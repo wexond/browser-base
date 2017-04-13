@@ -8,6 +8,10 @@ export default class WebView extends React.Component {
         self.props.getTab().normalTab()
       }
     })
+
+    setTimeout(function() {
+      self.refs.webview.loadURL('https://google.pl')
+    }, 1000)
   }
 
   render () {
