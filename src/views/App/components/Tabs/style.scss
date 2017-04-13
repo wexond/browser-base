@@ -1,0 +1,50 @@
+@import 'components/Controls/style.scss';
+@import 'components/Tab/style.scss';
+@import 'components/Page/style.scss';
+
+$add-button-size: 22px;
+
+.tabbar {
+  height: $systembar-height;
+  position: relative;
+  width: calc(100% - 120px);
+  float: left;
+}
+
+.add-button {
+  @include set-position(0, 0, 0, 0);
+  @include image-center($add-button-size, $add-button-size);
+  background-image: url(images/Tabs/add.png);
+  -webkit-app-region: no-drag;
+  position: absolute;
+  height: 100%;
+  width: 32px;
+  opacity: $secondary-opacity-light;
+  transition: $hover-duration opacity;
+
+  &:hover {
+    opacity: $primary-opacity-light;
+  }
+}
+
+.systembar-border {
+  @include set-position(0, auto, 0, 0);
+  height: 1px;
+  position: absolute;
+  z-index: 2;
+}
+
+.systembar {
+  position: relative;
+  height: $systembar-height;
+  -webkit-app-region: no-drag;
+  background-color: #EEEEEE;
+}
+
+.systembar-drag-handle {
+  @include set-position(2px, 2px, 2px, 0px);
+  position: absolute;
+  -webkit-app-region: drag;
+  width: calc(100% - 4px);
+  height: $systembar-height - 2px;
+}

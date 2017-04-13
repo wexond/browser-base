@@ -1,0 +1,8 @@
+@import 'components/WebView/style.scss';
+
+.page {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - #{$systembar-height});
+  clear: both;
+}

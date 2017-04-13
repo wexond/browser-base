@@ -1,0 +1,56 @@
+.tab {
+  @include set-position(0px, 0px, 0px, 0px);
+  width: 190px;
+  height: 100%;
+  background-color: white;
+  -webkit-app-region: no-drag;
+  position: absolute;
+}
+
+.tab-content {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.tab-title {
+  @include center-vertical;
+  @include Body1;
+  position: absolute;
+  left: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tab-close {
+  @include center-vertical;
+  @include image-center(16px, 16px);
+  position: absolute;
+  right: 1px;
+  background-image: url(images/tabs/close.png);
+  height: 100%;
+  width: 32px;
+  opacity: $secondary-opacity-light;
+  transition: $hover-duration opacity;
+
+  &:hover {
+    opacity: $primary-opacity-light;
+  }
+}
+
+.tab-border {
+  @include center-vertical;
+  width: 1px;
+  height: calc(100% - 8px);
+  background-color: rgba(0,0,0,0.12);
+  position: absolute;
+}
+
+.tab-border2 {
+  @include center-vertical;
+  width: 1px;
+  height: 100%;
+  background-color: rgba(0,0,0,0.12);
+  position: absolute;
+}

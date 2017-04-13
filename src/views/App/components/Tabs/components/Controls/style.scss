@@ -1,0 +1,35 @@
+.controls {
+  position: relative;
+  height: 100%;
+  float: right;
+}
+
+.control {
+  @include image-center(12px, 12px);
+  opacity: $secondary-opacity-light;
+  height: 100%;
+  width: 32px;
+  float: right;
+  margin-right: 4px;
+  transition: opacity $hover-duration;
+  -webkit-app-region: no-drag;
+
+  &:hover {
+    opacity: $primary-opacity-light;
+  }
+}
+
+.control-close {
+  @extend .control;
+  background-image: url(images/Controls/close.png);
+}
+
+.control-maximize {
+  @extend .control;
+  background-image: url(images/Controls/maximize.png);
+}
+
+.control-minimize {
+  @extend .control;
+  background-image: url(images/Controls/minimize.png);
+}
