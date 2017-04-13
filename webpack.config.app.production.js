@@ -3,10 +3,10 @@ const webpack = require('webpack')
 
 module.exports = {
   target: 'electron',
-  devtool: 'source-map',
+  devtool: 'eval-source-map',
   entry: {
-    browserEntry: './app/browser/browser-entry.js',
-    menuEntry: './app/menu/menu-entry.js'
+    'app': './src/views/App',
+    'menu': './src/views/Menu'
   },
   node: {
     __dirname: false,
@@ -14,20 +14,20 @@ module.exports = {
   },
 
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'build'),
     filename: '[name].bundle.js'
   },
 
   devServer: {
     contentBase: './',
-    publicPath: 'http://localhost:8080/dist/'
+    publicPath: 'http://localhost:8080/build/'
   },
 
   module: {
     rules: [
       {
         test: /\.(scss)$/,
-        include: path.resolve(__dirname, 'app/resources'),
+        include: path.resolve(__dirname, 'src'),
         use: [
           {
             loader: 'style-loader'
@@ -45,7 +45,7 @@ module.exports = {
         ]
       }, {
         test: /\.(png|gif|jpg|woff2|tff)$/,
-        include: path.resolve(__dirname, 'app/resources'),
+        include: path.resolve(__dirname, 'src'),
         use: [
           {
             loader: 'url-loader'
@@ -53,7 +53,7 @@ module.exports = {
         ]
       }, {
         test: /\.(js|jsx)$/,
-        include: path.resolve(__dirname, 'app'),
+        include: path.resolve(__dirname, 'src'),
         use: [
           {
             loader: 'babel-loader',
