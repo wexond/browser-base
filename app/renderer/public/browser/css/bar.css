@@ -1,0 +1,94 @@
+.bar {
+    height: 42px;
+    background: #fff;
+    width: calc(100% - 16px);
+    max-width: 768px;
+    left: 8px;
+    position: absolute;
+    z-index: 2;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border-radius: 3px;
+    overflow: hidden;
+}
+::selection {
+  background: #00BCD4;
+  color: #fff;
+}
+.searchInput {
+    outline: none;
+    border: none;
+    font-size: 14px;
+    top: 50%;
+    margin-left: 8px;
+    width: calc(100% - 242px);
+    transform: translateY(-50%);
+    position: absolute;
+    background-color: transparent;
+    overflow: hidden;
+}
+
+
+.bar-icon {
+    width: 26px;
+    height: 26px;
+    float: left;
+    transition: 0.3s background;
+    margin-left: 8px;
+    position: relative;
+    top: 50%;
+    opacity: 0.7;
+    transform: translateY(-50%);
+    background-size: 22px 22px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.back {
+    margin-left: 8px;
+    background-image: url(../img/bar/back.png);
+}
+
+.forward {
+    background-image: url(../img/bar/forward.png);
+}
+
+.refresh {
+    background-image: url(../img/bar/refresh.png);
+}
+.search-icon {
+    float: left;
+    position: relative;
+    background-size: 18px 18px;
+    background-position: center;
+    background-repeat: no-repeat;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.7;
+    width: 18px;
+    height: 18px;
+    background-image: url(../../history/img/search.png);
+}
+
+.menu-icon {
+    float: right;
+    margin-right: 10px;
+    background-image: url(../img/bar/menu.png);
+}
+
+.favourite-icon {
+    float: right;
+    background-image: url(../img/bar/star_empty.png);
+    display: none;
+}
+
+.favourite-icon-full {
+    background-image: url(../img/bar/star_full.png);
+}
+
+.bar-icon:hover {
+    opacity: 1;
+    transition: 0.3s background;
+}

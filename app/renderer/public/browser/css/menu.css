@@ -1,0 +1,170 @@
+.menu {
+    width: 280px;
+    height: 486px;
+    max-height: 486px;
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    position: absolute;
+    right: 12px;
+    top: 28px;
+    z-index: 10;
+    opacity: 0;
+    display: none;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.menu-items {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    font-size: 0;
+    float: left;
+}
+
+.menu-items li {
+    max-width: 100%;
+    height: auto;
+    text-align: left;
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: relative;
+    padding-left: 64px;
+    font-size: 14.5px;
+    color: #212121;
+    font-family: 'Roboto';
+    transition: all 0.2s;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+.menu-items li:hover {
+    background-color: #EEEEEE;
+    transition: all 0.2s;
+}
+
+.menu-items li .icon {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 24px;
+    transform: translateY(-50%);
+    position: absolute;
+    opacity: 0.6;
+}
+
+.menu-tabbar {
+    height: 48px;
+    width: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.menu-tab {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    color: #212121;
+}
+.menu-tab-title {
+    position: absolute;
+    font-size: 14px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.menu-tab:nth-child(2) {
+    left: 50%;
+}
+
+.menu-tabbar-line {
+    height: 2px;
+    width: 50%;
+    background-color: #03A9F4;
+    position: absolute;
+    bottom: 0;
+}
+
+.menu-tabbar-divider {
+    height: 1px;
+    width: 100%;
+    background-color: #eee;
+    position: absolute;
+    bottom: 0;
+}
+
+.extension-item {
+    background-position: center;
+    background-size: 48px 48px;
+    background-repeat: no-repeat;
+    width: 48px;
+    height: 48px;
+    float: left;
+    margin-left: 11px;
+}
+
+.menu-extensions {
+    padding: 16px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: none;
+}
+
+.menu-divider {
+    height: 1px;
+    position: relative;
+    width: 100%;
+    background-color: #EEEEEE;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.settings .icon {
+    background-image: url(../img/menu/settings.png);
+}
+
+.history .icon {
+    background-image: url(../img/menu/history.png);
+}
+
+.bookmarks .icon {
+    background-image: url(../img/menu/bookmarks.png);
+}
+
+.downloads .icon {
+    background-image: url(../img/menu/downloads.png);
+}
+
+.extensions .icon {
+    background-image: url(../img/menu/extensions.png);
+}
+
+.fullscreen .icon {
+    background-image: url(../img/menu/full_screen.png);
+}
+
+.devtools .icon {
+    background-image: url(../img/menu/developer_tools.png);
+}
+
+.screenshot .icon {
+    background-image: url(../img/menu/screen_shot.png);
+}
+
+.privacy .icon {
+    background-image: url(../img/menu/privacy.png);
+}
+
+.find .icon {
+    background-image: url(../img/menu/find_in_page.png);
+}

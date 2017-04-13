@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="pl">
+    <meta charset="UTF-8" />
+    <title>Wexond</title>
+    <link rel="stylesheet" href="browser/css/style.css" />
+    <link rel="stylesheet" href="browser/css/tabbar.css" />
+    <link rel="stylesheet" href="browser/css/browser.css" />
+    <link rel="stylesheet" href="browser/css/suggestions.css" />
+    <link rel="stylesheet" href="browser/css/bar.css" />
+    <link rel="stylesheet" href="browser/css/titlebar.css" />
+    <link rel="stylesheet" href="materialdesign/css/ripple.css" />
+    <link rel="stylesheet" href="materialdesign/css/materialbutton.css" />
+    <link rel="stylesheet" href="materialdesign/css/snackbar.css" />
+    <link rel="stylesheet" href="browser/css/menu.css" />
+    <link rel="stylesheet" href="browser/css/find.css" />
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="global/js/utils/color.js"></script>
+    <script src="global/js/utils/dom.js"></script>
+    <script src="global/js/utils/material.js"></script>
+    <script src="global/js/utils/network.js"></script>
+    <script src="global/js/utils/text.js"></script>
+    <script src="global/js/main.js"></script>
+    <script src="../../classes/extensionapi.js"></script>
+    <script src="materialdesign/js/ripple.js"></script>
+    <script>
+        if (process.env.ENV != 'dev') {
+            require('../../../build/entry.bundle.js');
+        } else {
+            loadScripts(['http://localhost:8080/build/entry.bundle.js', 'http://localhost:8080/webpack-dev-server.js']);
+        }
+    </script>
+</body>
+
+</html>

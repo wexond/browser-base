@@ -1,0 +1,144 @@
+.dark {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #000;
+    opacity: 0;
+    /*0.8*/
+    display: none;
+}
+
+.dialog {
+    width: 100%;
+    min-height: 400px;
+    max-height: 600px;
+    max-width: 750px;
+    background-color: #fafafa;
+    border-radius: 2px;
+    position: fixed;
+    z-index: 4;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    margin-top: -50%;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    opacity: 0;
+    display: none;
+}
+
+.dialog .menu {
+    list-style: none;
+    width: 200px;
+    height: 100%;
+    background-color: #3f51b5;
+    padding: 0;
+    margin: 0;
+    top: 0;
+    left: 0;
+    position: absolute;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.dialog .menu li {
+    color: #fff;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 24px;
+    font-size: 18px;
+    font-family: 'Roboto-Light';
+    -webkit-user-select: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dialog .menu .selected {
+    transition: all 0.2s;
+    background-color: #303F9F;
+}
+
+.dialog .menu .title {
+    font-size: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 25px;
+    font-family: 'Roboto-Medium';
+    color: #fff;
+    -webkit-user-select: none;
+}
+
+.dialog .content {
+    list-style: none;
+    height: 100%;
+    max-height: 100%;
+    width: calc(100% - 200px);
+    position: absolute;
+    margin: 0;
+    top: 0;
+    right: 0;
+    padding: 0;
+    overflow: auto;
+}
+
+.dialog .content::-webkit-scrollbar {
+  width: 8px;
+  height: 6px;
+}
+.dialog .content::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+.dialog .content::-webkit-scrollbar-thumb {
+  background: #3f51b5;
+  border: 0px none #ffffff;
+}
+.dialog .content::-webkit-scrollbar-thumb:hover {
+  background: #303F9F;
+}
+.dialog .content::-webkit-scrollbar-track {
+  background: #D3D3D3;
+}
+
+.dialog .content::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+
+.dialog .content li {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.dialog .settings-cards .container {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.dialog .settings-cards .settingsitem {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    background-color: blue;
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+.dialog .settings-cards .settingsitem .title {
+    font-size: 18px;
+    color: #fff;
+    font-family: 'Roboto-Medium';
+    padding-left: 40px;
+    padding-right: 10px;
+    -webkit-user-select: none;
+    pointer-events: none;
+}

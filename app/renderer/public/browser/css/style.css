@@ -1,0 +1,40 @@
+@font-face {
+    font-family: Roboto;
+    src: url('../../global/fonts/Roboto.ttf');
+}
+
+@font-face {
+    font-family: Roboto-Regular;
+    src: url('../../global/fonts/Roboto-Regular.ttf');
+}
+
+@font-face {
+    font-family: Roboto-Medium;
+    src: url('../../global/fonts/Roboto-Medium.ttf');
+}
+
+@font-face {
+    font-family: Roboto-Light;
+    src: url('../../global/fonts/Roboto-Light.ttf');
+}
+
+.white-icon {
+    -webkit-filter: invert(100%);
+}
+
+.pointer {
+    -webkit-user-select: none;
+    cursor: pointer;
+}
+
+.no-select {
+    -webkit-user-select: none;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto';
+    position: relative;
+    overflow: hidden;
+}

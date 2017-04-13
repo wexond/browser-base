@@ -1,0 +1,66 @@
+.cards {
+    max-width: 752px;
+    display: table;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 160px;
+    position: relative;
+}
+
+.card-item {
+    width: 172px;
+    height: 96px;
+    position: relative;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8px;
+    margin-bottom: 8px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    border-radius: 2px;
+}
+
+.card-item .icon {
+    width: 32px;
+    height: 32px;
+    margin-top: -12px;
+    position: absolute;
+    -webkit-user-select: none;
+    pointer-events: none;
+}
+
+.card-item .title {
+    position: absolute;
+    margin-top: 20px;
+    user-select: none;
+    text-align: center;
+    -webkit-user-select: none;
+    font-size: 16px;
+}
+.card-item .delete {
+  width: 20px;
+  height: 20px;
+  background-image: url('../img/icons/del.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+}
+
+.card-item-test {
+    position: relative;
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+.invert {
+    -webkit-filter: invert(100%);
+}
