@@ -31,11 +31,15 @@ class Menu extends React.Component {
   componentDidMount () {
     const self = this
 
+    /** Events */
+
+    /** Communicate with Menu and App. */
+
     global.ipcRenderer.on('menu:show', function (e, mouseX, mouseY) {
       self.mouseX = mouseX
       self.mouseY = mouseY
 
-      //self.setPosition()
+      // self.setPosition()
       self.show()
     })
 
@@ -48,6 +52,10 @@ class Menu extends React.Component {
     })
   }
 
+  /**
+   * Shows the menu.
+   * Animates opacity and top property of menu, and turns off ignoring mouse events.
+   */
   show = () => {
     global.currentWindow.setIgnoreMouseEvents(false)
     global.currentWindow.focus()
@@ -57,6 +65,10 @@ class Menu extends React.Component {
     })
   }
 
+  /**
+   * Hides the menu.
+   * Animates opacity and top property of menu, and turns on ignoring mouse events.
+   */
   hide = () => {
     this.setState({
       opacity: spring(0, global.menuAnimationData.opacitySpring),
