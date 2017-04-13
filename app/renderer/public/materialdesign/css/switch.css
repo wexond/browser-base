@@ -1,0 +1,23 @@
+.switch {
+    position: relative;
+}
+.switch > .track {
+    width: 32px;
+    background-color: #000;
+    border-radius: 15px;
+    height: 16px;
+    position: relative;
+    opacity: 0.38;
+    left: 8px;
+}
+.switch > .thumb {
+    width: 22px;
+    height: 22px;
+    background-color: #fafafa;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.14), 0 1px 3px rgba(0,0,0,0.26);
+    border-radius: 50%;
+}

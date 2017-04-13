@@ -1,0 +1,28 @@
+.material-snackbar {
+    width: 100%;
+    max-width: 568px;
+    position: fixed;
+    bottom: -200px;
+    border-radius: 2px;
+    background-color: #323232;
+    display: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.material-snackbar .text {
+    color: #fff;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    font-size: 16px;
+    font-family: 'Roboto';
+    user-select: none;
+    -webkit-user-select: none;
+    opacity: 0;
+}
+.material-snackbar .pointer {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 24px;
+}
