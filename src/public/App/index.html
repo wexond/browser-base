@@ -9,7 +9,7 @@
 
     <script src='../global/helpers/dom.js'></script>
     <script>
-      if (process.env.ENV != 'dev') {
+      if (process.env.ENV !== 'dev') {
         DOMHelper.loadScripts(['../../../build/app.bundle.js']);
       } else {
         DOMHelper.loadScripts(['http://localhost:8080/build/app.bundle.js', 'http://localhost:8080/webpack-dev-server.js']);
