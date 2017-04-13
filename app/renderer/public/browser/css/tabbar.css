@@ -1,0 +1,129 @@
+.tabBar {
+    height: 100%;
+    position: relative;
+    /*left: 50%;
+    transform: translateX(-50%);*/
+    left: -2px;
+    z-index: 9;
+    color: #212121;
+}
+
+.tabBarContainer {
+    width: calc(100% - 100px);
+    height: 100%;
+    z-index: 99999;
+    position: relative;
+    /*position: absolute;
+    bottom: 0;*/
+    left: 0px;
+}
+
+
+/*.tabBarContainer .border5 {
+    top: 0;
+}*/
+
+.tabTitle {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: calc(100% - 72px);
+    margin-left: 32px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+.border-bottom {
+    width: 100%;
+    background-color: #BDBDBD;
+    height: 1px;
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+    opacity: 0.1;
+}
+
+.tab {
+    width: 196px;
+    height: calc(100%);
+    background-color: white;
+    display: inline-block;
+    color: #444;
+    position: absolute;
+    top: 0px;
+    left: 4px;
+    -webkit-app-region: no-drag;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    z-index: 1;
+    -webkit-user-select: none;
+    cursor: default;
+    transition: 0.2s color;
+}
+
+.border-horizontal {
+    position: absolute;
+    width: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: calc(100% - 16px);
+    background-color: #fff;
+    opacity: 0.15;
+}
+
+.addBtn {
+    display: inline-block;
+    opacity: 0.6;
+    width: 32px;
+    height: 32px;
+    position: relative;
+    z-index: 0;
+    left: 0;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: none;
+    cursor: default;
+    top: 50%;
+    transform: translateY(-50%);
+    background-image: url(../img/tabbar/add.png);
+    background-size: 24px 24px;
+    background-position: center;
+}
+
+.addBtn:hover {
+    opacity: 1;
+}
+
+.closeBtn {
+    float: right;
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 8px;
+    opacity: 0.6;
+    background-position: center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-image: url(../img/tabbar/close.png);
+}
+
+.closeBtn:hover {
+    opacity: 1;
+}
+
+.favicon {
+    height: 16px;
+    width: 16px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 8px;
+    background-size: contain;
+    background-position: center;
+}

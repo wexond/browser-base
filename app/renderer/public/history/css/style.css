@@ -1,0 +1,149 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    background-color: #f5f5f5;
+}
+
+#t1 {
+    float: left;
+    height: 100%;
+}
+#t2 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 1024px;
+    width: 100%;
+    height: 100%;
+    margin-left: 0px;
+    float: left;
+}
+
+.history-card {
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    min-width: 768px;
+}
+.history-cards-container {
+    margin-top: 88px;
+}
+.history-cards-container-normal {
+    width: calc(100% - 32px);
+    margin-left: 16px;
+}
+.history-cards-container-center {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 1024px;
+    width: 100%;
+}
+.history-item-checkbox {
+    display: inline-block;
+}
+
+.history-item-hour {
+    margin-left: 24px;
+    opacity: 0.7;
+    position: relative;
+    bottom: 3px;
+}
+
+.history-item-title {
+    margin-left: 64px;
+    max-width: calc(100% - 360px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.history-item-domain {
+    margin-left: 32px;
+    opacity: 0.7;
+    position: relative;
+    bottom: 3px;
+}
+
+.history-item {
+    display: inline-block;
+}
+.history-item-root {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.history-toolbar-hide {
+    animation-name: history-toolbar-hide-animation;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+}
+.history-toolbar-show {
+    animation-name: history-toolbar-show-animation;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+}
+.history-toolbar-searchbox {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 512px;
+    height: 36px;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+.history-toolbar-searchicon {
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-image: url('../img/search.png');
+    float: left;
+    position: relative;
+    top: 50%;
+    opacity: 0.6;
+    transform: translateY(-50%);
+    margin-left: 8px;
+}
+.history-toolbar-input {
+    outline: none;
+    border: none;
+    position: relative;
+    width: calc(100% - 48px);
+    top: 9px;
+    font-size: 14px;
+    background-color: transparent;
+    color: white;
+    float: left;
+    margin-left: 8px;
+}
+.history-toolbar-search-hint {
+    color: white;
+    opacity: 0.6;
+    top: 9px;
+    position: absolute;
+    left: 40px;
+}
+
+@keyframes history-toolbar-show-animation {
+    0% {
+        opacity: 0;
+        visibility: visible;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes history-toolbar-hide-animation {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}

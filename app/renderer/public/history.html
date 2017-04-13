@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>History</title>
+    <link href="history/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="materialdesign/css/materialdesign.css" rel="stylesheet" type="text/css" />
+    <style>
+        @font-face {
+            font-family: "Roboto";
+            src: url('global/fonts/Roboto.ttf');
+        }
+
+        @font-face {
+            font-family: Roboto-Medium;
+            src: url('global/fonts/Roboto-Medium.ttf');
+        }
+
+        @font-face {
+            font-family: Roboto-Light;
+            src: url('global/fonts/Roboto-Light.ttf');
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+    <!-- TODO: scripts -->
+    <script src="materialdesign/js/ripple.js"></script>
+    <script src="global/js/utils/color.js"></script>
+    <script src="global/js/utils/dom.js"></script>
+    <script src="global/js/utils/material.js"></script>
+    <script src="global/js/utils/network.js"></script>
+    <script src="global/js/utils/text.js"></script>
+    <script>
+    var id = setInterval(function() {
+        var env = getEnv();
+        if (env != "s") {
+            if (env != 'dev') {
+                loadScripts(['build/history.bundle.js']);
+            } else {
+                loadScripts(['http://localhost:8181/build/history.bundle.js', 'http://localhost:8181/webpack-dev-server.js']);
+            }
+            clearInterval(id);
+        }
+    }, 1);
+    </script>
+</body>
+
+</html>

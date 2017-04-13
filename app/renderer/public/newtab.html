@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="pl">
+    <meta charset="utf-8">
+
+    <title>New tab</title>
+    <link href="materialdesign/css/materialdesign.css" rel="stylesheet" type="text/css" />
+    <link href="newtab/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="newtab/css/cards.css" rel="stylesheet" type="text/css" />
+    <style>
+        @font-face {
+            font-family: "Roboto";
+            src: url('global/fonts/Roboto.ttf');
+        }
+
+        @font-face {
+            font-family: Roboto-Medium;
+            src: url('global/fonts/Roboto-Medium.ttf');
+        }
+
+        @font-face {
+            font-family: Roboto-Light;
+            src: url('global/fonts/Roboto-Light.ttf');
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+    <!-- TODO: scripts -->
+    <script>
+        var id = setInterval(function() {
+            var env = getEnv();
+            if (env != "s") {
+                if (env != 'dev') {
+                    loadScripts(['build/newtab.bundle.js']);
+                } else {
+                    loadScripts(['http://localhost:8181/build/newtab.bundle.js', 'http://localhost:8181/webpack-dev-server.js']);
+                }
+                clearInterval(id);
+            }
+        }, 1);
+    </script>
+    <script src="global/js/utils/dom.js"></script>
+    <script src="global/js/utils/color.js"></script>
+    <script src="materialdesign/js/ripple.js"></script>
+</body>
+
+</html>
