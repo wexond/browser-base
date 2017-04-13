@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Menu</title>
+  </head>
+  <body>
+    <div id="app">
+    </div>
+    <script src='../global/helpers/dom.js'></script>
+    <script>
+      if (process.env.ENV !== 'dev') {
+        DOMHelper.loadScripts(['../../../build/menu.bundle.js']);
+      } else {
+        DOMHelper.loadScripts(['http://localhost:8080/build/menu.bundle.js', 'http://localhost:8080/webpack-dev-server.js']);
+      }
+    </script>
+  </body>
+</html>

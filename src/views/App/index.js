@@ -10,6 +10,7 @@ const {remote} = require('electron')
 
 window.global = {
   currentWindow: remote.getCurrentWindow(),
+  menuWindow: remote.getCurrentWindow().getChildWindows()[0],
   remote: remote,
   tabs: [],
   tabsData: {
@@ -30,6 +31,13 @@ window.global = {
 }
 
 class App extends React.Component {
+  componentDidMount () {
+    window.addEventListener('contextmenu', function (e) {
+      if (e.target.tagName === 'WEBVIEW') {
+        global.menuWindow.send('menu:show', e.screenX, e.screenY)
+      }
+    })
+  }
   /**
    * Gets this {App}.
    * @return {App}
