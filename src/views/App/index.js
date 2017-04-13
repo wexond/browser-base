@@ -24,7 +24,7 @@ window.global = {
   },
   defaultOptions: {
     select: true,
-    url: 'http://google.pl'
+    url: 'wexond://newtab'
   },
   excludedURLs: ['wexond://newtab', 'wexond://newtab/']
 }

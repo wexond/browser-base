@@ -47,6 +47,8 @@ export default class Tab extends React.Component {
 
     // Hide new tab button on tab create.
     tabs.setState({addButtonVisible: false})
+
+    tabs.canShowAddButton = false
   }
 
   /**
@@ -65,6 +67,8 @@ export default class Tab extends React.Component {
     // Set the widths and positions for all tabs.
     tabs.setWidths()
     tabs.setPositions()
+
+    tabs.canShowAddButton = true
   }
 
   /**
@@ -132,6 +136,10 @@ export default class Tab extends React.Component {
     this.selected = false
 
     tabs.updateTabs()
+
+    if (this.new) {
+      tabs.closeTab(this)
+    }
   }
 
   /**

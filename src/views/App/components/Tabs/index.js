@@ -23,6 +23,8 @@ export default class Tabs extends React.Component {
     }
 
     this.dragData = {}
+
+    this.canShowAddButton = false
   }
 
   componentDidMount () {
@@ -53,7 +55,9 @@ export default class Tabs extends React.Component {
       if (self.dragData.tab != null && !self.dragData.tab.pinned && !self.dragData.tab.new) {
         self.dragData.canDrag = false
 
-        self.setState({addButtonVisible: true})
+        if (self.canShowAddButton) {
+          self.setState({addButtonVisible: true})
+        }
 
         self.setPositions()
 
@@ -109,6 +113,9 @@ export default class Tabs extends React.Component {
     this.timer.canReset = true
     // Remove page associated to the tab.
     tab.getPage().setState({render: false})
+
+    // Bring back the add tab button.
+    this.setState({addButtonVisible: true})
 
     // Get previous and next tab.
     var index = global.tabs.indexOf(tab)
