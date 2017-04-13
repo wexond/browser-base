@@ -39,7 +39,8 @@ class Menu extends React.Component {
       self.mouseX = mouseX
       self.mouseY = mouseY
 
-      // self.setPosition()
+      self.setPosition()
+
       self.show()
     })
 
@@ -77,6 +78,48 @@ class Menu extends React.Component {
     remote.getCurrentWindow().setIgnoreMouseEvents(true)
   }
 
+  /**
+   * Sets position of menu under cursor or above the cursor.
+   */
+  setPosition = () => {
+    var screenHeight = window.screen.availHeight
+    var screenWidth = window.screen.availWidth
+    var height = this.menu.offsetHeight
+    var x = this.mouseX - 12
+    var y = this.mouseY - 55
+
+    if (this.mouseX + this.menu.offsetWidth >= screenWidth) {
+      x = this.mouseX - this.menu.offsetWidth - 14
+    }
+
+    if (this.mouseY + height >= screenHeight) {
+      y = this.mouseY - height - 55
+    }
+
+    remote.getCurrentWindow().setPosition(x, y)
+
+    this.fixPosition(height)
+  }
+
+  /**
+   * Fixes menu position when it's out of screen.
+   * @param {number} height - the height of menu
+   */
+  fixPosition = (height) => {
+    var y = global.currentWindow.getPosition()[1]
+    var x = global.currentWindow.getPosition()[0]
+    var yFromDown = y + height
+    var screenHeight = window.screen.availHeight
+
+    if (y < 0) {
+      global.currentWindow.setPosition(x, 32)
+    }
+
+    if (yFromDown > screenHeight) {
+      global.currentWindow.setPosition(x, screenHeight - height - 80)
+    }
+  }
+
   render () {
     /** Events */
 
@@ -87,7 +130,7 @@ class Menu extends React.Component {
     return (
       <Motion style={{opacity: this.state.opacity, top: this.state.top}}>
         {value =>
-          <div className='menu' onClick={onClick} style={{opacity: value.opacity, top: value.top}}>
+          <div ref={(t) => { this.menu = t }} className='menu' onClick={onClick} style={{opacity: value.opacity, top: value.top}}>
             Hello
           </div>}
 
