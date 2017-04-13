@@ -1,0 +1,70 @@
+@mixin Roboto-Regular {
+  font-family: Roboto, sans-serif;
+  font-weight: 400;
+}
+
+@mixin Roboto-Medium {
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+}
+
+@mixin Roboto-Light {
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+}
+
+@mixin Display4 {
+  @include Roboto-Light;
+  font-size: 112px;
+}
+
+@mixin Display3 {
+  @include Roboto-Regular;
+  font-size: 56px;
+}
+
+@mixin Display2 {
+  @include Roboto-Regular;
+  font-size: 45px;
+}
+
+@mixin Display1 {
+  @include Roboto-Regular;
+  font-size: 34px;
+}
+
+@mixin Headline {
+  @include Roboto-Regular;
+  font-size: 24px;
+}
+
+@mixin Title {
+  @include Roboto-Medium;
+  font-size: 20px;
+}
+
+@mixin Subheading {
+  @include Roboto-Regular;
+  font-size: 16px;
+}
+
+@mixin Body2 {
+  @include Roboto-Medium;
+  font-size: 14px;
+}
+
+@mixin Body1 {
+  @include Roboto-Regular;
+  font-size: 14px;
+}
+
+@mixin Caption {
+  @include Roboto-Regular;
+  font-size: 12px;
+}
+
+@mixin Button {
+  text-transform: capitalize;
+  @include Roboto-Medium;
+  font-size: 14px;
+}

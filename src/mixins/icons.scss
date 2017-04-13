@@ -1,0 +1,3 @@
+@mixin invert-colors () {
+  -webkit-filter: invert(100%);
+}
