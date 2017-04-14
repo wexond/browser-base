@@ -13,6 +13,7 @@ export default class Tab extends React.Component {
       render: true,
       visible: true,
       smallBorderVisible: true,
+      leftSmallBorderVisible: false,
       pinned: false,
       new: true,
       favicon: '',
@@ -194,6 +195,11 @@ export default class Tab extends React.Component {
       }
     }
 
+    var borderLeftSmallStyle = {
+      left: 0,
+      display: (this.state.leftSmallBorderVisible) ? 'block' : 'none'
+    }
+
     var borderSmallStyle = {
       right: 0,
       display: displaySmallBorder,
@@ -332,9 +338,10 @@ export default class Tab extends React.Component {
                     <div className='tab-close' onClick={onClickClose} />
                   </div>
                 </div>
-                <div className='tab-border' style={borderSmallStyle} />
-                <div className='tab-border2' style={borderLeftStyle} />
-                <div className='tab-border2' style={borderRightStyle} />
+                <div className='tab-border-small' style={borderLeftSmallStyle} />
+                <div className='tab-border-small' style={borderSmallStyle} />
+                <div className='tab-border-full' style={borderLeftStyle} />
+                <div className='tab-border-full' style={borderRightStyle} />
               </div>}
           </Motion>
 

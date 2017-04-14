@@ -43,7 +43,7 @@
   transition: 0.2s opacity;
 }
 
-.tab-border {
+.tab-border-small {
   @include center-vertical;
   width: 1px;
   height: calc(100% - 8px);
@@ -51,7 +51,7 @@
   position: absolute;
 }
 
-.tab-border2 {
+.tab-border-full {
   @include center-vertical;
   width: 1px;
   height: 100%;
