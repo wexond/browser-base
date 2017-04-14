@@ -66,7 +66,12 @@ export default class Tabs extends React.Component {
         if (global.tabs[global.tabs.indexOf(self.dragData.tab) - 1] != null) {
           global.tabs[global.tabs.indexOf(self.dragData.tab) - 1].setState({smallBorderVisible: false})
         }
-
+        if (global.tabs[global.tabs.indexOf(self.dragData.tab) + 1] != null) {
+          global.tabs[global.tabs.indexOf(self.dragData.tab) + 1].setState({leftSmallBorderVisible: false})
+        }
+        for (var i = 0; i < global.tabs.length; i++) {
+          global.tabs[i].setState({leftSmallBorderVisible: false})
+        }
         window.removeEventListener('mousemove', self.onMouseMove)
       }
     })
@@ -96,6 +101,9 @@ export default class Tabs extends React.Component {
 
         if (global.tabs[global.tabs.indexOf(this.dragData.tab) - 1] != null) {
           global.tabs[global.tabs.indexOf(this.dragData.tab) - 1].setState({smallBorderVisible: true})
+        }
+        if (global.tabs[global.tabs.indexOf(this.dragData.tab) + 1] != null) {
+          global.tabs[global.tabs.indexOf(this.dragData.tab) + 1].setState({leftSmallBorderVisible: true})
         }
       }
     }
@@ -420,6 +428,10 @@ export default class Tabs extends React.Component {
           global.tabs[i - 1].setState({smallBorderVisible: false})
         }
       }
+    }
+
+    for (i = 0; i < global.tabs.length; i++) {
+      global.tabs[i].setState({leftSmallBorderVisible: false})
     }
   }
 
