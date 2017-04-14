@@ -113,6 +113,7 @@ export default class Tab extends React.Component {
   select = () => {
     const tabs = this.props.getTabs()
     const page = this.getPage()
+    const self = this
 
     // Show the associated page.
     page.setState({visible: true})
@@ -121,6 +122,25 @@ export default class Tab extends React.Component {
     this.setState({animateBackgroundColor: false, selected: true, backgroundColor: this.selectedBackgroundColor, closeVisible: true})
 
     this.selected = true
+
+    var bar = this.props.getApp().getBar()
+    bar.hideSuggestions()
+
+    setTimeout(function () {
+      if (self.getPage().getWebView().getWebContents() != null) {
+        // Refresh navigation icons in Menu.
+        var menu = global.menuWindow
+        var webview = self.getPage().getWebView()
+
+        menu.send('webview:can-go-back', webview.canGoBack())
+        menu.send('webview:can-go-forward', webview.canGoForward())
+
+        self.props.getApp().updateBarText(webview.getURL())
+        if (bar.getText() === '') {
+          bar.input.focus()
+        }
+      }
+    }, 1)
 
     tabs.updateTabs()
   }
@@ -136,7 +156,7 @@ export default class Tab extends React.Component {
     page.setState({visible: false})
 
     // Deselect tab (change background color etc).
-    this.setState({animateBackgroundColor: false, selected: false, backgroundColor: tabs.state.backgroundColor, closeVisible: false})
+    this.setState({animateBackgroundColor: false, selected: false, backgroundColor: 'transparent', closeVisible: false})
 
     this.selected = false
 
@@ -210,7 +230,7 @@ export default class Tab extends React.Component {
       display: (this.state.selected && this.state.visible)
         ? 'block'
         : 'none',
-      right: 0,
+      right: -1,
       backgroundColor: tabs.state.borderColor
     }
 
@@ -265,7 +285,6 @@ export default class Tab extends React.Component {
         return
       }
 
-      var tabs = self.props.getTabs()
       tabs.selectTab(self)
 
       // Initialize the dragData object in {Tabs}.
@@ -297,8 +316,8 @@ export default class Tab extends React.Component {
 
     function onMouseEnter () {
       if (!self.selected) {
-        var rgba = Colors.shadeColor(self.state.backgroundColor, 0.05)
-        self.mouseLeaveBackgroundColor = self.state.backgroundColor
+        var rgba = Colors.shadeColor(tabs.state.backgroundColor, 0.05)
+        self.mouseLeaveBackgroundColor = tabs.state.backgroundColor
         self.setState({backgroundColor: rgba, animateBackgroundColor: true})
         if (!self.pinned) {
           self.setState({closeVisible: true})
@@ -348,7 +367,8 @@ export default class Tab extends React.Component {
           {React.Children.map(this.props.children, child => {
             return React.cloneElement(child, {
               ref: 'page',
-              getTab: self.getTab
+              getTab: self.getTab,
+              getApp: self.props.getApp
             })
           })}
         </div>

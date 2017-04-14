@@ -1,0 +1,38 @@
+.suggestion {
+  width: calc(100% - 16px);
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 2px;
+  padding-left: 16px;
+  font-size: 14px;
+  position: relative;
+}
+
+.suggestion-title {
+  float: left;
+  overflow: hidden;
+  color: #000;
+  margin-left: 5px;
+  max-width: 40%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  opacity: $primary-opacity-light;
+}
+
+.suggestion-url {
+  float: left;
+  color: #03A9F4;
+  max-width: 60%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.suggestion-selected {
+  background-color: #E0E0E0;
+}
+
+.clear-both {
+  clear: both;
+}

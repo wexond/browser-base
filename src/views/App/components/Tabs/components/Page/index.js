@@ -11,6 +11,10 @@ export default class Page extends React.Component {
     }
   }
 
+  getWebView = () => {
+    return this.refs.webview.refs.webview
+  }
+
   render () {
     var pageStyle = {
       opacity: (this.state.visible) ? 1 : 0,
@@ -21,7 +25,7 @@ export default class Page extends React.Component {
     if (this.state.render) {
       return (
         <div style={pageStyle} className='page'>
-          <WebView getTab={this.props.getTab} src={this.props.url} />
+          <WebView getTab={this.props.getTab} getApp={this.props.getApp} ref='webview' getTab={this.props.getTab} src={this.props.url} />
         </div>
       )
     } else {
