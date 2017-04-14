@@ -39,6 +39,10 @@
   }
 }
 
+.tab-close-container {
+  transition: 0.2s opacity;
+}
+
 .tab-border {
   @include center-vertical;
   width: 1px;
