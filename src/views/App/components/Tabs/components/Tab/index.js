@@ -13,7 +13,10 @@ export default class Tab extends React.Component {
       visible: true,
       smallBorderVisible: true,
       pinned: false,
-      new: true
+      new: true,
+      favicon: '',
+      loading: false,
+      closeVisible: true
     }
 
     this.background = '#fff'
@@ -215,11 +218,35 @@ export default class Tab extends React.Component {
         : 'none',
       backgroundColor: tabs.state.borderColor
     }
-    var titleStyle = {
-      display: (this.state.new || this.state.pinned) ? 'none' : 'block'
-    }
     var closeStyle = {
-      display: (this.state.pinned) ? 'none' : 'block'
+      display: (this.state.pinned) ? 'none' : 'block',
+      opacity: (this.state.closeVisible) ? 1 : 0
+    }
+
+    var titleMaxWidthDecrease = 0
+    if (this.state.closeVisible) {
+      titleMaxWidthDecrease += 28
+    } else {
+      titleMaxWidthDecrease += 16
+    }
+    if (this.state.favicon === '' && !this.state.loading) {
+      titleMaxWidthDecrease += 16
+    } else {
+      titleMaxWidthDecrease += 32
+    }
+
+    var titleStyle = {
+      display: (this.state.new || this.state.pinned)
+        ? 'none'
+        : 'block',
+      maxWidth: `calc(100% - ${titleMaxWidthDecrease}px)`,
+      left: (this.state.favicon === '' && !this.state.loading)
+        ? 12
+        : 32
+    }
+    var faviconStyle = {
+      backgroundImage: (this.state.favicon !== '') ? 'url(' + this.state.favicon + ')' : '',
+      display: (this.state.favicon === '') ? 'none' : 'block'
     }
 
     /** Events */
@@ -275,7 +302,9 @@ export default class Tab extends React.Component {
                   <div className='tab-title' style={titleStyle}>
                     New tab
                   </div>
-                  <div className='tab-close' onClick={onClickClose} style={closeStyle} />
+                  <div style={closeStyle}>
+                    <div className='tab-close' onClick={onClickClose} />
+                  </div>
                 </div>
                 <div className='tab-border' style={borderSmallStyle} />
                 <div className='tab-border2' style={borderLeftStyle} />
