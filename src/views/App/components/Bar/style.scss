@@ -1,0 +1,81 @@
+@import 'components/Suggestion/style.scss';
+
+.bar {
+  @include center-horizontal;
+  @include shadow(1);
+  @include Body1;
+  position: absolute;
+  z-index: 4;
+  top: 42px;
+  background-color: white;
+  height: 36px;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 3px;
+}
+
+.bar-search-icon {
+  @include center-vertical;
+  @include image-center(100%, 100%);
+  width: 19px;
+  height: 19px;
+  position: relative;
+  left: 12px;
+  background-image: url(images/Bar/search.png);
+  opacity: $secondary-opacity-light;
+}
+
+.bar-hint {
+  @include center-vertical;
+  @include Body1;
+  opacity: $disabled-opacity-light;
+  position: absolute;
+  left: 42px;
+  margin-top: -1px;
+  font-size: 14px;
+}
+
+.bar-watermark {
+  @include center-vertical;
+  @include Body1;
+  opacity: $secondary-opacity-light;
+  position: absolute;
+  left: 42px;
+  margin-top: -1px;
+}
+
+.bar-input {
+  @include center-vertical;
+  @include Body1;
+  position: absolute;
+  left: 42px;
+  background: transparent;
+  margin-top: -1px;
+  border: none;
+  outline: none;
+  color: #03A9F4;
+  text-shadow: 0 0 0 rgba(0, 0, 0, $primary-opacity-light);
+  -webkit-text-fill-color: transparent;
+  height: 100%;
+  width: calc(100% - 64px);
+}
+
+.suggestions {
+  @include center-horizontal;
+  @include shadow(1);
+  position: absolute;
+  top: 86px;
+  width: 100%;
+  max-width: calc(600px - 32px);
+  padding: 16px;
+  padding-top: 0;
+  background-color: white;
+}
+
+.suggestions-separator {
+  margin-top: 16px;
+  margin-bottom: 4px;
+  margin-left: 16px;
+  font-size: 12px;
+  color: rgba(0,0,0, $secondary-opacity-light);
+}

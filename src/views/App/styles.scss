@@ -13,6 +13,7 @@ $hover-duration: 0.2s;
 $systembar-height: 32px;
 
 @import 'components/Tabs/style.scss';
+@import 'components/Bar/style.scss';
 
 body {
   @include Body1;
