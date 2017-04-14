@@ -256,6 +256,14 @@ export default class Bar extends React.Component {
           self.removeHint()
         }
 
+        if (data.length <= 0) {
+          self.hideSuggestions()
+          return
+        }
+        if (self.barVisible) {
+          self.showSuggestions()
+        }
+
         Suggestions.getSearchSuggestions(self.input, function (data, error) {
           if (!(data.length <= 0)) {
             suggestions.push({type: 'separator', text: 'Google search'})
@@ -273,14 +281,6 @@ export default class Bar extends React.Component {
           }
 
           self.setState({suggestionsToCreate: []})
-          if (suggestions.length <= 0) {
-            self.hideSuggestions()
-            return
-          } else {
-            if (self.barVisible) {
-              self.showSuggestions()
-            }
-          }
           self.setState({suggestionsToCreate: suggestions})
         })
       })
