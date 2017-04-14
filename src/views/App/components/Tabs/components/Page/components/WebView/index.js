@@ -11,7 +11,7 @@ export default class WebView extends React.Component {
 
     setTimeout(function() {
       self.refs.webview.loadURL('https://google.pl')
-    }, 1000)
+    }, 10000)
   }
 
   render () {
