@@ -55,6 +55,8 @@ export default class Tabs extends React.Component {
       if (self.dragData.tab != null && !self.dragData.tab.pinned && !self.dragData.tab.new) {
         self.dragData.canDrag = false
 
+        self.dragData.canDrag2 = false
+
         if (self.canShowAddButton) {
           self.setState({addButtonVisible: true})
         }
@@ -79,7 +81,8 @@ export default class Tabs extends React.Component {
   onMouseMove = (e) => {
     var mouseDeltaX = e.pageX - this.dragData.mouseClickX
 
-    if (Math.abs(mouseDeltaX) > 10) {
+    if (Math.abs(mouseDeltaX) > 10 || this.dragData.canDrag2) {
+      this.dragData.canDrag2 = true
       if (this.dragData.canDrag && !this.dragData.tab.pinned && !this.dragData.tab.new) {
         this.dragData.tab.setState({
           left: this.dragData.tabX + e.clientX - this.dragData.mouseClickX
