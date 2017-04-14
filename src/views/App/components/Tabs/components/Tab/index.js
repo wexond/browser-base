@@ -226,6 +226,10 @@ export default class Tab extends React.Component {
     /** Events */
 
     function onMouseDown (e) {
+      if (e.target.className === 'tab-close') {
+        return
+      }
+
       var tabs = self.props.getTabs()
       tabs.selectTab(self)
 
@@ -242,7 +246,7 @@ export default class Tab extends React.Component {
       }
     }
 
-    function onClickClose () {
+    function onClickClose (e) {
       self.props.getTabs().closeTab(self)
     }
 
