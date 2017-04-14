@@ -138,7 +138,9 @@ export default class Tab extends React.Component {
     tabs.updateTabs()
 
     if (this.new) {
+      tabs.canShowAddButton = true
       tabs.closeTab(this)
+      tabs.setState({addButtonVisible: true})
     }
   }
 
