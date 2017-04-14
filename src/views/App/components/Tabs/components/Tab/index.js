@@ -14,11 +14,11 @@ export default class Tab extends React.Component {
       visible: true,
       smallBorderVisible: true,
       leftSmallBorderVisible: false,
+      closeVisible: true,
       pinned: false,
       new: true,
       favicon: '',
       loading: false,
-      closeVisible: true,
       animateBackgroundColor: false,
       backgroundColor: '#fff'
     }
@@ -118,7 +118,7 @@ export default class Tab extends React.Component {
     page.setState({visible: true})
 
     // Select tab (change background color etc).
-    this.setState({selected: true, backgroundColor: this.selectedBackgroundColor, closeVisible: true})
+    this.setState({animateBackgroundColor: false, selected: true, backgroundColor: this.selectedBackgroundColor, closeVisible: true})
 
     this.selected = true
 
@@ -136,7 +136,7 @@ export default class Tab extends React.Component {
     page.setState({visible: false})
 
     // Deselect tab (change background color etc).
-    this.setState({selected: false, backgroundColor: tabs.state.backgroundColor, closeVisible: false})
+    this.setState({animateBackgroundColor: false, selected: false, backgroundColor: tabs.state.backgroundColor, closeVisible: false})
 
     this.selected = false
 
