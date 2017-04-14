@@ -106,7 +106,7 @@ export default class Tabs extends React.Component {
     const self = this
     // If the tab is last tab, close App.
     if (global.tabs.length === 1) {
-      this.props.getApp().getSystembar().getControls().close()
+      this.props.getApp().getControls().close()
       return
     }
 
