@@ -140,7 +140,6 @@ export default class Tab extends React.Component {
     if (this.new) {
       tabs.canShowAddButton = true
       tabs.closeTab(this)
-      tabs.setState({addButtonVisible: true})
     }
   }
 
