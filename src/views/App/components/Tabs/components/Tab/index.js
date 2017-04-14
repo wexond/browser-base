@@ -1,5 +1,6 @@
 import React from 'react'
 import {Motion, spring} from 'react-motion'
+import Colors from '../../../../../../helpers/Colors'
 
 export default class Tab extends React.Component {
   constructor () {
@@ -16,12 +17,12 @@ export default class Tab extends React.Component {
       new: true,
       favicon: '',
       loading: false,
-      closeVisible: true
+      closeVisible: true,
+      animateBackgroundColor: false,
+      backgroundColor: '#fff'
     }
 
-    this.background = '#fff'
-    this.hiding = false
-    this.selected = false
+    this.selectedBackgroundColor = '#fff'
     this.new = true
   }
 
@@ -75,7 +76,7 @@ export default class Tab extends React.Component {
   }
 
   /**
-   * Pins tab.
+   * Pins or unpins tab.
    */
   pin = () => {
     const tabs = this.props.getTabs()
@@ -116,7 +117,7 @@ export default class Tab extends React.Component {
     page.setState({visible: true})
 
     // Select tab (change background color etc).
-    this.setState({selected: true})
+    this.setState({selected: true, backgroundColor: this.selectedBackgroundColor, closeVisible: true})
 
     this.selected = true
 
@@ -134,7 +135,7 @@ export default class Tab extends React.Component {
     page.setState({visible: false})
 
     // Deselect tab (change background color etc).
-    this.setState({selected: false})
+    this.setState({selected: false, backgroundColor: tabs.state.backgroundColor, closeVisible: false})
 
     this.selected = false
 
@@ -184,11 +185,6 @@ export default class Tab extends React.Component {
   render () {
     const self = this
     const tabs = this.props.getTabs()
-
-    var tabEvents = {
-      onMouseDown: onMouseDown,
-      onDoubleClick: onDoubleClick
-    }
 
     var displaySmallBorder = 'none'
 
@@ -251,6 +247,13 @@ export default class Tab extends React.Component {
 
     /** Events */
 
+    var tabEvents = {
+      onMouseDown: onMouseDown,
+      onDoubleClick: onDoubleClick,
+      onMouseEnter: onMouseEnter,
+      onMouseLeave: onMouseLeave
+    }
+
     function onMouseDown (e) {
       if (e.target.className === 'tab-close') {
         return
@@ -286,6 +289,26 @@ export default class Tab extends React.Component {
       self.pin()
     }
 
+    function onMouseEnter () {
+      if (!self.selected) {
+        var rgba = Colors.shadeColor(self.state.backgroundColor, 0.05)
+        self.mouseLeaveBackgroundColor = self.state.backgroundColor
+        self.setState({backgroundColor: rgba, animateBackgroundColor: true})
+        if (!self.pinned) {
+          self.setState({closeVisible: true})
+        }
+      }
+    }
+
+    function onMouseLeave () {
+      if (!self.selected) {
+        self.setState({backgroundColor: self.mouseLeaveBackgroundColor, animateBackgroundColor: true, closeVisible: false})
+        setTimeout(function () {
+          self.setState({animateBackgroundColor: false})
+        }, 200)
+      }
+    }
+
     if (this.state.render) {
       return (
         <div>
@@ -295,14 +318,17 @@ export default class Tab extends React.Component {
               {
                 left: value.left,
                 width: value.width,
-                backgroundColor: (this.state.selected) ? this.backgroundColor : tabs.state.backgroundColor,
-                zIndex: (this.state.selected) ? 3 : 1
+                backgroundColor: this.state.backgroundColor,
+                zIndex: (this.state.selected) ? 3 : 1,
+                transition: (this.state.animateBackgroundColor)
+                ? '0.2s background-color'
+                : 'none'
               }} className='tab' ref={(t) => { this.tab = t }}>
                 <div className='tab-content'>
                   <div className='tab-title' style={titleStyle}>
                     New tab
                   </div>
-                  <div style={closeStyle}>
+                  <div style={closeStyle} className='tab-close-container'>
                     <div className='tab-close' onClick={onClickClose} />
                   </div>
                 </div>
