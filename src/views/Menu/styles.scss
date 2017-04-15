@@ -1,3 +1,17 @@
+$primary-opacity-light: 0.87;
+$secondary-opacity-light: 0.54;
+$disabled-opacity-light: 0.38;
+$dividers-opacity-light: 0.12;
+
+$primary-opacity-dark: 1;
+$secondary-opacity-dark: 0.7;
+$disabled-opacity-dark: 0.5;
+$dividers-opacity-dark: 0.12;
+
+$hover-duration: 0.2s;
+
+$systembar-height: 32px;
+
 body {
   @include Roboto-Regular;
   @include cursor-default;
@@ -10,4 +24,51 @@ body {
   width: 100%;
   height: 200px;
   background-color: white;
+}
+
+.menu-actions {
+  width: 100%;
+  height: 48px;
+  position: relative;
+}
+
+.menu-action {
+  @include center-vertical;
+  @include image-center(24px, 24px);
+  position: relative;
+  height: 48px;
+  width: 48px;
+  float: left;
+  margin-left: 4px;
+  opacity: $secondary-opacity-light;
+  transition: $hover-duration opacity;
+
+  &:hover {
+    opacity: $primary-opacity-light;
+  }
+}
+
+.menu-action-back {
+  @extend .menu-action;
+  background-image: url(images/Menu/Actions/back.png);
+}
+
+.menu-action-forward {
+  @extend .menu-action;
+  background-image: url(images/Menu/Actions/back.png);
+}
+
+.menu-action-reload {
+  @extend .menu-action;
+  background-image: url(images/Menu/Actions/back.png);
+}
+
+.menu-action-star {
+  @extend .menu-action;
+  background-image: url(images/Menu/Actions/back.png);
+}
+
+.menu-action-expand {
+  @extend .menu-action;
+  background-image: url(images/Menu/Actions/back.png);
 }

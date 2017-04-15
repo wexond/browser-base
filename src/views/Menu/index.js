@@ -131,7 +131,13 @@ class Menu extends React.Component {
       <Motion style={{opacity: this.state.opacity, top: this.state.top}}>
         {value =>
           <div ref={(t) => { this.menu = t }} className='menu' onClick={onClick} style={{opacity: value.opacity, top: value.top}}>
-            Hello
+            <div className='menu-actions'>
+              <div className='menu-action-back' />
+              <div className='menu-action-forward' />
+              <div className='menu-action-reload' />
+              <div className='menu-action-star' />
+              <div className='menu-action-expand' />
+            </div>
           </div>}
 
       </Motion>
