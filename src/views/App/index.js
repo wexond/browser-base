@@ -31,13 +31,6 @@ window.global = {
     setPositionsSpring: Spring.durationToSpring(0.4),
     setWidthsSpring: Spring.durationToSpring(0.4)
   },
-  barAnimationData: {
-    opacitySpring: Spring.durationToSpring(0.4),
-    topSpring: Spring.durationToSpring(0.4)
-  },
-  suggestionsAnimationData: {
-    opacitySpring: Spring.durationToSpring(0.4)
-  },
   defaultOptions: {
     select: true,
     url: 'wexond://newtab'
