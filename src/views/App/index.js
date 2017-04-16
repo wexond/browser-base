@@ -5,9 +5,9 @@ import Spring from '../../helpers/Spring'
 import Bar from './components/Bar'
 import Page from './components/Page'
 
-import '../../helpers/Arrays'
+import './../../helpers/Arrays'
 
-import '../../app.scss'
+import './../../app.scss'
 
 const remote = require('electron').remote
 const path = require('path')
