@@ -392,9 +392,9 @@ export default class Tabs extends React.Component {
                   className='add-button' />}
             </Motion>
           </div>
-          <Controls ref='controls' />
           <div className='systembar-border' style={systembarBorderStyle} />
         </div>
+        <Controls ref='controls' />
       </div>
     )
   }

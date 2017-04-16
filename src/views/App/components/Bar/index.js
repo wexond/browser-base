@@ -1,5 +1,4 @@
 import React from 'react'
-import {Motion, spring} from 'react-motion'
 import Suggestion from './components/Suggestion'
 import Suggestions from '../../../../helpers/Suggestions'
 import Network from '../../../../helpers/Network'
@@ -9,16 +8,18 @@ export default class Bar extends React.Component {
     super()
 
     this.state = {
-      barTop: -20,
+      barMarginTop: -20,
+      barTop: 42,
+      centerVertical: false,
       barOpacity: 0,
       suggestionsOpacity: 0,
       watermarkVisible: true,
       suggestionsToCreate: [],
-      barVisible: false,
-      suggestionsVisible: false,
+      suggestionsPointerEvents: 'none',
       hint: '',
       hintLeft: 0,
-      inputText: ''
+      inputText: '',
+      barPointerEvents: false
     }
 
     this.tempLocked = false
@@ -67,6 +68,10 @@ export default class Bar extends React.Component {
    * @param {number} moveBy
    */
   selectSuggestion = (moveBy) => {
+    if (!this.suggestionsVisible) {
+      return
+    }
+
     var suggestions = this.suggestions
     var selectedSuggestion = this.getSelectedSuggestion()
     var selectedIndex = suggestions.indexOf(selectedSuggestion)
@@ -104,10 +109,11 @@ export default class Bar extends React.Component {
    */
   show = () => {
     this.setState({
-      barOpacity: spring(1, global.barAnimationData.opacitySpring),
-      barTop: spring(0, global.barAnimationData.topSpring),
-      barVisible: true
+      barPointerEvents: 'auto',
+      barOpacity: 1,
+      barMarginTop: 0
     })
+
     this.barVisible = true
   }
   /**
@@ -115,15 +121,20 @@ export default class Bar extends React.Component {
    */
   hide = () => {
     this.setState({
-      barOpacity: spring(0, global.barAnimationData.opacitySpring),
-      barTop: spring(-20, global.barAnimationData.topSpring)
+      barOpacity: 0,
+      barMarginTop: -20,
+      barPointerEvents: 'none'
     })
+
     this.input.value = this.lastText
     this.removeHint()
+    this.input.blur()
+
     this.barVisible = false
     this.tempLocked = false
-    this.input.blur()
+
     this.updateBar()
+
     this.hideSuggestions()
   }
   /**
@@ -131,8 +142,10 @@ export default class Bar extends React.Component {
    */
   hideSuggestions = () => {
     this.setState({
-      suggestionsOpacity: spring(0, global.suggestionsAnimationData.opacitySpring)
+      suggestionsOpacity: 0,
+      suggestionsPointerEvents: 'none'
     })
+
     this.suggestionsVisible = false
   }
   /**
@@ -140,11 +153,12 @@ export default class Bar extends React.Component {
    */
   showSuggestions = () => {
     this.setState({
-      suggestionsOpacity: spring(1, global.suggestionsAnimationData.opacitySpring),
-      suggestionsVisible: true
+      suggestionsOpacity: 1,
+      suggestionsPointerEvents: 'auto'
     })
-    this.suggestionsVisible = true
+
     this.tempLocked = true
+    this.suggestionsVisible = true
     this.show()
   }
   /**
@@ -232,7 +246,7 @@ export default class Bar extends React.Component {
     /** Events */
 
     function onChange (e) {
-      self.setState({inputText: self.input.value})
+      self.setState({inputText: self.input.value, centerVertical: false})
       self.updateBar(true)
 
       var suggestions = []
@@ -300,7 +314,7 @@ export default class Bar extends React.Component {
       }
       // arrow down
       if (key === 40) {
-      self.removeHint()
+        self.removeHint()
         self.selectSuggestion(1)
         e.preventDefault()
       }
@@ -344,58 +358,39 @@ export default class Bar extends React.Component {
       }
     }
 
-    function onRest () {
-      if (!self.barVisible) {
-        self.setState({suggestionsVisible: false, barVisible: false})
-      }
-      if (!self.suggestionsVisible) {
-        self.setState({suggestionsVisible: false})
-      }
-    }
-
     function onFocus () {
       self.input.setSelectionRange(0, self.input.value.length)
       self.tempLocked = true
     }
 
     return (
-      <Motion style={{
-        barTop: this.state.barTop,
-        barOpacity: this.state.barOpacity,
-        suggestionsOpacity: this.state.suggestionsOpacity
-      }} onRest={onRest}>
-        {value => <div>
-          <div style={{
-            marginTop: value.barTop,
-            opacity: value.barOpacity,
-            display: (this.state.barVisible)
-              ? 'block'
-              : 'none'
-          }} className='bar'>
-            <div className='bar-search-icon' />
-            <div style={watermarkStyle} className='bar-watermark'>Search</div>
-            <div className='bar-hint' style={{marginLeft: this.state.hintLeft}}>{this.state.hint}</div>
-            <span ref={(t) => { this.textWidth = t }} style={{opacity: 0, top: -300, fontSize: 14, position: 'absolute'}}>{this.state.inputText}</span>
-            <input ref={(t) => {
-              this.input = t
-            }} {...inputEvents} className='bar-input' />
-          </div>
-          <div onClick={onSuggestionsClick} className='suggestions' style={{
-            opacity: value.suggestionsOpacity,
-            display: (this.state.suggestionsVisible)
-              ? 'block'
-              : 'none'
-          }}>
-            {this.state.suggestionsToCreate.map((object, i) => {
-              if (object.type !== 'separator') {
-                return <Suggestion getBar={self.getBar} key={i} data={object} />
-              } else {
-                return <div key={i} className='suggestions-separator'>{object.text}</div>
-              }
-            })}
-          </div>
-        </div>}
-      </Motion>
+      <div>
+        <div style={{
+          marginTop: (this.state.centerVertical) ? -120 : this.state.barMarginTop,
+          opacity: this.state.barOpacity,
+          pointerEvents: this.state.barPointerEvents
+        }} className={(this.state.centerVertical) ? 'bar bar-center' : 'bar bar-center-horizontal'}>
+          <div className='bar-search-icon' />
+          <div style={watermarkStyle} className='bar-watermark'>Search</div>
+          <div className='bar-hint' style={{marginLeft: this.state.hintLeft}}>{this.state.hint}</div>
+          <span ref={(t) => { this.textWidth = t }} style={{opacity: 0, top: -300, fontSize: 14, position: 'absolute'}}>{this.state.inputText}</span>
+          <input ref={(t) => {
+            this.input = t
+          }} {...inputEvents} className='bar-input' />
+        </div>
+        <div onClick={onSuggestionsClick} className='suggestions' style={{
+          opacity: this.state.suggestionsOpacity,
+          pointerEvents: this.state.suggestionsPointerEvents
+        }}>
+          {this.state.suggestionsToCreate.map((object, i) => {
+            if (object.type !== 'separator') {
+              return <Suggestion getBar={self.getBar} key={i} data={object} />
+            } else {
+              return <div key={i} className='suggestions-separator'>{object.text}</div>
+            }
+          })}
+        </div>
+      </div>
     )
   }
 }

@@ -173,19 +173,23 @@ export default class Tab extends React.Component {
 
     setTimeout(function () {
       if (self.getPage().getWebView().getWebContents() != null) {
-        // Refresh navigation icons in Menu.
-        var menu = global.menuWindow
-        var webview = self.getPage().getWebView()
+        const menu = global.menuWindow
+        const webview = self.getPage().getWebView()
 
+        // Refresh navigation icons in Menu.
         menu.send('webview:can-go-back', webview.canGoBack())
         menu.send('webview:can-go-forward', webview.canGoForward())
 
+        // Update bar text and focus it.
         self.props.getApp().updateBarText(webview.getURL())
         if (bar.getText() === '') {
           bar.input.focus()
         }
       }
     }, 1)
+
+    // Center vertically bar when the selected tab is new.
+    bar.setState({centerVertical: this.new})
 
     tabs.updateTabs()
   }

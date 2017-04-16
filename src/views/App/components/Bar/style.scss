@@ -1,7 +1,6 @@
 @import 'components/Suggestion/style.scss';
 
 .bar {
-  @include center-horizontal;
   @include shadow(1);
   @include Body1;
   position: absolute;
@@ -12,6 +11,17 @@
   width: 100%;
   max-width: 600px;
   border-radius: 3px;
+  transition: 0.2s all;
+  transition-property: margin-top, opacity, top;
+}
+
+.bar-center {
+  @include center-both;
+  margin-top: -256px;
+}
+
+.bar-center-horizontal {
+  @include center-horizontal;
 }
 
 .bar-search-icon {
@@ -70,6 +80,8 @@
   padding: 16px;
   padding-top: 0;
   background-color: white;
+  transition: 0.3s all;
+  z-index: 5;
 }
 
 .suggestions-separator {
