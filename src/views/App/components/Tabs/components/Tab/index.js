@@ -93,9 +93,11 @@ export default class Tab extends React.Component {
     tabs.setState({addButtonVisible: true})
     this.setState({render: false})
 
+    // Set widths and positions for all tabs.
     tabs.setWidths(false, false)
     tabs.setPositions(false, false)
 
+    // Pass index of closed tab to callback.
     if (callback != null) callback(index)
   }
 
@@ -125,6 +127,7 @@ export default class Tab extends React.Component {
   pin = () => {
     const tabs = this.props.getTabs()
 
+    // Set pinned state.
     if (!this.pinned) {
       this.setState({pinned: true})
     } else {
@@ -133,12 +136,14 @@ export default class Tab extends React.Component {
 
     this.pinned = !this.pinned
 
+    // Move the pinned tab to first position.
     var tempTabs = []
     for (var i = 0; i < global.tabs.length; i++) {
       if (global.tabs[i].pinned) {
         tempTabs.push(global.tabs[i])
       }
     }
+
     for (i = 0; i < global.tabs.length; i++) {
       if (!global.tabs[i].pinned) {
         tempTabs.push(global.tabs[i])
@@ -146,6 +151,7 @@ export default class Tab extends React.Component {
     }
     global.tabs = tempTabs
 
+    // Calculate all widths and positions for all tabs.
     tabs.setWidths()
     tabs.setPositions()
   }
