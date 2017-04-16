@@ -114,10 +114,6 @@ export default class Tab extends React.Component {
     // Show the new tab button.
     tabs.setState({addButtonVisible: true})
 
-    // Set the widths and positions for all tabs.
-    tabs.setWidths()
-    tabs.setPositions()
-
     tabs.canShowAddButton = true
   }
 
