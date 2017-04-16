@@ -31,9 +31,11 @@ export default class Tab extends React.Component {
     const tabs = this.props.getTabs()
     const app = this.props.getApp()
 
+    // Add page associated to the tab and give access to the tab.
     app.setState(previousState => ({
       pagesToCreate: [...previousState.pagesToCreate, {url: this.props.url, getTab: this.getTab}]
     }))
+
     // Add this to the global tab collection.
     global.tabs.push(this)
 
@@ -58,12 +60,15 @@ export default class Tab extends React.Component {
   }
 
   /**
+   * Executed when the page associated with the tab has loaded.
+   * Gives access to the page.
    * @event
    * @param {function} getPage
    */
   onPageLoad = (getPage) => {
     const tabs = this.props.getTabs()
     this.getPage = getPage
+
     // Select the tab if prop select is true.
     if (this.props.select) {
       tabs.selectTab(this)
@@ -260,6 +265,89 @@ export default class Tab extends React.Component {
   }
 
   /**
+   * Closes the tab.
+   */
+  close = () => {
+    const self = this
+    const tabs = this.props.getTabs()
+    // If the tab is last tab.
+    if (global.tabs.length === 1) {
+      tabs.setState({tabsVisible: false})
+      tabs.addTab()
+    }
+
+    if (global.tabs.length === 2) {
+      if (!this.new) {
+        for (var i = 0; i < global.tabs.length; i++) {
+          if (global.tabs[i].new) {
+            global.tabs[i].getPage().setState({height: '100vh'})
+            tabs.setState({tabsVisible: false})
+          }
+        }
+      }
+    }
+
+    tabs.timer.canReset = true
+
+    // Remove page associated to the tab.
+    this.getPage().setState({render: false})
+
+    // Get previous and next tab.
+    var index = global.tabs.indexOf(this)
+    var nextTab = global.tabs[index + 1]
+    var prevTab = global.tabs[index - 1]
+
+    // Remove the tab from array.
+    global.tabs.splice(index, 1)
+
+    if (this.selected) {
+      if (nextTab != null) { // If the next tab exists, select it.
+        tabs.selectTab(nextTab)
+      } else { // If the next tab not exists.
+        if (prevTab != null) { // If previous tab exists, select it.
+          tabs.selectTab(prevTab)
+        } else { // If the previous tab not exists, check if the first tab exists.
+          if (global.tabs[0] != null) { // If first tab exists, select it.
+            tabs.selectTab(global.tabs[0])
+          }
+        }
+      }
+    }
+
+    // Bring back the add tab button.
+    tabs.setState({addButtonVisible: true})
+
+    if (index === global.tabs.length) { // If the tab is last.
+      // Calculate all widths and positions for all tabs.
+      tabs.setWidths()
+      tabs.setPositions()
+
+      if (this.width < 190) { // If tab width is less than normal tab width.
+        this.setState({render: false}) // Just remove it.
+      } else {
+        closeAnim() // Otherwise, animate the tab.
+      }
+    } else {
+      closeAnim() // Otherwise, animate the tab.
+    }
+
+    // Animate tab closing.
+    function closeAnim () {
+      self.hiding = true
+      // Animate.
+      self.setState({
+        width: spring(0, global.tabsAnimationData.closeTabSpring),
+        visible: false
+      })
+    }
+
+    tabs.timer.time = 0
+
+    // Calculate positions for all tabs, but don't calculate widths.
+    tabs.setPositions()
+  }
+
+  /**
    * Gets this {Tab}.
    * @return {Tab}
    */
@@ -341,7 +429,7 @@ export default class Tab extends React.Component {
 
     /** Events */
 
-    var tabEvents = {
+    let tabEvents = {
       onMouseDown: onMouseDown,
       onDoubleClick: onDoubleClick,
       onMouseEnter: onMouseEnter,
@@ -388,7 +476,7 @@ export default class Tab extends React.Component {
           }
         })
       } else {
-        self.props.getTabs().closeTab(self)
+        self.close()
       }
     }
 
@@ -428,15 +516,15 @@ export default class Tab extends React.Component {
           <Motion style={{left: this.state.left, width: this.state.width}} onRest={onRest}>
             {value =>
               <div {...tabEvents} style={Object.assign(
-              {
-                left: value.left,
-                width: value.width,
-                backgroundColor: this.state.backgroundColor,
-                zIndex: (this.state.selected) ? 3 : 1,
-                transition: (this.state.animateBackgroundColor)
-                ? '0.2s background-color'
-                : 'none'
-              }, this.props.style)} className='tab' ref={(t) => { this.tab = t }}>
+                {
+                  left: value.left,
+                  width: value.width,
+                  backgroundColor: this.state.backgroundColor,
+                  zIndex: (this.state.selected) ? 3 : 1,
+                  transition: (this.state.animateBackgroundColor)
+                  ? '0.2s background-color'
+                  : 'none'
+                }, this.props.style)} className='tab' ref={(t) => { this.tab = t }}>
                 <div className='tab-content'>
                   <div className='tab-title' style={titleStyle}>
                     New tab
