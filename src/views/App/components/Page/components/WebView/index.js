@@ -1,22 +1,39 @@
 import React from 'react'
-import BrowserStorage from '../../../../../../../../helpers/BrowserStorage'
+import BrowserStorage from '../../../../../../helpers/BrowserStorage'
 
 export default class WebView extends React.Component {
   componentDidMount () {
     const self = this
 
-    this.getWebView().addEventListener('did-start-loading', function () {
+    this.getWebView().addEventListener('load-commit', function () {
       // Refresh navigation icons in Menu.
       var menu = global.menuWindow
       menu.send('webview:can-go-back', self.getWebView().canGoBack())
       menu.send('webview:can-go-forward', self.getWebView().canGoForward())
+
+      var contains = false
+
+      for (var i = 0; i < global.excludedURLs.length; i++) {
+        if (global.excludedURLs[i].indexOf(this.getURL()) !== -1) {
+          contains = true
+          break
+        }
+        if (this.getURL().indexOf(global.excludedURLs[i]) !== -1) {
+          contains = true
+          break
+        }
+      }
+
+      if (!contains) {
+        self.props.getApp().getTabs().setWidths()
+        self.props.getApp().getTabs().setPositions()
+        self.props.getPage().setState({height: 'calc(100vh - 32px'})
+        self.props.getApp().getTabs().setState({tabsVisible: true})
+        self.props.getTab().normalTab()
+      }
     })
 
     this.getWebView().addEventListener('did-finish-load', function () {
-      if (!global.excludedURLs.contains(this.getURL())) {
-        self.props.getTab().normalTab()
-      }
-
       var webview = self.getWebView()
       // Check if tab is selected.
       if (self.props.getTab() != null && self.props.getTab().selected) {
