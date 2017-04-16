@@ -12,8 +12,12 @@ $hover-duration: 0.2s;
 
 $systembar-height: 32px;
 
+@import 'components/Page/components/WebView/style.scss';
+@import 'components/Page/style.scss';
 @import 'components/Tabs/style.scss';
 @import 'components/Bar/style.scss';
+@import 'components/Tabs/components/Tab/style.scss';
+@import 'components/Tabs/components/Controls/style.scss';
 
 body {
   @include Body1;

@@ -1,6 +1,5 @@
 import React from 'react'
 import Tab from './components/Tab'
-import Page from './components/Page'
 import Controls from './components/Controls'
 
 import {Motion, spring} from 'react-motion'
@@ -14,7 +13,8 @@ export default class Tabs extends React.Component {
       addButtonLeft: 0,
       addButtonVisible: true,
       borderColor: 'rgba(0,0,0,0.12)',
-      backgroundColor: '#EEE'
+      backgroundColor: '#EEE',
+      tabsVisible: false
     }
 
     // The timer for closing tabs system.
@@ -44,7 +44,7 @@ export default class Tabs extends React.Component {
       self.timer.time += 1
     }, 1000)
 
-    /** events */
+    /** Events */
 
     window.addEventListener('resize', function () {
       self.setWidths(false)
@@ -115,18 +115,26 @@ export default class Tabs extends React.Component {
    */
   closeTab = (tab) => {
     const self = this
-    // If the tab is last tab, close App.
+    // If the tab is last tab.
     if (global.tabs.length === 1) {
-      this.props.getApp().getControls().close()
-      return
+      this.setState({tabsVisible: false})
+      this.addTab()
+    }
+
+    if (global.tabs.length === 2) {
+      if (!tab.new) {
+        for (var i = 0; i < global.tabs.length; i++) {
+          if (global.tabs[i].new) {
+            global.tabs[i].getPage().setState({height: '100vh'})
+            this.setState({tabsVisible: false})
+          }
+        }
+      }
     }
 
     this.timer.canReset = true
     // Remove page associated to the tab.
     tab.getPage().setState({render: false})
-
-    // Bring back the add tab button.
-    this.setState({addButtonVisible: true})
 
     // Get previous and next tab.
     var index = global.tabs.indexOf(tab)
@@ -136,18 +144,23 @@ export default class Tabs extends React.Component {
     // Remove the tab from array.
     global.tabs.splice(index, 1)
 
-    if (nextTab != null) { // If the next tab exists, select it.
-      this.selectTab(nextTab)
-    } else { // If the next tab not exists.
-      if (prevTab != null) { // If previous tab exists, select it.
-        this.selectTab(prevTab)
-      } else { // If the previous tab not exists, check if the first tab exists.
-        if (global.tabs[0] != null) { // If first tab exists, select it.
-          this.selectTab(global.tabs[0])
+    if (tab.selected) {
+      if (nextTab != null) { // If the next tab exists, select it.  
+        this.selectTab(nextTab)
+      } else { // If the next tab not exists.
+        if (prevTab != null) { // If previous tab exists, select it.
+          this.selectTab(prevTab)
+        } else { // If the previous tab not exists, check if the first tab exists.
+          if (global.tabs[0] != null) { // If first tab exists, select it.
+            this.selectTab(global.tabs[0])
+          }
         }
       }
     }
 
+    // Bring back the add tab button.
+    this.setState({addButtonVisible: true})
+  
     if (index === global.tabs.length) { // If the tab is last.
       // Calculate all widths and positions for all tabs.
       this.setWidths()
@@ -270,7 +283,9 @@ export default class Tabs extends React.Component {
 
     for (var i = 0; i < global.tabs.length; i++) {
       lefts.push(a)
-      a += global.tabs[i].width
+      if (!global.tabs[i].new) {
+        a += global.tabs[i].width
+      }
     }
 
     return {tabPositions: lefts, addButtonPosition: a}
@@ -458,8 +473,11 @@ export default class Tabs extends React.Component {
       backgroundColor: this.state.borderColor
     }
 
+    var tabsDisplay = (this.state.tabsVisible) ? 'block' : 'none'
+
     var systembarStyle = {
-      backgroundColor: this.state.backgroundColor
+      backgroundColor: this.state.backgroundColor,
+      display: tabsDisplay
     }
 
     /** events */
@@ -473,11 +491,17 @@ export default class Tabs extends React.Component {
         <div className='systembar' style={systembarStyle}>
           <div className='systembar-drag-handle' />
           <div className='tabbar' ref='tabbar'>
+            {this.state.tabsToCreate.map((data, key) => {
+              return (
+                <Tab url={data.url} getApp={self.props.getApp} getTabs={self.getTabs} select={data.select} key={key} />
+              )
+            })}
             <Motion style={{left: this.state.addButtonLeft}}>
               {value =>
                 <div ref={(a) => { this.addButton = a }}
                   style={{
-                    left: value.left, display: (this.state.addButtonVisible) ? 'block' : 'none'
+                    left: value.left,
+                    display: (this.state.addButtonVisible && this.state.tabsVisible) ? 'block' : 'none'
                   }}
                   onClick={onAddButtonClick}
                   className='add-button' />}
@@ -485,13 +509,6 @@ export default class Tabs extends React.Component {
           </div>
           <Controls ref='controls' />
           <div className='systembar-border' style={systembarBorderStyle} />
-          {this.state.tabsToCreate.map((data, key) => {
-            return (
-              <Tab getApp={self.props.getApp} getTabs={self.getTabs} select={data.select} key={key}>
-                <Page url={data.url} />
-              </Tab>
-            )
-          })}
         </div>
       </div>
     )

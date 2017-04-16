@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import Tabs from './components/Tabs'
 import Spring from '../../helpers/Spring'
 import Bar from './components/Bar'
+import Page from './components/Page'
 
 import '../../helpers/Arrays'
 
@@ -46,6 +47,14 @@ window.global = {
 }
 
 class App extends React.Component {
+  constructor () {
+    super()
+
+    this.state = {
+      pagesToCreate: []
+    }
+  }
+
   componentDidMount () {
     window.addEventListener('contextmenu', function (e) {
       if (e.target.tagName === 'WEBVIEW') {
@@ -58,24 +67,24 @@ class App extends React.Component {
    * Sets bar text.
    * @param {string} text
    */
-    updateBarText = (text) => {
-      var bar = this.getBar()
-      // check if webview's url is in excluded urls
-      if (!global.excludedURLs.contains(text)) {
-        // if not, set bar's text to webview's url and unlock bar
-        bar.setText(text)
-        bar.locked = false
-        bar.tempLocked = false
-      } else {
-        bar.setText('')
-        // if it is, check if the url is wexond://newtab
-        if (text.startsWith('wexond://newtab')) {
-          // if it is, lock and show bar
-          bar.locked = true
-          bar.show()
-        }
+  updateBarText = (text) => {
+    var bar = this.getBar()
+    // check if webview's url is in excluded urls
+    if (!global.excludedURLs.contains(text)) {
+      // if not, set bar's text to webview's url and unlock bar
+      bar.setText(text)
+      bar.locked = false
+      bar.tempLocked = false
+    } else {
+      bar.setText('')
+      // if it is, check if the url is wexond://newtab
+      if (text.startsWith('wexond://newtab')) {
+        // if it is, lock and show bar
+        bar.locked = true
+        bar.show()
       }
     }
+  }
 
   /**
    * Gets this {App}.
@@ -105,7 +114,12 @@ class App extends React.Component {
     return (
       <div>
         <Tabs ref='tabs' getApp={this.getApp} />
-        <Bar ref='bar' />
+        <Bar ref='bar' getApp={this.getApp} />
+        {this.state.pagesToCreate.map((data, key) => {
+          return (
+            <Page getApp={this.getApp} getTab={data.getTab} url={data.url} key={key} />
+          )
+        })}
       </div>
     )
   }

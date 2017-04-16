@@ -29,9 +29,15 @@ export default class Tab extends React.Component {
 
   componentDidMount () {
     const tabs = this.props.getTabs()
+    const app = this.props.getApp()
 
+    app.setState(previousState => ({
+      pagesToCreate: [...previousState.pagesToCreate, {url: this.props.url, getTab: this.getTab}]
+    }))
     // Add this to the global tab collection.
     global.tabs.push(this)
+
+    global.tabs[global.tabs.indexOf(this)].staticIndex = global.tabs.indexOf(this)
 
     // Get positions for all tabs.
     var positions = tabs.getPositions().tabPositions
@@ -41,19 +47,51 @@ export default class Tab extends React.Component {
       left: positions[global.tabs.indexOf(this)]
     }, function () {
       // Set the widths and positions for all tabs.
-      tabs.setWidths()
-      tabs.setPositions()
+      tabs.setWidths(false)
+      tabs.setPositions(false, false)
     })
-
-    // Select the tab if prop select is true.
-    if (this.props.select) {
-      tabs.selectTab(this)
-    }
 
     // Hide new tab button on tab create.
     tabs.setState({addButtonVisible: false})
 
     tabs.canShowAddButton = false
+  }
+
+  /**
+   * @event
+   * @param {function} getPage
+   */
+  onPageLoad = (getPage) => {
+    const tabs = this.props.getTabs()
+    this.getPage = getPage
+    // Select the tab if prop select is true.
+    if (this.props.select) {
+      tabs.selectTab(this)
+    }
+  }
+
+  /**
+   * Closes only new tab.
+   * @param {function} callback
+   */
+  closeNew = (callback = null) => {
+    const tabs = this.props.getTabs()
+    let index = global.tabs.indexOf(this)
+
+    // Remove the tab from array.
+    global.tabs.splice(index, 1)
+
+    // Remove page associated to the tab.
+    this.getPage().setState({render: false})
+
+    // Bring back the add tab button.
+    tabs.setState({addButtonVisible: true})
+    this.setState({render: false})
+
+    tabs.setWidths(false, false)
+    tabs.setPositions(false, false)
+
+    if (callback != null) callback(index)
   }
 
   /**
@@ -115,7 +153,7 @@ export default class Tab extends React.Component {
     const page = this.getPage()
     const self = this
 
-    // Show the associated page.
+    // Show the associated page.s
     page.setState({visible: true})
 
     // Select tab (change background color etc).
@@ -164,7 +202,7 @@ export default class Tab extends React.Component {
 
     if (this.new) {
       tabs.canShowAddButton = true
-      tabs.closeTab(this)
+      this.closeNew()
     }
   }
 
@@ -185,14 +223,6 @@ export default class Tab extends React.Component {
         tabs.replaceTabs(indexTab, indexOverTab)
       }
     }
-  }
-
-  /**
-   * Gets page associated with tab.
-   * @return {Page}
-   */
-  getPage = () => {
-    return this.refs.page
   }
 
   /**
@@ -301,7 +331,27 @@ export default class Tab extends React.Component {
     }
 
     function onClickClose (e) {
-      self.props.getTabs().closeTab(self)
+      if (self.new) {
+        self.closeNew(function (index) {
+          // Get previous and next tab.
+          var nextTab = global.tabs[index + 1]
+          var prevTab = global.tabs[index - 1]
+
+          if (nextTab != null) { // If the next tab exists, select it.
+            tabs.selectTab(nextTab)
+          } else { // If the next tab not exists.
+            if (prevTab != null) { // If previous tab exists, select it.
+              tabs.selectTab(prevTab)
+            } else { // If the previous tab not exists, check if the first tab exists.
+              if (global.tabs[0] != null) { // If first tab exists, select it.
+                tabs.selectTab(global.tabs[0])
+              }
+            }
+          }
+        })
+      } else {
+        self.props.getTabs().closeTab(self)
+      }
     }
 
     function onRest () {
@@ -339,7 +389,7 @@ export default class Tab extends React.Component {
         <div>
           <Motion style={{left: this.state.left, width: this.state.width}} onRest={onRest}>
             {value =>
-              <div {...tabEvents} style={
+              <div {...tabEvents} style={Object.assign(
               {
                 left: value.left,
                 width: value.width,
@@ -348,7 +398,7 @@ export default class Tab extends React.Component {
                 transition: (this.state.animateBackgroundColor)
                 ? '0.2s background-color'
                 : 'none'
-              }} className='tab' ref={(t) => { this.tab = t }}>
+              }, this.props.style)} className='tab' ref={(t) => { this.tab = t }}>
                 <div className='tab-content'>
                   <div className='tab-title' style={titleStyle}>
                     New tab
@@ -363,14 +413,6 @@ export default class Tab extends React.Component {
                 <div className='tab-border-full' style={borderRightStyle} />
               </div>}
           </Motion>
-
-          {React.Children.map(this.props.children, child => {
-            return React.cloneElement(child, {
-              ref: 'page',
-              getTab: self.getTab,
-              getApp: self.props.getApp
-            })
-          })}
         </div>
       )
     } else {
