@@ -40,7 +40,7 @@ export default class Tab extends React.Component {
     global.tabs[global.tabs.indexOf(this)].staticIndex = global.tabs.indexOf(this)
 
     // Get positions for all tabs.
-    var positions = tabs.getPositions().tabPositions
+    const positions = tabs.getPositions().tabPositions
 
     // Set initial position for the tab.
     this.setState({
@@ -76,7 +76,7 @@ export default class Tab extends React.Component {
    */
   closeNew = (callback = null) => {
     const tabs = this.props.getTabs()
-    let index = global.tabs.indexOf(this)
+    const index = global.tabs.indexOf(this)
 
     // Remove the tab from array.
     global.tabs.splice(index, 1)
@@ -152,6 +152,7 @@ export default class Tab extends React.Component {
     const tabs = this.props.getTabs()
     const page = this.getPage()
     const self = this
+    const bar = this.props.getApp().getBar()
 
     // Show the associated page.s
     page.setState({visible: true})
@@ -161,7 +162,6 @@ export default class Tab extends React.Component {
 
     this.selected = true
 
-    var bar = this.props.getApp().getBar()
     bar.hideSuggestions()
 
     setTimeout(function () {
@@ -214,14 +214,48 @@ export default class Tab extends React.Component {
   reorderTabs = (cursorX) => {
     const tabs = this.props.getTabs()
     if (!this.pinned) {
-      var overTab = tabs.getTabFromMousePoint(this, cursorX)
+      const overTab = tabs.getTabFromMousePoint(this, cursorX)
 
       if (overTab != null && !overTab.pinned) {
-        var indexTab = global.tabs.indexOf(this)
-        var indexOverTab = global.tabs.indexOf(overTab)
+        const indexTab = global.tabs.indexOf(this)
+        const indexOverTab = global.tabs.indexOf(overTab)
 
         tabs.replaceTabs(indexTab, indexOverTab)
       }
+    }
+  }
+
+  /**
+   * Updates position of tab to its place.
+   */
+  updatePosition = () => {
+    const tabs = this.props.getTabs()
+    const self = this
+    const data = tabs.getPositions()
+
+    // Get new position for the tab.
+    const newTabPos = data.tabPositions[global.tabs.indexOf(this)]
+
+    // Unable to reorder the tab by other tabs.
+    this.locked = true
+
+    // Animate the tab.
+    this.setState({
+      left: spring(newTabPos, global.tabsAnimationData.setPositionsSpring)
+    })
+
+    // Unlock tab reordering by other tabs.
+    setTimeout(function () {
+      self.locked = false
+    }, 200)
+
+    tabs.updateTabs()
+
+    // Show or hide tab's borders.
+    if (newTabPos === 0) {
+      this.setState({leftBorderVisible: false})
+    } else {
+      this.setState({leftBorderVisible: true})
     }
   }
 
@@ -237,7 +271,9 @@ export default class Tab extends React.Component {
     const self = this
     const tabs = this.props.getTabs()
 
-    var displaySmallBorder = 'none'
+    /** Styles */
+
+    let displaySmallBorder = 'none'
 
     if (this.state.visible) {
       if (!this.state.selected && this.state.smallBorderVisible) {
@@ -245,18 +281,18 @@ export default class Tab extends React.Component {
       }
     }
 
-    var borderLeftSmallStyle = {
+    let borderLeftSmallStyle = {
       left: 0,
       display: (this.state.leftSmallBorderVisible) ? 'block' : 'none'
     }
 
-    var borderSmallStyle = {
+    let borderSmallStyle = {
       right: 0,
       display: displaySmallBorder,
       backgroundColor: tabs.state.borderColor
     }
 
-    var borderRightStyle = {
+    let borderRightStyle = {
       display: (this.state.selected && this.state.visible)
         ? 'block'
         : 'none',
@@ -264,18 +300,19 @@ export default class Tab extends React.Component {
       backgroundColor: tabs.state.borderColor
     }
 
-    var borderLeftStyle = {
+    let borderLeftStyle = {
       display: (this.state.selected && global.tabs.indexOf(this) !== 0 && this.state.visible)
         ? 'block'
         : 'none',
       backgroundColor: tabs.state.borderColor
     }
-    var closeStyle = {
+
+    let closeStyle = {
       display: (this.state.pinned) ? 'none' : 'block',
       opacity: (this.state.closeVisible) ? 1 : 0
     }
 
-    var titleMaxWidthDecrease = 0
+    let titleMaxWidthDecrease = 0
     if (this.state.closeVisible) {
       titleMaxWidthDecrease += 28
     } else {
@@ -287,7 +324,7 @@ export default class Tab extends React.Component {
       titleMaxWidthDecrease += 32
     }
 
-    var titleStyle = {
+    let titleStyle = {
       display: (this.state.new || this.state.pinned)
         ? 'none'
         : 'block',
@@ -296,7 +333,8 @@ export default class Tab extends React.Component {
         ? 12
         : 32
     }
-    var faviconStyle = {
+
+    let faviconStyle = {
       backgroundImage: (this.state.favicon !== '') ? 'url(' + this.state.favicon + ')' : '',
       display: (this.state.favicon === '') ? 'none' : 'block'
     }

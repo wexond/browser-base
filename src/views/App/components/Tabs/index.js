@@ -145,7 +145,7 @@ export default class Tabs extends React.Component {
     global.tabs.splice(index, 1)
 
     if (tab.selected) {
-      if (nextTab != null) { // If the next tab exists, select it.  
+      if (nextTab != null) { // If the next tab exists, select it.
         this.selectTab(nextTab)
       } else { // If the next tab not exists.
         if (prevTab != null) { // If previous tab exists, select it.
@@ -160,7 +160,7 @@ export default class Tabs extends React.Component {
 
     // Bring back the add tab button.
     this.setState({addButtonVisible: true})
-  
+
     if (index === global.tabs.length) { // If the tab is last.
       // Calculate all widths and positions for all tabs.
       this.setWidths()
@@ -390,40 +390,7 @@ export default class Tabs extends React.Component {
 
     // Change positions of replaced tabs.
     if (changePos) {
-      this.changePos(secondTab)
-    }
-  }
-
-  /**
-   * Changes position of tab to its place.
-   * @param {Tab} callingTab
-   */
-  changePos = (callingTab) => {
-    var data = this.getPositions()
-
-    // Get new position for the tab.
-    var newTabPos = data.tabPositions[global.tabs.indexOf(callingTab)]
-
-    // Unable to reorder the tab by other tabs.
-    callingTab.locked = true
-
-    // Animate the tab.
-    callingTab.setState({
-      left: spring(newTabPos, global.tabsAnimationData.setPositionsSpring)
-    })
-
-    // Unlock tab reordering by other tabs.
-    setTimeout(function () {
-      callingTab.locked = false
-    }, 200)
-
-    this.updateTabs()
-
-    // Show or hide tab's borders.
-    if (newTabPos === 0) {
-      callingTab.setState({leftBorderVisible: false})
-    } else {
-      callingTab.setState({leftBorderVisible: true})
+      secondTab.updatePosition()
     }
   }
 
