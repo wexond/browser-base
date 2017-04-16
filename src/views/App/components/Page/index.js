@@ -17,11 +17,11 @@ export default class Page extends React.Component {
   }
 
   /**
-   * Gets WebView.
+   * Gets webview tag from WebView component.
    * @return {<webview>}
    */
   getWebView = () => {
-    return this.refs.webview.refs.webview
+    return this.refs.webview.getWebView()
   }
 
   /**

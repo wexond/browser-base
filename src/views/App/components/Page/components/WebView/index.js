@@ -7,12 +7,17 @@ export default class WebView extends React.Component {
 
     this.getWebView().addEventListener('load-commit', function () {
       // Refresh navigation icons in Menu.
-      var menu = global.menuWindow
+      const menu = global.menuWindow
+      const tabs = self.props.getApp().getTabs()
+      const tab = self.props.getTab()
+      const page = self.props.getPage()
+
       menu.send('webview:can-go-back', self.getWebView().canGoBack())
       menu.send('webview:can-go-forward', self.getWebView().canGoForward())
 
-      var contains = false
+      let contains = false
 
+      // Check if the url from webview is in excluded URLs.
       for (var i = 0; i < global.excludedURLs.length; i++) {
         if (global.excludedURLs[i].indexOf(this.getURL()) !== -1) {
           contains = true
@@ -24,12 +29,13 @@ export default class WebView extends React.Component {
         }
       }
 
+      // If not, show the tabbar.
       if (!contains) {
-        self.props.getApp().getTabs().setWidths()
-        self.props.getApp().getTabs().setPositions()
-        self.props.getPage().setState({height: 'calc(100vh - 32px'})
-        self.props.getApp().getTabs().setState({tabsVisible: true})
-        self.props.getTab().normalTab()
+        tabs.setWidths()
+        tabs.setPositions()
+        page.setState({height: 'calc(100vh - ' + global.systembarHeight + 'px'})
+        tabs.setState({tabsVisible: true})
+        tab.normalTab()
       }
     })
 
@@ -54,6 +60,10 @@ export default class WebView extends React.Component {
     })
   }
 
+  /**
+   * Gets webview tag.
+   * @return {<webview>}
+   */
   getWebView = () => {
     return this.refs.webview
   }

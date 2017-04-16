@@ -43,7 +43,8 @@ window.global = {
     url: 'wexond://newtab'
   },
   excludedURLs: ['wexond://newtab', 'wexond://newtab/'],
-  historyPath: userData + '/history.json'
+  historyPath: userData + '/history.json',
+  systembarHeight: 32
 }
 
 class App extends React.Component {
