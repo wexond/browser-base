@@ -153,7 +153,7 @@ export default class Bar extends React.Component {
    */
   setText = (text) => {
     this.lastText = text
-    this.input.value = text
+    if (this.input !== document.activeElement) this.input.value = text
     this.updateBar()
   }
   /**
