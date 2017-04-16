@@ -373,8 +373,9 @@ export default class Tabs extends React.Component {
 
     return (
       <div>
+        {(!this.state.tabsVisible) ? <div className='systembar-drag-handle' /> : null}
         <div className='systembar' style={systembarStyle}>
-          <div className='systembar-drag-handle' />
+          {(this.state.tabsVisible) ? <div className='systembar-drag-handle' /> : null}
           <div className='tabbar' ref='tabbar'>
             {this.state.tabsToCreate.map((data, key) => {
               return (
