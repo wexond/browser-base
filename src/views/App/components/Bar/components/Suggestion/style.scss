@@ -6,6 +6,7 @@
   padding-left: 16px;
   font-size: 14px;
   position: relative;
+  background-color: transparent;
 }
 
 .suggestion-title {
@@ -18,6 +19,10 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   opacity: $primary-opacity-light;
+}
+
+.suggestion-hovered {
+  background-color: #eee;
 }
 
 .suggestion-url {

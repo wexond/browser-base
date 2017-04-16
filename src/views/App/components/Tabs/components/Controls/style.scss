@@ -1,7 +1,9 @@
 .controls {
-  position: relative;
-  height: 100%;
-  float: right;
+  position: absolute;
+  height: $systembar-height;
+  top: 0;
+  right: 0;
+  z-index: 4;
 }
 
 .control {

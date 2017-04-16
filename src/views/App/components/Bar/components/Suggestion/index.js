@@ -8,7 +8,8 @@ export default class Suggestion extends React.Component {
       text: '',
       url: '',
       title: '',
-      selected: false
+      selected: false,
+      hovered: false
     }
   }
 
@@ -28,7 +29,10 @@ export default class Suggestion extends React.Component {
   }
 
   render () {
+    const self = this
     var suggestionClass = (this.state.selected) ? 'suggestion suggestion-selected' : 'suggestion'
+    suggestionClass += (this.state.hovered) ? ' suggestion-hovered' : ''
+
     var content = (this.props.data.type === 'history')
         ? (
           <div>
@@ -38,8 +42,22 @@ export default class Suggestion extends React.Component {
         )
         : this.state.title
 
+    /** Events */
+
+    function onMouseEnter () {
+      if (!self.state.selected) {
+        self.setState({hovered: true})
+      }
+    }
+
+    function onMouseLeave () {
+      if (!self.state.selected) {
+        self.setState({hovered: false})
+      }
+    }
+
     return (
-        <div className={suggestionClass}>
+        <div onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnter} className={suggestionClass}>
           {content}
           <div className='clear-both' />
         </div>

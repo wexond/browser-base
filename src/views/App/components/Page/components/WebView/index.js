@@ -8,9 +8,11 @@ export default class WebView extends React.Component {
     this.getWebView().addEventListener('load-commit', function () {
       // Refresh navigation icons in Menu.
       const menu = global.menuWindow
-      const tabs = self.props.getApp().getTabs()
+      const app = self.props.getApp()
+      const tabs = app.getTabs()
       const tab = self.props.getTab()
       const page = self.props.getPage()
+      const bar = app.getBar()
 
       menu.send('webview:can-go-back', self.getWebView().canGoBack())
       menu.send('webview:can-go-forward', self.getWebView().canGoForward())
@@ -36,6 +38,7 @@ export default class WebView extends React.Component {
         page.setState({height: 'calc(100vh - ' + global.systembarHeight + 'px'})
         tabs.setState({tabsVisible: true})
         tab.normalTab()
+        bar.setState({centerVertical: false})
       }
     })
 
