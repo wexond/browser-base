@@ -27,6 +27,7 @@ export default class Tab extends React.Component {
   componentDidMount () {
     const tabs = this.props.getTabs()
     const app = this.props.getApp()
+    const self = this
 
     // Add page associated to the tab and give access to the tab.
     app.setState(previousState => ({
@@ -39,15 +40,15 @@ export default class Tab extends React.Component {
     global.tabs[global.tabs.indexOf(this)].staticIndex = global.tabs.indexOf(this)
 
     // Get positions for all tabs.
-    const positions = tabs.getPositions().tabPositions
-
-    // Set initial position for the tab.
-    this.setState({
-      left: positions[global.tabs.indexOf(this)]
-    }, function () {
-      // Set the widths and positions for all tabs.
-      tabs.setWidths()
-      tabs.setPositions()
+    tabs.getPositions(function (positions) {
+      // Set initial position for the tab.
+      self.setState({
+        left: positions.tabPositions[global.tabs.indexOf(self)]
+      }, function () {
+        // Set the widths and positions for all tabs.
+        tabs.setWidths()
+        tabs.setPositions()
+      })
     })
   }
 
