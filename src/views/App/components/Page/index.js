@@ -38,7 +38,7 @@ export default class Page extends React.Component {
       position: (this.state.visible) ? 'relative' : 'absolute',
       top: (this.state.visible) ? 0 : -window.innerHeight - 50,
       height: this.state.height,
-      display: (this.state.visible) ? 'block' : 'none'
+      display: (this.state.visible) ? 'flex' : 'none'
     }
 
     if (this.state.render) {
