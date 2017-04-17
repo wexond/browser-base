@@ -282,6 +282,7 @@ export default class Tab extends React.Component {
     function closeAnim () {
       // Animate.
       self.setState({
+        animate: true,
         width: 0
       })
 
@@ -380,8 +381,8 @@ export default class Tab extends React.Component {
       backgroundColor: this.state.backgroundColor,
       zIndex: (this.state.selected) ? 3 : 1,
       transitionProperty: (this.state.animateBackgroundColor)
-      ? 'background-color, left'
-      : 'left',
+      ? 'background-color, left, width'
+      : 'left, width',
       transition: (this.state.animate) ? '0.2s all' : 'none'
     }
 
