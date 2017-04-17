@@ -179,7 +179,7 @@ export default class Tab extends React.Component {
   reorderTabs = (cursorX) => {
     const tabs = this.props.getTabs()
     if (!this.pinned) {
-      const overTab = tabs.getTabFromMousePoint(this, cursorX)
+      const overTab = tabs.getTabFromMouseX(this, cursorX)
 
       if (overTab != null && !overTab.pinned) {
         const indexTab = global.tabs.indexOf(this)
@@ -390,9 +390,7 @@ export default class Tab extends React.Component {
 
     let tabEvents = {
       onMouseDown: onMouseDown,
-      onDoubleClick: onDoubleClick,
-      onMouseEnter: onMouseEnter,
-      onMouseLeave: onMouseLeave
+      onDoubleClick: onDoubleClick
     }
 
     function onMouseDown (e) {
@@ -421,26 +419,6 @@ export default class Tab extends React.Component {
 
     function onDoubleClick () {
       self.pin()
-    }
-
-    function onMouseEnter () {
-      if (!self.selected) {
-        var rgba = Colors.shadeColor(tabs.state.backgroundColor, 0.05)
-        self.mouseLeaveBackgroundColor = tabs.state.backgroundColor
-        self.setState({backgroundColor: rgba, animateBackgroundColor: true})
-        if (!self.pinned) {
-          self.setState({closeVisible: true})
-        }
-      }
-    }
-
-    function onMouseLeave () {
-      if (!self.selected) {
-        self.setState({backgroundColor: self.mouseLeaveBackgroundColor, animateBackgroundColor: true, closeVisible: false})
-        setTimeout(function () {
-          self.setState({animateBackgroundColor: false})
-        }, 200)
-      }
     }
 
     if (this.state.render) {
