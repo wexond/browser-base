@@ -137,9 +137,6 @@ export default class Tabs extends React.Component {
   setPositions = (animateTabs = true, animateAddButton = true) => {
     const self = this
 
-    clearTimeout(this.turnAnimationBack2)
-    clearTimeout(this.turnAnimationBack3)
-
     setTimeout(function () {
       self.getPositions(function (data) {
         const lefts = data.tabPositions
@@ -157,18 +154,6 @@ export default class Tabs extends React.Component {
           animateAddButton: animateAddButton
         })
 
-        this.turnAnimationBack3 = setTimeout(function () {
-          self.setState({animateAddButton: true})
-        }, 200)
-
-        this.turnAnimationBack2 = setTimeout(function () {
-          for (var i = 0; i < global.tabs.length; i++) {
-            global.tabs[i].setState({
-              animate: true
-            })
-          }
-        }, 200)
-
         self.updateTabs()
       })
     }, 0)
@@ -181,8 +166,6 @@ export default class Tabs extends React.Component {
   setWidths = (animation = true) => {
     const self = this
 
-    clearTimeout(this.turnAnimationBack)
-
     setTimeout(function () {
       self.getWidths(function (widths) {
         for (var i = 0; i < global.tabs.length; i++) {
@@ -193,14 +176,6 @@ export default class Tabs extends React.Component {
 
           global.tabs[i].width = widths[i]
         }
-
-        self.turnAnimationBack = setTimeout(function () {
-          for (var i = 0; i < global.tabs.length; i++) {
-            global.tabs[i].setState({
-              animate: true
-            })
-          }
-        }, 200)
 
         self.updateTabs()
       })
