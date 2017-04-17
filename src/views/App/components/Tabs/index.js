@@ -2,8 +2,6 @@ import React from 'react'
 import Tab from './components/Tab'
 import Controls from './components/Controls'
 
-import {Motion, spring} from 'react-motion'
-
 export default class Tabs extends React.Component {
   constructor () {
     super()
@@ -14,7 +12,8 @@ export default class Tabs extends React.Component {
       addButtonVisible: true,
       borderColor: 'rgba(0,0,0,0.12)',
       backgroundColor: '#EEE',
-      tabsVisible: false
+      tabsVisible: false,
+      animateAddButton: true
     }
 
     // The timer for closing tabs system.
@@ -138,6 +137,9 @@ export default class Tabs extends React.Component {
   setPositions = (animateTabs = true, animateAddButton = true) => {
     const self = this
 
+    clearTimeout(this.turnAnimationBack2)
+    clearTimeout(this.turnAnimationBack3)
+
     setTimeout(function () {
       self.getPositions(function (data) {
         const lefts = data.tabPositions
@@ -145,13 +147,27 @@ export default class Tabs extends React.Component {
 
         for (var i = 0; i < global.tabs.length; i++) {
           global.tabs[i].setState({
-            left: (animateTabs) ? spring(lefts[i], global.tabsAnimationData.setPositionsSpring) : lefts[i]
+            left: lefts[i],
+            animate: animateTabs
           })
         }
 
         self.setState({
-          addButtonLeft: (animateAddButton) ? spring(addLeft, global.tabsAnimationData.setPositionsSpring) : addLeft
+          addButtonLeft: addLeft,
+          animateAddButton: animateAddButton
         })
+
+        this.turnAnimationBack3 = setTimeout(function () {
+          self.setState({animateAddButton: true})
+        }, 200)
+
+        this.turnAnimationBack2 = setTimeout(function () {
+          for (var i = 0; i < global.tabs.length; i++) {
+            global.tabs[i].setState({
+              animate: true
+            })
+          }
+        }, 200)
 
         self.updateTabs()
       })
@@ -165,15 +181,26 @@ export default class Tabs extends React.Component {
   setWidths = (animation = true) => {
     const self = this
 
+    clearTimeout(this.turnAnimationBack)
+
     setTimeout(function () {
       self.getWidths(function (widths) {
         for (var i = 0; i < global.tabs.length; i++) {
           global.tabs[i].setState({
-            width: (animation) ? spring(widths[i], global.tabsAnimationData.setWidthsSpring) : widths[i]
+            width: widths[i],
+            animate: animation
           })
 
           global.tabs[i].width = widths[i]
         }
+
+        self.turnAnimationBack = setTimeout(function () {
+          for (var i = 0; i < global.tabs.length; i++) {
+            global.tabs[i].setState({
+              animate: true
+            })
+          }
+        }, 200)
 
         self.updateTabs()
       })
@@ -210,7 +237,7 @@ export default class Tabs extends React.Component {
 
     setTimeout(function () {
       const tabbarWidth = self.refs.tabbar.offsetWidth
-      const addButtonWidth = self.addButton.offsetWidth
+      const addButtonWidth = self.refs.addButton.offsetWidth
       let tabWidths = []
       let pinnedTabsLength = 0
 
@@ -270,7 +297,7 @@ export default class Tabs extends React.Component {
    * @return {Boolean}
    */
   contains = (tabToCheck, xPos) => {
-    var rect = tabToCheck.tab.getBoundingClientRect()
+    var rect = tabToCheck.refs.tab.getBoundingClientRect()
 
     if (xPos >= rect.left && xPos <= rect.right) {
       return true
@@ -347,15 +374,21 @@ export default class Tabs extends React.Component {
   render () {
     const self = this
 
-    var systembarBorderStyle = {
+    let systembarBorderStyle = {
       backgroundColor: this.state.borderColor
     }
 
-    var tabsDisplay = (this.state.tabsVisible) ? 'block' : 'none'
+    let tabsDisplay = (this.state.tabsVisible) ? 'block' : 'none'
 
-    var systembarStyle = {
+    let systembarStyle = {
       backgroundColor: this.state.backgroundColor,
       display: tabsDisplay
+    }
+
+    let addButtonStyle = {
+      left: this.state.addButtonLeft,
+      display: (this.state.addButtonVisible && this.state.tabsVisible) ? 'block' : 'none',
+      transition: (this.state.animateAddButton) ? '0.2s all' : 'none'
     }
 
     /** events */
@@ -375,16 +408,7 @@ export default class Tabs extends React.Component {
                 <Tab url={data.url} getApp={self.props.getApp} getTabs={self.getTabs} select={data.select} key={key} />
               )
             })}
-            <Motion style={{left: this.state.addButtonLeft}}>
-              {value =>
-                <div ref={(a) => { this.addButton = a }}
-                  style={{
-                    left: value.left,
-                    display: (this.state.addButtonVisible && this.state.tabsVisible) ? 'block' : 'none'
-                  }}
-                  onClick={onAddButtonClick}
-                  className='add-button' />}
-            </Motion>
+            <div ref='addButton' style={addButtonStyle} onClick={onAddButtonClick} className='add-button' />
           </div>
           <div className='systembar-border' style={systembarBorderStyle} />
         </div>

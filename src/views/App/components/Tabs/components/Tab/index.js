@@ -18,7 +18,8 @@ export default class Tab extends React.Component {
       favicon: '',
       loading: false,
       animateBackgroundColor: false,
-      backgroundColor: '#fff'
+      backgroundColor: '#fff',
+      animate: false
     }
 
     this.selectedBackgroundColor = '#fff'
@@ -45,9 +46,12 @@ export default class Tab extends React.Component {
       self.setState({
         left: positions.tabPositions[global.tabs.indexOf(self)]
       }, function () {
-        // Set the widths and positions for all tabs.
-        tabs.setWidths()
-        tabs.setPositions()
+        setTimeout(function () {
+          self.setState({animate: true})
+          // Set the widths and positions for all tabs.
+          tabs.setWidths()
+          tabs.setPositions()
+        }, 1)
       })
     })
   }
@@ -374,6 +378,17 @@ export default class Tab extends React.Component {
       display: (this.state.favicon === '') ? 'none' : 'block'
     }
 
+    let tabStyle = {
+      left: this.state.left,
+      width: this.state.width,
+      backgroundColor: this.state.backgroundColor,
+      zIndex: (this.state.selected) ? 3 : 1,
+      transitionProperty: (this.state.animateBackgroundColor)
+      ? 'background-color, left'
+      : 'left',
+      transition: (this.state.animate) ? '0.2s all' : 'none'
+    }
+
     /** Events */
 
     let tabEvents = {
@@ -434,32 +449,20 @@ export default class Tab extends React.Component {
     if (this.state.render) {
       return (
         <div>
-          <Motion style={{left: this.state.left, width: this.state.width}}>
-            {value =>
-              <div {...tabEvents} style={Object.assign(
-                {
-                  left: value.left,
-                  width: value.width,
-                  backgroundColor: this.state.backgroundColor,
-                  zIndex: (this.state.selected) ? 3 : 1,
-                  transition: (this.state.animateBackgroundColor)
-                  ? '0.2s background-color'
-                  : 'none'
-                }, this.props.style)} className='tab' ref={(t) => { this.tab = t }}>
-                <div className='tab-content'>
-                  <div className='tab-title' style={titleStyle}>
-                    New tab
-                  </div>
-                  <div style={closeStyle} className='tab-close-container'>
-                    <div className='tab-close' onClick={onClickClose} />
-                  </div>
-                </div>
-                <div className='tab-border-small' style={borderLeftSmallStyle} />
-                <div className='tab-border-small' style={borderSmallStyle} />
-                <div className='tab-border-full' style={borderLeftStyle} />
-                <div className='tab-border-full' style={borderRightStyle} />
-              </div>}
-          </Motion>
+          <div {...tabEvents} style={Object.assign(tabStyle, this.props.style)} className='tab' ref='tab'>
+            <div className='tab-content'>
+              <div className='tab-title' style={titleStyle}>
+                New tab
+              </div>
+              <div style={closeStyle} className='tab-close-container'>
+                <div className='tab-close' onClick={onClickClose} />
+              </div>
+            </div>
+            <div className='tab-border-small' style={borderLeftSmallStyle} />
+            <div className='tab-border-small' style={borderSmallStyle} />
+            <div className='tab-border-full' style={borderLeftStyle} />
+            <div className='tab-border-full' style={borderRightStyle} />
+          </div>
         </div>
       )
     } else {
