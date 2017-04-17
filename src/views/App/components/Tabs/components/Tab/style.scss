@@ -27,15 +27,16 @@
   @include center-vertical;
   @include image-center(16px, 16px);
   position: absolute;
-  right: 0px;
+  right: 6px;
   background-image: url(images/tabs/close.png);
-  height: 100%;
-  width: 32px;
+  height: 18px;
+  width: 18px;
   opacity: $secondary-opacity-light;
   transition: $hover-duration opacity;
 
   &:hover {
     opacity: $primary-opacity-light;
+    background-color: $tabs-hover-color;
   }
 }
 

@@ -10,9 +10,7 @@ export default class WebView extends React.Component {
       const menu = global.menuWindow
       const app = self.props.getApp()
       const tabs = app.getTabs()
-      const tab = self.props.getTab()
       const page = self.props.getPage()
-      const bar = app.getBar()
 
       menu.send('webview:can-go-back', self.getWebView().canGoBack())
       menu.send('webview:can-go-forward', self.getWebView().canGoForward())
@@ -33,12 +31,8 @@ export default class WebView extends React.Component {
 
       // If not, show the tabbar.
       if (!contains) {
-        tabs.setWidths()
-        tabs.setPositions()
         page.setState({height: 'calc(100vh - ' + global.systembarHeight + 'px'})
         tabs.setState({tabsVisible: true})
-        tab.normalTab()
-        bar.setState({centerVertical: false})
       }
     })
 

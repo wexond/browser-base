@@ -3,6 +3,7 @@
 .bar {
   @include shadow(1);
   @include Body1;
+  @include center-horizontal;
   position: absolute;
   z-index: 4;
   top: 42px;
@@ -13,15 +14,6 @@
   border-radius: 3px;
   transition: 0.2s all;
   transition-property: margin-top, opacity, top;
-}
-
-.bar-center {
-  @include center-both;
-  margin-top: -256px;
-}
-
-.bar-center-horizontal {
-  @include center-horizontal;
 }
 
 .bar-search-icon {

@@ -16,7 +16,6 @@ export default class Tab extends React.Component {
       leftSmallBorderVisible: false,
       closeVisible: true,
       pinned: false,
-      new: true,
       favicon: '',
       loading: false,
       animateBackgroundColor: false,
@@ -24,7 +23,6 @@ export default class Tab extends React.Component {
     }
 
     this.selectedBackgroundColor = '#fff'
-    this.new = true
   }
 
   componentDidMount () {
@@ -49,14 +47,9 @@ export default class Tab extends React.Component {
       left: positions[global.tabs.indexOf(this)]
     }, function () {
       // Set the widths and positions for all tabs.
-      tabs.setWidths(false)
-      tabs.setPositions(false, false)
+      tabs.setWidths()
+      tabs.setPositions()
     })
-
-    // Hide new tab button on tab create.
-    tabs.setState({addButtonVisible: false})
-
-    tabs.canShowAddButton = false
   }
 
   /**
@@ -73,48 +66,6 @@ export default class Tab extends React.Component {
     if (this.props.select) {
       tabs.selectTab(this)
     }
-  }
-
-  /**
-   * Closes only new tab.
-   * @param {function} callback
-   */
-  closeNew = (callback = null) => {
-    const tabs = this.props.getTabs()
-    const index = global.tabs.indexOf(this)
-
-    // Remove the tab from array.
-    global.tabs.splice(index, 1)
-
-    // Remove page associated to the tab.
-    this.getPage().setState({render: false})
-
-    // Bring back the add tab button.
-    tabs.setState({addButtonVisible: true})
-    this.setState({render: false})
-
-    // Set widths and positions for all tabs.
-    tabs.setWidths(false, false)
-    tabs.setPositions(false, false)
-
-    // Pass index of closed tab to callback.
-    if (callback != null) callback(index)
-  }
-
-  /**
-   * Changes from new tab (the small tab) to normal tab.
-   */
-  normalTab = () => {
-    const tabs = this.props.getTabs()
-
-    // Change tab mode to normal.
-    this.setState({new: false})
-    this.new = false
-
-    // Show the new tab button.
-    tabs.setState({addButtonVisible: true})
-
-    tabs.canShowAddButton = true
   }
 
   /**
@@ -280,17 +231,6 @@ export default class Tab extends React.Component {
     if (global.tabs.length === 1) {
       tabs.setState({tabsVisible: false})
       tabs.addTab()
-    }
-
-    if (global.tabs.length === 2) {
-      if (!this.new) {
-        for (var i = 0; i < global.tabs.length; i++) {
-          if (global.tabs[i].new) {
-            global.tabs[i].getPage().setState({height: '100vh'})
-            tabs.setState({tabsVisible: false})
-          }
-        }
-      }
     }
 
     tabs.timer.canReset = true
@@ -463,27 +403,7 @@ export default class Tab extends React.Component {
     }
 
     function onClickClose (e) {
-      if (self.new) {
-        self.closeNew(function (index) {
-          // Get previous and next tab.
-          var nextTab = global.tabs[index + 1]
-          var prevTab = global.tabs[index - 1]
-
-          if (nextTab != null) { // If the next tab exists, select it.
-            tabs.selectTab(nextTab)
-          } else { // If the next tab not exists.
-            if (prevTab != null) { // If previous tab exists, select it.
-              tabs.selectTab(prevTab)
-            } else { // If the previous tab not exists, check if the first tab exists.
-              if (global.tabs[0] != null) { // If first tab exists, select it.
-                tabs.selectTab(global.tabs[0])
-              }
-            }
-          }
-        })
-      } else {
-        self.close()
-      }
+      self.close()
     }
 
     function onRest () {
