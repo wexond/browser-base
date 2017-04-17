@@ -47,7 +47,6 @@ export default class Tab extends React.Component {
         left: positions.tabPositions[global.tabs.indexOf(self)]
       }, function () {
         setTimeout(function () {
-          self.setState({animate: true})
           // Set the widths and positions for all tabs.
           tabs.setWidths()
           tabs.setPositions()
@@ -265,9 +264,6 @@ export default class Tab extends React.Component {
       }
     }
 
-    // Bring back the add tab button.
-    tabs.setState({addButtonVisible: true})
-
     if (index === global.tabs.length) { // If the tab is last.
       // Calculate all widths and positions for all tabs.
       tabs.setWidths()
@@ -286,12 +282,12 @@ export default class Tab extends React.Component {
     function closeAnim () {
       // Animate.
       self.setState({
-        width: spring(0, global.tabsAnimationData.closeTabSpring)
+        width: 0
       })
 
       setTimeout(function () {
         self.setState({render: false})
-      }, 300)
+      }, 200)
     }
 
     tabs.timer.time = 0
