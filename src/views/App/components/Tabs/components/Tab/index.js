@@ -11,7 +11,6 @@ export default class Tab extends React.Component {
       left: 0,
       selected: false,
       render: true,
-      visible: true,
       smallBorderVisible: true,
       leftSmallBorderVisible: false,
       closeVisible: true,
@@ -279,12 +278,14 @@ export default class Tab extends React.Component {
 
     // Animate tab closing.
     function closeAnim () {
-      self.hiding = true
       // Animate.
       self.setState({
-        width: spring(0, global.tabsAnimationData.closeTabSpring),
-        visible: false
+        width: spring(0, global.tabsAnimationData.closeTabSpring)
       })
+
+      setTimeout(function () {
+        self.setState({render: false})
+      }, 300)
     }
 
     tabs.timer.time = 0
@@ -309,10 +310,8 @@ export default class Tab extends React.Component {
 
     let displaySmallBorder = 'none'
 
-    if (this.state.visible) {
-      if (!this.state.selected && this.state.smallBorderVisible) {
-        displaySmallBorder = 'block'
-      }
+    if (!this.state.selected && this.state.smallBorderVisible) {
+      displaySmallBorder = 'block'
     }
 
     let borderLeftSmallStyle = {
@@ -327,7 +326,7 @@ export default class Tab extends React.Component {
     }
 
     let borderRightStyle = {
-      display: (this.state.selected && this.state.visible)
+      display: (this.state.selected)
         ? 'block'
         : 'none',
       right: -1,
@@ -335,7 +334,7 @@ export default class Tab extends React.Component {
     }
 
     let borderLeftStyle = {
-      display: (this.state.selected && global.tabs.indexOf(this) !== 0 && this.state.visible)
+      display: (this.state.selected && global.tabs.indexOf(this) !== 0)
         ? 'block'
         : 'none',
       backgroundColor: tabs.state.borderColor
@@ -406,12 +405,6 @@ export default class Tab extends React.Component {
       self.close()
     }
 
-    function onRest () {
-      if (self.hiding) {
-        self.setState({render: false})
-      }
-    }
-
     function onDoubleClick () {
       self.pin()
     }
@@ -439,7 +432,7 @@ export default class Tab extends React.Component {
     if (this.state.render) {
       return (
         <div>
-          <Motion style={{left: this.state.left, width: this.state.width}} onRest={onRest}>
+          <Motion style={{left: this.state.left, width: this.state.width}}>
             {value =>
               <div {...tabEvents} style={Object.assign(
                 {
