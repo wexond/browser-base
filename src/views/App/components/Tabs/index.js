@@ -1,6 +1,7 @@
 import React from 'react'
 import Tab from './components/Tab'
 import Controls from './components/Controls'
+import Colors from './../../../../helpers/Colors'
 
 export default class Tabs extends React.Component {
   constructor () {
@@ -22,6 +23,8 @@ export default class Tabs extends React.Component {
     }
 
     this.dragData = {}
+
+    this.cursor = {}
   }
 
   componentDidMount () {
@@ -70,6 +73,34 @@ export default class Tabs extends React.Component {
         window.removeEventListener('mousemove', self.onMouseMove)
       }
     })
+
+    window.addEventListener('mousemove', function (e) {
+      self.cursor.x = e.pageX
+      self.cursor.y = e.pageY
+    })
+
+    var actualTab = null
+
+    setInterval(function () {
+      let tab = self.getTabFromMousePoint(null, self.cursor.x, self.cursor.y)
+
+      if (actualTab !== null && actualTab !== tab) {
+        if (!actualTab.selected) {
+          actualTab.setState({backgroundColor: 'transparent', animateBackgroundColor: true, closeVisible: false})
+        }
+      }
+
+      if (tab != null) {
+        if (!tab.selected) {
+          actualTab = tab
+          let rgba = Colors.shadeColor(self.state.backgroundColor, 0.05)
+          tab.setState({backgroundColor: rgba, animateBackgroundColor: true})
+          if (!tab.pinned) {
+            tab.setState({closeVisible: true})
+          }
+        }
+      }
+    }, 1)
   }
 
   /** events */
@@ -239,15 +270,15 @@ export default class Tabs extends React.Component {
   }
 
   /**
-   * Gets tab from mouse point.
+   * Gets tab from mouse x point.
    * @param {Tab} callingTab
    * @param {number} cursorX
    * @return {Tab}
    */
-  getTabFromMousePoint = (callingTab, xPos) => {
+  getTabFromMouseX = (callingTab, xPos) => {
     for (var i = 0; i < global.tabs.length; i++) {
       if (global.tabs[i] !== callingTab) {
-        if (this.contains(global.tabs[i], xPos)) {
+        if (this.containsX(global.tabs[i], xPos)) {
           if (!global.tabs[i].locked) {
             return global.tabs[i]
           }
@@ -258,17 +289,55 @@ export default class Tabs extends React.Component {
   }
 
   /**
-   * Checks if {Tab} contains mouse x position
+   * Checks if {Tab} contains mouse x position.
    * @param {Tab} tabToCheck
-   * @param {number} cursorX
-   * @return {Boolean}
+   * @param {number} xPos
+   * @return {boolean}
    */
-  contains = (tabToCheck, xPos) => {
+  containsX = (tabToCheck, xPos) => {
     var rect = tabToCheck.refs.tab.getBoundingClientRect()
 
     if (xPos >= rect.left && xPos <= rect.right) {
       return true
     }
+
+    return false
+  }
+
+  /**
+   * Gets tab from mouse x and y point.
+   * @param {Tab} callingTab
+   * @param {number} cursorX
+   * @param {number} cursorY
+   * @return {Tab}
+   */
+  getTabFromMousePoint = (callingTab, xPos, yPos) => {
+    for (var i = 0; i < global.tabs.length; i++) {
+      if (global.tabs[i] !== callingTab) {
+        if (this.containsPoint(global.tabs[i], xPos, yPos)) {
+          if (!global.tabs[i].locked) {
+            return global.tabs[i]
+          }
+        }
+      }
+    }
+    return null
+  }
+
+  /**
+   * Checks if {Tab} contains mouse x and y position.
+   * @param {Tab} tabToCheck
+   * @param {number} xPos
+   * @param {number} yPos
+   * @return {boolean}
+   */
+  containsPoint = (tabToCheck, xPos, yPos) => {
+    var rect = tabToCheck.refs.tab.getBoundingClientRect()
+
+    if (xPos >= rect.left && xPos <= rect.right && yPos <= rect.bottom) {
+      return true
+    }
+
     return false
   }
 
