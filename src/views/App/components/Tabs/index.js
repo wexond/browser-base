@@ -140,33 +140,38 @@ export default class Tabs extends React.Component {
    * @param {boolean} animateAddButton
    */
   setPositions = (animateTabs = true, animateAddButton = true) => {
-    var data = this.getPositions()
-    var lefts = data.tabPositions
-    var addLeft = data.addButtonPosition
+    const self = this
 
-    for (var i = 0; i < global.tabs.length; i++) {
-      if (animateTabs) {
-        global.tabs[i].setState({
-          left: spring(lefts[i], global.tabsAnimationData.setPositionsSpring)
-        })
-      } else {
-        global.tabs[i].setState({
-          left: lefts[i]
-        })
-      }
-    }
+    setTimeout(function () {
+      self.getPositions(function (data) {
+        const lefts = data.tabPositions
+        const addLeft = data.addButtonPosition
 
-    if (animateAddButton) {
-      this.setState({
-        addButtonLeft: spring(addLeft, global.tabsAnimationData.setPositionsSpring)
+        for (var i = 0; i < global.tabs.length; i++) {
+          if (animateTabs) {
+            global.tabs[i].setState({
+              left: spring(lefts[i], global.tabsAnimationData.setPositionsSpring)
+            })
+          } else {
+            global.tabs[i].setState({
+              left: lefts[i]
+            })
+          }
+        }
+
+        if (animateAddButton) {
+          self.setState({
+            addButtonLeft: spring(addLeft, global.tabsAnimationData.setPositionsSpring)
+          })
+        } else {
+          self.setState({
+            addButtonLeft: addLeft
+          })
+        }
+
+        self.updateTabs()
       })
-    } else {
-      this.setState({
-        addButtonLeft: addLeft
-      })
-    }
-
-    this.updateTabs()
+    }, 0)
   }
 
   /**
@@ -174,79 +179,94 @@ export default class Tabs extends React.Component {
    * @param {boolean} animation
    */
   setWidths = (animation = true) => {
-    var widths = this.getWidths()
+    const self = this
 
-    for (var i = 0; i < global.tabs.length; i++) {
-      if (animation) {
-        global.tabs[i].setState({
-          width: spring(widths[i], global.tabsAnimationData.setWidthsSpring)
-        })
-      } else {
-        global.tabs[i].setState({width: widths[i]})
-      }
+    setTimeout(function () {
+      self.getWidths(function (widths) {
+        for (var i = 0; i < global.tabs.length; i++) {
+          if (animation) {
+            global.tabs[i].setState({
+              width: spring(widths[i], global.tabsAnimationData.setWidthsSpring)
+            })
+          } else {
+            global.tabs[i].setState({width: widths[i]})
+          }
 
-      global.tabs[i].width = widths[i]
-    }
+          global.tabs[i].width = widths[i]
+        }
 
-    this.updateTabs()
+        self.updateTabs()
+      })
+    }, 0)
   }
 
   /**
    * Calculates positions for all tabs and add button.
-   * @return {object}
+   * @param {function} callback
    */
-  getPositions = () => {
-    var lefts = []
-    var a = 0
+  getPositions = (callback = null) => {
+    setTimeout(function () {
+      let lefts = []
+      let a = 0
 
-    for (var i = 0; i < global.tabs.length; i++) {
-      lefts.push(a)
-      a += global.tabs[i].width
-    }
+      for (var i = 0; i < global.tabs.length; i++) {
+        lefts.push(a)
+        a += global.tabs[i].width
+      }
 
-    return {tabPositions: lefts, addButtonPosition: a}
+      const callbackData = {tabPositions: lefts, addButtonPosition: a}
+
+      if (callback != null) callback(callbackData)
+    }, 0)
   }
 
   /**
    * Calculates widths for tabs.
-   * @return {number}
+   * @param {function} callback
+   * @param {number} margin - the margin between tabs
    */
-  getWidths = (margin = 0) => {
-    var tabsWidth = this.refs.tabbar.offsetWidth
-    var addButtonWidth = this.addButton.offsetWidth
-    var tabWidthsTemp = []
-    var tabWidths = []
-    var pinnedTabsLength = 0
-    var newTabsLength = 0
+  getWidths = (callback = null, margin = 0) => {
+    const self = this
 
-    for (var i = 0; i < global.tabs.length; i++) {
-      if (global.tabs[i].pinned) {
-        tabWidthsTemp.push({id: i, width: global.tabsData.pinnedTabWidth})
-        pinnedTabsLength += 1
-      }
-      if (global.tabs[i].new) {
-        tabWidthsTemp.push({id: i, width: global.tabsData.newTabWidth})
-        newTabsLength += 1
-      }
-    }
+    setTimeout(function () {
+      const tabbarWidth = self.refs.tabbar.offsetWidth
+      const addButtonWidth = self.addButton.offsetWidth
+      let tabWidthsTemp = []
+      let tabWidths = []
+      let pinnedTabsLength = 0
 
-    for (i = 0; i < global.tabs.length; i++) {
-      if (!global.tabs[i].pinned && !global.tabs[i].new) {
-        var margins = global.tabs.length * margin
-        var smallTabsWidth = (pinnedTabsLength * global.tabsData.pinnedTabWidth) + (newTabsLength * global.tabsData.newTabWidth)
-        var tabWidthTemp = (tabsWidth - addButtonWidth - margins - smallTabsWidth) / (global.tabs.length - (pinnedTabsLength + newTabsLength))
-        if (tabWidthTemp > global.tabsData.maxTabWidth) {
-          tabWidthTemp = global.tabsData.maxTabWidth
+      for (var i = 0; i < global.tabs.length; i++) {
+        if (global.tabs[i].pinned) {
+          // Push width for pinned tab.
+          tabWidthsTemp.push({id: i, width: global.tabsData.pinnedTabWidth})
+
+          pinnedTabsLength += 1
         }
-        tabWidthsTemp.push({id: i, width: tabWidthTemp})
       }
-    }
 
-    for (i = 0; i < tabWidthsTemp.length; i++) {
-      tabWidths[tabWidthsTemp[i].id] = tabWidthsTemp[i].width
-    }
+      for (i = 0; i < global.tabs.length; i++) {
+        if (!global.tabs[i].pinned) {
+          // Include margins between tabs.
+          var margins = global.tabs.length * margin
+          // Include pinned tabs.
+          var smallTabsWidth = (pinnedTabsLength * global.tabsData.pinnedTabWidth)
+          // Calculate final width per tab.
+          var tabWidthTemp = (tabbarWidth - addButtonWidth - margins - smallTabsWidth) / (global.tabs.length - pinnedTabsLength)
+          // Check if tab's width isn't greater than max tab width.
+          if (tabWidthTemp > global.tabsData.maxTabWidth) {
+            tabWidthTemp = global.tabsData.maxTabWidth
+          }
+          // Push width for normal tab.
+          tabWidthsTemp.push({id: i, width: tabWidthTemp})
+        }
+      }
 
-    return tabWidths
+      for (i = 0; i < tabWidthsTemp.length; i++) {
+        tabWidths[tabWidthsTemp[i].id] = tabWidthsTemp[i].width
+      }
+
+      if (callback != null) callback(tabWidths)
+    }, 0)
   }
 
   /**

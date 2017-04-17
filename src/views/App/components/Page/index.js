@@ -37,7 +37,8 @@ export default class Page extends React.Component {
       opacity: (this.state.visible) ? 1 : 0,
       position: (this.state.visible) ? 'relative' : 'absolute',
       top: (this.state.visible) ? 0 : -window.innerHeight - 50,
-      height: this.state.height
+      height: this.state.height,
+      display: (this.state.visible) ? 'block' : 'none'
     }
 
     if (this.state.render) {
