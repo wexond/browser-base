@@ -10,7 +10,6 @@ export default class Bar extends React.Component {
     this.state = {
       barMarginTop: -20,
       barTop: 42,
-      centerVertical: false,
       barOpacity: 0,
       suggestionsOpacity: 0,
       watermarkVisible: true,
@@ -246,7 +245,7 @@ export default class Bar extends React.Component {
     /** Events */
 
     function onChange (e) {
-      self.setState({inputText: self.input.value, centerVertical: false})
+      self.setState({inputText: self.input.value})
       self.updateBar(true)
 
       var suggestions = []
@@ -334,7 +333,6 @@ export default class Bar extends React.Component {
         }
         for (var i = 0; i < global.tabs.length; i++) {
           if (global.tabs[i].selected) {
-            global.tabs[i].normalTab()
             var webview = global.tabs[i].getPage().getWebView()
             if (!e.currentTarget.value.startsWith('wexond://')) {
               if (Network.isURL(e.currentTarget.value)) {
@@ -366,10 +364,10 @@ export default class Bar extends React.Component {
     return (
       <div>
         <div style={{
-          marginTop: (this.state.centerVertical) ? -120 : this.state.barMarginTop,
+          marginTop: this.state.barMarginTop,
           opacity: this.state.barOpacity,
           pointerEvents: this.state.barPointerEvents
-        }} className={(this.state.centerVertical) ? 'bar bar-center' : 'bar bar-center-horizontal'}>
+        }} className='bar'>
           <div className='bar-search-icon' />
           <div style={watermarkStyle} className='bar-watermark'>Search</div>
           <div className='bar-hint' style={{marginLeft: this.state.hintLeft}}>{this.state.hint}</div>

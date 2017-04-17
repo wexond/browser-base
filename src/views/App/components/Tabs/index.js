@@ -201,9 +201,7 @@ export default class Tabs extends React.Component {
 
     for (var i = 0; i < global.tabs.length; i++) {
       lefts.push(a)
-      if (!global.tabs[i].new) {
-        a += global.tabs[i].width
-      }
+      a += global.tabs[i].width
     }
 
     return {tabPositions: lefts, addButtonPosition: a}

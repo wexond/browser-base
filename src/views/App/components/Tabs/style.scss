@@ -20,6 +20,7 @@ $add-button-size: 22px;
 
   &:hover {
     opacity: $primary-opacity-light;
+    background-color: $tabs-hover-color;
   }
 }
 
