@@ -23,8 +23,6 @@ export default class Tabs extends React.Component {
     }
 
     this.dragData = {}
-
-    this.canShowAddButton = false
   }
 
   componentDidMount () {
@@ -57,9 +55,7 @@ export default class Tabs extends React.Component {
 
         self.dragData.canDrag2 = false
 
-        if (self.canShowAddButton) {
-          self.setState({addButtonVisible: true})
-        }
+        self.setState({addButtonVisible: true})
 
         self.setPositions()
 
@@ -148,26 +144,14 @@ export default class Tabs extends React.Component {
         const addLeft = data.addButtonPosition
 
         for (var i = 0; i < global.tabs.length; i++) {
-          if (animateTabs) {
-            global.tabs[i].setState({
-              left: spring(lefts[i], global.tabsAnimationData.setPositionsSpring)
-            })
-          } else {
-            global.tabs[i].setState({
-              left: lefts[i]
-            })
-          }
+          global.tabs[i].setState({
+            left: (animateTabs) ? spring(lefts[i], global.tabsAnimationData.setPositionsSpring) : lefts[i]
+          })
         }
 
-        if (animateAddButton) {
-          self.setState({
-            addButtonLeft: spring(addLeft, global.tabsAnimationData.setPositionsSpring)
-          })
-        } else {
-          self.setState({
-            addButtonLeft: addLeft
-          })
-        }
+        self.setState({
+          addButtonLeft: (animateAddButton) ? spring(addLeft, global.tabsAnimationData.setPositionsSpring) : addLeft
+        })
 
         self.updateTabs()
       })
@@ -184,13 +168,9 @@ export default class Tabs extends React.Component {
     setTimeout(function () {
       self.getWidths(function (widths) {
         for (var i = 0; i < global.tabs.length; i++) {
-          if (animation) {
-            global.tabs[i].setState({
-              width: spring(widths[i], global.tabsAnimationData.setWidthsSpring)
-            })
-          } else {
-            global.tabs[i].setState({width: widths[i]})
-          }
+          global.tabs[i].setState({
+            width: (animation) ? spring(widths[i], global.tabsAnimationData.setWidthsSpring) : widths[i]
+          })
 
           global.tabs[i].width = widths[i]
         }
@@ -231,14 +211,13 @@ export default class Tabs extends React.Component {
     setTimeout(function () {
       const tabbarWidth = self.refs.tabbar.offsetWidth
       const addButtonWidth = self.addButton.offsetWidth
-      let tabWidthsTemp = []
       let tabWidths = []
       let pinnedTabsLength = 0
 
       for (var i = 0; i < global.tabs.length; i++) {
         if (global.tabs[i].pinned) {
           // Push width for pinned tab.
-          tabWidthsTemp.push({id: i, width: global.tabsData.pinnedTabWidth})
+          tabWidths.push(global.tabsData.pinnedTabWidth)
 
           pinnedTabsLength += 1
         }
@@ -257,12 +236,8 @@ export default class Tabs extends React.Component {
             tabWidthTemp = global.tabsData.maxTabWidth
           }
           // Push width for normal tab.
-          tabWidthsTemp.push({id: i, width: tabWidthTemp})
+          tabWidths.push(tabWidthTemp)
         }
-      }
-
-      for (i = 0; i < tabWidthsTemp.length; i++) {
-        tabWidths[tabWidthsTemp[i].id] = tabWidthsTemp[i].width
       }
 
       if (callback != null) callback(tabWidths)

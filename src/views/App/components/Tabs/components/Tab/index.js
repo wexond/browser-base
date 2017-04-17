@@ -193,32 +193,33 @@ export default class Tab extends React.Component {
   updatePosition = () => {
     const tabs = this.props.getTabs()
     const self = this
-    const data = tabs.getPositions()
 
-    // Get new position for the tab.
-    const newTabPos = data.tabPositions[global.tabs.indexOf(this)]
+    tabs.getPositions(function (data) {
+      // Get new position for the tab.
+      const newTabPos = data.tabPositions[global.tabs.indexOf(self)]
 
-    // Unable to reorder the tab by other tabs.
-    this.locked = true
+      // Unable to reorder the tab by other tabs.
+      self.locked = true
 
-    // Animate the tab.
-    this.setState({
-      left: spring(newTabPos, global.tabsAnimationData.setPositionsSpring)
+      // Animate the tab.
+      self.setState({
+        left: spring(newTabPos, global.tabsAnimationData.setPositionsSpring)
+      })
+
+      // Unlock tab reordering by other tabs.
+      setTimeout(function () {
+        self.locked = false
+      }, 200)
+
+      tabs.updateTabs()
+
+      // Show or hide tab's borders.
+      if (newTabPos === 0) {
+        self.setState({leftBorderVisible: false})
+      } else {
+        self.setState({leftBorderVisible: true})
+      }
     })
-
-    // Unlock tab reordering by other tabs.
-    setTimeout(function () {
-      self.locked = false
-    }, 200)
-
-    tabs.updateTabs()
-
-    // Show or hide tab's borders.
-    if (newTabPos === 0) {
-      this.setState({leftBorderVisible: false})
-    } else {
-      this.setState({leftBorderVisible: true})
-    }
   }
 
   /**
