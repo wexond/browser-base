@@ -185,10 +185,17 @@ export default class Tabs extends React.Component {
       const addLeft = data.addButtonPosition
 
       for (var i = 0; i < global.tabs.length; i++) {
-        global.tabs[i].setState({
-          left: lefts[i],
-          animate: animateTabs
-        })
+        if (!global.tabs[i].lockedAnimation) {
+          global.tabs[i].setState({
+            left: lefts[i],
+            animate: animateTabs
+          })
+        } else {
+          global.tabs[i].setState({
+            left: lefts[i],
+            animate: false
+          })
+        }
       }
 
       self.setState({
