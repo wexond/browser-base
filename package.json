@@ -12,11 +12,11 @@
     "build-pages": "webpack --config webpack.config.pages.js && webpack-dev-server --hot --inline --config webpack.config.pages.js --port 8181",
     "build-app": "webpack --config webpack.config.app.js && webpack-dev-server --config webpack.config.app.js --hot --inline --port 8080",
     "build-production": "webpack --config webpack.config.app.production.js",
-    "package-all": "npm run package-win32 && npm run package-win64 && npm run package-linux32 && npm run package-linux64",
-    "package-win32": "npm run build-production && electron-packager . --platform=win32 --arch=x86 --out ./dist/win32-x86 --overwrite",
-    "package-win64": "npm run build-production && electron-packager . --platform=win32 --arch=x64 --out ./dist/win32-x64 --overwrite",
-    "package-linux32": "npm run build-production && electron-packager . --platform=linux --arch=x86 --out ./dist/linux-x86 --overwrite",
-    "package-linux64": "npm run build-production && electron-packager . --platform=linux --arch=x64 --out ./dist/linux-x64 --overwrite"
+    "package-all": "npm run build-production && electron-packager . --all --overwrite",
+    "package-win32": "npm run build-production && electron-packager . --platform=win32 --arch=x86 Wexond --overwrite",
+    "package-win64": "npm run build-production && electron-packager . --platform=win32 --arch=x64 Wexond --overwrite",
+    "package-linux32": "npm run build-production && electron-packager . --platform=linux --arch=x86 Wexond --overwrite",
+    "package-linux64": "npm run build-production && electron-packager . --platform=linux --arch=x64 Wexond --overwrite"
   },
   "dependencies": {
     "babel-preset-es2015": "latest",
