@@ -40,6 +40,8 @@ export default class Tab extends React.Component {
 
     global.tabs[global.tabs.indexOf(this)].staticIndex = global.tabs.indexOf(this)
 
+    this.lockedAnimation = true
+
     // Get positions for all tabs.
     tabs.getPositions(function (positions) {
       // Set initial position for the tab.
@@ -47,6 +49,7 @@ export default class Tab extends React.Component {
         left: positions.tabPositions[global.tabs.indexOf(self)]
       }, function () {
         setTimeout(function () {
+          self.lockedAnimation = false
           // Set the widths and positions for all tabs.
           tabs.setWidths()
           tabs.setPositions()
