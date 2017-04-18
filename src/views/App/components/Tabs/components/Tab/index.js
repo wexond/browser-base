@@ -122,7 +122,11 @@ export default class Tab extends React.Component {
     page.setState({visible: true})
 
     // Select tab (change background color etc).
-    this.setState({animateBackgroundColor: false, selected: true, backgroundColor: this.selectedBackgroundColor, closeVisible: true})
+    this.setState({animateBackgroundColor: false, selected: true, closeVisible: true}, function () {
+      setTimeout(function () {
+        self.setState({backgroundColor: this.selectedBackgroundColor})
+      }, 1)
+    })
 
     this.selected = true
 
@@ -157,12 +161,17 @@ export default class Tab extends React.Component {
   deselect = () => {
     const tabs = this.props.getTabs()
     const page = this.getPage()
+    const self = this
 
     // Hide the associated page.
     page.setState({visible: false})
 
     // Deselect tab (change background color etc).
-    this.setState({animateBackgroundColor: false, selected: false, backgroundColor: 'transparent', closeVisible: false})
+    this.setState({animateBackgroundColor: false, selected: false, closeVisible: false}, function () {
+      setTimeout(function () {
+        self.setState({backgroundColor: 'transparent'})
+      }, 1)
+    })
 
     this.selected = false
 
