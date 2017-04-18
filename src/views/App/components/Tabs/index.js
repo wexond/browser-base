@@ -81,6 +81,8 @@ export default class Tabs extends React.Component {
 
     var actualTab = null
 
+    // Fixes #1 issue.
+    // Custom mouseenter and mouseleave event.
     setInterval(function () {
       let tab = self.getTabFromMousePoint(null, self.cursor.x, self.cursor.y)
 
@@ -116,7 +118,8 @@ export default class Tabs extends React.Component {
       this.dragData.canDrag2 = true
       if (this.dragData.canDrag && !this.dragData.tab.pinned && !this.dragData.tab.new) {
         this.dragData.tab.setState({
-          left: this.dragData.tabX + e.clientX - this.dragData.mouseClickX
+          left: this.dragData.tabX + e.clientX - this.dragData.mouseClickX,
+          animate: false
         })
 
         this.dragData.tab.reorderTabs(e.clientX)

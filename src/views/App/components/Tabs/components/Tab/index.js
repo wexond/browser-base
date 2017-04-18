@@ -206,7 +206,7 @@ export default class Tab extends React.Component {
 
       // Animate the tab.
       self.setState({
-        left: spring(newTabPos, global.tabsAnimationData.setPositionsSpring)
+        left: newTabPos
       })
 
       // Unlock tab reordering by other tabs.
