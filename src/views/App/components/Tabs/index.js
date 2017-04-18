@@ -112,15 +112,24 @@ export default class Tabs extends React.Component {
    * @param {Event} e
    */
   onMouseMove = (e) => {
-    var mouseDeltaX = e.pageX - this.dragData.mouseClickX
+    let mouseDeltaX = e.pageX - this.dragData.mouseClickX
+    const tab = this.dragData.tab
 
     if (Math.abs(mouseDeltaX) > 10 || this.dragData.canDrag2) {
       this.dragData.canDrag2 = true
+
       if (this.dragData.canDrag && !this.dragData.tab.pinned && !this.dragData.tab.new) {
         this.dragData.tab.setState({
           left: this.dragData.tabX + e.clientX - this.dragData.mouseClickX,
           animate: false
         })
+
+        if (tab.state.left + tab.state.width > this.refs.tabbar.offsetWidth) {
+          tab.setState({left: this.refs.tabbar.offsetWidth - tab.state.width})
+        }
+        if (tab.state.left < this.refs.tabbar.getBoundingClientRect().left) {
+          tab.setState({left: this.refs.tabbar.getBoundingClientRect().left})
+        }
 
         this.dragData.tab.reorderTabs(e.clientX)
 
