@@ -408,14 +408,14 @@ export default class Tab extends React.Component {
     }
 
     let titleMaxWidthDecrease = 0
-    if (this.state.closeVisible) {
-      titleMaxWidthDecrease += 28
+
+    if (this.state.closeOpacity.value === 1) {
+      titleMaxWidthDecrease += 32
     } else {
       titleMaxWidthDecrease += 16
     }
-    if (this.state.favicon === '' && !this.state.loading) {
-      titleMaxWidthDecrease += 16
-    } else {
+
+    if (this.state.favicon !== '' && this.state.loading) { // If there is favicon or the tab is loading.
       titleMaxWidthDecrease += 32
     }
 
@@ -425,7 +425,7 @@ export default class Tab extends React.Component {
         : 'block',
       maxWidth: `calc(100% - ${titleMaxWidthDecrease}px)`,
       left: (this.state.favicon === '' && !this.state.loading)
-        ? 12
+        ? 8
         : 32
     }
 
