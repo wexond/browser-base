@@ -36,7 +36,7 @@
 
   &:hover {
     opacity: $primary-opacity-light;
-    background-color: $tabs-hover-color;
+    background-color: rgba(0,0,0,0.12);
   }
 }
 
