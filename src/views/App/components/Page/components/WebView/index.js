@@ -5,6 +5,14 @@ export default class WebView extends React.Component {
   componentDidMount () {
     const self = this
 
+    let checkWebcontentsInterval = setInterval(function () {
+      if (self.getWebView().getWebContents() != null) {
+        const event = new Event('webcontents-load')
+        self.getWebView().dispatchEvent(event)
+        clearInterval(checkWebcontentsInterval)
+      }
+    }, 1)
+
     this.getWebView().addEventListener('load-commit', function () {
       // Refresh navigation icons in Menu.
       const menu = global.menuWindow
