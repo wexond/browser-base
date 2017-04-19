@@ -80,9 +80,11 @@ export default class Tabs extends React.Component {
 
     var actualTab = null
 
+    hover()
+
     // Fixes #1 issue.
     // Custom mouseenter and mouseleave event.
-    setInterval(function () {
+    function hover () {
       let tab = self.getTabFromMousePoint(null, self.cursor.x, self.cursor.y)
 
       // Mouse leave.
@@ -121,7 +123,9 @@ export default class Tabs extends React.Component {
           }
         }
       }
-    }, 1)
+
+      requestAnimationFrame(hover)
+    }
   }
 
   /** events */
