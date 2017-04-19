@@ -260,8 +260,11 @@ export default class Bar extends React.Component {
       var suggestions = []
 
       Suggestions.getHistorySuggestions(self.input, function (data) {
+        let historySuggestions = []
+
         if (!(data.length <= 0)) {
           suggestions.push({type: 'separator', text: 'History'})
+          historySuggestions.push({type: 'separator', text: 'History'})
         }
         for (var i = 0; i < data.length; i++) {
           var object = {
@@ -270,6 +273,7 @@ export default class Bar extends React.Component {
             title: data[i].title
           }
           suggestions.push(object)
+          historySuggestions.push(object)
         }
 
         if (data[0] != null) {
@@ -278,21 +282,29 @@ export default class Bar extends React.Component {
           self.removeHint()
         }
 
-        if (data.length <= 0) {
-          self.hideSuggestions()
-          return
-        }
-
         if (self.barVisible) {
           self.showSuggestions()
         }
 
-        self.setState({suggestionsToCreate: []})
-        self.setState({suggestionsToCreate: suggestions})
+        let allSuggestions = suggestions.slice()
+
+        if (self.previousSearchSuggestions != null) {
+          for (i = 0; i < self.previousSearchSuggestions.length; i++) {
+            allSuggestions.push(self.previousSearchSuggestions[i])
+          }
+        }
+
+        if (allSuggestions.length <= 0) {
+          self.hideSuggestions()
+        }
+
+        self.setState({suggestionsToCreate: allSuggestions})
 
         Suggestions.getSearchSuggestions(self.input, function (data, error) {
+          let searchSuggestions = []
           if (!(data.length <= 0)) {
             suggestions.push({type: 'separator', text: 'Google search'})
+            searchSuggestions.push({type: 'separator', text: 'Google search'})
           }
 
           if (!error) {
@@ -303,11 +315,20 @@ export default class Bar extends React.Component {
                 url: 'https://www.google.com/search?q=' + data[i]
               }
               suggestions.push(object)
+              searchSuggestions.push(object)
             }
           }
 
+          self.previousSearchSuggestions = searchSuggestions
+
           self.setState({suggestionsToCreate: []})
           self.setState({suggestionsToCreate: suggestions})
+
+          if (suggestions.length <= 0) {
+            self.hideSuggestions()
+          } else {
+            self.showSuggestions()
+          }
         })
       })
     }
