@@ -144,6 +144,8 @@ export default class Tab extends React.Component {
     const page = this.getPage()
     const self = this
     const bar = this.props.getApp().getBar()
+    const menu = global.menuWindow
+    const webview = page.getWebView()
 
     bar.hideSuggestions()
 
@@ -151,9 +153,15 @@ export default class Tab extends React.Component {
     page.setState({visible: true})
 
     if (page.getWebView().getWebContents() != null) {
-      const menu = global.menuWindow
-      const webview = page.getWebView()
+      accessWebContents()
+    } else {
+      // Wait until the webview's webcontents load.
+      page.getWebView().addEventListener('webcontents-load', function () {
+        accessWebContents()
+      })
+    }
 
+    function accessWebContents () {
       // Refresh navigation icons in Menu.
       menu.send('webview:can-go-back', webview.canGoBack())
       menu.send('webview:can-go-forward', webview.canGoForward())
