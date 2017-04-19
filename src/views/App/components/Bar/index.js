@@ -282,9 +282,13 @@ export default class Bar extends React.Component {
           self.hideSuggestions()
           return
         }
+
         if (self.barVisible) {
           self.showSuggestions()
         }
+
+        self.setState({suggestionsToCreate: []})
+        self.setState({suggestionsToCreate: suggestions})
 
         Suggestions.getSearchSuggestions(self.input, function (data, error) {
           if (!(data.length <= 0)) {
