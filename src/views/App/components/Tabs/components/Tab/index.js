@@ -1,5 +1,6 @@
 import React from 'react'
 import Colors from '../../../../../../helpers/Colors'
+import ReactDOM from 'react-dom'
 
 export default class Tab extends React.Component {
   constructor () {
@@ -50,17 +51,6 @@ export default class Tab extends React.Component {
         }, 1)
       })
     })
-  }
-
-  /**
-   * Executed when the page associated with the tab has loaded.
-   * Gives access to the page.
-   * @event
-   * @param {function} getPage
-   */
-  onPageLoad = (getPage) => {
-    const tabs = this.props.getTabs()
-    this.getPage = getPage
 
     // Select the tab if prop select is true.
     if (this.props.select) {
@@ -108,36 +98,23 @@ export default class Tab extends React.Component {
    */
   select = () => {
     const tabs = this.props.getTabs()
-    const page = this.getPage()
     const self = this
-    const bar = this.props.getApp().getBar()
-
-    // Show the associated page.s
-    page.setState({visible: true})
 
     // Select tab (change background color etc).
     this.setState({selected: true, closeVisible: true, backgroundColor: this.selectedBackgroundColor})
 
     this.selected = true
 
-    bar.hideSuggestions()
-
-    setTimeout(function () {
-      if (self.getPage().getWebView().getWebContents() != null) {
-        const menu = global.menuWindow
-        const webview = self.getPage().getWebView()
-
-        // Refresh navigation icons in Menu.
-        menu.send('webview:can-go-back', webview.canGoBack())
-        menu.send('webview:can-go-forward', webview.canGoForward())
-
-        // Update bar text and focus it.
-        self.props.getApp().updateBarText(webview.getURL())
-        if (bar.getText() === '') {
-          bar.input.focus()
-        }
-      }
-    }, 1)
+    if (this.getPage == null || typeof (this.getPage) !== 'function' || this.getPage() == null) {
+      // Wait until the page load.
+      this.getDOMNode().addEventListener('page-load', function (e) {
+        // Bind getPage to getPage passed by event.
+        self.getPage = e.getPage
+        self.showPage()
+      })
+    } else {
+      this.showPage()
+    }
 
     tabs.updateTabs()
   }
@@ -158,6 +135,35 @@ export default class Tab extends React.Component {
     this.selected = false
 
     tabs.updateTabs()
+  }
+
+  /**
+   * Shows page associated with the tab.
+   */
+  showPage = () => {
+    const page = this.getPage()
+    const self = this
+    const bar = this.props.getApp().getBar()
+
+    bar.hideSuggestions()
+
+    // Show the associated page.
+    page.setState({visible: true})
+
+    if (page.getWebView().getWebContents() != null) {
+      const menu = global.menuWindow
+      const webview = page.getWebView()
+
+      // Refresh navigation icons in Menu.
+      menu.send('webview:can-go-back', webview.canGoBack())
+      menu.send('webview:can-go-forward', webview.canGoForward())
+
+      // Update bar text and focus it.
+      self.props.getApp().updateBarText(webview.getURL())
+      if (bar.getText() === '') {
+        bar.input.focus()
+      }
+    }
   }
 
   /**
@@ -291,6 +297,14 @@ export default class Tab extends React.Component {
    */
   getTab = () => {
     return this
+  }
+
+  /**
+   * Gets DOM Node for current component.
+   * @return {DOMElement}
+   */
+  getDOMNode = () => {
+    return ReactDOM.findDOMNode(this)
   }
 
   render () {
