@@ -13,7 +13,9 @@ export default class Page extends React.Component {
   }
 
   componentDidMount () {
-    this.props.getTab().onPageLoad(this.getPage)
+    const event = new Event('page-load')
+    event.getPage = this.getPage
+    this.props.getTab().getDOMNode().dispatchEvent(event)
   }
 
   /**
