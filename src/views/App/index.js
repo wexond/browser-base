@@ -27,9 +27,9 @@ window.global = {
     newTabWidth: 32
   },
   tabsAnimationData: {
-    closeTabSpring: Spring.durationToSpring(0.4),
-    setPositionsSpring: Spring.durationToSpring(0.4),
-    setWidthsSpring: Spring.durationToSpring(0.4)
+    positioningDuration: 0.2,
+    hoverDuration: 0.2,
+    positioningEasing: 'cubic-bezier(0.215, 0.610, 0.355, 1.000)'
   },
   defaultOptions: {
     select: true,
