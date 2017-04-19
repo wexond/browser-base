@@ -13,8 +13,7 @@ export default class Tabs extends React.Component {
       addButtonVisible: true,
       borderColor: 'rgba(0,0,0,0.12)',
       backgroundColor: '#EEE',
-      tabsVisible: false,
-      animateAddButton: true
+      tabsVisible: false
     }
 
     // The timer for closing tabs system.
@@ -88,7 +87,7 @@ export default class Tabs extends React.Component {
 
       if (actualTab !== null && actualTab !== tab) {
         if (!actualTab.selected) {
-          actualTab.setState({backgroundColor: 'transparent', animateBackgroundColor: true, closeVisible: false})
+          actualTab.setState({backgroundColor: 'transparent', closeVisible: false})
         }
       }
 
@@ -96,7 +95,7 @@ export default class Tabs extends React.Component {
         if (!tab.selected) {
           actualTab = tab
           let rgba = Colors.shadeColor(self.state.backgroundColor, 0.05)
-          tab.setState({backgroundColor: rgba, animateBackgroundColor: true})
+          tab.setState({backgroundColor: rgba})
           if (!tab.pinned) {
             tab.setState({closeVisible: true})
           }
@@ -120,8 +119,7 @@ export default class Tabs extends React.Component {
 
       if (this.dragData.canDrag && !this.dragData.tab.pinned && !this.dragData.tab.new) {
         this.dragData.tab.setState({
-          left: this.dragData.tabX + e.clientX - this.dragData.mouseClickX,
-          animate: false
+          left: this.dragData.tabX + e.clientX - this.dragData.mouseClickX
         })
 
         if (tab.state.left + tab.state.width > this.refs.tabbar.offsetWidth) {
@@ -185,22 +183,13 @@ export default class Tabs extends React.Component {
       const addLeft = data.addButtonPosition
 
       for (var i = 0; i < global.tabs.length; i++) {
-        if (!global.tabs[i].lockedAnimation) {
-          global.tabs[i].setState({
-            left: lefts[i],
-            animate: animateTabs
-          })
-        } else {
-          global.tabs[i].setState({
-            left: lefts[i],
-            animate: false
-          })
-        }
+        global.tabs[i].setState({
+          left: lefts[i]
+        })
       }
 
       self.setState({
-        addButtonLeft: addLeft,
-        animateAddButton: animateAddButton
+        addButtonLeft: addLeft
       })
 
       self.updateTabs()
@@ -217,8 +206,7 @@ export default class Tabs extends React.Component {
     self.getWidths(function (widths) {
       for (var i = 0; i < global.tabs.length; i++) {
         global.tabs[i].setState({
-          width: widths[i],
-          animate: animation
+          width: widths[i]
         })
 
         global.tabs[i].width = widths[i]
@@ -442,8 +430,7 @@ export default class Tabs extends React.Component {
 
     let addButtonStyle = {
       left: this.state.addButtonLeft,
-      display: (this.state.addButtonVisible && this.state.tabsVisible) ? 'block' : 'none',
-      transition: (this.state.animateAddButton) ? '0.2s all' : 'none'
+      display: (this.state.addButtonVisible) ? 'block' : 'none'
     }
 
     /** events */

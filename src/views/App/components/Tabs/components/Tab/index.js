@@ -1,5 +1,4 @@
 import React from 'react'
-import {Motion, spring} from 'react-motion'
 import Colors from '../../../../../../helpers/Colors'
 
 export default class Tab extends React.Component {
@@ -17,9 +16,7 @@ export default class Tab extends React.Component {
       pinned: false,
       favicon: '',
       loading: false,
-      animateBackgroundColor: false,
-      backgroundColor: '#fff',
-      animate: false
+      backgroundColor: '#fff'
     }
 
     this.selectedBackgroundColor = '#fff'
@@ -40,8 +37,6 @@ export default class Tab extends React.Component {
 
     global.tabs[global.tabs.indexOf(this)].staticIndex = global.tabs.indexOf(this)
 
-    this.lockedAnimation = true
-
     // Get positions for all tabs.
     tabs.getPositions(function (positions) {
       // Set initial position for the tab.
@@ -49,7 +44,6 @@ export default class Tab extends React.Component {
         left: positions.tabPositions[global.tabs.indexOf(self)]
       }, function () {
         setTimeout(function () {
-          self.lockedAnimation = false
           // Set the widths and positions for all tabs.
           tabs.setWidths()
           tabs.setPositions()
@@ -122,11 +116,7 @@ export default class Tab extends React.Component {
     page.setState({visible: true})
 
     // Select tab (change background color etc).
-    this.setState({animateBackgroundColor: false, selected: true, closeVisible: true}, function () {
-      setTimeout(function () {
-        self.setState({backgroundColor: this.selectedBackgroundColor})
-      }, 1)
-    })
+    this.setState({selected: true, closeVisible: true, backgroundColor: this.selectedBackgroundColor})
 
     this.selected = true
 
@@ -149,9 +139,6 @@ export default class Tab extends React.Component {
       }
     }, 1)
 
-    // Center vertically bar when the selected tab is new.
-    bar.setState({centerVertical: this.new})
-
     tabs.updateTabs()
   }
 
@@ -161,26 +148,16 @@ export default class Tab extends React.Component {
   deselect = () => {
     const tabs = this.props.getTabs()
     const page = this.getPage()
-    const self = this
 
     // Hide the associated page.
     page.setState({visible: false})
 
     // Deselect tab (change background color etc).
-    this.setState({animateBackgroundColor: false, selected: false, closeVisible: false}, function () {
-      setTimeout(function () {
-        self.setState({backgroundColor: 'transparent'})
-      }, 1)
-    })
+    this.setState({selected: false, closeVisible: false, backgroundColor: 'transparent'})
 
     this.selected = false
 
     tabs.updateTabs()
-
-    if (this.new) {
-      tabs.canShowAddButton = true
-      this.closeNew()
-    }
   }
 
   /**
@@ -188,7 +165,7 @@ export default class Tab extends React.Component {
    * If it is, then replaces current tab with second tab.
    * @param {number} cursorX
    */
-  reorderTabs = (cursorX) => {
+  findTabToReplace = (cursorX) => {
     const tabs = this.props.getTabs()
     if (!this.pinned) {
       const overTab = tabs.getTabFromMouseX(this, cursorX)
@@ -294,7 +271,6 @@ export default class Tab extends React.Component {
     function closeAnim () {
       // Animate.
       self.setState({
-        animate: true,
         width: 0
       })
 
@@ -391,11 +367,7 @@ export default class Tab extends React.Component {
       left: this.state.left,
       width: this.state.width,
       backgroundColor: this.state.backgroundColor,
-      zIndex: (this.state.selected) ? 3 : 1,
-      transitionProperty: (this.state.animateBackgroundColor)
-      ? 'background-color, left, width'
-      : 'left, width',
-      transition: (this.state.animate) ? '0.2s all' : 'none'
+      zIndex: (this.state.selected) ? 3 : 1
     }
 
     /** Events */

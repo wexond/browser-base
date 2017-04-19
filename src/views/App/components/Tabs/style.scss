@@ -16,8 +16,6 @@ $add-button-size: 22px;
   height: 100%;
   width: 32px;
   opacity: $secondary-opacity-light;
-  transition: $hover-duration all;
-  transition-property: opacity, left;
 
   &:hover {
     opacity: $primary-opacity-light;
