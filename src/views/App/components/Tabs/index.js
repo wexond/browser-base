@@ -129,7 +129,7 @@ export default class Tabs extends React.Component {
           tab.setState({left: this.refs.tabbar.getBoundingClientRect().left})
         }
 
-        this.dragData.tab.reorderTabs(e.clientX)
+        this.dragData.tab.findTabToReplace(e.clientX)
 
         if (global.tabs.indexOf(this.dragData.tab) === global.tabs.length - 1) {
           this.setState({addButtonVisible: false})
