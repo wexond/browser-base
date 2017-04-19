@@ -18,7 +18,8 @@ export default class Bar extends React.Component {
       hint: '',
       hintLeft: 0,
       inputText: '',
-      barPointerEvents: false
+      barPointerEvents: false,
+      barCenter: true
     }
 
     this.tempLocked = false
@@ -47,6 +48,14 @@ export default class Bar extends React.Component {
       }
     })
     this.show()
+
+    window.addEventListener('resize', function () {
+      if (window.innerWidth < 640) {
+        self.setState({barCenter: false})
+      } else {
+        self.setState({barCenter: true})
+      }
+    })
   }
 
   /**
@@ -231,12 +240,12 @@ export default class Bar extends React.Component {
   render () {
     const self = this
 
-    var watermarkStyle = {
+    let watermarkStyle = {
       display: (this.state.watermarkVisible)
         ? 'block'
         : 'none'
     }
-    var inputEvents = {
+    let inputEvents = {
       onKeyDown: onKeyDown,
       onChange: onChange,
       onFocus: onFocus
@@ -367,7 +376,7 @@ export default class Bar extends React.Component {
           marginTop: this.state.barMarginTop,
           opacity: this.state.barOpacity,
           pointerEvents: this.state.barPointerEvents
-        }} className='bar'>
+        }} className={(this.state.barCenter) ? 'bar bar-center' : 'bar bar-small-screen'}>
           <div className='bar-search-icon' />
           <div style={watermarkStyle} className='bar-watermark'>Search</div>
           <div className='bar-hint' style={{marginLeft: this.state.hintLeft}}>{this.state.hint}</div>
