@@ -22,7 +22,7 @@ export default class Suggestions {
 
         for (var i = 0; i < json[1].length; i++) {
           if (!tempSuggestions.contains(json[1][i])) {
-            tempSuggestions.push(json[1][i])
+            tempSuggestions.push(String(json[1][i]).toLowerCase())
           }
         }
 
@@ -80,27 +80,13 @@ export default class Suggestions {
         for (var i = 0; i < json.length; i++) {
           var url = json[i].url
           var title = json[i].title
-            // Remove http:// and www://.
-          if (url.startsWith('http://')) {
-            url = url.split('http://')[1]
-            if (url.startsWith('www.')) {
-              url = url.split('www.')[1]
-            }
-          }
-            // Remove https:// and www://.
-          if (url.startsWith('https://')) {
-            url = url.split('https://')[1]
-            if (url.startsWith('www.')) {
-              url = url.split('www.')[1]
-            }
-          }
 
           var suggestion = {
-            url: url,
-            title: title
+            url: url.toLowerCase(),
+            title: title.toLowerCase()
           }
 
-          if (url.startsWith(inputText)) {
+          if (url.indexOf(inputText) !== -1) {
             if (!tempSuggestions.contains(suggestion)) {
               tempSuggestions.push(suggestion)
             }
