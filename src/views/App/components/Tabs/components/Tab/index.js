@@ -44,6 +44,9 @@ export default class Tab extends React.Component {
     // Get positions for all tabs.
     tabs.getPositions(function (positions) {
       // Set initial position for the tab.
+      self.removeTransition('left')
+      self.appendTransition('width')
+
       self.setLeft(positions.tabPositions[global.tabs.indexOf(self)])
       setTimeout(function () {
         self.blockLeftAnimation = false
