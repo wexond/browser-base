@@ -78,12 +78,10 @@ export default class Tabs extends React.Component {
       self.cursor.y = e.pageY
     })
 
-    var actualTab = null
-
-    hover()
-
     // Fixes #1 issue.
     // Custom mouseenter and mouseleave event.
+    var actualTab = null
+    hover()
     function hover () {
       let tab = self.getTabFromMousePoint(null, self.cursor.x, self.cursor.y)
 
@@ -124,7 +122,7 @@ export default class Tabs extends React.Component {
         }
       }
 
-      requestAnimationFrame(hover)
+      requestAnimationFrame(hover) // eslint-disable-line
     }
   }
 
