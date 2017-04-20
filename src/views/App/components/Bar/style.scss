@@ -63,11 +63,10 @@
   margin-top: -1px;
   border: none;
   outline: none;
-  color: #03A9F4;
-  text-shadow: 0 0 0 rgba(0, 0, 0, $primary-opacity-light);
-  -webkit-text-fill-color: transparent;
+  color: rgba(0, 0, 0, $primary-opacity-light);
   height: 100%;
   width: calc(100% - 64px);
+  z-index: 2;
 }
 
 .suggestions {
@@ -90,4 +89,9 @@
   margin-left: 16px;
   font-size: 12px;
   color: rgba(0,0,0, $secondary-opacity-light);
+}
+
+
+.bar-input::-webkit-input-placeholder {
+  color: rgba(0,0,0,0.38);
 }
