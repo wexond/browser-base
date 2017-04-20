@@ -1,4 +1,9 @@
 export default class Transitions {
+  /**
+   * Converts transitions string to array of transitions.
+   * @param {string} str
+   * @return {array}
+   */
   static getTransitions (str) {
     var final = str.replace(/,(?=((?!\().)*?\))/g, ';')
 
@@ -19,6 +24,11 @@ export default class Transitions {
     return arr
   }
 
+  /**
+   * Appends transition to string.
+   * @param {string} str - current transitions
+   * @param {string} transition - transition to add
+   */
   static appendTransition (str, transition) {
     let transitions = Transitions.getTransitions(str)
 
@@ -27,6 +37,11 @@ export default class Transitions {
     return transitions.join(', ')
   }
 
+  /**
+   * Removes transition from string.
+   * @param {string} str - current transitions
+   * @param {string} transition - transition to add
+   */
   static removeTransition (str, transition) {
     let transitions = Transitions.getTransitions(str)
 
