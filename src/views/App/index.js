@@ -62,9 +62,21 @@ class App extends React.Component {
    * @param {string} text
    */
   updateBarText = (text) => {
-    var bar = this.getBar()
+    const bar = this.getBar()
+    let contains = false
+    // Check if the url from webview is in excluded URLs.
+    for (var i = 0; i < global.excludedURLs.length; i++) {
+      if (global.excludedURLs[i].indexOf(text) !== -1) {
+        contains = true
+        break
+      }
+      if (text.indexOf(global.excludedURLs[i]) !== -1) {
+        contains = true
+        break
+      }
+    }
     // check if webview's url is in excluded urls
-    if (!global.excludedURLs.contains(text)) {
+    if (!contains) {
       // if not, set bar's text to webview's url and unlock bar
       bar.setText(text)
       bar.locked = false
