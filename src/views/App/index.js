@@ -29,7 +29,7 @@ window.global = {
   tabsAnimationData: {
     positioningDuration: 0.2,
     hoverDuration: 0.2,
-    positioningEasing: 'cubic-bezier(0.215, 0.610, 0.355, 1.000)'
+    positioningEasing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
   },
   defaultOptions: {
     select: true,

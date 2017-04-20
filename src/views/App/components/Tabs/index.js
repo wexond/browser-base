@@ -2,6 +2,7 @@ import React from 'react'
 import Tab from './components/Tab'
 import Controls from './components/Controls'
 import Colors from './../../../../helpers/Colors'
+import Transitions from './../../../../helpers/Transitions'
 
 export default class Tabs extends React.Component {
   constructor () {
@@ -9,7 +10,6 @@ export default class Tabs extends React.Component {
 
     this.state = {
       tabsToCreate: [],
-      addButtonLeft: {value: 0, animate: false},
       addButtonVisible: true,
       borderColor: 'rgba(0,0,0,0.12)',
       backgroundColor: '#EEE',
@@ -80,50 +80,49 @@ export default class Tabs extends React.Component {
 
     // Fixes #1 issue.
     // Custom mouseenter and mouseleave event.
-    var actualTab = null
-    hover()
-    function hover () {
+    var previousTab = null
+    setInterval(function () {
       let tab = self.getTabFromMousePoint(null, self.cursor.x, self.cursor.y)
 
       // Mouse leave.
-      if (actualTab !== null && actualTab !== tab) {
-        if (!actualTab.selected) {
-          actualTab.setState(
-            {
-              backgroundColor: {
-                value: 'transparent',
-                animate: true
-              },
-              closeOpacity: {
-                value: 0,
-                animate: true
+      if (previousTab !== null && previousTab !== tab) {
+        if (previousTab.hovered) {
+          previousTab.hovered = false
+          if (!previousTab.selected) {
+            previousTab.appendTransition('background-color')
+            previousTab.setState(
+              {
+                backgroundColor: 'transparent',
+                closeOpacity: {
+                  value: 0,
+                  animate: true
+                }
               }
-            }
-          )
+            )
+          }
         }
       }
 
       // Mouse enter.
       if (tab != null) {
-        if (!tab.selected) {
-          actualTab = tab
-          let rgba = Colors.shadeColor(self.state.backgroundColor, 0.05)
-          tab.setState(
-            {
-              backgroundColor: {
-                value: rgba,
-                animate: true
+        if (!tab.hovered) {
+          tab.hovered = true
+          previousTab = tab
+          if (!tab.selected) {
+            let rgba = Colors.shadeColor(self.state.backgroundColor, 0.05)
+            tab.appendTransition('background-color')
+            tab.setState(
+              {
+                backgroundColor: rgba
               }
+            )
+            if (!tab.pinned) {
+              tab.setState({closeOpacity: {value: 1, animate: true}})
             }
-          )
-          if (!tab.pinned) {
-            tab.setState({closeOpacity: {value: 1, animate: true}})
           }
         }
       }
-
-      requestAnimationFrame(hover) // eslint-disable-line
-    }
+    }, 1)
   }
 
   /** events */
@@ -140,32 +139,14 @@ export default class Tabs extends React.Component {
       this.dragData.canDrag2 = true
 
       if (this.dragData.canDrag && !this.dragData.tab.pinned && !this.dragData.tab.new) {
-        this.dragData.tab.setState({
-          left: {
-            value: this.dragData.tabX + e.clientX - this.dragData.mouseClickX,
-            animate: false
-          }
-        })
+        tab.removeTransition('left')
+        tab.setLeft(this.dragData.tabX + e.clientX - this.dragData.mouseClickX)
 
         if (tab.state.left + tab.state.width > this.refs.tabbar.offsetWidth) {
-          tab.setState(
-            {
-              left: {
-                value: this.refs.tabbar.offsetWidth - tab.state.width,
-                animate: false
-              }
-            }
-          )
+          tab.setLeft(this.refs.tabbar.offsetWidth - tab.state.width)
         }
         if (tab.state.left < this.refs.tabbar.getBoundingClientRect().left) {
-          tab.setState(
-            {
-              left: {
-                value: this.refs.tabbar.getBoundingClientRect().left,
-                animate: false
-              }
-            }
-          )
+          tab.setLeft(this.refs.tabbar.getBoundingClientRect().left)
         }
 
         this.dragData.tab.findTabToReplace(e.clientX)
@@ -222,22 +203,21 @@ export default class Tabs extends React.Component {
       const addLeft = data.addButtonPosition
 
       for (var i = 0; i < global.tabs.length; i++) {
-        global.tabs[i].setState({
-          left: {
-            value: lefts[i],
-            animate: !global.tabs[i].blockLeftAnimation && animateTabs
-          }
-        })
+        // React's setState lowers performance :(
+        // Need to access DOM directly
+        var tab = global.tabs[i].refs.tab
+
+        if (!global.tabs[i].blockLeftAnimation && animateTabs) {
+          global.tabs[i].appendTransition('left')
+        } else {
+          global.tabs[i].removeTransition('left')
+        }
+
+        tab.style.left = lefts[i] + 'px'
       }
 
-      self.setState({
-        addButtonLeft: {
-          value: addLeft,
-          animate: animateAddButton
-        }
-      })
-
-      self.updateTabs()
+      self.setAddButtonAnimation(animateAddButton)
+      self.refs.addButton.style.left = addLeft + 'px'
     })
   }
 
@@ -250,17 +230,19 @@ export default class Tabs extends React.Component {
 
     self.getWidths(function (widths) {
       for (var i = 0; i < global.tabs.length; i++) {
-        global.tabs[i].setState({
-          width: {
-            value: widths[i],
-            animate: animation
-          }
-        })
+        // React's setState lowers performance :(
+        // Need to access DOM directly
+        var tab = global.tabs[i].refs.tab
+        tab.style.width = widths[i] + 'px'
+
+        if (animation) {
+          global.tabs[i].appendTransition('width')
+        } else {
+          global.tabs[i].removeTransition('width')
+        }
 
         global.tabs[i].width = widths[i]
       }
-
-      self.updateTabs()
     })
   }
 
@@ -447,6 +429,23 @@ export default class Tabs extends React.Component {
   }
 
   /**
+   * Sets add button animation.
+   * @param {boolean} flag
+   */
+  setAddButtonAnimation = (flag) => {
+    var transition = 'left ' + global.tabsAnimationData.positioningDuration + 's ' + global.tabsAnimationData.positioningEasing
+    const addButton = this.refs.addButton
+
+    if (addButton != null) {
+      if (flag) {
+        addButton.style['-webkit-transition'] = Transitions.appendTransition(addButton.style['-webkit-transition'], transition)
+      } else {
+        addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.style['-webkit-transition'], transition)
+      }
+    }
+  }
+
+  /**
    * Gets controls.
    * @return {Controls}
    */
@@ -476,13 +475,8 @@ export default class Tabs extends React.Component {
       display: tabsDisplay
     }
 
-    let backgroundColorTransition = global.tabsAnimationData.hoverDuration + 's background-color'
-    let leftTransition = global.tabsAnimationData.positioningDuration + 's left ' + global.tabsAnimationData.positioningEasing + ', '
-
     let addButtonStyle = {
-      left: this.state.addButtonLeft.value,
-      display: (this.state.addButtonVisible) ? 'block' : 'none',
-      transition: (this.state.addButtonLeft.animate) ? leftTransition + backgroundColorTransition : backgroundColorTransition
+      display: (this.state.addButtonVisible) ? 'block' : 'none'
     }
 
     /** events */
