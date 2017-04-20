@@ -289,17 +289,28 @@ export default class Bar extends React.Component {
         }
 
         for (var i = 0; i < data.length; i++) {
-          var object = {
-            type: 'history',
-            url: data[i].url,
-            title: data[i].title
+          var object
+          if (data[i].url.indexOf('?q=') !== -1 && data[i].url.split('?q=')[1].split('&')[0].trim() !== '') {
+            object = {
+              type: 'search',
+              url: data[i].url.split('?q=')[1].split('&')[0],
+              title: data[i].url.split('?q=')[1].split('&')[0]
+            }
+            suggestions.splice(1, 0, object)
+            historySuggestions.splice(1, 0, object)
+          } else {
+            object = {
+              type: 'history',
+              url: data[i].url,
+              title: data[i].title
+            }
+            suggestions.push(object)
+            historySuggestions.push(object)
           }
-          suggestions.push(object)
-          historySuggestions.push(object)
         }
 
-        if (data[0] != null) {
-          self.autoComplete(data[0].url)
+        if (suggestions[1] != null) {
+          self.autoComplete(suggestions[1].url)
         } else {
           self.removeHint()
         }
