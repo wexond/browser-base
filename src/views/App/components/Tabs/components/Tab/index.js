@@ -1,6 +1,7 @@
 import React from 'react'
 import Colors from '../../../../../../helpers/Colors'
 import ReactDOM from 'react-dom'
+import Transitions from './../../../../../../helpers/Transitions'
 
 export default class Tab extends React.Component {
   constructor () {
@@ -14,10 +15,10 @@ export default class Tab extends React.Component {
       pinned: false,
       favicon: '',
       loading: false,
-      backgroundColor: {value: 'transparent', animate: false},
-      closeOpacity: {value: 0, animate: false},
-      width: {value: 0, animate: false},
-      left: {value: 0, animate: false}
+      backgroundColor: 'transparent',
+      closeOpacity: 0,
+      width: 0,
+      left: 0
     }
 
     this.selectedBackgroundColor = '#fff'
@@ -43,16 +44,13 @@ export default class Tab extends React.Component {
     // Get positions for all tabs.
     tabs.getPositions(function (positions) {
       // Set initial position for the tab.
-      self.setState({
-        left: {value: positions.tabPositions[global.tabs.indexOf(self)], animate: false}
-      }, function () {
-        setTimeout(function () {
-          self.blockLeftAnimation = false
-          // Set the widths and positions for all tabs.
-          tabs.setWidths()
-          tabs.setPositions()
-        }, 1)
-      })
+      self.setLeft(positions.tabPositions[global.tabs.indexOf(self)])
+      setTimeout(function () {
+        self.blockLeftAnimation = false
+        // Set the widths and positions for all tabs.
+        tabs.setWidths()
+        tabs.setPositions()
+      }, 1)
     })
 
     // Select the tab if prop select is true.
@@ -103,6 +101,8 @@ export default class Tab extends React.Component {
     const tabs = this.props.getTabs()
     const self = this
 
+    this.removeTransition('background-color')
+
     // Select tab (change background color etc).
     this.setState(
       {
@@ -111,10 +111,7 @@ export default class Tab extends React.Component {
           value: 1,
           animate: false
         },
-        backgroundColor: {
-          value: this.selectedBackgroundColor,
-          animate: false
-        }
+        backgroundColor: this.selectedBackgroundColor
       }
     )
 
@@ -146,6 +143,8 @@ export default class Tab extends React.Component {
     // Hide the associated page.
     page.setState({visible: false})
 
+    this.removeTransition('background-color')
+
     // Deselect tab (change background color etc).
     this.setState(
       {
@@ -154,10 +153,7 @@ export default class Tab extends React.Component {
           value: 0,
           animate: false
         },
-        backgroundColor: {
-          value: 'transparent',
-          animate: false
-        }
+        backgroundColor: 'transparent'
       }
     )
 
@@ -238,13 +234,9 @@ export default class Tab extends React.Component {
       // Unable to reorder the tab by other tabs.
       self.locked = true
 
-      // Animate the tab.
-      self.setState({
-        left: {
-          value: newTabPos,
-          animate: true
-        }
-      })
+      // Animate the tab
+      self.appendTransition('left')
+      self.setLeft(newTabPos)
 
       // Unlock tab replacing by other tabs.
       setTimeout(function () {
@@ -278,12 +270,11 @@ export default class Tab extends React.Component {
 
     let rgba = Colors.shadeColor(this.props.getTabs().state.backgroundColor, -0.05)
 
+    this.removeTransition('background-color')
+
     this.setState(
       {
-        backgroundColor: {
-          value: rgba,
-          animate: false
-        }
+        backgroundColor: rgba
       }
     )
 
@@ -301,12 +292,15 @@ export default class Tab extends React.Component {
     if (this.selected) {
       if (nextTab != null) { // If the next tab exists, select it.
         tabs.selectTab(nextTab)
+        nextTab.selectedAfterClose = true
       } else { // If the next tab not exists.
         if (prevTab != null) { // If previous tab exists, select it.
           tabs.selectTab(prevTab)
+          prevTab.selectedAfterClose = true
         } else { // If the previous tab not exists, check if the first tab exists.
           if (global.tabs[0] != null) { // If first tab exists, select it.
             tabs.selectTab(global.tabs[0])
+            global.tabs[0].selectedAfterClose = true
           }
         }
       }
@@ -328,13 +322,10 @@ export default class Tab extends React.Component {
 
     // Animate tab closing.
     function closeAnim () {
-      // Animate.
-      self.setState({
-        width: {
-          value: 0,
-          animate: true
-        }
-      })
+      self.appendTransition('width')
+      if (self.refs.tab != null) {
+        self.refs.tab.style.width = 0
+      }
 
       setTimeout(function () {
         self.setState({render: false})
@@ -353,6 +344,70 @@ export default class Tab extends React.Component {
    */
   getTab = () => {
     return this
+  }
+
+  /**
+   * Appends transition property to tab.
+   * @param {string} transition
+   */
+  appendTransition = (transition) => {
+    var t = ''
+
+    if (transition === 'left') {
+      t = 'left ' + global.tabsAnimationData.positioningDuration + 's ' + global.tabsAnimationData.positioningEasing
+    }
+    if (transition === 'width') {
+      t = 'width ' + global.tabsAnimationData.positioningDuration + 's ' + global.tabsAnimationData.positioningEasing
+    }
+    if (transition === 'background-color') {
+      t = 'background-color ' + global.tabsAnimationData.positioningDuration + 's'
+    }
+
+    if (this.refs.tab != null) {
+      this.refs.tab.style['-webkit-transition'] = Transitions.appendTransition(this.refs.tab.style['-webkit-transition'], t)
+    }
+  }
+
+  /**
+  * Removes transition property from tab.
+  * @param {string} transition
+  */
+  removeTransition = (transition) => {
+    var t = ''
+
+    if (transition === 'left') {
+      t = 'left ' + global.tabsAnimationData.positioningDuration + 's ' + global.tabsAnimationData.positioningEasing
+    }
+    if (transition === 'width') {
+      t = 'width ' + global.tabsAnimationData.positioningDuration + 's ' + global.tabsAnimationData.positioningEasing
+    }
+    if (transition === 'background-color') {
+      t = 'background-color ' + global.tabsAnimationData.positioningDuration + 's'
+    }
+
+    if (this.refs.tab != null) {
+      this.refs.tab.style['-webkit-transition'] = Transitions.removeTransition(this.refs.tab.style['-webkit-transition'], t)
+    }
+  }
+
+  /**
+   * Sets left for tab.
+   * @param {number} left
+   */
+  setLeft = (left) => {
+    if (this.refs.tab != null) {
+      this.refs.tab.style.left = left + 'px'
+    }
+  }
+
+  /**
+  * Sets width for tab.
+  * @param {number} width
+  */
+  setWidth = (width) => {
+    if (this.refs.tab != null) {
+      this.refs.tab.style.width = width + 'px'
+    }
   }
 
   /**
@@ -434,33 +489,9 @@ export default class Tab extends React.Component {
       display: (this.state.favicon === '') ? 'none' : 'block'
     }
 
-    let tabTransitions = []
-
-    if (this.state.width.animate) {
-      tabTransitions.push(global.tabsAnimationData.positioningDuration + 's width ' + global.tabsAnimationData.positioningEasing)
-    }
-    if (this.state.left.animate) {
-      tabTransitions.push(global.tabsAnimationData.positioningDuration + 's left ' + global.tabsAnimationData.positioningEasing)
-    }
-    if (this.state.backgroundColor.animate) {
-      tabTransitions.push(global.tabsAnimationData.hoverDuration + 's background-color')
-    }
-
-    let tabTransition = ''
-    for (var i = 0; i < tabTransitions.length; i++) {
-      if (i < tabTransitions.length - 1) {
-        tabTransition += tabTransitions[i] + ', '
-      } else {
-        tabTransition += tabTransitions[i]
-      }
-    }
-
     let tabStyle = {
-      left: this.state.left.value,
-      width: this.state.width.value,
-      backgroundColor: this.state.backgroundColor.value,
-      zIndex: (this.state.selected) ? 3 : 1,
-      transition: tabTransition
+      backgroundColor: this.state.backgroundColor,
+      zIndex: (this.state.selected) ? 3 : 1
     }
 
     /** Events */

@@ -75,7 +75,7 @@ export default class WebView extends React.Component {
 
   render () {
     return (
-      <webview ref='webview' preload='../../preloads/Global' className='webview' src={this.props.src} />
+      <webview ref='webview' preload='../../preloads/Global' is autosize class='webview' src={this.props.src} />
     )
   }
 }
