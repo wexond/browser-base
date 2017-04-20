@@ -160,6 +160,10 @@ export default class Bar extends React.Component {
    * shows suggestions
    */
   showSuggestions = () => {
+    if (!this.barVisible) {
+      return
+    }
+
     this.setState({
       suggestionsOpacity: 1,
       suggestionsPointerEvents: 'auto'
@@ -167,7 +171,6 @@ export default class Bar extends React.Component {
 
     this.tempLocked = true
     this.suggestionsVisible = true
-    this.show()
   }
   /**
    * Sets text.
@@ -324,7 +327,7 @@ export default class Bar extends React.Component {
           self.setState({suggestionsToCreate: []})
           self.setState({suggestionsToCreate: suggestions})
 
-          if (suggestions.length <= 0) {
+          if (suggestions.length <= 0 && !self.barVisible) {
             self.hideSuggestions()
           } else {
             self.showSuggestions()
