@@ -33,14 +33,28 @@ export default class Suggestion extends React.Component {
     var suggestionClass = (this.state.selected) ? 'suggestion suggestion-selected' : 'suggestion'
     suggestionClass += (this.state.hovered) ? ' suggestion-hovered' : ''
 
-    var content = (this.props.data.type === 'history')
-        ? (
-          <div>
-            <div className='suggestion-url'>{this.state.url}</div>
-            <div className='suggestion-title'>{' — ' + this.state.title}</div>
-          </div>
-        )
-        : this.state.title
+    var content
+    var style = {}
+
+    if (this.props.data.type === 'history') {
+      content = (
+        <div>
+          <div className='suggestion-url'>{this.state.url}</div>
+          <div className='suggestion-title'>{' — ' + this.state.title}</div>
+        </div>
+      )
+    }
+    if (this.props.data.type === 'search') {
+      content = this.state.title
+    }
+    if (this.props.data.type === 'info') {
+      content = (
+        <div>
+          {this.props.data.url + ' — ' + this.props.data.hint}
+        </div>
+      )
+      style = {marginTop: 16}
+    }
 
     /** Events */
 
@@ -57,7 +71,7 @@ export default class Suggestion extends React.Component {
     }
 
     return (
-        <div onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnter} className={suggestionClass}>
+        <div style={style} onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnter} className={suggestionClass}>
           {content}
           <div className='clear-both' />
         </div>

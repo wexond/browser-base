@@ -12,12 +12,9 @@ export default class Bar extends React.Component {
       barTop: 42,
       barOpacity: 0,
       suggestionsOpacity: 0,
-      watermarkVisible: true,
       suggestionsToCreate: [],
       suggestionsPointerEvents: 'none',
       hint: '',
-      hintLeft: 0,
-      inputText: '',
       barPointerEvents: false,
       barCenter: true
     }
@@ -188,12 +185,9 @@ export default class Bar extends React.Component {
   updateBar = (toggleSuggestions = false) => {
     if (this.input.value === '') {
       this.removeHint()
-      this.setState({watermarkVisible: true})
       if (toggleSuggestions) {
         this.hideSuggestions()
       }
-    } else {
-      this.setState({watermarkVisible: false})
     }
   }
   /**
@@ -205,8 +199,7 @@ export default class Bar extends React.Component {
     var inputText = this.input.value
     if (text != null || text !== '') {
       if (text.toLowerCase().startsWith(inputText.toLowerCase())) {
-        var hintText = text.replace(inputText, '')
-        this.setState({hint: hintText, hintLeft: this.textWidth.offsetWidth})
+        this.setState({hint: text})
         this.suggestedURL = text
       }
     }
@@ -243,11 +236,6 @@ export default class Bar extends React.Component {
   render () {
     const self = this
 
-    let watermarkStyle = {
-      display: (this.state.watermarkVisible)
-        ? 'block'
-        : 'none'
-    }
     let inputEvents = {
       onKeyDown: onKeyDown,
       onChange: onChange,
@@ -257,18 +245,49 @@ export default class Bar extends React.Component {
     /** Events */
 
     function onChange (e) {
-      self.setState({inputText: self.input.value})
       self.updateBar(true)
 
       var suggestions = []
+
+      self.showSuggestions()
+
+      let allSuggestions = suggestions.slice()
+      let firstItem = {
+        type: 'info',
+        url: self.input.value,
+        hint: 'Search in Google'
+      }
+
+      if (self.previousHistorySuggestions != null && !(self.previousHistorySuggestions.length <= 0)) {
+        for (var i = 0; i < self.previousHistorySuggestions.length; i++) {
+          allSuggestions.push(self.previousHistorySuggestions[i])
+        }
+      } else {
+        suggestions.push(firstItem)
+        allSuggestions.push(firstItem)
+      }
+
+      if (self.previousSearchSuggestions != null) {
+        for (i = 0; i < self.previousSearchSuggestions.length; i++) {
+          allSuggestions.push(self.previousSearchSuggestions[i])
+        }
+      }
+
+      self.setState({suggestionsToCreate: []})
+      self.setState({suggestionsToCreate: allSuggestions})
 
       Suggestions.getHistorySuggestions(self.input, function (data) {
         let historySuggestions = []
 
         if (!(data.length <= 0)) {
-          suggestions.push({type: 'separator', text: 'History'})
+          suggestions[0] = {type: 'separator', text: 'History'}
           historySuggestions.push({type: 'separator', text: 'History'})
+        } else {
+          if (suggestions[0] !== firstItem) {
+            suggestions.push(firstItem)
+          }
         }
+
         for (var i = 0; i < data.length; i++) {
           var object = {
             type: 'history',
@@ -297,9 +316,7 @@ export default class Bar extends React.Component {
           }
         }
 
-        if (allSuggestions.length <= 0) {
-          self.hideSuggestions()
-        }
+        self.previousHistorySuggestions = historySuggestions
 
         self.setState({suggestionsToCreate: allSuggestions})
 
@@ -315,7 +332,7 @@ export default class Bar extends React.Component {
               var object = {
                 type: 'search',
                 title: data[i],
-                url: 'https://www.google.com/search?q=' + data[i]
+                url: data[i]
               }
               suggestions.push(object)
               searchSuggestions.push(object)
@@ -326,12 +343,6 @@ export default class Bar extends React.Component {
 
           self.setState({suggestionsToCreate: []})
           self.setState({suggestionsToCreate: suggestions})
-
-          if (suggestions.length <= 0 && !self.barVisible) {
-            self.hideSuggestions()
-          } else {
-            self.showSuggestions()
-          }
         })
       })
     }
@@ -406,10 +417,8 @@ export default class Bar extends React.Component {
           pointerEvents: this.state.barPointerEvents
         }} className={(this.state.barCenter) ? 'bar bar-center' : 'bar bar-small-screen'}>
           <div className='bar-search-icon' />
-          <div style={watermarkStyle} className='bar-watermark'>Search</div>
           <div className='bar-hint' style={{marginLeft: this.state.hintLeft}}>{this.state.hint}</div>
-          <span ref={(t) => { this.textWidth = t }} style={{opacity: 0, top: -300, fontSize: 14, position: 'absolute'}}>{this.state.inputText}</span>
-          <input ref={(t) => {
+          <input placeholder='Search' ref={(t) => {
             this.input = t
           }} {...inputEvents} className='bar-input' />
         </div>
