@@ -70,11 +70,12 @@ export default class Bar extends React.Component {
     }
     return null
   }
+
   /**
    * Moves to next or previous suggestion.
    * @param {number} moveBy
    */
-  selectSuggestion = (moveBy) => {
+  moveSuggestion = (moveBy) => {
     if (!this.suggestionsVisible) {
       return
     }
@@ -97,11 +98,12 @@ export default class Bar extends React.Component {
       }
     }
   }
+
   /**
    * Selects suggestion by index.
    * @param {number} index
    */
-  selectSuggestionByIndex = (index) => {
+  selectSuggestion = (index) => {
     var suggestions = this.suggestions
     if (suggestions[index] != null) {
       for (var i = 0; i < suggestions.length; i++) {
@@ -123,6 +125,7 @@ export default class Bar extends React.Component {
 
     this.barVisible = true
   }
+
   /**
    * Hides bar.
    */
@@ -140,10 +143,9 @@ export default class Bar extends React.Component {
     this.barVisible = false
     this.tempLocked = false
 
-    this.updateBar()
-
     this.hideSuggestions()
   }
+
   /**
    * Hides suggestions.
    */
@@ -155,8 +157,9 @@ export default class Bar extends React.Component {
 
     this.suggestionsVisible = false
   }
+
   /**
-   * shows suggestions
+   * Shows suggestions.
    */
   showSuggestions = () => {
     if (!this.barVisible) {
@@ -171,27 +174,25 @@ export default class Bar extends React.Component {
     this.tempLocked = true
     this.suggestionsVisible = true
   }
+
   /**
    * Sets text.
    * @param {string} text
+   * @param {boolean} overrideActive
    */
-  setText = (text) => {
+  setText = (text, overrideActive) => {
     this.lastText = text
-    if (this.input !== document.activeElement) this.input.value = text
-    this.updateBar()
-  }
-  /**
-   * Updates bar.
-   * @param {boolean} toggleSuggestions
-   */
-  updateBar = (toggleSuggestions = false) => {
-    if (this.input.value === '') {
+    if (!overrideActive) {
+      this.input.value = text
+    } else {
+      if (this.input !== document.activeElement) this.input.value = text
+    }
+
+    if (text === '') {
       this.removeHint()
-      if (toggleSuggestions) {
-        this.hideSuggestions()
-      }
     }
   }
+
   /**
    * Auto completes input with given text.
    * @param {DOMElement} input
@@ -202,10 +203,27 @@ export default class Bar extends React.Component {
     let inputTextLower = inputText.toLowerCase()
     let textLower = text.toLowerCase()
     if (textLower != null || textLower !== '') {
-      if (textLower.indexOf(inputTextLower) !== -1) {
-        let hintText = textLower.replace(inputTextLower, inputText).substr(textLower.indexOf(inputTextLower[0]))
-        this.setState({hint: hintText})
-        this.suggestedURL = hintText
+      let textToComplete = ''
+      let canAutoComplete = false
+      let regex = /(http(s?)):\/\/(www.)?/gi
+
+      console.log(textLower.replace(regex, ''))
+
+      if (textLower.startsWith(inputTextLower)) {
+        textToComplete = textLower.replace(inputTextLower, inputText)
+        canAutoComplete = true
+      }
+
+      if (textLower.replace(regex, '').startsWith(inputTextLower)) {
+        textToComplete = textLower.replace(inputTextLower, inputText).replace(regex, '')
+        canAutoComplete = true
+      }
+
+      if (canAutoComplete) {
+        this.setState({hint: textToComplete})
+        this.suggestedURL = textToComplete
+      } else {
+        this.removeHint()
       }
     }
   }
@@ -254,11 +272,15 @@ export default class Bar extends React.Component {
         self.setState({hintOverflowWidth: self.refs.textWidth.offsetWidth})
       })
 
-      self.updateBar(true)
-
       var suggestions = []
 
-      self.showSuggestions()
+      if (e.currentTarget.value.trim() !== '') {
+        self.showSuggestions()
+      } else {
+        self.hideSuggestions()
+        self.removeHint()
+        return
+      }
 
       let allSuggestions = suggestions.slice()
       let firstItem = {
@@ -316,10 +338,6 @@ export default class Bar extends React.Component {
           self.removeHint()
         }
 
-        if (self.barVisible) {
-          self.showSuggestions()
-        }
-
         let allSuggestions = suggestions.slice()
 
         if (self.previousSearchSuggestions != null) {
@@ -368,13 +386,13 @@ export default class Bar extends React.Component {
       // arrow up
       if (key === 38) {
         self.removeHint()
-        self.selectSuggestion(-1)
+        self.moveSuggestion(-1)
         e.preventDefault()
       }
       // arrow down
       if (key === 40) {
         self.removeHint()
-        self.selectSuggestion(1)
+        self.moveSuggestion(1)
         e.preventDefault()
       }
       // arrow right

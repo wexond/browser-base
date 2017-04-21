@@ -20,7 +20,7 @@ export default class Suggestion extends React.Component {
 
     bar.suggestions.push(this)
 
-    bar.selectSuggestionByIndex(0)
+    bar.selectSuggestion(0)
   }
 
   componentWillUnmount () {

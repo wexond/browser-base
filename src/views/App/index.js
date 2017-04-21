@@ -60,8 +60,9 @@ class App extends React.Component {
   /**
    * Sets bar text.
    * @param {string} text
+   * @param {boolean} overrideActive
    */
-  updateBarText = (text) => {
+  updateBarText = (text, overrideActive) => {
     const bar = this.getBar()
     let contains = false
     // Check if the url from webview is in excluded URLs.
@@ -78,11 +79,11 @@ class App extends React.Component {
     // check if webview's url is in excluded urls
     if (!contains) {
       // if not, set bar's text to webview's url and unlock bar
-      bar.setText(text)
+      bar.setText(text, overrideActive)
       bar.locked = false
       bar.tempLocked = false
     } else {
-      bar.setText('')
+      bar.setText('', overrideActive)
       // if it is, check if the url is wexond://newtab
       if (text.startsWith('wexond://newtab')) {
         // if it is, lock and show bar
