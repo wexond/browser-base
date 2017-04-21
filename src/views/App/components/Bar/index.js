@@ -268,13 +268,15 @@ export default class Bar extends React.Component {
     /** Events */
 
     function onChange (e) {
-      self.setState({inputText: e.currentTarget.value}, function () {
+      let inputText = e.currentTarget.value
+
+      self.setState({inputText: inputText}, function () {
         self.setState({hintOverflowWidth: self.refs.textWidth.offsetWidth})
       })
 
       var suggestions = []
 
-      if (e.currentTarget.value.trim() !== '') {
+      if (inputText.trim() !== '') {
         self.showSuggestions()
       } else {
         self.hideSuggestions()
@@ -283,19 +285,36 @@ export default class Bar extends React.Component {
       }
 
       let allSuggestions = suggestions.slice()
-      let firstItem = {
+      let infoSearchItem = {
         type: 'info',
-        url: self.input.value,
+        url: inputText,
         hint: 'Search in Google'
       }
+      let infoUrlItem = {
+        type: 'info-url',
+        url: inputText
+      }
+      let isInputTextURL = false
 
       if (self.previousHistorySuggestions != null && !(self.previousHistorySuggestions.length <= 0)) {
         for (var i = 0; i < self.previousHistorySuggestions.length; i++) {
           allSuggestions.push(self.previousHistorySuggestions[i])
         }
       } else {
-        suggestions.push(firstItem)
-        allSuggestions.push(firstItem)
+        if (Network.isURL(inputText)) {
+          isInputTextURL = true
+        } else {
+          isInputTextURL = false
+          if (Network.isURL('http://' + inputText)) {
+            isInputTextURL = true
+          }
+        }
+        if (isInputTextURL) {
+          suggestions.push(infoUrlItem)
+          allSuggestions.push(infoUrlItem)
+        }
+        suggestions.push(infoSearchItem)
+        allSuggestions.push(infoSearchItem)
       }
 
       if (self.previousSearchSuggestions != null) {
@@ -311,11 +330,16 @@ export default class Bar extends React.Component {
         let historySuggestions = []
 
         if (!(data.length <= 0)) {
-          suggestions[0] = {type: 'separator', text: 'History'}
+          suggestions.splice(suggestions.indexOf(infoUrlItem), 1)
+          suggestions.splice(suggestions.indexOf(infoSearchItem), 1)
+          suggestions.push({type: 'separator', text: 'History'})
           historySuggestions.push({type: 'separator', text: 'History'})
         } else {
-          if (suggestions[0] !== firstItem) {
-            suggestions.push(firstItem)
+          if (suggestions.indexOf(infoSearchItem) === -1) {
+            suggestions.push(infoSearchItem)
+          }
+          if (isInputTextURL && suggestions.indexOf(infoUrlItem) === -1) {
+            suggestions.push(infoUrlItem)
           }
         }
 

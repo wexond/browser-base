@@ -77,7 +77,6 @@
   width: 100%;
   max-width: calc(600px - 32px);
   padding: 16px;
-  padding-top: 0;
   background-color: white;
   transition: 0.3s all;
   z-index: 5;
@@ -89,8 +88,11 @@
   margin-left: 16px;
   font-size: 12px;
   color: rgba(0,0,0, $secondary-opacity-light);
-}
 
+  &:first-child {
+    margin-top: 0;
+  }
+}
 
 .bar-input::-webkit-input-placeholder {
   color: rgba(0,0,0,0.38);
