@@ -197,7 +197,7 @@ export default class Tab extends React.Component {
       menu.send('webview:can-go-forward', webview.canGoForward())
 
       // Update bar text and focus it.
-      self.props.getApp().updateBarText(webview.getURL())
+      self.props.getApp().updateBarText(webview.getURL(), true)
       if (bar.getText() === '') {
         bar.input.focus()
       }
