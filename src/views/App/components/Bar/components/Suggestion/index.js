@@ -34,7 +34,6 @@ export default class Suggestion extends React.Component {
     suggestionClass += (this.state.hovered) ? ' suggestion-hovered' : ''
 
     var content
-    var style = {}
 
     if (this.props.data.type === 'history') {
       content = (
@@ -53,7 +52,13 @@ export default class Suggestion extends React.Component {
           {this.props.data.url + ' — ' + this.props.data.hint}
         </div>
       )
-      style = {marginTop: 16}
+    }
+    if (this.props.data.type === 'info-url') {
+      content = (
+        <div>
+          {this.props.data.url}
+        </div>
+      )
     }
 
     /** Events */
@@ -71,7 +76,7 @@ export default class Suggestion extends React.Component {
     }
 
     return (
-        <div style={style} onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnter} className={suggestionClass}>
+        <div onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnter} className={suggestionClass}>
           {content}
           <div className='clear-both' />
         </div>
