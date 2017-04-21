@@ -356,7 +356,7 @@ export default class Bar extends React.Component {
           }
         }
 
-        if (suggestions[1] != null) {
+        if (suggestions[1] != null && self.canSuggest) {
           self.autoComplete(suggestions[1].url)
         } else {
           self.removeHint()
@@ -407,6 +407,13 @@ export default class Bar extends React.Component {
 
     function onKeyDown (e) {
       var key = e.keyCode || e.charCode
+      // backspace
+      if (key === 8) {
+        self.canSuggest = false
+        self.removeHint()
+      } else {
+        self.canSuggest = true
+      }
       // arrow up
       if (key === 38) {
         self.removeHint()
