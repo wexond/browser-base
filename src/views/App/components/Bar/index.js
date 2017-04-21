@@ -198,12 +198,14 @@ export default class Bar extends React.Component {
    * @param {string} text - text to autocomplete
    */
   autoComplete = (text) => {
-    var inputText = this.input.value
-    if (text != null || text !== '') {
-      if (text.toLowerCase().indexOf(inputText.toLowerCase()) !== -1) {
-        var hintText = text.replace(inputText.toLowerCase(), inputText).substr(text.indexOf(inputText[0]))
+    let inputText = this.input.value
+    let inputTextLower = inputText.toLowerCase()
+    let text1 = text.toLowerCase()
+    if (text1 != null || text1 !== '') {
+      if (text1.indexOf(inputTextLower) !== -1) {
+        let hintText = text1.replace(inputTextLower, inputText).substr(text1.indexOf(inputTextLower[0]))
         this.setState({hint: hintText})
-        this.suggestedURL = text
+        this.suggestedURL = text1
       }
     }
   }
