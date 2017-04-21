@@ -8,7 +8,7 @@ export default class Suggestions {
   static getSearchSuggestions = (input, callback = null) => {
     var inputText = input.value.slice(0, input.selectionStart) + input.value.slice(input.selectionEnd)
     var suggestions = []
-    Network.requestUrl('http://google.com/complete/search?client=chrome&q=' + inputText, function (data, error) {
+    Network.requestUrl('http://google.com/complete/search?client=chrome&q=' + inputText.toLowerCase(), function (data, error) {
       if (error) {
         if (callback != null) {
           callback(null, error)
@@ -71,7 +71,7 @@ export default class Suggestions {
    */
   static getHistorySuggestions = (input, callback = null) => {
     var suggestions = []
-    var inputText = input.value.slice(0, input.selectionStart) + input.value.slice(input.selectionEnd)
+    var inputText = (input.value.slice(0, input.selectionStart) + input.value.slice(input.selectionEnd)).toLowerCase()
 
     Network.requestUrl(global.historyPath, function (data, error) {
       var json = JSON.parse(data)
@@ -86,7 +86,7 @@ export default class Suggestions {
             title: title.toLowerCase()
           }
 
-          if (url.indexOf(inputText) !== -1) {
+          if (url.indexOf(inputText.toLowerCase()) !== -1) {
             if (!tempSuggestions.contains(suggestion)) {
               tempSuggestions.push(suggestion)
             }
