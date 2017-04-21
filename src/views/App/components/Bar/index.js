@@ -207,8 +207,6 @@ export default class Bar extends React.Component {
       let canAutoComplete = false
       let regex = /(http(s?)):\/\/(www.)?/gi
 
-      console.log(textLower.replace(regex, ''))
-
       if (textLower.startsWith(inputTextLower)) {
         textToComplete = textLower.replace(inputTextLower, inputText)
         canAutoComplete = true

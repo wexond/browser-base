@@ -93,6 +93,16 @@ export default class Suggestions {
           }
         }
 
+        let regex = /(http(s?)):\/\/(www.)?/gi
+
+        var shortestSuggestion = Object.assign({}, tempSuggestions[0])
+
+        shortestSuggestion.url = shortestSuggestion.url.replace(regex, '')
+
+        shortestSuggestion.url = shortestSuggestion.url.substring(0, shortestSuggestion.url.indexOf('/'))
+
+        tempSuggestions.unshift(shortestSuggestion)
+
         // Remove duplicates from array.
         var seenSuggestions = []
         for (i = 0; i < tempSuggestions.length; i++) {
