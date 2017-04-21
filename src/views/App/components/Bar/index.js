@@ -16,7 +16,9 @@ export default class Bar extends React.Component {
       suggestionsPointerEvents: 'none',
       hint: '',
       barPointerEvents: false,
-      barCenter: true
+      barCenter: true,
+      hintOverflowWidth: 0,
+      inputText: ''
     }
 
     this.tempLocked = false
@@ -198,8 +200,9 @@ export default class Bar extends React.Component {
   autoComplete = (text) => {
     var inputText = this.input.value
     if (text != null || text !== '') {
-      if (text.toLowerCase().startsWith(inputText.toLowerCase())) {
-        this.setState({hint: text})
+      if (text.toLowerCase().indexOf(inputText.toLowerCase()) !== -1) {
+        var hintText = text.replace(inputText.toLowerCase(), inputText).substr(text.indexOf(inputText[0]))
+        this.setState({hint: hintText})
         this.suggestedURL = text
       }
     }
@@ -245,6 +248,10 @@ export default class Bar extends React.Component {
     /** Events */
 
     function onChange (e) {
+      self.setState({inputText: e.currentTarget.value}, function () {
+        self.setState({hintOverflowWidth: self.refs.textWidth.offsetWidth})
+      })
+
       self.updateBar(true)
 
       var suggestions = []
@@ -290,15 +297,7 @@ export default class Bar extends React.Component {
 
         for (var i = 0; i < data.length; i++) {
           var object
-          if (data[i].url.indexOf('?q=') !== -1 && data[i].url.split('?q=')[1].split('&')[0].trim() !== '') {
-            object = {
-              type: 'search',
-              url: data[i].url.split('?q=')[1].split('&')[0],
-              title: data[i].url.split('?q=')[1].split('&')[0]
-            }
-            suggestions.splice(1, 0, object)
-            historySuggestions.splice(1, 0, object)
-          } else {
+          if (data[i].url.indexOf('?q=') === -1) {
             object = {
               type: 'history',
               url: data[i].url,
@@ -428,7 +427,9 @@ export default class Bar extends React.Component {
           pointerEvents: this.state.barPointerEvents
         }} className={(this.state.barCenter) ? 'bar bar-center' : 'bar bar-small-screen'}>
           <div className='bar-search-icon' />
+          <div ref='textWidth' className='bar-text-width'>{this.state.inputText}</div>
           <div className='bar-hint' style={{marginLeft: this.state.hintLeft}}>{this.state.hint}</div>
+          <div className='bar-hint-overflow' style={{width: this.state.hintOverflowWidth}} />
           <input placeholder='Search' ref={(t) => {
             this.input = t
           }} {...inputEvents} className='bar-input' />

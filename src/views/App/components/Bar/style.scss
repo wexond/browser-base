@@ -95,3 +95,19 @@
 .bar-input::-webkit-input-placeholder {
   color: rgba(0,0,0,0.38);
 }
+
+.bar-text-width {
+  position: absolute;
+  top: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bar-hint-overflow {
+  @include center-vertical;
+  position: absolute;
+  left: 42px;
+  margin-top: -1px;
+  background-color: white;
+  height: 15px;
+}
