@@ -21,7 +21,7 @@
   "dependencies": {
     "babel-preset-es2015": "latest",
     "babel-preset-react": "latest",
-    "electron": "latest",
+    "electron": "^1.4.16",
     "node-dir": "latest",
     "react": "latest",
     "react-dom": "latest",
