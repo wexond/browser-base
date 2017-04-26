@@ -9,12 +9,12 @@ import './../../helpers/Arrays'
 
 import './../../app.scss'
 
-const remote = require('electron').remote
-const path = require('path')
-const app = remote.app
+const remote  = require('electron').remote
+const fs      = require('fs')
+const path    = require('path')
+const homedir = require('os').homedir()
 
-const appData = app.getPath('userData')
-const userData = path.join(appData, '/userdata')
+const userData = path.join(homedir, '.wexond')
 
 window.global = {
   currentWindow: remote.getCurrentWindow(),
@@ -36,8 +36,33 @@ window.global = {
     url: 'wexond://newtab'
   },
   excludedURLs: ['wexond://newtab', 'wexond://newtab/'],
-  historyPath: userData + '/history.json',
+  historyPath: path.join(userData, 'history.json'),
   systembarHeight: 32
+}
+
+// In here declare default files that should
+// be created on first initialization or when the user breaks them
+// For example:
+// {
+//   path: 'user/settings.json',
+//   defaultContent: '{ foo: 'bar' }'
+// }
+
+const neededFiles = [
+  {
+    path: 'history.json',
+    defaultContent: '[]'
+  }
+]
+
+for (var i = 0; i < neededFiles.length; i++) {
+  let file = path.join(userData, neededFiles[i].path)
+
+  if(!fs.existsSync(file)) {
+    fs.writeFile(file, neededFiles[i].defaultContent, function(err) {
+      if(err) console.error(err)
+    })
+  }
 }
 
 class App extends React.Component {
