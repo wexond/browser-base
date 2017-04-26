@@ -102,7 +102,7 @@ export default class Suggestions {
           let regex = /(http(s?)):\/\/(www.)?/gi
 
           var shortestSuggestion = Object.assign({}, tempSuggestions[0])
-          console.log(shortestSuggestion);
+
           shortestSuggestion.url = shortestSuggestion.url.replace(regex, '')
 
           shortestSuggestion.url = shortestSuggestion.url.substring(0, shortestSuggestion.url.indexOf('/'))
