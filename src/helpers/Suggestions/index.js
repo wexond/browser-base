@@ -79,8 +79,8 @@ export default class Suggestions {
         var tempSuggestions = []
         for (var i = 0; i < json.length; i++) {
 
-          // Skip empty arrays
-          if(!json[i] || json[i].length === 0) {
+          // Skip empty arrays (only process when it's an actual filled arrays)
+          if(json[i] && json[i].length !== 0) {
             var url = json[i].url
             var title = json[i].title
 
@@ -97,7 +97,7 @@ export default class Suggestions {
           }
         }
 
-        // Skip empty arrays
+        // Skip empty arrays (only process when it's an actual filled arrays)
         if(tempSuggestions[i] && tempSuggestions[i].length !== 0) {
           let regex = /(http(s?)):\/\/(www.)?/gi
 
