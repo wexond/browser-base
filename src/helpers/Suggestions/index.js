@@ -78,44 +78,52 @@ export default class Suggestions {
       if (inputText !== '') {
         var tempSuggestions = []
         for (var i = 0; i < json.length; i++) {
-          var url = json[i].url
-          var title = json[i].title
 
-          var suggestion = {
-            url: url.toLowerCase(),
-            title: title.toLowerCase()
-          }
+          // Skip empty arrays (only process when it's an actual filled arrays)
+          if(json[i] && json[i].length !== 0) {
+            var url = json[i].url
+            var title = json[i].title
 
-          if (url.indexOf(inputText.toLowerCase()) !== -1) {
-            if (!tempSuggestions.contains(suggestion)) {
-              tempSuggestions.push(suggestion)
+            var suggestion = {
+              url: url.toLowerCase(),
+              title: title.toLowerCase()
+            }
+
+            if (url.indexOf(inputText.toLowerCase()) !== -1) {
+              if (!tempSuggestions.contains(suggestion)) {
+                tempSuggestions.push(suggestion)
+              }
             }
           }
         }
 
-        let regex = /(http(s?)):\/\/(www.)?/gi
+        // Skip empty arrays (only process when it's an actual filled arrays)
+        if(tempSuggestions[i] && tempSuggestions[i].length !== 0) {
+          let regex = /(http(s?)):\/\/(www.)?/gi
 
-        var shortestSuggestion = Object.assign({}, tempSuggestions[0])
+          var shortestSuggestion = Object.assign({}, tempSuggestions[0])
 
-        shortestSuggestion.url = shortestSuggestion.url.replace(regex, '')
+          shortestSuggestion.url = shortestSuggestion.url.replace(regex, '')
 
-        shortestSuggestion.url = shortestSuggestion.url.substring(0, shortestSuggestion.url.indexOf('/'))
+          shortestSuggestion.url = shortestSuggestion.url.substring(0, shortestSuggestion.url.indexOf('/'))
 
-        tempSuggestions.unshift(shortestSuggestion)
+          tempSuggestions.unshift(shortestSuggestion)
 
-        // Remove duplicates from array.
-        var seenSuggestions = []
-        for (i = 0; i < tempSuggestions.length; i++) {
-          if (!seenSuggestions.contains(tempSuggestions[i].url)) {
-            suggestions.push(tempSuggestions[i])
-            seenSuggestions.push(tempSuggestions[i].url)
+          // Remove duplicates from array.
+          var seenSuggestions = []
+          for (i = 0; i < tempSuggestions.length; i++) {
+            if (!seenSuggestions.contains(tempSuggestions[i].url)) {
+              suggestions.push(tempSuggestions[i])
+              seenSuggestions.push(tempSuggestions[i].url)
+            }
           }
-        }
 
-        // Sort array by length.
-        suggestions.sort(function (a, b) {
-          return a.url.length - b.url.length
-        })
+          // Sort array by length.
+          suggestions.sort(function (a, b) {
+            return a.url.length - b.url.length
+          })
+
+        }
       }
 
       // set max length for array.
