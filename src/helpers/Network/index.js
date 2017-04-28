@@ -35,8 +35,9 @@ export default class Network {
       return true
     } else {
       if (Network._isURL('http://' + string)) {
-        return false
+        return true
       }
+      return false
     }
   }
   static _isURL (string) {
