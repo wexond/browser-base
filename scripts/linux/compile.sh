@@ -1,2 +1,2 @@
 cd ../..
-sudo npm run build-app
+sudo npm run compile-all
