@@ -14,14 +14,10 @@ export default class WebView extends React.Component {
     }, 1)
 
     this.getWebView().addEventListener('load-commit', function () {
-      // Refresh navigation icons in Menu.
-      const menu = global.menuWindow
+      // TODO: Refresh navigation icons in Menu.
       const app = self.props.getApp()
       const tabs = app.getTabs()
       const page = self.props.getPage()
-
-      menu.send('webview:can-go-back', self.getWebView().canGoBack())
-      menu.send('webview:can-go-forward', self.getWebView().canGoForward())
 
       let contains = false
 
