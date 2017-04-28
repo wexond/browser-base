@@ -200,7 +200,7 @@ export default class Bar extends React.Component {
    * @param {string} text - text to autocomplete
    */
   autoComplete = (text) => {
-    let inputText = this.input.value
+    let inputText = this.input.value.trim()
     let inputTextLower = inputText.toLowerCase()
     let textLower = text.toLowerCase()
     if (textLower != null || textLower !== '') {
@@ -314,7 +314,7 @@ export default class Bar extends React.Component {
         if (isInputTextURL) { // If the input text is url then add "Navigate to" item.
           self.suggestions.splice(0, 0, infoNavigateItem)
         }
-        self.suggestions.splice(1, 0, infoSearchItem) // Add "Search" item.
+        self.suggestions.splice((isInputTextURL) ? 1 : 0, 0, infoSearchItem) // Add "Search" item.
       }
 
       // Apply changes to suggestions box.
@@ -347,10 +347,14 @@ export default class Bar extends React.Component {
 
           historySuggestions.push({type: 'separator', text: 'History'}) // Push "History" separator.
         } else {
-          if (isInputTextURL) { // If the input text is url then add "Navigate to" item.
-            self.suggestions.splice(0, 0, infoNavigateItem)
+          if (self.suggestions.indexOf(infoNavigateItem) === -1) {
+            if (isInputTextURL) { // If the input text is url then add "Navigate to" item.
+              self.suggestions.splice(0, 0, infoNavigateItem)
+            }
           }
-          self.suggestions.splice(1, 0, infoSearchItem) // Add "Search" item.
+          if (self.suggestions.indexOf(infoSearchItem) === -1) {
+            self.suggestions.splice((isInputTextURL) ? 1 : 0, 0, infoSearchItem) // Add "Search" item.
+          }
         }
 
         // Add history suggestions to the suggestions array.
@@ -483,14 +487,10 @@ export default class Bar extends React.Component {
           if (global.tabs[i].selected) {
             var webview = global.tabs[i].getPage().getWebView()
             if (!e.currentTarget.value.startsWith('wexond://')) {
-              if (Network.isURL(e.currentTarget.value)) {
-                webview.loadURL(e.currentTarget.value)
+              if (Network.isURL('http://' + e.currentTarget.value)) {
+                webview.loadURL('http://' + e.currentTarget.value)
               } else {
-                if (Network.isURL('http://' + e.currentTarget.value)) {
-                  webview.loadURL('http://' + e.currentTarget.value)
-                } else {
-                  webview.loadURL('https://www.google.com/search?q=' + e.currentTarget.value)
-                }
+                webview.loadURL('https://www.google.com/search?q=' + e.currentTarget.value)
               }
             } else {
               webview.loadURL(e.currentTarget.value)
