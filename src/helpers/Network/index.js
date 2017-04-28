@@ -31,7 +31,17 @@ export default class Network {
    * @return {boolean}
    */
   static isURL (string) {
-    var pattern = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/
+    if (Network._isURL(string)) {
+      return true
+    } else {
+      if (Network._isURL('http://' + string)) {
+        return true
+      }
+      return false
+    }
+  }
+  static _isURL (string) {
+    var pattern = /^(?:\w+:)?\/\/([^s.]+\.\S{2}|localhost[:?\d]*)\S*$/
     return pattern.test(string)
   }
 }
