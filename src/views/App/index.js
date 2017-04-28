@@ -9,16 +9,22 @@ import './../../helpers/Arrays'
 
 import './../../app.scss'
 
-const remote  = require('electron').remote
-const fs      = require('fs')
-const path    = require('path')
+const remote = require('electron').remote
+const fs = require('fs')
+const path = require('path')
 const homedir = require('os').homedir()
 
 const userData = path.join(homedir, '.wexond')
 
+const neededFiles = [
+  {
+    path: 'history.json',
+    defaultContent: '[]'
+  }
+]
+
 window.global = {
   currentWindow: remote.getCurrentWindow(),
-  menuWindow: remote.getCurrentWindow().getChildWindows()[0],
   remote: remote,
   tabs: [],
   tabsData: {
@@ -35,32 +41,21 @@ window.global = {
     select: true,
     url: 'wexond://newtab'
   },
-  excludedURLs: ['wexond://newtab', 'wexond://newtab/'],
+  excludedURLs: ['wexond://newtab'],
   historyPath: path.join(userData, 'history.json'),
   systembarHeight: 32
 }
 
-// In here declare default files that should
-// be created on first initialization or when the user breaks them
-// For example:
-// {
-//   path: 'user/settings.json',
-//   defaultContent: '{ foo: 'bar' }'
-// }
-
-const neededFiles = [
-  {
-    path: 'history.json',
-    defaultContent: '[]'
-  }
-]
+if (!fs.existsSync(userData)) {
+  fs.mkdir(userData)
+}
 
 for (var i = 0; i < neededFiles.length; i++) {
   let file = path.join(userData, neededFiles[i].path)
 
-  if(!fs.existsSync(file)) {
-    fs.writeFile(file, neededFiles[i].defaultContent, function(err) {
-      if(err) console.error(err)
+  if (!fs.existsSync(file)) {
+    fs.writeFile(file, neededFiles[i].defaultContent, function (err) {
+      if (err) console.error(err)
     })
   }
 }
@@ -76,9 +71,7 @@ class App extends React.Component {
 
   componentDidMount () {
     window.addEventListener('contextmenu', function (e) {
-      if (e.target.tagName === 'WEBVIEW') {
-        global.menuWindow.send('menu:show', e.screenX, e.screenY)
-      }
+      // TODO: Open context menu.
     })
   }
 

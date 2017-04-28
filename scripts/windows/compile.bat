@@ -1,3 +1,3 @@
 @echo off
-cd ..
+cd ../..
 start cmd /k npm run build-app
