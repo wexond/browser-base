@@ -26,6 +26,7 @@ export default class Bar extends React.Component {
 
     this.canSuggest = false
     this.suggestions = []
+    this.suggestionsElements = []
 
     this.input = null
     this.lastText = ''
@@ -62,7 +63,7 @@ export default class Bar extends React.Component {
    * @return {Suggestion}
    */
   getSelectedSuggestion = () => {
-    var suggestions = this.suggestions
+    var suggestions = this.suggestionsElements
     for (var i = 0; i < suggestions.length; i++) {
       if (suggestions[i].state.selected) {
         return suggestions[i]
@@ -80,7 +81,7 @@ export default class Bar extends React.Component {
       return
     }
 
-    var suggestions = this.suggestions
+    var suggestions = this.suggestionsElements
     var selectedSuggestion = this.getSelectedSuggestion()
     var selectedIndex = suggestions.indexOf(selectedSuggestion)
 
@@ -104,7 +105,7 @@ export default class Bar extends React.Component {
    * @param {number} index
    */
   selectSuggestion = (index) => {
-    var suggestions = this.suggestions
+    var suggestions = this.suggestionsElements
     if (suggestions[index] != null) {
       for (var i = 0; i < suggestions.length; i++) {
         suggestions[i].setState({selected: false})
@@ -272,7 +273,7 @@ export default class Bar extends React.Component {
         self.setState({hintOverflowWidth: self.refs.textWidth.offsetWidth})
       })
 
-      var allSuggestions = []
+      let isInputTextURL = Network.isURL(inputText)
 
       // Hide suggestions if input text is empty.
       if (inputText.trim() !== '') {
@@ -285,124 +286,156 @@ export default class Bar extends React.Component {
 
       // Declare items templates.
       const infoSearchItem = {
-        type: 'info',
+        type: 'info-search',
         url: inputText,
         hint: 'Search in Google'
       }
-      const infoUrlItem = {
-        type: 'info-url',
+      const infoNavigateItem = {
+        type: 'info-navigate',
         url: inputText
       }
 
-      let suggestions = allSuggestions.slice()
+      let suggestionsTemp = self.suggestions.slice()
 
-      let isInputTextURL = false
-
-      if (self.previousHistorySuggestions != null) { // Add to suggestions last history suggestions if exists to avoid suggestions box blinking
-        for (var i = 0; i < self.previousHistorySuggestions.length; i++) {
-          suggestions.push(self.previousHistorySuggestions[i])
+      for (var i = 0; i < self.suggestions.length; i++) {
+        if (self.suggestions[i].type === 'info-navigate' || self.suggestions[i].type === 'info-search') {
+          suggestionsTemp.splice(suggestionsTemp.indexOf(self.suggestions[i]), 1)
         }
-      } else { // If previous history suggestions not exists then add "Navigate to" and "Search" item.
-        isInputTextURL = Network.isURL(inputText)
-
-        if (isInputTextURL) { // If the input text is url then add "Navigate to" item.
-          suggestions.push(infoUrlItem)
-          allSuggestions.push(infoUrlItem)
-        }
-
-        // Add "Search" item.
-        suggestions.push(infoSearchItem)
-        allSuggestions.push(infoSearchItem)
       }
 
-      if (self.previousSearchSuggestions != null) { // Add to suggestions the last suggestions from search engine, to avoid the bug described above.
-        for (i = 0; i < self.previousSearchSuggestions.length; i++) {
-          suggestions.push(self.previousSearchSuggestions[i])
+      self.suggestions = suggestionsTemp
+
+      let historySuggestionsExists = false
+      for (i = 0; i < self.suggestions.length; i++) {
+        if (self.suggestions[i].type === 'history') historySuggestionsExists = true
+      }
+
+      if (!historySuggestionsExists) {
+        if (isInputTextURL) { // If the input text is url then add "Navigate to" item.
+          self.suggestions.splice(0, 0, infoNavigateItem)
         }
+        self.suggestions.splice(1, 0, infoSearchItem) // Add "Search" item.
       }
 
       // Apply changes to suggestions box.
-      self.setState({suggestionsToCreate: []}) // Remove all old items and replace them by new items.
-      self.setState({suggestionsToCreate: suggestions})
+      self.setState({suggestionsToCreate: []})
+      self.setState({suggestionsToCreate: self.suggestions})
 
       Suggestions.getHistorySuggestions(self.input, function (data) { // First, get history suggestions.
         let historySuggestions = []
 
-        if (!(data.length <= 0)) { // If there are history suggestions then add them.
-          // Remove "Navigate to" and "Search" items.
-          allSuggestions.splice(allSuggestions.indexOf(infoUrlItem), 1)
-          allSuggestions.splice(allSuggestions.indexOf(infoSearchItem), 1)
-          // Push "History" separator.
-          allSuggestions.push({type: 'separator', text: 'History'})
-        } else { // If there aren't any history suggestions then add "Navigate to" and "Search" items.
-          if (allSuggestions.indexOf(infoSearchItem) === -1) { // If there is no "Search" item, add it.
-            allSuggestions.push(infoSearchItem)
-          }
-          if (isInputTextURL && allSuggestions.indexOf(infoUrlItem) === -1) { // If there is no "Navigate to" item and the inputText is URL, add it.
-            allSuggestions.push(infoUrlItem)
+        suggestionsTemp = self.suggestions.slice()
+
+        for (i = 0; i < self.suggestions.length; i++) {
+          if (self.suggestions[i].type === 'separator' && self.suggestions[i].text === 'History') {
+            suggestionsTemp.splice(suggestionsTemp.indexOf(self.suggestions[i]), 1)
           }
         }
 
+        self.suggestions = suggestionsTemp
+
+        if (!(data.length <= 0)) { // If there are history suggestions then start adding history items.
+          suggestionsTemp = self.suggestions.slice()
+
+          for (i = 0; i < self.suggestions.length; i++) {
+            if (self.suggestions[i].type === 'info-navigate' || self.suggestions[i].type === 'info-search') {
+              suggestionsTemp.splice(suggestionsTemp.indexOf(self.suggestions[i]), 1)
+            }
+          }
+
+          self.suggestions = suggestionsTemp
+
+          historySuggestions.push({type: 'separator', text: 'History'}) // Push "History" separator.
+        } else {
+          if (isInputTextURL) { // If the input text is url then add "Navigate to" item.
+            self.suggestions.splice(0, 0, infoNavigateItem)
+          }
+          self.suggestions.splice(1, 0, infoSearchItem) // Add "Search" item.
+        }
+
         // Add history suggestions to the suggestions array.
-        for (var i = 0; i < data.length; i++) {
-          if (data[i].url.indexOf('?q=') === -1) {
+        for (i = 0; i < data.length; i++) {
+          if (data[i].url.indexOf('?q=') === -1) { // Don't add search items.
             let object = {
               type: 'history',
               url: data[i].url,
               title: data[i].title
             }
-            allSuggestions.push(object)
+            historySuggestions.push(object)
           }
         }
 
-        historySuggestions = allSuggestions.slice()
-
         // Autocomplete first suggestion in input if exists.
-        if (allSuggestions[1] != null && self.canSuggest) {
-          self.autoComplete(allSuggestions[1].url)
+        if (historySuggestions[1] != null && self.canSuggest) {
+          self.autoComplete(historySuggestions[1].url)
         } else {
           self.removeHint()
         }
 
-        suggestions = allSuggestions.slice()
+        suggestionsTemp = self.suggestions.slice()
 
-        if (self.previousSearchSuggestions != null) {
-          for (i = 0; i < self.previousSearchSuggestions.length; i++) {
-            suggestions.push(self.previousSearchSuggestions[i])
+        for (i = 0; i < self.suggestions.length; i++) {
+          if (self.suggestions[i].type === 'history') {
+            suggestionsTemp.splice(suggestionsTemp.indexOf(self.suggestions[i]), 1)
           }
         }
 
-        self.previousHistorySuggestions = historySuggestions
+        self.suggestions = suggestionsTemp
+
+        for (i = 0; i < historySuggestions.length; i++) {
+          self.suggestions.splice(i, 0, historySuggestions[i])
+        }
 
         // Apply changes to suggestions box.
-        self.setState({suggestionsToCreate: []}) // Remove all old items and replace them by new items.
-        self.setState({suggestionsToCreate: suggestions})
+        self.setState({suggestionsToCreate: []})
+        self.setState({suggestionsToCreate: self.suggestions})
 
         Suggestions.getSearchSuggestions(self.input, function (data, error) {
           let searchSuggestions = []
+
+          suggestionsTemp = self.suggestions.slice()
+
+          for (var i = 0; i < self.suggestions.length; i++) {
+            if (self.suggestions[i].type === 'separator' && self.suggestions[i].text === 'Google search') {
+              suggestionsTemp.splice(suggestionsTemp.indexOf(self.suggestions[i]), 1)
+            }
+          }
+
+          self.suggestions = suggestionsTemp
+
           if (!(data.length <= 0)) { // If there are search suggestions, then add them to array.
-            suggestions.push({type: 'separator', text: 'Google search'})
             searchSuggestions.push({type: 'separator', text: 'Google search'})
           }
 
           // Add search suggestions to the suggestions array.
           if (!error) {
-            for (var i = 0; i < data.length; i++) {
+            for (i = 0; i < data.length; i++) {
               let object = {
                 type: 'search',
                 title: data[i],
                 url: data[i]
               }
-              suggestions.push(object)
               searchSuggestions.push(object)
             }
           }
 
-          self.previousSearchSuggestions = searchSuggestions
+          suggestionsTemp = self.suggestions.slice()
+
+          for (i = 0; i < self.suggestions.length; i++) {
+            if (self.suggestions[i].type === 'search') {
+              suggestionsTemp.splice(suggestionsTemp.indexOf(self.suggestions[i]), 1)
+            }
+          }
+
+          self.suggestions = suggestionsTemp
+
+          for (i = 0; i < searchSuggestions.length; i++) {
+            self.suggestions.push(searchSuggestions[i])
+          }
 
           // Apply changes to suggestions box.
           self.setState({suggestionsToCreate: []}) // Remove all old items and replace them by new items.
-          self.setState({suggestionsToCreate: suggestions})
+          self.setState({suggestionsToCreate: self.suggestions})
         })
       })
     }
