@@ -26,6 +26,7 @@ export default class Bar extends React.Component {
 
     this.canSuggest = false
     this.suggestions = []
+    this.suggestionsElements = []
 
     this.input = null
     this.lastText = ''
@@ -62,7 +63,7 @@ export default class Bar extends React.Component {
    * @return {Suggestion}
    */
   getSelectedSuggestion = () => {
-    var suggestions = this.suggestions
+    var suggestions = this.suggestionsElements
     for (var i = 0; i < suggestions.length; i++) {
       if (suggestions[i].state.selected) {
         return suggestions[i]
@@ -80,7 +81,7 @@ export default class Bar extends React.Component {
       return
     }
 
-    var suggestions = this.suggestions
+    var suggestions = this.suggestionsElements
     var selectedSuggestion = this.getSelectedSuggestion()
     var selectedIndex = suggestions.indexOf(selectedSuggestion)
 
@@ -104,7 +105,7 @@ export default class Bar extends React.Component {
    * @param {number} index
    */
   selectSuggestion = (index) => {
-    var suggestions = this.suggestions
+    var suggestions = this.suggestionsElements
     if (suggestions[index] != null) {
       for (var i = 0; i < suggestions.length; i++) {
         suggestions[i].setState({selected: false})
@@ -199,7 +200,7 @@ export default class Bar extends React.Component {
    * @param {string} text - text to autocomplete
    */
   autoComplete = (text) => {
-    let inputText = this.input.value
+    let inputText = this.input.value.trim()
     let inputTextLower = inputText.toLowerCase()
     let textLower = text.toLowerCase()
     if (textLower != null || textLower !== '') {
@@ -272,8 +273,9 @@ export default class Bar extends React.Component {
         self.setState({hintOverflowWidth: self.refs.textWidth.offsetWidth})
       })
 
-      var suggestions = []
+      let isInputTextURL = Network.isURL(inputText)
 
+      // Hide suggestions if input text is empty.
       if (inputText.trim() !== '') {
         self.showSuggestions()
       } else {
@@ -282,119 +284,162 @@ export default class Bar extends React.Component {
         return
       }
 
-      let allSuggestions = suggestions.slice()
-      let infoSearchItem = {
-        type: 'info',
+      // Declare items templates.
+      const infoSearchItem = {
+        type: 'info-search',
         url: inputText,
         hint: 'Search in Google'
       }
-      let infoUrlItem = {
-        type: 'info-url',
+      const infoNavigateItem = {
+        type: 'info-navigate',
         url: inputText
       }
-      let isInputTextURL = false
 
-      if (self.previousHistorySuggestions != null && !(self.previousHistorySuggestions.length <= 0)) {
-        for (var i = 0; i < self.previousHistorySuggestions.length; i++) {
-          allSuggestions.push(self.previousHistorySuggestions[i])
-        }
-      } else {
-        if (Network.isURL(inputText)) {
-          isInputTextURL = true
-        } else {
-          isInputTextURL = false
-          if (Network.isURL('http://' + inputText)) {
-            isInputTextURL = true
-          }
-        }
-        if (isInputTextURL) {
-          suggestions.push(infoUrlItem)
-          allSuggestions.push(infoUrlItem)
-        }
-        suggestions.push(infoSearchItem)
-        allSuggestions.push(infoSearchItem)
-      }
+      let suggestionsTemp = self.suggestions.slice()
 
-      if (self.previousSearchSuggestions != null) {
-        for (i = 0; i < self.previousSearchSuggestions.length; i++) {
-          allSuggestions.push(self.previousSearchSuggestions[i])
+      for (var i = 0; i < self.suggestions.length; i++) {
+        if (self.suggestions[i].type === 'info-navigate' || self.suggestions[i].type === 'info-search') {
+          suggestionsTemp.splice(suggestionsTemp.indexOf(self.suggestions[i]), 1)
         }
       }
 
+      self.suggestions = suggestionsTemp
+
+      let historySuggestionsExists = false
+      for (i = 0; i < self.suggestions.length; i++) {
+        if (self.suggestions[i].type === 'history') historySuggestionsExists = true
+      }
+
+      if (!historySuggestionsExists) {
+        if (isInputTextURL) { // If the input text is url then add "Navigate to" item.
+          self.suggestions.splice(0, 0, infoNavigateItem)
+        }
+        self.suggestions.splice((isInputTextURL) ? 1 : 0, 0, infoSearchItem) // Add "Search" item.
+      }
+
+      // Apply changes to suggestions box.
       self.setState({suggestionsToCreate: []})
-      self.setState({suggestionsToCreate: allSuggestions})
+      self.setState({suggestionsToCreate: self.suggestions})
 
-      Suggestions.getHistorySuggestions(self.input, function (data) {
+      Suggestions.getHistorySuggestions(self.input, function (data) { // First, get history suggestions.
         let historySuggestions = []
 
-        if (!(data.length <= 0)) {
-          suggestions.splice(suggestions.indexOf(infoUrlItem), 1)
-          suggestions.splice(suggestions.indexOf(infoSearchItem), 1)
-          suggestions.push({type: 'separator', text: 'History'})
-          historySuggestions.push({type: 'separator', text: 'History'})
-        } else {
-          if (suggestions.indexOf(infoSearchItem) === -1) {
-            suggestions.push(infoSearchItem)
-          }
-          if (isInputTextURL && suggestions.indexOf(infoUrlItem) === -1) {
-            suggestions.push(infoUrlItem)
+        suggestionsTemp = self.suggestions.slice()
+
+        for (i = 0; i < self.suggestions.length; i++) {
+          if (self.suggestions[i].type === 'separator' && self.suggestions[i].text === 'History') {
+            suggestionsTemp.splice(suggestionsTemp.indexOf(self.suggestions[i]), 1)
           }
         }
 
-        for (var i = 0; i < data.length; i++) {
-          var object
-          if (data[i].url.indexOf('?q=') === -1) {
-            object = {
+        self.suggestions = suggestionsTemp
+
+        if (!(data.length <= 0)) { // If there are history suggestions then start adding history items.
+          suggestionsTemp = self.suggestions.slice()
+
+          for (i = 0; i < self.suggestions.length; i++) {
+            if (self.suggestions[i].type === 'info-navigate' || self.suggestions[i].type === 'info-search') {
+              suggestionsTemp.splice(suggestionsTemp.indexOf(self.suggestions[i]), 1)
+            }
+          }
+
+          self.suggestions = suggestionsTemp
+
+          historySuggestions.push({type: 'separator', text: 'History'}) // Push "History" separator.
+        } else {
+          if (self.suggestions.indexOf(infoNavigateItem) === -1) {
+            if (isInputTextURL) { // If the input text is url then add "Navigate to" item.
+              self.suggestions.splice(0, 0, infoNavigateItem)
+            }
+          }
+          if (self.suggestions.indexOf(infoSearchItem) === -1) {
+            self.suggestions.splice((isInputTextURL) ? 1 : 0, 0, infoSearchItem) // Add "Search" item.
+          }
+        }
+
+        // Add history suggestions to the suggestions array.
+        for (i = 0; i < data.length; i++) {
+          if (data[i].url.indexOf('?q=') === -1) { // Don't add search items.
+            let object = {
               type: 'history',
               url: data[i].url,
               title: data[i].title
             }
-            suggestions.push(object)
             historySuggestions.push(object)
           }
         }
 
-        if (suggestions[1] != null && self.canSuggest) {
-          self.autoComplete(suggestions[1].url)
+        // Autocomplete first suggestion in input if exists.
+        if (historySuggestions[1] != null && self.canSuggest) {
+          self.autoComplete(historySuggestions[1].url)
         } else {
           self.removeHint()
         }
 
-        let allSuggestions = suggestions.slice()
+        suggestionsTemp = self.suggestions.slice()
 
-        if (self.previousSearchSuggestions != null) {
-          for (i = 0; i < self.previousSearchSuggestions.length; i++) {
-            allSuggestions.push(self.previousSearchSuggestions[i])
+        for (i = 0; i < self.suggestions.length; i++) {
+          if (self.suggestions[i].type === 'history') {
+            suggestionsTemp.splice(suggestionsTemp.indexOf(self.suggestions[i]), 1)
           }
         }
 
-        self.previousHistorySuggestions = historySuggestions
+        self.suggestions = suggestionsTemp
 
-        self.setState({suggestionsToCreate: allSuggestions})
+        for (i = 0; i < historySuggestions.length; i++) {
+          self.suggestions.splice(i, 0, historySuggestions[i])
+        }
+
+        // Apply changes to suggestions box.
+        self.setState({suggestionsToCreate: []})
+        self.setState({suggestionsToCreate: self.suggestions})
 
         Suggestions.getSearchSuggestions(self.input, function (data, error) {
           let searchSuggestions = []
-          if (!(data.length <= 0)) {
-            suggestions.push({type: 'separator', text: 'Google search'})
+
+          suggestionsTemp = self.suggestions.slice()
+
+          for (var i = 0; i < self.suggestions.length; i++) {
+            if (self.suggestions[i].type === 'separator' && self.suggestions[i].text === 'Google search') {
+              suggestionsTemp.splice(suggestionsTemp.indexOf(self.suggestions[i]), 1)
+            }
+          }
+
+          self.suggestions = suggestionsTemp
+
+          if (!(data.length <= 0)) { // If there are search suggestions, then add them to array.
             searchSuggestions.push({type: 'separator', text: 'Google search'})
           }
 
+          // Add search suggestions to the suggestions array.
           if (!error) {
-            for (var i = 0; i < data.length; i++) {
-              var object = {
+            for (i = 0; i < data.length; i++) {
+              let object = {
                 type: 'search',
                 title: data[i],
                 url: data[i]
               }
-              suggestions.push(object)
               searchSuggestions.push(object)
             }
           }
 
-          self.previousSearchSuggestions = searchSuggestions
+          suggestionsTemp = self.suggestions.slice()
 
-          self.setState({suggestionsToCreate: []})
-          self.setState({suggestionsToCreate: suggestions})
+          for (i = 0; i < self.suggestions.length; i++) {
+            if (self.suggestions[i].type === 'search') {
+              suggestionsTemp.splice(suggestionsTemp.indexOf(self.suggestions[i]), 1)
+            }
+          }
+
+          self.suggestions = suggestionsTemp
+
+          for (i = 0; i < searchSuggestions.length; i++) {
+            self.suggestions.push(searchSuggestions[i])
+          }
+
+          // Apply changes to suggestions box.
+          self.setState({suggestionsToCreate: []}) // Remove all old items and replace them by new items.
+          self.setState({suggestionsToCreate: self.suggestions})
         })
       })
     }
@@ -442,14 +487,10 @@ export default class Bar extends React.Component {
           if (global.tabs[i].selected) {
             var webview = global.tabs[i].getPage().getWebView()
             if (!e.currentTarget.value.startsWith('wexond://')) {
-              if (Network.isURL(e.currentTarget.value)) {
-                webview.loadURL(e.currentTarget.value)
+              if (Network.isURL('http://' + e.currentTarget.value)) {
+                webview.loadURL('http://' + e.currentTarget.value)
               } else {
-                if (Network.isURL('http://' + e.currentTarget.value)) {
-                  webview.loadURL('http://' + e.currentTarget.value)
-                } else {
-                  webview.loadURL('https://www.google.com/search?q=' + e.currentTarget.value)
-                }
+                webview.loadURL('https://www.google.com/search?q=' + e.currentTarget.value)
               }
             } else {
               webview.loadURL(e.currentTarget.value)

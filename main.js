@@ -6,9 +6,7 @@ const protocolName = 'wexond'
 
 let mainWindow
 
-let browserMenu
-
-// global events
+/** Global events. */
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -26,9 +24,9 @@ process.on('uncaughtException', function (error) {
   console.log(error)
 })
 
-/*
-* prepares browser window
-*/
+/**
+ * Prepares browser window for browser and menu.
+ */
 function createWindow () {
   mainWindow = new BrowserWindow({
     width: 900,
@@ -51,53 +49,33 @@ function createWindow () {
     mainWindow.show()
   })
 
-  browserMenu = new BrowserWindow({
-    width: 300,
-    height: 700,
-    frame: false,
-    resizable: false,
-    transparent: true,
-    parent: mainWindow,
-    thickFrame: false,
-    skipTaskbar: true,
-    alwaysOnTop: true,
-    show: false
-  })
-  browserMenu.loadURL(path.join('file://', __dirname, '/src/public/Menu/index.html'))
-
-  browserMenu.setIgnoreMouseEvents(true)
-
-  browserMenu.on('blur', function () {
-    browserMenu.send('menu:hide')
-  })
-  browserMenu.once('ready-to-show', () => {
-    browserMenu.show()
-  })
-
   if (process.env.ENV === 'dev') {
-    mainWindow.webContents.openDevTools()
-    browserMenu.webContents.openDevTools()
+    mainWindow.webContents.openDevTools({mode: 'detach'})
   }
 }
 
-/*
-* creates protocol wexond://
-*/
+/**
+ * Creates protocol wexond://
+ */
 protocol.registerStandardSchemes([protocolName])
 app.on('ready', function () {
   protocol.registerFileProtocol(protocolName, (request, callback) => {
-    var url = request.url.substr(protocolName.length + 3)
-    var lastChar = url.substr(url.length - 1)
-    var splitBySlash = url.split('/')
+    let url = request.url.substr(protocolName.length + 3)
+    let lastChar = url.substr(url.length - 1)
+    let splitBySlash = url.split('/')
     if (lastChar !== '/') {
       url = url.replace(splitBySlash[0], '')
     }
+
     if (lastChar === '/') {
       url += 'index.html'
     }
-    callback({
+
+    let data = {
       path: path.normalize(path.join(__dirname, '/src/public/', url))
-    })
+    }
+
+    callback(data)
   }, (error) => {
     if (error) {
       console.error('Failed to register protocol')

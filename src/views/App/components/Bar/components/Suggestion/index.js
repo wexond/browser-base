@@ -18,13 +18,13 @@ export default class Suggestion extends React.Component {
     var data = this.props.data
     this.setState({url: data.url, title: data.title})
 
-    bar.suggestions.push(this)
+    bar.suggestionsElements.push(this)
 
     bar.selectSuggestion(0)
   }
 
   componentWillUnmount () {
-    var suggestions = this.props.getBar().suggestions
+    var suggestions = this.props.getBar().suggestionsElements
     suggestions.splice(suggestions.indexOf(this), 1)
   }
 
@@ -46,14 +46,14 @@ export default class Suggestion extends React.Component {
     if (this.props.data.type === 'search') {
       content = this.state.title
     }
-    if (this.props.data.type === 'info') {
+    if (this.props.data.type === 'info-search') {
       content = (
         <div>
           {this.props.data.url + ' — ' + this.props.data.hint}
         </div>
       )
     }
-    if (this.props.data.type === 'info-url') {
+    if (this.props.data.type === 'info-navigate') {
       content = (
         <div>
           {this.props.data.url}
