@@ -23,9 +23,10 @@ $tabs-hover-color: rgba(0,0,0,0.08);
 
 @import 'views/App/style.scss';
 
-@import 'components/Page/components/WebView/style.scss';
+@import 'components/WebView/style.scss';
 @import 'components/Page/style.scss';
 @import 'components/Tabs/style.scss';
 @import 'components/Bar/style.scss';
-@import 'components/Tabs/components/Tab/style.scss';
-@import 'components/Tabs/components/Controls/style.scss';
+@import 'components/Tab/style.scss';
+@import 'components/Controls/style.scss';
+@import 'components/Suggestion/style.scss';

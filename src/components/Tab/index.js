@@ -1,7 +1,7 @@
 import React from 'react'
-import Colors from '../../../../../../helpers/Colors'
+import Colors from '../../helpers/Colors'
 import ReactDOM from 'react-dom'
-import Transitions from './../../../../../../helpers/Transitions'
+import Transitions from '../../helpers/Transitions'
 
 export default class Tab extends React.Component {
   constructor () {

@@ -1,4 +1,4 @@
-import Network from '../Network'
+import Network from '../../helpers/Network'
 export default class Suggestions {
   /**
    * Gets suggestions from search engine.
