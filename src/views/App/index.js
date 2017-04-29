@@ -1,13 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Tabs from './components/Tabs'
-import Spring from '../../helpers/Spring'
-import Bar from './components/Bar'
-import Page from './components/Page'
+import Tabs from '../../components/Tabs'
+import Bar from '../../components/Bar'
+import Page from '../../components/Page'
 
-import './../../helpers/Arrays'
+import '../../helpers/Arrays'
 
-import './../../app.scss'
+import '../../app.scss'
 
 const remote = require('electron').remote
 const fs = require('fs')

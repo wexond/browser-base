@@ -1,7 +1,7 @@
 import React from 'react'
-import Suggestion from './components/Suggestion'
-import Suggestions from '../../../../helpers/Suggestions'
-import Network from '../../../../helpers/Network'
+import Suggestion from '../Suggestion'
+import Suggestions from '../../classes/Suggestions'
+import Network from '../../helpers/Network'
 
 export default class Bar extends React.Component {
   constructor () {

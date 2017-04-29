@@ -1,8 +1,8 @@
 import React from 'react'
-import Tab from './components/Tab'
-import Controls from './components/Controls'
-import Colors from './../../../../helpers/Colors'
-import Transitions from './../../../../helpers/Transitions'
+import Tab from '../Tab'
+import Controls from '../Controls'
+import Colors from '../../helpers/Colors'
+import Transitions from '../../helpers/Transitions'
 
 export default class Tabs extends React.Component {
   constructor () {
