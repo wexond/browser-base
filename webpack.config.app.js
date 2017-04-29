@@ -5,8 +5,7 @@ module.exports = {
   target: 'electron',
   devtool: 'eval-source-map',
   entry: {
-    'app': './src/views/App',
-    'menu': './src/views/Menu'
+    'app': './src/views/App'
   },
   node: {
     __dirname: false,
