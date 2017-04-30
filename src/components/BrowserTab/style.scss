@@ -60,3 +60,12 @@
   background-color: rgba(0,0,0,0.12);
   position: absolute;
 }
+
+.tab-favicon {
+  @include center-vertical;
+  @include image-center(16px, 16px);
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 8px;
+}
