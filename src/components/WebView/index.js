@@ -63,6 +63,10 @@ export default class WebView extends React.Component {
     this.getWebView().addEventListener('page-title-updated', function (e) {
       self.props.getTab().setState({title: e.title})
     })
+
+    this.getWebView().addEventListener('page-favicon-updated', function (e) {
+      self.props.getTab().setState({favicon: e.favicons[0]})
+    })
   }
 
   /**

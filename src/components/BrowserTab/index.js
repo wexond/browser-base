@@ -535,6 +535,8 @@ export default class Tab extends React.Component {
         <div>
           <div {...tabEvents} style={Object.assign(tabStyle, this.props.style)} className='tab' ref='tab'>
             <div className='tab-content'>
+              <div className='tab-favicon' style={{backgroundImage: `url(${this.state.favicon})`}}>
+              </div>
               <div className='tab-title' style={titleStyle}>
                 {this.state.title}
               </div>
