@@ -1,10 +1,10 @@
 import React from 'react'
-import Tab from '../Tab'
+import BrowserTab from '../BrowserTab'
 import Controls from '../Controls'
 import Colors from '../../helpers/Colors'
 import Transitions from '../../helpers/Transitions'
 
-export default class Tabs extends React.Component {
+export default class BrowserTabs extends React.Component {
   constructor () {
     super()
 
@@ -493,7 +493,7 @@ export default class Tabs extends React.Component {
           <div className='tabbar' ref='tabbar'>
             {this.state.tabsToCreate.map((data, key) => {
               return (
-                <Tab url={data.url} getApp={self.props.getApp} getTabs={self.getTabs} select={data.select} key={key} />
+                <BrowserTab url={data.url} getApp={self.props.getApp} getTabs={self.getTabs} select={data.select} key={key} />
               )
             })}
             <div ref='addButton' style={addButtonStyle} onClick={onAddButtonClick} className='add-button' />
