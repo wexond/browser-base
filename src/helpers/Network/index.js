@@ -41,7 +41,7 @@ export default class Network {
     }
   }
   static _isURL (string) {
-    var pattern = /^(?:\w+:)?\/\/([^s.]+\.\S{2}|localhost[:?\d]*)\S*$/
+    var pattern = /^(?:\w+:)?\/\/([^\s.]+\.\S{2}|localhost[:?\d]*)\S*$/
     return pattern.test(string)
   }
 }
