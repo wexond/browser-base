@@ -116,6 +116,12 @@ export default class BrowserTabs extends React.Component {
                 backgroundColor: rgba
               }
             )
+
+            tab.timeoutHover = setTimeout(function () {
+              clearTimeout(tab.timeoutHover)
+              tab.removeTransition('background-color')
+            }, global.tabsAnimationData.hoverDuration * 1000)
+
             if (!tab.pinned) {
               tab.setState({closeOpacity: {value: 1, animate: true}})
             }
