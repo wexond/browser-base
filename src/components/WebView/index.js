@@ -57,6 +57,8 @@ export default class WebView extends React.Component {
         if (!bar.locked) {
           bar.hide()
         }
+
+        self.props.getApp().refs.menu.hide()
       }
     })
 

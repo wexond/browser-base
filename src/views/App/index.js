@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import BrowserTabs from '../../components/BrowserTabs'
 import Bar from '../../components/Bar'
 import Page from '../../components/Page'
+import Menu from '../../components/Menu'
 
 import '../../helpers/Arrays'
 
@@ -69,8 +70,9 @@ class App extends React.Component {
   }
 
   componentDidMount () {
+    const self = this
     window.addEventListener('contextmenu', function (e) {
-      // TODO: Open context menu.
+      self.refs.menu.show()
     })
   }
 
@@ -144,6 +146,7 @@ class App extends React.Component {
             <Page getApp={this.getApp} getTab={data.getTab} url={data.url} key={key} />
           )
         })}
+        <Menu ref='menu' />
       </div>
     )
   }

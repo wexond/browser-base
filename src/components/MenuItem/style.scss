@@ -1,0 +1,24 @@
+.menu-items {
+  padding-bottom: 16px;
+  padding-top: 8px;
+  width: 100%;
+  height: 100%;
+}
+
+.menu-item {
+  @include cursor-default;
+  width: 100%;
+  height: 32px;
+}
+
+.menu-item:hover {
+  background-color: #F5F5F5;
+}
+
+.menu-item-text {
+  @include center-vertical;
+  @include Body1;
+  position: relative;
+  left: 24px;
+  opacity: $primary-opacity-light;
+}
