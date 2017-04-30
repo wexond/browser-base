@@ -1,5 +1,5 @@
 import React from 'react'
-import BrowserStorage from '../../../../../../helpers/BrowserStorage'
+import BrowserStorage from '../../classes/BrowserStorage'
 
 export default class WebView extends React.Component {
   componentDidMount () {

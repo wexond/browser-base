@@ -1,5 +1,5 @@
 import React from 'react'
-import WebView from './components/WebView'
+import WebView from '../WebView'
 
 export default class Page extends React.Component {
   constructor () {

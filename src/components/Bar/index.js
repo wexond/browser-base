@@ -1,7 +1,7 @@
 import React from 'react'
-import Suggestion from './components/Suggestion'
-import Suggestions from '../../../../helpers/Suggestions'
-import Network from '../../../../helpers/Network'
+import Suggestion from '../Suggestion'
+import Suggestions from '../../classes/Suggestions'
+import Network from '../../helpers/Network'
 
 export default class Bar extends React.Component {
   constructor () {
@@ -183,7 +183,7 @@ export default class Bar extends React.Component {
    */
   setText = (text, overrideActive) => {
     this.lastText = text
-    if (!overrideActive) {
+    if (overrideActive) {
       this.input.value = text
     } else {
       if (this.input !== document.activeElement) this.input.value = text
