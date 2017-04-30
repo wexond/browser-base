@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Tabs from '../../components/Tabs'
+import BrowserTabs from '../../components/BrowserTabs'
 import Bar from '../../components/Bar'
 import Page from '../../components/Page'
 
@@ -137,7 +137,7 @@ class App extends React.Component {
   render () {
     return (
       <div>
-        <Tabs ref='tabs' getApp={this.getApp} />
+        <BrowserTabs ref='tabs' getApp={this.getApp} />
         <Bar ref='bar' getApp={this.getApp} />
         {this.state.pagesToCreate.map((data, key) => {
           return (
