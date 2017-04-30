@@ -79,7 +79,7 @@ class App extends React.Component {
    * @param {string} text
    * @param {boolean} overrideActive
    */
-  updateBarText = (text, overrideActive) => {
+  updateBarText = (text, overrideActive = false) => {
     const bar = this.getBar()
     let contains = false
     // Check if the url from webview is in excluded URLs.
