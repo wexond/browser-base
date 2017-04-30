@@ -471,7 +471,7 @@ export default class Tab extends React.Component {
       titleMaxWidthDecrease += 16
     }
 
-    if (this.state.favicon !== '' && this.state.loading) { // If there is favicon or the tab is loading.
+    if (this.state.favicon !== '' || this.state.loading) { // If there is favicon or the tab is loading.
       titleMaxWidthDecrease += 32
     }
 
