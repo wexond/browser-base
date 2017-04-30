@@ -183,7 +183,7 @@ export default class Bar extends React.Component {
    */
   setText = (text, overrideActive) => {
     this.lastText = text
-    if (!overrideActive) {
+    if (overrideActive) {
       this.input.value = text
     } else {
       if (this.input !== document.activeElement) this.input.value = text
