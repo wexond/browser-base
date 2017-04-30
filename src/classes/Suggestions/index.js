@@ -102,7 +102,12 @@ export default class Suggestions {
 
           shortestSuggestion.url = shortestSuggestion.url.substring(0, shortestSuggestion.url.indexOf('/'))
 
-          tempSuggestions.unshift(shortestSuggestion)
+          let urlLC = shortestSuggestion.url.toLowerCase()
+          let inputTextLC = inputText.toLowerCase()
+
+          if (urlLC.startsWith(inputTextLC)) {
+            tempSuggestions.unshift(shortestSuggestion)
+          }
         }
 
         // Remove duplicates from array.
