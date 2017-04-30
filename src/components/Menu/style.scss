@@ -1,0 +1,64 @@
+.menu {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.17), 0 4px 8px rgba(0,0,0,0.21);
+  position: absolute;
+  left: 256px;
+  top: 128px;
+  width: 300px;
+  background-color: white;
+  z-index: 9999;
+  transition: 0.2s height, 0.2s margin-top, 0.2s opacity;
+  overflow: hidden;
+  border-radius: 3px;
+}
+
+.menu-line {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.menu-separator {
+  @extend .menu-line;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.navigation-icons {
+  height: 52px;
+  width: 100%;
+}
+
+.navigation-icon {
+  @include image-center(24px, 24px);
+  position: relative;
+  float: left;
+  height: 100%;
+  width: 32px;
+  margin-left: 34px;
+  opacity: $secondary-opacity-light;
+  transition: 0.2s opacity;
+
+  &:hover {
+    opacity: $primary-opacity-light;
+  }
+}
+
+.navigation-icon-back {
+  @extend .navigation-icon;
+  background-image: url(images/Menu/Navigation/back.png);
+}
+
+.navigation-icon-forward {
+  @extend .navigation-icon;
+  background-image: url(images/Menu/Navigation/forward.png);
+}
+
+.navigation-icon-refresh {
+  @extend .navigation-icon;
+  background-image: url(images/Menu/Navigation/refresh.png);
+}
+
+.navigation-icon-star {
+  @extend .navigation-icon;
+  background-image: url(images/Menu/Navigation/star.png);
+}
