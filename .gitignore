@@ -1,7 +1,7 @@
 node_modules
 *.zip
 Wexond**
-npm-debug*.log
+*.log
 build
 dist
 .vs
