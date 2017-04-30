@@ -15,7 +15,7 @@ const homedir = require('os').homedir()
 
 const userData = path.join(homedir, '.wexond')
 
-const neededFiles = [
+const requiredFiles = [
   {
     path: 'history.json',
     defaultContent: '[]'
@@ -49,11 +49,11 @@ if (!fs.existsSync(userData)) {
   fs.mkdir(userData)
 }
 
-for (var i = 0; i < neededFiles.length; i++) {
-  let file = path.join(userData, neededFiles[i].path)
+for (var i = 0; i < requiredFiles.length; i++) {
+  let file = path.join(userData, requiredFiles[i].path)
 
   if (!fs.existsSync(file)) {
-    fs.writeFile(file, neededFiles[i].defaultContent, function (err) {
+    fs.writeFile(file, requiredFiles[i].defaultContent, function (err) {
       if (err) console.error(err)
     })
   }
