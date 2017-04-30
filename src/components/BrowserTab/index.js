@@ -15,6 +15,7 @@ export default class Tab extends React.Component {
       pinned: false,
       favicon: '',
       loading: false,
+      title: 'New tab',
       backgroundColor: 'transparent',
       closeOpacity: 0,
       width: 0,
@@ -535,7 +536,7 @@ export default class Tab extends React.Component {
           <div {...tabEvents} style={Object.assign(tabStyle, this.props.style)} className='tab' ref='tab'>
             <div className='tab-content'>
               <div className='tab-title' style={titleStyle}>
-                New tab
+                {this.state.title}
               </div>
               <div style={closeStyle} className='tab-close-container'>
                 <div className='tab-close' onClick={onClickClose} />
