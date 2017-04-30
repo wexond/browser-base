@@ -1,13 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Tabs from './components/Tabs'
-import Spring from '../../helpers/Spring'
-import Bar from './components/Bar'
-import Page from './components/Page'
+import BrowserTabs from '../../components/BrowserTabs'
+import Bar from '../../components/Bar'
+import Page from '../../components/Page'
 
-import './../../helpers/Arrays'
+import '../../helpers/Arrays'
 
-import './../../app.scss'
+import '../../app.scss'
 
 const remote = require('electron').remote
 const fs = require('fs')
@@ -80,7 +79,7 @@ class App extends React.Component {
    * @param {string} text
    * @param {boolean} overrideActive
    */
-  updateBarText = (text, overrideActive) => {
+  updateBarText = (text, overrideActive = false) => {
     const bar = this.getBar()
     let contains = false
     // Check if the url from webview is in excluded URLs.
@@ -138,7 +137,7 @@ class App extends React.Component {
   render () {
     return (
       <div>
-        <Tabs ref='tabs' getApp={this.getApp} />
+        <BrowserTabs ref='tabs' getApp={this.getApp} />
         <Bar ref='bar' getApp={this.getApp} />
         {this.state.pagesToCreate.map((data, key) => {
           return (
