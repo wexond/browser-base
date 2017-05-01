@@ -15,7 +15,7 @@ export default class Menu extends React.Component {
   }
 
   show = () => {
-    let height = 120
+    let height = 48 + 3 + 3 * 16 + 24
     for (var i = 0; i < this.menuItems.length; i++) {
       if (this.menuItems[i].shown) {
         height += 32
