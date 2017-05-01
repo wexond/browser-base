@@ -1,5 +1,5 @@
 .menu {
-  box-shadow: 0 6px 24px rgba(0,0,0,0.17), 0 4px 8px rgba(0,0,0,0.21);
+  @include shadow(2);
   position: absolute;
   left: 256px;
   top: 128px;

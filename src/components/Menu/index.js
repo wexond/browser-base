@@ -8,7 +8,9 @@ export default class Menu extends React.Component {
     this.state = {
       height: 0,
       marginTop: -10,
-      opacity: 0
+      opacity: 0,
+      top: 0,
+      left: 0
     }
 
     this.menuItems = []
@@ -50,8 +52,16 @@ export default class Menu extends React.Component {
   }
 
   render () {
+    let menuStyle = {
+      height: this.state.height,
+      marginTop: this.state.marginTop,
+      opacity: this.state.opacity,
+      top: this.state.top,
+      left: this.state.left
+    }
+
     return (
-      <div ref='menu' className='menu' style={{height: this.state.height, marginTop: this.state.marginTop, opacity: this.state.opacity}}>
+      <div ref='menu' className='menu' style={menuStyle}>
         <div className='navigation-icons'>
           <div className='navigation-icon-back' />
           <div className='navigation-icon-forward' />
