@@ -1,7 +1,6 @@
 <h1 align="center"><img src="http://wexond.nersent.tk/logo/wexond.png" width="400"></h1>
 
-#### Join to our [Discord chat server](https://discord.gg/yAA8DdK)!
-
+[![discord](https://discordapp.com/api/guilds/307605794680209409/widget.png)](https://discord.gg/yAA8DdK)
 [![Build Status](https://travis-ci.org/Nersent/Wexond.svg)](https://travis-ci.org/Nersent/Wexond)
 [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](http://standardjs.com)
 [![dependencies Status](https://david-dm.org/nersent/wexond/status.svg)](https://david-dm.org/nersent/wexond)
@@ -43,8 +42,8 @@ To run `Wexond` in developer mode, you can use these commands:
   ```
 * Linux
   ```bash
-    ./scripts/linux/watch.sh
-    ./scripts/linux/start.sh
+  ./scripts/linux/watch.sh
+  ./scripts/linux/start.sh
   ```
 * Windows
   Just double-click on scripts/windows/watch.bat and scripts/windows/start.bat
