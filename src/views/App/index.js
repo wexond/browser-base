@@ -73,6 +73,21 @@ class App extends React.Component {
     const self = this
     window.addEventListener('contextmenu', function (e) {
       self.refs.menu.show()
+
+      let left = e.pageX + 1
+      let top = e.pageY + 1
+
+      if (left + 300 > window.innerWidth) {
+        left = e.pageX - 301
+      }
+      if (top + self.refs.menu.state.height > window.innerHeight) {
+        top = e.pageY - self.refs.menu.state.height
+      }
+      if (top < 0) {
+        top = 96
+      }
+
+      self.refs.menu.setState({left: left, top: top})
     })
   }
 
