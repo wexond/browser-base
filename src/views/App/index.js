@@ -89,6 +89,10 @@ class App extends React.Component {
 
       self.refs.menu.setState({left: left, top: top})
     })
+
+    window.addEventListener('click', function () {
+      self.refs.menu.hide()
+    })
   }
 
   /**
