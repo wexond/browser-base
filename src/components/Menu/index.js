@@ -15,7 +15,11 @@ export default class Menu extends React.Component {
   }
 
   show = () => {
-    let height = 48 + 3 + 3 * 16 + 24
+    let separatorsCount = document.getElementsByClassName('menu-separator').length
+    let topBottomPadding = 24
+    let separatorsMargins = 16
+    let navIconsHeight = 48
+    let height = navIconsHeight + separatorsCount + separatorsCount * separatorsMargins + topBottomPadding
     for (var i = 0; i < this.menuItems.length; i++) {
       if (this.menuItems[i].shown) {
         height += 32
