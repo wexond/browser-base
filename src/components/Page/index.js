@@ -8,7 +8,7 @@ export default class Page extends React.Component {
     this.state = {
       visible: false,
       render: true,
-      height: '100vh'
+      top: global.systembarHeight
     }
   }
 
@@ -16,6 +16,10 @@ export default class Page extends React.Component {
     const event = new Event('page-load')
     event.getPage = this.getPage
     this.props.getTab().getDOMNode().dispatchEvent(event)
+
+    if (this.props.getTab().staticIndex === 0) {
+      this.setState({top: 0})
+    }
   }
 
   /**
@@ -36,7 +40,8 @@ export default class Page extends React.Component {
 
   render () {
     var pageStyle = {
-      visibility: (this.state.visible) ? 'visible' : 'hidden'
+      visibility: (this.state.visible) ? 'visible' : 'hidden',
+      top: this.state.top
     }
 
     if (this.state.render) {
