@@ -15,25 +15,26 @@ Extensible web browser with material UI made with [`Electron`](https://github.co
 If you have noticed a bug, please report it on [Github issue tracker](https://github.com/Nersent/Wexond/issues).
 
 ## Documentation
-Guides and the API reference are located in
-[`docs`](https://github.com/Nersent/Wexond/tree/refactor/docs).
+Guides and the API reference are located in [`docs`](https://github.com/Nersent/Wexond/tree/refactor/docs).
 It also contains documents describing how to use the browser, and create extensions.
 
 ## Downloads
 [![Downloads](https://img.shields.io/github/downloads/Nersent/Wexond/total.svg)](https://github.com/Nersent/Wexond/releases)
 
 ### Installing
-To install all dependencies for `Wexond`, use [`npm`](https://docs.npmjs.com/):
+
+
+### Running
+Install all dependencies needed to run `Wexond` using [`npm`](https://docs.npmjs.com/):
 ```bash
 npm install
 ```
-or [`yarn`](https://yarnpkg.com/lang/en/)
+or [`yarn`](https://yarnpkg.com/lang/en/):
 ```bash
 yarn
 ```
 
-### Running in developer mode
-To run `Wexond` in developer mode, you can use these commands:
+To run `Wexond` in developer mode, use these methods:
 * Standard method
   ```bash
   npm run watch-app
@@ -46,7 +47,8 @@ To run `Wexond` in developer mode, you can use these commands:
   ./scripts/linux/start.sh
   ```
 * Windows
-  Just double-click on scripts/windows/watch.bat and scripts/windows/start.bat
+  
+  Just double-click on `scripts/windows/watch.bat` and `scripts/windows/start.bat`
   
 These methods are just to help to start the application easier.
 They are the same.
@@ -56,12 +58,14 @@ They are the same.
   ```batch
   npm run compile-all
   ```
-  Or Run as administrator scripts/windows/compile.bat file.
+  Or Run as administrator `scripts/windows/compile.bat` file.
 * Linux
   ```bash
   sudo npm run compile-all
   ```
+  
   or
+  
   ```bash
   sudo sh ./scripts/linux/compile.sh
   ```
