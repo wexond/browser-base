@@ -12,6 +12,7 @@ export default class WebView extends React.Component {
         self.getWebView().dispatchEvent(event)
         self.getWebView().getWebContents().on('context-menu', function (e) {
           app.refs.webviewmenu.show()
+          app.refs.tabmenu.hide()
 
           let left = app.cursor.x + 1
           let top = app.cursor.y + 1

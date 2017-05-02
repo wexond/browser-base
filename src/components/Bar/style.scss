@@ -70,6 +70,7 @@
 .suggestions {
   @include center-horizontal;
   @include shadow(1);
+  @include Body1;
   position: absolute;
   top: 86px;
   width: 100%;
