@@ -11,6 +11,8 @@
 # Wexond
 Extensible web browser with material UI made with [`Electron`](https://github.com/electron/electron) and [`React`](https://github.com/facebook/react), that contains many innovative features.
 
+Checkout our [Trello board](https://trello.com/b/dsd7rEEJ/wexond).
+
 ## Questions and issues
 If you have noticed a bug, please report it on [Github issue tracker](https://github.com/Nersent/Wexond/issues).
 
