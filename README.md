@@ -21,11 +21,8 @@ It also contains documents describing how to use the browser, and create extensi
 ## Downloads
 [![Downloads](https://img.shields.io/github/downloads/Nersent/Wexond/total.svg)](https://github.com/Nersent/Wexond/releases)
 
-### Installing
-
-
-### Running
-Install all dependencies needed to run `Wexond` using [`npm`](https://docs.npmjs.com/):
+## Running
+To run `Wexond` you need to install all needed dependencies using [`npm`](https://docs.npmjs.com/):
 ```bash
 npm install
 ```
@@ -34,7 +31,7 @@ or [`yarn`](https://yarnpkg.com/lang/en/):
 yarn
 ```
 
-To run `Wexond` in developer mode, use these methods:
+If you have installed all dependencies successfully, then you can run `Wexond` using these methods:
 * Standard method
   ```bash
   npm run watch-app
@@ -53,7 +50,7 @@ To run `Wexond` in developer mode, use these methods:
 These methods are just to help to start the application easier.
 They are the same.
 
-### Compiling
+## Compiling
 * Windows (you must run CMD as administrator).
   ```batch
   npm run compile-all
@@ -67,7 +64,7 @@ They are the same.
   or
   
   ```bash
-  sudo sh ./scripts/linux/compile.sh
+  sudo sh scripts/linux/compile.sh
   ```
     
 ## Screenshots
