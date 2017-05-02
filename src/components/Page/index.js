@@ -36,11 +36,7 @@ export default class Page extends React.Component {
 
   render () {
     var pageStyle = {
-      opacity: (this.state.visible) ? 1 : 0,
-      position: (this.state.visible) ? 'relative' : 'absolute',
-      zIndex: (this.state.visible) ? 1 : -1,
-      top: (this.state.visible) ? 0 : -window.innerHeight - 50,
-      height: this.state.height
+      visibility: (this.state.visible) ? 'visible' : 'hidden'
     }
 
     if (this.state.render) {
