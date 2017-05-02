@@ -36,7 +36,7 @@ function createWindow () {
     minHeight: 430,
     show: false
   })
-  mainWindow.loadURL(path.join('file://', __dirname, '/src/public/App/index.html'))
+  mainWindow.loadURL(path.join('file://', __dirname, '/src/public/app/index.html'))
   mainWindow.setMenu(null)
 
   mainWindow.on('closed', () => {
