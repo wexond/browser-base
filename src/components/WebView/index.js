@@ -54,7 +54,7 @@ export default class WebView extends React.Component {
 
       // If not, show the tabbar.
       if (!contains) {
-        page.setState({height: 'calc(100vh - ' + global.systembarHeight + 'px'})
+        page.setState({top: global.systembarHeight})
         tabs.setState({tabsVisible: true})
       }
     })
