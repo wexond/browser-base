@@ -4,11 +4,30 @@ import BrowserStorage from '../../classes/BrowserStorage'
 export default class WebView extends React.Component {
   componentDidMount () {
     const self = this
+    const app = this.props.getApp()
 
     let checkWebcontentsInterval = setInterval(function () {
       if (self.getWebView().getWebContents() != null) {
         const event = new Event('webcontents-load')
         self.getWebView().dispatchEvent(event)
+        self.getWebView().getWebContents().on('context-menu', function (e) {
+          app.refs.webviewmenu.show()
+
+          let left = app.cursor.x + 1
+          let top = app.cursor.y + 1
+
+          if (left + 300 > window.innerWidth) {
+            left = app.cursor.x - 301
+          }
+          if (top + app.refs.webviewmenu.state.height > window.innerHeight) {
+            top = app.cursor.y - app.refs.webviewmenu.state.height
+          }
+          if (top < 0) {
+            top = 96
+          }
+
+          app.refs.webviewmenu.setState({left: left, top: top})
+        })
         clearInterval(checkWebcontentsInterval)
       }
     }, 1)
@@ -58,7 +77,8 @@ export default class WebView extends React.Component {
           bar.hide()
         }
 
-        self.props.getApp().refs.menu.hide()
+        self.props.getApp().refs.webviewmenu.hide()
+        self.props.getApp().refs.tabmenu.hide()
       }
     })
 
@@ -81,7 +101,7 @@ export default class WebView extends React.Component {
 
   render () {
     return (
-      <webview ref='webview' preload='../../preloads/Global' is autosize class='webview' src={this.props.src} />
+      <webview ref='webview' preload='../../preloads/Global' className='webview' src={this.props.src} />
     )
   }
 }

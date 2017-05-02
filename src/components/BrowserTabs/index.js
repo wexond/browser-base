@@ -76,6 +76,8 @@ export default class BrowserTabs extends React.Component {
     window.addEventListener('mousemove', function (e) {
       self.cursor.x = e.pageX
       self.cursor.y = e.pageY
+      self.props.getApp().cursor.x = e.pageX
+      self.props.getApp().cursor.y = e.pageY
     })
 
     // Fixes #1 issue.

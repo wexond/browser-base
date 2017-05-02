@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import BrowserTabs from '../../components/BrowserTabs'
 import Bar from '../../components/Bar'
 import Page from '../../components/Page'
-import Menu from '../../components/Menu'
+import WebViewMenu from '../../components/WebViewMenu'
+import BrowserTabMenu from '../../components/BrowserTabMenu'
 
 import '../../helpers/Arrays'
 
@@ -67,31 +68,37 @@ class App extends React.Component {
     this.state = {
       pagesToCreate: []
     }
+
+    this.cursor = {}
   }
 
   componentDidMount () {
     const self = this
-    window.addEventListener('contextmenu', function (e) {
-      self.refs.menu.show()
 
-      let left = e.pageX + 1
-      let top = e.pageY + 1
+    this.refs.tabs.refs.tabbar.addEventListener('contextmenu', function (e) {
+      if (e.target !== self.refs.tabs.refs.addButton) {
+        self.refs.tabmenu.show()
 
-      if (left + 300 > window.innerWidth) {
-        left = e.pageX - 301
-      }
-      if (top + self.refs.menu.state.height > window.innerHeight) {
-        top = e.pageY - self.refs.menu.state.height
-      }
-      if (top < 0) {
-        top = 96
-      }
+        let left = e.pageX + 1
+        let top = e.pageY + 1
 
-      self.refs.menu.setState({left: left, top: top})
+        if (left + 300 > window.innerWidth) {
+          left = e.pageX - 301
+        }
+        if (top + self.refs.tabmenu.state.height > window.innerHeight) {
+          top = e.pageY - self.refs.tabmenu.state.height
+        }
+        if (top < 0) {
+          top = 96
+        }
+
+        self.refs.tabmenu.setState({left: left, top: top})
+      }
     })
 
     window.addEventListener('click', function () {
-      self.refs.menu.hide()
+      self.refs.tabmenu.hide()
+      self.refs.webviewmenu.hide()
     })
   }
 
@@ -165,7 +172,8 @@ class App extends React.Component {
             <Page getApp={this.getApp} getTab={data.getTab} url={data.url} key={key} />
           )
         })}
-        <Menu ref='menu' />
+        <WebViewMenu ref='webviewmenu' />
+        <BrowserTabMenu ref='tabmenu' />
       </div>
     )
   }
