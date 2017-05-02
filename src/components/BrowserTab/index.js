@@ -19,7 +19,8 @@ export default class Tab extends React.Component {
       backgroundColor: 'transparent',
       closeOpacity: 0,
       width: 0,
-      left: 0
+      left: 0,
+      faviconVisible: true
     }
 
     this.selectedBackgroundColor = '#fff'
@@ -486,8 +487,9 @@ export default class Tab extends React.Component {
     }
 
     let faviconStyle = {
-      backgroundImage: (this.state.favicon !== '') ? 'url(' + this.state.favicon + ')' : '',
-      display: (this.state.favicon === '') ? 'none' : 'block'
+      backgroundImage: `url(${this.state.favicon})`,
+      display: (this.state.favicon === '') ? 'none' : 'block',
+      opacity: (this.state.faviconVisible) ? 1 : 0
     }
 
     let tabStyle = {
@@ -498,8 +500,7 @@ export default class Tab extends React.Component {
     /** Events */
 
     let tabEvents = {
-      onMouseDown: onMouseDown,
-      onDoubleClick: onDoubleClick
+      onMouseDown: onMouseDown
     }
 
     function onMouseDown (e) {
@@ -526,16 +527,12 @@ export default class Tab extends React.Component {
       self.close()
     }
 
-    function onDoubleClick () {
-      self.pin()
-    }
-
     if (this.state.render) {
       return (
         <div>
           <div {...tabEvents} style={Object.assign(tabStyle, this.props.style)} className='tab' ref='tab'>
             <div className='tab-content'>
-              <div className='tab-favicon' style={{backgroundImage: `url(${this.state.favicon})`}}>
+              <div className='tab-favicon' style={faviconStyle}>
               </div>
               <div className='tab-title' style={titleStyle}>
                 {this.state.title}
