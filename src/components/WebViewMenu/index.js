@@ -1,13 +1,13 @@
 import React from 'react'
 import MenuItem from '../MenuItem'
 
-export default class Menu extends React.Component {
+export default class WebViewMenu extends React.Component {
   constructor () {
     super()
 
     this.state = {
       height: 0,
-      marginTop: -10,
+      marginTop: -20,
       opacity: 0,
       top: 0,
       left: 0
@@ -16,8 +16,11 @@ export default class Menu extends React.Component {
     this.menuItems = []
   }
 
+  /**
+   * Shows menu.
+   */
   show = () => {
-    let separatorsCount = document.getElementsByClassName('menu-separator').length
+    let separatorsCount = this.refs.menu.getElementsByClassName('menu-separator').length
     let topBottomPadding = 24
     let separatorsMargins = 16
     let navIconsHeight = 48
@@ -37,16 +40,23 @@ export default class Menu extends React.Component {
     )
   }
 
+  /**
+   * Hides menu.
+   */
   hide = () => {
     this.setState(
       {
-        marginTop: -10,
+        marginTop: -20,
         opacity: 0,
         height: 0
       }
     )
   }
 
+  /**
+   * Gets menu.
+   * @return {WebViewMenu}
+   */
   getMenu = () => {
     return this
   }

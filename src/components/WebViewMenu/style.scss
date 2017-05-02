@@ -1,12 +1,12 @@
 .menu {
-  @include shadow(2);
+  -webkit-box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2);
   position: absolute;
   left: 256px;
   top: 128px;
   width: 300px;
   background-color: white;
   z-index: 9999;
-  transition: 0.2s height, 0.2s margin-top, 0.2s opacity;
+  transition: 0.3s height, 0.27s margin-top, 0.2s opacity;
   overflow: hidden;
   border-radius: 3px;
 }
