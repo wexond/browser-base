@@ -98,7 +98,8 @@ export default class BrowserTabs extends React.Component {
                 closeOpacity: {
                   value: 0,
                   animate: true
-                }
+                },
+                faviconVisible: true
               }
             )
           }
@@ -111,6 +112,11 @@ export default class BrowserTabs extends React.Component {
           tab.hovered = true
           previousTab = tab
           if (!tab.selected) {
+            if (tab.refs.tab.offsetWidth < 48) {
+              if (tab.state.favicon !== '') {
+                tab.setState({faviconVisible: false})
+              }
+            }
             let rgba = Colors.shadeColor(self.state.backgroundColor, 0.05)
             tab.appendTransition('background-color')
             tab.setState(
