@@ -520,6 +520,8 @@ export default class Tab extends React.Component {
         return
       }
 
+      if (e.button !== 0) return
+
       tabs.selectTab(self)
 
       // Initialize the dragData object in {Tabs}.
