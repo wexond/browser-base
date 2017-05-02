@@ -78,6 +78,7 @@ class App extends React.Component {
     this.refs.tabs.refs.tabbar.addEventListener('contextmenu', function (e) {
       if (e.target !== self.refs.tabs.refs.addButton) {
         self.refs.tabmenu.show()
+        self.refs.webviewmenu.hide()
 
         let left = e.pageX + 1
         let top = e.pageY + 1
