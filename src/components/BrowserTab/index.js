@@ -18,9 +18,8 @@ export default class Tab extends React.Component {
       title: 'New tab',
       backgroundColor: 'transparent',
       closeOpacity: 0,
-      width: 0,
-      left: 0,
-      faviconVisible: true
+      faviconVisible: true,
+      closePointerEvents: true
     }
 
     this.selectedBackgroundColor = '#fff'
@@ -461,7 +460,8 @@ export default class Tab extends React.Component {
     let closeStyle = {
       display: (this.state.pinned) ? 'none' : 'block',
       opacity: this.state.closeOpacity.value,
-      transition: (this.state.closeOpacity.animate) ? global.tabsAnimationData.hoverDuration + 's opacity' : 'none'
+      transition: (this.state.closeOpacity.animate) ? global.tabsAnimationData.hoverDuration + 's opacity' : 'none',
+      pointerEvents: (this.state.selected) ? 'auto' : this.state.closePointerEvents
     }
 
     let titleMaxWidthDecrease = 0
@@ -486,10 +486,22 @@ export default class Tab extends React.Component {
         : 32
     }
 
+    let favOpacity = 0
+    if (this.state.faviconVisible) {
+      if (!(this.width < 48)) {
+        if (this.state.selected) {
+          favOpacity = 1
+        }
+      }
+      if (!this.state.selected) {
+        favOpacity = 1
+      }
+    }
+
     let faviconStyle = {
       backgroundImage: `url(${this.state.favicon})`,
       display: (this.state.favicon === '') ? 'none' : 'block',
-      opacity: (this.state.faviconVisible) ? 1 : 0
+      opacity: favOpacity
     }
 
     let tabStyle = {
@@ -527,28 +539,27 @@ export default class Tab extends React.Component {
       self.close()
     }
 
-    if (this.state.render) {
-      return (
-        <div>
-          <div {...tabEvents} style={Object.assign(tabStyle, this.props.style)} className='tab' ref='tab'>
-            <div className='tab-content'>
-              <div className='tab-favicon' style={faviconStyle}>
-              </div>
-              <div className='tab-title' style={titleStyle}>
-                {this.state.title}
-              </div>
-              <div style={closeStyle} className='tab-close-container'>
-                <div className='tab-close' onClick={onClickClose} />
-              </div>
+    if (!this.state.render) return null
+
+    return (
+      <div>
+        <div {...tabEvents} style={Object.assign(tabStyle, this.props.style)} className='tab' ref='tab'>
+          <div className='tab-content'>
+            <div className='tab-favicon' style={faviconStyle}>
             </div>
-            <div className='tab-border-small' style={borderLeftSmallStyle} />
-            <div className='tab-border-small' style={borderSmallStyle} />
-            <div className='tab-border-full' style={borderLeftStyle} />
-            <div className='tab-border-full' style={borderRightStyle} />
+            <div className='tab-title' style={titleStyle}>
+              {this.state.title}
+            </div>
+            <div style={closeStyle} className='tab-close-container'>
+              <div className='tab-close' onClick={onClickClose} />
+            </div>
           </div>
+          <div className='tab-border-small' style={borderLeftSmallStyle} />
+          <div className='tab-border-small' style={borderSmallStyle} />
+          <div className='tab-border-full' style={borderLeftStyle} />
+          <div className='tab-border-full' style={borderRightStyle} />
         </div>
-      )
-    }
-    return null
+      </div>
+    )
   }
 }

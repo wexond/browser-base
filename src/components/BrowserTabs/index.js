@@ -98,8 +98,7 @@ export default class BrowserTabs extends React.Component {
                 closeOpacity: {
                   value: 0,
                   animate: true
-                },
-                faviconVisible: true
+                }
               }
             )
           }
@@ -112,11 +111,6 @@ export default class BrowserTabs extends React.Component {
           tab.hovered = true
           previousTab = tab
           if (!tab.selected) {
-            if (tab.refs.tab.offsetWidth < 48) {
-              if (tab.state.favicon !== '') {
-                tab.setState({faviconVisible: false})
-              }
-            }
             let rgba = Colors.shadeColor(self.state.backgroundColor, 0.05)
             tab.appendTransition('background-color')
             tab.setState(
@@ -131,7 +125,7 @@ export default class BrowserTabs extends React.Component {
             }, global.tabsAnimationData.hoverDuration * 1000)
 
             if (!tab.pinned) {
-              tab.setState({closeOpacity: {value: 1, animate: true}})
+              tab.setState({closeOpacity: {value: (tab.refs.tab.offsetWidth < 48) ? 0 : 1, animate: true}, closePointerEvents: (tab.refs.tab.offsetWidth < 48) ? 'none' : 'auto'})
             }
           }
         }
