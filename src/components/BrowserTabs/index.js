@@ -148,18 +148,20 @@ export default class BrowserTabs extends React.Component {
   onMouseMove = (e) => {
     let mouseDeltaX = e.pageX - this.dragData.mouseClickX
     const tab = this.dragData.tab
+    const tabDiv = tab.refs.tab
 
     if (Math.abs(mouseDeltaX) > 10 || this.dragData.canDrag2) {
       this.dragData.canDrag2 = true
 
       if (this.dragData.canDrag && !this.dragData.tab.pinned && !this.dragData.tab.new) {
         tab.removeTransition('left')
+
         tab.setLeft(this.dragData.tabX + e.clientX - this.dragData.mouseClickX)
 
-        if (tab.state.left + tab.state.width > this.refs.tabbar.offsetWidth) {
-          tab.setLeft(this.refs.tabbar.offsetWidth - tab.state.width)
+        if (tabDiv.getBoundingClientRect().left + tabDiv.offsetWidth > this.refs.tabbar.offsetWidth) {
+          tab.setLeft(this.refs.tabbar.offsetWidth - tabDiv.offsetWidth)
         }
-        if (tab.state.left < this.refs.tabbar.getBoundingClientRect().left) {
+        if (tabDiv.getBoundingClientRect().left < this.refs.tabbar.getBoundingClientRect().left) {
           tab.setLeft(this.refs.tabbar.getBoundingClientRect().left)
         }
 

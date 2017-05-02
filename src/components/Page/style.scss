@@ -1,6 +1,7 @@
 .page {
-  position: relative;
-  width: 100%;
-  height: calc(100vh - #{$systembar-height});
-  clear: both;
+  position: absolute;
+  top: 32px;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
