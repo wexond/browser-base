@@ -44,14 +44,12 @@ export default class Page extends React.Component {
       top: this.state.top
     }
 
-    if (this.state.render) {
-      return (
-        <div style={pageStyle} className='page'>
-          <WebView getPage={this.getPage} getTab={this.props.getTab} getApp={this.props.getApp} ref='webview' getTab={this.props.getTab} src={this.props.url} />
-        </div>
-      )
-    } else {
-      return null
-    }
+    if (!this.state.render) return null
+
+    return (
+      <div style={pageStyle} className='page'>
+        <WebView getPage={this.getPage} getTab={this.props.getTab} getApp={this.props.getApp} ref='webview' getTab={this.props.getTab} src={this.props.url} />
+      </div>
+    )
   }
 }
