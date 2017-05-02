@@ -86,7 +86,7 @@ export default class Suggestions {
             title: title.toLowerCase()
           }
 
-          if (url.indexOf(inputText.toLowerCase()) !== -1) {
+          if (url.indexOf(inputText.toLowerCase()) !== -1 && url.indexOf('?q=') === -1) {
             if (!tempSuggestions.contains(suggestion)) {
               tempSuggestions.push(suggestion)
             }
