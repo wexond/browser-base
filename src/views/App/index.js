@@ -163,6 +163,14 @@ class App extends React.Component {
     return this.refs.bar
   }
 
+  /**
+   * Gets WebView Menu.
+   * @return {WebViewMenu}
+   */
+  getWebViewMenu = () => {
+    return this.refs.webviewmenu
+  }
+
   render () {
     return (
       <div>
@@ -173,7 +181,7 @@ class App extends React.Component {
             <Page getApp={this.getApp} getTab={data.getTab} url={data.url} key={key} />
           )
         })}
-        <WebViewMenu ref='webviewmenu' />
+        <WebViewMenu getApp={this.getApp} ref='webviewmenu' />
         <BrowserTabMenu ref='tabmenu' />
       </div>
     )
