@@ -174,6 +174,7 @@ export default class Tab extends React.Component {
     const self = this
     const bar = this.props.getApp().getBar()
     const webview = page.getWebView()
+    const app = this.props.getApp()
 
     bar.hideSuggestions()
 
@@ -192,7 +193,9 @@ export default class Tab extends React.Component {
     }
 
     function accessWebContents () {
-      // TODO: Refresh navigation icons in Menu.
+      // Refresh navigation icons in WebViewMenu.
+      app.getWebViewMenu().refreshNavIconsState()
+      // TODO: Refresh navigation icons in BrowserTabMenu.
 
       // Update bar text and focus it.
       self.props.getApp().updateBarText(webview.getURL(), true)

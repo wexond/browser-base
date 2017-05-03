@@ -34,10 +34,13 @@ export default class WebView extends React.Component {
     }, 1)
 
     this.getWebView().addEventListener('load-commit', function () {
-      // TODO: Refresh navigation icons in Menu.
       const app = self.props.getApp()
       const tabs = app.getTabs()
       const page = self.props.getPage()
+
+      // Refresh navigation icons in WebViewMenu.
+      app.getWebViewMenu().refreshNavIconsState()
+      // TODO: Refresh navigation icons in BrowserTabMenu.
 
       let contains = false
 
@@ -61,7 +64,14 @@ export default class WebView extends React.Component {
     })
 
     this.getWebView().addEventListener('did-finish-load', function () {
-      var webview = self.getWebView()
+      const webview = self.getWebView()
+      const app = self.props.getApp()
+
+      // Refresh navigation icons in WebViewMenu.
+      app.getWebViewMenu().refreshNavIconsState()
+      // TODO: Refresh navigation icons in BrowserTabMenu.
+
+
       // Check if tab is selected.
       if (self.props.getTab() != null && self.props.getTab().selected) {
         self.props.getApp().updateBarText(webview.getURL())
