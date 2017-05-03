@@ -1,7 +1,7 @@
 import React from 'react'
 import MenuItem from '../MenuItem'
 
-export default class WebViewMenu extends React.Component {
+export default class ContextMenu extends React.Component {
   constructor () {
     super()
 
@@ -29,8 +29,9 @@ export default class WebViewMenu extends React.Component {
     let separatorsMargins = 16
     let navIconsHeight = 48
     let height = navIconsHeight + separatorsCount + separatorsCount * separatorsMargins + topBottomPadding
+
     for (var i = 0; i < this.menuItems.length; i++) {
-      if (this.menuItems[i].shown) {
+      if (this.menuItems[i].state.visible) {
         height += 32
       }
     }
@@ -59,7 +60,7 @@ export default class WebViewMenu extends React.Component {
 
   /**
    * Gets menu.
-   * @return {WebViewMenu}
+   * @return {ContextMenu}
    */
   getMenu = () => {
     return this
@@ -95,21 +96,33 @@ export default class WebViewMenu extends React.Component {
 
     function onBackClick () {
       const webview = self.props.getApp().getTabs().getSelectedTab().getPage().getWebView()
-      webview.goBack()
+      if (webview.canGoBack()) {
+        webview.goBack()
+        self.hide()
+      }
     }
 
     function onForwardClick () {
       const webview = self.props.getApp().getTabs().getSelectedTab().getPage().getWebView()
-      webview.goForward()
+      if (webview.canGoForward()) {
+        webview.goForward()
+        self.hide()
+      }
     }
 
     function onRefreshClick () {
       const webview = self.props.getApp().getTabs().getSelectedTab().getPage().getWebView()
       webview.reload()
+      self.hide()
     }
 
+    function onClick (e) {
+      e.stopPropagation()
+    }
+
+
     return (
-      <div ref='menu' className='menu' style={menuStyle}>
+      <div onClick={onClick} ref='menu' className='menu' style={menuStyle}>
         <div className='navigation-icons'>
           <div onClick={onBackClick} className={backClass} />
           <div onClick={onForwardClick} className={forwardClass} />
@@ -118,39 +131,17 @@ export default class WebViewMenu extends React.Component {
         </div>
         <div className='menu-line' />
         <div className='menu-items'>
-          <MenuItem getMenu={this.getMenu}>
-            Open link in new tab
-          </MenuItem>
-          <div className='menu-separator' />
-          <MenuItem getMenu={this.getMenu}>
-            Copy link address
-          </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
-            Save link as
-          </MenuItem>
-          <div className='menu-separator' />
-          <MenuItem getMenu={this.getMenu}>
-            Open image in new tab
-          </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
-            Save image as
-          </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
-            Copy image
-          </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
-            Copy image address
-          </MenuItem>
-          <div className='menu-separator' />
-          <MenuItem getMenu={this.getMenu}>
-            Print
-          </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
-            View source
-          </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
-            Inspect element
-          </MenuItem>
+          {
+            React.Children.map(this.props.children, (child) => {
+              if (child.type === MenuItem) {
+                return React.cloneElement(child, {
+                  getMenu: self.getMenu
+                })
+              } else {
+                return React.cloneElement(child, null)
+              }
+            })
+          }
         </div>
       </div>
     )

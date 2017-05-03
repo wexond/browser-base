@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom'
 import BrowserTabs from '../../components/BrowserTabs'
 import Bar from '../../components/Bar'
 import Page from '../../components/Page'
-import WebViewMenu from '../../components/WebViewMenu'
-import BrowserTabMenu from '../../components/BrowserTabMenu'
+import ContextMenu from '../../components/ContextMenu'
+import MenuItem from '../../components/MenuItem'
 
 import '../../helpers/Arrays'
 
@@ -189,8 +189,74 @@ class App extends React.Component {
             <Page getApp={this.getApp} getTab={data.getTab} url={data.url} key={key} />
           )
         })}
-        <WebViewMenu getApp={this.getApp} ref='webviewmenu' />
-        <BrowserTabMenu getApp={this.getApp} ref='tabmenu' />
+        <ContextMenu getApp={this.getApp} ref='webviewmenu'>
+          <MenuItem getMenu={this.getMenu}>
+            Open link in new tab
+          </MenuItem>
+          <div className='menu-separator' />
+          <MenuItem getMenu={this.getMenu}>
+            Copy link address
+          </MenuItem>
+          <MenuItem getMenu={this.getMenu}>
+            Save link as
+          </MenuItem>
+          <div className='menu-separator' />
+          <MenuItem getMenu={this.getMenu}>
+            Open image in new tab
+          </MenuItem>
+          <MenuItem getMenu={this.getMenu}>
+            Save image as
+          </MenuItem>
+          <MenuItem getMenu={this.getMenu}>
+            Copy image
+          </MenuItem>
+          <MenuItem getMenu={this.getMenu}>
+            Copy image address
+          </MenuItem>
+          <div className='menu-separator' />
+          <MenuItem getMenu={this.getMenu}>
+            Print
+          </MenuItem>
+          <MenuItem getMenu={this.getMenu}>
+            View source
+          </MenuItem>
+          <MenuItem getMenu={this.getMenu}>
+            Inspect element
+          </MenuItem>
+        </ContextMenu>
+
+        <ContextMenu getApp={this.getApp} ref='tabmenu'>
+          <MenuItem getMenu={this.getMenu}>
+            Add new tab
+          </MenuItem>
+          <div className='menu-separator' />
+          <MenuItem getMenu={this.getMenu}>
+            Pin tab
+          </MenuItem>
+          <MenuItem getMenu={this.getMenu}>
+            Mute tab
+          </MenuItem>
+          <MenuItem getMenu={this.getMenu}>
+            Duplicate
+          </MenuItem>
+          <div className='menu-separator' />
+          <MenuItem getMenu={this.getMenu}>
+            Close tab
+          </MenuItem>
+          <MenuItem getMenu={this.getMenu}>
+            Close other tabs
+          </MenuItem>
+          <MenuItem getMenu={this.getMenu}>
+            Close tabs from left
+          </MenuItem>
+          <MenuItem getMenu={this.getMenu}>
+            Close tabs from right
+          </MenuItem>
+          <div className='menu-separator' />
+          <MenuItem getMenu={this.getMenu}>
+            Revert closed tab
+          </MenuItem>
+        </ContextMenu>
       </div>
     )
   }

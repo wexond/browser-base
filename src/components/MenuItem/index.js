@@ -4,7 +4,9 @@ export default class MenuItem extends React.Component {
   constructor () {
     super()
 
-    this.shown = true
+    this.state = {
+      visible: true
+    }
   }
 
   componentDidMount () {
