@@ -40,7 +40,8 @@ export default class WebView extends React.Component {
 
       // Refresh navigation icons in WebViewMenu.
       app.getWebViewMenu().refreshNavIconsState()
-      // TODO: Refresh navigation icons in BrowserTabMenu.
+      // Refresh navigation icons in BrowserTabMenu.
+      app.getBrowserTabMenu().refreshNavIconsState()
 
       let contains = false
 
@@ -69,7 +70,8 @@ export default class WebView extends React.Component {
 
       // Refresh navigation icons in WebViewMenu.
       app.getWebViewMenu().refreshNavIconsState()
-      // TODO: Refresh navigation icons in BrowserTabMenu.
+      // Refresh navigation icons in BrowserTabMenu.
+      app.getBrowserTabMenu().refreshNavIconsState()
 
 
       // Check if tab is selected.
