@@ -105,7 +105,7 @@ export default class WebViewMenu extends React.Component {
 
     function onRefreshClick () {
       const webview = self.props.getApp().getTabs().getSelectedTab().getPage().getWebView()
-      webview.goForward()
+      webview.reload()
     }
 
     return (
