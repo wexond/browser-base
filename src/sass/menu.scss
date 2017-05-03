@@ -42,30 +42,37 @@
   height: 100%;
   width: 32px;
   margin-left: 34px;
+}
+
+.navigation-icon-enabled {
+  @extend .navigation-icon;
   opacity: $secondary-opacity-light;
   transition: 0.2s opacity;
+  pointer-events: 'auto';
 
   &:hover {
     opacity: $primary-opacity-light;
   }
 }
 
-.navigation-icon-back {
+.navigation-icon-disabled {
   @extend .navigation-icon;
+  pointer-events: 'none';
+  opacity: $disabled-opacity-light;
+}
+
+.navigation-icon-back {
   background-image: url(images/Menu/Navigation/back.png);
 }
 
 .navigation-icon-forward {
-  @extend .navigation-icon;
   background-image: url(images/Menu/Navigation/forward.png);
 }
 
 .navigation-icon-refresh {
-  @extend .navigation-icon;
   background-image: url(images/Menu/Navigation/refresh.png);
 }
 
 .navigation-icon-star {
-  @extend .navigation-icon;
   background-image: url(images/Menu/Navigation/star.png);
 }

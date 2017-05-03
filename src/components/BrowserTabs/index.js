@@ -464,11 +464,24 @@ export default class BrowserTabs extends React.Component {
   }
 
   /**
-   * Gets tabs container {Tabs}
-   * @return {Tabs}
+   * Gets tabs container {BrowserTabs}
+   * @return {BrowserTabs}
    */
   getTabs = () => {
     return this
+  }
+
+  /**
+   * Gets selected tab.
+   * @return {BrowserTab}
+   */
+  getSelectedTab = () => {
+    for (var i = 0; i < global.tabs.length; i++) {
+      if (global.tabs[i].selected) {
+        return global.tabs[i]
+      }
+    }
+    return null
   }
 
   render () {
