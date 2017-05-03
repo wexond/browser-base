@@ -69,8 +69,8 @@ export default class WebViewMenu extends React.Component {
    * Refreshes navigation icons state (disabled or enabled etc)
    */
   refreshNavIconsState = () => {
-    const tab = this.props.getApp().getTabs().getSelectedTab()
-    const webview = tab.getPage().getWebView()
+    const webview = this.props.getApp().getTabs().getSelectedTab().getPage().getWebView()
+
     this.setState(
       {
         backEnabled: webview.canGoBack(),
@@ -80,6 +80,8 @@ export default class WebViewMenu extends React.Component {
   }
 
   render () {
+    const self = this
+
     let menuStyle = {
       height: this.state.height,
       marginTop: this.state.marginTop,
@@ -91,12 +93,27 @@ export default class WebViewMenu extends React.Component {
     let backClass = 'navigation-icon-back ' + ((this.state.backEnabled) ? 'navigation-icon-enabled' : 'navigation-icon-disabled')
     let forwardClass = 'navigation-icon-forward ' + ((this.state.forwardEnabled) ? 'navigation-icon-enabled' : 'navigation-icon-disabled')
 
+    function onBackClick () {
+      const webview = self.props.getApp().getTabs().getSelectedTab().getPage().getWebView()
+      webview.goBack()
+    }
+
+    function onForwardClick () {
+      const webview = self.props.getApp().getTabs().getSelectedTab().getPage().getWebView()
+      webview.goForward()
+    }
+
+    function onRefreshClick () {
+      const webview = self.props.getApp().getTabs().getSelectedTab().getPage().getWebView()
+      webview.goForward()
+    }
+
     return (
       <div ref='menu' className='menu' style={menuStyle}>
         <div className='navigation-icons'>
-          <div className={backClass} />
-          <div className={forwardClass} />
-          <div className='navigation-icon-refresh navigation-icon-enabled' />
+          <div onClick={onBackClick} className={backClass} />
+          <div onClick={onForwardClick} className={forwardClass} />
+          <div onClick={onRefreshClick} className='navigation-icon-refresh navigation-icon-enabled' />
           <div className='navigation-icon-star navigation-icon-enabled' />
         </div>
         <div className='menu-line' />
