@@ -10,7 +10,9 @@ export default class BrowserTabMenu extends React.Component {
       marginTop: -20,
       opacity: 0,
       top: 0,
-      left: 0
+      left: 0,
+      backEnabled: false,
+      forwardEnabled: false
     }
 
     this.menuItems = []
@@ -20,6 +22,8 @@ export default class BrowserTabMenu extends React.Component {
    * Shows menu.
    */
   show = () => {
+    this.refreshNavIconsState()
+
     let separatorsCount = this.refs.menu.getElementsByClassName('menu-separator').length
     let topBottomPadding = 24
     let separatorsMargins = 16
@@ -61,7 +65,23 @@ export default class BrowserTabMenu extends React.Component {
     return this
   }
 
+  /**
+   * Refreshes navigation icons state (disabled or enabled etc)
+   */
+  refreshNavIconsState = () => {
+    const webview = this.props.getApp().getTabs().getSelectedTab().getPage().getWebView()
+
+    this.setState(
+      {
+        backEnabled: webview.canGoBack(),
+        forwardEnabled: webview.canGoForward()
+      }
+    )
+  }
+
   render () {
+    const self = this
+
     let menuStyle = {
       height: this.state.height,
       marginTop: this.state.marginTop,
@@ -70,13 +90,31 @@ export default class BrowserTabMenu extends React.Component {
       left: this.state.left
     }
 
+    let backClass = 'navigation-icon-back ' + ((this.state.backEnabled) ? 'navigation-icon-enabled' : 'navigation-icon-disabled')
+    let forwardClass = 'navigation-icon-forward ' + ((this.state.forwardEnabled) ? 'navigation-icon-enabled' : 'navigation-icon-disabled')
+
+    function onBackClick () {
+      const webview = self.props.getApp().getTabs().getSelectedTab().getPage().getWebView()
+      webview.goBack()
+    }
+
+    function onForwardClick () {
+      const webview = self.props.getApp().getTabs().getSelectedTab().getPage().getWebView()
+      webview.goForward()
+    }
+
+    function onRefreshClick () {
+      const webview = self.props.getApp().getTabs().getSelectedTab().getPage().getWebView()
+      webview.reload()
+    }
+
     return (
       <div ref='menu' className='menu' style={menuStyle}>
         <div className='navigation-icons'>
-          <div className='navigation-icon-back' />
-          <div className='navigation-icon-forward' />
-          <div className='navigation-icon-refresh' />
-          <div className='navigation-icon-star' />
+          <div onClick={onBackClick} className={backClass} />
+          <div onClick={onForwardClick} className={forwardClass} />
+          <div onClick={onRefreshClick} className='navigation-icon-refresh navigation-icon-enabled' />
+          <div className='navigation-icon-star navigation-icon-enabled' />
         </div>
         <div className='menu-line' />
         <div className='menu-items'>
