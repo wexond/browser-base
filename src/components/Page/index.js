@@ -24,6 +24,8 @@ export default class Page extends React.Component {
       this.setState({top: 0})
     }
 
+    global.pages.push(this)
+
     let checkWebcontentsInterval = setInterval(function () {
       if (self.webview.getWebContents() != null) {
         event = new Event('webcontents-load')
@@ -119,6 +121,10 @@ export default class Page extends React.Component {
     this.webview.addEventListener('page-favicon-updated', function (e) {
       self.props.getTab().setState({favicon: e.favicons[0]})
     })
+  }
+
+  componentWillUnmount () {
+    global.pages.splice(global.pages.indexOf(this))
   }
 
   /**
