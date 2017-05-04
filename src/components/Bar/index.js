@@ -485,7 +485,7 @@ export default class Bar extends React.Component {
         }
         for (var i = 0; i < global.tabs.length; i++) {
           if (global.tabs[i].selected) {
-            var webview = global.tabs[i].getPage().getWebView()
+            const webview = global.tabs[i].getPage().webview
             if (!e.currentTarget.value.startsWith('wexond://')) {
               if (Network.isURL(e.currentTarget.value) && self.getSelectedSuggestion().props.data.type !== 'info-search') {
                 if (e.currentTarget.value.startsWith('http://') || e.currentTarget.value.startsWith('https://')) {

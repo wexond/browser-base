@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import BrowserTabs from '../../components/BrowserTabs'
+import Tabs from '../../components/Tabs'
 import Bar from '../../components/Bar'
 import Page from '../../components/Page'
 import ContextMenu from '../../components/ContextMenu'
@@ -75,10 +75,10 @@ class App extends React.Component {
   componentDidMount () {
     const self = this
 
-    this.refs.tabs.refs.tabbar.addEventListener('contextmenu', function (e) {
-      if (e.target !== self.refs.tabs.refs.addButton) {
-        self.refs.tabmenu.show()
-        self.refs.webviewmenu.hide()
+    this.tabs.tabbar.addEventListener('contextmenu', function (e) {
+      if (e.target !== self.tabs.addButton) {
+        self.tabMenu.show()
+        self.webviewMenu.hide()
 
         let left = e.pageX + 1
         let top = e.pageY + 1
@@ -86,20 +86,20 @@ class App extends React.Component {
         if (left + 300 > window.innerWidth) {
           left = e.pageX - 301
         }
-        if (top + self.refs.tabmenu.state.height > window.innerHeight) {
-          top = e.pageY - self.refs.tabmenu.state.height
+        if (top + self.tabMenu.state.height > window.innerHeight) {
+          top = e.pageY - self.tabMenu.state.height
         }
         if (top < 0) {
           top = 96
         }
 
-        self.refs.tabmenu.setState({left: left, top: top})
+        self.tabMenu.setState({left: left, top: top})
       }
     })
 
     window.addEventListener('click', function () {
-      self.refs.tabmenu.hide()
-      self.refs.webviewmenu.hide()
+      self.tabMenu.hide()
+      self.webviewMenu.hide()
     })
   }
 
@@ -109,7 +109,7 @@ class App extends React.Component {
    * @param {boolean} overrideActive
    */
   updateBarText = (text, overrideActive = false) => {
-    const bar = this.getBar()
+    const bar = this.bar
     let contains = false
     // Check if the url from webview is in excluded URLs.
     for (var i = 0; i < global.excludedURLs.length; i++) {
@@ -147,113 +147,81 @@ class App extends React.Component {
     return this
   }
 
-  /**
-   * Gets Systembar.
-   * @return {Systembar}
-   */
-  getTabs = () => {
-    return this.refs.tabs
-  }
-
-  /**
-   * Gets Bar.
-   * @return {Bar}
-   */
-  getBar = () => {
-    return this.refs.bar
-  }
-
-  /**
-   * Gets WebViewMenu.
-   * @return {WebViewMenu}
-   */
-  getWebViewMenu = () => {
-    return this.refs.webviewmenu
-  }
-
-    /**
-   * Gets BrowserTabMenu.
-   * @return {BrowserTabMenu}
-   */
-  getBrowserTabMenu = () => {
-    return this.refs.tabmenu
-  }
-
   render () {
     return (
       <div>
-        <BrowserTabs ref='tabs' getApp={this.getApp} />
-        <Bar ref='bar' getApp={this.getApp} />
+        <Tabs ref={(r) => { this.tabs = r }} getApp={this.getApp} />
+        <Bar ref={(r) => { this.bar = r }} getApp={this.getApp} />
         {this.state.pagesToCreate.map((data, key) => {
           return (
             <Page getApp={this.getApp} getTab={data.getTab} url={data.url} key={key} />
           )
         })}
-        <ContextMenu getApp={this.getApp} ref='webviewmenu'>
-          <MenuItem getMenu={this.getMenu}>
+        <ContextMenu getApp={this.getApp} ref={(r) => { this.webviewMenu = r }}>
+          <MenuItem>
             Open link in new tab
           </MenuItem>
           <div className='menu-separator' />
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Copy link address
           </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Save link as
           </MenuItem>
           <div className='menu-separator' />
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Open image in new tab
           </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Save image as
           </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Copy image
           </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Copy image address
           </MenuItem>
           <div className='menu-separator' />
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Print
           </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             View source
           </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Inspect element
           </MenuItem>
         </ContextMenu>
 
-        <ContextMenu getApp={this.getApp} ref='tabmenu'>
-          <MenuItem getMenu={this.getMenu}>
+        <ContextMenu getApp={this.getApp} ref={(r) => { this.tabMenu = r }}>
+          <MenuItem>
             Add new tab
           </MenuItem>
           <div className='menu-separator' />
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Pin tab
           </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Mute tab
           </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Duplicate
           </MenuItem>
           <div className='menu-separator' />
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Close tab
           </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Close other tabs
           </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Close tabs from left
           </MenuItem>
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Close tabs from right
           </MenuItem>
           <div className='menu-separator' />
-          <MenuItem getMenu={this.getMenu}>
+          <MenuItem>
             Revert closed tab
           </MenuItem>
         </ContextMenu>

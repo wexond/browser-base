@@ -172,8 +172,8 @@ export default class Tab extends React.Component {
   showPage = () => {
     const page = this.getPage()
     const self = this
-    const bar = this.props.getApp().getBar()
-    const webview = page.getWebView()
+    const bar = this.props.getApp().bar
+    const webview = page.webview
     const app = this.props.getApp()
 
     bar.hideSuggestions()
@@ -193,9 +193,10 @@ export default class Tab extends React.Component {
     }
 
     function accessWebContents () {
-      // Refresh navigation icons in WebViewMenu.
-      app.getWebViewMenu().refreshNavIconsState()
-      // TODO: Refresh navigation icons in BrowserTabMenu.
+      // Refresh navigation icons in webview menu.
+      app.webviewMenu.refreshNavIconsState()
+      // Refresh navigation icons in tab menu.
+      app.tabMenu.refreshNavIconsState()
 
       // Update bar text and focus it.
       self.props.getApp().updateBarText(webview.getURL(), true)
@@ -327,8 +328,8 @@ export default class Tab extends React.Component {
     // Animate tab closing.
     function closeAnim () {
       self.appendTransition('width')
-      if (self.refs.tab != null) {
-        self.refs.tab.style.width = 0
+      if (self.tabDiv != null) {
+        self.tabDiv.style.width = 0
       }
 
       setTimeout(function () {
@@ -367,8 +368,8 @@ export default class Tab extends React.Component {
       t = 'background-color ' + global.tabsAnimationData.positioningDuration + 's'
     }
 
-    if (this.refs.tab != null) {
-      this.refs.tab.style['-webkit-transition'] = Transitions.appendTransition(this.refs.tab.style['-webkit-transition'], t)
+    if (this.tabDiv != null) {
+      this.tabDiv.style['-webkit-transition'] = Transitions.appendTransition(this.tabDiv.style['-webkit-transition'], t)
     }
   }
 
@@ -389,8 +390,8 @@ export default class Tab extends React.Component {
       t = 'background-color ' + global.tabsAnimationData.positioningDuration + 's'
     }
 
-    if (this.refs.tab != null) {
-      this.refs.tab.style['-webkit-transition'] = Transitions.removeTransition(this.refs.tab.style['-webkit-transition'], t)
+    if (this.tabDiv != null) {
+      this.tabDiv.style['-webkit-transition'] = Transitions.removeTransition(this.tabDiv.style['-webkit-transition'], t)
     }
   }
 
@@ -399,8 +400,8 @@ export default class Tab extends React.Component {
    * @param {number} left
    */
   setLeft = (left) => {
-    if (this.refs.tab != null) {
-      this.refs.tab.style.left = left + 'px'
+    if (this.tabDiv != null) {
+      this.tabDiv.style.left = left + 'px'
     }
   }
 
@@ -409,8 +410,8 @@ export default class Tab extends React.Component {
   * @param {number} width
   */
   setWidth = (width) => {
-    if (this.refs.tab != null) {
-      this.refs.tab.style.width = width + 'px'
+    if (this.tabDiv != null) {
+      this.tabDiv.style.width = width + 'px'
     }
   }
 
@@ -548,7 +549,7 @@ export default class Tab extends React.Component {
 
     return (
       <div>
-        <div {...tabEvents} style={Object.assign(tabStyle, this.props.style)} className='tab' ref='tab'>
+        <div {...tabEvents} style={Object.assign(tabStyle, this.props.style)} className='tab' ref={(r) => { this.tabDiv = r }}>
           <div className='tab-content'>
             <div className='tab-favicon' style={faviconStyle}>
             </div>
