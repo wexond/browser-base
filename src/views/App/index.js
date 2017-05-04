@@ -28,6 +28,7 @@ window.global = {
   currentWindow: remote.getCurrentWindow(),
   remote: remote,
   tabs: [],
+  pages: [],
   tabsData: {
     pinnedTabWidth: 32,
     maxTabWidth: 190,
@@ -146,6 +147,19 @@ class App extends React.Component {
   getApp = () => {
     return this
   }
+
+  /**
+   * Gets selected page.
+   * @return {Page}
+   */
+  getSelectedPage = () => {
+    for (var i = 0; i < global.pages.length; i++) {
+      if (global.pages[i].props.getTab().selected) {
+        return global.pages[i]
+      }
+    }
+  }
+
 
   render () {
     return (

@@ -70,7 +70,7 @@ export default class ContextMenu extends React.Component {
    * Refreshes navigation icons state (disabled or enabled etc)
    */
   refreshNavIconsState = () => {
-    const webview = this.props.getApp().tabs.getSelectedTab().getPage().webview
+    const webview = this.props.getApp().getSelectedPage().webview
 
     if (webview.getWebContents() != null) {
       this.setState(
@@ -97,7 +97,7 @@ export default class ContextMenu extends React.Component {
     let forwardClass = 'navigation-icon-forward ' + ((this.state.forwardEnabled) ? 'navigation-icon-enabled' : 'navigation-icon-disabled')
 
     function onBackClick () {
-      const webview = self.props.getApp().tabs.getSelectedTab().getPage().webview
+      const webview = self.props.getApp().getSelectedPage().webview
       if (webview.canGoBack()) {
         webview.goBack()
         self.hide()
@@ -105,7 +105,7 @@ export default class ContextMenu extends React.Component {
     }
 
     function onForwardClick () {
-      const webview = self.props.getApp().tabs.getSelectedTab().getPage().webview
+      const webview = self.props.getApp().getSelectedPage().webview
       if (webview.canGoForward()) {
         webview.goForward()
         self.hide()
@@ -113,7 +113,7 @@ export default class ContextMenu extends React.Component {
     }
 
     function onRefreshClick () {
-      const webview = self.props.getApp().tabs.getSelectedTab().getPage().webview
+      const webview = self.props.getApp().getSelectedPage().webview
       webview.reload()
       self.hide()
     }
