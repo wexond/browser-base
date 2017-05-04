@@ -1,10 +1,10 @@
 import React from 'react'
-import BrowserTab from '../BrowserTab'
+import Tab from '../Tab'
 import Controls from '../Controls'
 import Colors from '../../helpers/Colors'
 import Transitions from '../../helpers/Transitions'
 
-export default class BrowserTabs extends React.Component {
+export default class Tabs extends React.Component {
   constructor () {
     super()
 
@@ -125,7 +125,7 @@ export default class BrowserTabs extends React.Component {
             }, global.tabsAnimationData.hoverDuration * 1000)
 
             if (!tab.pinned) {
-              tab.setState({closeOpacity: {value: (tab.refs.tab.offsetWidth < 48) ? 0 : 1, animate: true}, closePointerEvents: (tab.refs.tab.offsetWidth < 48) ? 'none' : 'auto'})
+              tab.setState({closeOpacity: {value: (tab.tabDiv.offsetWidth < 48) ? 0 : 1, animate: true}, closePointerEvents: (tab.tabDiv.offsetWidth < 48) ? 'none' : 'auto'})
             }
           }
         }
@@ -142,7 +142,7 @@ export default class BrowserTabs extends React.Component {
   onMouseMove = (e) => {
     let mouseDeltaX = e.pageX - this.dragData.mouseClickX
     const tab = this.dragData.tab
-    const tabDiv = tab.refs.tab
+    const tabDiv = tab.tabDiv
 
     if (Math.abs(mouseDeltaX) > 10 || this.dragData.canDrag2) {
       this.dragData.canDrag2 = true
@@ -152,11 +152,11 @@ export default class BrowserTabs extends React.Component {
 
         tab.setLeft(this.dragData.tabX + e.clientX - this.dragData.mouseClickX)
 
-        if (tabDiv.getBoundingClientRect().left + tabDiv.offsetWidth > this.refs.tabbar.offsetWidth) {
-          tab.setLeft(this.refs.tabbar.offsetWidth - tabDiv.offsetWidth)
+        if (tabDiv.getBoundingClientRect().left + tabDiv.offsetWidth > this.tabbar.offsetWidth) {
+          tab.setLeft(this.tabbar.offsetWidth - tabDiv.offsetWidth)
         }
-        if (tabDiv.getBoundingClientRect().left < this.refs.tabbar.getBoundingClientRect().left) {
-          tab.setLeft(this.refs.tabbar.getBoundingClientRect().left)
+        if (tabDiv.getBoundingClientRect().left < this.tabbar.getBoundingClientRect().left) {
+          tab.setLeft(this.tabbar.getBoundingClientRect().left)
         }
 
         this.dragData.tab.findTabToReplace(e.clientX)
@@ -215,7 +215,7 @@ export default class BrowserTabs extends React.Component {
       for (var i = 0; i < global.tabs.length; i++) {
         // React's setState lowers performance :(
         // Need to access DOM directly
-        var tab = global.tabs[i].refs.tab
+        var tab = global.tabs[i].tabDiv
 
         if (!global.tabs[i].blockLeftAnimation && animateTabs) {
           global.tabs[i].appendTransition('left')
@@ -227,7 +227,7 @@ export default class BrowserTabs extends React.Component {
       }
 
       self.setAddButtonAnimation(animateAddButton)
-      self.refs.addButton.style.left = addLeft + 'px'
+      self.addButton.style.left = addLeft + 'px'
     })
   }
 
@@ -242,7 +242,7 @@ export default class BrowserTabs extends React.Component {
       for (var i = 0; i < global.tabs.length; i++) {
         // React's setState lowers performance :(
         // Need to access DOM directly
-        var tab = global.tabs[i].refs.tab
+        var tab = global.tabs[i].tabDiv
         tab.style.width = widths[i] + 'px'
 
         if (animation) {
@@ -282,8 +282,8 @@ export default class BrowserTabs extends React.Component {
   getWidths = (callback = null, margin = 0) => {
     const self = this
 
-    const tabbarWidth = self.refs.tabbar.offsetWidth
-    const addButtonWidth = self.refs.addButton.offsetWidth
+    const tabbarWidth = self.tabbar.offsetWidth
+    const addButtonWidth = self.addButton.offsetWidth
     let tabWidths = []
     let pinnedTabsLength = 0
 
@@ -342,7 +342,7 @@ export default class BrowserTabs extends React.Component {
    * @return {boolean}
    */
   containsX = (tabToCheck, xPos) => {
-    var rect = tabToCheck.refs.tab.getBoundingClientRect()
+    var rect = tabToCheck.tabDiv.getBoundingClientRect()
 
     if (xPos >= rect.left && xPos <= rect.right) {
       return true
@@ -379,7 +379,7 @@ export default class BrowserTabs extends React.Component {
    * @return {boolean}
    */
   containsPoint = (tabToCheck, xPos, yPos) => {
-    var rect = tabToCheck.refs.tab.getBoundingClientRect()
+    var rect = tabToCheck.tabDiv.getBoundingClientRect()
 
     if (xPos >= rect.left && xPos <= rect.right && yPos <= rect.bottom) {
       return true
@@ -444,7 +444,7 @@ export default class BrowserTabs extends React.Component {
    */
   setAddButtonAnimation = (flag) => {
     var transition = 'left ' + global.tabsAnimationData.positioningDuration + 's ' + global.tabsAnimationData.positioningEasing
-    const addButton = this.refs.addButton
+    const addButton = this.addButton
 
     if (addButton != null) {
       if (flag) {
@@ -456,16 +456,8 @@ export default class BrowserTabs extends React.Component {
   }
 
   /**
-   * Gets controls.
-   * @return {Controls}
-   */
-  getControls = () => {
-    return this.refs.controls
-  }
-
-  /**
-   * Gets tabs container {BrowserTabs}
-   * @return {BrowserTabs}
+   * Gets tabs.
+   * @return {Tabs}
    */
   getTabs = () => {
     return this
@@ -473,7 +465,7 @@ export default class BrowserTabs extends React.Component {
 
   /**
    * Gets selected tab.
-   * @return {BrowserTab}
+   * @return {Tab}
    */
   getSelectedTab = () => {
     for (var i = 0; i < global.tabs.length; i++) {
@@ -513,17 +505,17 @@ export default class BrowserTabs extends React.Component {
         {(!this.state.tabsVisible) ? <div className='systembar-drag-handle' /> : null}
         <div className='systembar' style={systembarStyle}>
           {(this.state.tabsVisible) ? <div className='systembar-drag-handle' /> : null}
-          <div className='tabbar' ref='tabbar'>
+          <div className='tabbar' ref={(r) => { this.tabbar = r }}>
             {this.state.tabsToCreate.map((data, key) => {
               return (
-                <BrowserTab url={data.url} getApp={self.props.getApp} getTabs={self.getTabs} select={data.select} key={key} />
+                <Tab url={data.url} getApp={self.props.getApp} getTabs={self.getTabs} select={data.select} key={key} />
               )
             })}
-            <div ref='addButton' style={addButtonStyle} onClick={onAddButtonClick} className='add-button' />
+            <div ref={(r) => { this.addButton = r }} style={addButtonStyle} onClick={onAddButtonClick} className='add-button' />
           </div>
           <div className='systembar-border' style={systembarBorderStyle} />
         </div>
-        <Controls ref='controls' />
+        <Controls ref={(r) => { this.controls = r }} />
       </div>
     )
   }
