@@ -102,6 +102,90 @@ class App extends React.Component {
       self.tabMenu.hide()
       self.webviewMenu.hide()
     })
+
+    this.webviewMenu.setState(
+      {
+        menuItems: [
+          {
+            title: 'Open link in new tab',
+            type: 'menu-item',
+            show: false,
+            onClick: function () {
+              let data = self.WCMData
+              if (data.linkURL !== '') {
+                self.tabs.addTab({select: false, url: data.linkURL})
+              }
+            }
+          },
+          {
+            type: 'separator',
+            show: false
+          },
+          {
+            title: 'Copy link address',
+            type: 'menu-item',
+            show: false
+          },
+          {
+            title: 'Save link as',
+            type: 'menu-item',
+            show: false
+          },
+          {
+            type: 'separator',
+            show: false
+          },
+          {
+            title: 'Open image in new tab',
+            type: 'menu-item',
+            show: false
+          },
+          {
+            title: 'Save image as',
+            type: 'menu-item',
+            show: false
+          },
+          {
+            title: 'Copy image',
+            type: 'menu-item',
+            show: false
+          },
+          {
+            title: 'Copy image address',
+            type: 'menu-item',
+            show: false
+          },
+          {
+            type: 'separator',
+            show: false
+          },
+          {
+            title: 'Print',
+            type: 'menu-item',
+            show: false
+          },
+          {
+            title: 'Save as',
+            type: 'menu-item',
+            show: false
+          },
+          {
+            type: 'separator',
+            show: false
+          },
+          {
+            title: 'View source',
+            type: 'menu-item',
+            show: false
+          },
+          {
+            title: 'Inspect element',
+            type: 'menu-item',
+            show: true
+          }
+        ]
+      }
+    )
   }
 
   /**
@@ -165,15 +249,6 @@ class App extends React.Component {
   render () {
     const self = this
 
-    /** events */
-
-    function onOpenLinkInNewTabClick () {
-      let data = self.WCMData
-      if (data.linkURL !== '') {
-        self.tabs.addTab({select: false, url: data.linkURL})
-      }
-    }
-
     return (
       <div>
         <Tabs ref={(r) => { this.tabs = r }} getApp={this.getApp} />
@@ -183,42 +258,7 @@ class App extends React.Component {
             <Page getApp={this.getApp} getTab={data.getTab} url={data.url} key={key} />
           )
         })}
-        <ContextMenu getApp={this.getApp} ref={(r) => { this.webviewMenu = r }}>
-          <MenuItem onClick={onOpenLinkInNewTabClick}>
-            Open link in new tab
-          </MenuItem>
-          <div className='menu-separator' />
-          <MenuItem>
-            Copy link address
-          </MenuItem>
-          <MenuItem>
-            Save link as
-          </MenuItem>
-          <div className='menu-separator' />
-          <MenuItem>
-            Open image in new tab
-          </MenuItem>
-          <MenuItem>
-            Save image as
-          </MenuItem>
-          <MenuItem>
-            Copy image
-          </MenuItem>
-          <MenuItem>
-            Copy image address
-          </MenuItem>
-          <div className='menu-separator' />
-          <MenuItem>
-            Print
-          </MenuItem>
-          <MenuItem>
-            View source
-          </MenuItem>
-          <MenuItem>
-            Inspect element
-          </MenuItem>
-        </ContextMenu>
-
+        <ContextMenu getApp={this.getApp} ref={(r) => { this.webviewMenu = r }} />
         <ContextMenu getApp={this.getApp} ref={(r) => { this.tabMenu = r }}>
           <MenuItem>
             Add new tab
