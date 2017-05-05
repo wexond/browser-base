@@ -19,7 +19,8 @@ export default class Tab extends React.Component {
       backgroundColor: 'transparent',
       closeOpacity: {value: 0, animate: false},
       faviconVisible: true,
-      closePointerEvents: true
+      closePointerEvents: 'auto',
+      pointerEvents: 'auto'
     }
 
     this.selectedBackgroundColor = '#fff'
@@ -176,7 +177,6 @@ export default class Tab extends React.Component {
    */
   showPage = () => {
     const page = this.getPage()
-    const self = this
     const app = this.props.getApp()
     const bar = app.bar
     const webview = page.webview
@@ -284,11 +284,13 @@ export default class Tab extends React.Component {
 
     this.setState(
       {
-        backgroundColor: rgba
+        backgroundColor: rgba,
+        pointerEvents: 'none'
       }
     )
 
     // Remove page associated to the tab.
+    global.pages.splice(global.pages.indexOf(this.getPage()))
     this.getPage().setState({render: false})
 
     // Get previous and next tab.
@@ -515,7 +517,8 @@ export default class Tab extends React.Component {
 
     let tabStyle = {
       backgroundColor: this.state.backgroundColor,
-      zIndex: (this.state.selected) ? 3 : 1
+      zIndex: (this.state.selected) ? 3 : 1,
+      pointerEvents: this.state.pointerEvents
     }
 
     /** Events */
