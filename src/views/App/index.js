@@ -162,6 +162,17 @@ class App extends React.Component {
 
 
   render () {
+    const self = this
+
+    /** events */
+
+    function onOpenLinkInNewTabClick () {
+      let data = self.WCMData
+      if (data.linkURL !== '') {
+        self.tabs.addTab({select: false, url: data.linkURL})
+      }
+    }
+
     return (
       <div>
         <Tabs ref={(r) => { this.tabs = r }} getApp={this.getApp} />
@@ -172,7 +183,7 @@ class App extends React.Component {
           )
         })}
         <ContextMenu getApp={this.getApp} ref={(r) => { this.webviewMenu = r }}>
-          <MenuItem>
+          <MenuItem onClick={onOpenLinkInNewTabClick}>
             Open link in new tab
           </MenuItem>
           <div className='menu-separator' />

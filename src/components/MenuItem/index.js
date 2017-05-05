@@ -15,7 +15,7 @@ export default class MenuItem extends React.Component {
 
   render () {
     return (
-      <div className='menu-item'>
+      <div className='menu-item' onClick={this.props.onClick}>
         <div className='menu-item-text'>
           {this.props.children}
         </div>

@@ -30,9 +30,10 @@ export default class Page extends React.Component {
       if (self.webview.getWebContents() != null) {
         event = new Event('webcontents-load')
         self.webview.dispatchEvent(event)
-        self.webview.getWebContents().on('context-menu', function (e) {
+        self.webview.getWebContents().on('context-menu', function (e, params) {
           app.webviewMenu.show()
           app.tabMenu.hide()
+          app.WCMData = params // Webview context menu data.
 
           let left = app.cursor.x + 1
           let top = app.cursor.y + 1
