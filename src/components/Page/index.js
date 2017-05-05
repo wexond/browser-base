@@ -13,8 +13,11 @@ export default class Page extends React.Component {
   }
 
   componentDidMount () {
+    this.getTab = this.props.getTab
+
     const self = this
     const app = this.props.getApp()
+    const tab = this.getTab()
 
     let event = new Event('page-load')
     event.getPage = this.getPage
@@ -55,7 +58,6 @@ export default class Page extends React.Component {
     }, 1)
 
     this.webview.addEventListener('load-commit', function () {
-      const app = self.props.getApp()
       const tabs = app.tabs
 
       // Refresh navigation icons in webview menu.
@@ -86,7 +88,6 @@ export default class Page extends React.Component {
 
     this.webview.addEventListener('did-finish-load', function () {
       const webview = self.webview
-      const app = self.props.getApp()
 
       // Refresh navigation icons in webview menu.
       app.webviewMenu.refreshNavIconsState()
@@ -95,8 +96,8 @@ export default class Page extends React.Component {
 
 
       // Check if tab is selected.
-      if (self.props.getTab() != null && self.props.getTab().selected) {
-        self.props.getApp().updateBarText(webview.getURL())
+      if (tab != null && tab.selected) {
+        app.updateBarText(webview.getURL())
       }
       // Add history item.
       BrowserStorage.addHistoryItem(webview.getTitle(), webview.getURL())
@@ -105,22 +106,22 @@ export default class Page extends React.Component {
     this.webview.addEventListener('ipc-message', function (e) {
       if (e.channel === 'webview:mouse-left-button') {
         // hide bar on webview click
-        var bar = self.props.getApp().bar
+        var bar = app.bar
         if (!bar.locked) {
           bar.hide()
         }
 
-        self.props.getApp().webviewMenu.hide()
-        self.props.getApp().tabMenu.hide()
+        app.webviewMenu.hide()
+        app.tabMenu.hide()
       }
     })
 
     this.webview.addEventListener('page-title-updated', function (e) {
-      self.props.getTab().setState({title: e.title})
+      tab.setState({title: e.title})
     })
 
     this.webview.addEventListener('page-favicon-updated', function (e) {
-      self.props.getTab().setState({favicon: e.favicons[0]})
+      tab.setState({favicon: e.favicons[0]})
     })
   }
 
