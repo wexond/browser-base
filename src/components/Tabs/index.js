@@ -419,23 +419,25 @@ export default class Tabs extends React.Component {
    * Updates tabs' state (borders etc).
    */
   updateTabs = () => {
-    for (var i = 0; i < global.tabs.length; i++) {
-      if (!global.tabs[i].selected) {
-        global.tabs[i].setState({smallBorderVisible: true})
-      }
-    }
-
-    for (i = 0; i < global.tabs.length; i++) {
-      if (global.tabs[i].selected) {
-        if (global.tabs[i - 1] != null) {
-          global.tabs[i - 1].setState({smallBorderVisible: false})
+    setTimeout(function () {
+      for (var i = 0; i < global.tabs.length; i++) {
+        if (!global.tabs[i].selected) {
+          global.tabs[i].setState({smallBorderVisible: true})
         }
       }
-    }
 
-    for (i = 0; i < global.tabs.length; i++) {
-      global.tabs[i].setState({leftSmallBorderVisible: false})
-    }
+      for (i = 0; i < global.tabs.length; i++) {
+        global.tabs[i].setState({leftSmallBorderVisible: false})
+      }
+    })
+
+    this.getSelectedTab(function (tab) {
+      let prevTab = global.tabs[global.tabs.indexOf(tab) - 1]
+
+      if (prevTab != null) {
+        prevTab.setState({smallBorderVisible: false})
+      }
+    })
   }
 
   /**
@@ -465,15 +467,17 @@ export default class Tabs extends React.Component {
 
   /**
    * Gets selected tab.
-   * @return {Tab}
+   * @param {function} callback
    */
-  getSelectedTab = () => {
-    for (var i = 0; i < global.tabs.length; i++) {
-      if (global.tabs[i].selected) {
-        return global.tabs[i]
+  getSelectedTab = (callback = null) => {
+    setTimeout(function () {
+      for (var i = 0; i < global.tabs.length; i++) {
+        if (global.tabs[i].selected) {
+          callback(global.tabs[i])
+          break
+        }
       }
-    }
-    return null
+    })
   }
 
   render () {
