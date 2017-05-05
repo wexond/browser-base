@@ -70,16 +70,20 @@ export default class ContextMenu extends React.Component {
    * Refreshes navigation icons state (disabled or enabled etc)
    */
   refreshNavIconsState = () => {
-    const webview = this.props.getApp().getSelectedPage().webview
+    const self = this
 
-    if (webview.getWebContents() != null) {
-      this.setState(
-        {
-          backEnabled: webview.canGoBack(),
-          forwardEnabled: webview.canGoForward()
-        }
-      )
-    }
+    this.props.getApp().getSelectedPage(function (page) {
+      const webview = page.webview
+
+      if (webview.getWebContents() != null) {
+        self.setState(
+          {
+            backEnabled: webview.canGoBack(),
+            forwardEnabled: webview.canGoForward()
+          }
+        )
+      }
+    })
   }
 
   render () {
@@ -97,31 +101,36 @@ export default class ContextMenu extends React.Component {
     let forwardClass = 'navigation-icon-forward ' + ((this.state.forwardEnabled) ? 'navigation-icon-enabled' : 'navigation-icon-disabled')
 
     function onBackClick () {
-      const webview = self.props.getApp().getSelectedPage().webview
-      if (webview.canGoBack()) {
-        webview.goBack()
-        self.hide()
-      }
+      this.props.getApp().getSelectedPage(function (page) {
+        const webview = page.webview
+        if (webview.canGoBack()) {
+          webview.goBack()
+          self.hide()
+        }
+      })
     }
 
     function onForwardClick () {
-      const webview = self.props.getApp().getSelectedPage().webview
-      if (webview.canGoForward()) {
-        webview.goForward()
-        self.hide()
-      }
+      this.props.getApp().getSelectedPage(function (page) {
+        const webview = page.webview
+        if (webview.canGoForward()) {
+          webview.goForward()
+          self.hide()
+        }
+      })
     }
 
     function onRefreshClick () {
-      const webview = self.props.getApp().getSelectedPage().webview
-      webview.reload()
-      self.hide()
+      this.props.getApp().getSelectedPage(function (page) {
+        const webview = page.webview
+        webview.reload()
+        self.hide()
+      })
     }
 
     function onClick (e) {
       e.stopPropagation()
     }
-
 
     return (
       <div onClick={onClick} ref='menu' className='menu' style={menuStyle}>
