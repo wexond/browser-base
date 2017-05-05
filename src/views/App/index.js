@@ -186,6 +186,55 @@ class App extends React.Component {
         ]
       }
     )
+
+    this.tabMenu.setState(
+      {
+        menuItems: [
+          {
+            title: 'Add new tab',
+            type: 'menu-item'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            title: 'Pin tab',
+            type: 'menu-item'
+          },
+          {
+            title: 'Mute tab',
+            type: 'menu-item'
+          },
+          {
+            title: 'Duplicate',
+            type: 'menu-item'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            title: 'Close tab',
+            type: 'menu-item'
+          },
+          {
+            title: 'Close other tabs',
+            type: 'menu-item'
+          },
+          {
+            title: 'Close tabs from left',
+            type: 'menu-item'
+          },
+          {
+            title: 'Close tabs from right',
+            type: 'menu-item'
+          },
+          {
+            title: 'Revert closed tab',
+            type: 'menu-item'
+          }
+        ]
+      }
+    )
   }
 
   /**
@@ -259,38 +308,7 @@ class App extends React.Component {
           )
         })}
         <ContextMenu getApp={this.getApp} ref={(r) => { this.webviewMenu = r }} />
-        <ContextMenu getApp={this.getApp} ref={(r) => { this.tabMenu = r }}>
-          <MenuItem>
-            Add new tab
-          </MenuItem>
-          <div className='menu-separator' />
-          <MenuItem>
-            Pin tab
-          </MenuItem>
-          <MenuItem>
-            Mute tab
-          </MenuItem>
-          <MenuItem>
-            Duplicate
-          </MenuItem>
-          <div className='menu-separator' />
-          <MenuItem>
-            Close tab
-          </MenuItem>
-          <MenuItem>
-            Close other tabs
-          </MenuItem>
-          <MenuItem>
-            Close tabs from left
-          </MenuItem>
-          <MenuItem>
-            Close tabs from right
-          </MenuItem>
-          <div className='menu-separator' />
-          <MenuItem>
-            Revert closed tab
-          </MenuItem>
-        </ContextMenu>
+        <ContextMenu getApp={this.getApp} ref={(r) => { this.tabMenu = r }} />
       </div>
     )
   }

@@ -15,3 +15,7 @@ export default class MenuItem extends React.Component {
     )
   }
 }
+
+MenuItem.defaultProps = {
+  show: true
+}
