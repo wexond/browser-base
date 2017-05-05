@@ -128,6 +128,7 @@ export default class ContextMenu extends React.Component {
       e.stopPropagation()
     }
 
+
     return (
       <div onClick={onClick} ref='menu' className='menu' style={menuStyle}>
         <div className='navigation-icons'>
@@ -141,7 +142,12 @@ export default class ContextMenu extends React.Component {
           {
             this.state.menuItems.map((data, key) => {
               if (data.type === 'separator') {
-                return <div style={{display: (data.show) ? 'block' : 'none'}} key={key} className='menu-separator' />
+                let displaySeparator = true
+                if (data.show === false) {
+                  displaySeparator = false
+                }
+
+                return <div style={{display: (displaySeparator) ? 'block' : 'none'}} key={key} className='menu-separator' />
               }
               if (data.type === 'menu-item') {
                 return (
