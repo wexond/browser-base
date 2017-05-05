@@ -12,7 +12,8 @@ export default class ContextMenu extends React.Component {
       top: 0,
       left: 0,
       backEnabled: false,
-      forwardEnabled: false
+      forwardEnabled: false,
+      menuItems: []
     }
 
     this.menuItems = []
@@ -24,14 +25,20 @@ export default class ContextMenu extends React.Component {
   show = () => {
     this.refreshNavIconsState()
 
-    let separatorsCount = this.refs.menu.getElementsByClassName('menu-separator').length
+    let separators = this.refs.menu.getElementsByClassName('menu-separator')
+    let separatorsCount = 0
+    for (var i = 0; i < separators.length; i++) {
+      if (separators[i].style.display === 'block') {
+        separatorsCount += 1
+      }
+    }
     let topBottomPadding = 24
     let separatorsMargins = 16
     let navIconsHeight = 48
     let height = navIconsHeight + separatorsCount + separatorsCount * separatorsMargins + topBottomPadding
 
-    for (var i = 0; i < this.menuItems.length; i++) {
-      if (this.menuItems[i].state.visible) {
+    for (i = 0; i < this.menuItems.length; i++) {
+      if (this.menuItems[i].props.show) {
         height += 32
       }
     }
@@ -132,13 +139,16 @@ export default class ContextMenu extends React.Component {
         <div className='menu-line' />
         <div className='menu-items'>
           {
-            React.Children.map(this.props.children, (child) => {
-              if (child.type === MenuItem) {
-                return React.cloneElement(child, {
-                  getMenu: self.getMenu
-                })
-              } else {
-                return React.cloneElement(child, null)
+            this.state.menuItems.map((data, key) => {
+              if (data.type === 'separator') {
+                return <div style={{display: (data.show) ? 'block' : 'none'}} key={key} className='menu-separator' />
+              }
+              if (data.type === 'menu-item') {
+                return (
+                  <MenuItem show={data.show} key={key} onClick={data.onClick} getMenu={self.getMenu}>
+                    {data.title}
+                  </MenuItem>
+                )
               }
             })
           }

@@ -34,6 +34,42 @@ export default class Page extends React.Component {
         event = new Event('webcontents-load')
         self.webview.dispatchEvent(event)
         self.webview.getWebContents().on('context-menu', function (e, params) {
+          app.webviewMenu.setState((previousState) => {
+            /**
+             * 0  : Open link in new tab
+             * 1  : -----------------------
+             * 2  : Copy link address
+             * 3  : Save link as
+             * 4  : -----------------------
+             * 5  : Open image in new tab
+             * 6  : Save image as
+             * 7  : Copy image
+             * 8  : Copy image address
+             * 9  : -----------------------
+             * 10 : Save as
+             * 11 : Print
+             * 12 : -----------------------
+             * 13 : View source
+             * 14 : Inspect element
+             */
+            let menuItems = previousState.menuItems
+            for (var i = 0; i < 5; i++) {
+              menuItems[i].show = params.linkURL !== ''
+            }
+
+            for (i = 5; i < 10; i++) {
+              menuItems[i].show = params.hasImageContents
+            }
+
+            for (i = 10; i < 14; i++) {
+              menuItems[i].show = !params.hasImageContents && params.linkURL === ''
+            }
+
+            return {
+              menuItems: menuItems
+            }
+          })
+
           app.webviewMenu.show()
           app.tabMenu.hide()
           app.WCMData = params // Webview context menu data.
@@ -50,6 +86,8 @@ export default class Page extends React.Component {
           if (top < 0) {
             top = 96
           }
+
+          console.log(params)
 
           app.webviewMenu.setState({left: left, top: top})
         })
