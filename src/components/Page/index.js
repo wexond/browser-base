@@ -125,10 +125,6 @@ export default class Page extends React.Component {
     })
   }
 
-  componentWillUnmount () {
-    global.pages.splice(global.pages.indexOf(this))
-  }
-
   /**
    * Gets Page.
    * @return {Page}
