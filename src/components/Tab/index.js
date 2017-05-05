@@ -17,7 +17,7 @@ export default class Tab extends React.Component {
       loading: false,
       title: 'New tab',
       backgroundColor: 'transparent',
-      closeOpacity: 0,
+      closeOpacity: {value: 0, animate: false},
       faviconVisible: true,
       closePointerEvents: true
     }
@@ -55,6 +55,13 @@ export default class Tab extends React.Component {
         tabs.setWidths()
         tabs.setPositions()
       }, 1)
+    })
+
+    let event
+    this.getDOMNode().addEventListener('page-load', event = function (e) {
+      // Bind getPage to getPage passed by event.
+      self.getPage = e.getPage
+      self.getDOMNode().removeEventListener('page-load', event)
     })
 
     // Select the tab if prop select is true.
@@ -125,8 +132,6 @@ export default class Tab extends React.Component {
       // Wait until the page load.
       let event
       this.getDOMNode().addEventListener('page-load', event = function (e) {
-        // Bind getPage to getPage passed by event.
-        self.getPage = e.getPage
         self.showPage()
         self.getDOMNode().removeEventListener('page-load', event)
       })
