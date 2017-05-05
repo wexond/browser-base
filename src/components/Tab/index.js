@@ -177,9 +177,9 @@ export default class Tab extends React.Component {
   showPage = () => {
     const page = this.getPage()
     const self = this
-    const bar = this.props.getApp().bar
-    const webview = page.webview
     const app = this.props.getApp()
+    const bar = app.bar
+    const webview = page.webview
 
     bar.hideSuggestions()
 
@@ -204,7 +204,7 @@ export default class Tab extends React.Component {
       app.tabMenu.refreshNavIconsState()
 
       // Update bar text and focus it.
-      self.props.getApp().updateBarText(webview.getURL(), true)
+      app.updateBarText(webview.getURL(), true)
       if (bar.getText() === '') {
         bar.input.focus()
       }
@@ -278,7 +278,7 @@ export default class Tab extends React.Component {
 
     tabs.timer.canReset = true
 
-    let rgba = Colors.shadeColor(this.props.getTabs().state.backgroundColor, -0.05)
+    let rgba = Colors.shadeColor(tabs.state.backgroundColor, -0.05)
 
     this.removeTransition('background-color')
 
