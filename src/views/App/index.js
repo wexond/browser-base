@@ -150,17 +150,15 @@ class App extends React.Component {
 
   /**
    * Gets selected page.
-   * @param {function} callback
+   * @return {Page}
    */
-  getSelectedPage = (callback = null) => {
-    setTimeout(function () {
-      for (var i = 0; i < global.pages.length; i++) {
-        if (global.pages[i].props.getTab().selected) {
-          callback(global.pages[i])
-          break
-        }
+  getSelectedPage = () => {
+    for (var i = 0; i < global.pages.length; i++) {
+      if (global.pages[i].props.getTab().selected) {
+        return global.pages[i]
       }
-    })
+    }
+    return null
   }
 
 
