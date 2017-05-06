@@ -97,6 +97,8 @@ class App extends React.Component {
         }
 
         self.tabMenu.setState({left: left, top: top})
+
+        self.hoveredTab = self.tabs.getTabFromMousePoint(null, e.pageX, e.pageY)
       }
     })
 
