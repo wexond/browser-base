@@ -10,7 +10,7 @@ import '../../helpers/Arrays'
 
 import '../../app.scss'
 
-const remote = require('electron').remote
+const {remote, clipboard} = require('electron')
 const fs = require('fs')
 const path = require('path')
 const homedir = require('os').homedir()
@@ -27,6 +27,7 @@ const requiredFiles = [
 window.global = {
   currentWindow: remote.getCurrentWindow(),
   remote: remote,
+  clipboard: clipboard,
   tabs: [],
   pages: [],
   tabsData: {
@@ -112,9 +113,7 @@ class App extends React.Component {
             show: false,
             onClick: function () {
               let data = self.WCMData
-              if (data.linkURL !== '') {
-                self.tabs.addTab({select: false, url: data.linkURL})
-              }
+              self.tabs.addTab({select: false, url: data.linkURL})
             }
           },
           {
@@ -124,7 +123,12 @@ class App extends React.Component {
           {
             title: 'Copy link address',
             type: 'menu-item',
-            show: false
+            show: false,
+            onClick: function () {
+              let data = self.WCMData
+              clipboard.clear()
+              clipboard.writeText(data.linkURL)
+            }
           },
           {
             title: 'Save link as',
