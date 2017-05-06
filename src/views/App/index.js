@@ -155,18 +155,21 @@ class App extends React.Component {
             show: false,
             onClick: function () {
               let data = self.WCMData
-              console.log(data.srcURL)
+              let extension = data.srcURL.substring('data:image/'.length, data.srcURL.indexOf(';base64'))
+
               dialog.showSaveDialog(
                 {
                   filters: [
                     {
-                      name: 'HTML file',
-                      extensions: ['html']
+                      name: '*.' + extension,
+                      extensions: [extension]
                     }
                   ]
                 },
                 function (path1) {
-                  
+                  fs.writeFile(path1, data.srcURL.replace('data:image/' + extension + ';base64,', ''), 'base64', (err) => {
+                    if (err) console.error(err)
+                  })
                 }
               )
             }
