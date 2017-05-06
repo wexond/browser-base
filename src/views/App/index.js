@@ -181,7 +181,11 @@ class App extends React.Component {
           {
             title: 'Inspect element',
             type: 'menu-item',
-            show: true
+            show: true,
+            onClick: function () {
+              let data = self.WCMData
+              self.getSelectedPage().webview.inspectElement(data.x, data.y)
+            }
           }
         ]
       }
