@@ -152,7 +152,24 @@ class App extends React.Component {
           {
             title: 'Save image as',
             type: 'menu-item',
-            show: false
+            show: false,
+            onClick: function () {
+              let data = self.WCMData
+              console.log(data.srcURL)
+              dialog.showSaveDialog(
+                {
+                  filters: [
+                    {
+                      name: 'HTML file',
+                      extensions: ['html']
+                    }
+                  ]
+                },
+                function (path1) {
+                  
+                }
+              )
+            }
           },
           {
             title: 'Copy image',
@@ -194,15 +211,30 @@ class App extends React.Component {
             onClick: function () {
               dialog.showSaveDialog(
                 {
+                  defaultPath: self.getSelectedPage().webview.getTitle() + '.html',
                   filters: [
                     {
-                      name: 'HTML file',
-                      extensions: ['html']
+                      name: 'Webpage, complete',
+                      extensions: ['complete']
+                    },
+                    {
+                      name: 'Webpage, HTML Only',
+                      extensions: ['html_only']
                     }
                   ]
                 },
-                function (path) {
-                  self.getSelectedPage().webview.getWebContents().savePage(path, 'HTMLComplete', (error) => {
+                function (path1) {
+                  let extension = path.extname(path1)
+                  let type
+
+                  if (extension === '.html_only') {
+                    type = 'HTMLOnly'
+                  }
+                  if (extension === '.complete') {
+                    type = 'HTMLComplete'
+                  }
+
+                  self.getSelectedPage().webview.getWebContents().savePage(path1.replace(extension, '.html'), type, (error) => {
                     if (error) console.error(error)
                   })
                 }
