@@ -14,6 +14,7 @@ const {remote, clipboard} = require('electron')
 const fs = require('fs')
 const path = require('path')
 const homedir = require('os').homedir()
+const nativeImage = remote.nativeImage
 
 const userData = path.join(homedir, '.wexond')
 
@@ -156,12 +157,23 @@ class App extends React.Component {
           {
             title: 'Copy image',
             type: 'menu-item',
-            show: false
+            show: false,
+            onClick: function () {
+              let data = self.WCMData
+              clipboard.clear()
+              let img = nativeImage.createFromDataURL(data.srcURL)
+              clipboard.writeImage(img)
+            }
           },
           {
             title: 'Copy image address',
             type: 'menu-item',
-            show: false
+            show: false,
+            onClick: function () {
+              let data = self.WCMData
+              clipboard.clear()
+              clipboard.writeText(data.srcURL)
+            }
           },
           {
             type: 'separator',
