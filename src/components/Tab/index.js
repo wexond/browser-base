@@ -80,8 +80,26 @@ export default class Tab extends React.Component {
     // Set pinned state.
     if (!this.pinned) {
       this.setState({pinned: true})
+      this.props.getApp().tabMenu.setState((previousState) => {
+        let menuItems = previousState.menuItems
+
+        menuItems[2].title = 'Unpin tab'
+
+        return {
+          menuItems: menuItems
+        }
+      })
     } else {
       this.setState({pinned: false})
+      this.props.getApp().tabMenu.setState((previousState) => {
+        let menuItems = previousState.menuItems
+
+        menuItems[2].title = 'Pin tab'
+
+        return {
+          menuItems: menuItems
+        }
+      })
     }
 
     this.pinned = !this.pinned
