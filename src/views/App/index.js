@@ -134,7 +134,34 @@ class App extends React.Component {
           {
             title: 'Save link as',
             type: 'menu-item',
-            show: false
+            show: false,
+            onClick: function () {
+              let data = self.WCMData
+
+              dialog.showSaveDialog(
+                {
+                  defaultPath: 'link.html',
+                  filters: [
+                    {
+                      name: '*.html',
+                      extensions: ['html']
+                    }
+                  ]
+                },
+                function (path1) {
+                  var request = new XMLHttpRequest()
+                  request.open('GET', data.linkURL, true)
+                  request.send(null)
+                  request.onreadystatechange = function () {
+                    if (request.readyState === 4) {
+                      fs.writeFile(path1, request.responseText, (err) => {
+                        if (err) console.error(err)
+                      })
+                    }
+                  }
+                }
+              )
+            }
           },
           {
             type: 'separator',
@@ -157,8 +184,11 @@ class App extends React.Component {
               let data = self.WCMData
               let extension = data.srcURL.substring('data:image/'.length, data.srcURL.indexOf(';base64'))
 
+              console.log(window.atob(data.srcURL.replace('data:image/' + extension + ';base64,', '')))
+
               dialog.showSaveDialog(
                 {
+                  defaultPath: 'image.' + extension,
                   filters: [
                     {
                       name: '*.' + extension,

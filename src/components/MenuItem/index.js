@@ -6,10 +6,12 @@ export default class MenuItem extends React.Component {
   }
 
   render () {
+    const self = this
+
     function onClick () {
-      this.props.getMenu().hide()
-      if (typeof this.props.onClick === 'function') {
-        this.props.onClick()
+      self.props.getMenu().hide()
+      if (typeof self.props.onClick === 'function') {
+        self.props.onClick()
       }
     }
 
