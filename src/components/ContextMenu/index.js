@@ -151,7 +151,7 @@ export default class ContextMenu extends React.Component {
               }
               if (data.type === 'menu-item') {
                 return (
-                  <MenuItem show={data.show} key={key} onClick={data.onClick} getMenu={self.getMenu}>
+                  <MenuItem enabled={data.enabled} show={data.show} key={key} onClick={data.onClick} getMenu={self.getMenu}>
                     {data.title}
                   </MenuItem>
                 )
