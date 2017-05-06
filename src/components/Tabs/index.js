@@ -483,8 +483,6 @@ export default class Tabs extends React.Component {
       backgroundColor: this.state.borderColor
     }
 
-    let tabsDisplay = (this.state.tabsVisible) ? 'block' : 'none'
-
     let systembarStyle = {
       backgroundColor: this.state.backgroundColor,
       top: (this.state.tabsVisible) ? 0 : -500
