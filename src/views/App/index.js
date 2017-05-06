@@ -142,7 +142,11 @@ class App extends React.Component {
           {
             title: 'Open image in new tab',
             type: 'menu-item',
-            show: false
+            show: false,
+            onClick: function () {
+              let data = self.WCMData
+              self.tabs.addTab({select: false, url: data.srcURL})
+            }
           },
           {
             title: 'Save image as',
