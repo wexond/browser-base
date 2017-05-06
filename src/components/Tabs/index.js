@@ -487,7 +487,7 @@ export default class Tabs extends React.Component {
 
     let systembarStyle = {
       backgroundColor: this.state.backgroundColor,
-      display: tabsDisplay
+      top: (this.state.tabsVisible) ? 0 : -500
     }
 
     let addButtonStyle = {

@@ -27,8 +27,6 @@ export default class Page extends React.Component {
       this.setState({top: 0})
     }
 
-    global.pages.push(this)
-
     let checkWebcontentsInterval = setInterval(function () {
       if (self.webview.getWebContents() != null) {
         event = new Event('webcontents-load')

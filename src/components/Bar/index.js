@@ -483,24 +483,21 @@ export default class Bar extends React.Component {
           self.input.value = self.suggestedURL
           self.removeHint()
         }
-        for (var i = 0; i < global.tabs.length; i++) {
-          if (global.tabs[i].selected) {
-            const webview = global.tabs[i].getPage().webview
-            if (!e.currentTarget.value.startsWith('wexond://')) {
-              if (Network.isURL(e.currentTarget.value) && self.getSelectedSuggestion().props.data.type !== 'info-search') {
-                if (e.currentTarget.value.startsWith('http://') || e.currentTarget.value.startsWith('https://')) {
-                  webview.loadURL(e.currentTarget.value)
-                } else {
-                  webview.loadURL('http://' + e.currentTarget.value)
-                }
-              } else {
-                webview.loadURL('https://www.google.com/search?q=' + e.currentTarget.value)
-              }
-            } else {
-              webview.loadURL(e.currentTarget.value)
-            }
-          }
+
+        const page = self.props.getApp().getSelectedPage()
+        const webview = page.webview
+        const inputText = self.input.value
+
+        let URLToNavigate = inputText
+
+        if (Network.isURL(e.currentTarget.value) && self.getSelectedSuggestion().props.data.type !== 'info-search') {
+          if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'http://' + inputText
+        } else {
+          if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'https://www.google.com/search?q=' + inputText
         }
+
+        webview.loadURL(URLToNavigate)
+
         self.tempLocked = false
         self.locked = false
         self.hide()
