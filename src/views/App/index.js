@@ -305,14 +305,20 @@ class App extends React.Component {
         menuItems: [
           {
             title: 'Add new tab',
-            type: 'menu-item'
+            type: 'menu-item',
+            onClick: function () {
+              self.tabs.addTab()
+            }
           },
           {
             type: 'separator'
           },
           {
             title: 'Pin tab',
-            type: 'menu-item'
+            type: 'menu-item',
+            onClick: function () {
+              self.hoveredTab.pin()
+            }
           },
           {
             title: 'Mute tab',
