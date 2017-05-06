@@ -348,7 +348,10 @@ class App extends React.Component {
           },
           {
             title: 'Close tab',
-            type: 'menu-item'
+            type: 'menu-item',
+            onClick: function () {
+              self.hoveredTab.close()
+            }
           },
           {
             title: 'Close other tabs',
