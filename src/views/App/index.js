@@ -359,12 +359,21 @@ class App extends React.Component {
             onClick: function () {
               for (var i = global.tabs.length; i >= 0; i--) {
                 if (global.tabs[i] !== self.hoveredTab && global.tabs[i] != null) global.tabs[i].close()
+                self.tabs.setWidths()
+                self.tabs.setPositions()
               }
             }
           },
           {
             title: 'Close tabs from left',
-            type: 'menu-item'
+            type: 'menu-item',
+            onClick: function () {
+              while (global.tabs[global.tabs.indexOf(self.hoveredTab) - 1] != null) {
+                global.tabs[global.tabs.indexOf(self.hoveredTab) - 1].close()
+                self.tabs.setWidths()
+                self.tabs.setPositions()
+              }
+            }
           },
           {
             title: 'Close tabs from right',
@@ -373,6 +382,8 @@ class App extends React.Component {
               for (var i = global.tabs.length; i >= 0; i--) {
                 if (global.tabs[i] === self.hoveredTab) break
                 if (global.tabs[i] != null) global.tabs[i].close()
+                self.tabs.setWidths()
+                self.tabs.setPositions()
               }
             }
           },
