@@ -355,7 +355,12 @@ class App extends React.Component {
           },
           {
             title: 'Close other tabs',
-            type: 'menu-item'
+            type: 'menu-item',
+            onClick: function () {
+              for (var i = global.tabs.length; i >= 0; i--) {
+                if (global.tabs[i] !== self.hoveredTab && global.tabs[i] != null) global.tabs[i].close()
+              }
+            }
           },
           {
             title: 'Close tabs from left',
