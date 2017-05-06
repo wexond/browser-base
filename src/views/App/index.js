@@ -322,7 +322,22 @@ class App extends React.Component {
           },
           {
             title: 'Mute tab',
-            type: 'menu-item'
+            type: 'menu-item',
+            onClick: function () {
+              const webview = self.hoveredTab.getPage().webview
+
+              self.tabMenu.setState((previousState) => {
+                let menuItems = previousState.menuItems
+
+                menuItems[3].title = (webview.isAudioMuted()) ? 'Unmute tab' : 'Mute tab'
+
+                return {
+                  menuItems: menuItems
+                }
+              })
+
+              webview.setAudioMuted(!webview.isAudioMuted())
+            }
           },
           {
             title: 'Duplicate',
