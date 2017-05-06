@@ -182,7 +182,10 @@ class App extends React.Component {
           {
             title: 'Print',
             type: 'menu-item',
-            show: false
+            show: false,
+            onClick: function () {
+              self.getSelectedPage().webview.print()
+            }
           },
           {
             title: 'Save as',
