@@ -290,7 +290,6 @@ export default class Tab extends React.Component {
     )
 
     // Remove page associated to the tab.
-    global.pages.splice(global.pages.indexOf(this.getPage()))
     this.getPage().setState({render: false})
 
     // Get previous and next tab.
