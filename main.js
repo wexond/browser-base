@@ -54,11 +54,11 @@ function createWindow () {
   }
 }
 
-/**
- * Creates protocol wexond://
- */
 protocol.registerStandardSchemes([protocolName])
 app.on('ready', function () {
+  /**
+  * Creates protocol wexond://
+  */
   protocol.registerFileProtocol(protocolName, (request, callback) => {
     let url = request.url.substr(protocolName.length + 3)
     let lastChar = url.substr(url.length - 1)
@@ -78,7 +78,7 @@ app.on('ready', function () {
     callback(data)
   }, (error) => {
     if (error) {
-      console.error('Failed to register protocol')
+      console.error('Failed to register protocol ' + protocolName + '://')
     }
   })
   createWindow()

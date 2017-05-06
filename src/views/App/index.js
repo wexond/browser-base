@@ -184,8 +184,6 @@ class App extends React.Component {
               let data = self.WCMData
               let extension = data.srcURL.substring('data:image/'.length, data.srcURL.indexOf(';base64'))
 
-              console.log(window.atob(data.srcURL.replace('data:image/' + extension + ';base64,', '')))
-
               dialog.showSaveDialog(
                 {
                   defaultPath: 'image.' + extension,
@@ -281,7 +279,11 @@ class App extends React.Component {
           {
             title: 'View source',
             type: 'menu-item',
-            show: false
+            show: false,
+            onClick: function () {
+              const url = self.getSelectedPage().webview.getURL()
+              self.tabs.addTab({select: true, url: 'view-source:' + url})
+            }
           },
           {
             title: 'Inspect element',
@@ -395,9 +397,9 @@ class App extends React.Component {
    * @return {Page}
    */
   getSelectedPage = () => {
-    for (var i = 0; i < global.pages.length; i++) {
-      if (global.pages[i].props.getTab().selected) {
-        return global.pages[i]
+    for (var i = 0; i < global.tabs.length; i++) {
+      if (global.tabs[i].selected) {
+        return global.tabs[i].getPage()
       }
     }
     return null
@@ -405,8 +407,6 @@ class App extends React.Component {
 
 
   render () {
-    const self = this
-
     return (
       <div>
         <Tabs ref={(r) => { this.tabs = r }} getApp={this.getApp} />
