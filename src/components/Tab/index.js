@@ -294,6 +294,8 @@ export default class Tab extends React.Component {
       tabs.addTab()
     }
 
+    this.props.getApp().lastClosedURL = this.getPage().webview.getURL()
+
     tabs.timer.canReset = true
 
     let rgba = Colors.shadeColor(tabs.state.backgroundColor, -0.05)

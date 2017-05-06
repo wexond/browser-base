@@ -16,7 +16,7 @@ export default class MenuItem extends React.Component {
     }
 
     return (
-      <div style={{display: (this.props.show) ? 'block' : 'none'}} className='menu-item' onClick={onClick}>
+      <div style={{display: (this.props.show) ? 'block' : 'none'}} className={'menu-item ' + ((this.props.enabled) ? 'menu-item-enabled' : 'menu-item-disabled')} onClick={onClick}>
         <div className='menu-item-text'>
           {this.props.children}
         </div>
@@ -26,5 +26,6 @@ export default class MenuItem extends React.Component {
 }
 
 MenuItem.defaultProps = {
-  show: true
+  show: true,
+  enabled: true
 }

@@ -80,6 +80,16 @@ class App extends React.Component {
 
     this.tabs.tabbar.addEventListener('contextmenu', function (e) {
       if (e.target !== self.tabs.addButton) {
+        self.tabMenu.setState((previousState) => {
+          let menuItems = previousState.menuItems
+
+          menuItems[10].enabled = (self.lastClosedURL !== '' && self.lastClosedURL != null)
+
+          return {
+            menuItems: menuItems
+          }
+        })
+
         self.tabMenu.show()
         self.webviewMenu.hide()
 
@@ -389,7 +399,13 @@ class App extends React.Component {
           },
           {
             title: 'Revert closed tab',
-            type: 'menu-item'
+            type: 'menu-item',
+            onClick: function () {
+              if (self.lastClosedURL !== '' && self.lastClosedURL != null) {
+                self.tabs.addTab({select: true, url: self.lastClosedURL})
+                self.lastClosedURL = ''
+              }
+            }
           }
         ]
       }
