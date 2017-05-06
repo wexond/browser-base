@@ -368,7 +368,13 @@ class App extends React.Component {
           },
           {
             title: 'Close tabs from right',
-            type: 'menu-item'
+            type: 'menu-item',
+            onClick: function () {
+              for (var i = global.tabs.length; i >= 0; i--) {
+                if (global.tabs[i] === self.hoveredTab) break
+                if (global.tabs[i] != null) global.tabs[i].close()
+              }
+            }
           },
           {
             title: 'Revert closed tab',
