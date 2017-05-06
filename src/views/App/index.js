@@ -11,10 +11,10 @@ import '../../helpers/Arrays'
 import '../../app.scss'
 
 const {remote, clipboard} = require('electron')
+const {dialog, nativeImage} = remote
 const fs = require('fs')
 const path = require('path')
 const homedir = require('os').homedir()
-const nativeImage = remote.nativeImage
 
 const userData = path.join(homedir, '.wexond')
 
@@ -190,7 +190,24 @@ class App extends React.Component {
           {
             title: 'Save as',
             type: 'menu-item',
-            show: false
+            show: false,
+            onClick: function () {
+              dialog.showSaveDialog(
+                {
+                  filters: [
+                    {
+                      name: 'HTML file',
+                      extensions: ['html']
+                    }
+                  ]
+                },
+                function (path) {
+                  self.getSelectedPage().webview.getWebContents().savePage(path, 'HTMLComplete', (error) => {
+                    if (error) console.error(error)
+                  })
+                }
+              )
+            }
           },
           {
             type: 'separator',
