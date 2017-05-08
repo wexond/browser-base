@@ -11,6 +11,7 @@
   border-radius: 3px;
   transition: 0.2s all;
   transition-property: margin-top, opacity, top;
+  overflow: hidden;
 }
 
 .bar-center {
@@ -63,7 +64,8 @@
   outline: none;
   color: rgba(0, 0, 0, $primary-opacity-light);
   height: 100%;
-  width: calc(100% - 64px);
+  width: 100%;
+  max-width: calc(100% - 64px);
   z-index: 2;
 }
 
