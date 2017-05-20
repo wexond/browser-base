@@ -149,6 +149,7 @@ export default class Page extends React.Component {
 
         app.webviewMenu.hide()
         app.tabMenu.hide()
+        app.menu.hide()
       }
     })
 
