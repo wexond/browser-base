@@ -513,7 +513,7 @@ export default class Tabs extends React.Component {
           </div>
           <div className='systembar-border' style={systembarBorderStyle} />
         </div>
-        <Controls ref={(r) => { this.controls = r }} />
+        <Controls getApp={this.props.getApp} ref={(r) => { this.controls = r }} />
       </div>
     )
   }
