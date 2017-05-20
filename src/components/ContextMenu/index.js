@@ -25,7 +25,7 @@ export default class ContextMenu extends React.Component {
   show = () => {
     this.refreshNavIconsState()
 
-    let separators = this.refs.menu.getElementsByClassName('menu-separator')
+    let separators = this.refs.menu.getElementsByClassName('context-menu-separator')
     let separatorsCount = 0
     for (var i = 0; i < separators.length; i++) {
       if (separators[i].style.display === 'block') {
@@ -130,15 +130,15 @@ export default class ContextMenu extends React.Component {
 
 
     return (
-      <div onClick={onClick} ref='menu' className='menu' style={menuStyle}>
+      <div onClick={onClick} ref='menu' className='context-menu' style={menuStyle}>
         <div className='navigation-icons'>
           <div onClick={onBackClick} className={backClass} />
           <div onClick={onForwardClick} className={forwardClass} />
           <div onClick={onRefreshClick} className='navigation-icon-refresh navigation-icon-enabled' />
           <div className='navigation-icon-star navigation-icon-enabled' />
         </div>
-        <div className='menu-line' />
-        <div className='menu-items'>
+        <div className='context-menu-line' />
+        <div className='context-menu-items'>
           {
             this.state.menuItems.map((data, key) => {
               if (data.type === 'separator') {
@@ -147,7 +147,7 @@ export default class ContextMenu extends React.Component {
                   displaySeparator = false
                 }
 
-                return <div style={{display: (displaySeparator) ? 'block' : 'none'}} key={key} className='menu-separator' />
+                return <div style={{display: (displaySeparator) ? 'block' : 'none'}} key={key} className='context-menu-separator' />
               }
               if (data.type === 'menu-item') {
                 return (
