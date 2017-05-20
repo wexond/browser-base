@@ -115,6 +115,7 @@ class App extends React.Component {
     window.addEventListener('click', function () {
       self.tabMenu.hide()
       self.webviewMenu.hide()
+      self.menu.hide()
     })
 
     this.webviewMenu.setState(
