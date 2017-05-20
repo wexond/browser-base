@@ -34,6 +34,8 @@ export default class Controls extends React.Component {
         <div className='control-close' onClick={() => { this.close() }} />
         <div className='control-maximize' onClick={() => { this.maximize() }} />
         <div className='control-minimize' onClick={() => { this.minimize() }} />
+        <div className='control-separator' />
+        <div className='control-menu' />
       </div>
     )
   }
