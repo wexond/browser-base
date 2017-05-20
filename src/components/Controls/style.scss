@@ -35,3 +35,23 @@
   @extend .control;
   background-image: url(images/Controls/minimize.png);
 }
+
+.control-separator {
+  opacity: $dividers-opacity-light;
+  height: calc(100% - 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  float: right;
+  position: relative;
+  margin-right: 8px;
+  margin-left: 8px;
+  width: 1px;
+  background-color: #000;
+}
+
+.control-menu {
+  @extend .control;
+  @include image-center(20px, 20px);
+  width: 28px;
+  background-image: url(images/Controls/menu.png);
+}
