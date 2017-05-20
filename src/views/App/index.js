@@ -4,7 +4,7 @@ import Tabs from '../../components/Tabs'
 import Bar from '../../components/Bar'
 import Page from '../../components/Page'
 import ContextMenu from '../../components/ContextMenu'
-import MenuItem from '../../components/MenuItem'
+import Menu from '../../components/Menu'
 
 import '../../helpers/Arrays'
 
@@ -410,6 +410,51 @@ class App extends React.Component {
         ]
       }
     )
+
+    this.menu.setState(
+      {
+        menuItems: [
+          {
+            title: 'New tab',
+            type: 'menu-item'
+          },
+          {
+            title: 'New incognito window',
+            type: 'menu-item'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            title: 'History',
+            type: 'menu-item'
+          },
+          {
+            title: 'Bookmarks',
+            type: 'menu-item'
+          },
+          {
+            title: 'Downloads',
+            type: 'menu-item'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            title: 'Settings',
+            type: 'menu-item'
+          },
+          {
+            title: 'Extensions',
+            type: 'menu-item'
+          },
+          {
+            title: 'Developer tools',
+            type: 'menu-item'
+          }
+        ]
+      }
+    )
   }
 
   /**
@@ -482,6 +527,7 @@ class App extends React.Component {
         })}
         <ContextMenu getApp={this.getApp} ref={(r) => { this.webviewMenu = r }} />
         <ContextMenu getApp={this.getApp} ref={(r) => { this.tabMenu = r }} />
+        <Menu getApp={this.getApp} ref={(r) => { this.menu = r }} />
       </div>
     )
   }

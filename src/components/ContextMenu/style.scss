@@ -1,4 +1,4 @@
-.menu {
+.context-menu {
   -webkit-box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2);
   position: absolute;
   left: 256px;
@@ -11,21 +11,21 @@
   border-radius: 3px;
 }
 
-.menu-items {
+.context-menu-items {
   padding-bottom: 16px;
   padding-top: 8px;
   width: 100%;
   height: 100%;
 }
 
-.menu-line {
+.context-menu-line {
   width: 100%;
   height: 1px;
   background-color: rgba(0, 0, 0, 0.06);
 }
 
-.menu-separator {
-  @extend .menu-line;
+.context-menu-separator {
+  @extend .context-menu-line;
   margin-top: 8px;
   margin-bottom: 8px;
 }
