@@ -128,7 +128,6 @@ export default class ContextMenu extends React.Component {
       e.stopPropagation()
     }
 
-
     return (
       <div onClick={onClick} ref='menu' className='context-menu' style={menuStyle}>
         <div className='navigation-icons'>
