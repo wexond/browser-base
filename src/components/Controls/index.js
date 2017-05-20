@@ -29,13 +29,23 @@ export default class Controls extends React.Component {
   }
 
   render () {
+    const self = this
+
+    function onMenuClick (e) {
+      e.stopPropagation()
+      const menu = self.props.getApp().menu
+
+      if (menu.shown) menu.hide()
+      else menu.show()
+    }
+
     return (
       <div className='controls'>
         <div className='control-close' onClick={() => { this.close() }} />
         <div className='control-maximize' onClick={() => { this.maximize() }} />
         <div className='control-minimize' onClick={() => { this.minimize() }} />
         <div className='control-separator' />
-        <div className='control-menu' />
+        <div className='control-menu' onClick={onMenuClick} />
       </div>
     )
   }
