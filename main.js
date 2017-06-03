@@ -1,6 +1,7 @@
 const {app, BrowserWindow} = require('electron')
 const protocol = require('electron').protocol
 const path = require('path')
+const client = require('electron-connect').client;
 
 const protocolName = 'wexond'
 
@@ -49,9 +50,11 @@ function createWindow () {
     mainWindow.show()
   })
 
-  if (process.env.ENV === 'dev') {
+  if (process.env.ENV === 'dev' || process.argv[3] === 'dev') {
     mainWindow.webContents.openDevTools({mode: 'detach'})
   }
+
+  client.create(mainWindow);
 }
 
 protocol.registerStandardSchemes([protocolName])
