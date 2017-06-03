@@ -62,20 +62,16 @@ app.on('ready', function () {
   protocol.registerFileProtocol(protocolName, (request, callback) => {
     let url = request.url.substr(protocolName.length + 3)
     let lastChar = url.substr(url.length - 1)
-    let splitBySlash = url.split('/')
-    if (lastChar !== '/') {
-      url = url.replace(splitBySlash[0], '')
-    }
 
     if (lastChar === '/') {
       url += 'index.html'
     }
 
-    let data = {
-      path: path.normalize(path.join(__dirname, '/src/public/', url))
-    }
+    let data = path.join(__dirname, '/src/public/', url)
 
     callback(data)
+
+    console.log(data)
   }, (error) => {
     if (error) {
       console.error('Failed to register protocol ' + protocolName + '://')

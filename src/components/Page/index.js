@@ -139,6 +139,17 @@ export default class Page extends React.Component {
       BrowserStorage.addHistoryItem(webview.getTitle(), webview.getURL())
     })
 
+    this.webview.addEventListener('did-fail-load', function (e) {
+      const webview = self.webview
+
+      let errorCode = e.errorCode
+      let errorDescription = e.errorDescription
+
+      let dir = __dirname
+
+      webview.loadURL(`file:///${dir}/../error/index.html?errorCode=${errorCode}&errorDescription=${errorDescription}`)
+    })
+
     this.webview.addEventListener('ipc-message', function (e) {
       if (e.channel === 'webview:mouse-left-button') {
         // hide bar on webview click
