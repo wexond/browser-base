@@ -1,3 +1,8 @@
+/**
+ * Creates div element.
+ * @param {Object} data 
+ * @param {DOMElement} parent 
+ */
 function div (data = {}, parent = null) {
   let element = document.createElement('div')
   Object.assign(element, data)
@@ -5,6 +10,12 @@ function div (data = {}, parent = null) {
   return element
 }
 
+/**
+ * Creates element.
+ * @param {String} type 
+ * @param {Object} data 
+ * @param {DOMElement} parent 
+ */
 function createElement (type, data = {}, parent = null) {
   let element = document.createElement(type)
   Object.assign(element, data)
@@ -12,6 +23,12 @@ function createElement (type, data = {}, parent = null) {
   return element
 }
 
+/**
+ * Changes style attribute or gets value of the attribute.
+ * @param {Object | String} data
+ * @param {*} value
+ * @return {*}
+ */
 Element.prototype.css = function (data, value = null) {
   if (typeof data === 'object') {
     for (var key in data) {
