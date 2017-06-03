@@ -4,14 +4,14 @@
   "description": "A simple Wexond test.",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env ENV=dev electron main.js"
+    "start": "gulp"
   },
   "author": "Nersent",
   "license": "MIT",
   "dependencies": {
     "cross-env": "latest",
     "electron": "latest",
-    "electron-connect": "^0.6.1",
+    "electron-connect": "latest",
     "gulp": "latest"
   }
 }
