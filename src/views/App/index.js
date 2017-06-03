@@ -45,7 +45,7 @@ window.global = {
     select: true,
     url: 'wexond://newtab'
   },
-  excludedURLs: ['wexond://newtab'],
+  excludedURLs: ['wexond://newtab', 'wexond://error'],
   historyPath: path.join(userData, 'history.json'),
   systembarHeight: 32
 }
