@@ -454,7 +454,10 @@ class App extends React.Component {
           },
           {
             title: 'Developer tools',
-            type: 'menu-item'
+            type: 'menu-item',
+            onClick: function () {
+              self.getSelectedPage().webview.openDevTools()
+            }
           }
         ]
       }
