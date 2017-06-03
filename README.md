@@ -24,20 +24,12 @@ It also contains documents describing how to use the browser, and create extensi
 [![Downloads](https://img.shields.io/github/downloads/Nersent/Wexond/total.svg)](https://github.com/Nersent/Wexond/releases)
 
 ## Running
-To run `Wexond` you need to install all needed dependencies using [`npm`](https://docs.npmjs.com/):
-```bash
-npm install
-```
-or [`yarn`](https://yarnpkg.com/lang/en/):
+To run `Wexond` you need to install all needed dependencies using [`yarn`](https://yarnpkg.com/lang/en/):
 ```bash
 yarn
 ```
 
-If you have installed all dependencies successfully, then you can run `Wexond` using [`npm`](https://docs.npmjs.com/):
-```
-npm start
-```
-or [`yarn`](https://yarnpkg.com/lang/en/):
+If you have installed all dependencies successfully, then you can run `Wexond` using [`yarn`](https://yarnpkg.com/lang/en/):
 ```
 yarn start
 ```
