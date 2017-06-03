@@ -1,14 +1,14 @@
-function div (parent, data = {}) {
+function div (data = {}, parent = null) {
   let element = document.createElement('div')
   Object.assign(element, data)
-  parent.appendChild(element)
+  if (parent != null) parent.appendChild(element)
   return element
 }
 
-function createElement (type, parent, data = {}) {
+function createElement (type, data = {}, parent = null) {
   let element = document.createElement(type)
   Object.assign(element, data)
-  parent.appendChild(element)
+  if (parent != null) parent.appendChild(element)
   return element
 }
 

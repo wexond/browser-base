@@ -4,15 +4,15 @@ class Tabs {
     
     this.elements = {}
 
-    this.elements.tabs = div(app.rootElement, { className: 'tabs' })
+    this.elements.tabs = div({ className: 'tabs' }, app.rootElement)
 
-    this.elements.bottomBorder = div(this.elements.tabs, { className: 'tabs-bottom-border' })
+    this.elements.bottomBorder = div({ className: 'tabs-bottom-border' }, this.elements.tabs)
 
-    this.elements.handle = div(this.elements.tabs, { className: 'tabs-handle' })
+    this.elements.handle = div({ className: 'tabs-handle' }, this.elements.tabs)
 
-    this.elements.tabbar = div(this.elements.tabs, { className: 'tabbar' })
+    this.elements.tabbar = div({ className: 'tabbar' }, this.elements.tabs)
 
-    this.elements.addButton = div(this.elements.tabbar, { className: 'tabs-add-button' })
+    this.elements.addButton = div({ className: 'tabs-add-button' }, this.elements.tabbar)
     this.elements.addButton.addEventListener('click', (e) => {
       self.addTab()
     })
@@ -21,9 +21,15 @@ class Tabs {
       self.setWidths(self.getWidths())
       self.setPositions(self.getPositions())
     })
+
+    this.addTab()
   }
 
-  addTab () {
+  /**
+   * Adds tab.
+   * @param {Object} data 
+   */
+  addTab (data = window.defaultTabOptions) {
     let tab = new Tab(this)
     window.tabs.push(tab)
 
@@ -33,6 +39,10 @@ class Tabs {
     this.selectTab(tab)
   }
 
+  /**
+   * Selects given tab and deselects others.
+   * @param {Tab} tab 
+   */
   selectTab (tab) {
     for (var x = 0; x < window.tabs.length; x++) {
       if (window.tabs[x] !== tab) {
@@ -42,6 +52,10 @@ class Tabs {
     tab.select()
   }
 
+  /**
+   * Gets widths for all tabs.
+   * @return {Number}
+   */
   getWidths () {
     let tabbarWidth = this.elements.tabbar.offsetWidth - this.elements.addButton.offsetWidth
     let tabWidth = (tabbarWidth / window.tabs.length)
@@ -53,6 +67,10 @@ class Tabs {
     return tabWidth
   }
 
+  /**
+   * Sets widths for all tabs.
+   * @param {Number} width 
+   */
   setWidths (width) {
     for (var x = 0; x < window.tabs.length; x++) {
       window.tabs[x].setWidth(width)
@@ -60,6 +78,10 @@ class Tabs {
     }
   }
 
+  /**
+   * Gets positions for all tabs.
+   * @return {Object}
+   */
   getPositions () {
     let positions = []
     let tempPosition = 0
@@ -77,6 +99,10 @@ class Tabs {
     return toReturn
   }
 
+  /**
+   * Sets positions for all tabs.
+   * @param {Object} positions 
+   */
   setPositions (positions) {
     for (var x = 0; x < window.tabs.length; x++) {
       window.tabs[x].setLeft(positions.tabPositions[x])

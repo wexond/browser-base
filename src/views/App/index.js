@@ -1,12 +1,20 @@
+window.tabs = []
+window.defaultTabOptions = {
+  select: true,
+  url: 'wexond://newtab'
+}
+
 class App {
   constructor (rootElement) {
     window.app = this
 
     this.elements = {}
     this.rootElement = rootElement
-    
+
+    app.elements.pages = div({ className: 'pages' })
+
     this.elements.tabs = new Tabs()
 
-    this.elements.pages = div(rootElement, { className: 'pages' })
+    app.rootElement.appendChild(app.elements.pages)
   }
 }
