@@ -1,19 +1,27 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>Wexond</title>
+    <link rel="stylesheet" href="../../components/Tabs/style.css" />
+    <link rel="stylesheet" href="../../components/Tab/style.css" />
+    <link rel="stylesheet" href="../../components/Page/style.css" />
+    <link rel="stylesheet" href="../../views/App/style.css" />
   </head>
-  <body>
-    <div id="app"></div>
 
-    <script src='../global/helpers/dom.js'></script>
+  <body>
+    <div id="app">
+    </div>
+
+    <script src="../../views/App/index.js"></script>
+    <script src="../../classes/DOM/index.js"></script>
+    <script src="../../components/Tabs/index.js"></script>
+    <script src="../../components/Tab/index.js"></script>
+    <script src="../../components/Page/index.js"></script>
+
     <script>
-      if (process.env.ENV !== 'dev') {
-        DOMHelper.loadScripts(['../../../build/app.bundle.js']);
-      } else {
-        DOMHelper.loadScripts(['http://localhost:8080/build/app.bundle.js', 'http://localhost:8080/webpack-dev-server.js']);
-      }
+      window.tabs = []
+
+      new App(document.getElementById('app'))
+
+      require('electron-connect').client.create()
     </script>
   </body>
 </html>

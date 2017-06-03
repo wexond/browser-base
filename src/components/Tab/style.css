@@ -1,0 +1,50 @@
+.tab {
+  background-color: white;
+  height: 100%;
+  width: 190px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-app-region: no-drag;
+}
+
+.border-small {
+  width: 1px;
+  height: calc(100% - 8px);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: black;
+  opacity: 0.12;
+  z-index: 2;
+}
+
+.border-full {
+  width: 1px;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: black;
+  opacity: 0.12;
+  z-index: 2;
+}
+
+.tab-title {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 8px;
+  width: 100%;
+  max-width: calc(100% - 16px);
+  overflow: hidden;
+}
+
+.tab-content {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+}

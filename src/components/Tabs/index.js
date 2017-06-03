@@ -1,520 +1,87 @@
-import React from 'react'
-import Tab from '../Tab'
-import Controls from '../Controls'
-import Colors from '../../helpers/Colors'
-import Transitions from '../../helpers/Transitions'
-
-export default class Tabs extends React.Component {
+class Tabs {
   constructor () {
-    super()
-
-    this.state = {
-      tabsToCreate: [],
-      addButtonVisible: true,
-      borderColor: 'rgba(0,0,0,0.12)',
-      backgroundColor: '#EEE',
-      tabsVisible: false
-    }
-
-    // The timer for closing tabs system.
-    this.timer = {
-      canReset: false
-    }
-
-    this.dragData = {}
-
-    this.cursor = {}
-  }
-
-  componentDidMount () {
     const self = this
-    // Add tab after 1 millisecond to fix problem with measurements.
-    setTimeout(this.addTab, 1)
+    
+    this.elements = {}
 
-    // Start the timer.
-    this.timer.timer = setInterval(function () { // Invoke the function each 3 seconds.
-      if (self.timer.canReset && self.timer.time === 3) { // If can calculate widths for all tabs.
-        // Calculate widths and positions for all tabs.
-        self.setWidths()
-        self.setPositions()
+    this.elements.tabs = div(app.rootElement, { className: 'tabs' })
 
-        self.timer.canReset = false
-      }
-      self.timer.time += 1
-    }, 1000)
+    this.elements.bottomBorder = div(this.elements.tabs, { className: 'tabs-bottom-border' })
 
-    /** Events */
+    this.elements.handle = div(this.elements.tabs, { className: 'tabs-handle' })
 
-    window.addEventListener('resize', function () {
-      self.setWidths(false)
-      self.setPositions(false, false)
-    })
+    this.elements.tabbar = div(this.elements.tabs, { className: 'tabbar' })
 
-    window.addEventListener('mouseup', function () {
-      if (self.dragData.tab != null && !self.dragData.tab.pinned && !self.dragData.tab.new) {
-        self.dragData.canDrag = false
-
-        self.dragData.canDrag2 = false
-
-        self.setState({addButtonVisible: true})
-
-        self.setPositions()
-
-        if (global.tabs[global.tabs.indexOf(self.dragData.tab) - 1] != null) {
-          global.tabs[global.tabs.indexOf(self.dragData.tab) - 1].setState({smallBorderVisible: false})
-        }
-        if (global.tabs[global.tabs.indexOf(self.dragData.tab) + 1] != null) {
-          global.tabs[global.tabs.indexOf(self.dragData.tab) + 1].setState({leftSmallBorderVisible: false})
-        }
-        for (var i = 0; i < global.tabs.length; i++) {
-          global.tabs[i].setState({leftSmallBorderVisible: false})
-        }
-        window.removeEventListener('mousemove', self.onMouseMove)
-      }
-    })
-
-    window.addEventListener('mousemove', function (e) {
-      self.cursor.x = e.pageX
-      self.cursor.y = e.pageY
-      self.props.getApp().cursor.x = e.pageX
-      self.props.getApp().cursor.y = e.pageY
-    })
-
-    // Fixes #1 issue.
-    // Custom mouseenter and mouseleave event.
-    var previousTab = null
-    setInterval(function () {
-      let tab = self.getTabFromMousePoint(null, self.cursor.x, self.cursor.y)
-
-      // Mouse leave.
-      if (previousTab !== null && previousTab !== tab) {
-        if (previousTab.hovered) {
-          previousTab.hovered = false
-          if (!previousTab.selected) {
-            previousTab.appendTransition('background-color')
-            previousTab.setState(
-              {
-                backgroundColor: 'transparent',
-                closeOpacity: {
-                  value: 0,
-                  animate: true
-                }
-              }
-            )
-          }
-        }
-      }
-
-      // Mouse enter.
-      if (tab != null) {
-        if (!tab.hovered) {
-          tab.hovered = true
-          previousTab = tab
-          if (!tab.selected) {
-            let rgba = Colors.shadeColor(self.state.backgroundColor, 0.05)
-            tab.appendTransition('background-color')
-            tab.setState(
-              {
-                backgroundColor: rgba
-              }
-            )
-
-            tab.timeoutHover = setTimeout(function () {
-              clearTimeout(tab.timeoutHover)
-              tab.removeTransition('background-color')
-            }, global.tabsAnimationData.hoverDuration * 1000)
-
-            if (!tab.pinned) {
-              tab.setState({closeOpacity: {value: (tab.tabDiv.offsetWidth < 48) ? 0 : 1, animate: true}, closePointerEvents: (tab.tabDiv.offsetWidth < 48) ? 'none' : 'auto'})
-            }
-          }
-        }
-      }
-    }, 1)
-  }
-
-  /** events */
-
-  /**
-   * @event
-   * @param {Event} e
-   */
-  onMouseMove = (e) => {
-    let mouseDeltaX = e.pageX - this.dragData.mouseClickX
-    const tab = this.dragData.tab
-    const tabDiv = tab.tabDiv
-
-    if (Math.abs(mouseDeltaX) > 10 || this.dragData.canDrag2) {
-      this.dragData.canDrag2 = true
-
-      if (this.dragData.canDrag && !this.dragData.tab.pinned && !this.dragData.tab.new) {
-        tab.removeTransition('left')
-
-        tab.setLeft(this.dragData.tabX + e.clientX - this.dragData.mouseClickX)
-
-        if (tabDiv.getBoundingClientRect().left + tabDiv.offsetWidth > this.tabbar.offsetWidth) {
-          tab.setLeft(this.tabbar.offsetWidth - tabDiv.offsetWidth)
-        }
-        if (tabDiv.getBoundingClientRect().left < this.tabbar.getBoundingClientRect().left) {
-          tab.setLeft(this.tabbar.getBoundingClientRect().left)
-        }
-
-        this.dragData.tab.findTabToReplace(e.clientX)
-
-        if (global.tabs.indexOf(this.dragData.tab) === global.tabs.length - 1) {
-          this.setState({addButtonVisible: false})
-        }
-
-        if (global.tabs[global.tabs.indexOf(this.dragData.tab) - 1] != null) {
-          global.tabs[global.tabs.indexOf(this.dragData.tab) - 1].setState({smallBorderVisible: true})
-        }
-        if (global.tabs[global.tabs.indexOf(this.dragData.tab) + 1] != null) {
-          global.tabs[global.tabs.indexOf(this.dragData.tab) + 1].setState({leftSmallBorderVisible: true})
-        }
-      }
-    }
-  }
-
-  /**
-   * Helper method.
-   * Deselects other tabs and selects given tab.
-   * @param {Tab} tab
-   */
-  selectTab = (tab) => {
-    for (var i = 0; i < global.tabs.length; i++) {
-      if (global.tabs[i] === tab) {
-        tab.select()
-      } else {
-        global.tabs[i].deselect()
-      }
-    }
-  }
-
-  /**
-   * Adds new tab to <Tabs> component.
-   * @param {object} options - data to pass to new tab.
-   */
-  addTab = (options = global.defaultOptions) => {
-    this.setState(previousState => ({
-      tabsToCreate: [...previousState.tabsToCreate, options]
-    }))
-  }
-
-  /**
-   * Sets positions for tabs and add button.
-   * @param {boolean} animateTabs
-   * @param {boolean} animateAddButton
-   */
-  setPositions = (animateTabs = true, animateAddButton = true) => {
-    const self = this
-
-    self.getPositions(function (data) {
-      const lefts = data.tabPositions
-      const addLeft = data.addButtonPosition
-
-      for (var i = 0; i < global.tabs.length; i++) {
-        // React's setState lowers performance :(
-        // Need to access DOM directly
-        var tab = global.tabs[i].tabDiv
-
-        if (!global.tabs[i].blockLeftAnimation && animateTabs) {
-          global.tabs[i].appendTransition('left')
-        } else {
-          global.tabs[i].removeTransition('left')
-        }
-
-        tab.style.left = lefts[i] + 'px'
-      }
-
-      self.setAddButtonAnimation(animateAddButton)
-      self.addButton.style.left = addLeft + 'px'
-    })
-  }
-
-  /**
-   * Sets widths for all tabs.
-   * @param {boolean} animation
-   */
-  setWidths = (animation = true) => {
-    const self = this
-
-    self.getWidths(function (widths) {
-      for (var i = 0; i < global.tabs.length; i++) {
-        // React's setState lowers performance :(
-        // Need to access DOM directly
-        var tab = global.tabs[i].tabDiv
-        tab.style.width = widths[i] + 'px'
-
-        if (animation) {
-          global.tabs[i].appendTransition('width')
-        } else {
-          global.tabs[i].removeTransition('width')
-        }
-
-        global.tabs[i].width = widths[i]
-      }
-    })
-  }
-
-  /**
-   * Calculates positions for all tabs and add button.
-   * @param {function} callback
-   */
-  getPositions = (callback = null) => {
-    let lefts = []
-    let a = 0
-
-    for (var i = 0; i < global.tabs.length; i++) {
-      lefts.push(a)
-      a += global.tabs[i].width
-    }
-
-    const callbackData = {tabPositions: lefts, addButtonPosition: a}
-
-    if (callback != null) callback(callbackData)
-  }
-
-  /**
-   * Calculates widths for tabs.
-   * @param {function} callback
-   * @param {number} margin - the margin between tabs
-   */
-  getWidths = (callback = null, margin = 0) => {
-    const self = this
-
-    const tabbarWidth = self.tabbar.offsetWidth
-    const addButtonWidth = self.addButton.offsetWidth
-    let tabWidths = []
-    let pinnedTabsLength = 0
-
-    for (var i = 0; i < global.tabs.length; i++) {
-      if (global.tabs[i].pinned) {
-        // Push width for pinned tab.
-        tabWidths.push(global.tabsData.pinnedTabWidth)
-
-        pinnedTabsLength += 1
-      }
-    }
-
-    for (i = 0; i < global.tabs.length; i++) {
-      if (!global.tabs[i].pinned) {
-        // Include margins between tabs.
-        var margins = global.tabs.length * margin
-        // Include pinned tabs.
-        var smallTabsWidth = (pinnedTabsLength * global.tabsData.pinnedTabWidth)
-        // Calculate final width per tab.
-        var tabWidthTemp = (tabbarWidth - addButtonWidth - margins - smallTabsWidth) / (global.tabs.length - pinnedTabsLength)
-        // Check if tab's width isn't greater than max tab width.
-        if (tabWidthTemp > global.tabsData.maxTabWidth) {
-          tabWidthTemp = global.tabsData.maxTabWidth
-        }
-        // Push width for normal tab.
-        tabWidths.push(tabWidthTemp)
-      }
-    }
-
-    if (callback != null) callback(tabWidths)
-  }
-
-  /**
-   * Gets tab from mouse x point.
-   * @param {Tab} callingTab
-   * @param {number} cursorX
-   * @return {Tab}
-   */
-  getTabFromMouseX = (callingTab, xPos) => {
-    for (var i = 0; i < global.tabs.length; i++) {
-      if (global.tabs[i] !== callingTab) {
-        if (this.containsX(global.tabs[i], xPos)) {
-          if (!global.tabs[i].locked) {
-            return global.tabs[i]
-          }
-        }
-      }
-    }
-    return null
-  }
-
-  /**
-   * Checks if {Tab} contains mouse x position.
-   * @param {Tab} tabToCheck
-   * @param {number} xPos
-   * @return {boolean}
-   */
-  containsX = (tabToCheck, xPos) => {
-    var rect = tabToCheck.tabDiv.getBoundingClientRect()
-
-    if (xPos >= rect.left && xPos <= rect.right) {
-      return true
-    }
-
-    return false
-  }
-
-  /**
-   * Gets tab from mouse x and y point.
-   * @param {Tab} callingTab
-   * @param {number} cursorX
-   * @param {number} cursorY
-   * @return {Tab}
-   */
-  getTabFromMousePoint = (callingTab, xPos, yPos) => {
-    for (var i = 0; i < global.tabs.length; i++) {
-      if (global.tabs[i] !== callingTab) {
-        if (this.containsPoint(global.tabs[i], xPos, yPos)) {
-          if (!global.tabs[i].locked) {
-            return global.tabs[i]
-          }
-        }
-      }
-    }
-    return null
-  }
-
-  /**
-   * Checks if {Tab} contains mouse x and y position.
-   * @param {Tab} tabToCheck
-   * @param {number} xPos
-   * @param {number} yPos
-   * @return {boolean}
-   */
-  containsPoint = (tabToCheck, xPos, yPos) => {
-    var rect = tabToCheck.tabDiv.getBoundingClientRect()
-
-    if (xPos >= rect.left && xPos <= rect.right && yPos <= rect.bottom) {
-      return true
-    }
-
-    return false
-  }
-
-  /**
-   * Replaces tabs.
-   * @param {number} firstIndex
-   * @param {number} secondIndex
-   * @param {boolean} changePos
-   */
-  replaceTabs = (firstIndex, secondIndex, changePos = true) => {
-    var firstTab = global.tabs[firstIndex]
-    var secondTab = global.tabs[secondIndex]
-
-    // Replace tabs in array.
-    global.tabs[firstIndex] = secondTab
-    global.tabs[secondIndex] = firstTab
-
-    // Show or hide borders.
-    if (global.tabs.indexOf(firstTab) === 0) {
-      firstTab.setState({leftBorderVisible: false})
-    } else {
-      firstTab.setState({leftBorderVisible: true})
-    }
-
-    // Change positions of replaced tabs.
-    if (changePos) {
-      secondTab.updatePosition()
-    }
-  }
-
-  /**
-   * Updates tabs' state (borders etc).
-   */
-  updateTabs = () => {
-    for (var i = 0; i < global.tabs.length; i++) {
-      if (!global.tabs[i].selected) {
-        global.tabs[i].setState({smallBorderVisible: true})
-      }
-    }
-
-    for (i = 0; i < global.tabs.length; i++) {
-      global.tabs[i].setState({leftSmallBorderVisible: false})
-    }
-
-    let tab = this.getSelectedTab()
-
-    let prevTab = global.tabs[global.tabs.indexOf(tab) - 1]
-
-    if (prevTab != null) {
-      prevTab.setState({smallBorderVisible: false})
-    }
-  }
-
-  /**
-   * Sets add button animation.
-   * @param {boolean} flag
-   */
-  setAddButtonAnimation = (flag) => {
-    var transition = 'left ' + global.tabsAnimationData.positioningDuration + 's ' + global.tabsAnimationData.positioningEasing
-    const addButton = this.addButton
-
-    if (addButton != null) {
-      if (flag) {
-        addButton.style['-webkit-transition'] = Transitions.appendTransition(addButton.style['-webkit-transition'], transition)
-      } else {
-        addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.style['-webkit-transition'], transition)
-      }
-    }
-  }
-
-  /**
-   * Gets tabs.
-   * @return {Tabs}
-   */
-  getTabs = () => {
-    return this
-  }
-
-  /**
-   * Gets selected tab.
-   * @return {Tab}
-   */
-  getSelectedTab = () => {
-    for (var i = 0; i < global.tabs.length; i++) {
-      if (global.tabs[i].selected) {
-        return global.tabs[i]
-      }
-    }
-    return null
-  }
-
-  render () {
-    const self = this
-
-    let systembarBorderStyle = {
-      backgroundColor: this.state.borderColor
-    }
-
-    let systembarStyle = {
-      backgroundColor: this.state.backgroundColor,
-      top: (this.state.tabsVisible) ? 0 : -500
-    }
-
-    let addButtonStyle = {
-      display: (this.state.addButtonVisible) ? 'block' : 'none'
-    }
-
-    /** events */
-
-    function onAddButtonClick () {
+    this.elements.addButton = div(this.elements.tabbar, { className: 'tabs-add-button' })
+    this.elements.addButton.addEventListener('click', (e) => {
       self.addTab()
+    })
+
+    window.addEventListener('resize', (e) => {
+      self.setWidths(self.getWidths())
+      self.setPositions(self.getPositions())
+    })
+  }
+
+  addTab () {
+    let tab = new Tab(this)
+    window.tabs.push(tab)
+
+    this.setWidths(this.getWidths())
+    this.setPositions(this.getPositions())
+
+    this.selectTab(tab)
+  }
+
+  selectTab (tab) {
+    for (var x = 0; x < window.tabs.length; x++) {
+      if (window.tabs[x] !== tab) {
+        window.tabs[x].deselect()
+      }
+    }
+    tab.select()
+  }
+
+  getWidths () {
+    let tabbarWidth = this.elements.tabbar.offsetWidth - this.elements.addButton.offsetWidth
+    let tabWidth = (tabbarWidth / window.tabs.length)
+
+    if (tabWidth > 190) {
+      tabWidth = 190
     }
 
-    return (
-      <div>
-        {(!this.state.tabsVisible) ? <div className='systembar-drag-handle' /> : null}
-        <div className='systembar' style={systembarStyle}>
-          {(this.state.tabsVisible) ? <div className='systembar-drag-handle' /> : null}
-          <div className='tabbar' ref={(r) => { this.tabbar = r }}>
-            {this.state.tabsToCreate.map((data, key) => {
-              return (
-                <Tab url={data.url} getApp={self.props.getApp} getTabs={self.getTabs} select={data.select} key={key} />
-              )
-            })}
-            <div ref={(r) => { this.addButton = r }} style={addButtonStyle} onClick={onAddButtonClick} className='add-button' />
-          </div>
-          <div className='systembar-border' style={systembarBorderStyle} />
-        </div>
-        <Controls getApp={this.props.getApp} ref={(r) => { this.controls = r }} />
-      </div>
-    )
+    return tabWidth
   }
+
+  setWidths (width) {
+    for (var x = 0; x < window.tabs.length; x++) {
+      window.tabs[x].setWidth(width)
+      window.tabs[x].width = width
+    }
+  }
+
+  getPositions () {
+    let positions = []
+    let tempPosition = 0
+
+    for (var x = 0; x < window.tabs.length; x++) {
+      positions.push(tempPosition)
+      tempPosition += window.tabs[x].width
+    }
+
+    let toReturn = {
+      tabPositions: positions,
+      addButtonPosition: tempPosition
+    }
+
+    return toReturn
+  }
+
+  setPositions (positions) {
+    for (var x = 0; x < window.tabs.length; x++) {
+      window.tabs[x].setLeft(positions.tabPositions[x])
+    }
+
+    this.elements.addButton.css('left', positions.addButtonPosition)
+  } 
 }

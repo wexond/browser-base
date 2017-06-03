@@ -1,0 +1,43 @@
+.tabs {
+  height: 32px;
+  width: 100%;
+  background-color: #eee;
+  position: relative;
+  overflow: hidden;
+}
+
+.tabbar {
+  height: 32px;
+  width: 100%;
+  white-space: nowrap;
+  positions: relative;
+}
+
+.tabs-add-button {
+  width: 32px;
+  height: 100%;
+  background-color: transparent;
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  -webkit-app-region: no-drag;
+}
+
+.tabs-handle {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  height: calc(100% - 2px);
+  -webkit-app-region: drag;
+}
+
+.tabs-bottom-border {
+  height: 1px;
+  width: 100%;
+  background-color: black;
+  opacity: 0.12;
+  position: absolute;
+  bottom: 0;
+}
