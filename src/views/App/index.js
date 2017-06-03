@@ -417,7 +417,10 @@ class App extends React.Component {
         menuItems: [
           {
             title: 'New tab',
-            type: 'menu-item'
+            type: 'menu-item',
+            onClick: function () {
+              self.tabs.addTab()
+            }
           },
           {
             title: 'New incognito window',
