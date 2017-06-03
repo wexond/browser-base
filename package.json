@@ -1,78 +1,17 @@
 {
-  "name": "wexond",
-  "version": "0.1.0",
-  "main": "main.js",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Nersent/Wexond.git"
-  },
+  "name": "wexond-test",
+  "version": "0.0.1",
+  "description": "A simple Wexond test.",
+  "main": "index.js",
   "scripts": {
-    "start": "cross-env ENV=dev electron main.js",
-    "watch-pages": "webpack --config webpack.config.pages.js && webpack-dev-server --hot --inline --config webpack.config.pages.js --port 8181",
-    "watch-app": "webpack --config webpack.config.app.js && webpack-dev-server --config webpack.config.app.js --hot --inline --port 8080",
-    "build-production": "webpack --config webpack.config.app.production.js",
-    "compile-all": "npm run build-production && electron-packager . --all --overwrite",
-    "compile-win32": "npm run build-production && electron-packager . --platform=win32 --arch=x86 Wexond --overwrite",
-    "compile-win64": "npm run build-production && electron-packager . --platform=win32 --arch=x64 Wexond --overwrite",
-    "compile-linux32": "npm run build-production && electron-packager . --platform=linux --arch=x86 Wexond --overwrite",
-    "compile-linux64": "npm run build-production && electron-packager . --platform=linux --arch=x64 Wexond --overwrite"
+    "start": "cross-env ENV=dev electron main.js"
   },
+  "author": "Nersent",
+  "license": "MIT",
   "dependencies": {
-    "babel-preset-es2015": "latest",
-    "babel-preset-react": "latest",
-    "electron": "1.6.7",
-    "node-dir": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "react-measure": "latest",
-    "react-motion": "latest"
-  },
-  "devDependencies": {
-    "asar": "latest",
-    "babel-core": "latest",
-    "babel-eslint": "latest",
-    "babel-loader": "latest",
-    "babel-plugin-transform-class-properties": "latest",
-    "babel-preset-stage-0": "latest",
     "cross-env": "latest",
-    "css-loader": "latest",
-    "electron-packager": "latest",
-    "eslint": "latest",
-    "eslint-config-standard": "latest",
-    "eslint-plugin-import": "latest",
-    "eslint-plugin-node": "latest",
-    "eslint-plugin-promise": "latest",
-    "eslint-plugin-react": "latest",
-    "eslint-plugin-standard": "latest",
-    "node-sass": "latest",
-    "sass-loader": "latest",
-    "style-loader": "latest",
-    "url-loader": "latest",
-    "webpack": "latest",
-    "webpack-dev-server": "latest"
-  },
-  "peerDependencies": {
-    "sass-loader": "latest"
-  },
-  "standard": {
-    "parser": "babel-eslint"
-  },
-  "description": "Extensible web browser with material UI.",
-  "bugs": {
-    "url": "https://github.com/Nersent/Wexond/issues"
-  },
-  "homepage": "https://github.com/Nersent/Wexond#readme",
-  "directories": {
-    "doc": "docs"
-  },
-  "keywords": [
-    "web-browser",
-    "material-design",
-    "webpack2",
-    "react",
-    "es7",
-    "babel"
-  ],
-  "author": "Nersent"
+    "electron": "latest",
+    "electron-connect": "^0.6.1",
+    "gulp": "latest"
+  }
 }
