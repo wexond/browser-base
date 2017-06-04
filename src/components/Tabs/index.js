@@ -1,4 +1,6 @@
-class Tabs {
+import Tab from '../Tab'
+
+export default class Tabs {
   constructor () {
     const self = this
     

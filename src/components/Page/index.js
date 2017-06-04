@@ -1,4 +1,4 @@
-class Page {
+export default class Page {
   constructor (tab) {
     const self = this
 
