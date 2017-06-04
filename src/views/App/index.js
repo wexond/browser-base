@@ -1,11 +1,15 @@
+import '../../app.scss'
+import Tabs from '../../components/Tabs'
+
 window.tabs = []
 window.defaultTabOptions = {
   select: true,
   url: 'wexond://newtab'
 }
-
-import '../../app.scss'
-import Tabs from '../../components/Tabs'
+window.tabsAnimationData = {
+  positioningDuration: 0.2,
+  positioningEasing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+}
 
 class App {
   constructor (rootElement) {
