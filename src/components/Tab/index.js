@@ -63,7 +63,10 @@ export default class Tab {
 
     if (previousTab != null) {
       previousTab.elements.rightSmallBorder.css('display', 'none')
-      previousTab.elements.rightFullBorder.css('display', 'block')
+      previousTab.elements.rightFullBorder.css({
+        display: 'block',
+        right: 0
+      })
     }
   }
 
@@ -81,7 +84,10 @@ export default class Tab {
 
     if (previousTab != null) {
       previousTab.elements.rightSmallBorder.css('display', 'block')
-      previousTab.elements.rightFullBorder.css('display', 'none')
+      previousTab.elements.rightFullBorder.css({
+        display: 'none',
+        right: -1
+      })
     }
   }
 }
