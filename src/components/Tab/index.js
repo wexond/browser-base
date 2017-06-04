@@ -7,12 +7,31 @@ export default class Tab {
 
     this.tabs = tabs
     this.elements = {}
+    this.pinned = false
 
     this.page = new Page(this)
 
     this.elements.tab = div({ className: 'tab' }, tabs.elements.tabbar)
     this.elements.tab.addEventListener('mousedown', (e) => {
+      if (e.target.className === 'tab-close') {
+        return
+      }
+
+      if (e.button !== 0) return
+
+      // Initialize the dragData object in {Tabs}.
+      tabs.dragData = {
+        tabX: e.currentTarget.offsetLeft,
+        mouseClickX: e.clientX,
+        canDrag: !self.pinned,
+        tab: self
+      }
+
       tabs.selectTab(self)
+
+      if (!self.pinned) {
+        window.addEventListener('mousemove', tabs.onMouseMove)
+      }
     })
 
     this.elements.content = div({ className: 'tab-content' }, this.elements.tab)
@@ -29,6 +48,18 @@ export default class Tab {
 
     this.elements.rightSmallBorder = div({ className: 'tab-border-small-vertical' }, this.elements.tab)
     this.elements.rightSmallBorder.css('right', -1)
+
+    this.elements.leftSmallBorder = div({ className: 'tab-border-small-vertical' }, this.elements.tab)
+    this.elements.leftSmallBorder.css({
+      left: 0,
+      display: 'none'
+    })
+
+    this.elements.leftFullBorder = div({ className: 'tab-border-full-vertical' }, this.elements.tab)
+    this.elements.leftFullBorder.css({
+      left: 0,
+      display: 'none'
+    })
 
     this.elements.rightFullBorder = div({ className: 'tab-border-full-vertical' }, this.elements.tab)
     this.elements.rightFullBorder.css({
@@ -73,17 +104,24 @@ export default class Tab {
    * Selects tab.
    */
   select () {
-    this.elements.tab.css('background-color', '#fff')
+    this.elements.tab.css({
+      backgroundColor: '#fff',
+      zIndex: 4
+    })
     this.page.show()
 
     this.elements.rightSmallBorder.css('display', 'none')
+    if (window.tabs.indexOf(this) !== 0) {
+      this.elements.leftFullBorder.css('display', 'block')
+    } else {
+      this.elements.leftFullBorder.css('display', 'none')
+    }
     this.elements.rightFullBorder.css('display', 'block')
 
     let previousTab = window.tabs[window.tabs.indexOf(this) - 1]
 
     if (previousTab != null) {
       previousTab.elements.rightSmallBorder.css('display', 'none')
-      previousTab.elements.rightFullBorder.css({ display: 'block' })
     }
 
     this.selected = true
@@ -93,17 +131,20 @@ export default class Tab {
    * Deselects tab.
    */
   deselect () {
-    this.elements.tab.css('background-color', 'transparent')
+    this.elements.tab.css({
+      backgroundColor: 'transparent',
+      zIndex: 3
+    })
     this.page.hide()
 
     this.elements.rightSmallBorder.css('display', 'block')
+    this.elements.leftFullBorder.css('display', 'none')
     this.elements.rightFullBorder.css('display', 'none')
 
     let previousTab = window.tabs[window.tabs.indexOf(this) - 1]
 
     if (previousTab != null) {
       previousTab.elements.rightSmallBorder.css('display', 'block')
-      previousTab.elements.rightFullBorder.css({ display: 'none' })
     }
 
     this.selected = false
@@ -224,5 +265,54 @@ export default class Tab {
     }
 
     tabDiv.style['-webkit-transition'] = Transitions.removeTransition(tabDiv.style['-webkit-transition'], t)
+  }
+
+  /**
+   * Checks if mouse x position is on any tab.
+   * If it is, then replaces current tab with second tab.
+   * @param {number} cursorX
+   */
+  findTabToReplace = (cursorX) => {
+    if (!this.pinned) {
+      const overTab = this.tabs.getTabFromMouseX(this, cursorX)
+
+      if (overTab != null && !overTab.pinned) {
+        const indexTab = window.tabs.indexOf(this)
+        const indexOverTab = window.tabs.indexOf(overTab)
+
+        this.tabs.replaceTabs(indexTab, indexOverTab)
+      }
+    }
+  }
+
+  /**
+   * Updates position of tab to its place.
+   */
+  updatePosition = () => {
+    const self = this
+    let data = this.tabs.getPositions()
+    // Get new position for the tab.
+    const newTabPos = data.tabPositions[window.tabs.indexOf(this)]
+
+    // Unable to reorder the tab by other tabs.
+    this.locked = true
+
+    // Animate the tab
+    this.appendTransition('left')
+    this.setLeft(newTabPos)
+
+    // Unlock tab replacing by other tabs.
+    setTimeout(function () {
+      self.locked = false
+    }, window.tabsAnimationData.positioningDuration * 1000)
+
+    this.tabs.updateTabs()
+
+    // Show or hide tab's borders.
+    if (newTabPos === 0) {
+      this.elements.leftSmallBorder.css('display', 'none')
+    } else {
+      this.elements.leftSmallBorder.css('display', 'block')
+    }
   }
 }
