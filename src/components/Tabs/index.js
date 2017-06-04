@@ -9,6 +9,7 @@ export default class Tabs {
     this.timer = {
       canReset: false
     }
+    this.dragData = {}
 
     this.elements = {}
 
@@ -43,6 +44,70 @@ export default class Tabs {
       }
       self.timer.time += 1
     }, 1000)
+
+    window.addEventListener('mouseup', function () {
+      if (self.dragData.tab != null && !self.dragData.tab.pinned) {
+        self.dragData.canDrag = false
+        self.dragData.canDrag2 = false
+
+        self.elements.addButton.css('display', 'block')
+
+        self.setPositions()
+
+        if (window.tabs[window.tabs.indexOf(self.dragData.tab) - 1] != null) {
+          window.tabs[window.tabs.indexOf(self.dragData.tab) - 1].elements.rightSmallBorder.css('display', 'none')
+        }
+        if (window.tabs[window.tabs.indexOf(self.dragData.tab) + 1] != null) {
+          window.tabs[window.tabs.indexOf(self.dragData.tab) + 1].elements.leftSmallBorder.css('display', 'none')
+        }
+        for (var i = 0; i < window.tabs.length; i++) {
+          window.tabs[i].elements.leftSmallBorder.css('display', 'none')
+        }
+        window.removeEventListener('mousemove', self.onMouseMove)
+      }
+    })
+  }
+
+  /** Events */
+
+  /**
+   * @event
+   * @param {Event} e
+   */
+  onMouseMove = (e) => {
+    let mouseDeltaX = e.pageX - this.dragData.mouseClickX
+    const tab = this.dragData.tab
+    const tabDiv = tab.elements.tab
+
+    if (Math.abs(mouseDeltaX) > 10 || this.dragData.canDrag2) {
+      this.dragData.canDrag2 = true
+
+      if (this.dragData.canDrag && !this.dragData.tab.pinned && !this.dragData.tab.new) {
+        tab.removeTransition('left')
+
+        tab.setLeft(this.dragData.tabX + e.clientX - this.dragData.mouseClickX)
+
+        if (tabDiv.getBoundingClientRect().left + tabDiv.offsetWidth > this.elements.tabbar.offsetWidth) {
+          tab.setLeft(this.elements.tabbar.offsetWidth - tabDiv.offsetWidth)
+        }
+        if (tabDiv.getBoundingClientRect().left < this.elements.tabbar.getBoundingClientRect().left) {
+          tab.setLeft(this.elements.tabbar.getBoundingClientRect().left)
+        }
+
+        this.dragData.tab.findTabToReplace(e.clientX)
+
+        if (window.tabs.indexOf(this.dragData.tab) === window.tabs.length - 1) {
+          this.elements.addButton.css('display', 'none')
+        }
+
+        if (window.tabs[window.tabs.indexOf(this.dragData.tab) - 1] != null) {
+          window.tabs[window.tabs.indexOf(this.dragData.tab) - 1].elements.rightSmallBorder.css('display', 'block')
+        }
+        if (window.tabs[window.tabs.indexOf(this.dragData.tab) + 1] != null) {
+          window.tabs[window.tabs.indexOf(this.dragData.tab) + 1].elements.leftSmallBorder.css('display', 'block')
+        }
+      }
+    }
   }
 
   /**
@@ -157,5 +222,140 @@ export default class Tabs {
         addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.style['-webkit-transition'], transition)
       }
     }
+  }
+
+  /**
+   * Gets tab from mouse x point.
+   * @param {Tab} callingTab
+   * @param {number} cursorX
+   * @return {Tab}
+   */
+  getTabFromMouseX = (callingTab, xPos) => {
+    for (var i = 0; i < window.tabs.length; i++) {
+      if (window.tabs[i] !== callingTab) {
+        if (this.containsX(window.tabs[i], xPos)) {
+          if (!window.tabs[i].locked) {
+            return window.tabs[i]
+          }
+        }
+      }
+    }
+    return null
+  }
+
+  /**
+   * Checks if {Tab} contains mouse x position.
+   * @param {Tab} tabToCheck
+   * @param {number} xPos
+   * @return {boolean}
+   */
+  containsX = (tabToCheck, xPos) => {
+    var rect = tabToCheck.elements.tab.getBoundingClientRect()
+
+    if (xPos >= rect.left && xPos <= rect.right) {
+      return true
+    }
+
+    return false
+  }
+
+  /**
+   * Gets tab from mouse x and y point.
+   * @param {Tab} callingTab
+   * @param {number} cursorX
+   * @param {number} cursorY
+   * @return {Tab}
+   */
+  getTabFromMousePoint = (callingTab, xPos, yPos) => {
+    for (var i = 0; i < window.tabs.length; i++) {
+      if (window.tabs[i] !== callingTab) {
+        if (this.containsPoint(window.tabs[i], xPos, yPos)) {
+          if (!window.tabs[i].locked) {
+            return window.tabs[i]
+          }
+        }
+      }
+    }
+    return null
+  }
+
+  /**
+   * Checks if {Tab} contains mouse x and y position.
+   * @param {Tab} tabToCheck
+   * @param {number} xPos
+   * @param {number} yPos
+   * @return {boolean}
+   */
+  containsPoint = (tabToCheck, xPos, yPos) => {
+    var rect = tabToCheck.elements.tab.getBoundingClientRect()
+
+    if (xPos >= rect.left && xPos <= rect.right && yPos <= rect.bottom) {
+      return true
+    }
+
+    return false
+  }
+
+  /**
+   * Replaces tabs.
+   * @param {number} firstIndex
+   * @param {number} secondIndex
+   * @param {boolean} changePos
+   */
+  replaceTabs = (firstIndex, secondIndex, changePos = true) => {
+    var firstTab = window.tabs[firstIndex]
+    var secondTab = window.tabs[secondIndex]
+
+    // Replace tabs in array.
+    window.tabs[firstIndex] = secondTab
+    window.tabs[secondIndex] = firstTab
+
+    // Show or hide borders.
+    if (window.tabs.indexOf(firstTab) === 0) {
+      firstTab.elements.leftSmallBorder.css('display', 'none')
+    } else {
+      firstTab.elements.leftSmallBorder.css('display', 'block')
+    }
+
+    // Change positions of replaced tabs.
+    if (changePos) {
+      secondTab.updatePosition()
+    }
+  }
+
+  /**
+   * Updates tabs' state (borders etc).
+   */
+  updateTabs = () => {
+    for (var i = 0; i < window.tabs.length; i++) {
+      if (!window.tabs[i].selected) {
+        window.tabs[i].elements.rightSmallBorder.css('display', 'block')
+      }
+    }
+
+    for (i = 0; i < window.tabs.length; i++) {
+      window.tabs[i].elements.leftSmallBorder.css('display', 'none')
+    }
+
+    let tab = this.getSelectedTab()
+
+    let prevTab = window.tabs[window.tabs.indexOf(tab) - 1]
+
+    if (prevTab != null) {
+      prevTab.elements.rightSmallBorder.css('display', 'none')
+    }
+  }
+
+  /**
+   * Gets selected tab.
+   * @return {Tab}
+   */
+  getSelectedTab = () => {
+    for (var i = 0; i < window.tabs.length; i++) {
+      if (window.tabs[i].selected) {
+        return window.tabs[i]
+      }
+    }
+    return null
   }
 }
