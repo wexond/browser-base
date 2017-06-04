@@ -48,7 +48,10 @@ Element.prototype.css = function (data, value = null) {
       }
       this.style[data] = value
     } else {
-      return this.style[data]
+      if (this.currentStyle)
+          return this.currentStyle[data]
+
+      return document.defaultView.getComputedStyle(this, null)[data]
     }
   }
   return null

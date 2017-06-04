@@ -24,13 +24,15 @@ window.defaultTabOptions = {
 }
 window.tabsAnimationData = {
   positioningDuration: 0.2,
-  positioningEasing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+  positioningEasing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
+  hoverDuration: 0.2
 }
 
 class App {
   constructor (rootElement) {
     window.app = this
 
+    this.cursor = {}
     this.elements = {}
     this.rootElement = rootElement
 
