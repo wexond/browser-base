@@ -21,10 +21,12 @@ export default class Tab {
       innerHTML: 'New tab'
     }, this.elements.content)
 
-    this.elements.rightSmallBorder = div({ className: 'border-small' }, this.elements.tab)
+    this.elements.close = div({ className: 'tab-close' }, this.elements.content)
+
+    this.elements.rightSmallBorder = div({ className: 'tab-border-small-vertical' }, this.elements.tab)
     this.elements.rightSmallBorder.css('right', -1)
 
-    this.elements.rightFullBorder = div({ className: 'border-full' }, this.elements.tab)
+    this.elements.rightFullBorder = div({ className: 'tab-border-full-vertical' }, this.elements.tab)
     this.elements.rightFullBorder.css({
       right: -1,
       display: 'none'
