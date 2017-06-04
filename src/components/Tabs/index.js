@@ -26,7 +26,7 @@ export default class Tabs {
       self.addTab()
     })
 
-    window.addEventListener('resize', (e) => {
+    addEventListener('resize', (e) => {
       self.setWidths(false)
       self.setPositions(false, false)
     })
@@ -45,7 +45,7 @@ export default class Tabs {
       self.timer.time += 1
     }, 1000)
 
-    window.addEventListener('mouseup', function () {
+    addEventListener('mouseup', function () {
       if (self.dragData.tab != null && !self.dragData.tab.pinned) {
         self.dragData.canDrag = false
         self.dragData.canDrag2 = false
@@ -54,17 +54,35 @@ export default class Tabs {
 
         self.setPositions()
 
-        if (window.tabs[window.tabs.indexOf(self.dragData.tab) - 1] != null) {
-          window.tabs[window.tabs.indexOf(self.dragData.tab) - 1].elements.rightSmallBorder.css('display', 'none')
+        if (tabs[tabs.indexOf(self.dragData.tab) - 1] != null) {
+          tabs[tabs.indexOf(self.dragData.tab) - 1].elements.rightSmallBorder.css('display', 'none')
         }
-        if (window.tabs[window.tabs.indexOf(self.dragData.tab) + 1] != null) {
-          window.tabs[window.tabs.indexOf(self.dragData.tab) + 1].elements.leftSmallBorder.css('display', 'none')
+        if (tabs[tabs.indexOf(self.dragData.tab) + 1] != null) {
+          tabs[tabs.indexOf(self.dragData.tab) + 1].elements.leftSmallBorder.css('display', 'none')
         }
-        for (var i = 0; i < window.tabs.length; i++) {
-          window.tabs[i].elements.leftSmallBorder.css('display', 'none')
+        for (var i = 0; i < tabs.length; i++) {
+          tabs[i].elements.leftSmallBorder.css('display', 'none')
         }
-        window.removeEventListener('mousemove', self.onMouseMove)
+        removeEventListener('mousemove', self.onMouseMove)
       }
+    })
+
+    currentWindow.on('maximize', (e) => {
+      self.elements.handle.css({
+        left: 0,
+        top: 0,
+        right: 0,
+        height: '100%'
+      })
+    })
+
+    currentWindow.on('unmaximize', (e) => {
+      self.elements.handle.css({
+        left: 4,
+        top: 4,
+        right: 4,
+        height: 'calc(100% - 4px)'
+      })
     })
   }
 
@@ -96,15 +114,15 @@ export default class Tabs {
 
         this.dragData.tab.findTabToReplace(e.clientX)
 
-        if (window.tabs.indexOf(this.dragData.tab) === window.tabs.length - 1) {
+        if (tabs.indexOf(this.dragData.tab) === tabs.length - 1) {
           this.elements.addButton.css('display', 'none')
         }
 
-        if (window.tabs[window.tabs.indexOf(this.dragData.tab) - 1] != null) {
-          window.tabs[window.tabs.indexOf(this.dragData.tab) - 1].elements.rightSmallBorder.css('display', 'block')
+        if (tabs[tabs.indexOf(this.dragData.tab) - 1] != null) {
+          tabs[tabs.indexOf(this.dragData.tab) - 1].elements.rightSmallBorder.css('display', 'block')
         }
-        if (window.tabs[window.tabs.indexOf(this.dragData.tab) + 1] != null) {
-          window.tabs[window.tabs.indexOf(this.dragData.tab) + 1].elements.leftSmallBorder.css('display', 'block')
+        if (tabs[tabs.indexOf(this.dragData.tab) + 1] != null) {
+          tabs[tabs.indexOf(this.dragData.tab) + 1].elements.leftSmallBorder.css('display', 'block')
         }
       }
     }
@@ -114,7 +132,7 @@ export default class Tabs {
    * Adds tab.
    * @param {Object} data 
    */
-  addTab (data = window.defaultTabOptions) {
+  addTab (data = defaultTabOptions) {
     let tab = new Tab(this)
 
     this.selectTab(tab)
@@ -125,9 +143,9 @@ export default class Tabs {
    * @param {Tab} tab 
    */
   selectTab (tab) {
-    for (var x = 0; x < window.tabs.length; x++) {
-      if (window.tabs[x] !== tab) {
-        window.tabs[x].deselect()
+    for (var x = 0; x < tabs.length; x++) {
+      if (tabs[x] !== tab) {
+        tabs[x].deselect()
       }
     }
     tab.select()
@@ -139,7 +157,7 @@ export default class Tabs {
    */
   getWidths () {
     let tabbarWidth = this.elements.tabbar.offsetWidth - this.elements.addButton.offsetWidth
-    let tabWidth = (tabbarWidth / window.tabs.length)
+    let tabWidth = (tabbarWidth / tabs.length)
 
     if (tabWidth > 190) {
       tabWidth = 190
@@ -154,15 +172,15 @@ export default class Tabs {
   setWidths (animation = true) {
     const width = this.getWidths()
 
-    for (var x = 0; x < window.tabs.length; x++) {
+    for (var x = 0; x < tabs.length; x++) {
       if (animation) {
-        window.tabs[x].appendTransition('width')
+        tabs[x].appendTransition('width')
       } else {
-        window.tabs[x].removeTransition('width')
+        tabs[x].removeTransition('width')
       }
 
-      window.tabs[x].setWidth(width)
-      window.tabs[x].width = width
+      tabs[x].setWidth(width)
+      tabs[x].width = width
     }
   }
 
@@ -174,9 +192,9 @@ export default class Tabs {
     let positions = []
     let tempPosition = 0
 
-    for (var x = 0; x < window.tabs.length; x++) {
+    for (var x = 0; x < tabs.length; x++) {
       positions.push(tempPosition)
-      tempPosition += window.tabs[x].width
+      tempPosition += tabs[x].width
     }
 
     let toReturn = {
@@ -193,14 +211,14 @@ export default class Tabs {
   setPositions (animateTabs = true, animateAddButton = true) {
     const positions = this.getPositions()
 
-    for (var x = 0; x < window.tabs.length; x++) {
-      if (!window.tabs[x].blockLeftAnimation && animateTabs) {
-        window.tabs[x].appendTransition('left')
+    for (var x = 0; x < tabs.length; x++) {
+      if (!tabs[x].blockLeftAnimation && animateTabs) {
+        tabs[x].appendTransition('left')
       } else {
-        window.tabs[x].removeTransition('left')
+        tabs[x].removeTransition('left')
       }
 
-      window.tabs[x].setLeft(positions.tabPositions[x])
+      tabs[x].setLeft(positions.tabPositions[x])
     }
 
     this.setAddButtonAnimation(animateAddButton)
@@ -212,7 +230,7 @@ export default class Tabs {
    * @param {boolean} flag
    */
   setAddButtonAnimation = (flag) => {
-    var transition = 'left ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
+    var transition = 'left ' + tabsAnimationData.positioningDuration + 's ' + tabsAnimationData.positioningEasing
     const addButton = this.elements.addButton
 
     if (addButton != null) {
@@ -231,11 +249,11 @@ export default class Tabs {
    * @return {Tab}
    */
   getTabFromMouseX = (callingTab, xPos) => {
-    for (var i = 0; i < window.tabs.length; i++) {
-      if (window.tabs[i] !== callingTab) {
-        if (this.containsX(window.tabs[i], xPos)) {
-          if (!window.tabs[i].locked) {
-            return window.tabs[i]
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i] !== callingTab) {
+        if (this.containsX(tabs[i], xPos)) {
+          if (!tabs[i].locked) {
+            return tabs[i]
           }
         }
       }
@@ -267,11 +285,11 @@ export default class Tabs {
    * @return {Tab}
    */
   getTabFromMousePoint = (callingTab, xPos, yPos) => {
-    for (var i = 0; i < window.tabs.length; i++) {
-      if (window.tabs[i] !== callingTab) {
-        if (this.containsPoint(window.tabs[i], xPos, yPos)) {
-          if (!window.tabs[i].locked) {
-            return window.tabs[i]
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i] !== callingTab) {
+        if (this.containsPoint(tabs[i], xPos, yPos)) {
+          if (!tabs[i].locked) {
+            return tabs[i]
           }
         }
       }
@@ -303,15 +321,15 @@ export default class Tabs {
    * @param {boolean} changePos
    */
   replaceTabs = (firstIndex, secondIndex, changePos = true) => {
-    var firstTab = window.tabs[firstIndex]
-    var secondTab = window.tabs[secondIndex]
+    var firstTab = tabs[firstIndex]
+    var secondTab = tabs[secondIndex]
 
     // Replace tabs in array.
-    window.tabs[firstIndex] = secondTab
-    window.tabs[secondIndex] = firstTab
+    tabs[firstIndex] = secondTab
+    tabs[secondIndex] = firstTab
 
     // Show or hide borders.
-    if (window.tabs.indexOf(firstTab) === 0) {
+    if (tabs.indexOf(firstTab) === 0) {
       firstTab.elements.leftSmallBorder.css('display', 'none')
     } else {
       firstTab.elements.leftSmallBorder.css('display', 'block')
@@ -327,19 +345,19 @@ export default class Tabs {
    * Updates tabs' state (borders etc).
    */
   updateTabs = () => {
-    for (var i = 0; i < window.tabs.length; i++) {
-      if (!window.tabs[i].selected) {
-        window.tabs[i].elements.rightSmallBorder.css('display', 'block')
+    for (var i = 0; i < tabs.length; i++) {
+      if (!tabs[i].selected) {
+        tabs[i].elements.rightSmallBorder.css('display', 'block')
       }
     }
 
-    for (i = 0; i < window.tabs.length; i++) {
-      window.tabs[i].elements.leftSmallBorder.css('display', 'none')
+    for (i = 0; i < tabs.length; i++) {
+      tabs[i].elements.leftSmallBorder.css('display', 'none')
     }
 
     let tab = this.getSelectedTab()
 
-    let prevTab = window.tabs[window.tabs.indexOf(tab) - 1]
+    let prevTab = tabs[tabs.indexOf(tab) - 1]
 
     if (prevTab != null) {
       prevTab.elements.rightSmallBorder.css('display', 'none')
@@ -351,9 +369,9 @@ export default class Tabs {
    * @return {Tab}
    */
   getSelectedTab = () => {
-    for (var i = 0; i < window.tabs.length; i++) {
-      if (window.tabs[i].selected) {
-        return window.tabs[i]
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i].selected) {
+        return tabs[i]
       }
     }
     return null
