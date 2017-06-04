@@ -35,10 +35,10 @@
 
 .tabs-handle {
   position: absolute;
-  top: 2px;
-  left: 2px;
-  right: 2px;
-  height: calc(100% - 2px);
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  height: calc(100% - 4px);
   -webkit-app-region: drag;
 }
 
