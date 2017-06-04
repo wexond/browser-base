@@ -11,7 +11,7 @@ export default class Page {
 
     this.elements.webview = createElement('webview', { 
       className: 'page-webview',
-      src: 'https://google.pl'
+      src: 'about:blank'
     }, this.elements.page)
 
     this.elements.webview.addEventListener('page-title-updated', (e) => {
