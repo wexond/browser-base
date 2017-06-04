@@ -13,6 +13,14 @@ export default class Page {
       className: 'page-webview',
       src: 'https://google.pl'
     }, this.elements.page)
+
+    this.elements.webview.addEventListener('page-title-updated', (e) => {
+      self.tab.setTitle(e.title)
+    })
+
+    this.elements.webview.addEventListener('page-favicon-updated', (e) => {
+      self.tab.setFavicon(e.favicons[0])
+    })
   }
 
   /**
