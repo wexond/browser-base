@@ -138,6 +138,12 @@ export default class Tab {
       previousTab.elements.rightSmallBorder.css('display', 'none')
     }
 
+    if (this.elements.tab.offsetWidth < 48) {
+      this.elements.icon.css('display', 'none')
+    } else {
+      this.elements.icon.css('display', 'block')
+    }
+
     this.setTitleMaxWidth(true)
 
     this.selected = true
@@ -158,6 +164,8 @@ export default class Tab {
     } else {
       this.elements.close.css('display', 'block')
     }
+
+    this.elements.icon.css('display', 'block')
 
     this.elements.close.css({opacity: 0, transition: ''})
     this.page.hide()
@@ -349,11 +357,16 @@ export default class Tab {
    * Sets title max width.
    * @param {Boolean} closeVisible 
    */
-  setTitleMaxWidth (closeVisible) {
+  setTitleMaxWidth (closeVisible = null) {
+    let b = closeVisible
+    if (closeVisible == null) {
+      b = (this.elements.close.css('opacity') === '1')
+    }
     let decrease = 16
-    if (closeVisible && this.elements.close.css('display') === 'block') decrease += 20
+    if (b && this.elements.close.css('display') === 'block') decrease += 20
+    this.elements.title.css('left', 8)
     if (this.favicon !== '' || this.loading) {
-      decrease += 20
+      decrease += 28
       this.elements.title.css('left', 32)
     }
 
@@ -365,7 +378,11 @@ export default class Tab {
    * @param {String} title
    */
   setTitle (title) {
+    this.setTitleMaxWidth()
+
     this.elements.title.textContent = title
+
+    this.update()
   }
 
   /**
@@ -375,8 +392,23 @@ export default class Tab {
   setFavicon (favicon) {
     this.favicon = favicon
 
-    this.setTitleMaxWidth(this.elements.close.css('opacity') === 1)
+    this.setTitleMaxWidth()
 
     this.elements.icon.css('background-image', `url(${favicon})`)
+
+    this.update()
+  }
+
+  /**
+   * Updates content sizes of tab.
+   */
+  update () {
+    if (!this.selected) {
+      this.elements.close.css('display', (this.elements.tab.offsetWidth < 48) ? 'none' : 'block')
+      this.elements.icon.css('display', 'block')
+    } else {
+      this.elements.close.css('display', 'block')
+      this.elements.icon.css('display', (this.elements.tab.offsetWidth < 48) ? 'none' : 'block')
+    }
   }
 }
