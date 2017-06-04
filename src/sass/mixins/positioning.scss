@@ -1,0 +1,22 @@
+@mixin center-horizontal () {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@mixin center-vertical () {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@mixin center-both () {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin set-position ($left, $top, $right, $bottom) {
+  left: $left;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+}
