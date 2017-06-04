@@ -6,6 +6,7 @@
   top: 0;
   left: 0;
   -webkit-app-region: no-drag;
+  z-index: 3;
 }
 
 .tab-border-vertical {
@@ -14,17 +15,17 @@
   height: calc(100% - 8px);
   position: absolute;
   background-color: black;
-  opacity: 0.12;
+  opacity: $dividers-opacity-light;
   z-index: 2;
 }
 
 .tab-border-small-vertical {
-  @extend .tab-border-horizontal;
+  @extend .tab-border-vertical;
   height: calc(100% - 8px);
 }
 
 .tab-border-full-vertical {
-  @extend .tab-border-horizontal;
+  @extend .tab-border-vertical;
   height: 100%;
 }
 
@@ -44,4 +45,19 @@
   position: absolute;
   left: 0;
   top: 0;
+}
+
+.tab-close {
+  @include center-vertical;
+  @include image-center(16px, 16px);
+  position: absolute;
+  right: 6px;
+  background-image: url(images/Tabs/close.png);
+  height: 20px;
+  width: 20px;
+  opacity: $secondary-opacity-light;
+
+  &:hover {
+    opacity: $primary-opacity-light;
+  }
 }
