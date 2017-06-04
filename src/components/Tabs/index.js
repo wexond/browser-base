@@ -241,8 +241,10 @@ export default class Tabs {
 
       if (!tabs[x].selected) {
         tabs[x].elements.close.css('display', (width < 48) ? 'none' : 'block')
+        tabs[x].elements.icon.css('display', 'block')
       } else {
         tabs[x].elements.close.css('display', 'block')
+        tabs[x].elements.icon.css('display', (width < 48) ? 'none' : 'block')
       }
 
       tabs[x].setWidth(width)
@@ -421,8 +423,10 @@ export default class Tabs {
       tabs[i].elements.leftSmallBorder.css('display', 'none')
       if (!tabs[i].selected) {
         tabs[i].elements.close.css('display', (tabs[i].elements.tab.offsetWidth < 48) ? 'none' : 'block')
+        tabs[i].elements.icon.css('display', 'block')
       } else {
         tabs[i].elements.close.css('display', 'block')
+        tabs[i].elements.icon.css('display', (tabs[i].elements.tab.offsetWidth < 48) ? 'none' : 'block')
       }
     }
 
