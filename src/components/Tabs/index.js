@@ -240,7 +240,7 @@ export default class Tabs {
       }
 
       if (!tabs[x].selected) {
-        tabs[x].elements.close.css('display', (tabs[x].elements.tab.offsetWidth < 48) ? 'none' : 'block')
+        tabs[x].elements.close.css('display', (width < 48) ? 'none' : 'block')
       } else {
         tabs[x].elements.close.css('display', 'block')
       }

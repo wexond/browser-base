@@ -63,6 +63,15 @@
   }
 }
 
+.tab-icon {
+  @include center-vertical;
+  @include image-center(16px, 16px);
+  position: absolute;
+  left: 8px;
+  height: 16px;
+  width: 16px;
+}
+
 .tab-close {
   opacity: 0;
 }
