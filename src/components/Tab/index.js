@@ -46,8 +46,10 @@ export default class Tab {
       self.close()
     })
 
+    this.elements.closeIcon = div({ className: 'tab-close-icon' }, this.elements.close)
+
     this.elements.rightSmallBorder = div({ className: 'tab-border-small-vertical' }, this.elements.tab)
-    this.elements.rightSmallBorder.css('right', -1)
+    this.elements.rightSmallBorder.css('right', 0)
 
     this.elements.leftSmallBorder = div({ className: 'tab-border-small-vertical' }, this.elements.tab)
     this.elements.leftSmallBorder.css({
@@ -108,6 +110,7 @@ export default class Tab {
       backgroundColor: '#fff',
       zIndex: 4
     })
+    this.elements.close.css({opacity: 1, transition: ''})
     this.page.show()
 
     this.elements.rightSmallBorder.css('display', 'none')
@@ -135,6 +138,7 @@ export default class Tab {
       backgroundColor: 'transparent',
       zIndex: 3
     })
+    this.elements.close.css({opacity: 0, transition: ''})
     this.page.hide()
 
     this.elements.rightSmallBorder.css('display', 'block')

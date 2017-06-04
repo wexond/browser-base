@@ -1,5 +1,6 @@
 import Tab from '../Tab'
 import Transitions from '../../helpers/Transitions'
+import Colors from '../../helpers/Colors'
 
 export default class Tabs {
   constructor () {
@@ -9,6 +10,7 @@ export default class Tabs {
     this.timer = {
       canReset: false
     }
+    this.cursor = {}
     this.dragData = {}
 
     this.elements = {}
@@ -26,7 +28,7 @@ export default class Tabs {
       self.addTab()
     })
 
-    addEventListener('resize', (e) => {
+    window.addEventListener('resize', (e) => {
       self.setWidths(false)
       self.setPositions(false, false)
     })
@@ -45,7 +47,7 @@ export default class Tabs {
       self.timer.time += 1
     }, 1000)
 
-    addEventListener('mouseup', function () {
+    window.addEventListener('mouseup', function () {
       if (self.dragData.tab != null && !self.dragData.tab.pinned) {
         self.dragData.canDrag = false
         self.dragData.canDrag2 = false
@@ -67,6 +69,13 @@ export default class Tabs {
       }
     })
 
+    window.addEventListener('mousemove', function (e) {
+      self.cursor.x = e.pageX
+      self.cursor.y = e.pageY
+      app.cursor.x = e.pageX
+      app.cursor.y = e.pageY
+    })
+
     currentWindow.on('maximize', (e) => {
       self.elements.handle.css({
         left: 0,
@@ -84,6 +93,54 @@ export default class Tabs {
         height: 'calc(100% - 4px)'
       })
     })
+
+    // Fixes #1 issue.
+    // Custom mouseenter and mouseleave event.
+    var previousTab = null
+    setInterval(function () {
+      let tab = self.getTabFromMousePoint(null, self.cursor.x, self.cursor.y)
+
+      // Mouse leave.
+      if (previousTab !== null && previousTab !== tab) {
+        if (previousTab.hovered) {
+          previousTab.hovered = false
+          if (!previousTab.selected) {
+            previousTab.appendTransition('background-color')
+            previousTab.elements.tab.css('background-color', 'transparent')
+            previousTab.elements.close.css({
+              opacity: 0,
+              transition: '0.2s opacity'
+            })
+          }
+        }
+      }
+
+      // Mouse enter.
+      if (tab != null) {
+        if (!tab.hovered) {
+          tab.hovered = true
+          previousTab = tab
+          if (!tab.selected) {
+            let rgba = Colors.shadeColor(Colors.rgbToHex(self.elements.tabs.css('background-color')), 0.05)
+            tab.appendTransition('background-color')
+
+            tab.elements.tab.css('background-color', rgba)
+
+            tab.timeoutHover = setTimeout(function () {
+              clearTimeout(tab.timeoutHover)
+              tab.removeTransition('background-color')
+            }, tabsAnimationData.hoverDuration * 1000)
+
+            if (!tab.pinned) {
+              tab.elements.close.css({
+                opacity: 1,
+                transition: '0.2s opacity'
+              })
+            }
+          }
+        }
+      }
+    }, 1)
   }
 
   /** Events */
