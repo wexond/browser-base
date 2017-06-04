@@ -14,6 +14,8 @@
 }
 
 .tabs-add-button {
+  @include image-center(24px, 24px);
+  background-image: url(images/Tabs/add.png);
   width: 32px;
   height: 100%;
   background-color: transparent;
@@ -23,15 +25,11 @@
   top: 0;
   opacity: 0.54;
   -webkit-app-region: no-drag;
-  background-size: 24px 24px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url(images/Tabs/add.png);
-}
 
-.tabs-add-button:hover {
-  background-color: #E0E0E0;
-  opacity: 0.87;
+  &:hover {
+    background-color: #E0E0E0;
+    opacity: 0.87;
+  }
 }
 
 .tabs-handle {
