@@ -239,10 +239,10 @@ export default class Tabs {
         tabs[x].removeTransition('width')
       }
 
-      tabs[x].update(width)
-
       tabs[x].setWidth(width)
       tabs[x].width = width
+
+      tabs[x].update()
     }
   }
 
@@ -415,7 +415,6 @@ export default class Tabs {
 
     for (i = 0; i < tabs.length; i++) {
       tabs[i].elements.leftSmallBorder.css('display', 'none')
-      tabs[i].update()
     }
 
     let tab = this.getSelectedTab()
