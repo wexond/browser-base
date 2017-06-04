@@ -379,8 +379,6 @@ export default class Tab {
     this.setTitleMaxWidth()
 
     this.elements.title.textContent = title
-
-    this.update()
   }
 
   /**
@@ -393,25 +391,14 @@ export default class Tab {
     this.setTitleMaxWidth()
 
     this.elements.icon.css('background-image', `url(${favicon})`)
-
-    this.update()
   }
 
   /**
    * Updates content sizes of tab.
-   * @param {Number} newWidth
    */
-  update (newWidth = null) {
-    let width = this.elements.tab.offsetWidth
-    if (newWidth != null) {
-      width = newWidth
-    }
-    if (!this.selected) {
-      this.elements.close.css('display', (width < 48) ? 'none' : 'block')
-      this.elements.icon.css('display', 'block')
-    } else {
-      this.elements.close.css('display', 'block')
-      this.elements.icon.css('display', (width < 48) ? 'none' : 'block')
-    }
+  update () {
+    let a = (this.elements.tab.offsetWidth < 48) ? 'none' : 'block'
+    this.elements.close.css('display', (!this.selected) ? a : 'block')
+    this.elements.icon.css('display', (!this.selected) ? 'block' : a)
   }
 }
