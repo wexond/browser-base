@@ -1,6 +1,6 @@
 .page {
   position: relative;
-  height: calc(100vh - 32px);
+  height: calc(100vh - #{$systembar-height});
   width: 100%;
 }
 
