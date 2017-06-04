@@ -23,12 +23,13 @@
   z-index: 2;
   left: 0;
   top: 0;
-  opacity: 0.54;
+  opacity: $secondary-opacity-light;
   -webkit-app-region: no-drag;
+  z-index: 1;
 
   &:hover {
     background-color: #E0E0E0;
-    opacity: 0.87;
+    opacity: $primary-opacity-light;
   }
 }
 
@@ -45,7 +46,8 @@
   height: 1px;
   width: 100%;
   background-color: black;
-  opacity: 0.12;
+  opacity: $dividers-opacity-light;
   position: absolute;
   bottom: 0;
+  z-index: 2;
 }
