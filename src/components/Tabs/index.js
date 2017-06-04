@@ -239,8 +239,8 @@ export default class Tabs {
         tabs[x].removeTransition('width')
       }
 
-      if (width < 48 && !tabs[x].selected) {
-        tabs[x].elements.close.css('display', 'none')
+      if (!tabs[x].selected) {
+        tabs[x].elements.close.css('display', (tabs[x].elements.tab.offsetWidth < 48) ? 'none' : 'block')
       } else {
         tabs[x].elements.close.css('display', 'block')
       }
@@ -419,8 +419,8 @@ export default class Tabs {
 
     for (i = 0; i < tabs.length; i++) {
       tabs[i].elements.leftSmallBorder.css('display', 'none')
-      if (tabs[i].elements.offsetWidth < 48 && !tabs[i].selected) {
-        tabs[i].elements.close.css('display', 'none')
+      if (!tabs[i].selected) {
+        tabs[i].elements.close.css('display', (tabs[i].elements.tab.offsetWidth < 48) ? 'none' : 'block')
       } else {
         tabs[i].elements.close.css('display', 'block')
       }
