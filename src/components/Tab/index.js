@@ -258,8 +258,6 @@ export default class Tab {
 
     // Calculate positions for all tabs, but don't calculate widths.
     this.tabs.setPositions()
-
-    this.tabs.updateTabs()
   }
 
   /**
@@ -401,14 +399,19 @@ export default class Tab {
 
   /**
    * Updates content sizes of tab.
+   * @param {Number} newWidth
    */
-  update () {
+  update (newWidth = null) {
+    let width = this.elements.tab.offsetWidth
+    if (newWidth != null) {
+      width = newWidth
+    }
     if (!this.selected) {
-      this.elements.close.css('display', (this.elements.tab.offsetWidth < 48) ? 'none' : 'block')
+      this.elements.close.css('display', (width < 48) ? 'none' : 'block')
       this.elements.icon.css('display', 'block')
     } else {
       this.elements.close.css('display', 'block')
-      this.elements.icon.css('display', (this.elements.tab.offsetWidth < 48) ? 'none' : 'block')
+      this.elements.icon.css('display', (width < 48) ? 'none' : 'block')
     }
   }
 }
