@@ -8,6 +8,8 @@ export default class Tab {
     this.tabs = tabs
     this.elements = {}
     this.pinned = false
+    this.favicon = ''
+    this.loading = false
 
     this.page = new Page(this)
 
@@ -38,7 +40,7 @@ export default class Tab {
 
     this.elements.title = div({
       className: 'tab-title',
-      innerHTML: 'New tab'
+      textContent: 'New tab'
     }, this.elements.content)
 
     this.elements.close = div({ className: 'tab-close' }, this.elements.content)
@@ -47,6 +49,8 @@ export default class Tab {
     })
 
     this.elements.closeIcon = div({ className: 'tab-close-icon' }, this.elements.close)
+
+    this.elements.icon = div({ className: 'tab-icon' }, this.elements.content)
 
     this.elements.rightSmallBorder = div({ className: 'tab-border-small-vertical' }, this.elements.tab)
     this.elements.rightSmallBorder.css('right', 0)
@@ -348,7 +352,31 @@ export default class Tab {
   setTitleMaxWidth (closeVisible) {
     let decrease = 16
     if (closeVisible && this.elements.close.css('display') === 'block') decrease += 20
+    if (this.favicon !== '' || this.loading) {
+      decrease += 20
+      this.elements.title.css('left', 32)
+    }
 
     this.elements.title.css('max-width', `calc(100% - ${decrease}px)`)
+  }
+
+  /**
+   * Sets title.
+   * @param {String} title
+   */
+  setTitle (title) {
+    this.elements.title.textContent = title
+  }
+
+  /**
+   * Sets favicon.
+   * @param {String} favicon
+   */
+  setFavicon (favicon) {
+    this.favicon = favicon
+
+    this.setTitleMaxWidth(this.elements.close.css('opacity') === 1)
+
+    this.elements.icon.css('background-image', `url(${favicon})`)
   }
 }
