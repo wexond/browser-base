@@ -239,13 +239,7 @@ export default class Tabs {
         tabs[x].removeTransition('width')
       }
 
-      if (!tabs[x].selected) {
-        tabs[x].elements.close.css('display', (width < 48) ? 'none' : 'block')
-        tabs[x].elements.icon.css('display', 'block')
-      } else {
-        tabs[x].elements.close.css('display', 'block')
-        tabs[x].elements.icon.css('display', (width < 48) ? 'none' : 'block')
-      }
+      tabs[x].update(width)
 
       tabs[x].setWidth(width)
       tabs[x].width = width
@@ -421,13 +415,7 @@ export default class Tabs {
 
     for (i = 0; i < tabs.length; i++) {
       tabs[i].elements.leftSmallBorder.css('display', 'none')
-      if (!tabs[i].selected) {
-        tabs[i].elements.close.css('display', (tabs[i].elements.tab.offsetWidth < 48) ? 'none' : 'block')
-        tabs[i].elements.icon.css('display', 'block')
-      } else {
-        tabs[i].elements.close.css('display', 'block')
-        tabs[i].elements.icon.css('display', (tabs[i].elements.tab.offsetWidth < 48) ? 'none' : 'block')
-      }
+      tabs[i].update()
     }
 
     let tab = this.getSelectedTab()
