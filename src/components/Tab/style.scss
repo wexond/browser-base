@@ -8,32 +8,29 @@
   -webkit-app-region: no-drag;
 }
 
-.border-small {
+.tab-border-vertical {
+  @include center-vertical;
   width: 1px;
   height: calc(100% - 8px);
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   background-color: black;
   opacity: 0.12;
   z-index: 2;
 }
 
-.border-full {
-  width: 1px;
+.tab-border-small-vertical {
+  @extend .tab-border-horizontal;
+  height: calc(100% - 8px);
+}
+
+.tab-border-full-vertical {
+  @extend .tab-border-horizontal;
   height: 100%;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: black;
-  opacity: 0.12;
-  z-index: 2;
 }
 
 .tab-title {
+  @include center-vertical;
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   left: 8px;
   width: 100%;
   max-width: calc(100% - 16px);
