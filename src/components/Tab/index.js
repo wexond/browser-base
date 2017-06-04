@@ -106,11 +106,18 @@ export default class Tab {
    * Selects tab.
    */
   select () {
+    this.removeTransition('background-color')
     this.elements.tab.css({
       backgroundColor: '#fff',
       zIndex: 4
     })
-    this.elements.close.css({opacity: 1, transition: ''})
+    this.elements.close.css(
+      {
+        opacity: 1, 
+        transition: '', 
+        display: 'block'
+      }
+    )
     this.page.show()
 
     this.elements.rightSmallBorder.css('display', 'none')
@@ -127,6 +134,8 @@ export default class Tab {
       previousTab.elements.rightSmallBorder.css('display', 'none')
     }
 
+    this.setTitleMaxWidth(true)
+
     this.selected = true
   }
 
@@ -134,10 +143,18 @@ export default class Tab {
    * Deselects tab.
    */
   deselect () {
+    this.removeTransition('background-color')
     this.elements.tab.css({
       backgroundColor: 'transparent',
       zIndex: 3
     })
+
+    if (this.elements.tab.offsetWidth < 48) {
+      this.elements.close.css('display', 'none')
+    } else {
+      this.elements.close.css('display', 'block')
+    }
+
     this.elements.close.css({opacity: 0, transition: ''})
     this.page.hide()
 
@@ -150,6 +167,8 @@ export default class Tab {
     if (previousTab != null) {
       previousTab.elements.rightSmallBorder.css('display', 'block')
     }
+
+    this.setTitleMaxWidth(false)
 
     this.selected = false
   }
@@ -227,6 +246,8 @@ export default class Tab {
 
     // Calculate positions for all tabs, but don't calculate widths.
     this.tabs.setPositions()
+
+    this.tabs.updateTabs()
   }
 
   /**
@@ -318,5 +339,16 @@ export default class Tab {
     } else {
       this.elements.leftSmallBorder.css('display', 'block')
     }
+  }
+
+  /**
+   * Sets title max width.
+   * @param {Boolean} closeVisible 
+   */
+  setTitleMaxWidth (closeVisible) {
+    let decrease = 16
+    if (closeVisible && this.elements.close.css('display') === 'block') decrease += 20
+
+    this.elements.title.css('max-width', `calc(100% - ${decrease}px)`)
   }
 }

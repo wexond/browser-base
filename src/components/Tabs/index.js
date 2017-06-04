@@ -111,6 +111,7 @@ export default class Tabs {
               opacity: 0,
               transition: '0.2s opacity'
             })
+            previousTab.setTitleMaxWidth(false)
           }
         }
       }
@@ -130,6 +131,8 @@ export default class Tabs {
               clearTimeout(tab.timeoutHover)
               tab.removeTransition('background-color')
             }, tabsAnimationData.hoverDuration * 1000)
+
+            tab.setTitleMaxWidth(true)
 
             if (!tab.pinned) {
               tab.elements.close.css({
@@ -234,6 +237,12 @@ export default class Tabs {
         tabs[x].appendTransition('width')
       } else {
         tabs[x].removeTransition('width')
+      }
+
+      if (width < 48 && !tabs[x].selected) {
+        tabs[x].elements.close.css('display', 'none')
+      } else {
+        tabs[x].elements.close.css('display', 'block')
       }
 
       tabs[x].setWidth(width)
@@ -410,6 +419,11 @@ export default class Tabs {
 
     for (i = 0; i < tabs.length; i++) {
       tabs[i].elements.leftSmallBorder.css('display', 'none')
+      if (tabs[i].elements.offsetWidth < 48 && !tabs[i].selected) {
+        tabs[i].elements.close.css('display', 'none')
+      } else {
+        tabs[i].elements.close.css('display', 'block')
+      }
     }
 
     let tab = this.getSelectedTab()
