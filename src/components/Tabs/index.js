@@ -1,9 +1,15 @@
 import Tab from '../Tab'
+import Transitions from '../../helpers/Transitions'
 
 export default class Tabs {
   constructor () {
     const self = this
     
+    // The timer for closing tabs system.
+    this.timer = {
+      canReset: false
+    }
+
     this.elements = {}
 
     this.elements.tabs = div({ className: 'tabs' }, app.rootElement)
@@ -20,11 +26,23 @@ export default class Tabs {
     })
 
     window.addEventListener('resize', (e) => {
-      self.setWidths(self.getWidths())
-      self.setPositions(self.getPositions())
+      self.setWidths(false)
+      self.setPositions(false, false)
     })
 
     this.addTab()
+
+    // Start the timer.
+    this.timer.timer = setInterval(function () { // Invoke the function each 3 seconds.
+      if (self.timer.canReset && self.timer.time === 3) { // If can calculate widths for all tabs.
+        // Calculate widths and positions for all tabs.
+        self.setWidths()
+        self.setPositions()
+
+        self.timer.canReset = false
+      }
+      self.timer.time += 1
+    }, 1000)
   }
 
   /**
@@ -33,10 +51,6 @@ export default class Tabs {
    */
   addTab (data = window.defaultTabOptions) {
     let tab = new Tab(this)
-    window.tabs.push(tab)
-
-    this.setWidths(this.getWidths())
-    this.setPositions(this.getPositions())
 
     this.selectTab(tab)
   }
@@ -71,10 +85,17 @@ export default class Tabs {
 
   /**
    * Sets widths for all tabs.
-   * @param {Number} width 
    */
-  setWidths (width) {
+  setWidths (animation = true) {
+    const width = this.getWidths()
+
     for (var x = 0; x < window.tabs.length; x++) {
+      if (animation) {
+        window.tabs[x].appendTransition('width')
+      } else {
+        window.tabs[x].removeTransition('width')
+      }
+
       window.tabs[x].setWidth(width)
       window.tabs[x].width = width
     }
@@ -103,13 +124,38 @@ export default class Tabs {
 
   /**
    * Sets positions for all tabs.
-   * @param {Object} positions 
    */
-  setPositions (positions) {
+  setPositions (animateTabs = true, animateAddButton = true) {
+    const positions = this.getPositions()
+
     for (var x = 0; x < window.tabs.length; x++) {
+      if (!window.tabs[x].blockLeftAnimation && animateTabs) {
+        window.tabs[x].appendTransition('left')
+      } else {
+        window.tabs[x].removeTransition('left')
+      }
+
       window.tabs[x].setLeft(positions.tabPositions[x])
     }
 
+    this.setAddButtonAnimation(animateAddButton)
     this.elements.addButton.css('left', positions.addButtonPosition)
   } 
+
+  /**
+   * Sets add button animation.
+   * @param {boolean} flag
+   */
+  setAddButtonAnimation = (flag) => {
+    var transition = 'left ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
+    const addButton = this.elements.addButton
+
+    if (addButton != null) {
+      if (flag) {
+        addButton.style['-webkit-transition'] = Transitions.appendTransition(addButton.style['-webkit-transition'], transition)
+      } else {
+        addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.style['-webkit-transition'], transition)
+      }
+    }
+  }
 }

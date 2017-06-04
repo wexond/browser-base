@@ -54,6 +54,10 @@ Element.prototype.css = function (data, value = null) {
   return null
 }
 
+Element.prototype.remove = function () {
+  this.parentNode.removeChild(this)
+}
+
 class DOMHelper {
   /**
    * Loads an array of scripts URLs to document's body.
