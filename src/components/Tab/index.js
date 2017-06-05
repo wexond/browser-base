@@ -163,7 +163,7 @@ export default class Tab {
     })
 
     this.elements.close.css({
-      display: (this.elements.tab.offsetWidth < 48) ? 'none' : 'block',
+      display: (this.width < 48) ? 'none' : 'block',
       opacity: 0,
       transition: ''
     })

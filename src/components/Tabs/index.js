@@ -97,7 +97,7 @@ export default class Tabs {
 
     // Fixes #1 issue.
     // Custom mouseenter and mouseleave event.
-    var previousTab = null
+    let previousTab = null
     setInterval(function () {
       let tab = self.getTabFromMousePoint(null, self.cursor.x, self.cursor.y)
 
@@ -290,18 +290,20 @@ export default class Tabs {
    * @param {boolean} flag
    */
   setAddButtonAnimation = (flag) => {
-    
+    if (flag) {
+      if (this.transitions.indexOf('left') !== -1) return
+    } else {
+      if (this.transitions.indexOf('left') === -1) return
+    }
 
-    var transition = 'left ' + tabsAnimationData.positioningDuration + 's ' + tabsAnimationData.positioningEasing
+    let transition = 'left ' + tabsAnimationData.positioningDuration + 's ' + tabsAnimationData.positioningEasing
     const addButton = this.elements.addButton
 
     if (addButton != null) {
       if (flag) {
-        if (this.transitions.indexOf('left') !== -1) return
         addButton.style['-webkit-transition'] = Transitions.appendTransition(addButton.style['-webkit-transition'], transition)
         this.transitions.push('left')
       } else {
-        if (this.transitions.indexOf('left') === -1) return
         addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.style['-webkit-transition'], transition)
         this.transitions.splice(this.transitions.indexOf('left'), 1)
       }
@@ -315,15 +317,15 @@ export default class Tabs {
    * @return {Tab}
    */
   getTabFromMouseX = (callingTab, xPos) => {
-    tabs.forEach((tab) => {
-      if (tab !== callingTab) {
-        if (this.containsX(tab, xPos)) {
-          if (!tab.locked) {
-            return tab
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i] !== callingTab) {
+        if (this.containsX(tabs[i], xPos)) {
+          if (!tabs[i].locked) {
+            return tabs[i]
           }
         }
       }
-    })
+    }
     return null
   }
 
@@ -351,15 +353,15 @@ export default class Tabs {
    * @return {Tab}
    */
   getTabFromMousePoint = (callingTab, xPos, yPos) => {
-    tabs.forEach((tab) => {
-      if (tab !== callingTab) {
-        if (this.containsPoint(tab, xPos, yPos)) {
-          if (!tab.locked) {
-            return tab
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i] !== callingTab) {
+        if (this.containsPoint(tabs[i], xPos, yPos)) {
+          if (!tabs[i].locked) {
+            return tabs[i]
           }
         }
       }
-    })
+    }
     return null
   }
 
