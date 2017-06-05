@@ -13,28 +13,9 @@ export default class Tab {
 
     this.page = new Page(this)
 
+    this.transitions = []
+
     this.elements.tab = div({ className: 'tab' }, tabs.elements.tabbar)
-    this.elements.tab.addEventListener('mousedown', (e) => {
-      if (e.target.className === 'tab-close') {
-        return
-      }
-
-      if (e.button !== 0) return
-
-      // Initialize the dragData object in {Tabs}.
-      tabs.dragData = {
-        tabX: e.currentTarget.offsetLeft,
-        mouseClickX: e.clientX,
-        canDrag: !self.pinned,
-        tab: self
-      }
-
-      tabs.selectTab(self)
-
-      if (!self.pinned) {
-        window.addEventListener('mousemove', tabs.onMouseMove)
-      }
-    })
 
     this.elements.content = div({ className: 'tab-content' }, this.elements.tab)
 
@@ -44,9 +25,6 @@ export default class Tab {
     }, this.elements.content)
 
     this.elements.close = div({ className: 'tab-close' }, this.elements.content)
-    this.elements.close.addEventListener('click', (e) => {
-      self.close()
-    })
 
     this.elements.closeIcon = div({ className: 'tab-close-icon' }, this.elements.close)
 
@@ -88,6 +66,36 @@ export default class Tab {
       self.tabs.setWidths()
       self.tabs.setPositions()
     }, 1)
+
+    this.tabs.selectTab(this)
+
+    /** Events */
+
+    this.elements.tab.addEventListener('mousedown', (e) => {
+      if (e.target.className === 'tab-close') {
+        return
+      }
+
+      if (e.button !== 0) return
+
+      // Initialize the dragData object in {Tabs}.
+      tabs.dragData = {
+        tabX: e.currentTarget.offsetLeft,
+        mouseClickX: e.clientX,
+        canDrag: !self.pinned,
+        tab: self
+      }
+
+      tabs.selectTab(self)
+
+      if (!self.pinned) {
+        window.addEventListener('mousemove', tabs.onMouseMove)
+      }
+    })
+
+    this.elements.close.addEventListener('click', (e) => {
+      self.close()
+    })
   }
 
   /** 
@@ -110,11 +118,15 @@ export default class Tab {
    * Selects tab.
    */
   select () {
+    this.page.show()
+    this.selected = true
+
     this.removeTransition('background-color')
     this.elements.tab.css({
       backgroundColor: '#fff',
       zIndex: 4
     })
+
     this.elements.close.css(
       {
         opacity: 1, 
@@ -122,67 +134,52 @@ export default class Tab {
         display: 'block'
       }
     )
-    this.page.show()
 
     this.elements.rightSmallBorder.css('display', 'none')
-    if (window.tabs.indexOf(this) !== 0) {
-      this.elements.leftFullBorder.css('display', 'block')
-    } else {
-      this.elements.leftFullBorder.css('display', 'none')
-    }
+    this.elements.leftFullBorder.css('display', (window.tabs.indexOf(this) !== 0) ? 'block' : 'none')
     this.elements.rightFullBorder.css('display', 'block')
 
     let previousTab = window.tabs[window.tabs.indexOf(this) - 1]
-
     if (previousTab != null) {
       previousTab.elements.rightSmallBorder.css('display', 'none')
     }
 
-    if (this.elements.tab.offsetWidth < 48) {
-      this.elements.icon.css('display', 'none')
-    } else {
-      this.elements.icon.css('display', 'block')
-    }
+    this.elements.icon.css('display', (this.elements.tab.offsetWidth < 48) ? 'none' : 'block')
 
     this.setTitleMaxWidth(true)
-
-    this.selected = true
   }
 
   /** 
    * Deselects tab.
    */
   deselect () {
+    this.page.hide()
+    this.selected = false
+
     this.removeTransition('background-color')
     this.elements.tab.css({
       backgroundColor: 'transparent',
       zIndex: 3
     })
 
-    if (this.elements.tab.offsetWidth < 48) {
-      this.elements.close.css('display', 'none')
-    } else {
-      this.elements.close.css('display', 'block')
-    }
+    this.elements.close.css({
+      display: (this.elements.tab.offsetWidth < 48) ? 'none' : 'block',
+      opacity: 0,
+      transition: ''
+    })
 
     this.elements.icon.css('display', 'block')
-
-    this.elements.close.css({opacity: 0, transition: ''})
-    this.page.hide()
 
     this.elements.rightSmallBorder.css('display', 'block')
     this.elements.leftFullBorder.css('display', 'none')
     this.elements.rightFullBorder.css('display', 'none')
 
     let previousTab = window.tabs[window.tabs.indexOf(this) - 1]
-
     if (previousTab != null) {
       previousTab.elements.rightSmallBorder.css('display', 'block')
     }
 
     this.setTitleMaxWidth(false)
-
-    this.selected = false
   }
 
   /**
@@ -265,20 +262,24 @@ export default class Tab {
    * @param {string} transition
    */
   appendTransition = (transition) => {
+    if (this.transitions.indexOf(transition) !== -1) return
+
     const tabDiv = this.elements.tab
-    let t = ''
+    let tempTransition = ''
 
     if (transition === 'left') {
-      t = 'left ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
+      tempTransition = 'left ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
     }
     if (transition === 'width') {
-      t = 'width ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
+      tempTransition = 'width ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
     }
     if (transition === 'background-color') {
-      t = 'background-color ' + window.tabsAnimationData.positioningDuration + 's'
+      tempTransition = 'background-color ' + window.tabsAnimationData.positioningDuration + 's'
     }
 
-    tabDiv.style['-webkit-transition'] = Transitions.appendTransition(tabDiv.style['-webkit-transition'], t)
+    this.transitions.push(transition)
+
+    tabDiv.style['-webkit-transition'] = Transitions.appendTransition(tabDiv.style['-webkit-transition'], tempTransition)
   }
 
   /**
@@ -286,20 +287,24 @@ export default class Tab {
   * @param {string} transition
   */
   removeTransition = (transition) => {
+    if (this.transitions.indexOf(transition) === -1) return
+
     const tabDiv = this.elements.tab
-    let t = ''
+    let tempTransition = ''
 
     if (transition === 'left') {
-      t = 'left ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
+      tempTransition = 'left ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
     }
     if (transition === 'width') {
-      t = 'width ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
+      tempTransition = 'width ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
     }
     if (transition === 'background-color') {
-      t = 'background-color ' + window.tabsAnimationData.positioningDuration + 's'
+      tempTransition = 'background-color ' + window.tabsAnimationData.positioningDuration + 's'
     }
 
-    tabDiv.style['-webkit-transition'] = Transitions.removeTransition(tabDiv.style['-webkit-transition'], t)
+    this.transitions.splice(this.transitions.indexOf(transition), 1)
+
+    tabDiv.style['-webkit-transition'] = Transitions.removeTransition(tabDiv.style['-webkit-transition'], tempTransition)
   }
 
   /**
@@ -312,8 +317,8 @@ export default class Tab {
       const overTab = this.tabs.getTabFromMouseX(this, cursorX)
 
       if (overTab != null && !overTab.pinned) {
-        const indexTab = window.tabs.indexOf(this)
-        const indexOverTab = window.tabs.indexOf(overTab)
+        const indexTab = tabs.indexOf(this)
+        const indexOverTab = tabs.indexOf(overTab)
 
         this.tabs.replaceTabs(indexTab, indexOverTab)
       }
@@ -343,12 +348,8 @@ export default class Tab {
 
     this.tabs.updateTabs()
 
-    // Show or hide tab's borders.
-    if (newTabPos === 0) {
-      this.elements.leftSmallBorder.css('display', 'none')
-    } else {
-      this.elements.leftSmallBorder.css('display', 'block')
-    }
+    // Don't show left small border on replaced tab when the tab is first.
+    this.elements.leftSmallBorder.css('display', (newTabPos === 0) ? 'none' : 'block')
   }
 
   /**
@@ -356,19 +357,22 @@ export default class Tab {
    * @param {Boolean} closeVisible 
    */
   setTitleMaxWidth (closeVisible = null) {
-    let b = closeVisible
-    if (closeVisible == null) {
-      b = (this.elements.close.css('opacity') === '1')
-    }
+    let closeVisibleTemp = closeVisible
     let decrease = 16
-    if (b && this.elements.close.css('display') === 'block') decrease += 20
-    this.elements.title.css('left', 8)
-    if (this.favicon !== '' || this.loading) {
-      decrease += 28
-      this.elements.title.css('left', 32)
+
+    if (closeVisible == null) {
+      closeVisibleTemp = (this.elements.close.css('opacity') === '1')
     }
 
-    this.elements.title.css('max-width', `calc(100% - ${decrease}px)`)
+    if (closeVisibleTemp && this.elements.close.css('display') === 'block') decrease += 20
+
+    if (this.favicon !== '' || this.loading) {
+      decrease += 28
+    }
+    this.elements.title.css({
+      left: (this.favicon !== '' || this.loading) ? 32 : 8,
+      maxWidth: `calc(100% - ${decrease}px)`
+    })
   }
 
   /**
@@ -376,9 +380,8 @@ export default class Tab {
    * @param {String} title
    */
   setTitle (title) {
-    this.setTitleMaxWidth()
-
     this.elements.title.textContent = title
+    this.setTitleMaxWidth()
   }
 
   /**
@@ -387,18 +390,7 @@ export default class Tab {
    */
   setFavicon (favicon) {
     this.favicon = favicon
-
-    this.setTitleMaxWidth()
-
     this.elements.icon.css('background-image', `url(${favicon})`)
-  }
-
-  /**
-   * Updates content sizes of tab.
-   */
-  update () {
-    let a = (this.elements.tab.offsetWidth < 48) ? 'none' : 'block'
-    this.elements.close.css('display', (!this.selected) ? a : 'block')
-    this.elements.icon.css('display', (!this.selected) ? 'block' : a)
+    this.setTitleMaxWidth()
   }
 }

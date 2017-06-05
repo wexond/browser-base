@@ -12,6 +12,7 @@ export default class Tabs {
     }
     this.cursor = {}
     this.dragData = {}
+    this.transitions = []
 
     this.elements = {}
 
@@ -194,21 +195,19 @@ export default class Tabs {
    */
   addTab (data = defaultTabOptions) {
     let tab = new Tab(this)
-
-    this.selectTab(tab)
   }
 
   /**
    * Selects given tab and deselects others.
    * @param {Tab} tab 
    */
-  selectTab (tab) {
-    for (var x = 0; x < tabs.length; x++) {
-      if (tabs[x] !== tab) {
-        tabs[x].deselect()
+  selectTab (tabToSelect) {
+    tabs.forEach((tab) => {
+      if (tab !== tabToSelect) {
+        tab.deselect()
       }
-    }
-    tab.select()
+    })
+    tabToSelect.select()
   }
 
   /**
@@ -232,18 +231,18 @@ export default class Tabs {
   setWidths (animation = true) {
     const width = this.getWidths()
 
-    for (var x = 0; x < tabs.length; x++) {
+    tabs.forEach((tab) => {
       if (animation) {
-        tabs[x].appendTransition('width')
+        tab.appendTransition('width')
       } else {
-        tabs[x].removeTransition('width')
+        tab.removeTransition('width')
       }
 
-      tabs[x].setWidth(width)
-      tabs[x].width = width
+      tab.setWidth(width)
+      tab.width = width
 
-      tabs[x].update()
-    }
+      tab.elements.icon.css('display', ((tab.selected) ? ((width < 48) ? 'none' : 'block') : 'block'))
+    })
   }
 
   /**
@@ -254,10 +253,10 @@ export default class Tabs {
     let positions = []
     let tempPosition = 0
 
-    for (var x = 0; x < tabs.length; x++) {
+    tabs.forEach((tab) => {
       positions.push(tempPosition)
-      tempPosition += tabs[x].width
-    }
+      tempPosition += tab.width
+    })
 
     let toReturn = {
       tabPositions: positions,
@@ -273,15 +272,14 @@ export default class Tabs {
   setPositions (animateTabs = true, animateAddButton = true) {
     const positions = this.getPositions()
 
-    for (var x = 0; x < tabs.length; x++) {
-      if (!tabs[x].blockLeftAnimation && animateTabs) {
-        tabs[x].appendTransition('left')
+    tabs.forEach((tab) => {
+      if (!tab.blockLeftAnimation && animateTabs) {
+        tab.appendTransition('left')
       } else {
-        tabs[x].removeTransition('left')
+        tab.removeTransition('left')
       }
-
-      tabs[x].setLeft(positions.tabPositions[x])
-    }
+      tab.setLeft(positions.tabPositions[tabs.indexOf(tab)])
+    })
 
     this.setAddButtonAnimation(animateAddButton)
     this.elements.addButton.css('left', positions.addButtonPosition)
@@ -292,14 +290,20 @@ export default class Tabs {
    * @param {boolean} flag
    */
   setAddButtonAnimation = (flag) => {
+    
+
     var transition = 'left ' + tabsAnimationData.positioningDuration + 's ' + tabsAnimationData.positioningEasing
     const addButton = this.elements.addButton
 
     if (addButton != null) {
       if (flag) {
+        if (this.transitions.indexOf('left') !== -1) return
         addButton.style['-webkit-transition'] = Transitions.appendTransition(addButton.style['-webkit-transition'], transition)
+        this.transitions.push('left')
       } else {
+        if (this.transitions.indexOf('left') === -1) return
         addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.style['-webkit-transition'], transition)
+        this.transitions.splice(this.transitions.indexOf('left'), 1)
       }
     }
   }
@@ -311,15 +315,15 @@ export default class Tabs {
    * @return {Tab}
    */
   getTabFromMouseX = (callingTab, xPos) => {
-    for (var i = 0; i < tabs.length; i++) {
-      if (tabs[i] !== callingTab) {
-        if (this.containsX(tabs[i], xPos)) {
-          if (!tabs[i].locked) {
-            return tabs[i]
+    tabs.forEach((tab) => {
+      if (tab !== callingTab) {
+        if (this.containsX(tab, xPos)) {
+          if (!tab.locked) {
+            return tab
           }
         }
       }
-    }
+    })
     return null
   }
 
@@ -347,15 +351,15 @@ export default class Tabs {
    * @return {Tab}
    */
   getTabFromMousePoint = (callingTab, xPos, yPos) => {
-    for (var i = 0; i < tabs.length; i++) {
-      if (tabs[i] !== callingTab) {
-        if (this.containsPoint(tabs[i], xPos, yPos)) {
-          if (!tabs[i].locked) {
-            return tabs[i]
+    tabs.forEach((tab) => {
+      if (tab !== callingTab) {
+        if (this.containsPoint(tab, xPos, yPos)) {
+          if (!tab.locked) {
+            return tab
           }
         }
       }
-    }
+    })
     return null
   }
 
@@ -390,12 +394,8 @@ export default class Tabs {
     tabs[firstIndex] = secondTab
     tabs[secondIndex] = firstTab
 
-    // Show or hide borders.
-    if (tabs.indexOf(firstTab) === 0) {
-      firstTab.elements.leftSmallBorder.css('display', 'none')
-    } else {
-      firstTab.elements.leftSmallBorder.css('display', 'block')
-    }
+    // Don't show left small border of replaced tab when the tab is first.
+    firstTab.elements.leftSmallBorder.css('display', (tabs.indexOf(firstTab) === 0) ? 'none' : 'block')
 
     // Change positions of replaced tabs.
     if (changePos) {
@@ -407,23 +407,12 @@ export default class Tabs {
    * Updates tabs' state (borders etc).
    */
   updateTabs = () => {
-    for (var i = 0; i < tabs.length; i++) {
-      if (!tabs[i].selected) {
-        tabs[i].elements.rightSmallBorder.css('display', 'block')
+    tabs.forEach((tab) => {
+      if (!tab.selected) {
+        tab.elements.rightSmallBorder.css('display', 'block')
       }
-    }
-
-    for (i = 0; i < tabs.length; i++) {
-      tabs[i].elements.leftSmallBorder.css('display', 'none')
-    }
-
-    let tab = this.getSelectedTab()
-
-    let prevTab = tabs[tabs.indexOf(tab) - 1]
-
-    if (prevTab != null) {
-      prevTab.elements.rightSmallBorder.css('display', 'none')
-    }
+      tab.elements.leftSmallBorder.css('display', 'none')
+    })
   }
 
   /**
@@ -431,11 +420,11 @@ export default class Tabs {
    * @return {Tab}
    */
   getSelectedTab = () => {
-    for (var i = 0; i < tabs.length; i++) {
-      if (tabs[i].selected) {
+    tabs.forEach((tab) => {
+      if (tab.selected) {
         return tabs[i]
       }
-    }
+    })
     return null
   }
 }
