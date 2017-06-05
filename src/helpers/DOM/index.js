@@ -38,6 +38,7 @@ Element.prototype.css = function (data, value = null) {
         }
       }
     }
+    
     Object.assign(this.style, data)
   } else if (typeof data === 'string') {
     if (value != null) {
