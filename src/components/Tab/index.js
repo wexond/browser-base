@@ -367,10 +367,10 @@ export default class Tab {
     if (closeVisibleTemp && this.elements.close.css('display') === 'block') decrease += 20
 
     if (this.favicon !== '' || this.loading) {
-      decrease += 28
+      decrease += 30
     }
     this.elements.title.css({
-      left: (this.favicon !== '' || this.loading) ? 32 : 8,
+      left: (this.favicon !== '' || this.loading) ? 32 : 10,
       maxWidth: `calc(100% - ${decrease}px)`
     })
   }
