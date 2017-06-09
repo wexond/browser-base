@@ -16,12 +16,12 @@
 .tabs-add-button {
   @include image-center(24px, 24px);
   background-image: url(images/Tabs/add.png);
-  width: 32px;
+  width: 34px;
   height: 100%;
   background-color: transparent;
   position: absolute;
   z-index: 2;
-  left: 0;
+  left: 2px;
   top: 0;
   opacity: $secondary-opacity-light;
   -webkit-app-region: no-drag;
