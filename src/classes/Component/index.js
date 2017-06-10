@@ -1,8 +1,4 @@
 export default class Component {
-  constructor() {
-
-  }
-
   _render (rootElement, props = null) {
     if (typeof this.beforeRender === 'function') this.beforeRender(props)
     let tempElements = this.render(props)
