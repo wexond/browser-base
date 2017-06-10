@@ -6,25 +6,11 @@ export default class Page extends Component {
   }
 
   render () {
-    return {
-      children: [
-        {
-          tag: 'div',
-          props: { className: 'page' },
-          ref: 'page',
-          children: [
-            {
-              tag: 'webview',
-              props: { 
-                className: 'page-webview',
-                src: 'https://google.pl'
-              },
-              ref: 'webview'
-            }
-          ]
-        }
-      ]
-    }
+    return (
+      <div className='page' ref='page'>
+        <webview ref='webview' className='page-webview' src='https://google.pl' />
+      </div>
+    )
   }
 
   afterRender () {

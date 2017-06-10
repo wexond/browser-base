@@ -15,19 +15,12 @@ class App extends Component {
   }
 
   render() {
-    return {
-      children: [
-        {
-          component: new Tabs(),
-          ref: 'tabs'
-        },
-        {
-          tag: 'div',
-          props: { className: 'pages' },
-          ref: 'pages'
-        }
-      ]
-    }
+    return (
+      <div>
+        <Tabs ref='tabs' />
+        <div className='pages' ref='pages' />
+      </div>
+    )
   }
 
   afterRender() {
