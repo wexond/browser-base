@@ -1,73 +1,127 @@
 import Page from '../Page'
 import Transitions from '../../helpers/Transitions'
+import Component from '../../classes/Component'
 
-export default class Tab {
-  constructor (tabs) {
-    const self = this
+export default class Tab extends Component {
+  render() {
+    return {
+      children: [
+        {
+          tag: 'div',
+          ref: 'tab',
+          props: { className: 'tab' },
+          children: [
+            {
+              tag: 'div',
+              ref: 'content',
+              props: { className: 'tab-content' },
+              children: [
+                {
+                  tag: 'div',
+                  ref: 'title',
+                  props: {
+                    className: 'tab-title',
+                    textContent: 'New tab'
+                  }
+                },
+                {
+                  tag: 'div',
+                  ref: 'close',
+                  props: { className: 'tab-close' },
+                  children: [
+                    {
+                      tag: 'div',
+                      ref: 'closeIcon',
+                      props: { className: 'tab-close-icon' }
+                    }
+                  ]
+                },
+                {
+                  tag: 'div',
+                  ref: 'icon',
+                  props: { className: 'tab-icon' }
+                }
+              ]
+            },
+            {
+              tag: 'div',
+              ref: 'rightSmallBorder',
+              props: { className: 'tab-border-small-vertical' }
+            },
+            {
+              tag: 'div',
+              ref: 'leftSmallBorder',
+              props: { className: 'tab-border-small-vertical' }
+            },
+            {
+              tag: 'div',
+              ref: 'leftFullBorder',
+              props: { className: 'tab-border-full-vertical' }
+            },
+            {
+              tag: 'div',
+              ref: 'rightFullBorder',
+              props: { className: 'tab-border-full-vertical' }
+            }
+          ]
+        }
+      ]
+    }
+  }
+  beforeRender(props) {
+    this.page = new Page()
+    this.renderComponent(
+      {
+        children: [
+          {
+            component: this.page,
+            props: { tab: this }
+          }
+        ]
+      }, app.elements.pages
+    )
 
-    this.tabs = tabs
-    this.elements = {}
+    this.tabs = props.tabs
+
     this.pinned = false
     this.favicon = ''
     this.loading = false
-
-    this.page = new Page(this)
-
     this.transitions = []
+    this.blockLeftAnimation = true
 
-    this.elements.tab = div({ className: 'tab' }, tabs.elements.tabbar)
+    window.tabs.push(this)
+  }
 
-    this.elements.content = div({ className: 'tab-content' }, this.elements.tab)
+  afterRender() {
+    const self = this
 
-    this.elements.title = div({
-      className: 'tab-title',
-      textContent: 'New tab'
-    }, this.elements.content)
+    console.log(this)
 
-    this.elements.close = div({ className: 'tab-close' }, this.elements.content)
-
-    this.elements.closeIcon = div({ className: 'tab-close-icon' }, this.elements.close)
-
-    this.elements.icon = div({ className: 'tab-icon' }, this.elements.content)
-
-    this.elements.rightSmallBorder = div({ className: 'tab-border-small-vertical' }, this.elements.tab)
     this.elements.rightSmallBorder.css('right', 0)
-
-    this.elements.leftSmallBorder = div({ className: 'tab-border-small-vertical' }, this.elements.tab)
     this.elements.leftSmallBorder.css({
       left: 0,
       display: 'none'
     })
-
-    this.elements.leftFullBorder = div({ className: 'tab-border-full-vertical' }, this.elements.tab)
     this.elements.leftFullBorder.css({
       left: 0,
       display: 'none'
     })
-
-    this.elements.rightFullBorder = div({ className: 'tab-border-full-vertical' }, this.elements.tab)
     this.elements.rightFullBorder.css({
       right: 0,
       display: 'none'
     })
-    
-    window.tabs.push(this)
-
-    this.blockLeftAnimation = true
 
     let position = this.tabs.getPositions().tabPositions[window.tabs.indexOf(this)]
     this.setLeft(position)
 
     this.appendTransition('width')
-    
+
     setTimeout(() => {
       self.blockLeftAnimation = false
 
       self.tabs.setWidths()
       self.tabs.setPositions()
     }, 1)
-
-    this.tabs.selectTab(this)
 
     /** Events */
 
@@ -86,7 +140,7 @@ export default class Tab {
         tab: self
       }
 
-      tabs.selectTab(self)
+      self.tabs.selectTab(self)
 
       if (!self.pinned) {
         window.addEventListener('mousemove', tabs.onMouseMove)
@@ -96,13 +150,15 @@ export default class Tab {
     this.elements.close.addEventListener('click', (e) => {
       self.close()
     })
+
+    this.tabs.selectTab(this)
   }
 
   /** 
    * Sets width of tab div.
    * @param {Number} width
    */
-  setWidth (width) {
+  setWidth(width) {
     this.elements.tab.css('width', width)
   }
 
@@ -110,14 +166,14 @@ export default class Tab {
    * Sets left of tab div.
    * @param {Number} left
    */
-  setLeft (left) {
+  setLeft(left) {
     this.elements.tab.css('left', left)
   }
 
   /** 
    * Selects tab.
    */
-  select () {
+  select() {
     this.page.show()
     this.selected = true
 
@@ -129,8 +185,8 @@ export default class Tab {
 
     this.elements.close.css(
       {
-        opacity: 1, 
-        transition: '', 
+        opacity: 1,
+        transition: '',
         display: 'block'
       }
     )
@@ -152,7 +208,7 @@ export default class Tab {
   /** 
    * Deselects tab.
    */
-  deselect () {
+  deselect() {
     this.page.hide()
     this.selected = false
 
@@ -244,7 +300,7 @@ export default class Tab {
     this.tabs.timer.time = 0
 
     // Animate tab closing.
-    function closeAnim () {
+    function closeAnim() {
       self.appendTransition('width')
       tabDiv.css('width', 0)
 
@@ -356,7 +412,7 @@ export default class Tab {
    * Sets title max width.
    * @param {Boolean} closeVisible 
    */
-  setTitleMaxWidth (closeVisible = null) {
+  setTitleMaxWidth(closeVisible = null) {
     let closeVisibleTemp = closeVisible
     let decrease = 16
 
@@ -367,10 +423,10 @@ export default class Tab {
     if (closeVisibleTemp && this.elements.close.css('display') === 'block') decrease += 20
 
     if (this.favicon !== '' || this.loading) {
-      decrease += 30
+      decrease += 29
     }
     this.elements.title.css({
-      left: (this.favicon !== '' || this.loading) ? 32 : 10,
+      left: (this.favicon !== '' || this.loading) ? 32 : 9,
       maxWidth: `calc(100% - ${decrease}px)`
     })
   }
@@ -379,7 +435,7 @@ export default class Tab {
    * Sets title.
    * @param {String} title
    */
-  setTitle (title) {
+  setTitle(title) {
     this.elements.title.textContent = title
     this.setTitleMaxWidth()
   }
@@ -388,7 +444,7 @@ export default class Tab {
    * Sets favicon.
    * @param {String} favicon
    */
-  setFavicon (favicon) {
+  setFavicon(favicon) {
     this.favicon = favicon
     this.elements.icon.css('background-image', `url(${favicon})`)
     this.setTitleMaxWidth()

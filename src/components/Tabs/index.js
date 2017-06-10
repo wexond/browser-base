@@ -1,11 +1,10 @@
+import Component from '../../classes/Component'
 import Tab from '../Tab'
 import Transitions from '../../helpers/Transitions'
 import Colors from '../../helpers/Colors'
 
-export default class Tabs {
-  constructor () {
-    const self = this
-    
+export default class Tabs extends Component {
+  beforeRender() {
     // The timer for closing tabs system.
     this.timer = {
       canReset: false
@@ -13,18 +12,45 @@ export default class Tabs {
     this.cursor = {}
     this.dragData = {}
     this.transitions = []
+  }
 
-    this.elements = {}
+  render() {
+    return {
+      children: [
+        {
+          tag: 'div',
+          ref: 'tabs',
+          props: { className: 'tabs' },
+          children: [
+            {
+              tag: 'div',
+              ref: 'bottomBorder',
+              props: { className: 'tabs-bottom-border' }
+            },
+            {
+              tag: 'div',
+              ref: 'handle',
+              props: { className: 'tabs-handle' }
+            },
+            {
+              tag: 'div',
+              ref: 'tabbar',
+              props: { className: 'tabbar' }
+            },
+            {
+              tag: 'div',
+              ref: 'addButton',
+              props: { className: 'tabs-add-button' }
+            }
+          ]
+        }
+      ]
+    }
+  }
 
-    this.elements.tabs = div({ className: 'tabs' }, app.rootElement)
+  afterRender() {
+    const self = this
 
-    this.elements.bottomBorder = div({ className: 'tabs-bottom-border' }, this.elements.tabs)
-
-    this.elements.handle = div({ className: 'tabs-handle' }, this.elements.tabs)
-
-    this.elements.tabbar = div({ className: 'tabbar' }, this.elements.tabs)
-
-    this.elements.addButton = div({ className: 'tabs-add-button' }, this.elements.tabbar)
     this.elements.addButton.addEventListener('click', (e) => {
       self.addTab()
     })
@@ -33,20 +59,6 @@ export default class Tabs {
       self.setWidths(false)
       self.setPositions(false, false)
     })
-
-    this.addTab()
-
-    // Start the timer.
-    this.timer.timer = setInterval(function () { // Invoke the function each 3 seconds.
-      if (self.timer.canReset && self.timer.time === 3) { // If can calculate widths for all tabs.
-        // Calculate widths and positions for all tabs.
-        self.setWidths()
-        self.setPositions()
-
-        self.timer.canReset = false
-      }
-      self.timer.time += 1
-    }, 1000)
 
     window.addEventListener('mouseup', function () {
       if (self.dragData.tab != null && !self.dragData.tab.pinned) {
@@ -94,6 +106,18 @@ export default class Tabs {
         height: 'calc(100% - 4px)'
       })
     })
+
+    // Start the timer.
+    this.timer.timer = setInterval(function () { // Invoke the function each 3 seconds.
+      if (self.timer.canReset && self.timer.time === 3) { // If can calculate widths for all tabs.
+        // Calculate widths and positions for all tabs.
+        self.setWidths()
+        self.setPositions()
+
+        self.timer.canReset = false
+      }
+      self.timer.time += 1
+    }, 1000)
 
     // Fixes #1 issue.
     // Custom mouseenter and mouseleave event.
@@ -193,15 +217,24 @@ export default class Tabs {
    * Adds tab.
    * @param {Object} data 
    */
-  addTab (data = defaultTabOptions) {
-    let tab = new Tab(this)
+  addTab(data = defaultTabOptions) {
+    this.renderComponent(
+      {
+        children: [
+          {
+            component: new Tab(),
+            props: { tabs: this }
+          }
+        ]
+      }, this.elements.tabbar
+    )
   }
 
   /**
    * Selects given tab and deselects others.
    * @param {Tab} tab 
    */
-  selectTab (tabToSelect) {
+  selectTab(tabToSelect) {
     tabs.forEach((tab) => {
       if (tab !== tabToSelect) {
         tab.deselect()
@@ -214,7 +247,7 @@ export default class Tabs {
    * Gets widths for all tabs.
    * @return {Number}
    */
-  getWidths () {
+  getWidths() {
     let tabbarWidth = this.elements.tabbar.offsetWidth - this.elements.addButton.offsetWidth
     let tabWidth = (tabbarWidth / tabs.length)
 
@@ -228,7 +261,7 @@ export default class Tabs {
   /**
    * Sets widths for all tabs.
    */
-  setWidths (animation = true) {
+  setWidths(animation = true) {
     const width = this.getWidths()
 
     tabs.forEach((tab) => {
@@ -249,7 +282,7 @@ export default class Tabs {
    * Gets positions for all tabs.
    * @return {Object}
    */
-  getPositions () {
+  getPositions() {
     let positions = []
     let tempPosition = 0
 
@@ -269,7 +302,7 @@ export default class Tabs {
   /**
    * Sets positions for all tabs.
    */
-  setPositions (animateTabs = true, animateAddButton = true) {
+  setPositions(animateTabs = true, animateAddButton = true) {
     const positions = this.getPositions()
 
     tabs.forEach((tab) => {
@@ -283,7 +316,7 @@ export default class Tabs {
 
     this.setAddButtonAnimation(animateAddButton)
     this.elements.addButton.css('left', positions.addButtonPosition)
-  } 
+  }
 
   /**
    * Sets add button animation.
