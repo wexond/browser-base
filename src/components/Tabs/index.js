@@ -154,7 +154,7 @@ export default class Tabs extends Component {
    * @event
    * @param {Event} e
    */
-  onMouseMove (e) {
+  onMouseMove = (e) => {
     let mouseDeltaX = e.pageX - this.dragData.mouseClickX
     const tab = this.dragData.tab
     const tabDiv = tab.elements.tab
