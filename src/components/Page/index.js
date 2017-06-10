@@ -1,18 +1,34 @@
-export default class Page {
-  constructor (tab) {
+import Component from '../../classes/Component'
+
+export default class Page extends Component {
+  beforeRender (props) {
+    this.tab = props.tab
+  }
+
+  render () {
+    return {
+      children: [
+        {
+          tag: 'div',
+          props: { className: 'page' },
+          ref: 'page',
+          children: [
+            {
+              tag: 'webview',
+              props: { 
+                className: 'page-webview',
+                src: 'https://google.pl'
+              },
+              ref: 'webview'
+            }
+          ]
+        }
+      ]
+    }
+  }
+
+  afterRender () {
     const self = this
-
-    this.elements = {}
-    this.tab = tab
-
-    this.elements.page = div({ 
-      className: 'page'
-    }, app.elements.pages)
-
-    this.elements.webview = createElement('webview', { 
-      className: 'page-webview',
-      src: 'about:blank'
-    }, this.elements.page)
 
     this.elements.webview.addEventListener('page-title-updated', (e) => {
       self.tab.setTitle(e.title)
