@@ -235,6 +235,8 @@ export default class Tabs extends Component {
   setWidths (animation = true) {
     const width = this.getWidths()
 
+    let widthSmaller = width < 48
+
     tabs.forEach((tab) => {
       if (animation) {
         tab.appendTransition('width')
@@ -245,8 +247,9 @@ export default class Tabs extends Component {
       tab.setWidth(width)
       tab.width = width
 
-      tab.elements.close.css({ display: (!tab.selected && width < 48) ? 'none' : 'block' })
-      tab.elements.icon.css('display', ((tab.selected) ? ((width < 48) ? 'none' : 'block') : 'block'))
+      let tabSelected = tab.selected
+      tab.elements.close.css('display', (!tabSelected && widthSmaller) ? 'none' : 'block')
+      tab.elements.icon.css('display', ((tabSelected) ? ((widthSmaller) ? 'none' : 'block') : 'block'))
     })
   }
 
