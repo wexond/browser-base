@@ -3,7 +3,7 @@ import Transitions from '../../helpers/Transitions'
 import Component from '../../classes/Component'
 
 export default class Tab extends Component {
-  beforeRender(props) {
+  beforeRender (props) {
     this.tabs = props.tabs
 
     this.pinned = false
@@ -40,7 +40,7 @@ export default class Tab extends Component {
     )
   }
 
-  afterRender() {
+  afterRender () {
     const self = this
 
     this.elements.rightSmallBorder.css('right', 0)
@@ -104,7 +104,7 @@ export default class Tab extends Component {
    * Sets width of tab div.
    * @param {Number} width
    */
-  setWidth(width) {
+  setWidth (width) {
     this.elements.tab.css('width', width)
   }
 
@@ -112,14 +112,14 @@ export default class Tab extends Component {
    * Sets left of tab div.
    * @param {Number} left
    */
-  setLeft(left) {
+  setLeft (left) {
     this.elements.tab.css('left', left)
   }
 
   /** 
    * Selects tab.
    */
-  select() {
+  select () {
     this.page.show()
     this.selected = true
 
@@ -154,7 +154,7 @@ export default class Tab extends Component {
   /** 
    * Deselects tab.
    */
-  deselect() {
+  deselect () {
     this.page.hide()
     this.selected = false
 
@@ -187,7 +187,7 @@ export default class Tab extends Component {
   /**
    * Closes the tab.
    */
-  close = () => {
+  close () {
     const self = this
     const tabDiv = this.elements.tab
     // If the tab is last tab.
@@ -246,7 +246,7 @@ export default class Tab extends Component {
     this.tabs.timer.time = 0
 
     // Animate tab closing.
-    function closeAnim() {
+    function closeAnim () {
       self.appendTransition('width')
       tabDiv.css('width', 0)
 
@@ -263,7 +263,7 @@ export default class Tab extends Component {
    * Appends transition property to tab.
    * @param {string} transition
    */
-  appendTransition = (transition) => {
+  appendTransition (transition) {
     if (this.transitions.indexOf(transition) !== -1) return
 
     const tabDiv = this.elements.tab
@@ -288,7 +288,7 @@ export default class Tab extends Component {
   * Removes transition property from tab.
   * @param {string} transition
   */
-  removeTransition = (transition) => {
+  removeTransition (transition) {
     if (this.transitions.indexOf(transition) === -1) return
 
     const tabDiv = this.elements.tab
@@ -314,7 +314,7 @@ export default class Tab extends Component {
    * If it is, then replaces current tab with second tab.
    * @param {number} cursorX
    */
-  findTabToReplace = (cursorX) => {
+  findTabToReplace (cursorX) {
     if (!this.pinned) {
       const overTab = this.tabs.getTabFromMouseX(this, cursorX)
 
@@ -330,7 +330,7 @@ export default class Tab extends Component {
   /**
    * Updates position of tab to its place.
    */
-  updatePosition = () => {
+  updatePosition () {
     const self = this
     let data = this.tabs.getPositions()
     // Get new position for the tab.
@@ -358,7 +358,7 @@ export default class Tab extends Component {
    * Sets title max width.
    * @param {Boolean} closeVisible 
    */
-  setTitleMaxWidth(closeVisible = null) {
+  setTitleMaxWidth (closeVisible = null) {
     let closeVisibleTemp = closeVisible
     let decrease = 16
 
@@ -381,7 +381,7 @@ export default class Tab extends Component {
    * Sets title.
    * @param {String} title
    */
-  setTitle(title) {
+  setTitle (title) {
     this.elements.title.textContent = title
     this.setTitleMaxWidth()
   }
@@ -390,7 +390,7 @@ export default class Tab extends Component {
    * Sets favicon.
    * @param {String} favicon
    */
-  setFavicon(favicon) {
+  setFavicon (favicon) {
     this.favicon = favicon
     this.elements.icon.css('background-image', `url(${favicon})`)
     this.setTitleMaxWidth()
