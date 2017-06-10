@@ -4,7 +4,7 @@ import Transitions from '../../helpers/Transitions'
 import Colors from '../../helpers/Colors'
 
 export default class Tabs extends Component {
-  beforeRender() {
+  beforeRender () {
     // The timer for closing tabs system.
     this.timer = {
       canReset: false
@@ -14,7 +14,7 @@ export default class Tabs extends Component {
     this.transitions = []
   }
 
-  render() {
+  render () {
     return (
       <div className='tabs' ref='tabs'>
         <div className='tabs-bottom-border' ref='bottomBorder' />
@@ -25,7 +25,7 @@ export default class Tabs extends Component {
     )
   }
 
-  afterRender() {
+  afterRender () {
     const self = this
 
     this.elements.addButton.addEventListener('click', (e) => {
@@ -154,7 +154,7 @@ export default class Tabs extends Component {
    * @event
    * @param {Event} e
    */
-  onMouseMove = (e) => {
+  onMouseMove (e) {
     let mouseDeltaX = e.pageX - this.dragData.mouseClickX
     const tab = this.dragData.tab
     const tabDiv = tab.elements.tab
@@ -194,7 +194,7 @@ export default class Tabs extends Component {
    * Adds tab.
    * @param {Object} data 
    */
-  addTab(data = defaultTabOptions) {
+  addTab (data = defaultTabOptions) {
     let tab = (
       <Tab tabs={this}/>
     )
@@ -205,7 +205,7 @@ export default class Tabs extends Component {
    * Selects given tab and deselects others.
    * @param {Tab} tab 
    */
-  selectTab(tabToSelect) {
+  selectTab (tabToSelect) {
     tabs.forEach((tab) => {
       if (tab !== tabToSelect) {
         tab.deselect()
@@ -218,7 +218,7 @@ export default class Tabs extends Component {
    * Gets widths for all tabs.
    * @return {Number}
    */
-  getWidths() {
+  getWidths () {
     let tabbarWidth = this.elements.tabbar.offsetWidth - this.elements.addButton.offsetWidth
     let tabWidth = (tabbarWidth / tabs.length)
 
@@ -232,7 +232,7 @@ export default class Tabs extends Component {
   /**
    * Sets widths for all tabs.
    */
-  setWidths(animation = true) {
+  setWidths (animation = true) {
     const width = this.getWidths()
 
     tabs.forEach((tab) => {
@@ -245,6 +245,7 @@ export default class Tabs extends Component {
       tab.setWidth(width)
       tab.width = width
 
+      tab.elements.close.css({ display: (!tab.selected && width < 48) ? 'none' : 'block' })
       tab.elements.icon.css('display', ((tab.selected) ? ((width < 48) ? 'none' : 'block') : 'block'))
     })
   }
@@ -253,7 +254,7 @@ export default class Tabs extends Component {
    * Gets positions for all tabs.
    * @return {Object}
    */
-  getPositions() {
+  getPositions () {
     let positions = []
     let tempPosition = 0
 
@@ -273,7 +274,7 @@ export default class Tabs extends Component {
   /**
    * Sets positions for all tabs.
    */
-  setPositions(animateTabs = true, animateAddButton = true) {
+  setPositions (animateTabs = true, animateAddButton = true) {
     const positions = this.getPositions()
 
     tabs.forEach((tab) => {
@@ -293,7 +294,7 @@ export default class Tabs extends Component {
    * Sets add button animation.
    * @param {boolean} flag
    */
-  setAddButtonAnimation = (flag) => {
+  setAddButtonAnimation (flag) {
     if (flag) {
       if (this.transitions.indexOf('left') !== -1) return
     } else {
@@ -320,7 +321,7 @@ export default class Tabs extends Component {
    * @param {number} cursorX
    * @return {Tab}
    */
-  getTabFromMouseX = (callingTab, xPos) => {
+  getTabFromMouseX (callingTab, xPos) {
     for (var i = 0; i < tabs.length; i++) {
       if (tabs[i] !== callingTab) {
         if (this.containsX(tabs[i], xPos)) {
@@ -339,7 +340,7 @@ export default class Tabs extends Component {
    * @param {number} xPos
    * @return {boolean}
    */
-  containsX = (tabToCheck, xPos) => {
+  containsX (tabToCheck, xPos) {
     var rect = tabToCheck.elements.tab.getBoundingClientRect()
 
     if (xPos >= rect.left && xPos <= rect.right) {
@@ -356,7 +357,7 @@ export default class Tabs extends Component {
    * @param {number} cursorY
    * @return {Tab}
    */
-  getTabFromMousePoint = (callingTab, xPos, yPos) => {
+  getTabFromMousePoint (callingTab, xPos, yPos) {
     for (var i = 0; i < tabs.length; i++) {
       if (tabs[i] !== callingTab) {
         if (this.containsPoint(tabs[i], xPos, yPos)) {
@@ -376,7 +377,7 @@ export default class Tabs extends Component {
    * @param {number} yPos
    * @return {boolean}
    */
-  containsPoint = (tabToCheck, xPos, yPos) => {
+  containsPoint (tabToCheck, xPos, yPos) {
     var rect = tabToCheck.elements.tab.getBoundingClientRect()
 
     if (xPos >= rect.left && xPos <= rect.right && yPos <= rect.bottom) {
@@ -392,7 +393,7 @@ export default class Tabs extends Component {
    * @param {number} secondIndex
    * @param {boolean} changePos
    */
-  replaceTabs = (firstIndex, secondIndex, changePos = true) => {
+  replaceTabs (firstIndex, secondIndex, changePos = true) {
     var firstTab = tabs[firstIndex]
     var secondTab = tabs[secondIndex]
 
@@ -412,7 +413,7 @@ export default class Tabs extends Component {
   /**
    * Updates tabs' state (borders etc).
    */
-  updateTabs = () => {
+  updateTabs () {
     tabs.forEach((tab) => {
       if (!tab.selected) {
         tab.elements.rightSmallBorder.css('display', 'block')
@@ -425,7 +426,7 @@ export default class Tabs extends Component {
    * Gets selected tab.
    * @return {Tab}
    */
-  getSelectedTab = () => {
+  getSelectedTab () {
     tabs.forEach((tab) => {
       if (tab.selected) {
         return tabs[i]
