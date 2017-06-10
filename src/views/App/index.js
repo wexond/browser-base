@@ -18,7 +18,8 @@ class App extends Component {
     return {
       children: [
         {
-          component: new Tabs()
+          component: new Tabs(),
+          ref: 'tabs'
         },
         {
           tag: 'div',
@@ -30,7 +31,7 @@ class App extends Component {
   }
 
   afterRender() {
-    // this.elements.tabs.addTab()
+    this.elements.tabs.addTab()
   }
 }
 
