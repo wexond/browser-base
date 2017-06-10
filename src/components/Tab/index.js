@@ -95,8 +95,6 @@ export default class Tab extends Component {
   afterRender() {
     const self = this
 
-    console.log(this)
-
     this.elements.rightSmallBorder.css('right', 0)
     this.elements.leftSmallBorder.css({
       left: 0,
@@ -133,7 +131,7 @@ export default class Tab extends Component {
       if (e.button !== 0) return
 
       // Initialize the dragData object in {Tabs}.
-      tabs.dragData = {
+      self.tabs.dragData = {
         tabX: e.currentTarget.offsetLeft,
         mouseClickX: e.clientX,
         canDrag: !self.pinned,
@@ -143,7 +141,7 @@ export default class Tab extends Component {
       self.tabs.selectTab(self)
 
       if (!self.pinned) {
-        window.addEventListener('mousemove', tabs.onMouseMove)
+        window.addEventListener('mousemove', self.tabs.onMouseMove)
       }
     })
 
