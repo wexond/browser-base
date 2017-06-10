@@ -1,50 +1,40 @@
 import '../../app.scss'
+import './global'
 import Tabs from '../../components/Tabs'
+import Component from '../../classes/Component'
+import UI from '../../classes/UI'
 
-const {remote, clipboard} = require('electron')
-const {dialog, nativeImage} = remote
-const fs = require('fs')
-const path = require('path')
-const homedir = require('os').homedir()
-
-const userData = path.join(homedir, '.wexond')
-
-const requiredFiles = [
-  {
-    path: 'history.json',
-    defaultContent: '[]'
+class App extends Component {
+  constructor() {
+    super()
   }
-]
 
-window.currentWindow = remote.getCurrentWindow()
-window.tabs = []
-window.defaultTabOptions = {
-  select: true,
-  url: 'wexond://newtab'
-}
-window.tabsAnimationData = {
-  positioningDuration: 0.2,
-  positioningEasing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
-  hoverDuration: 0.2
-}
-
-class App {
-  constructor (rootElement) {
+  beforeRender() {
     window.app = this
-
     this.cursor = {}
-    this.elements = {}
-    this.rootElement = rootElement
+  }
 
-    app.elements.pages = div({ className: 'pages' })
+  render() {
+    return {
+      children: [
+        {
+          component: new Tabs()
+        },
+        {
+          tag: 'div',
+          props: { className: 'pages' },
+          ref: 'pages'
+        }
+      ]
+    }
+  }
 
-    this.elements.tabs = new Tabs()
-
-    app.rootElement.appendChild(app.elements.pages)
+  afterRender() {
+    // this.elements.tabs.addTab()
   }
 }
 
 // Wait for sass load.
 setTimeout(function () {
-  new App(document.getElementById('app'))
+  UI.render(new App(), document.getElementById('app'))
 }, 1)
