@@ -33,7 +33,7 @@ export default class Component {
   _createComponent (component, parent, props, ref) {
     component._render(parent, props)
     if (ref != null) {
-      this.elements[ref] = element.children[i].component
+      this.elements[ref] = component
     }
   }
 
