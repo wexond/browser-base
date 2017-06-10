@@ -15,37 +15,14 @@ export default class Tabs extends Component {
   }
 
   render() {
-    return {
-      children: [
-        {
-          tag: 'div',
-          ref: 'tabs',
-          props: { className: 'tabs' },
-          children: [
-            {
-              tag: 'div',
-              ref: 'bottomBorder',
-              props: { className: 'tabs-bottom-border' }
-            },
-            {
-              tag: 'div',
-              ref: 'handle',
-              props: { className: 'tabs-handle' }
-            },
-            {
-              tag: 'div',
-              ref: 'tabbar',
-              props: { className: 'tabbar' }
-            },
-            {
-              tag: 'div',
-              ref: 'addButton',
-              props: { className: 'tabs-add-button' }
-            }
-          ]
-        }
-      ]
-    }
+    return (
+      <div className='tabs' ref='tabs'>
+        <div className='tabs-bottom-border' ref='bottomBorder' />
+        <div className='tabs-handle' ref='handle' />
+        <div className='tabbar' ref='tabbar' />
+        <div className='tabs-add-button' ref='addButton' />
+      </div>
+    )
   }
 
   afterRender() {
@@ -218,16 +195,10 @@ export default class Tabs extends Component {
    * @param {Object} data 
    */
   addTab(data = defaultTabOptions) {
-    this.renderComponent(
-      {
-        children: [
-          {
-            component: new Tab(),
-            props: { tabs: this }
-          }
-        ]
-      }, this.elements.tabbar
+    let tab = (
+      <Tab tabs={this}/>
     )
+    this.renderComponent(tab, this.elements.tabbar)
   }
 
   /**

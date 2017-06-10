@@ -3,84 +3,7 @@ import Transitions from '../../helpers/Transitions'
 import Component from '../../classes/Component'
 
 export default class Tab extends Component {
-  render() {
-    return {
-      children: [
-        {
-          tag: 'div',
-          ref: 'tab',
-          props: { className: 'tab' },
-          children: [
-            {
-              tag: 'div',
-              ref: 'content',
-              props: { className: 'tab-content' },
-              children: [
-                {
-                  tag: 'div',
-                  ref: 'title',
-                  props: {
-                    className: 'tab-title',
-                    textContent: 'New tab'
-                  }
-                },
-                {
-                  tag: 'div',
-                  ref: 'close',
-                  props: { className: 'tab-close' },
-                  children: [
-                    {
-                      tag: 'div',
-                      ref: 'closeIcon',
-                      props: { className: 'tab-close-icon' }
-                    }
-                  ]
-                },
-                {
-                  tag: 'div',
-                  ref: 'icon',
-                  props: { className: 'tab-icon' }
-                }
-              ]
-            },
-            {
-              tag: 'div',
-              ref: 'rightSmallBorder',
-              props: { className: 'tab-border-small-vertical' }
-            },
-            {
-              tag: 'div',
-              ref: 'leftSmallBorder',
-              props: { className: 'tab-border-small-vertical' }
-            },
-            {
-              tag: 'div',
-              ref: 'leftFullBorder',
-              props: { className: 'tab-border-full-vertical' }
-            },
-            {
-              tag: 'div',
-              ref: 'rightFullBorder',
-              props: { className: 'tab-border-full-vertical' }
-            }
-          ]
-        }
-      ]
-    }
-  }
   beforeRender(props) {
-    this.page = new Page()
-    this.renderComponent(
-      {
-        children: [
-          {
-            component: this.page,
-            props: { tab: this }
-          }
-        ]
-      }, app.elements.pages
-    )
-
     this.tabs = props.tabs
 
     this.pinned = false
@@ -90,6 +13,31 @@ export default class Tab extends Component {
     this.blockLeftAnimation = true
 
     window.tabs.push(this)
+  }
+
+  render () {
+    let page = (
+      <Page tab={this} ref={(e) => { this.page = e }} />
+    )
+    this.renderComponent(page, app.elements.pages)
+
+    return (
+      <div className='tab' ref='tab'>
+        <div className='tab-content' ref='content'>
+          <div className='tab-title' ref='title'>
+            New tab
+          </div>
+          <div className='tab-close' ref='close'>
+            <div className='tab-close-icon' ref='closeIcon' />
+          </div>
+          <div className='tab-icon' ref='icon' />
+        </div>
+        <div className='tab-border-small-vertical' ref='rightSmallBorder' />
+        <div className='tab-border-small-vertical' ref='leftSmallBorder' />
+        <div className='tab-border-full-vertical' ref='rightFullBorder' />
+        <div className='tab-border-full-vertical' ref='leftFullBorder' />
+      </div>
+    )
   }
 
   afterRender() {
