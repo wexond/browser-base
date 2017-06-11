@@ -17,6 +17,7 @@ export default class Tabs extends Component {
   render () {
     return (
       <div className='tabs' ref='tabs'>
+        {this.props.children}
         <div className='tabs-bottom-border' ref='bottomBorder' />
         <div className='tabs-handle' ref='handle' />
         <div className='tabbar' ref='tabbar' />
