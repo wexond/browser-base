@@ -1,6 +1,7 @@
 export default class Component {
   _render (parentElement, props = {}, children = null) {
     this.props = props
+    if (children == null) children = []
     this.props.children = children
 
     this.elements = {
@@ -43,22 +44,22 @@ export default class Component {
           } else if (typeof props.ref === 'string') {
             this.elements[props.ref] = element
           }
-        }
 
-        if (typeof props.onClick === 'function') element.addEventListener('click', props.onClick)
-        if (typeof props.onMouseDown === 'function') element.addEventListener('mousedown', props.onMouseDown)
-        if (typeof props.onTouchStart === 'function') element.addEventListener('touchstart', props.onTouchStart)
-        if (typeof props.onFocus === 'function') element.addEventListener('focus', props.onFocus)
-        if (typeof props.onBlur === 'function') element.addEventListener('blur', props.onBlur)
-        if (typeof props.onInput === 'function') element.addEventListener('input', props.onInput)
+          if (typeof props.onClick === 'function') element.addEventListener('click', props.onClick)
+          if (typeof props.onMouseDown === 'function') element.addEventListener('mousedown', props.onMouseDown)
+          if (typeof props.onTouchStart === 'function') element.addEventListener('touchstart', props.onTouchStart)
+          if (typeof props.onFocus === 'function') element.addEventListener('focus', props.onFocus)
+          if (typeof props.onBlur === 'function') element.addEventListener('blur', props.onBlur)
+          if (typeof props.onInput === 'function') element.addEventListener('input', props.onInput)
 
-        if (typeof props.style === 'object') {
-          Object.assign(element.style, props.style)
-        }
+          if (typeof props.style === 'object') {
+            Object.assign(element.style, props.style)
+          }
 
-        for (var key in this.defaultProps) {
-          if (props[key] === null) {
-            props[key] = this.defaultProps[key]
+          for (var key in this.defaultProps) {
+            if (props[key] === null) {
+              props[key] = this.defaultProps[key]
+            }
           }
         }
 
@@ -68,15 +69,18 @@ export default class Component {
 
           let x = children.length
           while (x--) {
-            if (typeof children[x] !== 'string' && children[x].length > 0) {
+            if (children[x] != null && typeof children[x] !== 'string' && children[x].length > 0) {
               childrenToMove = children[x]
               childrenIndex = x
               children.splice(x, 1)
             }
           }
 
-          for (var x = 0; x < childrenToMove.length; x++) {
-            childrenToMove[x].isChildProp = true
+          for (x = 0; x < childrenToMove.length; x++) {
+            if (typeof childrenToMove[x] !== 'string') {
+              childrenToMove[x].isPropChild = true
+            }
+
             children.splice(childrenIndex, 0, childrenToMove[x])
           }
 
@@ -85,10 +89,8 @@ export default class Component {
           }
         }
       }
-      
     } else if (typeof elements === 'string') {
       parentElement.innerHTML += elements
-      return
     }
   }
 }
