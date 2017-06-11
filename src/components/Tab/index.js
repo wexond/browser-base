@@ -19,7 +19,7 @@ export default class Tab extends Component {
     let page = (
       <Page tab={this} ref={(e) => { this.page = e }} />
     )
-    this.renderComponent(page, app.elements.pages)
+    this.renderComponents(page, app.elements.pages)
 
     return (
       <div className='tab' ref='tab'>

@@ -198,7 +198,7 @@ export default class Tabs extends Component {
     let tab = (
       <Tab tabs={this}/>
     )
-    this.renderComponent(tab, this.elements.tabbar)
+    this.renderComponents(tab, this.elements.tabbar)
   }
 
   /**
