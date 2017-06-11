@@ -1,5 +1,8 @@
 export default class Component {
-  _render (rootElement, props = null) {
+  _render (rootElement, props = {}, children = null) {
+    this.props = props
+    this.props.children = children
+
     if (typeof this.beforeRender === 'function') this.beforeRender(props)
 
     let tempElements = this.render(props)
@@ -16,50 +19,59 @@ export default class Component {
   }
 
   _createElements(elements, rootElement) {
-    let element
     if (typeof elements === 'object') {
-      element = this._createElement(elements.elementName, elements.attributes, rootElement)
+      let elementName = elements.elementName
+      let props = elements.attributes
+      let children = elements.children
+
+      if (typeof elementName === 'function') {
+        let component = new elementName()
+        component._render(rootElement, props, children)
+
+        if (props != null && props.ref != null) {
+          if (typeof props.ref === 'function') {
+            props.ref(component)
+          } else if (typeof props.ref === 'string') {
+            this.elements[props.ref] = component
+          }
+        }
+      } else {
+        let element = document.createElement(elementName)
+        Object.assign(element, props)
+        rootElement.appendChild(element)
+
+        if (props != null && props.ref != null) {
+          if (typeof props.ref === 'function') {
+            props.ref(element)
+          } else if (typeof props.ref === 'string') {
+            this.elements[props.ref] = element
+          }
+        }
+
+        if (children != null) {
+          let length = children.length
+          for (var i = 0; i < length; i++) {
+            if (children[i].length > 0) {
+              for (var x = 0; x < children[i].length; x++) {
+                let child = children[i][x]
+                let indexChild = children.indexOf(children[i])
+                children.splice(indexChild, 1)
+                children.splice(indexChild, 0, child)
+              }
+            }
+          }
+
+          for (var i = 0; i < children.length; i++) {
+            this._createElements(children[i], element)
+          }
+        }
+      }
+      
     } else if (typeof elements === 'string') {
       rootElement.innerHTML += elements
       return
     }
 
-    if (elements.children != null) {
-      for (var i = 0; i < elements.children.length; i++) {
-        if (element.isDOM) {
-          this._createElements(elements.children[i], element.element)
-        }
-      }
-    }
-  }
-
-  _createElement (elementName, props, rootElement) {
-    if (typeof elementName === 'function') {
-      let component = new elementName()
-      component._render(rootElement, props)
-
-      if (props.ref != null) {
-        if (typeof props.ref === 'function') {
-          props.ref(component)
-        } else if (typeof props.ref === 'string') {
-          this.elements[props.ref] = component
-        }
-      }
-
-      return {element: component, isDOM: false}
-    } else {
-      let element = document.createElement(elementName)
-      Object.assign(element, props)
-      rootElement.appendChild(element)
-
-      if (props.ref != null) {
-        if (typeof props.ref === 'function') {
-          props.ref(element)
-        } else if (typeof props.ref === 'string') {
-          this.elements[props.ref] = element
-        }
-      }
-      return {element: element, isDOM: true}
-    }
+    
   }
 }
