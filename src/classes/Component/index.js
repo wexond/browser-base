@@ -10,7 +10,6 @@ export default class Component {
     if (typeof this.beforeRender === 'function') this.beforeRender(props)
 
     let tempElements = this.render(props)
-    console.log(tempElements)
     this.renderComponents(tempElements, parentElement)
 
     if (typeof this.afterRender === 'function') this.afterRender(props)
@@ -82,9 +81,7 @@ export default class Component {
           }
 
           for (var i = 0; i < children.length; i++) {
-            if (!children[i].isChildProp) {
-              this.renderComponents(children[i], element)
-            }
+            this.renderComponents(children[i], element)
           }
         }
       }
