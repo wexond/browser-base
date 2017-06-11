@@ -17,9 +17,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Tabs ref='tabs'>
-          <div ref='s'>e</div>
-        </Tabs>
+        <Tabs ref='tabs' />
         <div className='pages' ref='pages' />
       </div>
     )
