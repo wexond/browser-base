@@ -1,24 +1,21 @@
 export default class Component {
-  _render (rootElement, props = {}, children = null) {
+  _render (parentElement, props = {}, children = null) {
     this.props = props
     this.props.children = children
+
+    this.elements = {
+      parent: parentElement
+    }
 
     if (typeof this.beforeRender === 'function') this.beforeRender(props)
 
     let tempElements = this.render(props)
-    this.elements = {
-      root: rootElement
-    }
-    this._createElements(tempElements, rootElement)
+    this.renderComponents(tempElements, parentElement)
 
     if (typeof this.afterRender === 'function') this.afterRender(props)
   }
 
-  renderComponent (elements, rootElement) {
-    this._createElements(elements, rootElement)
-  }
-
-  _createElements(elements, rootElement) {
+  renderComponents (elements, parentElement, caller) {
     if (typeof elements === 'object') {
       let elementName = elements.elementName
       let props = elements.attributes
@@ -26,7 +23,7 @@ export default class Component {
 
       if (typeof elementName === 'function') {
         let component = new elementName()
-        component._render(rootElement, props, children)
+        component._render(parentElement, props, children)
 
         if (props != null && props.ref != null) {
           if (typeof props.ref === 'function') {
@@ -38,7 +35,7 @@ export default class Component {
       } else {
         let element = document.createElement(elementName)
         Object.assign(element, props)
-        rootElement.appendChild(element)
+        parentElement.appendChild(element)
 
         if (props != null && props.ref != null) {
           if (typeof props.ref === 'function') {
@@ -49,29 +46,31 @@ export default class Component {
         }
 
         if (children != null) {
-          let length = children.length
-          for (var i = 0; i < length; i++) {
-            if (children[i].length > 0) {
-              for (var x = 0; x < children[i].length; x++) {
-                let child = children[i][x]
-                let indexChild = children.indexOf(children[i])
-                children.splice(indexChild, 1)
-                children.splice(indexChild, 0, child)
-              }
+          let childrenToMove = []
+          let childrenIndex = 0
+
+          let x = children.length
+          while (x--) {
+            if (typeof children[x] !== 'string' && children[x].length > 0) {
+              childrenToMove = children[x]
+              childrenIndex = x
+              children.splice(x, 1)
             }
           }
 
+          for (var x = 0; x < childrenToMove.length; x++) {
+            children.splice(childrenIndex, 0, childrenToMove[x])
+          }
+
           for (var i = 0; i < children.length; i++) {
-            this._createElements(children[i], element)
+            this.renderComponents(children[i], element)
           }
         }
       }
       
     } else if (typeof elements === 'string') {
-      rootElement.innerHTML += elements
+      parentElement.innerHTML += elements
       return
     }
-
-    
   }
 }
