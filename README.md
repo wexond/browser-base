@@ -17,7 +17,8 @@ It also contains documents describing how to use the browser, and create extensi
 ## Downloads
 [![Downloads](https://img.shields.io/github/downloads/Nersent/Wexond/total.svg)](https://github.com/Nersent/Wexond/releases)
 
-There aren't any precompiled binaries at this moment, so to open `Wexond` you will need to compile the application by yourself.
+There aren't any precompiled binaries at this moment, so to open `Wexond` you will need to run the application manually, so head over to [Running section](https://github.com/Nersent/Wexond/tree/purejs#running).
+
 ## Running
 **NOTE**: The process shown here uses [`yarn`](https://yarnpkg.com/lang/en/), but those commands can be run with [`npm`](https://www.npmjs.com/). Though we highly recommend you to use [`yarn`](https://yarnpkg.com/lang/en/).
 
