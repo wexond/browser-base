@@ -1,7 +1,7 @@
 {
   "name": "wexond",
   "version": "0.1.0",
-  "description": "Extensible web browser with material UI.",
+  "description": "Extensible, fast and innovative web browser with material UI.",
   "main": "main.js",
   "repository": {
     "type": "git",
@@ -9,9 +9,10 @@
   },
   "scripts": {
     "start": "cross-env ENV=dev electron main.js",
-    "watch-app": "webpack && webpack-dev-server --hot --inline --port 8080",
-    "build-production": "webpack",
-    "compile-win64": "npm run build-production && electron-packager . --platform=win32 --arch=x64 Wexond --overwrite"
+    "watch:app": "npm run buld:dev && webpack-dev-server --hot --inline --port 8080",
+    "build:dev": "webpack",
+    "build:production": "webpack",
+    "compile:win64": "npm run build:production && electron-packager . --platform=win32 --arch=x64 Wexond --overwrite"
   },
   "homepage": "https://github.com/Nersent/Wexond#readme",
   "directories": {
@@ -20,7 +21,10 @@
   "keywords": [
     "web-browser",
     "material-design",
-    "webpack2"
+    "webpack2",
+    "material-ui",
+    "electron",
+    "jsx"
   ],
   "bugs": {
     "url": "https://github.com/Nersent/Wexond/issues"
