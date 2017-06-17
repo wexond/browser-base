@@ -30,5 +30,5 @@ class App extends Component {
 
 // Wait for sass load.
 setTimeout(function () {
-  UI.render(new App(), document.getElementById('app'))
+  UI.render(<App />, document.getElementById('app'))
 }, 1)
