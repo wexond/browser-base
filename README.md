@@ -15,9 +15,9 @@ Guides and the API reference are located in [`docs`](https://github.com/Nersent/
 It also contains documents describing how to use the browser, and create extensions.
 
 ## Downloads
-There aren't any precompiled binaries at this moment, so to open `Wexond` you will need to compile the application by yourself.
 [![Downloads](https://img.shields.io/github/downloads/Nersent/Wexond/total.svg)](https://github.com/Nersent/Wexond/releases)
 
+There aren't any precompiled binaries at this moment, so to open `Wexond` you will need to compile the application by yourself.
 ## Running
 **NOTE**: The process shown here uses [`yarn`](https://yarnpkg.com/lang/en/), but those commands can be run with [`npm`](https://www.npmjs.com/). Though we highly recommend you to use [`yarn`](https://yarnpkg.com/lang/en/).
 
