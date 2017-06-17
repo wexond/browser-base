@@ -1,10 +1,11 @@
 import Page from '../Page'
 import Transitions from '../../helpers/Transitions'
 import Component from '../../classes/Component'
+import UI from '../../classes/UI'
 
 export default class Tab extends Component {
-  beforeRender (props) {
-    this.tabs = props.tabs
+  beforeRender () {
+    this.tabs = this.props.tabs
 
     this.pinned = false
     this.favicon = ''
@@ -16,10 +17,7 @@ export default class Tab extends Component {
   }
 
   render () {
-    let page = (
-      <Page tab={this} ref={(e) => { this.page = e }} />
-    )
-    this.renderComponents(page, app.elements.pages)
+    UI.render(<Page tab={this} ref={(e) => { this.page = e }} />, app.elements.pages, this)
 
     return (
       <div className='tab' ref='tab'>

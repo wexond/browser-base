@@ -2,6 +2,7 @@ import Component from '../../classes/Component'
 import Tab from '../Tab'
 import Transitions from '../../helpers/Transitions'
 import Colors from '../../helpers/Colors'
+import UI from '../../classes/UI'
 
 export default class Tabs extends Component {
   beforeRender () {
@@ -17,7 +18,6 @@ export default class Tabs extends Component {
   render () {
     return (
       <div className='tabs' ref='tabs'>
-        {this.props.children}
         <div className='tabs-bottom-border' ref='bottomBorder' />
         <div className='tabs-handle' ref='handle' />
         <div className='tabbar' ref='tabbar' />
@@ -196,10 +196,7 @@ export default class Tabs extends Component {
    * @param {Object} data 
    */
   addTab (data = defaultTabOptions) {
-    let tab = (
-      <Tab tabs={this}/>
-    )
-    this.renderComponents(tab, this.elements.tabbar)
+    UI.render(<Tab tabs={this}/>, this.elements.tabbar, this)
   }
 
   /**

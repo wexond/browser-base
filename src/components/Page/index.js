@@ -1,8 +1,8 @@
 import Component from '../../classes/Component'
 
 export default class Page extends Component {
-  beforeRender (props) {
-    this.tab = props.tab
+  beforeRender () {
+    this.tab = this.props.tab
   }
 
   render () {
