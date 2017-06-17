@@ -307,10 +307,10 @@ export default class Tabs extends Component {
 
     if (addButton != null) {
       if (flag) {
-        addButton.style['-webkit-transition'] = Transitions.appendTransition(addButton.style['-webkit-transition'], transition)
+        addButton.style['-webkit-transition'] = Transitions.appendTransition(addButton.css('-webkit-transition'), transition)
         this.transitions.push('left')
       } else {
-        addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.style['-webkit-transition'], transition)
+        addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.css('-webkit-transition'), transition)
         this.transitions.splice(this.transitions.indexOf('left'), 1)
       }
     }

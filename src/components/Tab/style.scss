@@ -49,16 +49,17 @@
 
 .tab-close-icon {
   @include center-vertical;
-  @include image-center(16px, 16px);
   position: absolute;
-  right: 7px;
-  background-image: url(images/Tabs/close.png);
-  height: 20px;
-  width: 20px;
+  right: 8px;
+  -webkit-mask-box-image: url(images/Tabs/close.png);
+  background-color: black;
+  height: 16px;
+  width: 16px;
   opacity: $secondary-opacity-light;
-  transition: 0.2s opacity;
+  transition: 0.2s all;
 
   &:hover {
+    background-color: red;
     opacity: $primary-opacity-light;
   }
 }
