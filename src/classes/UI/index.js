@@ -1,16 +1,11 @@
 export default class UI {
-  static setRefsForChildren (children, context) {
+  static fixRefsForChildren (children, caller) {
     if (children != null) {
       for (var i = 0; i < children.length; i++) {
-        let props = children[i].attributes
-        if (props != null && props.ref != null) {
-          if (typeof props.ref === 'function') {
-            props.ref(element)
-          } else if (typeof props.ref === 'string') {
-            context.elements[props.ref] = children[i]
-          }
+        if (typeof children[i] === 'object') {
+          children[i].baseComponent = caller
+          UI.fixRefsForChildren(children[i].children, caller)
         }
-        UI.setRefsForChildren(children[i].children, context)
       }
     }
   }
@@ -30,9 +25,9 @@ export default class UI {
         if (children == null) children = []
         element.props.children = children
 
-        element.callRender(parentElement, props, children)
+        UI.fixRefsForChildren(children, caller)
 
-        UI.setRefsForChildren(children, caller)
+        element.callRender(parentElement, props, children)
       } else {
         element = document.createElement(elementName)
         Object.assign(element, props)
@@ -73,10 +68,6 @@ export default class UI {
           }
 
           for (x = childrenToMove.length - 1; x >= 0; x--) {
-            if (typeof childrenToMove[x] !== 'string') {
-              childrenToMove[x].isPropChild = true
-            }
-
             children.splice(childrenIndex, 0, childrenToMove[x])
           }
 
@@ -90,7 +81,12 @@ export default class UI {
         if (typeof props.ref === 'function') {
           props.ref(element)
         } else if (typeof props.ref === 'string') {
-          caller.elements[props.ref] = element
+          if (elements.baseComponent != null) {
+            elements.baseComponent.elements[props.ref] = element
+          } else {
+            caller.elements[props.ref] = element
+          }
+          
         }
       }
     } else if (typeof elements === 'string') {
