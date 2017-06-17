@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "cross-env ENV=dev electron main.js",
-    "watch:app": "npm run buld:dev && webpack-dev-server --hot --inline --port 8080",
+    "watch:app": "npm run build:dev && webpack-dev-server --hot --inline --port 8080",
     "build:dev": "webpack",
     "build:production": "webpack",
     "compile:win64": "npm run build:production && electron-packager . --platform=win32 --arch=x64 Wexond --overwrite"
