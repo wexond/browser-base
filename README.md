@@ -2,34 +2,37 @@
 
 [![discord](https://discordapp.com/api/guilds/307605794680209409/widget.png)](https://discord.gg/yAA8DdK)
 [![Build Status](https://travis-ci.org/Nersent/Wexond.svg)](https://travis-ci.org/Nersent/Wexond)
-[![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](http://standardjs.com)
 [![dependencies Status](https://david-dm.org/nersent/wexond/status.svg)](https://david-dm.org/nersent/wexond)
 [![devDependencies Status](https://david-dm.org/nersent/wexond/dev-status.svg)](https://david-dm.org/nersent/wexond?type=dev)
 
 [![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 # Wexond
-Extensible and minimal web browser with material UI made with [`Electron`](https://github.com/electron/electron), that contains many innovative features.
-
-Checkout our [Trello board](https://trello.com/b/dsd7rEEJ/wexond).
-
-## Questions and issues
-If you have noticed a bug, please report it on [Github issue tracker](https://github.com/Nersent/Wexond/issues).
+`Wexond` is an extensible, fast and innovative web browser written in JavaScript using [`Electron`](https://github.com/electron/electron) and JSX syntax to build browser's UI easier.
 
 ## Documentation
 Guides and the API reference are located in [`docs`](https://github.com/Nersent/Wexond/docs).
 It also contains documents describing how to use the browser, and create extensions.
 
 ## Downloads
+There aren't any precompiled binaries at this moment, so to open `Wexond` you will need to compile the application by yourself.
 [![Downloads](https://img.shields.io/github/downloads/Nersent/Wexond/total.svg)](https://github.com/Nersent/Wexond/releases)
 
 ## Running
-To run `Wexond` you need to install all needed dependencies using [`yarn`](https://yarnpkg.com/lang/en/):
+**NOTE**: The process shown here uses [`yarn`](https://yarnpkg.com/lang/en/), but those commands can be run with [`npm`](https://www.npmjs.com/). Though we highly recommend you to use [`yarn`](https://yarnpkg.com/lang/en/).
+
+Before using those commands below, please make sure you have [`npm`](https://www.npmjs.com/) and [`yarn`](https://yarnpkg.com/lang/en/) installed.
+
+Before running `Wexond`, you need to install all needed dependencies:
 ```bash
 yarn
 ```
 
-If you have installed all dependencies successfully, then you can run `Wexond` using [`yarn`](https://yarnpkg.com/lang/en/):
+If you have installed all dependencies successfully, then in first terminal you need to run:
+```bash
+yarn run watch:app
 ```
+and in second terminal:
+```bash
 yarn start
 ```
