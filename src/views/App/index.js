@@ -1,8 +1,11 @@
 import '../../app.scss'
 import './global'
-import Tabs from '../../components/Tabs'
+
 import Component from '../../classes/Component'
 import UI from '../../classes/UI'
+
+import Tabs from '../../components/Tabs'
+import Bar from '../../components/Bar'
 
 class App extends Component {
   constructor() {
@@ -18,6 +21,7 @@ class App extends Component {
     return (
       <div>
         <Tabs ref='tabs' />
+        <Bar />
         <div className='pages' ref='pages' />
       </div>
     )
