@@ -24,7 +24,14 @@ export default class Page extends Component {
       self.tab.setFavicon(e.favicons[0])
     })
 
-    this.elements.page.css('height', 'calc(100vh - ' + this.elements.page.getBoundingClientRect().top + 'px)')
+    if (window.app != null) {
+      let appElements = window.app.elements
+      let tabsHeight = appElements.tabs.elements.tabs.offsetHeight
+      let barHeight = appElements.bar.elements.bar.offsetHeight
+      let height = tabsHeight + barHeight
+
+      this.elements.page.css('height', 'calc(100vh - ' + height + 'px)')
+    }
   }
 
   /**

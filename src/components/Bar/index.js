@@ -7,7 +7,7 @@ export default class Bar extends Component {
 
   render () {
     return (
-      <div className='bar'>
+      <div className='bar' ref='bar'>
         <div className='bar-icon bar-icon-back' />
         <div className='bar-icon bar-icon-forward' />
         <div className='bar-icon bar-icon-refresh' />
