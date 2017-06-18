@@ -14,6 +14,7 @@ class App extends Component {
 
   beforeRender() {
     window.app = this
+    
     this.cursor = {}
   }
 
@@ -21,7 +22,7 @@ class App extends Component {
     return (
       <div>
         <Tabs ref='tabs' />
-        <Bar />
+        <Bar ref='bar' />
         <div className='pages' ref='pages' />
       </div>
     )
