@@ -23,6 +23,8 @@ export default class Page extends Component {
     this.elements.webview.addEventListener('page-favicon-updated', (e) => {
       self.tab.setFavicon(e.favicons[0])
     })
+
+    this.elements.page.css('height', 'calc(100vh - ' + this.elements.page.getBoundingClientRect().top + 'px)')
   }
 
   /**
