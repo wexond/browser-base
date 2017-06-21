@@ -51,7 +51,7 @@
   float: right;
 }
 
-.bar-icon-info {
+.bar-addressbar-icon-info {
   width: 14px;
   height: 14px;
   @include image-center(100%, 100%);
@@ -59,6 +59,39 @@
   position: relative;
   background-image: url(images/Bar/normal-icon.png);
   float: left;
+  opacity: $secondary-opacity-light;
+  margin-right: 12px;
+}
+
+.bar-addressbar {
+  float: left;
+  height: 100%;
   margin-left: 26px;
+  font-size: 14px;
+}
+
+.bar-addressbar-divider {
+  float: left;
+  margin-left: 8px;
+  margin-right: 8px;
+  width: 1px;
+  height: 16px;
+  background-color: black;
+  opacity: $dividers-opacity-light;
+  position: relative;
+  @include center-vertical;
+}
+
+.bar-addressbar-title {
+  float: left;
+  position: relative;
+  @include center-vertical;
+  opacity: $primary-opacity-light;
+}
+
+.bar-addressbar-shorturl {
+  float: left;
+  position: relative;
+  @include center-vertical;
   opacity: $secondary-opacity-light;
 }
