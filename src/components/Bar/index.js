@@ -11,8 +11,13 @@ export default class Bar extends Component {
         <div className='bar-icon bar-icon-back' />
         <div className='bar-icon bar-icon-forward' />
         <div className='bar-icon bar-icon-refresh' />
-
-        <div className='bar-icon-info' />
+        
+        <div className='bar-addressbar'>
+          <div className='bar-addressbar-icon-info' />
+          <div ref='title' className='bar-addressbar-title' />
+          <div className='bar-addressbar-divider' />
+          <div ref='shortUrl' className='bar-addressbar-shorturl' />
+        </div>
 
         <div className='bar-icon bar-icon-menu' />
       </div>
@@ -20,6 +25,7 @@ export default class Bar extends Component {
   }
 
   afterRender () {
-
+    this.elements.title.textContent = 'Google'
+    this.elements.shortUrl.textContent = 'www.google.com'
   }
 }
