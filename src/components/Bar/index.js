@@ -11,6 +11,9 @@ export default class Bar extends Component {
         <div className='bar-icon bar-icon-back' />
         <div className='bar-icon bar-icon-forward' />
         <div className='bar-icon bar-icon-refresh' />
+
+        <div className='bar-icon-info' />
+
         <div className='bar-icon bar-icon-menu' />
       </div>
     )
