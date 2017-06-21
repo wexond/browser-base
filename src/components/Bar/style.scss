@@ -50,3 +50,15 @@
   background-image: url(images/Bar/menu.png);
   float: right;
 }
+
+.bar-icon-info {
+  width: 14px;
+  height: 14px;
+  @include image-center(100%, 100%);
+  @include center-vertical;
+  position: relative;
+  background-image: url(images/Bar/normal-icon.png);
+  float: left;
+  margin-left: 26px;
+  opacity: $secondary-opacity-light;
+}
