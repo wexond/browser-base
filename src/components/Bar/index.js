@@ -25,7 +25,14 @@ export default class Bar extends Component {
   }
 
   afterRender () {
-    this.elements.title.textContent = 'Google'
-    this.elements.shortUrl.textContent = 'www.google.com'
+
+  }
+
+  setTitle (title) {
+    this.elements.title.textContent = title
+  }
+
+  setDomainName (domainName) {
+    this.elements.shortUrl.textContent = domainName
   }
 }

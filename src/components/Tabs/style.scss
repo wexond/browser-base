@@ -52,3 +52,35 @@
   bottom: 0;
   z-index: 4;
 }
+
+.controls {
+  float: right;
+  height: 100%;
+  -webkit-app-region: no-drag;
+  z-index: 5;
+}
+
+.control {
+  @include image-center(12px, 12px);
+  height: 100%;
+  width: 32px;
+  transition: 0.2s opacity;
+  opacity: $secondary-opacity-light;
+  float: right;
+
+  &:hover {
+    opacity: $primary-opacity-light;
+  }
+}
+
+.control-close {
+  background-image: url(images/controls/close.png);
+}
+
+.control-maximize {
+  background-image: url(images/controls/maximize.png);
+}
+
+.control-minimize {
+  background-image: url(images/controls/minimize.png);
+}
