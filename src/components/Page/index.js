@@ -32,6 +32,10 @@ export default class Page extends Component {
       app.elements.bar.setDomain(hostname)
     })
 
+    this.elements.webview.addEventListener('did-finish-load', (e) => {
+      app.elements.bar.setURL(self.elements.webview.getURL())
+    })
+
     this.elements.webview.addEventListener('page-favicon-updated', (e) => {
       self.tab.setFavicon(e.favicons[0])
     })
