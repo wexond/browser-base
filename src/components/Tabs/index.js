@@ -231,8 +231,8 @@ export default class Tabs extends Component {
         tab.deselect()
       }
     })
-    tabToSelect.select()
     this.selectedTab = tabToSelect
+    tabToSelect.select()
   }
 
   /**
