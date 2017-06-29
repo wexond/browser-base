@@ -31,6 +31,10 @@ class App extends Component {
   afterRender() {
     this.elements.tabs.addTab()
   }
+
+  getSelectedTab () {
+    return this.elements.tabs.selectedTab
+  }
 }
 
 // Wait for sass load.

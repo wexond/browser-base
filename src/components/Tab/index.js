@@ -393,4 +393,8 @@ export default class Tab extends Component {
     this.elements.icon.css('background-image', `url(${favicon})`)
     this.setTitleMaxWidth()
   }
+
+  getWebView () {
+    return this.page.elements.webview
+  }
 }
