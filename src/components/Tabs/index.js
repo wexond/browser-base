@@ -20,7 +20,13 @@ export default class Tabs extends Component {
       <div className='tabs' ref='tabs'>
         <div className='tabs-bottom-border' ref='bottomBorder' />
         <div className='tabs-handle' ref='handle' />
-        <div className='tabbar' ref='tabbar' />
+        <div className='tabbar' ref='tabbar'>
+          <div className='controls'>
+            <div ref='close' className='control control-close' />
+            <div ref='maximize' className='control control-maximize' />
+            <div ref='minimize' className='control control-minimize' />
+          </div>
+        </div>
         <div className='tabs-add-button' ref='addButton' />
       </div>
     )
@@ -31,6 +37,22 @@ export default class Tabs extends Component {
 
     this.elements.addButton.addEventListener('click', (e) => {
       self.addTab()
+    })
+
+    this.elements.close.addEventListener('click', (e) => {
+      currentWindow.close()
+    })
+
+    this.elements.maximize.addEventListener('click', (e) => {
+      if (currentWindow.isMaximized()) {
+        currentWindow.unmaximize()
+      } else {
+        currentWindow.maximize()
+      }
+    })
+
+    this.elements.minimize.addEventListener('click', (e) => {
+      currentWindow.minimize()
     })
 
     window.addEventListener('resize', (e) => {
