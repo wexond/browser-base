@@ -9,7 +9,7 @@
 
 .tabbar {
   height: 32px;
-  width: 100%;
+  width: calc(100% - 112px);
   white-space: nowrap;
   position: relative;
 }
@@ -54,6 +54,7 @@
 }
 
 .controls {
+  position: relative;
   float: right;
   height: 100%;
   -webkit-app-region: no-drag;
