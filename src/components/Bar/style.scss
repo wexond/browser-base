@@ -65,9 +65,12 @@
 
 .bar-addressbar {
   float: left;
+  width: calc(100% - 184px);
   height: 100%;
   margin-left: 26px;
   font-size: 14px;
+  position: relative;
+  cursor: text;
 }
 
 .bar-addressbar-divider {
@@ -94,4 +97,19 @@
   position: relative;
   @include center-vertical;
   opacity: $secondary-opacity-light;
+}
+
+.bar-input {
+  background-color: #fff;
+  display: block;
+  width: 100%;
+  height: 40px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  outline: none;
+  border: none;
+  font-size: 14px;
+  display: none;
+  color: rgba(0, 0, 0, $primary-opacity-light)
 }
