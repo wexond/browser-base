@@ -17,19 +17,10 @@ export default class Page extends Component {
     const self = this
 
     this.elements.webview.addEventListener('page-title-updated', (e) => {
-      const url = self.elements.webview.getURL()
-      let hostname = url
-
-      hostname = url.split('://')[1]
-
-      hostname = hostname.split(':')[0]
-      hostname = hostname.split('?')[0]
-      hostname = hostname.split('/')[0]
-
       self.tab.setTitle(e.title)
 
       app.elements.bar.setTitle(e.title)
-      app.elements.bar.setDomain(hostname)
+      app.elements.bar.setDomain(self.elements.webview.getURL())
     })
 
     this.elements.webview.addEventListener('did-finish-load', (e) => {
