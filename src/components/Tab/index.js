@@ -95,7 +95,7 @@ export default class Tab extends Component {
       self.close()
     })
 
-    this.tabs.selectTab(this)
+    this.tabs.selectTab(this, true)
   }
 
   /** 
@@ -117,7 +117,7 @@ export default class Tab extends Component {
   /** 
    * Selects tab.
    */
-  select () {
+  select (firstSelect = false) {
     this.page.show()
     this.selected = true
 
@@ -146,12 +146,14 @@ export default class Tab extends Component {
 
     this.elements.icon.css('display', (this.elements.tab.offsetWidth < 48) ? 'none' : 'block')
 
-    const webview = app.getSelectedPage().elements.webview
-    const url = webview.getURL()
-    const title = webview.getTitle()
-    
-    app.elements.bar.setDomain(url)
-    app.elements.bar.setTitle(title)
+    if (!firstSelect) {
+      const webview = app.getSelectedPage().elements.webview
+      const url = webview.getURL()
+      const title = webview.getTitle()
+
+      app.elements.bar.setDomain(url)
+      app.elements.bar.setTitle(title)
+    }
 
     this.setTitleMaxWidth(true)
   }
