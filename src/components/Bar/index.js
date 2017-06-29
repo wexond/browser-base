@@ -1,4 +1,5 @@
 import Component from '../../classes/Component'
+import Network from '../../helpers/Network'
 
 export default class Bar extends Component {
   beforeRender () {
@@ -18,7 +19,24 @@ export default class Bar extends Component {
 
   onKeyPress = (e) => {
     if (e.which === 13) {
+      e.preventDefault()
+      const page = app.getSelectedPage()
+      const webview = page.elements.webview
+      const inputText = this.elements.input.value
+
+      let URLToNavigate = inputText
+
+      if (Network.isURL(e.currentTarget.value)) {
+        if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'http://' + inputText
+      } else {
+        if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'https://www.google.com/search?q=' + inputText
+      }
+
+      webview.loadURL(URLToNavigate)
+
       app.getSelectedTab().getWebView().loadURL(this.elements.input.value)
+
+      this.toggleInput(false)
     }
   }
 
@@ -36,7 +54,7 @@ export default class Bar extends Component {
           <input ref='input' onFocus={this.onFocus} onKeyPress={this.onKeyPress} className='bar-input' />
         </div>
 
-        <div className='bar-icon bar-icon-menu' />
+        <div ref='menu' className='bar-icon bar-icon-menu' />
       </div>
     )
   }
@@ -67,7 +85,7 @@ export default class Bar extends Component {
 
     this.elements.refresh.addEventListener('click', (e) => {
       const webview = app.getSelectedPage().elements.webview
-      
+
       webview.reload()
     })
   }
