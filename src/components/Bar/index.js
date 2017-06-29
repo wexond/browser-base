@@ -25,9 +25,9 @@ export default class Bar extends Component {
   render () {
     return (
       <div className='bar' ref='bar'>
-        <div className='bar-icon bar-icon-back' />
-        <div className='bar-icon bar-icon-forward' />
-        <div className='bar-icon bar-icon-refresh' />
+        <div ref='back' className='bar-icon bar-icon-back' />
+        <div ref='forward' className='bar-icon bar-icon-forward' />
+        <div ref='refresh' className='bar-icon bar-icon-refresh' />
         <div className='bar-addressbar' onClick={this.onAddressBarClick}>
           <div className='bar-addressbar-icon-info' />
           <div ref='title' className='bar-addressbar-title' />
@@ -47,6 +47,28 @@ export default class Bar extends Component {
     window.addEventListener('mouseup', function (e) {
       self.elements.input.style.display = 'none'
       self.isAddressbarBarToggled = false
+    })
+
+    this.elements.back.addEventListener('click', (e) => {
+      const webview = app.getSelectedPage().elements.webview
+
+      if (webview.canGoBack()) {
+        webview.goBack()
+      }
+    })
+
+    this.elements.forward.addEventListener('click', (e) => {
+      const webview = app.getSelectedPage().elements.webview
+
+      if (webview.canGoForward()) {
+        webview.goForward()
+      }
+    })
+
+    this.elements.refresh.addEventListener('click', (e) => {
+      const webview = app.getSelectedPage().elements.webview
+      
+      webview.reload()
     })
   }
 
@@ -80,5 +102,21 @@ export default class Bar extends Component {
 
   setURL (url) {
     this.elements.input.value = url
+  }
+
+  updateNavigationIcons () {
+    const webview = app.getSelectedPage().elements.webview
+
+    if (webview.canGoBack()) {
+      this.elements.back.classList.remove('bar-icon-disabled')
+    } else {
+      this.elements.back.classList.add('bar-icon-disabled')
+    }
+
+    if (webview.canGoForward()) {
+      this.elements.forward.classList.remove('bar-icon-disabled')
+    } else {
+      this.elements.forward.classList.add('bar-icon-disabled')
+    }
   }
 }
