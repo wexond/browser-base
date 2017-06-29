@@ -32,7 +32,7 @@ export default class Bar extends Component {
     this.elements.title.textContent = title
   }
 
-  setDomainName (domainName) {
-    this.elements.shortUrl.textContent = domainName
+  setDomain (domain) {
+    this.elements.shortUrl.textContent = domain
   }
 }
