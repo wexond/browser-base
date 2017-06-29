@@ -25,6 +25,11 @@ export default class Page extends Component {
 
     this.elements.webview.addEventListener('did-finish-load', (e) => {
       app.elements.bar.setURL(self.elements.webview.getURL())
+      app.elements.bar.updateNavigationIcons()
+    })
+
+    this.elements.webview.addEventListener('load-commit', (e) => {
+      app.elements.bar.updateNavigationIcons()
     })
 
     this.elements.webview.addEventListener('page-favicon-updated', (e) => {
