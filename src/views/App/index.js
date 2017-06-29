@@ -35,6 +35,10 @@ class App extends Component {
   getSelectedTab () {
     return this.elements.tabs.selectedTab
   }
+
+  getSelectedPage () {
+    return this.getSelectedTab().page
+  }
 }
 
 // Wait for sass load.

@@ -146,6 +146,13 @@ export default class Tab extends Component {
 
     this.elements.icon.css('display', (this.elements.tab.offsetWidth < 48) ? 'none' : 'block')
 
+    const webview = app.getSelectedPage().elements.webview
+    const url = webview.getURL()
+    const title = webview.getTitle()
+    
+    app.elements.bar.setDomain(url)
+    app.elements.bar.setTitle(title)
+
     this.setTitleMaxWidth(true)
   }
 
