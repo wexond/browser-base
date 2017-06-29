@@ -224,15 +224,16 @@ export default class Tabs extends Component {
   /**
    * Selects given tab and deselects others.
    * @param {Tab} tab 
+   * @param {Boolean} firstSelect
    */
-  selectTab (tabToSelect) {
+  selectTab (tabToSelect, firstSelect = false) {
     tabs.forEach((tab) => {
       if (tab !== tabToSelect) {
         tab.deselect()
       }
     })
     this.selectedTab = tabToSelect
-    tabToSelect.select()
+    tabToSelect.select(firstSelect)
   }
 
   /**
