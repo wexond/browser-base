@@ -95,7 +95,7 @@ export default class Tab extends Component {
       self.close()
     })
 
-    this.tabs.selectTab(this, true)
+    this.tabs.selectTab(this)
   }
 
   /** 
@@ -117,7 +117,10 @@ export default class Tab extends Component {
   /** 
    * Selects tab.
    */
-  select (firstSelect = false) {
+  select () {
+    const webview = this.page.elements.webview
+    const bar = app.elements.bar
+
     this.page.show()
     this.selected = true
 
@@ -146,13 +149,25 @@ export default class Tab extends Component {
 
     this.elements.icon.css('display', (this.elements.tab.offsetWidth < 48) ? 'none' : 'block')
 
-    if (!firstSelect) {
-      const webview = app.getSelectedPage().elements.webview
+    if (webview.getWebContents() != null) {
+      accessWebContents()
+    } else {
+      // Wait until the webview's webcontents load.
+      let event
+      webview.addEventListener('webcontents-load', event = function (e) {
+        accessWebContents()
+        webview.removeEventListener('webcontents-load', event)
+      })
+    }
+
+    function accessWebContents () {
       const url = webview.getURL()
       const title = webview.getTitle()
 
-      app.elements.bar.setDomain(url)
-      app.elements.bar.setTitle(title)
+      bar.setDomain(url)
+      bar.setTitle(title)
+
+      bar.updateNavigationIcons()
     }
 
     this.setTitleMaxWidth(true)
