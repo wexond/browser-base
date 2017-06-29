@@ -232,6 +232,7 @@ export default class Tabs extends Component {
       }
     })
     tabToSelect.select()
+    this.selectedTab = tabToSelect
   }
 
   /**
