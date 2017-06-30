@@ -51,17 +51,27 @@
   float: right;
 }
 
-.bar-addressbar-icon-info {
-  width: 14px;
-  height: 14px;
+.bar-addressbar-icon {
   @include image-center(100%, 100%);
   @include center-vertical;
   position: relative;
-  background-image: url(images/Bar/normal-icon.png);
   float: left;
-  opacity: $secondary-opacity-light;
   margin-right: 12px;
 }
+
+.bar-addressbar-icon-info {
+  width: 18px;
+  height: 18px;
+  opacity: $secondary-opacity-light;
+  background-image: url(images/Bar/info.png);
+}
+
+.bar-addressbar-icon-secure {
+  width: 16px;
+  height: 16px;
+  background-image: url(images/Bar/secure.png);
+}
+
 
 .bar-addressbar {
   float: left;
