@@ -8,7 +8,7 @@ export default class Page extends Component {
   render () {
     return (
       <div className='page' ref='page'>
-        <webview ref='webview' className='page-webview' src='http://www.google.com' />
+        <webview ref='webview' className='page-webview' src={this.props.url} />
       </div>
     )
   }
@@ -67,6 +67,7 @@ export default class Page extends Component {
         webview.getWebContents().on('context-menu', function (e, params) {
           const webviewMenu = app.elements.webviewMenu
           let newItems = webviewMenu.menuItems
+          app.WCMData = params // Webview context menu data.
 
           /**
           * 0  : Open link in new tab
@@ -102,7 +103,6 @@ export default class Page extends Component {
 
           webviewMenu.show()
           // app.tabMenu.hide()
-          // app.WCMData = params // Webview context menu data.
 
           let left = app.cursor.x + 1
           let top = app.cursor.y + 1
