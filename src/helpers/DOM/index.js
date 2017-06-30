@@ -49,3 +49,14 @@ function loadScripts (scripts) {
     document.body.appendChild(script)
   }
 }
+
+Element.prototype.setAttributes = function (attributes) {
+  const keys = Object.keys(attributes)
+
+  for (let i = 0; i < keys.length; i++) {
+    const attr = keys[i]
+    const value = attributes[keys[i]]
+
+    this.setAttribute(attr, value)
+  }
+}
