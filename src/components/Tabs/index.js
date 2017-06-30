@@ -25,6 +25,7 @@ export default class Tabs extends Component {
           <div ref='maximize' className='control control-maximize' />
           <div ref='minimize' className='control control-minimize' />
         </div>
+        <div ref='controlsBorder' className='tabs-border-vertical' />
         <div className='tabbar' ref='tabbar'>
         </div>
         <div className='tabs-add-button' ref='addButton' />
@@ -272,6 +273,12 @@ export default class Tabs extends Component {
       tab.elements.close.css('display', (!tabSelected && widthSmaller) ? 'none' : 'block')
       tab.elements.icon.css('display', ((tabSelected) ? ((widthSmaller) ? 'none' : 'block') : 'block'))
     })
+
+    if (width < 190) {
+      this.elements.controlsBorder.css('display', 'block')
+    } else {
+      this.elements.controlsBorder.css('display', 'none')
+    }
   }
 
   /**
