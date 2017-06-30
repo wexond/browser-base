@@ -20,12 +20,10 @@ export default class Page extends Component {
     webview.addEventListener('page-title-updated', (e) => {
       self.tab.setTitle(e.title)
 
-      app.elements.bar.setTitle(e.title)
-      app.elements.bar.setDomain(webview.getURL())
-    })
-
-    webview.addEventListener('did-finish-load', (e) => {
-      app.elements.bar.setURL(webview.getURL())
+      if (self.tab.selected) {
+        app.elements.bar.setTitle(e.title)
+        app.elements.bar.setDomain(webview.getURL())
+      }
     })
 
     webview.addEventListener('load-commit', (e) => {
@@ -51,6 +49,9 @@ export default class Page extends Component {
 
     webview.addEventListener('did-stop-loading', function (e) {
       self.tab.togglePreloader(false)
+      if (self.tab.selected) {
+        app.elements.bar.setURL(webview.getURL())
+      }
     })
 
     if (app != null) {
