@@ -1,0 +1,83 @@
+.context-menu {
+  -webkit-box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2);
+  position: absolute;
+  left: 256px;
+  top: 128px;
+  width: 300px;
+  background-color: white;
+  z-index: 9999;
+  transition: 0.3s height, 0.27s margin-top, 0.2s opacity;
+  overflow: hidden;
+  border-radius: 3px;
+}
+
+.context-menu-items {
+  padding-bottom: 16px;
+  padding-top: 8px;
+  width: 100%;
+  height: 100%;
+}
+
+.context-menu-line {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.context-menu-separator {
+  @extend .context-menu-line;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.navigation-icons {
+  height: 48px;
+  width: 100%;
+}
+
+.navigation-icon {
+  @include image-center(24px, 24px);
+  position: relative;
+  float: left;
+  height: 100%;
+  width: 75px;
+}
+
+.navigation-icon-enabled {
+  @extend .navigation-icon;
+  opacity: $secondary-opacity-light;
+  transition: 0.2s opacity;
+  pointer-events: 'auto';
+
+  &:hover {
+    opacity: $primary-opacity-light;
+  }
+}
+
+.navigation-icon-disabled {
+  @extend .navigation-icon;
+  pointer-events: 'none';
+  opacity: $disabled-opacity-light;
+}
+
+.navigation-icon-back {
+  background-image: url(images/Bar/back.png);
+  background-position-x: 23.1px;
+}
+
+.navigation-icon-forward {
+  background-image: url(images/Bar/forward.png);
+  background-position-x: 23.1px;
+}
+
+.navigation-icon-refresh {
+  background-image: url(images/Bar/refresh.png);
+  @include image-center(20px, 20px);
+  background-position-x: 25.5px;
+}
+
+.navigation-icon-favorite {
+  background-image: url(images/Bar/favorite.png);
+  @include image-center(20px, 20px);
+  background-position-x: 25.5px;
+}
