@@ -97,11 +97,17 @@ export default class Bar extends Component {
   setDomain (url) {
     let hostname = url
 
-    hostname = hostname.split('://')[1]
+    if (hostname.indexOf('://') !== -1) {
+      hostname = hostname.split('://')[1]
+    }
 
-    hostname = hostname.split(':')[0]
-    hostname = hostname.split('?')[0]
-    hostname = hostname.split('/')[0]
+    if (hostname.indexOf('?') !== -1) {
+      hostname = hostname.split('?')[0]
+    }
+
+    if (hostname.indexOf('/') !== -1) {
+      hostname = hostname.split('/')[0]
+    }
 
     this.elements.shortUrl.textContent = hostname
   }
