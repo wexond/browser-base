@@ -127,12 +127,13 @@ export default class ContextMenu extends Component {
       self.hide()
     }
 
-    function onClick (e) {
+    function onMouseDown (e) {
       e.stopPropagation()
     }
 
+
     return (
-      <div onClick={onClick} ref='menu' className='context-menu'>
+      <div onMouseDown={onMouseDown} ref='menu' className='context-menu'>
         <div className='navigation-icons'>
           <div ref='back' onClick={onBackClick} className='navigation-icon-back navigation-icon-enabled' />
           <div ref='forward' onClick={onForwardClick} className='navigation-icon-forward navigation-icon-enabled' />
