@@ -183,6 +183,7 @@ export default class Tab extends Component {
       bar.setTitle(title)
 
       bar.updateNavigationIcons()
+      app.elements.webviewMenu.updateNavigationIcons()
     }
 
     this.setTitleMaxWidth(true)

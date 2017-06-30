@@ -7,7 +7,7 @@ export default class ContextMenu extends Component {
    * Shows menu.
    */
   show = () => {
-    this.refreshNavigationIcons()
+    this.updateNavigationIcons()
 
     let separators = this.elements.menuItems.getElementsByClassName('context-menu-separator')
     let separatorsCount = 0
@@ -48,7 +48,7 @@ export default class ContextMenu extends Component {
   /**
    * Refreshes navigation icons state (disabled or enabled etc)
    */
-  refreshNavigationIcons = () => {
+  updateNavigationIcons = () => {
     const webview = app.getSelectedPage().elements.webview
     if (webview.getWebContents() != null) {
       if (webview.canGoBack()) {
