@@ -9,13 +9,13 @@
 
 .tabbar {
   height: 32px;
-  width: calc(100% - 112px);
+  width: calc(100% - 118px);
   white-space: nowrap;
   position: relative;
 }
 
 .tabs-add-button {
-  @include image-center(24px, 24px);
+  @include image-center(20px, 20px);
   background-image: url(images/Tabs/add.png);
   width: 34px;
   height: 100%;
@@ -53,6 +53,17 @@
   z-index: 4;
 }
 
+.tabs-border-vertical {
+  position: relative;
+  @include center-vertical;
+  background-color: black;
+  opacity: $dividers-opacity-light;
+  height: calc(100% - 16px);
+  width: 1px;
+  float: right;
+  margin-right: 8px;
+}
+
 .controls {
   position: relative;
   float: right;
@@ -62,9 +73,9 @@
 }
 
 .control {
-  @include image-center(12px, 12px);
+  @include image-center(11px, 11px);
   height: 100%;
-  width: 32px;
+  width: 34px;
   transition: 0.2s opacity;
   opacity: $secondary-opacity-light;
   float: right;
