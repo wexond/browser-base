@@ -42,7 +42,11 @@ class App extends Component {
       [
         {
           title: 'Open link in new tab',
-          show: false
+          show: false,
+          onClick: (e) => {
+            let data = self.WCMData
+            self.elements.tabs.addTab({select: false, url: data.linkURL})
+          }
         },
         {
           title: 'Separator',

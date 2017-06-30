@@ -19,7 +19,7 @@ export default class Tab extends Component {
   }
 
   render () {
-    UI.render(<Page tab={this} ref={(e) => { this.page = e }} />, app.elements.pages, this)
+    UI.render(<Page url={this.props.url} tab={this} ref={(e) => { this.page = e }} />, app.elements.pages, this)
 
     return (
       <div className='tab' ref='tab'>
@@ -98,7 +98,11 @@ export default class Tab extends Component {
       self.close()
     })
 
-    this.tabs.selectTab(this)
+    if (this.props.select) {
+      this.tabs.selectTab(this)
+    } else {
+      this.tabs.selectTab(this.tabs.selectedTab)
+    }
   }
 
   /**
