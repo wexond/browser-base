@@ -23,6 +23,8 @@ $systembar-height: 32px;
 
 $tabs-hover-color: rgba(0,0,0,0.08);
 
+@import 'materialdesign/components/Preloader/style.scss';
+
 @import 'views/App/style.scss';
 
 @import 'components/Page/style.scss';
