@@ -9,6 +9,7 @@ export default class Bar extends Component {
   onAddressBarClick = (e) => {
     e.stopPropagation()
     if (!this.isAddressbarBarToggled) {
+      this.setURL(app.getSelectedPage().elements.webview.getURL())
       this.toggleInput(true)
     }
   }
@@ -119,7 +120,7 @@ export default class Bar extends Component {
 
     this.isAddressbarBarToggled = flag
 
-    this.elements.input.style.display = (flag) ? 'block' : 'none'
+    this.elements.input.style.display = (flag) ? 'inline-block' : 'none'
 
     if (flag) {
       this.elements.input.focus()
