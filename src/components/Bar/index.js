@@ -47,7 +47,7 @@ export default class Bar extends Component {
         <div ref='forward' className='bar-icon bar-icon-forward' />
         <div ref='refresh' className='bar-icon bar-icon-refresh' />
         <div className='bar-addressbar' onClick={this.onAddressBarClick}>
-          <div className='bar-addressbar-icon-info' />
+          <div ref='icon' className='bar-addressbar-icon bar-addressbar-icon-secure' />
           <div ref='title' className='bar-addressbar-title' />
           <div className='bar-addressbar-divider' />
           <div ref='shortUrl' className='bar-addressbar-shorturl' />
@@ -120,6 +120,14 @@ export default class Bar extends Component {
 
   setURL (url) {
     this.elements.input.value = url
+
+    if (url.startsWith('https')) {
+      this.elements.icon.classList.remove('bar-addressbar-icon-info')
+      this.elements.icon.classList.add('bar-addressbar-icon-secure')
+    } else {
+      this.elements.icon.classList.remove('bar-addressbar-icon-secure')
+      this.elements.icon.classList.add('bar-addressbar-icon-info')
+    }
   }
 
   updateNavigationIcons () {
