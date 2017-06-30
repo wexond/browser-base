@@ -26,6 +26,7 @@ export default class Page extends Component {
     this.elements.webview.addEventListener('did-finish-load', (e) => {
       app.elements.bar.setURL(self.elements.webview.getURL())
       app.elements.bar.updateNavigationIcons()
+      console.log(e.validatedURL)
     })
 
     this.elements.webview.addEventListener('load-commit', (e) => {
