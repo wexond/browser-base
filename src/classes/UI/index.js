@@ -48,14 +48,6 @@ export default class UI {
           if (typeof props.style === 'object') {
             Object.assign(element.style, props.style)
           }
-
-          if (caller != null) {
-            for (var key in caller.defaultProps) {
-              if (props[key] === null) {
-                props[key] = caller.defaultProps[key]
-              }
-            }
-          }
         }
 
         if (children != null) {

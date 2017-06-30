@@ -1,0 +1,26 @@
+.menu-item {
+  @include cursor-default;
+  width: 100%;
+  height: 32px;
+}
+
+.menu-item-enabled {
+  opacity: $primary-opacity-light;
+  pointer-events: auto;
+}
+
+.menu-item-disabled {
+  opacity: $disabled-opacity-light;
+  pointer-events: none;
+}
+
+.menu-item:hover {
+  background-color: #F5F5F5;
+}
+
+.menu-item-text {
+  @include center-vertical;
+  @include Body1;
+  position: relative;
+  left: 24px;
+}
