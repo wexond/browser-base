@@ -77,3 +77,16 @@
   opacity: 0;
   display: 'block';
 }
+
+.tab-preloader {
+  @include center-vertical;
+  position: absolute;
+  left: 8px;
+  height: 16px;
+  width: 16px;
+  display: none;
+
+  & .preloader-indeterminate .path {
+    stroke-width: 6;
+  }
+}
