@@ -34,7 +34,15 @@ export default class Page extends Component {
     })
 
     webview.addEventListener('page-favicon-updated', (e) => {
-      self.tab.setFavicon(e.favicons[0])
+      let request = new XMLHttpRequest()
+      request.open('GET', e.favicons[0], false)
+      request.send()
+
+      if (request.status !== 404) {
+        self.tab.setFavicon(e.favicons[0])
+      } else {
+        self.tab.setFavicon('')
+      }
     })
 
     webview.addEventListener('did-start-loading', function (e) {
