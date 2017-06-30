@@ -82,10 +82,12 @@
   position: relative;
   @include center-vertical;
   cursor: text;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .bar-addressbar-divider {
-  float: left;
+  display: inline-block;
   margin-left: 8px;
   margin-right: 8px;
   width: 1px;
@@ -97,22 +99,22 @@
 }
 
 .bar-addressbar-title {
-  float: left;
+  display: inline-block;
   position: relative;
-  @include center-vertical;
   opacity: $primary-opacity-light;
+  top: 1px;
 }
 
 .bar-addressbar-shorturl {
-  float: left;
+  display: inline-block;
   position: relative;
-  @include center-vertical;
   opacity: $secondary-opacity-light;
+  top: 1px;
 }
 
 .bar-input {
   background-color: #fff;
-  display: block;
+  display: inline-block;
   width: 100%;
   height: 100%;
   position: absolute;
