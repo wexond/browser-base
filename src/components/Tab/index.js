@@ -3,6 +3,8 @@ import Transitions from '../../helpers/Transitions'
 import Component from '../../classes/Component'
 import UI from '../../classes/UI'
 
+import Preloader from '../../materialdesign/components/Preloader'
+
 export default class Tab extends Component {
   beforeRender () {
     this.tabs = this.props.tabs
@@ -29,6 +31,7 @@ export default class Tab extends Component {
             <div className='tab-close-icon' ref='closeIcon' />
           </div>
           <div className='tab-icon' ref='icon' />
+          <Preloader ref='preloader' className='tab-preloader' />
         </div>
         <div className='tab-border-small-vertical' ref='rightSmallBorder' />
         <div className='tab-border-small-vertical' ref='leftSmallBorder' />
@@ -98,7 +101,19 @@ export default class Tab extends Component {
     this.tabs.selectTab(this)
   }
 
-  /** 
+  /**
+   * Shows or hides preloader.
+   * @param {Boolean}
+   */
+  togglePreloader (flag) {
+    this.elements.icon.style.display = (!flag) ? 'block' : 'none'
+    this.elements.preloader.getRoot().style.display = (!flag) ? 'none' : 'block'
+
+    this.loading = flag
+    this.setTitleMaxWidth()
+  }
+
+  /**
    * Sets width of tab div.
    * @param {Number} width
    */
@@ -106,7 +121,7 @@ export default class Tab extends Component {
     this.elements.tab.css('width', width)
   }
 
-  /** 
+  /**
    * Sets left of tab div.
    * @param {Number} left
    */
@@ -114,7 +129,7 @@ export default class Tab extends Component {
     this.elements.tab.css('left', left)
   }
 
-  /** 
+  /**
    * Selects tab.
    */
   select () {
