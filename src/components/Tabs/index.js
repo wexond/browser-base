@@ -219,7 +219,7 @@ export default class Tabs extends Component {
    * @param {Object} data 
    */
   addTab (data = defaultTabOptions) {
-    UI.render(<Tab tabs={this}/>, this.elements.tabbar, this)
+    UI.render(<Tab select={data.select} url={data.url} tabs={this}/>, this.elements.tabbar, this)
   }
 
   /**
