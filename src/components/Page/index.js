@@ -8,7 +8,7 @@ export default class Page extends Component {
   render () {
     return (
       <div className='page' ref='page'>
-        <webview ref='webview' className='page-webview' src='https://google.pl' />
+        <webview ref='webview' className='page-webview' src='http://www.google.com' />
       </div>
     )
   }
@@ -35,6 +35,14 @@ export default class Page extends Component {
 
     this.elements.webview.addEventListener('page-favicon-updated', (e) => {
       self.tab.setFavicon(e.favicons[0])
+    })
+
+    this.elements.webview.addEventListener('did-start-loading', function (e) {
+      self.tab.togglePreloader(true)
+    })
+
+    this.elements.webview.addEventListener('did-stop-loading', function (e) {
+      self.tab.togglePreloader(false)
     })
 
     if (window.app != null) {
