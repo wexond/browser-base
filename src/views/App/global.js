@@ -3,6 +3,7 @@ const {dialog, nativeImage} = remote
 const fs = require('fs')
 const path = require('path')
 const homedir = require('os').homedir()
+const url = require('url')
 
 const userData = path.join(homedir, '.wexond')
 
@@ -19,6 +20,11 @@ window.defaultTabOptions = {
   select: true,
   url: 'wexond://newtab'
 }
+window.fs = fs
+window.clipboard = clipboard
+window.dialog = dialog
+window.path = path
+window.url = url
 window.tabsAnimationData = {
   positioningDuration: 0.2,
   positioningEasing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
