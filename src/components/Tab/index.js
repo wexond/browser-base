@@ -185,6 +185,7 @@ export default class Tab extends Component {
 
       bar.setDomain(url)
       bar.setTitle(title)
+      bar.setURL(url)
 
       bar.updateNavigationIcons()
       app.elements.webviewMenu.updateNavigationIcons()
