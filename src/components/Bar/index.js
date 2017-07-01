@@ -52,7 +52,8 @@ export default class Bar extends Component {
           <div ref='title' className='bar-addressbar-title' />
           <div className='bar-addressbar-divider' />
           <div ref='shortUrl' className='bar-addressbar-shorturl' />
-          <div className='bar-addressbar-icon bar-addressbar-icon-favorite' />
+          <div className='bar-addressbar-action-icon bar-addressbar-action-icon-favorite' />
+          <div className='bar-addressbar-action-icon bar-addressbar-action-icon-clear' />
           <input ref='input' onFocus={this.onFocus} onKeyPress={this.onKeyPress} className='bar-input' />
         </div>
         <div ref='menu' className='bar-icon bar-icon-menu' />
