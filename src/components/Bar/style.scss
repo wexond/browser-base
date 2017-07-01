@@ -59,6 +59,33 @@
   margin-right: 12px;
 }
 
+.bar-addressbar-icon-favorite {
+  height: 24px;
+  width: 24px;
+  background-size: 18px 18px;
+  background-image: url(images/Bar/favorite-empty.png);
+  position: absolute;
+  margin-left: 16px;
+  float: none;
+  display: inline-block;
+  opacity: $secondary-opacity-light;
+  transition: 0.3s opacity;
+
+  &:hover {
+    opacity: $primary-opacity-light;
+    transition: 0.3s opacity;
+    background-image: url(images/Bar/favorite-full.png);
+  }
+
+  &.full {
+    background-image: url(images/Bar/favorite-full.png);
+  }
+
+  &.full:hover {
+    background-image: url(images/Bar/favorite-empty.png);
+  }
+}
+
 .bar-addressbar-icon-info {
   width: 18px;
   height: 18px;
