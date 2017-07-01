@@ -59,13 +59,11 @@
   margin-right: 12px;
 }
 
-.bar-addressbar-icon-favorite {
+.bar-addressbar-action-icon {
   height: 24px;
   width: 24px;
-  background-size: 18px 18px;
-  background-image: url(images/Bar/favorite-empty.png);
+  @include image-center(18px, 18px);
   position: absolute;
-  margin-left: 16px;
   float: none;
   display: inline-block;
   opacity: $secondary-opacity-light;
@@ -74,6 +72,14 @@
   &:hover {
     opacity: $primary-opacity-light;
     transition: 0.3s opacity;
+  }
+}
+
+.bar-addressbar-action-icon-favorite {
+  margin-left: 16px;
+  background-image: url(images/Bar/favorite-empty.png);
+
+  &:hover {
     background-image: url(images/Bar/favorite-full.png);
   }
 
@@ -84,6 +90,11 @@
   &.full:hover {
     background-image: url(images/Bar/favorite-empty.png);
   }
+}
+
+.bar-addressbar-action-icon-clear {
+  margin-left: 48px;
+  background-image: url(images/Tabs/close.png);
 }
 
 .bar-addressbar-icon-info {
