@@ -52,9 +52,9 @@ export default class Bar extends Component {
           <div ref='title' className='bar-addressbar-title' />
           <div className='bar-addressbar-divider' />
           <div ref='shortUrl' className='bar-addressbar-shorturl' />
+          <div className='bar-addressbar-icon bar-addressbar-icon-favorite' />
           <input ref='input' onFocus={this.onFocus} onKeyPress={this.onKeyPress} className='bar-input' />
         </div>
-
         <div ref='menu' className='bar-icon bar-icon-menu' />
       </div>
     )
