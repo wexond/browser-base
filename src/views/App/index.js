@@ -77,13 +77,19 @@ class App extends Component {
     this.elements.tabMenu.updateItems(
       [
         {
-          title: 'Add new tab'
+          title: 'Add new tab',
+          onClick: function () {
+            self.elements.tabs.addTab()
+          }
         },
         {
           title: 'Separator'
         },
         {
-          title: 'Pin tab'
+          title: 'Pin tab',
+          onClick: function () {
+            self.hoveredTab.pin()
+          }
         },
         {
           title: 'Mute tab'
