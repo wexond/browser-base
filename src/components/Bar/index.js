@@ -54,7 +54,7 @@ export default class Bar extends Component {
           <div ref='shortUrl' onClick={this.onShortUrlClick} className='bar-addressbar-shorturl' />
           <div ref='actionIcons' className='bar-addressbar-action-icons'>
             <div className='bar-addressbar-action-icon bar-addressbar-action-icon-favorite' />
-            <div className='bar-addressbar-action-icon bar-addressbar-action-icon-clear' />
+            <div ref='clear' className='bar-addressbar-action-icon bar-addressbar-action-icon-clear' />
           </div>
           <input ref='input' onFocus={this.onFocus} onKeyPress={this.onKeyPress} className='bar-input' />
         </div>
@@ -110,6 +110,18 @@ export default class Bar extends Component {
           pointerEvents: 'none'
         })
       }
+    })
+
+    this.elements.clear.addEventListener('click', (e) => {
+      self.elements.input.value = ''
+      if (!self.isAddressbarBarToggled) {
+        self.toggleInput(true)
+      }
+      self.elements.input.focus()
+    })
+
+    this.elements.actionIcons.addEventListener('mousedown', (e) => {
+      e.stopPropagation()
     })
   }
 
