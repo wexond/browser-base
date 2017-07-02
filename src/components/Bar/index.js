@@ -92,6 +92,21 @@ export default class Bar extends Component {
       webview.reload()
     })
 
+    this.elements.menu.addEventListener('click', (e) => {
+      const menu = app.elements.menu
+
+      if (menu.isMenuToggled) {
+        menu.hide()
+      } else {
+        menu.show()
+        menu.elements.menu.css({
+          right: 16,
+          top: 64,
+          left: 'auto'
+        })
+      }
+    })
+
     this.elements.input.addEventListener('mousedown', (e) => {
       e.stopPropagation()
     })
