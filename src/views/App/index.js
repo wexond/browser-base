@@ -44,7 +44,6 @@ class App extends Component {
     })
 
     this.elements.tabs.elements.tabbar.addEventListener('contextmenu', (e) => {
-      console.log(e)
       if (e.target === self.elements.tabs.elements.addButton) return
 
       const tabMenu = self.elements.tabMenu
