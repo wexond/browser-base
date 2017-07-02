@@ -2,14 +2,20 @@ import Component from '../../classes/Component'
 import UI from '../../classes/UI'
 import MenuItem from '../MenuItem'
 
-export default class ContextMenu extends Component {
+export default class Menu extends Component {
+  beforeRender () {
+    this.defaultProps = {
+      showNavigationIcons: false
+    }
+    this.isMenuToggled = false
+  }
   /**
    * Shows menu.
    */
   show = () => {
-    this.updateNavigationIcons()
+    if (this.props.showNavigationIcons) this.updateNavigationIcons()
 
-    let separators = this.elements.menuItems.getElementsByClassName('context-menu-separator')
+    let separators = this.elements.menuItems.getElementsByClassName('menu-separator')
     let separatorsCount = 0
     for (var i = 0; i < separators.length; i++) {
       if (separators[i].css('display') === 'block') {
@@ -18,8 +24,12 @@ export default class ContextMenu extends Component {
     }
     let topBottomPadding = 24
     let separatorsMargins = 16
-    let navIconsHeight = 48
+    let navIconsHeight = (this.props.showNavigationIcons) ? 48 : 8
     this.height = navIconsHeight + separatorsCount + separatorsCount * separatorsMargins + topBottomPadding
+
+    this.elements.menuItems.css({
+      paddingTop: (!this.props.showNavigationIcons) ? 16 : 8
+    })
 
     for (i = 0; i < this.menuItemsRendered.length; i++) {
       if (this.menuItemsRendered[i].props.show) {
@@ -32,6 +42,8 @@ export default class ContextMenu extends Component {
       opacity: 1,
       height: this.height
     })
+
+    this.isMenuToggled = true
   }
 
   /**
@@ -43,6 +55,8 @@ export default class ContextMenu extends Component {
       opacity: 0,
       height: 0
     })
+
+    this.isMenuToggled = false
   }
 
   /**
@@ -50,21 +64,19 @@ export default class ContextMenu extends Component {
    */
   updateNavigationIcons = () => {
     const webview = app.getSelectedPage().elements.webview
+    const disabledClassName = 'menu-navigation-icon-disabled'
+
     if (webview.getWebContents() != null) {
       if (webview.canGoBack()) {
-        this.elements.back.classList.remove('navigation-icon-disabled')
-        this.elements.back.classList.add('navigation-icon-enabled')
+        this.elements.back.classList.remove(disabledClassName)
       } else {
-        this.elements.back.classList.add('navigation-icon-disabled')
-        this.elements.back.classList.remove('navigation-icon-enabled')
+        this.elements.back.classList.add(disabledClassName)
       }
 
       if (webview.canGoForward()) {
-        this.elements.forward.classList.remove('navigation-icon-disabled')
-        this.elements.forward.classList.add('navigation-icon-enabled')
+        this.elements.forward.classList.remove(disabledClassName)
       } else {
-        this.elements.forward.classList.add('navigation-icon-disabled')
-        this.elements.forward.classList.remove('navigation-icon-enabled')
+        this.elements.forward.classList.add(disabledClassName)
       }
     }
   }
@@ -89,14 +101,14 @@ export default class ContextMenu extends Component {
       let show = newItems[i].show
       let enabled = newItems[i].enabled
       let onClick = newItems[i].onClick
-  
+
       if (title !== 'Separator') {
         UI.render(
           <MenuItem show={show} onClick={onClick} enabled={enabled} menu={this}>{title}</MenuItem>, this.elements.menuItems, this
         )
       } else {
         UI.render(
-          <div style={{display: (show) ? 'block' : 'none'}} className='context-menu-separator' />, this.elements.menuItems, this
+          <div style={{display: (show) ? 'block' : 'none'}} className='menu-separator' />, this.elements.menuItems, this
         )
       }
     }
@@ -131,19 +143,24 @@ export default class ContextMenu extends Component {
       e.stopPropagation()
     }
 
+    let navigationIcons = null
+
+    if (this.props.showNavigationIcons) {
+      navigationIcons = (
+        <div className='menu-navigation-icons'>
+          <div ref='back' onClick={onBackClick} className='menu-navigation-icon-back' />
+          <div ref='forward' onClick={onForwardClick} className='menu-navigation-icon-forward' />
+          <div ref='refresh' onClick={onRefreshClick} className='menu-navigation-icon-refresh' />
+          <div ref='favorite' className='menu-navigation-icon-favorite' />
+        </div>
+      )
+    }
 
     return (
-      <div onMouseDown={onMouseDown} ref='menu' className='context-menu'>
-        <div className='navigation-icons'>
-          <div ref='back' onClick={onBackClick} className='navigation-icon-back navigation-icon-enabled' />
-          <div ref='forward' onClick={onForwardClick} className='navigation-icon-forward navigation-icon-enabled' />
-          <div ref='refresh' onClick={onRefreshClick} className='navigation-icon-refresh navigation-icon-enabled' />
-          <div ref='favorite' className='navigation-icon-favorite navigation-icon-enabled' />
-        </div>
-        <div className='context-menu-line' />
-        <div ref='menuItems' className='context-menu-items'>
-          
-        </div>
+      <div onMouseDown={onMouseDown} ref='menu' className='menu'>
+        {navigationIcons}
+        <div className='menu-line' />
+        <div ref='menuItems' className='menu-items' />
       </div>
     )
   }

@@ -248,6 +248,8 @@ export default class Tab extends Component {
       pointerEvents: 'none'
     })
 
+    app.lastClosedURL = this.page.elements.page.elements.webview.getURL()
+
     this.page.elements.page.remove()
 
     // Get previous and next tab.
