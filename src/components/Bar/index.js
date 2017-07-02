@@ -6,7 +6,7 @@ export default class Bar extends Component {
     this.isAddressbarBarToggled = false
   }
 
-  onAddressBarClick = (e) => {
+  onShortUrlClick = (e) => {
     e.stopPropagation()
     if (!this.isAddressbarBarToggled) {
       this.setURL(app.getSelectedPage().elements.webview.getURL())
@@ -47,13 +47,15 @@ export default class Bar extends Component {
         <div ref='back' className='bar-icon bar-icon-back' />
         <div ref='forward' className='bar-icon bar-icon-forward' />
         <div ref='refresh' className='bar-icon bar-icon-refresh' />
-        <div className='bar-addressbar' onClick={this.onAddressBarClick}>
+        <div ref='addressbar' className='bar-addressbar'>
           <div ref='icon' className='bar-addressbar-icon bar-addressbar-icon-secure' />
           <div ref='title' className='bar-addressbar-title' />
           <div className='bar-addressbar-divider' />
-          <div ref='shortUrl' className='bar-addressbar-shorturl' />
-          <div className='bar-addressbar-action-icon bar-addressbar-action-icon-favorite' />
-          <div className='bar-addressbar-action-icon bar-addressbar-action-icon-clear' />
+          <div ref='shortUrl' onClick={this.onShortUrlClick} className='bar-addressbar-shorturl' />
+          <div ref='actionIcons' className='bar-addressbar-action-icons'>
+            <div className='bar-addressbar-action-icon bar-addressbar-action-icon-favorite' />
+            <div className='bar-addressbar-action-icon bar-addressbar-action-icon-clear' />
+          </div>
           <input ref='input' onFocus={this.onFocus} onKeyPress={this.onKeyPress} className='bar-input' />
         </div>
         <div ref='menu' className='bar-icon bar-icon-menu' />
@@ -64,9 +66,8 @@ export default class Bar extends Component {
   afterRender () {
     const self = this
 
-    window.addEventListener('mouseup', function (e) {
-      self.elements.input.style.display = 'none'
-      self.isAddressbarBarToggled = false
+    window.addEventListener('mousedown', function (e) {
+      if (self.isAddressbarBarToggled) self.toggleInput(false)
     })
 
     this.elements.back.addEventListener('click', (e) => {
@@ -90,6 +91,26 @@ export default class Bar extends Component {
 
       webview.reload()
     })
+
+    this.elements.input.addEventListener('mousedown', (e) => {
+      e.stopPropagation()
+    })
+
+    this.elements.addressbar.addEventListener('mouseenter', (e) => {
+      self.elements.actionIcons.css({
+        opacity: 1,
+        pointerEvents: 'auto'
+      })
+    })
+
+    this.elements.addressbar.addEventListener('mouseleave', (e) => {
+      if (!self.isAddressbarBarToggled) {
+        self.elements.actionIcons.css({
+          opacity: 0,
+          pointerEvents: 'none'
+        })
+      }
+    })
   }
 
   setTitle (title) {
@@ -106,7 +127,7 @@ export default class Bar extends Component {
     if (hostname.indexOf('?') !== -1) {
       hostname = hostname.split('?')[0]
     }
-    
+
     if (hostname.indexOf('://') !== -1) {
       hostname = hostname.split('://')[0] + '://' + hostname.split('/')[2]
     } else {
@@ -121,7 +142,18 @@ export default class Bar extends Component {
 
     this.isAddressbarBarToggled = flag
 
-    this.elements.input.style.display = (flag) ? 'inline-block' : 'none'
+    this.elements.input.css({
+      opacity: (flag) ? 1 : 0,
+      pointerEvents: (flag) ? 'auto' : 'none'
+    })
+
+    this.elements.actionIcons.css({
+      float: (flag) ? 'right' : 'none',
+      position: (flag) ? 'relative' : 'absolute',
+      opacity: (flag) ? 1 : 0,
+      pointerEvents: (flag) ? 'auto' : 'none',
+      marginRight: (flag) ? 11 : 0
+    })
 
     if (flag) {
       this.elements.input.focus()

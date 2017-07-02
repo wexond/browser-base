@@ -194,7 +194,7 @@ export default class Tab extends Component {
     this.setTitleMaxWidth(true)
   }
 
-  /** 
+  /**
    * Deselects tab.
    */
   deselect () {
