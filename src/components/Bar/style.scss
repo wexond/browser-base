@@ -63,38 +63,34 @@
   height: 24px;
   width: 24px;
   @include image-center(18px, 18px);
-  position: absolute;
-  float: none;
   display: inline-block;
   opacity: $secondary-opacity-light;
-  transition: 0.3s opacity;
+  transition: 0.2s opacity;
 
   &:hover {
     opacity: $primary-opacity-light;
-    transition: 0.3s opacity;
+    transition: 0.2s opacity;
   }
+}
+
+.bar-addressbar-action-icons {
+  opacity: 0;
+  position: absolute;
+  display: inline-block;
+  pointer-events: none;
+  transition: 0.2s opacity;
+  margin-left: 24px;
+  z-index: 3;
 }
 
 .bar-addressbar-action-icon-favorite {
-  margin-left: 16px;
   background-image: url(images/Bar/favorite-empty.png);
-
-  &:hover {
-    background-image: url(images/Bar/favorite-full.png);
-  }
-
-  &.full {
-    background-image: url(images/Bar/favorite-full.png);
-  }
-
-  &.full:hover {
-    background-image: url(images/Bar/favorite-empty.png);
-  }
 }
 
 .bar-addressbar-action-icon-clear {
-  margin-left: 48px;
+  margin-left: 8px;
   background-image: url(images/Tabs/close.png);
+  @include image-center(20px, 20px);
 }
 
 .bar-addressbar-icon-info {
@@ -110,7 +106,6 @@
   background-image: url(images/Bar/secure.png);
 }
 
-
 .bar-addressbar {
   float: left;
   width: calc(100% - 184px);
@@ -119,7 +114,6 @@
   font-size: 14px;
   position: relative;
   @include center-vertical;
-  cursor: text;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -148,12 +142,12 @@
   position: relative;
   opacity: $secondary-opacity-light;
   top: 1px;
+  cursor: text;
 }
 
 .bar-input {
-  background-color: #fff;
   display: inline-block;
-  width: 100%;
+  width: calc(100% - 11px);
   height: 100%;
   position: absolute;
   left: 0px;
@@ -161,6 +155,8 @@
   outline: none;
   border: none;
   font-size: 14px;
-  display: none;
-  color: rgba(0, 0, 0, $primary-opacity-light)
+  color: rgba(0, 0, 0, $primary-opacity-light);
+  transition: 0.1s opacity;
+  opacity: 0;
+  pointer-events: none;
 }
