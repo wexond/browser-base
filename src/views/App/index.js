@@ -43,12 +43,13 @@ class App extends Component {
       self.elements.tabMenu.hide()
     })
 
-    this.elements.tabs.elements.tabbar.addEventListener('context-menu', (e) => {
+    this.elements.tabs.elements.tabbar.addEventListener('contextmenu', (e) => {
+      console.log(e)
       if (e.target === self.elements.tabs.elements.addButton) return
 
       const tabMenu = self.elements.tabMenu
 
-      let newItems = webviewMenu.menuItems
+      let newItems = tabMenu.menuItems
 
       newItems[10].enabled = (self.lastClosedURL !== '' && self.lastClosedURL != null)
 

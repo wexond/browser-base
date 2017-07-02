@@ -102,6 +102,8 @@ export default class Menu extends Component {
       let enabled = newItems[i].enabled
       let onClick = newItems[i].onClick
 
+      if (show == null) show = true
+
       if (title !== 'Separator') {
         UI.render(
           <MenuItem show={show} onClick={onClick} enabled={enabled} menu={this}>{title}</MenuItem>, this.elements.menuItems, this
