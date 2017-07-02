@@ -7,7 +7,7 @@ import UI from '../../classes/UI'
 
 import Tabs from '../../components/Tabs'
 import Bar from '../../components/Bar'
-import ContextMenu from '../../components/ContextMenu'
+import Menu from '../../components/Menu'
 
 class App extends Component {
   constructor() {
@@ -26,7 +26,9 @@ class App extends Component {
         <Tabs ref='tabs' />
         <Bar ref='bar' />
         <div className='pages' ref='pages' />
-        <ContextMenu ref='webviewMenu' />
+        <Menu showNavigationIcons={true} ref='webviewMenu' />
+        <Menu showNavigationIcons={true} ref='tabMenu' />
+        <Menu ref='menu' />
       </div>
     )
   }
@@ -37,7 +39,113 @@ class App extends Component {
 
     window.addEventListener('mousedown', (e) => {
       self.elements.webviewMenu.hide()
+      self.elements.menu.hide()
+      self.elements.tabMenu.hide()
     })
+
+    this.elements.tabs.elements.tabbar.addEventListener('context-menu', (e) => {
+      if (e.target === self.elements.tabs.elements.addButton) return
+
+      const tabMenu = self.elements.tabMenu
+
+      let newItems = webviewMenu.menuItems
+
+      newItems[10].enabled = (self.lastClosedURL !== '' && self.lastClosedURL != null)
+
+      tabMenu.updateItems(newItems)
+      tabMenu.show()
+
+      let left = e.pageX + 1
+      let top = e.pageY + 1
+
+      if (left + 300 > window.innerWidth) {
+        left = e.pageX - 301
+      }
+      if (top + tabMenu.height > window.innerHeight) {
+        top = e.pageY - tabMenu.height
+      }
+      if (top < 0) {
+        top = 96
+      }
+
+      tabMenu.setPosition(left, top)
+
+      self.hoveredTab = self.tabs.getTabFromMousePoint(null, e.pageX, e.pageY)
+    })
+
+    this.elements.tabMenu.updateItems(
+      [
+        {
+          title: 'Add new tab'
+        },
+        {
+          title: 'Separator'
+        },
+        {
+          title: 'Pin tab'
+        },
+        {
+          title: 'Mute tab'
+        },
+        {
+          title: 'Duplicate'
+        },
+        {
+          title: 'Separator'
+        },
+        {
+          title: 'Close tab'
+        },
+        {
+          title: 'Close other tabs'
+        },
+        {
+          title: 'Close tabs from left'
+        },
+        {
+          title: 'Close tabs from right'
+        },
+        {
+          title: 'Revert closed tab',
+          enabled: false
+        }
+      ]
+    )
+
+    this.elements.menu.updateItems(
+      [
+        {
+          title: 'New tab'
+        },
+        {
+          title: 'New incognito window'
+        },
+        {
+          title: 'Separator'
+        },
+        {
+          title: 'History'
+        },
+        {
+          title: 'Bookmarks'
+        },
+        {
+          title: 'Downloads'
+        },
+        {
+          title: 'Separator'
+        },
+        {
+          title: 'Settings'
+        },
+        {
+          title: 'Extensions'
+        },
+        {
+          title: 'Developer tools'
+        }
+      ]
+    )
 
     this.elements.webviewMenu.updateItems(
       [
