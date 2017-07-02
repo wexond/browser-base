@@ -71,7 +71,7 @@ class App extends Component {
 
       tabMenu.setPosition(left, top)
 
-      self.hoveredTab = self.tabs.getTabFromMousePoint(null, e.pageX, e.pageY)
+      self.hoveredTab = self.elements.tabs.getTabFromMousePoint(null, e.pageX, e.pageY)
     })
 
     this.elements.tabMenu.updateItems(
