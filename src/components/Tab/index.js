@@ -238,7 +238,7 @@ export default class Tab extends Component {
       this.tabs.addTab()
     }
 
-    window.app.lastClosedURL = this.page.elements.webview.getURL()
+    app.lastClosedURL = this.page.elements.webview.getURL()
 
     this.tabs.timer.canReset = true
 
@@ -248,7 +248,7 @@ export default class Tab extends Component {
       pointerEvents: 'none'
     })
 
-    app.lastClosedURL = this.page.elements.page.elements.webview.getURL()
+    app.lastClosedURL = this.page.elements.webview.getURL()
 
     this.page.elements.page.remove()
 
