@@ -74,6 +74,7 @@
 }
 
 .bar-addressbar-action-icons {
+  @include center-vertical;
   opacity: 0;
   position: absolute;
   display: inline-block;
@@ -109,7 +110,7 @@
 .bar-addressbar {
   float: left;
   width: calc(100% - 184px);
-  height: calc(100% - 16px);
+  height: 100%;
   margin-left: 26px;
   font-size: 14px;
   position: relative;
@@ -134,15 +135,15 @@
   display: inline-block;
   position: relative;
   opacity: $primary-opacity-light;
-  top: 1px;
+  top: 9px;
 }
 
 .bar-addressbar-shorturl {
   display: inline-block;
   position: relative;
   opacity: $secondary-opacity-light;
-  top: 1px;
   cursor: text;
+  top: 9px;
 }
 
 .bar-input {
