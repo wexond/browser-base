@@ -11,6 +11,7 @@ export default class UI {
   }
 
   static render (elements, parentElement, caller = null) {
+    if (elements == null) return
     if (typeof elements === 'object') {
       let elementName = elements.elementName
       let props = elements.attributes

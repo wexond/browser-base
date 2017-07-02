@@ -103,7 +103,6 @@ export default class Page extends Component {
           webviewMenu.updateItems(newItems)
 
           webviewMenu.show()
-          // app.tabMenu.hide()
 
           let left = app.cursor.x + 1
           let top = app.cursor.y + 1
