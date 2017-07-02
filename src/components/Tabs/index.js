@@ -216,7 +216,7 @@ export default class Tabs extends Component {
 
   /**
    * Adds tab.
-   * @param {Object} data 
+   * @param {Object} data
    */
   addTab (data = defaultTabOptions) {
     UI.render(<Tab select={data.select} url={data.url} tabs={this}/>, this.elements.tabbar, this)
@@ -224,7 +224,7 @@ export default class Tabs extends Component {
 
   /**
    * Selects given tab and deselects others.
-   * @param {Tab} tab 
+   * @param {Tab} tab
    */
   selectTab (tabToSelect) {
     tabs.forEach((tab) => {
@@ -238,43 +238,74 @@ export default class Tabs extends Component {
 
   /**
    * Gets widths for all tabs.
+   * @param {Number} margin
    * @return {Number}
    */
-  getWidths () {
-    let tabbarWidth = this.elements.tabbar.offsetWidth - this.elements.addButton.offsetWidth
-    let tabWidth = (tabbarWidth / tabs.length)
+  getWidths (margin = 0) {
+    const tabbarWidth = this.elements.tabbar.offsetWidth
+    const addButtonWidth = this.elements.addButton.offsetWidth
+    let tabWidths = []
+    let pinnedTabsLength = 0
 
-    if (tabWidth > 190) {
-      tabWidth = 190
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i].pinned) {
+        // Push width for pinned tab.
+        tabWidths.push(tabsData.pinnedTabWidth)
+
+        pinnedTabsLength += 1
+      }
     }
 
-    return tabWidth
+    for (i = 0; i < tabs.length; i++) {
+      if (!tabs[i].pinned) {
+        // Include margins between tabs.
+        var margins = tabs.length * margin
+        // Include pinned tabs.
+        var smallTabsWidth = (pinnedTabsLength * tabsData.pinnedTabWidth)
+        // Calculate final width per tab.
+        var tabWidthTemp = (tabbarWidth - addButtonWidth - margins - smallTabsWidth) / (tabs.length - pinnedTabsLength)
+        // Check if tab's width isn't greater than max tab width.
+        if (tabWidthTemp > tabsData.maxTabWidth) {
+          tabWidthTemp = tabsData.maxTabWidth
+        }
+        // Push width for normal tab.
+        tabWidths.push(tabWidthTemp)
+      }
+    }
+
+    return tabWidths
   }
 
   /**
    * Sets widths for all tabs.
    */
   setWidths (animation = true) {
-    const width = this.getWidths()
+    const widths = this.getWidths()
 
-    let widthSmaller = width < 48
+    let normalTabWidth = tabsData.maxTabWidth
 
-    tabs.forEach((tab) => {
+    tabs.forEach((tab, index) => {
       if (animation) {
         tab.appendTransition('width')
       } else {
         tab.removeTransition('width')
       }
 
-      tab.setWidth(width)
-      tab.width = width
+      tab.setWidth(widths[index])
+      tab.width = widths[index]
 
       let tabSelected = tab.selected
+      let widthSmaller = widths[index] < 48
+
+      if (!tab.pinned) normalTabWidth = widths[index]
+
       tab.elements.close.css('display', (!tabSelected && widthSmaller) ? 'none' : 'block')
       tab.elements.icon.css('display', ((tabSelected) ? ((widthSmaller) ? 'none' : 'block') : 'block'))
+
+      if (tab.pinned) tab.elements.close.css('display', 'none')
     })
 
-    if (width < 190) {
+    if (normalTabWidth < tabsData.maxTabWidth) {
       this.elements.controlsBorder.css('display', 'block')
     } else {
       this.elements.controlsBorder.css('display', 'none')

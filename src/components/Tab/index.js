@@ -153,7 +153,7 @@ export default class Tab extends Component {
       {
         opacity: 1,
         transition: '',
-        display: 'block'
+        display: (this.pinned) ? 'none' : 'block'
       }
     )
 
@@ -225,6 +225,62 @@ export default class Tab extends Component {
     }
 
     this.setTitleMaxWidth(false)
+  }
+
+  /**
+   * Pins or unpins tab.
+   */
+  pin () {
+    // Set pinned state.
+    if (!this.pinned) {
+      this.elements.close.css({
+        display: 'none'
+      })
+      this.elements.title.css({
+        display: 'none'
+      })
+
+      let newItems = app.elements.tabMenu.menuItems
+
+      newItems[2].title = 'Unpin tab'
+
+      app.elements.tabMenu.updateItems(newItems)
+    } else {
+      this.elements.title.css({
+        display: 'block'
+      })
+      this.elements.close.css({
+        display: 'block'
+      })
+
+      let newItems = app.elements.tabMenu.menuItems
+
+      newItems[2].title = 'Pin tab'
+
+      app.elements.tabMenu.updateItems(newItems)
+    }
+
+    this.pinned = !this.pinned
+
+    // Move the pinned tab to first position.
+    var tempTabs = []
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i].pinned) {
+        tempTabs.push(tabs[i])
+      }
+    }
+
+    for (i = 0; i < tabs.length; i++) {
+      if (!tabs[i].pinned) {
+        tempTabs.push(tabs[i])
+      }
+    }
+    tabs = tempTabs
+
+    // Calculate all widths and positions for all tabs.
+    this.tabs.setWidths()
+    this.tabs.setPositions()
+    this.tabs.updateTabs()
   }
 
   /**
@@ -401,7 +457,7 @@ export default class Tab extends Component {
 
   /**
    * Sets title max width.
-   * @param {Boolean} closeVisible 
+   * @param {Boolean} closeVisible
    */
   setTitleMaxWidth (closeVisible = null) {
     let closeVisibleTemp = closeVisible

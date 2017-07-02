@@ -30,3 +30,7 @@ window.tabsAnimationData = {
   positioningEasing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
   hoverDuration: 0.2
 }
+window.tabsData = {
+  pinnedTabWidth: 32,
+  maxTabWidth: 190
+}
