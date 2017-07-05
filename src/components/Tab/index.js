@@ -15,6 +15,11 @@ export default class Tab extends Component {
     this.transitions = []
     this.blockLeftAnimation = true
 
+    this.defaultColors = {
+      select: '#fff',
+      hover: '#fff'
+    }
+
     window.tabs.push(this)
   }
 
@@ -145,7 +150,7 @@ export default class Tab extends Component {
 
     this.removeTransition('background-color')
     this.elements.tab.css({
-      backgroundColor: '#fff',
+      backgroundColor: this.defaultColors.select,
       zIndex: 4
     })
 

@@ -7,6 +7,14 @@
   left: 0;
   -webkit-app-region: no-drag;
   z-index: 3;
+
+  &.white {
+    color: #fff;
+
+    & .tab-close-icon {
+      background-color: #fff;
+    }
+  }
 }
 
 .tab-border-vertical {
