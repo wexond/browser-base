@@ -332,6 +332,10 @@ class App extends Component {
     return this.getSelectedTab().page
   }
 
+  /**
+   * Changes ui colors.
+   * @param {String} hex color
+   */
   changeUIColors (color) {
     const bar = this.elements.bar
     const tabs = this.elements.tabs
@@ -339,17 +343,7 @@ class App extends Component {
     const tab = selectedTab.elements.tab
     const white = (Colors.getForegroundColor(color) === 'white')
 
-    tab.css({
-      backgroundColor: color
-    })
-
-    selectedTab.defaultColors.select = color
-
-    const darkerColor = Colors.shadeColor(color, 0.1)
-
-    tabs.elements.tabs.css({
-      backgroundColor: darkerColor
-    })
+    const darkerColor = (color !== '#fff') ? Colors.shadeColor(color, 0.1) : '#eee'
 
     if (white) {
       tabs.elements.tabs.classList.add('white-icons')
@@ -360,6 +354,16 @@ class App extends Component {
 
       bar.elements.bar.classList.remove('white-icons')
     }
+
+    selectedTab.appendTransition('background-color')
+
+    tab.css({
+      backgroundColor: color
+    })
+
+    tabs.elements.tabs.css({
+      backgroundColor: darkerColor
+    })
 
     bar.elements.bar.css({
       backgroundColor: color
