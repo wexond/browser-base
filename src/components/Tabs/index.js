@@ -20,7 +20,7 @@ export default class Tabs extends Component {
       <div className='tabs' ref='tabs'>
         <div className='tabs-bottom-border' ref='bottomBorder' />
         <div className='tabs-handle' ref='handle' />
-        <div className='controls'>
+        <div className='controls' ref='controls'>
           <div ref='close' className='control control-close' />
           <div ref='maximize' className='control control-maximize' />
           <div ref='minimize' className='control control-minimize' />

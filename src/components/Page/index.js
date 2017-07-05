@@ -45,6 +45,7 @@ export default class Page extends Component {
 
     webview.addEventListener('did-start-loading', function (e) {
       self.tab.togglePreloader(true)
+      window.app.changeUIColors('#3b5998')
     })
 
     webview.addEventListener('did-stop-loading', function (e) {
