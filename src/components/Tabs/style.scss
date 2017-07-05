@@ -5,6 +5,22 @@
   position: relative;
   overflow: hidden;
   z-index: 3;
+
+  &.white-icons {
+    & .tabs-add-button, .control-close, .control-maximize, .control-minimize {
+      @include invert-colors;
+    }
+
+    & .tab {
+      & .tab-title {
+        color: #fff;
+      }
+
+      & .tab-close-icon {
+        background-color: #fff;
+      }
+    }
+  }
 }
 
 .tabbar {

@@ -4,6 +4,7 @@ import './global'
 
 import Component from '../../classes/Component'
 import UI from '../../classes/UI'
+import Colors from '../../classes/Colors'
 
 import Tabs from '../../components/Tabs'
 import Bar from '../../components/Bar'
@@ -329,6 +330,44 @@ class App extends Component {
 
   getSelectedPage() {
     return this.getSelectedTab().page
+  }
+
+  changeUIColors (color) {
+    const bar = this.elements.bar
+    const tabs = this.elements.tabs
+    const selectedTab = tabs.selectedTab
+    const tab = selectedTab.elements.tab
+    const white = (Colors.getForegroundColor(color) === 'white')
+
+    tab.css({
+      backgroundColor: color
+    })
+
+    selectedTab.defaultColors.select = color
+
+    const darkerColor = Colors.shadeColor(color, 0.1)
+
+    tabs.elements.tabs.css({
+      backgroundColor: darkerColor
+    })
+
+    if (white) {
+      tabs.elements.tabs.classList.add('white-icons')
+
+      bar.elements.bar.classList.add('white-icons')
+    } else {
+      tabs.elements.tabs.classList.remove('white-icons')
+
+      bar.elements.bar.classList.remove('white-icons')
+    }
+
+    bar.elements.bar.css({
+      backgroundColor: color
+    })
+
+    bar.elements.input.css({
+      backgroundColor: color
+    })
   }
 }
 
