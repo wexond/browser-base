@@ -15,7 +15,7 @@ export default class Tab extends Component {
     this.transitions = []
     this.blockLeftAnimation = true
 
-    this.defaultColors = {
+    this.colors = {
       select: '#fff',
       hover: '#fff'
     }
@@ -142,6 +142,7 @@ export default class Tab extends Component {
    * Selects tab.
    */
   select () {
+    const app = window.app
     const webview = this.page.elements.webview
     const bar = app.elements.bar
 
@@ -150,7 +151,7 @@ export default class Tab extends Component {
 
     this.removeTransition('background-color')
     this.elements.tab.css({
-      backgroundColor: this.defaultColors.select,
+      backgroundColor: this.colors.select,
       zIndex: 4
     })
 
@@ -196,7 +197,7 @@ export default class Tab extends Component {
       app.elements.webviewMenu.updateNavigationIcons()
     }
 
-    this.setTitleMaxWidth(true)
+    app.changeUIColors(this.colors.select)
   }
 
   /**

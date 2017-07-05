@@ -45,7 +45,6 @@ export default class Page extends Component {
 
     webview.addEventListener('did-start-loading', function (e) {
       self.tab.togglePreloader(true)
-      window.app.changeUIColors('#3b5998')
     })
 
     webview.addEventListener('did-stop-loading', function (e) {
@@ -53,6 +52,15 @@ export default class Page extends Component {
       if (self.tab.selected) {
         app.elements.bar.setURL(webview.getURL())
       }
+
+      let color = '#3b5998'
+
+      if (webview.getURL() !== 'wexond://newtab/') {
+        color = '#fff'
+      }
+
+      self.tab.colors.select = color
+      window.app.changeUIColors(self.tab.colors.select)
     })
 
     if (app != null) {

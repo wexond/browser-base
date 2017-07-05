@@ -4,6 +4,7 @@
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.29);
   z-index: 2;
   position: relative;
+  transition: 0.2s background-color;
 
   &.white-icons {
     & .bar-icon, & .bar-addressbar-icon-info,  & .bar-addressbar .bar-addressbar-action-icon {
@@ -171,7 +172,7 @@
   border: none;
   font-size: 14px;
   color: rgba(0, 0, 0, $primary-opacity-light);
-  transition: 0.1s opacity;
+  transition: 0.1s opacity, 0.2s background-color;
   opacity: 0;
   pointer-events: none;
 }
