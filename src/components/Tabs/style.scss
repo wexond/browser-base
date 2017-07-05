@@ -5,6 +5,7 @@
   position: relative;
   overflow: hidden;
   z-index: 3;
+  transition: 0.2s background-color;
 
   &.white-icons {
     & .tabs-add-button, .control-close, .control-maximize, .control-minimize {
