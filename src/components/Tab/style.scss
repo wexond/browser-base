@@ -36,6 +36,7 @@
   width: 100%;
   max-width: calc(100% - 16px);
   overflow: hidden;
+  opacity: $primary-opacity-light;
 }
 
 .tab-content {

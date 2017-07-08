@@ -11,6 +11,12 @@
 .tabs-white-foreground {
   & .tabs-add-button, .control-close, .control-maximize, .control-minimize {
     @include invert-colors;
+
+    opacity: $secondary-opacity-dark;
+
+    &:hover {
+      opacity: $primary-opacity-dark;
+    }
   }
 
   & .tabs-bottom-border {
@@ -21,10 +27,18 @@
   & .tab {
     & .tab-title {
       color: #fff;
+
+      opacity: $primary-opacity-dark;
     }
 
     & .tab-close-icon {
       background-color: #fff;
+
+      opacity: $secondary-opacity-dark;
+
+      &:hover {
+        opacity: $primary-opacity-dark;
+      }
     }
 
     & .tab-border-vertical {
