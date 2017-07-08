@@ -6,7 +6,7 @@ export default class Colors {
    */
   static getForegroundColor (color) {
     var brightness = Colors.colorBrightness(color)
-    if (brightness < 125) {
+    if (brightness < 130) {
       return 'white'
     } else {
       return 'black'
