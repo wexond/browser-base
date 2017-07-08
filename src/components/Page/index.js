@@ -58,7 +58,6 @@ export default class Page extends Component {
       if (webview.getURL() !== 'wexond://newtab/') {
         color = '#fff'
       }
-
       app.changeUIColors(color, self.tab)
     })
 
