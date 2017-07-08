@@ -53,14 +53,13 @@ export default class Page extends Component {
         app.elements.bar.setURL(webview.getURL())
       }
 
-      let color = '#3b5998'
+      let color = '#2196F3'
 
       if (webview.getURL() !== 'wexond://newtab/') {
         color = '#fff'
       }
 
-      self.tab.colors.select = color
-      window.app.changeUIColors(self.tab.colors.select)
+      app.changeUIColors(color, self.tab)
     })
 
     if (app != null) {
