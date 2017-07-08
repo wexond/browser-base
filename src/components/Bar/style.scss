@@ -7,6 +7,11 @@
   transition: 0.2s background-color;
 
   &.bar-white-foreground {
+    & .bar-addressbar-divider {
+      opacity: $dividers-opacity-dark;
+      background-color: white;
+    }
+
     & .bar-icon, & .bar-addressbar-icon-info,  & .bar-addressbar-action-icon {
       @include invert-colors;
       opacity: $secondary-opacity-dark;
