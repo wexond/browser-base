@@ -7,8 +7,19 @@
   transition: 0.2s background-color;
 
   &.bar-white-foreground {
-    & .bar-icon, & .bar-addressbar-icon-info,  & .bar-addressbar .bar-addressbar-action-icon {
+    & .bar-icon, & .bar-addressbar-icon-info,  & .bar-addressbar-action-icon {
       @include invert-colors;
+      opacity: $secondary-opacity-dark;
+    }
+
+    & .bar-icon, & .bar-addressbar-action-icon {
+      &:hover {
+        opacity: $primary-opacity-dark;
+      }
+    }
+
+    & .bar-icon-disabled {
+      opacity: $disabled-opacity-dark;
     }
 
     & .bar-addressbar {
