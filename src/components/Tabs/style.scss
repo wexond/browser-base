@@ -19,6 +19,10 @@
     }
 
     & .tabs-bottom-border {
+      display: none;
+    }
+
+    & .tabs-border-vertical {
       background-color: white;
       opacity: $dividers-opacity-dark;
     }
@@ -41,6 +45,10 @@
       }
 
       & .tab-border-vertical {
+        opacity: 0;
+      }
+
+      & .tab-border-small-vertical {
         background-color: white;
         opacity: $dividers-opacity-dark;
       }
