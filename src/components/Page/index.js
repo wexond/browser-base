@@ -61,6 +61,10 @@ export default class Page extends Component {
 
       self.tab.colors.select = color
       window.app.changeUIColors(self.tab.colors.select)
+
+      /*webview.executeJavaScript("document.querySelector('meta[name=\"theme-color\"]')", false, function (e) {
+        console.log(e)
+      })*/
     })
 
     if (app != null) {
