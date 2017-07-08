@@ -149,7 +149,7 @@ export default class Tab extends Component {
     this.page.show()
     this.selected = true
 
-    this.removeTransition('background-color')
+    this.appendTransition('background-color')
     this.elements.tab.css({
       backgroundColor: this.colors.select,
       zIndex: 4
@@ -197,7 +197,7 @@ export default class Tab extends Component {
       app.elements.webviewMenu.updateNavigationIcons()
     }
 
-    app.changeUIColors(this.colors.select)
+    app.changeUIColors(this.colors.select, this)
   }
 
   /**
@@ -207,7 +207,7 @@ export default class Tab extends Component {
     this.page.hide()
     this.selected = false
 
-    this.removeTransition('background-color')
+    this.appendTransition('background-color')
     this.elements.tab.css({
       backgroundColor: 'transparent',
       zIndex: 3

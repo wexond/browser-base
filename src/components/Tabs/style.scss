@@ -6,20 +6,30 @@
   overflow: hidden;
   z-index: 3;
   transition: 0.2s background-color;
+}
 
-  &.white-icons {
-    & .tabs-add-button, .control-close, .control-maximize, .control-minimize {
-      @include invert-colors;
+.tabs-white-foreground {
+  & .tabs-add-button, .control-close, .control-maximize, .control-minimize {
+    @include invert-colors;
+  }
+
+  & .tabs-bottom-border {
+    background-color: white;
+    opacity: $dividers-opacity-dark;
+  }
+
+  & .tab {
+    & .tab-title {
+      color: #fff;
     }
 
-    & .tab {
-      & .tab-title {
-        color: #fff;
-      }
+    & .tab-close-icon {
+      background-color: #fff;
+    }
 
-      & .tab-close-icon {
-        background-color: #fff;
-      }
+    & .tab-border-vertical {
+      background-color: white;
+      opacity: $dividers-opacity-dark;
     }
   }
 }

@@ -333,31 +333,35 @@ class App extends Component {
   }
 
   /**
-   * Changes ui colors.
-   * @param {String} hex color
+   * Changes UI colors.
+   * @param {String} color - hex color
+   * @param {Tab} tab
    */
-  changeUIColors (color) {
+  changeUIColors (color, tab) {
+    tab.colors.select = color
+
+    if (!tab.selected) return
+
     const bar = this.elements.bar
     const tabs = this.elements.tabs
-    const selectedTab = tabs.selectedTab
-    const tab = selectedTab.elements.tab
+    const tabDiv = tab.elements.tab
     const white = (Colors.getForegroundColor(color) === 'white')
 
-    const darkerColor = (color !== '#fff') ? Colors.shadeColor(color, 0.1) : '#eee'
+    const darkerColor = (color !== '#fff') ? Colors.shadeColor(color, -0.15) : '#eee'
 
     if (white) {
-      tabs.elements.tabs.classList.add('white-icons')
+      tabs.elements.tabs.classList.add('tabs-white-foreground')
 
-      bar.elements.bar.classList.add('white-icons')
+      bar.elements.bar.classList.add('bar-white-foreground')
     } else {
-      tabs.elements.tabs.classList.remove('white-icons')
+      tabs.elements.tabs.classList.remove('tabs-white-foreground')
 
-      bar.elements.bar.classList.remove('white-icons')
+      bar.elements.bar.classList.remove('bar-white-foreground')
     }
 
-    selectedTab.appendTransition('background-color')
+    tab.appendTransition('background-color')
 
-    tab.css({
+    tabDiv.css({
       backgroundColor: color
     })
 
