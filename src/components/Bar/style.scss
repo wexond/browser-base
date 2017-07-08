@@ -6,7 +6,7 @@
   position: relative;
   transition: 0.2s background-color;
 
-  &.white-icons {
+  &.bar-white-foreground {
     & .bar-icon, & .bar-addressbar-icon-info,  & .bar-addressbar .bar-addressbar-action-icon {
       @include invert-colors;
     }
@@ -15,7 +15,7 @@
       color: #fff;
 
       & .bar-input {
-        color: rgba(255, 255, 255, $primary-opacity-light);
+        color: rgba(255, 255, 255, $primary-opacity-dark);
       }
     }
   }
