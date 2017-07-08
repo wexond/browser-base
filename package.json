@@ -45,6 +45,7 @@
     "cross-env": "latest",
     "css-loader": "latest",
     "electron-packager": "latest",
+    "eslint": "latest",
     "eslint-config-standard": "latest",
     "eslint-plugin-import": "latest",
     "eslint-plugin-node": "latest",
