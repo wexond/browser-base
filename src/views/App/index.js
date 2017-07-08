@@ -11,17 +11,17 @@ import Bar from '../../components/Bar'
 import Menu from '../../components/Menu'
 
 class App extends Component {
-  constructor() {
+  constructor () {
     super()
   }
 
-  beforeRender() {
+  beforeRender () {
     window.app = this
 
     this.cursor = {}
   }
 
-  render() {
+  render () {
     return (
       <div>
         <Tabs ref='tabs' />
@@ -34,7 +34,7 @@ class App extends Component {
     )
   }
 
-  afterRender() {
+  afterRender () {
     const self = this
     this.elements.tabs.addTab()
 
@@ -230,22 +230,22 @@ class App extends Component {
 
             var request = require('request').defaults({ encoding: null })
             request.get(data.srcURL, function (err, res, body) {
-                dialog.showSaveDialog(
-                  {
-                    defaultPath: 'image.' + extension,
-                    filters: [
-                      {
-                        name: '',
-                        extensions: [extension]
-                      }
-                    ]
-                  },
-                  function (path1) {
-                    fs.writeFile(path1, body, (err) => {
-                      if (err) console.error(err)
-                    })
-                  }
-                )
+              dialog.showSaveDialog(
+                {
+                  defaultPath: 'image.' + extension,
+                  filters: [
+                    {
+                      name: '',
+                      extensions: [extension]
+                    }
+                  ]
+                },
+                function (path1) {
+                  fs.writeFile(path1, body, (err) => {
+                    if (err) console.error(err)
+                  })
+                }
+              )
             })
           }
         },
@@ -324,11 +324,11 @@ class App extends Component {
     )
   }
 
-  getSelectedTab() {
+  getSelectedTab () {
     return this.elements.tabs.selectedTab
   }
 
-  getSelectedPage() {
+  getSelectedPage () {
     return this.getSelectedTab().page
   }
 
