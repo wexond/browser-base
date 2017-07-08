@@ -42,7 +42,6 @@
   height: 100%;
   width: 75px;
   opacity: $secondary-opacity-light;
-  pointer-events: 'auto';
   transition: 0.2s opacity;
 
   &:hover {
@@ -51,7 +50,7 @@
 }
 
 .menu-navigation-icon-disabled {
-  pointer-events: 'none';
+  pointer-events: none;
   opacity: $disabled-opacity-light;
 }
 
