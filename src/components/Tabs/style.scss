@@ -25,6 +25,10 @@
         stroke: #fff;
       }
     }
+
+    & .tabs-bottom-border, .tab-border-vertical, .tab-border-small-vertical, .tab-border-full-vertical {
+      background-color: #fff;
+    }
   }
 }
 
