@@ -18,8 +18,8 @@ window.addEventListener('load', function (e) {
 /**
  * Calculates container width.
  * @param {Int} items in one line
- * @param {Int} item width
- * @param {Int} item margin left
+ * @param {Int} item width (optional)
+ * @param {Int} item margin left (optional)
  * @return {Int} container width
  */
 function getContainerWidth (count, itemWidth = 150, itemMarginLeft = 6) {
