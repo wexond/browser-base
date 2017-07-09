@@ -1,0 +1,38 @@
+.page {
+  width: 150px;
+  height: 100px;
+  background-color: #3b5998;
+  float: left;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  position: relative;
+  cursor: pointer;
+  margin-left: 6px;
+  margin-top: 6px;
+  text-decoration: none;
+  display: block;
+}
+
+.page .icon {
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.page .title {
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  position: absolute;
+  color: #fff;
+  max-width: calc(100% - 8px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  white-space: nowrap;
+}
