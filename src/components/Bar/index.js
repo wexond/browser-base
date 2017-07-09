@@ -192,10 +192,18 @@ export default class Bar extends Component {
 
     if (url.startsWith('https')) {
       this.elements.icon.classList.remove('bar-addressbar-icon-info')
+      this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
       this.elements.icon.classList.add('bar-addressbar-icon-secure')
     } else {
+      this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
       this.elements.icon.classList.remove('bar-addressbar-icon-secure')
-      this.elements.icon.classList.add('bar-addressbar-icon-info')
+
+      if (url.startsWith('wexond')) {
+        this.elements.icon.classList.remove('bar-addressbar-icon-info')
+        this.elements.icon.classList.add('bar-addressbar-icon-wexond')
+      } else {
+        this.elements.icon.classList.add('bar-addressbar-icon-info')
+      }
     }
   }
 
