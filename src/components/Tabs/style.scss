@@ -52,6 +52,10 @@
         background-color: white;
         opacity: $dividers-opacity-dark;
       }
+
+      & .tab-preloader .path {
+        stroke: #fff;
+      }
     }
   }
 }
