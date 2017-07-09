@@ -34,6 +34,18 @@
         color: rgba(255, 255, 255, $primary-opacity-dark);
       }
     }
+
+    & .bar-addressbar-icon-wexond {
+      background-image: none;
+      -webkit-mask-box-image: url(images/wexond-logo.png);
+      background-color: white;
+      opacity: $secondary-opacity-light;
+    }
+
+    & .bar-addressbar-icon-secure {
+      background-color: white;
+      opacity: $secondary-opacity-light;
+    }
   }
 }
 
@@ -141,7 +153,8 @@
 .bar-addressbar-icon-secure {
   width: 16px;
   height: 16px;
-  background-image: url(images/Bar/secure.png);
+  -webkit-mask-box-image: url(images/Bar/secure.png);
+  background-color: green;
 }
 
 .bar-addressbar {
@@ -168,7 +181,7 @@
   @include center-vertical;
 }
 
-.bar-addressbar-title {
+.bar-addressbar-certificate-name {
   display: inline-block;
   position: relative;
   opacity: $primary-opacity-light;

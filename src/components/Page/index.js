@@ -18,31 +18,33 @@ export default class Page extends Component {
     const webview = this.elements.webview
 
     webview.addEventListener('page-title-updated', (e) => {
-      self.tab.setTitle(e.title)
-
       if (self.tab.selected) {
-        app.elements.bar.setTitle(e.title)
-        app.elements.bar.setDomain(webview.getURL())
+        app.elements.bar.retrieveInformation(webview.getURL())
       }
+      self.tab.setTitle(e.title)
     })
 
     webview.addEventListener('load-commit', (e) => {
-      app.elements.bar.updateNavigationIcons()
-      app.elements.webviewMenu.updateNavigationIcons()
+      if (self.tab.selected) {
+        app.elements.bar.updateNavigationIcons()
+        app.elements.webviewMenu.updateNavigationIcons()
+      }
     })
 
     webview.addEventListener('page-favicon-updated', (e) => {
       let request = new XMLHttpRequest()
-      request.open('GET', e.favicons[0], false)
-      request.send()
-
-      console.log(e.favicons[0])
-
-      if (request.status !== 404) {
-        self.tab.setFavicon(e.favicons[0])
-      } else {
-        self.tab.setFavicon('')
+      request.onreadystatechange = function (event) {
+        if (request.readyState === 4) {
+          if (request.status === 404) {
+            self.tab.setFavicon('')
+          } else {
+            self.tab.setFavicon(e.favicons[0])
+          }
+        }
       }
+
+      request.open('GET', e.favicons[0], true)
+      request.send(null)
     })
 
     webview.addEventListener('did-start-loading', function (e) {
@@ -51,15 +53,12 @@ export default class Page extends Component {
 
     webview.addEventListener('did-stop-loading', function (e) {
       self.tab.togglePreloader(false)
+
       if (self.tab.selected) {
-        app.elements.bar.setURL(webview.getURL())
+        app.elements.bar.retrieveInformation(webview.getURL())
       }
 
       let color = '#2196F3'
-
-      if (webview.getURL() !== 'wexond://newtab/' || webview.getURL() !== 'wexond://history/') {
-        color = '#fff'
-      }
 
       app.changeUIColors(color, self.tab)
     })
