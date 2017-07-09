@@ -2,14 +2,10 @@ import Component from '../../classes/Component'
 import Network from '../../helpers/Network'
 
 export default class Bar extends Component {
-  beforeRender () {
-    this.isAddressbarBarToggled = false
-  }
-
   onShortUrlClick = (e) => {
     e.stopPropagation()
     if (!this.isAddressbarBarToggled) {
-      this.setURL(app.getSelectedPage().elements.webview.getURL())
+      this.retrieveInformation(app.getSelectedPage().elements.webview.getURL())
       this.toggleInput(true)
     }
   }
@@ -49,7 +45,7 @@ export default class Bar extends Component {
         <div ref='refresh' className='bar-icon bar-icon-refresh' />
         <div ref='addressbar' className='bar-addressbar'>
           <div ref='icon' className='bar-addressbar-icon bar-addressbar-icon-secure' />
-          <div ref='title' className='bar-addressbar-title' />
+          <div ref='certificateName' className='bar-addressbar-certificate-name' />
           <div className='bar-addressbar-divider' />
           <div ref='shortUrl' onClick={this.onShortUrlClick} className='bar-addressbar-shorturl' />
           <div ref='actionIcons' className='bar-addressbar-action-icons'>
@@ -140,11 +136,19 @@ export default class Bar extends Component {
     })
   }
 
-  setTitle (title) {
-    this.elements.title.textContent = title
+  setCertificateName (name, country = null) {
+    let certificateName = name
+    if (country != null) {
+      certificateName += ' [' + country + ']'
+    }
+    this.elements.certificateName.textContent = certificateName
   }
 
   setDomain (url) {
+    this.elements.shortUrl.textContent = this.getDomain(url)
+  }
+
+  getDomain (url) {
     let hostname = url
 
     if (hostname.indexOf('http://') !== -1 || hostname.indexOf('https://') !== -1) {
@@ -161,7 +165,7 @@ export default class Bar extends Component {
       hostname = hostname.split('/')[0]
     }
 
-    this.elements.shortUrl.textContent = hostname
+    return hostname
   }
 
   toggleInput (flag) {
@@ -187,24 +191,47 @@ export default class Bar extends Component {
     }
   }
 
-  setURL (url) {
+  retrieveInformation (url) {
+    const self = this
     this.elements.input.value = url
+    this.setDomain(url)
 
-    if (url.startsWith('https')) {
+    let options = {
+      host: this.getDomain(url),
+      port: 443,
+      method: 'GET'
+    }
+
+    let req = https.request(options, (res) => {
+      let certificate = res.connection.getPeerCertificate()
+
+      if (certificate.subject == null) return
+
       this.elements.icon.classList.remove('bar-addressbar-icon-info')
       this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
       this.elements.icon.classList.add('bar-addressbar-icon-secure')
-    } else {
+      self.setCertificateName(certificate.subject.O, certificate.subject.C)
+
+      self.isHttps = true
+    })
+
+    req.on('error', (e) => {
       this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
       this.elements.icon.classList.remove('bar-addressbar-icon-secure')
 
       if (url.startsWith('wexond')) {
+        self.isHttps = true
         this.elements.icon.classList.remove('bar-addressbar-icon-info')
         this.elements.icon.classList.add('bar-addressbar-icon-wexond')
+        self.setCertificateName('Wexond')
       } else {
+        self.isHttps = false
         this.elements.icon.classList.add('bar-addressbar-icon-info')
+        self.setCertificateName('')
       }
-    }
+    })
+
+    req.end()
   }
 
   updateNavigationIcons () {

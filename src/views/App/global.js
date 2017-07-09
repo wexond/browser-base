@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const homedir = require('os').homedir()
 const url = require('url')
+const https = require('https')
 
 const userData = path.join(homedir, '.wexond')
 
@@ -20,6 +21,7 @@ window.defaultTabOptions = {
   select: true,
   url: 'wexond://newtab'
 }
+window.https = https
 window.fs = fs
 window.clipboard = clipboard
 window.dialog = dialog
