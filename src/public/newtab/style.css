@@ -34,5 +34,4 @@ html, body {
   margin-left: calc(50% - 6px);
   transform: translateX(calc(-50% - 6px));
   position: relative;
-  overflow: hidden;
 }

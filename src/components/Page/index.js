@@ -36,6 +36,8 @@ export default class Page extends Component {
       request.open('GET', e.favicons[0], false)
       request.send()
 
+      console.log(e.favicons[0])
+
       if (request.status !== 404) {
         self.tab.setFavicon(e.favicons[0])
       } else {
@@ -58,6 +60,7 @@ export default class Page extends Component {
       if (webview.getURL() !== 'wexond://newtab/' || webview.getURL() !== 'wexond://history/') {
         color = '#fff'
       }
+
       app.changeUIColors(color, self.tab)
     })
 
