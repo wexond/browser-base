@@ -1,15 +1,16 @@
 .page {
   width: 150px;
   height: 100px;
-  background-color: #3b5998;
+  background-color: #2196F3;
   float: left;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   position: relative;
   cursor: pointer;
   margin-left: 6px;
   margin-top: 6px;
   text-decoration: none;
   display: block;
+  border-radius: 2px;
 }
 
 .page .icon {
