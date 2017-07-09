@@ -36,3 +36,7 @@
   user-select: none;
   white-space: nowrap;
 }
+
+.page .ripple-effect {
+  z-index: 0;
+}

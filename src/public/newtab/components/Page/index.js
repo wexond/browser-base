@@ -1,11 +1,23 @@
 class Page {
   constructor (url, title, icon) {
+    const self = this
+
+    this.rippleStyle = {
+      backgroundColor: '#fff',
+      opacity: 0.15
+    }
+
     this.elements = {}
 
     // Create root.
     this.elements.root = document.createElement('a')
     this.elements.root.href = url
-    this.elements.root.className = 'page'
+    this.elements.root.className = 'page ripple'
+
+    this.elements.root.addEventListener('mousedown', function (e) {
+      const ripple = Ripple.createRipple(self.elements.root, self.rippleStyle, createRippleMouse(self.elements.root, e, 1.5))
+      Ripple.makeRipple(ripple)
+    })
 
     // Create icon and append it to root.
     this.elements.icon = document.createElement('div')
