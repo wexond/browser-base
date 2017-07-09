@@ -189,9 +189,7 @@ export default class Tab extends Component {
       const url = webview.getURL()
       const title = webview.getTitle()
 
-      bar.setDomain(url)
-      bar.setTitle(title)
-      bar.setURL(url)
+      bar.retrieveInformation(url)
 
       bar.updateNavigationIcons()
       app.elements.webviewMenu.updateNavigationIcons()
