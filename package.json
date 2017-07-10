@@ -33,7 +33,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-preset-es2015": "latest",
-    "electron": "latest"
+    "electron": "^1.7.4"
   },
   "devDependencies": {
     "babel-core": "latest",

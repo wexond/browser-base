@@ -147,22 +147,26 @@ export default class Page extends Component {
    */
   show () {
     this.elements.page.setCSS({
-      pointerEvents: 'auto',
       position: 'relative',
-      top: 0,
+      top: 'auto',
       visibility: 'visible'
     })
+
+    this.elements.webview.classList.remove('hide')
   }
 
   /**
    * Hides page div.
    */
   hide () {
+    const self = this
+
     this.elements.page.setCSS({
-      pointerEvents: 'none',
       position: 'absolute',
       top: -99999,
       visibility: 'hidden'
     })
+
+    self.elements.webview.classList.add('hide')
   }
 }
