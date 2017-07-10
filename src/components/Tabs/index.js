@@ -300,7 +300,11 @@ export default class Tabs extends Component {
       if (!tab.pinned) normalTabWidth = widths[index]
 
       tab.elements.close.css('display', (!tabSelected && widthSmaller) ? 'none' : 'block')
-      tab.elements.icon.css('display', ((tabSelected) ? ((widthSmaller) ? 'none' : 'block') : 'block'))
+      if (tab.pinned) {
+        tab.elements.icon.css('display', 'block')
+      } else {
+        tab.elements.icon.css('display', ((tabSelected) ? ((widthSmaller) ? 'none' : 'block') : 'block'))
+      }
 
       if (tab.pinned) tab.elements.close.css('display', 'none')
     })
