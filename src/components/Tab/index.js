@@ -145,9 +145,8 @@ export default class Tab extends Component {
     const app = window.app
     const webview = this.page.elements.webview
     const bar = app.elements.bar
-    const self = this
-
     this.page.show()
+
     this.selected = true
 
     this.appendTransition('background-color')
