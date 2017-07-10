@@ -141,6 +141,11 @@ export default class Bar extends Component {
     if (country != null) {
       certificateName += ' [' + country + ']'
     }
+
+    if (name == null) {
+      certificateName = 'Secure'
+    }
+
     this.elements.certificateName.textContent = certificateName
   }
 
@@ -193,45 +198,75 @@ export default class Bar extends Component {
 
   retrieveInformation (url) {
     const self = this
-    this.elements.input.value = url
-    this.setDomain(url)
+    const domain = this.getDomain(url)
 
-    let options = {
-      host: this.getDomain(url),
-      port: 443,
-      method: 'GET'
+    if (!this.isAddressbarBarToggled) {
+      this.elements.input.value = url
     }
 
-    let req = https.request(options, (res) => {
-      let certificate = res.connection.getPeerCertificate()
+    this.setDomain(url)
 
-      if (certificate.subject == null) return
+    let certificateExists = false
 
-      this.elements.icon.classList.remove('bar-addressbar-icon-info')
-      this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
-      this.elements.icon.classList.add('bar-addressbar-icon-secure')
-      self.setCertificateName(certificate.subject.O, certificate.subject.C)
+    for (var i = 0; i < certificates.length; i++) {
+      if (certificates[i].domain === domain) {
+        let certificate = certificates[i].certificate
+        if (certificate.subject == null) return
 
-      self.isHttps = true
-    })
-
-    req.on('error', (e) => {
-      this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
-      this.elements.icon.classList.remove('bar-addressbar-icon-secure')
-
-      if (url.startsWith('wexond')) {
-        self.isHttps = true
         this.elements.icon.classList.remove('bar-addressbar-icon-info')
-        this.elements.icon.classList.add('bar-addressbar-icon-wexond')
-        self.setCertificateName('Wexond')
-      } else {
-        self.isHttps = false
-        this.elements.icon.classList.add('bar-addressbar-icon-info')
-        self.setCertificateName('')
-      }
-    })
+        this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
+        this.elements.icon.classList.add('bar-addressbar-icon-secure')
 
-    req.end()
+        self.setCertificateName(certificate.subject.O, certificate.subject.C)
+
+        self.isHttps = true
+        certificateExists = true
+      }
+    }
+
+    if (!certificateExists) {
+      let options = {
+        host: domain,
+        port: 443,
+        method: 'GET'
+      }
+
+      let req = https.request(options, (res) => {
+        let certificate = res.connection.getPeerCertificate()
+
+        if (certificate.subject == null) return
+
+        this.elements.icon.classList.remove('bar-addressbar-icon-info')
+        this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
+        this.elements.icon.classList.add('bar-addressbar-icon-secure')
+        self.setCertificateName(certificate.subject.O, certificate.subject.C)
+
+        self.isHttps = true
+
+        certificates.push({
+          domain: domain,
+          certificate: certificate
+        })
+      })
+
+      req.on('error', (e) => {
+        this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
+        this.elements.icon.classList.remove('bar-addressbar-icon-secure')
+
+        if (url.startsWith('wexond')) {
+          self.isHttps = true
+          this.elements.icon.classList.remove('bar-addressbar-icon-info')
+          this.elements.icon.classList.add('bar-addressbar-icon-wexond')
+          self.setCertificateName('Wexond')
+        } else {
+          self.isHttps = false
+          this.elements.icon.classList.add('bar-addressbar-icon-info')
+          self.setCertificateName('')
+        }
+      })
+
+      req.end()
+    }
   }
 
   updateNavigationIcons () {
