@@ -156,7 +156,7 @@ export default class Tab extends Component {
       previousTab.elements.rightSmallBorder.setCSS({display: 'none'})
     }
 
-    this.elements.icon.setCSS({display: (this.elements.tab.offsetWidth < 48) ? 'none' : 'block'})
+    this.elements.icon.setCSS({display: (this.elements.tab.offsetWidth < 48 && !this.pinned) ? 'none' : 'block'})
 
     if (this.certificate != null) {
       bar.setCertificate(this.certificate.type, this, this.certificate.name, this.certificate.country)
@@ -186,6 +186,8 @@ export default class Tab extends Component {
     app.changeUIColors(this.colors.select, this)
 
     this.setTitleMaxWidth()
+
+    this.tabs.updateTabs()
   }
 
   /**
