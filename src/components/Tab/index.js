@@ -145,6 +145,7 @@ export default class Tab extends Component {
     const app = window.app
     const webview = this.page.elements.webview
     const bar = app.elements.bar
+    const self = this
 
     this.page.show()
     this.selected = true
@@ -174,6 +175,10 @@ export default class Tab extends Component {
 
     this.elements.icon.css('display', (this.elements.tab.offsetWidth < 48) ? 'none' : 'block')
 
+    if (this.certificate != null) {
+      bar.setCertificate(this.certificate.type, this, this.certificate.name, this.certificate.country)
+    }
+
     if (webview.getWebContents() != null) {
       accessWebContents()
     } else {
@@ -189,7 +194,7 @@ export default class Tab extends Component {
       const url = webview.getURL()
       const title = webview.getTitle()
 
-      bar.retrieveInformation(url)
+      bar.setURL(url)
 
       bar.updateNavigationIcons()
       app.elements.webviewMenu.updateNavigationIcons()
