@@ -47,11 +47,19 @@ class App extends Component {
     this.elements.tabs.elements.tabbar.addEventListener('contextmenu', (e) => {
       if (e.target === self.elements.tabs.elements.addButton) return
 
+      self.hoveredTab = self.elements.tabs.getTabFromMousePoint(null, e.pageX, e.pageY)
+
       const tabMenu = self.elements.tabMenu
 
       let newItems = tabMenu.menuItems
 
       newItems[10].enabled = (self.lastClosedURL !== '' && self.lastClosedURL != null)
+
+      if (self.hoveredTab.pinned) {
+        newItems[2].title = 'Unpin tab'
+      } else {
+        newItems[2].title = 'Pin tab'
+      }
 
       tabMenu.updateItems(newItems)
       tabMenu.show()
@@ -70,8 +78,6 @@ class App extends Component {
       }
 
       tabMenu.setPosition(left, top)
-
-      self.hoveredTab = self.elements.tabs.getTabFromMousePoint(null, e.pageX, e.pageY)
     })
 
     this.elements.tabMenu.updateItems(
@@ -101,7 +107,10 @@ class App extends Component {
           title: 'Separator'
         },
         {
-          title: 'Close tab'
+          title: 'Close tab',
+          onClick: function () {
+            self.hoveredTab.close()
+          }
         },
         {
           title: 'Close other tabs'
@@ -122,7 +131,10 @@ class App extends Component {
     this.elements.menu.updateItems(
       [
         {
-          title: 'New tab'
+          title: 'New tab',
+          onClick: function () {
+            self.elements.tabs.addTab()
+          }
         },
         {
           title: 'New incognito window'

@@ -27,6 +27,7 @@ window.clipboard = clipboard
 window.dialog = dialog
 window.path = path
 window.url = url
+window.certificates = []
 window.tabsAnimationData = {
   positioningDuration: 0.2,
   positioningEasing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
