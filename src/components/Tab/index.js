@@ -201,6 +201,8 @@ export default class Tab extends Component {
     }
 
     app.changeUIColors(this.colors.select, this)
+
+    this.setTitleMaxWidth()
   }
 
   /**
@@ -473,7 +475,7 @@ export default class Tab extends Component {
     let decrease = 16
 
     if (closeVisible == null) {
-      closeVisibleTemp = (this.elements.close.css('opacity') === '1')
+      closeVisibleTemp = (this.elements.close.css('opacity') === '1' && !this.pinned)
     }
 
     if (closeVisibleTemp && this.elements.close.css('display') === 'block') decrease += 20
