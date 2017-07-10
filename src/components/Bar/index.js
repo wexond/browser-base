@@ -200,6 +200,9 @@ export default class Bar extends Component {
         this.elements.icon.classList.remove('bar-addressbar-icon-info')
         this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
         this.elements.icon.classList.add('bar-addressbar-icon-secure')
+        this.elements.certificateName.css({
+          color: 'green'
+        })
 
         self.setCertificateName(certificate.subject.O, certificate.subject.C)
 
@@ -227,6 +230,10 @@ export default class Bar extends Component {
 
         self.isHttps = true
 
+        this.elements.certificateName.css({
+          color: 'green'
+        })
+
         certificates.push({
           domain: domain,
           certificate: certificate
@@ -236,12 +243,18 @@ export default class Bar extends Component {
       req.on('error', (e) => {
         this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
         this.elements.icon.classList.remove('bar-addressbar-icon-secure')
+        this.elements.certificateName.css({
+          color: 'black'
+        })
 
         if (url.startsWith('wexond')) {
           self.isHttps = true
           this.elements.icon.classList.remove('bar-addressbar-icon-info')
           this.elements.icon.classList.add('bar-addressbar-icon-wexond')
           self.setCertificateName('Wexond')
+          this.elements.certificateName.css({
+            color: '#2196F3'
+          })
         } else {
           self.isHttps = false
           this.elements.icon.classList.add('bar-addressbar-icon-info')
