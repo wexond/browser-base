@@ -18,7 +18,7 @@ export default class Menu extends Component {
     let separators = this.elements.menuItems.getElementsByClassName('menu-separator')
     let separatorsCount = 0
     for (var i = 0; i < separators.length; i++) {
-      if (separators[i].css('display') === 'block') {
+      if (separators[i].getCSS('display') === 'block') {
         separatorsCount += 1
       }
     }
@@ -27,7 +27,7 @@ export default class Menu extends Component {
     let navIconsHeight = (this.props.showNavigationIcons) ? 48 : 8
     this.height = navIconsHeight + separatorsCount + separatorsCount * separatorsMargins + topBottomPadding
 
-    this.elements.menuItems.css({
+    this.elements.menuItems.setCSS({
       paddingTop: (!this.props.showNavigationIcons) ? 16 : 8
     })
 
@@ -37,7 +37,7 @@ export default class Menu extends Component {
       }
     }
 
-    this.elements.menu.css({
+    this.elements.menu.setCSS({
       marginTop: 0,
       opacity: 1,
       height: this.height
@@ -50,7 +50,7 @@ export default class Menu extends Component {
    * Hides menu.
    */
   hide = () => {
-    this.elements.menu.css({
+    this.elements.menu.setCSS({
       marginTop: -20,
       opacity: 0,
       height: 0
@@ -82,7 +82,7 @@ export default class Menu extends Component {
   }
 
   setPosition (left, top) {
-    this.elements.menu.css({
+    this.elements.menu.setCSS({
       left: left,
       top: top
     })
@@ -168,7 +168,7 @@ export default class Menu extends Component {
   }
 
   afterRender () {
-    this.elements.menu.css({
+    this.elements.menu.setCSS({
       marginTop: -20,
       opacity: 0,
       height: 0
