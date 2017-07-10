@@ -146,31 +146,15 @@ export default class Bar extends Component {
       certificateName = 'Secure'
     }
 
+    this.elements.icon.css({
+      marginRight: (name === '') ? 0 : 12
+    })
+
     this.elements.certificateName.textContent = certificateName
   }
 
   setDomain (url) {
-    this.elements.shortUrl.textContent = this.getDomain(url)
-  }
-
-  getDomain (url) {
-    let hostname = url
-
-    if (hostname.indexOf('http://') !== -1 || hostname.indexOf('https://') !== -1) {
-      hostname = hostname.split('://')[1]
-    }
-
-    if (hostname.indexOf('?') !== -1) {
-      hostname = hostname.split('?')[0]
-    }
-
-    if (hostname.indexOf('://') !== -1) {
-      hostname = hostname.split('://')[0] + '://' + hostname.split('/')[2]
-    } else {
-      hostname = hostname.split('/')[0]
-    }
-
-    return hostname
+    this.elements.shortUrl.textContent = Network.getDomain(url)
   }
 
   toggleInput (flag) {
@@ -198,7 +182,7 @@ export default class Bar extends Component {
 
   retrieveInformation (url) {
     const self = this
-    const domain = this.getDomain(url)
+    const domain = Network.getDomain(url)
 
     if (!this.isAddressbarBarToggled) {
       this.elements.input.value = url
