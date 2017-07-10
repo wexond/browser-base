@@ -359,7 +359,7 @@ class App extends Component {
     const tabDiv = tab.elements.tab
     const white = (Colors.getForegroundColor(color) === 'white')
 
-    const darkerColor = (color !== '#fff') ? Colors.shadeColor(color, -0.15) : '#eee'
+    const darkerColor = (color !== '#fff') ? Colors.shadeColor(color, -0.1) : '#eee'
 
     if (white) {
       tabs.elements.tabs.classList.add('tabs-white-foreground')
