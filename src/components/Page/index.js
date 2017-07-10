@@ -1,4 +1,5 @@
 import Component from '../../classes/Component'
+import WebViewColors from '../../classes/WebViewColors'
 
 export default class Page extends Component {
   beforeRender () {
@@ -47,8 +48,18 @@ export default class Page extends Component {
       request.send(null)
     })
 
+    webview.addEventListener('did-change-theme-color', (e) => {
+      app.changeUIColors(e.themeColor, self.tab)
+    })
+
     webview.addEventListener('did-start-loading', function (e) {
       self.tab.togglePreloader(true)
+
+      self.colorInterval = setInterval(() => {
+        WebViewColors.getColor(webview, (color) => {
+          app.changeUIColors(color, self.tab)
+        })
+      }, 200)
     })
 
     webview.addEventListener('did-stop-loading', function (e) {
@@ -58,9 +69,11 @@ export default class Page extends Component {
         app.elements.bar.retrieveInformation(webview.getURL())
       }
 
-      let color = '#fff'
+      WebViewColors.getColor(webview, (color) => {
+        app.changeUIColors(color, self.tab)
+      })
 
-      app.changeUIColors(color, self.tab)
+      clearInterval(self.colorInterval)
     })
 
     if (app != null) {
