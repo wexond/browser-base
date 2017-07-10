@@ -66,18 +66,18 @@ export default class Tabs extends Component {
         self.dragData.canDrag = false
         self.dragData.canDrag2 = false
 
-        self.elements.addButton.css('display', 'block')
+        self.elements.addButton.setCSS({display: 'block'})
 
         self.setPositions()
 
         if (tabs[tabs.indexOf(self.dragData.tab) - 1] != null) {
-          tabs[tabs.indexOf(self.dragData.tab) - 1].elements.rightSmallBorder.css('display', 'none')
+          tabs[tabs.indexOf(self.dragData.tab) - 1].elements.rightSmallBorder.setCSS({display: 'none'})
         }
         if (tabs[tabs.indexOf(self.dragData.tab) + 1] != null) {
-          tabs[tabs.indexOf(self.dragData.tab) + 1].elements.leftSmallBorder.css('display', 'none')
+          tabs[tabs.indexOf(self.dragData.tab) + 1].elements.leftSmallBorder.setCSS({display: 'none'})
         }
         for (var i = 0; i < tabs.length; i++) {
-          tabs[i].elements.leftSmallBorder.css('display', 'none')
+          tabs[i].elements.leftSmallBorder.setCSS({display: 'none'})
         }
         removeEventListener('mousemove', self.onMouseMove)
       }
@@ -91,7 +91,7 @@ export default class Tabs extends Component {
     })
 
     currentWindow.on('maximize', (e) => {
-      self.elements.handle.css({
+      self.elements.handle.setCSS({
         left: 0,
         top: 0,
         right: 0,
@@ -100,7 +100,7 @@ export default class Tabs extends Component {
     })
 
     currentWindow.on('unmaximize', (e) => {
-      self.elements.handle.css({
+      self.elements.handle.setCSS({
         left: 4,
         top: 4,
         right: 4,
@@ -132,8 +132,10 @@ export default class Tabs extends Component {
           previousTab.hovered = false
           if (!previousTab.selected) {
             previousTab.appendTransition('background-color')
-            previousTab.elements.tab.css('background-color', 'transparent')
-            previousTab.elements.close.css({
+            previousTab.elements.tab.setCSS({
+              backgroundColor: 'transparent'
+            })
+            previousTab.elements.close.setCSS({
               opacity: 0,
               transition: '0.2s opacity'
             })
@@ -148,10 +150,12 @@ export default class Tabs extends Component {
           tab.hovered = true
           previousTab = tab
           if (!tab.selected) {
-            let rgba = Colors.shadeColor(Colors.rgbToHex(self.elements.tabs.css('background-color')), 0.05)
+            let rgba = Colors.shadeColor(Colors.rgbToHex(self.elements.tabs.getCSS('background-color')), 0.05)
             tab.appendTransition('background-color')
 
-            tab.elements.tab.css('background-color', rgba)
+            tab.elements.tab.setCSS({
+              backgroundColor: rgba
+            })
 
             tab.timeoutHover = setTimeout(function () {
               clearTimeout(tab.timeoutHover)
@@ -161,7 +165,7 @@ export default class Tabs extends Component {
             tab.setTitleMaxWidth(true)
 
             if (!tab.pinned) {
-              tab.elements.close.css({
+              tab.elements.close.setCSS({
                 opacity: 1,
                 transition: '0.2s opacity'
               })
@@ -201,14 +205,14 @@ export default class Tabs extends Component {
         this.dragData.tab.findTabToReplace(e.clientX)
 
         if (tabs.indexOf(this.dragData.tab) === tabs.length - 1) {
-          this.elements.addButton.css('display', 'none')
+          this.elements.addButton.setCSS({display: 'none'})
         }
 
         if (tabs[tabs.indexOf(this.dragData.tab) - 1] != null) {
-          tabs[tabs.indexOf(this.dragData.tab) - 1].elements.rightSmallBorder.css('display', 'block')
+          tabs[tabs.indexOf(this.dragData.tab) - 1].elements.rightSmallBorder.setCSS({display: 'block'})
         }
         if (tabs[tabs.indexOf(this.dragData.tab) + 1] != null) {
-          tabs[tabs.indexOf(this.dragData.tab) + 1].elements.leftSmallBorder.css('display', 'block')
+          tabs[tabs.indexOf(this.dragData.tab) + 1].elements.leftSmallBorder.setCSS({display: 'block'})
         }
       }
     }
@@ -299,20 +303,21 @@ export default class Tabs extends Component {
 
       if (!tab.pinned) normalTabWidth = widths[index]
 
-      tab.elements.close.css('display', (!tabSelected && widthSmaller) ? 'none' : 'block')
+      tab.elements.close.style.display = (!tabSelected && widthSmaller) ? 'none' : 'block'
+
       if (tab.pinned) {
-        tab.elements.icon.css('display', 'block')
+        tab.elements.icon.style.display = 'block'
       } else {
-        tab.elements.icon.css('display', ((tabSelected) ? ((widthSmaller) ? 'none' : 'block') : 'block'))
+        tab.elements.icon.style.display = ((tabSelected) ? ((widthSmaller) ? 'none' : 'block') : 'block')
       }
 
-      if (tab.pinned) tab.elements.close.css('display', 'none')
+      if (tab.pinned) tab.elements.close.style.display = 'none'
     })
 
     if (normalTabWidth < tabsData.maxTabWidth) {
-      this.elements.controlsBorder.css('display', 'block')
+      this.elements.controlsBorder.style.display = 'block'
     } else {
-      this.elements.controlsBorder.css('display', 'none')
+      this.elements.controlsBorder.style.display = 'none'
     }
   }
 
@@ -353,7 +358,9 @@ export default class Tabs extends Component {
     })
 
     this.setAddButtonAnimation(animateAddButton)
-    this.elements.addButton.css('left', positions.addButtonPosition)
+    this.elements.addButton.setCSS({
+      left: positions.addButtonPosition
+    })
   }
 
   /**
@@ -372,10 +379,10 @@ export default class Tabs extends Component {
 
     if (addButton != null) {
       if (flag) {
-        addButton.style['-webkit-transition'] = Transitions.appendTransition(addButton.css('-webkit-transition'), transition)
+        addButton.style['-webkit-transition'] = Transitions.appendTransition(addButton.getCSS('-webkit-transition'), transition)
         this.transitions.push('left')
       } else {
-        addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.css('-webkit-transition'), transition)
+        addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.getCSS('-webkit-transition'), transition)
         this.transitions.splice(this.transitions.indexOf('left'), 1)
       }
     }
@@ -468,7 +475,9 @@ export default class Tabs extends Component {
     tabs[secondIndex] = firstTab
 
     // Don't show left small border of replaced tab when the tab is first.
-    firstTab.elements.leftSmallBorder.css('display', (tabs.indexOf(firstTab) === 0) ? 'none' : 'block')
+    firstTab.elements.leftSmallBorder.setCSS({
+      display: (tabs.indexOf(firstTab) === 0) ? 'none' : 'block'
+    })
 
     // Change positions of replaced tabs.
     if (changePos) {
@@ -482,9 +491,9 @@ export default class Tabs extends Component {
   updateTabs () {
     tabs.forEach((tab) => {
       if (!tab.selected) {
-        tab.elements.rightSmallBorder.css('display', 'block')
+        tab.elements.rightSmallBorder.setCSS({display: 'block'})
       }
-      tab.elements.leftSmallBorder.css('display', 'none')
+      tab.elements.leftSmallBorder.setCSS({display: 'none'})
     })
   }
 

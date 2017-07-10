@@ -95,7 +95,7 @@ export default class Bar extends Component {
         menu.hide()
       } else {
         menu.show()
-        menu.elements.menu.css({
+        menu.elements.menu.setCSS({
           right: 16,
           top: 64,
           left: 'auto'
@@ -108,7 +108,7 @@ export default class Bar extends Component {
     })
 
     this.elements.addressbar.addEventListener('mouseenter', (e) => {
-      self.elements.actionIcons.css({
+      self.elements.actionIcons.setCSS({
         opacity: 1,
         pointerEvents: 'auto'
       })
@@ -116,7 +116,7 @@ export default class Bar extends Component {
 
     this.elements.addressbar.addEventListener('mouseleave', (e) => {
       if (!self.isAddressbarBarToggled) {
-        self.elements.actionIcons.css({
+        self.elements.actionIcons.setCSS({
           opacity: 0,
           pointerEvents: 'none'
         })
@@ -142,7 +142,7 @@ export default class Bar extends Component {
       certificateName += ' [' + country + ']'
     }
 
-    this.elements.icon.css({
+    this.elements.icon.setCSS({
       marginRight: 12
     })
 
@@ -152,7 +152,7 @@ export default class Bar extends Component {
       certificateName = 'Wexond'
     } else if (name == null && type === 'Normal') {
       certificateName = ''
-      this.elements.icon.css({
+      this.elements.icon.setCSS({
         marginRight: 0
       })
     }
@@ -161,15 +161,15 @@ export default class Bar extends Component {
       this.elements.icon.classList.remove('bar-addressbar-icon-info')
       this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
       this.elements.icon.classList.add('bar-addressbar-icon-secure')
-      this.elements.certificateName.css({ color: 'green' })
+      this.elements.certificateName.setCSS({ color: 'green' })
     } else if (type === 'Wexond') {
       this.elements.icon.classList.remove('bar-addressbar-icon-info')
       this.elements.icon.classList.add('bar-addressbar-icon-wexond')
-      this.elements.certificateName.css({ color: '#2196F3' })
+      this.elements.certificateName.setCSS({ color: '#2196F3' })
     } else if (type === 'Normal') {
       this.elements.icon.classList.remove('bar-addressbar-icon-wexond')
       this.elements.icon.classList.remove('bar-addressbar-icon-secure')
-      this.elements.certificateName.css({ color: 'black' })
+      this.elements.certificateName.setCSS({ color: 'black' })
       this.elements.icon.classList.add('bar-addressbar-icon-info')
     }
 
@@ -191,12 +191,12 @@ export default class Bar extends Component {
 
     this.isAddressbarBarToggled = flag
 
-    this.elements.input.css({
+    this.elements.input.setCSS({
       opacity: (flag) ? 1 : 0,
       pointerEvents: (flag) ? 'auto' : 'none'
     })
 
-    this.elements.actionIcons.css({
+    this.elements.actionIcons.setCSS({
       float: (flag) ? 'right' : 'none',
       position: (flag) ? 'relative' : 'absolute',
       opacity: (flag) ? 1 : 0,
@@ -222,6 +222,8 @@ export default class Bar extends Component {
 
     const self = this
     const domain = Network.getDomain(url)
+
+    self.setCertificate('Normal', tab)
 
     this.setURL(url)
     this.setDomain(url)

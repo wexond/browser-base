@@ -1,36 +1,17 @@
-/**
- * Changes style attribute or gets value of the attribute.
- * @param {Object | String} data
- * @param {*} value
- * @return {*}
- */
-Element.prototype.css = function (data, value = null) {
-  if (typeof data === 'object') {
-    for (var key in data) {
-      if (key === 'top' || key === 'bottom' || key === 'left' || key === 'right' || key === 'width' || key === 'height' || key.indexOf('margin') !== -1) {
-        if (typeof data[key] === 'number') {
-          data[key] = data[key].toString() + 'px'
-        }
+Element.prototype.setCSS = function (data) {
+  for (var key in data) {
+    if (key === 'top' || key === 'bottom' || key === 'left' || key === 'right' || key === 'width' || key === 'height' || key.indexOf('margin') !== -1) {
+      if (typeof data[key] === 'number') {
+        data[key] = data[key].toString() + 'px'
       }
-    }
-    
-    Object.assign(this.style, data)
-  } else if (typeof data === 'string') {
-    if (value != null) {
-      if (data === 'top' || data === 'bottom' || data === 'left' || data === 'right' || data === 'width' || data === 'height' || data.indexOf('margin') !== -1) {
-        if (typeof value === 'number') {
-          value = value.toString() + 'px'
-        }
-      }
-      this.style[data] = value
-    } else {
-      if (this.currentStyle)
-          return this.currentStyle[data]
-
-      return document.defaultView.getComputedStyle(this, null)[data]
     }
   }
-  return null
+  Object.assign(this.style, data)
+}
+
+Element.prototype.getCSS = function (attribute) {
+  if (this.currentStyle) return this.currentStyle[attribute]
+  return document.defaultView.getComputedStyle(this, null)[attribute]
 }
 
 Element.prototype.remove = function () {

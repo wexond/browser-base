@@ -373,19 +373,19 @@ class App extends Component {
 
     tab.appendTransition('background-color')
 
-    tabDiv.css({
+    tabDiv.setCSS({
       backgroundColor: color
     })
 
-    tabs.elements.tabs.css({
+    tabs.elements.tabs.setCSS({
       backgroundColor: darkerColor
     })
 
-    bar.elements.bar.css({
+    bar.elements.bar.setCSS({
       backgroundColor: color
     })
 
-    bar.elements.input.css({
+    bar.elements.input.setCSS({
       backgroundColor: color
     })
   }
