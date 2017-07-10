@@ -58,7 +58,7 @@ export default class Page extends Component {
         app.elements.bar.retrieveInformation(webview.getURL())
       }
 
-      let color = '#2196F3'
+      let color = '#fff'
 
       app.changeUIColors(color, self.tab)
     })

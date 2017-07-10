@@ -46,6 +46,15 @@
       background-color: white;
       opacity: $secondary-opacity-light;
     }
+
+    & .bar-addressbar-certificate-name {
+      color: white !important;
+      opacity: $primary-opacity-dark;
+    }
+
+    & .bar-addressbar-shorturl {
+      opacity: $secondary-opacity-dark;
+    }
   }
 }
 
@@ -186,6 +195,7 @@
   position: relative;
   opacity: $primary-opacity-light;
   top: 9px;
+  color: #000;
 }
 
 .bar-addressbar-shorturl {
