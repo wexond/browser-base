@@ -78,7 +78,7 @@ export default class Page extends Component {
       let barHeight = appElements.bar.elements.bar.offsetHeight
       let height = tabsHeight + barHeight
 
-      this.elements.page.css('height', 'calc(100vh - ' + height + 'px)')
+      this.elements.page.setCSS('height', 'calc(100vh - ' + height + 'px)')
     }
 
     let checkWebcontentsInterval = setInterval(function () {
@@ -146,7 +146,7 @@ export default class Page extends Component {
    * Shows page div.
    */
   show () {
-    this.elements.page.css({
+    this.elements.page.setCSS({
       pointerEvents: 'auto',
       position: 'relative',
       top: 0,
@@ -158,7 +158,7 @@ export default class Page extends Component {
    * Hides page div.
    */
   hide () {
-    this.elements.page.css({
+    this.elements.page.setCSS({
       pointerEvents: 'none',
       position: 'absolute',
       top: -99999,

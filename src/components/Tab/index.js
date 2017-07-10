@@ -49,16 +49,16 @@ export default class Tab extends Component {
   afterRender () {
     const self = this
 
-    this.elements.rightSmallBorder.css('right', 0)
-    this.elements.leftSmallBorder.css({
+    this.elements.rightSmallBorder.setCSS({right: 0})
+    this.elements.leftSmallBorder.setCSS({
       left: 0,
       display: 'none'
     })
-    this.elements.leftFullBorder.css({
+    this.elements.leftFullBorder.setCSS({
       left: 0,
       display: 'none'
     })
-    this.elements.rightFullBorder.css({
+    this.elements.rightFullBorder.setCSS({
       right: 0,
       display: 'none'
     })
@@ -127,7 +127,7 @@ export default class Tab extends Component {
    * @param {Number} width
    */
   setWidth (width) {
-    this.elements.tab.css('width', width)
+    this.elements.tab.style.width = width + 'px'
   }
 
   /**
@@ -135,7 +135,7 @@ export default class Tab extends Component {
    * @param {Number} left
    */
   setLeft (left) {
-    this.elements.tab.css('left', left)
+    this.elements.tab.style.left = left + 'px'
   }
 
   /**
@@ -151,29 +151,29 @@ export default class Tab extends Component {
     this.selected = true
 
     this.appendTransition('background-color')
-    this.elements.tab.css({
+    this.elements.tab.setCSS({
       backgroundColor: this.colors.select,
       zIndex: 4
     })
 
-    this.elements.close.css(
-      {
-        opacity: 1,
-        transition: '',
-        display: (this.pinned) ? 'none' : 'block'
-      }
-    )
+    this.elements.close.setCSS({
+      opacity: 1,
+      transition: '',
+      display: (this.pinned) ? 'none' : 'block'
+    })
 
-    this.elements.rightSmallBorder.css('display', 'none')
-    this.elements.leftFullBorder.css('display', (window.tabs.indexOf(this) !== 0) ? 'block' : 'none')
-    this.elements.rightFullBorder.css('display', 'block')
+    this.elements.rightSmallBorder.setCSS({display: 'none'})
+    this.elements.leftFullBorder.setCSS({
+      display: (window.tabs.indexOf(this) !== 0) ? 'block' : 'none'
+    })
+    this.elements.rightFullBorder.setCSS({display: 'block'})
 
     let previousTab = window.tabs[window.tabs.indexOf(this) - 1]
     if (previousTab != null) {
-      previousTab.elements.rightSmallBorder.css('display', 'none')
+      previousTab.elements.rightSmallBorder.setCSS({display: 'none'})
     }
 
-    this.elements.icon.css('display', (this.elements.tab.offsetWidth < 48) ? 'none' : 'block')
+    this.elements.icon.setCSS({display: (this.elements.tab.offsetWidth < 48) ? 'none' : 'block'})
 
     if (this.certificate != null) {
       bar.setCertificate(this.certificate.type, this, this.certificate.name, this.certificate.country)
@@ -213,26 +213,26 @@ export default class Tab extends Component {
     this.selected = false
 
     this.removeTransition('background-color')
-    this.elements.tab.css({
+    this.elements.tab.setCSS({
       backgroundColor: 'transparent',
       zIndex: 3
     })
 
-    this.elements.close.css({
+    this.elements.close.setCSS({
       display: (this.width < 48) ? 'none' : 'block',
       opacity: 0,
       transition: ''
     })
 
-    this.elements.icon.css('display', 'block')
+    this.elements.icon.setCSS({display: 'block'})
 
-    this.elements.rightSmallBorder.css('display', 'block')
-    this.elements.leftFullBorder.css('display', 'none')
-    this.elements.rightFullBorder.css('display', 'none')
+    this.elements.rightSmallBorder.setCSS({display: 'block'})
+    this.elements.leftFullBorder.setCSS({display: 'none'})
+    this.elements.rightFullBorder.setCSS({display: 'none'})
 
     let previousTab = window.tabs[window.tabs.indexOf(this) - 1]
     if (previousTab != null) {
-      previousTab.elements.rightSmallBorder.css('display', 'block')
+      previousTab.elements.rightSmallBorder.setCSS({display: 'block'})
     }
 
     this.setTitleMaxWidth(false)
@@ -244,12 +244,8 @@ export default class Tab extends Component {
   pin () {
     // Set pinned state.
     if (!this.pinned) {
-      this.elements.close.css({
-        display: 'none'
-      })
-      this.elements.title.css({
-        display: 'none'
-      })
+      this.elements.close.setCSS({display: 'none'})
+      this.elements.title.setCSS({display: 'none'})
 
       let newItems = app.elements.tabMenu.menuItems
 
@@ -257,12 +253,8 @@ export default class Tab extends Component {
 
       app.elements.tabMenu.updateItems(newItems)
     } else {
-      this.elements.title.css({
-        display: 'block'
-      })
-      this.elements.close.css({
-        display: 'block'
-      })
+      this.elements.title.setCSS({display: 'block'})
+      this.elements.close.setCSS({display: 'block'})
 
       let newItems = app.elements.tabMenu.menuItems
 
@@ -311,9 +303,7 @@ export default class Tab extends Component {
 
     this.removeTransition('background-color')
 
-    tabDiv.css({
-      pointerEvents: 'none'
-    })
+    tabDiv.setCSS({pointerEvents: 'none'})
 
     app.lastClosedURL = this.page.elements.webview.getURL()
 
@@ -360,7 +350,7 @@ export default class Tab extends Component {
     // Animate tab closing.
     function closeAnim () {
       self.appendTransition('width')
-      tabDiv.css('width', 0)
+      self.setWidth(0)
 
       setTimeout(function () {
         tabDiv.remove()
@@ -463,7 +453,9 @@ export default class Tab extends Component {
     this.tabs.updateTabs()
 
     // Don't show left small border on replaced tab when the tab is first.
-    this.elements.leftSmallBorder.css('display', (newTabPos === 0) ? 'none' : 'block')
+    this.elements.leftSmallBorder.setCSS({
+      display: (newTabPos === 0) ? 'none' : 'block'
+    })
   }
 
   /**
@@ -475,15 +467,15 @@ export default class Tab extends Component {
     let decrease = 16
 
     if (closeVisible == null) {
-      closeVisibleTemp = (this.elements.close.css('opacity') === '1' && !this.pinned)
+      closeVisibleTemp = (this.elements.close.getCSS('opacity') === '1' && !this.pinned)
     }
 
-    if (closeVisibleTemp && this.elements.close.css('display') === 'block') decrease += 20
+    if (closeVisibleTemp && this.elements.close.getCSS('display') === 'block') decrease += 20
 
     if (this.favicon !== '' || this.loading) {
       decrease += 29
     }
-    this.elements.title.css({
+    this.elements.title.setCSS({
       left: (this.favicon !== '' || this.loading) ? 32 : 9,
       maxWidth: `calc(100% - ${decrease}px)`
     })
@@ -504,7 +496,9 @@ export default class Tab extends Component {
    */
   setFavicon (favicon) {
     this.favicon = favicon
-    this.elements.icon.css('background-image', `url(${favicon})`)
+    this.elements.icon.setCSS({
+      backgroundImage: `url(${favicon})`
+    })
     this.setTitleMaxWidth()
   }
 
