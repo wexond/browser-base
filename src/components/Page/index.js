@@ -146,13 +146,22 @@ export default class Page extends Component {
    * Shows page div.
    */
   show () {
+    const self = this
+
     this.elements.page.setCSS({
       position: 'relative',
       top: 'auto',
       visibility: 'visible'
     })
 
-    this.elements.webview.classList.remove('hide')
+    clearTimeout(this.timeout)
+
+    this.timeout = setTimeout(() => {
+      self.elements.webview.setCSS({
+        width: 'auto',
+        height: 'auto'
+      })
+    }, 200)
   }
 
   /**
@@ -163,10 +172,17 @@ export default class Page extends Component {
 
     this.elements.page.setCSS({
       position: 'absolute',
-      top: -99999,
+      top: 0,
       visibility: 'hidden'
     })
 
-    self.elements.webview.classList.add('hide')
+    clearTimeout(this.timeout)
+
+    this.timeout = setTimeout(() => {
+      self.elements.webview.setCSS({
+        width: window.innerWidth,
+        height: window.innerHeight - 72
+      })
+    }, 200)
   }
 }
