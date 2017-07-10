@@ -146,43 +146,21 @@ export default class Page extends Component {
    * Shows page div.
    */
   show () {
-    const self = this
-
     this.elements.page.setCSS({
       position: 'relative',
       top: 'auto',
       visibility: 'visible'
     })
-
-    clearTimeout(this.timeout)
-
-    this.timeout = setTimeout(() => {
-      self.elements.webview.setCSS({
-        width: 'auto',
-        height: 'auto'
-      })
-    }, 200)
   }
 
   /**
    * Hides page div.
    */
   hide () {
-    const self = this
-
     this.elements.page.setCSS({
       position: 'absolute',
       top: 0,
       visibility: 'hidden'
     })
-
-    clearTimeout(this.timeout)
-
-    this.timeout = setTimeout(() => {
-      self.elements.webview.setCSS({
-        width: window.innerWidth,
-        height: window.innerHeight - 72
-      })
-    }, 200)
   }
 }

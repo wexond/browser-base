@@ -38,30 +38,16 @@ export default class Tab extends Component {
           <div className='tab-icon' ref='icon' />
           <Preloader ref='preloader' className='tab-preloader' />
         </div>
-        <div className='tab-border-small-vertical' ref='rightSmallBorder' />
-        <div className='tab-border-small-vertical' ref='leftSmallBorder' />
-        <div className='tab-border-full-vertical' ref='rightFullBorder' />
-        <div className='tab-border-full-vertical' ref='leftFullBorder' />
+        <div className='tab-border-small-vertical' style={{right: 0}} ref='rightSmallBorder' />
+        <div className='tab-border-small-vertical' style={{left: 0, display: 'none'}} ref='leftSmallBorder' />
+        <div className='tab-border-full-vertical' style={{left: 0, display: 'none'}} ref='rightFullBorder' />
+        <div className='tab-border-full-vertical' style={{right: 0, display: 'none'}} ref='leftFullBorder' />
       </div>
     )
   }
 
   afterRender () {
     const self = this
-
-    this.elements.rightSmallBorder.setCSS({right: 0})
-    this.elements.leftSmallBorder.setCSS({
-      left: 0,
-      display: 'none'
-    })
-    this.elements.leftFullBorder.setCSS({
-      left: 0,
-      display: 'none'
-    })
-    this.elements.rightFullBorder.setCSS({
-      right: 0,
-      display: 'none'
-    })
 
     let position = this.tabs.getPositions().tabPositions[window.tabs.indexOf(this)]
     this.setLeft(position)
@@ -78,11 +64,9 @@ export default class Tab extends Component {
     /** Events */
 
     this.elements.tab.addEventListener('mousedown', (e) => {
-      if (e.target.className === 'tab-close') {
+      if (e.target.className === 'tab-close' && e.button !== 0) {
         return
       }
-
-      if (e.button !== 0) return
 
       // Initialize the dragData object in {Tabs}.
       self.tabs.dragData = {
