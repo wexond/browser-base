@@ -489,8 +489,11 @@ export default class Tabs extends Component {
    * Updates tabs' state (borders etc).
    */
   updateTabs () {
+    const self = this
+
     tabs.forEach((tab) => {
-      if (!tab.selected) {
+      let previousTab = tabs[tabs.indexOf(self.selectedTab) - 1]
+      if (!tab.selected && previousTab != null && tab !== previousTab) {
         tab.elements.rightSmallBorder.setCSS({display: 'block'})
       }
       tab.elements.leftSmallBorder.setCSS({display: 'none'})
