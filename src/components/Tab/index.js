@@ -205,7 +205,7 @@ export default class Tab extends Component {
     this.page.hide()
     this.selected = false
 
-    this.appendTransition('background-color')
+    this.removeTransition('background-color')
     this.elements.tab.css({
       backgroundColor: 'transparent',
       zIndex: 3
