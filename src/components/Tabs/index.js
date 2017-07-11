@@ -355,6 +355,7 @@ export default class Tabs extends Component {
         tab.removeTransition('left')
       }
       tab.setLeft(positions.tabPositions[tabs.indexOf(tab)])
+      tab.updateBorders()
     })
 
     this.setAddButtonAnimation(animateAddButton)
@@ -474,11 +475,6 @@ export default class Tabs extends Component {
     tabs[firstIndex] = secondTab
     tabs[secondIndex] = firstTab
 
-    // Don't show left small border of replaced tab when the tab is first.
-    firstTab.elements.leftSmallBorder.setCSS({
-      display: (tabs.indexOf(firstTab) === 0) ? 'none' : 'block'
-    })
-
     // Change positions of replaced tabs.
     if (changePos) {
       secondTab.updatePosition()
@@ -492,11 +488,7 @@ export default class Tabs extends Component {
     const self = this
 
     tabs.forEach((tab) => {
-      let previousTab = tabs[tabs.indexOf(self.selectedTab) - 1]
-      if (!tab.selected && previousTab != null && tab !== previousTab) {
-        tab.elements.rightSmallBorder.setCSS({display: 'block'})
-      }
-      tab.elements.leftSmallBorder.setCSS({display: 'none'})
+      tab.updateBorders()
     })
   }
 
