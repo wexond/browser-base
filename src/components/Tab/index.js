@@ -40,8 +40,8 @@ export default class Tab extends Component {
         </div>
         <div className='tab-border-small-vertical' style={{right: 0}} ref='rightSmallBorder' />
         <div className='tab-border-small-vertical' style={{left: 0, display: 'none'}} ref='leftSmallBorder' />
-        <div className='tab-border-full-vertical' style={{left: 0, display: 'none'}} ref='rightFullBorder' />
-        <div className='tab-border-full-vertical' style={{right: 0, display: 'none'}} ref='leftFullBorder' />
+        <div className='tab-border-full-vertical' style={{left: 0, display: 'none'}} ref='leftFullBorder' />
+        <div className='tab-border-full-vertical' style={{right: 0, display: 'none'}} ref='rightFullBorder' />
       </div>
     )
   }
@@ -92,6 +92,8 @@ export default class Tab extends Component {
     } else {
       this.tabs.selectTab(this.tabs.selectedTab)
     }
+
+    this.updateBorders()
   }
 
   /**
@@ -145,17 +147,6 @@ export default class Tab extends Component {
       display: (this.pinned) ? 'none' : 'block'
     })
 
-    this.elements.rightSmallBorder.setCSS({display: 'none'})
-    this.elements.leftFullBorder.setCSS({
-      display: (window.tabs.indexOf(this) !== 0) ? 'block' : 'none'
-    })
-    this.elements.rightFullBorder.setCSS({display: 'block'})
-
-    let previousTab = window.tabs[window.tabs.indexOf(this) - 1]
-    if (previousTab != null) {
-      previousTab.elements.rightSmallBorder.setCSS({display: 'none'})
-    }
-
     this.elements.icon.setCSS({display: (this.elements.tab.offsetWidth < 48 && !this.pinned) ? 'none' : 'block'})
 
     if (this.certificate != null) {
@@ -187,7 +178,7 @@ export default class Tab extends Component {
 
     this.setTitleMaxWidth()
 
-    this.tabs.updateTabs()
+    this.updateBorders()
   }
 
   /**
@@ -211,16 +202,9 @@ export default class Tab extends Component {
 
     this.elements.icon.setCSS({display: 'block'})
 
-    this.elements.rightSmallBorder.setCSS({display: 'block'})
-    this.elements.leftFullBorder.setCSS({display: 'none'})
-    this.elements.rightFullBorder.setCSS({display: 'none'})
-
-    let previousTab = window.tabs[window.tabs.indexOf(this) - 1]
-    if (previousTab != null) {
-      previousTab.elements.rightSmallBorder.setCSS({display: 'block'})
-    }
-
     this.setTitleMaxWidth(false)
+
+    this.updateBorders()
   }
 
   /**
@@ -289,8 +273,6 @@ export default class Tab extends Component {
     this.removeTransition('background-color')
 
     tabDiv.setCSS({pointerEvents: 'none'})
-
-    app.lastClosedURL = this.page.elements.webview.getURL()
 
     this.page.elements.page.remove()
 
@@ -436,11 +418,6 @@ export default class Tab extends Component {
     }, window.tabsAnimationData.positioningDuration * 1000)
 
     this.tabs.updateTabs()
-
-    // Don't show left small border on replaced tab when the tab is first.
-    this.elements.leftSmallBorder.setCSS({
-      display: (newTabPos === 0) ? 'none' : 'block'
-    })
   }
 
   /**
@@ -485,6 +462,34 @@ export default class Tab extends Component {
       backgroundImage: `url(${favicon})`
     })
     this.setTitleMaxWidth()
+  }
+
+  updateBorders () {
+    let previousTab = window.tabs[window.tabs.indexOf(this) - 1]
+
+    this.elements.rightSmallBorder.setCSS({
+      display: (this.selected) ? 'none' : 'block'
+    })
+
+    this.elements.leftFullBorder.setCSS({
+      display: (this.selected) ? ((window.tabs.indexOf(this) !== 0) ? 'block' : 'none') : 'none'
+    })
+
+    this.elements.rightFullBorder.setCSS({
+      display: (this.selected) ? 'block' : 'none'
+    })
+
+    if (previousTab != null) {
+      if (this.selected) {
+        previousTab.elements.rightSmallBorder.setCSS({
+          display: 'none'
+        })
+      }
+    }
+
+    this.elements.leftSmallBorder.setCSS({
+      display: 'none'
+    })
   }
 
   getWebView () {
