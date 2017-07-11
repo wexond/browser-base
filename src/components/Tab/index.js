@@ -114,8 +114,8 @@ export default class Tab extends Component {
    */
   setWidth (width) {
     this.elements.tab.style.width = width + 'px'
+    this.width = width
   }
-
   /**
    * Sets left of tab div.
    * @param {Number} left
