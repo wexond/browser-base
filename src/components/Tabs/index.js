@@ -285,33 +285,27 @@ export default class Tabs extends Component {
    */
   setWidths (animation = true) {
     const widths = this.getWidths()
-
     let normalTabWidth = tabsData.maxTabWidth
 
     tabs.forEach((tab, index) => {
+      let tabSelected = tab.selected
+      let width = widths[index]
+      let widthSmaller = width < 48
+
       if (animation) {
         tab.appendTransition('width')
       } else {
         tab.removeTransition('width')
       }
 
-      tab.setWidth(widths[index])
-      tab.width = widths[index]
+      tab.setWidth(width)
 
-      let tabSelected = tab.selected
-      let widthSmaller = widths[index] < 48
+      if (!tab.pinned) normalTabWidth = width
 
-      if (!tab.pinned) normalTabWidth = widths[index]
+      tab.elements.close.style.display = (!tabSelected && widthSmaller && tab.pinned) ? 'none' : 'block'
 
-      tab.elements.close.style.display = (!tabSelected && widthSmaller) ? 'none' : 'block'
-
-      if (tab.pinned) {
-        tab.elements.icon.style.display = 'block'
-      } else {
-        tab.elements.icon.style.display = ((tabSelected) ? ((widthSmaller) ? 'none' : 'block') : 'block')
-      }
-
-      if (tab.pinned) tab.elements.close.style.display = 'none'
+      let displayIcon = (tab.pinned) ? 'block' : ((tabSelected) ? ((widthSmaller) ? 'none' : 'block') : 'block')
+      tab.elements.icon.style.display = displayIcon
     })
 
     if (normalTabWidth < tabsData.maxTabWidth) {
@@ -355,7 +349,6 @@ export default class Tabs extends Component {
         tab.removeTransition('left')
       }
       tab.setLeft(positions.tabPositions[tabs.indexOf(tab)])
-      tab.updateBorders()
     })
 
     this.setAddButtonAnimation(animateAddButton)
@@ -370,9 +363,9 @@ export default class Tabs extends Component {
    */
   setAddButtonAnimation (flag) {
     if (flag) {
-      if (this.transitions.indexOf('left') !== -1) return
+      if (this.transitions.indexOf('left') !== -1) return // If the transition already exists.
     } else {
-      if (this.transitions.indexOf('left') === -1) return
+      if (this.transitions.indexOf('left') === -1) return // If the transition don't exist.
     }
 
     let transition = 'left ' + tabsAnimationData.positioningDuration + 's ' + tabsAnimationData.positioningEasing
@@ -380,9 +373,11 @@ export default class Tabs extends Component {
 
     if (addButton != null) {
       if (flag) {
-        addButton.style['-webkit-transition'] = Transitions.appendTransition(addButton.getCSS('-webkit-transition'), transition)
+        let newTransition = Transitions.appendTransition(addButton.getCSS('-webkit-transition'), transition)
+        addButton.style['-webkit-transition'] = newTransition
         this.transitions.push('left')
       } else {
+        let newTransition = newTransition
         addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.getCSS('-webkit-transition'), transition)
         this.transitions.splice(this.transitions.indexOf('left'), 1)
       }
@@ -482,7 +477,7 @@ export default class Tabs extends Component {
   }
 
   /**
-   * Updates tabs' state (borders etc).
+   * Updates tabs borders.
    */
   updateTabs () {
     const self = this
