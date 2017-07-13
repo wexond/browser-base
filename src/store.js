@@ -5,5 +5,6 @@ export default new class Store {
     this.certificates = []
     this.pageMenuData = {}
     this.hoveredTab = {}
+    this.cursor = {}
   }
 }

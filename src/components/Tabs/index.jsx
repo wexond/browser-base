@@ -1,13 +1,17 @@
 import Component from '../../component'
-import Tab from '../Tab'
-import Transitions from '../../utils/Transitions'
-import Colors from '../../utils/colors'
 import UI from '../../ui'
 import Store from '../../store'
 
+import Transitions from '../../utils/Transitions'
+import Colors from '../../utils/colors'
+
 import tabsDefaults from '../../defaults/tabs'
 
-import { getCurrentWindow, close, maximize, minimize } from '../../actions/window'
+import { getCurrentWindow } from '../../actions/window'
+import { getTabFromMousePoint, findTabToReplace } from '../../actions/tabs'
+
+import Tab from '../Tab'
+import WindowControls from '../WindowControls'
 
 export default class Tabs extends Component {
   beforeRender () {
@@ -24,11 +28,7 @@ export default class Tabs extends Component {
       <div className='tabs' ref='tabs'>
         <div className='tabs-bottom-border' ref='bottomBorder' />
         <div className='tabs-handle' ref='handle' />
-        <div className='controls' ref='controls'>
-          <div ref='close' className='control control-close' />
-          <div ref='maximize' className='control control-maximize' />
-          <div ref='minimize' className='control control-minimize' />
-        </div>
+        <WindowControls />
         <div ref='controlsBorder' className='tabs-border-vertical' />
         <div className='tabbar' ref='tabbar'>
         </div>
@@ -44,44 +44,9 @@ export default class Tabs extends Component {
       self.addTab()
     })
 
-    this.elements.close.addEventListener('click', close)
-
-    this.elements.maximize.addEventListener('click', maximize)
-
-    this.elements.minimize.addEventListener('click', minimize)
-
     window.addEventListener('resize', (e) => {
       self.setWidths(false)
       self.setPositions(false, false)
-    })
-
-    window.addEventListener('mouseup', function () {
-      if (self.dragData.tab != null && !self.dragData.tab.pinned) {
-        self.dragData.canDrag = false
-        self.dragData.canDrag2 = false
-
-        self.elements.addButton.setCSS({display: 'block'})
-
-        self.setPositions()
-
-        if (Store.tabs[Store.tabs.indexOf(self.dragData.tab) - 1] != null) {
-          Store.tabs[Store.tabs.indexOf(self.dragData.tab) - 1].elements.rightSmallBorder.setCSS({display: 'none'})
-        }
-        if (Store.tabs[Store.tabs.indexOf(self.dragData.tab) + 1] != null) {
-          Store.tabs[Store.tabs.indexOf(self.dragData.tab) + 1].elements.leftSmallBorder.setCSS({display: 'none'})
-        }
-        for (var i = 0; i < Store.tabs.length; i++) {
-          Store.tabs[i].elements.leftSmallBorder.setCSS({display: 'none'})
-        }
-        removeEventListener('mousemove', self.onMouseMove)
-      }
-    })
-
-    window.addEventListener('mousemove', function (e) {
-      self.cursor.x = e.pageX
-      self.cursor.y = e.pageY
-      app.cursor.x = e.pageX
-      app.cursor.y = e.pageY
     })
 
     getCurrentWindow().on('maximize', (e) => {
@@ -117,7 +82,7 @@ export default class Tabs extends Component {
     // Custom mouseenter and mouseleave event.
     let previousTab = null
     setInterval(function () {
-      let tab = self.getTabFromMousePoint(null, self.cursor.x, self.cursor.y)
+      let tab = getTabFromMousePoint(null)
 
       // Mouse leave.
       if (previousTab !== null && previousTab !== tab) {
@@ -167,6 +132,28 @@ export default class Tabs extends Component {
         }
       }
     }, 1)
+
+    window.addEventListener('mouseup', function () {
+      if (self.dragData.tab != null && !self.dragData.tab.pinned) {
+        self.dragData.canDrag = false
+        self.dragData.canDrag2 = false
+
+        self.elements.addButton.setCSS({visibility: 'visible'})
+
+        self.setPositions()
+
+        if (Store.tabs[Store.tabs.indexOf(self.dragData.tab) - 1] != null) {
+          Store.tabs[Store.tabs.indexOf(self.dragData.tab) - 1].elements.rightSmallBorder.setCSS({display: 'none'})
+        }
+        if (Store.tabs[Store.tabs.indexOf(self.dragData.tab) + 1] != null) {
+          Store.tabs[Store.tabs.indexOf(self.dragData.tab) + 1].elements.leftSmallBorder.setCSS({display: 'none'})
+        }
+        for (var i = 0; i < Store.tabs.length; i++) {
+          Store.tabs[i].elements.leftSmallBorder.setCSS({display: 'none'})
+        }
+        removeEventListener('mousemove', self.onMouseMove)
+      }
+    })
   }
 
   /** Events */
@@ -195,10 +182,10 @@ export default class Tabs extends Component {
           tab.setLeft(this.elements.tabbar.getBoundingClientRect().left)
         }
 
-        this.dragData.tab.findTabToReplace(e.clientX)
+        findTabToReplace(this.dragData.tab, e.clientX)
 
         if (Store.tabs.indexOf(this.dragData.tab) === Store.tabs.length - 1) {
-          this.elements.addButton.setCSS({display: 'none'})
+          this.elements.addButton.setCSS({visibility: 'hidden'})
         }
 
         if (Store.tabs[Store.tabs.indexOf(this.dragData.tab) - 1] != null) {
@@ -376,121 +363,5 @@ export default class Tabs extends Component {
         this.isAddButtonTransitionToggled = false
       }
     }
-  }
-
-  /**
-   * Gets tab from mouse x point.
-   * @param {Tab} callingTab
-   * @param {number} cursorX
-   * @return {Tab}
-   */
-  getTabFromMouseX (callingTab, xPos) {
-    for (var i = 0; i < Store.tabs.length; i++) {
-      if (Store.tabs[i] !== callingTab) {
-        if (this.containsX(Store.tabs[i], xPos)) {
-          if (!Store.tabs[i].locked) {
-            return Store.tabs[i]
-          }
-        }
-      }
-    }
-    return null
-  }
-
-  /**
-   * Checks if {Tab} contains mouse x position.
-   * @param {Tab} tabToCheck
-   * @param {number} xPos
-   * @return {boolean}
-   */
-  containsX (tabToCheck, xPos) {
-    var rect = tabToCheck.elements.tab.getBoundingClientRect()
-
-    if (xPos >= rect.left && xPos <= rect.right) {
-      return true
-    }
-
-    return false
-  }
-
-  /**
-   * Gets tab from mouse x and y point.
-   * @param {Tab} callingTab
-   * @param {number} cursorX
-   * @param {number} cursorY
-   * @return {Tab}
-   */
-  getTabFromMousePoint (callingTab, xPos, yPos) {
-    for (var i = 0; i < Store.tabs.length; i++) {
-      if (Store.tabs[i] !== callingTab) {
-        if (this.containsPoint(Store.tabs[i], xPos, yPos)) {
-          if (!Store.tabs[i].locked) {
-            return Store.tabs[i]
-          }
-        }
-      }
-    }
-    return null
-  }
-
-  /**
-   * Checks if {Tab} contains mouse x and y position.
-   * @param {Tab} tabToCheck
-   * @param {number} xPos
-   * @param {number} yPos
-   * @return {boolean}
-   */
-  containsPoint (tabToCheck, xPos, yPos) {
-    var rect = tabToCheck.elements.tab.getBoundingClientRect()
-
-    if (xPos >= rect.left && xPos <= rect.right && yPos <= rect.bottom) {
-      return true
-    }
-
-    return false
-  }
-
-  /**
-   * Replaces tabs.
-   * @param {number} firstIndex
-   * @param {number} secondIndex
-   * @param {boolean} changePos
-   */
-  replaceTabs (firstIndex, secondIndex, changePos = true) {
-    var firstTab = Store.tabs[firstIndex]
-    var secondTab = Store.tabs[secondIndex]
-
-    // Replace tabs in array.
-    Store.tabs[firstIndex] = secondTab
-    Store.tabs[secondIndex] = firstTab
-
-    // Change positions of replaced tabs.
-    if (changePos) {
-      secondTab.updatePosition()
-    }
-  }
-
-  /**
-   * Updates tabs borders.
-   */
-  updateTabs () {
-    const self = this
-
-    Store.tabs.forEach((tab) => {
-      tab.updateBorders()
-    })
-  }
-
-  /**
-   * Gets selected tab.
-   * @return {Tab}
-   */
-  getSelectedTab () {
-    Store.tabs.forEach((tab) => {
-      if (tab.selected) {
-        return tab
-      }
-    })
-    return null
   }
 }
