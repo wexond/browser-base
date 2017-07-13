@@ -1,8 +1,13 @@
-import Component from '../../classes/Component'
+import Component from '../../component'
 import Tab from '../Tab'
-import Transitions from '../../helpers/Transitions'
-import Colors from '../../helpers/Colors'
-import UI from '../../classes/UI'
+import Transitions from '../../utils/Transitions'
+import Colors from '../../utils/colors'
+import UI from '../../ui'
+import Store from '../../store'
+
+import tabsDefaults from '../../defaults/tabs'
+
+import { getCurrentWindow } from '../../actions/window'
 
 export default class Tabs extends Component {
   beforeRender () {
@@ -12,7 +17,6 @@ export default class Tabs extends Component {
     }
     this.cursor = {}
     this.dragData = {}
-    this.transitions = []
   }
 
   render () {
@@ -41,19 +45,15 @@ export default class Tabs extends Component {
     })
 
     this.elements.close.addEventListener('click', (e) => {
-      currentWindow.close()
+      
     })
 
     this.elements.maximize.addEventListener('click', (e) => {
-      if (currentWindow.isMaximized()) {
-        currentWindow.unmaximize()
-      } else {
-        currentWindow.maximize()
-      }
+      
     })
 
     this.elements.minimize.addEventListener('click', (e) => {
-      currentWindow.minimize()
+      
     })
 
     window.addEventListener('resize', (e) => {
@@ -70,14 +70,14 @@ export default class Tabs extends Component {
 
         self.setPositions()
 
-        if (tabs[tabs.indexOf(self.dragData.tab) - 1] != null) {
-          tabs[tabs.indexOf(self.dragData.tab) - 1].elements.rightSmallBorder.setCSS({display: 'none'})
+        if (Store.tabs[Store.tabs.indexOf(self.dragData.tab) - 1] != null) {
+          Store.tabs[Store.tabs.indexOf(self.dragData.tab) - 1].elements.rightSmallBorder.setCSS({display: 'none'})
         }
-        if (tabs[tabs.indexOf(self.dragData.tab) + 1] != null) {
-          tabs[tabs.indexOf(self.dragData.tab) + 1].elements.leftSmallBorder.setCSS({display: 'none'})
+        if (Store.tabs[Store.tabs.indexOf(self.dragData.tab) + 1] != null) {
+          Store.tabs[Store.tabs.indexOf(self.dragData.tab) + 1].elements.leftSmallBorder.setCSS({display: 'none'})
         }
-        for (var i = 0; i < tabs.length; i++) {
-          tabs[i].elements.leftSmallBorder.setCSS({display: 'none'})
+        for (var i = 0; i < Store.tabs.length; i++) {
+          Store.tabs[i].elements.leftSmallBorder.setCSS({display: 'none'})
         }
         removeEventListener('mousemove', self.onMouseMove)
       }
@@ -90,7 +90,7 @@ export default class Tabs extends Component {
       app.cursor.y = e.pageY
     })
 
-    currentWindow.on('maximize', (e) => {
+    getCurrentWindow().on('maximize', (e) => {
       self.elements.handle.setCSS({
         left: 0,
         top: 0,
@@ -99,7 +99,7 @@ export default class Tabs extends Component {
       })
     })
 
-    currentWindow.on('unmaximize', (e) => {
+    getCurrentWindow().on('unmaximize', (e) => {
       self.elements.handle.setCSS({
         left: 4,
         top: 4,
@@ -107,7 +107,6 @@ export default class Tabs extends Component {
         height: 'calc(100% - 4px)'
       })
     })
-
     // Start the timer.
     this.timer.timer = setInterval(function () { // Invoke the function each 3 seconds.
       if (self.timer.canReset && self.timer.time === 3) { // If can calculate widths for all tabs.
@@ -160,7 +159,7 @@ export default class Tabs extends Component {
             tab.timeoutHover = setTimeout(function () {
               clearTimeout(tab.timeoutHover)
               tab.removeTransition('background-color')
-            }, tabsAnimationData.hoverDuration * 1000)
+            }, tabsDefaults.transitions['background-color'].duration * 1000)
 
             tab.setTitleMaxWidth(true)
 
@@ -204,15 +203,15 @@ export default class Tabs extends Component {
 
         this.dragData.tab.findTabToReplace(e.clientX)
 
-        if (tabs.indexOf(this.dragData.tab) === tabs.length - 1) {
+        if (Store.tabs.indexOf(this.dragData.tab) === Store.tabs.length - 1) {
           this.elements.addButton.setCSS({display: 'none'})
         }
 
-        if (tabs[tabs.indexOf(this.dragData.tab) - 1] != null) {
-          tabs[tabs.indexOf(this.dragData.tab) - 1].elements.rightSmallBorder.setCSS({display: 'block'})
+        if (Store.tabs[Store.tabs.indexOf(this.dragData.tab) - 1] != null) {
+          Store.tabs[Store.tabs.indexOf(this.dragData.tab) - 1].elements.rightSmallBorder.setCSS({display: 'block'})
         }
-        if (tabs[tabs.indexOf(this.dragData.tab) + 1] != null) {
-          tabs[tabs.indexOf(this.dragData.tab) + 1].elements.leftSmallBorder.setCSS({display: 'block'})
+        if (Store.tabs[Store.tabs.indexOf(this.dragData.tab) + 1] != null) {
+          Store.tabs[Store.tabs.indexOf(this.dragData.tab) + 1].elements.leftSmallBorder.setCSS({display: 'block'})
         }
       }
     }
@@ -222,7 +221,7 @@ export default class Tabs extends Component {
    * Adds tab.
    * @param {Object} data
    */
-  addTab (data = defaultTabOptions) {
+  addTab (data = tabsDefaults.defaultOptions) {
     UI.render(<Tab select={data.select} url={data.url} tabs={this}/>, this.elements.tabbar, this)
   }
 
@@ -231,7 +230,7 @@ export default class Tabs extends Component {
    * @param {Tab} tab
    */
   selectTab (tabToSelect) {
-    tabs.forEach((tab) => {
+    Store.tabs.forEach((tab) => {
       if (tab !== tabToSelect) {
         tab.deselect()
       }
@@ -251,26 +250,26 @@ export default class Tabs extends Component {
     let tabWidths = []
     let pinnedTabsLength = 0
 
-    for (var i = 0; i < tabs.length; i++) {
-      if (tabs[i].pinned) {
+    for (var i = 0; i < Store.tabs.length; i++) {
+      if (Store.tabs[i].pinned) {
         // Push width for pinned tab.
-        tabWidths.push(tabsData.pinnedTabWidth)
+        tabWidths.push(tabsDefaults.pinnedTabWidth)
 
         pinnedTabsLength += 1
       }
     }
 
-    for (i = 0; i < tabs.length; i++) {
-      if (!tabs[i].pinned) {
+    for (i = 0; i < Store.tabs.length; i++) {
+      if (!Store.tabs[i].pinned) {
         // Include margins between tabs.
-        var margins = tabs.length * margin
+        var margins = Store.tabs.length * margin
         // Include pinned tabs.
-        var smallTabsWidth = (pinnedTabsLength * tabsData.pinnedTabWidth)
+        var smallTabsWidth = (pinnedTabsLength * tabsDefaults.pinnedTabWidth)
         // Calculate final width per tab.
-        var tabWidthTemp = (tabbarWidth - addButtonWidth - margins - smallTabsWidth) / (tabs.length - pinnedTabsLength)
+        var tabWidthTemp = (tabbarWidth - addButtonWidth - margins - smallTabsWidth) / (Store.tabs.length - pinnedTabsLength)
         // Check if tab's width isn't greater than max tab width.
-        if (tabWidthTemp > tabsData.maxTabWidth) {
-          tabWidthTemp = tabsData.maxTabWidth
+        if (tabWidthTemp > tabsDefaults.maxTabWidth) {
+          tabWidthTemp = tabsDefaults.maxTabWidth
         }
         // Push width for normal tab.
         tabWidths.push(tabWidthTemp)
@@ -285,9 +284,9 @@ export default class Tabs extends Component {
    */
   setWidths (animation = true) {
     const widths = this.getWidths()
-    let normalTabWidth = tabsData.maxTabWidth
+    let normalTabWidth = tabsDefaults.maxTabWidth
 
-    tabs.forEach((tab, index) => {
+    Store.tabs.forEach((tab, index) => {
       let tabSelected = tab.selected
       let width = widths[index]
       let widthSmaller = width < 48
@@ -308,7 +307,7 @@ export default class Tabs extends Component {
       tab.elements.icon.style.display = displayIcon
     })
 
-    if (normalTabWidth < tabsData.maxTabWidth) {
+    if (normalTabWidth < tabsDefaults.maxTabWidth) {
       this.elements.controlsBorder.style.display = 'block'
     } else {
       this.elements.controlsBorder.style.display = 'none'
@@ -323,7 +322,7 @@ export default class Tabs extends Component {
     let positions = []
     let tempPosition = 0
 
-    tabs.forEach((tab) => {
+    Store.tabs.forEach((tab) => {
       positions.push(tempPosition)
       tempPosition += tab.width
     })
@@ -342,13 +341,13 @@ export default class Tabs extends Component {
   setPositions (animateTabs = true, animateAddButton = true) {
     const positions = this.getPositions()
 
-    tabs.forEach((tab) => {
+    Store.tabs.forEach((tab) => {
       if (!tab.blockLeftAnimation && animateTabs) {
         tab.appendTransition('left')
       } else {
         tab.removeTransition('left')
       }
-      tab.setLeft(positions.tabPositions[tabs.indexOf(tab)])
+      tab.setLeft(positions.tabPositions[Store.tabs.indexOf(tab)])
     })
 
     this.setAddButtonAnimation(animateAddButton)
@@ -363,23 +362,24 @@ export default class Tabs extends Component {
    */
   setAddButtonAnimation (flag) {
     if (flag) {
-      if (this.transitions.indexOf('left') !== -1) return // If the transition already exists.
+      if (this.isAddButtonTransitionToggled) return // If the transition already exists.
     } else {
-      if (this.transitions.indexOf('left') === -1) return // If the transition don't exist.
+      if (!this.isAddButtonTransitionToggled) return // If the transition don't exist.
     }
 
-    let transition = 'left ' + tabsAnimationData.positioningDuration + 's ' + tabsAnimationData.positioningEasing
+    const transitionData = tabsDefaults.transitions.left
+    let transition = 'left ' + transitionData.duration + 's ' + transitionData.easing
     const addButton = this.elements.addButton
 
     if (addButton != null) {
       if (flag) {
         let newTransition = Transitions.appendTransition(addButton.getCSS('-webkit-transition'), transition)
         addButton.style['-webkit-transition'] = newTransition
-        this.transitions.push('left')
+        this.isAddButtonTransitionToggled = true
       } else {
         let newTransition = newTransition
         addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.getCSS('-webkit-transition'), transition)
-        this.transitions.splice(this.transitions.indexOf('left'), 1)
+        this.isAddButtonTransitionToggled = false
       }
     }
   }
@@ -391,11 +391,11 @@ export default class Tabs extends Component {
    * @return {Tab}
    */
   getTabFromMouseX (callingTab, xPos) {
-    for (var i = 0; i < tabs.length; i++) {
-      if (tabs[i] !== callingTab) {
-        if (this.containsX(tabs[i], xPos)) {
-          if (!tabs[i].locked) {
-            return tabs[i]
+    for (var i = 0; i < Store.tabs.length; i++) {
+      if (Store.tabs[i] !== callingTab) {
+        if (this.containsX(Store.tabs[i], xPos)) {
+          if (!Store.tabs[i].locked) {
+            return Store.tabs[i]
           }
         }
       }
@@ -427,11 +427,11 @@ export default class Tabs extends Component {
    * @return {Tab}
    */
   getTabFromMousePoint (callingTab, xPos, yPos) {
-    for (var i = 0; i < tabs.length; i++) {
-      if (tabs[i] !== callingTab) {
-        if (this.containsPoint(tabs[i], xPos, yPos)) {
-          if (!tabs[i].locked) {
-            return tabs[i]
+    for (var i = 0; i < Store.tabs.length; i++) {
+      if (Store.tabs[i] !== callingTab) {
+        if (this.containsPoint(Store.tabs[i], xPos, yPos)) {
+          if (!Store.tabs[i].locked) {
+            return Store.tabs[i]
           }
         }
       }
@@ -463,12 +463,12 @@ export default class Tabs extends Component {
    * @param {boolean} changePos
    */
   replaceTabs (firstIndex, secondIndex, changePos = true) {
-    var firstTab = tabs[firstIndex]
-    var secondTab = tabs[secondIndex]
+    var firstTab = Store.tabs[firstIndex]
+    var secondTab = Store.tabs[secondIndex]
 
     // Replace tabs in array.
-    tabs[firstIndex] = secondTab
-    tabs[secondIndex] = firstTab
+    Store.tabs[firstIndex] = secondTab
+    Store.tabs[secondIndex] = firstTab
 
     // Change positions of replaced tabs.
     if (changePos) {
@@ -482,7 +482,7 @@ export default class Tabs extends Component {
   updateTabs () {
     const self = this
 
-    tabs.forEach((tab) => {
+    Store.tabs.forEach((tab) => {
       tab.updateBorders()
     })
   }
@@ -492,9 +492,9 @@ export default class Tabs extends Component {
    * @return {Tab}
    */
   getSelectedTab () {
-    tabs.forEach((tab) => {
+    Store.tabs.forEach((tab) => {
       if (tab.selected) {
-        return tabs[i]
+        return tab
       }
     })
     return null

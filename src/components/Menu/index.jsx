@@ -1,5 +1,5 @@
-import Component from '../../classes/Component'
-import UI from '../../classes/UI'
+import Component from '../../component'
+import UI from '../../ui'
 import MenuItem from '../MenuItem'
 
 export default class Menu extends Component {

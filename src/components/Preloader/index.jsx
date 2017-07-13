@@ -1,4 +1,4 @@
-import Component from '../../../classes/Component'
+import Component from '../../component'
 
 export default class Preloader extends Component {
   /**

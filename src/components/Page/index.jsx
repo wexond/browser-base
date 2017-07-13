@@ -1,5 +1,6 @@
-import Component from '../../classes/Component'
-import WebViewColors from '../../classes/WebViewColors'
+import Component from '../../component'
+import WebViewColors from '../../webview-colors'
+import Store from '../../store'
 
 export default class Page extends Component {
   beforeRender () {
@@ -86,25 +87,24 @@ export default class Page extends Component {
         webview.getWebContents().on('context-menu', function (e, params) {
           const webviewMenu = app.elements.webviewMenu
           let newItems = webviewMenu.menuItems
-          app.WCMData = params // Webview context menu data.
+          Store.pageMenuData = params // Webview context menu data.
 
-          /**
-          * 0  : Open link in new tab
-          * 1  : -----------------------
-          * 2  : Copy link address
-          * 3  : Save link as
-          * 4  : -----------------------
-          * 5  : Open image in new tab
-          * 6  : Save image as
-          * 7  : Copy image
-          * 8  : Copy image address
-          * 9  : -----------------------
-          * 10 : Save as
-          * 11 : Print
-          * 12 : -----------------------
-          * 13 : View source
-          * 14 : Inspect element
-          */
+          // Context menu items IDs:
+          // 0  : Open link in new tab
+          // 1  : -----------------------
+          // 2  : Copy link address
+          // 3  : Save link as
+          // 4  : -----------------------
+          // 5  : Open image in new tab
+          // 6  : Save image as
+          // 7  : Copy image
+          // 8  : Copy image address
+          // 9  : -----------------------
+          // 10 : Save as
+          // 11 : Print
+          // 12 : -----------------------
+          // 13 : View source
+          // 14 : Inspect element
 
           for (var i = 0; i < 5; i++) {
             newItems[i].show = params.linkURL !== ''
@@ -151,6 +151,11 @@ export default class Page extends Component {
       top: 'auto',
       visibility: 'visible'
     })
+
+    /*this.elements.webview.setCSS({
+      height: 'auto',
+      width: 'auto'
+    })*/
   }
 
   /**
@@ -162,5 +167,10 @@ export default class Page extends Component {
       top: 0,
       visibility: 'hidden'
     })
+
+    /*this.elements.webview.setCSS({
+      height: 0,
+      width: 0
+    })*/
   }
 }
