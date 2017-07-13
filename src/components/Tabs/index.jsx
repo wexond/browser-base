@@ -7,7 +7,7 @@ import Store from '../../store'
 
 import tabsDefaults from '../../defaults/tabs'
 
-import { getCurrentWindow } from '../../actions/window'
+import { getCurrentWindow, close, maximize, minimize } from '../../actions/window'
 
 export default class Tabs extends Component {
   beforeRender () {
@@ -44,17 +44,11 @@ export default class Tabs extends Component {
       self.addTab()
     })
 
-    this.elements.close.addEventListener('click', (e) => {
-      
-    })
+    this.elements.close.addEventListener('click', close)
 
-    this.elements.maximize.addEventListener('click', (e) => {
-      
-    })
+    this.elements.maximize.addEventListener('click', maximize)
 
-    this.elements.minimize.addEventListener('click', (e) => {
-      
-    })
+    this.elements.minimize.addEventListener('click', minimize)
 
     window.addEventListener('resize', (e) => {
       self.setWidths(false)
@@ -377,8 +371,8 @@ export default class Tabs extends Component {
         addButton.style['-webkit-transition'] = newTransition
         this.isAddButtonTransitionToggled = true
       } else {
-        let newTransition = newTransition
-        addButton.style['-webkit-transition'] = Transitions.removeTransition(addButton.getCSS('-webkit-transition'), transition)
+        let newTransition = Transitions.removeTransition(addButton.getCSS('-webkit-transition'), transition)
+        addButton.style['-webkit-transition'] = newTransition
         this.isAddButtonTransitionToggled = false
       }
     }
