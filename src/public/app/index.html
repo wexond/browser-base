@@ -6,13 +6,13 @@
   <body>
     <div id='app'></div>
 
-    <script src="../../helpers/DOM/index.js"></script>
+    <script src="../../utils/dom.js"></script>
 
     <script>
       if (process.env.ENV !== 'dev') {
-        loadScripts(['../../../build/app.bundle.js']);
+        loadScripts(['../../../build/app.bundle.js'])
       } else {
-        loadScripts(['http://localhost:8080/build/app.bundle.js', 'http://localhost:8080/webpack-dev-server.js']);
+        loadScripts(['http://localhost:8080/build/app.bundle.js', 'http://localhost:8080/webpack-dev-server.js'])
       }
     </script>
   </body>

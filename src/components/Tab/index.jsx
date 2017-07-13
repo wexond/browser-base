@@ -1,9 +1,12 @@
-import Page from '../Page'
-import Transitions from '../../helpers/Transitions'
-import Component from '../../classes/Component'
-import UI from '../../classes/UI'
+import Transitions from '../../utils/Transitions'
+import Component from '../../component'
+import UI from '../../ui'
 
-import Preloader from '../../materialdesign/components/Preloader'
+import Page from '../Page'
+import Preloader from '../Preloader'
+
+import Store from '../../store'
+import tabsDefaults from '../../defaults/tabs'
 
 export default class Tab extends Component {
   beforeRender () {
@@ -20,7 +23,7 @@ export default class Tab extends Component {
       hover: '#fff'
     }
 
-    window.tabs.push(this)
+    Store.tabs.push(this)
   }
 
   render () {
@@ -49,7 +52,7 @@ export default class Tab extends Component {
   afterRender () {
     const self = this
 
-    let position = this.tabs.getPositions().tabPositions[window.tabs.indexOf(this)]
+    let position = this.tabs.getPositions().tabPositions[Store.tabs.indexOf(this)]
     this.setLeft(position)
 
     this.appendTransition('width')
@@ -236,18 +239,18 @@ export default class Tab extends Component {
 
     // Move the pinned tab to first position.
     var tempTabs = []
-    for (var i = 0; i < tabs.length; i++) {
-      if (tabs[i].pinned) {
-        tempTabs.push(tabs[i])
+    for (var i = 0; i < Store.tabs.length; i++) {
+      if (Store.tabs[i].pinned) {
+        tempTabs.push(Store.tabs[i])
       }
     }
 
-    for (i = 0; i < tabs.length; i++) {
-      if (!tabs[i].pinned) {
-        tempTabs.push(tabs[i])
+    for (i = 0; i < Store.tabs.length; i++) {
+      if (!Store.tabs[i].pinned) {
+        tempTabs.push(Store.tabs[i])
       }
     }
-    tabs = tempTabs
+    Store.tabs = tempTabs
 
     // Calculate all widths and positions for all tabs.
     this.tabs.setWidths()
@@ -262,7 +265,7 @@ export default class Tab extends Component {
     const self = this
     const tabDiv = this.elements.tab
     // If the tab is last tab.
-    if (window.tabs.length === 1) {
+    if (Store.tabs.length === 1) {
       this.tabs.addTab()
     }
 
@@ -277,12 +280,12 @@ export default class Tab extends Component {
     this.page.elements.page.remove()
 
     // Get previous and next tab.
-    var index = window.tabs.indexOf(this)
-    var nextTab = window.tabs[index + 1]
-    var prevTab = window.tabs[index - 1]
+    var index = Store.tabs.indexOf(this)
+    var nextTab = Store.tabs[index + 1]
+    var prevTab = Store.tabs[index - 1]
 
     // Remove the tab from array.
-    window.tabs.splice(index, 1)
+    Store.tabs.splice(index, 1)
 
     if (this.selected) {
       if (nextTab != null) { // If the next tab exists, select it.
@@ -291,14 +294,14 @@ export default class Tab extends Component {
         if (prevTab != null) { // If previous tab exists, select it.
           this.tabs.selectTab(prevTab)
         } else { // If the previous tab not exists, check if the first tab exists.
-          if (global.tabs[0] != null) { // If first tab exists, select it.
-            this.tabs.selectTab(global.tabs[0])
+          if (Store.tabs[0] != null) { // If first tab exists, select it.
+            this.tabs.selectTab(Store.tabs[0])
           }
         }
       }
     }
 
-    if (index === global.tabs.length) { // If the tab is last.
+    if (index === Store.tabs.length) { // If the tab is last.
       // Calculate all widths and positions for all tabs.
       this.tabs.setWidths()
       this.tabs.setPositions()
@@ -321,7 +324,7 @@ export default class Tab extends Component {
 
       setTimeout(function () {
         tabDiv.remove()
-      }, window.tabsAnimationData.positioningDuration * 1000)
+      }, tabsDefaults.transitions.width.duration * 1000)
     }
 
     // Calculate positions for all tabs, but don't calculate widths.
@@ -330,52 +333,36 @@ export default class Tab extends Component {
 
   /**
    * Appends transition property to tab.
-   * @param {string} transition
+   * @param {string} transitionToAdd
    */
-  appendTransition (transition) {
-    if (this.transitions.indexOf(transition) !== -1) return
+  appendTransition (transitionToAdd) {
+    if (this.transitions.indexOf(transitionToAdd) !== -1) return
 
     const tabDiv = this.elements.tab
-    let tempTransition = ''
+    const transitionData = tabsDefaults.transitions[transitionToAdd]
+    let transition = transitionToAdd + ' ' + transitionData.duration + 's ' + transitionData.easing
 
-    if (transition === 'left') {
-      tempTransition = 'left ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
-    }
-    if (transition === 'width') {
-      tempTransition = 'width ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
-    }
-    if (transition === 'background-color') {
-      tempTransition = 'background-color ' + window.tabsAnimationData.positioningDuration + 's'
-    }
+    this.transitions.push(transitionToAdd)
 
-    this.transitions.push(transition)
-
-    tabDiv.style['-webkit-transition'] = Transitions.appendTransition(tabDiv.style['-webkit-transition'], tempTransition)
+    let newTransition = Transitions.appendTransition(tabDiv.style['-webkit-transition'], transition)
+    tabDiv.style['-webkit-transition'] = newTransition
   }
 
   /**
   * Removes transition property from tab.
-  * @param {string} transition
+  * @param {string} transitionToRemove
   */
-  removeTransition (transition) {
-    if (this.transitions.indexOf(transition) === -1) return
+  removeTransition (transitionToRemove) {
+    if (this.transitions.indexOf(transitionToRemove) === -1) return
 
     const tabDiv = this.elements.tab
-    let tempTransition = ''
+    const transitionData = tabsDefaults.transitions[transitionToRemove]
+    let transition = transitionToRemove + ' ' + transitionData.duration + 's ' + transitionData.easing
 
-    if (transition === 'left') {
-      tempTransition = 'left ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
-    }
-    if (transition === 'width') {
-      tempTransition = 'width ' + window.tabsAnimationData.positioningDuration + 's ' + window.tabsAnimationData.positioningEasing
-    }
-    if (transition === 'background-color') {
-      tempTransition = 'background-color ' + window.tabsAnimationData.positioningDuration + 's'
-    }
+    this.transitions.splice(this.transitions.indexOf(transitionToRemove), 1)
 
-    this.transitions.splice(this.transitions.indexOf(transition), 1)
-
-    tabDiv.style['-webkit-transition'] = Transitions.removeTransition(tabDiv.style['-webkit-transition'], tempTransition)
+    let newTransition = Transitions.removeTransition(tabDiv.style['-webkit-transition'], transition)
+    tabDiv.style['-webkit-transition'] = newTransition
   }
 
   /**
@@ -388,8 +375,8 @@ export default class Tab extends Component {
       const overTab = this.tabs.getTabFromMouseX(this, cursorX)
 
       if (overTab != null && !overTab.pinned) {
-        const indexTab = tabs.indexOf(this)
-        const indexOverTab = tabs.indexOf(overTab)
+        const indexTab = Store.tabs.indexOf(this)
+        const indexOverTab = Store.tabs.indexOf(overTab)
 
         this.tabs.replaceTabs(indexTab, indexOverTab)
       }
@@ -403,7 +390,7 @@ export default class Tab extends Component {
     const self = this
     let data = this.tabs.getPositions()
     // Get new position for the tab.
-    const newTabPos = data.tabPositions[window.tabs.indexOf(this)]
+    const newTabPos = data.tabPositions[Store.tabs.indexOf(this)]
 
     // Unable to reorder the tab by other tabs.
     this.locked = true
@@ -415,7 +402,7 @@ export default class Tab extends Component {
     // Unlock tab replacing by other tabs.
     setTimeout(function () {
       self.locked = false
-    }, window.tabsAnimationData.positioningDuration * 1000)
+    }, tabsDefaults.transitions.left.duration * 1000)
 
     this.tabs.updateTabs()
   }
@@ -465,14 +452,14 @@ export default class Tab extends Component {
   }
 
   updateBorders () {
-    let previousTab = window.tabs[window.tabs.indexOf(this) - 1]
+    let previousTab = Store.tabs[Store.tabs.indexOf(this) - 1]
 
     this.elements.rightSmallBorder.setCSS({
       display: (this.selected) ? 'none' : 'block'
     })
 
     this.elements.leftFullBorder.setCSS({
-      display: (this.selected) ? ((window.tabs.indexOf(this) !== 0) ? 'block' : 'none') : 'none'
+      display: (this.selected) ? ((Store.tabs.indexOf(this) !== 0) ? 'block' : 'none') : 'none'
     })
 
     this.elements.rightFullBorder.setCSS({
