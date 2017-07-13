@@ -1,4 +1,3 @@
-import Transitions from '../../utils/Transitions'
 import Component from '../../component'
 import UI from '../../ui'
 
@@ -6,7 +5,10 @@ import Page from '../Page'
 import Preloader from '../Preloader'
 
 import Store from '../../store'
+import Transitions from '../../utils/Transitions'
+
 import tabsDefaults from '../../defaults/tabs'
+import { updateTabs } from '../../actions/tabs'
 
 export default class Tab extends Component {
   beforeRender () {
@@ -255,7 +257,8 @@ export default class Tab extends Component {
     // Calculate all widths and positions for all tabs.
     this.tabs.setWidths()
     this.tabs.setPositions()
-    this.tabs.updateTabs()
+
+    updateTabs()
   }
 
   /**
@@ -366,24 +369,6 @@ export default class Tab extends Component {
   }
 
   /**
-   * Checks if mouse x position is on any tab.
-   * If it is, then replaces current tab with second tab.
-   * @param {number} cursorX
-   */
-  findTabToReplace (cursorX) {
-    if (!this.pinned) {
-      const overTab = this.tabs.getTabFromMouseX(this, cursorX)
-
-      if (overTab != null && !overTab.pinned) {
-        const indexTab = Store.tabs.indexOf(this)
-        const indexOverTab = Store.tabs.indexOf(overTab)
-
-        this.tabs.replaceTabs(indexTab, indexOverTab)
-      }
-    }
-  }
-
-  /**
    * Updates position of tab to its place.
    */
   updatePosition () {
@@ -404,7 +389,7 @@ export default class Tab extends Component {
       self.locked = false
     }, tabsDefaults.transitions.left.duration * 1000)
 
-    this.tabs.updateTabs()
+    updateTabs()
   }
 
   /**

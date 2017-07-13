@@ -122,14 +122,14 @@ export default class Page extends Component {
 
           webviewMenu.show()
 
-          let left = app.cursor.x + 1
-          let top = app.cursor.y + 1
+          let left = Store.cursor.x + 1
+          let top = Store.cursor.y + 1
 
           if (left + 300 > window.innerWidth) {
-            left = app.cursor.x - 301
+            left = Store.cursor.x - 301
           }
           if (top + webviewMenu.height > window.innerHeight) {
-            top = app.cursor.y - webviewMenu.height
+            top = Store.cursor.y - webviewMenu.height
           }
           if (top < 0) {
             top = 96
