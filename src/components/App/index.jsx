@@ -3,8 +3,9 @@ import Store from '../../store'
 
 import Component from '../../component'
 
-import PageMenuActions from '../../actions/page-menu'
+import * as pageMenuActions from '../../actions/page-menu'
 import TabMenuActions from '../../actions/tab-menu'
+import { getTabFromMousePoint } from '../../actions/tabs'
 
 import { tabMenuItems } from '../../defaults/tab-menu-items'
 import { pageMenuItems } from '../../defaults/page-menu-items'
@@ -47,10 +48,15 @@ export default class App extends Component {
       self.elements.tabMenu.hide()
     })
 
+    window.addEventListener('mousemove', function (e) {
+      Store.cursor.x = e.pageX
+      Store.cursor.y = e.pageY
+    })
+
     this.elements.tabs.elements.tabbar.addEventListener('contextmenu', (e) => {
       if (e.target === self.elements.tabs.elements.addButton) return
 
-      Store.hoveredTab = self.elements.tabs.getTabFromMousePoint(null, e.pageX, e.pageY)
+      Store.hoveredTab = getTabFromMousePoint(null)
 
       const tabMenu = self.elements.tabMenu
 
@@ -84,17 +90,17 @@ export default class App extends Component {
     })
 
     // Page menu items actions.
-    pageMenuItems[0].onClick = () => PageMenuActions.openLinkInNewTab(this)
-    pageMenuItems[2].onClick = () => PageMenuActions.copyLinkAddress()
-    pageMenuItems[3].onClick = () => PageMenuActions.saveLinkAs()
-    pageMenuItems[5].onClick = () => PageMenuActions.openImageInNewTab()
-    pageMenuItems[6].onClick = () => PageMenuActions.saveImageAs()
-    pageMenuItems[7].onClick = () => PageMenuActions.copyImage()
-    pageMenuItems[8].onClick = () => PageMenuActions.copyImageAddress()
-    pageMenuItems[10].onClick = () => PageMenuActions.print(this)
-    pageMenuItems[11].onClick = () => PageMenuActions.saveAs(this)
-    pageMenuItems[13].onClick = () => PageMenuActions.viewSource(this)
-    pageMenuItems[14].onClick = () => PageMenuActions.inspectElement(this)
+    pageMenuItems[0].onClick = () => pageMenuActions.openLinkInNewTab(this)
+    pageMenuItems[2].onClick = () => pageMenuActions.copyLinkAddress()
+    pageMenuItems[3].onClick = () => pageMenuActions.saveLinkAs()
+    pageMenuItems[5].onClick = () => pageMenuActions.openImageInNewTab(this)
+    pageMenuItems[6].onClick = () => pageMenuActions.saveImageAs()
+    pageMenuItems[7].onClick = () => pageMenuActions.copyImage()
+    pageMenuItems[8].onClick = () => pageMenuActions.copyImageAddress()
+    pageMenuItems[10].onClick = () => pageMenuActions.print(this)
+    pageMenuItems[11].onClick = () => pageMenuActions.saveAs(this)
+    pageMenuItems[13].onClick = () => pageMenuActions.viewSource(this)
+    pageMenuItems[14].onClick = () => pageMenuActions.inspectElement(this)
 
     // Tab menu items.
     tabMenuItems[0].onClick = () => TabMenuActions.addNewTab()
