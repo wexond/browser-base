@@ -19,25 +19,22 @@ Element.prototype.remove = function () {
 }
 
 /**
-* Loads an array of scripts URLs to document's body.
-* @static
-* @param {array}
-*/
+ * Loads an array of scripts URLs to document's body.
+ * @param {Array}
+ */
 function loadScripts (scripts) {
   for (var i = 0; i < scripts.length; i++) {
-    var script = document.createElement('script')
+    let script = document.createElement('script')
     script.src = scripts[i]
     document.body.appendChild(script)
   }
 }
 
 Element.prototype.setAttributes = function (attributes) {
-  const keys = Object.keys(attributes)
+  for (var key in attributes) {
+    const attribute = key
+    const value = attributes[key]
 
-  for (let i = 0; i < keys.length; i++) {
-    const attr = keys[i]
-    const value = attributes[keys[i]]
-
-    this.setAttribute(attr, value)
+    this.setAttribute(attribute, value)
   }
 }

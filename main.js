@@ -70,8 +70,6 @@ app.on('ready', function () {
     let data = path.join(__dirname, '/src/public/', url)
 
     callback(data)
-
-    console.log(data)
   }, (error) => {
     if (error) {
       console.error('Failed to register protocol ' + protocolName + '://')

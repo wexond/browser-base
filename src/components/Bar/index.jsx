@@ -1,5 +1,7 @@
-import Component from '../../classes/Component'
-import Network from '../../helpers/Network'
+import Component from '../../component'
+import Network from '../../utils/network'
+import Store from '../../store'
+import { request as httpsRequest } from 'https' 
 
 export default class Bar extends Component {
   onShortUrlClick = (e) => {
@@ -238,9 +240,9 @@ export default class Bar extends Component {
 
     let certificateExists = false
 
-    for (var i = 0; i < certificates.length; i++) {
-      if (certificates[i].domain === domain) {
-        let certificate = certificates[i].certificate
+    for (var i = 0; i < Store.certificates.length; i++) {
+      if (Store.certificates[i].domain === domain) {
+        let certificate = Store.certificates[i].certificate
         if (certificate.subject == null) return
 
         self.setCertificate('Secure', tab, certificate.subject.O, certificate.subject.C)
@@ -256,13 +258,13 @@ export default class Bar extends Component {
         method: 'GET'
       }
 
-      let req = https.request(options, (res) => {
+      let req = httpsRequest(options, (res) => {
         let certificate = res.connection.getPeerCertificate()
         if (certificate.subject == null) return
 
         self.setCertificate('Secure', tab, certificate.subject.O, certificate.subject.C)
 
-        certificates.push({
+        Store.certificates.push({
           domain: domain,
           certificate: certificate
         })
