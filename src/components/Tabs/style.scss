@@ -8,7 +8,7 @@
   transition: 0.2s background-color;
 
   &.tabs-white-foreground {
-    & .tabs-add-button, .control-close, .control-maximize, .control-minimize {
+    & .tabs-add-button, .window-control {
       @include invert-colors;
 
       opacity: $secondary-opacity-dark;
@@ -115,37 +115,4 @@
   width: 1px;
   float: right;
   margin-right: 8px;
-}
-
-.controls {
-  position: relative;
-  float: right;
-  height: 100%;
-  -webkit-app-region: no-drag;
-  z-index: 5;
-}
-
-.control {
-  @include image-center(11px, 11px);
-  height: 100%;
-  width: 34px;
-  transition: 0.2s opacity;
-  opacity: $secondary-opacity-light;
-  float: right;
-
-  &:hover {
-    opacity: $primary-opacity-light;
-  }
-}
-
-.control-close {
-  background-image: url(images/controls/close.png);
-}
-
-.control-maximize {
-  background-image: url(images/controls/maximize.png);
-}
-
-.control-minimize {
-  background-image: url(images/controls/minimize.png);
 }
