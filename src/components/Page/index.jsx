@@ -20,7 +20,7 @@ export default class Page extends Component {
     const webview = this.elements.webview
 
     webview.addEventListener('page-title-updated', (e) => {
-      app.elements.bar.retrieveInformation(webview.getURL(), self.tab)
+      app.elements.bar.updateInfo(webview.getURL(), self.tab)
       self.tab.setTitle(e.title)
     })
 
@@ -64,7 +64,7 @@ export default class Page extends Component {
     webview.addEventListener('did-stop-loading', function (e) {
       self.tab.togglePreloader(false)
 
-      app.elements.bar.retrieveInformation(webview.getURL(), self.tab)
+      app.elements.bar.updateInfo(webview.getURL(), self.tab)
 
       WebViewColors.getColor(webview, (color) => {
         app.changeUIColors(color, self.tab)
