@@ -1,4 +1,4 @@
-import Colors from '../../helpers/Colors'
+import Colors from './utils/colors'
 
 export default class WebViewColors {
   static getColorFromTop (webview, callback = null) {

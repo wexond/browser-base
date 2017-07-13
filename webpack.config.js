@@ -1,21 +1,16 @@
-const path = require('path')
-const webpack = require('webpack')
+const { join } = require('path')
+const BabiliPlugin = require("babili-webpack-plugin")
 
-module.exports = {
+let config = {
   target: 'electron',
   devtool: 'eval-source-map',
 
   entry: {
-    'app': './src/views/App'
-  },
-
-  node: {
-    __dirname: false,
-    __filename: false
+    'app': './src/bootstrap.jsx'
   },
 
   output: {
-    path: path.join(__dirname, 'build'),
+    path: join(__dirname, 'build'),
     filename: '[name].bundle.js'
   },
 
@@ -28,7 +23,8 @@ module.exports = {
     rules: [
       {
         test: /\.(scss)$/,
-        include: path.resolve(__dirname, 'src'),
+        include: join(__dirname, 'src'),
+        exclude: /node_modules/,
         use: [
           {
             loader: 'style-loader'
@@ -46,34 +42,37 @@ module.exports = {
         ]
       }, {
         test: /\.(png|gif|jpg|woff2|tff)$/,
-        include: path.resolve(__dirname, 'src'),
+        include: join(__dirname, 'src'),
+        exclude: /node_modules/,
         use: [
           {
             loader: 'url-loader'
           }
         ]
       }, {
-        test: /\.(js)$/,
-        include: path.resolve(__dirname, 'src'),
+        test: /\.(jsx)$/,
+        include: join(__dirname, 'src'),
+        exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
-            options: {
-              presets: ['es2015', 'stage-0'],
-              plugins: [['transform-jsx', { "useVariables": true }]]
-            }
+            loader: 'babel-loader'
           }
         ]
       }
     ]
   },
 
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin()
-  ],
+  plugins: [],
 
   resolve: {
     modules: ['node_modules'],
-    extensions: ['.js']
+    extensions: ['.js', '.jsx']
   }
 }
+
+if (process.env.NODE_ENV === 'production') {
+  config.plugins.push(new BabiliPlugin())
+  config.devtool = 'cheap-module-source-map'
+}
+
+module.exports = config

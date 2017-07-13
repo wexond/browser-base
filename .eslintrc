@@ -6,8 +6,5 @@
     "ecmaFeatures": {
       "jsx": true
     }
-  },
-  "extends": [
-     "standard"
-  ]
+  }
 }

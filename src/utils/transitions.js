@@ -1,11 +1,11 @@
 export default class Transitions {
   /**
    * Converts transitions string to array of transitions.
-   * @param {string} str
-   * @return {array}
+   * @param {String} transitions
+   * @return {Array}
    */
-  static getTransitions (str) {
-    var final = str.replace(/,(?=((?!\().)*?\))/g, ';')
+  static getTransitions (transitions) {
+    var final = transitions.replace(/,(?=((?!\().)*?\))/g, ';')
 
     let arr = final.split(',').map(function (item) {
       if (item.trim() !== '') {
@@ -26,11 +26,11 @@ export default class Transitions {
 
   /**
    * Appends transition to string.
-   * @param {string} str - current transitions
-   * @param {string} transition - transition to add
+   * @param {String} transitions - current transitions
+   * @param {String} transition - transition to add
    */
-  static appendTransition (str, transition) {
-    let transitions = Transitions.getTransitions(str)
+  static appendTransition (transitions, transition) {
+    transitions = Transitions.getTransitions(transitions)
 
     transitions.push(transition)
 
@@ -39,11 +39,11 @@ export default class Transitions {
 
   /**
    * Removes transition from string.
-   * @param {string} str - current transitions
-   * @param {string} transition - transition to add
+   * @param {String} transitions - current transitions
+   * @param {String} transition - transition to add
    */
-  static removeTransition (str, transition) {
-    let transitions = Transitions.getTransitions(str)
+  static removeTransition (transitions, transition) {
+    transitions = Transitions.getTransitions(transitions)
 
     transitions.splice(transitions.indexOf(transition), 1)
 
