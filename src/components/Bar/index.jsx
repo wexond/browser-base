@@ -1,7 +1,6 @@
 import Component from '../../component'
 import Network from '../../utils/network'
 import Store from '../../store'
-import { request as httpsRequest } from 'https' 
 
 export default class Bar extends Component {
   onShortUrlClick = (e) => {
@@ -138,6 +137,29 @@ export default class Bar extends Component {
     })
   }
 
+  toggleInput (flag) {
+    const self = this
+
+    this.isAddressbarBarToggled = flag
+
+    this.elements.input.setCSS({
+      opacity: (flag) ? 1 : 0,
+      pointerEvents: (flag) ? 'auto' : 'none'
+    })
+
+    this.elements.actionIcons.setCSS({
+      float: (flag) ? 'right' : 'none',
+      position: (flag) ? 'relative' : 'absolute',
+      opacity: (flag) ? 1 : 0,
+      pointerEvents: (flag) ? 'auto' : 'none',
+      marginRight: (flag) ? 11 : 0
+    })
+
+    if (flag) {
+      this.elements.input.focus()
+    }
+  }
+
   setCertificate (type, tab, name = null, country = null) {
     let certificateName = name
     if (country != null) {
@@ -196,29 +218,6 @@ export default class Bar extends Component {
     this.elements.shortUrl.textContent = Network.getDomain(url)
   }
 
-  toggleInput (flag) {
-    const self = this
-
-    this.isAddressbarBarToggled = flag
-
-    this.elements.input.setCSS({
-      opacity: (flag) ? 1 : 0,
-      pointerEvents: (flag) ? 'auto' : 'none'
-    })
-
-    this.elements.actionIcons.setCSS({
-      float: (flag) ? 'right' : 'none',
-      position: (flag) ? 'relative' : 'absolute',
-      opacity: (flag) ? 1 : 0,
-      pointerEvents: (flag) ? 'auto' : 'none',
-      marginRight: (flag) ? 11 : 0
-    })
-
-    if (flag) {
-      this.elements.input.focus()
-    }
-  }
-
   setURL (url) {
     if (!this.isAddressbarBarToggled) {
       this.elements.input.value = url
@@ -227,59 +226,19 @@ export default class Bar extends Component {
     this.setDomain(url)
   }
 
-  retrieveInformation (url, tab) {
+  updateInfo (url, tab) {
     const self = this
-    const domain = Network.getDomain(url)
 
-    self.setCertificate('Normal', tab)
+    this.setCertificate('Normal', tab)
 
     if (tab.selected) {
       this.setURL(url)
       this.setDomain(url)
     }
 
-    let certificateExists = false
-
-    for (var i = 0; i < Store.certificates.length; i++) {
-      if (Store.certificates[i].domain === domain) {
-        let certificate = Store.certificates[i].certificate
-        if (certificate.subject == null) return
-
-        self.setCertificate('Secure', tab, certificate.subject.O, certificate.subject.C)
-
-        certificateExists = true
-      }
-    }
-
-    if (!certificateExists) {
-      let options = {
-        host: domain,
-        port: 443,
-        method: 'GET'
-      }
-
-      let req = httpsRequest(options, (res) => {
-        let certificate = res.connection.getPeerCertificate()
-        if (certificate.subject == null) return
-
-        self.setCertificate('Secure', tab, certificate.subject.O, certificate.subject.C)
-
-        Store.certificates.push({
-          domain: domain,
-          certificate: certificate
-        })
-      })
-
-      req.on('error', (e) => {
-        if (url.startsWith('wexond')) {
-          self.setCertificate('Wexond', tab)
-        } else {
-          self.setCertificate('Normal', tab)
-        }
-      })
-
-      req.end()
-    }
+    Network.getCertificate(url, (data) => {
+      self.setCertificate(data.type, tab, data.title, data.country)
+    })
   }
 
   updateNavigationIcons () {
