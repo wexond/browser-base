@@ -57,42 +57,6 @@ export default class App extends Component {
       Store.cursor.y = e.pageY
     })
 
-    this.elements.tabs.elements.tabbar.addEventListener('contextmenu', (e) => {
-      if (e.target === self.elements.tabs.elements.addButton) return
-
-      Store.hoveredTab = getTabFromMousePoint(null)
-
-      const tabMenu = self.elements.tabMenu
-
-      let newItems = tabMenu.menuItems
-
-      newItems[10].enabled = (self.lastClosedURL !== '' && self.lastClosedURL != null)
-
-      if (Store.hoveredTab.pinned) {
-        newItems[2].title = 'Unpin tab'
-      } else {
-        newItems[2].title = 'Pin tab'
-      }
-
-      tabMenu.updateItems(newItems)
-      tabMenu.show()
-
-      let left = e.pageX + 1
-      let top = e.pageY + 1
-
-      if (left + 300 > window.innerWidth) {
-        left = e.pageX - 301
-      }
-      if (top + tabMenu.height > window.innerHeight) {
-        top = e.pageY - tabMenu.height
-      }
-      if (top < 0) {
-        top = 96
-      }
-
-      tabMenu.setPosition(left, top)
-    })
-
     // Page menu items actions.
     pageMenuItems[0].onClick = () => pageMenuActions.openLinkInNewTab(this)
     pageMenuItems[2].onClick = () => pageMenuActions.copyLinkAddress()
