@@ -140,24 +140,36 @@ export default class Bar extends Component {
   toggleInput (flag) {
     const self = this
 
-    this.isAddressbarBarToggled = flag
-
     this.elements.input.setCSS({
       opacity: (flag) ? 1 : 0,
       pointerEvents: (flag) ? 'auto' : 'none'
     })
 
-    this.elements.actionIcons.setCSS({
-      float: (flag) ? 'right' : 'none',
-      position: (flag) ? 'relative' : 'absolute',
-      opacity: (flag) ? 1 : 0,
-      pointerEvents: (flag) ? 'auto' : 'none',
-      marginRight: (flag) ? 11 : 0
-    })
+    clearTimeout(self.timeout)
 
-    if (flag) {
+    if (!flag) {
+      self.timeout = setTimeout(() => {
+        self.elements.actionIcons.setCSS({
+          float: 'none',
+          position: 'absolute',
+          marginRight: 0
+        })
+      }, 200)
+    } else {
+      self.elements.actionIcons.setCSS({
+        float: 'right',
+        position: 'relative',
+        marginRight: 11
+      })
       this.elements.input.focus()
     }
+
+    this.elements.actionIcons.setCSS({
+      opacity: (flag) ? 1 : 0,
+      pointerEvents: (flag) ? 'auto' : 'none'
+    })
+
+    this.isAddressbarBarToggled = flag
   }
 
   setCertificate (type, tab, name = null, country = null) {
