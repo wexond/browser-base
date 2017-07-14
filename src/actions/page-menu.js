@@ -7,11 +7,11 @@ import { basename, extname } from 'path'
 const { dialog } = remote
 
 const getWebView = (app) => {
-  return app.getSelectedPage().elements.webview
+  return Store.app.getSelectedPage().elements.webview
 }
 
 export const openLinkInNewTab = (app) => {
-  app.elements.tabs.addTab({
+  Store.app.elements.tabs.addTab({
     select: false,
     url: Store.pageMenuData.linkURL
   })
@@ -48,7 +48,7 @@ export const saveLinkAs = () => {
 }
 
 export const openImageInNewTab = (app) => {
-  app.elements.tabs.addTab({
+  Store.app.elements.tabs.addTab({
     select: false,
     url: Store.pageMenuData.srcURL
   })
@@ -115,7 +115,7 @@ export const saveAs = (app) => {
 
 export const viewSource = (app) => {
   const url = getWebView(app).getURL()
-  app.elements.tabs.addTab({
+  Store.app.elements.tabs.addTab({
     select: true,
     url: 'view-source:' + url
   })
