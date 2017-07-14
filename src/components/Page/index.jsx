@@ -65,6 +65,14 @@ export default class Page extends Component {
       clearInterval(self.colorInterval)
     })
 
+    
+    let appElements = Store.app.elements
+    let tabsHeight = appElements.tabs.elements.tabs.offsetHeight
+    let barHeight = appElements.bar.elements.bar.offsetHeight
+    let height = tabsHeight + barHeight
+
+    this.elements.page.setCSS({height: 'calc(100vh - ' + height + 'px)'})
+
     let checkWebcontentsInterval = setInterval(function () {
       if (webview.getWebContents() != null) {
         webview.getWebContents().on('context-menu', function (e, params) {
@@ -123,13 +131,6 @@ export default class Page extends Component {
         clearInterval(checkWebcontentsInterval)
       }
     }, 1)
-
-    let appElements = Store.app.elements
-    let tabsHeight = appElements.tabs.elements.tabs.offsetHeight
-    let barHeight = appElements.bar.elements.bar.offsetHeight
-    let height = tabsHeight + barHeight
-
-    this.elements.page.setCSS({height: 'calc(100vh - ' + height + 'px)'})
   }
 
   /**
@@ -142,10 +143,7 @@ export default class Page extends Component {
       visibility: 'visible'
     })
 
-    /*this.elements.webview.setCSS({
-      height: 'auto',
-      width: 'auto'
-    })*/
+    this.elements.webview.classList.remove('hide')
   }
 
   /**
@@ -158,10 +156,7 @@ export default class Page extends Component {
       visibility: 'hidden'
     })
 
-    /*this.elements.webview.setCSS({
-      height: 0,
-      width: 0
-    })*/
+    this.elements.webview.classList.add('hide')
   }
 
   render () {

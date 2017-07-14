@@ -45,8 +45,10 @@ export default class Tabs extends Component {
     })
 
     window.addEventListener('resize', (e) => {
-      self.setWidths(false)
-      self.setPositions(false, false)
+      if (e.isTrusted) {
+        self.setWidths(false)
+        self.setPositions(false, false)
+      }
     })
 
     getCurrentWindow().on('maximize', (e) => {
@@ -264,6 +266,7 @@ export default class Tabs extends Component {
    * Sets widths for all tabs.
    */
   setWidths (animation = true) {
+    console.log(animation)
     const widths = this.getWidths()
     let normalTabWidth = tabsDefaults.maxTabWidth
 
