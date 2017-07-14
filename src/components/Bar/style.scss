@@ -7,53 +7,18 @@
   transition: 0.2s background-color;
 
   &.bar-white-foreground {
-    & .bar-addressbar-divider {
+    & .bar-info-divider {
       opacity: $dividers-opacity-dark;
       background-color: white;
     }
 
-    & .bar-icon, & .bar-addressbar-icon-info,  & .bar-addressbar-action-icon {
+    & .bar-icon {
       @include invert-colors;
       opacity: $secondary-opacity-dark;
-    }
 
-    & .bar-icon, & .bar-addressbar-action-icon {
       &:hover {
         opacity: $primary-opacity-dark;
       }
-    }
-
-    & .bar-icon-disabled {
-      opacity: $disabled-opacity-dark;
-    }
-
-    & .bar-addressbar {
-      color: #fff;
-
-      & .bar-input {
-        color: rgba(255, 255, 255, $primary-opacity-dark);
-      }
-    }
-
-    & .bar-addressbar-icon-wexond {
-      background-image: none;
-      -webkit-mask-box-image: url(images/wexond-logo.png);
-      background-color: white;
-      opacity: $secondary-opacity-light;
-    }
-
-    & .bar-addressbar-icon-secure {
-      background-color: white;
-      opacity: $secondary-opacity-light;
-    }
-
-    & .bar-addressbar-certificate-name {
-      color: white !important;
-      opacity: $primary-opacity-dark;
-    }
-
-    & .bar-addressbar-shorturl {
-      opacity: $secondary-opacity-dark;
     }
   }
 }
@@ -78,6 +43,7 @@
 }
 
 .bar-icon-back {
+  @extend .bar-icon;
   background-position-x: 12px;
   width: 42px;
   background-image: url(images/Bar/back.png);
@@ -85,139 +51,23 @@
 }
 
 .bar-icon-forward {
+  @extend .bar-icon;
   background-image: url(images/Bar/forward.png);
   float: left;
 }
 
 .bar-icon-refresh {
- background-size: 20px 20px;
+  @extend .bar-icon;
+  background-size: 20px 20px;
   background-image: url(images/Bar/refresh.png);
   float: left;
 }
 
 .bar-icon-menu {
+  @extend .bar-icon;
   width: 44px;
   background-size: 20px 20px;
   background-position-x: 12px;
   background-image: url(images/Bar/more-vertical.png);
   float: right;
-}
-
-.bar-addressbar-icon {
-  @include image-center(100%, 100%);
-  @include center-vertical;
-  position: relative;
-  float: left;
-  margin-right: 12px;
-}
-
-.bar-addressbar-action-icon {
-  height: 24px;
-  width: 24px;
-  @include image-center(18px, 18px);
-  display: inline-block;
-  opacity: $secondary-opacity-light;
-  transition: 0.2s opacity;
-
-  &:hover {
-    opacity: $primary-opacity-light;
-    transition: 0.2s opacity;
-  }
-}
-
-.bar-addressbar-action-icons {
-  @include center-vertical;
-  opacity: 0;
-  position: absolute;
-  display: inline-block;
-  pointer-events: none;
-  transition: 0.2s opacity;
-  margin-left: 24px;
-  z-index: 3;
-}
-
-.bar-addressbar-action-icon-favorite {
-  background-image: url(images/Bar/favorite-empty.png);
-}
-
-.bar-addressbar-action-icon-clear {
-  margin-left: 8px;
-  background-image: url(images/Tabs/close.png);
-  @include image-center(20px, 20px);
-}
-
-.bar-addressbar-icon-info {
-  width: 18px;
-  height: 18px;
-  opacity: $secondary-opacity-light;
-  background-image: url(images/Bar/info.png);
-}
-
-.bar-addressbar-icon-wexond {
-  width: 20px;
-  height: 20px;
-  background-image: url(images/wexond-logo.png);
-}
-
-.bar-addressbar-icon-secure {
-  width: 16px;
-  height: 16px;
-  -webkit-mask-box-image: url(images/Bar/secure.png);
-  background-color: green;
-}
-
-.bar-addressbar {
-  float: left;
-  width: calc(100% - 184px);
-  height: 100%;
-  margin-left: 26px;
-  font-size: 14px;
-  position: relative;
-  @include center-vertical;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.bar-addressbar-divider {
-  display: inline-block;
-  margin-left: 8px;
-  margin-right: 8px;
-  width: 1px;
-  height: 16px;
-  background-color: black;
-  opacity: $dividers-opacity-light;
-  position: relative;
-  @include center-vertical;
-}
-
-.bar-addressbar-certificate-name {
-  display: inline-block;
-  position: relative;
-  opacity: $primary-opacity-light;
-  top: 9px;
-  color: #000;
-}
-
-.bar-addressbar-shorturl {
-  display: inline-block;
-  position: relative;
-  opacity: $secondary-opacity-light;
-  cursor: text;
-  top: 9px;
-}
-
-.bar-input {
-  display: inline-block;
-  width: calc(100% - 11px);
-  height: 100%;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  outline: none;
-  border: none;
-  font-size: 14px;
-  color: rgba(0, 0, 0, $primary-opacity-light);
-  transition: 0.1s opacity, 0.2s background-color;
-  opacity: 0;
-  pointer-events: none;
 }
