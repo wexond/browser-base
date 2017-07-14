@@ -266,7 +266,6 @@ export default class Tabs extends Component {
    * Sets widths for all tabs.
    */
   setWidths (animation = true) {
-    console.log(animation)
     const widths = this.getWidths()
     let normalTabWidth = tabsDefaults.maxTabWidth
 
@@ -285,7 +284,12 @@ export default class Tabs extends Component {
 
       if (!tab.pinned) normalTabWidth = width
 
-      tab.elements.close.style.display = (!tabSelected && widthSmaller && tab.pinned) ? 'none' : 'block'
+      let showClose = true
+      if ((!tabSelected && widthSmaller) || tab.pinned) {
+        showClose = false
+      }
+
+      tab.elements.close.style.display = (showClose) ? 'block' : 'none'
 
       let displayIcon = (tab.pinned) ? 'block' : ((tabSelected) ? ((widthSmaller) ? 'none' : 'block') : 'block')
       tab.elements.icon.style.display = displayIcon
