@@ -57,8 +57,6 @@ export default class Tab extends Component {
     let position = this.tabs.getPositions().tabPositions[Store.tabs.indexOf(this)]
     this.setLeft(position)
 
-    this.appendTransition('width')
-
     setTimeout(() => {
       self.blockLeftAnimation = false
 
