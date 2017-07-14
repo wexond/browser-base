@@ -2,7 +2,7 @@ import Store from '../store'
 
 export default class TabMenuActions {
   static addNewTab (app) {
-    app.elements.tabs.addTab()
+    Store.app.elements.tabs.addTab()
   }
 
   static pinTab (app) {

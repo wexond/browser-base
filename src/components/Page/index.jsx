@@ -20,14 +20,14 @@ export default class Page extends Component {
     const webview = this.elements.webview
 
     webview.addEventListener('page-title-updated', (e) => {
-      app.elements.bar.updateInfo(webview.getURL(), self.tab)
+      Store.app.elements.bar.updateInfo(webview.getURL(), self.tab)
       self.tab.setTitle(e.title)
     })
 
     webview.addEventListener('load-commit', (e) => {
       if (self.tab.selected) {
-        app.elements.bar.updateNavigationIcons()
-        app.elements.webviewMenu.updateNavigationIcons()
+        Store.app.elements.bar.updateNavigationIcons()
+        Store.app.elements.webviewMenu.updateNavigationIcons()
       }
     })
 
@@ -48,7 +48,7 @@ export default class Page extends Component {
     })
 
     webview.addEventListener('did-change-theme-color', (e) => {
-      app.changeUIColors(e.themeColor, self.tab)
+      Store.app.changeUIColors(e.themeColor, self.tab)
     })
 
     webview.addEventListener('did-start-loading', function (e) {
@@ -56,7 +56,7 @@ export default class Page extends Component {
 
       self.colorInterval = setInterval(() => {
         WebViewColors.getColor(webview, (color) => {
-          app.changeUIColors(color, self.tab)
+          Store.app.changeUIColors(color, self.tab)
         })
       }, 200)
     })
@@ -64,17 +64,17 @@ export default class Page extends Component {
     webview.addEventListener('did-stop-loading', function (e) {
       self.tab.togglePreloader(false)
 
-      app.elements.bar.updateInfo(webview.getURL(), self.tab)
+      Store.app.elements.bar.updateInfo(webview.getURL(), self.tab)
 
       WebViewColors.getColor(webview, (color) => {
-        app.changeUIColors(color, self.tab)
+        Store.app.changeUIColors(color, self.tab)
       })
 
       clearInterval(self.colorInterval)
     })
 
     if (app != null) {
-      let appElements = app.elements
+      let appElements = Store.app.elements
       let tabsHeight = appElements.tabs.elements.tabs.offsetHeight
       let barHeight = appElements.bar.elements.bar.offsetHeight
       let height = tabsHeight + barHeight
@@ -85,7 +85,7 @@ export default class Page extends Component {
     let checkWebcontentsInterval = setInterval(function () {
       if (webview.getWebContents() != null) {
         webview.getWebContents().on('context-menu', function (e, params) {
-          const webviewMenu = app.elements.webviewMenu
+          const webviewMenu = Store.app.elements.webviewMenu
           let newItems = webviewMenu.menuItems
           Store.pageMenuData = params // Webview context menu data.
 

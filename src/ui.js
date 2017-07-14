@@ -37,6 +37,7 @@ export default class UI {
         if (props != null) {
           if (typeof props.onClick === 'function') element.addEventListener('click', props.onClick)
           if (typeof props.onMouseDown === 'function') element.addEventListener('mousedown', props.onMouseDown)
+          if (typeof props.onMouseUp === 'function') element.addEventListener('mouseup', props.onMouseUp)
           if (typeof props.onMouseEnter === 'function') element.addEventListener('mouseenter', props.onMouseEnter)
           if (typeof props.onMouseLeave === 'function') element.addEventListener('mouseleave', props.onMouseLeave)
           if (typeof props.onTouchStart === 'function') element.addEventListener('touchstart', props.onTouchStart)
@@ -45,6 +46,7 @@ export default class UI {
           if (typeof props.onInput === 'function') element.addEventListener('input', props.onInput)
           if (typeof props.onChange === 'function') element.addEventListener('change', props.onChange)
           if (typeof props.onKeyPress === 'function') element.addEventListener('keypress', props.onKeyPress)
+          if (typeof props.onKeyDown === 'function') element.addEventListener('keydown', props.onKeyDown)
 
           if (typeof props.style === 'object') {
             Object.assign(element.style, props.style)

@@ -6,5 +6,6 @@ export default new class Store {
     this.pageMenuData = {}
     this.hoveredTab = {}
     this.cursor = {}
+    this.app = {}
   }
 }

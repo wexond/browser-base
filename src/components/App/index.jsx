@@ -20,7 +20,7 @@ export default class App extends Component {
   }
 
   beforeRender () {
-    window.app = this
+    Store.app = this
 
     this.cursor = {}
   }
@@ -40,6 +40,7 @@ export default class App extends Component {
 
   afterRender () {
     const self = this
+
     this.elements.tabs.addTab()
 
     window.addEventListener('mousedown', (e) => {
@@ -182,12 +183,12 @@ export default class App extends Component {
 
     if (white) {
       tabs.elements.tabs.classList.add('tabs-white-foreground')
-
       bar.elements.bar.classList.add('bar-white-foreground')
+      bar.elements.barInfo.elements.barInfo.classList.add('bar-info-white-foreground')
     } else {
       tabs.elements.tabs.classList.remove('tabs-white-foreground')
-
       bar.elements.bar.classList.remove('bar-white-foreground')
+      bar.elements.barInfo.elements.barInfo.classList.remove('bar-info-white-foreground')
     }
 
     tab.appendTransition('background-color')
@@ -204,7 +205,7 @@ export default class App extends Component {
       backgroundColor: color
     })
 
-    bar.elements.input.setCSS({
+    bar.elements.barInfo.elements.input.setCSS({
       backgroundColor: color
     })
   }
