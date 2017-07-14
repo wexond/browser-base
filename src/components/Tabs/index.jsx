@@ -9,6 +9,7 @@ import tabsDefaults from '../../defaults/tabs'
 
 import { getCurrentWindow } from '../../actions/window'
 import { getTabFromMousePoint, findTabToReplace } from '../../actions/tabs'
+import { getPosition as getMenuPosition } from '../../actions/menu'
 
 import Tab from '../Tab'
 import WindowControls from '../WindowControls'
@@ -21,20 +22,6 @@ export default class Tabs extends Component {
     }
     this.cursor = {}
     this.dragData = {}
-  }
-
-  render () {
-    return (
-      <div className='tabs' ref='tabs'>
-        <div className='tabs-bottom-border' ref='bottomBorder' />
-        <div className='tabs-handle' ref='handle' />
-        <WindowControls />
-        <div ref='controlsBorder' className='tabs-border-vertical' />
-        <div className='tabbar' ref='tabbar'>
-        </div>
-        <div className='tabs-add-button' ref='addButton' />
-      </div>
-    )
   }
 
   afterRender () {
@@ -370,5 +357,44 @@ export default class Tabs extends Component {
         this.isAddButtonTransitionToggled = false
       }
     }
+  }
+
+  render () {
+    const self = this
+    
+    const onTabBarContextMenu = (e) => {
+      if (e.target === self.elements.addButton) return
+
+      Store.hoveredTab = getTabFromMousePoint(null)
+
+      const tabMenu = Store.app.elements.tabMenu
+      let newItems = tabMenu.menuItems
+
+      newItems[10].enabled = (Store.lastClosedURL !== '' && Store.lastClosedURL != null)
+
+      if (Store.hoveredTab.pinned) {
+        newItems[2].title = 'Unpin tab'
+      } else {
+        newItems[2].title = 'Pin tab'
+      }
+
+      tabMenu.updateItems(newItems)
+      tabMenu.show()
+
+      const position = getMenuPosition(tabMenu)
+      tabMenu.setPosition(position.left, position.top)
+    } 
+
+    return (
+      <div className='tabs' ref='tabs'>
+        <div className='tabs-bottom-border' ref='bottomBorder' />
+        <div className='tabs-handle' ref='handle' />
+        <WindowControls />
+        <div ref='controlsBorder' className='tabs-border-vertical' />
+        <div onContextMenu={onTabBarContextMenu} className='tabbar' ref='tabbar'>
+        </div>
+        <div className='tabs-add-button' ref='addButton' />
+      </div>
+    )
   }
 }
