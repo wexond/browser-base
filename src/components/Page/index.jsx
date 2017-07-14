@@ -7,14 +7,6 @@ export default class Page extends Component {
     this.tab = this.props.tab
   }
 
-  render () {
-    return (
-      <div className='page' ref='page'>
-        <webview ref='webview' className='page-webview' src={this.props.url} />
-      </div>
-    )
-  }
-
   afterRender () {
     const self = this
     const webview = this.elements.webview
@@ -72,15 +64,6 @@ export default class Page extends Component {
 
       clearInterval(self.colorInterval)
     })
-
-    if (app != null) {
-      let appElements = Store.app.elements
-      let tabsHeight = appElements.tabs.elements.tabs.offsetHeight
-      let barHeight = appElements.bar.elements.bar.offsetHeight
-      let height = tabsHeight + barHeight
-
-      this.elements.page.setCSS('height', 'calc(100vh - ' + height + 'px)')
-    }
 
     let checkWebcontentsInterval = setInterval(function () {
       if (webview.getWebContents() != null) {
@@ -140,6 +123,13 @@ export default class Page extends Component {
         clearInterval(checkWebcontentsInterval)
       }
     }, 1)
+
+    let appElements = Store.app.elements
+    let tabsHeight = appElements.tabs.elements.tabs.offsetHeight
+    let barHeight = appElements.bar.elements.bar.offsetHeight
+    let height = tabsHeight + barHeight
+
+    this.elements.page.setCSS({height: 'calc(100vh - ' + height + 'px)'})
   }
 
   /**
@@ -172,5 +162,13 @@ export default class Page extends Component {
       height: 0,
       width: 0
     })*/
+  }
+
+  render () {
+    return (
+      <div className='page' ref='page'>
+        <webview ref='webview' className='page-webview' src={this.props.url} />
+      </div>
+    )
   }
 }
