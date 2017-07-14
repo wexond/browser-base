@@ -1,35 +1,37 @@
 import Store from '../store'
 
-export default class TabMenuActions {
-  static addNewTab (app) {
-    Store.app.elements.tabs.addTab()
-  }
+export const addNewTab = (app) => {
+  Store.app.elements.tabs.addTab()
+}
 
-  static pinTab (app) {
-    Store.hoveredTab.pin()
-  }
+export const pinTab = () => {
+  Store.hoveredTab.pin()
+}
 
-  static muteTab () {
+export const muteTab = () => {
 
-  }
+}
 
-  static duplicate () {
+export const duplicate = () => {
 
-  }
+}
 
-  static closeTab (app) {
-    Store.hoveredTab.close()
-  }
+export const closeTab = () => {
+  Store.hoveredTab.close()
+}
 
-  static closeOtherTabs () {
+export const closeOtherTabs = () => {
 
-  }
+}
 
-  static closeTabsFromRight () {
+export const closeTabsFromLeft = () => {
 
-  }
+}
 
-  static revertClosedTab () {
+export const closeTabsFromRight = () => {
 
-  }
+}
+
+export const revertClosedTab = () => {
+
 }
