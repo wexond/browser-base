@@ -29,7 +29,7 @@ export default class Tab extends Component {
   }
 
   render () {
-    UI.render(<Page url={this.props.url} tab={this} ref={(e) => { this.page = e }} />, app.elements.pages, this)
+    UI.render(<Page url={this.props.url} tab={this} ref={(e) => { this.page = e }} />, Store.app.elements.pages, this)
 
     return (
       <div className='tab' ref='tab'>
@@ -135,7 +135,7 @@ export default class Tab extends Component {
   select () {
     const app = window.app
     const webview = this.page.elements.webview
-    const bar = app.elements.bar
+    const bar = Store.app.elements.bar
     this.page.show()
 
     this.selected = true
@@ -176,10 +176,10 @@ export default class Tab extends Component {
       bar.setURL(url)
 
       bar.updateNavigationIcons()
-      app.elements.webviewMenu.updateNavigationIcons()
+      Store.app.elements.webviewMenu.updateNavigationIcons()
     }
 
-    app.changeUIColors(this.colors.select, this)
+    Store.app.changeUIColors(this.colors.select, this)
 
     this.setTitleMaxWidth()
 
@@ -221,20 +221,20 @@ export default class Tab extends Component {
       this.elements.close.setCSS({display: 'none'})
       this.elements.title.setCSS({display: 'none'})
 
-      let newItems = app.elements.tabMenu.menuItems
+      let newItems = Store.app.elements.tabMenu.menuItems
 
       newItems[2].title = 'Unpin tab'
 
-      app.elements.tabMenu.updateItems(newItems)
+      Store.app.elements.tabMenu.updateItems(newItems)
     } else {
       this.elements.title.setCSS({display: 'block'})
       this.elements.close.setCSS({display: 'block'})
 
-      let newItems = app.elements.tabMenu.menuItems
+      let newItems = Store.app.elements.tabMenu.menuItems
 
       newItems[2].title = 'Pin tab'
 
-      app.elements.tabMenu.updateItems(newItems)
+      Store.app.elements.tabMenu.updateItems(newItems)
     }
 
     this.pinned = !this.pinned
@@ -272,7 +272,7 @@ export default class Tab extends Component {
       this.tabs.addTab()
     }
 
-    app.lastClosedURL = this.page.elements.webview.getURL()
+    Store.app.lastClosedURL = this.page.elements.webview.getURL()
 
     this.tabs.timer.canReset = true
 

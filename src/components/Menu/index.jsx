@@ -1,5 +1,8 @@
 import Component from '../../component'
 import UI from '../../ui'
+
+import Store from '../../store'
+
 import MenuItem from '../MenuItem'
 
 export default class Menu extends Component {
@@ -63,7 +66,7 @@ export default class Menu extends Component {
    * Refreshes navigation icons state (disabled or enabled etc)
    */
   updateNavigationIcons = () => {
-    const webview = app.getSelectedPage().elements.webview
+    const webview = Store.app.getSelectedPage().elements.webview
     const disabledClassName = 'menu-navigation-icon-disabled'
 
     if (webview.getWebContents() != null) {
@@ -120,7 +123,7 @@ export default class Menu extends Component {
     const self = this
 
     function onBackClick () {
-      const webview = app.getSelectedPage().elements.webview
+      const webview = Store.app.getSelectedPage().elements.webview
       if (webview.canGoBack()) {
         webview.goBack()
         self.hide()
@@ -128,7 +131,7 @@ export default class Menu extends Component {
     }
 
     function onForwardClick () {
-      const webview = app.getSelectedPage().elements.webview
+      const webview = Store.app.getSelectedPage().elements.webview
       if (webview.canGoForward()) {
         webview.goForward()
         self.hide()
@@ -136,7 +139,7 @@ export default class Menu extends Component {
     }
 
     function onRefreshClick () {
-      const webview = app.getSelectedPage().elements.webview
+      const webview = Store.app.getSelectedPage().elements.webview
       webview.reload()
       self.hide()
     }
