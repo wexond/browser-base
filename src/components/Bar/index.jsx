@@ -36,7 +36,7 @@ export default class Bar extends Component {
     })
 
     this.elements.menu.addEventListener('click', (e) => {
-      const menu = Store.app.elements.menu
+      const menu = Store.app.elements.mainMenu
 
       if (menu.isMenuToggled) {
         menu.hide()
