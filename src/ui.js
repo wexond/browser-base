@@ -47,6 +47,7 @@ export default class UI {
           if (typeof props.onChange === 'function') element.addEventListener('change', props.onChange)
           if (typeof props.onKeyPress === 'function') element.addEventListener('keypress', props.onKeyPress)
           if (typeof props.onKeyDown === 'function') element.addEventListener('keydown', props.onKeyDown)
+          if (typeof props.onContextMenu === 'function') element.addEventListener('contextmenu', props.onContextMenu)
 
           if (typeof props.style === 'object') {
             Object.assign(element.style, props.style)

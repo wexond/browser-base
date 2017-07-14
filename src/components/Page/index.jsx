@@ -2,6 +2,8 @@ import Component from '../../component'
 import WebViewColors from '../../webview-colors'
 import Store from '../../store'
 
+import { getPosition as getMenuPosition } from '../../actions/menu' 
+
 export default class Page extends Component {
   beforeRender () {
     this.tab = this.props.tab
@@ -110,23 +112,10 @@ export default class Page extends Component {
           }
 
           webviewMenu.updateItems(newItems)
-
           webviewMenu.show()
 
-          let left = Store.cursor.x + 1
-          let top = Store.cursor.y + 1
-
-          if (left + 300 > window.innerWidth) {
-            left = Store.cursor.x - 301
-          }
-          if (top + webviewMenu.height > window.innerHeight) {
-            top = Store.cursor.y - webviewMenu.height
-          }
-          if (top < 0) {
-            top = 96
-          }
-
-          webviewMenu.setPosition(left, top)
+          const position = getMenuPosition(webviewMenu)
+          webviewMenu.setPosition(position.left, position.top)
         })
         clearInterval(checkWebcontentsInterval)
       }
