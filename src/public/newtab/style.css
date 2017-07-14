@@ -22,16 +22,17 @@ html, body {
   background-repeat: no-repeat;
   background-position: center;
   background-image: url(images/wexond-logo.png);
-  margin-top: 48px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-top: 96px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .recently-visited-pages {
+  position: relative;
   width: 100%;
   height: auto;
-  margin-top: 24px;
-  margin-left: calc(50% - 6px);
-  transform: translateX(calc(-50% - 6px));
-  position: relative;
+  margin-top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
 }
