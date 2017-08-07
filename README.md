@@ -1,4 +1,4 @@
-<h1 align="center"><img src="http://wexond.nersent.tk/logo/wexond.png" width="400"></h1>
+<h1 align="center"><img src="https://wexond.nersent.tk/logo/wexond.png" width="400"></h1>
 
 [![discord](https://discordapp.com/api/guilds/307605794680209409/widget.png)](https://discord.gg/yAA8DdK)
 [![Build Status](https://travis-ci.org/Nersent/Wexond.svg)](https://travis-ci.org/Nersent/Wexond)
