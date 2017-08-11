@@ -1,57 +1,66 @@
 {
   "name": "wexond",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Extensible, fast and innovative web browser with material UI.",
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Nersent/Wexond.git"
+    "url": "git+https://github.com/Nersent/wexond.git"
   },
   "scripts": {
     "start": "cross-env ENV=dev electron main.js",
     "watch:app": "npm run build:dev && webpack-dev-server --hot --inline --port 8080",
     "build:dev": "rimraf build && webpack",
     "build:production": "rimraf build && webpack",
-    "compile:win64": "npm run build:production && electron-packager . --platform=win32 --arch=x64 Wexond --overwrite"
+    "compile:win64": "npm run build:production && electron-packager . --platform=win32 --arch=x64 Wexond --asar --overwrite",
+    "compile:win32": "npm run build:production && electron-packager . --platform=win32 --arch=ia32 Wexond --asar --overwrite",
+    "compile:linux64": "npm run build:production && electron-packager . --platform=linux --arch=x64 Wexond --asar --overwrite",
+    "compile:linux32": "npm run build:production && electron-packager . --platform=linux --arch=ia32 Wexond --asar --overwrite",
+    "compile:darwin64": "npm run build:production && electron-packager . --platform=darwin --arch=x64 Wexond --asar --overwrite",
+    "compile:darwin32": "npm run build:production && electron-packager . --platform=darwin --arch=ia32 Wexond --asar --overwrite"
   },
-  "homepage": "https://github.com/Nersent/Wexond#readme",
+  "homepage": "https://github.com/Nersent/wexond#readme",
   "directories": {
     "doc": "docs"
   },
   "keywords": [
     "web-browser",
-    "material-design",
-    "webpack2",
-    "material-ui",
+    "webpack",
+    "material",
     "electron",
-    "jsx"
+    "inferno",
+    "mobx",
+    "sass"
   ],
   "bugs": {
-    "url": "https://github.com/Nersent/Wexond/issues"
+    "url": "https://github.com/Nersent/wexond/issues"
   },
   "author": "Nersent",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "babel-preset-es2017": "latest",
     "electron": "^1.7.4"
   },
   "devDependencies": {
     "babel-core": "latest",
-    "babel-eslint": "latest",
     "babel-loader": "latest",
-    "babel-plugin-transform-jsx": "latest",
     "babel-preset-stage-0": "latest",
-    "babili-webpack-plugin": "latest",
+    "babel-plugin-inferno": "latest",
+    "electron-packager": "latest",
     "rimraf": "latest",
     "cross-env": "latest",
     "css-loader": "latest",
-    "electron-packager": "latest",
-    "eslint": "latest",
     "node-sass": "latest",
     "sass-loader": "latest",
     "style-loader": "latest",
     "url-loader": "latest",
     "webpack": "latest",
-    "webpack-dev-server": "latest"
+    "webpack-dev-server": "latest",
+    "uglifyjs-webpack-plugin": ">=1.0.0-beta.2",
+    "inferno": "latest",
+    "inferno-component": "latest",
+    "inferno-devtools": "latest",
+    "inferno-mobx": "latest",
+    "mobx": "latest"
   }
 }
