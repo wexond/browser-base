@@ -1,4 +1,5 @@
 body {
+  @include Body1;
   @include cursor-default;
   padding: 0;
   margin: 0;

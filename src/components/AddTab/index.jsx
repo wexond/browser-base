@@ -28,7 +28,7 @@ export default class AddTab extends Component {
       animateLeft
     } = this.state
 
-    let transition = ''
+    let transition = '0.2s background-color'
 
     if (animateLeft) {
       const newTransition = transitions.left.duration + 's' + ' left ' + transitions.left.easing 
