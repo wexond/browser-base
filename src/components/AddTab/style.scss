@@ -5,12 +5,11 @@
   width: $system-bar-height;
   height: 100%;
   @include image-center(20px, 20px);
-  background-image: url(images/Tabs/add.svg);
   opacity: $secondary-opacity-light;
-  transition: 0.2s opacity;
+  background-image: url(images/Tabs/add.svg);
   -webkit-app-region: no-drag;
 
   &:hover {
-    opacity: $primary-opacity-light;
+    background-color: rgba(196, 196, 196, 0.4);
   }
 }
