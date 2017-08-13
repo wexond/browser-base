@@ -1,0 +1,93 @@
+.tab {
+  background-color: transparent;
+  height: 100%;
+  width: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-app-region: no-drag;
+  z-index: 3;
+}
+
+.tab-border-vertical {
+  @include center-vertical;
+  width: 1px;
+  height: calc(100% - 8px);
+  position: absolute;
+  background-color: black;
+  opacity: $dividers-opacity-light;
+  z-index: 6;
+}
+
+.tab-border-small-vertical {
+  @extend .tab-border-vertical;
+  height: calc(100% - 8px);
+}
+
+.tab-border-full-vertical {
+  @extend .tab-border-vertical;
+  height: 100%;
+}
+
+.tab-title {
+  @include center-vertical;
+  position: absolute;
+  left: 8px;
+  width: 100%;
+  max-width: calc(100% - 16px);
+  overflow: hidden;
+  opacity: $primary-opacity-light;
+}
+
+.tab-content {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.tab-close-icon {
+  @include center-vertical;
+  position: absolute;
+  right: 8px;
+  -webkit-mask-box-image: url(images/Tabs/close.png);
+  background-color: black;
+  height: 16px;
+  width: 16px;
+  opacity: $secondary-opacity-light;
+  transition: 0.2s all;
+
+  &:hover {
+    background-color: red;
+    opacity: $primary-opacity-light;
+  }
+}
+
+.tab-icon {
+  @include center-vertical;
+  @include image-center(16px, 16px);
+  position: absolute;
+  left: 8px;
+  height: 16px;
+  width: 16px;
+}
+
+.tab-close {
+  opacity: 0;
+  display: 'block';
+}
+
+.tab-preloader {
+  @include center-vertical;
+  position: absolute;
+  left: 8px;
+  height: 16px;
+  width: 16px;
+  display: none;
+
+  & .preloader-indeterminate .path {
+    stroke-width: 6;
+  }
+}

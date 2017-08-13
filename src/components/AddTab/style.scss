@@ -1,0 +1,17 @@
+.add-tab {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: $system-bar-height;
+  height: 100%;
+  @include image-center(20px, 20px);
+  background-image: url(images/Tabs/add.svg);
+  opacity: $secondary-opacity-light;
+  transition: 0.2s opacity;
+  -webkit-app-region: no-drag;
+
+  &:hover {
+    opacity: $primary-opacity-light;
+  }
+}

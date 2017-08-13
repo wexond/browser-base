@@ -1,11 +1,13 @@
+import { observable, observe, intercept } from 'mobx'
+
 export default new class Store {
-  constructor () {
-    // Public properties.
-    this.tabs = []
-    this.certificates = []
-    this.pageMenuData = {}
-    this.hoveredTab = {}
-    this.cursor = {}
-    this.app = {}
+  @observable tabs = []
+  @observable addTabLeft = 0
+  @observable selectedTab = -1
+
+  async init () {
+    const disposer = observe(this.tabs, change => {
+      
+    })
   }
 }
