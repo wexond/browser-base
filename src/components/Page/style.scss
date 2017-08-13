@@ -1,0 +1,28 @@
+.page {
+  display: flex;
+  flex: 1;
+
+  &.hide {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+    flex: 0 1;
+  }
+  .webview {
+    display: flex;
+    flex: 1;
+
+    &.hide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 0;
+      width: 0;
+      flex: 0 1;
+    }
+  }
+}

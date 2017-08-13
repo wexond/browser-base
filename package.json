@@ -55,7 +55,6 @@
     "inferno-component": "latest",
     "inferno-mobx": "latest",
     "mobx": "latest",
-    "mobx-logger": "^0.6.0",
     "node-sass": "latest",
     "rimraf": "latest",
     "sass-loader": "latest",

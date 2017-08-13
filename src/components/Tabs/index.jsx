@@ -18,7 +18,6 @@ export default class Tabs extends Component {
       if (change.addedCount > 0) {
         change.added.forEach(tab => {
           tab.left = getPosition(tab.id, 1)
-          console.log(tab.left)
         })
       }
       setTimeout(() => {

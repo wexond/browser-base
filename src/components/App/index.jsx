@@ -2,20 +2,16 @@ import Component from 'inferno-component'
 
 import SystemBar from '../SystemBar'
 import Tabs from '../Tabs'
-
-import Store from '../../store'
+import Pages from '../Pages'
 
 export default class App extends Component {
-  componentDidMount () {
-    Store.init()
-  }
-
   render () {
     return (
-      <div>
+      <div className='app'>
         <SystemBar>
           <Tabs></Tabs>
         </SystemBar>
+        <Pages></Pages>
       </div>
     )
   }
