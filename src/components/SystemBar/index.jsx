@@ -8,6 +8,7 @@ export default class SystemBar extends Component {
       <div className='system-bar'>
         {this.props.children}
         <Controls />
+        <div className='border-bottom' />
       </div>
     )
   }
