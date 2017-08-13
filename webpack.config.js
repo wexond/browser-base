@@ -1,4 +1,5 @@
 const { join } = require('path')
+const webpack = require('webpack')
 const UglifyJSWebpackPlugin = require('uglifyjs-webpack-plugin')
 
 let config = {
@@ -72,8 +73,10 @@ let config = {
 
 if (process.env.NODE_ENV === 'production') {
   config.plugins.push(new UglifyJSWebpackPlugin({
-    output: {
-      comments: false
+    uglifyOptions: {
+      output: {
+        comments: false
+      }
     }
   }))
   config.plugins.push(new webpack.DefinePlugin({
