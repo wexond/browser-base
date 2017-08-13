@@ -1,0 +1,11 @@
+.system-bar {
+  position: relative;
+  -webkit-app-region: drag;
+  display: flex;
+  flex-direction: row;
+  background-color: #EEE;
+  height: $system-bar-height;
+  width: 100%;
+  border-bottom: 1px solid rgba(0,0,0, $dividers-opacity-light);
+  z-index: 3;
+}

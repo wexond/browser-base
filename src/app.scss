@@ -19,7 +19,7 @@ $dividers-opacity-dark: 0.12;
 
 $hover-duration: 0.2s;
 
-$systembar-height: 32px;
+$system-bar-height: 32px;
 
 $tabs-hover-color: rgba(0,0,0,0.08);
 
@@ -27,9 +27,6 @@ $tabs-hover-color: rgba(0,0,0,0.08);
 @import 'components/Page/style.scss';
 @import 'components/Tab/style.scss';
 @import 'components/Tabs/style.scss';
-@import 'components/Bar/style.scss';
-@import 'components/BarInfo/style.scss';
-@import 'components/Menu/style.scss';
-@import 'components/MenuItem/style.scss';
-@import 'components/Preloader/style.scss';
-@import 'components/WindowControls/style.scss';
+@import 'components/SystemBar/style.scss';
+@import 'components/Controls/style.scss';
+@import 'components/AddTab/style.scss';

@@ -1,16 +1,16 @@
+<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
     <title>Wexond</title>
   </head>
-
   <body>
     <div id='app'></div>
-
-    <script src="../../utils/dom.js"></script>
+    <script src="../../src/utils/dom.js"></script>
 
     <script>
-      if (process.env.ENV !== 'dev') {
-        loadScripts(['../../../build/app.bundle.js'])
+      if (process.env.NODE_ENV !== 'dev') {
+        loadScripts(['../../build/app.bundle.js'])
       } else {
         loadScripts(['http://localhost:8080/build/app.bundle.js', 'http://localhost:8080/webpack-dev-server.js'])
       }
