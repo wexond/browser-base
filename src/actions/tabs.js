@@ -16,7 +16,10 @@ export const addTab = data => {
     pinned: false,
     left: 0,
     animateLeft: false,
-    animateWidth: true
+    animateWidth: true,
+    title: 'New tab',
+    favicon: '',
+    loading: false
   }
 
   Store.tabs.push(tab)
