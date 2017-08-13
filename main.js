@@ -24,9 +24,6 @@ process.on('uncaughtException', (error) => {
   console.log(error)
 })
 
-/**
- * Prepares browser window for browser and menu.
- */
 function createWindow () {
   mainWindow = new BrowserWindow({
     width: 900,
@@ -56,9 +53,6 @@ function createWindow () {
 
 protocol.registerStandardSchemes([protocolName])
 app.on('ready', function () {
-  /**
-  * Creates protocol wexond://
-  */
   protocol.registerFileProtocol(protocolName, (request, callback) => {
     let url = request.url.substr(protocolName.length + 3)
     let lastChar = url.substr(url.length - 1)
@@ -67,7 +61,7 @@ app.on('ready', function () {
       url += 'index.html'
     }
 
-    let data = path.join(__dirname, '/src/public/', url)
+    let data = path.join(__dirname, '/public/', url)
 
     callback(data)
   }, (error) => {
