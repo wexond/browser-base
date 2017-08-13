@@ -14,13 +14,13 @@ app.on('window-all-closed', () => {
   }
 })
 
-app.on('activate', function () {
+app.on('activate', () => {
   if (mainWindow == null) {
     createWindow()
   }
 })
 
-process.on('uncaughtException', function (error) {
+process.on('uncaughtException', (error) => {
   console.log(error)
 })
 
@@ -36,20 +36,20 @@ function createWindow () {
     minHeight: 430,
     show: false
   })
-  mainWindow.loadURL(path.join('file://', __dirname, '/src/public/app/index.html'))
+  mainWindow.loadURL(path.join('file://', __dirname, '/public/app/index.html'))
   mainWindow.setMenu(null)
 
   mainWindow.on('closed', () => {
     mainWindow = null
   })
 
-  mainWindow.on('unresponsive', function () {})
+  mainWindow.on('unresponsive', () => {})
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
   })
 
-  if (process.env.ENV === 'dev' || process.argv[3] === 'dev') {
+  if (process.env.NODE_ENV === 'dev') {
     mainWindow.webContents.openDevTools({mode: 'detach'})
   }
 }
@@ -77,9 +77,3 @@ app.on('ready', function () {
   })
   createWindow()
 })
-
-global.start = {
-  args: process.argv,
-  file: false,
-  env: process.env.ENV
-}

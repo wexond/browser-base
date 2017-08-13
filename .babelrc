@@ -4,10 +4,11 @@
     "stage-0"
   ],
   "plugins": [
+    "transform-decorators-legacy",
     [
-      "transform-jsx",
+      "inferno",
       {
-        "useVariables": true
+        "imports": true
       }
     ]
   ],

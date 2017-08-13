@@ -1,12 +1,74 @@
 import Store from '../store'
 
-/**
- * Gets tab from mouse x and y point.
- * @param {Tab} callingTab
- * @param {Number} cursorX
- * @param {Number} cursorY
- * @return {Tab}
- */
+import { tabDefaults } from '../defaults/tabs.js'
+
+export const addTab = data => {
+  const {
+    select,
+    url
+  } = data
+
+  const tab = {
+    id: Store.tabs.length,
+    select: select,
+    url: url,
+    width: 0,
+    pinned: false,
+    left: 0,
+    animateLeft: false,
+    animateWidth: true
+  }
+
+  Store.tabs.push(tab)
+}
+
+export const setWidths = (tabsWidth, addTabWidth, margin = 0) => {
+  const {
+    pinnedTabWidth,
+    maxTabWidth
+  } = tabDefaults
+
+  const pinnedTabs = Store.tabs.filter(tab => tab.pinned)
+  const normalTabs = Store.tabs.filter(tab => !tab.pinned)
+  // Calculate margins between tabs.
+  const margins = Store.tabs.length * margin
+  // Calculate all pinned tabs width.
+  const allPinnedTabsWidth = pinnedTabs.length * pinnedTabWidth
+  // Calculate final width per tab.
+  let newNormalTabWidth = (tabsWidth - addTabWidth - margins - allPinnedTabsWidth) / (Store.tabs.length - allPinnedTabsWidth)
+
+  // Limit width to `maxTabWidth`.
+  if (newNormalTabWidth > maxTabWidth) newNormalTabWidth = maxTabWidth
+
+  // Apply width for all normal tabs.
+  normalTabs.forEach(tab => {
+    tab.width = newNormalTabWidth
+  })
+}
+
+export const getPosition = (index, margin = 0) => {
+  let position = 0
+  for (var i = 0; i < Store.tabs.length; i++) {
+    if (i === index) {
+      return position
+    }
+    position += Store.tabs[i].width + margin
+  }
+}
+
+export const setPositions = (margin = 0) => {
+  let addTabLeft = 0
+  // Apply lefts for all tabs.
+  Store.tabs.forEach((tab, index) => {
+    const newLeft = index * tab.width + index * margin
+    tab.left = newLeft
+    addTabLeft = newLeft + tab.width
+  })
+
+  // Apply left for add tab button.
+  Store.addTabLeft = addTabLeft
+}
+
 export const getTabFromMousePoint = (callingTab, xPos = null, yPos = null) => {
   if (xPos == null) {
     xPos = Store.cursor.x
@@ -25,13 +87,6 @@ export const getTabFromMousePoint = (callingTab, xPos = null, yPos = null) => {
   return null
 }
 
-/**
- * Checks if {Tab} contains mouse x and y position.
- * @param {Tab} tabToCheck
- * @param {Number} xPos
- * @param {Number} yPos
- * @return {Boolean}
- */
 export const containsPoint = (tabToCheck, xPos, yPos = null) => {
   const rect = tabToCheck.elements.tab.getBoundingClientRect()
 
@@ -47,12 +102,6 @@ export const containsPoint = (tabToCheck, xPos, yPos = null) => {
   return false
 }
 
-/**
- * Replaces tabs.
- * @param {Number} firstIndex
- * @param {Number} secondIndex
- * @param {Boolean} changePos
- */
 export const replaceTabs = (firstIndex, secondIndex, changePos = true) => {
   const firstTab = Store.tabs[firstIndex]
   const secondTab = Store.tabs[secondIndex]
@@ -67,27 +116,14 @@ export const replaceTabs = (firstIndex, secondIndex, changePos = true) => {
   }
 }
 
-/**
- * Updates tabs borders.
- */
 export const updateTabs = () => Store.tabs.forEach((tab) => tab.updateBorders())
 
-/**
- * Gets selected tab.
- * @return {Tab}
- */
 export const getSelectedTab = () => {
   for (var i = 0; i < Store.tabs.length; i++) {
     if (tab.selected) return tab
   }
 }
 
-/**
- * Checks if mouse x position is on any tab.
- * If it is, then replaces caller tab with second tab.
- * @param {Tab} callerTab
- * @param {Number} cursorX
- */
 export const findTabToReplace = (callerTab, cursorX) => {
   const overTab = getTabFromMousePoint(callerTab, cursorX)
 

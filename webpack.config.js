@@ -1,5 +1,5 @@
 const { join } = require('path')
-const BabiliPlugin = require("babili-webpack-plugin")
+const UglifyJSWebpackPlugin = require('uglifyjs-webpack-plugin')
 
 let config = {
   target: 'electron',
@@ -41,7 +41,7 @@ let config = {
           }
         ]
       }, {
-        test: /\.(png|gif|jpg|woff2|tff)$/,
+        test: /\.(png|gif|jpg|woff2|tff|svg)$/,
         include: join(__dirname, 'src'),
         exclude: /node_modules/,
         use: [
@@ -50,7 +50,7 @@ let config = {
           }
         ]
       }, {
-        test: /\.(jsx)$/,
+        test: /\.(jsx|js)$/,
         include: join(__dirname, 'src'),
         exclude: /node_modules/,
         use: [
@@ -71,7 +71,16 @@ let config = {
 }
 
 if (process.env.NODE_ENV === 'production') {
-  config.plugins.push(new BabiliPlugin())
+  config.plugins.push(new UglifyJSWebpackPlugin({
+    output: {
+      comments: false
+    }
+  }))
+  config.plugins.push(new webpack.DefinePlugin({
+    'process.env': {
+      'NODE_ENV': JSON.stringify('production')
+    }
+  }))
   config.devtool = 'cheap-module-source-map'
 }
 
