@@ -16,20 +16,21 @@ export default class Tabs extends Component {
   componentDidMount () {
     observe(Store.tabs, change => {
       if (change.addedCount > 0) {
-        change.added.forEach(tab => {
-          tab.left = getPosition(tab.id, 1)
+        const tab = change.added[0]
+        tab.left = getPosition(change.index, 1)
+        setTimeout(() => {
+          tab.animateLeft = true
+          this.updateTabs()
         })
       }
-      setTimeout(() => {
-        change.added.forEach(tab => {
-          tab.animateLeft = true
-        })
-        this.updateTabs()
-      })
     })
 
     window.addEventListener('resize', (e) => {
       if (!e.isTrusted) return
+
+      this.addTab.setState({animateLeft: false})
+      setTimeout(() => this.addTab.setState({animateLeft: true}))
+
       Store.tabs.forEach(tab => {
         tab.animateLeft = false
         tab.animateWidth = false
