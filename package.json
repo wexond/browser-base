@@ -39,7 +39,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "babel-preset-es2017": "latest",
-    "electron": "^1.7.4"
+    "electron": "^1.7.6"
   },
   "devDependencies": {
     "babel-core": "latest",
