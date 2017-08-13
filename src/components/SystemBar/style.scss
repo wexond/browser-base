@@ -6,6 +6,14 @@
   background-color: #EEE;
   height: $system-bar-height;
   width: 100%;
-  border-bottom: 1px solid rgba(0,0,0, $dividers-opacity-light);
   z-index: 3;
+
+  & .border-bottom {
+    position: absolute;
+    bottom: 0;
+    background-color: rgba(0,0,0, $dividers-opacity-light);
+    height: 1px;
+    left: 0;
+    right: 0;
+  }
 }
