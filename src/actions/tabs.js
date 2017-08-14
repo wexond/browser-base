@@ -50,8 +50,7 @@ export const getWidth = (tabsWidth, addTabWidth, margin = 0) => {
     maxTabWidth
   } = tabDefaults
 
-  const tabs = Store.tabs.filter(Boolean)
-
+  const tabs = Store.tabs.filter(tab => !tab.closing)
   const normalTabs = tabs.filter(tab => !tab.pinned)
 
   // Calculate margins between tabs.
@@ -70,20 +69,18 @@ export const getWidth = (tabsWidth, addTabWidth, margin = 0) => {
 }
 
 export const getPosition = (index, margin = 0) => {
-  let position = 0
-  let tabs = Store.tabs.filter(Boolean)
-  for (var i = 0; i < tabs.length; i++) {
-    if (i === index) {
-      return position
+  for (var i = index - 1; i >= 0; i--) {
+    if (Store.tabs[i] != null) {
+      return Store.tabs[i].left + Store.tabs[i].width + margin
     }
-    position += tabs[i].width + margin
   }
+  return 0
 }
 
 export const setPositions = (margin = 0) => {
   let addTabLeft = 0
 
-  let tabs = Store.tabs.filter(Boolean)
+  let tabs = Store.tabs.filter(tab => !tab.closing)
 
   // Apply lefts for all tabs.
   for (var i = 0; i < tabs.length; i++) {
