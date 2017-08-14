@@ -9,11 +9,14 @@ export default class Page extends Component {
     const tab = this.props.data
     const isSelected = Store.selectedTab === Store.tabs.indexOf(tab)
 
-    const pageClass = (isSelected) ? '' : 'hide'
-
     const {
-      url
+      url,
+      renderPage
     } = this.props.data
+
+    if (!renderPage) return null
+
+    const pageClass = (isSelected) ? '' : 'hide'
 
     return (
       <div className={'page ' + pageClass}>

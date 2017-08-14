@@ -2,6 +2,8 @@ import Store from '../store'
 
 import { tabDefaults } from '../defaults/tabs.js'
 
+let id = 0
+
 export const addTab = data => {
   const {
     select,
@@ -9,7 +11,7 @@ export const addTab = data => {
   } = data
 
   const tab = {
-    id: Store.tabs.length,
+    id: id,
     select: select,
     url: url,
     width: 0,
@@ -19,54 +21,77 @@ export const addTab = data => {
     animateWidth: true,
     title: 'New tab',
     favicon: '',
-    loading: false
+    loading: false,
+    render: true,
+    renderPage: true,
+    closing: false
   }
 
   Store.tabs.push(tab)
+  id++
 }
 
 export const setWidths = (tabsWidth, addTabWidth, margin = 0) => {
+  const width = getWidth(tabsWidth, addTabWidth, margin)
+  
+  const tabs = Store.tabs.filter(Boolean)
+  const normalTabs = tabs.filter(tab => !tab.pinned)
+
+  // Apply width for all normal tabs.
+  normalTabs.forEach(tab => {
+    if (tab.width === width) return
+    tab.width = width
+  })
+}
+
+export const getWidth = (tabsWidth, addTabWidth, margin = 0) => {
   const {
     pinnedTabWidth,
     maxTabWidth
   } = tabDefaults
 
-  const pinnedTabs = Store.tabs.filter(tab => tab.pinned)
-  const normalTabs = Store.tabs.filter(tab => !tab.pinned)
+  const tabs = Store.tabs.filter(Boolean)
+
+  const normalTabs = tabs.filter(tab => !tab.pinned)
+
   // Calculate margins between tabs.
-  const margins = Store.tabs.length * margin
+  const margins = tabs.length * margin
   // Calculate all pinned tabs width.
-  const allPinnedTabsWidth = pinnedTabs.length * pinnedTabWidth
+  const allPinnedTabsWidth = (tabs.length - normalTabs.length) * pinnedTabWidth
   // Calculate final width per tab.
-  let newNormalTabWidth = (tabsWidth - addTabWidth - margins - allPinnedTabsWidth) / (Store.tabs.length - allPinnedTabsWidth)
+  let newNormalTabWidth = (tabsWidth - addTabWidth - margins - allPinnedTabsWidth) / (tabs.length - allPinnedTabsWidth)
+
+  if (newNormalTabWidth < 32) newNormalTabWidth = 32
 
   // Limit width to `maxTabWidth`.
   if (newNormalTabWidth > maxTabWidth) newNormalTabWidth = maxTabWidth
 
-  // Apply width for all normal tabs.
-  normalTabs.forEach(tab => {
-    tab.width = newNormalTabWidth
-  })
+  return newNormalTabWidth
 }
 
 export const getPosition = (index, margin = 0) => {
   let position = 0
-  for (var i = 0; i < Store.tabs.length; i++) {
+  let tabs = Store.tabs.filter(Boolean)
+  for (var i = 0; i < tabs.length; i++) {
     if (i === index) {
       return position
     }
-    position += Store.tabs[i].width + margin
+    position += tabs[i].width + margin
   }
 }
 
 export const setPositions = (margin = 0) => {
   let addTabLeft = 0
+
+  let tabs = Store.tabs.filter(Boolean)
+
   // Apply lefts for all tabs.
-  Store.tabs.forEach((tab, index) => {
-    const newLeft = index * tab.width + index * margin
+  for (var i = 0; i < tabs.length; i++) {
+    const tab = tabs[i]
+    const newLeft = i * tab.width + i * margin
     tab.left = newLeft
     addTabLeft = newLeft + tab.width
-  })
+  }
 
   // Apply left for add tab button.
   Store.addTabLeft = addTabLeft

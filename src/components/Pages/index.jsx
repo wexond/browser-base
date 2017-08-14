@@ -13,7 +13,7 @@ export default class Pages extends Component {
       <div className='pages'>
         {
           tabs.map(item => {
-            return <Page data={item} />
+            return <Page key={item.id} data={item} />
           })
         }
       </div>
