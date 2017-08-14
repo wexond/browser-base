@@ -1,5 +1,5 @@
 .tab {
-  display: flex;
+  display: inline-block;
   flex-flow: row;
   position: absolute;
   width: 0;
@@ -8,7 +8,6 @@
   left: 0;
   background-color: white;
   -webkit-app-region: no-drag;
-  overflow: hidden;
 
   .overlay {
     transition: 0.2s opacity;

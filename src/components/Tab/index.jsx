@@ -23,9 +23,8 @@ export default class Tab extends Component {
 
   componentDidMount () {
     const tab = this.props.data
-    if (tab.select) {
-      this.select()
-    }
+  
+    if (tab.select) this.select()
   }
 
   select () {
@@ -37,45 +36,44 @@ export default class Tab extends Component {
     const tabs = this.props.tabs
     const isSelected = Store.selectedTab === Store.tabs.indexOf(tab)
 
+    // Close window when the tab is last.
     if (Store.tabs.length === 1) {
       close()
     }
-    Store.lastClosedURL = tab.url
 
-    tabs.timer.canReset = true
+    // Get the tab url and store in Store.
+    Store.lastClosedURL = tab.url
 
     tab.renderPage = false
 
     // Get previous and next tab.
-    const index = Store.tabs.indexOf(tab)
-    const nextTab = (index === Store.tabs.length - 1) ? null : Store.tabs[index + 1]
-    const prevTab = (index === 0) ? null : Store.tabs[index - 1]
+    let index = Store.tabs.indexOf(tab)
 
+    // Remove tab from array.
     Store.tabs.splice(index, 1)
 
+    // If the closed tab was selected, select other tab.
     if (isSelected) {
-      if (nextTab != null) { // If the next tab exists, select it.
-        Store.selectedTab = Store.tabs.indexOf(nextTab)
-      } else { // If the next tab not exists.
-        if (prevTab != null) { // If previous tab exists, select it.
-          Store.selectedTab = Store.tabs.indexOf(prevTab)
-        } else { // If the previous tab not exists, check if the first tab exists.
-          if (Store.tabs[0] != null) { // If first tab exists, select it.
-            Store.selectedTab = 0
-          }
-        }
+      if (index === Store.tabs.length) { // If the tab is last.
+        Store.selectedTab = index - 1 // Select previous tab.
+      } else {
+        Store.selectedTab = index // Select next tab.
       }
     }
 
-    tabs.timer.time = 0
+    tabs.resetTimer()
 
-    if (index === Store.tabs.length) { // If the tab is last.
-      if (tab.width < tabDefaults.maxTabWidth) { // If tab width is less than normal tab width.
+    // If the tab is last.
+    if (index === Store.tabs.length) {
+      // If tab width is less than normal tab width.
+      if (tab.width < tabDefaults.maxTabWidth) {
         tab.render = false
         tabs.updateTabs()
         return
       }
     }
+    
+    // Animate tabs.
     tab.animateWidth = true
     tab.closing = true
     setPositions(1)
@@ -104,6 +102,7 @@ export default class Tab extends Component {
       hovered
     } = this.state
 
+    // Control transitions.
     let transition = transitions['background-color'].duration + 's' + ' background-color ' + transitions['background-color'].easing 
 
     if (animateLeft) {
@@ -135,6 +134,7 @@ export default class Tab extends Component {
       opacity: (isSelected || hovered) ? 1 : 0
     }
 
+    // Set title max width, based on favicon and close visibility.
     let maxWidthDecrease = 16
     const closeWidth = 16
     const faviconWidth = 16
@@ -142,6 +142,7 @@ export default class Tab extends Component {
     let titleLeft = 8
 
     if (isSelected || hovered) maxWidthDecrease += closeWidth + margins
+    
     if (favicon !== '' || loading) {
       maxWidthDecrease += faviconWidth + margins
       titleLeft += faviconWidth + margins
@@ -154,12 +155,8 @@ export default class Tab extends Component {
     }
 
     const overlayStyle = {
-      opacity: (!isSelected && hovered) ? 1 : 0
-    }
-
-    const overlay2Style = {
-      backgroundColor: 'rgba(0,0,0, 0.1)',
-      display: (closing) ? 'block' : 'none'
+      opacity: ((!isSelected && hovered) || closing) ? 1 : 0,
+      backgroundColor: (closing) ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.5)'
     }
 
     const contentStyle = {
@@ -187,7 +184,6 @@ export default class Tab extends Component {
     return (
       <div ref={(r) => { this.tab = r }} className='tab' style={tabStyle} {...tabEvents}>
         <div className='overlay' style={overlayStyle} />
-        <div className='overlay' style={overlay2Style} />
         <div className='content' style={contentStyle}>
           <div className='favicon' style={faviconStyle} />
           <div className='title' style={titleStyle}>{title}</div>
