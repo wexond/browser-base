@@ -21,6 +21,10 @@ export default class Tabs extends Component {
     }
 
     this.removedTab = false
+
+    this.state = {
+      tabs: Store.tabs.slice()
+    }
   }
 
   componentDidMount () {
@@ -37,13 +41,19 @@ export default class Tabs extends Component {
 
     observe(Store.tabs, change => {
       if (change.addedCount > 0) {
+        this.setState({tabs: change.object.slice()})
         const tab = change.added[0]
-
+        console.log(Store.tabs[change.index])
         tab.left = getPosition(change.index, 1)
         setTimeout(() => {
           tab.animateLeft = true
           this.updateTabs()
         })
+      }
+      if (change.removedCount > 0) {
+        setTimeout(() => {
+          this.setState({tabs: change.object.slice()})
+        }, transitions.width.duration * 1000)
       }
     })
 
@@ -55,9 +65,11 @@ export default class Tabs extends Component {
       setTimeout(() => this.addTab.setState({animateLeft: true}))
 
       Store.tabs.forEach(tab => {
+        if (tab == null) return
         tab.animateLeft = false
         tab.animateWidth = false
         setTimeout(() => {
+          if (tab == null) return
           tab.animateLeft = true
           tab.animateWidth = true
         })
@@ -66,14 +78,6 @@ export default class Tabs extends Component {
     })
 
     addTab(defaultOptions)
-  }
-
-  shouldComponentUpdate () {
-    if (this.removedTab) {
-      this.removedTab = false
-      return false
-    }
-    return true
   }
 
   updateTabs () {
@@ -91,7 +95,7 @@ export default class Tabs extends Component {
   render () {
     return (
       <div ref={(r) => { this.tabs = r }} className='tabs'>
-        {Store.tabs.filter(Boolean).map((item) => {
+        {this.state.tabs.map((item) => {
           return <Tab tabs={this} getTabsWidth={this.getWidth} data={item} key={item.id}></Tab>
         })}
         <AddTab ref={(r) => { this.addTab = r }} />
