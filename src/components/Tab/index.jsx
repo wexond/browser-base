@@ -50,7 +50,8 @@ export default class Tab extends Component {
     const index = Store.tabs.indexOf(tab)
     const nextTab = (index === Store.tabs.length - 1) ? null : Store.tabs[index + 1]
     const prevTab = (index === 0) ? null : Store.tabs[index - 1]
-    let selectedTab
+
+    Store.tabs.splice(index, 1)
 
     if (isSelected) {
       if (nextTab != null) { // If the next tab exists, select it.
@@ -68,22 +69,16 @@ export default class Tab extends Component {
 
     tabs.timer.time = 0
 
-    if (index === Store.tabs.length - 1) { // If the tab is last.
+    if (index === Store.tabs.length) { // If the tab is last.
       if (tab.width < tabDefaults.maxTabWidth) { // If tab width is less than normal tab width.
-        Store.tabs.splice(index, 1)
+        tab.render = false
         tabs.updateTabs()
         return
       }
     }
     tab.animateWidth = true
     tab.closing = true
-    Store.tabs[index] = null
     setPositions(1)
-
-    setTimeout(() => {
-      Store.tabs.splice(index, 1)
-      if (index !== Store.tabs.length) Store.selectedTab--
-    }, transitions.width.duration * 1000)
   }
 
   render () {
@@ -162,6 +157,11 @@ export default class Tab extends Component {
       opacity: (!isSelected && hovered) ? 1 : 0
     }
 
+    const overlay2Style = {
+      backgroundColor: 'rgba(0,0,0, 0.1)',
+      display: (closing) ? 'block' : 'none'
+    }
+
     const contentStyle = {
       display: (!isSelected && width < 42) ? 'none' : 'block'
     }
@@ -187,6 +187,7 @@ export default class Tab extends Component {
     return (
       <div ref={(r) => { this.tab = r }} className='tab' style={tabStyle} {...tabEvents}>
         <div className='overlay' style={overlayStyle} />
+        <div className='overlay' style={overlay2Style} />
         <div className='content' style={contentStyle}>
           <div className='favicon' style={faviconStyle} />
           <div className='title' style={titleStyle}>{title}</div>
