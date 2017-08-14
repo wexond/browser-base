@@ -8,6 +8,7 @@
   left: 0;
   background-color: white;
   -webkit-app-region: no-drag;
+  overflow: hidden;
 
   .overlay {
     transition: 0.2s opacity;
