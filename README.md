@@ -1,7 +1,7 @@
 <h1 align="center"><img src="https://wexond.nersent.tk/logo/wexond.png" width="400"></h1>
 
 [![discord](https://discordapp.com/api/guilds/307605794680209409/widget.png)](https://discord.gg/yAA8DdK)
-[![Build Status](https://travis-ci.org/Nersent/Wexond.svg)](https://travis-ci.org/Nersent/Wexond)
+[![Build Status](https://travis-ci.org/Nersent/wexond.svg)](https://travis-ci.org/Nersent/wexond)
 [![dependencies Status](https://david-dm.org/nersent/wexond/status.svg)](https://david-dm.org/nersent/wexond)
 [![devDependencies Status](https://david-dm.org/nersent/wexond/dev-status.svg)](https://david-dm.org/nersent/wexond?type=dev)
 
