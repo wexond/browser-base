@@ -47,7 +47,7 @@ export default class Tabs extends Component {
 
         // Get and set initial left for new tab.
         const tab = change.added[0]
-        tab.left = getPosition(change.index, 1)
+        tab.left = getPosition(change.index)
 
         // Enable left animation.
         setTimeout(() => {
@@ -68,7 +68,7 @@ export default class Tabs extends Component {
       if (!e.isTrusted) return
       
       // Don't resize tabs when they new width is less than 32.
-      if (getWidth(this.getWidth(), this.addTab.getWidth(), 1) < 32) return
+      if (getWidth(this.getWidth(), this.addTab.getWidth()) < 32) return
       
       // Turn off left animation for add tab button.
       this.addTab.setState({animateLeft: false})
@@ -104,8 +104,8 @@ export default class Tabs extends Component {
     const addTabWidth = this.addTab.getWidth()
 
     // Set widths and lefts.
-    setWidths(tabsWidth, addTabWidth, 1)
-    setPositions(1)
+    setWidths(tabsWidth, addTabWidth)
+    setPositions()
   }
 
   getWidth () {
