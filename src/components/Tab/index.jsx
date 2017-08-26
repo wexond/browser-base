@@ -163,6 +163,17 @@ export default class Tab extends Component {
       display: (!isSelected && width < 42) ? 'none' : 'block'
     }
 
+    const borderLeftStyle = {
+      display: (isSelected) ? 'block' : 'none',
+      left: 0
+    }
+
+    const borderRightStyle = {
+      display: (Store.tabs.indexOf(tab) === Store.selectedTab - 1) ? 'none' : 'block',
+      right: (isSelected) ? 0 : -1,
+      height: (isSelected) ? '100%' : 'calc(100% - 8px)'
+    }
+
     const onMouseDown = () => {
       if (!isSelected) this.select()
     }
@@ -184,6 +195,8 @@ export default class Tab extends Component {
     return (
       <div ref={(r) => { this.tab = r }} className='tab' style={tabStyle} {...tabEvents}>
         <div className='overlay' style={overlayStyle} />
+        <div className='border-vertical' style={borderLeftStyle} />
+        <div className='border-vertical' style={borderRightStyle} />
         <div className='content' style={contentStyle}>
           <div className='favicon' style={faviconStyle} />
           <div className='title' style={titleStyle}>{title}</div>
