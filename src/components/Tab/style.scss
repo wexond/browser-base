@@ -9,6 +9,15 @@
   background-color: white;
   -webkit-app-region: no-drag;
 
+  .border-vertical {
+    position: absolute;
+    width: 1px;
+    background-color: rgba(0,0,0, $dividers-opacity-light);
+    height: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
   .overlay {
     transition: 0.2s opacity;
     position: absolute;

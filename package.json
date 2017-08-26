@@ -51,7 +51,7 @@
     "cross-env": "latest",
     "css-loader": "latest",
     "electron-packager": "latest",
-    "inferno": "1.6.2",
+    "inferno": "latest",
     "inferno-component": "latest",
     "inferno-mobx": "latest",
     "mobx": "latest",
