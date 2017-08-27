@@ -1,6 +1,6 @@
 import Store from '../store'
 
-import { tabDefaults } from '../defaults/tabs.js'
+import { tabDefaults, transitions } from '../defaults/tabs.js'
 
 let id = 0
 
@@ -69,12 +69,11 @@ export const getWidth = (tabsWidth, addTabWidth, margin = 0) => {
 }
 
 export const getPosition = (index, margin = 0) => {
-  for (var i = index - 1; i >= 0; i--) {
-    if (Store.tabs[i] != null) {
-      return Store.tabs[i].left + Store.tabs[i].width + margin
-    }
+  let position = 0
+  for (var i = 0; i < Store.tabs.length; i++) {
+    position += Store.tabs[i].width + margin
   }
-  return 0
+  return position
 }
 
 export const setPositions = (margin = 0) => {
@@ -94,15 +93,10 @@ export const setPositions = (margin = 0) => {
   Store.addTabLeft = addTabLeft
 }
 
-export const getTabFromMousePoint = (callingTab, xPos = null, yPos = null) => {
-  if (xPos == null) {
-    xPos = Store.cursor.x
-    yPos = Store.cursor.y
-  } 
-
+export const getTabFromMouseX = (callingTab, xPos = null) => {
   for (var i = 0; i < Store.tabs.length; i++) {
     if (Store.tabs[i] !== callingTab) {
-      if (containsPoint(Store.tabs[i], xPos, yPos)) {
+      if (containsX(Store.tabs[i], xPos)) {
         if (!Store.tabs[i].locked) {
           return Store.tabs[i]
         }
@@ -112,45 +106,48 @@ export const getTabFromMousePoint = (callingTab, xPos = null, yPos = null) => {
   return null
 }
 
-export const containsPoint = (tabToCheck, xPos, yPos = null) => {
-  const rect = tabToCheck.elements.tab.getBoundingClientRect()
-
-  if (xPos >= rect.left && xPos <= rect.right) {
-    if (yPos != null) {
-      if (yPos <= rect.bottom && yPos >= rect.top) return true
-      else return false
-    } else {
-      return true
-    }
+export const containsX = (tabToCheck, xPos) => {
+  const rect = {
+    left: tabToCheck.left,
+    right: tabToCheck.left + tabToCheck.width
   }
+
+  if (xPos >= rect.left && xPos <= rect.right) return true
 
   return false
 }
 
 export const replaceTabs = (firstIndex, secondIndex, changePos = true) => {
-  const firstTab = Store.tabs[firstIndex]
-  const secondTab = Store.tabs[secondIndex]
+  const tabs = Store.tabs.slice()
 
-  // Replace tabs in array.
-  Store.tabs[firstIndex] = secondTab
-  Store.tabs[secondIndex] = firstTab
+  const firstTab = tabs[firstIndex]
+  const secondTab = tabs[secondIndex]
 
+  tabs[firstIndex] = secondTab
+  tabs[secondIndex] = firstTab
+
+  Store.tabs = tabs
+
+  console.log(Store.tabs)
+
+  setPositions()
+
+  /*
   // Change positions of replaced tabs.
   if (changePos) {
-    secondTab.updatePosition()
-  }
-}
+    secondTab.animateLeft = true
+    secondTab.left = getPosition(secondTab.id, 0)
+    secondTab.locked = true
 
-export const updateTabs = () => Store.tabs.forEach((tab) => tab.updateBorders())
-
-export const getSelectedTab = () => {
-  for (var i = 0; i < Store.tabs.length; i++) {
-    if (tab.selected) return tab
+    setTimeout(() => {
+      secondTab.locked = false
+    }, transitions.left.duration * 1000)
   }
+  */
 }
 
 export const findTabToReplace = (callerTab, cursorX) => {
-  const overTab = getTabFromMousePoint(callerTab, cursorX)
+  const overTab = getTabFromMouseX(callerTab, cursorX)
 
   if (overTab != null && !overTab.pinned) {
     const indexTab = Store.tabs.indexOf(callerTab)
