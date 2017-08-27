@@ -19,6 +19,7 @@ export default class Tab extends Component {
     this.state = {
       hovered: false
     }
+    this.dragData = {}
   }
 
   componentDidMount () {
@@ -76,7 +77,7 @@ export default class Tab extends Component {
     // Animate tabs.
     tab.animateWidth = true
     tab.closing = true
-    setPositions(1)
+    setPositions()
   }
 
   render () {
@@ -174,8 +175,17 @@ export default class Tab extends Component {
       height: (isSelected) ? '100%' : 'calc(100% - 8px)'
     }
 
-    const onMouseDown = () => {
+    const onMouseDown = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
       if (!isSelected) this.select()
+      Store.tabDragData = {
+        isMouseDown: true,
+        mouseClickX: e.clientX,
+        left: tab.left,
+        tab: tab
+      }
+      console.log(tab.id)
     }
 
     const onMouseEnter = () => {
@@ -189,7 +199,7 @@ export default class Tab extends Component {
     const tabEvents = {
       onMouseDown: onMouseDown,
       onMouseEnter: onMouseEnter,
-      onMouseLeave: onMouseLeave
+      onMouseLeave: onMouseLeave,
     }
 
     return (
