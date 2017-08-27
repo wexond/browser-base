@@ -9,7 +9,7 @@ import AddTab from '../AddTab'
 
 import { defaultOptions, transitions } from '../../defaults/tabs'
 
-import { addTab, setPositions, setWidths, getPosition, getWidth } from '../../actions/tabs'
+import { addTab, setPositions, setWidths, getPosition, getWidth, findTabToReplace } from '../../actions/tabs'
 
 @connect
 export default class Tabs extends Component {
@@ -40,6 +40,12 @@ export default class Tabs extends Component {
     }, 1000)
 
     observe(Store.tabs, change => {
+      console.log(change)
+      // If an item was updated.
+      if (change.type === 'update') {
+        this.setState({tabs: change.object.slice()})
+        return
+      }
       // If an item was added.
       if (change.addedCount > 0) {
         // Add the item to state.
@@ -54,6 +60,8 @@ export default class Tabs extends Component {
           tab.animateLeft = true
           this.updateTabs()
         })
+
+        return
       }
       // If an item was removed.
       if (change.removedCount > 0) {
@@ -61,6 +69,8 @@ export default class Tabs extends Component {
         setTimeout(() => {
           this.setState({tabs: change.object.slice()})
         }, transitions.width.duration * 1000)
+        
+        return
       }
     })
 
@@ -87,6 +97,40 @@ export default class Tabs extends Component {
           tab.animateWidth = true
         })
       })
+      this.updateTabs()
+    })
+
+    window.addEventListener('mousemove', (e) => {
+      e.stopPropagation()
+      const {
+        mouseClickX,
+        left,
+        isMouseDown,
+        tab
+      } = Store.tabDragData
+
+      if (!isMouseDown) return
+
+      // Don't move pinned tabs.
+      if (tab.pinned) return
+
+      const mouseDeltaX = e.pageX - mouseClickX
+
+      if (Math.abs(mouseDeltaX) > 5) {
+        tab.left = left + e.clientX - mouseClickX
+        tab.animateLeft = false
+        findTabToReplace(tab, e.clientX)
+      }
+    })
+
+    window.addEventListener('mouseup', (e) => {
+      const {
+        isMouseDown,
+        tab
+      } = Store.tabDragData
+      if (!isMouseDown) return
+      tab.animateLeft = true
+      Store.tabDragData.isMouseDown = false
       this.updateTabs()
     })
 
