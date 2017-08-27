@@ -134,9 +134,6 @@ export const replaceTabs = (firstIndex, secondIndex, changePos = true) => {
   Store.tabs[secondIndex] = tab1
   Store.tabs[firstIndex]  = tab2
 
-
-  Store.tabs.forEach(tab => console.log('We now have have', tab.id, tab.title))
-
   setPositions()
 
   /*
