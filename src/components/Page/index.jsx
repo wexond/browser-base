@@ -11,11 +11,8 @@ export default class Page extends Component {
     const isSelected = Store.selectedTab === tab.id
 
     const {
-      url,
-      renderPage
-    } = page
-
-    if (!renderPage) return null
+      url
+    } = this.props.page
 
     const pageClass = (isSelected) ? '' : 'hide'
 
