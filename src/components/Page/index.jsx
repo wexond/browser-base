@@ -6,13 +6,14 @@ import Store from '../../store'
 @connect
 export default class Page extends Component {
   render () {
-    const tab = this.props.data
-    const isSelected = Store.selectedTab === Store.tabs.indexOf(tab)
+    const tab = this.props.tab
+    const page = this.props.page
+    const isSelected = Store.selectedTab === tab.id
 
     const {
       url,
       renderPage
-    } = this.props.data
+    } = page
 
     if (!renderPage) return null
 

@@ -8,12 +8,14 @@ import Page from '../Page'
 @observer
 export default class Pages extends Component {
   render () {
-    const tabs = Store.tabs.filter(Boolean)
     return (
       <div className='pages'>
         {
-          tabs.map(item => {
-            return <Page key={item.id} data={item} />
+          Store.pages.map(page => {
+            const tab = Store.tabs.filter(tab => {
+              return tab.id === page.id
+            })
+            return <Page key={page.id} tab={tab} page={page} />
           })
         }
       </div>
