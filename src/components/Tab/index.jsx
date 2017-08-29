@@ -53,7 +53,7 @@ export default class Tab extends Component {
     // Get page from array by its unique id.
     let page = Store.pages.filter(page => {
       return tab.id === page.id
-    })
+    })[0]
 
     // Remove page from array.
     Store.pages.splice(Store.pages.indexOf(page), 1)
