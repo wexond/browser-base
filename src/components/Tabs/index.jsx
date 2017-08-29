@@ -110,9 +110,12 @@ export default class Tabs extends Component {
       if (tab.pinned) return
 
       const mouseDeltaX = e.pageX - mouseClickX
+      const newX = left + e.clientX - mouseClickX
 
       if (Math.abs(mouseDeltaX) > 5) {
-        tab.left = left + e.clientX - mouseClickX
+        if (!(newX < this.tabs.getBoundingClientRect().left) && !(newX + tab.width > this.tabs.offsetWidth)) {
+          tab.left = newX
+        }
         tab.animateLeft = false
         findTabToReplace(tab, e.clientX)
       }
