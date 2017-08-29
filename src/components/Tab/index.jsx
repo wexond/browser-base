@@ -74,8 +74,8 @@ export default class Tab extends Component {
 
     // If the tab is last.
     if (index === Store.tabs.length) {
-      // If tab width is less than normal tab width.
-      if (tab.width < tabDefaults.maxTabWidth) {
+      // If tab width is less than normal tab width and the tab width is greater than 32.
+      if (tab.width < tabDefaults.maxTabWidth && tab.width > 32) {
         tab.render = false
         tabs.updateTabs()
         return
