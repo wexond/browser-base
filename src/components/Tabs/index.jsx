@@ -40,12 +40,7 @@ export default class Tabs extends Component {
     }, 1000)
 
     observe(Store.tabs, change => {
-      console.log(change)
-      // If an item was updated.
-      if (change.type === 'update') {
-        this.setState({tabs: change.object.slice()})
-        return
-      }
+      if (change.addedCount > 0 && change.removedCount > 0) return
       // If an item was added.
       if (change.addedCount > 0) {
         // Add the item to state.
