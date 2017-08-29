@@ -129,7 +129,7 @@ export default class Tabs extends Component {
       if (!isMouseDown) return
       tab.animateLeft = true
       Store.tabDragData.isMouseDown = false
-      this.updateTabs()
+      setPositions()
     })
 
     addTab(defaultOptions)
