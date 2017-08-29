@@ -29,7 +29,7 @@ export default class Tab extends Component {
   }
 
   select () {
-    Store.selectedTab = Store.tabs.indexOf(this.props.data)
+    Store.selectedTab = this.props.data.id
   }
 
   close = (e) => {
@@ -50,15 +50,23 @@ export default class Tab extends Component {
     // Get previous and next tab.
     let index = Store.tabs.indexOf(tab)
 
+    // Get page from array by its unique id.
+    let page = Store.pages.filter(page => {
+      return tab.id === page.id
+    })
+
+    // Remove page from array.
+    Store.page.splice(Store.pages.indexOf(page), 1)
+
     // Remove tab from array.
     Store.tabs.splice(index, 1)
 
     // If the closed tab was selected, select other tab.
     if (isSelected) {
       if (index === Store.tabs.length) { // If the tab is last.
-        Store.selectedTab = index - 1 // Select previous tab.
+        Store.selectedTab = Store.tabs[index - 1].id // Select previous tab.
       } else {
-        Store.selectedTab = index // Select next tab.
+        Store.selectedTab = Store.tabs[index].id // Select next tab.
       }
     }
 
@@ -82,7 +90,7 @@ export default class Tab extends Component {
 
   render () {
     const tab = this.props.data
-    const isSelected = Store.selectedTab === Store.tabs.indexOf(tab)
+    const isSelected = Store.selectedTab === tab.id
 
     const {
       width,
@@ -169,8 +177,12 @@ export default class Tab extends Component {
       left: 0
     }
 
+    const selectedTab = Store.tabs.filter(ttab => {
+      return tab.id === Store.selectedTab
+    })
+
     const borderRightStyle = {
-      display: (Store.tabs.indexOf(tab) === Store.selectedTab - 1) ? 'none' : 'block',
+      display: (Store.tabs.indexOf(selectedTab) - 1 === Store.tabs.indexOf(tab)) ? 'none' : 'block',
       right: (isSelected) ? 0 : -1,
       height: (isSelected) ? '100%' : 'calc(100% - 8px)'
     }

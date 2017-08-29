@@ -2,6 +2,8 @@ import Store from '../store'
 
 import { tabDefaults, transitions } from '../defaults/tabs.js'
 
+let id = 0
+
 export const addTab = data => {
   const {
     select,
@@ -9,7 +11,7 @@ export const addTab = data => {
   } = data
 
   const tab = {
-    id: Store.tabs.length,
+    id: id,
     select: select,
     url: url,
     width: 0,
@@ -21,11 +23,17 @@ export const addTab = data => {
     favicon: '',
     loading: false,
     render: true,
-    renderPage: true,
     closing: false
   }
 
+  const page = {
+    url: url,
+    id: id
+  }
+
   Store.tabs.push(tab)
+  Store.pages.push(page)
+  id++
 }
 
 export const setWidths = (tabsWidth, addTabWidth, margin = 0) => {
@@ -67,7 +75,7 @@ export const getWidth = (tabsWidth, addTabWidth, margin = 0) => {
 
 export const getPosition = (index, margin = 0) => {
   let position = 0
-  for (var i = 0; i < Store.tabs.length; i++) {
+  for (var i = 0; i < index; i++) {
     position += Store.tabs[i].width + margin
   }
   return position
@@ -115,39 +123,26 @@ export const containsX = (tabToCheck, xPos) => {
 }
 
 export const replaceTabs = (firstIndex, secondIndex, changePos = true) => {
-  console.log('Swapping tab', firstIndex, 'for', secondIndex)
+  const tabs = Store.tabs.slice()
 
-  // First clone the two tabs that will be swapped,
-  // since we don't want to clone them with changed ids
-  //
-  // NOTE: Changing ids is required to escape inferno's
-  // `normalization` wich checks for duplicated keys(ids)
-  const tab1 = Store.tabs[firstIndex]
-  const tab2 = Store.tabs[secondIndex]
+  const tab1 = tabs[firstIndex]
+  const tab2 = tabs[secondIndex]
 
-  // Increase the id of the fist tab(will be reverted soon after)
-  // To prevent normalization errors
-  Store.tabs[firstIndex] = Store.tabs.length + 1
+  tabs[secondIndex] = tab1
+  tabs[firstIndex] = tab2
 
-  // Swap them with the backup we did previously
-  // This will also revert ids back to normal
-  Store.tabs[secondIndex] = tab1
-  Store.tabs[firstIndex]  = tab2
+  Store.tabs.replace(tabs)
 
-  setPositions()
-
-  /*
   // Change positions of replaced tabs.
   if (changePos) {
-    secondTab.animateLeft = true
-    secondTab.left = getPosition(secondTab.id, 0)
-    secondTab.locked = true
+    tab2.animateLeft = true
+    tab2.left = getPosition(Store.tabs.indexOf(tab2), 0)
+    tab2.locked = true
 
     setTimeout(() => {
-      secondTab.locked = false
+      tab2.locked = false
     }, transitions.left.duration * 1000)
   }
-  */
 }
 
 export const findTabToReplace = (callerTab, cursorX) => {
