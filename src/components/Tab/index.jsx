@@ -23,19 +23,19 @@ export default class Tab extends Component {
   }
 
   componentDidMount () {
-    const tab = this.props.data
+    const tab = this.props.tab
   
     if (tab.select) this.select()
   }
 
   select () {
-    Store.selectedTab = this.props.data.id
+    Store.selectedTab = this.props.tab.id
   }
 
   close = (e) => {
-    const tab = this.props.data
+    const tab = this.props.tab
     const tabs = this.props.tabs
-    const isSelected = Store.selectedTab === Store.tabs.indexOf(tab)
+    const isSelected = Store.selectedTab === tab.id
 
     // Close window when the tab is last.
     if (Store.tabs.length === 1) {
@@ -56,7 +56,7 @@ export default class Tab extends Component {
     })
 
     // Remove page from array.
-    Store.page.splice(Store.pages.indexOf(page), 1)
+    Store.pages.splice(Store.pages.indexOf(page), 1)
 
     // Remove tab from array.
     Store.tabs.splice(index, 1)
@@ -89,7 +89,7 @@ export default class Tab extends Component {
   }
 
   render () {
-    const tab = this.props.data
+    const tab = this.props.tab
     const isSelected = Store.selectedTab === tab.id
 
     const {
@@ -197,7 +197,6 @@ export default class Tab extends Component {
         left: tab.left,
         tab: tab
       }
-      console.log(tab.id)
     }
 
     const onMouseEnter = () => {
