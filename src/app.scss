@@ -20,6 +20,7 @@ $dividers-opacity-dark: 0.12;
 $hover-duration: 0.2s;
 
 $system-bar-height: 32px;
+$bar-height: 40px;
 
 $tabs-hover-color: rgba(0,0,0,0.08);
 
@@ -31,3 +32,4 @@ $tabs-hover-color: rgba(0,0,0,0.08);
 @import 'components/SystemBar/style.scss';
 @import 'components/Controls/style.scss';
 @import 'components/AddTab/style.scss';
+@import 'components/Bar/style.scss';
