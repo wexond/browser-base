@@ -7,6 +7,7 @@ import { connect } from 'inferno-mobx'
 import Transitions from '../../utils/transitions'
 
 import { transitions, tabDefaults } from '../../defaults/tabs'
+import wexondUrls from '../../defaults/wexond-urls'
 
 import { close } from '../../actions/window'
 import { setPositions, setWidths } from '../../actions/tabs'
@@ -29,6 +30,8 @@ export default class Tab extends Component {
   }
 
   select () {
+    const tab = this.props.tab
+
     Store.selectedTab = this.props.tab.id
   }
 
@@ -212,6 +215,14 @@ export default class Tab extends Component {
       onMouseDown: onMouseDown,
       onMouseEnter: onMouseEnter,
       onMouseLeave: onMouseLeave,
+    }
+
+    if (isSelected && tab.url === 'wexond://newtab') {
+      Store.app.bar.focus()
+    }
+
+    if (isSelected) {
+      Store.app.bar.setURL(tab.url)
     }
 
     return (
