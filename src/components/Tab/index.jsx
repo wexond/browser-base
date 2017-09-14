@@ -91,6 +91,7 @@ export default class Tab extends Component {
   render () {
     const tab = this.props.tab
     const isSelected = Store.selectedTab === tab.id
+    const tabs = this.props.tabs
 
     const {
       width,
@@ -193,8 +194,8 @@ export default class Tab extends Component {
       if (!isSelected) this.select()
       Store.tabDragData = {
         isMouseDown: true,
-        mouseClickX: e.clientX,
-        left: tab.left,
+        mouseClickX: e.clientX + tabs.tabs.scrollLeft,
+        left: left,
         tab: tab
       }
     }

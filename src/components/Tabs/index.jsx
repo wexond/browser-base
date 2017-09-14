@@ -56,6 +56,14 @@ export default class Tabs extends Component {
           this.updateTabs()
         })
 
+        const interval = setInterval(() => {
+          this.tabs.scrollLeft = this.tabs.offsetWidth + this.tabs.scrollLeft
+        }, 1)
+        
+        setTimeout(() => {
+          clearInterval(interval)
+        }, transitions.width.duration * 1000)
+
         return
       }
       // If an item was removed.
@@ -109,15 +117,16 @@ export default class Tabs extends Component {
       // Don't move pinned tabs.
       if (tab.pinned) return
 
+      const mouseX = (e.clientX + this.tabs.scrollLeft)
       const mouseDeltaX = e.pageX - mouseClickX
-      const newX = left + e.clientX - mouseClickX
+      const newX = left + mouseX - mouseClickX
 
       if (Math.abs(mouseDeltaX) > 5) {
-        if (!(newX < this.tabs.getBoundingClientRect().left) && !(newX + tab.width > this.tabs.offsetWidth)) {
+        if (!(newX < this.tabs.getBoundingClientRect().left + this.tabs.scrollLeft) && !(newX + tab.width - this.tabs.scrollLeft > this.tabs.offsetWidth)) {
           tab.left = newX
         }
         tab.animateLeft = false
-        findTabToReplace(tab, e.clientX)
+        findTabToReplace(tab, mouseX)
       }
     })
 
@@ -126,9 +135,11 @@ export default class Tabs extends Component {
         isMouseDown,
         tab
       } = Store.tabDragData
+
       if (!isMouseDown) return
+      
       tab.animateLeft = true
-      Store.tabDragData.isMouseDown = false
+      Store.tabDragData = {}
       setPositions()
     })
 
@@ -155,8 +166,14 @@ export default class Tabs extends Component {
   }
 
   render () {
+    const tabs = Store.tabs.filter(tab => !tab.pinned)
+
+    const tabsStyle = {
+      '-webkit-app-region': (tabs[0] != null && tabs[0].width > 32) ? 'drag' : 'no-drag'
+    }
+
     return (
-      <div ref={(r) => { this.tabs = r }} className='tabs'>
+      <div ref={(r) => { this.tabs = r }} style={tabsStyle} className='tabs'>
         {this.state.tabs.map((item) => {
           return <Tab tabs={this} getTabsWidth={this.getWidth} tab={item} key={item.id}></Tab>
         })}

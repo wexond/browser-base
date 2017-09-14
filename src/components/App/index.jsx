@@ -3,6 +3,7 @@ import Component from 'inferno-component'
 import SystemBar from '../SystemBar'
 import Tabs from '../Tabs'
 import Pages from '../Pages'
+import Bar from '../Bar'
 
 export default class App extends Component {
   render () {
@@ -11,6 +12,7 @@ export default class App extends Component {
         <SystemBar>
           <Tabs></Tabs>
         </SystemBar>
+        <Bar></Bar>
         <Pages></Pages>
       </div>
     )
