@@ -1,5 +1,7 @@
 import Component from 'inferno-component'
 
+import AddressBar from '../AddressBar'
+
 export default class Bar extends Component {
   render () {
     return (
@@ -7,7 +9,7 @@ export default class Bar extends Component {
         <div className='bar-icon back' />
         <div className='bar-icon forward' />
         <div className='bar-icon refresh' />
-        <div className='address-bar' />
+        <AddressBar />
         <div className='bar-icon menu' />
       </div>
     )
