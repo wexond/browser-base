@@ -20,5 +20,9 @@ export const requiredFiles = [
   {
     path: 'history.json',
     defaultContent: '[]'
+  },
+  {
+    path: 'bookmarks.json',
+    defaultContent: '[]'
   }
 ]

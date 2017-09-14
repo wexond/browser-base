@@ -5,6 +5,18 @@ import Store from '../../store'
 
 @connect
 export default class Page extends Component {
+  componentDidMount () {
+    const tab = this.props.tab
+    const page = this.props.page
+    page.webview = this.webview
+
+    this.webview.addEventListener('did-stop-loading', (e) => {
+      tab.url = this.webview.getURL()
+
+      Store.app.bar.setURL(tab.url)
+    })
+  }
+
   render () {
     const tab = this.props.tab
     const page = this.props.page
@@ -18,7 +30,7 @@ export default class Page extends Component {
 
     return (
       <div className={'page ' + pageClass}>
-        <webview className={'webview ' + pageClass} src={url}></webview>
+        <webview ref={(r) => { this.webview = r }} className={'webview ' + pageClass} src={url}></webview>
       </div>
     )
   }
