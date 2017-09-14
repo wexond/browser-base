@@ -5,14 +5,23 @@ import Tabs from '../Tabs'
 import Pages from '../Pages'
 import Bar from '../Bar'
 
+import Store from '../../store'
+
+import { connect } from 'inferno-mobx'
+
+@connect
 export default class App extends Component {
+  componentDidMount () {
+    Store.app = this
+  }
+
   render () {
     return (
       <div className='app'>
         <SystemBar>
           <Tabs></Tabs>
         </SystemBar>
-        <Bar></Bar>
+        <Bar ref={(r) => { this.bar = r }}></Bar>
         <Pages></Pages>
       </div>
     )
