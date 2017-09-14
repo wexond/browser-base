@@ -2,7 +2,13 @@
   flex: 1;
   height: 100%;
   white-space: nowrap;
-  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: auto;
   position: relative;
   margin-right: 16px;
+}
+
+.tabs::-webkit-scrollbar {
+  position: absolute;
+  height: 0px;
 }
