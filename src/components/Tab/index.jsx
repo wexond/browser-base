@@ -221,7 +221,7 @@ export default class Tab extends Component {
     }
 
     if (isSelected) {
-      Store.app.bar.setURL(tab.url)
+      Store.app.bar.setInfo(tab.url)
     }
 
     return (
