@@ -6,6 +6,8 @@ export default class Bar extends Component {
   componentDidMount () {
     this.focus = this.addressBar.focus
     this.setURL = this.addressBar.setURL
+    this.setInfo = this.addressBar.setInfo
+    this.setInputToggled = this.addressBar.setInputToggled
   }
 
   render () {
