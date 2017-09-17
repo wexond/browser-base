@@ -14,7 +14,6 @@ export default class AddressBar extends Component {
     super()
 
     this.state = {
-      url: '',
       domain: '',
       certificateType: 'Normal',
       certificateName: '',
@@ -25,6 +24,9 @@ export default class AddressBar extends Component {
   componentDidMount () {
     window.addEventListener('mousedown', (e) => {
       if (this.state.inputToggled) this.setInputToggled(false)
+      setTimeout(() => {
+        this.setURL(this.url)
+      }, 200)
     })
   }
 
@@ -33,14 +35,15 @@ export default class AddressBar extends Component {
   }
 
   setURL = (url) => {
-    this.setState({url: (!url.startsWith(wexondUrls.newtab)) ? url : ''})
+    this.url = url
+    // Change URL of input only when the input is not active.
+    if (!this.state.inputToggled) this.input.value = (!url.startsWith(wexondUrls.newtab)) ? url : ''
   }
 
   setInfo = (url) => {
     const domain = Network.getDomain(url)
-
-    // Change URL of input only when the input is not active.
-    if (!this.state.inputToggled) this.setURL(url)
+    
+    this.setURL(url)
 
     this.setState({domain: domain})
 
@@ -85,7 +88,6 @@ export default class AddressBar extends Component {
   render () {
     const {
       inputToggled,
-      url,
       domain,
       certificateType,
       certificateName
@@ -113,13 +115,18 @@ export default class AddressBar extends Component {
         }
 
         page.webview.loadURL(URLToNavigate)
+
+        this.setInputToggled(false)
       }
     }
 
     const onClick = (e) => {
       e.stopPropagation()
 
-      if (!this.state.inputToggled) this.setInputToggled(true)
+      if (!this.state.inputToggled) {
+        this.setInputToggled(true)
+        this.input.setSelectionRange(0, this.input.value.length)
+      }
     }
 
     const infoStyle = {
@@ -136,7 +143,7 @@ export default class AddressBar extends Component {
 
     return (
       <div {...addressBarEvents} className='address-bar'>
-        <input onKeyPress={onKeyPress} ref={(r) => { this.input = r }} placeholder='Search' value={url}></input>
+        <input onKeyPress={onKeyPress} ref={(r) => { this.input = r }} placeholder='Search'></input>
         <div style={infoStyle} className='info'>
           <div className={'icon ' + iconClassName} />
           <div className='certificate-name'>{certificateName}</div>
