@@ -68,59 +68,63 @@ export default class Network {
     return hostname
   }
 
-  static getCertificate (url, callback = null) {
-    const domain = Network.getDomain(url)
+  static getCertificate (url) {
+    return new Promise(
+      (resolve, reject) => {
+        const domain = Network.getDomain(url)
 
-    let certificateExists = false
+        let certificateExists = false
 
-    for (var i = 0; i < Store.certificates.length; i++) {
-      if (Store.certificates[i].domain === domain) {
-        let certificate = Store.certificates[i].certificate
-        if (certificate.subject == null) return
+        for (var i = 0; i < Store.certificates.length; i++) {
+          if (Store.certificates[i].domain === domain) {
+            let certificate = Store.certificates[i].certificate
+            if (certificate.subject == null) return
 
-        const data = {
-          type: 'Secure',
-          title: certificate.subject.O,
-          country: certificate.subject.C
+            const data = {
+              type: 'Secure',
+              title: certificate.subject.O,
+              country: certificate.subject.C
+            }
+            resolve(data)
+
+            certificateExists = true
+          }
         }
-        callback(data)
 
-        certificateExists = true
+        if (certificateExists) return
+
+        let options = {
+          host: domain,
+          port: 443,
+          method: 'GET'
+        }
+
+        let req = httpsRequest(options, (res) => {
+          let certificate = res.connection.getPeerCertificate()
+          if (certificate.subject == null) return
+
+          const data = {
+            type: 'Secure',
+            title: certificate.subject.O,
+            country: certificate.subject.C
+          }
+          resolve(data)
+
+          Store.certificates.push({
+            domain: domain,
+            certificate: certificate
+          })
+        })
+
+        req.on('error', (e) => {
+          const data = {
+            type: url.startsWith('wexond') ? 'Wexond' : 'Normal'
+          }
+          resolve(data)
+        })
+
+        req.end()
       }
-    }
-
-    if (certificateExists) return
-
-    let options = {
-      host: domain,
-      port: 443,
-      method: 'GET'
-    }
-
-    let req = httpsRequest(options, (res) => {
-      let certificate = res.connection.getPeerCertificate()
-      if (certificate.subject == null) return
-
-      const data = {
-        type: 'Secure',
-        title: certificate.subject.O,
-        country: certificate.subject.C
-      }
-      callback(data)
-
-      Store.certificates.push({
-        domain: domain,
-        certificate: certificate
-      })
-    })
-
-    req.on('error', (e) => {
-      const data = {
-        type: url.startsWith('wexond') ? 'Wexond' : 'Normal'
-      }
-      callback(data)
-    })
-
-    req.end()
+    )
   }
 }

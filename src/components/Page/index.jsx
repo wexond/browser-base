@@ -8,12 +8,13 @@ export default class Page extends Component {
   componentDidMount () {
     const tab = this.props.tab
     const page = this.props.page
+
     page.webview = this.webview
 
     this.webview.addEventListener('did-stop-loading', (e) => {
       tab.url = this.webview.getURL()
 
-      Store.app.bar.setURL(tab.url)
+      Store.app.bar.setInfo(tab.url)
     })
   }
 
