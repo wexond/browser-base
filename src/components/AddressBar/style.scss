@@ -1,17 +1,62 @@
 .address-bar {
-  display: flex;
-  flex-flow: row;
   flex: 1;
   height: 100%;
   margin-left: 8px;
   margin-right: 8px;
+  position: relative;
 
   input {
+    @include Body1;
+    position: absolute;
     border: none;
     outline: none;
     box-sizing: border-box;
-    flex: 1;
-    margin-left: 8px;
+    width: calc(100% - 16px);
+    height: 100%;
+    left: 16px;
     opacity: $primary-opacity-light;
+  }
+
+  .info {
+    background-color: white;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transition: 0.2s opacity;
+
+    .icon {
+      float: left;
+      @include center-vertical;
+      width: 16px;
+      height: 16px;
+      @include image-center(100%, 100%);
+    }
+
+    .domain {
+      float: left;
+      @include center-vertical;
+      position: relative;
+      opacity: $secondary-opacity-light;
+    }
+
+    .certificate-name {
+      float: left;
+      @include center-vertical;
+      position: relative;
+      opacity: $primary-opacity-light;
+    }
+
+    .separator {
+      float: left;
+      position: relative;
+      margin-left: 8px;
+      margin-right: 8px;
+      width: 1px;
+      height: 16px;
+      background-color: rgba(0,0,0, $dividers-opacity-light);
+      @include center-vertical;
+    }
   }
 }

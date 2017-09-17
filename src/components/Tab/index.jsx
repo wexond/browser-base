@@ -193,7 +193,6 @@ export default class Tab extends Component {
 
     const onMouseDown = (e) => {
       e.preventDefault()
-      e.stopPropagation()
       if (!isSelected) this.select()
       Store.tabDragData = {
         isMouseDown: true,
