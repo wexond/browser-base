@@ -40,11 +40,16 @@
       }
 
       &.secure {
-        background-image: url(images/Bar/secure.svg);
+        -webkit-mask-image: url(images/Bar/secure.svg);
+        -webkit-mask-size: 100% 100%;
+        -webkit-mask-repeat: no-repeat;
+        background-color: green;
       }
 
       &.wexond {
-        background-image: url(images/Bar/normal.svg);
+        width: 20px;
+        height: 20px;
+        background-image: url(images/Bar/wexond.png);
       }
     }
 
