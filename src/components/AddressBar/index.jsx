@@ -24,9 +24,6 @@ export default class AddressBar extends Component {
   componentDidMount () {
     window.addEventListener('mousedown', (e) => {
       if (this.state.inputToggled) this.setInputToggled(false)
-      setTimeout(() => {
-        this.setURL(this.url)
-      }, 200)
     })
   }
 
@@ -52,7 +49,11 @@ export default class AddressBar extends Component {
 
   setInputToggled = (flag) => {
     this.setState({inputToggled: flag})
-    if (flag) this.focus()
+
+    if (flag) {
+      this.focus()
+      this.input.value = (!this.url.startsWith(wexondUrls.newtab)) ? this.url : ''
+    }
   }
 
   setCertificate = async (url) => {
