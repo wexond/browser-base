@@ -16,14 +16,16 @@ export default class AddressBar extends Component {
     this.state = {
       domain: '',
       certificateType: 'Normal',
-      certificateName: '',
-      inputToggled: false
+      certificateName: ''
     }
+
+    this.inputToggled = false
+    this.url = ''
   }
 
   componentDidMount () {
     window.addEventListener('mousedown', (e) => {
-      if (this.state.inputToggled) this.setInputToggled(false)
+      if (this.inputToggled) this.setInputToggled(false)
     })
   }
 
@@ -34,7 +36,7 @@ export default class AddressBar extends Component {
   setURL = (url) => {
     this.url = url
     // Change URL of input only when the input is not active.
-    if (!this.state.inputToggled) this.input.value = (!url.startsWith(wexondUrls.newtab)) ? url : ''
+    if (!this.inputToggled) this.input.value = (!url.startsWith(wexondUrls.newtab)) ? url : ''
   }
 
   setInfo = (url) => {
@@ -48,12 +50,15 @@ export default class AddressBar extends Component {
   }
 
   setInputToggled = (flag) => {
-    this.setState({inputToggled: flag})
+    this.info.style.opacity = (flag) ? 0 : 1
+    this.info.style.pointerEvents = (flag) ? 'none' : 'auto'
 
     if (flag) {
       this.focus()
       this.input.value = (!this.url.startsWith(wexondUrls.newtab)) ? this.url : ''
     }
+
+    this.inputToggled = flag
   }
 
   setCertificate = async (url) => {
@@ -88,7 +93,6 @@ export default class AddressBar extends Component {
 
   render () {
     const {
-      inputToggled,
       domain,
       certificateType,
       certificateName
@@ -124,15 +128,10 @@ export default class AddressBar extends Component {
     const onClick = (e) => {
       e.stopPropagation()
 
-      if (!this.state.inputToggled) {
+      if (!this.inputToggled) {
         this.setInputToggled(true)
         this.input.setSelectionRange(0, this.input.value.length)
       }
-    }
-
-    const infoStyle = {
-      opacity: (inputToggled) ? 0 : 1,
-      pointerEvents: (inputToggled) ? 'none' : 'auto'
     }
 
     const addressBarEvents = {
@@ -145,7 +144,7 @@ export default class AddressBar extends Component {
     return (
       <div {...addressBarEvents} className='address-bar'>
         <input onKeyPress={onKeyPress} ref={(r) => { this.input = r }} placeholder='Search'></input>
-        <div style={infoStyle} className='info'>
+        <div ref={(r) => { this.info = r }} className='info'>
           <div className={'icon ' + iconClassName} />
           <div className='certificate-name'>{certificateName}</div>
           <div className='separator' />
