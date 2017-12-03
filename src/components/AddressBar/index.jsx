@@ -25,7 +25,7 @@ export default class AddressBar extends Component {
 
   componentDidMount () {
     window.addEventListener('mousedown', (e) => {
-      if (this.inputToggled) this.setInputToggled(false)
+      if (this.inputToggled && !this.url.startsWith(wexondUrls.newtab)) this.setInputToggled(false)
     })
   }
 
@@ -137,8 +137,7 @@ export default class AddressBar extends Component {
     const addressBarEvents = {
       onMouseDown: (e) => { 
         e.stopPropagation() 
-      },
-      onClick: onClick
+      }
     }
 
     return (
@@ -148,7 +147,7 @@ export default class AddressBar extends Component {
           <div className={'icon ' + iconClassName} />
           <div className='certificate-name'>{certificateName}</div>
           <div className='separator' />
-          <div className='domain'>{domain}</div>
+          <div className='domain' onClick={onClick}>{domain}</div>
         </div>
         <div className='action-icons'>
           <div className='action-icon favorite' />
