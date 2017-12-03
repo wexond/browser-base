@@ -221,7 +221,7 @@ export default class Tab extends Component {
     if (isSelected) {
       Store.app.bar.setInfo(tab.url)
 
-      if (tab.url.startsWith('wexond://newtab') && !this.selected) {
+      if (tab.url.startsWith('wexond://newtab')) {
         setTimeout(() => {
           Store.app.bar.setInputToggled(true)
         })
