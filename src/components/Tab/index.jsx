@@ -179,12 +179,12 @@ export default class Tab extends Component {
     }
 
     const borderLeftStyle = {
-      display: (isSelected) ? 'block' : 'none',
+      display: (isSelected && Store.tabs.indexOf(tab) !== 0) ? 'block' : 'none',
       left: 0
     }
 
     const selectedTab = Store.tabs.filter(ttab => {
-      return tab.id === Store.selectedTab
+      return ttab.id === Store.selectedTab
     })
 
     const borderRightStyle = {
