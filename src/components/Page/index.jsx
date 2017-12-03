@@ -15,6 +15,8 @@ export default class Page extends Component {
       tab.url = this.webview.getURL()
 
       Store.app.bar.setInfo(tab.url)
+
+      Store.app.bar.setInputToggled(false);
     })
   }
 
