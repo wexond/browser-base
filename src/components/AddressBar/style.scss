@@ -18,36 +18,44 @@
 
   .info {
     background-color: white;
-    width: 100%;
-    position: absolute;
+    position: relative;
     top: 0;
     opacity: 0;
     left: 0;
-    height: 100%;
     transition: 0.15s opacity;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    height: 100%;
+
+    .click-area {
+      flex: 1;
+      cursor: text;
+      height: 100%;
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+    }
 
     .icon {
-      position: relative;
-      float: left;
-      @include center-vertical;
       width: 16px;
       height: 16px;
       @include image-center(100%, 100%);
       margin-right: 8px;
 
-      &.normal {
+      &.Normal {
         background-image: url(images/Bar/normal.svg);
         opacity: $secondary-opacity-light;
       }
 
-      &.secure {
+      &.Secure {
         -webkit-mask-image: url(images/Bar/secure.svg);
         -webkit-mask-size: 100% 100%;
         -webkit-mask-repeat: no-repeat;
         background-color: green;
       }
 
-      &.wexond {
+      &.Wexond {
         width: 20px;
         height: 20px;
         background-image: url(images/Bar/wexond.png);
@@ -55,29 +63,23 @@
     }
 
     .domain {
-      float: left;
-      @include center-vertical;
-      position: relative;
       opacity: $secondary-opacity-light;
-      cursor: text;
     }
 
     .certificate-name {
-      float: left;
-      @include center-vertical;
-      position: relative;
       opacity: $primary-opacity-light;
+
+      &.Secure {
+        color: green;
+      }
     }
 
     .separator {
-      float: left;
-      position: relative;
       margin-left: 8px;
       margin-right: 8px;
       width: 1px;
       height: 16px;
       background-color: rgba(0,0,0, $dividers-opacity-light);
-      @include center-vertical;
     }
   }
 }

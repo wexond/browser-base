@@ -85,6 +85,7 @@ export default class Network {
               title: certificate.subject.O,
               country: certificate.subject.C
             }
+
             resolve(data)
 
             certificateExists = true
