@@ -9,6 +9,8 @@ export default class Page extends Component {
     const tab = this.props.tab
     const page = this.props.page
 
+    page.page = this
+
     page.webview = this.webview
 
     this.webview.addEventListener('did-stop-loading', (e) => {
@@ -18,6 +20,24 @@ export default class Page extends Component {
 
       Store.app.bar.setInputToggled(false);
     })
+  }
+
+  goBack () {
+    this.webview.goBack()
+    
+    Store.app.bar.refreshIconsState()
+  }
+
+  goForward () {
+    this.webview.goForward()
+    
+    Store.app.bar.refreshIconsState()
+  }
+
+  refresh () {
+    this.webview.reload()
+
+    Store.app.bar.refreshIconsState()
   }
 
   render () {
