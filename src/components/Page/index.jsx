@@ -15,30 +15,24 @@ export default class Page extends Component {
 
     this.webview.addEventListener('did-stop-loading', (e) => {
       tab.url = this.webview.getURL()
-
+      Store.app.bar.url = tab.url
       Store.app.bar.setInfo(tab.url)
-
-      Store.app.bar.setInputToggled(false);
-
       Store.app.bar.refreshIconsState()
     })
   }
 
   goBack () {
     this.webview.goBack()
-    
     Store.app.bar.refreshIconsState()
   }
 
   goForward () {
     this.webview.goForward()
-    
     Store.app.bar.refreshIconsState()
   }
 
   refresh () {
     this.webview.reload()
-
     Store.app.bar.refreshIconsState()
   }
 
