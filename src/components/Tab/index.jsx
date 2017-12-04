@@ -28,6 +28,8 @@ export default class Tab extends Component {
   componentDidMount () {
     const tab = this.props.tab
   
+    tab.tab = this
+
     if (tab.select) this.select()
   }
 
