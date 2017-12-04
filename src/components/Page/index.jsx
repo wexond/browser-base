@@ -19,6 +19,8 @@ export default class Page extends Component {
       Store.app.bar.setInfo(tab.url)
 
       Store.app.bar.setInputToggled(false);
+
+      Store.app.bar.refreshIconsState()
     })
   }
 
