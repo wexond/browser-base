@@ -21,8 +21,6 @@ export default class Tab extends Component {
       hovered: false
     }
     this.dragData = {}
-
-    this.selected = false
   }
 
   componentDidMount () {
@@ -219,19 +217,6 @@ export default class Tab extends Component {
       onMouseEnter: onMouseEnter,
       onMouseLeave: onMouseLeave,
     }
-
-    if (isSelected) {
-      Store.app.bar.setInfo(tab.url)
-      Store.app.bar.refreshIconsState()
-
-      if (tab.url.startsWith('wexond://newtab')) {
-        setTimeout(() => {
-          Store.app.bar.setInputToggled(true)
-        })
-      }
-    }
-
-    this.selected = isSelected
 
     return (
       <div ref={(r) => { this.tab = r }} className='tab' style={tabStyle} {...tabEvents}>
