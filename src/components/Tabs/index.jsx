@@ -9,7 +9,7 @@ import AddTab from '../AddTab'
 
 import { defaultOptions, transitions } from '../../defaults/tabs'
 
-import { addTab, setPositions, setWidths, getPosition, getWidth, findTabToReplace } from '../../actions/tabs'
+import { addTab, setPositions, setWidths, getPosition, getWidth, findTabToReplace, getSelectedTab } from '../../actions/tabs'
 
 @connect
 export default class Tabs extends Component {
@@ -39,6 +39,25 @@ export default class Tabs extends Component {
       this.timer.time += 1
     }, 1000)
 
+    // Check for changes in Store.
+    observe(Store, change => {
+      const tab = getSelectedTab()
+
+      if (change.name === 'selectedTab') {
+        // Update some info in bar.
+        Store.app.bar.setInfo(tab.url)
+        Store.app.bar.refreshIconsState()
+  
+        // If the tab is a new tab, just toggle input in bar.
+        if (tab.url.startsWith('wexond://newtab')) {
+          setTimeout(() => {
+            Store.app.bar.setInputToggled(true)
+          })
+        }
+      }
+    })
+
+    // Check for changes in Store.tabs.
     observe(Store.tabs, change => {
       if (change.addedCount > 0 && change.removedCount > 0) return
       // If an item was added.
