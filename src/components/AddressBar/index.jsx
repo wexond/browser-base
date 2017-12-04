@@ -71,11 +71,11 @@ export default class AddressBar extends Component {
       certificateName += ' [' + certificate.country + ']'
     }
 
-    if (certificate.name == null && certificate.type === 'Secure') {
+    if (certificate.title == null && certificate.type === 'Secure') {
       certificateName = 'Secure'
-    } else if (certificate.name == null && certificate.type === 'Wexond') {
+    } else if (certificate.title == null && certificate.type === 'Wexond') {
       certificateName = 'Wexond'
-    } else if (certificate.name == null && certificate.type === 'Normal') {
+    } else if (certificate.title == null && certificate.type === 'Normal') {
       certificateName = ''
     }
 
@@ -97,13 +97,6 @@ export default class AddressBar extends Component {
       certificateType,
       certificateName
     } = this.state
-
-    let iconClassName = 'normal'
-    if (certificateType === 'Wexond') {
-      iconClassName = 'wexond'
-    } else if (certificateType === 'Secure') {
-      iconClassName = 'secure'
-    }
 
     const onKeyPress = (e) => {
       if (e.which === 13) {
@@ -144,11 +137,14 @@ export default class AddressBar extends Component {
       <div {...addressBarEvents} className='address-bar'>
         <input onKeyPress={onKeyPress} ref={(r) => { this.input = r }} placeholder='Search'></input>
         <div ref={(r) => { this.info = r }} className='info'>
-          <div className={'icon ' + iconClassName} />
-          <div className='certificate-name'>{certificateName}</div>
+          <div className={'icon ' + certificateType} />
+          <div className={'certificate-name ' + this.state.certificateType}>{certificateName}</div>
           <div className='separator' />
-          <div className='domain' onClick={onClick}>{domain}</div>
+          <div className='click-area' onClick={onClick}>
+            <div className='domain'>{domain}</div>
+          </div>
         </div>
+        
         <div className='action-icons'>
           <div className='action-icon favorite' />
           <div className='action-icon clear' />
