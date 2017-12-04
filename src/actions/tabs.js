@@ -23,7 +23,8 @@ export const addTab = data => {
     favicon: '',
     loading: false,
     render: true,
-    closing: false
+    closing: false,
+    tab: null
   }
 
   const page = {
@@ -34,6 +35,24 @@ export const addTab = data => {
   Store.tabs.push(tab)
   Store.pages.push(page)
   id++
+}
+
+export const getSelectedTab = () => {
+  const id = Store.selectedTab
+
+  for (var i = 0; i < Store.tabs.length; i++) {
+    if (Store.tabs[i].id === id) return Store.tabs[i]
+  }
+  return null
+}
+
+export const getSelectedPage = () => {
+  const id = Store.selectedTab
+
+  for (var i = 0; i < Store.pages.length; i++) {
+    if (Store.pages[i].id === id) return Store.pages[i]
+  }
+  return null
 }
 
 export const setWidths = (tabsWidth, addTabWidth, margin = 0) => {
