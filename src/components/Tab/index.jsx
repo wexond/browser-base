@@ -222,6 +222,7 @@ export default class Tab extends Component {
 
     if (isSelected) {
       Store.app.bar.setInfo(tab.url)
+      Store.app.bar.refreshIconsState()
 
       if (tab.url.startsWith('wexond://newtab')) {
         setTimeout(() => {

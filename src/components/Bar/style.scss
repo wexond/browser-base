@@ -27,17 +27,25 @@
       opacity: $primary-opacity-light;
     }
 
+    &.disabled {
+      opacity: $disabled-opacity-light;
+      pointer-events: none;
+    }
+
     &.back {
       background-image: url(images/Bar/back.svg);
       background-position: 4px center;
     }
+
     &.forward {
       background-image: url(images/Bar/forward.svg);
     }
+
     &.refresh {
       background-image: url(images/Bar/refresh.svg);
       @include image-center(20px, 20px);
     }
+
     &.menu {
       background-image: url(images/Bar/menu.svg);
       @include image-center(20px, 20px);
