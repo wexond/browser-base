@@ -1,10 +1,10 @@
 .bar {
   display: flex;
   flex-flow: row;
-  position: absolute;
   top: $system-bar-height;
   width: 100%;
   height: $bar-height;
+  z-index: 2;
   background-color: white;
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.29);
 
