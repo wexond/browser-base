@@ -1,0 +1,41 @@
+.suggestion {
+    padding: 8px;
+    border-radius: 2px;
+    width: 100%;
+
+    &:hover {
+        background-color: #EEEEEE;
+    }
+
+    .container {
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        width: calc(100% - (112px + 32px));
+        margin-left: 100px;
+
+        .favicon {
+            width: 16px;
+            height: 16px;
+            border: 1px dashed rgba(0, 0, 0, $dividers-opacity-light);
+        }
+    
+        .title {
+            margin-left: 16px;
+        }
+    
+        .address {
+            color: #2196F3;
+            @include Caption;
+            margin-top: 1px;
+        }
+
+        .dash {
+            opacity: $disabled-opacity-light;
+            margin-left: 6px;
+            margin-right: 6px;
+            @include Caption;
+            margin-top: 1px;
+        }
+    }
+}
