@@ -1,6 +1,7 @@
 body {
   @include Body1;
   @include cursor-default;
+  color: rgba(0, 0, 0, $primary-opacity-light);
   padding: 0;
   margin: 0;
   overflow: hidden;
