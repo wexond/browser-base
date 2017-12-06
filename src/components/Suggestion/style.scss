@@ -1,7 +1,8 @@
 .suggestion {
-    padding: 8px;
+    padding: 8px 0 8px 0;
     border-radius: 2px;
     width: 100%;
+    position: relative;
 
     &:hover {
         background-color: #EEEEEE;
@@ -12,7 +13,7 @@
         flex-flow: row;
         align-items: center;
         width: calc(100% - (112px + 32px));
-        margin-left: 100px;
+        margin-left: 108px;
 
         .favicon {
             width: 16px;
