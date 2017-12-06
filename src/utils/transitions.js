@@ -1,6 +1,6 @@
 export default class Transitions {
   /**
-   * Converts transitions string to array of transitions.
+   * Converts transitions string to an array of transitions.
    * @param {String} transitions
    * @return {Array}
    */
@@ -28,6 +28,7 @@ export default class Transitions {
    * Appends transition to string.
    * @param {String} transitions - current transitions
    * @param {String} transition - transition to add
+   * @return {String}
    */
   static appendTransition (transitions, transition) {
     transitions = Transitions.getTransitions(transitions)
@@ -41,6 +42,7 @@ export default class Transitions {
    * Removes transition from string.
    * @param {String} transitions - current transitions
    * @param {String} transition - transition to add
+   * @return {String}
    */
   static removeTransition (transitions, transition) {
     transitions = Transitions.getTransitions(transitions)

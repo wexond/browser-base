@@ -2,11 +2,6 @@ import Store from '../store'
 import { request as httpsRequest } from 'https' 
 
 export default class Network {
-  /**
-   * Requests URL and gets response.
-   * @param {string} url
-   * @param {function(response)} callback (optional)
-   */
   static requestUrl (url, callback = null) {
     var xmlHttp = new XMLHttpRequest()
     xmlHttp.onreadystatechange = function () {
@@ -28,11 +23,7 @@ export default class Network {
     xmlHttp.open('GET', url, true)
     xmlHttp.send()
   }
-  /**
-   * Checks if given string is an URL.
-   * @param {string} string
-   * @return {boolean}
-   */
+
   static isURL (string) {
     if (Network._isURL(string)) {
       return true
