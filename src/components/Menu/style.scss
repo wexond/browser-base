@@ -1,0 +1,21 @@
+.menu {
+    position: fixed;
+    width: 300px;
+    top: 256px;
+    left: 128px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    z-index: 3;
+    overflow: visible;
+
+    .separator {
+        margin-top: 8px;
+        margin-bottom: 8px;
+        width: 100%;
+        height: 1px;
+        background-color: rgba(0, 0, 0, 0.06);
+    }
+}
