@@ -45,7 +45,7 @@ export default class Page extends Component {
     }, 1)
 
     const onContextMenu = (e, params) => {
-      Store.app.menu.setState((previousState) => {
+      Store.app.pageMenu.setState((previousState) => {
         /**
          * 0  : Open link in new tab
          * 1  : -----------------------
@@ -84,7 +84,7 @@ export default class Page extends Component {
         }
       })
 
-      Store.app.menu.show()
+      Store.app.pageMenu.show()
       Store.app.pageMenuData = params
 
       let x = Store.cursor.x
@@ -97,15 +97,15 @@ export default class Page extends Component {
         left = x - 301
       }
 
-      if (top + Store.app.menu.newHeight > window.innerHeight) {
-        top = y - Store.app.menu.newHeight
+      if (top + Store.app.pageMenu.newHeight > window.innerHeight) {
+        top = y - Store.app.pageMenu.newHeight
       }
 
       if (top < 0) {
         top = 96
       }
 
-      Store.app.menu.setState({left: left, top: top})
+      Store.app.pageMenu.setState({left: left, top: top})
     }
   }
 
