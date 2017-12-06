@@ -1,8 +1,8 @@
 export default class Colors {
   /**
-   * Calculates foreground color based on background color
-   * @param {string} color
-   * @return {string}
+   * Calculates foreground color based on background color.
+   * @param {String} color
+   * @return {String}
    */
   static getForegroundColor (color) {
     var brightness = Colors.colorBrightness(color)
@@ -14,9 +14,9 @@ export default class Colors {
   }
   /**
    * Shades given color.
-   * @param {string} hex
-   * @param {number} lum - luminace
-   * @return {string} - new color hex
+   * @param {String} hex
+   * @param {Number} lum - luminace
+   * @return {String} - new color hex
    */
   static shadeColor (hex, lum) {
     hex = String(hex).replace(/[^0-9a-f]/gi, '')
@@ -36,10 +36,10 @@ export default class Colors {
   }
   /**
    * Converts RGB color to hex.
-   * @param {number} r
-   * @param {number} g
-   * @param {number} b
-   * @return {string} - hex of RGB color
+   * @param {Number} r
+   * @param {Number} g
+   * @param {Number} b
+   * @return {String} - hex of RGB color
    */
   static rgbToHex (rgb) {
     rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
@@ -50,7 +50,7 @@ export default class Colors {
   }
   /**
    * Extracts brightness from color.
-   * @param {string} color
+   * @param {String} color
    * @return {Number} - the brightness
    */
   static colorBrightness (color) {
@@ -80,8 +80,8 @@ export default class Colors {
   }
   /**
    * Converts hex color to RGB.
-   * @param {string} hex
-   * @return {object} - rgb
+   * @param {String} hex
+   * @return {Object} - rgb
    */
   static hexToRgb (hex) {
     var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
