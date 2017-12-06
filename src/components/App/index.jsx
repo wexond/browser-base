@@ -22,7 +22,7 @@ export default class App extends Component {
 
     window.addEventListener('mousedown', (e) => {
       this.suggestions.hide()
-      this.menu.hide()
+      this.pageMenu.hide()
     })
 
     window.addEventListener('mousemove' , (e) => {
@@ -30,7 +30,7 @@ export default class App extends Component {
       Store.cursor.y = e.pageY
     })
 
-    this.menu.setState({
+    this.pageMenu.setState({
       items: [
         {
           title: 'Open link in new tab',
@@ -104,7 +104,7 @@ export default class App extends Component {
         <Bar ref={(r) => { this.bar = r }} />
         <Suggestions ref={(r) => { this.suggestions = r }} />
         <Pages />
-        <Menu ref={(r) => { this.menu = r }} />
+        <Menu ref={(r) => { this.pageMenu = r }} />
       </div>
     )
   }
