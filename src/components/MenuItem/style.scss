@@ -1,0 +1,24 @@
+.menu-item {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 64px;
+    font-size: 15px;
+    position: relative;
+    @include Roboto-Regular;
+    transition: 0.25s background-color;
+
+    .icon {
+        width: 24px;
+        height: 24px;
+        position: absolute;
+        left: 24px;
+        @include center-vertical;
+        @include image-center(24px, auto);
+        background-image: url(images/Tabs/add.svg);
+        opacity: 0.54;
+    }
+
+    &:hover {
+        background-color: #F5F5F5;
+    }
+}
