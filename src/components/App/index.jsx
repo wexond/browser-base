@@ -15,56 +15,6 @@ import { connect } from 'inferno-mobx'
 export default class App extends Component {
   constructor () {
     super()
-
-    this.state = {
-      menuItems: [
-        {
-          title: 'First item',
-          type: 'item',
-          onClick: () => {
-            alert('x')
-          }
-        },
-        {
-          title: 'Second item',
-          type: 'item',
-          onClick: () => {
-            alert('x')
-          }
-        },
-        {
-          title: 'Third item',
-          type: 'item',
-          onClick: () => {
-            alert('x')
-          }
-        },
-        {
-          type: 'separator'
-        },
-        {
-          title: 'First item',
-          type: 'item',
-          onClick: () => {
-            alert('x')
-          }
-        },
-        {
-          title: 'Second item',
-          type: 'item',
-          onClick: () => {
-            alert('x')
-          }
-        },
-        {
-          title: 'Third item',
-          type: 'item',
-          onClick: () => {
-            alert('x')
-          }
-        },
-      ]
-    }
   }
 
   componentDidMount () {
@@ -72,6 +22,76 @@ export default class App extends Component {
 
     window.addEventListener('mousedown', (e) => {
       this.suggestions.hide()
+      this.menu.hide()
+    })
+
+    window.addEventListener('mousemove' , (e) => {
+      Store.cursor.x = e.pageX
+      Store.cursor.y = e.pageY
+    })
+
+    this.menu.setState({
+      items: [
+        {
+          title: 'Open link in new tab',
+          visible: false
+        },
+        {
+          type: 'separator',
+          visible: false
+        },
+        {
+          title: 'Copy link address',
+          visible: false
+        },
+        {
+          title: 'Save link as',
+          visible: false
+        },
+        {
+          type: 'separator',
+          visible: false
+        },
+        {
+          title: 'Open image in new tab',
+          visible: false
+        },
+        {
+          title: 'Save image as',
+          visible: false
+        },
+        {
+          title: 'Copy image',
+          visible: false
+        },
+        {
+          title: 'Copy image address',
+          visible: false
+        },
+        {
+          type: 'separator',
+          visible: false
+        },
+        {
+          title: 'Print',
+          visible: false
+        },
+        {
+          title: 'Save as',
+          visible: false
+        },
+        {
+          type: 'separator',
+          visible: false
+        },
+        {
+          title: 'View source',
+          visible: false
+        },
+        {
+          title: 'Inspect element'
+        }
+      ]
     })
   }
 
@@ -79,15 +99,12 @@ export default class App extends Component {
     return (
       <div className='app'>
         <SystemBar>
-          <Tabs></Tabs>
+          <Tabs />
         </SystemBar>
-        <Bar ref={(r) => { this.bar = r }}></Bar>
-        <Suggestions ref={(r) => { this.suggestions = r }}></Suggestions>
-        <Pages></Pages>
-        <Menu ref={(r) => this.menu = r } items={this.state.menuItems} />
-        <div className='temporary-button' onClick={(e) => {
-          this.menu.toggle(!this.menu.shown, e)
-        }} />
+        <Bar ref={(r) => { this.bar = r }} />
+        <Suggestions ref={(r) => { this.suggestions = r }} />
+        <Pages />
+        <Menu ref={(r) => { this.menu = r }} />
       </div>
     )
   }

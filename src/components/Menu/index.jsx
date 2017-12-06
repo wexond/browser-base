@@ -1,82 +1,142 @@
 import Component from 'inferno-component'
 
+import { observer } from 'inferno-mobx'
+import Store from '../../store'
+
 import MenuItem from '../MenuItem'
 
+@observer
 export default class Menu extends Component {
   constructor () {
     super()
 
     this.state = {
-      top: 0,
-      left: 0,
-      height: 0,
+      marginTop: 0,
       opacity: 0,
-      display: false
+      height: 0,
+      left: 0,
+      top: 0,
+      pointerEvents: false,
+      items: []
     }
 
-    this.shown = false
+    this.items = []
   }
 
-  toggle (flag, e) {
-    if (flag) {
-      const top = e.target.getBoundingClientRect().top
+  addItem = (item) => {
+    this.items.push(item)
+  }
 
-      this.setState({
-        display: true,
-        top: top
-      })
+  show = () => {
+    let separators = this.menu.getElementsByClassName('separator')
+    let separatorsCount = 0
 
-      setTimeout(() => {
-        this.setState({
-          height: this.root.scrollHeight,
-          opacity: 1,
-          top: top + 8
-        })
-      }, 10)
+    // Remove height transition to set height to 0 quickly.
+    this.menu.style.transition = '0.27s margin-top, 0.2s opacity'
+    this.setState({height: 0})
 
-      document.addEventListener('mousedown', this.onDocumentMouseDown)
-    } else {
-      this.setState({
-        height: 0,
-        opacity: 0,
-        top: this.state.top - 8
-      })
-
-      setTimeout(() => {
-        this.setState({
-          display: false
-        })
-      }, 200)
-
-      document.removeEventListener('mousedown', this.onDocumentMouseDown)
+    // Get amount of separators.
+    for (var i = 0; i < separators.length; i++) {
+      if (separators[i].style.display === 'block') {
+        separatorsCount += 1
+      }
     }
 
-    this.shown = flag
+    // Top padding is 16 and bottom too.
+    let topBottomPadding = 32
+    // Margin top and bottom of separators are 8.
+    let separatorsMargins = 16
+    // Initialize height by adding these values.
+    let height = separatorsCount + separatorsCount * separatorsMargins + topBottomPadding
+
+    // Get height of all items.
+    for (i = 0; i < this.items.length; i++) {
+      if (this.items[i].props.visible) {
+        height += 32
+      }
+    }
+
+    this.newHeight = height
+
+    setTimeout(() => {
+      // Revert height transition.
+      this.menu.style.transition = '0.3s height, 0.27s margin-top, 0.2s opacity'
+      this.setState({
+        marginTop: 0,
+        opacity: 1,
+        height: height,
+        pointerEvents: true
+      })
+    })
   }
 
-  onDocumentMouseDown = (e) => {
-    this.toggle(false)
+  hide = () => {
+    this.setState({
+      marginTop: -20,
+      opacity: 0,
+      pointerEvents: false
+    })
   }
 
   render () {
-    const style = {
-      top: this.state.top,
-      opacity: this.state.opacity,
-      maxHeight: this.state.height,
-      display: this.state.display ? 'block' : 'none'
+    const {
+      height,
+      marginTop,
+      opacity,
+      left,
+      top,
+      items,
+      pointerEvents
+    } = this.state
+
+    const menuStyle = {
+      height: height,
+      marginTop: marginTop,
+      opacity: opacity,
+      left: left,
+      top: top,
+      pointerEvents: (pointerEvents) ? 'auto' : 'none'
+    }
+
+    const onMouseDown = (e) => {
+      e.stopPropagation()
+    }
+
+    const menuEvents = {
+      onMouseDown: onMouseDown
     }
 
     return (
-      <div className='material-menu' style={style} ref={(r) => { this.root = r }}>
+      <div {...menuEvents} className='menu' style={menuStyle} ref={(r) => { this.menu = r }}>
+        <div className='items'>
           {
-            this.props.items.map((data, key) => {
+            items.map((data, key) => {
+              // Default values for an item.
+              if (data.visible == null) data.visible = true
+              if (data.type == null) data.type = 'item'
+
               if (data.type === 'separator') {
-                return <div className='separator' />
-              } else {
-                return <MenuItem title={data.title} icon={data.icon} onClick={data.onClick} />
+                const separatorStyle = {
+                  display: (data.visible) ? 'block' : 'none'
+                }
+
+                return <div style={separatorStyle} key={key} className='separator' />
+              } else if (data.type === 'item') {
+                const methodsToPass = {
+                  onClick: data.onClick,
+                  addItem: this.addItem,
+                  hide: this.hide
+                }
+
+                return (
+                  <MenuItem enabled={data.enabled} visible={data.visible} key={key} {...methodsToPass}>
+                    {data.title}
+                  </MenuItem>
+                )
               }
             })
           }
+        </div>
       </div>
     )
   }
