@@ -5,6 +5,7 @@ import Tabs from '../Tabs'
 import Pages from '../Pages'
 import Bar from '../Bar'
 import Suggestions from '../Suggestions'
+import ContextMenu from '../ContextMenu'
 
 import Store from '../../store'
 
@@ -29,6 +30,7 @@ export default class App extends Component {
         <Bar ref={(r) => { this.bar = r }}></Bar>
         <Suggestions ref={(r) => { this.suggestions = r }}></Suggestions>
         <Pages></Pages>
+        <ContextMenu ref={(r) => this.contextMenu = r } />
       </div>
     )
   }
