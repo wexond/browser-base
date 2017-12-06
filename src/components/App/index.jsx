@@ -85,6 +85,9 @@ export default class App extends Component {
         <Suggestions ref={(r) => { this.suggestions = r }}></Suggestions>
         <Pages></Pages>
         <Menu ref={(r) => this.menu = r } items={this.state.menuItems} />
+        <div className='temporary-button' onClick={(e) => {
+          this.menu.toggle(!this.menu.shown, e)
+        }} />
       </div>
     )
   }
