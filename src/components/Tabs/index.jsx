@@ -8,6 +8,7 @@ import Tab from '../Tab'
 import AddTab from '../AddTab'
 
 import { defaultOptions, transitions } from '../../defaults/tabs'
+import wexondUrls from '../../defaults/wexond-urls'
 
 import { addTab, setPositions, setWidths, getPosition, getWidth, findTabToReplace, getSelectedTab } from '../../actions/tabs'
 
@@ -47,13 +48,9 @@ export default class Tabs extends Component {
         // Update some info in bar.
         Store.app.bar.setInfo(tab.url)
         Store.app.bar.refreshIconsState()
-  
+
         // If the tab is a new tab, just toggle input in bar.
-        if (tab.url.startsWith('wexond://newtab')) {
-          setTimeout(() => {
-            Store.app.bar.setInputToggled(true)
-          })
-        }
+        Store.app.bar.setInputToggled(tab.url.startsWith(wexondUrls.newtab))
       }
     })
 

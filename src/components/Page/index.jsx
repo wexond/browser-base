@@ -14,10 +14,23 @@ export default class Page extends Component {
     page.webview = this.webview
 
     this.webview.addEventListener('did-stop-loading', (e) => {
-      tab.url = this.webview.getURL()
-      Store.app.bar.url = tab.url
-      Store.app.bar.setInfo(tab.url)
       Store.app.bar.refreshIconsState()
+    })
+
+    const didNavigate = (e) => {
+      tab.url = e.url
+      Store.url = e.url
+      Store.app.bar.setInfo(e.url)
+      Store.app.bar.setInputToggled(false)
+    }
+
+    this.webview.addEventListener('did-navigate', didNavigate)
+    this.webview.addEventListener('did-navigate-in-page', didNavigate)
+
+    this.webview.addEventListener('will-navigate', (e) => {
+      tab.url = e.url
+      Store.url = e.url
+      Store.app.bar.setInfo(tab.url)
     })
   }
 

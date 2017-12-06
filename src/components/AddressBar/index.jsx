@@ -8,6 +8,8 @@ import Store from '../../store'
 
 import Network from '../../utils/network'
 
+import { getSelectedTab } from '../../actions/tabs'
+
 @connect
 export default class AddressBar extends Component {
   constructor () {
@@ -20,12 +22,12 @@ export default class AddressBar extends Component {
     }
 
     this.inputToggled = false
-    this.url = ''
   }
 
   componentDidMount () {
     window.addEventListener('mousedown', (e) => {
-      if (this.inputToggled && !this.url.startsWith(wexondUrls.newtab)) this.setInputToggled(false)
+      this.setInputToggled(false)
+      this.setURL(Store.url)
     })
   }
 
@@ -34,14 +36,16 @@ export default class AddressBar extends Component {
   }
 
   setURL = (url) => {
-    this.url = url
+    Store.url = url
     // Change URL of input only when the input is not active.
-    if (!this.inputToggled) this.input.value = (!url.startsWith(wexondUrls.newtab)) ? url : ''
+    if (!this.inputToggled) {
+      this.input.value = (!url.startsWith(wexondUrls.newtab)) ? url : ''
+    }
   }
 
   setInfo = (url) => {
     const domain = Network.getDomain(url)
-    
+
     this.setURL(url)
 
     this.setState({domain: domain})
@@ -50,12 +54,16 @@ export default class AddressBar extends Component {
   }
 
   setInputToggled = (flag) => {
+    if (!flag) {
+      if (Store.url.startsWith(wexondUrls.newtab)) return
+    }
+    
     this.info.style.opacity = (flag) ? 0 : 1
     this.info.style.pointerEvents = (flag) ? 'none' : 'auto'
 
     if (flag) {
       this.focus()
-      this.input.value = (!this.url.startsWith(wexondUrls.newtab)) ? this.url : ''
+      this.input.value = (!Store.url.startsWith(wexondUrls.newtab)) ? Store.url : ''
     }
 
     this.inputToggled = flag
@@ -98,9 +106,25 @@ export default class AddressBar extends Component {
       certificateName
     } = this.state
 
+    const onInput = (e) => {
+      if (e.currentTarget.value !== '') {
+        Store.app.suggestions.show()
+      } else {
+        Store.app.suggestions.hide()
+      }
+    }
+
+    const onKeyUp = (e) => {
+      if (e.which === 27) { // Escape.
+        this.setInputToggled(false)
+        this.setURL(Store.url)
+      } 
+    } 
+
     const onKeyPress = (e) => {
-      if (e.which === 13) {
+      if (e.which === 13) { // Enter.
         e.preventDefault()
+
         const page = Store.pages.filter(page => Store.selectedTab === page.id)[0]
         const inputText = e.currentTarget.value
 
@@ -115,6 +139,8 @@ export default class AddressBar extends Component {
         page.webview.loadURL(URLToNavigate)
 
         this.setInputToggled(false)
+
+        Store.app.suggestions.hide()
       }
     }
 
@@ -133,9 +159,15 @@ export default class AddressBar extends Component {
       }
     }
 
+    const inputEvents = {
+      onKeyPress: onKeyPress,
+      onKeyUp: onKeyUp,
+      onInput: onInput
+    }
+
     return (
       <div {...addressBarEvents} className='address-bar'>
-        <input onKeyPress={onKeyPress} ref={(r) => { this.input = r }} placeholder='Search'></input>
+        <input {...inputEvents} ref={(r) => { this.input = r }} placeholder='Search'></input>
         <div ref={(r) => { this.info = r }} className='info'>
           <div className={'icon ' + certificateType} />
           <div className={'certificate-name ' + this.state.certificateType}>{certificateName}</div>

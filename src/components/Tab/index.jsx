@@ -21,6 +21,7 @@ export default class Tab extends Component {
       hovered: false
     }
     this.dragData = {}
+    this.actualValue = ''
   }
 
   componentDidMount () {

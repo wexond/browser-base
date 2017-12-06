@@ -14,6 +14,10 @@ import { connect } from 'inferno-mobx'
 export default class App extends Component {
   componentDidMount () {
     Store.app = this
+
+    window.addEventListener('mousedown', (e) => {
+      this.suggestions.hide()
+    })
   }
 
   render () {
@@ -23,7 +27,7 @@ export default class App extends Component {
           <Tabs></Tabs>
         </SystemBar>
         <Bar ref={(r) => { this.bar = r }}></Bar>
-        <Suggestions></Suggestions>
+        <Suggestions ref={(r) => { this.suggestions = r }}></Suggestions>
         <Pages></Pages>
       </div>
     )
