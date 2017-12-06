@@ -1,15 +1,17 @@
-.menu {
+.material-menu {
     position: fixed;
     width: 300px;
     top: 256px;
-    left: 128px;
+    left: 60px;
     padding-top: 16px;
     padding-bottom: 16px;
     background-color: #fff;
     border-radius: 2px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     z-index: 3;
-    overflow: visible;
+    overflow: hidden;
+    opacity: 0;
+    transition: 0.3s opacity, 0.2s max-height ease-out, 0.2s top ease-out;
 
     .separator {
         margin-top: 8px;
@@ -18,4 +20,13 @@
         height: 1px;
         background-color: rgba(0, 0, 0, 0.06);
     }
+}
+
+.temporary-button {
+    position: fixed;
+    top: 200px;
+    left: 256px;
+    background-color: red;
+    width: 100px;
+    height: 50px;
 }
