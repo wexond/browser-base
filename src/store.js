@@ -8,4 +8,6 @@ export default new class Store {
   @observable tabDragData = {}
   url = ''
   certificates = []
+  pageMenuData = {}
+  cursor = {}
 }
