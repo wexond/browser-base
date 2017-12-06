@@ -58,11 +58,11 @@ export default class Bar extends Component {
 
     return (
       <div className='bar'>
-        <div className={'bar-icon back ' + ((!canGoBack) ? 'disabled' : '')} onClick={onBackClick} />
-        <div className={'bar-icon forward ' + ((!canGoForward) ? 'disabled' : '')} onClick={onForwardClick} />
-        <div className='bar-icon refresh' onClick={onRefreshClick} />
+        <div className={'bar-icon back-icon ' + ((!canGoBack) ? 'disabled' : '')} onClick={onBackClick} />
+        <div className={'bar-icon forward-icon ' + ((!canGoForward) ? 'disabled' : '')} onClick={onForwardClick} />
+        <div className='bar-icon refresh-icon' onClick={onRefreshClick} />
         <AddressBar ref={(r) => { this.addressBar = r }} />
-        <div className='bar-icon menu' />
+        <div className='bar-icon menu-icon' />
       </div>
     )
   }
