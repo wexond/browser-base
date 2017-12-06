@@ -3,5 +3,8 @@
     z-index: 3;
     background-color: white;
     box-shadow: 0 3px 5px rgba(0,0,0,0.13), 0 3px 5px rgba(0,0,0,0.2);
-    display: flex;
+    position: absolute;
+    width: 100%;
+    top: 72px;
+    display: none;
 }
