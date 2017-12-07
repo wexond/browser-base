@@ -28,7 +28,19 @@ export default class Page extends Component {
     this.webview.addEventListener('will-navigate', updateInfo)
 
     this.webview.addEventListener('page-favicon-updated', (e) => {
-      tab.favicon = e.favicons[0]
+      let request = new XMLHttpRequest()
+      request.onreadystatechange = function (event) {
+        if (request.readyState === 4) {
+          if (request.status === 404) {
+            tab.favicon = ''
+          } else {
+            tab.favicon = e.favicons[0]
+          }
+        }
+      }
+
+      request.open('GET', e.favicons[0], true)
+      request.send(null)
     })
 
     this.webview.addEventListener('page-title-updated', (e) => {
