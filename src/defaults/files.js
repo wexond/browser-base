@@ -12,17 +12,3 @@ export const paths = {
     bookmarks: join(homedir, '.wexond', 'userData', 'bookmarks.json')
   }
 }
-
-// Paths are relative to:
-// %USERPROFILE%/.wexond/ for Windows,
-// $HOME/.wexond/ for Linux.
-export const requiredFiles = [
-  {
-    path: 'history.json',
-    defaultContent: '[]'
-  },
-  {
-    path: 'bookmarks.json',
-    defaultContent: '[]'
-  }
-]

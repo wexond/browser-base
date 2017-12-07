@@ -11,35 +11,34 @@ export default class Page extends Component {
 
     page.page = this
 
-    page.webview = this.webview
-
-    this.webview.addEventListener('did-stop-loading', (e) => {
+    const updateInfo = (e) => {
       Store.app.bar.refreshIconsState()
-    })
 
-    const didNavigate = (e) => {
-      tab.url = e.url
-      Store.url = e.url
-      Store.app.bar.setInfo(e.url)
-      Store.app.bar.setInputToggled(false)
+      if (e.url != null) {
+        if (e.isMainFrame != null && !e.isMainFrame) return
+        tab.url = e.url
+        Store.url = e.url
+        Store.app.bar.addressBar.setInfo(e.url)
+      }
     }
 
-    this.webview.addEventListener('did-navigate', didNavigate)
-    this.webview.addEventListener('did-navigate-in-page', didNavigate)
+    this.webview.addEventListener('did-stop-loading', updateInfo)
+    this.webview.addEventListener('did-navigate', updateInfo)
+    this.webview.addEventListener('did-navigate-in-page', updateInfo)
+    this.webview.addEventListener('will-navigate', updateInfo)
 
-    this.webview.addEventListener('will-navigate', (e) => {
-      tab.url = e.url
-      Store.url = e.url
-      Store.app.bar.setInfo(tab.url)
-    })
-
+    // When webcontents of a webview are not available,
+    // we can't use them, so we need to check if 
+    // these webcontents are not null, 
+    // and then use them.
     let checkWebcontentsInterval = setInterval(() => {
+      // We need to use webcontents,
+      // to add an event listener `context-menu`.
       if (this.webview.getWebContents() != null) {
-        event = new Event('webcontents-load')
-        this.webview.dispatchEvent(event)
-
         this.webview.getWebContents().on('context-menu', onContextMenu)
 
+        // When these webcontents are finally not null,
+        // just remove the interval.
         clearInterval(checkWebcontentsInterval)
       }
     }, 1)
@@ -84,19 +83,25 @@ export default class Page extends Component {
         }
       })
 
-      Store.app.pageMenu.show()
-      Store.app.pageMenuData = params
+      Store.app.showPageMenu()
+      Store.pageMenuData = params
 
+      // Calculate new menu position
+      // using cursor x, y and 
+      // width, height of the menu.
       let x = Store.cursor.x
       let y = Store.cursor.y
 
+      // By default it opens menu from upper left corner.
       let left = x + 1
       let top = y + 1
 
+      // Open menu from right corner.
       if (left + 300 > window.innerWidth) {
         left = x - 301
       }
 
+      // Open menu from bottom corner.
       if (top + Store.app.pageMenu.newHeight > window.innerHeight) {
         top = y - Store.app.pageMenu.newHeight
       }
@@ -105,6 +110,7 @@ export default class Page extends Component {
         top = 96
       }
 
+      // Set the new position.
       Store.app.pageMenu.setState({left: left, top: top})
     }
   }

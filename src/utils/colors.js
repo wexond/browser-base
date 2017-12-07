@@ -1,7 +1,7 @@
 export default class Colors {
   /**
    * Calculates foreground color based on background color.
-   * @param {String} color
+   * @param {String} color - color in hex
    * @return {String}
    */
   static getForegroundColor (color) {
@@ -36,9 +36,7 @@ export default class Colors {
   }
   /**
    * Converts RGB color to hex.
-   * @param {Number} r
-   * @param {Number} g
-   * @param {Number} b
+   * @param {String} rgb
    * @return {String} - hex of RGB color
    */
   static rgbToHex (rgb) {
