@@ -6,6 +6,7 @@ export default new class Store {
   @observable addTabLeft = 0
   @observable selectedTab = -1
   @observable tabDragData = {}
+  
   url = ''
   certificates = []
   pageMenuData = {}

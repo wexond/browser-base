@@ -56,6 +56,7 @@
       left: 8px;
       width: 16px;
       height: 16px;
+      @include image-center(16px, 16px);
     }
 
     .close {
