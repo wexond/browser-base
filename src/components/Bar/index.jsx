@@ -14,13 +14,6 @@ export default class Bar extends Component {
     }
   }
 
-  componentDidMount () {
-    this.focus = this.addressBar.focus
-    this.setURL = this.addressBar.setURL
-    this.setInfo = this.addressBar.setInfo
-    this.setInputToggled = this.addressBar.setInputToggled
-  }
-
   refreshIconsState () {
     const page = getSelectedPage()
 
@@ -40,19 +33,16 @@ export default class Bar extends Component {
 
     const onBackClick = () => {
       const page = getSelectedPage()
-
       page.page.goBack()
     }
 
     const onForwardClick = () => {
       const page = getSelectedPage()
-
       page.page.goForward()
     }
 
     const onRefreshClick = () => {
       const page = getSelectedPage()
-
       page.page.refresh()
     }
 

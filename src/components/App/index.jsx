@@ -11,6 +11,8 @@ import Store from '../../store'
 
 import { connect } from 'inferno-mobx'
 
+import { pageMenuItems } from '../../defaults/page-menu-items'
+
 @connect
 export default class App extends Component {
   constructor () {
@@ -22,7 +24,7 @@ export default class App extends Component {
 
     window.addEventListener('mousedown', (e) => {
       this.suggestions.hide()
-      this.pageMenu.hide()
+      this.hidePageMenu()
     })
 
     window.addEventListener('mousemove' , (e) => {
@@ -30,69 +32,19 @@ export default class App extends Component {
       Store.cursor.y = e.pageY
     })
 
-    this.pageMenu.setState({
-      items: [
-        {
-          title: 'Open link in new tab',
-          visible: false
-        },
-        {
-          type: 'separator',
-          visible: false
-        },
-        {
-          title: 'Copy link address',
-          visible: false
-        },
-        {
-          title: 'Save link as',
-          visible: false
-        },
-        {
-          type: 'separator',
-          visible: false
-        },
-        {
-          title: 'Open image in new tab',
-          visible: false
-        },
-        {
-          title: 'Save image as',
-          visible: false
-        },
-        {
-          title: 'Copy image',
-          visible: false
-        },
-        {
-          title: 'Copy image address',
-          visible: false
-        },
-        {
-          type: 'separator',
-          visible: false
-        },
-        {
-          title: 'Print',
-          visible: false
-        },
-        {
-          title: 'Save as',
-          visible: false
-        },
-        {
-          type: 'separator',
-          visible: false
-        },
-        {
-          title: 'View source',
-          visible: false
-        },
-        {
-          title: 'Inspect element'
-        }
-      ]
-    })
+    this.setPageMenuItems(pageMenuItems)
+  }
+
+  showPageMenu () {
+    this.pageMenu.show()
+  }
+
+  hidePageMenu () {
+    this.pageMenu.hide()
+  }
+
+  setPageMenuItems (items) {
+    this.pageMenu.setState({items: items})
   }
 
   render () {

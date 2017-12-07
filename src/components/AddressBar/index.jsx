@@ -8,7 +8,7 @@ import Store from '../../store'
 
 import Network from '../../utils/network'
 
-import { getSelectedTab } from '../../actions/tabs'
+import { getSelectedTab, getSelectedPage } from '../../actions/tabs'
 
 @connect
 export default class AddressBar extends Component {
@@ -37,7 +37,7 @@ export default class AddressBar extends Component {
 
   setURL = (url) => {
     Store.url = url
-    // Change URL of input only when the input is not active.
+    // Change URL of input only when it's not active.
     if (!this.inputToggled) {
       this.input.value = (!url.startsWith(wexondUrls.newtab)) ? url : ''
     }
@@ -53,14 +53,19 @@ export default class AddressBar extends Component {
     this.setCertificate(url)
   }
 
-  setInputToggled = (flag) => {
-    if (!flag) {
+  setInputToggled = (flag, force = false) => {
+    if (!flag && !force) {
+      // Always have toggled input when the url
+      // starts with wexond://newtab.
       if (Store.url.startsWith(wexondUrls.newtab)) return
     }
     
+    // Hide or show the info depending on the flag
+    // whether it's true or false.
     this.info.style.opacity = (flag) ? 0 : 1
     this.info.style.pointerEvents = (flag) ? 'none' : 'auto'
 
+    // Focus and change input value only when it's toggled.
     if (flag) {
       this.focus()
       this.input.value = (!Store.url.startsWith(wexondUrls.newtab)) ? Store.url : ''
@@ -71,7 +76,7 @@ export default class AddressBar extends Component {
 
   setCertificate = async (url) => {
     const certificate = await Network.getCertificate(url)
-    const tab = Store.tabs.filter(tab => tab.id === Store.selectedTab)[0]
+    const tab = getSelectedTab()
 
     let certificateName = certificate.title
     
@@ -115,17 +120,20 @@ export default class AddressBar extends Component {
     }
 
     const onKeyUp = (e) => {
+      // When pressing escape in the input,
+      // just toggle it off, and revert its value.
       if (e.which === 27) { // Escape.
         this.setInputToggled(false)
         this.setURL(Store.url)
-      } 
+      }
     } 
 
     const onKeyPress = (e) => {
+      // When pressing enter just navigate WebView.
       if (e.which === 13) { // Enter.
         e.preventDefault()
 
-        const page = Store.pages.filter(page => Store.selectedTab === page.id)[0]
+        const page = getSelectedPage()
         const inputText = e.currentTarget.value
 
         let URLToNavigate = inputText
@@ -136,10 +144,11 @@ export default class AddressBar extends Component {
           if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'https://www.google.com/search?q=' + inputText
         }
 
-        page.webview.loadURL(URLToNavigate)
+        page.page.webview.loadURL(URLToNavigate)
 
-        this.setInputToggled(false)
-
+        // Force toggle off the input.
+        this.setInputToggled(false, true)
+        
         Store.app.suggestions.hide()
       }
     }
@@ -154,9 +163,7 @@ export default class AddressBar extends Component {
     }
 
     const addressBarEvents = {
-      onMouseDown: (e) => { 
-        e.stopPropagation() 
-      }
+      onMouseDown: (e) => e.stopPropagation() 
     }
 
     const inputEvents = {

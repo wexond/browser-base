@@ -2,41 +2,17 @@ import Store from '../store'
 import { request as httpsRequest } from 'https' 
 
 export default class Network {
-  static requestUrl (url, callback = null) {
-    var xmlHttp = new XMLHttpRequest()
-    xmlHttp.onreadystatechange = function () {
-      if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-        if (callback != null) {
-          if (xmlHttp.statusText === 'OK') {
-            callback(xmlHttp.responseText, null)
-          } else {
-            callback(xmlHttp.responseText, xmlHttp.statusText)
-          }
-        }
-      }
-    }
-
-    xmlHttp.onerror = function (e) {
-      callback(xmlHttp.responseText, xmlHttp.statusText)
-    }
-
-    xmlHttp.open('GET', url, true)
-    xmlHttp.send()
-  }
-
   static isURL (string) {
-    if (Network._isURL(string)) {
+    const _isURL = (string) => {
+      let pattern = /^(?:\w+:)?\/\/([^\s.]+\.\S{2}|localhost[:?\d]*)\S*$/
+      return pattern.test(string)
+    }
+
+    if (_isURL(string)) {
       return true
     } else {
-      if (Network._isURL('http://' + string)) {
-        return true
-      }
-      return false
+      return _isURL('http://' + string)
     }
-  }
-  static _isURL (string) {
-    var pattern = /^(?:\w+:)?\/\/([^\s.]+\.\S{2}|localhost[:?\d]*)\S*$/
-    return pattern.test(string)
   }
 
   static getDomain (url) {

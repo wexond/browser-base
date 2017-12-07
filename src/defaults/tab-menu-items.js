@@ -15,7 +15,7 @@ export const tabMenuItems = [
     title: 'Duplicate'
   },
   {
-    title: 'Separator'
+    type: 'separator'
   },
   {
     title: 'Close tab'
