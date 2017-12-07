@@ -46,11 +46,11 @@ export default class Tabs extends Component {
 
       if (change.name === 'selectedTab') {
         // Update some info in bar.
-        Store.app.bar.setInfo(tab.url)
+        Store.app.bar.addressBar.setInfo(tab.url)
         Store.app.bar.refreshIconsState()
 
         // If the tab is a new tab, just toggle input in bar.
-        Store.app.bar.setInputToggled(tab.url.startsWith(wexondUrls.newtab))
+        Store.app.bar.addressBar.setInputToggled(tab.url.startsWith(wexondUrls.newtab))
       }
     })
 
@@ -137,8 +137,14 @@ export default class Tabs extends Component {
       const mouseDeltaX = e.pageX - mouseClickX
       const newX = left + mouseX - mouseClickX
 
+      const tabsLeft = this.tabs.getBoundingClientRect().left
+
+      // If the mouse cursor moved x by 5, 
+      // then start dragging the tab.
       if (Math.abs(mouseDeltaX) > 5) {
-        if (!(newX < this.tabs.getBoundingClientRect().left + this.tabs.scrollLeft) && !(newX + tab.width - this.tabs.scrollLeft > this.tabs.offsetWidth)) {
+        // Check if the tab will not go out of tabbar bounds.
+        if (!(newX < tabsLeft + this.tabs.scrollLeft) 
+            && !(newX + tab.width - this.tabs.scrollLeft > this.tabs.offsetWidth)) {
           tab.left = newX
         }
         tab.animateLeft = false

@@ -31,6 +31,7 @@ export default class AddTab extends Component {
     let transition = '0.2s background-color'
 
     if (animateLeft) {
+      // Add left transition to add tab button.
       const newTransition = transitions.left.duration + 's' + ' left ' + transitions.left.easing 
       transition = Transitions.appendTransition(transition, newTransition)
     }

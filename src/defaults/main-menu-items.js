@@ -6,7 +6,7 @@ export const mainMenuItems = [
     title: 'New incognito window'
   },
   {
-    title: 'Separator'
+    type: 'separator'
   },
   {
     title: 'History'
@@ -18,7 +18,7 @@ export const mainMenuItems = [
     title: 'Downloads'
   },
   {
-    title: 'Separator'
+    type: 'separator'
   },
   {
     title: 'Settings'

@@ -38,21 +38,11 @@ export const addTab = data => {
 }
 
 export const getSelectedTab = () => {
-  const id = Store.selectedTab
-
-  for (var i = 0; i < Store.tabs.length; i++) {
-    if (Store.tabs[i].id === id) return Store.tabs[i]
-  }
-  return null
+  return Store.tabs.filter(tab => tab.id === Store.selectedTab)[0]
 }
 
 export const getSelectedPage = () => {
-  const id = Store.selectedTab
-
-  for (var i = 0; i < Store.pages.length; i++) {
-    if (Store.pages[i].id === id) return Store.pages[i]
-  }
-  return null
+  return Store.pages.filter(page => page.id === Store.selectedTab)[0]
 }
 
 export const setWidths = (tabsWidth, addTabWidth, margin = 0) => {
