@@ -74,7 +74,7 @@ export default class Menu extends Component {
         height: height,
         pointerEvents: true
       })
-    })
+    }, 10)
   }
 
   hide = () => {
