@@ -139,7 +139,7 @@ export default class Tab extends Component {
     }
 
     const faviconStyle = {
-      display: (favicon === ''  || (!isSelected && width < 42)) ? 'block' : 'none',
+      display: (favicon === ''  || (isSelected && !(width < 42))) ? 'block' : 'none',
       backgroundImage: `url(${favicon})`
     }
 

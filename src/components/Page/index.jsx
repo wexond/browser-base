@@ -27,6 +27,14 @@ export default class Page extends Component {
     this.webview.addEventListener('did-navigate-in-page', updateInfo)
     this.webview.addEventListener('will-navigate', updateInfo)
 
+    this.webview.addEventListener('page-favicon-updated', (e) => {
+      tab.favicon = e.favicons[0]
+    })
+
+    this.webview.addEventListener('page-title-updated', (e) => {
+      tab.title = e.title
+    })
+
     // When webcontents of a webview are not available,
     // we can't use them, so we need to check if 
     // these webcontents are not null, 
