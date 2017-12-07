@@ -11,7 +11,9 @@ export default class MenuItem extends Component {
 
   render () {
     const onClick = (e) => {
+      // Hide parent menu.
       this.props.hide()
+      // Execute onClick event.
       if (typeof this.props.onClick === 'function') {
         this.props.onClick(e)
       }

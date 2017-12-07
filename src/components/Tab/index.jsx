@@ -26,15 +26,12 @@ export default class Tab extends Component {
 
   componentDidMount () {
     const tab = this.props.tab
-  
     tab.tab = this
-
     if (tab.select) this.select()
   }
 
   select () {
     const tab = this.props.tab
-
     Store.selectedTab = this.props.tab.id
   }
 
@@ -80,7 +77,8 @@ export default class Tab extends Component {
 
     // If the tab is last.
     if (index === Store.tabs.length) {
-      // If tab width is less than normal tab width and the tab width is greater than 32.
+      // If the tab width is less than normal tab width
+      //  and the tab width is greater than 32.
       if (tab.width < tabDefaults.maxTabWidth && tab.width > 32) {
         tab.render = false
         tabs.updateTabs()
