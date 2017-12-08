@@ -47,7 +47,7 @@ export default class Tabs extends Component {
       if (change.name === 'selectedTab') {
         // Update some info in bar.
         Store.app.bar.addressBar.setInfo(tab.url)
-        Store.app.bar.refreshIconsState()
+        Store.app.refreshIconsState()
 
         // If the tab is a new tab, just toggle input in bar.
         Store.app.bar.addressBar.setInputToggled(tab.url.startsWith(wexondUrls.newtab))

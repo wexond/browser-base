@@ -8,7 +8,8 @@ import Store from '../../store'
 
 import Network from '../../utils/network'
 
-import { getSelectedTab, getSelectedPage } from '../../actions/tabs'
+import { getSelectedTab } from '../../actions/tabs'
+import { getSelectedPage } from '../../actions/pages'
 
 @connect
 export default class AddressBar extends Component {
@@ -154,8 +155,6 @@ export default class AddressBar extends Component {
     }
 
     const onClick = (e) => {
-      e.stopPropagation()
-
       if (!this.inputToggled) {
         this.setInputToggled(true)
         this.input.setSelectionRange(0, this.input.value.length)
