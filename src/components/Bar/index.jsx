@@ -2,7 +2,7 @@ import Component from 'inferno-component'
 
 import AddressBar from '../AddressBar'
 
-import { getSelectedPage } from '../../actions/tabs'
+import { getNavigationState, getSelectedPage } from '../../actions/pages'
 
 export default class Bar extends Component {
   constructor () {
@@ -15,14 +15,7 @@ export default class Bar extends Component {
   }
 
   refreshIconsState () {
-    const page = getSelectedPage()
-
-    if (page != null && page.page != null && page.page.webview.getWebContents() != null) {
-      this.setState({
-        canGoBack: page.page.webview.canGoBack(),
-        canGoForward: page.page.webview.canGoForward()
-      })
-    }
+    this.setState(getNavigationState())
   }
 
   render () {
