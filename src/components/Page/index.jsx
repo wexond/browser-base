@@ -137,16 +137,19 @@ export default class Page extends Component {
 
   goBack () {
     this.webview.goBack()
+    Store.app.bar.addressBar.setInputToggled(false, true)
     Store.app.refreshIconsState()
   }
 
   goForward () {
     this.webview.goForward()
+    Store.app.bar.addressBar.setInputToggled(false, true)
     Store.app.refreshIconsState()
   }
 
   refresh () {
     this.webview.reload()
+    Store.app.bar.addressBar.setInputToggled(false, true)
     Store.app.refreshIconsState()
   }
 
