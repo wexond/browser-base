@@ -3,6 +3,10 @@ import Component from 'inferno-component'
 import { connect } from 'inferno-mobx'
 import Store from '../../store'
 
+import Storage from '../../utils/storage'
+
+import { checkFiles } from '../../actions/files'
+
 @connect
 export default class Page extends Component {
   componentDidMount () {
@@ -22,10 +26,20 @@ export default class Page extends Component {
       }
     }
 
+    const didNavigate = (e) => {
+      if (e.isMainFrame != null && !e.isMainFrame) return
+
+      checkFiles()
+
+      Storage.addHistoryItem(tab.title, e.url)
+    }
+
     this.webview.addEventListener('did-stop-loading', updateInfo)
     this.webview.addEventListener('did-navigate', updateInfo)
     this.webview.addEventListener('did-navigate-in-page', updateInfo)
     this.webview.addEventListener('will-navigate', updateInfo)
+    this.webview.addEventListener('did-navigate', didNavigate)
+    this.webview.addEventListener('did-navigate-in-page', didNavigate)
 
     this.webview.addEventListener('page-favicon-updated', (e) => {
       let request = new XMLHttpRequest()
