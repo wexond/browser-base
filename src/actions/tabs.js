@@ -41,10 +41,6 @@ export const getSelectedTab = () => {
   return Store.tabs.filter(tab => tab.id === Store.selectedTab)[0]
 }
 
-export const getSelectedPage = () => {
-  return Store.pages.filter(page => page.id === Store.selectedTab)[0]
-}
-
 export const setWidths = (tabsWidth, addTabWidth, margin = 0) => {
   const width = getWidth(tabsWidth, addTabWidth, margin)
   

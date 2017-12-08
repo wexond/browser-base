@@ -12,7 +12,7 @@ export default class Page extends Component {
     page.page = this
 
     const updateInfo = (e) => {
-      Store.app.bar.refreshIconsState()
+      Store.app.refreshIconsState()
 
       if (e.url != null) {
         if (e.isMainFrame != null && !e.isMainFrame) return
@@ -137,17 +137,17 @@ export default class Page extends Component {
 
   goBack () {
     this.webview.goBack()
-    Store.app.bar.refreshIconsState()
+    Store.app.refreshIconsState()
   }
 
   goForward () {
     this.webview.goForward()
-    Store.app.bar.refreshIconsState()
+    Store.app.refreshIconsState()
   }
 
   refresh () {
     this.webview.reload()
-    Store.app.bar.refreshIconsState()
+    Store.app.refreshIconsState()
   }
 
   render () {
