@@ -7,7 +7,7 @@
     top: 128px;
     left: 64px;
     border-radius: 2px;
-    transition: 0.3s height, 0.27s margin-top, 0.2s opacity;
+    transition: 0.3s max-height, 0.27s margin-top, 0.2s opacity;
     overflow: hidden;
 
     .items {
