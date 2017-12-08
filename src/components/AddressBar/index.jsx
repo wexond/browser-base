@@ -52,6 +52,10 @@ export default class AddressBar extends Component {
     this.setState({domain: domain})
 
     this.setCertificate(url)
+
+    if (url.startsWith(wexondUrls.newtab)) {
+      this.setInputToggled(true)
+    }
   }
 
   setInputToggled = (flag, force = false) => {
