@@ -138,13 +138,18 @@ export default class Tab extends Component {
       pointerEvents: (closing) ? 'none' : 'auto'
     }
 
+    let faviconDisplay = 'none'
+
+    if (favicon !== '') faviconDisplay = 'block'
+    if (isSelected && width < 42) faviconDisplay = 'none'
+
     const faviconStyle = {
-      display: (favicon === ''  || (isSelected && !(width < 42))) ? 'block' : 'none',
+      display: faviconDisplay,
       backgroundImage: `url(${favicon})`
     }
 
     const closeStyle = {
-      display: (pinned  || (!isSelected && width < 42)) ? 'none' : 'block',
+      display: (pinned || (!isSelected && width < 42)) ? 'none' : 'block',
       opacity: (isSelected || hovered) ? 1 : 0
     }
 
@@ -173,8 +178,11 @@ export default class Tab extends Component {
       backgroundColor: (closing) ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.5)'
     }
 
+    let contentDisplay = 'block'
+
+
     const contentStyle = {
-      display: (!isSelected && width < 42) ? 'none' : 'block'
+      display: 'block'
     }
 
     const borderLeftStyle = {
