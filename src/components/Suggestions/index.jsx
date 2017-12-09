@@ -5,7 +5,7 @@ import Store from '../../store'
 
 import Suggestion from '../Suggestion'
 
-import { getHistorySuggestions } from '../../actions/suggestions'
+import { getHistorySuggestions, getSearchSuggestions } from '../../actions/suggestions'
 
 @observer
 export default class Suggestions extends Component {
@@ -16,6 +16,8 @@ export default class Suggestions extends Component {
       visible: false,
       suggestions: []
     }
+
+    this.lastSearchSuggestions = []
   }
 
   hide () {
@@ -27,14 +29,23 @@ export default class Suggestions extends Component {
   }
 
   suggest = async (text) => {
-    const suggestions = await getHistorySuggestions(text)
-    this.setState({suggestions: suggestions})
-    if (suggestions.length === 0) this.hide()
-    else this.show()
+    const historySuggestions = await getHistorySuggestions(text)
+
+    this.setState({suggestions: historySuggestions.concat(this.lastSearchSuggestions)})
+
+    getSearchSuggestions(text).then((data) => {
+      const suggestions = historySuggestions.concat(data)
+      this.setState({suggestions: suggestions})
+
+      this.lastSearchSuggestions = data
+
+      if (this.state.suggestions.length === 0) this.hide()
+      else this.show()
+    })
   }
 
   whatToSuggest = () => {
-    if (this.state.suggestions[0] != null) {
+    if (this.state.suggestions[0] != null && this.state.suggestions[0].title != null) {
       return this.state.suggestions[0].url
     }
     return null
