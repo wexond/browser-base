@@ -6,6 +6,15 @@ import Store from '../../store'
 @observer
 export default class Suggestion extends Component {
   render () {
+    let dashDisplay = 'block'
+    let titleContent = this.props.title
+    let urlContent = this.props.url
+    if (this.props.title == null) {
+      titleContent = this.props.url
+      urlContent = ''
+      dashDisplay = 'none'
+    }
+
     return (
       <div className='suggestion'>
         <div className='container'>
@@ -13,13 +22,13 @@ export default class Suggestion extends Component {
 
           </div>
           <div className='title'>
-            {this.props.title}
+            {titleContent}
           </div>
-          <div className='dash'>
-          &mdash;
+          <div className='dash' style={{display: dashDisplay}}>
+            &mdash;
           </div>
           <div className='address'>
-            {this.props.url}
+            {urlContent}
           </div>
         </div>
       </div>
