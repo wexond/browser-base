@@ -13,13 +13,13 @@ export default class Suggestion extends Component {
 
           </div>
           <div className='title'>
-            Nersent 
+            {this.props.title}
           </div>
           <div className='dash'>
           &mdash;
           </div>
           <div className='address'>
-            http://www.nersent.tk/
+            {this.props.url}
           </div>
         </div>
       </div>

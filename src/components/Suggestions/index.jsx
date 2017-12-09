@@ -5,13 +5,16 @@ import Store from '../../store'
 
 import Suggestion from '../Suggestion'
 
+import { getHistorySuggestions } from '../../actions/suggestions'
+
 @observer
 export default class Suggestions extends Component {
   constructor () {
     super()
 
     this.state = {
-      visible: false
+      visible: false,
+      suggestions: []
     }
   }
 
@@ -23,9 +26,17 @@ export default class Suggestions extends Component {
     this.setState({visible: true})
   }
 
+  suggest = async (text) => {
+    const suggestions = await getHistorySuggestions(text)
+    this.setState({suggestions: suggestions})
+    if (suggestions.length === 0) this.hide()
+    else this.show()
+  }
+
   render () {
     const {
-      visible
+      visible,
+      suggestions
     } = this.state
 
     const suggestionsStyle = {
@@ -34,7 +45,9 @@ export default class Suggestions extends Component {
 
     return (
       <div style={suggestionsStyle} className='suggestions'>
-        <Suggestion />
+        {suggestions.map((item, key) => {
+          return <Suggestion key={key} title={item.title} url={item.url} />
+        })}
       </div>
     )
   }

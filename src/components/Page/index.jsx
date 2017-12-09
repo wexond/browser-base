@@ -26,20 +26,23 @@ export default class Page extends Component {
       }
     }
 
-    const didNavigate = (e) => {
-      if (e.isMainFrame != null && !e.isMainFrame) return
-
-      checkFiles()
-
-      Storage.addHistoryItem(tab.title, e.url)
-    }
 
     this.webview.addEventListener('did-stop-loading', updateInfo)
     this.webview.addEventListener('did-navigate', updateInfo)
     this.webview.addEventListener('did-navigate-in-page', updateInfo)
     this.webview.addEventListener('will-navigate', updateInfo)
-    this.webview.addEventListener('did-navigate', didNavigate)
-    this.webview.addEventListener('did-navigate-in-page', didNavigate)
+
+    const saveHistory = () => {
+      checkFiles()
+      Storage.addHistoryItem(tab.title, tab.url)
+    }
+
+    this.webview.addEventListener('did-finish-load', () => {
+      saveHistory()
+    })
+    this.webview.addEventListener('did-frame-finish-load', (e) => {
+      saveHistory()
+    })
 
     this.webview.addEventListener('page-favicon-updated', (e) => {
       let request = new XMLHttpRequest()
@@ -79,23 +82,22 @@ export default class Page extends Component {
 
     const onContextMenu = (e, params) => {
       Store.app.pageMenu.setState((previousState) => {
-        /**
-         * 0  : Open link in new tab
-         * 1  : -----------------------
-         * 2  : Copy link address
-         * 3  : Save link as
-         * 4  : -----------------------
-         * 5  : Open image in new tab
-         * 6  : Save image as
-         * 7  : Copy image
-         * 8  : Copy image address
-         * 9  : -----------------------
-         * 10 : Save as
-         * 11 : Print
-         * 12 : -----------------------
-         * 13 : View source
-         * 14 : Inspect element
-         */
+         // 0  : Open link in new tab
+         // 1  : -----------------------
+         // 2  : Copy link address
+         // 3  : Save link as
+         // 4  : -----------------------
+         // 5  : Open image in new tab
+         // 6  : Save image as
+         // 7  : Copy image
+         // 8  : Copy image address
+         // 9  : -----------------------
+         // 10 : Save as
+         // 11 : Print
+         // 12 : -----------------------
+         // 13 : View source
+         // 14 : Inspect element
+         
         let menuItems = previousState.items
         // Hide or show first 5 items.
         for (var i = 0; i < 5; i++) {

@@ -117,11 +117,7 @@ export default class AddressBar extends Component {
     } = this.state
 
     const onInput = (e) => {
-      if (e.currentTarget.value !== '') {
-        Store.app.suggestions.show()
-      } else {
-        Store.app.suggestions.hide()
-      }
+      Store.app.suggestions.suggest(e.currentTarget.value)
     }
 
     const onKeyUp = (e) => {

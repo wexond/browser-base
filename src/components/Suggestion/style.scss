@@ -3,6 +3,7 @@
     border-radius: 2px;
     width: 100%;
     position: relative;
+    flex: 1;
 
     &:hover {
         background-color: #EEEEEE;
@@ -10,28 +11,41 @@
 
     .container {
         display: flex;
-        flex-flow: row;
         align-items: center;
         width: calc(100% - (112px + 32px));
         margin-left: 108px;
+        overflow: hidden;
+        white-space: nowrap;
 
         .favicon {
+            display: inline-block;
             width: 16px;
             height: 16px;
             border: 1px dashed rgba(0, 0, 0, $dividers-opacity-light);
         }
     
         .title {
+            display: inline-block;
             margin-left: 16px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 50%;
         }
     
         .address {
+            display: inline-block;
             color: #2196F3;
             @include Caption;
             margin-top: 1px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: calc(50% - 64px);
         }
 
         .dash {
+            display: inline-block;
             opacity: $disabled-opacity-light;
             margin-left: 6px;
             margin-right: 6px;
