@@ -33,6 +33,13 @@ export default class Suggestions extends Component {
     else this.show()
   }
 
+  whatToSuggest = () => {
+    if (this.state.suggestions[0] != null) {
+      return this.state.suggestions[0].url
+    }
+    return null
+  }
+
   render () {
     const {
       visible,
