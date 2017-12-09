@@ -23,6 +23,7 @@ export default class AddressBar extends Component {
     }
 
     this.inputToggled = false
+    this.lastSuggestion = ''
   }
 
   componentDidMount () {
@@ -109,6 +110,25 @@ export default class AddressBar extends Component {
     }
   }
 
+  getSelectionText() {
+    let text = ''
+    if (window.getSelection) {
+        text = window.getSelection().toString()
+    } else if (document.selection && document.selection.type !== 'Control') {
+        text = document.selection.createRange().text
+    }
+    return text;
+  }
+
+  autoComplete (whatToSuggest) {
+    const text = this.input.value
+    const index = whatToSuggest.indexOf(text)
+    if (index !== -1) {
+      this.input.value = whatToSuggest.substr(index)
+      this.input.setSelectionRange(text.length, this.input.value.length)
+    }
+  }
+
   render () {
     const {
       domain,
@@ -116,18 +136,43 @@ export default class AddressBar extends Component {
       certificateName
     } = this.state
 
-    const onInput = (e) => {
-      Store.app.suggestions.suggest(e.currentTarget.value)
+    const onInput = async (e) => {
+      const input = e.currentTarget
+      const text = input.value.toLowerCase().trim().replace(this.getSelectionText(), '')
+
+      if (this.canSuggest && text !== '') {
+        this.autoComplete(this.lastSuggestion)
+      }
+
+      await Store.app.suggestions.suggest(text)
+
+      if (this.canSuggest) {
+        const whatToSuggest = Store.app.suggestions.whatToSuggest()
+        if (whatToSuggest != null) {
+          this.input.value = input.value.toLowerCase().trim().replace(this.getSelectionText(), '')
+          this.autoComplete(whatToSuggest)
+          this.lastSuggestion = whatToSuggest
+        }
+        this.canSuggest = false
+      }
     }
 
-    const onKeyUp = (e) => {
+    const onKeyUp = async (e) => {
       // When pressing escape in the input,
       // just toggle it off, and revert its value.
       if (e.which === 27) { // Escape.
         this.setInputToggled(false)
         this.setURL(Store.url)
       }
-    } 
+    }
+
+    const onKeyDown = async (e) => {
+      const key = e.keyCode
+      // Blacklist: backspace, enter, ctrl, alt, shift, tab, caps lock, delete, space
+      if (key != 8 && key != 13 && key != 17 && key != 18 && key != 16 && key != 9 && key != 20 && key != 46 && key != 32) {
+        this.canSuggest = true
+      }
+    }
 
     const onKeyPress = (e) => {
       // When pressing enter just navigate WebView.
@@ -168,6 +213,7 @@ export default class AddressBar extends Component {
     const inputEvents = {
       onKeyPress: onKeyPress,
       onKeyUp: onKeyUp,
+      onKeyDown: onKeyDown,
       onInput: onInput
     }
 
