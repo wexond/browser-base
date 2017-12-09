@@ -1,7 +1,29 @@
 import Store from '../store'
 import { request as httpsRequest } from 'https' 
+import http from 'http'
+import urlNode from 'url'
 
 export default class Network {
+  static async requestURL (url) {
+    return new Promise((resolve, reject) => {
+      const options = urlNode.parse(url)
+      const request = http.request(options, (res) => {
+        let data = ''
+        res.on('data', (chunk) => {
+          data += chunk
+        })
+        res.on('end', () => {
+          resolve(data)
+        })
+      })
+  
+      request.on('error', (e) => {
+        reject(e)
+      })
+      request.end()
+    })
+  }
+
   static isURL (string) {
     const _isURL = (string) => {
       let pattern = /^(?:\w+:)?\/\/([^\s.]+\.\S{2}|localhost[:?\d]*)\S*$/

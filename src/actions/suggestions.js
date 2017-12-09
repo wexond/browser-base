@@ -2,7 +2,29 @@ import Network from '../utils/network'
 import Storage from '../utils/storage'
 
 export const getSearchSuggestions = async (text) => {
+  return new Promise(async (resolve, reject) => {
+    const input = text.trim().toLowerCase()
+    
+    if (input === '') return resolve([])
 
+    try {
+      const data = await Network.requestURL('http://google.com/complete/search?client=chrome&q=' + text)
+      const json = JSON.parse(data)
+
+      let tempSuggestions = []
+      const suggestions = []
+
+      for (var i = 0; i < json[1].length; i++) {
+        if (tempSuggestions.indexOf(json[1][i]) === -1) {
+          tempSuggestions.push({url: String(json[1][i]).toLowerCase()})
+        }
+      }
+
+      resolve(getSuggestions(tempSuggestions))
+    } catch (e) {
+      reject(e)
+    }
+  })
 }
 
 export const getHistorySuggestions = async (text) => {
@@ -26,54 +48,39 @@ export const getHistorySuggestions = async (text) => {
 
       // Adds suggestions to a list, only when
       // the url or the title contains input text.
-      if ((url.indexOf(input) !== -1 && url.indexOf('?q=') === -1) 
-          || title.toLowerCase().indexOf(input) !== -1) {
+      if (url.indexOf(input) !== -1 || title.toLowerCase().indexOf(input) !== -1) {
         if (tempSuggestions.indexOf(suggestion) === -1) {
           tempSuggestions.push(suggestion)
         }
       }
     }
 
-    // Gets first suggestion.
-    const shortestSuggestion = Object.assign({}, tempSuggestions[0])
-
-    // Gets shortest suggestion. 
-    // For example when we have:
-    // `https://google.com/?q=something`
-    // it takes `https://google.com` from it
-    if (shortestSuggestion != null && shortestSuggestion.url != null) {
-      // Removes `http://`, `www.`, `/` etc.
-      let url = shortestSuggestion.url
-      url = url.substring(0, url.indexOf('/'))
-
-      shortestSuggestion.url = url
-
-      // Add the suggestion to the first position.
-      if (url.startsWith(input)) {
-        tempSuggestions.unshift(shortestSuggestion)
-      }
-    }
-    
-    // Remove duplicates from array.
-    const seenSuggestions = []
-    for (i = 0; i < tempSuggestions.length; i++) {
-      if (seenSuggestions.indexOf(tempSuggestions[i].url) === -1) {
-        suggestions.push(tempSuggestions[i])
-        seenSuggestions.push(tempSuggestions[i].url)
-      }
-    }
-
-    // Sort suggestions array by length.
-    suggestions.sort((a, b) => { 
-      return a.url.length - b.url.length
-    })
-
-    // Get only first 5 suggestions.
-    tempSuggestions = []
-    for (i = 0; i < 5; i++) {
-      if (suggestions[i] != null) tempSuggestions.push(suggestions[i])
-    }
-    
-    resolve(tempSuggestions)
+    resolve(getSuggestions(tempSuggestions))
   })
+}
+
+const getSuggestions = (suggestions) => {
+  let tempSuggestions = suggestions.slice()
+  suggestions = []
+  // Remove duplicates from array.
+  const seenSuggestions = []
+  for (i = 0; i < tempSuggestions.length; i++) {
+    if (seenSuggestions.indexOf(tempSuggestions[i].url) === -1) {
+      suggestions.push(tempSuggestions[i])
+      seenSuggestions.push(tempSuggestions[i].url)
+    }
+  }
+
+  // Sort suggestions array by length.
+  suggestions.sort((a, b) => { 
+    return a.url.length - b.url.length
+  })
+
+  // Get only first 5 suggestions.
+  tempSuggestions = []
+  for (var i = 0; i < 5; i++) {
+    if (suggestions[i] != null) tempSuggestions.push(suggestions[i])
+  }
+
+  return tempSuggestions
 }
