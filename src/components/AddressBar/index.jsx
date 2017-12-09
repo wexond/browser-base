@@ -120,12 +120,15 @@ export default class AddressBar extends Component {
     return text;
   }
 
-  autoComplete (whatToSuggest) {
-    const text = this.input.value
+  autoComplete (whatToSuggest, inputText = null) {
+    let text = inputText
+    if (text == null) text = this.input.value
     const index = whatToSuggest.indexOf(text)
     if (index !== -1) {
       this.input.value = whatToSuggest.substr(index)
-      this.input.setSelectionRange(text.length, this.input.value.length)
+      if (this.input.value.length - text.length > 0) {
+        this.input.setSelectionRange(text.length, this.input.value.length)
+      }
     }
   }
 
@@ -149,8 +152,7 @@ export default class AddressBar extends Component {
       if (this.canSuggest) {
         const whatToSuggest = Store.app.suggestions.whatToSuggest()
         if (whatToSuggest != null) {
-          this.input.value = input.value.toLowerCase().trim().replace(this.getSelectionText(), '')
-          this.autoComplete(whatToSuggest)
+          this.autoComplete(whatToSuggest, input.value.toLowerCase().replace(this.getSelectionText(), ''))
           this.lastSuggestion = whatToSuggest
         }
         this.canSuggest = false
