@@ -76,7 +76,7 @@ export const getHistorySuggestions = async (text) => {
     // Remove the same suggestions.
     for (var x = 0; x < suggestions.length; x++) {
       for (var y = x + 1; y < suggestions.length; y++) {
-        if (suggestions[x].url.replace(regex, '') === suggestions[y].url.replace(regex, '')) {
+        if (suggestions[x].url.replace(regex, '').replace('/', '') === suggestions[y].url.replace(regex, '').replace('/', '')) {
           newSuggestions.splice(newSuggestions.indexOf(suggestions[x]), 1)
         }
       }

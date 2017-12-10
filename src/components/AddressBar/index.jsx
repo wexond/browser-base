@@ -195,6 +195,21 @@ export default class AddressBar extends Component {
       if (key != 8 && key != 13 && key != 17 && key != 18 && key != 16 && key != 9 && key != 20 && key != 46 && key != 32) {
         this.canSuggest = true
       }
+
+      if (key === 40) {
+        e.preventDefault()
+  
+        Store.app.suggestions.selectNext()
+        const suggestion = Store.app.suggestions.getSelectedSuggestion()
+        this.input.value = suggestion.url
+      }
+      if (key === 38) {
+        e.preventDefault()
+  
+        Store.app.suggestions.selectPrevious()
+        const suggestion = Store.app.suggestions.getSelectedSuggestion()
+        this.input.value = suggestion.url
+      }
     }
 
     const onKeyPress = (e) => {
@@ -214,8 +229,6 @@ export default class AddressBar extends Component {
           if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'https://www.google.com/search?q=' + inputText
         }
 
-        if (URLToNavigate[URLToNavigate.length - 1] !== '/') URLToNavigate += '/'
-
         const pageTitleUpdated = (e) => {
           checkFiles()
           Storage.addSite(e.title, URLToNavigate)
@@ -231,7 +244,7 @@ export default class AddressBar extends Component {
         
         Store.app.suggestions.hide()
         Store.app.suggestions.hidden = true
-      }
+      } 
     }
 
     const onClick = (e) => {
