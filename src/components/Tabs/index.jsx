@@ -10,6 +10,8 @@ import AddTab from '../AddTab'
 import { defaultOptions, transitions } from '../../defaults/tabs'
 import wexondUrls from '../../defaults/wexond-urls'
 
+import Colors from '../../utils/colors'
+
 import { addTab, setPositions, setWidths, getPosition, getWidth, findTabToReplace, getSelectedTab } from '../../actions/tabs'
 
 @connect
@@ -48,6 +50,9 @@ export default class Tabs extends Component {
         // Update some info in bar.
         Store.app.bar.addressBar.setInfo(tab.url)
         Store.app.refreshIconsState()
+
+        Store.backgroundColor = tab.backgroundColor
+        Store.foreground = Colors.getForegroundColor(tab.backgroundColor)
 
         // If the tab is a new tab, just toggle input in bar.
         Store.app.bar.addressBar.setInputToggled(tab.url.startsWith(wexondUrls.newtab))

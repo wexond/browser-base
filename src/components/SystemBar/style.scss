@@ -8,7 +8,7 @@
   width: 100%;
   z-index: 4;
 
-  & .border-bottom {
+  .border-bottom {
     position: absolute;
     bottom: 0;
     background-color: rgba(0,0,0, $dividers-opacity-light);
@@ -16,5 +16,11 @@
     left: 0;
     right: 0;
     z-index: 2;
+  }
+
+  &.white {
+    .border-bottom {
+      opacity: 0;
+    }
   }
 }

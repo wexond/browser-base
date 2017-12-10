@@ -3,7 +3,14 @@ import Component from 'inferno-component'
 import AddressBar from '../AddressBar'
 
 import { getNavigationState, getSelectedPage } from '../../actions/pages'
+import { getSelectedTab } from '../../actions/tabs'
 
+import { connect } from 'inferno-mobx'
+import Store from '../../store'
+
+import Colors from '../../utils/colors'
+
+@connect
 export default class Bar extends Component {
   constructor () {
     super()
@@ -39,8 +46,12 @@ export default class Bar extends Component {
       page.page.refresh()
     }
 
+    const barStyle = {
+      backgroundColor: Store.backgroundColor
+    }
+
     return (
-      <div className='bar'>
+      <div className={'bar ' + Store.foreground} style={barStyle}>
         <div className={'bar-icon back-icon ' + ((!canGoBack) ? 'disabled' : '')} onClick={onBackClick} />
         <div className={'bar-icon forward-icon ' + ((!canGoForward) ? 'disabled' : '')} onClick={onForwardClick} />
         <div className='bar-icon refresh-icon' onClick={onRefreshClick} />
