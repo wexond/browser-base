@@ -1,18 +1,17 @@
 import Store from '../store'
 
-import { clipboard, remote } from 'electron'
+import { clipboard, remote, nativeImage } from 'electron'
 import { writeFile } from 'fs'
 import { defaults } from 'request'
 import { basename, extname } from 'path'
 const { dialog } = remote
 
-const getWebView = (app) => {
-  return Store.app.getSelectedPage().elements.webview
-}
+import { addTab } from '../actions/tabs'
+import { getSelectedPage } from '../actions/pages'
 
-export const openLinkInNewTab = (app) => {
-  Store.app.elements.tabs.addTab({
-    select: false,
+export const openLinkInNewTab = () => {
+  addTab({
+    select: false, 
     url: Store.pageMenuData.linkURL
   })
 }
@@ -47,8 +46,8 @@ export const saveLinkAs = () => {
   })
 }
 
-export const openImageInNewTab = (app) => {
-  Store.app.elements.tabs.addTab({
+export const openImageInNewTab = () => {
+  addTab({
     select: false,
     url: Store.pageMenuData.srcURL
   })
@@ -60,7 +59,6 @@ export const saveImageAs = () => {
   const extension = extname(name)
 
   let request = require('request').defaults({ encoding: null })
-  console.log(request)
 
   request.get(srcURL, function (err, res, body) {
     dialog.showSaveDialog({
@@ -90,14 +88,14 @@ export const copyImageAddress = () => {
   clipboard.writeText(Store.pageMenuData.srcURL)
 }
 
-export const print = (app) => {
-  getWebView(app).print()
+export const print = () => {
+  getSelectedPage().page.webview.print()
 }
 
-export const saveAs = (app) => {
+export const saveAs = () => {
   dialog.showSaveDialog(
     {
-      defaultPath: getWebView(app).getTitle() + '.html',
+      defaultPath: getSelectedPage().page.webview.getTitle() + '.html',
       filters: [
         {
           name: 'Webpage, complete',
@@ -106,22 +104,22 @@ export const saveAs = (app) => {
       ]
     },
     function (path1) {
-      getWebView(app).getWebContents().savePage(path1, 'HTMLComplete', (error) => {
+      getSelectedPage().page.webview.getWebContents().savePage(path1, 'HTMLComplete', (error) => {
         if (error) console.error(error)
       })
     }
   )
 }
 
-export const viewSource = (app) => {
-  const url = getWebView(app).getURL()
-  Store.app.elements.tabs.addTab({
+export const viewSource = () => {
+  const url = getSelectedPage().page.webview.getURL()
+  addTab({
     select: true,
     url: 'view-source:' + url
   })
 }
 
-export const inspectElement = (app) => {
+export const inspectElement = () => {
   let data = Store.pageMenuData
-  getWebView(app).inspectElement(data.x, data.y)
+  getSelectedPage().page.webview.inspectElement(data.x, data.y)
 }
