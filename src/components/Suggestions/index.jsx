@@ -18,6 +18,7 @@ export default class Suggestions extends Component {
     }
 
     this.lastSearchSuggestions = []
+    this.hidden = false
   }
 
   hide () {
@@ -39,8 +40,14 @@ export default class Suggestions extends Component {
 
       this.lastSearchSuggestions = data
 
-      if (this.state.suggestions.length === 0) this.hide()
-      else this.show()
+      if (this.hidden) return this.hidden = false
+
+      if (this.state.suggestions.length === 0) {
+        this.hide()
+      }
+      else {
+        this.show()
+      }
     })
   }
 

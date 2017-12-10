@@ -184,6 +184,9 @@ export default class AddressBar extends Component {
         this.setInputToggled(false)
         this.setURL(Store.url)
       }
+      if (e.which !== 13) {
+        Store.app.suggestions.hidden = false
+      }
     }
 
     const onKeyDown = async (e) => {
@@ -211,9 +214,11 @@ export default class AddressBar extends Component {
           if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'https://www.google.com/search?q=' + inputText
         }
 
+        if (URLToNavigate[URLToNavigate.length - 1] !== '/') URLToNavigate += '/'
+
         const pageTitleUpdated = (e) => {
           checkFiles()
-          Storage.addSite(e.title, URLToNavigate + '/')
+          Storage.addSite(e.title, URLToNavigate)
           page.page.webview.removeEventListener('page-title-updated', pageTitleUpdated)
         }
 
@@ -225,6 +230,7 @@ export default class AddressBar extends Component {
         this.setInputToggled(false, true)
         
         Store.app.suggestions.hide()
+        Store.app.suggestions.hidden = true
       }
     }
 
