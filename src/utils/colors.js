@@ -19,6 +19,8 @@ export default class Colors {
    * @return {String} - new color hex
    */
   static shadeColor (hex, lum) {
+    if (hex == null) return null
+
     hex = String(hex).replace(/[^0-9a-f]/gi, '')
     if (hex.length < 6) {
       hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2]
@@ -52,6 +54,8 @@ export default class Colors {
    * @return {Number} - the brightness
    */
   static colorBrightness (color) {
+    if (color == null) return null
+
     var r
     var g
     var b

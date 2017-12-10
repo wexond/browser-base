@@ -14,13 +14,12 @@
     width: 100%;
     height: 100%;
     opacity: $primary-opacity-light;
+    background-color: transparent;
   }
 
   .info {
-    background-color: white;
     position: relative;
     top: 0;
-    opacity: 0;
     left: 0;
     display: flex;
     flex-flow: row;
@@ -43,8 +42,11 @@
       margin-right: 8px;
 
       &.Normal {
-        background-image: url(images/Bar/normal.svg);
+        -webkit-mask-image: url(images/Bar/normal.svg);
+        -webkit-mask-size: 100% 100%;
+        -webkit-mask-repeat: no-repeat;
         opacity: $secondary-opacity-light;
+        background-color: black;
       }
 
       &.Secure {
@@ -79,6 +81,55 @@
       width: 1px;
       height: 16px;
       background-color: rgba(0,0,0, $dividers-opacity-light);
+    }
+  }
+
+  &.white {
+    input {
+      color: white;
+      opacity: $primary-opacity-dark;
+    }
+    .info {
+      .icon {
+        &.Normal {
+          background-color: white;
+          opacity: $secondary-opacity-dark;
+        }
+  
+        &.Secure {
+          background-color: white;
+          opacity: $secondary-opacity-dark;
+        }
+  
+        &.Wexond {
+          background-image: none;
+          -webkit-mask-image: url(images/Bar/wexond.png);
+          -webkit-mask-size: 100% 100%;
+          -webkit-mask-repeat: no-repeat;
+          background-color: white;
+          opacity: $secondary-opacity-dark;
+        }
+      }
+      .separator {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+      .domain {
+        opacity: $secondary-opacity-dark;
+        color: white;
+      }
+      .certificate-name {
+        opacity: $primary-opacity-dark;
+  
+        &.Secure {
+          color: white;
+        }
+        &.Wexond {
+          color: white;
+        }
+        &.Normal {
+          color: white;
+        }
+      }
     }
   }
 }

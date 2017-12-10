@@ -47,7 +47,7 @@ export default class AddTab extends Component {
     }
 
     return (
-      <div className='add-tab' onClick={onClick} ref={(a) => { this.addTab = a }} style={addTabStyle}>
+      <div className={'add-tab ' + Store.foreground} onClick={onClick} ref={(a) => { this.addTab = a }} style={addTabStyle}>
       </div>
     )
   }
