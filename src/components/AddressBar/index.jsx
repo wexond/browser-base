@@ -10,6 +10,9 @@ import Network from '../../utils/network'
 
 import { getSelectedTab } from '../../actions/tabs'
 import { getSelectedPage } from '../../actions/pages'
+import { checkFiles } from '../../actions/files'
+
+import Storage from '../../utils/storage'
 
 @connect
 export default class AddressBar extends Component {
@@ -81,8 +84,15 @@ export default class AddressBar extends Component {
   }
 
   setCertificate = async (url) => {
-    const certificate = await Network.getCertificate(url)
     const tab = getSelectedTab()
+    if (tab.certificate != null) {
+      this.setState({
+        certificateName: tab.certificate.name,
+        certificateType: tab.certificate.type
+      })
+    }
+
+    const certificate = await Network.getCertificate(url)
 
     let certificateName = certificate.title
     
@@ -123,12 +133,24 @@ export default class AddressBar extends Component {
   autoComplete (whatToSuggest, inputText = null) {
     let text = inputText
     if (text == null) text = this.input.value
-    const index = whatToSuggest.indexOf(text)
-    if (index !== -1) {
-      this.input.value = whatToSuggest.substr(index)
-      if (this.input.value.length - text.length > 0) {
-        this.input.setSelectionRange(text.length, this.input.value.length)
-      }
+
+    let httpsWwwRegex = /(http(s?)):\/\/(www.)?/gi
+    let wwwRegex = /(www.)?/gi
+
+    console.log(whatToSuggest.replace(wwwRegex, ''))
+
+    if (whatToSuggest.replace(httpsWwwRegex, '').startsWith(text)) {
+      this.input.value = whatToSuggest.replace(httpsWwwRegex, '')
+    } else if (whatToSuggest.replace(httpsWwwRegex, '').startsWith(text.replace(httpsWwwRegex, '')) && text.replace(httpsWwwRegex, '') !== '') {
+      this.input.value = text + whatToSuggest.replace(httpsWwwRegex, '').replace(text.replace(httpsWwwRegex, ''), '')
+    } else if (whatToSuggest.replace(httpsWwwRegex, '').startsWith(text.replace(wwwRegex, '')) && text.replace(wwwRegex, '') !== '') {
+      this.input.value = text + whatToSuggest.replace(httpsWwwRegex, '').replace(text.replace(wwwRegex, ''), '')
+    } else if (whatToSuggest.replace(wwwRegex, '').startsWith(text.replace(wwwRegex, '')) && text.replace(wwwRegex, '') !== '') {
+      this.input.value = text + whatToSuggest.replace(wwwRegex, '').replace(text.replace(wwwRegex, ''), '')
+    }
+
+    if (this.input.value.length - text.length > 0) {
+      this.input.setSelectionRange(text.length, this.input.value.length)
     }
   }
 
@@ -182,6 +204,7 @@ export default class AddressBar extends Component {
         e.preventDefault()
 
         const page = getSelectedPage()
+        const tab = getSelectedTab()
         const inputText = e.currentTarget.value
 
         let URLToNavigate = inputText
@@ -191,6 +214,22 @@ export default class AddressBar extends Component {
         } else {
           if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'https://www.google.com/search?q=' + inputText
         }
+
+        let url = ''
+
+        const didGetResponseDetails = (e) => {
+          url = e.originalURL
+          page.page.webview.removeEventListener('did-get-response-details', didGetResponseDetails)
+        }
+
+        const pageTitleUpdated = (e) => {
+          checkFiles()
+          Storage.addSite(e.title, url)
+          page.page.webview.removeEventListener('page-title-updated', pageTitleUpdated)
+        }
+
+        page.page.webview.addEventListener('page-title-updated', pageTitleUpdated)
+        page.page.webview.addEventListener('did-get-response-details', didGetResponseDetails)
 
         page.page.webview.loadURL(URLToNavigate)
 
