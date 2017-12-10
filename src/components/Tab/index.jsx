@@ -12,6 +12,8 @@ import wexondUrls from '../../defaults/wexond-urls'
 import { close } from '../../actions/window'
 import { setPositions, setWidths } from '../../actions/tabs'
 
+import Colors from '../../utils/colors'
+
 @connect
 export default class Tab extends Component {
   constructor () {
@@ -21,7 +23,6 @@ export default class Tab extends Component {
       hovered: false
     }
     this.dragData = {}
-    this.actualValue = ''
   }
 
   componentDidMount () {
@@ -133,7 +134,7 @@ export default class Tab extends Component {
       width: (closing) ? 0 : width,
       left: left,
       transition: transition,
-      backgroundColor: (isSelected) ? 'white' : 'transparent',
+      backgroundColor: (isSelected) ? tab.backgroundColor : 'transparent',
       zIndex: (isSelected) ? 3 : 1,
       pointerEvents: (closing) ? 'none' : 'auto'
     }
@@ -158,7 +159,7 @@ export default class Tab extends Component {
     const closeWidth = 16
     const faviconWidth = 16
     const margins = 8
-    let titleLeft = 8
+    let titleLeft = 12
 
     if (isSelected || hovered) maxWidthDecrease += closeWidth + margins
     
@@ -226,7 +227,7 @@ export default class Tab extends Component {
     }
 
     return (
-      <div ref={(r) => { this.tab = r }} className='tab' style={tabStyle} {...tabEvents}>
+      <div ref={(r) => { this.tab = r }} className={'tab ' + Store.foreground} style={tabStyle} {...tabEvents}>
         <div className='overlay' style={overlayStyle} />
         <div className='border-vertical' style={borderLeftStyle} />
         <div className='border-vertical' style={borderRightStyle} />

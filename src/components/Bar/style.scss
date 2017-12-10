@@ -7,6 +7,18 @@
   z-index: 3;
   background-color: white;
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.29);
+  transition: 0.2s background-color;
+
+  &.white {
+    .bar-icon {
+      @include invert-colors();
+      opacity: $secondary-opacity-dark;
+
+      &:hover {
+        opacity: $primary-opacity-dark;
+      }
+    }
+  }
 
   .bar-icon {
     position: relative;

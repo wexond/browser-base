@@ -68,11 +68,11 @@ export default class AddressBar extends Component {
       // starts with wexond://newtab.
       if (Store.url.startsWith(wexondUrls.newtab)) return
     }
-    
+
     // Hide or show the info depending on the flag
     // whether it's true or false.
-    this.info.style.opacity = (flag) ? 0 : 1
-    this.info.style.pointerEvents = (flag) ? 'none' : 'auto'
+    this.info.style.display = (flag) ? 'none' : 'flex'
+    this.input.style.display = (flag) ? 'block' : 'none'
 
     // Focus and change input value only when it's toggled.
     if (flag) {
@@ -211,23 +211,15 @@ export default class AddressBar extends Component {
           if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'https://www.google.com/search?q=' + inputText
         }
 
-        let url = ''
-
-        const didGetResponseDetails = (e) => {
-          url = e.originalURL
-          page.page.webview.removeEventListener('did-get-response-details', didGetResponseDetails)
-        }
-
         const pageTitleUpdated = (e) => {
           checkFiles()
-          Storage.addSite(e.title, url)
+          Storage.addSite(e.title, URLToNavigate + '/')
           page.page.webview.removeEventListener('page-title-updated', pageTitleUpdated)
         }
 
         page.page.webview.addEventListener('page-title-updated', pageTitleUpdated)
-        page.page.webview.addEventListener('did-get-response-details', didGetResponseDetails)
-
         page.page.webview.loadURL(URLToNavigate)
+        page.page.webview.focus()
 
         // Force toggle off the input.
         this.setInputToggled(false, true)
@@ -255,7 +247,7 @@ export default class AddressBar extends Component {
     }
 
     return (
-      <div {...addressBarEvents} className='address-bar'>
+      <div {...addressBarEvents} className={'address-bar ' + Store.foreground}>
         <input {...inputEvents} ref={(r) => { this.input = r }} placeholder='Search'></input>
         <div ref={(r) => { this.info = r }} className='info'>
           <div className={'icon ' + certificateType} />

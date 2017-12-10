@@ -24,7 +24,8 @@ export const addTab = data => {
     loading: false,
     render: true,
     closing: false,
-    tab: null
+    tab: null,
+    backgroundColor: '#fff'
   }
 
   const page = {
