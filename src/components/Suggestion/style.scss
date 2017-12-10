@@ -1,12 +1,21 @@
 .suggestion {
     padding: 8px 0 8px 0;
-    border-radius: 2px;
     width: 100%;
     position: relative;
     flex: 1;
 
     &:hover {
         background-color: #EEEEEE;
+    }
+
+    &.selected {
+        background-color: rgba(33, 150, 243, 0.7);
+        color: #000;
+        .container {
+            .address {
+                color: #000;
+            }
+        }
     }
 
     .container {
