@@ -1,7 +1,10 @@
+import * as actions from '../actions/page-menu'
+
 export const pageMenuItems = [
   {
     title: 'Open link in new tab',
-    visible: false
+    visible: false,
+    onClick: actions.openLinkInNewTab
   },
   {
     type: 'separator',
@@ -9,11 +12,13 @@ export const pageMenuItems = [
   },
   {
     title: 'Copy link address',
-    visible: false
+    visible: false,
+    onClick: actions.copyLinkAddress
   },
   {
     title: 'Save link as',
-    visible: false
+    visible: false,
+    onClick: actions.saveLinkAs
   },
   {
     type: 'separator',
@@ -21,19 +26,23 @@ export const pageMenuItems = [
   },
   {
     title: 'Open image in new tab',
-    visible: false
+    visible: false,
+    onClick: actions.openImageInNewTab
   },
   {
     title: 'Save image as',
-    visible: false
+    visible: false,
+    onClick: actions.saveImageAs
   },
   {
     title: 'Copy image',
-    visible: false
+    visible: false,
+    onClick: actions.copyImage
   },
   {
     title: 'Copy image address',
-    visible: false
+    visible: false,
+    onClick: actions.copyImageAddress
   },
   {
     type: 'separator',
@@ -41,11 +50,13 @@ export const pageMenuItems = [
   },
   {
     title: 'Print',
-    visible: false
+    visible: false,
+    onClick: actions.print
   },
   {
     title: 'Save as',
-    visible: false
+    visible: false,
+    onClick: actions.saveAs
   },
   {
     type: 'separator',
@@ -53,9 +64,11 @@ export const pageMenuItems = [
   },
   {
     title: 'View source',
-    visible: false
+    visible: false,
+    onClick: actions.viewSource
   },
   {
-    title: 'Inspect element'
+    title: 'Inspect element',
+    onClick: actions.inspectElement
   }
 ]
