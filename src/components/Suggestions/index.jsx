@@ -14,14 +14,15 @@ export default class Suggestions extends Component {
 
     this.state = {
       visible: false,
-      suggestions: []
+      suggestions: [],
+      selectedSuggestion: 0
     }
 
     this.lastSearchSuggestions = []
     this.hidden = false
   }
 
-  hide () {
+  hide = () => {
     this.setState({visible: false})
   }
 
@@ -51,6 +52,22 @@ export default class Suggestions extends Component {
     })
   }
 
+  getSelectedSuggestion () {
+    return this.state.suggestions[this.state.selectedSuggestion]
+  }
+
+  selectNext () {
+    let selectedSuggestion = this.state.selectedSuggestion
+    if (!(selectedSuggestion + 1 > this.state.suggestions.length - 1)) selectedSuggestion++
+    this.setState({selectedSuggestion: selectedSuggestion})
+  }
+
+  selectPrevious () {
+    let selectedSuggestion = this.state.selectedSuggestion
+    if (!(selectedSuggestion - 1 < 0)) selectedSuggestion--
+    this.setState({selectedSuggestion: selectedSuggestion})
+  }
+
   whatToSuggest = () => {
     if (this.state.suggestions[0] != null && this.state.suggestions[0].title != null) {
       return this.state.suggestions[0].url
@@ -68,10 +85,16 @@ export default class Suggestions extends Component {
       display: (visible) ? 'flex' : 'none'
     }
 
+    const onMouseDown = (e) => {
+      e.stopPropagation()
+    }
+
     return (
-      <div style={suggestionsStyle} className='suggestions'>
+      <div onMouseDown={onMouseDown} style={suggestionsStyle} className='suggestions'>
         {suggestions.map((item, key) => {
-          return <Suggestion key={key} title={item.title} url={item.url} />
+          let selected = false
+          if (this.state.selectedSuggestion === key) selected = true
+          return <Suggestion key={key} title={item.title} url={item.url} selected={selected} hide={this.hide} />
         })}
       </div>
     )
