@@ -52,9 +52,9 @@ export default class Storage {
     }
   }
 
-  static async saveHistory (jsonObject) {
+  static saveHistory (jsonObject) {
     return new Promise((resolve, reject) => {
-      fs.writeFile(paths.files.history, JSON.stringify(jsonObject), function (error) {
+      fs.writeFile(paths.files.history, JSON.stringify(jsonObject), (error) => {
         if (error) {
           reject(error)
         } else {
@@ -64,19 +64,70 @@ export default class Storage {
     })
   }
 
-  static async resetHistory () {
+  static getHistory () {
     return new Promise((resolve, reject) => {
-      Storage.saveHistory([]).then(() => {
-        resolve()
-      }).catch(() => {
-        reject(error)
+      fs.readFile(paths.files.history, (error, data) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(JSON.parse(data))
+        }
       })
     })
   }
 
-  static getHistory () {
+  static async addSite (title, url) {
+    if (title != null && url != null) {
+      let data = await Storage.getSites()
+
+      if (!url.startsWith('wexond://') && !url.startsWith('about:blank')) {
+        // Configure newItem's data.
+        let newItem = {
+          'url': url,
+          'title': title
+        }
+
+        let canSave = true
+
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].url === newItem.url) {
+            canSave = false
+            break
+          }
+        }
+
+        if (!canSave) return
+
+        // Get newItem's new id.
+        if (data[data.length - 1] == null) {
+          newItem.id = 0
+        } else {
+          newItem.id = data[data.length - 1].id + 1
+        }
+
+        // Push new history item.
+        data.push(newItem)
+
+        await Storage.saveSites(data)
+      }
+    }
+  }
+
+  static saveSites (jsonObject) {
     return new Promise((resolve, reject) => {
-      fs.readFile(paths.files.history, function (error, data) {
+      fs.writeFile(paths.files.sites, JSON.stringify(jsonObject), (error) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve()
+        }
+      })
+    })
+  }
+
+  static getSites () {
+    return new Promise((resolve, reject) => {
+      fs.readFile(paths.files.sites, (error, data) => {
         if (error) {
           reject(error)
         } else {

@@ -60,6 +60,9 @@ export default class Network {
   static getCertificate (url) {
     return new Promise(
       (resolve, reject) => {
+        if (url.startsWith('http://')) return resolve({type: 'Normal'})
+        else if (url.startsWith('wexond://')) return resolve({type: 'Wexond'})
+
         const domain = Network.getDomain(url)
 
         let certificateExists = false
@@ -104,13 +107,6 @@ export default class Network {
             domain: domain,
             certificate: certificate
           })
-        })
-
-        req.on('error', (e) => {
-          const data = {
-            type: url.startsWith('wexond') ? 'Wexond' : 'Normal'
-          }
-          resolve(data)
         })
 
         req.end()
