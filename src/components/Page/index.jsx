@@ -4,8 +4,11 @@ import { connect } from 'inferno-mobx'
 import Store from '../../store'
 
 import Storage from '../../utils/storage'
+import Colors from '../../utils/colors'
 
 import { checkFiles } from '../../actions/files'
+
+import { getColor } from '../../actions/webview-colors'
 
 @connect
 export default class Page extends Component {
@@ -62,6 +65,16 @@ export default class Page extends Component {
 
     this.webview.addEventListener('page-title-updated', (e) => {
       tab.title = e.title
+    })
+
+    this.webview.addEventListener('did-change-theme-color', (e) => {
+      let color = e.themeColor
+      if (color == null) color = '#fff'
+
+      Store.backgroundColor = color
+      tab.backgroundColor = color
+      Store.foreground = Colors.getForegroundColor(color)
+      Colors.getForegroundColor(color)
     })
 
     // When webcontents of a webview are not available,

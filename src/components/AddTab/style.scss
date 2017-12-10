@@ -10,6 +10,15 @@
   -webkit-app-region: no-drag;
 
   &:hover {
-    background-color: rgba(196, 196, 196, 0.4);
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+
+  &.white {
+    @include invert-colors;
+    opacity: $secondary-opacity-dark;
+
+    :hover {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
   }
 }
