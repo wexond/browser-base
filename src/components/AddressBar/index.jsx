@@ -137,16 +137,12 @@ export default class AddressBar extends Component {
     let httpsWwwRegex = /(http(s?)):\/\/(www.)?/gi
     let wwwRegex = /(www.)?/gi
 
-    console.log(whatToSuggest.replace(wwwRegex, ''))
-
     if (whatToSuggest.replace(httpsWwwRegex, '').startsWith(text)) {
       this.input.value = whatToSuggest.replace(httpsWwwRegex, '')
     } else if (whatToSuggest.replace(httpsWwwRegex, '').startsWith(text.replace(httpsWwwRegex, '')) && text.replace(httpsWwwRegex, '') !== '') {
       this.input.value = text + whatToSuggest.replace(httpsWwwRegex, '').replace(text.replace(httpsWwwRegex, ''), '')
     } else if (whatToSuggest.replace(httpsWwwRegex, '').startsWith(text.replace(wwwRegex, '')) && text.replace(wwwRegex, '') !== '') {
       this.input.value = text + whatToSuggest.replace(httpsWwwRegex, '').replace(text.replace(wwwRegex, ''), '')
-    } else if (whatToSuggest.replace(wwwRegex, '').startsWith(text.replace(wwwRegex, '')) && text.replace(wwwRegex, '') !== '') {
-      this.input.value = text + whatToSuggest.replace(wwwRegex, '').replace(text.replace(wwwRegex, ''), '')
     }
 
     if (this.input.value.length - text.length > 0) {
