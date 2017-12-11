@@ -1,0 +1,35 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #F5F5F5;
+
+    --card-width: 256px;
+}
+
+.content {
+    width: 800px;
+    padding-top: 32px;
+    margin: 0 auto;
+}
+
+.content::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.show-all {
+    width: 100%;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    font-size: 16px;
+    opacity: 0.87;
+    color: #3F51B5;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
