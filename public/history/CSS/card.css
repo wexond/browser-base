@@ -1,0 +1,65 @@
+.card {
+    width: var(--card-width);
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    position: relative;
+    overflow: hidden;
+    margin-left: 16px;
+    float: left;
+}
+
+.card:first-child {
+    margin-left: 0px;
+}
+
+.card .screenshot, .card .icon {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.card .screenshot {
+    width: 100%;
+    height: calc(var(--card-width) * 9 / 16);
+}
+
+.card .info-container {
+    height: 48px;
+    position: relative;
+}
+
+.card .icon {
+    height: 32px;
+    width: 32px;
+    border-radius: 100%;
+    opacity: 0.87;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 8px;
+}
+
+.card .text-container {
+    max-width: calc(100% - 56px);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 48px;
+}
+
+.card .title, .card .description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card .title {
+    font-size: 16px;
+    opacity: 0.87;
+}
+
+.card .description {
+    font-size: 15px;
+    opacity: 0.54;
+}
