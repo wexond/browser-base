@@ -161,6 +161,8 @@ export default class AddressBar extends Component {
       const input = e.currentTarget
       const text = input.value.toLowerCase().trim().replace(this.getSelectionText(), '')
 
+      Store.app.suggestions.selectByIndex(0)
+
       if (this.canSuggest && text !== '') {
         this.autoComplete(this.lastSuggestion)
       }
