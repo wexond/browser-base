@@ -71,7 +71,7 @@
       @extend %item;
       width: 100%;
       @include Body1;
-      font-size: 12px;
+      font-size: 13px;
       color: rgba(0,0,0, $primary-opacity-light);
       overflow: hidden;
       left: 32px;
@@ -81,8 +81,10 @@
     .favicon {
       @extend %item;
       left: 8px;
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      border-radius: 3px;
       @include image-center(16px, 16px);
     }
 
