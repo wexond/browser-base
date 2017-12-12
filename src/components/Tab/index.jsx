@@ -43,17 +43,6 @@ export default class Tab extends Component {
 
     const tabGroup = getCurrentTabGroup().tabs
 
-    // Close window when the tab and the current group is last.
-    if (tabGroup.length === 1 && Store.tabGroups.length === 1) {
-      close()
-    } else if (tabGroup.length === 1 && Store.tabGroups.length !== 1) {
-      if (Store.tabGroups[Store.currentTabGroup - 1] != null) {
-        switchTabGroup(Store.currentTabGroup - 1)
-      } else if (Store.tabGroups[Store.currentTabGroup + 1] != null) {
-        switchTabGroup(Store.currentTabGroup + 1)
-      }
-    }
-
     // Get the tab url and store in Store.
     Store.lastClosedURL = tab.url
 
@@ -73,7 +62,19 @@ export default class Tab extends Component {
     // Remove tab from array.
     tabGroup.splice(index, 1)
 
-    if (tabGroup.length === 0) return Store.tabGroups.splice(Store.tabGroups.indexOf(tabGroup), 1)
+    if (tabGroup.length === 0) {
+      const tabGroupIndex = Store.tabGroups.indexOf(getCurrentTabGroup())
+      if (Store.tabGroups.length === 0) {
+        close()
+      } else {
+        if (tabGroupIndex + 1 < Store.tabGroups.length) {
+          switchTabGroup(Store.tabGroups[tabGroupIndex + 1].id) // Select next tab group.
+        } else if (Store.tabGroups[tabGroupIndex - 1] != null) {
+          switchTabGroup(Store.tabGroups[tabGroupIndex - 1].id) // Select previous tab group.
+        }
+      }
+      return Store.tabGroups.splice(tabGroupIndex, 1)
+    }
 
     // If the closed tab was selected, select other tab.
     if (isSelected && tabGroup.length !== 0) {
