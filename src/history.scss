@@ -23,7 +23,9 @@ $background-color: #F5F5F5;
 $primary-color: #3F51B5;
 
 $card-width: 256px;
+$card-margin: 32px;
 
 @import 'components/History/style.scss';
 @import 'components/HistoryCard/style.scss';
+@import 'components/HistoryCards/style.scss';
 @import 'components/HistoryToolBar/style.scss';
