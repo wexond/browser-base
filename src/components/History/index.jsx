@@ -51,15 +51,46 @@ export default class History extends Component {
           screenshot: 'https://www.mhthemes.com/support/files/2015/10/YouTube.png',
           icon: 'https://cdn1.iconfinder.com/data/icons/logotypes/32/youtube-256.png',
         }
-      ]
+      ],
+      cardsContainerWidth: 256
     }
   }
 
-  render () {
-    const cardsContainerWidth = 256 * 3 + 16 * 3
+  componentDidMount () {
+    window.addEventListener('resize', this.resizeCardsContainer)
 
+    this.resizeCardsContainer()
+  }
+
+  resizeCardsContainer = () => {
+    const count = this.getMaxCardsCount()
+    const width = this.calculateWidth(count)
+
+    if (this.state.cardsContainerWidth !== width) {
+      this.setState({
+        cardsContainerWidth: width
+      })
+    }
+  }
+
+  getMaxCardsCount () {
+    let i = 1
+
+    while (true) {
+      if (this.calculateWidth(i) >= window.innerWidth) return (i - 1 ) > 3 ? 3 : (i - 1)
+      else i++
+    }
+
+    return -1
+  }
+
+  calculateWidth (count) {
+    return this.props.cardWidth * count + this.props.cardMargin * count + 16
+  }
+
+  render () {
     const cardsContainerStyle = {
-      width: cardsContainerWidth
+      maxWidth: this.state.cardsContainerWidth
     }
 
     return (
@@ -78,5 +109,6 @@ export default class History extends Component {
 }
 
 History.defaultProps = {
-  cardWidth: 256
+  cardWidth: 256,
+  cardMargin: 32
 }

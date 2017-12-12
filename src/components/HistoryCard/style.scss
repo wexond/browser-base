@@ -4,9 +4,8 @@
     color: #000;
     position: relative;
     overflow: hidden;
-    margin-left: 16px;
-    margin-top: 16px;
-    display: inline-block;
+    margin-left: $card-margin;
+    margin-top: $card-margin;
     border-radius: 2px;
     user-select: none;
     text-decoration: none;
@@ -19,11 +18,11 @@
     }
 
     .icon {
-        width: 32px;
-        height: 32px;
+        width: 24px;
+        height: 24px;
         border-radius: 100%;
         opacity: 0.87;
-        position: absolute;
+        position: relative;
         left: 8px;
         @include center-vertical;
         @include image-cover;
@@ -35,9 +34,9 @@
     }
 
     .title-container {
-        max-width: calc(100% - 56px);
+        max-width: calc(100% - 48px);
         position: absolute;
-        left: 48px;
+        left: 40px;
         @include center-vertical;
 
         .title, .description {
