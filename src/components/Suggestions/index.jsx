@@ -7,6 +7,8 @@ import Suggestion from '../Suggestion'
 
 import { getHistorySuggestions, getSearchSuggestions } from '../../actions/suggestions'
 
+import Network from '../../utils/network'
+
 @observer
 export default class Suggestions extends Component {
   constructor () {
@@ -46,16 +48,19 @@ export default class Suggestions extends Component {
       }
     }
 
-    getSearchSuggestions(text).then((data) => {
+    toggle()
+
+    if (text.indexOf('.') === -1 || text.trim().indexOf(' ') !== -1) {
+      const data = await getSearchSuggestions(text)
       const suggestions = historySuggestions.concat(data)
       this.setState({suggestions: suggestions})
 
       this.lastSearchSuggestions = data
 
       toggle()
-    })
-
-    toggle()
+    } else {
+      this.setState({suggestions: historySuggestions})
+    }
   }
 
   getSelectedSuggestion () {
@@ -79,7 +84,7 @@ export default class Suggestions extends Component {
   }
 
   whatToSuggest = () => {
-    if (this.state.suggestions[0] != null && this.state.suggestions[0].title != null) {
+    if (this.state.suggestions[0] != null && this.state.suggestions[0].title != null && this.state.suggestions[0].canSuggest) {
       return this.state.suggestions[0].url
     }
     return null
@@ -104,7 +109,7 @@ export default class Suggestions extends Component {
         {suggestions.map((item, key) => {
           let selected = false
           if (this.state.selectedSuggestion === key) selected = true
-          return <Suggestion key={key} title={item.title} url={item.url} selected={selected} hide={this.hide} />
+          return <Suggestion key={key} title={item.title} description={item.description} url={item.url} selected={selected} hide={this.hide} />
         })}
       </div>
     )
