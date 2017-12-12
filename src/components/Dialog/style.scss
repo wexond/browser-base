@@ -1,7 +1,6 @@
 .dialog {
   background-color: white;
   @include shadow(2);
-  padding: 24px 24px 8px 24px;
   transform-origin: center;
   transition: 0.15s transform;
   width: calc(100% - 128px);
