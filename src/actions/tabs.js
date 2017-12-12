@@ -71,6 +71,20 @@ export const getCurrentTabGroup = () => {
   })[0]
 }
 
+export const removeTabGroup = (tabGroup) => {
+  const tabGroupIndex = Store.tabGroups.indexOf(tabGroup)
+  if (Store.tabGroups.length === 0) {
+    close()
+  } else {
+    if (tabGroupIndex + 1 < Store.tabGroups.length) {
+      switchTabGroup(Store.tabGroups[tabGroupIndex + 1].id) // Select next tab group.
+    } else if (Store.tabGroups[tabGroupIndex - 1] != null) {
+      switchTabGroup(Store.tabGroups[tabGroupIndex - 1].id) // Select previous tab group.
+    }
+  }
+  Store.tabGroups.splice(tabGroupIndex, 1)
+}
+
 export const setWidths = (tabsWidth, addTabWidth, margin = 0) => {
   const width = getWidth(tabsWidth, addTabWidth, margin)
   
