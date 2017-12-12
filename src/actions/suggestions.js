@@ -16,11 +16,21 @@ export const getSearchSuggestions = async (text) => {
 
       for (var i = 0; i < json[1].length; i++) {
         if (tempSuggestions.indexOf(json[1][i]) === -1) {
-          tempSuggestions.push({url: String(json[1][i]).toLowerCase()})
+          tempSuggestions.push({
+            title: String(json[1][i]).toLowerCase(),
+            type: 'search'
+          })
         }
       }
 
-      resolve(getSuggestions(tempSuggestions))
+      let newSuggestions = getSuggestions(tempSuggestions, 'title')
+      // Get only first 5 suggestions.
+      tempSuggestions = []
+      for (var i = 0; i < 5; i++) {
+        if (newSuggestions[i] != null) tempSuggestions.push(newSuggestions[i])
+      }
+
+      resolve(tempSuggestions)
     } catch (e) {
       reject(e)
     }
@@ -35,16 +45,30 @@ export const getHistorySuggestions = async (text) => {
 
     const sites = await Storage.getSites()
     const history = await Storage.getHistory()
+    const regex = /(http(s?)):\/\/(www.)?/gi
+
     let tempSuggestions = []
 
-    const filterSuggestions = (array, i) => {
+    const filterSuggestions = (array, i, canSuggest) => {
       let url = array[i].url.toLowerCase()
       let title = array[i].title
 
       let suggestion = {
         title: title,
-        url: url
+        url: url,
+        canSuggest: canSuggest,
+        type: 'history'
       }
+
+      if (url.replace(regex, '').indexOf('/') === -1) {
+        suggestion.canSuggest = true
+      } else {
+        if (url.replace(regex, '').split('/')[1] == null || url.replace(regex, '').split('/')[1].trim() === '') {
+          suggestion.canSuggest = true
+        }
+      }
+
+      if (url.indexOf(input) === -1) suggestion.canSuggest = false
 
       // Adds suggestions to a list, only when
       // the url or the title contains input text.
@@ -62,16 +86,26 @@ export const getHistorySuggestions = async (text) => {
     }
 
     for (var i = 0; i < sites.length; i++) {
-      filterSuggestions(sites, i)
+      filterSuggestions(sites, i, true)
     }
 
     for (i = 0; i < history.length; i++) {
-      filterSuggestions(history, i)
+      filterSuggestions(history, i, false)
     }
 
-    let regex = /(http(s?)):\/\/(www.)?/gi
     let suggestions = getSuggestions(tempSuggestions)
-    let newSuggestions = suggestions.slice()
+    let newSuggestions = []
+
+    // Get only first 5 suggestions.
+    tempSuggestions = []
+
+    let suggestionsLimit = (!Network.isURL(input)) ? 5 : 10
+
+    for (var i = 0; i < suggestionsLimit; i++) {
+      if (suggestions[i] != null) tempSuggestions.push(suggestions[i])
+    }
+    newSuggestions = tempSuggestions.slice()
+    suggestions = tempSuggestions.slice()
 
     // Remove the same suggestions.
     for (var x = 0; x < suggestions.length; x++) {
@@ -82,32 +116,72 @@ export const getHistorySuggestions = async (text) => {
       }
     }
 
+    let autocompleteSuggestions = 0
+
+    for (var i = 0; i < newSuggestions.length; i++) {
+      if (newSuggestions[i].canSuggest) {
+        autocompleteSuggestions++
+      }
+    }
+
+    newSuggestions.sort((a, b) => {
+      let urlA = a.url.replace(regex, '').replace('/').length
+      let urlB = b.url.replace(regex, '').replace('/').length
+      return urlA - urlB
+    })
+
+    for (var i = 0; i < newSuggestions.length; i++) {
+      if (newSuggestions[i].url.indexOf(input) !== -1 && newSuggestions[i].canSuggest) {
+        let a = newSuggestions[0]
+        let b = newSuggestions[i]
+        newSuggestions[i] = a
+        newSuggestions[0] = b
+
+        newSuggestions[0].title = newSuggestions[0].url
+        newSuggestions[0].url = null
+        newSuggestions[0].description = 'open website'
+        newSuggestions[0].type = 'first-url'
+
+        break
+      }
+    }
+
+    if (autocompleteSuggestions === 0) {
+      if (Network.isURL(input)) {
+        newSuggestions.unshift({
+          title: (input.startsWith('http://')) ? input : 'http://' + input,
+          description: 'open website',
+          type: 'first-url'
+        })
+      } else {
+        newSuggestions.unshift({
+          title: input,
+          description: 'search in Google',
+          type: 'first-search'
+        })
+      }
+    }
+
     resolve(newSuggestions)
   })
 }
 
-const getSuggestions = (suggestions) => {
+const getSuggestions = (suggestions, param = 'url') => {
   let tempSuggestions = suggestions.slice()
   suggestions = []
   // Remove duplicates from array.
   const seenSuggestions = []
   for (var i = 0; i < tempSuggestions.length; i++) {
-    if (seenSuggestions.indexOf(tempSuggestions[i].url) === -1) {
+    if (seenSuggestions.indexOf(tempSuggestions[i][param]) === -1) {
       suggestions.push(tempSuggestions[i])
-      seenSuggestions.push(tempSuggestions[i].url)
+      seenSuggestions.push(tempSuggestions[i][param])
     }
   }
 
   // Sort suggestions array by length.
   suggestions.sort((a, b) => { 
-    return a.url.length - b.url.length
+    return a[param].length - b[param].length
   })
 
-  // Get only first 5 suggestions.
-  tempSuggestions = []
-  for (var i = 0; i < 5; i++) {
-    if (suggestions[i] != null) tempSuggestions.push(suggestions[i])
-  }
-
-  return tempSuggestions
+  return suggestions
 }

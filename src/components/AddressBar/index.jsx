@@ -13,6 +13,7 @@ import { getSelectedPage } from '../../actions/pages'
 import { checkFiles } from '../../actions/files'
 
 import Storage from '../../utils/storage'
+import { getHistorySuggestions } from '../../actions/suggestions';
 
 @connect
 export default class AddressBar extends Component {
@@ -159,24 +160,29 @@ export default class AddressBar extends Component {
 
     const onInput = async (e) => {
       const input = e.currentTarget
-      const text = input.value.toLowerCase().trim().replace(this.getSelectionText(), '')
+      let text = input.value.toLowerCase().trim().replace(this.getSelectionText(), '')
 
       Store.app.suggestions.selectByIndex(0)
 
-      if (this.canSuggest && text !== '') {
-        this.autoComplete(this.lastSuggestion)
+      if (this.canSuggest && this.lastSuggestion != null) {
+        this.autoComplete(this.lastSuggestion, text)
+      }
+
+      if (this.canSuggest) {
+        const whatToSuggest = await getHistorySuggestions(text)
+        text = input.value.toLowerCase().replace(this.getSelectionText(), '')
+
+        input.value = text
+
+        if (whatToSuggest[0] != null) {
+          this.autoComplete(whatToSuggest[0].title, text)
+          this.lastSuggestion = whatToSuggest[0].title
+        }
+
+        this.canSuggest = false
       }
 
       await Store.app.suggestions.suggest(text)
-
-      if (this.canSuggest) {
-        const whatToSuggest = Store.app.suggestions.whatToSuggest()
-        if (whatToSuggest != null) {
-          this.autoComplete(whatToSuggest, input.value.toLowerCase().replace(this.getSelectionText(), ''))
-          this.lastSuggestion = whatToSuggest
-        }
-        this.canSuggest = false
-      }
     }
 
     const onKeyUp = async (e) => {
@@ -198,19 +204,29 @@ export default class AddressBar extends Component {
         this.canSuggest = true
       }
 
+      const setNewValue = (suggestion) => {
+        if (suggestion.type === 'history') {
+          this.input.value = suggestion.url
+        } else if (suggestion.type === 'search' || suggestion.type === 'first-search' || suggestion.type === 'first-url') {
+          this.input.value = suggestion.title
+        }
+      }
+
       if (key === 40) {
         e.preventDefault()
   
         Store.app.suggestions.selectNext()
         const suggestion = Store.app.suggestions.getSelectedSuggestion()
-        this.input.value = suggestion.url
+        
+        setNewValue(suggestion)
       }
       if (key === 38) {
         e.preventDefault()
   
         Store.app.suggestions.selectPrevious()
         const suggestion = Store.app.suggestions.getSelectedSuggestion()
-        this.input.value = suggestion.url
+       
+        setNewValue(suggestion)
       }
     }
 
@@ -231,13 +247,6 @@ export default class AddressBar extends Component {
           if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'https://www.google.com/search?q=' + inputText
         }
 
-        const pageTitleUpdated = (e) => {
-          checkFiles()
-          Storage.addSite(e.title, URLToNavigate)
-          page.page.webview.removeEventListener('page-title-updated', pageTitleUpdated)
-        }
-
-        page.page.webview.addEventListener('page-title-updated', pageTitleUpdated)
         page.page.webview.loadURL(URLToNavigate)
         page.page.webview.focus()
 
