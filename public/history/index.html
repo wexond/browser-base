@@ -1,73 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link href="CSS/styles.css" rel="stylesheet">
-    <link href="CSS/toolbar.css" rel="stylesheet">
-    <link href="CSS/card.css" rel="stylesheet">
-    <link href="CSS/subHeader.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <title>Wexond</title>
   </head>
   <body>
-    <div class="toolbar">
-      <div class="title">
-        History
-      </div>
-      <input type="checkbox" class="show-most-visited" checked />
-    </div>
-    <div class="sub-header">
-        The most visited websites
-      </div>
-    <div class="content">
-      <div class="card">
-        <div class="screenshot"
-          style="background-image:url(https://scontent-waw1-1.xx.fbcdn.net/v/t1.0-9/24899862_2050574158507064_8530629417294747664_n.jpg?oh=eba9b82613dacc8a41e99d63ca32c845&oe=5ACD27C8)"></div>
-        <div class="info-container">
-          <div class="icon"
-            style="background-image:url(https://image.flaticon.com/icons/svg/25/25231.svg)"></div>
-          <div class="text-container">
-            <div class="title">
-              GitHub
-            </div>
-            <div class="description">
-              Build for developers and imprerium Nersent
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="screenshot"
-          style="background-image:url(http://cdn.ilovefreesoftware.com/wp-content/uploads/2013/06/facebookdesktopversion.png)"></div>
-        <div class="info-container">
-          <div class="icon"
-            style="background-image:url(https://image.flaticon.com/icons/png/512/124/124010.png)"></div>
-          <div class="text-container">
-            <div class="title">
-              Facebook
-            </div>
-            <div class="description">
-              
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-          <div class="screenshot"
-            style="background-image:url(https://www.mhthemes.com/support/files/2015/10/YouTube.png)"></div>
-          <div class="info-container">
-            <div class="icon"
-              style="background-image:url(https://cdn1.iconfinder.com/data/icons/logotypes/32/youtube-256.png)"></div>
-            <div class="text-container">
-              <div class="title">
-                YouTube
-              </div>
-              <div class="description">
-                
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
-    <div class="show-all">
-      Show all history
-    </div>
+    <div id='app'></div>
+    <script>
+      function loadScripts (scripts) {
+        for (var i = 0; i < scripts.length; i++) {
+          let script = document.createElement('script')
+          script.src = scripts[i]
+          document.body.appendChild(script)
+        }
+      }
+      loadScripts(['http://localhost:8080/build/history.bundle.js', 'http://localhost:8080/webpack-dev-server.js'])
+    </script>
   </body>
 </html>
