@@ -3,11 +3,14 @@ html, body {
     padding: 0;
     background-color: $background-color;
     @include Body1;
+    overflow-x: hidden;
 }
 
 .cards-container {
-    padding-top: 16px;
-    margin-left: auto;
-    margin-right: auto;
-    transform: translateX(-8px);
+    display: inline-flex;
+    position: relative;
+    left: 50%;
+    transform: translateX(calc(-50% - 0.5 * #{$card-margin}));
+    flex-wrap: wrap;
+    padding-bottom: 24px;
 }
