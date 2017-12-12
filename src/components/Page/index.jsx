@@ -15,6 +15,7 @@ export default class Page extends Component {
   componentDidMount () {
     const tab = this.props.tab
     const page = this.props.page
+    let lastURL = ''
 
     page.page = this
 
@@ -37,7 +38,17 @@ export default class Page extends Component {
 
     const saveHistory = () => {
       checkFiles()
-      Storage.addHistoryItem(tab.title, tab.url)
+      if (lastURL !== tab.url) {
+        Storage.addHistoryItem(tab.title, tab.url)
+        lastURL = tab.url
+      }
+      
+      const regex = /(http(s?)):\/\/(www.)?/gi
+      let url = tab.url
+      if (url.indexOf('/', 9) !== -1) {
+        url = url.substring(0, url.indexOf('/', 9))
+      }
+      Storage.addSite(tab.title, url)
     }
 
     this.webview.addEventListener('did-finish-load', () => {
