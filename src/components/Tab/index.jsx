@@ -41,8 +41,10 @@ export default class Tab extends Component {
     const tabs = this.props.tabs
     const isSelected = Store.selectedTab === tab.id
 
-    // Close window when the tab is last.
-    if (Store.tabs.length === 1) {
+    const tabGroup = Store.tabGroups[Store.currentTabGroup]
+
+    // Close window when the tab and the current group is last.
+    if (tabGroup.length === 1 && Store.tabGroups.length === 1) {
       close()
     }
 
@@ -52,7 +54,7 @@ export default class Tab extends Component {
     tab.renderPage = false
 
     // Get previous and next tab.
-    let index = Store.tabs.indexOf(tab)
+    let index = tabGroup.indexOf(tab)
 
     // Get page from array by its unique id.
     let page = Store.pages.filter(page => {
@@ -63,26 +65,26 @@ export default class Tab extends Component {
     Store.pages.splice(Store.pages.indexOf(page), 1)
 
     // Remove tab from array.
-    Store.tabs.splice(index, 1)
+    tabGroup.splice(index, 1)
 
     // If the closed tab was selected, select other tab.
     if (isSelected) {
-      if (index === Store.tabs.length) { // If the tab is last.
-        Store.selectedTab = Store.tabs[index - 1].id // Select previous tab.
+      if (index === tabGroup.length) { // If the tab is last.
+        Store.selectedTab = tabGroup[index - 1].id // Select previous tab.
       } else {
-        Store.selectedTab = Store.tabs[index].id // Select next tab.
+        Store.selectedTab = tabGroup[index].id // Select next tab.
       }
     }
 
-    tabs.resetTimer()
+    this.props.tabGroup.resetTimer()
 
     // If the tab is last.
-    if (index === Store.tabs.length) {
+    if (index === tabGroup.length) {
       // If the tab width is less than normal tab width
       //  and the tab width is greater than 32.
       if (tab.width < tabDefaults.maxTabWidth && tab.width > 32) {
         tab.render = false
-        tabs.updateTabs()
+        this.props.tabGroup.updateTabs()
         return
       }
     }
@@ -97,6 +99,8 @@ export default class Tab extends Component {
     const tab = this.props.tab
     const isSelected = Store.selectedTab === tab.id
     const tabs = this.props.tabs
+
+    const tabGroup = Store.tabGroups[Store.currentTabGroup]
 
     const {
       width,
@@ -187,16 +191,16 @@ export default class Tab extends Component {
     }
 
     const borderLeftStyle = {
-      display: (isSelected && Store.tabs.indexOf(tab) !== 0) ? 'block' : 'none',
+      display: (isSelected && tabGroup.indexOf(tab) !== 0) ? 'block' : 'none',
       left: 0
     }
 
-    const selectedTab = Store.tabs.filter(ttab => {
+    const selectedTab = tabGroup.filter(ttab => {
       return ttab.id === Store.selectedTab
     })
 
     const borderRightStyle = {
-      display: (Store.tabs.indexOf(selectedTab) - 1 === Store.tabs.indexOf(tab)) ? 'none' : 'block',
+      display: (tabGroup.indexOf(selectedTab) - 1 === tabGroup.indexOf(tab)) ? 'none' : 'block',
       right: (isSelected) ? 0 : -1,
       height: (isSelected) ? '100%' : 'calc(100% - 8px)'
     }
