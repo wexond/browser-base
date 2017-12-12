@@ -6,6 +6,21 @@
   overflow-x: auto;
   position: relative;
   margin-right: 32px;
+
+  .groups {
+    @include image-center(16px, 16px);
+    background-image: url(images/Tabs/groups.svg);
+    width: $system-bar-height;
+    height: 100%;
+    float: right;
+    -webkit-app-region: no-drag;
+    opacity: $secondary-opacity-light;
+    transition: $hover-duration background-color;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+  }
 }
 
 .tabs::-webkit-scrollbar {
