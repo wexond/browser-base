@@ -18,9 +18,15 @@ export default class SystemBar extends Component {
 
     if (Store.backgroundColor === '#fff') backColor = Colors.shadeColor(Store.backgroundColor, -0.1)
 
+    const onGroupsClick = (e) => {
+      Store.app.dialog.show()
+    }
+
     return (
       <div className={'system-bar ' + Store.foreground} style={{backgroundColor: backColor}}>
         {this.props.children}
+        <div onClick={onGroupsClick} className='groups'></div>
+        <div className='border-vertical2'></div>
         <Controls />
         <div className='border-bottom' />
       </div>
