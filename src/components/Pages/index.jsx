@@ -14,9 +14,9 @@ export default class Pages extends Component {
           Store.pages.map(page => {
             let tab = null
             for (var x = 0; x < Store.tabGroups.length; x++) {
-              for (var y = 0; y < Store.tabGroups[x].length; y++) {
-                if (Store.tabGroups[x][y].id === page.id) {
-                  tab = Store.tabGroups[x][y]
+              for (var y = 0; y < Store.tabGroups[x].tabs.length; y++) {
+                if (Store.tabGroups[x].tabs[y].id === page.id) {
+                  tab = Store.tabGroups[x].tabs[y]
                 }
               }
             }

@@ -10,7 +10,7 @@ import { transitions, tabDefaults } from '../../defaults/tabs'
 import wexondUrls from '../../defaults/wexond-urls'
 
 import { close } from '../../actions/window'
-import { setPositions, setWidths } from '../../actions/tabs'
+import { setPositions, setWidths, switchTabGroup, getCurrentTabGroup } from '../../actions/tabs'
 
 import Colors from '../../utils/colors'
 
@@ -41,11 +41,17 @@ export default class Tab extends Component {
     const tabs = this.props.tabs
     const isSelected = Store.selectedTab === tab.id
 
-    const tabGroup = Store.tabGroups[Store.currentTabGroup]
+    const tabGroup = getCurrentTabGroup().tabs
 
     // Close window when the tab and the current group is last.
     if (tabGroup.length === 1 && Store.tabGroups.length === 1) {
       close()
+    } else if (tabGroup.length === 1 && Store.tabGroups.length !== 1) {
+      if (Store.tabGroups[Store.currentTabGroup - 1] != null) {
+        switchTabGroup(Store.currentTabGroup - 1)
+      } else if (Store.tabGroups[Store.currentTabGroup + 1] != null) {
+        switchTabGroup(Store.currentTabGroup + 1)
+      }
     }
 
     // Get the tab url and store in Store.
@@ -67,8 +73,10 @@ export default class Tab extends Component {
     // Remove tab from array.
     tabGroup.splice(index, 1)
 
+    if (tabGroup.length === 0) return Store.tabGroups.splice(Store.tabGroups.indexOf(tabGroup), 1)
+
     // If the closed tab was selected, select other tab.
-    if (isSelected) {
+    if (isSelected && tabGroup.length !== 0) {
       if (index === tabGroup.length) { // If the tab is last.
         Store.selectedTab = tabGroup[index - 1].id // Select previous tab.
       } else {
@@ -84,7 +92,7 @@ export default class Tab extends Component {
       //  and the tab width is greater than 32.
       if (tab.width < tabDefaults.maxTabWidth && tab.width > 32) {
         tab.render = false
-        this.props.tabGroup.updateTabs()
+        Store.app.tabs.updateTabs()
         return
       }
     }
@@ -100,7 +108,7 @@ export default class Tab extends Component {
     const isSelected = Store.selectedTab === tab.id
     const tabs = this.props.tabs
 
-    const tabGroup = Store.tabGroups[Store.currentTabGroup]
+    const tabGroup = getCurrentTabGroup().tabs
 
     const {
       width,

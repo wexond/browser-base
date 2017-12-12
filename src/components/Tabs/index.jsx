@@ -12,7 +12,7 @@ import wexondUrls from '../../defaults/wexond-urls'
 
 import Colors from '../../utils/colors'
 
-import { setPositions, getWidth, findTabToReplace, getSelectedTab, addTabGroup } from '../../actions/tabs'
+import { setPositions, setWidths, findTabToReplace, getSelectedTab, addTabGroup, getCurrentTabGroup } from '../../actions/tabs'
 
 @connect
 export default class Tabs extends Component {
@@ -42,6 +42,8 @@ export default class Tabs extends Component {
 
         // If the tab is a new tab, just toggle input in bar.
         Store.app.bar.addressBar.setInputToggled(tab.url.startsWith(wexondUrls.newtab))
+
+        getCurrentTabGroup().selectedTab = tab.id
       }
     })
 
@@ -96,10 +98,24 @@ export default class Tabs extends Component {
     return this.tabs.offsetWidth
   }
 
+  updateTabs () {
+    // Get widths.
+    const tabsWidth = this.getWidth()
+    const addTabWidth = this.addTab.getWidth()
+
+    // Set widths and lefts.
+    setWidths(tabsWidth, addTabWidth)
+    setPositions()
+
+    setTimeout(() => {
+      this.addTab.setState({animateLeft: true})
+    })
+  }
+
   render () {
     if (Store.tabGroups.length === 0) addTabGroup()
 
-    const tabs = Store.tabGroups[Store.currentTabGroup].filter(tab => !tab.pinned)
+    const tabs = getCurrentTabGroup().tabs.filter(tab => !tab.pinned)
 
     const tabsStyle = {
       '-webkit-app-region': (tabs[0] != null && tabs[0].width > 32) ? 'drag' : 'no-drag'
@@ -112,7 +128,7 @@ export default class Tabs extends Component {
     return (
       <div ref={(r) => { this.tabs = r }} style={tabsStyle} className={'tabs ' + Store.foreground}>
         {Store.tabGroups.map((tabGroup, key) => {
-          return <TabGroup id={key}></TabGroup>
+          return <TabGroup id={tabGroup.id}></TabGroup>
         })}
        
         <AddTab ref={(r) => { this.addTab = r }} />
