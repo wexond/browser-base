@@ -9,3 +9,8 @@
   background-position: $left $top;
   background-repeat: no-repeat;
 }
+
+@mixin image-cover () {
+  background-size: cover;
+  background-repeat: no-repeat;
+}

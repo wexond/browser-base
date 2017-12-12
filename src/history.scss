@@ -19,4 +19,11 @@ $dividers-opacity-dark: 0.12;
 
 $hover-duration: 0.2s;
 
+$background-color: #F5F5F5;
+$primary-color: #3F51B5;
+
+$card-width: 256px;
+
 @import 'components/History/style.scss';
+@import 'components/HistoryCard/style.scss';
+@import 'components/HistoryToolBar/style.scss';
