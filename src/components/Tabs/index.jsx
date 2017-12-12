@@ -200,11 +200,12 @@ export default class Tabs extends Component {
     }
 
     return (
-      <div ref={(r) => { this.tabs = r }} style={tabsStyle} className='tabs'>
+      <div ref={(r) => { this.tabs = r }} style={tabsStyle} className={'tabs ' + Store.foreground}>
         {this.state.tabs.map((item) => {
           return <Tab tabs={this} getTabsWidth={this.getWidth} tab={item} key={item.id}></Tab>
         })}
         <AddTab ref={(r) => { this.addTab = r }} />
+        <div className='groups'></div>
       </div>
     )
   }

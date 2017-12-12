@@ -69,7 +69,7 @@ export const getWidth = (tabsWidth, addTabWidth, margin = 0) => {
   // Calculate all pinned tabs width.
   const allPinnedTabsWidth = (tabs.length - normalTabs.length) * pinnedTabWidth
   // Calculate final width per tab.
-  let newNormalTabWidth = (tabsWidth - addTabWidth - margins - allPinnedTabsWidth) / (tabs.length - allPinnedTabsWidth)
+  let newNormalTabWidth = (tabsWidth - 32 - addTabWidth - margins - allPinnedTabsWidth) / (tabs.length - allPinnedTabsWidth)
 
   if (newNormalTabWidth < 32) newNormalTabWidth = 32
 
