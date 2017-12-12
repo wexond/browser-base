@@ -4,10 +4,3 @@ html, body {
     background-color: $background-color;
     @include Body1;
 }
-
-.cards-container {
-    padding-top: 16px;
-    margin-left: auto;
-    margin-right: auto;
-    transform: translateX(-8px);
-}
