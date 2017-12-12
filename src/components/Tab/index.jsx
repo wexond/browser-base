@@ -10,7 +10,7 @@ import { transitions, tabDefaults } from '../../defaults/tabs'
 import wexondUrls from '../../defaults/wexond-urls'
 
 import { close } from '../../actions/window'
-import { setPositions, setWidths, switchTabGroup, getCurrentTabGroup } from '../../actions/tabs'
+import { setPositions, setWidths, switchTabGroup, getCurrentTabGroup, removeTabGroup } from '../../actions/tabs'
 
 import Colors from '../../utils/colors'
 
@@ -63,17 +63,8 @@ export default class Tab extends Component {
     tabGroup.splice(index, 1)
 
     if (tabGroup.length === 0) {
-      const tabGroupIndex = Store.tabGroups.indexOf(getCurrentTabGroup())
-      if (Store.tabGroups.length === 0) {
-        close()
-      } else {
-        if (tabGroupIndex + 1 < Store.tabGroups.length) {
-          switchTabGroup(Store.tabGroups[tabGroupIndex + 1].id) // Select next tab group.
-        } else if (Store.tabGroups[tabGroupIndex - 1] != null) {
-          switchTabGroup(Store.tabGroups[tabGroupIndex - 1].id) // Select previous tab group.
-        }
-      }
-      return Store.tabGroups.splice(tabGroupIndex, 1)
+      removeTabGroup(getCurrentTabGroup())
+      return 
     }
 
     // If the closed tab was selected, select other tab.
