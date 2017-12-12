@@ -32,7 +32,7 @@ yarn
 
 If you have installed all dependencies successfully, then in first terminal you need to run:
 ```bash
-yarn run watch:app
+yarn run watch
 ```
 and in second terminal:
 ```bash
