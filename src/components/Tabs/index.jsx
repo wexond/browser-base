@@ -25,6 +25,8 @@ export default class Tabs extends Component {
     this.state = {
       tabs: []
     }
+
+    addTabGroup()
   }
 
   componentDidMount () {
@@ -113,8 +115,6 @@ export default class Tabs extends Component {
   }
 
   render () {
-    if (Store.tabGroups.length === 0) addTabGroup()
-
     const tabs = getCurrentTabGroup().tabs.filter(tab => !tab.pinned)
 
     const tabsStyle = {
@@ -128,7 +128,7 @@ export default class Tabs extends Component {
     return (
       <div ref={(r) => { this.tabs = r }} style={tabsStyle} className={'tabs ' + Store.foreground}>
         {Store.tabGroups.map((tabGroup, key) => {
-          return <TabGroup id={tabGroup.id}></TabGroup>
+          return <TabGroup id={tabGroup.id} key={tabGroup.id}></TabGroup>
         })}
        
         <AddTab ref={(r) => { this.addTab = r }} />
