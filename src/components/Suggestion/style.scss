@@ -9,11 +9,11 @@
     }
 
     &.selected {
-        background-color: rgba(33, 150, 243, 0.7);
-        color: #000;
+        background-color: rgb(33, 150, 243);
+        color: #fff;
         .container {
             .address {
-                color: #000;
+                color: #fff;
             }
         }
     }
@@ -39,7 +39,7 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            max-width: 50%;
+            max-width: 70%;
         }
     
         .address {
@@ -50,7 +50,7 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            max-width: calc(50% - 64px);
+            max-width: 70%;
         }
 
         .dash {
