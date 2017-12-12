@@ -1,6 +1,6 @@
 export const tabDefaults = {
   pinnedTabWidth: 32,
-  maxTabWidth: 190
+  maxTabWidth: 210
 }
 
 export const defaultOptions = {
