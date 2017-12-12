@@ -68,7 +68,7 @@ export default class App extends Component {
         <Pages />
         <Menu ref={(r) => { this.pageMenu = r }}>
           <MenuNavigation ref={(r) => { this.menuNavigation = r }}></MenuNavigation>
-          <div className='separator' style={{marginTop: 0, marginBottom: 0}}></div>
+          <div className='separator' style={{marginTop: 0}}></div>
         </Menu>
       </div>
     )
