@@ -1,0 +1,37 @@
+.dialog {
+  background-color: white;
+  @include shadow(2);
+  padding: 24px 24px 8px 24px;
+  transform-origin: center;
+  transition: 0.15s transform;
+  width: calc(100% - 128px);
+  max-width: 512px;
+  border-radius: 2px;
+  @include center-both;
+  position: fixed;
+  z-index: 999;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+
+  &.hide {
+    transform: translate(-50%, -50%) scale(0);
+  }
+}
+
+.background {
+  opacity: 0.5;
+  background-color: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.3s all;
+  z-index: 99;
+
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+}

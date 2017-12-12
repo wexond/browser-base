@@ -12,9 +12,15 @@ export default class Pages extends Component {
       <div className='pages'>
         {
           Store.pages.map(page => {
-            const tab = Store.tabs.filter(item => {
-              return item.id === page.id
-            })[0]
+            let tab = null
+            for (var x = 0; x < Store.tabGroups.length; x++) {
+              for (var y = 0; y < Store.tabGroups[x].length; y++) {
+                if (Store.tabGroups[x][y].id === page.id) {
+                  tab = Store.tabGroups[x][y]
+                }
+              }
+            }
+
             return <Page key={page.id} tab={tab} page={page} />
           })
         }

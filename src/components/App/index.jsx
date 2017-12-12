@@ -7,6 +7,7 @@ import Bar from '../Bar'
 import Suggestions from '../Suggestions'
 import Menu from '../Menu'
 import MenuNavigation from '../MenuNavigation'
+import Dialog from '../Dialog'
 
 import Store from '../../store'
 
@@ -61,7 +62,7 @@ export default class App extends Component {
     return (
       <div className='app'>
         <SystemBar>
-          <Tabs />
+          <Tabs ref={(r) => { this.tabs = r }} />
         </SystemBar>
         <Bar ref={(r) => { this.bar = r }} />
         <Suggestions ref={(r) => { this.suggestions = r }} />
@@ -70,6 +71,13 @@ export default class App extends Component {
           <MenuNavigation ref={(r) => { this.menuNavigation = r }}></MenuNavigation>
           <div className='separator' style={{marginTop: 0}}></div>
         </Menu>
+        <Dialog ref={(r) => {this.dialog = r}}>
+          <div className='groups-dialog'>
+            <div className='title'>
+              Tab groups
+            </div>
+          </div>
+        </Dialog>
       </div>
     )
   }
