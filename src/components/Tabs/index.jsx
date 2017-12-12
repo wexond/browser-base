@@ -6,42 +6,28 @@ import Store from '../../store'
 
 import Tab from '../Tab'
 import AddTab from '../AddTab'
+import TabGroup from '../TabGroup'
 
-import { defaultOptions, transitions } from '../../defaults/tabs'
 import wexondUrls from '../../defaults/wexond-urls'
 
 import Colors from '../../utils/colors'
 
-import { addTab, setPositions, setWidths, getPosition, getWidth, findTabToReplace, getSelectedTab } from '../../actions/tabs'
+import { setPositions, getWidth, findTabToReplace, getSelectedTab, addTabGroup } from '../../actions/tabs'
 
 @connect
 export default class Tabs extends Component {
   constructor () {
     super()
 
-    this.timer = {
-      canReset: false
-    }
-
     this.removedTab = false
 
-    // Copy Store.tabs to state.
+    // Copy tabs to state.
     this.state = {
-      tabs: Store.tabs.slice()
+      tabs: []
     }
   }
 
   componentDidMount () {
-    // Start the timer.
-    setInterval(() => { // Invoke the function each 3 seconds.
-      // Set widths and positions for tabs 3 seconds after a tab was closed
-      if (this.timer.canReset && this.timer.time === 3) {
-        this.updateTabs()
-        this.timer.canReset = false
-      }
-      this.timer.time += 1
-    }, 1000)
-
     // Check for changes in Store.
     observe(Store, change => {
       const tab = getSelectedTab()
@@ -57,71 +43,6 @@ export default class Tabs extends Component {
         // If the tab is a new tab, just toggle input in bar.
         Store.app.bar.addressBar.setInputToggled(tab.url.startsWith(wexondUrls.newtab))
       }
-    })
-
-    // Check for changes in Store.tabs.
-    observe(Store.tabs, change => {
-      if (change.addedCount > 0 && change.removedCount > 0) return
-      // If an item was added.
-      if (change.addedCount > 0) {
-        // Add the item to state.
-        this.setState({tabs: change.object.slice()})
-
-        // Get and set initial left for new tab.
-        const tab = change.added[0]
-        tab.left = getPosition(change.index)
-
-        // Enable left animation.
-        setTimeout(() => {
-          tab.animateLeft = true
-          this.updateTabs()
-        })
-
-        const interval = setInterval(() => {
-          this.tabs.scrollLeft = this.tabs.offsetWidth + this.tabs.scrollLeft
-        }, 1)
-        
-        setTimeout(() => {
-          clearInterval(interval)
-        }, transitions.width.duration * 1000)
-
-        return
-      }
-      // If an item was removed.
-      if (change.removedCount > 0) {
-        // Remove it from state after delay, to keep close animation.
-        setTimeout(() => {
-          this.setState({tabs: change.object.slice()})
-        }, transitions.width.duration * 1000)
-        
-        return
-      }
-    })
-
-    window.addEventListener('resize', (e) => {
-      if (!e.isTrusted) return
-      
-      // Don't resize tabs when they new width is less than 32.
-      if (getWidth(this.getWidth(), this.addTab.getWidth()) < 32) return
-      
-      // Turn off left animation for add tab button.
-      this.addTab.setState({animateLeft: false})
-      // After a while enable left animation for add tab button.
-      setTimeout(() => this.addTab.setState({animateLeft: true}))
-
-      // Disable animations for all tabs.
-      Store.tabs.forEach(tab => {
-        if (tab == null) return
-        tab.animateLeft = false
-        tab.animateWidth = false
-        // After setting widths and lefts, enable the animations.
-        setTimeout(() => {
-          if (tab == null) return
-          tab.animateLeft = true
-          tab.animateWidth = true
-        })
-      })
-      this.updateTabs()
     })
 
     window.addEventListener('mousemove', (e) => {
@@ -169,23 +90,6 @@ export default class Tabs extends Component {
       Store.tabDragData = {}
       setPositions()
     })
-
-    addTab(defaultOptions)
-  }
-
-  resetTimer () {
-    this.timer.canReset = true
-    this.timer.time = 0
-  }
-
-  updateTabs () {
-    // Get widths.
-    const tabsWidth = this.getWidth()
-    const addTabWidth = this.addTab.getWidth()
-
-    // Set widths and lefts.
-    setWidths(tabsWidth, addTabWidth)
-    setPositions()
   }
 
   getWidth () {
@@ -193,19 +97,26 @@ export default class Tabs extends Component {
   }
 
   render () {
-    const tabs = Store.tabs.filter(tab => !tab.pinned)
+    if (Store.tabGroups.length === 0) addTabGroup()
+
+    const tabs = Store.tabGroups[Store.currentTabGroup].filter(tab => !tab.pinned)
 
     const tabsStyle = {
       '-webkit-app-region': (tabs[0] != null && tabs[0].width > 32) ? 'drag' : 'no-drag'
     }
 
+    const onGroupsClick = (e) => {
+      Store.app.dialog.show()
+    }
+
     return (
       <div ref={(r) => { this.tabs = r }} style={tabsStyle} className={'tabs ' + Store.foreground}>
-        {this.state.tabs.map((item) => {
-          return <Tab tabs={this} getTabsWidth={this.getWidth} tab={item} key={item.id}></Tab>
+        {Store.tabGroups.map((tabGroup, key) => {
+          return <TabGroup id={key}></TabGroup>
         })}
+       
         <AddTab ref={(r) => { this.addTab = r }} />
-        <div className='groups'></div>
+        <div onClick={onGroupsClick} className='groups'></div>
       </div>
     )
   }
