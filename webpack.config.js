@@ -3,13 +3,6 @@ const webpack = require('webpack')
 const UglifyJSWebpackPlugin = require('uglifyjs-webpack-plugin')
 
 let config = {
-  target: 'electron',
-  devtool: 'eval-source-map',
-
-  entry: {
-    'app': './src/bootstrap.jsx'
-  },
-
   output: {
     path: join(__dirname, 'build'),
     filename: '[name].bundle.js'
@@ -87,4 +80,25 @@ if (process.env.NODE_ENV === 'production') {
   config.devtool = 'cheap-module-source-map'
 }
 
-module.exports = config
+let appConfig = {
+  target: 'electron',
+  devtool: 'eval-source-map',
+
+  entry: {
+    app: './src/app-bootstrap.jsx'
+  }
+}
+
+let appletsConfig = {
+  target: 'web',
+  devtool: 'eval-source-map',
+
+  entry: {
+    history: './src/history-bootstrap.jsx'
+  }
+}
+
+appConfig = Object.assign(appConfig, config)
+appletsConfig = Object.assign(appletsConfig, config)
+
+module.exports = [appConfig, appletsConfig]
