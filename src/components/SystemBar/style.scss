@@ -22,5 +22,38 @@
     .border-bottom {
       opacity: 0;
     }
+    .groups {
+      opacity: $secondary-opacity-dark;
+      @include invert-colors;
+    }
+    .border-vertical2 {
+      opacity: $dividers-opacity-dark;
+    }
+  }
+
+  .border-vertical2 {
+    height: calc(100% - 16px);
+    width: 1px;
+    background-color: black;
+    opacity: $dividers-opacity-light;
+    position: relative;
+    @include center-vertical;
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  .groups {
+    @include image-center(16px, 16px);
+    background-image: url(images/Tabs/groups.svg);
+    width: $system-bar-height;
+    height: 100%;
+    float: right;
+    -webkit-app-region: no-drag;
+    opacity: $secondary-opacity-light;
+    transition: $hover-duration background-color;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
   }
 }

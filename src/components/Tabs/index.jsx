@@ -121,10 +121,6 @@ export default class Tabs extends Component {
       '-webkit-app-region': (tabs[0] != null && tabs[0].width > 32) ? 'drag' : 'no-drag'
     }
 
-    const onGroupsClick = (e) => {
-      Store.app.dialog.show()
-    }
-
     return (
       <div ref={(r) => { this.tabs = r }} style={tabsStyle} className={'tabs ' + Store.foreground}>
         {Store.tabGroups.map((tabGroup, key) => {
@@ -132,7 +128,7 @@ export default class Tabs extends Component {
         })}
        
         <AddTab ref={(r) => { this.addTab = r }} />
-        <div onClick={onGroupsClick} className='groups'></div>
+        
       </div>
     )
   }
