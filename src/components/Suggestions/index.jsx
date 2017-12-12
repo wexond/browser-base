@@ -35,21 +35,27 @@ export default class Suggestions extends Component {
 
     this.setState({suggestions: historySuggestions.concat(this.lastSearchSuggestions)})
 
-    getSearchSuggestions(text).then((data) => {
-      const suggestions = historySuggestions.concat(data)
-      this.setState({suggestions: suggestions})
-
-      this.lastSearchSuggestions = data
-
+    const toggle = () => {
       if (this.hidden) return this.hidden = false
-
+      
       if (this.state.suggestions.length === 0) {
         this.hide()
       }
       else {
         this.show()
       }
+    }
+
+    getSearchSuggestions(text).then((data) => {
+      const suggestions = historySuggestions.concat(data)
+      this.setState({suggestions: suggestions})
+
+      this.lastSearchSuggestions = data
+
+      toggle()
     })
+
+    toggle()
   }
 
   getSelectedSuggestion () {
@@ -66,6 +72,10 @@ export default class Suggestions extends Component {
     let selectedSuggestion = this.state.selectedSuggestion
     if (!(selectedSuggestion - 1 < 0)) selectedSuggestion--
     this.setState({selectedSuggestion: selectedSuggestion})
+  }
+
+  selectByIndex (index) {
+    this.setState({selectedSuggestion: index})
   }
 
   whatToSuggest = () => {
