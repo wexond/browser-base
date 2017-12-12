@@ -12,4 +12,10 @@ body {
   flex-flow: column;
   flex: 1;
   height: 100vh;
+
+  .groups-dialog {
+    .title {
+      @include Title;
+    }
+  }
 }
