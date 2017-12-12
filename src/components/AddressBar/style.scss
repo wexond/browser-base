@@ -88,6 +88,10 @@
     input {
       color: white;
       opacity: $primary-opacity-dark;
+
+      &::-webkit-input-placeholder {
+        color: rgba(255,255,255, 0.5);
+      }
     }
     .info {
       .icon {
@@ -103,7 +107,7 @@
   
         &.Wexond {
           background-image: none;
-          -webkit-mask-image: url(images/Bar/wexond.png);
+          -webkit-mask-image: url(images/Bar/wexond2.png);
           -webkit-mask-size: 100% 100%;
           -webkit-mask-repeat: no-repeat;
           background-color: white;
