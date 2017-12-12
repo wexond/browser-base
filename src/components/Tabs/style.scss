@@ -7,6 +7,13 @@
   position: relative;
   margin-right: 32px;
 
+  &.white {
+    .groups {
+      opacity: $secondary-opacity-dark;
+      @include invert-colors;
+    }
+  }
+
   .groups {
     @include image-center(16px, 16px);
     background-image: url(images/Tabs/groups.svg);
