@@ -1,0 +1,8 @@
+.tab-groups-dialog {
+  .title {
+    @include Title;
+  }
+  .content {
+    margin-top: 20px;
+  }
+}

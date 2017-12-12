@@ -6,7 +6,7 @@ import Store from '../../store'
 
 import Tab from '../Tab'
 
-import { setPositions, setWidths, getPosition, addTab, getWidth } from '../../actions/tabs'
+import { getPosition, addTab, getWidth } from '../../actions/tabs'
 
 import { defaultOptions, transitions } from '../../defaults/tabs'
 
@@ -25,20 +25,24 @@ export default class TabGroup extends Component {
   }
 
   componentDidMount () {
-    this.setState({tabs: Store.tabGroups[this.props.id].slice()})
+    const tabGroup = Store.tabGroups.filter((tabGroup) => {
+      return tabGroup.id === this.props.id
+    })[0]
+
+    this.setState({tabs: tabGroup.tabs.slice()})
 
     // Start the timer.
     setInterval(() => { // Invoke the function each 3 seconds.
       // Set widths and positions for tabs 3 seconds after a tab was closed
       if (this.timer.canReset && this.timer.time === 3) {
-        this.updateTabs()
+        Store.app.tabs.updateTabs()
         this.timer.canReset = false
       }
       this.timer.time += 1
     }, 1000)
 
     // Check for changes in Store.tabsGroups[this.props.id].
-    observe(Store.tabGroups[this.props.id], change => {
+    observe(tabGroup.tabs, change => {
       if (change.addedCount > 0 && change.removedCount > 0) return
       // If an item was added.
       if (change.addedCount > 0) {
@@ -52,7 +56,7 @@ export default class TabGroup extends Component {
         // Enable left animation.
         setTimeout(() => {
           tab.animateLeft = true
-          this.updateTabs()
+          Store.app.tabs.updateTabs()
         })
 
         const interval = setInterval(() => {
@@ -88,7 +92,7 @@ export default class TabGroup extends Component {
       setTimeout(() => Store.app.tabs.addTab.setState({animateLeft: true}))
 
       // Disable animations for all tabs.
-      Store.tabGroups[this.props.id].forEach(tab => {
+      tabGroup.tabs.forEach(tab => {
         if (tab == null) return
         tab.animateLeft = false
         tab.animateWidth = false
@@ -99,10 +103,10 @@ export default class TabGroup extends Component {
           tab.animateWidth = true
         })
       })
-      this.updateTabs()
+      Store.app.tabs.updateTabs()
     })
 
-
+    Store.currentTabGroup = this.props.id
     addTab(defaultOptions)
   }
 
@@ -111,19 +115,10 @@ export default class TabGroup extends Component {
     this.timer.time = 0
   }
 
-  updateTabs () {
-    // Get widths.
-    const tabsWidth = Store.app.tabs.getWidth()
-    const addTabWidth = Store.app.tabs.addTab.getWidth()
-
-    // Set widths and lefts.
-    setWidths(tabsWidth, addTabWidth)
-    setPositions()
-  }
 
   render () {
     return (
-      <div className='tab-group' display={(Store.currentTabGroup === this.props.id) ? 'block' : 'none'}>
+      <div className='tab-group' style={{display: (Store.currentTabGroup === this.props.id) ? 'block' : 'none'}}>
         {this.state.tabs.map((item) => {
           return <Tab tabs={Store.app.tabs} tabGroup={this} getTabsWidth={Store.app.tabs.getWidth} tab={item} key={item.id}></Tab>
         })}
