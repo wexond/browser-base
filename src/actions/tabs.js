@@ -4,6 +4,10 @@ import { tabDefaults, transitions } from '../defaults/tabs.js'
 
 let id = 0
 
+export const addTabGroup = () => {
+  Store.tabGroups.push([])
+}
+
 export const addTab = data => {
   const {
     select,
@@ -33,19 +37,19 @@ export const addTab = data => {
     id: id
   }
 
-  Store.tabs.push(tab)
+  Store.tabGroups[Store.currentTabGroup].push(tab)
   Store.pages.push(page)
   id++
 }
 
 export const getSelectedTab = () => {
-  return Store.tabs.filter(tab => tab.id === Store.selectedTab)[0]
+  return Store.tabGroups[Store.currentTabGroup].filter(tab => tab.id === Store.selectedTab)[0]
 }
 
 export const setWidths = (tabsWidth, addTabWidth, margin = 0) => {
   const width = getWidth(tabsWidth, addTabWidth, margin)
   
-  const tabs = Store.tabs.filter(Boolean)
+  const tabs = Store.tabGroups[Store.currentTabGroup].filter(Boolean)
   const normalTabs = tabs.filter(tab => !tab.pinned)
 
   // Apply width for all normal tabs.
@@ -61,7 +65,7 @@ export const getWidth = (tabsWidth, addTabWidth, margin = 0) => {
     maxTabWidth
   } = tabDefaults
 
-  const tabs = Store.tabs.filter(tab => !tab.closing)
+  const tabs = Store.tabGroups[Store.currentTabGroup].filter(tab => !tab.closing)
   const normalTabs = tabs.filter(tab => !tab.pinned)
 
   // Calculate margins between tabs.
@@ -82,7 +86,7 @@ export const getWidth = (tabsWidth, addTabWidth, margin = 0) => {
 export const getPosition = (index, margin = 0) => {
   let position = 0
   for (var i = 0; i < index; i++) {
-    position += Store.tabs[i].width + margin
+    position += Store.tabGroups[Store.currentTabGroup][i].width + margin
   }
   return position
 }
@@ -90,7 +94,7 @@ export const getPosition = (index, margin = 0) => {
 export const setPositions = (margin = 0) => {
   let addTabLeft = 0
 
-  let tabs = Store.tabs.filter(tab => !tab.closing)
+  let tabs = Store.tabGroups[Store.currentTabGroup].filter(tab => !tab.closing)
 
   // Apply lefts for all tabs.
   for (var i = 0; i < tabs.length; i++) {
@@ -105,11 +109,11 @@ export const setPositions = (margin = 0) => {
 }
 
 export const getTabFromMouseX = (callingTab, xPos = null) => {
-  for (var i = 0; i < Store.tabs.length; i++) {
-    if (Store.tabs[i] !== callingTab) {
-      if (containsX(Store.tabs[i], xPos)) {
-        if (!Store.tabs[i].locked) {
-          return Store.tabs[i]
+  for (var i = 0; i < Store.tabGroups[Store.currentTabGroup].length; i++) {
+    if (Store.tabGroups[Store.currentTabGroup][i] !== callingTab) {
+      if (containsX(Store.tabGroups[Store.currentTabGroup][i], xPos)) {
+        if (!Store.tabGroups[Store.currentTabGroup][i].locked) {
+          return Store.tabGroups[Store.currentTabGroup][i]
         }
       }
     }
@@ -129,7 +133,7 @@ export const containsX = (tabToCheck, xPos) => {
 }
 
 export const replaceTabs = (firstIndex, secondIndex, changePos = true) => {
-  const tabs = Store.tabs.slice()
+  const tabs = Store.tabGroups[Store.currentTabGroup].slice()
 
   const tab1 = tabs[firstIndex]
   const tab2 = tabs[secondIndex]
@@ -137,12 +141,12 @@ export const replaceTabs = (firstIndex, secondIndex, changePos = true) => {
   tabs[secondIndex] = tab1
   tabs[firstIndex] = tab2
 
-  Store.tabs.replace(tabs)
+  Store.tabGroups[Store.currentTabGroup].replace(tabs)
 
   // Change positions of replaced tabs.
   if (changePos) {
     tab2.animateLeft = true
-    tab2.left = getPosition(Store.tabs.indexOf(tab2), 0)
+    tab2.left = getPosition(Store.tabGroups[Store.currentTabGroup].indexOf(tab2), 0)
     tab2.locked = true
 
     setTimeout(() => {
@@ -155,8 +159,8 @@ export const findTabToReplace = (callerTab, cursorX) => {
   const overTab = getTabFromMouseX(callerTab, cursorX)
 
   if (overTab != null && !overTab.pinned) {
-    const indexTab = Store.tabs.indexOf(callerTab)
-    const indexOverTab = Store.tabs.indexOf(overTab)
+    const indexTab = Store.tabGroups[Store.currentTabGroup].indexOf(callerTab)
+    const indexOverTab = Store.tabGroups[Store.currentTabGroup].indexOf(overTab)
 
     replaceTabs(indexTab, indexOverTab)
   }
