@@ -18,6 +18,12 @@ export const switchTabGroup = (id) => {
   Store.app.tabs.updateTabs()
 }
 
+export const getTabGroupById = (id) => {
+  return Store.tabGroups.filter((tabGroup) => {
+    return tabGroup.id === id
+  })[0]
+}
+
 export const addTabGroup = () => {
   Store.tabGroups.push({
     title: 'New group', 
@@ -66,9 +72,7 @@ export const getSelectedTab = () => {
 }
 
 export const getCurrentTabGroup = () => {
-  return Store.tabGroups.filter((tabGroup) => {
-    return tabGroup.id === Store.currentTabGroup
-  })[0]
+  return getTabGroupById(Store.currentTabGroup)
 }
 
 export const removeTabGroup = (tabGroup) => {

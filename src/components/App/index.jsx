@@ -50,6 +50,12 @@ export default class App extends React.Component {
   }
 
   render () {
+    const onVisibilityChange = (e) => {
+      if (!e) {
+        Store.editingTabGroup = -1
+      }
+    }
+
     return (
       <div className='app'>
         <SystemBar>
@@ -62,7 +68,7 @@ export default class App extends React.Component {
           <MenuNavigation ref={(r) => { this.menuNavigation = r }}></MenuNavigation>
           <div className='separator' style={{marginTop: 0}}></div>
         </Menu>
-        <Menu ref={(r) => { this.tabGroupsMenu = r }} right={8} top={8}>
+        <Menu ref={(r) => { this.tabGroupsMenu = r }} right={8} top={8} onVisibilityChange={onVisibilityChange}>
           <TabGroupsMenu></TabGroupsMenu>
         </Menu>
       </div>
