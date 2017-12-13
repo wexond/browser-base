@@ -5,5 +5,5 @@
     transform: translateX(calc(-50% - 0.5 * #{$card-margin}));
     flex-wrap: wrap;
     padding-bottom: 24px;
-    //display: none; // temporary
+    display: none; // temporary
 }
