@@ -20,3 +20,9 @@
   right: $right;
   bottom: $bottom;
 }
+
+@mixin clearAfter () {
+  content: "";
+  display: block;
+  clear: both;
+}
