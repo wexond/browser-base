@@ -1,9 +1,19 @@
-.cards-container {
-    display: inline-flex;
-    position: relative;
-    left: 50%;
-    transform: translateX(calc(-50% - 0.5 * #{$card-margin}));
-    flex-wrap: wrap;
-    padding-bottom: 24px;
-    display: none; // temporary
+.history-section {
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    border-radius: 2px;
+    margin: 24px auto 0px auto;
+    padding-bottom: 8px;
+    @include shadow(1);
+
+    .subheader {
+        padding-top: 16px;
+        padding-bottom: 16px;
+        font-size: 14px;
+        padding-left: 16px;
+        opacity: 0.87;
+        @include cursor-default;
+        @include Roboto-Medium;
+    }
 }
