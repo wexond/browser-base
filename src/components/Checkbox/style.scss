@@ -1,0 +1,43 @@
+.checkbox {
+    width: 18px;
+    height: 18px;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    cursor: pointer;
+    @include cursor-pointer;
+
+    .border {
+        width: 100%;
+        height: 100%;
+        border-width: 2px;
+        border-color: #757575;
+        border-style: solid;
+        border-radius: 3px;
+        box-sizing: border-box;
+        transition: 0.15s border-width, 0.15s border-color;
+
+        &.animation {
+            border-color: #FFC107;
+        }
+    }
+
+    .icon {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-image: url(images/Controls/check.svg);
+        @include image-center(16px, auto);
+        @include invert-colors;
+
+        &.hide {
+            clip-path: inset(0 100% 0 0);
+        }
+
+        &.animation {
+            clip-path: inset(0 0 0 0);
+            transition: 0.3s all;
+        }
+    }
+}
