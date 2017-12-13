@@ -2,18 +2,21 @@ import Component from 'inferno-component'
 
 import ToolBar from '../HistoryToolBar'
 import Cards from '../HistoryCards'
+import Section from '../HistorySection'
 
 export default class History extends Component {
   constructor () {
     super()
 
     this.state = {
-      cards: []
+      cards: [],
+      sections: []
     }
   }
 
   componentDidMount () {
     this.loadCards()
+    this.loadSections()
   }
 
   // TODO: Load from JSON file
@@ -66,11 +69,35 @@ export default class History extends Component {
     })
   }
 
+  // TODO: Load from JSON file
+  loadSections () {
+    this.setState({
+      sections: [
+        {
+          date: 'Today',
+          items: [
+            {
+              title: 'Youtube',
+              url: 'https://www.youtube.com',
+              icon: 'https://cdn1.iconfinder.com/data/icons/logotypes/32/youtube-256.png',
+              time: '10.47'
+            }
+          ]
+        }
+      ]
+    })
+  }
+
   render () {
     return (
       <div className='history'>
         <ToolBar />
         <Cards items={this.state.cards} />
+        {
+          this.state.sections.map((data, key) => {
+            return <Section data={data} key={key} />
+          })
+        }
       </div>
     )
   }
