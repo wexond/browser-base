@@ -64,7 +64,7 @@
 }
 
 @mixin Button {
-  text-transform: capitalize;
+  text-transform: uppercase;
   @include Roboto-Medium;
   font-size: 14px;
 }

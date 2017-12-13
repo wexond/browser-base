@@ -1,12 +1,12 @@
-import Component from 'inferno-component'
+import React from 'react'
 
-import { observer } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 import Store from '../../store'
 
 import MenuItem from '../MenuItem'
 
 @observer
-export default class Menu extends Component {
+export default class Menu extends React.Component {
   constructor () {
     super()
 
@@ -20,11 +20,30 @@ export default class Menu extends Component {
       items: []
     }
 
-    this.items = []
+    this.visible = false
   }
 
-  addItem = (item) => {
-    this.items.push(item)
+  static defaultProps = {
+    left: 'auto',
+    top: 'auto',
+    right: 'auto',
+    bottom: 'auto'
+  }
+
+  componentDidMount () {
+    this.setState({
+      left: this.props.left,
+      top: this.props.top,
+      right: this.props.right,
+      bottom: this.props.bottom
+    })
+  }
+
+  refreshHeight = () => {
+    setTimeout(() => {
+      this.newHeight = this.menu.scrollHeight
+      this.setState({height: this.newHeight})
+    }, 50)
   }
 
   show = () => {
@@ -47,7 +66,9 @@ export default class Menu extends Component {
         height: this.newHeight,
         pointerEvents: true
       })
-    }, 10)
+    }, 50)
+
+    this.visible = true
   }
 
   hide = () => {
@@ -56,6 +77,8 @@ export default class Menu extends Component {
       opacity: 0,
       pointerEvents: false
     })
+
+    this.visible = false
   }
 
   render () {
@@ -65,6 +88,8 @@ export default class Menu extends Component {
       opacity,
       left,
       top,
+      right,
+      bottom,
       items,
       pointerEvents
     } = this.state
@@ -75,6 +100,8 @@ export default class Menu extends Component {
       opacity: opacity,
       left: left,
       top: top,
+      bottom: bottom,
+      right: right,
       pointerEvents: (pointerEvents) ? 'auto' : 'none'
     }
 
@@ -82,42 +109,56 @@ export default class Menu extends Component {
       e.stopPropagation()
     }
 
-    const menuEvents = {
-      onMouseDown: onMouseDown
+    const onClick = (e) => {
+      e.stopPropagation()
     }
+
+    const menuEvents = {
+      onMouseDown: onMouseDown,
+      onClick: onClick
+    }
+
+    let menuItems = null
+    if (items != null && items.length !== 0) menuItems = (
+      <div className='items'>
+        {
+          items.map((data, key) => {
+            // Default values for an item.
+            if (data.visible == null) data.visible = true
+            if (data.type == null) data.type = 'item'
+
+            if (data.type === 'separator') {
+              const separatorStyle = {
+                display: (data.visible) ? 'block' : 'none'
+              }
+
+              return <div style={separatorStyle} key={key} className='separator' />
+            } else if (data.type === 'item') {
+
+              const onClick = () => {
+                data.onClick()
+                this.hide()
+              }
+
+              const methodsToPass = {
+                onClick: onClick
+              }
+
+              return (
+                <MenuItem enabled={data.enabled} visible={data.visible} key={key} {...methodsToPass}>
+                  {data.title}
+                </MenuItem>
+              )
+            }
+          })
+        }
+      </div>
+    )
 
     return (
       <div {...menuEvents} className='menu' style={menuStyle} ref={(r) => { this.menu = r }}>
-        {this.props.children}  
-        <div className='items'>
-          {
-            items.map((data, key) => {
-              // Default values for an item.
-              if (data.visible == null) data.visible = true
-              if (data.type == null) data.type = 'item'
-
-              if (data.type === 'separator') {
-                const separatorStyle = {
-                  display: (data.visible) ? 'block' : 'none'
-                }
-
-                return <div style={separatorStyle} key={key} className='separator' />
-              } else if (data.type === 'item') {
-                const methodsToPass = {
-                  onClick: data.onClick,
-                  addItem: this.addItem,
-                  hide: this.hide
-                }
-
-                return (
-                  <MenuItem enabled={data.enabled} visible={data.visible} key={key} {...methodsToPass}>
-                    {data.title}
-                  </MenuItem>
-                )
-              }
-            })
-          }
-        </div>
+        {this.props.children}
+        {menuItems}
       </div>
     )
   }

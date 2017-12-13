@@ -1,6 +1,6 @@
-import Component from 'inferno-component'
+import React from 'react'
 
-import { connect } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 import Store from '../../store'
 
 import Storage from '../../utils/storage'
@@ -10,8 +10,8 @@ import { checkFiles } from '../../actions/files'
 
 import { getColor } from '../../actions/webview-colors'
 
-@connect
-export default class Page extends Component {
+@observer
+export default class Page extends React.Component {
   componentDidMount () {
     const tab = this.props.tab
     const page = this.props.page
@@ -143,7 +143,7 @@ export default class Page extends Component {
         }
       })
 
-      Store.app.showPageMenu()
+      Store.app.pageMenu.show()
       Store.pageMenuData = params
 
       // Calculate new menu position

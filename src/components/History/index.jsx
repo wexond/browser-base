@@ -1,10 +1,10 @@
-import Component from 'inferno-component'
+import React from 'react'
 
 import ToolBar from '../HistoryToolBar'
 import Cards from '../HistoryCards'
 import Section from '../HistorySection'
 
-export default class History extends Component {
+export default class History extends React.Component {
   constructor () {
     super()
 

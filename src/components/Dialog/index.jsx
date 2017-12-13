@@ -1,10 +1,10 @@
-import Component from 'inferno-component'
+import React from 'react'
 
-import { observer } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 import Store from '../../store'
 
 @observer
-export default class Dialog extends Component {
+export default class Dialog extends React.Component {
   constructor () {
     super()
 

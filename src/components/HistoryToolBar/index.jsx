@@ -1,6 +1,6 @@
-import Component from 'inferno-component'
+import React from 'react'
 
-export default class HistoryToolBar extends Component {
+export default class HistoryToolBar extends React.Component {
   render () {
     return (
       <div className='history-toolbar'>

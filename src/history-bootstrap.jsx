@@ -1,10 +1,11 @@
 import './history.scss'
 
-import Inferno from 'inferno'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 import History from './components/History'
 
 // Wait for sass load.
 setTimeout(function () {
-  Inferno.render(<History />, document.getElementById('app'))
+  ReactDOM.render(<History />, document.getElementById('app'))
 }, 1)

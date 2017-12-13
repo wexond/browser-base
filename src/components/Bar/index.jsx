@@ -1,17 +1,17 @@
-import Component from 'inferno-component'
+import React from 'react'
 
 import AddressBar from '../AddressBar'
 
 import { getNavigationState, getSelectedPage } from '../../actions/pages'
 import { getSelectedTab } from '../../actions/tabs'
 
-import { connect } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 import Store from '../../store'
 
 import Colors from '../../utils/colors'
 
-@connect
-export default class Bar extends Component {
+@observer
+export default class Bar extends React.Component {
   constructor () {
     super()
 
