@@ -1,14 +1,14 @@
-import Component from 'inferno-component'
+import React from 'react'
 
 import Controls from '../Controls'
 
 import Store from '../../store'
-import { connect } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 
 import Colors from '../../utils/colors'
 
-@connect
-export default class SystemBar extends Component {
+@observer
+export default class SystemBar extends React.Component {
   constructor () {
     super()
   }
@@ -18,14 +18,22 @@ export default class SystemBar extends Component {
 
     if (Store.backgroundColor === '#fff') backColor = Colors.shadeColor(Store.backgroundColor, -0.1)
 
+    const onGroupsMouseDown = e => e.stopPropagation()
+
     const onGroupsClick = (e) => {
-      Store.app.dialog.show()
+      e.stopPropagation()
+
+      if (Store.app.tabGroupsMenu.visible) {
+        Store.app.tabGroupsMenu.hide()
+      } else {
+        Store.app.tabGroupsMenu.show()
+      }
     }
 
     return (
       <div className={'system-bar ' + Store.foreground} style={{backgroundColor: backColor}}>
         {this.props.children}
-        <div onClick={onGroupsClick} className='groups'></div>
+        <div onMouseDown={onGroupsMouseDown} onClick={onGroupsClick} className='groups'></div>
         <div className='border-vertical2'></div>
         <Controls />
         <div className='border-bottom' />

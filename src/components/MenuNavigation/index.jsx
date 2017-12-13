@@ -1,12 +1,12 @@
-import Component from 'inferno-component'
+import React from 'react'
 
-import { observer } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 import Store from '../../store'
 
 import { getNavigationState, getSelectedPage } from '../../actions/pages'
 
 @observer
-export default class MenuNavigation extends Component {
+export default class MenuNavigation extends React.Component {
   constructor () {
     super()
 

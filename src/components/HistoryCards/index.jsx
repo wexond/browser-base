@@ -1,8 +1,8 @@
-import Component from 'inferno-component'
+import React from 'react'
 
 import Card from '../HistoryCard'
 
-export default class HistoryCards extends Component {
+export default class HistoryCards extends React.Component {
   constructor () {
     super()
 

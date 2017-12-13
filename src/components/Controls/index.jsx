@@ -1,12 +1,12 @@
-import Component from 'inferno-component'
+import React from 'react'
 
 import { close, minimize, maximize } from '../../actions/window'
 
 import Store from '../../store'
-import { connect } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 
-@connect
-export default class Controls extends Component {
+@observer
+export default class Controls extends React.Component {
   render () {
     return (
       <div className={'controls ' + Store.foreground}>

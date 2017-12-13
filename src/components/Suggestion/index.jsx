@@ -1,12 +1,12 @@
-import Component from 'inferno-component'
+import React from 'react'
 
-import { observer } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 import Store from '../../store'
 
 import { getSelectedPage } from '../../actions/pages'
 
 @observer
-export default class Suggestion extends Component {
+export default class Suggestion extends React.Component {
   render () {
     let description = this.props.url
     if (this.props.description != null) description = this.props.description

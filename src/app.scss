@@ -20,7 +20,7 @@ $dividers-opacity-dark: 0.12;
 $hover-duration: 0.2s;
 
 $system-bar-height: 32px;
-$bar-height: 40px;
+$bar-height: 42px;
 
 $tabs-hover-color: rgba(0,0,0,0.08);
 
@@ -40,5 +40,4 @@ $tabs-hover-color: rgba(0,0,0,0.08);
 @import 'components/MenuItem/style.scss';
 @import 'components/MenuNavigation/style.scss';
 @import 'components/Dialog/style.scss';
-@import 'components/TabGroupsDialog/style.scss';
-@import 'components/TabGroupItem/style.scss';
+@import 'components/TabGroupsMenu/style.scss';

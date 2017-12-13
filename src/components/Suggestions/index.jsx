@@ -1,6 +1,6 @@
-import Component from 'inferno-component'
+import React from 'react'
 
-import { observer } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 import Store from '../../store'
 
 import Suggestion from '../Suggestion'
@@ -10,7 +10,7 @@ import { getHistorySuggestions, getSearchSuggestions } from '../../actions/sugge
 import Network from '../../utils/network'
 
 @observer
-export default class Suggestions extends Component {
+export default class Suggestions extends React.Component {
   constructor () {
     super()
 

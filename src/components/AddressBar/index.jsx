@@ -1,8 +1,8 @@
-import Component from 'inferno-component'
+import React from 'react'
 
 import wexondUrls from '../../defaults/wexond-urls'
 
-import { connect } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 
 import Store from '../../store'
 
@@ -15,8 +15,8 @@ import { checkFiles } from '../../actions/files'
 import Storage from '../../utils/storage'
 import { getHistorySuggestions } from '../../actions/suggestions';
 
-@connect
-export default class AddressBar extends Component {
+@observer
+export default class AddressBar extends React.Component {
   constructor () {
     super()
 
