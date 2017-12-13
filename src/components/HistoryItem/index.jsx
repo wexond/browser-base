@@ -1,5 +1,7 @@
 import Component from 'inferno-component'
 
+import Checkbox from '../Checkbox'
+
 export default class HistoryItem extends Component {
   render () {
     const iconStyle = {
@@ -8,15 +10,15 @@ export default class HistoryItem extends Component {
 
     return (
       <div class='history-section-item'>
-        <div class='check-box in-line' />
-        <div class='time in-line'>
+        <Checkbox />
+        <div class='time'>
           {this.props.data.time}
         </div>
-        <div class='icon in-line' style={iconStyle} />
-        <a href={this.props.data.url} class='title in-line'>
+        <div class='icon' style={iconStyle} />
+        <a href={this.props.data.url} class='title'>
           {this.props.data.title}
         </a>
-        <div class='domain in-line'>
+        <div class='domain'>
           www.youtube.com
         </div>
       </div>
