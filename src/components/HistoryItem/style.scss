@@ -1,0 +1,53 @@
+.history-section-item {
+    width: 100%;
+    height: 32px;
+    position: relative;
+    font-size: 14px;
+
+    .check-box {
+        width: 18px;
+        height: 18px;
+        border-width: 2px;
+        border-color: #757575;
+        border-style: solid;
+        border-radius: 3px;
+        box-sizing: border-box;
+        position: relative;
+        margin-left: 16px;
+        @include cursor-pointer;
+    }
+
+    .time {
+        opacity: 0.54;
+        margin-left: 16px;
+    }
+
+    .icon {
+        width: 16px;
+        height: 16px;
+        margin-left: 48px;
+        @include image-cover;
+    }
+
+    .title {
+        opacity: 0.79;
+        margin-left: 8px;
+        text-decoration: none;
+        color: #000;
+    }
+
+    .domain {
+        opacity: 0.54;
+        margin-left: 32px;
+    }
+
+    .in-line {
+        float: left;
+        position: relative;
+        @include center-vertical;
+    }
+
+    &::after {
+        @include clearAfter;
+    }
+}
