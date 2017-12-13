@@ -28,6 +28,7 @@
     }
     .border-vertical2 {
       opacity: $dividers-opacity-dark;
+      @include invert-colors;
     }
   }
 
