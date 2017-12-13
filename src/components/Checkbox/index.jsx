@@ -1,6 +1,6 @@
-import Component from 'inferno-component'
+import React from 'react'
 
-export default class Checkbox extends Component {
+export default class Checkbox extends React.Component {
   constructor () {
     super()
 

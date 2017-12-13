@@ -1,8 +1,8 @@
-import Component from 'inferno-component'
+import React from 'react'
 
 import Checkbox from '../Checkbox'
 
-export default class HistoryItem extends Component {
+export default class HistoryItem extends React.Component {
   render () {
     const iconStyle = {
       backgroundImage: `url(${this.props.data.icon})`

@@ -1,8 +1,8 @@
-import Component from 'inferno-component'
+import React from 'react'
 
 import Store from '../../store'
 
-import { connect } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 
 import Transitions from '../../utils/transitions'
 
@@ -14,8 +14,8 @@ import { setPositions, setWidths, switchTabGroup, getCurrentTabGroup, removeTabG
 
 import Colors from '../../utils/colors'
 
-@connect
-export default class Tab extends Component {
+@observer
+export default class Tab extends React.Component {
   constructor () {
     super()
 

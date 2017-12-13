@@ -1,18 +1,12 @@
-import Component from 'inferno-component'
+import React from 'react'
 
-import { observer } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 import Store from '../../store'
 
 @observer
-export default class MenuItem extends Component {
-  componentDidMount () {
-    this.props.addItem(this)
-  }
-
+export default class MenuItem extends React.Component {
   render () {
     const onClick = (e) => {
-      // Hide parent menu.
-      this.props.hide()
       // Execute onClick event.
       if (typeof this.props.onClick === 'function') {
         this.props.onClick(e)
@@ -24,7 +18,7 @@ export default class MenuItem extends Component {
     }
 
     return (
-      <div className='menu-item' onClick={onClick} style={style}>
+      <div className={'menu-item ' + ((this.props.selected) ? 'selected' : '')} onClick={onClick} style={style}>
         {this.props.children}
       </div>
     )
@@ -33,5 +27,6 @@ export default class MenuItem extends Component {
 
 MenuItem.defaultProps = {
   visible: true,
-  enabled: true
+  enabled: true,
+  selected: false
 }
