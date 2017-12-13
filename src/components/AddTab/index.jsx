@@ -1,16 +1,16 @@
-import Component from 'inferno-component'
+import React from 'react'
 
 import { defaultOptions, transitions } from '../../defaults/tabs'
 
 import { addTab } from '../../actions/tabs'
 
 import Store from '../../store'
-import { connect } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 
 import Transitions from '../../utils/transitions'
 
-@connect
-export default class AddTab extends Component {
+@observer
+export default class AddTab extends React.Component {
   constructor () {
     super ()
 

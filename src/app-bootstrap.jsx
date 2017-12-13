@@ -1,10 +1,11 @@
 import './app.scss'
 
-import Inferno from 'inferno'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 import App from './components/App'
 
 // Wait for sass load.
 setTimeout(function () {
-  Inferno.render(<App />, document.getElementById('app'))
+  ReactDOM.render(<App />, document.getElementById('app'))
 }, 1)

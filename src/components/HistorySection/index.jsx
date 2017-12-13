@@ -1,8 +1,8 @@
-import Component from 'inferno-component'
+import React from 'react'
 
 import Item from '../HistoryItem'
 
-export default class HistorySection extends Component {
+export default class HistorySection extends React.Component {
   render () {
     return (
       <div class='history-section'>

@@ -1,6 +1,6 @@
-import Component from 'inferno-component'
+import React from 'react'
 
-import { connect } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 import { observe } from 'mobx'
 import Store from '../../store'
 
@@ -14,8 +14,8 @@ import Colors from '../../utils/colors'
 
 import { setPositions, setWidths, findTabToReplace, getSelectedTab, addTabGroup, getCurrentTabGroup } from '../../actions/tabs'
 
-@connect
-export default class Tabs extends Component {
+@observer
+export default class Tabs extends React.Component {
   constructor () {
     super()
 
@@ -118,7 +118,7 @@ export default class Tabs extends Component {
     const tabs = getCurrentTabGroup().tabs.filter(tab => !tab.pinned)
 
     const tabsStyle = {
-      '-webkit-app-region': (tabs[0] != null && tabs[0].width > 32) ? 'drag' : 'no-drag'
+      WebkitAppRegion: (tabs[0] != null && tabs[0].width > 32) ? 'drag' : 'no-drag'
     }
 
     return (

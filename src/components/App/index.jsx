@@ -1,4 +1,4 @@
-import Component from 'inferno-component'
+import React from 'react'
 
 import SystemBar from '../SystemBar'
 import Tabs from '../Tabs'
@@ -8,16 +8,16 @@ import Suggestions from '../Suggestions'
 import Menu from '../Menu'
 import MenuNavigation from '../MenuNavigation'
 import Dialog from '../Dialog'
-import TabGroupsDialog from '../TabGroupsDialog'
+import TabGroupsMenu from '../TabGroupsMenu'
 
 import Store from '../../store'
 
-import { connect } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 
 import { pageMenuItems } from '../../defaults/page-menu-items'
 
-@connect
-export default class App extends Component {
+@observer
+export default class App extends React.Component {
   constructor () {
     super()
   }
@@ -27,11 +27,13 @@ export default class App extends Component {
 
     window.addEventListener('mousedown', (e) => {
       this.suggestions.hide()
-      this.hidePageMenu()
+      this.pageMenu.hide()
+      this.tabGroupsMenu.hide()
     })
 
     window.addEventListener('click', (e) => {
-      this.hidePageMenu()
+      this.pageMenu.hide()
+      this.tabGroupsMenu.hide()
     })
 
     window.addEventListener('mousemove' , (e) => {
@@ -39,19 +41,7 @@ export default class App extends Component {
       Store.cursor.y = e.pageY
     })
 
-    this.setPageMenuItems(pageMenuItems)
-  }
-
-  showPageMenu () {
-    this.pageMenu.show()
-  }
-
-  hidePageMenu () {
-    this.pageMenu.hide()
-  }
-
-  setPageMenuItems (items) {
-    this.pageMenu.setState({items: items})
+    this.pageMenu.setState({items: pageMenuItems})
   }
 
   refreshIconsState () {
@@ -72,9 +62,9 @@ export default class App extends Component {
           <MenuNavigation ref={(r) => { this.menuNavigation = r }}></MenuNavigation>
           <div className='separator' style={{marginTop: 0}}></div>
         </Menu>
-        <Dialog ref={(r) => {this.dialog = r}}>
-          <TabGroupsDialog></TabGroupsDialog>
-        </Dialog>
+        <Menu ref={(r) => { this.tabGroupsMenu = r }} right={8} top={8}>
+          <TabGroupsMenu></TabGroupsMenu>
+        </Menu>
       </div>
     )
   }

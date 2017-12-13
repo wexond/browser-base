@@ -1,12 +1,12 @@
-import Component from 'inferno-component'
+import React from 'react'
 
-import { observer } from 'inferno-mobx'
+import { observer } from 'mobx-react'
 import Store from '../../store'
 
 import Page from '../Page'
 
 @observer
-export default class Pages extends Component {
+export default class Pages extends React.Component {
   render () {
     return (
       <div className='pages'>

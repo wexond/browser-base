@@ -1,6 +1,6 @@
-import Component from 'inferno-component'
+import React from 'react'
 
-export default class HistoryCard extends Component {
+export default class HistoryCard extends React.Component {
   render () {
     const screenshotStyle = {
       backgroundImage: `url(${this.props.data.screenshot}`
