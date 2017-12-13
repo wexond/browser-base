@@ -69,6 +69,8 @@ export default class Menu extends React.Component {
     }, 50)
 
     this.visible = true
+
+    if (typeof this.props.onVisibilityChange === 'function') this.props.onVisibilityChange(this.visible)
   }
 
   hide = () => {
@@ -79,6 +81,8 @@ export default class Menu extends React.Component {
     })
 
     this.visible = false
+
+    if (typeof this.props.onVisibilityChange === 'function') this.props.onVisibilityChange(this.visible)
   }
 
   render () {
