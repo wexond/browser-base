@@ -163,7 +163,7 @@ export const replaceTabs = (firstIndex, secondIndex, changePos = true) => {
 }
 
 export const findTabToReplace = (callerTab, cursorX) => {
-  const tabs = tabGroupsActions.getCurrentTabGroup()
+  const tabs = tabGroupsActions.getCurrentTabGroup().tabs
   const overTab = getTabFromMouseX(callerTab, cursorX)
 
   if (overTab != null && !overTab.pinned) {
