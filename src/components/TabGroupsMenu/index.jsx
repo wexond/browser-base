@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 
 import Store from '../../store'
 
-import { addTabGroup } from '../../actions/tabs'
+import * as tabGroupsActions from '../../actions/tab-groups'
 
 import TabGroupsMenuItem from '../TabGroupsMenuItem'
 
@@ -12,7 +12,7 @@ import TabGroupsMenuItem from '../TabGroupsMenuItem'
 export default class TabGroupsMenu extends React.Component {
   render () {
     const onAddClick = () => {
-      addTabGroup()
+      tabGroupsActions.addTabGroup()
       Store.app.tabGroupsMenu.refreshHeight()
       Store.editingTabGroup = -1
     }

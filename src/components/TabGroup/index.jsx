@@ -6,9 +6,9 @@ import Store from '../../store'
 
 import Tab from '../Tab'
 
-import { getPosition, addTab, getWidth } from '../../actions/tabs'
+import * as tabsActions from '../../actions/tabs'
 
-import { defaultOptions, transitions } from '../../defaults/tabs'
+import tabDefaults from '../../defaults/tabs'
 
 @observer
 export default class TabGroup extends React.Component {
@@ -51,7 +51,7 @@ export default class TabGroup extends React.Component {
 
         // Get and set initial left for new tab.
         const tab = change.added[0]
-        tab.left = getPosition(change.index)
+        tab.left = tabsActions.getPosition(change.index)
 
         // Enable left animation.
         setTimeout(() => {
@@ -65,7 +65,7 @@ export default class TabGroup extends React.Component {
         
         setTimeout(() => {
           clearInterval(interval)
-        }, transitions.width.duration * 1000)
+        }, tabDefaults.transitions.width.duration * 1000)
 
         return
       }
@@ -74,7 +74,7 @@ export default class TabGroup extends React.Component {
         // Remove it from state after delay, to keep close animation.
         setTimeout(() => {
           this.setState({tabs: change.object.slice()})
-        }, transitions.width.duration * 1000)
+        }, tabDefaults.transitions.width.duration * 1000)
         
         return
       }
@@ -84,7 +84,7 @@ export default class TabGroup extends React.Component {
       if (!e.isTrusted) return
       
       // Don't resize tabs when they new width is less than 32.
-      if (getWidth(Store.app.tabs.getWidth(), Store.app.tabs.addTab.getWidth()) < 32) return
+      if (tabsActions.getWidth(Store.app.tabs.getWidth(), Store.app.tabs.addTab.getWidth()) < 32) return
       
       // Turn off left animation for add tab button.
       Store.app.tabs.addTab.setState({animateLeft: false})
@@ -107,7 +107,7 @@ export default class TabGroup extends React.Component {
     })
 
     Store.currentTabGroup = this.props.id
-    addTab(defaultOptions)
+    tabsActions.addTab()
   }
 
   resetTimer () {

@@ -6,9 +6,7 @@ import Store from '../../store'
 import Storage from '../../utils/storage'
 import Colors from '../../utils/colors'
 
-import { checkFiles } from '../../actions/files'
-
-import { getColor } from '../../actions/webview-colors'
+import * as filesActions from '../../actions/files'
 
 @observer
 export default class Page extends React.Component {
@@ -37,7 +35,7 @@ export default class Page extends React.Component {
     this.webview.addEventListener('will-navigate', updateInfo)
 
     const saveHistory = () => {
-      checkFiles()
+      filesActions.checkFiles()
       if (lastURL !== tab.url) {
         Storage.addHistoryItem(tab.title, tab.url)
         lastURL = tab.url

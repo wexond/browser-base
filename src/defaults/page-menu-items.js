@@ -1,6 +1,6 @@
 import * as actions from '../actions/page-menu'
 
-export const pageMenuItems = [
+export default [
   {
     title: 'Open link in new tab',
     visible: false,

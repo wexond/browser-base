@@ -1,4 +1,4 @@
-export const tabMenuItems = [
+export default [
   {
     title: 'Add new tab'
   },

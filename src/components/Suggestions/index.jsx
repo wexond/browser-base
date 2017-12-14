@@ -5,7 +5,7 @@ import Store from '../../store'
 
 import Suggestion from '../Suggestion'
 
-import { getHistorySuggestions, getSearchSuggestions } from '../../actions/suggestions'
+import * as suggestionsActions from '../../actions/suggestions'
 
 import Network from '../../utils/network'
 
@@ -33,7 +33,7 @@ export default class Suggestions extends React.Component {
   }
 
   suggest = async (text) => {
-    const historySuggestions = await getHistorySuggestions(text)
+    const historySuggestions = await suggestionsActions.getHistorySuggestions(text)
 
     this.setState({suggestions: historySuggestions.concat(this.lastSearchSuggestions)})
 
@@ -51,7 +51,7 @@ export default class Suggestions extends React.Component {
     toggle()
 
     if (text.indexOf('.') === -1 || text.trim().indexOf(' ') !== -1) {
-      const data = await getSearchSuggestions(text)
+      const data = await suggestionsActions.getSearchSuggestions(text)
       const suggestions = historySuggestions.concat(data)
       this.setState({suggestions: suggestions})
 
