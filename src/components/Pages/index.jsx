@@ -15,7 +15,6 @@ export default class Pages extends React.Component {
         {
           Store.tabGroups.map(tabGroup => {
             return tabGroup.pages.map(page => {
-              console.log(page)
               let tab = tabsActions.getTabById(page.id)
               return <Page key={page.id} tab={tab} page={page} />
             })
