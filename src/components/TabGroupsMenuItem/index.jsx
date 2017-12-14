@@ -6,7 +6,7 @@ import Store from '../../store'
 
 import MenuItem from '../MenuItem'
 
-import { switchTabGroup, removeTabGroup, getTabGroupById } from '../../actions/tabs'
+import * as tabGroupsActions from '../../actions/tab-groups'
 
 @observer
 export default class TabGroupsMenuItem extends React.Component {
@@ -20,19 +20,19 @@ export default class TabGroupsMenuItem extends React.Component {
     const onClick = () => {
       Store.editingTabGroup = -1
       Store.app.tabGroupsMenu.hide()
-      switchTabGroup(tabGroup.id)
+      tabGroupsActions.switchTabGroup(tabGroup.id)
     }
 
     const onRemoveClick = (e) => {
       e.stopPropagation()
-      removeTabGroup(getTabGroupById(tabGroup.id))
+      tabGroupsActions.removeTabGroup(tabGroupsActions.getTabGroupById(tabGroup.id))
       Store.app.tabGroupsMenu.refreshHeight()
       Store.editingTabGroup = -1
     }
 
     const onEditClick = (e) => {
       e.stopPropagation()
-      switchTabGroup(tabGroup.id)
+      tabGroupsActions.switchTabGroup(tabGroup.id)
       Store.app.tabGroupsMenu.refreshHeight()
       Store.editingTabGroup = (editing) ? -1 : tabGroup.id
     }

@@ -3,7 +3,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import Store from '../../store'
 
-import { getNavigationState, getSelectedPage } from '../../actions/pages'
+import * as pagesActions from '../../actions/pages'
 
 @observer
 export default class MenuNavigation extends React.Component {
@@ -17,7 +17,7 @@ export default class MenuNavigation extends React.Component {
   }
 
   refreshIconsState () {
-    this.setState(getNavigationState())
+    this.setState(pagesActions.getNavigationState())
   }
 
   render () {
@@ -27,17 +27,17 @@ export default class MenuNavigation extends React.Component {
     } = this.state
 
     const onBackClick = () => {
-      const page = getSelectedPage()
+      const page = pagesActions.getSelectedPage()
       page.page.goBack()
     }
 
     const onForwardClick = () => {
-      const page = getSelectedPage()
+      const page = pagesActions.getSelectedPage()
       page.page.goForward()
     }
 
     const onRefreshClick = () => {
-      const page = getSelectedPage()
+      const page = pagesActions.getSelectedPage()
       page.page.refresh()
     }
 

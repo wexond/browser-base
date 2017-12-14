@@ -1,4 +1,4 @@
-import { paths } from '../defaults/files'
+import paths from '../defaults/files'
 import fs from 'fs'
 
 export const checkFiles = () => {
