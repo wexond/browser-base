@@ -18,7 +18,11 @@ export default class SystemBar extends React.Component {
 
     if (Store.backgroundColor === '#fff') backColor = Colors.shadeColor(Store.backgroundColor, -0.1)
 
-    const onGroupsMouseDown = e => e.stopPropagation()
+    const onGroupsMouseDown = e => {
+      e.stopPropagation()
+
+      Store.app.pageMenu.hide()
+    }
 
     const onGroupsClick = (e) => {
       e.stopPropagation()
