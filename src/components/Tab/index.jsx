@@ -46,7 +46,10 @@ export default class Tab extends React.Component {
     // Get the tab url and store in Store.
     Store.lastClosedURL = tab.url
 
-    tab.renderPage = false
+    if (tabGroup.tabs.length === 1) {
+      tabGroupsActions.removeTabGroup(tabGroup)
+      return 
+    }
 
     // Get previous and next tab.
     let index = tabGroup.tabs.indexOf(tab)
@@ -61,11 +64,6 @@ export default class Tab extends React.Component {
 
     // Remove tab from array.
     tabGroup.tabs.splice(index, 1)
-
-    if (tabGroup.tabs.length === 0) {
-      tabGroupsActions.removeTabGroup(tabGroup)
-      return 
-    }
 
     // If the closed tab was selected, select other tab.
     if (isSelected && tabGroup.tabs.length !== 0) {
@@ -224,6 +222,8 @@ export default class Tab extends React.Component {
       this.setState({hovered: false})
     }
 
+    const onCloseMouseDown = e => e.stopPropagation()
+
     const tabEvents = {
       onMouseDown: onMouseDown,
       onMouseEnter: onMouseEnter,
@@ -238,7 +238,7 @@ export default class Tab extends React.Component {
         <div className='content' style={contentStyle}>
           <div className='favicon' style={faviconStyle} />
           <div className='title' style={titleStyle}>{title}</div>
-          <div className='close' onClick={this.close} style={closeStyle} >
+          <div className='close' onClick={this.close} onMouseDown={onCloseMouseDown} style={closeStyle}>
             <div className='icon' />
           </div>
         </div>

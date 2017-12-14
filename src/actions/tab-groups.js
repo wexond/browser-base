@@ -20,7 +20,7 @@ export const getCurrentTabGroup = () => {
 
 export const removeTabGroup = (tabGroup) => {
   const tabGroupIndex = Store.tabGroups.indexOf(tabGroup)
-  if (Store.tabGroups.length === 0) {
+  if (Store.tabGroups.length === 1) {
     windowActions.close()
   } else {
     if (tabGroupIndex + 1 < Store.tabGroups.length) {
