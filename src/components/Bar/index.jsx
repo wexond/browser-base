@@ -32,17 +32,17 @@ export default class Bar extends React.Component {
     } = this.state
 
     const onBackClick = () => {
-      const page = getSelectedPage()
+      const page = pagesActions.getSelectedPage()
       page.page.goBack()
     }
 
     const onForwardClick = () => {
-      const page = getSelectedPage()
+      const page = pagesActions.getSelectedPage()
       page.page.goForward()
     }
 
     const onRefreshClick = () => {
-      const page = getSelectedPage()
+      const page = pagesActions.getSelectedPage()
       page.page.refresh()
     }
 
