@@ -47,7 +47,8 @@ export default class Bar extends React.Component {
     }
 
     const barStyle = {
-      backgroundColor: Store.backgroundColor
+      backgroundColor: Store.backgroundColor,
+      display: (Store.isFullscreen) ? 'none' : 'flex'
     }
 
     return (

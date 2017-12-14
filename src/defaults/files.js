@@ -10,6 +10,7 @@ export default {
   files: {
     history: join(homedir(), '.wexond', 'userData', 'history.json'),
     sites: join(homedir(), '.wexond', 'userData', 'sites.json'),
-    bookmarks: join(homedir(), '.wexond', 'userData', 'bookmarks.json')
+    bookmarks: join(homedir(), '.wexond', 'userData', 'bookmarks.json'),
+    favicons: join(homedir(), '.wexond', 'userData', 'favicons.json')
   }
 }

@@ -12,14 +12,14 @@ export default class Suggestion extends React.Component {
     if (this.props.description != null) description = this.props.description
 
     const onClick = (e) => {
-      const page = getSelectedPage()
+      const page = pagesActions.getSelectedPage()
       if (this.props.type === 'search') {
         page.page.webview.loadURL('https://www.google.com/search?q=' + this.props.title)
       } else if (this.props.type === 'history') {
         page.page.webview.loadURL(this.props.url)
-      } else if (this.props.type === 'first-url') {
+      } else if (this.props.type === 'autocomplete-url' || this.props.type === 'unknown-url') {
         page.page.webview.loadURL(this.props.title)
-      } else if (this.props.type === 'first-search') {
+      } else if (this.props.type === 'unknown-search') {
         page.page.webview.loadURL('https://www.google.com/search?q=' + this.props.title)
       }
 
@@ -33,10 +33,28 @@ export default class Suggestion extends React.Component {
       dashDisplay = 'none'
     }
 
+    let icon = 'images/Suggestions/page.svg'
+
+    let iconClassName = 'page-icon'
+
+    if (this.props.type === 'unknown-search' || this.props.type === 'search') {
+      iconClassName = 'search-icon'
+    } else if ((this.props.type === 'history' 
+        || this.props.type === 'autocomplete-url' 
+        || this.props.type === 'unknown-url') 
+        && this.props.favicon != null) {
+      iconClassName = ''
+      icon = this.props.favicon
+    }
+
+    const iconStyle = {
+      backgroundImage: `url(${icon})`
+    }
+
     return (
       <div onClick={onClick} className={'suggestion ' + ((this.props.selected) ? 'selected' : '')}>
         <div className='container'>
-          <div className='favicon'>
+          <div className={'icon ' + iconClassName} style={iconStyle}>
 
           </div>
           <div className='title'>
