@@ -21,7 +21,6 @@ export default class Suggestions extends React.Component {
     }
 
     this.lastSearchSuggestions = []
-    this.hidden = false
   }
 
   hide = () => {
@@ -38,8 +37,6 @@ export default class Suggestions extends React.Component {
     this.setState({suggestions: historySuggestions.concat(this.lastSearchSuggestions)})
 
     const toggle = () => {
-      if (this.hidden) return this.hidden = false
-      
       if (this.state.suggestions.length === 0) {
         this.hide()
       }
@@ -52,6 +49,7 @@ export default class Suggestions extends React.Component {
 
     if (text.indexOf('.') === -1 || text.trim().indexOf(' ') !== -1) {
       const data = await suggestionsActions.getSearchSuggestions(text)
+
       const suggestions = historySuggestions.concat(data)
       this.setState({suggestions: suggestions})
 
@@ -67,16 +65,16 @@ export default class Suggestions extends React.Component {
     return this.state.suggestions[this.state.selectedSuggestion]
   }
 
-  selectNext () {
+  async selectNext () {
     let selectedSuggestion = this.state.selectedSuggestion
     if (!(selectedSuggestion + 1 > this.state.suggestions.length - 1)) selectedSuggestion++
-    this.setState({selectedSuggestion: selectedSuggestion})
+    await this.setState({selectedSuggestion: selectedSuggestion})
   }
 
-  selectPrevious () {
+  async selectPrevious () {
     let selectedSuggestion = this.state.selectedSuggestion
     if (!(selectedSuggestion - 1 < 0)) selectedSuggestion--
-    this.setState({selectedSuggestion: selectedSuggestion})
+    await this.setState({selectedSuggestion: selectedSuggestion})
   }
 
   selectByIndex (index) {
@@ -109,7 +107,7 @@ export default class Suggestions extends React.Component {
         {suggestions.map((item, key) => {
           let selected = false
           if (this.state.selectedSuggestion === key) selected = true
-          return <Suggestion key={key} title={item.title} description={item.description} url={item.url} selected={selected} hide={this.hide} />
+          return <Suggestion key={key} favicon={item.favicon} type={item.type} title={item.title} description={item.description} url={item.url} selected={selected} hide={this.hide} />
         })}
       </div>
     )

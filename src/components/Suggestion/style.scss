@@ -15,6 +15,17 @@
             .address {
                 color: #fff;
             }
+            .icon {
+                background-color: rgba(255, 255, 255, $secondary-opacity-dark);
+
+                &.page-icon {
+                    background-color: white;
+                }
+
+                &.search-icon {
+                    background-color: white;
+                }
+            }
         }
     }
 
@@ -26,11 +37,22 @@
         overflow: hidden;
         white-space: nowrap;
 
-        .favicon {
+        .icon {
             display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 1px dashed rgba(0, 0, 0, $dividers-opacity-light);
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            @include image-center(16px, 16px);
+
+            &.page-icon {
+                background-image: url(images/Suggestions/page.svg) !important;
+                opacity: $secondary-opacity-light;
+            }
+
+            &.search-icon {
+                background-image: url(images/Suggestions/search.svg) !important;
+                opacity: $secondary-opacity-light;
+            }
         }
     
         .title {
@@ -50,7 +72,7 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            max-width: 70%;
+            max-width: calc(50% - 64px);
         }
 
         .dash {
