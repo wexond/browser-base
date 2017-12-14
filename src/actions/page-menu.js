@@ -6,11 +6,11 @@ import { defaults } from 'request'
 import { basename, extname } from 'path'
 const { dialog } = remote
 
-import { addTab } from '../actions/tabs'
+import * as tabActions from '../actions/tabs'
 import { getSelectedPage } from '../actions/pages'
 
 export const openLinkInNewTab = () => {
-  addTab({
+  tabActions.addTab({
     select: false, 
     url: Store.pageMenuData.linkURL
   })
@@ -47,7 +47,7 @@ export const saveLinkAs = () => {
 }
 
 export const openImageInNewTab = () => {
-  addTab({
+  tabActions.addTab({
     select: false,
     url: Store.pageMenuData.srcURL
   })
@@ -113,7 +113,7 @@ export const saveAs = () => {
 
 export const viewSource = () => {
   const url = getSelectedPage().page.webview.getURL()
-  addTab({
+  tabActions.addTab({
     select: true,
     url: 'view-source:' + url
   })

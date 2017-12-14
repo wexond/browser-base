@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { paths } from '../defaults/files'
+import paths from '../defaults/files'
 
 export default class Storage {
   static async addHistoryItem (title, url) {

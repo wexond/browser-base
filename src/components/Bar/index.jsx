@@ -2,8 +2,8 @@ import React from 'react'
 
 import AddressBar from '../AddressBar'
 
-import { getNavigationState, getSelectedPage } from '../../actions/pages'
-import { getSelectedTab } from '../../actions/tabs'
+import * as pagesActions from '../../actions/pages'
+import * as tabsActions from '../../actions/tabs'
 
 import { observer } from 'mobx-react'
 import Store from '../../store'
@@ -22,7 +22,7 @@ export default class Bar extends React.Component {
   }
 
   refreshIconsState () {
-    this.setState(getNavigationState())
+    this.setState(pagesActions.getNavigationState())
   }
 
   render () {

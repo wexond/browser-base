@@ -6,11 +6,11 @@ import { observer } from 'mobx-react'
 
 import Transitions from '../../utils/transitions'
 
-import { transitions, tabDefaults } from '../../defaults/tabs'
+import tabDefaults from '../../defaults/tabs'
 import wexondUrls from '../../defaults/wexond-urls'
 
-import { close } from '../../actions/window'
-import { setPositions, setWidths, switchTabGroup, getCurrentTabGroup, removeTabGroup } from '../../actions/tabs'
+import * as tabsActions from '../../actions/tabs'
+import * as tabGroupsActions from '../../actions/tab-groups'
 
 import Colors from '../../utils/colors'
 
@@ -41,7 +41,7 @@ export default class Tab extends React.Component {
     const tabs = this.props.tabs
     const isSelected = Store.selectedTab === tab.id
 
-    const tabGroup = getCurrentTabGroup().tabs
+    const tabGroup = tabGroupsActions.getCurrentTabGroup()
 
     // Get the tab url and store in Store.
     Store.lastClosedURL = tab.url
@@ -49,37 +49,37 @@ export default class Tab extends React.Component {
     tab.renderPage = false
 
     // Get previous and next tab.
-    let index = tabGroup.indexOf(tab)
+    let index = tabGroup.tabs.indexOf(tab)
 
     // Get page from array by its unique id.
-    let page = Store.pages.filter(page => {
+    let page = tabGroup.pages.filter(page => {
       return tab.id === page.id
     })[0]
 
     // Remove page from array.
-    Store.pages.splice(Store.pages.indexOf(page), 1)
+    tabGroup.pages.splice(tabGroup.pages.indexOf(page), 1)
 
     // Remove tab from array.
-    tabGroup.splice(index, 1)
+    tabGroup.tabs.splice(index, 1)
 
-    if (tabGroup.length === 0) {
-      removeTabGroup(getCurrentTabGroup())
+    if (tabGroup.tabs.length === 0) {
+      tabGroupsActions.removeTabGroup(tabGroup)
       return 
     }
 
     // If the closed tab was selected, select other tab.
-    if (isSelected && tabGroup.length !== 0) {
-      if (index === tabGroup.length) { // If the tab is last.
-        Store.selectedTab = tabGroup[index - 1].id // Select previous tab.
+    if (isSelected && tabGroup.tabs.length !== 0) {
+      if (index === tabGroup.tabs.length) { // If the tab is last.
+        Store.selectedTab = tabGroup.tabs[index - 1].id // Select previous tab.
       } else {
-        Store.selectedTab = tabGroup[index].id // Select next tab.
+        Store.selectedTab = tabGroup.tabs[index].id // Select next tab.
       }
     }
 
     this.props.tabGroup.resetTimer()
 
     // If the tab is last.
-    if (index === tabGroup.length) {
+    if (index === tabGroup.tabs.length) {
       // If the tab width is less than normal tab width
       //  and the tab width is greater than 32.
       if (tab.width < tabDefaults.maxTabWidth && tab.width > 32) {
@@ -92,7 +92,7 @@ export default class Tab extends React.Component {
     // Animate tabs.
     tab.animateWidth = true
     tab.closing = true
-    setPositions()
+    tabsActions.setPositions()
   }
 
   render () {
@@ -100,7 +100,7 @@ export default class Tab extends React.Component {
     const isSelected = Store.selectedTab === tab.id
     const tabs = this.props.tabs
 
-    const tabGroup = getCurrentTabGroup().tabs
+    const tabGroup = tabGroupsActions.getCurrentTabGroup().tabs
 
     const {
       width,
@@ -122,15 +122,15 @@ export default class Tab extends React.Component {
     } = this.state
 
     // Control transitions.
-    let transition = transitions['background-color'].duration + 's' + ' background-color ' + transitions['background-color'].easing 
+    let transition = tabDefaults.transitions['background-color'].duration + 's' + ' background-color ' + tabDefaults.transitions['background-color'].easing 
 
     if (animateLeft) {
-      const newTransition = transitions.left.duration + 's' + ' left ' + transitions.left.easing 
+      const newTransition = tabDefaults.transitions.left.duration + 's' + ' left ' + tabDefaults.transitions.left.easing 
       transition = Transitions.appendTransition(transition, newTransition)
     }
 
     if (animateWidth) {
-      const newTransition = transitions.width.duration + 's' + ' width ' + transitions.width.easing 
+      const newTransition = tabDefaults.transitions.width.duration + 's' + ' width ' + tabDefaults.transitions.width.easing 
       transition = Transitions.appendTransition(transition, newTransition)
     }
 

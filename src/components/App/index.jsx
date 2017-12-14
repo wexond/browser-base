@@ -14,7 +14,7 @@ import Store from '../../store'
 
 import { observer } from 'mobx-react'
 
-import { pageMenuItems } from '../../defaults/page-menu-items'
+import pageMenuItems from '../../defaults/page-menu-items'
 
 @observer
 export default class App extends React.Component {

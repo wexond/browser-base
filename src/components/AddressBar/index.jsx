@@ -8,12 +8,12 @@ import Store from '../../store'
 
 import Network from '../../utils/network'
 
-import { getSelectedTab } from '../../actions/tabs'
-import { getSelectedPage } from '../../actions/pages'
-import { checkFiles } from '../../actions/files'
+import * as tabsActions from '../../actions/tabs'
+import * as pagesActions from '../../actions/pages'
+import * as filesActions from '../../actions/files'
 
 import Storage from '../../utils/storage'
-import { getHistorySuggestions } from '../../actions/suggestions';
+import * as suggestionsActions from '../../actions/suggestions';
 
 @observer
 export default class AddressBar extends React.Component {
@@ -85,7 +85,7 @@ export default class AddressBar extends React.Component {
   }
 
   setCertificate = async (url) => {
-    const tab = getSelectedTab()
+    const tab = tabsActions.getSelectedTab()
     if (tab.certificate != null) {
       this.setState({
         certificateName: tab.certificate.name,
@@ -169,7 +169,7 @@ export default class AddressBar extends React.Component {
       }
 
       if (this.canSuggest) {
-        const whatToSuggest = await getHistorySuggestions(text)
+        const whatToSuggest = await suggestionsActions.getHistorySuggestions(text)
         text = input.value.toLowerCase().replace(this.getSelectionText(), '')
 
         input.value = text
@@ -235,8 +235,8 @@ export default class AddressBar extends React.Component {
       if (e.which === 13) { // Enter.
         e.preventDefault()
 
-        const page = getSelectedPage()
-        const tab = getSelectedTab()
+        const page = pagesActions.getSelectedPage()
+        const tab = tabsActions.getSelectedTab()
         const inputText = e.currentTarget.value
 
         let URLToNavigate = inputText
