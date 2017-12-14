@@ -63,6 +63,7 @@
     "uglifyjs-webpack-plugin": "latest",
     "url-loader": "latest",
     "webpack": "latest",
-    "webpack-dev-server": "latest"
+    "webpack-dev-server": "latest",
+    "base64-img": "latest"
   }
 }

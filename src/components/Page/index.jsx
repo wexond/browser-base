@@ -15,6 +15,8 @@ export default class Page extends React.Component {
     const tab = this.props.tab
     const page = this.props.page
     let lastURL = ''
+    let loaded = false
+    let favicon = ''
 
     page.page = this
 
@@ -35,19 +37,30 @@ export default class Page extends React.Component {
     this.webview.addEventListener('did-navigate-in-page', updateInfo)
     this.webview.addEventListener('will-navigate', updateInfo)
 
-    const saveHistory = () => {
+    const saveHistory = async () => {
       filesActions.checkFiles()
-      if (lastURL !== tab.url) {
-        Storage.addHistoryItem(tab.title, tab.url)
-        lastURL = tab.url
-      }
-      
+    
       const regex = /(http(s?)):\/\/(www.)?/gi
       let url = tab.url
       if (url.indexOf('/', 9) !== -1) {
         url = url.substring(0, url.indexOf('/', 9))
       }
-      Storage.addSite(tab.title, url)
+
+      const interval1 = setInterval(() => {
+        if (favicon === 'error') {
+          favicon = 'handled'
+          Storage.addHistoryItem(tab.title, tab.url, '')
+          Storage.addSite(tab.title, url, '')
+          clearInterval(interval1)
+        } else if (favicon !== '' && favicon !== 'handled') {
+          Storage.addHistoryItem(tab.title, tab.url, favicon)
+          Storage.addSite(tab.title, url, favicon)
+          favicon = 'handled'
+          clearInterval(interval1)
+        }
+      }, 1)
+
+      loaded = true
     }
 
     this.webview.addEventListener('did-finish-load', () => {
@@ -68,14 +81,25 @@ export default class Page extends React.Component {
       }
     })
 
+    this.webview.addEventListener('enter-html-full-screen', (e) => {
+      Store.isFullscreen = true
+    })
+
+    this.webview.addEventListener('leave-html-full-screen', (e) => {
+      Store.isFullscreen = false
+    })
+
     this.webview.addEventListener('page-favicon-updated', (e) => {
       let request = new XMLHttpRequest()
-      request.onreadystatechange = function (event) {
+      request.onreadystatechange = async (event) => {
         if (request.readyState === 4) {
           if (request.status === 404) {
             tab.favicon = ''
+            favicon = 'error'
           } else {
+            Storage.addFavicon(e.favicons[0])
             tab.favicon = e.favicons[0]
+            favicon = e.favicons[0]
           }
         }
       }

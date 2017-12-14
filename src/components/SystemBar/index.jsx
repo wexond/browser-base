@@ -30,8 +30,13 @@ export default class SystemBar extends React.Component {
       }
     }
 
+    const systemBarStyle = {
+      backgroundColor: backColor,
+      display: (Store.isFullscreen) ? 'none' : 'flex'
+    }
+
     return (
-      <div className={'system-bar ' + Store.foreground} style={{backgroundColor: backColor}}>
+      <div className={'system-bar ' + Store.foreground} style={systemBarStyle}>
         {this.props.children}
         <div onMouseDown={onGroupsMouseDown} onClick={onGroupsClick} className='groups'></div>
         <div className='border-vertical2'></div>

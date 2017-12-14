@@ -132,18 +132,22 @@ export default class AddressBar extends React.Component {
   }
 
   autoComplete (whatToSuggest, inputText = null) {
+    if (whatToSuggest.type !== 'autocomplete-url') return
+
+    let suggestion = whatToSuggest.title
+
     let text = inputText
     if (text == null) text = this.input.value
 
     let httpsWwwRegex = /(http(s?)):\/\/(www.)?/gi
     let wwwRegex = /(www.)?/gi
 
-    if (whatToSuggest.replace(httpsWwwRegex, '').startsWith(text)) {
-      this.input.value = whatToSuggest.replace(httpsWwwRegex, '')
-    } else if (whatToSuggest.replace(httpsWwwRegex, '').startsWith(text.replace(httpsWwwRegex, '')) && text.replace(httpsWwwRegex, '') !== '') {
-      this.input.value = text + whatToSuggest.replace(httpsWwwRegex, '').replace(text.replace(httpsWwwRegex, ''), '')
-    } else if (whatToSuggest.replace(httpsWwwRegex, '').startsWith(text.replace(wwwRegex, '')) && text.replace(wwwRegex, '') !== '') {
-      this.input.value = text + whatToSuggest.replace(httpsWwwRegex, '').replace(text.replace(wwwRegex, ''), '')
+    if (suggestion.replace(httpsWwwRegex, '').startsWith(text)) {
+      this.input.value = suggestion.replace(httpsWwwRegex, '')
+    } else if (suggestion.replace(httpsWwwRegex, '').startsWith(text.replace(httpsWwwRegex, '')) && text.replace(httpsWwwRegex, '') !== '') {
+      this.input.value = text + suggestion.replace(httpsWwwRegex, '').replace(text.replace(httpsWwwRegex, ''), '')
+    } else if (suggestion.replace(httpsWwwRegex, '').startsWith(text.replace(wwwRegex, '')) && text.replace(wwwRegex, '') !== '') {
+      this.input.value = text + suggestion.replace(httpsWwwRegex, '').replace(text.replace(wwwRegex, ''), '')
     }
 
     if (this.input.value.length - text.length > 0) {
@@ -175,13 +179,13 @@ export default class AddressBar extends React.Component {
         input.value = text
 
         if (whatToSuggest[0] != null) {
-          this.autoComplete(whatToSuggest[0].title, text)
-          this.lastSuggestion = whatToSuggest[0].title
+          this.autoComplete(whatToSuggest[0], text)
+          this.lastSuggestion = whatToSuggest[0]
         }
 
         this.canSuggest = false
       }
-
+      
       await Store.app.suggestions.suggest(text)
     }
 
@@ -191,9 +195,6 @@ export default class AddressBar extends React.Component {
       if (e.which === 27) { // Escape.
         this.setInputToggled(false)
         this.setURL(Store.url)
-      }
-      if (e.which !== 13) {
-        Store.app.suggestions.hidden = false
       }
     }
 
@@ -207,7 +208,10 @@ export default class AddressBar extends React.Component {
       const setNewValue = (suggestion) => {
         if (suggestion.type === 'history') {
           this.input.value = suggestion.url
-        } else if (suggestion.type === 'search' || suggestion.type === 'first-search' || suggestion.type === 'first-url') {
+        } else if (suggestion.type === 'search' 
+            || suggestion.type === 'unknown-search' 
+            || suggestion.type === 'unknown-url' 
+            || suggestion.type === 'autocomplete-url') {
           this.input.value = suggestion.title
         }
       }
@@ -215,17 +219,17 @@ export default class AddressBar extends React.Component {
       if (key === 40) {
         e.preventDefault()
   
-        Store.app.suggestions.selectNext()
+        await Store.app.suggestions.selectNext()
         const suggestion = Store.app.suggestions.getSelectedSuggestion()
-        
+
         setNewValue(suggestion)
       }
       if (key === 38) {
         e.preventDefault()
   
-        Store.app.suggestions.selectPrevious()
+        await Store.app.suggestions.selectPrevious()
         const suggestion = Store.app.suggestions.getSelectedSuggestion()
-       
+      
         setNewValue(suggestion)
       }
     }

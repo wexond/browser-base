@@ -45,6 +45,7 @@ export const getHistorySuggestions = async (text) => {
 
     const sites = await Storage.getSites()
     const history = await Storage.getHistory()
+    const favicons = await Storage.getFavicons()
     const regex = /(http(s?)):\/\/(www.)?/gi
 
     let tempSuggestions = []
@@ -57,7 +58,16 @@ export const getHistorySuggestions = async (text) => {
         title: title,
         url: url,
         canSuggest: canSuggest,
-        type: 'history'
+        type: 'history',
+        favicon: null
+      }
+
+      if (array[i].favicon != null) {
+        for (var y = 0; y < favicons.length; y++) {
+          if (favicons[y].url === array[i].favicon) {
+            suggestion.favicon = favicons[y].data
+          }
+        }
       }
 
       if (url.replace(regex, '').indexOf('/') === -1) {
@@ -140,7 +150,7 @@ export const getHistorySuggestions = async (text) => {
         newSuggestions[0].title = newSuggestions[0].url
         newSuggestions[0].url = null
         newSuggestions[0].description = 'open website'
-        newSuggestions[0].type = 'first-url'
+        newSuggestions[0].type = 'autocomplete-url'
 
         break
       }
@@ -151,13 +161,13 @@ export const getHistorySuggestions = async (text) => {
         newSuggestions.unshift({
           title: (input.startsWith('http://')) ? input : 'http://' + input,
           description: 'open website',
-          type: 'first-url'
+          type: 'unknown-url'
         })
       } else {
         newSuggestions.unshift({
           title: input,
           description: 'search in Google',
-          type: 'first-search'
+          type: 'unknown-search'
         })
       }
     }
