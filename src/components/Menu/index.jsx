@@ -41,6 +41,7 @@ export default class Menu extends React.Component {
 
   refreshHeight = () => {
     setTimeout(() => {
+      this.menu.style.transition = '0.27s margin-top, 0.2s opacity'
       this.newHeight = this.menu.scrollHeight
       this.setState({height: this.newHeight})
     }, 50)
@@ -66,7 +67,7 @@ export default class Menu extends React.Component {
         height: this.newHeight,
         pointerEvents: true
       })
-    }, 50)
+    }, 10)
 
     this.visible = true
 
@@ -124,7 +125,7 @@ export default class Menu extends React.Component {
 
     let menuItems = null
     if (items != null && items.length !== 0) menuItems = (
-      <div className='items'>
+      <div className='items' style={this.props.itemsStyle}>
         {
           items.map((data, key) => {
             // Default values for an item.

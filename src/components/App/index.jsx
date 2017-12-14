@@ -64,7 +64,7 @@ export default class App extends React.Component {
         <Bar ref={(r) => { this.bar = r }} />
         <Suggestions ref={(r) => { this.suggestions = r }} />
         <Pages />
-        <Menu ref={(r) => { this.pageMenu = r }}>
+        <Menu ref={(r) => { this.pageMenu = r }} itemsStyle={{paddingBottom: 8, paddingTop: 0}}>
           <MenuNavigation ref={(r) => { this.menuNavigation = r }}></MenuNavigation>
           <div className='separator' style={{marginTop: 0}}></div>
         </Menu>
