@@ -79,7 +79,7 @@ export default class Tabs extends React.Component {
           tab.left = newX
         }
         tab.animateLeft = false
-        findTabToReplace(tab, mouseX)
+        tabsActions.findTabToReplace(tab, mouseX)
       }
     })
 
