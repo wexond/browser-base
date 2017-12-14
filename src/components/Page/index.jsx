@@ -7,6 +7,7 @@ import Storage from '../../utils/storage'
 import Colors from '../../utils/colors'
 
 import * as filesActions from '../../actions/files'
+import * as tabsActions from '../../actions/tabs'
 
 @observer
 export default class Page extends React.Component {
@@ -54,6 +55,17 @@ export default class Page extends React.Component {
     })
     this.webview.addEventListener('did-frame-finish-load', (e) => {
       saveHistory()
+    })
+
+    this.webview.addEventListener('new-window', (e) => {
+      if (e.disposition === 'foreground-tab' 
+          || e.disposition === 'background-tab' 
+          || disposition === 'new-window') {
+        tabsActions.addTab({
+          select: true,
+          url: e.url
+        })
+      }
     })
 
     this.webview.addEventListener('page-favicon-updated', (e) => {
