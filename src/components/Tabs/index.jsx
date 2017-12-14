@@ -12,7 +12,8 @@ import wexondUrls from '../../defaults/wexond-urls'
 
 import Colors from '../../utils/colors'
 
-import { setPositions, setWidths, findTabToReplace, getSelectedTab, addTabGroup, getCurrentTabGroup } from '../../actions/tabs'
+import * as tabsActions from '../../actions/tabs'
+import * as tabGroupsActions from '../../actions/tab-groups'
 
 @observer
 export default class Tabs extends React.Component {
@@ -26,13 +27,13 @@ export default class Tabs extends React.Component {
       tabs: []
     }
 
-    addTabGroup()
+    tabGroupsActions.addTabGroup()
   }
 
   componentDidMount () {
     // Check for changes in Store.
     observe(Store, change => {
-      const tab = getSelectedTab()
+      const tab = tabsActions.getSelectedTab()
 
       if (change.name === 'selectedTab') {
         // Update some info in bar.
@@ -45,7 +46,7 @@ export default class Tabs extends React.Component {
         // If the tab is a new tab, just toggle input in bar.
         Store.app.bar.addressBar.setInputToggled(tab.url.startsWith(wexondUrls.newtab))
 
-        getCurrentTabGroup().selectedTab = tab.id
+        tabGroupsActions.getCurrentTabGroup().selectedTab = tab.id
       }
     })
 
@@ -92,7 +93,7 @@ export default class Tabs extends React.Component {
       
       tab.animateLeft = true
       Store.tabDragData = {}
-      setPositions()
+      tabsActions.setPositions()
     })
   }
 
@@ -106,8 +107,8 @@ export default class Tabs extends React.Component {
     const addTabWidth = this.addTab.getWidth()
 
     // Set widths and lefts.
-    setWidths(tabsWidth, addTabWidth)
-    setPositions()
+    tabsActions.setWidths(tabsWidth, addTabWidth)
+    tabsActions.setPositions()
 
     setTimeout(() => {
       this.addTab.setState({animateLeft: true})
@@ -115,7 +116,7 @@ export default class Tabs extends React.Component {
   }
 
   render () {
-    const tabs = getCurrentTabGroup().tabs.filter(tab => !tab.pinned)
+    const tabs = tabGroupsActions.getCurrentTabGroup().tabs.filter(tab => !tab.pinned)
 
     const tabsStyle = {
       WebkitAppRegion: (tabs[0] != null && tabs[0].width > 32) ? 'drag' : 'no-drag'

@@ -3,7 +3,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import Store from '../../store'
 
-import { getSelectedPage } from '../../actions/pages'
+import * as pagesActions from '../../actions/pages'
 
 @observer
 export default class Suggestion extends React.Component {

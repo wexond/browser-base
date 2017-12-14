@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { defaultOptions, transitions } from '../../defaults/tabs'
+import tabDefaults from '../../defaults/tabs'
 
-import { addTab } from '../../actions/tabs'
+import * as tabsActions from '../../actions/tabs'
 
 import Store from '../../store'
 import { observer } from 'mobx-react'
@@ -32,7 +32,7 @@ export default class AddTab extends React.Component {
 
     if (animateLeft) {
       // Add left transition to add tab button.
-      const newTransition = transitions.left.duration + 's' + ' left ' + transitions.left.easing 
+      const newTransition = tabDefaults.transitions.left.duration + 's' + ' left ' + tabDefaults.transitions.left.easing 
       transition = Transitions.appendTransition(transition, newTransition)
     }
 
@@ -43,7 +43,7 @@ export default class AddTab extends React.Component {
 
     const onClick = e => {
       e.stopPropagation()
-      addTab(defaultOptions)
+      tabsActions.addTab()
     }
 
     return (
