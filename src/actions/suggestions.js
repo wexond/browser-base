@@ -50,14 +50,13 @@ export const getHistorySuggestions = async (text) => {
 
     let tempSuggestions = []
 
-    const filterSuggestions = (array, i, canSuggest) => {
+    const filterSuggestions = (array, i) => {
       let url = array[i].url.toLowerCase()
       let title = array[i].title
 
       let suggestion = {
         title: title,
         url: url,
-        canSuggest: canSuggest,
         type: 'history',
         favicon: null
       }
@@ -70,69 +69,89 @@ export const getHistorySuggestions = async (text) => {
         }
       }
 
-      if (url.replace(regex, '').indexOf('/') === -1) {
-        suggestion.canSuggest = true
-      } else {
-        if (url.replace(regex, '').split('/')[1] == null || url.replace(regex, '').split('/')[1].trim() === '') {
-          suggestion.canSuggest = true
+      const addSuggestion = (canSuggest) => {
+        suggestion.canSuggest = canSuggest
+        if (tempSuggestions.indexOf(suggestion) === -1) {
+          tempSuggestions.push(suggestion)
         }
       }
 
-      if (url.indexOf(input) === -1) suggestion.canSuggest = false
+      const urlContainsInput = (isWWW) => {
+        if (isWWW) {
+          return url.replace(/(http(s?)):\/\//gi, '').startsWith(input.replace(/(http(s?)):\/\//gi, ''))
+        } else {
+          return url.replace(/(http(s?)):\/\/(www.)?/gi, '').startsWith(input.replace(/(http(s?)):\/\/(www.)?/gi, ''))
+        }
+      }
 
-      // Adds suggestions to a list, only when
-      // the url or the title contains input text.
-      if (url.replace(/(http(s?)):\/\/(www.)?/gi, '').startsWith(input)
-          || url.startsWith(input)
-          || url.replace(/(http(s?)):\/\/?/gi , '').startsWith(input)
-          || url.replace(/(www.)?/gi, '').startsWith(input)
-          || title.toLowerCase().indexOf(input) !== -1
-          || url.replace(/(http(s?)):\/\/(www.)?/gi, '').startsWith(input.replace(/(http(s?)):\/\/(www.)?/gi, ''))
-          || url.replace(/(http(s?)):\/\/?/gi, '').startsWith(input.replace(/(www.)?/gi, ''))) {
-        if (tempSuggestions.indexOf(suggestion) === -1) {
-          tempSuggestions.push(suggestion)
+      const isMatch = (start) => {
+        if (input.startsWith(start) && input.length > start.length) {
+          if (input.startsWith(start + 'www.')) {
+            if (input.length > (start + 'www.').length) {
+              if (urlContainsInput()) {
+                return true
+              }
+            }
+          } else {
+            if (urlContainsInput()) {
+              return true
+            }
+          }
+        }
+        return false
+      }
+
+      if (isMatch('http://') 
+          || isMatch('https://') 
+          || (input.startsWith('www.') && input.length > 'www.'.length && urlContainsInput(true))
+          || (!input.startsWith('http://') && !input.startsWith('https://') && !input.startsWith('www.') && urlContainsInput())) {
+        addSuggestion(true)
+      } else {
+        if (title.toLowerCase().indexOf(input) !== -1 
+            || (((input.startsWith('http://') || input.startsWith('https://')) && urlContainsInput())
+            || (input.startsWith('www.')) && urlContainsInput(true))
+            || url.indexOf(input) !== -1 
+            || url.replace(/(http(s?)):\/\/(www.)?/gi, '').indexOf(input.replace(/(http(s?)):\/\/(www.)?/gi, '')) !== -1) {
+          addSuggestion(false)
         }
       }
     }
 
     for (var i = 0; i < sites.length; i++) {
-      filterSuggestions(sites, i, true)
+      filterSuggestions(sites, i)
     }
 
     for (i = 0; i < history.length; i++) {
-      filterSuggestions(history, i, false)
+      filterSuggestions(history, i)
     }
 
     let suggestions = getSuggestions(tempSuggestions)
     let newSuggestions = []
 
-    // Get only first 5 suggestions.
-    tempSuggestions = []
+    let isURL = false
 
-    let suggestionsLimit = (!Network.isURL(input)) ? 5 : 10
-
-    for (var i = 0; i < suggestionsLimit; i++) {
-      if (suggestions[i] != null) tempSuggestions.push(suggestions[i])
-    }
-    newSuggestions = tempSuggestions.slice()
-    suggestions = tempSuggestions.slice()
-
-    // Remove the same suggestions.
-    for (var x = 0; x < suggestions.length; x++) {
-      for (var y = x + 1; y < suggestions.length; y++) {
-        if (suggestions[x].url.replace(regex, '').replace('/', '') === suggestions[y].url.replace(regex, '').replace('/', '')) {
-          newSuggestions.splice(newSuggestions.indexOf(suggestions[x]), 1)
+    if (input.indexOf(' ') === -1) {
+      if (input.replace('www.', '').indexOf('.') !== -1) {
+        isURL = true
+      } else {
+        if ((input.startsWith('www.') && input.length > 'www.'.length)
+            || (input.startsWith('https://') && input.length > 'https://'.length)
+            || (input.startsWith('http://') && input.length > 'http://'.length)) {
+          isURL = true
         }
       }
     }
 
-    let autocompleteSuggestions = 0
+    // Get only first 5 suggestions.
+    tempSuggestions = []
 
-    for (var i = 0; i < newSuggestions.length; i++) {
-      if (newSuggestions[i].canSuggest) {
-        autocompleteSuggestions++
-      }
+    let suggestionsLimit = (isURL) ? 5 : 10
+
+    for (var i = 0; i < suggestionsLimit; i++) {
+      if (suggestions[i] != null) tempSuggestions.push(suggestions[i])
     }
+    
+    newSuggestions = tempSuggestions.slice()
 
     newSuggestions.sort((a, b) => {
       let urlA = a.url.replace(regex, '').replace('/').length
@@ -140,8 +159,10 @@ export const getHistorySuggestions = async (text) => {
       return urlA - urlB
     })
 
+    let isAutocomplete = false
+
     for (var i = 0; i < newSuggestions.length; i++) {
-      if (newSuggestions[i].url.indexOf(input) !== -1 && newSuggestions[i].canSuggest) {
+      if (newSuggestions[i].canSuggest) {
         let a = newSuggestions[0]
         let b = newSuggestions[i]
         newSuggestions[i] = a
@@ -152,14 +173,16 @@ export const getHistorySuggestions = async (text) => {
         newSuggestions[0].description = 'open website'
         newSuggestions[0].type = 'autocomplete-url'
 
+        isAutocomplete = true
+
         break
       }
     }
 
-    if (autocompleteSuggestions === 0) {
-      if (Network.isURL(input)) {
+    if (!isAutocomplete) {
+      if (isURL) {
         newSuggestions.unshift({
-          title: (input.startsWith('http://')) ? input : 'http://' + input,
+          title: (input.startsWith('http://') || input.startsWith('https://')) ? input : 'http://' + input,
           description: 'open website',
           type: 'unknown-url'
         })

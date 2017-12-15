@@ -1,7 +1,7 @@
 import React from 'react'
 
 import ToolBar from '../HistoryToolBar'
-import Cards from '../HistoryCards'
+import HistoryCards from '../HistoryCards'
 import Section from '../HistorySection'
 
 export default class History extends React.Component {
@@ -120,7 +120,7 @@ export default class History extends React.Component {
     return (
       <div className='history'>
         <ToolBar />
-        <Cards items={this.state.cards} />
+        <HistoryCards items={this.state.cards} />
         {
           this.state.sections.map((data, key) => {
             return <Section data={data} key={key} />
