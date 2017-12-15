@@ -1,7 +1,7 @@
 const { homedir } = require('os')
 const { join } = require('path')
 
-export default {
+module.exports = {
   directories: {
     wexond: join(homedir(), '.wexond'),
     userData: join(homedir(), '.wexond', 'userData'),
