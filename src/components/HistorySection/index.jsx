@@ -5,8 +5,8 @@ import Item from '../HistoryItem'
 export default class HistorySection extends React.Component {
   render () {
     return (
-      <div class='history-section'>
-        <div class='subheader'>
+      <div className='history-section'>
+        <div className='subheader'>
           {this.props.data.date}
         </div>
         {
