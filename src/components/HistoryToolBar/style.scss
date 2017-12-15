@@ -7,10 +7,15 @@
     @include shadow(1);
     @include cursor-default;
 
-    .title {
+    %item {
+        position: relative;
         font-size: 16px;
+        float: left;
         left: 24px;
-        position: absolute;
         @include center-vertical;
+    }
+
+    .title {
+        @extend %item;
     }
 }

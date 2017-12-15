@@ -4,3 +4,7 @@ html, body {
     background-color: $background-color;
     @include Body1;
 }
+
+a {
+    text-decoration: none;
+}
