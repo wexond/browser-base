@@ -131,23 +131,19 @@ export default class AddressBar extends React.Component {
     return text;
   }
 
-  autoComplete (whatToSuggest, inputText = null) {
+  autoComplete (whatToSuggest, text) {
     if (whatToSuggest.type !== 'autocomplete-url') return
-
+    
     let suggestion = whatToSuggest.title
 
-    let text = inputText
-    if (text == null) text = this.input.value
+    const httpsRegex = /(http(s?)):\/\//gi
+    const wwwRegex = /(www.)?/gi
 
-    let httpsWwwRegex = /(http(s?)):\/\/(www.)?/gi
-    let wwwRegex = /(www.)?/gi
-
-    if (suggestion.replace(httpsWwwRegex, '').startsWith(text)) {
-      this.input.value = suggestion.replace(httpsWwwRegex, '')
-    } else if (suggestion.replace(httpsWwwRegex, '').startsWith(text.replace(httpsWwwRegex, '')) && text.replace(httpsWwwRegex, '') !== '') {
-      this.input.value = text + suggestion.replace(httpsWwwRegex, '').replace(text.replace(httpsWwwRegex, ''), '')
-    } else if (suggestion.replace(httpsWwwRegex, '').startsWith(text.replace(wwwRegex, '')) && text.replace(wwwRegex, '') !== '') {
-      this.input.value = text + suggestion.replace(httpsWwwRegex, '').replace(text.replace(wwwRegex, ''), '')
+    if (suggestion.replace(httpsRegex, '').replace(wwwRegex, '')
+        .startsWith(text.replace(wwwRegex, '').replace(httpsRegex, '')) 
+        && text.replace(wwwRegex, '').replace(httpsRegex, '') !== '') {
+      this.input.value = text + suggestion.replace(httpsRegex, '').replace(wwwRegex, '')
+      this.input.value = this.input.value.replace(text.replace(wwwRegex, '').replace(httpsRegex, ''), '')
     }
 
     if (this.input.value.length - text.length > 0) {
@@ -164,7 +160,7 @@ export default class AddressBar extends React.Component {
 
     const onInput = async (e) => {
       const input = e.currentTarget
-      let text = input.value.toLowerCase().trim().replace(this.getSelectionText(), '')
+      let text = input.value.toLowerCase().trim()
 
       Store.app.suggestions.selectByIndex(0)
 
@@ -174,9 +170,6 @@ export default class AddressBar extends React.Component {
 
       if (this.canSuggest) {
         const whatToSuggest = await suggestionsActions.getHistorySuggestions(text)
-        text = input.value.toLowerCase().replace(this.getSelectionText(), '')
-
-        input.value = text
 
         if (whatToSuggest[0] != null) {
           this.autoComplete(whatToSuggest[0], text)
