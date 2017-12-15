@@ -17,6 +17,7 @@ export default class History extends React.Component {
   componentDidMount () {
     this.loadCards()
     this.loadSections()
+    this.test()
   }
 
   // TODO: Load from JSON file
@@ -107,6 +108,12 @@ export default class History extends React.Component {
         }
       ]
     })
+  }
+
+  async test () {
+    const history = await window.historyAPI.get()
+
+    console.log(history)
   }
 
   render () {
