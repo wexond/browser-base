@@ -7,52 +7,47 @@ export default class HistoryCards extends React.Component {
     super()
 
     this.state = {
-      cardsContainerWidth: 256
+      width: 0
     }
   }
 
   componentDidMount () {
-    window.addEventListener('resize', this.resizeCardsContainer)
-
-    this.resizeCardsContainer()
+    window.addEventListener('resize', this.resizeContainer)
+    this.resizeContainer()
   }
 
-  resizeCardsContainer = () => {
-    const count = this.getMaxCardsCount()
-    const width = this.calculateWidth(count)
-
-    if (this.state.cardsContainerWidth !== width) {
-      this.setState({
-        cardsContainerWidth: width
-      })
-    }
-  }
-
-  getMaxCardsCount () {
+  resizeContainer = () => {
     let i = 1
 
     while (true) {
-      if (this.calculateWidth(i) >= window.innerWidth) return (i - 1 ) > 3 ? 3 : (i - 1)
-      else i++
-    }
+      if (this.calculateWidth(i) >= window.innerWidth) {
+        const count = (i - 1 ) > 3 ? 3 : (i - 1)
 
-    return -1
+        this.setState({
+          width: this.calculateWidth(count)
+        })
+
+        break
+      } else {
+        i++
+      }
+    }
   }
 
   calculateWidth (count) {
-    return this.props.cardWidth * count + this.props.cardMargin * count + 16
+    return this.props.cardWidth * count + this.props.cardGap * (count - 1)
   }
 
   render () {
-    const cardsContainerStyle = {
-      maxWidth: this.state.cardsContainerWidth
+    const style = {
+      width: this.state.width
     }
 
     return (
-        <div class='cards-container' style={cardsContainerStyle}>
+        <div className='cards-container' style={style}>
           {
             this.props.items.map((data, key) => {
-              return <Card data={data} key={key} />
+              return <Card data={data} key={key} image={false} description={false} />
             })
           }
         </div>
@@ -62,6 +57,5 @@ export default class HistoryCards extends React.Component {
 
 HistoryCards.defaultProps = {
   cardWidth: 256,
-  cardMargin: 32,
-  items: []
+  cardGap: 16
 }

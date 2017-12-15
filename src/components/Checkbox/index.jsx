@@ -18,8 +18,8 @@ export default class Checkbox extends React.Component {
   }
 
   render () {
-    const borderClass = `border ${!this.state.toggled ? '' : 'animation'}`
-    const iconClass = `icon ${!this.state.toggled ? 'hide' : 'animation'}`
+    const borderClass = `checkbox-border ${!this.state.toggled ? '' : 'checkbox-animation'}`
+    const iconClass = `checkbox-icon ${!this.state.toggled ? 'checkbox-hide' : 'checkbox-icon-animation'}`
 
     const borderStyle = {
       borderWidth: (!this.state.toggled || this.root == null) ? 2 : this.root.offsetWidth / 2

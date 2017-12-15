@@ -1,12 +1,11 @@
 .history-section {
-    width: 100%;
-    max-width: 600px;
+    width: calc(100% - 32px);
+    max-width: 800px;
     background-color: #fff;
     border-radius: 2px;
     margin: 24px auto 0px auto;
     padding-bottom: 8px;
     @include shadow(1);
-    //display: none; // temporary
 
     .subheader {
         padding-top: 16px;
