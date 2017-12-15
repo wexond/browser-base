@@ -4,13 +4,13 @@ const { join } = require('path')
 module.exports = {
   directories: {
     wexond: join(homedir(), '.wexond'),
-    userData: join(homedir(), '.wexond', 'userData'),
-    extensions: join(homedir(), '.wexond', 'userData', 'extensions')
+    userData: join(homedir(), '.wexond', 'user-data'),
+    extensions: join(homedir(), '.wexond', 'user-data', 'extensions')
   },
   files: {
-    history: join(homedir(), '.wexond', 'userData', 'history.json'),
-    sites: join(homedir(), '.wexond', 'userData', 'sites.json'),
-    bookmarks: join(homedir(), '.wexond', 'userData', 'bookmarks.json'),
-    favicons: join(homedir(), '.wexond', 'userData', 'favicons.json')
+    history: join(homedir(), '.wexond', 'user-data', 'history.json'),
+    sites: join(homedir(), '.wexond', 'user-data', 'sites.json'),
+    bookmarks: join(homedir(), '.wexond', 'user-data', 'bookmarks.json'),
+    favicons: join(homedir(), '.wexond', 'user-data', 'favicons.json')
   }
 }

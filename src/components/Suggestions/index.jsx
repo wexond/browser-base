@@ -82,7 +82,7 @@ export default class Suggestions extends React.Component {
   }
 
   whatToSuggest = () => {
-    if (this.state.suggestions[0] != null && this.state.suggestions[0].title != null && this.state.suggestions[0].canSuggest) {
+    if (this.state.suggestions[0] != null && this.state.suggestions[0].type === 'autocomplete-url') {
       return this.state.suggestions[0].url
     }
     return null
