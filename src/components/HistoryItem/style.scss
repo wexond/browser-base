@@ -1,50 +1,50 @@
 .history-section-item {
-    width: 100%;
-    height: 44px;
-    position: relative;
-    font-size: 14px;
+  width: 100%;
+  height: 44px;
+  position: relative;
+  font-size: 14px;
 
-    %in-line {
-        float: left;
-        position: relative;
-        @include center-vertical;
-    }
+  %in-line {
+      float: left;
+      position: relative;
+      @include center-vertical;
+  }
 
-    .checkbox {
-        margin-left: 16px;
-        @include cursor-pointer;
-        @extend %in-line;
-    }
+  .checkbox {
+      margin-left: 16px;
+      @include cursor-pointer;
+      @extend %in-line;
+  }
 
-    .time {
-        opacity: 0.54;
-        margin-left: 16px;
-        @extend %in-line;
-    }
+  .time {
+      opacity: 0.54;
+      margin-left: 16px;
+      @extend %in-line;
+  }
 
-    .icon {
-        width: 16px;
-        height: 16px;
-        margin-left: 48px;
-        @include image-cover;
-        @extend %in-line;
-    }
+  .icon {
+      width: 16px;
+      height: 16px;
+      margin-left: 48px;
+      @include image-cover;
+      @extend %in-line;
+  }
 
-    .title {
-        opacity: 0.79;
-        margin-left: 16px;
-        text-decoration: none;
-        color: #000;
-        @extend %in-line;
-    }
+  .title {
+      opacity: 0.79;
+      margin-left: 16px;
+      text-decoration: none;
+      color: #000;
+      @extend %in-line;
+  }
 
-    .domain {
-        opacity: 0.54;
-        margin-left: 32px;
-        @extend %in-line;
-    }
+  .domain {
+      opacity: 0.54;
+      margin-left: 32px;
+      @extend %in-line;
+  }
 
-    &::after {
-        @include clearAfter;
-    }
+  &::after {
+      @include clearAfter;
+  }
 }
