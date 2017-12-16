@@ -145,7 +145,7 @@ export const getHistorySuggestions = async (text) => {
     // Get only first 5 suggestions.
     tempSuggestions = []
 
-    let suggestionsLimit = (isURL) ? 5 : 10
+    let suggestionsLimit = (isURL) ? 10 : 5
 
     for (var i = 0; i < suggestionsLimit; i++) {
       if (suggestions[i] != null) tempSuggestions.push(suggestions[i])
