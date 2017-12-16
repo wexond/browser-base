@@ -1,6 +1,7 @@
 .checkbox {
     width: 18px;
     height: 18px;
+    min-width: 18px !important;
     position: relative;
     -webkit-font-smoothing: antialiased;
     cursor: pointer;
