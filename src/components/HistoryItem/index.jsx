@@ -3,9 +3,9 @@ import React from 'react'
 import Checkbox from '../Checkbox'
 
 export default class HistoryItem extends React.Component {
-  onCheck = (flag) => {
+  onCheck = (flag, checkbox) => {
     if (typeof this.props.onSelect === 'function') {
-      this.props.onSelect(flag, this.props.data)
+      this.props.onSelect(flag, this.props.data, checkbox)
     }
   }
 

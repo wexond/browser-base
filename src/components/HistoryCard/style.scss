@@ -36,8 +36,7 @@
             max-width: calc(100% - 32px);
 
             .title {
-                @include Subheading;
-                @include Roboto-Medium;
+                @include Body2;
                 opacity: 0.87;
                 @extend %overflow;
             }
