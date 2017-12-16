@@ -1,5 +1,7 @@
-export const newTab = (app) => {
-  app.elements.tabs.addTab()
+import * as tabsActions from './tabs'
+
+export const newWindow = () => {
+  
 }
 
 export const newIncognitoWindow = () => {
@@ -7,7 +9,10 @@ export const newIncognitoWindow = () => {
 }
 
 export const history = () => {
-
+  tabsActions.addTab({
+    select: true,
+    url: 'wexond://history'
+  })
 }
 
 export const bookmarks = () => {

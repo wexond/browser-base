@@ -22,6 +22,7 @@ export default class SystemBar extends React.Component {
       e.stopPropagation()
 
       Store.app.pageMenu.hide()
+      Store.app.menu.hide()
     }
 
     const onGroupsClick = (e) => {
