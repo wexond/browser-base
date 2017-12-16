@@ -3,7 +3,7 @@
   overflow: hidden;
 
   .content {
-    height: 32px;
+    height: 100%;
     padding: 0 24px 0 24px;
 
     &:hover {
@@ -20,6 +20,7 @@
   }
 
   &.editing {
+    height: 48px;
     .content {
       .icon {
         opacity: $secondary-opacity-light;
@@ -38,14 +39,13 @@
       @include center-vertical;
     }
   
-    input {
+    .input1 {
       float: left;
-      background-color: transparent;
-      border: none;
-      outline: none;
       position: relative;
       @include center-vertical;
       @include Body1;
+      width: 100%;
+      max-width: calc(100% - 72px);
     }
   
     .icon {
@@ -54,7 +54,7 @@
       @include center-vertical;
       float: right;
       width: 28px;
-      height: 32px;
+      height: 100%;
       margin-left: 4px;
       @include image-center(16px, 16px);
       transition: $hover-duration opacity;
