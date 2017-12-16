@@ -15,6 +15,7 @@ import Store from '../../store'
 import { observer } from 'mobx-react'
 
 import pageMenuItems from '../../defaults/page-menu-items'
+import mainMenuItems from '../../defaults/main-menu-items'
 
 @observer
 export default class App extends React.Component {
@@ -29,11 +30,13 @@ export default class App extends React.Component {
       this.suggestions.hide()
       this.pageMenu.hide()
       this.tabGroupsMenu.hide()
+      this.menu.hide()
     })
 
     window.addEventListener('click', (e) => {
       this.pageMenu.hide()
       this.tabGroupsMenu.hide()
+      this.menu.hide()
     })
 
     window.addEventListener('mousemove' , (e) => {
@@ -42,6 +45,7 @@ export default class App extends React.Component {
     })
 
     this.pageMenu.setState({items: pageMenuItems})
+    this.menu.setState({items: mainMenuItems})
   }
 
   refreshIconsState () {
@@ -70,6 +74,9 @@ export default class App extends React.Component {
         </Menu>
         <Menu ref={(r) => { this.tabGroupsMenu = r }} right={8} top={8} onVisibilityChange={onVisibilityChange}>
           <TabGroupsMenu></TabGroupsMenu>
+        </Menu>
+        <Menu ref={(r) => { this.menu = r }} right={8} top={40}>
+
         </Menu>
       </div>
     )

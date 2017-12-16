@@ -1,6 +1,8 @@
+import * as mainMenuActions from '../actions/main-menu'
+
 export default [
   {
-    title: 'New tab'
+    title: 'New window'
   },
   {
     title: 'New incognito window'
@@ -9,7 +11,8 @@ export default [
     type: 'separator'
   },
   {
-    title: 'History'
+    title: 'History',
+    onClick: mainMenuActions.history
   },
   {
     title: 'Bookmarks'
@@ -25,6 +28,12 @@ export default [
   },
   {
     title: 'Extensions'
+  },
+  {
+    title: 'Privacy'
+  },
+  {
+    type: 'separator'
   },
   {
     title: 'Developer tools'
