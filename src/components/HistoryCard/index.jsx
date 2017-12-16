@@ -12,10 +12,6 @@ export default class HistoryCard extends React.Component {
       backgroundImage: `url(${this.props.data.favicon}`
     }
 
-    const descriptionStyle = {
-      display: this.props.description ? 'block' : 'none'
-    }
-
     return (
       <a href={this.props.data.url}>
         <div className='history-card'>
@@ -26,7 +22,7 @@ export default class HistoryCard extends React.Component {
               <div className='title'>
                 {this.props.data.title}
               </div>
-              <div className='description' style={descriptionStyle}>
+              <div className='description'>
                 {this.props.data.description}
               </div>
             </div>
@@ -38,6 +34,5 @@ export default class HistoryCard extends React.Component {
 }
 
 HistoryCard.defaultProps = {
-  image: true,
-  description: true
+  image: true
 }
