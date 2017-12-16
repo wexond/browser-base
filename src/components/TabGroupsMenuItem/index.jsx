@@ -5,6 +5,7 @@ import { observer } from 'mobx-react'
 import Store from '../../store'
 
 import MenuItem from '../MenuItem'
+import Input from '../Input'
 
 import * as tabGroupsActions from '../../actions/tab-groups'
 
@@ -32,6 +33,7 @@ export default class TabGroupsMenuItem extends React.Component {
 
     const onEditClick = (e) => {
       e.stopPropagation()
+      this.input.focus()
       tabGroupsActions.switchTabGroup(tabGroup.id)
       Store.app.tabGroupsMenu.refreshHeight()
       Store.editingTabGroup = (editing) ? -1 : tabGroup.id
@@ -42,8 +44,7 @@ export default class TabGroupsMenuItem extends React.Component {
     }
 
     const onInputKeyPress = (e) => {
-      if (e.keyCode === 13) { // Enter
-        input.style.display = 'none'
+      if (e.which === 13) { // Enter
         Store.editingTabGroup = -1
       }
     }
@@ -69,7 +70,7 @@ export default class TabGroupsMenuItem extends React.Component {
     return (
       <div className={'tab-groups-menu-item ' + ((editing) ? 'editing' : '')} onClick={onClick}>
         <div className={'content ' + ((selected) ? 'selected ' : ' ')}>
-          <input style={inputStyle} {...inputEvents} defaultValue={tabGroup.title}></input>
+          <Input ref={(r) => { this.input = r }} className='input1' style={inputStyle} {...inputEvents} defaultValue={tabGroup.title}></Input>
           <div className='title' style={titleStyle} >
             {tabGroup.title}
           </div>
