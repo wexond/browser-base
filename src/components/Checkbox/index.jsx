@@ -5,24 +5,24 @@ export default class Checkbox extends React.Component {
     super()
 
     this.state = {
-      toggled: false
+      checked: false
     }
   }
 
   onClick = (e) => {
     this.setState({
-      toggled: !this.state.toggled
+      checked: !this.state.checked
     })
 
-    if (typeof this.props.onCheck === 'function') this.props.onCheck(this.state.toggled)
+    if (typeof this.props.onCheck === 'function') this.props.onCheck(!this.state.checked, this)
   }
 
   render () {
-    const borderClass = `checkbox-border ${!this.state.toggled ? '' : 'checkbox-animation'}`
-    const iconClass = `checkbox-icon ${!this.state.toggled ? 'checkbox-hide' : 'checkbox-icon-animation'}`
+    const borderClass = `checkbox-border ${!this.state.checked ? '' : 'checkbox-animation'}`
+    const iconClass = `checkbox-icon ${!this.state.checked ? 'checkbox-hide' : 'checkbox-icon-animation'}`
 
     const borderStyle = {
-      borderWidth: (!this.state.toggled || this.root == null) ? 2 : this.root.offsetWidth / 2
+      borderWidth: (!this.state.checked || this.root == null) ? 2 : this.root.offsetWidth / 2
     }
 
     return (
