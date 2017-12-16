@@ -16,9 +16,9 @@ export default class HistoryCard extends React.Component {
       <a href={this.props.data.url}>
         <div className='history-card'>
           <div className='image' style={imageStyle} />
-          <div className='info-container'>
+          <div className='card-content'>
             <div className='icon' style={iconStyle} />
-            <div className='title-container'>
+            <div className='info'>
               <div className='title'>
                 {this.props.data.title}
               </div>

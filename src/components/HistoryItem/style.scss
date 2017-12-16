@@ -1,26 +1,19 @@
 .history-section-item {
   width: 100%;
-  height: 44px;
-  position: relative;
+  height: 40px;
   font-size: 14px;
   overflow: hidden;
-
-  %in-line {
-    float: left;
-    position: relative;
-    @include center-vertical;
-  }
+  display: flex;
+  align-items: center;
 
   .checkbox {
-     margin-left: 16px;
+    margin-left: 16px;
     @include cursor-pointer;
-    @extend %in-line;
   }
 
   .time {
     opacity: 0.54;
     margin-left: 16px;
-    @extend %in-line;
   }
 
   .icon {
@@ -28,7 +21,6 @@
     height: 16px;
     margin-left: 48px;
     @include image-cover;
-    @extend %in-line;
   }
 
   .title {
@@ -36,16 +28,11 @@
     margin-left: 16px;
     text-decoration: none;
     color: #000;
-    @extend %in-line;
+    @include cursor-pointer;
   }
 
   .domain {
     opacity: 0.54;
     margin-left: 32px;
-    @extend %in-line;
-  }
-
-  &::after {
-    @include clearAfter;
   }
 }
