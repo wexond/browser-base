@@ -5,7 +5,7 @@ import Checkbox from '../Checkbox'
 export default class HistorySection extends React.Component {
   render () {
     const iconStyle = {
-      backgroundImage: `url(${this.props.data.icon})`
+      backgroundImage: `url(${this.props.data.favicon})`
     }
 
     return (
@@ -19,7 +19,7 @@ export default class HistorySection extends React.Component {
           {this.props.data.title}
         </a>
         <div className='domain'>
-          www.youtube.com
+          {this.props.data.domain}
         </div>
       </div>
     )
