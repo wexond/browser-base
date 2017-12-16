@@ -4,7 +4,7 @@ import HistoryParser from '../../utils/history'
 
 import ToolBar from '../HistoryToolBar'
 import HistoryCards from '../HistoryCards'
-import Section from '../HistorySection'
+import HistorySection from '../HistorySection'
 
 export default class History extends React.Component {
   constructor () {
@@ -39,7 +39,7 @@ export default class History extends React.Component {
           <HistoryCards items={this.state.cards} />
           {
             this.state.sections.map((data, key) => {
-              return <Section data={data} key={key} getHistory={() => { return this }} />
+              return <HistorySection data={data} key={key} getHistory={() => { return this }} />
             })
           }
         </div>

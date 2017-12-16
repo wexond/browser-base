@@ -31,7 +31,6 @@ export default class Page extends React.Component {
       }
     }
 
-
     this.webview.addEventListener('did-stop-loading', updateInfo)
     this.webview.addEventListener('did-navigate', updateInfo)
     this.webview.addEventListener('did-navigate-in-page', updateInfo)
@@ -48,13 +47,23 @@ export default class Page extends React.Component {
 
       const interval1 = setInterval(() => {
         if (favicon === 'error') {
-          favicon = 'handled'
-          Storage.addHistoryItem(tab.title, tab.url, '')
+          if (lastURL !== tab.url) {
+            Storage.addHistoryItem(tab.title, tab.url, '')
+            lastURL = tab.url
+          }
+          
           Storage.addSite(tab.title, url, '')
+          
+          favicon = 'handled'
           clearInterval(interval1)
         } else if (favicon !== '' && favicon !== 'handled') {
-          Storage.addHistoryItem(tab.title, tab.url, favicon)
+          if (lastURL !== tab.url) {
+            Storage.addHistoryItem(tab.title, tab.url, favicon)
+            lastURL = tab.url
+          }
+
           Storage.addSite(tab.title, url, favicon)
+
           favicon = 'handled'
           clearInterval(interval1)
         }
