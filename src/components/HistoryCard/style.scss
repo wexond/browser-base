@@ -22,18 +22,17 @@
     .title-container {
         max-width: calc(100% - 56px);
         position: absolute;
-        left: 48px;
+        left: 38px;
         @include center-vertical;
     }
 
     .icon {
-        width: 24px;
-        height: 24px;
-        border-radius: 100%;
+        width: 16px;
+        height: 16px;
         opacity: 0.87;
         position: absolute;
         left: 12px;
-        @include image-center(24px, auto);
+        @include image-center(16px, auto);
         @include center-vertical;
     }
 
