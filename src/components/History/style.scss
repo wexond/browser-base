@@ -14,10 +14,11 @@ a {
 
 .content {
   width: 100%;
-  height: calc(100% - 56px);
+  height: calc(100% - 72px);
   overflow-y: auto;
   left: 0;
   top: 56px;
+  padding-bottom: 16px;
   position: absolute;
   z-index: 1;
 }

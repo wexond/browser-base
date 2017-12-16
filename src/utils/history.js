@@ -5,7 +5,7 @@ export default class History {
   static parse (data) {
     const sections = []
     // Get sections
-    for (var i = 0; i < data.length; i++) {
+    for (var i = data.length - 1; i >= 0; i--) {
       const item = data[i]
       // Get section index
       let sectionIndex = History.getSectionIndexByDate(sections, item.date)
@@ -23,12 +23,6 @@ export default class History {
       item.domain = History.getDomain(item.url)
       // Add item to section
       sections[sectionIndex].items.push(item)
-    }
-    // Change items order in sections
-    // Now they are ordered from the oldest to the latest but
-    // we want from the latest to the oldest
-    for (var i = 0; i < sections.length; i++) {
-      sections[i].items.reverse()
     }
 
     return sections

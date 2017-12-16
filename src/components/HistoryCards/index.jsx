@@ -47,7 +47,7 @@ export default class HistoryCards extends React.Component {
         <div className='cards-container' style={style}>
           {
             this.props.items.map((data, key) => {
-              return <Card data={data} key={key} image={false} description={false} />
+              return <Card data={data} key={key} image={false} />
             })
           }
         </div>
