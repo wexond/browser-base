@@ -8,9 +8,7 @@ export default class MenuItem extends React.Component {
   render () {
     const onClick = (e) => {
       // Execute onClick event.
-      if (typeof this.props.onClick === 'function') {
-        this.props.onClick(e)
-      }
+      this.props.onClick(e)
     }
 
     const style = {

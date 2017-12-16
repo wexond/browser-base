@@ -141,7 +141,7 @@ export default class Menu extends React.Component {
             } else if (data.type === 'item') {
 
               const onClick = () => {
-                data.onClick()
+                if (typeof data.onClick === 'function') data.onClick()
                 this.hide()
               }
 

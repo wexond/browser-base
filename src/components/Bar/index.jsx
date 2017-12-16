@@ -46,6 +46,10 @@ export default class Bar extends React.Component {
       page.page.refresh()
     }
 
+    const onMenuClick = () => {
+      Store.app.menu.show()
+    }
+
     const barStyle = {
       backgroundColor: Store.backgroundColor,
       display: (Store.isFullscreen) ? 'none' : 'flex'
@@ -57,7 +61,7 @@ export default class Bar extends React.Component {
         <div className={'bar-icon forward-icon ' + ((!canGoForward) ? 'disabled' : '')} onClick={onForwardClick} />
         <div className='bar-icon refresh-icon' onClick={onRefreshClick} />
         <AddressBar ref={(r) => { this.addressBar = r }} />
-        <div className='bar-icon menu-icon' />
+        <div className='bar-icon menu-icon' onClick={onMenuClick} />
       </div>
     )
   }
