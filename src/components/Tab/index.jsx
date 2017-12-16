@@ -41,6 +41,8 @@ export default class Tab extends React.Component {
     const tabs = this.props.tabs
     const isSelected = Store.selectedTab === tab.id
 
+    Store.app.suggestions.hide()
+
     const tabGroup = tabGroupsActions.getCurrentTabGroup()
 
     // Get the tab url and store in Store.
