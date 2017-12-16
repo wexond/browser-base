@@ -1,12 +1,12 @@
 .history-card {
     width: $card-width;
-    position: relative;
-    display: inline-block;
     background-color: #fff;
     color: #000;
     border-radius: 2px;
     overflow: hidden;
     @include shadow(1);
+    display: flex;
+    flex-flow: column;
 
     .image {
         width: 100%;
@@ -14,44 +14,42 @@
         @include image-cover;
     }
 
-    .info-container {
+    .card-content {
         height: 48px;
         position: relative;
-    }
+        display: flex;
+        align-items: center;
 
-    .title-container {
-        max-width: calc(100% - 56px);
-        position: absolute;
-        left: 38px;
-        @include center-vertical;
-    }
+        .icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.87;
+            margin-left: 16px;
+            @include image-center(16px, auto);
+        }
 
-    .icon {
-        width: 16px;
-        height: 16px;
-        opacity: 0.87;
-        position: absolute;
-        left: 12px;
-        @include image-center(16px, auto);
-        @include center-vertical;
+        .info {
+            max-width: calc(100% - 56px);
+            margin-left: 16px;
+            display: flex;
+
+            .title {
+                @include Subheading;
+                opacity: 0.87;
+                @extend %overflow;
+            }
+
+            .description {
+                font-size: 13px;
+                opacity: 0.54;
+                @extend %overflow;
+            }
+        }
     }
 
     %overflow {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-    }
-
-    .title {
-        font-size: 15px;
-        opacity: 0.87;
-        @include Roboto-Medium;
-        @extend %overflow;
-    }
-
-    .description {
-        font-size: 13px;
-        opacity: 0.54;
-        @extend %overflow;
     }
 }
