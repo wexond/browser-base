@@ -3,6 +3,7 @@
   background-color: $primary-color;
   color: #fff;
   z-index: 2;
+  position: relative;
   @include shadow(1);
   @include cursor-default;
   display: flex;

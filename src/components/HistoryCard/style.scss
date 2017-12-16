@@ -19,28 +19,31 @@
         position: relative;
         display: flex;
         align-items: center;
+        padding: 0 16px 0 16px;
+        overflow: hidden;
 
         .icon {
             width: 16px;
             height: 16px;
             opacity: 0.87;
-            margin-left: 16px;
             @include image-center(16px, auto);
         }
 
         .info {
-            max-width: calc(100% - 56px);
             margin-left: 16px;
             display: flex;
+            width: 100%;
+            max-width: calc(100% - 32px);
 
             .title {
                 @include Subheading;
+                @include Roboto-Medium;
                 opacity: 0.87;
                 @extend %overflow;
             }
 
             .description {
-                font-size: 13px;
+                @include Caption;
                 opacity: 0.54;
                 @extend %overflow;
             }
