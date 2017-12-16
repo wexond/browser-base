@@ -7,7 +7,7 @@ export default class HistorySection extends React.Component {
     return (
       <div className='history-section'>
         <div className='subheader'>
-          {this.props.data.date}
+          {this.props.data.title}
         </div>
         {
           this.props.data.items.map((data, key) => {

@@ -9,7 +9,7 @@ export default class HistoryCard extends React.Component {
     }
 
     const iconStyle = {
-      backgroundImage: `url(${this.props.data.icon}`
+      backgroundImage: `url(${this.props.data.favicon}`
     }
 
     const descriptionStyle = {
