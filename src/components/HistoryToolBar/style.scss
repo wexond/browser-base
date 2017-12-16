@@ -1,13 +1,17 @@
 .history-toolbar {
-  height: 64px;
+  width: 100%;
+  height: 56px;
   background-color: $primary-color;
   color: #fff;
   z-index: 2;
-  position: relative;
+  top: 0;
+  left: 0;
+  position: fixed;
   @include shadow(1);
   @include cursor-default;
   display: flex;
   align-items: center;
+  overflow: hidden;
 
   %item {
     @include Title;
@@ -19,5 +23,84 @@
 
   .title {
     @extend %item;
+    transition: 0.15s opacity;
+  }
+
+  .controls-container {
+    width: calc(100% - 24px);
+    max-width: 824px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    display: none;
+    transition: 0.15s opacity;
+  }
+
+  %icon {
+    width: 24px;
+    height: 24px;
+    padding: 16px;
+    cursor: pointer;
+    @include image-center(24px, auto);
+    @include invert-colors;
+    @extend %inline;
+  }
+
+  %inline {
+    float: left;
+    position: relative;
+    @include center-vertical;
+  }
+
+  .exit-icon {
+    background-image: url(images/Tabs/close.svg);
+    @extend %icon;
+  }
+
+  .selected-items, .count {
+    @include Body2;
+    @extend %inline;
+  }
+
+  .count {
+    margin-left: 4px;
+  }
+
+  %button {
+    @extend %inline;
+    @include Button;
+    width: auto;
+    text-align: center;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 2px;
+    cursor: pointer;
+    float: right;
+  }
+
+  .cancel-button {
+    margin-right: 8px;
+    @extend %button;
+  }
+
+  .delete-button {
+    @extend %button;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .history-toolbar {
+    .selected-items {
+      display: none;
+    }
+
+    .count {
+      margin-left: 0px;
+    }
   }
 }
