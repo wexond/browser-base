@@ -105,12 +105,14 @@ export default class History extends React.Component {
     return (
       <div className='history'>
         <ToolBar />
-        <HistoryCards items={this.state.cards} />
-        {
-          this.state.sections.map((data, key) => {
-            return <Section data={data} key={key} />
-          })
-        }
+        <div className='content'>
+          <HistoryCards items={this.state.cards} />
+          {
+            this.state.sections.map((data, key) => {
+              return <Section data={data} key={key} />
+            })
+          }
+        </div>
       </div>
     )
   }
