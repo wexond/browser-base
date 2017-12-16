@@ -2,7 +2,7 @@ import Language from '../defaults/language'
 
 export default class History {
   // Separates history data in diffrent sections
-  static parse (data) {
+  static getSections (data) {
     const sections = []
     // Get sections
     for (var i = data.length - 1; i >= 0; i--) {
@@ -69,5 +69,54 @@ export default class History {
   static getDomain (url) {
     // Get domain by getting second value of split url by slash
     return url.split('/')[2]
+  }
+
+  /**
+   * Gets the most visited websites
+   */
+  static getCards (history, count = 9) {
+    const webSites = []
+
+    for (var i = 0; i < history.length; i++) {
+      const item = history[i]
+
+      let index = History.getWebSiteIndex(webSites, history[i].url)
+
+      if (index === -1) {
+        webSites.push({
+          url: history[i].url,
+          title: history[i].title,
+          favicon: history[i].favicon,
+          description: '',
+          count: 1
+        })
+      } else {
+        webSites[index].count = webSites[index].count + 1
+      }
+    }
+    // Sort web sites by visits count
+    webSites.sort((a, b) => {
+      return b.count - a.count;
+    })
+
+    const cards = []
+
+    for (var i = 0; i < count; i++) {
+      if (i >= webSites.length) {
+        break
+      } else {
+        cards.push(webSites[i])
+      }
+    }
+
+    return cards
+  }
+
+  static getWebSiteIndex (data, url) {
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].url == url) return i
+    }
+
+    return -1
   }
 }
