@@ -2,7 +2,13 @@ import React from 'react'
 
 import Checkbox from '../Checkbox'
 
-export default class HistorySection extends React.Component {
+export default class HistoryItem extends React.Component {
+  onCheck = (flag) => {
+    if (typeof this.props.onSelect === 'function') {
+      this.props.onSelect(flag, this.props.data)
+    }
+  }
+
   render () {
     const iconStyle = {
       backgroundImage: `url(${this.props.data.favicon})`
@@ -10,7 +16,7 @@ export default class HistorySection extends React.Component {
 
     return (
       <div className='history-section-item'>
-        <Checkbox />
+        <Checkbox onCheck={this.onCheck} />
         <div className='time'>
           {this.props.data.time}
         </div>
