@@ -51,18 +51,18 @@ export default class History extends React.Component {
   }
 
   onToolbarExitIconClick = () => {
-    this.setState({
-      selectedUrls: [],
-      selectingMode: false
-    })
-
     const checkboxes = this.selectedCheckboxes
-
+    
     for (var i = 0; i < checkboxes.length; i++) {
       checkboxes[i].setState({
         checked: false
       })
     }
+
+    this.setState({
+      selectedUrls: [],
+      selectingMode: false
+    })
   }
 
   render () {

@@ -125,6 +125,8 @@ export default class Page extends React.Component {
       let color = e.themeColor
       if (color == null) color = '#fff'
 
+      console.log(e.themeColor)
+
       Store.backgroundColor = color
       tab.backgroundColor = color
       Store.foreground = Colors.getForegroundColor(color)
