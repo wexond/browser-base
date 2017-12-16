@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Card from '../HistoryCard'
+import HistoryCard from '../HistoryCard'
 
 export default class HistoryCards extends React.Component {
   constructor () {
@@ -47,7 +47,7 @@ export default class HistoryCards extends React.Component {
         <div className='cards-container' style={style}>
           {
             this.props.items.map((data, key) => {
-              return <Card data={data} key={key} image={false} />
+              return <HistoryCard data={data} key={key} image={false} />
             })
           }
         </div>
