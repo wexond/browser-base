@@ -28,8 +28,8 @@ export default class Storage {
         if (!url.startsWith('wexond://') && !url.startsWith('about:blank')) {
           // Get current time.
           let date = new Date()
-          let currentHour = date.getHours()
-          let currentMinute = date.getMinutes()
+          let currentHour = ('0' + date.getHours()).slice(-2)
+          let currentMinute = ('0' + date.getMinutes()).slice(-2)
           let time = `${currentHour}:${currentMinute}`
   
           // Configure newItem's data.
