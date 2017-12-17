@@ -17,6 +17,11 @@ import { observer } from 'mobx-react'
 import pageMenuItems from '../../defaults/page-menu-items'
 import mainMenuItems from '../../defaults/main-menu-items'
 
+import { ipcRenderer } from 'electron'
+import ipcMessages from '../../defaults/ipc-messages'
+
+import * as pagesActions from '../../actions/pages'
+
 @observer
 export default class App extends React.Component {
   constructor () {
@@ -42,6 +47,14 @@ export default class App extends React.Component {
     window.addEventListener('mousemove' , (e) => {
       Store.cursor.x = e.pageX
       Store.cursor.y = e.pageY
+    })
+
+    ipcRenderer.on(ipcMessages.BROWSER_GO_BACK, (e, arg) => {
+      pagesActions.getSelectedPage().page.webview.goBack()
+    })
+
+    ipcRenderer.on(ipcMessages.BROWSER_GO_FORWARD, (e, arg) => {
+      pagesActions.getSelectedPage().page.webview.goForward()
     })
 
     this.pageMenu.setState({items: pageMenuItems})
