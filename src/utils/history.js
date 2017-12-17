@@ -79,12 +79,13 @@ export default class History {
 
     for (var i = 0; i < history.length; i++) {
       const item = history[i]
+      const domain = History.getDomain(item.url)
 
-      let index = History.getWebSiteIndex(webSites, history[i].url)
+      let index = History.getWebSiteIndex(webSites, domain)
 
       if (index === -1) {
         webSites.push({
-          url: history[i].url,
+          url: domain,
           title: history[i].title,
           favicon: history[i].favicon,
           description: '',
@@ -114,7 +115,7 @@ export default class History {
 
   static getWebSiteIndex (data, url) {
     for (var i = 0; i < data.length; i++) {
-      if (data[i].url == url) return i
+      if (data[i].url.replace('/', '').toLowerCase().replace('https://', 'http://') == url.replace('/', '').toLowerCase().replace('https://', 'http://')) return i
     }
 
     return -1
