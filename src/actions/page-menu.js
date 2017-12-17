@@ -6,11 +6,11 @@ import { defaults } from 'request'
 import { basename, extname } from 'path'
 const { dialog } = remote
 
-import * as tabActions from '../actions/tabs'
-import { getSelectedPage } from '../actions/pages'
+import * as tabsActions from '../actions/tabs'
+import * as pagesActions from '../actions/pages'
 
 export const openLinkInNewTab = () => {
-  tabActions.addTab({
+  tabsActions.addTab({
     select: false, 
     url: Store.pageMenuData.linkURL
   })
@@ -47,7 +47,7 @@ export const saveLinkAs = () => {
 }
 
 export const openImageInNewTab = () => {
-  tabActions.addTab({
+  tabsActions.addTab({
     select: false,
     url: Store.pageMenuData.srcURL
   })
@@ -89,13 +89,13 @@ export const copyImageAddress = () => {
 }
 
 export const print = () => {
-  getSelectedPage().page.webview.print()
+  pagesActions.getSelectedPage().page.webview.print()
 }
 
 export const saveAs = () => {
   dialog.showSaveDialog(
     {
-      defaultPath: getSelectedPage().page.webview.getTitle() + '.html',
+      defaultPath: pagesActions.getSelectedPage().page.webview.getTitle() + '.html',
       filters: [
         {
           name: 'Webpage, complete',
@@ -104,7 +104,7 @@ export const saveAs = () => {
       ]
     },
     function (path1) {
-      getSelectedPage().page.webview.getWebContents().savePage(path1, 'HTMLComplete', (error) => {
+      pagesActions.getSelectedPage().page.webview.getWebContents().savePage(path1, 'HTMLComplete', (error) => {
         if (error) console.error(error)
       })
     }
@@ -112,8 +112,8 @@ export const saveAs = () => {
 }
 
 export const viewSource = () => {
-  const url = getSelectedPage().page.webview.getURL()
-  tabActions.addTab({
+  const url = pagesActions.getSelectedPage().page.webview.getURL()
+  tabsActions.addTab({
     select: true,
     url: 'view-source:' + url
   })
@@ -121,5 +121,5 @@ export const viewSource = () => {
 
 export const inspectElement = () => {
   let data = Store.pageMenuData
-  getSelectedPage().page.webview.inspectElement(data.x, data.y)
+  pagesActions.getSelectedPage().page.webview.inspectElement(data.x, data.y)
 }

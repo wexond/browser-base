@@ -21,6 +21,9 @@ import { ipcRenderer } from 'electron'
 import ipcMessages from '../../defaults/ipc-messages'
 
 import * as pagesActions from '../../actions/pages'
+import * as tabsActions from '../../actions/tabs'
+import * as tabGroupsActions from '../../actions/tab-groups'
+import * as pageMenuActions from '../../actions/page-menu'
 
 @observer
 export default class App extends React.Component {
@@ -47,6 +50,76 @@ export default class App extends React.Component {
     window.addEventListener('mousemove' , (e) => {
       Store.cursor.x = e.pageX
       Store.cursor.y = e.pageY
+    })
+
+    window.addEventListener('keydown', e => {
+      if (e.ctrlKey) {
+        if (e.shiftKey) {
+          if (e.keyCode === 9) { // Tab key
+            const tabGroup = tabGroupsActions.getCurrentTabGroup()
+            const selectedTab = tabsActions.getSelectedTab()
+  
+            const prevTab = tabGroup.tabs[tabGroup.tabs.indexOf(selectedTab) - 1]
+  
+            if (prevTab != null) {
+              Store.selectedTab = prevTab.id
+            } else {
+              Store.selectedTab = tabGroup.tabs[tabGroup.tabs.length - 1].id
+            }
+          }
+        } else {
+          if (e.keyCode === 9) { // Tab key
+            const tabGroup = tabGroupsActions.getCurrentTabGroup()
+            const selectedTab = tabsActions.getSelectedTab()
+  
+            const nextTab = tabGroup.tabs[tabGroup.tabs.indexOf(selectedTab) + 1]
+  
+            if (nextTab != null) {
+              Store.selectedTab = nextTab.id
+            } else {
+              Store.selectedTab = 0
+            }
+          }
+        }
+      }
+    })
+
+    window.addEventListener('keyup', (e) => {
+      if (e.ctrlKey) {
+        if (e.keyCode === 84) { // T key
+          tabsActions.addTab()
+        }
+        if (e.keyCode === 87) { // W key
+          tabsActions.getSelectedTab().tab.close()
+        }
+        if (e.keyCode === 116) { // F5 key
+          pagesActions.getSelectedPage().page.webview.reloadIgnoringCache()
+        }
+        if (e.keyCode === 76) { // L key
+          this.bar.addressBar.focus()
+        }
+        if (e.keyCode === 72) { // H key
+          tabsActions.addTab({
+            select: true,
+            url: 'wexond://newtab'
+          })
+        }
+        if (e.keyCode === 80) { // P key
+          pageMenuActions.print()
+        }
+        if (e.keyCode === 83) { // S key
+          pageMenuActions.saveAs()
+        }
+      } else if (e.altKey) {
+
+      } else {
+        if (e.keyCode === 116) { // F5 key
+          pagesActions.getSelectedPage().page.webview.reload()
+        }
+        if (e.keyCode === 123) { // F12 key
+          pagesActions.getSelectedPage().page.webview.openDevTools()
+        }
+      }
     })
 
     ipcRenderer.on(ipcMessages.BROWSER_GO_BACK, (e, arg) => {
