@@ -1,6 +1,7 @@
 const {app, BrowserWindow} = require('electron')
 const protocol = require('electron').protocol
 const path = require('path')
+const ipcMessages = require(path.join(__dirname, '/src/defaults/ipc-messages.js'))
 
 const protocolName = 'wexond'
 
@@ -24,7 +25,7 @@ process.on('uncaughtException', (error) => {
   console.log(error)
 })
 
-function createWindow () {
+const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 900,
     height: 700,
@@ -41,6 +42,17 @@ function createWindow () {
   })
 
   mainWindow.on('unresponsive', () => {})
+
+  mainWindow.on('app-command', function (e, cmd) {
+    switch (cmd) {
+      case 'browser-backward':
+        mainWindow.webContents.send(ipcMessages.BROWSER_GO_BACK)
+        return
+      case 'browser-forward':
+        mainWindow.webContents.send(ipcMessages.BROWSER_GO_FORWARD)
+        return
+    }
+  })
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
