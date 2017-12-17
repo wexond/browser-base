@@ -13,6 +13,8 @@ import { observer } from 'mobx-react'
 export default class History extends React.Component {
   constructor () {
     super()
+
+    this.sections = []
   }
 
   componentDidMount () {
@@ -29,15 +31,19 @@ export default class History extends React.Component {
   }
 
   render () {
+    this.sections = []
+
     return (
       <div className='history'>
         <ToolBar />
         <div className='content'>
+          <div className='history-title'>Most visited websites</div>
           <HistoryCards />
+          <div className='history-title'>History</div>
           {
             Store.sections.map((data, key) => {
               if (data.items.length > 0) {
-                return <HistorySection data={data} key={key} />
+                return <HistorySection ref={(r) => { this.sections.push(r) }} data={data} key={key} />
               }
             })
           }
