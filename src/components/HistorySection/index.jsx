@@ -11,7 +11,7 @@ export default class HistorySection extends React.Component {
         </div>
         {
           this.props.data.items.map((data, key) => {
-            return <Item data={data} key={key} onSelect={this.props.onItemSelect} />
+            return <Item data={data} key={key} />
           })
         }
       </div>
