@@ -10,7 +10,7 @@
 
     <script>
       if (process.env.NODE_ENV !== 'dev') {
-        loadScripts(['build/app.bundle.js'])
+        loadScripts(['wexond://build/app.bundle.js'])
       } else {
         loadScripts(['http://localhost:8080/build/app.bundle.js', 'http://localhost:8080/webpack-dev-server.js'])
       }
