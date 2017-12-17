@@ -11,7 +11,7 @@
     "start": "cross-env NODE_ENV=dev electron main.js",
     "watch": "npm run build:dev && webpack-dev-server --hot --inline --port 8080 --colors --progress",
     "build:dev": "rimraf build && webpack",
-    "build:production": "rimraf build && cross-env NODE_ENV=production webpack --define process.env.NODE_ENV=production --progress --colors",
+    "build:production": "rimraf build && rimraf dist && cross-env NODE_ENV=production webpack --define process.env.NODE_ENV=production --progress --colors",
     "compile:win64": "npm run build:production && electron-packager . --platform=win32 --arch=x64 Wexond --asar --overwrite --out=dist",
     "compile:win32": "npm run build:production && electron-packager . --platform=win32 --arch=ia32 Wexond --asar --overwrite --out=dist",
     "compile:linux64": "npm run build:production && electron-packager . --platform=linux --arch=x64 Wexond --asar --overwrite --out=dist",

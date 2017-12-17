@@ -2,6 +2,7 @@ const fs = require('fs')
 const paths = require('../defaults/files')
 
 if (window.location.protocol === 'wexond:') {
+  window.env = process.env.NODE_ENV
   window.historyAPI = {
     get: () => {
       return new Promise((resolve, reject) => {
