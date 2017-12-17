@@ -1,6 +1,6 @@
 {
   "name": "wexond",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Extensible, fast and innovative web browser with material UI.",
   "main": "main.js",
   "repository": {
