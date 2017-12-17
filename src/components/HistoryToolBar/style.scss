@@ -12,6 +12,11 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+  transition: 0.15s background-color;
+
+  &.selecting-mode {
+    background-color: #2196F3;
+  }
 
   %item {
     @include Title;
@@ -23,10 +28,13 @@
 
   .title {
     @extend %item;
+  }
+
+  .normal-toolbar {
     transition: 0.15s opacity;
   }
 
-  .controls-container {
+  .selection-toolbar {
     width: calc(100% - 24px);
     max-width: 824px;
     height: 100%;
@@ -35,10 +43,16 @@
     left: 0;
     right: 0;
     margin: 0 auto;
-    display: none;
     transition: 0.15s opacity;
   }
-
+/*
+  .selection-content {
+    width: calc(100% - 24px);
+    max-width: 824px;
+    position: relative;
+    @include center-both;
+  }
+*/
   %icon {
     width: 24px;
     height: 24px;
