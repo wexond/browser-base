@@ -17,7 +17,7 @@ if (window.location.protocol === 'wexond:') {
     delete: async (items) => {
       const data = await window.historyAPI.get()
   
-      for (var x = data.length; x >= 0; x--) {
+      for (var x = data.length - 1; x >= 0; x--) {
         for (var y = 0; y < items.length; y++) {
           if (data[x].id === items[y].id) {
             data.splice(data.indexOf(data[x]), 1)
