@@ -16,10 +16,12 @@ export default class HistoryToolBar extends React.Component {
   }
 
   onDelete = async () => {
+    const deletedItems = []
+
     for (var i = Store.selectedItems.length - 1; i >= 0; i--) {
       const selectedItem = Object.assign({}, Store.selectedItems[i])
 
-      await window.historyAPI.delete(selectedItem)
+      deletedItems.push(selectedItem)
 
       selectedItem.checkbox.setState({checked: false})
       Store.selectedItems.splice(Store.selectedItems.indexOf(selectedItem), 1)
@@ -37,6 +39,8 @@ export default class HistoryToolBar extends React.Component {
         }
       }
     }
+
+    await window.historyAPI.delete(deletedItems)
   }
 
   render () {
