@@ -26,15 +26,15 @@ export default class HistoryToolBar extends React.Component {
       selectedItem.checkbox.setState({checked: false})
       Store.selectedItems.splice(Store.selectedItems.indexOf(selectedItem), 1)
 
-      for (var y = 0; y < Store.history.state.sections.length; y++) {
-        const section = Store.history.state.sections[y]
+      for (var y = 0; y < Store.sections.length; y++) {
+        const section = Store.sections[y]
 
         for (var z = 0; z < section.items.length; z++) {
           const item = section.items[z]
 
           if (item.id === selectedItem.id) {
             section.items.splice(section.items.indexOf(item), 1)
-            Store.history.setState({sections: Store.history.state.sections})
+            Store.history.setState({sections: Store.sections})
           }
         }
       }
