@@ -38,8 +38,6 @@ export default class Page extends React.Component {
 
     const saveHistory = async () => {
       filesActions.checkFiles()
-    
-      console.log('aha')
 
       const regex = /(http(s?)):\/\/(www.)?/gi
       let url = tab.url
@@ -53,8 +51,7 @@ export default class Page extends React.Component {
             Storage.addHistoryItem(tab.title, tab.url, '')
             lastURL = tab.url
           }
-          console.log('aha1')
-          
+
           Storage.addSite(tab.title, url, '')
           
           favicon = 'handled'
@@ -64,9 +61,7 @@ export default class Page extends React.Component {
             Storage.addHistoryItem(tab.title, tab.url, favicon)
             lastURL = tab.url
           }
-
-          console.log('aha1')
-
+          
           Storage.addSite(tab.title, url, favicon)
 
           favicon = 'handled'
