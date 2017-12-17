@@ -29,16 +29,23 @@ export default class MenuNavigation extends React.Component {
     const onBackClick = () => {
       const page = pagesActions.getSelectedPage()
       page.page.goBack()
+      Store.app.pageMenu.hide()
     }
 
     const onForwardClick = () => {
       const page = pagesActions.getSelectedPage()
       page.page.goForward()
+      Store.app.pageMenu.hide()
     }
 
     const onRefreshClick = () => {
       const page = pagesActions.getSelectedPage()
       page.page.refresh()
+      Store.app.pageMenu.hide()
+    }
+
+    const onFavoriteClick = () => {
+      Store.app.pageMenu.hide()
     }
 
     return (
@@ -46,7 +53,7 @@ export default class MenuNavigation extends React.Component {
         <div className={'icon back-icon ' + ((!canGoBack) ? 'disabled' : '')} onClick={onBackClick}></div>
         <div className={'icon forward-icon ' + ((!canGoForward) ? 'disabled' : '')} onClick={onForwardClick}></div>
         <div className='icon refresh-icon' onClick={onRefreshClick}></div>
-        <div className='icon favorite-icon'></div>
+        <div className='icon favorite-icon' onClick={onFavoriteClick}></div>
       </div>
     )
   }

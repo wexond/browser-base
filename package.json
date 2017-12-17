@@ -17,7 +17,6 @@
     "compile:linux64": "npm run build:production && electron-packager . --platform=linux --arch=x64 Wexond --asar --overwrite --out=dist",
     "compile:linux32": "npm run build:production && electron-packager . --platform=linux --arch=ia32 Wexond --asar --overwrite --out=dist",
     "compile:darwin64": "npm run build:production && electron-packager . --platform=darwin --arch=x64 Wexond --asar --overwrite --out=dist",
-    "compile:darwin32": "npm run build:production && electron-packager . --platform=darwin --arch=ia32 Wexond --asar --overwrite --out=dist",
     "compile:all": "npm run build:production && electron-packager . --all Wexond --asar --overwrite --out=dist"
   },
   "homepage": "https://github.com/Nersent/wexond#readme",
