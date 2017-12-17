@@ -8,6 +8,11 @@ let config = {
     publicPath: 'http://localhost:8080/build/'
   },
 
+  output: {
+    path: join(__dirname, 'public', 'build'),
+    filename: '[name].bundle.js'
+  },
+
   module: {
     rules: [
       {
@@ -78,24 +83,15 @@ if (process.env.NODE_ENV === 'production') {
 let appConfig = {
   target: 'electron',
   devtool: 'eval-source-map',
-  output: {
-    path: join(__dirname, 'public', 'app', 'build'),
-    filename: '[name].bundle.js'
-  },
 
   entry: {
     app: './src/app-bootstrap.jsx'
   }
 }
 
-let historyConfig = {
+let appletsConfig = {
   target: 'web',
   devtool: 'eval-source-map',
-
-  output: {
-    path: join(__dirname, 'public', 'history', 'build'),
-    filename: '[name].bundle.js'
-  },
 
   entry: {
     history: './src/history-bootstrap.jsx'
@@ -103,6 +99,6 @@ let historyConfig = {
 }
 
 appConfig = Object.assign(appConfig, config)
-historyConfig = Object.assign(historyConfig, config)
+appletsConfig = Object.assign(appletsConfig, config)
 
-module.exports = [appConfig, historyConfig]
+module.exports = [appConfig, appletsConfig]
