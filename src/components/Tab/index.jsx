@@ -207,12 +207,19 @@ export default class Tab extends React.Component {
 
     const onMouseDown = (e) => {
       e.preventDefault()
+
       if (!isSelected) this.select()
       Store.tabDragData = {
         isMouseDown: true,
         mouseClickX: e.clientX + tabs.tabs.scrollLeft,
         left: left,
         tab: tab
+      }
+    }
+
+    const onMouseUp = (e) => {
+      if (e.button === 1) { // Middle mouse button.
+        this.close()
       }
     }
 
@@ -230,6 +237,7 @@ export default class Tab extends React.Component {
       onMouseDown: onMouseDown,
       onMouseEnter: onMouseEnter,
       onMouseLeave: onMouseLeave,
+      onMouseUp: onMouseUp
     }
 
     return (
