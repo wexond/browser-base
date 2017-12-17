@@ -1,63 +1,52 @@
 import React from 'react'
 
+import Store from '../../history-store'
+import { observer } from 'mobx-react'
+
+@observer
 export default class HistoryToolBar extends React.Component {
-  constructor () {
-    super()
-
-    this.state = {
-      titleOpacity: 1,
-      containerDisplay: false,
-      containerOpacity: 0
+  onCancel = () => {
+    for (var i = 0; i < Store.selectedItems.length; i++) {
+      if (Store.selectedItems[i].checkbox.state.checked) {
+        Store.selectedItems[i].checkbox.setState({checked: false})
+      }
     }
-  }
 
-  toggle = (flag) => {
-    if (flag) {
-      this.setState({titleOpacity: 0, containerDisplay: true})
-
-      setTimeout(() => {
-        this.setState({containerOpacity: 1})
-      }, 10)
-    } else {
-      this.setState({titleOpacity: 1, containerOpacity: 0})
-
-      setTimeout(() => {
-        this.setState({containerDisplay: false})
-      }, 150)
-    }
-  }
-
-  componentWillReceiveProps () {
-    this.toggle(this.props.selectedUrls.length > 0)
+    Store.selectedItems = []
   }
 
   render () {
-    const titleStyle = {
-      opacity: this.state.titleOpacity
+    const selectingMode = Store.selectedItems.length > 0
+
+    const normalToolbarStyle = {
+      opacity: selectingMode ? 0 : 1,
+      pointerEvents: selectingMode ? 'none' : 'auto'
     }
 
-    const containerStyle = {
-      display: !this.state.containerDisplay ? 'none' : 'block',
-      opacity: this.state.containerOpacity
+    const selectionToolbarStyle = {
+      opacity: selectingMode ? 1 : 0,
+      pointerEvents: selectingMode ? 'auto' : 'none'
     }
 
     return (
-      <div className='history-toolbar'>
-        <div className='title' style={titleStyle}>
-          History
+      <div className={'history-toolbar ' + ((selectingMode) ? 'selecting-mode' : '')}>
+        <div className='normal-toolbar' style={normalToolbarStyle}>
+          <div className='title'>
+            History
+          </div>
         </div>
-        <div className='controls-container' style={containerStyle}>
-          <div className='exit-icon' onClick={this.props.onExitIconClick} />
+        <div className='selection-toolbar' style={selectionToolbarStyle}>
+          <div className='exit-icon' onClick={this.onCancel} />
           <div className='selected-items'>
             Selected items:
           </div>
           <div className='count'>
-            {this.props.selectedUrls.length}
+            {Store.selectedItems.length}
           </div>
           <div className='delete-button'>
             delete
           </div>
-          <div className='cancel-button'>
+          <div className='cancel-button' onClick={this.onCancel}>
             cancel
           </div>
         </div>
