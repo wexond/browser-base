@@ -82,7 +82,7 @@ export default class Page extends React.Component {
     this.webview.addEventListener('new-window', (e) => {
       if (e.disposition === 'foreground-tab' 
           || e.disposition === 'background-tab' 
-          || disposition === 'new-window') {
+          || e.disposition === 'new-window') {
         tabsActions.addTab({
           select: true,
           url: e.url
