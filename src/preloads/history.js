@@ -19,7 +19,7 @@ if (window.location.protocol === 'wexond:') {
   
       for (var x = data.length - 1; x >= 0; x--) {
         for (var y = 0; y < items.length; y++) {
-          if (data[x].id === items[y].id) {
+          if (data[x] != null && data[x].id === items[y].id) {
             data.splice(data.indexOf(data[x]), 1)
           }
         }

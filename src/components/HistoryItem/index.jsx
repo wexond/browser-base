@@ -25,7 +25,7 @@ export default class HistoryItem extends React.Component {
 
     return (
       <div className='history-section-item'>
-        <Checkbox onCheck={onCheck} />
+        <Checkbox ref={(r) => { this.checkbox = r }} onCheck={onCheck} />
         <div className='time'>
           {this.props.data.time}
         </div>
