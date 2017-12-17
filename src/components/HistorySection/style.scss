@@ -3,7 +3,7 @@
   max-width: 800px;
   background-color: #fff;
   border-radius: 2px;
-  margin: 24px auto 0px auto;
+  margin: 16px auto 0px auto;
   padding-bottom: 8px;
   @include shadow(1);
 
@@ -14,5 +14,10 @@
       opacity: 0.87;
       @include cursor-default;
       @include Body2;
+      display: flex;
+
+      .section-checkbox {
+        margin-right: 16px;
+      }
   }
 }

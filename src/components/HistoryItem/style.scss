@@ -5,6 +5,7 @@
   overflow: hidden;
   display: flex;
   align-items: center;
+  padding-right: 16px;
 
   .checkbox {
     margin-left: 16px;
@@ -29,6 +30,9 @@
     margin-left: 16px;
     text-decoration: none;
     color: #000;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
     @include cursor-pointer;
   }
 
