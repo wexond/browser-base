@@ -6,6 +6,8 @@ import ToolBar from '../HistoryToolBar'
 import HistoryCards from '../HistoryCards'
 import HistorySection from '../HistorySection'
 
+import Store from '../../history-store'
+
 export default class History extends React.Component {
   constructor () {
     super()
@@ -21,6 +23,7 @@ export default class History extends React.Component {
   }
 
   componentDidMount () {
+    Store.history = this
     this.loadData()
   }
 
@@ -41,7 +44,9 @@ export default class History extends React.Component {
           <HistoryCards items={this.state.cards} />
           {
             this.state.sections.map((data, key) => {
-              return <HistorySection data={data} key={key} onItemSelect={this.onItemSelect} />
+              if (data.items.length > 0) {
+                return <HistorySection data={data} key={key} onItemSelect={this.onItemSelect} />
+              }
             })
           }
         </div>
