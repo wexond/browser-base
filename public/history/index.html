@@ -15,7 +15,11 @@
           document.body.appendChild(script)
         }
       }
-      loadScripts(['http://localhost:8080/build/history.bundle.js', 'http://localhost:8080/webpack-dev-server.js'])
+      if (window.env !== 'dev') {
+        loadScripts(['build/history.bundle.js'])
+      } else {
+        loadScripts(['http://localhost:8080/build/history.bundle.js', 'http://localhost:8080/webpack-dev-server.js'])
+      }
     </script>
   </body>
 </html>
