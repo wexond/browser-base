@@ -2,6 +2,10 @@ import React from 'react'
 
 import HistoryCard from '../HistoryCard'
 
+import Store from '../../history-store'
+import { observer } from 'mobx-react'
+
+@observer
 export default class HistoryCards extends React.Component {
   constructor () {
     super()
@@ -46,7 +50,7 @@ export default class HistoryCards extends React.Component {
     return (
         <div className='cards-container' style={style}>
           {
-            this.props.items.map((data, key) => {
+            Store.cards.map((data, key) => {
               return <HistoryCard data={data} key={key} image={false} />
             })
           }
