@@ -15,6 +15,30 @@ export default class HistoryToolBar extends React.Component {
     Store.selectedItems = []
   }
 
+  onDelete = async () => {
+    for (var i = Store.selectedItems.length - 1; i >= 0; i--) {
+      const selectedItem = Object.assign({}, Store.selectedItems[i])
+
+      await window.historyAPI.delete(selectedItem)
+
+      selectedItem.checkbox.setState({checked: false})
+      Store.selectedItems.splice(Store.selectedItems.indexOf(selectedItem), 1)
+
+      for (var y = 0; y < Store.history.state.sections.length; y++) {
+        const section = Store.history.state.sections[y]
+
+        for (var z = 0; z < section.items.length; z++) {
+          const item = section.items[z]
+
+          if (item.id === selectedItem.id) {
+            section.items.splice(section.items.indexOf(item), 1)
+            Store.history.setState({sections: Store.history.state.sections})
+          }
+        }
+      }
+    }
+  }
+
   render () {
     const selectingMode = Store.selectedItems.length > 0
 
@@ -43,7 +67,7 @@ export default class HistoryToolBar extends React.Component {
           <div className='count'>
             {Store.selectedItems.length}
           </div>
-          <div className='delete-button'>
+          <div className='delete-button' onClick={this.onDelete}>
             delete
           </div>
           <div className='cancel-button' onClick={this.onCancel}>
