@@ -1,0 +1,11 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: $background-color;
+  @include Body1;
+  overflow: hidden;
+}
+
+a {
+  text-decoration: none;
+}
