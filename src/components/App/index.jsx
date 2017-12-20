@@ -28,8 +28,8 @@ import * as pageMenuActions from '../../actions/page-menu'
 const { remote } = require('electron')
 const { app, autoUpdater } = remote
 
-if (process.env.NODE_ENV !== 'dev') {  
-  const server = 'https://nersent.tk:3030'
+if (process.env.NODE_ENV !== 'dev' && autoUpdater != null) {  
+  const server = 'http://nersent.tk:3030'
   const feed = `${server}/update/${process.platform}/${app.getVersion()}`
   
   autoUpdater.setFeedURL(feed)
