@@ -8,6 +8,7 @@ import Colors from '../../utils/colors'
 
 import * as filesActions from '../../actions/files'
 import * as tabsActions from '../../actions/tabs'
+import { getBarBorder } from '../../actions/webview-bar-border'
 
 @observer
 export default class Page extends React.Component {
@@ -53,7 +54,7 @@ export default class Page extends React.Component {
           }
 
           Storage.addSite(tab.title, url, '')
-          
+
           favicon = 'handled'
           clearInterval(interval1)
         } else if (favicon !== '' && favicon !== 'handled') {
@@ -61,7 +62,7 @@ export default class Page extends React.Component {
             Storage.addHistoryItem(tab.title, tab.url, favicon)
             lastURL = tab.url
           }
-          
+
           Storage.addSite(tab.title, url, favicon)
 
           favicon = 'handled'
@@ -72,8 +73,15 @@ export default class Page extends React.Component {
       loaded = true
     }
 
+    const setBarBorder = async () => {
+      const shadow = await getBarBorder(this.webview)
+
+      Store.border = shadow
+    }
+
     this.webview.addEventListener('did-finish-load', () => {
       saveHistory()
+      setBarBorder()
     })
     this.webview.addEventListener('did-frame-finish-load', (e) => {
       saveHistory()

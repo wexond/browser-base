@@ -56,7 +56,7 @@ export default class Bar extends React.Component {
     }
 
     return (
-      <div className={'bar ' + Store.foreground} style={barStyle}>
+      <div className={'bar ' + Store.foreground + (!Store.border ? ' disabled-border' : '')} style={barStyle}>
         <div className={'bar-icon back-icon ' + ((!canGoBack) ? 'disabled' : '')} onClick={onBackClick} />
         <div className={'bar-icon forward-icon ' + ((!canGoForward) ? 'disabled' : '')} onClick={onForwardClick} />
         <div className='bar-icon refresh-icon' onClick={onRefreshClick} />
