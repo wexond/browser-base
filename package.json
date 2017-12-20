@@ -44,25 +44,26 @@
   "devDependencies": {
     "babel-core": "latest",
     "babel-loader": "latest",
-    "babel-preset-react": "latest",
     "babel-plugin-syntax-jsx": "latest",
     "babel-plugin-transform-decorators-legacy": "latest",
+    "babel-preset-react": "latest",
     "babel-preset-stage-0": "latest",
-    "cross-env": "latest",
+    "base64-img": "latest",
+    "cross-env": "^5.1.1",
     "css-loader": "latest",
     "electron-packager": "latest",
+    "electron-winstaller": "^2.6.3",
+    "mobx": "latest",
+    "mobx-react": "latest",
+    "node-sass": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "mobx-react": "latest",
-    "mobx": "latest",
-    "node-sass": "latest",
     "rimraf": "latest",
     "sass-loader": "latest",
     "style-loader": "latest",
     "uglifyjs-webpack-plugin": "latest",
     "url-loader": "latest",
     "webpack": "latest",
-    "webpack-dev-server": "latest",
-    "base64-img": "latest"
+    "webpack-dev-server": "latest"
   }
 }
