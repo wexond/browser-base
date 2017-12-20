@@ -20,6 +20,10 @@
     }
   }
 
+  &.disabled-border {
+    border-bottom: unset;
+  }
+
   .bar-icon {
     position: relative;
     @include center-vertical;

@@ -8,6 +8,7 @@ export default new class Store {
 
   @observable foreground = 'black'
   @observable backgroundColor = '#fff'
+  @observable border = true
 
   @observable currentTabGroup = 0
   @observable editingTabGroup = -1
