@@ -94,7 +94,8 @@ let appletsConfig = {
   devtool: 'eval-source-map',
 
   entry: {
-    history: './src/history-bootstrap.jsx'
+    history: './src/history-bootstrap.jsx',
+    newTab: './src/new-tab-bootstrap.jsx'
   }
 }
 

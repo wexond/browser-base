@@ -11,7 +11,7 @@
       padding-top: 16px;
       padding-bottom: 16px;
       padding-left: 16px;
-      color: rgba(0, 0, 0, 0.87);
+      color: rgba(0, 0, 0, $primary-opacity-light);
       @include cursor-default;
       @include Body2;
       display: flex;
