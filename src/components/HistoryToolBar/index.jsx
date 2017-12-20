@@ -72,6 +72,7 @@ export default class HistoryToolBar extends React.Component {
           <div className='title'>
             History
           </div>
+          <div className='search-icon' />
         </div>
         <div className='selection-toolbar' style={selectionToolbarStyle}>
           <div className='exit-icon' onClick={this.onCancel} />

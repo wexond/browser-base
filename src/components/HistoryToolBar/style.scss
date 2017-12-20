@@ -27,10 +27,13 @@
   }
 
   .title {
+    @extend %inline;
     @extend %item;
   }
 
   .normal-toolbar {
+    width: 100%;
+    height: 100%;
     transition: 0.15s opacity;
   }
 
@@ -45,14 +48,7 @@
     margin: 0 auto;
     transition: 0.15s opacity;
   }
-/*
-  .selection-content {
-    width: calc(100% - 24px);
-    max-width: 824px;
-    position: relative;
-    @include center-both;
-  }
-*/
+
   %icon {
     width: 24px;
     height: 24px;
@@ -61,6 +57,15 @@
     @include image-center(24px, auto);
     @include invert-colors;
     @extend %inline;
+
+    &:last-child {
+      margin-right: 24px;
+    }
+  }
+
+  %icon-right {
+    @extend %icon;
+    float: right !important;
   }
 
   %inline {
@@ -72,6 +77,11 @@
   .exit-icon {
     background-image: url(images/Tabs/close.svg);
     @extend %icon;
+  }
+
+  .search-icon {
+    background-image: url(images/Bar/search.svg);
+    @extend %icon-right;
   }
 
   .selected-items, .count {
