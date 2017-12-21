@@ -14,6 +14,8 @@ export default new class Store {
   @observable editingTabGroup = -1
   @observable isFullscreen = false
 
+  @observable extensions = []
+
   url = ''
   certificates = []
 
