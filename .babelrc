@@ -1,11 +1,15 @@
 {
   "presets": [
-    "es2017",
-    "stage-0",
+    ["env",{
+      "targets": {
+        "browser": "last 2 versions"
+      }
+    }],
     "react"
   ],
   "plugins": [
-    "transform-decorators-legacy"
+    "transform-decorators-legacy",
+    "transform-class-properties"
   ],
   "retainLines": true
 }
