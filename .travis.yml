@@ -18,4 +18,4 @@ addons:
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then yarn run compile:darwin ;fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then yarn run compile:darwin ;fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then yarn run compile:linux ;fi
