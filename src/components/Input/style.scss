@@ -55,3 +55,13 @@
     @include Subheading;
   }
 }
+
+@mixin white-input () {
+  .line, .thick-line {
+    background-color: #fff;
+  }
+
+  .label.focused, .hint, input {
+    color: #fff;
+  }
+}
