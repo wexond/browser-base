@@ -25,11 +25,12 @@ $primary-color: #3F51B5;
 $card-width: 256px;
 $card-gap: 16px;
 
+@import 'components/Checkbox/style.scss';
+@import 'components/Input/style.scss';
+
 @import 'components/History/style.scss';
 @import 'components/HistoryCard/style.scss';
 @import 'components/HistoryCards/style.scss';
 @import 'components/HistoryToolBar/style.scss';
 @import 'components/HistorySection/style.scss';
 @import 'components/HistoryItem/style.scss';
-
-@import 'components/Checkbox/style.scss';

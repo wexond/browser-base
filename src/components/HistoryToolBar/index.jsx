@@ -1,5 +1,7 @@
 import React from 'react'
 
+import Input from '../Input'
+
 import Store from '../../history-store'
 import { observer } from 'mobx-react'
 
@@ -73,6 +75,7 @@ export default class HistoryToolBar extends React.Component {
             History
           </div>
           <div className='search-icon' />
+          <Input placeholder='Search' />
         </div>
         <div className='selection-toolbar' style={selectionToolbarStyle}>
           <div className='exit-icon' onClick={this.onCancel} />
