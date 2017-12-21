@@ -25,22 +25,6 @@ import * as tabsActions from '../../actions/tabs'
 import * as tabGroupsActions from '../../actions/tab-groups'
 import * as pageMenuActions from '../../actions/page-menu'
 
-const { remote } = require('electron')
-const { app, autoUpdater } = remote
-
-if (process.env.NODE_ENV !== 'dev' && autoUpdater != null) {  
-  const server = 'http://nersent.tk:3030'
-  const feed = `${server}/update/${process.platform}/${app.getVersion()}`
-  
-  autoUpdater.setFeedURL(feed)
-
-  autoUpdater.on('update-downloaded', (e, releaseNotes, releaseName) => {
-    autoUpdater.quitAndInstall()
-  })
-
-  autoUpdater.checkForUpdates()
-}
-
 @observer
 export default class App extends React.Component {
   constructor () {
