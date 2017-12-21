@@ -6,9 +6,7 @@ import Store from '../../store'
 @observer
 export default class BackgroundExtensions extends React.Component {
   componentDidMount () {
-    this.webview.addEventListener('dom-ready', () => {
-      this.webview.openDevTools()
-    })
+
   }
 
   render () {
