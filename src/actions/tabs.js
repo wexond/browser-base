@@ -26,7 +26,8 @@ export const addTab = (data = tabDefaults.defaultOptions) => {
     render: true,
     closing: false,
     tab: null,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    barBorder: true
   }
 
   const page = {
