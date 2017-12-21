@@ -1,0 +1,44 @@
+{
+  "appId": "org.nersent.wexond",
+  "productName": "Wexond",
+  "asar": true,
+  "directories": {
+    "output": "dist",
+    "buildResources": "resources"
+  },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "nersent",
+      "repo": "wexond"
+    }
+  ],
+  "linux": {
+    "category": "Navigation",
+    "target": [
+      {
+        "target": "deb",
+        "arch": [
+          "ia32",
+          "x64"
+        ]
+      },
+      {
+        "target": "AppImage",
+        "arch": [
+          "ia32",
+          "x64"
+        ]
+      }
+    ]
+  },
+  "win": {
+    "target": [
+      "zip",
+      "nsis"
+    ]
+  },
+  "mac": {
+    "category": "public.app-category.navigation"
+  }
+}
