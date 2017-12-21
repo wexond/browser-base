@@ -12,7 +12,9 @@ export default class BackgroundExtensions extends React.Component {
       <div className='background-extensions'>
         {
           Store.extensions.map((item) => {
-            return <BackgroundExtension key={item.id} data={item} />
+            if (item.background != null && item.background.page != null) {
+              return <BackgroundExtension key={item.id} data={item} />
+            }
           })
         }
       </div>
