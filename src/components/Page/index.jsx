@@ -8,7 +8,7 @@ import Colors from '../../utils/colors'
 
 import * as filesActions from '../../actions/files'
 import * as tabsActions from '../../actions/tabs'
-import { getBarBorder } from '../../actions/webview-bar-border'
+import * as webviewActions from '../../actions/webview'
 
 @observer
 export default class Page extends React.Component {
@@ -74,7 +74,7 @@ export default class Page extends React.Component {
     }
 
     const setBarBorder = async () => {
-      const shadow = await getBarBorder(this.webview)
+      const shadow = await webviewActions.getBarBorder(this.webview)
 
       Store.border = shadow
       tab.barBorder = shadow
@@ -138,8 +138,6 @@ export default class Page extends React.Component {
     this.webview.addEventListener('did-change-theme-color', (e) => {
       let color = e.themeColor
       if (color == null) color = '#fff'
-
-      console.log(e.themeColor)
 
       Store.backgroundColor = color
       tab.backgroundColor = color
