@@ -3,21 +3,20 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import Store from '../../store'
 
-import Page from '../Page'
-
-import * as tabsActions from '../../actions/tabs'
+import TabGroupPages from '../TabGroupPages'
 
 @observer
 export default class Pages extends React.Component {
   render () {
+    const {
+      tabGroup
+    } = this.props
+
     return (
       <div className='pages'>
         {
-          Store.tabGroups.map(tabGroup => {
-            return tabGroup.pages.map(page => {
-              let tab = tabsActions.getTabById(page.id)
-              return <Page key={page.id} tab={tab} page={page} />
-            })
+          Store.tabGroups.map((tabGroup) => {
+            return <TabGroupPages key={tabGroup.id} tabGroup={tabGroup} />
           })
         }
       </div>
