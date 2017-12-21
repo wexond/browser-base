@@ -47,6 +47,8 @@ export default class Tabs extends React.Component {
         Store.app.bar.addressBar.setInputToggled(tab.url.startsWith(wexondUrls.newtab))
 
         tabGroupsActions.getCurrentTabGroup().selectedTab = tab.id
+
+        Store.border = tab.barBorder
       }
     })
 
