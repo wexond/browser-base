@@ -1,6 +1,6 @@
 {
   "name": "wexond",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Extensible, fast and innovative web browser with material UI.",
   "main": "main.js",
   "repository": {
@@ -12,9 +12,9 @@
     "watch": "npm run build:dev && webpack-dev-server --hot --inline --port 8080 --colors --progress",
     "build:dev": "rimraf public/build && webpack",
     "build:production": "rimraf public/build && rimraf dist && cross-env NODE_ENV=production webpack --define process.env.NODE_ENV=production --progress --colors",
-    "compile:win32": "npm run build:production && electron-builder -w -p onTagOrDraft",
-    "compile:darwin": "npm run build:production && electron-builder -m -p onTagOrDraft",
-    "compile:linux": "npm run build:production && electron-builder -l -p onTagOrDraft"
+    "compile:win32": "npm run build:production && electron-builder -w -p always",
+    "compile:darwin": "npm run build:production && electron-builder -m -p always",
+    "compile:linux": "npm run build:production && electron-builder -l -p always"
   },
   "homepage": "https://github.com/Nersent/wexond#readme",
   "keywords": [
@@ -29,7 +29,10 @@
   "bugs": {
     "url": "https://github.com/Nersent/wexond/issues"
   },
-  "author": "Nersent",
+  "author": {
+    "name": "Nersent",
+    "email": "sentialx@gmail.com"
+  },
   "license": "Apache-2.0",
   "devDependencies": {
     "babel-core": "6.26.0",
