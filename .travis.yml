@@ -1,3 +1,21 @@
 language: node_js
-node_js:
-  - "7"
+node_js: '8'
+sudo: enabled
+dist: trusty
+os:
+  - linux
+  - osx
+addons:
+  apt:
+    packages:
+      - libc6-dev-i386
+      - gcc-4.8-multilib
+      - g++-4.8-multilib
+      - linux-libc-dev:i386
+      - linux-libc-dev
+      - icnsutils
+      - graphicsmagick
+
+script:
+  - if [[ "$TRAVIS_OS_NAME" == "osx"   ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then yarn run compile:darwin ;fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then yarn run compile:darwin ;fi
