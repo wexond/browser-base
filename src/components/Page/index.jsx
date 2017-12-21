@@ -77,6 +77,7 @@ export default class Page extends React.Component {
       const shadow = await getBarBorder(this.webview)
 
       Store.border = shadow
+      tab.barBorder = shadow
     }
 
     this.webview.addEventListener('did-finish-load', () => {
