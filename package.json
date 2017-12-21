@@ -54,7 +54,9 @@
     "uglifyjs-webpack-plugin": "1.1.4",
     "url-loader": "0.6.2",
     "webpack": "3.10.0",
-    "webpack-dev-server": "2.9.7",
-    "electron-updater": "^2.17.6"
+    "webpack-dev-server": "2.9.7"
+  },
+  "dependencies": {
+    "electron-updater": "2.17.6"
   }
 }
