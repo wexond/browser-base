@@ -29,7 +29,7 @@
   "bugs": {
     "url": "https://github.com/Nersent/wexond/issues"
   },
-  "author": "Nersent",
+  "author": "Nersent sentialx@gmail.com",
   "license": "Apache-2.0",
   "devDependencies": {
     "babel-core": "6.26.0",
