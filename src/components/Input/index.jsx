@@ -37,7 +37,8 @@ export default class Input extends React.Component {
       onClick,
       onMouseDown,
       onInput,
-      onKeyPress
+      onKeyPress,
+      placeholder
     } = this.props
 
     const onFocus = () => {
@@ -76,7 +77,7 @@ export default class Input extends React.Component {
       <div className={className} style={style}>
         <div className='input' style={{height: this.props.hint != null ? 48 : 30}} >
           <div className={labelClassName}>{this.props.hint}</div>
-          <input ref={(r) => { this.input = r }} {...inputEvents} defaultValue={defaultValue}></input>
+          <input ref={(r) => { this.input = r }} {...inputEvents} defaultValue={defaultValue} placeholder={placeholder}></input>
           <div className='line'></div>
           <div className={'thick-line ' + ((focused) ? 'show' : '')}></div>
         </div>

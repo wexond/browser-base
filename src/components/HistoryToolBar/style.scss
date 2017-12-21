@@ -115,6 +115,15 @@
   .delete-button {
     @extend %button;
   }
+
+  .input {
+    width: 200px;
+    position: relative;
+    @extend %inline;
+    position: absolute;
+    left: 200px;
+    @include white-input;
+  }
 }
 
 @media screen and (max-width: 400px) {
