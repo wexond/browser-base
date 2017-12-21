@@ -12,12 +12,9 @@
     "watch": "npm run build:dev && webpack-dev-server --hot --inline --port 8080 --colors --progress",
     "build:dev": "rimraf public/build && webpack",
     "build:production": "rimraf public/build && rimraf dist && cross-env NODE_ENV=production webpack --define process.env.NODE_ENV=production --progress --colors",
-    "compile:win64": "npm run build:production && electron-packager . --platform=win32 --arch=x64 Wexond --asar --overwrite --out=dist",
-    "compile:win32": "npm run build:production && electron-packager . --platform=win32 --arch=ia32 Wexond --asar --overwrite --out=dist",
-    "compile:linux64": "npm run build:production && electron-packager . --platform=linux --arch=x64 Wexond --asar --overwrite --out=dist",
-    "compile:linux32": "npm run build:production && electron-packager . --platform=linux --arch=ia32 Wexond --asar --overwrite --out=dist",
-    "compile:darwin64": "npm run build:production && electron-packager . --platform=darwin --arch=x64 Wexond --asar --overwrite --out=dist",
-    "compile:all": "npm run build:production && electron-packager . --all Wexond --asar --overwrite --out=dist"
+    "compile:win32": "npm run build:production && electron-builder -w -p onTagOrDraft",
+    "compile:darwin": "npm run build:production && electron-builder -m -p onTagOrDraft",
+    "compile:linux": "npm run build:production && electron-builder -l -p onTagOrDraft"
   },
   "homepage": "https://github.com/Nersent/wexond#readme",
   "keywords": [
@@ -34,9 +31,6 @@
   },
   "author": "Nersent",
   "license": "Apache-2.0",
-  "dependencies": {
-    "electron": "1.8.2-beta.3"
-  },
   "devDependencies": {
     "babel-core": "6.26.0",
     "babel-loader": "7.1.2",
@@ -47,7 +41,8 @@
     "base64-img": "1.0.3",
     "cross-env": "5.1.1",
     "css-loader": "0.28.7",
-    "electron-packager": "10.1.0",
+    "electron": "1.8.2-beta.3",
+    "electron-builder": "19.49.0",
     "mobx": "3.4.1",
     "mobx-react": "4.3.5",
     "node-sass": "4.7.2",
