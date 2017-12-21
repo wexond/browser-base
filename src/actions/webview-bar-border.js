@@ -3,7 +3,7 @@ export const getBarBorder = (webview) => {
     if (webview != null && webview.getWebContents() != null) {
       webview.executeJavaScript('(function () { return document.documentElement.innerHTML })()', false, async (result) => {
         const regexp = /<meta name='?.bar-border'?.* content='?.false'?.*>/
-
+        console.log(!regexp.test(result))
         resolve(!regexp.test(result))
       })
     } else {
