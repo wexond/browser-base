@@ -9,6 +9,7 @@ import Menu from '../Menu'
 import MenuNavigation from '../MenuNavigation'
 import Dialog from '../Dialog'
 import TabGroupsMenu from '../TabGroupsMenu'
+import BackgroundExtensions from '../BackgroundExtensions'
 
 import Store from '../../store'
 
@@ -24,6 +25,7 @@ import * as pagesActions from '../../actions/pages'
 import * as tabsActions from '../../actions/tabs'
 import * as tabGroupsActions from '../../actions/tab-groups'
 import * as pageMenuActions from '../../actions/page-menu'
+import * as extensionsActions from '../../actions/extensions'
 
 @observer
 export default class App extends React.Component {
@@ -33,6 +35,8 @@ export default class App extends React.Component {
 
   componentDidMount () {
     Store.app = this
+
+    extensionsActions.loadExtensions()
 
     window.addEventListener('mousedown', (e) => {
       this.suggestions.hide()
@@ -164,6 +168,7 @@ export default class App extends React.Component {
         <Menu ref={(r) => { this.menu = r }} right={8} top={40}>
 
         </Menu>
+        <BackgroundExtensions />
       </div>
     )
   }
