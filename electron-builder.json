@@ -14,7 +14,7 @@
     }
   ],
   "linux": {
-    "category": "Navigation",
+    "category": "Network",
     "target": [
       {
         "target": "deb",
