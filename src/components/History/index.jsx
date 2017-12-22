@@ -62,7 +62,7 @@ export default class History extends React.Component {
                 })
               }
             </div> || !Store.loading &&
-            <div className='history-empty'>History is empty!</div>
+            <div className='history-no-results'>No search results</div>
           }
         </div>
       </div>
