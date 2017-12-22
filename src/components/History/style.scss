@@ -46,3 +46,29 @@ a {
   position: absolute;
   @include center-both;
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $scroll-color;
+  border: none;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $scroll-color-hover;
+}
+
+::-webkit-scrollbar-track {
+  background: $scroll-track-color;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
