@@ -57,10 +57,12 @@ export default class History extends React.Component {
       display: !Store.loading ? 'none' : 'block'
     }
 
+    const containerClassName = 'content ' + (Store.selectedItems.length > 0 ? 'selecting' : '')
+
     return (
       <div className='history'>
         <ToolBar onSearch={this.onSearch} />
-        <div className='content' style={contentStyle}>
+        <div className={containerClassName} style={contentStyle}>
           {!emptyHistory &&
             <div>
               <div className='history-title'>Most visited websites</div>

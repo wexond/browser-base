@@ -38,6 +38,41 @@ a {
   padding-bottom: 16px;
   overflow: auto;
   transition: 0.15s opacity;
+
+  &::-webkit-scrollbar {
+    width: 12px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-button {
+    width: 0px;
+    height: 0px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $scroll-color;
+    border: none;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $scroll-color-hover;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $scroll-track-color;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  &.selecting::-webkit-scrollbar-thumb {
+    background: $scroll-color-selecting;
+  }
+
+  &.selecting::-webkit-scrollbar-thumb:hover {
+    background: $scroll-color-hover-selecting;
+  }
 }
 
 .preloader {
@@ -45,30 +80,4 @@ a {
   height: 56px;
   position: absolute;
   @include center-both;
-}
-
-::-webkit-scrollbar {
-  width: 12px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-button {
-  width: 0px;
-  height: 0px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: $scroll-color;
-  border: none;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: $scroll-color-hover;
-}
-
-::-webkit-scrollbar-track {
-  background: $scroll-track-color;
-}
-::-webkit-scrollbar-corner {
-  background: transparent;
 }
