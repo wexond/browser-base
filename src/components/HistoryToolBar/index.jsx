@@ -71,7 +71,7 @@ export default class HistoryToolBar extends React.Component {
         this.input.input.focus()
       }, 64)
     } else {
-      this.onSearch(this.input.getValue())
+      this.props.onSearch(this.input.getValue())
     }
   }
 
@@ -82,14 +82,10 @@ export default class HistoryToolBar extends React.Component {
     }
   }
 
-  onSearch (str) {
-    console.log(str)
-  }
-
   onInputKeyPress = (e) => {
     // Enter
     if (e.which === 13) {
-      this.onSearch(this.input.getValue())
+      this.props.onSearch(this.input.getValue())
     }
   }
 
