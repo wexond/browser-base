@@ -79,11 +79,6 @@
     @extend %icon;
   }
 
-  .search-icon {
-    background-image: url(images/Bar/search.svg);
-    @extend %icon-right;
-  }
-
   .selected-items, .count {
     @include Body2;
     @extend %inline;
@@ -116,13 +111,38 @@
     @extend %button;
   }
 
-  .input {
-    width: 200px;
+  .search-container {
+    width: 56px;
+    height: 100%;
+    float: right;
     position: relative;
+    margin-right: 16px;
+    overflow: hidden;
+    transition: 0.25s ease-out;
     @extend %inline;
-    position: absolute;
-    left: 200px;
-    @include white-input;
+
+    .search-icon {
+      background-image: url(images/Bar/search.svg);
+      @extend %icon;
+    }
+
+    .input {
+      width: calc(100% - 128px);
+      position: absolute;
+      right: 72px;
+      @include white-input;
+      @include center-vertical;
+    }
+
+    &.selected {
+      width: 512px;
+    }
+
+    .cancel-icon {
+      float: right;
+      padding: 6px;
+      @extend .exit-icon;
+    }
   }
 }
 
