@@ -64,4 +64,9 @@
   .label.focused, .hint, input {
     color: #fff;
   }
+
+  input::placeholder {
+    color: #fff;
+    opacity: $secondary-opacity-light;
+  }
 }
