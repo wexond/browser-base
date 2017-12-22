@@ -23,7 +23,7 @@ export default class HistoryToolBar extends React.Component {
     }
 
     for (i = 0; i < Store.history.sections.length; i++) {
-      Store.history.sections[i].checkbox.setState({checked: false})
+      if (Store.history.sections[i] != null) Store.history.sections[i].checkbox.setState({checked: false})
     }
 
     Store.selectedItems = []
@@ -55,7 +55,7 @@ export default class HistoryToolBar extends React.Component {
     }
 
     for (i = 0; i < Store.history.sections.length; i++) {
-      Store.history.sections[i].checkbox.setState({checked: false})
+      if (Store.history.sections[i] != null) Store.history.sections[i].checkbox.setState({checked: false})
     }
 
     console.log(deletedItems)
