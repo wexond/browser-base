@@ -7,6 +7,14 @@ import { observer } from 'mobx-react'
 
 @observer
 export default class HistoryToolBar extends React.Component {
+  constructor () {
+    super()
+
+    this.state = {
+      searchInput: false
+    }
+  }
+
   onCancel = () => {
     for (var i = 0; i < Store.selectedItems.length; i++) {
       if (Store.selectedItems[i].checkbox.state.checked) {
@@ -55,6 +63,18 @@ export default class HistoryToolBar extends React.Component {
     await window.historyAPI.delete(deletedItems)
   }
 
+  onSearchIconClick = () => {
+    this.setState({
+      searchInput: !this.state.searchInput
+    })
+
+    if (!this.state.searchInput) {
+      setTimeout(() => {
+        this.input.input.focus()
+      }, 64)
+    }
+  }
+
   render () {
     const selectingMode = Store.selectedItems.length > 0
 
@@ -74,8 +94,11 @@ export default class HistoryToolBar extends React.Component {
           <div className='title'>
             History
           </div>
-          <div className='search-icon' />
-          <Input placeholder='Search' />
+          <div className={'search-container' + (this.state.searchInput ? ' selected' : '')}>
+            <div className='search-icon' onClick={this.onSearchIconClick} />
+            <Input ref={(r) => this.input = r} placeholder='Search' />
+            <div className='cancel-icon' />
+          </div>
         </div>
         <div className='selection-toolbar' style={selectionToolbarStyle}>
           <div className='exit-icon' onClick={this.onCancel} />
