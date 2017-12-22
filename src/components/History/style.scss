@@ -22,6 +22,14 @@ a {
   }
 }
 
+.history-empty {
+  position: relative;
+  text-align: center;
+  opacity: $secondary-opacity-light;
+  @include Title;
+  @include center-vertical;
+}
+
 .content {
   width: 100%;
   height: calc(100% - 72px);
