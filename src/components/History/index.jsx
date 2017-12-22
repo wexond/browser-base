@@ -24,6 +24,8 @@ export default class History extends React.Component {
   }
 
   async loadData (searchStr) {
+    Store.loading = true
+
     let data = await window.historyAPI.get()
 
     if (searchStr) {
@@ -32,6 +34,8 @@ export default class History extends React.Component {
 
     Store.cards = HistoryParser.getCards(data)
     Store.sections = HistoryParser.getSections(data)
+
+    Store.loading = false
   }
 
   onSearch = (str) => {
@@ -41,19 +45,24 @@ export default class History extends React.Component {
   render () {
     this.sections = []
 
+    const emptyHistory = Store.sections.length === 0
+
     return (
       <div className='history'>
         <ToolBar onSearch={this.onSearch} />
         <div className='content'>
-          <div className='history-title'>Most visited websites</div>
-          <HistoryCards />
-          <div className='history-title'>History</div>
-          {
-            Store.sections.map((data, key) => {
-              if (data.items.length > 0) {
-                return <HistorySection ref={(r) => { this.sections.push(r) }} data={data} key={key} />
+          {!emptyHistory &&
+            <div>
+              <div className='history-title'>Most visited websites</div>
+              <HistoryCards />
+              <div className='history-title'>History</div>
+              {
+                Store.sections.map((data, key) => {
+                  return <HistorySection ref={(r) => { this.sections.push(r) }} data={data} key={key} />
+                })
               }
-            })
+            </div> || !Store.loading &&
+            <div className='history-empty'>History is empty!</div>
           }
         </div>
       </div>
