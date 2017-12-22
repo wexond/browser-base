@@ -64,15 +64,26 @@ export default class HistoryToolBar extends React.Component {
   }
 
   onSearchIconClick = () => {
-    this.setState({
-      searchInput: !this.state.searchInput
-    })
+    this.setState({searchInput: !this.state.searchInput})
 
     if (!this.state.searchInput) {
       setTimeout(() => {
         this.input.input.focus()
       }, 64)
+    } else {
+      this.onSearch(this.input.getValue())
     }
+  }
+
+  onSearchCancelIconClick = () => {
+    if (this.state.searchInput) {
+      this.setState({searchInput: false})
+      this.input.setValue('')
+    }
+  }
+
+  onSearch (str) {
+    console.log(str)
   }
 
   render () {
@@ -97,7 +108,7 @@ export default class HistoryToolBar extends React.Component {
           <div className={'search-container' + (this.state.searchInput ? ' selected' : '')}>
             <div className='search-icon' onClick={this.onSearchIconClick} />
             <Input ref={(r) => this.input = r} placeholder='Search' />
-            <div className='cancel-icon' />
+            <div className='cancel-icon' onClick={this.onSearchCancelIconClick} />
           </div>
         </div>
         <div className='selection-toolbar' style={selectionToolbarStyle}>
