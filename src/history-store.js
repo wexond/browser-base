@@ -4,6 +4,7 @@ export default new class Store {
   @observable selectedItems = []
   @observable sections = []
   @observable cards = []
+  @observable loading = true
 
   history = null
 }
