@@ -67,3 +67,15 @@ export const getColor = (webview) => {
     }
   })
 }
+
+export const getOGData = (webview) => {
+  return new Promise((resolve, reject) => {
+    if (webview != null && webview.getWebContents() != null) {
+      webview.executeJavaScript('(function () { return document.documentElement.innerHTML })()', false, async (result) => {
+        resolve()
+      })
+    } else {
+      reject(new Error('WebContents are not available'))
+    }
+  })
+}

@@ -38,6 +38,21 @@ if (window.location.protocol === 'wexond:') {
           }
         })
       })
+    },
+    search: (data, str) => {
+      return new Promise((resolve, reject) => {
+        const matches = []
+
+        for (var i = 0; i < data.length; i++) {
+          const item = data[i]
+
+          if ((item.url.split('/')[2]).includes(str) || item.title.includes(str)) {
+            matches.push(item)
+          }
+        }
+
+        resolve(matches)
+      })
     }
-  }  
+  }
 }
