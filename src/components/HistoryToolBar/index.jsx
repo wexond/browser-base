@@ -86,6 +86,13 @@ export default class HistoryToolBar extends React.Component {
     console.log(str)
   }
 
+  onInputKeyPress = (e) => {
+    // Enter
+    if (e.which === 13) {
+      this.onSearch(this.input.getValue())
+    }
+  }
+
   render () {
     const selectingMode = Store.selectedItems.length > 0
 
@@ -107,7 +114,7 @@ export default class HistoryToolBar extends React.Component {
           </div>
           <div className={'search-container' + (this.state.searchInput ? ' selected' : '')}>
             <div className='search-icon' onClick={this.onSearchIconClick} />
-            <Input ref={(r) => this.input = r} placeholder='Search' />
+            <Input ref={(r) => this.input = r} placeholder='Search' onKeyPress={this.onInputKeyPress} />
             <div className='cancel-icon' onClick={this.onSearchCancelIconClick} />
           </div>
         </div>
