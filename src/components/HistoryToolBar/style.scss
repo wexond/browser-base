@@ -112,13 +112,14 @@
   }
 
   .search-container {
-    width: 56px;
+    width: 100%;
+    max-width: 56px;
     height: 100%;
     float: right;
     position: relative;
     margin-right: 16px;
     overflow: hidden;
-    transition: 0.25s ease-out;
+    transition: 0.25s max-width ease-out, 0.25s margin-right ease-out;
     @extend %inline;
 
     .search-icon {
@@ -135,7 +136,7 @@
     }
 
     &.selected {
-      width: 512px;
+      max-width: 512px;
       margin-right: 0px;
     }
 
@@ -156,5 +157,11 @@
     .count {
       margin-left: 0px;
     }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .history-toolbar .search-container.selected {
+    max-width: calc(100% - 96px);
   }
 }
