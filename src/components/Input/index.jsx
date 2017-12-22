@@ -18,6 +18,10 @@ export default class Input extends React.Component {
     return this.input.value
   }
 
+  setValue (str) {
+    this.input.value = str
+  }
+
   focus = () => {
     setTimeout(() => {
       this.input.focus()
