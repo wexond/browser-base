@@ -36,7 +36,8 @@ a {
   position: absolute;
   top: 56px;
   padding-bottom: 16px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   transition: 0.15s opacity;
 
   &::-webkit-scrollbar {
