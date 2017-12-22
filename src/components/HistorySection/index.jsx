@@ -16,16 +16,17 @@ export default class HistorySection extends React.Component {
 
   render () {
     const onCheck = (flag) => {
-      console.log(this.items)
       for (var i = 0; i < this.items.length; i++) {
-        const data = this.items[i].props.data
-        data.checkbox = this.items[i].checkbox
-        if (flag) {
-          data.checkbox.setState({checked: true})
-          Store.selectedItems.push(data)
-        } else {
-          data.checkbox.setState({checked: false})
-          Store.selectedItems.splice(Store.selectedItems.indexOf(data), 1)
+        if (this.items[i] != null) {
+          const data = this.items[i].props.data
+          data.checkbox = this.items[i].checkbox
+          if (flag) {
+            data.checkbox.setState({checked: true})
+            Store.selectedItems.push(data)
+          } else {
+            data.checkbox.setState({checked: false})
+            Store.selectedItems.splice(Store.selectedItems.indexOf(data), 1)
+          }
         }
       }
     }

@@ -89,6 +89,19 @@ export default class HistoryToolBar extends React.Component {
     }
   }
 
+  componentWillReceiveProps () {
+    const metaTags = document.getElementsByTagName('meta')
+
+    for (var i = 0; i < metaTags.length; i++) {
+      if (metaTags[i].getAttribute('name') === 'theme-color') {
+        const color = Store.selectedItems.length === 0 ? '#303F9F' : '#2196F3'
+
+        metaTags[i].setAttribute('content', color)
+        break
+      }
+    }
+  }
+
   render () {
     const selectingMode = Store.selectedItems.length > 0
 
