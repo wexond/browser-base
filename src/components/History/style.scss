@@ -37,4 +37,12 @@ a {
   top: 56px;
   padding-bottom: 16px;
   overflow: auto;
+  transition: 0.15s opacity;
+}
+
+.preloader {
+  width: 56px;
+  height: 56px;
+  position: absolute;
+  @include center-both;
 }

@@ -6,6 +6,8 @@ import ToolBar from '../HistoryToolBar'
 import HistoryCards from '../HistoryCards'
 import HistorySection from '../HistorySection'
 
+import Preloader from '../Preloader'
+
 import Store from '../../history-store'
 import { observer } from 'mobx-react'
 
@@ -47,10 +49,18 @@ export default class History extends React.Component {
 
     const emptyHistory = Store.sections.length === 0
 
+    const contentStyle = {
+      opacity: !Store.loading ? 1 : 0
+    }
+
+    const preloaderStyle = {
+      display: !Store.loading ? 'none' : 'block'
+    }
+
     return (
       <div className='history'>
         <ToolBar onSearch={this.onSearch} />
-        <div className='content'>
+        <div className='content' style={contentStyle}>
           {!emptyHistory &&
             <div>
               <div className='history-title'>Most visited websites</div>
@@ -65,6 +75,7 @@ export default class History extends React.Component {
             <div className='history-no-results'>No search results</div>
           }
         </div>
+        <Preloader style={preloaderStyle} />
       </div>
     )
   }
