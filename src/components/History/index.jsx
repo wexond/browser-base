@@ -23,11 +23,19 @@ export default class History extends React.Component {
     this.loadData()
   }
 
-  async loadData () {
-    const history = await window.historyAPI.get()
+  async loadData (searchStr) {
+    let data = await window.historyAPI.get()
 
-    Store.cards = HistoryParser.getCards(history)
-    Store.sections = HistoryParser.getSections(history)
+    if (searchStr) {
+      data = await window.historyAPI.search(data, searchStr)
+    }
+
+    Store.cards = HistoryParser.getCards(data)
+    Store.sections = HistoryParser.getSections(data)
+  }
+
+  onSearch = (str) => {
+    this.loadData(str)
   }
 
   render () {
@@ -35,7 +43,7 @@ export default class History extends React.Component {
 
     return (
       <div className='history'>
-        <ToolBar />
+        <ToolBar onSearch={this.onSearch} />
         <div className='content'>
           <div className='history-title'>Most visited websites</div>
           <HistoryCards />

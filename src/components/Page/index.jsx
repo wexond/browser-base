@@ -80,9 +80,11 @@ export default class Page extends React.Component {
       tab.barBorder = shadow
     }
 
-    this.webview.addEventListener('did-finish-load', () => {
+    this.webview.addEventListener('did-finish-load', async () => {
       saveHistory()
       setBarBorder()
+
+      const test = await webviewActions.getOGData(this.webview)
     })
     this.webview.addEventListener('did-frame-finish-load', (e) => {
       saveHistory()
