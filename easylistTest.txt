@@ -1,0 +1,2 @@
+﻿/banner/*/img^
+||ads.example.com^
