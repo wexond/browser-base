@@ -8,15 +8,14 @@
     "url": "git+https://github.com/Nersent/wexond.git"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=dev electron main.js",
+    "start": "electron-builder install-app-deps && cross-env NODE_ENV=dev electron main.js",
     "watch": "npm run build:dev && webpack-dev-server --hot --inline --port 8080 --colors --progress",
     "build:dev": "rimraf public/build && webpack",
     "build:production": "rimraf public/build && rimraf dist && cross-env NODE_ENV=production webpack --define process.env.NODE_ENV=production --progress --colors",
     "compile:win32": "npm run build:production && electron-builder -w -p always",
     "compile:darwin": "npm run build:production && electron-builder -m -p always",
     "compile:linux": "npm run build:production && electron-builder -l -p always",
-    "adblock:parse": "electron scripts/adblock-parse.js",
-    "postinstall": "electron-builder install-app-deps"
+    "adblock:parse": "npm run rebuild && node scripts/adblock-parse.js"
   },
   "homepage": "https://github.com/Nersent/wexond#readme",
   "keywords": [
@@ -64,6 +63,8 @@
   },
   "dependencies": {
     "ad-block": "3.1.10",
+    "chalk": "2.3.0",
+    "devtron": "1.4.0",
     "electron-updater": "2.17.6"
   }
 }
