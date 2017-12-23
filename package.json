@@ -15,7 +15,8 @@
     "compile:win32": "npm run build:production && electron-builder -w -p always",
     "compile:darwin": "npm run build:production && electron-builder -m -p always",
     "compile:linux": "npm run build:production && electron-builder -l -p always",
-    "adblock:parse": "npm run rebuild && node scripts/adblock-parse.js"
+    "adblock:parse": "npm run rebuild && node scripts/adblock-parse.js",
+    "postinstall": "electron-builder install-app-deps"
   },
   "homepage": "https://github.com/Nersent/wexond#readme",
   "keywords": [
