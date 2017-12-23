@@ -1,4 +1,5 @@
 import React from 'react'
+import { platform } from 'os'
 
 import { observer } from 'mobx-react'
 import { observe } from 'mobx'
@@ -121,7 +122,8 @@ export default class Tabs extends React.Component {
     const tabs = tabGroupsActions.getCurrentTabGroup().tabs.filter(tab => !tab.pinned)
 
     const tabsStyle = {
-      WebkitAppRegion: (tabs[0] != null && tabs[0].width > 32) ? 'drag' : 'no-drag'
+      WebkitAppRegion: (tabs[0] != null && tabs[0].width > 32) ? 'drag' : 'no-drag',
+      marginLeft: platform() === 'darwin' ? 80 : 0
     }
 
     return (

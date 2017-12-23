@@ -49,7 +49,8 @@ const createWindow = () => {
     frame: false,
     minWidth: 300,
     minHeight: 430,
-    show: false
+    show: false,
+    titleBarStyle: 'hidden-inset'
   })
   mainWindow.loadURL(path.join('file://', __dirname, '/public/app/index.html'))
   mainWindow.setMenu(null)
