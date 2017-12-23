@@ -1,4 +1,5 @@
 import React from 'react'
+import { platform } from 'os'
 
 import Controls from '../Controls'
 
@@ -37,15 +38,16 @@ export default class SystemBar extends React.Component {
 
     const systemBarStyle = {
       backgroundColor: backColor,
-      display: (Store.isFullscreen) ? 'none' : 'flex'
+      display: (Store.isFullscreen) ? 'none' : 'flex',
+      height: platform() == 'darwin' ? 34 : 32
     }
 
     return (
       <div className={'system-bar ' + Store.foreground} style={systemBarStyle}>
         {this.props.children}
         <div onMouseDown={onGroupsMouseDown} onClick={onGroupsClick} className='groups'></div>
-        <div className='border-vertical2'></div>
-        <Controls />
+        {platform() !== 'darwin' && <div className='border-vertical2'></div> }
+        {platform() !== 'darwin' && <Controls /> }
         <div className='border-bottom' />
       </div>
     )
