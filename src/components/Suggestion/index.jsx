@@ -33,7 +33,7 @@ export default class Suggestion extends React.Component {
       dashDisplay = 'none'
     }
 
-    let icon = 'images/Suggestions/page.svg'
+    let icon = '../../src/images/Suggestions/page.svg'
 
     let iconClassName = 'page-icon'
 

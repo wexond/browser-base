@@ -47,6 +47,7 @@
     "css-loader": "0.28.7",
     "electron": "1.8.2-beta.3",
     "electron-builder": "19.49.0",
+    "electron-rebuild": "1.6.0",
     "mobx": "3.4.1",
     "mobx-react": "4.3.5",
     "node-sass": "4.7.2",
