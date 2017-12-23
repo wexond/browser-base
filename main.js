@@ -1,8 +1,10 @@
 const { app, BrowserWindow } = require('electron')
 const protocol = require('electron').protocol
 const path = require('path')
-const ipcMessages = require(path.join(__dirname, '/src/defaults/ipc-messages.js'))
+const ipcMessages = require(path.join(__dirname, '/src/defaults/ipc-messages'))
 const { autoUpdater } = require('electron-updater')
+const fs = require('fs')
+const adblockFilterParser = require(path.join(__dirname, '/src/utils/adblock-filter-parser'))
 
 const protocolName = 'wexond'
 
@@ -54,6 +56,39 @@ const createWindow = () => {
 
   mainWindow.on('closed', () => {
     mainWindow = null
+  })
+
+  const dataTest = String(fs.readFileSync(path.join(__dirname, 'easylistTest.txt'), 'utf8'))
+  const categoriesTest = adblockFilterParser.parse(dataTest)
+
+  const data = String(fs.readFileSync(path.join(__dirname, 'easylist.txt'), 'utf8'))
+  const categories = adblockFilterParser.parse(data)
+
+  console.log(adblockFilterParser.isAd('http://example.com/banner/foo/img', categoriesTest) + ' true')
+  console.log(adblockFilterParser.isAd('http://example.com/banner/foo/bar/img?param', categoriesTest) + ' true')
+  console.log(adblockFilterParser.isAd('http://example.com/banner//img/foo', categoriesTest) + ' true')
+  console.log(adblockFilterParser.isAd('http://example.com/banner/img', categoriesTest) + ' false')
+  console.log(adblockFilterParser.isAd('http://example.com/banner/foo/imgraph', categoriesTest) + ' false')
+  console.log(adblockFilterParser.isAd('http://example.com/banner/foo/img.gif', categoriesTest) + ' false')
+
+  console.log(adblockFilterParser.isAd('http://ads.example.com/foo.gif', categoriesTest) + ' true')
+  console.log(adblockFilterParser.isAd('http://server1.ads.example.com/foo.gif', categoriesTest) + ' true')
+  console.log(adblockFilterParser.isAd('https://ads.example.com:8000/', categoriesTest) + ' true')
+  console.log(adblockFilterParser.isAd('http://ads.example.com.ua/foo.gif', categoriesTest) + ' false')
+  console.log(adblockFilterParser.isAd('http://example.com/redirect/http://ads.example.com/', categoriesTest) + ' false')
+
+  mainWindow.webContents.session.webRequest.onBeforeRequest((details, callback) => {
+    if (adblockFilterParser.isAd(details.url, categories)) {
+      return callback({
+        cancel: true,
+        requestHeaders: details.requestHeaders
+      })
+    }
+
+    return callback({
+      cancel: false,
+      requestHeaders: details.requestHeaders
+    })
   })
 
   mainWindow.on('unresponsive', () => {})
