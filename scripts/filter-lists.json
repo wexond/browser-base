@@ -13,18 +13,6 @@
 		"lang": "da",
 		"supportURL": "https://henrik.schack.dk/adblock/"
 	},
-	"https://dl.dropboxusercontent.com/u/1289327/abpxfiles/filtri.txt": {
-		"off": true,
-		"title": "ITA: ABP X Files",
-		"group": "regions",
-		"supportURL": "http://noads.it/"
-	},
-	"https://adguard.com/en/filter-rules.html?id=1": {
-		"off": true,
-		"title": "RUS: Adguard Russian Filter (obsolete, will be removed)",
-		"group": "regions",
-		"supportURL": "https://forum.adguard.com/forumdisplay.php?69-%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D1%8B-Adguard"
-	},
 	"https://filters.adtidy.org/extension/chromium/filters/1.txt": {
 		"off": true,
 		"title": "RUS: Adguard Russian Filter",
@@ -44,7 +32,7 @@
 		"group": "regions",
 		"supportURL": "https://forums.lanik.us/viewforum.php?f=102"
 	},
-	"easylist-downloads.adblockplus.org/easylist.txt": {
+	"https://easylist-downloads.adblockplus.org/easylist.txt": {
 		"title": "EasyList",
 		"group": "ads",
 		"homeURL": "https://easylist.to/easylist/easylist.txt",
@@ -96,7 +84,7 @@
 		"lang": "it",
 		"supportURL": "https://forums.lanik.us/viewforum.php?f=96"
 	},
-	"easylist-downloads.adblockplus.org/easyprivacy.txt": {
+	"https://easylist-downloads.adblockplus.org/easyprivacy.txt": {
 		"title": "EasyPrivacy",
 		"group": "privacy",
 		"homeURL": "https://easylist.to/easylist/easyprivacy.txt",
@@ -224,7 +212,7 @@
 		"group": "malware",
 		"supportURL": "http://www.malwaredomains.com/"
 	},
-	"mirror1.malwaredomains.com/files/justdomains": {
+	"http://mirror1.malwaredomains.com/files/justdomains": {
 		"title": "Malware domains",
 		"group": "malware",
 		"homeURL": "https://mirror.cedia.org.ec/malwaredomains/justdomains",
@@ -341,7 +329,7 @@
 		"lang": "vi",
 		"supportURL": "https://forums.lanik.us/"
 	},
-	"www.malwaredomainlist.com/hostslist/hosts.txt": {
+	"http://www.malwaredomainlist.com/hostslist/hosts.txt": {
 		"title": "Malware Domain List",
 		"group": "malware",
 		"homeURL": "https://www.malwaredomainlist.com/hostslist/hosts.txt"
