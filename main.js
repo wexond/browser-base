@@ -6,6 +6,8 @@ const { autoUpdater } = require('electron-updater')
 const fs = require('fs')
 const {AdBlockClient, FilterOptions} = require('ad-block')
 
+const windowDataPath = path.join(app.getPath('userData'), "window-data.json");
+
 const protocolName = 'wexond'
 
 let mainWindow
@@ -43,15 +45,29 @@ autoUpdater.on('update-downloaded', (info) => {
 })
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({
-    width: 900,
-    height: 700,
+  let data = null
+  try {
+    data = fs.readFileSync(windowDataPath)
+    data = JSON.parse(data)
+  } catch (e) {
+    console.error(e)
+  }
+
+  const windowData = {
     frame: false,
     minWidth: 300,
     minHeight: 430,
+    width: 900,
+    height: 700,
     show: false,
     titleBarStyle: 'hidden-inset'
-  })
+  }
+
+  if (data != null && data.bounds != null) {
+    Object.assign(windowData, data.bounds)
+  }
+
+  mainWindow = new BrowserWindow(windowData)
   mainWindow.loadURL(path.join('file://', __dirname, '/public/app/index.html'))
   mainWindow.setMenu(null)
 
@@ -59,6 +75,15 @@ const createWindow = () => {
     mainWindow = null
   })
   
+  console.log(mainWindow.getBounds())
+
+  mainWindow.on('close', () => {
+    data = {
+      bounds: mainWindow.getBounds()
+    }
+    fs.writeFileSync(windowDataPath, JSON.stringify(data))
+  })
+
   mainWindow.on('unresponsive', () => {})
 
   mainWindow.on('app-command', function (e, cmd) {
