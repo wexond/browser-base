@@ -28,7 +28,9 @@ export default class Page extends React.Component {
         if (e.isMainFrame != null && !e.isMainFrame) return
         tab.url = e.url
         Store.url = e.url
-        Store.app.bar.addressBar.setInfo(e.url)
+        if (Store.selectedTab === tab.id) {
+          Store.app.bar.addressBar.setInfo(e.url)
+        }
       }
     }
 
