@@ -100,7 +100,7 @@ export default class Menu extends React.Component {
     } = this.state
 
     const menuStyle = {
-      maxHeight: height,
+      maxHeight: (height > 400) ? 400 : height,
       marginTop: marginTop,
       opacity: opacity,
       left: left,
