@@ -19,9 +19,11 @@ export default class TabGroupsMenu extends React.Component {
 
     return (
       <div className='tab-groups-menu'>
-        {Store.tabGroups.map((item, key) => {
-          return <TabGroupsMenuItem tabGroup={item} key={key}></TabGroupsMenuItem>
-        })}
+        <div className='menu-items'>
+          {Store.tabGroups.map((item, key) => {
+            return <TabGroupsMenuItem tabGroup={item} key={key}></TabGroupsMenuItem>
+          })}
+        </div>
         <div className='add-group' onClick={onAddClick}>Add new group</div>
         <div style={{clear: 'both'}}></div>
       </div>
