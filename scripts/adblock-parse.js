@@ -15,82 +15,65 @@ const filterLists = fs.readFileSync(filterListsPath, 'utf8')
 const filterListsJson = JSON.parse(filterLists)
 
 let parsedLists = 0
-let listsToParse = 0
+const listsToParse = []
 
 const requestURL = (urlToList, callback) => {
   let request
 
-  if (urlToList.startsWith('http://')) {
-    request = http.request(url.parse(urlToList), callback)
-  } else if (urlToList.startsWith('https://')) {
-    request = https.request(url.parse(urlToList), callback)
-  } else {
-    request = http.request(url.parse(urlToList), callback)
-  }
-
-  request.on('error', (e) => {
-    listsToParse--
-  })
-
-  request.end()
-}
-
-console.log(chalk.gray('[INFO] ') + 'Getting lists to download and parse...')
-
-for (let urlToList in filterListsJson) {
-  listsToParse++
-}
-
-console.log(listsToParse)
-
-for (let urlToList in filterListsJson) {
-  console.log(chalk.gray('[INFO] ') + 'Downloading ' + filterListsJson[urlToList].title + '...')
-
-  const onListReceive = (list) => {
-    console.log(parsedLists + '/' + listsToParse)
-
-    console.log(chalk.green('[SUCCESS] ') + 'Downloaded ' + filterListsJson[urlToList].title)
-    console.log(chalk.gray('[INFO] ') + 'Parsing ' + filterListsJson[urlToList].title + '...')
-
-    list.split('\n').forEach(line => client.parse(line))
-
-    console.log(chalk.green('[SUCCESS] ') + 'Parsed ' + filterListsJson[urlToList].title)
-    
-    parsedLists++
-
-    const buffer = client.serialize(64)
-    
-    console.log(chalk.gray('[INFO] ') + 'Saving to detector.buffer...')
-    console.log('')
-    fs.writeFile(output, buffer, (err) => {
-      if (err) return console.error(err)
-    })
-  }
-
-  const onListRequest = (res) => {
+  const onEnd = (res) => {
     let data = ''
     res.setEncoding('utf8')
     res.on('data', (chunk) => {
       data += chunk
     })
     res.on('end', () => {
-      onListReceive(data)
+      callback(data)
     })
   }
 
-  let request
-
   if (urlToList.startsWith('http://')) {
-    request = http.request(url.parse(urlToList), onListRequest)
+    request = http.request(url.parse(urlToList), onEnd)
   } else if (urlToList.startsWith('https://')) {
-    request = https.request(url.parse(urlToList), onListRequest)
+    request = https.request(url.parse(urlToList), onEnd)
   } else {
-    request = http.request(url.parse(urlToList), onListRequest)
+    request = http.request(url.parse(urlToList), onEnd)
   }
 
   request.on('error', (e) => {
-    
+    console.error(e)
   })
 
   request.end()
+}
+
+for (let urlToList in filterListsJson) {
+  if (!filterListsJson[urlToList].off) {
+    listsToParse.push(Object.assign({url: urlToList}, filterListsJson[urlToList]))
+  }
+}
+
+for (let i = 0; i < listsToParse.length; i++) {
+  console.log('')
+  console.log(chalk.gray('[INFO] ') + 'Downloading ' + listsToParse[i].title + '...')
+
+  const onListReceive = (list) => {
+    parsedLists++
+
+    console.log(parsedLists + '/' + listsToParse.length)
+
+    console.log(chalk.green('[SUCCESS] ') + 'Downloaded ' + listsToParse[i].title)
+    console.log(chalk.gray('[INFO] ') + 'Parsing ' + listsToParse[i].title + '...')
+
+    list.split('\n').forEach(line => client.parse(line))
+
+    console.log(chalk.green('[SUCCESS] ') + 'Parsed ' + listsToParse[i].title)
+    
+    const buffer = client.serialize(64)
+    
+    console.log(chalk.gray('[INFO] ') + 'Saving to detector.buffer...')
+    fs.writeFileSync(output, buffer)
+    console.log(chalk.green('[SUCCESS] ') + 'Saved to detector.buffer')
+  }
+
+  requestURL(listsToParse[i].url, onListReceive)
 }
