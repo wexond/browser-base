@@ -90,6 +90,7 @@ export default class App extends React.Component {
 
     window.addEventListener('keyup', (e) => {
       if (e.ctrlKey) {
+        if (e.altKey) return
         if (e.keyCode === 84) { // T key
           tabsActions.addTab()
         }
