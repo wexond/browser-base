@@ -1,6 +1,11 @@
 .tab-groups-menu {
   padding: 8px 0 8px 0;
 
+  .menu-items {
+    max-height: 340px;
+    overflow: auto;
+  }
+
   .add-group {
     display: table;
     color: #3F51B5;
