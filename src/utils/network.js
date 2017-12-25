@@ -9,6 +9,7 @@ export default class Network {
       const options = urlNode.parse(url)
       const request = http.request(options, (res) => {
         let data = ''
+        res.setEncoding('utf-8')
         res.on('data', (chunk) => {
           data += chunk
         })
