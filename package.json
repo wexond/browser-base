@@ -65,7 +65,6 @@
     "webpack-dev-server": "2.9.7"
   },
   "dependencies": {
-    "ad-block": "3.1.10",
     "chalk": "2.3.0",
     "electron-updater": "2.17.6"
   }
