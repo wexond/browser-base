@@ -7,7 +7,7 @@ const https = require('https')
 const url = require('url')
 
 const filterListsPath = path.resolve(__dirname, 'filter-lists.json')
-const output = path.resolve(__dirname, '../detector.buffer')
+const output = path.resolve(__dirname, '../adblock.dat')
 
 const client = new AdBlockClient()
 
@@ -53,12 +53,12 @@ for (let urlToList in filterListsJson) {
 }
 
 for (let i = 0; i < listsToParse.length; i++) {
-  console.log('')
   console.log(chalk.gray('[INFO] ') + 'Downloading ' + listsToParse[i].title + '...')
 
   const onListReceive = (list) => {
     parsedLists++
 
+    console.log('')
     console.log(parsedLists + '/' + listsToParse.length)
 
     console.log(chalk.green('[SUCCESS] ') + 'Downloaded ' + listsToParse[i].title)
@@ -70,9 +70,9 @@ for (let i = 0; i < listsToParse.length; i++) {
     
     const buffer = client.serialize(64)
     
-    console.log(chalk.gray('[INFO] ') + 'Saving to detector.buffer...')
+    console.log(chalk.gray('[INFO] ') + 'Saving to adblock.dat...')
     fs.writeFileSync(output, buffer)
-    console.log(chalk.green('[SUCCESS] ') + 'Saved to detector.buffer')
+    console.log(chalk.green('[SUCCESS] ') + 'Saved to adblock.dat')
   }
 
   requestURL(listsToParse[i].url, onListReceive)
