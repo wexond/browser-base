@@ -12,6 +12,8 @@ const protocolName = 'wexond'
 
 let mainWindow
 
+let windowBounds = {}
+
 /** Global events. */
 
 app.on('ready', () =>  {
@@ -71,16 +73,34 @@ const createWindow = () => {
   mainWindow.loadURL(path.join('file://', __dirname, '/public/app/index.html'))
   mainWindow.setMenu(null)
 
+  windowBounds = mainWindow.getBounds()
+
+  mainWindow.on('resize', () => {
+    if (!mainWindow.isMaximized()) {
+      windowBounds = mainWindow.getBounds()
+    }
+  })
+
+  mainWindow.on('move', () => {
+    if (!mainWindow.isMaximized()) {
+      windowBounds = mainWindow.getBounds()
+    }
+  })
+
+  if (data != null && data.maximized) {
+    mainWindow.maximize()
+  }
+
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-  
-  console.log(mainWindow.getBounds())
 
   mainWindow.on('close', () => {
     data = {
-      bounds: mainWindow.getBounds()
+      maximized: mainWindow.isMaximized(),
+      bounds: windowBounds
     }
+
     fs.writeFileSync(windowDataPath, JSON.stringify(data))
   })
 
