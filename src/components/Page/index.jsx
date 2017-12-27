@@ -48,10 +48,12 @@ export default class Page extends React.Component {
         url = url.substring(0, url.indexOf('/', 9))
       }
 
-      const interval1 = setInterval(() => {
+      const interval1 = setInterval(async () => {
+        const ogData = await webviewActions.getOGData(this.webview)
+
         if (favicon === 'error') {
           if (lastURL !== tab.url) {
-            Storage.addHistoryItem(tab.title, tab.url, '')
+            Storage.addHistoryItem(tab.title, tab.url, '', ogData)
             lastURL = tab.url
           }
 
@@ -61,7 +63,7 @@ export default class Page extends React.Component {
           clearInterval(interval1)
         } else if (favicon !== '' && favicon !== 'handled') {
           if (lastURL !== tab.url) {
-            Storage.addHistoryItem(tab.title, tab.url, favicon)
+            Storage.addHistoryItem(tab.title, tab.url, favicon, ogData)
             lastURL = tab.url
           }
 

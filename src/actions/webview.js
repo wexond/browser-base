@@ -71,8 +71,11 @@ export const getColor = (webview) => {
 export const getOGData = (webview) => {
   return new Promise((resolve, reject) => {
     if (webview != null && webview.getWebContents() != null) {
-      webview.executeJavaScript('(function () { return document.documentElement.innerHTML })()', false, async (result) => {
-        resolve()
+      webview.executeJavaScript('(function () { return document.documentElement.innerHTML })()', false, async (result) => {  
+        const title = new RegExp(/<meta .*(?=.*property="og:title").*(?=content="(.+?)").*>/gi).exec(result)[1]
+        const description = new RegExp(/<meta .*(?=.*property="og:description").*(?=content="(.+?)").*>/gi).exec(result)[1]
+
+        resolve({title: title, description: description})
       })
     } else {
       reject(new Error('WebContents are not available'))
