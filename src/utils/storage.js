@@ -4,7 +4,7 @@ import paths from '../defaults/files'
 import base64Img from 'base64-img'
 
 export default class Storage {
-  static async addHistoryItem (title, url, favicon) {
+  static async addHistoryItem (title, url, favicon, ogData = {}) {
     return new Promise(async (resolve, reject) => {
       if (title != null && url != null) {
         // Get today's date.
@@ -38,7 +38,8 @@ export default class Storage {
             'title': title,
             'date': today,
             'time': time,
-            'favicon': favicon
+            'favicon': favicon,
+            'ogData': ogData
           }
   
           // Get newItem's new id.
