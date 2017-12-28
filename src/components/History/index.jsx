@@ -3,7 +3,7 @@ import React from 'react'
 import HistoryParser from '../../utils/history'
 
 import ToolBar from '../HistoryToolBar'
-import HistoryCards from '../HistoryCards'
+import Cards from '../Cards'
 import HistorySection from '../HistorySection'
 
 import Preloader from '../Preloader'
@@ -66,7 +66,7 @@ export default class History extends React.Component {
           {!emptyHistory &&
             <div>
               <div className='history-title'>Most visited websites</div>
-              <HistoryCards />
+              <Cards />
               <div className='history-title'>History</div>
               {
                 Store.sections.map((data, key) => {
