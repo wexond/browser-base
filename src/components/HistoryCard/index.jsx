@@ -2,8 +2,8 @@ import React from 'react'
 
 export default class HistoryCard extends React.Component {
   render () {
-    const imageStyle = this.props.displayImage && {
-      backgroundImage: `url(${this.props.data.image}`
+    const imageStyle = this.props.image && {
+      backgroundImage: `url(${this.props.data.ogData.image}`
     } || {
       display: 'none'
     }
@@ -34,5 +34,5 @@ export default class HistoryCard extends React.Component {
 }
 
 HistoryCard.defaultProps = {
-  image: true
+  image: false
 }

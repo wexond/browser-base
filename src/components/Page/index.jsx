@@ -16,7 +16,6 @@ export default class Page extends React.Component {
     const tab = this.props.tab
     const page = this.props.page
     let lastURL = ''
-    let loaded = false
     let favicon = ''
 
     page.page = this
@@ -48,12 +47,13 @@ export default class Page extends React.Component {
         url = url.substring(0, url.indexOf('/', 9))
       }
 
-      const interval1 = setInterval(async () => {
-        const ogData = await webviewActions.getOGData(this.webview)
-
+      const interval1 = setInterval(() => {
         if (favicon === 'error') {
           if (lastURL !== tab.url) {
-            Storage.addHistoryItem(tab.title, tab.url, '', ogData)
+            setTimeout(async () => {
+              const ogData = await webviewActions.getOGData(this.webview)
+              Storage.addHistoryItem(tab.title, tab.url, favicon, ogData)
+            }, 1)
             lastURL = tab.url
           }
 
@@ -63,7 +63,11 @@ export default class Page extends React.Component {
           clearInterval(interval1)
         } else if (favicon !== '' && favicon !== 'handled') {
           if (lastURL !== tab.url) {
-            Storage.addHistoryItem(tab.title, tab.url, favicon, ogData)
+            setTimeout(async () => {
+              const ogData = await webviewActions.getOGData(this.webview)
+              Storage.addHistoryItem(tab.title, tab.url, favicon, ogData)
+            }, 1)
+
             lastURL = tab.url
           }
 
@@ -73,8 +77,6 @@ export default class Page extends React.Component {
           clearInterval(interval1)
         }
       }, 1)
-
-      loaded = true
     }
 
     const setBarBorder = async () => {
@@ -87,8 +89,6 @@ export default class Page extends React.Component {
     this.webview.addEventListener('did-finish-load', async () => {
       saveHistory()
       setBarBorder()
-
-      const test = await webviewActions.getOGData(this.webview)
     })
     this.webview.addEventListener('did-frame-finish-load', (e) => {
       saveHistory()

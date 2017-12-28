@@ -28,7 +28,7 @@ export default class NewTab extends React.Component {
   render () {
     return (
       <div className='new-tab'>
-        <HistoryCards />
+        <HistoryCards cardsImage={true} />
       </div>
     )
   }

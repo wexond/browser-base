@@ -51,7 +51,7 @@ export default class HistoryCards extends React.Component {
         <div className='cards-container' style={style}>
           {
             Store.cards.map((data, key) => {
-              return <HistoryCard data={data} key={key} image={false} />
+              return <HistoryCard data={data} key={key} image={this.props.cardsImage} />
             })
           }
         </div>
@@ -61,5 +61,6 @@ export default class HistoryCards extends React.Component {
 
 HistoryCards.defaultProps = {
   cardWidth: 256,
-  cardGap: 16
+  cardGap: 16,
+  cardsImage: false
 }
