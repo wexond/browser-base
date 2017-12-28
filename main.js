@@ -117,35 +117,37 @@ const createWindow = () => {
     }
   })
 
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show()
+  console.log(path.join(__dirname, 'resources/adblock/adblock.dat'))
 
-    const client = new AdBlockClient()
+  const client = new AdBlockClient()
 
-    fs.readFile(path.join(__dirname, 'resources/adblock/adblock.dat'), (err, data) => {
-      if (err) return console.error(err)
+  fs.readFile(path.join(__dirname, 'resources/adblock/adblock.dat'), (err, data) => {
+    if (err) return console.error(err)
 
-      client.deserialize(data)
+    client.deserialize(data)
 
-      mainWindow.webContents.session.webRequest.onBeforeRequest((details, callback) => {
+    mainWindow.webContents.session.webRequest.onBeforeRequest((details, callback) => {
 
-        if (details.url.startsWith('http://') || details.url.startsWith('https://')) {
-          const isAd = client.matches(details.url, FilterOptions.noFilterOption)
+      if (details.url.startsWith('http://') || details.url.startsWith('https://')) {
+        const isAd = client.matches(details.url, FilterOptions.noFilterOption)
 
-          if (isAd) {
-            return callback({
-              cancel: true,
-              requestHeaders: details.requestHeaders
-            })
-          }
+        if (isAd) {
+          return callback({
+            cancel: true,
+            requestHeaders: details.requestHeaders
+          })
         }
-       
-        return callback({
-          cancel: false,
-          requestHeaders: details.requestHeaders
-        })
+      }
+      
+      return callback({
+        cancel: false,
+        requestHeaders: details.requestHeaders
       })
     })
+  })
+
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
   })
 
   if (process.env.NODE_ENV === 'dev') {
