@@ -71,11 +71,16 @@ export const getColor = (webview) => {
 export const getOGData = (webview) => {
   return new Promise((resolve, reject) => {
     if (webview != null && webview.getWebContents() != null) {
-      webview.executeJavaScript('(function () { return document.documentElement.innerHTML })()', false, async (result) => {  
-        const title = new RegExp(/<meta .*(?=.*property="og:title").*(?=content="(.+?)").*>/gi).exec(result)[1]
-        const description = new RegExp(/<meta .*(?=.*property="og:description").*(?=content="(.+?)").*>/gi).exec(result)[1]
+      webview.executeJavaScript('(function () { return document.documentElement.innerHTML })()', false, async (result) => {
+        const titleResult = new RegExp(/<meta .*(?=.*property="og:title").*(?=content="(.+?)").*>/gi).exec(result)
+        const descriptionResult = new RegExp(/<meta .*(?=.*property="og:description").*(?=content="(.+?)").*>/gi).exec(result)
+        const imageResult = new RegExp(/<meta .*(?=.*property="og:image").*(?=content="(.+?)").*>/gi).exec(result)
 
-        resolve({title: title, description: description})
+        const getValue = (r) => {
+          return (r != null && r.length > 1) ? r[1] : null
+        }
+
+        resolve({title: getValue(titleResult), description: getValue(descriptionResult), image: getValue(imageResult)})
       })
     } else {
       reject(new Error('WebContents are not available'))
