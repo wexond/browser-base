@@ -89,7 +89,8 @@ export default class History {
           title: history[i].title,
           favicon: history[i].favicon,
           description: '',
-          count: 1
+          count: 1,
+          ogData: history[i].ogData
         })
       } else {
         webSites[index].count = webSites[index].count + 1

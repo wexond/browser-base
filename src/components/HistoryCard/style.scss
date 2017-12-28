@@ -1,57 +1,58 @@
 .history-card {
-    width: $card-width;
-    background-color: #fff;
-    color: #000;
-    border-radius: 2px;
-    overflow: hidden;
-    @include shadow(1);
+  width: $card-width;
+  background-color: #fff;
+  color: #000;
+  border-radius: 2px;
+  overflow: hidden;
+  @include shadow(1);
+  display: flex;
+  flex-flow: column;
+
+  .image {
+    width: 100%;
+    height: calc(#{$card-width} * 9 / 16);
+    background-position: center;
+    @include image-cover;
+  }
+
+  .card-content {
+    height: 48px;
+    position: relative;
     display: flex;
-    flex-flow: column;
+    align-items: center;
+    padding: 0 16px 0 16px;
+    overflow: hidden;
 
-    .image {
-        width: 100%;
-        height: calc(#{$card-width} * 9 / 16);
-        @include image-cover;
+    .icon {
+      width: 16px;
+      height: 16px;
+      opacity: 0.87;
+      @include image-center(16px, auto);
     }
 
-    .card-content {
-        height: 48px;
-        position: relative;
-        display: flex;
-        align-items: center;
-        padding: 0 16px 0 16px;
-        overflow: hidden;
+    .info {
+      margin-left: 16px;
+      display: flex;
+      width: 100%;
+      max-width: calc(100% - 32px);
 
-        .icon {
-            width: 16px;
-            height: 16px;
-            opacity: 0.87;
-            @include image-center(16px, auto);
-        }
+      .title {
+        @include Body2;
+        opacity: 0.87;
+        @extend %overflow;
+      }
 
-        .info {
-            margin-left: 16px;
-            display: flex;
-            width: 100%;
-            max-width: calc(100% - 32px);
-
-            .title {
-                @include Body2;
-                opacity: 0.87;
-                @extend %overflow;
-            }
-
-            .description {
-                @include Caption;
-                opacity: 0.54;
-                @extend %overflow;
-            }
-        }
+      .description {
+        @include Caption;
+        opacity: 0.54;
+        @extend %overflow;
+      }
     }
+  }
 
-    %overflow {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+  %overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
