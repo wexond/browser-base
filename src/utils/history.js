@@ -74,25 +74,29 @@ export default class History {
   /**
    * Gets the most visited websites
    */
-  static getCards (history, count = 9) {
+  static getCards (history, count = 9, onlyWithOGData = false) {
     const webSites = []
 
     for (var i = 0; i < history.length; i++) {
       const item = history[i]
       const domain = History.getDomain(item.url)
+      const ogData = item.ogData
 
-      let index = History.getWebSiteIndex(webSites, domain)
+      if (onlyWithOGData && ogData.description != null && ogData.image != null || !onlyWithOGData) {
+        let index = History.getWebSiteIndex(webSites, domain)
 
-      if (index === -1) {
-        webSites.push({
-          url: domain,
-          title: history[i].title,
-          favicon: history[i].favicon,
-          description: '',
-          count: 1
-        })
-      } else {
-        webSites[index].count = webSites[index].count + 1
+        if (index === -1) {
+          webSites.push({
+            url: domain,
+            title: history[i].title,
+            favicon: history[i].favicon,
+            description: '',
+            count: 1,
+            ogData: history[i].ogData
+          })
+        } else {
+          webSites[index].count = webSites[index].count + 1
+        }
       }
     }
     // Sort web sites by visits count

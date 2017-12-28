@@ -9,3 +9,40 @@ html, body {
 a {
   text-decoration: none;
 }
+
+.new-tab {
+  .card {
+    width: 220px;
+    height: 256px;
+
+    .image {
+      height: calc(164px * 9 / 16);
+    }
+
+    .icon {
+      display: none;
+    }
+
+    .card-content {
+      height: auto;
+      padding: 8px 16px 8px 16px;
+    }
+
+    .info {
+      display: block !important;
+      margin-left: 0px !important;
+    }
+
+    .card-content .info .title, .card-content .info .description {
+      white-space: normal;
+    }
+
+    .description {
+      margin-top: 8px;
+    }
+
+    .cards-container {
+      transform: translateX(16px);
+    }
+  }
+}
