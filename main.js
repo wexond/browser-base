@@ -4,7 +4,7 @@ const path = require('path')
 const ipcMessages = require(path.join(__dirname, '/src/defaults/ipc-messages'))
 const { autoUpdater } = require('electron-updater')
 const fs = require('fs')
-const {AdBlockClient, FilterOptions} = require('ad-block')
+const { AdBlockClient, FilterOptions } = require('ad-block')
 
 const windowDataPath = path.join(app.getPath('userData'), "window-data.json");
 
@@ -122,7 +122,7 @@ const createWindow = () => {
 
     const client = new AdBlockClient()
 
-    fs.readFile(path.join(__dirname, 'adblock.dat'), (err, data) => {
+    fs.readFile(path.join(__dirname, 'resources/adblock/adblock.dat'), (err, data) => {
       if (err) return console.error(err)
 
       client.deserialize(data)
