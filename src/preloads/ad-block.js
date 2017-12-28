@@ -1,8 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 
-const list = String(fs.readFileSync(path.join(__dirname, '../../elem-hide-rules.txt'), 'utf8'))
-const filters = list.split('\r\n')
+const list = fs.readFileSync(path.resolve(__dirname, '../../resources/adblock/adblock-cosmetic.dat'), 'utf8')
+const filters = list.split('\n')
 
 let blockedSelectors = []
 
@@ -11,7 +11,7 @@ let timeout = null
 
 const toDivide = 2048
 
-for (var x = 0; x < filters.length; x++) {
+for (var x = filters.length - 1; x >= 0; x--) {
   if (filters[x].split('##')[1] != null) {
     if (filters[x].split('##')[0] === '') {
       if (blockedSelectors.indexOf(filters[x].split('##')[1]) === -1) {
@@ -53,38 +53,38 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 const observer = new MutationObserver((mutations) => {
-  for (let i = 0; i < changedNodes.length; i++)
+  for (let i = changedNodes.length - 1; i >= 0; i--)
   {
     if (!document.contains(changedNodes[i]))
-      changedNodes.splice(i--, 1);
+      changedNodes.splice(i, 1)
   }
 
   for (let mutation of mutations)
   {
-    let node = mutation.target;
+    let node = mutation.target
 
     if (!document.contains(node))
-      continue;
+      continue
 
     if (mutation.type == "attributes")
-      node = node.parentNode;
+      node = node.parentNode
 
-    let addNode = true;
-    for (let i = 0; i < changedNodes.length; i++)
+    let addNode = true
+    for (let i = changedNodes.length - 1; i >= 0; i--)
     {
-      let previouslyChangedNode = changedNodes[i];
+      let previouslyChangedNode = changedNodes[i]
       if (previouslyChangedNode.contains(node))
       {
-        addNode = false;
-        break;
+        addNode = false
+        break
       }
 
       if (node.contains(previouslyChangedNode))
-        changedNodes.splice(i--, 1);
+        changedNodes.splice(i, 1)
     }
 
     if (addNode)
-      changedNodes.push(node);
+      changedNodes.push(node)
   }
 
   setTimeout(() => {
