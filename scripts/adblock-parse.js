@@ -17,6 +17,9 @@ const filterListsJson = JSON.parse(filterLists)
 let parsedLists = 0
 const listsToParse = []
 
+const buf = Buffer.from(blockedSelectors)
+fs.writeFileSync(path.resolve(__dirname, '../adblock2.dat'), buf)
+
 const requestURL = (urlToList, callback) => {
   let request
 
