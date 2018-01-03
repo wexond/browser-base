@@ -19,13 +19,13 @@ export default class Card extends React.Component {
           <div className='card-content'>
             <div className='icon' style={iconStyle} />
             <div className='info'>
-              <div className='title'>
+              <span className='title'>
                 {this.props.data.ogData.title || this.props.data.title}
-              </div>
+              </span>
               { this.props.description &&
-                <div className='description'>
+                <span className='description'>
                   {this.props.data.ogData.description}
-               </div>
+               </span>
               }
             </div>
           </div>
