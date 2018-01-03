@@ -18,10 +18,9 @@
   .card-content {
     height: 48px;
     position: relative;
-    display: flex;
-    align-items: center;
     padding: 0 16px 0 16px;
     overflow: hidden;
+    text-overflow: ellipsis;
 
     .icon {
       width: 16px;
@@ -31,28 +30,23 @@
     }
 
     .info {
-      margin-left: 16px;
-      display: flex;
       width: 100%;
-      max-width: calc(100% - 32px);
 
       .title {
-        @include Body2;
+        display: block;
+        font-size: 16px;
+        @include Roboto-Medium;
         opacity: 0.87;
-        @extend %overflow;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
 
       .description {
-        @include Caption;
+        display: block;
+        font-size: 14px;
         opacity: 0.54;
-        @extend %overflow;
       }
     }
-  }
-
-  %overflow {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
