@@ -116,12 +116,10 @@ const createWindow = () => {
         return
     }
   })
-
-  console.log(path.join(__dirname, 'resources/adblock/adblock.dat'))
-
+  
   const client = new AdBlockClient()
 
-  fs.readFile(path.join(__dirname, 'resources/adblock/adblock.dat'), (err, data) => {
+  fs.readFile(path.join(__dirname, 'adblock/adblock.dat'), (err, data) => {
     if (err) return console.error(err)
 
     client.deserialize(data)
