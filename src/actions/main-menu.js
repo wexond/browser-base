@@ -1,4 +1,5 @@
 import * as tabsActions from './tabs'
+import * as pagesActions from './pages'
 
 export const newWindow = () => {
   
@@ -32,5 +33,5 @@ export const extensions = () => {
 }
 
 export const developerTools = () => {
-  
+  pagesActions.getSelectedPage().page.webview.openDevTools()
 }
