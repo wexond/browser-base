@@ -49,6 +49,8 @@ export default class Page extends React.Component {
 
       const interval1 = setInterval(() => {
         if (favicon === 'error') {
+          favicon = 'handled'
+
           if (lastURL !== tab.url) {
             setTimeout(async () => {
               const ogData = await webviewActions.getOGData(this.webview)
@@ -59,7 +61,6 @@ export default class Page extends React.Component {
 
           Storage.addSite(tab.title, url, '')
 
-          favicon = 'handled'
           clearInterval(interval1)
         } else if (favicon !== '' && favicon !== 'handled') {
           if (lastURL !== tab.url) {
@@ -72,8 +73,6 @@ export default class Page extends React.Component {
           }
 
           Storage.addSite(tab.title, url, favicon)
-
-          favicon = 'handled'
           clearInterval(interval1)
         }
       }, 1)
