@@ -1,0 +1,90 @@
+.history-card {
+  width: $card-width;
+  height: 48px;
+  background-color: #fff;
+  color: #000;
+  border-radius: 2px;
+  overflow: hidden;
+  @include shadow(1);
+  display: flex;
+  flex-flow: row;
+  position: relative;
+  align-items: center;
+
+  .image {
+    width: 100%;
+    height: calc(#{$card-width} * 9 / 16);
+    background-position: center;
+    background-color: red;
+    @include image-cover;
+    display: none;
+  }
+
+  .favicon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.87;
+    background-color: red;
+    position: relative;
+    margin-left: 16px;
+    @include image-center(16px, auto);
+  }
+
+  .info-container {
+    max-width: calc(100% - 64px);
+    height: 100%;
+    flex: 1;
+    padding-left: 16px;
+    padding-right: 16px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  %no-wrap {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .title {
+    font-size: 16px;
+    @include Roboto-Medium;
+    opacity: 0.87;
+    @extend %no-wrap;
+  }
+
+  .description {
+    font-size: 13px;
+    opacity: 0.54;
+    @extend %no-wrap;
+  }
+
+  &.full-info {
+    display: block;
+    height: 270px;
+
+    .image {
+      display: block;
+    }
+
+    .favicon {
+      display: none;
+    }
+
+    .info-container {
+      display: block;
+      padding: 16px;
+
+      .title, .description {
+        display: block;
+        overflow: unset;
+        white-space: normal;
+      }
+
+      .description {
+        margin-top: 4px;
+      }
+    }
+  }
+}
