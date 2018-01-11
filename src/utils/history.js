@@ -82,7 +82,7 @@ export default class History {
       const domain = History.getDomain(item.url)
       const ogData = item.ogData
 
-      if (onlyWithOGData && ogData.description != null && ogData.image != null || !onlyWithOGData) {
+      if (onlyWithOGData && ogData.description != null && ogData.image != null && ogData.image.startsWith('http') || !onlyWithOGData) {
         let index = History.getWebSiteIndex(webSites, domain)
 
         if (index === -1) {

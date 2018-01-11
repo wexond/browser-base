@@ -94,7 +94,7 @@ export default class HistoryToolBar extends React.Component {
 
     for (var i = 0; i < metaTags.length; i++) {
       if (metaTags[i].getAttribute('name') === 'theme-color') {
-        const color = Store.selectedItems.length === 0 ? '#303F9F' : '#2196F3'
+        const color = Store.selectedItems.length === 0 ? '#303F9F' : '#1E88E5'
 
         metaTags[i].setAttribute('content', color)
         break
