@@ -14,7 +14,7 @@ export default class HistoryCard extends React.Component {
       <a href={this.props.data.url}>
         <div className={'history-card ' + (fullInfo ? 'full-info' : '')}>
           <div className='image' />
-          <div className='favicon' />
+          {!fullInfo && <div className='favicon' style={{backgroundImage: `url(${this.props.data.favicon})`}} />}
           <div className='info-container'>
             <span className='title'>
               GitHub

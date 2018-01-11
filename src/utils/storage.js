@@ -213,4 +213,12 @@ export default class Storage {
       })
     })
   }
+
+  static getFaviconData (data, url) {
+    return new Promise((resolve, reject) => {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].url === url) resolve(data[i].data)
+      }
+    })
+  }
 }

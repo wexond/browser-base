@@ -51,8 +51,8 @@ export default class HistoryCards extends React.Component {
           })
         }
       </div>
-  )
-}
+    )
+  }
 }
 
 HistoryCards.defaultProps = {
