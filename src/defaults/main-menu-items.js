@@ -36,6 +36,7 @@ export default [
     type: 'separator'
   },
   {
-    title: 'Developer tools'
+    title: 'Developer tools',
+    onClick: mainMenuActions.developerTools
   }
 ]
