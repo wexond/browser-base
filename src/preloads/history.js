@@ -6,11 +6,21 @@ if (window.location.protocol === 'wexond:') {
   window.historyAPI = {
     get: () => {
       return new Promise((resolve, reject) => {
-        fs.readFile(paths.files.history, (error, data) => {
+        fs.readFile(paths.files.history, async (error, data) => {
           if (error) {
             reject(error)
           } else {
-            resolve(JSON.parse(data))
+            const favicons = await window.historyAPI.getFavicons()
+            const json = JSON.parse(data)
+
+            for (var i = 0; i < json.length; i++) {
+              if (json[i].favicon != null || json[i].favicon !== 'handled') {
+                const fav = await window.historyAPI.getFaviconData(favicons, json[i].favicon)
+                json[i].favicon = fav
+              }
+            }
+
+            resolve(json)
           }
         })
       })
@@ -52,6 +62,24 @@ if (window.location.protocol === 'wexond:') {
         }
 
         resolve(matches)
+      })
+    },
+    getFavicons: () => {
+      return new Promise((resolve, reject) => {
+        fs.readFile(paths.files.favicons, (error, data) => {
+          if (error) {
+            reject(error)
+          } else {
+            resolve(JSON.parse(data))
+          }
+        })
+      })
+    },
+    getFaviconData: (data, url) => {
+      return new Promise((resolve, reject) => {
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].url === url) resolve(data[i].data)
+        }
       })
     }
   }
