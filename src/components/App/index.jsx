@@ -93,6 +93,9 @@ export default class App extends React.Component {
     window.addEventListener('keyup', (e) => {
       if (e.ctrlKey) {
         if (e.altKey) return
+        if (e.keyCode === 70) {
+          pagesActions.getSelectedPage().page.findMenu.toggle()
+        }
         if (e.keyCode === 84) { // T key
           tabsActions.addTab()
         }
