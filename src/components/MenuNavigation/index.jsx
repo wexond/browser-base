@@ -30,22 +30,26 @@ export default class MenuNavigation extends React.Component {
       const page = pagesActions.getSelectedPage()
       page.page.goBack()
       Store.app.pageMenu.hide()
+      Store.app.tabMenu.hide()
     }
 
     const onForwardClick = () => {
       const page = pagesActions.getSelectedPage()
       page.page.goForward()
       Store.app.pageMenu.hide()
+      Store.app.tabMenu.hide()
     }
 
     const onRefreshClick = () => {
       const page = pagesActions.getSelectedPage()
       page.page.refresh()
       Store.app.pageMenu.hide()
+      Store.app.tabMenu.hide()
     }
 
     const onFavoriteClick = () => {
       Store.app.pageMenu.hide()
+      Store.app.tabMenu.hide()
     }
 
     return (
