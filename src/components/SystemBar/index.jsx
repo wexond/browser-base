@@ -22,6 +22,7 @@ export default class SystemBar extends React.Component {
     const onGroupsMouseDown = e => {
       e.stopPropagation()
 
+      Store.app.tabMenu.hide()
       Store.app.pageMenu.hide()
       Store.app.menu.hide()
     }
