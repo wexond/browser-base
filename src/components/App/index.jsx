@@ -15,6 +15,7 @@ import Store from '../../store'
 
 import { observer } from 'mobx-react'
 
+import tabMenuItems from '../../defaults/tab-menu-items';
 import pageMenuItems from '../../defaults/page-menu-items'
 import mainMenuItems from '../../defaults/main-menu-items'
 
@@ -41,6 +42,7 @@ export default class App extends React.Component {
     window.addEventListener('mousedown', (e) => {
       this.suggestions.hide()
       this.pageMenu.hide()
+      this.tabMenu.hide()
       this.tabGroupsMenu.hide()
       this.menu.hide()
     })
@@ -135,6 +137,7 @@ export default class App extends React.Component {
       pagesActions.getSelectedPage().page.webview.goForward()
     })
 
+    this.tabMenu.setState({items: tabMenuItems})
     this.pageMenu.setState({items: pageMenuItems})
     this.menu.setState({items: mainMenuItems})
   }
@@ -162,6 +165,10 @@ export default class App extends React.Component {
         <Menu ref={(r) => { this.pageMenu = r }} itemsStyle={{paddingBottom: 12, paddingTop: 0}}>
           <MenuNavigation ref={(r) => { this.menuNavigation = r }}></MenuNavigation>
           <div className='separator' style={{marginTop: 0}}></div>
+        </Menu>
+        <Menu ref={(r) => { this.tabMenu = r }} itemsStyle={{ paddingBottom: 12, paddingTop: 0 }}>
+          <MenuNavigation ref={(r) => { this.menuNavigation = r }}></MenuNavigation>
+          <div className='separator' style={{ marginTop: 0 }}></div>
         </Menu>
         <Menu ref={(r) => { this.tabGroupsMenu = r }} right={8} top={8} onVisibilityChange={onVisibilityChange}>
           <TabGroupsMenu></TabGroupsMenu>
