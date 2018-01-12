@@ -1,36 +1,47 @@
+import * as tabMenuActions from "../actions/tab-menu";
+
 export default [
   {
-    title: 'Add new tab'
-  },
-  {
-    title: 'Separator'
-  },
-  {
-    title: 'Pin tab'
-  },
-  {
-    title: 'Mute tab'
-  },
-  {
-    title: 'Duplicate'
+    title: 'Add new tab',
+    onClick: tabMenuActions.addNewTab
   },
   {
     type: 'separator'
   },
   {
-    title: 'Close tab'
+    title: 'Pin tab',
+    onClick: tabMenuActions.pinTab
   },
   {
-    title: 'Close other tabs'
+    title: 'Mute tab',
+    onClick: tabMenuActions.muteTab
   },
   {
-    title: 'Close tabs from left'
+    title: 'Duplicate',
+    onClick: tabMenuActions.duplicate
   },
   {
-    title: 'Close tabs from right'
+    type: 'separator'
+  },
+  {
+    title: 'Close tab',
+    onClick: tabMenuActions.closeTab
+  },
+  {
+    title: 'Close other tabs',
+    onClick: tabMenuActions.closeOtherTabs
+  },
+  {
+    title: 'Close tabs from left',
+    onClick: tabMenuActions.closeTabsFromLeft
+  },
+  {
+    title: 'Close tabs from right',
+    onClick: tabMenuActions.closeTabsFromRight
   },
   {
     title: 'Revert closed tab',
-    enabled: false
+    enabled: false,
+    onClick: tabMenuActions.revertClosedTab
   }
 ]

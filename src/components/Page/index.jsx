@@ -10,6 +10,8 @@ import * as filesActions from '../../actions/files'
 import * as tabsActions from '../../actions/tabs'
 import * as webviewActions from '../../actions/webview'
 
+import FindMenu from '../FindMenu'
+
 @observer
 export default class Page extends React.Component {
   componentDidMount () {
@@ -269,6 +271,7 @@ export default class Page extends React.Component {
     return (
       <div className={'page ' + pageClass}>
         <webview ref={(r) => { this.webview = r }} className={'webview ' + pageClass} src={url} preload='../../src/preloads/index.js'></webview>
+        <FindMenu ref={(r) => { this.findMenu = r }} webview={this.webview} />
       </div>
     )
   }
