@@ -6,6 +6,7 @@ import { observer } from 'mobx-react'
 
 import Transitions from '../../utils/transitions'
 
+import tabMenuItems from '../../defaults/tab-menu-items'
 import tabDefaults from '../../defaults/tabs'
 import wexondUrls from '../../defaults/wexond-urls'
 
@@ -13,6 +14,8 @@ import * as tabsActions from '../../actions/tabs'
 import * as tabGroupsActions from '../../actions/tab-groups'
 
 import Colors from '../../utils/colors'
+
+import MenuItem from '../MenuItem'
 
 @observer
 export default class Tab extends React.Component {
@@ -114,7 +117,7 @@ export default class Tab extends React.Component {
       render,
       closing
     } = tab
-
+    
     if (!render) return null
 
     const {
@@ -233,11 +236,54 @@ export default class Tab extends React.Component {
 
     const onCloseMouseDown = e => e.stopPropagation()
 
+    const onContextMenu = (e) => {
+
+      let items = tabMenuItems.map((item) => {
+        return {
+          type: item.type,
+          title: item.title,
+          onClick: () => item.onClick(tab.tab),
+        }
+      })
+
+      Store.app.tabMenu.setState({ items: items })
+
+      Store.app.tabMenu.show()
+
+      // Calculate new menu position
+      // using cursor x, y and 
+      // width, height of the menu.
+      let x = Store.cursor.x
+      let y = Store.cursor.y
+
+      // By default it opens menu from upper left corner.
+      let left = x + 1
+      let top = y + 1
+
+      // Open menu from right corner.
+      if (left + 300 > window.innerWidth) {
+        left = x - 301
+      }
+
+      // Open menu from bottom corner.
+      if (top + Store.app.tabMenu.newHeight > window.innerHeight) {
+        top = y - Store.app.tabMenu.newHeight
+      }
+
+      if (top < 0) {
+        top = 96
+      }
+
+      // Set the new position.
+      Store.app.tabMenu.setState({ left: left, top: top })
+    }
+
     const tabEvents = {
       onMouseDown: onMouseDown,
       onMouseEnter: onMouseEnter,
       onMouseLeave: onMouseLeave,
-      onMouseUp: onMouseUp
+      onMouseUp: onMouseUp,
+      onContextMenu: onContextMenu
     }
 
     return (
