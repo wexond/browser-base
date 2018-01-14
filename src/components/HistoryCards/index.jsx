@@ -34,7 +34,7 @@ export default class HistoryCards extends React.Component {
     } else if (window.innerWidth > 528) {
       return 528
     } else {
-      return this.props.cardWidth + this.props.cardGap * 2
+      return this.props.cardWidth
     }
   }
 
@@ -44,12 +44,21 @@ export default class HistoryCards extends React.Component {
     }
 
     return (
-      <div className='history-cards-container' style={style}>
-        {
-          Store.cards.map((data, key) => {
-            return <HistoryCard fullInfo={false} data={data} key={key} image={this.props.cardsImage} description={this.props.cardsDescription} />
-          })
-        }
+      <div>
+        <div className='cards-container' style={style}>
+          {
+            Store.cards.fullInfo.map((data, key) => {
+              return <HistoryCard fullInfo={true} data={data} key={key} />
+            })
+          }
+        </div>
+        <div className='cards-container' style={style}>
+          {
+            Store.cards.lessInfo.map((data, key) => {
+              return <HistoryCard fullInfo={false} data={data} key={key} />
+            })
+          }
+        </div>
       </div>
     )
   }
