@@ -3,7 +3,8 @@ import React from 'react'
 export default class HistoryCard extends React.Component {
   render () {
     const {
-      fullInfo
+      fullInfo,
+      data,
     } = this.props
 
     const iconStyle = {
@@ -13,15 +14,17 @@ export default class HistoryCard extends React.Component {
     return (
       <a href={this.props.data.url}>
         <div className={'history-card ' + (fullInfo ? 'full-info' : '')}>
-          <div className='image' />
-          {!fullInfo && <div className='favicon' style={{backgroundImage: `url(${this.props.data.favicon})`}} />}
+          {fullInfo && <div className='image' style={{backgroundImage: `url(${data.ogData.image})`}} />}
+          {!fullInfo && <div className='favicon' style={{backgroundImage: `url(${data.favicon})`}} />}
           <div className='info-container'>
             <span className='title'>
-              GitHub
+              {data.title}
             </span>
-            <span className='description'>
-              GitHub is where people build software. More than 26 million people use GitHub to discover, fork, and contribute to over 74 million projects.
-            </span>
+            {data.ogData != null && data.ogData.description != null &&
+              <span className='description'>
+                {data.ogData.description}
+              </span>
+            }
           </div>
         </div>
       </a>
