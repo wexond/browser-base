@@ -16,6 +16,7 @@ a {
   position: relative;
   @include center-horizontal;
   @include Title;
+  @include cursor-default;
 
   &:first-child {
     margin-top: 32px;
