@@ -51,10 +51,10 @@ export default class Storage {
   
           // Push new history item.
           data.push(newItem)
-  
+
           await Storage.saveHistory(data)
 
-          resolve(data.indexOf(newItem))
+          resolve(newItem.id)
         }
       }
     })
@@ -120,7 +120,7 @@ export default class Storage {
   
           await Storage.saveSites(data)
 
-          resolve(data.indexOf(newItem))
+          resolve(newItem.id)
         }
       }
     })
