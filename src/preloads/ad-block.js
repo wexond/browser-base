@@ -34,7 +34,6 @@ for (var x = filters.length - 1; x >= 0; x--) {
           }
         }
       }
-
       if (canPush && blockedSelectors.indexOf(filters[x].split('##')[1]) === -1) {
         blockedSelectors.push(filters[x].split('##')[1])
       }
@@ -91,7 +90,6 @@ const observer = new MutationObserver((mutations) => {
               elements[y].style.display = 'none'
             }
           }
-          
         }
       })
     }
