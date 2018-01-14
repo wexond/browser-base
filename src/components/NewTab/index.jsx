@@ -1,11 +1,16 @@
 import React from 'react'
 
-import HistoryParser from '../../utils/history'
-import HistoryCards from '../HistoryCards'
+import https from 'https'
+import url from 'url'
 
-import Store from '../../history-store'
+import Store from '../../new-tab-store'
 import { observer } from 'mobx-react'
 
+import NewTabHelper from '../../utils/new-tab'
+
+import NewTabList from '../NewTabList'
+
+@observer
 export default class NewTab extends React.Component {
   constructor () {
     super()
@@ -16,19 +21,58 @@ export default class NewTab extends React.Component {
   }
 
   componentDidMount () {
+    Store.newTab = this
+
     this.loadData()
   }
 
-  async loadData () {
-    const history = await window.historyAPI.get()
+  getNews = (country = 'us') => {
+    const newsURL = `https://newsapi.org/v2/top-headlines?country=${country}`
 
-    Store.cards = HistoryParser.getCards(history, 9, true)
+    return new Promise(
+      (resolve, reject) => {
+        let options = {
+          headers: {
+            'X-Api-Key': '113af42f31a5472187e0b85ce398994d'
+          }
+        }
+
+        Object.assign(options, url.parse(newsURL))
+
+        const req = https.get(options, (res) => {
+          let data = ''
+
+          res.on('data', (d) => {
+            data += d
+          })
+
+          res.on('end', () => {
+            resolve(JSON.parse(data))
+          })
+        }) 
+
+        req.end()
+      }
+    )
+  }
+
+  async loadData () {
+    Store.loading = true
+
+    const data = await this.getNews()
+
+    Store.news = NewTabHelper.getNews(data)
+    Store.loading = false
   }
 
   render () {
     return (
       <div className='new-tab'>
-        <HistoryCards cardsImage={true} cardsDescription={true} cardWidth={220} />
+        {
+          Store.news.map((data, key) => {
+            return <NewTabList data={data} key={key} />
+          })
+        }
       </div>
     )
   }
