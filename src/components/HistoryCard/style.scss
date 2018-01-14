@@ -13,7 +13,7 @@
 
   .image {
     width: 100%;
-    height: calc(#{$card-width} * 9 / 16);
+    height: 128px;
     background-position: center;
     @include image-cover;
     display: none;
@@ -48,13 +48,13 @@
   .title {
     font-size: 16px;
     @include Roboto-Medium;
-    opacity: 0.87;
+    opacity: $primary-opacity-light;
     @extend %no-wrap;
   }
 
   .description {
     font-size: 13px;
-    opacity: 0.54;
+    opacity: $secondary-opacity-light;
     @extend %no-wrap;
   }
 
@@ -81,7 +81,7 @@
       }
 
       .description {
-        margin-top: 4px;
+        margin-top: 8px;
       }
     }
   }

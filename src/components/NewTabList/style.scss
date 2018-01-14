@@ -1,0 +1,68 @@
+.new-tab-list {
+  width: calc(100% - 32px);
+  max-width: 512px;
+  height: 128px;
+  border-radius: 2px;
+  background-color: #fff;
+  margin: 0 auto;
+  @include shadow(1);
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(0, 0, 0, $dividers-opacity-light);
+  
+  .info-container {
+    max-width: 50%;
+    height: 100%;
+    min-height: 64px;
+    padding: 16px;
+    float: left;
+  }
+
+  .title {
+    font-size: 16px;
+    @include Roboto-Regular;
+    line-height: 1.4;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: -o-ellipsis-lastline;
+  }
+
+  .site-container {
+    font-size: 14px;
+    color: rgba(0, 0, 0, $secondary-opacity-light);
+    position: absolute;
+    bottom: 16px;
+  }
+
+  .favicon {
+    width: 16px;
+    height: 16px;
+    @include image-cover;
+    float: left;
+    background-image: url(https://ocdn.eu/paas-static/template-engine/0e2a2d3f283ba44b706b95806dc0f32b/faviconn.ico);
+  }
+
+  .domain {
+    margin-left: 8px;
+  }
+  
+  .time {
+    margin-left: 4px;
+  }
+
+  .image {
+    width: 128px;
+    height: 100%;
+    @include image-cover;
+    float: right;
+    background-image: url(http://cdn.cnn.com/cnnnext/dam/assets/180112011447-santa-barbara-county-fire-super-tease.jpg);
+  }
+
+  &::after {
+    content: "";
+    clear: both;
+    display: block;
+  }
+}

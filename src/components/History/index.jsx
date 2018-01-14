@@ -30,13 +30,10 @@ export default class History extends React.Component {
 
     let data = await window.historyAPI.get()
 
-    if (searchStr) {
-      data = await window.historyAPI.search(data, searchStr)
-    }
+    if (searchStr) data = await window.historyAPI.search(data, searchStr)
 
     Store.cards = HistoryParser.getCards(data)
     Store.sections = HistoryParser.getSections(data)
-
     Store.loading = false
   }
 
