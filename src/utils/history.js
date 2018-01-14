@@ -71,57 +71,59 @@ export default class History {
     return url.split('/')[2]
   }
 
-  /**
+  static getWebSiteIndex (data, url) {
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].domain.replace('/', '').toLowerCase().replace('https://', 'http://') == url.replace('/', '').toLowerCase().replace('https://', 'http://')) return i
+    }
+
+    return -1
+  }
+
+    /**
    * Gets the most visited websites
    */
-  static getCards (history, count = 9, onlyWithOGData = false) {
-    const webSites = []
-
+  static getCards (history, fullCardsCount = 3, cardsCount = 6) {
+    const cards = {fullInfo: [], lessInfo: []}
+    const websites = []
+    // Get websites
     for (var i = 0; i < history.length; i++) {
       const item = history[i]
       const domain = History.getDomain(item.url)
-      const ogData = item.ogData
 
-      if (onlyWithOGData && ogData.description != null && ogData.image != null && ogData.image.startsWith('http') || !onlyWithOGData) {
-        let index = History.getWebSiteIndex(webSites, domain)
-
-        if (index === -1) {
-          webSites.push({
-            url: domain,
-            title: history[i].title,
-            favicon: history[i].favicon,
-            description: '',
-            count: 1,
-            ogData: history[i].ogData
-          })
+      const index = History.getWebSiteIndex(websites, domain)
+      
+      if (index === -1) {
+        websites.push(Object.assign(item, {domain: domain, count: 1}))
+      } else {
+        websites[index].count += 1
+      }
+    }
+    // Sort websites by visited count
+    websites.sort((a, b) => {
+      return b.count - a.count;
+    })
+    // Select the most visited websites
+    for (var i = 0; i <= cardsCount; i++) {
+      if (i >= websites.length) {
+        break
+      } else {
+        const ogData = websites[i].ogData
+        // If website has og data (image and description) then add the website to full info cards
+        if (ogData != null && ogData.description != null && ogData.image != null && ogData.image.startsWith('http')) {
+          cards.fullInfo.push(websites[i])
         } else {
-          webSites[index].count = webSites[index].count + 1
+          cards.lessInfo.push(websites[i])
         }
       }
     }
-    // Sort web sites by visits count
-    webSites.sort((a, b) => {
-      return b.count - a.count;
-    })
-
-    const cards = []
-
-    for (var i = 0; i < count; i++) {
-      if (i >= webSites.length) {
-        break
-      } else {
-        cards.push(webSites[i])
+    // Complete less info cards with more cards if needed
+    if (cards.lessInfo.length < 6) {
+      for (var i = cards.lessInfo.length + cards.fullInfo.length; i <= cardsCount - cards.lessInfo.length; i++) {
+        if (i >= websites.length) break
+        else cards.lessInfo.push(websites[i])
       }
     }
 
     return cards
-  }
-
-  static getWebSiteIndex (data, url) {
-    for (var i = 0; i < data.length; i++) {
-      if (data[i].url.replace('/', '').toLowerCase().replace('https://', 'http://') == url.replace('/', '').toLowerCase().replace('https://', 'http://')) return i
-    }
-
-    return -1
   }
 }
