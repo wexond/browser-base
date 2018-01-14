@@ -82,7 +82,7 @@ export default class History {
     /**
    * Gets the most visited websites
    */
-  static getCards (history, fullCardsCount = 3, cardsCount = 6) {
+  static getCards (history, fullInfoCardsCount = 3, cardsCount = 6) {
     const cards = {fullInfo: [], lessInfo: []}
     const websites = []
     // Get websites
@@ -109,7 +109,7 @@ export default class History {
       } else {
         const ogData = websites[i].ogData
         // If website has og data (image and description) then add the website to full info cards
-        if (ogData != null && ogData.description != null && ogData.image != null && ogData.image.startsWith('http')) {
+        if (ogData != null && ogData.description != null && ogData.image != null && ogData.image.startsWith('http') && cards.fullInfo.length <= fullInfoCardsCount) {
           cards.fullInfo.push(websites[i])
         } else {
           cards.lessInfo.push(websites[i])
@@ -118,7 +118,9 @@ export default class History {
     }
     // Complete less info cards with more cards if needed
     if (cards.lessInfo.length < 6) {
-      for (var i = cards.lessInfo.length + cards.fullInfo.length; i <= cardsCount - cards.lessInfo.length; i++) {
+      const actualIndex = cards.lessInfo.length + cards.fullInfo.length
+
+      for (var i = actualIndex; i <= actualIndex + cardsCount - cards.lessInfo.length; i++) {
         if (i >= websites.length) break
         else cards.lessInfo.push(websites[i])
       }
