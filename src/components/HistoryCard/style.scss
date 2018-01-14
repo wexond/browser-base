@@ -15,7 +15,6 @@
     width: 100%;
     height: calc(#{$card-width} * 9 / 16);
     background-position: center;
-    background-color: red;
     @include image-cover;
     display: none;
   }
