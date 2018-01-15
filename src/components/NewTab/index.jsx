@@ -8,11 +8,11 @@ import { observer } from 'mobx-react'
 
 import NewTabHelper from '../../utils/new-tab'
 
-import NewTabList from '../NewTabList'
+import NewTabCard from '../NewTabCard'
 
 @observer
 export default class NewTab extends React.Component {
-  constructor () {
+  constructor() {
     super()
 
     this.state = {
@@ -20,7 +20,7 @@ export default class NewTab extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     Store.newTab = this
 
     this.loadData()
@@ -49,14 +49,14 @@ export default class NewTab extends React.Component {
           res.on('end', () => {
             resolve(JSON.parse(data))
           })
-        }) 
+        })
 
         req.end()
       }
     )
   }
 
-  async loadData () {
+  async loadData() {
     Store.loading = true
 
     const data = await this.getNews()
@@ -65,14 +65,16 @@ export default class NewTab extends React.Component {
     Store.loading = false
   }
 
-  render () {
+  render() {
     return (
       <div className='new-tab'>
-        {
-          Store.news.map((data, key) => {
-            return <NewTabList data={data} key={key} />
-          })
-        }
+        <div className='new-tab-news'>
+          {
+            Store.news.map((data, key) => {
+              return <NewTabCard data={data} key={key} />
+            })
+          }
+        </div>
       </div>
     )
   }

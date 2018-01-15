@@ -1,10 +1,7 @@
-.new-tab-list {
-  width: calc(100% - 32px);
-  max-width: 512px;
+.new-tab-card {
   height: 128px;
   border-radius: 2px;
   background-color: #fff;
-  margin: 0 auto;
   @include shadow(1);
   position: relative;
   overflow: hidden;
