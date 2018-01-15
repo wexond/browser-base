@@ -20,8 +20,10 @@ export default class Page extends React.Component {
     let lastURL = ''
     let favicon = ''
 
-    let historyId = await Storage.addHistoryItem('', '', '', '')
-    let siteId = await Storage.addSite('', '', '')
+    filesActions.checkFiles()
+
+    let historyId = -1
+    let siteId = -1
 
     lastURL = ''
 
@@ -38,13 +40,16 @@ export default class Page extends React.Component {
           Store.app.bar.addressBar.setInfo(e.url)
         }
         if (lastURL === e.url) {
-          const history = await Storage.getHistory()
-          history.filter(item => { return item.id === historyId })[0].url = e.url
-          Storage.saveHistory(history)
-
-          const sites = await Storage.getSites()
-          sites.filter(item => { return item.id === siteId })[0].url = e.url
-          Storage.saveSites(sites)
+          if (historyId !== -1) {
+            const history = await Storage.get('history')
+            history.filter(item => { return item.id === historyId })[0].url = e.url
+            Storage.saveHistory(history)
+          }
+          if (siteId !== -1) {
+            const sites = await Storage.get('sites')
+            sites.filter(item => { return item.id === siteId })[0].url = e.url
+            Storage.saveSites(sites)
+          }
         }
       }
     }
@@ -58,8 +63,16 @@ export default class Page extends React.Component {
       tab.url = e.url
       if (e.url !== lastURL && e.isMainFrame) {
         lastURL = e.url
+        filesActions.checkFiles()
+
+        const regex = /(http(s?)):\/\/(www.)?/gi
+        let url = tab.url
+        if (url.indexOf('/', 9) !== -1) {
+          url = url.substring(0, url.indexOf('/', 9))
+        }
+
         historyId = await Storage.addHistoryItem('', e.url, '', '')
-        siteId = await Storage.addSite('', e.url, '')
+        siteId = await Storage.addSite('', url, '')
       }
     })
 
@@ -67,21 +80,13 @@ export default class Page extends React.Component {
       if (lastURL === tab.url) {
         const ogData = await webviewActions.getOGData(this.webview)
 
-        const history = await Storage.getHistory()
-        history.filter(item => { return item.id === historyId })[0].ogData = ogData
-        Storage.saveHistory(history)
+        if (historyId !== -1) {
+          const history = await Storage.get('history')
+          history.filter(item => { return item.id === historyId })[0].ogData = ogData
+          Storage.saveHistory(history)
+        }
       }
     })
-
-    const saveHistory = async () => {
-      filesActions.checkFiles()
-
-      const regex = /(http(s?)):\/\/(www.)?/gi
-      let url = tab.url
-      if (url.indexOf('/', 9) !== -1) {
-        url = url.substring(0, url.indexOf('/', 9))
-      }
-    }
 
     const setBarBorder = async () => {
       const shadow = await webviewActions.getBarBorder(this.webview)
@@ -91,15 +96,10 @@ export default class Page extends React.Component {
     }
 
     this.webview.addEventListener('did-finish-load', async () => {
-      saveHistory()
       setBarBorder()
-    })
-    this.webview.addEventListener('did-frame-finish-load', (e) => {
-      saveHistory()
     })
 
     this.webview.addEventListener('new-window', (e) => {
-      console.log(e.disposition)
       if (e.disposition === 'new-window'
           || e.disposition === 'foreground-tab') {
         tabsActions.addTab({
@@ -135,14 +135,16 @@ export default class Page extends React.Component {
             favicon = e.favicons[0]
 
             if (lastURL === tab.url) {
-              const history = await Storage.getHistory()
-              history.filter(item => { return item.id === historyId })[0].favicon = favicon
-              console.log(history)
-              await Storage.saveHistory(history)
-
-              const sites = await Storage.getSites()
-              sites.filter(item => { return item.id === siteId })[0].favicon = favicon
-              Storage.saveSites(sites)
+              if (historyId !== -1) {
+                const history = await Storage.get('history')
+                history.filter(item => { return item.id === historyId })[0].favicon = favicon
+                Storage.save('history', history)
+              }
+              if (siteId !== -1) {
+                const sites = await Storage.get('sites')
+                sites.filter(item => { return item.id === siteId })[0].favicon = favicon
+                Storage.save('sites', sites)
+              }
             }
           }
         }
@@ -156,13 +158,16 @@ export default class Page extends React.Component {
       tab.title = e.title
 
       if (lastURL === tab.url) {
-        const history = await Storage.getHistory()
-        history.filter(item => { return item.id === historyId })[0].title = e.title
-        Storage.saveHistory(history)
-
-        const sites = await Storage.getSites()
-        sites.filter(item => { return item.id === siteId })[0].title = e.title
-        Storage.saveSites(sites)
+        if (historyId !== -1) {
+          const history = await Storage.get('history')
+          history.filter(item => { return item.id === historyId })[0].title = e.title
+          Storage.save('history', history)
+        }
+        if (siteId !== -1) {
+          const sites = await Storage.get('sites')
+          sites.filter(item => { return item.id === siteId })[0].title = e.title
+          Storage.save('sites', sites)
+        }
       }
     })
 
