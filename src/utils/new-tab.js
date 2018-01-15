@@ -31,7 +31,7 @@ export default class NewTabHelper {
   }
 
   static getCountryCode = async () => {
-    const json = await NewTabHelper.getWebSiteSource('https://www.freegeoip.net/json/', {})
+    const json = await NewTabHelper.getWebSiteSource('https://www.freegeoip.net/json/')
     return json.country_code
   }
 
@@ -40,7 +40,7 @@ export default class NewTabHelper {
       async (resolve, reject) => {
         const country = await NewTabHelper.getCountryCode()
         const newsURL = `https://newsapi.org/v2/top-headlines?country=${country}`
-    
+
         const json = await NewTabHelper.getWebSiteSource(newsURL, {
           'X-Api-Key': '113af42f31a5472187e0b85ce398994d'
         })
@@ -52,8 +52,7 @@ export default class NewTabHelper {
         }
 
         for (var i = 0; i < news.length; i++) {
-          const icon = await NewTabHelper.getIconFromWebSite(news[i].url)
-          news[i].icon = icon
+          news[i].favicon = `https://www.google.com/s2/favicons?domain=${news[i].url}`
           news[i].time = NewTabHelper.getArticleTime(news[i].publishedAt)
         }
 
@@ -85,18 +84,8 @@ export default class NewTabHelper {
   static loadPictures = async (news) => {
     for (var i = 0; i < news.length; i++) {
       await NewTabHelper.loadPicture(news[i].urlToImage)
+      await NewTabHelper.loadPicture(news[i].favicon)
     }
-  }
-
-  static getIconFromWebSite = (website) => {
-    return new Promise(
-      async (resolve, reject) => {
-        /*const body = await NewTabHelper.getWebSiteSource('https://www.facebook.com/', {}, false)
-        const icon = new RegExp(/<link .*(?=.*rel="shortcut icon").*(?=href="(.+?)").*>/gi).exec(body)
-        resolve(icon)*/
-        resolve(null)
-      }
-    )
   }
 
   static getArticleTime (t) {
@@ -111,8 +100,6 @@ export default class NewTabHelper {
       hours++
       minutes = 0
     }
-
-    console.log(t)
 
     if (hours < 1) {
       if (minutes > 1) return `${minutes} minutes ago`
