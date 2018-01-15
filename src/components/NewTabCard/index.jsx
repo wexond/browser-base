@@ -1,7 +1,6 @@
 import React from 'react'
 
-
-export default class NewTabList extends React.Component {
+export default class NewTabCard extends React.Component {
   render () {
     const {
       url,
@@ -16,7 +15,7 @@ export default class NewTabList extends React.Component {
 
     return (
       <a href={url}>
-        <div className='new-tab-list'>
+        <div className='new-tab-card'>
           <div className='info-container'>
             <div className='title'>
               {title}
