@@ -6,8 +6,9 @@ import url from 'url'
 import Store from '../../new-tab-store'
 import { observer } from 'mobx-react'
 
-import NewTabHelper from '../../utils/new-tab'
+import Preloader from '../Preloader'
 
+import NewTabHelper from '../../utils/new-tab'
 import NewTabCard from '../NewTabCard'
 
 @observer
@@ -75,27 +76,63 @@ export default class NewTab extends React.Component {
       }
     )
   }
+  
+  loadPicture = (url) => {
+    return new Promise(
+      (resolve, reject) => {
+        const img = new Image()
+
+        img.onload = () => {
+          resolve()
+        }
+
+        img.onerror = (e) => {
+          reject(e)
+        }
+
+        img.src = url
+      }
+    )
+  }
+
+  loadPictures = async (news) => {
+    for (var i = 0; i < news.length; i++) {
+      await this.loadPicture(news[i].urlToImage)
+    }
+  }
 
   async loadData() {
     Store.loading = true
 
     const countryCode = await this.getCountryCode()
     const data = await this.getNews(countryCode)
+    const news = NewTabHelper.getNews(data)
 
-    Store.news = NewTabHelper.getNews(data)
+    await this.loadPictures(news)
+
+    Store.news = news
     Store.loading = false
   }
 
   render() {
+    const newsContainer = {
+      opacity: Store.loading ? 0 : 1
+    }
+    
+    const preloaderStyle = {
+      display: Store.loading ? 'block' : 'none'
+    }
+
     return (
       <div className='new-tab'>
-        <div className='new-tab-news'>
+        <div className='new-tab-news' style={newsContainer}>
           {
             Store.news.map((data, key) => {
               return <NewTabCard data={data} key={key} />
             })
           }
         </div>
+        <Preloader style={preloaderStyle} />
       </div>
     )
   }

@@ -15,4 +15,13 @@ a {
   max-width: 512px;
   margin: 0 auto;
   border-radius: 2px;
+  opacity: 0;
+  transition: 0.15s opacity;
+}
+
+.preloader {
+  width: 56px;
+  height: 56px;
+  position: fixed;
+  @include center-both;
 }
