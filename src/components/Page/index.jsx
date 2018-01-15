@@ -83,7 +83,7 @@ export default class Page extends React.Component {
         if (historyId !== -1) {
           const history = await Storage.get('history')
           history.filter(item => { return item.id === historyId })[0].ogData = ogData
-          Storage.saveHistory(history)
+          Storage.save('history')
         }
       }
     })
