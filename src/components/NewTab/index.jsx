@@ -48,6 +48,7 @@ export default class NewTab extends React.Component {
     return (
       <div className='new-tab'>
         <div className='new-tab-news' style={newsContainer}>
+          <div className='sub-header'>News</div>
           {
             Store.news.map((data, key) => {
               return <NewTabCard data={data} key={key} />
