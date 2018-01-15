@@ -26,6 +26,26 @@ export default class NewTab extends React.Component {
     this.loadData()
   }
 
+  getCountryCode = async () => {
+    return new Promise(
+      (resolve, reject) => {
+        const req = https.get(url.parse('https://www.freegeoip.net/json/'), (res) => {
+          let data = ''
+
+          res.on('data', (d) => {
+            data += d
+          })
+
+          res.on('end', () => {
+            resolve(JSON.parse(data).country_code)
+          })
+        })
+
+        req.end()
+      }
+    )
+  }
+
   getNews = (country = 'us') => {
     const newsURL = `https://newsapi.org/v2/top-headlines?country=${country}`
 
@@ -59,7 +79,8 @@ export default class NewTab extends React.Component {
   async loadData() {
     Store.loading = true
 
-    const data = await this.getNews()
+    const countryCode = await this.getCountryCode()
+    const data = await this.getNews(countryCode)
 
     Store.news = NewTabHelper.getNews(data)
     Store.loading = false
