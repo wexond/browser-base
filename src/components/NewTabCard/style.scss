@@ -37,7 +37,6 @@
     height: 16px;
     @include image-cover;
     float: left;
-    background-image: url(https://ocdn.eu/paas-static/template-engine/0e2a2d3f283ba44b706b95806dc0f32b/faviconn.ico);
   }
 
   .domain {
@@ -53,7 +52,6 @@
     height: 100%;
     @include image-cover;
     float: right;
-    background-image: url(http://cdn.cnn.com/cnnnext/dam/assets/180112011447-santa-barbara-county-fire-super-tease.jpg);
   }
 
   &::after {

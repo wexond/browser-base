@@ -7,8 +7,13 @@ export default class NewTabCard extends React.Component {
       title,
       source,
       urlToImage,
-      time
+      time,
+      favicon
     } = this.props.data
+    
+    const faviconStyle = {
+      backgroundImage: `url(${favicon})`
+    }
 
     const imageStyle = {
       backgroundImage: `url(${urlToImage})`
@@ -22,7 +27,7 @@ export default class NewTabCard extends React.Component {
               {title}
             </div>
             <div className='site-container'>
-              <div className='favicon' />
+              <div className='favicon' style={faviconStyle} />
               <span className='domain'>
                 {source.name}
               </span>
