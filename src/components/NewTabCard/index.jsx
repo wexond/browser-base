@@ -6,7 +6,8 @@ export default class NewTabCard extends React.Component {
       url,
       title,
       source,
-      urlToImage
+      urlToImage,
+      time
     } = this.props.data
 
     const imageStyle = {
@@ -26,7 +27,7 @@ export default class NewTabCard extends React.Component {
                 {source.name}
               </span>
               <span className='time'>
-                - x hours ago
+                - {time}
               </span>
             </div>
           </div>
