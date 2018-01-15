@@ -9,3 +9,9 @@ a {
   text-decoration: none;
   color: #000;
 }
+
+.new-tab-news {
+  width: calc(100% - 32px);
+  max-width: 512px;
+  margin: 0 auto;
+}
