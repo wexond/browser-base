@@ -43,9 +43,9 @@ export const getHistorySuggestions = async (text) => {
 
     if (input === '') return resolve([])
 
-    const sites = await Storage.getSites()
-    const history = await Storage.getHistory()
-    const favicons = await Storage.getFavicons()
+    const sites = await Storage.get('sites')
+    const history = await Storage.get('history')
+    const favicons = await Storage.get('favicons')
     const regex = /(http(s?)):\/\/(www.)?/gi
 
     let tempSuggestions = []

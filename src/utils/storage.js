@@ -4,7 +4,7 @@ import paths from '../defaults/files'
 import base64Img from 'base64-img'
 
 export default class Storage {
-  static async addHistoryItem (title, url, favicon, ogData = {}) {
+  static async addHistoryItem (title = '', url = '', favicon = '', ogData = {}) {
     return new Promise(async (resolve, reject) => {
       if (title != null && url != null) {
         // Get today's date.
@@ -23,7 +23,7 @@ export default class Storage {
   
         today = mm + '-' + dd + '-' + yyyy
   
-        let data = await Storage.getHistory()
+        let data = await Storage.get('history')
   
         if (!url.startsWith('wexond://') && !url.startsWith('about:blank')) {
           // Get current time.
@@ -52,7 +52,7 @@ export default class Storage {
           // Push new history item.
           data.push(newItem)
 
-          await Storage.saveHistory(data)
+          await Storage.save('history', data)
 
           resolve(newItem.id)
         }
@@ -60,34 +60,10 @@ export default class Storage {
     })
   }
 
-  static saveHistory (jsonObject) {
-    return new Promise((resolve, reject) => {
-      fs.writeFile(paths.files.history, JSON.stringify(jsonObject), (error) => {
-        if (error) {
-          reject(error)
-        } else {
-          resolve()
-        }
-      })
-    })
-  }
-
-  static getHistory () {
-    return new Promise((resolve, reject) => {
-      fs.readFile(paths.files.history, (error, data) => {
-        if (error) {
-          reject(error)
-        } else {
-          resolve(JSON.parse(data))
-        }
-      })
-    })
-  }
-
-  static async addSite (title, url, favicon) {
+  static async addSite (title = '',  url = '', favicon = '') {
     return new Promise(async (resolve, reject) => {
       if (title != null && url != null) {
-        let data = await Storage.getSites()
+        let data = await Storage.get('sites')
   
         if (!url.startsWith('wexond://') && !url.startsWith('about:blank')) {
           // Configure newItem's data.
@@ -118,7 +94,7 @@ export default class Storage {
           // Push new history item.
           data.push(newItem)
   
-          await Storage.saveSites(data)
+          await Storage.save('sites', data)
 
           resolve(newItem.id)
         }
@@ -126,33 +102,9 @@ export default class Storage {
     })
   }
 
-  static saveSites (jsonObject) {
-    return new Promise((resolve, reject) => {
-      fs.writeFile(paths.files.sites, JSON.stringify(jsonObject), (error) => {
-        if (error) {
-          reject(error)
-        } else {
-          resolve()
-        }
-      })
-    })
-  }
-
-  static getSites () {
-    return new Promise((resolve, reject) => {
-      fs.readFile(paths.files.sites, (error, data) => {
-        if (error) {
-          reject(error)
-        } else {
-          resolve(JSON.parse(data))
-        }
-      })
-    })
-  }
-
   static async addFavicon (url) {
     if (url != null) {
-      let data = await Storage.getFavicons()
+      let data = await Storage.get('favicons')
 
       if (!url.startsWith('wexond://') && !url.startsWith('about:blank')) {
         base64Img.requestBase64(url, async (err, res, body) => {
@@ -184,15 +136,15 @@ export default class Storage {
           // Push new history item.
           data.push(newItem)
 
-          await Storage.saveFavicons(data)
+          await Storage.save('favicons', data)
         })
       }
     }
   }
 
-  static saveFavicons (jsonObject) {
+  static save (file, jsonObject) {
     return new Promise((resolve, reject) => {
-      fs.writeFile(paths.files.favicons, JSON.stringify(jsonObject), (error) => {
+      fs.writeFile(paths.files[file], JSON.stringify(jsonObject), (error) => {
         if (error) {
           reject(error)
         } else {
@@ -202,23 +154,16 @@ export default class Storage {
     })
   }
 
-  static getFavicons () {
+
+  static get (file) {
     return new Promise((resolve, reject) => {
-      fs.readFile(paths.files.favicons, (error, data) => {
+      fs.readFile(paths.files[file], (error, data) => {
         if (error) {
           reject(error)
         } else {
           resolve(JSON.parse(data))
         }
       })
-    })
-  }
-
-  static getFaviconData (data, url) {
-    return new Promise((resolve, reject) => {
-      for (var i = 0; i < data.length; i++) {
-        if (data[i].url === url) resolve(data[i].data)
-      }
     })
   }
 }
