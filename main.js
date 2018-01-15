@@ -124,6 +124,8 @@ const createWindow = () => {
 
     client.deserialize(data)
 
+    client.parse('@@||freegeoip.net/json^')
+
     mainWindow.webContents.session.webRequest.onBeforeRequest((details, callback) => {
 
       if (details.url.startsWith('http://') || details.url.startsWith('https://')) {
