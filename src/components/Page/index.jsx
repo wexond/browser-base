@@ -43,12 +43,12 @@ export default class Page extends React.Component {
           if (historyId !== -1) {
             const history = await Storage.get('history')
             history.filter(item => { return item.id === historyId })[0].url = e.url
-            Storage.saveHistory(history)
+            await Storage.save('history', history)
           }
           if (siteId !== -1) {
             const sites = await Storage.get('sites')
             sites.filter(item => { return item.id === siteId })[0].url = e.url
-            Storage.saveSites(sites)
+            await Storage.save('sites', sites)
           }
         }
       }
@@ -71,7 +71,7 @@ export default class Page extends React.Component {
           url = url.substring(0, url.indexOf('/', 9))
         }
 
-        historyId = await Storage.addHistoryItem('', e.url, '', '')
+        historyId = await Storage.addHistoryItem('', e.url, '', {})
         siteId = await Storage.addSite('', url, '')
       }
     })
@@ -82,8 +82,8 @@ export default class Page extends React.Component {
 
         if (historyId !== -1) {
           const history = await Storage.get('history')
-          history.filter(item => { return item.id === historyId })[0].ogData = ogData
-          Storage.save('history')
+          history.filter(item => { return item.id === historyId })[0].ogdata = ogData
+          Storage.save('history', history)
         }
       }
     })

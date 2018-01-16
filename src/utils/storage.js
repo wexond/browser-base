@@ -39,7 +39,7 @@ export default class Storage {
             'date': today,
             'time': time,
             'favicon': favicon,
-            'ogData': ogData
+            'ogdata': ogData
           }
   
           // Get newItem's new id.
@@ -144,13 +144,17 @@ export default class Storage {
 
   static save (file, jsonObject) {
     return new Promise((resolve, reject) => {
-      fs.writeFile(paths.files[file], JSON.stringify(jsonObject), (error) => {
-        if (error) {
-          reject(error)
-        } else {
-          resolve()
-        }
-      })
+      if (jsonObject != null) {
+        fs.writeFile(paths.files[file], JSON.stringify(jsonObject), (error) => {
+          if (error) {
+            reject(error)
+          } else {
+            resolve()
+          }
+        })
+      } else {
+        reject()
+      }
     })
   }
 
