@@ -244,7 +244,6 @@ export default class AddressBar extends React.Component {
           if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'https://www.google.com/search?q=' + inputText
         }
 
-        console.log(page)
         page.page.webview.loadURL(URLToNavigate)
         page.page.webview.focus()
 
