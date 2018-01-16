@@ -23,6 +23,7 @@ a {
     opacity: $secondary-opacity-light;
     font-size: 14px;
     @include Roboto-Medium;
+    @include cursor-default;
   }
 }
 
