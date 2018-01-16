@@ -107,7 +107,7 @@ export default class History {
       if (i >= websites.length) {
         break
       } else {
-        const ogData = websites[i].ogData
+        const ogData = websites[i].ogdata
         // If website has og data (image and description) then add the website to full info cards
         if (ogData != null && ogData.description != null && ogData.image != null && ogData.image.startsWith('http') && cards.fullInfo.length <= fullInfoCardsCount) {
           cards.fullInfo.push(websites[i])
