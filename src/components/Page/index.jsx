@@ -71,8 +71,8 @@ export default class Page extends React.Component {
           url = url.substring(0, url.indexOf('/', 9))
         }
 
-        historyId = await Storage.addHistoryItem('', e.url, '', {})
-        siteId = await Storage.addSite('', url, '')
+        historyId = await Storage.addHistoryItem('', e.url)
+        siteId = await Storage.addSite('', url)
       }
     })
 
