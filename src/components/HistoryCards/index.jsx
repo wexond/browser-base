@@ -45,13 +45,15 @@ export default class HistoryCards extends React.Component {
 
     return (
       <div>
-        <div className='cards-container' style={style}>
-          {
-            Store.cards.fullInfo.map((data, key) => {
-              return <HistoryCard fullInfo={true} data={data} key={key} />
-            })
-          }
-        </div>
+        { Store.cards.fullInfo.length > 0 &&
+         <div className='cards-container' style={style}>
+            {
+              Store.cards.fullInfo.map((data, key) => {
+                return <HistoryCard fullInfo={true} data={data} key={key} />
+              })
+            }
+          </div>
+        }
         <div className='cards-container' style={style}>
           {
             Store.cards.lessInfo.map((data, key) => {
