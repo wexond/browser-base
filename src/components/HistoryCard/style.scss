@@ -71,6 +71,7 @@
     }
 
     .info-container {
+      max-width: 100%;
       display: block;
       padding: 16px;
 
@@ -78,6 +79,7 @@
         display: block;
         overflow: unset;
         white-space: normal;
+        overflow: hidden;
       }
 
       .description {
