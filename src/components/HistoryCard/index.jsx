@@ -14,15 +14,15 @@ export default class HistoryCard extends React.Component {
     return (
       <a href={this.props.data.url}>
         <div className={'history-card ' + (fullInfo ? 'full-info' : '')}>
-          {fullInfo && <div className='image' style={{backgroundImage: `url(${data.ogData.image})`}} />}
+          {fullInfo && <div className='image' style={{backgroundImage: `url(${data.ogdata.image})`}} />}
           {!fullInfo && <div className='favicon' style={{backgroundImage: `url(${data.favicon})`}} />}
           <div className='info-container'>
             <span className='title'>
               {data.title}
             </span>
-            {data.ogData != null && data.ogData.description != null &&
+            {data.ogdata != null && data.ogdata.description != null &&
               <span className='description'>
-                {data.ogData.description}
+                {data.ogdata.description}
               </span>
             }
           </div>
