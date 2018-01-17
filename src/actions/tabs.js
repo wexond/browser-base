@@ -1,9 +1,12 @@
 import Store from '../store'
 
+import { remote } from 'electron'
+
 import tabDefaults from '../defaults/tabs.js'
 import * as tabGroupsActions from './tab-groups';
 
 let tabId = 0
+let firstTab = true
 
 export const addTab = (data = tabDefaults.defaultOptions) => {
   const {
@@ -35,9 +38,29 @@ export const addTab = (data = tabDefaults.defaultOptions) => {
     id: tabId
   }
 
+  if (firstTab) {
+    const process = remote.process
+    let file
+
+    if (process.env.NODE_ENV === 'dev') {
+      if (process.argv.length >= 3) file = process.argv[2]
+    } else if (process.argv.length >= 1) {
+      file = process.argv[0]
+    }
+
+    if (file != null) {
+      const _url = `file:///${file}`
+
+      tab.url = _url
+      page.url = _url
+    }
+  }
+
   tabGroupsActions.getCurrentTabGroup().tabs.push(tab)
   tabGroupsActions.getCurrentTabGroup().pages.push(page)
   tabId++
+
+  firstTab = false
 }
 
 export const getSelectedTab = () => {

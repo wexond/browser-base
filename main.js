@@ -175,3 +175,21 @@ app.on('ready', function () {
   })
   createWindow()
 })
+
+app.setJumpList(
+  [
+    {
+      name: 'Bookmarks',
+      items: [
+        {
+          type: 'task',
+          title: 'GitHub',
+          program: process.execPath,
+          args: '--run-tool-a',
+          icon: `resources/icon.ico`,
+          description: 'GitHub is where people build software. More than 27 million people use GitHub to discover, fork, and contribute to over 76 million projects.'
+        }
+      ]
+    }
+  ]
+)
