@@ -3,6 +3,7 @@
 
 [![discord](https://discordapp.com/api/guilds/307605794680209409/widget.png)](https://discord.gg/yAA8DdK)
 [![Build Status](https://travis-ci.org/Nersent/wexond.svg)](https://travis-ci.org/Nersent/wexond)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/nersent/wexond?branch=master&svg=true)](https://ci.appveyor.com/project/nersent/wexond/branch/master)
 [![dependencies Status](https://david-dm.org/nersent/wexond/status.svg)](https://david-dm.org/nersent/wexond)
 [![devDependencies Status](https://david-dm.org/nersent/wexond/dev-status.svg)](https://david-dm.org/nersent/wexond?type=dev)
 
