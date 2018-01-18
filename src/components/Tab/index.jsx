@@ -181,7 +181,7 @@ export default class Tab extends React.Component {
     const titleStyle = {
       maxWidth: `calc(100% - ${maxWidthDecrease}px)`,
       display: (pinned || (!isSelected && width < 42)) ? 'none' : 'block',
-      left: titleLeft
+      left: titleLeft * 2
     }
 
     const overlayStyle = {
