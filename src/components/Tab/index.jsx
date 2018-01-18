@@ -299,7 +299,7 @@ export default class Tab extends React.Component {
         <div className='border-vertical' style={borderLeftStyle} />
         <div className='border-vertical' style={borderRightStyle} />
         <div className='content' style={contentStyle}>
-          <Preloader className='preloader' style={preloaderStyle} />
+          <Preloader className={Store.foreground} style={preloaderStyle} />
           <div className='favicon' style={faviconStyle} />
           <div className='title' style={titleStyle}>{title}</div>
           <div className='close' onClick={this.close} onMouseDown={onCloseMouseDown} style={closeStyle}>
