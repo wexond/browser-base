@@ -17,6 +17,8 @@ import Colors from '../../utils/colors'
 
 import MenuItem from '../MenuItem'
 
+import Preloader from '../Preloader'
+
 @observer
 export default class Tab extends React.Component {
   constructor () {
@@ -150,6 +152,7 @@ export default class Tab extends React.Component {
 
     if (favicon !== '') faviconDisplay = 'block'
     if (isSelected && width < 42) faviconDisplay = 'none'
+    if (loading) faviconDisplay = 'none'
 
     const faviconStyle = {
       display: faviconDisplay,
@@ -286,12 +289,17 @@ export default class Tab extends React.Component {
       onContextMenu: onContextMenu
     }
 
+    const preloaderStyle = {
+      display: loading ? 'block' : 'none'
+    }
+
     return (
       <div ref={(r) => { this.tab = r }} className={'tab ' + Store.foreground} style={tabStyle} {...tabEvents}>
         <div className='overlay' style={overlayStyle} />
         <div className='border-vertical' style={borderLeftStyle} />
         <div className='border-vertical' style={borderRightStyle} />
         <div className='content' style={contentStyle}>
+          <Preloader className='preloader' style={preloaderStyle} />
           <div className='favicon' style={faviconStyle} />
           <div className='title' style={titleStyle}>{title}</div>
           <div className='close' onClick={this.close} onMouseDown={onCloseMouseDown} style={closeStyle}>

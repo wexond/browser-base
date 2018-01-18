@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require('electron')
 const protocol = require('electron').protocol
 const path = require('path')
+const request = require('request')
 const ipcMessages = require(path.join(__dirname, '/src/defaults/ipc-messages'))
 const { autoUpdater } = require('electron-updater')
 const fs = require('fs')
@@ -144,6 +145,10 @@ const createWindow = () => {
         requestHeaders: details.requestHeaders
       })
     })
+
+    /* TODO
+    mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
+    })*/
   })
 
   mainWindow.once('ready-to-show', () => {
@@ -186,7 +191,7 @@ app.setJumpList(
           title: 'GitHub',
           program: process.execPath,
           args: '--run-tool-a',
-          icon: `resources/icon.ico`,
+          icon: `${__dirname}/resources/icon.ico`,
           description: 'GitHub is where people build software. More than 27 million people use GitHub to discover, fork, and contribute to over 76 million projects.'
         }
       ]
