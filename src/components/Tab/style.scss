@@ -87,6 +87,11 @@
 
       & .preloader-indeterminate .path {
         stroke-width: 5;
+        transition: 0.15s stroke;
+      }
+
+      &.white .path {
+        stroke: #fff;
       }
     }
 
@@ -95,7 +100,6 @@
       left: 8px;
       width: 20px;
       height: 20px;
-      background-color: white;
       border-radius: 3px;
       @include image-center(16px, 16px);
     }
