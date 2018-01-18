@@ -145,7 +145,7 @@ export default class Storage {
   static save (file, jsonObject) {
     return new Promise((resolve, reject) => {
       if (jsonObject != null) {
-        fs.writeFileSync(paths.files[file], JSON.stringify(jsonObject))
+        fs.writeFileSync(paths.files[file], JSON.stringify(jsonObject), 'utf8')
         resolve()
       } else {
         reject()
