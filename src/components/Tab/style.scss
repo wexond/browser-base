@@ -68,15 +68,20 @@
     }
 
     .title {
-      @extend %item;
       width: 100%;
       @include Body1;
       font-size: 13px;
       color: rgba(0,0,0, $primary-opacity-light);
       overflow: hidden;
       left: 32px;
+      top: 50%;
+      position: absolute;
       text-overflow: ellipsis;
       transition: 0.15s ease-out max-width, 0.15s ease-out left;
+      zoom: 0.5;
+      transform-origin: left;
+      transform: scale(2) translateY(-25%);
+      -webkit-font-smoothing: subpixel-antialiased;
     }
 
     .preloader {
