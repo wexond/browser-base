@@ -52,6 +52,10 @@ export default class Page extends React.Component {
           }
         }
       }
+
+      if (e.type === 'did-stop-loading') {
+        tab.loading = false
+      }
     }
 
     this.webview.addEventListener('did-stop-loading', updateInfo)
@@ -61,6 +65,7 @@ export default class Page extends React.Component {
 
     this.webview.addEventListener('load-commit', async (e) => {
       tab.url = e.url
+      tab.loading = true
       if (e.url !== lastURL && e.isMainFrame) {
         lastURL = e.url
         filesActions.checkFiles()
