@@ -1,7 +1,6 @@
 const { app, BrowserWindow } = require('electron')
 const protocol = require('electron').protocol
 const path = require('path')
-const request = require('request')
 const ipcMessages = require(path.join(__dirname, '/src/defaults/ipc-messages'))
 const { autoUpdater } = require('electron-updater')
 const fs = require('fs')
