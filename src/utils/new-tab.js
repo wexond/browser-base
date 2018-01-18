@@ -47,7 +47,9 @@ export default class NewTabHelper {
     
         const news = []
         for (var i = 0; i < newsCount; i++) {
-          if (json.articles[i].urlToImage == null) newsCount++
+          const image = json.articles[i].urlToImage
+
+          if (image == null || !image.startsWith('http')) newsCount++
           else news.push(json.articles[i])
         }
 
