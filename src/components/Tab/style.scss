@@ -76,6 +76,18 @@
       overflow: hidden;
       left: 32px;
       text-overflow: ellipsis;
+      transition: 0.15s ease-out max-width, 0.15s ease-out left;
+    }
+
+    .preloader {
+      @extend %item;
+      left: 8px;
+      width: 20px;
+      height: 20px;
+
+      & .preloader-indeterminate .path {
+        stroke-width: 5;
+      }
     }
 
     .favicon {
