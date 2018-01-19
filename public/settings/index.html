@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Settings</title>
+  </head>
+  <body>
+    <div id='app'></div>
+    <script>
+      function loadScripts (scripts) {
+        for (var i = 0; i < scripts.length; i++) {
+          let script = document.createElement('script')
+          script.src = scripts[i]
+          document.body.appendChild(script)
+        }
+      }
+      if (window.env !== 'dev') {
+        loadScripts(['wexond://build/settings.bundle.js'])
+      } else {
+        loadScripts(['http://localhost:8080/build/settings.bundle.js', 'http://localhost:8080/webpack-dev-server.js'])
+      }
+    </script>
+  </body>
+</html>
