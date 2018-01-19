@@ -3,7 +3,7 @@ import React from 'react'
 import https from 'https'
 import url from 'url'
 
-import Store from '../../new-tab-store'
+import Store from '../../stores/new-tab'
 import { observer } from 'mobx-react'
 
 import Preloader from '../Preloader'

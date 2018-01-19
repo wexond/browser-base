@@ -3,7 +3,7 @@ import path from 'path'
 
 import paths from '../defaults/files'
 
-import Store from '../store'
+import Store from '../stores/store'
 
 let id = 0
 

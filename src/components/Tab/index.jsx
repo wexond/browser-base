@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Store from '../../store'
+import Store from '../../stores/store'
 
 import { observer } from 'mobx-react'
 
