@@ -1,3 +1,4 @@
+// Mixins
 @import 'sass/imports/fonts.scss';
 
 @import 'sass/mixins/cursors.scss';
@@ -7,6 +8,7 @@
 @import 'sass/mixins/shadows.scss';
 @import 'sass/mixins/typography.scss';
 
+// Transparency
 $primary-opacity-light: 0.87;
 $secondary-opacity-light: 0.54;
 $disabled-opacity-light: 0.38;
@@ -17,4 +19,18 @@ $secondary-opacity-dark: 0.7;
 $disabled-opacity-dark: 0.5;
 $dividers-opacity-dark: 0.12;
 
+// Animations duration
 $hover-duration: 0.2s;
+
+// Default colors
+$primary-color: #3F51B5;
+$second-color: #2196F3;
+$background-color: #F5F5F5;
+
+// Default scroll colors (used in history)
+$scroll-color: $primary-color;
+$scroll-color-hover: #303F9F;
+$scroll-track-color: #EEE;
+
+$scroll-color-selecting: $second-color;
+$scroll-color-hover-selecting: #1976D2;
