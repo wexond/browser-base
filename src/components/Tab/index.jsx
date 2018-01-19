@@ -171,15 +171,15 @@ export default class Tab extends React.Component {
     const margins = 8
     let titleLeft = 12
 
-    if (isSelected || hovered) maxWidthDecrease += closeWidth + margins
+    if (isSelected || hovered) maxWidthDecrease = closeWidth + 2 * margins
     
     if (favicon !== '' || loading) {
-      maxWidthDecrease += faviconWidth + margins
+      maxWidthDecrease += faviconWidth + 2 * margins
       titleLeft += faviconWidth + margins
     }
 
     const titleStyle = {
-      maxWidth: `calc(100% - ${maxWidthDecrease}px)`,
+      maxWidth: `calc(50% - ${maxWidthDecrease}px)`,
       display: (pinned || (!isSelected && width < 42)) ? 'none' : 'block',
       left: titleLeft * 2
     }
