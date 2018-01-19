@@ -76,8 +76,8 @@ export default class Page extends React.Component {
           url = url.substring(0, url.indexOf('/', 9))
         }
 
-        historyId = await Storage.addHistoryItem('', e.url)
-        siteId = await Storage.addSite('', url)
+        historyId = await Storage.addHistoryItem('', e.url, favicon)
+        siteId = await Storage.addSite('', url, favicon)
       }
     })
 
@@ -133,23 +133,22 @@ export default class Page extends React.Component {
         if (request.readyState === 4) {
           if (request.status === 404) {
             tab.favicon = ''
-            favicon = 'error'
+            favicon = ''
           } else {
             Storage.addFavicon(e.favicons[0])
             tab.favicon = e.favicons[0]
             favicon = e.favicons[0]
-
-            if (lastURL === tab.url) {
-              if (historyId !== -1) {
-                const history = await Storage.get('history')
-                history.filter(item => { return item.id === historyId })[0].favicon = favicon
-                Storage.save('history', history)
-              }
-              if (siteId !== -1) {
-                const sites = await Storage.get('sites')
-                sites.filter(item => { return item.id === siteId })[0].favicon = favicon
-                Storage.save('sites', sites)
-              }
+          }
+          if (lastURL === tab.url) {
+            if (historyId !== -1) {
+              const history = await Storage.get('history')
+              history.filter(item => { return item.id === historyId })[0].favicon = favicon
+              Storage.save('history', history)
+            }
+            if (siteId !== -1) {
+              const sites = await Storage.get('sites')
+              sites.filter(item => { return item.id === siteId })[0].favicon = favicon
+              Storage.save('sites', sites)
             }
           }
         }
