@@ -2,7 +2,12 @@ const { join } = require('path')
 const webpack = require('webpack')
 const UglifyJSWebpackPlugin = require('uglifyjs-webpack-plugin')
 
+const productionDevtool = 'cheap-module-source-map'
+const developmentDevtool = 'cheap-module-eval-source-map'
+
 let config = {
+  devtool: (process.env.NODE_ENV === 'production') ? productionDevtool : developmentDevtool,
+
   devServer: {
     contentBase: './',
     publicPath: 'http://localhost:8080/build/'
@@ -77,12 +82,11 @@ if (process.env.NODE_ENV === 'production') {
       'NODE_ENV': JSON.stringify('production')
     }
   }))
-  config.devtool = 'cheap-module-source-map'
 }
 
 let appConfig = {
   target: 'electron',
-  devtool: 'eval-source-map',
+  devtool: (process.env.NODE_ENV === 'production') ? productionDevtool : developmentDevtool,
 
   entry: {
     app: './src/app-bootstrap.jsx'
@@ -91,7 +95,7 @@ let appConfig = {
 
 let appletsConfig = {
   target: 'web',
-  devtool: 'eval-source-map',
+  devtool: (process.env.NODE_ENV === 'production') ? productionDevtool : developmentDevtool,
 
   entry: {
     history: './src/history-bootstrap.jsx',
