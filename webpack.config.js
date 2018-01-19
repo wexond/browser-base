@@ -85,7 +85,7 @@ let appConfig = {
   devtool: 'eval-source-map',
 
   entry: {
-    app: './src/app-bootstrap.jsx'
+    app: './src/bootstraps/app.jsx'
   }
 }
 
@@ -94,9 +94,9 @@ let appletsConfig = {
   devtool: 'eval-source-map',
 
   entry: {
-    history: './src/history-bootstrap.jsx',
-    newTab: './src/new-tab-bootstrap.jsx',
-    settings: './src/settings-bootstrap.jsx'
+    history: './src/bootstraps/history.jsx',
+    newTab: './src/bootstraps/new-tab.jsx',
+    settings: './src/bootstraps/settings.jsx'
   }
 }
 
