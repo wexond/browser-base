@@ -3,7 +3,7 @@ import { platform } from 'os'
 
 import Controls from '../Controls'
 
-import Store from '../../store'
+import Store from '../../stores/store'
 import { observer } from 'mobx-react'
 
 import Colors from '../../utils/colors'

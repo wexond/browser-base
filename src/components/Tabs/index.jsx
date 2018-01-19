@@ -3,7 +3,7 @@ import { platform } from 'os'
 
 import { observer } from 'mobx-react'
 import { observe } from 'mobx'
-import Store from '../../store'
+import Store from '../../stores/store'
 
 import Tab from '../Tab'
 import AddTab from '../AddTab'

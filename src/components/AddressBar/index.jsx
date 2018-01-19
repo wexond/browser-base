@@ -4,7 +4,7 @@ import wexondUrls from '../../defaults/wexond-urls'
 
 import { observer } from 'mobx-react'
 
-import Store from '../../store'
+import Store from '../../stores/store'
 
 import Network from '../../utils/network'
 

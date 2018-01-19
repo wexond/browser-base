@@ -1,4 +1,4 @@
-import Store from '../store'
+import Store from '../stores/store'
 import * as tabGroupsActions from './tab-groups'
 
 export const getNavigationState = () => {

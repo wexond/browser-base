@@ -4,7 +4,7 @@ import tabDefaults from '../../defaults/tabs'
 
 import * as tabsActions from '../../actions/tabs'
 
-import Store from '../../store'
+import Store from '../../stores/store'
 import { observer } from 'mobx-react'
 
 import Transitions from '../../utils/transitions'

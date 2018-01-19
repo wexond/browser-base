@@ -1,4 +1,4 @@
-import Store from '../store'
+import Store from '../stores/store'
 import { request as httpsRequest } from 'https' 
 import http from 'http'
 import urlNode from 'url'

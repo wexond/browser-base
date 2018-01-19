@@ -2,7 +2,7 @@ import React from 'react'
 
 import Input from '../Input'
 
-import Store from '../../history-store'
+import Store from '../../stores/history'
 import { observer } from 'mobx-react'
 
 @observer
