@@ -8,7 +8,7 @@ import HistorySection from '../HistorySection'
 
 import Preloader from '../Preloader'
 
-import Store from '../../history-store'
+import Store from '../../stores/history'
 import { observer } from 'mobx-react'
 
 @observer

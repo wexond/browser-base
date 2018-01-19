@@ -1,4 +1,4 @@
-import Store from '../store'
+import Store from '../stores/store'
 
 import { remote } from 'electron'
 
