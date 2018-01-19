@@ -68,3 +68,11 @@
   @include Roboto-Medium;
   font-size: 14px;
 }
+
+@mixin MaxLines ($lines) {
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: -o-ellipsis-lastline;
+}

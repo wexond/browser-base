@@ -1,4 +1,4 @@
-import Store from '../store'
+import Store from '../stores/store'
 import * as tabsActions from './tabs'
 import * as pagesActions from './pages'
 import * as tabGroupsActions from './tab-groups'

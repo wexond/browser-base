@@ -46,15 +46,17 @@
   }
 
   .title {
+    opacity: $primary-opacity-light;
     font-size: 16px;
     @include Roboto-Medium;
-    opacity: $primary-opacity-light;
+    @include MaxLines(2);
     @extend %no-wrap;
   }
 
   .description {
-    font-size: 13px;
     opacity: $secondary-opacity-light;
+    font-size: 13px;
+    @include MaxLines(6);
     @extend %no-wrap;
   }
 
@@ -76,7 +78,6 @@
       padding: 16px;
 
       .title, .description {
-        display: block;
         white-space: normal;
       }
 
