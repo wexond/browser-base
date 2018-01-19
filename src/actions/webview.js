@@ -92,7 +92,7 @@ export const getOGData = (webview) => {
       })()`
       
       webview.executeJavaScript(getMetaTagsFunction, false, async (result) => {
-        return result
+        resolve(result)
       })
     } else {
       reject(new Error('WebContents are not available'))
