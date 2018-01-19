@@ -71,16 +71,28 @@ export const getColor = (webview) => {
 export const getOGData = (webview) => {
   return new Promise((resolve, reject) => {
     if (webview != null && webview.getWebContents() != null) {
-      webview.executeJavaScript('(function () { return document.documentElement.innerHTML })()', false, async (result) => {
-        const titleResult = new RegExp(/<meta .*(?=.*property="og:title").*(?=content="(.+?)").*>/gi).exec(result)
-        const descriptionResult = new RegExp(/<meta .*(?=.*property="og:description").*(?=content="(.+?)").*>/gi).exec(result)
-        const imageResult = new RegExp(/<meta .*(?=.*property="og:image").*(?=content="(.+?)").*>/gi).exec(result)
+      const getMetaTagsFunction = `(function () { 
+        var metaTags = document.getElementsByTagName("meta");
+        var ogData = {title:null,description:null,image:null};
+        
+        for (var i = 0; i < metaTags.length; i++) {
+          var element = metaTags[i];
 
-        const getValue = (r) => {
-          return (r != null && r.length > 1) ? r[1] : null
+          if (element.hasAttribute("property") && element.hasAttribute("content")) {
+            var property = element.getAttribute("property");
+            var content = element.getAttribute("content");
+
+            if (property == "og:title") ogData.title = content;
+            else if (property == "og:description") ogData.description = content;
+            else if (property == "og:image") ogData.image = content;
+          }
         }
 
-        resolve({title: getValue(titleResult), description: getValue(descriptionResult), image: getValue(imageResult)})
+        return ogData;
+      })()`
+      
+      webview.executeJavaScript(getMetaTagsFunction, false, async (result) => {
+        return result
       })
     } else {
       reject(new Error('WebContents are not available'))
