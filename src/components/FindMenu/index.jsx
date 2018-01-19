@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { observer } from 'mobx-react'
-import Store from '../../store'
+import Store from '../../stores/store'
 
 import Storage from '../../utils/storage'
 import Colors from '../../utils/colors'
