@@ -95,7 +95,8 @@ let appletsConfig = {
 
   entry: {
     history: './src/history-bootstrap.jsx',
-    newTab: './src/new-tab-bootstrap.jsx'
+    newTab: './src/new-tab-bootstrap.jsx',
+    settings: './src/settings-bootstrap.jsx'
   }
 }
 
