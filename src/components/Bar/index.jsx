@@ -6,7 +6,7 @@ import * as pagesActions from '../../actions/pages'
 import * as tabsActions from '../../actions/tabs'
 
 import { observer } from 'mobx-react'
-import Store from '../../store'
+import Store from '../../stores/store'
 
 import Colors from '../../utils/colors'
 
