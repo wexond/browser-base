@@ -36,12 +36,16 @@ export default class Suggestions extends React.Component {
 
     this.setState({suggestions: historySuggestions.concat(this.lastSearchSuggestions)})
 
+    if (this.state.suggestions.length === 0) {
+      this.hide()
+    }
+
     const toggle = () => {
       if (this.state.suggestions.length === 0) {
         this.hide()
       }
       else {
-        this.show()
+        if (!this.hidden) this.show()
       }
     }
 
