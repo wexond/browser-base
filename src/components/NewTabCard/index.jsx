@@ -1,6 +1,26 @@
 import React from 'react'
 
+import Preloader from '../Preloader'
+
+import NewTabHelper from '../../utils/new-tab'
+
 export default class NewTabCard extends React.Component {
+  constructor () {
+    super()
+
+    this.state = {
+      loading: true
+    }
+  }
+
+  async componentDidMount () {
+    await NewTabHelper.loadPicture(this.props.data.urlToImage)
+
+    this.setState({
+      loading: false
+    })
+  }
+
   render () {
     const {
       url,
@@ -16,7 +36,12 @@ export default class NewTabCard extends React.Component {
     }
 
     const imageStyle = {
-      backgroundImage: `url(${urlToImage})`
+      backgroundImage: this.state.loading ? 'unset' : `url(${urlToImage})`,
+      opacity: this.state.loading ? 0 : 1
+    }
+    
+    const preloaderStyle = {
+      display: this.state.loading ? 'block' : 'none'
     }
 
     return (
@@ -37,6 +62,9 @@ export default class NewTabCard extends React.Component {
             </div>
           </div>
           <div className='image' style={imageStyle} />
+          <div className='preloader-container' style={preloaderStyle}>
+            <Preloader />
+          </div>
         </div>
       </a>
     )
