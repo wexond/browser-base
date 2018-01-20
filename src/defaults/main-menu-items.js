@@ -2,7 +2,8 @@ import * as mainMenuActions from '../actions/main-menu'
 
 export default [
   {
-    title: 'New window'
+    title: 'New window',
+    onClick: mainMenuActions.newWindow
   },
   {
     title: 'New incognito window'

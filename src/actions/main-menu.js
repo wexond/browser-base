@@ -1,8 +1,9 @@
 import * as tabsActions from './tabs'
 import * as pagesActions from './pages'
+import { ipcRenderer } from 'electron'
 
 export const newWindow = () => {
-  
+  ipcRenderer.send("newWindow")
 }
 
 export const newIncognitoWindow = () => {
