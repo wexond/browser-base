@@ -24,7 +24,8 @@ export default [
     type: 'separator'
   },
   {
-    title: 'Settings'
+    title: 'Settings',
+    onClick: mainMenuActions.settings
   },
   {
     title: 'Extensions'
