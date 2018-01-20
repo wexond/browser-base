@@ -5,6 +5,7 @@ export default new class Store {
   @observable sections = []
   @observable cards = []
   @observable loading = true
+  @observable searched = false
 
   history = null
 }

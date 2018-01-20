@@ -2,7 +2,7 @@ import React from 'react'
 
 import HistoryParser from '../../utils/history'
 
-import ToolBar from '../HistoryToolBar'
+import ToolBar from '../ToolBar'
 import HistoryCards from '../HistoryCards'
 import HistorySection from '../HistorySection'
 
@@ -25,20 +25,65 @@ export default class History extends React.Component {
     this.loadData()
   }
 
-  async loadData (searchStr) {
+  async loadData (searchStr = false) {
     Store.loading = true
 
     let data = await window.historyAPI.get()
 
     if (searchStr) data = await window.historyAPI.search(data, searchStr)
+    else Store.searched = false
 
     Store.cards = HistoryParser.getCards(data)
     Store.sections = HistoryParser.getSections(data)
     Store.loading = false
   }
 
+  getSelectedCheckBoxes (sectionIndex) {
+    const filter = (item) => {
+      return item.props.sectionIndex === sectionIndex
+    }
+
+    return Store.selectedItems.filter(filter)
+  }
+
   onSearch = (str) => {
+    Store.searched = true
     this.loadData(str)
+  }
+
+  onCancel = () => {
+    for (var i = 0; i < Store.selectedItems.length; i++) {
+      const checkbox = Store.selectedItems[i]
+      checkbox.setState({checked: false})
+    }
+
+    for (var i = 0; i < this.sections.length; i++) {
+      const checkbox = this.sections[i].checkbox
+
+      if (checkbox.state.checked) {
+        checkbox.setState({
+          checked: false
+        })
+      }
+    }
+
+    Store.selectedItems = []
+  }
+
+  onDelete = async () => {
+    Store.loading = true
+
+    const selectedItems = Store.selectedItems.slice()
+    const deletedItems = []
+
+    this.onCancel()
+
+    for (var i = 0; i < selectedItems.length; i++) {
+      deletedItems.push(selectedItems[i].props.data)
+    }
+
+    await window.historyAPI.delete(deletedItems)
+    await this.loadData()
   }
 
   render () {
@@ -56,9 +101,16 @@ export default class History extends React.Component {
 
     const containerClassName = 'content ' + (Store.selectedItems.length > 0 ? 'selecting' : '')
 
+    let sectionIndex = -1
+
     return (
       <div className='history'>
-        <ToolBar onSearch={this.onSearch} />
+        <ToolBar
+          title='History'
+          selectedItems={Store.selectedItems}
+          onSearch={this.onSearch}
+          onCancel={this.onCancel}
+          onDelete={this.onDelete} />
         <div className={containerClassName} style={contentStyle}>
           {!emptyHistory &&
             <div>
@@ -67,11 +119,14 @@ export default class History extends React.Component {
               <div className='history-title'>History</div>
               {
                 Store.sections.map((data, key) => {
-                  return <HistorySection ref={(r) => { this.sections.push(r) }} data={data} key={key} />
+                  sectionIndex++
+                  return <HistorySection ref={(r) => { if (r != null) this.sections.push(r) }} data={data} key={key} index={sectionIndex} />
                 })
               }
             </div> || !Store.loading &&
-            <div className='history-no-results'>No search results</div>
+            <div className='history-no-results'>
+              {Store.searched ? 'No search results' : 'History is empty'}
+            </div>
           }
         </div>
         <Preloader style={preloaderStyle} />

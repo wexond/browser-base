@@ -14,7 +14,7 @@ export default class History {
         sections.push({
           title: History.getSectionTitle(item.date),
           date: item.date,
-          items: [],
+          items: []
         })
         // Update section index
         sectionIndex = sections.length - 1

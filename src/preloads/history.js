@@ -14,8 +14,9 @@ if (window.location.protocol === 'wexond:') {
             const json = JSON.parse(data)
 
             for (var i = 0; i < json.length; i++) {
-              if (json[i].favicon != null && json[i].favicon != '' && json[i].favicon !== 'handled')  {
-                const fav = await window.historyAPI.getFaviconData(favicons, json[i].favicon)
+              const favicon = json[i].favicon
+              if (favicon != null && favicon != '' && favicon !== 'handled' && !favicon.startsWith('data'))  {
+                const fav = await window.historyAPI.getFaviconData(favicons, favicon)
                 json[i].favicon = fav
               }
             }

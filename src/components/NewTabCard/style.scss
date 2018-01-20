@@ -48,6 +48,22 @@
     height: 100%;
     @include image-cover;
     float: right;
+    opacity: 0;
+    transition: 0.15s opacity;
+  }
+
+  .preloader-container {
+    width: 128px;
+    height: 100%;
+    right: 0;
+    position: absolute;
+  }
+  
+  .preloader {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    @include center-both;
   }
 
   &::after {
