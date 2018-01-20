@@ -49,15 +49,25 @@
     opacity: $primary-opacity-light;
     font-size: 16px;
     @include Roboto-Medium;
-    @include MaxLines(2);
     @extend %no-wrap;
   }
 
   .description {
     opacity: $secondary-opacity-light;
     font-size: 13px;
-    @include MaxLines(6);
+    @include MaxLines(5);
     @extend %no-wrap;
+  }
+
+  .site-container {
+    font-size: 14px;
+    color: rgba(0, 0, 0, $secondary-opacity-light);
+    position: absolute;
+    bottom: 16px;
+  }
+
+  .domain {
+    margin-left: 8px;
   }
 
   &.full-info {
@@ -69,13 +79,17 @@
     }
 
     .favicon {
-      display: none;
+      float: left;
     }
 
     .info-container {
       max-width: 100%;
       display: block;
       padding: 16px;
+
+      .title {
+        @include MaxLines(2);
+      }
 
       .title, .description {
         white-space: normal;
