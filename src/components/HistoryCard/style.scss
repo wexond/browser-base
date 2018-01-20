@@ -49,7 +49,6 @@
     opacity: $primary-opacity-light;
     font-size: 16px;
     @include Roboto-Medium;
-    @include MaxLines(2);
     @extend %no-wrap;
   }
 
@@ -87,6 +86,10 @@
       max-width: 100%;
       display: block;
       padding: 16px;
+
+      .title {
+        @include MaxLines(2);
+      }
 
       .title, .description {
         white-space: normal;
