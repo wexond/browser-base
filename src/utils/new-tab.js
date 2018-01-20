@@ -85,7 +85,6 @@ export default class NewTabHelper {
 
   static loadPictures = async (news) => {
     for (var i = 0; i < news.length; i++) {
-      await NewTabHelper.loadPicture(news[i].urlToImage)
       await NewTabHelper.loadPicture(news[i].favicon)
     }
   }
