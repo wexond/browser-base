@@ -59,7 +59,6 @@ const observer = new MutationObserver((mutations) => {
   }
 
   clearTimeout(timeout)
-  timeout = null
 
   for (let mutation of mutations) {
     let node = mutation.target
@@ -84,7 +83,6 @@ const observer = new MutationObserver((mutations) => {
 
   timeout = setTimeout(() => {
     for (let x = toDivide - 1; x >= 0; x--) {
-      if (timeout == null) break
       setTimeout(() => {
         var i
         for (i = Math.floor((blockedSelectors.length / toDivide) * (x + 1)) - 1; i >= Math.floor((blockedSelectors.length / toDivide) * (x)); i--) {
@@ -97,7 +95,7 @@ const observer = new MutationObserver((mutations) => {
             }
           }
         }
-      })
+      }, 200)
     }
-  }, 1000)
+  })
 })
