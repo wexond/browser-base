@@ -25,7 +25,10 @@ export const downloads = () => {
 }
 
 export const settings = () => {
-
+  tabsActions.addTab({
+    select: true,
+    url: 'wexond://settings'
+  })
 }
 
 export const extensions = () => {
