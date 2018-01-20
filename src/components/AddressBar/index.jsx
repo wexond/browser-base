@@ -162,7 +162,11 @@ export default class AddressBar extends React.Component {
       const input = e.currentTarget
       let text = input.value.toLowerCase().trim()
 
+      Store.app.suggestions.hidden = false
+
       Store.app.suggestions.selectByIndex(0)
+
+      Store.app.suggestions.show()
 
       if (this.canSuggest && this.lastSuggestion != null) {
         this.autoComplete(this.lastSuggestion, text)
