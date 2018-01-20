@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const protocol = require('electron').protocol
 const path = require('path')
 const ipcMessages = require(path.join(__dirname, '/src/defaults/ipc-messages'))
@@ -30,6 +30,10 @@ app.on('activate', () => {
   if (mainWindow == null) {
     createWindow()
   }
+})
+
+ipcMain.on('newWindow', () => {
+  createWindow()
 })
 
 process.on('uncaughtException', (error) => {
