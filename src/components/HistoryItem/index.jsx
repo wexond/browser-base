@@ -8,33 +8,44 @@ import { observer } from 'mobx-react'
 @observer
 export default class HistoryItem extends React.Component {
   render () {
+    const {
+      data,
+      section
+    } = this.props
+
     const iconStyle = {
-      backgroundImage: `url(${this.props.data.favicon})`
+      backgroundImage: `url(${data.favicon})`
     }
 
-    const onCheck = (flag, checkbox) => {
-      const data = Object.assign({}, this.props.data)
-      data.checkbox = checkbox
+    const sectionIndex = section.props.index
 
+    const onCheck = (flag, checkbox) => {
       if (flag) {
-        Store.selectedItems.push(data)
+        const checked = Store.history.getSelectedCheckBoxes(sectionIndex)
+
+        if (checked.length + 1 === section.items.length) {
+          section.checkbox.setState({checked: true})
+        }
+
+        Store.selectedItems.push(checkbox)
       } else {
-        Store.selectedItems.splice(Store.selectedItems.indexOf(data), 1)
+        section.checkbox.setState({checked: false})
+        Store.selectedItems.splice(Store.selectedItems.indexOf(checkbox), 1)
       }
     }
 
     return (
       <div className='history-section-item'>
-        <Checkbox ref={(r) => { this.checkbox = r }} onCheck={onCheck} />
+        <Checkbox ref={(r) => { this.checkbox = r }} onCheck={onCheck} sectionIndex={sectionIndex} data={data} />
         <div className='time'>
-          {this.props.data.time}
+          {data.time}
         </div>
         <div className='icon' style={iconStyle} />
-        <a href={this.props.data.url} className='title'>
-          {this.props.data.title}
+        <a href={data.url} className='title'>
+          {data.title}
         </a>
         <div className='domain'>
-          {this.props.data.domain}
+          {data.domain}
         </div>
       </div>
     )
