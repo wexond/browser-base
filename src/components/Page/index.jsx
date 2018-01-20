@@ -42,13 +42,19 @@ export default class Page extends React.Component {
         if (lastURL === e.url) {
           if (historyId !== -1) {
             const history = await Storage.get('history')
-            history.filter(item => { return item.id === historyId })[0].url = e.url
-            await Storage.save('history', history)
+            const item = history.filter(item => { return item.id === historyId })[0]
+            if (item != null) {
+              item.url = e.url
+              Storage.save('history', history)
+            }
           }
           if (siteId !== -1) {
             const sites = await Storage.get('sites')
-            sites.filter(item => { return item.id === siteId })[0].url = e.url
-            await Storage.save('sites', sites)
+            const item = sites.filter(item => { return item.id === siteId })[0]
+            if (item != null) {
+              item.favicon = favicon
+              Storage.save('sites', sites)
+            }
           }
         }
       }
@@ -87,8 +93,11 @@ export default class Page extends React.Component {
 
         if (historyId !== -1) {
           const history = await Storage.get('history')
-          history.filter(item => { return item.id === historyId })[0].ogdata = ogData
-          Storage.save('history', history)
+            const item = history.filter(item => { return item.id === historyId })[0]
+            if (item != null) {
+              item.ogdata = ogData
+              Storage.save('history', history)
+            }
         }
       }
     })
@@ -142,13 +151,19 @@ export default class Page extends React.Component {
           if (lastURL === tab.url) {
             if (historyId !== -1) {
               const history = await Storage.get('history')
-              history.filter(item => { return item.id === historyId })[0].favicon = favicon
-              Storage.save('history', history)
+              const item = history.filter(item => { return item.id === historyId })[0]
+              if (item != null) {
+                item.favicon = favicon
+                Storage.save('history', history)
+              }
             }
             if (siteId !== -1) {
               const sites = await Storage.get('sites')
-              sites.filter(item => { return item.id === siteId })[0].favicon = favicon
-              Storage.save('sites', sites)
+              const item = sites.filter(item => { return item.id === siteId })[0]
+              if (item != null) {
+                item.favicon = favicon
+                Storage.save('sites', sites)
+              }
             }
           }
         }
@@ -164,13 +179,19 @@ export default class Page extends React.Component {
       if (lastURL === tab.url) {
         if (historyId !== -1) {
           const history = await Storage.get('history')
-          history.filter(item => { return item.id === historyId })[0].title = e.title
-          Storage.save('history', history)
+          const item = history.filter(item => { return item.id === historyId })[0]
+          if (item != null) {
+            item.title = e.title
+            Storage.save('history', history)
+          }
         }
         if (siteId !== -1) {
           const sites = await Storage.get('sites')
-          sites.filter(item => { return item.id === siteId })[0].title = e.title
-          Storage.save('sites', sites)
+          const item = sites.filter(item => { return item.id === siteId })[0]
+          if (item != null) {
+            item.title = e.title
+            Storage.save('sites', sites)
+          }
         }
       }
     })
