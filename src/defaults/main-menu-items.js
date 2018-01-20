@@ -2,7 +2,8 @@ import * as mainMenuActions from '../actions/main-menu'
 
 export default [
   {
-    title: 'New window'
+    title: 'New window',
+    onClick: mainMenuActions.newWindow
   },
   {
     title: 'New incognito window'
@@ -24,7 +25,8 @@ export default [
     type: 'separator'
   },
   {
-    title: 'Settings'
+    title: 'Settings',
+    onClick: mainMenuActions.settings
   },
   {
     title: 'Extensions'
