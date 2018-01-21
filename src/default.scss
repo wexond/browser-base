@@ -8,6 +8,8 @@
 @import 'sass/mixins/shadows.scss';
 @import 'sass/mixins/typography.scss';
 
+@import 'components/Ripple/style.scss';
+
 // Transparency
 $primary-opacity-light: 0.87;
 $secondary-opacity-light: 0.54;

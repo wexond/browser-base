@@ -2,7 +2,6 @@
   width: 100%;
   height: 40px;
   font-size: 14px;
-  overflow: hidden;
   display: flex;
   align-items: center;
   padding-right: 16px;
@@ -15,6 +14,7 @@
   .time {
     opacity: 0.54;
     margin-left: 16px;
+    @include cursor-default;
   }
 
   .icon {
@@ -40,5 +40,6 @@
     opacity: 0.54;
     margin-left: 32px;
     margin-right: 16px;
+    @include cursor-default;
   }
 }
