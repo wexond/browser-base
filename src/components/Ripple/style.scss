@@ -1,0 +1,32 @@
+%ripple-basics {
+  user-select: none;
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+@mixin ripple {
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  @extend %ripple-basics;
+}
+
+@mixin ripple-icon {
+  user-select: none;
+  @extend %ripple-basics;
+}
+
+.ripple-effect {
+  width: 0px;
+  height: 0px;
+  padding: 0;
+  margin: 0;
+  z-index: -2;
+  position: absolute;
+  border-radius: 50%;
+  user-select: none;
+  pointer-events: none;
+  -webkit-transform: translate3d(-50.1%, -50.1%, 0);
+  -webkit-font-smoothing: subpixel-antialiased;
+  background-color: #000;
+}
