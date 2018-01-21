@@ -38,13 +38,13 @@ export default class Ripple extends React.Component {
   getPosition (center, e) {
     if (!center) {
       return {
-        x: e.pageX - e.target.getBoundingClientRect().left,
-        y: e.pageY - e.target.getBoundingClientRect().top
+        x: e.pageX - e.target.getBoundingClientRect().left + 'px',
+        y: e.pageY - e.target.getBoundingClientRect().top + 'px'
       }
     } else {
       return {
-        x: e.target.clientWidth / 2,
-        y: e.target.clientHeight / 2
+        x: '50%',
+        y: '50%'
       }
     }
   }
@@ -70,20 +70,20 @@ export default class Ripple extends React.Component {
     element.className = 'ripple-effect'
     // Set css
     this.css(element, {
-      left: `${position.x}px`,
-      top: `${position.y}px`,
+      left: position.x,
+      top: position.y,
       transition: `${time}s ease-out width, ${time}s ease-out height, ${time}s opacity`,
       opacity: opacity
     })
-    // Append the element to the container
-    this.root.appendChild(element)
+    // Append the element to parent
+    this.parent.appendChild(element)
     // Calculate the ripple size
     const animateSize = parseInt(Math.max(scaleX, scaleY) * Math.PI)
     // Wait 1 ms, because there is bug with display
     setTimeout(() => {
       this.css(element, {
-        width: `${animateSize}px`,
-        height: `${animateSize}px`
+        width: animateSize + 'px',
+        height: animateSize + 'px'
       })
     }, 1)
     // Removes the ripple
@@ -103,7 +103,7 @@ export default class Ripple extends React.Component {
 
   render () {
     return (
-      <div className='ripple-container' ref={(r) => this.root = r} />
+      <div className='ripple-container' />
     )
   }
 }
@@ -111,6 +111,6 @@ export default class Ripple extends React.Component {
 Ripple.defaultProps = {
   center: false,
   scale: 15,
-  time: 1,
-  opacity: 0.4
+  time: 0.3,
+  opacity: 0.3
 }
