@@ -44,8 +44,8 @@ export const addTab = (data = tabDefaults.defaultOptions) => {
 
     if (process.env.NODE_ENV === 'dev') {
       if (process.argv.length >= 3) file = process.argv[2]
-    } else if (process.argv.length >= 1) {
-      file = process.argv[0]
+    } else if (process.argv.length >= 2) {
+      file = process.argv[1]
     }
 
     if (file != null) {
