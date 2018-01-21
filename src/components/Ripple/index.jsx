@@ -110,7 +110,7 @@ export default class Ripple extends React.Component {
 
 Ripple.defaultProps = {
   center: false,
-  scale: 15,
+  scale: 14,
   time: 0.3,
   opacity: 0.3
 }
