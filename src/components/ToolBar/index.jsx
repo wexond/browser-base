@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Input from '../Input'
+import Ripple from '../Ripple'
 
 import Store from '../../stores/history'
 import { observer } from 'mobx-react'
@@ -82,13 +83,19 @@ export default class ToolBar extends React.Component {
             {title}
           </div>
           <div className={'search-container' + (this.state.searchInput ? ' selected' : '')}>
-            <div className='search-icon' onClick={this.onSearchIconClick} />
+            <div className='search-icon' onClick={this.onSearchIconClick}>
+              <Ripple center={true} opacity={0.2} />
+            </div>
             <Input ref={(r) => this.input = r} placeholder='Search' onKeyPress={this.onInputKeyPress} />
-            <div className='cancel-icon' onClick={this.onSearchCancelIconClick} />
+            <div className='cancel-icon' onClick={this.onSearchCancelIconClick}>
+              <Ripple center={true} opacity={0.2} />
+            </div>
           </div>
         </div>
         <div className='selection-toolbar' style={selectionToolbarStyle}>
-          <div className='exit-icon' onClick={onCancel} />
+          <div className='exit-icon' onClick={onCancel}>
+            <Ripple center={true} />
+          </div>
           <div className='selected-items'>
             Selected items:
           </div>
@@ -97,9 +104,11 @@ export default class ToolBar extends React.Component {
           </div>
           <div className='delete-button' onClick={onDelete}>
             delete
+            <Ripple time={0.6} />
           </div>
           <div className='cancel-button' onClick={onCancel}>
             cancel
+            <Ripple time={0.6} />
           </div>
         </div>
       </div>
