@@ -20,10 +20,3 @@ a {
   overflow-y: auto;
   padding: 32px;
 }
-
-.test {
-  width: 200px;
-  height: 200px;
-  border: 1px solid #000;
-  @include ripple;
-}
