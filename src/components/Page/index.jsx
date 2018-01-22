@@ -29,6 +29,32 @@ export default class Page extends React.Component {
 
     page.page = this
 
+    const updateData = async () => {
+      if (lastURL === tab.url) {
+        if (historyId !== -1) {
+          const history = await Storage.get('history')
+          const item = history.filter(item => { return item.id === historyId })[0]
+          if (item != null) {
+            item.url = tab.url
+            item.favicon = tab.favicon
+            item.title = tab.title
+            item.ogData = tab.ogData
+            Storage.save('history', history)
+          }
+        }
+        if (siteId !== -1) {
+          const sites = await Storage.get('sites')
+          const item = sites.filter(item => { return item.id === siteId })[0]
+          if (item != null) {
+            item.url = tab.url
+            item.favicon = tab.favicon
+            item.title = tab.title
+            Storage.save('sites', sites)
+          }
+        }
+      }
+    }
+
     const updateInfo = async (e) => {
       Store.app.refreshIconsState()
 
@@ -36,27 +62,11 @@ export default class Page extends React.Component {
         if (e.isMainFrame != null && !e.isMainFrame) return
         tab.url = e.url
         Store.url = e.url
+
         if (Store.selectedTab === tab.id) {
           Store.app.bar.addressBar.setInfo(e.url)
         }
-        if (lastURL === e.url) {
-          if (historyId !== -1) {
-            const history = await Storage.get('history')
-            const item = history.filter(item => { return item.id === historyId })[0]
-            if (item != null) {
-              item.url = e.url
-              Storage.save('history', history)
-            }
-          }
-          if (siteId !== -1) {
-            const sites = await Storage.get('sites')
-            const item = sites.filter(item => { return item.id === siteId })[0]
-            if (item != null) {
-              item.favicon = favicon
-              Storage.save('sites', sites)
-            }
-          }
-        }
+        updateData()
       }
 
       if (e.type === 'did-stop-loading') {
@@ -70,7 +80,6 @@ export default class Page extends React.Component {
     this.webview.addEventListener('will-navigate', updateInfo)
 
     this.webview.addEventListener('load-commit', async (e) => {
-      tab.url = e.url
       tab.loading = true
       if (e.url !== lastURL && e.isMainFrame) {
         lastURL = e.url
@@ -82,23 +91,16 @@ export default class Page extends React.Component {
           url = url.substring(0, url.indexOf('/', 9))
         }
 
-        historyId = await Storage.addHistoryItem('', e.url, favicon)
-        siteId = await Storage.addSite('', url, favicon)
+        historyId = await Storage.addHistoryItem(tab.title, e.url, favicon)
+        siteId = await Storage.addSite(tab.title, url, favicon)
       }
     })
 
     this.webview.addEventListener('dom-ready', async (e) => {
       if (lastURL === tab.url) {
         const ogData = await webviewActions.getOGData(this.webview)
-
-        if (historyId !== -1) {
-          const history = await Storage.get('history')
-            const item = history.filter(item => { return item.id === historyId })[0]
-            if (item != null) {
-              item.ogdata = ogData
-              Storage.save('history', history)
-            }
-        }
+        tab.ogData = ogData
+        updateData()
       }
     })
 
@@ -148,24 +150,7 @@ export default class Page extends React.Component {
             tab.favicon = e.favicons[0]
             favicon = e.favicons[0]
           }
-          if (lastURL === tab.url) {
-            if (historyId !== -1) {
-              const history = await Storage.get('history')
-              const item = history.filter(item => { return item.id === historyId })[0]
-              if (item != null) {
-                item.favicon = favicon
-                Storage.save('history', history)
-              }
-            }
-            if (siteId !== -1) {
-              const sites = await Storage.get('sites')
-              const item = sites.filter(item => { return item.id === siteId })[0]
-              if (item != null) {
-                item.favicon = favicon
-                Storage.save('sites', sites)
-              }
-            }
-          }
+          updateData()
         }
       }
 
@@ -175,25 +160,7 @@ export default class Page extends React.Component {
 
     this.webview.addEventListener('page-title-updated', async (e) => {
       tab.title = e.title
-
-      if (lastURL === tab.url) {
-        if (historyId !== -1) {
-          const history = await Storage.get('history')
-          const item = history.filter(item => { return item.id === historyId })[0]
-          if (item != null) {
-            item.title = e.title
-            Storage.save('history', history)
-          }
-        }
-        if (siteId !== -1) {
-          const sites = await Storage.get('sites')
-          const item = sites.filter(item => { return item.id === siteId })[0]
-          if (item != null) {
-            item.title = e.title
-            Storage.save('sites', sites)
-          }
-        }
-      }
+      updateData()
     })
 
     this.webview.addEventListener('did-change-theme-color', (e) => {

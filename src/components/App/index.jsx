@@ -27,16 +27,18 @@ import * as tabsActions from '../../actions/tabs'
 import * as tabGroupsActions from '../../actions/tab-groups'
 import * as pageMenuActions from '../../actions/page-menu'
 import * as extensionsActions from '../../actions/extensions'
+import * as languageActions from '../../actions/language'
 
 @observer
 export default class App extends React.Component {
   constructor () {
     super()
+
+    languageActions.loadDictionary('english_US')
   }
 
-  componentDidMount () {
+  async componentDidMount () {
     Store.app = this
-
     extensionsActions.loadExtensions()
 
     window.addEventListener('mousedown', (e) => {

@@ -47,18 +47,20 @@ document.addEventListener('DOMContentLoaded', () => {
   observer.observe(
     document.body,
     {
-      attributes: true,
-      childList: true
+      childList: true,
+      subtree: true,
+      attributes: true
     }
   )
 })
 
 const observer = new MutationObserver((mutations) => {
-  for (let i = changedNodes.length - 1; i >= 0; i--) {
-    if (!document.contains(changedNodes[i])) changedNodes.splice(i, 1)
+  for (let i = 0; i < changedNodes.length; i++) {
+    if (!document.contains(changedNodes[i])) changedNodes.splice(i--, 1)
   }
 
   clearTimeout(timeout)
+  timeout = null
 
   for (let mutation of mutations) {
     let node = mutation.target
@@ -68,34 +70,31 @@ const observer = new MutationObserver((mutations) => {
     if (mutation.type == "attributes") node = node.parentNode
 
     let addNode = true
-    for (let i = changedNodes.length - 1; i >= 0; i--) {
+    for (let i = 0; i < changedNodes.length; i++) {
       let previouslyChangedNode = changedNodes[i]
       if (previouslyChangedNode.contains(node)) {
         addNode = false
         break
       }
 
-      if (node.contains(previouslyChangedNode)) changedNodes.splice(i, 1)
+      if (node.contains(previouslyChangedNode)) changedNodes.splice(i--, 1)
     }
 
     if (addNode) changedNodes.push(node)
   }
 
   timeout = setTimeout(() => {
-    for (let x = toDivide - 1; x >= 0; x--) {
+    for (let x = toDivide; x--;) {
       setTimeout(() => {
-        var i
-        for (i = Math.floor((blockedSelectors.length / toDivide) * (x + 1)) - 1; i >= Math.floor((blockedSelectors.length / toDivide) * (x)); i--) {
-          var z
-          for (z = changedNodes.length - 1; z >= 0; z--) {
+        for (var i = Math.floor((blockedSelectors.length / toDivide) * (x + 1)) - 1; i >= Math.floor((blockedSelectors.length / toDivide) * (x)); i--) {
+          for (var z = changedNodes.length; z--;) {
             const elements = changedNodes[z].querySelectorAll(blockedSelectors[i])
-            var y
-            for (y = elements.length - 1; y >= 0; y--) {
+            for (var y = elements.length; y--;) {
               elements[y].style.display = 'none'
             }
           }
         }
-      }, 200)
+      })
     }
-  })
+  }, 200)
 })
