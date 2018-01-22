@@ -1,6 +1,7 @@
 import React from 'react'
 
 import AddressBar from '../AddressBar'
+import Ripple from '../Ripple'
 
 import * as pagesActions from '../../actions/pages'
 import * as tabsActions from '../../actions/tabs'
@@ -57,11 +58,19 @@ export default class Bar extends React.Component {
 
     return (
       <div className={'bar ' + Store.foreground + (!Store.border ? ' disabled-border' : '')} style={barStyle}>
-        <div className={'bar-icon back-icon ' + ((!canGoBack) ? 'disabled' : '')} onClick={onBackClick} />
-        <div className={'bar-icon forward-icon ' + ((!canGoForward) ? 'disabled' : '')} onClick={onForwardClick} />
-        <div className='bar-icon refresh-icon' onClick={onRefreshClick} />
+        <div className={'bar-icon back-icon ' + ((!canGoBack) ? 'disabled' : '')} onClick={onBackClick} >
+          <Ripple center={true} scale={12} offsetX={15} />
+        </div>
+        <div className={'bar-icon forward-icon ' + ((!canGoForward) ? 'disabled' : '')} onClick={onForwardClick} >
+          <Ripple center={true} scale={12} offsetX={-5} />
+        </div>
+        <div className='bar-icon refresh-icon' onClick={onRefreshClick} >
+          <Ripple center={true} scale={12} />
+        </div>
         <AddressBar ref={(r) => { this.addressBar = r }} />
-        <div className='bar-icon menu-icon' onClick={onMenuClick} />
+        <div className='bar-icon menu-icon' onClick={onMenuClick} >
+          <Ripple center={true} scale={12} offsetX={-5} />
+        </div>
       </div>
     )
   }
