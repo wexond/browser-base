@@ -33,6 +33,20 @@
       "historyHeader": "historia",
       "emptyHistory": "historia jest pusta",
       "noMatches": "brak wyników wyszukiwania"
+    },
+    "newTab": {
+      "title": "aktualności",
+      "anHour": "godzinę",
+      "hours": {
+        "<5":"godziny",
+        ">6": "godzin"
+      },
+      "minutes": {
+        "<5":"minuty",
+        ">6": "minut"
+      },
+      "ago": "temu",
+      "now": "teraz"
     }
   }
 }
