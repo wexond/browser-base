@@ -9,7 +9,7 @@ import { observer } from 'mobx-react'
 import Preloader from '../Preloader'
 
 import NewTabHelper from '../../utils/new-tab'
-import NewTabCard from '../NewTabCard'
+import NewTabCard from './Card'
 
 import LanguageHelper from '../../utils/language'
 

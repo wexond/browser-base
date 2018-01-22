@@ -1,13 +1,13 @@
 import React from 'react'
 
-import Checkbox from '../Checkbox'
-import Item from '../HistoryItem'
+import Checkbox from '../../Checkbox'
+import Item from '../Item'
 
-import Store from '../../stores/history'
+import Store from '../../../stores/history'
 import { observer } from 'mobx-react'
 
 @observer
-export default class HistorySection extends React.Component {
+export default class Section extends React.Component {
   constructor () {
     super()
 
