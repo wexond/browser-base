@@ -35,7 +35,7 @@ export default class Ripple extends React.Component {
    * @param {Object} event data
    * @return {Object} positions
    */
-  getPosition (center, e) {
+  getPosition (center, offsetX, e) {
     if (!center) {
       return {
         x: e.pageX - e.target.getBoundingClientRect().left + 'px',
@@ -43,7 +43,7 @@ export default class Ripple extends React.Component {
       }
     } else {
       return {
-        x: '50%',
+        x: 50 + offsetX + '%',
         y: '50%'
       }
     }
@@ -56,6 +56,7 @@ export default class Ripple extends React.Component {
   makeRipple = (e) => {
     const {
       center,
+      offsetX,
       opacity,
       time,
       scale
@@ -64,7 +65,7 @@ export default class Ripple extends React.Component {
     const scaleX = center ? scale : e.target.clientWidth
     const scaleY = center ? scale : e.target.clientHeight
     // Get ripple position
-    const position = this.getPosition(center, e)
+    const position = this.getPosition(center, offsetX, e)
     // Create DOM element
     const element = document.createElement('span')
     element.className = 'ripple-effect'
@@ -110,6 +111,7 @@ export default class Ripple extends React.Component {
 
 Ripple.defaultProps = {
   center: false,
+  offsetX: 0,
   scale: 14,
   time: 0.3,
   opacity: 0.3
