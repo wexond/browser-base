@@ -15,7 +15,7 @@ import LanguageHelper from '../../utils/language'
 
 @observer
 export default class History extends React.Component {
-  constructor () {
+  constructor() {
     super()
 
     this.sections = []
@@ -24,13 +24,13 @@ export default class History extends React.Component {
     document.title = LanguageHelper.capFirst(window.dictionary.pages.history.title)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     Store.history = this
 
     this.loadData()
   }
 
-  async loadData (searchStr = false) {
+  async loadData(searchStr = false) {
     Store.loading = true
 
     let data = await window.historyAPI.get()
@@ -43,7 +43,7 @@ export default class History extends React.Component {
     Store.loading = false
   }
 
-  getSelectedCheckBoxes (sectionIndex) {
+  getSelectedCheckBoxes(sectionIndex) {
     const filter = (item) => {
       return item.props.sectionIndex === sectionIndex
     }
@@ -59,7 +59,7 @@ export default class History extends React.Component {
   onCancel = () => {
     for (var i = 0; i < Store.selectedItems.length; i++) {
       const checkbox = Store.selectedItems[i]
-      checkbox.setState({checked: false})
+      checkbox.setState({ checked: false })
     }
 
     for (var i = 0; i < this.sections.length; i++) {
@@ -76,22 +76,33 @@ export default class History extends React.Component {
   }
 
   onDelete = async () => {
-    Store.loading = true
-
-    const selectedItems = Store.selectedItems.slice()
     const deletedItems = []
+    const selectedItems = Store.selectedItems.slice()
+
+    for (var i = selectedItems.length; i--;) {
+      const selectedItem = Object.assign({}, selectedItems[i])
+
+      deletedItems.push(selectedItem.props.data)
+
+      for (var y = Store.sections.length; y--;) {
+        const section = Store.sections[y]
+
+        for (var z = section.items.length; z--;) {
+          const item = section.items[z]
+
+          if (item.id === selectedItem.props.data.id) {  
+            section.items.splice(section.items.indexOf(item), 1)
+          }
+        }
+      }
+    }
 
     this.onCancel()
 
-    for (var i = 0; i < selectedItems.length; i++) {
-      deletedItems.push(selectedItems[i].props.data)
-    }
-
     await window.historyAPI.delete(deletedItems)
-    await this.loadData()
   }
 
-  render () {
+  render() {
     this.sections = []
 
     const emptyHistory = Store.sections.length === 0
