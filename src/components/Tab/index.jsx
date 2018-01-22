@@ -16,6 +16,7 @@ import * as tabGroupsActions from '../../actions/tab-groups'
 import Colors from '../../utils/colors'
 
 import MenuItem from '../MenuItem'
+import Ripple from '../Ripple'
 
 import Preloader from '../Preloader'
 
@@ -303,6 +304,7 @@ export default class Tab extends React.Component {
           <div className='favicon' style={faviconStyle} />
           <div className='title' style={titleStyle}>{title}</div>
           <div className='close' onClick={this.close} onMouseDown={onCloseMouseDown} style={closeStyle}>
+            <Ripple center={true} scale={8} />
             <div className='icon' />
           </div>
         </div>
