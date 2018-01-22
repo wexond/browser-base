@@ -1,0 +1,38 @@
+{
+  "timeAndDate": {
+    "weekDays": [
+      "poniedziałek",
+      "wtorek",
+      "środka",
+      "czwartek",
+      "piątek",
+      "sobota",
+      "niedziela"
+    ],
+    "months": [
+      "styczeń",
+      "luty",
+      "marzec",
+      "kwiecień",
+      "maj",
+      "czerwiec",
+      "lipiec",
+      "sierpień",
+      "wrzesień",
+      "październik",
+      "listopad",
+      "grudzień"
+    ],
+    "today": "dzisiaj",
+    "yesterday": "wczoraj"
+  },
+  "pages": {
+    "history": {
+      "title": "historia",
+      "cardsHeader": "najczęściej odwiedzane strony internetowe",
+      "historyHeader": "historia",
+      "emptyHistory": "historia jest pusta",
+      "noMatches": "brak wyników wyszukiwania"
+    }
+  }
+}
