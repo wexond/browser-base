@@ -3,8 +3,8 @@ import React from 'react'
 import HistoryParser from '../../utils/history'
 
 import ToolBar from '../ToolBar'
-import HistoryCards from '../HistoryCards'
-import HistorySection from '../HistorySection'
+import Cards from './Cards'
+import Section from './Section'
 
 import Preloader from '../Preloader'
 
@@ -120,12 +120,12 @@ export default class History extends React.Component {
           {!emptyHistory &&
             <div>
               <div className='history-title'>{LanguageHelper.capFirst(window.dictionary.pages.history.cardsHeader)}</div>
-              <HistoryCards />
+              <Cards />
               <div className='history-title'>{LanguageHelper.capFirst(window.dictionary.pages.history.historyHeader)}</div>
               {
                 Store.sections.map((data, key) => {
                   sectionIndex++
-                  return <HistorySection ref={(r) => { if (r != null) this.sections.push(r) }} data={data} key={key} index={sectionIndex} />
+                  return <Section ref={(r) => { if (r != null) this.sections.push(r) }} data={data} key={key} index={sectionIndex} />
                 })
               }
             </div> || !Store.loading &&

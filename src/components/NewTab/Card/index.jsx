@@ -1,10 +1,10 @@
 import React from 'react'
 
-import Preloader from '../Preloader'
+import Preloader from '../../Preloader'
 
-import NewTabHelper from '../../utils/new-tab'
+import NewTabHelper from '../../../utils/new-tab'
 
-export default class NewTabCard extends React.Component {
+export default class Card extends React.Component {
   constructor () {
     super()
 
