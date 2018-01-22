@@ -114,5 +114,5 @@ Ripple.defaultProps = {
   offsetX: 0,
   scale: 14,
   time: 0.3,
-  opacity: 0.3
+  opacity: 0.2
 }
