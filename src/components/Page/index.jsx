@@ -29,6 +29,32 @@ export default class Page extends React.Component {
 
     page.page = this
 
+    const updateData = async () => {
+      if (lastURL === tab.url) {
+        if (historyId !== -1) {
+          const history = await Storage.get('history')
+          const item = history.filter(item => { return item.id === historyId })[0]
+          if (item != null) {
+            item.url = tab.url
+            item.favicon = tab.favicon
+            item.title = tab.title
+            item.ogData = tab.ogData
+            Storage.save('history', history)
+          }
+        }
+        if (siteId !== -1) {
+          const sites = await Storage.get('sites')
+          const item = sites.filter(item => { return item.id === siteId })[0]
+          if (item != null) {
+            item.url = tab.url
+            item.favicon = tab.favicon
+            item.title = tab.title
+            Storage.save('sites', sites)
+          }
+        }
+      }
+    }
+
     const updateInfo = async (e) => {
       Store.app.refreshIconsState()
 
@@ -40,26 +66,7 @@ export default class Page extends React.Component {
         if (Store.selectedTab === tab.id) {
           Store.app.bar.addressBar.setInfo(e.url)
         }
-        if (lastURL === e.url) {
-          if (historyId !== -1) {
-            const history = await Storage.get('history')
-            const item = history.filter(item => { return item.id === historyId })[0]
-            if (item != null) {
-              item.url = e.url
-              item.favicon = favicon
-              Storage.save('history', history)
-            }
-          }
-          if (siteId !== -1) {
-            const sites = await Storage.get('sites')
-            const item = sites.filter(item => { return item.id === siteId })[0]
-            if (item != null) {
-              item.favicon = favicon
-              item.url = e.url
-              Storage.save('sites', sites)
-            }
-          }
-        }
+        updateData()
       }
 
       if (e.type === 'did-stop-loading') {
@@ -75,7 +82,6 @@ export default class Page extends React.Component {
     this.webview.addEventListener('load-commit', async (e) => {
       tab.loading = true
       if (e.url !== lastURL && e.isMainFrame) {
-        console.log(e.url)
         lastURL = e.url
         filesActions.checkFiles()
 
@@ -93,17 +99,8 @@ export default class Page extends React.Component {
     this.webview.addEventListener('dom-ready', async (e) => {
       if (lastURL === tab.url) {
         const ogData = await webviewActions.getOGData(this.webview)
-
-        if (historyId !== -1) {
-          const history = await Storage.get('history')
-            const item = history.filter(item => { return item.id === historyId })[0]
-            if (item != null) {
-              item.ogdata = ogData
-              item.favicon = favicon
-              item.title = tab.title
-              Storage.save('history', history)
-            }
-        }
+        tab.ogData = ogData
+        updateData()
       }
     })
 
@@ -153,26 +150,7 @@ export default class Page extends React.Component {
             tab.favicon = e.favicons[0]
             favicon = e.favicons[0]
           }
-          if (lastURL === tab.url) {
-            if (historyId !== -1) {
-              const history = await Storage.get('history')
-              const item = history.filter(item => { return item.id === historyId })[0]
-              if (item != null) {
-                item.favicon = favicon
-                item.title = tab.title
-                Storage.save('history', history)
-              }
-            }
-            if (siteId !== -1) {
-              const sites = await Storage.get('sites')
-              const item = sites.filter(item => { return item.id === siteId })[0]
-              if (item != null) {
-                item.favicon = favicon
-                item.title = tab.title
-                Storage.save('sites', sites)
-              }
-            }
-          }
+          updateData()
         }
       }
 
@@ -182,27 +160,7 @@ export default class Page extends React.Component {
 
     this.webview.addEventListener('page-title-updated', async (e) => {
       tab.title = e.title
-
-      if (lastURL === tab.url) {
-        if (historyId !== -1) {
-          const history = await Storage.get('history')
-          const item = history.filter(item => { return item.id === historyId })[0]
-          if (item != null) {
-            item.title = e.title
-            item.favicon = favicon
-            Storage.save('history', history)
-          }
-        }
-        if (siteId !== -1) {
-          const sites = await Storage.get('sites')
-          const item = sites.filter(item => { return item.id === siteId })[0]
-          if (item != null) {
-            item.title = e.title
-            item.favicon = favicon
-            Storage.save('sites', sites)
-          }
-        }
-      }
+      updateData()
     })
 
     this.webview.addEventListener('did-change-theme-color', (e) => {
