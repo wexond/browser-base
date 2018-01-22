@@ -1,0 +1,38 @@
+{
+  "timeAndDate": {
+    "weekDays": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "today": "dzisiaj",
+    "yesterday": "wczoraj"
+  },
+  "pages": {
+    "history": {
+      "title": "History",
+      "cardsHeader": "the most visited websites",
+      "historyHeader": "history",
+      "emptyHistory": "history is empty",
+      "noMatches": "no search results"
+    }
+  }
+}
