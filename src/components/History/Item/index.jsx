@@ -7,6 +7,10 @@ import { observer } from 'mobx-react'
 
 @observer
 export default class HistoryItem extends React.Component {
+  componentDidMount () {
+    this.id = this.props.data.id
+  }
+
   render () {
     const {
       data,
