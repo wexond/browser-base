@@ -19,7 +19,7 @@ export default class History extends React.Component {
     super()
 
     this.sections = []
-    window.dictionary = window.dictionaryAPI.get('english_US')
+    window.dictionary = window.dictionaryAPI.get('polish_PL')
 
     document.title = LanguageHelper.capFirst(window.dictionary.pages.history.title)
   }
