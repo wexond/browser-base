@@ -57,9 +57,9 @@ export default class History {
       prefix = LanguageHelper.capFirst(window.dictionary.timeAndDate.yesterday)
     }
     // Get name of day in week
-    const nameOfDay = LanguageHelper.capFirst(window.dictionary.timeAndDate.weekDays[sectionDate.getDay()])
+    const nameOfDay = window.dictionary.timeAndDate.weekDays[sectionDate.getDay()]
     // Get name of month
-    const month = LanguageHelper.capFirst(window.dictionary.timeAndDate.months[sectionDate.getMonth()])
+    const month = window.dictionary.timeAndDate.months[sectionDate.getMonth()]
     // Create full date. For example saturday, 16 december 2017
     const fullDate = `${nameOfDay}, ${sectionDate.getDate()} ${month} ${sectionDate.getFullYear()}`
     // Final date
