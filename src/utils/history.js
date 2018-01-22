@@ -1,4 +1,4 @@
-import Language from '../defaults/language'
+import LanguageHelper from './language'
 
 export default class History {
   // Separates history data in diffrent sections
@@ -52,14 +52,14 @@ export default class History {
     // If section date string equals today's date string then
     // prefix is "Today"
     if (sectionDateString === actualDate.toDateString()) {
-      prefix = 'Today'
+      prefix = LanguageHelper.capFirst(window.dictionary.timeAndDate.today)
     } else if (sectionDateString === yesterdayDate.toDateString()) {
-      prefix = 'Yesterday'
+      prefix = LanguageHelper.capFirst(window.dictionary.timeAndDate.yesterday)
     }
     // Get name of day in week
-    const nameOfDay = Language.english.weekDays[sectionDate.getDay()]
+    const nameOfDay = LanguageHelper.capFirst(window.dictionary.timeAndDate.weekDays[sectionDate.getDay()])
     // Get name of month
-    const month = Language.english.months[sectionDate.getMonth()]
+    const month = LanguageHelper.capFirst(window.dictionary.timeAndDate.months[sectionDate.getMonth()])
     // Create full date. For example saturday, 16 december 2017
     const fullDate = `${nameOfDay}, ${sectionDate.getDate()} ${month} ${sectionDate.getFullYear()}`
     // Final date
