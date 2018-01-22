@@ -1,6 +1,8 @@
-const http = require('http')
-const https = require('https')
-const url = require('url')
+import http from 'http'
+import https from 'https'
+import url from 'url'
+
+import LanguageHelper from './language'
 
 export default class NewTabHelper {
   static getWebSiteSource (website, headers, parseToJSON = true) {
@@ -102,13 +104,22 @@ export default class NewTabHelper {
       minutes = 0
     }
 
+    const newTab = window.dictionary.pages.newTab
+
     if (hours < 1) {
-      if (minutes > 1) return `${minutes} minutes ago`
-      else return 'a minute ago'
+      if (minutes > 1) {
+        const minutesAgo = LanguageHelper.completeWithEndings(newTab.minutes, minutes)
+
+        return `${minutes} ${newTab.minutes} ${newTab.ago}`
+      } else {
+        return newTab.now
+      }
     } else if (hours === 1) {
-      return 'an hour ago'
+      return `${newTab.anHour} ${newTab.ago}`
     } else {
-      return `${hours} hours ago`
+      const hoursAgo = LanguageHelper.completeWithEndings(newTab.hours, hours)
+
+      return `${hours} ${hoursAgo} ${newTab.ago}`
     }
   }
 }

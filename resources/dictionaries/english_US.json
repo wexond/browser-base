@@ -1,27 +1,27 @@
 {
   "timeAndDate": {
     "weekDays": [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday"
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
     ],
     "months": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "january",
+      "february",
+      "march",
+      "april",
+      "may",
+      "june",
+      "july",
+      "august",
+      "september",
+      "october",
+      "november",
+      "december"
     ],
     "today": "today",
     "yesterday": "yesterday"
@@ -33,6 +33,14 @@
       "historyHeader": "history",
       "emptyHistory": "history is empty",
       "noMatches": "no search results"
+    },
+    "newTab": {
+      "title": "news",
+      "anHour": "an hour",
+      "hours": "hours",
+      "minutes": "minutes",
+      "ago": "ago",
+      "now": "now"
     }
   }
 }
