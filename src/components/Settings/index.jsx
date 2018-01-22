@@ -11,9 +11,7 @@ export default class Settings extends React.Component {
       <div className='settings'>
         <ToolBar title='Settings' />
         <div className='content'>
-          <div className='test'>
-            <Ripple />
-          </div>
+
         </div>
       </div>
     )
