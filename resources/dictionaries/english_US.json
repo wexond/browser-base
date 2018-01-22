@@ -23,8 +23,8 @@
       "November",
       "December"
     ],
-    "today": "dzisiaj",
-    "yesterday": "wczoraj"
+    "today": "today",
+    "yesterday": "yesterday"
   },
   "pages": {
     "history": {
