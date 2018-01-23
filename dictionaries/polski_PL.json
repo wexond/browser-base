@@ -94,5 +94,9 @@
   },
   "security": {
     "secure": "Bezpieczna"
+  },
+  "tabGroups": {
+    "newGroup": "Nowa grupa",
+    "addNewGroup": "Dodaj nową grupę"
   }
 }

@@ -6,7 +6,7 @@ let groupId = 0
 
 export const addTabGroup = () => {
   Store.tabGroups.push({
-    title: 'New group', 
+    title: Store.dictionary.tabGroups.newGroup, 
     tabs: [],
     pages: [],
     id: groupId
