@@ -23,19 +23,20 @@
       "November",
       "December"
     ],
-    "today": "today",
-    "yesterday": "yesterday"
+    "today": "Today",
+    "yesterday": "Yesterday"
   },
   "pages": {
     "history": {
       "title": "History",
-      "cardsHeader": "the most visited websites",
-      "historyHeader": "history",
-      "emptyHistory": "history is empty",
-      "noMatches": "no search results"
+      "cardsHeader": "The most visited websites",
+      "historyHeader": "History",
+      "emptyHistory": "History is empty",
+      "noMatches": "No search results"
     },
     "newTab": {
-      "title": "news",
+      "title": "New tab",
+      "news": "News",
       "anHour": "an hour",
       "hours": "hours",
       "minutes": "minutes",
@@ -46,6 +47,19 @@
   "searching": {
     "unknownURL": "open website",
     "unknownSearch": "search in Google",
-    "search": "search"
+    "search": "Search"
+  },
+  "menu": {
+    "main": {
+      "newWindow": "New window",
+      "newIncognitoWindow": "New incognito window",
+      "history": "History",
+      "bookmarks": "Bookmarks",
+      "downloads": "Downloads",
+      "settings": "Settings",
+      "extensions": "Extensions",
+      "privacy": "Privacy",
+      "developerTools": "Developer tools"
+    }
   }
 }

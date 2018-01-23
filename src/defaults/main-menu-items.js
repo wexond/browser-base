@@ -1,7 +1,6 @@
 import * as mainMenuActions from '../actions/main-menu'
 
 import Store from '../stores/store'
-import LanguageHelper from '../utils/language'
 
 export default () => {
   const {
@@ -18,43 +17,43 @@ export default () => {
 
   return [
     {
-      title: LanguageHelper.capFirst(newWindow),
+      title: newWindow,
       onClick: mainMenuActions.newWindow
     },
     {
-      title: LanguageHelper.capFirst(newIncognitoWindow)
+      title: newIncognitoWindow
     },
     {
       type: 'separator'
     },
     {
-      title: LanguageHelper.capFirst(history),
+      title: history,
       onClick: mainMenuActions.history
     },
     {
-      title: LanguageHelper.capFirst(bookmarks)
+      title: bookmarks
     },
     {
-      title: LanguageHelper.capFirst(downloads)
+      title: downloads
     },
     {
       type: 'separator'
     },
     {
-      title: LanguageHelper.capFirst(settings),
+      title: settings,
       onClick: mainMenuActions.settings
     },
     {
-      title: LanguageHelper.capFirst(extensions)
+      title: extensions
     },
     {
-      title: LanguageHelper.capFirst(privacy)
+      title: privacy
     },
     {
       type: 'separator'
     },
     {
-      title: LanguageHelper.capFirst(developerTools),
+      title: developerTools,
       onClick: mainMenuActions.developerTools
     }
   ]  
