@@ -79,6 +79,17 @@
       "saveAs": "Zapisz jako",
       "viewSource": "Wyświetl źródło strony",
       "inspectElement": "Zbadaj element"
+    },
+    "tab": {
+      "addNewTab": "Dodaj nową kartę",
+      "pinTab": "Przypnij kartę",
+      "muteTab": "Wycisz kartę",
+      "duplicate": "Duplikuj",
+      "closeTab": "Zamknij kartę",
+      "closeOtherTabs": "Zamknij inne karty",
+      "closeTabsFromLeft": "Zamknij karty po lewo",
+      "closeTabsFromRight": "Zamknij karty po prawo",
+      "revertClosedTab": "Przywróć zamknięte karty"
     }
   }
 }
