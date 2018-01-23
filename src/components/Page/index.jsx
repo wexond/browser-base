@@ -10,6 +10,9 @@ import * as filesActions from '../../actions/files'
 import * as tabsActions from '../../actions/tabs'
 import * as webviewActions from '../../actions/webview'
 
+import ipcMessages from '../../defaults/ipc-messages'
+import extensionsDefaults from '../../defaults/extensions'
+
 import FindMenu from '../FindMenu'
 
 @observer
@@ -74,12 +77,25 @@ export default class Page extends React.Component {
       }
     }
 
+    const executeExtensionEvent = (name, eventObject) => {
+      for (var i = Store.extensions.length; i--;) {
+        Store.extensions[i].backgroundExtension.webview.send(ipcMessages.EXTENSION_EXECUTE_EVENT + name, eventObject)
+      }
+    }
+
     this.webview.addEventListener('did-stop-loading', updateInfo)
     this.webview.addEventListener('did-navigate', updateInfo)
     this.webview.addEventListener('did-navigate-in-page', updateInfo)
     this.webview.addEventListener('will-navigate', updateInfo)
 
     this.webview.addEventListener('load-commit', async (e) => {
+      const eventObject = {
+        url: e.url,
+        isMainFrame: e.isMainFrame
+      }
+
+      executeExtensionEvent(extensionsDefaults.events.webNavigation.onCommited, eventObject)
+
       tab.loading = true
       if (e.url !== lastURL && e.isMainFrame) {
         lastURL = e.url
