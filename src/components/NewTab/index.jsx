@@ -22,7 +22,7 @@ export default class NewTab extends React.Component {
       cards: []
     }
 
-    window.dictionary = window.dictionaryAPI.get()
+    window.dictionary = window.dictionaryAPI.get('polski_PL')
 
     document.title = LanguageHelper.capFirst(window.dictionary.pages.newTab.title)
   }
