@@ -31,8 +31,7 @@
       "title": "Historia",
       "cardsHeader": "Najczęściej odwiedzane strony internetowe",
       "historyHeader": "Historia",
-      "emptyHistory": "Historia jest pusta",
-      "noMatches": "Brak wyników wyszukiwania"
+      "emptyHistory": "Historia jest pusta"
     },
     "newTab": {
       "title": "Nowa karta",
@@ -51,9 +50,17 @@
     }
   },
   "searching": {
+    "search": "Wyszukaj",
+    "noMatches": "Brak wyników wyszukiwania"
+  },
+  "actions": {
+    "selectedItems": "Zaznaczone elementy",
+    "delete": "Usuń",
+    "cancel": "Anuluj"
+  },
+  "suggestions": {
     "unknownURL": "otwórz stronę",
-    "unknownSearch": "wyszukaj w Google",
-    "search": "Wyszukaj"
+    "unknownSearch": "wyszukaj w Google"
   },
   "menu": {
     "main": {

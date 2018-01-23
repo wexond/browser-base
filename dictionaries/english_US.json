@@ -31,8 +31,7 @@
       "title": "History",
       "cardsHeader": "The most visited websites",
       "historyHeader": "History",
-      "emptyHistory": "History is empty",
-      "noMatches": "No search results"
+      "emptyHistory": "History is empty"
     },
     "newTab": {
       "title": "New tab",
@@ -45,9 +44,17 @@
     }
   },
   "searching": {
+    "search": "Search",
+    "noMatches": "No search results"
+  },
+  "actions": {
+    "selectedItems": "Selected items",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+  "suggestions": {
     "unknownURL": "open website",
-    "unknownSearch": "search in Google",
-    "search": "Search"
+    "unknownSearch": "search in Google"
   },
   "menu": {
     "main": {

@@ -103,7 +103,7 @@ export default class History extends React.Component {
   render() {
     this.sections = []
 
-    const emptyHistory = Store.sections.length === 0
+    const isHistoryEmpty = Store.sections.length === 0
 
     const contentStyle = {
       opacity: !Store.loading ? 1 : 0
@@ -117,20 +117,31 @@ export default class History extends React.Component {
 
     let sectionIndex = -1
 
+    const {
+      title,
+      cardsHeader,
+      historyHeader,
+      emptyHistory
+    } = window.dictionary.pages.history
+
+    const {
+      noMatches
+    } = window.dictionary.searching
+
     return (
       <div className='history'>
         <ToolBar
-          title={window.dictionary.pages.history.title}
+          title={title}
           selectedItems={Store.selectedItems}
           onSearch={this.onSearch}
           onCancel={this.onCancel}
           onDelete={this.onDelete} />
         <div className={containerClassName} style={contentStyle}>
-          {!emptyHistory &&
+          {!isHistoryEmpty &&
             <div>
-              <div className='history-title'>{window.dictionary.pages.history.cardsHeader}</div>
+              <div className='history-title'>{cardsHeader}</div>
               <Cards />
-              <div className='history-title'>{window.dictionary.pages.history.historyHeader}</div>
+              <div className='history-title'>{historyHeader}</div>
               {
                 Store.sections.map((data, key) => {
                   sectionIndex++
@@ -139,7 +150,7 @@ export default class History extends React.Component {
               }
             </div> || !Store.loading &&
             <div className='history-no-results'>
-              {Store.searched ? 'No search results' : 'History is empty'}
+              {Store.searched ? noMatches : emptyHistory}
             </div>
           }
         </div>
