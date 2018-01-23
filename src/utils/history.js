@@ -1,5 +1,3 @@
-import LanguageHelper from './language'
-
 export default class History {
   // Separates history data in diffrent sections
   static getSections (data) {
@@ -52,9 +50,9 @@ export default class History {
     // If section date string equals today's date string then
     // prefix is "Today"
     if (sectionDateString === actualDate.toDateString()) {
-      prefix = LanguageHelper.capFirst(window.dictionary.timeAndDate.today)
+      prefix = window.dictionary.timeAndDate.today
     } else if (sectionDateString === yesterdayDate.toDateString()) {
-      prefix = LanguageHelper.capFirst(window.dictionary.timeAndDate.yesterday)
+      prefix = window.dictionary.timeAndDate.yesterday
     }
     // Get name of day in week
     const nameOfDay = window.dictionary.timeAndDate.weekDays[sectionDate.getDay()]

@@ -1,6 +1,6 @@
 export default class LanguageHelper {
   static capFirst (str) {
-    return str[0].toUpperCase() + str.slice(1)
+    return str[0].toUpperCase() + str.slice(1).toLowerCase()
   }
 
   static completeWithEndings (obj, value) {
