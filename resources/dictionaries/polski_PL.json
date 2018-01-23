@@ -39,7 +39,7 @@
       "anHour": "godzinę",
       "hours": {
         "<5":"godziny",
-        ">6": "godzin"
+        ">4": "godzin"
       },
       "minutes": {
         "<5":"minuty",
