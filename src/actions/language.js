@@ -1,8 +1,10 @@
+import fs from 'fs'
+
 import Store from '../stores/store'
 
 export const loadDictionary = (dname = 'english_US') => {
   try {
-    const json = require(`../../resources/dictionaries/${dname}.json`)
+    const json = JSON.parse(fs.readFileSync(`./dictionaries/${dname}.json`))
 
     Store.dictionary = json
   } catch (e) {
