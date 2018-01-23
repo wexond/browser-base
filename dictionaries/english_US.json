@@ -88,5 +88,9 @@
   },
   "security": {
     "secure": "Secure"
+  },
+  "tabGroups": {
+    "newGroup": "New group",
+    "addNewGroup": "Add new group"
   }
 }
