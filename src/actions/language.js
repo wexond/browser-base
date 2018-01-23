@@ -1,10 +1,10 @@
-import LanguageStore from '../stores/language'
+import Store from '../stores/store'
 
 export const loadDictionary = (dname = 'english_US') => {
   try {
     const json = require(`../../resources/dictionaries/${dname}.json`)
 
-    LanguageStore.dictionary = json
+    Store.dictionary = json
   } catch (e) {
     console.error(e)
   }
