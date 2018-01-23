@@ -11,8 +11,6 @@ import Preloader from '../Preloader'
 import Store from '../../stores/history'
 import { observer } from 'mobx-react'
 
-import LanguageHelper from '../../utils/language'
-
 @observer
 export default class History extends React.Component {
   constructor() {
@@ -21,7 +19,7 @@ export default class History extends React.Component {
     this.sections = []
     window.dictionary = window.dictionaryAPI.get()
 
-    document.title = LanguageHelper.capFirst(window.dictionary.pages.history.title)
+    document.title = window.dictionary.pages.history.title
   }
 
   componentDidMount() {
@@ -122,7 +120,7 @@ export default class History extends React.Component {
     return (
       <div className='history'>
         <ToolBar
-          title={LanguageHelper.capFirst(window.dictionary.pages.history.title)}
+          title={window.dictionary.pages.history.title}
           selectedItems={Store.selectedItems}
           onSearch={this.onSearch}
           onCancel={this.onCancel}
@@ -130,9 +128,9 @@ export default class History extends React.Component {
         <div className={containerClassName} style={contentStyle}>
           {!emptyHistory &&
             <div>
-              <div className='history-title'>{LanguageHelper.capFirst(window.dictionary.pages.history.cardsHeader)}</div>
+              <div className='history-title'>{window.dictionary.pages.history.cardsHeader}</div>
               <Cards />
-              <div className='history-title'>{LanguageHelper.capFirst(window.dictionary.pages.history.historyHeader)}</div>
+              <div className='history-title'>{window.dictionary.pages.history.historyHeader}</div>
               {
                 Store.sections.map((data, key) => {
                   sectionIndex++

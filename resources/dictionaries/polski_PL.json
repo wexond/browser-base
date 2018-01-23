@@ -3,7 +3,7 @@
     "weekDays": [
       "poniedziałek",
       "wtorek",
-      "środka",
+      "środa",
       "czwartek",
       "piątek",
       "sobota",
@@ -23,19 +23,20 @@
       "listopada",
       "grudnia"
     ],
-    "today": "dzisiaj",
-    "yesterday": "wczoraj"
+    "today": "Dzisiaj",
+    "yesterday": "Wczoraj"
   },
   "pages": {
     "history": {
-      "title": "historia",
-      "cardsHeader": "najczęściej odwiedzane strony internetowe",
-      "historyHeader": "historia",
-      "emptyHistory": "historia jest pusta",
-      "noMatches": "brak wyników wyszukiwania"
+      "title": "Historia",
+      "cardsHeader": "Najczęściej odwiedzane strony internetowe",
+      "historyHeader": "Historia",
+      "emptyHistory": "Historia jest pusta",
+      "noMatches": "Brak wyników wyszukiwania"
     },
     "newTab": {
-      "title": "aktualności",
+      "title": "Nowa karta",
+      "news": "Aktualności",
       "anHour": "godzinę",
       "hours": {
         "<5":"godziny",
@@ -52,19 +53,19 @@
   "searching": {
     "unknownURL": "otwórz stronę",
     "unknownSearch": "wyszukaj w Google",
-    "search": "wyszukaj"
+    "search": "Wyszukaj"
   },
   "menu": {
     "main": {
-      "newWindow": "nowe okno",
-      "newIncognitoWindow": "nowe okno incognito",
-      "history": "historia",
-      "bookmarks": "zakładki",
-      "downloads": "pobrane",
-      "settings": "ustawienia",
-      "extensions": "rozszerzenia",
-      "privacy": "prywatność",
-      "developerTools": "narzędzia dla programistów"
+      "newWindow": "Nowe okno",
+      "newIncognitoWindow": "Nowe okno incognito",
+      "history": "Historia",
+      "bookmarks": "Zakładki",
+      "downloads": "Pobrane",
+      "settings": "Ustawienia",
+      "extensions": "Rozszerzenia",
+      "privacy": "Prywatność",
+      "developerTools": "Narzędzia dla programistów"
     }
   }
 }
