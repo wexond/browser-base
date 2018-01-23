@@ -142,6 +142,31 @@ export default class App extends React.Component {
     ipcRenderer.on(ipcMessages.BROWSER_GO_FORWARD, (e, arg) => {
       pagesActions.getSelectedPage().page.webview.goForward()
     })
+    // docs for "arg"
+    // https://electronjs.org/docs/api/download-item
+    ipcRenderer.on(ipcMessages.DOWNLOAD_STARTED, (e, arg) => {
+      //TODO
+    })
+
+    ipcRenderer.on(ipcMessages.DOWNLOAD_INTERRUPTED, (e, arg) => {
+      //TODO
+    })
+
+    ipcRenderer.on(ipcMessages.DOWNLOAD_PAUSED, (e, arg) => {
+      //TODO
+    })
+
+    ipcRenderer.on(ipcMessages.DOWNLOAD_PROGRESS, (e, arg) => {
+      //TODO
+    })
+
+    ipcRenderer.on(ipcMessages.DOWNLOAD_COMPLETE, (e, arg) => {
+      //TODO
+    })
+
+    ipcRenderer.on(ipcMessages.DOWNLOAD_FAILED, (e, arg) => {
+      //TODO
+    })
 
     this.menu.setState({items: mainMenuItems()})
     this.tabMenu.setState({items: tabMenuItems()})
