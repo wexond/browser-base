@@ -7,5 +7,8 @@ module.exports = {
   DOWNLOAD_INTERRUPTED: 'download-interrupted',
   DOWNLOAD_PROGRESS: 'download-progress',
   DOWNLOAD_COMPLETE: 'download-complete',
-  DOWNLOAD_FAILED: 'download-failed'
+  DOWNLOAD_FAILED: 'download-failed',
+
+  EXTENSION_EXECUTE_EVENT: 'extension-execute-event:',
+  EXTENSION_RELOAD: 'extension-reload'
 }
