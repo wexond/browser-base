@@ -12,7 +12,7 @@ export default class LanguageHelper {
         const conditionChar = conditions[i][0]
         const integer = parseInt(conditions[i].slice(1))
         
-        if (conditionChar == '<' && value < integer || conditionChar == '>' && integer) {
+        if (conditionChar == '<' && value < integer || conditionChar == '>' && value > integer) {
           return obj[conditions[i]]
         }
       }
