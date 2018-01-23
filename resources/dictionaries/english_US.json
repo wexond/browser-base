@@ -42,5 +42,10 @@
       "ago": "ago",
       "now": "now"
     }
+  },
+  "searching": {
+    "unknownURL": "open website",
+    "unknownSearch": "search in Google",
+    "search": "search"
   }
 }

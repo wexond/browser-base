@@ -1,6 +1,6 @@
 import LanguageStore from '../stores/language'
 
-export const loadDictionary = (dname) => {
+export const loadDictionary = (dname = 'english_US') => {
   try {
     const json = require(`../../resources/dictionaries/${dname}.json`)
 

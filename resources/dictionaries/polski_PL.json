@@ -48,5 +48,10 @@
       "ago": "temu",
       "now": "teraz"
     }
+  },
+  "searching": {
+    "unknownURL": "otwórz stronę",
+    "unknownSearch": "wyszukaj w Google",
+    "search": "wyszukaj"
   }
 }
