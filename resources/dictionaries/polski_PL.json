@@ -53,5 +53,18 @@
     "unknownURL": "otwórz stronę",
     "unknownSearch": "wyszukaj w Google",
     "search": "wyszukaj"
+  },
+  "menu": {
+    "main": {
+      "newWindow": "nowe okno",
+      "newIncognitoWindow": "nowe okno incognito",
+      "history": "historia",
+      "bookmarks": "zakładki",
+      "downloads": "pobrane",
+      "settings": "ustawienia",
+      "extensions": "rozszerzenia",
+      "privacy": "prywatność",
+      "developerTools": "narzędzia dla programistów"
+    }
   }
 }

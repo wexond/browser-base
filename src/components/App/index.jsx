@@ -15,9 +15,9 @@ import Store from '../../stores/store'
 
 import { observer } from 'mobx-react'
 
+import mainMenuItems from '../../defaults/main-menu-items'
 import tabMenuItems from '../../defaults/tab-menu-items';
 import pageMenuItems from '../../defaults/page-menu-items'
-import mainMenuItems from '../../defaults/main-menu-items'
 
 import { ipcRenderer } from 'electron'
 import ipcMessages from '../../defaults/ipc-messages'
@@ -27,6 +27,7 @@ import * as tabsActions from '../../actions/tabs'
 import * as tabGroupsActions from '../../actions/tab-groups'
 import * as pageMenuActions from '../../actions/page-menu'
 import * as extensionsActions from '../../actions/extensions'
+
 import * as languageActions from '../../actions/language'
 
 @observer
@@ -142,9 +143,9 @@ export default class App extends React.Component {
       pagesActions.getSelectedPage().page.webview.goForward()
     })
 
-    this.tabMenu.setState({items: tabMenuItems})
-    this.pageMenu.setState({items: pageMenuItems})
-    this.menu.setState({items: mainMenuItems})
+    this.menu.setState({items: mainMenuItems()})
+    this.tabMenu.setState({items: tabMenuItems()})
+    this.pageMenu.setState({items: pageMenuItems()})
   }
 
   refreshIconsState () {
