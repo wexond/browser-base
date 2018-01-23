@@ -148,9 +148,28 @@ const createWindow = () => {
       })
     })
 
-    /* TODO
     mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
-    })*/
+      item.on('updated', (event, state) => {
+        if (state === 'interrupted') {
+          mainWindow.webContents.send(ipcMessages.DOWNLOAD_INTERRUPTED, item)
+        } else if (state === 'progressing') {
+          if (item.isPaused()) {
+            mainWindow.webContents.send(ipcMessages.DOWNLOAD_PAUSED, item)
+          } else if (item.getStartTime() === new Date().getTime() / 1000) {
+            mainWindow.webContents.send(ipcMessages.DOWNLOAD_STARTED, item)
+          } else {
+            mainWindow.webContents.send(ipcMessages.DOWNLOAD_PROGRESS, item)
+          }
+        }
+      })
+      item.once('done', (event, state) => {
+        if (state === 'completed') {
+          mainWindow.webContents.send(ipcMessages.DOWNLOAD_COMPLETE, item)
+        } else {
+          mainWindow.webContents.send(ipcMessages.DOWNLOAD_FAILED, item)
+        }
+      })
+    })
   })
 
   mainWindow.once('ready-to-show', () => {
