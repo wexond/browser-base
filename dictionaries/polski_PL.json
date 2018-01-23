@@ -27,12 +27,6 @@
     "yesterday": "Wczoraj"
   },
   "pages": {
-    "history": {
-      "title": "Historia",
-      "cardsHeader": "Najczęściej odwiedzane strony internetowe",
-      "historyHeader": "Historia",
-      "emptyHistory": "Historia jest pusta"
-    },
     "newTab": {
       "title": "Nowa karta",
       "news": "Aktualności",
@@ -47,6 +41,15 @@
       },
       "ago": "temu",
       "now": "teraz"
+    },
+    "history": {
+      "title": "Historia",
+      "cardsHeader": "Najczęściej odwiedzane strony internetowe",
+      "historyHeader": "Historia",
+      "emptyHistory": "Historia jest pusta"
+    },
+    "settings": {
+      "title": "Ustawienia"
     }
   },
   "searching": {
