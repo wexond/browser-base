@@ -27,12 +27,6 @@
     "yesterday": "Yesterday"
   },
   "pages": {
-    "history": {
-      "title": "History",
-      "cardsHeader": "The most visited websites",
-      "historyHeader": "History",
-      "emptyHistory": "History is empty"
-    },
     "newTab": {
       "title": "New tab",
       "news": "News",
@@ -41,6 +35,15 @@
       "minutes": "minutes",
       "ago": "ago",
       "now": "now"
+    },
+    "history": {
+      "title": "History",
+      "cardsHeader": "The most visited websites",
+      "historyHeader": "History",
+      "emptyHistory": "History is empty"
+    },
+    "settings": {
+      "title": "Settings"
     }
   },
   "searching": {
