@@ -172,7 +172,7 @@ export const getHistorySuggestions = async (text) => {
 
         newSuggestions[0].title = newSuggestions[0].url
         newSuggestions[0].url = null
-        newSuggestions[0].description = Store.dictionary.searching.unknownURL
+        newSuggestions[0].description = Store.dictionary.suggestions.unknownURL
         newSuggestions[0].type = 'autocomplete-url'
 
         isAutocomplete = true
@@ -185,13 +185,13 @@ export const getHistorySuggestions = async (text) => {
       if (isURL) {
         newSuggestions.unshift({
           title: (input.startsWith('http://') || input.startsWith('https://')) ? input : 'http://' + input,
-          description: Store.dictionary.searching.unknownURL,
+          description: Store.dictionary.suggestions.unknownURL,
           type: 'unknown-url'
         })
       } else {
         newSuggestions.unshift({
           title: input,
-          description: Store.dictionary.searching.unknownSearch,
+          description: Store.dictionary.suggestions.unknownSearch,
           type: 'unknown-search'
         })
       }

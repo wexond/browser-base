@@ -76,6 +76,9 @@ export default class ToolBar extends React.Component {
       pointerEvents: selectingMode ? 'auto' : 'none'
     }
 
+    const actions = window.dictionary.actions
+    const searching = window.dictionary.searching
+
     return (
       <div className={'history-toolbar ' + ((selectingMode) ? 'selecting-mode' : '')}>
         <div className='normal-toolbar' style={normalToolbarStyle}>
@@ -86,7 +89,7 @@ export default class ToolBar extends React.Component {
             <div className='search-icon' onClick={this.onSearchIconClick}>
               <Ripple center={true} opacity={0.2} />
             </div>
-            <Input ref={(r) => this.input = r} placeholder='Search' onKeyPress={this.onInputKeyPress} />
+            <Input ref={(r) => this.input = r} placeholder={searching.search} onKeyPress={this.onInputKeyPress} />
             <div className='cancel-icon' onClick={this.onSearchCancelIconClick}>
               <Ripple center={true} opacity={0.2} />
             </div>
@@ -97,17 +100,17 @@ export default class ToolBar extends React.Component {
             <Ripple center={true} />
           </div>
           <div className='selected-items'>
-            Selected items:
+            {actions.selectedItems}:
           </div>
           <div className='count'>
             {selectedItems.length}
           </div>
           <div className='delete-button' onClick={onDelete}>
-            delete
+          {actions.delete}
             <Ripple time={0.6} />
           </div>
           <div className='cancel-button' onClick={onCancel}>
-            cancel
+          {actions.cancel}
             <Ripple time={0.6} />
           </div>
         </div>
