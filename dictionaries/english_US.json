@@ -60,6 +60,19 @@
       "extensions": "Extensions",
       "privacy": "Privacy",
       "developerTools": "Developer tools"
+    },
+    "page": {
+      "openLinkInNewTab": "Open link in new tab",
+      "copyLinkAddress": "Copy link address",
+      "saveLinkAs": "Save link as",
+      "openImageInNewTab": "Open image in new tab",
+      "saveImageAs": "Save image as",
+      "copyImage": "Copy image",
+      "copyImageAddress": "Copy image address",
+      "print": "Print",
+      "saveAs": "Save as",
+      "viewSource": "View source",
+      "inspectElement": "Inspect element"
     }
   }
 }
