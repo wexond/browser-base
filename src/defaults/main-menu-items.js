@@ -1,44 +1,61 @@
 import * as mainMenuActions from '../actions/main-menu'
 
-export default [
-  {
-    title: 'New window',
-    onClick: mainMenuActions.newWindow
-  },
-  {
-    title: 'New incognito window'
-  },
-  {
-    type: 'separator'
-  },
-  {
-    title: 'History',
-    onClick: mainMenuActions.history
-  },
-  {
-    title: 'Bookmarks'
-  },
-  {
-    title: 'Downloads'
-  },
-  {
-    type: 'separator'
-  },
-  {
-    title: 'Settings',
-    onClick: mainMenuActions.settings
-  },
-  {
-    title: 'Extensions'
-  },
-  {
-    title: 'Privacy'
-  },
-  {
-    type: 'separator'
-  },
-  {
-    title: 'Developer tools',
-    onClick: mainMenuActions.developerTools
-  }
-]
+import Store from '../stores/store'
+import LanguageHelper from '../utils/language'
+
+export default () => {
+  const {
+    newWindow,
+    newIncognitoWindow,
+    history,
+    bookmarks,
+    downloads,
+    settings,
+    extensions,
+    privacy,
+    developerTools
+  } = Store.dictionary.menu.main
+
+  return [
+    {
+      title: LanguageHelper.capFirst(newWindow),
+      onClick: mainMenuActions.newWindow
+    },
+    {
+      title: LanguageHelper.capFirst(newIncognitoWindow)
+    },
+    {
+      type: 'separator'
+    },
+    {
+      title: LanguageHelper.capFirst(history),
+      onClick: mainMenuActions.history
+    },
+    {
+      title: LanguageHelper.capFirst(bookmarks)
+    },
+    {
+      title: LanguageHelper.capFirst(downloads)
+    },
+    {
+      type: 'separator'
+    },
+    {
+      title: LanguageHelper.capFirst(settings),
+      onClick: mainMenuActions.settings
+    },
+    {
+      title: LanguageHelper.capFirst(extensions)
+    },
+    {
+      title: LanguageHelper.capFirst(privacy)
+    },
+    {
+      type: 'separator'
+    },
+    {
+      title: LanguageHelper.capFirst(developerTools),
+      onClick: mainMenuActions.developerTools
+    }
+  ]  
+}
