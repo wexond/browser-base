@@ -15,6 +15,9 @@ import * as filesActions from '../../actions/files'
 import Storage from '../../utils/storage'
 import * as suggestionsActions from '../../actions/suggestions';
 
+import LanguageStore from '../../stores/language'
+import LanguageHelper from '../../utils/language'
+
 @observer
 export default class AddressBar extends React.Component {
   constructor () {
@@ -277,9 +280,11 @@ export default class AddressBar extends React.Component {
       onInput: onInput
     }
 
+    const search = LanguageHelper.capFirst(LanguageStore.dictionary.searching.search)
+
     return (
       <div {...addressBarEvents} className={'address-bar ' + Store.foreground}>
-        <input {...inputEvents} ref={(r) => { this.input = r }} placeholder='Search'></input>
+        <input {...inputEvents} ref={(r) => { this.input = r }} placeholder={search}></input>
         <div ref={(r) => { this.info = r }} className='info'>
           <div className={'icon ' + certificateType} />
           <div className={'certificate-name ' + this.state.certificateType}>{certificateName}</div>
