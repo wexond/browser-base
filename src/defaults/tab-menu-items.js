@@ -1,47 +1,61 @@
-import * as tabMenuActions from "../actions/tab-menu";
+import * as tabMenuActions from "../actions/tab-menu"
+
+import Store from '../stores/store'
 
 export default () => {
+  const {
+    addNewTab,
+    pinTab,
+    muteTab,
+    duplicate,
+    closeTab,
+    closeOtherTabs,
+    closeTabsFromLeft,
+    closeTabsFromRight,
+    revertClosedTab
+  } = Store.dictionary.menu.tab
+
   return [
     {
-      title: 'Add new tab',
+      title: addNewTab,
       onClick: tabMenuActions.addNewTab
     },
     {
       type: 'separator'
     },
     {
-      title: 'Pin tab',
+      title: pinTab,
       onClick: tabMenuActions.pinTab
     },
     {
-      title: 'Mute tab',
+      title: muteTab,
       onClick: tabMenuActions.muteTab
     },
     {
-      title: 'Duplicate',
+      title: duplicate,
       onClick: tabMenuActions.duplicate
     },
     {
       type: 'separator'
     },
     {
-      title: 'Close tab',
+      title: closeTab,
       onClick: tabMenuActions.closeTab
     },
     {
-      title: 'Close other tabs',
+      title: closeOtherTabs,
       onClick: tabMenuActions.closeOtherTabs
     },
     {
-      title: 'Close tabs from left',
+      title: closeTabsFromLeft,
       onClick: tabMenuActions.closeTabsFromLeft
     },
     {
-      title: 'Close tabs from right',
+      title: closeTabsFromRight,
       onClick: tabMenuActions.closeTabsFromRight
     },
     {
-      title: 'Revert closed tab',
+      title: revertClosedTab,
       enabled: false,
       onClick: tabMenuActions.revertClosedTab
     }
