@@ -23,7 +23,7 @@ export const addTab = (data = tabDefaults.defaultOptions) => {
     left: 0,
     animateLeft: false,
     animateWidth: true,
-    title: 'New tab',
+    title: Store.dictionary.pages.newTab.title,
     favicon: '',
     loading: false,
     render: true,

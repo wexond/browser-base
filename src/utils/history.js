@@ -61,7 +61,7 @@ export default class History {
     // Create full date. For example saturday, 16 december 2017
     const fullDate = `${nameOfDay}, ${sectionDate.getDate()} ${month} ${sectionDate.getFullYear()}`
     // Final date
-    return `${prefix ? (prefix + ' - ') : ''}${fullDate}`
+    return `${prefix ? (prefix + ' — ') : ''}${fullDate}`
   }
 
   static getDomain (url) {
