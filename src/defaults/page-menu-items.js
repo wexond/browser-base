@@ -1,9 +1,25 @@
 import * as actions from '../actions/page-menu'
 
+import Store from '../stores/store'
+
 export default () => {
+  const {
+    openLinkInNewTab,
+    copyLinkAddress,
+    saveLinkAs,
+    openImageInNewTab,
+    saveImageAs,
+    copyImage,
+    copyImageAddress,
+    print,
+    saveAs,
+    viewSource,
+    inspectElement
+  } = Store.dictionary.menu.page
+
   return [
     {
-      title: 'Open link in new tab',
+      title: openLinkInNewTab,
       visible: false,
       onClick: actions.openLinkInNewTab
     },
@@ -12,12 +28,12 @@ export default () => {
       visible: false
     },
     {
-      title: 'Copy link address',
+      title: copyLinkAddress,
       visible: false,
       onClick: actions.copyLinkAddress
     },
     {
-      title: 'Save link as',
+      title: saveLinkAs,
       visible: false,
       onClick: actions.saveLinkAs
     },
@@ -26,22 +42,22 @@ export default () => {
       visible: false
     },
     {
-      title: 'Open image in new tab',
+      title: openImageInNewTab,
       visible: false,
       onClick: actions.openImageInNewTab
     },
     {
-      title: 'Save image as',
+      title: saveImageAs,
       visible: false,
       onClick: actions.saveImageAs
     },
     {
-      title: 'Copy image',
+      title: copyImage,
       visible: false,
       onClick: actions.copyImage
     },
     {
-      title: 'Copy image address',
+      title: copyImageAddress,
       visible: false,
       onClick: actions.copyImageAddress
     },
@@ -50,12 +66,12 @@ export default () => {
       visible: false
     },
     {
-      title: 'Print',
+      title: print,
       visible: false,
       onClick: actions.print
     },
     {
-      title: 'Save as',
+      title: saveAs,
       visible: false,
       onClick: actions.saveAs
     },
@@ -64,12 +80,12 @@ export default () => {
       visible: false
     },
     {
-      title: 'View source',
+      title: viewSource,
       visible: false,
       onClick: actions.viewSource
     },
     {
-      title: 'Inspect element',
+      title: inspectElement,
       onClick: actions.inspectElement
     }
   ]

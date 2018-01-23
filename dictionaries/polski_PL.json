@@ -66,6 +66,19 @@
       "extensions": "Rozszerzenia",
       "privacy": "Prywatność",
       "developerTools": "Narzędzia dla programistów"
+    },
+    "page": {
+      "openLinkInNewTab": "Otwórz link w nowej karcie",
+      "copyLinkAddress": "Kopiuj adres linku",
+      "saveLinkAs": "Zapisz link jako",
+      "openImageInNewTab": "Otwórz zdjęcie w nowej karcie",
+      "saveImageAs": "Zapisz zdjęcie jako",
+      "copyImage": "Kopiuj grafikę",
+      "copyImageAddress": "Kopiuj adres obrazu",
+      "print": "Drukuj",
+      "saveAs": "Zapisz jako",
+      "viewSource": "Wyświetl źródło strony",
+      "inspectElement": "Zbadaj element"
     }
   }
 }
