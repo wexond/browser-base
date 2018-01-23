@@ -91,5 +91,8 @@
       "closeTabsFromRight": "Zamknij karty po prawo",
       "revertClosedTab": "Przywróć zamknięte karty"
     }
+  },
+  "security": {
+    "secure": "Bezpieczna"
   }
 }

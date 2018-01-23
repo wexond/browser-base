@@ -102,7 +102,7 @@ export default class AddressBar extends React.Component {
     }
 
     if (certificate.title == null && certificate.type === 'Secure') {
-      certificateName = 'Secure'
+      certificateName = Store.dictionary.security.secure
     } else if (certificate.title == null && certificate.type === 'Wexond') {
       certificateName = 'Wexond'
     } else if (certificate.title == null && certificate.type === 'Normal') {
