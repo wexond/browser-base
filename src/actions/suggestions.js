@@ -1,7 +1,7 @@
 import Network from '../utils/network'
 import Storage from '../utils/storage'
 
-import LanguageStore from '../stores/language'
+import Store from '../stores/store'
 
 export const getSearchSuggestions = async (text) => {
   return new Promise(async (resolve, reject) => {
@@ -172,7 +172,7 @@ export const getHistorySuggestions = async (text) => {
 
         newSuggestions[0].title = newSuggestions[0].url
         newSuggestions[0].url = null
-        newSuggestions[0].description = LanguageStore.dictionary.searching.unknownURL
+        newSuggestions[0].description = Store.dictionary.searching.unknownURL
         newSuggestions[0].type = 'autocomplete-url'
 
         isAutocomplete = true
@@ -185,13 +185,13 @@ export const getHistorySuggestions = async (text) => {
       if (isURL) {
         newSuggestions.unshift({
           title: (input.startsWith('http://') || input.startsWith('https://')) ? input : 'http://' + input,
-          description: LanguageStore.dictionary.searching.unknownURL,
+          description: Store.dictionary.searching.unknownURL,
           type: 'unknown-url'
         })
       } else {
         newSuggestions.unshift({
           title: input,
-          description: LanguageStore.dictionary.searching.unknownSearch,
+          description: Store.dictionary.searching.unknownSearch,
           type: 'unknown-search'
         })
       }
