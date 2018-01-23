@@ -73,6 +73,17 @@
       "saveAs": "Save as",
       "viewSource": "View source",
       "inspectElement": "Inspect element"
+    },
+    "tab": {
+      "addNewTab": "Add new tab",
+      "pinTab": "Pin tab",
+      "muteTab": "Mute tab",
+      "duplicate": "Duplicate",
+      "closeTab": "Close tab",
+      "closeOtherTabs": "Close other tabs",
+      "closeTabsFromLeft": "Close tabs from left",
+      "closeTabsFromRight": "Close tabs from right",
+      "revertClosedTab": "Revert closed tab"
     }
   }
 }
