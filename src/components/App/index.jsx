@@ -34,7 +34,7 @@ export default class App extends React.Component {
   constructor () {
     super()
 
-    languageActions.loadDictionary('english_US')
+    languageActions.loadDictionary()
   }
 
   async componentDidMount () {
