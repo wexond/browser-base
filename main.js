@@ -14,6 +14,8 @@ let mainWindow
 
 let windowBounds = {}
 
+process.env.dirname = __dirname
+
 /** Global events. */
 app.on('ready', () =>  {
   if (process.env.NODE_ENV !== 'dev') autoUpdater.checkForUpdates()
@@ -188,8 +190,10 @@ const createWindow = () => {
   })
 
   if (process.env.NODE_ENV === 'dev') {
-    mainWindow.webContents.openDevTools({mode: 'detach'})
+    
   }
+
+  mainWindow.webContents.openDevTools({mode: 'detach'})
 }
 
 protocol.registerStandardSchemes([protocolName])
