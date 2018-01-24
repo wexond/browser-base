@@ -14,7 +14,9 @@ let mainWindow
 
 let windowBounds = {}
 
-process.env.dirname = __dirname
+global.shared = {
+  dirname: __dirname
+}
 
 /** Global events. */
 app.on('ready', () =>  {
