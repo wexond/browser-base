@@ -9,9 +9,7 @@ import { observer } from 'mobx-react'
 import Preloader from '../Preloader'
 
 import NewTabHelper from '../../utils/new-tab'
-import NewTabCard from '../NewTabCard'
-
-import LanguageHelper from '../../utils/language'
+import NewTabCard from './Card'
 
 @observer
 export default class NewTab extends React.Component {
@@ -24,7 +22,7 @@ export default class NewTab extends React.Component {
 
     window.dictionary = window.dictionaryAPI.get()
 
-    document.title = LanguageHelper.capFirst(window.dictionary.pages.newTab.title)
+    document.title = window.dictionary.pages.newTab.title
   }
 
   componentDidMount() {
@@ -54,7 +52,7 @@ export default class NewTab extends React.Component {
     return (
       <div className='new-tab'>
         <div className='new-tab-news' style={newsContainer}>
-          <div className='sub-header'>{LanguageHelper.capFirst(window.dictionary.pages.newTab.title)}</div>
+          <div className='sub-header'>{window.dictionary.pages.newTab.news}</div>
           {
             Store.news.map((data, key) => {
               return <NewTabCard data={data} key={key} />

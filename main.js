@@ -15,7 +15,6 @@ let mainWindow
 let windowBounds = {}
 
 /** Global events. */
-
 app.on('ready', () =>  {
   if (process.env.NODE_ENV !== 'dev') autoUpdater.checkForUpdates()
 })

@@ -102,7 +102,7 @@ export default class AddressBar extends React.Component {
     }
 
     if (certificate.title == null && certificate.type === 'Secure') {
-      certificateName = 'Secure'
+      certificateName = Store.dictionary.security.secure
     } else if (certificate.title == null && certificate.type === 'Wexond') {
       certificateName = 'Wexond'
     } else if (certificate.title == null && certificate.type === 'Normal') {
@@ -277,9 +277,11 @@ export default class AddressBar extends React.Component {
       onInput: onInput
     }
 
+    const search = Store.dictionary.searching.search
+
     return (
       <div {...addressBarEvents} className={'address-bar ' + Store.foreground}>
-        <input {...inputEvents} ref={(r) => { this.input = r }} placeholder='Search'></input>
+        <input {...inputEvents} ref={(r) => { this.input = r }} placeholder={search}></input>
         <div ref={(r) => { this.info = r }} className='info'>
           <div className={'icon ' + certificateType} />
           <div className={'certificate-name ' + this.state.certificateType}>{certificateName}</div>

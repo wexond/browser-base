@@ -1,6 +1,6 @@
 export default class LanguageHelper {
   static capFirst (str) {
-    return str[0].toUpperCase() + str.slice(1)
+    return str[0].toUpperCase() + str.slice(1).toLowerCase()
   }
 
   static completeWithEndings (obj, value) {
@@ -12,7 +12,7 @@ export default class LanguageHelper {
         const conditionChar = conditions[i][0]
         const integer = parseInt(conditions[i].slice(1))
         
-        if (conditionChar == '<' && value < integer || conditionChar == '>' && integer) {
+        if (conditionChar == '<' && value < integer || conditionChar == '>' && value > integer) {
           return obj[conditions[i]]
         }
       }

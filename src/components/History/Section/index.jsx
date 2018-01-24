@@ -1,13 +1,13 @@
 import React from 'react'
 
-import Checkbox from '../Checkbox'
-import Item from '../HistoryItem'
+import Checkbox from '../../Checkbox'
+import Item from '../Item'
 
-import Store from '../../stores/history'
+import Store from '../../../stores/history'
 import { observer } from 'mobx-react'
 
 @observer
-export default class HistorySection extends React.Component {
+export default class Section extends React.Component {
   constructor () {
     super()
 
@@ -23,16 +23,18 @@ export default class HistorySection extends React.Component {
 
     const onAllCheck = (flag) => {
       for (var i = 0; i < this.items.length; i++) {
-        const checkbox = this.items[i].checkbox
+        if (this.items[i] != null) {
+          const checkbox = this.items[i].checkbox
 
-        if (flag) {
-          if (!checkbox.state.checked) {
-            checkbox.setState({checked: true})
-            Store.selectedItems.push(checkbox)
+          if (flag) {
+            if (!checkbox.state.checked) {
+              checkbox.setState({checked: true})
+              Store.selectedItems.push(checkbox)
+            }
+          } else {
+            checkbox.setState({checked: false})
+            Store.selectedItems.splice(Store.selectedItems.indexOf(checkbox), 1)
           }
-        } else {
-          checkbox.setState({checked: false})
-          Store.selectedItems.splice(Store.selectedItems.indexOf(checkbox), 1)
         }
       }
     }

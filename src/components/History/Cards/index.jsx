@@ -1,12 +1,12 @@
 import React from 'react'
 
-import HistoryCard from '../HistoryCard'
+import Card from '../Card'
 
-import Store from '../../stores/history'
+import Store from '../../../stores/history'
 import { observer } from 'mobx-react'
 
 @observer
-export default class HistoryCards extends React.Component {
+export default class Cards extends React.Component {
   constructor () {
     super()
 
@@ -49,7 +49,7 @@ export default class HistoryCards extends React.Component {
          <div className='cards-container' style={style}>
             {
               Store.cards.fullInfo.map((data, key) => {
-                return <HistoryCard fullInfo={true} data={data} key={key} />
+                return <Card fullInfo={true} data={data} key={key} />
               })
             }
           </div>
@@ -57,7 +57,7 @@ export default class HistoryCards extends React.Component {
         <div className='cards-container' style={style}>
           {
             Store.cards.lessInfo.map((data, key) => {
-              return <HistoryCard fullInfo={false} data={data} key={key} />
+              return <Card fullInfo={false} data={data} key={key} />
             })
           }
         </div>
@@ -66,7 +66,7 @@ export default class HistoryCards extends React.Component {
   }
 }
 
-HistoryCards.defaultProps = {
+Cards.defaultProps = {
   cardWidth: 256,
   cardGap: 16,
   cardsImage: false,
