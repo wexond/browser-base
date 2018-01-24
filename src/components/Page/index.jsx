@@ -3,6 +3,8 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import Store from '../../stores/store'
 
+import { ipcRenderer } from 'electron';
+
 import Storage from '../../utils/storage'
 import Colors from '../../utils/colors'
 
@@ -274,6 +276,68 @@ export default class Page extends React.Component {
       // Set the new position.
       Store.app.pageMenu.setState({left: left, top: top})
     }
+
+    this.registerSwipeListener()
+  }
+
+  registerSwipeListener() {
+    let trackingFingers = false
+    let startTime = 0
+    let isSwipeOnLeftEdge = false
+    let isSwipeOnRightEdge = false
+    let deltaX = 0
+    let deltaY = 0
+    let time
+
+    ipcRenderer.on('scroll-touch-begin', () => {
+      trackingFingers = true
+      startTime = (new Date()).getTime()
+    })
+
+    this.webview.addEventListener('wheel', (e) => {
+      if (trackingFingers) {
+        deltaX = deltaX + e.deltaX
+        deltaY = deltaY + e.deltaY
+        time = (new Date()).getTime() - startTime
+      }
+    })
+
+    ipcRenderer.on('scroll-touch-end', () => {
+      const distanceThresholdX = 150
+      const distanceThresholdY = 200
+      const timeMax = 200
+      const timeMin = 20
+      if (trackingFingers && time > timeMin && time < timeMax && Math.abs(deltaY) < distanceThresholdY) {
+        if (Math.abs(deltaX) / time > 3.5) {
+          if (deltaX > distanceThresholdX) {
+            this.goForward()
+          } else if (deltaX < -distanceThresholdX) {
+            this.goBack()
+          }
+        }
+      }
+      trackingFingers = false
+      deltaX = 0
+      deltaY = 0
+      startTime = 0
+    })
+
+    ipcRenderer.on('scroll-touch-edge', () => {
+      if (trackingFingers) {
+        if (!isSwipeOnRightEdge && deltaX > 0) {
+          isSwipeOnRightEdge = true
+          isSwipeOnLeftEdge = false
+          time = 0
+          deltaX = 0
+        } else if (!isSwipeOnLeftEdge && deltaX < 0) {
+          isSwipeOnLeftEdge = true
+          isSwipeOnRightEdge = false
+          time = 0
+          deltaX = 0
+        }
+      }
+    })
+
   }
 
   goBack () {
