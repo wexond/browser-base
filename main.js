@@ -147,29 +147,40 @@ const createWindow = () => {
         requestHeaders: details.requestHeaders
       })
     })
+  })
 
-    mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
-      item.on('updated', (event, state) => {
-        if (state === 'interrupted') {
-          mainWindow.webContents.send(ipcMessages.DOWNLOAD_INTERRUPTED, item)
-        } else if (state === 'progressing') {
-          if (item.isPaused()) {
-            mainWindow.webContents.send(ipcMessages.DOWNLOAD_PAUSED, item)
-          } else if (item.getStartTime() === new Date().getTime() / 1000) {
-            mainWindow.webContents.send(ipcMessages.DOWNLOAD_STARTED, item)
-          } else {
-            mainWindow.webContents.send(ipcMessages.DOWNLOAD_PROGRESS, item)
-          }
-        }
-      })
-      item.once('done', (event, state) => {
-        if (state === 'completed') {
-          mainWindow.webContents.send(ipcMessages.DOWNLOAD_COMPLETE, item)
+  mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
+    item.on('updated', (event, state) => {
+      if (state === 'interrupted') {
+        mainWindow.webContents.send(ipcMessages.DOWNLOAD_INTERRUPTED, item)
+      } else if (state === 'progressing') {
+        if (item.isPaused()) {
+          mainWindow.webContents.send(ipcMessages.DOWNLOAD_PAUSED, item)
+        } else if (item.getStartTime() === new Date().getTime() / 1000) {
+          mainWindow.webContents.send(ipcMessages.DOWNLOAD_STARTED, item)
         } else {
-          mainWindow.webContents.send(ipcMessages.DOWNLOAD_FAILED, item)
+          mainWindow.webContents.send(ipcMessages.DOWNLOAD_PROGRESS, item)
         }
-      })
+      }
     })
+    item.once('done', (event, state) => {
+      if (state === 'completed') {
+        mainWindow.webContents.send(ipcMessages.DOWNLOAD_COMPLETE, item)
+        app.dock.downloadFinished(item.getSavePath())
+      } else {
+        mainWindow.webContents.send(ipcMessages.DOWNLOAD_FAILED, item)
+      }
+    })
+  })
+
+  mainWindow.on('scroll-touch-begin', (e) => {
+    mainWindow.webContents.send('scroll-touch-begin')
+  })
+  mainWindow.on('scroll-touch-end', (e) => {
+    mainWindow.webContents.send('scroll-touch-end')
+  })
+  mainWindow.on('scroll-touch-edge', (e) => {
+    mainWindow.webContents.send('scroll-touch-edge')
   })
 
   mainWindow.once('ready-to-show', () => {
