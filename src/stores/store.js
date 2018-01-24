@@ -16,6 +16,8 @@ export default new class Store {
 
   @observable extensions = []
 
+  @observable dictionary
+
   url = ''
   certificates = []
 

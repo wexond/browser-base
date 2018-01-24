@@ -1,44 +1,60 @@
 import * as mainMenuActions from '../actions/main-menu'
 
-export default [
-  {
-    title: 'New window',
-    onClick: mainMenuActions.newWindow
-  },
-  {
-    title: 'New incognito window'
-  },
-  {
-    type: 'separator'
-  },
-  {
-    title: 'History',
-    onClick: mainMenuActions.history
-  },
-  {
-    title: 'Bookmarks'
-  },
-  {
-    title: 'Downloads'
-  },
-  {
-    type: 'separator'
-  },
-  {
-    title: 'Settings',
-    onClick: mainMenuActions.settings
-  },
-  {
-    title: 'Extensions'
-  },
-  {
-    title: 'Privacy'
-  },
-  {
-    type: 'separator'
-  },
-  {
-    title: 'Developer tools',
-    onClick: mainMenuActions.developerTools
-  }
-]
+import Store from '../stores/store'
+
+export default () => {
+  const {
+    newWindow,
+    newIncognitoWindow,
+    history,
+    bookmarks,
+    downloads,
+    settings,
+    extensions,
+    privacy,
+    developerTools
+  } = Store.dictionary.menu.main
+
+  return [
+    {
+      title: newWindow,
+      onClick: mainMenuActions.newWindow
+    },
+    {
+      title: newIncognitoWindow
+    },
+    {
+      type: 'separator'
+    },
+    {
+      title: history,
+      onClick: mainMenuActions.history
+    },
+    {
+      title: bookmarks
+    },
+    {
+      title: downloads
+    },
+    {
+      type: 'separator'
+    },
+    {
+      title: settings,
+      onClick: mainMenuActions.settings
+    },
+    {
+      title: extensions
+    },
+    {
+      title: privacy
+    },
+    {
+      type: 'separator'
+    },
+    {
+      title: developerTools,
+      onClick: mainMenuActions.developerTools
+    }
+  ]  
+}

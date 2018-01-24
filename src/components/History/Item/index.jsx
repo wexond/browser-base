@@ -1,12 +1,16 @@
 import React from 'react'
 
-import Checkbox from '../Checkbox'
+import Checkbox from '../../Checkbox'
 
-import Store from '../../stores/history'
+import Store from '../../../stores/history'
 import { observer } from 'mobx-react'
 
 @observer
 export default class HistoryItem extends React.Component {
+  componentDidMount () {
+    this.id = this.props.data.id
+  }
+
   render () {
     const {
       data,

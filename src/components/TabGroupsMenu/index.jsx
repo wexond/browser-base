@@ -24,7 +24,9 @@ export default class TabGroupsMenu extends React.Component {
             return <TabGroupsMenuItem tabGroup={item} key={key}></TabGroupsMenuItem>
           })}
         </div>
-        <div className='add-group' onClick={onAddClick}>Add new group</div>
+        <div className='add-group' onClick={onAddClick}>
+          {Store.dictionary.tabGroups.addNewGroup}
+        </div>
         <div style={{clear: 'both'}}></div>
       </div>
     )

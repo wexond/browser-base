@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default class HistoryCard extends React.Component {
+export default class Card extends React.Component {
   render() {
     const {
       fullInfo,
@@ -40,7 +40,7 @@ export default class HistoryCard extends React.Component {
   }
 }
 
-HistoryCard.defaultProps = {
+Card.defaultProps = {
   image: false,
   description: false,
   fullInfo: false

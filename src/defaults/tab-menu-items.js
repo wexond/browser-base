@@ -1,47 +1,63 @@
-import * as tabMenuActions from "../actions/tab-menu";
+import * as tabMenuActions from "../actions/tab-menu"
 
-export default [
-  {
-    title: 'Add new tab',
-    onClick: tabMenuActions.addNewTab
-  },
-  {
-    type: 'separator'
-  },
-  {
-    title: 'Pin tab',
-    onClick: tabMenuActions.pinTab
-  },
-  {
-    title: 'Mute tab',
-    onClick: tabMenuActions.muteTab
-  },
-  {
-    title: 'Duplicate',
-    onClick: tabMenuActions.duplicate
-  },
-  {
-    type: 'separator'
-  },
-  {
-    title: 'Close tab',
-    onClick: tabMenuActions.closeTab
-  },
-  {
-    title: 'Close other tabs',
-    onClick: tabMenuActions.closeOtherTabs
-  },
-  {
-    title: 'Close tabs from left',
-    onClick: tabMenuActions.closeTabsFromLeft
-  },
-  {
-    title: 'Close tabs from right',
-    onClick: tabMenuActions.closeTabsFromRight
-  },
-  {
-    title: 'Revert closed tab',
-    enabled: false,
-    onClick: tabMenuActions.revertClosedTab
-  }
-]
+import Store from '../stores/store'
+
+export default () => {
+  const {
+    addNewTab,
+    pinTab,
+    muteTab,
+    duplicate,
+    closeTab,
+    closeOtherTabs,
+    closeTabsFromLeft,
+    closeTabsFromRight,
+    revertClosedTab
+  } = Store.dictionary.menu.tab
+
+  return [
+    {
+      title: addNewTab,
+      onClick: tabMenuActions.addNewTab
+    },
+    {
+      type: 'separator'
+    },
+    {
+      title: pinTab,
+      onClick: tabMenuActions.pinTab
+    },
+    {
+      title: muteTab,
+      onClick: tabMenuActions.muteTab
+    },
+    {
+      title: duplicate,
+      onClick: tabMenuActions.duplicate
+    },
+    {
+      type: 'separator'
+    },
+    {
+      title: closeTab,
+      onClick: tabMenuActions.closeTab
+    },
+    {
+      title: closeOtherTabs,
+      onClick: tabMenuActions.closeOtherTabs
+    },
+    {
+      title: closeTabsFromLeft,
+      onClick: tabMenuActions.closeTabsFromLeft
+    },
+    {
+      title: closeTabsFromRight,
+      onClick: tabMenuActions.closeTabsFromRight
+    },
+    {
+      title: revertClosedTab,
+      enabled: false,
+      onClick: tabMenuActions.revertClosedTab
+    }
+  ]
+}
