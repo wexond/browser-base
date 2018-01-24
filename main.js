@@ -192,10 +192,8 @@ const createWindow = () => {
   })
 
   if (process.env.NODE_ENV === 'dev') {
-    
+    mainWindow.webContents.openDevTools({mode: 'detach'})
   }
-
-  mainWindow.webContents.openDevTools({mode: 'detach'})
 }
 
 protocol.registerStandardSchemes([protocolName])
