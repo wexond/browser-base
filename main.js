@@ -14,6 +14,10 @@ let mainWindow
 
 let windowBounds = {}
 
+global.shared = {
+  dirname: __dirname
+}
+
 /** Global events. */
 app.on('ready', () =>  {
   if (process.env.NODE_ENV !== 'dev') autoUpdater.checkForUpdates()
