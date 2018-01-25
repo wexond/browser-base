@@ -15,8 +15,8 @@
         color: rgba(255,255,255, $primary-opacity-dark);
       }
       .close {
+        @include invert-colors;
         .icon {
-          @include invert-colors;
           opacity: $secondary-opacity-dark;
 
           &:hover {
