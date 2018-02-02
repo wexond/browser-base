@@ -1,3 +1,4 @@
 export default {
-    newtab: 'wexond://newtab'
+    newtab: 'wexond://newtab',
+    settings: 'wexond://settings'
 }

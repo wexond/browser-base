@@ -68,6 +68,11 @@ export default class AddressBar extends React.Component {
       // Always have toggled input when the url
       // starts with wexond://newtab.
       if (Store.url.startsWith(wexondUrls.newtab)) return
+
+      if (Store.url.text = "wexond://newtab")
+      {
+        Store.url.text = "(New Tab) Enter URL or Search Here"
+      }
     }
 
     // Hide or show the info depending on the flag
