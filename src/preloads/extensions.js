@@ -2,6 +2,10 @@ const { ipcRenderer } = require('electron')
 const ipcMessages = require('../defaults/ipc-messages')
 const extensionsDefaults = require('../defaults/extensions')
 
+const fs = require('fs')
+const path = require('path')
+const { remote } = require('electron')
+
 class EventEmitter {
   constructor (name) {
     this.name = name
@@ -40,3 +44,12 @@ global.wexond = {
     }
   }
 }
+
+//To Create Extentions Folder
+function createExtentionsFolder() {
+         var myObject, newfolder;
+        myObject = new ActiveXObject("Scripting.FileSystemObject");
+        newfolder = myObject.CreateFolder ("../extentions");
+    }
+    createExtentionsFolder();
+    

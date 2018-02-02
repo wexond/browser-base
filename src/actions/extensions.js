@@ -14,6 +14,9 @@ export const loadExtensions = async () => {
       // Get paths for extensions directory and manifest.
       const extensionDir = path.join(paths.directories.extensions, dirName)
       const manifestPath = path.join(extensionDir, 'manifest.json')
+      const iconDir = path.join(extensionDir, 'icon.png')
+      const popupDir = path.join(extensionDir, 'index.html')
+
       // Check if the manifest exists.
       await fsPromised.access(manifestPath)
 
@@ -22,11 +25,11 @@ export const loadExtensions = async () => {
       const manifestObject = JSON.parse(manifestContent)
 
       manifestObject.id = id
-      
+
       // Change relative paths to absolute paths.
       if (manifestObject.background != null) {
         if (manifestObject.background.page != null) {
-          manifestObject.background.page = path.join(extensionDir, manifestObject.background.page).replace(/\\/g,"/")
+          manifestObject.background.page = path.join(extensionDir, manifestObject.background.page).replace(/\\/g, "/")
         }
       }
 
@@ -37,5 +40,26 @@ export const loadExtensions = async () => {
     })
   } catch (e) {
     console.error(e)
+  }
+
+  let concatCSP = (cspDirectives) => {
+    let csp = ''
+    for (let directive in cspDirectives) {
+      csp += directive + ' ' + cspDirectives[directive] + '; '
+    }
+    return csp.trim()
+  }
+
+  let generateBrowserManifest = () => {
+    const indexHTML = getBraveExtIndexHTML()
+
+    let baseManifest = {
+      name: 'wexond',
+      manifest_version: 2,
+      version: '0.3.0',
+      background: {
+        persistent: true
+      }
+    };
   }
 }
