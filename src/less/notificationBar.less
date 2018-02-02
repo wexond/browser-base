@@ -1,0 +1,59 @@
+@import "variables.less";
+
+// TODO: refactor notificationBar.js and updateBar.js
+.notificationItem {
+
+  // TODO: refactor button.less
+  .browserButton {
+    border: none;
+    box-shadow: none;
+    line-height: 1;
+
+    &:hover {
+      border: none;
+    }
+
+    &.whiteButton {
+      border: 1px solid @gray;
+    }
+
+    &.primaryButton {
+      background: @braveOrange;
+      border: 1px solid @braveOrange;
+      box-shadow: none;
+      font-weight: normal;
+
+      &:hover {
+        background: lighten(@braveOrange, 10%);
+        border: 1px solid lighten(@braveOrange, 10%);
+      }
+
+      &:active {
+        background: darken(@braveOrange, 10%);
+        border: 1px solid darken(@braveOrange, 10%);
+      }
+    }
+  }
+
+  // Copied to commonStyles.js - notificationItem__greetingStyle
+  // TODO: refactor app/ledger.js (style: 'greetingStyle')
+  &.greetingStyle {
+    background: #fff;
+    padding: 8px 20px;
+    width: 100%;
+  }
+}
+
+// TODO: remove
+div[class*='notificationBar'] {
+  // Cancel the top margin of notificationBar (except the 1st one)
+  + div[class*='notificationBar'] {
+    margin-top: 0;
+    border-top: 0;
+
+    // Cancel the top border of notificationItem (except the 1st one)
+    > div[class*='notificationItem'] {
+      border-top: 0;
+    }
+  }
+}
