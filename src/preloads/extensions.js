@@ -2,12 +2,14 @@ const { ipcRenderer } = require('electron')
 const ipcMessages = require('../defaults/ipc-messages')
 const extensionsDefaults = require('../defaults/extensions')
 
+import { observable, autorun, action } from "mobx";
+
 const fs = require('fs')
 const path = require('path')
 const { remote } = require('electron')
 
 class EventEmitter {
-  constructor (name) {
+  constructor(name) {
     this.name = name
     this.callbacks = []
 
@@ -16,15 +18,15 @@ class EventEmitter {
     })
   }
 
-  addListener (callback) {
+  addListener(callback) {
     this.callbacks.push(callback)
   }
 
-  removeListener (callback) {
+  removeListener(callback) {
     this.callbacks.splice(this.callbacks.indexOf(callback), 1)
   }
 
-  execute (e) {
+  execute(e) {
     for (var i = this.callbacks.length; i--;) {
       if (typeof this.callbacks[i] === 'function') {
         this.callbacks[i](e)
@@ -47,9 +49,35 @@ global.wexond = {
 
 //To Create Extentions Folder
 function createExtentionsFolder() {
-         var myObject, newfolder;
-        myObject = new ActiveXObject("Scripting.FileSystemObject");
-        newfolder = myObject.CreateFolder ("../extentions");
+  var myObject, newfolder;
+  myObject = new ActiveXObject("Scripting.FileSystemObject");
+  newfolder = myObject.CreateFolder("../extentions");
+}
+createExtentionsFolder();
+
+extensionsDirs.forEach(async (dirName) => {
+  // Get paths for extensions directory and manifest.
+  const extensionDir = path.join(paths.directories.extensions, dirName)
+  const manifestPath = path.join(extensionDir, 'manifest.json')
+  const iconDir = path.join(extensionDir, 'icon.png')
+  const popupDir = path.join(extensionDir, 'index.html')
+
+  // Check if the manifest exists.
+  await fsPromised.access(manifestPath)
+
+  // Parse the manifest.
+  const manifestContent = await fsPromised.readFile(manifestPath)
+  const manifestObject = JSON.parse(manifestContent)
+
+  manifestObject.id = id
+
+  // Change relative paths to absolute paths.
+  if (manifestObject.background != null) {
+    if (manifestObject.background.page != null) {
+      manifestObject.background.page = path.join(extensionDir, manifestObject.background.page).replace(/\\/g, "/")
     }
-    createExtentionsFolder();
-    
+  }
+});
+
+var extName = manifestObject.name;
+var extIdNumber = manifestObject.id;
