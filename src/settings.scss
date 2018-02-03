@@ -1,5 +1,7 @@
 @import './default.scss';
 
+@import 'sass/mixins/custom-scroll.scss';
+
 @import 'components/Input/style.scss';
 @import 'components/Checkbox/style.scss';
 @import 'components/ToolBar/style.scss';

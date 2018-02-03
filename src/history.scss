@@ -3,6 +3,8 @@
 $card-width: 256px;
 $card-gap: 16px;
 
+@import 'sass/mixins/custom-scroll.scss';
+
 @import 'components/Checkbox/style.scss';
 @import 'components/Input/style.scss';
 @import 'components/Preloader/style.scss';
