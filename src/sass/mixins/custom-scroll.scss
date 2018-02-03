@@ -1,0 +1,36 @@
+@mixin custom-scroll ($color: $scroll-color, $color-hover: $scroll-color-hover, $track-color: $scroll-track-color, $color-selecting: $scroll-color-selecting, $color-hover-selecting: $scroll-color-hover-selecting) {
+  &::-webkit-scrollbar {
+    width: 12px;
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-button {
+    width: 0px;
+    height: 0px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: $color;
+    border: none;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: $color-hover;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+  }
+  
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  
+  &.selecting::-webkit-scrollbar-thumb {
+    background: $color-selecting;
+  }
+  
+  &.selecting::-webkit-scrollbar-thumb:hover {
+    background: $color-hover-selecting;
+  }
+}

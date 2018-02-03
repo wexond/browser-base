@@ -19,4 +19,5 @@ a {
   padding-bottom: 16px;
   overflow-x: hidden;
   overflow-y: auto;
+  @include custom-scroll;
 }
