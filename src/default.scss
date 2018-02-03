@@ -8,8 +8,6 @@
 @import 'sass/mixins/shadows.scss';
 @import 'sass/mixins/typography.scss';
 
-@import 'components/Ripple/style.scss';
-
 // Transparency
 $primary-opacity-light: 0.87;
 $secondary-opacity-light: 0.54;
@@ -36,3 +34,6 @@ $scroll-track-color: #EEE;
 
 $scroll-color-selecting: $second-color;
 $scroll-color-hover-selecting: #1976D2;
+
+@import 'components/Ripple/style.scss';
+@import 'components/Input/style.scss';

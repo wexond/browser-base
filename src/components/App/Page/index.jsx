@@ -1,10 +1,9 @@
 import React from 'react'
-import electron, { NativeImage, nativeImage } from 'electron'
 
 import { observer } from 'mobx-react'
 import Store from '../../../stores/store'
 
-import { ipcRenderer } from 'electron';
+import { ipcRenderer } from 'electron'
 
 import Storage from '../../../utils/storage'
 import Colors from '../../../utils/colors'
@@ -20,13 +19,6 @@ import FindMenu from '../FindMenu'
 
 @observer
 export default class Page extends React.Component {
-  state = {
-    touching: false,
-    scrolling: false,
-    scroll: 0,
-    pageX: 0
-  }
-  
   componentDidMount = async () => {
     const tab = this.props.tab
     const page = this.props.page
@@ -67,38 +59,8 @@ export default class Page extends React.Component {
         }
       }
     }
-    const captureWeb = () => {
-      var code = "var r = {}; \
-        r.pageHeight = window.innerHeight; \
-        r.pageWidth = window.innerWidth; \
-        r;";
-      this.webview.executeJavaScript(code, false, (r) => {
-        let webviewMeta = {};
-        webviewMeta.captureHeight = r.pageHeight;
-        webviewMeta.captureWidth = r.pageWidth;
-        let captureRect = {
-          x: 0,
-          y: 0,
-          width: parseInt(webviewMeta.captureWidth * electron.screen.getPrimaryDisplay().scaleFactor),
-          height: parseInt(webviewMeta.captureHeight * electron.screen.getPrimaryDisplay().scaleFactor)
-        };
-
-        this.webview.capturePage(captureRect, (img) => {
-          if (!img.isEmpty()) {
-            let resizedImg = img.resize({ width: img.getSize().width / electron.screen.getPrimaryDisplay().scaleFactor });
-            this.setState({
-              image: resizedImg.toDataURL({ scaleFactor: 0.5 })
-            })
-          }
-        });
-      });
-    }
 
     const updateInfo = async (e) => {
-      captureWeb()
-      this.setState({
-        scroll: 0
-      })
       Store.app.refreshIconsState()
 
       if (e.url != null) {
@@ -153,7 +115,6 @@ export default class Page extends React.Component {
     })
 
     this.webview.addEventListener('dom-ready', async (e) => {
-      this.webview.insertCSS(".no-scroll { overflow: hidden; }")
       if (lastURL === tab.url) {
         const ogData = await webviewActions.getOGData(this.webview)
         tab.ogData = ogData
@@ -320,64 +281,63 @@ export default class Page extends React.Component {
   }
 
   registerSwipeListener() {
-
+    let trackingFingers = false
+    let startTime = 0
     let isSwipeOnLeftEdge = false
     let isSwipeOnRightEdge = false
     let deltaX = 0
+    let deltaY = 0
+    let time
 
     ipcRenderer.on('scroll-touch-begin', () => {
-      if (this.webview.canGoBack()) {
-        this.setState({
-          scrolling: true
-        })
-      } else {
-        this.setState({
-          scrolling: false
-        })
-      }
+      trackingFingers = true
+      startTime = (new Date()).getTime()
     })
-    
-    this.page.addEventListener('wheel', (e) => {
-      e.preventDefault()
-      if (this.state.scrolling) {
+
+    this.webview.addEventListener('wheel', (e) => {
+      if (trackingFingers) {
         deltaX = deltaX + e.deltaX
-        if (isSwipeOnLeftEdge) {
-          this.setState({
-            scroll: -deltaX
-          })
-        }
+        deltaY = deltaY + e.deltaY
+        time = (new Date()).getTime() - startTime
       }
     })
 
-    ipcRenderer.on('scroll-touch-end', () => {      
-      if (-deltaX >= this.webview.clientWidth * (5 / 8)) {
-        this.goBack()
+    ipcRenderer.on('scroll-touch-end', () => {
+      const distanceThresholdX = 150
+      const distanceThresholdY = 200
+      const timeMax = 200
+      const timeMin = 20
+      if (trackingFingers && time > timeMin && time < timeMax && Math.abs(deltaY) < distanceThresholdY) {
+        if (Math.abs(deltaX) / time > 3.5) {
+          if (deltaX > distanceThresholdX) {
+            this.goForward()
+          } else if (deltaX < -distanceThresholdX) {
+            this.goBack()
+          }
+        }
       }
-      setTimeout(() => {
-        deltaX = 0
-        this.setState({
-          scroll: 0
-        })
-      }, 1000);
-      this.webview.executeJavaScript("document.querySelector('html').classList.remove('no-scroll');")
+      trackingFingers = false
+      deltaX = 0
+      deltaY = 0
+      startTime = 0
     })
 
     ipcRenderer.on('scroll-touch-edge', () => {
-      if (this.state.scrolling) {
+      if (trackingFingers) {
         if (!isSwipeOnRightEdge && deltaX > 0) {
           isSwipeOnRightEdge = true
           isSwipeOnLeftEdge = false
+          time = 0
           deltaX = 0
-        } else if (!isSwipeOnLeftEdge && deltaX <= 0) {
-          //disables webview scrolling
-          this.webview.executeJavaScript("document.querySelector('html').classList.add('no-scroll');")
-
+        } else if (!isSwipeOnLeftEdge && deltaX < 0) {
           isSwipeOnLeftEdge = true
           isSwipeOnRightEdge = false
+          time = 0
           deltaX = 0
         }
       }
     })
+
   }
 
   goBack () {
@@ -398,7 +358,6 @@ export default class Page extends React.Component {
     Store.app.refreshIconsState()
   }
 
-  
   render () {
     const tab = this.props.tab
     const page = this.props.page
@@ -408,17 +367,11 @@ export default class Page extends React.Component {
       url
     } = this.props.page
 
-    const pageClass = (isSelected || !this.state.scrolling) ? '' : 'hide'
+    const pageClass = (isSelected) ? '' : 'hide'
+
     return (
-      <div ref={(r) => { this.page = r }} className={'page ' + pageClass} >
-        {this.state.image && <img src={this.state.image} style={{ position: "absolute", left: 0, bottom: 0, right: 0 }}/>}
-        <webview ref={(r) => { this.webview = r }} className={'webview ' + pageClass} src={url} preload='../../src/preloads/index.js'
-          style={{
-            position: "relative",
-            left: (this.webview && this.state.scroll == this.webview.clientWidth * (5 / 8)) || this.state.scroll >= 0 ? this.state.scroll : 0,
-            top: 0, bottom: 0, right: 0, boxShadow: "-10px 0 100px 1px #aaaaaa",
-            transition: `${this.state.scroll == 0 ? 0.35 : 0.0}s left`
-          }} />
+      <div className={'page ' + pageClass}>
+        <webview ref={(r) => { this.webview = r }} className={'webview ' + pageClass} src={url} preload='../../src/preloads/index.js'></webview>
         <FindMenu ref={(r) => { this.findMenu = r }} webview={this.webview} />
       </div>
     )
