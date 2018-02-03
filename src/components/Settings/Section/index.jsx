@@ -2,13 +2,19 @@ import React from 'react'
 
 export default class Section extends React.Component {
   render() {
+    const {
+      className,
+      title,
+      children
+    } = this.props
+
     return (
-      <div className='section'>
+      <div className={'section ' + (className != null ? className : '')}>
         <div className='subheader'>
-          {this.props.title}
+          {title}
         </div>
         <div className='section-content'>
-          {this.props.children}
+          {children}
         </div>
       </div>
     )
