@@ -1,0 +1,25 @@
+.section {
+  width: calc(100% - 32px);
+  max-width: 640px;
+  height: auto;
+  margin: 24px auto 0px auto;
+
+  &:first-child {
+    margin: 0px auto;
+  }
+
+  .subheader {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    color: rgba(0, 0, 0, $primary-opacity-light);
+    @include cursor-default;
+    @include Body2;
+  }
+
+  .section-content {
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 2px; 
+    @include shadow(1);
+  }
+}
