@@ -1,9 +1,8 @@
 import React from 'react'
 
 import ToolBar from '../ToolBar'
-import Checkbox from '../Checkbox'
 
-import Ripple from '../Ripple'
+import TestSection from './Sections/Test'
 
 export default class Settings extends React.Component {
   constructor () {
@@ -19,7 +18,7 @@ export default class Settings extends React.Component {
       <div className='settings'>
         <ToolBar title='Settings' />
         <div className='content'>
-
+          <TestSection />
         </div>
       </div>
     )
