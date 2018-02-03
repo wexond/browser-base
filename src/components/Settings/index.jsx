@@ -4,6 +4,8 @@ import ToolBar from '../ToolBar'
 
 import TestSection from './Sections/Test'
 
+import Dropdown from '../Dropdown'
+
 export default class Settings extends React.Component {
   constructor () {
     super()
@@ -18,7 +20,7 @@ export default class Settings extends React.Component {
       <div className='settings'>
         <ToolBar title='Settings' />
         <div className='content'>
-          <TestSection />
+          <Dropdown />
         </div>
       </div>
     )
