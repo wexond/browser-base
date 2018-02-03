@@ -1,19 +1,18 @@
 import React from 'react'
 
-import SystemBar from '../SystemBar'
-import Tabs from '../Tabs'
-import Pages from '../Pages'
-import Bar from '../Bar'
-import Suggestions from '../Suggestions'
-import Menu from '../Menu'
-import MenuNavigation from '../MenuNavigation'
-import Dialog from '../Dialog'
-import TabGroupsMenu from '../TabGroupsMenu'
-import BackgroundExtensions from '../BackgroundExtensions'
-
 import Store from '../../stores/store'
-
 import { observer } from 'mobx-react'
+
+import SystemBar from './SystemBar'
+import Tabs from './Tabs'
+import Pages from './Pages'
+import Bar from './Bar'
+import Suggestions from './Suggestions'
+import Menu from './Menu'
+import MenuNavigation from './MenuNavigation'
+import Dialog from './Dialog'
+import TabGroupsMenu from './TabGroupsMenu'
+import BackgroundExtensions from './BackgroundExtensions'
 
 import mainMenuItems from '../../defaults/main-menu-items'
 import tabMenuItems from '../../defaults/tab-menu-items';
