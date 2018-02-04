@@ -1,7 +1,8 @@
 .dropdown-container {
-  margin: 48px;
+  margin: 96px;
   width: auto;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   position: relative;
   @include cursor-pointer;
 
@@ -10,13 +11,12 @@
     height: 48px;
     display: inline-flex;
     align-items: center;
-    background-color: white;
     position: relative;
     border-radius: 2px;
+    @include ripple;
 
     .selected {
       width: calc(100% - 24px);
-      padding-left: 16px;
       overflow: hidden;
       text-overflow: ellipsis;
       opacity: $primary-opacity-light;
@@ -26,7 +26,6 @@
     .icon {
       width: 24px;
       height: 24px;
-      padding-right: 8px;
       opacity: $secondary-opacity-light;
       @include image-center(20px, auto);
       background-image: url(./images/Controls/drop-down.svg);
@@ -42,32 +41,42 @@
   }
 
   .menu {
-    width: 100%;
-    height: 0px;
+    width: 94px;
+    max-height: calc(5 * 48px);
     opacity: 0;
     background-color: #fff;
     @include shadow(1);
     position: absolute;
-    top: 0;
-    overflow: hidden;
+    left: -25px;
+    overflow-x: hidden;
+    overflow-y: overlay;
     z-index: 10;
-    transition: 0.15s ease-out height, 0.1s opacity;
+    transform: scale(0.1);
+    transition: 0.15s ease-out transform, 0.2s opacity;
+    @include thin-scroll;
 
     .item {
       height: 48px;
       display: flex;
       align-items: center;
+      color: rgba(0,0,0,$secondary-opacity-light);
+      transition: 0.25s color;
+      @include ripple;
 
       .text {
-        padding-left: 16px;
         max-width: calc(100% - 32px);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        margin: 0 auto;
       }
 
       &.selected {
-        background-color: rgba(0,0,0,0.12);
+        color: rgba(0,0,0,$primary-opacity-light);
+      }
+
+      &:hover {
+        color: rgba(0,0,0,$primary-opacity-light);
       }
     }
   }
