@@ -38,8 +38,8 @@ export default class Ripple extends React.Component {
   getPosition (center, offsetX, e) {
     if (!center) {
       return {
-        x: e.pageX - e.target.getBoundingClientRect().left + 'px',
-        y: e.pageY - e.target.getBoundingClientRect().top + 'px'
+        x: e.pageX - this.parent.getBoundingClientRect().left + 'px',
+        y: e.pageY - this.parent.getBoundingClientRect().top + 'px'
       }
     } else {
       return {
@@ -62,8 +62,8 @@ export default class Ripple extends React.Component {
       scale
     } = this.props
     // Scales
-    const scaleX = center ? scale : e.target.clientWidth
-    const scaleY = center ? scale : e.target.clientHeight
+    const scaleX = center ? scale : this.parent.clientWidth
+    const scaleY = center ? scale : this.parent.clientHeight
     // Get ripple position
     const position = this.getPosition(center, offsetX, e)
     // Create DOM element
