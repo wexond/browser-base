@@ -1,5 +1,9 @@
 import React from 'react'
 
+import Ripple from '../Ripple'
+
+import Item from './Item'
+
 export default class Dropdown extends React.Component {
   constructor () {
     super()
@@ -7,7 +11,6 @@ export default class Dropdown extends React.Component {
     this.state = {
       selected: -1,
       toggledMenu: false,
-      menuHeight: 0,
       menuOpacity: 0
     }
   }
@@ -18,11 +21,8 @@ export default class Dropdown extends React.Component {
     }
   }
 
-  getMenuHeight () {
-    return this.props.items.length * this.props.itemHeight
-  }
-
   openMenu = () => {
+    this.scrollIntoCurrentItem()
     this.toggleMenu(true)
   }
   
@@ -31,32 +31,48 @@ export default class Dropdown extends React.Component {
   }
 
   toggleMenu (flag = !this.state.toggledMenu) {
-    this.setState({toggledMenu: flag})
-
-    if (flag) {
+    if (this.props.items.length > 0) {
       this.setState({
-        menuOpacity: 1,
-        menuHeight: this.getMenuHeight()
+        toggledMenu: flag,
+        menuOpacity: flag ? 1 : 0
       })
-    } else {
-      this.setState({menuHeight: 0})
 
-      setTimeout(() => {
-        this.setState({menuOpacity: 0})
-      }, 50)
-    }
-
-    if (flag) {
-      setTimeout(() => {
-        window.addEventListener('mousedown', this.onWindowMouseDown)
-      }, 250)
-    } else {
-      window.removeEventListener('mousedown', this.onWindowMouseDown)
+      if (flag) {
+        setTimeout(() => {
+          window.addEventListener('mouseup', this.onWindowMouseDown)
+        }, 250)
+      } else {
+        window.removeEventListener('mouseup', this.onWindowMouseDown)
+      }
     }
   }
 
   onWindowMouseDown = (e) => {
-    this.closeMenu()
+    if (!e.target.hasAttribute('disableDropdropClosing')) {
+      this.closeMenu()
+    }
+  }
+
+  onItemClick = (e, item) => {
+    const {
+      onSelect
+    } = this.props
+  
+    const {
+      index,
+      data
+    } = item.props
+
+
+    this.setState({
+      selected: index
+    })
+
+    if (typeof onSelect === 'function') onSelect(index, data)
+  }
+
+  scrollIntoCurrentItem () {
+    this.menu.scrollTop = (this.state.selected - 2) * this.props.itemHeight
   }
 
   render () {
@@ -67,33 +83,27 @@ export default class Dropdown extends React.Component {
     const selected = this.state.selected
 
     const menuStyle = {
-      height: this.state.menuHeight,
-      opacity: this.state.menuOpacity
+      opacity: this.state.menuOpacity,
+      transform: `scale(${this.state.toggledMenu ? 1 : 0})`
     }
 
     let itemIndex = -1
 
     return (
       <div className='dropdown-container'>
-        <div className='control' onMouseDown={this.openMenu}>
+        <div className='control' onClick={this.openMenu}>
           <div className='selected'>
             {items[selected]}
           </div>
           <div className='icon' />
           <div className='line' />
+          <Ripple time={0.6} />
         </div>
-        <div className='menu' style={menuStyle}>
+        <div className='menu' ref={(r) => this.menu = r} style={menuStyle} disabledropdropclosing='true'>
           {
             items.map((data, key) => {
               itemIndex++
-
-              return (
-                <div className={'item ' + ((selected === itemIndex) ? 'selected' : '')} key={key}>
-                  <div className='text'>
-                    {data}
-                  </div>
-                </div>
-              )
+              return <Item index={itemIndex} data={data} selected={selected} onClick={this.onItemClick} key={key} />
             })
           }
         </div>
@@ -104,16 +114,16 @@ export default class Dropdown extends React.Component {
 
 Dropdown.defaultProps = {
   items: [
-    'aha',
-    'wtf',
-    'xd',
-    'no bywa bywa bywa',
-    'wtf',
-    'kurwa',
-    'oc',
-    'nersent',
-    'jak to',
-    'nie wiem'
+    'Item 1',
+    'Item 2',
+    'Item 3',
+    'Item 4',
+    'Item 5',
+    'Item 6',
+    'Item 7',
+    'Item 8',
+    'Item 9',
+    'Item 10',
   ],
   selected: 0,
   itemHeight: 48
