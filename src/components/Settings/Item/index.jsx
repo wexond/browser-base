@@ -2,6 +2,7 @@ import React from 'react'
 
 import Ripple from '../../Ripple'
 import Switch from '../../Switch'
+import Dropdown from '../../Dropdown'
 
 export default class Item extends React.Component {
   render() {
@@ -29,6 +30,9 @@ export default class Item extends React.Component {
             ) ||
             type === 'switch' && (
               <Switch />
+            ) ||
+            type === 'dropdown' && (
+              <Dropdown items={this.props.items} />
             )
           }
         </div>
