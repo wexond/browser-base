@@ -7,7 +7,8 @@ export default class Test extends React.Component {
   render() {
     return (
       <Section title='Foo' className='test'>
-        <Item title='Title' description='Button' type='button' />
+        <Item title='First type' description='Button' type='button' />
+        <Item title='Second type' description='Switch' type='switch' />
       </Section>
     )
   }
