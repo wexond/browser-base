@@ -4,8 +4,6 @@ import ToolBar from '../ToolBar'
 
 import TestSection from './Sections/Test'
 
-import Switch from '../Switch'
-
 export default class Settings extends React.Component {
   constructor() {
     super()
@@ -19,14 +17,10 @@ export default class Settings extends React.Component {
     return (
       <div className='settings'>
         <ToolBar title='Settings' />
-        <Switch onToggle={(flag) => { console.log(flag) }} />
+        <div className='content'>
+          <TestSection />
+        </div>
       </div>
     )
   }
 }
-
-/*
-<div className='content'>
-  <TestSection />
-</div>
-*/
