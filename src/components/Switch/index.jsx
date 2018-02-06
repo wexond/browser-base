@@ -13,6 +13,8 @@ export default class Switch extends React.Component {
       x: -1,
       y: -1
     }
+
+    this.samePosition = false
     
     this.lastState = false
   }
@@ -26,8 +28,6 @@ export default class Switch extends React.Component {
 
       window.addEventListener('mousemove', this.onWindowMouseMove)
       window.addEventListener('mouseup', this.onWindowMouseUp)
-    } else {
-      this.toggle()
     }
   }
 
@@ -66,9 +66,9 @@ export default class Switch extends React.Component {
       off
     } = this.props.thumbPosition
 
-    if (this.mouseDownPosition.x === e.clientX) {
-      this.toggle()
-    } else {
+    this.samePosition = this.mouseDownPosition.x === e.clientX
+
+    if (!this.samePosition) {
       this.setState({
         thumbLeft: this.state.toggled ? on : off
       })
@@ -76,6 +76,10 @@ export default class Switch extends React.Component {
 
     window.removeEventListener('mousemove', this.onWindowMouseMove)
     window.removeEventListener('mouseup', this.onWindowMouseUp)
+  }
+
+  onClick = (e) => {
+    if (this.samePosition) this.toggle()
   }
 
   toggle (flag = !this.state.toggled) {
@@ -104,7 +108,7 @@ export default class Switch extends React.Component {
     }
 
     return (
-      <div className={'material-switch ' + (this.state.toggled ? 'toggled' : '')} ref={(r) => this.root = r} onMouseDown={this.onMouseDown}>
+      <div className={'material-switch ' + (this.state.toggled ? 'toggled' : '')} ref={(r) => this.root = r} onMouseDown={this.onMouseDown} onClick={this.onClick}>
         <div className='track' ref={(r) => this.track = r} />
         <div className='thumb' style={thumbStyle} />
       </div>
