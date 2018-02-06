@@ -5,8 +5,8 @@
 }
 
 @mixin ripple {
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
   box-sizing: border-box;
   @extend %ripple-basics;
 }
