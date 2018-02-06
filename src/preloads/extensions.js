@@ -55,6 +55,9 @@ function createExtentionsFolder() {
 }
 createExtentionsFolder();
 
+var extName = manifestObject.name;
+var extIdNumber = manifestObject.id;
+
 extensionsDirs.forEach(async (dirName) => {
   // Get paths for extensions directory and manifest.
   const extensionDir = path.join(paths.directories.extensions, dirName)
@@ -79,5 +82,3 @@ extensionsDirs.forEach(async (dirName) => {
   }
 });
 
-var extName = manifestObject.name;
-var extIdNumber = manifestObject.id;
