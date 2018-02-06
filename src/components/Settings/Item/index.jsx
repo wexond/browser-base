@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Ripple from '../../Ripple'
+import Switch from '../../Switch'
 
 export default class Item extends React.Component {
   render() {
@@ -25,10 +26,17 @@ export default class Item extends React.Component {
               <div className='button-icon icon'>
                 <Ripple center={true} />
               </div>
+            ) ||
+            type === 'switch' && (
+              <Switch />
             )
           }
         </div>
       </div>
     )
   }
+}
+
+Item.defaultProps = {
+  type: 'button'
 }

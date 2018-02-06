@@ -27,6 +27,8 @@
   }
 
   .action-container {
+    padding-right: 16px;
+
     .button-icon {
       width: 32px;
       height: 32px;
@@ -34,7 +36,6 @@
       background-image: url(images/Controls/drop-down.svg);
       opacity: $secondary-opacity-light;
       transform: rotate(-90deg);
-      margin-right: 16px;
       @include ripple-icon;
     }
   }
