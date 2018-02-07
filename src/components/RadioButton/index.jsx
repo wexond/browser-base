@@ -1,25 +1,35 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-export default class RadioButton extends React.Component {
-  constructor () {
-    super()
+import Ripple from '../Ripple'
 
-    this.state = {
-      toggled: false
-    }
+export default class RadioButton extends React.Component {
+  onClick = (e) => {
+    const onClick = this.props.onClick
+
+    if (typeof onClick === 'function') onClick(this)
   }
 
   render () {
-    const toggled = this.state.toggled
+    const {
+      toggled,
+      text
+    } = this.props
 
     return (
-      <div className={'radio-button ' + (toggled ? 'toggled' : '')} onMouseEnter={() => {
-        this.setState({toggled:true})}} onMouseLeave={() => {
-          this.setState({toggled:false})}}>
-        <div className='border'>
-          <div className='circle' />
+      <div className='radio-button-container'>
+        <div className={'radio-button ' + (toggled ? 'toggled' : '')} onClick={this.onClick}>
+          <div className='border'>
+            <div className='circle' />
+          </div>
+          <Ripple center={true} />
         </div>
+        { text && (
+            <div className='text'>
+              {text}
+            </div>
+          )
+        }
       </div>
     )
   }

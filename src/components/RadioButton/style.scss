@@ -1,10 +1,24 @@
+.radio-button-container {
+  position: relative;
+  display: flex;
+  height: 48px;
+  align-items: center;
+
+  .text {
+    font-size: 16px;
+    color: rgba(0,0,0,0.54);
+    margin-left: 16px;
+    @include cursor-default;
+  }
+}
+
 .radio-button {
   width: 18px;
   height: 18px;
   position: relative;
   left: 0;
   @include cursor-pointer;
-  margin-top: 8px;
+  @include ripple-icon;
 
   &:first-child {
     margin-top: 0px;
