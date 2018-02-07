@@ -45,12 +45,14 @@ export default class Input extends React.Component {
       placeholder
     } = this.props
 
+    const isEmpty = this.input != null ? (this.input.value.length === 0) : false
+
     const onFocus = () => {
-      this.setState({focused: true})
+      if (isEmpty) this.setState({focused: true})
     }
 
     const onBlur = () => {
-      this.setState({focused: false})
+      if (isEmpty) this.setState({focused: false})
     }
 
     const onChange = () => {
