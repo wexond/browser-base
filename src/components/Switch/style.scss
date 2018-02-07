@@ -23,6 +23,10 @@
     @include center-vertical;
     @include shadow(1);
     background-color: #FAFAFA;
+
+    .ripple-effect {
+      background-color: #000;
+    }
   }
 
   &.toggled {

@@ -3,6 +3,8 @@ import React from 'react'
 import ToolBar from '../ToolBar'
 
 import TestSection from './Sections/Test'
+import RadioButtonsContainer from '../RadioButtonsContainer'
+import RadioButton from '../RadioButton'
 
 export default class Settings extends React.Component {
   constructor() {
@@ -18,7 +20,9 @@ export default class Settings extends React.Component {
       <div className='settings'>
         <ToolBar title='Settings' />
         <div className='content'>
-          <TestSection />
+          <RadioButtonsContainer>
+            <RadioButton />
+          </RadioButtonsContainer>
         </div>
       </div>
     )
