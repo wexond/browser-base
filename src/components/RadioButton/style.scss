@@ -1,0 +1,44 @@
+.radio-button {
+  width: 18px;
+  height: 18px;
+  position: relative;
+  left: 0;
+  @include cursor-pointer;
+
+  .border {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #757575;
+    box-sizing: border-box;
+    transition: 0.1s border-color;
+  }
+
+  .circle {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    border-radius: 50%;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #757575;
+    box-sizing: border-box;
+    transform: scale(0);
+    transition: 0.1s ease-out transform, 0.1s border-color;
+  }
+
+  &.toggled {
+    .border, .circle {
+      border-color: #2196F3;
+    }
+
+    .circle {
+      transform: scale(1);
+    }
+  }
+}
