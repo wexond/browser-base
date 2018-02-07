@@ -21,3 +21,7 @@ a {
   overflow-y: auto;
   @include custom-scroll;
 }
+
+.thick-line {
+  background-color: #2196F3 !important;
+}

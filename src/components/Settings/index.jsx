@@ -6,6 +6,8 @@ import TestSection from './Sections/Test'
 import RadioButtonsContainer from '../RadioButtonsContainer'
 import RadioButton from '../RadioButton'
 
+import Input from '../Input'
+
 export default class Settings extends React.Component {
   constructor() {
     super()
@@ -20,7 +22,10 @@ export default class Settings extends React.Component {
       'Item 1',
       'Item 2',
       'Item 3',
-      false
+      false,
+      (
+        <Input style={{width: '128px'}} />
+      )
     ]
 
     return (
