@@ -16,13 +16,18 @@ export default class Settings extends React.Component {
   }
 
   render() {
+    const radioButtons = [
+      'Item 1',
+      'Item 2',
+      'Item 3',
+      false
+    ]
+
     return (
       <div className='settings'>
         <ToolBar title='Settings' />
         <div className='content'>
-          <RadioButtonsContainer>
-            <RadioButton />
-          </RadioButtonsContainer>
+          <RadioButtonsContainer items={radioButtons} />
         </div>
       </div>
     )
