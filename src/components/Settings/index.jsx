@@ -2,11 +2,8 @@ import React from 'react'
 
 import ToolBar from '../ToolBar'
 
-import TestSection from './Sections/Test'
-import RadioButtonsContainer from '../RadioButtonsContainer'
-import RadioButton from '../RadioButton'
-
-import Input from '../Input'
+import Browser from './Sections/Browser'
+import Languages from './Sections/Languages'
 
 export default class Settings extends React.Component {
   constructor() {
@@ -18,21 +15,12 @@ export default class Settings extends React.Component {
   }
 
   render() {
-    const radioButtons = [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      false,
-      (
-        <Input style={{width: '128px'}} />
-      )
-    ]
-
     return (
       <div className='settings'>
         <ToolBar title='Settings' />
         <div className='content'>
-          <RadioButtonsContainer items={radioButtons} />
+          <Browser />
+          <Languages />
         </div>
       </div>
     )

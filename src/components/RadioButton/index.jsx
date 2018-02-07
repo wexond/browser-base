@@ -16,7 +16,9 @@ export default class RadioButton extends React.Component {
       text
     } = this.props
     
-    const isTextObject = typeof text === 'object'
+    const isObject = typeof text === 'object'
+
+    if (isObject) this.customControl = text
 
     return (
       <div className='radio-button-container'>
@@ -26,11 +28,11 @@ export default class RadioButton extends React.Component {
           </div>
           <Ripple center={true} />
         </div>
-        { text && !isTextObject && (
+        { text && !isObject && (
             <div className='text'>
               {text}
             </div>
-          ) || isTextObject && (
+          ) || isObject && (
             <div className='custom-control'>
               {text}
             </div>
