@@ -4,6 +4,11 @@
   position: relative;
   left: 0;
   @include cursor-pointer;
+  margin-top: 8px;
+
+  &:first-child {
+    margin-top: 0px;
+  }
 
   .border {
     width: 100%;
@@ -14,7 +19,7 @@
     border-radius: 50%;
     border-width: 2px;
     border-style: solid;
-    border-color: #757575;
+    border-color: rgba(0,0,0,0.54);
     box-sizing: border-box;
     transition: 0.1s border-color;
   }
@@ -26,7 +31,7 @@
     border-radius: 50%;
     border-width: 5px;
     border-style: solid;
-    border-color: #757575;
+    border-color: rgba(0,0,0,0.54);
     box-sizing: border-box;
     transform: scale(0);
     transition: 0.1s ease-out transform, 0.1s border-color;
