@@ -11,6 +11,16 @@ module.exports = {
     history: join(homedir(), '.wexond', 'user-data', 'history.json'),
     sites: join(homedir(), '.wexond', 'user-data', 'sites.json'),
     bookmarks: join(homedir(), '.wexond', 'user-data', 'bookmarks.json'),
-    favicons: join(homedir(), '.wexond', 'user-data', 'favicons.json')
+    favicons: join(homedir(), '.wexond', 'user-data', 'favicons.json'),
+    settings: {
+      path: join(homedir(), '.wexond', 'user-data', 'settings.json'),
+      defaultContent: {
+        adblock: true,
+        adblockCosmetic: false,
+        onStartup: {
+          type: 0
+        }
+      }
+    }
   }
 }

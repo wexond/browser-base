@@ -1,6 +1,12 @@
 import React from 'react'
 
 export default class Item extends React.Component {
+  constructor () {
+    super()
+
+    this.itemActions = []
+  }
+
   render() {
     const {
       title,
@@ -13,7 +19,17 @@ export default class Item extends React.Component {
     }
 
     const onClick = (e) => {
-      if (typeof this.props.onClick === 'function') this.props.onClick(e, this.refs.itemAction.refs.action)
+      if (typeof this.props.onClick === 'function') this.props.onClick(e)
+
+      for (var i = 0; i < this.itemActions.length; i++) {
+        if (this.itemActions[i].action.constructor.name === 'Switch') {
+          this.itemActions[i].action.toggle(!this.itemActions[i].action.state.toggled)
+        }
+      }
+
+      if (this.expandableContent != null) {
+        this.expandableContent.toggle(!this.expandableContent.state.toggled)
+      }
     }
 
     return (
@@ -24,7 +40,7 @@ export default class Item extends React.Component {
           </div>
           {React.Children.map(this.props.children, child => {
             if (child.type.name === 'ItemAction') {
-              return React.cloneElement(child, {ref: 'itemAction'})
+              return React.cloneElement(child, {ref: (r) => { this.itemActions.push(r) }})
             }
           })}
         </div>
