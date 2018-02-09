@@ -2,7 +2,8 @@ import React from 'react'
 
 import ToolBar from '../ToolBar'
 
-import TestSection from './Sections/Test'
+import Browser from './Sections/Browser'
+import Languages from './Sections/Languages'
 
 export default class Settings extends React.Component {
   constructor() {
@@ -18,7 +19,8 @@ export default class Settings extends React.Component {
       <div className='settings'>
         <ToolBar title='Settings' />
         <div className='content'>
-          <TestSection />
+          <Browser />
+          <Languages />
         </div>
       </div>
     )

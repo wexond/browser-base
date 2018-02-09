@@ -3,9 +3,12 @@
   padding-top: 16px;
   padding-bottom: 16px;
   position: relative;
-  display: flex;
-  align-items: center;
   @include cursor-pointer;
+
+  .center-items {
+    display: flex;
+    align-items: center;
+  }
 
   .info-container {
     max-width: calc(100% - 64px);
@@ -38,5 +41,12 @@
       transform: rotate(-90deg);
       @include ripple-icon;
     }
+  }
+
+  .children-container {
+    width: 100%;
+    height: 0px;
+    overflow: hidden;
+    transition: 0.25s ease-out height;
   }
 }
