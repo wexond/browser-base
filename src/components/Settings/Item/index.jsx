@@ -1,11 +1,6 @@
 import React from 'react'
 
 export default class Item extends React.Component {
-  componentDidMount () {
-    if (this.refs.itemAction != null) this.action = this.refs.itemAction.refs.action
-    this.expandableContent = this.refs.expandableContent
-  }
-
   render() {
     const {
       title,
@@ -18,7 +13,7 @@ export default class Item extends React.Component {
     }
 
     const onClick = (e) => {
-      if (typeof this.props.onClick === 'function') this.props.onClick(e, this.action)
+      if (typeof this.props.onClick === 'function') this.props.onClick(e, this.refs.itemAction.refs.action)
     }
 
     return (
@@ -40,7 +35,7 @@ export default class Item extends React.Component {
 
         {React.Children.map(this.props.children, child => {
           if (child.type.name === 'ExpandableContent') {
-            return React.cloneElement(child, {ref: 'expandableContent'})
+            return React.cloneElement(child, {ref: (r) => { this.expandableContent = r }})
           } else if (child.type.name !== 'ItemAction') {
             return React.cloneElement(child)
           }
