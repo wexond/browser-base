@@ -1,82 +1,51 @@
 import React from 'react'
 
-import Ripple from '../../Ripple'
-import Switch from '../../Switch'
-import Dropdown from '../../Dropdown'
-import RadioButtonsContainer from '../../RadioButtonsContainer'
-
 export default class Item extends React.Component {
-  constructor () {
-    super()
-
-    this.childrenContainerToggled = false
-  }
-
-  onSwitchToggle = (e) => {
-    const type = this.props.type
-    
-    if (type === 'radiobuttons') {
-      this.toggleChildrenContainer(!this.childrenContainerToggled)
-    }
-  }
-
-  toggleChildrenContainer (flag) {
-    if (this.childrenContainer != null) {
-      const height = flag ? this.childrenContainer.scrollHeight : 0
-
-      this.childrenContainer.style.height = height + 'px'
-      this.childrenContainerToggled = flag
-    }
+  componentDidMount () {
+    if (this.refs.itemAction != null) this.action = this.refs.itemAction.refs.action
+    this.expandableContent = this.refs.expandableContent
   }
 
   render() {
     const {
       title,
       description,
-      type,
-      items
+      cursor
     } = this.props
 
-    const childrenContainer = type === 'radiobuttons'
+    const style = {
+      cursor: cursor
+    }
+
+    const onClick = (e) => {
+      if (typeof this.props.onClick === 'function') this.props.onClick(e, this.action)
+    }
 
     return (
-      <div className='section-item'>
-        <div className='center-items'>
-          <div className='info-container'>
-            <div className='title'>
-              {title}
-            </div>
-            <div className='description'>
-              {description}
-            </div>
+      <div className='section-item' style={style} onClick={onClick}>
+        <div className='horizontal'>
+          <div className='title'>
+            {title}
           </div>
-          <div className='action-container'>
-            {type === 'button' && (
-              <div className='button-icon icon'>
-                <Ripple center={true} />
-              </div>
-            ) ||
-              type === 'switch' || type === 'radiobuttons' && (
-                <Switch onToggle={this.onSwitchToggle} />
-              ) ||
-              type === 'dropdown' && (
-                <Dropdown items={items} />
-              )
+          {React.Children.map(this.props.children, child => {
+            if (child.type.name === 'ItemAction') {
+              return React.cloneElement(child, {ref: 'itemAction'})
             }
-          </div>
+          })}
         </div>
-        {childrenContainer &&
-          (
-            <div className='children-container' ref={(r) => this.childrenContainer = r}>
-              Foo
-            </div>
-          )
-        }
+
+        <div style={{clear: 'both'}} />
+        
+        <div className='description'>{description}</div>
+
+        {React.Children.map(this.props.children, child => {
+          if (child.type.name === 'ExpandableContent') {
+            return React.cloneElement(child, {ref: 'expandableContent'})
+          } else if (child.type.name !== 'ItemAction') {
+            return React.cloneElement(child)
+          }
+        })}
       </div>
     )
   }
-}
-
-Item.defaultProps = {
-  type: 'button'
 }
