@@ -26,6 +26,12 @@ export const getSearchSuggestions = async (text) => {
       }
 
       let newSuggestions = getSuggestions(tempSuggestions, 'title')
+
+      // Sort suggestions array by length.
+      newSuggestions.sort((a, b) => { 
+        return a.title.length - b.title.length
+      })
+
       // Get only first 5 suggestions.
       tempSuggestions = []
       for (var i = 0; i < 5; i++) {
@@ -51,6 +57,7 @@ export const getHistorySuggestions = async (text) => {
     const regex = /(http(s?)):\/\/(www.)?/gi
 
     let tempSuggestions = []
+    let validSuggestions = []
 
     const filterSuggestions = (array, i) => {
       let url = array[i].url.toLowerCase()
@@ -74,7 +81,11 @@ export const getHistorySuggestions = async (text) => {
       const addSuggestion = (canSuggest) => {
         suggestion.canSuggest = canSuggest
         if (tempSuggestions.indexOf(suggestion) === -1) {
-          tempSuggestions.push(suggestion)
+          if (canSuggest) {
+            validSuggestions.splice(0, 0, suggestion)
+          } else {
+            tempSuggestions.push(suggestion)
+          }
         }
       }
 
@@ -126,6 +137,19 @@ export const getHistorySuggestions = async (text) => {
     for (i = 0; i < history.length; i++) {
       filterSuggestions(history, i)
     }
+
+    validSuggestions.sort((a, b) => {
+      let urlA = a.url.replace(regex, '').replace('/').length
+      let urlB = b.url.replace(regex, '').replace('/').length
+      return urlA - urlB
+    })
+
+    // Sort suggestions array by length.
+    tempSuggestions.sort((a, b) => { 
+      return a.url.length - b.url.length
+    })
+
+    tempSuggestions = validSuggestions.concat(tempSuggestions)
 
     let suggestions = getSuggestions(tempSuggestions)
     let newSuggestions = []
@@ -212,11 +236,6 @@ const getSuggestions = (suggestions, param = 'url') => {
       seenSuggestions.push(tempSuggestions[i][param])
     }
   }
-
-  // Sort suggestions array by length.
-  suggestions.sort((a, b) => { 
-    return a[param].length - b[param].length
-  })
 
   return suggestions
 }
