@@ -153,7 +153,6 @@ export default class Storage {
     })
   }
 
-
   static get (file) {
     return new Promise((resolve, reject) => {
       fs.readFile(paths.files[file], (error, data) => {

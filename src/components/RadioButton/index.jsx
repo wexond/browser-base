@@ -17,6 +17,13 @@ export default class RadioButton extends React.Component {
   }
 
   toggle (flag) {
+    if (flag !== this.state.toggled) {
+      const e = {
+        radioButton: this
+      }
+      this.props.onToggle(e)
+    }
+
     this.setState({toggled: flag})
   }
 
