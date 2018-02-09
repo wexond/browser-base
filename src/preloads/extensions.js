@@ -55,7 +55,7 @@ export const loadExtensions = async () => {
       // Get paths for extensions directory and manifest.
       const extensionDir = path.join(paths.directories.extensions, dirName)
       const manifestPath = path.join(extensionDir, 'manifest.json')
-
+      
       const popupPath = path.join(extensionDir,'index.html')
       // Check if the manifest exists.
       await fsPromised.access(manifestPath)
