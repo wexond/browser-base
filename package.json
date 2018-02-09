@@ -50,7 +50,7 @@
     "devtron": "1.4.0",
     "electron": "1.7.11",
     "electron-builder": "19.49.0",
-    "mobx": "3.4.1",
+    "mobx": "latest",
     "mobx-react": "4.3.5",
     "node-sass": "4.7.2",
     "react": "16.2.0",
@@ -60,7 +60,7 @@
     "style-loader": "0.19.1",
     "uglifyjs-webpack-plugin": "1.1.4",
     "url-loader": "0.6.2",
-    "webpack": "3.10.0",
+    "webpack": "latest",
     "webpack-dev-server": "2.9.7"
   },
   "dependencies": {
