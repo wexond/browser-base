@@ -1,52 +1,9 @@
 .section-item {
-  width: 100%;
+  position: relative;
   padding-top: 16px;
   padding-bottom: 16px;
-  position: relative;
-  @include cursor-pointer;
 
-  .center-items {
-    display: flex;
-    align-items: center;
-  }
-
-  .info-container {
-    max-width: calc(100% - 64px);
-    height: 100%;
-    flex: 1;
-    padding-left: 16px;
-    padding-right: 16px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-
-    .title {
-      color: rgba(0,0,0,$primary-opacity-light);
-    }
-  
-    .description {
-      color: rgba(0,0,0,$secondary-opacity-light);
-    }
-  }
-
-  .action-container {
-    padding-right: 16px;
-
-    .button-icon {
-      width: 32px;
-      height: 32px;
-      @include image-center(24px, auto);
-      background-image: url(images/Controls/drop-down.svg);
-      opacity: $secondary-opacity-light;
-      transform: rotate(-90deg);
-      @include ripple-icon;
-    }
-  }
-
-  .children-container {
-    width: 100%;
-    height: 0px;
-    overflow: hidden;
-    transition: 0.25s ease-out height;
+  .title {
+    float: left;
   }
 }
