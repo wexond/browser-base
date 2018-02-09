@@ -5,91 +5,18 @@ export default class Switch extends React.Component {
     super()
 
     this.state = {
-      thumbLeft: -5,
+      thumbLeft: -2,
       toggled: false
     }
-
-    this.mouseDownPosition = {
-      x: -1,
-      y: -1
-    }
-
-    this.samePosition = false
-    
-    this.lastState = false
-  }
-
-  onMouseDown = (e) => {
-    if (e.target !== this.track) {
-      this.mouseDownPosition = {
-        x: e.clientX,
-        y: e.clientY
-      }
-
-      window.addEventListener('mousemove', this.onWindowMouseMove)
-      window.addEventListener('mouseup', this.onWindowMouseUp)
-    }
-  }
-
-  onWindowMouseMove = (e) => {
-    const rect = this.root.getBoundingClientRect()
-
-    const {
-      off,
-      on
-    } = this.props.thumbPosition
-
-    if (e.clientX + -off >= rect.left && e.clientX <= rect.right) {
-      let delta = e.clientX - rect.left
-
-      if (delta <= off) delta = off
-
-      if (delta <= on) {
-        const toggled = delta >= on / 2
-
-        this.setState({
-          thumbLeft: delta,
-          toggled: toggled
-        })
-
-        if (this.lastState !== toggled) {
-          this.lastState = toggled
-          this.triggerEvent()
-        }   
-      }
-    }
-  }
-
-  onWindowMouseUp = (e) => {
-    const {
-      on,
-      off
-    } = this.props.thumbPosition
-
-    this.samePosition = this.mouseDownPosition.x === e.clientX
-
-    if (!this.samePosition) {
-      this.setState({
-        thumbLeft: this.state.toggled ? on : off
-      })
-    }
-
-    window.removeEventListener('mousemove', this.onWindowMouseMove)
-    window.removeEventListener('mouseup', this.onWindowMouseUp)
   }
 
   onClick = (e) => {
-    if (this.samePosition) this.toggle()
+    this.toggle()
   }
 
   toggle (flag = !this.state.toggled) {
-    const {
-      on,
-      off
-    } = this.props.thumbPosition
-
     this.setState({
-      thumbLeft: flag ? on : off,
+      thumbLeft: flag ? this.track.offsetWidth - this.thumb.offsetWidth + 2 : -2,
       toggled: flag
     })
 
@@ -108,17 +35,10 @@ export default class Switch extends React.Component {
     }
 
     return (
-      <div className={'material-switch ' + (this.state.toggled ? 'toggled' : '')} ref={(r) => this.root = r} onMouseDown={this.onMouseDown} onClick={this.onClick}>
+      <div className={'material-switch ' + (this.state.toggled ? 'toggled' : '')} onClick={this.onClick}>
         <div className='track' ref={(r) => this.track = r} />
-        <div className='thumb' style={thumbStyle} />
+        <div className='thumb' ref={(r) => this.thumb = r} style={thumbStyle} />
       </div>
     )
-  }
-}
-
-Switch.defaultProps = {
-  thumbPosition: {
-    off: -5,
-    on: 15
   }
 }
