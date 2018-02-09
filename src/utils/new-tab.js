@@ -123,7 +123,7 @@ export default class NewTabHelper {
     }
   }
   
-static getWeather = {
+static getWeather = (getWeather) => {
   return new Promise(
     async (resolve, reject) => {
       const country = await NewTabHelper.getCountryCode()
