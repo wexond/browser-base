@@ -2,13 +2,6 @@ const { ipcRenderer } = require('electron')
 const ipcMessages = require('../defaults/ipc-messages')
 const extensionsDefaults = require('../defaults/extensions')
 
-import fsPromised from '../actions/fs'
-import path from 'path'
-
-import paths from '../defaults/files'
-
-import Store from '../stores/store'
-
 class EventEmitter {
   constructor (name) {
     this.name = name
