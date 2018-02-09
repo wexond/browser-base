@@ -5,21 +5,21 @@ export default class ExpandableContent extends React.Component {
     super()
     
     this.state = {
-      height: 0
+      toggled: false
     }
   }
 
   toggle = (flag) => {
-    this.setState({height: (flag) ? this.refs.root.scrollHeight : 0})
+    this.setState({toggled: flag})
   }
 
   render() {
     const {
-      height
+      toggled
     } = this.state
 
     const style = {
-      height: height
+      height: (toggled) ? this.refs.root.scrollHeight : 0
     }
 
     return (
