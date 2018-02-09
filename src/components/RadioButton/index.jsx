@@ -4,41 +4,52 @@ import ReactDOM from 'react-dom'
 import Ripple from '../Ripple'
 
 export default class RadioButton extends React.Component {
-  onClick = (e) => {
-    const onClick = this.props.onClick
+  constructor () {
+    super()
 
-    if (typeof onClick === 'function') onClick(this)
+    this.state = {
+      toggled: false
+    }
+  }
+
+  componentDidMount () {
+    this.toggle(this.props.toggled)
+  }
+
+  toggle (flag) {
+    this.setState({toggled: flag})
   }
 
   render () {
     const {
-      toggled,
-      text
-    } = this.props
-    
-    const isObject = typeof text === 'object'
+      toggled
+    } = this.state
 
-    if (isObject) this.customControl = text
+    const onClick = (e) => {
+      this.toggle(true)
+      if (typeof this.props.onClick === 'function') this.props.onClick(this)
+    }
+
+    const onMouseDown = (e) => {
+      this.refs.ripple.makeRipple()
+    }
 
     return (
-      <div className='radio-button-container'>
-        <div className={'radio-button ' + (toggled ? 'toggled' : '')} onClick={this.onClick}>
+      <div className='radio-button-container' onClick={onClick} onMouseDown={onMouseDown}>
+        <div className={'radio-button ' + (toggled ? 'toggled' : '')}>
           <div className='border'>
             <div className='circle' />
           </div>
-          <Ripple center={true} />
+          <Ripple autoRipple={false} ref='ripple' center={true} />
         </div>
-        { text && !isObject && (
-            <div className='text'>
-              {text}
-            </div>
-          ) || isObject && (
-            <div className='custom-control'>
-              {text}
-            </div>
-          )
-        }
+        <div className='text'>
+          {this.props.children}
+        </div>
       </div>
     )
   }
+}
+
+RadioButton.defaultProps = {
+  toggled: false
 }

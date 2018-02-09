@@ -5,8 +5,10 @@ export default class Ripple extends React.Component {
   componentDidMount () {
     // Get parent
     this.parent = ReactDOM.findDOMNode(this).parentNode
-    // Add mouse down event to parent
-    this.parent.addEventListener('mousedown', this.makeRipple)
+    if (this.props.autoRipple) {
+      // Add mouse down event to parent
+      this.parent.addEventListener('mousedown', this.makeRipple)
+    }
   }
 
   /**
@@ -96,10 +98,13 @@ export default class Ripple extends React.Component {
           element.parentNode.removeChild(element)
         }
       }, time * 1000)
+
+      window.removeEventListener('mouseup', remove)
+      window.removeEventListener('mouseleave', remove)
     }
     // Add events to remove the ripple
-    this.parent.addEventListener('mouseup', remove)
-    this.parent.addEventListener('mouseleave', remove)
+    window.addEventListener('mouseup', remove)
+    window.addEventListener('mouseleave', remove)
   }
 
   render () {
@@ -114,5 +119,6 @@ Ripple.defaultProps = {
   offsetX: 0,
   scale: 14,
   time: 0.3,
-  opacity: 0.2
+  opacity: 0.2,
+  autoRipple: true
 }
