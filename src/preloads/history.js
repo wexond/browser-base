@@ -20,7 +20,7 @@ if (window.location.protocol === 'wexond:') {
                 json[i].favicon = fav
               }
             }
-
+            
             resolve(json)
           }
         })

@@ -8,6 +8,8 @@ export default class Switch extends React.Component {
       thumbLeft: -2,
       toggled: false
     }
+
+    this.toggled = false
   }
 
   onClick = (e) => {
@@ -20,13 +22,20 @@ export default class Switch extends React.Component {
       toggled: flag
     })
 
+    this.toggled = flag
+
     this.triggerEvent()
   }
 
   triggerEvent () {
     const onToggle = this.props.onToggle
 
-    if (typeof onToggle === 'function') onToggle(this.state.toggled, this)
+    const e = {
+      switch: this,
+      toggled: this.toggled
+    }
+
+    if (typeof onToggle === 'function') onToggle(e)
   }
 
   render () {
