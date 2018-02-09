@@ -20,6 +20,14 @@ a {
   overflow-x: hidden;
   overflow-y: auto;
   @include custom-scroll;
+
+  .alert {
+    width: calc(100% - 32px);
+    max-width: 640px;
+    position: relative;
+    @include center-horizontal;
+    margin-top: 16px;
+  }
 }
 
 .thick-line {

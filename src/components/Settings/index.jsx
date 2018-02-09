@@ -23,6 +23,9 @@ export default class Settings extends React.Component {
       <div className='settings'>
         <ToolBar title='Settings' />
         <div className='content'>
+          <div className='alert'>
+          Warning! This is an experimental version of Settings page, and some features might not work!
+          </div>
           <Section title='On startup'>
             <RadioButtonsContainer>
               <RadioButton toggled={true}>Open the new tab page</RadioButton>
@@ -36,7 +39,7 @@ export default class Settings extends React.Component {
                 <Switch onToggle={(toggled) => { this.refs.testItem1.expandableContent.toggle(!toggled) }} />
               </ItemAction>
               <ExpandableContent>
-                xd
+                Test
               </ExpandableContent>
             </Item>
           </Section>
