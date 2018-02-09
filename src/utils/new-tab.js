@@ -122,4 +122,16 @@ export default class NewTabHelper {
       return `${hours} ${hoursAgo} ${newTab.ago}`
     }
   }
+  
+static getWeather = (getWeather) => {
+  return new Promise(
+    async (resolve, reject) => {
+      const country = await NewTabHelper.getCountryCode()
+      const weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${country}`
+
+      const jsonWeather = await NewTabHelper.getWebSiteSource(weatherURL, {
+        'X-Api-Key': '17a6438b1d63d5b05f7039e7cb52cde7'
+      })
+    })
+  }
 }
