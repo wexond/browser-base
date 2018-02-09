@@ -65,6 +65,7 @@
   },
   "dependencies": {
     "ad-block": "Sential/ad-block",
-    "electron-updater": "2.17.6"
+    "electron-updater": "2.17.6",
+    "material-ui": "^1.0.0-beta.32"
   }
 }
