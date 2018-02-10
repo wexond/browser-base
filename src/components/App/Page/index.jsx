@@ -14,6 +14,7 @@ import * as webviewActions from '../../../actions/webview'
 
 import ipcMessages from '../../../defaults/ipc-messages'
 import extensionsDefaults from '../../../defaults/extensions'
+import wexondUrls from '../../../defaults/wexond-urls'
 
 import FindMenu from '../FindMenu'
 
@@ -33,13 +34,15 @@ export default class Page extends React.Component {
 
     const updateData = async () => {
       if (lastURL === tab.url) {
-        let query = `UPDATE history SET title = ?, url = ?, favicon = ?, ogTitle = ?, ogDescription = ?, ogImage = ? WHERE rowid = ?`
-        let data = [tab.title, tab.url, tab.favicon, tab.ogData.title, tab.ogData.description, tab.ogData.image, historyId]
-        storage.history.run(query, data)
-        
+        if (historyId !== -1) {
+          let query = `UPDATE history SET title = ?, url = ?, favicon = ?, ogTitle = ?, ogDescription = ?, ogImage = ? WHERE rowid = ?`
+          let data = [tab.title, tab.url, tab.favicon, tab.ogData.title, tab.ogData.description, tab.ogData.image, historyId]
+          storage.history.run(query, data)
+        }
+
         if (siteId !== -1) {
           let query = `UPDATE history SET title = ?, favicon = ?, ogTitle = ?, ogDescription = ?, ogImage = ? WHERE rowid = ?`
-          data = [tab.title, tab.favicon, null, null, null, siteId]
+          let data = [tab.title, tab.favicon, null, null, null, siteId]
           storage.history.run(query, data)
         }
       }
@@ -94,19 +97,21 @@ export default class Page extends React.Component {
           url = url.substring(0, url.indexOf('/', 9) + 1)
         }
 
-        storage.history.run(`INSERT INTO history(title, url, favicon, date) VALUES (?, ?, ?, DATETIME('now', 'localtime'))`, [tab.title, e.url, tab.favicon], function (err) {
-          historyId = this.lastID
-        })
-
-        storage.history.run(`INSERT INTO history(title, url, favicon, date) SELECT ?, ?, ?, DATETIME('now', 'localtime') WHERE NOT EXISTS(SELECT 1 FROM history WHERE url = ?)`, [tab.title, url, tab.favicon, url], function (err) {
-          if (this.changes > 0) {
-            siteId = this.lastID
-          } else {
-            siteId = -1
-          }
-
-          console.log(siteId)
-        })
+        if (!e.url.startsWith('wexond://')) {
+          storage.history.run(`INSERT INTO history(title, url, favicon, date) VALUES (?, ?, ?, DATETIME('now', 'localtime'))`, [tab.title, e.url, tab.favicon], function (err) {
+            historyId = this.lastID
+          })
+  
+          storage.history.run(`INSERT INTO history(title, url, favicon, date) SELECT ?, ?, ?, DATETIME('now', 'localtime') WHERE NOT EXISTS(SELECT 1 FROM history WHERE url = ?)`, [tab.title, url, tab.favicon, url], function (err) {
+            if (this.changes > 0) {
+              siteId = this.lastID
+            } else {
+              siteId = -1
+            }
+  
+            console.log(siteId)
+          })
+        } else historyId = -1
       }
     })
 
