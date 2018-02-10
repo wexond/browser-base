@@ -1,5 +1,5 @@
 import Network from '../utils/network'
-import Storage from '../utils/storage'
+import * as storage from '../utils/storage'
 
 import Store from '../stores/store'
 
@@ -51,177 +51,174 @@ export const getHistorySuggestions = async (text) => {
 
     if (input === '') return resolve([])
 
-    const sites = await Storage.get('sites')
-    const history = await Storage.get('history')
-    const favicons = await Storage.get('favicons')
-    const regex = /(http(s?)):\/\/(www.)?/gi
+    storage.history.all('SELECT * FROM history', (err, history) => {
+      storage.favicons.all('SELECT * FROM favicons', (err, favicons) => {
+        const regex = /(http(s?)):\/\/(www.)?/gi
 
-    let tempSuggestions = []
-    let validSuggestions = []
-
-    const filterSuggestions = (array, i) => {
-      let url = array[i].url.toLowerCase()
-      let title = array[i].title
-
-      let suggestion = {
-        title: title,
-        url: url,
-        type: 'history',
-        favicon: null
-      }
-
-      if (array[i].favicon != null) {
-        for (var y = 0; y < favicons.length; y++) {
-          if (favicons[y].url === array[i].favicon) {
-            suggestion.favicon = favicons[y].data
+        let tempSuggestions = []
+        let validSuggestions = []
+    
+        const filterSuggestions = (array, i) => {
+          let url = array[i].url.toLowerCase()
+          let title = array[i].title
+    
+          let suggestion = {
+            title: title,
+            url: url,
+            type: 'history',
+            favicon: null
           }
-        }
-      }
-
-      const addSuggestion = (canSuggest) => {
-        suggestion.canSuggest = canSuggest
-        if (tempSuggestions.indexOf(suggestion) === -1) {
-          if (canSuggest) {
-            validSuggestions.splice(0, 0, suggestion)
-          } else {
-            tempSuggestions.push(suggestion)
-          }
-        }
-      }
-
-      const urlContainsInput = (isWWW) => {
-        if (isWWW) {
-          return url.replace(/(http(s?)):\/\//gi, '').startsWith(input.replace(/(http(s?)):\/\//gi, ''))
-        } else {
-          return url.replace(/(http(s?)):\/\/(www.)?/gi, '').startsWith(input.replace(/(http(s?)):\/\/(www.)?/gi, ''))
-        }
-      }
-
-      const isMatch = (start) => {
-        if (input.startsWith(start) && input.length > start.length) {
-          if (input.startsWith(start + 'www.')) {
-            if (input.length > (start + 'www.').length) {
-              if (urlContainsInput()) {
-                return true
+    
+          if (array[i].favicon != null) {
+            for (var y = 0; y < favicons.length; y++) {
+              if (favicons[y].url === array[i].favicon) {
+                suggestion.favicon = favicons[y].favicon
               }
             }
+          }
+    
+          const addSuggestion = (canSuggest) => {
+            suggestion.canSuggest = canSuggest
+            if (tempSuggestions.indexOf(suggestion) === -1) {
+              if (canSuggest) {
+                validSuggestions.splice(0, 0, suggestion)
+              } else {
+                tempSuggestions.push(suggestion)
+              }
+            }
+          }
+    
+          const urlContainsInput = (isWWW) => {
+            if (isWWW) {
+              return url.replace(/(http(s?)):\/\//gi, '').startsWith(input.replace(/(http(s?)):\/\//gi, ''))
+            } else {
+              return url.replace(/(http(s?)):\/\/(www.)?/gi, '').startsWith(input.replace(/(http(s?)):\/\/(www.)?/gi, ''))
+            }
+          }
+    
+          const isMatch = (start) => {
+            if (input.startsWith(start) && input.length > start.length) {
+              if (input.startsWith(start + 'www.')) {
+                if (input.length > (start + 'www.').length) {
+                  if (urlContainsInput()) {
+                    return true
+                  }
+                }
+              } else {
+                if (urlContainsInput()) {
+                  return true
+                }
+              }
+            }
+            return false
+          }
+    
+          if (isMatch('http://') 
+              || isMatch('https://') 
+              || (input.startsWith('www.') && input.length > 'www.'.length && urlContainsInput(true))
+              || (!input.startsWith('http://') && !input.startsWith('https://') && !input.startsWith('www.') && urlContainsInput())) {
+            addSuggestion(true)
           } else {
-            if (urlContainsInput()) {
-              return true
+            if (title.toLowerCase().indexOf(input) !== -1 
+                || (((input.startsWith('http://') || input.startsWith('https://')) && urlContainsInput())
+                || (input.startsWith('www.')) && urlContainsInput(true))
+                || url.indexOf(input) !== -1 
+                || url.replace(/(http(s?)):\/\/(www.)?/gi, '').indexOf(input.replace(/(http(s?)):\/\/(www.)?/gi, '')) !== -1) {
+              addSuggestion(false)
             }
           }
         }
-        return false
-      }
-
-      if (isMatch('http://') 
-          || isMatch('https://') 
-          || (input.startsWith('www.') && input.length > 'www.'.length && urlContainsInput(true))
-          || (!input.startsWith('http://') && !input.startsWith('https://') && !input.startsWith('www.') && urlContainsInput())) {
-        addSuggestion(true)
-      } else {
-        if (title.toLowerCase().indexOf(input) !== -1 
-            || (((input.startsWith('http://') || input.startsWith('https://')) && urlContainsInput())
-            || (input.startsWith('www.')) && urlContainsInput(true))
-            || url.indexOf(input) !== -1 
-            || url.replace(/(http(s?)):\/\/(www.)?/gi, '').indexOf(input.replace(/(http(s?)):\/\/(www.)?/gi, '')) !== -1) {
-          addSuggestion(false)
-        }
-      }
-    }
-
-    for (var i = 0; i < sites.length; i++) {
-      filterSuggestions(sites, i)
-    }
-
-    for (i = 0; i < history.length; i++) {
-      filterSuggestions(history, i)
-    }
-
-    validSuggestions.sort((a, b) => {
-      let urlA = a.url.replace(regex, '').replace('/').length
-      let urlB = b.url.replace(regex, '').replace('/').length
-      return urlA - urlB
-    })
-
-    // Sort suggestions array by length.
-    tempSuggestions.sort((a, b) => { 
-      return a.url.length - b.url.length
-    })
-
-    tempSuggestions = validSuggestions.concat(tempSuggestions)
-
-    let suggestions = getSuggestions(tempSuggestions)
-    let newSuggestions = []
-
-    let isURL = false
-
-    if (input.indexOf(' ') === -1) {
-      if (input.replace('www.', '').indexOf('.') !== -1) {
-        isURL = true
-      } else {
-        if ((input.startsWith('www.') && input.length > 'www.'.length)
-            || (input.startsWith('https://') && input.length > 'https://'.length)
-            || (input.startsWith('http://') && input.length > 'http://'.length)) {
-          isURL = true
-        }
-      }
-    }
-
-    // Get only first 5 suggestions.
-    tempSuggestions = []
-
-    let suggestionsLimit = (isURL) ? 10 : 5
-
-    for (var i = 0; i < suggestionsLimit; i++) {
-      if (suggestions[i] != null) tempSuggestions.push(suggestions[i])
-    }
     
-    newSuggestions = tempSuggestions.slice()
-
-    newSuggestions.sort((a, b) => {
-      let urlA = a.url.replace(regex, '').replace('/').length
-      let urlB = b.url.replace(regex, '').replace('/').length
-      return urlA - urlB
+        for (i = 0; i < history.length; i++) {
+          filterSuggestions(history, i)
+        }
+    
+        validSuggestions.sort((a, b) => {
+          let urlA = a.url.replace(regex, '').replace('/').length
+          let urlB = b.url.replace(regex, '').replace('/').length
+          return urlA - urlB
+        })
+    
+        // Sort suggestions array by length.
+        tempSuggestions.sort((a, b) => { 
+          return a.url.length - b.url.length
+        })
+    
+        tempSuggestions = validSuggestions.concat(tempSuggestions)
+    
+        let suggestions = getSuggestions(tempSuggestions)
+        let newSuggestions = []
+    
+        let isURL = false
+    
+        if (input.indexOf(' ') === -1) {
+          if (input.replace('www.', '').indexOf('.') !== -1) {
+            isURL = true
+          } else {
+            if ((input.startsWith('www.') && input.length > 'www.'.length)
+                || (input.startsWith('https://') && input.length > 'https://'.length)
+                || (input.startsWith('http://') && input.length > 'http://'.length)) {
+              isURL = true
+            }
+          }
+        }
+    
+        // Get only first 5 suggestions.
+        tempSuggestions = []
+    
+        let suggestionsLimit = (isURL) ? 10 : 5
+    
+        for (var i = 0; i < suggestionsLimit; i++) {
+          if (suggestions[i] != null) tempSuggestions.push(suggestions[i])
+        }
+        
+        newSuggestions = tempSuggestions.slice()
+    
+        newSuggestions.sort((a, b) => {
+          let urlA = a.url.replace(regex, '').replace('/').length
+          let urlB = b.url.replace(regex, '').replace('/').length
+          return urlA - urlB
+        })
+    
+        let isAutocomplete = false
+    
+        for (var i = 0; i < newSuggestions.length; i++) {
+          if (newSuggestions[i].canSuggest) {
+            let a = newSuggestions[0]
+            let b = newSuggestions[i]
+            newSuggestions[i] = a
+            newSuggestions[0] = b
+    
+            newSuggestions[0].title = newSuggestions[0].url
+            newSuggestions[0].url = null
+            newSuggestions[0].description = Store.dictionary.suggestions.unknownURL
+            newSuggestions[0].type = 'autocomplete-url'
+    
+            isAutocomplete = true
+    
+            break
+          }
+        }
+    
+        if (!isAutocomplete) {
+          if (isURL) {
+            newSuggestions.unshift({
+              title: (input.startsWith('http://') || input.startsWith('https://')) ? input : 'http://' + input,
+              description: Store.dictionary.suggestions.unknownURL,
+              type: 'unknown-url'
+            })
+          } else {
+            newSuggestions.unshift({
+              title: input,
+              description: Store.dictionary.suggestions.unknownSearch,
+              type: 'unknown-search'
+            })
+          }
+        }
+    
+        resolve(newSuggestions)
+      })
     })
-
-    let isAutocomplete = false
-
-    for (var i = 0; i < newSuggestions.length; i++) {
-      if (newSuggestions[i].canSuggest) {
-        let a = newSuggestions[0]
-        let b = newSuggestions[i]
-        newSuggestions[i] = a
-        newSuggestions[0] = b
-
-        newSuggestions[0].title = newSuggestions[0].url
-        newSuggestions[0].url = null
-        newSuggestions[0].description = Store.dictionary.suggestions.unknownURL
-        newSuggestions[0].type = 'autocomplete-url'
-
-        isAutocomplete = true
-
-        break
-      }
-    }
-
-    if (!isAutocomplete) {
-      if (isURL) {
-        newSuggestions.unshift({
-          title: (input.startsWith('http://') || input.startsWith('https://')) ? input : 'http://' + input,
-          description: Store.dictionary.suggestions.unknownURL,
-          type: 'unknown-url'
-        })
-      } else {
-        newSuggestions.unshift({
-          title: input,
-          description: Store.dictionary.suggestions.unknownSearch,
-          type: 'unknown-search'
-        })
-      }
-    }
-
-    resolve(newSuggestions)
   })
 }
 
