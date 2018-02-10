@@ -2,11 +2,9 @@ import fs from 'fs'
 import paths from '../defaults/files'
 
 export const history = new sqlite3.Database(paths.files['history'])
-export const sites = new sqlite3.Database(paths.files['sites'])
 export const favicons = new sqlite3.Database(paths.files['favicons'])
 
 history.run(`CREATE TABLE IF NOT EXISTS history(title TEXT, url TEXT, favicon TEXT, date TEXT, ogTitle TEXT, ogDescription TEXT, ogImage TEXT)`)
-sites.run(`CREATE TABLE IF NOT EXISTS sites(title TEXT, url TEXT, favicon TEXT)`)
 favicons.run(`CREATE TABLE IF NOT EXISTS favicons(url TEXT, favicon BLOB)`)
 
 export const addFavicon = (url) => {
