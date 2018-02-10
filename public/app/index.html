@@ -9,6 +9,7 @@
     <script src="../../src/utils/dom.js"></script>
 
     <script>
+      const sqlite3 = require('sqlite3').verbose()
       if (process.env.NODE_ENV !== 'dev') {
         loadScripts(['wexond://build/app.bundle.js'])
       } else {
