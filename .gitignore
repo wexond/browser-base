@@ -6,4 +6,3 @@ dist
 package-lock.json
 .vscode
 .vs
-electron
