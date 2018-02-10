@@ -5,7 +5,7 @@ import Store from '../../../stores/store'
 
 import { ipcRenderer } from 'electron'
 
-import Storage from '../../../utils/storage'
+import * as storage from '../../../utils/storage'
 import Colors from '../../../utils/colors'
 
 import * as filesActions from '../../../actions/files'
@@ -23,40 +23,21 @@ export default class Page extends React.Component {
     const tab = this.props.tab
     const page = this.props.page
     let lastURL = ''
-    let favicon = ''
 
     filesActions.checkFiles()
 
     let historyId = -1
     let siteId = -1
 
-    lastURL = ''
-
     page.page = this
 
     const updateData = async () => {
       if (lastURL === tab.url) {
-        if (historyId !== -1) {
-          const history = await Storage.get('history')
-          const item = history.filter(item => { return item.id === historyId })[0]
-          if (item != null) {
-            item.url = tab.url
-            item.favicon = tab.favicon
-            item.title = tab.title
-            item.ogData = tab.ogData
-            Storage.save('history', history)
-          }
-        }
-        if (siteId !== -1) {
-          const sites = await Storage.get('sites')
-          const item = sites.filter(item => { return item.id === siteId })[0]
-          if (item != null) {
-            item.url = tab.url
-            item.favicon = tab.favicon
-            item.title = tab.title
-            Storage.save('sites', sites)
-          }
-        }
+        const query = `UPDATE history SET title = ?, url = ?, favicon = ?, ogTitle = ?, ogDescription = ?, ogImage = ? WHERE rowid = ?`
+        const data = [tab.title, tab.url, tab.favicon, tab.ogData.title, tab.ogData.description, tab.ogData.image, historyId]
+        storage.history.run(query, data, function (err) {
+
+        })
       }
     }
 
@@ -109,8 +90,9 @@ export default class Page extends React.Component {
           url = url.substring(0, url.indexOf('/', 9))
         }
 
-        historyId = await Storage.addHistoryItem(tab.title, e.url, favicon)
-        siteId = await Storage.addSite(tab.title, url, favicon)
+        storage.history.run(`INSERT INTO history(title, url, favicon, date) VALUES (?, ?, ?, DATETIME('now', 'localtime'))`, [tab.title, e.url, tab.favicon], function (err) {
+          historyId = this.lastID
+        })
       }
     })
 
@@ -162,11 +144,9 @@ export default class Page extends React.Component {
         if (request.readyState === 4) {
           if (request.status === 404) {
             tab.favicon = ''
-            favicon = ''
           } else {
-            Storage.addFavicon(e.favicons[0])
             tab.favicon = e.favicons[0]
-            favicon = e.favicons[0]
+            storage.addFavicon(e.favicons[0])
           }
           updateData()
         }
