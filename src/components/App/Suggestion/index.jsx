@@ -5,6 +5,8 @@ import Store from '../../../stores/store'
 
 import * as pagesActions from '../../../actions/pages'
 
+import fs from 'fs'
+
 @observer
 export default class Suggestion extends React.Component {
   render () {
@@ -44,7 +46,8 @@ export default class Suggestion extends React.Component {
         || this.props.type === 'unknown-url') 
         && this.props.favicon != null) {
       iconClassName = ''
-      icon = this.props.favicon
+
+      icon = window.URL.createObjectURL(new Blob([this.props.favicon]))
     }
 
     const iconStyle = {
