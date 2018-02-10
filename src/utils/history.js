@@ -29,7 +29,7 @@ export default class History {
   static getSectionIndexByDate (sections, date) {
     // Search in sections for given date
     for (var i = 0; i < sections.length; i++) {
-      if (sections[i].date === date) return i
+      if (sections[i].date.split(' ')[0] === date.split(' ')[0]) return i
     }
 
     return -1
@@ -70,8 +70,10 @@ export default class History {
   }
 
   static getWebSiteIndex (data, url) {
+    if (url == null) return -1
+
     for (var i = 0; i < data.length; i++) {
-      if (data[i].domain.replace('/', '').toLowerCase().replace('https://', 'http://') == url.replace('/', '').toLowerCase().replace('https://', 'http://')) return i
+      if (data[i].domain != null && data[i].domain.replace('/', '').toLowerCase().replace('https://', 'http://') == url.replace('/', '').toLowerCase().replace('https://', 'http://')) return i
     }
 
     return -1
