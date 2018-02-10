@@ -43,16 +43,20 @@ for (var x = filters.length - 1; x >= 0; x--) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  observer.observe(
-    document.body,
-    {
-      childList: true,
-      subtree: true,
-      attributes: true
-    }
-  )
-})
+const interval = setInterval(() => {
+  if (observer != null) {
+    observer.observe(
+      document.body,
+      {
+        childList: true,
+        subtree: true,
+        attributes: true
+      }
+    )
+
+    clearInterval(interval)
+  }
+}, 1)
 
 const observer = new MutationObserver((mutations) => {
   for (let i = 0; i < changedNodes.length; i++) {

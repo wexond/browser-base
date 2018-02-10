@@ -49,10 +49,12 @@ export default class NewTabHelper {
     
         const news = []
         for (var i = 0; i < newsCount; i++) {
-          const image = json.articles[i].urlToImage
+          if (json.articles[i] != null) {
+            const image = json.articles[i].urlToImage
 
-          if (image == null || !image.startsWith('http')) newsCount++
-          else news.push(json.articles[i])
+            if (image == null || !image.startsWith('http')) newsCount++
+            else news.push(json.articles[i])
+          }
         }
 
         for (var i = 0; i < news.length; i++) {
@@ -123,14 +125,14 @@ export default class NewTabHelper {
     }
   }
   
-static getWeather = (getWeather) => {
-  return new Promise(
-    async (resolve, reject) => {
-      const country = await NewTabHelper.getCountryCode()
-      const weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${country}`
+  static getWeather = (getWeather) => {
+    return new Promise(
+      async (resolve, reject) => {
+        const country = await NewTabHelper.getCountryCode()
+        const weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${country}`
 
-      const jsonWeather = await NewTabHelper.getWebSiteSource(weatherURL, {
-        'X-Api-Key': '17a6438b1d63d5b05f7039e7cb52cde7'
+        const jsonWeather = await NewTabHelper.getWebSiteSource(weatherURL, {
+          'X-Api-Key': '17a6438b1d63d5b05f7039e7cb52cde7'
       })
     })
   }

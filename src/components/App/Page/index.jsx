@@ -33,7 +33,7 @@ export default class Page extends React.Component {
     page.page = this
 
     const updateData = async () => {
-      if (lastURL === tab.url) {
+      if (lastURL === tab.url && tab != null) {
         if (historyId !== -1) {
           let query = `UPDATE history SET title = ?, url = ?, favicon = ?, ogTitle = ?, ogDescription = ?, ogImage = ? WHERE rowid = ?`
           let data = [tab.title, tab.url, tab.favicon, tab.ogData.title, tab.ogData.description, tab.ogData.image, historyId]
