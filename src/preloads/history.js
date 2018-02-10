@@ -1,54 +1,50 @@
 const fs = require('fs')
 const paths = require('../defaults/files')
 
+const sqlite3 = require('sqlite3').verbose()
+
+const history = new sqlite3.Database(paths.files['history'])
+const favicons = new sqlite3.Database(paths.files['favicons'])
+
 if (window.location.protocol === 'wexond:') {
   window.env = process.env.NODE_ENV
   window.historyAPI = {
     get: () => {
       return new Promise((resolve, reject) => {
-        fs.readFile(paths.files.history, async (error, data) => {
-          if (error) {
-            reject(error)
-          } else {
-            const favicons = await window.historyAPI.getFavicons()
-            const json = JSON.parse(data)
+        history.all('SELECT * FROM history', (err, hist) => {
+          if (err) reject(err)
+          else {
+            favicons.all('SELECT * FROM favicons', (err, favs) => {
+              for (let i = 0; i < hist.length; i++) {
+                const favicon = hist[i].favicon
+                if (favicon != null && favicon != '') {
+                  const fav = window.historyAPI.getFaviconData(favs, favicon)
 
-            for (var i = 0; i < json.length; i++) {
-              const favicon = json[i].favicon
-              if (favicon != null && favicon != '' && favicon !== 'handled' && !favicon.startsWith('data'))  {
-                const fav = await window.historyAPI.getFaviconData(favicons, favicon)
-                json[i].favicon = fav
+                  var reader  = new FileReader()
+
+                  reader.onloadend = function () {
+                    hist[i].favicon = reader.result
+                  }
+                  reader.readAsDataURL(new Blob([fav]))
+                }
               }
-            }
-            
-            resolve(json)
+
+              console.log(hist)
+
+              resolve(hist)
+            })
           }
         })
       })
     },
     delete: async (items) => {
-      const data = await window.historyAPI.get()
-  
-      for (var x = data.length - 1; x >= 0; x--) {
-        for (var y = 0; y < items.length; y++) {
-          if (data[x] != null && data[x].id === items[y].id) {
-            data.splice(data.indexOf(data[x]), 1)
-          }
+      for (var x = 0; x < items.length; x++) {
+        if (items[x] != null) {
+          history.run('DELETE FROM history WHERE id = ?', [items[x].id], (err) => {
+
+          })
         }
       }
-
-      await window.historyAPI.save(data)
-    },
-    save: (data) => {
-      return new Promise((resolve, reject) => {
-        fs.writeFile(paths.files.history, JSON.stringify(data), (error) => {
-          if (error) {
-            reject(error)
-          } else {
-            resolve()
-          }
-        })
-      })
     },
     search: (data, str) => {
       return new Promise((resolve, reject) => {
@@ -65,23 +61,10 @@ if (window.location.protocol === 'wexond:') {
         resolve(matches)
       })
     },
-    getFavicons: () => {
-      return new Promise((resolve, reject) => {
-        fs.readFile(paths.files.favicons, (error, data) => {
-          if (error) {
-            reject(error)
-          } else {
-            resolve(JSON.parse(data))
-          }
-        })
-      })
-    },
     getFaviconData: (data, url) => {
-      return new Promise((resolve, reject) => {
-        for (var i = 0; i < data.length; i++) {
-          if (data[i].url === url) resolve(data[i].data)
-        }
-      })
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].url === url) return data[i].data
+      }
     }
   }
 }

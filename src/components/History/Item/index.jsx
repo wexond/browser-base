@@ -42,7 +42,7 @@ export default class HistoryItem extends React.Component {
       <div className='history-section-item'>
         <Checkbox ref={(r) => { this.checkbox = r }} onCheck={onCheck} sectionIndex={sectionIndex} data={data} />
         <div className='time'>
-          {data.time}
+          {data.date.split(' ')[1].split(':')[0] + ':' + data.date.split(' ')[1].split(':')[1]}
         </div>
         <div className='icon' style={iconStyle} />
         <a href={data.url} className='title'>
