@@ -6,6 +6,7 @@ import Store from '../../../stores/store'
 
 import MenuItem from '../MenuItem'
 import Input from '../../Material/Input'
+import Ripple from '../../Material/Ripple'
 
 import * as tabGroupsActions from '../../../actions/tab-groups'
 
