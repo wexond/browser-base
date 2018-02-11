@@ -21,9 +21,10 @@ export default class Item extends React.Component {
     const onClick = (e) => {
       if (typeof this.props.onClick === 'function') this.props.onClick(e)
 
+      this.itemActions = this.itemActions.filter(Boolean)
+
       for (var i = 0; i < this.itemActions.length; i++) {
-        if (this.itemActions[i] != null && this.itemActions[i].action.constructor.name === 'Switch') {
-          console.log('aha')
+        if (this.itemActions[i].action.constructor.name === 'Switch') {
           this.itemActions[i].action.toggle(!this.itemActions[i].action.state.toggled)
         }
       }

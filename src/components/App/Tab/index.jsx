@@ -16,9 +16,9 @@ import * as tabGroupsActions from '../../../actions/tab-groups'
 import Colors from '../../../utils/colors'
 
 import MenuItem from '../MenuItem'
-import Ripple from '../../Material/components/Ripple'
+import Ripple from '../../Material/Ripple'
 
-import Preloader from '../../Preloader'
+import Preloader from '../../Material/Preloader'
 
 @observer
 export default class Tab extends React.Component {
