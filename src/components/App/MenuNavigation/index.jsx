@@ -5,6 +5,8 @@ import Store from '../../../stores/store'
 
 import * as pagesActions from '../../../actions/pages'
 
+import Ripple from '../../Material/Ripple'
+
 @observer
 export default class MenuNavigation extends React.Component {
   constructor () {
@@ -54,10 +56,18 @@ export default class MenuNavigation extends React.Component {
 
     return (
       <div className='menu-navigation'>
-        <div className={'icon back-icon ' + ((!canGoBack) ? 'disabled' : '')} onClick={onBackClick}></div>
-        <div className={'icon forward-icon ' + ((!canGoForward) ? 'disabled' : '')} onClick={onForwardClick}></div>
-        <div className='icon refresh-icon' onClick={onRefreshClick}></div>
-        <div className='icon favorite-icon' onClick={onFavoriteClick}></div>
+        <div className={'icon back-icon ' + ((!canGoBack) ? 'disabled' : '')} onClick={onBackClick}>
+          <Ripple center />
+        </div>
+        <div className={'icon forward-icon ' + ((!canGoForward) ? 'disabled' : '')} onClick={onForwardClick}>
+          <Ripple center />
+        </div>
+        <div className='icon refresh-icon' onClick={onRefreshClick}>
+          <Ripple center />
+        </div>
+        <div className='icon favorite-icon' onClick={onFavoriteClick}>
+          <Ripple center />
+        </div>
       </div>
     )
   }
