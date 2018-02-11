@@ -7,20 +7,8 @@
   }
 
   .add-group {
-    display: table;
-    color: #3F51B5;
-    height: 36px;
-    line-height: 36px;
-    @include Button;
-    padding: 0 8px;
     margin-top: 8px;
-    border-radius: 2px;
-    transition: $hover-duration background-color;
     float: right;
     margin-right: 8px;
-
-    &:hover {
-      background-color: #EEEEEE;
-    }
   }
 }

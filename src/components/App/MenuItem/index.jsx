@@ -3,6 +3,8 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import Store from '../../../stores/store'
 
+import Ripple from '../../Material/Ripple'
+
 @observer
 export default class MenuItem extends React.Component {
   render () {
@@ -18,6 +20,7 @@ export default class MenuItem extends React.Component {
     return (
       <div className={'menu-item ' + ((this.props.selected) ? 'selected' : '')} onClick={onClick} style={style}>
         {this.props.children}
+        <Ripple time={1} />
       </div>
     )
   }
