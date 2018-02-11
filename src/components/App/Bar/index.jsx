@@ -1,7 +1,7 @@
 import React from 'react'
 
 import AddressBar from '../AddressBar'
-import Ripple from '../../Ripple'
+import Ripple from '../../Material/components/Ripple'
 
 import * as pagesActions from '../../../actions/pages'
 import * as tabsActions from '../../../actions/tabs'

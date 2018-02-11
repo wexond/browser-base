@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Ripple from '../Ripple'
+import Ripple from '../Material/components/Ripple'
 
 export default class Checkbox extends React.Component {
   constructor () {

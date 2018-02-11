@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import Ripple from '../Ripple'
+import Ripple from '../Material/components/Ripple'
 
 export default class RadioButton extends React.Component {
   constructor () {
@@ -38,7 +38,7 @@ export default class RadioButton extends React.Component {
     }
 
     const onMouseDown = (e) => {
-      this.refs.ripple.makeRipple()
+      this.refs.ripple.makeRipple(e)
     }
 
     return (
