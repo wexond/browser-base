@@ -82,7 +82,7 @@ export default class TabGroup extends React.Component {
 
     window.addEventListener('resize', (e) => {
       if (!e.isTrusted) return
-      
+
       // Don't resize tabs when they new width is less than 32.
       if (tabsActions.getWidth(Store.app.tabs.getWidth(), Store.app.tabs.addTab.getWidth()) < 32) return
       
