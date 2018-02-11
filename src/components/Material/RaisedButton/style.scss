@@ -10,6 +10,7 @@
   @include Button;
   @include cursor-pointer;
   @include ripple;
+  zoom: 1.01;
 
   &.white {
     color: #fff;

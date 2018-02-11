@@ -1,4 +1,4 @@
-.history-toolbar {
+.settings-toolbar {
   width: 100%;
   height: 56px;
   background-color: $primary-color;
@@ -13,10 +13,6 @@
   align-items: center;
   overflow: hidden;
   transition: 0.15s background-color;
-
-  &.selecting-mode {
-    background-color: #2196F3;
-  }
 
   %item {
     @include Title;
@@ -34,18 +30,6 @@
   .normal-toolbar {
     width: 100%;
     height: 100%;
-    transition: 0.15s opacity;
-  }
-
-  .selection-toolbar {
-    width: calc(100% - 24px);
-    max-width: 824px;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
     transition: 0.15s opacity;
   }
 
@@ -154,20 +138,8 @@
   }
 }
 
-@media screen and (max-width: 400px) {
-  .history-toolbar {
-    .selected-items {
-      display: none;
-    }
-
-    .count {
-      margin-left: 0px;
-    }
-  }
-}
-
 @media screen and (max-width: 600px) {
-  .history-toolbar .search-container.selected {
+  .settings-toolbar .search-container.selected {
     max-width: calc(100% - 96px);
   }
 }
