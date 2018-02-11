@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Checkbox from '../../Checkbox'
+import Checkbox from '../../Material/Checkbox'
 
 import Store from '../../../stores/history'
 import { observer } from 'mobx-react'

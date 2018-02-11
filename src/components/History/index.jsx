@@ -2,11 +2,11 @@ import React from 'react'
 
 import HistoryParser from '../../utils/history'
 
-import ToolBar from '../ToolBar'
+import ToolBar from './ToolBar'
 import Cards from './Cards'
 import Section from './Section'
 
-import Preloader from '../Preloader'
+import Preloader from '../Material/Preloader'
 
 import Store from '../../stores/history'
 import { observer } from 'mobx-react'

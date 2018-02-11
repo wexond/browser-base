@@ -2,8 +2,8 @@ import React from 'react'
 
 import Ripple from '../Ripple'
 
-import { getForeground } from '../../utils/foreground'
-import ClassManager from '../../utils/class'
+import { getForeground } from '../utils/foreground'
+import ClassManager from '../utils/class'
 
 export default class RaisedButton extends React.Component {
   render () {

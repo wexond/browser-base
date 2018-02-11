@@ -1,14 +1,14 @@
 import React from 'react'
 
-import ToolBar from '../ToolBar'
+import ToolBar from './ToolBar'
 import Section from './Section'
 import Item from './Item'
 import ItemAction from './ItemAction'
 import ExpandableContent from './ExpandableContent'
-import RadioButtonsContainer from '../RadioButtonsContainer'
-import RadioButton from '../RadioButton'
-import Switch from '../Switch'
-import FlatButton from '../Material/components/FlatButton'
+import RadioButtonsContainer from '../Material/RadioButtonsContainer'
+import RadioButton from '../Material/RadioButton'
+import Switch from '../Material/Switch'
+import FlatButton from '../Material/FlatButton'
 
 export default class Settings extends React.Component {
   constructor() {
@@ -27,6 +27,8 @@ export default class Settings extends React.Component {
     this.settings = await window.settingsAPI.get()
     this.originalSettings = Object.assign({}, this.settings)
 
+    console.log(this.settings.onStartup.type)
+
     this.refs.onStartupRadioButtons.items[this.settings.onStartup.type].toggle(true)
     this.adblockSwitch.toggle(this.settings.adblock)
     this.adblockCosmeticSwitch.toggle(this.settings.adblockCosmetic)
@@ -42,8 +44,10 @@ export default class Settings extends React.Component {
     }
 
     const onStartupToggle = async (e) => {
-      this.settings.onStartup.type = e.id
-      save()
+      if (e.toggled) {
+        this.settings.onStartup.type = e.id
+        save()
+      }
     }
 
     const onAdblockToggle = async (e) => {
