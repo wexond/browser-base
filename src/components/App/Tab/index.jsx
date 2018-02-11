@@ -199,7 +199,8 @@ export default class Tab extends React.Component {
 
     const borderLeftStyle = {
       display: (isSelected && tabGroup.indexOf(tab) !== 0) ? 'block' : 'none',
-      left: 0
+      left: 0,
+      opacity: ((isSelected) ? ((Store.foreground === 'white') ? 0 : 1) : 1)
     }
 
     const selectedTab = tabGroup.filter(ttab => {
@@ -209,7 +210,8 @@ export default class Tab extends React.Component {
     const borderRightStyle = {
       display: (tabGroup.indexOf(selectedTab) - 1 === tabGroup.indexOf(tab)) ? 'none' : 'block',
       right: (isSelected) ? 0 : -1,
-      height: (isSelected) ? '100%' : 'calc(100% - 8px)'
+      height: (isSelected) ? '100%' : 'calc(100% - 8px)',
+      opacity: ((isSelected) ? ((Store.foreground === 'white') ? 0 : 1) : 1)
     }
 
     const onMouseDown = (e) => {
@@ -241,8 +243,7 @@ export default class Tab extends React.Component {
     const onCloseMouseDown = e => e.stopPropagation()
 
     const onContextMenu = (e) => {
-
-      let items = tabMenuItems.map((item) => {
+      let items = tabMenuItems().map((item) => {
         return {
           type: item.type,
           title: item.title,
