@@ -1,5 +1,9 @@
 import React from 'react'
 
+import ItemAction from '../ItemAction'
+import ExpandableContent from '../ExpandableContent'
+import Switch from '../../Material/Switch'
+
 export default class Item extends React.Component {
   constructor () {
     super()
@@ -24,7 +28,7 @@ export default class Item extends React.Component {
       this.itemActions = this.itemActions.filter(Boolean)
 
       for (var i = 0; i < this.itemActions.length; i++) {
-        if (this.itemActions[i].action.constructor.name === 'Switch') {
+        if (this.itemActions[i].action.constructor === Switch) {
           this.itemActions[i].action.toggle(!this.itemActions[i].action.state.toggled)
         }
       }
@@ -49,16 +53,16 @@ export default class Item extends React.Component {
           </div>
           <div className='actions'>
             {React.Children.map(this.props.children, child => {
-              if (child.type.name === 'ItemAction') {
+              if (child.type === ItemAction) {
                 return React.cloneElement(child, {ref: (r) => { this.itemActions.push(r) }})
               }
             })}
           </div>
         </div>
         {React.Children.map(this.props.children, child => {
-          if (child.type.name === 'ExpandableContent') {
+          if (child.type === ExpandableContent) {
             return React.cloneElement(child, {ref: (r) => { this.expandableContent = r }})
-          } else if (child.type.name !== 'ItemAction') {
+          } else if (child.type !== ItemAction) {
             return React.cloneElement(child)
           }
         })}

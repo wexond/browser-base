@@ -2,8 +2,8 @@ const { join } = require('path')
 const webpack = require('webpack')
 const UglifyJSWebpackPlugin = require('uglifyjs-webpack-plugin')
 
-const productionDevtool = 'cheap-module-source-map'
-const developmentDevtool = 'cheap-module-eval-source-map'
+const productionDevtool = 'source-map'
+const developmentDevtool = 'eval-source-map'
 
 let config = {
   devtool: (process.env.NODE_ENV === 'production') ? productionDevtool : developmentDevtool,

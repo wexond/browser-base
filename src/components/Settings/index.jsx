@@ -27,8 +27,6 @@ export default class Settings extends React.Component {
     this.settings = await window.settingsAPI.get()
     this.originalSettings = Object.assign({}, this.settings)
 
-    console.log(this.settings.onStartup.type)
-
     this.refs.onStartupRadioButtons.items[this.settings.onStartup.type].toggle(true)
     this.adblockSwitch.toggle(this.settings.adblock)
     this.adblockCosmeticSwitch.toggle(this.settings.adblockCosmetic)
