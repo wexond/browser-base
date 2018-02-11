@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Ripple from '../Material/components/Ripple'
+import Ripple from '../Ripple'
 
 import Item from './Item'
 

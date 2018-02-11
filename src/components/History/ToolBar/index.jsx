@@ -1,9 +1,11 @@
 import React from 'react'
 
-import Input from '../Input'
-import Ripple from '../Material/components/Ripple'
+import Input from '../../Material/Input'
+import FlatButton from '../../Material/FlatButton'
+import Ripple from '../../Material/Ripple'
 
-import Store from '../../stores/history'
+
+import Store from '../../../stores/history'
 import { observer } from 'mobx-react'
 
 @observer
@@ -105,14 +107,12 @@ export default class ToolBar extends React.Component {
           <div className='count'>
             {selectedItems.length}
           </div>
-          <div className='delete-button' onClick={onDelete}>
-          {actions.delete}
-            <Ripple time={0.6} />
-          </div>
-          <div className='cancel-button' onClick={onCancel}>
-          {actions.cancel}
-            <Ripple time={0.6} />
-          </div>
+          <FlatButton color='#fff' onClick={onDelete} className='delete-button'>
+            {actions.delete}
+          </FlatButton>
+          <FlatButton color='#fff' onClick={onCancel} className='cancel-button'>
+            {actions.cancel}
+          </FlatButton>
         </div>
       </div>
     )

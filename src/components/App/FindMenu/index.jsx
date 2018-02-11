@@ -10,7 +10,7 @@ import * as filesActions from '../../../actions/files'
 import * as tabsActions from '../../../actions/tabs'
 import * as webviewActions from '../../../actions/webview'
 
-import Input from '../../Input'
+import Input from '../../Material/Input'
 
 @observer
 export default class FindMenu extends React.Component {

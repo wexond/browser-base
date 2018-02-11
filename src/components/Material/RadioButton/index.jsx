@@ -1,7 +1,6 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 
-import Ripple from '../Material/components/Ripple'
+import Ripple from '../Ripple'
 
 export default class RadioButton extends React.Component {
   constructor () {
@@ -10,6 +9,8 @@ export default class RadioButton extends React.Component {
     this.state = {
       toggled: false
     }
+
+    this.toggled = false
   }
 
   componentDidMount () {
@@ -17,13 +18,17 @@ export default class RadioButton extends React.Component {
   }
 
   toggle (flag) {
-    if (flag !== this.state.toggled) {
+    if (flag !== this.toggled) {
       const e = {
-        radioButton: this
+        radioButton: this,
+        toggled: flag
       }
+
+      this.toggled = flag
+
       this.props.onToggle(e)
     }
-
+    
     this.setState({toggled: flag})
   }
 

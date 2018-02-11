@@ -12,15 +12,17 @@
 // Transparency
 $primary-opacity-light: 0.87;
 $secondary-opacity-light: 0.54;
+$disabled-text-light: 0.26;
+$disabled-button-light: 0.12;
 $disabled-opacity-light: 0.38;
 $dividers-opacity-light: 0.12;
-$disabled-text-light: 0.26;
 
 $primary-opacity-dark: 1;
 $secondary-opacity-dark: 0.7;
+$disabled-text-dark: 0.30;
+$disabled-button-dark: 0.12;
 $disabled-opacity-dark: 0.5;
 $dividers-opacity-dark: 0.12;
-$disabled-text-dark: 0.30;
 
 // Animations duration
 $hover-duration: 0.2s;
@@ -38,10 +40,13 @@ $scroll-track-color: #EEE;
 $scroll-color-selecting: $second-color;
 $scroll-color-hover-selecting: #1976D2;
 
-@import 'components/Material/sass/all-components.scss';
-@import 'components/Input/style.scss';
-@import 'components/ToolBar/style.scss';
-@import 'components/Dropdown/style.scss';
-@import 'components/Switch/style.scss';
-@import 'components/RadioButtonsContainer/style.scss';
-@import 'components/RadioButton/style.scss';
+@import 'components/Material/Ripple/style.scss';
+@import 'components/Material/RaisedButton/style.scss';
+@import 'components/Material/FlatButton/style.scss';
+@import 'components/Material/Input/style.scss';
+@import 'components/Material/Preloader/style.scss';
+@import 'components/Material/Dropdown/style.scss';
+@import 'components/Material/Switch/style.scss';
+@import 'components/Material/Checkbox/style.scss';
+@import 'components/Material/RadioButtonsContainer/style.scss';
+@import 'components/Material/RadioButton/style.scss';

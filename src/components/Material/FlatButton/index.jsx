@@ -2,7 +2,7 @@ import React from 'react'
 
 import Ripple from '../Ripple'
 
-import ClassManager from '../../utils/class'
+import ClassManager from '../utils/class'
 
 export default class FlatButton extends React.Component {
   render () {
@@ -31,7 +31,8 @@ export default class FlatButton extends React.Component {
     const rootClass = ClassManager.get('material-button flat', [
       className,
       disabled ? 'disabled' : '',
-      darkTheme ? 'dark-theme' : ''
+      darkTheme ? 'dark-theme' : '',
+      this.props.className
     ])
 
     return (
@@ -48,5 +49,6 @@ FlatButton.defaultProps = {
   color: '#3F51B5',
   disabled: false,
   darkTheme: false,
-  style: {}
+  style: {},
+  className: ''
 }
