@@ -176,6 +176,12 @@ export default class App extends React.Component {
     this.bar.refreshIconsState()
   }
 
+  restoreTabsAnimations () {
+    if (!Store.tabAnimateLeft) Store.tabAnimateLeft = true
+    if (!Store.tabAnimateWidth) Store.tabAnimateWidth = true
+    if (Store.app != null && !Store.app.tabs.addTab.state.animateLeft) Store.app.tabs.addTab.setState({animateLeft: true})
+  }
+
   render () {
     const onVisibilityChange = (e) => {
       if (!e) {
