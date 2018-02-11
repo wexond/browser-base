@@ -288,10 +288,10 @@ export default class Page extends React.Component {
     let deltaY = 0
     let time
 
-    ipcRenderer.on('scroll-touch-begin', () => {
+    /*ipcRenderer.on('scroll-touch-begin', () => {
       trackingFingers = true
       startTime = (new Date()).getTime()
-    })
+    })*/
 
     this.webview.addEventListener('wheel', (e) => {
       if (trackingFingers) {
@@ -301,7 +301,7 @@ export default class Page extends React.Component {
       }
     })
 
-    ipcRenderer.on('scroll-touch-end', () => {
+    /*ipcRenderer.on('scroll-touch-end', () => {
       const distanceThresholdX = 150
       const distanceThresholdY = 200
       const timeMax = 200
@@ -335,7 +335,7 @@ export default class Page extends React.Component {
           deltaX = 0
         }
       }
-    })
+    })*/
 
   }
 
