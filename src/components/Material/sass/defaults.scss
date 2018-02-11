@@ -1,0 +1,20 @@
+// Typography
+$fonts-path: '../material-react/sass/imports/fonts/';
+$fonts-roboto-regular-path: $fonts-path + 'Roboto-Regular.woff2';
+$fonts-roboto-medium-path: $fonts-path + 'Roboto-Medium.woff2';
+$fonts-roboto-light-path: $fonts-path + 'Roboto-Light.woff2';
+
+// Transparency
+$primary-opacity-light: 0.87;
+$secondary-opacity-light: 0.54;
+$disabled-text-light: 0.26;
+$disabled-button-light: 0.12;
+$disabled-opacity-light: 0.38;
+$dividers-opacity-light: 0.12;
+
+$primary-opacity-dark: 1;
+$secondary-opacity-dark: 0.7;
+$disabled-text-dark: 0.30;
+$disabled-button-dark: 0.12;
+$disabled-opacity-dark: 0.5;
+$dividers-opacity-dark: 0.12;

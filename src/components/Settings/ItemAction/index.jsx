@@ -13,7 +13,8 @@ export default class ItemAction extends React.Component {
             if (typeof ref === 'function') {
               ref(r)
             }
-          }})
+            
+          }, onClick: (e) => { e.stopPropagation() }})
         })}
       </div>
     )
