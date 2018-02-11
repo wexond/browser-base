@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Input from '../Input'
-import Ripple from '../Ripple'
+import Ripple from '../Material/components/Ripple'
 
 import Store from '../../stores/history'
 import { observer } from 'mobx-react'

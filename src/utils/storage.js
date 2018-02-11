@@ -16,8 +16,7 @@ export const addFavicon = (url) => {
         const generatedBuffer = reader.result
 
         console.log(generatedBuffer)
-
-        favicons.run('INSERT INTO favicons(url, favicon) VALUES(?, ?)', [url, new Buffer(generatedBuffer)])
+        favicons.run('INSERT INTO favicons(url, favicon) SELECT ?, ? WHERE NOT EXISTS(SELECT 1 FROM favicons WHERE url = ?)', [url, new Buffer(generatedBuffer), url])
       }
       reader.readAsArrayBuffer(blob)
     })

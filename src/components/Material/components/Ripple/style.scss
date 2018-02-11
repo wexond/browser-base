@@ -1,22 +1,30 @@
 %ripple-basics {
   user-select: none;
-  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
   -webkit-font-smoothing: subpixel-antialiased;
 }
 
-@mixin ripple {
+@mixin ripple () {
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
   @extend %ripple-basics;
 }
 
-@mixin ripple-icon {
+@mixin ripple-icon () {
   user-select: none;
   @extend %ripple-basics;
 }
 
-.ripple-effect {
+.material-ripple {
+  @include ripple;
+}
+
+.material-ripple-icon {
+  @include ripple-icon;
+}
+
+.material-ripple-effect {
   width: 0px;
   height: 0px;
   padding: 0;
@@ -26,11 +34,7 @@
   border-radius: 50%;
   user-select: none;
   pointer-events: none;
-  -webkit-transform: translate3d(-50.1%, -50.1%, 0);
+  transform: translate3d(-50.1%, -50.1%, 0);
   -webkit-font-smoothing: subpixel-antialiased;
   background-color: #000;
-}
-
-.ripple-container {
-  display: none;
 }

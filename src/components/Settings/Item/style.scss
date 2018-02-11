@@ -2,12 +2,25 @@
   position: relative;
   padding-top: 16px;
   padding-bottom: 16px;
+  display: flex;
+  flex-flow: column;
 
-  .title {
-    float: left;
-  }
+  .row {
+    display: flex;
 
-  .description {
-    color: rgba(0,0,0, $secondary-opacity-light);
+    .info {
+      flex: 1;
+
+      .description {
+        color: rgba(0,0,0, $secondary-opacity-light);
+      }
+    }
+
+    .actions {
+      .material-button.flat {
+        margin-top: -10px;
+        margin-right: 16px;
+      }
+    }
   }
 }

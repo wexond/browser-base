@@ -16,7 +16,7 @@ import * as tabGroupsActions from '../../../actions/tab-groups'
 import Colors from '../../../utils/colors'
 
 import MenuItem from '../MenuItem'
-import Ripple from '../../Ripple'
+import Ripple from '../../Material/components/Ripple'
 
 import Preloader from '../../Preloader'
 

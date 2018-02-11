@@ -2,12 +2,35 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 export default class Ripple extends React.Component {
+  constructor () {
+    super()
+
+    this.isTouch = false
+  }
+
   componentDidMount () {
-    // Get parent
+    const {
+      center,
+      touchSupport,
+      autoRipple,
+      autoClass
+    } = this.props
+
+    // Get the parent
     this.parent = ReactDOM.findDOMNode(this).parentNode
-    if (this.props.autoRipple) {
-      // Add mouse down event to parent
+
+    if (autoClass) {
+      // Add ripple class
+      this.parent.classList.add(!center ? 'material-ripple' : 'material-ripple-icon')
+    }
+
+    if (autoRipple) {
+      // Add events to the parent
       this.parent.addEventListener('mousedown', this.makeRipple)
+      // If support touch
+      if (touchSupport) {
+        this.parent.addEventListener('touchstart', this.makeRipple)
+      }
     }
   }
 
@@ -39,9 +62,28 @@ export default class Ripple extends React.Component {
    */
   getPosition (center, offsetX, e) {
     if (!center) {
+      let pos = {
+        x: -1,
+        y: -1
+      }
+
+      if (e.type === 'touchstart') {
+        const touch = e.touches[0]
+
+        pos = {
+          x: touch.pageX,
+          y: touch.pageY
+        }
+      } else {
+        pos = {
+          x: e.pageX,
+          y: e.pageY
+        }
+      }
+
       return {
-        x: e.pageX - this.parent.getBoundingClientRect().left + 'px',
-        y: e.pageY - this.parent.getBoundingClientRect().top + 'px'
+        x: pos.x - this.parent.getBoundingClientRect().left + 'px',
+        y: pos.y - this.parent.getBoundingClientRect().top + 'px'
       }
     } else {
       return {
@@ -56,13 +98,29 @@ export default class Ripple extends React.Component {
    * @param {Object} event data
    */
   makeRipple = (e) => {
+    const options = this.props.options
+    const props = Object.assign({}, this.props)
+
+    if (options != null && typeof options === 'object') {
+      Object.assign(props, options)
+    }
+
     const {
       center,
       offsetX,
       opacity,
       time,
-      scale
-    } = this.props
+      scale,
+      touchSupport,
+      color
+    } = props
+
+    const isEventTouch = (e.type === 'touchstart')
+    if (isEventTouch && !touchSupport || isEventTouch && e.touches.length > 1) return
+
+    if (isEventTouch) this.isTouch = true
+    else if (this.isTouch) return
+
     // Scales
     const scaleX = center ? scale : this.parent.clientWidth
     const scaleY = center ? scale : this.parent.clientHeight
@@ -70,13 +128,14 @@ export default class Ripple extends React.Component {
     const position = this.getPosition(center, offsetX, e)
     // Create DOM element
     const element = document.createElement('span')
-    element.className = 'ripple-effect'
+    element.className = 'material-ripple-effect'
     // Set css
     this.css(element, {
       left: position.x,
       top: position.y,
       transition: `${time}s ease-out width, ${time}s ease-out height, ${time}s opacity`,
-      opacity: opacity
+      opacity: opacity,
+      backgroundColor: color
     })
     // Append the element to parent
     this.parent.appendChild(element)
@@ -96,20 +155,26 @@ export default class Ripple extends React.Component {
       setTimeout(() => {
         if (element.parentNode != null) {
           element.parentNode.removeChild(element)
+          this.isTouch = false
+
+          window.removeEventListener('mouseup', remove)
+          window.removeEventListener('mouseleave', remove)
+          window.addEventListener('touchend', remove)
         }
       }, time * 1000)
-
-      window.removeEventListener('mouseup', remove)
-      window.removeEventListener('mouseleave', remove)
     }
     // Add events to remove the ripple
-    window.addEventListener('mouseup', remove)
-    window.addEventListener('mouseleave', remove)
+    if (!isEventTouch) {
+      window.addEventListener('mouseup', remove)
+      window.addEventListener('mouseleave', remove)
+    } else {
+      window.addEventListener('touchend', remove)
+    }
   }
 
   render () {
     return (
-      <div className='ripple-container' />
+      <div style={{display: 'none'}} />
     )
   }
 }
@@ -118,7 +183,10 @@ Ripple.defaultProps = {
   center: false,
   offsetX: 0,
   scale: 14,
-  time: 0.3,
+  time: 0.4,
   opacity: 0.2,
-  autoRipple: true
+  touchSupport: true,
+  color: '#000',
+  autoRipple: true,
+  autoClass: true
 }

@@ -40,9 +40,7 @@ if (window.location.protocol === 'wexond:') {
     delete: async (items) => {
       for (var x = 0; x < items.length; x++) {
         if (items[x] != null) {
-          history.run('DELETE FROM history WHERE id = ?', [items[x].id], (err) => {
-
-          })
+          history.run('DELETE FROM history WHERE id = ?', [items[x].id])
         }
       }
     },
