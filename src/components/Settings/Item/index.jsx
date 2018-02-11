@@ -22,7 +22,8 @@ export default class Item extends React.Component {
       if (typeof this.props.onClick === 'function') this.props.onClick(e)
 
       for (var i = 0; i < this.itemActions.length; i++) {
-        if (this.itemActions[i].action.constructor.name === 'Switch') {
+        if (this.itemActions[i] != null && this.itemActions[i].action.constructor.name === 'Switch') {
+          console.log('aha')
           this.itemActions[i].action.toggle(!this.itemActions[i].action.state.toggled)
         }
       }
@@ -32,23 +33,27 @@ export default class Item extends React.Component {
       }
     }
 
+    this.itemActions = []
+
     return (
       <div className='section-item' style={style} onClick={onClick}>
-        <div className='horizontal'>
-          <div className='title'>
-            {title}
+        <div className='row'>
+          <div className='info'>
+            <div className='title'>
+              {title}
+            </div>
+            <div className='description'>
+              {description}
+            </div>
           </div>
-          {React.Children.map(this.props.children, child => {
-            if (child.type.name === 'ItemAction') {
-              return React.cloneElement(child, {ref: (r) => { this.itemActions.push(r) }})
-            }
-          })}
+          <div className='actions'>
+            {React.Children.map(this.props.children, child => {
+              if (child.type.name === 'ItemAction') {
+                return React.cloneElement(child, {ref: (r) => { this.itemActions.push(r) }})
+              }
+            })}
+          </div>
         </div>
-
-        <div style={{clear: 'both'}} />
-        
-        <div className='description'>{description}</div>
-
         {React.Children.map(this.props.children, child => {
           if (child.type.name === 'ExpandableContent') {
             return React.cloneElement(child, {ref: (r) => { this.expandableContent = r }})

@@ -8,6 +8,7 @@ import ExpandableContent from './ExpandableContent'
 import RadioButtonsContainer from '../RadioButtonsContainer'
 import RadioButton from '../RadioButton'
 import Switch from '../Switch'
+import FlatButton from '../Material/components/FlatButton'
 
 export default class Settings extends React.Component {
   constructor() {
@@ -16,10 +17,15 @@ export default class Settings extends React.Component {
     window.dictionary = window.dictionaryAPI.get()
 
     document.title = window.dictionary.pages.settings.title
+
+    this.state = {
+      adblockRelaunchBtnVisible: false
+    }
   }
 
   componentDidMount = async () => {
     this.settings = await window.settingsAPI.get()
+    this.originalSettings = Object.assign({}, this.settings)
 
     this.refs.onStartupRadioButtons.items[this.settings.onStartup.type].toggle(true)
     this.adblockSwitch.toggle(this.settings.adblock)
@@ -27,6 +33,10 @@ export default class Settings extends React.Component {
   }
 
   render() {
+    const {
+      adblockRelaunchBtnVisible
+    } = this.state
+
     const save = async () => {
       await window.settingsAPI.save(this.settings)
     }
@@ -37,6 +47,7 @@ export default class Settings extends React.Component {
     }
 
     const onAdblockToggle = async (e) => {
+      this.setState({adblockRelaunchBtnVisible: (this.originalSettings.adblock !== e.toggled)})
       this.settings.adblock = e.toggled
       save()
     }
@@ -64,6 +75,9 @@ export default class Settings extends React.Component {
             <Item title='Ad-block' description='Block unwanted ads' cursor='pointer'>
               <ItemAction>
                 <Switch ref={(r) => this.adblockSwitch = r} onToggle={onAdblockToggle} />
+              </ItemAction>
+              <ItemAction>
+                <FlatButton style={{visibility: (adblockRelaunchBtnVisible) ? 'visible' : 'hidden'}}>relaunch</FlatButton>
               </ItemAction>
             </Item>
             <Item title='Ad-block cosmetic filtering' description='This is an experimental feature, which might slow down browser' cursor='pointer' ref='testItem1'>
