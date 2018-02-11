@@ -42,6 +42,8 @@ export default class Tab extends React.Component {
   }
 
   close = (e) => {
+    Store.app.restoreTabsAnimations()
+
     const tab = this.props.tab
     const tabs = this.props.tabs
     const isSelected = Store.selectedTab === tab.id
@@ -129,12 +131,12 @@ export default class Tab extends React.Component {
     // Control transitions.
     let transition = tabDefaults.transitions['background-color'].duration + 's' + ' background-color ' + tabDefaults.transitions['background-color'].easing 
 
-    if (animateLeft) {
+    if (animateLeft && Store.tabAnimateLeft) {
       const newTransition = tabDefaults.transitions.left.duration + 's' + ' left ' + tabDefaults.transitions.left.easing 
       transition = Transitions.appendTransition(transition, newTransition)
     }
 
-    if (animateWidth) {
+    if (animateWidth && Store.tabAnimateWidth) {
       const newTransition = tabDefaults.transitions.width.duration + 's' + ' width ' + tabDefaults.transitions.width.easing 
       transition = Transitions.appendTransition(transition, newTransition)
     }

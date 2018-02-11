@@ -114,10 +114,6 @@ export default class Tabs extends React.Component {
     // Set widths and lefts.
     tabsActions.setWidths(tabsWidth, addTabWidth)
     tabsActions.setPositions()
-
-    setTimeout(() => {
-      this.addTab.setState({animateLeft: true})
-    })
   }
 
   render () {

@@ -59,14 +59,6 @@ export default class TabGroup extends React.Component {
           Store.app.tabs.updateTabs()
         })
 
-        const interval = setInterval(() => {
-          Store.app.tabs.tabs.scrollLeft = Store.app.tabs.tabs.offsetWidth + Store.app.tabs.tabs.scrollLeft
-        }, 1)
-        
-        setTimeout(() => {
-          clearInterval(interval)
-        }, tabDefaults.transitions.width.duration * 1000)
-
         return
       }
       // If an item was removed.
@@ -82,27 +74,18 @@ export default class TabGroup extends React.Component {
 
     window.addEventListener('resize', (e) => {
       if (!e.isTrusted) return
-
-      // Don't resize tabs when they new width is less than 32.
-      if (tabsActions.getWidth(Store.app.tabs.getWidth(), Store.app.tabs.addTab.getWidth()) < 32) return
       
       // Turn off left animation for add tab button.
       Store.app.tabs.addTab.setState({animateLeft: false})
-      // After a while enable left animation for add tab button.
-      setTimeout(() => Store.app.tabs.addTab.setState({animateLeft: true}))
 
       // Disable animations for all tabs.
-      tabGroup.tabs.forEach(tab => {
-        if (tab == null) return
-        tab.animateLeft = false
-        tab.animateWidth = false
-        // After setting widths and lefts, enable the animations.
-        setTimeout(() => {
-          if (tab == null) return
-          tab.animateLeft = true
-          tab.animateWidth = true
-        })
-      })
+      for (var i = 0; i < tabGroup.tabs.length; i++) {
+        const tab = tabGroup.tabs[i]
+
+        Store.tabAnimateLeft = false
+        Store.tabAnimateWidth = false
+      }
+
       Store.app.tabs.updateTabs()
     })
 
