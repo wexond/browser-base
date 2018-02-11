@@ -10,7 +10,6 @@ import Bar from './Bar'
 import Suggestions from './Suggestions'
 import Menu from './Menu'
 import MenuNavigation from './MenuNavigation'
-import Dialog from './Dialog'
 import TabGroupsMenu from './TabGroupsMenu'
 import BackgroundExtensions from './BackgroundExtensions'
 

@@ -150,7 +150,9 @@ export default class Ripple extends React.Component {
     }, 1)
     // Removes the ripple
     const remove = (e) => {
-      element.style.opacity = '0'
+      setTimeout(() => {
+        element.style.opacity = '0'
+      }, 100)
       // Wait until animation
       setTimeout(() => {
         if (element.parentNode != null) {
@@ -158,7 +160,7 @@ export default class Ripple extends React.Component {
           this.isTouch = false
 
           window.removeEventListener('mouseup', remove)
-          window.removeEventListener('mouseleave', remove)
+          this.parent.removeEventListener('mouseleave', remove)
           window.addEventListener('touchend', remove)
         }
       }, time * 1000)
@@ -166,7 +168,7 @@ export default class Ripple extends React.Component {
     // Add events to remove the ripple
     if (!isEventTouch) {
       window.addEventListener('mouseup', remove)
-      window.addEventListener('mouseleave', remove)
+      this.parent.addEventListener('mouseleave', remove)
     } else {
       window.addEventListener('touchend', remove)
     }
@@ -184,7 +186,7 @@ Ripple.defaultProps = {
   offsetX: 0,
   scale: 14,
   time: 0.4,
-  opacity: 0.2,
+  opacity: 0.15,
   touchSupport: true,
   color: '#000',
   autoRipple: true,
