@@ -65,10 +65,7 @@
   "dependencies": {
     "ad-block": "Sential/ad-block",
     "electron-updater": "2.17.6",
-<<<<<<< HEAD
-    "material-ui": "^1.0.0-beta.32"
-=======
+    "material-ui": "^1.0.0-beta.32",
     "sqlite3": "3.1.13"
->>>>>>> a160aaecb267bdeac5936b823ddbd912cc34722d
   }
 }
