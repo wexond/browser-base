@@ -14,6 +14,8 @@ export const addTab = (data = tabDefaults.defaultOptions) => {
     url
   } = data
 
+  if (Store.app != null) Store.app.restoreTabsAnimations()
+
   const tab = {
     id: tabId,
     select: select,
@@ -104,8 +106,6 @@ export const getWidth = (tabsWidth, addTabWidth, margin = 0) => {
   const allPinnedTabsWidth = (tabs.length - normalTabs.length) * pinnedTabWidth
   // Calculate final width per tab.
   let newNormalTabWidth = (tabsWidth - addTabWidth - margins - allPinnedTabsWidth) / (tabs.length - allPinnedTabsWidth)
-
-  if (newNormalTabWidth < 32) newNormalTabWidth = 32
 
   // Limit width to `maxTabWidth`.
   if (newNormalTabWidth > maxTabWidth) newNormalTabWidth = maxTabWidth

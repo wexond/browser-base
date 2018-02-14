@@ -6,7 +6,7 @@ import url from 'url'
 import Store from '../../stores/new-tab'
 import { observer } from 'mobx-react'
 
-import Preloader from '../Preloader'
+import Preloader from '../Material/Preloader'
 
 import NewTabHelper from '../../utils/new-tab'
 import NewTabCard from './Card'

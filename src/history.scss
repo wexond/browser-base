@@ -5,14 +5,9 @@ $card-gap: 16px;
 
 @import 'sass/mixins/custom-scroll.scss';
 
-@import 'components/Checkbox/style.scss';
-@import 'components/Input/style.scss';
-@import 'components/Preloader/style.scss';
-
-@import 'components/ToolBar/style.scss';
-
 @import 'components/History/style.scss';
 @import 'components/History/Card/style.scss';
 @import 'components/History/Cards/style.scss';
 @import 'components/History/Section/style.scss';
 @import 'components/History/Item/style.scss';
+@import 'components/History/ToolBar/style.scss';

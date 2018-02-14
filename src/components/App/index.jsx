@@ -10,7 +10,6 @@ import Bar from './Bar'
 import Suggestions from './Suggestions'
 import Menu from './Menu'
 import MenuNavigation from './MenuNavigation'
-import Dialog from './Dialog'
 import TabGroupsMenu from './TabGroupsMenu'
 import BackgroundExtensions from './BackgroundExtensions'
 
@@ -175,6 +174,12 @@ export default class App extends React.Component {
   refreshIconsState () {
     this.menuNavigation.refreshIconsState()
     this.bar.refreshIconsState()
+  }
+
+  restoreTabsAnimations () {
+    if (!Store.tabAnimateLeft) Store.tabAnimateLeft = true
+    if (!Store.tabAnimateWidth) Store.tabAnimateWidth = true
+    if (Store.app != null && !Store.app.tabs.addTab.state.animateLeft) Store.app.tabs.addTab.setState({animateLeft: true})
   }
 
   render () {

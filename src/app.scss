@@ -5,8 +5,6 @@ $bar-height: 42px;
 
 $tabs-hover-color: rgba(0,0,0,0.08);
 
-@import 'components/Preloader/style.scss';
-
 @import 'components/App/style.scss';
 @import 'components/App/Page/style.scss';
 @import 'components/App/Pages/style.scss';
@@ -22,7 +20,6 @@ $tabs-hover-color: rgba(0,0,0,0.08);
 @import 'components/App/Menu/style.scss';
 @import 'components/App/MenuItem/style.scss';
 @import 'components/App/MenuNavigation/style.scss';
-@import 'components/App/Dialog/style.scss';
 @import 'components/App/TabGroupsMenu/style.scss';
 @import 'components/App/TabGroupsMenuItem/style.scss';
 @import 'components/App/TabGroupPages/style.scss';

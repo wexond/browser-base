@@ -7,6 +7,7 @@ import Store from '../../../stores/store'
 import * as tabGroupsActions from '../../../actions/tab-groups'
 
 import TabGroupsMenuItem from '../TabGroupsMenuItem'
+import FlatButton from '../../Material/FlatButton'
 
 @observer
 export default class TabGroupsMenu extends React.Component {
@@ -24,9 +25,9 @@ export default class TabGroupsMenu extends React.Component {
             return <TabGroupsMenuItem tabGroup={item} key={key}></TabGroupsMenuItem>
           })}
         </div>
-        <div className='add-group' onClick={onAddClick}>
+        <FlatButton className='add-group' onClick={onAddClick}>
           {Store.dictionary.tabGroups.addNewGroup}
-        </div>
+        </FlatButton>
         <div style={{clear: 'both'}}></div>
       </div>
     )

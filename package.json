@@ -44,7 +44,6 @@
     "babel-plugin-transform-runtime": "6.23.0",
     "babel-preset-env": "1.6.1",
     "babel-preset-react": "6.24.1",
-    "base64-img": "1.0.3",
     "cross-env": "5.1.1",
     "css-loader": "0.28.7",
     "devtron": "1.4.0",
@@ -66,6 +65,10 @@
   "dependencies": {
     "ad-block": "Sential/ad-block",
     "electron-updater": "2.17.6",
+<<<<<<< HEAD
     "material-ui": "^1.0.0-beta.32"
+=======
+    "sqlite3": "3.1.13"
+>>>>>>> a160aaecb267bdeac5936b823ddbd912cc34722d
   }
 }

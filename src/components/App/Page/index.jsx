@@ -5,7 +5,7 @@ import Store from '../../../stores/store'
 
 import { ipcRenderer } from 'electron'
 
-import Storage from '../../../utils/storage'
+import * as storage from '../../../utils/storage'
 import Colors from '../../../utils/colors'
 
 import * as filesActions from '../../../actions/files'
@@ -14,6 +14,7 @@ import * as webviewActions from '../../../actions/webview'
 
 import ipcMessages from '../../../defaults/ipc-messages'
 import extensionsDefaults from '../../../defaults/extensions'
+import wexondUrls from '../../../defaults/wexond-urls'
 
 import FindMenu from '../FindMenu'
 
@@ -23,39 +24,26 @@ export default class Page extends React.Component {
     const tab = this.props.tab
     const page = this.props.page
     let lastURL = ''
-    let favicon = ''
 
     filesActions.checkFiles()
 
     let historyId = -1
     let siteId = -1
 
-    lastURL = ''
-
     page.page = this
 
     const updateData = async () => {
-      if (lastURL === tab.url) {
+      if (lastURL === tab.url && tab != null) {
         if (historyId !== -1) {
-          const history = await Storage.get('history')
-          const item = history.filter(item => { return item.id === historyId })[0]
-          if (item != null) {
-            item.url = tab.url
-            item.favicon = tab.favicon
-            item.title = tab.title
-            item.ogData = tab.ogData
-            Storage.save('history', history)
-          }
+          let query = `UPDATE history SET title = ?, url = ?, favicon = ?, ogTitle = ?, ogDescription = ?, ogImage = ? WHERE rowid = ?`
+          let data = [tab.title, tab.url, tab.favicon, tab.ogData.title, tab.ogData.description, tab.ogData.image, historyId]
+          storage.history.run(query, data)
         }
+
         if (siteId !== -1) {
-          const sites = await Storage.get('sites')
-          const item = sites.filter(item => { return item.id === siteId })[0]
-          if (item != null) {
-            item.url = tab.url
-            item.favicon = tab.favicon
-            item.title = tab.title
-            Storage.save('sites', sites)
-          }
+          let query = `UPDATE history SET title = ?, favicon = ?, ogTitle = ?, ogDescription = ?, ogImage = ? WHERE rowid = ?`
+          let data = [tab.title, tab.favicon, null, null, null, siteId]
+          storage.history.run(query, data)
         }
       }
     }
@@ -106,11 +94,24 @@ export default class Page extends React.Component {
         const regex = /(http(s?)):\/\/(www.)?/gi
         let url = tab.url
         if (url.indexOf('/', 9) !== -1) {
-          url = url.substring(0, url.indexOf('/', 9))
+          url = url.substring(0, url.indexOf('/', 9) + 1)
         }
 
-        historyId = await Storage.addHistoryItem(tab.title, e.url, favicon)
-        siteId = await Storage.addSite(tab.title, url, favicon)
+        if (!e.url.startsWith('wexond://')) {
+          storage.history.run(`INSERT INTO history(title, url, favicon, date) VALUES (?, ?, ?, DATETIME('now', 'localtime'))`, [tab.title, e.url, tab.favicon], function (err) {
+            historyId = this.lastID
+          })
+  
+          storage.history.run(`INSERT INTO history(title, url, favicon, date) SELECT ?, ?, ?, DATETIME('now', 'localtime') WHERE NOT EXISTS(SELECT 1 FROM history WHERE url = ?)`, [tab.title, url, tab.favicon, url], function (err) {
+            if (this.changes > 0) {
+              siteId = this.lastID
+            } else {
+              siteId = -1
+            }
+  
+            console.log(siteId)
+          })
+        } else historyId = -1
       }
     })
 
@@ -162,11 +163,9 @@ export default class Page extends React.Component {
         if (request.readyState === 4) {
           if (request.status === 404) {
             tab.favicon = ''
-            favicon = ''
           } else {
-            Storage.addFavicon(e.favicons[0])
             tab.favicon = e.favicons[0]
-            favicon = e.favicons[0]
+            storage.addFavicon(e.favicons[0])
           }
           updateData()
         }
@@ -289,10 +288,10 @@ export default class Page extends React.Component {
     let deltaY = 0
     let time
 
-    ipcRenderer.on('scroll-touch-begin', () => {
+    /*ipcRenderer.on('scroll-touch-begin', () => {
       trackingFingers = true
       startTime = (new Date()).getTime()
-    })
+    })*/
 
     this.webview.addEventListener('wheel', (e) => {
       if (trackingFingers) {
@@ -302,7 +301,7 @@ export default class Page extends React.Component {
       }
     })
 
-    ipcRenderer.on('scroll-touch-end', () => {
+    /*ipcRenderer.on('scroll-touch-end', () => {
       const distanceThresholdX = 150
       const distanceThresholdY = 200
       const timeMax = 200
@@ -336,7 +335,7 @@ export default class Page extends React.Component {
           deltaX = 0
         }
       }
-    })
+    })*/
 
   }
 

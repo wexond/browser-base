@@ -6,7 +6,6 @@ import { observer } from 'mobx-react'
 
 import Transitions from '../../../utils/transitions'
 
-import tabMenuItems from '../../../defaults/tab-menu-items'
 import tabDefaults from '../../../defaults/tabs'
 import wexondUrls from '../../../defaults/wexond-urls'
 
@@ -16,9 +15,9 @@ import * as tabGroupsActions from '../../../actions/tab-groups'
 import Colors from '../../../utils/colors'
 
 import MenuItem from '../MenuItem'
-import Ripple from '../../Ripple'
+import Ripple from '../../Material/Ripple'
 
-import Preloader from '../../Preloader'
+import Preloader from '../../Material/Preloader'
 
 @observer
 export default class Tab extends React.Component {
@@ -43,6 +42,8 @@ export default class Tab extends React.Component {
   }
 
   close = (e) => {
+    Store.app.restoreTabsAnimations()
+
     const tab = this.props.tab
     const tabs = this.props.tabs
     const isSelected = Store.selectedTab === tab.id
@@ -130,12 +131,12 @@ export default class Tab extends React.Component {
     // Control transitions.
     let transition = tabDefaults.transitions['background-color'].duration + 's' + ' background-color ' + tabDefaults.transitions['background-color'].easing 
 
-    if (animateLeft) {
+    if (animateLeft && Store.tabAnimateLeft) {
       const newTransition = tabDefaults.transitions.left.duration + 's' + ' left ' + tabDefaults.transitions.left.easing 
       transition = Transitions.appendTransition(transition, newTransition)
     }
 
-    if (animateWidth) {
+    if (animateWidth && Store.tabAnimateWidth) {
       const newTransition = tabDefaults.transitions.width.duration + 's' + ' width ' + tabDefaults.transitions.width.easing 
       transition = Transitions.appendTransition(transition, newTransition)
     }
@@ -199,7 +200,8 @@ export default class Tab extends React.Component {
 
     const borderLeftStyle = {
       display: (isSelected && tabGroup.indexOf(tab) !== 0) ? 'block' : 'none',
-      left: 0
+      left: 0,
+      opacity: ((isSelected) ? ((Store.foreground === 'white') ? 0 : 1) : 1)
     }
 
     const selectedTab = tabGroup.filter(ttab => {
@@ -209,7 +211,8 @@ export default class Tab extends React.Component {
     const borderRightStyle = {
       display: (tabGroup.indexOf(selectedTab) - 1 === tabGroup.indexOf(tab)) ? 'none' : 'block',
       right: (isSelected) ? 0 : -1,
-      height: (isSelected) ? '100%' : 'calc(100% - 8px)'
+      height: (isSelected) ? '100%' : 'calc(100% - 8px)',
+      opacity: ((isSelected) ? ((Store.foreground === 'white') ? 0 : 1) : 1)
     }
 
     const onMouseDown = (e) => {
@@ -240,54 +243,11 @@ export default class Tab extends React.Component {
 
     const onCloseMouseDown = e => e.stopPropagation()
 
-    const onContextMenu = (e) => {
-
-      let items = tabMenuItems.map((item) => {
-        return {
-          type: item.type,
-          title: item.title,
-          onClick: () => item.onClick(tab.tab),
-        }
-      })
-
-      Store.app.tabMenu.setState({ items: items })
-
-      Store.app.tabMenu.show()
-
-      // Calculate new menu position
-      // using cursor x, y and 
-      // width, height of the menu.
-      let x = Store.cursor.x
-      let y = Store.cursor.y
-
-      // By default it opens menu from upper left corner.
-      let left = x + 1
-      let top = y + 1
-
-      // Open menu from right corner.
-      if (left + 300 > window.innerWidth) {
-        left = x - 301
-      }
-
-      // Open menu from bottom corner.
-      if (top + Store.app.tabMenu.newHeight > window.innerHeight) {
-        top = y - Store.app.tabMenu.newHeight
-      }
-
-      if (top < 0) {
-        top = 96
-      }
-
-      // Set the new position.
-      Store.app.tabMenu.setState({ left: left, top: top })
-    }
-
     const tabEvents = {
       onMouseDown: onMouseDown,
       onMouseEnter: onMouseEnter,
       onMouseLeave: onMouseLeave,
-      onMouseUp: onMouseUp,
-      onContextMenu: onContextMenu
+      onMouseUp: onMouseUp
     }
 
     const preloaderStyle = {

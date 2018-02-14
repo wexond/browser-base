@@ -9,9 +9,10 @@ export const checkFiles = () => {
     }
   }
   for (var key in paths.files) {
-    let path = paths.files[key]
-    if (!fs.existsSync(path)) {
-      fs.writeFileSync(path, '[]')
+    let file = paths.files[key]
+
+    if (typeof file === 'object' && file.autoCreate && !fs.existsSync(file.path)) {
+      fs.writeFileSync(file.path, JSON.stringify(file.defaultContent))
     }
   }
 }
