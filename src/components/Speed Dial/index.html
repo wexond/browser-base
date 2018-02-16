@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- favicon -->
+    <link rel="shortcut icon" href="../../../resources/icon.ico" />
+    <title>Wexond Speed Dial</title>
+
+    <!-- JavaScript Files -->
+    <script src="../Speed Dial/js/main.js"></script>
+    <script src="/node_modules/material-design-lite/material.min.js"></script>
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <!-- CSS3 Files -->
+    <link rel="stylesheet" href="../Speed Dial/css/main.css" />
+    <link rel="stylesheet" href="/node_modules/material-design-lite/material.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" />
+    <link rel="stylesheet" href="node_modules/material-components-web/dist/material-components-web.css">
+
+</head>
+
+<body>
+    <div class="demo-layout-waterfall mdl-layout mdl-js-layout">
+        <header class="mdl-layout__header mdl-layout__header--waterfall">
+            <!-- Top row, always visible -->
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">Wexond Speed Dial</span>
+                <div class="mdl-layout-spacer"></div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                                mdl-textfield--floating-label mdl-textfield--align-right">
+                    Search
+                    <label class="mdl-button mdl-js-button mdl-button--icon" for="waterfall-exp">
+                        <i class="material-icons">search</i>
+                    </label>
+                    <div class="mdl-textfield__expandable-holder">
+                        <input class="mdl-textfield__input" type="text" name="sample" id="waterfall-exp">
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">Quick Access</span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="wexond://settings">
+                    <i class="material-icons" role="presentation">settings</i>
+                    Settings
+                </a>
+                <a class="mdl-navigation__link" href="wexond://history">
+                    <i class="material-icons" role="presentation">history</i>
+                    History
+                </a>
+                <a class="mdl-navigation__link" href="">
+                    <i class="material-icons" role="presentation">extension</i>
+                    Extensions
+                </a>
+                <a class="mdl-navigation__link" href="">
+                    <i class="material-icons" role="presentation">get_app</i>
+                    Downloads
+                </a>
+                <a class="mdl-navigation__link" href="">
+                    <i class="material-icons" role="presentation">help</i>
+                    About
+                </a>
+            </nav>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="page-content">
+                <!-- Your content goes here -->
+                <div class="mdc-grid-list">
+                    <ul class="mdc-grid-list__tiles">
+                        <li class="mdc-grid-tile">
+                            <a href="https://google.com">
+                                <div class="mdc-grid-tile__primary">
+                                    <img class="mdc-grid-tile__primary-content" src="../Speed Dial/img/google.png" />
+                                </div>
+                                <span class="mdc-grid-tile__secondary">
+                                    <span class="mdc-grid-tile__title">Google</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="mdc-grid-tile">
+                            <a href="https://facebook.com/">
+
+                                <div class="mdc-grid-tile__primary">
+                                    <img class="mdc-grid-tile__primary-content" src="../Speed Dial/img/facebook.png" />
+
+                                </div>
+                                <span class="mdc-grid-tile__secondary">
+                                    <span class="mdc-grid-tile__title">Facebook</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="mdc-grid-tile">
+                            <a href="https://youtube.com">
+                                <div class="mdc-grid-tile__primary">
+                                    <img class="mdc-grid-tile__primary-content" src="../Speed Dial/img/youtube.png" />
+                                </div>
+                                <span class="mdc-grid-tile__secondary">
+                                    <span class="mdc-grid-tile__title">Youtube</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="mdc-grid-tile">
+                            <a href="https://www.wikipedia.org/">
+                                <div class="mdc-grid-tile__primary">
+
+                                    <img class="mdc-grid-tile__primary-content" src="../Speed Dial/img/wikipedia.png" />
+
+                                </div>
+                                <span class="mdc-grid-tile__secondary">
+                                    <span class="mdc-grid-tile__title">Wikipedia</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="mdc-grid-tile">
+                                <a href="https://www.amazon.com/">
+                                    <div class="mdc-grid-tile__primary">
+    
+                                        <img class="mdc-grid-tile__primary-content" src="../Speed Dial/img/amazon.png" />
+    
+                                    </div>
+                                    <span class="mdc-grid-tile__secondary">
+                                        <span class="mdc-grid-tile__title">Amazon</span>
+                                    </span>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

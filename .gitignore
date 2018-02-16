@@ -6,3 +6,7 @@ dist
 package-lock.json
 .vscode
 .vs
+<<<<<<< HEAD
+electron
+=======
+>>>>>>> a160aaecb267bdeac5936b823ddbd912cc34722d

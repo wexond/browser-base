@@ -125,6 +125,16 @@ export default class NewTabHelper {
     }
   }
   
+<<<<<<< HEAD
+static getWeather = (getWeather) => {
+  return new Promise(
+    async (resolve, reject) => {
+      const country = await NewTabHelper.getCountryCode()
+      const weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${country}`
+
+      const jsonWeather = await NewTabHelper.getWebSiteSource(weatherURL, {
+        'X-Api-Key': '17a6438b1d63d5b05f7039e7cb52cde7'
+=======
   static getWeather = (getWeather) => {
     return new Promise(
       async (resolve, reject) => {
@@ -133,6 +143,7 @@ export default class NewTabHelper {
 
         const jsonWeather = await NewTabHelper.getWebSiteSource(weatherURL, {
           'X-Api-Key': '17a6438b1d63d5b05f7039e7cb52cde7'
+>>>>>>> a160aaecb267bdeac5936b823ddbd912cc34722d
       })
     })
   }

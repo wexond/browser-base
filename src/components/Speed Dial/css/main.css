@@ -1,0 +1,44 @@
+.material-icons{
+    padding-right: 8px;
+    margin-right: 8px;
+}
+.mdl-textfield__expandable-holder{
+    width: 500px;
+    background-color: rgb(72, 92, 206);
+    
+}
+.mdl-layout-title{
+    background-color: rgb(63, 81, 181);
+    color: #ffffff;
+}
+
+.mdl-layout__content{
+    background-color: #f3f3f3;
+}
+.mdc-grid-tile {
+    --mdc-grid-list-tile-width: 100%;
+    margin: 16px;
+    float: left;
+    padding: 10px;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;    
+}
+
+li {
+    float: left;
+    text-align: center;
+    
+}
+
+li a {
+    display: block;
+    padding: 6px;
+    background-color: #dddddd;
+}
+.mdc-grid-tile__secondary{
+    color: #494949;
+}
