@@ -1,110 +1,112 @@
-const { join } = require('path')
-const webpack = require('webpack')
-const UglifyJSWebpackPlugin = require('uglifyjs-webpack-plugin')
+const { resolve } = require("path");
+const { spawn } = require("child_process");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const productionDevtool = 'source-map'
-const developmentDevtool = 'eval-source-map'
+const productionDevtool = "source-map";
+const developmentDevtool = "eval-source-map";
 
-let config = {
-  devtool: (process.env.NODE_ENV === 'production') ? productionDevtool : developmentDevtool,
+const INCLUDE = [resolve(__dirname, "src")];
+const EXCLUDE = [/node_modules/];
 
-  devServer: {
-    contentBase: './',
-    publicPath: 'http://localhost:8080/build/'
-  },
+const PORT = 8080;
+
+const OUTPUT_DIR = resolve(__dirname, "build");
+
+const config = {
+  devtool:
+    process.env.NODE_ENV === "production"
+      ? productionDevtool
+      : developmentDevtool,
 
   output: {
-    path: join(__dirname, 'public', 'build'),
-    filename: '[name].bundle.js'
+    path: OUTPUT_DIR,
+    filename: "[name].bundle.js",
   },
 
   module: {
     rules: [
       {
+        test: /\.(png|gif|jpg|woff2|tff|svg)$/,
+        include: INCLUDE,
+        exclude: EXCLUDE,
+        use: [
+          {
+            loader: "url-loader",
+          },
+        ],
+      },
+      {
         test: /\.(scss)$/,
-        include: join(__dirname, 'src'),
-        exclude: /node_modules/,
+        include: INCLUDE,
+        exclude: EXCLUDE,
         use: [
           {
             loader: 'style-loader'
           }, {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true
-            }
+            loader: 'css-loader'
           }, {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true
-            }
+            loader: 'sass-loader'
           }
         ]
-      }, {
-        test: /\.(png|gif|jpg|woff2|tff|svg)$/,
-        include: join(__dirname, 'src'),
-        exclude: /node_modules/,
+      },
+      {
+        test: /\.(tsx|ts)$/,
+        include: INCLUDE,
+        exclude: EXCLUDE,
         use: [
           {
-            loader: 'url-loader'
-          }
-        ]
-      }, {
-        test: /\.(jsx|js)$/,
-        include: join(__dirname, 'src'),
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader'
-          }
-        ]
-      }
-    ]
+            loader: "ts-loader",
+          },
+        ],
+      },
+    ],
+  },
+
+  node: {
+    __dirname: false,
+    __filename: false,
   },
 
   plugins: [],
 
   resolve: {
-    modules: ['node_modules'],
-    extensions: ['.js', '.jsx']
-  }
-}
+    modules: ["node_modules"],
+    extensions: [".js", ".tsx", ".ts"],
+  },
 
-if (process.env.NODE_ENV === 'production') {
-  config.plugins.push(new UglifyJSWebpackPlugin({
-    uglifyOptions: {
-      output: {
-        comments: false
-      }
+  devServer: {
+    contentBase: OUTPUT_DIR,
+    publicPath: '/',
+    stats: {
+      colors: true
+    },
+    setup() {
+      spawn('npm', ['start'], { 
+        shell: true, 
+        env: process.env, 
+        stdio: 'inherit',
+        cwd: __dirname,
+      })
+      .on('close', code => process.exit(0))
+      .on('error', spawnError => console.error(spawnError));
     }
-  }))
-  config.plugins.push(new webpack.DefinePlugin({
-    'process.env': {
-      'NODE_ENV': JSON.stringify('production')
-    }
-  }))
-}
+  }
+};
 
 let appConfig = {
-  target: 'electron',
-  devtool: (process.env.NODE_ENV === 'production') ? productionDevtool : developmentDevtool,
-
+  target: "electron-renderer",
   entry: {
-    app: './src/bootstraps/app.jsx'
-  }
-}
+    app: "./src/app",
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Wexond',
+      filename: 'app.html',
+      template: 'static/template.html'
+    }),
+  ]
+};
 
-let appletsConfig = {
-  target: 'web',
-  devtool: (process.env.NODE_ENV === 'production') ? productionDevtool : developmentDevtool,
+appConfig = Object.assign(appConfig, config);
 
-  entry: {
-    history: './src/bootstraps/history.jsx',
-    newTab: './src/bootstraps/new-tab.jsx',
-    settings: './src/bootstraps/settings.jsx'
-  }
-}
-
-appConfig = Object.assign(appConfig, config)
-appletsConfig = Object.assign(appletsConfig, config)
-
-module.exports = [appConfig, appletsConfig]
+module.exports = [appConfig];
