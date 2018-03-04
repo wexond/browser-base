@@ -1,6 +1,6 @@
 {
   "name": "wexond",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Extensible, fast and innovative web browser with material UI.",
   "main": "main.js",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "git+https://github.com/Nersent/wexond.git"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=dev electron main.js",
+    "start": "cross-env NODE_ENV=dev electron .",
     "watch": "npm run build:dev && webpack-dev-server --hot --inline --port 8080 --colors --progress",
     "build:dev": "rimraf public/build && webpack",
     "build:production": "rimraf public/build && rimraf dist && cross-env NODE_ENV=production webpack --define process.env.NODE_ENV=production --progress --colors",
@@ -63,8 +63,6 @@
     "webpack-dev-server": "2.9.7"
   },
   "dependencies": {
-    "ad-block": "Sential/ad-block",
-    "electron-updater": "2.17.6",
-    "sqlite3": "3.1.13"
+    "electron-updater": "2.17.6"
   }
 }
