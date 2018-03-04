@@ -4,12 +4,12 @@
   "asar": true,
   "directories": {
     "output": "dist",
-    "buildResources": "resources"
+    "buildResources": "static/icons"
   },
   "publish": [
     {
       "provider": "github",
-      "owner": "nersent",
+      "owner": "wexond",
       "repo": "wexond"
     }
   ],

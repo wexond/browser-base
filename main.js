@@ -4,7 +4,6 @@ const path = require('path')
 const ipcMessages = require(path.join(__dirname, '/src/defaults/ipc-messages'))
 const { autoUpdater } = require('electron-updater')
 const fs = require('fs')
-const { AdBlockClient, FilterOptions } = require('ad-block')
 
 const windowDataPath = path.join(app.getPath('userData'), "window-data.json");
 
@@ -123,35 +122,6 @@ const createWindow = () => {
         return
     }
   })
-  
-  const client = new AdBlockClient()
-
-  fs.readFile(path.join(__dirname, 'adblock/adblock.dat'), (err, data) => {
-    if (err) return console.error(err)
-
-    client.deserialize(data)
-
-    client.parse('@@||freegeoip.net/json^')
-
-    mainWindow.webContents.session.webRequest.onBeforeRequest((details, callback) => {
-
-      if (details.url.startsWith('http://') || details.url.startsWith('https://')) {
-        const isAd = client.matches(details.url, FilterOptions.noFilterOption)
-
-        if (isAd) {
-          return callback({
-            cancel: true,
-            requestHeaders: details.requestHeaders
-          })
-        }
-      }
-      
-      return callback({
-        cancel: false,
-        requestHeaders: details.requestHeaders
-      })
-    })
-  })
 
   mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
     item.on('updated', (event, state) => {
@@ -216,21 +186,3 @@ app.on('ready', function () {
   })
   createWindow()
 })
-
-app.setJumpList(
-  [
-    {
-      name: 'Bookmarks',
-      items: [
-        {
-          type: 'task',
-          title: 'GitHub',
-          program: process.execPath,
-          args: '--run-tool-a',
-          icon: `${__dirname}/resources/icon.ico`,
-          description: 'GitHub is where people build software. More than 27 million people use GitHub to discover, fork, and contribute to over 76 million projects.'
-        }
-      ]
-    }
-  ]
-)
