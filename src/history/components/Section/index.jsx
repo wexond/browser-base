@@ -3,7 +3,7 @@ import React from 'react'
 import Checkbox from '../../Material/Checkbox'
 import Item from '../Item'
 
-import Store from '../../../stores/history'
+import Store from '../../stores/history'
 import { observer } from 'mobx-react'
 
 @observer

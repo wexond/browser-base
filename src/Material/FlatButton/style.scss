@@ -1,0 +1,11 @@
+.material-button {
+  &.flat {
+    &:not(.dark-theme).disabled {
+      color: rgba(0,0,0,$disabled-text-light) !important;
+    }
+
+    &.disabled.dark-theme {
+      color: rgba(255,255,255,$disabled-text-dark) !important;
+    }
+  }
+}

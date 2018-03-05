@@ -1,23 +1,23 @@
 import React from 'react'
 
-import Store from '../../../stores/store'
+import Store from '../../store'
 
 import { observer } from 'mobx-react'
 
-import Transitions from '../../../utils/transitions'
+import Transitions from '../../utils/transitions'
 
-import tabDefaults from '../../../defaults/tabs'
-import wexondUrls from '../../../defaults/wexond-urls'
+import tabDefaults from '../../defaults/tabs'
+import wexondUrls from '../../defaults/wexond-urls'
 
-import * as tabsActions from '../../../actions/tabs'
-import * as tabGroupsActions from '../../../actions/tab-groups'
+import * as tabsActions from '../../actions/tabs'
+import * as tabGroupsActions from '../../actions/tab-groups'
 
-import Colors from '../../../utils/colors'
+import Colors from '../../utils/colors'
 
 import MenuItem from '../MenuItem'
-import Ripple from '../../Material/Ripple'
+import Ripple from '../../../Material/Ripple'
 
-import Preloader from '../../Material/Preloader'
+import Preloader from '../../../Material/Preloader'
 
 @observer
 export default class Tab extends React.Component {

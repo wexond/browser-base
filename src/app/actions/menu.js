@@ -1,4 +1,4 @@
-import Store from '../stores/store'
+import Store from '../store'
 
 export const getPosition = (menu) => {
   let left = Store.cursor.x + 1

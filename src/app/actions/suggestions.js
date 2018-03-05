@@ -1,7 +1,7 @@
 import Network from '../utils/network'
 import * as storage from '../utils/storage'
 
-import Store from '../stores/store'
+import Store from '../store'
 
 export const getSearchSuggestions = async (text) => {
   return new Promise(async (resolve, reject) => {

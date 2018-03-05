@@ -2,7 +2,7 @@ import React from 'react'
 
 import Preloader from '../../Material/Preloader'
 
-import NewTabHelper from '../../../utils/new-tab'
+import NewTabHelper from '../../utils/new-tab'
 
 export default class Card extends React.Component {
   constructor () {

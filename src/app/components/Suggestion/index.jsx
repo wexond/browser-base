@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { observer } from 'mobx-react'
-import Store from '../../../stores/store'
+import Store from '../../store'
 
-import * as pagesActions from '../../../actions/pages'
+import * as pagesActions from '../../actions/pages'
 
 import fs from 'fs'
 
