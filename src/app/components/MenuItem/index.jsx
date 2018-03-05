@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { observer } from 'mobx-react'
-import Store from '../../../stores/store'
+import Store from '../../store'
 
-import Ripple from '../../Material/Ripple'
+import Ripple from '../../../Material/Ripple'
 
 @observer
 export default class MenuItem extends React.Component {

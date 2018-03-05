@@ -1,6 +1,6 @@
 import * as tabMenuActions from "../actions/tab-menu"
 
-import Store from '../stores/store'
+import Store from '../store'
 
 export default () => {
   const {

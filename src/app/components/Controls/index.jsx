@@ -1,8 +1,8 @@
 import React from 'react'
 
-import * as windowActions from '../../../actions/window'
+import * as windowActions from '../../actions/window'
 
-import Store from '../../../stores/store'
+import Store from '../../store'
 import { observer } from 'mobx-react'
 
 @observer
