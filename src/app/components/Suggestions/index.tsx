@@ -9,10 +9,25 @@ import * as suggestionsActions from '../../actions/suggestions'
 
 import Network from '../../utils/network'
 
+interface Props {
+
+}
+
+interface State {
+  visible: boolean,
+  suggestions: Array<any>,
+  selectedSuggestion: number,
+}
+
 @observer
-export default class Suggestions extends React.Component {
-  constructor () {
-    super()
+export default class Suggestions extends React.Component<Props, State> {
+  
+  lastSearchSuggestions: Array<any>
+  hidden: boolean
+  
+
+  constructor(props: Props) {
+    super(props)
 
     this.state = {
       visible: false,
@@ -31,7 +46,7 @@ export default class Suggestions extends React.Component {
     this.setState({visible: true})
   }
 
-  suggest = async (text) => {
+  suggest = async (text: string) => {
     const historySuggestions = await suggestionsActions.getHistorySuggestions(text)
 
     this.setState({suggestions: historySuggestions.concat(this.lastSearchSuggestions)})
@@ -81,7 +96,7 @@ export default class Suggestions extends React.Component {
     await this.setState({selectedSuggestion: selectedSuggestion})
   }
 
-  selectByIndex (index) {
+  selectByIndex (index: number) {
     this.setState({selectedSuggestion: index})
   }
 
@@ -92,7 +107,7 @@ export default class Suggestions extends React.Component {
     return null
   }
 
-  render () {
+  public render (): JSX.Element {
     const {
       visible,
       suggestions
@@ -102,7 +117,7 @@ export default class Suggestions extends React.Component {
       display: (visible) ? 'flex' : 'none'
     }
 
-    const onMouseDown = (e) => {
+    const onMouseDown = (e: any) => {
       e.stopPropagation()
     }
 

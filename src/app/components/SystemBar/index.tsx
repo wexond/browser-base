@@ -8,10 +8,18 @@ import { observer } from 'mobx-react'
 
 import Colors from '../../utils/colors'
 
+interface Props {
+
+}
+
+interface State {
+
+}
+
 @observer
-export default class SystemBar extends React.Component {
-  constructor () {
-    super()
+export default class SystemBar extends React.Component<Props, State> {
+  constructor (props: Props) {
+    super(props)
   }
 
   render () {
@@ -19,7 +27,7 @@ export default class SystemBar extends React.Component {
 
     if (Store.backgroundColor === '#fff') { backColor = Colors.shadeColor(Store.backgroundColor, -0.1) }
 
-    const onGroupsMouseDown = e => {
+    const onGroupsMouseDown = (e: any) => {
       e.stopPropagation()
 
       Store.app.tabMenu.hide()
@@ -27,7 +35,7 @@ export default class SystemBar extends React.Component {
       Store.app.menu.hide()
     }
 
-    const onGroupsClick = (e) => {
+    const onGroupsClick = (e: any) => {
       e.stopPropagation()
 
       if (Store.app.tabGroupsMenu.visible) {

@@ -18,9 +18,24 @@ import wexondUrls from '../../defaults/wexond-urls'
 
 import FindMenu from '../FindMenu'
 
+interface Props {
+  tab: Tab,
+  page: Page,
+}
+
+interface State {
+
+}
+
 @observer
-export default class Page extends React.Component {
-  componentDidMount = async () => {
+export default class Page extends React.Component<Props, State> {
+
+  page: Page
+  webview: HTMLWebViewElement
+  findMenu: FindMenu
+  url: string
+
+  async componentDidMount() {
     const tab = this.props.tab
     const page = this.props.page
     let lastURL = ''
@@ -52,7 +67,7 @@ export default class Page extends React.Component {
       Store.app.refreshIconsState()
 
       if (e.url != null) {
-        if (e.isMainFrame != null && !e.isMainFrame) { return }
+        if (e.isMainFrame != null && !e.isMainFrame) return
         tab.url = e.url
         Store.url = e.url
 
@@ -101,17 +116,17 @@ export default class Page extends React.Component {
           storage.history.run(`INSERT INTO history(title, url, favicon, date) VALUES (?, ?, ?, DATETIME('now', 'localtime'))`, [tab.title, e.url, tab.favicon], function (err) {
             historyId = this.lastID
           })
-  
+
           storage.history.run(`INSERT INTO history(title, url, favicon, date) SELECT ?, ?, ?, DATETIME('now', 'localtime') WHERE NOT EXISTS(SELECT 1 FROM history WHERE url = ?)`, [tab.title, url, tab.favicon, url], function (err) {
             if (this.changes > 0) {
               siteId = this.lastID
             } else {
               siteId = -1
             }
-  
+
             console.log(siteId)
           })
-        } else { historyId = -1 }
+        } else historyId = -1
       }
     })
 
@@ -136,7 +151,7 @@ export default class Page extends React.Component {
 
     this.webview.addEventListener('new-window', (e) => {
       if (e.disposition === 'new-window'
-          || e.disposition === 'foreground-tab') {
+        || e.disposition === 'foreground-tab') {
         tabsActions.addTab({
           select: true,
           url: e.url
@@ -182,7 +197,7 @@ export default class Page extends React.Component {
 
     this.webview.addEventListener('did-change-theme-color', (e) => {
       let color = e.themeColor
-      if (color == null) { color = '#fff' }
+      if (color == null) color = '#fff'
 
       Store.backgroundColor = color
       tab.backgroundColor = color
@@ -208,22 +223,22 @@ export default class Page extends React.Component {
 
     const onContextMenu = (e, params) => {
       Store.app.pageMenu.setState((previousState) => {
-         // 0  : Open link in new tab
-         // 1  : -----------------------
-         // 2  : Copy link address
-         // 3  : Save link as
-         // 4  : -----------------------
-         // 5  : Open image in new tab
-         // 6  : Save image as
-         // 7  : Copy image
-         // 8  : Copy image address
-         // 9  : -----------------------
-         // 10 : Save as
-         // 11 : Print
-         // 12 : -----------------------
-         // 13 : View source
-         // 14 : Inspect element
-         
+        // 0  : Open link in new tab
+        // 1  : -----------------------
+        // 2  : Copy link address
+        // 3  : Save link as
+        // 4  : -----------------------
+        // 5  : Open image in new tab
+        // 6  : Save image as
+        // 7  : Copy image
+        // 8  : Copy image address
+        // 9  : -----------------------
+        // 10 : Save as
+        // 11 : Print
+        // 12 : -----------------------
+        // 13 : View source
+        // 14 : Inspect element
+
         let menuItems = previousState.items
         // Hide or show first 5 items.
         for (var i = 0; i < 5; i++) {
@@ -273,7 +288,7 @@ export default class Page extends React.Component {
       }
 
       // Set the new position.
-      Store.app.pageMenu.setState({left: left, top: top})
+      Store.app.pageMenu.setState({ left: left, top: top })
     }
 
     this.registerSwipeListener()
@@ -339,25 +354,25 @@ export default class Page extends React.Component {
 
   }
 
-  goBack () {
+  goBack() {
     this.webview.goBack()
     Store.app.bar.addressBar.setInputToggled(false, true)
     Store.app.refreshIconsState()
   }
 
-  goForward () {
+  goForward() {
     this.webview.goForward()
     Store.app.bar.addressBar.setInputToggled(false, true)
     Store.app.refreshIconsState()
   }
 
-  refresh () {
+  refresh() {
     this.webview.reload()
     Store.app.bar.addressBar.setInputToggled(false, true)
     Store.app.refreshIconsState()
   }
 
-  render () {
+  public render(): JSX.Element {
     const tab = this.props.tab
     const page = this.props.page
     const isSelected = Store.selectedTab === tab.id
@@ -369,9 +384,9 @@ export default class Page extends React.Component {
     const pageClass = (isSelected) ? '' : 'hide'
 
     return (
-      <div className={'page ' + pageClass}>
-        <webview ref={(r) => { this.webview = r }} className={'webview ' + pageClass} src={url} preload='../../src/preloads/index.js'></webview>
-        <FindMenu ref={(r) => { this.findMenu = r }} webview={this.webview} />
+      <div className={ 'page ' + pageClass }>
+        <webview ref={ (r) => { this.webview = r } } className={ 'webview ' + pageClass } src={ url } preload='../../src/preloads/index.js'></webview>
+        <FindMenu ref={ (r) => { this.findMenu = r } } webview={ this.webview } />
       </div>
     )
   }

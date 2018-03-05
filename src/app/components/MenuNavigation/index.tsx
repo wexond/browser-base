@@ -7,10 +7,19 @@ import * as pagesActions from '../../actions/pages'
 
 import Ripple from '../../../Material/Ripple'
 
+interface Props {
+
+}
+
+interface State {
+  canGoBack: boolean,
+  canGoForward: boolean,
+}
+
 @observer
-export default class MenuNavigation extends React.Component {
-  constructor () {
-    super()
+export default class MenuNavigation extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props)
 
     this.state = {
       canGoBack: false,
@@ -18,11 +27,11 @@ export default class MenuNavigation extends React.Component {
     }
   }
 
-  refreshIconsState () {
+  refreshIconsState() {
     this.setState(pagesActions.getNavigationState())
   }
 
-  render () {
+  public render(): JSX.Element {
     const {
       canGoBack,
       canGoForward
@@ -56,16 +65,16 @@ export default class MenuNavigation extends React.Component {
 
     return (
       <div className='menu-navigation'>
-        <div className={'icon back-icon ' + ((!canGoBack) ? 'disabled' : '')} onClick={onBackClick}>
+        <div className={ 'icon back-icon ' + ((!canGoBack) ? 'disabled' : '') } onClick={ onBackClick }>
           <Ripple center />
         </div>
-        <div className={'icon forward-icon ' + ((!canGoForward) ? 'disabled' : '')} onClick={onForwardClick}>
+        <div className={ 'icon forward-icon ' + ((!canGoForward) ? 'disabled' : '') } onClick={ onForwardClick }>
           <Ripple center />
         </div>
-        <div className='icon refresh-icon' onClick={onRefreshClick}>
+        <div className='icon refresh-icon' onClick={ onRefreshClick }>
           <Ripple center />
         </div>
-        <div className='icon favorite-icon' onClick={onFavoriteClick}>
+        <div className='icon favorite-icon' onClick={ onFavoriteClick }>
           <Ripple center />
         </div>
       </div>

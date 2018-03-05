@@ -9,21 +9,32 @@ import { observer } from 'mobx-react'
 
 import Transitions from '../../utils/transitions'
 
+interface Props {
+
+}
+
+interface State {
+  animateLeft: boolean,
+}
+
 @observer
-export default class AddTab extends React.Component {
-  constructor () {
-    super ()
+export default class AddTab extends React.Component<Props, State> {
+
+  addTab: HTMLDivElement
+
+  constructor(props: Props) {
+    super(props)
 
     this.state = {
       animateLeft: true
     }
   }
 
-  getWidth () {
+  getWidth() {
     return this.addTab.offsetWidth
   }
 
-  render () {
+  public render(): JSX.Element {
     const {
       animateLeft
     } = this.state
@@ -32,7 +43,7 @@ export default class AddTab extends React.Component {
 
     if (animateLeft) {
       // Add left transition to add tab button.
-      const newTransition = tabDefaults.transitions.left.duration + 's' + ' left ' + tabDefaults.transitions.left.easing 
+      const newTransition = tabDefaults.transitions.left.duration + 's' + ' left ' + tabDefaults.transitions.left.easing
       transition = Transitions.appendTransition(transition, newTransition)
     }
 
@@ -41,7 +52,7 @@ export default class AddTab extends React.Component {
       transition: transition
     }
 
-    const onClick = e => {
+    const onClick = (e): void => {
       e.stopPropagation()
       tabsActions.addTab()
     }

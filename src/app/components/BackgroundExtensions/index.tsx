@@ -7,7 +7,7 @@ import BackgroundExtension from '../BackgroundExtension'
 
 @observer
 export default class BackgroundExtensions extends React.Component {
-  render () {
+  public render(): JSX.Element {
     return (
       <div className='background-extensions'>
         {
