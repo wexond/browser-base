@@ -7,13 +7,27 @@ import * as pagesActions from '../../actions/pages'
 
 import fs from 'fs'
 
+interface Props {
+  url: string,
+  description?: string,
+  type: string,
+  hide: Function,
+  title: string,
+  selected: boolean,
+  favicon: any,
+}
+
+interface State {
+
+}
+
 @observer
-export default class Suggestion extends React.Component {
+export default class Suggestion extends React.Component<Props, State> {
   render () {
     let description = this.props.url
     if (this.props.description != null) { description = this.props.description }
 
-    const onClick = (e) => {
+    const onClick = (e: any) => {
       const page = pagesActions.getSelectedPage()
       if (this.props.type === 'search') {
         page.page.webview.loadURL('https://www.google.com/search?q=' + this.props.title)

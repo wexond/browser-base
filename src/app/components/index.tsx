@@ -28,14 +28,32 @@ import * as extensionsActions from '../actions/extensions'
 
 import * as languageActions from '../actions/language'
 
-export default class App extends React.Component {
-  constructor () {
-    super()
+interface Props {
+
+}
+
+interface State {
+
+}
+
+export default class App extends React.Component<Props, State> {
+
+  pageMenu: Menu
+  menu: Menu
+  menuNavigation: MenuNavigation
+  tabMenu: Menu
+  tabGroupsMenu: Menu
+  bar: Bar
+  suggestions: Suggestions
+  tabs: Tabs
+
+  constructor(props: Props) {
+    super(props)
 
     languageActions.loadDictionary()
   }
 
-  async componentDidMount () {
+  async componentDidMount() {
     Store.app = this
     extensionsActions.loadExtensions()
 
@@ -53,7 +71,7 @@ export default class App extends React.Component {
       this.menu.hide()
     })
 
-    window.addEventListener('mousemove' , (e) => {
+    window.addEventListener('mousemove', (e) => {
       Store.cursor.x = e.pageX
       Store.cursor.y = e.pageY
     })
@@ -64,9 +82,9 @@ export default class App extends React.Component {
           if (e.keyCode === 9) { // Tab key
             const tabGroup = tabGroupsActions.getCurrentTabGroup()
             const selectedTab = tabsActions.getSelectedTab()
-  
+
             const prevTab = tabGroup.tabs[tabGroup.tabs.indexOf(selectedTab) - 1]
-  
+
             if (prevTab != null) {
               Store.selectedTab = prevTab.id
             } else {
@@ -77,9 +95,9 @@ export default class App extends React.Component {
           if (e.keyCode === 9) { // Tab key
             const tabGroup = tabGroupsActions.getCurrentTabGroup()
             const selectedTab = tabsActions.getSelectedTab()
-  
+
             const nextTab = tabGroup.tabs[tabGroup.tabs.indexOf(selectedTab) + 1]
-  
+
             if (nextTab != null) {
               Store.selectedTab = nextTab.id
             } else {
@@ -92,7 +110,7 @@ export default class App extends React.Component {
 
     window.addEventListener('keyup', (e) => {
       if (e.ctrlKey || e.metaKey) {
-        if (e.altKey) { return }
+        if (e.altKey) return
         if (e.keyCode === 70) {
           pagesActions.getSelectedPage().page.findMenu.toggle()
         }
@@ -165,23 +183,23 @@ export default class App extends React.Component {
       //TODO
     })
 
-    this.menu.setState({items: mainMenuItems()})
-    this.tabMenu.setState({items: tabMenuItems()})
-    this.pageMenu.setState({items: pageMenuItems()})
+    this.menu.setState({ items: mainMenuItems() })
+    this.tabMenu.setState({ items: tabMenuItems() })
+    this.pageMenu.setState({ items: pageMenuItems() })
   }
 
-  refreshIconsState () {
+  refreshIconsState() {
     this.menuNavigation.refreshIconsState()
     this.bar.refreshIconsState()
   }
 
-  restoreTabsAnimations () {
-    if (!Store.tabAnimateLeft) { Store.tabAnimateLeft = true }
-    if (!Store.tabAnimateWidth) { Store.tabAnimateWidth = true }
-    if (Store.app != null && !Store.app.tabs.addTab.state.animateLeft) { Store.app.tabs.addTab.setState({animateLeft: true}) }
+  restoreTabsAnimations() {
+    if (!Store.tabAnimateLeft) Store.tabAnimateLeft = true
+    if (!Store.tabAnimateWidth) Store.tabAnimateWidth = true
+    if (Store.app != null && !Store.app.tabs.addTab.state.animateLeft) Store.app.tabs.addTab.setState({ animateLeft: true })
   }
 
-  render () {
+  render() {
     const onVisibilityChange = (e) => {
       if (!e) {
         Store.editingTabGroup = -1
@@ -191,23 +209,23 @@ export default class App extends React.Component {
     return (
       <div className='app'>
         <SystemBar>
-          <Tabs ref={(r) => { this.tabs = r }} />
+          <Tabs ref={ (r) => { this.tabs = r } } />
         </SystemBar>
-        <Bar ref={(r) => { this.bar = r }} />
-        <Suggestions ref={(r) => { this.suggestions = r }} />
+        <Bar ref={ (r) => { this.bar = r } } />
+        <Suggestions ref={ (r) => { this.suggestions = r } } />
         <Pages />
-        <Menu ref={(r) => { this.pageMenu = r }} itemsStyle={{paddingBottom: 12, paddingTop: 0}}>
-          <MenuNavigation ref={(r) => { this.menuNavigation = r }}></MenuNavigation>
-          <div className='separator' style={{marginTop: 0}}></div>
+        <Menu ref={ (r) => { this.pageMenu = r } } itemsStyle={ { paddingBottom: 12, paddingTop: 0 } }>
+          <MenuNavigation ref={ (r) => { this.menuNavigation = r } }></MenuNavigation>
+          <div className='separator' style={ { marginTop: 0 } }></div>
         </Menu>
-        <Menu ref={(r) => { this.tabMenu = r }} itemsStyle={{ paddingBottom: 12, paddingTop: 0 }}>
-          <MenuNavigation ref={(r) => { this.menuNavigation = r }}></MenuNavigation>
-          <div className='separator' style={{ marginTop: 0 }}></div>
+        <Menu ref={ (r) => { this.tabMenu = r } } itemsStyle={ { paddingBottom: 12, paddingTop: 0 } }>
+          <MenuNavigation ref={ (r) => { this.menuNavigation = r } }></MenuNavigation>
+          <div className='separator' style={ { marginTop: 0 } }></div>
         </Menu>
-        <Menu ref={(r) => { this.tabGroupsMenu = r }} right={8} top={8} onVisibilityChange={onVisibilityChange}>
+        <Menu ref={ (r) => { this.tabGroupsMenu = r } } right={ 8 } top={ 8 } onVisibilityChange={ onVisibilityChange }>
           <TabGroupsMenu></TabGroupsMenu>
         </Menu>
-        <Menu ref={(r) => { this.menu = r }} right={8} top={40}>
+        <Menu ref={ (r) => { this.menu = r } } right={ 8 } top={ 40 }>
 
         </Menu>
         <BackgroundExtensions />

@@ -5,9 +5,20 @@ import Store from '../../store'
 
 import ipcMessages from '../../defaults/ipc-messages'
 
+interface Props {
+  data
+}
+
+interface State {
+
+}
+
 @observer
-export default class BackgroundExtensions extends React.Component {
-  componentDidMount () {
+export default class BackgroundExtensions extends React.Component<Props, State> {
+
+  webview: HTMLWebViewElement
+
+  componentDidMount() {
     this.props.data.backgroundExtension = this
 
     this.webview.addEventListener('ipc-message', (e) => {
@@ -17,7 +28,7 @@ export default class BackgroundExtensions extends React.Component {
     })
   }
 
-  render () {
+  public render(): JSX.Element {
     const {
       data
     } = this.props
@@ -26,7 +37,7 @@ export default class BackgroundExtensions extends React.Component {
 
     return (
       <div className='background-extension'>
-        <webview ref={(r) => { this.webview = r }} src={url} preload='../../src/preloads/extensions.js' />
+        <webview ref={ (r) => { this.webview = r } } src={ url } preload='../../src/preloads/extensions.js' />
       </div>
     )
   }

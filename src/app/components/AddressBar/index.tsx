@@ -15,10 +15,28 @@ import * as filesActions from '../../actions/files'
 import Storage from '../../utils/storage'
 import * as suggestionsActions from '../../actions/suggestions';
 
+interface Props {
+
+}
+
+interface State {
+  domain: string,
+  certificateType: string,
+  certificateName: string,
+}
+
 @observer
-export default class AddressBar extends React.Component {
-  constructor () {
-    super()
+export default class AddressBar extends React.Component<Props, State> {
+
+  canSuggest: boolean
+  inputToggled: boolean
+  lastSuggestion: string
+
+  input: HTMLInputElement
+  info: HTMLDivElement
+
+  constructor(props: Props) {
+    super(props)
 
     this.state = {
       domain: '',
@@ -30,7 +48,7 @@ export default class AddressBar extends React.Component {
     this.lastSuggestion = ''
   }
 
-  componentDidMount () {
+  componentDidMount() {
     window.addEventListener('mousedown', (e) => {
       this.setInputToggled(false)
       this.setURL(Store.url)
@@ -41,7 +59,7 @@ export default class AddressBar extends React.Component {
     this.input.focus()
   }
 
-  setURL = (url) => {
+  setURL = (url: string): void => {
     Store.url = url
     // Change URL of input only when it's not active.
     if (!this.inputToggled) {
@@ -49,12 +67,12 @@ export default class AddressBar extends React.Component {
     }
   }
 
-  setInfo = (url) => {
+  setInfo = (url: string): void => {
     const domain = Network.getDomain(url)
 
     this.setURL(url)
 
-    this.setState({domain: domain})
+    this.setState({ domain: domain })
 
     this.setCertificate(url)
 
@@ -63,11 +81,11 @@ export default class AddressBar extends React.Component {
     }
   }
 
-  setInputToggled = (flag, force = false) => {
+  setInputToggled = (flag: boolean, force = false): void => {
     if (!flag && !force) {
       // Always have toggled input when the url
       // starts with wexond://newtab.
-      if (Store.url.startsWith(wexondUrls.newtab)) { return }
+      if (Store.url.startsWith(wexondUrls.newtab)) return
     }
 
     // Hide or show the info depending on the flag
@@ -84,7 +102,7 @@ export default class AddressBar extends React.Component {
     this.inputToggled = flag
   }
 
-  setCertificate = async (url) => {
+  setCertificate = async (url: string) => {
     const tab = tabsActions.getSelectedTab()
     if (tab.certificate != null) {
       this.setState({
@@ -96,7 +114,7 @@ export default class AddressBar extends React.Component {
     const certificate = await Network.getCertificate(url)
 
     let certificateName = certificate.title
-    
+
     if (certificate.country != null) {
       certificateName += ' [' + certificate.country + ']'
     }
@@ -121,27 +139,27 @@ export default class AddressBar extends React.Component {
     }
   }
 
-  getSelectionText() {
+  getSelectionText(): string {
     let text = ''
     if (window.getSelection) {
-        text = window.getSelection().toString()
+      text = window.getSelection().toString()
     } else if (document.selection && document.selection.type !== 'Control') {
-        text = document.selection.createRange().text
+      text = document.selection.createRange().text
     }
     return text;
   }
 
-  autoComplete (whatToSuggest, text) {
-    if (whatToSuggest.type !== 'autocomplete-url') { return }
-    
+  autoComplete(whatToSuggest, text: string) {
+    if (whatToSuggest.type !== 'autocomplete-url') return
+
     let suggestion = whatToSuggest.title
 
     const httpsRegex = /(http(s?)):\/\//gi
     const wwwRegex = /(www.)?/gi
 
     if (suggestion.replace(httpsRegex, '').replace(wwwRegex, '')
-        .startsWith(text.replace(wwwRegex, '').replace(httpsRegex, '')) 
-        && text.replace(wwwRegex, '').replace(httpsRegex, '') !== '') {
+      .startsWith(text.replace(wwwRegex, '').replace(httpsRegex, ''))
+      && text.replace(wwwRegex, '').replace(httpsRegex, '') !== '') {
       this.input.value = text + suggestion.replace(httpsRegex, '').replace(wwwRegex, '')
       this.input.value = this.input.value.replace(text.replace(wwwRegex, '').replace(httpsRegex, ''), '')
     }
@@ -151,7 +169,7 @@ export default class AddressBar extends React.Component {
     }
   }
 
-  render () {
+  render() {
     const {
       domain,
       certificateType,
@@ -182,7 +200,7 @@ export default class AddressBar extends React.Component {
 
         this.canSuggest = false
       }
-      
+
       await Store.app.suggestions.suggest(text)
     }
 
@@ -205,17 +223,17 @@ export default class AddressBar extends React.Component {
       const setNewValue = (suggestion) => {
         if (suggestion.type === 'history') {
           this.input.value = suggestion.url
-        } else if (suggestion.type === 'search' 
-            || suggestion.type === 'unknown-search' 
-            || suggestion.type === 'unknown-url' 
-            || suggestion.type === 'autocomplete-url') {
+        } else if (suggestion.type === 'search'
+          || suggestion.type === 'unknown-search'
+          || suggestion.type === 'unknown-url'
+          || suggestion.type === 'autocomplete-url') {
           this.input.value = suggestion.title
         }
       }
 
       if (key === 40) {
         e.preventDefault()
-  
+
         await Store.app.suggestions.selectNext()
         const suggestion = Store.app.suggestions.getSelectedSuggestion()
 
@@ -223,10 +241,10 @@ export default class AddressBar extends React.Component {
       }
       if (key === 38) {
         e.preventDefault()
-  
+
         await Store.app.suggestions.selectPrevious()
         const suggestion = Store.app.suggestions.getSelectedSuggestion()
-      
+
         setNewValue(suggestion)
       }
     }
@@ -243,9 +261,9 @@ export default class AddressBar extends React.Component {
         let URLToNavigate = inputText
 
         if (Network.isURL(e.currentTarget.value)) {
-          if (e.currentTarget.value.indexOf('://') === -1) { URLToNavigate = 'http://' + inputText }
+          if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'http://' + inputText
         } else {
-          if (e.currentTarget.value.indexOf('://') === -1) { URLToNavigate = 'https://www.google.com/search?q=' + inputText }
+          if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'https://www.google.com/search?q=' + inputText
         }
 
         page.page.webview.loadURL(URLToNavigate)
@@ -253,10 +271,10 @@ export default class AddressBar extends React.Component {
 
         // Force toggle off the input.
         this.setInputToggled(false, true)
-        
+
         Store.app.suggestions.hide()
         Store.app.suggestions.hidden = true
-      } 
+      }
     }
 
     const onClick = (e) => {
@@ -267,7 +285,7 @@ export default class AddressBar extends React.Component {
     }
 
     const addressBarEvents = {
-      onMouseDown: (e) => e.stopPropagation() 
+      onMouseDown: (e) => e.stopPropagation()
     }
 
     const inputEvents = {
@@ -280,17 +298,17 @@ export default class AddressBar extends React.Component {
     const search = Store.dictionary.searching.search
 
     return (
-      <div {...addressBarEvents} className={'address-bar ' + Store.foreground}>
-        <input {...inputEvents} ref={(r) => { this.input = r }} placeholder={search}></input>
-        <div ref={(r) => { this.info = r }} className='info'>
-          <div className={'icon ' + certificateType} />
-          <div className={'certificate-name ' + this.state.certificateType}>{certificateName}</div>
+      <div { ...addressBarEvents } className={ 'address-bar ' + Store.foreground }>
+        <input { ...inputEvents } ref={ (r) => { this.input = r } } placeholder={ search }></input>
+        <div ref={ (r) => { this.info = r } } className='info'>
+          <div className={ 'icon ' + certificateType } />
+          <div className={ 'certificate-name ' + this.state.certificateType }>{ certificateName }</div>
           <div className='separator' />
-          <div className='click-area' onClick={onClick}>
-            <div className='domain'>{domain}</div>
+          <div className='click-area' onClick={ onClick }>
+            <div className='domain'>{ domain }</div>
           </div>
         </div>
-        
+
         <div className='action-icons'>
           <div className='action-icon favorite' />
           <div className='action-icon clear' />
