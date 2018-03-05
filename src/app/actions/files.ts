@@ -1,7 +1,7 @@
 import paths from '../defaults/files'
 import fs from 'fs'
 
-export const checkFiles = () => {
+export const checkFiles = (): void => {
   for (var key in paths.directories) {
     let path = paths.directories[key]
     if (!fs.existsSync(path)) {

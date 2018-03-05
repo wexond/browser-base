@@ -1,5 +1,6 @@
 import Store from '../store'
 import * as tabGroupsActions from './tab-groups'
+import Page from '../components/Page';
 
 export const getNavigationState = () => {
   const page = getSelectedPage()
@@ -13,5 +14,5 @@ export const getNavigationState = () => {
 }
 
 export const getSelectedPage = () => {
-  return tabGroupsActions.getCurrentTabGroup().pages.filter(page => page.id === Store.selectedTab)[0]
+  return tabGroupsActions.getCurrentTabGroup().pages.filter((page: Page) => page.id === Store.selectedTab)[0]
 }
