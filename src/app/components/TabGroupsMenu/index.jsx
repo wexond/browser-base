@@ -2,12 +2,12 @@ import React from 'react'
 
 import { observer } from 'mobx-react'
 
-import Store from '../../../stores/store'
+import Store from '../../store'
 
-import * as tabGroupsActions from '../../../actions/tab-groups'
+import * as tabGroupsActions from '../../actions/tab-groups'
 
 import TabGroupsMenuItem from '../TabGroupsMenuItem'
-import FlatButton from '../../Material/FlatButton'
+import FlatButton from '../../../Material/FlatButton'
 
 @observer
 export default class TabGroupsMenu extends React.Component {

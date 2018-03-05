@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { observer } from 'mobx-react'
-import Store from '../../../stores/store'
+import Store from '../../store'
 
 import TabGroupPages from '../TabGroupPages'
 

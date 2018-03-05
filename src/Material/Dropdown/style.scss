@@ -1,0 +1,82 @@
+.dropdown-container {
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  @include cursor-pointer;
+
+  .control {
+    width: 100%;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    border-radius: 2px;
+    @include ripple;
+
+    .selected {
+      width: calc(100% - 24px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: $primary-opacity-light;
+      white-space: nowrap;
+    }
+  
+    .icon {
+      width: 24px;
+      height: 24px;
+      opacity: $secondary-opacity-light;
+      @include image-center(20px, auto);
+      background-image: url(./images/Controls/drop-down.svg);
+    }
+  
+    .line {
+      height: 1px;
+      width: 100%;
+      background-color: rgba(0,0,0,$dividers-opacity-light);
+      bottom: 0;
+      position: absolute;
+    }
+  }
+
+  .menu {
+    width: 94px;
+    max-height: calc(5 * 48px);
+    opacity: 0;
+    background-color: #fff;
+    @include shadow(1);
+    position: absolute;
+    left: -25px;
+    overflow-x: hidden;
+    overflow-y: overlay;
+    z-index: 10;
+    transform: scale(0.1);
+    transition: 0.15s ease-out transform, 0.2s opacity;
+    @include thin-scroll;
+
+    .item {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      color: rgba(0,0,0,$secondary-opacity-light);
+      transition: 0.25s color;
+      @include ripple;
+
+      .text {
+        max-width: calc(100% - 32px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 0 auto;
+      }
+
+      &.selected {
+        color: rgba(0,0,0,$primary-opacity-light);
+      }
+
+      &:hover {
+        color: rgba(0,0,0,$primary-opacity-light);
+      }
+    }
+  }
+}

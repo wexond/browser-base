@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { observer } from 'mobx-react'
-import Store from '../../../stores/store'
+import Store from '../../store'
 
 import Page from '../Page'
 
-import * as tabsActions from '../../../actions/tabs'
+import * as tabsActions from '../../actions/tabs'
 
 @observer
 export default class TabGroupPages extends React.Component {

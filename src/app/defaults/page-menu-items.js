@@ -1,6 +1,6 @@
 import * as actions from '../actions/page-menu'
 
-import Store from '../stores/store'
+import Store from '../store'
 
 export default () => {
   const {

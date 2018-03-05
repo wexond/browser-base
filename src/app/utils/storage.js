@@ -1,5 +1,6 @@
 import fs from 'fs'
 import paths from '../defaults/files'
+const sqlite3 = require('sqlite3').verbose()
 
 export const history = new sqlite3.Database(paths.files.history)
 export const favicons = new sqlite3.Database(paths.files.favicons)
