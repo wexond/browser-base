@@ -79,7 +79,7 @@ const config = {
     stats: {
       colors: true
     },
-    setup() {
+    after() {
       spawn('npm', ['start'], { 
         shell: true, 
         env: process.env, 
