@@ -2,7 +2,7 @@ import React from 'react'
 
 import Card from '../Card'
 
-import Store from '../../../stores/history'
+import Store from '../../stores/history'
 import { observer } from 'mobx-react'
 
 @observer
