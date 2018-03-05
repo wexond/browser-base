@@ -27,7 +27,7 @@ const isMatch = (url, list) => {
       const urlParts = url.split('/')
       urlParts.splice(0, 2)
 
-      if (urlParts[urlParts.length - 1] === '') urlParts.splice(urlParts.length - 1, 1)
+      if (urlParts[urlParts.length - 1] === '') { urlParts.splice(urlParts.length - 1, 1) }
 
       let domain = urlParts[0].split(':')[0]
 
@@ -38,16 +38,16 @@ const isMatch = (url, list) => {
         for (var i in urlParts) {
           domain += urlParts[i]
 
-          if (Number(i) !== urlParts.length - 1) domain += '/'
+          if (Number(i) !== urlParts.length - 1) { domain += '/' }
         }
         domain = domain.split(':')[0]
       }
 
-      if (domain.endsWith(domainFilter)) return true
+      if (domain.endsWith(domainFilter)) { return true }
 
       return false
     } else if (list[x].startsWith('|')) {
-      if (list[x].replace('|', '') === url) return true
+      if (list[x].replace('|', '') === url) { return true }
       return false
     } else {
       const addressParts = list[x].split('*')

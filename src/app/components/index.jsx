@@ -93,7 +93,7 @@ export default class App extends React.Component {
 
     window.addEventListener('keyup', (e) => {
       if (e.ctrlKey || e.metaKey) {
-        if (e.altKey) return
+        if (e.altKey) { return }
         if (e.keyCode === 70) {
           pagesActions.getSelectedPage().page.findMenu.toggle()
         }
@@ -177,9 +177,9 @@ export default class App extends React.Component {
   }
 
   restoreTabsAnimations () {
-    if (!Store.tabAnimateLeft) Store.tabAnimateLeft = true
-    if (!Store.tabAnimateWidth) Store.tabAnimateWidth = true
-    if (Store.app != null && !Store.app.tabs.addTab.state.animateLeft) Store.app.tabs.addTab.setState({animateLeft: true})
+    if (!Store.tabAnimateLeft) { Store.tabAnimateLeft = true }
+    if (!Store.tabAnimateWidth) { Store.tabAnimateWidth = true }
+    if (Store.app != null && !Store.app.tabs.addTab.state.animateLeft) { Store.app.tabs.addTab.setState({animateLeft: true}) }
   }
 
   render () {

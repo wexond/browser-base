@@ -45,7 +45,7 @@ export default class Suggestions extends React.Component {
         this.hide()
       }
       else {
-        if (!this.hidden) this.show()
+        if (!this.hidden) { this.show() }
       }
     }
 
@@ -71,13 +71,13 @@ export default class Suggestions extends React.Component {
 
   async selectNext () {
     let selectedSuggestion = this.state.selectedSuggestion
-    if (!(selectedSuggestion + 1 > this.state.suggestions.length - 1)) selectedSuggestion++
+    if (!(selectedSuggestion + 1 > this.state.suggestions.length - 1)) { selectedSuggestion++ }
     await this.setState({selectedSuggestion: selectedSuggestion})
   }
 
   async selectPrevious () {
     let selectedSuggestion = this.state.selectedSuggestion
-    if (!(selectedSuggestion - 1 < 0)) selectedSuggestion--
+    if (!(selectedSuggestion - 1 < 0)) { selectedSuggestion-- }
     await this.setState({selectedSuggestion: selectedSuggestion})
   }
 
@@ -110,7 +110,7 @@ export default class Suggestions extends React.Component {
       <div onMouseDown={onMouseDown} style={suggestionsStyle} className='suggestions'>
         {suggestions.map((item, key) => {
           let selected = false
-          if (this.state.selectedSuggestion === key) selected = true
+          if (this.state.selectedSuggestion === key) { selected = true }
           return <Suggestion key={key} favicon={item.favicon} type={item.type} title={item.title} description={item.description} url={item.url} selected={selected} hide={this.hide} />
         })}
       </div>

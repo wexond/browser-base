@@ -19,7 +19,7 @@ export default class Colors {
    * @return {String} - new color hex
    */
   static shadeColor (hex, lum) {
-    if (hex == null) return null
+    if (hex == null) { return null }
 
     hex = String(hex).replace(/[^0-9a-f]/gi, '')
     if (hex.length < 6) {
@@ -54,7 +54,7 @@ export default class Colors {
    * @return {Number} - the brightness
    */
   static colorBrightness (color) {
-    if (color == null) return null
+    if (color == null) { return null }
 
     var r
     var g

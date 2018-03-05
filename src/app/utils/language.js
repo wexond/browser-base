@@ -8,7 +8,7 @@ export default class LanguageHelper {
       const conditions = Object.keys(obj)
 
       for (var i = 0; conditions.length; i++) {
-        if (conditions[i] == null) break
+        if (conditions[i] == null) { break }
         const conditionChar = conditions[i][0]
         const integer = parseInt(conditions[i].slice(1))
         
