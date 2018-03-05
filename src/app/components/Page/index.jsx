@@ -52,7 +52,7 @@ export default class Page extends React.Component {
       Store.app.refreshIconsState()
 
       if (e.url != null) {
-        if (e.isMainFrame != null && !e.isMainFrame) return
+        if (e.isMainFrame != null && !e.isMainFrame) { return }
         tab.url = e.url
         Store.url = e.url
 
@@ -111,7 +111,7 @@ export default class Page extends React.Component {
   
             console.log(siteId)
           })
-        } else historyId = -1
+        } else { historyId = -1 }
       }
     })
 
@@ -182,7 +182,7 @@ export default class Page extends React.Component {
 
     this.webview.addEventListener('did-change-theme-color', (e) => {
       let color = e.themeColor
-      if (color == null) color = '#fff'
+      if (color == null) { color = '#fff' }
 
       Store.backgroundColor = color
       tab.backgroundColor = color

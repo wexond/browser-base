@@ -3,8 +3,8 @@ const paths = require('../defaults/files')
 
 const sqlite3 = require('sqlite3').verbose()
 
-const history = new sqlite3.Database(paths.files['history'])
-const favicons = new sqlite3.Database(paths.files['favicons'])
+const history = new sqlite3.Database(paths.files.history)
+const favicons = new sqlite3.Database(paths.files.favicons)
 
 if (window.location.protocol === 'wexond:') {
   window.env = process.env.NODE_ENV
@@ -12,7 +12,7 @@ if (window.location.protocol === 'wexond:') {
     get: () => {
       return new Promise((resolve, reject) => {
         history.all('SELECT * FROM history', (err, hist) => {
-          if (err) reject(err)
+          if (err) { reject(err) }
           else {
             favicons.all('SELECT * FROM favicons', (err, favs) => {
               for (let i = 0; i < hist.length; i++) {
@@ -61,7 +61,7 @@ if (window.location.protocol === 'wexond:') {
     },
     getFaviconData: (data, url) => {
       for (var i = 0; i < data.length; i++) {
-        if (data[i].url === url) return data[i].data
+        if (data[i].url === url) { return data[i].data }
       }
     }
   }

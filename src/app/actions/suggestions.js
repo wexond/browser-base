@@ -7,7 +7,7 @@ export const getSearchSuggestions = async (text) => {
   return new Promise(async (resolve, reject) => {
     const input = text.trim().toLowerCase()
     
-    if (input === '') return resolve([])
+    if (input === '') { return resolve([]) }
 
     try {
       const data = await Network.requestURL('http://google.com/complete/search?client=chrome&q=' + text)
@@ -35,7 +35,7 @@ export const getSearchSuggestions = async (text) => {
       // Get only first 5 suggestions.
       tempSuggestions = []
       for (var i = 0; i < 5; i++) {
-        if (newSuggestions[i] != null) tempSuggestions.push(newSuggestions[i])
+        if (newSuggestions[i] != null) { tempSuggestions.push(newSuggestions[i]) }
       }
 
       resolve(tempSuggestions)
@@ -49,7 +49,7 @@ export const getHistorySuggestions = async (text) => {
   return new Promise(async (resolve, reject) => {
     const input = text.trim().toLowerCase()
 
-    if (input === '') return resolve([])
+    if (input === '') { return resolve([]) }
 
     storage.history.all('SELECT * FROM history', (err, history) => {
       storage.favicons.all('SELECT * FROM favicons', (err, favicons) => {
@@ -169,7 +169,7 @@ export const getHistorySuggestions = async (text) => {
         let suggestionsLimit = (isURL) ? 10 : 5
     
         for (var i = 0; i < suggestionsLimit; i++) {
-          if (suggestions[i] != null) tempSuggestions.push(suggestions[i])
+          if (suggestions[i] != null) { tempSuggestions.push(suggestions[i]) }
         }
         
         newSuggestions = tempSuggestions.slice()

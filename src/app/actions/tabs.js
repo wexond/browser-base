@@ -14,7 +14,7 @@ export const addTab = (data = tabDefaults.defaultOptions) => {
     url
   } = data
 
-  if (Store.app != null) Store.app.restoreTabsAnimations()
+  if (Store.app != null) { Store.app.restoreTabsAnimations() }
 
   const tab = {
     id: tabId,
@@ -45,7 +45,7 @@ export const addTab = (data = tabDefaults.defaultOptions) => {
     let file
 
     if (process.env.NODE_ENV === 'dev') {
-      if (process.argv.length >= 3) file = process.argv[2]
+      if (process.argv.length >= 3) { file = process.argv[2] }
     } else if (process.argv.length >= 2) {
       file = process.argv[1]
     }
@@ -73,7 +73,7 @@ export const getTabById = (id) => {
   for (var i = 0; i < Store.tabGroups.length; i++) {
     const tabGroup = Store.tabGroups[i]
     const tabs = tabGroup.tabs.filter(tab => tab.id === id)
-    if (tabs.length > 0) return tabs[0]
+    if (tabs.length > 0) { return tabs[0] }
   }
   return null
 }
@@ -86,7 +86,7 @@ export const setWidths = (tabsWidth, addTabWidth, margin = 0) => {
 
   // Apply width for all normal tabs.
   normalTabs.forEach(tab => {
-    if (tab.width === width) return
+    if (tab.width === width) { return }
     tab.width = width
   })
 }
@@ -108,7 +108,7 @@ export const getWidth = (tabsWidth, addTabWidth, margin = 0) => {
   let newNormalTabWidth = (tabsWidth - addTabWidth - margins - allPinnedTabsWidth) / (tabs.length - allPinnedTabsWidth)
 
   // Limit width to `maxTabWidth`.
-  if (newNormalTabWidth > maxTabWidth) newNormalTabWidth = maxTabWidth
+  if (newNormalTabWidth > maxTabWidth) { newNormalTabWidth = maxTabWidth }
 
   return newNormalTabWidth
 }
@@ -158,7 +158,7 @@ export const containsX = (tabToCheck, xPos) => {
     right: tabToCheck.left + tabToCheck.width
   }
 
-  if (xPos >= rect.left && xPos <= rect.right) return true
+  if (xPos >= rect.left && xPos <= rect.right) { return true }
 
   return false
 }

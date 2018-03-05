@@ -3,6 +3,5 @@ node_modules
 *.log*
 build
 dist
-package-lock.json
 .vscode
 .vs

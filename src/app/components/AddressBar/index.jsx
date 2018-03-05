@@ -67,7 +67,7 @@ export default class AddressBar extends React.Component {
     if (!flag && !force) {
       // Always have toggled input when the url
       // starts with wexond://newtab.
-      if (Store.url.startsWith(wexondUrls.newtab)) return
+      if (Store.url.startsWith(wexondUrls.newtab)) { return }
     }
 
     // Hide or show the info depending on the flag
@@ -132,7 +132,7 @@ export default class AddressBar extends React.Component {
   }
 
   autoComplete (whatToSuggest, text) {
-    if (whatToSuggest.type !== 'autocomplete-url') return
+    if (whatToSuggest.type !== 'autocomplete-url') { return }
     
     let suggestion = whatToSuggest.title
 
@@ -243,9 +243,9 @@ export default class AddressBar extends React.Component {
         let URLToNavigate = inputText
 
         if (Network.isURL(e.currentTarget.value)) {
-          if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'http://' + inputText
+          if (e.currentTarget.value.indexOf('://') === -1) { URLToNavigate = 'http://' + inputText }
         } else {
-          if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'https://www.google.com/search?q=' + inputText
+          if (e.currentTarget.value.indexOf('://') === -1) { URLToNavigate = 'https://www.google.com/search?q=' + inputText }
         }
 
         page.page.webview.loadURL(URLToNavigate)

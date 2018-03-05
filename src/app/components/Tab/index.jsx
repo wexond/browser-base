@@ -33,7 +33,7 @@ export default class Tab extends React.Component {
   componentDidMount () {
     const tab = this.props.tab
     tab.tab = this
-    if (tab.select) this.select()
+    if (tab.select) { this.select() }
   }
 
   select () {
@@ -122,7 +122,7 @@ export default class Tab extends React.Component {
       closing
     } = tab
     
-    if (!render) return null
+    if (!render) { return null }
 
     const {
       hovered
@@ -152,9 +152,9 @@ export default class Tab extends React.Component {
 
     let faviconDisplay = 'none'
 
-    if (favicon !== '') faviconDisplay = 'block'
-    if (isSelected && width < 42) faviconDisplay = 'none'
-    if (loading) faviconDisplay = 'none'
+    if (favicon !== '') { faviconDisplay = 'block' }
+    if (isSelected && width < 42) { faviconDisplay = 'none' }
+    if (loading) { faviconDisplay = 'none' }
 
     const faviconStyle = {
       display: faviconDisplay,
@@ -173,7 +173,7 @@ export default class Tab extends React.Component {
     const margins = 8
     let titleLeft = 12
 
-    if (isSelected || hovered) maxWidthDecrease = closeWidth + 2 * margins
+    if (isSelected || hovered) { maxWidthDecrease = closeWidth + 2 * margins }
     
     if (favicon !== '' || loading) {
       maxWidthDecrease += faviconWidth + 2 * margins
@@ -218,7 +218,7 @@ export default class Tab extends React.Component {
     const onMouseDown = (e) => {
       e.preventDefault()
 
-      if (!isSelected) this.select()
+      if (!isSelected) { this.select() }
       Store.tabDragData = {
         isMouseDown: true,
         mouseClickX: e.clientX + tabs.tabs.scrollLeft,

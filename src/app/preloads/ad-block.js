@@ -4,7 +4,7 @@ const path = require('path')
 const list = fs.readFileSync(path.resolve(__dirname, '../../adblock/adblock-cosmetic.dat'), 'utf8')
 const filters = list.split('\n')
 
-if (window.location.protocol === 'wexond:') return
+if (window.location.protocol === 'wexond:') { return }
 
 let blockedSelectors = []
 
@@ -60,7 +60,7 @@ const interval = setInterval(() => {
 
 const observer = new MutationObserver((mutations) => {
   for (let i = 0; i < changedNodes.length; i++) {
-    if (!document.contains(changedNodes[i])) changedNodes.splice(i--, 1)
+    if (!document.contains(changedNodes[i])) { changedNodes.splice(i--, 1) }
   }
 
   clearTimeout(timeout)
@@ -69,9 +69,9 @@ const observer = new MutationObserver((mutations) => {
   for (let mutation of mutations) {
     let node = mutation.target
 
-    if (!document.contains(node)) continue
+    if (!document.contains(node)) { continue }
 
-    if (mutation.type == "attributes") node = node.parentNode
+    if (mutation.type == "attributes") { node = node.parentNode }
 
     let addNode = true
     for (let i = 0; i < changedNodes.length; i++) {
@@ -81,10 +81,10 @@ const observer = new MutationObserver((mutations) => {
         break
       }
 
-      if (node.contains(previouslyChangedNode)) changedNodes.splice(i--, 1)
+      if (node.contains(previouslyChangedNode)) { changedNodes.splice(i--, 1) }
     }
 
-    if (addNode) changedNodes.push(node)
+    if (addNode) { changedNodes.push(node) }
   }
 
   timeout = setTimeout(() => {
