@@ -1,6 +1,5 @@
 const { resolve } = require("path");
 const { spawn } = require("child_process");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const productionDevtool = "source-map";
 const developmentDevtool = "eval-source-map";
@@ -97,14 +96,7 @@ let appConfig = {
   target: "electron-renderer",
   entry: {
     app: "./src/app",
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: 'Wexond',
-      filename: 'app.html',
-      template: 'static/template.html'
-    }),
-  ]
+  }
 };
 
 appConfig = Object.assign(appConfig, config);
