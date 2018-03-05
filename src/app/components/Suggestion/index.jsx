@@ -11,7 +11,7 @@ import fs from 'fs'
 export default class Suggestion extends React.Component {
   render () {
     let description = this.props.url
-    if (this.props.description != null) description = this.props.description
+    if (this.props.description != null) { description = this.props.description }
 
     const onClick = (e) => {
       const page = pagesActions.getSelectedPage()

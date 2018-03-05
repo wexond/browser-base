@@ -43,7 +43,7 @@ export default class TabGroup extends React.Component {
 
     // Check for changes in Store.tabsGroups[this.props.id].
     observe(tabGroup.tabs, change => {
-      if (change.addedCount > 0 && change.removedCount > 0) return
+      if (change.addedCount > 0 && change.removedCount > 0) { return }
       // If an item was added.
       if (change.addedCount > 0) {
         // Add the item to state.
@@ -73,7 +73,7 @@ export default class TabGroup extends React.Component {
     })
 
     window.addEventListener('resize', (e) => {
-      if (!e.isTrusted) return
+      if (!e.isTrusted) { return }
       
       // Turn off left animation for add tab button.
       Store.app.tabs.addTab.setState({animateLeft: false})

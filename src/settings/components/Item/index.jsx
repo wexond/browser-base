@@ -23,7 +23,7 @@ export default class Item extends React.Component {
     }
 
     const onClick = (e) => {
-      if (typeof this.props.onClick === 'function') this.props.onClick(e)
+      if (typeof this.props.onClick === 'function') { this.props.onClick(e) }
 
       this.itemActions = this.itemActions.filter(Boolean)
 

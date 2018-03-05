@@ -22,8 +22,8 @@ export default class NewTabHelper {
           })
 
           res.on('end', () => {
-            if (!parseToJSON) resolve(data)
-            else resolve(JSON.parse(data))
+            if (!parseToJSON) { resolve(data) }
+            else { resolve(JSON.parse(data)) }
           })
         })
 
@@ -52,8 +52,8 @@ export default class NewTabHelper {
           if (json.articles[i] != null) {
             const image = json.articles[i].urlToImage
 
-            if (image == null || !image.startsWith('http')) newsCount++
-            else news.push(json.articles[i])
+            if (image == null || !image.startsWith('http')) { newsCount++ }
+            else { news.push(json.articles[i]) }
           }
         }
 

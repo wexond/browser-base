@@ -1,11 +1,11 @@
-import '../settings.scss'
+import "../settings.scss";
 
-import React from 'react'
-import ReactDOM from 'react-dom'
+import react from "react";
+import reactDom from "react-dom";
 
-import Settings from '../components/Settings'
+import Settings from "../components/Settings";
 
 // Wait for sass load.
-setTimeout(function () {
-  ReactDOM.render(<Settings />, document.getElementById('app'))
-}, 1)
+setTimeout(function() {
+  ReactDOM.render(<Settings />, document.getElementById("app"));
+}, 1);

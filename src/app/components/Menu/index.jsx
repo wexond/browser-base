@@ -71,7 +71,7 @@ export default class Menu extends React.Component {
 
     this.visible = true
 
-    if (typeof this.props.onVisibilityChange === 'function') this.props.onVisibilityChange(this.visible)
+    if (typeof this.props.onVisibilityChange === 'function') { this.props.onVisibilityChange(this.visible) }
   }
 
   hide = () => {
@@ -83,7 +83,7 @@ export default class Menu extends React.Component {
 
     this.visible = false
 
-    if (typeof this.props.onVisibilityChange === 'function') this.props.onVisibilityChange(this.visible)
+    if (typeof this.props.onVisibilityChange === 'function') { this.props.onVisibilityChange(this.visible) }
   }
 
   render () {
@@ -124,13 +124,13 @@ export default class Menu extends React.Component {
     }
 
     let menuItems = null
-    if (items != null && items.length !== 0) menuItems = (
+    if (items != null && items.length !== 0) { menuItems = (
       <div className='items' style={this.props.itemsStyle}>
         {
           items.map((data, key) => {
             // Default values for an item.
-            if (data.visible == null) data.visible = true
-            if (data.type == null) data.type = 'item'
+            if (data.visible == null) { data.visible = true }
+            if (data.type == null) { data.type = 'item' }
 
             if (data.type === 'separator') {
               const separatorStyle = {
@@ -141,7 +141,7 @@ export default class Menu extends React.Component {
             } else if (data.type === 'item') {
 
               const onClick = () => {
-                if (typeof data.onClick === 'function') data.onClick()
+                if (typeof data.onClick === 'function') { data.onClick() }
                 this.hide()
               }
 
@@ -159,6 +159,7 @@ export default class Menu extends React.Component {
         }
       </div>
     )
+    }
 
     return (
       <div {...menuEvents} className='menu' style={menuStyle} ref={(r) => { this.menu = r }}>

@@ -33,7 +33,7 @@ export const removeTabGroup = (tabGroup) => {
 }
 
 export const switchTabGroup = (id) => {
-  if (id === Store.currentTabGroup) return
+  if (id === Store.currentTabGroup) { return }
 
   Store.currentTabGroup = id
 

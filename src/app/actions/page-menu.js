@@ -39,7 +39,7 @@ export const saveLinkAs = () => {
     request.onreadystatechange = () => {
       if (request.readyState === 4) {
         writeFile(path, request.responseText, (err) => {
-          if (err) console.error(err)
+          if (err) { console.error(err) }
         })
       }
     }
@@ -71,7 +71,7 @@ export const saveImageAs = () => {
       ]
     }, (path) => {
       writeFile(path, body, (err) => {
-        if (err) console.error(err)
+        if (err) { console.error(err) }
       })
     })
   })
@@ -105,7 +105,7 @@ export const saveAs = () => {
     },
     function (path1) {
       pagesActions.getSelectedPage().page.webview.getWebContents().savePage(path1, 'HTMLComplete', (error) => {
-        if (error) console.error(error)
+        if (error) { console.error(error) }
       })
     }
   )

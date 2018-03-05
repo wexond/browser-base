@@ -64,10 +64,10 @@ export default class Tabs extends React.Component {
         tab
       } = Store.tabDragData
 
-      if (!isMouseDown) return
+      if (!isMouseDown) { return }
 
       // Don't move pinned tabs.
-      if (tab.pinned) return
+      if (tab.pinned) { return }
 
       const mouseX = (e.clientX + this.tabs.scrollLeft)
       const mouseDeltaX = e.pageX - mouseClickX
@@ -94,7 +94,7 @@ export default class Tabs extends React.Component {
         tab
       } = Store.tabDragData
 
-      if (!isMouseDown) return
+      if (!isMouseDown) { return }
       
       tab.animateLeft = true
       Store.tabDragData = {}

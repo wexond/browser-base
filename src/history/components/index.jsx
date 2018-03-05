@@ -33,8 +33,8 @@ export default class History extends React.Component {
 
     let data = await window.historyAPI.get()
 
-    if (searchStr) data = await window.historyAPI.search(data, searchStr)
-    else Store.searched = false
+    if (searchStr) { data = await window.historyAPI.search(data, searchStr) }
+    else { Store.searched = false }
 
     Store.cards = HistoryParser.getCards(data)
     Store.sections = HistoryParser.getSections(data)
@@ -145,7 +145,7 @@ export default class History extends React.Component {
               {
                 Store.sections.map((data, key) => {
                   sectionIndex++
-                  return <Section ref={(r) => { if (r != null) this.sections.push(r) }} data={data} key={key} index={sectionIndex} />
+                  return <Section ref={(r) => { if (r != null) { this.sections.push(r) } }} data={data} key={key} index={sectionIndex} />
                 })
               }
             </div> || !Store.loading &&

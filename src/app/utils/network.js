@@ -61,8 +61,8 @@ export default class Network {
   static getCertificate (url) {
     return new Promise(
       (resolve, reject) => {
-        if (url.startsWith('http://')) return resolve({type: 'Normal'})
-        else if (url.startsWith('wexond://')) return resolve({type: 'Wexond'})
+        if (url.startsWith('http://')) { return resolve({type: 'Normal'}) }
+        else if (url.startsWith('wexond://')) { return resolve({type: 'Wexond'}) }
 
         const domain = Network.getDomain(url)
 
@@ -71,7 +71,7 @@ export default class Network {
         for (var i = 0; i < Store.certificates.length; i++) {
           if (Store.certificates[i].domain === domain) {
             let certificate = Store.certificates[i].certificate
-            if (certificate.subject == null) return
+            if (certificate.subject == null) { return }
 
             const data = {
               type: 'Secure',
@@ -85,7 +85,7 @@ export default class Network {
           }
         }
 
-        if (certificateExists) return
+        if (certificateExists) { return }
 
         let options = {
           host: domain,
@@ -95,7 +95,7 @@ export default class Network {
 
         let req = httpsRequest(options, (res) => {
           let certificate = res.connection.getPeerCertificate()
-          if (certificate.subject == null) return
+          if (certificate.subject == null) { return }
 
           const data = {
             type: 'Secure',

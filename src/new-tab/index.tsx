@@ -1,11 +1,11 @@
-import '../new-tab.scss'
+import "../new-tab.scss";
 
-import React from 'react'
-import ReactDOM from 'react-dom'
+import react from "react";
+import reactDom from "react-dom";
 
-import NewTab from '../components/NewTab'
+import NewTab from "../components/NewTab";
 
 // Wait for sass load.
-setTimeout(function () {
-  ReactDOM.render(<NewTab />, document.getElementById('app'))
-}, 1)
+setTimeout(function() {
+  ReactDOM.render(<NewTab />, document.getElementById("app"));
+}, 1);
