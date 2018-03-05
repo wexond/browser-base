@@ -1,16 +1,16 @@
 import React from 'react'
 
 import { observer } from 'mobx-react'
-import Store from '../../../stores/store'
+import Store from '../../store'
 
-import Storage from '../../../utils/storage'
-import Colors from '../../../utils/colors'
+import Storage from '../../utils/storage'
+import Colors from '../../utils/colors'
 
-import * as filesActions from '../../../actions/files'
-import * as tabsActions from '../../../actions/tabs'
-import * as webviewActions from '../../../actions/webview'
+import * as filesActions from '../../actions/files'
+import * as tabsActions from '../../actions/tabs'
+import * as webviewActions from '../../actions/webview'
 
-import Input from '../../Material/Input'
+import Input from '../../../Material/Input'
 
 @observer
 export default class FindMenu extends React.Component {

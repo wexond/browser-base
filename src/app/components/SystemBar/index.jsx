@@ -3,10 +3,10 @@ import { platform } from 'os'
 
 import Controls from '../Controls'
 
-import Store from '../../../stores/store'
+import Store from '../../store'
 import { observer } from 'mobx-react'
 
-import Colors from '../../../utils/colors'
+import Colors from '../../utils/colors'
 
 @observer
 export default class SystemBar extends React.Component {

@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { observer } from 'mobx-react'
-import Store from '../../../stores/store'
+import Store from '../../store'
 
-import ipcMessages from '../../../defaults/ipc-messages'
+import ipcMessages from '../../defaults/ipc-messages'
 
 @observer
 export default class BackgroundExtensions extends React.Component {

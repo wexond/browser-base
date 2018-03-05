@@ -1,13 +1,13 @@
 import React from 'react'
 
-import tabDefaults from '../../../defaults/tabs'
+import tabDefaults from '../../defaults/tabs'
 
-import * as tabsActions from '../../../actions/tabs'
+import * as tabsActions from '../../actions/tabs'
 
-import Store from '../../../stores/store'
+import Store from '../../store'
 import { observer } from 'mobx-react'
 
-import Transitions from '../../../utils/transitions'
+import Transitions from '../../utils/transitions'
 
 @observer
 export default class AddTab extends React.Component {

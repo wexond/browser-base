@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { remote } from 'electron'
 
-import Store from '../stores/store'
+import Store from '../store'
 
 export const loadDictionary = (dname = 'english_US') => {
   try {

@@ -2,13 +2,13 @@ import React from 'react'
 
 import { observer } from 'mobx-react'
 
-import Store from '../../../stores/store'
+import Store from '../../store'
 
 import MenuItem from '../MenuItem'
-import Input from '../../Material/Input'
-import Ripple from '../../Material/Ripple'
+import Input from '../../../Material/Input'
+import Ripple from '../../../Material/Ripple'
 
-import * as tabGroupsActions from '../../../actions/tab-groups'
+import * as tabGroupsActions from '../../actions/tab-groups'
 
 @observer
 export default class TabGroupsMenuItem extends React.Component {

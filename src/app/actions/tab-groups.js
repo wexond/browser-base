@@ -1,4 +1,4 @@
-import Store from '../stores/store'
+import Store from '../store'
 
 import * as windowActions from './window'
 

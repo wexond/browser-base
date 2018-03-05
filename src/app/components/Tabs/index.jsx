@@ -4,19 +4,19 @@ import { platform } from 'os'
 
 import { observer } from 'mobx-react'
 import { observe } from 'mobx'
-import Store from '../../../stores/store'
+import Store from '../../store'
 
 import Tab from '../Tab'
 import AddTab from '../AddTab'
 import TabGroup from '../TabGroup'
 
-import wexondUrls from '../../../defaults/wexond-urls'
-import tabMenuItems from '../../../defaults/tab-menu-items'
+import wexondUrls from '../../defaults/wexond-urls'
+import tabMenuItems from '../../defaults/tab-menu-items'
 
-import Colors from '../../../utils/colors'
+import Colors from '../../utils/colors'
 
-import * as tabsActions from '../../../actions/tabs'
-import * as tabGroupsActions from '../../../actions/tab-groups'
+import * as tabsActions from '../../actions/tabs'
+import * as tabGroupsActions from '../../actions/tab-groups'
 
 @observer
 export default class Tabs extends React.Component {

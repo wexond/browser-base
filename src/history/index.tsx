@@ -3,7 +3,7 @@ import "../history.scss";
 import React from "react";
 import ReactDOM from "react-dom";
 
-import History from "../components/History";
+import History from "./components";
 
 // Wait for sass load.
 setTimeout(function() {

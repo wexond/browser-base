@@ -1,19 +1,19 @@
 import React from 'react'
 
-import wexondUrls from '../../../defaults/wexond-urls'
+import wexondUrls from '../../defaults/wexond-urls'
 
 import { observer } from 'mobx-react'
 
-import Store from '../../../stores/store'
+import Store from '../../store'
 
-import Network from '../../../utils/network'
+import Network from '../../utils/network'
 
-import * as tabsActions from '../../../actions/tabs'
-import * as pagesActions from '../../../actions/pages'
-import * as filesActions from '../../../actions/files'
+import * as tabsActions from '../../actions/tabs'
+import * as pagesActions from '../../actions/pages'
+import * as filesActions from '../../actions/files'
 
-import Storage from '../../../utils/storage'
-import * as suggestionsActions from '../../../actions/suggestions';
+import Storage from '../../utils/storage'
+import * as suggestionsActions from '../../actions/suggestions';
 
 @observer
 export default class AddressBar extends React.Component {

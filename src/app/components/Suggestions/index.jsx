@@ -1,13 +1,13 @@
 import React from 'react'
 
 import { observer } from 'mobx-react'
-import Store from '../../../stores/store'
+import Store from '../../store'
 
 import Suggestion from '../Suggestion'
 
-import * as suggestionsActions from '../../../actions/suggestions'
+import * as suggestionsActions from '../../actions/suggestions'
 
-import Network from '../../../utils/network'
+import Network from '../../utils/network'
 
 @observer
 export default class Suggestions extends React.Component {

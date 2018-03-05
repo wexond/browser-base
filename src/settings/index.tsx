@@ -3,7 +3,7 @@ import '../settings.scss'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import Settings from '../components/Settings'
+import Settings from './components'
 
 // Wait for sass load.
 setTimeout(function () {

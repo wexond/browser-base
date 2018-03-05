@@ -1,15 +1,15 @@
 import React from 'react'
 
 import AddressBar from '../AddressBar'
-import Ripple from '../../Material/Ripple'
+import Ripple from '../../../Material/Ripple'
 
-import * as pagesActions from '../../../actions/pages'
-import * as tabsActions from '../../../actions/tabs'
+import * as pagesActions from '../../actions/pages'
+import * as tabsActions from '../../actions/tabs'
 
 import { observer } from 'mobx-react'
-import Store from '../../../stores/store'
+import Store from '../../store'
 
-import Colors from '../../../utils/colors'
+import Colors from '../../utils/colors'
 
 @observer
 export default class Bar extends React.Component {

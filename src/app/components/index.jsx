@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Store from '../../stores/store'
+import Store from '../store'
 import { observer } from 'mobx-react'
 
 import SystemBar from './SystemBar'
@@ -13,22 +13,21 @@ import MenuNavigation from './MenuNavigation'
 import TabGroupsMenu from './TabGroupsMenu'
 import BackgroundExtensions from './BackgroundExtensions'
 
-import mainMenuItems from '../../defaults/main-menu-items'
-import tabMenuItems from '../../defaults/tab-menu-items';
-import pageMenuItems from '../../defaults/page-menu-items'
+import mainMenuItems from '../defaults/main-menu-items'
+import tabMenuItems from '../defaults/tab-menu-items';
+import pageMenuItems from '../defaults/page-menu-items'
 
 import { ipcRenderer } from 'electron'
-import ipcMessages from '../../defaults/ipc-messages'
+import ipcMessages from '../defaults/ipc-messages'
 
-import * as pagesActions from '../../actions/pages'
-import * as tabsActions from '../../actions/tabs'
-import * as tabGroupsActions from '../../actions/tab-groups'
-import * as pageMenuActions from '../../actions/page-menu'
-import * as extensionsActions from '../../actions/extensions'
+import * as pagesActions from '../actions/pages'
+import * as tabsActions from '../actions/tabs'
+import * as tabGroupsActions from '../actions/tab-groups'
+import * as pageMenuActions from '../actions/page-menu'
+import * as extensionsActions from '../actions/extensions'
 
-import * as languageActions from '../../actions/language'
+import * as languageActions from '../actions/language'
 
-@observer
 export default class App extends React.Component {
   constructor () {
     super()

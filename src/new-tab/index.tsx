@@ -3,7 +3,7 @@ import '../new-tab.scss'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import NewTab from '../components/NewTab'
+import NewTab from './components'
 
 // Wait for sass load.
 setTimeout(function () {
