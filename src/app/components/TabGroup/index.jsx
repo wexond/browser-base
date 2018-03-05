@@ -2,13 +2,13 @@ import React from 'react'
 
 import { observer } from 'mobx-react'
 import { observe } from 'mobx'
-import Store from '../../../stores/store'
+import Store from '../../store'
 
 import Tab from '../Tab'
 
-import * as tabsActions from '../../../actions/tabs'
+import * as tabsActions from '../../actions/tabs'
 
-import tabDefaults from '../../../defaults/tabs'
+import tabDefaults from '../../defaults/tabs'
 
 @observer
 export default class TabGroup extends React.Component {

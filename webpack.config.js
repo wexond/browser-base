@@ -50,7 +50,7 @@ const config = {
         ]
       },
       {
-        test: /\.(tsx|ts)$/,
+        test: /\.(tsx|ts|jsx|js)$/,
         include: INCLUDE,
         exclude: EXCLUDE,
         use: [
@@ -71,7 +71,7 @@ const config = {
 
   resolve: {
     modules: ["node_modules"],
-    extensions: [".js", ".tsx", ".ts"],
+    extensions: [".jsx", ".js", ".tsx", ".ts"],
   },
 
   devServer: {

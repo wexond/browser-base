@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { observer } from 'mobx-react'
-import Store from '../../../stores/store'
+import Store from '../../store'
 
-import * as pagesActions from '../../../actions/pages'
+import * as pagesActions from '../../actions/pages'
 
-import Ripple from '../../Material/Ripple'
+import Ripple from '../../../Material/Ripple'
 
 @observer
 export default class MenuNavigation extends React.Component {

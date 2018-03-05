@@ -1,20 +1,20 @@
 import React from 'react'
 
 import { observer } from 'mobx-react'
-import Store from '../../../stores/store'
+import Store from '../../store'
 
 import { ipcRenderer } from 'electron'
 
-import * as storage from '../../../utils/storage'
-import Colors from '../../../utils/colors'
+import * as storage from '../../utils/storage'
+import Colors from '../../utils/colors'
 
-import * as filesActions from '../../../actions/files'
-import * as tabsActions from '../../../actions/tabs'
-import * as webviewActions from '../../../actions/webview'
+import * as filesActions from '../../actions/files'
+import * as tabsActions from '../../actions/tabs'
+import * as webviewActions from '../../actions/webview'
 
-import ipcMessages from '../../../defaults/ipc-messages'
-import extensionsDefaults from '../../../defaults/extensions'
-import wexondUrls from '../../../defaults/wexond-urls'
+import ipcMessages from '../../defaults/ipc-messages'
+import extensionsDefaults from '../../defaults/extensions'
+import wexondUrls from '../../defaults/wexond-urls'
 
 import FindMenu from '../FindMenu'
 

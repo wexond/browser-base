@@ -5,7 +5,7 @@ import FlatButton from '../../Material/FlatButton'
 import Ripple from '../../Material/Ripple'
 
 
-import Store from '../../../stores/history'
+import Store from '../../stores/history'
 import { observer } from 'mobx-react'
 
 @observer
