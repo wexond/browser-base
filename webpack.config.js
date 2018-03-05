@@ -70,7 +70,7 @@ const config = {
 
   resolve: {
     modules: ["node_modules"],
-    extensions: [".jsx", ".js", ".tsx", ".ts"],
+    extensions: [".js", ".tsx", ".ts"],
   },
 
   devServer: {
