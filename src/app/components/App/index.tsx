@@ -25,8 +25,30 @@ import * as tabs from "../../actions/tabs";
 export default class App extends React.Component {
   private tabBar: HTMLDivElement;
 
-  public onAddTabClick = () => {
-    tabs.addTab();
+  public addTab = () => {
+    const tab = tabs.addTab();
+
+    requestAnimationFrame(() => {
+      for (const item of Store.tabGroups[0].tabs) {
+        this.setTabWidth(item);
+      }
+
+      tabs.setTabsPositions();
+    })
+
+    this.setTabLeft(tab);
+  }
+
+  public setTabLeft = (tab: ITab) => {
+    const left = tabs.getTabLeft(tab);
+    tabs.setTabLeft(tab, left, false);
+  }
+
+  public setTabWidth = (tab: ITab) => {
+    const { offsetWidth } = this.tabBar;
+
+    const width = tabs.getTabWidth(tab, offsetWidth);
+    tabs.setTabWidth(tab, width);
   }
 
   public renderTabGroups() {
@@ -34,7 +56,15 @@ export default class App extends React.Component {
       return (
         <List key={tabGroup.id} inline>
           {tabGroup.tabs.map((tab: ITab) => {
-            return <Tab key={tab.id} tabGroupId={tabGroup.id} selected={tabGroup.selectedTab === tab.id} {...tab} />;
+            return (
+              <Tab
+                key={tab.id}
+                tabGroupId={tabGroup.id}
+                setLeft={(left: number, animation = true) => tabs.setTabLeft(tab, left, animation)}
+                selected={tabGroup.selectedTab === tab.id}
+                {...tab}
+              />
+            );
           })}
         </List>
       );
@@ -49,7 +79,10 @@ export default class App extends React.Component {
             {this.renderTabGroups()}
           </List>
 
-          <SystemBarButton icon={SystemBarIcons.Add} onClick={this.onAddTabClick} />
+          <SystemBarButton
+            icon={SystemBarIcons.Add}
+            onClick={() => this.addTab()}
+          />
 
           <SystemBarButton size={16} icon={SystemBarIcons.TabGroups} />
 
