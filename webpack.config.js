@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const { resolve } = require("path");
 const { spawn } = require("child_process");
 
@@ -20,6 +21,7 @@ const config = {
   output: {
     path: OUTPUT_DIR,
     filename: "[name].bundle.js",
+    publicPath: "http://localhost:8080/",
   },
 
   module: {
@@ -51,8 +53,6 @@ const config = {
     __dirname: false,
     __filename: false,
   },
-
-  plugins: [],
 
   resolve: {
     modules: ["node_modules"],

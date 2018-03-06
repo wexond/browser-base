@@ -25,7 +25,7 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=dev electron .",
-    "watch": "webpack-dev-server --hot --mode development",
+    "watch": "webpack-dev-server --hot --inline --mode development",
     "postinstall": "npm run electron-rebuild",
     "electron-rebuild": "electron-builder install-app-deps",
     "compile-win32": "npm run build-production && electron-builder -w -p always",
