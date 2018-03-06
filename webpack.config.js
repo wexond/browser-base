@@ -75,8 +75,18 @@ const config = {
       .on('close', code => process.exit(0))
       .on('error', spawnError => console.error(spawnError));
     }
-  }
+  },
+
+  plugins: []
 };
+
+if (process.env.NODE_ENV === 'production') {
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    })
+  )
+}
 
 let appConfig = {
   target: "electron-renderer",

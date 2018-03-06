@@ -31,7 +31,7 @@
     "compile-win32": "npm run build-production && electron-builder -w -p always",
     "compile-darwin": "npm run build-production && electron-builder -m -p always",
     "compile-linux": "npm run build-production && electron-builder -l -p always",
-    "build-production": "webpack-cli --mode production",
+    "build-production": "cross-env NODE_ENV=production webpack-cli --mode production",
     "lint": "prettier --write src/**/*.ts* && tslint -p . --fix"
   },
   "devDependencies": {
