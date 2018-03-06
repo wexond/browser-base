@@ -1,9 +1,0 @@
-@mixin cursor-pointer () {
-  -webkit-user-select: none;
-  cursor: pointer;
-}
-
-@mixin cursor-default () {
-  -webkit-user-select: none;
-  cursor: default;
-}
