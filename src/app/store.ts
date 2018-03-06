@@ -1,9 +1,15 @@
 import { observable } from "mobx";
 
-import { ITabGroup } from "./interfaces";
+import { ITab, ITabGroup } from "./interfaces";
 
 class Store {
-  @observable public tabGroups: ITabGroup[] = [];
+  @observable public tabGroups: ITabGroup[] = [
+    {
+      selectedTab: -1,
+      tabs: [] as ITab[],
+      id: 0
+    }
+  ];
 }
 
 export default new Store();
