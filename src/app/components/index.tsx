@@ -160,27 +160,27 @@ export default class App extends React.Component<Props, State> {
     // docs for "arg"
     // https://electronjs.org/docs/api/download-item
     ipcRenderer.on(ipcMessages.DOWNLOAD_STARTED, (e, arg) => {
-      //TODO
+      // TODO
     })
 
     ipcRenderer.on(ipcMessages.DOWNLOAD_INTERRUPTED, (e, arg) => {
-      //TODO
+      // TODO
     })
 
     ipcRenderer.on(ipcMessages.DOWNLOAD_PAUSED, (e, arg) => {
-      //TODO
+      // TODO
     })
 
     ipcRenderer.on(ipcMessages.DOWNLOAD_PROGRESS, (e, arg) => {
-      //TODO
+      // TODO
     })
 
     ipcRenderer.on(ipcMessages.DOWNLOAD_COMPLETE, (e, arg) => {
-      //TODO
+      // TODO
     })
 
     ipcRenderer.on(ipcMessages.DOWNLOAD_FAILED, (e, arg) => {
-      //TODO
+      // TODO
     })
 
     this.menu.setState({ items: mainMenuItems() })
@@ -199,7 +199,7 @@ export default class App extends React.Component<Props, State> {
     if (Store.app != null && !Store.app.tabs.addTab.state.animateLeft) { Store.app.tabs.addTab.setState({ animateLeft: true }) }
   }
 
-  public render() {
+  public render(): JSX.Element {
     const onVisibilityChange = (e) => {
       if (!e) {
         Store.editingTabGroup = -1
