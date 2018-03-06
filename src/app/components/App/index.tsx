@@ -35,8 +35,6 @@ export default class App extends React.Component {
 
       tabs.setTabsPositions();
     })
-
-    this.setTabLeft(tab);
   }
 
   public setTabLeft = (tab: ITab) => {

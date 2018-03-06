@@ -39,6 +39,7 @@ const StyledTab = styled.div`
   position: absolute;
   height: 100%;
   left: 0;
+  top: 0;
   overflow: hidden;
 
   background-color: ${(props: IStyledTabProps) =>
