@@ -8,10 +8,30 @@ import Ripple from '../../Material/Ripple'
 import Store from '../../stores/history'
 import { observer } from 'mobx-react'
 
+interface Props {
+  onSearch: any,
+  title?: string,
+  selectedItems?: any[],
+  onCancel: any,
+  onDelete: any,
+}
+
+interface State {
+  searchInput: boolean,
+}
+
 @observer
-export default class ToolBar extends React.Component {
-  constructor () {
-    super()
+export default class ToolBar extends React.Component<Props, State> {
+
+  input: Input
+
+  static defaultProps: Partial<Props> = {
+    title: 'Title',
+    selectedItems: []
+  }
+
+  constructor (props: Props) {
+    super(props)
 
     this.state = {
       searchInput: false
@@ -37,7 +57,7 @@ export default class ToolBar extends React.Component {
     }
   }
 
-  onInputKeyPress = (e) => {
+  onInputKeyPress = (e: any) => {
     // Enter
     if (e.which === 13) {
       this.props.onSearch(this.input.getValue())
@@ -57,7 +77,7 @@ export default class ToolBar extends React.Component {
     }
   }
 
-  render () {
+  render (): JSX.Element {
     const {
       title,
       selectedItems,
@@ -91,7 +111,7 @@ export default class ToolBar extends React.Component {
             <div className='search-icon' onClick={this.onSearchIconClick}>
               <Ripple center={true} opacity={0.2} />
             </div>
-            <Input ref={(r) => this.input = r} placeholder={searching.search} onKeyPress={this.onInputKeyPress} />
+            <Input ref={(r: Input) => this.input = r} placeholder={searching.search} onKeyPress={this.onInputKeyPress} />
             <div className='cancel-icon' onClick={this.onSearchCancelIconClick}>
               <Ripple center={true} opacity={0.2} />
             </div>
@@ -117,9 +137,4 @@ export default class ToolBar extends React.Component {
       </div>
     )
   }
-}
-
-ToolBar.defaultProps = {
-  title: 'Title',
-  selectedItems: []
 }

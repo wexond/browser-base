@@ -5,13 +5,28 @@ import Checkbox from '../../Material/Checkbox'
 import Store from '../../stores/history'
 import { observer } from 'mobx-react'
 
+import Section from "../Section"
+
+interface Props {
+  data: any,
+  section: Section
+}
+
+interface State {
+  
+}
+
 @observer
-export default class HistoryItem extends React.Component {
-  componentDidMount () {
+export default class HistoryItem extends React.Component<Props, State> {
+  
+  checkbox: Checkbox
+  id: number
+  
+  componentDidMount() {
     this.id = this.props.data.id
   }
 
-  render () {
+  render (): JSX.Element {
     const {
       data,
       section
@@ -23,7 +38,7 @@ export default class HistoryItem extends React.Component {
 
     const sectionIndex = section.props.index
 
-    const onCheck = (flag, checkbox) => {
+    const onCheck = (flag: boolean, checkbox: Checkbox) => {
       if (flag) {
         const checked = Store.history.getSelectedCheckBoxes(sectionIndex)
 
@@ -40,7 +55,7 @@ export default class HistoryItem extends React.Component {
 
     return (
       <div className='history-section-item'>
-        <Checkbox ref={(r) => { this.checkbox = r }} onCheck={onCheck} sectionIndex={sectionIndex} data={data} />
+        <Checkbox ref={(r: Checkbox) => { this.checkbox = r }} onCheck={onCheck} sectionIndex={sectionIndex} data={data} />
         <div className='time'>
           {data.date.split(' ')[1].split(':')[0] + ':' + data.date.split(' ')[1].split(':')[1]}
         </div>
