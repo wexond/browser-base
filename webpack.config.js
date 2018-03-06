@@ -35,20 +35,6 @@ const config = {
         ],
       },
       {
-        test: /\.(scss)$/,
-        include: INCLUDE,
-        exclude: EXCLUDE,
-        use: [
-          {
-            loader: 'style-loader'
-          }, {
-            loader: 'css-loader'
-          }, {
-            loader: 'sass-loader'
-          }
-        ]
-      },
-      {
         test: /\.(tsx|ts|jsx|js)$/,
         include: INCLUDE,
         exclude: EXCLUDE,
