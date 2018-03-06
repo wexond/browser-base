@@ -4,16 +4,24 @@ import Preloader from '../../Material/Preloader'
 
 import NewTabHelper from '../../utils/new-tab'
 
-export default class Card extends React.Component {
-  constructor () {
-    super()
+interface Props {
+  data: any,
+}
+
+interface State {
+  loading: boolean,
+}
+
+export default class Card extends React.Component<Props, State> {
+  constructor (props: Props) {
+    super(props)
 
     this.state = {
       loading: true
     }
   }
 
-  async componentDidMount () {
+  public async componentDidMount () {
     await NewTabHelper.loadPicture(this.props.data.urlToImage)
 
     this.setState({
@@ -21,7 +29,7 @@ export default class Card extends React.Component {
     })
   }
 
-  render () {
+  public render (): JSX.Element {
     const {
       url,
       title,

@@ -1,8 +1,8 @@
 import { observable, observe, intercept } from 'mobx'
 
 export default new class Store {
-  @observable loading = true
-  @observable news = []
+  @observable loading: boolean = true
+  @observable news: any[] = []
 
-  newTab = null
+  newTab: any = null
 }
