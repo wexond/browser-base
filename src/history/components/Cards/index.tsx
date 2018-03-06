@@ -5,10 +5,29 @@ import Card from '../Card'
 import Store from '../../stores/history'
 import { observer } from 'mobx-react'
 
+interface Props {
+  cardWidth?: number,
+  cardGap?: number,
+  cardsImage?: boolean,
+  cardsDescription?: boolean,
+}
+
+interface State {
+  width: number,
+}
+
 @observer
-export default class Cards extends React.Component {
-  constructor () {
-    super()
+export default class Cards extends React.Component<Props, State> {
+  
+  public static defaultProps: Partial<Props> = {
+    cardWidth: 256,
+    cardGap: 16,
+    cardsImage: false,
+    cardsDescription: false
+  }
+
+  constructor(props: Props) {
+    super(props)
 
     this.state = {
       width: 0
@@ -48,7 +67,7 @@ export default class Cards extends React.Component {
         { Store.cards.fullInfo.length > 0 &&
          <div className='cards-container' style={style}>
             {
-              Store.cards.fullInfo.map((data, key) => {
+              Store.cards.fullInfo.map((data: any, key: string) => {
                 return <Card fullInfo={true} data={data} key={key} />
               })
             }
@@ -56,7 +75,7 @@ export default class Cards extends React.Component {
         }
         <div className='cards-container' style={style}>
           {
-            Store.cards.lessInfo.map((data, key) => {
+            Store.cards.lessInfo.map((data: any, key: string) => {
               return <Card fullInfo={false} data={data} key={key} />
             })
           }
@@ -64,11 +83,4 @@ export default class Cards extends React.Component {
       </div>
     )
   }
-}
-
-Cards.defaultProps = {
-  cardWidth: 256,
-  cardGap: 16,
-  cardsImage: false,
-  cardsDescription: false
 }

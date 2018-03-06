@@ -1,7 +1,25 @@
 import React from 'react'
 
-export default class Card extends React.Component {
-  render() {
+interface Props {
+  fullInfo?: boolean,
+  data: any,
+  image?: boolean,
+  description?: boolean,
+}
+
+interface State {
+
+}
+
+export default class Card extends React.Component<Props, State> {
+
+  public static defaultProps: Partial<Props> = {
+    image: false,
+    description: false,
+    fullInfo: false
+  }
+
+  public render(): JSX.Element {
     const {
       fullInfo,
       data,
@@ -38,10 +56,4 @@ export default class Card extends React.Component {
       </a>
     )
   }
-}
-
-Card.defaultProps = {
-  image: false,
-  description: false,
-  fullInfo: false
 }

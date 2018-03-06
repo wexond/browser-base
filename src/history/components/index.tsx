@@ -11,10 +11,21 @@ import Preloader from '../Material/Preloader'
 import Store from '../../stores/history'
 import { observer } from 'mobx-react'
 
+interface Props {
+
+}
+
+interface State {
+
+}
+
 @observer
-export default class History extends React.Component {
-  constructor() {
-    super()
+export default class History extends React.Component<Props, State> {
+  
+  sections: any[]
+
+  constructor(props: Props) {
+    super(props)
 
     this.sections = []
     window.dictionary = window.dictionaryAPI.get()
@@ -28,7 +39,7 @@ export default class History extends React.Component {
     this.loadData()
   }
 
-  async loadData(searchStr = false) {
+  async loadData(searchStr: string | boolean = false) {
     Store.loading = true
 
     let data = await window.historyAPI.get()
@@ -41,15 +52,15 @@ export default class History extends React.Component {
     Store.loading = false
   }
 
-  getSelectedCheckBoxes(sectionIndex) {
-    const filter = (item) => {
+  getSelectedCheckBoxes(sectionIndex: number) {
+    const filter = (item: any) => {
       return item.props.sectionIndex === sectionIndex
     }
 
     return Store.selectedItems.filter(filter)
   }
 
-  onSearch = (str) => {
+  onSearch = (str: string) => {
     Store.searched = true
     this.loadData(str)
   }
@@ -143,7 +154,7 @@ export default class History extends React.Component {
               <Cards />
               <div className='history-title'>{historyHeader}</div>
               {
-                Store.sections.map((data, key) => {
+                Store.sections.map((data: any, key: string) => {
                   sectionIndex++
                   return <Section ref={(r) => { if (r != null) { this.sections.push(r) } }} data={data} key={key} index={sectionIndex} />
                 })
