@@ -56,7 +56,7 @@ const Icon = styled.div`
         ? images.center("11px", "11px")
         : images.center(props.size + "px", props.size + "px")
     }
-    background-image: url(${"../images/" + props.icon});
+    background-image: url(${"../../src/app/icons/" + props.icon});
 
     &:hover {
       ${props.icon === SystemBarIcons.Close && `filter: invert(100%);`}
