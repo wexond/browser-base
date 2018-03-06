@@ -10,9 +10,23 @@ import RadioButton from '../Material/RadioButton'
 import Switch from '../Material/Switch'
 import FlatButton from '../Material/FlatButton'
 
-export default class Settings extends React.Component {
-  constructor() {
-    super()
+interface Props {
+
+}
+
+interface State {
+  adblockRelaunchBtnVisible: boolean,
+}
+
+export default class Settings extends React.Component<Props, State> {
+
+  private settings: any
+  private originalSettings: any
+  private adblockSwitch: Switch
+  private adblockCosmeticSwitch: Switch
+
+  constructor(props: Props) {
+    super(props)
 
     window.dictionary = window.dictionaryAPI.get()
 
@@ -23,7 +37,7 @@ export default class Settings extends React.Component {
     }
   }
 
-  componentDidMount = async () => {
+  public async componentDidMount() {
     this.settings = await window.settingsAPI.get()
     this.originalSettings = Object.assign({}, this.settings)
 
@@ -32,7 +46,7 @@ export default class Settings extends React.Component {
     this.adblockCosmeticSwitch.toggle(this.settings.adblockCosmetic)
   }
 
-  render() {
+  public render(): JSX.Element {
     const {
       adblockRelaunchBtnVisible
     } = this.state
@@ -41,20 +55,20 @@ export default class Settings extends React.Component {
       await window.settingsAPI.save(this.settings)
     }
 
-    const onStartupToggle = async (e) => {
+    const onStartupToggle = async (e: any) => {
       if (e.toggled) {
         this.settings.onStartup.type = e.id
         save()
       }
     }
 
-    const onAdblockToggle = async (e) => {
+    const onAdblockToggle = async (e: any) => {
       this.setState({adblockRelaunchBtnVisible: (this.originalSettings.adblock !== e.toggled)})
       this.settings.adblock = e.toggled
       save()
     }
 
-    const onAdblockCosmeticToggle = async (e) => {
+    const onAdblockCosmeticToggle = async (e: any) => {
       this.settings.adblockCosmetic = e.toggled
       save()
     }
@@ -76,7 +90,7 @@ export default class Settings extends React.Component {
           <Section title='Privacy and security'>
             <Item title='Ad-block' description='Block unwanted ads' cursor='pointer'>
               <ItemAction>
-                <Switch ref={(r) => this.adblockSwitch = r} onToggle={onAdblockToggle} />
+                <Switch ref={(r: Switch) => this.adblockSwitch = r} onToggle={onAdblockToggle} />
               </ItemAction>
               <ItemAction>
                 <FlatButton style={{visibility: (adblockRelaunchBtnVisible) ? 'visible' : 'hidden'}}>relaunch</FlatButton>
@@ -84,7 +98,7 @@ export default class Settings extends React.Component {
             </Item>
             <Item title='Ad-block cosmetic filtering' description='This is an experimental feature, which might slow down browser' cursor='pointer' ref='testItem1'>
               <ItemAction>
-                <Switch ref={(r) => this.adblockCosmeticSwitch = r} onToggle={onAdblockCosmeticToggle} />
+                <Switch ref={(r: Switch) => this.adblockCosmeticSwitch = r} onToggle={onAdblockCosmeticToggle} />
               </ItemAction>
             </Item>
           </Section>
