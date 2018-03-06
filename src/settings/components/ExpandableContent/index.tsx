@@ -1,19 +1,27 @@
 import React from 'react'
 
-export default class ExpandableContent extends React.Component {
-  constructor () {
-    super()
+interface Props {
+
+}
+
+interface State {
+  toggled: boolean,
+}
+
+export default class ExpandableContent extends React.Component<Props, State> {
+  constructor (props: Props) {
+    super(props)
     
     this.state = {
       toggled: false
     }
   }
 
-  toggle = (flag) => {
+  public toggle = (flag: boolean) => {
     this.setState({toggled: flag})
   }
 
-  render() {
+  public render(): JSX.Element {
     const {
       toggled
     } = this.state

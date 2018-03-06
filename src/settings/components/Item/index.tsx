@@ -4,14 +4,29 @@ import ItemAction from '../ItemAction'
 import ExpandableContent from '../ExpandableContent'
 import Switch from '../../Material/Switch'
 
-export default class Item extends React.Component {
-  constructor () {
-    super()
+interface Props {
+  title: string,
+  description?: string,
+  cursor: any,
+  onClick?: any,
+}
+
+interface State {
+
+}
+
+export default class Item extends React.Component<Props, State> {
+  
+  private itemActions: any[]
+  private expandableContent: ExpandableContent
+
+  constructor(props: Props) {
+    super(props)
 
     this.itemActions = []
   }
 
-  render() {
+  public render(): JSX.Element {
     const {
       title,
       description,
@@ -22,7 +37,7 @@ export default class Item extends React.Component {
       cursor: cursor
     }
 
-    const onClick = (e) => {
+    const onClick = (e: any) => {
       if (typeof this.props.onClick === 'function') { this.props.onClick(e) }
 
       this.itemActions = this.itemActions.filter(Boolean)
@@ -54,14 +69,14 @@ export default class Item extends React.Component {
           <div className='actions'>
             {React.Children.map(this.props.children, child => {
               if (child.type === ItemAction) {
-                return React.cloneElement(child, {ref: (r) => { this.itemActions.push(r) }})
+                return React.cloneElement(child, {ref: (r: any) => { this.itemActions.push(r) }})
               }
             })}
           </div>
         </div>
         {React.Children.map(this.props.children, child => {
           if (child.type === ExpandableContent) {
-            return React.cloneElement(child, {ref: (r) => { this.expandableContent = r }})
+            return React.cloneElement(child, {ref: (r: any) => { this.expandableContent = r }})
           } else if (child.type !== ItemAction) {
             return React.cloneElement(child)
           }

@@ -3,16 +3,35 @@ import React from 'react'
 import Input from '../../Material/Input'
 import Ripple from '../../Material/Ripple'
 
-export default class ToolBar extends React.Component {
-  constructor () {
-    super()
+interface Props {
+  title: string,
+  selectedItems?: any[],
+  onSearch?: any,
+  onCancel?: any,
+  onDelete?: any,
+}
+
+interface State {
+  searchInput: boolean,
+}
+
+export default class ToolBar extends React.Component<Props, State> {
+  
+  private input: Input
+
+  public static defaultProps = {
+    title: 'Title'
+  }
+
+  constructor(props: Props) {
+    super(props)
 
     this.state = {
       searchInput: false
     }
   }
 
-  onSearchIconClick = () => {
+  private onSearchIconClick = () => {
     this.setState({searchInput: !this.state.searchInput})
 
     if (!this.state.searchInput) {
@@ -24,21 +43,21 @@ export default class ToolBar extends React.Component {
     }
   }
 
-  onSearchCancelIconClick = () => {
+  private onSearchCancelIconClick = () => {
     if (this.state.searchInput) {
       this.setState({searchInput: false})
       this.input.setValue('')
     }
   }
 
-  onInputKeyPress = (e) => {
+  public onInputKeyPress = (e: any) => {
     // Enter
     if (e.which === 13) {
       this.props.onSearch(this.input.getValue())
     }
   }
 
-  render () {
+  public render (): JSX.Element {
     const {
       title,
       selectedItems,
@@ -60,7 +79,7 @@ export default class ToolBar extends React.Component {
             <div className='search-icon' onClick={this.onSearchIconClick}>
               <Ripple center={true} opacity={0.2} />
             </div>
-            <Input ref={(r) => this.input = r} placeholder={searching.search} onKeyPress={this.onInputKeyPress} />
+            <Input ref={(r: Input) => this.input = r} placeholder={searching.search} onKeyPress={this.onInputKeyPress} />
             <div className='cancel-icon' onClick={this.onSearchCancelIconClick}>
               <Ripple center={true} opacity={0.2} />
             </div>
@@ -69,8 +88,4 @@ export default class ToolBar extends React.Component {
       </div>
     )
   }
-}
-
-ToolBar.defaultProps = {
-  title: 'Title'
 }

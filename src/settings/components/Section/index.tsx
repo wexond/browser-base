@@ -1,7 +1,16 @@
 import React from 'react'
 
-export default class Section extends React.Component {
-  render() {
+interface Props {
+  className?: string,
+  title: string,
+}
+
+interface State {
+
+}
+
+export default class Section extends React.Component<Props, State> {
+  public render(): JSX.Element {
     const {
       className,
       title,
