@@ -1,5 +1,5 @@
-import fsPromised from '../actions/fs'
 import path from 'path'
+import fsPromised from '../actions/fs'
 
 import paths from '../defaults/files'
 
@@ -9,7 +9,7 @@ let id: number = 0
 
 export const loadExtensions = async (): Promise<void> => {
   try {
-    const extensionsDirs: Array<string> = await fsPromised.readdir(paths.directories.extensions)
+    const extensionsDirs: string[] = await fsPromised.readdir(paths.directories.extensions)
     extensionsDirs.forEach(async (dirName: string) => {
       // Get paths for extensions directory and manifest.
       const extensionDir: string = path.join(paths.directories.extensions, dirName)

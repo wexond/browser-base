@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { observer } from 'mobx-react'
 import { observe } from 'mobx'
+import { observer } from 'mobx-react'
 import Store from '../../store'
 
 import Tab from '../Tab'
@@ -9,11 +9,29 @@ import Tab from '../Tab'
 import * as tabsActions from '../../actions/tabs'
 
 import tabDefaults from '../../defaults/tabs'
+import Page from '../Page';
+
+interface Props {
+  id: number,
+}
+
+interface State {
+  tabs: Tab[],
+}
 
 @observer
-export default class TabGroup extends React.Component {
-  constructor () {
-    super()
+export default class TabGroup extends React.Component<Props, State> {
+  
+  public timer: {
+    canReset: boolean,
+    time?: number,
+  }
+  public title: string
+  public id: number
+  public pages: Page[]
+
+  constructor(props: Props) {
+    super(props)
 
     this.timer = {
       canReset: false
@@ -24,7 +42,7 @@ export default class TabGroup extends React.Component {
     }
   }
 
-  componentDidMount () {
+  public componentDidMount () {
     const tabGroup = Store.tabGroups.filter((tabGroup) => {
       return tabGroup.id === this.props.id
     })[0]
@@ -79,7 +97,7 @@ export default class TabGroup extends React.Component {
       Store.app.tabs.addTab.setState({animateLeft: false})
 
       // Disable animations for all tabs.
-      for (var i = 0; i < tabGroup.tabs.length; i++) {
+      for (let i = 0; i < tabGroup.tabs.length; i++) {
         const tab = tabGroup.tabs[i]
 
         Store.tabAnimateLeft = false
@@ -93,13 +111,13 @@ export default class TabGroup extends React.Component {
     tabsActions.addTab()
   }
 
-  resetTimer () {
+  public resetTimer () {
     this.timer.canReset = true
     this.timer.time = 0
   }
 
 
-  render () {
+  public render () {
     return (
       <div className='tab-group' style={{display: (Store.currentTabGroup === this.props.id) ? 'block' : 'none'}}>
         {this.state.tabs.map((item) => {

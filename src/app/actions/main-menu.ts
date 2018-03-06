@@ -1,6 +1,6 @@
-import * as tabsActions from './tabs'
-import * as pagesActions from './pages'
 import { ipcRenderer } from 'electron'
+import * as pagesActions from './pages'
+import * as tabsActions from './tabs'
 
 export const newWindow = (): void => {
   ipcRenderer.send("newWindow")

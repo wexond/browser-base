@@ -2,8 +2,8 @@ import React from 'react'
 
 import * as windowActions from '../../actions/window'
 
-import Store from '../../store'
 import { observer } from 'mobx-react'
+import Store from '../../store'
 
 interface Props {
 

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import AddressBar from '../AddressBar'
 import Ripple from '../../../Material/Ripple'
+import AddressBar from '../AddressBar'
 
 import * as pagesActions from '../../actions/pages'
 import * as tabsActions from '../../actions/tabs'
@@ -23,7 +23,7 @@ interface State {
 @observer
 export default class Bar extends React.Component<Props, State> {
 
-  addressBar: AddressBar
+  public addressBar: AddressBar
 
   constructor(props: Props) {
     super(props)
@@ -34,7 +34,7 @@ export default class Bar extends React.Component<Props, State> {
     }
   }
 
-  refreshIconsState() {
+  public refreshIconsState() {
     this.setState(pagesActions.getNavigationState())
   }
 

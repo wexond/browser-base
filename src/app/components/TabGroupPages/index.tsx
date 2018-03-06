@@ -6,10 +6,19 @@ import Store from '../../store'
 import Page from '../Page'
 
 import * as tabsActions from '../../actions/tabs'
+import TabGroup from '../TabGroup';
+
+interface Props {
+  tabGroup: TabGroup
+}
+
+interface State {
+
+}
 
 @observer
-export default class TabGroupPages extends React.Component {
-  render () {
+export default class TabGroupPages extends React.Component<Props, State> {
+  public render (): JSX.Element {
     const {
       tabGroup
     } = this.props
@@ -18,7 +27,7 @@ export default class TabGroupPages extends React.Component {
       <div className='tab-group-pages' style={{display: (Store.currentTabGroup === tabGroup.id) ? 'flex' : 'none'}}>
         {
           tabGroup.pages.map(page => {
-            let tab = tabsActions.getTabById(page.id)
+            const tab = tabsActions.getTabById(page.id)
             return <Page key={page.id} tab={tab} page={page} />
           })
         }

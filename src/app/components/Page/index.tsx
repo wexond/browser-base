@@ -5,18 +5,19 @@ import Store from '../../store'
 
 import { ipcRenderer } from 'electron'
 
-import * as storage from '../../utils/storage'
 import Colors from '../../utils/colors'
+import * as storage from '../../utils/storage'
 
 import * as filesActions from '../../actions/files'
 import * as tabsActions from '../../actions/tabs'
 import * as webviewActions from '../../actions/webview'
 
-import ipcMessages from '../../defaults/ipc-messages'
 import extensionsDefaults from '../../defaults/extensions'
+import ipcMessages from '../../defaults/ipc-messages'
 import wexondUrls from '../../defaults/wexond-urls'
 
 import FindMenu from '../FindMenu'
+import Tab from '../Tab';
 
 interface Props {
   tab: Tab,
@@ -30,12 +31,13 @@ interface State {
 @observer
 export default class Page extends React.Component<Props, State> {
 
-  page: Page
-  webview: HTMLWebViewElement
-  findMenu: FindMenu
-  url: string
-
-  async componentDidMount() {
+  public page: Page
+  public webview: HTMLWebViewElement
+  public findMenu: FindMenu
+  public url: string
+  public id: number
+  
+  public async componentDidMount() {
     const tab = this.props.tab
     const page = this.props.page
     let lastURL = ''
@@ -50,24 +52,24 @@ export default class Page extends React.Component<Props, State> {
     const updateData = async () => {
       if (lastURL === tab.url && tab != null) {
         if (historyId !== -1) {
-          let query = `UPDATE history SET title = ?, url = ?, favicon = ?, ogTitle = ?, ogDescription = ?, ogImage = ? WHERE rowid = ?`
-          let data = [tab.title, tab.url, tab.favicon, tab.ogData.title, tab.ogData.description, tab.ogData.image, historyId]
+          const query = `UPDATE history SET title = ?, url = ?, favicon = ?, ogTitle = ?, ogDescription = ?, ogImage = ? WHERE rowid = ?`
+          const data = [tab.title, tab.url, tab.favicon, tab.ogData.title, tab.ogData.description, tab.ogData.image, historyId]
           storage.history.run(query, data)
         }
 
         if (siteId !== -1) {
-          let query = `UPDATE history SET title = ?, favicon = ?, ogTitle = ?, ogDescription = ?, ogImage = ? WHERE rowid = ?`
-          let data = [tab.title, tab.favicon, null, null, null, siteId]
+          const query = `UPDATE history SET title = ?, favicon = ?, ogTitle = ?, ogDescription = ?, ogImage = ? WHERE rowid = ?`
+          const data = [tab.title, tab.favicon, null, null, null, siteId]
           storage.history.run(query, data)
         }
       }
     }
 
-    const updateInfo = async (e) => {
+    const updateInfo = async (e: any) => {
       Store.app.refreshIconsState()
 
       if (e.url != null) {
-        if (e.isMainFrame != null && !e.isMainFrame) return
+        if (e.isMainFrame != null && !e.isMainFrame) { return }
         tab.url = e.url
         Store.url = e.url
 
@@ -82,8 +84,8 @@ export default class Page extends React.Component<Props, State> {
       }
     }
 
-    const executeExtensionEvent = (name, eventObject) => {
-      for (var i = Store.extensions.length; i--;) {
+    const executeExtensionEvent = (name: string, eventObject: any) => {
+      for (let i = Store.extensions.length; i--;) {
         Store.extensions[i].backgroundExtension.webview.send(ipcMessages.EXTENSION_EXECUTE_EVENT + name, eventObject)
       }
     }
@@ -93,7 +95,7 @@ export default class Page extends React.Component<Props, State> {
     this.webview.addEventListener('did-navigate-in-page', updateInfo)
     this.webview.addEventListener('will-navigate', updateInfo)
 
-    this.webview.addEventListener('load-commit', async (e) => {
+    this.webview.addEventListener('load-commit', async (e: any) => {
       const eventObject = {
         url: e.url,
         isMainFrame: e.isMainFrame
@@ -113,11 +115,11 @@ export default class Page extends React.Component<Props, State> {
         }
 
         if (!e.url.startsWith('wexond://')) {
-          storage.history.run(`INSERT INTO history(title, url, favicon, date) VALUES (?, ?, ?, DATETIME('now', 'localtime'))`, [tab.title, e.url, tab.favicon], function (err) {
+          storage.history.run(`INSERT INTO history(title, url, favicon, date) VALUES (?, ?, ?, DATETIME('now', 'localtime'))`, [tab.title, e.url, tab.favicon], function (err: Error) {
             historyId = this.lastID
           })
 
-          storage.history.run(`INSERT INTO history(title, url, favicon, date) SELECT ?, ?, ?, DATETIME('now', 'localtime') WHERE NOT EXISTS(SELECT 1 FROM history WHERE url = ?)`, [tab.title, url, tab.favicon, url], function (err) {
+          storage.history.run(`INSERT INTO history(title, url, favicon, date) SELECT ?, ?, ?, DATETIME('now', 'localtime') WHERE NOT EXISTS(SELECT 1 FROM history WHERE url = ?)`, [tab.title, url, tab.favicon, url], function (err: Error) {
             if (this.changes > 0) {
               siteId = this.lastID
             } else {
@@ -126,7 +128,7 @@ export default class Page extends React.Component<Props, State> {
 
             console.log(siteId)
           })
-        } else historyId = -1
+        } else { historyId = -1 }
       }
     })
 
@@ -149,7 +151,7 @@ export default class Page extends React.Component<Props, State> {
       setBarBorder()
     })
 
-    this.webview.addEventListener('new-window', (e) => {
+    this.webview.addEventListener('new-window', (e: any) => {
       if (e.disposition === 'new-window'
         || e.disposition === 'foreground-tab') {
         tabsActions.addTab({
@@ -172,8 +174,8 @@ export default class Page extends React.Component<Props, State> {
       Store.isFullscreen = false
     })
 
-    this.webview.addEventListener('page-favicon-updated', (e) => {
-      let request = new XMLHttpRequest()
+    this.webview.addEventListener('page-favicon-updated', (e: any) => {
+      const request = new XMLHttpRequest()
       request.onreadystatechange = async (event) => {
         if (request.readyState === 4) {
           if (request.status === 404) {
@@ -190,14 +192,14 @@ export default class Page extends React.Component<Props, State> {
       request.send(null)
     })
 
-    this.webview.addEventListener('page-title-updated', async (e) => {
+    this.webview.addEventListener('page-title-updated', async (e: any) => {
       tab.title = e.title
       updateData()
     })
 
-    this.webview.addEventListener('did-change-theme-color', (e) => {
+    this.webview.addEventListener('did-change-theme-color', (e: any) => {
       let color = e.themeColor
-      if (color == null) color = '#fff'
+      if (color == null) { color = '#fff' }
 
       Store.backgroundColor = color
       tab.backgroundColor = color
@@ -209,7 +211,7 @@ export default class Page extends React.Component<Props, State> {
     // we can't use them, so we need to check if 
     // these webcontents are not null, 
     // and then use them.
-    let checkWebcontentsInterval = setInterval(() => {
+    const checkWebcontentsInterval = setInterval(() => {
       // We need to use webcontents,
       // to add an event listener `context-menu`.
       if (this.webview.getWebContents() != null) {
@@ -221,8 +223,8 @@ export default class Page extends React.Component<Props, State> {
       }
     }, 1)
 
-    const onContextMenu = (e, params) => {
-      Store.app.pageMenu.setState((previousState) => {
+    const onContextMenu = (e: any, params: any) => {
+      Store.app.pageMenu.setState((previousState: any) => {
         // 0  : Open link in new tab
         // 1  : -----------------------
         // 2  : Copy link address
@@ -239,19 +241,19 @@ export default class Page extends React.Component<Props, State> {
         // 13 : View source
         // 14 : Inspect element
 
-        let menuItems = previousState.items
+        const menuItems = previousState.items
         // Hide or show first 5 items.
-        for (var i = 0; i < 5; i++) {
+        for (let i = 0; i < 5; i++) {
           menuItems[i].visible = params.linkURL !== ''
         }
 
         // Next 5 items.
-        for (i = 5; i < 10; i++) {
+        for (let i = 5; i < 10; i++) {
           menuItems[i].visible = params.hasImageContents
         }
 
         // Next 4 items.
-        for (i = 10; i < 14; i++) {
+        for (let i = 10; i < 14; i++) {
           menuItems[i].visible = !params.hasImageContents && params.linkURL === ''
         }
 
@@ -266,8 +268,8 @@ export default class Page extends React.Component<Props, State> {
       // Calculate new menu position
       // using cursor x, y and 
       // width, height of the menu.
-      let x = Store.cursor.x
-      let y = Store.cursor.y
+      const x = Store.cursor.x
+      const y = Store.cursor.y
 
       // By default it opens menu from upper left corner.
       let left = x + 1
@@ -288,17 +290,17 @@ export default class Page extends React.Component<Props, State> {
       }
 
       // Set the new position.
-      Store.app.pageMenu.setState({ left: left, top: top })
+      Store.app.pageMenu.setState({ left, top })
     }
 
     this.registerSwipeListener()
   }
 
-  registerSwipeListener() {
-    let trackingFingers = false
-    let startTime = 0
-    let isSwipeOnLeftEdge = false
-    let isSwipeOnRightEdge = false
+  public registerSwipeListener() {
+    const trackingFingers = false
+    const startTime = 0
+    const isSwipeOnLeftEdge = false
+    const isSwipeOnRightEdge = false
     let deltaX = 0
     let deltaY = 0
     let time
@@ -354,19 +356,19 @@ export default class Page extends React.Component<Props, State> {
 
   }
 
-  goBack() {
+  public goBack() {
     this.webview.goBack()
     Store.app.bar.addressBar.setInputToggled(false, true)
     Store.app.refreshIconsState()
   }
 
-  goForward() {
+  public goForward() {
     this.webview.goForward()
     Store.app.bar.addressBar.setInputToggled(false, true)
     Store.app.refreshIconsState()
   }
 
-  refresh() {
+  public refresh() {
     this.webview.reload()
     Store.app.bar.addressBar.setInputToggled(false, true)
     Store.app.refreshIconsState()

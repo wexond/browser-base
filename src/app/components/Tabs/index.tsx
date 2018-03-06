@@ -2,26 +2,38 @@ import React from 'react'
 
 import { platform } from 'os'
 
-import { observer } from 'mobx-react'
 import { observe } from 'mobx'
+import { observer } from 'mobx-react'
 import Store from '../../store'
 
-import Tab from '../Tab'
 import AddTab from '../AddTab'
+import Tab from '../Tab'
 import TabGroup from '../TabGroup'
 
-import wexondUrls from '../../defaults/wexond-urls'
 import tabMenuItems from '../../defaults/tab-menu-items'
+import wexondUrls from '../../defaults/wexond-urls'
 
 import Colors from '../../utils/colors'
 
-import * as tabsActions from '../../actions/tabs'
 import * as tabGroupsActions from '../../actions/tab-groups'
+import * as tabsActions from '../../actions/tabs'
+
+interface Props {
+
+}
+
+interface State {
+
+}
 
 @observer
-export default class Tabs extends React.Component {
-  constructor () {
-    super()
+export default class Tabs extends React.Component<Props, State> {
+  
+  public removedTab: boolean
+  public tabs: HTMLDivElement
+  public addTab: AddTab
+  constructor(props: Props) {
+    super(props)
 
     this.removedTab = false
 
@@ -33,7 +45,7 @@ export default class Tabs extends React.Component {
     tabGroupsActions.addTabGroup()
   }
 
-  componentDidMount () {
+  public componentDidMount () {
     // Check for changes in Store.
     observe(Store, change => {
       const tab = tabsActions.getSelectedTab()
@@ -102,11 +114,11 @@ export default class Tabs extends React.Component {
     })
   }
 
-  getWidth () {
+  public getWidth () {
     return this.tabs.offsetWidth
   }
 
-  updateTabs () {
+  public updateTabs () {
     // Get widths.
     const tabsWidth = this.getWidth()
     const addTabWidth = this.addTab.getWidth()
@@ -116,18 +128,18 @@ export default class Tabs extends React.Component {
     tabsActions.setPositions()
   }
 
-  render () {
-    const tabs = tabGroupsActions.getCurrentTabGroup().tabs.filter(tab => !tab.pinned)
+  public render (): JSX.Element {
+    const tabs = tabGroupsActions.getCurrentTabGroup().tabs.filter((tab: Tab) => !tab.pinned)
 
     const tabsStyle = {
       WebkitAppRegion: (tabs[0] != null && tabs[0].width > 32) ? 'drag' : 'no-drag',
       marginLeft: platform() === 'darwin' ? 80 : 0
     }
 
-    const onContextMenu = (e) => {
+    const onContextMenu = (e: any) => {
       const tab = tabsActions.getTabFromMouseX(null, Store.cursor.x)
 
-      let items = tabMenuItems().map((item) => {
+      const items = tabMenuItems().map((item) => {
         return {
           type: item.type,
           title: item.title,
@@ -135,15 +147,15 @@ export default class Tabs extends React.Component {
         }
       })
 
-      Store.app.tabMenu.setState({ items: items })
+      Store.app.tabMenu.setState({ items })
 
       Store.app.tabMenu.show()
 
       // Calculate new menu position
       // using cursor x, y and 
       // width, height of the menu.
-      let x = Store.cursor.x
-      let y = Store.cursor.y
+      const x = Store.cursor.x
+      const y = Store.cursor.y
 
       // By default it opens menu from upper left corner.
       let left = x + 1
@@ -164,7 +176,7 @@ export default class Tabs extends React.Component {
       }
 
       // Set the new position.
-      Store.app.tabMenu.setState({ left: left, top: top })
+      Store.app.tabMenu.setState({ left, top })
     }
 
     return (

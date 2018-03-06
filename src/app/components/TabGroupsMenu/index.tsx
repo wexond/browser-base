@@ -6,12 +6,20 @@ import Store from '../../store'
 
 import * as tabGroupsActions from '../../actions/tab-groups'
 
-import TabGroupsMenuItem from '../TabGroupsMenuItem'
 import FlatButton from '../../../Material/FlatButton'
+import TabGroupsMenuItem from '../TabGroupsMenuItem'
+
+interface Props {
+
+}
+
+interface State {
+  
+}
 
 @observer
 export default class TabGroupsMenu extends React.Component {
-  render () {
+  public render (): JSX.Element {
     const onAddClick = () => {
       tabGroupsActions.addTabGroup()
       Store.app.tabGroupsMenu.refreshHeight()

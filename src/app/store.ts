@@ -1,30 +1,38 @@
-import { observable, observe, intercept } from 'mobx'
-import App from "./components"
+import { intercept, observable, observe } from "mobx";
+import App from "./components";
+import Tab from "./components/Tab";
 
 export default new class Store {
-  @observable tabGroups: Array<any> = []
-  @observable addTabLeft: number = 0
-  @observable selectedTab: number = -1
-  @observable tabDragData = {}
-  @observable tabAnimateLeft: boolean = true
-  @observable tabAnimateWidth: boolean = true
+  @observable public tabGroups: any[] = [];
+  @observable public addTabLeft: number = 0;
+  @observable public selectedTab: number = -1;
+  @observable
+  public tabDragData: {
+    mouseClickX?: number;
+    left?: number;
+    isMouseDown?: boolean;
+    tab?: Tab;
+  } = {};
+  @observable public tabAnimateLeft: boolean = true;
+  @observable public tabAnimateWidth: boolean = true;
 
-  @observable foreground: string = 'black'
-  @observable backgroundColor: string = '#fff'
-  @observable border: boolean = true
+  @observable public foreground: string = "black";
+  @observable public backgroundColor: string = "#fff";
+  @observable public border: boolean = true;
 
-  @observable currentTabGroup: number = 0
-  @observable editingTabGroup: number = -1
-  @observable isFullscreen: boolean = false
+  @observable public currentTabGroup: number = 0;
+  @observable public editingTabGroup: number = -1;
+  @observable public isFullscreen: boolean = false;
 
-  @observable extensions: Array<any> = []
+  @observable public extensions: any[] = [];
 
-  @observable dictionary: any
+  @observable public dictionary: any;
 
-  url: string = ''
-  certificates: Array<any> = []
+  public url: string = "";
+  public certificates: any[] = [];
 
-  pageMenuData = {}
-  cursor: { x: number, y: number } = { x: 0, y: 0 }
-  app: App
-}
+  public pageMenuData = {};
+  public cursor: { x: number; y: number } = { x: 0, y: 0 };
+  public app: App;
+  public lastClosedURL: string;
+}();

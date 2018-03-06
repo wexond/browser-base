@@ -6,12 +6,14 @@ import Store from '../../store'
 import MenuItem from '../MenuItem'
 
 interface Props {
-  left: number | string,
-  top: number | string,
-  right: number | string,
-  bottom: number | string,
-  onVisibilityChange: Function,
-  itemsStyle: HTMLStyleElement
+  left?: number | string,
+  top?: number | string,
+  right?: number | string,
+  bottom?: number | string,
+  onVisibilityChange?: Function,
+  itemsStyle?: HTMLStyleElement,
+  enabled: boolean,
+  visible: boolean,
 }
 
 interface State {
@@ -22,16 +24,16 @@ interface State {
   top: number | string,
   right: number | string,
   bottom: number | string,
-  items: Array<any>,
-  pointerEvents,
+  items: any[],
+  pointerEvents: any,
 }
 
 @observer
 export default class Menu extends React.Component<Props, State> {
 
-  visible: boolean
-  newHeight: number
-  menu: HTMLDivElement
+  public visible: boolean
+  public newHeight: number
+  public menu: HTMLDivElement
 
   public static defaultProps: Partial<Props> = {
     left: 'auto',
@@ -67,7 +69,7 @@ export default class Menu extends React.Component<Props, State> {
     })
   }
 
-  refreshHeight = () => {
+  public refreshHeight = () => {
     setTimeout(() => {
       this.menu.style.transition = '0.27s margin-top, 0.2s opacity'
       this.newHeight = this.menu.scrollHeight
@@ -75,7 +77,7 @@ export default class Menu extends React.Component<Props, State> {
     }, 50)
   }
 
-  show = () => {
+  public show = () => {
     // Remove height transition to quickly set height to 0.
     this.menu.style.transition = '0.27s margin-top, 0.2s opacity'
     this.setState({ height: 0 })
@@ -99,10 +101,10 @@ export default class Menu extends React.Component<Props, State> {
 
     this.visible = true
 
-    if (typeof this.props.onVisibilityChange === 'function') this.props.onVisibilityChange(this.visible)
+    if (typeof this.props.onVisibilityChange === 'function') { this.props.onVisibilityChange(this.visible) }
   }
 
-  hide = () => {
+  public hide = () => {
     this.setState({
       marginTop: -20,
       opacity: 0,
@@ -111,7 +113,7 @@ export default class Menu extends React.Component<Props, State> {
 
     this.visible = false
 
-    if (typeof this.props.onVisibilityChange === 'function') this.props.onVisibilityChange(this.visible)
+    if (typeof this.props.onVisibilityChange === 'function') { this.props.onVisibilityChange(this.visible) }
   }
 
   public render(): JSX.Element {
@@ -129,36 +131,36 @@ export default class Menu extends React.Component<Props, State> {
 
     const menuStyle = {
       maxHeight: (height > 400) ? 400 : height,
-      marginTop: marginTop,
-      opacity: opacity,
-      left: left,
-      top: top,
-      bottom: bottom,
-      right: right,
+      marginTop,
+      opacity,
+      left,
+      top,
+      bottom,
+      right,
       pointerEvents: (pointerEvents) ? 'auto' : 'none'
     }
 
-    const onMouseDown = (e): void => {
+    const onMouseDown = (e: any): void => {
       e.stopPropagation()
     }
 
-    const onClick = (e): void => {
+    const onClick = (e: any): void => {
       e.stopPropagation()
     }
 
     const menuEvents = {
-      onMouseDown: onMouseDown,
-      onClick: onClick
+      onMouseDown,
+      onClick
     }
 
     let menuItems = null
-    if (items != null && items.length !== 0) menuItems = (
+    if (items != null && items.length !== 0) { menuItems = (
       <div className='items' style={ this.props.itemsStyle }>
         {
           items.map((data, key) => {
             // Default values for an item.
-            if (data.visible == null) data.visible = true
-            if (data.type == null) data.type = 'item'
+            if (data.visible == null) { data.visible = true }
+            if (data.type == null) { data.type = 'item' }
 
             if (data.type === 'separator') {
               const separatorStyle = {
@@ -169,12 +171,12 @@ export default class Menu extends React.Component<Props, State> {
             } else if (data.type === 'item') {
 
               const onClick = () => {
-                if (typeof data.onClick === 'function') data.onClick()
+                if (typeof data.onClick === 'function') { data.onClick() }
                 this.hide()
               }
 
               const methodsToPass = {
-                onClick: onClick
+                onClick
               }
 
               return (
@@ -187,6 +189,7 @@ export default class Menu extends React.Component<Props, State> {
         }
       </div>
     )
+    }
 
     return (
       <div { ...menuEvents } className='menu' style={ menuStyle } ref={ (r) => { this.menu = r } }>

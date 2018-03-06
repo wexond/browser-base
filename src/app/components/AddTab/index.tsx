@@ -4,8 +4,8 @@ import tabDefaults from '../../defaults/tabs'
 
 import * as tabsActions from '../../actions/tabs'
 
-import Store from '../../store'
 import { observer } from 'mobx-react'
+import Store from '../../store'
 
 import Transitions from '../../utils/transitions'
 
@@ -20,7 +20,7 @@ interface State {
 @observer
 export default class AddTab extends React.Component<Props, State> {
 
-  addTab: HTMLDivElement
+  public addTab: HTMLDivElement
 
   constructor(props: Props) {
     super(props)
@@ -30,7 +30,7 @@ export default class AddTab extends React.Component<Props, State> {
     }
   }
 
-  getWidth() {
+  public getWidth() {
     return this.addTab.offsetWidth
   }
 
@@ -49,7 +49,7 @@ export default class AddTab extends React.Component<Props, State> {
 
     const addTabStyle = {
       left: Store.addTabLeft,
-      transition: transition
+      transition
     }
 
     const onClick = (e): void => {

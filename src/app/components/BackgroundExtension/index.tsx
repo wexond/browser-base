@@ -6,7 +6,7 @@ import Store from '../../store'
 import ipcMessages from '../../defaults/ipc-messages'
 
 interface Props {
-  data
+  data: any
 }
 
 interface State {
@@ -16,12 +16,12 @@ interface State {
 @observer
 export default class BackgroundExtensions extends React.Component<Props, State> {
 
-  webview: HTMLWebViewElement
+  public webview: HTMLWebViewElement
 
-  componentDidMount() {
+  public componentDidMount() {
     this.props.data.backgroundExtension = this
 
-    this.webview.addEventListener('ipc-message', (e) => {
+    this.webview.addEventListener('ipc-message', (e: any) => {
       if (e.channel === ipcMessages.EXTENSION_RELOAD) {
         this.webview.reload()
       }

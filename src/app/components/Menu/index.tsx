@@ -5,10 +5,35 @@ import Store from '../../store'
 
 import MenuItem from '../MenuItem'
 
+interface Props {
+  left: number,
+  right: number,
+  top: number,
+  bottom: number,
+  onVisibilityChange: Function,
+  itemsStyle: any
+}
+
+interface State {
+  height: number,
+  marginTop: number,
+  opacity: number,
+  left: number,
+  top: number,
+  right?: number,
+  bottom?: number,
+  items: any,
+  pointerEvents: boolean
+}
+
 @observer
-export default class Menu extends React.Component {
-  constructor () {
-    super()
+export default class Menu extends React.Component<Props, State> {
+
+  public visible: boolean
+  public newHeight: number
+  public menu: HTMLDivElement
+  constructor (props: Props) {
+    super(props)
 
     this.state = {
       marginTop: 0,
@@ -23,14 +48,14 @@ export default class Menu extends React.Component {
     this.visible = false
   }
 
-  static defaultProps = {
+  public static defaultProps = {
     left: 'auto',
     top: 'auto',
     right: 'auto',
     bottom: 'auto'
   }
 
-  componentDidMount () {
+  public componentDidMount () {
     this.setState({
       left: this.props.left,
       top: this.props.top,
@@ -39,7 +64,7 @@ export default class Menu extends React.Component {
     })
   }
 
-  refreshHeight = () => {
+  public refreshHeight = () => {
     setTimeout(() => {
       this.menu.style.transition = '0.27s margin-top, 0.2s opacity'
       this.newHeight = this.menu.scrollHeight
@@ -47,7 +72,7 @@ export default class Menu extends React.Component {
     }, 50)
   }
 
-  show = () => {
+  public show = () => {
     // Remove height transition to quickly set height to 0.
     this.menu.style.transition = '0.27s margin-top, 0.2s opacity'
     this.setState({height: 0})
@@ -74,7 +99,7 @@ export default class Menu extends React.Component {
     if (typeof this.props.onVisibilityChange === 'function') { this.props.onVisibilityChange(this.visible) }
   }
 
-  hide = () => {
+  public hide = () => {
     this.setState({
       marginTop: -20,
       opacity: 0,
@@ -86,7 +111,7 @@ export default class Menu extends React.Component {
     if (typeof this.props.onVisibilityChange === 'function') { this.props.onVisibilityChange(this.visible) }
   }
 
-  render () {
+  public render () {
     const {
       height,
       marginTop,
@@ -101,33 +126,33 @@ export default class Menu extends React.Component {
 
     const menuStyle = {
       maxHeight: (height > 400) ? 400 : height,
-      marginTop: marginTop,
-      opacity: opacity,
-      left: left,
-      top: top,
-      bottom: bottom,
-      right: right,
+      marginTop,
+      opacity,
+      left,
+      top,
+      bottom,
+      right,
       pointerEvents: (pointerEvents) ? 'auto' : 'none'
     }
 
-    const onMouseDown = (e) => {
+    const onMouseDown = (e: any) => {
       e.stopPropagation()
     }
 
-    const onClick = (e) => {
+    const onClick = (e: any) => {
       e.stopPropagation()
     }
 
     const menuEvents = {
-      onMouseDown: onMouseDown,
-      onClick: onClick
+      onMouseDown,
+      onClick
     }
 
     let menuItems = null
     if (items != null && items.length !== 0) { menuItems = (
       <div className='items' style={this.props.itemsStyle}>
         {
-          items.map((data, key) => {
+          items.map((data: any, key: string) => {
             // Default values for an item.
             if (data.visible == null) { data.visible = true }
             if (data.type == null) { data.type = 'item' }
@@ -146,7 +171,7 @@ export default class Menu extends React.Component {
               }
 
               const methodsToPass = {
-                onClick: onClick
+                onClick
               }
 
               return (
