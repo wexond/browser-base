@@ -23,7 +23,7 @@ interface State {
 
 @observer
 export default class Suggestion extends React.Component<Props, State> {
-  render () {
+  public render (): JSX.Element {
     let description = this.props.url
     if (this.props.description != null) { description = this.props.description }
 

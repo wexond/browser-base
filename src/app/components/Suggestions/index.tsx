@@ -15,15 +15,15 @@ interface Props {
 
 interface State {
   visible: boolean,
-  suggestions: Array<any>,
+  suggestions: any[],
   selectedSuggestion: number,
 }
 
 @observer
 export default class Suggestions extends React.Component<Props, State> {
   
-  lastSearchSuggestions: Array<any>
-  hidden: boolean
+  public lastSearchSuggestions: any[]
+  public hidden: boolean
   
 
   constructor(props: Props) {
@@ -38,15 +38,15 @@ export default class Suggestions extends React.Component<Props, State> {
     this.lastSearchSuggestions = []
   }
 
-  hide = () => {
+  public hide = () => {
     this.setState({visible: false})
   }
 
-  show () {
+  public show () {
     this.setState({visible: true})
   }
 
-  suggest = async (text: string) => {
+  public suggest = async (text: string) => {
     const historySuggestions = await suggestionsActions.getHistorySuggestions(text)
 
     this.setState({suggestions: historySuggestions.concat(this.lastSearchSuggestions)})
@@ -70,7 +70,7 @@ export default class Suggestions extends React.Component<Props, State> {
       const data = await suggestionsActions.getSearchSuggestions(text)
 
       const suggestions = historySuggestions.concat(data)
-      this.setState({suggestions: suggestions})
+      this.setState({suggestions})
 
       this.lastSearchSuggestions = data
 
@@ -80,27 +80,27 @@ export default class Suggestions extends React.Component<Props, State> {
     }
   }
 
-  getSelectedSuggestion () {
+  public getSelectedSuggestion () {
     return this.state.suggestions[this.state.selectedSuggestion]
   }
 
-  async selectNext () {
+  public async selectNext () {
     let selectedSuggestion = this.state.selectedSuggestion
     if (!(selectedSuggestion + 1 > this.state.suggestions.length - 1)) { selectedSuggestion++ }
-    await this.setState({selectedSuggestion: selectedSuggestion})
+    await this.setState({selectedSuggestion})
   }
 
-  async selectPrevious () {
+  public async selectPrevious () {
     let selectedSuggestion = this.state.selectedSuggestion
     if (!(selectedSuggestion - 1 < 0)) { selectedSuggestion-- }
-    await this.setState({selectedSuggestion: selectedSuggestion})
+    await this.setState({selectedSuggestion})
   }
 
-  selectByIndex (index: number) {
+  public selectByIndex (index: number) {
     this.setState({selectedSuggestion: index})
   }
 
-  whatToSuggest = () => {
+  public whatToSuggest = () => {
     if (this.state.suggestions[0] != null && this.state.suggestions[0].type === 'autocomplete-url') {
       return this.state.suggestions[0].url
     }

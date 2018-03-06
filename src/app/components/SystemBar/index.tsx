@@ -1,10 +1,10 @@
-import React from 'react'
 import { platform } from 'os'
+import React from 'react'
 
 import Controls from '../Controls'
 
-import Store from '../../store'
 import { observer } from 'mobx-react'
+import Store from '../../store'
 
 import Colors from '../../utils/colors'
 
@@ -22,7 +22,7 @@ export default class SystemBar extends React.Component<Props, State> {
     super(props)
   }
 
-  render () {
+  public render () {
     let backColor = Colors.shadeColor(Store.backgroundColor, -0.2)
 
     if (Store.backgroundColor === '#fff') { backColor = Colors.shadeColor(Store.backgroundColor, -0.1) }

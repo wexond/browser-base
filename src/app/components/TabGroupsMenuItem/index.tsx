@@ -4,20 +4,31 @@ import { observer } from 'mobx-react'
 
 import Store from '../../store'
 
-import MenuItem from '../MenuItem'
 import Input from '../../../Material/Input'
 import Ripple from '../../../Material/Ripple'
+import MenuItem from '../MenuItem'
 
 import * as tabGroupsActions from '../../actions/tab-groups'
+import TabGroup from '../TabGroup';
+
+interface Props {
+  tabGroup: TabGroup
+}
+
+interface State {
+
+}
 
 @observer
-export default class TabGroupsMenuItem extends React.Component {
-  render () {
+export default class TabGroupsMenuItem extends React.Component<Props, State> {
+  
+  public input: Input
+  public render(): JSX.Element {
     const tabGroup = this.props.tabGroup
 
-    let selected = tabGroup.id === Store.currentTabGroup
+    const selected = tabGroup.id === Store.currentTabGroup
 
-    let editing = tabGroup.id === Store.editingTabGroup
+    const editing = tabGroup.id === Store.editingTabGroup
 
     const onClick = () => {
       Store.editingTabGroup = -1
@@ -25,14 +36,14 @@ export default class TabGroupsMenuItem extends React.Component {
       tabGroupsActions.switchTabGroup(tabGroup.id)
     }
 
-    const onRemoveClick = (e) => {
+    const onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
       e.stopPropagation()
       tabGroupsActions.removeTabGroup(tabGroupsActions.getTabGroupById(tabGroup.id))
       Store.app.tabGroupsMenu.refreshHeight()
       Store.editingTabGroup = -1
     }
 
-    const onEditClick = (e) => {
+    const onEditClick = (e: React.MouseEvent<HTMLDivElement>) => {
       e.stopPropagation()
       this.input.focus()
       tabGroupsActions.switchTabGroup(tabGroup.id)
@@ -40,24 +51,24 @@ export default class TabGroupsMenuItem extends React.Component {
       Store.editingTabGroup = (editing) ? -1 : tabGroup.id
     }
 
-    const onInput = (e) => {
+    const onInput = (e: React.KeyboardEvent<Input>) => {
       tabGroup.title = e.currentTarget.value
     }
 
-    const onInputKeyPress = (e) => {
+    const onInputKeyPress = (e: React.KeyboardEvent<Input>) => {
       if (e.which === 13) { // Enter
         Store.editingTabGroup = -1
       }
     }
 
-    const onInputClick = (e) => {
+    const onInputClick = (e: React.MouseEvent<Input>) => {
       e.stopPropagation()
     }
 
     const inputEvents = {
       onClick: onInputClick,
       onKeyPress: onInputKeyPress,
-      onInput: onInput
+      onInput
     }
 
     const inputStyle = {
@@ -71,7 +82,7 @@ export default class TabGroupsMenuItem extends React.Component {
     return (
       <div className={'tab-groups-menu-item ' + ((editing) ? 'editing' : '')} onClick={onClick}>
         <div className={'content ' + ((selected) ? 'selected ' : ' ')}>
-          <Input ref={(r) => { this.input = r }} className='input1' style={inputStyle} {...inputEvents} defaultValue={tabGroup.title}></Input>
+          <Input ref={(r: Input) => { this.input = r }} className='input1' style={inputStyle} {...inputEvents} defaultValue={tabGroup.title}></Input>
           <div className='title' style={titleStyle} >
             {tabGroup.title}
           </div>

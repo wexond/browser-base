@@ -1,13 +1,13 @@
 import Store from '../store'
 
-import { clipboard, remote, nativeImage } from 'electron'
+import { clipboard, nativeImage, remote } from 'electron'
 import { writeFile } from 'fs'
-import { defaults } from 'request'
 import { basename, extname } from 'path'
+import { defaults } from 'request'
 const { dialog } = remote
 
-import * as tabsActions from '../actions/tabs'
 import * as pagesActions from '../actions/pages'
+import * as tabsActions from '../actions/tabs'
 
 export const openLinkInNewTab = (): void => {
   tabsActions.addTab({
@@ -58,7 +58,7 @@ export const saveImageAs = (): void => {
   const name = basename(srcURL)
   const extension = extname(name)
 
-  let request = require('request').defaults({ encoding: null })
+  const request = require('request').defaults({ encoding: null })
 
   request.get(srcURL, function (err, res, body) {
     dialog.showSaveDialog({
@@ -78,7 +78,7 @@ export const saveImageAs = (): void => {
 }
 
 export const copyImage = (): void => {
-  let img = nativeImage.createFromDataURL(Store.pageMenuData.srcURL)
+  const img = nativeImage.createFromDataURL(Store.pageMenuData.srcURL)
   clipboard.clear()
   clipboard.writeImage(img)
 }
@@ -120,6 +120,6 @@ export const viewSource = (): void => {
 }
 
 export const inspectElement = (): void => {
-  let data = Store.pageMenuData
+  const data = Store.pageMenuData
   pagesActions.getSelectedPage().page.webview.inspectElement(data.x, data.y)
 }

@@ -1,30 +1,30 @@
 import React from 'react'
 
-import Store from '../store'
 import { observer } from 'mobx-react'
+import Store from '../store'
 
-import SystemBar from './SystemBar'
-import Tabs from './Tabs'
-import Pages from './Pages'
+import BackgroundExtensions from './BackgroundExtensions'
 import Bar from './Bar'
-import Suggestions from './Suggestions'
 import Menu from './Menu'
 import MenuNavigation from './MenuNavigation'
+import Pages from './Pages'
+import Suggestions from './Suggestions'
+import SystemBar from './SystemBar'
 import TabGroupsMenu from './TabGroupsMenu'
-import BackgroundExtensions from './BackgroundExtensions'
+import Tabs from './Tabs'
 
 import mainMenuItems from '../defaults/main-menu-items'
-import tabMenuItems from '../defaults/tab-menu-items';
 import pageMenuItems from '../defaults/page-menu-items'
+import tabMenuItems from '../defaults/tab-menu-items';
 
 import { ipcRenderer } from 'electron'
 import ipcMessages from '../defaults/ipc-messages'
 
-import * as pagesActions from '../actions/pages'
-import * as tabsActions from '../actions/tabs'
-import * as tabGroupsActions from '../actions/tab-groups'
-import * as pageMenuActions from '../actions/page-menu'
 import * as extensionsActions from '../actions/extensions'
+import * as pageMenuActions from '../actions/page-menu'
+import * as pagesActions from '../actions/pages'
+import * as tabGroupsActions from '../actions/tab-groups'
+import * as tabsActions from '../actions/tabs'
 
 import * as languageActions from '../actions/language'
 
@@ -38,14 +38,14 @@ interface State {
 
 export default class App extends React.Component<Props, State> {
 
-  pageMenu: Menu
-  menu: Menu
-  menuNavigation: MenuNavigation
-  tabMenu: Menu
-  tabGroupsMenu: Menu
-  bar: Bar
-  suggestions: Suggestions
-  tabs: Tabs
+  public pageMenu: Menu
+  public menu: Menu
+  public menuNavigation: MenuNavigation
+  public tabMenu: Menu
+  public tabGroupsMenu: Menu
+  public bar: Bar
+  public suggestions: Suggestions
+  public tabs: Tabs
 
   constructor(props: Props) {
     super(props)
@@ -53,7 +53,7 @@ export default class App extends React.Component<Props, State> {
     languageActions.loadDictionary()
   }
 
-  async componentDidMount() {
+  public async componentDidMount() {
     Store.app = this
     extensionsActions.loadExtensions()
 
@@ -110,7 +110,7 @@ export default class App extends React.Component<Props, State> {
 
     window.addEventListener('keyup', (e) => {
       if (e.ctrlKey || e.metaKey) {
-        if (e.altKey) return
+        if (e.altKey) { return }
         if (e.keyCode === 70) {
           pagesActions.getSelectedPage().page.findMenu.toggle()
         }
@@ -188,18 +188,18 @@ export default class App extends React.Component<Props, State> {
     this.pageMenu.setState({ items: pageMenuItems() })
   }
 
-  refreshIconsState() {
+  public refreshIconsState() {
     this.menuNavigation.refreshIconsState()
     this.bar.refreshIconsState()
   }
 
-  restoreTabsAnimations() {
-    if (!Store.tabAnimateLeft) Store.tabAnimateLeft = true
-    if (!Store.tabAnimateWidth) Store.tabAnimateWidth = true
-    if (Store.app != null && !Store.app.tabs.addTab.state.animateLeft) Store.app.tabs.addTab.setState({ animateLeft: true })
+  public restoreTabsAnimations() {
+    if (!Store.tabAnimateLeft) { Store.tabAnimateLeft = true }
+    if (!Store.tabAnimateWidth) { Store.tabAnimateWidth = true }
+    if (Store.app != null && !Store.app.tabs.addTab.state.animateLeft) { Store.app.tabs.addTab.setState({ animateLeft: true }) }
   }
 
-  render() {
+  public render() {
     const onVisibilityChange = (e) => {
       if (!e) {
         Store.editingTabGroup = -1

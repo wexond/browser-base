@@ -8,12 +8,12 @@ import Store from '../../store'
 
 import Network from '../../utils/network'
 
-import * as tabsActions from '../../actions/tabs'
-import * as pagesActions from '../../actions/pages'
 import * as filesActions from '../../actions/files'
+import * as pagesActions from '../../actions/pages'
+import * as tabsActions from '../../actions/tabs'
 
-import Storage from '../../utils/storage'
 import * as suggestionsActions from '../../actions/suggestions';
+import Storage from '../../utils/storage'
 
 interface Props {
 
@@ -28,12 +28,12 @@ interface State {
 @observer
 export default class AddressBar extends React.Component<Props, State> {
 
-  canSuggest: boolean
-  inputToggled: boolean
-  lastSuggestion: string
+  public canSuggest: boolean
+  public inputToggled: boolean
+  public lastSuggestion: string
 
-  input: HTMLInputElement
-  info: HTMLDivElement
+  public input: HTMLInputElement
+  public info: HTMLDivElement
 
   constructor(props: Props) {
     super(props)
@@ -48,18 +48,18 @@ export default class AddressBar extends React.Component<Props, State> {
     this.lastSuggestion = ''
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     window.addEventListener('mousedown', (e) => {
       this.setInputToggled(false)
       this.setURL(Store.url)
     })
   }
 
-  focus = () => {
+  public focus = () => {
     this.input.focus()
   }
 
-  setURL = (url: string): void => {
+  public setURL = (url: string): void => {
     Store.url = url
     // Change URL of input only when it's not active.
     if (!this.inputToggled) {
@@ -67,12 +67,12 @@ export default class AddressBar extends React.Component<Props, State> {
     }
   }
 
-  setInfo = (url: string): void => {
+  public setInfo = (url: string): void => {
     const domain = Network.getDomain(url)
 
     this.setURL(url)
 
-    this.setState({ domain: domain })
+    this.setState({ domain })
 
     this.setCertificate(url)
 
@@ -81,11 +81,11 @@ export default class AddressBar extends React.Component<Props, State> {
     }
   }
 
-  setInputToggled = (flag: boolean, force = false): void => {
+  public setInputToggled = (flag: boolean, force = false): void => {
     if (!flag && !force) {
       // Always have toggled input when the url
       // starts with wexond://newtab.
-      if (Store.url.startsWith(wexondUrls.newtab)) return
+      if (Store.url.startsWith(wexondUrls.newtab)) { return }
     }
 
     // Hide or show the info depending on the flag
@@ -102,7 +102,7 @@ export default class AddressBar extends React.Component<Props, State> {
     this.inputToggled = flag
   }
 
-  setCertificate = async (url: string) => {
+  public setCertificate = async (url: string) => {
     const tab = tabsActions.getSelectedTab()
     if (tab.certificate != null) {
       this.setState({
@@ -128,7 +128,7 @@ export default class AddressBar extends React.Component<Props, State> {
     }
 
     this.setState({
-      certificateName: certificateName,
+      certificateName,
       certificateType: certificate.type
     })
 
@@ -139,7 +139,7 @@ export default class AddressBar extends React.Component<Props, State> {
     }
   }
 
-  getSelectionText(): string {
+  public getSelectionText(): string {
     let text = ''
     if (window.getSelection) {
       text = window.getSelection().toString()
@@ -149,10 +149,10 @@ export default class AddressBar extends React.Component<Props, State> {
     return text;
   }
 
-  autoComplete(whatToSuggest, text: string) {
-    if (whatToSuggest.type !== 'autocomplete-url') return
+  public autoComplete(whatToSuggest, text: string) {
+    if (whatToSuggest.type !== 'autocomplete-url') { return }
 
-    let suggestion = whatToSuggest.title
+    const suggestion = whatToSuggest.title
 
     const httpsRegex = /(http(s?)):\/\//gi
     const wwwRegex = /(www.)?/gi
@@ -169,7 +169,7 @@ export default class AddressBar extends React.Component<Props, State> {
     }
   }
 
-  render() {
+  public render() {
     const {
       domain,
       certificateType,
@@ -178,7 +178,7 @@ export default class AddressBar extends React.Component<Props, State> {
 
     const onInput = async (e) => {
       const input = e.currentTarget
-      let text = input.value.toLowerCase().trim()
+      const text = input.value.toLowerCase().trim()
 
       Store.app.suggestions.hidden = false
 
@@ -261,9 +261,9 @@ export default class AddressBar extends React.Component<Props, State> {
         let URLToNavigate = inputText
 
         if (Network.isURL(e.currentTarget.value)) {
-          if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'http://' + inputText
+          if (e.currentTarget.value.indexOf('://') === -1) { URLToNavigate = 'http://' + inputText }
         } else {
-          if (e.currentTarget.value.indexOf('://') === -1) URLToNavigate = 'https://www.google.com/search?q=' + inputText
+          if (e.currentTarget.value.indexOf('://') === -1) { URLToNavigate = 'https://www.google.com/search?q=' + inputText }
         }
 
         page.page.webview.loadURL(URLToNavigate)
@@ -289,10 +289,10 @@ export default class AddressBar extends React.Component<Props, State> {
     }
 
     const inputEvents = {
-      onKeyPress: onKeyPress,
-      onKeyUp: onKeyUp,
-      onKeyDown: onKeyDown,
-      onInput: onInput
+      onKeyPress,
+      onKeyUp,
+      onKeyDown,
+      onInput
     }
 
     const search = Store.dictionary.searching.search

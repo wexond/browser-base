@@ -27,7 +27,7 @@ export default class MenuNavigation extends React.Component<Props, State> {
     }
   }
 
-  refreshIconsState() {
+  public refreshIconsState() {
     this.setState(pagesActions.getNavigationState())
   }
 

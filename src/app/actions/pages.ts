@@ -1,6 +1,6 @@
+import Page from '../components/Page';
 import Store from '../store'
 import * as tabGroupsActions from './tab-groups'
-import Page from '../components/Page';
 
 export const getNavigationState = () => {
   const page = getSelectedPage()
