@@ -6,6 +6,10 @@ import images from "../../../shared/mixins/images";
 
 import * as tabs from "../../actions/tabs";
 
+import { ITab } from "../../interfaces";
+
+import Store from "../../store";
+
 interface IProps {
   title: string;
   tabGroupId: number;
@@ -14,25 +18,34 @@ interface IProps {
   left: number;
   width: number;
   setLeft: (left: number, animation?: boolean) => void;
+  getTabBarWidth: () => number;
 }
 
 @observer
 export default class Tab extends React.Component<IProps, {}> {
   public close = () => {
-    const { id } = this.props;
+    const { id, getTabBarWidth } = this.props;
     const tab = tabs.getTabById(id);
-    tabs.closeTab(tab);
+
+    tabs.removeTab(tab);
+
+    const containerWidth = getTabBarWidth();
+
+    tabs.setTabsWidths(containerWidth);
+    tabs.setTabsPositions();
   }
+
   public select = () => {
     const { id } = this.props;
     const tab = tabs.getTabById(id);
     tabs.selectTab(tab);
   }
+
   public render() {
     const { title, selected, width, left } = this.props;
 
     return (
-      <StyledTab selected={selected} style={{left, width}} onClick={this.select}>
+      <StyledTab selected={selected} style={{left, width}} onMouseDown={this.select}>
         <Content>
           <Title>{title}</Title>
           <Close onClick={this.close}/>
@@ -47,6 +60,7 @@ interface IStyledTabProps {
 }
 
 const StyledTab = styled.div`
+  -webkit-app-region: no-drag;
   display: flex;
   align-items: center;
   position: absolute;

@@ -57,6 +57,15 @@ export const getTabLeft = (tab: ITab): number => {
   return 0;
 }
 
+export const setTabsWidths = (containerWidth: number, animation = true) => {
+  const { tabs } = Store.tabGroups[0];
+
+  for (const item of tabs) {
+    const width = getTabWidth(item, containerWidth);
+    setTabWidth(item, width);
+  }
+}
+
 export const getTabWidth = (tab: ITab, containerWidth: number): number => {
   const { tabs } = Store.tabGroups[0];
 
@@ -110,9 +119,8 @@ export const addTab = (): ITab => {
   return Store.tabGroups[0].tabs[index];
 };
 
-export const closeTab = (tab: ITab) => {
-  Store.tabGroups[0].tabs = Store.tabGroups[0].tabs.filter(({id}) => tab.id != id);
-  setTabsPositions();
+export const removeTab = (tab: ITab) => {
+  Store.tabGroups[0].tabs = Store.tabGroups[0].tabs.filter(({ id }) => tab.id !== id);
 }
 
 export const selectTab = (tab: ITab) => {
