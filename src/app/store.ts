@@ -13,6 +13,8 @@ class Store {
   ];
 
   @observable public pages: IPage[] = [];
+
+  @observable public addTabButtonLeft = 0;
 }
 
 export default new Store();
