@@ -69,7 +69,7 @@ export const getTabWidth = (tab: ITab, containerWidth: number): number => {
   return width;
 }
 
-export const getTabById = (id: number) => {
+export const getTabById = (id: number): ITab => {
   const { tabGroups } = Store;
 
   const tabs = tabGroups.map((tabGroup: ITabGroup) => {
@@ -109,3 +109,12 @@ export const addTab = (): ITab => {
 
   return Store.tabGroups[0].tabs[index];
 };
+
+export const closeTab = (tab: ITab) => {
+  Store.tabGroups[0].tabs = Store.tabGroups[0].tabs.filter(({id}) => tab.id != id);
+  setTabsPositions();
+}
+
+export const selectTab = (tab: ITab) => {
+  Store.tabGroups[0].selectedTab = tab.id;
+}
