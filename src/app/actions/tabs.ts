@@ -6,6 +6,8 @@ import { TAB_MAX_WIDTH, TAB_PINNED_WIDTH } from "../constants/design";
 
 import { ITab, ITabGroup } from "../interfaces";
 
+import { addPage } from "./pages";
+
 let nextTabId = 0;
 
 export const setTabLeft = (tab: ITab, left: number, animation = true) => {
@@ -94,10 +96,14 @@ export const addTab = (): ITab => {
     ]
   };
 
+  const { id } = tab;
+
   const index = Store.tabGroups[0].tabs.push(tab) - 1;
-  Store.tabGroups[0].selectedTab = tab.id;
+  Store.tabGroups[0].selectedTab = id;
 
   nextTabId += 1;
+
+  addPage(id);
 
   return Store.tabGroups[0].tabs[index];
 };

@@ -15,11 +15,12 @@ import SystemBar from "../SystemBar";
 import SystemBarButton from "../SystemBarButton";
 import Tab from "../Tab";
 
-import { ITab, ITabGroup } from "../../interfaces";
+import { IPage, ITab, ITabGroup } from "../../interfaces";
 
 import Store from "../../store";
 
 import * as tabs from "../../actions/tabs";
+import Page from "../Page";
 
 @observer
 export default class App extends React.Component {
@@ -67,6 +68,12 @@ export default class App extends React.Component {
     });
   }
 
+  public renderPages() {
+    return Store.pages.map((page: IPage) => {
+      return <Page key={page.id} {...page} selected={Store.tabGroups[0].selectedTab === page.id} />
+    })
+  }
+
   public render() {
     return (
       <List style={{ height: "100vh" }}>
@@ -100,7 +107,9 @@ export default class App extends React.Component {
           <Line />
         </SystemBar>
 
-        <List />
+        <List>
+          {this.renderPages()}
+        </List>
       </List>
     );
   }
