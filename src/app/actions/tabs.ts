@@ -57,6 +57,15 @@ export const getTabLeft = (tab: ITab): number => {
   return 0;
 }
 
+export const setTabsWidths = (containerWidth: number, animation = true) => {
+  const { tabs } = Store.tabGroups[0];
+
+  for (const item of tabs) {
+    const width = getTabWidth(item, containerWidth);
+    setTabWidth(item, width);
+  }
+}
+
 export const getTabWidth = (tab: ITab, containerWidth: number): number => {
   const { tabs } = Store.tabGroups[0];
 
@@ -69,7 +78,7 @@ export const getTabWidth = (tab: ITab, containerWidth: number): number => {
   return width;
 }
 
-export const getTabById = (id: number) => {
+export const getTabById = (id: number): ITab => {
   const { tabGroups } = Store;
 
   const tabs = tabGroups.map((tabGroup: ITabGroup) => {
@@ -109,3 +118,11 @@ export const addTab = (): ITab => {
 
   return Store.tabGroups[0].tabs[index];
 };
+
+export const removeTab = (tab: ITab) => {
+  Store.tabGroups[0].tabs = Store.tabGroups[0].tabs.filter(({ id }) => tab.id !== id);
+}
+
+export const selectTab = (tab: ITab) => {
+  Store.tabGroups[0].selectedTab = tab.id;
+}
