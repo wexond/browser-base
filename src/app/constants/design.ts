@@ -7,4 +7,4 @@ export const TAB_MAX_WIDTH = 210;
 export const TAB_PINNED_WIDTH = 32;
 
 // Animations
-export const HOVER_DURATION = 0.2;
+export const HOVER_DURATION = 0.156;
