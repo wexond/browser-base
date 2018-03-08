@@ -2,7 +2,7 @@ import Store from "../store";
 
 import { tabTransitions } from "../defaults/tabs";
 
-import { TAB_MAX_WIDTH, TAB_PINNED_WIDTH } from "../constants/design";
+import { SYSTEM_BAR_HEIGHT, TAB_MAX_WIDTH, TAB_PINNED_WIDTH } from "../constants/design";
 
 import { ITab, ITabGroup } from "../interfaces";
 
@@ -41,6 +41,8 @@ export const setTabsPositions = (animation = true) => {
     setTabLeft(item, left, animation);
     left += item.width;
   }
+
+  Store.addTabButtonLeft = left;
 }
 
 export const getTabLeft = (tab: ITab): number => {
@@ -58,7 +60,7 @@ export const getTabLeft = (tab: ITab): number => {
 export const getTabWidth = (tab: ITab, containerWidth: number): number => {
   const { tabs } = Store.tabGroups[0];
 
-  let width = tab.pinned ? TAB_PINNED_WIDTH : containerWidth / tabs.length;
+  let width = tab.pinned ? TAB_PINNED_WIDTH : (containerWidth - SYSTEM_BAR_HEIGHT) / tabs.length;
 
   if (width > TAB_MAX_WIDTH) {
     width = TAB_MAX_WIDTH;

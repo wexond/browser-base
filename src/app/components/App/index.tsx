@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import React from "react";
+import React, { SFC } from "react";
 import styled from "styled-components";
 
 import { SystemBarIcons } from "../../enums";
@@ -76,7 +76,7 @@ export default class App extends React.Component {
 
   public render() {
     return (
-      <List style={{ height: "100vh" }}>
+      <List style={{ height: "100vh", overflow: 'hidden' }}>
         <SystemBar>
           <List innerRef={(r: any) => (this.tabBar = r)}>
             {this.renderTabGroups()}
@@ -85,6 +85,10 @@ export default class App extends React.Component {
           <SystemBarButton
             icon={SystemBarIcons.Add}
             onClick={() => this.addTab()}
+            style={{
+              position: 'absolute',
+              left: Store.addTabButtonLeft
+            }}
           />
 
           <SystemBarButton size={16} icon={SystemBarIcons.TabGroups} />
