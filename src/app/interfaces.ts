@@ -13,6 +13,11 @@ export interface ITab {
   pinned: boolean;
 }
 
+export interface IPage {
+  id: number;
+  url: string;
+}
+
 export interface ITransition {
   property: string;
   duration: number;
