@@ -4,9 +4,12 @@ import styled from "styled-components";
 
 import images from "../../../shared/mixins/images";
 
+import * as tabs from "../../actions/tabs";
+
 interface IProps {
   title: string;
   tabGroupId: number;
+  id: number;
   selected: boolean;
   left: number;
   width: number;
@@ -15,14 +18,24 @@ interface IProps {
 
 @observer
 export default class Tab extends React.Component<IProps, {}> {
+  public close = () => {
+    const { id } = this.props;
+    const tab = tabs.getTabById(id);
+    tabs.closeTab(tab);
+  }
+  public select = () => {
+    const { id } = this.props;
+    const tab = tabs.getTabById(id);
+    tabs.selectTab(tab);
+  }
   public render() {
     const { title, selected, width, left } = this.props;
 
     return (
-      <StyledTab selected={selected} style={{left, width}}>
+      <StyledTab selected={selected} style={{left, width}} onClick={this.select}>
         <Content>
           <Title>{title}</Title>
-          <Close />
+          <Close onClick={this.close}/>
         </Content>
       </StyledTab>
     );

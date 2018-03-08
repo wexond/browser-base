@@ -56,6 +56,7 @@ export default class App extends React.Component {
             return (
               <Tab
                 key={tab.id}
+                id={tab.id}
                 tabGroupId={tabGroup.id}
                 setLeft={(left: number, animation = true) => tabs.setTabLeft(tab, left, animation)}
                 selected={tabGroup.selectedTab === tab.id}
