@@ -16,6 +16,7 @@ import images from "../../../shared/mixins/images";
 interface IProps extends IButtonProps {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
   size?: number;
+  style?: any;
 }
 
 interface IButtonProps {
@@ -35,10 +36,10 @@ export default class SystemBarButton extends React.Component<IProps, {}> {
   };
 
   public render() {
-    const { windows, icon, onClick, size } = this.props;
+    const { windows, icon, onClick, size, style } = this.props;
 
     return (
-      <Button onClick={onClick} windows={windows} icon={icon}>
+      <Button onClick={onClick} windows={windows} icon={icon} style={style}>
         <Icon icon={icon} windows={windows} size={size} />
       </Button>
     );
