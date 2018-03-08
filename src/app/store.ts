@@ -1,6 +1,6 @@
 import { observable } from "mobx";
 
-import { ITab, ITabGroup } from "./interfaces";
+import { IPage, ITab, ITabGroup } from "./interfaces";
 
 class Store {
   @observable
@@ -11,6 +11,8 @@ class Store {
       id: 0
     }
   ];
+
+  @observable public pages: IPage[] = [];
 }
 
 export default new Store();
