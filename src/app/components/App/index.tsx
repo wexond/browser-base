@@ -28,13 +28,11 @@ export default class App extends React.Component {
   public addTab = () => {
     const tab = tabs.addTab();
 
-    requestAnimationFrame(() => {
-      for (const item of Store.tabGroups[0].tabs) {
-        this.setTabWidth(item);
-      }
+    for (const item of Store.tabGroups[0].tabs) {
+      this.setTabWidth(item);
+    }
 
-      tabs.setTabsPositions();
-    })
+    tabs.setTabsPositions();
   }
 
   public setTabLeft = (tab: ITab) => {
