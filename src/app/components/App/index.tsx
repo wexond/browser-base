@@ -29,24 +29,11 @@ export default class App extends React.Component {
   public addTab = () => {
     const tab = tabs.addTab();
 
-    for (const item of Store.tabGroups[0].tabs) {
-      this.setTabWidth(item);
-    }
-
+    tabs.setTabsWidths(this.getTabBarWidth());
     tabs.setTabsPositions();
   }
 
-  public setTabLeft = (tab: ITab) => {
-    const left = tabs.getTabLeft(tab);
-    tabs.setTabLeft(tab, left, false);
-  }
-
-  public setTabWidth = (tab: ITab) => {
-    const { offsetWidth } = this.tabBar;
-
-    const width = tabs.getTabWidth(tab, offsetWidth);
-    tabs.setTabWidth(tab, width);
-  }
+  public getTabBarWidth = () => this.tabBar.offsetWidth;
 
   public renderTabGroups() {
     return Store.tabGroups.map((tabGroup: ITabGroup) => {
@@ -60,6 +47,7 @@ export default class App extends React.Component {
                 tabGroupId={tabGroup.id}
                 setLeft={(left: number, animation = true) => tabs.setTabLeft(tab, left, animation)}
                 selected={tabGroup.selectedTab === tab.id}
+                getTabBarWidth={this.getTabBarWidth}
                 {...tab}
               />
             );
