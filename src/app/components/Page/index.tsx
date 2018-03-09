@@ -24,7 +24,7 @@ export default ({ page, selected }: IProps) => {
 
   return (
     <div style={pageStyle}>
-      <webview src={url} style={{ height: "100%" }} useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36 WEXOND/0.3" nodeintegration={true} blinkfeatures="PreciseMemoryInfo, CSSVariables" />
+      <webview src={url} style={{ height: "100%" }} useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36 WEXOND/0.3" nodeintegration={true} blinkfeatures="PreciseMemoryInfo, CSSVariables"/>
     </div>
   );
 };
