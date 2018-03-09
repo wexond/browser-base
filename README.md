@@ -10,6 +10,8 @@
 [![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 # Wexond
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/wexond/wexond.svg)](https://greenkeeper.io/)
 `Wexond` is an extensible, fast and innovative web browser written in ES2017 using [`Electron`](https://github.com/electron/electron), [`React`](https://reactjs.org/) to build browser's UI easier, and [`MobX`](https://github.com/mobxjs/mobx) to easily manage states.
 
 ## Documentation
