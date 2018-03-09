@@ -16,10 +16,14 @@ let nextTabId = 0;
 
 export const setTabAnimation = (tab: ITab, property: string, flag: boolean) => {
   if (flag) {
-    tab.transitions.push({
-      property,
-      ...tabTransitions.left
-    });
+    if (
+      !(tab.transitions.filter(item => item.property === property).length > 0)
+    ) {
+      tab.transitions.push({
+        property,
+        ...tabTransitions.left
+      });
+    }
   } else {
     tab.transitions = tab.transitions.filter(
       item => item.property !== property
@@ -44,9 +48,9 @@ export const setTabsPositions = (
       item.left = left;
       left += item.width;
     }
-  
+
     Store.addTabButton.left = left;
-  })
+  });
 };
 
 export const getTabLeft = (tab: ITab): number => {
@@ -64,14 +68,14 @@ export const getTabLeft = (tab: ITab): number => {
 export const setTabsWidths = (containerWidth: number, animation = true) => {
   const { tabs } = Store.tabGroups[0];
 
-  for (const item of tabs) {
-    setTabAnimation(item, "width", animation);
+  requestAnimationFrame(() => {
+    for (const item of tabs) {
+      setTabAnimation(item, "width", animation);
 
-    requestAnimationFrame(() => {
       const width = getTabWidth(item, containerWidth);
       item.width = width;
-    })
-  }
+    }
+  });
 };
 
 export const getTabWidth = (tab: ITab, containerWidth: number): number => {
@@ -132,9 +136,7 @@ export const removeTab = (tab: ITab) => {
   Store.tabGroups[0].tabs = Store.tabGroups[0].tabs.filter(
     ({ id }) => tab.id !== id
   );
-  Store.pages = Store.pages.filter(
-    ({ id }) => tab.id !== id
-  );
+  Store.pages = Store.pages.filter(({ id }) => tab.id !== id);
 };
 
 export const selectTab = (tab: ITab) => {

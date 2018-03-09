@@ -1,28 +1,30 @@
-import React from "react";
+import React, { SFC } from "react";
 import styled from "styled-components";
 
+import { IPage } from "../../interfaces";
+
 interface IProps {
-  id: number;
-  url: string;
+  page: IPage;
   selected: boolean;
 }
 
-export default class Page extends React.Component<IProps, {}> {
-  public render() {
-    const { url, selected } = this.props;
+export default ({ page, selected }: IProps) => {
+  const { url } = page;
 
-    const pageStyle = {
-      flex: selected ? 1 : "0 1",
-      height: !selected && 0,
-      width: !selected && 0,
-      pointerEvents: !selected && "none",
-      opacity: selected ? 1 : 0
-    };
-
-    return (
-      <div style={pageStyle}>
-        <webview src={url} style={{ height: "100%" }} />
-      </div>
-    );
-  }
-}
+  return (
+    <div
+      style={{
+        flex: selected ? 1 : "0 1",
+        height: !selected ? 0 : "auto",
+        width: !selected ? 0 : "auto",
+        pointerEvents: !selected ? "none" : "auto",
+        opacity: !selected ? 0 : 1,
+        position: !selected ? "absolute" : "initial",
+        top: !selected ? 0 : "auto",
+        left: !selected ? 0 : "auto"
+      }}
+    >
+      <webview src={url} style={{ height: "100%" }} />
+    </div>
+  );
+};
