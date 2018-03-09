@@ -14,7 +14,13 @@ class Store {
 
   @observable public pages: IPage[] = [];
 
-  @observable public addTabButtonLeft = 0;
+  @observable
+  public addTabButton = {
+    left: 0,
+    leftAnimation: true
+  };
+
+  public getTabBarWidth: () => number;
 }
 
 export default new Store();
