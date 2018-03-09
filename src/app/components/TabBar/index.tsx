@@ -58,14 +58,14 @@ export default class TabBar extends React.Component<{}, {}> {
 
   public render() {
     return (
-      <List innerRef={(r: any) => (this.tabBar = r)}>
+      <List innerRef={r => (this.tabBar = r)}>
         {Store.tabGroups.map((tabGroup: ITabGroup) => {
           return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
         })}
 
         <SystemBarButton
           icon={SystemBarIcons.Add}
-          onClick={() => this.addTab()}
+          onClick={this.addTab}
           style={{
             position: "absolute",
             left: Store.addTabButton.left,
