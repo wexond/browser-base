@@ -1,3 +1,4 @@
+import DevTools from 'mobx-react-devtools'
 import React from "react";
 import styled from "styled-components";
 
@@ -13,12 +14,10 @@ import {
 
 // Components
 import List from "../List";
-import Page from "../Page";
 import Pages from "../Pages";
 import SystemBar from "../SystemBar";
 import SystemBarButton from "../SystemBarButton";
 import TabBar from "../TabBar";
-import TabGroup from "../TabGroup";
 
 // Interfaces
 import { IPage, ITab, ITabGroup } from "../../interfaces";
@@ -59,6 +58,8 @@ export default () => {
       </SystemBar>
 
       <Pages />
+
+      {process.env.NODE_ENV === 'development' && <DevTools position={{bottom: 0, right: 0}}/>}
     </List>
   );
 };
