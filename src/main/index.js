@@ -45,3 +45,11 @@ const createWindow = () => {
     mainWindow.show();
   });
 };
+
+// Specify flash path, supposing it is placed in the same directory with main.js.
+let pluginName = 'pepflashplayer.dll';
+
+app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginName));
+
+// Optional: Specify flash version: v26.0.0.131
+app.commandLine.appendSwitch('ppapi-flash-version', '26.0.0.131'); //to get pepflashplayer go to
