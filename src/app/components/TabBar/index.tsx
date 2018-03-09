@@ -1,25 +1,25 @@
-import { observer } from 'mobx-react';
-import React from 'react';
+import { observer } from "mobx-react";
+import React from "react";
 
 // Components
-import List from '../List';
-import SystemBarButton from '../SystemBarButton';
-import TabGroup from '../TabGroup';
+import List from "../List";
+import SystemBarButton from "../SystemBarButton";
+import TabGroup from "../TabGroup";
 
 // Constants and defaults
-import { HOVER_DURATION } from '../../constants/design';
-import { tabTransitions } from '../../defaults/tabs';
+import { HOVER_DURATION } from "../../constants/design";
+import { tabTransitions } from "../../defaults/tabs";
 
 // Enums
-import { SystemBarIcons } from '../../enums';
+import { SystemBarIcons } from "../../enums";
 
 // Actions
-import * as tabs from '../../actions/tabs';
+import * as tabs from "../../actions/tabs";
 
 // Interfaces
-import { ITabGroup } from '../../interfaces';
+import { ITabGroup } from "../../interfaces";
 
-import Store from '../../store';
+import Store from "../../store";
 
 @observer
 export default class TabBar extends React.Component<{}, {}> {
@@ -51,7 +51,7 @@ export default class TabBar extends React.Component<{}, {}> {
     requestAnimationFrame(() => {
       tabs.setTabsWidths(containerWidth);
       tabs.setTabsPositions();
-    })
+    });
   };
 
   public getTabBarWidth = () => this.tabBar.offsetWidth;
@@ -59,11 +59,9 @@ export default class TabBar extends React.Component<{}, {}> {
   public render() {
     return (
       <List innerRef={(r: any) => (this.tabBar = r)}>
-        {
-          Store.tabGroups.map((tabGroup: ITabGroup) => {
-            return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />
-          })
-        }
+        {Store.tabGroups.map((tabGroup: ITabGroup) => {
+          return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
+        })}
 
         <SystemBarButton
           icon={SystemBarIcons.Add}
@@ -71,11 +69,13 @@ export default class TabBar extends React.Component<{}, {}> {
           style={{
             position: "absolute",
             left: Store.addTabButton.left,
-            transition: `${HOVER_DURATION}s opacity ${Store.addTabButton
-              .leftAnimation ?
-              `, ${tabTransitions.left.duration}s ${
-                tabTransitions.left.easing
-              }` : ''}`
+            transition: `${HOVER_DURATION}s opacity ${
+              Store.addTabButton.leftAnimation
+                ? `, ${tabTransitions.left.duration}s ${
+                    tabTransitions.left.easing
+                  }`
+                : ""
+            }`
           }}
         />
       </List>

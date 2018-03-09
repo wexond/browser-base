@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { SFC } from "react";
 import styled from "styled-components";
 
 import { join } from "path";
@@ -21,23 +21,27 @@ interface IProps extends IButtonProps {
   style?: any;
 }
 
-export default class SystemBarButton extends React.Component<IProps, {}> {
-  public static defaultProps = {
-    icon: "",
-    size: 20,
-    windows: false
-  };
+const SystemBarButton: SFC<IProps> = ({
+  windows,
+  icon,
+  onClick,
+  size,
+  style
+}) => {
+  return (
+    <Button onClick={onClick} windows={windows} icon={icon} style={style}>
+      <Icon icon={icon} windows={windows} size={size} />
+    </Button>
+  );
+};
 
-  public render() {
-    const { windows, icon, onClick, size, style } = this.props;
+SystemBarButton.defaultProps = {
+  icon: SystemBarIcons.Add,
+  size: 20,
+  windows: false
+};
 
-    return (
-      <Button onClick={onClick} windows={windows} icon={icon} style={style}>
-        <Icon icon={icon} windows={windows} size={size} />
-      </Button>
-    );
-  }
-}
+export default SystemBarButton;
 
 interface IIconProps extends IButtonProps {
   size: number;

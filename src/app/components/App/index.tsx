@@ -14,6 +14,7 @@ import {
 // Components
 import List from "../List";
 import Page from "../Page";
+import Pages from "../Pages";
 import SystemBar from "../SystemBar";
 import SystemBarButton from "../SystemBarButton";
 import TabBar from "../TabBar";
@@ -31,50 +32,36 @@ import * as tabs from "../../actions/tabs";
 import { HOVER_DURATION } from "../../constants/design";
 import { tabTransitions } from "../../defaults/tabs";
 
-export default class App extends React.Component {
-  public renderPages() {
-    return Store.pages.map((page: IPage) => {
-      return (
-        <Page
-          key={page.id}
-          {...page}
-          selected={Store.tabGroups[0].selectedTab === page.id}
+export default () => {
+  return (
+    <List style={{ height: "100vh", overflow: "hidden" }}>
+      <SystemBar>
+        <TabBar />
+
+        <SystemBarButton size={16} icon={SystemBarIcons.TabGroups} />
+
+        <SystemBarButton
+          windows
+          icon={SystemBarIcons.Minimize}
+          onClick={() => minimizeWindow()}
         />
-      );
-    });
-  }
+        <SystemBarButton
+          windows
+          icon={SystemBarIcons.Maximize}
+          onClick={() => maximizeWindow()}
+        />
+        <SystemBarButton
+          windows
+          icon={SystemBarIcons.Close}
+          onClick={() => closeWindow()}
+        />
+        <Line />
+      </SystemBar>
 
-  public render() {
-    return (
-      <List style={{ height: "100vh", overflow: "hidden" }}>
-        <SystemBar>
-          <TabBar />
-
-          <SystemBarButton size={16} icon={SystemBarIcons.TabGroups} />
-
-          <SystemBarButton
-            windows
-            icon={SystemBarIcons.Minimize}
-            onClick={() => minimizeWindow()}
-          />
-          <SystemBarButton
-            windows
-            icon={SystemBarIcons.Maximize}
-            onClick={() => maximizeWindow()}
-          />
-          <SystemBarButton
-            windows
-            icon={SystemBarIcons.Close}
-            onClick={() => closeWindow()}
-          />
-          <Line />
-        </SystemBar>
-
-        <List>{this.renderPages()}</List>
-      </List>
-    );
-  }
-}
+      <Pages />
+    </List>
+  );
+};
 
 const Line = styled.div`
   background-color: rgba(0, 0, 0, 0.12);
