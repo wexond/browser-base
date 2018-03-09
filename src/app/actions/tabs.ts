@@ -15,8 +15,8 @@ import { addPage } from "./pages";
 let nextTabId = 0;
 
 export const setTabAnimation = (
-  tab: ITab, 
-  property: "left" | "width", 
+  tab: ITab,
+  property: "left" | "width",
   flag: boolean
 ) => {
   if (flag) {
