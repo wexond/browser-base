@@ -41,19 +41,19 @@ export default () => {
         <SystemBarButton size={16} icon={SystemBarIcons.TabGroups} />
 
         <SystemBarButton
-          windows
+          windows={true}
           icon={SystemBarIcons.Minimize}
-          onClick={() => minimizeWindow()}
+          onClick={minimizeWindow}
         />
         <SystemBarButton
-          windows
+          windows={true}
           icon={SystemBarIcons.Maximize}
-          onClick={() => maximizeWindow()}
+          onClick={maximizeWindow}
         />
         <SystemBarButton
-          windows
+          windows={true}
           icon={SystemBarIcons.Close}
-          onClick={() => closeWindow()}
+          onClick={closeWindow}
         />
         <Line />
       </SystemBar>

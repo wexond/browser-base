@@ -32,7 +32,7 @@
     "compile-darwin": "npm run build-production && electron-builder -m -p always",
     "compile-linux": "npm run build-production && electron-builder -l -p always",
     "build-production": "cross-env NODE_ENV=production webpack-cli --mode production",
-    "lint": "prettier --write src/**/*.ts* && tslint -p . --fix"
+    "lint": "prettier --write src/**/*.ts* && tslint --config tslint.json src/**/*.ts* --fix"
   },
   "devDependencies": {
     "@types/node": "9.4.6",
@@ -52,6 +52,7 @@
     "ts-loader": "4.0.1",
     "tslint": "5.9.1",
     "tslint-config-prettier": "1.9.0",
+    "tslint-react": "3.5.1",
     "typescript": "2.7.2",
     "url-loader": "1.0.1",
     "webpack": "4.1.0",
