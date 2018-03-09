@@ -12,16 +12,16 @@ export default class Page extends React.Component<IProps, {}> {
     const { url, selected } = this.props;
 
     const pageStyle = {
-      flex: selected ? 1 : '0 1',
+      flex: selected ? 1 : "0 1",
       height: !selected && 0,
       width: !selected && 0,
-      pointerEvents: !selected && 'none',
+      pointerEvents: !selected && "none",
       opacity: selected ? 1 : 0
     };
 
     return (
       <div style={pageStyle}>
-        <webview src={url} style={{ height: '100%' }} />
+        <webview src={url} style={{ height: "100%" }} />
       </div>
     );
   }
