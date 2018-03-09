@@ -13,22 +13,17 @@ interface IProps {
   tabGroup: ITabGroup;
 }
 
-@observer
-export default class TabGroup extends React.Component<IProps, {}> {
-  public render() {
-    const { tabGroup } = this.props;
-
-    return (
-      <>
-        {tabGroup.tabs.map((tab: ITab) => (
-          <Tab
-            key={tab.id}
-            tabGroup={tabGroup}
-            tab={tab}
-            selected={tabGroup.selectedTab === tab.id}
-          />
-        ))}
-      </>
-    );
-  }
-}
+export default observer(({ tabGroup }: IProps) => {
+  return (
+    <>
+      {tabGroup.tabs.map((tab: ITab) => (
+        <Tab
+          key={tab.id}
+          tabGroup={tabGroup}
+          tab={tab}
+          selected={tabGroup.selectedTab === tab.id}
+        />
+      ))}
+    </>
+  );
+});

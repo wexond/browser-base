@@ -19,13 +19,10 @@ interface IProps {
   selected: boolean;
 }
 
-@observer
-export default class Tab extends React.Component<IProps, {}> {
-  public tabElement: HTMLDivElement;
+export default observer(({ selected, tab }) => {
+  const { transitions, left, width, title } = tab;
 
-  public close = () => {
-    const { tab } = this.props;
-
+  const close = () => {
     tabs.removeTab(tab);
 
     const containerWidth = Store.getTabBarWidth();
@@ -34,29 +31,23 @@ export default class Tab extends React.Component<IProps, {}> {
     tabs.setTabsPositions();
   };
 
-  public select = () => {
-    tabs.selectTab(this.props.tab);
+  const select = () => {
+    tabs.selectTab(tab);
   };
 
-  public render() {
-    const { selected, tab } = this.props;
-    const { transitions, left, width, title } = tab;
-
-    return (
-      <StyledTab
-        selected={selected}
-        style={{ left, width, transition: transitionsToString(transitions) }}
-        onMouseDown={this.select}
-        innerRef={r => (this.tabElement = r)}
-      >
-        <Content>
-          <Title>{title}</Title>
-          <Close onClick={this.close} />
-        </Content>
-      </StyledTab>
-    );
-  }
-}
+  return (
+    <StyledTab
+      selected={selected}
+      style={{ left, width, transition: transitionsToString(transitions) }}
+      onMouseDown={select}
+    >
+      <Content>
+        <Title>{title}</Title>
+        <Close onClick={close} />
+      </Content>
+    </StyledTab>
+  );
+});
 
 interface IStyledTabProps {
   selected: boolean;
