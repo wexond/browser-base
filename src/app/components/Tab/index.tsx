@@ -6,49 +6,52 @@ import images from "../../../shared/mixins/images";
 
 import * as tabs from "../../actions/tabs";
 
-import { ITab } from "../../interfaces";
+import { ITab, ITabGroup, ITransition } from "../../interfaces";
 
 import Store from "../../store";
 
+import { transitionsToString } from "../../utils/transitions";
+
 interface IProps {
-  title: string;
-  tabGroupId: number;
-  id: number;
+  key: number;
+  tab: ITab;
+  tabGroup: ITabGroup;
   selected: boolean;
-  left: number;
-  width: number;
-  setLeft: (left: number, animation?: boolean) => void;
-  getTabBarWidth: () => number;
 }
 
 @observer
 export default class Tab extends React.Component<IProps, {}> {
+  public tabElement: HTMLDivElement;
+
   public close = () => {
-    const { id, getTabBarWidth } = this.props;
-    const tab = tabs.getTabById(id);
+    const { tab } = this.props;
 
     tabs.removeTab(tab);
 
-    const containerWidth = getTabBarWidth();
+    const containerWidth = Store.getTabBarWidth();
 
     tabs.setTabsWidths(containerWidth);
     tabs.setTabsPositions();
-  }
+  };
 
   public select = () => {
-    const { id } = this.props;
-    const tab = tabs.getTabById(id);
-    tabs.selectTab(tab);
-  }
+    tabs.selectTab(this.props.tab);
+  };
 
   public render() {
-    const { title, selected, width, left } = this.props;
+    const { selected, tab } = this.props;
+    const { transitions, left, width, title } = tab;
 
     return (
-      <StyledTab selected={selected} style={{left, width}} onMouseDown={this.select}>
+      <StyledTab
+        selected={selected}
+        style={{ left, width, transition: transitionsToString(transitions) }}
+        onMouseDown={this.select}
+        innerRef={r => (this.tabElement = r)}
+      >
         <Content>
           <Title>{title}</Title>
-          <Close onClick={this.close}/>
+          <Close onClick={this.close} />
         </Content>
       </StyledTab>
     );
