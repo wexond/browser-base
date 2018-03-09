@@ -14,7 +14,11 @@ import { addPage } from "./pages";
 
 let nextTabId = 0;
 
-export const setTabAnimation = (tab: ITab, property: string, flag: boolean) => {
+export const setTabAnimation = (
+  tab: ITab, 
+  property: "left" | "width", 
+  flag: boolean
+) => {
   if (flag) {
     tab.transitions.push({
       property,
