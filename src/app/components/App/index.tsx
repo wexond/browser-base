@@ -1,84 +1,54 @@
-import { observer } from "mobx-react";
-import React, { SFC } from "react";
+import React from "react";
 import styled from "styled-components";
 
+// Enums
 import { SystemBarIcons } from "../../enums";
 
+// Utils
 import {
   closeWindow,
   maximizeWindow,
   minimizeWindow
 } from "../../utils/window";
 
+// Components
 import List from "../List";
+import Page from "../Page";
 import SystemBar from "../SystemBar";
 import SystemBarButton from "../SystemBarButton";
-import Tab from "../Tab";
+import TabBar from "../TabBar";
+import TabGroup from "../TabGroup";
 
+// Interfaces
 import { IPage, ITab, ITabGroup } from "../../interfaces";
 
 import Store from "../../store";
 
+// Actions
 import * as tabs from "../../actions/tabs";
-import Page from "../Page";
 
-@observer
+// Defaults and constants
+import { HOVER_DURATION } from "../../constants/design";
+import { tabTransitions } from "../../defaults/tabs";
+
 export default class App extends React.Component {
-  private tabBar: HTMLDivElement;
-
-  public addTab = () => {
-    const tab = tabs.addTab();
-
-    tabs.setTabsWidths(this.getTabBarWidth());
-    tabs.setTabsPositions();
-  }
-
-  public getTabBarWidth = () => this.tabBar.offsetWidth;
-
-  public renderTabGroups() {
-    return Store.tabGroups.map((tabGroup: ITabGroup) => {
+  public renderPages() {
+    return Store.pages.map((page: IPage) => {
       return (
-        <List key={tabGroup.id} inline>
-          {tabGroup.tabs.map((tab: ITab) => {
-            return (
-              <Tab
-                key={tab.id}
-                id={tab.id}
-                tabGroupId={tabGroup.id}
-                setLeft={(left: number, animation = true) => tabs.setTabLeft(tab, left, animation)}
-                selected={tabGroup.selectedTab === tab.id}
-                getTabBarWidth={this.getTabBarWidth}
-                {...tab}
-              />
-            );
-          })}
-        </List>
+        <Page
+          key={page.id}
+          {...page}
+          selected={Store.tabGroups[0].selectedTab === page.id}
+        />
       );
     });
   }
 
-  public renderPages() {
-    return Store.pages.map((page: IPage) => {
-      return <Page key={page.id} {...page} selected={Store.tabGroups[0].selectedTab === page.id} />
-    })
-  }
-
   public render() {
     return (
-      <List style={{ height: "100vh", overflow: 'hidden' }}>
+      <List style={{ height: "100vh", overflow: "hidden" }}>
         <SystemBar>
-          <List innerRef={(r: any) => (this.tabBar = r)}>
-            {this.renderTabGroups()}
-          </List>
-
-          <SystemBarButton
-            icon={SystemBarIcons.Add}
-            onClick={() => this.addTab()}
-            style={{
-              position: 'absolute',
-              left: Store.addTabButtonLeft
-            }}
-          />
+          <TabBar />
 
           <SystemBarButton size={16} icon={SystemBarIcons.TabGroups} />
 
@@ -100,9 +70,7 @@ export default class App extends React.Component {
           <Line />
         </SystemBar>
 
-        <List>
-          {this.renderPages()}
-        </List>
+        <List>{this.renderPages()}</List>
       </List>
     );
   }
