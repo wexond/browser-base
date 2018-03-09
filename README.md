@@ -6,12 +6,10 @@
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/nersent/wexond?branch=master&svg=true)](https://ci.appveyor.com/project/nersent/wexond/branch/master)
 [![dependencies Status](https://david-dm.org/nersent/wexond/status.svg)](https://david-dm.org/nersent/wexond)
 [![devDependencies Status](https://david-dm.org/nersent/wexond/dev-status.svg)](https://david-dm.org/nersent/wexond?type=dev)
-
-[![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+[![Greenkeeper badge](https://badges.greenkeeper.io/wexond/wexond.svg)](https://greenkeeper.io/)
 
 # Wexond
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/wexond/wexond.svg)](https://greenkeeper.io/)
 `Wexond` is an extensible, fast and innovative web browser written in ES2017 using [`Electron`](https://github.com/electron/electron), [`React`](https://reactjs.org/) to build browser's UI easier, and [`MobX`](https://github.com/mobxjs/mobx) to easily manage states.
 
 ## Documentation
