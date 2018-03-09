@@ -3,6 +3,7 @@
   "rules": {
     "object-literal-sort-keys": false,
     "no-unused-expression": false,
-    "jsx-no-multiline-js": false
+    "jsx-no-multiline-js": false,
+    "jsx-no-lambda": false
   }
 }

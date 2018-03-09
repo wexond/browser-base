@@ -57,8 +57,20 @@ export default class TabBar extends React.Component<{}, {}> {
   public getTabBarWidth = () => this.tabBar.offsetWidth;
 
   public render() {
+    const addTabButtonStyle = {
+      position: "absolute",
+      left: Store.addTabButton.left,
+      transition: `${HOVER_DURATION}s opacity ${
+        Store.addTabButton.leftAnimation
+          ? `, ${tabTransitions.left.duration}s ${
+              tabTransitions.left.easing
+            }`
+          : ""
+      }`
+    }
+
     return (
-      <List innerRef={r => (this.tabBar = r)}>
+      <List innerRef={(r: any) => (this.tabBar = r)}>
         {Store.tabGroups.map((tabGroup: ITabGroup) => {
           return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
         })}
@@ -66,17 +78,7 @@ export default class TabBar extends React.Component<{}, {}> {
         <SystemBarButton
           icon={SystemBarIcons.Add}
           onClick={this.addTab}
-          style={{
-            position: "absolute",
-            left: Store.addTabButton.left,
-            transition: `${HOVER_DURATION}s opacity ${
-              Store.addTabButton.leftAnimation
-                ? `, ${tabTransitions.left.duration}s ${
-                    tabTransitions.left.easing
-                  }`
-                : ""
-            }`
-          }}
+          style={addTabButtonStyle}
         />
       </List>
     );
