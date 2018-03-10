@@ -5,7 +5,7 @@ import Store from "../store";
 export const addPage = (tabId: number): IPage => {
   const page = {
     id: tabId,
-    url: "about:blank"
+    url: "https://nersent.tk/Projects/Material-React"
   };
 
   const index = Store.pages.push(page) - 1;

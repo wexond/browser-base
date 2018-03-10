@@ -23,6 +23,7 @@ import Store from "../../store";
 
 import styled from "styled-components";
 import { Platforms } from "../../../shared/enums";
+import shadows from "../../../shared/mixins/shadows";
 
 @observer
 export default class TabBar extends React.Component<{}, {}> {
@@ -36,10 +37,8 @@ export default class TabBar extends React.Component<{}, {}> {
         return;
       }
 
-      if (!tabs.getScrollingMode(Store.tabGroups[0])) {
-        tabs.setTabsWidths(false);
-        tabs.setTabsPositions(false, false);
-      }
+      tabs.setTabsWidths(false);
+      tabs.setTabsPositions(false, false);
     });
   }
 
@@ -66,7 +65,7 @@ export default class TabBar extends React.Component<{}, {}> {
       position: "absolute",
       left: Store.addTabButton.left,
       right: 0,
-      transition: `${HOVER_DURATION}s opacity ${
+      transition: `${HOVER_DURATION}s background-color ${
         Store.addTabButton.leftAnimation
           ? `, ${tabTransitions.left.duration}s ${tabTransitions.left.easing}`
           : ""

@@ -41,7 +41,6 @@ export default () => {
         <SystemBarButton
           size={16}
           icon={SystemBarIcons.TabGroups}
-          style={{ position: "relative", right: 0, zIndex: 3 }}
         />
         {Store.platform !== Platforms.MacOS && (
           <>
