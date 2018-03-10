@@ -1,8 +1,9 @@
-import DevTools from 'mobx-react-devtools'
+import DevTools from "mobx-react-devtools";
 import React from "react";
 import styled from "styled-components";
 
 // Enums
+import { Platforms } from "../../../shared/enums";
 import { SystemBarIcons } from "../../enums";
 
 // Utils
@@ -31,8 +32,6 @@ import * as tabs from "../../actions/tabs";
 import { HOVER_DURATION } from "../../constants/design";
 import { tabTransitions } from "../../defaults/tabs";
 
-import os from "os";
-
 export default () => {
   return (
     <List style={{ height: "100vh", overflow: "hidden" }}>
@@ -40,8 +39,8 @@ export default () => {
         <TabBar />
 
         <SystemBarButton size={16} icon={SystemBarIcons.TabGroups} />
-        {
-          os.platform() != "darwin" && <>
+        {Store.platform !== Platforms.MacOS && (
+          <>
             <SystemBarButton
               windows={true}
               icon={SystemBarIcons.Minimize}
@@ -57,14 +56,16 @@ export default () => {
               icon={SystemBarIcons.Close}
               onClick={closeWindow}
             />
-          </>  
-        }
+          </>
+        )}
         <Line />
       </SystemBar>
 
       <Pages />
 
-      {process.env.NODE_ENV === 'development' && <DevTools position={{bottom: 0, right: 0}}/>}
+      {process.env.NODE_ENV === "development" && (
+        <DevTools position={{ bottom: 0, right: 0 }} />
+      )}
     </List>
   );
 };
