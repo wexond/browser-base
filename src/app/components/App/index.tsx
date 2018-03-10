@@ -31,6 +31,8 @@ import * as tabs from "../../actions/tabs";
 import { HOVER_DURATION } from "../../constants/design";
 import { tabTransitions } from "../../defaults/tabs";
 
+import os from "os";
+
 export default () => {
   return (
     <List style={{ height: "100vh", overflow: "hidden" }}>
@@ -38,22 +40,25 @@ export default () => {
         <TabBar />
 
         <SystemBarButton size={16} icon={SystemBarIcons.TabGroups} />
-
-        <SystemBarButton
-          windows={true}
-          icon={SystemBarIcons.Minimize}
-          onClick={minimizeWindow}
-        />
-        <SystemBarButton
-          windows={true}
-          icon={SystemBarIcons.Maximize}
-          onClick={maximizeWindow}
-        />
-        <SystemBarButton
-          windows={true}
-          icon={SystemBarIcons.Close}
-          onClick={closeWindow}
-        />
+        {
+          os.platform() != "darwin" && <>
+            <SystemBarButton
+              windows={true}
+              icon={SystemBarIcons.Minimize}
+              onClick={minimizeWindow}
+            />
+            <SystemBarButton
+              windows={true}
+              icon={SystemBarIcons.Maximize}
+              onClick={maximizeWindow}
+            />
+            <SystemBarButton
+              windows={true}
+              icon={SystemBarIcons.Close}
+              onClick={closeWindow}
+            />
+          </>  
+        }
         <Line />
       </SystemBar>
 
