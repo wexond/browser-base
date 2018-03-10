@@ -5,8 +5,8 @@ import { tabTransitions } from "../defaults/tabs";
 import {
   SYSTEM_BAR_HEIGHT,
   TAB_MAX_WIDTH,
-  TAB_PINNED_WIDTH,
-  TAB_MIN_WIDTH
+  TAB_MIN_WIDTH,
+  TAB_PINNED_WIDTH
 } from "../constants/design";
 
 import { ITab, ITabGroup } from "../interfaces";
@@ -55,7 +55,7 @@ export const setTabsPositions = (
       left += item.width;
     }
     if (left >= containerWidth - SYSTEM_BAR_HEIGHT) {
-      Store.addTabButton.left = "auto";
+      Store.addTabButton.left = containerWidth - SYSTEM_BAR_HEIGHT;
     } else {
       Store.addTabButton.left = left;
     }
@@ -77,7 +77,6 @@ export const getTabLeft = (tab: ITab): number => {
 export const setTabsWidths = (animation = true) => {
   const { tabs } = Store.tabGroups[0];
   const containerWidth = Store.getTabBarWidth();
-  let tabsWidth = 0;
 
   requestAnimationFrame(() => {
     for (const item of tabs) {
@@ -85,9 +84,7 @@ export const setTabsWidths = (animation = true) => {
 
       const width = getTabWidth(item);
       item.width = width;
-      tabsWidth += width;
     }
-    
   });
 };
 

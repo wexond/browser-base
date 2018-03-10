@@ -7,7 +7,7 @@ import SystemBarButton from "../SystemBarButton";
 import TabGroup from "../TabGroup";
 
 // Constants and defaults
-import { HOVER_DURATION } from "../../constants/design";
+import { HOVER_DURATION, SYSTEM_BAR_HEIGHT } from "../../constants/design";
 import { tabTransitions } from "../../defaults/tabs";
 
 // Enums
@@ -21,7 +21,7 @@ import { ITabGroup } from "../../interfaces";
 
 import Store from "../../store";
 
-import { platform } from "os";
+import styled from "styled-components";
 import { Platforms } from "../../../shared/enums";
 
 @observer
@@ -63,29 +63,40 @@ export default class TabBar extends React.Component<{}, {}> {
     const addTabButtonStyle: React.CSSProperties = {
       position: "absolute",
       left: Store.addTabButton.left,
-      right: 0,
-      zIndex: 3,
       transition: `${HOVER_DURATION}s opacity ${
         Store.addTabButton.leftAnimation
           ? `, ${tabTransitions.left.duration}s ${tabTransitions.left.easing}`
           : ""
-      }`
+      }`,
+      top: 0
     };
 
     return (
-      <div ref={(r: any) => (this.tabBar = r)} style={{ marginLeft: (platform() == Platforms.MacOS ? 78 : 0) + "px", flex: 1, position: "relative" }}>
-        <List inline >
+      <StyledTabBar innerRef={(r: any) => (this.tabBar = r)}>
+        <TabGroups>
           {Store.tabGroups.map((tabGroup: ITabGroup) => {
             return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
           })}
-        </List>
+        </TabGroups>
         <SystemBarButton
           icon={SystemBarIcons.Add}
           onClick={this.addTab}
           style={addTabButtonStyle}
         />
-      </div>
-      
+      </StyledTabBar>
     );
   }
 }
+
+const StyledTabBar = styled.div`
+  margin-left: ${(Store.platform === Platforms.MacOS ? 78 : 0)}px;
+  flex: 1;
+  position: relative;
+`;
+
+const TabGroups = styled.div`
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  width: calc(100% - ${SYSTEM_BAR_HEIGHT}px);
+`;

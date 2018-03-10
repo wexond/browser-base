@@ -19,13 +19,13 @@ class Store {
 
   @observable
   public addTabButton: {
-    left: number | "auto",
-    leftAnimation: boolean
+    left: number | "auto";
+    leftAnimation: boolean;
   } = {
     left: 0,
     leftAnimation: true
   };
-  
+
   public getTabBarWidth: () => number;
   public platform: Platforms = os.platform() as Platforms;
 }
