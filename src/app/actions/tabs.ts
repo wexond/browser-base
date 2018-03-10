@@ -36,6 +36,16 @@ export const setTabAnimation = (
   }
 };
 
+export const getScrollingMode = (tabGroup: ITabGroup): boolean => {
+  for (const tab of tabGroup.tabs) {
+    if (!tab.pinned) {
+      const width = getTabWidth(tab);
+      tabGroup.scrollingMode = width <= TAB_MIN_WIDTH;
+      return width <= TAB_MIN_WIDTH;
+    }
+  }
+}
+
 export const setTabsPositions = (
   animation = true,
   addTabButtonAnimation = true
@@ -57,8 +67,8 @@ export const setTabsPositions = (
     }
     if (left >= containerWidth - SYSTEM_BAR_HEIGHT) {
       if (Store.addTabButton.left !== "auto") {
-        Store.addTabButton.left = left;
-        
+        Store.addTabButton.left = containerWidth - SYSTEM_BAR_HEIGHT;
+
         setTimeout(() => {
           Store.addTabButton.left = "auto";
         }, tabTransitions.left.duration * 1000)

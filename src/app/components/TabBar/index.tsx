@@ -7,7 +7,7 @@ import SystemBarButton from "../SystemBarButton";
 import TabGroup from "../TabGroup";
 
 // Constants and defaults
-import { HOVER_DURATION, SYSTEM_BAR_HEIGHT } from "../../constants/design";
+import { HOVER_DURATION, SYSTEM_BAR_HEIGHT, TAB_MIN_WIDTH } from "../../constants/design";
 import { tabTransitions } from "../../defaults/tabs";
 
 // Enums
@@ -17,7 +17,7 @@ import { SystemBarIcons } from "../../enums";
 import * as tabs from "../../actions/tabs";
 
 // Interfaces
-import { ITabGroup } from "../../interfaces";
+import { ITab, ITabGroup } from "../../interfaces";
 
 import Store from "../../store";
 
@@ -36,7 +36,7 @@ export default class TabBar extends React.Component<{}, {}> {
         return;
       }
 
-      if (!Store.tabGroups[0].scrollingMode) {
+      if (!tabs.getScrollingMode(Store.tabGroups[0])) {
         tabs.setTabsWidths(false);
         tabs.setTabsPositions(false, false);
       }
