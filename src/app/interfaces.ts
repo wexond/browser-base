@@ -2,6 +2,7 @@ export interface ITabGroup {
   id: number;
   tabs: ITab[];
   selectedTab: number;
+  scrollingMode: boolean;
 }
 
 export interface ITab {

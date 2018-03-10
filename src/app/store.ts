@@ -11,7 +11,8 @@ class Store {
     {
       selectedTab: -1,
       tabs: [] as ITab[],
-      id: 0
+      id: 0,
+      scrollingMode: false
     }
   ];
 
