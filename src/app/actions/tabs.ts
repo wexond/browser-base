@@ -40,7 +40,8 @@ export const setTabsPositions = (
   animation = true,
   addTabButtonAnimation = true
 ) => {
-  const { tabs } = Store.tabGroups[0];
+  const tabGroup = Store.tabGroups[0];
+  const { tabs } = tabGroup;
   const containerWidth = Store.getTabBarWidth();
 
   let left = 0;
@@ -55,9 +56,31 @@ export const setTabsPositions = (
       left += item.width;
     }
     if (left >= containerWidth - SYSTEM_BAR_HEIGHT) {
-      Store.addTabButton.left = containerWidth - SYSTEM_BAR_HEIGHT;
+      if (Store.addTabButton.left !== "auto") {
+        Store.addTabButton.left = left;
+        
+        setTimeout(() => {
+          Store.addTabButton.left = "auto";
+        }, tabTransitions.left.duration * 1000)
+      }
+
+      if (!tabGroup.scrollingMode) {
+        tabGroup.scrollingMode = true;
+      }
     } else {
-      Store.addTabButton.left = left;
+      if (Store.addTabButton.left === "auto") {
+        Store.addTabButton.left = containerWidth - SYSTEM_BAR_HEIGHT;
+
+        requestAnimationFrame(() => {
+          Store.addTabButton.left = left;
+        })
+      } else {
+        Store.addTabButton.left = left;
+      }
+      
+      if (tabGroup.scrollingMode) {
+        tabGroup.scrollingMode = false;
+      }
     }
   });
 };
