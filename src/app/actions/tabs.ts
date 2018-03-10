@@ -5,6 +5,7 @@ import { tabTransitions } from "../defaults/tabs";
 import {
   SYSTEM_BAR_HEIGHT,
   TAB_MAX_WIDTH,
+  TAB_MIN_WIDTH,
   TAB_PINNED_WIDTH
 } from "../constants/design";
 
@@ -40,6 +41,7 @@ export const setTabsPositions = (
   addTabButtonAnimation = true
 ) => {
   const { tabs } = Store.tabGroups[0];
+  const containerWidth = Store.getTabBarWidth();
 
   let left = 0;
 
@@ -52,8 +54,11 @@ export const setTabsPositions = (
       item.left = left;
       left += item.width;
     }
-
-    Store.addTabButton.left = left;
+    if (left >= containerWidth - SYSTEM_BAR_HEIGHT) {
+      Store.addTabButton.left = containerWidth - SYSTEM_BAR_HEIGHT;
+    } else {
+      Store.addTabButton.left = left;
+    }
   });
 };
 
@@ -69,21 +74,23 @@ export const getTabLeft = (tab: ITab): number => {
   return 0;
 };
 
-export const setTabsWidths = (containerWidth: number, animation = true) => {
+export const setTabsWidths = (animation = true) => {
   const { tabs } = Store.tabGroups[0];
+  const containerWidth = Store.getTabBarWidth();
 
   requestAnimationFrame(() => {
     for (const item of tabs) {
       setTabAnimation(item, "width", animation);
 
-      const width = getTabWidth(item, containerWidth);
+      const width = getTabWidth(item);
       item.width = width;
     }
   });
 };
 
-export const getTabWidth = (tab: ITab, containerWidth: number): number => {
+export const getTabWidth = (tab: ITab): number => {
   const { tabs } = Store.tabGroups[0];
+  const containerWidth = Store.getTabBarWidth();
 
   let width = tab.pinned
     ? TAB_PINNED_WIDTH
@@ -91,6 +98,10 @@ export const getTabWidth = (tab: ITab, containerWidth: number): number => {
 
   if (width > TAB_MAX_WIDTH) {
     width = TAB_MAX_WIDTH;
+  }
+
+  if (!tab.pinned && width < TAB_MIN_WIDTH) {
+    width = TAB_MIN_WIDTH;
   }
 
   return width;
