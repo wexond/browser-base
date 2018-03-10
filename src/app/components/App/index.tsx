@@ -31,7 +31,8 @@ import * as tabs from "../../actions/tabs";
 import { HOVER_DURATION } from "../../constants/design";
 import { tabTransitions } from "../../defaults/tabs";
 
-import os from "os";
+import { platform } from "os";
+import { Platforms } from '../../../shared/enums';
 
 export default () => {
   return (
@@ -39,23 +40,26 @@ export default () => {
       <SystemBar>
         <TabBar />
 
-        <SystemBarButton size={16} icon={SystemBarIcons.TabGroups} />
+        <SystemBarButton size={16} icon={SystemBarIcons.TabGroups} style={{ position: "relative", right: 0, zIndex: 3 }} />
         {
-          os.platform() != "darwin" && <>
+          platform() != Platforms.MacOS && <>
             <SystemBarButton
               windows={true}
               icon={SystemBarIcons.Minimize}
               onClick={minimizeWindow}
+              style={{ position: "relative", right: 0 }}
             />
             <SystemBarButton
               windows={true}
               icon={SystemBarIcons.Maximize}
               onClick={maximizeWindow}
+              style={{ position: "relative", right: 0 }}
             />
             <SystemBarButton
               windows={true}
               icon={SystemBarIcons.Close}
               onClick={closeWindow}
+              style={{ position: "relative", right: 0 }}
             />
           </>  
         }

@@ -15,11 +15,14 @@ class Store {
   @observable public pages: IPage[] = [];
 
   @observable
-  public addTabButton = {
+  public addTabButton: {
+    left: number | "auto",
+    leftAnimation: boolean
+  } = {
     left: 0,
     leftAnimation: true
   };
-
+  
   public getTabBarWidth: () => number;
 }
 

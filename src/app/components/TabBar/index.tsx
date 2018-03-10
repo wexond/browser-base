@@ -21,6 +21,9 @@ import { ITabGroup } from "../../interfaces";
 
 import Store from "../../store";
 
+import { platform } from "os";
+import { Platforms } from "../../../shared/enums";
+
 @observer
 export default class TabBar extends React.Component<{}, {}> {
   private tabBar: HTMLDivElement;
@@ -33,7 +36,7 @@ export default class TabBar extends React.Component<{}, {}> {
         return;
       }
 
-      tabs.setTabsWidths(this.getTabBarWidth(), false);
+      tabs.setTabsWidths(false);
       tabs.setTabsPositions(false, false);
     });
   }
@@ -42,14 +45,14 @@ export default class TabBar extends React.Component<{}, {}> {
     const tab = tabs.addTab();
     const containerWidth = this.getTabBarWidth();
 
-    const width = tabs.getTabWidth(tab, containerWidth);
+    const width = tabs.getTabWidth(tab);
     tabs.setTabAnimation(tab, "left", false);
     tabs.setTabAnimation(tab, "width", true);
 
     tab.left = tabs.getTabLeft(tab);
 
     requestAnimationFrame(() => {
-      tabs.setTabsWidths(containerWidth);
+      tabs.setTabsWidths();
       tabs.setTabsPositions();
     });
   };
@@ -57,9 +60,11 @@ export default class TabBar extends React.Component<{}, {}> {
   public getTabBarWidth = () => this.tabBar.offsetWidth;
 
   public render() {
-    const addTabButtonStyle = {
+    const addTabButtonStyle: React.CSSProperties = {
       position: "absolute",
       left: Store.addTabButton.left,
+      right: 0,
+      zIndex: 3,
       transition: `${HOVER_DURATION}s opacity ${
         Store.addTabButton.leftAnimation
           ? `, ${tabTransitions.left.duration}s ${
@@ -70,17 +75,19 @@ export default class TabBar extends React.Component<{}, {}> {
     }
 
     return (
-      <List innerRef={(r: any) => (this.tabBar = r)}>
-        {Store.tabGroups.map((tabGroup: ITabGroup) => {
-          return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
-        })}
-
+      <div ref={(r: any) => (this.tabBar = r)} style={{ marginLeft: (platform() == Platforms.MacOS ? 78 : 0) + "px", flex: 1, position: "relative" }}>
+        <List inline >
+          {Store.tabGroups.map((tabGroup: ITabGroup) => {
+            return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
+          })}
+        </List>
         <SystemBarButton
           icon={SystemBarIcons.Add}
           onClick={this.addTab}
           style={addTabButtonStyle}
         />
-      </List>
+      </div>
+      
     );
   }
 }

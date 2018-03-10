@@ -27,7 +27,7 @@ export default observer(({ selected, tab }) => {
 
     const containerWidth = Store.getTabBarWidth();
 
-    tabs.setTabsWidths(containerWidth);
+    tabs.setTabsWidths();
     tabs.setTabsPositions();
   };
 
