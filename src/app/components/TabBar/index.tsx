@@ -67,12 +67,10 @@ export default class TabBar extends React.Component<{}, {}> {
       zIndex: 3,
       transition: `${HOVER_DURATION}s opacity ${
         Store.addTabButton.leftAnimation
-          ? `, ${tabTransitions.left.duration}s ${
-              tabTransitions.left.easing
-            }`
+          ? `, ${tabTransitions.left.duration}s ${tabTransitions.left.easing}`
           : ""
       }`
-    }
+    };
 
     return (
       <div ref={(r: any) => (this.tabBar = r)} style={{ marginLeft: (platform() == Platforms.MacOS ? 78 : 0) + "px", flex: 1, position: "relative" }}>
