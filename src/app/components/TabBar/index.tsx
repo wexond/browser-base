@@ -36,8 +36,10 @@ export default class TabBar extends React.Component<{}, {}> {
         return;
       }
 
-      tabs.setTabsWidths(false);
-      tabs.setTabsPositions(false, false);
+      if (!Store.tabGroups[0].scrollingMode) {
+        tabs.setTabsWidths(false);
+        tabs.setTabsPositions(false, false);
+      }
     });
   }
 
@@ -63,6 +65,7 @@ export default class TabBar extends React.Component<{}, {}> {
     const addTabButtonStyle: React.CSSProperties = {
       position: "absolute",
       left: Store.addTabButton.left,
+      right: 0,
       transition: `${HOVER_DURATION}s opacity ${
         Store.addTabButton.leftAnimation
           ? `, ${tabTransitions.left.duration}s ${tabTransitions.left.easing}`
