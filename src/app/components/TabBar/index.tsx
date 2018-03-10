@@ -62,12 +62,10 @@ export default class TabBar extends React.Component<{}, {}> {
       left: Store.addTabButton.left,
       transition: `${HOVER_DURATION}s opacity ${
         Store.addTabButton.leftAnimation
-          ? `, ${tabTransitions.left.duration}s ${
-              tabTransitions.left.easing
-            }`
+          ? `, ${tabTransitions.left.duration}s ${tabTransitions.left.easing}`
           : ""
       }`
-    }
+    };
 
     return (
       <List innerRef={(r: any) => (this.tabBar = r)}>

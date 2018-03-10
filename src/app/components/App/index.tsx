@@ -1,8 +1,9 @@
-import DevTools from 'mobx-react-devtools'
+import DevTools from "mobx-react-devtools";
 import React from "react";
 import styled from "styled-components";
 
 // Enums
+import { Platforms } from "../../../shared/enums";
 import { SystemBarIcons } from "../../enums";
 
 // Utils
@@ -38,28 +39,33 @@ export default () => {
         <TabBar />
 
         <SystemBarButton size={16} icon={SystemBarIcons.TabGroups} />
-
-        <SystemBarButton
-          windows={true}
-          icon={SystemBarIcons.Minimize}
-          onClick={minimizeWindow}
-        />
-        <SystemBarButton
-          windows={true}
-          icon={SystemBarIcons.Maximize}
-          onClick={maximizeWindow}
-        />
-        <SystemBarButton
-          windows={true}
-          icon={SystemBarIcons.Close}
-          onClick={closeWindow}
-        />
+        {Store.platform !== Platforms.MacOS && (
+          <>
+            <SystemBarButton
+              windows={true}
+              icon={SystemBarIcons.Minimize}
+              onClick={minimizeWindow}
+            />
+            <SystemBarButton
+              windows={true}
+              icon={SystemBarIcons.Maximize}
+              onClick={maximizeWindow}
+            />
+            <SystemBarButton
+              windows={true}
+              icon={SystemBarIcons.Close}
+              onClick={closeWindow}
+            />
+          </>
+        )}
         <Line />
       </SystemBar>
 
       <Pages />
 
-      {process.env.NODE_ENV === 'development' && <DevTools position={{bottom: 0, right: 0}}/>}
+      {process.env.NODE_ENV === "development" && (
+        <DevTools position={{ bottom: 0, right: 0 }} />
+      )}
     </List>
   );
 };
