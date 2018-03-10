@@ -1,4 +1,6 @@
+import { observer } from "mobx-react";
 import React from "react";
+import styled from "styled-components";
 
 import { IPage } from "../../interfaces";
 
@@ -6,9 +8,9 @@ import Store from "../../store";
 
 import Page from "../Page";
 
-export default () => {
+export default observer(() => {
   return (
-    <>
+    <StyledPages>
       {Store.pages.map((page: IPage) => {
         return (
           <Page
@@ -18,6 +20,13 @@ export default () => {
           />
         );
       })}
-    </>
+    </StyledPages>
   );
-};
+});
+
+const StyledPages = styled.div`
+  z-index: 4;
+  position: relative;
+  flex: 1;
+  display: flex;
+`;
