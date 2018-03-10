@@ -28,6 +28,8 @@ import shadows from "../../../shared/mixins/shadows";
 @observer
 export default class TabBar extends React.Component<{}, {}> {
   private tabBar: HTMLDivElement;
+  private tabGroups: HTMLDivElement;
+  private scrollLeft = 0;
 
   public componentDidMount() {
     Store.getTabBarWidth = this.getTabBarWidth;
@@ -50,7 +52,23 @@ export default class TabBar extends React.Component<{}, {}> {
     tabs.setTabAnimation(tab, "left", false);
     tabs.setTabAnimation(tab, "width", true);
 
+    this.scrollLeft += width;
+
     tab.left = tabs.getTabLeft(tab);
+
+    let time = 0;
+
+    const frame = () => {
+      this.tabGroups.scrollLeft = this.scrollLeft;
+
+      if (time < 300) {
+        requestAnimationFrame(frame);
+      }
+
+      time += 1;
+    }
+
+    requestAnimationFrame(frame);
 
     requestAnimationFrame(() => {
       tabs.setTabsWidths();
@@ -75,7 +93,7 @@ export default class TabBar extends React.Component<{}, {}> {
 
     return (
       <StyledTabBar innerRef={(r: any) => (this.tabBar = r)}>
-        <TabGroups>
+        <TabGroups innerRef={(r: any) => (this.tabGroups = r)}>
           {Store.tabGroups.map((tabGroup: ITabGroup) => {
             return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
           })}
