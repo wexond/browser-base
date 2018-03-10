@@ -1,6 +1,9 @@
 import { observable } from "mobx";
+import os from "os";
 
 import { IPage, ITab, ITabGroup } from "./interfaces";
+
+import { Platforms } from "../shared/enums";
 
 class Store {
   @observable
@@ -15,12 +18,16 @@ class Store {
   @observable public pages: IPage[] = [];
 
   @observable
-  public addTabButton = {
+  public addTabButton: {
+    left: number | "auto";
+    leftAnimation: boolean;
+  } = {
     left: 0,
     leftAnimation: true
   };
 
   public getTabBarWidth: () => number;
+  public platform: Platforms = os.platform() as Platforms;
 }
 
 export default new Store();

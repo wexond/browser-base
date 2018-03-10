@@ -7,7 +7,7 @@ import SystemBarButton from "../SystemBarButton";
 import TabGroup from "../TabGroup";
 
 // Constants and defaults
-import { HOVER_DURATION } from "../../constants/design";
+import { HOVER_DURATION, SYSTEM_BAR_HEIGHT } from "../../constants/design";
 import { tabTransitions } from "../../defaults/tabs";
 
 // Enums
@@ -21,6 +21,9 @@ import { ITabGroup } from "../../interfaces";
 
 import Store from "../../store";
 
+import styled from "styled-components";
+import { Platforms } from "../../../shared/enums";
+
 @observer
 export default class TabBar extends React.Component<{}, {}> {
   private tabBar: HTMLDivElement;
@@ -33,7 +36,7 @@ export default class TabBar extends React.Component<{}, {}> {
         return;
       }
 
-      tabs.setTabsWidths(this.getTabBarWidth(), false);
+      tabs.setTabsWidths(false);
       tabs.setTabsPositions(false, false);
     });
   }
@@ -42,14 +45,14 @@ export default class TabBar extends React.Component<{}, {}> {
     const tab = tabs.addTab();
     const containerWidth = this.getTabBarWidth();
 
-    const width = tabs.getTabWidth(tab, containerWidth);
+    const width = tabs.getTabWidth(tab);
     tabs.setTabAnimation(tab, "left", false);
     tabs.setTabAnimation(tab, "width", true);
 
     tab.left = tabs.getTabLeft(tab);
 
     requestAnimationFrame(() => {
-      tabs.setTabsWidths(containerWidth);
+      tabs.setTabsWidths();
       tabs.setTabsPositions();
     });
   };
@@ -57,30 +60,43 @@ export default class TabBar extends React.Component<{}, {}> {
   public getTabBarWidth = () => this.tabBar.offsetWidth;
 
   public render() {
-    const addTabButtonStyle = {
+    const addTabButtonStyle: React.CSSProperties = {
       position: "absolute",
       left: Store.addTabButton.left,
       transition: `${HOVER_DURATION}s opacity ${
         Store.addTabButton.leftAnimation
-          ? `, ${tabTransitions.left.duration}s ${
-              tabTransitions.left.easing
-            }`
+          ? `, ${tabTransitions.left.duration}s ${tabTransitions.left.easing}`
           : ""
-      }`
-    }
+      }`,
+      top: 0
+    };
 
     return (
-      <List innerRef={(r: any) => (this.tabBar = r)}>
-        {Store.tabGroups.map((tabGroup: ITabGroup) => {
-          return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
-        })}
-
+      <StyledTabBar innerRef={(r: any) => (this.tabBar = r)}>
+        <TabGroups>
+          {Store.tabGroups.map((tabGroup: ITabGroup) => {
+            return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
+          })}
+        </TabGroups>
         <SystemBarButton
           icon={SystemBarIcons.Add}
           onClick={this.addTab}
           style={addTabButtonStyle}
         />
-      </List>
+      </StyledTabBar>
     );
   }
 }
+
+const StyledTabBar = styled.div`
+  margin-left: ${(Store.platform === Platforms.MacOS ? 78 : 0)}px;
+  flex: 1;
+  position: relative;
+`;
+
+const TabGroups = styled.div`
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  width: calc(100% - ${SYSTEM_BAR_HEIGHT}px);
+`;
