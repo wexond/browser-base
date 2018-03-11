@@ -55,7 +55,7 @@ export default class TabBar extends React.Component<{}, {}> {
       }
 
       tabs.setTabsWidths(false);
-      tabs.setTabsPositions(false, false);
+      tabs.setTabsPositions(false);
     });
 
     requestAnimationFrame(this.resizeScrollbar);
@@ -83,15 +83,12 @@ export default class TabBar extends React.Component<{}, {}> {
     const containerWidth = this.getTabBarWidth();
 
     const width = tabs.getTabWidth(tab);
-    tabs.setTabAnimation(tab, "left", false);
-    tabs.setTabAnimation(tab, "width", true);
-
-    this.scrollLeft += width + 100;
 
     tab.left = tabs.getTabLeft(tab);
 
-    let time = 0;
+    this.scrollLeft += width + 100;
 
+    let time = 0;
     const interval = setInterval(() => {
       if (time < tabTransitions.left.duration * 1000) {
         this.tabGroups.scrollLeft = this.scrollLeft;
@@ -102,10 +99,8 @@ export default class TabBar extends React.Component<{}, {}> {
       time += 1;
     }, 1);
 
-    requestAnimationFrame(() => {
-      tabs.setTabsWidths();
-      tabs.setTabsPositions();
-    });
+    tabs.setTabsWidths();
+    tabs.setTabsPositions();
   };
 
   public getTabBarWidth = () => this.tabBar.offsetWidth;
@@ -207,11 +202,6 @@ export default class TabBar extends React.Component<{}, {}> {
             position: "absolute",
             left: Store.addTabButton.left,
             right: 0,
-            transition: `${HOVER_DURATION}s background-color ${
-              Store.addTabButton.leftAnimation
-                ? `, ${tabTransitions.left.duration}s ${tabTransitions.left.easing}`
-                : ""
-            }`,
             top: 0
           }}
         />

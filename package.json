@@ -35,10 +35,12 @@
     "lint": "prettier --write src/**/*.ts* && tslint --config tslint.json src/**/*.ts* --fix"
   },
   "devDependencies": {
+    "@types/animejs": "2.0.0",
     "@types/node": "9.4.6",
     "@types/react": "16.0.40",
     "@types/react-dom": "16.0.4",
     "@types/request": "2.47.0",
+    "animejs": "2.2.0",
     "cross-env": "5.1.3",
     "css-loader": "0.28.10",
     "electron": "1.8.2",
