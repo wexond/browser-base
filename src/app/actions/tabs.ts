@@ -166,6 +166,7 @@ export const addTab = (): ITab => {
       left: 0,
       width: 0,
       pinned: false,
+      isRemoving: false,
       transitions: [
         {
           property: "background-color",
