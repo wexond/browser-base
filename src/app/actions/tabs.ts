@@ -60,9 +60,10 @@ export const setTabsPositions = (
 
   requestAnimationFrame(() => {
     for (const item of tabs) {
-      setTabAnimation(item, "left", animation);
-
-      item.left = left;
+      if (item.left !== left) {
+        setTabAnimation(item, "left", animation);
+        item.left = left;
+      }
       left += item.width;
     }
     if (left >= containerWidth - SYSTEM_BAR_HEIGHT) {
@@ -111,23 +112,26 @@ export const setTabsWidths = (animation = true) => {
   const { tabs } = Store.tabGroups[0];
   const containerWidth = Store.getTabBarWidth();
 
-  requestAnimationFrame(() => {
-    for (const item of tabs) {
-      setTabAnimation(item, "width", animation);
+  const newTabs = tabs.filter(tab => !tab.isRemoving);
 
-      const width = getTabWidth(item);
-      item.width = width;
+  requestAnimationFrame(() => {
+    for (const item of newTabs) {
+      const width = getTabWidth(item, newTabs.length);
+
+      if (item.width !== width) {
+        setTabAnimation(item, "width", animation);
+        item.width = width;
+      }
     }
   });
 };
 
-export const getTabWidth = (tab: ITab): number => {
-  const { tabs } = Store.tabGroups[0];
+export const getTabWidth = (tab: ITab, tabsCount = Store.tabGroups[0].tabs.length): number => {
   const containerWidth = Store.getTabBarWidth();
 
   let width = tab.pinned
     ? TAB_PINNED_WIDTH
-    : (containerWidth - SYSTEM_BAR_HEIGHT) / tabs.length;
+    : (containerWidth - SYSTEM_BAR_HEIGHT) / tabsCount;
 
   if (width > TAB_MAX_WIDTH) {
     width = TAB_MAX_WIDTH;
