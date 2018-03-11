@@ -22,10 +22,8 @@ class Store {
   @observable
   public addTabButton: {
     left: number | "auto";
-    leftAnimation: boolean;
   } = {
-    left: 0,
-    leftAnimation: true
+    left: 0
   };
 
   public getTabBarWidth: () => number;

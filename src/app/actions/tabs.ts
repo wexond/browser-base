@@ -1,5 +1,6 @@
 import Store from "../store";
 
+import anime from "animejs";
 import { tabTransitions } from "../defaults/tabs";
 
 import {
@@ -14,27 +15,7 @@ import { ITab, ITabGroup } from "../interfaces";
 import { addPage } from "./pages";
 
 let nextTabId = 0;
-
-export const setTabAnimation = (
-  tab: ITab,
-  property: "left" | "width",
-  flag: boolean
-) => {
-  if (flag) {
-    if (
-      !(tab.transitions.filter(item => item.property === property).length > 0)
-    ) {
-      tab.transitions.push({
-        property,
-        ...tabTransitions.left
-      });
-    }
-  } else {
-    tab.transitions = tab.transitions.filter(
-      item => item.property !== property
-    );
-  }
-};
+let widths: number[] = [];
 
 export const getScrollingMode = (tabGroup: ITabGroup): boolean => {
   for (const tab of tabGroup.tabs) {
@@ -48,52 +29,80 @@ export const getScrollingMode = (tabGroup: ITabGroup): boolean => {
 
 export const setTabsPositions = (
   animation = true,
-  addTabButtonAnimation = true
+  callback: () => void = null
 ) => {
   const tabGroup = Store.tabGroups[0];
   const { tabs } = tabGroup;
+  const newTabs = tabs.filter(tab => !tab.isRemoving);
   const containerWidth = Store.getTabBarWidth();
 
   let left = 0;
 
-  Store.addTabButton.leftAnimation = addTabButtonAnimation;
-
-  requestAnimationFrame(() => {
-    for (const item of tabs) {
-      if (item.left !== left) {
-        setTabAnimation(item, "left", animation);
-        item.left = left;
-      }
-      left += item.width;
-    }
-    if (left >= containerWidth - SYSTEM_BAR_HEIGHT) {
-      if (Store.addTabButton.left !== "auto") {
-        Store.addTabButton.left = containerWidth - SYSTEM_BAR_HEIGHT;
-
-        setTimeout(() => {
-          Store.addTabButton.left = "auto";
-        }, tabTransitions.left.duration * 1000);
-      }
-
-      if (!tabGroup.scrollingMode) {
-        tabGroup.scrollingMode = true;
-      }
-    } else {
-      if (Store.addTabButton.left === "auto") {
-        Store.addTabButton.left = containerWidth - SYSTEM_BAR_HEIGHT;
-
-        requestAnimationFrame(() => {
-          Store.addTabButton.left = left;
+  for (const item of newTabs) {
+    if (item.left !== left) {
+      if (animation) {
+        anime({
+          targets: item,
+          left,
+          round: 1,
+          easing: 'easeOutCubic',
+          duration: 300,
+          complete: () => {
+            if (item === newTabs[newTabs.length - 1]) {
+              if (callback != null) {
+                callback();
+              }
+            }
+          }
         });
       } else {
-        Store.addTabButton.left = left;
-      }
-
-      if (tabGroup.scrollingMode) {
-        tabGroup.scrollingMode = false;
+        item.left = left;
       }
     }
-  });
+    left += widths[newTabs.indexOf(item)];
+  }
+
+  const animateAddTabButton = (newLeft: number) => {
+    anime({
+      targets: Store.addTabButton,
+      left: newLeft,
+      round: 1,
+      easing: 'easeOutCubic',
+      duration: 300
+    });
+  }
+  
+  if (left >= containerWidth - SYSTEM_BAR_HEIGHT) {
+    if (Store.addTabButton.left !== "auto") {
+      if (animation) {
+        animateAddTabButton(containerWidth - SYSTEM_BAR_HEIGHT);
+      } else {
+        Store.addTabButton.left = containerWidth - SYSTEM_BAR_HEIGHT;
+      }
+
+      setTimeout(() => {
+        Store.addTabButton.left = "auto";
+      }, tabTransitions.left.duration * 1000);
+    }
+
+    if (!tabGroup.scrollingMode) {
+      tabGroup.scrollingMode = true;
+    }
+  } else {
+    if (Store.addTabButton.left === "auto") {
+      Store.addTabButton.left = containerWidth - SYSTEM_BAR_HEIGHT;
+    }
+
+    if (animation) {
+      animateAddTabButton(left);
+    } else {
+      Store.addTabButton.left = left;
+    }
+
+    if (tabGroup.scrollingMode) {
+      tabGroup.scrollingMode = false;
+    }
+  }
 };
 
 export const getTabLeft = (tab: ITab): number => {
@@ -108,22 +117,41 @@ export const getTabLeft = (tab: ITab): number => {
   return 0;
 };
 
-export const setTabsWidths = (animation = true) => {
+export const setTabsWidths = (animation = true, callback: () => void = null) => {
   const { tabs } = Store.tabGroups[0];
   const containerWidth = Store.getTabBarWidth();
 
   const newTabs = tabs.filter(tab => !tab.isRemoving);
 
-  requestAnimationFrame(() => {
-    for (const item of newTabs) {
-      const width = getTabWidth(item, newTabs.length);
+  widths = [];
 
-      if (item.width !== width) {
-        setTabAnimation(item, "width", animation);
+  for (const item of newTabs) {
+    const width = getTabWidth(item, newTabs.length);
+
+    if (item.width !== width) {
+      if (animation) {
+
+        anime({
+          targets: item,
+          width,
+          round: 1,
+          easing: 'easeOutCubic',
+          duration: 300,
+          complete: () => {
+            if (item === newTabs[newTabs.length - 1]) {
+              if (callback != null) {
+                callback();
+              }
+            }
+          }
+        });
+      } else {
         item.width = width;
       }
     }
-  });
+
+    widths.push(width);
+  }
 };
 
 export const getTabWidth = (
@@ -169,13 +197,7 @@ export const addTab = (): ITab => {
       left: 0,
       width: 0,
       pinned: false,
-      isRemoving: false,
-      transitions: [
-        {
-          property: "background-color",
-          ...tabTransitions["background-color"]
-        }
-      ]
+      isRemoving: false
     }) - 1;
 
   const tab = Store.tabGroups[0].tabs[index];
