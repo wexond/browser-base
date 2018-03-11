@@ -22,16 +22,22 @@ interface IProps {
   selected: boolean;
 }
 
-export default observer(({ selected, tab, tabGroup }) => {
-  const { transitions, left, width, title, id } = tab;
+export default observer(({ selected, tab, tabGroup }: IProps) => {
+  const { transitions, left, width, title, id, isRemoving } = tab;
 
   const close = () => {
     tabs.setTabAnimation(tab, "width", true);
 
+    if (tabGroup.tabs.indexOf(tab) === tabGroup.tabs.length - 1) {
+      tabGroup.selectedTab = tabGroup.tabs[tabGroup.tabs.indexOf(tab) - 1].id;
+    } else {
+      tabGroup.selectedTab = tabGroup.tabs[tabGroup.tabs.indexOf(tab) + 1].id;
+    }
+
     if (tabs.getScrollingMode(tabGroup) || tab.width === TAB_MAX_WIDTH) {
-      requestAnimationFrame(() => {
+      tab.isRemoving = true;
+      setTimeout(() => {
         tab.width = 0;
-        tab.isRemoving = true;
   
         tabs.setTabsPositions();
   
@@ -40,7 +46,7 @@ export default observer(({ selected, tab, tabGroup }) => {
           tabs.setTabsWidths();
           tabs.setTabsPositions();
         }, tabTransitions.left.duration * 1000);
-      })
+      }, 50);
     } else {
       tabs.removeTab(tab);
       tabs.setTabsWidths();
@@ -57,10 +63,11 @@ export default observer(({ selected, tab, tabGroup }) => {
       selected={selected}
       style={{ left, width, transition: transitionsToString(transitions) }}
       onMouseDown={select}
+      isRemoving={isRemoving}
     >
       <Content>
-        <Title>{title}</Title>
-        <Close onClick={close} />
+        <Title isRemoving={isRemoving}>{title}</Title>
+        <Close isRemoving={isRemoving} onClick={close} />
       </Content>
     </StyledTab>
   );
@@ -68,6 +75,7 @@ export default observer(({ selected, tab, tabGroup }) => {
 
 interface IStyledTabProps {
   selected: boolean;
+  isRemoving: boolean;
 }
 
 const StyledTab = styled.div`
@@ -80,8 +88,17 @@ const StyledTab = styled.div`
   top: 0;
   overflow: hidden;
 
-  background-color: ${(props: IStyledTabProps) =>
-    props.selected ? "#fff" : "none"};
+  background-color: ${(props: IStyledTabProps) => {
+    if (props.isRemoving) {
+      return "#E0E0E0";
+    } else {
+      if (props.selected) {
+        return "#fff";
+      } else {
+        return "none";
+      }
+    }
+  }};
   z-index: ${props => (props.selected ? 2 : 1)};
 `;
 
@@ -90,6 +107,10 @@ const Content = styled.div`
   align-items: center;
 `;
 
+interface ITitleProps {
+  isRemoving: boolean;
+}
+
 const Title = styled.div`
   position: absolute;
   left: 8px;
@@ -97,7 +118,13 @@ const Title = styled.div`
   text-overflow: ellipsis;
   width: 100%;
   white-space: nowrap;
+  opacity: ${(props: ITitleProps) => props.isRemoving ? 0 : 1};
+  transition: 0.2s opacity;
 `;
+
+interface ICloseProps {
+  isRemoving: boolean;
+}
 
 const Close = styled.div`
   position: absolute;
@@ -106,4 +133,6 @@ const Close = styled.div`
   width: 16px;
   background-image: url(../../src/app/icons/actions/close.svg);
   ${images.center("100%", "100%")};
+  opacity: ${(props: ITitleProps) => props.isRemoving ? 0 : 1};
+  transition: 0.2s opacity;
 `;
