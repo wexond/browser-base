@@ -2,6 +2,7 @@ import { observer } from "mobx-react";
 import React from "react";
 
 // Components
+import styled from "styled-components";
 import List from "../List";
 import SystemBarButton from "../SystemBarButton";
 import TabGroup from "../TabGroup";
@@ -15,6 +16,7 @@ import {
 import { tabTransitions } from "../../defaults/tabs";
 
 // Enums
+import { Platforms } from "../../../shared/enums";
 import { SystemBarIcons } from "../../enums";
 
 // Actions
@@ -23,11 +25,10 @@ import * as tabs from "../../actions/tabs";
 // Interfaces
 import { ITab, ITabGroup } from "../../interfaces";
 
-import Store from "../../store";
-
-import styled from "styled-components";
-import { Platforms } from "../../../shared/enums";
+// Mixins
 import shadows from "../../../shared/mixins/shadows";
+
+import Store from "../../store";
 
 @observer
 export default class TabBar extends React.Component<{}, {}> {
@@ -52,8 +53,6 @@ export default class TabBar extends React.Component<{}, {}> {
       if (!e.isTrusted) {
         return;
       }
-
-      this.tabGroups.scrollLeft = this.scrollLeft;
 
       tabs.setTabsWidths(false);
       tabs.setTabsPositions(false, false);
@@ -87,7 +86,7 @@ export default class TabBar extends React.Component<{}, {}> {
     tabs.setTabAnimation(tab, "left", false);
     tabs.setTabAnimation(tab, "width", true);
 
-    this.scrollLeft += width;
+    this.scrollLeft += width + 100;
 
     tab.left = tabs.getTabLeft(tab);
 
@@ -171,18 +170,6 @@ export default class TabBar extends React.Component<{}, {}> {
   };
 
   public render() {
-    const addTabButtonStyle: React.CSSProperties = {
-      position: "absolute",
-      left: Store.addTabButton.left,
-      right: 0,
-      transition: `${HOVER_DURATION}s background-color ${
-        Store.addTabButton.leftAnimation
-          ? `, ${tabTransitions.left.duration}s ${tabTransitions.left.easing}`
-          : ""
-      }`,
-      top: 0
-    };
-
     return (
       <StyledTabBar innerRef={(r: any) => (this.tabBar = r)}>
         <TabGroups
@@ -216,7 +203,17 @@ export default class TabBar extends React.Component<{}, {}> {
         <SystemBarButton
           icon={SystemBarIcons.Add}
           onClick={this.addTab}
-          style={addTabButtonStyle}
+          style={{
+            position: "absolute",
+            left: Store.addTabButton.left,
+            right: 0,
+            transition: `${HOVER_DURATION}s background-color ${
+              Store.addTabButton.leftAnimation
+                ? `, ${tabTransitions.left.duration}s ${tabTransitions.left.easing}`
+                : ""
+            }`,
+            top: 0
+          }}
         />
       </StyledTabBar>
     );
