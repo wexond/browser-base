@@ -69,10 +69,8 @@ export default observer(({ selected, tab, tabGroup }: IProps) => {
       onMouseDown={select}
       isRemoving={isRemoving}
     >
-      <Content>
-        <Title isRemoving={isRemoving}>{title}</Title>
-        <Close isRemoving={isRemoving} onClick={close} />
-      </Content>
+      <Title isRemoving={isRemoving}>{title}</Title>
+      <Close isRemoving={isRemoving} selected={selected} onClick={close} />
     </StyledTab>
   );
 });
@@ -106,11 +104,6 @@ const StyledTab = styled.div`
   z-index: ${props => (props.selected ? 2 : 1)};
 `;
 
-const Content = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 interface ITitleProps {
   isRemoving: boolean;
 }
@@ -128,6 +121,7 @@ const Title = styled.div`
 
 interface ICloseProps {
   isRemoving: boolean;
+  selected: boolean;
 }
 
 const Close = styled.div`
@@ -137,6 +131,7 @@ const Close = styled.div`
   width: 16px;
   background-image: url(../../src/app/icons/actions/close.svg);
   ${images.center("100%", "100%")};
-  opacity: ${(props: ITitleProps) => (props.isRemoving ? 0 : 1)};
+  opacity: ${(props: ICloseProps) => (props.isRemoving ? 0 : 1)};
   transition: 0.2s opacity;
+  display: ${props => props.selected ? "block" : "none"};
 `;

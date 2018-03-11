@@ -76,13 +76,12 @@ export const setTabsPositions = (
     if (Store.addTabButton.left !== "auto") {
       if (animation) {
         animateAddTabButton(containerWidth - SYSTEM_BAR_HEIGHT);
+        setTimeout(() => {
+          Store.addTabButton.left = "auto";
+        }, tabTransitions.left.duration * 1000);
       } else {
-        Store.addTabButton.left = containerWidth - SYSTEM_BAR_HEIGHT;
-      }
-
-      setTimeout(() => {
         Store.addTabButton.left = "auto";
-      }, tabTransitions.left.duration * 1000);
+      }
     }
 
     if (!tabGroup.scrollingMode) {
@@ -130,7 +129,6 @@ export const setTabsWidths = (animation = true, callback: () => void = null) => 
 
     if (item.width !== width) {
       if (animation) {
-
         anime({
           targets: item,
           width,
