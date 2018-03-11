@@ -39,6 +39,8 @@ export default class TabBar extends React.Component<{}, {}> {
         return;
       }
 
+      this.tabGroups.scrollLeft = this.scrollLeft;
+
       tabs.setTabsWidths(false);
       tabs.setTabsPositions(false, false);
     });
@@ -52,7 +54,7 @@ export default class TabBar extends React.Component<{}, {}> {
     tabs.setTabAnimation(tab, "left", false);
     tabs.setTabAnimation(tab, "width", true);
 
-    this.scrollLeft += width;
+    this.scrollLeft += width + 9999;
 
     tab.left = tabs.getTabLeft(tab);
 
@@ -61,7 +63,7 @@ export default class TabBar extends React.Component<{}, {}> {
     const frame = () => {
       this.tabGroups.scrollLeft = this.scrollLeft;
 
-      if (time < 300) {
+      if (time < tabTransitions.left.duration * 1000) {
         requestAnimationFrame(frame);
       }
 
