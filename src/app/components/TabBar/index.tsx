@@ -28,6 +28,7 @@ import { ITab, ITabGroup } from "../../interfaces";
 // Mixins
 import shadows from "../../../shared/mixins/shadows";
 
+import anime, { AnimeInstance } from "animejs";
 import Store from "../../store";
 
 @observer
@@ -45,6 +46,8 @@ export default class TabBar extends React.Component<{}, {}> {
   private scrollbarThumbDragging = false;
   private mouseStartX = 0;
   private startLeft = 0;
+  private animation: AnimeInstance;
+  private newScrollLeft: number = -1;
 
   public componentDidMount() {
     Store.getTabBarWidth = this.getTabBarWidth;
@@ -92,6 +95,7 @@ export default class TabBar extends React.Component<{}, {}> {
     const interval = setInterval(() => {
       if (time < tabTransitions.left.duration * 1000) {
         this.tabGroups.scrollLeft = this.scrollLeft;
+        this.newScrollLeft = this.tabGroups.scrollLeft;
       } else {
         clearInterval(interval);
       }
@@ -125,36 +129,29 @@ export default class TabBar extends React.Component<{}, {}> {
 
   public onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     const { deltaX, deltaY } = e;
+    const target = deltaY / 2;
 
-    const change = (Math.abs(deltaX) >= Math.abs(deltaY)) ? deltaX : deltaY;
+    if (this.tabGroups.scrollLeft !== this.newScrollLeft && this.newScrollLeft !== -1) {
+      this.newScrollLeft += target;
+    } else {
+      this.newScrollLeft = this.tabGroups.scrollLeft + target;
+    }
 
-    const fps = 60;
-    const interval = 1000 / fps;
+    if (this.newScrollLeft > this.tabGroups.scrollWidth - this.tabGroups.offsetWidth) {
+      this.newScrollLeft = this.tabGroups.scrollWidth - this.tabGroups.offsetWidth;
+    }
+    if (this.newScrollLeft < 0) {
+      this.newScrollLeft = 0;
+    }
 
-    const target = change / 4;
+    anime.remove(this.tabGroups)
 
-    let now;
-    let then = Date.now();
-
-    let delta;
-    let scroll = 0;
-
-    const draw = () => {
-      if (scroll < Math.abs(target)) {
-        requestAnimationFrame(draw);
-      }
-
-      now = Date.now();
-      delta = now - then;
-
-      if (delta > interval) {
-        scroll += 8;
-        this.tabGroups.scrollLeft -= change / 100 * 8;
-        then = now - delta % interval;
-      }
-    };
-
-    draw();
+    anime({
+      targets: this.tabGroups,
+      scrollLeft: this.newScrollLeft,
+      duration: 200,
+      easing: 'easeOutCubic'
+    })
   };
 
   public onMouseMove = (e: any) => {
