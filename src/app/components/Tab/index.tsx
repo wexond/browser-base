@@ -12,6 +12,7 @@ import Store from "../../store";
 
 import { transitionsToString } from "../../utils/transitions";
 
+import anime from "animejs";
 import { TAB_MAX_WIDTH } from "../../constants/design";
 import { tabTransitions } from "../../defaults/tabs";
 
@@ -23,11 +24,9 @@ interface IProps {
 }
 
 export default observer(({ selected, tab, tabGroup }: IProps) => {
-  const { transitions, left, width, title, id, isRemoving } = tab;
+  const { left, width, title, id, isRemoving } = tab;
 
   const close = () => {
-    tabs.setTabAnimation(tab, "width", true);
-
     if (tabGroup.tabs.indexOf(tab) === tabGroup.tabs.length - 1) {
       tabGroup.selectedTab = tabGroup.tabs[tabGroup.tabs.indexOf(tab) - 1].id;
     } else {
@@ -37,7 +36,13 @@ export default observer(({ selected, tab, tabGroup }: IProps) => {
     if (tabs.getScrollingMode(tabGroup) || tab.width === TAB_MAX_WIDTH) {
       tab.isRemoving = true;
       setTimeout(() => {
-        tab.width = 0;
+        anime({
+          targets: tab,
+          width: 0,
+          round: 1,
+          easing: 'easeOutCubic',
+          duration: 300
+        });
 
         tabs.setTabsWidths();
         tabs.setTabsPositions();
@@ -60,7 +65,7 @@ export default observer(({ selected, tab, tabGroup }: IProps) => {
   return (
     <StyledTab
       selected={selected}
-      style={{ left, width, transition: transitionsToString(transitions) }}
+      style={{ left, width }}
       onMouseDown={select}
       isRemoving={isRemoving}
     >
@@ -89,7 +94,7 @@ const StyledTab = styled.div`
 
   background-color: ${(props: IStyledTabProps) => {
     if (props.isRemoving) {
-      return "#E0E0E0";
+      return "#fff";
     } else {
       if (props.selected) {
         return "#fff";
