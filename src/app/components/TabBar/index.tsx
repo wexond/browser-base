@@ -7,7 +7,11 @@ import SystemBarButton from "../SystemBarButton";
 import TabGroup from "../TabGroup";
 
 // Constants and defaults
-import { HOVER_DURATION, SYSTEM_BAR_HEIGHT, TAB_MIN_WIDTH } from "../../constants/design";
+import {
+  HOVER_DURATION,
+  SYSTEM_BAR_HEIGHT,
+  TAB_MIN_WIDTH
+} from "../../constants/design";
 import { tabTransitions } from "../../defaults/tabs";
 
 // Enums
@@ -27,9 +31,19 @@ import shadows from "../../../shared/mixins/shadows";
 
 @observer
 export default class TabBar extends React.Component<{}, {}> {
+  public state = {
+    scrollbarThumbWidth: 0,
+    scrollbarWidth: 0,
+    scrollLeft: 0,
+    scrollbarVisible: false
+  };
+
   private tabBar: HTMLDivElement;
   private tabGroups: HTMLDivElement;
   private scrollLeft = 0;
+  private scrollbarThumbDragging = false;
+  private mouseStartX = 0;
+  private startLeft = 0;
 
   public componentDidMount() {
     Store.getTabBarWidth = this.getTabBarWidth;
@@ -44,7 +58,26 @@ export default class TabBar extends React.Component<{}, {}> {
       tabs.setTabsWidths(false);
       tabs.setTabsPositions(false, false);
     });
+
+    requestAnimationFrame(this.resizeScrollbar);
+
+    window.addEventListener("mouseup", this.onMouseUp);
+    window.addEventListener("mousemove", this.onMouseMove);
   }
+
+  public resizeScrollbar = () => {
+    this.setState({
+      scrollbarThumbWidth:
+        this.tabGroups.offsetWidth ** 2 / this.tabGroups.scrollWidth,
+      scrollbarWidth: this.scrollLeft,
+      scrollLeft:
+        this.tabGroups.scrollLeft /
+        this.tabGroups.scrollWidth *
+        this.tabGroups.offsetWidth
+    });
+
+    requestAnimationFrame(this.resizeScrollbar);
+  };
 
   public addTab = () => {
     const tab = tabs.addTab();
@@ -54,23 +87,21 @@ export default class TabBar extends React.Component<{}, {}> {
     tabs.setTabAnimation(tab, "left", false);
     tabs.setTabAnimation(tab, "width", true);
 
-    this.scrollLeft += width + 9999;
+    this.scrollLeft += width;
 
     tab.left = tabs.getTabLeft(tab);
 
     let time = 0;
 
-    const frame = () => {
-      this.tabGroups.scrollLeft = this.scrollLeft;
-
+    const interval = setInterval(() => {
       if (time < tabTransitions.left.duration * 1000) {
-        requestAnimationFrame(frame);
+        this.tabGroups.scrollLeft = this.scrollLeft;
+      } else {
+        clearInterval(interval);
       }
 
       time += 1;
-    }
-
-    requestAnimationFrame(frame);
+    }, 1);
 
     requestAnimationFrame(() => {
       tabs.setTabsWidths();
@@ -79,6 +110,65 @@ export default class TabBar extends React.Component<{}, {}> {
   };
 
   public getTabBarWidth = () => this.tabBar.offsetWidth;
+
+  public onMouseEnter = () => {
+    this.setState({ scrollbarVisible: true });
+  };
+
+  public onMouseLeave = () => {
+    this.setState({ scrollbarVisible: false });
+  };
+
+  public onMouseDown = (e: any) => {
+    this.scrollbarThumbDragging = true;
+    this.mouseStartX = e.pageX;
+    this.startLeft = this.state.scrollLeft;
+  };
+
+  public onMouseUp = () => {
+    this.scrollbarThumbDragging = false;
+  };
+
+  public onWheel = (e: any) => {
+    const { deltaY } = e;
+
+    const fps = 60;
+    const interval = 1000 / fps;
+
+    const target = deltaY / 4;
+
+    let now;
+    let then = Date.now();
+
+    let delta;
+    let scroll = 0;
+
+    const draw = () => {
+      if (scroll < Math.abs(target)) {
+        requestAnimationFrame(draw);
+      }
+
+      now = Date.now();
+      delta = now - then;
+
+      if (delta > interval) {
+        scroll += 8;
+        this.tabGroups.scrollLeft -= deltaY / 100 * 8;
+        then = now - delta % interval;
+      }
+    };
+
+    draw();
+  };
+
+  public onMouseMove = (e: any) => {
+    if (this.scrollbarThumbDragging) {
+      this.tabGroups.scrollLeft =
+        (this.startLeft + e.pageX - this.mouseStartX) /
+        this.tabGroups.offsetWidth *
+        this.tabGroups.scrollWidth;
+    }
+  };
 
   public render() {
     const addTabButtonStyle: React.CSSProperties = {
@@ -95,11 +185,34 @@ export default class TabBar extends React.Component<{}, {}> {
 
     return (
       <StyledTabBar innerRef={(r: any) => (this.tabBar = r)}>
-        <TabGroups innerRef={(r: any) => (this.tabGroups = r)}>
+        <TabGroups
+          onWheel={this.onWheel}
+          innerRef={(r: any) => (this.tabGroups = r)}
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+        >
           {Store.tabGroups.map((tabGroup: ITabGroup) => {
             return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
           })}
         </TabGroups>
+
+        <Scrollbar>
+          <ScrollbarThumb
+            style={{
+              width: this.state.scrollbarThumbWidth,
+              display:
+                this.tabGroups == null ||
+                this.state.scrollbarThumbWidth === this.tabGroups.offsetWidth
+                  ? "none"
+                  : "block",
+              left: this.state.scrollLeft
+            }}
+            visible={this.state.scrollbarVisible}
+            onMouseMove={this.onMouseMove}
+            onMouseDown={this.onMouseDown}
+          />
+        </Scrollbar>
+
         <SystemBarButton
           icon={SystemBarIcons.Add}
           onClick={this.addTab}
@@ -111,7 +224,7 @@ export default class TabBar extends React.Component<{}, {}> {
 }
 
 const StyledTabBar = styled.div`
-  margin-left: ${(Store.platform === Platforms.MacOS ? 78 : 0)}px;
+  margin-left: ${Store.platform === Platforms.MacOS ? 78 : 0}px;
   flex: 1;
   position: relative;
 `;
@@ -121,4 +234,35 @@ const TabGroups = styled.div`
   height: 100%;
   overflow: hidden;
   width: calc(100% - ${SYSTEM_BAR_HEIGHT}px);
+`;
+
+const Scrollbar = styled.div`
+  position: absolute;
+  height: 3px;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+`;
+
+interface IScrollbarThumbProps {
+  visible: boolean;
+}
+
+const ScrollbarThumb = styled.div`
+  position: absolute;
+  background-color: black;
+  opacity: ${(props: IScrollbarThumbProps) => (props.visible ? 0.2 : 0)};
+  height: 100%;
+  top: 0;
+  left: 0;
+  transition: 0.2s opacity;
+
+  &:hover {
+    opacity: 0.4;
+  }
+
+  &:active {
+    opacity: 0.4;
+  }
 `;
