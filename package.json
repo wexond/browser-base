@@ -48,6 +48,7 @@
     "prettier": "1.11.1",
     "react": "16.2.0",
     "react-dom": "16.2.0",
+    "react-measure": "2.0.2",
     "styled-components": "3.1.6",
     "ts-loader": "4.0.1",
     "tslint": "5.9.1",
