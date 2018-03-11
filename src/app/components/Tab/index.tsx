@@ -39,12 +39,11 @@ export default observer(({ selected, tab, tabGroup }: IProps) => {
       setTimeout(() => {
         tab.width = 0;
   
+        tabs.setTabsWidths();
         tabs.setTabsPositions();
   
         setTimeout(() => {
           tabs.removeTab(tab);
-          tabs.setTabsWidths();
-          tabs.setTabsPositions();
         }, tabTransitions.left.duration * 1000);
       }, 50);
     } else {
