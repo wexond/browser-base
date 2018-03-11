@@ -149,7 +149,7 @@ export default class TabBar extends React.Component<{}, {}> {
     anime({
       targets: this.tabGroups,
       scrollLeft: this.newScrollLeft,
-      duration: 200,
+      duration: 250,
       easing: 'easeOutCubic'
     })
   };
