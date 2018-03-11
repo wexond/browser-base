@@ -38,10 +38,10 @@ export default observer(({ selected, tab, tabGroup }: IProps) => {
       tab.isRemoving = true;
       setTimeout(() => {
         tab.width = 0;
-  
+
         tabs.setTabsWidths();
         tabs.setTabsPositions();
-  
+
         setTimeout(() => {
           tabs.removeTab(tab);
         }, tabTransitions.left.duration * 1000);
@@ -117,7 +117,7 @@ const Title = styled.div`
   text-overflow: ellipsis;
   width: 100%;
   white-space: nowrap;
-  opacity: ${(props: ITitleProps) => props.isRemoving ? 0 : 1};
+  opacity: ${(props: ITitleProps) => (props.isRemoving ? 0 : 1)};
   transition: 0.2s opacity;
 `;
 
@@ -132,6 +132,6 @@ const Close = styled.div`
   width: 16px;
   background-image: url(../../src/app/icons/actions/close.svg);
   ${images.center("100%", "100%")};
-  opacity: ${(props: ITitleProps) => props.isRemoving ? 0 : 1};
+  opacity: ${(props: ITitleProps) => (props.isRemoving ? 0 : 1)};
   transition: 0.2s opacity;
 `;
