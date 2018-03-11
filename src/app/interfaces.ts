@@ -12,6 +12,7 @@ export interface ITab {
   left: number;
   width: number;
   pinned: boolean;
+  isRemoving?: boolean;
 }
 
 export interface IPage {

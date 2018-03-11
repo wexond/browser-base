@@ -12,6 +12,9 @@ import Store from "../../store";
 
 import { transitionsToString } from "../../utils/transitions";
 
+import { TAB_MAX_WIDTH } from "../../constants/design";
+import { tabTransitions } from "../../defaults/tabs";
+
 interface IProps {
   key: number;
   tab: ITab;
@@ -19,16 +22,30 @@ interface IProps {
   selected: boolean;
 }
 
-export default observer(({ selected, tab }) => {
-  const { transitions, left, width, title } = tab;
+export default observer(({ selected, tab, tabGroup }) => {
+  const { transitions, left, width, title, id } = tab;
 
   const close = () => {
-    tabs.removeTab(tab);
+    tabs.setTabAnimation(tab, "width", true);
 
-    const containerWidth = Store.getTabBarWidth();
-
-    tabs.setTabsWidths();
-    tabs.setTabsPositions();
+    if (tabs.getScrollingMode(tabGroup) || tab.width === TAB_MAX_WIDTH) {
+      requestAnimationFrame(() => {
+        tab.width = 0;
+        tab.isRemoving = true;
+  
+        tabs.setTabsPositions();
+  
+        setTimeout(() => {
+          tabs.removeTab(tab);
+          tabs.setTabsWidths();
+          tabs.setTabsPositions();
+        }, tabTransitions.left.duration * 1000);
+      })
+    } else {
+      tabs.removeTab(tab);
+      tabs.setTabsWidths();
+      tabs.setTabsPositions();
+    }
   };
 
   const select = () => {
