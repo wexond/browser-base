@@ -37,10 +37,7 @@ export default () => {
       <SystemBar>
         <TabBar />
 
-        <SystemBarButton
-          size={16}
-          icon={SystemBarIcons.TabGroups}
-        />
+        <SystemBarButton size={16} icon={SystemBarIcons.TabGroups} />
         {Store.platform !== Platforms.MacOS && (
           <>
             <SystemBarButton

@@ -44,7 +44,7 @@ export const getScrollingMode = (tabGroup: ITabGroup): boolean => {
       return width <= TAB_MIN_WIDTH;
     }
   }
-}
+};
 
 export const setTabsPositions = (
   animation = true,
@@ -72,7 +72,7 @@ export const setTabsPositions = (
 
         setTimeout(() => {
           Store.addTabButton.left = "auto";
-        }, tabTransitions.left.duration * 1000)
+        }, tabTransitions.left.duration * 1000);
       }
 
       if (!tabGroup.scrollingMode) {
@@ -84,11 +84,11 @@ export const setTabsPositions = (
 
         requestAnimationFrame(() => {
           Store.addTabButton.left = left;
-        })
+        });
       } else {
         Store.addTabButton.left = left;
       }
-      
+
       if (tabGroup.scrollingMode) {
         tabGroup.scrollingMode = false;
       }
@@ -126,7 +126,10 @@ export const setTabsWidths = (animation = true) => {
   });
 };
 
-export const getTabWidth = (tab: ITab, tabsCount = Store.tabGroups[0].tabs.length): number => {
+export const getTabWidth = (
+  tab: ITab,
+  tabsCount = Store.tabGroups[0].tabs.length
+): number => {
   const containerWidth = Store.getTabBarWidth();
 
   let width = tab.pinned
