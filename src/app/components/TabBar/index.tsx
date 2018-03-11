@@ -123,13 +123,15 @@ export default class TabBar extends React.Component<{}, {}> {
     this.scrollbarThumbDragging = false;
   };
 
-  public onWheel = (e: any) => {
-    const { deltaY } = e;
+  public onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const { deltaX, deltaY } = e;
+
+    const change = (Math.abs(deltaX) >= Math.abs(deltaY)) ? deltaX : deltaY;
 
     const fps = 60;
     const interval = 1000 / fps;
 
-    const target = deltaY / 4;
+    const target = change / 4;
 
     let now;
     let then = Date.now();
@@ -147,7 +149,7 @@ export default class TabBar extends React.Component<{}, {}> {
 
       if (delta > interval) {
         scroll += 8;
-        this.tabGroups.scrollLeft -= deltaY / 100 * 8;
+        this.tabGroups.scrollLeft -= change / 100 * 8;
         then = now - delta % interval;
       }
     };
