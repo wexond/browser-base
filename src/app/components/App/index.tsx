@@ -1,3 +1,4 @@
+import { observer } from "mobx-react";
 import { transparency } from "nersent-ui";
 import React from "react";
 import styled from "styled-components";
@@ -32,7 +33,7 @@ import * as tabs from "../../actions/tabs";
 import images from "../../../shared/mixins/images";
 import { HOVER_DURATION } from "../../constants/design";
 
-export default () => {
+export default observer(() => {
   return (
     <List style={{ height: "100vh", overflow: "hidden" }}>
       <SystemBar>
@@ -42,6 +43,7 @@ export default () => {
         <TabBar />
         {Store.platform !== Platforms.MacOS && (
           <>
+            <SystemBarButton size={16} icon={Icons.TabGroups} />
             <SystemBarButton
               windows={true}
               icon={Icons.Minimize}
@@ -64,7 +66,7 @@ export default () => {
       <Pages />
     </List>
   );
-};
+});
 
 const Bar = styled.div`
   flex: 1;
