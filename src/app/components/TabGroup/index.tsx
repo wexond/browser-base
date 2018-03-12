@@ -170,7 +170,9 @@ export default class TabGroup extends React.Component<IProps, {}> {
   public onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     const { deltaX, deltaY } = e;
     let { newScrollLeft } = this.scrollData;
-    const target = deltaY / 2;
+
+    const delta = (Math.abs(deltaX) >= Math.abs(deltaY)) ? deltaX : -deltaY;
+    const target = delta / 2;
 
     clearInterval(this.interval);
 
