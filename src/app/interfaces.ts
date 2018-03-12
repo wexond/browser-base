@@ -2,8 +2,8 @@ export interface ITabGroup {
   id: number;
   tabs: ITab[];
   selectedTab: number;
-  scrollingMode: boolean;
-  containerWidth: number;
+  lineLeft: number;
+  lineWidth: number;
 }
 
 export interface ITab {
@@ -13,6 +13,8 @@ export interface ITab {
   width: number;
   pinned: boolean;
   isRemoving?: boolean;
+  newWidth: number;
+  newLeft: number;
 }
 
 export interface IPage {
