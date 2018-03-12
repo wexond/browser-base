@@ -56,7 +56,6 @@ export default class TabBar extends React.Component<{}, {}> {
             }}
           />
         </TabGroups>
-        <SystemBarButton size={16} icon={Icons.TabGroups} />
       </StyledTabBar>
     );
   }

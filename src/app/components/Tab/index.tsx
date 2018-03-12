@@ -117,6 +117,8 @@ const Title = styled.div`
   transition: 0.2s opacity;
   font-weight: 500;
   text-transform: uppercase;
+  max-width: calc(100% - 32px);
+  opacity: ${transparency.light.text.primary};
 `;
 
 interface ICloseProps {

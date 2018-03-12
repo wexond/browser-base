@@ -16,6 +16,7 @@ import { tabAnimations } from "../../defaults/tabs";
 // Actions
 import * as tabs from "../../actions/tabs";
 
+import { observe } from "mobx";
 import Store from "../../store";
 
 interface IProps {
@@ -65,6 +66,19 @@ export default class TabGroup extends React.Component<IProps, {}> {
     requestAnimationFrame(() => {
       this.addTab();
     }) 
+
+    observe(this.props.tabGroup, change => {
+      if (change.name === "selectedTab") {
+        requestAnimationFrame(() => {
+          const newTab = tabs.getTabById(change.newValue)
+          TweenLite.to(this.props.tabGroup, tabAnimations.left.duration, { 
+            lineWidth: newTab.newWidth,
+            lineLeft: newTab.newLeft,
+            ease: tabAnimations.left.easing
+          })
+        })
+      }
+    })
   }
 
   public resizeScrollbar = () => {
@@ -193,6 +207,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
 
   public render() {
     const { tabGroup } = this.props;
+
     return (
       <>
         <Tabs
@@ -211,7 +226,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
               onMouseUp={() => this.onTabMouseUp(tab)}
             />
           ))}
-          <Line/>
+          <Line style={{width: tabGroup.lineWidth, left: tabGroup.lineLeft }}/>
         </Tabs>
         <Scrollbar 
           visible={this.state.scrollbarVisible}
