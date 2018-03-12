@@ -84,8 +84,8 @@ const Line = styled.div`
 
 const Input = styled.div`
   background-color: black;
-  opacity: 0.2;
-  height: 24px;
+  opacity: 0.12;
+  height: 32px;
   top: 50%;
   position: relative;
   transform: translateY(-50%);

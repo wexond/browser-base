@@ -10,7 +10,7 @@ import styled from "styled-components";
 import Tab from "../Tab";
 
 // Constants and defaults
-import { SYSTEM_BAR_HEIGHT } from "../../constants/design";
+import { SYSTEM_BAR_HEIGHT, TABBAR_BUTTON_WIDTH } from "../../constants/design";
 import { tabAnimations } from "../../defaults/tabs";
 
 // Actions
@@ -234,7 +234,7 @@ const Tabs = styled.div`
   position: relative;
   height: 100%;
   overflow: hidden;
-  width: calc(100% - ${SYSTEM_BAR_HEIGHT}px);
+  width: calc(100% - ${TABBAR_BUTTON_WIDTH}px);
 `;
 
 interface IScrollbarProps {

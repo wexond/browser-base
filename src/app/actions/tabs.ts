@@ -9,7 +9,8 @@ import {
   SYSTEM_BAR_HEIGHT,
   TAB_MAX_WIDTH,
   TAB_MIN_WIDTH,
-  TAB_PINNED_WIDTH
+  TAB_PINNED_WIDTH,
+  TABBAR_BUTTON_WIDTH
 } from "../constants/design";
 
 import { IAddTabButton, ITab, ITabGroup } from "../interfaces";
@@ -68,10 +69,10 @@ export const setTabsPositions = (
     left += widths[newTabs.indexOf(item)];
   }
   
-  if (left >= containerWidth - 2 * SYSTEM_BAR_HEIGHT) {
+  if (left >= containerWidth - 2 * TABBAR_BUTTON_WIDTH) {
     if (Store.addTabButton.left !== "auto") {
       if (animation) {
-        animateAddTabButton(containerWidth - 2 * SYSTEM_BAR_HEIGHT);
+        animateAddTabButton(containerWidth - 2 * TABBAR_BUTTON_WIDTH);
         setTimeout(() => {
           Store.addTabButton.left = "auto";
         }, tabAnimations.left.duration * 1000);
@@ -81,7 +82,7 @@ export const setTabsPositions = (
     }
   } else {
     if (Store.addTabButton.left === "auto") {
-      Store.addTabButton.left = containerWidth - 2 * SYSTEM_BAR_HEIGHT;
+      Store.addTabButton.left = containerWidth - 2 * TABBAR_BUTTON_WIDTH;
     }
 
     if (animation) {
@@ -129,11 +130,11 @@ export const getTabWidth = (
   tab: ITab,
   tabsCount = Store.tabGroups[Store.selectedTabGroup].tabs.length
 ): number => {
-  const containerWidth = Store.getTabBarWidth() - SYSTEM_BAR_HEIGHT;
+  const containerWidth = Store.getTabBarWidth() - TABBAR_BUTTON_WIDTH;
 
   let width = tab.pinned
     ? TAB_PINNED_WIDTH
-    : (containerWidth - SYSTEM_BAR_HEIGHT) / tabsCount;
+    : (containerWidth - TABBAR_BUTTON_WIDTH) / tabsCount;
 
   if (width > TAB_MAX_WIDTH) {
     width = TAB_MAX_WIDTH;
