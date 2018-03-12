@@ -24,7 +24,6 @@ export const getScrollingMode = (tabGroup: ITabGroup): boolean => {
   for (const tab of tabGroup.tabs) {
     if (!tab.pinned) {
       const width = getTabWidth(tab);
-      tabGroup.scrollingMode = width <= TAB_MIN_WIDTH;
       return width <= TAB_MIN_WIDTH;
     }
   }
@@ -66,13 +65,14 @@ export const setTabsPositions = (
         item.left = left;
       }
     }
-    left += widths[newTabs.indexOf(item)];
+    item.newLeft = left;
+    left += item.newWidth;
   }
   
-  if (left >= containerWidth - 2 * TABBAR_BUTTON_WIDTH) {
+  if (left >= containerWidth - TABBAR_BUTTON_WIDTH) {
     if (Store.addTabButton.left !== "auto") {
       if (animation) {
-        animateAddTabButton(containerWidth - 2 * TABBAR_BUTTON_WIDTH);
+        animateAddTabButton(containerWidth - TABBAR_BUTTON_WIDTH);
         setTimeout(() => {
           Store.addTabButton.left = "auto";
         }, tabAnimations.left.duration * 1000);
@@ -82,7 +82,7 @@ export const setTabsPositions = (
     }
   } else {
     if (Store.addTabButton.left === "auto") {
-      Store.addTabButton.left = containerWidth - 2 * TABBAR_BUTTON_WIDTH;
+      Store.addTabButton.left = containerWidth - TABBAR_BUTTON_WIDTH;
     }
 
     if (animation) {
@@ -121,6 +121,7 @@ export const setTabsWidths = (animation = true) => {
         item.width = width;
       }
     }
+    item.newWidth = width;
 
     widths.push(width);
   }
@@ -130,7 +131,7 @@ export const getTabWidth = (
   tab: ITab,
   tabsCount = Store.tabGroups[Store.selectedTabGroup].tabs.length
 ): number => {
-  const containerWidth = Store.getTabBarWidth() - TABBAR_BUTTON_WIDTH;
+  const containerWidth = Store.getTabBarWidth();
 
   let width = tab.pinned
     ? TAB_PINNED_WIDTH
@@ -169,7 +170,9 @@ export const addTab = (): ITab => {
       left: 0,
       width: 0,
       pinned: false,
-      isRemoving: false
+      isRemoving: false,
+      newLeft: 0,
+      newWidth: 0
     }) - 1;
 
   const tab = Store.tabGroups[Store.selectedTabGroup].tabs[index];

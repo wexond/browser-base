@@ -13,8 +13,8 @@ class Store {
       selectedTab: -1,
       tabs: [] as ITab[],
       id: 0,
-      scrollingMode: false,
-      containerWidth: 0
+      lineLeft: 0,
+      lineWidth: 0,
     }
   ];
 
