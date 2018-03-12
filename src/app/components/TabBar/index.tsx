@@ -8,11 +8,15 @@ import TabGroup from "../TabGroup";
 
 // Enums
 import { Platforms } from "../../../shared/enums";
-import { SystemBarIcons } from "../../enums";
+import { Icons } from "../../enums";
 
 // Interfaces
 import { ITabGroup } from "../../interfaces";
 
+// Mixins
+import { shadows } from "nersent-ui";
+
+import { TABBAR_HEIGHT } from "../../constants/design";
 import Store from "../../store";
 
 @observer
@@ -35,29 +39,41 @@ export default class TabBar extends React.Component<{}, {}> {
   public render() {
     return (
       <StyledTabBar innerRef={(r: any) => (this.tabBar = r)}>
-        {Store.tabGroups.map((tabGroup: ITabGroup) => {
-          if (tabGroup.id !== Store.selectedTabGroup) {
-            return null;
-          }
-          return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
-        })}
-        <SystemBarButton
-          icon={SystemBarIcons.Add}
-          onClick={() => Store.addTab()}
-          style={{
-            position: "absolute",
-            left: Store.addTabButton.left,
-            right: 0,
-            top: 0
-          }}
-        />
+        <TabGroups>
+          {Store.tabGroups.map((tabGroup: ITabGroup) => {
+            if (tabGroup.id !== Store.selectedTabGroup) {
+              return null;
+            }
+            return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
+          })}
+          <SystemBarButton
+            icon={Icons.Add}
+            onClick={() => Store.addTab()}
+            style={{
+              position: "absolute",
+              right: 0,
+              left: Store.addTabButton.left,
+              top: 0
+            }}
+          />
+        </TabGroups>
+        <SystemBarButton size={16} icon={Icons.TabGroups} />
       </StyledTabBar>
     );
   }
 }
 
-const StyledTabBar = styled.div`
-  margin-left: ${Store.platform === Platforms.MacOS ? 78 : 0}px;
+const TabGroups = styled.div`
+  display: flex;
   flex: 1;
   position: relative;
+`
+
+const StyledTabBar = styled.div`
+  margin-left: ${Store.platform === Platforms.MacOS ? 78 : 0}px;
+  position: relative;
+  box-shadow: ${shadows[2]};
+  z-index: 9;
+  height: ${TABBAR_HEIGHT}px;
+  display: flex;
 `;
