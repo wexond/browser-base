@@ -21,9 +21,11 @@ interface IProps {
   tab: ITab;
   tabGroup: ITabGroup;
   selected: boolean;
+  onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseUp: () => void;
 }
 
-export default observer(({ selected, tab, tabGroup }: IProps) => {
+export default observer(({ selected, tab, tabGroup, onMouseDown, onMouseUp }: IProps) => {
   const { left, width, title, id, isRemoving } = tab;
 
   const close = () => {
@@ -58,15 +60,12 @@ export default observer(({ selected, tab, tabGroup }: IProps) => {
     }
   };
 
-  const select = () => {
-    tabs.selectTab(tab);
-  };
-
   return (
     <StyledTab
       selected={selected}
       style={{ left, width }}
-      onMouseDown={select}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
       isRemoving={isRemoving}
     >
       <Title isRemoving={isRemoving}>{title}</Title>
