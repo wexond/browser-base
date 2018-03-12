@@ -1,13 +1,15 @@
-export const tabTransitions = {
-  "background-color": {
+import { Power4 } from "gsap";
+
+export const tabAnimations = {
+  backgroundColor: {
     duration: 0.2
   },
   left: {
-    duration: 0.3,
-    easing: "cubic-bezier(0.215, 0.61, 0.355, 1)"
+    duration: 0.5,
+    easing: Power4.easeOut
   },
   width: {
-    duration: 0.3,
-    easing: "cubic-bezier(0.215, 0.61, 0.355, 1)"
+    duration: 0.5,
+    easing: Power4.easeOut
   }
 };

@@ -1,7 +1,8 @@
+import { TweenLite } from "gsap";
+
 import Store from "../store";
 
-import anime from "animejs";
-import { tabTransitions } from "../defaults/tabs";
+import { tabAnimations } from "../defaults/tabs";
 
 import {
   SYSTEM_BAR_HEIGHT,
@@ -10,7 +11,7 @@ import {
   TAB_PINNED_WIDTH
 } from "../constants/design";
 
-import { ITab, ITabGroup } from "../interfaces";
+import { IAddTabButton, ITab, ITabGroup } from "../interfaces";
 
 import { addPage } from "./pages";
 
@@ -27,11 +28,28 @@ export const getScrollingMode = (tabGroup: ITabGroup): boolean => {
   }
 };
 
+export const animateTab = (tab: ITab, property: "width" | "left", value: number) => {
+  const { easing, duration } = tabAnimations[property];
+
+  TweenLite.to(tab, duration, {
+    [property]: value,
+    ease: easing
+  })
+}
+
+export const animateAddTabButton = (left: number) => {
+  const { easing, duration } = tabAnimations.left;
+
+  TweenLite.to(Store.addTabButton, duration, {
+    left,
+    ease: easing
+  })
+}
+
 export const setTabsPositions = (
-  animation = true,
-  callback: () => void = null
+  animation = true
 ) => {
-  const tabGroup = Store.tabGroups[0];
+  const tabGroup = Store.tabGroups[Store.selectedTabGroup];
   const { tabs } = tabGroup;
   const newTabs = tabs.filter(tab => !tab.isRemoving);
   const containerWidth = Store.getTabBarWidth();
@@ -41,35 +59,12 @@ export const setTabsPositions = (
   for (const item of newTabs) {
     if (item.left !== left) {
       if (animation) {
-        anime({
-          targets: item,
-          left,
-          round: 1,
-          easing: 'easeOutCubic',
-          duration: 300,
-          complete: () => {
-            if (item === newTabs[newTabs.length - 1]) {
-              if (callback != null) {
-                callback();
-              }
-            }
-          }
-        });
+        animateTab(item, "left", left);
       } else {
         item.left = left;
       }
     }
     left += widths[newTabs.indexOf(item)];
-  }
-
-  const animateAddTabButton = (newLeft: number) => {
-    anime({
-      targets: Store.addTabButton,
-      left: newLeft,
-      round: 1,
-      easing: 'easeOutCubic',
-      duration: 300
-    });
   }
   
   if (left >= containerWidth - SYSTEM_BAR_HEIGHT) {
@@ -78,7 +73,7 @@ export const setTabsPositions = (
         animateAddTabButton(containerWidth - SYSTEM_BAR_HEIGHT);
         setTimeout(() => {
           Store.addTabButton.left = "auto";
-        }, tabTransitions.left.duration * 1000);
+        }, tabAnimations.left.duration * 1000);
       } else {
         Store.addTabButton.left = "auto";
       }
@@ -105,7 +100,7 @@ export const setTabsPositions = (
 };
 
 export const getTabLeft = (tab: ITab): number => {
-  const { tabs } = Store.tabGroups[0];
+  const { tabs } = Store.tabGroups[Store.selectedTabGroup];
   const previousTab = tabs[tabs.indexOf(tab) - 1];
 
   if (previousTab) {
@@ -116,8 +111,8 @@ export const getTabLeft = (tab: ITab): number => {
   return 0;
 };
 
-export const setTabsWidths = (animation = true, callback: () => void = null) => {
-  const { tabs } = Store.tabGroups[0];
+export const setTabsWidths = (animation = true) => {
+  const { tabs } = Store.tabGroups[Store.selectedTabGroup];
   const containerWidth = Store.getTabBarWidth();
 
   const newTabs = tabs.filter(tab => !tab.isRemoving);
@@ -129,20 +124,7 @@ export const setTabsWidths = (animation = true, callback: () => void = null) => 
 
     if (item.width !== width) {
       if (animation) {
-        anime({
-          targets: item,
-          width,
-          round: 1,
-          easing: 'easeOutCubic',
-          duration: 300,
-          complete: () => {
-            if (item === newTabs[newTabs.length - 1]) {
-              if (callback != null) {
-                callback();
-              }
-            }
-          }
-        });
+        animateTab(item, "width", width);
       } else {
         item.width = width;
       }
@@ -154,7 +136,7 @@ export const setTabsWidths = (animation = true, callback: () => void = null) => 
 
 export const getTabWidth = (
   tab: ITab,
-  tabsCount = Store.tabGroups[0].tabs.length
+  tabsCount = Store.tabGroups[Store.selectedTabGroup].tabs.length
 ): number => {
   const containerWidth = Store.getTabBarWidth();
 
@@ -189,7 +171,7 @@ export const getTabById = (id: number): ITab => {
 
 export const addTab = (): ITab => {
   const index =
-    Store.tabGroups[0].tabs.push({
+    Store.tabGroups[Store.selectedTabGroup].tabs.push({
       id: nextTabId,
       title: "New tab",
       left: 0,
@@ -198,7 +180,7 @@ export const addTab = (): ITab => {
       isRemoving: false
     }) - 1;
 
-  const tab = Store.tabGroups[0].tabs[index];
+  const tab = Store.tabGroups[Store.selectedTabGroup].tabs[index];
 
   selectTab(tab);
   addPage(tab.id);
@@ -209,12 +191,12 @@ export const addTab = (): ITab => {
 };
 
 export const removeTab = (tab: ITab) => {
-  Store.tabGroups[0].tabs = Store.tabGroups[0].tabs.filter(
+  Store.tabGroups[Store.selectedTabGroup].tabs = Store.tabGroups[Store.selectedTabGroup].tabs.filter(
     ({ id }) => tab.id !== id
   );
   Store.pages = Store.pages.filter(({ id }) => tab.id !== id);
 };
 
 export const selectTab = (tab: ITab) => {
-  Store.tabGroups[0].selectedTab = tab.id;
+  Store.tabGroups[Store.selectedTabGroup].selectedTab = tab.id;
 };
