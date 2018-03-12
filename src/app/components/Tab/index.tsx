@@ -13,6 +13,8 @@ import Store from "../../store";
 import { TAB_MAX_WIDTH } from "../../constants/design";
 import { tabAnimations } from "../../defaults/tabs";
 
+import { closeWindow } from "../../utils/window";
+
 interface IProps {
   key: number;
   tab: ITab;
@@ -25,25 +27,37 @@ interface IProps {
 export default observer(({ selected, tab, tabGroup, onMouseDown, onMouseUp }: IProps) => {
   const { left, width, title, id, isRemoving } = tab;
 
-  const close = () => {
-    if (tabGroup.tabs.indexOf(tab) === tabGroup.tabs.length - 1) {
-      tabGroup.selectedTab = tabGroup.tabs[tabGroup.tabs.indexOf(tab) - 1].id;
+  const close = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+
+    const tabIndex = tabGroup.tabs.indexOf(tab);
+
+    if (tabIndex + 1 < tabGroup.tabs.length - 1) {
+      const nextTab = tabGroup.tabs[tabIndex + 1];
+      if (nextTab != null && !nextTab.isRemoving) {
+        tabGroup.selectedTab = nextTab.id;
+      }
+    } else if (tabIndex - 1 >= 0) {
+      const previousTab = tabGroup.tabs[tabIndex - 1];
+      if (previousTab != null && !previousTab.isRemoving) {
+        tabGroup.selectedTab = previousTab.id;
+      }
     } else {
-      tabGroup.selectedTab = tabGroup.tabs[tabGroup.tabs.indexOf(tab) + 1].id;
+      if (Store.tabGroups.length === 1) {
+        closeWindow();
+      }
     }
 
     if (tabs.getScrollingMode(tabGroup) || tab.width === TAB_MAX_WIDTH) {
       tab.isRemoving = true;
+      tabs.animateTab(tab, "width", 0);
+
+      tabs.setTabsWidths();
+      tabs.setTabsPositions();
+
       setTimeout(() => {
-        tabs.animateTab(tab, "width", 0);
-
-        tabs.setTabsWidths();
-        tabs.setTabsPositions();
-
-        setTimeout(() => {
-          tabs.removeTab(tab);
-        }, tabAnimations.left.duration * 1000);
-      }, 50);
+        tabs.removeTab(tab);
+      }, tabAnimations.left.duration * 1000);
     } else {
       tabs.removeTab(tab);
       tabs.setTabsWidths();
