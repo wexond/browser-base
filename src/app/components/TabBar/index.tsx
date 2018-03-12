@@ -73,7 +73,7 @@ const StyledTabBar = styled.div`
   margin-left: ${Store.platform === Platforms.MacOS ? 78 : 0}px;
   position: relative;
   box-shadow: ${shadows[2]};
-  z-index: 9;
+  z-index: 8;
   height: ${TABBAR_HEIGHT}px;
   display: flex;
 `;
