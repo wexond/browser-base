@@ -7,7 +7,7 @@ export const SYSTEM_BAR_HEIGHT = 48;
 // Widths
 export const SYSTEM_BAR_WINDOWS_BUTTON_WIDTH = 45;
 export const TAB_MAX_WIDTH = 200;
-export const TAB_MIN_WIDTH = 60;
+export const TAB_MIN_WIDTH = 72;
 export const TAB_PINNED_WIDTH = 32;
 export const TABBAR_BUTTON_WIDTH = 40;
 
