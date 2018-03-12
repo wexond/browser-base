@@ -36,7 +36,7 @@ export default class TabBar extends React.Component<{}, {}> {
     return (
       <StyledTabBar innerRef={(r: any) => (this.tabBar = r)}>
         {Store.tabGroups.map((tabGroup: ITabGroup) => {
-          if (tabGroup.id != Store.selectedTabGroup) {
+          if (tabGroup.id !== Store.selectedTabGroup) {
             return null;
           }
           return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
