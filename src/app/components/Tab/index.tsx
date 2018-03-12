@@ -103,7 +103,7 @@ interface ITitleProps {
 const Title = styled.div`
   position: absolute;
   left: calc(50%);
-  transform: translateX(calc(-50% - 8px));
+  transform: translateX(calc(-50% - 12px));
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -111,7 +111,7 @@ const Title = styled.div`
   transition: 0.2s opacity;
   font-weight: 500;
   text-transform: uppercase;
-  max-width: calc(100% - 32px);
+  max-width: calc(100% - 40px);
   opacity: ${transparency.light.text.primary};
 `;
 
@@ -122,7 +122,7 @@ interface ICloseProps {
 
 const Close = styled.div`
   position: absolute;
-  right: 8px;
+  right: 12px;
   height: 16px;
   width: 16px;
   background-image: url(../../src/app/icons/actions/close.svg);
