@@ -61,6 +61,10 @@ export default class TabGroup extends React.Component<IProps, {}> {
 
     window.addEventListener("mouseup", this.onScrollbarMouseUp);
     window.addEventListener("mousemove", this.onMouseMove);
+
+    requestAnimationFrame(() => {
+      this.addTab();
+    }) 
   }
 
   public resizeScrollbar = () => {
