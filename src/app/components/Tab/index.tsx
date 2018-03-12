@@ -92,6 +92,7 @@ const StyledTab = styled.div`
     }
   }};
   z-index: ${props => (props.selected ? 2 : 1)};
+  pointer-events: ${props => props.isRemoving ? "none" : "auto"};
 `;
 
 interface ITitleProps {
