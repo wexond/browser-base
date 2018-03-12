@@ -1,4 +1,5 @@
 import { observer } from "mobx-react";
+import { transparency } from "nersent-ui";
 import React from "react";
 import styled from "styled-components";
 
@@ -32,7 +33,7 @@ export default observer(({ selected, tab, tabGroup, onMouseDown, onMouseUp }: IP
 
     const tabIndex = tabGroup.tabs.indexOf(tab);
 
-    if (tabIndex + 1 < tabGroup.tabs.length - 1) {
+    if (tabIndex + 1 < tabGroup.tabs.length) {
       const nextTab = tabGroup.tabs[tabIndex + 1];
       if (nextTab != null && !nextTab.isRemoving) {
         tabGroup.selectedTab = nextTab.id;
@@ -89,21 +90,13 @@ const StyledTab = styled.div`
   display: flex;
   align-items: center;
   position: absolute;
-  height: 100%;
   left: 0;
   top: 0;
   overflow: hidden;
+  height: calc(100% - 2px);
 
   background-color: ${(props: IStyledTabProps) => {
-    if (props.isRemoving) {
-      return "#fff";
-    } else {
-      if (props.selected) {
-        return "#fff";
-      } else {
-        return "none";
-      }
-    }
+    return "none";
   }};
   z-index: ${props => (props.selected ? 2 : 1)};
   pointer-events: ${props => props.isRemoving ? "none" : "auto"};
@@ -115,13 +108,15 @@ interface ITitleProps {
 
 const Title = styled.div`
   position: absolute;
-  left: 8px;
+  left: calc(50%);
+  transform: translateX(calc(-50% - 8px));
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 100%;
   white-space: nowrap;
   opacity: ${(props: ITitleProps) => (props.isRemoving ? 0 : 1)};
   transition: 0.2s opacity;
+  font-weight: 500;
+  text-transform: uppercase;
 `;
 
 interface ICloseProps {
@@ -139,4 +134,5 @@ const Close = styled.div`
   opacity: ${(props: ICloseProps) => (props.isRemoving ? 0 : 1)};
   transition: 0.2s opacity;
   display: ${props => props.selected ? "block" : "none"};
+  opacity: ${transparency.light.icons.inactive};
 `;
