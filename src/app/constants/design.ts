@@ -3,7 +3,6 @@ import { Platforms } from "../../shared/enums";
 
 // Heights
 export const SYSTEM_BAR_HEIGHT = 48;
-export const TABBAR_HEIGHT = 48;
 
 // Widths
 export const SYSTEM_BAR_WINDOWS_BUTTON_WIDTH = 45;
