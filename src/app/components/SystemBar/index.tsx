@@ -8,5 +8,5 @@ export default styled.div`
   height: ${SYSTEM_BAR_HEIGHT}px;
   display: flex;
   -webkit-app-region: drag;
-  background-color: #eee;
+  background-color: #fff;
 `;

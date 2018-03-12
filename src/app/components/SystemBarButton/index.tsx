@@ -7,7 +7,8 @@ import { join } from "path";
 import {
   HOVER_DURATION,
   SYSTEM_BAR_HEIGHT,
-  SYSTEM_BAR_WINDOWS_BUTTON_WIDTH
+  SYSTEM_BAR_WINDOWS_BUTTON_WIDTH,
+  TABBAR_BUTTON_WIDTH
 } from "../../constants/design";
 
 import { Icons } from "../../enums";
@@ -50,7 +51,7 @@ const Icon = styled.div`
   width: 100%;
   height: 100%;
   transition: ${HOVER_DURATION}s all;
-  
+
   ${(props: IIconProps) =>
     props.windows
       ? images.center("11px", "11px")
@@ -75,7 +76,7 @@ const Button = styled.div`
   -webkit-app-region: no-drag;
 
   width: ${(props: IButtonProps) =>
-    props.windows ? SYSTEM_BAR_WINDOWS_BUTTON_WIDTH : SYSTEM_BAR_HEIGHT}px;
+    props.windows ? SYSTEM_BAR_WINDOWS_BUTTON_WIDTH : TABBAR_BUTTON_WIDTH}px;
 
   transition: ${HOVER_DURATION}s background-color;
 
