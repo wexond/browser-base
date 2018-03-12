@@ -21,5 +21,5 @@ export interface IPage {
 }
 
 export interface IAddTabButton {
-  left: number | "auto"
+  left: number | "auto";
 }
