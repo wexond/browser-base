@@ -119,9 +119,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
     }
   }
 
-  public onTabMouseUp = (tab: ITab) => {
-
-  }
+  public onTabMouseUp = (tab: ITab) => '';
 
   public onMouseEnter = () => {
     this.setState({ scrollbarThumbVisible: true });
@@ -197,7 +195,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
     const { tabGroup } = this.props;
     return (
       <>
-        <TabGroups
+        <Tabs
           onWheel={this.onWheel}
           innerRef={(r: any) => (this.tabGroups = r)}
           onMouseEnter={this.onMouseEnter}
@@ -213,7 +211,8 @@ export default class TabGroup extends React.Component<IProps, {}> {
               onMouseUp={() => this.onTabMouseUp(tab)}
             />
           ))}
-        </TabGroups>
+          <Line/>
+        </Tabs>
         <Scrollbar 
           visible={this.state.scrollbarVisible}
         >
@@ -231,7 +230,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
   }
 }
 
-const TabGroups = styled.div`
+const Tabs = styled.div`
   position: relative;
   height: 100%;
   overflow: hidden;
@@ -273,4 +272,13 @@ const ScrollbarThumb = styled.div`
   &:active {
     opacity: 0.4;
   }
+`;
+
+const Line = styled.div`
+  background-color: #2196F3;
+  height: 2px;
+  width: 200px;
+  bottom: 0;
+  position: absolute;
+  z-index: 3;
 `;
