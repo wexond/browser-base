@@ -31,7 +31,7 @@ export const setTabsPositions = (
   animation = true,
   callback: () => void = null
 ) => {
-  const tabGroup = Store.tabGroups[0];
+  const tabGroup = Store.tabGroups[Store.selectedTabGroup];
   const { tabs } = tabGroup;
   const newTabs = tabs.filter(tab => !tab.isRemoving);
   const containerWidth = Store.getTabBarWidth();
@@ -105,7 +105,7 @@ export const setTabsPositions = (
 };
 
 export const getTabLeft = (tab: ITab): number => {
-  const { tabs } = Store.tabGroups[0];
+  const { tabs } = Store.tabGroups[Store.selectedTabGroup];
   const previousTab = tabs[tabs.indexOf(tab) - 1];
 
   if (previousTab) {
@@ -117,7 +117,7 @@ export const getTabLeft = (tab: ITab): number => {
 };
 
 export const setTabsWidths = (animation = true, callback: () => void = null) => {
-  const { tabs } = Store.tabGroups[0];
+  const { tabs } = Store.tabGroups[Store.selectedTabGroup];
   const containerWidth = Store.getTabBarWidth();
 
   const newTabs = tabs.filter(tab => !tab.isRemoving);
@@ -154,7 +154,7 @@ export const setTabsWidths = (animation = true, callback: () => void = null) => 
 
 export const getTabWidth = (
   tab: ITab,
-  tabsCount = Store.tabGroups[0].tabs.length
+  tabsCount = Store.tabGroups[Store.selectedTabGroup].tabs.length
 ): number => {
   const containerWidth = Store.getTabBarWidth();
 
@@ -189,7 +189,7 @@ export const getTabById = (id: number): ITab => {
 
 export const addTab = (): ITab => {
   const index =
-    Store.tabGroups[0].tabs.push({
+    Store.tabGroups[Store.selectedTabGroup].tabs.push({
       id: nextTabId,
       title: "New tab",
       left: 0,
@@ -198,7 +198,7 @@ export const addTab = (): ITab => {
       isRemoving: false
     }) - 1;
 
-  const tab = Store.tabGroups[0].tabs[index];
+  const tab = Store.tabGroups[Store.selectedTabGroup].tabs[index];
 
   selectTab(tab);
   addPage(tab.id);
@@ -209,12 +209,12 @@ export const addTab = (): ITab => {
 };
 
 export const removeTab = (tab: ITab) => {
-  Store.tabGroups[0].tabs = Store.tabGroups[0].tabs.filter(
+  Store.tabGroups[Store.selectedTabGroup].tabs = Store.tabGroups[Store.selectedTabGroup].tabs.filter(
     ({ id }) => tab.id !== id
   );
   Store.pages = Store.pages.filter(({ id }) => tab.id !== id);
 };
 
 export const selectTab = (tab: ITab) => {
-  Store.tabGroups[0].selectedTab = tab.id;
+  Store.tabGroups[Store.selectedTabGroup].selectedTab = tab.id;
 };
