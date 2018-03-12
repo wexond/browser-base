@@ -13,8 +13,6 @@ import { SystemBarIcons } from "../../enums";
 
 import images from "../../../shared/mixins/images";
 
-import { tabTransitions } from "../../defaults/tabs";
-
 interface IProps extends IButtonProps {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
   size?: number;

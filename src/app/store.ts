@@ -1,11 +1,12 @@
 import { observable } from "mobx";
 import os from "os";
 
-import { IPage, ITab, ITabGroup } from "./interfaces";
+import { IAddTabButton, IPage, ITab, ITabGroup } from "./interfaces";
 
 import { Platforms } from "../shared/enums";
 
 class Store {
+  public selectedTabGroup: number = 0;
   @observable
   public tabGroups: ITabGroup[] = [
     {
@@ -20,13 +21,13 @@ class Store {
   @observable public pages: IPage[] = [];
 
   @observable
-  public addTabButton: {
-    left: number | "auto";
-  } = {
+  public addTabButton: IAddTabButton = {
     left: 0
   };
 
   public getTabBarWidth: () => number;
+  public addTab: () => void;
+
   public platform: Platforms = os.platform() as Platforms;
 }
 

@@ -6,24 +6,23 @@ import images from "../../../shared/mixins/images";
 
 import * as tabs from "../../actions/tabs";
 
-import { ITab, ITabGroup, ITransition } from "../../interfaces";
+import { ITab, ITabGroup } from "../../interfaces";
 
 import Store from "../../store";
 
-import { transitionsToString } from "../../utils/transitions";
-
-import anime from "animejs";
 import { TAB_MAX_WIDTH } from "../../constants/design";
-import { tabTransitions } from "../../defaults/tabs";
+import { tabAnimations } from "../../defaults/tabs";
 
 interface IProps {
   key: number;
   tab: ITab;
   tabGroup: ITabGroup;
   selected: boolean;
+  onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseUp: () => void;
 }
 
-export default observer(({ selected, tab, tabGroup }: IProps) => {
+export default observer(({ selected, tab, tabGroup, onMouseDown, onMouseUp }: IProps) => {
   const { left, width, title, id, isRemoving } = tab;
 
   const close = () => {
@@ -36,20 +35,14 @@ export default observer(({ selected, tab, tabGroup }: IProps) => {
     if (tabs.getScrollingMode(tabGroup) || tab.width === TAB_MAX_WIDTH) {
       tab.isRemoving = true;
       setTimeout(() => {
-        anime({
-          targets: tab,
-          width: 0,
-          round: 1,
-          easing: 'easeOutCubic',
-          duration: 300
-        });
+        tabs.animateTab(tab, "width", 0);
 
         tabs.setTabsWidths();
         tabs.setTabsPositions();
 
         setTimeout(() => {
           tabs.removeTab(tab);
-        }, tabTransitions.left.duration * 1000);
+        }, tabAnimations.left.duration * 1000);
       }, 50);
     } else {
       tabs.removeTab(tab);
@@ -58,15 +51,12 @@ export default observer(({ selected, tab, tabGroup }: IProps) => {
     }
   };
 
-  const select = () => {
-    tabs.selectTab(tab);
-  };
-
   return (
     <StyledTab
       selected={selected}
       style={{ left, width }}
-      onMouseDown={select}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
       isRemoving={isRemoving}
     >
       <Title isRemoving={isRemoving}>{title}</Title>

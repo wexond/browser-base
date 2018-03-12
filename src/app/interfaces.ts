@@ -20,8 +20,6 @@ export interface IPage {
   url: string;
 }
 
-export interface ITransition {
-  property: string;
-  duration: number;
-  easing?: string;
+export interface IAddTabButton {
+  left: number | "auto"
 }

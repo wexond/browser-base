@@ -29,7 +29,6 @@ import * as tabs from "../../actions/tabs";
 
 // Defaults and constants
 import { HOVER_DURATION } from "../../constants/design";
-import { tabTransitions } from "../../defaults/tabs";
 
 export default () => {
   return (
