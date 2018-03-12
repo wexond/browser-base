@@ -36,12 +36,10 @@ export default () => {
   return (
     <List style={{ height: "100vh", overflow: "hidden" }}>
       <SystemBar>
-        <Bar>
-          <Icon icon={Icons.Back} size={24} />
-          <Icon icon={Icons.Forward} size={24} />
-          <Icon icon={Icons.Refresh} size={20} />
-          <Input />
-        </Bar>
+        <Icon icon={Icons.Back} size={24} />
+        <Icon icon={Icons.Forward} size={24} />
+        <Icon icon={Icons.Refresh} size={20} />
+        <TabBar />
         {Store.platform !== Platforms.MacOS && (
           <>
             <SystemBarButton
@@ -61,8 +59,8 @@ export default () => {
             />
           </>
         )}
+        <Line />
       </SystemBar>
-      <TabBar />
       <Pages />
     </List>
   );

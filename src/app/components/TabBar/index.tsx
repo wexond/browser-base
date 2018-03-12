@@ -16,7 +16,6 @@ import { ITabGroup } from "../../interfaces";
 // Mixins
 import { shadows } from "nersent-ui";
 
-import { TABBAR_HEIGHT } from "../../constants/design";
 import Store from "../../store";
 
 @observer
@@ -70,10 +69,10 @@ const TabGroups = styled.div`
 `
 
 const StyledTabBar = styled.div`
-  margin-left: ${Store.platform === Platforms.MacOS ? 78 : 0}px;
   position: relative;
-  box-shadow: ${shadows[2]};
   z-index: 8;
-  height: ${TABBAR_HEIGHT}px;
+  height: 100%;
   display: flex;
+  flex: 1;
+  margin-left: 16px;
 `;
