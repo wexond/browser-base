@@ -56,6 +56,10 @@ export default class TabGroup extends React.Component<IProps, {}> {
 
       tabs.setTabsWidths(false);
       tabs.setTabsPositions(false);
+
+      const selectedTab = tabs.getTabById(this.props.tabGroup.selectedTab)
+      this.props.tabGroup.lineLeft = selectedTab.newLeft;
+      this.props.tabGroup.lineWidth = selectedTab.newWidth;
     });
 
     requestAnimationFrame(this.resizeScrollbar);

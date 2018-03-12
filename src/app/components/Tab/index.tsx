@@ -33,16 +33,10 @@ export default observer(({ selected, tab, tabGroup, onMouseDown, onMouseUp }: IP
 
     const tabIndex = tabGroup.tabs.indexOf(tab);
 
-    if (tabIndex + 1 < tabGroup.tabs.length) {
-      const nextTab = tabGroup.tabs[tabIndex + 1];
-      if (nextTab != null && !nextTab.isRemoving) {
-        tabGroup.selectedTab = nextTab.id;
-      }
-    } else if (tabIndex - 1 >= 0) {
-      const previousTab = tabGroup.tabs[tabIndex - 1];
-      if (previousTab != null && !previousTab.isRemoving) {
-        tabGroup.selectedTab = previousTab.id;
-      }
+    if (tabIndex + 1 < tabGroup.tabs.length && !tabGroup.tabs[tabIndex + 1].isRemoving) {
+      tabGroup.selectedTab = tabGroup.tabs[tabIndex + 1].id;
+    } else if (tabIndex - 1 >= 0 && !tabGroup.tabs[tabIndex - 1].isRemoving) {
+      tabGroup.selectedTab = tabGroup.tabs[tabIndex - 1].id;
     } else {
       if (Store.tabGroups.length === 1) {
         closeWindow();
