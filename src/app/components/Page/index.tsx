@@ -1,30 +1,23 @@
-import React, { SFC } from "react";
-import styled from "styled-components";
+import { observer } from "mobx-react";
+import React from "react";
 
+// Interfaces
 import { IPage } from "../../interfaces";
+
+// Styles
+import { Page } from "./styles";
 
 interface IProps {
   page: IPage;
   selected: boolean;
 }
 
-export default ({ page, selected }: IProps) => {
+export default observer(({ page, selected }: IProps) => {
   const { url } = page;
 
-  const pageStyle: any = {
-    flex: selected ? 1 : "0 1",
-    height: !selected ? 0 : "auto",
-    width: !selected ? 0 : "auto",
-    pointerEvents: !selected ? "none" : "auto",
-    opacity: !selected ? 0 : 1,
-    position: !selected ? "absolute" : "initial",
-    top: !selected ? 0 : "auto",
-    left: !selected ? 0 : "auto"
-  };
-
   return (
-    <div style={pageStyle}>
+    <Page>
       <webview src={url} style={{ height: "100%" }} />
-    </div>
+    </Page>
   );
-};
+});
