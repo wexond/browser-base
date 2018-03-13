@@ -14,7 +14,7 @@ class Store {
       tabs: [] as ITab[],
       id: 0,
       lineLeft: 0,
-      lineWidth: 0,
+      lineWidth: 0
     }
   ];
 

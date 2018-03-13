@@ -65,7 +65,7 @@ const TabGroups = styled.div`
   display: flex;
   flex: 1;
   position: relative;
-`
+`;
 
 const StyledTabBar = styled.div`
   position: relative;
