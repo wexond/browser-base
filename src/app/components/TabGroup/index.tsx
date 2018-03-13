@@ -1,4 +1,5 @@
 import { Expo, TweenLite } from "gsap";
+import { observe } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
 
@@ -6,23 +7,24 @@ import React from "react";
 import { ITab, ITabGroup } from "../../interfaces";
 
 // Components
-import styled from "styled-components";
 import Tab from "../Tab";
 
 // Constants and defaults
-import { SYSTEM_BAR_HEIGHT, TABBAR_BUTTON_WIDTH } from "../../constants/design";
 import { tabAnimations } from "../../defaults/tabs";
 
 // Actions
 import * as tabs from "../../actions/tabs";
 
-import { observe } from "mobx";
+// Styles
+import { Line, Scrollbar, ScrollbarThumb, Tabs } from "./styles";
+
 import Store from "../../store";
 
 interface IProps {
   tabGroup: ITabGroup;
 }
 
+@observer
 export default class TabGroup extends React.Component<IProps, {}> {
   public state = {
     scrollbarThumbWidth: 0,
@@ -257,56 +259,3 @@ export default class TabGroup extends React.Component<IProps, {}> {
     );
   }
 }
-
-const Tabs = styled.div`
-  position: relative;
-  height: 100%;
-  overflow: hidden;
-  width: calc(100% - ${TABBAR_BUTTON_WIDTH}px);
-`;
-
-interface IScrollbarProps {
-  visible: boolean;
-}
-
-const Scrollbar = styled.div`
-  position: absolute;
-  height: 3px;
-  bottom: 0;
-  left: 0;
-  z-index: 10;
-  width: 100%;
-
-  display: ${(props: IScrollbarProps) => (props.visible ? "block" : "none")};
-`;
-
-interface IScrollbarThumbProps {
-  visible: boolean;
-}
-
-const ScrollbarThumb = styled.div`
-  position: absolute;
-  background-color: black;
-  opacity: ${(props: IScrollbarThumbProps) => (props.visible ? 0.2 : 0)};
-  height: 100%;
-  top: 0;
-  left: 0;
-  transition: 0.2s opacity;
-
-  &:hover {
-    opacity: 0.4;
-  }
-
-  &:active {
-    opacity: 0.4;
-  }
-`;
-
-const Line = styled.div`
-  background-color: #2196f3;
-  height: 2px;
-  width: 200px;
-  bottom: 0;
-  position: absolute;
-  z-index: 3;
-`;
