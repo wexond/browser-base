@@ -137,7 +137,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
     }
   }
 
-  public onTabMouseUp = (tab: ITab) => '';
+  public onTabMouseUp = (e: React.MouseEvent<HTMLDivElement>, tab: ITab) => '';
 
   public onMouseEnter = () => {
     this.setState({ scrollbarThumbVisible: true });
@@ -229,7 +229,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
               tab={tab}
               selected={tabGroup.selectedTab === tab.id}
               onMouseDown={(e) => this.onTabMouseDown(e, tab)}
-              onMouseUp={() => this.onTabMouseUp(tab)}
+              onMouseUp={(e) => this.onTabMouseUp(e, tab)}
             />
           ))}
           <Line style={{width: tabGroup.lineWidth, left: tabGroup.lineLeft }}/>
