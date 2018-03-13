@@ -3,6 +3,8 @@ const path = require('path');
 
 let mainWindow;
 
+
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -43,5 +45,13 @@ const createWindow = () => {
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
+  });
+
+  mainWindow.on("enter-full-screen", () => {
+    mainWindow.webContents.send("fullscreen", true);
+  });
+
+  mainWindow.on("leave-full-screen", () => {
+    mainWindow.webContents.send("fullscreen", false);
   });
 };

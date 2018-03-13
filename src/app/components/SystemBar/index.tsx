@@ -14,5 +14,5 @@ export default styled.div`
   display: flex;
   -webkit-app-region: drag;
   background-color: #fff;
-  padding-left: ${Store.platform === Platforms.MacOS ? 78 : 0}px;
+  padding-left: ${Store.platform === Platforms.MacOS && !Store.isFullscreen ? 78 : 0}px;
 `;
