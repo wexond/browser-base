@@ -23,4 +23,4 @@ ReactDOM.render(<App />, document.getElementById("app"));
 
 ipcRenderer.on("fullscreen", (isFullscreen: boolean) => {
   Store.isFullscreen = isFullscreen;
-})
+});

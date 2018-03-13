@@ -1,32 +1,24 @@
 import { observer } from "mobx-react";
 import React from "react";
+import styled from "styled-components";
 
 // Components
-import styled from "styled-components";
-import SystemBarButton from "../SystemBarButton";
 import TabGroup from "../TabGroup";
+import ToolBarButton from "../ToolBarButton";
+
+// Styles
+import { StyledTabBar, TabGroups } from "./styles";
 
 // Enums
-import { Platforms } from "../../../shared/enums";
 import { Icons } from "../../enums";
 
 // Interfaces
 import { ITabGroup } from "../../interfaces";
 
-// Mixins
-import { shadows } from "nersent-ui";
-
 import Store from "../../store";
 
 @observer
 export default class TabBar extends React.Component<{}, {}> {
-  public state = {
-    scrollbarThumbWidth: 0,
-    scrollbarWidth: 0,
-    scrollLeft: 0,
-    scrollbarVisible: false
-  };
-
   private tabBar: HTMLDivElement;
 
   public componentDidMount() {
@@ -45,9 +37,9 @@ export default class TabBar extends React.Component<{}, {}> {
             }
             return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
           })}
-          <SystemBarButton
-            icon={Icons.Add}
-            onClick={() => Store.addTab()}
+          <ToolBarButton
+            icon={Icons.AddTab}
+            onClick={Store.addTab}
             style={{
               position: "absolute",
               right: 0,
@@ -60,17 +52,3 @@ export default class TabBar extends React.Component<{}, {}> {
     );
   }
 }
-
-const TabGroups = styled.div`
-  display: flex;
-  flex: 1;
-  position: relative;
-`;
-
-const StyledTabBar = styled.div`
-  position: relative;
-  z-index: 8;
-  height: 100%;
-  display: flex;
-  flex: 1;
-`;
