@@ -17,6 +17,7 @@ import {
 // Components
 import List from "../List";
 import Pages from "../Pages";
+import Separator from "../Separator";
 import SystemBar from "../SystemBar";
 import SystemBarButton from "../SystemBarButton";
 import TabBar from "../TabBar";
@@ -37,13 +38,19 @@ export default observer(() => {
   return (
     <List style={{ height: "100vh", overflow: "hidden" }}>
       <SystemBar>
-        <Icon icon={Icons.Back} size={24} />
-        <Icon icon={Icons.Forward} size={24} />
-        <Icon icon={Icons.Refresh} size={20} />
+        <NavIcons>
+          <SystemBarButton size={24} icon={Icons.Back} />
+          <SystemBarButton size={24} icon={Icons.Forward} />
+          <SystemBarButton size={20} icon={Icons.Refresh} />
+        </NavIcons>
+        <Separator />
         <TabBar />
+        <Separator />
+        <SystemBarButton size={16} icon={Icons.TabGroups} />
+        <SystemBarButton size={18} icon={Icons.More} />
         {Store.platform !== Platforms.MacOS && (
           <>
-            <SystemBarButton size={16} icon={Icons.TabGroups} />
+            <Separator />
             <SystemBarButton
               windows={true}
               icon={Icons.Minimize}
@@ -68,9 +75,9 @@ export default observer(() => {
   );
 });
 
-const Bar = styled.div`
-  flex: 1;
+const NavIcons = styled.div`
   display: flex;
+  -webkit-app-region: no-drag;
 `;
 
 const Line = styled.div`
@@ -95,13 +102,13 @@ const Input = styled.div`
   margin-right: 48px;
 `
 
-interface IIconProps {
+interface INavIconProps {
   icon: Icons;
   size: number;
 }
 
-const Icon = styled.div`
-  background-image: url(${(props: IIconProps) => "../../src/app/icons/" + props.icon});
+const NavIcon = styled.div`
+  background-image: url(${(props: INavIconProps) => "../../src/app/icons/" + props.icon});
   ${props => images.center(`${props.size}px`, `${props.size}px`)};
   height: 100%;
   min-width: 48px;
