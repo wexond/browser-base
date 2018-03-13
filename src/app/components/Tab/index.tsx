@@ -1,5 +1,6 @@
 import { observer } from "mobx-react";
 import { transparency } from "nersent-ui";
+import { colors, getRippleEvents, Ripples } from "nersent-ui";
 import React from "react";
 import styled from "styled-components";
 
@@ -22,11 +23,14 @@ interface IProps {
   tabGroup: ITabGroup;
   selected: boolean;
   onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
-  onMouseUp: () => void;
+  onMouseUp: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export default observer(({ selected, tab, tabGroup, onMouseDown, onMouseUp }: IProps) => {
+export default observer((props: IProps) => {
+  const { selected, tab, tabGroup } = props;
   const { left, width, title, id, isRemoving } = tab;
+
+  let ripples: Ripples;
 
   const close = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -60,6 +64,18 @@ export default observer(({ selected, tab, tabGroup, onMouseDown, onMouseUp }: IP
     }
   };
 
+  const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    ripples.makeRipple(e.pageX, e.pageY);
+
+    props.onMouseDown(e);
+  }
+
+  const onMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+    ripples.removeRipples();
+
+    props.onMouseUp(e);
+  }
+
   return (
     <StyledTab
       selected={selected}
@@ -70,6 +86,7 @@ export default observer(({ selected, tab, tabGroup, onMouseDown, onMouseUp }: IP
     >
       <Title>{title}</Title>
       <Close selected={selected} onClick={close} />
+      <Ripples rippleTime={0.8} ref={r => ripples = r} color={colors.blue['500']} />
     </StyledTab>
   );
 });
