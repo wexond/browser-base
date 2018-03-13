@@ -68,8 +68,8 @@ export default observer(({ selected, tab, tabGroup, onMouseDown, onMouseUp }: IP
       onMouseUp={onMouseUp}
       isRemoving={isRemoving}
     >
-      <Title isRemoving={isRemoving}>{title}</Title>
-      <Close isRemoving={isRemoving} selected={selected} onClick={close} />
+      <Title>{title}</Title>
+      <Close selected={selected} onClick={close} />
     </StyledTab>
   );
 });
@@ -88,35 +88,25 @@ const StyledTab = styled.div`
   top: 0;
   overflow: hidden;
   height: calc(100% - 2px);
-
-  background-color: ${(props: IStyledTabProps) => {
-    return "none";
-  }};
-  z-index: ${props => (props.selected ? 2 : 1)};
+  z-index: ${(props: IStyledTabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => props.isRemoving ? "none" : "auto"};
 `;
-
-interface ITitleProps {
-  isRemoving: boolean;
-}
 
 const Title = styled.div`
   position: absolute;
   left: calc(50%);
-  transform: translateX(calc(-50% - 12px));
+  transform: translateX(-50%);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  opacity: ${(props: ITitleProps) => (props.isRemoving ? 0 : 1)};
   transition: 0.2s opacity;
   font-weight: 500;
   text-transform: uppercase;
-  max-width: calc(100% - 40px);
+  max-width: calc(100% - 64px);
   opacity: ${transparency.light.text.primary};
 `;
 
 interface ICloseProps {
-  isRemoving: boolean;
   selected: boolean;
 }
 
@@ -127,8 +117,7 @@ const Close = styled.div`
   width: 16px;
   background-image: url(../../src/app/icons/actions/close.svg);
   ${images.center("100%", "100%")};
-  opacity: ${(props: ICloseProps) => (props.isRemoving ? 0 : 1)};
   transition: 0.2s opacity;
-  display: ${props => props.selected ? "block" : "none"};
+  display: ${(props: ICloseProps) => props.selected ? "block" : "none"};
   opacity: ${transparency.light.icons.inactive};
 `;

@@ -6,5 +6,7 @@ export enum Icons {
   TabGroups = "actions/tab-groups.svg",
   Back = "actions/back.svg",
   Forward = "actions/forward.svg",
-  Refresh = "actions/refresh.svg"
+  Refresh = "actions/refresh.svg",
+  Menu = "actions/menu.svg",
+  More = "actions/more.svg"
 }
