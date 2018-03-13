@@ -73,5 +73,4 @@ const StyledTabBar = styled.div`
   height: 100%;
   display: flex;
   flex: 1;
-  margin-left: 16px;
 `;
