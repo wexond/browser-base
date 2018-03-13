@@ -9,4 +9,4 @@ export default styled.div`
   transform: translateY(-50%);
   margin-left: 8px;
   margin-right: 8px;
-`
+`;
