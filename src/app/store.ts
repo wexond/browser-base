@@ -28,6 +28,7 @@ class Store {
   public getTabBarWidth: () => number;
   public addTab: () => void;
 
+  public isFullscreen: boolean = false;
   public platform: Platforms = os.platform() as Platforms;
 }
 
