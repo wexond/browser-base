@@ -5,11 +5,10 @@ import Store from "../store";
 import { tabAnimations } from "../defaults/tabs";
 
 import {
-  SYSTEM_BAR_HEIGHT,
   TAB_MAX_WIDTH,
   TAB_MIN_WIDTH,
   TAB_PINNED_WIDTH,
-  TABBAR_BUTTON_WIDTH
+  TOOLBAR_BUTTON_WIDTH
 } from "../constants/design";
 
 import { IAddTabButton, ITab, ITabGroup } from "../interfaces";
@@ -70,10 +69,10 @@ export const setTabsPositions = (animation = true) => {
     left += item.newWidth;
   }
 
-  if (left >= containerWidth - TABBAR_BUTTON_WIDTH) {
+  if (left >= containerWidth - TOOLBAR_BUTTON_WIDTH) {
     if (Store.addTabButton.left !== "auto") {
       if (animation) {
-        animateAddTabButton(containerWidth - TABBAR_BUTTON_WIDTH);
+        animateAddTabButton(containerWidth - TOOLBAR_BUTTON_WIDTH);
         setTimeout(() => {
           Store.addTabButton.left = "auto";
         }, tabAnimations.left.duration * 1000);
@@ -83,7 +82,7 @@ export const setTabsPositions = (animation = true) => {
     }
   } else {
     if (Store.addTabButton.left === "auto") {
-      Store.addTabButton.left = containerWidth - TABBAR_BUTTON_WIDTH;
+      Store.addTabButton.left = containerWidth - TOOLBAR_BUTTON_WIDTH;
     }
 
     if (animation) {
@@ -136,7 +135,7 @@ export const getTabWidth = (
 
   let width = tab.pinned
     ? TAB_PINNED_WIDTH
-    : (containerWidth - TABBAR_BUTTON_WIDTH) / tabsCount;
+    : (containerWidth - TOOLBAR_BUTTON_WIDTH) / tabsCount;
 
   if (width > TAB_MAX_WIDTH) {
     width = TAB_MAX_WIDTH;

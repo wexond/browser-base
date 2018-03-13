@@ -1,15 +1,14 @@
-import { platform } from "os";
-import { Platforms } from "../../shared/enums";
+// Toolbar
+export const TOOLBAR_HEIGHT = 48;
+export const TOOLBAR_BUTTON_WIDTH = 40;
 
-// Heights
-export const SYSTEM_BAR_HEIGHT = 48;
-
-// Widths
-export const SYSTEM_BAR_WINDOWS_BUTTON_WIDTH = 45;
+// Tabs
 export const TAB_MAX_WIDTH = 200;
 export const TAB_MIN_WIDTH = 72;
 export const TAB_PINNED_WIDTH = 32;
-export const TABBAR_BUTTON_WIDTH = 40;
+
+// Widths
+export const WINDOW_BUTTON_WIDTH = 45;
 
 // Animations
 export const HOVER_DURATION = 0.2;

@@ -1,12 +1,16 @@
 import { observer } from "mobx-react";
 import React from "react";
-import styled from "styled-components";
 
+// Interfaces
 import { IPage } from "../../interfaces";
 
-import Store from "../../store";
-
+// Components
 import Page from "../Page";
+
+// Styles
+import { StyledPages } from "./styles";
+
+import Store from "../../store";
 
 export default observer(() => {
   return (
@@ -23,10 +27,3 @@ export default observer(() => {
     </StyledPages>
   );
 });
-
-const StyledPages = styled.div`
-  z-index: 4;
-  position: relative;
-  flex: 1;
-  display: flex;
-`;
