@@ -57,7 +57,7 @@ const Icon = styled.div`
       ? images.center("11px", "11px")
       : images.center(props.size + "px", props.size + "px")}
 
-  opacity: ${props => props.windows ? 1 : transparency.light.icons.inactive};
+  opacity: ${props => (props.windows ? 1 : transparency.light.icons.inactive)};
 
   background-image: url(${props => "../../src/app/icons/" + props.icon});
 
@@ -82,8 +82,6 @@ const Button = styled.div`
 
   &:hover {
     background-color: ${props =>
-      props.icon !== Icons.Close
-        ? `rgba(196, 196, 196, 0.4)`
-        : `#e81123`};
+      props.icon !== Icons.Close ? `rgba(196, 196, 196, 0.4)` : `#e81123`};
   }
 `;
