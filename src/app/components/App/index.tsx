@@ -100,7 +100,7 @@ const Input = styled.div`
   border-radius: 2px;
   margin-left: 48px;
   margin-right: 48px;
-`
+`;
 
 interface INavIconProps {
   icon: Icons;
@@ -108,7 +108,8 @@ interface INavIconProps {
 }
 
 const NavIcon = styled.div`
-  background-image: url(${(props: INavIconProps) => "../../src/app/icons/" + props.icon});
+  background-image: url(${(props: INavIconProps) =>
+    "../../src/app/icons/" + props.icon});
   ${props => images.center(`${props.size}px`, `${props.size}px`)};
   height: 100%;
   min-width: 48px;
@@ -117,4 +118,4 @@ const NavIcon = styled.div`
   &:hover {
     opacity: ${transparency.light.icons.active};
   }
-`
+`;

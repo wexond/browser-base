@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import { transparency } from "nersent-ui";
 import { colors, getRippleEvents, Ripples } from "nersent-ui";
 import React from "react";
-import styled from "styled-components";
+import styled, { StyledComponentClass } from "styled-components";
 
 import images from "../../../shared/mixins/images";
 
@@ -24,20 +24,38 @@ interface IProps {
   selected: boolean;
   onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
   onMouseUp: (e: React.MouseEvent<HTMLDivElement>) => void;
+  styles?: any;
 }
 
-export default observer((props: IProps) => {
-  const { selected, tab, tabGroup } = props;
-  const { left, width, title, id, isRemoving } = tab;
+@observer
+export default class Tab extends React.Component<IProps, {}> {
+  private ripples: Ripples;
 
-  let ripples: Ripples;
+  public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    this.ripples.makeRipple(e.pageX, e.pageY);
+    this.props.onMouseDown(e);
+  };
 
-  const close = (e: React.MouseEvent<HTMLDivElement>) => {
+  public onMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+    this.ripples.removeRipples();
+    this.props.onMouseUp(e);
+  };
+
+  public onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
+  public close = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { tabGroup, tab } = this.props;
+
     e.stopPropagation();
 
     const tabIndex = tabGroup.tabs.indexOf(tab);
 
-    if (tabIndex + 1 < tabGroup.tabs.length && !tabGroup.tabs[tabIndex + 1].isRemoving) {
+    if (
+      tabIndex + 1 < tabGroup.tabs.length &&
+      !tabGroup.tabs[tabIndex + 1].isRemoving
+    ) {
       tabGroup.selectedTab = tabGroup.tabs[tabIndex + 1].id;
     } else if (tabIndex - 1 >= 0 && !tabGroup.tabs[tabIndex - 1].isRemoving) {
       tabGroup.selectedTab = tabGroup.tabs[tabIndex - 1].id;
@@ -64,32 +82,47 @@ export default observer((props: IProps) => {
     }
   };
 
-  const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    ripples.makeRipple(e.pageX, e.pageY);
-
-    props.onMouseDown(e);
+  public styles() {
+    return {
+      tab: {},
+      title: {},
+      close: {}
+    };
   }
 
-  const onMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
-    ripples.removeRipples();
+  public render() {
+    const { selected, tab, tabGroup } = this.props;
+    const { left, width, title, id, isRemoving } = tab;
 
-    props.onMouseUp(e);
+    const styles = {
+      ...this.styles(),
+      ...this.props.styles
+    };
+
+    return (
+      <StyledTab
+        selected={selected}
+        style={{ left, width, ...styles.tab }}
+        onMouseDown={this.onMouseDown}
+        onMouseUp={this.onMouseUp}
+        isRemoving={isRemoving}
+      >
+        <Title style={{ ...styles.title }}>{title}</Title>
+        <Close
+          onMouseDown={this.onCloseMouseDown}
+          selected={selected}
+          onClick={this.close}
+          style={{ ...styles.close }}
+        />
+        <Ripples
+          rippleTime={0.75}
+          ref={r => (this.ripples = r)}
+          color={colors.blue["500"]}
+        />
+      </StyledTab>
+    );
   }
-
-  return (
-    <StyledTab
-      selected={selected}
-      style={{ left, width }}
-      onMouseDown={onMouseDown}
-      onMouseUp={onMouseUp}
-      isRemoving={isRemoving}
-    >
-      <Title>{title}</Title>
-      <Close selected={selected} onClick={close} />
-      <Ripples rippleTime={0.8} ref={r => ripples = r} color={colors.blue['500']} />
-    </StyledTab>
-  );
-});
+}
 
 interface IStyledTabProps {
   selected: boolean;
@@ -106,7 +139,7 @@ const StyledTab = styled.div`
   overflow: hidden;
   height: calc(100% - 2px);
   z-index: ${(props: IStyledTabProps) => (props.selected ? 2 : 1)};
-  pointer-events: ${props => props.isRemoving ? "none" : "auto"};
+  pointer-events: ${props => (props.isRemoving ? "none" : "auto")};
 `;
 
 const Title = styled.div`
@@ -135,6 +168,6 @@ const Close = styled.div`
   background-image: url(../../src/app/icons/actions/close.svg);
   ${images.center("100%", "100%")};
   transition: 0.2s opacity;
-  display: ${(props: ICloseProps) => props.selected ? "block" : "none"};
+  display: ${(props: ICloseProps) => (props.selected ? "block" : "none")};
   opacity: ${transparency.light.icons.inactive};
 `;

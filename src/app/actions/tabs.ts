@@ -1,4 +1,3 @@
-
 import { TweenLite } from "gsap";
 
 import Store from "../store";
@@ -29,14 +28,18 @@ export const getScrollingMode = (tabGroup: ITabGroup): boolean => {
   }
 };
 
-export const animateTab = (tab: ITab, property: "width" | "left", value: number) => {
+export const animateTab = (
+  tab: ITab,
+  property: "width" | "left",
+  value: number
+) => {
   const { easing, duration } = tabAnimations[property];
 
   TweenLite.to(tab, duration, {
     [property]: value,
     ease: easing
-  })
-}
+  });
+};
 
 export const animateAddTabButton = (left: number) => {
   const { easing, duration } = tabAnimations.left;
@@ -44,12 +47,10 @@ export const animateAddTabButton = (left: number) => {
   TweenLite.to(Store.addTabButton, duration, {
     left,
     ease: easing
-  })
-}
+  });
+};
 
-export const setTabsPositions = (
-  animation = true
-) => {
+export const setTabsPositions = (animation = true) => {
   const tabGroup = Store.tabGroups[Store.selectedTabGroup];
   const { tabs } = tabGroup;
   const newTabs = tabs.filter(tab => !tab.isRemoving);
@@ -68,7 +69,7 @@ export const setTabsPositions = (
     item.newLeft = left;
     left += item.newWidth;
   }
-  
+
   if (left >= containerWidth - TABBAR_BUTTON_WIDTH) {
     if (Store.addTabButton.left !== "auto") {
       if (animation) {
@@ -186,9 +187,9 @@ export const addTab = (): ITab => {
 };
 
 export const removeTab = (tab: ITab) => {
-  Store.tabGroups[Store.selectedTabGroup].tabs = Store.tabGroups[Store.selectedTabGroup].tabs.filter(
-    ({ id }) => tab.id !== id
-  );
+  Store.tabGroups[Store.selectedTabGroup].tabs = Store.tabGroups[
+    Store.selectedTabGroup
+  ].tabs.filter(({ id }) => tab.id !== id);
   Store.pages = Store.pages.filter(({ id }) => tab.id !== id);
 };
 
