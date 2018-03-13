@@ -25,8 +25,9 @@ export const StyledTab = styled.div`
 
 export const Title = styled.div`
   position: absolute;
-  left: calc(50%);
-  transform: translateX(-50%);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -49,6 +50,8 @@ export const Close = styled.div`
   width: 16px;
   background-image: url(../../src/app/icons/actions/close.svg);
   transition: 0.2s opacity;
+  top: 50%;
+  transform: translateY(-50%);
 
   display: ${(props: ICloseProps) => (props.selected ? "block" : "none")};
   opacity: ${transparency.light.icons.inactive};

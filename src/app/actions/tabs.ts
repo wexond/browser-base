@@ -1,22 +1,23 @@
 import { TweenLite } from "gsap";
 
-import Store from "../store";
-
-import { tabAnimations } from "../defaults/tabs";
-
+// Constants and defaults
 import {
   TAB_MAX_WIDTH,
   TAB_MIN_WIDTH,
   TAB_PINNED_WIDTH,
   TOOLBAR_BUTTON_WIDTH
 } from "../constants/design";
+import { tabAnimations } from "../defaults/tabs";
 
+// Interfaces
 import { IAddTabButton, ITab, ITabGroup } from "../interfaces";
 
+// Actions
 import { addPage } from "./pages";
 
+import Store from "../store";
+
 let nextTabId = 0;
-let widths: number[] = [];
 
 export const getScrollingMode = (tabGroup: ITabGroup): boolean => {
   for (const tab of tabGroup.tabs) {
@@ -109,8 +110,6 @@ export const setTabsWidths = (animation = true) => {
   const { tabs } = Store.tabGroups[Store.selectedTabGroup];
   const newTabs = tabs.filter(tab => !tab.isRemoving);
 
-  widths = [];
-
   for (const item of newTabs) {
     const width = getTabWidth(item, newTabs.length);
 
@@ -122,8 +121,6 @@ export const setTabsWidths = (animation = true) => {
       }
     }
     item.newWidth = width;
-
-    widths.push(width);
   }
 };
 
