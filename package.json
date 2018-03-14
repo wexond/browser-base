@@ -48,7 +48,7 @@
     "css-loader": "0.28.10",
     "devtron": "1.4.0",
     "electron": "1.8.3",
-    "electron-builder": "20.4.1",
+    "electron-builder": "20.5.1",
     "mobx-react": "5.0.0",
     "mobx": "4.0.1",
     "node-sass": "4.8.1",
