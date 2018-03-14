@@ -50,7 +50,7 @@
     "electron": "1.8.3",
     "electron-builder": "20.5.1",
     "mobx-react": "5.0.0",
-    "mobx": "4.0.1",
+    "mobx": "4.0.2",
     "node-sass": "4.8.1",
     "react": "16.2.0",
     "react-dom": "16.2.0",
