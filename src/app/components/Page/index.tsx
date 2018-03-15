@@ -16,7 +16,7 @@ export default observer(({ page, selected }: IProps) => {
   const { url } = page;
 
   return (
-    <Page>
+    <Page selected={selected}>
       <webview src={url} style={{ height: "100%" }} />
     </Page>
   );
