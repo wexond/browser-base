@@ -15,4 +15,4 @@ export const Page = styled.div.attrs({
     top: !selected ? 0 : "auto",
     left: !selected ? 0 : "auto"
   })
-})``;
+})`${(props: IPageProps) => ''}`;
