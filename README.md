@@ -9,7 +9,7 @@
   [![Travis](https://img.shields.io/travis/wexond/wexond.svg?style=flat-square)](https://travis-ci.org/wexond/wexond)
   [![AppVeyor](https://img.shields.io/appveyor/ci/Sential/wexond.svg?style=flat-square)](https://ci.appveyor.com/project/Sential/wexond)
   
-  Wexond is a *free*, *open-source* and *extensible* web browser with material design, which lets you browse the web without any ads thanks to built-in ad blocker. The API in extensions system lets you to extend browser by additional functionality. Wexond works on each desktop platform, thanks to `Electron`. For building browser interface, we use `React` which is useful framework for creating components, `Sass` for styling them and `MobX` for managing states.
+  Wexond is a *free*, *open-source* and *extensible* web browser with material design, which lets you browse the web without any ads thanks to built-in ad blocker. The API in extensions system lets you to extend browser by additional functionality. Wexond works on each desktop platform, thanks to `Electron`. For building browser interface, we use `React` which is useful framework for creating components, `Sass` for styling them and `MobX` for managing states. We also use Material Design components from our framework [`nersent-ui`](https://github.com/nersent/nersent-ui).
 </div>
 
 # Contributing
