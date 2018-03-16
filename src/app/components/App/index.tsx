@@ -37,6 +37,8 @@ export default class App extends React.Component<{}, IState> {
     isFullscreen: false
   }
 
+  private input: HTMLInputElement;
+
   public componentDidMount() {
     ipcRenderer.on("fullscreen", (e: any, isFullscreen: boolean) => {
       this.setState({
@@ -50,8 +52,17 @@ export default class App extends React.Component<{}, IState> {
     })
   }
 
+  public onInputBlur = () => {
+    Store.addressBar.toggled = false;
+  }
+
   public render() {
     const { isFullscreen } = this.state
+
+    if (Store.addressBar.toggled) {
+      this.input.focus();
+    }
+
     return (
       <StyledApp>
         <ToolBar>
@@ -64,7 +75,7 @@ export default class App extends React.Component<{}, IState> {
           <ToolBarSeparator />
           <TabsSection>
             <AddressBar visible={Store.addressBar.toggled}>
-              <Input visible={Store.addressBar.toggled}/>
+              <Input innerRef={r => this.input = r} onBlur={this.onInputBlur} placeholder="Search" visible={Store.addressBar.toggled}/>
             </AddressBar>
             <TabBar />
           </TabsSection>
