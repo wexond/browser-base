@@ -1,4 +1,4 @@
-import { Expo, TweenLite } from "gsap";
+import { Expo, TweenLite, TweenMax } from "gsap";
 import { observe } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
@@ -279,7 +279,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
         }
       }
 
-      tabGroup.lineLeft = selectedTab.left;
+      TweenLite.to(tabGroup, 0, { lineLeft: selectedTab.left })
 
       let direction = "";
       if (this.tabDragData.lastMouseX - e.pageX === 1) {
