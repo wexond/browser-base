@@ -57,7 +57,7 @@ const createWindow = () => {
   });
 };
 
-var zoomText = document.forms['zoom-form']['zoom-text'];
+/*var zoomText = document.forms['zoom-form']['zoom-text'];
   var zoomFactor = Number(zoomText.value);
     if (zoomFactor > 5) {
         zoomText.value = "5";
@@ -86,4 +86,4 @@ function handleKeyDown(event) {
 
     }
   }
-}
+}*/
