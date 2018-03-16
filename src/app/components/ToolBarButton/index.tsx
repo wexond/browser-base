@@ -41,7 +41,7 @@ export default class ToolBarButton extends React.PureComponent<IProps, {}> {
           color={"#000"}
           parentWidth={42}
           parentHeight={48}
-          rippleTime={0.7}
+          rippleTime={0.6}
           initialOpacity={0.1}
         />
       </Button>
