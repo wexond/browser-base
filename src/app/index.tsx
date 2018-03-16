@@ -10,6 +10,8 @@ import Store from "./store";
 
 injectGlobal`
   body {
+    transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
     user-select: none;
     cursor: default;
     ${typography.body1()}
