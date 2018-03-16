@@ -26,7 +26,8 @@ const createWindow = () => {
       show: false,
       titleBarStyle: 'hidden-inset',
       webPreferences: {
-        preload: path.resolve(__dirname, 'preloads/index.js')
+        preload: path.resolve(__dirname, 'preloads/index.js'),
+        plugins: true
       }
     }
   );
