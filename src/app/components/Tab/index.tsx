@@ -120,7 +120,7 @@ export default class Tab extends React.Component<IProps, {}> {
           style={{ ...styles.close }}
         />
         <Ripples
-          rippleTime={0.75}
+          rippleTime={0.6}
           ref={r => (this.ripples = r)}
           color={colors.blue["500"]}
         />
