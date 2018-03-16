@@ -100,7 +100,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
       scrollbarVisible:
         this.state.scrollbarThumbWidth !== this.tabGroups.offsetWidth
     });
-    
+
     requestAnimationFrame(this.resizeScrollbar);
   };
 
@@ -232,6 +232,10 @@ export default class TabGroup extends React.Component<IProps, {}> {
       const { startLeft, mouseStartX } = this.tabDragData;
 
       const boundingRect = this.tabGroups.getBoundingClientRect();
+
+      if (Math.abs(e.pageX - mouseStartX) < 5) {
+        return;
+      }
 
       const newLeft = startLeft + e.pageX - mouseStartX - (this.scrollData.lastScrollLeft - this.tabGroups.scrollLeft);
 
