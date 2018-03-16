@@ -52,7 +52,35 @@ export const AddressBar = styled.div`
   left: 0;
   top: 0;
   transition: 0.2s opacity;
+  display: flex;
+  align-items: center;
 
-  -webkit-app-region: ${(props: IAddressBarProps) => props.visible ? "no-drag" : "drag"};
-  opacity: ${props => props.visible ? 1 : 0};
+  opacity: ${(props: IAddressBarProps) => props.visible ? 1 : 0};
 `;
+
+interface IInputProps {
+  visible: boolean;
+}
+
+export const Input = styled.div`
+  background-color: black;
+  border-radius: 2px;
+  width: 100%;
+  height: 32px;
+  opacity: 0.12;
+  max-width: 680px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: relative;
+
+  -webkit-app-region: ${(props: IInputProps) => props.visible ? "no-drag" : "drag"};
+`;
+
+export const Handle = styled.div`
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  right: 3px;
+  bottom: 0px;
+  -webkit-app-region: drag;
+`
