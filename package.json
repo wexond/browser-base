@@ -47,7 +47,7 @@
     "gsap": "1.20.4",
     "mobx": "4.1.0",
     "mobx-react": "5.0.0",
-    "nersent-ui": "3.2.6",
+    "nersent-ui": "3.2.7",
     "prettier": "1.11.1",
     "react": "16.2.0",
     "react-dom": "16.2.0",

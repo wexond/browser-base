@@ -29,7 +29,7 @@ export default class TabBar extends React.Component<{}, {}> {
 
   public render() {
     return (
-      <StyledTabBar innerRef={(r: any) => (this.tabBar = r)}>
+      <StyledTabBar visible={!Store.addressBar.toggled} innerRef={(r: any) => (this.tabBar = r)}>
         <TabGroups>
           {Store.tabGroups.map((tabGroup: ITabGroup) => {
             if (tabGroup.id !== Store.selectedTabGroup) {

@@ -1,7 +1,7 @@
 import { observable } from "mobx";
 import os from "os";
 
-import { IAddTabButton, IPage, ITab, ITabGroup } from "./interfaces";
+import { IAddressBar, IAddTabButton, IPage, ITab, ITabGroup } from "./interfaces";
 
 import { Platforms } from "../shared/enums";
 
@@ -24,6 +24,12 @@ class Store {
   public addTabButton: IAddTabButton = {
     left: 0
   };
+
+  @observable
+  public addressBar: IAddressBar = {
+    toggled: false,
+    canToggle: false
+  }
 
   public getTabBarWidth: () => number;
   public addTab: () => void;
