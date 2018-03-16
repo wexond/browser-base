@@ -46,7 +46,8 @@ export default class TabGroup extends React.Component<IProps, {}> {
     mouseStartX: 0,
     startLeft: 0,
     newScrollLeft: -1,
-    maxScrollLeft: 0
+    maxScrollLeft: 0,
+    lastScrollLeft: 0
   };
   private interval: any;
 
@@ -139,6 +140,8 @@ export default class TabGroup extends React.Component<IProps, {}> {
       startLeft: tab.left,
       direction: ""
     };
+
+    this.scrollData.lastScrollLeft = this.tabGroups.scrollLeft;
   };
 
   public onMouseEnter = () => {
@@ -225,6 +228,8 @@ export default class TabGroup extends React.Component<IProps, {}> {
       const { startLeft, mouseStartX } = this.tabDragData;
       const selectedTab = tabs.getTabById(tabGroup.selectedTab);
 
+      const boundingRect = this.tabGroups.getBoundingClientRect();
+
       let direction = "";
       if (this.tabDragData.lastMouseX - e.pageX === 1) {
         direction = "left"
@@ -236,7 +241,25 @@ export default class TabGroup extends React.Component<IProps, {}> {
         this.tabDragData.direction = direction;
       }
 
-      selectedTab.left = startLeft + e.pageX - mouseStartX;
+
+      const newLeft = startLeft + e.pageX - mouseStartX - (this.scrollData.lastScrollLeft - this.tabGroups.scrollLeft);
+
+      if (newLeft < 0) {
+        selectedTab.left = 0;
+      } else if (Store.addTabButton.left === "auto") {
+        if (newLeft + selectedTab.width > this.tabGroups.scrollWidth) {
+          selectedTab.left = this.tabGroups.scrollWidth - selectedTab.width;
+        } else {
+          selectedTab.left = newLeft;
+        }
+      } else if (typeof Store.addTabButton.left === "number") {
+        if (newLeft + selectedTab.width > (Store.addTabButton.left as number)) {
+          selectedTab.left = Store.addTabButton.left - selectedTab.width;
+        } else {
+          selectedTab.left = newLeft;
+        }
+      }
+
       tabGroup.lineLeft = selectedTab.left;
 
       const tab = tabs.getTabUnderTab(selectedTab, this.tabDragData.direction);
