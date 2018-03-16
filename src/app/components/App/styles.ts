@@ -62,15 +62,19 @@ interface IInputProps {
   visible: boolean;
 }
 
-export const Input = styled.div`
-  background-color: black;
+export const Input = styled.input`
+  background-color: rgba(0,0,0, 0.12);
   border-radius: 2px;
   width: 100%;
   height: 32px;
-  opacity: 0.12;
   max-width: 680px;
   left: 50%;
+  font-size: 13px;
   transform: translateX(-50%);
+  padding-left: 16px;
+  color: black;
+  border: none;
+  outline: none;
   position: relative;
 
   -webkit-app-region: ${(props: IInputProps) => props.visible ? "no-drag" : "drag"};

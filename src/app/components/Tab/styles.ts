@@ -23,7 +23,7 @@ export const StyledTab = styled.div`
 
   z-index: ${(props: IStyledTabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => props.isRemoving || !props.visible ? "none" : "auto"};
-  -webkit-app-region: ${props => props.visible ? "no-drag" : "drag"};
+  -webkit-app-region: ${props => props.visible ? "no-drag" : ""};
 `;
 
 interface ITitleProps {
