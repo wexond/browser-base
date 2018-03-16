@@ -18,6 +18,7 @@ export const StyledTab = styled.div`
   top: 0;
   overflow: hidden;
   height: calc(100% - 2px);
+  background-color: white;
 
   z-index: ${(props: IStyledTabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => (props.isRemoving ? "none" : "auto")};

@@ -1,4 +1,3 @@
-import { ipcRenderer } from "electron";
 import React from "react";
 import ReactDOM from "react-dom";
 import { injectGlobal } from "styled-components";
@@ -20,7 +19,3 @@ injectGlobal`
 `;
 
 ReactDOM.render(<App />, document.getElementById("app"));
-
-ipcRenderer.on("fullscreen", (isFullscreen: boolean) => {
-  Store.isFullscreen = isFullscreen;
-});
