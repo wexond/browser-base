@@ -12,6 +12,7 @@ interface IStyledTabProps {
 }
 
 export const StyledTab = styled.div`
+  transform: translateZ(0);
   -webkit-app-region: no-drag;
   position: absolute;
   left: 0;
