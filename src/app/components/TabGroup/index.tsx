@@ -49,7 +49,8 @@ export default class TabGroup extends React.Component<IProps, {}> {
     maxScrollLeft: 0,
     lastScrollLeft: 0
   };
-  private interval: any;
+  private scrollInterval: any;
+  private tabsInterval: any;
 
   public componentDidMount() {
     const { tabGroup } = this.props;
@@ -112,14 +113,14 @@ export default class TabGroup extends React.Component<IProps, {}> {
 
     this.scrollData.maxScrollLeft += width;
 
-    clearInterval(this.interval);
+    clearInterval(this.scrollInterval);
 
     let time = 0;
-    this.interval = setInterval(() => {
+    this.scrollInterval = setInterval(() => {
       if (time < tabAnimations.left.duration * 1000) {
         this.tabGroups.scrollLeft = this.scrollData.maxScrollLeft;
       } else {
-        clearInterval(this.interval);
+        clearInterval(this.scrollInterval);
       }
 
       time += 1;
@@ -155,7 +156,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
   public onScrollbarMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const { scrollbarThumbLeft } = this.state;
 
-    clearInterval(this.interval);
+    clearInterval(this.scrollInterval);
 
     this.scrollData = {
       ...this.scrollData,
@@ -186,7 +187,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
     const delta = Math.abs(deltaX) >= Math.abs(deltaY) ? deltaX : -deltaY;
     const target = delta / 2;
 
-    clearInterval(this.interval);
+    clearInterval(this.scrollInterval);
 
     if (this.tabGroups.scrollLeft !== newScrollLeft && newScrollLeft !== -1) {
       newScrollLeft += target;
@@ -216,6 +217,9 @@ export default class TabGroup extends React.Component<IProps, {}> {
   };
 
   public onMouseMove = (e: any) => {
+    const { tabGroup } = this.props;
+    const selectedTab = tabs.getTabById(tabGroup.selectedTab);
+
     if (this.scrollData.dragging) {
       const { startLeft, mouseStartX } = this.scrollData;
       this.tabGroups.scrollLeft =
@@ -224,9 +228,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
         this.tabGroups.scrollWidth;
     }
     if (this.tabDragData.dragging) {
-      const { tabGroup } = this.props;
       const { startLeft, mouseStartX } = this.tabDragData;
-      const selectedTab = tabs.getTabById(tabGroup.selectedTab);
 
       const boundingRect = this.tabGroups.getBoundingClientRect();
 
@@ -240,7 +242,6 @@ export default class TabGroup extends React.Component<IProps, {}> {
       if (direction !== "") {
         this.tabDragData.direction = direction;
       }
-
 
       const newLeft = startLeft + e.pageX - mouseStartX - (this.scrollData.lastScrollLeft - this.tabGroups.scrollLeft);
 
