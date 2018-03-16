@@ -38,6 +38,7 @@ interface IProps {
 @observer
 export default class Tab extends React.Component<IProps, {}> {
   private ripples: Ripples;
+  private iconRipples: Ripples;
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     this.ripples.makeRipple(e.pageX, e.pageY);
@@ -50,6 +51,11 @@ export default class Tab extends React.Component<IProps, {}> {
 
   public onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
+    this.iconRipples.makeRipple(e.pageX, e.pageY);
+  };
+
+  public onCloseMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+    this.ripples.removeRipples();
   };
 
   public close = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -115,10 +121,22 @@ export default class Tab extends React.Component<IProps, {}> {
         <Title style={{ ...styles.title }}>{title}</Title>
         <Close
           onMouseDown={this.onCloseMouseDown}
+          onMouseUp={this.onCloseMouseUp}
           selected={selected}
           onClick={this.close}
           style={{ ...styles.close }}
-        />
+        >
+          <Ripples
+            icon={true}
+            ref={r => (this.iconRipples = r)}
+            color={"#000"}
+            parentWidth={16}
+            parentHeight={16}
+            size={32}
+            rippleTime={0.6}
+            initialOpacity={0.1}
+          />
+        </Close>
         <Ripples
           rippleTime={0.6}
           ref={r => (this.ripples = r)}
