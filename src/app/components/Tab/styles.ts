@@ -42,7 +42,7 @@ export const Title = styled.div`
 `;
 
 interface ICloseProps {
-  selected: boolean;
+  hovered: boolean;
 }
 
 export const Close = styled.div`
@@ -55,7 +55,6 @@ export const Close = styled.div`
   top: 50%;
   transform: translateY(-50%);
 
-  display: ${(props: ICloseProps) => (props.selected ? "block" : "none")};
-  opacity: ${transparency.light.icons.inactive};
+  opacity: ${(props: ICloseProps) => props.hovered ? transparency.light.icons.inactive : 0};
   ${images.center("100%", "100%")};
 `;
