@@ -32,7 +32,6 @@ interface IProps {
   tabGroup: ITabGroup;
   selected: boolean;
   onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
-  onMouseUp: (e: React.MouseEvent<HTMLDivElement>) => void;
   styles?: any;
 }
 
@@ -47,7 +46,6 @@ export default class Tab extends React.Component<IProps, {}> {
 
   public onMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
     this.ripples.removeRipples();
-    this.props.onMouseUp(e);
   };
 
   public onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {

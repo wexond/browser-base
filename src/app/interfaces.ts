@@ -12,9 +12,10 @@ export interface ITab {
   left: number;
   width: number;
   pinned: boolean;
-  isRemoving?: boolean;
+  isRemoving: boolean;
   newWidth: number;
   newLeft: number;
+  reorderLocked: boolean;
 }
 
 export interface IPage {

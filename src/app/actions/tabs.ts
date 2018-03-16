@@ -28,6 +28,14 @@ export const getScrollingMode = (tabGroup: ITabGroup): boolean => {
   }
 };
 
+export const animateLine = (tabGroup: ITabGroup, tab: ITab) => {
+  TweenLite.to(tabGroup, tabAnimations.left.duration, {
+    lineWidth: tab.newWidth,
+    lineLeft: tab.newLeft,
+    ease: tabAnimations.left.easing
+  });
+}
+
 export const animateTab = (
   tab: ITab,
   property: "width" | "left",
@@ -94,17 +102,15 @@ export const setTabsPositions = (animation = true) => {
   }
 };
 
-export const getTabLeft = (tab: ITab): number => {
-  const { tabs } = Store.tabGroups[Store.selectedTabGroup];
-  const previousTab = tabs[tabs.indexOf(tab) - 1];
+export const getTabLeft = (tab: ITab) => {
+  const { tabs } = Store.tabGroups[0];
 
-  if (previousTab) {
-    const { left, width } = previousTab;
-    return left + width;
+  let position = 0
+  for (let i = 0; i < tabs.indexOf(tab); i++) {
+    position += tabs[i].newWidth
   }
-
-  return 0;
-};
+  return position
+}
 
 export const setTabsWidths = (animation = true) => {
   const { tabs } = Store.tabGroups[Store.selectedTabGroup];
@@ -169,7 +175,8 @@ export const addTab = (): ITab => {
       pinned: false,
       isRemoving: false,
       newLeft: 0,
-      newWidth: 0
+      newWidth: 0,
+      reorderLocked: false
     }) - 1;
 
   const tab = Store.tabGroups[Store.selectedTabGroup].tabs[index];
@@ -181,6 +188,48 @@ export const addTab = (): ITab => {
 
   return tab;
 };
+
+export const replaceTab = (callingTab: ITab, secondTab: ITab) => {
+  const { tabs } = Store.tabGroups[0];
+  const tabsCopy = tabs.slice();
+  const firstIndex = tabsCopy.indexOf(callingTab);
+  const secondIndex = tabsCopy.indexOf(secondTab);
+
+  tabsCopy[firstIndex] = secondTab;
+  tabsCopy[secondIndex] = callingTab;
+
+  animateTab(tabsCopy[firstIndex], "left", getTabLeft(tabsCopy[secondIndex]));
+
+  tabsCopy[firstIndex].reorderLocked = true;
+
+  setTimeout(() => {
+    tabsCopy[firstIndex].reorderLocked = false;
+  }, tabAnimations.left.duration * 1000);
+
+  (Store.tabGroups[0].tabs as any).replace(tabsCopy);
+}
+
+export const getTabUnderTab = (callingTab: ITab, direction: string) => {
+  const { tabs } = Store.tabGroups[0];
+
+  for (const tab of tabs) {
+    if (tab !== callingTab && !tab.reorderLocked) {
+      if (direction === "left") {
+        if (tab.left < callingTab.left 
+            && callingTab.left <= tab.left + tab.width / 2 
+            && callingTab.left >= tab.left) {
+          return tab;
+        }
+      } else {
+        if (tab.left > callingTab.left
+            && callingTab.left + callingTab.width >= tab.left + tab.width / 2 
+            && callingTab.left + callingTab.width <= tab.left + tab.width) {
+          return tab;
+        }
+      }
+    }
+  }
+}
 
 export const removeTab = (tab: ITab) => {
   Store.tabGroups[Store.selectedTabGroup].tabs = Store.tabGroups[
