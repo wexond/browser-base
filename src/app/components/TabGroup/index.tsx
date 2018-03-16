@@ -18,6 +18,7 @@ import * as tabs from "../../actions/tabs";
 // Styles
 import { Line, Scrollbar, ScrollbarThumb, Tabs } from "./styles";
 
+import { TOOLBAR_HEIGHT } from "../../constants/design";
 import Store from "../../store";
 
 interface IProps {
@@ -232,17 +233,6 @@ export default class TabGroup extends React.Component<IProps, {}> {
 
       const boundingRect = this.tabGroups.getBoundingClientRect();
 
-      let direction = "";
-      if (this.tabDragData.lastMouseX - e.pageX === 1) {
-        direction = "left"
-      } else if (this.tabDragData.lastMouseX - e.pageX === -1) {
-        direction = "right";
-      }
-
-      if (direction !== "") {
-        this.tabDragData.direction = direction;
-      }
-
       const newLeft = startLeft + e.pageX - mouseStartX - (this.scrollData.lastScrollLeft - this.tabGroups.scrollLeft);
 
       if (newLeft < 0) {
@@ -261,7 +251,40 @@ export default class TabGroup extends React.Component<IProps, {}> {
         }
       }
 
+      const createWindow = () => {
+        console.log("create a new window");
+      }
+
+      if (e.pageY > TOOLBAR_HEIGHT + 16 || e.pageY < -16) {
+        createWindow();
+      }
+
+      if (e.pageX < boundingRect.left) {
+        createWindow();
+      }
+
+      if (Store.addTabButton.left === "auto") {
+        if (e.pageX - boundingRect.left > this.tabGroups.scrollWidth) {
+          createWindow();
+        }
+      } else {
+        if (e.pageX - boundingRect.left > (Store.addTabButton.left as number)) {
+          createWindow();
+        }
+      }
+
       tabGroup.lineLeft = selectedTab.left;
+
+      let direction = "";
+      if (this.tabDragData.lastMouseX - e.pageX === 1) {
+        direction = "left"
+      } else if (this.tabDragData.lastMouseX - e.pageX === -1) {
+        direction = "right";
+      }
+
+      if (direction !== "") {
+        this.tabDragData.direction = direction;
+      }
 
       const tab = tabs.getTabUnderTab(selectedTab, this.tabDragData.direction);
       if (tab != null) {
