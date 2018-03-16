@@ -33,7 +33,7 @@ class Store {
   public mouse = {
     x: 0,
     y: 0
-  }
+  };
 }
 
 export default new Store();
