@@ -9,11 +9,11 @@ import images from "../../../shared/mixins/images";
 interface IStyledTabProps {
   selected: boolean;
   isRemoving: boolean;
+  visible: boolean;
 }
 
 export const StyledTab = styled.div`
   transform: translateZ(0);
-  -webkit-app-region: no-drag;
   position: absolute;
   left: 0;
   top: 0;
@@ -22,7 +22,8 @@ export const StyledTab = styled.div`
   background-color: white;
 
   z-index: ${(props: IStyledTabProps) => (props.selected ? 2 : 1)};
-  pointer-events: ${props => (props.isRemoving ? "none" : "auto")};
+  pointer-events: ${props => props.isRemoving || !props.visible ? "none" : "auto"};
+  -webkit-app-region: ${props => props.visible ? "no-drag" : "drag"};
 `;
 
 interface ITitleProps {

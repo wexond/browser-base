@@ -17,6 +17,7 @@ export const Button = styled.div`
   height: 100%;
   -webkit-app-region: no-drag;
   width: 45px;
+  position: relative;
 
   transition: ${HOVER_DURATION}s background-color;
 

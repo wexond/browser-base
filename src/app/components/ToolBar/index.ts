@@ -8,6 +8,5 @@ export default styled.div`
   z-index: 10;
   height: ${TOOLBAR_HEIGHT}px;
   display: flex;
-  -webkit-app-region: drag;
   background-color: #fff;
 `;
