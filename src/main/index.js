@@ -26,7 +26,8 @@ const createWindow = () => {
       show: false,
       titleBarStyle: 'hidden-inset',
       webPreferences: {
-        preload: path.resolve(__dirname, 'preloads/index.js')
+        preload: path.resolve(__dirname, 'preloads/index.js'),
+        plugins: true
       }
     }
   );
@@ -55,3 +56,34 @@ const createWindow = () => {
     mainWindow.webContents.send("fullscreen", false);
   });
 };
+
+/*var zoomText = document.forms['zoom-form']['zoom-text'];
+  var zoomFactor = Number(zoomText.value);
+    if (zoomFactor > 5) {
+        zoomText.value = "5";
+        zoomFactor = 5;
+      } else if (zoomFactor < 0.25) {
+        zoomText.value = "0.25";
+        zoomFactor = 0.25;
+      }
+webview.setZoom(zoomFactor);
+
+function handleKeyDown(event) {
+  if (event.ctrlKey) {
+    switch (event.keyCode) {
+      // Ctrl + +.
+      case 107:
+      case 187:
+        event.preventDefault();
+        increaseZoom();
+        break;
+
+      // Ctrl + -.
+      case 109:
+      case 189:
+        event.preventDefault();
+        decreaseZoom();
+
+    }
+  }
+}*/

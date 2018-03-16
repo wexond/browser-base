@@ -1,27 +1,33 @@
 export interface ITabGroup {
-  id: number;
-  tabs: ITab[];
-  selectedTab: number;
-  lineLeft: number;
-  lineWidth: number;
+  id : number;
+  tabs : ITab[];
+  selectedTab : number;
+  lineLeft : number;
+  lineWidth : number;
 }
 
 export interface ITab {
-  id: number;
-  title: string;
-  left: number;
-  width: number;
-  pinned: boolean;
+  id : number;
+  title : string;
+  left : number;
+  width : number;
+  pinned : boolean;
   isRemoving?: boolean;
-  newWidth: number;
-  newLeft: number;
+  newWidth : number;
+  newLeft : number;
 }
 
 export interface IPage {
-  id: number;
-  url: string;
+  id : number;
+  url : string;
 }
 
 export interface IAddTabButton {
-  left: number | "auto";
+  left : number | "auto";
+}
+
+export interface IPlugin {
+  title : string;
+  id : number;
+  description : string;
 }
