@@ -1,6 +1,6 @@
 // Toolbar
 export const TOOLBAR_HEIGHT = 48;
-export const TOOLBAR_BUTTON_WIDTH = 40;
+export const TOOLBAR_BUTTON_WIDTH = 42;
 
 // Tabs
 export const TAB_MAX_WIDTH = 200;

@@ -39,7 +39,7 @@ export default class ToolBarButton extends React.PureComponent<IProps, {}> {
           icon={true}
           ref={r => (this.ripples = r)}
           color={"#000"}
-          parentWidth={40}
+          parentWidth={42}
           parentHeight={48}
           rippleTime={0.7}
           initialOpacity={0.1}
