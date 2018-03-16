@@ -23,7 +23,7 @@ import ToolBarSeparator from "../ToolBarSeparator";
 import WindowButton from "../WindowButton";
 
 // Styles
-import { AddressBar, Line, NavIcons, StyledApp, TabsSection } from "./styles";
+import { AddressBar, Handle, Input, Line, NavIcons, StyledApp, TabsSection } from "./styles";
 
 import Store from "../../store";
 
@@ -55,6 +55,7 @@ export default class App extends React.Component<{}, IState> {
     return (
       <StyledApp>
         <ToolBar>
+          <Handle />
           <NavIcons isFullscreen={isFullscreen}>
             <ToolBarButton size={24} icon={Icons.Back} />
             <ToolBarButton size={24} icon={Icons.Forward} />
@@ -63,7 +64,7 @@ export default class App extends React.Component<{}, IState> {
           <ToolBarSeparator />
           <TabsSection>
             <AddressBar visible={Store.addressBar.toggled}>
-              <TextField fontSize={15} style={{ paddingTop: 0, position: 'relative', top: '50%', transform: 'translateY(-50%)', width: '100%' }} />
+              <Input visible={Store.addressBar.toggled}/>
             </AddressBar>
             <TabBar />
           </TabsSection>

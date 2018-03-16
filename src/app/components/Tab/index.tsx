@@ -156,10 +156,11 @@ export default class Tab extends React.Component<IProps, {}> {
     return (
       <StyledTab
         selected={selected}
-        style={{ left, width, pointerEvents: Store.addressBar.toggled ? "none" : "auto", ...styles.tab }}
+        style={{ left, width, ...styles.tab }}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
         isRemoving={isRemoving}
+        visible={!Store.addressBar.toggled}
         innerRef={r => this.tab = r}
       >
         <Title hovered={hovered} style={{ ...styles.title }}>{title}</Title>
