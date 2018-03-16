@@ -28,6 +28,7 @@ export const Icon = styled.div`
 export const Button = styled.div`
   height: 100%;
   -webkit-app-region: no-drag;
+  position: relative;
 
   width: ${TOOLBAR_BUTTON_WIDTH}px;
   transition: ${HOVER_DURATION}s background-color;
