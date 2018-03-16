@@ -45,7 +45,7 @@
     "babel-preset-env": "1.6.1",
     "babel-preset-react": "6.24.1",
     "cross-env": "5.1.4",
-    "css-loader": "0.28.10",
+    "css-loader": "0.28.11",
     "devtron": "1.4.0",
     "electron": "1.8.3",
     "electron-builder": "20.5.1",
