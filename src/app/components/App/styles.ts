@@ -1,6 +1,19 @@
 import styled from "styled-components";
 
+// Enums
+import { Platforms } from "../../../shared/enums";
+
+import Store from "../../store";
+
+interface INavIconsProps {
+  isFullscreen: boolean;
+}
+
 export const NavIcons = styled.div`
+  margin-left: ${(props: INavIconsProps) => 
+    !props.isFullscreen && Store.platform === Platforms.MacOS
+    ? 78
+    : 0}px};
   display: flex;
   -webkit-app-region: no-drag;
 `;

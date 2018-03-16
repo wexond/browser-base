@@ -1,6 +1,7 @@
+import { EventEmitter, ipcRenderer } from "electron";
 import { observer } from "mobx-react";
 import React from "react";
-import { ipcRenderer, EventEmitter } from "electron";
+
 // Enums
 import { Platforms } from "../../../shared/enums";
 import { Icons } from "../../enums";
@@ -30,7 +31,7 @@ interface IState {
 }
 
 export default class App extends React.Component<{}, IState> {
-  state: IState = {
+  public state: IState = {
     isFullscreen: false
   }
 
@@ -46,8 +47,8 @@ export default class App extends React.Component<{}, IState> {
     const { isFullscreen } = this.state
     return (
       <StyledApp>
-        <ToolBar isFullscreen={isFullscreen}>
-          <NavIcons>
+        <ToolBar>
+          <NavIcons isFullscreen={isFullscreen}>
             <ToolBarButton size={24} icon={Icons.Back} />
             <ToolBarButton size={24} icon={Icons.Forward} />
             <ToolBarButton size={20} icon={Icons.Refresh} />
