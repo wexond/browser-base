@@ -37,7 +37,9 @@ export default class TabGroup extends React.Component<IProps, {}> {
   private tabDragData = {
     dragging: false,
     mouseStartX: 0,
-    startLeft: 0
+    startLeft: 0,
+    lastMouseX: 0,
+    direction: ""
   };
   private scrollData = {
     dragging: false,
@@ -49,6 +51,8 @@ export default class TabGroup extends React.Component<IProps, {}> {
   private interval: any;
 
   public componentDidMount() {
+    const { tabGroup } = this.props;
+
     Store.addTab = this.addTab;
 
     window.addEventListener("resize", e => {
@@ -59,29 +63,24 @@ export default class TabGroup extends React.Component<IProps, {}> {
       tabs.setTabsWidths(false);
       tabs.setTabsPositions(false);
 
-      const selectedTab = tabs.getTabById(this.props.tabGroup.selectedTab);
-      this.props.tabGroup.lineLeft = selectedTab.newLeft;
-      this.props.tabGroup.lineWidth = selectedTab.newWidth;
+      const selectedTab = tabs.getTabById(tabGroup.selectedTab);
+      tabGroup.lineLeft = selectedTab.newLeft;
+      tabGroup.lineWidth = selectedTab.newWidth;
     });
 
     requestAnimationFrame(this.resizeScrollbar);
 
-    window.addEventListener("mouseup", this.onScrollbarMouseUp);
+    window.addEventListener("mouseup", this.onMouseUp);
     window.addEventListener("mousemove", this.onMouseMove);
 
     requestAnimationFrame(() => {
       this.addTab();
     });
 
-    observe(this.props.tabGroup, change => {
+    observe(tabGroup, change => {
       if (change.name === "selectedTab") {
         requestAnimationFrame(() => {
-          const newTab = tabs.getTabById(change.newValue);
-          TweenLite.to(this.props.tabGroup, tabAnimations.left.duration, {
-            lineWidth: newTab.newWidth,
-            lineLeft: newTab.newLeft,
-            ease: tabAnimations.left.easing
-          });
+          tabs.animateLine(tabGroup, tabs.getTabById(change.newValue));
         });
       }
     });
@@ -134,13 +133,13 @@ export default class TabGroup extends React.Component<IProps, {}> {
 
     tabs.selectTab(tab);
     this.tabDragData = {
+      lastMouseX: 0,
       dragging: true,
       mouseStartX: e.pageX,
-      startLeft: tab.left
+      startLeft: tab.left,
+      direction: ""
     };
   };
-
-  public onTabMouseUp = (e: React.MouseEvent<HTMLDivElement>, tab: ITab) => "";
 
   public onMouseEnter = () => {
     this.setState({ scrollbarThumbVisible: true });
@@ -163,11 +162,18 @@ export default class TabGroup extends React.Component<IProps, {}> {
     };
   };
 
-  public onScrollbarMouseUp = () => {
+  public onMouseUp = () => {
+    const { tabGroup } = this.props;
+
     this.scrollData = {
       ...this.scrollData,
       dragging: false
     };
+
+    this.tabDragData.dragging = false;
+    tabs.setTabsPositions();
+
+    tabs.animateLine(tabGroup, tabs.getTabById(tabGroup.selectedTab));
   };
 
   public onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -215,8 +221,30 @@ export default class TabGroup extends React.Component<IProps, {}> {
         this.tabGroups.scrollWidth;
     }
     if (this.tabDragData.dragging) {
+      const { tabGroup } = this.props;
       const { startLeft, mouseStartX } = this.tabDragData;
-      // Move the tab
+      const selectedTab = tabs.getTabById(tabGroup.selectedTab);
+
+      let direction = "";
+      if (this.tabDragData.lastMouseX - e.pageX === 1) {
+        direction = "left"
+      } else if (this.tabDragData.lastMouseX - e.pageX === -1) {
+        direction = "right";
+      }
+
+      if (direction !== "") {
+        this.tabDragData.direction = direction;
+      }
+
+      selectedTab.left = startLeft + e.pageX - mouseStartX;
+      tabGroup.lineLeft = selectedTab.left;
+
+      const tab = tabs.getTabUnderTab(selectedTab, this.tabDragData.direction);
+      if (tab != null) {
+        tabs.replaceTab(selectedTab, tab);
+      }
+
+      this.tabDragData.lastMouseX = e.pageX;
     }
   };
 
@@ -238,7 +266,6 @@ export default class TabGroup extends React.Component<IProps, {}> {
               tab={tab}
               selected={tabGroup.selectedTab === tab.id}
               onMouseDown={e => this.onTabMouseDown(e, tab)}
-              onMouseUp={e => this.onTabMouseUp(e, tab)}
             />
           ))}
           <Line

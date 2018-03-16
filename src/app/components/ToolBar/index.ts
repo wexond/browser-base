@@ -8,6 +8,10 @@ import { Platforms } from "../../../shared/enums";
 
 import Store from "../../store";
 
+interface IStyledToolbarProps {
+  isFullscreen: boolean;
+}
+
 export default styled.div`
   position: relative;
   z-index: 10;
@@ -15,7 +19,7 @@ export default styled.div`
   display: flex;
   -webkit-app-region: drag;
   background-color: #fff;
-  padding-left: ${Store.platform === Platforms.MacOS && !Store.isFullscreen
+  padding-left: ${(props: IStyledToolbarProps) => !props.isFullscreen && Store.platform === Platforms.MacOS
     ? 78
     : 0}px;
 `;
