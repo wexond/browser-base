@@ -14,6 +14,7 @@ import {
 } from "../../utils/window";
 
 // Components
+import { TextField } from "nersent-ui";
 import Pages from "../Pages";
 import TabBar from "../TabBar";
 import ToolBar from "../ToolBar";
@@ -22,7 +23,7 @@ import ToolBarSeparator from "../ToolBarSeparator";
 import WindowButton from "../WindowButton";
 
 // Styles
-import { Line, NavIcons, StyledApp } from "./styles";
+import { AddressBar, Line, NavIcons, StyledApp, TabsSection } from "./styles";
 
 import Store from "../../store";
 
@@ -30,6 +31,7 @@ interface IState {
   isFullscreen: boolean;
 }
 
+@observer
 export default class App extends React.Component<{}, IState> {
   public state: IState = {
     isFullscreen: false
@@ -59,7 +61,12 @@ export default class App extends React.Component<{}, IState> {
             <ToolBarButton size={20} icon={Icons.Refresh} />
           </NavIcons>
           <ToolBarSeparator />
-          <TabBar />
+          <TabsSection>
+            <AddressBar visible={Store.addressBar.toggled}>
+              <TextField fontSize={15} style={{ paddingTop: 0, position: 'relative', top: '50%', transform: 'translateY(-50%)', width: '100%' }} />
+            </AddressBar>
+            <TabBar />
+          </TabsSection>
           <ToolBarSeparator />
           <ToolBarButton size={16} icon={Icons.TabGroups} />
           <ToolBarButton size={18} icon={Icons.More} />

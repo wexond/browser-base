@@ -33,3 +33,26 @@ export const StyledApp = styled.div`
   height: 100vh;
   overflow: hidden;
 `;
+
+export const TabsSection = styled.div`
+  display: flex;
+  flex: 1;
+  height: 100%;
+  position: relative;
+`;
+
+interface IAddressBarProps {
+  visible: boolean;
+}
+
+export const AddressBar = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  transition: 0.2s opacity;
+
+  -webkit-app-region: ${(props: IAddressBarProps) => props.visible ? "no-drag" : "drag"};
+  opacity: ${props => props.visible ? 1 : 0};
+`;

@@ -67,12 +67,25 @@ export default class Tab extends React.Component<IProps, {}> {
   }
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { selected } = this.props;
+
     this.ripples.makeRipple(e.pageX, e.pageY);
+
+    if (selected) {
+      Store.addressBar.canToggle = true;
+    }
+
     this.props.onMouseDown(e);
   };
 
-  public onMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+  public onMouseUp = () => {
+    const { selected } = this.props;
+
     this.ripples.removeRipples();
+
+    if (Store.addressBar.canToggle) {
+      Store.addressBar.toggled = true;
+    }
   };
 
   public onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -80,7 +93,7 @@ export default class Tab extends React.Component<IProps, {}> {
     this.iconRipples.makeRipple(e.pageX, e.pageY);
   };
 
-  public onCloseMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+  public onCloseMouseUp = () => {
     this.ripples.removeRipples();
   };
 
@@ -143,7 +156,7 @@ export default class Tab extends React.Component<IProps, {}> {
     return (
       <StyledTab
         selected={selected}
-        style={{ left, width, ...styles.tab }}
+        style={{ left, width, pointerEvents: Store.addressBar.toggled ? "none" : "auto", ...styles.tab }}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
         isRemoving={isRemoving}
