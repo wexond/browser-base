@@ -117,6 +117,10 @@ export default class Tab extends React.Component<IProps, {}> {
       tabs.setTabsWidths();
       tabs.setTabsPositions();
     }
+
+    requestAnimationFrame(() => {
+      tabs.animateLine(tabGroup, tabs.getTabById(tabGroup.selectedTab));
+    });
   };
 
   public styles() {
