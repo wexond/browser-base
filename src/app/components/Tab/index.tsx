@@ -39,6 +39,32 @@ interface IProps {
 export default class Tab extends React.Component<IProps, {}> {
   private ripples: Ripples;
   private iconRipples: Ripples;
+  private tab: HTMLDivElement;
+
+  public componentDidMount() {
+    const { tab } = this.props;
+
+    const frame = () => {
+      if (this.tab != null) {
+        const boundingRect = this.tab.getBoundingClientRect();
+        if (Store.mouse.x >= boundingRect.left
+          && Store.mouse.x <= boundingRect.left + this.tab.offsetWidth
+          && Store.mouse.y >= boundingRect.top
+          && Store.mouse.y <= boundingRect.top + this.tab.offsetHeight) {
+          if (!tab.hovered) {
+            tab.hovered = true;
+          }
+        } else {
+          if (tab.hovered) {
+            tab.hovered = false;
+          }
+        }
+        requestAnimationFrame(frame);
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     this.ripples.makeRipple(e.pageX, e.pageY);
@@ -57,14 +83,6 @@ export default class Tab extends React.Component<IProps, {}> {
   public onCloseMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
     this.ripples.removeRipples();
   };
-
-  public onMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    this.props.tab.hovered = true;
-  }
-
-  public onMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    this.props.tab.hovered = false;
-  }
 
   public close = (e: React.MouseEvent<HTMLDivElement>) => {
     const { tabGroup, tab } = this.props;
@@ -124,9 +142,8 @@ export default class Tab extends React.Component<IProps, {}> {
         style={{ left, width, ...styles.tab }}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
         isRemoving={isRemoving}
+        innerRef={r => this.tab = r}
       >
         <Title style={{ ...styles.title }}>{title}</Title>
         <Close

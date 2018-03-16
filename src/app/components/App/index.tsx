@@ -41,6 +41,11 @@ export default class App extends React.Component<{}, IState> {
         isFullscreen
       })
     });
+
+    window.addEventListener('mousemove', e => {
+      Store.mouse.x = e.pageX;
+      Store.mouse.y = e.pageY;
+    })
   }
 
   public render() {

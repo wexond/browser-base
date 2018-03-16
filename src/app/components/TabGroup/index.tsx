@@ -100,7 +100,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
       scrollbarVisible:
         this.state.scrollbarThumbWidth !== this.tabGroups.offsetWidth
     });
-
+    
     requestAnimationFrame(this.resizeScrollbar);
   };
 
