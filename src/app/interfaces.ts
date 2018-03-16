@@ -27,3 +27,8 @@ export interface IPage {
 export interface IAddTabButton {
   left: number | "auto";
 }
+
+export interface IAddressBar {
+  toggled: boolean;
+  canToggle: boolean;
+}

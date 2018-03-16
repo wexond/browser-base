@@ -237,6 +237,8 @@ export default class TabGroup extends React.Component<IProps, {}> {
         return;
       }
 
+      Store.addressBar.canToggle = false;
+
       const newLeft = startLeft + e.pageX - mouseStartX - (this.scrollData.lastScrollLeft - this.tabGroups.scrollLeft);
 
       if (newLeft < 0) {
