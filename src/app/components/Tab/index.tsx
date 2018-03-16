@@ -58,6 +58,14 @@ export default class Tab extends React.Component<IProps, {}> {
     this.ripples.removeRipples();
   };
 
+  public onMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    this.props.tab.hovered = true;
+  }
+
+  public onMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    this.props.tab.hovered = false;
+  }
+
   public close = (e: React.MouseEvent<HTMLDivElement>) => {
     const { tabGroup, tab } = this.props;
 
@@ -103,7 +111,7 @@ export default class Tab extends React.Component<IProps, {}> {
 
   public render() {
     const { selected, tab, tabGroup } = this.props;
-    const { left, width, title, id, isRemoving } = tab;
+    const { left, width, title, id, isRemoving, hovered } = tab;
 
     const styles = {
       ...this.styles(),
@@ -116,14 +124,16 @@ export default class Tab extends React.Component<IProps, {}> {
         style={{ left, width, ...styles.tab }}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
         isRemoving={isRemoving}
       >
         <Title style={{ ...styles.title }}>{title}</Title>
         <Close
           onMouseDown={this.onCloseMouseDown}
           onMouseUp={this.onCloseMouseUp}
-          selected={selected}
           onClick={this.close}
+          hovered={hovered}
           style={{ ...styles.close }}
         >
           <Ripples
