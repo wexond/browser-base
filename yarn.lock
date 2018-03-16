@@ -26,10 +26,6 @@
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
 
-"@types/animejs@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@types/animejs/-/animejs-2.0.0.tgz#9163f06aba47595b99951d5560c10e78223f0e20"
-
 "@types/caseless@*":
   version "0.12.1"
   resolved "https://registry.yarnpkg.com/@types/caseless/-/caseless-0.12.1.tgz#9794c69c8385d0192acc471a540d1f8e0d16218a"
@@ -4434,9 +4430,9 @@ neo-async@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.5.0.tgz#76b1c823130cca26acfbaccc8fbaf0a2fa33b18f"
 
-nersent-ui@3.2.4:
-  version "3.2.4"
-  resolved "https://registry.yarnpkg.com/nersent-ui/-/nersent-ui-3.2.4.tgz#e52ec55a848afd3bea298e75932a52fc5b45560b"
+nersent-ui@3.2.5:
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/nersent-ui/-/nersent-ui-3.2.5.tgz#aa610345f9f289055c0785acff7852d61ef7c6f7"
 
 nice-try@^1.0.4:
   version "1.0.4"
