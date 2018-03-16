@@ -4430,9 +4430,9 @@ neo-async@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.5.0.tgz#76b1c823130cca26acfbaccc8fbaf0a2fa33b18f"
 
-nersent-ui@3.2.5:
-  version "3.2.5"
-  resolved "https://registry.yarnpkg.com/nersent-ui/-/nersent-ui-3.2.5.tgz#aa610345f9f289055c0785acff7852d61ef7c6f7"
+nersent-ui@3.2.6:
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/nersent-ui/-/nersent-ui-3.2.6.tgz#2e3196ed634276a9b3bc6f200c01399a475e1dab"
 
 nice-try@^1.0.4:
   version "1.0.4"
