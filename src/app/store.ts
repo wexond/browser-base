@@ -29,6 +29,11 @@ class Store {
   public addTab: () => void;
 
   public platform: Platforms = os.platform() as Platforms;
+
+  public mouse = {
+    x: 0,
+    y: 0
+  }
 }
 
 export default new Store();
