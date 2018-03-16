@@ -176,7 +176,8 @@ export const addTab = (): ITab => {
       isRemoving: false,
       newLeft: 0,
       newWidth: 0,
-      reorderLocked: false
+      reorderLocked: false,
+      hovered: false
     }) - 1;
 
   const tab = Store.tabGroups[Store.selectedTabGroup].tabs[index];
