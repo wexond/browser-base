@@ -80,7 +80,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
       this.addTab();
     });
 
-    observe(tabGroup, change => {
+    observe(tabGroup, (change: any) => {
       if (change.name === "selectedTab") {
         requestAnimationFrame(() => {
           tabs.animateLine(tabGroup, tabs.getTabById(change.newValue));

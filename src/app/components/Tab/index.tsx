@@ -149,7 +149,7 @@ export default class Tab extends React.Component<IProps, {}> {
         isRemoving={isRemoving}
         innerRef={r => this.tab = r}
       >
-        <Title style={{ ...styles.title }}>{title}</Title>
+        <Title hovered={hovered} style={{ ...styles.title }}>{title}</Title>
         <Close
           onMouseDown={this.onCloseMouseDown}
           onMouseUp={this.onCloseMouseUp}
