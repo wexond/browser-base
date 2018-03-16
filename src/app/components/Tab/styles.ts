@@ -25,19 +25,23 @@ export const StyledTab = styled.div`
   pointer-events: ${props => (props.isRemoving ? "none" : "auto")};
 `;
 
+interface ITitleProps {
+  hovered: boolean;
+}
+
 export const Title = styled.div`
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: 0.2s opacity;
+  transition: 0.2s opacity, 0.1s max-width;
   font-weight: 500;
   text-transform: uppercase;
-  max-width: calc(100% - 64px);
 
+  max-width: ${(props: ITitleProps) => `calc(100% - ${24 + (props.hovered ? 24 : 0)}px)`};
+  transform: ${props => `translate(-50%, -50%)`};
   opacity: ${transparency.light.text.primary};
 `;
 
