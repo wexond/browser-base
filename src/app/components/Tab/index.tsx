@@ -96,10 +96,6 @@ export default class Tab extends React.Component<IProps, {}> {
     const { selected } = this.props;
 
     this.ripples.removeRipples();
-
-    if (Store.addressBar.canToggle) {
-      Store.addressBar.toggled = true;
-    }
   };
 
   public onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -111,8 +107,16 @@ export default class Tab extends React.Component<IProps, {}> {
     this.ripples.removeRipples();
   };
 
+  public onClick = () => {
+    if (Store.addressBar.canToggle) {
+      Store.addressBar.toggled = true;
+    }
+  }
+
   public close = (e: React.MouseEvent<HTMLDivElement>) => {
     const { tabGroup, tab, selected } = this.props;
+
+    e.stopPropagation();
 
     if (selected) {
       const tabIndex = tabGroup.tabs.indexOf(tab);
@@ -175,6 +179,7 @@ export default class Tab extends React.Component<IProps, {}> {
         style={{ transform: `translateX(${left}px)`, width, ...styles.tab }}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
+        onClick={this.onClick}
         isRemoving={isRemoving}
         visible={!Store.addressBar.toggled}
         innerRef={r => (this.tab = r)}
