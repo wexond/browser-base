@@ -17,6 +17,7 @@ export interface ITab {
   newLeft: number;
   reorderLocked: boolean;
   hovered: boolean;
+  page: IPage
 }
 
 export interface IPage {

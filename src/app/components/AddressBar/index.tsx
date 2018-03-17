@@ -64,8 +64,8 @@ export default class AddressBar extends Component<IProps, {}> {
       }
 
       this.input.value = url
-      Store.pages[Store.tabGroups[Store.selectedTabGroup].selectedTab].url = url
-      Store.tabGroups[Store.selectedTabGroup].tabs[Store.tabGroups[Store.selectedTabGroup].selectedTab].title = this.getDomain(url)
+      Store.currentTab.page.url = url
+      Store.currentTab.title = this.getDomain(url)
     }  
   }
   public render() {
