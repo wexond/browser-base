@@ -85,9 +85,7 @@ export default class Tab extends React.Component<IProps, {}> {
 
     this.ripples.makeRipple(e.pageX, e.pageY);
 
-    if (selected) {
-      Store.addressBar.canToggle = true;
-    }
+    Store.addressBar.canToggle = selected;
 
     tabs.selectTab(tab);
 
