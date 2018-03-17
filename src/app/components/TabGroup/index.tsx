@@ -1,4 +1,4 @@
-import { Expo, TweenLite, TweenMax } from "gsap";
+import { Expo, TweenLite } from "gsap";
 import { observe } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
