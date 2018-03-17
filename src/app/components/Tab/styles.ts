@@ -13,7 +13,6 @@ interface IStyledTabProps {
 }
 
 export const StyledTab = styled.div`
-  transform: translateZ(0);
   position: absolute;
   left: 0;
   top: 0;
