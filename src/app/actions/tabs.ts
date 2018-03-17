@@ -34,7 +34,7 @@ export const animateLine = (tabGroup: ITabGroup, tab: ITab) => {
     lineLeft: tab.newLeft,
     ease: tabAnimations.left.easing
   });
-}
+};
 
 export const animateTab = (
   tab: ITab,
@@ -56,6 +56,62 @@ export const animateAddTabButton = (left: number) => {
     left,
     ease: easing
   });
+};
+
+export const updateTabs = (animation = true) => {
+  const tabGroup = Store.tabGroups[Store.selectedTabGroup];
+  const { tabs } = tabGroup;
+  const newTabs = tabs.filter(tab => !tab.isRemoving);
+  const containerWidth = Store.getTabBarWidth();
+
+  let left = 0;
+
+  for (const item of newTabs) {
+    const width = getTabWidth(item, newTabs.length);
+
+    if (item.newWidth !== width) {
+      if (animation) {
+        animateTab(item, "width", width);
+      } else {
+        item.width = width;
+      }
+      item.newWidth = width;
+    }
+
+    if (item.newLeft !== left) {
+      if (animation) {
+        animateTab(item, "left", left);
+      } else {
+        item.left = left;
+      }
+      item.newLeft = left;
+    }
+
+    left += width;
+  }
+
+  if (left >= containerWidth - TOOLBAR_BUTTON_WIDTH) {
+    if (Store.addTabButton.left !== "auto") {
+      if (animation) {
+        animateAddTabButton(containerWidth - TOOLBAR_BUTTON_WIDTH);
+        setTimeout(() => {
+          Store.addTabButton.left = "auto";
+        }, tabAnimations.left.duration * 1000);
+      } else {
+        Store.addTabButton.left = "auto";
+      }
+    }
+  } else {
+    if (Store.addTabButton.left === "auto") {
+      Store.addTabButton.left = containerWidth - TOOLBAR_BUTTON_WIDTH;
+    }
+
+    if (animation) {
+      animateAddTabButton(left);
+    } else {
+      Store.addTabButton.left = left;
+    }
+  }
 };
 
 export const setTabsPositions = (animation = true) => {
@@ -105,12 +161,12 @@ export const setTabsPositions = (animation = true) => {
 export const getTabLeft = (tab: ITab) => {
   const { tabs } = Store.tabGroups[0];
 
-  let position = 0
+  let position = 0;
   for (let i = 0; i < tabs.indexOf(tab); i++) {
-    position += tabs[i].newWidth
+    position += tabs[i].newWidth;
   }
-  return position
-}
+  return position;
+};
 
 export const setTabsWidths = (animation = true) => {
   const { tabs } = Store.tabGroups[Store.selectedTabGroup];
@@ -208,7 +264,7 @@ export const replaceTab = (callingTab: ITab, secondTab: ITab) => {
   }, tabAnimations.left.duration * 1000);
 
   (Store.tabGroups[0].tabs as any).replace(tabsCopy);
-}
+};
 
 export const getTabUnderTab = (callingTab: ITab, direction: string) => {
   const { tabs } = Store.tabGroups[0];
@@ -216,27 +272,33 @@ export const getTabUnderTab = (callingTab: ITab, direction: string) => {
   for (const tab of tabs) {
     if (tab !== callingTab && !tab.reorderLocked) {
       if (direction === "left") {
-        if (tab.left < callingTab.left 
-            && callingTab.left <= tab.left + tab.width / 2 
-            && callingTab.left >= tab.left) {
+        if (
+          tab.left < callingTab.left &&
+          callingTab.left <= tab.left + tab.width / 2 &&
+          callingTab.left >= tab.left
+        ) {
           return tab;
         }
       } else {
-        if (tab.left > callingTab.left
-            && callingTab.left + callingTab.width >= tab.left + tab.width / 2 
-            && callingTab.left + callingTab.width <= tab.left + tab.width) {
+        if (
+          tab.left > callingTab.left &&
+          callingTab.left + callingTab.width >= tab.left + tab.width / 2 &&
+          callingTab.left + callingTab.width <= tab.left + tab.width
+        ) {
           return tab;
         }
       }
     }
   }
-}
+};
 
 export const removeTab = (tab: ITab) => {
-  Store.tabGroups[Store.selectedTabGroup].tabs = Store.tabGroups[
-    Store.selectedTabGroup
-  ].tabs.filter(({ id }) => tab.id !== id);
-  Store.pages = Store.pages.filter(({ id }) => tab.id !== id);
+  (Store.tabGroups[Store.selectedTabGroup].tabs as any).replace(
+    Store.tabGroups[Store.selectedTabGroup].tabs.filter(
+      ({ id }) => tab.id !== id
+    )
+  );
+  (Store.pages as any).replace(Store.pages.filter(({ id }) => tab.id !== id));
 };
 
 export const selectTab = (tab: ITab) => {

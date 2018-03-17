@@ -13,17 +13,17 @@ interface IStyledTabProps {
 }
 
 export const StyledTab = styled.div`
-  transform: translateZ(0);
   position: absolute;
-  left: 0;
-  top: 0;
+  display: flex;
+  align-items: center;
   overflow: hidden;
   height: calc(100% - 2px);
-  background-color: white;
 
   z-index: ${(props: IStyledTabProps) => (props.selected ? 2 : 1)};
-  pointer-events: ${props => props.isRemoving || !props.visible ? "none" : "auto"};
-  -webkit-app-region: ${props => props.visible ? "no-drag" : ""};
+  background-color: ${props => (props.selected ? "white" : "none")};
+  pointer-events: ${props =>
+    props.isRemoving || !props.visible ? "none" : "auto"};
+  -webkit-app-region: ${props => (props.visible ? "no-drag" : "")};
 `;
 
 interface ITitleProps {
@@ -33,7 +33,7 @@ interface ITitleProps {
 export const Title = styled.div`
   position: absolute;
   left: 50%;
-  top: 50%;
+  transform: translateX(-50%);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -41,8 +41,8 @@ export const Title = styled.div`
   font-weight: 500;
   text-transform: uppercase;
 
-  max-width: ${(props: ITitleProps) => `calc(100% - ${24 + (props.hovered ? 24 : 0)}px)`};
-  transform: ${props => `translate(-50%, -50%)`};
+  max-width: ${(props: ITitleProps) =>
+    `calc(100% - ${24 + (props.hovered ? 24 : 0)}px)`};
   opacity: ${transparency.light.text.primary};
 `;
 
@@ -57,9 +57,8 @@ export const Close = styled.div`
   width: 16px;
   background-image: url(../../src/app/icons/actions/close.svg);
   transition: 0.2s opacity;
-  top: 50%;
-  transform: translateY(-50%);
 
-  opacity: ${(props: ICloseProps) => props.hovered ? transparency.light.icons.inactive : 0};
+  opacity: ${(props: ICloseProps) =>
+    props.hovered ? transparency.light.icons.inactive : 0};
   ${images.center("100%", "100%")};
 `;

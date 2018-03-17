@@ -33,7 +33,12 @@ export default class ToolBarButton extends React.PureComponent<IProps, {}> {
     const { icon, onClick, size, style } = this.props;
 
     return (
-      <Button onMouseDown={this.onMouseDown} onMouseUp={this.onMouseUp} onClick={onClick} style={style}>
+      <Button
+        onMouseDown={this.onMouseDown}
+        onMouseUp={this.onMouseUp}
+        onClick={onClick}
+        style={style}
+      >
         <Icon icon={icon} size={size} />
         <Ripples
           icon={true}
