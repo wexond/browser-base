@@ -15,7 +15,7 @@ import Store from "../../store";
 export default observer(() => {
   return (
     <StyledPages>
-      {Store.currentTabGroup.tabs.map(({ page }) => {
+      {Store.pages.map(page => {
         return (
           <Page
             key={page.id}
