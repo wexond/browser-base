@@ -47,10 +47,12 @@ export default class Tab extends React.Component<IProps, {}> {
     const frame = () => {
       if (this.tab != null) {
         const boundingRect = this.tab.getBoundingClientRect();
-        if (Store.mouse.x >= boundingRect.left
-          && Store.mouse.x <= boundingRect.left + this.tab.offsetWidth
-          && Store.mouse.y >= boundingRect.top
-          && Store.mouse.y <= boundingRect.top + this.tab.offsetHeight) {
+        if (
+          Store.mouse.x >= boundingRect.left &&
+          Store.mouse.x <= boundingRect.left + this.tab.offsetWidth &&
+          Store.mouse.y >= boundingRect.top &&
+          Store.mouse.y <= boundingRect.top + this.tab.offsetHeight
+        ) {
           if (!tab.hovered) {
             tab.hovered = true;
           }
@@ -61,19 +63,33 @@ export default class Tab extends React.Component<IProps, {}> {
         }
         requestAnimationFrame(frame);
       }
-    }
+    };
 
     requestAnimationFrame(frame);
   }
 
+  public shouldComponentUpdate(nextProps: any) {
+    const { tab, selected } = this.props;
+    if (
+      nextProps.left !== tab.left ||
+      nextProps.width !== tab.width ||
+      selected !== nextProps.selected
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { selected } = this.props;
+    const { selected, tab } = this.props;
 
     this.ripples.makeRipple(e.pageX, e.pageY);
 
     if (selected) {
       Store.addressBar.canToggle = true;
     }
+
+    tabs.selectTab(tab);
 
     this.props.onMouseDown(e);
   };
@@ -98,20 +114,22 @@ export default class Tab extends React.Component<IProps, {}> {
   };
 
   public close = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { tabGroup, tab } = this.props;
+    const { tabGroup, tab, selected } = this.props;
 
-    const tabIndex = tabGroup.tabs.indexOf(tab);
+    if (selected) {
+      const tabIndex = tabGroup.tabs.indexOf(tab);
 
-    if (
-      tabIndex + 1 < tabGroup.tabs.length &&
-      !tabGroup.tabs[tabIndex + 1].isRemoving
-    ) {
-      tabGroup.selectedTab = tabGroup.tabs[tabIndex + 1].id;
-    } else if (tabIndex - 1 >= 0 && !tabGroup.tabs[tabIndex - 1].isRemoving) {
-      tabGroup.selectedTab = tabGroup.tabs[tabIndex - 1].id;
-    } else {
-      if (Store.tabGroups.length === 1) {
-        closeWindow();
+      if (
+        tabIndex + 1 < tabGroup.tabs.length &&
+        !tabGroup.tabs[tabIndex + 1].isRemoving
+      ) {
+        tabGroup.selectedTab = tabGroup.tabs[tabIndex + 1].id;
+      } else if (tabIndex - 1 >= 0 && !tabGroup.tabs[tabIndex - 1].isRemoving) {
+        tabGroup.selectedTab = tabGroup.tabs[tabIndex - 1].id;
+      } else {
+        if (Store.tabGroups.length === 1) {
+          closeWindow();
+        }
       }
     }
 
@@ -156,14 +174,16 @@ export default class Tab extends React.Component<IProps, {}> {
     return (
       <StyledTab
         selected={selected}
-        style={{ left, width, ...styles.tab }}
+        style={{ transform: `translateX(${left}px)`, width, ...styles.tab }}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
         isRemoving={isRemoving}
         visible={!Store.addressBar.toggled}
-        innerRef={r => this.tab = r}
+        innerRef={r => (this.tab = r)}
       >
-        <Title hovered={hovered} style={{ ...styles.title }}>{title}</Title>
+        <Title hovered={hovered} style={{ ...styles.title }}>
+          {title}
+        </Title>
         <Close
           onMouseDown={this.onCloseMouseDown}
           onMouseUp={this.onCloseMouseUp}
