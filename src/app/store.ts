@@ -1,11 +1,22 @@
 import { observable } from "mobx";
 import os from "os";
 
-import { IAddressBar, IAddTabButton, IPage, ITab, ITabGroup } from "./interfaces";
+import {
+  IAddressBar,
+  IAddTabButton,
+  ITab,
+  ITabGroup
+} from "./interfaces";
 
 import { Platforms } from "../shared/enums";
 
 class Store {
+  public get currentTabGroup(): ITabGroup {
+    return this.tabGroups[this.selectedTabGroup]
+  }
+  public get currentTab(): ITab {
+    return this.currentTabGroup.tabs[this.currentTabGroup.selectedTab]
+  }
   public selectedTabGroup: number = 0;
   @observable
   public tabGroups: ITabGroup[] = [
@@ -18,8 +29,6 @@ class Store {
     }
   ];
 
-  @observable public pages: IPage[] = [];
-
   @observable
   public addTabButton: IAddTabButton = {
     left: 0
@@ -29,7 +38,7 @@ class Store {
   public addressBar: IAddressBar = {
     toggled: false,
     canToggle: false
-  }
+  };
 
   public getTabBarWidth: () => number;
   public addTab: () => void;

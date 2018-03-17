@@ -10,10 +10,8 @@ interface INavIconsProps {
 }
 
 export const NavIcons = styled.div`
-  margin-left: ${(props: INavIconsProps) => 
-    !props.isFullscreen && Store.platform === Platforms.MacOS
-    ? 78
-    : 0}px};
+  margin-left: ${(props: INavIconsProps) =>
+    !props.isFullscreen && Store.platform === Platforms.MacOS ? 78 : 0}px;
   display: flex;
   -webkit-app-region: no-drag;
 `;
@@ -35,50 +33,12 @@ export const StyledApp = styled.div`
 `;
 
 export const TabsSection = styled.div`
-  display: flex;
   flex: 1;
   height: 100%;
   position: relative;
 `;
 
-interface IAddressBarProps {
-  visible: boolean;
-}
 
-export const AddressBar = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  transition: 0.2s opacity;
-  display: flex;
-  align-items: center;
-
-  opacity: ${(props: IAddressBarProps) => props.visible ? 1 : 0};
-`;
-
-interface IInputProps {
-  visible: boolean;
-}
-
-export const Input = styled.input`
-  background-color: rgba(0,0,0, 0.12);
-  border-radius: 2px;
-  width: 100%;
-  height: 32px;
-  max-width: 680px;
-  left: 50%;
-  font-size: 13px;
-  transform: translateX(-50%);
-  padding-left: 16px;
-  color: black;
-  border: none;
-  outline: none;
-  position: relative;
-
-  -webkit-app-region: ${(props: IInputProps) => props.visible ? "no-drag" : "drag"};
-`;
 
 export const Handle = styled.div`
   position: absolute;
@@ -87,4 +47,4 @@ export const Handle = styled.div`
   right: 3px;
   bottom: 0px;
   -webkit-app-region: drag;
-`
+`;
