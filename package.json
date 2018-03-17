@@ -47,7 +47,7 @@
     "cross-env": "5.1.4",
     "css-loader": "0.28.11",
     "devtron": "1.4.0",
-    "electron": "1.8.3",
+    "electron": "1.8.4",
     "electron-builder": "20.5.1",
     "mobx-react": "5.0.0",
     "mobx": "4.0.2",
