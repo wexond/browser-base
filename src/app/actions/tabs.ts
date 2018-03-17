@@ -12,6 +12,9 @@ import { tabAnimations } from "../defaults/tabs";
 // Interfaces
 import { IAddTabButton, ITab, ITabGroup } from "../interfaces";
 
+// Actions
+import { addPage } from "./pages";
+
 import Store from "../store";
 
 let nextTabId = 0;
@@ -230,16 +233,13 @@ export const addTab = (): ITab => {
       newLeft: 0,
       newWidth: 0,
       reorderLocked: false,
-      hovered: false,
-      page: {
-        id: nextTabId,
-        url: "https://nersent.tk/Projects/Material-React"
-      }
+      hovered: false
     }) - 1;
 
   const tab = Store.currentTabGroup.tabs[index];
 
   selectTab(tab);
+  addPage(tab.id);
 
   nextTabId += 1;
 
