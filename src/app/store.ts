@@ -25,11 +25,10 @@ class Store {
 
   @computed
   public get currentTab(): ITab {
-    return tabs.getTabById(this.currentTabGroup.selectedTab);
+    return this.currentTabGroup.getSelectedTab();
   }
 
-  @observable
-  public selectedTabGroup: number = 0;
+  @observable public selectedTabGroup: number = 0;
 
   @observable
   public tabGroups: ITabGroup[] = [
@@ -38,7 +37,10 @@ class Store {
       tabs: [] as ITab[],
       id: 0,
       lineLeft: 0,
-      lineWidth: 0
+      lineWidth: 0,
+      getSelectedTab() {
+        return tabs.getTabById(this.selectedTab);
+      }
     }
   ];
 
