@@ -79,7 +79,6 @@ if (process.env.NODE_ENV === 'production') {
 
 let appConfig = {
   target: 'electron-renderer',
-  devtool,
 
   entry: {
     app: './src/bootstraps/app.jsx'
@@ -88,7 +87,6 @@ let appConfig = {
 
 let appletsConfig = {
   target: 'web',
-  devtool,
 
   entry: {
     history: './src/bootstraps/history.jsx',
