@@ -40,7 +40,7 @@ let config = {
           }
         ]
       }, {
-        test: /\.(png|gif|jpg|woff2|tff|svg)$/,
+        test: /\.(png|gif|jpg|woff2|ttf|svg)$/,
         include: join(__dirname, 'src'),
         exclude: /node_modules/,
         use: [
@@ -70,13 +70,6 @@ let config = {
 }
 
 if (process.env.NODE_ENV === 'production') {
-  config.plugins.push(new UglifyJSWebpackPlugin({
-    uglifyOptions: {
-      output: {
-        comments: false
-      }
-    }
-  }))
   config.plugins.push(new webpack.DefinePlugin({
     'process.env': {
       'NODE_ENV': JSON.stringify('production')
@@ -86,7 +79,7 @@ if (process.env.NODE_ENV === 'production') {
 
 let appConfig = {
   target: 'electron-renderer',
-  devtool: (process.env.NODE_ENV === 'production') ? productionDevtool : developmentDevtool,
+  devtool,
 
   entry: {
     app: './src/bootstraps/app.jsx'
@@ -95,7 +88,7 @@ let appConfig = {
 
 let appletsConfig = {
   target: 'web',
-  devtool: (process.env.NODE_ENV === 'production') ? productionDevtool : developmentDevtool,
+  devtool,
 
   entry: {
     history: './src/bootstraps/history.jsx',
