@@ -15,6 +15,8 @@ export const StyledAddressBar = styled.div`
   align-items: center;
 
   opacity: ${(props: IStyledAddressBarProps) => (props.visible ? 1 : 0)};
+  -webkit-app-region: ${(props: IInputProps) =>
+    props.visible ? "no-drag" : ""};
 `;
 
 interface IInputProps {
