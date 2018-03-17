@@ -90,6 +90,7 @@ export default class App extends React.Component<{}, IState> {
           )}
           <Line />
         </ToolBar>
+        <Pages />
       </StyledApp>
     );
   }
