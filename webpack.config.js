@@ -85,7 +85,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 let appConfig = {
-  target: 'electron',
+  target: 'electron-renderer',
   devtool: (process.env.NODE_ENV === 'production') ? productionDevtool : developmentDevtool,
 
   entry: {
