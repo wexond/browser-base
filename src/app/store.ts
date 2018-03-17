@@ -1,23 +1,36 @@
-import { observable } from "mobx";
+import { computed, observable } from "mobx";
 import os from "os";
 
+// Interfaces
 import {
   IAddressBar,
   IAddTabButton,
+  IPage,
   ITab,
   ITabGroup
 } from "./interfaces";
 
+// Enums
 import { Platforms } from "../shared/enums";
 
+// Actions
+import * as tabGroups from "./actions/tab-groups";
+import * as tabs from "./actions/tabs";
+
 class Store {
+  @computed
   public get currentTabGroup(): ITabGroup {
-    return this.tabGroups[this.selectedTabGroup]
+    return tabGroups.getTabGroupById(this.selectedTabGroup);
   }
+
+  @computed
   public get currentTab(): ITab {
-    return this.currentTabGroup.tabs[this.currentTabGroup.selectedTab]
+    return tabs.getTabById(this.currentTabGroup.selectedTab);
   }
+
+  @observable
   public selectedTabGroup: number = 0;
+
   @observable
   public tabGroups: ITabGroup[] = [
     {
@@ -28,6 +41,8 @@ class Store {
       lineWidth: 0
     }
   ];
+
+  @observable public pages: IPage[] = [];
 
   @observable
   public addTabButton: IAddTabButton = {

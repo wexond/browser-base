@@ -35,9 +35,6 @@ export default class TabBar extends React.Component<{}, {}> {
       >
         <TabGroups>
           {Store.tabGroups.map((tabGroup: ITabGroup) => {
-            if (tabGroup.id !== Store.selectedTabGroup) {
-              return null;
-            }
             return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
           })}
           <ToolBarButton
