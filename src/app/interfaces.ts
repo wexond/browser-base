@@ -4,6 +4,7 @@ export interface ITabGroup {
   selectedTab: number;
   lineLeft: number;
   lineWidth: number;
+  getSelectedTab: () => ITab;
 }
 
 export interface ITab {
