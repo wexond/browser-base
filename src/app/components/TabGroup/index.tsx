@@ -90,10 +90,6 @@ export default class TabGroup extends React.Component<IProps, {}> {
     });
 
     observe(tabGroup.tabs, (change: any) => {
-      if (change.addedCount > 0 && change.removedCount > 0) {
-        return;
-      }
-
       if (change.addedCount > 0 || change.removedCount > 0) {
         this.setState({ tabs: change.object.slice() });
       }
