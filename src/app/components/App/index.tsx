@@ -15,6 +15,7 @@ import {
 
 // Components
 import { TextField } from "nersent-ui";
+import AddressBar from "../AddressBar"
 import Pages from "../Pages";
 import TabBar from "../TabBar";
 import ToolBar from "../ToolBar";
@@ -23,7 +24,13 @@ import ToolBarSeparator from "../ToolBarSeparator";
 import WindowButton from "../WindowButton";
 
 // Styles
-import { AddressBar, Handle, Input, Line, NavIcons, StyledApp, TabsSection } from "./styles";
+import {
+  Handle,
+  Line,
+  NavIcons,
+  StyledApp,
+  TabsSection
+} from "./styles";
 
 import Store from "../../store";
 
@@ -35,34 +42,30 @@ interface IState {
 export default class App extends React.Component<{}, IState> {
   public state: IState = {
     isFullscreen: false
-  }
-
-  private input: HTMLInputElement;
-
+  };
   public componentDidMount() {
     ipcRenderer.on("fullscreen", (e: any, isFullscreen: boolean) => {
       this.setState({
         isFullscreen
-      })
+      });
     });
 
-    window.addEventListener('mousemove', e => {
+    window.addEventListener("mousemove", e => {
       Store.mouse.x = e.pageX;
       Store.mouse.y = e.pageY;
+<<<<<<< HEAD
     })
   }
 
   public onInputBlur = () => {
     Store.addressBar.toggled = false;
     Store.addressBar.canToggle = false;
+=======
+    });
+>>>>>>> 3dfe6c713291311c119940915fdf028688492dba
   }
-
   public render() {
-    const { isFullscreen } = this.state
-
-    if (Store.addressBar.toggled) {
-      this.input.focus();
-    }
+    const { isFullscreen } = this.state;
 
     return (
       <StyledApp>
@@ -75,9 +78,7 @@ export default class App extends React.Component<{}, IState> {
           </NavIcons>
           <ToolBarSeparator />
           <TabsSection>
-            <AddressBar visible={Store.addressBar.toggled}>
-              <Input innerRef={r => this.input = r} onBlur={this.onInputBlur} placeholder="Search" visible={Store.addressBar.toggled}/>
-            </AddressBar>
+            <AddressBar visible={Store.addressBar.toggled}/>              
             <TabBar />
           </TabsSection>
           <ToolBarSeparator />

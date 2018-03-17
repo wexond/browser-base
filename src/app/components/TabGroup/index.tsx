@@ -31,7 +31,8 @@ export default class TabGroup extends React.Component<IProps, {}> {
     scrollbarThumbWidth: 0,
     scrollbarThumbLeft: 0,
     scrollbarThumbVisible: false,
-    scrollbarVisible: false
+    scrollbarVisible: false,
+    tabs: [] as ITab[]
   };
 
   private tabGroups: HTMLDivElement;
@@ -51,6 +52,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
     lastScrollLeft: 0
   };
   private scrollInterval: any;
+  private scrollTimeout: any;
   private tabsInterval: any;
 
   public componentDidMount() {
@@ -63,15 +65,14 @@ export default class TabGroup extends React.Component<IProps, {}> {
         return;
       }
 
-      tabs.setTabsWidths(false);
-      tabs.setTabsPositions(false);
+      tabs.updateTabs(false);
 
       const selectedTab = tabs.getTabById(tabGroup.selectedTab);
       tabGroup.lineLeft = selectedTab.newLeft;
       tabGroup.lineWidth = selectedTab.newWidth;
     });
 
-    requestAnimationFrame(this.resizeScrollbar);
+    this.resizeScrollbar();
 
     window.addEventListener("mouseup", this.onMouseUp);
     window.addEventListener("mousemove", this.onMouseMove);
@@ -85,6 +86,12 @@ export default class TabGroup extends React.Component<IProps, {}> {
         requestAnimationFrame(() => {
           tabs.animateLine(tabGroup, tabs.getTabById(change.newValue));
         });
+      }
+    });
+
+    observe(tabGroup.tabs, (change: any) => {
+      if (change.addedCount > 0 || change.removedCount > 0) {
+        this.setState({ tabs: change.object.slice() });
       }
     });
   }
@@ -108,38 +115,35 @@ export default class TabGroup extends React.Component<IProps, {}> {
     const tab = tabs.addTab();
     const containerWidth = Store.getTabBarWidth();
 
-    const width = tabs.getTabWidth(tab);
-
     tab.left = tabs.getTabLeft(tab);
 
+    const width = tabs.getTabWidth(tab);
     this.scrollData.maxScrollLeft += width;
 
     clearInterval(this.scrollInterval);
 
-    let time = 0;
     this.scrollInterval = setInterval(() => {
-      if (time < tabAnimations.left.duration * 1000) {
-        this.tabGroups.scrollLeft = this.scrollData.maxScrollLeft;
-      } else {
-        clearInterval(this.scrollInterval);
-      }
-
-      time += 1;
+      this.tabGroups.scrollLeft = this.scrollData.maxScrollLeft;
     }, 1);
 
-    tabs.setTabsWidths();
-    tabs.setTabsPositions();
+    clearTimeout(this.scrollTimeout);
+
+    this.scrollTimeout = setTimeout(() => {
+      clearInterval(this.scrollInterval);
+    }, tabAnimations.left.duration * 1000);
+
+    tabs.updateTabs();
   };
 
-  public onTabMouseDown = (e: React.MouseEvent<HTMLDivElement>, tab: ITab) => {
-    const { left } = tab;
+  public onTabMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { tabGroup } = this.props;
+    const selectedTab = tabs.getTabById(tabGroup.selectedTab);
 
-    tabs.selectTab(tab);
     this.tabDragData = {
       lastMouseX: 0,
       dragging: true,
       mouseStartX: e.pageX,
-      startLeft: tab.left,
+      startLeft: selectedTab.left,
       direction: ""
     };
 
@@ -239,7 +243,11 @@ export default class TabGroup extends React.Component<IProps, {}> {
 
       Store.addressBar.canToggle = false;
 
-      const newLeft = startLeft + e.pageX - mouseStartX - (this.scrollData.lastScrollLeft - this.tabGroups.scrollLeft);
+      const newLeft =
+        startLeft +
+        e.pageX -
+        mouseStartX -
+        (this.scrollData.lastScrollLeft - this.tabGroups.scrollLeft);
 
       if (newLeft < 0) {
         selectedTab.left = 0;
@@ -258,8 +266,8 @@ export default class TabGroup extends React.Component<IProps, {}> {
       }
 
       const createWindow = () => {
-        console.log("create a new window");
-      }
+        // Create a new window
+      };
 
       if (e.pageY > TOOLBAR_HEIGHT + 16 || e.pageY < -16) {
         createWindow();
@@ -279,11 +287,11 @@ export default class TabGroup extends React.Component<IProps, {}> {
         }
       }
 
-      TweenLite.to(tabGroup, 0, { lineLeft: selectedTab.left })
+      TweenLite.to(tabGroup, 0, { lineLeft: selectedTab.left });
 
       let direction = "";
       if (this.tabDragData.lastMouseX - e.pageX === 1) {
-        direction = "left"
+        direction = "left";
       } else if (this.tabDragData.lastMouseX - e.pageX === -1) {
         direction = "right";
       }
@@ -312,13 +320,13 @@ export default class TabGroup extends React.Component<IProps, {}> {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          {tabGroup.tabs.map((tab: ITab) => (
+          {this.state.tabs.map((tab: ITab) => (
             <Tab
               key={tab.id}
               tabGroup={tabGroup}
               tab={tab}
               selected={tabGroup.selectedTab === tab.id}
-              onMouseDown={e => this.onTabMouseDown(e, tab)}
+              onMouseDown={this.onTabMouseDown}
             />
           ))}
           <Line
