@@ -15,6 +15,7 @@ import {
 
 // Components
 import { TextField } from "nersent-ui";
+import AddressBar from "../AddressBar"
 import Pages from "../Pages";
 import TabBar from "../TabBar";
 import ToolBar from "../ToolBar";
@@ -24,9 +25,7 @@ import WindowButton from "../WindowButton";
 
 // Styles
 import {
-  AddressBar,
   Handle,
-  Input,
   Line,
   NavIcons,
   StyledApp,
@@ -44,9 +43,6 @@ export default class App extends React.Component<{}, IState> {
   public state: IState = {
     isFullscreen: false
   };
-
-  private input: HTMLInputElement;
-
   public componentDidMount() {
     ipcRenderer.on("fullscreen", (e: any, isFullscreen: boolean) => {
       this.setState({
@@ -59,17 +55,8 @@ export default class App extends React.Component<{}, IState> {
       Store.mouse.y = e.pageY;
     });
   }
-
-  public onInputBlur = () => {
-    Store.addressBar.toggled = false;
-  };
-
   public render() {
     const { isFullscreen } = this.state;
-
-    if (Store.addressBar.toggled) {
-      this.input.focus();
-    }
 
     return (
       <StyledApp>
@@ -82,14 +69,7 @@ export default class App extends React.Component<{}, IState> {
           </NavIcons>
           <ToolBarSeparator />
           <TabsSection>
-            <AddressBar visible={Store.addressBar.toggled}>
-              <Input
-                innerRef={r => (this.input = r)}
-                onBlur={this.onInputBlur}
-                placeholder="Search"
-                visible={Store.addressBar.toggled}
-              />
-            </AddressBar>
+            <AddressBar visible={Store.addressBar.toggled}/>              
             <TabBar />
           </TabsSection>
           <ToolBarSeparator />
