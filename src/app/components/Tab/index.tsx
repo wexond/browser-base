@@ -152,7 +152,7 @@ export default class Tab extends React.Component<IProps, {}> {
     }
 
     requestAnimationFrame(() => {
-      tabs.animateLine(tabGroup, tabs.getTabById(tabGroup.selectedTab));
+      tabs.animateLine(tabGroup, tabGroup.getSelectedTab());
     });
   };
 
