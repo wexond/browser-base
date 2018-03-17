@@ -67,7 +67,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
 
       tabs.updateTabs(false);
 
-      const selectedTab = tabs.getTabById(tabGroup.selectedTab);
+      const selectedTab = tabGroup.getSelectedTab();
       tabGroup.lineLeft = selectedTab.newLeft;
       tabGroup.lineWidth = selectedTab.newWidth;
     });
@@ -137,7 +137,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
 
   public onTabMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const { tabGroup } = this.props;
-    const selectedTab = tabs.getTabById(tabGroup.selectedTab);
+    const selectedTab = tabGroup.getSelectedTab();
 
     this.tabDragData = {
       lastMouseX: 0,
@@ -182,7 +182,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
     this.tabDragData.dragging = false;
     tabs.setTabsPositions();
 
-    tabs.animateLine(tabGroup, tabs.getTabById(tabGroup.selectedTab));
+    tabs.animateLine(tabGroup, tabGroup.getSelectedTab());
   };
 
   public onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -223,7 +223,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
 
   public onMouseMove = (e: any) => {
     const { tabGroup } = this.props;
-    const selectedTab = tabs.getTabById(tabGroup.selectedTab);
+    const selectedTab = tabGroup.getSelectedTab();
 
     if (this.scrollData.dragging) {
       const { startLeft, mouseStartX } = this.scrollData;
