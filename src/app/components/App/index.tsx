@@ -53,16 +53,12 @@ export default class App extends React.Component<{}, IState> {
     window.addEventListener("mousemove", e => {
       Store.mouse.x = e.pageX;
       Store.mouse.y = e.pageY;
-<<<<<<< HEAD
     })
   }
 
   public onInputBlur = () => {
     Store.addressBar.toggled = false;
     Store.addressBar.canToggle = false;
-=======
-    });
->>>>>>> 3dfe6c713291311c119940915fdf028688492dba
   }
   public render() {
     const { isFullscreen } = this.state;
