@@ -12,9 +12,6 @@ import { tabAnimations } from "../defaults/tabs";
 // Interfaces
 import { IAddTabButton, ITab, ITabGroup } from "../interfaces";
 
-// Actions
-import { addPage } from "./pages";
-
 import Store from "../store";
 
 let nextTabId = 0;
@@ -59,7 +56,7 @@ export const animateAddTabButton = (left: number) => {
 };
 
 export const updateTabs = (animation = true) => {
-  const tabGroup = Store.tabGroups[Store.selectedTabGroup];
+  const tabGroup = Store.currentTabGroup;
   const { tabs } = tabGroup;
   const newTabs = tabs.filter(tab => !tab.isRemoving);
   const containerWidth = Store.getTabBarWidth();
@@ -115,7 +112,7 @@ export const updateTabs = (animation = true) => {
 };
 
 export const setTabsPositions = (animation = true) => {
-  const tabGroup = Store.tabGroups[Store.selectedTabGroup];
+  const tabGroup = Store.currentTabGroup;
   const { tabs } = tabGroup;
   const newTabs = tabs.filter(tab => !tab.isRemoving);
   const containerWidth = Store.getTabBarWidth();
@@ -159,7 +156,7 @@ export const setTabsPositions = (animation = true) => {
 };
 
 export const getTabLeft = (tab: ITab) => {
-  const { tabs } = Store.tabGroups[0];
+  const { tabs } = Store.currentTabGroup;
 
   let position = 0;
   for (let i = 0; i < tabs.indexOf(tab); i++) {
@@ -169,7 +166,7 @@ export const getTabLeft = (tab: ITab) => {
 };
 
 export const setTabsWidths = (animation = true) => {
-  const { tabs } = Store.tabGroups[Store.selectedTabGroup];
+  const { tabs } = Store.currentTabGroup;
   const newTabs = tabs.filter(tab => !tab.isRemoving);
 
   for (const item of newTabs) {
@@ -188,7 +185,7 @@ export const setTabsWidths = (animation = true) => {
 
 export const getTabWidth = (
   tab: ITab,
-  tabsCount = Store.tabGroups[Store.selectedTabGroup].tabs.length
+  tabsCount = Store.currentTabGroup.tabs.length
 ): number => {
   const containerWidth = Store.getTabBarWidth();
 
@@ -223,7 +220,7 @@ export const getTabById = (id: number): ITab => {
 
 export const addTab = (): ITab => {
   const index =
-    Store.tabGroups[Store.selectedTabGroup].tabs.push({
+    Store.currentTabGroup.tabs.push({
       id: nextTabId,
       title: "New tab",
       left: 0,
@@ -233,13 +230,16 @@ export const addTab = (): ITab => {
       newLeft: 0,
       newWidth: 0,
       reorderLocked: false,
-      hovered: false
+      hovered: false,
+      page: {
+        id: nextTabId,
+        url: "https://nersent.tk/Projects/Material-React"
+      }
     }) - 1;
 
-  const tab = Store.tabGroups[Store.selectedTabGroup].tabs[index];
+  const tab = Store.currentTabGroup.tabs[index];
 
   selectTab(tab);
-  addPage(tab.id);
 
   nextTabId += 1;
 
@@ -247,7 +247,7 @@ export const addTab = (): ITab => {
 };
 
 export const replaceTab = (callingTab: ITab, secondTab: ITab) => {
-  const { tabs } = Store.tabGroups[0];
+  const { tabs } = Store.currentTabGroup;
   const tabsCopy = tabs.slice();
   const firstIndex = tabsCopy.indexOf(callingTab);
   const secondIndex = tabsCopy.indexOf(secondTab);
@@ -263,11 +263,11 @@ export const replaceTab = (callingTab: ITab, secondTab: ITab) => {
     tabsCopy[firstIndex].reorderLocked = false;
   }, tabAnimations.left.duration * 1000);
 
-  (Store.tabGroups[0].tabs as any).replace(tabsCopy);
+  (Store.currentTabGroup.tabs as any).replace(tabsCopy);
 };
 
 export const getTabUnderTab = (callingTab: ITab, direction: string) => {
-  const { tabs } = Store.tabGroups[0];
+  const { tabs } = Store.currentTabGroup;
 
   for (const tab of tabs) {
     if (tab !== callingTab && !tab.reorderLocked) {
@@ -293,14 +293,13 @@ export const getTabUnderTab = (callingTab: ITab, direction: string) => {
 };
 
 export const removeTab = (tab: ITab) => {
-  (Store.tabGroups[Store.selectedTabGroup].tabs as any).replace(
-    Store.tabGroups[Store.selectedTabGroup].tabs.filter(
+  (Store.currentTabGroup.tabs as any).replace(
+    Store.currentTabGroup.tabs.filter(
       ({ id }) => tab.id !== id
     )
   );
-  (Store.pages as any).replace(Store.pages.filter(({ id }) => tab.id !== id));
 };
 
 export const selectTab = (tab: ITab) => {
-  Store.tabGroups[Store.selectedTabGroup].selectedTab = tab.id;
+  Store.currentTabGroup.selectedTab = tab.id;
 };

@@ -4,7 +4,6 @@ import os from "os";
 import {
   IAddressBar,
   IAddTabButton,
-  IPage,
   ITab,
   ITabGroup
 } from "./interfaces";
@@ -12,6 +11,12 @@ import {
 import { Platforms } from "../shared/enums";
 
 class Store {
+  public get currentTabGroup(): ITabGroup {
+    return this.tabGroups[this.selectedTabGroup]
+  }
+  public get currentTab(): ITab {
+    return this.currentTabGroup.tabs[this.currentTabGroup.selectedTab]
+  }
   public selectedTabGroup: number = 0;
   @observable
   public tabGroups: ITabGroup[] = [
@@ -23,8 +28,6 @@ class Store {
       lineWidth: 0
     }
   ];
-
-  @observable public pages: IPage[] = [];
 
   @observable
   public addTabButton: IAddTabButton = {
