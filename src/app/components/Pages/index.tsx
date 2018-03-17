@@ -15,12 +15,12 @@ import Store from "../../store";
 export default observer(() => {
   return (
     <StyledPages>
-      {Store.pages.map((page: IPage) => {
+      {Store.currentTabGroup.tabs.map(({ page }) => {
         return (
           <Page
             key={page.id}
             page={page}
-            selected={Store.tabGroups[0].selectedTab === page.id}
+            selected={Store.currentTabGroup.selectedTab === page.id}
           />
         );
       })}

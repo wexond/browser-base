@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { TOOLBAR_BUTTON_WIDTH } from "../../constants/design";
 
 export const Tabs = styled.div`
+  transform: translateZ(0);
   position: relative;
   height: 100%;
   overflow: hidden;
@@ -32,11 +33,12 @@ interface IScrollbarThumbProps {
 export const ScrollbarThumb = styled.div`
   position: absolute;
   background-color: black;
-  opacity: ${(props: IScrollbarThumbProps) => (props.visible ? 0.2 : 0)};
   height: 100%;
   top: 0;
   left: 0;
   transition: 0.2s opacity;
+
+  opacity: ${(props: IScrollbarThumbProps) => (props.visible ? 0.2 : 0)};
 
   &:hover {
     opacity: 0.4;
