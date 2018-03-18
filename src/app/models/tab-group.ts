@@ -66,6 +66,8 @@ export default class TabGroup {
     this.selectTab(tab);
     Store.addPage(tab.id);
 
+    Store.addressBar.toggle(true);
+
     return tab;
   };
 

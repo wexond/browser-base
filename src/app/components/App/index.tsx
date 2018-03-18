@@ -45,10 +45,6 @@ export default class App extends React.Component<{}, IState> {
     });
   }
 
-  public onInputBlur = () => {
-    Store.addressBar.toggled = false;
-    Store.addressBar.canToggle = false;
-  };
   public render() {
     const { isFullscreen } = this.state;
 
