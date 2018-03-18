@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { transparency } from 'nersent-ui';
 
 interface IStyledAddressBarProps {
   visible: boolean;
@@ -24,6 +25,7 @@ interface IInputProps {
 
 export const Input = styled.input`
   background-color: rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, ${transparency.light.text.primary});
   border-radius: 2px;
   width: 100%;
   height: 32px;
