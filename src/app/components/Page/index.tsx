@@ -1,11 +1,11 @@
-import { observer } from "mobx-react";
-import React from "react";
+import { observer } from 'mobx-react';
+import React from 'react';
 
 // Styles
-import { StyledPage } from "./styles";
+import StyledPage from './styles';
 
 // Models
-import Page from "../../models/page";
+import Page from '../../models/page';
 
 interface IProps {
   page: Page;
@@ -17,7 +17,7 @@ export default observer(({ page, selected }: IProps) => {
 
   return (
     <StyledPage selected={selected}>
-      <webview src={url} style={{ height: "100%" }} />
+      <webview src={url} style={{ height: '100%' }} />
     </StyledPage>
   );
 });

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 interface IStyledAddressBarProps {
   visible: boolean;
@@ -15,8 +15,7 @@ export const StyledAddressBar = styled.div`
   align-items: center;
 
   opacity: ${(props: IStyledAddressBarProps) => (props.visible ? 1 : 0)};
-  -webkit-app-region: ${(props: IInputProps) =>
-    props.visible ? "no-drag" : ""};
+  -webkit-app-region: ${(props: IInputProps) => (props.visible ? 'no-drag' : '')};
 `;
 
 interface IInputProps {
@@ -38,6 +37,5 @@ export const Input = styled.input`
   outline: none;
   position: relative;
 
-  -webkit-app-region: ${(props: IInputProps) =>
-    props.visible ? "no-drag" : "drag"};
+  -webkit-app-region: ${(props: IInputProps) => (props.visible ? 'no-drag' : 'drag')};
 `;

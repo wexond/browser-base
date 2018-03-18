@@ -1,14 +1,14 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // Defaults and constants
-import { transparency } from "nersent-ui";
-import { HOVER_DURATION, TOOLBAR_BUTTON_WIDTH } from "../../constants/design";
+import { transparency } from 'nersent-ui';
+import { HOVER_DURATION, TOOLBAR_BUTTON_WIDTH } from '../../constants/design';
 
 // Enums
-import { Icons } from "../../enums";
+import { Icons } from '../../enums';
 
 // Mixins
-import images from "../../../shared/mixins/images";
+import images from '../../../shared/mixins/images';
 
 interface IIconProps {
   size: number;
@@ -21,7 +21,7 @@ export const Icon = styled.div`
 
   opacity: ${transparency.light.icons.inactive};
 
-  ${(props: IIconProps) => images.center(props.size + "px", props.size + "px")}
+  ${(props: IIconProps) => images.center(`${props.size}px`, `${props.size}px`)}
   background-image: ${props => `url(../../src/app/icons/${props.icon})`};
 `;
 

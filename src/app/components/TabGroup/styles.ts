@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // Constants and defaults
-import { TOOLBAR_BUTTON_WIDTH } from "../../constants/design";
+import { TOOLBAR_BUTTON_WIDTH } from '../../constants/design';
 
 export const Tabs = styled.div`
   transform: translateZ(0);
@@ -23,7 +23,7 @@ export const Scrollbar = styled.div`
   z-index: 10;
   width: 100%;
 
-  display: ${(props: IScrollbarProps) => (props.visible ? "block" : "none")};
+  display: ${(props: IScrollbarProps) => (props.visible ? 'block' : 'none')};
 `;
 
 interface IScrollbarThumbProps {
