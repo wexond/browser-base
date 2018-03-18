@@ -1,28 +1,22 @@
-import { observer } from "mobx-react";
-import React from "react";
-
-// Mixins
-import images from "../../../shared/mixins/images";
+import { observer } from 'mobx-react';
+import React from 'react';
+import { Ripples, colors } from 'nersent-ui';
 
 // Constants and defaults
-import { colors } from "nersent-ui";
-import { TAB_MAX_WIDTH } from "../../constants/design";
-import { tabAnimations } from "../../defaults/tabs";
+import { TAB_MAX_WIDTH } from '../../constants/design';
+import tabAnimations from '../../defaults/tab-animations';
 
 // Utils
-import { closeWindow } from "../../utils/window";
-
-// Components
-import { Ripples } from "nersent-ui";
+import { closeWindow } from '../../utils/window';
 
 // Styles
-import { Close, StyledTab, Title } from "./styles";
+import { Close, StyledTab, Title } from './styles';
 
 // Models
-import Tab from "../../models/tab";
-import TabGroup from "../../models/tab-group";
+import Tab from '../../models/tab';
+import TabGroup from '../../models/tab-group';
 
-import Store from "../../store";
+import Store from '../../store';
 
 interface IProps {
   key: number;
@@ -54,10 +48,8 @@ export default class extends React.Component<IProps, {}> {
           if (!tab.hovered) {
             tab.hovered = true;
           }
-        } else {
-          if (tab.hovered) {
-            tab.hovered = false;
-          }
+        } else if (tab.hovered) {
+          tab.hovered = false;
         }
         requestAnimationFrame(frame);
       }
@@ -91,8 +83,6 @@ export default class extends React.Component<IProps, {}> {
   };
 
   public onMouseUp = () => {
-    const { selected } = this.props;
-
     this.ripples.removeRipples();
   };
 
@@ -109,9 +99,9 @@ export default class extends React.Component<IProps, {}> {
     if (Store.addressBar.canToggle) {
       Store.addressBar.toggled = true;
     }
-  }
+  };
 
-  public close = (e: React.MouseEvent<HTMLDivElement>) => {
+  public onClose = (e: React.MouseEvent<HTMLDivElement>) => {
     const { tabGroup, tab, selected } = this.props;
 
     e.stopPropagation();
@@ -119,25 +109,20 @@ export default class extends React.Component<IProps, {}> {
     if (selected) {
       const tabIndex = tabGroup.tabs.indexOf(tab);
 
-      if (
-        tabIndex + 1 < tabGroup.tabs.length &&
-        !tabGroup.tabs[tabIndex + 1].isRemoving
-      ) {
+      if (tabIndex + 1 < tabGroup.tabs.length && !tabGroup.tabs[tabIndex + 1].isRemoving) {
         tabGroup.selectedTab = tabGroup.tabs[tabIndex + 1].id;
       } else if (tabIndex - 1 >= 0 && !tabGroup.tabs[tabIndex - 1].isRemoving) {
         tabGroup.selectedTab = tabGroup.tabs[tabIndex - 1].id;
-      } else {
-        if (Store.tabGroups.length === 1) {
-          closeWindow();
-        }
+      } else if (Store.tabGroups.length === 1) {
+        closeWindow();
       }
     }
 
     if (tabGroup.getScrollingMode() || tab.width === TAB_MAX_WIDTH) {
       tab.isRemoving = true;
-      tab.animate("width", 0);
+      tab.animate('width', 0);
 
-      tabGroup.updateTabsBounds()
+      tabGroup.updateTabsBounds();
 
       setTimeout(() => {
         tabGroup.removeTab(tab);
@@ -153,15 +138,17 @@ export default class extends React.Component<IProps, {}> {
   };
 
   public render() {
-    const { selected, tab, tabGroup } = this.props;
-    const { left, width, title, id, isRemoving, hovered } = tab;
+    const { selected, tab } = this.props;
+    const {
+      left, width, title, isRemoving, hovered,
+    } = tab;
 
     return (
       <StyledTab
         selected={selected}
         style={{
-          transform: `translateX(${left}px)`, 
-          width, 
+          transform: `translateX(${left}px)`,
+          width,
         }}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
@@ -170,19 +157,17 @@ export default class extends React.Component<IProps, {}> {
         visible={!Store.addressBar.toggled}
         innerRef={r => (this.tab = r)}
       >
-        <Title hovered={hovered}>
-          {title}
-        </Title>
+        <Title hovered={hovered}>{title}</Title>
         <Close
           onMouseDown={this.onCloseMouseDown}
           onMouseUp={this.onCloseMouseUp}
-          onClick={this.close}
+          onClick={this.onClose}
           hovered={hovered}
         >
           <Ripples
-            icon={true}
+            icon
             ref={r => (this.iconRipples = r)}
-            color={"#000"}
+            color="#000"
             parentWidth={16}
             parentHeight={16}
             size={32}
@@ -190,11 +175,7 @@ export default class extends React.Component<IProps, {}> {
             initialOpacity={0.1}
           />
         </Close>
-        <Ripples
-          rippleTime={0.6}
-          ref={r => (this.ripples = r)}
-          color={colors.blue["500"]}
-        />
+        <Ripples rippleTime={0.6} ref={r => (this.ripples = r)} color={colors.blue['500']} />
       </StyledTab>
     );
   }

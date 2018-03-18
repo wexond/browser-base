@@ -1,9 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // Enums
-import { Platforms } from "../../../shared/enums";
+import { Platforms } from '../../../shared/enums';
 
-import Store from "../../store";
+import Store from '../../store';
 
 interface INavIconsProps {
   isFullscreen: boolean;
@@ -11,7 +11,7 @@ interface INavIconsProps {
 
 export const NavIcons = styled.div`
   margin-left: ${(props: INavIconsProps) =>
-    !props.isFullscreen && Store.platform === Platforms.MacOS ? 78 : 0}px;
+    (!props.isFullscreen && Store.platform === Platforms.MacOS ? 78 : 0)}px;
   display: flex;
   -webkit-app-region: no-drag;
 `;
@@ -37,8 +37,6 @@ export const TabsSection = styled.div`
   height: 100%;
   position: relative;
 `;
-
-
 
 export const Handle = styled.div`
   position: absolute;

@@ -1,13 +1,13 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // Enums
-import { Icons } from "../../enums";
+import { Icons } from '../../enums';
 
 // Defaults and constants
-import { HOVER_DURATION } from "../../constants/design";
+import { HOVER_DURATION } from '../../constants/design';
 
 // Mixins
-import images from "../../../shared/mixins/images";
+import images from '../../../shared/mixins/images';
 
 interface IButtonProps {
   icon: Icons;
@@ -23,7 +23,7 @@ export const Button = styled.div`
 
   &:hover {
     background-color: ${(props: IButtonProps) =>
-      props.icon !== Icons.Close ? `rgba(196, 196, 196, 0.4)` : `#e81123`};
+    (props.icon !== Icons.Close ? 'rgba(196, 196, 196, 0.4)' : '#e81123')};
   }
 `;
 
@@ -36,9 +36,8 @@ export const Icon = styled.div`
   height: 100%;
   transition: ${HOVER_DURATION}s filter;
 
-  background-image: ${(props: IIconProps) =>
-    `url(../../src/app/icons/${props.icon})`};
-  ${images.center("11px", "11px")} &:hover {
-    filter: ${props => props.icon === Icons.Close && `invert(100%);`};
+  background-image: ${(props: IIconProps) => `url(../../src/app/icons/${props.icon})`};
+  ${images.center('11px', '11px')} &:hover {
+    filter: ${props => props.icon === Icons.Close && 'invert(100%);'};
   }
 `;

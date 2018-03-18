@@ -18,25 +18,16 @@
     "target": [
       {
         "target": "deb",
-        "arch": [
-          "ia32",
-          "x64"
-        ]
+        "arch": ["ia32", "x64"]
       },
       {
         "target": "AppImage",
-        "arch": [
-          "ia32",
-          "x64"
-        ]
+        "arch": ["ia32", "x64"]
       }
     ]
   },
   "win": {
-    "target": [
-      "zip",
-      "nsis"
-    ]
+    "target": ["zip", "nsis"]
   },
   "mac": {
     "category": "public.app-category.navigation"

@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // Constants and defaults
-import { TOOLBAR_HEIGHT } from "../../constants/design";
+import { TOOLBAR_HEIGHT } from '../../constants/design';
 
 export default styled.div`
   position: relative;

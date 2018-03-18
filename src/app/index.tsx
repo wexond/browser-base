@@ -1,14 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { injectGlobal } from "styled-components";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { injectGlobal } from 'styled-components';
 
 // Mixins
-import { typography } from "nersent-ui";
+import { typography } from 'nersent-ui';
 
 // Components
-import App from "./components/App";
-
-import Store from "./store";
+import App from './components/App';
 
 injectGlobal`
   body {
@@ -20,4 +18,4 @@ injectGlobal`
   }
 `;
 
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(<App />, document.getElementById('app'));

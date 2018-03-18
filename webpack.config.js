@@ -1,27 +1,24 @@
 const webpack = require('webpack');
-const { resolve } = require("path");
-const { spawn } = require("child_process");
+const { resolve } = require('path');
+const { spawn } = require('child_process');
 
-const productionDevtool = "source-map";
-const developmentDevtool = "eval-source-map";
+const productionDevtool = 'source-map';
+const developmentDevtool = 'eval-source-map';
 
-const INCLUDE = [resolve(__dirname, "src")];
+const INCLUDE = [resolve(__dirname, 'src')];
 const EXCLUDE = [/node_modules/];
 
 const PORT = 8080;
 
-const OUTPUT_DIR = resolve(__dirname, "build");
+const OUTPUT_DIR = resolve(__dirname, 'build');
 
 const config = {
-  devtool:
-    process.env.NODE_ENV === "production"
-      ? productionDevtool
-      : developmentDevtool,
+  devtool: process.env.NODE_ENV === 'production' ? productionDevtool : developmentDevtool,
 
   output: {
     path: OUTPUT_DIR,
-    filename: "[name].bundle.js",
-    publicPath: "http://localhost:8080/",
+    filename: '[name].bundle.js',
+    publicPath: 'http://localhost:8080/',
   },
 
   module: {
@@ -32,7 +29,7 @@ const config = {
         exclude: EXCLUDE,
         use: [
           {
-            loader: "url-loader",
+            loader: 'url-loader',
           },
         ],
       },
@@ -42,7 +39,7 @@ const config = {
         exclude: EXCLUDE,
         use: [
           {
-            loader: "ts-loader",
+            loader: 'ts-loader',
           },
         ],
       },
@@ -55,44 +52,41 @@ const config = {
   },
 
   resolve: {
-    modules: ["node_modules"],
-    extensions: [".js", ".tsx", ".ts"],
+    modules: ['node_modules'],
+    extensions: ['.js', '.tsx', '.ts'],
   },
 
   devServer: {
     contentBase: OUTPUT_DIR,
     publicPath: '/',
+    port: PORT,
     stats: {
-      colors: true
+      colors: true,
     },
     after() {
-      spawn('npm', ['start'], { 
-        shell: true, 
-        env: process.env, 
+      spawn('npm', ['start'], {
+        shell: true,
+        env: process.env,
         stdio: 'inherit',
         cwd: __dirname,
-      })
-      .on('close', code => process.exit(0))
-      .on('error', spawnError => console.error(spawnError));
-    }
+      }).on('close', () => process.exit(0));
+    },
   },
 
-  plugins: []
+  plugins: [],
 };
 
 if (process.env.NODE_ENV === 'production') {
-  config.plugins.push(
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    })
-  )
+  config.plugins.push(new webpack.DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify('production'),
+  }));
 }
 
 let appConfig = {
-  target: "electron-renderer",
+  target: 'electron-renderer',
   entry: {
-    app: "./src/app",
-  }
+    app: './src/app',
+  },
 };
 
 appConfig = Object.assign(appConfig, config);

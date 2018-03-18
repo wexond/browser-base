@@ -1,0 +1,25 @@
+{
+  "parser": "typescript-eslint-parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true,
+      "spread": true,
+      "experimentalDecorators": true
+    }
+  },
+  "extends": "airbnb",
+  "rules": {
+    "react/jsx-filename-extension": "off",
+    "no-undef": "off",
+    "no-multi-str": "off",
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "import/no-extraneous-dependencies": "off",
+    "react/sort-comp": "off",
+    "no-return-assign": "off",
+    "no-mixed-operators": "off",
+    "import/prefer-default-export": "off",
+    "no-unused-expressions": "off",
+    "prefer-destructuring": "off"
+  }
+}
