@@ -257,39 +257,32 @@ export const replaceTab = (callingTab: ITab, secondTab: ITab) => {
 
   animateTab(tabsCopy[firstIndex], "left", getTabLeft(tabsCopy[secondIndex]));
 
-  tabsCopy[firstIndex].reorderLocked = true;
-
-  setTimeout(() => {
-    tabsCopy[firstIndex].reorderLocked = false;
-  }, tabAnimations.left.duration * 1000);
-
   (Store.currentTabGroup.tabs as any).replace(tabsCopy);
 };
 
-export const getTabUnderTab = (callingTab: ITab, direction: string) => {
+export const getTabsToReplace = (callingTab: ITab, direction: string) => {
   const { tabs } = Store.currentTabGroup;
 
-  for (const tab of tabs) {
-    if (tab !== callingTab && !tab.reorderLocked) {
-      if (direction === "left") {
-        if (
-          tab.left < callingTab.left &&
-          callingTab.left <= tab.left + tab.width / 2 &&
-          callingTab.left >= tab.left
-        ) {
-          return tab;
-        }
-      } else {
-        if (
-          tab.left > callingTab.left &&
-          callingTab.left + callingTab.width >= tab.left + tab.width / 2 &&
-          callingTab.left + callingTab.width <= tab.left + tab.width
-        ) {
-          return tab;
-        }
+  const index = tabs.indexOf(callingTab);
+
+  const tabsToReplace = [] as ITab[];
+  if (direction === "left") {
+    for (let i = index; i--;) {
+      if (callingTab.left <= tabs[i].width / 2 + tabs[i].left) {
+        replaceTab(tabs[i + 1], tabs[i]);
+        tabsToReplace.push(tabs[i]);
+      }
+    }
+  } else if (direction === "right") {
+    for (let i = index + 1; i < tabs.length; i++) {
+      if (callingTab.left + callingTab.width >= tabs[i].width / 2 + tabs[i].left) {
+        replaceTab(tabs[i - 1], tabs[i]);
+        tabsToReplace.push(tabs[i]);
       }
     }
   }
+
+  return tabsToReplace;
 };
 
 export const removeTab = (tab: ITab) => {
