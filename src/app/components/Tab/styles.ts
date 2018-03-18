@@ -19,6 +19,8 @@ export const StyledTab = styled.div`
   overflow: hidden;
   height: calc(100% - 2px);
   background-color: white;
+  display: flex;
+  align-items: center;
 
   z-index: ${(props: IStyledTabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
@@ -32,7 +34,6 @@ interface ITitleProps {
 export const Title = styled.div`
   position: absolute;
   left: 50%;
-  top: 50%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -41,7 +42,7 @@ export const Title = styled.div`
   text-transform: uppercase;
 
   max-width: ${(props: ITitleProps) => `calc(100% - ${24 + (props.hovered ? 24 : 0)}px)`};
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   opacity: ${transparency.light.text.primary};
 `;
 
