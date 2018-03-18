@@ -150,6 +150,7 @@ export default class extends React.Component<IProps, {}> {
           transform: `translateX(${left}px)`,
           width,
         }}
+        hovered={hovered}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
         onClick={this.onClick}

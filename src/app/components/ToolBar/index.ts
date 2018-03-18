@@ -8,5 +8,5 @@ export default styled.div`
   z-index: 10;
   height: ${TOOLBAR_HEIGHT}px;
   display: flex;
-  background-color: #fff;
+  background-color: #fafafa;
 `;
