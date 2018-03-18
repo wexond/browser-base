@@ -77,43 +77,37 @@ export default class TabGroup {
     this.selectedTab = tab.id;
   }
 
-  public replaceTab(callingTab: Tab, secondTab: Tab) {
-    const { tabs } = this;
-    const tabsCopy = tabs.slice();
-    const firstIndex = tabsCopy.indexOf(callingTab);
-    const secondIndex = tabsCopy.indexOf(secondTab);
-
-    tabsCopy[firstIndex] = secondTab;
-    tabsCopy[secondIndex] = callingTab;
-
-    secondTab.animate('left', callingTab.getLeft());
-
-    (this.tabs as any).replace(tabsCopy);
-  }
-
   public getTabsToReplace(callingTab: Tab, direction: string) {
     const { tabs } = this;
 
     const index = tabs.indexOf(callingTab);
 
-    const tabsToReplace = [] as Tab[];
+    const replaceTab = (firstTab: Tab, secondTab: Tab) => {
+      const tabsCopy = tabs.slice();
+      const firstIndex = tabsCopy.indexOf(firstTab);
+      const secondIndex = tabsCopy.indexOf(secondTab);
+
+      tabsCopy[firstIndex] = secondTab;
+      tabsCopy[secondIndex] = firstTab;
+
+      secondTab.animate('left', firstTab.getLeft());
+
+      (this.tabs as any).replace(tabsCopy);
+    };
+
     if (direction === 'left') {
       for (let i = index; i--;) {
         if (callingTab.left <= tabs[i].width / 2 + tabs[i].left) {
-          this.replaceTab(tabs[i + 1], tabs[i]);
-          tabsToReplace.push(tabs[i]);
+          replaceTab(tabs[i + 1], tabs[i]);
         }
       }
     } else if (direction === 'right') {
       for (let i = index + 1; i < tabs.length; i++) {
         if (callingTab.left + callingTab.width >= tabs[i].width / 2 + tabs[i].left) {
-          this.replaceTab(tabs[i - 1], tabs[i]);
-          tabsToReplace.push(tabs[i]);
+          replaceTab(tabs[i - 1], tabs[i]);
         }
       }
     }
-
-    return tabsToReplace;
   }
 
   public getScrollingMode() {
