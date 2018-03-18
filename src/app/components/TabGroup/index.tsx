@@ -266,9 +266,9 @@ export default class extends React.Component<IProps, {}> {
       TweenLite.to(tabGroup.line, 0, { left: selectedTab.left });
 
       let direction = '';
-      if (this.tabDragData.lastMouseX - e.pageX === 1) {
+      if (this.tabDragData.lastMouseX - e.pageX >= 1) {
         direction = 'left';
-      } else if (this.tabDragData.lastMouseX - e.pageX === -1) {
+      } else if (this.tabDragData.lastMouseX - e.pageX <= -1) {
         direction = 'right';
       }
 
