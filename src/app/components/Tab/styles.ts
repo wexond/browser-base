@@ -57,8 +57,6 @@ export const Close = styled.div`
   width: 16px;
   background-image: url(../../src/app/icons/actions/close.svg);
   transition: 0.2s opacity;
-  top: 50%;
-  transform: translateY(-50%);
 
   opacity: ${(props: ICloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
   ${images.center('100%', '100%')};

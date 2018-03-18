@@ -28,6 +28,8 @@
     "react/jsx-indent": "off",
     "react/jsx-indent-props": "off",
     "react/jsx-max-props-per-line": "off",
-    "no-restricted-syntax": "off"
+    "no-restricted-syntax": "off",
+    "no-param-reassign": "off",
+    "no-underscore-dangle": "off"
   }
 }

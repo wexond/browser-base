@@ -16,7 +16,7 @@ export default class AddressBar extends Component<IProps, {}> {
   private input: HTMLInputElement;
 
   public onInputBlur = () => {
-    Store.addressBar.toggle(false);
+    Store.addressBar.toggled = false;
   };
 
   public onInputFocus = () => {
@@ -46,7 +46,7 @@ export default class AddressBar extends Component<IProps, {}> {
 
       page.url = url;
 
-      Store.addressBar.toggle(false);
+      Store.addressBar.toggled = false;
     }
   };
 
@@ -54,6 +54,11 @@ export default class AddressBar extends Component<IProps, {}> {
     const { visible } = this.props;
 
     if (Store.addressBar.toggled) {
+      const page = Store.getSelectedPage();
+      if (page.webview != null && page.webview.getWebContents() != null) {
+        this.input.value = page.webview.getURL();
+      }
+
       this.input.focus();
     }
 
