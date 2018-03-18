@@ -61,25 +61,21 @@ export default class Tab {
   }
 
   public setLeft(left: number, animation = true) {
-    if (this.targetLeft !== left) {
-      if (animation) {
-        this.animate('left', left);
-      } else {
-        this.left = left;
-      }
-      this.targetLeft = left;
+    if (animation) {
+      this.animate('left', left);
+    } else {
+      this.left = left;
     }
+    this.targetLeft = left;
   }
 
   public setWidth(width: number, animation = true) {
-    if (this.targetWidth !== width) {
-      if (animation) {
-        this.animate('width', width);
-      } else {
-        this.width = width;
-      }
-      this.targetWidth = width;
+    if (animation) {
+      this.animate('width', width);
+    } else {
+      this.width = width;
     }
+    this.targetWidth = width;
   }
 
   public animate(property: 'width' | 'left', value: number) {
