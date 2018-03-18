@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react'; // eslint-disable-line no-unused-vars
 import React from 'react';
 
 // Enums
