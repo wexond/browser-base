@@ -8,6 +8,7 @@ import { Platforms } from '../shared/enums';
 import AddTabButton from './models/add-tab-button';
 import Page from './models/page';
 import TabGroup from './models/tab-group';
+import AddressBar from './models/address-bar';
 
 class Store {
   // Observables
@@ -15,24 +16,14 @@ class Store {
   @observable public tabGroups = [new TabGroup()];
   @observable public pages: Page[] = [];
   @observable public addTabButton = new AddTabButton();
-  @observable
-  public addressBar = {
-    toggled: false,
-    canToggle: false,
-    toggle(flag: boolean) {
-      if (!flag) {
-        this.canToggle = flag;
-      }
-
-      this.toggled = flag;
-    },
-  };
+  @observable public addressBar = new AddressBar();
 
   public platform = os.platform() as Platforms;
   public mouse = {
     x: 0,
     y: 0,
   };
+
   public getTabBarWidth: () => number;
 
   public getCurrentTabGroup() {
@@ -53,6 +44,10 @@ class Store {
 
   public getPageById(id: number) {
     return this.pages.filter(page => page.id === id)[0];
+  }
+
+  public getSelectedPage() {
+    return this.getPageById(this.getCurrentTabGroup().getSelectedTab().id);
   }
 
   public addPage(tabId: number) {
