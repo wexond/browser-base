@@ -1,6 +1,6 @@
 import { Expo, TweenLite } from 'gsap';
 import { observe } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react'; // eslint-disable-line no-unused-vars
 import React from 'react';
 
 // Components

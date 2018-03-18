@@ -20,6 +20,14 @@
     "no-mixed-operators": "off",
     "import/prefer-default-export": "off",
     "no-unused-expressions": "off",
-    "prefer-destructuring": "off"
+    "prefer-destructuring": "off",
+    "no-plusplus": "off",
+    "react/no-unsecaped-entites": "off",
+    "react/self-closing-comp": "off",
+    "react/void-dom-elements-no-children": "off",
+    "react/jsx-indent": "off",
+    "react/jsx-indent-props": "off",
+    "react/jsx-max-props-per-line": "off",
+    "no-restricted-syntax": "off"
   }
 }

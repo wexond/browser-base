@@ -25,7 +25,7 @@
     "compile-darwin": "npm run build-production && electron-builder -m -p always",
     "compile-linux": "npm run build-production && electron-builder -l -p always",
     "build-production": "cross-env NODE_ENV=production webpack-cli --mode production",
-    "lint": "prettier-eslint src/**/*.ts* && eslint --ext .tsx --ext .ts src/"
+    "lint": "prettier-eslint --write src/**/*.ts* && eslint --ext .tsx --ext .ts --ext .js src/"
   },
   "devDependencies": {
     "@types/gsap": "1.19.2",
