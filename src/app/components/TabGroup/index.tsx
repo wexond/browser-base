@@ -286,7 +286,7 @@ export default class extends React.Component<IProps, {}> {
     const { tabGroup } = this.props;
 
     return (
-      <div>
+      <React.Fragment>
         <Tabs
           onWheel={this.onWheel}
           innerRef={(r: any) => (this.tabGroups = r)}
@@ -314,7 +314,7 @@ export default class extends React.Component<IProps, {}> {
             onMouseDown={this.onScrollbarMouseDown}
           />
         </Scrollbar>
-      </div>
+      </React.Fragment>
     );
   }
 }

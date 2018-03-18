@@ -70,12 +70,12 @@ export default class App extends React.Component<{}, IState> {
           <ToolBarButton size={16} icon={Icons.TabGroups} />
           <ToolBarButton size={18} icon={Icons.More} />
           {Store.platform !== Platforms.MacOS && (
-            <div>
+            <React.Fragment>
               <ToolBarSeparator />
               <WindowButton icon={Icons.Minimize} onClick={minimizeWindow} />
               <WindowButton icon={Icons.Maximize} onClick={maximizeWindow} />
               <WindowButton icon={Icons.Close} onClick={closeWindow} />
-            </div>
+            </React.Fragment>
           )}
           <Line />
         </ToolBar>
