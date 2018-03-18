@@ -7,17 +7,35 @@ import StyledPage from './styles';
 // Models
 import Page from '../../models/page';
 
+import Store from '../../store';
+
 interface IProps {
   page: Page;
   selected: boolean;
 }
 
-export default observer(({ page, selected }: IProps) => {
-  const { url } = page;
+@observer
+export default class extends React.Component<IProps, {}> {
+  public componentDidMount() {
+    const { webview, id } = this.props.page;
+    const tab = Store.getTabById(id);
 
-  return (
-    <StyledPage selected={selected}>
-      <webview src={url} style={{ height: '100%' }} />
-    </StyledPage>
-  );
-});
+    webview.addEventListener(
+      'page-title-updated',
+      ({ title }: { title: string; explicitSet: string }) => {
+        tab.title = title;
+      },
+    );
+  }
+
+  public render() {
+    const { page, selected } = this.props;
+    const { url } = page;
+
+    return (
+      <StyledPage selected={selected}>
+        <webview src={url} style={{ height: '100%' }} ref={r => (page.webview = r)} />
+      </StyledPage>
+    );
+  }
+}
