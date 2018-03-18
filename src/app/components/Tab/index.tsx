@@ -97,7 +97,7 @@ export default class extends React.Component<IProps, {}> {
 
   public onClick = () => {
     if (Store.addressBar.canToggle) {
-      Store.addressBar.toggled = true;
+      Store.addressBar.toggle(true);
     }
   };
 

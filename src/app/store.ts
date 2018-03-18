@@ -19,6 +19,13 @@ class Store {
   public addressBar = {
     toggled: false,
     canToggle: false,
+    toggle(flag: boolean) {
+      if (!flag) {
+        this.canToggle = flag;
+      }
+
+      this.toggled = flag;
+    },
   };
 
   public platform = os.platform() as Platforms;
