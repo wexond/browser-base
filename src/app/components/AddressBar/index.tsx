@@ -6,8 +6,8 @@ import {
   StyledAddressBar
 } from "./styles"
 
-// Actions
-import * as pages from "../../actions/pages";
+// Utils
+import { isURL } from "../../utils/url";
 
 import Store from "../../store"
 
@@ -24,12 +24,15 @@ export default class AddressBar extends Component<IProps, {}> {
 
   public onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.which === 13) { // Enter.
+      const tabGroup = Store.getCurrentTabGroup();
+      const tab = tabGroup.getSelectedTab();
+
       e.preventDefault()
 
       const text = e.currentTarget.value
       let url = text
 
-      if (this.isURL(text) && !text.includes("://")) {
+      if (isURL(text) && !text.includes("://")) {
         url = "http://" + text
       } else if (!text.includes("://")) {
         url = "https://www.google.com/search?q=" + text
@@ -37,43 +40,10 @@ export default class AddressBar extends Component<IProps, {}> {
 
       this.input.value = url
       
-      const page = pages.getPageById(Store.currentTab.id);
+      const page = Store.getPageById(tab.id);
 
       page.url = url
     }  
-  }
-
-  public isURL = (input: string): boolean => {
-    const isURLRegex = (url: string) => {
-      const pattern = /^(?:\w+:)?\/\/([^\s.]+\.\S{2}|localhost[:?\d]*)\S*$/
-      return pattern.test(url)
-    }
-
-    if (isURLRegex(input)) {
-      return true
-    } else {
-      return isURLRegex('http://' + input)
-    }
-  }
-
-  public getDomain = (url: string): string => {
-    let hostname = url
-
-    if (hostname.includes("http://") || hostname.includes('https://')) {
-      hostname = hostname.split('://')[1]
-    }
-
-    if (hostname.includes('?')) {
-      hostname = hostname.split('?')[0]
-    }
-
-    if (hostname.includes('://')) {
-      hostname = hostname.split('://')[0] + '://' + hostname.split('/')[2]
-    } else {
-      hostname = hostname.split('/')[0]
-    }
-
-    return hostname
   }
 
   public render() {
