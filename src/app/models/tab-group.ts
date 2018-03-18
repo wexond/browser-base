@@ -45,7 +45,7 @@ export default class TabGroup {
       left += item.targetWidth;
     }
 
-    Store.addTabButton.setLeft(left);
+    Store.addTabButton.setLeft(left, animation);
   }
 
   public setTabsWidths(animation = true) {

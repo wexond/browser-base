@@ -14,6 +14,7 @@ export default styled.div.attrs({
     position: !selected ? 'absolute' : 'initial',
     top: !selected ? 0 : 'auto',
     left: !selected ? 0 : 'auto',
+    visibility: !selected ? 'hidden' : 'visible',
   }),
 })`
   ${(props: IStyledPageProps) => (props.selected ? '' : '')};
