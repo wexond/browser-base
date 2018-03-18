@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-interface IPageProps {
+interface IStyledPageProps {
   selected: boolean;
 }
 
-export const Page = styled.div.attrs({
-  style: ({ selected }: IPageProps) => ({
+export const StyledPage = styled.div.attrs({
+  style: ({ selected }: IStyledPageProps) => ({
     flex: selected ? 1 : "0 1",
     height: !selected ? 0 : "auto",
     width: !selected ? 0 : "auto",
@@ -16,5 +16,5 @@ export const Page = styled.div.attrs({
     left: !selected ? 0 : "auto"
   })
 })`
-  ${(props: IPageProps) => ""};
+  ${(props: IStyledPageProps) => ""};
 `;

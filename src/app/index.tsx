@@ -2,8 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { injectGlobal } from "styled-components";
 
+// Mixins
 import { typography } from "nersent-ui";
 
+// Components
 import App from "./components/App";
 
 import Store from "./store";
