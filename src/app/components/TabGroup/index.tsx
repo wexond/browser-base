@@ -300,10 +300,7 @@ export default class TabGroup extends React.Component<IProps, {}> {
         this.tabDragData.direction = direction;
       }
 
-      const tab = tabs.getTabUnderTab(selectedTab, this.tabDragData.direction);
-      if (tab != null) {
-        tabs.replaceTab(selectedTab, tab);
-      }
+      const tabsToReplace = tabs.getTabsToReplace(selectedTab, this.tabDragData.direction);
 
       this.tabDragData.lastMouseX = e.pageX;
     }
