@@ -10,6 +10,7 @@ interface IStyledTabProps {
   selected: boolean;
   isRemoving: boolean;
   visible: boolean;
+  hovered: boolean;
 }
 
 export const StyledTab = styled.div`
@@ -18,13 +19,19 @@ export const StyledTab = styled.div`
   top: 0;
   overflow: hidden;
   height: calc(100% - 2px);
-  background-color: white;
   display: flex;
   align-items: center;
+  transition: 0.2s background-color;
 
   z-index: ${(props: IStyledTabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
+  background-color: ${(props) => {
+    if (props.hovered && !props.selected) {
+      return 'rgba(0,0,0,0.08)';
+    }
+    return '#fafafa';
+  }};
 `;
 
 interface ITitleProps {
@@ -39,7 +46,6 @@ export const Title = styled.div`
   white-space: nowrap;
   transition: 0.2s opacity, 0.1s max-width;
   font-weight: 500;
-  text-transform: uppercase;
 
   max-width: ${(props: ITitleProps) => `calc(100% - ${24 + (props.hovered ? 24 : 0)}px)`};
   transform: translateX(-50%);
