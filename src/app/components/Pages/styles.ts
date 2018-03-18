@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const StyledPages = styled.div`
+export default styled.div`
   z-index: 4;
   position: relative;
   flex: 1;

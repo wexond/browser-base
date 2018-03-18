@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const TabGroups = styled.div`
   transform: translateZ(0);
@@ -20,7 +20,6 @@ export const StyledTabBar = styled.div`
   left: 0;
   transition: 0.2s opacity;
 
-  pointer-events: ${(props: IStyledTabBarProps) =>
-    props.visible ? "auto" : "none"};
+  pointer-events: ${(props: IStyledTabBarProps) => (props.visible ? 'auto' : 'none')};
   opacity: ${props => (props.visible ? 1 : 0)};
 `;

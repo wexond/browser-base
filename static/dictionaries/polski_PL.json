@@ -1,14 +1,6 @@
 {
   "timeAndDate": {
-    "weekDays": [
-      "poniedziałek",
-      "wtorek",
-      "środa",
-      "czwartek",
-      "piątek",
-      "sobota",
-      "niedziela"
-    ],
+    "weekDays": ["poniedziałek", "wtorek", "środa", "czwartek", "piątek", "sobota", "niedziela"],
     "months": [
       "stycznia",
       "lutego",
@@ -32,11 +24,11 @@
       "news": "Aktualności",
       "anHour": "godzinę",
       "hours": {
-        "<5":"godziny",
+        "<5": "godziny",
         ">4": "godzin"
       },
       "minutes": {
-        "<5":"minuty",
+        "<5": "minuty",
         ">6": "minut"
       },
       "ago": "temu",

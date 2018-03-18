@@ -1,14 +1,6 @@
 {
   "timeAndDate": {
-    "weekDays": [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday"
-    ],
+    "weekDays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
     "months": [
       "January",
       "February",

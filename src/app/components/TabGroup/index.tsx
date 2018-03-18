@@ -1,23 +1,23 @@
-import { Expo, TweenLite } from "gsap";
-import { observe } from "mobx";
-import { observer } from "mobx-react";
-import React from "react";
+import { Expo, TweenLite } from 'gsap';
+import { observe } from 'mobx';
+import { observer } from 'mobx-react';
+import React from 'react';
 
 // Components
-import TabComponent from "../Tab";
+import TabComponent from '../Tab';
 
 // Constants and defaults
-import { TOOLBAR_HEIGHT } from "../../constants/design";
-import { tabAnimations } from "../../defaults/tabs";
+import { TOOLBAR_HEIGHT } from '../../constants/design';
+import tabAnimations from '../../defaults/tab-animations';
 
 // Styles
-import { Line, Scrollbar, ScrollbarThumb, Tabs } from "./styles";
+import { Line, Scrollbar, ScrollbarThumb, Tabs } from './styles';
 
 // Models
-import Tab from "../../models/tab";
-import TabGroup from "../../models/tab-group";
+import Tab from '../../models/tab';
+import TabGroup from '../../models/tab-group';
 
-import Store from "../../store";
+import Store from '../../store';
 
 interface IProps {
   tabGroup: TabGroup;
@@ -30,7 +30,6 @@ export default class extends React.Component<IProps, {}> {
     scrollbarThumbLeft: 0,
     scrollbarThumbVisible: false,
     scrollbarVisible: false,
-    tabs: [] as Tab[]
   };
 
   private tabGroups: HTMLDivElement;
@@ -39,7 +38,7 @@ export default class extends React.Component<IProps, {}> {
     mouseStartX: 0,
     startLeft: 0,
     lastMouseX: 0,
-    direction: ""
+    direction: '',
   };
   private scrollData = {
     dragging: false,
@@ -47,7 +46,7 @@ export default class extends React.Component<IProps, {}> {
     startLeft: 0,
     newScrollLeft: -1,
     maxScrollLeft: 0,
-    lastScrollLeft: 0
+    lastScrollLeft: 0,
   };
   private scrollInterval: any;
   private scrollTimeout: any;
@@ -56,7 +55,7 @@ export default class extends React.Component<IProps, {}> {
   public componentDidMount() {
     const { tabGroup } = this.props;
 
-    window.addEventListener("resize", e => {
+    window.addEventListener('resize', (e) => {
       if (!e.isTrusted) {
         return;
       }
@@ -70,55 +69,45 @@ export default class extends React.Component<IProps, {}> {
 
     this.resizeScrollbar();
 
-    window.addEventListener("mouseup", this.onMouseUp);
-    window.addEventListener("mousemove", this.onMouseMove);
+    window.addEventListener('mouseup', this.onMouseUp);
+    window.addEventListener('mousemove', this.onMouseMove);
 
     requestAnimationFrame(() => {
       tabGroup.addTab();
     });
 
     observe(tabGroup.tabs, (change: any) => {
-      if (change.addedCount > 0 || change.removedCount > 0) {
-        this.setState({ tabs: change.object.slice() });
+      if (change.addedCount > 0 && change.removedCount === 0) {
+        const tab = change.added[0] as Tab;
+        const width = tab.getWidth();
 
-        if (change.removedCount === 0) {
-          const tab = change.added[0] as Tab;
-          const containerWidth = Store.getTabBarWidth();
+        tab.left = tab.getLeft();
 
-          tab.left = tab.getLeft();
+        this.scrollData.maxScrollLeft += width;
 
-          const width = tab.getWidth();
+        clearInterval(this.scrollInterval);
 
-          this.scrollData.maxScrollLeft += width;
+        this.scrollInterval = setInterval(() => {
+          this.tabGroups.scrollLeft = this.scrollData.maxScrollLeft;
+        }, 1);
 
+        clearTimeout(this.scrollTimeout);
+
+        this.scrollTimeout = setTimeout(() => {
           clearInterval(this.scrollInterval);
+        }, tabAnimations.left.duration * 1000);
 
-          this.scrollInterval = setInterval(() => {
-            this.tabGroups.scrollLeft = this.scrollData.maxScrollLeft;
-          }, 1);
-
-          clearTimeout(this.scrollTimeout);
-
-          this.scrollTimeout = setTimeout(() => {
-            clearInterval(this.scrollInterval);
-          }, tabAnimations.left.duration * 1000);
-
-          tabGroup.updateTabsBounds();
-        }
+        tabGroup.updateTabsBounds();
       }
     });
   }
 
   public resizeScrollbar = () => {
     this.setState({
-      scrollbarThumbWidth:
-        this.tabGroups.offsetWidth ** 2 / this.tabGroups.scrollWidth,
+      scrollbarThumbWidth: this.tabGroups.offsetWidth ** 2 / this.tabGroups.scrollWidth,
       scrollbarThumbLeft:
-        this.tabGroups.scrollLeft /
-        this.tabGroups.scrollWidth *
-        this.tabGroups.offsetWidth,
-      scrollbarVisible:
-        this.state.scrollbarThumbWidth !== this.tabGroups.offsetWidth
+        this.tabGroups.scrollLeft / this.tabGroups.scrollWidth * this.tabGroups.offsetWidth,
+      scrollbarVisible: this.state.scrollbarThumbWidth !== this.tabGroups.offsetWidth,
     });
 
     requestAnimationFrame(this.resizeScrollbar);
@@ -133,7 +122,7 @@ export default class extends React.Component<IProps, {}> {
       dragging: true,
       mouseStartX: e.pageX,
       startLeft: selectedTab.left,
-      direction: ""
+      direction: '',
     };
 
     this.scrollData.lastScrollLeft = this.tabGroups.scrollLeft;
@@ -156,7 +145,7 @@ export default class extends React.Component<IProps, {}> {
       ...this.scrollData,
       dragging: true,
       mouseStartX: e.pageX,
-      startLeft: scrollbarThumbLeft
+      startLeft: scrollbarThumbLeft,
     };
   };
 
@@ -165,7 +154,7 @@ export default class extends React.Component<IProps, {}> {
 
     this.scrollData = {
       ...this.scrollData,
-      dragging: false
+      dragging: false,
     };
 
     this.tabDragData.dragging = false;
@@ -192,10 +181,7 @@ export default class extends React.Component<IProps, {}> {
       newScrollLeft = this.tabGroups.scrollLeft + target;
     }
 
-    if (
-      newScrollLeft >
-      this.tabGroups.scrollWidth - this.tabGroups.offsetWidth
-    ) {
+    if (newScrollLeft > this.tabGroups.scrollWidth - this.tabGroups.offsetWidth) {
       newScrollLeft = this.tabGroups.scrollWidth - this.tabGroups.offsetWidth;
     }
     if (newScrollLeft < 0) {
@@ -204,12 +190,12 @@ export default class extends React.Component<IProps, {}> {
 
     this.scrollData = {
       ...this.scrollData,
-      newScrollLeft
+      newScrollLeft,
     };
 
     TweenLite.to(this.tabGroups, 0.3, {
       scrollLeft: newScrollLeft,
-      ease: Expo.easeOut
+      ease: Expo.easeOut,
     });
   };
 
@@ -243,13 +229,13 @@ export default class extends React.Component<IProps, {}> {
 
       if (newLeft < 0) {
         selectedTab.left = 0;
-      } else if (Store.addTabButton.left === "auto") {
+      } else if (Store.addTabButton.left === 'auto') {
         if (newLeft + selectedTab.width > this.tabGroups.scrollWidth) {
           selectedTab.left = this.tabGroups.scrollWidth - selectedTab.width;
         } else {
           selectedTab.left = newLeft;
         }
-      } else if (typeof Store.addTabButton.left === "number") {
+      } else if (typeof Store.addTabButton.left === 'number') {
         if (newLeft + selectedTab.width > (Store.addTabButton.left as number)) {
           selectedTab.left = Store.addTabButton.left - selectedTab.width;
         } else {
@@ -269,30 +255,28 @@ export default class extends React.Component<IProps, {}> {
         createWindow();
       }
 
-      if (Store.addTabButton.left === "auto") {
+      if (Store.addTabButton.left === 'auto') {
         if (e.pageX - boundingRect.left > this.tabGroups.scrollWidth) {
           createWindow();
         }
-      } else {
-        if (e.pageX - boundingRect.left > (Store.addTabButton.left as number)) {
-          createWindow();
-        }
+      } else if (e.pageX - boundingRect.left > (Store.addTabButton.left as number)) {
+        createWindow();
       }
 
       TweenLite.to(tabGroup.line, 0, { left: selectedTab.left });
 
-      let direction = "";
+      let direction = '';
       if (this.tabDragData.lastMouseX - e.pageX === 1) {
-        direction = "left";
+        direction = 'left';
       } else if (this.tabDragData.lastMouseX - e.pageX === -1) {
-        direction = "right";
+        direction = 'right';
       }
 
-      if (direction !== "") {
+      if (direction !== '') {
         this.tabDragData.direction = direction;
       }
 
-      const tabsToReplace = tabGroup.getTabsToReplace(selectedTab, this.tabDragData.direction);
+      tabGroup.getTabsToReplace(selectedTab, this.tabDragData.direction);
 
       this.tabDragData.lastMouseX = e.pageX;
     }
@@ -302,14 +286,14 @@ export default class extends React.Component<IProps, {}> {
     const { tabGroup } = this.props;
 
     return (
-      <>
+      <div>
         <Tabs
           onWheel={this.onWheel}
           innerRef={(r: any) => (this.tabGroups = r)}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          {this.state.tabs.map(tab => (
+          {tabGroup.tabs.map(tab => (
             <TabComponent
               key={tab.id}
               tabGroup={tabGroup}
@@ -318,21 +302,19 @@ export default class extends React.Component<IProps, {}> {
               onMouseDown={this.onTabMouseDown}
             />
           ))}
-          <Line
-            style={{ width: tabGroup.line.width, left: tabGroup.line.left }}
-          />
+          <Line style={{ width: tabGroup.line.width, left: tabGroup.line.left }} />
         </Tabs>
         <Scrollbar visible={this.state.scrollbarVisible}>
           <ScrollbarThumb
             style={{
               width: this.state.scrollbarThumbWidth,
-              left: this.state.scrollbarThumbLeft
+              left: this.state.scrollbarThumbLeft,
             }}
             visible={this.state.scrollbarThumbVisible}
             onMouseDown={this.onScrollbarMouseDown}
           />
         </Scrollbar>
-      </>
+      </div>
     );
   }
 }

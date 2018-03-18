@@ -1,18 +1,15 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 // Styles
-import {
-  Input,
-  StyledAddressBar
-} from "./styles"
+import { Input, StyledAddressBar } from './styles';
 
 // Utils
-import { isURL } from "../../utils/url";
+import { isURL } from '../../utils/url';
 
-import Store from "../../store"
+import Store from '../../store';
 
 interface IProps {
-  visible: boolean
+  visible: boolean;
 }
 
 export default class AddressBar extends Component<IProps, {}> {
@@ -23,32 +20,33 @@ export default class AddressBar extends Component<IProps, {}> {
   };
 
   public onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.which === 13) { // Enter.
+    if (e.which === 13) {
+      // Enter.
       const tabGroup = Store.getCurrentTabGroup();
       const tab = tabGroup.getSelectedTab();
 
-      e.preventDefault()
+      e.preventDefault();
 
-      const text = e.currentTarget.value
-      let url = text
+      const text = e.currentTarget.value;
+      let url = text;
 
-      if (isURL(text) && !text.includes("://")) {
-        url = "http://" + text
-      } else if (!text.includes("://")) {
-        url = "https://www.google.com/search?q=" + text
+      if (isURL(text) && !text.includes('://')) {
+        url = `http://${text}`;
+      } else if (!text.includes('://')) {
+        url = `https://www.google.com/search?q=${text}`;
       }
 
-      this.input.value = url
-      
+      this.input.value = url;
+
       const page = Store.getPageById(tab.id);
 
-      page.url = url
-    }  
-  }
+      page.url = url;
+    }
+  };
 
   public render() {
-    const { visible } = this.props
-    
+    const { visible } = this.props;
+
     if (Store.addressBar.toggled) {
       this.input.focus();
     }
@@ -63,6 +61,6 @@ export default class AddressBar extends Component<IProps, {}> {
           onKeyPress={this.onKeyPress}
         />
       </StyledAddressBar>
-    )
+    );
   }
 }

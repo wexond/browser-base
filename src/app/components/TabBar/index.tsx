@@ -1,18 +1,17 @@
-import { observer } from "mobx-react";
-import React from "react";
-import styled from "styled-components";
+import { observer } from 'mobx-react';
+import React from 'react';
 
 // Components
-import TabGroup from "../TabGroup";
-import ToolBarButton from "../ToolBarButton";
+import TabGroup from '../TabGroup';
+import ToolBarButton from '../ToolBarButton';
 
 // Styles
-import { StyledTabBar, TabGroups } from "./styles";
+import { StyledTabBar, TabGroups } from './styles';
 
 // Enums
-import { Icons } from "../../enums";
+import { Icons } from '../../enums';
 
-import Store from "../../store";
+import Store from '../../store';
 
 @observer
 export default class TabBar extends React.Component<{}, {}> {
@@ -25,27 +24,22 @@ export default class TabBar extends React.Component<{}, {}> {
   public getTabBarWidth = () => this.tabBar.offsetWidth;
 
   public onAddTabButtonClick = () => {
-    Store.getCurrentTabGroup().addTab()
-  }
+    Store.getCurrentTabGroup().addTab();
+  };
 
   public render() {
     return (
-      <StyledTabBar
-        visible={!Store.addressBar.toggled}
-        innerRef={(r: any) => (this.tabBar = r)}
-      >
+      <StyledTabBar visible={!Store.addressBar.toggled} innerRef={(r: any) => (this.tabBar = r)}>
         <TabGroups>
-          {Store.tabGroups.map(tabGroup => {
-            return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
-          })}
+          {Store.tabGroups.map(tabGroup => <TabGroup key={tabGroup.id} tabGroup={tabGroup} />)}
           <ToolBarButton
             icon={Icons.AddTab}
             onClick={this.onAddTabButtonClick}
             style={{
-              position: "absolute",
+              position: 'absolute',
               right: 0,
               left: Store.addTabButton.left,
-              top: 0
+              top: 0,
             }}
           />
         </TabGroups>
