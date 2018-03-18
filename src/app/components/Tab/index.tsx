@@ -4,12 +4,6 @@ import React from "react";
 // Mixins
 import images from "../../../shared/mixins/images";
 
-// Actions
-import * as tabs from "../../actions/tabs";
-
-// Interfaces
-import { ITab, ITabGroup } from "../../interfaces";
-
 // Constants and defaults
 import { colors } from "nersent-ui";
 import { TAB_MAX_WIDTH } from "../../constants/design";
@@ -24,19 +18,23 @@ import { Ripples } from "nersent-ui";
 // Styles
 import { Close, StyledTab, Title } from "./styles";
 
+// Models
+import Tab from "../../models/tab";
+import TabGroup from "../../models/tab-group";
+
 import Store from "../../store";
 
 interface IProps {
   key: number;
-  tab: ITab;
-  tabGroup: ITabGroup;
+  tab: Tab;
+  tabGroup: TabGroup;
   selected: boolean;
   onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
   styles?: any;
 }
 
 @observer
-export default class Tab extends React.Component<IProps, {}> {
+export default class extends React.Component<IProps, {}> {
   private ripples: Ripples;
   private iconRipples: Ripples;
   private tab: HTMLDivElement;
@@ -81,13 +79,13 @@ export default class Tab extends React.Component<IProps, {}> {
   }
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { selected, tab } = this.props;
+    const { selected, tab, tabGroup } = this.props;
 
     this.ripples.makeRipple(e.pageX, e.pageY);
 
     Store.addressBar.canToggle = selected;
 
-    tabs.selectTab(tab);
+    tabGroup.selectTab(tab);
 
     this.props.onMouseDown(e);
   };
@@ -135,48 +133,36 @@ export default class Tab extends React.Component<IProps, {}> {
       }
     }
 
-    if (tabs.getScrollingMode(tabGroup) || tab.width === TAB_MAX_WIDTH) {
+    if (tabGroup.getScrollingMode() || tab.width === TAB_MAX_WIDTH) {
       tab.isRemoving = true;
-      tabs.animateTab(tab, "width", 0);
+      tab.animate("width", 0);
 
-      tabs.setTabsWidths();
-      tabs.setTabsPositions();
+      tabGroup.updateTabsBounds()
 
       setTimeout(() => {
-        tabs.removeTab(tab);
+        tabGroup.removeTab(tab);
       }, tabAnimations.left.duration * 1000);
     } else {
-      tabs.removeTab(tab);
-      tabs.setTabsWidths();
-      tabs.setTabsPositions();
+      tabGroup.removeTab(tab);
+      tabGroup.updateTabsBounds();
     }
 
     requestAnimationFrame(() => {
-      tabs.animateLine(tabGroup, tabGroup.getSelectedTab());
+      tabGroup.line.moveToTab(tabGroup.getSelectedTab());
     });
   };
-
-  public styles() {
-    return {
-      tab: {},
-      title: {},
-      close: {}
-    };
-  }
 
   public render() {
     const { selected, tab, tabGroup } = this.props;
     const { left, width, title, id, isRemoving, hovered } = tab;
 
-    const styles = {
-      ...this.styles(),
-      ...this.props.styles
-    };
-
     return (
       <StyledTab
         selected={selected}
-        style={{ transform: `translateX(${left}px)`, width, ...styles.tab }}
+        style={{
+          transform: `translateX(${left}px)`, 
+          width, 
+        }}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
         onClick={this.onClick}
@@ -184,7 +170,7 @@ export default class Tab extends React.Component<IProps, {}> {
         visible={!Store.addressBar.toggled}
         innerRef={r => (this.tab = r)}
       >
-        <Title hovered={hovered} style={{ ...styles.title }}>
+        <Title hovered={hovered}>
           {title}
         </Title>
         <Close
@@ -192,7 +178,6 @@ export default class Tab extends React.Component<IProps, {}> {
           onMouseUp={this.onCloseMouseUp}
           onClick={this.close}
           hovered={hovered}
-          style={{ ...styles.close }}
         >
           <Ripples
             icon={true}

@@ -12,9 +12,6 @@ import { StyledTabBar, TabGroups } from "./styles";
 // Enums
 import { Icons } from "../../enums";
 
-// Interfaces
-import { ITabGroup } from "../../interfaces";
-
 import Store from "../../store";
 
 @observer
@@ -27,6 +24,10 @@ export default class TabBar extends React.Component<{}, {}> {
 
   public getTabBarWidth = () => this.tabBar.offsetWidth;
 
+  public onAddTabButtonClick = () => {
+    Store.getCurrentTabGroup().addTab()
+  }
+
   public render() {
     return (
       <StyledTabBar
@@ -34,12 +35,12 @@ export default class TabBar extends React.Component<{}, {}> {
         innerRef={(r: any) => (this.tabBar = r)}
       >
         <TabGroups>
-          {Store.tabGroups.map((tabGroup: ITabGroup) => {
+          {Store.tabGroups.map(tabGroup => {
             return <TabGroup key={tabGroup.id} tabGroup={tabGroup} />;
           })}
           <ToolBarButton
             icon={Icons.AddTab}
-            onClick={Store.addTab}
+            onClick={this.onAddTabButtonClick}
             style={{
               position: "absolute",
               right: 0,
