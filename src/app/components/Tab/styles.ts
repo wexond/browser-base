@@ -1,10 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // Constants and defaults
-import { transparency } from "nersent-ui";
+import { transparency } from 'nersent-ui';
 
 // Mixins
-import images from "../../../shared/mixins/images";
+import images from '../../../shared/mixins/images';
 
 interface IStyledTabProps {
   selected: boolean;
@@ -21,8 +21,8 @@ export const StyledTab = styled.div`
   background-color: white;
 
   z-index: ${(props: IStyledTabProps) => (props.selected ? 2 : 1)};
-  pointer-events: ${props => props.isRemoving || !props.visible ? "none" : "auto"};
-  -webkit-app-region: ${props => props.visible ? "no-drag" : ""};
+  pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
+  -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
 `;
 
 interface ITitleProps {
@@ -41,7 +41,7 @@ export const Title = styled.div`
   text-transform: uppercase;
 
   max-width: ${(props: ITitleProps) => `calc(100% - ${24 + (props.hovered ? 24 : 0)}px)`};
-  transform: ${props => `translate(-50%, -50%)`};
+  transform: translate(-50%, -50%);
   opacity: ${transparency.light.text.primary};
 `;
 
@@ -59,6 +59,6 @@ export const Close = styled.div`
   top: 50%;
   transform: translateY(-50%);
 
-  opacity: ${(props: ICloseProps) => props.hovered ? transparency.light.icons.inactive : 0};
-  ${images.center("100%", "100%")};
+  opacity: ${(props: ICloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
+  ${images.center('100%', '100%')};
 `;

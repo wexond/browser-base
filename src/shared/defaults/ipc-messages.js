@@ -1,7 +1,7 @@
 module.exports = {
   BROWSER_GO_BACK: 'browser-go-back',
   BROWSER_GO_FORWARD: 'browser-go-forward',
-  
+
   DOWNLOAD_STARTED: 'download-start',
   DOWNLOAD_PAUSED: 'download-paused',
   DOWNLOAD_INTERRUPTED: 'download-interrupted',
@@ -10,5 +10,5 @@ module.exports = {
   DOWNLOAD_FAILED: 'download-failed',
 
   EXTENSION_EXECUTE_EVENT: 'extension-execute-event:',
-  EXTENSION_RELOAD: 'extension-reload'
-}
+  EXTENSION_RELOAD: 'extension-reload',
+};

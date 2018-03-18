@@ -1,11 +1,11 @@
 export enum Align {
   CenterHorizontal,
   CenterVertical,
-  CenterBoth
+  CenterBoth,
 }
 
 export enum Platforms {
-  Windows = "win32",
-  MacOS = "darwin",
-  Linux = "linux"
+  Windows = 'win32',
+  MacOS = 'darwin',
+  Linux = 'linux',
 }

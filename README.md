@@ -42,16 +42,16 @@ This will watch code for changes, and start Wexond.
 $ npm run <command>
 ```
 
-| Command              | Description                                                             |
-|----------------------|-------------------------------------------------------------------------|
-| `build:production`   | Bundles Wexond's source in production mode.                             |
-| `compile:win32`      | Builds Wexond binaries for Windows.                                     |
-| `compile:darwin`     | Builds Wexond binaries for macOS.                                       |
-| `compile:linux`      | Builds Wexond binaries for Linux.                                       |
-| `electron:rebuild`   | Rebuilds all dependencies for `Electron`.                               |
-| `tslint`             | Lints code and fixes if there are errors.                               |
-| `start`              | Starts Wexond.                                                          |
-| `watch`              | Bundles code using webpack, watches code for changes and starts Wexond. |
+| Command            | Description                                                             |
+| ------------------ | ----------------------------------------------------------------------- |
+| `build:production` | Bundles Wexond's source in production mode.                             |
+| `compile:win32`    | Builds Wexond binaries for Windows.                                     |
+| `compile:darwin`   | Builds Wexond binaries for macOS.                                       |
+| `compile:linux`    | Builds Wexond binaries for Linux.                                       |
+| `electron:rebuild` | Rebuilds all dependencies for `Electron`.                               |
+| `tslint`           | Lints code and fixes if there are errors.                               |
+| `start`            | Starts Wexond.                                                          |
+| `watch`            | Bundles code using webpack, watches code for changes and starts Wexond. |
 
 ## Documentation
 
@@ -59,6 +59,5 @@ Guides and the API reference are located in [`docs`](https://github.com/Nersent/
 It also contains documents describing how to use the browser, and create extensions.
 
 ## Screenshots
+
 All screenshots can be found on [`Imgur`](#).
-
-
