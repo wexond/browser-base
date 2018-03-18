@@ -16,7 +16,11 @@ export default class AddressBar extends Component<IProps, {}> {
   private input: HTMLInputElement;
 
   public onInputBlur = () => {
-    Store.addressBar.toggled = false;
+    Store.addressBar.toggle(false);
+  };
+
+  public onInputFocus = () => {
+    this.input.select();
   };
 
   public onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -41,6 +45,8 @@ export default class AddressBar extends Component<IProps, {}> {
       const page = Store.getPageById(tab.id);
 
       page.url = url;
+
+      Store.addressBar.toggle(false);
     }
   };
 
@@ -56,6 +62,7 @@ export default class AddressBar extends Component<IProps, {}> {
         <Input
           innerRef={r => (this.input = r)}
           onBlur={this.onInputBlur}
+          onFocus={this.onInputFocus}
           placeholder="Search"
           visible={Store.addressBar.toggled}
           onKeyPress={this.onKeyPress}
