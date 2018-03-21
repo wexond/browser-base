@@ -11,6 +11,7 @@ interface IStyledTabProps {
   isRemoving: boolean;
   visible: boolean;
   hovered: boolean;
+  dragging: boolean;
 }
 
 export const StyledTab = styled.div`
@@ -26,12 +27,7 @@ export const StyledTab = styled.div`
   z-index: ${(props: IStyledTabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
-  background-color: ${(props) => {
-    if (props.hovered && !props.selected) {
-      return 'rgba(0,0,0,0.08)';
-    }
-    return '#fafafa';
-  }};
+  background-color: ${props => (props.hovered && !props.dragging ? 'rgba(0,0,0,0.08)' : '#fafafa')};
 `;
 
 interface ITitleProps {
