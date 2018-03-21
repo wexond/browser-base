@@ -163,6 +163,7 @@ export default class extends React.Component<IProps, {}> {
     const selectedTab = tabGroup.getSelectedTab();
     if (selectedTab != null) {
       tabGroup.line.moveToTab(selectedTab);
+      selectedTab.dragging = false;
     }
   };
 
@@ -218,7 +219,8 @@ export default class extends React.Component<IProps, {}> {
       if (Math.abs(e.pageX - mouseStartX) < 5) {
         return;
       }
-
+      
+      selectedTab.dragging = true;
       Store.addressBar.canToggle = false;
 
       const newLeft =
