@@ -74,9 +74,7 @@ export default class extends React.Component<IProps, {}> {
     const { selected, tab, tabGroup } = this.props;
 
     this.ripples.makeRipple(e.pageX, e.pageY);
-
     Store.addressBar.canToggle = selected;
-
     tabGroup.selectTab(tab);
 
     this.props.onMouseDown(e);
@@ -140,7 +138,7 @@ export default class extends React.Component<IProps, {}> {
   public render() {
     const { selected, tab } = this.props;
     const {
-      left, width, title, isRemoving, hovered,
+      left, width, title, isRemoving, hovered, dragging,
     } = tab;
 
     return (
@@ -155,6 +153,7 @@ export default class extends React.Component<IProps, {}> {
         onMouseUp={this.onMouseUp}
         onClick={this.onClick}
         isRemoving={isRemoving}
+        dragging={dragging}
         visible={!Store.addressBar.toggled}
         innerRef={r => (this.tab = r)}
       >

@@ -37,11 +37,11 @@
     "css-loader": "0.28.11",
     "electron": "1.8.4",
     "electron-builder": "20.5.1",
-    "eslint": "4.9.0",
+    "eslint": "4.19.0",
     "eslint-config-airbnb": "16.1.0",
-    "eslint-plugin-import": "2.7.0",
-    "eslint-plugin-jsx-a11y": "6.0.2",
-    "eslint-plugin-react": "7.4.0",
+    "eslint-plugin-import": "2.9.0",
+    "eslint-plugin-jsx-a11y": "6.0.3",
+    "eslint-plugin-react": "7.7.0",
     "gsap": "1.20.4",
     "mobx": "4.1.0",
     "mobx-react": "5.0.0",
@@ -52,15 +52,15 @@
     "react": "16.2.0",
     "react-dom": "16.2.0",
     "styled-components": "3.2.3",
-    "ts-loader": "4.0.1",
+    "ts-loader": "4.1.0",
     "typescript": "2.7.2",
     "typescript-eslint-parser": "14.0.0",
     "url-loader": "1.0.1",
-    "webpack": "4.1.1",
+    "webpack": "4.2.0",
     "webpack-cli": "2.0.12",
     "webpack-dev-server": "3.1.1"
   },
   "dependencies": {
-    "electron-updater": "2.21.0"
+    "electron-updater": "2.21.1"
   }
 }
