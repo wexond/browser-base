@@ -24,6 +24,7 @@ export default class Tab {
   @observable public pinned = false;
   @observable public isRemoving = false;
   @observable public hovered = false;
+  @observable public dragging = false;
 
   public tabGroup = Store.getCurrentTabGroup();
 
