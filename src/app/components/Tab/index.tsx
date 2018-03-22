@@ -32,7 +32,7 @@ export default class extends React.Component<IProps, {}> {
   private ripples: Ripples;
   private iconRipples: Ripples;
   private tab: HTMLDivElement;
-  
+
   public componentDidMount() {
     const { tab } = this.props;
 
@@ -119,7 +119,8 @@ export default class extends React.Component<IProps, {}> {
 
     if (tabGroup.getScrollingMode() || tab.width === TAB_MAX_WIDTH) {
       tab.isRemoving = true;
-      tab.animate('width', 0);
+
+      tab.setWidth(0);
 
       tabGroup.updateTabsBounds();
 
@@ -139,16 +140,12 @@ export default class extends React.Component<IProps, {}> {
   public render() {
     const { selected, tab } = this.props;
     const {
-      left, width, title, isRemoving, hovered, dragging,
+      title, isRemoving, hovered, dragging,
     } = tab;
 
     return (
       <StyledTab
         selected={selected}
-        style={{
-          transform: `translateX(${left}px)`,
-          width,
-        }}
         hovered={hovered}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
@@ -156,7 +153,10 @@ export default class extends React.Component<IProps, {}> {
         isRemoving={isRemoving}
         dragging={dragging}
         visible={!Store.addressBar.toggled}
-        innerRef={r => (this.tab = r)}
+        innerRef={(r) => {
+          this.tab = r;
+          tab.tab = r;
+        }}
       >
         <Title hovered={hovered}>{title}</Title>
         <Close

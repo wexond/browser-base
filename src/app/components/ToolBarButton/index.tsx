@@ -11,6 +11,7 @@ interface IProps {
   size?: number;
   style?: any;
   icon: Icons;
+  innerRef?: (ref: HTMLDivElement) => void;
 }
 
 export default class ToolBarButton extends React.PureComponent<IProps, {}> {
@@ -39,6 +40,7 @@ export default class ToolBarButton extends React.PureComponent<IProps, {}> {
         onMouseUp={this.onMouseUp}
         onClick={onClick}
         style={style}
+        innerRef={this.props.innerRef}
       >
         <Icon icon={icon} size={size} />
         <Ripples
