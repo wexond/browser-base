@@ -16,6 +16,7 @@ import Store from '../../store';
 @observer
 export default class TabBar extends React.Component<{}, {}> {
   private tabBar: HTMLDivElement;
+  private addTabButton: HTMLDivElement;
 
   public componentDidMount() {
     Store.getTabBarWidth = this.getTabBarWidth;
@@ -38,8 +39,11 @@ export default class TabBar extends React.Component<{}, {}> {
             style={{
               position: 'absolute',
               right: 0,
-              left: Store.addTabButton.left,
               top: 0,
+            }}
+            innerRef={(r) => {
+              this.addTabButton = r;
+              Store.addTabButton.ref = r;
             }}
           />
         </TabGroups>
