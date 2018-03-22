@@ -40,6 +40,7 @@ export default class TabBar extends React.Component<{}, {}> {
               position: 'absolute',
               right: 0,
               top: 0,
+              left: 0,
             }}
             innerRef={(r) => {
               this.addTabButton = r;
