@@ -52,6 +52,20 @@ export default class extends React.Component<IProps, {}> {
   private scrollTimeout: any;
   private tabsInterval: any;
 
+  public shouldComponentUpdate(nextProps: any, nextState: any) {
+    if (
+      nextState.scrollbarThumbLeft !== this.state.scrollbarThumbLeft ||
+      nextState.scrollbarThumbVisible !== this.state.scrollbarThumbVisible ||
+      nextState.scrollbarThumbWidth !== this.state.scrollbarThumbWidth ||
+      nextState.scrollbarVisible !== this.state.scrollbarVisible ||
+      this.props.tabGroup.selectedTab !== nextProps.tabGroup.selectedTab
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
   public componentDidMount() {
     const { tabGroup } = this.props;
 
@@ -219,7 +233,7 @@ export default class extends React.Component<IProps, {}> {
       if (Math.abs(e.pageX - mouseStartX) < 5) {
         return;
       }
-      
+
       selectedTab.dragging = true;
       Store.addressBar.canToggle = false;
 

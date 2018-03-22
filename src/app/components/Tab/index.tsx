@@ -32,7 +32,7 @@ export default class extends React.Component<IProps, {}> {
   private ripples: Ripples;
   private iconRipples: Ripples;
   private tab: HTMLDivElement;
-
+  
   public componentDidMount() {
     const { tab } = this.props;
 
@@ -60,9 +60,10 @@ export default class extends React.Component<IProps, {}> {
 
   public shouldComponentUpdate(nextProps: any) {
     const { tab, selected } = this.props;
+
     if (
-      nextProps.left !== tab.left ||
-      nextProps.width !== tab.width ||
+      nextProps.tab.left !== tab.left ||
+      nextProps.tab.width !== tab.width ||
       selected !== nextProps.selected
     ) {
       return true;
