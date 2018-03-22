@@ -53,12 +53,15 @@ export default class extends React.Component<IProps, {}> {
   private tabsInterval: any;
 
   public shouldComponentUpdate(nextProps: any, nextState: any) {
+    if (this.props.tabGroup.selectedTab !== nextProps.tabGroup.selectedTab) {
+      return true;
+    }
+
     if (
-      nextState.scrollbarThumbLeft !== this.state.scrollbarThumbLeft ||
+      (nextState.scrollbarThumbLeft !== this.state.scrollbarThumbLeft ||
       nextState.scrollbarThumbVisible !== this.state.scrollbarThumbVisible ||
       nextState.scrollbarThumbWidth !== this.state.scrollbarThumbWidth ||
-      nextState.scrollbarVisible !== this.state.scrollbarVisible ||
-      this.props.tabGroup.selectedTab !== nextProps.tabGroup.selectedTab
+      nextState.scrollbarVisible !== this.state.scrollbarVisible)
     ) {
       return true;
     }
