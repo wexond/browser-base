@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "ad-block": "Sential/ad-block",
-    "electron-updater": "2.21.1",
+    "electron-updater": "2.21.3",
     "sqlite3": "4.0.0"
   }
 }
