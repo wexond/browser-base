@@ -13,8 +13,8 @@ export default class Line {
 
   public moveToTab(tab: Tab) {
     TweenLite.to(this, tabAnimations.left.duration, {
-      width: tab.targetWidth,
-      left: tab.targetLeft,
+      width: tab.width,
+      left: tab.left,
       ease: tabAnimations.left.easing,
     });
   }
