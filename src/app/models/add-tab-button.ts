@@ -35,7 +35,9 @@ export default class AddTabButton {
 
   public setLeft(left: 'auto' | number, animation = false) {
     if (!animation) {
-      this.ref.style.left = (left === 'auto' ? 'auto' : `${left}px`);
+      TweenLite.to(this.ref, 0, {
+        left,
+      });
     } else {
       TweenLite.to(this.ref, tabAnimations.left.duration, {
         left,
