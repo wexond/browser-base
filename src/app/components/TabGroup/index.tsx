@@ -110,7 +110,8 @@ export default class extends React.Component<IProps, {}> {
         }, tabAnimations.left.duration * 1000);
 
         requestAnimationFrame(() => {
-          tabGroup.updateTabsBounds(true, tab);
+          tab.setLeft(tab.getLeft(), false);
+          tabGroup.updateTabsBounds();
         });
       }
     });

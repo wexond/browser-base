@@ -83,9 +83,7 @@ export default class Tab {
         ease: tabAnimations.width.easing,
       });
     } else {
-      TweenLite.to(this.tab, 0, {
-        width,
-      });
+      this.tab.style.width = `${width}px`;
     }
 
     this.width = width;
