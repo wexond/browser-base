@@ -1,5 +1,5 @@
-import { TweenLite } from 'gsap';
 import { observable } from 'mobx';
+import { TweenLite } from 'gsap';
 
 // Constants and defaults
 import {
@@ -17,15 +17,15 @@ let nextTabId = 0;
 export default class Tab {
   @observable public id = -1;
   @observable public title = 'New tab';
-  @observable public left = 0;
-  @observable public width = 0;
-  @observable public targetLeft = 0;
-  @observable public targetWidth = 0;
   @observable public pinned = false;
   @observable public isRemoving = false;
   @observable public hovered = false;
   @observable public dragging = false;
 
+  public left = 0;
+  public width = 0;
+
+  public tab: HTMLDivElement;
   public tabGroup = Store.getCurrentTabGroup();
 
   constructor() {
@@ -56,35 +56,38 @@ export default class Tab {
 
     let position = 0;
     for (let i = 0; i < tabs.indexOf(this); i++) {
-      position += tabs[i].targetWidth;
+      position += tabs[i].width;
     }
     return position;
   }
 
-  public setLeft(left: number, animation = true) {
+  public setLeft(left: number, animation = false) {
     if (animation) {
-      this.animate('left', left);
+      TweenLite.to(this.tab, tabAnimations.left.duration, {
+        x: left,
+        ease: tabAnimations.left.easing,
+      });
     } else {
-      this.left = left;
+      TweenLite.to(this.tab, 0, {
+        x: left,
+      });
     }
-    this.targetLeft = left;
+
+    this.left = left;
   }
 
-  public setWidth(width: number, animation = true) {
+  public setWidth(width: number, animation = false) {
     if (animation) {
-      this.animate('width', width);
+      TweenLite.to(this.tab, tabAnimations.width.duration, {
+        width,
+        ease: tabAnimations.width.easing,
+      });
     } else {
-      this.width = width;
+      TweenLite.to(this.tab, 0, {
+        width,
+      });
     }
-    this.targetWidth = width;
-  }
 
-  public animate(property: 'width' | 'left', value: number) {
-    const { easing, duration } = tabAnimations[property];
-
-    TweenLite.to(this, duration, {
-      [property]: value,
-      ease: easing,
-    });
+    this.width = width;
   }
 }

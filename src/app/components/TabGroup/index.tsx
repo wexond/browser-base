@@ -77,8 +77,8 @@ export default class extends React.Component<IProps, {}> {
       tabGroup.updateTabsBounds(false);
 
       const selectedTab = tabGroup.getSelectedTab();
-      tabGroup.line.left = selectedTab.targetLeft;
-      tabGroup.line.width = selectedTab.targetWidth;
+      tabGroup.line.left = selectedTab.left;
+      tabGroup.line.width = selectedTab.width;
     });
 
     this.resizeScrollbar();
@@ -95,8 +95,6 @@ export default class extends React.Component<IProps, {}> {
         const tab = change.added[0] as Tab;
         const width = tab.getWidth();
 
-        tab.left = tab.getLeft();
-
         this.scrollData.maxScrollLeft += width;
 
         clearInterval(this.scrollInterval);
@@ -111,7 +109,9 @@ export default class extends React.Component<IProps, {}> {
           clearInterval(this.scrollInterval);
         }, tabAnimations.left.duration * 1000);
 
-        tabGroup.updateTabsBounds();
+        requestAnimationFrame(() => {
+          tabGroup.updateTabsBounds(true, tab);
+        });
       }
     });
   }

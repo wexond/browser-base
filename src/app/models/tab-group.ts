@@ -29,23 +29,27 @@ export default class TabGroup {
     return this.getTabById(this.selectedTab);
   }
 
-  public updateTabsBounds(animations = true) {
+  public updateTabsBounds(animations = true, tabToIgnore: Tab = null) {
     this.setTabsWidths(animations);
-    this.setTabsPositions(animations);
+    this.setTabsPositions(animations, tabToIgnore);
   }
 
-  public setTabsPositions(animation = true) {
+  public setTabsPositions(animation = true, tabToIgnore: Tab = null) {
     const { tabs } = this;
     const newTabs = tabs.filter(tab => !tab.isRemoving);
 
     let left = 0;
 
     for (const item of newTabs) {
-      item.setLeft(left, animation);
-      left += item.targetWidth;
+      if (item !== tabToIgnore) {
+        item.setLeft(left, animation);
+      } else {
+        item.setLeft(left, false);
+      }
+      left += item.width;
     }
 
-    Store.addTabButton.setLeft(left, animation);
+    Store.addTabButton.updateLeft(left, animation);
   }
 
   public setTabsWidths(animation = true) {
@@ -66,7 +70,7 @@ export default class TabGroup {
     this.selectTab(tab);
     Store.addPage(tab.id);
 
-    Store.addressBar.toggled = true;
+    // Store.addressBar.toggled = true;
 
     return tab;
   };
@@ -92,7 +96,7 @@ export default class TabGroup {
       tabsCopy[firstIndex] = secondTab;
       tabsCopy[secondIndex] = firstTab;
 
-      secondTab.animate('left', firstTab.getLeft());
+      secondTab.setLeft(firstTab.getLeft());
 
       (this.tabs as any).replace(tabsCopy);
     };
