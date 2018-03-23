@@ -3,7 +3,6 @@ import React from 'react';
 import { Ripples, colors } from 'nersent-ui';
 
 // Constants and defaults
-import { TAB_MAX_WIDTH } from '../../constants/design';
 import tabAnimations from '../../defaults/tab-animations';
 
 // Utils
@@ -105,9 +104,9 @@ export default class extends React.Component<IProps, {}> {
 
     e.stopPropagation();
 
-    if (selected) {
-      const tabIndex = tabGroup.tabs.indexOf(tab);
+    const tabIndex = tabGroup.tabs.indexOf(tab);
 
+    if (selected) {
       if (tabIndex + 1 < tabGroup.tabs.length && !tabGroup.tabs[tabIndex + 1].isRemoving) {
         tabGroup.selectedTab = tabGroup.tabs[tabIndex + 1].id;
       } else if (tabIndex - 1 >= 0 && !tabGroup.tabs[tabIndex - 1].isRemoving) {
@@ -117,20 +116,16 @@ export default class extends React.Component<IProps, {}> {
       }
     }
 
-    if (tabGroup.getScrollingMode() || tab.width === TAB_MAX_WIDTH) {
-      tab.isRemoving = true;
+    const previousTab = tabGroup.tabs[tabIndex - 1];
+    tab.isRemoving = true;
+    tab.setLeft(previousTab.getNewLeft() + previousTab.getWidth(), true);
+    tab.setWidth(0, true);
 
-      tab.setWidth(0);
-
-      tabGroup.updateTabsBounds();
-
-      setTimeout(() => {
-        tabGroup.removeTab(tab);
-      }, tabAnimations.left.duration * 1000);
-    } else {
+    setTimeout(() => {
       tabGroup.removeTab(tab);
-      tabGroup.updateTabsBounds();
-    }
+    }, tabAnimations.left.duration * 1000);
+
+    tabGroup.updateTabsBounds();
 
     requestAnimationFrame(() => {
       tabGroup.line.moveToTab(tabGroup.getSelectedTab());

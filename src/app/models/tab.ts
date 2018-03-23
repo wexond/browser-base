@@ -32,7 +32,7 @@ export default class Tab {
     this.id = nextTabId++;
   }
 
-  public getWidth(): number {
+  public getInitialWidth(): number {
     const newTabs = this.tabGroup.tabs.filter(tab => !tab.isRemoving);
     const containerWidth = Store.getTabBarWidth();
 
@@ -44,6 +44,12 @@ export default class Tab {
       width = TAB_MAX_WIDTH;
     }
 
+    return width;
+  }
+
+  public getWidth(): number {
+    let width = this.getInitialWidth();
+
     if (!this.pinned && width < TAB_MIN_WIDTH) {
       width = TAB_MIN_WIDTH;
     }
@@ -51,12 +57,22 @@ export default class Tab {
     return width;
   }
 
-  public getLeft(): number {
-    const { tabs } = this.tabGroup;
+  public getNewLeft(): number {
+    const newTabs = this.tabGroup.tabs.filter(tab => !tab.isRemoving);
 
     let position = 0;
-    for (let i = 0; i < tabs.indexOf(this); i++) {
-      position += tabs[i].width;
+    for (let i = 0; i < newTabs.indexOf(this); i++) {
+      position += newTabs[i].getWidth();
+    }
+    return position;
+  }
+
+  public getLeft(): number {
+    const newTabs = this.tabGroup.tabs.filter(tab => !tab.isRemoving);
+
+    let position = 0;
+    for (let i = 0; i < newTabs.indexOf(this); i++) {
+      position += newTabs[i].width;
     }
     return position;
   }
