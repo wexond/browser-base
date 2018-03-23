@@ -39,6 +39,7 @@ export default class TabGroup {
     const newTabs = tabs.filter(tab => !tab.isRemoving);
 
     let left = 0;
+    let addTabButtonLeft = 0;
 
     for (const item of newTabs) {
       if (item !== tabToIgnore) {
@@ -47,9 +48,10 @@ export default class TabGroup {
         item.setLeft(left, false);
       }
       left += item.width;
+      addTabButtonLeft += item.getInitialWidth();
     }
 
-    Store.addTabButton.updateLeft(left, animation);
+    Store.addTabButton.setLeft(addTabButtonLeft, animation);
   }
 
   public setTabsWidths(animation = true) {
@@ -70,7 +72,7 @@ export default class TabGroup {
     this.selectTab(tab);
     Store.addPage(tab.id);
 
-    // Store.addressBar.toggled = true;
+    Store.addressBar.toggled = true;
 
     return tab;
   };
