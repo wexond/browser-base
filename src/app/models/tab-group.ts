@@ -98,7 +98,7 @@ export default class TabGroup {
       tabsCopy[firstIndex] = secondTab;
       tabsCopy[secondIndex] = firstTab;
 
-      secondTab.setLeft(firstTab.getLeft());
+      secondTab.setLeft(firstTab.getLeft(), true);
 
       (this.tabs as any).replace(tabsCopy);
     };

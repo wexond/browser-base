@@ -263,6 +263,8 @@ export default class extends React.Component<IProps, {}> {
         }
       }
 
+      selectedTab.setLeft(selectedTab.left, false);
+
       const createWindow = () => {
         // Create a new window
       };
