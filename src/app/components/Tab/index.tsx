@@ -9,7 +9,7 @@ import tabAnimations from '../../defaults/tab-animations';
 import { closeWindow } from '../../utils/window';
 
 // Styles
-import { Close, StyledTab, Title } from './styles';
+import { Close, StyledTab, Title, Icon, Content } from './styles';
 
 // Models
 import Tab from '../../models/tab';
@@ -153,7 +153,11 @@ export default class extends React.Component<IProps, {}> {
           tab.tab = r;
         }}
       >
-        <Title hovered={hovered}>{title}</Title>
+        <Content hovered={hovered}>
+          <Icon />
+          <Title>{title}</Title>
+        </Content>
+
         <Close
           onMouseDown={this.onCloseMouseDown}
           onMouseUp={this.onCloseMouseUp}
