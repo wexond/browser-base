@@ -35,16 +35,13 @@ interface ITitleProps {
 }
 
 export const Title = styled.div`
-  position: absolute;
-  left: 50%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: 0.2s opacity, 0.1s max-width;
+  transition: 0.2s opacity;
   font-weight: 500;
+  margin-left: 12px;
 
-  max-width: ${(props: ITitleProps) => `calc(100% - ${24 + (props.hovered ? 24 : 0)}px)`};
-  transform: translateX(-50%);
   opacity: ${transparency.light.text.primary};
 `;
 
@@ -62,4 +59,26 @@ export const Close = styled.div`
 
   opacity: ${(props: ICloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
   ${images.center('100%', '100%')};
+`;
+
+export const Icon = styled.div`
+  height: 16px;
+  min-width: 16px;
+  border: 1px dotted black;
+`;
+
+interface IContentProps {
+  hovered: boolean;
+}
+
+export const Content = styled.div`
+  position: absolute;
+  left: 50%;
+  overflow: hidden;
+  display: flex;
+  transition: 0.1s max-width, 0.1s transform;
+
+  transform: ${(props: IContentProps) =>
+    (props.hovered ? 'translateX(calc(-50% - 12px))' : 'translateX(-50%)')};
+  max-width: ${props => `calc(100% - ${24 + (props.hovered ? 24 : 0)}px)`};
 `;
