@@ -73,6 +73,10 @@ const config = {
     },
   },
 
+  externals: {
+    vm2: 'require("vm2")',
+  },
+
   plugins: [],
 };
 
