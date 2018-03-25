@@ -11,33 +11,15 @@ import { StyledTabBar, TabGroups } from './styles';
 // Enums
 import { Icons } from '../../enums';
 
-// Utils
-import { getPlugins } from '../../utils/plugins';
-
 import Store from '../../store';
 
 @observer
 export default class TabBar extends React.Component<{}, {}> {
-  public state = {
-    tabBarStyle: {},
-  };
-
   private tabBar: HTMLDivElement;
   private addTabButton: HTMLDivElement;
 
-  public async componentDidMount() {
+  public componentDidMount() {
     Store.getTabBarWidth = this.getTabBarWidth;
-
-    const plugins = await getPlugins();
-
-    for (const plugin of plugins) {
-      this.setState({
-        tabBarStyle: {
-          ...this.state.tabBarStyle,
-          ...plugin.api.styleTabBar(),
-        },
-      });
-    }
   }
 
   public getTabBarWidth = () => this.tabBar.offsetWidth;
@@ -48,11 +30,7 @@ export default class TabBar extends React.Component<{}, {}> {
 
   public render() {
     return (
-      <StyledTabBar
-        style={{ ...this.state.tabBarStyle }}
-        visible={!Store.addressBar.toggled}
-        innerRef={(r: any) => (this.tabBar = r)}
-      >
+      <StyledTabBar visible={!Store.addressBar.toggled} innerRef={(r: any) => (this.tabBar = r)}>
         <TabGroups>
           {Store.tabGroups.map(tabGroup => <TabGroup key={tabGroup.id} tabGroup={tabGroup} />)}
           <ToolBarButton
