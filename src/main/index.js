@@ -5,7 +5,7 @@ let mainWindow;
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
-    frame: false,
+    frame: process.env.NODE_ENV === 'dev',
     minWidth: 300,
     minHeight: 430,
     width: 900,
@@ -20,11 +20,11 @@ const createWindow = () => {
 
   if (process.env.NODE_ENV === 'dev') {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
+  } else {
+    mainWindow.setMenu(null);
   }
 
   mainWindow.loadURL(path.join('file://', __dirname, '../../static/pages/app.html'));
-
-  mainWindow.setMenu(null);
 
   mainWindow.on('closed', () => {
     mainWindow = null;

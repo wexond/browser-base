@@ -31,6 +31,8 @@
     "no-restricted-syntax": "off",
     "no-param-reassign": "off",
     "no-underscore-dangle": "off",
-    "linebreak-style": "off"
+    "linebreak-style": "off",
+    "no-restricted-globals": "off",
+    "react/no-did-mount-set-state": "off"
   }
 }
