@@ -1,5 +1,5 @@
 language: node_js
-node_js: '8'
+node_js: '9'
 sudo: enabled
 dist: trusty
 os:
@@ -20,5 +20,8 @@ addons:
       - graphicsmagick
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx"   ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then yarn run compile:darwin ;fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then yarn run compile:linux ;fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx"   ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then yarn run compile-darwin ;fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then yarn run compile-linux ;fi
+before_install: yarn global add greenkeeper-lockfile@1
+before_script: greenkeeper-lockfile-update
+after_script: greenkeeper-lockfile-upload
