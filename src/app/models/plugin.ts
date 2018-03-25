@@ -5,20 +5,15 @@ import fs from 'fs';
 // Utils
 import { getPath } from '../utils/paths';
 
-interface IPluginPackage {
+interface IPackage {
   name: string;
   version: string;
   description: string;
   main: string;
 }
 
-interface IPluginAPI {
-  styleTabBar: () => {};
-}
-
 export default class Plugin {
-  public api: IPluginAPI;
-  public package: IPluginPackage;
+  public package: IPackage;
   public path: string;
 
   private mainCode: string;
@@ -26,13 +21,12 @@ export default class Plugin {
   constructor(name: string) {
     this.path = path.resolve(getPath('plugins'), name);
 
-    const pluginPackageContent = fs.readFileSync(this.getPath('package.json'), 'utf8');
+    const packageContent = fs.readFileSync(this.getPath('package.json'), 'utf8');
 
-    this.package = JSON.parse(pluginPackageContent) as IPluginPackage;
+    this.package = JSON.parse(packageContent) as IPackage;
 
-    const pluginMainPath = this.getPath(this.package.main);
-    this.mainCode = fs.readFileSync(pluginMainPath, 'utf8');
-    this.api = this.run();
+    const mainPath = this.getPath(this.package.main);
+    this.mainCode = fs.readFileSync(mainPath, 'utf8');
   }
 
   public run() {
@@ -49,7 +43,7 @@ export default class Plugin {
       },
     });
 
-    return vm.run(this.mainCode, this.getPath(this.package.main)) as IPluginAPI;
+    return vm.run(this.mainCode, this.getPath(this.package.main));
   }
 
   public getPath(relativePath: string) {
