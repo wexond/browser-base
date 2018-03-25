@@ -30,6 +30,7 @@
     "react/jsx-max-props-per-line": "off",
     "no-restricted-syntax": "off",
     "no-param-reassign": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "linebreak-style": "off"
   }
 }
