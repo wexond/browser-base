@@ -8,6 +8,7 @@ import { Icons } from '../../enums';
 
 // Utils
 import { closeWindow, maximizeWindow, minimizeWindow } from '../../utils/window';
+import { getPlugins } from '../../utils/plugins';
 
 // Components
 import AddressBar from '../AddressBar';
@@ -21,18 +22,24 @@ import WindowButton from '../WindowButton';
 // Styles
 import { Handle, Line, NavIcons, StyledApp, TabsSection } from './styles';
 
+// Models
+import PluginAPI from '../../models/plugin-api';
+
 import Store from '../../store';
 
 interface IState {
   isFullscreen: boolean;
+  toolbarStyle: any;
 }
 
 @observer
 export default class App extends React.Component<{}, IState> {
   public state: IState = {
     isFullscreen: false,
+    toolbarStyle: {},
   };
-  public componentDidMount() {
+
+  public async componentDidMount() {
     ipcRenderer.on('fullscreen', (e: any, isFullscreen: boolean) => {
       this.setState({
         isFullscreen,
@@ -43,6 +50,18 @@ export default class App extends React.Component<{}, IState> {
       Store.mouse.x = e.pageX;
       Store.mouse.y = e.pageY;
     });
+
+    const plugins = await getPlugins();
+
+    for (const plugin of plugins) {
+      const api = plugin.run() as PluginAPI;
+      this.setState({
+        toolbarStyle: {
+          ...this.state.toolbarStyle,
+          ...api.styleToolbar(),
+        },
+      });
+    }
   }
 
   public render() {
@@ -50,7 +69,7 @@ export default class App extends React.Component<{}, IState> {
 
     return (
       <StyledApp>
-        <ToolBar>
+        <ToolBar style={{ ...this.state.toolbarStyle }}>
           <Handle />
           <NavIcons isFullscreen={isFullscreen}>
             <ToolBarButton size={24} icon={Icons.Back} />
