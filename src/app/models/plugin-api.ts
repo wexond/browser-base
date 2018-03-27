@@ -1,3 +1,3 @@
-export default class PluginAPI {
-  public styleToolbar: () => {};
-}
+export default interface PluginAPI {
+  styleToolbar: () => {};
+}; // eslint-disable-line
