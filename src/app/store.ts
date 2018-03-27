@@ -9,6 +9,7 @@ import AddTabButton from './models/add-tab-button';
 import Page from './models/page';
 import TabGroup from './models/tab-group';
 import AddressBar from './models/address-bar';
+import Theme from './models/theme';
 
 class Store {
   // Observables
@@ -17,6 +18,7 @@ class Store {
   @observable public pages: Page[] = [];
   @observable public addTabButton = new AddTabButton();
   @observable public addressBar = new AddressBar();
+  @observable public theme = new Theme();
 
   public platform = os.platform() as Platforms;
   public mouse = {
