@@ -1,3 +1,7 @@
+import { ToolbarTheme } from './theme';
+
 export default interface PluginAPI {
-  styleToolbar: () => {};
+  toolbar?: ToolbarTheme;
+  toolbarDividersColor?: string;
+  accentColor?: string;
 }; // eslint-disable-line

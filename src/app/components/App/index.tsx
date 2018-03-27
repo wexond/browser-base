@@ -1,7 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { observer } from 'mobx-react'; // eslint-disable-line no-unused-vars
 import React from 'react';
-import wpm from 'wexond-package-manager';
 
 // Enums
 import { Platforms } from '../../../shared/enums';
@@ -22,21 +21,16 @@ import WindowButton from '../WindowButton';
 // Styles
 import { Handle, Line, NavIcons, StyledApp, TabsSection } from './styles';
 
-// Models
-import PluginAPI from '../../models/plugin-api';
-
 import Store from '../../store';
 
 interface IState {
   isFullscreen: boolean;
-  toolbarStyle: any;
 }
 
 @observer
 export default class App extends React.Component<{}, IState> {
   public state: IState = {
     isFullscreen: false,
-    toolbarStyle: {},
   };
 
   public async componentDidMount() {
@@ -50,20 +44,6 @@ export default class App extends React.Component<{}, IState> {
       Store.mouse.x = e.pageX;
       Store.mouse.y = e.pageY;
     });
-
-    const plugins = await wpm.list();
-
-    for (const plugin of plugins) {
-      wpm.run(plugin.namespace).then((pkg) => {
-        const api = pkg as PluginAPI;
-        this.setState({
-          toolbarStyle: {
-            ...this.state.toolbarStyle,
-            ...api.styleToolbar(),
-          },
-        });
-      });
-    }
   }
 
   public render() {
@@ -71,7 +51,7 @@ export default class App extends React.Component<{}, IState> {
 
     return (
       <StyledApp>
-        <ToolBar style={{ ...this.state.toolbarStyle }}>
+        <ToolBar>
           <Handle />
           <NavIcons isFullscreen={isFullscreen}>
             <ToolBarButton size={24} icon={Icons.Back} />
