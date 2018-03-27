@@ -33,6 +33,7 @@
     "no-underscore-dangle": "off",
     "linebreak-style": "off",
     "no-restricted-globals": "off",
-    "react/no-did-mount-set-state": "off"
+    "react/no-did-mount-set-state": "off",
+    "no-loop-func": "off"
   }
 }
