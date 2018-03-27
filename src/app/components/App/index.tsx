@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { observer } from 'mobx-react'; // eslint-disable-line no-unused-vars
 import React from 'react';
+import wpm from 'wexond-package-manager';
 
 // Enums
 import { Platforms } from '../../../shared/enums';
@@ -8,7 +9,6 @@ import { Icons } from '../../enums';
 
 // Utils
 import { closeWindow, maximizeWindow, minimizeWindow } from '../../utils/window';
-import { getPlugins } from '../../utils/plugins';
 
 // Components
 import AddressBar from '../AddressBar';
@@ -51,15 +51,17 @@ export default class App extends React.Component<{}, IState> {
       Store.mouse.y = e.pageY;
     });
 
-    const plugins = await getPlugins();
+    const plugins = await wpm.list();
 
     for (const plugin of plugins) {
-      const api = plugin.run() as PluginAPI;
-      this.setState({
-        toolbarStyle: {
-          ...this.state.toolbarStyle,
-          ...api.styleToolbar(),
-        },
+      wpm.run(plugin.namespace).then((pkg) => {
+        const api = pkg as PluginAPI;
+        this.setState({
+          toolbarStyle: {
+            ...this.state.toolbarStyle,
+            ...api.styleToolbar(),
+          },
+        });
       });
     }
   }
