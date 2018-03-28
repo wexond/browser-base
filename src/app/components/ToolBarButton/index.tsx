@@ -9,19 +9,29 @@ import { Button, Icon } from './styles';
 
 import Store from '../../store';
 
+import Theme from '../../models/theme';
+
 interface IProps {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
   size?: number;
   style?: any;
   icon: Icons;
   innerRef?: (ref: HTMLDivElement) => void;
+  theme?: Theme;
 }
 
 @observer
-export default class ToolBarButton extends React.PureComponent<IProps, {}> {
+export default class ToolBarButton extends React.Component<IProps, {}> {
   public static defaultProps = {
     size: 20,
   };
+
+  public shouldComponentUpdate(nextProps: any) {
+    if (this.props.theme !== nextProps.theme) {
+      return true;
+    }
+    return false;
+  }
 
   private ripples: Ripples;
 
