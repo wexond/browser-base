@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { transparency } from 'nersent-ui';
+import Theme from '../../models/theme';
 
 interface IStyledAddressBarProps {
   visible: boolean;
@@ -21,11 +22,11 @@ export const StyledAddressBar = styled.div`
 
 interface IInputProps {
   visible: boolean;
+  theme: Theme;
 }
 
 export const Input = styled.input`
   background-color: rgba(0, 0, 0, 0.12);
-  color: rgba(0, 0, 0, ${transparency.light.text.primary});
   border-radius: 2px;
   width: 100%;
   height: 32px;
@@ -40,4 +41,8 @@ export const Input = styled.input`
   position: relative;
 
   -webkit-app-region: ${(props: IInputProps) => (props.visible ? 'no-drag' : 'drag')};
+  color: ${props =>
+    (props.theme.toolbar.foreground === 'white'
+      ? `rgba(255, 255, 255, ${transparency.dark.text.primary})`
+      : `rgba(0, 0, 0, ${transparency.light.text.primary})`)};
 `;
