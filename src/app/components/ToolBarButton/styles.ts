@@ -36,8 +36,8 @@ export const Button = styled.div`
   height: 100%;
   -webkit-app-region: no-drag;
   position: relative;
-  filter: ${(props: IButtonProps) => props.theme.toolbar.foreground === 'white' && 'invert(100%)'};
 
   width: ${TOOLBAR_BUTTON_WIDTH}px;
   transition: ${HOVER_DURATION}s background-color;
+  filter: ${(props: IButtonProps) => props.theme.toolbar.foreground === 'white' && 'invert(100%)'};
 `;

@@ -34,7 +34,7 @@ export const StyledTab = styled.div`
     if (props.hovered && !props.dragging) {
       return 'rgba(0,0,0,0.08)';
     } else if (props.dragging) {
-      return '#fafafa';
+      return props.theme.toolbar.background;
     }
     return 'none';
   }};
