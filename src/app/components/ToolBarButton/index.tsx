@@ -26,13 +26,6 @@ export default class ToolBarButton extends React.Component<IProps, {}> {
     size: 20,
   };
 
-  public shouldComponentUpdate(nextProps: any) {
-    if (this.props.theme !== nextProps.theme) {
-      return true;
-    }
-    return false;
-  }
-
   private ripples: Ripples;
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -49,6 +42,8 @@ export default class ToolBarButton extends React.Component<IProps, {}> {
     } = this.props;
 
     Store.theme.toolbar;
+
+    console.log(icon, Store.theme.toolbar.foreground);
 
     return (
       <Button
