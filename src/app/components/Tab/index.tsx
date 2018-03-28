@@ -145,6 +145,7 @@ export default class extends React.Component<IProps, {}> {
 
     return (
       <StyledTab
+        theme={Store.theme}
         selected={selected}
         hovered={hovered}
         onMouseDown={this.onMouseDown}
