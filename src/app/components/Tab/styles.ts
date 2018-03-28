@@ -6,6 +6,9 @@ import { transparency } from 'nersent-ui';
 // Mixins
 import images from '../../../shared/mixins/images';
 
+// Models
+import Theme from '../../models/theme';
+
 interface IStyledTabProps {
   selected: boolean;
   isRemoving: boolean;
@@ -54,6 +57,7 @@ export const Title = styled.div`
 
 interface ICloseProps {
   hovered: boolean;
+  theme: Theme;
 }
 
 export const Close = styled.div`
@@ -65,6 +69,7 @@ export const Close = styled.div`
   transition: 0.2s opacity;
 
   opacity: ${(props: ICloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
+  filter: ${props => props.theme.toolbar.foreground === 'white' && 'invert(100%)'};
   ${images.center('100%', '100%')};
 `;
 

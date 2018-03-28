@@ -3,6 +3,9 @@ import styled from 'styled-components';
 // Constants and defaults
 import { TOOLBAR_BUTTON_WIDTH } from '../../constants/design';
 
+// Models
+import Theme from '../../models/theme';
+
 export const Tabs = styled.div`
   transform: translateZ(0);
   position: relative;
@@ -49,11 +52,16 @@ export const ScrollbarThumb = styled.div`
   }
 `;
 
+interface ILineProps {
+  theme: Theme;
+}
+
 export const Line = styled.div`
-  background-color: #2196f3;
   height: 2px;
   width: 200px;
   bottom: 0;
   position: absolute;
   z-index: 3;
+
+  background-color: ${(props: ILineProps) => props.theme.accentColor};
 `;
