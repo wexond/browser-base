@@ -116,9 +116,12 @@ export default class extends React.Component<IProps, {}> {
       }
     }
 
-    const previousTab = tabGroup.tabs[tabIndex - 1];
     tab.isRemoving = true;
-    tab.setLeft(previousTab.getNewLeft() + previousTab.getWidth(), true);
+    if (tabGroup.tabs.length - 1 === tabIndex) {
+      const previousTab = tabGroup.tabs[tabIndex - 1];
+      tab.setLeft(previousTab.getNewLeft() + previousTab.getWidth(), true);
+    }
+
     tab.setWidth(0, true);
 
     setTimeout(() => {
