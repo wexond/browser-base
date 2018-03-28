@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'; // eslint-disable-line no-unused-vars
 import React from 'react';
-import { Ripples, colors } from 'nersent-ui';
+import { Ripples } from 'nersent-ui';
 
 // Constants and defaults
 import tabAnimations from '../../defaults/tab-animations';
