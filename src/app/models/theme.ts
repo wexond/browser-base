@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import { transparency, colors } from 'nersent-ui';
+import { colors } from 'nersent-ui';
 
 export interface ToolbarDividersTheme {
   color?: string;
@@ -18,6 +18,5 @@ export default class Theme {
     foreground: 'black',
     align: 'top',
   };
-  @observable public toolbarDividersColor = `rgba(0, 0, 0, ${transparency.light.dividers})`;
   @observable public accentColor = colors.blue['500'];
 } // eslint-disable-line

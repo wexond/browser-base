@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { transparency } from 'nersent-ui';
 
 // Enums
 import { Platforms } from '../../../shared/enums';
@@ -17,12 +18,16 @@ export const NavIcons = styled.div`
 `;
 
 export const Line = styled.div`
-  background-color: rgba(0, 0, 0, 0.12);
   height: 1px;
   width: 100%;
   position: absolute;
   z-index: 1;
   bottom: 0;
+
+  background-color: ${props =>
+    (props.theme.toolbar.foreground === 'white'
+      ? `rgba(255, 255, 255, ${transparency.dark.dividers})`
+      : `rgba(0, 0, 0, ${transparency.light.dividers})`)};
 `;
 
 export const StyledApp = styled.div`
