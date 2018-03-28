@@ -43,8 +43,6 @@ export default class ToolBarButton extends React.Component<IProps, {}> {
 
     Store.theme.toolbar;
 
-    console.log(icon, Store.theme.toolbar.foreground);
-
     return (
       <Button
         onMouseDown={this.onMouseDown}
