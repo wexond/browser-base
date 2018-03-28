@@ -61,23 +61,23 @@ export default class App extends React.Component<{}, IState> {
             <ToolBarButton size={24} icon={Icons.Forward} />
             <ToolBarButton size={20} icon={Icons.Refresh} />
           </NavIcons>
-          <ToolBarSeparator />
+          <ToolBarSeparator theme={Store.theme} />
           <TabsSection>
             <AddressBar visible={Store.addressBar.toggled} />
             <TabBar />
           </TabsSection>
-          <ToolBarSeparator />
+          <ToolBarSeparator theme={Store.theme} />
           <ToolBarButton size={16} icon={Icons.TabGroups} />
           <ToolBarButton size={18} icon={Icons.More} />
           {Store.platform !== Platforms.MacOS && (
             <React.Fragment>
-              <ToolBarSeparator />
+              <ToolBarSeparator theme={Store.theme} />
               <WindowButton icon={Icons.Minimize} onClick={minimizeWindow} />
               <WindowButton icon={Icons.Maximize} onClick={maximizeWindow} />
               <WindowButton icon={Icons.Close} onClick={closeWindow} />
             </React.Fragment>
           )}
-          <Line />
+          <Line theme={Store.theme} />
         </ToolBar>
         <Pages />
       </StyledApp>

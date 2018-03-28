@@ -34,10 +34,6 @@ wpm.list().then((plugins) => {
         };
       }
 
-      if (api.toolbarDividersColor != null) {
-        Store.theme.toolbarDividersColor = api.toolbarDividersColor;
-      }
-
       if (api.accentColor != null) {
         Store.theme.accentColor = api.accentColor;
       }
