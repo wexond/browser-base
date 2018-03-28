@@ -138,6 +138,8 @@ export default class extends React.Component<IProps, {}> {
       title, isRemoving, hovered, dragging,
     } = tab;
 
+    Store.theme.toolbar;
+
     return (
       <StyledTab
         selected={selected}
@@ -163,6 +165,7 @@ export default class extends React.Component<IProps, {}> {
           onMouseUp={this.onCloseMouseUp}
           onClick={this.onClose}
           hovered={hovered}
+          theme={Store.theme}
         >
           <Ripples
             icon
@@ -175,7 +178,7 @@ export default class extends React.Component<IProps, {}> {
             initialOpacity={0.1}
           />
         </Close>
-        <Ripples rippleTime={0.6} ref={r => (this.ripples = r)} color={colors.blue['500']} />
+        <Ripples rippleTime={0.6} ref={r => (this.ripples = r)} color={Store.theme.accentColor} />
       </StyledTab>
     );
   }

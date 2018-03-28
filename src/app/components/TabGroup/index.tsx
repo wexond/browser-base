@@ -58,10 +58,10 @@ export default class extends React.Component<IProps, {}> {
     }
 
     if (
-      (nextState.scrollbarThumbLeft !== this.state.scrollbarThumbLeft ||
+      nextState.scrollbarThumbLeft !== this.state.scrollbarThumbLeft ||
       nextState.scrollbarThumbVisible !== this.state.scrollbarThumbVisible ||
       nextState.scrollbarThumbWidth !== this.state.scrollbarThumbWidth ||
-      nextState.scrollbarVisible !== this.state.scrollbarVisible)
+      nextState.scrollbarVisible !== this.state.scrollbarVisible
     ) {
       return true;
     }
@@ -307,6 +307,8 @@ export default class extends React.Component<IProps, {}> {
   public render() {
     const { tabGroup } = this.props;
 
+    Store.theme.toolbar;
+
     return (
       <React.Fragment>
         <Tabs
@@ -324,7 +326,10 @@ export default class extends React.Component<IProps, {}> {
               onMouseDown={this.onTabMouseDown}
             />
           ))}
-          <Line style={{ width: tabGroup.line.width, left: tabGroup.line.left }} />
+          <Line
+            theme={Store.theme}
+            style={{ width: tabGroup.line.width, left: tabGroup.line.left }}
+          />
         </Tabs>
         <Scrollbar visible={this.state.scrollbarVisible}>
           <ScrollbarThumb

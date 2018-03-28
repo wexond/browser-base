@@ -1,10 +1,13 @@
 import React from 'react';
 import { Ripples } from 'nersent-ui';
+import { observer } from 'mobx-react'; // eslint-disable-line
 
 // Enums
 import { Icons } from '../../enums';
 
 import { Button, Icon } from './styles';
+
+import Store from '../../store';
 
 interface IProps {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
@@ -14,6 +17,7 @@ interface IProps {
   innerRef?: (ref: HTMLDivElement) => void;
 }
 
+@observer
 export default class ToolBarButton extends React.PureComponent<IProps, {}> {
   public static defaultProps = {
     size: 20,
@@ -34,6 +38,8 @@ export default class ToolBarButton extends React.PureComponent<IProps, {}> {
       icon, onClick, size, style,
     } = this.props;
 
+    Store.theme.toolbar;
+
     return (
       <Button
         onMouseDown={this.onMouseDown}
@@ -41,6 +47,7 @@ export default class ToolBarButton extends React.PureComponent<IProps, {}> {
         onClick={onClick}
         style={style}
         innerRef={this.props.innerRef}
+        theme={Store.theme}
       >
         <Icon icon={icon} size={size} />
         <Ripples

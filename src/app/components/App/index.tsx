@@ -49,9 +49,12 @@ export default class App extends React.Component<{}, IState> {
   public render() {
     const { isFullscreen } = this.state;
 
+    // Observe changes in toolbar object and apply them.
+    Store.theme.toolbar;
+
     return (
       <StyledApp>
-        <ToolBar>
+        <ToolBar theme={Store.theme}>
           <Handle />
           <NavIcons isFullscreen={isFullscreen}>
             <ToolBarButton size={24} icon={Icons.Back} />
