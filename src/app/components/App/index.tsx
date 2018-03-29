@@ -24,13 +24,13 @@ import { Handle, Line, NavIcons, StyledApp, TabsSection } from './styles';
 
 import Store from '../../store';
 
-interface IState {
+interface State {
   isFullscreen: boolean;
 }
 
 @observer
-export default class App extends React.Component<{}, IState> {
-  public state: IState = {
+export default class App extends React.Component<{}, State> {
+  public state: State = {
     isFullscreen: false,
   };
 

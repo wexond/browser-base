@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-interface IStyledPageProps {
+interface PageProps {
   selected: boolean;
 }
 
 export default styled.div.attrs({
-  style: ({ selected }: IStyledPageProps) => ({
+  style: ({ selected }: PageProps) => ({
     flex: selected ? 1 : '0 1',
     height: !selected ? 0 : 'auto',
     width: !selected ? 0 : 'auto',
@@ -17,5 +17,5 @@ export default styled.div.attrs({
     visibility: !selected ? 'hidden' : 'visible',
   }),
 })`
-  ${(props: IStyledPageProps) => (props.selected ? '' : '')};
+  ${(props: PageProps) => (props.selected ? '' : '')};
 `;

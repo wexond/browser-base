@@ -6,7 +6,7 @@ export const TabGroups = styled.div`
   height: 100%;
 `;
 
-interface IStyledTabBarProps {
+interface TabBarProps {
   visible: boolean;
 }
 
@@ -20,6 +20,6 @@ export const StyledTabBar = styled.div`
   left: 0;
   transition: 0.2s opacity;
 
-  pointer-events: ${(props: IStyledTabBarProps) => (props.visible ? 'auto' : 'none')};
+  pointer-events: ${(props: TabBarProps) => (props.visible ? 'auto' : 'none')};
   opacity: ${props => (props.visible ? 1 : 0)};
 `;
