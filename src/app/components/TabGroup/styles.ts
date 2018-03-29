@@ -52,16 +52,17 @@ export const ScrollbarThumb = styled.div`
   }
 `;
 
-interface LineProps {
+interface IndicatorProps {
   theme?: Theme;
 }
 
-export const Line = styled.div`
+export const Indicator = styled.div`
   height: 2px;
   width: 200px;
   bottom: 0;
   position: absolute;
   z-index: 3;
 
-  background-color: ${(props: LineProps) => props.theme.accentColor};
+  background-color: ${(props: IndicatorProps) => props.theme.accentColor};
+  display: ${(props: IndicatorProps) => (props.theme.toolbar.indicatorVisible ? 'block' : 'none')};
 `;

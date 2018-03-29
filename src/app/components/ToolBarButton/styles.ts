@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 // Defaults and constants
 import { transparency } from 'nersent-ui';
-import { HOVER_DURATION, TOOLBAR_BUTTON_WIDTH } from '../../constants/design';
+import { HOVER_DURATION } from '../../constants/design';
 
 // Enums
 import { Icons } from '../../enums';
@@ -36,7 +36,7 @@ export const Button = styled.div`
   -webkit-app-region: no-drag;
   position: relative;
 
-  width: ${TOOLBAR_BUTTON_WIDTH}px;
   transition: ${HOVER_DURATION}s background-color;
   filter: ${(props: ButtonProps) => props.theme.toolbar.foreground === 'light' && 'invert(100%)'};
+  width: ${(props: ButtonProps) => props.theme.toolbarButtons.width}px;
 `;

@@ -50,25 +50,34 @@ export default class App extends React.Component<{}, State> {
   public render() {
     const { isFullscreen } = this.state;
 
+    const { tabbar } = Store.theme;
+
     return (
       <ThemeProvider theme={{ ...Store.theme }}>
         <StyledApp>
           <ToolBar>
             <Handle />
             <NavIcons isFullscreen={isFullscreen}>
-              {Store.platform === Platforms.MacOS && <ToolBarSeparator />}
-              <ToolBarButton size={24} icon={Icons.Back} />
+              <ToolBarButton size={24} icon={Icons.Back} style={{ marginLeft: 4 }} />
               <ToolBarButton size={24} icon={Icons.Forward} />
               <ToolBarButton size={20} icon={Icons.Refresh} />
             </NavIcons>
             <ToolBarSeparator />
-            <TabsSection>
+            <TabsSection
+              style={{
+                marginLeft: tabbar.marginLeft,
+                marginRight: tabbar.marginRight,
+                marginTop: tabbar.marginTop,
+                marginBottom: tabbar.marginBottom,
+                margin: tabbar.margin,
+              }}
+            >
               <AddressBar visible={Store.addressBar.toggled} />
               <TabBar />
             </TabsSection>
             <ToolBarSeparator />
             <ToolBarButton size={16} icon={Icons.TabGroups} />
-            <ToolBarButton size={18} icon={Icons.More} />
+            <ToolBarButton size={18} icon={Icons.More} style={{ marginRight: 4 }} />
             {Store.platform !== Platforms.MacOS && (
               <React.Fragment>
                 <ToolBarSeparator />

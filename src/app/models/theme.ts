@@ -1,8 +1,14 @@
 import { observable } from 'mobx';
 import { colors } from 'nersent-ui';
+import { TOOLBAR_HEIGHT, TOOLBAR_BUTTON_WIDTH } from '../constants/design';
 
 export interface ToolbarDividersTheme {
   color?: string;
+}
+
+export interface ToolbarButtonsTheme {
+  rippleSize?: number;
+  width?: number;
 }
 
 export interface ToolbarTheme {
@@ -10,31 +16,72 @@ export interface ToolbarTheme {
   foreground?: 'dark' | 'light';
   align?: 'left' | 'right' | 'top' | 'bottom';
   shadow?: boolean | string;
+  indicatorVisible?: boolean;
+  bottomDividerVisible?: boolean;
+  separatorsVisible?: boolean;
+  height?: number;
 }
 
 export interface SearchBarTheme {
   background?: 'dark' | 'light';
+  height?: number;
 }
 
 export interface TabsTheme {
-  hover?: string;
+  backgrounds?: {
+    hover?: string;
+    normal?: string;
+    selected?: string;
+  };
+  rippleColor?: string;
+}
+
+export interface TabbarTheme {
+  marginLeft?: number;
+  marginRight?: number;
+  marginTop?: number;
+  marginBottom?: number;
+  margin?: string;
 }
 
 export default class Theme {
   @observable
   public toolbar: ToolbarTheme = {
     background: '#fafafa',
-    foreground: 'light',
+    foreground: 'dark',
     align: 'top',
     shadow: false,
+    indicatorVisible: true,
+    bottomDividerVisible: true,
+    separatorsVisible: true,
+    height: TOOLBAR_HEIGHT,
   };
   @observable
   public searchBar: SearchBarTheme = {
     background: 'dark',
+    height: 32,
   };
   @observable
   public tabs: TabsTheme = {
-    hover: 'dark',
+    backgrounds: {
+      hover: 'dark',
+      normal: 'none',
+      selected: 'none',
+    },
+    rippleColor: '',
+  };
+  @observable
+  public tabbar: TabbarTheme = {
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 0,
+    marginBottom: 0,
+    margin: null,
+  };
+  @observable
+  toolbarButtons: ToolbarButtonsTheme = {
+    width: TOOLBAR_BUTTON_WIDTH,
+    rippleSize: 42,
   };
   @observable public accentColor = colors.blue['500'];
 } // eslint-disable-line

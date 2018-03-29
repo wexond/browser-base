@@ -7,6 +7,8 @@ import { Icons } from '../../enums';
 
 import { Button, Icon } from './styles';
 
+import Store from '../../store';
+
 interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
   size?: number;
@@ -49,10 +51,11 @@ export default class ToolBarButton extends React.Component<Props, {}> {
           icon
           ref={r => (this.ripples = r)}
           color="#000"
-          parentWidth={42}
-          parentHeight={48}
+          parentWidth={Store.theme.toolbarButtons.width}
+          parentHeight={Store.theme.toolbar.height}
           rippleTime={0.6}
           initialOpacity={0.1}
+          size={Store.theme.toolbarButtons.rippleSize}
         />
       </Button>
     );
