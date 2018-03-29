@@ -41,6 +41,13 @@ wpm.list().then((plugins) => {
         };
       }
 
+      if (api.theme.tabs != null) {
+        Store.theme.tabs = {
+          ...Store.theme.tabs,
+          ...api.theme.tabs,
+        };
+      }
+
       if (api.theme.accentColor != null) {
         Store.theme.accentColor = api.theme.accentColor;
       }
