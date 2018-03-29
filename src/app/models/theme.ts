@@ -34,15 +34,19 @@ export interface AddTabButtonTheme {
 export interface TabsTheme {
   hovered?: {
     background?: string;
-    foreground?: string;
+    foreground?: 'light' | 'dark';
   };
   selected?: {
     background?: string;
-    foreground?: string;
+    foreground?: 'light' | 'dark';
   };
   normal?: {
     background?: string;
-    foreground?: string;
+    foreground?: 'light' | 'dark';
+  };
+  dragging?: {
+    background?: string;
+    foreground?: 'light' | 'dark';
   };
   rippleColor?: string;
 }
@@ -83,6 +87,10 @@ export default class Theme {
       foreground: 'dark',
     },
     normal: {
+      background: 'none',
+      foreground: 'dark',
+    },
+    dragging: {
       background: 'none',
       foreground: 'dark',
     },
