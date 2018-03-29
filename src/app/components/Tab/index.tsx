@@ -173,12 +173,20 @@ export default class extends React.Component<Props, {}> {
             color="#000"
             parentWidth={16}
             parentHeight={16}
-            size={32}
+            size={28}
             rippleTime={0.6}
             initialOpacity={0.1}
           />
         </Close>
-        <Ripples rippleTime={0.6} ref={r => (this.ripples = r)} color={Store.theme.accentColor} />
+        <Ripples
+          rippleTime={0.6}
+          ref={r => (this.ripples = r)}
+          color={
+            Store.theme.tabs.rippleColor === ''
+              ? Store.theme.accentColor
+              : Store.theme.tabs.rippleColor
+          }
+        />
       </StyledTab>
     );
   }

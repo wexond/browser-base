@@ -48,6 +48,20 @@ wpm.list().then((plugins) => {
         };
       }
 
+      if (api.theme.tabbar != null) {
+        Store.theme.tabbar = {
+          ...Store.theme.tabbar,
+          ...api.theme.tabbar,
+        };
+      }
+
+      if (api.theme.toolbarButtons != null) {
+        Store.theme.toolbarButtons = {
+          ...Store.theme.toolbarButtons,
+          ...api.theme.toolbarButtons,
+        };
+      }
+
       if (api.theme.accentColor != null) {
         Store.theme.accentColor = api.theme.accentColor;
       }

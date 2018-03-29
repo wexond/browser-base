@@ -30,7 +30,6 @@ interface InputProps {
 export const Input = styled.input`
   border-radius: 2px;
   width: 100%;
-  height: 32px;
   max-width: 680px;
   left: 50%;
   font-size: 13px;
@@ -60,4 +59,5 @@ export const Input = styled.input`
     (props.theme.searchBar.background === 'light'
       ? `rgba(255, 255, 255, ${transparency.dark.dividers})`
       : `rgba(0, 0, 0, ${transparency.light.dividers})`)};
+  height: ${(props: InputProps) => props.theme.searchBar.height}px;
 `;
