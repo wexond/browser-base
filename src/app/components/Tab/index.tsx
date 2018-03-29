@@ -178,6 +178,7 @@ export default class extends React.Component<Props, {}> {
             initialOpacity={0.1}
           />
         </Close>
+        <Overlay hovered={hovered} />
         <Ripples
           rippleTime={0.6}
           ref={r => (this.ripples = r)}
@@ -187,7 +188,6 @@ export default class extends React.Component<Props, {}> {
               : Store.theme.tabs.rippleColor
           }
         />
-        <Overlay hovered={hovered} />
       </StyledTab>
     );
   }
