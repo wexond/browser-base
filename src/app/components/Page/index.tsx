@@ -9,13 +9,13 @@ import Page from '../../models/page';
 
 import Store from '../../store';
 
-interface IProps {
+interface Props {
   page: Page;
   selected: boolean;
 }
 
 @observer
-export default class extends React.Component<IProps, {}> {
+export default class extends React.Component<Props, {}> {
   public componentDidMount() {
     const { webview, id } = this.props.page;
     const tab = Store.getTabById(id);

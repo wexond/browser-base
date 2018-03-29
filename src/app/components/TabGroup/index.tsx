@@ -19,12 +19,12 @@ import TabGroup from '../../models/tab-group';
 
 import Store from '../../store';
 
-interface IProps {
+interface Props {
   tabGroup: TabGroup;
 }
 
 @observer
-export default class extends React.Component<IProps, {}> {
+export default class extends React.Component<Props, {}> {
   public state = {
     scrollbarThumbWidth: 0,
     scrollbarThumbLeft: 0,

@@ -5,17 +5,22 @@ import { transparency } from 'nersent-ui';
 import { Platforms } from '../../../shared/enums';
 
 import Store from '../../store';
+import Theme from '../../models/theme';
 
-interface INavIconsProps {
+interface NavIconsProps {
   isFullscreen: boolean;
 }
 
 export const NavIcons = styled.div`
-  margin-left: ${(props: INavIconsProps) =>
+  margin-left: ${(props: NavIconsProps) =>
     (!props.isFullscreen && Store.platform === Platforms.MacOS ? 72 : 0)}px;
   display: flex;
   -webkit-app-region: no-drag;
 `;
+
+interface LineProps {
+  theme?: Theme;
+}
 
 export const Line = styled.div`
   height: 1px;
@@ -24,8 +29,8 @@ export const Line = styled.div`
   z-index: 1;
   bottom: 0;
 
-  background-color: ${props =>
-    (props.theme.toolbar.foreground === 'white'
+  background-color: ${(props: LineProps) =>
+    (props.theme.toolbar.foreground === 'light'
       ? `rgba(255, 255, 255, ${transparency.dark.dividers})`
       : `rgba(0, 0, 0, ${transparency.light.dividers})`)};
 `;
