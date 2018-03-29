@@ -8,6 +8,7 @@ import images from '../../../shared/mixins/images';
 
 // Models
 import Theme from '../../models/theme';
+import Tab from '../../models/tab';
 
 interface TabProps {
   selected: boolean;
@@ -16,7 +17,28 @@ interface TabProps {
   hovered: boolean;
   dragging: boolean;
   theme?: Theme;
+  tab: Tab;
 }
+
+interface CloseProps {
+  hovered: boolean;
+  theme?: Theme;
+  foreground: string;
+}
+
+export const Close = styled.div`
+  position: absolute;
+  right: 12px;
+  height: 16px;
+  width: 16px;
+  background-image: url(../../src/app/icons/actions/close.svg);
+  transition: 0.2s opacity;
+  z-index: 2;
+
+  opacity: ${(props: CloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
+  ${images.center('100%', '100%')};
+  filter: ${props => (props.foreground === '#000' ? '' : 'invert(100%)')};
+`;
 
 export const StyledTab = styled.div`
   position: absolute;
@@ -32,7 +54,7 @@ export const StyledTab = styled.div`
   pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
   ${({
-    theme, hovered, dragging, selected,
+    theme, hovered, dragging, selected, tab,
   }: TabProps) => {
     const { tabs } = theme;
 
@@ -44,16 +66,19 @@ export const StyledTab = styled.div`
       background =
         tabs.selected.background === 'none' ? theme.toolbar.background : tabs.selected.background;
 
-      if (dragging && tabs.dragging.background !== 'none') {
-        background = tabs.dragging.background;
-      }
-
       if (hovered && !dragging && tabs.enableHoverOnSelectedTab) {
         foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
+      }
+
+      if (dragging && tabs.dragging.background !== 'none') {
+        background = tabs.dragging.background;
+        foreground = tabs.dragging.foreground === 'light' ? '#fff' : '#000';
       }
     } else if (hovered) {
       foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
     }
+
+    tab.foreground = foreground;
 
     return `
       color: ${foreground};
@@ -108,25 +133,6 @@ export const Title = styled.div`
   margin-left: 12px;
 
   opacity: ${transparency.light.text.primary};
-`;
-
-interface CloseProps {
-  hovered: boolean;
-  theme?: Theme;
-}
-
-export const Close = styled.div`
-  position: absolute;
-  right: 12px;
-  height: 16px;
-  width: 16px;
-  background-image: url(../../src/app/icons/actions/close.svg);
-  transition: 0.2s opacity;
-  z-index: 2;
-
-  opacity: ${(props: CloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
-  filter: ${props => props.theme.toolbar.foreground === 'light' && 'invert(100%)'};
-  ${images.center('100%', '100%')};
 `;
 
 export const Icon = styled.div`
