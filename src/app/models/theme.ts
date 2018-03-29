@@ -51,6 +51,7 @@ export interface TabsTheme {
   content?: {
     align?: 'left' | 'center';
   };
+  enableHoverOnSelectedTab?: boolean;
   rippleColor?: string;
 }
 
@@ -100,6 +101,7 @@ export default class Theme {
     content: {
       align: 'center',
     },
+    enableHoverOnSelectedTab: true,
     rippleColor: '',
   };
   @observable
