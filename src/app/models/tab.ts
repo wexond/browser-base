@@ -38,7 +38,8 @@ export default class Tab {
 
     let width: number = this.pinned
       ? TAB_PINNED_WIDTH
-      : (containerWidth - TOOLBAR_BUTTON_WIDTH) / newTabs.length;
+      : (containerWidth - TOOLBAR_BUTTON_WIDTH - Store.theme.addTabButton.marginLeft) /
+        newTabs.length;
 
     if (width > TAB_MAX_WIDTH) {
       width = TAB_MAX_WIDTH;
