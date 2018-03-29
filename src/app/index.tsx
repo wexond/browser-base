@@ -27,15 +27,15 @@ wpm.list().then((plugins) => {
     wpm.run(plugin.namespace).then((pkg) => {
       const api = pkg as PluginAPI;
 
-      if (api.toolbar != null) {
+      if (api.theme.toolbar != null) {
         Store.theme.toolbar = {
           ...Store.theme.toolbar,
-          ...api.toolbar,
+          ...api.theme.toolbar,
         };
       }
 
-      if (api.accentColor != null) {
-        Store.theme.accentColor = api.accentColor;
+      if (api.theme.accentColor != null) {
+        Store.theme.accentColor = api.theme.accentColor;
       }
     });
   }
