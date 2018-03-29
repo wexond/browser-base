@@ -143,12 +143,22 @@ export default class extends React.Component<Props, {}> {
     const { tabs } = Store.theme;
 
     let foreground = tabs.normal.foreground === 'light' ? '#fff' : '#000';
+    let background = tabs.normal.background;
 
     if (selected) {
       foreground = `${tabs.selected.foreground === 'light' ? '#fff' : '#000'}`;
 
       if (hovered && !dragging && tabs.enableHoverOnSelectedTab) {
         foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
+      }
+
+      background =
+        tabs.selected.background === 'none'
+          ? Store.theme.toolbar.background
+          : tabs.selected.background;
+
+      if (dragging && tabs.dragging.background !== 'none') {
+        background = tabs.dragging.background;
       }
     } else if (hovered) {
       foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
@@ -169,6 +179,7 @@ export default class extends React.Component<Props, {}> {
           tab.tab = r;
         }}
         foreground={foreground}
+        background={background}
       >
         <Content hovered={hovered}>
           <Icon />
