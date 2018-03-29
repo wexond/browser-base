@@ -41,14 +41,6 @@ export const StyledTab = styled.div`
 
     if (hovered && !dragging) {
       foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
-
-      if (tabs.hovered.background === 'dark') {
-        background = 'rgba(0, 0, 0, 0.08)';
-      } else if (tabs.hovered.background === 'light') {
-        background = 'rgba(255, 255, 255, 0.08)';
-      } else {
-        background = tabs.hovered.background;
-      }
     } else if (selected) {
       foreground = `${tabs.selected.foreground === 'light' ? '#fff' : '#000'}`;
       background =
@@ -62,6 +54,32 @@ export const StyledTab = styled.div`
       color: ${foreground};
       background-color: ${background};
     `;
+  }};
+`;
+
+interface OverlayProps {
+  theme?: Theme;
+  hovered: boolean;
+}
+
+export const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  transition: 0.2s opacity;
+
+  opacity: ${(props: OverlayProps) => (props.hovered ? 1 : 0)};
+  background-color: ${({ theme }: OverlayProps) => {
+    const { tabs } = theme;
+    if (tabs.hovered.background === 'dark') {
+      return 'rgba(0, 0, 0, 0.08)';
+    } else if (tabs.hovered.background === 'light') {
+      return 'rgba(255, 255, 255, 0.08)';
+    }
+    return tabs.hovered.background;
   }};
 `;
 
@@ -88,6 +106,7 @@ export const Close = styled.div`
   width: 16px;
   background-image: url(../../src/app/icons/actions/close.svg);
   transition: 0.2s opacity;
+  z-index: 2;
 
   opacity: ${(props: CloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
   filter: ${props => props.theme.toolbar.foreground === 'light' && 'invert(100%)'};
@@ -109,6 +128,7 @@ export const Content = styled.div`
   position: absolute;
   left: 50%;
   overflow: hidden;
+  z-index: 2;
   display: flex;
   transition: 0.1s max-width, 0.1s transform;
 
