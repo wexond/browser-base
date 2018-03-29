@@ -26,6 +26,22 @@ export default class extends React.Component<Props, {}> {
         tab.title = title;
       },
     );
+
+    webview.addEventListener('page-favicon-updated', ({ favicons }: { favicons: string[] }) => {
+      const request = new XMLHttpRequest();
+      request.onreadystatechange = async () => {
+        if (request.readyState === 4) {
+          if (request.status === 404) {
+            tab.favicon = '';
+          } else {
+            tab.favicon = favicons[0];
+          }
+        }
+      };
+
+      request.open('GET', favicons[0], true);
+      request.send(null);
+    });
   }
 
   public render() {
