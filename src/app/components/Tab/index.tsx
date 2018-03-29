@@ -140,6 +140,19 @@ export default class extends React.Component<Props, {}> {
     const {
       title, isRemoving, hovered, dragging,
     } = tab;
+    const { tabs } = Store.theme;
+
+    let foreground = tabs.normal.foreground === 'light' ? '#fff' : '#000';
+
+    if (selected) {
+      foreground = `${tabs.selected.foreground === 'light' ? '#fff' : '#000'}`;
+
+      if (hovered && !dragging && tabs.enableHoverOnSelectedTab) {
+        foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
+      }
+    } else if (hovered) {
+      foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
+    }
 
     return (
       <StyledTab
@@ -155,7 +168,7 @@ export default class extends React.Component<Props, {}> {
           this.tab = r;
           tab.tab = r;
         }}
-        tab={tab}
+        foreground={foreground}
       >
         <Content hovered={hovered}>
           <Icon />
@@ -167,7 +180,7 @@ export default class extends React.Component<Props, {}> {
           onMouseUp={this.onCloseMouseUp}
           onClick={this.onClose}
           hovered={hovered}
-          foreground={tab.foreground}
+          foreground={foreground}
         >
           <Ripples
             icon
