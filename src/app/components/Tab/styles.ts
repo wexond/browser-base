@@ -46,12 +46,17 @@ export const StyledTab = styled.div`
         background = 'rgba(0, 0, 0, 0.08)';
       } else if (tabs.hovered.background === 'light') {
         background = 'rgba(255, 255, 255, 0.08)';
+      } else {
+        background = tabs.hovered.background;
       }
-      background = tabs.hovered.background;
-    } else if (dragging || selected) {
+    } else if (selected) {
+      foreground = `${tabs.selected.foreground === 'light' ? '#fff' : '#000'}`;
       background =
         tabs.selected.background === 'none' ? theme.toolbar.background : tabs.selected.background;
-      foreground = `${tabs.selected.foreground === 'light' ? '#fff' : '#000'}`;
+
+      if (dragging && tabs.dragging.background !== 'none') {
+        background = tabs.dragging.background;
+      }
     }
     return `
       color: ${foreground};
