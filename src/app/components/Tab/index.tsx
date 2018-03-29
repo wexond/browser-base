@@ -9,7 +9,7 @@ import tabAnimations from '../../defaults/tab-animations';
 import { closeWindow } from '../../utils/window';
 
 // Styles
-import { Close, StyledTab, Title, Icon, Content } from './styles';
+import { Close, StyledTab, Title, Icon, Content, Overlay } from './styles';
 
 // Models
 import Tab from '../../models/tab';
@@ -187,6 +187,7 @@ export default class extends React.Component<Props, {}> {
               : Store.theme.tabs.rippleColor
           }
         />
+        <Overlay hovered={hovered} />
       </StyledTab>
     );
   }
