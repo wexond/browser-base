@@ -37,6 +37,16 @@ export const Input = styled.input`
   border: none;
   outline: none;
   position: relative;
+  ::placeholder {
+    color: ${props =>
+    (props.theme.toolbar.foreground === 'white'
+      ? `rgba(255, 255, 255, ${transparency.dark.text.primary})`
+      : `rgba(0, 0, 0, ${transparency.light.text.primary})`)};
+    opacity: ${props =>
+    (props.theme.toolbar.foreground === 'white'
+      ? transparency.dark.text.secondary
+      : transparency.light.text.secondary)};
+  }
 
   -webkit-app-region: ${(props: IInputProps) => (props.visible ? 'no-drag' : 'drag')};
   color: ${props =>
