@@ -7,7 +7,7 @@ import { Icons } from '../../enums';
 
 import { Button, Icon } from './styles';
 
-interface IProps {
+interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
   size?: number;
   style?: any;
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 @observer
-export default class ToolBarButton extends React.Component<IProps, {}> {
+export default class ToolBarButton extends React.Component<Props, {}> {
   public static defaultProps = {
     size: 20,
   };

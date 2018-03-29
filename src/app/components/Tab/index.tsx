@@ -17,7 +17,7 @@ import TabGroup from '../../models/tab-group';
 
 import Store from '../../store';
 
-interface IProps {
+interface Props {
   key: number;
   tab: Tab;
   tabGroup: TabGroup;
@@ -27,7 +27,7 @@ interface IProps {
 }
 
 @observer
-export default class extends React.Component<IProps, {}> {
+export default class extends React.Component<Props, {}> {
   private ripples: Ripples;
   private iconRipples: Ripples;
   private tab: HTMLDivElement;

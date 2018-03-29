@@ -6,12 +6,16 @@ import { transparency } from 'nersent-ui';
 // Mixins
 import images from '../../../shared/mixins/images';
 
-interface IStyledTabProps {
+// Models
+import Theme from '../../models/theme';
+
+interface TabProps {
   selected: boolean;
   isRemoving: boolean;
   visible: boolean;
   hovered: boolean;
   dragging: boolean;
+  theme?: Theme;
 }
 
 export const StyledTab = styled.div`
@@ -24,7 +28,7 @@ export const StyledTab = styled.div`
   align-items: center;
   transition: 0.2s background-color;
 
-  z-index: ${(props: IStyledTabProps) => (props.selected ? 2 : 1)};
+  z-index: ${(props: TabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
   background-color: ${(props) => {
@@ -37,10 +41,6 @@ export const StyledTab = styled.div`
   }};
 `;
 
-interface ITitleProps {
-  hovered: boolean;
-}
-
 export const Title = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
@@ -52,8 +52,9 @@ export const Title = styled.div`
   opacity: ${transparency.light.text.primary};
 `;
 
-interface ICloseProps {
+interface CloseProps {
   hovered: boolean;
+  theme?: Theme;
 }
 
 export const Close = styled.div`
@@ -64,8 +65,8 @@ export const Close = styled.div`
   background-image: url(../../src/app/icons/actions/close.svg);
   transition: 0.2s opacity;
 
-  opacity: ${(props: ICloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
-  filter: ${props => props.theme.toolbar.foreground === 'white' && 'invert(100%)'};
+  opacity: ${(props: CloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
+  filter: ${props => props.theme.toolbar.foreground === 'light' && 'invert(100%)'};
   ${images.center('100%', '100%')};
 `;
 
