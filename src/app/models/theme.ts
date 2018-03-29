@@ -16,6 +16,10 @@ export interface SearchBarTheme {
   background?: 'dark' | 'light';
 }
 
+export interface TabsTheme {
+  hover?: string;
+}
+
 export default class Theme {
   @observable
   public toolbar: ToolbarTheme = {
@@ -27,6 +31,10 @@ export default class Theme {
   @observable
   public searchBar: SearchBarTheme = {
     background: 'dark',
+  };
+  @observable
+  public tabs: TabsTheme = {
+    hover: 'dark',
   };
   @observable public accentColor = colors.blue['500'];
 } // eslint-disable-line
