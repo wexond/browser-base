@@ -14,7 +14,7 @@ export const Tabs = styled.div`
   width: calc(100% - ${TOOLBAR_BUTTON_WIDTH}px);
 `;
 
-interface IScrollbarProps {
+interface ScrollbarProps {
   visible: boolean;
 }
 
@@ -26,10 +26,10 @@ export const Scrollbar = styled.div`
   z-index: 10;
   width: 100%;
 
-  display: ${(props: IScrollbarProps) => (props.visible ? 'block' : 'none')};
+  display: ${(props: ScrollbarProps) => (props.visible ? 'block' : 'none')};
 `;
 
-interface IScrollbarThumbProps {
+interface ScrollbarThumbProps {
   visible: boolean;
 }
 
@@ -41,7 +41,7 @@ export const ScrollbarThumb = styled.div`
   left: 0;
   transition: 0.2s opacity;
 
-  opacity: ${(props: IScrollbarThumbProps) => (props.visible ? 0.2 : 0)};
+  opacity: ${(props: ScrollbarThumbProps) => (props.visible ? 0.2 : 0)};
 
   &:hover {
     opacity: 0.4;
@@ -52,8 +52,8 @@ export const ScrollbarThumb = styled.div`
   }
 `;
 
-interface ILineProps {
-  theme: Theme;
+interface LineProps {
+  theme?: Theme;
 }
 
 export const Line = styled.div`
@@ -63,5 +63,5 @@ export const Line = styled.div`
   position: absolute;
   z-index: 3;
 
-  background-color: ${props => props.theme.accentColor};
+  background-color: ${(props: LineProps) => props.theme.accentColor};
 `;

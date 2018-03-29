@@ -8,11 +8,11 @@ import { isURL } from '../../utils/url';
 
 import Store from '../../store';
 
-interface IProps {
+interface Props {
   visible: boolean;
 }
 
-export default class AddressBar extends Component<IProps, {}> {
+export default class AddressBar extends Component<Props, {}> {
   private input: HTMLInputElement;
 
   public onInputBlur = () => {

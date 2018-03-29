@@ -1,7 +1,10 @@
 import styled from 'styled-components';
 import { transparency } from 'nersent-ui';
 
-interface IStyledAddressBarProps {
+// Models
+import Theme from '../../models/theme';
+
+interface AddressBarProps {
   visible: boolean;
 }
 
@@ -15,16 +18,16 @@ export const StyledAddressBar = styled.div`
   display: flex;
   align-items: center;
 
-  opacity: ${(props: IInputProps) => (props.visible ? 1 : 0)};
+  opacity: ${(props: AddressBarProps) => (props.visible ? 1 : 0)};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
 `;
 
-interface IInputProps {
+interface InputProps {
   visible: boolean;
+  theme?: Theme;
 }
 
 export const Input = styled.input`
-  background-color: rgba(0, 0, 0, 0.12);
   border-radius: 2px;
   width: 100%;
   height: 32px;
@@ -37,20 +40,24 @@ export const Input = styled.input`
   border: none;
   outline: none;
   position: relative;
+
+  -webkit-app-region: ${(props: InputProps) => (props.visible ? 'no-drag' : 'drag')};
+  color: ${props =>
+    (props.theme.toolbar.foreground === 'light'
+      ? `rgba(255, 255, 255, ${transparency.dark.text.primary})`
+      : `rgba(0, 0, 0, ${transparency.light.text.primary})`)};
   ::placeholder {
     color: ${props =>
-    (props.theme.toolbar.foreground === 'white'
+    (props.theme.toolbar.foreground === 'light'
       ? `rgba(255, 255, 255, ${transparency.dark.text.primary})`
       : `rgba(0, 0, 0, ${transparency.light.text.primary})`)};
     opacity: ${props =>
-    (props.theme.toolbar.foreground === 'white'
+    (props.theme.toolbar.foreground === 'light'
       ? transparency.dark.text.secondary
       : transparency.light.text.secondary)};
   }
-
-  -webkit-app-region: ${(props: IInputProps) => (props.visible ? 'no-drag' : 'drag')};
-  color: ${props =>
-    (props.theme.toolbar.foreground === 'white'
-      ? `rgba(255, 255, 255, ${transparency.dark.text.primary})`
-      : `rgba(0, 0, 0, ${transparency.light.text.primary})`)};
+  background-color: ${props =>
+    (props.theme.searchBar.background === 'light'
+      ? `rgba(255, 255, 255, ${transparency.dark.dividers})`
+      : `rgba(0, 0, 0, ${transparency.light.dividers})`)};
 `;
