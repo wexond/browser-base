@@ -141,11 +141,8 @@ export default class extends React.Component<IProps, {}> {
       title, isRemoving, hovered, dragging,
     } = tab;
 
-    Store.theme.toolbar;
-
     return (
       <StyledTab
-        theme={Store.theme}
         selected={selected}
         hovered={hovered}
         onMouseDown={this.onMouseDown}
@@ -169,7 +166,6 @@ export default class extends React.Component<IProps, {}> {
           onMouseUp={this.onCloseMouseUp}
           onClick={this.onClose}
           hovered={hovered}
-          theme={Store.theme}
         >
           <Ripples
             icon
