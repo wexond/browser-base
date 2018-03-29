@@ -34,6 +34,13 @@ wpm.list().then((plugins) => {
         };
       }
 
+      if (api.theme.searchBar != null) {
+        Store.theme.searchBar = {
+          ...Store.theme.searchBar,
+          ...api.theme.searchBar,
+        };
+      }
+
       if (api.theme.accentColor != null) {
         Store.theme.accentColor = api.theme.accentColor;
       }
