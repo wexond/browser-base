@@ -21,6 +21,7 @@ export default class Tab {
   @observable public isRemoving = false;
   @observable public hovered = false;
   @observable public dragging = false;
+  @observable public favicon = '';
 
   public left = 0;
   public width = 0;
