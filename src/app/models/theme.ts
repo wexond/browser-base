@@ -28,10 +28,17 @@ export interface SearchBarTheme {
 }
 
 export interface TabsTheme {
-  backgrounds?: {
-    hover?: string;
-    normal?: string;
-    selected?: string;
+  hovered?: {
+    background?: string;
+    foreground?: string;
+  };
+  selected?: {
+    background?: string;
+    foreground?: string;
+  };
+  normal?: {
+    background?: string;
+    foreground?: string;
   };
   rippleColor?: string;
 }
@@ -63,10 +70,17 @@ export default class Theme {
   };
   @observable
   public tabs: TabsTheme = {
-    backgrounds: {
-      hover: 'dark',
-      normal: 'none',
-      selected: 'none',
+    hovered: {
+      background: 'dark',
+      foreground: 'dark',
+    },
+    selected: {
+      background: 'none',
+      foreground: 'dark',
+    },
+    normal: {
+      background: 'none',
+      foreground: 'dark',
     },
     rippleColor: '',
   };
