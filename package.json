@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@types/gsap": "1.19.2",
-    "@types/node": "9.4.7",
+    "@types/node": "9.6.1",
     "@types/react": "16.1.0",
     "@types/react-dom": "16.0.4",
     "@types/request": "2.47.0",
@@ -50,7 +50,7 @@
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-react": "7.7.0",
     "gsap": "1.20.4",
-    "mobx": "4.1.0",
+    "mobx": "4.1.1",
     "mobx-react": "5.0.0",
     "nersent-ui": "3.2.7",
     "prettier": "1.11.1",
