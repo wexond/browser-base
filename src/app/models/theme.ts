@@ -48,6 +48,9 @@ export interface TabsTheme {
     background?: string;
     foreground?: 'light' | 'dark';
   };
+  content?: {
+    align?: 'left' | 'center';
+  };
   rippleColor?: string;
 }
 
@@ -93,6 +96,9 @@ export default class Theme {
     dragging: {
       background: 'none',
       foreground: 'dark',
+    },
+    content: {
+      align: 'center',
     },
     rippleColor: '',
   };
