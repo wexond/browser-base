@@ -26,7 +26,7 @@ export const StyledTab = styled.div`
   display: flex;
   height: 100%;
   align-items: center;
-  transition: 0.2s background-color;
+  transition: 0.2s background-color, 0.2s color;
 
   z-index: ${(props: TabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
@@ -39,9 +39,7 @@ export const StyledTab = styled.div`
     let foreground = tabs.normal.foreground === 'light' ? '#fff' : '#000';
     let background = tabs.normal.background;
 
-    if (hovered && !dragging) {
-      foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
-    } else if (selected) {
+    if (selected) {
       foreground = `${tabs.selected.foreground === 'light' ? '#fff' : '#000'}`;
       background =
         tabs.selected.background === 'none' ? theme.toolbar.background : tabs.selected.background;
@@ -49,7 +47,14 @@ export const StyledTab = styled.div`
       if (dragging && tabs.dragging.background !== 'none') {
         background = tabs.dragging.background;
       }
+
+      if (hovered && !dragging && tabs.enableHoverOnSelectedTab) {
+        foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
+      }
+    } else if (hovered) {
+      foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
     }
+
     return `
       color: ${foreground};
       background-color: ${background};
@@ -60,6 +65,7 @@ export const StyledTab = styled.div`
 interface OverlayProps {
   theme?: Theme;
   hovered: boolean;
+  selected: boolean;
 }
 
 export const Overlay = styled.div`
@@ -71,7 +77,17 @@ export const Overlay = styled.div`
   z-index: 0;
   transition: 0.2s opacity;
 
-  opacity: ${(props: OverlayProps) => (props.hovered ? 1 : 0)};
+  opacity: ${(props: OverlayProps) => {
+    if (props.selected) {
+      if (props.hovered && props.theme.tabs.enableHoverOnSelectedTab) {
+        return 1;
+      }
+      return 0;
+    } else if (props.hovered) {
+      return 1;
+    }
+    return 0;
+  }};
   background-color: ${({ theme }: OverlayProps) => {
     const { tabs } = theme;
     if (tabs.hovered.background === 'dark') {
