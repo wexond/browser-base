@@ -7,17 +7,12 @@ import { Icons } from '../../enums';
 
 import { Button, Icon } from './styles';
 
-import Store from '../../store';
-
-import Theme from '../../models/theme';
-
 interface IProps {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
   size?: number;
   style?: any;
   icon: Icons;
   innerRef?: (ref: HTMLDivElement) => void;
-  theme?: Theme;
 }
 
 @observer
@@ -41,8 +36,6 @@ export default class ToolBarButton extends React.Component<IProps, {}> {
       icon, onClick, size, style,
     } = this.props;
 
-    Store.theme.toolbar;
-
     return (
       <Button
         onMouseDown={this.onMouseDown}
@@ -50,7 +43,6 @@ export default class ToolBarButton extends React.Component<IProps, {}> {
         onClick={onClick}
         style={style}
         innerRef={this.props.innerRef}
-        theme={Store.theme}
       >
         <Icon icon={icon} size={size} />
         <Ripples

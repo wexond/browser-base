@@ -307,8 +307,6 @@ export default class extends React.Component<IProps, {}> {
   public render() {
     const { tabGroup } = this.props;
 
-    Store.theme.toolbar;
-
     return (
       <React.Fragment>
         <Tabs
@@ -326,10 +324,7 @@ export default class extends React.Component<IProps, {}> {
               onMouseDown={this.onTabMouseDown}
             />
           ))}
-          <Line
-            theme={Store.theme}
-            style={{ width: tabGroup.line.width, left: tabGroup.line.left }}
-          />
+          <Line style={{ width: tabGroup.line.width, left: tabGroup.line.left }} />
         </Tabs>
         <Scrollbar visible={this.state.scrollbarVisible}>
           <ScrollbarThumb
