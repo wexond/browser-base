@@ -63,5 +63,5 @@ export const Line = styled.div`
   position: absolute;
   z-index: 3;
 
-  background-color: ${(props: ILineProps) => props.theme.accentColor};
+  background-color: ${props => props.theme.accentColor};
 `;

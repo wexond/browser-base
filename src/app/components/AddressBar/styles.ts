@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { transparency } from 'nersent-ui';
-import Theme from '../../models/theme';
 
 interface IStyledAddressBarProps {
   visible: boolean;
@@ -16,13 +15,12 @@ export const StyledAddressBar = styled.div`
   display: flex;
   align-items: center;
 
-  opacity: ${(props: IStyledAddressBarProps) => (props.visible ? 1 : 0)};
-  -webkit-app-region: ${(props: IInputProps) => (props.visible ? 'no-drag' : '')};
+  opacity: ${(props: IInputProps) => (props.visible ? 1 : 0)};
+  -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
 `;
 
 interface IInputProps {
   visible: boolean;
-  theme: Theme;
 }
 
 export const Input = styled.input`
