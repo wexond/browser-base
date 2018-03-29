@@ -178,7 +178,7 @@ export default class extends React.Component<Props, {}> {
             initialOpacity={0.1}
           />
         </Close>
-        <Overlay hovered={hovered} />
+        <Overlay hovered={hovered} selected={selected} />
         <Ripples
           rippleTime={0.6}
           ref={r => (this.ripples = r)}

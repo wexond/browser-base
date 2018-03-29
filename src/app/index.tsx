@@ -45,7 +45,27 @@ wpm.list().then((plugins) => {
         if (api.theme.tabs != null) {
           Store.theme.tabs = {
             ...Store.theme.tabs,
-            ...api.theme.tabs,
+            hovered: {
+              ...Store.theme.tabs.hovered,
+              ...api.theme.tabs.hovered,
+            },
+            selected: {
+              ...Store.theme.tabs.selected,
+              ...api.theme.tabs.selected,
+            },
+            dragging: {
+              ...Store.theme.tabs.dragging,
+              ...api.theme.tabs.dragging,
+            },
+            normal: {
+              ...Store.theme.tabs.normal,
+              ...api.theme.tabs.normal,
+            },
+            content: {
+              ...Store.theme.tabs.content,
+              ...api.theme.tabs.content,
+            },
+            enableHoverOnSelectedTab: api.theme.tabs.enableHoverOnSelectedTab,
           };
         }
 
