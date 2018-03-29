@@ -12,7 +12,7 @@ interface INavIconsProps {
 
 export const NavIcons = styled.div`
   margin-left: ${(props: INavIconsProps) =>
-    (!props.isFullscreen && Store.platform === Platforms.MacOS ? 78 : 0)}px;
+    (!props.isFullscreen && Store.platform === Platforms.MacOS ? 72 : 0)}px;
   display: flex;
   -webkit-app-region: no-drag;
 `;

@@ -57,6 +57,7 @@ export default class App extends React.Component<{}, IState> {
         <ToolBar theme={Store.theme}>
           <Handle />
           <NavIcons isFullscreen={isFullscreen}>
+            {Store.platform === Platforms.MacOS && <ToolBarSeparator theme={Store.theme} />}
             <ToolBarButton size={24} icon={Icons.Back} />
             <ToolBarButton size={24} icon={Icons.Forward} />
             <ToolBarButton size={20} icon={Icons.Refresh} />
