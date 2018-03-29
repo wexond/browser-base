@@ -11,7 +11,7 @@ import { TOOLBAR_HEIGHT } from '../../constants/design';
 import tabAnimations from '../../defaults/tab-animations';
 
 // Styles
-import { Line, Scrollbar, ScrollbarThumb, Tabs } from './styles';
+import { Indicator, Scrollbar, ScrollbarThumb, Tabs } from './styles';
 
 // Models
 import Tab from '../../models/tab';
@@ -324,7 +324,7 @@ export default class extends React.Component<Props, {}> {
               onMouseDown={this.onTabMouseDown}
             />
           ))}
-          <Line style={{ width: tabGroup.line.width, left: tabGroup.line.left }} />
+          <Indicator style={{ width: tabGroup.line.width, left: tabGroup.line.left }} />
         </Tabs>
         <Scrollbar visible={this.state.scrollbarVisible}>
           <ScrollbarThumb

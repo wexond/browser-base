@@ -33,6 +33,8 @@ export const Line = styled.div`
     (props.theme.toolbar.foreground === 'light'
       ? `rgba(255, 255, 255, ${transparency.dark.dividers})`
       : `rgba(0, 0, 0, ${transparency.light.dividers})`)};
+  display: ${(props: LineProps) => (props.theme.toolbar.bottomDividerVisible ? 'block' : 'none')};
+  });
 `;
 
 export const StyledApp = styled.div`
