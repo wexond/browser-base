@@ -31,22 +31,32 @@ export const StyledTab = styled.div`
   z-index: ${(props: TabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
-  background-color: ${({
+  ${({
     theme, hovered, dragging, selected,
   }: TabProps) => {
-    const { backgrounds } = theme.tabs;
+    const { tabs } = theme;
+
+    let foreground = tabs.normal.foreground === 'light' ? '#fff' : '#000';
+    let background = tabs.normal.background;
 
     if (hovered && !dragging) {
-      if (backgrounds.hover === 'dark') {
-        return 'rgba(0, 0, 0, 0.08)';
-      } else if (backgrounds.hover === 'light') {
-        return 'rgba(255, 255, 255, 0.08)';
+      foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
+
+      if (tabs.hovered.background === 'dark') {
+        background = 'rgba(0, 0, 0, 0.08)';
+      } else if (tabs.hovered.background === 'light') {
+        background = 'rgba(255, 255, 255, 0.08)';
       }
-      return backgrounds.hover;
+      background = tabs.hovered.background;
     } else if (dragging || selected) {
-      return backgrounds.selected === 'none' ? theme.toolbar.background : backgrounds.selected;
+      background =
+        tabs.selected.background === 'none' ? theme.toolbar.background : tabs.selected.background;
+      foreground = `${tabs.selected.foreground === 'light' ? '#fff' : '#000'}`;
     }
-    return backgrounds.normal;
+    return `
+      color: ${foreground};
+      background-color: ${background};
+    `;
   }};
 `;
 
