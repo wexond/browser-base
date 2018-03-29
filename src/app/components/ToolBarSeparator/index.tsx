@@ -21,4 +21,5 @@ export default styled.div`
     (props.theme.toolbar.foreground === 'light'
       ? `rgba(255, 255, 255, ${transparency.dark.dividers})`
       : `rgba(0, 0, 0, ${transparency.light.dividers})`)};
+  display: ${(props: Props) => (props.theme.toolbar.separatorsVisible ? 'block' : 'none')};
 `;

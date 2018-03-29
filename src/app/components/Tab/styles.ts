@@ -23,26 +23,30 @@ export const StyledTab = styled.div`
   left: 0;
   top: 0;
   overflow: hidden;
-  height: calc(100% - 2px);
   display: flex;
+  height: 100%;
   align-items: center;
   transition: 0.2s background-color;
 
   z-index: ${(props: TabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
-  background-color: ${(props) => {
-    if (props.hovered && !props.dragging) {
-      if (props.theme.tabs.hover === 'dark') {
+  background-color: ${({
+    theme, hovered, dragging, selected,
+  }: TabProps) => {
+    const { backgrounds } = theme.tabs;
+
+    if (hovered && !dragging) {
+      if (backgrounds.hover === 'dark') {
         return 'rgba(0, 0, 0, 0.08)';
-      } else if (props.theme.tabs.hover === 'light') {
+      } else if (backgrounds.hover === 'light') {
         return 'rgba(255, 255, 255, 0.08)';
       }
-      return props.theme.tabs.hover;
-    } else if (props.dragging) {
-      return props.theme.toolbar.background;
+      return backgrounds.hover;
+    } else if (dragging || selected) {
+      return backgrounds.selected === 'none' ? theme.toolbar.background : backgrounds.selected;
     }
-    return 'none';
+    return backgrounds.normal;
   }};
 `;
 
@@ -81,8 +85,9 @@ export const Icon = styled.div`
   border: 1px dotted black;
 `;
 
-interface IContentProps {
+interface ContentProps {
   hovered: boolean;
+  theme?: Theme;
 }
 
 export const Content = styled.div`
@@ -92,7 +97,7 @@ export const Content = styled.div`
   display: flex;
   transition: 0.1s max-width, 0.1s transform;
 
-  transform: ${(props: IContentProps) =>
+  transform: ${(props: ContentProps) =>
     (props.hovered ? 'translateX(calc(-50% - 12px))' : 'translateX(-50%)')};
   max-width: ${props => `calc(100% - ${24 + (props.hovered ? 24 : 0)}px)`};
 `;
