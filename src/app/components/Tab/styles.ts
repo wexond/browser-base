@@ -8,7 +8,6 @@ import images from '../../../shared/mixins/images';
 
 // Models
 import Theme from '../../models/theme';
-import Tab from '../../models/tab';
 
 interface TabProps {
   selected: boolean;
@@ -17,7 +16,7 @@ interface TabProps {
   hovered: boolean;
   dragging: boolean;
   theme?: Theme;
-  tab: Tab;
+  foreground?: string;
 }
 
 interface CloseProps {
@@ -32,7 +31,7 @@ export const Close = styled.div`
   height: 16px;
   width: 16px;
   background-image: url(../../src/app/icons/actions/close.svg);
-  transition: 0.2s opacity;
+  transition: 0.2s opacity, 0.2s filter;
   z-index: 2;
 
   opacity: ${(props: CloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
@@ -54,31 +53,20 @@ export const StyledTab = styled.div`
   pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
   ${({
-    theme, hovered, dragging, selected, tab,
+    theme, dragging, selected, foreground,
   }: TabProps) => {
     const { tabs } = theme;
 
-    let foreground = tabs.normal.foreground === 'light' ? '#fff' : '#000';
     let background = tabs.normal.background;
 
     if (selected) {
-      foreground = `${tabs.selected.foreground === 'light' ? '#fff' : '#000'}`;
       background =
         tabs.selected.background === 'none' ? theme.toolbar.background : tabs.selected.background;
 
-      if (hovered && !dragging && tabs.enableHoverOnSelectedTab) {
-        foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
-      }
-
       if (dragging && tabs.dragging.background !== 'none') {
         background = tabs.dragging.background;
-        foreground = tabs.dragging.foreground === 'light' ? '#fff' : '#000';
       }
-    } else if (hovered) {
-      foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
     }
-
-    tab.foreground = foreground;
 
     return `
       color: ${foreground};

@@ -45,6 +45,7 @@ wpm.list().then((plugins) => {
         if (api.theme.tabs != null) {
           Store.theme.tabs = {
             ...Store.theme.tabs,
+            ...api.theme.tabs,
             hovered: {
               ...Store.theme.tabs.hovered,
               ...api.theme.tabs.hovered,
@@ -65,7 +66,6 @@ wpm.list().then((plugins) => {
               ...Store.theme.tabs.content,
               ...api.theme.tabs.content,
             },
-            enableHoverOnSelectedTab: api.theme.tabs.enableHoverOnSelectedTab,
           };
         }
 
