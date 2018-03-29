@@ -10,9 +10,6 @@ import { Icons } from '../../enums';
 // Mixins
 import images from '../../../shared/mixins/images';
 
-// Models
-import Theme from '../../models/theme';
-
 interface IIconProps {
   size: number;
   icon: Icons;
@@ -28,10 +25,6 @@ export const Icon = styled.div`
   background-image: ${props => `url(../../src/app/icons/${props.icon})`};
 `;
 
-interface IButtonProps {
-  theme: Theme;
-}
-
 export const Button = styled.div`
   height: 100%;
   -webkit-app-region: no-drag;
@@ -39,5 +32,5 @@ export const Button = styled.div`
 
   width: ${TOOLBAR_BUTTON_WIDTH}px;
   transition: ${HOVER_DURATION}s background-color;
-  filter: ${(props: IButtonProps) => props.theme.toolbar.foreground === 'white' && 'invert(100%)'};
+  filter: ${props => props.theme.toolbar.foreground === 'white' && 'invert(100%)'};
 `;

@@ -6,9 +6,6 @@ import { transparency } from 'nersent-ui';
 // Mixins
 import images from '../../../shared/mixins/images';
 
-// Models
-import Theme from '../../models/theme';
-
 interface IStyledTabProps {
   selected: boolean;
   isRemoving: boolean;
@@ -57,7 +54,6 @@ export const Title = styled.div`
 
 interface ICloseProps {
   hovered: boolean;
-  theme: Theme;
 }
 
 export const Close = styled.div`

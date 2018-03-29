@@ -62,8 +62,6 @@ export default class AddressBar extends Component<IProps, {}> {
       this.input.focus();
     }
 
-    Store.theme.toolbar;
-
     return (
       <StyledAddressBar visible={visible}>
         <Input
@@ -72,7 +70,6 @@ export default class AddressBar extends Component<IProps, {}> {
           onFocus={this.onInputFocus}
           placeholder="Search"
           visible={Store.addressBar.toggled}
-          theme={Store.theme}
           onKeyPress={this.onKeyPress}
         />
       </StyledAddressBar>
