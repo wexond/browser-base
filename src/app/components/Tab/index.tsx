@@ -138,7 +138,7 @@ export default class extends React.Component<Props, {}> {
   public render() {
     const { selected, tab } = this.props;
     const {
-      title, isRemoving, hovered, dragging,
+      title, isRemoving, hovered, dragging, favicon,
     } = tab;
     const { tabs } = Store.theme;
 
@@ -182,8 +182,8 @@ export default class extends React.Component<Props, {}> {
         background={background}
       >
         <Content hovered={hovered}>
-          <Icon />
-          <Title>{title}</Title>
+          <Icon favicon={favicon} />
+          <Title favicon={favicon}>{title}</Title>
         </Content>
 
         <Close
