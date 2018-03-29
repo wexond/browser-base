@@ -155,6 +155,7 @@ export default class extends React.Component<Props, {}> {
           this.tab = r;
           tab.tab = r;
         }}
+        tab={tab}
       >
         <Content hovered={hovered}>
           <Icon />
@@ -166,6 +167,7 @@ export default class extends React.Component<Props, {}> {
           onMouseUp={this.onCloseMouseUp}
           onClick={this.onClose}
           hovered={hovered}
+          foreground={tab.foreground}
         >
           <Ripples
             icon
