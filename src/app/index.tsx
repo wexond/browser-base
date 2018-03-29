@@ -62,6 +62,13 @@ wpm.list().then((plugins) => {
         };
       }
 
+      if (api.theme.addTabButton != null) {
+        Store.theme.addTabButton = {
+          ...Store.theme.addTabButton,
+          ...api.theme.addTabButton,
+        };
+      }
+
       if (api.theme.accentColor != null) {
         Store.theme.accentColor = api.theme.accentColor;
       }
