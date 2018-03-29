@@ -94,21 +94,38 @@ export const Overlay = styled.div`
   }};
 `;
 
+interface TitleProps {
+  favicon: string;
+}
+
 export const Title = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: 0.2s opacity;
+  transition: 0.2s all;
   font-weight: 500;
   margin-left: 12px;
 
   opacity: ${transparency.light.text.primary};
+  margin-left: ${(props: TitleProps) => (props.favicon === '' ? 0 : '12px')};
 `;
 
-export const Icon = styled.div`
+interface IconProps {
+  favicon: string;
+}
+
+export const Icon = styled.div.attrs({
+  style: (props: any) => ({
+    backgroundImage: `url(${props.favicon})`,
+    opacity: props.favicon === '' ? 0 : 1,
+    minWidth: props.favicon === '' ? 0 : 16,
+  }),
+})`
   height: 16px;
   min-width: 16px;
-  border: 1px dotted black;
+  transition: 0.2s opacity, 0.2s width;
+  ${images.center('16px', '16px')};
+  ${(props: IconProps) => props.favicon};
 `;
 
 interface ContentProps {
