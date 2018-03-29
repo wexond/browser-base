@@ -16,7 +16,8 @@ interface TabProps {
   hovered: boolean;
   dragging: boolean;
   theme?: Theme;
-  foreground?: string;
+  foreground: string;
+  background: string;
 }
 
 interface CloseProps {
@@ -52,27 +53,8 @@ export const StyledTab = styled.div`
   z-index: ${(props: TabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
-  ${({
-    theme, dragging, selected, foreground,
-  }: TabProps) => {
-    const { tabs } = theme;
-
-    let background = tabs.normal.background;
-
-    if (selected) {
-      background =
-        tabs.selected.background === 'none' ? theme.toolbar.background : tabs.selected.background;
-
-      if (dragging && tabs.dragging.background !== 'none') {
-        background = tabs.dragging.background;
-      }
-    }
-
-    return `
-      color: ${foreground};
-      background-color: ${background};
-    `;
-  }};
+  background-color: ${props => props.background};
+  color: ${props => props.foreground};
 `;
 
 interface OverlayProps {
