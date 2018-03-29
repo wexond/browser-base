@@ -27,6 +27,10 @@ export interface SearchBarTheme {
   height?: number;
 }
 
+export interface AddTabButtonTheme {
+  marginLeft: number;
+}
+
 export interface TabsTheme {
   hovered?: {
     background?: string;
@@ -83,6 +87,10 @@ export default class Theme {
       foreground: 'dark',
     },
     rippleColor: '',
+  };
+  @observable
+  addTabButton: AddTabButtonTheme = {
+    marginLeft: 0,
   };
   @observable
   public tabbar: TabbarTheme = {
