@@ -126,13 +126,23 @@ interface ContentProps {
 
 export const Content = styled.div`
   position: absolute;
-  left: 50%;
   overflow: hidden;
   z-index: 2;
   display: flex;
   transition: 0.1s max-width, 0.1s transform;
 
-  transform: ${(props: ContentProps) =>
-    (props.hovered ? 'translateX(calc(-50% - 12px))' : 'translateX(-50%)')};
+  ${(props: ContentProps) => {
+    if (props.theme.tabs.content.align === 'center') {
+      let transform = 'transform: translateX(-50%);';
+      if (props.hovered) {
+        transform = 'transform: translateX(calc(-50% - 12px));';
+      }
+      return `
+        ${transform}
+        left: 50%;
+      `;
+    }
+    return 'margin-left: 12px;';
+  }}
   max-width: ${props => `calc(100% - ${24 + (props.hovered ? 24 : 0)}px)`};
 `;
