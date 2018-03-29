@@ -33,7 +33,12 @@ export const StyledTab = styled.div`
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
   background-color: ${(props) => {
     if (props.hovered && !props.dragging) {
-      return 'rgba(0,0,0,0.08)';
+      if (props.theme.tabs.hover === 'dark') {
+        return 'rgba(0, 0, 0, 0.08)';
+      } else if (props.theme.tabs.hover === 'light') {
+        return 'rgba(255, 255, 255, 0.08)';
+      }
+      return props.theme.tabs.hover;
     } else if (props.dragging) {
       return props.theme.toolbar.background;
     }
