@@ -11,10 +11,3 @@ export enum Icons {
   Menu = 'actions/menu.svg',
   More = 'actions/more.svg',
 }
-
-export enum Storages {
-  History = 'history',
-  Favicons = 'favicons',
-  Settings = 'settings',
-  Bookmarks = 'bookmarks',
-}
