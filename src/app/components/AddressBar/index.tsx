@@ -17,9 +17,11 @@ interface Props {
 export default class AddressBar extends Component<Props, {}> {
   private input: HTMLInputElement;
 
-  public onInputBlur = () => {
-    Store.addressBar.toggled = false;
-  };
+  public componentDidMount() {
+    window.addEventListener('mousedown', () => {
+      Store.addressBar.toggled = false;
+    });
+  }
 
   public onInputFocus = () => {
     this.input.select();
@@ -69,7 +71,6 @@ export default class AddressBar extends Component<Props, {}> {
         <InputContainer>
           <Input
             innerRef={r => (this.input = r)}
-            onBlur={this.onInputBlur}
             onFocus={this.onInputFocus}
             placeholder="Search"
             visible={Store.addressBar.toggled}
