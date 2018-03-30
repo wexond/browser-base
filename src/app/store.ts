@@ -10,6 +10,14 @@ import Page from './models/page';
 import TabGroup from './models/tab-group';
 import AddressBar from './models/address-bar';
 import Theme from './models/theme';
+import SuggestionItem from './models/suggestion-item';
+
+interface Suggestions {
+  search: SuggestionItem[];
+  history: SuggestionItem[];
+  bookmarks: SuggestionItem[];
+  mostVisited: SuggestionItem[];
+}
 
 class Store {
   // Observables
@@ -20,22 +28,11 @@ class Store {
   @observable public addressBar = new AddressBar();
   @observable public theme = new Theme();
   @observable
-  public suggestions = {
-    search: [
-      {
-        primaryText: 'nersent',
-        id: 0,
-      },
-    ],
-    mostVisited: [
-      {
-        primaryText: 'www.nersent.tk',
-        secondaryText: 'Nersent',
-        id: 0,
-      },
-    ],
-    history: [] as any[],
-    bookmarks: [] as any[],
+  public suggestions: Suggestions = {
+    search: [],
+    mostVisited: [],
+    history: [],
+    bookmarks: [],
   };
 
   public platform = os.platform() as Platforms;
