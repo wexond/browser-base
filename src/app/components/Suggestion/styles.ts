@@ -16,10 +16,17 @@ export const StyledSuggestion = styled.div`
 export const PrimaryText = styled.div`
   margin-left: 64px;
   opacity: ${transparency.light.text.primary};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const SecondaryText = styled.div`
   opacity: ${transparency.light.text.secondary};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 16px;
 `;
 
 export const Icon = styled.div`
