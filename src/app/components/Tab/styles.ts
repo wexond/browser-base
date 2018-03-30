@@ -48,7 +48,7 @@ export const StyledTab = styled.div`
   display: flex;
   height: 100%;
   align-items: center;
-  transition: 0.2s background-color, 0.2s color;
+  transition: 0.2s background-color, 0.1s color;
 
   z-index: ${(props: TabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
