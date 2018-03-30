@@ -10,7 +10,7 @@ interface Props {
 
 export default styled.div`
   position: relative;
-  z-index: 10;
+  z-index: 100;
   display: flex;
 
   background-color: ${(props: Props) => props.theme.toolbar.background};

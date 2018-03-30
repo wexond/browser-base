@@ -20,6 +20,7 @@ export const StyledAddressBar = styled.div`
 
   opacity: ${(props: AddressBarProps) => (props.visible ? 1 : 0)};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
+  pointer-events: ${props => (props.visible ? 'auto' : 'none')};
 `;
 
 interface InputProps {
@@ -29,11 +30,8 @@ interface InputProps {
 
 export const Input = styled.input`
   border-radius: 2px;
-  width: 100%;
-  max-width: 680px;
-  left: 50%;
+  width: calc(100% - 16px);
   font-size: 13px;
-  transform: translateX(-50%);
   padding-left: 16px;
   color: black;
   border: none;
@@ -60,4 +58,12 @@ export const Input = styled.input`
       ? `rgba(255, 255, 255, ${transparency.dark.dividers})`
       : `rgba(0, 0, 0, ${transparency.light.dividers})`)};
   height: ${(props: InputProps) => props.theme.searchBar.height}px;
+`;
+
+export const InputContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  left: 50%;
+  transform: translateX(-50%);
 `;
