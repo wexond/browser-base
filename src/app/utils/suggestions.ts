@@ -1,12 +1,11 @@
 import { history, favicons } from '../utils/storage';
 
-const levenshtein = require('js-levenshtein');
-
 interface History {
   date: string;
   favicon: string;
   url: string;
   title: string;
+  id: number;
 }
 
 interface Favicon {
@@ -14,12 +13,27 @@ interface Favicon {
   favicon: Buffer;
 }
 
+const removeDuplicates = (array: any[], param: string) => {
+  const tempArray = array.slice();
+  array = [];
+  // Remove duplicates from array.
+  const seenItems = [];
+  for (let i = 0; i < tempArray.length; i++) {
+    if (seenItems.indexOf(tempArray[i][param]) === -1) {
+      array.push(tempArray[i]);
+      seenItems.push(tempArray[i][param]);
+    }
+  }
+
+  return array;
+};
+
 const countVisitedTimes = (filter: string, historyItems: History[]) => {
   const items: any[] = [];
 
   for (const hitem of historyItems) {
     const itemToPush = {
-      id: historyItems.indexOf(hitem),
+      id: hitem.id,
       times: 1,
       url: hitem.url,
     };
@@ -62,32 +76,57 @@ export const getHistorySuggestions = (filter: string) =>
 
         const regex = /(http(s?)):\/\/(www.)?|www./gi;
 
-        const mostVisited: History[] = [];
-        const fromHistory: History[] = [];
+        let mostVisited: History[] = [];
+        let fromHistory: History[] = [];
 
         const filterPart = filter.replace(regex, '');
 
         for (const hItem of historyItems) {
           const urlPart = hItem.url.replace(regex, '');
 
-          if (
-            urlPart.startsWith(filterPart) ||
-            levenshtein(hItem.title, filter) <= 4 ||
-            hItem.title.includes(filter)
-          ) {
+          if (urlPart.startsWith(filterPart)) {
+            fromHistory.push(hItem);
+            mostVisited.push(hItem);
+          } else if (hItem.title.includes(filter)) {
             fromHistory.push(hItem);
           }
         }
 
-        const visitedTimes = countVisitedTimes(filter, fromHistory);
+        fromHistory = removeDuplicates(fromHistory, 'url');
+        mostVisited = removeDuplicates(mostVisited, 'url');
 
+        const visitedTimes = countVisitedTimes(filter, mostVisited);
+
+        mostVisited = [];
         for (const item of visitedTimes) {
-          mostVisited.push(fromHistory[item.id]);
+          const item2 = fromHistory.find(x => x.id === item.id);
+          mostVisited.push(item2);
+          fromHistory.splice(fromHistory.indexOf(item2), 1);
         }
 
+        if (mostVisited[0] != null) {
+          const split = mostVisited[0].url.split('/');
+          const shortUrl = split[2];
+          mostVisited.unshift({
+            ...mostVisited[0],
+            url: shortUrl,
+          });
+
+          if (
+            split[3] == null ||
+            (split[3] != null && (split[3].startsWith('?') || split[3] === ''))
+          ) {
+            mostVisited.splice(1, 1);
+          }
+        }
+
+        mostVisited = mostVisited.slice(0, 3);
+        mostVisited = mostVisited.sort((a: any, b: any) => a.url.length - b.url.length);
+        mostVisited = mostVisited.filter(Boolean);
+
         resolve({
-          history: fromHistory,
-          mostVisited: mostVisited.slice(0, 3),
+          history: fromHistory.slice(0, 5),
+          mostVisited,
         });
       });
     });
