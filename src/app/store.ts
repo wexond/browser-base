@@ -19,6 +19,24 @@ class Store {
   @observable public addTabButton = new AddTabButton();
   @observable public addressBar = new AddressBar();
   @observable public theme = new Theme();
+  @observable
+  public suggestions = {
+    search: [
+      {
+        primaryText: 'nersent',
+        id: 0,
+      },
+    ],
+    mostVisited: [
+      {
+        primaryText: 'www.nersent.tk',
+        secondaryText: 'Nersent',
+        id: 0,
+      },
+    ],
+    history: [] as any[],
+    bookmarks: [] as any[],
+  };
 
   public platform = os.platform() as Platforms;
   public mouse = {
