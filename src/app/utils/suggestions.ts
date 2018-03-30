@@ -124,8 +124,13 @@ export const getHistorySuggestions = (filter: string) =>
         mostVisited = mostVisited.sort((a: any, b: any) => a.url.length - b.url.length);
         mostVisited = mostVisited.filter(Boolean);
 
+        mostVisited = removeDuplicates(mostVisited, 'title');
+
+        fromHistory = fromHistory.slice(0, 5);
+        fromHistory = removeDuplicates(fromHistory, 'title');
+
         resolve({
-          history: fromHistory.slice(0, 5),
+          history: fromHistory,
           mostVisited,
         });
       });
