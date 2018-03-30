@@ -72,6 +72,7 @@ export default class AddressBar extends Component<Props, {}> {
           <Input
             innerRef={r => (this.input = r)}
             onFocus={this.onInputFocus}
+            onMouseDown={e => e.stopPropagation()}
             placeholder="Search"
             visible={Store.addressBar.toggled}
             onKeyPress={this.onKeyPress}
