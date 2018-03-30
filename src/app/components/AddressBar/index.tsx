@@ -9,6 +9,8 @@ import { isURL } from '../../utils/url';
 import Suggestions from '../Suggestions';
 
 import Store from '../../store';
+import { getHistorySuggestions } from '../../utils/suggestions';
+import SuggestionItem from '../../models/suggestion-item';
 
 interface Props {
   visible: boolean;
@@ -54,6 +56,36 @@ export default class AddressBar extends Component<Props, {}> {
     }
   };
 
+  public onInput = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const suggestions = await getHistorySuggestions(this.input.value);
+    const mostVisited: SuggestionItem[] = [];
+    const historySuggestions: SuggestionItem[] = [];
+
+    let id = 0;
+
+    for (const item of suggestions.mostVisited) {
+      mostVisited.push({
+        primaryText: item.url,
+        secondaryText: item.title,
+        id: id++,
+      });
+    }
+
+    for (const item of suggestions.history) {
+      historySuggestions.push({
+        primaryText: item.url,
+        secondaryText: item.title,
+        id: id++,
+      });
+    }
+
+    Store.suggestions = {
+      ...Store.suggestions,
+      history: historySuggestions,
+      mostVisited,
+    };
+  };
+
   public render() {
     const { visible } = this.props;
 
@@ -74,6 +106,7 @@ export default class AddressBar extends Component<Props, {}> {
             onFocus={this.onInputFocus}
             onMouseDown={e => e.stopPropagation()}
             placeholder="Search"
+            onInput={this.onInput}
             visible={Store.addressBar.toggled}
             onKeyPress={this.onKeyPress}
           />
