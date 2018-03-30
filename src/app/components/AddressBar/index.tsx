@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 
 // Styles
-import { Input, StyledAddressBar } from './styles';
+import { Input, StyledAddressBar, InputContainer } from './styles';
 
 // Utils
 import { isURL } from '../../utils/url';
+
+import Suggestions from '../Suggestions';
 
 import Store from '../../store';
 
@@ -64,14 +66,17 @@ export default class AddressBar extends Component<Props, {}> {
 
     return (
       <StyledAddressBar visible={visible}>
-        <Input
-          innerRef={r => (this.input = r)}
-          onBlur={this.onInputBlur}
-          onFocus={this.onInputFocus}
-          placeholder="Search"
-          visible={Store.addressBar.toggled}
-          onKeyPress={this.onKeyPress}
-        />
+        <InputContainer>
+          <Input
+            innerRef={r => (this.input = r)}
+            onBlur={this.onInputBlur}
+            onFocus={this.onInputFocus}
+            placeholder="Search"
+            visible={Store.addressBar.toggled}
+            onKeyPress={this.onKeyPress}
+          />
+          <Suggestions />
+        </InputContainer>
       </StyledAddressBar>
     );
   }
