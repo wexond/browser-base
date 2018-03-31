@@ -3,12 +3,10 @@ import React from 'react';
 
 // Styles
 import { StyledSuggestion, PrimaryText, SecondaryText, Icon, Dash } from './styles';
+import SuggestionItem from '../../models/suggestion-item';
 
 interface Props {
-  suggestion: {
-    primaryText: string;
-    secondaryText?: string;
-  };
+  suggestion: SuggestionItem;
 }
 
 @observer
@@ -19,7 +17,7 @@ export default class Suggestion extends React.Component<Props, {}> {
 
     return (
       <StyledSuggestion>
-        <Icon />
+        <Icon style={{ backgroundImage: `url(${suggestion.favicon})` }} />
         <PrimaryText>{primaryText}</PrimaryText>
         {primaryText != null && secondaryText != null && <Dash>&mdash;</Dash>}
         <SecondaryText>{secondaryText}</SecondaryText>

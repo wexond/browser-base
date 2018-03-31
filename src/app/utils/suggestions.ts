@@ -61,7 +61,10 @@ const countVisitedTimes = (filter: string, historyItems: History[]) => {
   return items.sort((a: any, b: any) => a.times - b.times);
 };
 
-type historySuggestions = { history: History[]; mostVisited: History[] }; // eslint-disable-line
+type historySuggestions = {
+  history: History[];
+  mostVisited: History[];
+};
 
 export const getHistorySuggestions = (filter: string) =>
   new Promise((resolve: (suggestions: historySuggestions) => void, reject) => {
@@ -84,11 +87,24 @@ export const getHistorySuggestions = (filter: string) =>
         for (const hItem of historyItems) {
           const urlPart = hItem.url.replace(regex, '');
 
+          const favicon = faviconItems.find(x => x.url === hItem.favicon);
+
+          let faviconBuffer = null;
+          if (favicon != null) {
+            faviconBuffer = favicon.favicon;
+          }
+
+          const itemToPush = {
+            ...hItem,
+            url: urlPart,
+            favicon: window.URL.createObjectURL(new Blob([faviconBuffer])),
+          };
+
           if (urlPart.startsWith(filterPart)) {
-            fromHistory.push(hItem);
-            mostVisited.push(hItem);
-          } else if (hItem.title.includes(filter)) {
-            fromHistory.push(hItem);
+            fromHistory.push(itemToPush);
+            mostVisited.push(itemToPush);
+          } else if (itemToPush.title.includes(filter)) {
+            fromHistory.push(itemToPush);
           }
         }
 
@@ -106,15 +122,15 @@ export const getHistorySuggestions = (filter: string) =>
 
         if (mostVisited[0] != null) {
           const split = mostVisited[0].url.split('/');
-          const shortUrl = split[2];
+          const shortUrl = split[0];
           mostVisited.unshift({
             ...mostVisited[0],
             url: shortUrl,
           });
 
           if (
-            split[3] == null ||
-            (split[3] != null && (split[3].startsWith('?') || split[3] === ''))
+            split[1] == null ||
+            (split[1] != null && (split[1].startsWith('?') || split[1] === ''))
           ) {
             mostVisited.splice(1, 1);
           }
