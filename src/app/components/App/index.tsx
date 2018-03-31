@@ -25,6 +25,18 @@ export default class App extends React.Component<{}, State> {
     isFullscreen: false,
   };
 
+  public onBackClick = () => {
+    Store.getSelectedPage().webview.goBack();
+  };
+
+  public onForwardClick = () => {
+    Store.getSelectedPage().webview.goForward();
+  };
+
+  public onRefreshClick = () => {
+    Store.getSelectedPage().webview.reload();
+  };
+
   public async componentDidMount() {
     ipcRenderer.on('fullscreen', (isFullscreen: boolean) => {
       this.setState({
@@ -49,9 +61,20 @@ export default class App extends React.Component<{}, State> {
           <ToolBar>
             <Handle />
             <NavIcons isFullscreen={isFullscreen}>
-              <ToolBarButton size={24} icon={Icons.Back} style={{ marginLeft: 4 }} />
-              <ToolBarButton size={24} icon={Icons.Forward} />
-              <ToolBarButton size={20} icon={Icons.Refresh} />
+              <ToolBarButton
+                disabled={!Store.navigationState.canGoBack}
+                size={24}
+                icon={Icons.Back}
+                style={{ marginLeft: 4 }}
+                onClick={this.onBackClick}
+              />
+              <ToolBarButton
+                disabled={!Store.navigationState.canGoForward}
+                size={24}
+                icon={Icons.Forward}
+                onClick={this.onForwardClick}
+              />
+              <ToolBarButton size={20} icon={Icons.Refresh} onClick={this.onRefreshClick} />
             </NavIcons>
             <ToolBarSeparator />
             <TabsSection
