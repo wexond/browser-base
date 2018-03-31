@@ -48,17 +48,16 @@ export default class AddressBar extends Component<Props, {}> {
   public onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const key = e.keyCode;
 
-    // Blacklist: backspace, enter, ctrl, alt, shift, tab, caps lock, delete, space
     if (
-      key !== 8 &&
-      key !== 13 &&
-      key !== 17 &&
-      key !== 18 &&
-      key !== 16 &&
-      key !== 9 &&
-      key !== 20 &&
-      key !== 46 &&
-      key !== 32
+      key !== 8 && // backspace
+      key !== 13 && // enter
+      key !== 17 && // ctrl
+      key !== 18 && // alt
+      key !== 16 && // shift
+      key !== 9 && // tab
+      key !== 20 && // capslock
+      key !== 46 && // delete
+      key !== 32 // space
     ) {
       this.canSuggest = true;
     }
