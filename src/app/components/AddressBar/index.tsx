@@ -4,6 +4,7 @@ import { Input, InputContainer, StyledAddressBar } from './styles';
 import Store from '../../store';
 import { isURL } from '../../utils/url';
 import Suggestions from '../Suggestions';
+import SuggestionItem from '../../models/suggestion-item';
 
 interface Props {
   visible: boolean;
@@ -12,6 +13,8 @@ interface Props {
 @observer
 export default class AddressBar extends Component<Props, {}> {
   private input: HTMLInputElement;
+  private canSuggest = false;
+  private lastSuggestion: SuggestionItem;
 
   public componentDidMount() {
     window.addEventListener('mousedown', () => {
@@ -24,7 +27,32 @@ export default class AddressBar extends Component<Props, {}> {
     this.input.select();
   };
 
+  public autoComplete(suggestion: SuggestionItem, text: string) {
+    if (suggestion && suggestion.secondaryText.startsWith(text)) {
+      const start = text.length;
+      this.input.value = text + suggestion.secondaryText.replace(text, '');
+      this.input.setSelectionRange(start, this.input.value.length);
+    }
+  }
+
   public onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const key = e.keyCode;
+
+    // Blacklist: backspace, enter, ctrl, alt, shift, tab, caps lock, delete, space
+    if (
+      key !== 8 &&
+      key !== 13 &&
+      key !== 17 &&
+      key !== 18 &&
+      key !== 16 &&
+      key !== 9 &&
+      key !== 20 &&
+      key !== 46 &&
+      key !== 32
+    ) {
+      this.canSuggest = true;
+    }
+
     if (e.keyCode === 38 || e.keyCode === 40) {
       e.preventDefault();
       if (e.keyCode === 40) {
@@ -75,7 +103,19 @@ export default class AddressBar extends Component<Props, {}> {
   };
 
   public onInput = async () => {
-    Store.suggestions.suggest(this.input.value);
+    const text = this.input.value;
+    if (this.canSuggest) {
+      this.autoComplete(this.lastSuggestion, text);
+    }
+
+    await Store.suggestions.load(text);
+
+    if (this.canSuggest) {
+      const suggestion = Store.suggestions.suggest();
+      this.lastSuggestion = suggestion;
+      this.autoComplete(suggestion, text);
+      this.canSuggest = false;
+    }
   };
 
   public render() {
