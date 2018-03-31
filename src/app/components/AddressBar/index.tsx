@@ -1,17 +1,9 @@
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
 import { Input, InputContainer, StyledAddressBar } from './styles';
-import SuggestionItem from '../../models/suggestion-item';
 import Store from '../../store';
-import { favicons } from '../../utils/storage';
-import { getHistorySuggestions } from '../../utils/suggestions';
 import { isURL } from '../../utils/url';
 import Suggestions from '../Suggestions';
-
-interface Favicon {
-  url: string;
-  favicon: Buffer;
-}
 
 interface Props {
   visible: boolean;
@@ -24,18 +16,35 @@ export default class AddressBar extends Component<Props, {}> {
   public componentDidMount() {
     window.addEventListener('mousedown', () => {
       Store.addressBar.toggled = false;
-
-      Store.suggestions = {
-        history: [],
-        bookmarks: [],
-        mostVisited: [],
-        search: [],
-      };
+      Store.suggestions.clear();
     });
   }
 
   public onInputFocus = () => {
     this.input.select();
+  };
+
+  public onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === 38 || e.keyCode === 40) {
+      e.preventDefault();
+      if (e.keyCode === 40) {
+        Store.suggestions.selectNext();
+      } else if (e.keyCode === 38) {
+        Store.suggestions.selectPrevious();
+      }
+
+      const suggestion = Store.suggestions.getSelected();
+
+      if (
+        suggestion.type === 'history' ||
+        suggestion.type === 'bookmarks' ||
+        suggestion.type === 'most-visited'
+      ) {
+        this.input.value = suggestion.secondaryText;
+      } else {
+        this.input.value = suggestion.primaryText;
+      }
+    }
   };
 
   public onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -66,44 +75,7 @@ export default class AddressBar extends Component<Props, {}> {
   };
 
   public onInput = async () => {
-    const suggestions = await getHistorySuggestions(this.input.value);
-    const mostVisited: SuggestionItem[] = [];
-    const historySuggestions: SuggestionItem[] = [];
-
-    favicons.all('SELECT * FROM favicons', (err: any, faviconItems: Favicon[]) => {
-      if (err) throw err;
-      for (const favicon of faviconItems) {
-        if (Store.favicons[favicon.url] == null) {
-          Store.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));
-        }
-      }
-
-      let id = 0;
-
-      for (const item of suggestions.mostVisited) {
-        mostVisited.push({
-          primaryText: item.title,
-          secondaryText: item.url,
-          favicon: Store.favicons[item.favicon],
-          id: id++,
-        });
-      }
-
-      for (const item of suggestions.history) {
-        historySuggestions.push({
-          primaryText: item.title,
-          secondaryText: item.url,
-          favicon: Store.favicons[item.favicon],
-          id: id++,
-        });
-      }
-
-      Store.suggestions = {
-        ...Store.suggestions,
-        history: historySuggestions,
-        mostVisited,
-      };
-    });
+    Store.suggestions.suggest(this.input.value);
   };
 
   public render() {
@@ -129,6 +101,7 @@ export default class AddressBar extends Component<Props, {}> {
             onInput={this.onInput}
             visible={Store.addressBar.toggled}
             onKeyPress={this.onKeyPress}
+            onKeyDown={this.onKeyDown}
           />
           <Suggestions />
         </InputContainer>
