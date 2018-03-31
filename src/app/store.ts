@@ -3,19 +3,12 @@ import os from 'os';
 import AddTabButton from './models/add-tab-button';
 import AddressBar from './models/address-bar';
 import Page from './models/page';
-import SuggestionItem from './models/suggestion-item';
 import TabGroup from './models/tab-group';
 import Theme from './models/theme';
 import { Platforms } from '../shared/enums';
+import Suggestions from './models/suggestions';
 
-interface Suggestions {
-  search: SuggestionItem[];
-  history: SuggestionItem[];
-  bookmarks: SuggestionItem[];
-  mostVisited: SuggestionItem[];
-}
-
-interface Favicons {
+export interface Favicons {
   [key: string]: string;
 }
 
@@ -27,13 +20,7 @@ class Store {
   @observable public addTabButton = new AddTabButton();
   @observable public addressBar = new AddressBar();
   @observable public theme = new Theme();
-  @observable
-  public suggestions: Suggestions = {
-    search: [],
-    mostVisited: [],
-    history: [],
-    bookmarks: [],
-  };
+  @observable public suggestions = new Suggestions();
 
   public favicons: Favicons = {};
 
