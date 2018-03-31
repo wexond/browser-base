@@ -14,14 +14,14 @@ interface Props {
 export default class extends React.Component<Props, {}> {
   public componentDidMount() {
     const { page } = this.props;
-    const { webview, id } = this.props.page;
+    const { webview, id } = page;
     const tab = Store.getTabById(id);
 
     let historyId = -1;
     let lastURL = '';
 
     const updateData = async () => {
-      if (lastURL === page.url) {
+      if (lastURL === tab.url) {
         if (historyId !== -1) {
           const query = 'UPDATE history SET title = ?, url = ?, favicon = ? WHERE rowid = ?';
           const data = [tab.title, webview.getURL(), tab.favicon, historyId];
@@ -31,9 +31,10 @@ export default class extends React.Component<Props, {}> {
     };
 
     const updateInfo = ({ url, isMainFrame }: { url: string; isMainFrame: boolean }) => {
-      if (!isMainFrame && !url) return;
-      page.url = url;
+      Store.refreshNavigationState();
 
+      if (!isMainFrame && !url) return;
+      tab.url = url;
       updateData();
     };
 

@@ -21,6 +21,8 @@ export default class Tab {
   @observable public favicon = '';
   @observable public loading = false;
 
+  public url = '';
+
   public left = 0;
   public width = 0;
 
