@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 import { colors } from 'nersent-ui';
-import { TOOLBAR_HEIGHT, TOOLBAR_BUTTON_WIDTH } from '../constants/design';
+import { TOOLBAR_BUTTON_WIDTH, TOOLBAR_HEIGHT } from '../constants/design';
 
 export interface ToolbarDividersTheme {
   color?: string;
@@ -75,11 +75,13 @@ export default class Theme {
     separatorsVisible: true,
     height: TOOLBAR_HEIGHT,
   };
+
   @observable
   public searchBar: SearchBarTheme = {
     background: 'dark',
     height: 32,
   };
+
   @observable
   public tabs: TabsTheme = {
     hovered: {
@@ -104,10 +106,12 @@ export default class Theme {
     enableHoverOnSelectedTab: true,
     rippleColor: '',
   };
+
   @observable
   addTabButton: AddTabButtonTheme = {
     marginLeft: 0,
   };
+
   @observable
   public tabbar: TabbarTheme = {
     marginLeft: 0,
@@ -116,10 +120,12 @@ export default class Theme {
     marginBottom: 0,
     margin: null,
   };
+
   @observable
   toolbarButtons: ToolbarButtonsTheme = {
     width: TOOLBAR_BUTTON_WIDTH,
     rippleSize: 42,
   };
+
   @observable public accentColor = colors.blue['500'];
-} // eslint-disable-line
+}

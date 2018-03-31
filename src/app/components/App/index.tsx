@@ -1,16 +1,12 @@
 import { ipcRenderer } from 'electron';
-import { observer } from 'mobx-react'; // eslint-disable-line no-unused-vars
+import { observer } from 'mobx-react';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
-
-// Enums
+import { Handle, Line, NavIcons, StyledApp, TabsSection } from './styles';
 import { Platforms } from '../../../shared/enums';
 import { Icons } from '../../enums';
-
-// Utils
+import Store from '../../store';
 import { closeWindow, maximizeWindow, minimizeWindow } from '../../utils/window';
-
-// Components
 import AddressBar from '../AddressBar';
 import Pages from '../Pages';
 import TabBar from '../TabBar';
@@ -18,11 +14,6 @@ import ToolBar from '../ToolBar';
 import ToolBarButton from '../ToolBarButton';
 import ToolBarSeparator from '../ToolBarSeparator';
 import WindowButton from '../WindowButton';
-
-// Styles
-import { Handle, Line, NavIcons, StyledApp, TabsSection } from './styles';
-
-import Store from '../../store';
 
 interface State {
   isFullscreen: boolean;
@@ -35,7 +26,7 @@ export default class App extends React.Component<{}, State> {
   };
 
   public async componentDidMount() {
-    ipcRenderer.on('fullscreen', (e: any, isFullscreen: boolean) => {
+    ipcRenderer.on('fullscreen', (isFullscreen: boolean) => {
       this.setState({
         isFullscreen,
       });

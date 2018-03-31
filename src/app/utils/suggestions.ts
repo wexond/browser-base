@@ -1,4 +1,4 @@
-import { history, favicons } from '../utils/storage';
+import { history } from '../utils/storage';
 
 interface History {
   date: string;
@@ -23,7 +23,7 @@ const removeDuplicates = (array: any[], param: string) => {
   return array;
 };
 
-const countVisitedTimes = (filter: string, historyItems: History[]) => {
+const countVisitedTimes = (historyItems: History[]) => {
   const items: any[] = [];
 
   for (const hitem of historyItems) {
@@ -96,7 +96,7 @@ export const getHistorySuggestions = (filter: string) =>
       fromHistory = removeDuplicates(fromHistory, 'url');
       mostVisited = removeDuplicates(mostVisited, 'url');
 
-      const visitedTimes = countVisitedTimes(filter, mostVisited);
+      const visitedTimes = countVisitedTimes(mostVisited);
 
       mostVisited = [];
       for (const item of visitedTimes) {
