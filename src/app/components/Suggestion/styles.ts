@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { transparency } from 'nersent-ui';
+import images from '../../../shared/mixins/images';
 
 export const StyledSuggestion = styled.div`
   width: 100%;
@@ -34,8 +35,8 @@ export const Icon = styled.div`
   left: 16px;
   width: 16px;
   height: 16px;
-  background-color: #212121;
-  opacity: 0.54;
+
+  ${images.center('16px', '16px')};
 `;
 
 export const Dash = styled.div`
