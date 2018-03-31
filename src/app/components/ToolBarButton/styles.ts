@@ -1,16 +1,8 @@
-import styled from 'styled-components';
-
-// Defaults and constants
 import { transparency } from 'nersent-ui';
-import { HOVER_DURATION } from '../../constants/design';
-
-// Enums
-import { Icons } from '../../enums';
-
-// Mixins
+import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
-
-// Models
+import { HOVER_DURATION } from '../../constants/design';
+import { Icons } from '../../enums';
 import Theme from '../../models/theme';
 
 interface IconProps {

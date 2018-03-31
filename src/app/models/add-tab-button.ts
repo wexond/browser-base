@@ -1,6 +1,4 @@
 import { TweenLite } from 'gsap';
-
-// Constants and defaults
 import tabAnimations from '../defaults/tab-animations';
 
 export default class AddTabButton {

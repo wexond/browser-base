@@ -1,16 +1,12 @@
 import { observable } from 'mobx';
 import os from 'os';
-
-// Enums
-import { Platforms } from '../shared/enums';
-
-// Models
 import AddTabButton from './models/add-tab-button';
-import Page from './models/page';
-import TabGroup from './models/tab-group';
 import AddressBar from './models/address-bar';
-import Theme from './models/theme';
+import Page from './models/page';
 import SuggestionItem from './models/suggestion-item';
+import TabGroup from './models/tab-group';
+import Theme from './models/theme';
+import { Platforms } from '../shared/enums';
 
 interface Suggestions {
   search: SuggestionItem[];

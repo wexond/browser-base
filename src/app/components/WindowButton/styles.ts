@@ -1,13 +1,7 @@
 import styled from 'styled-components';
-
-// Enums
-import { Icons } from '../../enums';
-
-// Defaults and constants
-import { HOVER_DURATION } from '../../constants/design';
-
-// Mixins
 import images from '../../../shared/mixins/images';
+import { HOVER_DURATION } from '../../constants/design';
+import { Icons } from '../../enums';
 
 interface IButtonProps {
   icon: Icons;

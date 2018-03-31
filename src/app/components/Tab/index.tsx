@@ -1,21 +1,12 @@
-import { observer } from 'mobx-react'; // eslint-disable-line no-unused-vars
-import React from 'react';
+import { observer } from 'mobx-react';
 import { Ripples } from 'nersent-ui';
-
-// Constants and defaults
+import React from 'react';
+import { Close, Content, Icon, Overlay, StyledTab, Title } from './styles';
 import tabAnimations from '../../defaults/tab-animations';
-
-// Utils
-import { closeWindow } from '../../utils/window';
-
-// Styles
-import { Close, StyledTab, Title, Icon, Content, Overlay } from './styles';
-
-// Models
 import Tab from '../../models/tab';
 import TabGroup from '../../models/tab-group';
-
 import Store from '../../store';
+import { closeWindow } from '../../utils/window';
 
 interface Props {
   key: number;

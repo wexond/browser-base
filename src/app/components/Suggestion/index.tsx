@@ -1,8 +1,6 @@
-import { observer } from 'mobx-react'; // eslint-disable-line
+import { observer } from 'mobx-react';
 import React from 'react';
-
-// Styles
-import { StyledSuggestion, PrimaryText, SecondaryText, Icon, Dash } from './styles';
+import { Dash, Icon, PrimaryText, SecondaryText, StyledSuggestion } from './styles';
 import SuggestionItem from '../../models/suggestion-item';
 
 interface Props {
