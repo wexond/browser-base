@@ -1,17 +1,24 @@
-import { transparency } from 'nersent-ui';
+import { transparency, colors } from 'nersent-ui';
 import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
+
+interface SuggestionProps {
+  selected: boolean;
+}
 
 export const StyledSuggestion = styled.div`
   width: 100%;
   height: 40px;
   display: flex;
   align-items: center;
-  transition: 0.2s background-color;
+  transition: 0.1s background-color;
 
   &:hover {
     background-color: #eee;
   }
+
+  background-color: ${(props: SuggestionProps) =>
+    (props.selected ? `${colors.grey['300']} !important` : '')};
 `;
 
 export const PrimaryText = styled.div`
