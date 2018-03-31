@@ -14,6 +14,7 @@ export const StyledAddressBar = styled.div`
   top: 0;
   transition: 0.2s opacity;
   display: flex;
+  z-index: 10;
   align-items: center;
 
   opacity: ${(props: AddressBarProps) => (props.visible ? 1 : 0)};
