@@ -1,12 +1,6 @@
-import styled from 'styled-components';
-
-// Constants and defaults
 import { transparency } from 'nersent-ui';
-
-// Mixins
+import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
-
-// Models
 import Theme from '../../models/theme';
 
 interface TabProps {

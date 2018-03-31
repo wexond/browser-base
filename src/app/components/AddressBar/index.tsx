@@ -1,17 +1,12 @@
+import { observer } from 'mobx-react';
 import React, { Component } from 'react';
-
-// Styles
-import { Input, StyledAddressBar, InputContainer } from './styles';
-
-// Utils
-import { isURL } from '../../utils/url';
-
-import Suggestions from '../Suggestions';
-
+import { Input, InputContainer, StyledAddressBar } from './styles';
+import SuggestionItem from '../../models/suggestion-item';
 import Store from '../../store';
-import { getHistorySuggestions } from '../../utils/suggestions';
-import SuggestionItem from '../../models/suggestion-item'; // eslint-disable-line
 import { favicons } from '../../utils/storage';
+import { getHistorySuggestions } from '../../utils/suggestions';
+import { isURL } from '../../utils/url';
+import Suggestions from '../Suggestions';
 
 interface Favicon {
   url: string;
@@ -22,6 +17,7 @@ interface Props {
   visible: boolean;
 }
 
+@observer
 export default class AddressBar extends Component<Props, {}> {
   private input: HTMLInputElement;
 
@@ -67,7 +63,7 @@ export default class AddressBar extends Component<Props, {}> {
     const mostVisited: SuggestionItem[] = [];
     const historySuggestions: SuggestionItem[] = [];
 
-    favicons.all('SELECT * FROM favicons', (err1: any, faviconItems: Favicon[]) => {
+    favicons.all('SELECT * FROM favicons', (faviconItems: Favicon[]) => {
       for (const favicon of faviconItems) {
         if (Store.favicons[favicon.url] == null) {
           Store.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));

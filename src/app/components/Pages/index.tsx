@@ -1,13 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-
-// Components
-import Page from '../Page';
-
-// Styles
 import StyledPages from './styles';
-
 import Store from '../../store';
+import Page from '../Page';
 
 export default observer(() => (
   <StyledPages>

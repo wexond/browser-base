@@ -1,12 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-
-// Styles
-import { StyledSuggestions, Caption } from './styles';
-
-import Suggestion from '../Suggestion';
-
+import { Caption, StyledSuggestions } from './styles';
 import Store from '../../store';
+import Suggestion from '../Suggestion';
 
 export default observer(() => (
   <StyledSuggestions onMouseDown={e => e.stopPropagation()}>

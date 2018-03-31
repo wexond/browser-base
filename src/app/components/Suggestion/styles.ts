@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { transparency } from 'nersent-ui';
+import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
 
 export const StyledSuggestion = styled.div`

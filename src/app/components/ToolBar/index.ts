@@ -1,7 +1,5 @@
-import styled from 'styled-components';
 import { shadows } from 'nersent-ui';
-
-// Models
+import styled from 'styled-components';
 import Theme from '../../models/theme';
 
 interface Props {

@@ -1,11 +1,7 @@
 import { TweenLite } from 'gsap';
 import { observable } from 'mobx';
-
-// Constants and defaults
+import Tab from './tab';
 import tabAnimations from '../defaults/tab-animations';
-
-// Models
-import Tab from './tab'; // eslint-disable-line no-unused-vars
 
 export default class Line {
   @observable public left = 0;

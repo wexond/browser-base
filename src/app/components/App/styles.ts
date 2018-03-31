@@ -1,11 +1,8 @@
-import styled from 'styled-components';
 import { transparency } from 'nersent-ui';
-
-// Enums
+import styled from 'styled-components';
 import { Platforms } from '../../../shared/enums';
-
-import Store from '../../store';
 import Theme from '../../models/theme';
+import Store from '../../store';
 
 interface NavIconsProps {
   isFullscreen: boolean;

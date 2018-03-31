@@ -1,10 +1,6 @@
 import React from 'react';
-
-// Enums
-import { Icons } from '../../enums';
-
-// Styles
 import { Button, Icon } from './styles';
+import { Icons } from '../../enums';
 
 interface IProps {
   icon: Icons;

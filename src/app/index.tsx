@@ -1,15 +1,10 @@
+import { typography } from 'nersent-ui';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
 import wpm from 'wexond-package-manager';
-import { typography } from 'nersent-ui';
-
-// Components
 import App from './components/App';
-
-// Models
 import PluginAPI from './models/plugin-api';
-
 import Store from './store';
 
 injectGlobal`

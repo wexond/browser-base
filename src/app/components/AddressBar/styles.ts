@@ -1,7 +1,5 @@
-import styled from 'styled-components';
 import { transparency } from 'nersent-ui';
-
-// Models
+import styled from 'styled-components';
 import Theme from '../../models/theme';
 
 interface AddressBarProps {
