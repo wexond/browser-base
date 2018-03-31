@@ -29,7 +29,6 @@ export default class extends React.Component<Props, {}> {
     const updateData = async () => {
       if (lastURL === page.url) {
         if (historyId !== -1) {
-          console.log(historyId, tab.favicon);
           const query = 'UPDATE history SET title = ?, url = ?, favicon = ? WHERE rowid = ?';
           const data = [tab.title, webview.getURL(), tab.favicon, historyId];
           history.run(query, data);

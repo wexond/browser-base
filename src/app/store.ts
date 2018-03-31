@@ -19,6 +19,10 @@ interface Suggestions {
   mostVisited: SuggestionItem[];
 }
 
+interface Favicons {
+  [key: string]: string;
+}
+
 class Store {
   // Observables
   @observable public selectedTabGroup = 0;
@@ -34,6 +38,8 @@ class Store {
     history: [],
     bookmarks: [],
   };
+
+  public favicons: Favicons = {};
 
   public platform = os.platform() as Platforms;
   public mouse = {
