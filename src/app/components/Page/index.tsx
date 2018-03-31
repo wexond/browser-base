@@ -1,15 +1,9 @@
-import { observer } from 'mobx-react'; // eslint-disable-line no-unused-vars
+import { observer } from 'mobx-react';
 import React from 'react';
-
-// Styles
 import StyledPage from './styles';
-
-// Models
 import Page from '../../models/page';
-
 import Store from '../../store';
-
-import { history, addFavicon } from '../../utils/storage';
+import { addFavicon, history } from '../../utils/storage';
 
 interface Props {
   page: Page;

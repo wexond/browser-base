@@ -1,12 +1,7 @@
 import { observable, observe } from 'mobx';
-
-// Models
 import Line from './line';
 import Tab from './tab';
-
-// Constants and defaults
 import { TAB_MIN_WIDTH } from '../constants/design';
-
 import Store from '../store';
 
 export default class TabGroup {

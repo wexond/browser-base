@@ -1,23 +1,14 @@
 import { Expo, TweenLite } from 'gsap';
 import { observe } from 'mobx';
-import { observer } from 'mobx-react'; // eslint-disable-line no-unused-vars
+import { observer } from 'mobx-react';
 import React from 'react';
-
-// Components
-import TabComponent from '../Tab';
-
-// Constants and defaults
+import { Indicator, Scrollbar, ScrollbarThumb, Tabs } from './styles';
 import { TOOLBAR_HEIGHT } from '../../constants/design';
 import tabAnimations from '../../defaults/tab-animations';
-
-// Styles
-import { Indicator, Scrollbar, ScrollbarThumb, Tabs } from './styles';
-
-// Models
 import Tab from '../../models/tab';
 import TabGroup from '../../models/tab-group';
-
 import Store from '../../store';
+import TabComponent from '../Tab';
 
 interface Props {
   tabGroup: TabGroup;
@@ -50,7 +41,6 @@ export default class extends React.Component<Props, {}> {
   };
   private scrollInterval: any;
   private scrollTimeout: any;
-  private tabsInterval: any;
 
   public shouldComponentUpdate(nextProps: any, nextState: any) {
     if (this.props.tabGroup.selectedTab !== nextProps.tabGroup.selectedTab) {

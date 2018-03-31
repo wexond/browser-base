@@ -1,12 +1,8 @@
-import React from 'react';
+import { observer } from 'mobx-react';
 import { Ripples } from 'nersent-ui';
-import { observer } from 'mobx-react'; // eslint-disable-line
-
-// Enums
-import { Icons } from '../../enums';
-
+import React from 'react';
 import { Button, Icon } from './styles';
-
+import { Icons } from '../../enums';
 import Store from '../../store';
 
 interface Props {

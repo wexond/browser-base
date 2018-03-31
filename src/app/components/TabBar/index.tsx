@@ -1,22 +1,14 @@
-import { observer } from 'mobx-react'; // eslint-disable-line no-unused-vars
+import { observer } from 'mobx-react';
 import React from 'react';
-
-// Components
+import { StyledTabBar, TabGroups } from './styles';
+import { Icons } from '../../enums';
+import Store from '../../store';
 import TabGroup from '../TabGroup';
 import ToolBarButton from '../ToolBarButton';
-
-// Styles
-import { StyledTabBar, TabGroups } from './styles';
-
-// Enums
-import { Icons } from '../../enums';
-
-import Store from '../../store';
 
 @observer
 export default class TabBar extends React.Component<{}, {}> {
   private tabBar: HTMLDivElement;
-  private addTabButton: HTMLDivElement;
 
   public componentDidMount() {
     Store.getTabBarWidth = this.getTabBarWidth;
@@ -44,7 +36,6 @@ export default class TabBar extends React.Component<{}, {}> {
               marginLeft: Store.theme.addTabButton.marginLeft,
             }}
             innerRef={(r) => {
-              this.addTabButton = r;
               Store.addTabButton.ref = r;
             }}
           />

@@ -1,10 +1,5 @@
-import styled from 'styled-components';
 import { shadows, transparency } from 'nersent-ui';
-import Theme from '../../models/theme';
-
-interface SuggestionsProps {
-  theme?: Theme;
-}
+import styled from 'styled-components';
 
 export const StyledSuggestions = styled.div`
   position: absolute;
