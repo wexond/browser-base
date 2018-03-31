@@ -8,11 +8,6 @@ interface History {
   id: number;
 }
 
-interface Favicon {
-  url: string;
-  favicon: Buffer;
-}
-
 const removeDuplicates = (array: any[], param: string) => {
   const tempArray = array.slice();
   array = [];
@@ -74,81 +69,70 @@ export const getHistorySuggestions = (filter: string) =>
 
     history.all('SELECT * FROM history', (err: any, historyItems: History[]) => {
       if (err) reject(err);
-      favicons.all('SELECT * FROM favicons', (err1: any, faviconItems: Favicon[]) => {
-        if (err1) reject(err1);
 
-        const regex = /(http(s?)):\/\/(www.)?|www./gi;
+      const regex = /(http(s?)):\/\/(www.)?|www./gi;
 
-        let mostVisited: History[] = [];
-        let fromHistory: History[] = [];
+      let mostVisited: History[] = [];
+      let fromHistory: History[] = [];
 
-        const filterPart = filter.replace(regex, '');
+      const filterPart = filter.replace(regex, '');
 
-        for (const hItem of historyItems) {
-          const urlPart = hItem.url.replace(regex, '');
+      for (const hItem of historyItems) {
+        const urlPart = hItem.url.replace(regex, '');
 
-          const favicon = faviconItems.find(x => x.url === hItem.favicon);
+        const itemToPush = {
+          ...hItem,
+          url: urlPart,
+        };
 
-          let faviconBuffer = null;
-          if (favicon != null) {
-            faviconBuffer = favicon.favicon;
-          }
-
-          const itemToPush = {
-            ...hItem,
-            url: urlPart,
-            favicon: window.URL.createObjectURL(new Blob([faviconBuffer])),
-          };
-
-          if (urlPart.startsWith(filterPart)) {
-            fromHistory.push(itemToPush);
-            mostVisited.push(itemToPush);
-          } else if (itemToPush.title.includes(filter)) {
-            fromHistory.push(itemToPush);
-          }
+        if (urlPart.startsWith(filterPart)) {
+          fromHistory.push(itemToPush);
+          mostVisited.push(itemToPush);
+        } else if (itemToPush.title.includes(filter)) {
+          fromHistory.push(itemToPush);
         }
+      }
 
-        fromHistory = removeDuplicates(fromHistory, 'url');
-        mostVisited = removeDuplicates(mostVisited, 'url');
+      fromHistory = removeDuplicates(fromHistory, 'url');
+      mostVisited = removeDuplicates(mostVisited, 'url');
 
-        const visitedTimes = countVisitedTimes(filter, mostVisited);
+      const visitedTimes = countVisitedTimes(filter, mostVisited);
 
-        mostVisited = [];
-        for (const item of visitedTimes) {
-          const item2 = fromHistory.find(x => x.id === item.id);
-          mostVisited.push(item2);
-          fromHistory.splice(fromHistory.indexOf(item2), 1);
-        }
+      mostVisited = [];
+      for (const item of visitedTimes) {
+        const item2 = fromHistory.find(x => x.id === item.id);
+        mostVisited.push(item2);
+        fromHistory.splice(fromHistory.indexOf(item2), 1);
+      }
 
-        if (mostVisited[0] != null) {
-          const split = mostVisited[0].url.split('/');
-          const shortUrl = split[0];
-          mostVisited.unshift({
-            ...mostVisited[0],
-            url: shortUrl,
-          });
-
-          if (
-            split[1] == null ||
-            (split[1] != null && (split[1].startsWith('?') || split[1] === ''))
-          ) {
-            mostVisited.splice(1, 1);
-          }
-        }
-
-        mostVisited = mostVisited.slice(0, 3);
-        mostVisited = mostVisited.sort((a: any, b: any) => a.url.length - b.url.length);
-        mostVisited = mostVisited.filter(Boolean);
-
-        mostVisited = removeDuplicates(mostVisited, 'title');
-
-        fromHistory = fromHistory.slice(0, 5);
-        fromHistory = removeDuplicates(fromHistory, 'title');
-
-        resolve({
-          history: fromHistory,
-          mostVisited,
+      if (mostVisited[0] != null) {
+        const split = mostVisited[0].url.split('/');
+        const shortUrl = split[0];
+        mostVisited.unshift({
+          ...mostVisited[0],
+          url: shortUrl,
         });
+
+        if (
+          split[1] == null ||
+          (split[1] != null && (split[1].startsWith('?') || split[1] === ''))
+        ) {
+          mostVisited.splice(1, 1);
+        }
+      }
+
+      mostVisited = mostVisited.slice(0, 2);
+      mostVisited = mostVisited.sort((a: any, b: any) => a.url.length - b.url.length);
+      mostVisited = mostVisited.filter(Boolean);
+
+      mostVisited = removeDuplicates(mostVisited, 'title');
+
+      fromHistory = fromHistory.slice(0, 4);
+      fromHistory = removeDuplicates(fromHistory, 'title');
+
+      resolve({
+        history: fromHistory,
+        mostVisited,
       });
     });
   });
