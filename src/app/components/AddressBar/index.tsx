@@ -10,7 +10,7 @@ import Suggestions from '../Suggestions';
 
 import Store from '../../store';
 import { getHistorySuggestions } from '../../utils/suggestions';
-import SuggestionItem from '../../models/suggestion-item';
+import SuggestionItem from '../../models/suggestion-item'; // eslint-disable-line
 
 interface Props {
   visible: boolean;
@@ -56,7 +56,7 @@ export default class AddressBar extends Component<Props, {}> {
     }
   };
 
-  public onInput = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+  public onInput = async () => {
     const suggestions = await getHistorySuggestions(this.input.value);
     const mostVisited: SuggestionItem[] = [];
     const historySuggestions: SuggestionItem[] = [];
@@ -65,16 +65,18 @@ export default class AddressBar extends Component<Props, {}> {
 
     for (const item of suggestions.mostVisited) {
       mostVisited.push({
-        primaryText: item.url,
-        secondaryText: item.title,
+        primaryText: item.title,
+        secondaryText: item.url,
+        favicon: item.favicon,
         id: id++,
       });
     }
 
     for (const item of suggestions.history) {
       historySuggestions.push({
-        primaryText: item.url,
-        secondaryText: item.title,
+        primaryText: item.title,
+        secondaryText: item.url,
+        favicon: item.favicon,
         id: id++,
       });
     }

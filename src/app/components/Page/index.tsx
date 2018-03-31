@@ -9,7 +9,7 @@ import Page from '../../models/page';
 
 import Store from '../../store';
 
-import { history } from '../../utils/storage';
+import { history, addFavicon } from '../../utils/storage';
 
 interface Props {
   page: Page;
@@ -27,8 +27,9 @@ export default class extends React.Component<Props, {}> {
     let lastURL = '';
 
     const updateData = async () => {
-      if (lastURL === webview.getURL() && tab != null) {
+      if (lastURL === page.url) {
         if (historyId !== -1) {
+          console.log(historyId, tab.favicon);
           const query = 'UPDATE history SET title = ?, url = ?, favicon = ? WHERE rowid = ?';
           const data = [tab.title, webview.getURL(), tab.favicon, historyId];
           history.run(query, data);
@@ -36,28 +37,17 @@ export default class extends React.Component<Props, {}> {
       }
     };
 
-    const updateInfo = ({
-      url,
-      isMainFrame,
-      type,
-    }: {
-    url: string;
-    isMainFrame: boolean;
-    type: string;
-    }) => {
-      if (url) {
-        if (!isMainFrame) return;
-        page.url = url;
+    const updateInfo = ({ url, isMainFrame }: { url: string; isMainFrame: boolean }) => {
+      if (!isMainFrame && !url) return;
+      page.url = url;
 
-        updateData();
-      }
-
-      if (type === 'did-stop-loading') {
-        tab.loading = false;
-      }
+      updateData();
     };
 
-    webview.addEventListener('did-stop-loading', updateInfo);
+    webview.addEventListener('did-stop-loading', (e: any) => {
+      updateInfo(e);
+      tab.loading = false;
+    });
     webview.addEventListener('did-navigate', updateInfo);
     webview.addEventListener('did-navigate-in-page', updateInfo);
     webview.addEventListener('will-navigate', updateInfo);
@@ -96,14 +86,14 @@ export default class extends React.Component<Props, {}> {
             tab.favicon = '';
           } else {
             tab.favicon = favicons[0];
+            addFavicon(favicons[0]);
           }
         }
+        updateData();
       };
 
       request.open('GET', favicons[0], true);
       request.send(null);
-
-      updateData();
     });
   }
 
