@@ -11,6 +11,12 @@ import Suggestions from '../Suggestions';
 import Store from '../../store';
 import { getHistorySuggestions } from '../../utils/suggestions';
 import SuggestionItem from '../../models/suggestion-item'; // eslint-disable-line
+import { favicons } from '../../utils/storage';
+
+interface Favicon {
+  url: string;
+  favicon: Buffer;
+}
 
 interface Props {
   visible: boolean;
@@ -61,31 +67,39 @@ export default class AddressBar extends Component<Props, {}> {
     const mostVisited: SuggestionItem[] = [];
     const historySuggestions: SuggestionItem[] = [];
 
-    let id = 0;
+    favicons.all('SELECT * FROM favicons', (err1: any, faviconItems: Favicon[]) => {
+      for (const favicon of faviconItems) {
+        if (Store.favicons[favicon.url] == null) {
+          Store.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));
+        }
+      }
 
-    for (const item of suggestions.mostVisited) {
-      mostVisited.push({
-        primaryText: item.title,
-        secondaryText: item.url,
-        favicon: item.favicon,
-        id: id++,
-      });
-    }
+      let id = 0;
 
-    for (const item of suggestions.history) {
-      historySuggestions.push({
-        primaryText: item.title,
-        secondaryText: item.url,
-        favicon: item.favicon,
-        id: id++,
-      });
-    }
+      for (const item of suggestions.mostVisited) {
+        mostVisited.push({
+          primaryText: item.title,
+          secondaryText: item.url,
+          favicon: Store.favicons[item.favicon],
+          id: id++,
+        });
+      }
 
-    Store.suggestions = {
-      ...Store.suggestions,
-      history: historySuggestions,
-      mostVisited,
-    };
+      for (const item of suggestions.history) {
+        historySuggestions.push({
+          primaryText: item.title,
+          secondaryText: item.url,
+          favicon: Store.favicons[item.favicon],
+          id: id++,
+        });
+      }
+
+      Store.suggestions = {
+        ...Store.suggestions,
+        history: historySuggestions,
+        mostVisited,
+      };
+    });
   };
 
   public render() {
