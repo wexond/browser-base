@@ -53,19 +53,19 @@ const countVisitedTimes = (historyItems: History[]) => {
     }
   }
 
-  return items.sort((a: any, b: any) => a.times - b.times);
+  return items.sort((a, b) => a.times - b.times);
 };
 
-type historySuggestions = {
+type HistorySuggestions = {
   history: History[];
   mostVisited: History[];
 };
 
 export const getHistorySuggestions = (filter: string) =>
-  new Promise((resolve: (suggestions: historySuggestions) => void, reject) => {
+  new Promise((resolve: (suggestions: HistorySuggestions) => void, reject) => {
     filter = filter.trim().toLowerCase();
 
-    if (filter === '') resolve({ history: [], mostVisited: [] } as historySuggestions);
+    if (filter === '') resolve({ history: [], mostVisited: [] });
 
     history.all('SELECT * FROM history', (err: any, historyItems: History[]) => {
       if (err) reject(err);
@@ -85,10 +85,10 @@ export const getHistorySuggestions = (filter: string) =>
           url: urlPart,
         };
 
-        if (urlPart.startsWith(filterPart)) {
+        if (urlPart.toLowerCase().startsWith(filterPart)) {
           fromHistory.push(itemToPush);
           mostVisited.push(itemToPush);
-        } else if (itemToPush.title.includes(filter)) {
+        } else if (itemToPush.title.toLowerCase().includes(filter)) {
           fromHistory.push(itemToPush);
         }
       }
@@ -99,10 +99,13 @@ export const getHistorySuggestions = (filter: string) =>
       const visitedTimes = countVisitedTimes(mostVisited);
 
       mostVisited = [];
-      for (const item of visitedTimes) {
-        const item2 = fromHistory.find(x => x.id === item.id);
-        mostVisited.push(item2);
-        fromHistory.splice(fromHistory.indexOf(item2), 1);
+      for (let i = 0; i < 2; i++) {
+        const item = visitedTimes[i];
+        if (item) {
+          const hItem = fromHistory.find(x => x.id === item.id);
+          mostVisited.push(hItem);
+          fromHistory.splice(fromHistory.indexOf(hItem), 1);
+        }
       }
 
       if (mostVisited[0] != null) {
@@ -121,14 +124,11 @@ export const getHistorySuggestions = (filter: string) =>
         }
       }
 
-      mostVisited = mostVisited.slice(0, 2);
-      mostVisited = mostVisited.sort((a: any, b: any) => a.url.length - b.url.length);
-      mostVisited = mostVisited.filter(Boolean);
+      mostVisited = mostVisited.sort((a, b) => a.url.length - b.url.length).filter(Boolean);
+      fromHistory = fromHistory.sort((a, b) => a.url.length - b.url.length).slice(0, 4);
 
-      mostVisited = removeDuplicates(mostVisited, 'title');
-
-      fromHistory = fromHistory.slice(0, 4);
       fromHistory = removeDuplicates(fromHistory, 'title');
+      mostVisited = removeDuplicates(mostVisited, 'title');
 
       resolve({
         history: fromHistory,
