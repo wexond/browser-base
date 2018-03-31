@@ -24,6 +24,13 @@ export default class AddressBar extends Component<Props, {}> {
   public componentDidMount() {
     window.addEventListener('mousedown', () => {
       Store.addressBar.toggled = false;
+
+      Store.suggestions = {
+        history: [],
+        bookmarks: [],
+        mostVisited: [],
+        search: [],
+      };
     });
   }
 
