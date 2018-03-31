@@ -21,6 +21,11 @@ class Store {
   @observable public addressBar = new AddressBar();
   @observable public theme = new Theme();
   @observable public suggestions = new Suggestions();
+  @observable
+  public navigationState = {
+    canGoBack: false,
+    canGoForward: false,
+  };
 
   public favicons: Favicons = {};
 
@@ -61,6 +66,20 @@ class Store {
     const index = this.pages.push(page) - 1;
 
     return this.pages[index];
+  }
+
+  public refreshNavigationState() {
+    const page = this.getSelectedPage();
+    if (page) {
+      const { webview } = this.getSelectedPage();
+
+      if (webview && webview.getWebContents()) {
+        this.navigationState = {
+          canGoBack: webview.canGoBack(),
+          canGoForward: webview.canGoForward(),
+        };
+      }
+    }
   }
 }
 

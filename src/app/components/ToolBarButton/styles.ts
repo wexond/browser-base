@@ -8,19 +8,22 @@ import Theme from '../../models/theme';
 interface IconProps {
   size: number;
   icon: Icons;
+  disabled: boolean;
 }
 
 export const Icon = styled.div`
   width: 100%;
   height: 100%;
 
-  opacity: ${transparency.light.icons.inactive};
   ${(props: IconProps) => images.center(`${props.size}px`, `${props.size}px`)}
+  opacity: ${props =>
+    (props.disabled ? transparency.light.button.disabled : transparency.light.icons.inactive)};
   background-image: ${props => `url(../../src/app/icons/${props.icon})`};
 `;
 
 interface ButtonProps {
   theme?: Theme;
+  disabled: boolean;
 }
 
 export const Button = styled.div`
@@ -31,4 +34,5 @@ export const Button = styled.div`
   transition: ${HOVER_DURATION}s background-color;
   filter: ${(props: ButtonProps) => props.theme.toolbar.foreground === 'light' && 'invert(100%)'};
   width: ${(props: ButtonProps) => props.theme.toolbarButtons.width}px;
+  pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
 `;
