@@ -28,9 +28,19 @@ export default class AddressBar extends Component<Props, {}> {
   };
 
   public autoComplete(suggestion: SuggestionItem, text: string) {
-    if (suggestion && suggestion.secondaryText.startsWith(text)) {
-      const start = text.length;
-      this.input.value = text + suggestion.secondaryText.replace(text, '');
+    const regex = /(http(s?)):\/\/(www.)?|www./gi;
+    const regex2 = /(http(s?)):\/\//gi;
+
+    const start = text.length;
+
+    if (suggestion) {
+      const { secondaryText } = suggestion;
+
+      if (secondaryText.startsWith(text.replace(regex, ''))) {
+        this.input.value = text + secondaryText.replace(text.replace(regex, ''), '');
+      } else if (`www.${secondaryText}`.startsWith(text.replace(regex2, ''))) {
+        this.input.value = text + `www.${secondaryText}`.replace(text.replace(regex2, ''), '');
+      }
       this.input.setSelectionRange(start, this.input.value.length);
     }
   }
