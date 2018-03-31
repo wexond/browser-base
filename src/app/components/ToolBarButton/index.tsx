@@ -11,6 +11,7 @@ interface Props {
   style?: any;
   icon: Icons;
   innerRef?: (ref: HTMLDivElement) => void;
+  disabled?: boolean;
 }
 
 @observer
@@ -31,7 +32,7 @@ export default class ToolBarButton extends React.Component<Props, {}> {
 
   public render() {
     const {
-      icon, onClick, size, style,
+      icon, onClick, size, style, disabled,
     } = this.props;
 
     return (
@@ -41,8 +42,9 @@ export default class ToolBarButton extends React.Component<Props, {}> {
         onClick={onClick}
         style={style}
         innerRef={this.props.innerRef}
+        disabled={disabled}
       >
-        <Icon icon={icon} size={size} />
+        <Icon icon={icon} size={size} disabled={disabled} />
         <Ripples
           icon
           ref={r => (this.ripples = r)}

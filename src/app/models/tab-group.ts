@@ -16,6 +16,7 @@ export default class TabGroup {
         requestAnimationFrame(() => {
           this.line.moveToTab(this.getTabById(change.object.selectedTab));
         });
+        Store.refreshNavigationState();
       }
     });
   }
