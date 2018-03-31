@@ -63,7 +63,8 @@ export default class AddressBar extends Component<Props, {}> {
     const mostVisited: SuggestionItem[] = [];
     const historySuggestions: SuggestionItem[] = [];
 
-    favicons.all('SELECT * FROM favicons', (faviconItems: Favicon[]) => {
+    favicons.all('SELECT * FROM favicons', (err: any, faviconItems: Favicon[]) => {
+      if (err) throw err;
       for (const favicon of faviconItems) {
         if (Store.favicons[favicon.url] == null) {
           Store.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));
