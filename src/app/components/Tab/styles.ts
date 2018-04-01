@@ -18,6 +18,7 @@ interface CloseProps {
   hovered: boolean;
   theme?: Theme;
   foreground: string;
+  foregroundType: string;
 }
 
 export const Close = styled.div`
@@ -31,7 +32,7 @@ export const Close = styled.div`
 
   opacity: ${(props: CloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
   ${images.center('100%', '100%')};
-  filter: ${props => (props.foreground === '#000' ? '' : 'invert(100%)')};
+  filter: ${props => (props.foregroundType === 'dark' ? '' : 'invert(100%)')};
 `;
 
 export const StyledTab = styled.div`
