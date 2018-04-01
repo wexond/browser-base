@@ -1,6 +1,6 @@
-import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
 import Theme from '../../models/theme';
+import { getForegroundColor } from '../../utils/colors';
 
 interface Props {
   theme?: Theme;
@@ -15,9 +15,6 @@ export default styled.div`
   margin-left: 8px;
   margin-right: 8px;
 
-  background-color: ${(props: Props) =>
-    (props.theme.toolbar.foreground === 'light'
-      ? `rgba(255, 255, 255, ${transparency.dark.dividers})`
-      : `rgba(0, 0, 0, ${transparency.light.dividers})`)};
+  background-color: ${(props: Props) => getForegroundColor('dividers', props.theme.toolbar)};
   display: ${(props: Props) => (props.theme.toolbar.separatorsVisible ? 'block' : 'none')};
 `;

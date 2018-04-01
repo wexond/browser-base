@@ -9,6 +9,7 @@ interface IconProps {
   size: number;
   icon: Icons;
   disabled: boolean;
+  theme?: Theme;
 }
 
 export const Icon = styled.div`
@@ -16,8 +17,16 @@ export const Icon = styled.div`
   height: 100%;
 
   ${(props: IconProps) => images.center(`${props.size}px`, `${props.size}px`)}
-  opacity: ${props =>
-    (props.disabled ? transparency.light.button.disabled : transparency.light.icons.inactive)};
+  opacity: ${(props: IconProps) => {
+    if (props.disabled) {
+      return props.theme.toolbar.foreground === 'light'
+        ? transparency.dark.button.disabled
+        : transparency.light.button.disabled;
+    }
+    return props.theme.toolbar.foreground === 'light'
+      ? transparency.dark.icons.inactive
+      : transparency.light.icons.inactive;
+  }};
   background-image: ${props => `url(../../src/app/icons/${props.icon})`};
 `;
 

@@ -13,7 +13,7 @@ export interface ToolbarButtonsTheme {
 
 export interface ToolbarTheme {
   background?: string;
-  foreground?: 'dark' | 'light';
+  foreground?: string;
   align?: 'left' | 'right' | 'top' | 'bottom';
   shadow?: boolean | string;
   indicatorVisible?: boolean;
@@ -22,8 +22,14 @@ export interface ToolbarTheme {
   height?: number;
 }
 
+export interface SuggestionsTheme {
+  background?: string;
+  foreground?: string;
+}
+
 export interface SearchBarTheme {
-  background?: 'dark' | 'light';
+  background?: string;
+  foreground?: string;
   height?: number;
 }
 
@@ -34,19 +40,19 @@ export interface AddTabButtonTheme {
 export interface TabsTheme {
   hovered?: {
     background?: string;
-    foreground?: 'light' | 'dark';
+    foreground?: string;
   };
   selected?: {
     background?: string;
-    foreground?: 'light' | 'dark';
+    foreground?: string;
   };
   normal?: {
     background?: string;
-    foreground?: 'light' | 'dark';
+    foreground?: string;
   };
   dragging?: {
     background?: string;
-    foreground?: 'light' | 'dark';
+    foreground?: string;
   };
   content?: {
     align?: 'left' | 'center';
@@ -79,6 +85,7 @@ export default class Theme {
   @observable
   public searchBar: SearchBarTheme = {
     background: 'dark',
+    foreground: 'dark',
     height: 32,
   };
 
@@ -108,7 +115,7 @@ export default class Theme {
   };
 
   @observable
-  addTabButton: AddTabButtonTheme = {
+  public addTabButton: AddTabButtonTheme = {
     marginLeft: 0,
   };
 
@@ -122,9 +129,15 @@ export default class Theme {
   };
 
   @observable
-  toolbarButtons: ToolbarButtonsTheme = {
+  public toolbarButtons: ToolbarButtonsTheme = {
     width: TOOLBAR_BUTTON_WIDTH,
     rippleSize: 42,
+  };
+
+  @observable
+  public suggestions: SuggestionsTheme = {
+    background: '#fff',
+    foreground: 'dark',
   };
 
   @observable public accentColor = colors.blue['500'];

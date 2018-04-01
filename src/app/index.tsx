@@ -22,71 +22,59 @@ wpm.list().then((plugins) => {
     wpm.run(plugin.namespace).then((pkg) => {
       const api = pkg as PluginAPI;
 
-      if (api.theme != null) {
-        if (api.theme.toolbar != null) {
+      if (typeof api.setTheme === 'function') {
+        const theme = api.setTheme();
+        if (theme.toolbar) {
           Store.theme.toolbar = {
             ...Store.theme.toolbar,
-            ...api.theme.toolbar,
+            ...theme.toolbar,
           };
         }
 
-        if (api.theme.searchBar != null) {
+        if (theme.searchBar != null) {
           Store.theme.searchBar = {
             ...Store.theme.searchBar,
-            ...api.theme.searchBar,
+            ...theme.searchBar,
           };
         }
 
-        if (api.theme.tabs != null) {
+        if (theme.tabs != null) {
           Store.theme.tabs = {
             ...Store.theme.tabs,
-            ...api.theme.tabs,
-            hovered: {
-              ...Store.theme.tabs.hovered,
-              ...api.theme.tabs.hovered,
-            },
-            selected: {
-              ...Store.theme.tabs.selected,
-              ...api.theme.tabs.selected,
-            },
-            dragging: {
-              ...Store.theme.tabs.dragging,
-              ...api.theme.tabs.dragging,
-            },
-            normal: {
-              ...Store.theme.tabs.normal,
-              ...api.theme.tabs.normal,
-            },
-            content: {
-              ...Store.theme.tabs.content,
-              ...api.theme.tabs.content,
-            },
+            ...theme.tabs,
           };
         }
 
-        if (api.theme.tabbar != null) {
+        if (theme.tabbar != null) {
           Store.theme.tabbar = {
             ...Store.theme.tabbar,
-            ...api.theme.tabbar,
+            ...theme.tabbar,
           };
         }
 
-        if (api.theme.toolbarButtons != null) {
+        if (theme.toolbarButtons != null) {
           Store.theme.toolbarButtons = {
             ...Store.theme.toolbarButtons,
-            ...api.theme.toolbarButtons,
+            ...theme.toolbarButtons,
           };
         }
 
-        if (api.theme.addTabButton != null) {
+        if (theme.addTabButton != null) {
           Store.theme.addTabButton = {
             ...Store.theme.addTabButton,
-            ...api.theme.addTabButton,
+            ...theme.addTabButton,
           };
         }
 
-        if (api.theme.accentColor != null) {
-          Store.theme.accentColor = api.theme.accentColor;
+        if (theme.accentColor != null) {
+          Store.theme.accentColor = theme.accentColor;
+        }
+
+        if (theme.suggestions != null) {
+          Store.theme.suggestions = {
+            ...Store.theme.suggestions,
+            ...theme.suggestions,
+          };
         }
       }
     });
