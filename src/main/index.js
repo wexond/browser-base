@@ -24,6 +24,8 @@ const createWindow = () => {
     mainWindow.setMenu(null);
   }
 
+  mainWindow.webContents.openDevTools({ mode: 'detach' });
+
   mainWindow.loadURL(path.join('file://', __dirname, '../../static/pages/app.html'));
 
   mainWindow.on('closed', () => {
