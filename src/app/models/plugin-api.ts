@@ -1,5 +1,5 @@
 import Theme from './theme';
 
 export default interface PluginAPI {
-  theme?: Theme;
+  setTheme?: () => Theme;
 }; // eslint-disable-line
