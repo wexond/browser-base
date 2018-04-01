@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
 import wpm from 'wexond-package-manager';
 import App from './components/App';
-import PluginAPI from './models/plugin-api';
 import Store from './store';
 import Theme from './models/theme';
 
@@ -54,16 +53,15 @@ const setTheme = (object1: any, object2: any, themeBase: Theme = null, objectNam
   }
 };
 
+const wexondAPI = {
+  setTheme: (theme: Theme) => {
+    setTheme(Store.theme, theme);
+  },
+};
+
 wpm.list().then((plugins) => {
   for (const plugin of plugins) {
-    wpm.run(plugin.namespace).then((pkg) => {
-      const api = pkg as PluginAPI;
-
-      if (typeof api.setTheme === 'function') {
-        const theme = api.setTheme();
-        setTheme(Store.theme, theme);
-      }
-    });
+    wpm.run(plugin.namespace, wexondAPI);
   }
 });
 
