@@ -1,6 +1,7 @@
 import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
 import Theme from '../../models/theme';
+import { getForegroundColor, getBackgroundColor } from '../../utils/colors';
 
 interface AddressBarProps {
   visible: boolean;
@@ -38,24 +39,16 @@ export const Input = styled.input`
   position: relative;
 
   -webkit-app-region: ${(props: InputProps) => (props.visible ? 'no-drag' : 'drag')};
-  color: ${props =>
-    (props.theme.toolbar.foreground === 'light'
-      ? `rgba(255, 255, 255, ${transparency.dark.text.primary})`
-      : `rgba(0, 0, 0, ${transparency.light.text.primary})`)};
+  color: ${(props: InputProps) => getForegroundColor('text-primary', props.theme.searchBar)};
   ::placeholder {
-    color: ${props =>
-    (props.theme.toolbar.foreground === 'light'
-      ? `rgba(255, 255, 255, ${transparency.dark.text.primary})`
-      : `rgba(0, 0, 0, ${transparency.light.text.primary})`)};
+    color: ${(props: InputProps) => getForegroundColor('text-secondary', props.theme.searchBar)};
     opacity: ${props =>
     (props.theme.toolbar.foreground === 'light'
       ? transparency.dark.text.secondary
       : transparency.light.text.secondary)};
   }
-  background-color: ${props =>
-    (props.theme.searchBar.background === 'light'
-      ? `rgba(255, 255, 255, ${transparency.dark.dividers})`
-      : `rgba(0, 0, 0, ${transparency.light.dividers})`)};
+  background-color: ${(props: InputProps) =>
+    getBackgroundColor('search-bar', props.theme.searchBar)};
   height: ${(props: InputProps) => props.theme.searchBar.height}px;
 `;
 

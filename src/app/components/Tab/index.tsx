@@ -7,6 +7,7 @@ import Tab from '../../models/tab';
 import TabGroup from '../../models/tab-group';
 import Store from '../../store';
 import { closeWindow } from '../../utils/window';
+import { getForegroundColor } from '../../utils/colors';
 
 interface Props {
   key: number;
@@ -133,14 +134,14 @@ export default class extends React.Component<Props, {}> {
     } = tab;
     const { tabs } = Store.theme;
 
-    let foreground = tabs.normal.foreground === 'light' ? '#fff' : '#000';
+    let foregroundType = tabs.normal;
     let background = tabs.normal.background;
 
     if (selected) {
-      foreground = `${tabs.selected.foreground === 'light' ? '#fff' : '#000'}`;
+      foregroundType = tabs.selected;
 
       if (hovered && !dragging && tabs.enableHoverOnSelectedTab) {
-        foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
+        foregroundType = tabs.hovered;
       }
 
       background =
@@ -152,8 +153,10 @@ export default class extends React.Component<Props, {}> {
         background = tabs.dragging.background;
       }
     } else if (hovered) {
-      foreground = tabs.hovered.foreground === 'light' ? '#fff' : '#000';
+      foregroundType = tabs.hovered;
     }
+
+    const foreground = getForegroundColor('text-primary', foregroundType, false);
 
     return (
       <StyledTab
@@ -183,6 +186,7 @@ export default class extends React.Component<Props, {}> {
           onClick={this.onClose}
           hovered={hovered}
           foreground={foreground}
+          foregroundType={foregroundType.foreground}
         >
           <Ripples
             icon
