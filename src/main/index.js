@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
+const { platform } = require('os');
 
 let mainWindow;
 
@@ -45,12 +46,20 @@ const createWindow = () => {
   });
 };
 
+app.on('activate', () => {
+  // On OS X it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (mainWindow === null) {
+    createWindow();
+  }
+});
+
 app.on('ready', () => {
   createWindow();
 });
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+  if (platform() !== 'darwin') {
     app.quit();
   }
 });
