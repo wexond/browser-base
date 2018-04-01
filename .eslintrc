@@ -35,6 +35,7 @@
     "no-restricted-globals": "off",
     "react/no-did-mount-set-state": "off",
     "no-loop-func": "off",
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "guard-for-in": "off"
   }
 }
