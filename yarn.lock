@@ -63,9 +63,9 @@
     "@types/node" "*"
     "@types/react" "*"
 
-"@types/react@*", "@types/react@16.1.0":
-  version "16.1.0"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.1.0.tgz#6c0e9955ce73f332b4a1948d45decaf18c764c6e"
+"@types/react@*", "@types/react@16.3.1":
+  version "16.3.1"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.3.1.tgz#6f6aaffaf7dba502ff5ca15e4aa18caee9b04995"
 
 "@types/request@2.47.0":
   version "2.47.0"
@@ -2327,6 +2327,13 @@ duplexify@^3.4.2, duplexify@^3.5.3:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
+easy-vm@nersent/easy-vm:
+  version "1.0.0"
+  resolved "https://codeload.github.com/nersent/easy-vm/tar.gz/3fd5644ee3f04a573d4e4bef9d16f6004754196d"
+  dependencies:
+    "@types/node" "9.6.0"
+    typescript "2.7.2"
+
 ecc-jsbn@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz#0fc73a9ed5f0d53c38193398523ef7e543777505"
@@ -2635,23 +2642,23 @@ eslint-import-resolver-node@^0.3.1:
     debug "^2.6.9"
     resolve "^1.5.0"
 
-eslint-module-utils@^2.1.1:
+eslint-module-utils@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/eslint-module-utils/-/eslint-module-utils-2.2.0.tgz#b270362cd88b1a48ad308976ce7fa54e98411746"
   dependencies:
     debug "^2.6.8"
     pkg-dir "^1.0.0"
 
-eslint-plugin-import@2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.9.0.tgz#26002efbfca5989b7288ac047508bd24f217b169"
+eslint-plugin-import@2.10.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.10.0.tgz#fa09083d5a75288df9c6c7d09fe12255985655e7"
   dependencies:
     builtin-modules "^1.1.1"
     contains-path "^0.1.0"
     debug "^2.6.8"
     doctrine "1.5.0"
     eslint-import-resolver-node "^0.3.1"
-    eslint-module-utils "^2.1.1"
+    eslint-module-utils "^2.2.0"
     has "^1.0.1"
     lodash "^4.17.4"
     minimatch "^3.0.3"
@@ -2938,8 +2945,8 @@ extend@~3.0.0, extend@~3.0.1:
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.1.tgz#a755ea7bc1adfcc5a31ce7e762dbaadc5e636444"
 
 external-editor@^2.0.4, external-editor@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/external-editor/-/external-editor-2.1.0.tgz#3d026a21b7f95b5726387d4200ac160d372c3b48"
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/external-editor/-/external-editor-2.2.0.tgz#045511cfd8d133f3846673d1047c154e214ad3d5"
   dependencies:
     chardet "^0.4.0"
     iconv-lite "^0.4.17"
@@ -7622,10 +7629,6 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vm2@3.5.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/vm2/-/vm2-3.5.2.tgz#6ae7c75a867775946e1d4a66623374e0245150e0"
-
 watchpack@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.5.0.tgz#231e783af830a22f8966f65c4c4bacc814072eed"
@@ -7774,11 +7777,11 @@ websocket-extensions@>=0.1.1:
 
 wexond-package-manager@wexond/wexond-package-manager:
   version "1.0.0"
-  resolved "https://codeload.github.com/wexond/wexond-package-manager/tar.gz/7aaabbfd0b67e6d8432b07cd80f00bd0ad2b29d1"
+  resolved "https://codeload.github.com/wexond/wexond-package-manager/tar.gz/61a8eaceb68152457691417290ea485cd623c907"
   dependencies:
     "@types/node" "9.6.0"
+    easy-vm nersent/easy-vm
     typescript "2.7.2"
-    vm2 "3.5.2"
 
 whatwg-fetch@>=0.10.0:
   version "2.0.4"
