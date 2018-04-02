@@ -74,7 +74,6 @@ const config = {
   },
 
   externals: {
-    vm2: 'require("vm2")',
     sqlite3: 'commonjs sqlite3',
   },
 
