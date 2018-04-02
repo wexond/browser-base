@@ -59,11 +59,11 @@
     "url-loader": "1.0.1",
     "webpack": "4.4.0",
     "webpack-cli": "2.0.12",
-    "webpack-dev-server": "3.1.1"
+    "webpack-dev-server": "3.1.1",
+    "wexond-package-manager": "wexond/wexond-package-manager"
   },
   "dependencies": {
     "electron-updater": "2.21.4",
-    "sqlite3": "4.0.0",
-    "wexond-package-manager": "wexond/wexond-package-manager"
+    "sqlite3": "4.0.0"
   }
 }
