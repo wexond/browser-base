@@ -53,7 +53,7 @@ const config = {
 
   resolve: {
     modules: ['node_modules'],
-    extensions: ['.js', '.tsx', '.ts'],
+    extensions: ['.js', '.tsx', '.ts', '.json'],
   },
 
   devServer: {
