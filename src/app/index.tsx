@@ -61,7 +61,9 @@ const wexondAPI = {
 
 wpm.list().then((plugins) => {
   for (const plugin of plugins) {
-    wpm.run(plugin.namespace, wexondAPI);
+    wpm.run(plugin.namespace, wexondAPI).then(() => {
+      wpm.update(plugin.namespace);
+    });
   }
 });
 
