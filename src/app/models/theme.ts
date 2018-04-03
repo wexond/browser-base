@@ -141,4 +141,36 @@ export default class Theme {
   };
 
   @observable public accentColor = colors.blue['500'];
+
+  public set(object2: any, object1: any = this, objectName = '') {
+    for (const key in object1) {
+      const newName = `${objectName}.${key}`;
+
+      if (object2[key] != null) {
+        if (typeof object2[key] !== 'object') {
+          object1[key] = object2[key];
+        } else {
+          this.set(object2[key], object1[key], newName);
+        }
+      } else if (
+        newName === '.tabs.hovered.foreground' ||
+        newName === '.tabs.normal.foregrond' ||
+        newName === '.tabs.selected.foreground' ||
+        newName === '.searchBar.foreground'
+      ) {
+        // Inherit foregrounds from toolbar foreground
+        // if the custom theme hasn't foregrounds set.
+        object1[key] = this.toolbar.foreground;
+      } else if (
+        newName === '.tabs.hovered' ||
+        newName === '.tabs.normal' ||
+        newName === '.tabs.selected' ||
+        newName === '.searchBar'
+      ) {
+        object1[key] = {
+          foreground: this.toolbar.foreground,
+        };
+      }
+    }
+  }
 }
