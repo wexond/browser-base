@@ -51,7 +51,7 @@
     "prettier-eslint": "8.8.1",
     "prettier-eslint-cli": "4.7.1",
     "react": "16.3.0",
-    "react-dom": "16.3.0",
+    "react-dom": "16.3.1",
     "styled-components": "3.2.4",
     "ts-loader": "4.1.0",
     "typescript": "2.7.2",
