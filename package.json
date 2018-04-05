@@ -2,7 +2,14 @@
   "name": "wexond",
   "version": "1.0.0",
   "description": "Extensible, fast and innovative web browser with material UI.",
-  "keywords": ["web-browser", "material", "electron", "react", "mobx", "sass"],
+  "keywords": [
+    "web-browser",
+    "material",
+    "electron",
+    "react",
+    "mobx",
+    "sass"
+  ],
   "homepage": "https://github.com/Nersent/wexond#readme",
   "main": "src/main/index.js",
   "author": {
@@ -60,7 +67,7 @@
     "webpack": "4.4.0",
     "webpack-cli": "2.0.12",
     "webpack-dev-server": "3.1.1",
-    "wexond-package-manager": "wexond/wexond-package-manager"
+    "wexond-package-manager": "1.0.4"
   },
   "dependencies": {
     "electron-updater": "2.21.4",
