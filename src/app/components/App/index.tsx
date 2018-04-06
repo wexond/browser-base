@@ -14,7 +14,6 @@ import ToolBar from '../ToolBar';
 import ToolBarButton from '../ToolBarButton';
 import ToolBarSeparator from '../ToolBarSeparator';
 import WindowButton from '../WindowButton';
-import ipcMessages from '../../../shared/defaults/ipc-messages';
 
 interface State {
   isFullscreen: boolean;
