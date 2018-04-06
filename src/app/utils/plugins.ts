@@ -12,7 +12,7 @@ export const loadPlugins = () => {
   wpm.list().then((plugins) => {
     for (const plugin of plugins) {
       wpm.run(plugin.namespace, wexondAPI).then(() => {
-        wpm.update(plugin.namespace);
+        wpm.update(plugin.namespace, false);
       });
     }
   });
