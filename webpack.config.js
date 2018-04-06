@@ -75,6 +75,7 @@ const config = {
 
   externals: {
     sqlite3: 'commonjs sqlite3',
+    npm: 'require("npm")',
   },
 
   plugins: [],

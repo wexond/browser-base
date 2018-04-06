@@ -1,6 +1,8 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { platform } = require('os');
+const wpm = require('wexond-package-manager');
+const ipcMessages = require('../shared/defaults/ipc-messages');
 
 let mainWindow;
 
@@ -62,4 +64,8 @@ app.on('window-all-closed', () => {
   if (platform() !== 'darwin') {
     app.quit();
   }
+});
+
+ipcMain.on(ipcMessages.PLUGIN_INSTALL, (event, arg) => {
+  wpm.default.install(arg);
 });

@@ -14,6 +14,7 @@ import ToolBar from '../ToolBar';
 import ToolBarButton from '../ToolBarButton';
 import ToolBarSeparator from '../ToolBarSeparator';
 import WindowButton from '../WindowButton';
+import ipcMessages from '../../../shared/defaults/ipc-messages';
 
 interface State {
   isFullscreen: boolean;
@@ -38,6 +39,8 @@ export default class App extends React.Component<{}, State> {
   };
 
   public async componentDidMount() {
+    // ipcRenderer.send(ipcMessages.PLUGIN_INSTALL, 'wexond/wexond-example-plugin');
+
     ipcRenderer.on('fullscreen', (isFullscreen: boolean) => {
       this.setState({
         isFullscreen,
