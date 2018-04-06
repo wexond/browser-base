@@ -9,6 +9,8 @@ module.exports = {
   DOWNLOAD_COMPLETE: 'download-complete',
   DOWNLOAD_FAILED: 'download-failed',
 
-  EXTENSION_EXECUTE_EVENT: 'extension-execute-event:',
+  EXTENSION_EXECUTE_EVENT: 'extension-execute-event',
   EXTENSION_RELOAD: 'extension-reload',
+
+  PLUGIN_INSTALL: 'plugin-install',
 };
