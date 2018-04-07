@@ -15,6 +15,10 @@ injectGlobal`
   }
 `;
 
-loadPlugins();
+async function setup() {
+  await loadPlugins();
 
-ReactDOM.render(<App />, document.getElementById('app'));
+  ReactDOM.render(<App />, document.getElementById('app'));
+}
+
+setup();
