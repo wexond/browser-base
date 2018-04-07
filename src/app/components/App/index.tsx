@@ -85,7 +85,6 @@ export default class App extends React.Component<{}, State> {
                 marginRight: tabbar.marginRight,
                 marginTop: tabbar.marginTop,
                 marginBottom: tabbar.marginBottom,
-                margin: tabbar.margin,
               }}
             >
               <AddressBar visible={Store.addressBar.toggled} />
