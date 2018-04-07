@@ -9,17 +9,17 @@ import Store from '../../store';
 import { closeWindow } from '../../utils/window';
 import { getForegroundColor } from '../../utils/colors';
 
-interface Props {
+export interface TabProps {
   key: number;
   tab: Tab;
   tabGroup: TabGroup;
   selected: boolean;
   onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
-  styles?: any;
+  style?: any;
 }
 
 @observer
-export default class extends React.Component<Props, {}> {
+export default class extends React.Component<TabProps, {}> {
   private ripples: Ripples;
   private iconRipples: Ripples;
   private tab: HTMLDivElement;
@@ -128,7 +128,7 @@ export default class extends React.Component<Props, {}> {
   };
 
   public render() {
-    const { selected, tab } = this.props;
+    const { selected, tab, style } = this.props;
     const {
       title, isRemoving, hovered, dragging, favicon,
     } = tab;
@@ -172,6 +172,7 @@ export default class extends React.Component<Props, {}> {
           this.tab = r;
           tab.tab = r;
         }}
+        style={style}
         foreground={foreground}
         background={background}
       >
@@ -199,6 +200,7 @@ export default class extends React.Component<Props, {}> {
             initialOpacity={0.1}
           />
         </Close>
+        {this.props.children}
         <Overlay hovered={hovered} selected={selected} />
         <Ripples
           rippleTime={0.6}
