@@ -8,7 +8,6 @@ import tabAnimations from '../../defaults/tab-animations';
 import Tab from '../../models/tab';
 import TabGroup from '../../models/tab-group';
 import Store from '../../store';
-import TabComponent from '../Tab';
 
 interface Props {
   tabGroup: TabGroup;
@@ -41,6 +40,8 @@ export default class extends React.Component<Props, {}> {
   };
   private scrollInterval: any;
   private scrollTimeout: any;
+
+  DecoratedTab = observer(Store.decoratedTab);
 
   public shouldComponentUpdate(nextProps: any, nextState: any) {
     if (this.props.tabGroup.selectedTab !== nextProps.tabGroup.selectedTab) {
@@ -306,7 +307,7 @@ export default class extends React.Component<Props, {}> {
           onMouseLeave={this.onMouseLeave}
         >
           {tabGroup.tabs.map(tab => (
-            <TabComponent
+            <this.DecoratedTab
               key={tab.id}
               tabGroup={tabGroup}
               tab={tab}

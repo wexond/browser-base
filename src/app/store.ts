@@ -7,6 +7,7 @@ import TabGroup from './models/tab-group';
 import Theme from './models/theme';
 import { Platforms } from '../shared/enums';
 import Suggestions from './models/suggestions';
+import Tab, { TabProps } from './components/Tab';
 
 export interface Favicons {
   [key: string]: string;
@@ -26,6 +27,7 @@ class Store {
     canGoBack: false,
     canGoForward: false,
   };
+  public decoratedTab: React.ComponentClass<TabProps> = Tab;
 
   public favicons: Favicons = {};
 
