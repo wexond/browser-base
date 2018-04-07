@@ -20,7 +20,10 @@ export const loadPlugins = async () => {
       react: React,
     });
 
-    Store.decoratedTab = data.decorateTab(Tab);
+    if (typeof data.decorateTab === 'function' && data.decorateTab.length === 1) {
+      Store.decoratedTab = data.decorateTab(Tab);
+    }
+
     wpm.update(plugin.namespace, false);
   }
 };
