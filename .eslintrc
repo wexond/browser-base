@@ -36,6 +36,8 @@
     "react/no-did-mount-set-state": "off",
     "no-loop-func": "off",
     "no-unused-vars": "off",
-    "guard-for-in": "off"
+    "guard-for-in": "off",
+    "no-await-in-loop": "off",
+    "arrow-parens": "off"
   }
 }

@@ -7,14 +7,14 @@ import Tab from '../../models/tab';
 import TabGroup from '../../models/tab-group';
 import Store from '../../store';
 import { closeWindow } from '../../utils/window';
-import { getForegroundColor } from '../../utils/colors';
 
 export interface TabProps {
   key: number;
   tab: Tab;
   tabGroup: TabGroup;
   selected: boolean;
-  onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseDown?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onTabMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
   style?: any;
 }
 
@@ -69,7 +69,7 @@ export default class extends React.Component<TabProps, {}> {
     Store.addressBar.canToggle = selected;
     tabGroup.selectTab(tab);
 
-    this.props.onMouseDown(e);
+    this.props.onTabMouseDown(e);
   };
 
   public onMouseUp = () => {
@@ -128,55 +128,46 @@ export default class extends React.Component<TabProps, {}> {
   };
 
   public render() {
-    const { selected, tab, style } = this.props;
+    const { selected, tab } = this.props;
+    let { style } = this.props;
     const {
       title, isRemoving, hovered, dragging, favicon,
     } = tab;
-    const { tabs } = Store.theme;
+    const { tabs } = Store.theme.theme;
 
-    let foregroundType = tabs.normal;
-    let background = tabs.normal.background;
+    let tabState = tabs.normal;
 
     if (selected) {
-      foregroundType = tabs.selected;
+      tabState = tabs.selected;
 
       if (hovered && !dragging && tabs.enableHoverOnSelectedTab) {
-        foregroundType = tabs.hovered;
+        tabState = tabs.hovered;
       }
 
-      background =
-        tabs.selected.background === 'none'
-          ? Store.theme.toolbar.background
-          : tabs.selected.background;
-
-      if (dragging && tabs.dragging.background !== 'none') {
-        background = tabs.dragging.background;
+      if (dragging) {
+        tabState = tabs.dragging;
       }
     } else if (hovered) {
-      foregroundType = tabs.hovered;
+      tabState = tabs.hovered;
     }
 
-    const foreground = getForegroundColor('text-primary', foregroundType, false);
+    style = { ...style, ...tabState.style };
 
     return (
       <StyledTab
         selected={selected}
-        hovered={hovered}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
         onClick={this.onClick}
         isRemoving={isRemoving}
-        dragging={dragging}
         visible={!Store.addressBar.toggled}
         innerRef={(r) => {
           this.tab = r;
           tab.tab = r;
         }}
         style={style}
-        foreground={foreground}
-        background={background}
       >
-        <Content hovered={hovered}>
+        <Content tabState={tabState} hovered={hovered}>
           <Icon favicon={favicon} />
           <Title favicon={favicon}>{title}</Title>
         </Content>
@@ -186,8 +177,7 @@ export default class extends React.Component<TabProps, {}> {
           onMouseUp={this.onCloseMouseUp}
           onClick={this.onClose}
           hovered={hovered}
-          foreground={foreground}
-          foregroundType={foregroundType.foreground}
+          tabState={tabState}
         >
           <Ripples
             icon
@@ -206,9 +196,9 @@ export default class extends React.Component<TabProps, {}> {
           rippleTime={0.6}
           ref={r => (this.ripples = r)}
           color={
-            Store.theme.tabs.rippleColor === ''
-              ? Store.theme.accentColor
-              : Store.theme.tabs.rippleColor
+            tabs.rippleColor === '' || tabs.rippleColor == null
+              ? Store.theme.theme.accentColor
+              : tabs.rippleColor
           }
         />
       </StyledTab>

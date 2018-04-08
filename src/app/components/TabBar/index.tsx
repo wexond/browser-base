@@ -22,20 +22,24 @@ export default class TabBar extends React.Component<{}, {}> {
 
   public render() {
     return (
-      <StyledTabBar visible={!Store.addressBar.toggled} innerRef={(r: any) => (this.tabBar = r)}>
+      <StyledTabBar
+        style={{ ...Store.theme.theme.tabbar.style }}
+        visible={!Store.addressBar.toggled}
+        innerRef={(r: any) => (this.tabBar = r)}
+      >
         <TabGroups>
           {Store.tabGroups.map(tabGroup => <TabGroup key={tabGroup.id} tabGroup={tabGroup} />)}
           <ToolBarButton
             icon={Icons.AddTab}
             onClick={this.onAddTabButtonClick}
             style={{
+              ...Store.theme.theme.addTabButton.style,
               position: 'absolute',
               right: 0,
               top: 0,
               left: 0,
-              marginLeft: Store.theme.addTabButton.marginLeft,
             }}
-            innerRef={(r) => {
+            innerRef={r => {
               Store.addTabButton.ref = r;
             }}
           />

@@ -1,8 +1,7 @@
+import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
 import { Platforms } from '../../../shared/enums';
-import Theme from '../../models/theme';
 import Store from '../../store';
-import { getForegroundColor } from '../../utils/colors';
 
 interface NavIconsProps {
   isFullscreen: boolean;
@@ -15,10 +14,6 @@ export const NavIcons = styled.div`
   -webkit-app-region: no-drag;
 `;
 
-interface LineProps {
-  theme?: Theme;
-}
-
 export const Line = styled.div`
   height: 1px;
   width: 100%;
@@ -26,8 +21,7 @@ export const Line = styled.div`
   z-index: 1;
   bottom: 0;
 
-  background-color: ${(props: LineProps) => getForegroundColor('dividers', props.theme.toolbar)};
-  display: ${(props: LineProps) => (props.theme.toolbar.bottomDividerVisible ? 'block' : 'none')};
+  background-color: rgba(0, 0, 0, ${transparency.light.dividers});
 `;
 
 export const StyledApp = styled.div`
