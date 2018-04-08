@@ -14,7 +14,10 @@ export default class Suggestions extends React.Component {
     const search = list.filter(x => x.type === 'search');
 
     return (
-      <StyledSuggestions onMouseDown={e => e.stopPropagation()}>
+      <StyledSuggestions
+        style={{ ...Store.theme.theme.suggestions.style }}
+        onMouseDown={e => e.stopPropagation()}
+      >
         {mostVisited.length > 0 && <Caption>Most visited</Caption>}
         {mostVisited.map(suggestion => <Suggestion suggestion={suggestion} key={suggestion.id} />)}
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { TOOLBAR_BUTTON_WIDTH } from '../../constants/design';
-import Theme from '../../models/theme';
+import { Theme } from '../../models/theme';
 
 export const Tabs = styled.div`
   transform: translateZ(0);
@@ -60,5 +60,4 @@ export const Indicator = styled.div`
   z-index: 3;
 
   background-color: ${(props: IndicatorProps) => props.theme.accentColor};
-  display: ${(props: IndicatorProps) => (props.theme.toolbar.indicatorVisible ? 'block' : 'none')};
 `;

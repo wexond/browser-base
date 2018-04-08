@@ -1,11 +1,5 @@
 import { shadows, transparency } from 'nersent-ui';
 import styled from 'styled-components';
-import Theme from '../../models/theme';
-import { getForegroundColor } from '../../utils/colors';
-
-interface Props {
-  theme?: Theme;
-}
 
 export const StyledSuggestions = styled.div`
   position: absolute;
@@ -16,8 +10,8 @@ export const StyledSuggestions = styled.div`
   margin-top: 14px;
   padding-bottom: 8px;
 
-  color: ${(props: Props) => getForegroundColor('text-primary', props.theme.suggestions)};
-  background-color: ${(props: Props) => props.theme.suggestions.background};
+  color: rgba(0, 0, 0, ${transparency.light.text.primary});
+  background-color: #fafafa;
 `;
 
 export const Caption = styled.div`
