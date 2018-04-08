@@ -4,13 +4,15 @@
 
 <div align="center">
   <h1>Wexond</h1>
-  
+
   [![Discord](https://img.shields.io/discord/307605794680209409.svg?style=flat-square)](https://discord.gg/yAA8DdK)
   [![Travis](https://img.shields.io/travis/wexond/wexond.svg?style=flat-square)](https://travis-ci.org/wexond/wexond)
   [![AppVeyor](https://img.shields.io/appveyor/ci/Sential/wexond.svg?style=flat-square)](https://ci.appveyor.com/project/Sential/wexond)
-  
+
   Wexond is a *free*, *open-source* and *extensible* web browser with material design, which lets you browse the web without any ads thanks to built-in ad blocker. The API in extensions system lets you to extend browser by additional functionality. Wexond works on each desktop platform, thanks to `Electron`. For building the browser interface, we use `React` which is useful framework for creating components, `Sass` for styling them and `MobX` for managing states. We also use Material Design components from our framework [`nersent-ui`](https://github.com/nersent/nersent-ui). To manage plugins we use our [`wexond-package-manager`](https://github.com/wexond/wexond-package-manager) (wpm).
 </div>
+
+
 
 # Contributing
 
@@ -43,7 +45,7 @@ $ npm run <command>
 ```
 
 | Command            | Description                                 |
-| ------------------ | --------------------------------------------|
+| ------------------ | ------------------------------------------- |
 | `build-production` | Bundles Wexond's source in production mode. |
 | `compile-win32`    | Builds Wexond binaries for Windows.         |
 | `compile-darwin`   | Builds Wexond binaries for macOS.           |
@@ -60,4 +62,6 @@ It also contains documents describing how to use the browser, and create extensi
 
 ## Screenshots
 
-All screenshots can be found on [`Imgur`](#).
+![Home page](screenshot-1.png)
+
+![GitHub page](screenshot-2.png)
