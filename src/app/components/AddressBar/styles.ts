@@ -1,7 +1,6 @@
 import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
-import Theme from '../../models/theme';
-import { getForegroundColor, getBackgroundColor } from '../../utils/colors';
+import { Theme } from '../../models/theme';
 
 interface AddressBarProps {
   visible: boolean;
@@ -33,23 +32,16 @@ export const Input = styled.input`
   width: calc(100% - 16px);
   font-size: 13px;
   padding-left: 16px;
-  color: black;
   border: none;
   outline: none;
   position: relative;
 
   -webkit-app-region: ${(props: InputProps) => (props.visible ? 'no-drag' : 'drag')};
-  color: ${(props: InputProps) => getForegroundColor('text-primary', props.theme.searchBar)};
   ::placeholder {
-    color: ${(props: InputProps) => getForegroundColor('text-secondary', props.theme.searchBar)};
-    opacity: ${props =>
-    (props.theme.toolbar.foreground === 'light'
-      ? transparency.dark.text.secondary
-      : transparency.light.text.secondary)};
+    color: ${(props: InputProps) => props.theme.searchBar.placeholderColor};
   }
-  background-color: ${(props: InputProps) =>
-    getBackgroundColor('search-bar', props.theme.searchBar)};
-  height: ${(props: InputProps) => props.theme.searchBar.height}px;
+  background-color: rgba(0, 0, 0, ${transparency.light.dividers});
+  height: 32px;
 `;
 
 export const InputContainer = styled.div`

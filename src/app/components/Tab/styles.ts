@@ -1,24 +1,11 @@
 import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
-import Theme from '../../models/theme';
-
-interface TabProps {
-  selected: boolean;
-  isRemoving: boolean;
-  visible: boolean;
-  hovered: boolean;
-  dragging: boolean;
-  theme?: Theme;
-  foreground: string;
-  background: string;
-}
+import { TabTheme, Theme } from '../../models/theme';
 
 interface CloseProps {
   hovered: boolean;
-  theme?: Theme;
-  foreground: string;
-  foregroundType: string;
+  tabState: TabTheme;
 }
 
 export const Close = styled.div`
@@ -30,10 +17,16 @@ export const Close = styled.div`
   transition: 0.2s opacity, 0.2s filter;
   z-index: 2;
 
-  opacity: ${(props: CloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
   ${images.center('100%', '100%')};
-  filter: ${props => (props.foregroundType === 'dark' ? '' : 'invert(100%)')};
+  opacity: ${(props: CloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
+  filter: ${props => (props.tabState.close.color === 'light' ? 'invert(100%)' : '')};
 `;
+
+interface TabProps {
+  selected: boolean;
+  isRemoving: boolean;
+  visible: boolean;
+}
 
 export const StyledTab = styled.div`
   position: absolute;
@@ -48,8 +41,7 @@ export const StyledTab = styled.div`
   z-index: ${(props: TabProps) => (props.selected ? 2 : 1)};
   pointer-events: ${props => (props.isRemoving || !props.visible ? 'none' : 'auto')};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
-  background-color: ${props => props.background};
-  color: ${props => props.foreground};
+  background-color: 'none';
 `;
 
 interface OverlayProps {
@@ -78,15 +70,7 @@ export const Overlay = styled.div`
     }
     return 0;
   }};
-  background-color: ${({ theme }: OverlayProps) => {
-    const { tabs } = theme;
-    if (tabs.hovered.background === 'dark') {
-      return 'rgba(0, 0, 0, 0.08)';
-    } else if (tabs.hovered.background === 'light') {
-      return 'rgba(255, 255, 255, 0.08)';
-    }
-    return tabs.hovered.background;
-  }};
+  background-color: ${(props: OverlayProps) => props.theme.tabs.hovered.background};
 `;
 
 interface TitleProps {
@@ -125,7 +109,7 @@ export const Icon = styled.div.attrs({
 
 interface ContentProps {
   hovered: boolean;
-  theme?: Theme;
+  tabState: TabTheme;
 }
 
 export const Content = styled.div`
@@ -136,7 +120,7 @@ export const Content = styled.div`
   transition: 0.1s max-width, 0.1s transform;
 
   ${(props: ContentProps) => {
-    if (props.theme.tabs.content.align === 'center') {
+    if (props.tabState.content.align === 'center') {
       let transform = 'transform: translateX(-50%);';
       if (props.hovered) {
         transform = 'transform: translateX(calc(-50% - 12px));';

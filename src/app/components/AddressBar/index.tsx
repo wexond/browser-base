@@ -151,6 +151,7 @@ export default class AddressBar extends Component<Props, {}> {
             visible={Store.addressBar.toggled}
             onKeyPress={this.onKeyPress}
             onKeyDown={this.onKeyDown}
+            style={{ ...Store.theme.theme.searchBar.style }}
           />
           <Suggestions />
         </InputContainer>
