@@ -297,6 +297,7 @@ export default class extends React.Component<Props, {}> {
 
   public render() {
     const { tabGroup } = this.props;
+    const { DecoratedTab } = this;
 
     return (
       <React.Fragment>
@@ -307,15 +308,21 @@ export default class extends React.Component<Props, {}> {
           onMouseLeave={this.onMouseLeave}
         >
           {tabGroup.tabs.map(tab => (
-            <this.DecoratedTab
+            <DecoratedTab
               key={tab.id}
               tabGroup={tabGroup}
               tab={tab}
               selected={tabGroup.selectedTab === tab.id}
-              onMouseDown={this.onTabMouseDown}
+              onTabMouseDown={this.onTabMouseDown}
             />
           ))}
-          <Indicator style={{ width: tabGroup.line.width, left: tabGroup.line.left }} />
+          <Indicator
+            style={{
+              width: tabGroup.line.width,
+              left: tabGroup.line.left,
+              ...Store.theme.theme.tabs.indicator.style,
+            }}
+          />
         </Tabs>
         <Scrollbar visible={this.state.scrollbarVisible}>
           <ScrollbarThumb

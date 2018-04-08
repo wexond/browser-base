@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
 import App from './components/App';
 import { loadPlugins } from './utils/plugins';
+import defaultTheme from './defaults/theme';
+import Store from './store';
 
 injectGlobal`
   body {
@@ -16,6 +18,7 @@ injectGlobal`
 `;
 
 async function setup() {
+  Store.theme.set(defaultTheme);
   await loadPlugins();
 
   ReactDOM.render(<App />, document.getElementById('app'));
