@@ -27,14 +27,15 @@ export interface TabsTheme extends BaseTheme {
 
 export interface TabTheme extends BaseTheme {
   content?: {
-    title?: BaseTheme;
-    icon?: BaseTheme;
     align?: 'left' | 'center';
+    style?: any;
   };
   close?: {
     color?: 'light' | 'dark';
     style?: any;
   };
+  title?: BaseTheme;
+  icon?: BaseTheme;
 }
 
 export interface TabHoveredTheme extends TabTheme {
