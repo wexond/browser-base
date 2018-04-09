@@ -49,10 +49,6 @@ export default class extends React.Component<TabProps, {}> {
     requestAnimationFrame(frame);
   }
 
-  public componentDidUpdate() {
-    console.log('aha');
-  }
-
   public shouldComponentUpdate(nextProps: any) {
     const { tab, selected } = this.props;
 
