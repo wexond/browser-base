@@ -2,7 +2,14 @@
   "name": "wexond",
   "version": "1.0.0",
   "description": "Extensible, fast and innovative web browser with material UI.",
-  "keywords": ["web-browser", "material", "electron", "react", "mobx", "sass"],
+  "keywords": [
+    "web-browser",
+    "material",
+    "electron",
+    "react",
+    "mobx",
+    "sass"
+  ],
   "homepage": "https://github.com/Nersent/wexond#readme",
   "main": "src/main/index.js",
   "author": {
@@ -38,6 +45,7 @@
     "css-loader": "0.28.11",
     "electron": "1.8.4",
     "electron-builder": "20.8.1",
+    "electron-react-devtools": "0.5.3",
     "eslint": "4.19.1",
     "eslint-config-airbnb": "16.1.0",
     "eslint-plugin-import": "2.10.0",

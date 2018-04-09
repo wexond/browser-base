@@ -49,6 +49,10 @@ export default class extends React.Component<TabProps, {}> {
     requestAnimationFrame(frame);
   }
 
+  public componentDidUpdate() {
+    console.log('aha');
+  }
+
   public shouldComponentUpdate(nextProps: any) {
     const { tab, selected } = this.props;
 
@@ -64,10 +68,13 @@ export default class extends React.Component<TabProps, {}> {
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const { selected, tab, tabGroup } = this.props;
+    const { pageX, pageY } = e;
 
-    this.ripples.makeRipple(e.pageX, e.pageY);
     Store.addressBar.canToggle = selected;
-    tabGroup.selectTab(tab);
+    setTimeout(() => {
+      tabGroup.selectTab(tab);
+    });
+    this.ripples.makeRipple(pageX, pageY);
 
     this.props.onTabMouseDown(e);
   };
@@ -130,25 +137,26 @@ export default class extends React.Component<TabProps, {}> {
   public render() {
     const { selected, tab } = this.props;
     let { style } = this.props;
+
     const {
       title, isRemoving, hovered, dragging, favicon,
     } = tab;
     const { tabs } = Store.theme.theme;
 
-    let tabState = tabs.normal;
+    let tabState: any = { ...tabs.normal };
 
     if (selected) {
-      tabState = tabs.selected;
+      tabState = { ...tabs.selected };
 
       if (hovered && !dragging && tabs.enableHoverOnSelectedTab) {
-        tabState = tabs.hovered;
+        tabState = { ...tabs.hovered };
       }
 
       if (dragging) {
-        tabState = tabs.dragging;
+        tabState = { ...tabs.dragging };
       }
     } else if (hovered) {
-      tabState = tabs.hovered;
+      tabState = { ...tabs.hovered };
     }
 
     style = { ...style, ...tabState.style };
@@ -161,13 +169,13 @@ export default class extends React.Component<TabProps, {}> {
         onClick={this.onClick}
         isRemoving={isRemoving}
         visible={!Store.addressBar.toggled}
-        innerRef={(r) => {
+        innerRef={r => {
           this.tab = r;
           tab.tab = r;
         }}
         style={style}
       >
-        <Content tabState={tabState} hovered={hovered}>
+        <Content tabState={tabs.normal} hovered={hovered}>
           <Icon favicon={favicon} />
           <Title favicon={favicon}>{title}</Title>
         </Content>
@@ -177,7 +185,7 @@ export default class extends React.Component<TabProps, {}> {
           onMouseUp={this.onCloseMouseUp}
           onClick={this.onClose}
           hovered={hovered}
-          tabState={tabState}
+          tabState={tabs.normal}
         >
           <Ripples
             icon
