@@ -11,12 +11,26 @@ export default {
       content: {
         align: 'center',
       },
+      icon: {},
+      title: {},
       close: {
         color: 'dark',
       },
     },
+    selected: {
+      title: {
+        style: {
+          color: colors.blue['500'],
+        },
+      },
+    },
     hovered: {
       background: 'rgba(0, 0, 0, 0.08)',
+      title: {
+        style: {
+          color: colors.blue['500'],
+        },
+      },
     },
     dragging: {
       style: {

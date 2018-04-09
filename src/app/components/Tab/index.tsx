@@ -171,9 +171,11 @@ export default class extends React.Component<TabProps, {}> {
         }}
         style={style}
       >
-        <Content tabState={tabs.normal} hovered={hovered}>
-          <Icon favicon={favicon} />
-          <Title favicon={favicon}>{title}</Title>
+        <Content tabState={tabs.normal} hovered={hovered} style={{ ...tabState.content.style }}>
+          <Icon favicon={favicon.trim()} styleToApply={{ ...tabState.icon.style }} />
+          <Title favicon={favicon} style={{ ...tabState.title.style }}>
+            {title}
+          </Title>
         </Content>
 
         <Close
@@ -182,6 +184,7 @@ export default class extends React.Component<TabProps, {}> {
           onClick={this.onClose}
           hovered={hovered}
           tabState={tabs.normal}
+          style={{ ...tabState.close.style }}
         >
           <Ripples
             icon
