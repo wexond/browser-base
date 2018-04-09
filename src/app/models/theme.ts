@@ -1,8 +1,9 @@
 import { observable } from 'mobx';
-import { merge } from '../utils/objects';
+import { merge, isObject } from '../utils/objects';
 
 export interface BaseTheme {
   style?: any;
+  inherit?: string;
 }
 
 export interface ToolbarButtonsTheme extends BaseTheme {
@@ -17,6 +18,7 @@ export interface ToolbarTheme extends BaseTheme {
 
 export interface TabsTheme extends BaseTheme {
   hovered?: TabHoveredTheme;
+  selectedHovered?: TabHoveredTheme;
   selected?: TabTheme;
   normal?: TabTheme;
   dragging?: TabTheme;
@@ -56,35 +58,70 @@ export interface Theme {
   suggestions?: BaseTheme;
   addTabButton?: BaseTheme;
   tabsSection?: BaseTheme;
+  [key: string]: any;
 }
+
+export const getObjectToInherit = (inherit: string, baseObject: any) => {
+  if (inherit == null) return null;
+
+  const split = inherit.split('.');
+  let objToInherit = baseObject[split[0]];
+
+  for (let i = 1; i < split.length; i++) {
+    objToInherit = objToInherit[split[i]];
+  }
+
+  return objToInherit;
+};
+
+export const inheritObjects = (object: any, baseObject: any) => {
+  object = { ...object };
+
+  if (object.inherit != null) {
+    let obj = getObjectToInherit(object.inherit, baseObject);
+    obj = inheritObjects(obj, baseObject);
+    object = merge(object, obj);
+  }
+
+  return object;
+};
 
 export default class {
   @observable public theme: Theme = {};
 
-  public set(theme: Theme) {
-    const initialTheme = { ...this.theme.tabs };
+  public inherit(object: any = this.theme, baseObject: any = null) {
+    object = { ...object };
 
-    this.theme.tabs = {
-      ...this.theme.tabs,
-      hovered: {},
-      selected: {},
-      normal: {},
-      dragging: {},
-    };
+    if (baseObject == null) {
+      baseObject = object;
+    }
+
+    if (isObject(object)) {
+      const keys = Object.keys(object);
+
+      let toInherit: string = null;
+
+      for (const key of keys) {
+        if (typeof object[key] === 'string' && key === 'inherit') {
+          toInherit = object[key];
+        } else if (isObject(object[key])) {
+          object[key] = this.inherit(object[key], baseObject);
+        }
+      }
+
+      if (toInherit != null) {
+        object = inheritObjects(object, baseObject);
+      }
+    }
+
+    return object;
+  }
+
+  public set(theme: Theme) {
+    // Inherit themes.
+    theme = this.inherit(theme);
 
     // Deep merge current theme with new theme.
     this.theme = merge(this.theme, theme);
-
-    // Inherit from normal tab only not existing properties.
-    this.theme.tabs.hovered = merge(this.theme.tabs.hovered, this.theme.tabs.normal, true);
-    this.theme.tabs.selected = merge(this.theme.tabs.selected, this.theme.tabs.normal, true);
-    // Inherit from selected tab only not existing properties.
-    this.theme.tabs.dragging = merge(this.theme.tabs.dragging, this.theme.tabs.selected, true);
-
-    // Inherit from initialTheme only not existing properties.
-    this.theme.tabs.hovered = merge(this.theme.tabs.hovered, initialTheme.hovered, true);
-    this.theme.tabs.normal = merge(this.theme.tabs.normal, initialTheme.normal, true);
-    this.theme.tabs.dragging = merge(this.theme.tabs.dragging, initialTheme.dragging, true);
-    this.theme.tabs.selected = merge(this.theme.tabs.selected, initialTheme.selected, true);
   }
 }
