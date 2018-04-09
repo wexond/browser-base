@@ -91,10 +91,12 @@ export const Title = styled.div`
 
 interface IconProps {
   favicon: string;
+  styleToApply: any;
 }
 
 export const Icon = styled.div.attrs({
   style: (props: any) => ({
+    ...props.styleToApply,
     backgroundImage: `url(${props.favicon})`,
     opacity: props.favicon === '' ? 0 : 1,
     minWidth: props.favicon === '' ? 0 : 16,
