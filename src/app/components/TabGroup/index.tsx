@@ -63,7 +63,7 @@ export default class extends React.Component<Props, {}> {
   public componentDidMount() {
     const { tabGroup } = this.props;
 
-    window.addEventListener('resize', (e) => {
+    window.addEventListener('resize', e => {
       if (!e.isTrusted) {
         return;
       }
