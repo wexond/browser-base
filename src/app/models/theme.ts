@@ -60,7 +60,9 @@ export interface Theme {
 export default class {
   @observable public theme: Theme = {};
 
-  public set(theme: any) {
+  public set(theme: Theme) {
+    const initialTheme = { ...this.theme.tabs };
+
     this.theme.tabs = {
       ...this.theme.tabs,
       hovered: {},
@@ -77,5 +79,11 @@ export default class {
     this.theme.tabs.selected = merge(this.theme.tabs.selected, this.theme.tabs.normal, true);
     // Inherit from selected tab only not existing properties.
     this.theme.tabs.dragging = merge(this.theme.tabs.dragging, this.theme.tabs.selected, true);
+
+    // Inherit from initialTheme only not existing properties.
+    this.theme.tabs.hovered = merge(this.theme.tabs.hovered, initialTheme.hovered, true);
+    this.theme.tabs.normal = merge(this.theme.tabs.normal, initialTheme.normal, true);
+    this.theme.tabs.dragging = merge(this.theme.tabs.dragging, initialTheme.dragging, true);
+    this.theme.tabs.selected = merge(this.theme.tabs.selected, initialTheme.selected, true);
   }
 }

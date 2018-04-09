@@ -1,4 +1,5 @@
 import { colors, transparency } from 'nersent-ui';
+import { Theme } from '../models/theme';
 
 export default {
   toolbar: {
@@ -17,6 +18,11 @@ export default {
     hovered: {
       background: 'rgba(0, 0, 0, 0.08)',
     },
+    dragging: {
+      style: {
+        backgroundColor: '#fff',
+      },
+    },
     indicator: {},
     enableHoverOnSelectedTab: true,
   },
@@ -32,4 +38,4 @@ export default {
   tabsSection: {},
   addTabButton: {},
   tabbar: {},
-};
+} as Theme;
