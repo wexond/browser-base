@@ -23,19 +23,25 @@ export default {
           color: colors.blue['500'],
         },
       },
+      inherit: 'tabs.normal',
     },
     hovered: {
       background: 'rgba(0, 0, 0, 0.08)',
+      inherit: 'tabs.normal',
+    },
+    selectedHovered: {
       title: {
         style: {
           color: colors.blue['500'],
         },
       },
+      inherit: 'tabs.hovered',
     },
     dragging: {
       style: {
         backgroundColor: '#fff',
       },
+      inherit: 'tabs.selected',
     },
     indicator: {},
     enableHoverOnSelectedTab: true,

@@ -145,7 +145,7 @@ export default class extends React.Component<TabProps, {}> {
       tabState = { ...tabs.selected };
 
       if (hovered && !dragging && tabs.enableHoverOnSelectedTab) {
-        tabState = { ...tabs.hovered };
+        tabState = { ...tabs.selectedHovered };
       }
 
       if (dragging) {
