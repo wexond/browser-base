@@ -10,8 +10,6 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "lib": ["dom", "esnext"],
-    "experimentalDecorators": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "experimentalDecorators": true
   }
 }

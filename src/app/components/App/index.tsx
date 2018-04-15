@@ -1,9 +1,10 @@
 import { ipcRenderer } from 'electron';
 import { observer } from 'mobx-react';
+import { Menu } from 'nersent-ui';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Handle, Line, NavIcons, StyledApp, TabsSection } from './styles';
-import { Platforms, Icons } from '../../enums';
+import { Icons, Platforms } from '../../enums';
 import Store from '../../store';
 import { closeWindow, maximizeWindow, minimizeWindow } from '../../utils/window';
 import AddressBar from '../AddressBar';
@@ -36,6 +37,11 @@ export default class App extends React.Component<{}, State> {
     Store.getSelectedPage().webview.reload();
   };
 
+  public onInspectElementClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { x, y } = Store.contextMenuParams;
+    Store.getSelectedPage().webview.inspectElement(x, y);
+  };
+
   public async componentDidMount() {
     // ipcRenderer.send(ipcMessages.PLUGIN_INSTALL, 'wexond/wexond-example-plugin');
 
@@ -48,6 +54,10 @@ export default class App extends React.Component<{}, State> {
     window.addEventListener('mousemove', e => {
       Store.mouse.x = e.pageX;
       Store.mouse.y = e.pageY;
+    });
+
+    window.addEventListener('mousedown', e => {
+      Store.pageMenu.toggle(false);
     });
   }
 
@@ -96,6 +106,19 @@ export default class App extends React.Component<{}, State> {
             <Line style={{ ...theme.toolbar.bottomDivider.style }} />
           </ToolBar>
           <Pages />
+          <Menu
+            large
+            ref={(r: Menu) => (Store.pageMenu = r)}
+            onMouseDown={e => e.stopPropagation()}
+            style={{
+              position: 'absolute',
+              left: Store.pageMenuData.x,
+              top: Store.pageMenuData.y,
+              zIndex: 999,
+            }}
+          >
+            <Menu.Item onClick={this.onInspectElementClick}>Inspect element</Menu.Item>
+          </Menu>
         </StyledApp>
       </ThemeProvider>
     );

@@ -30,7 +30,7 @@ export default class extends React.Component<Props, {}> {
       }
     };
 
-    const updateInfo = ({ url, isMainFrame }: { url: string; isMainFrame: boolean }) => {
+    const updateInfo = ({ isMainFrame, url }: any) => {
       Store.refreshNavigationState();
 
       if (!isMainFrame && !url) return;
@@ -46,13 +46,10 @@ export default class extends React.Component<Props, {}> {
     webview.addEventListener('did-navigate-in-page', updateInfo);
     webview.addEventListener('will-navigate', updateInfo);
 
-    webview.addEventListener(
-      'page-title-updated',
-      ({ title }: { title: string; explicitSet: string }) => {
-        tab.title = title;
-        updateData();
-      },
-    );
+    webview.addEventListener('page-title-updated', ({ title }) => {
+      tab.title = title;
+      updateData();
+    });
 
     webview.addEventListener(
       'load-commit',
@@ -89,6 +86,61 @@ export default class extends React.Component<Props, {}> {
       request.open('GET', favicons[0], true);
       request.send(null);
     });
+
+    const onContextMenu = (e: Electron.Event, params: Electron.ContextMenuParams) => {
+      requestAnimationFrame(() => {
+        Store.pageMenu.toggle(true);
+      });
+
+      Store.contextMenuParams = params;
+
+      // Calculate new menu position
+      // using cursor x, y and
+      // width, height of the menu.
+      const x = Store.mouse.x;
+      const y = Store.mouse.y;
+
+      // By default it opens menu from upper left corner.
+      let left = x + 1;
+      let top = y + 1;
+
+      const width = 3 * 64;
+      const height = Store.pageMenu.getHeight();
+
+      // Open menu from right corner.
+      if (left + width > window.innerWidth) {
+        left = x - (width + 1);
+      }
+
+      // Open menu from bottom corner.
+      if (top + height > window.innerHeight) {
+        top = y - height;
+      }
+
+      if (top < 0) {
+        top = 96;
+      }
+
+      // Set the new position.
+      Store.pageMenuData.x = left;
+      Store.pageMenuData.y = top;
+    };
+
+    // When webcontents of a webview are not available,
+    // we can't use them, so we need to check if
+    // these webcontents are not null,
+    // and then use them.
+    const checkWebcontentsInterval = setInterval(() => {
+      // We need to use webcontents,
+      // to add an event listener `context-menu`.
+      if (webview.getWebContents() != null) {
+        webview.getWebContents().on('context-menu', onContextMenu);
+
+        // When these webcontents are finally not null,
+        // just remove the interval.
+        clearInterval(checkWebcontentsInterval);
+      }
+    }, 1);
   }
 
   public render() {
@@ -100,7 +152,7 @@ export default class extends React.Component<Props, {}> {
         <webview
           src={url}
           style={{ height: '100%' }}
-          ref={r => (page.webview = r)}
+          ref={(r: Electron.WebviewTag) => (page.webview = r)}
           preload="../../src/app/preloads/index.js"
         />
       </StyledPage>
