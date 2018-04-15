@@ -94,6 +94,14 @@ let appConfig = {
   },
 };
 
-appConfig = Object.assign(appConfig, config);
+let pagesConfig = {
+  target: 'web',
+  entry: {
+    history: './src/history',
+  },
+};
 
-module.exports = [appConfig];
+appConfig = Object.assign(appConfig, config);
+pagesConfig = Object.assign(pagesConfig, config);
+
+module.exports = [appConfig, pagesConfig];
