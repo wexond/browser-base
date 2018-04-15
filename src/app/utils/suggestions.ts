@@ -78,7 +78,11 @@ export const getHistorySuggestions = (filter: string) =>
       const filterPart = filter.replace(regex, '');
 
       for (const hItem of historyItems) {
-        const urlPart = hItem.url.replace(regex, '');
+        let urlPart = hItem.url.replace(regex, '');
+
+        if (urlPart.endsWith('/')) {
+          urlPart = urlPart.slice(0, -1);
+        }
 
         const itemToPush = {
           ...hItem,
@@ -113,11 +117,20 @@ export const getHistorySuggestions = (filter: string) =>
 
       if (mostVisited[0] != null) {
         const split = mostVisited[0].url.split('/');
-        const shortUrl = split[0];
+
+        let splitIndex = 0;
+        let shortUrl = split[0];
+
+        if (mostVisited[0].url.includes('://')) {
+          shortUrl = mostVisited[0].url;
+          splitIndex = 2;
+        }
 
         if (
-          split[1] == null ||
-          (split[1] != null && (split[1].startsWith('?') || split[1] === '') && filterPart !== '')
+          split[splitIndex + 1] == null ||
+          (split[splitIndex + 1] != null &&
+            (split[splitIndex + 1].startsWith('?') || split[splitIndex + 1] === '') &&
+            filterPart !== '')
         ) {
           mostVisited.unshift({
             ...mostVisited[0],
