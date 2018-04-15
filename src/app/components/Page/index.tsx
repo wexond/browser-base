@@ -97,7 +97,12 @@ export default class extends React.Component<Props, {}> {
 
     return (
       <StyledPage selected={selected}>
-        <webview src={url} style={{ height: '100%' }} ref={r => (page.webview = r)} />
+        <webview
+          src={url}
+          style={{ height: '100%' }}
+          ref={r => (page.webview = r)}
+          preload="../../src/app/preloads/index.js"
+        />
       </StyledPage>
     );
   }

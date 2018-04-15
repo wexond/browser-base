@@ -5,7 +5,7 @@ import AddressBar from './models/address-bar';
 import Page from './models/page';
 import TabGroup from './models/tab-group';
 import Theme from './models/theme';
-import { Platforms } from '../shared/enums';
+import { Platforms } from './enums';
 import Suggestions from './models/suggestions';
 import Tab, { TabProps } from './components/Tab';
 

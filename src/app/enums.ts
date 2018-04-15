@@ -11,3 +11,9 @@ export enum Icons {
   Menu = 'actions/menu.svg',
   More = 'actions/more.svg',
 }
+
+export enum Platforms {
+  Windows = 'win32',
+  MacOS = 'darwin',
+  Linux = 'linux',
+}
