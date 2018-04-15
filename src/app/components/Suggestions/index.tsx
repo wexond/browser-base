@@ -13,9 +13,24 @@ export default class Suggestions extends React.Component {
     const bookmarks = list.filter(x => x.type === 'bookmarks');
     const search = list.filter(x => x.type === 'search');
 
+    let hide = false;
+
+    if (
+      mostVisited.length === 0 &&
+      bookmarks.length === 0 &&
+      history.length === 0 &&
+      search.length === 0
+    ) {
+      hide = true;
+    }
+
     return (
       <StyledSuggestions
-        style={{ ...Store.theme.theme.suggestions.style }}
+        style={{
+          ...Store.theme.theme.suggestions.style,
+          opacity: hide ? 0 : 1,
+          pointerEvents: hide ? 'none' : 'auto',
+        }}
         onMouseDown={e => e.stopPropagation()}
       >
         {mostVisited.length > 0 && <Caption>Most visited</Caption>}
