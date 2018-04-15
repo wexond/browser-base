@@ -1,6 +1,6 @@
 import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
-import { Platforms } from '../../../shared/enums';
+import { Platforms } from '../../enums';
 import Store from '../../store';
 
 interface NavIconsProps {
