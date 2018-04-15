@@ -1,8 +1,14 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const {
+  app, BrowserWindow, ipcMain, protocol,
+} = require('electron');
 const path = require('path');
 const { platform } = require('os');
 const wpm = require('wexond-package-manager');
 const ipcMessages = require('../shared/defaults/ipc-messages');
+
+const PROTOCOL = 'wexond';
+
+const URL_WHITELIST = ['history', 'settings', 'newtab', 'bookmarks', 'plugins', 'extensions'];
 
 let mainWindow;
 
@@ -56,7 +62,27 @@ app.on('activate', () => {
   }
 });
 
+protocol.registerStandardSchemes([PROTOCOL]);
 app.on('ready', () => {
+  protocol.registerFileProtocol(
+    PROTOCOL,
+    (request, callback) => {
+      const url = request.url.substr(PROTOCOL.length + 3).slice(0, -1);
+
+      console.log(path.resolve(__dirname, '../../static/pages', `${url}.html`));
+
+      for (const item of URL_WHITELIST) {
+        if (item === url) {
+          callback({ path: path.resolve(__dirname, '../../static/pages', `${url}.html`) });
+          break;
+        }
+      }
+    },
+    error => {
+      if (error) console.error('Failed to register protocol');
+    },
+  );
+
   createWindow();
 });
 
