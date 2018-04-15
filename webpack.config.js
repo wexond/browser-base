@@ -7,9 +7,7 @@ const developmentDevtool = 'eval-source-map';
 
 const INCLUDE = [resolve(__dirname, 'src')];
 const EXCLUDE = [/node_modules/];
-
 const PORT = 8080;
-
 const OUTPUT_DIR = resolve(__dirname, 'build');
 
 const config = {
@@ -73,11 +71,6 @@ const config = {
     },
   },
 
-  externals: {
-    sqlite3: 'commonjs sqlite3',
-    npm: 'require("npm")',
-  },
-
   plugins: [],
 };
 
@@ -91,6 +84,10 @@ let appConfig = {
   target: 'electron-renderer',
   entry: {
     app: './src/app',
+  },
+  externals: {
+    sqlite3: 'commonjs sqlite3',
+    npm: 'require("npm")',
   },
 };
 

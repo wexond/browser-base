@@ -1,13 +1,14 @@
 import { observable } from 'mobx';
+import { Menu } from 'nersent-ui';
 import os from 'os';
+import Tab, { TabProps } from './components/Tab';
+import { Platforms } from './enums';
 import AddTabButton from './models/add-tab-button';
 import AddressBar from './models/address-bar';
 import Page from './models/page';
+import Suggestions from './models/suggestions';
 import TabGroup from './models/tab-group';
 import Theme from './models/theme';
-import { Platforms } from './enums';
-import Suggestions from './models/suggestions';
-import Tab, { TabProps } from './components/Tab';
 
 export interface Favicons {
   [key: string]: string;
@@ -27,15 +28,25 @@ class Store {
     canGoBack: false,
     canGoForward: false,
   };
+  @observable
+  public pageMenuData = {
+    x: 0,
+    y: 0,
+  };
+
+  public pageMenu: Menu;
+
+  // Decorated components
   public decoratedTab: React.ComponentClass<TabProps> = Tab;
 
   public favicons: Favicons = {};
-
   public platform = os.platform() as Platforms;
   public mouse = {
     x: 0,
     y: 0,
   };
+
+  public contextMenuParams: Electron.ContextMenuParams;
 
   public getTabBarWidth: () => number;
 
