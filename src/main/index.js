@@ -69,8 +69,6 @@ app.on('ready', () => {
     (request, callback) => {
       const url = request.url.substr(PROTOCOL.length + 3).slice(0, -1);
 
-      console.log(path.resolve(__dirname, '../../static/pages', `${url}.html`));
-
       for (const item of URL_WHITELIST) {
         if (item === url) {
           callback({ path: path.resolve(__dirname, '../../static/pages', `${url}.html`) });
