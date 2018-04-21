@@ -101,15 +101,15 @@ export default class extends React.Component<Props, {}> {
       const y = Store.mouse.y;
 
       // By default it opens menu from upper left corner.
-      let left = x + 1;
-      let top = y + 1;
+      let left = x;
+      let top = y;
 
       const width = 3 * 64;
       const height = Store.pageMenu.getHeight();
 
       // Open menu from right corner.
       if (left + width > window.innerWidth) {
-        left = x - (width + 1);
+        left = x - width;
       }
 
       // Open menu from bottom corner.
