@@ -14,7 +14,7 @@ export interface TabProps {
   tabGroup: TabGroup;
   selected: boolean;
   onMouseDown?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  onTabMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onTabMouseDown?: (e?: React.MouseEvent<HTMLDivElement>, tab?: Tab) => void;
   style?: any;
 }
 
@@ -70,9 +70,8 @@ export default class extends React.Component<TabProps, {}> {
     setTimeout(() => {
       tabGroup.selectTab(tab);
     });
+    this.props.onTabMouseDown(e, tab);
     this.ripples.makeRipple(pageX, pageY);
-
-    this.props.onTabMouseDown(e);
   };
 
   public onMouseUp = () => {

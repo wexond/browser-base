@@ -122,15 +122,14 @@ export default class extends React.Component<Props, {}> {
     requestAnimationFrame(this.resizeScrollbar);
   };
 
-  public onTabMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+  public onTabMouseDown = (e: React.MouseEvent<HTMLDivElement>, tab: Tab) => {
     const { tabGroup } = this.props;
-    const selectedTab = tabGroup.getSelectedTab();
 
     this.tabDragData = {
       lastMouseX: 0,
       dragging: true,
       mouseStartX: e.pageX,
-      startLeft: selectedTab.left,
+      startLeft: tab.left,
       direction: '',
     };
 
@@ -238,23 +237,24 @@ export default class extends React.Component<Props, {}> {
         mouseStartX -
         (this.scrollData.lastScrollLeft - this.tabGroups.scrollLeft);
 
+      let left = newLeft;
+
       if (newLeft < 0) {
-        selectedTab.left = 0;
+        left = 0;
       } else if (Store.addTabButton.left === 'auto') {
-        if (newLeft + selectedTab.width > this.tabGroups.scrollWidth) {
-          selectedTab.left = this.tabGroups.scrollWidth - selectedTab.width;
-        } else {
-          selectedTab.left = newLeft;
+        if (newLeft + selectedTab.width > this.tabGroups.scrollWidth + this.tabGroups.scrollLeft) {
+          left = this.tabGroups.scrollWidth - selectedTab.width;
         }
       } else if (typeof Store.addTabButton.left === 'number') {
-        if (newLeft + selectedTab.width > (Store.addTabButton.left as number)) {
-          selectedTab.left = Store.addTabButton.left - selectedTab.width;
-        } else {
-          selectedTab.left = newLeft;
+        if (
+          newLeft + selectedTab.width >
+          (Store.addTabButton.left as number) + this.tabGroups.scrollLeft
+        ) {
+          left = Store.addTabButton.left - selectedTab.width;
         }
       }
 
-      selectedTab.setLeft(selectedTab.left, false);
+      selectedTab.setLeft(left, false);
 
       const createWindow = () => {
         // Create a new window
