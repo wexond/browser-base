@@ -241,17 +241,11 @@ export default class extends React.Component<Props, {}> {
 
       if (newLeft < 0) {
         left = 0;
-      } else if (Store.addTabButton.left === 'auto') {
-        if (newLeft + selectedTab.width > this.tabGroups.scrollWidth + this.tabGroups.scrollLeft) {
-          left = this.tabGroups.scrollWidth - selectedTab.width;
-        }
-      } else if (typeof Store.addTabButton.left === 'number') {
-        if (
-          newLeft + selectedTab.width >
-          (Store.addTabButton.left as number) + this.tabGroups.scrollLeft
-        ) {
-          left = Store.addTabButton.left - selectedTab.width;
-        }
+      } else if (
+        newLeft + selectedTab.width >
+        Store.addTabButton.left + this.tabGroups.scrollLeft
+      ) {
+        left = Store.addTabButton.left - selectedTab.width;
       }
 
       selectedTab.setLeft(left, false);
@@ -268,11 +262,7 @@ export default class extends React.Component<Props, {}> {
         createWindow();
       }
 
-      if (Store.addTabButton.left === 'auto') {
-        if (e.pageX - boundingRect.left > this.tabGroups.scrollWidth) {
-          createWindow();
-        }
-      } else if (e.pageX - boundingRect.left > (Store.addTabButton.left as number)) {
+      if (e.pageX - boundingRect.left > Store.addTabButton.left) {
         createWindow();
       }
 
