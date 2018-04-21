@@ -110,10 +110,13 @@ export default class extends React.Component<TabProps, {}> {
       }
     }
 
+    tabGroup.resetTimer();
+
     tab.isRemoving = true;
     if (tabGroup.tabs.length - 1 === tabIndex) {
       const previousTab = tabGroup.tabs[tabIndex - 1];
       tab.setLeft(previousTab.getNewLeft() + previousTab.getWidth(), true);
+      tabGroup.updateTabsBounds();
     }
 
     tab.setWidth(0, true);
@@ -122,7 +125,7 @@ export default class extends React.Component<TabProps, {}> {
       tabGroup.removeTab(tab);
     }, tabAnimations.left.duration * 1000);
 
-    tabGroup.updateTabsBounds();
+    tabGroup.setTabsPositions();
 
     requestAnimationFrame(() => {
       tabGroup.line.moveToTab(tabGroup.getSelectedTab());
