@@ -80,7 +80,7 @@ export const inheritObjects = (object: any, baseObject: any) => {
   if (object.inherit != null) {
     let obj = getObjectToInherit(object.inherit, baseObject);
     obj = inheritObjects(obj, baseObject);
-    object = merge(object, obj);
+    object = merge(obj, object);
   }
 
   return object;
