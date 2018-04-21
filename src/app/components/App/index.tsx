@@ -108,6 +108,7 @@ export default class App extends React.Component<{}, State> {
           <Pages />
           <Menu
             large
+            dense
             ref={(r: Menu) => (Store.pageMenu = r)}
             onMouseDown={e => e.stopPropagation()}
             style={{

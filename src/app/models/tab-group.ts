@@ -60,9 +60,10 @@ export default class TabGroup {
 
     const marginLeft = parseInt(getComputedStyle(Store.addTabButton.ref).marginLeft, 10);
 
-    if (left > Store.getTabBarWidth() - (marginLeft + Store.addTabButton.ref.offsetWidth)) {
-      left = Store.getTabBarWidth() - (marginLeft + Store.addTabButton.ref.offsetWidth);
-    }
+    left = Math.min(
+      left,
+      Store.getTabBarWidth() - (marginLeft + Store.addTabButton.ref.offsetWidth),
+    );
 
     Store.addTabButton.setLeft(left, animation);
   }
