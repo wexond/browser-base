@@ -2,10 +2,10 @@ import { TweenLite } from 'gsap';
 import tabAnimations from '../defaults/tab-animations';
 
 export default class AddTabButton {
-  public left: number | 'auto' = 0;
+  public left = 0;
   public ref: HTMLDivElement;
 
-  public setLeft(left: 'auto' | number, animation = false) {
+  public setLeft(left: number, animation = false) {
     if (!animation) {
       TweenLite.to(this.ref, 0, {
         left,

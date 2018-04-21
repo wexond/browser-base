@@ -10,6 +10,11 @@ export default class TabGroup {
   @observable public tabs: Tab[] = [];
   @observable public line = new Line();
 
+  public timer = {
+    canReset: true,
+    time: 0,
+  };
+
   constructor() {
     observe(this, (change: any) => {
       if (change.name === 'selectedTab') {
@@ -19,6 +24,18 @@ export default class TabGroup {
         Store.refreshNavigationState();
       }
     });
+
+    setInterval(() => {
+      // Set widths and positions for tabs 3 seconds after a tab was closed
+      if (this.timer.canReset && this.timer.time === 3) {
+        this.updateTabsBounds();
+        requestAnimationFrame(() => {
+          this.line.moveToTab(this.getTabById(this.selectedTab));
+        });
+        this.timer.canReset = false;
+      }
+      this.timer.time++;
+    }, 1000);
   }
 
   public getSelectedTab() {
@@ -35,19 +52,19 @@ export default class TabGroup {
     const newTabs = tabs.filter(tab => !tab.isRemoving);
 
     let left = 0;
-    let addTabButtonLeft = 0;
 
     for (const item of newTabs) {
-      if (item !== tabToIgnore) {
-        item.setLeft(left, animation);
-      } else {
-        item.setLeft(left, false);
-      }
+      item.setLeft(left, item !== tabToIgnore ? animation : false);
       left += item.width;
-      addTabButtonLeft += item.getInitialWidth();
     }
 
-    Store.addTabButton.setLeft(addTabButtonLeft, animation);
+    const marginLeft = parseInt(getComputedStyle(Store.addTabButton.ref).marginLeft, 10);
+
+    if (left > Store.getTabBarWidth() - (marginLeft + Store.addTabButton.ref.offsetWidth)) {
+      left = Store.getTabBarWidth() - (marginLeft + Store.addTabButton.ref.offsetWidth);
+    }
+
+    Store.addTabButton.setLeft(left, animation);
   }
 
   public setTabsWidths(animation = true) {
@@ -122,5 +139,12 @@ export default class TabGroup {
       }
     }
     return false;
+  }
+
+  public resetTimer() {
+    this.timer = {
+      time: 0,
+      canReset: true,
+    };
   }
 }
