@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://wexond.nersent.tk/logo/wexond.png" width="256">
+  <img src="wexond.png" width="256">
 </p>
 
 <div align="center">
