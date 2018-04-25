@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="wexond.png" width="256">
+  <img src="static/icons/icon.png" width="256">
 </p>
 
 <div align="center">
