@@ -46,7 +46,6 @@ export default class App extends React.Component<{}, State> {
     // ipcRenderer.send(ipcMessages.PLUGIN_INSTALL, 'wexond/wexond-example-plugin');
 
     ipcRenderer.on('fullscreen', (e: Electron.IpcMessageEvent, isFullscreen: boolean) => {
-      console.log(isFullscreen);
       this.setState({
         isFullscreen,
       });
