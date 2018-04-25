@@ -60,6 +60,8 @@ export default class AddressBar extends Component<Props, {}> {
       key !== 32 // space
     ) {
       this.canSuggest = true;
+    } else {
+      this.canSuggest = false;
     }
 
     if (e.keyCode === 38 || e.keyCode === 40) {
@@ -113,6 +115,7 @@ export default class AddressBar extends Component<Props, {}> {
 
   public onInput = async () => {
     const text = this.input.value;
+
     if (this.canSuggest) {
       this.autoComplete(this.lastSuggestion, text);
     }
