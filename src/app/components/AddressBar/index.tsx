@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import React, { Component } from 'react';
 import { Input, InputContainer, StyledAddressBar } from './styles';
 import Store from '../../store';
-import { isURL } from '../../utils/url';
+import { isURL, getAddressbarURL } from '../../utils/url';
 import Suggestions from '../Suggestions';
 import SuggestionItem from '../../models/suggestion-item';
 
@@ -136,7 +136,7 @@ export default class AddressBar extends Component<Props, {}> {
     if (Store.addressBar.toggled) {
       const page = Store.getSelectedPage();
       if (page.webview != null && page.webview.getWebContents() != null) {
-        this.input.value = page.webview.getURL();
+        this.input.value = getAddressbarURL(page.webview.getURL());
       }
 
       this.input.focus();
