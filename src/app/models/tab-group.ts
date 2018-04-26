@@ -99,16 +99,7 @@ export default class TabGroup {
   public selectTab(tab: Tab) {
     this.selectedTab = tab.id;
 
-    let canFocus = false;
-
-    for (const item of addressbarBlacklist) {
-      if (tab.url.startsWith(item)) {
-        canFocus = true;
-        break;
-      }
-    }
-
-    if (canFocus) {
+    if (tab.url.startsWith('wexond://newtab')) {
       Store.addressBar.toggled = true;
     }
   }

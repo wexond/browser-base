@@ -2,7 +2,7 @@ import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
 import { HOVER_DURATION, TOOLBAR_BUTTON_WIDTH } from '../../constants/design';
-import { Icons } from '../../enums';
+import { Icons } from '../../../shared/enums';
 import { Theme } from '../../models/theme';
 
 interface IconProps {
@@ -27,7 +27,7 @@ export const Icon = styled.div`
       ? transparency.dark.icons.inactive
       : transparency.light.icons.inactive;
   }};
-  background-image: ${props => `url(../../src/app/icons/${props.icon})`};
+  background-image: ${props => `url(../../src/shared/icons/${props.icon})`};
 `;
 
 interface ButtonProps {

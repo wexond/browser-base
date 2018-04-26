@@ -3,5 +3,11 @@ export default interface SuggestionItem {
   secondaryText?: string;
   id: number;
   favicon?: string;
-  type: 'most-visited' | 'history' | 'bookmarks' | 'search';
-}; // eslint-disable-line
+  type:
+    | 'most-visited'
+    | 'history'
+    | 'bookmarks'
+    | 'search'
+    | 'no-subheader-search'
+    | 'no-subheader-website';
+} // eslint-disable-line

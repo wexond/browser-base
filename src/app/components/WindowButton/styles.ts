@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
 import { HOVER_DURATION } from '../../constants/design';
-import { Icons } from '../../enums';
+import { Icons } from '../../../shared/enums';
 
 interface IButtonProps {
   icon: Icons;
