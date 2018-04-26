@@ -48,6 +48,18 @@ export interface SearchBarTheme extends BaseTheme {
   placeholderColor?: string;
 }
 
+export interface SuggestionItemTheme extends BaseTheme {
+  iconColor: 'light' | 'dark';
+}
+
+export interface SuggestionsTheme extends BaseTheme {
+  item?: {
+    selected?: SuggestionItemTheme;
+    hovered?: SuggestionItemTheme;
+    normal?: SuggestionItemTheme;
+  };
+}
+
 export interface Theme {
   toolbar?: ToolbarTheme;
   tabs?: TabsTheme;
@@ -55,7 +67,7 @@ export interface Theme {
   searchBar?: SearchBarTheme;
   accentColor?: string;
   tabbar?: BaseTheme;
-  suggestions?: BaseTheme;
+  suggestions?: SuggestionsTheme;
   addTabButton?: BaseTheme;
   tabsSection?: BaseTheme;
   [key: string]: any;
