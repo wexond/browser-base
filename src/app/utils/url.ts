@@ -1,3 +1,5 @@
+import { addressbarBlacklist } from '../defaults/blacklisted-urls';
+
 export const isURL = (input: string): boolean => {
   const pattern = /^(?:\w+:)?\/\/([^\s.]+\.\S{2}|localhost[:?\d]*)\S*$/;
 
@@ -25,4 +27,13 @@ export const getDomain = (url: string): string => {
   }
 
   return hostname;
+};
+
+export const getAddressbarURL = (url: string) => {
+  for (const item of addressbarBlacklist) {
+    if (url.startsWith(item)) {
+      return '';
+    }
+  }
+  return url;
 };
