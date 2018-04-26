@@ -6,10 +6,9 @@ import { shadows, typography } from 'nersent-ui';
 export const StyledToolbar = styled.div`
   width: 100%;
   height: 64px;
-  background: linear-gradient(to right, #8e7ed3, #6aadf1);
-  position: fixed;
+  background: linear-gradient(to right, #9575cd, #64b5f6);
+  position: absolute;
   top: 0;
-  z-index: 9;
   color: #fff;
   display: flex;
   align-items: center;
