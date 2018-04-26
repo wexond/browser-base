@@ -128,6 +128,8 @@ export default class AddressBar extends Component<Props, {}> {
       this.autoComplete(suggestion, text);
       this.canSuggest = false;
     }
+
+    Store.suggestions.selected = 0;
   };
 
   public render() {

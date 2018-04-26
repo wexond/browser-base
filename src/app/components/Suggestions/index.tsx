@@ -12,6 +12,7 @@ export default class Suggestions extends React.Component {
     const history = list.filter(x => x.type === 'history');
     const bookmarks = list.filter(x => x.type === 'bookmarks');
     const search = list.filter(x => x.type === 'search');
+    const noSubheader = list.filter(x => x.type.startsWith('no-subheader'));
 
     let hide = false;
 
@@ -33,6 +34,9 @@ export default class Suggestions extends React.Component {
         }}
         onMouseDown={e => e.stopPropagation()}
       >
+        {noSubheader.length > 0 && <div style={{ height: 8 }} />}
+        {noSubheader.map(suggestion => <Suggestion suggestion={suggestion} key={suggestion.id} />)}
+
         {mostVisited.length > 0 && <Caption>Most visited</Caption>}
         {mostVisited.map(suggestion => <Suggestion suggestion={suggestion} key={suggestion.id} />)}
 
