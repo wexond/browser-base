@@ -56,7 +56,7 @@ export default class extends React.Component<Props, {}> {
       ({ url, isMainFrame }: { url: string; isMainFrame: boolean }) => {
         tab.loading = true;
 
-        if (url !== lastURL && isMainFrame) {
+        if (url !== lastURL && isMainFrame && !url.startsWith('wexond://')) {
           history.run(
             "INSERT INTO history(title, url, favicon, date) VALUES (?, ?, ?, DATETIME('now', 'localtime'))",
             [tab.title, url, tab.favicon],
