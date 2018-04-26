@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { StyledTabBar, TabGroups } from './styles';
-import { Icons } from '../../enums';
+import { Icons } from '../../../shared/enums';
 import Store from '../../store';
 import TabGroup from '../TabGroup';
 import ToolBarButton from '../ToolBarButton';
