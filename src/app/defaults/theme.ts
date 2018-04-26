@@ -54,7 +54,23 @@ export default {
   searchBar: {
     placeholderColor: `rgba(0, 0, 0, ${transparency.light.text.secondary})`,
   },
-  suggestions: {},
+  suggestions: {
+    item: {
+      normal: {},
+      selected: {
+        style: {
+          backgroundColor: colors.grey['300'],
+        },
+        inherit: 'suggestions.item.normal',
+      },
+      hovered: {
+        style: {
+          backgroundColor: colors.grey['200'],
+        },
+        inherit: 'suggestions.item.normal',
+      },
+    },
+  },
   tabsSection: {},
   addTabButton: {},
   tabbar: {},

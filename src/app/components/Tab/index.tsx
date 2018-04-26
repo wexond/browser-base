@@ -68,7 +68,9 @@ export default class extends React.Component<TabProps, {}> {
 
     Store.addressBar.canToggle = selected;
     setTimeout(() => {
-      tabGroup.selectTab(tab);
+      if (tab !== tabGroup.getSelectedTab()) {
+        tabGroup.selectTab(tab);
+      }
     });
     this.props.onTabMouseDown(e, tab);
     this.ripples.makeRipple(pageX, pageY);
