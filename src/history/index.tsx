@@ -8,9 +8,10 @@ injectGlobal`
   body {
     user-select: none;
     cursor: default;
-    ${typography.body1()}
+    ${typography.robotoRegular()}
     margin: 0;
     padding: 0;
+    background-color: #F5F5F5;
   }
 `;
 
