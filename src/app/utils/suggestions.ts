@@ -1,4 +1,5 @@
 import { history } from '../utils/storage';
+import { requestURL } from './network';
 
 interface History {
   date: string;
@@ -6,6 +7,10 @@ interface History {
   url: string;
   title: string;
   id: number;
+}
+
+interface Search {
+  title: string;
 }
 
 const removeDuplicates = (array: any[], param: string) => {
@@ -151,4 +156,34 @@ export const getHistorySuggestions = (filter: string) =>
         mostVisited,
       });
     });
+  });
+
+export const getSearchSuggestions = (filter: string) =>
+  // eslint-disable-next-line
+  new Promise(async (resolve: (suggestions: Search[]) => void, reject) => {
+    const input = filter.trim().toLowerCase();
+
+    if (input === '') return resolve([]);
+
+    try {
+      const data = await requestURL(`http://google.com/complete/search?client=chrome&q=${input}`);
+      const json = JSON.parse(data);
+
+      let suggestions: Search[] = [];
+
+      for (const item of json[1]) {
+        if (suggestions.indexOf(item) === -1) {
+          suggestions.push({
+            title: String(item).toLowerCase(),
+          });
+        }
+      }
+
+      // Sort suggestions array by length.
+      suggestions = suggestions.sort((a, b) => a.title.length - b.title.length).slice(0, 4);
+
+      resolve(suggestions);
+    } catch (e) {
+      reject(e);
+    }
   });

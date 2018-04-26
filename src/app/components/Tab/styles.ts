@@ -13,7 +13,7 @@ export const Close = styled.div`
   right: 12px;
   height: 16px;
   width: 16px;
-  background-image: url(../../src/app/icons/actions/close.svg);
+  background-image: url(../../src/shared/icons/actions/close.svg);
   transition: 0.2s opacity, 0.2s filter;
   z-index: 2;
 

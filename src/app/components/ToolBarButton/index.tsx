@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { Ripples } from 'nersent-ui';
 import React from 'react';
 import { Button, Icon } from './styles';
-import { Icons } from '../../enums';
+import { Icons } from '../../../shared/enums';
 import Store from '../../store';
 
 interface Props {
@@ -65,7 +65,7 @@ export default class ToolBarButton extends React.Component<Props, {}> {
         onMouseUp={this.onMouseUp}
         onClick={onClick}
         style={style}
-        innerRef={(r) => {
+        innerRef={r => {
           this.ref = r;
           if (typeof this.props.innerRef === 'function') {
             this.props.innerRef(r);
