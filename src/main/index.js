@@ -29,8 +29,6 @@ const createWindow = () => {
 
   if (process.env.NODE_ENV === 'dev') {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
-  } else {
-    mainWindow.setMenu(null);
   }
 
   mainWindow.webContents.openDevTools({ mode: 'detach' });
