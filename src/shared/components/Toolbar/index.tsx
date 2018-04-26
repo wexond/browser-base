@@ -2,6 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 import ToolbarIcon from '../ToolbarIcon';
+import SearchInput from '../SearchInput';
 
 import { StyledToolbar, Title } from './styles';
 
@@ -14,12 +15,13 @@ export interface IProps {
 @observer
 export default class Toolbar extends React.Component<IProps, {}> {
   public render() {
-    const { title, children } = this.props;
+    const { title } = this.props;
 
     return (
       <StyledToolbar>
         <ToolbarIcon image={menuIcon} />
         <Title>{title}</Title>
+        <SearchInput />
       </StyledToolbar>
     );
   }
