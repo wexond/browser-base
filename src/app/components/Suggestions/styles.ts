@@ -1,6 +1,10 @@
 import { shadows, transparency } from 'nersent-ui';
 import styled from 'styled-components';
 
+interface SuggestionsProps {
+  visible: boolean;
+}
+
 export const StyledSuggestions = styled.div`
   position: absolute;
   z-index: 50;
