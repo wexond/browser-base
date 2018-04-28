@@ -158,7 +158,7 @@ export default class AddressBar extends Component<Props, {}> {
             onKeyDown={this.onKeyDown}
             style={{ ...Store.theme.theme.searchBar.style }}
           />
-          <Suggestions />
+          <Suggestions visible={visible} />
         </InputContainer>
       </StyledAddressBar>
     );

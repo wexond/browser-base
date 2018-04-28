@@ -1,4 +1,4 @@
-import { colors, transparency } from 'nersent-ui';
+import * as nersentUi from 'nersent-ui';
 import React from 'react';
 import styled from 'styled-components';
 import wpm from 'wexond-package-manager';
@@ -19,9 +19,8 @@ export const loadPlugins = async () => {
         setTheme: (theme: Theme) => {
           Store.theme.set(theme);
         },
-        transparency,
-        colors,
       },
+      'nersent-ui': nersentUi,
     };
 
     const { result, context } = await wpm.run(plugin.namespace, {}, mock);
