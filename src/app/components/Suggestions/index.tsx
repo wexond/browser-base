@@ -4,17 +4,23 @@ import { Caption, StyledSuggestions } from './styles';
 import Store from '../../store';
 import Suggestion from '../Suggestion';
 
+interface Props {
+  visible: boolean;
+}
+
 @observer
-export default class Suggestions extends React.Component {
+export default class Suggestions extends React.Component<Props, {}> {
   public render() {
     const { list } = Store.suggestions;
+    const { visible } = this.props;
+
     const mostVisited = list.filter(x => x.type === 'most-visited');
     const history = list.filter(x => x.type === 'history');
     const bookmarks = list.filter(x => x.type === 'bookmarks');
     const search = list.filter(x => x.type === 'search');
     const noSubheader = list.filter(x => x.type.startsWith('no-subheader'));
 
-    let hide = false;
+    let hide = !visible;
 
     if (
       mostVisited.length === 0 &&
