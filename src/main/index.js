@@ -24,7 +24,12 @@ const createWindow = () => {
     webPreferences: {
       preload: path.resolve(__dirname, 'preloads/index.js'),
       plugins: true,
+      experimentalFeatures: true,
     },
+  });
+
+  mainWindow.webContents.addListener('will-attach-webview', (e, webPreferences) => {
+    webPreferences.experimentalFeatures = true;
   });
 
   if (process.env.NODE_ENV === 'dev') {
