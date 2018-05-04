@@ -8,6 +8,7 @@ import { StyledPageLayout, Content } from './styles';
 
 export interface IProps {
   title?: string;
+  children?: any;
 }
 
 @observer
@@ -18,9 +19,8 @@ export default class PageLayout extends React.Component<IProps, {}> {
     return (
       <StyledPageLayout>
         <Toolbar title={title} />
-        <Content>
-          <NavigationDrawer />
-        </Content>
+        <NavigationDrawer />
+        <Content>{this.props.children}</Content>
       </StyledPageLayout>
     );
   }

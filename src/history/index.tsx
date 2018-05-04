@@ -11,7 +11,11 @@ injectGlobal`
     ${typography.robotoRegular()}
     margin: 0;
     padding: 0;
-    background-color: #F5F5F5;
+    background-color: #fafafa;
+  }
+
+  * {
+    box-sizing: border-box;
   }
 `;
 
