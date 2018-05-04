@@ -7,8 +7,9 @@ export const StyledPageLayout = styled.div`
 `;
 
 export const Content = styled.div`
-  width: 100%;
+  width: calc(100% - 320px);
   height: calc(100% - 56px);
-  margin-top: 64px;
+  margin-top: 56px;
+  margin-left: 320px;
   overflow: auto;
 `;

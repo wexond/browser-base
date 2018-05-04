@@ -28,11 +28,11 @@ interface InputProps {
 }
 
 export const Input = styled.input`
-  border-radius: 2px;
-  width: calc(100% - 16px);
+  border-radius: 20px;
+  width: calc(100% - 18px);
   font-size: 13px;
   padding-left: 16px;
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   outline: none;
   position: relative;
 
@@ -40,7 +40,7 @@ export const Input = styled.input`
   ::placeholder {
     color: ${(props: InputProps) => props.theme.searchBar.placeholderColor};
   }
-  background-color: rgba(0, 0, 0, ${transparency.light.dividers});
+  background-color: white;
   height: 32px;
 `;
 
