@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import ToolbarIcon from '../ToolbarIcon';
 import SearchInput from '../SearchInput';
 
-import { StyledToolbar, Title } from './styles';
+import { StyledToolbar, Title, Content } from './styles';
 
 const menuIcon = require('../../icons/actions/menu.svg');
 
@@ -21,7 +21,9 @@ export default class Toolbar extends React.Component<IProps, {}> {
       <StyledToolbar>
         <ToolbarIcon image={menuIcon} />
         <Title>{title}</Title>
-        <SearchInput />
+        <Content>
+          <SearchInput />
+        </Content>
       </StyledToolbar>
     );
   }
