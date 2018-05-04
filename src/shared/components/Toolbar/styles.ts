@@ -5,7 +5,7 @@ import { shadows, typography } from 'nersent-ui';
 
 export const StyledToolbar = styled.div`
   width: 100%;
-  height: 64px;
+  height: 56px;
   background: linear-gradient(to right, #9575cd, #64b5f6);
   position: absolute;
   top: 0;
@@ -14,10 +14,22 @@ export const StyledToolbar = styled.div`
   align-items: center;
   user-select: none;
   box-shadow: ${shadows[2]};
+  z-index: 10;
+`;
+
+export const Content = styled.div`
+  width: calc(100% - 288px);
+  position: absolute;
+  height: 100%;
+  left: 288px;
+  top: 0;
+  display: flex;
+  align-items: center;
 `;
 
 export const Title = styled.div`
-  margin-left: 24px;
+  left: 80px;
   font-size: 18px;
+  position: absolute;
   ${typography.robotoMedium()};
 `;

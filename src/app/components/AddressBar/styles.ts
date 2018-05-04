@@ -47,7 +47,7 @@ export const Input = styled.input`
 export const InputContainer = styled.div`
   position: relative;
   width: 100%;
-  max-width: 680px;
+  max-width: 640px;
   left: 50%;
   transform: translateX(-50%);
 `;
