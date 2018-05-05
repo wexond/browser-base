@@ -78,6 +78,10 @@ app.on('ready', () => {
           break;
         }
       }
+
+      if (url === 'build') {
+        callback({ path: path.resolve(__dirname, '../../build', `${url}`) });
+      }
     },
     error => {
       if (error) console.error('Failed to register protocol');
