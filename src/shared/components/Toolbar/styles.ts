@@ -2,10 +2,11 @@ import * as React from 'react';
 import styled, { StyledComponentClass } from 'styled-components';
 
 import { shadows, typography } from 'nersent-ui';
+import pages from '../../defaults/pages';
 
 export const StyledToolbar = styled.div`
   width: 100%;
-  height: 56px;
+  height: ${pages.toolbarHeight}px;
   position: fixed;
   top: 0;
   display: flex;
@@ -16,10 +17,10 @@ export const StyledToolbar = styled.div`
 `;
 
 export const Content = styled.div`
-  width: calc(100% - 320px);
+  width: calc(100% - ${pages.navDrawerWidth}px);
   position: absolute;
   height: 100%;
-  left: 320px;
+  left: ${pages.navDrawerWidth}px;
   top: 0;
   display: flex;
   align-items: center;
