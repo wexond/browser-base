@@ -1,4 +1,4 @@
 export default {
-  toolbarHeight: 56,
-  navDrawerWidth: 288,
+  toolbarHeight: 128,
+  navDrawerWidth: 300,
 };

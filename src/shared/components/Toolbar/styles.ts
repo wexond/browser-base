@@ -5,15 +5,15 @@ import { shadows, typography } from 'nersent-ui';
 import pages from '../../defaults/pages';
 
 export const StyledToolbar = styled.div`
-  width: 100%;
+  width: calc(100% - ${pages.navDrawerWidth}px);
   height: ${pages.toolbarHeight}px;
   position: fixed;
+  z-index: 5;
   top: 0;
+  left: ${pages.navDrawerWidth}px;
   display: flex;
   align-items: center;
   user-select: none;
-  background: linear-gradient(to right, #9575cd, #64b5f6);
-  z-index: 10;
 `;
 
 export const Content = styled.div`
@@ -27,9 +27,19 @@ export const Content = styled.div`
 `;
 
 export const Title = styled.div`
-  left: 80px;
-  font-size: 18px;
+  left: 64px;
+  font-size: 32px;
   position: absolute;
-  color: #fff;
+  opacity: 0.87;
   ${typography.robotoMedium()};
+`;
+
+export const Line = styled.div`
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 128px);
+  height: 1px;
+  background: rgba(0, 0, 0, 0.12);
+  position: absolute;
+  bottom: 0;
 `;
