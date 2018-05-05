@@ -1,4 +1,4 @@
-import { transparency } from 'nersent-ui';
+import { transparency, shadows } from 'nersent-ui';
 import styled from 'styled-components';
 import { Theme } from '../../models/theme';
 
@@ -15,7 +15,6 @@ export const StyledAddressBar = styled.div`
   transition: 0.2s opacity;
   display: flex;
   z-index: 10;
-  align-items: center;
 
   opacity: ${(props: AddressBarProps) => (props.visible ? 1 : 0)};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
@@ -25,29 +24,43 @@ export const StyledAddressBar = styled.div`
 interface InputProps {
   visible: boolean;
   theme?: Theme;
+  suggestionsVisible: boolean;
 }
 
 export const Input = styled.input`
-  border-radius: 20px;
-  width: calc(100% - 18px);
+  width: 100%;
   font-size: 13px;
   padding-left: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
   outline: none;
+  border: none;
   position: relative;
+  transition: 0.2s height;
 
   -webkit-app-region: ${(props: InputProps) => (props.visible ? 'no-drag' : 'drag')};
+  height: ${props => (props.suggestionsVisible ? '42px' : '30px')};
+
   ::placeholder {
     color: ${(props: InputProps) => props.theme.searchBar.placeholderColor};
   }
-  background-color: white;
-  height: 32px;
 `;
 
+interface InputContainerProps {
+  suggestionsVisible: boolean;
+}
+
 export const InputContainer = styled.div`
-  position: relative;
+  position: absolute;
   width: 100%;
   max-width: 640px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -16px);
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: white;
+  top: 50%;
+  transition: 0.2s height;
+
+  height: ${(props: InputContainerProps) => (props.suggestionsVisible ? 'auto' : '32px')};
+  border: ${props => (!props.suggestionsVisible ? '1px solid rgba(0, 0, 0, 0.12)' : 'none')};
+  box-shadow: ${props => (props.suggestionsVisible ? shadows[4] : 'none')};
 `;
