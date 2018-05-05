@@ -9,7 +9,7 @@ export const StyledPageLayout = styled.div`
 
 export const Content = styled.div`
   width: calc(100% - ${pages.navDrawerWidth}px);
-  height: 100%;
+  height: calc(100% - ${pages.toolbarHeight}px);
   top: ${pages.toolbarHeight}px;
   left: ${pages.navDrawerWidth}px;
   position: relative;

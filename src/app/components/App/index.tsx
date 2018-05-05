@@ -95,7 +95,7 @@ export default class App extends React.Component<{}, State> {
             </TabsSection>
             <ToolBarSeparator style={{ ...theme.toolbar.separators.style }} />
             <ToolBarButton size={16} icon={Icons.TabGroups} />
-            <ToolBarButton size={18} icon={Icons.More} style={{ marginRight: 4 }} />
+            <ToolBarButton size={20} icon={Icons.Menu} style={{ marginRight: 4 }} />
             {Store.platform !== Platforms.MacOS && (
               <React.Fragment>
                 <ToolBarSeparator />
