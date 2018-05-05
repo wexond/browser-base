@@ -80,7 +80,7 @@ app.on('ready', () => {
       }
 
       if (url === 'build') {
-        callback({ path: path.resolve(__dirname, '../../build', `${url}`) });
+        callback({ path: path.resolve(__dirname, '../../', `${url}`) });
       }
     },
     error => {
