@@ -70,16 +70,18 @@ app.on('ready', () => {
   protocol.registerFileProtocol(
     PROTOCOL,
     (request, callback) => {
-      const url = request.url.substr(PROTOCOL.length + 3).slice(0, -1);
+      const url = request.url.substr(PROTOCOL.length + 3);
 
       for (const item of URL_WHITELIST) {
         if (item === url) {
-          callback({ path: path.resolve(__dirname, '../../static/pages', `${url}.html`) });
+          callback({
+            path: path.resolve(__dirname, '../../static/pages', `${url.slice(0, -1)}.html`),
+          });
           break;
         }
       }
 
-      if (url === 'build') {
+      if (url.startsWith('build')) {
         callback({ path: path.resolve(__dirname, '../../', `${url}`) });
       }
     },
