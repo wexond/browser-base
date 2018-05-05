@@ -5,7 +5,7 @@ const loadContent = name => {
     if (process.env.NODE_ENV === 'dev') {
       loadScripts([`http://localhost:8080/${name}.bundle.js`]);
     } else {
-      loadScripts([`../../build/${name}.bundle.js`]);
+      loadScripts([`wexond://build/${name}.bundle.js`]);
     }
   });
 };
