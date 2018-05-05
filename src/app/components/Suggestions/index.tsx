@@ -20,23 +20,16 @@ export default class Suggestions extends React.Component<Props, {}> {
     const search = list.filter(x => x.type === 'search');
     const noSubheader = list.filter(x => x.type.startsWith('no-subheader'));
 
-    let hide = !visible;
+    let vis = visible;
 
-    if (
-      mostVisited.length === 0 &&
-      bookmarks.length === 0 &&
-      history.length === 0 &&
-      search.length === 0
-    ) {
-      hide = true;
-    }
+    if (!Store.suggestions.getVisible()) vis = false;
 
     return (
       <StyledSuggestions
         style={{
           ...Store.theme.theme.suggestions.style,
-          opacity: hide ? 0 : 1,
-          pointerEvents: hide ? 'none' : 'auto',
+          display: vis ? 'block' : 'none',
+          pointerEvents: !vis ? 'none' : 'auto',
         }}
         onMouseDown={e => e.stopPropagation()}
       >

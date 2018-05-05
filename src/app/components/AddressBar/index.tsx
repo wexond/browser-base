@@ -15,6 +15,7 @@ export default class AddressBar extends Component<Props, {}> {
   private input: HTMLInputElement;
   private canSuggest = false;
   private lastSuggestion: SuggestionItem;
+  private visible = false;
 
   public componentDidMount() {
     window.addEventListener('mousedown', () => {
@@ -135,7 +136,7 @@ export default class AddressBar extends Component<Props, {}> {
   public render() {
     const { visible } = this.props;
 
-    if (Store.addressBar.toggled) {
+    if (Store.addressBar.toggled && this.visible !== Store.addressBar.toggled) {
       const page = Store.getSelectedPage();
       if (page.webview != null && page.webview.getWebContents() != null) {
         this.input.value = getAddressbarURL(page.webview.getURL());
@@ -144,9 +145,15 @@ export default class AddressBar extends Component<Props, {}> {
       this.input.focus();
     }
 
+    if (this.visible !== Store.addressBar.toggled) {
+      this.visible = Store.addressBar.toggled;
+    }
+
+    const suggestionsVisible = Store.suggestions.getVisible();
+
     return (
       <StyledAddressBar visible={visible}>
-        <InputContainer>
+        <InputContainer suggestionsVisible={suggestionsVisible}>
           <Input
             innerRef={r => (this.input = r)}
             onFocus={this.onInputFocus}
@@ -154,6 +161,7 @@ export default class AddressBar extends Component<Props, {}> {
             placeholder="Search"
             onInput={this.onInput}
             visible={Store.addressBar.toggled}
+            suggestionsVisible={suggestionsVisible}
             onKeyPress={this.onKeyPress}
             onKeyDown={this.onKeyDown}
             style={{ ...Store.theme.theme.searchBar.style }}
