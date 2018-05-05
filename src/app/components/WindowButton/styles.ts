@@ -30,7 +30,7 @@ export const Icon = styled.div`
   height: 100%;
   transition: ${HOVER_DURATION}s filter;
 
-  background-image: ${(props: IIconProps) => `url(../../src/app/icons/${props.icon})`};
+  background-image: ${(props: IIconProps) => `url(../../src/shared/icons/${props.icon})`};
   ${images.center('11px', '11px')} &:hover {
     filter: ${props => props.icon === Icons.Close && 'invert(100%);'};
   }
