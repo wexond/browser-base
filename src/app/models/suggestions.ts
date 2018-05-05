@@ -26,6 +26,12 @@ export default class Suggestions {
 
   public load(filter: string) {
     return new Promise(async resolve => {
+      if (filter.trim() === '') {
+        this.list = [];
+        resolve();
+        return;
+      }
+
       this.historySuggestions = [];
       const suggestions = await getHistorySuggestions(filter);
 
@@ -39,7 +45,7 @@ export default class Suggestions {
 
         let id = 0;
 
-        if (suggestions.mostVisited.length === 0) {
+        if (suggestions.mostVisited.length === 0 && filter.trim() !== '') {
           this.historySuggestions.unshift({
             primaryText: filter,
             secondaryText: 'search in Google',
@@ -107,5 +113,15 @@ export default class Suggestions {
 
   public getSelected() {
     return this.list.find(x => x.id === this.selected);
+  }
+
+  public getVisible() {
+    const { list } = this;
+
+    if (list.length === 0) {
+      return false;
+    }
+
+    return true;
   }
 }

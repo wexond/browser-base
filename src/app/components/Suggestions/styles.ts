@@ -6,16 +6,12 @@ interface SuggestionsProps {
 }
 
 export const StyledSuggestions = styled.div`
-  position: absolute;
   z-index: 50;
   width: 100%;
-  box-shadow: ${shadows[3]};
-  border-radius: 2px;
-  margin-top: 14px;
   padding-bottom: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
 
   color: rgba(0, 0, 0, ${transparency.light.text.primary});
-  background-color: #fafafa;
 `;
 
 export const Caption = styled.div`
