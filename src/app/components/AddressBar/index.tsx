@@ -1,10 +1,12 @@
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
-import { Input, InputContainer, StyledAddressBar } from './styles';
+import { Input, InputContainer, StyledAddressBar, Icon } from './styles';
 import Store from '../../store';
 import { isURL, getAddressbarURL } from '../../utils/url';
 import Suggestions from '../Suggestions';
 import SuggestionItem from '../../models/suggestion-item';
+
+const searchIcon = require('../../../shared/icons/actions/search.svg');
 
 interface Props {
   visible: boolean;
@@ -152,22 +154,28 @@ export default class AddressBar extends Component<Props, {}> {
     const suggestionsVisible = Store.suggestions.getVisible();
 
     return (
-      <StyledAddressBar visible={visible}>
-        <InputContainer suggestionsVisible={suggestionsVisible}>
+      <StyledAddressBar
+        visible={visible}
+        suggestionsVisible={suggestionsVisible}
+        onMouseDown={e => e.stopPropagation()}
+      >
+        <InputContainer
+          style={{ ...Store.theme.theme.searchBar.style }}
+          suggestionsVisible={suggestionsVisible}
+        >
+          <Icon image={searchIcon} />
           <Input
             innerRef={r => (this.input = r)}
             onFocus={this.onInputFocus}
-            onMouseDown={e => e.stopPropagation()}
             placeholder="Search"
             onInput={this.onInput}
             visible={Store.addressBar.toggled}
-            suggestionsVisible={suggestionsVisible}
             onKeyPress={this.onKeyPress}
             onKeyDown={this.onKeyDown}
-            style={{ ...Store.theme.theme.searchBar.style }}
           />
-          <Suggestions visible={visible} />
+          <div style={{ clear: 'both' }} />
         </InputContainer>
+        <Suggestions visible={visible} />
       </StyledAddressBar>
     );
   }

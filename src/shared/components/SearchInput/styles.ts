@@ -9,14 +9,14 @@ import { invertColors } from '../../mixins/icons';
 const searchIcon = require('../../icons/actions/search.svg');
 
 export const StyledSearchInput = styled.div`
-  width: calc(100% - 32px);
-  max-width: 512px;
+  width: 100%;
+  max-width: 256px;
   height: 40px;
   position: absolute;
-  left: 50%;
+  right: 64px;
   border-radius: 20px;
-  transform: translateX(-50%);
   background-color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
 `;
