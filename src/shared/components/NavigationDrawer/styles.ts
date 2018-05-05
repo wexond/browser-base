@@ -1,13 +1,14 @@
 import * as React from 'react';
 import styled, { StyledComponentClass } from 'styled-components';
 import { transparency, typography } from 'nersent-ui';
+import pages from '../../defaults/pages';
 
 export const StyledNavigationDrawer = styled.div`
-  width: 320px;
-  height: calc(100% - 56px);
+  width: ${pages.navDrawerWidth}px;
+  height: calc(100% - ${pages.toolbarHeight}px);
   position: fixed;
   left: 8px;
-  top: 56px;
+  top: ${pages.toolbarHeight}px;
   z-index: 5;
 `;
 
