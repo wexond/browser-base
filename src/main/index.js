@@ -73,7 +73,7 @@ app.on('ready', () => {
       const url = request.url.substr(PROTOCOL.length + 3);
 
       for (const item of URL_WHITELIST) {
-        if (item === url) {
+        if (url.startsWith(item)) {
           callback({
             path: path.resolve(__dirname, '../../static/pages', `${url.slice(0, -1)}.html`),
           });
