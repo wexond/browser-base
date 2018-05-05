@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled, { StyledComponentClass } from 'styled-components';
+import pages from '../../defaults/pages';
 
 export const StyledPageLayout = styled.div`
   width: 100%;
@@ -7,9 +8,10 @@ export const StyledPageLayout = styled.div`
 `;
 
 export const Content = styled.div`
-  width: calc(100% - 320px);
-  height: calc(100% - 56px);
-  margin-top: 56px;
-  margin-left: 320px;
+  width: calc(100% - ${pages.navDrawerWidth}px);
+  height: calc(100% - ${pages.toolbarHeight}px);
+  top: ${pages.toolbarHeight}px;
+  left: ${pages.navDrawerWidth}px;
+  position: relative;
   overflow: auto;
 `;
