@@ -15,18 +15,17 @@ export const StyledAddressBar = styled.div`
   z-index: 10;
   max-width: 640px;
   left: 50%;
-  transform: translate(-50%);
   border-radius: 20px;
   overflow: hidden;
   background-color: white;
-  transition: 0.2s height, 0.2s box-shadow;
+  transition: 0.2s height, 0.2s box-shadow, 0.2s opacity, 0.2s transform;
   top: calc(50% - 18px);
 
   height: ${(props: AddressBarProps) => (props.suggestionsVisible ? 'auto' : '34px')};
   border: ${props => (!props.suggestionsVisible ? '1px solid rgba(0, 0, 0, 0.12)' : 'none')};
   box-shadow: ${props =>
     (props.suggestionsVisible ? '0 5px 10px 2px rgba(0, 0, 0, 0.12)' : 'none')};
-
+  transform: translate(-50%) ${props => (props.visible ? 'scale(1)' : 'scale(1.1)')};
   opacity: ${(props: AddressBarProps) => (props.visible ? 1 : 0)};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
   pointer-events: ${props => (props.visible ? 'auto' : 'none')};
