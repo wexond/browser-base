@@ -18,8 +18,8 @@ export default class PageLayout extends React.Component<IProps, {}> {
 
     return (
       <StyledPageLayout>
-        <Toolbar title={title} />
         <NavigationDrawer />
+        <Toolbar title={title} />
         <Content>{this.props.children}</Content>
       </StyledPageLayout>
     );

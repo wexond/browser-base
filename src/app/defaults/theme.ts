@@ -59,13 +59,13 @@ export default {
       normal: {},
       selected: {
         style: {
-          backgroundColor: colors.grey['300'],
+          backgroundColor: 'rgba(0, 0, 0, 0.08)',
         },
         inherit: 'suggestions.item.normal',
       },
       hovered: {
         style: {
-          backgroundColor: colors.grey['200'],
+          backgroundColor: 'rgba(0, 0, 0, 0.04)',
         },
         inherit: 'suggestions.item.normal',
       },

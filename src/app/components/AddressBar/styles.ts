@@ -1,20 +1,31 @@
 import { transparency, shadows } from 'nersent-ui';
 import styled from 'styled-components';
 import { Theme } from '../../models/theme';
+import images from '../../../shared/mixins/images';
 
 interface AddressBarProps {
   visible: boolean;
+  suggestionsVisible: boolean;
 }
 
 export const StyledAddressBar = styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
   transition: 0.2s opacity;
-  display: flex;
   z-index: 10;
+  max-width: 640px;
+  left: 50%;
+  transform: translate(-50%);
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: white;
+  transition: 0.2s height, 0.2s box-shadow;
+  top: calc(50% - 18px);
+
+  height: ${(props: AddressBarProps) => (props.suggestionsVisible ? 'auto' : '34px')};
+  border: ${props => (!props.suggestionsVisible ? '1px solid rgba(0, 0, 0, 0.12)' : 'none')};
+  box-shadow: ${props =>
+    (props.suggestionsVisible ? '0 5px 10px 2px rgba(0, 0, 0, 0.12)' : 'none')};
 
   opacity: ${(props: AddressBarProps) => (props.visible ? 1 : 0)};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
@@ -24,7 +35,6 @@ export const StyledAddressBar = styled.div`
 interface InputProps {
   visible: boolean;
   theme?: Theme;
-  suggestionsVisible: boolean;
 }
 
 export const Input = styled.input`
@@ -34,10 +44,7 @@ export const Input = styled.input`
   outline: none;
   border: none;
   position: relative;
-  transition: 0.2s height;
-
-  -webkit-app-region: ${(props: InputProps) => (props.visible ? 'no-drag' : 'drag')};
-  height: ${props => (props.suggestionsVisible ? '42px' : '30px')};
+  height: 32px;
 
   ::placeholder {
     color: ${(props: InputProps) => props.theme.searchBar.placeholderColor};
@@ -49,18 +56,21 @@ interface InputContainerProps {
 }
 
 export const InputContainer = styled.div`
-  position: absolute;
-  width: 100%;
-  max-width: 640px;
-  left: 50%;
-  transform: translate(-50%, -16px);
-  border-radius: 20px;
-  overflow: hidden;
-  background-color: white;
-  top: 50%;
+  display: flex;
+  align-items: center;
+  height: ${(props: InputContainerProps) => (props.suggestionsVisible ? '48px' : '34px')};
   transition: 0.2s height;
+`;
 
-  height: ${(props: InputContainerProps) => (props.suggestionsVisible ? 'auto' : '32px')};
-  border: ${props => (!props.suggestionsVisible ? '1px solid rgba(0, 0, 0, 0.12)' : 'none')};
-  box-shadow: ${props => (props.suggestionsVisible ? shadows[4] : 'none')};
+interface IconProps {
+  image: string;
+}
+
+export const Icon = styled.div`
+  background-image: url(${(props: IconProps) => props.image});
+  ${images.center('100%', '100%')};
+  width: 20px;
+  height: 20px;
+  margin-left: 16px;
+  opacity: 0.5;
 `;
