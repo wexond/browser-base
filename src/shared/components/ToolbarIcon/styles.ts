@@ -8,12 +8,8 @@ import { invertColors } from '../../mixins/icons';
 export const StyledContainer = styled.div`
   width: 24px;
   height: 24px;
-  margin-left: 16px;
+  margin-left: 64px;
   cursor: pointer;
-
-  &:first-child {
-    margin-left: 24px;
-  }
 `;
 
 export interface IStyledIcon {
@@ -25,5 +21,5 @@ export const StyledIcon = styled.div`
   height: 100%;
   background-image: url(${(props: IStyledIcon) => props.image});
   ${center('24px', 'auto')};
-  ${invertColors()};
+  opacity: 0.87;
 `;
