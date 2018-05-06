@@ -15,8 +15,4 @@ injectGlobal`
   }
 `;
 
-async function setup() {
-  ReactDOM.render(<App />, document.getElementById('app'));
-}
-
-setup();
+ReactDOM.render(<App />, document.getElementById('app'));

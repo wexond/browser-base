@@ -87,8 +87,6 @@ export default class TabGroup {
     this.selectTab(tab);
     Store.addPage(tab.id);
 
-    Store.addressBar.toggled = true;
-
     return tab;
   };
 
@@ -100,6 +98,7 @@ export default class TabGroup {
     this.selectedTab = tab.id;
 
     if (tab.url.startsWith('wexond://newtab')) {
+      requestAnimationFrame(() => {});
       Store.addressBar.toggled = true;
     }
   }
