@@ -1,5 +1,6 @@
 import { typography } from 'nersent-ui';
 import React from 'react';
+import { AppContainer } from 'react-hot-loader';
 import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
 import App from './components/App';
@@ -17,11 +18,33 @@ injectGlobal`
   }
 `;
 
+declare const module: any;
+
 async function setup() {
   Store.theme.set(defaultTheme);
   await loadPlugins();
-
-  ReactDOM.render(<App />, document.getElementById('app'));
 }
 
 setup();
+
+const rootEl = document.getElementById('app');
+
+ReactDOM.render(
+  <AppContainer>
+    <App />
+  </AppContainer>,
+  rootEl,
+);
+
+if (module.hot) {
+  module.hot.accept('./components/App', () => {
+    // eslint-disable-next-line
+    const NextApp = require('./components/App').default;
+    ReactDOM.render(
+      <AppContainer>
+        <NextApp />
+      </AppContainer>,
+      rootEl,
+    );
+  });
+}

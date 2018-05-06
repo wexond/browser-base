@@ -94,6 +94,10 @@ class Store {
       }
     }
   }
+
+  public addTabGroup() {
+    this.tabGroups.push(new TabGroup());
+  }
 }
 
 export default new Store();
