@@ -1,10 +1,11 @@
 import { observer } from 'mobx-react';
+import { resolve } from 'path';
 import React from 'react';
 import StyledPage from './styles';
 import Page from '../../models/page';
+import Tab from '../../models/tab';
 import Store from '../../store';
 import { addFavicon, history } from '../../utils/storage';
-import Tab from '../../models/tab';
 
 interface Props {
   page: Page;
@@ -171,7 +172,7 @@ export default class extends React.Component<Props, {}> {
             page.webview = r;
             this.webview = r;
           }}
-          preload="../../src/app/preloads/index.js"
+          preload={`file://${resolve(Store.basePath, 'src/app/preloads/index.js')}`}
         />
       </StyledPage>
     );

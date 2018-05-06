@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
 import { TabTheme, Theme } from '../../models/theme';
 
+const closeIcon = require('../../../shared/icons/actions/close.svg');
+
 interface CloseProps {
   hovered: boolean;
   tabState: TabTheme;
@@ -13,7 +15,7 @@ export const Close = styled.div`
   right: 12px;
   height: 16px;
   width: 16px;
-  background-image: url(../../src/shared/icons/actions/close.svg);
+  background-image: url(${closeIcon});
   transition: 0.2s opacity, 0.2s filter;
   z-index: 2;
 
