@@ -44,23 +44,6 @@ export default class extends React.Component<Props, {}> {
 
   DecoratedTab = observer(Store.decoratedTab);
 
-  public shouldComponentUpdate(nextProps: any, nextState: any) {
-    if (this.props.tabGroup.selectedTab !== nextProps.tabGroup.selectedTab) {
-      return true;
-    }
-
-    if (
-      nextState.scrollbarThumbLeft !== this.state.scrollbarThumbLeft ||
-      nextState.scrollbarThumbVisible !== this.state.scrollbarThumbVisible ||
-      nextState.scrollbarThumbWidth !== this.state.scrollbarThumbWidth ||
-      nextState.scrollbarVisible !== this.state.scrollbarVisible
-    ) {
-      return true;
-    }
-
-    return false;
-  }
-
   public componentDidMount() {
     const { tabGroup } = this.props;
 

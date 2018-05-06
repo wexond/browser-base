@@ -2,20 +2,20 @@ import { observer } from 'mobx-react';
 import { Ripples } from 'nersent-ui';
 import React from 'react';
 import { Button, Icon } from './styles';
-import { Icons } from '../../../shared/enums';
 import Store from '../../store';
 
 interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
   size?: number;
   style?: any;
-  icon: Icons;
-  innerRef?: (ref: HTMLDivElement) => void;
+  icon: string;
+  divRef?: (ref: HTMLDivElement) => void;
   disabled?: boolean;
+  className?: string;
 }
 
 @observer
-export default class ToolBarButton extends React.Component<Props, {}> {
+export default class ToolbarButton extends React.Component<Props, {}> {
   public static defaultProps = {
     size: 20,
   };
@@ -50,7 +50,7 @@ export default class ToolBarButton extends React.Component<Props, {}> {
 
   public render() {
     const {
-      icon, onClick, size, disabled,
+      icon, onClick, size, disabled, className, divRef,
     } = this.props;
 
     let { style } = this.props;
@@ -64,11 +64,12 @@ export default class ToolBarButton extends React.Component<Props, {}> {
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
         onClick={onClick}
+        className={className}
         style={style}
         innerRef={r => {
           this.ref = r;
-          if (typeof this.props.innerRef === 'function') {
-            this.props.innerRef(r);
+          if (typeof divRef === 'function') {
+            divRef(r);
           }
         }}
         disabled={disabled}
