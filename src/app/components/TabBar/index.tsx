@@ -6,6 +6,8 @@ import Store from '../../store';
 import TabGroup from '../TabGroup';
 import ToolBarButton from '../ToolBarButton';
 
+const addTabIcon = require('../../../shared/icons/actions/add.svg');
+
 @observer
 export default class TabBar extends React.Component<{}, {}> {
   private tabBar: HTMLDivElement;
@@ -30,7 +32,7 @@ export default class TabBar extends React.Component<{}, {}> {
         <TabGroups>
           {Store.tabGroups.map(tabGroup => <TabGroup key={tabGroup.id} tabGroup={tabGroup} />)}
           <ToolBarButton
-            icon={Icons.AddTab}
+            icon={addTabIcon}
             onClick={this.onAddTabButtonClick}
             style={{
               ...Store.theme.theme.addTabButton.style,
