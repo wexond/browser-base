@@ -1,3 +1,4 @@
+import { remote } from 'electron';
 import { observable } from 'mobx';
 import { Menu } from 'nersent-ui';
 import os from 'os';
@@ -47,6 +48,8 @@ class Store {
   };
 
   public contextMenuParams: Electron.ContextMenuParams;
+
+  public basePath = remote.app.getAppPath();
 
   public getTabBarWidth: () => number;
 

@@ -4,7 +4,6 @@ import { Menu } from 'nersent-ui';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Handle, Line, NavIcons, StyledApp, TabsSection } from './styles';
-import { Icons } from '../../../shared/enums';
 import { Platforms } from '../../enums';
 import Store from '../../store';
 import { closeWindow, maximizeWindow, minimizeWindow } from '../../utils/window';
@@ -15,6 +14,16 @@ import ToolBar from '../ToolBar';
 import ToolBarButton from '../ToolBarButton';
 import ToolBarSeparator from '../ToolBarSeparator';
 import WindowButton from '../WindowButton';
+
+const backIcon = require('../../../shared/icons/actions/back.svg');
+const forwardIcon = require('../../../shared/icons/actions/forward.svg');
+const refreshIcon = require('../../../shared/icons/actions/refresh.svg');
+const tabGroupsIcon = require('../../../shared/icons/actions/tab-groups.svg');
+const menuIcon = require('../../../shared/icons/actions/menu.svg');
+
+const closeIcon = require('../../../shared/icons/windows/close.svg');
+const maximizeIcon = require('../../../shared/icons/windows/maximize.svg');
+const minimizeIcon = require('../../../shared/icons/windows/minimize.svg');
 
 interface State {
   isFullscreen: boolean;
@@ -80,17 +89,17 @@ class App extends React.Component<{}, State> {
               <ToolBarButton
                 disabled={!Store.navigationState.canGoBack}
                 size={24}
-                icon={Icons.Back}
+                icon={backIcon}
                 style={{ marginLeft: 4 }}
                 onClick={this.onBackClick}
               />
               <ToolBarButton
                 disabled={!Store.navigationState.canGoForward}
                 size={24}
-                icon={Icons.Forward}
+                icon={forwardIcon}
                 onClick={this.onForwardClick}
               />
-              <ToolBarButton size={20} icon={Icons.Refresh} onClick={this.onRefreshClick} />
+              <ToolBarButton size={20} icon={refreshIcon} onClick={this.onRefreshClick} />
             </NavIcons>
             <ToolBarSeparator style={{ ...theme.toolbar.separators.style }} />
             <TabsSection style={{ ...theme.tabsSection.style }}>
@@ -98,14 +107,14 @@ class App extends React.Component<{}, State> {
               <TabBar />
             </TabsSection>
             <ToolBarSeparator style={{ ...theme.toolbar.separators.style }} />
-            <ToolBarButton size={16} icon={Icons.TabGroups} />
-            <ToolBarButton size={20} icon={Icons.Menu} style={{ marginRight: 4 }} />
+            <ToolBarButton size={16} icon={tabGroupsIcon} />
+            <ToolBarButton size={20} icon={menuIcon} style={{ marginRight: 4 }} />
             {Store.platform !== Platforms.MacOS && (
               <React.Fragment>
                 <ToolBarSeparator />
-                <WindowButton icon={Icons.Minimize} onClick={minimizeWindow} />
-                <WindowButton icon={Icons.Maximize} onClick={maximizeWindow} />
-                <WindowButton icon={Icons.Close} onClick={closeWindow} />
+                <WindowButton icon={minimizeIcon} onClick={minimizeWindow} />
+                <WindowButton icon={maximizeIcon} onClick={maximizeWindow} />
+                <WindowButton icon={closeIcon} onClick={closeWindow} />
               </React.Fragment>
             )}
             <Line style={{ ...theme.toolbar.bottomDivider.style }} />

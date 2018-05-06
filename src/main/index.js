@@ -29,11 +29,12 @@ const createWindow = () => {
 
   if (process.env.NODE_ENV === 'dev') {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
+    mainWindow.loadURL('http://localhost:8080/app.html');
+  } else {
+    mainWindow.loadURL(path.join('file://', __dirname, '../../static/pages/app.html'));
   }
 
   mainWindow.webContents.openDevTools({ mode: 'detach' });
-
-  mainWindow.loadURL(path.join('file://', __dirname, '../../static/pages/app.html'));
 
   mainWindow.on('closed', () => {
     mainWindow = null;
