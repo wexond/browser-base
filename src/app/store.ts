@@ -24,6 +24,7 @@ class Store {
   @observable public addressBar = new AddressBar();
   @observable public theme = new Theme();
   @observable public suggestions = new Suggestions();
+  @observable public isFullscreen: boolean;
   @observable
   public navigationState = {
     canGoBack: false,
