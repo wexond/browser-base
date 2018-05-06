@@ -49,19 +49,6 @@ export default class extends React.Component<TabProps, {}> {
     requestAnimationFrame(frame);
   }
 
-  public shouldComponentUpdate(nextProps: any) {
-    const { tab, selected } = this.props;
-
-    if (
-      nextProps.tab.left !== tab.left ||
-      nextProps.tab.width !== tab.width ||
-      selected !== nextProps.selected
-    ) {
-      return true;
-    }
-    return false;
-  }
-
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const { selected, tab, tabGroup } = this.props;
     const { pageX, pageY } = e;

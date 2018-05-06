@@ -1,0 +1,37 @@
+import React from 'react';
+import { observer } from 'mobx-react';
+import NavigationButtons from '../NavigationButtons';
+import ToolbarSeparator from '../ToolbarSeparator';
+import { StyledToolbar, Handle, TabsSection, Line } from './styles';
+import Store from '../../store';
+import AddressBar from '../AddressBar';
+import TabBar from '../TabBar';
+import ToolbarButton from '../ToolbarButton';
+import { Platforms } from '../../enums';
+
+const tabGroupsIcon = require('../../../shared/icons/actions/tab-groups.svg');
+const menuIcon = require('../../../shared/icons/actions/menu.svg');
+
+@observer
+export default class Toolbar extends React.Component {
+  public render() {
+    const { theme } = Store.theme;
+
+    return (
+      <StyledToolbar style={{ ...theme.toolbar.style }}>
+        <Handle />
+        <NavigationButtons />
+        <ToolbarSeparator style={{ ...theme.toolbar.separators.style }} />
+        <TabsSection style={{ ...theme.tabsSection.style }}>
+          <AddressBar visible={Store.addressBar.toggled} />
+          <TabBar />
+        </TabsSection>
+        <ToolbarSeparator style={{ ...theme.toolbar.separators.style }} />
+        <ToolbarButton size={16} icon={tabGroupsIcon} />
+        <ToolbarButton size={20} icon={menuIcon} style={{ marginRight: 4 }} />
+        {Store.platform !== Platforms.MacOS && <React.Fragment />}
+        <Line style={{ ...theme.toolbar.bottomDivider.style }} />
+      </StyledToolbar>
+    );
+  }
+}

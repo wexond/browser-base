@@ -18,8 +18,6 @@ injectGlobal`
   }
 `;
 
-declare const module: any;
-
 async function setup() {
   Store.theme.set(defaultTheme);
   await loadPlugins();
@@ -35,6 +33,8 @@ ReactDOM.render(
   </AppContainer>,
   rootEl,
 );
+
+declare const module: any;
 
 if (module.hot) {
   module.hot.accept('./components/App', () => {
