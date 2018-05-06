@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./build/",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "module": "esnext",
     "target": "es2017",
     "jsx": "react",
@@ -11,5 +11,9 @@
     "allowSyntheticDefaultImports": true,
     "lib": ["dom", "esnext"],
     "experimentalDecorators": true
+  },
+  "awesomeTypescriptLoaderOptions": {
+    "reportFiles": ["src/**/*.{ts,tsx}"],
+    "useCache": true
   }
 }

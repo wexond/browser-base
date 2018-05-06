@@ -6,3 +6,4 @@ dist
 .vscode
 .vs
 .DS_Store
+.awcache
