@@ -82,6 +82,7 @@ app.on('ready', () => {
       }
     },
     error => {
+      // eslint-disable-next-line
       if (error) console.error('Failed to register protocol');
     },
   );
