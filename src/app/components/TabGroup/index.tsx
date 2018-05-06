@@ -40,6 +40,7 @@ export default class extends React.Component<Props, {}> {
   };
   private scrollInterval: any;
   private scrollTimeout: any;
+  private mounted = true;
 
   DecoratedTab = observer(Store.decoratedTab);
 
@@ -94,7 +95,9 @@ export default class extends React.Component<Props, {}> {
         clearInterval(this.scrollInterval);
 
         this.scrollInterval = setInterval(() => {
-          this.tabGroups.scrollLeft = this.scrollData.maxScrollLeft;
+          if (this.scrollData != null && this.tabGroups != null) {
+            this.tabGroups.scrollLeft = this.scrollData.maxScrollLeft;
+          }
         }, 1);
 
         clearTimeout(this.scrollTimeout);
@@ -111,7 +114,15 @@ export default class extends React.Component<Props, {}> {
     });
   }
 
+  componentWillUnmount() {
+    clearInterval(this.scrollInterval);
+    this.mounted = false;
+    this.props.tabGroup.tabs = [];
+  }
+
   public resizeScrollbar = () => {
+    if (!this.mounted) return;
+
     this.setState({
       scrollbarThumbWidth: this.tabGroups.offsetWidth ** 2 / this.tabGroups.scrollWidth,
       scrollbarThumbLeft:

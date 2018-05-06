@@ -2,21 +2,20 @@ const webpack = require('webpack');
 const { resolve } = require('path');
 const { spawn } = require('child_process');
 
-const productionDevtool = 'source-map';
-const developmentDevtool = 'eval-source-map';
+const INCLUDE = resolve(__dirname, 'src');
+const EXCLUDE = /node_modules/;
 
-const INCLUDE = [resolve(__dirname, 'src')];
-const EXCLUDE = [/node_modules/];
 const PORT = 8080;
-const OUTPUT_DIR = resolve(__dirname, 'build');
 
 const config = {
-  devtool: process.env.NODE_ENV === 'production' ? productionDevtool : developmentDevtool,
+  devtool: 'eval-source-map',
 
   output: {
-    path: OUTPUT_DIR,
+    path: resolve(__dirname, 'build'),
     filename: '[name].bundle.js',
-    publicPath: 'http://localhost:8080/',
+    publicPath: `http://localhost:${PORT}/`,
+    hotUpdateChunkFilename: 'hot/hot-update.js',
+    hotUpdateMainFilename: 'hot/hot-update.json',
   },
 
   module: {
@@ -37,7 +36,7 @@ const config = {
         exclude: EXCLUDE,
         use: [
           {
-            loader: 'ts-loader',
+            loader: 'awesome-typescript-loader',
           },
         ],
       },
@@ -54,13 +53,16 @@ const config = {
     extensions: ['.js', '.tsx', '.ts', '.json'],
   },
 
+  plugins: [new webpack.HotModuleReplacementPlugin()],
+
   devServer: {
-    contentBase: OUTPUT_DIR,
-    publicPath: '/',
+    contentBase: './static/pages',
     port: PORT,
     stats: {
       colors: true,
     },
+    hot: true,
+    inline: true,
     after() {
       spawn('npm', ['start'], {
         shell: true,
@@ -70,20 +72,12 @@ const config = {
       }).on('close', () => process.exit(0));
     },
   },
-
-  plugins: [],
 };
 
-if (process.env.NODE_ENV === 'production') {
-  config.plugins.push(new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify('production'),
-  }));
-}
-
-let appConfig = {
+const appConfig = {
   target: 'electron-renderer',
   entry: {
-    app: './src/app',
+    app: ['react-hot-loader/patch', './src/app'],
   },
   externals: {
     sqlite3: 'commonjs sqlite3',
@@ -91,14 +85,15 @@ let appConfig = {
   },
 };
 
-let pagesConfig = {
+const pagesConfig = {
   target: 'web',
   entry: {
-    history: './src/history',
+    history: ['react-hot-loader/patch', './src/history'],
   },
 };
 
-appConfig = Object.assign(appConfig, config);
-pagesConfig = Object.assign(pagesConfig, config);
+module.exports = [getConfig(appConfig), getConfig(pagesConfig)];
 
-module.exports = [appConfig, pagesConfig];
+function getConfig(cfg) {
+  return Object.assign({}, config, cfg);
+}

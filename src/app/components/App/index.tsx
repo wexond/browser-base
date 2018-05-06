@@ -4,8 +4,8 @@ import { Menu } from 'nersent-ui';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Handle, Line, NavIcons, StyledApp, TabsSection } from './styles';
-import { Platforms } from '../../enums';
 import { Icons } from '../../../shared/enums';
+import { Platforms } from '../../enums';
 import Store from '../../store';
 import { closeWindow, maximizeWindow, minimizeWindow } from '../../utils/window';
 import AddressBar from '../AddressBar';
@@ -21,7 +21,7 @@ interface State {
 }
 
 @observer
-export default class App extends React.Component<{}, State> {
+class App extends React.Component<{}, State> {
   public state: State = {
     isFullscreen: false,
   };
@@ -60,6 +60,10 @@ export default class App extends React.Component<{}, State> {
     window.addEventListener('mousedown', e => {
       Store.pageMenu.toggle(false);
     });
+  }
+
+  public componentWillUnmount() {
+    Store.pages = [];
   }
 
   public render() {
@@ -126,3 +130,5 @@ export default class App extends React.Component<{}, State> {
     );
   }
 }
+
+export default App;
