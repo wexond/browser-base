@@ -1,12 +1,13 @@
 import { observer } from 'mobx-react';
 import { Checkbox } from 'nersent-ui';
+import { hot } from 'react-hot-loader';
 import React from 'react';
 import { Content, Title } from './styles';
 import PageLayout from '../../../shared/components/PageLayout';
 import SearchInput from '../../../shared/components/SearchInput';
 
 @observer
-export default class App extends React.Component {
+class App extends React.Component {
   public render() {
     const checkboxStyle = {
       marginLeft: 16,
@@ -27,3 +28,5 @@ export default class App extends React.Component {
     );
   }
 }
+
+export default hot(module)(App);

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./build/",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "module": "esnext",
     "target": "es2017",
     "jsx": "react",
