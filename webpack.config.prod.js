@@ -6,7 +6,7 @@ const INCLUDE = resolve(__dirname, 'src');
 const EXCLUDE = /node_modules/;
 
 const config = {
-  devtool: 'eval-source-map',
+  devtool: 'source-map',
 
   output: {
     path: resolve(__dirname, 'build'),
@@ -31,7 +31,7 @@ const config = {
         exclude: EXCLUDE,
         use: [
           {
-            loader: 'awesome-typescript-loader',
+            loader: 'ts-loader',
           },
         ],
       },
