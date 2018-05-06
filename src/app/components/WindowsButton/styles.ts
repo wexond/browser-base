@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
 import { HOVER_DURATION } from '../../constants/design';
-import { Icons } from '../../../shared/enums';
 
 interface IButtonProps {
-  icon: Icons;
+  icon: string;
+  isClose?: boolean;
 }
 
 export const Button = styled.div`
@@ -17,12 +17,13 @@ export const Button = styled.div`
 
   &:hover {
     background-color: ${(props: IButtonProps) =>
-    (props.icon !== Icons.Close ? 'rgba(196, 196, 196, 0.4)' : '#e81123')};
+    (!props.isClose ? 'rgba(196, 196, 196, 0.4)' : '#e81123')};
   }
 `;
 
 interface IIconProps {
-  icon: Icons;
+  icon: string;
+  isClose?: boolean;
 }
 
 export const Icon = styled.div`
@@ -31,7 +32,9 @@ export const Icon = styled.div`
   transition: ${HOVER_DURATION}s filter;
 
   background-image: ${(props: IIconProps) => `url(../../src/shared/icons/${props.icon})`};
-  ${images.center('11px', '11px')} &:hover {
-    filter: ${props => props.icon === Icons.Close && 'invert(100%);'};
+  ${images.center('11px', '11px')};
+
+  &:hover {
+    filter: ${props => props.isClose && 'invert(100%);'};
   }
 `;
