@@ -15,5 +15,6 @@
   "awesomeTypescriptLoaderOptions": {
     "reportFiles": ["src/**/*.{ts,tsx}"],
     "useCache": true
-  }
+  },
+  "exclude": ["node_modules"]
 }
