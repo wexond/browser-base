@@ -1,8 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-
 import ToolbarIcon from '../ToolbarIcon';
-
 import {
   StyledNavigationDrawer,
   Item,
@@ -14,7 +12,6 @@ import {
   Title,
   Header,
 } from './styles';
-import SearchInput from '../SearchInput';
 
 const menuIcon = require('../../icons/actions/menu.svg');
 

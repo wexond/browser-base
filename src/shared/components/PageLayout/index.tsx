@@ -1,9 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-
 import Toolbar from '../Toolbar';
 import NavigationDrawer from '../NavigationDrawer';
-
 import { StyledPageLayout, Content } from './styles';
 
 export interface IProps {

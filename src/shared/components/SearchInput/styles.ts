@@ -1,10 +1,6 @@
-import * as React from 'react';
-import styled, { StyledComponentClass } from 'styled-components';
-
+import styled from 'styled-components';
 import { transparency, typography } from 'nersent-ui';
-
 import { center } from '../../mixins/images';
-import { invertColors } from '../../mixins/icons';
 
 const searchIcon = require('../../icons/actions/search.svg');
 

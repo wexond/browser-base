@@ -39,7 +39,6 @@
     "no-unused-vars": "off",
     "guard-for-in": "off",
     "no-await-in-loop": "off",
-    "arrow-parens": "off",
-    "typescript/no-unused-vars": "warn"
+    "arrow-parens": "off"
   }
 }

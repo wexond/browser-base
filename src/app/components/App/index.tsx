@@ -4,16 +4,13 @@ import { Menu } from 'nersent-ui';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { StyledApp } from './styles';
-import { Platforms } from '../../enums';
 import Store from '../../store';
-import AddressBar from '../AddressBar';
 import Pages from '../Pages';
-import TabBar from '../TabBar';
 import Toolbar from '../Toolbar';
 
 @observer
 export default class App extends React.Component {
-  public onInspectElementClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  public onInspectElementClick = () => {
     const { x, y } = Store.contextMenuParams;
     Store.getSelectedPage().webview.inspectElement(x, y);
   };
@@ -28,7 +25,7 @@ export default class App extends React.Component {
       Store.mouse.y = e.pageY;
     });
 
-    window.addEventListener('mousedown', e => {
+    window.addEventListener('mousedown', () => {
       Store.pageMenu.toggle(false);
     });
 
