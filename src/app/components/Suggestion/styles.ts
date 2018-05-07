@@ -1,4 +1,4 @@
-import { transparency, colors } from 'nersent-ui';
+import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
 

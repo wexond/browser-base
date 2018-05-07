@@ -1,6 +1,4 @@
-import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
-import { Platforms } from '../../enums';
 
 export const StyledApp = styled.div`
   display: flex;

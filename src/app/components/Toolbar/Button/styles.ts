@@ -1,8 +1,8 @@
 import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
-import images from '../../../shared/mixins/images';
-import { HOVER_DURATION, TOOLBAR_BUTTON_WIDTH } from '../../constants/design';
-import { Theme } from '../../models/theme';
+import images from '../../../../shared/mixins/images';
+import { HOVER_DURATION, TOOLBAR_BUTTON_WIDTH } from '../../../constants/design';
+import { Theme } from '../../../models/theme';
 
 interface IconProps {
   size: number;

@@ -1,12 +1,12 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import NavigationButtons from '../NavigationButtons';
-import ToolbarSeparator from '../ToolbarSeparator';
+import ToolbarSeparator from './Separator';
 import { StyledToolbar, Handle, TabsSection, Line } from './styles';
 import Store from '../../store';
 import AddressBar from '../AddressBar';
 import TabBar from '../TabBar';
-import ToolbarButton from '../ToolbarButton';
+import ToolbarButton from './Button';
 import { Platforms } from '../../enums';
 
 const tabGroupsIcon = require('../../../shared/icons/actions/tab-groups.svg');
@@ -14,6 +14,9 @@ const menuIcon = require('../../../shared/icons/actions/menu.svg');
 
 @observer
 export default class Toolbar extends React.Component {
+  public static Button = ToolbarButton;
+  public static Separator = ToolbarSeparator;
+
   public render() {
     const { theme } = Store.theme;
 

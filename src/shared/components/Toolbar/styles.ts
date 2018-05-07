@@ -1,7 +1,5 @@
-import * as React from 'react';
-import styled, { StyledComponentClass } from 'styled-components';
-
-import { shadows, typography } from 'nersent-ui';
+import styled from 'styled-components';
+import { typography } from 'nersent-ui';
 import pages from '../../defaults/pages';
 
 export const StyledToolbar = styled.div`
