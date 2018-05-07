@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import ToolbarButton from '../ToolbarButton';
+import ToolbarButton from '../Toolbar/Button';
 
 export const TabGroups = styled.div`
   transform: translateZ(0);

@@ -1,6 +1,5 @@
-import * as React from 'react';
-import styled, { StyledComponentClass } from 'styled-components';
-import { transparency, typography } from 'nersent-ui';
+import styled from 'styled-components';
+import { typography } from 'nersent-ui';
 import pages from '../../defaults/pages';
 
 export const StyledNavigationDrawer = styled.div`

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { shadows, typography } from 'nersent-ui';
+import { typography } from 'nersent-ui';
 
 export const Content = styled.div`
   max-width: 960px;

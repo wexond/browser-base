@@ -117,8 +117,6 @@ export default class extends React.Component<Props, {}> {
   };
 
   public onTabMouseDown = (e: React.MouseEvent<HTMLDivElement>, tab: Tab) => {
-    const { tabGroup } = this.props;
-
     this.tabDragData = {
       lastMouseX: 0,
       dragging: true,

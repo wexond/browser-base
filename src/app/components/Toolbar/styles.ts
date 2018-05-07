@@ -1,4 +1,3 @@
-import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
 import { TOOLBAR_HEIGHT } from '../../constants/design';
 

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import images from '../../../shared/mixins/images';
-import { HOVER_DURATION } from '../../constants/design';
+import images from '../../../../shared/mixins/images';
+import { HOVER_DURATION } from '../../../constants/design';
 
-interface IButtonProps {
+interface ButtonProps {
   icon: string;
   isClose?: boolean;
 }
@@ -16,12 +16,12 @@ export const Button = styled.div`
   transition: ${HOVER_DURATION}s background-color;
 
   &:hover {
-    background-color: ${(props: IButtonProps) =>
+    background-color: ${(props: ButtonProps) =>
     (!props.isClose ? 'rgba(196, 196, 196, 0.4)' : '#e81123')};
   }
 `;
 
-interface IIconProps {
+interface IconProps {
   icon: string;
   isClose?: boolean;
 }
@@ -31,7 +31,7 @@ export const Icon = styled.div`
   height: 100%;
   transition: ${HOVER_DURATION}s filter;
 
-  background-image: ${(props: IIconProps) => `url(../../src/shared/icons/${props.icon})`};
+  background-image: ${(props: IconProps) => `url(${props.icon})`};
   ${images.center('11px', '11px')};
 
   &:hover {
