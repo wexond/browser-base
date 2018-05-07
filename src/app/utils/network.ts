@@ -1,4 +1,3 @@
-import { request as httpsRequest } from 'https';
 import http from 'http';
 import urlNode from 'url';
 

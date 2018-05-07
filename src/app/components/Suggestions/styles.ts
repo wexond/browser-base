@@ -1,4 +1,4 @@
-import { shadows, transparency } from 'nersent-ui';
+import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
 
 interface SuggestionsProps {

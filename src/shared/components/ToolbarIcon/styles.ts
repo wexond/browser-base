@@ -1,9 +1,5 @@
-import * as React from 'react';
-import styled, { StyledComponentClass } from 'styled-components';
-
-import { shadows, typography } from 'nersent-ui';
+import styled from 'styled-components';
 import { center } from '../../mixins/images';
-import { invertColors } from '../../mixins/icons';
 
 export const StyledContainer = styled.div`
   width: 24px;

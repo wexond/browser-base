@@ -1,12 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-
-import ToolbarIcon from '../ToolbarIcon';
 import SearchInput from '../SearchInput';
-
-import { StyledToolbar, Title, Content, Line } from './styles';
-
-const menuIcon = require('../../icons/actions/menu.svg');
+import { StyledToolbar, Title } from './styles';
 
 export interface IProps {
   title?: string;

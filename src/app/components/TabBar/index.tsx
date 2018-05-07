@@ -3,7 +3,6 @@ import React from 'react';
 import { StyledTabBar, TabGroups, AddTabButton } from './styles';
 import Store from '../../store';
 import TabGroup from '../TabGroup';
-import ToolbarButton from '../ToolbarButton';
 
 const addTabIcon = require('../../../shared/icons/actions/add.svg');
 

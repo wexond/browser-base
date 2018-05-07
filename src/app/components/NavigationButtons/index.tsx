@@ -1,5 +1,5 @@
 import React from 'react';
-import ToolbarButton from '../ToolbarButton';
+import Toolbar from '../Toolbar';
 import { StyledContainer } from './styles';
 import Store from '../../store';
 
@@ -23,20 +23,20 @@ export default class NavigationButtons extends React.Component {
   public render() {
     return (
       <StyledContainer isFullscreen={Store.isFullscreen}>
-        <ToolbarButton
+        <Toolbar.Button
           disabled={!Store.navigationState.canGoBack}
           size={24}
           icon={backIcon}
           style={{ marginLeft: 4 }}
           onClick={this.onBackClick}
         />
-        <ToolbarButton
+        <Toolbar.Button
           disabled={!Store.navigationState.canGoForward}
           size={24}
           icon={forwardIcon}
           onClick={this.onForwardClick}
         />
-        <ToolbarButton size={20} icon={refreshIcon} onClick={this.onRefreshClick} />
+        <Toolbar.Button size={20} icon={refreshIcon} onClick={this.onRefreshClick} />
       </StyledContainer>
     );
   }

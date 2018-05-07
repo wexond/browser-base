@@ -84,7 +84,7 @@ export default class extends React.Component<Props, {}> {
     Store.pageMenuData.y = top;
   };
 
-  public onDomReady = (e: Electron.Event) => {
+  public onDomReady = () => {
     this.webview.getWebContents().on('context-menu', this.onContextMenu);
     this.webview.removeEventListener('dom-ready', this.onDomReady);
   };

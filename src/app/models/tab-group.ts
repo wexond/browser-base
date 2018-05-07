@@ -3,7 +3,6 @@ import Line from './line';
 import Tab from './tab';
 import { TAB_MIN_WIDTH } from '../constants/design';
 import Store from '../store';
-import { addressbarBlacklist } from '../defaults/blacklisted-urls';
 
 export default class TabGroup {
   @observable public id: number = 0;

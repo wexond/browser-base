@@ -1,4 +1,3 @@
-import { transparency, shadows } from 'nersent-ui';
 import styled from 'styled-components';
 import { Theme } from '../../models/theme';
 import images from '../../../shared/mixins/images';
