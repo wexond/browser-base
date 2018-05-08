@@ -9,8 +9,8 @@ import TabBar from '../TabBar';
 import ToolbarButton from './Button';
 import { Platforms } from '../../enums';
 
-const tabGroupsIcon = require('../../../shared/icons/actions/tab-groups.svg');
-const menuIcon = require('../../../shared/icons/actions/menu.svg');
+const tabGroupsIcon = require('../../../shared/icons/tab-groups.svg');
+const menuIcon = require('../../../shared/icons/menu.svg');
 
 @observer
 export default class Toolbar extends React.Component {

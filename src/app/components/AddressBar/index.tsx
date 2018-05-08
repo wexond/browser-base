@@ -6,7 +6,7 @@ import { isURL, getAddressbarURL } from '../../utils/url';
 import Suggestions from '../Suggestions';
 import SuggestionItem from '../../models/suggestion-item';
 
-const searchIcon = require('../../../shared/icons/actions/search.svg');
+const searchIcon = require('../../../shared/icons/search.svg');
 
 interface Props {
   visible: boolean;

@@ -2,17 +2,17 @@ import styled from 'styled-components';
 import { transparency, typography } from 'nersent-ui';
 import { center } from '../../mixins/images';
 
-const searchIcon = require('../../icons/actions/search.svg');
+const searchIcon = require('../../icons/search.svg');
 
-export const StyledSearchInput = styled.div`
+export const StyledSearch = styled.div`
   width: 100%;
   max-width: 256px;
   height: 40px;
   position: absolute;
   right: 64px;
   border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
 `;
@@ -26,7 +26,7 @@ export const Input = styled.input`
   -webkit-text-fill-color: transparent;
   text-shadow: 0px 0px 0px #000;
   color: rgba(0, 0, 0, 0.87);
-  font-size: 13px;
+  font-size: 14px;
   padding-left: 16px;
   ${typography.robotoRegular()};
 
