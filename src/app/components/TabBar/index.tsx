@@ -4,7 +4,7 @@ import { StyledTabBar, TabGroups, AddTabButton } from './styles';
 import Store from '../../store';
 import TabGroup from '../TabGroup';
 
-const addTabIcon = require('../../../shared/icons/actions/add.svg');
+const addTabIcon = require('../../../shared/icons/add.svg');
 
 @observer
 export default class TabBar extends React.Component<{}, {}> {

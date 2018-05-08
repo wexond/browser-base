@@ -5,8 +5,8 @@ import { Dash, Icon, PrimaryText, SecondaryText, StyledSuggestion } from './styl
 import SuggestionItem from '../../models/suggestion-item';
 import Store from '../../store';
 
-const searchIcon = require('../../../shared/icons/actions/search.svg');
-const pageIcon = require('../../../shared/icons/info/page.svg');
+const searchIcon = require('../../../shared/icons/search.svg');
+const pageIcon = require('../../../shared/icons/page.svg');
 
 interface Props {
   suggestion: SuggestionItem;
