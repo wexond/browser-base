@@ -10,21 +10,40 @@ interface Props {
   title: string;
 }
 
+interface State {
+  fullWidth: boolean;
+}
+
 @observer
-export default class LeftMenu extends React.Component<Props, {}> {
+export default class LeftMenu extends React.Component<Props, State> {
+  public state: State = {
+    fullWidth: true,
+  };
+
   public static Item = Item;
+
+  private onMenuClick = () => {
+    this.setState({
+      fullWidth: !this.state.fullWidth,
+    });
+  };
 
   public render() {
     const { children, title } = this.props;
 
+    const { fullWidth } = this.state;
+
     return (
-      <Styled>
+      <Styled fullWidth={fullWidth}>
         <Header>
-          <MenuIcon image={menuIcon} />
-          <Title>{title}</Title>
+          <MenuIcon image={menuIcon} onClick={this.onMenuClick} fullWidth={fullWidth} />
+          <Title fullWidth={fullWidth}>{title}</Title>
         </Header>
         <Line />
-        {children}
+        {React.Children.map(children, (child?: any) =>
+          React.cloneElement(child, {
+            fullWidth,
+          }))}
       </Styled>
     );
   }
