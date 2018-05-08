@@ -6,12 +6,17 @@ export const StyledPageLayout = styled.div`
   height: 100vh;
 `;
 
+interface ContentProps {
+  toolbarHeight: number;
+}
+
 export const Content = styled.div`
-  width: calc(100% - ${pages.navDrawerWidth}px);
-  height: calc(100% - ${pages.toolbarHeight}px);
-  top: ${pages.toolbarHeight}px;
-  left: ${pages.navDrawerWidth}px;
+  width: calc(100% - ${pages.navDrawerWidth.full}px);
+  left: ${pages.navDrawerWidth.full}px;
   position: relative;
   overflow: auto;
   z-index: 10;
+
+  top: ${(props: ContentProps) => props.toolbarHeight}px;
+  height: calc(100% - ${props => props.toolbarHeight}px);
 `;
