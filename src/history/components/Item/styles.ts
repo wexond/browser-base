@@ -2,8 +2,7 @@ import styled from 'styled-components';
 import { typography } from 'nersent-ui';
 
 export const StyledItem = styled.div`
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-  height: 48px;
+  height: 56px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -34,5 +33,5 @@ export const Title = styled(PrimaryText)`
 `;
 
 export const Time = styled(SecondaryText)`
-  margin-left: 48px;
+  margin-left: 16px;
 `;

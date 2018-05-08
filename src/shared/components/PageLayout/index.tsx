@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import Toolbar from '../Toolbar';
 import LeftMenu from '../LeftMenu';
 import { StyledPageLayout, Content } from './styles';
+import Store from '../../store';
 
 const clearIcon = require('../../../shared/icons/clear.svg');
 const historyIcon = require('../../../shared/icons/history.svg');
@@ -17,6 +18,30 @@ export interface IProps {
 
 @observer
 export default class PageLayout extends React.Component<IProps, {}> {
+  private content: HTMLDivElement;
+  private lastScroll = 0;
+
+  public componentDidMount() {
+    this.content.addEventListener('scroll', this.onScroll);
+  }
+
+  public componentWillUnmount() {
+    this.content.removeEventListener('scroll', this.onScroll);
+  }
+
+  public onScroll = (e: Event) => {
+    if (this.content.scrollTop < 64 && Store.toolbarHeight <= 128 && Store.toolbarHeight >= 64) {
+      Store.toolbarHeight -= this.content.scrollTop - this.lastScroll;
+      if (Store.toolbarHeight < 64) Store.toolbarHeight = 64;
+      if (Store.toolbarHeight > 128) Store.toolbarHeight = 128;
+    }
+    if (this.content.scrollTop > 64) {
+      Store.toolbarHeight = 64;
+    }
+    this.lastScroll = this.content.scrollTop;
+    Store.toolbarSmallFontSize = this.content.scrollTop > 50;
+  };
+
   public render() {
     const { title } = this.props;
 
@@ -38,7 +63,9 @@ export default class PageLayout extends React.Component<IProps, {}> {
           </LeftMenu.Item>
         </LeftMenu>
         <Toolbar title={title} />
-        <Content>{this.props.children}</Content>
+        <Content toolbarHeight={Store.toolbarHeight} innerRef={r => (this.content = r)}>
+          {this.props.children}
+        </Content>
       </StyledPageLayout>
     );
   }

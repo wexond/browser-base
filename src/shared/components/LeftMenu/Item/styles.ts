@@ -32,24 +32,22 @@ interface IconProps {
   fullWidth: boolean;
 }
 
-const getIconSize = (props: IconProps) => (props.fullWidth ? 24 : 20);
-
 const getIconMargin = (props: IconProps) => {
   if (!props.fullWidth) return 'auto';
   return props.subItem ? '88px' : '64px';
 };
 
 export const Icon = styled.div`
-  height: ${(props: IconProps) => getIconSize(props)}px;
-  width: ${props => getIconSize(props)}px;
+  height: 20px;
+  width: 20px;
   background-image: ${props => `url(${props.image})`};
 
-  margin-left: ${props => getIconMargin(props)};
+  margin-left: ${(props: IconProps) => getIconMargin(props)};
   margin-right: ${props => (props.fullWidth ? 'unset' : 'auto')};
 
   opacity: ${props => (props.selected ? 1 : 0.7)};
 
-  ${props => images.center(`${getIconSize(props)}px`, 'auto')};
+  ${props => images.center('20px', 'auto')};
 `;
 
 interface TitleProps {
