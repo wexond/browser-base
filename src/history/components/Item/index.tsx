@@ -12,12 +12,15 @@ interface Props {
 export default class Item extends React.Component<Props, {}> {
   public render() {
     const { data } = this.props;
-    const time = data.date;
+    const date = new Date(data.date);
+
+    const hour = date.getHours();
+    const minute = date.getMinutes();
 
     return (
       <StyledItem>
         <Checkbox style={{ marginLeft: 16 }} />
-        <Time>{time}</Time>
+        <Time>{`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
         <Icon />
         <Title>{data.title}</Title>
       </StyledItem>

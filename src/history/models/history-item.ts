@@ -1,6 +1,6 @@
-export default class HistoryItem {
-  public id: number;
-  public title: string;
-  public date: string;
-  public favicon: string;
-}
+export default interface HistoryItem {
+  id: number;
+  title: string;
+  date: string;
+  favicon: string;
+} // eslint-disable-line
