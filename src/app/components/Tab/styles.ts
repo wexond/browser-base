@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
 import { TabTheme, Theme } from '../../models/theme';
 
-const closeIcon = require('../../../shared/icons/actions/close.svg');
+const closeIcon = require('../../../shared/icons/close.svg');
 
 interface CloseProps {
   hovered: boolean;
