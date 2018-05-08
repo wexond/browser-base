@@ -3,9 +3,9 @@ import Toolbar from '../Toolbar';
 import { StyledContainer } from './styles';
 import Store from '../../store';
 
-const backIcon = require('../../../shared/icons/actions/back.svg');
-const forwardIcon = require('../../../shared/icons/actions/forward.svg');
-const refreshIcon = require('../../../shared/icons/actions/refresh.svg');
+const backIcon = require('../../../shared/icons/back.svg');
+const forwardIcon = require('../../../shared/icons/forward.svg');
+const refreshIcon = require('../../../shared/icons/refresh.svg');
 
 export default class NavigationButtons extends React.Component {
   public onBackClick = () => {

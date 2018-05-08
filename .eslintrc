@@ -39,6 +39,7 @@
     "no-unused-vars": "off",
     "guard-for-in": "off",
     "no-await-in-loop": "off",
-    "arrow-parens": "off"
+    "arrow-parens": "off",
+    "react/prefer-stateless-function": "off"
   }
 }

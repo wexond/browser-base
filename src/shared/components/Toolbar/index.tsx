@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import SearchInput from '../SearchInput';
+import Search from '../Search';
 import { StyledToolbar, Title } from './styles';
 
 export interface IProps {
@@ -15,7 +15,7 @@ export default class Toolbar extends React.Component<IProps, {}> {
     return (
       <StyledToolbar>
         <Title>{title}</Title>
-        <SearchInput />
+        <Search />
       </StyledToolbar>
     );
   }
