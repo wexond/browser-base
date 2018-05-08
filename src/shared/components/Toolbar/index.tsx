@@ -2,6 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import Search from '../Search';
 import { StyledToolbar, Title } from './styles';
+import Store from '../../store';
 
 export interface IProps {
   title?: string;
@@ -13,8 +14,8 @@ export default class Toolbar extends React.Component<IProps, {}> {
     const { title } = this.props;
 
     return (
-      <StyledToolbar>
-        <Title>{title}</Title>
+      <StyledToolbar height={Store.toolbarHeight}>
+        <Title smallFontSize={Store.toolbarSmallFontSize}>{title}</Title>
         <Search />
       </StyledToolbar>
     );
