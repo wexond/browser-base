@@ -5,16 +5,19 @@ import images from '../../../mixins/images';
 interface ItemProps {
   visible: boolean;
   selected: boolean;
+  fullWidth: boolean;
 }
 
 export const StyledItem = styled.div`
   height: 48px;
   position: relative;
   align-items: center;
-  padding-right: 16px;
   cursor: pointer;
+  overflow: hidden;
 
-  display: ${(props: ItemProps) => (props.visible ? 'flex' : 'none')};
+  width: ${(props: ItemProps) => (props.fullWidth ? 'calc(100% - 16px)' : '100%')};
+  padding-right: ${props => (props.fullWidth ? '16px' : '0px')};
+  display: ${props => (props.visible ? 'flex' : 'none')};
   pointer-events: ${props => (props.selected ? 'none' : 'auto')};
 
   &:hover {
@@ -26,20 +29,32 @@ interface IconProps {
   image: string;
   subItem: boolean;
   selected: boolean;
+  fullWidth: boolean;
 }
 
-export const Icon = styled.div`
-  height: 24px;
-  width: 24px;
+const getIconSize = (props: IconProps) => (props.fullWidth ? 24 : 20);
 
-  ${images.center('20px', '20px')};
-  background-image: ${(props: IconProps) => `url(${props.image})`};
-  margin-left: ${props => (props.subItem ? '88px' : '64px')};
+const getIconMargin = (props: IconProps) => {
+  if (!props.fullWidth) return 'auto';
+  return props.subItem ? '88px' : '64px';
+};
+
+export const Icon = styled.div`
+  height: ${(props: IconProps) => getIconSize(props)}px;
+  width: ${props => getIconSize(props)}px;
+  background-image: ${props => `url(${props.image})`};
+
+  margin-left: ${props => getIconMargin(props)};
+  margin-right: ${props => (props.fullWidth ? 'unset' : 'auto')};
+
   opacity: ${props => (props.selected ? 1 : 0.7)};
+
+  ${props => images.center(`${getIconSize(props)}px`, 'auto')};
 `;
 
 interface TitleProps {
   selected: boolean;
+  fullWidth: boolean;
 }
 
 export const Title = styled.div`
@@ -48,10 +63,12 @@ export const Title = styled.div`
 
   opacity: ${(props: TitleProps) => (props.selected ? 1 : 0.7)};
   ${props => (props.selected ? typography.robotoMedium() : typography.robotoRegular())};
+  display: ${props => (props.fullWidth ? 'flex' : 'none')};
 `;
 
 interface IndicatorProps {
   visible: boolean;
+  fullWidth: boolean;
 }
 
 export const Indicator = styled.div`
@@ -60,7 +77,8 @@ export const Indicator = styled.div`
   height: 32px;
   border-radius: 5px;
   position: absolute;
-  left: 40px;
+  transition: 0.2s ease-out left;
 
   display: ${(props: IndicatorProps) => (props.visible ? 'block' : 'none')};
+  left: ${props => (props.fullWidth ? '40px' : '0px')};
 `;

@@ -7,6 +7,7 @@ interface Props {
   subItem?: boolean;
   selected?: boolean;
   visible?: boolean;
+  fullWidth?: boolean;
 }
 
 export default class Item extends React.Component<Props, {}> {
@@ -17,7 +18,7 @@ export default class Item extends React.Component<Props, {}> {
 
   public render() {
     const {
-      icon, children, subItem, visible,
+      icon, children, subItem, visible, fullWidth,
     } = this.props;
 
     let { selected } = this.props;
@@ -26,19 +27,21 @@ export default class Item extends React.Component<Props, {}> {
 
     return (
       <React.Fragment>
-        <StyledItem visible={visible} selected={selected}>
-          <Indicator visible={selected} />
-          <Icon selected={selected} subItem={subItem} image={icon} />
+        <StyledItem visible={visible} selected={selected} fullWidth={fullWidth}>
+          <Indicator visible={selected} fullWidth={fullWidth} />
+          <Icon selected={selected} subItem={subItem} image={icon} fullWidth={fullWidth} />
           {React.Children.map(children, (el: React.ReactElement<any>) => {
             if (typeof el === 'string') {
-              return React.cloneElement(<Title selected={selected}>{el}</Title>);
+              return React.cloneElement(<Title selected={selected} fullWidth={fullWidth}>
+                  {el}
+                                        </Title>);
             }
             return null;
           })}
         </StyledItem>
         {React.Children.map(children, (el: React.ReactElement<any>) => {
           if (typeof el !== 'string') {
-            return React.cloneElement(el, { subItem: true, visible: selected });
+            return React.cloneElement(el, { subItem: true, visible: selected, fullWidth });
           }
           return null;
         })}
