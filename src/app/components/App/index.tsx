@@ -7,6 +7,7 @@ import { StyledApp } from './styles';
 import Store from '../../store';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
+import NavigationDrawer from '../NavigationDrawer';
 
 @observer
 export default class App extends React.Component {
@@ -58,6 +59,7 @@ export default class App extends React.Component {
           >
             <Menu.Item onClick={this.onInspectElementClick}>Inspect element</Menu.Item>
           </Menu>
+          <NavigationDrawer title="Wexond" />
         </StyledApp>
       </ThemeProvider>
     );
