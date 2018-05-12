@@ -7,6 +7,7 @@ export const StyledItem = styled.div`
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-right: 24px;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.03);
@@ -19,7 +20,7 @@ export const StyledItem = styled.div`
 
 export const Icon = styled.div`
   height: 16px;
-  width: 16px;
+  min-width: 16px;
   margin-left: 24px;
   background-color: rgba(0, 0, 0, 0.54);
   border-radius: 4px;
@@ -39,6 +40,10 @@ export const SecondaryText = styled.div`
 
 export const Title = styled(PrimaryText)`
   margin-left: 48px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-right: 24px;
 `;
 
 export const Time = styled(SecondaryText)`
