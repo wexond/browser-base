@@ -113,7 +113,9 @@ export default class extends React.Component<Props, {}> {
       scrollbarVisible: this.state.scrollbarThumbWidth !== this.tabGroups.offsetWidth,
     });
 
-    requestAnimationFrame(this.resizeScrollbar);
+    if (this.mounted) {
+      requestAnimationFrame(this.resizeScrollbar);
+    }
   };
 
   public onTabMouseDown = (e: React.MouseEvent<HTMLDivElement>, tab: Tab) => {

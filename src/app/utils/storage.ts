@@ -1,6 +1,7 @@
 import sqlite3 from 'sqlite3';
 
 import { getPath } from './paths';
+import HistoryItem from '../../history/models/history-item';
 
 export const history = new sqlite3.Database(getPath('history.db'));
 export const favicons = new sqlite3.Database(getPath('favicons.db'));
@@ -13,17 +14,10 @@ export interface Favicon {
   favicon: Buffer;
 }
 
-export interface HistoryItem {
-  date: string;
-  favicon: string;
-  title: string;
-  url: string;
-}
-
 export const addFavicon = (url: string) => {
   fetch(url)
     .then(res => res.blob())
-    .then((blob) => {
+    .then(blob => {
       const reader = new FileReader();
       reader.onload = () => {
         const generatedBuffer = reader.result;
@@ -36,3 +30,13 @@ export const addFavicon = (url: string) => {
       reader.readAsArrayBuffer(blob);
     });
 };
+
+export const getHistory = async () =>
+  new Promise((resolve: (history: HistoryItem[]) => void, reject) => {
+    history.all('SELECT * FROM history', (err, rows) => {
+      if (err) {
+        return;
+      }
+      resolve(rows);
+    });
+  });

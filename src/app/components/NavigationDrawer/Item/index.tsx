@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyledItem, Icon, Title, Indicator } from './styles';
+import { StyledItem, Icon, Title, Background } from './styles';
 
 interface Props {
   icon: string;
@@ -7,7 +7,7 @@ interface Props {
   subItem?: boolean;
   selected?: boolean;
   visible?: boolean;
-  fullWidth?: boolean;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 export default class Item extends React.Component<Props, {}> {
@@ -18,7 +18,7 @@ export default class Item extends React.Component<Props, {}> {
 
   public render() {
     const {
-      icon, children, subItem, visible, fullWidth,
+      icon, children, subItem, visible, onClick,
     } = this.props;
 
     let { selected } = this.props;
@@ -27,21 +27,20 @@ export default class Item extends React.Component<Props, {}> {
 
     return (
       <React.Fragment>
-        <StyledItem visible={visible} selected={selected} fullWidth={fullWidth}>
-          <Indicator visible={selected} fullWidth={fullWidth} />
-          <Icon selected={selected} subItem={subItem} image={icon} fullWidth={fullWidth} />
+        <StyledItem onClick={onClick} visible={visible} selected={selected}>
+          <Background selected={selected} />
+          <Icon selected={selected} subItem={subItem} image={icon} />
           {React.Children.map(children, (el: React.ReactElement<any>) => {
             if (typeof el === 'string') {
-              return React.cloneElement(<Title selected={selected} fullWidth={fullWidth}>
-                  {el}
-                                        </Title>);
+              const element = <Title selected={selected}>{el}</Title>;
+              return React.cloneElement(element);
             }
             return null;
           })}
         </StyledItem>
         {React.Children.map(children, (el: React.ReactElement<any>) => {
           if (typeof el !== 'string') {
-            return React.cloneElement(el, { subItem: true, visible: selected, fullWidth });
+            return React.cloneElement(el, { subItem: true, visible: selected });
           }
           return null;
         })}

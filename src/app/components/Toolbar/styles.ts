@@ -6,7 +6,7 @@ export const StyledToolbar = styled.div`
   z-index: 100;
   display: flex;
 
-  background-color: #fafafa;
+  background-color: #fff;
   color: rgba(0, 0, 0, 0.8);
   height: ${TOOLBAR_HEIGHT}px;
 `;

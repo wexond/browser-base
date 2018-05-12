@@ -1,9 +1,8 @@
 import { observable } from 'mobx';
-import pages from './defaults/pages';
+import Section from '../history/models/section';
 
 class Store {
-  @observable toolbarHeight = pages.toolbarHeight;
-  @observable toolbarSmallFontSize = false;
+  @observable sections: Section[] = [];
 }
 
 export default new Store();
