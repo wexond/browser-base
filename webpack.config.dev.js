@@ -85,14 +85,7 @@ const appConfig = {
   },
 };
 
-const pagesConfig = {
-  target: 'web',
-  entry: {
-    history: ['react-hot-loader/patch', './src/history'],
-  },
-};
-
-module.exports = [getConfig(appConfig), getConfig(pagesConfig)];
+module.exports = [getConfig(appConfig)];
 
 function getConfig(cfg) {
   return Object.assign({}, config, cfg);

@@ -19,9 +19,8 @@ export default class Item extends React.Component<Props, {}> {
 
     return (
       <StyledItem>
-        <Checkbox style={{ marginLeft: 16 }} />
-        <Time>{`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
         <Icon />
+        <Time>{`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
         <Title>{data.title}</Title>
       </StyledItem>
     );

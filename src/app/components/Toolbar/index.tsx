@@ -17,6 +17,10 @@ export default class Toolbar extends React.Component {
   public static Button = ToolbarButton;
   public static Separator = ToolbarSeparator;
 
+  public onMenuClick = () => {
+    Store.navigationDrawer.visible = !Store.navigationDrawer.visible;
+  };
+
   public render() {
     const { theme } = Store.theme;
 
@@ -31,7 +35,12 @@ export default class Toolbar extends React.Component {
         </TabsSection>
         <ToolbarSeparator style={{ ...theme.toolbar.separators.style }} />
         <ToolbarButton size={16} icon={tabGroupsIcon} />
-        <ToolbarButton size={20} icon={menuIcon} style={{ marginRight: 4 }} />
+        <ToolbarButton
+          onClick={this.onMenuClick}
+          size={20}
+          icon={menuIcon}
+          style={{ marginRight: 4 }}
+        />
         {Store.platform !== Platforms.MacOS && <React.Fragment />}
         <Line style={{ ...theme.toolbar.bottomDivider.style }} />
       </StyledToolbar>

@@ -21,7 +21,6 @@ export default class extends React.Component<Props, {}> {
     return (
       <React.Fragment>
         <Header>
-          <Checkbox style={{ marginLeft: 16 }} />
           <Title>{title}</Title>
         </Header>
         <Items>{items.map(item => <Item key={item.id} data={item} />)}</Items>

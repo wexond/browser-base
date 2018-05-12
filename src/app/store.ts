@@ -10,6 +10,7 @@ import Page from './models/page';
 import Suggestions from './models/suggestions';
 import TabGroup from './models/tab-group';
 import Theme from './models/theme';
+import NavigationDrawer from './models/navigation-drawer';
 
 export interface Favicons {
   [key: string]: string;
@@ -25,6 +26,7 @@ class Store {
   @observable public theme = new Theme();
   @observable public suggestions = new Suggestions();
   @observable public isFullscreen: boolean;
+  @observable public navigationDrawer = new NavigationDrawer();
   @observable
   public navigationState = {
     canGoBack: false,
