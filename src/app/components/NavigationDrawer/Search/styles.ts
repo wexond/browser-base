@@ -5,7 +5,7 @@ const searchIcon = require('../../../../shared/icons/search.svg');
 
 export const StyledSearch = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  height: 48px;
+  height: 51px;
   width: 100%;
   display: flex;
   align-items: center;

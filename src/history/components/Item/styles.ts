@@ -7,7 +7,6 @@ export const StyledItem = styled.div`
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding-right: 24px;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.03);

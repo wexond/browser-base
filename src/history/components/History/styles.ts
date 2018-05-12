@@ -4,7 +4,6 @@ import { typography } from 'nersent-ui';
 export const Content = styled.div`
   max-width: 640px;
   width: calc(100% - 64px);
-  padding-top: 32px;
   padding-bottom: 32px;
   left: 50%;
   position: relative;
