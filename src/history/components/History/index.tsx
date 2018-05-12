@@ -15,7 +15,7 @@ class History extends React.Component {
       const sections = getSections(history.reverse());
       setTimeout(() => {
         Store.sections = sections;
-      }, 150);
+      }, 250);
     });
   }
 
