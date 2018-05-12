@@ -96,6 +96,13 @@ export default class extends React.Component<Props, {}> {
             >
               Extensions
             </Item>
+            <Item
+              onClick={() => (Store.navigationDrawer.selectedItem = 'test')}
+              icon={extensionsIcon}
+              selected={selected === 'test'}
+            >
+              Test
+            </Item>
           </NavContent>
         </Styled>
         <Dark onClick={this.onDarkClick} visible={Store.navigationDrawer.visible} />

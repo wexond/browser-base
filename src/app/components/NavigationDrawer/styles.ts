@@ -22,7 +22,7 @@ export const Styled = styled.div`
   top: 0;
   background-color: white;
   z-index: 9999;
-  transition: 0.2s ease-out right;
+  transition: 0.4s right cubic-bezier(0.19, 1, 0.22, 1);
   box-sizing: border-box;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: ${shadows(16)};
@@ -76,11 +76,21 @@ interface ContentProps {
   visible: boolean;
 }
 
+const getWidth = () => {
+  const maxWidth = 640 + 64;
+
+  if (window.innerWidth - 300 - 96 > maxWidth) {
+    return `${maxWidth}px`;
+  }
+
+  return 'calc(100vw - 300px - 96px)';
+};
+
 export const Content = styled.div`
   height: 100%;
   max-width: calc(640px + 64px);
-  transition: 0.2s ease-out width;
+  transition: 0.5s width cubic-bezier(0.19, 1, 0.22, 1);
   overflow: auto;
 
-  width: ${(props: ContentProps) => (props.visible ? 'calc(100vw - 128px - 300px)' : 0)};
+  width: ${(props: ContentProps) => (props.visible ? getWidth() : 0)};
 `;
