@@ -1,4 +1,3 @@
-import { typography } from 'nersent-ui';
 import fs from 'fs';
 import { promisify } from 'util';
 import React from 'react';
@@ -7,9 +6,10 @@ import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
 import App from './components/App';
 import { loadPlugins } from './utils/plugins';
-import defaultTheme from './defaults/theme';
 import Store from './store';
-import { getPath } from './utils/paths';
+import typography from '../shared/mixins/typography';
+import { getPath } from '../shared/utils/paths';
+import defaultTheme from '../shared/defaults/theme';
 
 declare const module: any;
 

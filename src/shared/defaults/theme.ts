@@ -1,5 +1,6 @@
-import { colors, transparency } from 'nersent-ui';
 import { Theme } from '../models/theme';
+import colors from '../../shared/defaults/colors';
+import opacity from '../../shared/defaults/opacity';
 
 export default {
   toolbar: {
@@ -52,7 +53,7 @@ export default {
   },
   accentColor: colors.blue['500'],
   searchBar: {
-    placeholderColor: `rgba(0, 0, 0, ${transparency.light.text.secondary})`,
+    placeholderColor: `rgba(0, 0, 0, ${opacity.light.secondaryText})`,
   },
   suggestions: {
     item: {

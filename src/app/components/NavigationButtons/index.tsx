@@ -1,12 +1,14 @@
+import { observer } from 'mobx-react';
 import React from 'react';
-import Toolbar from '../Toolbar';
 import { StyledContainer } from './styles';
 import Store from '../../store';
+import Toolbar from '../Toolbar';
 
 const backIcon = require('../../../shared/icons/back.svg');
 const forwardIcon = require('../../../shared/icons/forward.svg');
 const refreshIcon = require('../../../shared/icons/refresh.svg');
 
+@observer
 export default class NavigationButtons extends React.Component {
   public onBackClick = () => {
     Store.getSelectedPage().webview.goBack();

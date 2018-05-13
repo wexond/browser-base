@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { Theme } from '../../models/theme';
 import images from '../../../shared/mixins/images';
+import opacity from '../../../shared/defaults/opacity';
+import { Theme } from '../../../shared/models/theme';
 
 interface AddressBarProps {
   visible: boolean;
@@ -21,7 +22,8 @@ export const StyledAddressBar = styled.div`
   top: calc(50% - 18px);
 
   height: ${(props: AddressBarProps) => (props.suggestionsVisible ? 'auto' : '34px')};
-  border: ${props => (!props.suggestionsVisible ? '1px solid rgba(0, 0, 0, 0.12)' : 'none')};
+  border: ${props =>
+    (!props.suggestionsVisible ? `1px solid rgba(0, 0, 0, ${opacity.light.dividers})` : 'none')};
   box-shadow: ${props =>
     (props.suggestionsVisible
       ? '0 1px 3px 1px rgba(60, 64, 67, 0.2), 0 2px 8px 4px rgba(60, 64, 67, 0.1)'

@@ -2,14 +2,7 @@
   "name": "wexond",
   "version": "1.0.0",
   "description": "Extensible, fast and innovative web browser with material UI.",
-  "keywords": [
-    "web-browser",
-    "material",
-    "electron",
-    "react",
-    "mobx",
-    "sass"
-  ],
+  "keywords": ["web-browser", "material", "electron", "react", "mobx", "sass"],
   "homepage": "https://github.com/Nersent/wexond#readme",
   "main": "src/main/index.js",
   "author": {
@@ -54,11 +47,10 @@
     "eslint-plugin-import": "2.11.0",
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-react": "7.7.0",
-    "eslint-plugin-typescript": "0.12.0",
+    "eslint-plugin-typescript": "${opacity.light.dividers}.0",
     "gsap": "1.20.4",
     "mobx": "4.2.1",
     "mobx-react": "5.1.2",
-    "nersent-ui": "3.5.3",
     "prettier": "1.12.1",
     "prettier-eslint": "8.8.1",
     "prettier-eslint-cli": "4.7.1",

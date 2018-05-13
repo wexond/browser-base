@@ -1,6 +1,6 @@
-import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
+import opacity from '../../../shared/defaults/opacity';
 
 export const StyledSuggestion = styled.div`
   width: 100%;
@@ -12,14 +12,14 @@ export const StyledSuggestion = styled.div`
 
 export const PrimaryText = styled.div`
   margin-left: 64px;
-  opacity: ${transparency.light.text.primary};
+  opacity: ${opacity.light.primaryText};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
 export const SecondaryText = styled.div`
-  opacity: ${transparency.light.text.secondary};
+  opacity: ${opacity.light.secondaryText};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -38,5 +38,5 @@ export const Icon = styled.div`
 export const Dash = styled.div`
   margin-left: 4px;
   margin-right: 4px;
-  opacity: ${transparency.light.text.secondary};
+  opacity: ${opacity.light.secondaryText};
 `;

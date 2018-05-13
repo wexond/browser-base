@@ -1,8 +1,8 @@
-import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
 import images from '../../../../shared/mixins/images';
 import { HOVER_DURATION, TOOLBAR_BUTTON_WIDTH } from '../../../constants/design';
-import { Theme } from '../../../models/theme';
+import opacity from '../../../../shared/defaults/opacity';
+import { Theme } from '../../../../shared/models/theme';
 
 interface IconProps {
   size: number;
@@ -19,12 +19,12 @@ export const Icon = styled.div`
   opacity: ${(props: IconProps) => {
     if (props.disabled) {
       return props.theme.toolbarButtons.color === 'light'
-        ? transparency.dark.button.disabled
-        : transparency.light.button.disabled;
+        ? opacity.dark.disabledIcon
+        : opacity.light.disabledIcon;
     }
     return props.theme.toolbarButtons.color === 'light'
-      ? transparency.dark.icons.inactive
-      : transparency.light.icons.inactive;
+      ? opacity.dark.inactiveIcon
+      : opacity.light.inactiveIcon;
   }};
   background-image: ${props => `url(${props.icon})`};
 `;

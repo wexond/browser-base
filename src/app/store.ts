@@ -1,6 +1,5 @@
 import { remote } from 'electron';
 import { observable } from 'mobx';
-import { Menu } from 'nersent-ui';
 import os from 'os';
 import Tab, { TabProps } from './components/Tab';
 import { Platforms } from './enums';
@@ -9,8 +8,9 @@ import AddressBar from './models/address-bar';
 import Page from './models/page';
 import Suggestions from './models/suggestions';
 import TabGroup from './models/tab-group';
-import Theme from './models/theme';
+import Theme from '../shared/models/theme';
 import NavigationDrawer from './models/navigation-drawer';
+import Menu from '../shared/components/Menu';
 
 export interface Favicons {
   [key: string]: string;
