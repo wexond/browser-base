@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import images from '../../../../shared/mixins/images';
+import opacity from '../../../../shared/defaults/opacity';
 
 const searchIcon = require('../../../../shared/icons/search.svg');
 
 export const StyledSearch = styled.div`
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
   height: 51px;
   width: 100%;
   display: flex;
@@ -24,7 +25,7 @@ export const Input = styled.input`
 
 export const Icon = styled.div`
   ${images.center('24px', 'auto')};
-  opacity: 0.54;
+  opacity: ${opacity.light.inactiveIcon};
   height: 24px;
   width: 24px;
   margin-left: 16px;

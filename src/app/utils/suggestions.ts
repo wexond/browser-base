@@ -1,6 +1,6 @@
 import db from '../../shared/models/app-database';
-import { requestURL } from './network';
 import HistoryItem from '../../shared/models/history-item';
+import { requestURL } from '../../shared/utils/network';
 
 interface Search {
   title: string;

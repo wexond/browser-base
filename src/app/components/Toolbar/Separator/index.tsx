@@ -1,5 +1,5 @@
-import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
+import opacity from '../../../../shared/defaults/opacity';
 
 export default styled.div`
   height: calc(100% - 24px);
@@ -10,5 +10,5 @@ export default styled.div`
   margin-left: 8px;
   margin-right: 8px;
 
-  background-color: rgba(0, 0, 0, ${transparency.light.dividers});
+  background-color: rgba(0, 0, 0, ${opacity.light.dividers});
 `;

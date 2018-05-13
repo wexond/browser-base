@@ -1,6 +1,5 @@
 import { ipcRenderer } from 'electron';
 import { observer } from 'mobx-react';
-import { Menu } from 'nersent-ui';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { StyledApp } from './styles';
@@ -8,6 +7,7 @@ import Store from '../../store';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
 import NavigationDrawer from '../NavigationDrawer';
+import Menu from '../../../shared/components/Menu';
 
 @observer
 export default class App extends React.Component {
