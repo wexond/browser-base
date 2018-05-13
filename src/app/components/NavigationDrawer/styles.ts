@@ -9,11 +9,11 @@ export interface StyledProps {
   contentVisible: boolean;
 }
 
-const getRight = (props: StyledProps) => {
+const getTranslateX = (props: StyledProps) => {
   if (!props.visible) {
-    return '-320px';
+    return 'translateX(320px)';
   }
-  return 0;
+  return 'translateX(0)';
 };
 
 export const Styled = styled.div`
@@ -23,12 +23,13 @@ export const Styled = styled.div`
   top: 0;
   background-color: white;
   z-index: 9999;
-  transition: 0.4s right cubic-bezier(0.19, 1, 0.22, 1);
+  transition: 0.4s transform cubic-bezier(0.19, 1, 0.22, 1);
   box-sizing: border-box;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: ${shadows(16)};
+  right: 0;
 
-  right: ${(props: StyledProps) => getRight(props)};
+  transform: ${(props: StyledProps) => getTranslateX(props)};
+  box-shadow: ${shadows(16)};
 `;
 
 export const Title = styled.div`
