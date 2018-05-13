@@ -33,10 +33,6 @@ function render(Component: any) {
 }
 
 async function setup() {
-  if (!fs.existsSync(getPath())) {
-    fs.mkdirSync(getPath());
-  }
-
   if (!fs.existsSync(getPath('plugins'))) {
     fs.mkdirSync(getPath('plugins'));
   }
