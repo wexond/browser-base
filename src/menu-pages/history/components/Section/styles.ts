@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { typography } from 'nersent-ui';
-import shadows from '../../../shared/mixins/shadows';
+import shadows from '../../../../shared/mixins/shadows';
 
 export const Title = styled.div`
   font-size: 20px;
