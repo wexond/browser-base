@@ -13,8 +13,7 @@
     "experimentalDecorators": true
   },
   "awesomeTypescriptLoaderOptions": {
-    "reportFiles": ["src/**/*.{ts,tsx}"],
-    "useCache": true
+    "reportFiles": ["src/**/*.{ts,tsx}"]
   },
   "exclude": ["node_modules"]
 }
