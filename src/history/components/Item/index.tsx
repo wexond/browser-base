@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react';
-import { Checkbox } from 'nersent-ui';
 import React from 'react';
 import { Icon, StyledItem, Time, Title } from './styles';
-import HistoryItem from '../../../../shared/models/history-item';
+import HistoryItem from '../../../shared/models/history-item';
+import transparency from '../../../shared/defaults/opacity';
 
-const pageIcon = require('../../../../shared/icons/page.svg');
+const pageIcon = require('../../../shared/icons/page.svg');
 
 interface Props {
   data: HistoryItem;
@@ -23,7 +23,7 @@ export default class Item extends React.Component<Props, {}> {
 
     if (data.favicon == null) {
       data.favicon = pageIcon;
-      opacity = 0.54;
+      opacity = transparency.light.inactiveIcon;
     }
 
     return (

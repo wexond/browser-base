@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Styled, Title, Header, Dark, NavContent, Content } from './styles';
 import Item from './Item';
 import Store from '../../store';
-import History from '../../../menu-pages/history/components/History';
+import History from '../../../history/components/History';
 import Search from './Search';
 
 const clearIcon = require('../../../shared/icons/clear.svg');

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { typography } from 'nersent-ui';
+import typography from '../../../shared/mixins/typography';
+import opacity from '../../../shared/defaults/opacity';
 
 export const Content = styled.div`
   max-width: 640px;
@@ -13,7 +14,7 @@ export const Content = styled.div`
 export const Title = styled.div`
   ${typography.robotoMedium()};
   font-size: 32px;
-  opacity: 0.87;
+  opacity: ${opacity.light.primaryText};
   margin-top: 56px;
   margin-left: 64px;
 `;

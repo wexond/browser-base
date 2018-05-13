@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { typography } from 'nersent-ui';
-import images from '../../../../shared/mixins/images';
+import images from '../../../shared/mixins/images';
+import typography from '../../../shared/mixins/typography';
+import opacity from '../../../shared/defaults/opacity';
 
 export const StyledItem = styled.div`
   height: 56px;
@@ -28,13 +29,13 @@ export const Icon = styled.div`
 export const PrimaryText = styled.div`
   ${typography.robotoRegular()};
   font-size: 14px;
-  opacity: 0.87;
+  opacity: ${opacity.light.primaryText};
 `;
 
 export const SecondaryText = styled.div`
   ${typography.robotoRegular()};
   font-size: 14px;
-  opacity: 0.54;
+  opacity: ${opacity.light.secondaryText};
 `;
 
 export const Title = styled(PrimaryText)`

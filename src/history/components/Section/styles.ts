@@ -1,12 +1,13 @@
 import styled from 'styled-components';
-import { typography } from 'nersent-ui';
-import shadows from '../../../../shared/mixins/shadows';
+import shadows from '../../../shared/mixins/shadows';
+import opacity from '../../../shared/defaults/opacity';
+import typography from '../../../shared/mixins/typography';
 
 export const Title = styled.div`
   font-size: 20px;
   ${typography.robotoMedium()};
   margin-left: 24px;
-  opacity: 0.87;
+  opacity: ${opacity.light.primaryText};
   letter-spacing: 0.0075rem;
 `;
 

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { typography } from 'nersent-ui';
 import images from '../../../shared/mixins/images';
 import shadows from '../../../shared/mixins/shadows';
+import opacity from '../../../shared/defaults/opacity';
+import typography from '../../../shared/mixins/typography';
 
 export interface StyledProps {
   visible: boolean;
@@ -35,7 +36,7 @@ export const Title = styled.div`
   margin-left: 16px;
   margin-top: 18px;
   margin-bottom: 10px;
-  opacity: 0.87;
+  opacity: ${opacity.light.primaryText};
 
   letter-spacing: 0.007rem;
   ${typography.robotoMedium()};
@@ -69,7 +70,7 @@ export const Dark = styled.div`
 
 export const NavContent = styled.div`
   width: 300px;
-  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  border-left: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
 `;
 
 interface ContentProps {

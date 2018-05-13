@@ -2,9 +2,9 @@ import { observer } from 'mobx-react';
 import React, { Component } from 'react';
 import { Input, InputContainer, StyledAddressBar, Icon } from './styles';
 import Store from '../../store';
-import { isURL, getAddressbarURL } from '../../utils/url';
 import Suggestions from '../Suggestions';
 import SuggestionItem from '../../models/suggestion-item';
+import { isURL, getAddressbarURL } from '../../../shared/utils/url';
 
 const searchIcon = require('../../../shared/icons/search.svg');
 

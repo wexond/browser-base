@@ -1,6 +1,8 @@
 import styled from 'styled-components';
-import { typography, colors } from 'nersent-ui';
 import images from '../../../../shared/mixins/images';
+import colors from '../../../../shared/defaults/colors';
+import typography from '../../../../shared/mixins/typography';
+import opacity from '../../../../shared/defaults/opacity';
 
 interface ItemProps {
   visible: boolean;
@@ -48,7 +50,7 @@ export const Title = styled.div`
   font-size: 14px;
   margin-left: 32px;
 
-  opacity: ${(props: TitleProps) => (props.selected ? 1 : 0.87)};
+  opacity: ${(props: TitleProps) => (props.selected ? 1 : opacity.light.primaryText)};
   ${typography.robotoMedium()};
   display: 'flex';
   color: ${props => (props.selected ? colors.blue['500'] : '#000')};
