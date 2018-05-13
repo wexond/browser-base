@@ -1,4 +1,4 @@
 export interface Favicon {
-  url: string;
-  favicon: Buffer;
+  url?: string;
+  favicon?: Buffer;
 }
