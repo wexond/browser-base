@@ -1,11 +1,10 @@
-import * as nersentUi from 'nersent-ui';
 import React from 'react';
 import styled from 'styled-components';
 import wpm from 'wexond-package-manager';
 import Tab from '../components/Tab';
 import PluginAPI from '../models/plugin-api';
-import { Theme } from '../models/theme';
 import Store from '../store';
+import { Theme } from '../../shared/models/theme';
 
 export const loadPlugins = async () => {
   const plugins = await wpm.list();
@@ -20,7 +19,6 @@ export const loadPlugins = async () => {
           Store.theme.set(theme);
         },
       },
-      'nersent-ui': nersentUi,
     };
 
     const { result, context } = await wpm.run(plugin.namespace, {}, mock);

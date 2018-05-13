@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react';
-import { Checkbox } from 'nersent-ui';
 import React from 'react';
 import { Header, Items, Title } from './styles';
 import Item from '../Item';

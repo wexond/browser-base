@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import Section from '../menu-pages/history/models/section';
+import Section from './models/section';
 
 class Store {
   @observable sections: Section[] = [];

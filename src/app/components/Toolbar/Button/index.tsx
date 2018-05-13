@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
-import { Ripples } from 'nersent-ui';
 import React from 'react';
 import { Button, Icon } from './styles';
 import Store from '../../../store';
+import Ripples from '../../../../shared/components/Ripples';
 
 interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;

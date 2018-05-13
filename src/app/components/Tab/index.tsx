@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react';
-import { Ripples } from 'nersent-ui';
 import React from 'react';
 import { Close, Content, Icon, Overlay, StyledTab, Title } from './styles';
 import tabAnimations from '../../defaults/tab-animations';
@@ -7,6 +6,7 @@ import Tab from '../../models/tab';
 import TabGroup from '../../models/tab-group';
 import Store from '../../store';
 import { closeWindow } from '../../utils/window';
+import Ripples from '../../../shared/components/Ripples';
 
 export interface TabProps {
   key: number;

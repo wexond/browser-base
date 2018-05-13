@@ -1,7 +1,7 @@
-import { transparency } from 'nersent-ui';
 import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
-import { TabTheme, Theme } from '../../models/theme';
+import opacity from '../../../shared/defaults/opacity';
+import { TabTheme, Theme } from '../../../shared/models/theme';
 
 const closeIcon = require('../../../shared/icons/close.svg');
 
@@ -20,7 +20,7 @@ export const Close = styled.div`
   z-index: 2;
 
   ${images.center('100%', '100%')};
-  opacity: ${(props: CloseProps) => (props.hovered ? transparency.light.icons.inactive : 0)};
+  opacity: ${(props: CloseProps) => (props.hovered ? opacity.light.inactiveIcon : 0)};
   filter: ${props => (props.tabState.close.color === 'light' ? 'invert(100%)' : '')};
 `;
 
@@ -87,7 +87,7 @@ export const Title = styled.div`
   font-weight: 500;
   margin-left: 12px;
 
-  opacity: ${transparency.light.text.primary};
+  opacity: ${opacity.light.primaryText};
   margin-left: ${(props: TitleProps) => (props.favicon === '' ? 0 : '12px')};
 `;
 

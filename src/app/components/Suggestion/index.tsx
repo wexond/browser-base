@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react';
-import { transparency } from 'nersent-ui';
 import React from 'react';
 import { Dash, Icon, PrimaryText, SecondaryText, StyledSuggestion } from './styles';
 import SuggestionItem from '../../models/suggestion-item';
 import Store from '../../store';
+import transparency from '../../../shared/defaults/opacity';
 
 const searchIcon = require('../../../shared/icons/search.svg');
 const pageIcon = require('../../../shared/icons/page.svg');
@@ -51,14 +51,14 @@ export default class Suggestion extends React.Component<Props, {}> {
 
     if (suggestion.type === 'no-subheader-search' || suggestion.type === 'search') {
       suggestion.favicon = searchIcon;
-      opacity = transparency.light.icons.inactive;
+      opacity = transparency.light.inactiveIcon;
 
       if (suggestionState.iconColor === 'light') {
         filter = 'invert(100%)';
       }
     } else if (suggestion.type === 'no-subheader-website') {
       suggestion.favicon = pageIcon;
-      opacity = transparency.light.icons.inactive;
+      opacity = transparency.light.inactiveIcon;
 
       if (suggestionState.iconColor === 'light') {
         filter = 'invert(100%)';
@@ -67,7 +67,7 @@ export default class Suggestion extends React.Component<Props, {}> {
 
     if (suggestion.favicon == null) {
       suggestion.favicon = pageIcon;
-      opacity = transparency.light.icons.inactive;
+      opacity = transparency.light.inactiveIcon;
     }
 
     return (
