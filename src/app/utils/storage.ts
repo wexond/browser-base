@@ -1,18 +1,12 @@
 import sqlite3 from 'sqlite3';
-
 import { getPath } from './paths';
-import HistoryItem from '../../history/models/history-item';
+import HistoryItem from '../../shared/models/history-item';
 
 export const history = new sqlite3.Database(getPath('history.db'));
 export const favicons = new sqlite3.Database(getPath('favicons.db'));
 
 history.run('CREATE TABLE IF NOT EXISTS history(id INTEGER PRIMARY KEY, title TEXT, url TEXT, favicon TEXT, date TEXT)');
 favicons.run('CREATE TABLE IF NOT EXISTS favicons(id INTEGER PRIMARY KEY, url TEXT, favicon BLOB)');
-
-export interface Favicon {
-  url: string;
-  favicon: Buffer;
-}
 
 export const addFavicon = (url: string) => {
   fetch(url)

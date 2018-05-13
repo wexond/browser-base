@@ -1,5 +1,6 @@
-import HistoryItem from '../models/history-item';
 import Section from '../models/section';
+import HistoryItem from '../../shared/models/history-item';
+import AppStore from '../../app/store';
 
 export function getSections(history: HistoryItem[]) {
   const sections: Section[] = [];
@@ -20,15 +21,20 @@ export function getSections(history: HistoryItem[]) {
 
     const foundSection = sections.find(x => x.date === dateStr);
 
+    const newItem = {
+      ...item,
+      favicon: AppStore.favicons[item.favicon],
+    };
+
     if (foundSection == null) {
       const section = {
-        items: [item],
+        items: [newItem],
         date: dateStr,
         id: id++,
       };
       sections.push(section);
     } else {
-      foundSection.items.push(item);
+      foundSection.items.push(newItem);
     }
   }
 

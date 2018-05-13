@@ -32,7 +32,7 @@ interface IconProps {
 export const Icon = styled.div`
   height: 24px;
   width: 24px;
-  -webkit-mask-image: ${props => `url(${props.image})`};
+  mask-image: ${props => `url(${props.image})`};
 
   margin-left: ${(props: IconProps) => (props.subItem ? '40px' : '16px')};
   background-color: ${props => (props.selected ? colors.blue['500'] : '#000')};
