@@ -1,13 +1,6 @@
-import { history } from '../utils/storage';
+import db from '../../shared/models/app-database';
 import { requestURL } from './network';
-
-interface History {
-  date: string;
-  favicon: string;
-  url: string;
-  title: string;
-  id: number;
-}
+import HistoryItem from '../../shared/models/history-item';
 
 interface Search {
   title: string;
@@ -28,7 +21,7 @@ const removeDuplicates = (array: any[], param: string) => {
   return array;
 };
 
-const countVisitedTimes = (historyItems: History[]) => {
+const countVisitedTimes = (historyItems: HistoryItem[]) => {
   const items: any[] = [];
 
   for (const hitem of historyItems) {
@@ -62,8 +55,8 @@ const countVisitedTimes = (historyItems: History[]) => {
 };
 
 type HistorySuggestions = {
-  history: History[];
-  mostVisited: History[];
+  history: HistoryItem[];
+  mostVisited: HistoryItem[];
 };
 
 export const getHistorySuggestions = (filter: string) =>
@@ -72,25 +65,23 @@ export const getHistorySuggestions = (filter: string) =>
 
     if (filter === '') resolve({ history: [], mostVisited: [] });
 
-    history.all('SELECT * FROM history', (err: any, historyItems: History[]) => {
-      if (err) reject(err);
+    const regex = /(http(s?)):\/\/(www.)?|www./gi;
 
-      const regex = /(http(s?)):\/\/(www.)?|www./gi;
+    let mostVisited: HistoryItem[] = [];
+    let fromHistory: HistoryItem[] = [];
 
-      let mostVisited: History[] = [];
-      let fromHistory: History[] = [];
+    const filterPart = filter.replace(regex, '');
 
-      const filterPart = filter.replace(regex, '');
-
-      for (const hItem of historyItems) {
-        let urlPart = hItem.url.replace(regex, '');
+    db.history
+      .each(item => {
+        let urlPart = item.url.replace(regex, '');
 
         if (urlPart.endsWith('/')) {
           urlPart = urlPart.slice(0, -1);
         }
 
         const itemToPush = {
-          ...hItem,
+          ...item,
           url: urlPart,
         };
 
@@ -103,58 +94,65 @@ export const getHistorySuggestions = (filter: string) =>
         } else if (itemToPush.title.toLowerCase().includes(filter)) {
           fromHistory.push(itemToPush);
         }
-      }
+      })
+      .then(() => {
+        fromHistory = removeDuplicates(fromHistory, 'url');
+        mostVisited = removeDuplicates(mostVisited, 'url');
 
-      fromHistory = removeDuplicates(fromHistory, 'url');
-      mostVisited = removeDuplicates(mostVisited, 'url');
-
-      const visitedTimes = countVisitedTimes(mostVisited);
-
-      mostVisited = [];
-      for (let i = 0; i < 2; i++) {
-        const item = visitedTimes[i];
-        if (item) {
-          const hItem = fromHistory.find(x => x.id === item.id);
-          mostVisited.push(hItem);
-          fromHistory.splice(fromHistory.indexOf(hItem), 1);
-        }
-      }
-
-      if (mostVisited[0] != null) {
-        const split = mostVisited[0].url.split('/');
-
-        let splitIndex = 0;
-        let shortUrl = split[0];
-
-        if (mostVisited[0].url.includes('://')) {
-          shortUrl = mostVisited[0].url;
-          splitIndex = 2;
+        for (const item of mostVisited) {
+          if (item.favicon != null) {
+            mostVisited.unshift(item);
+            mostVisited.splice(mostVisited.indexOf(item), 1);
+          }
         }
 
-        if (
-          split[splitIndex + 1] == null ||
-          (split[splitIndex + 1] != null &&
-            (split[splitIndex + 1].startsWith('?') || split[splitIndex + 1] === '') &&
-            filterPart !== '')
-        ) {
-          mostVisited.unshift({
-            ...mostVisited[0],
-            url: shortUrl,
-          });
-          mostVisited.splice(1, 1);
+        const visitedTimes = countVisitedTimes(mostVisited);
+
+        mostVisited = [];
+        for (let i = 0; i < 2; i++) {
+          const item = visitedTimes[i];
+          if (item) {
+            const hItem = fromHistory.find(x => x.id === item.id);
+            mostVisited.push(hItem);
+            fromHistory.splice(fromHistory.indexOf(hItem), 1);
+          }
         }
-      }
 
-      mostVisited = mostVisited.sort((a, b) => a.url.length - b.url.length).filter(Boolean);
-      fromHistory = fromHistory.sort((a, b) => a.url.length - b.url.length).slice(0, 4);
+        if (mostVisited[0] != null) {
+          const split = mostVisited[0].url.split('/');
 
-      fromHistory = removeDuplicates(fromHistory, 'title');
+          let splitIndex = 0;
+          let shortUrl = split[0];
 
-      resolve({
-        history: fromHistory,
-        mostVisited,
+          if (mostVisited[0].url.includes('://')) {
+            shortUrl = mostVisited[0].url;
+            splitIndex = 2;
+          }
+
+          if (
+            split[splitIndex + 1] == null ||
+            (split[splitIndex + 1] != null &&
+              (split[splitIndex + 1].startsWith('?') || split[splitIndex + 1] === '') &&
+              filterPart !== '')
+          ) {
+            mostVisited.unshift({
+              ...mostVisited[0],
+              url: shortUrl,
+            });
+            mostVisited.splice(1, 1);
+          }
+        }
+
+        mostVisited = mostVisited.sort((a, b) => a.url.length - b.url.length).filter(Boolean);
+        fromHistory = fromHistory.sort((a, b) => a.url.length - b.url.length).slice(0, 4);
+
+        fromHistory = removeDuplicates(fromHistory, 'title');
+
+        resolve({
+          history: fromHistory,
+          mostVisited,
+        });
       });
-    });
   });
 
 export const getSearchSuggestions = (filter: string) =>

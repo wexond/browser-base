@@ -1,13 +1,14 @@
 import Section from '../models/section';
 import HistoryItem from '../../../shared/models/history-item';
 import AppStore from '../../../app/store';
+import db from '../../../shared/models/app-database';
 
-export function getSections(history: HistoryItem[]) {
+export function getSections() {
   const sections: Section[] = [];
 
   let id = 0;
 
-  for (const item of history) {
+  db.history.each(item => {
     const date = new Date(item.date);
 
     const year = date
@@ -36,7 +37,7 @@ export function getSections(history: HistoryItem[]) {
     } else {
       foundSection.items.push(newItem);
     }
-  }
+  });
 
   return sections;
 }

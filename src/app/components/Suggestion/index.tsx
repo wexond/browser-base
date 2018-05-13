@@ -34,18 +34,19 @@ export default class Suggestion extends React.Component<Props, {}> {
     const { suggestion } = this.props;
     const { hovered } = this.state;
     const { primaryText, secondaryText } = suggestion;
+    const { suggestions } = Store.theme.theme;
 
     const selected = Store.suggestions.selected === suggestion.id;
 
     let opacity = 1;
     let filter = '';
 
-    let suggestionState = Store.theme.theme.suggestions.item.normal;
+    let suggestionState = suggestions.item.normal;
 
     if (selected) {
-      suggestionState = Store.theme.theme.suggestions.item.selected;
+      suggestionState = suggestions.item.selected;
     } else if (hovered) {
-      suggestionState = Store.theme.theme.suggestions.item.hovered;
+      suggestionState = suggestions.item.hovered;
     }
 
     if (suggestion.type === 'no-subheader-search' || suggestion.type === 'search') {
@@ -62,6 +63,11 @@ export default class Suggestion extends React.Component<Props, {}> {
       if (suggestionState.iconColor === 'light') {
         filter = 'invert(100%)';
       }
+    }
+
+    if (suggestion.favicon == null) {
+      suggestion.favicon = pageIcon;
+      opacity = transparency.light.icons.inactive;
     }
 
     return (

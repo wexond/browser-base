@@ -4,6 +4,8 @@ import React from 'react';
 import { Icon, StyledItem, Time, Title } from './styles';
 import HistoryItem from '../../../../shared/models/history-item';
 
+const pageIcon = require('../../../../shared/icons/page.svg');
+
 interface Props {
   data: HistoryItem;
 }
@@ -17,9 +19,16 @@ export default class Item extends React.Component<Props, {}> {
     const hour = date.getHours();
     const minute = date.getMinutes();
 
+    let opacity = 1;
+
+    if (data.favicon == null) {
+      data.favicon = pageIcon;
+      opacity = 0.54;
+    }
+
     return (
       <StyledItem>
-        <Icon style={{ backgroundImage: `url(${data.favicon})` }} />
+        <Icon style={{ backgroundImage: `url(${data.favicon})`, opacity }} />
         <Time>{`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
         <Title>{data.title}</Title>
       </StyledItem>

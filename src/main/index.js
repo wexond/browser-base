@@ -5,10 +5,12 @@ const path = require('path');
 const { platform } = require('os');
 const wpm = require('wexond-package-manager');
 const ipcMessages = require('../shared/defaults/ipc-messages');
+const { homedir } = require('os');
 
 const PROTOCOL = 'wexond';
-
 const URL_WHITELIST = ['history', 'settings', 'newtab', 'bookmarks', 'plugins', 'extensions'];
+
+app.setPath('userData', path.resolve(homedir(), '.wexond'));
 
 let mainWindow;
 
