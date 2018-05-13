@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { Checkbox } from 'nersent-ui';
 import React from 'react';
 import { Icon, StyledItem, Time, Title } from './styles';
-import HistoryItem from '../../../shared/models/history-item';
+import HistoryItem from '../../../../shared/models/history-item';
 
 interface Props {
   data: HistoryItem;
