@@ -149,7 +149,6 @@ export const getHistorySuggestions = (filter: string) =>
       fromHistory = fromHistory.sort((a, b) => a.url.length - b.url.length).slice(0, 4);
 
       fromHistory = removeDuplicates(fromHistory, 'title');
-      mostVisited = removeDuplicates(mostVisited, 'title');
 
       resolve({
         history: fromHistory,
