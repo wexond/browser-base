@@ -5,7 +5,7 @@ import StyledPage from './styles';
 import Page from '../../models/page';
 import Tab from '../../models/tab';
 import Store from '../../store';
-import { addFavicon, history } from '../../utils/storage';
+import db from '../../../shared/models/app-database';
 
 interface Props {
   page: Page;
@@ -102,18 +102,21 @@ export default class extends React.Component<Props, {}> {
     this.updateData();
   };
 
-  public onLoadCommit = ({ url, isMainFrame }: Electron.LoadCommitEvent) => {
+  public onLoadCommit = async ({ url, isMainFrame }: Electron.LoadCommitEvent) => {
     this.tab.loading = true;
 
     if (url !== this.lastURL && isMainFrame && !url.startsWith('wexond://')) {
-      const self = this;
-      history.run(
-        "INSERT INTO history(title, url, favicon, date) VALUES (?, ?, ?, DATETIME('now', 'localtime'))",
-        [this.tab.title, url, this.tab.favicon],
-        function callback() {
-          self.lastHistoryItemID = this.lastID;
-        },
-      );
+      db.transaction('rw', db.history, async () => {
+        const id = await db.history.add({
+          title: this.tab.title,
+          url,
+          favicon: this.tab.favicon,
+          date: new Date().toString(),
+        });
+
+        this.lastHistoryItemID = id;
+      });
+
       this.lastURL = url;
     }
   };
@@ -126,7 +129,7 @@ export default class extends React.Component<Props, {}> {
           this.tab.favicon = '';
         } else {
           this.tab.favicon = favicons[0];
-          addFavicon(favicons[0]);
+          db.addFavicon(favicons[0]);
         }
       }
       this.updateData();
@@ -139,14 +142,16 @@ export default class extends React.Component<Props, {}> {
   public updateData = () => {
     if (this.lastURL === this.tab.url) {
       if (this.lastHistoryItemID !== -1) {
-        const query = 'UPDATE history SET title = ?, url = ?, favicon = ? WHERE rowid = ?';
-        const data = [
-          this.tab.title,
-          this.webview.getURL(),
-          this.tab.favicon,
-          this.lastHistoryItemID,
-        ];
-        history.run(query, data);
+        db.transaction('rw', db.history, async () => {
+          db.history
+            .where('id')
+            .equals(this.lastHistoryItemID)
+            .modify({
+              title: this.tab.title,
+              url: this.webview.getURL(),
+              favicon: this.tab.favicon,
+            });
+        });
       }
     }
   };

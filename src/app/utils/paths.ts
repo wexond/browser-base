@@ -1,5 +1,5 @@
 import path from 'path';
 import { USERDATA_PATH } from '../constants/paths';
 
-export const getPath = (relativePath: string) =>
-  path.resolve(USERDATA_PATH, relativePath).replace(/\\/g, '/');
+export const getPath = (...relativePaths: string[]) =>
+  path.resolve(USERDATA_PATH, ...relativePaths).replace(/\\/g, '/');

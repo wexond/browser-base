@@ -6,28 +6,24 @@ import { getSections } from '../../utils/history';
 import Store from '../../store';
 import AppStore from '../../../../app/store';
 import Section from '../Section';
-import { getHistory, favicons } from '../../../../app/utils/storage';
 import { Favicon } from '../../../../shared/models/favicon';
+import db from '../../../../shared/models/app-database';
 
 @observer
 class History extends React.Component {
   public async componentDidMount() {
-    const history = await getHistory();
-
-    favicons.all('SELECT * FROM favicons', (err: any, faviconItems: Favicon[]) => {
-      if (err) throw err;
-      for (const favicon of faviconItems) {
-        if (AppStore.favicons[favicon.url] == null) {
+    db.favicons
+      .each(favicon => {
+        if (AppStore.favicons[favicon.url] == null && favicon.favicon.byteLength !== 0) {
           AppStore.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));
         }
-      }
-
-      const sections = getSections(history.reverse());
-
-      setTimeout(() => {
-        Store.sections = sections;
-      }, 250);
-    });
+      })
+      .then(() => {
+        const sections = getSections();
+        setTimeout(() => {
+          Store.sections = sections;
+        }, 250);
+      });
   }
 
   public componentWillUnmount() {
