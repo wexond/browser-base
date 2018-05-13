@@ -96,9 +96,10 @@ export default class TabGroup {
   public selectTab(tab: Tab) {
     this.selectedTab = tab.id;
 
-    if (tab.url.startsWith('wexond://newtab')) {
-      requestAnimationFrame(() => {});
-      Store.addressBar.toggled = true;
+    if (tab.url.startsWith('wexond://newtab') || tab.url.trim() === '') {
+      requestAnimationFrame(() => {
+        Store.addressBar.toggled = true;
+      });
     }
   }
 
