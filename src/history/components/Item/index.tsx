@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { Checkbox } from 'nersent-ui';
 import React from 'react';
 import { Icon, StyledItem, Time, Title } from './styles';
-import HistoryItem from '../../models/history-item';
+import HistoryItem from '../../../shared/models/history-item';
 
 interface Props {
   data: HistoryItem;
@@ -19,7 +19,7 @@ export default class Item extends React.Component<Props, {}> {
 
     return (
       <StyledItem>
-        <Icon />
+        <Icon style={{ backgroundImage: `url(${data.favicon})` }} />
         <Time>{`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
         <Title>{data.title}</Title>
       </StyledItem>
