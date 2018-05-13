@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { typography } from 'nersent-ui';
+import images from '../../../shared/mixins/images';
 
 export const StyledItem = styled.div`
   height: 56px;
@@ -21,8 +22,7 @@ export const Icon = styled.div`
   height: 16px;
   min-width: 16px;
   margin-left: 24px;
-  background-color: rgba(0, 0, 0, 0.54);
-  border-radius: 4px;
+  ${images.center('16px', 'auto')};
 `;
 
 export const PrimaryText = styled.div`

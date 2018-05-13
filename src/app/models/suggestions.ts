@@ -1,9 +1,10 @@
 import { observable } from 'mobx';
 import SuggestionItem from './suggestion-item';
-import { favicons, Favicon } from '../utils/storage';
+import { favicons } from '../utils/storage';
 import { getHistorySuggestions, getSearchSuggestions } from '../utils/suggestions';
 import Store from '../store';
 import { isURL } from '../utils/url';
+import { Favicon } from '../../shared/models/favicon';
 
 export default class Suggestions {
   @observable public list: SuggestionItem[] = [];
