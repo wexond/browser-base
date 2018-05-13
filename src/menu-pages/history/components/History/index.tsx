@@ -4,10 +4,10 @@ import React from 'react';
 import { Content } from './styles';
 import { getSections } from '../../utils/history';
 import Store from '../../store';
-import AppStore from '../../../app/store';
+import AppStore from '../../../../app/store';
 import Section from '../Section';
-import { getHistory, favicons } from '../../../app/utils/storage';
-import { Favicon } from '../../../shared/models/favicon';
+import { getHistory, favicons } from '../../../../app/utils/storage';
+import { Favicon } from '../../../../shared/models/favicon';
 
 @observer
 class History extends React.Component {
