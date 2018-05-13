@@ -1,6 +1,6 @@
 import Section from '../models/section';
-import HistoryItem from '../../shared/models/history-item';
-import AppStore from '../../app/store';
+import HistoryItem from '../../../shared/models/history-item';
+import AppStore from '../../../app/store';
 
 export function getSections(history: HistoryItem[]) {
   const sections: Section[] = [];

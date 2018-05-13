@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { typography } from 'nersent-ui';
-import images from '../../../shared/mixins/images';
+import images from '../../../../shared/mixins/images';
 
 export const StyledItem = styled.div`
   height: 56px;
