@@ -26,7 +26,9 @@ class Store {
   @observable public theme = new Theme();
   @observable public suggestions = new Suggestions();
   @observable public isFullscreen: boolean;
-  @observable public navigationDrawer = new NavigationDrawer();
+  @observable public pagesNavigationDrawer = new NavigationDrawer();
+  @observable public tabGroupsNavigationDrawer = new NavigationDrawer();
+
   @observable
   public navigationState = {
     canGoBack: false,

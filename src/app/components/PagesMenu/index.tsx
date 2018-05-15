@@ -24,18 +24,18 @@ interface Props {
 
 @observer
 export default class extends React.Component<Props, {}> {
-  public static Item = Item;
+  private static Item = Item;
 
-  public onItemClick = (e: React.MouseEvent<HTMLDivElement>, item: Item) => {
+  private onItemClick = (e: React.MouseEvent<HTMLDivElement>, item: Item) => {
     if (item != null && item.props.pageName != null) {
-      Store.navigationDrawer.selectedItem = item.props.pageName;
+      Store.pagesNavigationDrawer.selectedItem = item.props.pageName;
     }
   };
 
   public render() {
     const { children, title } = this.props;
 
-    const selected = Store.navigationDrawer.selectedItem;
+    const selected = Store.pagesNavigationDrawer.selectedItem;
 
     const contentVisible =
       selected === 'history' ||
@@ -51,7 +51,7 @@ export default class extends React.Component<Props, {}> {
       selected === 'extensions';
 
     return (
-      <NavigationDrawer>
+      <NavigationDrawer store={Store.pagesNavigationDrawer}>
         <Content visible={contentVisible}>
           {(selected === 'history' && <History />) || (selected === 'about' && <About />)}
         </Content>
