@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { Icon, StyledItem, Time, Title } from './styles';
-import HistoryItem from '../../../shared/models/history-item';
-import transparency from '../../../shared/defaults/opacity';
+import HistoryItem from '../../../../shared/models/history-item';
+import transparency from '../../../../shared/defaults/opacity';
 
-const pageIcon = require('../../../shared/icons/page.svg');
+const pageIcon = require('../../../../shared/icons/page.svg');
 
 interface Props {
   data: HistoryItem;

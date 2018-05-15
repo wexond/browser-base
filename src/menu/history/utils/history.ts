@@ -1,7 +1,7 @@
 import Section from '../models/section';
-import HistoryItem from '../../shared/models/history-item';
-import AppStore from '../../app/store';
-import db from '../../shared/models/app-database';
+import HistoryItem from '../../../shared/models/history-item';
+import AppStore from '../../../app/store';
+import db from '../../../shared/models/app-database';
 
 export function getSections() {
   const sections: Section[] = [];
