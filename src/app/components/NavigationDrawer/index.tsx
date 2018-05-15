@@ -3,34 +3,39 @@ import { observer } from 'mobx-react';
 import { Styled, Dark } from './styles';
 
 import Store from '../../store';
+import NavigationDrawerModel from '../../models/navigation-drawer';
 
 interface Props {
   children?: any;
   contentVisible?: boolean;
+  store: NavigationDrawerModel;
 }
 
 @observer
-export default class extends React.Component<Props, {}> {
+export default class NavigationDrawer extends React.Component<Props, {}> {
   public static defaultProps = {
     contentVisible: false,
+    visible: false,
   };
 
   public onDarkClick = () => {
+    const { store } = this.props;
+
     requestAnimationFrame(() => {
-      Store.navigationDrawer.visible = false;
-      Store.navigationDrawer.selectedItem = '';
+      store.visible = false;
+      store.selectedItem = '';
     });
   };
 
   public render() {
-    const { children, contentVisible } = this.props;
+    const { children, contentVisible, store } = this.props;
 
     return (
       <React.Fragment>
-        <Styled visible={Store.navigationDrawer.visible} contentVisible={contentVisible}>
+        <Styled visible={store.visible} contentVisible={contentVisible}>
           {children}
         </Styled>
-        <Dark onClick={this.onDarkClick} visible={Store.navigationDrawer.visible} />
+        <Dark onClick={this.onDarkClick} visible={store.visible} />
       </React.Fragment>
     );
   }
