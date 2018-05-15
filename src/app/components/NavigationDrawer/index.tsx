@@ -31,24 +31,10 @@ export default class extends React.Component<Props, {}> {
     });
   };
 
-  public onHistoryClick = () => {
-    Store.navigationDrawer.selectedItem = 'history';
-  };
-
-  public onBookmarksClick = () => {
-    Store.navigationDrawer.selectedItem = 'bookmarks';
-  };
-
-  public onSettingsClick = () => {
-    Store.navigationDrawer.selectedItem = 'settings';
-  };
-
-  public onExtensionsClick = () => {
-    Store.navigationDrawer.selectedItem = 'extensions';
-  };
-
-  public onAboutClick = () => {
-    Store.navigationDrawer.selectedItem = 'about';
+  public onItemClick = (e: React.MouseEvent<HTMLDivElement>, item: Item) => {
+    if (item != null && item.props.pageName != null) {
+      Store.navigationDrawer.selectedItem = item.props.pageName;
+    }
   };
 
   public render() {
@@ -78,35 +64,44 @@ export default class extends React.Component<Props, {}> {
           <NavContent>
             <Header>{(searchVisible && <Search />) || <Title>{title}</Title>}</Header>
             <Item
-              onClick={this.onHistoryClick}
+              onClick={this.onItemClick}
               icon={historyIcon}
               selected={selected === 'history'}
+              pageName="history"
             >
               History
               <Item icon={clearIcon}>Clear browsing history</Item>
             </Item>
             <Item
-              onClick={this.onBookmarksClick}
+              onClick={this.onItemClick}
               icon={bookmarksIcon}
               selected={selected === 'bookmarks'}
+              pageName="bookmarks"
             >
               Bookmarks
             </Item>
             <Item
-              onClick={this.onSettingsClick}
+              onClick={this.onItemClick}
               icon={settingsIcon}
               selected={selected === 'settings'}
+              pageName="settings"
             >
               Settings
             </Item>
             <Item
-              onClick={this.onExtensionsClick}
+              onClick={this.onItemClick}
               icon={extensionsIcon}
               selected={selected === 'extensions'}
+              pageName="extensions"
             >
               Extensions
             </Item>
-            <Item onClick={this.onAboutClick} icon={aboutIcon} selected={selected === 'about'}>
+            <Item
+              onClick={this.onItemClick}
+              icon={aboutIcon}
+              selected={selected === 'about'}
+              pageName="about"
+            >
               About
             </Item>
           </NavContent>
