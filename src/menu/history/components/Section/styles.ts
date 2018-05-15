@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import shadows from '../../../shared/mixins/shadows';
-import opacity from '../../../shared/defaults/opacity';
-import typography from '../../../shared/mixins/typography';
+import shadows from '../../../../shared/mixins/shadows';
+import opacity from '../../../../shared/defaults/opacity';
+import typography from '../../../../shared/mixins/typography';
 
 export const Title = styled.div`
   font-size: 20px;
