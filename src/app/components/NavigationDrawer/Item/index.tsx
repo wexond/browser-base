@@ -7,7 +7,8 @@ interface Props {
   subItem?: boolean;
   selected?: boolean;
   visible?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  pageName?: string;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
 }
 
 export default class Item extends React.Component<Props, {}> {
@@ -16,9 +17,17 @@ export default class Item extends React.Component<Props, {}> {
     selected: false,
   };
 
+  private onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { onClick } = this.props;
+
+    if (typeof onClick === 'function') {
+      onClick(e, this);
+    }
+  };
+
   public render() {
     const {
-      icon, children, subItem, visible, onClick,
+      icon, children, subItem, visible,
     } = this.props;
 
     let { selected } = this.props;
@@ -27,7 +36,7 @@ export default class Item extends React.Component<Props, {}> {
 
     return (
       <React.Fragment>
-        <StyledItem onClick={onClick} visible={visible} selected={selected}>
+        <StyledItem onClick={this.onClick} visible={visible} selected={selected}>
           <Background selected={selected} />
           <Icon selected={selected} subItem={subItem} image={icon} />
           {React.Children.map(children, (el: React.ReactElement<any>) => {
