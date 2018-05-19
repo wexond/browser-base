@@ -21,7 +21,7 @@ export const Styled = styled.div`
   position: fixed;
   display: flex;
   top: 0;
-  background-color: white;
+  background-color: #f5f5f5;
   z-index: 9999;
   transition: 0.4s transform cubic-bezier(0.19, 1, 0.22, 1);
   box-sizing: border-box;
