@@ -4,7 +4,6 @@ import colors from '../../defaults/colors';
 import { Path, StyledPreloader } from './styles';
 
 export interface IProps {
-  className?: string;
   style?: {};
   color?: string;
   thickness?: number;
@@ -20,11 +19,11 @@ export default class Preloader extends React.Component<IProps, {}> {
 
   public render() {
     const {
-      className, style, color, size, thickness,
+      style, color, size, thickness,
     } = this.props;
 
     return (
-      <StyledPreloader size={size} style={style}>
+      <StyledPreloader size={size} style={style} className="aha">
         <svg viewBox="25 25 50 50">
           <Path
             cx="50"
