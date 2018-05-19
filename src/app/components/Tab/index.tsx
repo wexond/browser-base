@@ -6,6 +6,7 @@ import Tab from '../../models/tab';
 import TabGroup from '../../models/tab-group';
 import Store from '../../store';
 import { closeWindow } from '../../utils/window';
+
 import Ripples from '../../../shared/components/Ripples';
 
 export interface TabProps {
@@ -168,7 +169,6 @@ export default class extends React.Component<TabProps, {}> {
             {title}
           </Title>
         </Content>
-
         <Close
           onMouseDown={this.onCloseMouseDown}
           onMouseUp={this.onCloseMouseUp}

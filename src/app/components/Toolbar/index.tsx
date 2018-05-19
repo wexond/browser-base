@@ -17,12 +17,8 @@ export default class Toolbar extends React.Component {
   public static Button = ToolbarButton;
   public static Separator = ToolbarSeparator;
 
-  public onTabGroupsIconClick = () => {
-    Store.tabGroupsNavigationDrawer.visible = !Store.tabGroupsNavigationDrawer.visible;
-  };
-
-  public onMenuClick = () => {
-    Store.wexondNavigationDrawer.visible = !Store.wexondNavigationDrawer.visible;
+  public toggleMenu = () => {
+    Store.navigationDrawer.visible = !Store.navigationDrawer.visible;
   };
 
   public render() {
@@ -38,9 +34,9 @@ export default class Toolbar extends React.Component {
           <TabBar />
         </TabsSection>
         <ToolbarSeparator style={{ ...theme.toolbar.separators.style }} />
-        <ToolbarButton size={16} icon={tabGroupsIcon} onClick={this.onTabGroupsIconClick} />
+        <ToolbarButton size={16} icon={tabGroupsIcon} />
         <ToolbarButton
-          onClick={this.onMenuClick}
+          onClick={this.toggleMenu}
           size={20}
           icon={menuIcon}
           style={{ marginRight: 4 }}
