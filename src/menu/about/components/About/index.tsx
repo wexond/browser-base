@@ -19,7 +19,7 @@ class About extends React.Component {
             <Item title="Wexond version">v{packageFile.version}</Item>
             <Item title="React version">v{packageFile.devDependencies.react}</Item>
             <Item title="Electron version">v{packageFile.devDependencies.electron}</Item>
-            <Item title="Nodejs version">{process.version}</Item>
+            <Item title="NodeJS version">{process.version}</Item>
           </Card>
         </Content>
       </React.Fragment>

@@ -5,11 +5,15 @@ import Item from './Item';
 import Store from '../../store';
 import Search from './Search';
 
-import About from '../../../menu/about/components/About';
+import TabGroups from '../../../menu/tabGroups/components/TabGroups';
 import History from '../../../menu/history/components/History';
+import About from '../../../menu/about/components/About';
 
-const clearIcon = require('../../../shared/icons/clear.svg');
+import { NavigationDrawerItems } from '../../enums';
+
+const tabGroupsIcon = require('../../../shared/icons/tab-groups.svg');
 const historyIcon = require('../../../shared/icons/history.svg');
+const clearIcon = require('../../../shared/icons/clear.svg');
 const bookmarksIcon = require('../../../shared/icons/bookmarks.svg');
 const settingsIcon = require('../../../shared/icons/settings.svg');
 const extensionsIcon = require('../../../shared/icons/extensions.svg');
@@ -27,14 +31,78 @@ export default class extends React.Component<Props, {}> {
   public onDarkClick = () => {
     requestAnimationFrame(() => {
       Store.navigationDrawer.visible = false;
-      Store.navigationDrawer.selectedItem = '';
+      Store.navigationDrawer.selectedItem = null;
     });
   };
 
   private onItemClick = (e: React.MouseEvent<HTMLDivElement>, item: Item) => {
-    if (item != null && item.props.pageName != null) {
-      Store.navigationDrawer.selectedItem = item.props.pageName;
+    if (item != null && item.props.page != null) {
+      Store.navigationDrawer.selectedItem = item.props.page;
     }
+  };
+
+  private getItems = () => [
+    {
+      type: NavigationDrawerItems.TabGroups,
+      label: 'Tab groups',
+      icon: tabGroupsIcon,
+      content: <TabGroups />,
+      searchVisible: false,
+      subItems: [],
+    },
+    {
+      type: NavigationDrawerItems.History,
+      label: 'History',
+      icon: historyIcon,
+      content: <History />,
+      searchVisible: true,
+      subItems: [
+        {
+          label: 'Clear browsing history',
+          icon: clearIcon,
+        },
+      ],
+    },
+    {
+      type: NavigationDrawerItems.Bookmarks,
+      label: 'Bookmarks',
+      icon: bookmarksIcon,
+      content: null,
+      searchVisible: false,
+      subItems: [],
+    },
+    {
+      type: NavigationDrawerItems.Settings,
+      label: 'Settings',
+      icon: settingsIcon,
+      content: null,
+      searchVisible: false,
+      subItems: [],
+    },
+    {
+      type: NavigationDrawerItems.Extensions,
+      label: 'Extensions',
+      icon: extensionsIcon,
+      content: null,
+      searchVisible: false,
+      subItems: [],
+    },
+    {
+      type: NavigationDrawerItems.About,
+      label: 'About',
+      icon: aboutIcon,
+      content: <About />,
+      searchVisible: false,
+      subItems: [],
+    },
+  ];
+
+  private getItem = (page: NavigationDrawerItems, items: any) => {
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type === page) return items[i];
+    }
+
+    return null;
   };
 
   public render() {
@@ -42,68 +110,34 @@ export default class extends React.Component<Props, {}> {
 
     const selected = Store.navigationDrawer.selectedItem;
 
-    const contentVisible =
-      selected === 'history' ||
-      selected === 'extensions' ||
-      selected === 'bookmarks' ||
-      selected === 'settings' ||
-      selected === 'about';
+    const items = this.getItems();
+    const selectedItem = this.getItem(selected, items);
 
-    const searchVisible =
-      selected === 'history' ||
-      selected === 'bookmarks' ||
-      selected === 'settings' ||
-      selected === 'extensions';
+    const contentVisible = selectedItem != null && selectedItem.content != null;
+    const searchVisible = selectedItem != null && selectedItem.searchVisible;
 
     return (
       <React.Fragment>
         <Styled visible={Store.navigationDrawer.visible} contentVisible={contentVisible}>
-          <Content visible={contentVisible}>
-            {(selected === 'history' && <History />) || (selected === 'about' && <About />)}
-          </Content>
+          <Content visible={contentVisible}>{selectedItem != null && selectedItem.content}</Content>
           <NavContent>
             <Header>{(searchVisible && <Search />) || <Title>{title}</Title>}</Header>
-            <Item
-              onClick={this.onItemClick}
-              icon={historyIcon}
-              selected={selected === 'history'}
-              pageName="history"
-            >
-              History
-              <Item icon={clearIcon}>Clear browsing history</Item>
-            </Item>
-            <Item
-              onClick={this.onItemClick}
-              icon={bookmarksIcon}
-              selected={selected === 'bookmarks'}
-              pageName="bookmarks"
-            >
-              Bookmarks
-            </Item>
-            <Item
-              onClick={this.onItemClick}
-              icon={settingsIcon}
-              selected={selected === 'settings'}
-              pageName="settings"
-            >
-              Settings
-            </Item>
-            <Item
-              onClick={this.onItemClick}
-              icon={extensionsIcon}
-              selected={selected === 'extensions'}
-              pageName="extensions"
-            >
-              Extensions
-            </Item>
-            <Item
-              onClick={this.onItemClick}
-              icon={aboutIcon}
-              selected={selected === 'about'}
-              pageName="about"
-            >
-              About
-            </Item>
+            {items.map((data: any, key: any) => (
+              <Item
+                onClick={this.onItemClick}
+                icon={data.icon}
+                selected={selectedItem != null && data.type === selectedItem.type}
+                page={data.type}
+                key={key}
+              >
+                {data.subItems.map((subItemData: any, subItemKey: any) => (
+                  <Item icon={subItemData.icon} key={key}>
+                    {subItemData.label}
+                  </Item>
+                ))}
+                {data.label}
+              </Item>
+            ))}
           </NavContent>
         </Styled>
         <Dark onClick={this.onDarkClick} visible={Store.navigationDrawer.visible} />
