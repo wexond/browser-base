@@ -12,6 +12,8 @@ import About from '../../../menu/about/components/About';
 import { NavigationDrawerItems } from '../../enums';
 
 const tabGroupsIcon = require('../../../shared/icons/tab-groups.svg');
+const tabGroupsLoadIcon = require('../../../shared/icons/load.svg');
+const tabGroupsSaveIcon = require('../../../shared/icons/save.svg');
 const historyIcon = require('../../../shared/icons/history.svg');
 const clearIcon = require('../../../shared/icons/clear.svg');
 const bookmarksIcon = require('../../../shared/icons/bookmarks.svg');
@@ -37,7 +39,9 @@ export default class extends React.Component<Props, {}> {
 
   private onItemClick = (e: React.MouseEvent<HTMLDivElement>, item: Item) => {
     if (item != null && item.props.page != null) {
-      Store.navigationDrawer.selectedItem = item.props.page;
+      requestAnimationFrame(() => {
+        Store.navigationDrawer.selectedItem = item.props.page;
+      });
     }
   };
 
@@ -48,7 +52,16 @@ export default class extends React.Component<Props, {}> {
       icon: tabGroupsIcon,
       content: <TabGroups />,
       searchVisible: false,
-      subItems: [],
+      subItems: [
+        {
+          label: 'Load from a JSON file',
+          icon: tabGroupsLoadIcon,
+        },
+        {
+          label: 'Save to a JSON file',
+          icon: tabGroupsSaveIcon,
+        },
+      ],
     },
     {
       type: NavigationDrawerItems.History,
@@ -109,11 +122,12 @@ export default class extends React.Component<Props, {}> {
     const { children, title } = this.props;
 
     const selected = Store.navigationDrawer.selectedItem;
+    const hideContent = Store.navigationDrawer.hideContent;
 
     const items = this.getItems();
     const selectedItem = this.getItem(selected, items);
 
-    const contentVisible = selectedItem != null && selectedItem.content != null;
+    const contentVisible = !hideContent && selectedItem != null && selectedItem.content != null;
     const searchVisible = selectedItem != null && selectedItem.searchVisible;
 
     return (
@@ -131,7 +145,7 @@ export default class extends React.Component<Props, {}> {
                 key={key}
               >
                 {data.subItems.map((subItemData: any, subItemKey: any) => (
-                  <Item icon={subItemData.icon} key={key}>
+                  <Item icon={subItemData.icon} key={subItemKey}>
                     {subItemData.label}
                   </Item>
                 ))}
