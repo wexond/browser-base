@@ -22,7 +22,7 @@ export default class Toolbar extends React.Component {
   };
 
   public onMenuClick = () => {
-    Store.pagesNavigationDrawer.visible = !Store.pagesNavigationDrawer.visible;
+    Store.wexondNavigationDrawer.visible = !Store.wexondNavigationDrawer.visible;
   };
 
   public render() {
