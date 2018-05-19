@@ -1,13 +1,15 @@
 import React from 'react';
 import { StyledItem, Icon, Title, Background } from './styles';
 
+import { NavigationDrawerItems } from '../../../enums';
+
 interface Props {
   icon: string;
   children: any;
   subItem?: boolean;
   selected?: boolean;
   visible?: boolean;
-  pageName?: string;
+  page?: NavigationDrawerItems;
   onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
 }
 
