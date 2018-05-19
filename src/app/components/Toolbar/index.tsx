@@ -7,7 +7,7 @@ import Store from '../../store';
 import AddressBar from '../AddressBar';
 import TabBar from '../TabBar';
 import ToolbarButton from './Button';
-import { Platforms } from '../../enums';
+import { Platforms, NavigationDrawerItems } from '../../enums';
 
 const tabGroupsIcon = require('../../../shared/icons/tab-groups.svg');
 const menuIcon = require('../../../shared/icons/menu.svg');
@@ -16,6 +16,14 @@ const menuIcon = require('../../../shared/icons/menu.svg');
 export default class Toolbar extends React.Component {
   public static Button = ToolbarButton;
   public static Separator = ToolbarSeparator;
+
+  public onTabGroupsIconClick = () => {
+    this.toggleMenu();
+
+    requestAnimationFrame(() => {
+      Store.navigationDrawer.selectedItem = NavigationDrawerItems.TabGroups;
+    });
+  };
 
   public toggleMenu = () => {
     Store.navigationDrawer.visible = !Store.navigationDrawer.visible;
@@ -34,7 +42,7 @@ export default class Toolbar extends React.Component {
           <TabBar />
         </TabsSection>
         <ToolbarSeparator style={{ ...theme.toolbar.separators.style }} />
-        <ToolbarButton size={16} icon={tabGroupsIcon} />
+        <ToolbarButton size={16} icon={tabGroupsIcon} onClick={this.onTabGroupsIconClick} />
         <ToolbarButton
           onClick={this.toggleMenu}
           size={20}
