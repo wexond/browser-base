@@ -4,7 +4,7 @@ import React from 'react';
 import { Content } from './styles';
 
 @observer
-class TabsManagment extends React.Component {
+class TabGroups extends React.Component {
   public render() {
     return (
       <React.Fragment>
@@ -14,4 +14,4 @@ class TabsManagment extends React.Component {
   }
 }
 
-export default hot(module)(TabsManagment);
+export default hot(module)(TabGroups);

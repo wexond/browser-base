@@ -3,3 +3,12 @@ export enum Platforms {
   MacOS = 'darwin',
   Linux = 'linux',
 }
+
+export enum NavigationDrawerItems {
+  TabGroups = 'tabGroups',
+  History = 'history',
+  Extensions = 'extensions',
+  Bookmarks = 'bookmarks',
+  Settings = 'settings',
+  About = 'about',
+}
