@@ -14,13 +14,6 @@ export const Content = styled.div`
   transform: translateX(-50%);
 `;
 
-export const Title = styled.div`
-  font-size: 32px;
-  opacity: 0.87;
-  margin-top: 56px;
-  margin-left: 64px;
-`;
-
 export const Logo = styled.div`
   width: 196px;
   height: 196px;
