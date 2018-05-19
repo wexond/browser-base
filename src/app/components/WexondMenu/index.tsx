@@ -28,14 +28,14 @@ export default class extends React.Component<Props, {}> {
 
   private onItemClick = (e: React.MouseEvent<HTMLDivElement>, item: Item) => {
     if (item != null && item.props.pageName != null) {
-      Store.pagesNavigationDrawer.selectedItem = item.props.pageName;
+      Store.wexondNavigationDrawer.selectedItem = item.props.pageName;
     }
   };
 
   public render() {
     const { children, title } = this.props;
 
-    const selected = Store.pagesNavigationDrawer.selectedItem;
+    const selected = Store.wexondNavigationDrawer.selectedItem;
 
     const contentVisible =
       selected === 'history' ||
@@ -51,7 +51,7 @@ export default class extends React.Component<Props, {}> {
       selected === 'extensions';
 
     return (
-      <NavigationDrawer store={Store.pagesNavigationDrawer}>
+      <NavigationDrawer store={Store.wexondNavigationDrawer}>
         <Content visible={contentVisible}>
           {(selected === 'history' && <History />) || (selected === 'about' && <About />)}
         </Content>

@@ -26,7 +26,7 @@ class Store {
   @observable public theme = new Theme();
   @observable public suggestions = new Suggestions();
   @observable public isFullscreen: boolean;
-  @observable public pagesNavigationDrawer = new NavigationDrawer();
+  @observable public wexondNavigationDrawer = new NavigationDrawer();
   @observable public tabGroupsNavigationDrawer = new NavigationDrawer();
 
   @observable

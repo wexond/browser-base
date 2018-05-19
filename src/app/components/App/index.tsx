@@ -6,7 +6,7 @@ import { StyledApp } from './styles';
 import Store from '../../store';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
-import PagesMenu from '../PagesMenu';
+import WexondMenu from '../WexondMenu';
 import TabGroupMenu from '../TabGroupMenu';
 import Menu from '../../../shared/components/Menu';
 
@@ -60,7 +60,7 @@ export default class App extends React.Component {
           >
             <Menu.Item onClick={this.onInspectElementClick}>Inspect element</Menu.Item>
           </Menu>
-          <PagesMenu title="Wexond" />
+          <WexondMenu title="Wexond" />
           <TabGroupMenu title="Tabs grouping" />
         </StyledApp>
       </ThemeProvider>
