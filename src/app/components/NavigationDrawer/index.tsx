@@ -12,6 +12,7 @@ import About from '../../../menu/about/components/About';
 import { NavigationDrawerItems } from '../../enums';
 
 const tabGroupsIcon = require('../../../shared/icons/tab-groups.svg');
+const tabGroupsAddIcon = require('../../../shared/icons/add.svg');
 const tabGroupsLoadIcon = require('../../../shared/icons/load.svg');
 const tabGroupsSaveIcon = require('../../../shared/icons/save.svg');
 const historyIcon = require('../../../shared/icons/history.svg');
@@ -54,11 +55,15 @@ export default class extends React.Component<Props, {}> {
       searchVisible: false,
       subItems: [
         {
-          label: 'Load from a JSON file',
+          label: 'Add',
+          icon: tabGroupsAddIcon,
+        },
+        {
+          label: 'Load',
           icon: tabGroupsLoadIcon,
         },
         {
-          label: 'Save to a JSON file',
+          label: 'Save',
           icon: tabGroupsSaveIcon,
         },
       ],
