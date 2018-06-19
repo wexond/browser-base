@@ -55,7 +55,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
 
     let { style } = this.props;
 
-    style = { ...style, ...Store.theme.theme.toolbarButtons.style };
+    style = { ...style, ...Store.theme.theme.toolbarButtons };
 
     const { height, width } = this.getSize();
 

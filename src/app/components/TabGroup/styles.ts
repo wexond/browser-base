@@ -59,6 +59,4 @@ export const Indicator = styled.div`
   position: absolute;
   z-index: 3;
   border-radius: 5px;
-
-  background-color: ${(props: IndicatorProps) => props.theme.accentColor};
 `;

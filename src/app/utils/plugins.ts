@@ -5,6 +5,8 @@ import Tab from '../components/Tab';
 import PluginAPI from '../models/plugin-api';
 import Store from '../store';
 import { Theme } from '../../shared/models/theme';
+import colors from '../../shared/defaults/colors';
+import opacity from '../../shared/defaults/opacity';
 
 export const loadPlugins = async () => {
   const plugins = await wpm.list();
@@ -18,6 +20,8 @@ export const loadPlugins = async () => {
         setTheme: (theme: Theme) => {
           Store.theme.set(theme);
         },
+        colors,
+        opacity,
       },
     };
 
