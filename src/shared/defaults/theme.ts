@@ -2,6 +2,7 @@ import { Theme } from '../models/theme';
 import colors from '../../shared/defaults/colors';
 import opacity from '../../shared/defaults/opacity';
 
+/*
 export default {
   toolbar: {
     bottomDivider: {},
@@ -75,4 +76,57 @@ export default {
   tabsSection: {},
   addTabButton: {},
   tabbar: {},
+} as Theme; */
+
+const tabContentTheme = {
+  align: 'center',
+};
+
+const tabHoveredTheme = {
+  background: 'rgba(0, 0, 0, 0.08)',
+};
+
+const tabSelectedTitleTheme = {
+  color: colors.blue['500'],
+};
+
+const tabTheme = {};
+
+export default {
+  toolbar: {},
+  toolbarButtons: {
+    rippleSize: 42,
+  },
+
+  addressBarInput: {},
+
+  tab: {},
+  tabHovered: tabHoveredTheme,
+  tabSelected: {
+    enableHover: true,
+  },
+  tabSelectedHovered: tabHoveredTheme,
+  tabDragging: {},
+
+  tabContent: tabContentTheme,
+  tabSelectedContent: tabContentTheme,
+  tabHoveredContent: tabContentTheme,
+  tabDraggingContent: tabContentTheme,
+  tabSelectedHoveredContent: tabContentTheme,
+
+  tabTitle: {},
+  tabSelectedTitle: tabSelectedTitleTheme,
+  tabHoveredTitle: {},
+  tabDraggingTitle: {},
+  tabSelectedHoveredTitle: tabSelectedTitleTheme,
+
+  tabsIndicator: {
+    backgroundColor: colors.blue['500'],
+  },
+
+  suggestion: {},
+  suggestionHovered: {},
+  suggestionSelected: {},
+
+  accentColor: colors.blue['500'],
 } as Theme;

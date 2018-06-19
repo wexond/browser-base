@@ -1,13 +1,14 @@
 import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
 import opacity from '../../../shared/defaults/opacity';
-import { TabTheme, Theme } from '../../../shared/models/theme';
+import { Theme, TabContentTheme } from '../../../shared/models/theme';
 
 const closeIcon = require('../../../shared/icons/close.svg');
 
+type TabState = 'tab' | 'tabSelected' | 'tabSelectedHovered' | 'tabDragging' | 'tabHovered';
+
 interface CloseProps {
   hovered: boolean;
-  tabState: TabTheme;
 }
 
 export const Close = styled.div`
@@ -21,7 +22,6 @@ export const Close = styled.div`
 
   ${images.center('100%', '100%')};
   opacity: ${(props: CloseProps) => (props.hovered ? opacity.light.inactiveIcon : 0)};
-  filter: ${props => (props.tabState.close.color === 'light' ? 'invert(100%)' : '')};
 `;
 
 interface TabProps {
@@ -63,7 +63,7 @@ export const Overlay = styled.div`
 
   opacity: ${(props: OverlayProps) => {
     if (props.selected) {
-      if (props.hovered && props.theme.tabs.enableHoverOnSelectedTab) {
+      if (props.hovered && props.theme.tabSelected.enableHover) {
         return 1;
       }
       return 0;
@@ -72,7 +72,7 @@ export const Overlay = styled.div`
     }
     return 0;
   }};
-  background-color: ${(props: OverlayProps) => props.theme.tabs.hovered.background};
+  background-color: ${(props: OverlayProps) => props.theme.tabHovered.backgroundColor};
 `;
 
 interface TitleProps {
@@ -113,7 +113,8 @@ export const Icon = styled.div.attrs({
 
 interface ContentProps {
   hovered: boolean;
-  tabState: TabTheme;
+  tabState: TabState;
+  theme?: Theme;
 }
 
 export const Content = styled.div`
@@ -124,7 +125,9 @@ export const Content = styled.div`
   transition: 0.1s max-width, 0.1s transform;
 
   ${(props: ContentProps) => {
-    if (props.tabState.content.align === 'center') {
+    if (
+      (props.theme[`${props.tabState}Content` as TabState] as TabContentTheme).align === 'center'
+    ) {
       let transform = 'transform: translateX(-50%);';
       if (props.hovered) {
         transform = 'transform: translateX(calc(-50% - 12px));';
@@ -136,5 +139,6 @@ export const Content = styled.div`
     }
     return 'margin-left: 12px;';
   }}
+
   max-width: ${props => `calc(100% - ${24 + (props.hovered ? 24 : 0)}px)`};
 `;

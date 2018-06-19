@@ -34,35 +34,29 @@ export default class Suggestion extends React.Component<Props, {}> {
     const { suggestion } = this.props;
     const { hovered } = this.state;
     const { primaryText, secondaryText } = suggestion;
-    const { suggestions } = Store.theme.theme;
+    const { theme } = Store.theme;
 
     const selected = Store.suggestions.selected === suggestion.id;
 
     let opacity = 1;
-    let filter = '';
+    const filter = '';
 
-    let suggestionState = suggestions.item.normal;
+    type SuggestionState = 'suggestion' | 'suggestionSelected' | 'suggestionHovered';
+
+    let suggestionState: SuggestionState = 'suggestion';
 
     if (selected) {
-      suggestionState = suggestions.item.selected;
+      suggestionState = 'suggestionSelected';
     } else if (hovered) {
-      suggestionState = suggestions.item.hovered;
+      suggestionState = 'suggestionHovered';
     }
 
     if (suggestion.type === 'no-subheader-search' || suggestion.type === 'search') {
       suggestion.favicon = searchIcon;
       opacity = transparency.light.inactiveIcon;
-
-      if (suggestionState.iconColor === 'light') {
-        filter = 'invert(100%)';
-      }
     } else if (suggestion.type === 'no-subheader-website') {
       suggestion.favicon = pageIcon;
       opacity = transparency.light.inactiveIcon;
-
-      if (suggestionState.iconColor === 'light') {
-        filter = 'invert(100%)';
-      }
     }
 
     if (suggestion.favicon == null) {
@@ -74,9 +68,16 @@ export default class Suggestion extends React.Component<Props, {}> {
       <StyledSuggestion
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        style={suggestionState.style}
+        style={theme[suggestionState]}
       >
-        <Icon style={{ backgroundImage: `url(${suggestion.favicon})`, opacity, filter }} />
+        <Icon
+          style={{
+            backgroundImage: `url(${suggestion.favicon})`,
+            opacity,
+            filter,
+            ...theme[`${suggestionState}Icon` as SuggestionState],
+          }}
+        />
         <PrimaryText>{primaryText}</PrimaryText>
         {primaryText != null && secondaryText != null && <Dash>&mdash;</Dash>}
         <SecondaryText>{secondaryText}</SecondaryText>
