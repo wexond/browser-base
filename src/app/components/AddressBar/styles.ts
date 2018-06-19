@@ -49,7 +49,7 @@ export const Input = styled.input`
   height: 32px;
 
   ::placeholder {
-    color: ${(props: InputProps) => props.theme.searchBar.placeholderColor};
+    color: ${(props: InputProps) => props.theme.addressBarInput.placeholderColor};
   }
 `;
 

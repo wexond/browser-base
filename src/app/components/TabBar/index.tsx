@@ -23,7 +23,7 @@ export default class TabBar extends React.Component<{}, {}> {
 
     return (
       <StyledTabBar
-        style={{ ...theme.tabbar.style }}
+        style={{ ...theme.tabbar }}
         visible={!Store.addressBar.toggled}
         innerRef={(r: any) => (this.tabBar = r)}
       >
@@ -32,7 +32,7 @@ export default class TabBar extends React.Component<{}, {}> {
           <AddTabButton
             icon={addTabIcon}
             onClick={this.onAddTabButtonClick}
-            style={{ ...theme.addTabButton.style }}
+            style={{ ...theme.addTabButton }}
             divRef={r => (Store.addTabButton.ref = r)}
           />
         </TabGroups>

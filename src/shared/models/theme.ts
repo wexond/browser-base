@@ -1,76 +1,87 @@
+import { CSSProperties } from 'react';
 import { observable } from 'mobx';
 import { merge, isObject } from '../utils/objects';
 
-export interface BaseTheme {
-  style?: any;
-  inherit?: string;
+export interface BaseTheme extends CSSProperties {}
+
+export interface TabSelectedTheme extends BaseTheme {
+  enableHover?: boolean;
+}
+
+export interface TabTheme extends BaseTheme {
+  rippleColor?: string;
+}
+
+export interface TabContentTheme extends BaseTheme {
+  align?: 'center' | 'left';
+}
+
+export interface AddressBarInputTheme extends BaseTheme {
+  placeholderColor?: string;
 }
 
 export interface ToolbarButtonsTheme extends BaseTheme {
   rippleSize?: number;
-  color?: 'light' | 'dark';
-}
-
-export interface ToolbarTheme extends BaseTheme {
-  bottomDivider?: BaseTheme;
-  separators?: BaseTheme;
-}
-
-export interface TabsTheme extends BaseTheme {
-  hovered?: TabHoveredTheme;
-  selectedHovered?: TabHoveredTheme;
-  selected?: TabTheme;
-  normal?: TabTheme;
-  dragging?: TabTheme;
-  indicator?: BaseTheme;
-  enableHoverOnSelectedTab?: boolean;
-  rippleColor?: string;
-}
-
-export interface TabTheme extends BaseTheme {
-  content?: {
-    align?: 'left' | 'center';
-    style?: any;
-  };
-  close?: {
-    color?: 'light' | 'dark';
-    style?: any;
-  };
-  title?: BaseTheme;
-  icon?: BaseTheme;
-}
-
-export interface TabHoveredTheme extends TabTheme {
-  background?: string;
-}
-
-export interface SearchBarTheme extends BaseTheme {
-  placeholderColor?: string;
-}
-
-export interface SuggestionItemTheme extends BaseTheme {
-  iconColor: 'light' | 'dark';
-}
-
-export interface SuggestionsTheme extends BaseTheme {
-  item?: {
-    selected?: SuggestionItemTheme;
-    hovered?: SuggestionItemTheme;
-    normal?: SuggestionItemTheme;
-  };
 }
 
 export interface Theme {
-  toolbar?: ToolbarTheme;
-  tabs?: TabsTheme;
+  app?: BaseTheme;
+  toolbar?: BaseTheme;
+  toolbarSeparators?: BaseTheme;
+  toolbarBottomLine?: BaseTheme;
   toolbarButtons?: ToolbarButtonsTheme;
-  searchBar?: SearchBarTheme;
-  accentColor?: string;
-  tabbar?: BaseTheme;
-  suggestions?: SuggestionsTheme;
-  addTabButton?: BaseTheme;
+
   tabsSection?: BaseTheme;
-  [key: string]: any;
+  tabbar?: BaseTheme;
+  tabsIndicator?: BaseTheme;
+
+  tab?: TabTheme;
+  tabHovered?: BaseTheme;
+  tabSelected?: TabSelectedTheme;
+  tabSelectedHovered?: BaseTheme;
+  tabDragging?: BaseTheme;
+
+  tabContent?: TabContentTheme;
+  tabHoveredContent?: TabContentTheme;
+  tabSelectedContent?: TabContentTheme;
+  tabSelectedHoveredContent?: TabContentTheme;
+  tabDraggingContent?: TabContentTheme;
+
+  tabTitle?: BaseTheme;
+  tabHoveredTitle?: BaseTheme;
+  tabSelectedTitle?: BaseTheme;
+  tabSelectedHoveredTitle?: BaseTheme;
+  tabDraggingTitle?: BaseTheme;
+
+  tabClose?: BaseTheme;
+  tabHoveredClose?: BaseTheme;
+  tabSelectedClose?: BaseTheme;
+  tabSelectedHoveredClose?: BaseTheme;
+  tabDraggingClose?: BaseTheme;
+
+  tabIcon?: BaseTheme;
+  tabHoveredIcon?: BaseTheme;
+  tabSelectedIcon?: BaseTheme;
+  tabSelectedHoveredIcon?: BaseTheme;
+  tabDraggingIcon?: BaseTheme;
+
+  addressBar?: BaseTheme;
+  addressBarInput?: AddressBarInputTheme;
+  addressBarInputContainer?: BaseTheme;
+
+  suggestions?: BaseTheme;
+
+  suggestion?: BaseTheme;
+  suggestionHovered?: BaseTheme;
+  suggestionSelected?: BaseTheme;
+
+  suggestionIcon?: BaseTheme;
+  suggestionHoveredIcon?: BaseTheme;
+  suggestionSelectedIcon?: BaseTheme;
+
+  addTabButton?: BaseTheme;
+
+  accentColor?: string;
 }
 
 export const getObjectToInherit = (inherit: string, baseObject: any) => {
