@@ -27,7 +27,7 @@ export default class Suggestions extends React.Component<Props, {}> {
     return (
       <StyledSuggestions
         style={{
-          ...Store.theme.theme.suggestions.style,
+          ...Store.theme.theme.suggestions,
           display: vis ? 'block' : 'none',
           pointerEvents: !vis ? 'none' : 'auto',
         }}

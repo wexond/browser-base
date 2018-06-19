@@ -304,7 +304,7 @@ export default class extends React.Component<Props, {}> {
             style={{
               width: tabGroup.line.width,
               left: tabGroup.line.left,
-              ...Store.theme.theme.tabs.indicator.style,
+              ...Store.theme.theme.tabsIndicator,
             }}
           />
         </Tabs>

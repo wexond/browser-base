@@ -16,16 +16,7 @@ export const Icon = styled.div`
   height: 100%;
 
   ${(props: IconProps) => images.center(`${props.size}px`, `${props.size}px`)}
-  opacity: ${(props: IconProps) => {
-    if (props.disabled) {
-      return props.theme.toolbarButtons.color === 'light'
-        ? opacity.dark.disabledIcon
-        : opacity.light.disabledIcon;
-    }
-    return props.theme.toolbarButtons.color === 'light'
-      ? opacity.dark.inactiveIcon
-      : opacity.light.inactiveIcon;
-  }};
+  opacity: ${opacity.light.disabledIcon};
   background-image: ${props => `url(${props.icon})`};
 `;
 
