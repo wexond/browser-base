@@ -50,7 +50,15 @@ const appConfig = {
   },
 };
 
-module.exports = [getConfig(appConfig)];
+const newTabConfig = {
+  target: 'web',
+
+  entry: {
+    newtab: ['react-hot-loader/patch', './src/newtab'],
+  },
+};
+
+module.exports = [getConfig(appConfig), getConfig(newTabConfig)];
 
 function getConfig(cfg) {
   return Object.assign({}, config, cfg);
