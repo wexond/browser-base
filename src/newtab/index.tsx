@@ -39,25 +39,8 @@ injectGlobal`
   }
 `;
 
-function render(Component: any) {
-  ReactDOM.render(
-    <AppContainer>
-      <Component />
-    </AppContainer>,
-    document.getElementById('app'),
-  );
-}
-
 async function setup() {
-  render(App);
+  ReactDOM.render(<App />, document.getElementById('app'));
 }
 
 setup();
-
-if (module.hot) {
-  module.hot.accept('./components/App', () => {
-    // eslint-disable-next-line
-    const NextApp = require('./components/App').default;
-    render(NextApp);
-  });
-}
