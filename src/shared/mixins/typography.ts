@@ -16,6 +16,11 @@ const button = () => `
   font-weight: 500;
 `;
 
+const robotoLight = () => `
+  font-family: Roboto;
+  font-weight: 300;
+`;
+
 const robotoRegular = () => `
   font-family: Roboto;
   font-weight: 400;
@@ -30,6 +35,7 @@ export default {
   body1,
   body2,
   button,
+  robotoLight,
   robotoRegular,
   robotoMedium,
 };
