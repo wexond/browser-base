@@ -11,10 +11,11 @@ export const StyledSearch = styled.div`
   display: flex;
   align-items: center;
   overflow: hidden;
+  background-color: transparent;
 `;
 
 export const Input = styled.input`
-  background-color: none;
+  background-color: transparent;
   outline: none;
   font-size: 14px;
   border: none;

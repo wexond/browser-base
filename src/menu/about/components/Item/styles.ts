@@ -5,8 +5,8 @@ import typography from '../../../../shared/mixins/typography';
 
 export const StyledItem = styled.div`
   display: flex;
-  font-size: 15px;
-  padding: 12px 16px 12px 16px;
+  font-size: 14px;
+  height: 48px;
 
   justify-content: space-between;
   align-items: center;
@@ -15,10 +15,12 @@ export const StyledItem = styled.div`
 export const Title = styled.div`
   opacity: ${opacity.light.primaryText};
   ${typography.robotoMedium};
+  margin-left: 16px;
 `;
 
 export const Content = styled.div`
   text-align: right;
 
   opacity: ${opacity.light.secondaryText};
+  margin-right: 16px;
 `;

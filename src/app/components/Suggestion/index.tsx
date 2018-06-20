@@ -39,7 +39,6 @@ export default class Suggestion extends React.Component<Props, {}> {
     const selected = Store.suggestions.selected === suggestion.id;
 
     let opacity = 1;
-    const filter = '';
 
     type SuggestionState = 'suggestion' | 'suggestionSelected' | 'suggestionHovered';
 
@@ -73,8 +72,6 @@ export default class Suggestion extends React.Component<Props, {}> {
         <Icon
           style={{
             backgroundImage: `url(${suggestion.favicon})`,
-            opacity,
-            filter,
             ...theme[`${suggestionState}Icon` as SuggestionState],
           }}
         />
