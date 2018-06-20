@@ -3,6 +3,10 @@ import images from '../../../../shared/mixins/images';
 import typography from '../../../../shared/mixins/typography';
 import opacity from '../../../../shared/defaults/opacity';
 
+interface StyledItemProps {
+  selected: boolean;
+}
+
 export const StyledItem = styled.div`
   height: 56px;
   width: 100%;
@@ -10,8 +14,11 @@ export const StyledItem = styled.div`
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
+  background-color: ${(props: StyledItemProps) =>
+    (props.selected ? 'rgba(0, 0, 0, 0.08)' : 'transparent')};
+
   &:hover {
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: ${props => (props.selected ? 'rgba(0, 0, 0, 0.12)' : 'rgba(0, 0, 0, 0.03)')};
   }
 
   &:last-child {
