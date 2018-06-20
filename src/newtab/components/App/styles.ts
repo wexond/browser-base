@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import images from '../../../shared/mixins/images';
+import typography from '../../../shared/mixins/typography';
 
 export const StyledApp = styled.div`
   height: 100vh;
@@ -16,26 +17,4 @@ export const Container = styled.div`
   width: 100%;
   height: 500px;
   margin: 32px auto;
-`;
-
-export const InfoContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 16px;
-`;
-
-export const Temperature = styled.div`
-  font-size: 96px;
-`;
-
-export interface ITemperatureIconProps {
-  src: string;
-}
-
-export const TemperatureIcon = styled.div`
-  width: 80px;
-  height: 80px;
-
-  ${images.center('80px', 'auto')};
-  background-image: url(${(props: ITemperatureIconProps) => props.src});
 `;
