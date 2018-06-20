@@ -3,3 +3,9 @@ export enum Align {
   CenterVertical,
   CenterBoth,
 }
+
+export enum TemperatureUnit {
+  Celsius = 'C',
+  Fahrenheit = 'F',
+  Kelvin = 'K',
+}
