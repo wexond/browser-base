@@ -15,6 +15,13 @@ injectGlobal`
   @font-face {
     font-family: 'Roboto';
     font-style: normal;
+    font-weight: 300;
+    src: url(${robotoLight}) format('truetype');
+  }
+  
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
     font-weight: 400;
     src: url(${robotoRegular}) format('truetype');
   }
@@ -24,13 +31,6 @@ injectGlobal`
     font-style: normal;
     font-weight: 500;
     src: url(${robotoMedium}) format('truetype');
-  }
-
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 300;
-    src: url(${robotoLight}) format('truetype');
   }
   
   body {
