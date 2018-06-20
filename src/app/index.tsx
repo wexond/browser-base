@@ -11,9 +11,34 @@ import typography from '../shared/mixins/typography';
 import { getPath } from '../shared/utils/paths';
 import defaultTheme from '../shared/defaults/theme';
 
+const robotoLight = require('../shared/fonts/Roboto-Light.ttf');
+const robotoMedium = require('../shared/fonts/Roboto-Medium.ttf');
+const robotoRegular = require('../shared/fonts/Roboto-Regular.ttf');
+
 declare const module: any;
 
 injectGlobal`
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: url(${robotoRegular}) format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    src: url(${robotoMedium}) format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    src: url(${robotoLight}) format('truetype');
+  }
+  
   body {
     user-select: none;
     cursor: default;

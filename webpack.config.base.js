@@ -12,7 +12,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.(png|gif|jpg|woff2|tff|svg)$/,
+        test: /\.(png|gif|jpg|woff2|ttf|svg)$/,
         include: INCLUDE,
         exclude: EXCLUDE,
         use: [
