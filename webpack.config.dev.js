@@ -4,20 +4,22 @@ const baseConfig = require('./webpack.config.base');
 
 const PORT = 8080;
 
+const output = {
+  publicPath: `http://localhost:${PORT}/`,
+  hotUpdateChunkFilename: 'hot/hot-update.js',
+  hotUpdateMainFilename: 'hot/hot-update.json',
+};
+
 const config = Object.assign(
   {
     devtool: 'eval-source-map',
-
-    output: {
-      publicPath: `http://localhost:${PORT}/`,
-      hotUpdateChunkFilename: 'hot/hot-update.js',
-      hotUpdateMainFilename: 'hot/hot-update.json',
-    },
 
     plugins: [new webpack.HotModuleReplacementPlugin()],
   },
   baseConfig,
 );
+
+config.output = Object.assign(output, baseConfig.output);
 
 const appConfig = {
   target: 'electron-renderer',
@@ -57,6 +59,8 @@ const newTabConfig = {
     newtab: ['react-hot-loader/patch', './src/newtab'],
   },
 };
+
+console.log(getConfig(newTabConfig));
 
 module.exports = [getConfig(appConfig), getConfig(newTabConfig)];
 
