@@ -25,6 +25,7 @@ export function getSections() {
     const newItem = {
       ...item,
       favicon: AppStore.favicons[item.favicon],
+      selected: false,
     };
 
     if (foundSection == null) {

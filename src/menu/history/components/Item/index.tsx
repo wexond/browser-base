@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { Icon, StyledItem, Time, Title } from './styles';
-import HistoryItem from '../../../../shared/models/history-item';
+import HistoryItem from '../../models/history-item';
 import transparency from '../../../../shared/defaults/opacity';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
@@ -12,6 +12,26 @@ interface Props {
 
 @observer
 export default class Item extends React.Component<Props, {}> {
+  private cmdPressed = false;
+
+  public componentDidMount() {
+    window.addEventListener('keydown', e => {
+      this.cmdPressed = e.key === 'Meta'; // Command on macOS
+    });
+
+    window.addEventListener('keyup', e => {
+      if (e.key === 'Meta') {
+        this.cmdPressed = false;
+      }
+    });
+  }
+
+  public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (this.cmdPressed || e.ctrlKey) {
+      this.props.data.selected = !this.props.data.selected;
+    }
+  };
+
   public render() {
     const { data } = this.props;
     const date = new Date(data.date);
@@ -27,7 +47,7 @@ export default class Item extends React.Component<Props, {}> {
     }
 
     return (
-      <StyledItem>
+      <StyledItem onClick={this.onClick} selected={data.selected}>
         <Icon style={{ backgroundImage: `url(${data.favicon})`, opacity }} />
         <Time>{`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
         <Title>{data.title}</Title>
