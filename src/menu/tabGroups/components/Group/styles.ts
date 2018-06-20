@@ -10,18 +10,18 @@ import images from '../../../../shared/mixins/images';
 const expandIcon = require('../../../../shared/icons/expand.svg');
 
 export const StyledGroup = styled.div`
-  min-height: 48px;
+  min-height: 56px;
   background-color: #fff;
   margin-top: 32px;
-  border-radius: 2px;
-  font-size: 15px;
+  border-radius: 4px;
+  font-size: 16px;
   position: relative;
 
-  box-shadow: ${shadows(3)};
+  box-shadow: 0 1px 1px 0 rgba(60, 64, 67, 0.08), 0 1px 3px 1px rgba(60, 64, 67, 0.16);
 `;
 
 export const Bar = styled.div`
-  height: 48px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,6 +38,8 @@ export const Border = styled.div`
   position: absolute;
   left: 0;
   transition: 0.5s opacity;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 
   background-color: ${colors.blue['500']};
   opacity: ${(props: IBorderProps) => (props.selected ? 1 : 0)};
@@ -47,7 +49,7 @@ export const Title = styled.div`
   margin-left: 24px;
 
   opacity: ${opacity.light.primaryText};
-  ${typography.robotoMedium};
+  ${typography.robotoRegular};
 `;
 
 export interface IExpandProps {
@@ -72,6 +74,8 @@ export interface IContentProps {
 
 export const Content = styled.div`
   overflow: hidden;
+  transition: 0.2s all;
 
-  height: ${(props: IContentProps) => (props.expanded ? 'auto' : '0px')};
+  max-height: ${(props: IContentProps) => (props.expanded ? 'auto' : '0px')};
+  height: 100%;
 `;
