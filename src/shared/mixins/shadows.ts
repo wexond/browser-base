@@ -87,14 +87,14 @@ const ambientMap = [
   '0px 9px 46px 8px',
 ];
 
-export default (z: number, color = '0, 0, 0', opacityBoost = 0) => {
+export default (z: number, color = '0, 0, 0', opacity = 1) => {
   const umbraZ = umbraMap[z];
   const penumbraZ = penumbraMap[z];
   const ambientZ = ambientMap[z];
 
-  const umbraColor = `rgba(${color}, ${umbraOpacity + opacityBoost})`;
-  const penumbraColor = `rgba(${color}, ${penumbraOpacity + opacityBoost})`;
-  const ambientColor = `rgba(${color}, ${ambientOpacity + opacityBoost})`;
+  const umbraColor = `rgba(${color}, ${umbraOpacity * opacity})`;
+  const penumbraColor = `rgba(${color}, ${penumbraOpacity * opacity})`;
+  const ambientColor = `rgba(${color}, ${ambientOpacity * opacity})`;
 
   return `
     ${umbraZ} ${umbraColor},
