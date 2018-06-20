@@ -125,8 +125,19 @@ export default {
   },
 
   suggestion: {},
-  suggestionHovered: {},
-  suggestionSelected: {},
+  suggestionHovered: {
+    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+  },
+  suggestionSelected: {
+    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+  },
+
+  suggestionIcon: {
+    opacity: opacity.light.activeIcon,
+  },
+  suggestionHoveredIcon: {
+    opacity: opacity.light.activeIcon,
+  },
 
   accentColor: colors.blue['500'],
 } as Theme;

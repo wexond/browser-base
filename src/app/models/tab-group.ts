@@ -97,9 +97,9 @@ export default class TabGroup {
     this.selectedTab = tab.id;
 
     if (tab.url.startsWith('wexond://newtab') || tab.url.trim() === '') {
-      requestAnimationFrame(() => {
+      setTimeout(() => {
         Store.addressBar.toggled = true;
-      });
+      }, 50);
     }
   }
 
