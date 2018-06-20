@@ -1,10 +1,17 @@
 import React from 'react';
-import { hot } from 'react-hot-loader';
 
-class App extends React.Component {
+import WeatherCard from '../WeatherCard';
+
+import { StyledApp, Container } from './styles';
+
+export default class App extends React.Component {
   public render() {
-    return <div>New tab</div>;
+    return (
+      <StyledApp>
+        <Container>
+          <WeatherCard city="Warsaw" info="Mon, 12:00 AM, Mostly cloudy" temperature="28" />
+        </Container>
+      </StyledApp>
+    );
   }
 }
-
-export default hot(module)(App);
