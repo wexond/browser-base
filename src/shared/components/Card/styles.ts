@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-import opacity from '../../../shared/defaults/opacity';
+import opacity from '../../defaults/opacity';
 
-import typography from '../../../shared/mixins/typography';
-import shadows from '../../../shared/mixins/shadows';
-import images from '../../../shared/mixins/images';
+import typography from '../../mixins/typography';
+import shadows from '../../mixins/shadows';
+import images from '../../mixins/images';
 
 export const StyledCard = styled.div`
   width: 344px;

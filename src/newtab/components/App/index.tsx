@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Card from '../Card';
+import Card from '../../../shared/components/Card';
 
 import { StyledApp, Container, Temperature, InfoContainer, TemperatureIcon } from './styles';
 
