@@ -4,12 +4,15 @@ import urlNode from 'url';
 export const requestURL = (url: string) =>
   new Promise((resolve: (data: string) => void, reject) => {
     const options = urlNode.parse(url);
+
     const request = http.request(options, res => {
       let data = '';
       res.setEncoding('utf-8');
+
       res.on('data', chunk => {
         data += chunk;
       });
+
       res.on('end', () => {
         resolve(data);
       });
@@ -18,5 +21,6 @@ export const requestURL = (url: string) =>
     request.on('error', e => {
       reject(e);
     });
+
     request.end();
   });
