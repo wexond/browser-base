@@ -6,8 +6,6 @@ import db from '../../../shared/models/app-database';
 export function getSections() {
   const sections: Section[] = [];
 
-  let id = 0;
-
   db.history.each(item => {
     const date = new Date(item.date);
 
@@ -32,7 +30,7 @@ export function getSections() {
       const section = {
         items: [newItem],
         date: dateStr,
-        id: id++,
+        id: item.id,
       };
       sections.push(section);
     } else {
