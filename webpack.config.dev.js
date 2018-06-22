@@ -60,8 +60,6 @@ const newTabConfig = {
   },
 };
 
-console.log(getConfig(newTabConfig));
-
 module.exports = [getConfig(appConfig), getConfig(newTabConfig)];
 
 function getConfig(cfg) {
