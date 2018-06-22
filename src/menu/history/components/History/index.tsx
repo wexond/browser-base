@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
 import React from 'react';
-import { Content } from './styles';
+import { Content, Toolbar } from './styles';
 import { getSections } from '../../utils/history';
 import Store from '../../store';
 import AppStore from '../../../../app/store';

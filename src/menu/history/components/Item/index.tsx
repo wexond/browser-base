@@ -3,6 +3,7 @@ import React from 'react';
 import { Icon, StyledItem, Time, Title } from './styles';
 import HistoryItem from '../../models/history-item';
 import transparency from '../../../../shared/defaults/opacity';
+import Store from '../../store';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
 
@@ -29,6 +30,12 @@ export default class Item extends React.Component<Props, {}> {
   public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (this.cmdPressed || e.ctrlKey) {
       this.props.data.selected = !this.props.data.selected;
+
+      if (this.props.data.selected) {
+        Store.selectedItems.push(this.props.data);
+      } else {
+        Store.selectedItems.splice(Store.selectedItems.indexOf(this.props.data), 1);
+      }
     }
   };
 
