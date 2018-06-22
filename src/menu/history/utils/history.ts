@@ -1,6 +1,7 @@
 import Section from '../models/section';
 import HistoryItem from '../../../shared/models/history-item';
 import AppStore from '../../../app/store';
+import HistoryStore from '../store';
 import db from '../../../shared/models/app-database';
 
 export function getSections() {
@@ -39,4 +40,21 @@ export function getSections() {
   });
 
   return sections;
+}
+
+export function deleteItem(id: number) {
+  const { sections } = HistoryStore;
+  for (let i = sections.length - 1; i >= 0; i--) {
+    const section = sections[i];
+    const itm = section.items.find(x => x.id === id);
+    if (itm) {
+      section.items.splice(section.items.indexOf(itm), 1);
+      if (section.items.length === 0) {
+        sections.splice(i, 1);
+      }
+      break;
+    }
+  }
+
+  db.history.delete(id);
 }

@@ -9,6 +9,7 @@ import About from '../../menu/about/components/About';
 import HistoryStore from '../../menu/history/store';
 
 import db from '../../shared/models/app-database';
+import { deleteItem } from '../../menu/history/utils/history';
 
 const tabGroupsIcon = require('../../shared/icons/tab-groups.svg');
 const tabGroupsAddIcon = require('../../shared/icons/add.svg');
@@ -45,22 +46,7 @@ const history = {
     const { selectedItems, sections } = HistoryStore;
     for (let i = selectedItems.length - 1; i >= 0; i--) {
       const selectedItem = selectedItems[i];
-      for (let j = sections.length - 1; j >= 0; j--) {
-        const section = sections[j];
-        const item = section.items.find(x => x.id === selectedItem.id);
-
-        if (item) {
-          section.items.splice(section.items.indexOf(item), 1);
-
-          if (section.items.length === 0) {
-            sections.splice(j, 1);
-          }
-
-          db.history.delete(item.id);
-
-          break;
-        }
-      }
+      deleteItem(selectedItem.id);
       selectedItems.splice(i, 1);
     }
   },
