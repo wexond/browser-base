@@ -68,6 +68,10 @@ injectGlobal`
       stroke-dashoffset: -124px;
     }
   }
+
+  * {
+    box-sizing: border-box;
+  }
 `;
 
 function render(Component: any) {

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Header, Items, Title } from './styles';
+import { Items, Title } from './styles';
 import Item from '../Item';
 import Section from '../../models/section';
 
@@ -18,9 +18,7 @@ export default class extends React.Component<Props, {}> {
 
     return (
       <React.Fragment>
-        <Header>
-          <Title>{title}</Title>
-        </Header>
+        <Title>{title}</Title>
         <Items>{items.map(item => <Item key={item.id} data={item} />)}</Items>
       </React.Fragment>
     );

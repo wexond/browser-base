@@ -15,7 +15,7 @@ export const StyledItem = styled.div`
   align-items: center;
   cursor: pointer;
   overflow: hidden;
-  width: calc(100% - 16px);
+  width: 100%;
   padding-right: 16px;
   display: ${(props: ItemProps) => (props.visible ? 'flex' : 'none')};
   pointer-events: ${props => (props.selected ? 'none' : 'auto')};

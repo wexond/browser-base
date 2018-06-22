@@ -2,25 +2,15 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Styled, Title, Header, Dark, NavContent, Content } from './styles';
 import Item from './Item';
-import Store from '../../store';
 import Search from './Search';
-
-import TabGroups from '../../../menu/tabGroups/components/TabGroups';
-import History from '../../../menu/history/components/History';
-import About from '../../../menu/about/components/About';
-
+import menuItems from '../../defaults/menu-items';
+import HistoryStore from '../../../menu/history/store';
+import Store from '../../store';
 import { NavigationDrawerItems } from '../../enums';
 
-const tabGroupsIcon = require('../../../shared/icons/tab-groups.svg');
-const tabGroupsAddIcon = require('../../../shared/icons/add.svg');
-const tabGroupsLoadIcon = require('../../../shared/icons/load.svg');
-const tabGroupsSaveIcon = require('../../../shared/icons/save.svg');
-const historyIcon = require('../../../shared/icons/history.svg');
-const clearIcon = require('../../../shared/icons/clear.svg');
-const bookmarksIcon = require('../../../shared/icons/bookmarks.svg');
-const settingsIcon = require('../../../shared/icons/settings.svg');
-const extensionsIcon = require('../../../shared/icons/extensions.svg');
-const aboutIcon = require('../../../shared/icons/info.svg');
+const deleteIcon = require('../../../shared/icons/delete.svg');
+const selectAllIcon = require('../../../shared/icons/select-all.svg');
+const closeIcon = require('../../../shared/icons/close.svg');
 
 interface Props {
   children?: any;
@@ -46,75 +36,6 @@ export default class extends React.Component<Props, {}> {
     }
   };
 
-  private getItems = () => [
-    {
-      type: NavigationDrawerItems.TabGroups,
-      label: 'Tab groups',
-      icon: tabGroupsIcon,
-      content: <TabGroups />,
-      searchVisible: false,
-      subItems: [
-        {
-          label: 'Add',
-          icon: tabGroupsAddIcon,
-        },
-        {
-          label: 'Load',
-          icon: tabGroupsLoadIcon,
-        },
-        {
-          label: 'Save',
-          icon: tabGroupsSaveIcon,
-        },
-      ],
-    },
-    {
-      type: NavigationDrawerItems.History,
-      label: 'History',
-      icon: historyIcon,
-      content: <History />,
-      searchVisible: true,
-      subItems: [
-        {
-          label: 'Clear browsing history',
-          icon: clearIcon,
-        },
-      ],
-    },
-    {
-      type: NavigationDrawerItems.Bookmarks,
-      label: 'Bookmarks',
-      icon: bookmarksIcon,
-      content: null,
-      searchVisible: false,
-      subItems: [],
-    },
-    {
-      type: NavigationDrawerItems.Settings,
-      label: 'Settings',
-      icon: settingsIcon,
-      content: null,
-      searchVisible: false,
-      subItems: [],
-    },
-    {
-      type: NavigationDrawerItems.Extensions,
-      label: 'Extensions',
-      icon: extensionsIcon,
-      content: null,
-      searchVisible: false,
-      subItems: [],
-    },
-    {
-      type: NavigationDrawerItems.About,
-      label: 'About',
-      icon: aboutIcon,
-      content: <About />,
-      searchVisible: false,
-      subItems: [],
-    },
-  ];
-
   private getItem = (page: NavigationDrawerItems, items: any) => {
     for (let i = 0; i < items.length; i++) {
       if (items[i].type === page) return items[i];
@@ -129,7 +50,26 @@ export default class extends React.Component<Props, {}> {
     const selected = Store.navigationDrawer.selectedItem;
     const hideContent = Store.navigationDrawer.hideContent;
 
-    const items = this.getItems();
+    const items = [...menuItems];
+
+    const historyItem = items.find(x => x.type === NavigationDrawerItems.History);
+
+    if (HistoryStore.selectedItems.length > 0) {
+      historyItem.subItems[1].label = 'Deselect all';
+      historyItem.subItems[1].icon = closeIcon;
+      historyItem.subItems[2] = {
+        label: 'Remove selected items',
+        icon: deleteIcon,
+      };
+    } else {
+      historyItem.subItems[1].label = 'Select all';
+      historyItem.subItems[1].icon = selectAllIcon;
+      historyItem.subItems = [
+        ...historyItem.subItems.slice(0, 2),
+        ...historyItem.subItems.slice(2 + 1),
+      ];
+    }
+
     const selectedItem = this.getItem(selected, items);
 
     const contentVisible = !hideContent && selectedItem != null && selectedItem.content != null;
@@ -150,7 +90,7 @@ export default class extends React.Component<Props, {}> {
                 key={key}
               >
                 {data.subItems.map((subItemData: any, subItemKey: any) => (
-                  <Item icon={subItemData.icon} key={subItemKey}>
+                  <Item onClick={subItemData.onClick} icon={subItemData.icon} key={subItemKey}>
                     {subItemData.label}
                   </Item>
                 ))}
