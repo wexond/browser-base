@@ -4,11 +4,6 @@ import colors from '../../../../shared/defaults/colors';
 import typography from '../../../../shared/mixins/typography';
 import opacity from '../../../../shared/defaults/opacity';
 
-interface ItemProps {
-  visible: boolean;
-  selected: boolean;
-}
-
 export const StyledItem = styled.div`
   height: 48px;
   position: relative;
@@ -17,8 +12,7 @@ export const StyledItem = styled.div`
   overflow: hidden;
   width: 100%;
   padding-right: 16px;
-  display: ${(props: ItemProps) => (props.visible ? 'flex' : 'none')};
-  pointer-events: ${props => (props.selected ? 'none' : 'auto')};
+  display: flex;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.03);
