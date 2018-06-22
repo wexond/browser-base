@@ -13,7 +13,7 @@ export default class Item extends React.Component<Props, {}> {
 
     return (
       <StyledItem>
-        <Title>{title}:</Title>
+        <Title>{title}</Title>
         <Content>{children}</Content>
       </StyledItem>
     );
