@@ -5,10 +5,12 @@ import { NavigationDrawerItems } from '../../../enums';
 
 interface Props {
   icon: string;
-  children: any;
+  children?: any;
   subItem?: boolean;
+  title: string;
   selected?: boolean;
   visible?: boolean;
+  display?: boolean;
   page?: NavigationDrawerItems;
   onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
 }
@@ -17,6 +19,7 @@ export default class Item extends React.Component<Props, {}> {
   static defaultProps = {
     visible: true,
     selected: false,
+    display: true,
   };
 
   private onClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -29,7 +32,7 @@ export default class Item extends React.Component<Props, {}> {
 
   public render() {
     const {
-      icon, children, subItem, visible,
+      icon, children, subItem, visible, title, display,
     } = this.props;
 
     let { selected } = this.props;
@@ -37,25 +40,15 @@ export default class Item extends React.Component<Props, {}> {
     if (subItem) selected = false;
 
     return (
-      <React.Fragment>
-        <StyledItem onClick={this.onClick} visible={visible} selected={selected}>
+      <div style={{ display: display && visible ? 'block' : 'none' }}>
+        <StyledItem onClick={this.onClick}>
           <Background selected={selected} />
           <Icon selected={selected} subItem={subItem} image={icon} />
-          {React.Children.map(children, (el: React.ReactElement<any>) => {
-            if (typeof el === 'string') {
-              const element = <Title selected={selected}>{el}</Title>;
-              return React.cloneElement(element);
-            }
-            return null;
-          })}
+          <Title selected={selected}>{title}</Title>
         </StyledItem>
-        {React.Children.map(children, (el: React.ReactElement<any>) => {
-          if (typeof el !== 'string') {
-            return React.cloneElement(el, { subItem: true, visible: selected });
-          }
-          return null;
-        })}
-      </React.Fragment>
+        {React.Children.map(children, (el: React.ReactElement<any>) =>
+          React.cloneElement(el, { subItem: true, visible: selected }))}
+      </div>
     );
   }
 }

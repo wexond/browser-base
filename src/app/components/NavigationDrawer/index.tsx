@@ -52,22 +52,16 @@ export default class extends React.Component<Props, {}> {
 
     const items = [...menuItems];
 
-    const historyItem = items.find(x => x.type === NavigationDrawerItems.History);
+    const historyItem = items[1];
 
     if (HistoryStore.selectedItems.length > 0) {
-      historyItem.subItems[1].label = 'Deselect all';
-      historyItem.subItems[1].icon = closeIcon;
-      historyItem.subItems[2] = {
-        label: 'Remove selected items',
-        icon: deleteIcon,
-      };
+      historyItem.subItems[1].visible = false; // Select all
+      historyItem.subItems[2].visible = true; // Deselect all
+      historyItem.subItems[3].visible = true; // Remove selected items
     } else {
-      historyItem.subItems[1].label = 'Select all';
-      historyItem.subItems[1].icon = selectAllIcon;
-      historyItem.subItems = [
-        ...historyItem.subItems.slice(0, 2),
-        ...historyItem.subItems.slice(2 + 1),
-      ];
+      historyItem.subItems[1].visible = true; // Select all
+      historyItem.subItems[2].visible = false; // Deselect all
+      historyItem.subItems[3].visible = false; // Remove selected items
     }
 
     const selectedItem = this.getItem(selected, items);
@@ -88,13 +82,18 @@ export default class extends React.Component<Props, {}> {
                 selected={selectedItem != null && data.type === selectedItem.type}
                 page={data.type}
                 key={key}
+                title={data.label}
+                display={data.visible}
               >
                 {data.subItems.map((subItemData: any, subItemKey: any) => (
-                  <Item onClick={subItemData.onClick} icon={subItemData.icon} key={subItemKey}>
-                    {subItemData.label}
-                  </Item>
+                  <Item
+                    onClick={subItemData.onClick}
+                    icon={subItemData.icon}
+                    key={subItemKey}
+                    title={subItemData.label}
+                    display={subItemData.visible}
+                  />
                 ))}
-                {data.label}
               </Item>
             ))}
           </NavContent>
