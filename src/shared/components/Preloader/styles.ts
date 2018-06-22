@@ -11,6 +11,7 @@ export const StyledPreloader = styled.div`
   height: ${props => props.size}px;
   transform-origin: center center;
   animation: nersent-ui-preloader-rotate 2s linear infinite;
+  z-index: 5;
 `;
 
 export interface IPathProps {

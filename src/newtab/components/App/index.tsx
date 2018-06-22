@@ -1,25 +1,51 @@
 import React from 'react';
 
-import WeatherCard from '../WeatherCard';
+import Preloader from '../../../shared/components/Preloader';
 
 import { requestWeather } from '../../../shared/utils/weather';
 import { Languages } from '../../../shared/enums';
 
-import { StyledApp, Container } from './styles';
+import { StyledApp, Content } from './styles';
 
-export default class App extends React.Component {
-  async componentDidMount() {
+import WeatherCard from '../WeatherCard';
+
+export interface IState {
+  contentVisible: boolean;
+}
+
+export default class App extends React.Component<{}, IState> {
+  public state: IState = {
+    contentVisible: false,
+  };
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  async loadData() {
     const weatherData = await requestWeather('opole', Languages.pl);
 
-    console.log(weatherData);
+    this.setState({
+      contentVisible: true,
+    });
   }
 
   public render() {
+    const { contentVisible } = this.state;
+
+    const preloaderStyle = {
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+    };
+
     return (
       <StyledApp>
-        <Container>
+        {!contentVisible && <Preloader size={48} style={preloaderStyle} />}
+        <Content visible={contentVisible}>
           <WeatherCard city="Warsaw" info="Mon, 12:00 AM, Mostly cloudy" temperature="28" />
-        </Container>
+        </Content>
       </StyledApp>
     );
   }
