@@ -4,17 +4,11 @@ import opacity from '../../../../shared/defaults/opacity';
 import typography from '../../../../shared/mixins/typography';
 
 export const Title = styled.div`
-  font-size: 20px;
-  ${typography.robotoMedium()};
-  margin-left: 24px;
+  font-size: 16px;
+  ${typography.robotoRegular()};
   opacity: ${opacity.light.primaryText};
-  letter-spacing: 0.0075rem;
-`;
-
-export const Header = styled.div`
-  display: flex;
-  align-items: center;
-  height: 64px;
+  letter-spacing: 0.0125rem * 0.15;
+  margin-bottom: 16px;
   margin-top: 32px;
 `;
 
