@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import typography from '../../../../shared/mixins/typography';
 import opacity from '../../../../shared/defaults/opacity';
+import shadows from '../../../../shared/mixins/shadows';
 
 export const Content = styled.div`
   max-width: 640px;
@@ -9,6 +10,17 @@ export const Content = styled.div`
   left: 50%;
   position: relative;
   transform: translateX(-50%);
+`;
+
+export const Toolbar = styled.div`
+  height: 56px;
+  border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
+  box-sizing: border-box;
+  background-color: #fff;
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  width: calc(100% - 300px);
 `;
 
 export const Title = styled.div`

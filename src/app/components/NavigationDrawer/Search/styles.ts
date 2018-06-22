@@ -6,12 +6,14 @@ const searchIcon = require('../../../../shared/icons/search.svg');
 
 export const StyledSearch = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
-  height: 51px;
+  height: 56px;
+  box-sizing: border-box;
   width: 100%;
   display: flex;
   align-items: center;
   overflow: hidden;
   background-color: transparent;
+  -webkit-app-region: no-drag;
 `;
 
 export const Input = styled.input`

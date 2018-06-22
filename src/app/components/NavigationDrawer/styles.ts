@@ -21,7 +21,7 @@ export const Styled = styled.div`
   position: fixed;
   display: flex;
   top: 0;
-  background-color: #f5f5f5;
+  background-color: #fff;
   z-index: 9999;
   transition: 0.4s transform cubic-bezier(0.19, 1, 0.22, 1);
   box-sizing: border-box;
@@ -72,6 +72,8 @@ export const Dark = styled.div`
 export const NavContent = styled.div`
   width: 300px;
   border-left: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
+  position: relative;
+  z-index: 999;
 `;
 
 interface ContentProps {
@@ -93,6 +95,8 @@ export const Content = styled.div`
   max-width: calc(640px + 64px);
   transition: 0.5s width cubic-bezier(0.19, 1, 0.22, 1);
   overflow: auto;
+  background-color: #fafafa;
+  position: relative;
 
   width: ${(props: ContentProps) => (props.visible ? getWidth() : 0)};
 `;
