@@ -12,9 +12,16 @@ export const StyledApp = styled.div`
   background-color: #f5f5f5;
 `;
 
-export const Container = styled.div`
+export interface IContent {
+  visible: boolean;
+}
+
+export const Content = styled.div`
   max-width: 960px;
   width: 100%;
   height: 500px;
   margin: 32px auto;
+  transition: 0.2s opacity;
+
+  opacity: ${(props: IContent) => (props.visible ? 1 : 0)};
 `;
