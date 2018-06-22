@@ -10,6 +10,7 @@ export enum TemperatureUnit {
   Kelvin = 'K',
 }
 
+/* eslint-disable camelcase */
 export enum Languages {
   ar,
   bg,
@@ -42,6 +43,8 @@ export enum Languages {
   tr,
   ua,
   vi,
-  zh_cn, // eslint-disable-line camelcase
-  zh_tw, // eslint-disable-line camelcase
+  zh_cn,
+  zh_tw,
 }
+
+/* eslint-enable camelcase */
