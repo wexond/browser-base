@@ -97,7 +97,7 @@ export interface ISecondaryTextProps {
 export const SecondaryText = styled.div`
   font-size: 14px;
 
-  opacity: ${opacity.light.secondaryText};
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
   margin-top: ${(props: ISecondaryTextProps) => (props.largeTop ? 8 : 2)}px;
 `;
 
@@ -131,8 +131,9 @@ export const SupportingText = styled.div`
 `;
 
 export const Content = styled.div`
-  padding: 0px 16px 0px 16px;
+  padding: 0px 16px 16px 16px;
   font-size: 14px;
 
   ${typography.robotoRegular()};
+  color: rgba(0, 0, 0, ${opacity.light.primaryText});
 `;

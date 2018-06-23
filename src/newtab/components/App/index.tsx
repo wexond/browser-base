@@ -3,7 +3,7 @@ import React from 'react';
 import Preloader from '../../../shared/components/Preloader';
 
 import { requestWeather } from '../../../shared/utils/weather';
-import { Languages } from '../../../shared/enums';
+import { Languages, TemperatureUnit } from '../../../shared/enums';
 
 import { StyledApp, Content } from './styles';
 
@@ -11,11 +11,13 @@ import WeatherCard from '../WeatherCard';
 
 export interface IState {
   contentVisible: boolean;
+  weatherData: any;
 }
 
 export default class App extends React.Component<{}, IState> {
   public state: IState = {
     contentVisible: false,
+    weatherData: null,
   };
 
   componentDidMount() {
@@ -23,15 +25,16 @@ export default class App extends React.Component<{}, IState> {
   }
 
   async loadData() {
-    const weatherData = await requestWeather('opole', Languages.pl);
+    const weatherData = await requestWeather('opole', Languages.EN, TemperatureUnit.Celsius);
 
     this.setState({
+      weatherData,
       contentVisible: true,
     });
   }
 
   public render() {
-    const { contentVisible } = this.state;
+    const { contentVisible, weatherData } = this.state;
 
     const preloaderStyle = {
       position: 'fixed',
@@ -44,7 +47,7 @@ export default class App extends React.Component<{}, IState> {
       <StyledApp>
         {!contentVisible && <Preloader size={48} style={preloaderStyle} />}
         <Content visible={contentVisible}>
-          <WeatherCard city="Warsaw" info="Mon, 12:00 AM, Mostly cloudy" temperature="28" />
+          <WeatherCard data={weatherData} />
         </Content>
       </StyledApp>
     );
