@@ -21,8 +21,6 @@ export const StyledAddressBar = styled.div`
 
   height: ${(props: AddressBarProps) => (props.suggestionsVisible ? 'auto' : '32px')};
   border-radius: ${props => (props.suggestionsVisible ? '10px' : '20px')};
-  border: ${props =>
-    (!props.suggestionsVisible ? `1px solid rgba(0, 0, 0, ${opacity.light.dividers})` : 'none')};
   box-shadow: ${props =>
     (props.suggestionsVisible
       ? shadows(8)
@@ -47,6 +45,7 @@ export const Input = styled.input`
   border: none;
   position: relative;
   height: 32px;
+  background-color: transparent;
 
   ::placeholder {
     color: ${(props: InputProps) => props.theme.addressBarInput.placeholderColor};
@@ -60,7 +59,10 @@ interface InputContainerProps {
 export const InputContainer = styled.div`
   display: flex;
   align-items: center;
-  height: ${(props: InputContainerProps) => (props.suggestionsVisible ? '41px' : '32px')};
+  transition: 0.2s background-color;
+
+  height: ${(props: InputContainerProps) => (props.suggestionsVisible ? '40px' : '32px')};
+  background-color: ${props => props.suggestionsVisible ? 'white' : 'rgba(0, 0, 0, 0.04)'};
 `;
 
 interface IconProps {
