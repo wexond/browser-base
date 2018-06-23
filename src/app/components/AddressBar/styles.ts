@@ -34,18 +34,21 @@ export const StyledAddressBar = styled.div`
 
 interface InputProps {
   visible: boolean;
+  suggestionsVisible: boolean;
   theme?: Theme;
 }
 
 export const Input = styled.input`
   width: 100%;
   font-size: 13px;
-  padding-left: 16px;
   outline: none;
   border: none;
   position: relative;
   height: 32px;
   background-color: transparent;
+  transition: 0.1s padding-left;
+
+  padding-left: ${props => props.suggestionsVisible ? '30px' : '16px'};
 
   ::placeholder {
     color: ${(props: InputProps) => props.theme.addressBarInput.placeholderColor};
