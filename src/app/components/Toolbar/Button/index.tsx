@@ -12,6 +12,7 @@ interface Props {
   divRef?: (ref: HTMLDivElement) => void;
   disabled?: boolean;
   className?: string;
+  children?: any;
 }
 
 @observer
@@ -50,7 +51,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
 
   public render() {
     const {
-      icon, onClick, size, disabled, className, divRef,
+      icon, onClick, size, disabled, className, divRef, children,
     } = this.props;
 
     let { style } = this.props;
@@ -85,6 +86,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
           initialOpacity={0.1}
           size={Store.theme.theme.toolbarButtons.rippleSize}
         />
+        {children}
       </Button>
     );
   }

@@ -152,8 +152,9 @@ export default class extends React.Component<TabProps, {}> {
 
     if (
       hovered ||
-      (tabGroup.tabs.indexOf(tab) + 1 !== tabGroup.tabs.length &&
-        tabGroup.tabs[tabGroup.tabs.indexOf(tab) + 1].hovered)
+      ((tabGroup.tabs.indexOf(tab) + 1 !== tabGroup.tabs.length &&
+        tabGroup.tabs[tabGroup.tabs.indexOf(tab) + 1].hovered) ||
+        tabGroup.tabs.indexOf(tab) === tabGroup.tabs.length - 1)
     ) {
       rightBorderVisible = false;
     }
