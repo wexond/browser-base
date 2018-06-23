@@ -41,7 +41,7 @@ export default class Item extends React.Component<Props, {}> {
 
     return (
       <div style={{ display: display && visible ? 'block' : 'none' }}>
-        <StyledItem onClick={this.onClick}>
+        <StyledItem onClick={this.onClick} selected={selected}>
           <Background selected={selected} />
           <Icon selected={selected} subItem={subItem} image={icon} />
           <Title selected={selected}>{title}</Title>

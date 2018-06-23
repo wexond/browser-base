@@ -117,7 +117,7 @@ export default {
   tabTitle: {},
   tabSelectedTitle: tabSelectedTitleTheme,
   tabHoveredTitle: {},
-  tabDraggingTitle: {},
+  tabDraggingTitle: tabSelectedTitleTheme,
   tabSelectedHoveredTitle: tabSelectedTitleTheme,
 
   tabsIndicator: {
