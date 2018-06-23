@@ -5,7 +5,7 @@ export const getActualTime = (timeUnit: TimeUnit = TimeUnit.AM) => {
   let hours = date.getHours();
 
   if (timeUnit === TimeUnit.PM) {
-    hours = 24 - hours;
+    hours -= 12;
   }
 
   return `${hours}:${date.getMinutes()}`;
