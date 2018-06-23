@@ -2,6 +2,7 @@ import { requestURL } from './network';
 
 import { Languages, TemperatureUnit, TimeUnit } from '../enums';
 import { weatherApiKeys } from '../defaults/apiKeys';
+import { weatherIcons } from '../defaults/weatherIcons';
 
 export const capitalizeFirst = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -23,6 +24,19 @@ export const convertTemperature = (celsiusTemp: number, tempUnit: TemperatureUni
   }
 };
 
+export const getWeatherIcon = (code: string) => {
+  let fileName = '';
+
+  for (let i = 0; i < weatherIcons.length; i++) {
+    if (weatherIcons[i].code === code) {
+      fileName = weatherIcons[i].name;
+      break;
+    }
+  }
+
+  return require(`../icons/weather/${fileName}`); // eslint-disable-line global-require, import/no-dynamic-require
+};
+
 export const requestWeatherUnsafe = async (
   city: string,
   lang: Languages,
@@ -38,6 +52,7 @@ export const requestWeatherUnsafe = async (
 
     const data = await requestURL(url);
     const json = JSON.parse(data);
+    const icon = getWeatherIcon(json.weather[0].icon);
 
     return {
       city: capitalizeFirst(city.indexOf(',') === -1 ? city : json.name),
@@ -46,7 +61,7 @@ export const requestWeatherUnsafe = async (
       temp: convertTemperature(json.main.temp, tempUnit),
       humidity: json.main.humidity,
       pressure: json.main.pressure,
-      icon: json.weather[0].icon,
+      icon,
       wind: json.wind,
       tempUnit,
       timeUnit,

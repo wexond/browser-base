@@ -55,7 +55,7 @@ export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
               {data.temp}
               <TemperatureDeg>&deg;{this.getTemperatureUnitChar()}</TemperatureDeg>
             </Temperature>
-            <TemperatureIcon src="https://img7.downloadapk.net/7/b7/9e012d_0.png" />
+            <TemperatureIcon src={data.icon} />
           </InfoContainer>
         )}
         {data == null && (
