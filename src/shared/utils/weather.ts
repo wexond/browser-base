@@ -30,6 +30,7 @@ export const getWeatherIcon = (code: string) => {
   for (let i = 0; i < weatherIcons.length; i++) {
     if (weatherIcons[i].code === code) {
       fileName = weatherIcons[i].name;
+
       break;
     }
   }
@@ -37,7 +38,15 @@ export const getWeatherIcon = (code: string) => {
   return require(`../icons/weather/${fileName}`); // eslint-disable-line global-require, import/no-dynamic-require
 };
 
-export const requestWeatherUnsafe = async (
+export const convertWindSpeed = (windSpeed: number, tempUnit: TemperatureUnit) => {
+  if (tempUnit === TemperatureUnit.Fahrenheit) {
+    return `${Math.round(windSpeed * 2.23693629)} mph`;
+  }
+
+  return `${Math.round(windSpeed * 3.6)} km/h`;
+};
+
+export const requestWeather = async (
   city: string,
   lang: Languages,
   tempUnit: TemperatureUnit = TemperatureUnit.Celsius,
@@ -46,6 +55,7 @@ export const requestWeatherUnsafe = async (
 ) => {
   try {
     const langCode = Languages[lang];
+
     const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${
       weatherApiKeys[apiKeyIndex]
     }&lang=${langCode}&units=metric`;
@@ -57,14 +67,13 @@ export const requestWeatherUnsafe = async (
     return {
       city: capitalizeFirst(city.indexOf(',') === -1 ? city : json.name),
       description: capitalizeFirst(json.weather[0].description),
-      coord: json.coord,
       temp: convertTemperature(json.main.temp, tempUnit),
-      humidity: json.main.humidity,
+      windSpeed: convertWindSpeed(json.wind.speed, tempUnit),
+      precipitation: json.main.humidity,
       pressure: json.main.pressure,
-      icon,
-      wind: json.wind,
       tempUnit,
       timeUnit,
+      icon,
     };
   } catch (e) {
     console.error(e); // eslint-disable-line no-console
@@ -73,14 +82,14 @@ export const requestWeatherUnsafe = async (
   }
 };
 
-export const requestWeather = async (
+export const getWeather = async (
   city: string,
   lang: Languages,
   tempUnit?: TemperatureUnit,
   timeUnit?: TimeUnit,
 ) => {
   for (let i = 0; i < weatherApiKeys.length; i++) {
-    const data = await requestWeatherUnsafe(city, lang, tempUnit, timeUnit, i);
+    const data = await requestWeather(city, lang, tempUnit, timeUnit, i);
 
     if (data != null) {
       return data;

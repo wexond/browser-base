@@ -2,7 +2,7 @@ import React from 'react';
 
 import Preloader from '../../../shared/components/Preloader';
 
-import { requestWeather } from '../../../shared/utils/weather';
+import { getWeather } from '../../../shared/utils/weather';
 import { Languages, TemperatureUnit, TimeUnit } from '../../../shared/enums';
 
 import { StyledApp, Content } from './styles';
@@ -25,7 +25,7 @@ export default class App extends React.Component<{}, IState> {
   }
 
   async loadData() {
-    const weatherData = await requestWeather(
+    const weatherData = await getWeather(
       'opole',
       Languages.EN,
       TemperatureUnit.Celsius,
