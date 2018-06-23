@@ -8,6 +8,7 @@ import AddressBar from '../AddressBar';
 import TabBar from '../TabBar';
 import ToolbarButton from './Button';
 import { Platforms, NavigationDrawerItems } from '../../enums';
+import WindowsControls from '../WindowsControls';
 
 const tabGroupsIcon = require('../../../shared/icons/tab-groups.svg');
 const menuIcon = require('../../../shared/icons/menu.svg');
@@ -49,7 +50,7 @@ export default class Toolbar extends React.Component {
           icon={menuIcon}
           style={{ marginRight: 4 }}
         />
-        {Store.platform !== Platforms.MacOS && <React.Fragment />}
+        {Store.platform !== Platforms.MacOS && <WindowsControls />}
         <Line style={{ ...theme.toolbarBottomLine }} />
       </StyledToolbar>
     );
