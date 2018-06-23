@@ -168,6 +168,7 @@ export default class AddressBar extends Component<Props, {}> {
         >
           <Icon image={searchIcon} />
           <Input
+            suggestionsVisible={suggestionsVisible}
             innerRef={r => (this.input = r)}
             onFocus={this.onInputFocus}
             placeholder="Search"
