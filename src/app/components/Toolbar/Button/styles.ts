@@ -16,7 +16,7 @@ export const Icon = styled.div`
   height: 100%;
 
   ${(props: IconProps) => images.center(`${props.size}px`, `${props.size}px`)}
-  opacity: ${props => (props.disabled ? opacity.light.disabledIcon : opacity.light.inactiveIcon)};
+  opacity: ${props => (props.disabled ? opacity.light.disabledIcon : 0.65)};
   background-image: ${props => `url(${props.icon})`};
 `;
 

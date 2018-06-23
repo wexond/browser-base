@@ -23,7 +23,7 @@ export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
     return (
       <Card title={city} secondaryText={info} largeTitle>
         <InfoContainer>
-          <Temperature>{temperature}&#x2103;</Temperature>
+          <Temperature>{temperature}&deg;C</Temperature>
           <TemperatureIcon src="https://img7.downloadapk.net/7/b7/9e012d_0.png" />
         </InfoContainer>
       </Card>
