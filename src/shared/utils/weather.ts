@@ -1,11 +1,10 @@
 import { requestURL } from './network';
 
-import { Languages, TemperatureUnit, TimeUnit } from '../enums';
 import { weatherApiKeys } from '../defaults/apiKeys';
 import { weatherIcons } from '../defaults/weatherIcons';
 
-export const capitalizeFirst = (str: string) =>
-  str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+import { Languages, TemperatureUnit, TimeUnit } from '../enums';
+import { capitalizeFirstLetter, capitalizeFirstLetterInEachWord } from './objects';
 
 export const convertTemperature = (celsiusTemp: number, tempUnit: TemperatureUnit) => {
   switch (tempUnit) {
@@ -65,8 +64,8 @@ export const requestWeather = async (
     const icon = getWeatherIcon(json.weather[0].icon);
 
     return {
-      city: capitalizeFirst(city.indexOf(',') === -1 ? city : json.name),
-      description: capitalizeFirst(json.weather[0].description),
+      city: capitalizeFirstLetter(city.indexOf(',') === -1 ? city : json.name),
+      description: capitalizeFirstLetterInEachWord(json.weather[0].description),
       temp: convertTemperature(json.main.temp, tempUnit),
       windSpeed: convertWindSpeed(json.wind.speed, tempUnit),
       precipitation: json.main.humidity,
