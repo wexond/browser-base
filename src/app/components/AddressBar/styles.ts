@@ -11,7 +11,7 @@ interface AddressBarProps {
 export const StyledAddressBar = styled.div`
   position: absolute;
   width: 100%;
-  transition: 0.2s opacity;
+  transition: 0.2s opacity, 0.2s transform;
   z-index: 10;
   max-width: 640px;
   left: 50%;
