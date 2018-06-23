@@ -52,7 +52,7 @@ export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
         {data != null && (
           <InfoContainer>
             <Temperature>
-              {data.temp}
+              <span>{data.temp}</span>
               <TemperatureDeg>&deg;{this.getTemperatureUnitChar()}</TemperatureDeg>
             </Temperature>
             <TemperatureIcon src={data.icon} />
@@ -60,7 +60,7 @@ export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
         )}
         {data == null && (
           <ErrorContainer>
-            Check your internet connection or your settings. An incorrect city name is probably set.
+            Check your internet connection or your settings. City name is probably incorrect.
           </ErrorContainer>
         )}
       </Card>
