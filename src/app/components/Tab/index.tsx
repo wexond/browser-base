@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Close, Content, Icon, Overlay, StyledTab, Title } from './styles';
+import { Close, Content, Icon, Overlay, StyledTab, Title, RightBorder } from './styles';
 import tabAnimations from '../../defaults/tab-animations';
 import Tab from '../../models/tab';
 import TabGroup from '../../models/tab-group';
@@ -123,7 +123,7 @@ export default class extends React.Component<TabProps, {}> {
   };
 
   public render() {
-    const { selected, tab } = this.props;
+    const { selected, tab, tabGroup } = this.props;
 
     const {
       title, isRemoving, hovered, dragging, favicon,
@@ -146,6 +146,16 @@ export default class extends React.Component<TabProps, {}> {
       }
     } else if (hovered) {
       tabState = 'tabHovered';
+    }
+
+    let rightBorderVisible = true;
+
+    if (
+      hovered ||
+      (tabGroup.tabs.indexOf(tab) + 1 !== tabGroup.tabs.length &&
+        tabGroup.tabs[tabGroup.tabs.indexOf(tab) + 1].hovered)
+    ) {
+      rightBorderVisible = false;
     }
 
     return (
@@ -204,6 +214,7 @@ export default class extends React.Component<TabProps, {}> {
               : theme.tab.rippleColor
           }
         />
+        <RightBorder visible={rightBorderVisible} />
       </StyledTab>
     );
   }

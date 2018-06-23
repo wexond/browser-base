@@ -15,20 +15,19 @@ export const StyledAddressBar = styled.div`
   z-index: 10;
   max-width: 640px;
   left: 50%;
-  border-radius: 20px;
   overflow: hidden;
   background-color: white;
-  transition: 0.2s height, 0.2s box-shadow, 0.2s opacity, 0.2s transform;
-  top: calc(50% - 18px);
 
   height: ${(props: AddressBarProps) => (props.suggestionsVisible ? 'auto' : '34px')};
+  border-radius: ${props => (props.suggestionsVisible ? '10px' : '20px')};
   border: ${props =>
     (!props.suggestionsVisible ? `1px solid rgba(0, 0, 0, ${opacity.light.dividers})` : 'none')};
   box-shadow: ${props =>
     (props.suggestionsVisible
-      ? '0 1px 3px 1px rgba(60, 64, 67, 0.2), 0 2px 8px 4px rgba(60, 64, 67, 0.1)'
+      ? '0 2px 15px 1px rgba(60,64,67,0.08), 0 1px 20px 1px rgba(60,64,67,0.16)'
       : 'none')};
-  transform: translate(-50%) ${props => (props.visible ? 'scale(1)' : 'scale(1.1)')};
+  top: ${props => (props.suggestionsVisible ? '6px' : 'calc(50% - 34px / 2)')};
+  transform: translateX(-50%) ${props => (props.visible ? 'scale(1)' : 'scale(1.1)')};
   opacity: ${(props: AddressBarProps) => (props.visible ? 1 : 0)};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
   pointer-events: ${props => (props.visible ? 'auto' : 'none')};
@@ -60,8 +59,7 @@ interface InputContainerProps {
 export const InputContainer = styled.div`
   display: flex;
   align-items: center;
-  height: ${(props: InputContainerProps) => (props.suggestionsVisible ? '48px' : '34px')};
-  transition: 0.2s height;
+  height: ${(props: InputContainerProps) => (props.suggestionsVisible ? '41px' : '34px')};
 `;
 
 interface IconProps {

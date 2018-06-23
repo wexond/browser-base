@@ -35,8 +35,7 @@ export const Styled = styled.div`
 export const Title = styled.div`
   font-size: 20px;
   margin-left: 16px;
-  margin-top: 18px;
-  margin-bottom: 10px;
+  margin-top: 10px;
   opacity: ${opacity.light.primaryText};
 
   letter-spacing: 0.007rem;
@@ -46,6 +45,7 @@ export const Title = styled.div`
 export const Header = styled.div`
   width: 100%;
   display: flex;
+  height: 56px;
   align-items: center;
   position: relative;
   margin-bottom: 8px;
