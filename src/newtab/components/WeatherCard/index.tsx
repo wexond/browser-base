@@ -1,31 +1,68 @@
 import React from 'react';
 
+import { TemperatureUnit, TimeUnit } from '../../../shared/enums';
+import { getActualTime } from '../../../shared/utils/time';
+
 import Card from '../../../shared/components/Card';
 
-import { Temperature, InfoContainer, TemperatureIcon } from './styles';
-import { TemperatureUnit } from '../../../shared/enums';
+import {
+  Temperature,
+  InfoContainer,
+  TemperatureDeg,
+  TemperatureIcon,
+  ErrorContainer,
+} from './styles';
 
 export interface WeatherCardProps {
-  city?: string;
-  info?: string;
-  temperature?: string;
-  temperatureUnit?: TemperatureUnit;
+  data: any;
 }
 
 export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
-  public static defaultProps = {
-    temperatureUnit: TemperatureUnit.Celsius,
+  getTemperatureUnitChar = () => {
+    const { tempUnit } = this.props.data;
+
+    for (const temp in TemperatureUnit) {
+      if (TemperatureUnit[temp] === tempUnit) {
+        return TemperatureUnit[temp];
+      }
+    }
+
+    return null;
+  };
+
+  getDescription = () => {
+    const { description, timeUnit } = this.props.data;
+    const date = new Date();
+    const daysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const dayIndex = date.getDay() === 0 ? daysShort.length - 1 : date.getDay();
+
+    return `${daysShort[dayIndex]}, ${getActualTime(timeUnit)} ${
+      TimeUnit[timeUnit]
+    }, ${description}`;
   };
 
   public render() {
-    const { city, info, temperature } = this.props;
+    const { data } = this.props;
+
+    const city = data != null ? data.city : 'Weather info is unavailable';
+    const description = data != null ? this.getDescription() : null;
 
     return (
-      <Card title={city} secondaryText={info} largeTitle>
-        <InfoContainer>
-          <Temperature>{temperature}&deg;C</Temperature>
-          <TemperatureIcon src="https://img7.downloadapk.net/7/b7/9e012d_0.png" />
-        </InfoContainer>
+      <Card title={city} secondaryText={description} largeTitle>
+        {data != null && (
+          <InfoContainer>
+            <Temperature>
+              {data.temp}
+              <TemperatureDeg>&deg;{this.getTemperatureUnitChar()}</TemperatureDeg>
+            </Temperature>
+            <TemperatureIcon src="https://img7.downloadapk.net/7/b7/9e012d_0.png" />
+          </InfoContainer>
+        )}
+        {data == null && (
+          <ErrorContainer>
+            Check your internet connection or your settings. An incorrect city name is probably set.
+          </ErrorContainer>
+        )}
       </Card>
     );
   }
