@@ -34,7 +34,6 @@ export const StyledTab = styled.div`
   position: absolute;
   left: 0;
   top: 0;
-  overflow: hidden;
   display: flex;
   height: 100%;
   align-items: center;
@@ -141,4 +140,18 @@ export const Content = styled.div`
   }}
 
   max-width: ${props => `calc(100% - ${24 + (props.hovered ? 24 : 0)}px)`};
+`;
+
+interface RightBorderProps {
+  visible: boolean;
+}
+
+export const RightBorder = styled.div`
+  height: calc(100% - 24px);
+  width: 1px;
+  background-color: rgba(0, 0, 0, ${opacity.light.dividers});
+  position: absolute;
+  right: 0;
+
+  display: ${(props: RightBorderProps) => (props.visible ? 'block' : 'none')};
 `;
