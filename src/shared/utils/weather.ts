@@ -67,6 +67,8 @@ export const requestWeatherUnsafe = async (
       timeUnit,
     };
   } catch (e) {
+    console.error(e); // eslint-disable-line no-console
+
     return null;
   }
 };
