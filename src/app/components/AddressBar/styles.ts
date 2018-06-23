@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
 import opacity from '../../../shared/defaults/opacity';
 import { Theme } from '../../../shared/models/theme';
+import shadows from '../../../shared/mixins/shadows';
 
 interface AddressBarProps {
   visible: boolean;
@@ -11,22 +12,22 @@ interface AddressBarProps {
 export const StyledAddressBar = styled.div`
   position: absolute;
   width: 100%;
-  transition: 0.2s opacity, 0.2s transform;
+  transition: 0.2s opacity, 0.2s transform, 0.2s box-shadow, 0.2s border-radius;
   z-index: 10;
   max-width: 640px;
   left: 50%;
   overflow: hidden;
   background-color: white;
 
-  height: ${(props: AddressBarProps) => (props.suggestionsVisible ? 'auto' : '34px')};
+  height: ${(props: AddressBarProps) => (props.suggestionsVisible ? 'auto' : '32px')};
   border-radius: ${props => (props.suggestionsVisible ? '10px' : '20px')};
   border: ${props =>
     (!props.suggestionsVisible ? `1px solid rgba(0, 0, 0, ${opacity.light.dividers})` : 'none')};
   box-shadow: ${props =>
     (props.suggestionsVisible
-      ? '0 2px 15px 1px rgba(60,64,67,0.08), 0 1px 20px 1px rgba(60,64,67,0.16)'
+      ? shadows(8)
       : 'none')};
-  top: ${props => (props.suggestionsVisible ? '6px' : 'calc(50% - 34px / 2)')};
+  top: ${props => (props.suggestionsVisible ? '4px' : 'calc(50% - 32px / 2)')};
   transform: translateX(-50%) ${props => (props.visible ? 'scale(1)' : 'scale(1.1)')};
   opacity: ${(props: AddressBarProps) => (props.visible ? 1 : 0)};
   -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
@@ -59,7 +60,7 @@ interface InputContainerProps {
 export const InputContainer = styled.div`
   display: flex;
   align-items: center;
-  height: ${(props: InputContainerProps) => (props.suggestionsVisible ? '41px' : '34px')};
+  height: ${(props: InputContainerProps) => (props.suggestionsVisible ? '41px' : '32px')};
 `;
 
 interface IconProps {

@@ -33,7 +33,6 @@ export default class Suggestions extends React.Component<Props, {}> {
         }}
         onMouseDown={e => e.stopPropagation()}
       >
-        {noSubheader.length > 0 && <div style={{ height: 8 }} />}
         {noSubheader.map(suggestion => <Suggestion suggestion={suggestion} key={suggestion.id} />)}
 
         {mostVisited.length > 0 && <Caption>Most visited</Caption>}
