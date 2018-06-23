@@ -31,6 +31,7 @@ export interface ITemperatureIconProps {
 export const TemperatureIcon = styled.div`
   width: 96px;
   height: 96px;
+  margin-right: 8px;
   align-self: center;
 
   ${images.center('100%', 'auto')};
