@@ -13,6 +13,12 @@ export const Button = styled.div`
   width: 45px;
   position: relative;
 
+  margin-right: 1px;
+
+  &:first-child {
+    margin-right: 0;
+  }
+
   transition: ${HOVER_DURATION}s background-color;
 
   &:hover {
