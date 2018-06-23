@@ -67,9 +67,11 @@ export default class Card extends React.Component<CardProps, {}> {
             {logo && <Logo src={logo} />}
             <HeaderText>
               <Title large={largeTitle}>{title}</Title>
-              <SecondaryText largeTop={!!supportingText || largeTitle}>
-                {secondaryText}
-              </SecondaryText>
+              {secondaryText != null && (
+                <SecondaryText largeTop={!!supportingText || largeTitle}>
+                  {secondaryText}
+                </SecondaryText>
+              )}
             </HeaderText>
             {image && <Image src={image} />}
             {icon && <Icon src={icon} />}
