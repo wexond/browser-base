@@ -3,6 +3,8 @@ import React from 'react';
 import { TemperatureUnit, TimeUnit } from '../../../shared/enums';
 import { getActualTime } from '../../../shared/utils/time';
 
+import opacity from '../../../shared/defaults/opacity';
+
 import Card from '../../../shared/components/Card';
 
 import {
@@ -11,25 +13,20 @@ import {
   TemperatureDeg,
   TemperatureIcon,
   ErrorContainer,
+  ExtraInfoContainer,
+  ExtraInfo,
+  ExtraInfoIcon,
+  ExtraInfoText,
 } from './styles';
+
+const precipitationIcon = require('../../../shared/icons/weather/precipitation.png');
+const windIcon = require('../../../shared/icons/weather/wind.svg');
 
 export interface WeatherCardProps {
   data: any;
 }
 
 export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
-  getTemperatureUnitChar = () => {
-    const { tempUnit } = this.props.data;
-
-    for (const temp in TemperatureUnit) {
-      if (TemperatureUnit[temp] === tempUnit) {
-        return TemperatureUnit[temp];
-      }
-    }
-
-    return null;
-  };
-
   getDescription = () => {
     const { description, timeUnit } = this.props.data;
     const date = new Date();
@@ -47,16 +44,32 @@ export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
     const city = data != null ? data.city : 'Weather info is unavailable';
     const description = data != null ? this.getDescription() : null;
 
+    const windIconStyle = {
+      opacity: opacity.light.disabledIcon,
+    };
+
     return (
       <Card title={city} secondaryText={description} largeTitle>
         {data != null && (
-          <InfoContainer>
-            <Temperature>
-              <span>{data.temp}</span>
-              <TemperatureDeg>&deg;{this.getTemperatureUnitChar()}</TemperatureDeg>
-            </Temperature>
-            <TemperatureIcon src={data.icon} />
-          </InfoContainer>
+          <div>
+            <InfoContainer>
+              <Temperature>
+                {data.temp}
+                <TemperatureDeg>&deg;{data.tempUnit}</TemperatureDeg>
+              </Temperature>
+              <TemperatureIcon src={data.icon} />
+            </InfoContainer>
+            <ExtraInfoContainer>
+              <ExtraInfo>
+                <ExtraInfoIcon src={precipitationIcon} />
+                <ExtraInfoText>{data.precipitation}% Precipitation</ExtraInfoText>
+              </ExtraInfo>
+              <ExtraInfo>
+                <ExtraInfoIcon src={windIcon} style={windIconStyle} />
+                <ExtraInfoText>{data.windSpeed} Winds</ExtraInfoText>
+              </ExtraInfo>
+            </ExtraInfoContainer>
+          </div>
         )}
         {data == null && (
           <ErrorContainer>
