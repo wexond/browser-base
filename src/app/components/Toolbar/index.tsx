@@ -36,12 +36,12 @@ export default class Toolbar extends React.Component {
       <StyledToolbar style={{ ...theme.toolbar }}>
         <Handle />
         <NavigationButtons />
-        <ToolbarSeparator style={{ marginRight: 0, ...theme.toolbarSeparators }} />
+        <ToolbarSeparator style={{ marginRight: 16, ...theme.toolbarSeparators }} />
         <TabsSection style={{ ...theme.tabsSection }}>
           <AddressBar visible={Store.addressBar.toggled} />
           <TabBar />
         </TabsSection>
-        <ToolbarSeparator style={{ marginLeft: 0, ...theme.toolbarSeparators }} />
+        <ToolbarSeparator style={{ marginLeft: 16, ...theme.toolbarSeparators }} />
         <ToolbarButton size={16} icon={tabGroupsIcon} onClick={this.onTabGroupsIconClick} />
         <ToolbarButton
           onClick={this.toggleMenu}
