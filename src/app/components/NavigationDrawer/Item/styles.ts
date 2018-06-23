@@ -4,6 +4,10 @@ import colors from '../../../../shared/defaults/colors';
 import typography from '../../../../shared/mixins/typography';
 import opacity from '../../../../shared/defaults/opacity';
 
+interface ItemProps {
+  selected: boolean;
+}
+
 export const StyledItem = styled.div`
   height: 48px;
   position: relative;
@@ -13,6 +17,8 @@ export const StyledItem = styled.div`
   width: 100%;
   padding-right: 16px;
   display: flex;
+
+  pointer-events: ${(props: ItemProps) => props.selected ? 'none' : 'auto'};
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.03);
