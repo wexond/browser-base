@@ -3,6 +3,7 @@ import React from 'react';
 import { StyledTabBar, TabGroups, AddTabButton } from './styles';
 import Store from '../../store';
 import TabGroup from '../TabGroup';
+import Toolbar from '../Toolbar';
 
 const addTabIcon = require('../../../shared/icons/add.svg');
 
@@ -20,6 +21,8 @@ export default class TabBar extends React.Component<{}, {}> {
 
   public render() {
     const { theme } = Store.theme;
+
+    const { tabs } = Store.getCurrentTabGroup();
 
     return (
       <StyledTabBar
