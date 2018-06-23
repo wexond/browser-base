@@ -8,8 +8,7 @@ interface SuggestionsProps {
 export const StyledSuggestions = styled.div`
   z-index: 50;
   width: 100%;
-  padding-bottom: 8px;
-  border-top: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
+  border-top: 0px solid rgba(0, 0, 0, ${opacity.light.dividers});
 
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
 `;
