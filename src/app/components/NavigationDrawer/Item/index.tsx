@@ -40,8 +40,8 @@ export default class Item extends React.Component<Props, {}> {
     if (subItem) selected = false;
 
     return (
-      <div style={{ display: display && visible ? 'block' : 'none' }}>
-        <StyledItem onClick={this.onClick}>
+      <div style={{ display: display && visible ? 'block' : 'none'}}>
+        <StyledItem onClick={this.onClick} selected={selected}>
           <Background selected={selected} />
           <Icon selected={selected} subItem={subItem} image={icon} />
           <Title selected={selected}>{title}</Title>
