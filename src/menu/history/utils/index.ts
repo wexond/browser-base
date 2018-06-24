@@ -33,9 +33,9 @@ export function getSections() {
         date: dateStr,
         id: item.id,
       };
-      sections.push(section);
+      sections.unshift(section);
     } else {
-      foundSection.items.push(newItem);
+      foundSection.items.unshift(newItem);
     }
   });
 
