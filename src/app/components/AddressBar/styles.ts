@@ -21,10 +21,7 @@ export const StyledAddressBar = styled.div`
 
   height: ${(props: AddressBarProps) => (props.suggestionsVisible ? 'auto' : '32px')};
   border-radius: ${props => (props.suggestionsVisible ? '10px' : '20px')};
-  box-shadow: ${props =>
-    (props.suggestionsVisible
-      ? shadows(8)
-      : 'none')};
+  box-shadow: ${props => (props.suggestionsVisible ? shadows(8) : 'none')};
   top: ${props => (props.suggestionsVisible ? '4px' : 'calc(50% - 32px / 2)')};
   transform: translateX(-50%) ${props => (props.visible ? 'scale(1)' : 'scale(1.1)')};
   opacity: ${(props: AddressBarProps) => (props.visible ? 1 : 0)};
@@ -48,7 +45,7 @@ export const Input = styled.input`
   background-color: transparent;
   transition: 0.1s padding-left;
 
-  padding-left: ${props => props.suggestionsVisible ? '30px' : '16px'};
+  padding-left: ${props => (props.suggestionsVisible ? '30px' : '16px')};
 
   ::placeholder {
     color: ${(props: InputProps) => props.theme.addressBarInput.placeholderColor};
@@ -65,7 +62,7 @@ export const InputContainer = styled.div`
   transition: 0.2s background-color;
 
   height: ${(props: InputContainerProps) => (props.suggestionsVisible ? '40px' : '32px')};
-  background-color: ${props => props.suggestionsVisible ? 'white' : 'rgba(0, 0, 0, 0.04)'};
+  background-color: ${props => (props.suggestionsVisible ? 'white' : 'rgba(0, 0, 0, 0.06)')};
 `;
 
 interface IconProps {

@@ -27,6 +27,7 @@ class Store {
   @observable public suggestions = new Suggestions();
   @observable public isFullscreen: boolean;
   @observable public navigationDrawer = new NavigationDrawer();
+  @observable public draggingTab: number = null;
 
   @observable
   public navigationState = {
