@@ -28,7 +28,8 @@ export interface WeatherCardProps {
 
 export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
   getDescription = () => {
-    const { description, timeUnit } = this.props.data;
+    const { data } = this.props;
+    const { description, timeUnit } = data;
     const date = new Date();
     const daysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const dayIndex = date.getDay() === 0 ? daysShort.length - 1 : date.getDay();

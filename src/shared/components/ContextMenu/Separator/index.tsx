@@ -16,7 +16,8 @@ export default class MenuSeparator extends React.Component<IProps, {}> {
   };
 
   public componentWillReceiveProps(nextProps: IProps) {
-    if (nextProps.visible && !this.props.visible) {
+    const { visible } = this.props;
+    if (nextProps.visible && !visible) {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         this.setState({ visible: true });

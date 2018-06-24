@@ -5,6 +5,7 @@ import tabAnimations from '../defaults/tab-animations';
 
 export default class TabsIndicator {
   @observable public left = 0;
+
   @observable public width = 0;
 
   public moveToTab(tab: Tab) {

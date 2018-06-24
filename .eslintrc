@@ -42,6 +42,7 @@
     "arrow-parens": "off",
     "react/prefer-stateless-function": "off",
     "react/no-array-index-key": "off",
-    "implicit-arrow-linebreak": "off"
+    "implicit-arrow-linebreak": "off",
+    "react/jsx-one-expression-per-line": "off"
   }
 }

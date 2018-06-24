@@ -3,6 +3,7 @@ import tabAnimations from '../defaults/tab-animations';
 
 export default class AddTabButton {
   public left = 0;
+
   public ref: HTMLDivElement;
 
   public setLeft(left: number, animation = false) {

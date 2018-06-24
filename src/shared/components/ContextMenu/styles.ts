@@ -19,8 +19,8 @@ export const StyledMenu = styled.div`
 
   box-shadow: ${shadows(5)};
 
-  opacity: ${(props: IStyledMenuProps) => (props.visible ? 1 : 0)};
-  margin-top: ${props => (props.visible ? 0 : -15)}px;
-  width: ${props => (props.large ? 3 * x : 2 * x)}px;
-  pointer-events: ${props => (props.visible ? 'auto' : 'none')};
+  opacity: ${({ visible }: IStyledMenuProps) => (visible ? 1 : 0)};
+  margin-top: ${({ visible }) => (visible ? 0 : -15)}px;
+  width: ${({ large }) => (large ? 3 * x : 2 * x)}px;
+  pointer-events: ${({ visible }) => (visible ? 'auto' : 'none')};
 `;

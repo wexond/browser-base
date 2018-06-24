@@ -22,7 +22,7 @@ export const Scrollbar = styled.div`
   z-index: 10;
   width: 100%;
 
-  display: ${(props: ScrollbarProps) => (props.visible ? 'block' : 'none')};
+  display: ${({ visible }: ScrollbarProps) => (visible ? 'block' : 'none')};
 `;
 
 interface ScrollbarThumbProps {
@@ -37,7 +37,7 @@ export const ScrollbarThumb = styled.div`
   left: 0;
   transition: 0.2s opacity;
 
-  opacity: ${(props: ScrollbarThumbProps) => (props.visible ? 0.2 : 0)};
+  opacity: ${({ visible }: ScrollbarThumbProps) => (visible ? 0.2 : 0)};
 
   &:hover {
     opacity: 0.4;

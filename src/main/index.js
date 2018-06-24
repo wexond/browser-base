@@ -2,10 +2,9 @@ const {
   app, BrowserWindow, ipcMain, protocol,
 } = require('electron');
 const path = require('path');
-const { platform } = require('os');
+const { platform, homedir } = require('os');
 const wpm = require('wexond-package-manager');
 const ipcMessages = require('../shared/defaults/ipc-messages');
-const { homedir } = require('os');
 
 const PROTOCOL = 'wexond';
 const URL_WHITELIST = ['history', 'settings', 'newtab', 'bookmarks', 'plugins', 'extensions'];
