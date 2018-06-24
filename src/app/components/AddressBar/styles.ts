@@ -19,14 +19,14 @@ export const StyledAddressBar = styled.div`
   overflow: hidden;
   background-color: white;
 
-  height: ${(props: AddressBarProps) => (props.suggestionsVisible ? 'auto' : '32px')};
-  border-radius: ${props => (props.suggestionsVisible ? '10px' : '20px')};
-  box-shadow: ${props => (props.suggestionsVisible ? shadows(8) : 'none')};
-  top: ${props => (props.suggestionsVisible ? '4px' : 'calc(50% - 32px / 2)')};
-  transform: translateX(-50%) ${props => (props.visible ? 'scale(1)' : 'scale(1.1)')};
-  opacity: ${(props: AddressBarProps) => (props.visible ? 1 : 0)};
-  -webkit-app-region: ${props => (props.visible ? 'no-drag' : '')};
-  pointer-events: ${props => (props.visible ? 'auto' : 'none')};
+  height: ${({ suggestionsVisible }: AddressBarProps) => (suggestionsVisible ? 'auto' : '32px')};
+  border-radius: ${({ suggestionsVisible }) => (suggestionsVisible ? '10px' : '20px')};
+  box-shadow: ${({ suggestionsVisible }) => (suggestionsVisible ? shadows(8) : 'none')};
+  top: ${({ suggestionsVisible }) => (suggestionsVisible ? '4px' : 'calc(50% - 32px / 2)')};
+  transform: translateX(-50%) ${({ visible }) => (visible ? 'scale(1)' : 'scale(1.1)')};
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
+  -webkit-app-region: ${({ visible }) => (visible ? 'no-drag' : '')};
+  pointer-events: ${({ visible }) => (visible ? 'auto' : 'none')};
 `;
 
 interface InputProps {
@@ -45,10 +45,10 @@ export const Input = styled.input`
   background-color: transparent;
   transition: 0.1s padding-left;
 
-  padding-left: ${props => (props.suggestionsVisible ? '30px' : '16px')};
+  padding-left: ${({ suggestionsVisible }) => (suggestionsVisible ? '30px' : '16px')};
 
   ::placeholder {
-    color: ${(props: InputProps) => props.theme.addressBarInput.placeholderColor};
+    color: ${({ theme }: InputProps) => theme.addressBarInput.placeholderColor};
   }
 `;
 
@@ -61,8 +61,10 @@ export const InputContainer = styled.div`
   align-items: center;
   transition: 0.2s background-color;
 
-  height: ${(props: InputContainerProps) => (props.suggestionsVisible ? '40px' : '32px')};
-  background-color: ${props => (props.suggestionsVisible ? 'white' : 'rgba(0, 0, 0, 0.06)')};
+  height: ${({ suggestionsVisible }: InputContainerProps) =>
+    (suggestionsVisible ? '40px' : '32px')};
+  background-color: ${({ suggestionsVisible }) =>
+    (suggestionsVisible ? 'white' : 'rgba(0, 0, 0, 0.06)')};
 `;
 
 interface IconProps {
@@ -70,7 +72,7 @@ interface IconProps {
 }
 
 export const Icon = styled.div`
-  background-image: url(${(props: IconProps) => props.image});
+  background-image: url(${({ image }: IconProps) => image});
   ${images.center('100%', '100%')};
   width: 20px;
   height: 20px;

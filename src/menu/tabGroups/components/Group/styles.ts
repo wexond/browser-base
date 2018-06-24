@@ -42,7 +42,7 @@ export const Border = styled.div`
   border-bottom-left-radius: 4px;
 
   background-color: ${colors.blue['500']};
-  opacity: ${(props: IBorderProps) => (props.selected ? 1 : 0)};
+  opacity: ${({ selected }: IBorderProps) => (selected ? 1 : 0)};
 `;
 
 export const Title = styled.div`
@@ -64,7 +64,7 @@ export const Expand = styled.div`
   transition: 0.2s ease-out transform;
 
   background-image: url(${expandIcon});
-  transform: rotate(${(props: IExpandProps) => (props.expanded ? 180 : 0)}deg);
+  transform: rotate(${({ expanded }: IExpandProps) => (expanded ? 180 : 0)}deg);
   ${images.center('24px', 'auto')};
 `;
 
@@ -76,6 +76,6 @@ export const Content = styled.div`
   overflow: hidden;
   transition: 0.2s all;
 
-  max-height: ${(props: IContentProps) => (props.expanded ? 'auto' : '0px')};
+  max-height: ${({ expanded }: IContentProps) => (expanded ? 'auto' : '0px')};
   height: 100%;
 `;

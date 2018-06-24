@@ -1,6 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Dash, Icon, PrimaryText, SecondaryText, StyledSuggestion } from './styles';
+import {
+  Dash, Icon, PrimaryText, SecondaryText, StyledSuggestion,
+} from './styles';
 import SuggestionItem from '../../models/suggestion-item';
 import Store from '../../store';
 import transparency from '../../../shared/defaults/opacity';

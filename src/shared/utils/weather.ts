@@ -12,7 +12,7 @@ export const convertTemperature = (celsiusTemp: number, tempUnit: TemperatureUni
       return Math.round(celsiusTemp);
     }
     case TemperatureUnit.Fahrenheit: {
-      return Math.round(celsiusTemp * 9 / 5 + 32);
+      return Math.round((celsiusTemp * 9) / 5 + 32);
     }
     case TemperatureUnit.Kelvin: {
       return Math.round(celsiusTemp + 273.15);

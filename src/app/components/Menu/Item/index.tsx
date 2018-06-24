@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyledItem, Icon, Title, Background } from './styles';
+import {
+  StyledItem, Icon, Title, Background,
+} from './styles';
 
 import { MenuItems } from '../../../enums';
 

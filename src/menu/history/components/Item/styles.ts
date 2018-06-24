@@ -14,11 +14,12 @@ export const StyledItem = styled.div`
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
-  background-color: ${(props: StyledItemProps) =>
-    (props.selected ? 'rgba(0, 0, 0, 0.08)' : 'transparent')};
+  background-color: ${({ selected }: StyledItemProps) =>
+    (selected ? 'rgba(0, 0, 0, 0.08)' : 'transparent')};
 
   &:hover {
-    background-color: ${props => (props.selected ? 'rgba(0, 0, 0, 0.12)' : 'rgba(0, 0, 0, 0.03)')};
+    background-color: ${({ selected }) =>
+    (selected ? 'rgba(0, 0, 0, 0.12)' : 'rgba(0, 0, 0, 0.03)')};
   }
 
   &:last-child {

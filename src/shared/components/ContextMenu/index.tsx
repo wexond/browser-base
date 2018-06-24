@@ -29,6 +29,7 @@ export interface IState {
 
 export default class ContextMenu extends React.Component<IProps, IState> {
   public static Item = Item;
+
   public static Separator = Separator;
 
   static defaultProps = {
@@ -42,6 +43,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
   };
 
   private menu: HTMLDivElement;
+
   private height: number;
 
   public componentWillReceiveProps(nextProps: IProps) {
@@ -49,7 +51,10 @@ export default class ContextMenu extends React.Component<IProps, IState> {
   }
 
   public toggle(flag: boolean) {
-    if (flag === this.state.visible) return;
+    const { visible } = this.state;
+
+    if (flag === visible) return;
+
     this.setState({ visible: flag });
 
     if (flag) {
@@ -64,7 +69,8 @@ export default class ContextMenu extends React.Component<IProps, IState> {
   }
 
   public updateHeight() {
-    if (this.state.visible) {
+    const { visible } = this.state;
+    if (visible) {
       requestAnimationFrame(() => {
         this.height = this.menu.scrollHeight;
         this.setState({ heightTransition: true, height: this.height });
@@ -89,7 +95,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
   public render() {
     const { visible, height, heightTransition } = this.state;
     const {
-      large, style, className, dense, hideMenuOnMouseDown,
+      large, style, className, dense, hideMenuOnMouseDown, children,
     } = this.props;
 
     let i = 1;
@@ -113,7 +119,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
         }}
         {...events}
       >
-        {React.Children.map(this.props.children, child =>
+        {React.Children.map(children, child =>
           React.cloneElement(child as React.ReactElement<any>, {
             menu: this,
             dense,

@@ -17,5 +17,5 @@ export default styled.div.attrs({
     visibility: !selected ? 'hidden' : 'visible',
   }),
 })`
-  ${(props: PageProps) => (props.selected ? '' : '')};
+  ${({ selected }: PageProps) => (selected ? '' : '')};
 `;

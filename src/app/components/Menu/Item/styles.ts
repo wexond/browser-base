@@ -18,7 +18,7 @@ export const StyledItem = styled.div`
   padding-right: 16px;
   display: flex;
 
-  pointer-events: ${(props: ItemProps) => (props.selected ? 'none' : 'auto')};
+  pointer-events: ${({ selected }: ItemProps) => (selected ? 'none' : 'auto')};
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.03);
@@ -34,12 +34,11 @@ interface IconProps {
 export const Icon = styled.div`
   height: 24px;
   width: 24px;
-  mask-image: ${props => `url(${props.image})`};
 
-  margin-left: ${(props: IconProps) => (props.subItem ? '40px' : '16px')};
-  background-color: ${props => (props.selected ? colors.blue['500'] : '#000')};
-
-  opacity: ${props => (props.selected ? 1 : 0.5)};
+  margin-left: ${({ subItem }: IconProps) => (subItem ? '40px' : '16px')};
+  background-color: ${({ selected }) => (selected ? colors.blue['500'] : '#000')};
+  mask-image: ${({ image }) => `url(${image})`};
+  opacity: ${({ selected }) => (selected ? 1 : 0.5)};
 `;
 
 interface TitleProps {
@@ -50,10 +49,10 @@ export const Title = styled.div`
   font-size: 14px;
   margin-left: 32px;
 
-  opacity: ${(props: TitleProps) => (props.selected ? 1 : opacity.light.primaryText)};
+  opacity: ${({ selected }: TitleProps) => (selected ? 1 : opacity.light.primaryText)};
   ${typography.robotoMedium()};
   display: 'flex';
-  color: ${props => (props.selected ? colors.blue['500'] : '#000')};
+  color: ${({ selected }) => (selected ? colors.blue['500'] : '#000')};
 `;
 
 interface BackgroundProps {
@@ -61,7 +60,7 @@ interface BackgroundProps {
 }
 
 export const Background = styled.div`
-  background: ${(props: BackgroundProps) => (props.selected ? colors.blue['500'] : 'none')};
+  background: ${({ selected }: BackgroundProps) => (selected ? colors.blue['500'] : 'none')};
   opacity: 0.15;
   position: absolute;
   width: calc(100% - 16px);

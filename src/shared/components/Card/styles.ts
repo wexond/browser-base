@@ -31,7 +31,7 @@ export const Thumbnail = styled.div`
   width: 100%;
   height: 194px;
 
-  background-image: url(${(props: IThumbnailProps) => props.src});
+  background-image: url(${({ src }: IThumbnailProps) => src});
   ${images.center('100%', '194px')};
 `;
 
@@ -42,7 +42,7 @@ export interface IHeaderProps {
 export const Header = styled.div`
   display: flex;
 
-  justify-content: ${(props: IHeaderProps) => (!props.logo ? 'space-between' : 'unset')};
+  justify-content: ${({ logo }: IHeaderProps) => (!logo ? 'space-between' : 'unset')};
 `;
 
 export interface ILogoProps {
@@ -58,7 +58,7 @@ export const Logo = styled.div`
   border-radius: 100%;
 
   ${images.cover()}
-  background-image: url(${(props: IImageProps) => props.src});
+  background-image: url(${({ src }: IImageProps) => src});
 `;
 
 export interface IImageProps {
@@ -72,7 +72,7 @@ export const Image = styled.div`
   align-self: center;
 
   ${images.cover()}
-  background-image: url(${(props: IImageProps) => props.src});
+  background-image: url(${({ src }: IImageProps) => src});
 `;
 
 export const HeaderText = styled.div`
@@ -86,8 +86,8 @@ export interface ITitleProps {
 export const Title = styled.div`
   opacity: ${opacity.light.primaryText};
 
-  font-size: ${(props: ITitleProps) => (props.large ? 24 : 20)}px;
-  ${props => (!props.large ? typography.robotoMedium() : '')};
+  font-size: ${({ large }: ITitleProps) => (large ? 24 : 20)}px;
+  ${({ large }) => (!large ? typography.robotoMedium() : '')};
 `;
 
 export interface ISecondaryTextProps {
@@ -98,7 +98,7 @@ export const SecondaryText = styled.div`
   font-size: 14px;
 
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
-  margin-top: ${(props: ISecondaryTextProps) => (props.largeTop ? 8 : 2)}px;
+  margin-top: ${({ largeTop }: ISecondaryTextProps) => (largeTop ? 8 : 2)}px;
 `;
 
 export interface IIconProps {
@@ -115,7 +115,7 @@ export const Icon = styled.div`
   
   ${images.center('24px', 'auto')}
   opacity: ${opacity.light.secondaryText};
-  background-image: url(${(props: IIconProps) => props.src});
+  background-image: url(${({ src }: IIconProps) => src});
 `;
 
 export interface ISupportingTextProps {
@@ -127,7 +127,7 @@ export const SupportingText = styled.div`
   padding: 0px 16px 16px 16px;
 
   opacity: ${opacity.light.secondaryText};
-  padding-top: ${(props: ISupportingTextProps) => (props.paddingTop ? 16 : 0)}px;
+  padding-top: ${({ paddingTop }: ISupportingTextProps) => (paddingTop ? 16 : 0)}px;
 `;
 
 export const Content = styled.div`
