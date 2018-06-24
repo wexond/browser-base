@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TemperatureUnit, TimeUnit } from '../../../shared/enums';
+import { TimeUnit } from '../../../shared/enums';
 import { getActualTime } from '../../../shared/utils/time';
 
 import opacity from '../../../shared/defaults/opacity';

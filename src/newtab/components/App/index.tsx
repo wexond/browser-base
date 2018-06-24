@@ -2,8 +2,9 @@ import React from 'react';
 
 import Preloader from '../../../shared/components/Preloader';
 
-import { getWeather } from '../../../shared/utils/weather';
-import { Languages, TemperatureUnit, TimeUnit } from '../../../shared/enums';
+import { getWeather } from '../../utils';
+import { Languages, TimeUnit } from '../../../shared/enums';
+import { TemperatureUnit } from '../../enums';
 
 import { StyledApp, Content } from './styles';
 
@@ -27,9 +28,9 @@ export default class App extends React.Component<{}, IState> {
   async loadData() {
     const weatherData = await getWeather(
       'opole',
-      Languages.EN,
+      Languages.en,
       TemperatureUnit.Celsius,
-      TimeUnit.AM,
+      TimeUnit.am,
     );
 
     this.setState({
