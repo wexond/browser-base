@@ -27,23 +27,38 @@ export interface WeatherCardProps {
 }
 
 export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
+  getCity = () => {
+    const { data } = this.props;
+    return data != null ? data.city : 'Weather info is unavailable';
+  };
+
   getDescription = () => {
     const { data } = this.props;
-    const { description, timeUnit } = data;
-    const date = new Date();
-    const daysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    const dayIndex = date.getDay() === 0 ? daysShort.length - 1 : date.getDay();
 
-    return `${daysShort[dayIndex]}, ${getActualTime(timeUnit)} ${
-      TimeUnit[timeUnit]
-    }, ${description}`;
+    if (data != null) {
+      const { timeUnit, daily } = data;
+      const { description } = daily.current;
+
+      const date = new Date();
+      const daysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+      const dayIndex = date.getDay() === 0 ? daysShort.length - 1 : date.getDay();
+
+      return `${daysShort[dayIndex]}, ${getActualTime(timeUnit)} ${TimeUnit[
+        timeUnit
+      ].toUpperCase()}, ${description}`;
+    }
+
+    return null;
   };
 
   public render() {
     const { data } = this.props;
 
-    const city = data != null ? data.city : 'Weather info is unavailable';
-    const description = data != null ? this.getDescription() : null;
+    const current = data != null ? data.daily.current : null;
+
+    const city = this.getCity();
+    const description = this.getDescription();
 
     const windIconStyle = {
       opacity: opacity.light.disabledIcon,
@@ -55,19 +70,19 @@ export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
           <div>
             <InfoContainer>
               <Temperature>
-                {data.temp}
+                {current.temp}
                 <TemperatureDeg>&deg;{data.tempUnit}</TemperatureDeg>
               </Temperature>
-              <TemperatureIcon src={data.icon} />
+              <TemperatureIcon src={current.icon} />
             </InfoContainer>
             <ExtraInfoContainer>
               <ExtraInfo>
                 <ExtraInfoIcon src={precipitationIcon} />
-                <ExtraInfoText>{data.precipitation}% Precipitation</ExtraInfoText>
+                <ExtraInfoText>{current.precipitation}% Precipitation</ExtraInfoText>
               </ExtraInfo>
               <ExtraInfo>
                 <ExtraInfoIcon src={windIcon} style={windIconStyle} />
-                <ExtraInfoText>{data.windSpeed} Winds</ExtraInfoText>
+                <ExtraInfoText>{current.windSpeed} Winds</ExtraInfoText>
               </ExtraInfo>
             </ExtraInfoContainer>
           </div>
