@@ -8,9 +8,11 @@ import { isURL } from '../../shared/utils/url';
 
 export default class Suggestions {
   @observable public list: SuggestionItem[] = [];
+
   @observable public selected = 0;
 
   private searchSuggestions: SuggestionItem[] = [];
+
   private historySuggestions: SuggestionItem[] = [];
 
   public selectNext() {

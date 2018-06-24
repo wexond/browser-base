@@ -5,7 +5,7 @@ import Ripples from '../../Ripples';
 import colors from '../../../defaults/colors';
 import { getEvents } from '../../../utils/events';
 import { getRippleEvents } from '../../../utils/ripple';
-import ContextMenu from '../';
+import ContextMenu from '..';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
@@ -45,10 +45,13 @@ export default class MenuItem extends React.Component<IProps, IState> {
   };
 
   private ripples: Ripples;
+
   private timeout: any;
 
   public componentWillReceiveProps(nextProps: IProps) {
-    if (nextProps.visible && !this.props.visible) {
+    const { visible } = this.props;
+
+    if (nextProps.visible && !visible) {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         this.setState({ visible: true });
@@ -82,7 +85,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
 
   public render() {
     const {
-      rippleColor, hide, disabled, dense,
+      rippleColor, hide, disabled, dense, children,
     } = this.props;
     const { visible } = this.state;
 
@@ -96,7 +99,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
     return (
       <StyledMenuItem dense={dense} hide={hide} visible={visible} {...events}>
         <Title dense={dense} disabled={disabled}>
-          {this.props.children}
+          {children}
         </Title>
         <Ripples ref={r => (this.ripples = r)} initialOpacity={0.1} color={rippleColor} />
       </StyledMenuItem>

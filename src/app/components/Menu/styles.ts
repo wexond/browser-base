@@ -9,13 +9,6 @@ export interface StyledProps {
   contentVisible: boolean;
 }
 
-const getTranslateX = (props: StyledProps) => {
-  if (!props.visible) {
-    return 'translateX(320px)';
-  }
-  return 'translateX(0)';
-};
-
 export const Styled = styled.div`
   height: 100%;
   position: fixed;
@@ -28,7 +21,7 @@ export const Styled = styled.div`
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   right: 0;
 
-  transform: ${(props: StyledProps) => getTranslateX(props)};
+  transform: ${({ visible }: StyledProps) => (visible ? 'translateX(0)' : 'translateX(320px)')};
   box-shadow: ${shadows(16)};
 `;
 
@@ -65,8 +58,8 @@ export const Dark = styled.div`
   z-index: 100;
   transition: 0.2s opacity;
 
-  opacity: ${(props: DarkProps) => (props.visible ? 1 : 0)};
-  pointer-events: ${props => (props.visible ? 'auto' : 'none')};
+  opacity: ${({ visible }: DarkProps) => (visible ? 1 : 0)};
+  pointer-events: ${({ visible }) => (visible ? 'auto' : 'none')};
 `;
 
 export const NavContent = styled.div`
@@ -98,5 +91,5 @@ export const Content = styled.div`
   background-color: #fafafa;
   position: relative;
 
-  width: ${(props: ContentProps) => (props.visible ? getWidth() : 0)};
+  width: ${({ visible }: ContentProps) => (visible ? getWidth() : 0)};
 `;

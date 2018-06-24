@@ -51,7 +51,9 @@ export default class Ripples extends React.Component<IProps, IState> {
   };
 
   private ripples: HTMLDivElement;
+
   private currentRipple: IRipple;
+
   private isTouched = false;
 
   public componentDidMount() {
@@ -63,7 +65,8 @@ export default class Ripples extends React.Component<IProps, IState> {
   }
 
   public makeRipple(mouseX: number, mouseY: number, isTouch = false) {
-    const { color, initialOpacity, disabled } = this.props;
+    const { disabled } = this.props;
+    const { ripples } = this.state;
 
     if ((!isTouch && this.isTouched) || disabled) {
       return;
@@ -78,7 +81,7 @@ export default class Ripples extends React.Component<IProps, IState> {
     this.currentRipple = newRipple;
 
     this.setState({
-      ripples: [...this.state.ripples, newRipple],
+      ripples: [...ripples, newRipple],
     });
 
     if (isTouch && !this.isTouched) {
@@ -87,19 +90,21 @@ export default class Ripples extends React.Component<IProps, IState> {
   }
 
   public removeRipple = (id: number) => {
-    // eslint-disable-next-line
-    const index = this.state.ripples.indexOf(
-      this.state.ripples.filter(ripple => ripple.id === id)[0]);
+    const { ripples } = this.state;
+
+    const index = ripples.indexOf(ripples.filter(ripple => ripple.id === id)[0]);
 
     this.setState({
-      ripples: [...this.state.ripples.slice(0, index), ...this.state.ripples.slice(index + 1)],
+      ripples: [...ripples.slice(0, index), ...ripples.slice(index + 1)],
     });
   };
 
   public removeRipples = () => {
+    const { ripples } = this.state;
+
     this.setState({
       ripples: [
-        ...this.state.ripples.map((ripple: IRipple) => {
+        ...ripples.map((ripple: IRipple) => {
           const newRipple: IRipple = { ...ripple };
           newRipple.isRemoving = true;
           return newRipple;
@@ -135,8 +140,8 @@ export default class Ripples extends React.Component<IProps, IState> {
         {ripples.map((ripple: IRipple) => {
           const { offsetHeight, offsetWidth } = this.ripples;
           const {
- id, x, y, isRemoving,
-} = ripple;
+            id, x, y, isRemoving,
+          } = ripple;
 
           return (
             <Ripple
@@ -171,8 +176,8 @@ export default class Ripples extends React.Component<IProps, IState> {
         >
           {component}
         </IconRipple>
-      )) ||
-      component
+      ))
+      || component
     );
   }
 }

@@ -15,6 +15,6 @@ export const StyledSeparator = styled.div`
   width: 100%;
   transition: 0.2s opacity;
 
-  opacity: ${(props: ISeparatorProps) => (props.visible ? 1 : 0)};
-  display: ${props => (props.hide ? 'none' : 'block')};
+  opacity: ${({ visible }: ISeparatorProps) => (visible ? 1 : 0)};
+  display: ${({ hide }) => (hide ? 'none' : 'block')};
 `;

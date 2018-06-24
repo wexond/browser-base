@@ -1,6 +1,8 @@
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
-import { Input, InputContainer, StyledAddressBar, Icon } from './styles';
+import {
+  Input, InputContainer, StyledAddressBar, Icon,
+} from './styles';
 import Store from '../../store';
 import Suggestions from '../Suggestions';
 import SuggestionItem from '../../models/suggestion-item';
@@ -15,8 +17,11 @@ interface Props {
 @observer
 export default class AddressBar extends Component<Props, {}> {
   private input: HTMLInputElement;
+
   private canSuggest = false;
+
   private lastSuggestion: SuggestionItem;
+
   private visible = false;
 
   public componentDidMount() {
@@ -52,15 +57,15 @@ export default class AddressBar extends Component<Props, {}> {
     const key = e.keyCode;
 
     if (
-      key !== 8 && // backspace
-      key !== 13 && // enter
-      key !== 17 && // ctrl
-      key !== 18 && // alt
-      key !== 16 && // shift
-      key !== 9 && // tab
-      key !== 20 && // capslock
-      key !== 46 && // delete
-      key !== 32 // space
+      key !== 8 // backspace
+      && key !== 13 // enter
+      && key !== 17 // ctrl
+      && key !== 18 // alt
+      && key !== 16 // shift
+      && key !== 9 // tab
+      && key !== 20 // capslock
+      && key !== 46 // delete
+      && key !== 32 // space
     ) {
       this.canSuggest = true;
     } else {
@@ -78,9 +83,9 @@ export default class AddressBar extends Component<Props, {}> {
       const suggestion = Store.suggestions.getSelected();
 
       if (
-        suggestion.type === 'history' ||
-        suggestion.type === 'bookmarks' ||
-        suggestion.type === 'most-visited'
+        suggestion.type === 'history'
+        || suggestion.type === 'bookmarks'
+        || suggestion.type === 'most-visited'
       ) {
         this.input.value = suggestion.secondaryText;
       } else {

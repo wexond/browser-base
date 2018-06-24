@@ -22,6 +22,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
   };
 
   private ripples: Ripples;
+
   private ref: HTMLDivElement;
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {

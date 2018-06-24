@@ -1,6 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Icon, StyledItem, Time, Title } from './styles';
+import {
+  Icon, StyledItem, Time, Title,
+} from './styles';
 import HistoryItem from '../../models/history-item';
 import transparency from '../../../../shared/defaults/opacity';
 import Store from '../../store';
@@ -28,13 +30,15 @@ export default class Item extends React.Component<Props, {}> {
   }
 
   public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { data } = this.props;
+    const { selected } = data;
     if (this.cmdPressed || e.ctrlKey) {
-      this.props.data.selected = !this.props.data.selected;
+      data.selected = !selected;
 
-      if (this.props.data.selected) {
-        Store.selectedItems.push(this.props.data);
+      if (selected) {
+        Store.selectedItems.push(data);
       } else {
-        Store.selectedItems.splice(Store.selectedItems.indexOf(this.props.data), 1);
+        Store.selectedItems.splice(Store.selectedItems.indexOf(data), 1);
       }
     }
   };

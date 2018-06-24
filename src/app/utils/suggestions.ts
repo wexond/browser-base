@@ -86,8 +86,8 @@ export const getHistorySuggestions = (filter: string) =>
         };
 
         if (
-          urlPart.toLowerCase().startsWith(filterPart) ||
-          `www.${urlPart}`.startsWith(filterPart)
+          urlPart.toLowerCase().startsWith(filterPart)
+          || `www.${urlPart}`.startsWith(filterPart)
         ) {
           fromHistory.push(itemToPush);
           mostVisited.push(itemToPush);
@@ -130,10 +130,10 @@ export const getHistorySuggestions = (filter: string) =>
           }
 
           if (
-            split[splitIndex + 1] == null ||
-            (split[splitIndex + 1] != null &&
-              (split[splitIndex + 1].startsWith('?') || split[splitIndex + 1] === '') &&
-              filterPart !== '')
+            split[splitIndex + 1] == null
+            || (split[splitIndex + 1] != null
+              && (split[splitIndex + 1].startsWith('?') || split[splitIndex + 1] === '')
+              && filterPart !== '')
           ) {
             mostVisited.unshift({
               ...mostVisited[0],

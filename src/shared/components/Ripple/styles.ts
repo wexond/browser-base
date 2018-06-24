@@ -1,6 +1,4 @@
-import * as React from 'react';
-
-import styled, { StyledComponentClass } from 'styled-components';
+import styled from 'styled-components';
 
 const getSize = (x: number, y: number, width: number, height: number, icon: number) => {
   if (width === 0 || height === 0) {
@@ -35,16 +33,18 @@ export interface IProps {
 }
 
 export const StyledRipple = styled.div.attrs({
-  style: (props: any) => {
-    const x = Math.min(props.x, props.width);
-    const size = getSize(x, props.y, props.width, props.height, props.icon);
+  style: ({
+    x, y, width, height, icon, opacity,
+  }: any) => {
+    const newX = Math.min(x, width);
+    const size = getSize(x, y, width, height, icon);
 
     return {
-      left: x,
-      top: props.y,
+      left: newX,
+      top: y,
       height: size,
       width: size,
-      opacity: props.opacity,
+      opacity,
     };
   },
 })`
@@ -54,8 +54,8 @@ export const StyledRipple = styled.div.attrs({
   overflow: hidden;
   pointer-events: none;
 
-  transition: ${(props: IProps) => props.rippleTime}s width ${easing},
-    ${props => props.rippleTime}s height ${easing}, ${props => props.fadeOutTime}s opacity,
-    0.3s background-color;
-  background-color: ${props => props.color};
+  transition: ${({ rippleTime }: IProps) => rippleTime}s width ${easing},
+    ${({ rippleTime }) => rippleTime}s height ${easing},
+    ${({ fadeOutTime }) => fadeOutTime}s opacity, 0.3s background-color;
+  background-color: ${({ color }) => color};
 `;
