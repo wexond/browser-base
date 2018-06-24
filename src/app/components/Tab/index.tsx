@@ -37,7 +37,7 @@ export default class extends React.Component<TabProps, {}> {
           Store.mouse.y >= boundingRect.top &&
           Store.mouse.y <= boundingRect.top + this.tab.offsetHeight
         ) {
-          if (!tab.hovered) {
+          if (!tab.hovered && Store.draggingTab == null) {
             tab.hovered = true;
           }
         } else if (tab.hovered) {
@@ -150,11 +150,15 @@ export default class extends React.Component<TabProps, {}> {
 
     let rightBorderVisible = true;
 
+    const tabIndex = tabGroup.tabs.indexOf(tab);
+
     if (
       hovered ||
-      ((tabGroup.tabs.indexOf(tab) + 1 !== tabGroup.tabs.length &&
-        tabGroup.tabs[tabGroup.tabs.indexOf(tab) + 1].hovered) ||
-        tabGroup.tabs.indexOf(tab) === tabGroup.tabs.length - 1)
+      selected ||
+      ((tabIndex + 1 !== tabGroup.tabs.length &&
+        (tabGroup.tabs[tabIndex + 1].hovered ||
+          tabGroup.selectedTab === tabGroup.tabs[tabIndex + 1].id)) ||
+        tabIndex === tabGroup.tabs.length - 1)
     ) {
       rightBorderVisible = false;
     }
