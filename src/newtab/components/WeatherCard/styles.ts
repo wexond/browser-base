@@ -24,7 +24,7 @@ export const TemperatureDeg = styled.div`
   ${typography.robotoRegular()};
 `;
 
-export interface ITemperatureIconProps {
+export interface TemperatureIconProps {
   src: string;
 }
 
@@ -35,7 +35,7 @@ export const TemperatureIcon = styled.div`
   align-self: center;
 
   ${images.center('100%', 'auto')};
-  background-image: url(${({ src }: ITemperatureIconProps) => src});
+  background-image: url(${({ src }: TemperatureIconProps) => src});
 `;
 
 export const ErrorContainer = styled.div`
@@ -45,7 +45,6 @@ export const ErrorContainer = styled.div`
 export const ExtraInfoContainer = styled.div`
   display: flex;
   padding-top: 16px;
-  padding-bottom: 16px;
   align-items: center;
   justify-content: first-start;
 `;
@@ -61,7 +60,7 @@ export const ExtraInfo = styled.div`
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 `;
 
-export interface IExtraInfoIconProps {
+export interface ExtraInfoIconProps {
   src: string;
 }
 
@@ -70,7 +69,7 @@ export const ExtraInfoIcon = styled.div`
   height: 24px;
 
   ${images.center('24px', 'auto')};
-  background-image: url(${({ src }: IExtraInfoIconProps) => src});
+  background-image: url(${({ src }: ExtraInfoIconProps) => src});
 `;
 
 export const ExtraInfoText = styled.div`
