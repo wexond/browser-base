@@ -40,6 +40,8 @@ export default class Suggestion extends React.Component<Props, {}> {
 
     const selected = Store.suggestions.selected === suggestion.id;
 
+    let favicon = suggestion.favicon;
+
     let opacity = 1;
 
     type SuggestionState = 'suggestion' | 'suggestionSelected' | 'suggestionHovered';
@@ -53,15 +55,15 @@ export default class Suggestion extends React.Component<Props, {}> {
     }
 
     if (suggestion.type === 'no-subheader-search' || suggestion.type === 'search') {
-      suggestion.favicon = searchIcon;
+      favicon = searchIcon;
       opacity = transparency.light.inactiveIcon;
     } else if (suggestion.type === 'no-subheader-website') {
-      suggestion.favicon = pageIcon;
+      favicon = pageIcon;
       opacity = transparency.light.inactiveIcon;
     }
 
-    if (suggestion.favicon == null) {
-      suggestion.favicon = pageIcon;
+    if (favicon == null) {
+      favicon = pageIcon;
       opacity = transparency.light.inactiveIcon;
     }
 
@@ -73,7 +75,7 @@ export default class Suggestion extends React.Component<Props, {}> {
       >
         <Icon
           style={{
-            backgroundImage: `url(${suggestion.favicon})`,
+            backgroundImage: `url(${favicon})`,
             ...theme[`${suggestionState}Icon` as SuggestionState],
           }}
         />
