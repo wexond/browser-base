@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
 import React from 'react';
 import { Content, Toolbar } from './styles';
-import { getSections } from '../../utils/history';
+import { getSections } from '../../utils';
 import Store from '../../store';
 import AppStore from '../../../../app/store';
 import Section from '../Section';
