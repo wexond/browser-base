@@ -41,6 +41,7 @@
     "no-await-in-loop": "off",
     "arrow-parens": "off",
     "react/prefer-stateless-function": "off",
-    "react/no-array-index-key": "off"
+    "react/no-array-index-key": "off",
+    "implicit-arrow-linebreak": "off"
   }
 }

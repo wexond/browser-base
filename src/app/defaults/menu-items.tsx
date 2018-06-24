@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NavigationDrawerItems } from '../enums';
+import { MenuItems } from '../enums';
 
 import TabGroups from '../../menu/tabGroups/components/TabGroups';
 import History from '../../menu/history/components/History';
@@ -54,7 +54,7 @@ const history = {
 
 export default [
   {
-    type: NavigationDrawerItems.TabGroups,
+    type: MenuItems.TabGroups,
     label: 'Tab groups',
     icon: tabGroupsIcon,
     content: <TabGroups />,
@@ -75,7 +75,7 @@ export default [
     ],
   },
   {
-    type: NavigationDrawerItems.History,
+    type: MenuItems.History,
     label: 'History',
     icon: historyIcon,
     content: <History />,
@@ -106,7 +106,7 @@ export default [
     ],
   },
   {
-    type: NavigationDrawerItems.Bookmarks,
+    type: MenuItems.Bookmarks,
     label: 'Bookmarks',
     icon: bookmarksIcon,
     content: null,
@@ -114,7 +114,7 @@ export default [
     subItems: [],
   },
   {
-    type: NavigationDrawerItems.Settings,
+    type: MenuItems.Settings,
     label: 'Settings',
     icon: settingsIcon,
     content: null,
@@ -122,7 +122,7 @@ export default [
     subItems: [],
   },
   {
-    type: NavigationDrawerItems.Extensions,
+    type: MenuItems.Extensions,
     label: 'Extensions',
     icon: extensionsIcon,
     content: null,
@@ -130,7 +130,7 @@ export default [
     subItems: [],
   },
   {
-    type: NavigationDrawerItems.About,
+    type: MenuItems.About,
     label: 'About',
     icon: aboutIcon,
     content: <About />,

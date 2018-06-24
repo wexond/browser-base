@@ -3,7 +3,7 @@ import { observable } from 'mobx';
 import Tab from './tab';
 import tabAnimations from '../defaults/tab-animations';
 
-export default class Line {
+export default class TabsIndicator {
   @observable public left = 0;
   @observable public width = 0;
 

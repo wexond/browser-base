@@ -1,14 +1,17 @@
 import { observable, observe } from 'mobx';
-import Line from './line';
+import TabsIndicator from './tabs-indicator';
 import Tab from './tab';
-import { TAB_MIN_WIDTH } from '../constants/design';
+import { TAB_MIN_WIDTH } from '../constants';
 import Store from '../store';
 
 export default class TabGroup {
   @observable public id: number = 0;
+
   @observable public selectedTab: number = -1;
+
   @observable public tabs: Tab[] = [];
-  @observable public line = new Line();
+
+  @observable public tabsIndicator = new TabsIndicator();
 
   public timer = {
     canReset: true,
@@ -19,7 +22,7 @@ export default class TabGroup {
     observe(this, (change: any) => {
       if (change.name === 'selectedTab') {
         requestAnimationFrame(() => {
-          this.line.moveToTab(this.getTabById(change.object.selectedTab));
+          this.tabsIndicator.moveToTab(this.getTabById(change.object.selectedTab));
         });
         Store.refreshNavigationState();
       }
@@ -30,7 +33,7 @@ export default class TabGroup {
       if (this.timer.canReset && this.timer.time === 3) {
         this.updateTabsBounds();
         requestAnimationFrame(() => {
-          this.line.moveToTab(this.getTabById(this.selectedTab));
+          this.tabsIndicator.moveToTab(this.getTabById(this.selectedTab));
         });
         this.timer.canReset = false;
       }

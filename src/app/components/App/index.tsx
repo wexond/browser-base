@@ -6,13 +6,13 @@ import { StyledApp } from './styles';
 import Store from '../../store';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
-import NavigationDrawer from '../NavigationDrawer';
-import Menu from '../../../shared/components/Menu';
+import Menu from '../Menu';
+import ContextMenu from '../../../shared/components/ContextMenu';
 
 @observer
 export default class App extends React.Component {
   public onInspectElementClick = () => {
-    const { x, y } = Store.contextMenuParams;
+    const { x, y } = Store.webviewContextMenuParams;
     Store.getSelectedPage().webview.inspectElement(x, y);
   };
 
@@ -45,10 +45,10 @@ export default class App extends React.Component {
         <StyledApp>
           <Toolbar />
           <Pages />
-          <Menu
+          <ContextMenu
             large
             dense
-            ref={(r: Menu) => (Store.pageMenu = r)}
+            ref={(r: ContextMenu) => (Store.pageMenu = r)}
             onMouseDown={e => e.stopPropagation()}
             style={{
               position: 'absolute',
@@ -57,9 +57,11 @@ export default class App extends React.Component {
               zIndex: 999,
             }}
           >
-            <Menu.Item onClick={this.onInspectElementClick}>Inspect element</Menu.Item>
-          </Menu>
-          <NavigationDrawer title="Wexond" />
+            <ContextMenu.Item onClick={this.onInspectElementClick}>
+              Inspect element
+            </ContextMenu.Item>
+          </ContextMenu>
+          <Menu title="Wexond" />
         </StyledApp>
       </ThemeProvider>
     );

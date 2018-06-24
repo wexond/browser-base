@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TOOLBAR_BUTTON_WIDTH } from '../../constants/design';
+import { TOOLBAR_BUTTON_WIDTH } from '../../constants';
 import { Theme } from '../../../shared/models/theme';
 
 export const Tabs = styled.div`
