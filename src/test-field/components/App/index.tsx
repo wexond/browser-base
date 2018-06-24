@@ -21,16 +21,16 @@ export default class App extends React.Component {
     return (
       <StyledApp>
         <Button background={background} foreground={foreground}>
-          Button
+          BUTTON
         </Button>
         <Button background={background} foreground={foreground} icon={addIcon} style={buttonStyle}>
-          Button
+          BUTTON
         </Button>
         <Button foreground={background} style={buttonStyle} type={ButtonType.Text}>
-          Button
+          BUTTON
         </Button>
         <Button foreground={background} style={buttonStyle} type={ButtonType.Outlined}>
-          Button
+          BUTTON
         </Button>
       </StyledApp>
     );
