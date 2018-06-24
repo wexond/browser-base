@@ -5,7 +5,14 @@ import { getActualTime } from '../../../shared/utils/time';
 
 import opacity from '../../../shared/defaults/opacity';
 
-import Card from '../../../shared/components/Card';
+import {
+  Card,
+  CardHeader,
+  CardHeaderText,
+  CardTitle,
+  CardSecondaryText,
+  CardContent,
+} from '../../../shared/components/Card';
 
 import {
   Temperature,
@@ -65,33 +72,41 @@ export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
     };
 
     return (
-      <Card title={city} secondaryText={description} largeTitle>
-        {data != null && (
-          <div>
-            <InfoContainer>
-              <Temperature>
-                {current.temp}
-                <TemperatureDeg>&deg;{data.tempUnit}</TemperatureDeg>
-              </Temperature>
-              <TemperatureIcon src={current.icon} />
-            </InfoContainer>
-            <ExtraInfoContainer>
-              <ExtraInfo>
-                <ExtraInfoIcon src={precipitationIcon} />
-                <ExtraInfoText>{current.precipitation}% Precipitation</ExtraInfoText>
-              </ExtraInfo>
-              <ExtraInfo>
-                <ExtraInfoIcon src={windIcon} style={windIconStyle} />
-                <ExtraInfoText>{current.windSpeed} Winds</ExtraInfoText>
-              </ExtraInfo>
-            </ExtraInfoContainer>
-          </div>
-        )}
-        {data == null && (
-          <ErrorContainer>
-            Check your internet connection or your settings. City name is probably incorrect.
-          </ErrorContainer>
-        )}
+      <Card>
+        <CardHeader>
+          <CardHeaderText>
+            <CardTitle large>{city}</CardTitle>
+            <CardSecondaryText largeTop>{description}</CardSecondaryText>
+          </CardHeaderText>
+        </CardHeader>
+        <CardContent>
+          {data != null && (
+            <div>
+              <InfoContainer>
+                <Temperature>
+                  {current.temp}
+                  <TemperatureDeg>&deg;{data.tempUnit}</TemperatureDeg>
+                </Temperature>
+                <TemperatureIcon src={current.icon} />
+              </InfoContainer>
+              <ExtraInfoContainer>
+                <ExtraInfo>
+                  <ExtraInfoIcon src={precipitationIcon} />
+                  <ExtraInfoText>{current.precipitation}% Precipitation</ExtraInfoText>
+                </ExtraInfo>
+                <ExtraInfo>
+                  <ExtraInfoIcon src={windIcon} style={windIconStyle} />
+                  <ExtraInfoText>{current.windSpeed} Winds</ExtraInfoText>
+                </ExtraInfo>
+              </ExtraInfoContainer>
+            </div>
+          )}
+          {data == null && (
+            <ErrorContainer>
+              Check your internet connection or your settings. City name is probably incorrect.
+            </ErrorContainer>
+          )}
+        </CardContent>
       </Card>
     );
   }

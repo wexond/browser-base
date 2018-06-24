@@ -6,7 +6,7 @@ import typography from '../../mixins/typography';
 import shadows from '../../mixins/shadows';
 import images from '../../mixins/images';
 
-export const StyledCard = styled.div`
+export const Card = styled.div`
   width: 344px;
   min-height: 72px;
   height: auto;
@@ -23,33 +23,33 @@ export const StyledCard = styled.div`
   ${typography.robotoRegular()};
 `;
 
-export interface IThumbnailProps {
+export interface ThumbnailProps {
   src: string;
 }
 
-export const Thumbnail = styled.div`
+export const CardThumbnail = styled.div`
   width: 100%;
   height: 194px;
 
-  background-image: url(${({ src }: IThumbnailProps) => src});
+  background-image: url(${({ src }: ThumbnailProps) => src});
   ${images.center('100%', '194px')};
 `;
 
-export interface IHeaderProps {
-  logo: boolean;
+export interface HeaderProps {
+  logo?: boolean;
 }
 
-export const Header = styled.div`
+export const CardHeader = styled.div`
   display: flex;
 
-  justify-content: ${({ logo }: IHeaderProps) => (!logo ? 'space-between' : 'unset')};
+  justify-content: ${({ logo }: HeaderProps) => (!logo ? 'space-between' : 'unset')};
 `;
 
-export interface ILogoProps {
+export interface LogoProps {
   src: string;
 }
 
-export const Logo = styled.div`
+export const CardLogo = styled.div`
   width: 40px;
   height: 40px;
   margin-left: 16px;
@@ -58,54 +58,54 @@ export const Logo = styled.div`
   border-radius: 100%;
 
   ${images.cover()}
-  background-image: url(${({ src }: IImageProps) => src});
+  background-image: url(${({ src }: ImageProps) => src});
 `;
 
-export interface IImageProps {
+export interface ImageProps {
   src: string;
 }
 
-export const Image = styled.div`
+export const CardImage = styled.div`
   width: 80px;
   height: 80px;
   margin: 16px;
   align-self: center;
 
   ${images.cover()}
-  background-image: url(${({ src }: IImageProps) => src});
+  background-image: url(${({ src }: ImageProps) => src});
 `;
 
-export const HeaderText = styled.div`
+export const CardHeaderText = styled.div`
   padding: 16px;
 `;
 
-export interface ITitleProps {
-  large: boolean;
+export interface TitleProps {
+  large?: boolean;
 }
 
-export const Title = styled.div`
+export const CardTitle = styled.div`
   opacity: ${opacity.light.primaryText};
 
-  font-size: ${({ large }: ITitleProps) => (large ? 24 : 20)}px;
+  font-size: ${({ large }: TitleProps) => (large ? 24 : 20)}px;
   ${({ large }) => (!large ? typography.robotoMedium() : '')};
 `;
 
-export interface ISecondaryTextProps {
+export interface SecondaryTextProps {
   largeTop: boolean;
 }
 
-export const SecondaryText = styled.div`
+export const CardSecondaryText = styled.div`
   font-size: 14px;
 
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
-  margin-top: ${({ largeTop }: ISecondaryTextProps) => (largeTop ? 8 : 2)}px;
+  margin-top: ${({ largeTop }: SecondaryTextProps) => (largeTop ? 8 : 2)}px;
 `;
 
-export interface IIconProps {
+export interface IconProps {
   src: string;
 }
 
-export const Icon = styled.div`
+export const CardIcon = styled.div`
   width: 42px;
   height: 42px;
   align-self: center;
@@ -115,22 +115,22 @@ export const Icon = styled.div`
   
   ${images.center('24px', 'auto')}
   opacity: ${opacity.light.secondaryText};
-  background-image: url(${({ src }: IIconProps) => src});
+  background-image: url(${({ src }: IconProps) => src});
 `;
 
-export interface ISupportingTextProps {
-  paddingTop: boolean;
+export interface SupportingTextProps {
+  paddingTop?: boolean;
 }
 
-export const SupportingText = styled.div`
+export const CardSupportingText = styled.div`
   font-size: 14px;
   padding: 0px 16px 16px 16px;
 
   opacity: ${opacity.light.secondaryText};
-  padding-top: ${({ paddingTop }: ISupportingTextProps) => (paddingTop ? 16 : 0)}px;
+  padding-top: ${({ paddingTop }: SupportingTextProps) => (paddingTop ? 16 : 0)}px;
 `;
 
-export const Content = styled.div`
+export const CardContent = styled.div`
   padding: 0px 16px 16px 16px;
   font-size: 14px;
 
