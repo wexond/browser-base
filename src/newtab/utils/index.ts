@@ -1,10 +1,9 @@
-import { requestURL } from './network';
-
-import { weatherApiKeys } from '../defaults/apiKeys';
-import { weatherIcons } from '../defaults/weatherIcons';
-
-import { Languages, TemperatureUnit, TimeUnit } from '../enums';
-import { capitalizeFirstLetter, capitalizeFirstLetterInEachWord } from './objects';
+import { requestURL } from '../../shared/utils/network';
+import { WEATHER_API_KEYS } from '../../shared/constants';
+import weatherIcons, { WeatherCodes } from '../defaults/weather-icons';
+import { Languages, TimeUnit } from '../../shared/enums';
+import { TemperatureUnit } from '../enums';
+import { capitalizeFirstLetter, capitalizeFirstLetterInEachWord } from '../../shared/utils/strings';
 
 export const convertTemperature = (celsiusTemp: number, tempUnit: TemperatureUnit) => {
   switch (tempUnit) {
@@ -23,20 +22,6 @@ export const convertTemperature = (celsiusTemp: number, tempUnit: TemperatureUni
   }
 };
 
-export const getWeatherIcon = (code: string) => {
-  let fileName = '';
-
-  for (let i = 0; i < weatherIcons.length; i++) {
-    if (weatherIcons[i].code === code) {
-      fileName = weatherIcons[i].name;
-
-      break;
-    }
-  }
-
-  return require(`../icons/weather/${fileName}`); // eslint-disable-line global-require, import/no-dynamic-require
-};
-
 export const convertWindSpeed = (windSpeed: number, tempUnit: TemperatureUnit) => {
   if (tempUnit === TemperatureUnit.Fahrenheit) {
     return `${Math.round(windSpeed * 2.23693629)} mph`;
@@ -49,19 +34,19 @@ export const requestWeather = async (
   city: string,
   lang: Languages,
   tempUnit: TemperatureUnit = TemperatureUnit.Celsius,
-  timeUnit: TimeUnit = TimeUnit.AM,
+  timeUnit: TimeUnit = TimeUnit.am,
   apiKeyIndex: number = 0,
 ) => {
   try {
     const langCode = Languages[lang];
 
     const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${
-      weatherApiKeys[apiKeyIndex]
+      WEATHER_API_KEYS[apiKeyIndex]
     }&lang=${langCode}&units=metric`;
 
     const data = await requestURL(url);
     const json = JSON.parse(data);
-    const icon = getWeatherIcon(json.weather[0].icon);
+    const icon = weatherIcons[json.weather[0].icon as WeatherCodes];
 
     return {
       city: capitalizeFirstLetter(city.indexOf(',') === -1 ? city : json.name),
@@ -87,7 +72,7 @@ export const getWeather = async (
   tempUnit?: TemperatureUnit,
   timeUnit?: TimeUnit,
 ) => {
-  for (let i = 0; i < weatherApiKeys.length; i++) {
+  for (let i = 0; i < WEATHER_API_KEYS.length; i++) {
     const data = await requestWeather(city, lang, tempUnit, timeUnit, i);
 
     if (data != null) {
