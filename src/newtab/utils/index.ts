@@ -30,54 +30,144 @@ export const convertWindSpeed = (windSpeed: number, tempUnit: TemperatureUnit) =
   return `${Math.round(windSpeed * 3.6)} km/h`;
 };
 
-export const requestWeather = async (
+export const requestCurrentWeather = async (
   city: string,
   lang: Languages,
-  tempUnit: TemperatureUnit = TemperatureUnit.Celsius,
-  timeUnit: TimeUnit = TimeUnit.am,
-  apiKeyIndex: number = 0,
+  tempUnit: TemperatureUnit,
+  timeUnit: TimeUnit,
+  apiKey: string,
 ) => {
   try {
     const langCode = Languages[lang];
-
-    const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${
-      WEATHER_API_KEYS[apiKeyIndex]
-    }&lang=${langCode}&units=metric`;
+    const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=${langCode}&units=metric`;
 
     const data = await requestURL(url);
     const json = JSON.parse(data);
-    const icon = weatherIcons[json.weather[0].icon as WeatherCodes];
 
     return {
-      city: capitalizeFirstLetter(city.indexOf(',') === -1 ? city : json.name),
       description: capitalizeFirstLetterInEachWord(json.weather[0].description),
       temp: convertTemperature(json.main.temp, tempUnit),
       windSpeed: convertWindSpeed(json.wind.speed, tempUnit),
+      icon: weatherIcons[json.weather[0].icon as WeatherCodes],
       precipitation: json.main.humidity,
       pressure: json.main.pressure,
-      tempUnit,
-      timeUnit,
-      icon,
     };
   } catch (e) {
     console.error(e); // eslint-disable-line no-console
-
-    return null;
   }
+
+  return null;
+};
+
+export const requestWeatherForecast = async (
+  city: string,
+  lang: Languages,
+  tempUnit: TemperatureUnit,
+  timeUnit: TimeUnit,
+  apiKey: string,
+) => {
+  try {
+    const langCode = Languages[lang];
+    const url = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&lang=${langCode}&units=metric`;
+
+    const data = await requestURL(url);
+    const json = JSON.parse(data);
+
+    const daily = [];
+    const week = [];
+
+    const currentDate = new Date();
+    const timeZoneOffset = currentDate.getTimezoneOffset() / 60;
+
+    let night = null;
+
+    for (let i = 0; i < json.list.length; i++) {
+      const item = json.list[i];
+      const date = new Date(item.dt * 1000);
+      const hoursDiff = date.getHours() + timeZoneOffset;
+
+      if (date.getDate() === currentDate.getDate()) {
+        daily.push({
+          description: capitalizeFirstLetterInEachWord(item.weather[0].description),
+          temp: convertTemperature(item.main.temp, tempUnit),
+          windSpeed: convertWindSpeed(item.wind.speed, tempUnit),
+          icon: weatherIcons[item.weather[0].icon as WeatherCodes],
+          precipitation: item.main.humidity,
+          pressure: item.main.pressure,
+          date,
+        });
+      } else if (hoursDiff === 0) {
+        night = {
+          temp: item.main.temp,
+          icon: weatherIcons[item.weather[0].icon as WeatherCodes],
+        };
+      } else if (hoursDiff === 15) {
+        week.push({
+          day: {
+            temp: item.main.temp,
+            icon: weatherIcons[item.weather[0].icon as WeatherCodes],
+          },
+          night,
+          date,
+        });
+      }
+    }
+
+    return {
+      daily,
+      week,
+    };
+  } catch (e) {
+    console.error(e); // eslint-disable-line no-console
+  }
+
+  return null;
 };
 
 export const getWeather = async (
   city: string,
   lang: Languages,
-  tempUnit?: TemperatureUnit,
-  timeUnit?: TimeUnit,
+  tempUnit: TemperatureUnit = TemperatureUnit.Celsius,
+  timeUnit: TimeUnit = TimeUnit.am,
 ) => {
-  for (let i = 0; i < WEATHER_API_KEYS.length; i++) {
-    const data = await requestWeather(city, lang, tempUnit, timeUnit, i);
+  let apiKeyIndex = 0;
 
-    if (data != null) {
-      return data;
+  let current;
+  let forecast;
+
+  for (apiKeyIndex = 0; apiKeyIndex < WEATHER_API_KEYS.length; apiKeyIndex++) {
+    current = await requestCurrentWeather(
+      city,
+      lang,
+      tempUnit,
+      timeUnit,
+      WEATHER_API_KEYS[apiKeyIndex],
+    );
+
+    forecast = await requestWeatherForecast(
+      city,
+      lang,
+      tempUnit,
+      timeUnit,
+      WEATHER_API_KEYS[apiKeyIndex],
+    );
+
+    if (current != null && forecast != null) {
+      break;
     }
+  }
+
+  if (apiKeyIndex < WEATHER_API_KEYS.length) {
+    return {
+      city: capitalizeFirstLetter(city),
+      tempUnit,
+      timeUnit,
+      daily: {
+        current,
+        later: forecast.daily,
+      },
+      week: forecast.week,
+    };
   }
 
   return null;

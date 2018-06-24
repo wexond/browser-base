@@ -46,3 +46,14 @@ export enum TimeUnit {
   am,
   pm,
 }
+
+export enum UITheme {
+  Light = 'light',
+  Dark = 'dark',
+}
+
+export enum ButtonType {
+  Text,
+  Outlined,
+  Contained,
+}
