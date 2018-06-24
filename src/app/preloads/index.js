@@ -11,4 +11,3 @@ if (
 ) {
   loadContent('testField');
 }
-r;
