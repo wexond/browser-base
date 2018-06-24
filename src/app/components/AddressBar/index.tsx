@@ -128,7 +128,7 @@ export default class AddressBar extends Component<Props, {}> {
       this.autoComplete(this.lastSuggestion, text);
     }
 
-    await Store.suggestions.load(text);
+    await Store.suggestions.load(this.input);
 
     if (this.canSuggest) {
       const suggestion = Store.suggestions.suggest();
@@ -138,6 +138,13 @@ export default class AddressBar extends Component<Props, {}> {
     }
 
     Store.suggestions.selected = 0;
+  };
+
+  public getInputValue = () => {
+    if (this.input != null) {
+      return this.input.value;
+    }
+    return null;
   };
 
   public render() {
