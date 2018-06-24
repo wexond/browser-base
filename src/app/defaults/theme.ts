@@ -17,7 +17,7 @@ const tabSelectedTitleTheme = {
 export default {
   toolbar: {},
   toolbarButtons: {
-    rippleSize: 36,
+    rippleSize: 38,
   },
 
   addressBarInput: {
