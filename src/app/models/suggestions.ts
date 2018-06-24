@@ -27,13 +27,9 @@ export default class Suggestions {
     this.list = [];
   }
 
-  public load(filter: string) {
+  public load(input: HTMLInputElement) {
     return new Promise(async resolve => {
-      if (filter.trim() === '') {
-        this.list = [];
-        resolve();
-        return;
-      }
+      const filter = input.value;
 
       this.historySuggestions = [];
       const suggestions = await getHistorySuggestions(filter);
@@ -95,10 +91,15 @@ export default class Suggestions {
             id: id++,
           });
         }
+
         this.list = this.historySuggestions.concat(this.searchSuggestions);
+
+        if (input.value === '') this.list = [];
       });
 
       this.list = this.searchSuggestions.concat(this.historySuggestions);
+
+      if (input.value === '') this.list = [];
 
       resolve();
     });
