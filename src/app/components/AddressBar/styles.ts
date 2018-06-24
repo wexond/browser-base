@@ -1,6 +1,5 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import images from '../../../shared/mixins/images';
-import opacity from '../../../shared/defaults/opacity';
 import { Theme } from '../../../shared/models/theme';
 import shadows from '../../../shared/mixins/shadows';
 
@@ -19,14 +18,16 @@ export const StyledAddressBar = styled.div`
   overflow: hidden;
   background-color: white;
 
-  height: ${({ suggestionsVisible }: AddressBarProps) => (suggestionsVisible ? 'auto' : '32px')};
-  border-radius: ${({ suggestionsVisible }) => (suggestionsVisible ? '10px' : '20px')};
-  box-shadow: ${({ suggestionsVisible }) => (suggestionsVisible ? shadows(8) : 'none')};
-  top: ${({ suggestionsVisible }) => (suggestionsVisible ? '4px' : 'calc(50% - 32px / 2)')};
-  transform: translateX(-50%) ${({ visible }) => (visible ? 'scale(1)' : 'scale(1.1)')};
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
-  -webkit-app-region: ${({ visible }) => (visible ? 'no-drag' : '')};
-  pointer-events: ${({ visible }) => (visible ? 'auto' : 'none')};
+  ${({ suggestionsVisible, visible }: AddressBarProps) => css`
+    height: ${suggestionsVisible ? 'auto' : '32px'};
+    border-radius: ${suggestionsVisible ? 10 : 20}px;
+    box-shadow: ${suggestionsVisible ? shadows(8) : 'none'};
+    top: ${suggestionsVisible ? '4px' : 'calc(50% - 32px / 2)'};
+    transform: translateX(-50%) ${visible ? 'scale(1)' : 'scale(1.1)'};
+    opacity: ${visible ? 1 : 0};
+    -webkit-app-region: ${visible ? 'no-drag' : ''};
+    pointer-events: ${visible ? 'auto' : 'none'};
+  `};
 `;
 
 interface InputProps {
@@ -45,11 +46,12 @@ export const Input = styled.input`
   background-color: transparent;
   transition: 0.1s padding-left;
 
-  padding-left: ${({ suggestionsVisible }) => (suggestionsVisible ? '30px' : '16px')};
-
-  ::placeholder {
-    color: ${({ theme }: InputProps) => theme.addressBarInput.placeholderColor};
-  }
+  ${({ suggestionsVisible, theme }: InputProps) => css`
+    padding-left: ${suggestionsVisible ? '30px' : '16px'};
+    ::placeholder {
+      color: ${theme.addressBarInput.placeholderColor};
+    }
+  `};
 `;
 
 interface InputContainerProps {
@@ -61,10 +63,10 @@ export const InputContainer = styled.div`
   align-items: center;
   transition: 0.2s background-color;
 
-  height: ${({ suggestionsVisible }: InputContainerProps) =>
-    (suggestionsVisible ? '40px' : '32px')};
-  background-color: ${({ suggestionsVisible }) =>
-    (suggestionsVisible ? 'white' : 'rgba(0, 0, 0, 0.06)')};
+  ${({ suggestionsVisible }: InputContainerProps) => css`
+    height: ${suggestionsVisible ? '40px' : '32px'};
+    background-color: ${suggestionsVisible ? 'white' : 'rgba(0, 0, 0, 0.06)'};
+  `};
 `;
 
 interface IconProps {
@@ -72,10 +74,13 @@ interface IconProps {
 }
 
 export const Icon = styled.div`
-  background-image: url(${({ image }: IconProps) => image});
   ${images.center('100%', '100%')};
   width: 20px;
   height: 20px;
   margin-left: 16px;
   opacity: 0.5;
+
+  ${({ image }: IconProps) => css`
+    background-image: url(${image});
+  `};
 `;
