@@ -24,6 +24,8 @@ const config = {
       {
         test: /\.(tsx|ts|jsx|js)$/,
         loader: 'babel-loader',
+        include: INCLUDE,
+        exclude: EXCLUDE,
         options: {
           babelrc: false,
           plugins: ['react-hot-loader/babel'],
