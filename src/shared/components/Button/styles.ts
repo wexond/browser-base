@@ -33,6 +33,7 @@ export const StyledButton = styled.div`
   justify-content: center;
   cursor: pointer;
   position: relative;
+  transition: 0.2s box-shadow;
 
   background-color: ${({ color, type }: IStyledButtonProps) =>
     (isTransparent(type) ? 'transparent' : color)};
@@ -40,6 +41,12 @@ export const StyledButton = styled.div`
   border: ${({ type }) => (type === ButtonType.Outlined ? getBorder() : 'unset')};
   box-shadow: ${({ type }) => (isTransparent(type) ? 'unset' : shadows(2))};
   padding-left: ${({ icon }) => getPadding(icon)}px;
+
+  &:hover .over-shade {
+    opacity: 0.12;
+
+    box-shadow: ${({ type }) => (isTransparent(type) ? 'unset' : shadows(3))};
+  }
 `;
 
 export interface IIconProps {
@@ -63,10 +70,24 @@ export interface ITextProps {
 }
 
 export const Text = styled.div`
-
-  text-transform: uppercase;
   font-size: 14px;
 
   ${typography.robotoMedium()}
   color: ${({ color }: ITextProps) => color};
+`;
+
+export interface IOverShadeProps {
+  color: string;
+}
+
+export const OverShade = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: 0.2s opacity;
+
+  background-color: ${({ color }: IOverShadeProps) => color};
 `;
