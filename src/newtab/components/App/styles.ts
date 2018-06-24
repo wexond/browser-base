@@ -23,5 +23,5 @@ export const Content = styled.div`
   margin: 32px auto;
   transition: 0.2s opacity;
 
-  opacity: ${(props: IContent) => (props.visible ? 1 : 0)};
+  opacity: ${({ visible }: IContent) => (visible ? 1 : 0)};
 `;

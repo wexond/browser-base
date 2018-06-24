@@ -1,6 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Styled, Title, Header, Dark, NavContent, Content } from './styles';
+import {
+  Styled, Title, Header, Dark, NavContent, Content,
+} from './styles';
 import Item from './Item';
 import Search from './Search';
 import menuItems from '../../defaults/menu-items';

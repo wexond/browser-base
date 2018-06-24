@@ -21,8 +21,8 @@ export const Button = styled.div`
   transition: 0.2ss background-color;
 
   &:hover {
-    background-color: ${(props: ButtonProps) =>
-    (!props.isClose ? 'rgba(196, 196, 196, 0.4)' : '#e81123')};
+    background-color: ${({ isClose }: ButtonProps) =>
+    (!isClose ? 'rgba(196, 196, 196, 0.4)' : '#e81123')};
   }
 `;
 
@@ -36,10 +36,10 @@ export const Icon = styled.div`
   height: 100%;
   transition: 0.2ss filter;
 
-  background-image: ${(props: IconProps) => `url(${props.icon})`};
+  background-image: ${({ icon }: IconProps) => `url(${icon})`};
   ${images.center('11px', '11px')};
 
   &:hover {
-    filter: ${props => props.isClose && 'invert(100%);'};
+    filter: ${({ isClose }) => isClose && 'invert(100%);'};
   }
 `;

@@ -4,6 +4,7 @@ import HistoryItem from './models/history-item';
 
 class Store {
   @observable sections: Section[] = [];
+
   @observable selectedItems: HistoryItem[] = [];
 }
 

@@ -1,7 +1,9 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { StyledGroup, Bar, Border, Title, Expand, Content } from './styles';
+import {
+  StyledGroup, Bar, Border, Title, Expand, Content,
+} from './styles';
 
 import SiteItem from '../SiteItem';
 
@@ -19,9 +21,9 @@ export default class Group extends React.Component<Props, State> {
   };
 
   private Expand = () => {
-    this.setState({
-      expanded: !this.state.expanded,
-    });
+    this.setState(({ expanded }) => ({
+      expanded: !expanded,
+    }));
   };
 
   public render() {

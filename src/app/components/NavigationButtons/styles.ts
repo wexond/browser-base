@@ -7,8 +7,8 @@ interface ContainerProps {
 }
 
 export const StyledContainer = styled.div`
-  margin-left: ${(props: ContainerProps) =>
-    (!props.isFullscreen && Store.platform === Platforms.MacOS ? 72 : 0)}px;
+  margin-left: ${({ isFullscreen }: ContainerProps) =>
+    (!isFullscreen && Store.platform === Platforms.MacOS ? 72 : 0)}px;
   display: flex;
   -webkit-app-region: no-drag;
 `;

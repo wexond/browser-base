@@ -1,6 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Close, Content, Icon, Overlay, StyledTab, Title, RightBorder } from './styles';
+import {
+  Close, Content, Icon, Overlay, StyledTab, Title, RightBorder,
+} from './styles';
 import tabAnimations from '../../defaults/tab-animations';
 import Tab from '../../models/tab';
 import TabGroup from '../../models/tab-group';
@@ -22,7 +24,9 @@ export interface TabProps {
 @observer
 export default class extends React.Component<TabProps, {}> {
   private ripples: Ripples;
+
   private iconRipples: Ripples;
+
   private tab: HTMLDivElement;
 
   public componentDidMount() {
@@ -32,10 +36,10 @@ export default class extends React.Component<TabProps, {}> {
       if (this.tab != null) {
         const boundingRect = this.tab.getBoundingClientRect();
         if (
-          Store.mouse.x >= boundingRect.left &&
-          Store.mouse.x <= boundingRect.left + this.tab.offsetWidth &&
-          Store.mouse.y >= boundingRect.top &&
-          Store.mouse.y <= boundingRect.top + this.tab.offsetHeight
+          Store.mouse.x >= boundingRect.left
+          && Store.mouse.x <= boundingRect.left + this.tab.offsetWidth
+          && Store.mouse.y >= boundingRect.top
+          && Store.mouse.y <= boundingRect.top + this.tab.offsetHeight
         ) {
           if (!tab.hovered && !Store.draggingTab) {
             tab.hovered = true;
@@ -51,7 +55,9 @@ export default class extends React.Component<TabProps, {}> {
   }
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { selected, tab, tabGroup } = this.props;
+    const {
+      selected, tab, tabGroup, onTabMouseDown,
+    } = this.props;
     const { pageX, pageY } = e;
 
     Store.addressBar.canToggle = selected;
@@ -60,7 +66,7 @@ export default class extends React.Component<TabProps, {}> {
         tabGroup.selectTab(tab);
       }
     });
-    this.props.onTabMouseDown(e, tab);
+    onTabMouseDown(e, tab);
     this.ripples.makeRipple(pageX, pageY);
   };
 
@@ -123,7 +129,9 @@ export default class extends React.Component<TabProps, {}> {
   };
 
   public render() {
-    const { selected, tab, tabGroup } = this.props;
+    const {
+      selected, tab, tabGroup, children,
+    } = this.props;
 
     const {
       title, isRemoving, hovered, dragging, favicon,
@@ -153,12 +161,12 @@ export default class extends React.Component<TabProps, {}> {
     const tabIndex = tabGroup.tabs.indexOf(tab);
 
     if (
-      hovered ||
-      selected ||
-      ((tabIndex + 1 !== tabGroup.tabs.length &&
-        (tabGroup.tabs[tabIndex + 1].hovered ||
-          tabGroup.selectedTab === tabGroup.tabs[tabIndex + 1].id)) ||
-        tabIndex === tabGroup.tabs.length - 1)
+      hovered
+      || selected
+      || ((tabIndex + 1 !== tabGroup.tabs.length
+        && (tabGroup.tabs[tabIndex + 1].hovered
+          || tabGroup.selectedTab === tabGroup.tabs[tabIndex + 1].id))
+        || tabIndex === tabGroup.tabs.length - 1)
     ) {
       rightBorderVisible = false;
     }
@@ -208,7 +216,7 @@ export default class extends React.Component<TabProps, {}> {
             initialOpacity={0.1}
           />
         </Close>
-        {this.props.children}
+        {children}
         <Overlay hovered={hovered} selected={selected} />
         <Ripples
           rippleTime={0.6}

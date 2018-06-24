@@ -7,8 +7,8 @@ export interface IPreloaderProps {
 }
 
 export const StyledPreloader = styled.div`
-  width: ${(props: IPreloaderProps) => props.size}px;
-  height: ${props => props.size}px;
+  width: ${({ size }: IPreloaderProps) => size}px;
+  height: ${({ size }) => size}px;
   transform-origin: center center;
   animation: nersent-ui-preloader-rotate 2s linear infinite;
   z-index: 5;
@@ -24,7 +24,7 @@ export const Path = styled.circle`
   stroke-dashoffset: 0;
   animation: nersent-ui-preloader-dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
   stroke-linecap: square;
-  stroke-width: ${(props: IPathProps) => props.thickness};
-  stroke: ${props => props.color};
+  stroke-width: ${({ thickness }: IPathProps) => thickness};
+  stroke: ${({ color }) => color};
   transition: 0.3s stroke;
 `;

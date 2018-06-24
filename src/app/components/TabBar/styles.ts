@@ -21,8 +21,8 @@ export const StyledTabBar = styled.div`
   left: 0;
   transition: 0.2s opacity;
 
-  pointer-events: ${(props: TabBarProps) => (props.visible ? 'auto' : 'none')};
-  opacity: ${props => (props.visible ? 1 : 0)};
+  pointer-events: ${({ visible }: TabBarProps) => (visible ? 'auto' : 'none')};
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
 `;
 
 export const AddTabButton = styled(ToolbarButton)`

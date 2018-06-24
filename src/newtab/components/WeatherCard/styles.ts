@@ -35,7 +35,7 @@ export const TemperatureIcon = styled.div`
   align-self: center;
 
   ${images.center('100%', 'auto')};
-  background-image: url(${(props: ITemperatureIconProps) => props.src});
+  background-image: url(${({ src }: ITemperatureIconProps) => src});
 `;
 
 export const ErrorContainer = styled.div`
@@ -70,7 +70,7 @@ export const ExtraInfoIcon = styled.div`
   height: 24px;
 
   ${images.center('24px', 'auto')};
-  background-image: url(${(props: IExtraInfoIconProps) => props.src});
+  background-image: url(${({ src }: IExtraInfoIconProps) => src});
 `;
 
 export const ExtraInfoText = styled.div`

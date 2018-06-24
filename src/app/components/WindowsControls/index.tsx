@@ -12,12 +12,11 @@ export default class WindowsControls extends React.Component {
   public render() {
     return (
       <React.Fragment>
-        <Toolbar.Separator style={{...Store.theme.theme.toolbarSeparators}} />
+        <Toolbar.Separator style={{ ...Store.theme.theme.toolbarSeparators }} />
         <Button icon={minimizeIcon} onClick={minimizeWindow} />
         <Button icon={maximizeIcon} onClick={maximizeWindow} />
         <Button icon={closeIcon} onClick={closeWindow} isClose />
       </React.Fragment>
-    )
+    );
   }
 }
-

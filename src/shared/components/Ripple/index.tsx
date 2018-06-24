@@ -42,25 +42,31 @@ export default class Ripple extends React.Component<IProps, IState> {
       opacity: initialOpacity,
     });
 
-    this.timeouts.push(setTimeout(() => {
-      this.setState({
-        width,
-        height,
-      });
-    }));
+    this.timeouts.push(
+      setTimeout(() => {
+        this.setState({
+          width,
+          height,
+        });
+      }),
+    );
   }
 
   public remove() {
     const { removeRipple, id, fadeOutTime } = this.props;
 
-    this.timeouts.push(setTimeout(() => {
-      this.setState({
-        opacity: 0,
-      });
-      this.timeouts.push(setTimeout(() => {
-        removeRipple(id);
-      }, fadeOutTime * 1000));
-    }, 100));
+    this.timeouts.push(
+      setTimeout(() => {
+        this.setState({
+          opacity: 0,
+        });
+        this.timeouts.push(
+          setTimeout(() => {
+            removeRipple(id);
+          }, fadeOutTime * 1000),
+        );
+      }, 100),
+    );
   }
 
   public componentWillUnmount() {
