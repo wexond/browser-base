@@ -9,7 +9,7 @@ import { loadPlugins } from './utils/plugins';
 import Store from './store';
 import typography from '../shared/mixins/typography';
 import { getPath } from '../shared/utils/paths';
-import defaultTheme from '../shared/defaults/theme';
+import defaultTheme from '../app/defaults/theme';
 
 const robotoLight = require('../shared/fonts/Roboto-Light.ttf');
 const robotoMedium = require('../shared/fonts/Roboto-Medium.ttf');
