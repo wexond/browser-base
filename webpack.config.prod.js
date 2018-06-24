@@ -1,8 +1,6 @@
 const webpack = require('webpack');
 const baseConfig = require('./webpack.config.base');
 
-const PORT = 8080;
-
 const config = Object.assign(
   {
     devtool: 'source-map',
@@ -29,8 +27,16 @@ const appConfig = {
   },
 };
 
-module.exports = [getConfig(appConfig)];
+const newTabConfig = {
+  target: 'web',
+
+  entry: {
+    newtab: ['react-hot-loader/patch', './src/newtab'],
+  },
+};
 
 function getConfig(cfg) {
   return Object.assign({}, config, cfg);
 }
+
+module.exports = [getConfig(appConfig), getConfig(newTabConfig)];

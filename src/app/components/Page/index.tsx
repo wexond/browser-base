@@ -6,6 +6,7 @@ import Page from '../../models/page';
 import Tab from '../../models/tab';
 import Store from '../../store';
 import db from '../../../shared/models/app-database';
+import { BASE_PATH } from '../../constants';
 
 interface Props {
   page: Page;
@@ -15,14 +16,18 @@ interface Props {
 @observer
 export default class extends React.Component<Props, {}> {
   private lastURL = '';
+
   private lastHistoryItemID = -1;
 
   private webview: Electron.WebviewTag;
+
   private tab: Tab;
 
   public componentDidMount() {
-    const { id } = this.props.page;
+    const { page } = this.props;
+    const { id } = page;
     const tab = Store.getTabById(id);
+
     this.tab = tab;
 
     this.webview.addEventListener('did-stop-loading', this.onDidStopLoading);
@@ -50,7 +55,7 @@ export default class extends React.Component<Props, {}> {
       Store.pageMenu.toggle(true);
     });
 
-    Store.contextMenuParams = params;
+    Store.webviewContextMenuParams = params;
 
     // Calculate new menu position
     // using cursor x, y and
@@ -157,7 +162,8 @@ export default class extends React.Component<Props, {}> {
   };
 
   public onPageTitleUpdated = ({ title }: Electron.PageTitleUpdatedEvent) => {
-    const { id } = this.props.page;
+    const { page } = this.props;
+    const { id } = page;
     const tab = Store.getTabById(id);
 
     tab.title = title;
@@ -177,7 +183,7 @@ export default class extends React.Component<Props, {}> {
             page.webview = r;
             this.webview = r;
           }}
-          preload={`file://${resolve(Store.basePath, 'src/app/preloads/index.js')}`}
+          preload={`file://${resolve(BASE_PATH, 'src/app/preloads/index.js')}`}
         />
       </StyledPage>
     );

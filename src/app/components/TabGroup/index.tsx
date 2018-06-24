@@ -2,8 +2,10 @@ import { Expo, TweenLite } from 'gsap';
 import { observe } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Indicator, Scrollbar, ScrollbarThumb, Tabs } from './styles';
-import { TOOLBAR_HEIGHT } from '../../constants/design';
+import {
+  Indicator, Scrollbar, ScrollbarThumb, Tabs,
+} from './styles';
+import { TOOLBAR_HEIGHT } from '../../constants';
 import tabAnimations from '../../defaults/tab-animations';
 import Tab from '../../models/tab';
 import TabGroup from '../../models/tab-group';
@@ -23,6 +25,7 @@ export default class extends React.Component<Props, {}> {
   };
 
   private tabGroups: HTMLDivElement;
+
   private tabDragData = {
     dragging: false,
     mouseStartX: 0,
@@ -30,6 +33,7 @@ export default class extends React.Component<Props, {}> {
     lastMouseX: 0,
     direction: '',
   };
+
   private scrollData = {
     dragging: false,
     mouseStartX: 0,
@@ -38,8 +42,11 @@ export default class extends React.Component<Props, {}> {
     maxScrollLeft: 0,
     lastScrollLeft: 0,
   };
+
   private scrollInterval: any;
+
   private scrollTimeout: any;
+
   private mounted = true;
 
   DecoratedTab = observer(Store.decoratedTab);
@@ -55,8 +62,8 @@ export default class extends React.Component<Props, {}> {
       tabGroup.updateTabsBounds(false);
 
       const selectedTab = tabGroup.getSelectedTab();
-      tabGroup.line.left = selectedTab.left;
-      tabGroup.line.width = selectedTab.width;
+      tabGroup.tabsIndicator.left = selectedTab.left;
+      tabGroup.tabsIndicator.width = selectedTab.width;
     });
 
     this.resizeScrollbar();
@@ -98,20 +105,23 @@ export default class extends React.Component<Props, {}> {
   }
 
   componentWillUnmount() {
+    const { tabGroup } = this.props;
+
     clearInterval(this.scrollInterval);
     this.mounted = false;
-    this.props.tabGroup.tabs = [];
+    tabGroup.tabs = [];
   }
 
   public resizeScrollbar = () => {
     if (!this.mounted) return;
 
+    const { scrollbarThumbWidth } = this.state;
+
     this.setState({
       scrollbarThumbWidth: this.tabGroups.offsetWidth ** 2 / this.tabGroups.scrollWidth,
       scrollbarThumbLeft:
-        this.tabGroups.scrollLeft / this.tabGroups.scrollWidth * this.tabGroups.offsetWidth,
-      scrollbarVisible:
-        Math.ceil(this.state.scrollbarThumbWidth) !== Math.ceil(this.tabGroups.offsetWidth),
+        (this.tabGroups.scrollLeft / this.tabGroups.scrollWidth) * this.tabGroups.offsetWidth,
+      scrollbarVisible: Math.ceil(scrollbarThumbWidth) !== Math.ceil(this.tabGroups.offsetWidth),
     });
 
     if (this.mounted) {
@@ -128,7 +138,7 @@ export default class extends React.Component<Props, {}> {
       direction: '',
     };
 
-    Store.draggingTab = tab.id;
+    Store.draggingTab = true;
 
     this.scrollData.lastScrollLeft = this.tabGroups.scrollLeft;
   };
@@ -165,11 +175,11 @@ export default class extends React.Component<Props, {}> {
     this.tabDragData.dragging = false;
     tabGroup.setTabsPositions();
 
-    Store.draggingTab = null;
+    Store.draggingTab = false;
 
     const selectedTab = tabGroup.getSelectedTab();
     if (selectedTab != null) {
-      tabGroup.line.moveToTab(selectedTab);
+      tabGroup.tabsIndicator.moveToTab(selectedTab);
       selectedTab.dragging = false;
     }
   };
@@ -213,10 +223,8 @@ export default class extends React.Component<Props, {}> {
 
     if (this.scrollData.dragging) {
       const { startLeft, mouseStartX } = this.scrollData;
-      this.tabGroups.scrollLeft =
-        (startLeft + e.pageX - mouseStartX) /
-        this.tabGroups.offsetWidth *
-        this.tabGroups.scrollWidth;
+      this.tabGroups.scrollLeft = ((startLeft + e.pageX - mouseStartX) / this.tabGroups.offsetWidth)
+        * this.tabGroups.scrollWidth;
     }
     if (this.tabDragData.dragging) {
       const { startLeft, mouseStartX } = this.tabDragData;
@@ -230,19 +238,18 @@ export default class extends React.Component<Props, {}> {
       selectedTab.dragging = true;
       Store.addressBar.canToggle = false;
 
-      const newLeft =
-        startLeft +
-        e.pageX -
-        mouseStartX -
-        (this.scrollData.lastScrollLeft - this.tabGroups.scrollLeft);
+      const newLeft = startLeft
+        + e.pageX
+        - mouseStartX
+        - (this.scrollData.lastScrollLeft - this.tabGroups.scrollLeft);
 
       let left = newLeft;
 
       if (newLeft < 0) {
         left = 0;
       } else if (
-        newLeft + selectedTab.width >
-        Store.addTabButton.left + this.tabGroups.scrollLeft
+        newLeft + selectedTab.width
+        > Store.addTabButton.left + this.tabGroups.scrollLeft
       ) {
         left = Store.addTabButton.left - selectedTab.width;
       }
@@ -265,7 +272,7 @@ export default class extends React.Component<Props, {}> {
         createWindow();
       }
 
-      TweenLite.to(tabGroup.line, 0, { left: selectedTab.left });
+      TweenLite.to(tabGroup.tabsIndicator, 0, { left: selectedTab.left });
 
       let direction = '';
       if (this.tabDragData.lastMouseX - e.pageX >= 1) {
@@ -286,6 +293,12 @@ export default class extends React.Component<Props, {}> {
 
   public render() {
     const { tabGroup } = this.props;
+    const {
+      scrollbarVisible,
+      scrollbarThumbWidth,
+      scrollbarThumbLeft,
+      scrollbarThumbVisible,
+    } = this.state;
     const { DecoratedTab } = this;
 
     return (
@@ -307,19 +320,19 @@ export default class extends React.Component<Props, {}> {
           ))}
           <Indicator
             style={{
-              width: tabGroup.line.width,
-              left: tabGroup.line.left,
+              width: tabGroup.tabsIndicator.width,
+              left: tabGroup.tabsIndicator.left,
               ...Store.theme.theme.tabsIndicator,
             }}
           />
         </Tabs>
-        <Scrollbar visible={this.state.scrollbarVisible}>
+        <Scrollbar visible={scrollbarVisible}>
           <ScrollbarThumb
             style={{
-              width: this.state.scrollbarThumbWidth,
-              left: this.state.scrollbarThumbLeft,
+              width: scrollbarThumbWidth,
+              left: scrollbarThumbLeft,
             }}
-            visible={this.state.scrollbarThumbVisible}
+            visible={scrollbarThumbVisible}
             onMouseDown={this.onScrollbarMouseDown}
           />
         </Scrollbar>

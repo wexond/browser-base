@@ -1,4 +1,3 @@
-import { remote } from 'electron';
 import { observable } from 'mobx';
 import os from 'os';
 import Tab, { TabProps } from './components/Tab';
@@ -9,8 +8,8 @@ import Page from './models/page';
 import Suggestions from './models/suggestions';
 import TabGroup from './models/tab-group';
 import Theme from '../shared/models/theme';
-import NavigationDrawer from './models/navigation-drawer';
-import Menu from '../shared/components/Menu';
+import Menu from './models/menu';
+import ContextMenu from '../shared/components/ContextMenu';
 
 export interface Favicons {
   [key: string]: string;
@@ -19,42 +18,52 @@ export interface Favicons {
 class Store {
   // Observables
   @observable public selectedTabGroup = 0;
+
   @observable public tabGroups = [new TabGroup()];
-  @observable public pages: Page[] = [];
+
   @observable public addTabButton = new AddTabButton();
+
+  @observable public pages: Page[] = [];
+
+  @observable public draggingTab = false;
+
   @observable public addressBar = new AddressBar();
+
   @observable public theme = new Theme();
+
   @observable public suggestions = new Suggestions();
+
   @observable public isFullscreen: boolean;
-  @observable public navigationDrawer = new NavigationDrawer();
-  @observable public draggingTab: number = null;
+
+  @observable public menu = new Menu();
+
+  @observable public pageMenu: ContextMenu;
 
   @observable
   public navigationState = {
     canGoBack: false,
     canGoForward: false,
   };
+
   @observable
   public pageMenuData = {
     x: 0,
     y: 0,
   };
 
-  public pageMenu: Menu;
+  public webviewContextMenuParams: Electron.ContextMenuParams;
 
   // Decorated components
   public decoratedTab: React.ComponentClass<TabProps> = Tab;
 
   public favicons: Favicons = {};
+
   public platform = os.platform() as Platforms;
+
   public mouse = {
     x: 0,
     y: 0,
   };
-
-  public contextMenuParams: Electron.ContextMenuParams;
-
-  public basePath = remote.app.getAppPath();
 
   public getTabBarWidth: () => number;
 

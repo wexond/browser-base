@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TOOLBAR_HEIGHT } from '../../constants/design';
+import { TOOLBAR_HEIGHT } from '../../constants';
 
 export const StyledToolbar = styled.div`
   position: relative;

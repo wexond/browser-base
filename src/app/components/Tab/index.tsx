@@ -37,7 +37,7 @@ export default class extends React.Component<TabProps, {}> {
           Store.mouse.y >= boundingRect.top &&
           Store.mouse.y <= boundingRect.top + this.tab.offsetHeight
         ) {
-          if (!tab.hovered && Store.draggingTab == null) {
+          if (!tab.hovered && !Store.draggingTab) {
             tab.hovered = true;
           }
         } else if (tab.hovered) {
@@ -118,7 +118,7 @@ export default class extends React.Component<TabProps, {}> {
     tabGroup.setTabsPositions();
 
     requestAnimationFrame(() => {
-      tabGroup.line.moveToTab(tabGroup.getSelectedTab());
+      tabGroup.tabsIndicator.moveToTab(tabGroup.getSelectedTab());
     });
   };
 
