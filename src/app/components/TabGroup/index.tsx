@@ -110,7 +110,8 @@ export default class extends React.Component<Props, {}> {
       scrollbarThumbWidth: this.tabGroups.offsetWidth ** 2 / this.tabGroups.scrollWidth,
       scrollbarThumbLeft:
         this.tabGroups.scrollLeft / this.tabGroups.scrollWidth * this.tabGroups.offsetWidth,
-      scrollbarVisible: this.state.scrollbarThumbWidth !== this.tabGroups.offsetWidth,
+      scrollbarVisible:
+        Math.ceil(this.state.scrollbarThumbWidth) !== Math.ceil(this.tabGroups.offsetWidth),
     });
 
     if (this.mounted) {
@@ -126,6 +127,8 @@ export default class extends React.Component<Props, {}> {
       startLeft: tab.left,
       direction: '',
     };
+
+    Store.draggingTab = tab.id;
 
     this.scrollData.lastScrollLeft = this.tabGroups.scrollLeft;
   };
@@ -161,6 +164,8 @@ export default class extends React.Component<Props, {}> {
 
     this.tabDragData.dragging = false;
     tabGroup.setTabsPositions();
+
+    Store.draggingTab = null;
 
     const selectedTab = tabGroup.getSelectedTab();
     if (selectedTab != null) {
