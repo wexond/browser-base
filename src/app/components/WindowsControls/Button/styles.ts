@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import images from '../../../../shared/mixins/images';
-import { HOVER_DURATION } from '../../../constants/design';
 
 interface ButtonProps {
   icon: string;
@@ -19,7 +18,7 @@ export const Button = styled.div`
     margin-right: 0;
   }
 
-  transition: ${HOVER_DURATION}s background-color;
+  transition: 0.2ss background-color;
 
   &:hover {
     background-color: ${(props: ButtonProps) =>
@@ -35,7 +34,7 @@ interface IconProps {
 export const Icon = styled.div`
   width: 100%;
   height: 100%;
-  transition: ${HOVER_DURATION}s filter;
+  transition: 0.2ss filter;
 
   background-image: ${(props: IconProps) => `url(${props.icon})`};
   ${images.center('11px', '11px')};

@@ -4,6 +4,7 @@ import { Favicon } from './favicon';
 
 export class AppDatabase extends Dexie {
   public history: Dexie.Table<HistoryItem, number>;
+
   public favicons: Dexie.Table<Favicon, number>;
 
   constructor() {

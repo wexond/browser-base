@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyledItem, Icon, Title, Background } from './styles';
 
-import { NavigationDrawerItems } from '../../../enums';
+import { MenuItems } from '../../../enums';
 
 interface Props {
   icon: string;
@@ -11,7 +11,7 @@ interface Props {
   selected?: boolean;
   visible?: boolean;
   display?: boolean;
-  page?: NavigationDrawerItems;
+  page?: MenuItems;
   onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
 }
 

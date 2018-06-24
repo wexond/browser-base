@@ -3,30 +3,36 @@ import { observable } from 'mobx';
 import tabAnimations from '../defaults/tab-animations';
 import Store from '../store';
 import {
-  TAB_MAX_WIDTH,
-  TAB_MIN_WIDTH,
-  TAB_PINNED_WIDTH,
-  TOOLBAR_BUTTON_WIDTH,
-} from '../constants/design';
+  TAB_MAX_WIDTH, TAB_MIN_WIDTH, TAB_PINNED_WIDTH, TOOLBAR_BUTTON_WIDTH,
+} from '../constants';
 
 let nextTabId = 0;
 
 export default class Tab {
   @observable public id = -1;
+
   @observable public title = 'New tab';
+
   @observable public pinned = false;
+
   @observable public isRemoving = false;
+
   @observable public hovered = false;
+
   @observable public dragging = false;
+
   @observable public favicon = '';
+
   @observable public loading = false;
 
   public url = '';
 
   public left = 0;
+
   public width = 0;
 
   public tab: HTMLDivElement;
+
   public tabGroup = Store.getCurrentTabGroup();
 
   constructor() {
@@ -39,10 +45,10 @@ export default class Tab {
 
     let width: number = this.pinned
       ? TAB_PINNED_WIDTH
-      : (containerWidth -
-          TOOLBAR_BUTTON_WIDTH -
-          parseInt(getComputedStyle(Store.addTabButton.ref).marginLeft, 10)) /
-        newTabs.length;
+      : (containerWidth
+          - TOOLBAR_BUTTON_WIDTH
+          - parseInt(getComputedStyle(Store.addTabButton.ref).marginLeft, 10))
+        / newTabs.length;
 
     if (width > TAB_MAX_WIDTH) {
       width = TAB_MAX_WIDTH;

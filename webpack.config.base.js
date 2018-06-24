@@ -23,11 +23,19 @@ const config = {
       },
       {
         test: /\.(tsx|ts|jsx|js)$/,
+        loader: 'babel-loader',
+        options: {
+          babelrc: false,
+          plugins: ['react-hot-loader/babel'],
+        },
+      },
+      {
+        test: /\.(tsx|ts|jsx|js)$/,
         include: INCLUDE,
         exclude: EXCLUDE,
         use: [
           {
-            loader: 'awesome-typescript-loader',
+            loader: 'ts-loader',
           },
         ],
       },

@@ -27,7 +27,7 @@ export interface IState {
   heightTransition: boolean;
 }
 
-export default class Menu extends React.Component<IProps, IState> {
+export default class ContextMenu extends React.Component<IProps, IState> {
   public static Item = Item;
   public static Separator = Separator;
 

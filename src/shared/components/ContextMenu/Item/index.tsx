@@ -5,7 +5,7 @@ import Ripples from '../../Ripples';
 import colors from '../../../defaults/colors';
 import { getEvents } from '../../../utils/events';
 import { getRippleEvents } from '../../../utils/ripple';
-import Menu from '../../Menu';
+import ContextMenu from '../';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
@@ -20,7 +20,7 @@ export interface IProps {
   onTouchStart?: ButtonEvent;
   onTouchEnd?: ButtonEvent;
   ripple?: boolean;
-  menu?: Menu;
+  menu?: ContextMenu;
   i?: number;
   visible?: boolean;
   hide?: boolean;
