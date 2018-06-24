@@ -6,7 +6,7 @@ import Search from './Search';
 import menuItems from '../../defaults/menu-items';
 import HistoryStore from '../../../menu/history/store';
 import Store from '../../store';
-import { NavigationDrawerItems } from '../../enums';
+import { MenuItems } from '../../enums';
 
 const deleteIcon = require('../../../shared/icons/delete.svg');
 const selectAllIcon = require('../../../shared/icons/select-all.svg');
@@ -23,20 +23,20 @@ export default class extends React.Component<Props, {}> {
 
   public onDarkClick = () => {
     requestAnimationFrame(() => {
-      Store.navigationDrawer.visible = false;
-      Store.navigationDrawer.selectedItem = null;
+      Store.menu.visible = false;
+      Store.menu.selectedItem = null;
     });
   };
 
   private onItemClick = (e: React.MouseEvent<HTMLDivElement>, item: Item) => {
     if (item != null && item.props.page != null) {
       requestAnimationFrame(() => {
-        Store.navigationDrawer.selectedItem = item.props.page;
+        Store.menu.selectedItem = item.props.page;
       });
     }
   };
 
-  private getItem = (page: NavigationDrawerItems, items: any) => {
+  private getItem = (page: MenuItems, items: any) => {
     for (let i = 0; i < items.length; i++) {
       if (items[i].type === page) return items[i];
     }
@@ -47,8 +47,8 @@ export default class extends React.Component<Props, {}> {
   public render() {
     const { children, title } = this.props;
 
-    const selected = Store.navigationDrawer.selectedItem;
-    const hideContent = Store.navigationDrawer.hideContent;
+    const selected = Store.menu.selectedItem;
+    const hideContent = Store.menu.hideContent;
 
     const items = [...menuItems];
 
@@ -71,7 +71,7 @@ export default class extends React.Component<Props, {}> {
 
     return (
       <React.Fragment>
-        <Styled visible={Store.navigationDrawer.visible} contentVisible={contentVisible}>
+        <Styled visible={Store.menu.visible} contentVisible={contentVisible}>
           <Content visible={contentVisible}>{selectedItem != null && selectedItem.content}</Content>
           <NavContent>
             <Header>{(searchVisible && <Search />) || <Title>{title}</Title>}</Header>
@@ -98,7 +98,7 @@ export default class extends React.Component<Props, {}> {
             ))}
           </NavContent>
         </Styled>
-        <Dark onClick={this.onDarkClick} visible={Store.navigationDrawer.visible} />
+        <Dark onClick={this.onDarkClick} visible={Store.menu.visible} />
       </React.Fragment>
     );
   }

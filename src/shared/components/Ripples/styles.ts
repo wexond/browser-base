@@ -1,5 +1,4 @@
-import * as React from 'react';
-import styled, { StyledComponentClass } from 'styled-components';
+import styled from 'styled-components';
 import { hexToRgb } from '../../utils/colors';
 
 export const StyledRipples = styled.div`
@@ -12,7 +11,7 @@ export const StyledRipples = styled.div`
   pointer-events: none;
 `;
 
-export interface IIconRippleProps {
+export interface IconRippleProps {
   width: number;
   height: number;
   color: string;
@@ -28,16 +27,16 @@ export const IconRipple = styled.div`
   overflow: hidden;
   transition: 0.2s background-color;
 
-  left: ${(props: IIconRippleProps) => props.width / 2}px;
-  top: ${props => props.height / 2}px;
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
+  left: ${({ width }: IconRippleProps) => width / 2}px;
+  top: ${({ height }) => height / 2}px;
+  width: ${({ size }) => size}px;
+  height: ${({ size }) => size}px;
 
   &:hover {
-    ${props => {
-    const rgb = hexToRgb(props.color);
+    ${({ color, hoverOverShade, disabled }) => {
+    const rgb = hexToRgb(color);
 
-    if (props.hoverOverShade && !props.disabled) {
+    if (hoverOverShade && !disabled) {
       return `background-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.08);`;
     }
     return '';

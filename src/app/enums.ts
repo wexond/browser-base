@@ -4,7 +4,7 @@ export enum Platforms {
   Linux = 'linux',
 }
 
-export enum NavigationDrawerItems {
+export enum MenuItems {
   TabGroups = 'tabGroups',
   History = 'history',
   Extensions = 'extensions',

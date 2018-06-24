@@ -41,14 +41,6 @@ const appConfig = {
     },
     hot: true,
     inline: true,
-    after() {
-      spawn('npm', ['start'], {
-        shell: true,
-        env: process.env,
-        stdio: 'inherit',
-        cwd: __dirname,
-      }).on('close', () => process.exit(0));
-    },
   },
 };
 
@@ -60,8 +52,8 @@ const newTabConfig = {
   },
 };
 
-module.exports = [getConfig(appConfig), getConfig(newTabConfig)];
-
 function getConfig(cfg) {
   return Object.assign({}, config, cfg);
 }
+
+module.exports = [getConfig(appConfig), getConfig(newTabConfig)];

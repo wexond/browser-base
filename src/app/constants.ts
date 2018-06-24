@@ -1,3 +1,7 @@
+import { remote } from 'electron';
+
+export const BASE_PATH = remote.app.getAppPath();
+
 // Toolbar
 export const TOOLBAR_HEIGHT = 48;
 export const TOOLBAR_BUTTON_WIDTH = 44;
@@ -8,7 +12,4 @@ export const TAB_MIN_WIDTH = 72;
 export const TAB_PINNED_WIDTH = 32;
 
 // Widths
-export const WINDOW_BUTTON_WIDTH = 45;
-
-// Animations
-export const HOVER_DURATION = 0.2;
+export const WINDOWS_BUTTON_WIDTH = 45;
