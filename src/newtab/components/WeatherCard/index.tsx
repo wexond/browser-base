@@ -71,7 +71,7 @@ export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
             <InfoContainer>
               <Temperature>
                 {current.temp}
-                <TemperatureDeg>&deg;{current.tempUnit}</TemperatureDeg>
+                <TemperatureDeg>&deg;{data.tempUnit}</TemperatureDeg>
               </Temperature>
               <TemperatureIcon src={current.icon} />
             </InfoContainer>
