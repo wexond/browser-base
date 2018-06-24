@@ -106,7 +106,9 @@ export const getHistorySuggestions = (filter: string) =>
           }
         }
 
-        const visitedTimes = countVisitedTimes(mostVisited);
+        let visitedTimes = countVisitedTimes(mostVisited);
+
+        visitedTimes = visitedTimes.sort((a, b) => a.url.length - b.url.length).filter(Boolean);
 
         mostVisited = [];
         for (let i = 0; i < 2; i++) {
@@ -118,6 +120,7 @@ export const getHistorySuggestions = (filter: string) =>
           }
         }
 
+        // Get short domain from URL.
         if (mostVisited[0] != null) {
           const split = mostVisited[0].url.split('/');
 
