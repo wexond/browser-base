@@ -35,7 +35,7 @@ export default class Item extends React.Component<Props, {}> {
     if (this.cmdPressed || e.ctrlKey) {
       data.selected = !selected;
 
-      if (selected) {
+      if (data.selected) {
         Store.selectedItems.push(data);
       } else {
         Store.selectedItems.splice(Store.selectedItems.indexOf(data), 1);
