@@ -69,7 +69,7 @@ export default class Suggestion extends React.Component<Props, {}> {
       <StyledSuggestion
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        style={theme[suggestionState]}
+        style={{ ...theme[suggestionState] }}
       >
         <Icon
           style={{
