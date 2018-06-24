@@ -35,8 +35,16 @@ const newTabConfig = {
   },
 };
 
+const testFieldConfig = {
+  target: 'web',
+
+  entry: {
+    testField: ['react-hot-loader/patch', './src/test-field'],
+  },
+};
+
 function getConfig(cfg) {
   return Object.assign({}, config, cfg);
 }
 
-module.exports = [getConfig(appConfig), getConfig(newTabConfig)];
+module.exports = [getConfig(appConfig), getConfig(newTabConfig), getConfig(testFieldConfig)];
