@@ -9,7 +9,7 @@ import About from '../../menu/about/components/About';
 import HistoryStore from '../../menu/history/store';
 
 import db from '../../shared/models/app-database';
-import { deleteItem } from '../../menu/history/utils/history';
+import { deleteItem } from '../../menu/history/utils';
 
 const tabGroupsIcon = require('../../shared/icons/tab-groups.svg');
 const tabGroupsAddIcon = require('../../shared/icons/add.svg');
