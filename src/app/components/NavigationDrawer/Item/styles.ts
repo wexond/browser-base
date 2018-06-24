@@ -18,7 +18,7 @@ export const StyledItem = styled.div`
   padding-right: 16px;
   display: flex;
 
-  pointer-events: ${(props: ItemProps) => props.selected ? 'none' : 'auto'};
+  pointer-events: ${(props: ItemProps) => (props.selected ? 'none' : 'auto')};
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.03);
