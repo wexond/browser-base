@@ -3,7 +3,9 @@ import * as React from 'react';
 import colors from '../../defaults/colors';
 import { UITheme, ButtonType } from '../../enums';
 
-import { StyledButton, Icon, Text } from './styles';
+import {
+  StyledButton, Icon, Text, OverShade,
+} from './styles';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
@@ -36,6 +38,7 @@ export default class Button extends React.Component<IProps, {}> {
         <StyledButton color={background} icon={icon != null} style={style} type={type}>
           {icon != null && <Icon src={icon} white={whiteIcon} />}
           <Text color={foreground}>{children}</Text>
+          <OverShade className="over-shade" color={foreground} />
         </StyledButton>
         {!inline && <div style={{ clear: 'both' }} />}
       </React.Fragment>
