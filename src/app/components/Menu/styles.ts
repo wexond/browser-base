@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import images from '../../../shared/mixins/images';
 import shadows from '../../../shared/mixins/shadows';
 import opacity from '../../../shared/defaults/opacity';
@@ -20,9 +20,11 @@ export const Styled = styled.div`
   box-sizing: border-box;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   right: 0;
-
-  transform: ${({ visible }: StyledProps) => (visible ? 'translateX(0)' : 'translateX(320px)')};
   box-shadow: ${shadows(16)};
+
+  ${({ visible }: StyledProps) => css`
+    transform: translateX(${visible ? 0 : 320}px);
+  `};
 `;
 
 export const Title = styled.div`
@@ -30,7 +32,6 @@ export const Title = styled.div`
   margin-left: 16px;
   margin-top: 10px;
   opacity: ${opacity.light.primaryText};
-
   letter-spacing: 0.007rem;
   ${typography.robotoMedium()};
 `;
@@ -58,8 +59,10 @@ export const Dark = styled.div`
   z-index: 100;
   transition: 0.2s opacity;
 
-  opacity: ${({ visible }: DarkProps) => (visible ? 1 : 0)};
-  pointer-events: ${({ visible }) => (visible ? 'auto' : 'none')};
+  ${({ visible }: DarkProps) => css`
+    opacity: ${visible ? 1 : 0};
+    pointer-events: ${visible ? 'auto' : 'none'};
+  `};
 `;
 
 export const NavContent = styled.div`
@@ -91,5 +94,7 @@ export const Content = styled.div`
   background-color: #fafafa;
   position: relative;
 
-  width: ${({ visible }: ContentProps) => (visible ? getWidth() : 0)};
+  ${({ visible }: ContentProps) => css`
+    width: ${visible ? getWidth() : 0};
+  `};
 `;
