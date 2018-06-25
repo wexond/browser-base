@@ -20,7 +20,7 @@ const getSize = (x: number, y: number, width: number, height: number, icon: numb
 
 const easing = 'cubic-bezier(0.215, 0.61, 0.355, 1)';
 
-export interface IProps {
+export interface StyledRippleProps {
   height: number;
   width: number;
   x: number;
@@ -54,7 +54,7 @@ export const StyledRipple = styled.div.attrs({
   overflow: hidden;
   pointer-events: none;
 
-  transition: ${({ rippleTime }: IProps) => rippleTime}s width ${easing},
+  transition: ${({ rippleTime }: StyledRippleProps) => rippleTime}s width ${easing},
     ${({ rippleTime }) => rippleTime}s height ${easing},
     ${({ fadeOutTime }) => fadeOutTime}s opacity, 0.3s background-color;
   background-color: ${({ color }) => color};

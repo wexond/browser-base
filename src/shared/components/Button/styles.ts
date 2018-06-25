@@ -17,8 +17,9 @@ const isTransparent = (type: ButtonType) =>
 
 const getBorder = () => `1px solid rgba(0, 0, 0, ${opacity.light.dividers})`;
 
-export interface IStyledButtonProps {
-  color: string;
+export interface StyledButtonProps {
+  background: string;
+  foreground: string;
   icon: boolean;
   type: ButtonType;
 }
@@ -34,10 +35,13 @@ export const StyledButton = styled.div`
   cursor: pointer;
   position: relative;
   transition: 0.2s box-shadow;
+  font-size: 14px;
+  white-space: nowrap;
 
-  background-color: ${({ color, type }: IStyledButtonProps) =>
-    (isTransparent(type) ? 'transparent' : color)};
-
+  ${typography.robotoMedium()}
+  background-color: ${({ background, type }: StyledButtonProps) =>
+    (isTransparent(type) ? 'transparent' : background)};
+  color: ${({ foreground }) => foreground};
   border: ${({ type }) => (type === ButtonType.Outlined ? getBorder() : 'unset')};
   box-shadow: ${({ type }) => (isTransparent(type) ? 'unset' : shadows(2))};
   padding-left: ${({ icon }) => getPadding(icon)}px;
@@ -49,7 +53,7 @@ export const StyledButton = styled.div`
   }
 `;
 
-export interface IIconProps {
+export interface IconProps {
   src: string;
   white: boolean;
 }
@@ -61,22 +65,11 @@ export const Icon = styled.div`
   margin-right: 8px;
 
   ${images.center('18px', 'auto')}
-  background-image: url(${({ src }: IIconProps) => src});
+  background-image: url(${({ src }: IconProps) => src});
   ${({ white }) => invertColors()});
 `;
 
-export interface ITextProps {
-  color: string;
-}
-
-export const Text = styled.div`
-  font-size: 14px;
-
-  ${typography.robotoMedium()}
-  color: ${({ color }: ITextProps) => color};
-`;
-
-export interface IOverShadeProps {
+export interface OverShadeProps {
   color: string;
 }
 
@@ -89,5 +82,5 @@ export const OverShade = styled.div`
   opacity: 0;
   transition: 0.2s opacity;
 
-  background-color: ${({ color }: IOverShadeProps) => color};
+  background-color: ${({ color }: OverShadeProps) => color};
 `;
