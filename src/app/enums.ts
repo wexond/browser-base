@@ -3,12 +3,3 @@ export enum Platforms {
   MacOS = 'darwin',
   Linux = 'linux',
 }
-
-export enum MenuItems {
-  Workspaces = 'workspaces',
-  History = 'history',
-  Extensions = 'extensions',
-  Bookmarks = 'bookmarks',
-  Settings = 'settings',
-  About = 'about',
-}

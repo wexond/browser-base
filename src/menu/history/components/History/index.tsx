@@ -17,11 +17,9 @@ export default class History extends React.Component {
           AppStore.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));
         }
       })
-      .then(() => {
-        const sections = getHistorySections();
-        setTimeout(() => {
-          Store.sections = sections;
-        }, 250);
+      .then(async () => {
+        const sections = await getHistorySections();
+        Store.sections = sections;
       });
 
     Store.selectedItems = [];
@@ -31,8 +29,8 @@ export default class History extends React.Component {
     Store.sections = [];
   }
 
-  public onMenuSearchInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const sections = getHistorySections(e.currentTarget.value);
+  public onMenuSearchInput = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const sections = await getHistorySections(e.currentTarget.value);
     Store.sections = sections;
   };
 

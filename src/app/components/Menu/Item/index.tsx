@@ -1,22 +1,25 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 
 import {
   StyledItem, Icon, Title, Background, SubItemsContainer,
 } from './styles';
 
-import { MenuItems } from '../../../enums';
+import Store from '../../../store';
 
 interface Props {
   icon: string;
   children?: any;
-  subItem?: boolean;
+  isSubItem?: boolean;
   title: string;
-  selected?: boolean;
   visible?: boolean;
-  page?: MenuItems;
+  searchVisible?: boolean;
+  content?: any;
+  id?: number;
   onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
 }
 
+@observer
 export default class Item extends React.Component<Props, {}> {
   static defaultProps = {
     visible: true,
@@ -36,12 +39,14 @@ export default class Item extends React.Component<Props, {}> {
 
   public render() {
     const {
-      icon, children, subItem, visible, title,
+      icon, children, isSubItem, visible, title, id,
     } = this.props;
 
-    let { selected } = this.props;
+    let selected = false;
 
-    if (subItem) selected = false;
+    if (!isSubItem) {
+      selected = Store.menu.selectedItem === id;
+    }
 
     let height = 0;
 
@@ -55,12 +60,12 @@ export default class Item extends React.Component<Props, {}> {
       <div style={{ display: visible ? 'block' : 'none' }}>
         <StyledItem onClick={this.onClick} selected={selected}>
           <Background selected={selected} />
-          <Icon selected={selected} subItem={subItem} image={icon} />
+          <Icon selected={selected} subItem={isSubItem} image={icon} />
           <Title selected={selected}>{title}</Title>
         </StyledItem>
         <SubItemsContainer innerRef={r => (this.subItemsContainer = r)} style={{ height }}>
           {React.Children.map(children, (el: React.ReactElement<any>) =>
-            React.cloneElement(el, { subItem: true }))}
+            React.cloneElement(el, { isSubItem: true }))}
         </SubItemsContainer>
       </div>
     );
