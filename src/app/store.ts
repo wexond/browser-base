@@ -6,7 +6,7 @@ import AddTabButton from './models/add-tab-button';
 import AddressBar from './models/address-bar';
 import Page from './models/page';
 import Suggestions from './models/suggestions';
-import TabGroup from './models/tab-group';
+import Workspace from './models/workspace';
 import Theme from '../shared/models/theme';
 import Menu from './models/menu';
 import ContextMenu from '../shared/components/ContextMenu';
@@ -17,9 +17,9 @@ export interface Favicons {
 
 class Store {
   // Observables
-  @observable public selectedTabGroup = 0;
+  @observable public selectedWorkspace = 0;
 
-  @observable public tabGroups = [new TabGroup()];
+  @observable public workspaces = [new Workspace()];
 
   @observable public addTabButton = new AddTabButton();
 
@@ -67,18 +67,18 @@ class Store {
 
   public getTabBarWidth: () => number;
 
-  public getCurrentTabGroup() {
-    return this.getTabGroupById(this.selectedTabGroup);
+  public getCurrentWorkspace() {
+    return this.getWorkspaceById(this.selectedWorkspace);
   }
 
-  public getTabGroupById(id: number) {
-    return this.tabGroups.filter(tabGroup => tabGroup.id === id)[0];
+  public getWorkspaceById(id: number) {
+    return this.workspaces.filter(workspace => workspace.id === id)[0];
   }
 
   public getTabById(id: number) {
-    const { tabGroups } = this;
+    const { workspaces } = this;
 
-    const tabs = tabGroups.map(tabGroup => tabGroup.getTabById(id));
+    const tabs = workspaces.map(workspace => workspace.getTabById(id));
 
     return tabs[0];
   }
@@ -88,7 +88,7 @@ class Store {
   }
 
   public getSelectedPage() {
-    return this.getPageById(this.getCurrentTabGroup().getSelectedTab().id);
+    return this.getPageById(this.getCurrentWorkspace().getSelectedTab().id);
   }
 
   public addPage(tabId: number) {
@@ -112,8 +112,8 @@ class Store {
     }
   }
 
-  public addTabGroup() {
-    this.tabGroups.push(new TabGroup());
+  public addWorkspace() {
+    this.workspaces.push(new Workspace());
   }
 }
 

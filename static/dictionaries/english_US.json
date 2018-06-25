@@ -91,7 +91,7 @@
   "security": {
     "secure": "Secure"
   },
-  "tabGroups": {
+  "workspaces": {
     "newGroup": "New group",
     "addNewGroup": "Add new group"
   }

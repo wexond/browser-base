@@ -1,9 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { StyledTabBar, TabGroups, AddTabButton } from './styles';
+import { StyledTabBar, Workspaces, AddTabButton } from './styles';
 import Store from '../../store';
-import TabGroup from '../TabGroup';
-import Toolbar from '../Toolbar';
+import Workspace from '../Workspace';
 
 const addTabIcon = require('../../../shared/icons/add.svg');
 
@@ -16,13 +15,13 @@ export default class TabBar extends React.Component<{}, {}> {
   }
 
   public onAddTabButtonClick = () => {
-    Store.getCurrentTabGroup().addTab();
+    Store.getCurrentWorkspace().addTab();
   };
 
   public render() {
     const { theme } = Store.theme;
 
-    const { tabs } = Store.getCurrentTabGroup();
+    const { tabs } = Store.getCurrentWorkspace();
 
     return (
       <StyledTabBar
@@ -30,15 +29,17 @@ export default class TabBar extends React.Component<{}, {}> {
         visible={!Store.addressBar.toggled}
         innerRef={(r: any) => (this.tabBar = r)}
       >
-        <TabGroups>
-          {Store.tabGroups.map(tabGroup => <TabGroup key={tabGroup.id} tabGroup={tabGroup} />)}
+        <Workspaces>
+          {Store.workspaces.map(workspace => (
+            <Workspace key={workspace.id} workspace={workspace} />
+          ))}
           <AddTabButton
             icon={addTabIcon}
             onClick={this.onAddTabButtonClick}
             style={{ ...theme.addTabButton }}
             divRef={r => (Store.addTabButton.ref = r)}
           />
-        </TabGroups>
+        </Workspaces>
       </StyledTabBar>
     );
   }

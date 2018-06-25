@@ -10,7 +10,7 @@ export default observer(() => (
       <Page
         key={page.id}
         page={page}
-        selected={Store.getCurrentTabGroup().selectedTab === page.id}
+        selected={Store.getCurrentWorkspace().selectedTab === page.id}
       />
     ))}
   </StyledPages>
