@@ -2,53 +2,44 @@ import { UITheme } from '../enums';
 
 import { TransparencyComponent, TransparencyText } from '../models/transparency';
 
-export const getComponentBackground = (
+export const getComponentColor = (
   color: string,
   toggled: boolean,
   disabled: boolean,
   theme: UITheme,
-  transparency?: TransparencyComponent,
+  background: boolean = true,
+  transparency?: any,
+  returnOnlyAlpha: boolean = false,
 ) => {
+  if (transparency == null) {
+    transparency = background ? TransparencyComponent : TransparencyText;
+  }
+
   const { light, dark } = transparency;
   const isLightTheme = theme === UITheme.Light;
+  const rgb = isLightTheme ? 0 : 255;
 
-  let alpha = isLightTheme ? light.active : dark.active;
-  let rgb = 0;
+  let alpha;
 
   if (disabled) {
     alpha = isLightTheme ? light.disabled : dark.disabled;
-  } else if (toggled != null && !toggled) {
+  } else if (!toggled) {
     alpha = isLightTheme ? light.inactive : dark.inactive;
   }
 
-  rgb = isLightTheme ? 255 : 0;
-  return `rgba(${rgb}, ${rgb}, ${rgb}, ${alpha}`;
-};
-/*
-export const getComponentForeground = (
-  disabled: boolean,
-  theme: UITheme,
-  transparency?: TransparencyText,
-) => {
-  if (disabled) {
-    if (theme === Theme.Light) {
-      return `rgba(0,0,0,${opacity.disabled.light})`;
-    }
-    return `rgba(255,255,255,${opacity.disabled.dark})`;
-  }
-  if (theme === Theme.Light) {
-    return `rgba(0,0,0,${opacity.enabled.light})`;
-  }
-  return `rgba(255,255,255,${opacity.enabled.dark})`;
+  if (returnOnlyAlpha) return alpha;
+  return alpha != null ? `rgba(${rgb}, ${rgb}, ${rgb}, ${alpha})` : color;
 };
 
-export const getComponentRippleColor = (flag, color, theme) => {
-  if (flag) {
-    return color;
-  }
-  if (theme === Theme.Light) {
-    return '#000';
-  }
-  return '#fff';
+export const getComponentRippleColor = (color: string, toggled: boolean, theme: UITheme) => {
+  if (toggled) return color;
+  return theme === UITheme.Light ? '#000' : '#fff';
 };
-*/
+
+export const getComponentOpacity = (
+  toggled: boolean,
+  disabled: boolean,
+  theme: UITheme,
+  background: boolean = true,
+  transparency?: any,
+) => getComponentColor(null, toggled, disabled, theme, background, transparency, true);
