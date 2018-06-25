@@ -31,7 +31,7 @@ const newTabConfig = {
   target: 'web',
 
   entry: {
-    newtab: ['react-hot-loader/patch', './src/newtab'],
+    newtab: ['./src/newtab'],
   },
 };
 
@@ -39,7 +39,7 @@ const testFieldConfig = {
   target: 'web',
 
   entry: {
-    testField: ['react-hot-loader/patch', './src/test-field'],
+    testField: ['./src/test-field'],
   },
 };
 
