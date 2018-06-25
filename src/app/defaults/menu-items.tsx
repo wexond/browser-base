@@ -9,7 +9,7 @@ import About from '../../menu/about/components/About';
 import HistoryStore from '../../menu/history/store';
 
 import db from '../../shared/models/app-database';
-import { deleteItem } from '../../menu/history/utils';
+import { deleteHistoryItem } from '../../menu/history/utils';
 
 const tabGroupsIcon = require('../../shared/icons/tab-groups.svg');
 const tabGroupsAddIcon = require('../../shared/icons/add.svg');
@@ -46,7 +46,7 @@ const history = {
     const { selectedItems, sections } = HistoryStore;
     for (let i = selectedItems.length - 1; i >= 0; i--) {
       const selectedItem = selectedItems[i];
-      deleteItem(selectedItem.id);
+      deleteHistoryItem(selectedItem.id);
       selectedItems.splice(i, 1);
     }
   },
@@ -98,7 +98,7 @@ export default [
         visible: false,
       },
       {
-        label: 'Remove selected items',
+        label: 'Delete selected items',
         icon: trashIcon,
         onClick: history.onDeleteSelectedClick,
         visible: false,
