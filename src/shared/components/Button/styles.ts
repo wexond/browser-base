@@ -2,26 +2,70 @@ import * as React from 'react';
 import styled, { StyledComponentClass } from 'styled-components';
 
 import opacity from '../../defaults/opacity';
+import { getComponentColor, getComponentOpacity } from '../../utils/component-color';
 
 import { invertColors } from '../../mixins/icons';
 import images from '../../mixins/images';
 import typography from '../../mixins/typography';
 import shadows from '../../mixins/shadows';
 
-import { ButtonType } from '../../enums';
-
-const getPadding = (icon: boolean) => (icon ? 8 : 16);
+import { ButtonType, UITheme } from '../../enums';
 
 const isTransparent = (type: ButtonType) =>
   type === ButtonType.Outlined || type === ButtonType.Text;
 
-const getBorder = () => `1px solid rgba(0, 0, 0, ${opacity.light.dividers})`;
+const getPadding = (icon: boolean) => (icon ? 8 : 16);
+
+const getBackground = (props: StyledButtonProps) => {
+  const {
+    background, disabled, type, theme,
+  } = props;
+
+  if (isTransparent(type)) return 'transparent';
+  return getComponentColor(background, true, disabled, theme);
+};
+
+const getBorder = (props: StyledButtonProps) => {
+  const { type, theme } = props;
+
+  if (type === ButtonType.Outlined) {
+    const rgb = theme === UITheme.Light ? 0 : 255;
+    const alpha = theme === UITheme.Light ? opacity.light.dividers : opacity.dark.dividers;
+
+    return `1px solid rgba(${rgb}, ${rgb}, ${rgb}, ${alpha})`;
+  }
+
+  return 'unset';
+};
+
+const getBoxShadow = (props: StyledButtonProps, z: number = 2) => {
+  const { type, disabled } = props;
+
+  if (!disabled && !isTransparent(type)) return shadows(z);
+  return 'unset';
+};
+
+const iconInvertColors = (props: IconProps) => {
+  const { white, theme, disabled } = props;
+
+  if (disabled) {
+    if (theme === UITheme.Dark) {
+      return invertColors();
+    }
+  } else if (white) {
+    return invertColors();
+  }
+
+  return null;
+};
 
 export interface StyledButtonProps {
   background: string;
   foreground: string;
   icon: boolean;
+  disabled: boolean;
   type: ButtonType;
+  theme: UITheme;
 }
 
 export const StyledButton = styled.div`
@@ -32,30 +76,32 @@ export const StyledButton = styled.div`
   border-radius: 4px;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   position: relative;
   transition: 0.2s box-shadow;
   font-size: 14px;
   white-space: nowrap;
 
   ${typography.robotoMedium()}
-  background-color: ${({ background, type }: StyledButtonProps) =>
-    (isTransparent(type) ? 'transparent' : background)};
-  color: ${({ foreground }) => foreground};
-  border: ${({ type }) => (type === ButtonType.Outlined ? getBorder() : 'unset')};
-  box-shadow: ${({ type }) => (isTransparent(type) ? 'unset' : shadows(2))};
+  background-color: ${(props: StyledButtonProps) => getBackground(props)};
+  color: ${({ foreground, disabled, theme }) =>
+    getComponentColor(foreground, true, disabled, theme, false)};
+  border: ${props => getBorder(props)};
+  box-shadow: ${props => getBoxShadow(props)};
   padding-left: ${({ icon }) => getPadding(icon)}px;
+  cursor: ${({ disabled }) => (disabled ? 'unset' : 'pointer')};
 
-  &:hover .over-shade {
-    opacity: 0.12;
+  &:hover .overlay {
+    opacity: ${({ disabled }) => (disabled ? 0 : 0.12)};
 
-    box-shadow: ${({ type }) => (isTransparent(type) ? 'unset' : shadows(3))};
+    box-shadow: ${props => getBoxShadow(props, 3)};
   }
 `;
 
 export interface IconProps {
   src: string;
   white: boolean;
+  disabled: boolean;
+  theme: UITheme;
 }
 
 export const Icon = styled.div`
@@ -66,14 +112,15 @@ export const Icon = styled.div`
 
   ${images.center('18px', 'auto')}
   background-image: url(${({ src }: IconProps) => src});
-  ${({ white }) => invertColors()});
+  opacity: ${({ disabled, theme }) => getComponentOpacity(true, disabled, theme, false)};
+  ${props => iconInvertColors(props)} )
 `;
 
-export interface OverShadeProps {
+export interface OverlayProps {
   color: string;
 }
 
-export const OverShade = styled.div`
+export const Overlay = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -82,5 +129,5 @@ export const OverShade = styled.div`
   opacity: 0;
   transition: 0.2s opacity;
 
-  background-color: ${({ color }: OverShadeProps) => color};
+  background-color: ${({ color }: OverlayProps) => color};
 `;
