@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled, { StyledComponentClass } from 'styled-components';
 import opacity from '../../../defaults/opacity';
 
-export interface ISeparatorProps {
+export interface SeparatorProps {
   hide: boolean;
   visible: boolean;
 }
@@ -15,6 +15,6 @@ export const StyledSeparator = styled.div`
   width: 100%;
   transition: 0.2s opacity;
 
-  opacity: ${({ visible }: ISeparatorProps) => (visible ? 1 : 0)};
+  opacity: ${({ visible }: SeparatorProps) => (visible ? 1 : 0)};
   display: ${({ hide }) => (hide ? 'none' : 'block')};
 `;
