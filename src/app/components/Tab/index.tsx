@@ -5,7 +5,7 @@ import {
 } from './styles';
 import tabAnimations from '../../defaults/tab-animations';
 import Tab from '../../models/tab';
-import TabGroup from '../../models/tab-group';
+import Workspace from '../../models/workspace';
 import Store from '../../store';
 import { closeWindow } from '../../utils/window';
 
@@ -14,7 +14,7 @@ import Ripples from '../../../shared/components/Ripples';
 export interface TabProps {
   key: number;
   tab: Tab;
-  tabGroup: TabGroup;
+  workspace: Workspace;
   selected: boolean;
   onMouseDown?: (e: React.MouseEvent<HTMLDivElement>) => void;
   onTabMouseDown?: (e?: React.MouseEvent<HTMLDivElement>, tab?: Tab) => void;
@@ -56,14 +56,14 @@ export default class extends React.Component<TabProps, {}> {
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const {
-      selected, tab, tabGroup, onTabMouseDown,
+      selected, tab, workspace, onTabMouseDown,
     } = this.props;
     const { pageX, pageY } = e;
 
     Store.addressBar.canToggle = selected;
     setTimeout(() => {
-      if (tab !== tabGroup.getSelectedTab()) {
-        tabGroup.selectTab(tab);
+      if (tab !== workspace.getSelectedTab()) {
+        workspace.selectTab(tab);
       }
     });
     onTabMouseDown(e, tab);
@@ -90,47 +90,47 @@ export default class extends React.Component<TabProps, {}> {
   };
 
   public onClose = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { tabGroup, tab, selected } = this.props;
+    const { workspace, tab, selected } = this.props;
 
     e.stopPropagation();
 
-    const tabIndex = tabGroup.tabs.indexOf(tab);
+    const tabIndex = workspace.tabs.indexOf(tab);
 
     if (selected) {
-      if (tabIndex + 1 < tabGroup.tabs.length && !tabGroup.tabs[tabIndex + 1].isRemoving) {
-        tabGroup.selectedTab = tabGroup.tabs[tabIndex + 1].id;
-      } else if (tabIndex - 1 >= 0 && !tabGroup.tabs[tabIndex - 1].isRemoving) {
-        tabGroup.selectedTab = tabGroup.tabs[tabIndex - 1].id;
-      } else if (Store.tabGroups.length === 1) {
+      if (tabIndex + 1 < workspace.tabs.length && !workspace.tabs[tabIndex + 1].isRemoving) {
+        workspace.selectedTab = workspace.tabs[tabIndex + 1].id;
+      } else if (tabIndex - 1 >= 0 && !workspace.tabs[tabIndex - 1].isRemoving) {
+        workspace.selectedTab = workspace.tabs[tabIndex - 1].id;
+      } else if (Store.workspaces.length === 1) {
         closeWindow();
       }
     }
 
-    tabGroup.resetTimer();
+    workspace.resetTimer();
 
     tab.isRemoving = true;
-    if (tabGroup.tabs.length - 1 === tabIndex) {
-      const previousTab = tabGroup.tabs[tabIndex - 1];
+    if (workspace.tabs.length - 1 === tabIndex) {
+      const previousTab = workspace.tabs[tabIndex - 1];
       tab.setLeft(previousTab.getNewLeft() + previousTab.getWidth(), true);
-      tabGroup.updateTabsBounds();
+      workspace.updateTabsBounds();
     }
 
     tab.setWidth(0, true);
 
     setTimeout(() => {
-      tabGroup.removeTab(tab);
+      workspace.removeTab(tab);
     }, tabAnimations.left.duration * 1000);
 
-    tabGroup.setTabsPositions();
+    workspace.setTabsPositions();
 
     requestAnimationFrame(() => {
-      tabGroup.tabsIndicator.moveToTab(tabGroup.getSelectedTab());
+      workspace.tabsIndicator.moveToTab(workspace.getSelectedTab());
     });
   };
 
   public render() {
     const {
-      selected, tab, tabGroup, children,
+      selected, tab, workspace, children,
     } = this.props;
 
     const {
@@ -158,15 +158,15 @@ export default class extends React.Component<TabProps, {}> {
 
     let rightBorderVisible = true;
 
-    const tabIndex = tabGroup.tabs.indexOf(tab);
+    const tabIndex = workspace.tabs.indexOf(tab);
 
     if (
       hovered
       || selected
-      || ((tabIndex + 1 !== tabGroup.tabs.length
-        && (tabGroup.tabs[tabIndex + 1].hovered
-          || tabGroup.selectedTab === tabGroup.tabs[tabIndex + 1].id))
-        || tabIndex === tabGroup.tabs.length - 1)
+      || ((tabIndex + 1 !== workspace.tabs.length
+        && (workspace.tabs[tabIndex + 1].hovered
+          || workspace.selectedTab === workspace.tabs[tabIndex + 1].id))
+        || tabIndex === workspace.tabs.length - 1)
     ) {
       rightBorderVisible = false;
     }

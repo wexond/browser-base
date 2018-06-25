@@ -12,7 +12,7 @@ import ToolbarButton from './Button';
 import { Platforms, MenuItems } from '../../enums';
 import WindowsControls from '../WindowsControls';
 
-const tabGroupsIcon = require('../../../shared/icons/tab-groups.svg');
+const workspacesIcon = require('../../../shared/icons/tab-groups.svg');
 const menuIcon = require('../../../shared/icons/menu.svg');
 
 @observer
@@ -21,10 +21,7 @@ export default class Toolbar extends React.Component {
 
   public static Separator = ToolbarSeparator;
 
-  public onTabGroupsIconClick = () => {
-    this.toggleMenu();
-    Store.menu.selectedItem = MenuItems.TabGroups;
-  };
+  public onWorkspacesIconClick = () => {};
 
   public toggleMenu = () => {
     Store.menu.visible = !Store.menu.visible;
@@ -43,7 +40,7 @@ export default class Toolbar extends React.Component {
           <TabBar />
         </TabsSection>
         <ToolbarSeparator style={{ marginLeft: 16, ...theme.toolbarSeparators }} />
-        <ToolbarButton size={16} icon={tabGroupsIcon} onClick={this.onTabGroupsIconClick} />
+        <ToolbarButton size={16} icon={workspacesIcon} onClick={this.onWorkspacesIconClick} />
         <ToolbarButton
           onClick={this.toggleMenu}
           size={20}

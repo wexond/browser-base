@@ -2,19 +2,13 @@ import React from 'react';
 
 import { MenuItems } from '../enums';
 
-import TabGroups from '../../menu/tabGroups/components/TabGroups';
 import History from '../../menu/history/components/History';
 import About from '../../menu/about/components/About';
 
 import HistoryStore from '../../menu/history/store';
 
-import db from '../../shared/models/app-database';
 import { deleteHistoryItem } from '../../menu/history/utils';
 
-const tabGroupsIcon = require('../../shared/icons/tab-groups.svg');
-const tabGroupsAddIcon = require('../../shared/icons/add.svg');
-const tabGroupsLoadIcon = require('../../shared/icons/load.svg');
-const tabGroupsSaveIcon = require('../../shared/icons/save.svg');
 const historyIcon = require('../../shared/icons/history.svg');
 const clearIcon = require('../../shared/icons/clear.svg');
 const bookmarksIcon = require('../../shared/icons/bookmarks.svg');
@@ -53,27 +47,6 @@ const history = {
 };
 
 export default [
-  {
-    type: MenuItems.TabGroups,
-    label: 'Tab groups',
-    icon: tabGroupsIcon,
-    content: <TabGroups />,
-    searchVisible: false,
-    subItems: [
-      {
-        label: 'New group',
-        icon: tabGroupsAddIcon,
-      },
-      {
-        label: 'Load',
-        icon: tabGroupsLoadIcon,
-      },
-      {
-        label: 'Save',
-        icon: tabGroupsSaveIcon,
-      },
-    ],
-  },
   {
     type: MenuItems.History,
     label: 'History',

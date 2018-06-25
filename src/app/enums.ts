@@ -5,7 +5,7 @@ export enum Platforms {
 }
 
 export enum MenuItems {
-  TabGroups = 'tabGroups',
+  Workspaces = 'workspaces',
   History = 'history',
   Extensions = 'extensions',
   Bookmarks = 'bookmarks',
