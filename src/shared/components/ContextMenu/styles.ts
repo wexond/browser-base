@@ -5,7 +5,7 @@ import shadows from '../../mixins/shadows';
 const x = 64;
 const easing = 'cubic-bezier(0.215, 0.61, 0.355, 1)';
 
-export interface IStyledMenuProps {
+export interface StyledMenuProps {
   visible: boolean;
   large: boolean;
   dense: boolean;
@@ -19,7 +19,7 @@ export const StyledMenu = styled.div`
 
   box-shadow: ${shadows(5)};
 
-  opacity: ${({ visible }: IStyledMenuProps) => (visible ? 1 : 0)};
+  opacity: ${({ visible }: StyledMenuProps) => (visible ? 1 : 0)};
   margin-top: ${({ visible }) => (visible ? 0 : -15)}px;
   width: ${({ large }) => (large ? 3 * x : 2 * x)}px;
   pointer-events: ${({ visible }) => (visible ? 'auto' : 'none')};
