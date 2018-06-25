@@ -9,7 +9,6 @@ const searchIcon = require('../../../shared/icons/search.svg');
 
 export interface StyledProps {
   visible: boolean;
-  contentVisible: boolean;
 }
 
 export const Container = styled.div`
