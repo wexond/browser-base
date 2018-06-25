@@ -8,9 +8,7 @@ import Ripples from '../Ripples';
 import colors from '../../defaults/colors';
 import { UITheme, ButtonType } from '../../enums';
 
-import {
-  StyledButton, Icon, Text, OverShade,
-} from './styles';
+import { StyledButton, Icon, OverShade } from './styles';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
@@ -67,9 +65,16 @@ export default class Button extends React.Component<IProps, {}> {
 
     return (
       <React.Fragment>
-        <StyledButton color={background} icon={icon != null} style={style} type={type} {...events}>
+        <StyledButton
+          background={background}
+          foreground={foreground}
+          icon={icon != null}
+          style={style}
+          type={type}
+          {...events}
+        >
           {icon != null && <Icon src={icon} white={whiteIcon} />}
-          <Text color={foreground}>{children}</Text>
+          {children}
           <OverShade className="over-shade" color={foreground} />
           <Ripples ref={r => (this.ripples = r)} color={foreground} />
         </StyledButton>
