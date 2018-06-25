@@ -15,13 +15,14 @@ export const StyledItem = styled.div`
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: 0.2s all;
 
   background-color: ${({ selected }: StyledItemProps) =>
     (selected ? 'rgba(0, 0, 0, 0.08)' : 'transparent')};
 
   &:hover {
     background-color: ${({ selected }) =>
-    (selected ? 'rgba(0, 0, 0, 0.12)' : 'rgba(0, 0, 0, 0.03)')};
+    (selected ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.03)')};
   }
 
   &:last-child {
