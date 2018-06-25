@@ -9,7 +9,7 @@ import Store from '../../store';
 import AddressBar from '../AddressBar';
 import TabBar from '../TabBar';
 import ToolbarButton from './Button';
-import { Platforms, MenuItems } from '../../enums';
+import { Platforms } from '../../enums';
 import WindowsControls from '../WindowsControls';
 
 const workspacesIcon = require('../../../shared/icons/tab-groups.svg');
