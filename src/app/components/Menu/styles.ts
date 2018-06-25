@@ -83,8 +83,6 @@ interface ContentProps {
 const getWidth = () => {
   const maxWidth = MENU_CONTENT_MAX_WIDTH;
 
-  console.log('aha');
-
   if (window.innerWidth - MENU_WIDTH - MENU_SPACE > maxWidth) {
     return `${maxWidth}px`;
   }
