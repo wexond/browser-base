@@ -6,11 +6,10 @@ import { getHistorySections } from '../../utils';
 import Store from '../../store';
 import AppStore from '../../../../app/store';
 import Section from '../Section';
-import { Favicon } from '../../../../shared/models/favicon';
 import db from '../../../../shared/models/app-database';
 
 @observer
-class History extends React.Component {
+export default class History extends React.Component {
   public async componentDidMount() {
     db.favicons
       .each(favicon => {
@@ -32,6 +31,11 @@ class History extends React.Component {
     Store.sections = [];
   }
 
+  public onMenuSearchInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const sections = getHistorySections(e.currentTarget.value);
+    Store.sections = sections;
+  };
+
   public render() {
     return (
       <React.Fragment>
@@ -42,5 +46,3 @@ class History extends React.Component {
     );
   }
 }
-
-export default hot(module)(History);

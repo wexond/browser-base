@@ -1,14 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import {
-  Container, Title, Header, Dark, Menu, Content,
+  Container, Title, Header, Dark, Menu, Content, Search, Input, SearchIcon,
 } from './styles';
 import Item from './Item';
-import Search from './Search';
 import menuItems from '../../defaults/menu-items';
 import HistoryStore from '../../../menu/history/store';
 import Store from '../../store';
 import { MenuItems } from '../../enums';
+import History from '../../../menu/history/components/History';
 
 interface Props {
   children?: any;
@@ -18,6 +18,8 @@ interface Props {
 @observer
 export default class extends React.Component<Props, {}> {
   public static Item = Item;
+
+  private contentRef: any;
 
   public onDarkClick = () => {
     requestAnimationFrame(() => {
@@ -40,6 +42,12 @@ export default class extends React.Component<Props, {}> {
     }
 
     return null;
+  };
+
+  private onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (this.contentRef && typeof this.contentRef.onMenuSearchInput === 'function') {
+      this.contentRef.onMenuSearchInput(e);
+    }
   };
 
   public render() {
@@ -70,9 +78,21 @@ export default class extends React.Component<Props, {}> {
     return (
       <React.Fragment>
         <Container visible={Store.menu.visible} contentVisible={contentVisible}>
-          <Content visible={contentVisible}>{selectedItem != null && selectedItem.content}</Content>
+          <Content visible={contentVisible}>
+            {selectedItem != null
+              && React.cloneElement(selectedItem.content, {
+                ref: (r: any) => (this.contentRef = r),
+              })}
+          </Content>
           <Menu>
-            <Header>{(searchVisible && <Search />) || <Title>{title}</Title>}</Header>
+            <Header>
+              {(searchVisible && (
+                <Search>
+                  <SearchIcon />
+                  <Input placeholder="Search" onInput={this.onInput} />
+                </Search>
+              )) || <Title>{title}</Title>}
+            </Header>
             {items.map((data: any, key: any) => (
               <Item
                 onClick={this.onItemClick}
