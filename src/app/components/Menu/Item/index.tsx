@@ -1,6 +1,7 @@
 import React from 'react';
+
 import {
-  StyledItem, Icon, Title, Background,
+  StyledItem, Icon, Title, Background, SubItemsContainer,
 } from './styles';
 
 import { MenuItems } from '../../../enums';
@@ -12,7 +13,6 @@ interface Props {
   title: string;
   selected?: boolean;
   visible?: boolean;
-  display?: boolean;
   page?: MenuItems;
   onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
 }
@@ -24,6 +24,8 @@ export default class Item extends React.Component<Props, {}> {
     display: true,
   };
 
+  private subItemsContainer: HTMLDivElement;
+
   private onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { onClick } = this.props;
 
@@ -34,22 +36,32 @@ export default class Item extends React.Component<Props, {}> {
 
   public render() {
     const {
-      icon, children, subItem, visible, title, display,
+      icon, children, subItem, visible, title,
     } = this.props;
 
     let { selected } = this.props;
 
     if (subItem) selected = false;
 
+    let height = 0;
+
+    React.Children.forEach(children, (el: React.ReactElement<any>) => {
+      if (el.props.visible && selected) {
+        height += 48;
+      }
+    });
+
     return (
-      <div style={{ display: display && visible ? 'block' : 'none' }}>
+      <div style={{ display: visible ? 'block' : 'none' }}>
         <StyledItem onClick={this.onClick} selected={selected}>
           <Background selected={selected} />
           <Icon selected={selected} subItem={subItem} image={icon} />
           <Title selected={selected}>{title}</Title>
         </StyledItem>
-        {React.Children.map(children, (el: React.ReactElement<any>) =>
-          React.cloneElement(el, { subItem: true, visible: selected }))}
+        <SubItemsContainer innerRef={r => (this.subItemsContainer = r)} style={{ height }}>
+          {React.Children.map(children, (el: React.ReactElement<any>) =>
+            React.cloneElement(el, { subItem: true }))}
+        </SubItemsContainer>
       </div>
     );
   }

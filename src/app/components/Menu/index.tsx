@@ -85,7 +85,7 @@ export default class extends React.Component<Props, {}> {
                 page={data.type}
                 key={key}
                 title={data.label}
-                display={data.visible}
+                visible={data.visible}
               >
                 {data.subItems.map((subItemData: any, subItemKey: any) => (
                   <Item
@@ -93,7 +93,7 @@ export default class extends React.Component<Props, {}> {
                     icon={subItemData.icon}
                     key={subItemKey}
                     title={subItemData.label}
-                    display={subItemData.visible}
+                    visible={subItemData.visible}
                   />
                 ))}
               </Item>

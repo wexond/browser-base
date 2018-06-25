@@ -10,6 +10,15 @@ export const Title = styled.div`
   letter-spacing: 0.0125rem * 0.15;
   margin-bottom: 16px;
   margin-top: 32px;
+  border-radius: 4px;
+  display: table;
+  padding: 6px;
+  margin-left: -6px;
+  transition: 0.2s background-color;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
 `;
 
 export const Items = styled.div`

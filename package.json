@@ -63,6 +63,7 @@
     "prettier-eslint-cli": "4.7.1",
     "react": "16.4.1",
     "react-dom": "16.4.1",
+    "react-flip-move": "3.0.2",
     "react-hot-loader": "4.3.3",
     "ts-loader": "4.4.1",
     "typescript": "2.9.2",

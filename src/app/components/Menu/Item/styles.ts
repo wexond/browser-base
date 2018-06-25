@@ -80,3 +80,8 @@ export const Background = styled.div`
     background: ${selected ? colors.blue['500'] : 'none'};
   `};
 `;
+
+export const SubItemsContainer = styled.div`
+  overflow: hidden;
+  transition: 0.2s height;
+`;
