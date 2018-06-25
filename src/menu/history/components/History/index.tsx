@@ -24,6 +24,8 @@ class History extends React.Component {
           Store.sections = sections;
         }, 250);
       });
+
+    Store.selectedItems = [];
   }
 
   public componentWillUnmount() {
