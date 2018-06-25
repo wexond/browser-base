@@ -5,6 +5,8 @@ import opacity from '../../../shared/defaults/opacity';
 import typography from '../../../shared/mixins/typography';
 import { MENU_WIDTH, MENU_CONTENT_MAX_WIDTH, MENU_SPACE } from '../../constants';
 
+const searchIcon = require('../../../shared/icons/search.svg');
+
 export interface StyledProps {
   visible: boolean;
   contentVisible: boolean;
@@ -105,4 +107,35 @@ export const Content = styled.div`
   @media (max-width: ${MENU_CONTENT_MAX_WIDTH + MENU_WIDTH + MENU_SPACE}px) {
     max-width: calc(100vw - ${MENU_WIDTH + MENU_SPACE}px);
   }
+`;
+
+export const Search = styled.div`
+  border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
+  height: 56px;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: transparent;
+  -webkit-app-region: no-drag;
+`;
+
+export const Input = styled.input`
+  background-color: transparent;
+  outline: none;
+  font-size: 14px;
+  border: none;
+  padding-left: 16px;
+  width: 100%;
+  height: 100%;
+`;
+
+export const SearchIcon = styled.div`
+  ${images.center('24px', 'auto')};
+  opacity: ${opacity.light.inactiveIcon};
+  height: 24px;
+  width: 24px;
+  margin-left: 16px;
+  background-image: url(${searchIcon});
 `;
