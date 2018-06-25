@@ -4,7 +4,7 @@ import AppStore from '../../../app/store';
 import HistoryStore from '../store';
 import db from '../../../shared/models/app-database';
 
-export function getSections() {
+export function getHistorySections() {
   const sections: Section[] = [];
 
   db.history.each(item => {
@@ -42,7 +42,7 @@ export function getSections() {
   return sections;
 }
 
-export function deleteItem(id: number) {
+export function deleteHistoryItem(id: number) {
   const { sections } = HistoryStore;
   for (let i = sections.length - 1; i >= 0; i--) {
     const section = sections[i];
