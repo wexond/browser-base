@@ -1,10 +1,9 @@
 import Section from '../models/section';
-import HistoryItem from '../../../shared/models/history-item';
 import AppStore from '../../../app/store';
 import HistoryStore from '../store';
 import db from '../../../shared/models/app-database';
 
-export function getHistorySections() {
+export function getHistorySections(filter = '') {
   const sections: Section[] = [];
 
   db.history.each(item => {
@@ -27,15 +26,26 @@ export function getHistorySections() {
       selected: false,
     };
 
-    if (foundSection == null) {
-      const section = {
-        items: [newItem],
-        date: dateStr,
-        id: item.id,
-      };
-      sections.unshift(section);
-    } else {
-      foundSection.items.unshift(newItem);
+    if (
+      newItem.title
+        .toLowerCase()
+        .trim()
+        .indexOf(filter.toLowerCase().trim()) !== -1
+      || newItem.url
+        .toLowerCase()
+        .trim()
+        .indexOf(filter.toLowerCase().trim()) !== -1
+    ) {
+      if (foundSection == null) {
+        const section = {
+          items: [newItem],
+          date: dateStr,
+          id: item.id,
+        };
+        sections.unshift(section);
+      } else {
+        foundSection.items.unshift(newItem);
+      }
     }
   });
 
