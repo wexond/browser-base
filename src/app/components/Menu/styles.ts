@@ -81,13 +81,15 @@ interface ContentProps {
 }
 
 const getWidth = () => {
-  const maxWidth = MENU_CONTENT_MAX_WIDTH + MENU_SPACE;
+  const maxWidth = MENU_CONTENT_MAX_WIDTH;
+
+  console.log('aha');
 
   if (window.innerWidth - MENU_WIDTH - MENU_SPACE > maxWidth) {
     return `${maxWidth}px`;
   }
 
-  return `calc(100vw - ${MENU_WIDTH}px - ${MENU_SPACE}px)`;
+  return `calc(100vw - ${MENU_WIDTH + MENU_SPACE}px)`;
 };
 
 export const Content = styled.div`
