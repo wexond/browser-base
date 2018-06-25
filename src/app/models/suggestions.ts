@@ -31,7 +31,6 @@ export default class Suggestions {
     return new Promise(async resolve => {
       const filter = input.value;
 
-      this.historySuggestions = [];
       const suggestions = await getHistorySuggestions(filter);
 
       await db.favicons.each(favicon => {
@@ -39,6 +38,8 @@ export default class Suggestions {
           Store.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));
         }
       });
+
+      this.historySuggestions = [];
 
       let id = 0;
 
