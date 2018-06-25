@@ -97,7 +97,7 @@
   "security": {
     "secure": "Bezpieczna"
   },
-  "tabGroups": {
+  "workspaces": {
     "newGroup": "Nowa grupa",
     "addNewGroup": "Dodaj nową grupę"
   }

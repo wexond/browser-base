@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import ToolbarButton from '../Toolbar/Button';
 
-export const TabGroups = styled.div`
+export const Workspaces = styled.div`
   transform: translateZ(0);
   position: relative;
   height: 100%;

@@ -54,7 +54,7 @@ export default class extends React.Component<Props, {}> {
 
     const items = [...menuItems];
 
-    const historyItem = items[1];
+    const historyItem = items[0];
 
     if (HistoryStore.selectedItems.length > 0) {
       historyItem.subItems[1].visible = false; // Select all

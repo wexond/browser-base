@@ -44,10 +44,6 @@ export default class Suggestions {
       let id = 0;
 
       if (suggestions.mostVisited.length === 0 && filter.trim() !== '') {
-        this.historySuggestions = this.historySuggestions.filter(
-          x => x.type !== 'no-subheader-search' && x.type !== 'no-subheader-website',
-        );
-
         this.historySuggestions.unshift({
           primaryText: filter,
           secondaryText: 'search in Google',
