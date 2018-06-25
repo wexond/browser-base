@@ -3,53 +3,57 @@ import AppStore from '../../../app/store';
 import HistoryStore from '../store';
 import db from '../../../shared/models/app-database';
 
-export function getHistorySections(filter = '') {
-  const sections: Section[] = [];
+export async function getHistorySections(filter = '') {
+  return new Promise(async (resolve: (r: Section[]) => void) => {
+    const sections: Section[] = [];
 
-  db.history.each(item => {
-    const date = new Date(item.date);
+    const items = await db.history.toArray();
 
-    const year = date
-      .getFullYear()
-      .toString()
-      .padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = (date.getDay() + 1).toString().padStart(2, '0');
+    for (const item of items) {
+      const date = new Date(item.date);
 
-    const dateStr = `${year}-${month}-${day}`;
+      const year = date
+        .getFullYear()
+        .toString()
+        .padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = (date.getDay() + 1).toString().padStart(2, '0');
 
-    const foundSection = sections.find(x => x.date === dateStr);
+      const dateStr = `${year}-${month}-${day}`;
 
-    const newItem = {
-      ...item,
-      favicon: AppStore.favicons[item.favicon],
-      selected: false,
-    };
+      const foundSection = sections.find(x => x.date === dateStr);
 
-    if (
-      newItem.title
-        .toLowerCase()
-        .trim()
-        .indexOf(filter.toLowerCase().trim()) !== -1
-      || newItem.url
-        .toLowerCase()
-        .trim()
-        .indexOf(filter.toLowerCase().trim()) !== -1
-    ) {
-      if (foundSection == null) {
-        const section = {
-          items: [newItem],
-          date: dateStr,
-          id: item.id,
-        };
-        sections.unshift(section);
-      } else {
-        foundSection.items.unshift(newItem);
+      const newItem = {
+        ...item,
+        favicon: AppStore.favicons[item.favicon],
+        selected: false,
+      };
+
+      if (
+        newItem.title
+          .toLowerCase()
+          .trim()
+          .indexOf(filter.toLowerCase().trim()) !== -1
+        || newItem.url
+          .toLowerCase()
+          .trim()
+          .indexOf(filter.toLowerCase().trim()) !== -1
+      ) {
+        if (foundSection == null) {
+          const section = {
+            items: [newItem],
+            date: dateStr,
+            id: item.id,
+          };
+          sections.unshift(section);
+        } else {
+          foundSection.items.unshift(newItem);
+        }
       }
     }
-  });
 
-  return sections;
+    resolve(sections);
+  });
 }
 
 export function deleteHistoryItem(id: number) {
