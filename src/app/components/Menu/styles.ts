@@ -70,6 +70,9 @@ export const NavContent = styled.div`
   border-left: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
   position: relative;
   z-index: 999;
+  display: flex;
+  flex-flow: column;
+  transition: 0.2s all;
 `;
 
 interface ContentProps {
