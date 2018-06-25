@@ -13,3 +13,6 @@ export const TAB_PINNED_WIDTH = 32;
 
 // Widths
 export const WINDOWS_BUTTON_WIDTH = 45;
+export const MENU_WIDTH = 300;
+export const MENU_SPACE = 96;
+export const MENU_CONTENT_MAX_WIDTH = 640;

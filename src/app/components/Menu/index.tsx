@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import {
-  Styled, Title, Header, Dark, NavContent, Content,
+  Container, Title, Header, Dark, Menu, Content,
 } from './styles';
 import Item from './Item';
 import Search from './Search';
@@ -9,10 +9,6 @@ import menuItems from '../../defaults/menu-items';
 import HistoryStore from '../../../menu/history/store';
 import Store from '../../store';
 import { MenuItems } from '../../enums';
-
-const deleteIcon = require('../../../shared/icons/delete.svg');
-const selectAllIcon = require('../../../shared/icons/select-all.svg');
-const closeIcon = require('../../../shared/icons/close.svg');
 
 interface Props {
   children?: any;
@@ -47,7 +43,7 @@ export default class extends React.Component<Props, {}> {
   };
 
   public render() {
-    const { children, title } = this.props;
+    const { title } = this.props;
 
     const selected = Store.menu.selectedItem;
     const hideContent = Store.menu.hideContent;
@@ -73,9 +69,9 @@ export default class extends React.Component<Props, {}> {
 
     return (
       <React.Fragment>
-        <Styled visible={Store.menu.visible} contentVisible={contentVisible}>
+        <Container visible={Store.menu.visible} contentVisible={contentVisible}>
           <Content visible={contentVisible}>{selectedItem != null && selectedItem.content}</Content>
-          <NavContent>
+          <Menu>
             <Header>{(searchVisible && <Search />) || <Title>{title}</Title>}</Header>
             {items.map((data: any, key: any) => (
               <Item
@@ -98,8 +94,8 @@ export default class extends React.Component<Props, {}> {
                 ))}
               </Item>
             ))}
-          </NavContent>
-        </Styled>
+          </Menu>
+        </Container>
         <Dark onClick={this.onDarkClick} visible={Store.menu.visible} />
       </React.Fragment>
     );

@@ -3,13 +3,14 @@ import images from '../../../shared/mixins/images';
 import shadows from '../../../shared/mixins/shadows';
 import opacity from '../../../shared/defaults/opacity';
 import typography from '../../../shared/mixins/typography';
+import { MENU_WIDTH, MENU_CONTENT_MAX_WIDTH, MENU_SPACE } from '../../constants';
 
 export interface StyledProps {
   visible: boolean;
   contentVisible: boolean;
 }
 
-export const Styled = styled.div`
+export const Container = styled.div`
   height: 100%;
   position: fixed;
   display: flex;
@@ -23,7 +24,7 @@ export const Styled = styled.div`
   box-shadow: ${shadows(16)};
 
   ${({ visible }: StyledProps) => css`
-    transform: translateX(${visible ? 0 : 320}px);
+    transform: translateX(${visible ? 0 : MENU_WIDTH + 20}px);
   `};
 `;
 
@@ -65,7 +66,7 @@ export const Dark = styled.div`
   `};
 `;
 
-export const NavContent = styled.div`
+export const Menu = styled.div`
   width: 300px;
   border-left: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
   position: relative;
@@ -80,18 +81,18 @@ interface ContentProps {
 }
 
 const getWidth = () => {
-  const maxWidth = 640 + 64;
+  const maxWidth = MENU_CONTENT_MAX_WIDTH + MENU_SPACE;
 
-  if (window.innerWidth - 300 - 96 > maxWidth) {
+  if (window.innerWidth - MENU_WIDTH - MENU_SPACE > maxWidth) {
     return `${maxWidth}px`;
   }
 
-  return 'calc(100vw - 300px - 96px)';
+  return `calc(100vw - ${MENU_WIDTH}px - ${MENU_SPACE}px)`;
 };
 
 export const Content = styled.div`
   height: 100%;
-  max-width: calc(640px + 64px);
+  max-width: ${MENU_CONTENT_MAX_WIDTH}px;
   transition: 0.5s width cubic-bezier(0.19, 1, 0.22, 1);
   overflow: auto;
   background-color: #fafafa;
@@ -100,4 +101,8 @@ export const Content = styled.div`
   ${({ visible }: ContentProps) => css`
     width: ${visible ? getWidth() : 0};
   `};
+
+  @media (max-width: ${MENU_CONTENT_MAX_WIDTH + MENU_WIDTH + MENU_SPACE}px) {
+    max-width: calc(100vw - ${MENU_WIDTH + MENU_SPACE}px);
+  }
 `;
