@@ -10,6 +10,8 @@ interface Props {
 
 @observer
 export default class Suggestions extends React.Component<Props, {}> {
+  private suggestions: HTMLDivElement;
+
   public render() {
     const { list } = Store.suggestions;
     const { visible } = this.props;
@@ -24,12 +26,36 @@ export default class Suggestions extends React.Component<Props, {}> {
 
     if (!Store.suggestions.getVisible()) vis = false;
 
+    let height = 0;
+
+    list.forEach(a => {
+      height += 40;
+    });
+
+    if (mostVisited.length > 0) {
+      height += 42;
+    }
+
+    if (bookmarks.length > 0) {
+      height += 42;
+    }
+
+    if (history.length > 0) {
+      height += 42;
+    }
+
+    if (search.length > 0) {
+      height += 42;
+    }
+
     return (
       <StyledSuggestions
+        innerRef={r => (this.suggestions = r)}
         style={{
           ...Store.theme.theme.suggestions,
-          display: vis ? 'block' : 'none',
+          opacity: vis ? 1 : 0,
           pointerEvents: !vis ? 'none' : 'auto',
+          height,
         }}
         onMouseDown={e => e.stopPropagation()}
       >
