@@ -71,6 +71,7 @@ export interface ITextProps {
 
 export const Text = styled.div`
   font-size: 14px;
+  white-space: nowrap;
 
   ${typography.robotoMedium()}
   color: ${({ color }: ITextProps) => color};
