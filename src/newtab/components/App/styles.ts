@@ -12,7 +12,7 @@ export const StyledApp = styled.div`
   background-color: #f5f5f5;
 `;
 
-export interface IContent {
+export interface ContentProps {
   visible: boolean;
 }
 
@@ -23,5 +23,5 @@ export const Content = styled.div`
   margin: 32px auto;
   transition: 0.2s opacity;
 
-  opacity: ${({ visible }: IContent) => (visible ? 1 : 0)};
+  opacity: ${({ visible }: ContentProps) => (visible ? 1 : 0)};
 `;
