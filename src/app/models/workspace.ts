@@ -4,7 +4,7 @@ import Tab from './tab';
 import { TAB_MIN_WIDTH } from '../constants';
 import Store from '../store';
 
-export default class TabGroup {
+export default class Workspace {
   @observable public id: number = 0;
 
   @observable public selectedTab: number = -1;

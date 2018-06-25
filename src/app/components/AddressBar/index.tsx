@@ -97,8 +97,8 @@ export default class AddressBar extends Component<Props, {}> {
   public onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.which === 13) {
       // Enter.
-      const tabGroup = Store.getCurrentTabGroup();
-      const tab = tabGroup.getSelectedTab();
+      const workspace = Store.getCurrentWorkspace();
+      const tab = workspace.getSelectedTab();
 
       e.preventDefault();
 

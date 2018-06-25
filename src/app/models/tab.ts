@@ -33,14 +33,14 @@ export default class Tab {
 
   public tab: HTMLDivElement;
 
-  public tabGroup = Store.getCurrentTabGroup();
+  public workspace = Store.getCurrentWorkspace();
 
   constructor() {
     this.id = nextTabId++;
   }
 
   public getInitialWidth(): number {
-    const newTabs = this.tabGroup.tabs.filter(tab => !tab.isRemoving);
+    const newTabs = this.workspace.tabs.filter(tab => !tab.isRemoving);
     const containerWidth = Store.getTabBarWidth();
 
     let width: number = this.pinned
@@ -68,7 +68,7 @@ export default class Tab {
   }
 
   public getNewLeft(): number {
-    const newTabs = this.tabGroup.tabs.filter(tab => !tab.isRemoving);
+    const newTabs = this.workspace.tabs.filter(tab => !tab.isRemoving);
 
     let position = 0;
     for (let i = 0; i < newTabs.indexOf(this); i++) {
@@ -78,7 +78,7 @@ export default class Tab {
   }
 
   public getLeft(): number {
-    const newTabs = this.tabGroup.tabs.filter(tab => !tab.isRemoving);
+    const newTabs = this.workspace.tabs.filter(tab => !tab.isRemoving);
 
     let position = 0;
     for (let i = 0; i < newTabs.indexOf(this); i++) {
