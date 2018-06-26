@@ -10,3 +10,8 @@ export const getActualTime = (timeUnit: TimeUnit = TimeUnit.am) => {
 
   return `${getTimeWithZero(hours)}:${getTimeWithZero(date.getMinutes())}`;
 };
+
+export const getDay = (days: any, date: Date) => {
+  const index = date.getDay() === 0 ? days.length - 1 : date.getDay();
+  return days[index];
+};
