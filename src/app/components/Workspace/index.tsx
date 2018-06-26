@@ -8,6 +8,7 @@ import {
 import { TOOLBAR_HEIGHT } from '../../constants';
 import tabAnimations from '../../defaults/tab-animations';
 import Tab from '../../models/tab';
+import TabComponent from '../Tab';
 import Workspace from '../../models/workspace';
 import Store from '../../store';
 
@@ -48,8 +49,6 @@ export default class extends React.Component<Props, {}> {
   private scrollTimeout: any;
 
   private mounted = true;
-
-  DecoratedTab = observer(Store.decoratedTab);
 
   public componentDidMount() {
     const { workspace } = this.props;
@@ -300,7 +299,6 @@ export default class extends React.Component<Props, {}> {
       scrollbarThumbLeft,
       scrollbarThumbVisible,
     } = this.state;
-    const { DecoratedTab } = this;
 
     return (
       <React.Fragment>
@@ -311,7 +309,7 @@ export default class extends React.Component<Props, {}> {
           onMouseLeave={this.onMouseLeave}
         >
           {workspace.tabs.map(tab => (
-            <DecoratedTab
+            <TabComponent
               key={tab.id}
               workspace={workspace}
               tab={tab}
@@ -323,7 +321,6 @@ export default class extends React.Component<Props, {}> {
             style={{
               width: workspace.tabsIndicator.width,
               left: workspace.tabsIndicator.left,
-              ...Store.theme.theme.tabsIndicator,
             }}
           />
         </Tabs>

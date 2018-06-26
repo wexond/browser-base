@@ -1,13 +1,11 @@
 import { observable } from 'mobx';
 import os from 'os';
-import Tab, { TabProps } from './components/Tab';
 import { Platforms } from './enums';
 import AddTabButton from './models/add-tab-button';
 import AddressBar from './models/address-bar';
 import Page from './models/page';
 import Suggestions from './models/suggestions';
 import Workspace from './models/workspace';
-import Theme from '../shared/models/theme';
 import Menu from './models/menu';
 import ContextMenu from '../shared/components/ContextMenu';
 
@@ -28,8 +26,6 @@ class Store {
   @observable public draggingTab = false;
 
   @observable public addressBar = new AddressBar();
-
-  @observable public theme = new Theme();
 
   @observable public suggestions = new Suggestions();
 
@@ -52,9 +48,6 @@ class Store {
   };
 
   public webviewContextMenuParams: Electron.ContextMenuParams;
-
-  // Decorated components
-  public decoratedTab: React.ComponentClass<TabProps> = Tab;
 
   public favicons: Favicons = {};
 

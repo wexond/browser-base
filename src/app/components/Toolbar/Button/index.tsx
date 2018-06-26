@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { Button, Icon } from './styles';
-import Store from '../../../store';
 import Ripples from '../../../../shared/components/Ripples';
 
 interface Props {
@@ -57,7 +56,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
 
     let { style } = this.props;
 
-    style = { ...style, ...Store.theme.theme.toolbarButtons };
+    style = { ...style };
 
     const { height, width } = this.getSize();
 
@@ -85,7 +84,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
           parentHeight={height}
           rippleTime={0.6}
           initialOpacity={0.1}
-          size={Store.theme.theme.toolbarButtons.rippleSize}
+          size={38}
         />
         {children}
       </Button>

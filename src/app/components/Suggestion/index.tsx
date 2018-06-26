@@ -5,7 +5,7 @@ import {
 } from './styles';
 import SuggestionItem from '../../models/suggestion-item';
 import Store from '../../store';
-import transparency from '../../../shared/defaults/opacity';
+import opacity from '../../../shared/defaults/opacity';
 
 const searchIcon = require('../../../shared/icons/search.svg');
 const pageIcon = require('../../../shared/icons/page.svg');
@@ -36,47 +36,32 @@ export default class Suggestion extends React.Component<Props, {}> {
     const { suggestion } = this.props;
     const { hovered } = this.state;
     const { primaryText, secondaryText } = suggestion;
-    const { theme } = Store.theme;
 
     const selected = Store.suggestions.selected === suggestion.id;
 
     let favicon = suggestion.favicon;
 
-    let opacity = 1;
-
-    type SuggestionState = 'suggestion' | 'suggestionSelected' | 'suggestionHovered';
-
-    let suggestionState: SuggestionState = 'suggestion';
-
-    if (selected) {
-      suggestionState = 'suggestionSelected';
-    } else if (hovered) {
-      suggestionState = 'suggestionHovered';
-    }
+    let customFavicon = true;
 
     if (suggestion.type === 'no-subheader-search' || suggestion.type === 'search') {
       favicon = searchIcon;
-      opacity = transparency.light.inactiveIcon;
-    } else if (suggestion.type === 'no-subheader-website') {
+      customFavicon = false;
+    } else if (suggestion.type === 'no-subheader-website' || favicon == null) {
       favicon = pageIcon;
-      opacity = transparency.light.inactiveIcon;
-    }
-
-    if (favicon == null) {
-      favicon = pageIcon;
-      opacity = transparency.light.inactiveIcon;
+      customFavicon = false;
     }
 
     return (
       <StyledSuggestion
+        selected={selected}
+        hovered={hovered}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        style={{ ...theme[suggestionState] }}
       >
         <Icon
           style={{
             backgroundImage: `url(${favicon})`,
-            ...theme[`${suggestionState}Icon` as SuggestionState],
+            opacity: customFavicon ? 1 : opacity.light.inactiveIcon,
           }}
         />
         <PrimaryText>{primaryText}</PrimaryText>

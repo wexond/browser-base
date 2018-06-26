@@ -28,18 +28,16 @@ export default class Toolbar extends React.Component {
   };
 
   public render() {
-    const { theme } = Store.theme;
-
     return (
-      <StyledToolbar style={{ ...theme.toolbar }}>
+      <StyledToolbar>
         <Handle />
         <NavigationButtons />
-        <ToolbarSeparator style={{ marginRight: 16, ...theme.toolbarSeparators }} />
-        <TabsSection style={{ ...theme.tabsSection }}>
+        <ToolbarSeparator style={{ marginRight: 16 }} />
+        <TabsSection>
           <AddressBar visible={Store.addressBar.toggled} />
           <TabBar />
         </TabsSection>
-        <ToolbarSeparator style={{ marginLeft: 16, ...theme.toolbarSeparators }} />
+        <ToolbarSeparator style={{ marginLeft: 16 }} />
         <ToolbarButton size={16} icon={workspacesIcon} onClick={this.onWorkspacesIconClick} />
         <ToolbarButton
           onClick={this.toggleMenu}
@@ -48,7 +46,7 @@ export default class Toolbar extends React.Component {
           style={{ marginRight: 4 }}
         />
         {Store.platform !== Platforms.MacOS && <WindowsControls />}
-        <Line style={{ ...theme.toolbarBottomLine }} />
+        <Line />
       </StyledToolbar>
     );
   }

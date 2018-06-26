@@ -52,7 +52,6 @@ export default class Suggestions extends React.Component<Props, {}> {
       <StyledSuggestions
         innerRef={r => (this.suggestions = r)}
         style={{
-          ...Store.theme.theme.suggestions,
           opacity: vis ? 1 : 0,
           pointerEvents: !vis ? 'none' : 'auto',
           height,
