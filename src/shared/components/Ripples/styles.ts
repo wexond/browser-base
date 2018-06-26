@@ -37,7 +37,7 @@ export const IconRipple = styled.div`
     const rgb = hexToRgb(color);
 
     if (hoverOverShade && !disabled) {
-      return `background-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.08);`;
+      return `background-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.04);`;
     }
     return '';
   }};

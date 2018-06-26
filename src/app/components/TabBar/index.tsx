@@ -19,16 +19,10 @@ export default class TabBar extends React.Component<{}, {}> {
   };
 
   public render() {
-    const { theme } = Store.theme;
-
     const { tabs } = Store.getCurrentWorkspace();
 
     return (
-      <StyledTabBar
-        style={{ ...theme.tabbar }}
-        visible={!Store.addressBar.toggled}
-        innerRef={(r: any) => (this.tabBar = r)}
-      >
+      <StyledTabBar visible={!Store.addressBar.toggled} innerRef={(r: any) => (this.tabBar = r)}>
         <Workspaces>
           {Store.workspaces.map(workspace => (
             <Workspace key={workspace.id} workspace={workspace} />
@@ -36,7 +30,6 @@ export default class TabBar extends React.Component<{}, {}> {
           <AddTabButton
             icon={addTabIcon}
             onClick={this.onAddTabButtonClick}
-            style={{ ...theme.addTabButton }}
             divRef={r => (Store.addTabButton.ref = r)}
           />
         </Workspaces>
