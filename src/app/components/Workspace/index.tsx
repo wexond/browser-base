@@ -222,8 +222,7 @@ export default class extends React.Component<Props, {}> {
 
     if (this.scrollData.dragging) {
       const { startLeft, mouseStartX } = this.scrollData;
-      this.workspaces.scrollLeft = ((startLeft + e.pageX - mouseStartX)
-        / this.workspaces.offsetWidth)
+      this.workspaces.scrollLeft = ((startLeft + e.pageX - mouseStartX) / this.workspaces.offsetWidth)
         * this.workspaces.scrollWidth;
     }
     if (this.tabDragData.dragging) {
