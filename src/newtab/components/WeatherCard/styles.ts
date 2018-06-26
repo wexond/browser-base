@@ -4,7 +4,7 @@ import images from '../../../shared/mixins/images';
 import typography from '../../../shared/mixins/typography';
 import opacity from '../../../shared/defaults/opacity';
 
-import { EASE_FUNCTION } from '../../constants';
+import { EASE_FUNCTION } from '../../../shared/constants';
 
 export const InfoContainer = styled.div`
   display: flex;
@@ -58,11 +58,11 @@ export const ExtraInfo = styled.div`
   display: flex;
   margin-left: 24px;
 
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+
   &:first-child {
     margin-left: 0px;
   }
-
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 `;
 
 export interface ExtraInfoIconProps {
