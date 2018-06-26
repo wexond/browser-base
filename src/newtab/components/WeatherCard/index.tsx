@@ -1,11 +1,10 @@
 import React from 'react';
 
 import colors from '../../../shared/defaults/colors';
-
-import { TimeUnit, ButtonType } from '../../../shared/enums';
-import { getActualTime, getDay } from '../../../shared/utils/time';
 import Button from '../../../shared/components/Button';
 import opacity from '../../../shared/defaults/opacity';
+import { TimeUnit, ButtonType } from '../../../shared/enums';
+import { getActualTime, getDay } from '../../../shared/utils/time';
 
 import {
   Card,

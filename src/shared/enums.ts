@@ -57,3 +57,8 @@ export enum ButtonType {
   Outlined,
   Contained,
 }
+
+export enum SliderType {
+  Continuous,
+  Discrete,
+}
