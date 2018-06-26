@@ -4,7 +4,6 @@ import wpm from 'wexond-package-manager';
 import colors from '../../shared/defaults/colors';
 import opacity from '../../shared/defaults/opacity';
 import components from '../components';
-import { StyledTab } from '../components/Tab/styles';
 
 export const loadPlugins = async () => {
   const plugins = await wpm.list();
@@ -19,7 +18,7 @@ export const loadPlugins = async () => {
         opacity,
       },
       'wexond-components': {
-        StyledTab,
+        tabStyles: components.tab,
       },
     };
 
@@ -29,7 +28,7 @@ export const loadPlugins = async () => {
 
     for (const key in components) {
       if (pluginAPI[key] && components[key]) {
-        components[key] = pluginAPI[key];
+        components[key] = { ...components[key], ...pluginAPI[key] };
       }
     }
     wpm.update(plugin.namespace, false);
