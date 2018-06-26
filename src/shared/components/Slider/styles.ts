@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled, { StyledComponentClass, css } from 'styled-components';
 
 import opacity from '../../defaults/opacity';
+
 import { Align } from '../../enums';
 
 import positioning from '../../mixins/positioning';
@@ -22,6 +23,7 @@ export const trackStyle = `
 
 export interface TrackProps {
   color: string;
+  thumbAnimation?: boolean;
 }
 
 export const UnderTrack = styled.div`
@@ -34,9 +36,11 @@ export const UnderTrack = styled.div`
 
 export const Track = styled.div`
   width: 50%;
+  transition: 0.2s opacity;
 
   ${trackStyle}
   background-color: ${({ color }: TrackProps) => color};
+  opacity: ${({ thumbAnimation }) => (thumbAnimation ? 0 : 1)};
 `;
 
 export const ThumbContainer = styled.div`
@@ -72,14 +76,16 @@ export const ThumbHover = styled.div`
 
 export interface ThumbProps {
   color: string;
+  thumbAnimation: boolean;
 }
 
 export const Thumb = styled.div`
-  width: 12px;
-  height: 12px;
   border-radius: 100%;
   position: absolute;
+  transition: 0.15s width, 0.15s height;
 
-  background-color: ${({ color }: ThumbProps) => color};
   ${positioning.center(Align.CenterBoth)};
+  background-color: ${({ color }: ThumbProps) => color};
+  width: ${({ thumbAnimation }) => (thumbAnimation ? 0 : 12)}px;
+  height: ${({ thumbAnimation }) => (thumbAnimation ? 0 : 12)}px;
 `;
