@@ -22,6 +22,7 @@ export interface Props {
 
 export interface State {
   trackWidth: string;
+  thumbAnimation: boolean;
 }
 
 export default class Slider extends React.Component<Props, State> {
@@ -32,6 +33,7 @@ export default class Slider extends React.Component<Props, State> {
 
   public state: State = {
     trackWidth: '50%',
+    thumbAnimation: false,
   };
 
   private thumbContainer: HTMLDivElement;
@@ -47,6 +49,21 @@ export default class Slider extends React.Component<Props, State> {
     window.addEventListener('mousemove', this.onWindowMouseMove);
   }
 
+  public onMouseDown = (e: React.MouseEvent<HTMLElement>) => {
+    if (!this.isMouseDown) {
+      const clientX = e.clientX;
+
+      this.setState({ thumbAnimation: true });
+
+      setTimeout(() => {
+        this.setState({
+          thumbAnimation: false,
+          trackWidth: `${this.getPercent(clientX)}%`,
+        });
+      }, 150);
+    }
+  };
+
   public onThumbMouseDown = (e: React.MouseEvent<HTMLElement>) => {
     this.isMouseDown = true;
   };
@@ -57,23 +74,26 @@ export default class Slider extends React.Component<Props, State> {
 
   public onWindowMouseMove = (e: MouseEvent) => {
     if (this.isMouseDown) {
-      const underTrackRect = this.underTrack.getBoundingClientRect();
-      const posX = e.clientX - underTrackRect.left;
-
-      let percent = (posX * 100) / this.underTrack.clientWidth;
-
-      if (percent < 0) percent = 0;
-      else if (percent > 100) percent = 100;
-
       this.setState({
-        trackWidth: `${percent}%`,
+        trackWidth: `${this.getPercent(e.clientX)}%`,
       });
     }
   };
 
+  public getPercent = (clientX: number) => {
+    const underTrackRect = this.underTrack.getBoundingClientRect();
+    const posX = clientX - underTrackRect.left;
+    const percent = (posX * 100) / this.underTrack.clientWidth;
+
+    if (percent < 0) return 0;
+    if (percent > 100) return 100;
+
+    return percent;
+  };
+
   public render() {
     const { color } = this.props;
-    const { trackWidth } = this.state;
+    const { trackWidth, thumbAnimation } = this.state;
 
     const trackStyle = {
       width: trackWidth,
@@ -84,16 +104,16 @@ export default class Slider extends React.Component<Props, State> {
     };
 
     return (
-      <StyledSlider>
+      <StyledSlider onMouseDown={this.onMouseDown}>
         <UnderTrack innerRef={r => (this.underTrack = r)} color={color} />
-        <Track color={color} style={trackStyle} />
+        <Track color={color} thumbAnimation={thumbAnimation} style={trackStyle} />
         <ThumbContainer
           innerRef={r => (this.thumbContainer = r)}
           style={thumbStyle}
           onMouseDown={this.onThumbMouseDown}
         >
           <ThumbHover className="thumb-hover" color={color} />
-          <Thumb color={color} />
+          <Thumb thumbAnimation={thumbAnimation} color={color} />
         </ThumbContainer>
       </StyledSlider>
     );
