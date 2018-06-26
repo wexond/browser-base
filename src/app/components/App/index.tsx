@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { observer } from 'mobx-react';
+import { hot } from 'react-hot-loader';
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
 import { StyledApp } from './styles';
 import Store from '../../store';
 import Pages from '../Pages';
@@ -51,7 +51,7 @@ const historyActions = {
 };
 
 @observer
-export default class App extends React.Component {
+class App extends React.Component {
   public onInspectElementClick = () => {
     const { x, y } = Store.webviewContextMenuParams;
     Store.getSelectedPage().webview.inspectElement(x, y);
@@ -130,3 +130,5 @@ export default class App extends React.Component {
     );
   }
 }
+
+export default hot(module)(App);
