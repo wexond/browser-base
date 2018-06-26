@@ -9,7 +9,7 @@ export const Icon = styled.div`
 
   ${({ size, disabled, icon }: { size: number; disabled: boolean; icon: string }) => css`
     ${images.center(`${size}px`, `${size}px`)};
-    opacity: ${disabled ? opacity.light.disabledIcon : 0.65};
+    opacity: ${disabled ? 0.25 : opacity.light.inactiveIcon};
     background-image: url(${icon});
   `};
 `;

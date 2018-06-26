@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react';
-import { hot } from 'react-hot-loader';
 import React from 'react';
-import { Content, Toolbar } from './styles';
+import { Content } from './styles';
 import { getHistorySections } from '../../utils';
 import Store from '../../store';
 import AppStore from '../../../../app/store';
@@ -19,7 +18,9 @@ export default class History extends React.Component {
       })
       .then(async () => {
         const sections = await getHistorySections();
-        Store.sections = sections;
+        setTimeout(() => {
+          Store.sections = sections;
+        }, 100);
       });
 
     Store.selectedItems = [];
