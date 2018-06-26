@@ -11,6 +11,7 @@ import { closeWindow } from '../../utils/window';
 
 import Ripples from '../../../shared/components/Ripples';
 import colors from '../../../shared/defaults/colors';
+import components from '../../components';
 
 export interface TabProps {
   key: number;
@@ -154,14 +155,14 @@ export default class extends React.Component<TabProps, {}> {
     }
 
     return (
-      <StyledTab
+      <components.Tab
         selected={selected}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
         onClick={this.onClick}
         isRemoving={isRemoving}
         visible={!Store.addressBar.toggled}
-        innerRef={r => {
+        innerRef={(r: HTMLDivElement) => {
           this.tab = r;
           tab.tab = r;
         }}
@@ -197,7 +198,7 @@ export default class extends React.Component<TabProps, {}> {
         <Overlay hovered={hovered} selected={selected} />
         <Ripples rippleTime={0.6} ref={r => (this.ripples = r)} color={colors.blue['500']} />
         <RightBorder visible={rightBorderVisible} />
-      </StyledTab>
+      </components.Tab>
     );
   }
 }

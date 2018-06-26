@@ -40,7 +40,6 @@ export const StyledTab = styled.div`
   z-index: ${({ selected }: TabProps) => (selected ? 2 : 1)};
   pointer-events: ${({ isRemoving, visible }) => (isRemoving || !visible ? 'none' : 'auto')};
   -webkit-app-region: ${({ visible }) => (visible ? 'no-drag' : '')};
-  background-color: 'none';
 `;
 
 interface OverlayProps {
