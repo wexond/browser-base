@@ -72,11 +72,6 @@ export const Overlay = styled.div`
   background-color: rgba(0, 0, 0, 0.04);
 `;
 
-interface TitleProps {
-  favicon: string;
-  selected: boolean;
-}
-
 export const Title = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
@@ -86,7 +81,7 @@ export const Title = styled.div`
   margin-left: 12px;
 
   ${({ favicon, selected }: { favicon: string; selected: boolean }) => css`
-    color: ${selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.7)'};
+    color: ${selected ? colors.blue['500'] : `rgba(0, 0, 0, ${opacity.light.secondaryText})`};
     margin-left: ${favicon === '' ? 0 : 12}px;
   `};
 `;
