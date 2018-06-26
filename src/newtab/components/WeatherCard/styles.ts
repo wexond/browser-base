@@ -4,9 +4,12 @@ import images from '../../../shared/mixins/images';
 import typography from '../../../shared/mixins/typography';
 import opacity from '../../../shared/defaults/opacity';
 
+import { EASE_FUNCTION } from '../../constants';
+
 export const InfoContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  padding: 0px 16px 0px 16px;
 `;
 
 export const Temperature = styled.div`
@@ -47,6 +50,8 @@ export const ExtraInfoContainer = styled.div`
   padding-top: 16px;
   align-items: center;
   justify-content: first-start;
+  margin-top: 16px;
+  padding: 0px 16px 0px 16px;
 `;
 
 export const ExtraInfo = styled.div`
@@ -75,4 +80,16 @@ export const ExtraInfoIcon = styled.div`
 export const ExtraInfoText = styled.div`
   margin-left: 8px;
   align-self: center;
+`;
+
+export interface ForecastContainerProps {
+  expanded: boolean;
+}
+
+export const ForecastContainer = styled.div`
+  margin-top: 24px;
+  overflow: hidden;
+  transition: 1s ${EASE_FUNCTION} max-height;
+
+  max-height: ${({ expanded }: ForecastContainerProps) => (expanded ? '300px' : '0px')};
 `;
