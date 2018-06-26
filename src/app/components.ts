@@ -1,7 +1,16 @@
-import { StyledTab } from './components/Tab/styles';
+import * as tabStyles from './components/Tab/styles';
 
 class Components {
-  public Tab = StyledTab;
+  // Tab
+  public tab = {
+    Root: tabStyles.StyledTab,
+    Close: tabStyles.Close,
+    Overlay: tabStyles.Overlay,
+    Title: tabStyles.Title,
+    Icon: tabStyles.Icon,
+    Content: tabStyles.Content,
+    RightBorder: tabStyles.RightBorder,
+  };
 
   [key: string]: any;
 }

@@ -1,8 +1,5 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import {
-  Close, Content, Icon, Overlay, StyledTab, Title, RightBorder,
-} from './styles';
 import tabAnimations from '../../defaults/tab-animations';
 import Tab from '../../models/tab';
 import Workspace from '../../models/workspace';
@@ -154,8 +151,10 @@ export default class extends React.Component<TabProps, {}> {
       rightBorderVisible = false;
     }
 
+    const { Root, Content, Icon, Title, Close, Overlay, RightBorder } = components.tab;
+
     return (
-      <components.Tab
+      <Root
         selected={selected}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
@@ -198,7 +197,7 @@ export default class extends React.Component<TabProps, {}> {
         <Overlay hovered={hovered} selected={selected} />
         <Ripples rippleTime={0.6} ref={r => (this.ripples = r)} color={colors.blue['500']} />
         <RightBorder visible={rightBorderVisible} />
-      </components.Tab>
+      </Root>
     );
   }
 }
