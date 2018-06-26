@@ -10,6 +10,7 @@ import Store from '../../store';
 import { closeWindow } from '../../utils/window';
 
 import Ripples from '../../../shared/components/Ripples';
+import colors from '../../../shared/defaults/colors';
 
 export interface TabProps {
   key: number;
@@ -136,25 +137,6 @@ export default class extends React.Component<TabProps, {}> {
     const {
       title, isRemoving, hovered, dragging, favicon,
     } = tab;
-    const { theme } = Store.theme;
-
-    type TabState = 'tab' | 'tabSelected' | 'tabSelectedHovered' | 'tabDragging' | 'tabHovered';
-
-    let tabState: TabState = 'tab';
-
-    if (selected) {
-      tabState = 'tabSelected';
-
-      if (hovered && !dragging && theme.tabSelected.enableHover) {
-        tabState = 'tabSelectedHovered';
-      }
-
-      if (dragging) {
-        tabState = 'tabDragging';
-      }
-    } else if (hovered) {
-      tabState = 'tabHovered';
-    }
 
     let rightBorderVisible = true;
 
@@ -183,18 +165,14 @@ export default class extends React.Component<TabProps, {}> {
           this.tab = r;
           tab.tab = r;
         }}
-        style={{ ...(theme[tabState] as any) }}
       >
         <Content
           hovered={hovered}
-          tabState={tabState}
-          style={{ ...(theme[`${tabState}Content` as TabState] as any) }}
         >
           <Icon
             favicon={favicon.trim()}
-            styleToApply={{ ...(theme[`${tabState}Icon` as TabState] as any) }}
           />
-          <Title favicon={favicon} style={{ ...(theme[`${tabState}Title` as TabState] as any) }}>
+          <Title selected={selected} favicon={favicon}>
             {title}
           </Title>
         </Content>
@@ -203,7 +181,6 @@ export default class extends React.Component<TabProps, {}> {
           onMouseUp={this.onCloseMouseUp}
           onClick={this.onClose}
           hovered={hovered}
-          style={{ ...(theme[`${tabState}Close` as TabState] as any) }}
         >
           <Ripples
             icon
@@ -218,15 +195,7 @@ export default class extends React.Component<TabProps, {}> {
         </Close>
         {children}
         <Overlay hovered={hovered} selected={selected} />
-        <Ripples
-          rippleTime={0.6}
-          ref={r => (this.ripples = r)}
-          color={
-            theme.tab.rippleColor === '' || theme.tab.rippleColor == null
-              ? Store.theme.theme.accentColor
-              : theme.tab.rippleColor
-          }
-        />
+        <Ripples rippleTime={0.6} ref={r => (this.ripples = r)} color={colors.blue['500']} />
         <RightBorder visible={rightBorderVisible} />
       </StyledTab>
     );

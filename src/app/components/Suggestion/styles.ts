@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import images from '../../../shared/mixins/images';
 import opacity from '../../../shared/defaults/opacity';
 
@@ -7,7 +7,17 @@ export const StyledSuggestion = styled.div`
   height: 40px;
   display: flex;
   align-items: center;
-  transition: 0.1s background-color;
+
+  ${({ selected, hovered }: { selected: boolean; hovered: boolean }) => {
+    let backgroundColor = 'transparent';
+
+    if (selected) backgroundColor = 'rgba(0, 0, 0, 0.08)';
+    else if (hovered) backgroundColor = 'rgba(0, 0, 0, 0.04)';
+
+    return css`
+      background-color: ${backgroundColor};
+    `;
+  }};
 `;
 
 export const PrimaryText = styled.div`

@@ -1,15 +1,12 @@
 import fs from 'fs';
-import { promisify } from 'util';
 import React from 'react';
 import { AppContainer } from 'react-hot-loader';
 import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
 import App from './components/App';
 import { loadPlugins } from './utils/plugins';
-import Store from './store';
 import typography from '../shared/mixins/typography';
 import { getPath } from '../shared/utils/paths';
-import defaultTheme from '../app/defaults/theme';
 
 const robotoLight = require('../shared/fonts/Roboto-Light.ttf');
 const robotoMedium = require('../shared/fonts/Roboto-Medium.ttf');
@@ -88,7 +85,6 @@ async function setup() {
     fs.mkdirSync(getPath('plugins'));
   }
 
-  Store.theme.set(defaultTheme);
   await loadPlugins();
 
   render(App);

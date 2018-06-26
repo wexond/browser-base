@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { TOOLBAR_BUTTON_WIDTH } from '../../constants';
-import { Theme } from '../../../shared/models/theme';
+import colors from '../../../shared/defaults/colors';
 
 export const Tabs = styled.div`
   transform: translateZ(0);
@@ -48,10 +48,6 @@ export const ScrollbarThumb = styled.div`
   }
 `;
 
-interface IndicatorProps {
-  theme?: Theme;
-}
-
 export const Indicator = styled.div`
   height: 2px;
   width: 200px;
@@ -59,4 +55,5 @@ export const Indicator = styled.div`
   position: absolute;
   z-index: 3;
   border-radius: 5px;
+  background-color: ${colors.blue['500']};
 `;

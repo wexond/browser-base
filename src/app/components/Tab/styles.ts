@@ -1,11 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import images from '../../../shared/mixins/images';
 import opacity from '../../../shared/defaults/opacity';
-import { Theme, TabContentTheme } from '../../../shared/models/theme';
+import colors from '../../../shared/defaults/colors';
 
 const closeIcon = require('../../../shared/icons/close.svg');
-
-type TabState = 'tab' | 'tabSelected' | 'tabSelectedHovered' | 'tabDragging' | 'tabHovered';
 
 interface CloseProps {
   hovered: boolean;
@@ -46,7 +44,6 @@ export const StyledTab = styled.div`
 `;
 
 interface OverlayProps {
-  theme?: Theme;
   hovered: boolean;
   selected: boolean;
 }
@@ -60,9 +57,9 @@ export const Overlay = styled.div`
   z-index: 0;
   transition: 0.2s opacity;
 
-  opacity: ${({ selected, hovered, theme }: OverlayProps) => {
+  opacity: ${({ selected, hovered }: OverlayProps) => {
     if (selected) {
-      if (hovered && theme.tabSelected.enableHover) {
+      if (hovered) {
         return 1;
       }
       return 0;
@@ -72,11 +69,12 @@ export const Overlay = styled.div`
     }
     return 0;
   }};
-  background-color: ${({ theme }: OverlayProps) => theme.tabHovered.backgroundColor};
+  background-color: rgba(0, 0, 0, 0.04);
 `;
 
 interface TitleProps {
   favicon: string;
+  selected: boolean;
 }
 
 export const Title = styled.div`
@@ -87,13 +85,14 @@ export const Title = styled.div`
   font-weight: 500;
   margin-left: 12px;
 
-  opacity: ${opacity.light.primaryText};
-  margin-left: ${({ favicon }: TitleProps) => (favicon === '' ? 0 : '12px')};
+  ${({ favicon, selected }: { favicon: string; selected: boolean }) => css`
+    color: ${selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.7)'};
+    margin-left: ${favicon === '' ? 0 : 12}px;
+  `};
 `;
 
 interface IconProps {
   favicon: string;
-  styleToApply: any;
 }
 
 export const Icon = styled.div.attrs({
@@ -113,8 +112,6 @@ export const Icon = styled.div.attrs({
 
 interface ContentProps {
   hovered: boolean;
-  tabState: TabState;
-  theme?: Theme;
 }
 
 export const Content = styled.div`
@@ -124,18 +121,15 @@ export const Content = styled.div`
   display: flex;
   transition: 0.1s max-width, 0.1s transform;
 
-  ${({ theme, tabState, hovered }: ContentProps) => {
-    if ((theme[`${tabState}Content` as TabState] as TabContentTheme).align === 'center') {
-      let transform = 'transform: translateX(-50%);';
-      if (hovered) {
-        transform = 'transform: translateX(calc(-50% - 12px));';
-      }
-      return `
-        ${transform}
-        left: 50%;
-      `;
+  ${({ hovered }: ContentProps) => {
+    let transform = 'transform: translateX(-50%);';
+    if (hovered) {
+      transform = 'transform: translateX(calc(-50% - 12px));';
     }
-    return 'margin-left: 12px;';
+    return `
+      ${transform}
+      left: 50%;
+    `;
   }}
 
   max-width: ${({ hovered }) => `calc(100% - ${24 + (hovered ? 24 : 0)}px)`};

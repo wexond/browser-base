@@ -35,6 +35,7 @@ const appConfig = {
 
   devServer: {
     contentBase: './static/pages',
+    publicPath: `http://localhost:${PORT}/`,
     port: PORT,
     stats: {
       colors: true,
