@@ -15,31 +15,13 @@ const config = {
         test: /\.(png|gif|jpg|woff2|ttf|svg)$/,
         include: INCLUDE,
         exclude: EXCLUDE,
-        use: [
-          {
-            loader: 'url-loader',
-          },
-        ],
-      },
-      {
-        test: /\.(tsx|ts|jsx|js)$/,
-        loader: 'babel-loader',
-        include: INCLUDE,
-        exclude: EXCLUDE,
-        options: {
-          babelrc: false,
-          plugins: ['react-hot-loader/babel'],
-        },
+        use: ['url-loader'],
       },
       {
         test: /\.(tsx|ts|jsx|js)$/,
         include: INCLUDE,
         exclude: EXCLUDE,
-        use: [
-          {
-            loader: 'ts-loader',
-          },
-        ],
+        use: ['ts-loader'],
       },
     ],
   },
