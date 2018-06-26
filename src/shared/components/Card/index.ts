@@ -131,9 +131,22 @@ export const CardSupportingText = styled.div`
 `;
 
 export const CardContent = styled.div`
-  padding: 0px 16px 16px 16px;
   font-size: 14px;
 
   ${typography.robotoRegular()};
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
 `;
+
+export const CardActions = styled.div`
+  width: 100%;
+  padding: 8px;
+  margin-top: 24px;
+  display: flex;
+  align-content: center;
+`;
+
+export const CardActionButtonStyle = {
+  marginLeft: 8,
+  paddingLeft: 8,
+  paddingRight: 8,
+};

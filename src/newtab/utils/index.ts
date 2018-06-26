@@ -98,13 +98,12 @@ export const requestWeatherForecast = async (
         });
       } else if (hoursDiff === 0) {
         night = {
-          temp: item.main.temp,
-          icon: weatherIcons[item.weather[0].icon as WeatherCodes],
+          temp: convertTemperature(item.main.temp, tempUnit),
         };
       } else if (hoursDiff === 15) {
         week.push({
           day: {
-            temp: item.main.temp,
+            temp: convertTemperature(item.main.temp, tempUnit),
             icon: weatherIcons[item.weather[0].icon as WeatherCodes],
           },
           night,

@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { TimeUnit } from '../../../shared/enums';
-import { getActualTime } from '../../../shared/utils/time';
+import colors from '../../../shared/defaults/colors';
 
+import { TimeUnit, ButtonType } from '../../../shared/enums';
+import { getActualTime, getDay } from '../../../shared/utils/time';
+import Button from '../../../shared/components/Button';
 import opacity from '../../../shared/defaults/opacity';
 
 import {
@@ -12,6 +14,8 @@ import {
   CardTitle,
   CardSecondaryText,
   CardContent,
+  CardActions,
+  CardActionButtonStyle,
 } from '../../../shared/components/Card';
 
 import {
@@ -24,16 +28,27 @@ import {
   ExtraInfo,
   ExtraInfoIcon,
   ExtraInfoText,
+  ForecastContainer,
 } from './styles';
+
+import ForecastItem from './ForecastItem';
 
 const precipitationIcon = require('../../../shared/icons/weather/precipitation.png');
 const windIcon = require('../../../shared/icons/weather/wind.svg');
 
-export interface WeatherCardProps {
+export interface Props {
   data: any;
 }
 
-export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
+export interface State {
+  expanded: boolean;
+}
+
+export default class WeatherCard extends React.Component<Props, State> {
+  public state: State = {
+    expanded: false,
+  };
+
   getCity = () => {
     const { data } = this.props;
     return data != null ? data.city : 'Weather info is unavailable';
@@ -49,9 +64,7 @@ export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
       const date = new Date();
       const daysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-      const dayIndex = date.getDay() === 0 ? daysShort.length - 1 : date.getDay();
-
-      return `${daysShort[dayIndex]}, ${getActualTime(timeUnit)} ${TimeUnit[
+      return `${getDay(daysShort, date)}, ${getActualTime(timeUnit)} ${TimeUnit[
         timeUnit
       ].toUpperCase()}, ${description}`;
     }
@@ -59,16 +72,36 @@ export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
     return null;
   };
 
+  getDayName = (date: any) => {
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    return getDay(days, date);
+  };
+
+  onExpandButtonClick = () => {
+    const { expanded } = this.state;
+
+    this.setState({
+      expanded: !expanded,
+    });
+  };
+
   public render() {
     const { data } = this.props;
+    const { expanded } = this.state;
 
     const current = data != null ? data.daily.current : null;
+    const week = data != null ? data.week : null;
 
     const city = this.getCity();
     const description = this.getDescription();
 
     const windIconStyle = {
       opacity: opacity.light.disabledIcon,
+    };
+
+    const cardActionsStyle = {
+      borderTop: '1px solid rgba(0,0,0,0.12)',
+      marginTop: expanded ? 16 : 8,
     };
 
     return (
@@ -81,7 +114,7 @@ export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
         </CardHeader>
         <CardContent>
           {data != null && (
-            <div>
+            <React.Fragment>
               <InfoContainer>
                 <Temperature>
                   {current.temp}
@@ -99,7 +132,23 @@ export default class WeatherCard extends React.Component<WeatherCardProps, {}> {
                   <ExtraInfoText>{current.windSpeed} Winds</ExtraInfoText>
                 </ExtraInfo>
               </ExtraInfoContainer>
-            </div>
+              <ForecastContainer expanded={expanded}>
+                {data.week.map((day: any, key: any) => {
+                  const dayName = this.getDayName(day.date);
+                  return <ForecastItem data={day} dayName={dayName} key={key} />;
+                })}
+              </ForecastContainer>
+              <CardActions style={cardActionsStyle}>
+                <Button
+                  foreground={colors.blue['500']}
+                  type={ButtonType.Text}
+                  onClick={this.onExpandButtonClick}
+                  style={Object.assign({}, CardActionButtonStyle, { marginLeft: 0 })}
+                >
+                  {(!expanded && 'EXPAND') || 'COLLAPSE'}
+                </Button>
+              </CardActions>
+            </React.Fragment>
           )}
           {data == null && (
             <ErrorContainer>
