@@ -10,16 +10,26 @@ const output = {
   hotUpdateMainFilename: 'hot/hot-update.json',
 };
 
-const config = Object.assign(
-  {
-    devtool: 'eval-source-map',
+const config = Object.assign({}, baseConfig, {
+  devtool: 'eval-source-map',
 
-    plugins: [new webpack.HotModuleReplacementPlugin()],
-  },
-  baseConfig,
-);
+  plugins: [new webpack.HotModuleReplacementPlugin()],
+});
 
 config.output = Object.assign(output, baseConfig.output);
+
+config.module.rules[1] = Object.assign({}, config.module.rules[1], {
+  use: [
+    {
+      loader: 'babel-loader',
+      options: {
+        babelrc: false,
+        plugins: ['react-hot-loader/babel'],
+      },
+    },
+    'ts-loader',
+  ],
+});
 
 const appConfig = {
   target: 'electron-renderer',
@@ -35,7 +45,6 @@ const appConfig = {
 
   devServer: {
     contentBase: './static/pages',
-    publicPath: `http://localhost:${PORT}/`,
     port: PORT,
     stats: {
       colors: true,
