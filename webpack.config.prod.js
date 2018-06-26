@@ -1,18 +1,15 @@
 const webpack = require('webpack');
 const baseConfig = require('./webpack.config.base');
 
-const config = Object.assign(
-  {
-    devtool: 'source-map',
+const config = Object.assign({}, baseConfig, {
+  devtool: 'source-map',
 
-    plugins: [
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify('production'),
-      }),
-    ],
-  },
-  baseConfig,
-);
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production'),
+    }),
+  ],
+});
 
 const appConfig = {
   target: 'electron-renderer',

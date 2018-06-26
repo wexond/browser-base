@@ -1,6 +1,5 @@
 import fs from 'fs';
 import React from 'react';
-import { AppContainer } from 'react-hot-loader';
 import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
 import App from './components/App';
@@ -71,15 +70,6 @@ injectGlobal`
   }
 `;
 
-function render(Component: any) {
-  ReactDOM.render(
-    <AppContainer>
-      <Component />
-    </AppContainer>,
-    document.getElementById('app'),
-  );
-}
-
 async function setup() {
   if (!fs.existsSync(getPath('plugins'))) {
     fs.mkdirSync(getPath('plugins'));
@@ -87,15 +77,7 @@ async function setup() {
 
   await loadPlugins();
 
-  render(App);
+  ReactDOM.render(<App />, document.getElementById('app'));
 }
 
 setup();
-
-if (module.hot) {
-  module.hot.accept('./components/App', () => {
-    // eslint-disable-next-line
-    const NextApp = require('./components/App').default;
-    render(NextApp);
-  });
-}
