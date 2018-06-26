@@ -151,7 +151,9 @@ export default class extends React.Component<TabProps, {}> {
       rightBorderVisible = false;
     }
 
-    const { Root, Content, Icon, Title, Close, Overlay, RightBorder } = components.tab;
+    const {
+      Root, Content, Icon, Title, Close, Overlay, RightBorder,
+    } = components.tab;
 
     return (
       <Root
@@ -166,12 +168,8 @@ export default class extends React.Component<TabProps, {}> {
           tab.tab = r;
         }}
       >
-        <Content
-          hovered={hovered}
-        >
-          <Icon
-            favicon={favicon.trim()}
-          />
+        <Content hovered={hovered}>
+          <Icon favicon={favicon.trim()} />
           <Title selected={selected} favicon={favicon}>
             {title}
           </Title>
