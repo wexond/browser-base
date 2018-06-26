@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import images from '../../../shared/mixins/images';
-import { Theme } from '../../../shared/models/theme';
 import shadows from '../../../shared/mixins/shadows';
+import opacity from '../../../shared/defaults/opacity';
 
 interface AddressBarProps {
   visible: boolean;
@@ -33,7 +33,6 @@ export const StyledAddressBar = styled.div`
 interface InputProps {
   visible: boolean;
   suggestionsVisible: boolean;
-  theme?: Theme;
 }
 
 export const Input = styled.input`
@@ -46,11 +45,12 @@ export const Input = styled.input`
   background-color: transparent;
   transition: 0.1s padding-left;
 
-  ${({ suggestionsVisible, theme }: InputProps) => css`
+  ::placeholder {
+    color: rgba(0, 0, 0, ${opacity.light.disabledText});
+  }
+
+  ${({ suggestionsVisible }: InputProps) => css`
     padding-left: ${suggestionsVisible ? '30px' : '16px'};
-    ::placeholder {
-      color: ${theme.addressBarInput.placeholderColor};
-    }
   `};
 `;
 

@@ -165,19 +165,13 @@ export default class AddressBar extends Component<Props, {}> {
 
     const suggestionsVisible = Store.suggestions.getVisible();
 
-    const { theme } = Store.theme;
-
     return (
       <StyledAddressBar
         visible={visible}
         suggestionsVisible={suggestionsVisible}
         onMouseDown={e => e.stopPropagation()}
-        style={{ ...theme.addressBar }}
       >
-        <InputContainer
-          style={{ ...theme.addressBarInputContainer }}
-          suggestionsVisible={suggestionsVisible}
-        >
+        <InputContainer suggestionsVisible={suggestionsVisible}>
           <Icon image={searchIcon} />
           <Input
             suggestionsVisible={suggestionsVisible}
@@ -188,7 +182,6 @@ export default class AddressBar extends Component<Props, {}> {
             visible={Store.addressBar.toggled}
             onKeyPress={this.onKeyPress}
             onKeyDown={this.onKeyDown}
-            style={{ ...(theme.addressBarInput as any) }}
           />
           <div style={{ clear: 'both' }} />
         </InputContainer>
