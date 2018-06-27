@@ -5,7 +5,7 @@ import Button from '../../../shared/components/Button';
 import Slider from '../../../shared/components/Slider';
 import opacity from '../../../shared/defaults/opacity';
 import { TimeUnit, ButtonType } from '../../../shared/enums';
-import { getActualTime, getDay } from '../../../shared/utils/time';
+import { getTime, getDay } from '../../../shared/utils/time';
 
 import {
   Card,
@@ -41,11 +41,13 @@ export interface Props {
 }
 
 export interface State {
+  dailyForecastIndex: number;
   forecastHeight: number;
 }
 
 export default class WeatherCard extends React.Component<Props, State> {
   public state: State = {
+    dailyForecastIndex: 0,
     forecastHeight: 0,
   };
 
@@ -57,16 +59,18 @@ export default class WeatherCard extends React.Component<Props, State> {
   };
 
   getDescription = () => {
+    const { dailyForecastIndex } = this.state;
     const { data } = this.props;
 
     if (data != null) {
       const { timeUnit, daily } = data;
-      const { description } = daily.current;
 
-      const date = new Date();
+      const { description, date } = daily[dailyForecastIndex];
+
+      const currentDate = new Date();
       const daysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-      return `${getDay(daysShort, date)}, ${getActualTime(timeUnit)} ${TimeUnit[
+      return `${getDay(daysShort, currentDate)}, ${getTime(date, timeUnit)} ${TimeUnit[
         timeUnit
       ].toUpperCase()}, ${description}`;
     }
@@ -90,10 +94,11 @@ export default class WeatherCard extends React.Component<Props, State> {
 
   public render() {
     const { data } = this.props;
-    const { forecastHeight } = this.state;
+    const { dailyForecastIndex, forecastHeight } = this.state;
+
     const expanded = forecastHeight > 0;
 
-    const current = data != null ? data.daily.current : null;
+    const current = data != null ? data.daily[dailyForecastIndex] : null;
     const week = data != null ? data.week : null;
 
     const city = this.getCity();
