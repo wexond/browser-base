@@ -35,7 +35,7 @@ export interface IProps {
 
 export default class Button extends React.Component<IProps, {}> {
   public static defaultProps = {
-    background: colors.deepPurple['500'],
+    background: colors.blue['500'],
     foreground: '#fff',
     whiteIcon: true,
     inline: false,

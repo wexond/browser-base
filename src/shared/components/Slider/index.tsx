@@ -45,7 +45,7 @@ export interface State {
 
 export default class Slider extends React.Component<Props, State> {
   public static defaultProps = {
-    color: colors.deepPurple['500'],
+    color: colors.blue['500'],
     type: SliderType.Continuous,
     ticks: [1, 2],
     showTicksLabels: false,
