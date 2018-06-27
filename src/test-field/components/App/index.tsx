@@ -30,12 +30,18 @@ export default class App extends React.Component<{}, IState> {
 
     const ticks1 = [10, 20, 30];
 
-    const ticks2 = {
-      8: '8 AM',
-      11: '11 AM',
-      14: '2 PM',
-      17: '5 PM',
-      20: '8 PM',
+    const ticks2: any = {
+      d1: null,
+      '8 AM': 8,
+      d2: null,
+      '11 AM': 11,
+      d3: null,
+      '2 PM': 14,
+      d4: null,
+      '5 PM': 17,
+      d5: null,
+      '8 PM': 20,
+      d6: null,
     };
 
     return (
