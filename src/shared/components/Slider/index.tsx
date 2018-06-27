@@ -19,6 +19,8 @@ import {
   Thumb,
   TicksContainer,
   Tick,
+  TickLine,
+  TickValue,
 } from './styles';
 
 export interface Props {
@@ -172,6 +174,11 @@ export default class Slider extends React.Component<Props, State> {
 
   public getGap = () => this.inactiveTrack.clientWidth / (this.ticksList.length - 1);
 
+  public showTicksValues = () => {
+    const { ticks } = this.props;
+    return Object.prototype.toString.call(ticks) === '[object Object]';
+  };
+
   public render() {
     const {
       color, ticks, style, type, selectedTickColor,
@@ -202,13 +209,22 @@ export default class Slider extends React.Component<Props, State> {
             {type === SliderType.Discrete
               && typeof ticks === 'object'
               && (ticksArray ? ticks : Object.keys(ticks)).map((data: any, key: any) => {
+                const tickValue = !ticksArray && ticks[data];
                 tickIndex++;
+
                 return (
                   <Tick
                     innerRef={r => r != null && this.ticksList.push(r)}
                     key={key}
                     color={tickIndex <= selectedTickIndex ? selectedTickColor : unselectedTickColor}
-                  />
+                  >
+                    {!ticksArray && (
+                      <React.Fragment>
+                        <TickLine color={color} />
+                        {tickValue != null && <TickValue>{data}</TickValue>}
+                      </React.Fragment>
+                    )}
+                  </Tick>
                 );
               })}
           </TicksContainer>
