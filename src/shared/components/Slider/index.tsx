@@ -28,7 +28,6 @@ export interface Props {
   maxValue?: number;
   ticks?: any;
   style?: any;
-  lineTicks?: boolean;
   selectedTickColor?: string;
 }
 
@@ -43,7 +42,7 @@ export default class Slider extends React.Component<Props, State> {
   public static defaultProps = {
     color: colors.deepPurple['500'],
     type: SliderType.Continuous,
-    lineTicks: false,
+    showTicksValues: false,
     selectedTickColor: 'rgba(255, 255, 255, 0.38)',
   };
 
@@ -171,26 +170,22 @@ export default class Slider extends React.Component<Props, State> {
     return percent;
   };
 
-  public getGap = () => this.inactiveTrack.clientWidth / this.ticksList.length;
+  public getGap = () => this.inactiveTrack.clientWidth / (this.ticksList.length - 1);
 
   public render() {
     const {
       color, ticks, style, type, selectedTickColor,
     } = this.props;
+
     const {
       trackWidth, thumbAnimation, unselectedTickColor, selectedTickIndex,
     } = this.state;
 
-    const trackStyle = {
-      width: trackWidth,
-    };
+    const trackStyle = { width: trackWidth };
+    const thumbStyle = { left: trackWidth };
 
-    const thumbStyle = {
-      left: trackWidth,
-    };
-
+    const ticksArray = Object.prototype.toString.call(ticks) === '[object Array]';
     let tickIndex = 0;
-
     this.ticksList = [];
 
     return (
@@ -205,8 +200,8 @@ export default class Slider extends React.Component<Props, State> {
           />
           <TicksContainer>
             {type === SliderType.Discrete
-              && Object.prototype.toString.call(ticks) === '[object Array]'
-              && ticks.map((data: any, key: any) => {
+              && typeof ticks === 'object'
+              && (ticksArray ? ticks : Object.keys(ticks)).map((data: any, key: any) => {
                 tickIndex++;
                 return (
                   <Tick
