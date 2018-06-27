@@ -15,8 +15,7 @@ export const Title = styled.div`
 export const Info = styled.div`
   display: flex;
   align-content: center;
-
-  margin-top: 8px;
+  align-self: flex-end;
   font-size: 13px;
 
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
@@ -29,7 +28,6 @@ export interface IconProps {
 export const Icon = styled.div`
   width: 18px;
   height: 18px;
-  display: flex;
 
   ${images.center('18px', 'auto')};
   background-image: url(${({ source }: IconProps) => source});
@@ -37,4 +35,11 @@ export const Icon = styled.div`
 
 export const Source = styled.div`
   margin-left: 8px;
+`;
+
+export const CardHeaderText = styled.div`
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-flow: row wrap;
 `;
