@@ -9,7 +9,7 @@ export const Title = styled.div`
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
 
   ${typography.robotoRegular()};
-  ${typography.maxLines(3)};
+  ${typography.maxLines(3, 19)};
 `;
 
 export const Info = styled.div`

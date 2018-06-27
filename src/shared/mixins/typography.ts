@@ -31,12 +31,14 @@ const robotoMedium = () => `
   font-weight: 500;
 `;
 
-const maxLines = (count: number) => `
+const maxLines = (count: number, lineHeight: number = 16) => `
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: ${count};
   -webkit-box-orient: vertical;
+  line-height: ${lineHeight}px;
+  max-height: ${lineHeight * 2}px;
 `;
 
 export default {
