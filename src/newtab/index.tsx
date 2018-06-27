@@ -41,6 +41,10 @@ injectGlobal`
     padding: 0;
   }
 
+  a {
+    text-decoration: none;
+  }
+
   @keyframes nersent-ui-preloader-rotate {
     100% {
       -webkit-transform: rotate(360deg);

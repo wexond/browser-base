@@ -24,14 +24,17 @@ export const Info = styled.div`
 
 export interface IconProps {
   source: string;
+  visible: boolean;
 }
 
 export const Icon = styled.div`
   width: 18px;
   height: 18px;
+  transition: 0.2s opacity;
 
   ${images.center('18px', 'auto')};
   background-image: url(${({ source }: IconProps) => source});
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
 `;
 
 export const Source = styled.div`
