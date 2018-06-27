@@ -28,7 +28,7 @@ export default class App extends React.Component<{}, IState> {
     const { darkTheme } = this.state;
     const theme: UITheme = darkTheme ? UITheme.Dark : UITheme.Light;
 
-    const ticks1 = [10, 20, 30, 40, 50];
+    const ticks1 = [10, 20, 30];
 
     const ticks2 = {
       8: '8 AM',
@@ -37,8 +37,6 @@ export default class App extends React.Component<{}, IState> {
       17: '5 PM',
       20: '8 PM',
     };
-
-    console.log(Object.keys(ticks1));
 
     return (
       <StyledApp theme={theme}>
