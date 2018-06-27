@@ -23,7 +23,6 @@ import {
   InfoContainer,
   TemperatureDeg,
   TemperatureIcon,
-  ErrorContainer,
   ExtraInfoContainer,
   ExtraInfo,
   ExtraInfoIcon,
@@ -135,7 +134,11 @@ export default class WeatherCard extends React.Component<Props, State> {
         <CardHeader>
           <CardHeaderText>
             <CardTitle large>{city}</CardTitle>
-            <CardSecondaryText largeTop>{description}</CardSecondaryText>
+            <CardSecondaryText largeTop>
+              {data != null && description}
+              {data == null
+                && 'Check your internet connection or your settings. City name is probably incorrect.'}
+            </CardSecondaryText>
           </CardHeaderText>
         </CardHeader>
         <CardContent>
@@ -186,11 +189,6 @@ export default class WeatherCard extends React.Component<Props, State> {
                 </Button>
               </CardActions>
             </React.Fragment>
-          )}
-          {data == null && (
-            <ErrorContainer>
-              Check your internet connection or your settings. City name is probably incorrect.
-            </ErrorContainer>
           )}
         </CardContent>
       </Card>
