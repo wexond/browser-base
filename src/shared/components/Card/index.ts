@@ -66,7 +66,7 @@ export interface ImageProps {
 }
 
 export const CardImage = styled.div`
-  width: 80px;
+  min-width: 80px;
   height: 80px;
   margin: 16px;
   align-self: center;
@@ -91,7 +91,7 @@ export const CardTitle = styled.div`
 `;
 
 export interface SecondaryTextProps {
-  largeTop: boolean;
+  largeTop?: boolean;
 }
 
 export const CardSecondaryText = styled.div`

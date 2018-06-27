@@ -10,6 +10,7 @@ import { TemperatureUnit } from '../../enums';
 import { StyledApp, Content } from './styles';
 
 import WeatherCard from '../WeatherCard';
+import News from '../News';
 
 export interface IState {
   contentVisible: boolean;
@@ -57,9 +58,17 @@ export default class App extends React.Component<{}, IState> {
       <StyledApp>
         {!contentVisible && <Preloader size={48} style={preloaderStyle} />}
         <Content visible={contentVisible}>
-          <WeatherCard data={weatherData} />
+          <News data={newsData} />
         </Content>
+        <a
+          href="https://newsapi.org/"
+          style={{ position: 'absolute', bottom: 0, color: 'rgba(0,0,0,0.54)' }}
+        >
+          Powered by News API
+        </a>
       </StyledApp>
     );
   }
 }
+
+// <WeatherCard data={weatherData} />
