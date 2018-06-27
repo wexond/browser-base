@@ -90,6 +90,12 @@ export default class WeatherCard extends React.Component<Props, State> {
     });
   };
 
+  onSliderChange = (index: any) => {
+    this.setState({
+      dailyForecastIndex: index,
+    });
+  };
+
   public render() {
     const { data } = this.props;
     const { dailyForecastIndex, forecastHeight } = this.state;
@@ -153,6 +159,7 @@ export default class WeatherCard extends React.Component<Props, State> {
                 </ExtraInfo>
               </ExtraInfoContainer>
               <Slider
+                onChange={this.onSliderChange}
                 type={SliderType.Discrete}
                 color="#000"
                 ticks={sliderTicks}
