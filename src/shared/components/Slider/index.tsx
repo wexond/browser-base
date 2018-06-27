@@ -43,7 +43,7 @@ export default class Slider extends React.Component<Props, State> {
   public static defaultProps = {
     color: colors.deepPurple['500'],
     type: SliderType.Continuous,
-    showTicksValues: false,
+    ticks: [1, 2],
     selectedTickColor: 'rgba(255, 255, 255, 0.38)',
   };
 
@@ -217,7 +217,7 @@ export default class Slider extends React.Component<Props, State> {
                     key={key}
                     color={tickIndex <= selectedTickIndex ? selectedTickColor : unselectedTickColor}
                   >
-                    {!ticksArray && tickValue != null && <TickValue>{data}</TickValue>}
+                    {!ticksArray && data != null && <TickValue>{tickValue}</TickValue>}
                   </Tick>
                 );
               })}

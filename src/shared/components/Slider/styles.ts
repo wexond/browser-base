@@ -10,7 +10,7 @@ import positioning from '../../mixins/positioning';
 import typography from '../../mixins/typography';
 
 export const StyledSlider = styled.div`
-  width: 256px;
+  width: 100%;
   height: 2px;
   position: relative;
   cursor: pointer;
@@ -130,6 +130,7 @@ export const TickValue = styled.div`
   position: relative;
   white-space: nowrap;
   font-size: 12px;
+  margin-top: 16px;
 
   ${positioning.center(Align.CenterHorizontal)};
   ${typography.robotoRegular()}
