@@ -83,13 +83,13 @@ export const ExtraInfoText = styled.div`
 `;
 
 export interface ForecastContainerProps {
-  expanded: boolean;
+  height: number;
 }
 
 export const ForecastContainer = styled.div`
   margin-top: 24px;
   overflow: hidden;
-  transition: 1s ${EASE_FUNCTION} max-height;
+  transition: 0.5s ${EASE_FUNCTION} height;
 
-  max-height: ${({ expanded }: ForecastContainerProps) => (expanded ? '300px' : '0px')};
+  height: ${({ height }: ForecastContainerProps) => height}px;
 `;
