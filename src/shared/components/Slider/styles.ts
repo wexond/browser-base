@@ -7,6 +7,7 @@ import { Align, SliderType } from '../../enums';
 import { EASE_FUNCTION } from '../../constants';
 
 import positioning from '../../mixins/positioning';
+import typography from '../../mixins/typography';
 
 export const StyledSlider = styled.div`
   width: 256px;
@@ -118,6 +119,33 @@ export interface TickProps {
 export const Tick = styled.div`
   width: 2px;
   height: 2px;
+  position: relative;
 
   background-color: ${({ color }: TickProps) => color};
+`;
+
+export interface TickLineProps {
+  color: string;
+}
+
+export const TickLine = styled.div`
+  width: 2px;
+  height: 12px;
+  position: relative;
+
+  ${positioning.center(Align.CenterVertical)};
+  background-color: ${({ color }: TickLineProps) => color};
+  opacity: 0.06;
+`;
+
+export const TickValue = styled.div`
+  width: 32px;
+  text-align: center;
+  position: relative;
+  white-space: nowrap;
+  font-size: 12px;
+
+  ${positioning.center(Align.CenterHorizontal)};
+  ${typography.robotoRegular()}
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 `;
