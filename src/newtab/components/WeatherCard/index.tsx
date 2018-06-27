@@ -4,7 +4,7 @@ import colors from '../../../shared/defaults/colors';
 import Button from '../../../shared/components/Button';
 import Slider from '../../../shared/components/Slider';
 import opacity from '../../../shared/defaults/opacity';
-import { TimeUnit, ButtonType } from '../../../shared/enums';
+import { TimeUnit, ButtonType, SliderType } from '../../../shared/enums';
 import { getTime, getDay } from '../../../shared/utils/time';
 
 import {
@@ -70,9 +70,7 @@ export default class WeatherCard extends React.Component<Props, State> {
       const currentDate = new Date();
       const daysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-      return `${getDay(daysShort, currentDate)}, ${getTime(date, timeUnit)} ${TimeUnit[
-        timeUnit
-      ].toUpperCase()}, ${description}`;
+      return `${getDay(daysShort, currentDate)}, ${getTime(date, timeUnit)}, ${description}`;
     }
 
     return null;
@@ -98,8 +96,8 @@ export default class WeatherCard extends React.Component<Props, State> {
 
     const expanded = forecastHeight > 0;
 
-    const current = data != null ? data.daily[dailyForecastIndex] : null;
-    const week = data != null ? data.week : null;
+    const current = data != null && data.daily[dailyForecastIndex];
+    const week = data != null && data.week;
 
     const city = this.getCity();
     const description = this.getDescription();
@@ -112,6 +110,19 @@ export default class WeatherCard extends React.Component<Props, State> {
       borderTop: '1px solid rgba(0,0,0,0.12)',
       marginTop: expanded ? 16 : 8,
     };
+
+    const sliderStyle = {
+      width: 'calc(100% - 64px)',
+      margin: '32px auto 0px auto',
+    };
+
+    const sliderTicks: any = {};
+
+    if (data != null) {
+      for (let i = 0; i < data.daily.length; i++) {
+        sliderTicks[`item${i}`] = getTime(data.daily[i].date, data.timeUnit, false);
+      }
+    }
 
     return (
       <Card>
@@ -141,6 +152,12 @@ export default class WeatherCard extends React.Component<Props, State> {
                   <ExtraInfoText>{current.windSpeed} Winds</ExtraInfoText>
                 </ExtraInfo>
               </ExtraInfoContainer>
+              <Slider
+                type={SliderType.Discrete}
+                color="#000"
+                ticks={sliderTicks}
+                style={sliderStyle}
+              />
               <ForecastContainer
                 innerRef={r => (this.forecastContainer = r)}
                 height={forecastHeight}
