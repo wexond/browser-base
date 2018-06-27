@@ -124,20 +124,6 @@ export const Tick = styled.div`
   background-color: ${({ color }: TickProps) => color};
 `;
 
-export interface TickLineProps {
-  color: string;
-}
-
-export const TickLine = styled.div`
-  width: 2px;
-  height: 12px;
-  position: relative;
-
-  ${positioning.center(Align.CenterVertical)};
-  background-color: ${({ color }: TickLineProps) => color};
-  opacity: 0.06;
-`;
-
 export const TickValue = styled.div`
   width: 32px;
   text-align: center;

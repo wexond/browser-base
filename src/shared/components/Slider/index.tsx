@@ -19,7 +19,6 @@ import {
   Thumb,
   TicksContainer,
   Tick,
-  TickLine,
   TickValue,
 } from './styles';
 
@@ -218,12 +217,7 @@ export default class Slider extends React.Component<Props, State> {
                     key={key}
                     color={tickIndex <= selectedTickIndex ? selectedTickColor : unselectedTickColor}
                   >
-                    {!ticksArray && (
-                      <React.Fragment>
-                        <TickLine color={color} />
-                        {tickValue != null && <TickValue>{data}</TickValue>}
-                      </React.Fragment>
-                    )}
+                    {!ticksArray && tickValue != null && <TickValue>{data}</TickValue>}
                   </Tick>
                 );
               })}
