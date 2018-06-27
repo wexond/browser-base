@@ -116,11 +116,11 @@ export default class WeatherCard extends React.Component<Props, State> {
       margin: '32px auto 0px auto',
     };
 
-    const sliderTicks: any = {};
+    const sliderTicks = [];
 
     if (data != null) {
       for (let i = 0; i < data.daily.length; i++) {
-        sliderTicks[`item${i}`] = getTime(data.daily[i].date, data.timeUnit, false);
+        sliderTicks.push(getTime(data.daily[i].date, data.timeUnit, false));
       }
     }
 
@@ -157,6 +157,7 @@ export default class WeatherCard extends React.Component<Props, State> {
                 color="#000"
                 ticks={sliderTicks}
                 style={sliderStyle}
+                showTicksLabels
               />
               <ForecastContainer
                 innerRef={r => (this.forecastContainer = r)}
