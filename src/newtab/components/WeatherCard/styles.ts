@@ -87,7 +87,7 @@ export interface ForecastContainerProps {
 }
 
 export const ForecastContainer = styled.div`
-  margin-top: 24px;
+  margin-top: 48px;
   overflow: hidden;
   transition: 0.5s ${EASE_FUNCTION} height;
 

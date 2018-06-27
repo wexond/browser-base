@@ -2,13 +2,15 @@ import { TimeUnit } from '../enums';
 
 export const getTimeWithZero = (time: number) => (time < 10 ? `0${time}` : time);
 
-export const getTime = (date?: Date, timeUnit: TimeUnit = TimeUnit.am) => {
+export const getTime = (date?: Date, timeUnit: TimeUnit = TimeUnit.am, minutes: boolean = true) => {
   if (date == null) date = new Date();
 
   let hours = date.getHours();
-  if (timeUnit === TimeUnit.pm) hours -= 12;
+  if (hours > 12 && timeUnit === TimeUnit.pm) hours -= 12;
 
-  return `${getTimeWithZero(hours)}:${getTimeWithZero(date.getMinutes())}`;
+  return `${getTimeWithZero(hours)}${minutes ? ':' : ''}${
+    minutes ? getTimeWithZero(date.getMinutes()) : ''
+  } ${TimeUnit[timeUnit].toUpperCase()}`;
 };
 
 export const getDay = (days: any, date: Date) => {

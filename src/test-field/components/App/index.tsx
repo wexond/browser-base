@@ -31,7 +31,11 @@ export default class App extends React.Component<{}, IState> {
     const ticks1 = [10, 20, 30];
 
     const ticks2: any = {
-      d1: null,
+      8: '8 AM',
+    };
+
+    /*
+          d1: null,
       '8 AM': 8,
       d2: null,
       '11 AM': 11,
@@ -42,7 +46,7 @@ export default class App extends React.Component<{}, IState> {
       d5: null,
       '8 PM': 20,
       d6: null,
-    };
+      */
 
     return (
       <StyledApp theme={theme}>
