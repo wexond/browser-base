@@ -24,3 +24,10 @@ export const requestURL = (url: string) =>
 
     request.end();
   });
+
+export const hasSubdomain = (url: string) => {
+  const regex = new RegExp(/^([a-z]+:\/{2})?([\w-]+\.[\w-]+\.\w+)$/);
+  return !!url.match(regex);
+};
+
+export const removeSubdomain = (url: string) => url.replace(/^[^.]+\./g, '');
