@@ -41,10 +41,6 @@ export const TemperatureIcon = styled.div`
   background-image: url(${({ src }: TemperatureIconProps) => src});
 `;
 
-export const ErrorContainer = styled.div`
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
-`;
-
 export const ExtraInfoContainer = styled.div`
   display: flex;
   padding-top: 16px;
