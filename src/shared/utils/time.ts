@@ -12,6 +12,6 @@ export const getActualTime = (timeUnit: TimeUnit = TimeUnit.am) => {
 };
 
 export const getDay = (days: any, date: Date) => {
-  const index = date.getDay() === 0 ? days.length - 1 : date.getDay();
+  const index = date.getDay() === 0 ? days.length - 1 : date.getDay() - 1;
   return days[index];
 };

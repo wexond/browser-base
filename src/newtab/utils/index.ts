@@ -81,6 +81,8 @@ export const requestWeatherForecast = async (
 
     let night = null;
 
+    console.log(json);
+
     for (let i = 0; i < json.list.length; i++) {
       const item = json.list[i];
       const date = new Date(item.dt * 1000);
