@@ -22,6 +22,8 @@ import {
   TickValue,
 } from './styles';
 
+export type SliderEvent = (value?: any, type?: SliderType, element?: Slider) => void;
+
 export interface Props {
   color?: string;
   type?: SliderType;
@@ -29,11 +31,13 @@ export interface Props {
   maxValue?: number;
   ticks?: any;
   style?: any;
+  showTicksLabels?: boolean;
   selectedTickColor?: string;
+  onChange?: SliderEvent;
 }
 
 export interface State {
-  trackWidth: string;
+  trackWidth: number;
   thumbAnimation: boolean;
   unselectedTickColor: string;
   selectedTickIndex: number;
@@ -44,11 +48,12 @@ export default class Slider extends React.Component<Props, State> {
     color: colors.deepPurple['500'],
     type: SliderType.Continuous,
     ticks: [1, 2],
+    showTicksLabels: false,
     selectedTickColor: 'rgba(255, 255, 255, 0.38)',
   };
 
   public state: State = {
-    trackWidth: '0%',
+    trackWidth: 0,
     thumbAnimation: false,
     unselectedTickColor: colors.deepPurple['500'],
     selectedTickIndex: 0,
@@ -82,12 +87,15 @@ export default class Slider extends React.Component<Props, State> {
 
     if (!this.isMouseDown) {
       if (type !== SliderType.Discrete) {
+        const percent = this.getPercent(clientX);
+
         this.setState({ thumbAnimation: true });
+        this.triggerEvent();
 
         setTimeout(() => {
           this.setState({
             thumbAnimation: false,
-            trackWidth: `${this.getPercent(clientX)}%`,
+            trackWidth: percent,
           });
         }, 150);
       } else {
@@ -101,8 +109,9 @@ export default class Slider extends React.Component<Props, State> {
 
             this.setState({
               selectedTickIndex: i - 1,
-              trackWidth: `${this.getPercent(tickRect.left)}%`,
+              trackWidth: this.getPercent(tickRect.left),
             });
+            this.triggerEvent();
 
             break;
           }
@@ -112,8 +121,9 @@ export default class Slider extends React.Component<Props, State> {
 
             this.setState({
               selectedTickIndex: i,
-              trackWidth: `${this.getPercent(tickRect.left)}%`,
+              trackWidth: this.getPercent(tickRect.left),
             });
+            this.triggerEvent();
           }
         }
       }
@@ -134,8 +144,9 @@ export default class Slider extends React.Component<Props, State> {
     if (this.isMouseDown) {
       if (type !== SliderType.Discrete) {
         this.setState({
-          trackWidth: `${this.getPercent(e.clientX)}%`,
+          trackWidth: this.getPercent(e.clientX),
         });
+        this.triggerEvent();
       } else {
         const gap = this.getGap();
 
@@ -152,8 +163,9 @@ export default class Slider extends React.Component<Props, State> {
           if (tickRect.left - gap / 2 <= e.clientX) {
             this.setState({
               selectedTickIndex: tickIndex,
-              trackWidth: `${this.getPercent(tickRect.left)}%`,
+              trackWidth: this.getPercent(tickRect.left),
             });
+            this.triggerEvent();
           }
         }
       }
@@ -173,24 +185,31 @@ export default class Slider extends React.Component<Props, State> {
 
   public getGap = () => this.inactiveTrack.clientWidth / (this.ticksList.length - 1);
 
-  public showTicksValues = () => {
-    const { ticks } = this.props;
-    return Object.prototype.toString.call(ticks) === '[object Object]';
+  public triggerEvent = () => {
+    const { type, onChange } = this.props;
+    const { trackWidth, selectedTickIndex } = this.state;
+
+    if (typeof onChange === 'function') {
+      if (type === SliderType.Continuous) {
+        onChange(trackWidth, type, this);
+      } else {
+        onChange(selectedTickIndex, type, this);
+      }
+    }
   };
 
   public render() {
     const {
-      color, ticks, style, type, selectedTickColor,
+      color, ticks, style, type, selectedTickColor, showTicksLabels,
     } = this.props;
 
     const {
       trackWidth, thumbAnimation, unselectedTickColor, selectedTickIndex,
     } = this.state;
 
-    const trackStyle = { width: trackWidth };
-    const thumbStyle = { left: trackWidth };
+    const trackStyle = { width: `${trackWidth}%` };
+    const thumbStyle = { left: `${trackWidth}%` };
 
-    const ticksArray = Object.prototype.toString.call(ticks) === '[object Array]';
     let tickIndex = 0;
     this.ticksList = [];
 
@@ -207,8 +226,7 @@ export default class Slider extends React.Component<Props, State> {
           <TicksContainer>
             {type === SliderType.Discrete
               && typeof ticks === 'object'
-              && (ticksArray ? ticks : Object.keys(ticks)).map((data: any, key: any) => {
-                const tickValue = !ticksArray && ticks[data];
+              && ticks.map((data: any, key: any) => {
                 tickIndex++;
 
                 return (
@@ -217,7 +235,7 @@ export default class Slider extends React.Component<Props, State> {
                     key={key}
                     color={tickIndex <= selectedTickIndex ? selectedTickColor : unselectedTickColor}
                   >
-                    {!ticksArray && data != null && <TickValue>{tickValue}</TickValue>}
+                    {showTicksLabels && data != null && <TickValue>{data}</TickValue>}
                   </Tick>
                 );
               })}
