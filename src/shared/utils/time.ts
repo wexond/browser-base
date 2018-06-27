@@ -19,16 +19,17 @@ export const getDay = (days: any, date: Date) => {
 };
 
 export const getTimeOffset = (date: Date) => {
-  date = new Date(2018, 5, 27, 23, 0, 0, 0);
-  const currentdate = new Date(2018, 5, 27, 23, 10, 0, 0);
+  const currentdate = new Date();
   const diff = new Date(currentdate.getTime() - date.getTime());
 
-  const hours = diff.getHours();
+  const hours = diff.getHours() - 1;
   const minutes = diff.getMinutes();
 
   if (hours === 0) {
+    if (minutes <= 1) return 'a minute ago';
     return `${minutes} minutes ago`;
   }
 
-  return '';
+  if (hours === 1) return 'an hour ago';
+  return `${hours} hours ago`;
 };

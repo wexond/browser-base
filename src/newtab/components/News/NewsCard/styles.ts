@@ -15,6 +15,7 @@ export const Title = styled.div`
 export const Info = styled.div`
   display: flex;
   align-content: center;
+
   margin-top: 8px;
   font-size: 13px;
 
@@ -28,6 +29,7 @@ export interface IconProps {
 export const Icon = styled.div`
   width: 18px;
   height: 18px;
+  display: flex;
 
   ${images.center('18px', 'auto')};
   background-image: url(${({ source }: IconProps) => source});
