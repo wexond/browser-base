@@ -2,12 +2,10 @@ import React from 'react';
 
 import { getTimeOffset } from '../../../../shared/utils/time';
 
-import {
-  Card, CardHeader, CardHeaderText, CardImage,
-} from '../../../../shared/components/Card';
+import { Card, CardHeader, CardImage } from '../../../../shared/components/Card';
 
 import {
-  Title, Info, Icon, Source,
+  CardHeaderText, Title, Info, Icon, Source,
 } from './styles';
 
 export interface Props {
@@ -20,7 +18,7 @@ export default class NewsCard extends React.Component<Props, {}> {
 
     return (
       <Card>
-        <CardHeader>
+        <CardHeader logo>
           <CardHeaderText>
             <Title>{data.title}</Title>
             <Info>
