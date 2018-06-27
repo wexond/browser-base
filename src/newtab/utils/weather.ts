@@ -168,6 +168,5 @@ export const getWeather = async (
 };
 
 /**
- * Conditions
- * https://openweathermap.org/weather-conditions
+ * Powered by openweathermap.org
  */
