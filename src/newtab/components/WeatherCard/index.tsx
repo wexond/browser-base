@@ -2,6 +2,7 @@ import React from 'react';
 
 import colors from '../../../shared/defaults/colors';
 import Button from '../../../shared/components/Button';
+import Slider from '../../../shared/components/Slider';
 import opacity from '../../../shared/defaults/opacity';
 import { TimeUnit, ButtonType } from '../../../shared/enums';
 import { getActualTime, getDay } from '../../../shared/utils/time';
@@ -40,13 +41,15 @@ export interface Props {
 }
 
 export interface State {
-  expanded: boolean;
+  forecastHeight: number;
 }
 
 export default class WeatherCard extends React.Component<Props, State> {
   public state: State = {
-    expanded: false,
+    forecastHeight: 0,
   };
+
+  public forecastContainer: HTMLDivElement;
 
   getCity = () => {
     const { data } = this.props;
@@ -77,16 +80,18 @@ export default class WeatherCard extends React.Component<Props, State> {
   };
 
   onExpandButtonClick = () => {
-    const { expanded } = this.state;
+    const { forecastHeight } = this.state;
+    const expanded = forecastHeight > 0;
 
     this.setState({
-      expanded: !expanded,
+      forecastHeight: expanded ? 0 : this.forecastContainer.scrollHeight,
     });
   };
 
   public render() {
     const { data } = this.props;
-    const { expanded } = this.state;
+    const { forecastHeight } = this.state;
+    const expanded = forecastHeight > 0;
 
     const current = data != null ? data.daily.current : null;
     const week = data != null ? data.week : null;
@@ -131,7 +136,10 @@ export default class WeatherCard extends React.Component<Props, State> {
                   <ExtraInfoText>{current.windSpeed} Winds</ExtraInfoText>
                 </ExtraInfo>
               </ExtraInfoContainer>
-              <ForecastContainer expanded={expanded}>
+              <ForecastContainer
+                innerRef={r => (this.forecastContainer = r)}
+                height={forecastHeight}
+              >
                 {data.week.map((day: any, key: any) => {
                   const dayName = this.getDayName(day.date);
                   return <ForecastItem data={day} dayName={dayName} key={key} />;
