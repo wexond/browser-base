@@ -1,4 +1,4 @@
-import { requestURL } from '../../shared/utils/network';
+import { requestURL, hasSubdomain, removeSubdomain } from '../../shared/utils/network';
 import { NEWS_API_KEY } from '../../shared/constants';
 import { Countries, NewsCategories } from '../../shared/enums';
 
@@ -6,7 +6,6 @@ export const getNews = async (
   country: Countries,
   category: NewsCategories = NewsCategories.General,
   newsCount: number = 20,
-  onlyWithThumbnail: boolean = true,
   apiKey: string = NEWS_API_KEY,
 ) => {
   try {
@@ -20,10 +19,25 @@ export const getNews = async (
     if (json.status === 'ok') {
       const news = [];
 
-      return json;
+      for (let i = 0; i < json.articles.length; i++) {
+        const item = json.articles[i];
+
+        if (item.urlToImage != null) {
+          const sourceUrl = item.source.name;
+
+          if (hasSubdomain(sourceUrl)) {
+            item.source.name = removeSubdomain(sourceUrl);
+          }
+
+          item.icon = `https://www.google.com/s2/favicons?domain=${item.url}`;
+          news.push(item);
+        }
+      }
+
+      return news;
     }
 
-    console.log(json); // eslint-disable-line no-console
+    console.error(json); // eslint-disable-line no-console
     return null;
   } catch (e) {
     console.error(e); // eslint-disable-line no-console

@@ -17,3 +17,18 @@ export const getDay = (days: any, date: Date) => {
   const index = date.getDay() === 0 ? days.length - 1 : date.getDay() - 1;
   return days[index];
 };
+
+export const getTimeOffset = (date: Date) => {
+  date = new Date(2018, 5, 27, 23, 0, 0, 0);
+  const currentdate = new Date(2018, 5, 27, 23, 10, 0, 0);
+  const diff = new Date(currentdate.getTime() - date.getTime());
+
+  const hours = diff.getHours();
+  const minutes = diff.getMinutes();
+
+  if (hours === 0) {
+    return `${minutes} minutes ago`;
+  }
+
+  return '';
+};

@@ -31,6 +31,14 @@ const robotoMedium = () => `
   font-weight: 500;
 `;
 
+const maxLines = (count: number) => `
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: ${count};
+  -webkit-box-orient: vertical;
+`;
+
 export default {
   body1,
   body2,
@@ -38,4 +46,5 @@ export default {
   robotoLight,
   robotoRegular,
   robotoMedium,
+  maxLines,
 };
