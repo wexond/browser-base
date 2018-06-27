@@ -27,17 +27,17 @@ export default class App extends React.Component<{}, IState> {
   }
 
   async loadData() {
-    const weatherData = await getWeather(
+    /* const weatherData = await getWeather(
       'opole',
       Languages.en,
       TemperatureUnit.Celsius,
       TimeUnit.am,
-    );
+    ); */
 
     const newsData = await getNews(Countries.pl);
 
     this.setState({
-      weatherData,
+      // weatherData,
       newsData,
       contentVisible: true,
     });
