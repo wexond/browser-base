@@ -9,13 +9,14 @@ export const Title = styled.div`
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
 
   ${typography.robotoRegular()};
-  ${typography.maxLines(3, 19)};
+  ${typography.maxLines(3)};
 `;
 
 export const Info = styled.div`
   display: flex;
   align-content: center;
   align-self: flex-end;
+  margin-top: 8px;
   font-size: 13px;
 
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
