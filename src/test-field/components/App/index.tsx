@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import React from 'react';
 
 import colors from '../../../shared/defaults/colors';
@@ -24,35 +26,38 @@ export default class App extends React.Component<{}, IState> {
     });
   };
 
+  public onSliderChange = (value: any, type: SliderType, element: Slider) => {
+    if (type === SliderType.Continuous) {
+      console.log(Math.round(value));
+    } else {
+      console.log(value);
+    }
+  };
+
   public render() {
     const { darkTheme } = this.state;
     const theme: UITheme = darkTheme ? UITheme.Dark : UITheme.Light;
 
     const ticks1 = [10, 20, 30];
 
-    const ticks2: any = {
-      8: '8 AM',
-    };
-
-    /*
-          d1: null,
-      '8 AM': 8,
-      d2: null,
-      '11 AM': 11,
-      d3: null,
-      '2 PM': 14,
-      d4: null,
-      '5 PM': 17,
-      d5: null,
-      '8 PM': 20,
-      d6: null,
-      */
+    const ticks2: any = [null, 'A', null, 'B', null, 'C', null, 'D', null];
 
     return (
       <StyledApp theme={theme}>
-        <Slider minValue={0} maxValue={100} />
-        <Slider ticks={ticks1} type={SliderType.Discrete} style={{ marginTop: 64 }} />
-        <Slider ticks={ticks2} type={SliderType.Discrete} style={{ marginTop: 64 }} />
+        <Slider onChange={this.onSliderChange} minValue={0} maxValue={100} />
+        <Slider
+          onChange={this.onSliderChange}
+          ticks={ticks1}
+          type={SliderType.Discrete}
+          style={{ marginTop: 64 }}
+        />
+        <Slider
+          onChange={this.onSliderChange}
+          ticks={ticks2}
+          type={SliderType.Discrete}
+          style={{ marginTop: 64 }}
+          showTicksLabels
+        />
       </StyledApp>
     );
   }
