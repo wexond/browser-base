@@ -5,7 +5,7 @@ import { Countries, NewsCategories } from '../../shared/enums';
 export const getNews = async (
   country: Countries,
   category: NewsCategories = NewsCategories.General,
-  newsCount: number = 20,
+  newsCount: number = 100,
   apiKey: string = NEWS_API_KEY,
 ) => {
   try {

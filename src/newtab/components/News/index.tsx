@@ -15,10 +15,7 @@ export default class News extends React.Component<Props, {}> {
     return (
       <StyledNews>
         {data != null
-          && data.map((news: any, key: any) => {
-            const x = 5;
-            return <NewsCard data={news} key={key} />;
-          })}
+          && data.map((news: any, key: any) => <NewsCard data={news} key={key} />)}
       </StyledNews>
     );
   }

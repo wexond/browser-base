@@ -8,7 +8,7 @@ import { TimeUnit, Languages, Countries } from '../../../shared/enums';
 import { TemperatureUnit } from '../../enums';
 
 import {
-  StyledApp, Content, CardsContainer, Credits,
+  StyledApp, Content, CardsContainer, Credits, Column,
 } from './styles';
 
 import WeatherCard from '../WeatherCard';
@@ -23,6 +23,7 @@ export interface IState {
 export default class App extends React.Component<{}, IState> {
   public state: IState = {
     contentVisible: false,
+    newsData: [],
   };
 
   componentDidMount() {
@@ -34,7 +35,7 @@ export default class App extends React.Component<{}, IState> {
       'opole',
       Languages.en,
       TemperatureUnit.Celsius,
-      TimeUnit.am,
+      TimeUnit.pm,
     );
 
     const newsData = await getNews(Countries.pl);
@@ -56,14 +57,26 @@ export default class App extends React.Component<{}, IState> {
       transform: 'translate(-50%, -50%)',
     };
 
+    const items = newsData.length / 3;
+
+    const column1 = newsData.slice(1, items);
+    const column2 = newsData.slice(items, items * 2);
+    const column3 = newsData.slice(items * 2, items * 3);
+
     return (
       <StyledApp>
         {!contentVisible && <Preloader size={48} style={preloaderStyle} />}
         <Content visible={contentVisible}>
-          <CardsContainer>
+          <Column>
             <WeatherCard data={weatherData} />
-          </CardsContainer>
-          <News data={newsData} />
+            <News data={column1} />
+          </Column>
+          <Column>
+            <News data={column2} />
+          </Column>
+          <Column>
+            <News data={column3} />
+          </Column>
         </Content>
         <Credits>
           APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and{' '}

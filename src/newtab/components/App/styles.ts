@@ -16,9 +16,11 @@ export interface ContentProps {
 export const Content = styled.div`
   display: flex;
   justify-content: center;
+  flex-flow: row;
   position: relative;
   padding-top: 24px;
   background-color: #f5f5f5;
+  flex-wrap: wrap;
 
   opacity: ${({ visible }: ContentProps) => (visible ? 1 : 0)};
 `;
@@ -37,4 +39,15 @@ export const Credits = styled.div`
   font-size: 12px;
 
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+`;
+
+export const Column = styled.div`
+  display: flex;
+  flex-flow: column;
+  margin-right: 32px;
+  align-items: flex-start;
+
+  &:last-child {
+    margin-right: 0px;
+  }
 `;
