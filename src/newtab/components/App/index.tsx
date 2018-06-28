@@ -4,8 +4,9 @@ import Preloader from '../../../shared/components/Preloader';
 
 import { getWeather } from '../../utils/weather';
 import { getNews } from '../../utils/news';
-import { TimeUnit, Languages, Countries } from '../../../shared/enums';
-import { TemperatureUnit } from '../../enums';
+import {
+  TimeUnit, TemperatureUnit, Languages, Countries,
+} from '../../../shared/enums';
 
 import {
   StyledApp, Content, CardsContainer, Credits, Column,
@@ -35,7 +36,7 @@ export default class App extends React.Component<{}, IState> {
       'opole',
       Languages.en,
       TemperatureUnit.Celsius,
-      TimeUnit.pm,
+      TimeUnit.TwentyFourHours,
     );
 
     const newsData = await getNews(Countries.pl);

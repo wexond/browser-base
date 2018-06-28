@@ -2,15 +2,31 @@ import { TimeUnit } from '../enums';
 
 export const getTimeWithZero = (time: number) => (time < 10 ? `0${time}` : time);
 
-export const getTime = (date?: Date, timeUnit: TimeUnit = TimeUnit.am, minutes: boolean = true) => {
+export const getTimePeriod = (hours: number, timeUnit: TimeUnit) => {
+  if (timeUnit === TimeUnit.TwelveHours) {
+    return hours > 12 ? ' PM' : ' AM';
+  }
+  return '';
+};
+
+export const getTime = (
+  date?: Date,
+  timeUnit: TimeUnit = TimeUnit.TwentyFourHours,
+  minutes: boolean = true,
+) => {
   if (date == null) date = new Date();
 
   let hours = date.getHours();
-  if (hours > 12 && timeUnit === TimeUnit.pm) hours -= 12;
+  const timePeriod = getTimePeriod(hours, timeUnit);
 
-  return `${getTimeWithZero(hours)}${minutes ? ':' : ''}${
-    minutes ? getTimeWithZero(date.getMinutes()) : ''
-  } ${TimeUnit[timeUnit].toUpperCase()}`;
+  if (timeUnit === TimeUnit.TwelveHours && hours > 12) {
+    hours -= 12;
+  }
+
+  const _hours = getTimeWithZero(hours);
+  const _minutes = minutes ? getTimeWithZero(date.getMinutes()) : '';
+
+  return `${_hours}${minutes ? ':' : ''}${_minutes}${timePeriod}`;
 };
 
 export const getDay = (days: any, date: Date) => {
