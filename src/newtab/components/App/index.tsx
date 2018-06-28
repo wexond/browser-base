@@ -7,7 +7,9 @@ import { getNews } from '../../utils/news';
 import { TimeUnit, Languages, Countries } from '../../../shared/enums';
 import { TemperatureUnit } from '../../enums';
 
-import { StyledApp, Content, CardsContainer } from './styles';
+import {
+  StyledApp, Content, CardsContainer, Credits,
+} from './styles';
 
 import WeatherCard from '../WeatherCard';
 import News from '../News';
@@ -63,6 +65,10 @@ export default class App extends React.Component<{}, IState> {
           </CardsContainer>
           <News data={newsData} />
         </Content>
+        <Credits>
+          APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and{' '}
+          <a href="https://newsapi.org/">News API</a>
+        </Credits>
       </StyledApp>
     );
   }
