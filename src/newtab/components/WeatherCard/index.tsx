@@ -2,9 +2,10 @@ import React from 'react';
 
 import colors from '../../../shared/defaults/colors';
 import Button from '../../../shared/components/Button';
+import Slider from '../../../shared/components/Slider';
 import opacity from '../../../shared/defaults/opacity';
-import { TimeUnit, ButtonType } from '../../../shared/enums';
-import { getActualTime, getDay } from '../../../shared/utils/time';
+import { TimeUnit, ButtonType, SliderType } from '../../../shared/enums';
+import { getTime, getDay } from '../../../shared/utils/time';
 
 import {
   Card,
@@ -22,7 +23,6 @@ import {
   InfoContainer,
   TemperatureDeg,
   TemperatureIcon,
-  ErrorContainer,
   ExtraInfoContainer,
   ExtraInfo,
   ExtraInfoIcon,
@@ -40,13 +40,17 @@ export interface Props {
 }
 
 export interface State {
-  expanded: boolean;
+  dailyForecastIndex: number;
+  forecastHeight: number;
 }
 
 export default class WeatherCard extends React.Component<Props, State> {
   public state: State = {
-    expanded: false,
+    dailyForecastIndex: 0,
+    forecastHeight: 0,
   };
+
+  public forecastContainer: HTMLDivElement;
 
   getCity = () => {
     const { data } = this.props;
@@ -54,18 +58,18 @@ export default class WeatherCard extends React.Component<Props, State> {
   };
 
   getDescription = () => {
+    const { dailyForecastIndex } = this.state;
     const { data } = this.props;
 
     if (data != null) {
       const { timeUnit, daily } = data;
-      const { description } = daily.current;
 
-      const date = new Date();
+      const { description, date } = daily[dailyForecastIndex];
+
+      const currentDate = new Date();
       const daysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-      return `${getDay(daysShort, date)}, ${getActualTime(timeUnit)} ${TimeUnit[
-        timeUnit
-      ].toUpperCase()}, ${description}`;
+      return `${getDay(daysShort, currentDate)}, ${getTime(date, timeUnit)}, ${description}`;
     }
 
     return null;
@@ -77,19 +81,28 @@ export default class WeatherCard extends React.Component<Props, State> {
   };
 
   onExpandButtonClick = () => {
-    const { expanded } = this.state;
+    const { forecastHeight } = this.state;
+    const expanded = forecastHeight > 0;
 
     this.setState({
-      expanded: !expanded,
+      forecastHeight: expanded ? 0 : this.forecastContainer.scrollHeight,
+    });
+  };
+
+  onSliderChange = (index: any) => {
+    this.setState({
+      dailyForecastIndex: index,
     });
   };
 
   public render() {
     const { data } = this.props;
-    const { expanded } = this.state;
+    const { dailyForecastIndex, forecastHeight } = this.state;
 
-    const current = data != null ? data.daily.current : null;
-    const week = data != null ? data.week : null;
+    const expanded = forecastHeight > 0;
+
+    const current = data != null && data.daily[dailyForecastIndex];
+    const week = data != null && data.week;
 
     const city = this.getCity();
     const description = this.getDescription();
@@ -103,12 +116,29 @@ export default class WeatherCard extends React.Component<Props, State> {
       marginTop: expanded ? 16 : 8,
     };
 
+    const sliderStyle = {
+      width: 'calc(100% - 64px)',
+      margin: '32px auto 0px auto',
+    };
+
+    const sliderTicks = [];
+
+    if (data != null) {
+      for (let i = 0; i < data.daily.length; i++) {
+        sliderTicks.push(getTime(data.daily[i].date, data.timeUnit, false));
+      }
+    }
+
     return (
-      <Card>
+      <Card className="weather-card">
         <CardHeader>
           <CardHeaderText>
             <CardTitle large>{city}</CardTitle>
-            <CardSecondaryText largeTop>{description}</CardSecondaryText>
+            <CardSecondaryText largeTop>
+              {data != null && description}
+              {data == null
+                && 'Check your internet connection or your settings. City name is probably incorrect.'}
+            </CardSecondaryText>
           </CardHeaderText>
         </CardHeader>
         <CardContent>
@@ -131,7 +161,18 @@ export default class WeatherCard extends React.Component<Props, State> {
                   <ExtraInfoText>{current.windSpeed} Winds</ExtraInfoText>
                 </ExtraInfo>
               </ExtraInfoContainer>
-              <ForecastContainer expanded={expanded}>
+              <Slider
+                onChange={this.onSliderChange}
+                type={SliderType.Discrete}
+                color="#000"
+                ticks={sliderTicks}
+                style={sliderStyle}
+                showTicksLabels
+              />
+              <ForecastContainer
+                innerRef={r => (this.forecastContainer = r)}
+                height={forecastHeight}
+              >
                 {data.week.map((day: any, key: any) => {
                   const dayName = this.getDayName(day.date);
                   return <ForecastItem data={day} dayName={dayName} key={key} />;
@@ -148,11 +189,6 @@ export default class WeatherCard extends React.Component<Props, State> {
                 </Button>
               </CardActions>
             </React.Fragment>
-          )}
-          {data == null && (
-            <ErrorContainer>
-              Check your internet connection or your settings. City name is probably incorrect.
-            </ErrorContainer>
           )}
         </CardContent>
       </Card>

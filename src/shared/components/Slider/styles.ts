@@ -3,12 +3,14 @@ import styled, { StyledComponentClass, css } from 'styled-components';
 
 import opacity from '../../defaults/opacity';
 
-import { Align } from '../../enums';
+import { Align, SliderType } from '../../enums';
+import { EASE_FUNCTION } from '../../constants';
 
 import positioning from '../../mixins/positioning';
+import typography from '../../mixins/typography';
 
 export const StyledSlider = styled.div`
-  width: 256px;
+  width: 100%;
   height: 2px;
   position: relative;
   cursor: pointer;
@@ -24,9 +26,10 @@ export const trackStyle = `
 export interface TrackProps {
   color: string;
   thumbAnimation?: boolean;
+  type?: SliderType;
 }
 
-export const UnderTrack = styled.div`
+export const InactiveTrack = styled.div`
   width: 100%;
 
   ${trackStyle}
@@ -34,14 +37,20 @@ export const UnderTrack = styled.div`
   background-color: ${({ color }: TrackProps) => color};
 `;
 
-export const Track = styled.div`
+export const ActiveTrack = styled.div`
   width: 50%;
   transition: 0.2s opacity;
 
   ${trackStyle}
   background-color: ${({ color }: TrackProps) => color};
   opacity: ${({ thumbAnimation }) => (thumbAnimation ? 0 : 1)};
+  transition: ${({ type }) =>
+    (type === SliderType.Discrete ? `0.15s width ${EASE_FUNCTION}` : 'unset')};
 `;
+
+export interface ThumbContainerProps {
+  type: SliderType;
+}
 
 export const ThumbContainer = styled.div`
   width: 32px;
@@ -51,6 +60,9 @@ export const ThumbContainer = styled.div`
   transform: translateX(-50%) translateY(-50%);
   position: relative;
   cursor: pointer;
+
+  transition: ${({ type }: ThumbContainerProps) =>
+    (type === SliderType.Discrete ? `0.15s left ${EASE_FUNCTION}` : 'unset')};
 
   &:hover .thumb-hover {
     width: 32px;
@@ -88,4 +100,39 @@ export const Thumb = styled.div`
   background-color: ${({ color }: ThumbProps) => color};
   width: ${({ thumbAnimation }) => (thumbAnimation ? 0 : 12)}px;
   height: ${({ thumbAnimation }) => (thumbAnimation ? 0 : 12)}px;
+`;
+
+export const TicksContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export interface TickProps {
+  color: string;
+}
+
+export const Tick = styled.div`
+  width: 2px;
+  height: 2px;
+  position: relative;
+
+  background-color: ${({ color }: TickProps) => color};
+`;
+
+export const TickValue = styled.div`
+  width: 32px;
+  text-align: center;
+  position: relative;
+  white-space: nowrap;
+  font-size: 12px;
+  margin-top: 16px;
+
+  ${positioning.center(Align.CenterHorizontal)};
+  ${typography.robotoRegular()}
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 `;
