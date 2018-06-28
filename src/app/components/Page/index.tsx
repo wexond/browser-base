@@ -38,6 +38,8 @@ export default class extends React.Component<Props, {}> {
     this.webview.addEventListener('load-commit', this.onLoadCommit);
     this.webview.addEventListener('page-favicon-updated', this.onPageFaviconUpdated);
     this.webview.addEventListener('dom-ready', this.onDomReady);
+    this.webview.addEventListener('enter-html-full-screen', this.onFullScreenEnter);
+    this.webview.addEventListener('leave-html-full-screen', this.onFullScreenLeave);
   }
 
   public componentWillUnmount() {
@@ -48,6 +50,9 @@ export default class extends React.Component<Props, {}> {
     this.webview.removeEventListener('page-title-updated', this.onPageTitleUpdated);
     this.webview.removeEventListener('load-commit', this.onLoadCommit);
     this.webview.removeEventListener('page-favicon-updated', this.onPageFaviconUpdated);
+    this.webview.removeEventListener('enter-html-full-screen', this.onFullScreenEnter);
+    this.webview.removeEventListener('leave-html-full-screen', this.onFullScreenLeave);
+    Store.isFullscreen = false;
   }
 
   public onContextMenu = (e: Electron.Event, params: Electron.ContextMenuParams) => {
@@ -170,6 +175,14 @@ export default class extends React.Component<Props, {}> {
     this.updateData();
   };
 
+  public onFullScreenEnter = () => {
+    Store.isFullscreen = true;
+  };
+
+  public onFullScreenLeave = () => {
+    Store.isFullscreen = false;
+  };
+
   public render() {
     const { page, selected } = this.props;
     const { url } = page;
@@ -184,6 +197,7 @@ export default class extends React.Component<Props, {}> {
             this.webview = r;
           }}
           preload={`file://${resolve(BASE_PATH, 'src/app/preloads/index.js')}`}
+          allowFullScreen
         />
       </StyledPage>
     );
