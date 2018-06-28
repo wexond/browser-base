@@ -16,3 +16,7 @@ export const WINDOWS_BUTTON_WIDTH = 45;
 export const MENU_WIDTH = 300;
 export const MENU_SPACE = 96;
 export const MENU_CONTENT_MAX_WIDTH = 640;
+
+// Workspaces
+export const WORKSPACE_FOLDER_SIZE = 96;
+export const WORKSPACE_ICON_SIZE = 16;
