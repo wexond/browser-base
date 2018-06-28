@@ -94,6 +94,9 @@ export default class extends React.Component<TabProps, {}> {
     e.stopPropagation();
 
     const tabIndex = workspace.tabs.indexOf(tab);
+    const page = Store.getPageById(tab.id);
+
+    Store.pages.splice(Store.pages.indexOf(page), 1);
 
     if (selected) {
       if (tabIndex + 1 < workspace.tabs.length && !workspace.tabs[tabIndex + 1].isRemoving) {
