@@ -11,11 +11,15 @@ import { StyledApp } from './styles';
 
 export interface IState {
   darkTheme: boolean;
+  ticks1: any;
+  ticks2: any;
 }
 
 export default class App extends React.Component<{}, IState> {
   public state: IState = {
     darkTheme: false,
+    ticks1: [10, 20, 30],
+    ticks2: [null, 'A', null, 'B', null, 'C', null, 'D', null],
   };
 
   onChange = (e: any) => {
@@ -30,17 +34,13 @@ export default class App extends React.Component<{}, IState> {
     if (type === SliderType.Continuous) {
       console.log(Math.round(value));
     } else {
-      console.log(value);
+      console.log(`Index: ${value}, Value: ${element.props.ticks[value]}`);
     }
   };
 
   public render() {
-    const { darkTheme } = this.state;
+    const { darkTheme, ticks1, ticks2 } = this.state;
     const theme: UITheme = darkTheme ? UITheme.Dark : UITheme.Light;
-
-    const ticks1 = [10, 20, 30];
-
-    const ticks2: any = [null, 'A', null, 'B', null, 'C', null, 'D', null];
 
     return (
       <StyledApp theme={theme}>
