@@ -111,8 +111,8 @@ export enum NewsCategories {
 }
 
 export enum TimeUnit {
-  am,
-  pm,
+  TwentyFourHours,
+  TwelveHours,
 }
 
 export enum UITheme {
@@ -129,4 +129,10 @@ export enum ButtonType {
 export enum SliderType {
   Continuous,
   Discrete,
+}
+
+export enum TemperatureUnit {
+  Celsius = 'C',
+  Fahrenheit = 'F',
+  Kelvin = 'K',
 }
