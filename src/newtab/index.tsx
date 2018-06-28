@@ -44,6 +44,7 @@ injectGlobal`
 
   a {
     text-decoration: none;
+    color: unset;
   }
 
   @keyframes nersent-ui-preloader-rotate {

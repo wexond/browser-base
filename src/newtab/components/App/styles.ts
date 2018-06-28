@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import images from '../../../shared/mixins/images';
 import typography from '../../../shared/mixins/typography';
+import opacity from '../../../shared/defaults/opacity';
 
 export const StyledApp = styled.div`
   width: 100%;
@@ -27,4 +28,13 @@ export const CardsContainer = styled.div`
     position: sticky;
     top: 24px;
   }
+`;
+
+export const Credits = styled.div`
+  position: fixed;
+  bottom: 8px;
+  left: 8px;
+  font-size: 12px;
+
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 `;
