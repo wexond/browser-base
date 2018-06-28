@@ -255,10 +255,6 @@ process.on('message', data => {
 
     process.send(`Overall time: ${performance.now() - t0}`);
 
-    process.send(virtualNodes.length);
-
-    process.send({ s: verified });
-
     if (verified.length > 0) process.send(verified);
   }
 });
