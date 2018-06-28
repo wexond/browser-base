@@ -1,14 +1,21 @@
 import styled from 'styled-components';
 import { TOOLBAR_HEIGHT } from '../../constants';
+import { EASE_FUNCTION } from '../../../shared/constants';
+
+export interface StyledToolbarProps {
+  isFullscreen: boolean;
+}
 
 export const StyledToolbar = styled.div`
   position: relative;
   z-index: 100;
   display: flex;
-
   background-color: #fff;
   color: rgba(0, 0, 0, 0.8);
+
   height: ${TOOLBAR_HEIGHT}px;
+  transition: 0.2s margin-top ${EASE_FUNCTION};
+  margin-top: ${({ isFullscreen }: StyledToolbarProps) => (isFullscreen ? -TOOLBAR_HEIGHT : 0)}px;
 `;
 
 export const Handle = styled.div`
