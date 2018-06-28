@@ -10,7 +10,6 @@ import { getTime, getDay } from '../../../shared/utils/time';
 import {
   Card,
   CardHeader,
-  CardHeaderText,
   CardTitle,
   CardSecondaryText,
   CardContent,
@@ -132,14 +131,12 @@ export default class WeatherCard extends React.Component<Props, State> {
     return (
       <Card>
         <CardHeader>
-          <CardHeaderText>
-            <CardTitle large>{city}</CardTitle>
-            <CardSecondaryText largeTop>
-              {data != null && description}
-              {data == null
-                && 'Check your internet connection or your settings. City name is probably incorrect.'}
-            </CardSecondaryText>
-          </CardHeaderText>
+          <CardTitle large>{city}</CardTitle>
+          <CardSecondaryText largeTop>
+            {data != null && description}
+            {data == null
+              && 'Check your internet connection or your settings. City name is probably incorrect.'}
+          </CardSecondaryText>
         </CardHeader>
         <CardContent>
           {data != null && (
