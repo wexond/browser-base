@@ -42,8 +42,8 @@ export interface HeaderProps {
 
 export const CardHeader = styled.div`
   display: flex;
-
-  justify-content: ${({ logo }: HeaderProps) => (!logo ? 'space-between' : 'unset')};
+  flex-flow: column;
+  padding: 16px;
 `;
 
 export interface LogoProps {
@@ -77,10 +77,6 @@ export const CardImage = styled.div`
   ${images.cover()}
   background-image: url(${({ src }: ImageProps) => src});
   opacity: ${({ visible }) => getCardImageOpacity(visible)};
-`;
-
-export const CardHeaderText = styled.div`
-  padding: 16px;
 `;
 
 export interface TitleProps {

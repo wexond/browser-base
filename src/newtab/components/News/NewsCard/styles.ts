@@ -40,13 +40,6 @@ export const Source = styled.div`
   font-size: 12px;
 `;
 
-export const CardHeaderText = styled.div`
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  flex-flow: row wrap;
-`;
-
 export const SecondaryText = styled.div`
   font-size: 14px;
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
