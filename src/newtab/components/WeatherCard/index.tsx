@@ -130,7 +130,7 @@ export default class WeatherCard extends React.Component<Props, State> {
     }
 
     return (
-      <Card className="weather-card">
+      <Card>
         <CardHeader>
           <CardHeaderText>
             <CardTitle large>{city}</CardTitle>
