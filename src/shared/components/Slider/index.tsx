@@ -87,15 +87,15 @@ export default class Slider extends React.Component<Props, State> {
 
     if (!this.isMouseDown) {
       if (type !== SliderType.Discrete) {
-        const percent = this.getPercent(clientX);
+        const width = this.getPercent(clientX);
 
         this.setState({ thumbAnimation: true });
-        this.triggerEvent();
+        this.triggerEvent(width);
 
         setTimeout(() => {
           this.setState({
             thumbAnimation: false,
-            trackWidth: percent,
+            trackWidth: width,
           });
         }, 150);
       } else {
@@ -111,8 +111,8 @@ export default class Slider extends React.Component<Props, State> {
               selectedTickIndex: i - 1,
               trackWidth: this.getPercent(tickRect.left),
             });
-            this.triggerEvent();
 
+            this.triggerEvent(i - 1);
             break;
           }
 
@@ -123,7 +123,9 @@ export default class Slider extends React.Component<Props, State> {
               selectedTickIndex: i,
               trackWidth: this.getPercent(tickRect.left),
             });
-            this.triggerEvent();
+
+            this.triggerEvent(i);
+            break;
           }
         }
       }
@@ -143,10 +145,10 @@ export default class Slider extends React.Component<Props, State> {
 
     if (this.isMouseDown) {
       if (type !== SliderType.Discrete) {
-        this.setState({
-          trackWidth: this.getPercent(e.clientX),
-        });
-        this.triggerEvent();
+        const width = this.getPercent(e.clientX);
+
+        this.setState({ trackWidth: width });
+        this.triggerEvent(width);
       } else {
         const gap = this.getGap();
 
@@ -165,7 +167,8 @@ export default class Slider extends React.Component<Props, State> {
               selectedTickIndex: tickIndex,
               trackWidth: this.getPercent(tickRect.left),
             });
-            this.triggerEvent();
+
+            this.triggerEvent(tickIndex);
           }
         }
       }
@@ -185,15 +188,14 @@ export default class Slider extends React.Component<Props, State> {
 
   public getGap = () => this.inactiveTrack.clientWidth / (this.ticksList.length - 1);
 
-  public triggerEvent = () => {
+  public triggerEvent = (value: any) => {
     const { type, onChange } = this.props;
-    const { trackWidth, selectedTickIndex } = this.state;
 
     if (typeof onChange === 'function') {
       if (type === SliderType.Continuous) {
-        onChange(trackWidth, type, this);
+        onChange(value, type, this);
       } else {
-        onChange(selectedTickIndex, type, this);
+        onChange(value, type, this);
       }
     }
   };

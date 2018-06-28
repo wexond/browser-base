@@ -23,8 +23,6 @@ export const Content = styled.div`
 `;
 
 export const CardsContainer = styled.div`
-  width: 334px;
-
   & .weather-card {
     position: sticky;
     top: 24px;
