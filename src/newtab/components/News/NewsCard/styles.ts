@@ -1,12 +1,13 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import images from '../../../../shared/mixins/images';
 import opacity from '../../../../shared/defaults/opacity';
 import typography from '../../../../shared/mixins/typography';
 
 export const Title = styled.div`
-  font-size: 16px;
+  font-size: 20px;
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
+  margin-top: 16px;
 
   ${typography.robotoRegular()};
   ${typography.maxLines(3)};
@@ -15,11 +16,8 @@ export const Title = styled.div`
 export const Info = styled.div`
   display: flex;
   align-content: center;
-  align-self: flex-end;
-  margin-top: 8px;
-  font-size: 13px;
-
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  width: 100%;
+  margin-bottom: 16px;
 `;
 
 export interface IconProps {
@@ -39,6 +37,7 @@ export const Icon = styled.div`
 
 export const Source = styled.div`
   margin-left: 8px;
+  font-size: 12px;
 `;
 
 export const CardHeaderText = styled.div`
@@ -46,4 +45,37 @@ export const CardHeaderText = styled.div`
   display: flex;
   flex-direction: column;
   flex-flow: row wrap;
+`;
+
+export const SecondaryText = styled.div`
+  font-size: 14px;
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  margin-top: 12px;
+`;
+
+export const CardImage = styled.div`
+  width: 100%;
+  height: 194px;
+  background-size: cover;
+  background-position: center;
+  transition: 0.2s opacity;
+
+  ${({ src, visible }: { src: string; visible: boolean }) => css`
+    background-image: url(${src});
+    opacity: ${visible ? 1 : 0};
+  `};
+`;
+
+export const Overline = styled.div`
+  font-size: 10px;
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  text-transform: uppercase;
+  margin-top: 4px;
+`;
+
+export const SourceContainer = styled.div`
+  margin-top: 16px;
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  display: flex;
+  align-items: center;
 `;
