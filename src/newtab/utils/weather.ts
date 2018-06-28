@@ -1,8 +1,7 @@
 import { requestURL } from '../../shared/utils/network';
 import { WEATHER_API_KEYS } from '../../shared/constants';
 import weatherIcons, { WeatherCodes } from '../defaults/weather-icons';
-import { Languages, TimeUnit } from '../../shared/enums';
-import { TemperatureUnit } from '../enums';
+import { TimeUnit, TemperatureUnit, Languages } from '../../shared/enums';
 import { capitalizeFirstLetter, capitalizeFirstLetterInEachWord } from '../../shared/utils/strings';
 
 export const convertTemperature = (celsiusTemp: number, tempUnit: TemperatureUnit) => {
@@ -43,7 +42,6 @@ export const requestCurrentWeather = async (
   city: string,
   lang: Languages,
   tempUnit: TemperatureUnit,
-  timeUnit: TimeUnit,
   apiKey: string,
 ) => {
   try {
@@ -65,7 +63,6 @@ export const requestWeatherForecast = async (
   city: string,
   lang: Languages,
   tempUnit: TemperatureUnit,
-  timeUnit: TimeUnit,
   apiKey: string,
 ) => {
   try {
@@ -118,7 +115,7 @@ export const getWeather = async (
   city: string,
   lang: Languages,
   tempUnit: TemperatureUnit = TemperatureUnit.Celsius,
-  timeUnit: TimeUnit = TimeUnit.am,
+  timeUnit: TimeUnit = TimeUnit.TwentyFourHours,
 ) => {
   let apiKeyIndex = 0;
 
@@ -126,21 +123,8 @@ export const getWeather = async (
   let forecast;
 
   for (apiKeyIndex = 0; apiKeyIndex < WEATHER_API_KEYS.length; apiKeyIndex++) {
-    current = await requestCurrentWeather(
-      city,
-      lang,
-      tempUnit,
-      timeUnit,
-      WEATHER_API_KEYS[apiKeyIndex],
-    );
-
-    forecast = await requestWeatherForecast(
-      city,
-      lang,
-      tempUnit,
-      timeUnit,
-      WEATHER_API_KEYS[apiKeyIndex],
-    );
+    current = await requestCurrentWeather(city, lang, tempUnit, WEATHER_API_KEYS[apiKeyIndex]);
+    forecast = await requestWeatherForecast(city, lang, tempUnit, WEATHER_API_KEYS[apiKeyIndex]);
 
     if (current != null && forecast != null) {
       break;
