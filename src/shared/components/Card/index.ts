@@ -6,6 +6,11 @@ import typography from '../../mixins/typography';
 import shadows from '../../mixins/shadows';
 import images from '../../mixins/images';
 
+const getCardImageOpacity = (visible: boolean) => {
+  if (visible != null) return visible ? 1 : 0;
+  return 1;
+};
+
 export const Card = styled.div`
   width: 344px;
   min-height: 72px;
@@ -13,11 +18,7 @@ export const Card = styled.div`
   background-color: #fff;
   border-radius: 4px;
   overflow: hidden;
-  margin-top: 32px;
-
-  &:last-child {
-    margin-bottom: 32px;
-  }
+  margin-bottom: 24px;
 
   box-shadow: 0 1px 1px 0 rgba(60, 64, 67, 0.08), 0 1px 3px 1px rgba(60, 64, 67, 0.16);
   ${typography.robotoRegular()};
@@ -63,16 +64,19 @@ export const CardLogo = styled.div`
 
 export interface ImageProps {
   src: string;
+  visible?: boolean;
 }
 
 export const CardImage = styled.div`
-  width: 80px;
+  min-width: 80px;
   height: 80px;
   margin: 16px;
   align-self: center;
+  transition: 0.2s opacity;
 
   ${images.cover()}
   background-image: url(${({ src }: ImageProps) => src});
+  opacity: ${({ visible }) => getCardImageOpacity(visible)};
 `;
 
 export const CardHeaderText = styled.div`
@@ -91,7 +95,7 @@ export const CardTitle = styled.div`
 `;
 
 export interface SecondaryTextProps {
-  largeTop: boolean;
+  largeTop?: boolean;
 }
 
 export const CardSecondaryText = styled.div`

@@ -41,10 +41,6 @@ export const TemperatureIcon = styled.div`
   background-image: url(${({ src }: TemperatureIconProps) => src});
 `;
 
-export const ErrorContainer = styled.div`
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
-`;
-
 export const ExtraInfoContainer = styled.div`
   display: flex;
   padding-top: 16px;
@@ -83,13 +79,13 @@ export const ExtraInfoText = styled.div`
 `;
 
 export interface ForecastContainerProps {
-  expanded: boolean;
+  height: number;
 }
 
 export const ForecastContainer = styled.div`
-  margin-top: 24px;
+  margin-top: 48px;
   overflow: hidden;
-  transition: 1s ${EASE_FUNCTION} max-height;
+  transition: 0.5s ${EASE_FUNCTION} height;
 
-  max-height: ${({ expanded }: ForecastContainerProps) => (expanded ? '300px' : '0px')};
+  height: ${({ height }: ForecastContainerProps) => height}px;
 `;
