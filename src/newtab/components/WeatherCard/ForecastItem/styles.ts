@@ -32,22 +32,23 @@ export const WeatherIcon = styled.div`
   width: 24px;
   height: 24px;
   display: flex;
-  margin-right: 32px;
+  margin-right: 16px;
 
   ${images.center('24px', 'auto')};
   background-image: url(${({ src }: WeatherIconProps) => src});
 `;
 
 export const TempContainer = styled.div`
-  display: flex;
-  justify-self: right;
+  width: 64px;
+  text-align: right;
+  white-space: nowrap;
 `;
 
 export interface TempProps {
   night?: boolean;
 }
 
-export const Temp = styled.div`
+export const Temp = styled.span`
   color: rgba(
     0,
     0,

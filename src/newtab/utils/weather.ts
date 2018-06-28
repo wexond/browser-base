@@ -26,9 +26,18 @@ export const convertWindSpeed = (windSpeed: number, tempUnit: TemperatureUnit) =
   if (tempUnit === TemperatureUnit.Fahrenheit) {
     return `${Math.round(windSpeed * 2.23693629)} mph`;
   }
-
   return `${Math.round(windSpeed * 3.6)} km/h`;
 };
+
+export const getDailyItem = (json: any, tempUnit: TemperatureUnit) => ({
+  description: capitalizeFirstLetterInEachWord(json.weather[0].description),
+  temp: convertTemperature(json.main.temp, tempUnit),
+  windSpeed: convertWindSpeed(json.wind.speed, tempUnit),
+  icon: weatherIcons[json.weather[0].icon as WeatherCodes],
+  precipitation: json.main.humidity,
+  pressure: json.main.pressure,
+  date: new Date(json.dt * 1000),
+});
 
 export const requestCurrentWeather = async (
   city: string,
@@ -44,14 +53,7 @@ export const requestCurrentWeather = async (
     const data = await requestURL(url);
     const json = JSON.parse(data);
 
-    return {
-      description: capitalizeFirstLetterInEachWord(json.weather[0].description),
-      temp: convertTemperature(json.main.temp, tempUnit),
-      windSpeed: convertWindSpeed(json.wind.speed, tempUnit),
-      icon: weatherIcons[json.weather[0].icon as WeatherCodes],
-      precipitation: json.main.humidity,
-      pressure: json.main.pressure,
-    };
+    return getDailyItem(json, tempUnit);
   } catch (e) {
     console.error(e); // eslint-disable-line no-console
   }
@@ -79,7 +81,7 @@ export const requestWeatherForecast = async (
     const currentDate = new Date();
     const timeZoneOffset = currentDate.getTimezoneOffset() / 60;
 
-    let night = null;
+    let nightTemp = null;
 
     for (let i = 0; i < json.list.length; i++) {
       const item = json.list[i];
@@ -87,35 +89,24 @@ export const requestWeatherForecast = async (
       const hoursDiff = date.getHours() + timeZoneOffset;
 
       if (date.getDate() === currentDate.getDate()) {
-        daily.push({
-          description: capitalizeFirstLetterInEachWord(item.weather[0].description),
-          temp: convertTemperature(item.main.temp, tempUnit),
-          windSpeed: convertWindSpeed(item.wind.speed, tempUnit),
-          icon: weatherIcons[item.weather[0].icon as WeatherCodes],
-          precipitation: item.main.humidity,
-          pressure: item.main.pressure,
-          date,
-        });
+        daily.push(getDailyItem(item, tempUnit));
       } else if (hoursDiff === 0) {
-        night = {
-          temp: convertTemperature(item.main.temp, tempUnit),
-        };
+        nightTemp = convertTemperature(item.main.temp, tempUnit);
       } else if (hoursDiff === 15) {
         week.push({
           day: {
             temp: convertTemperature(item.main.temp, tempUnit),
             icon: weatherIcons[item.weather[0].icon as WeatherCodes],
           },
-          night,
+          night: {
+            temp: nightTemp,
+          },
           date,
         });
       }
     }
 
-    return {
-      daily,
-      week,
-    };
+    return { daily, week };
   } catch (e) {
     console.error(e); // eslint-disable-line no-console
   }
@@ -157,14 +148,18 @@ export const getWeather = async (
   }
 
   if (apiKeyIndex < WEATHER_API_KEYS.length) {
+    const daily = [];
+    daily.push(current);
+
+    for (let i = 0; i < forecast.daily.length; i++) {
+      daily.push(forecast.daily[i]);
+    }
+
     return {
       city: capitalizeFirstLetter(city),
       tempUnit,
       timeUnit,
-      daily: {
-        current,
-        later: forecast.daily,
-      },
+      daily,
       week: forecast.week,
     };
   }
@@ -173,6 +168,5 @@ export const getWeather = async (
 };
 
 /**
- * Conditions
- * https://openweathermap.org/weather-conditions
+ * Powered by openweathermap.org
  */

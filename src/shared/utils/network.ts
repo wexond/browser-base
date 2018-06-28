@@ -24,3 +24,28 @@ export const requestURL = (url: string) =>
 
     request.end();
   });
+
+/* eslint-disable no-new */
+export const loadImage = (url: string) => {
+  new Promise((resolve: () => void, reject) => {
+    const img = new Image();
+
+    img.onload = () => {
+      resolve();
+    };
+
+    img.onerror = (e: any) => {
+      reject(e);
+    };
+
+    img.src = url;
+  });
+};
+/* eslint-enable no-new */
+
+export const hasSubdomain = (url: string) => {
+  const regex = new RegExp(/^([a-z]+:\/{2})?([\w-]+\.[\w-]+\.\w+)$/);
+  return !!url.match(regex);
+};
+
+export const removeSubdomain = (url: string) => url.replace(/^[^.]+\./g, '');
