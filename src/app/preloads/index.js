@@ -132,6 +132,7 @@ setInterval(() => {
   const tempNodes = document.getElementsByTagName('*');
 
   const newVNodes = [];
+  const newNodes = [];
 
   for (const node of tempNodes) {
     const newVNode = createVirtualNode(node);
