@@ -11,6 +11,7 @@ import TabBar from '../TabBar';
 import ToolbarButton from './Button';
 import { Platforms } from '../../enums';
 import WindowsControls from '../WindowsControls';
+import { TOOLBAR_HEIGHT } from '../../constants';
 
 const workspacesIcon = require('../../../shared/icons/tab-groups.svg');
 const menuIcon = require('../../../shared/icons/menu.svg');
@@ -29,7 +30,7 @@ export default class Toolbar extends React.Component {
 
   public render() {
     return (
-      <StyledToolbar>
+      <StyledToolbar isFullscreen={Store.isFullscreen}>
         <Handle />
         <NavigationButtons />
         <ToolbarSeparator style={{ marginRight: 16 }} />
