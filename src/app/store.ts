@@ -16,8 +16,6 @@ export interface Favicons {
 
 class Store {
   // Observables
-  @observable public selectedWorkspace = 0;
-
   @observable public workspaces = new Workspaces();
 
   @observable public addTabButton = new AddTabButton();
@@ -62,7 +60,7 @@ class Store {
   public getTabBarWidth: () => number;
 
   public getCurrentWorkspace() {
-    return this.getWorkspaceById(this.selectedWorkspace);
+    return this.getWorkspaceById(this.workspaces.selected);
   }
 
   public getWorkspaceById(id: number) {

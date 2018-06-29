@@ -1,11 +1,15 @@
 import { observable, observe } from 'mobx';
 import TabsIndicator from './tabs-indicator';
 import Tab from './tab';
-import { TAB_MIN_WIDTH } from '../constants';
+import { TAB_MIN_WIDTH, WORKSPACE_MAX_ICONS_COUNT } from '../constants';
 import Store from '../store';
+
+const pageIcon = require('../../shared/icons/page.svg');
 
 export default class Workspace {
   @observable public id: number = 0;
+
+  @observable public name: string = 'Workspace';
 
   @observable public selectedTab: number = -1;
 
@@ -154,5 +158,19 @@ export default class Workspace {
       time: 0,
       canReset: true,
     };
+  }
+
+  public getIcons() {
+    const icons = [];
+
+    for (let i = 0; i < this.tabs.length; i++) {
+      const icon = this.tabs[i].favicon;
+
+      if (icons.length < WORKSPACE_MAX_ICONS_COUNT) {
+        icons.push(icon !== '' ? icon : pageIcon);
+      }
+    }
+
+    return icons;
   }
 }
