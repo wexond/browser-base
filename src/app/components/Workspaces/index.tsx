@@ -12,6 +12,14 @@ export default class Workspaces extends Component<{}, {}> {
     Store.workspaces.visible = false;
   };
 
+  // TODO: A dialog with workspace name
+  addNew = () => {
+    const workspace: Workspace = new Workspace();
+
+    Store.workspaces.list.push(workspace);
+    // Store.workspaces.selected = Store.workspaces.list.length;
+  };
+
   public render() {
     const { visible, selected, list } = Store.workspaces;
 
@@ -27,7 +35,7 @@ export default class Workspaces extends Component<{}, {}> {
                 key={workspace.id}
               />
             ))}
-            <Add />
+            <Add onClick={this.addNew} />
           </ItemsContainer>
           <Dark />
         </Root>
