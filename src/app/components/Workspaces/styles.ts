@@ -1,24 +1,36 @@
 import styled from 'styled-components';
-import { Align } from '../../../shared/enums';
-import positioning from '../../../shared/mixins/positioning';
+
+export interface Props {
+  visible: boolean;
+}
+
+export const Root = styled.div`
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  position: fixed;
+  display: flex;
+  transition: 0.15s opacity;
+
+  opacity: ${({ visible }: Props) => (visible ? 1 : 0)};
+  pointer-events: ${({ visible }: Props) => (visible ? 'all' : 'none')};
+`;
 
 export const ItemsContainer = styled.div`
   width: 100%;
   height: auto;
   display: flex;
-  position: fixed;
-  z-index: 101;
   justify-content: center;
-
-  ${positioning.center(Align.CenterVertical)};
+  align-self: center;
+  z-index: 1;
 `;
 
 export const Dark = styled.div`
   width: 100%;
   height: 100vh;
-  top: 0;
-  left: 0;
-  position: fixed;
-  z-index: 100;
+  position: absolute;
+  z-index: 0;
   background-color: rgba(0, 0, 0, 0.79);
 `;
