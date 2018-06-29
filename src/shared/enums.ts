@@ -4,6 +4,27 @@ export enum Align {
   CenterBoth,
 }
 
+export enum UITheme {
+  Light = 'light',
+  Dark = 'dark',
+}
+
+export enum ButtonType {
+  Text,
+  Outlined,
+  Contained,
+}
+
+export enum SliderType {
+  Continuous,
+  Discrete,
+}
+
+export enum ProgressType {
+  Determinate,
+  Indeterminate,
+}
+
 /* eslint-disable camelcase */
 export enum Languages {
   ar,
@@ -113,22 +134,6 @@ export enum NewsCategories {
 export enum TimeUnit {
   TwentyFourHours,
   TwelveHours,
-}
-
-export enum UITheme {
-  Light = 'light',
-  Dark = 'dark',
-}
-
-export enum ButtonType {
-  Text,
-  Outlined,
-  Contained,
-}
-
-export enum SliderType {
-  Continuous,
-  Discrete,
 }
 
 export enum TemperatureUnit {
