@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import typography from '../../../../shared/mixins/typography';
 import images from '../../../../shared/mixins/images';
 import shadows from '../../../../shared/mixins/shadows';
+import colors from '../../../../shared/defaults/colors';
 
 import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '../../../constants';
 
@@ -18,6 +19,10 @@ export const Root = styled.div`
   }
 `;
 
+export interface IconsContainerProps {
+  selected: boolean;
+}
+
 export const IconsContainer = styled.div`
   width: ${WORKSPACE_FOLDER_SIZE}px;
   height: ${WORKSPACE_FOLDER_SIZE}px;
@@ -29,6 +34,13 @@ export const IconsContainer = styled.div`
   align-items: center;
   flex-wrap: wrap;
   box-shadow: ${shadows(3)};
+
+  ${({ selected }: IconsContainerProps) => {
+    if (selected) {
+      return `border: 3px solid ${colors.blue['500']}`;
+    }
+    return '';
+  }};
 `;
 
 export interface IconProps {
@@ -36,10 +48,8 @@ export interface IconProps {
 }
 
 export const Icon = styled.div`
-  min-width: ${WORKSPACE_ICON_SIZE}px;
-  min-height: ${WORKSPACE_ICON_SIZE}px;
-  max-width: ${WORKSPACE_ICON_SIZE}px;
-  max-height: ${WORKSPACE_ICON_SIZE}px;
+  width: ${WORKSPACE_ICON_SIZE}px;
+  height: ${WORKSPACE_ICON_SIZE}px;
   display: flex;
   margin: 4px;
 

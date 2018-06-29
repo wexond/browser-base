@@ -1,20 +1,23 @@
-import React from 'react';
-
+import { observer } from 'mobx-react';
+import React, { Component } from 'react';
 import Item from './Item';
+import Store from '../../store';
+import { ItemsContainer, Dark } from './styles';
 
-import { Root, ItemsContainer } from './styles';
-
-export default class extends React.Component<{}, {}> {
+@observer
+export default class Workspaces extends Component<{}, {}> {
   public render() {
+    const { visible } = Store.workspaces;
     const icons = ['https://assets-cdn.github.com/favicon.ico'];
 
     return (
-      <Root>
+      <React.Fragment>
         <ItemsContainer>
-          <Item icons={icons} label="Work" />
+          <Item icons={icons} label="Work" selected />
           <Item icons={icons} label="Fun" />
         </ItemsContainer>
-      </Root>
+        <Dark />
+      </React.Fragment>
     );
   }
 }
