@@ -6,6 +6,10 @@ class Store {
   @observable sections: Section[] = [];
 
   @observable selectedItems: HistoryItem[] = [];
+
+  loadedItems = 0;
+
+  @observable itemsLimit = 20;
 }
 
 export default new Store();

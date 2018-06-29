@@ -29,7 +29,10 @@ export default class Suggestions {
 
   public load(input: HTMLInputElement) {
     return new Promise(async resolve => {
-      const filter = input.value;
+      const filter = input.value.replace(
+        input.value.substring(input.selectionStart, input.selectionEnd),
+        '',
+      );
 
       const suggestions = await getHistorySuggestions(filter);
 
