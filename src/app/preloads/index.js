@@ -22,7 +22,7 @@ const list = fs.readFileSync(
 );
 const filters = list.split('\n');
 
-// if (window.location.protocol === 'wexond:') return;
+if (window.location.protocol === 'wexond:') return;
 
 let blockedSelectors = [];
 
@@ -172,7 +172,7 @@ child.on('message', data => {
 
         for (const parent of parents) {
           if (parent) {
-            parent.remove();
+            // parent.remove();
           }
         }
       }
