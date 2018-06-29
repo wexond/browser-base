@@ -77,6 +77,7 @@ export const StyledButton = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
   transition: 0.2s box-shadow;
   font-size: 14px;
   white-space: nowrap;
