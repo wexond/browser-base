@@ -7,17 +7,16 @@ import Workspace from '../../models/workspace';
 
 @observer
 export default class Workspaces extends Component<{}, {}> {
-  onDarkClick = () => {
+  hide = () => {
     Store.workspaces.visible = false;
   };
 
   public render() {
     const { visible, selected, list } = Store.workspaces;
-    const icons = ['https://assets-cdn.github.com/favicon.ico'];
 
     return (
       <React.Fragment>
-        <Root visible={visible}>
+        <Root visible={visible} onClick={this.hide}>
           <ItemsContainer>
             {list.map((workspace: Workspace) => (
               <Item
@@ -28,7 +27,7 @@ export default class Workspaces extends Component<{}, {}> {
               />
             ))}
           </ItemsContainer>
-          <Dark onClick={this.onDarkClick} />
+          <Dark />
         </Root>
       </React.Fragment>
     );
