@@ -20,3 +20,4 @@ export const MENU_CONTENT_MAX_WIDTH = 640;
 // Workspaces
 export const WORKSPACE_FOLDER_SIZE = 96;
 export const WORKSPACE_ICON_SIZE = 16;
+export const WORKSPACE_MAX_ICONS_COUNT = 9;
