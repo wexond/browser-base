@@ -5,6 +5,7 @@ import AddTabButton from './models/add-tab-button';
 import AddressBar from './models/address-bar';
 import Page from './models/page';
 import Suggestions from './models/suggestions';
+import Workspaces from './models/workspaces';
 import Workspace from './models/workspace';
 import Menu from './models/menu';
 import ContextMenu from '../shared/components/ContextMenu';
@@ -17,7 +18,7 @@ class Store {
   // Observables
   @observable public selectedWorkspace = 0;
 
-  @observable public workspaces = [new Workspace()];
+  @observable public workspaces = new Workspaces();
 
   @observable public addTabButton = new AddTabButton();
 
@@ -65,13 +66,13 @@ class Store {
   }
 
   public getWorkspaceById(id: number) {
-    return this.workspaces.filter(workspace => workspace.id === id)[0];
+    return this.workspaces.list.filter(workspace => workspace.id === id)[0];
   }
 
   public getTabById(id: number) {
     const { workspaces } = this;
 
-    const tabs = workspaces.map(workspace => workspace.getTabById(id));
+    const tabs = this.workspaces.list.map(workspace => workspace.getTabById(id));
 
     return tabs[0];
   }
@@ -106,7 +107,7 @@ class Store {
   }
 
   public addWorkspace() {
-    this.workspaces.push(new Workspace());
+    this.workspaces.list.push(new Workspace());
   }
 }
 
