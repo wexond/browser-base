@@ -28,6 +28,7 @@ export default class History extends React.Component {
 
   public componentWillUnmount() {
     Store.sections = [];
+    Store.loadedItems = 0;
   }
 
   public onMenuSearchInput = async (e: React.KeyboardEvent<HTMLInputElement>) => {
