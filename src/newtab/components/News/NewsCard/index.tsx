@@ -6,7 +6,6 @@ import { getTimeOffset } from '../../../../shared/utils/time';
 import { Card, CardHeader } from '../../../../shared/components/Card';
 
 import {
-  CardHeaderText,
   Title,
   Info,
   Icon,
@@ -43,25 +42,24 @@ export default class NewsCard extends React.Component<Props, State> {
     const { data } = this.props;
     const { loaded } = this.state;
 
+    const desc = data.description.replace(/&nbsp;/g, '');
+
     return (
       <a href={data.url}>
         <Card>
           <CardImage visible={loaded} src={data.urlToImage} />
           <CardHeader>
-            <CardHeaderText>
-              <Overline>{getTimeOffset(new Date(data.publishedAt))}</Overline>
-              <Title>{data.title}</Title>
+            <Overline>{getTimeOffset(new Date(data.publishedAt))}</Overline>
+            <Title>{data.title}</Title>
 
-              {data.description
-                && data.description.indexOf('�') === -1 && (
-                  <SecondaryText>{data.description}</SecondaryText>
-              )}
+            {data.description
+              && data.description.indexOf('�') === -1
+              && desc.trim() !== '' && <SecondaryText>{desc}</SecondaryText>}
 
-              <SourceContainer>
-                <Icon visible={loaded} source={data.icon} />
-                <Source>{data.source.name}</Source>
-              </SourceContainer>
-            </CardHeaderText>
+            <SourceContainer>
+              <Icon visible={loaded} source={data.icon} />
+              <Source>{data.source.name}</Source>
+            </SourceContainer>
           </CardHeader>
         </Card>
       </a>
