@@ -24,7 +24,7 @@ export default class TabBar extends React.Component<{}, {}> {
     return (
       <StyledTabBar visible={!Store.addressBar.toggled} innerRef={(r: any) => (this.tabBar = r)}>
         <Workspaces>
-          {Store.workspaces.map(workspace => (
+          {Store.workspaces.list.map(workspace => (
             <Workspace key={workspace.id} workspace={workspace} />
           ))}
           <AddTabButton
