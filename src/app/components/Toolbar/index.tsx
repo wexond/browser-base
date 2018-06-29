@@ -22,7 +22,9 @@ export default class Toolbar extends React.Component {
 
   public static Separator = ToolbarSeparator;
 
-  public onWorkspacesIconClick = () => {};
+  public onWorkspacesIconClick = () => {
+    Store.workspaces.visible = true;
+  };
 
   public toggleMenu = () => {
     Store.menu.visible = !Store.menu.visible;

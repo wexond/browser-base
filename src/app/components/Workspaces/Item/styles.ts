@@ -26,7 +26,7 @@ export interface IconsContainerProps {
 export const IconsContainer = styled.div`
   width: ${WORKSPACE_FOLDER_SIZE}px;
   height: ${WORKSPACE_FOLDER_SIZE}px;
-  background-color: rgba(255, 255, 255, 0.79);
+  background-color: #fff;
   border-radius: 4px;
   overflow: hidden;
   display: flex;
