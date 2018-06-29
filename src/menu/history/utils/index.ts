@@ -9,7 +9,10 @@ export async function getHistorySections(filter = '') {
 
     const items = await db.history.toArray();
 
-    for (const item of items) {
+    const len = items.length < 20 ? items.length : 20;
+
+    for (let i = 0; i < len; i++) {
+      const item = items[i];
       const date = new Date(item.date);
 
       const year = date
