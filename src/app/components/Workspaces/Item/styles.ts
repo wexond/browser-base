@@ -33,6 +33,7 @@ export const IconsContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  padding: 4px;
   box-shadow: ${shadows(3)};
 
   ${({ selected }: IconsContainerProps) => {
