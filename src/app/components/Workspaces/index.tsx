@@ -1,9 +1,10 @@
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
-import Item from './Item';
 import Store from '../../store';
-import { Root, ItemsContainer, Dark } from './styles';
 import Workspace from '../../models/workspace';
+import Add from './Add';
+import Item from './Item';
+import { Root, ItemsContainer, Dark } from './styles';
 
 @observer
 export default class Workspaces extends Component<{}, {}> {
@@ -26,6 +27,7 @@ export default class Workspaces extends Component<{}, {}> {
                 key={workspace.id}
               />
             ))}
+            <Add />
           </ItemsContainer>
           <Dark />
         </Root>
