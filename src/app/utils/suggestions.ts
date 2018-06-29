@@ -110,8 +110,6 @@ export const getHistorySuggestions = (filter: string) =>
 
         visitedTimes = visitedTimes.sort((a, b) => a.url.length - b.url.length).filter(Boolean);
 
-        console.log(visitedTimes);
-
         mostVisited = [];
         for (let i = 0; i < 2; i++) {
           const item = visitedTimes[i];
