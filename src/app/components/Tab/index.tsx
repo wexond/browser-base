@@ -103,7 +103,7 @@ export default class extends React.Component<TabProps, {}> {
         workspace.selectedTab = workspace.tabs[tabIndex + 1].id;
       } else if (tabIndex - 1 >= 0 && !workspace.tabs[tabIndex - 1].isRemoving) {
         workspace.selectedTab = workspace.tabs[tabIndex - 1].id;
-      } else if (Store.workspaces.length === 1) {
+      } else if (Store.workspaces.list.length === 1) {
         closeWindow();
       }
     }
