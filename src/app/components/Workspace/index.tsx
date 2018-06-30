@@ -71,10 +71,12 @@ export default class extends React.Component<Props, {}> {
     workspace.getContainerWidth = this.getTabsWidth;
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     const { workspace } = this.props;
-
     workspace.tabs = [];
+
+    window.removeEventListener('mouseup', this.onMouseUp);
+    window.removeEventListener('mouseup', this.onMouseMove);
   }
 
   public getTabsWidth = () => this.tabs.offsetWidth;

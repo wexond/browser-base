@@ -31,20 +31,20 @@ export default class extends React.Component<Props, {}> {
     const { workspaces } = Store;
 
     if (workspaces.list.length > 0) {
-      let altWorkspaceIndex = workspace.id + 1;
+      let altWorkspaceIndex = workspaces.list.indexOf(workspace) + 1;
 
-      if (altWorkspaceIndex >= workspaces.list.length) {
-        altWorkspaceIndex = workspace.id - 1;
+      if (altWorkspaceIndex === workspaces.list.length) {
+        altWorkspaceIndex = workspaces.list.indexOf(workspace) - 1;
       }
 
       const altWorkspace = workspaces.list[altWorkspaceIndex];
 
-      for (let i = 0; i < workspace.tabs.length; i++) {
-        altWorkspace.tabs.push(workspace.tabs[i]);
+      for (const tab of workspace.tabs) {
+        Store.pages.splice(Store.pages.indexOf(Store.getPageById(tab.id)), 1);
       }
 
-      workspaces.list.splice(workspace.id, 1);
-      workspaces.selected = altWorkspaceIndex - 1;
+      workspaces.selected = altWorkspace.id;
+      workspace.remove();
     }
   };
 
