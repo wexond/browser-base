@@ -26,7 +26,7 @@ export default class Workspaces extends Component<{}, {}> {
     return (
       <React.Fragment>
         <Root visible={visible} onClick={this.hide}>
-          <ItemsContainer>
+          <ItemsContainer visible={visible}>
             {list.map((workspace: Workspace) => <Item workspace={workspace} key={workspace.id} />)}
             <Add onClick={this.addNew} />
           </ItemsContainer>
