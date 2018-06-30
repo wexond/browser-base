@@ -14,21 +14,22 @@ export interface IProps {
 export default class Button extends React.Component<IProps, {}> {
   public static defaultProps = {
     color: colors.deepPurple['500'],
-    type: ProgressType.Determinate,
+    type: ProgressType.Indeterminate,
     progress: 50,
   };
 
   public render() {
     const { color, progress, type } = this.props;
 
-    const indicatorStyle = {
+    const firstIndicatorStyle = (type === ProgressType.Determinate && {
       width: `${progress}}%`,
-    };
+    })
+      || {};
 
     return (
       <Root>
         <Track color={color} />
-        <Indicator color={color} style={indicatorStyle} />
+        <Indicator type={type} color={color} style={firstIndicatorStyle} />
       </Root>
     );
   }
