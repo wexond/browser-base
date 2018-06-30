@@ -2,6 +2,7 @@ import { observable } from 'mobx';
 import SuggestionItem from './suggestion-item';
 import { getHistorySuggestions, getSearchSuggestions } from '../utils/suggestions';
 import Store from '../store';
+import GlobalStore from '../../global-store';
 import { Favicon } from '../../shared/models/favicon';
 import db from '../../shared/models/app-database';
 import { isURL } from '../../shared/utils/url';
@@ -34,7 +35,7 @@ export default class Suggestions {
         '',
       );
 
-      const dictionary = Store.dictionary.suggestions;
+      const dictionary = GlobalStore.dictionary.suggestions;
       const suggestions = await getHistorySuggestions(filter);
 
       await db.favicons.each(favicon => {
