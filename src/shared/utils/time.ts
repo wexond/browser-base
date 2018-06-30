@@ -33,7 +33,7 @@ export const formatTime = (
   return `${_hours}${minutes ? ':' : ''}${_minutes}${timePeriod}`;
 };
 
-export const getDayIndex = (date: Date) => 0;
+export const getDayIndex = (date: Date) => (date.getDay() === 0 ? 6 : date.getDay() - 1);
 
 const getOperator = (condition: string) => {
   const operators = ['=', '<', '>'];
