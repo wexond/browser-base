@@ -12,6 +12,10 @@
     "searchInGoogle": "wyszukaj w Google",
     "openWebsite": "otwórz stronę"
   },
+  "newTab": {
+    "precipitation": "Wilgotność",
+    "winds": "Wiatry"
+  },
   "history": {
     "title": "Historia",
     "clearHistory": "Wyczyść historię"
@@ -67,5 +71,9 @@
       "x<5": "godziny",
       "x>4": "godzin"
     }
+  },
+  "general": {
+    "expand": "więcej",
+    "collapse": "mniej"
   }
 }

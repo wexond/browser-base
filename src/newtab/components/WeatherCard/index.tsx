@@ -94,6 +94,7 @@ export default class WeatherCard extends React.Component<Props, State> {
   public render() {
     const { data } = this.props;
     const { dailyForecastIndex, forecastHeight } = this.state;
+    const dictionary = GlobalStore.dictionary;
 
     const expanded = forecastHeight > 0;
     const current = data != null && data.daily[dailyForecastIndex];
@@ -145,11 +146,15 @@ export default class WeatherCard extends React.Component<Props, State> {
               <ExtraInfoContainer>
                 <ExtraInfo>
                   <ExtraInfoIcon src={precipitationIcon} />
-                  <ExtraInfoText>{current.precipitation}% Precipitation</ExtraInfoText>
+                  <ExtraInfoText>
+                    {current.precipitation}% {dictionary.newTab.precipitation}
+                  </ExtraInfoText>
                 </ExtraInfo>
                 <ExtraInfo>
                   <ExtraInfoIcon src={windIcon} style={windIconStyle} />
-                  <ExtraInfoText>{current.windSpeed} Winds</ExtraInfoText>
+                  <ExtraInfoText>
+                    {current.windSpeed} {dictionary.newTab.winds}
+                  </ExtraInfoText>
                 </ExtraInfo>
               </ExtraInfoContainer>
               <Slider
@@ -176,7 +181,8 @@ export default class WeatherCard extends React.Component<Props, State> {
                   onClick={this.onExpandButtonClick}
                   style={Object.assign({}, CardActionButtonStyle, { marginLeft: 0 })}
                 >
-                  {(!expanded && 'EXPAND') || 'COLLAPSE'}
+                  {(!expanded && dictionary.general.expand.toUpperCase())
+                    || dictionary.general.collapse.toUpperCase()}
                 </Button>
               </CardActions>
             </React.Fragment>
