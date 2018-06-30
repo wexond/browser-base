@@ -2,6 +2,7 @@ import { observable } from 'mobx';
 import SuggestionItem from './suggestion-item';
 import { getHistorySuggestions, getSearchSuggestions } from '../utils/suggestions';
 import Store from '../store';
+import GlobalStore from '../../global-store';
 import { Favicon } from '../../shared/models/favicon';
 import db from '../../shared/models/app-database';
 import { isURL } from '../../shared/utils/url';
@@ -34,6 +35,7 @@ export default class Suggestions {
         '',
       );
 
+      const dictionary = GlobalStore.dictionary.suggestions;
       const suggestions = await getHistorySuggestions(filter);
 
       await db.favicons.each(favicon => {
@@ -49,7 +51,7 @@ export default class Suggestions {
       if (suggestions.mostVisited.length === 0 && filter.trim() !== '') {
         this.historySuggestions.unshift({
           primaryText: filter,
-          secondaryText: 'search in Google',
+          secondaryText: dictionary.searchInGoogle,
           type: 'no-subheader-search',
           id: 0,
         });
@@ -58,7 +60,7 @@ export default class Suggestions {
           this.historySuggestions[0].id = 1;
           this.historySuggestions.unshift({
             primaryText: filter,
-            secondaryText: 'open website',
+            secondaryText: dictionary.openWebsite,
             type: 'no-subheader-website',
             id: 0,
           });

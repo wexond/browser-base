@@ -1,3 +1,4 @@
+import GlobalStore from '../../global-store';
 import { TimeUnit } from '../enums';
 
 export const getTimePeriod = (hours: number, timeUnit: TimeUnit) => {
@@ -32,58 +33,87 @@ export const formatTime = (
   return `${_hours}${minutes ? ':' : ''}${_minutes}${timePeriod}`;
 };
 
-export const getDay = (days: any, date: Date) => {
-  const index = date.getDay() === 0 ? days.length - 1 : date.getDay() - 1;
-  return days[index];
+export const getDayIndex = (date: Date) => (date.getDay() === 0 ? 6 : date.getDay() - 1);
+
+const getOperator = (condition: string) => {
+  const operators = ['=', '<', '>'];
+
+  for (let i = 0; i < operators.length; i++) {
+    if (condition.indexOf(operators[i]) !== -1) {
+      return operators[i];
+    }
+  }
+
+  return null;
+};
+
+export const getConditionsTime = (time: number, conditions: any) => {
+  if (typeof conditions === 'object') {
+    const keys = Object.keys(conditions);
+
+    for (let i = 0; i < keys.length; i++) {
+      const condition = keys[i].replace('x', time.toString());
+      const operator = getOperator(condition);
+      const parts = condition.split(operator);
+
+      if (operator != null) {
+        const firstSide = parseInt(parts[0], 10);
+        const secondSide = parseInt(parts[1], 10);
+
+        if (
+          (operator === '<' && firstSide < secondSide)
+          || (operator === '>' && firstSide > secondSide)
+          || (operator === '=' && firstSide === secondSide)
+        ) {
+          return conditions[keys[i]];
+        }
+      }
+    }
+  }
+
+  return conditions;
 };
 
 export const getTimeOffset = (date: Date) => {
+  const dictionary = GlobalStore.dictionary.dateAndTime;
   const currentdate = new Date();
   const diff = new Date(currentdate.getTime() - date.getTime());
 
   const hours = diff.getHours() - 1;
   const minutes = diff.getMinutes();
+  let value = hours;
+  let showHours = true;
 
   if (hours === 0) {
-    if (minutes <= 1) return 'a minute ago';
-    return `${minutes} minutes ago`;
+    if (minutes <= 1) {
+      return dictionary.oneMinuteAgo;
+    }
+
+    showHours = false;
+    value = minutes;
+  } else if (hours === 1) {
+    return dictionary.oneHourAgo;
   }
 
-  if (hours === 1) return 'an hour ago';
-  return `${hours} hours ago`;
+  return `${value} ${getConditionsTime(value, showHours ? dictionary.hours : dictionary.minutes)} ${
+    dictionary.ago
+  }`;
 };
 
 export const formatDate = (date: Date) => {
-  date = new Date();
+  const dictionary = GlobalStore.dictionary.dateAndTime;
   const currentDate = new Date();
-
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
 
   let prefix = '';
 
   if (date.getDate() === currentDate.getDate()) {
-    prefix = 'Today - ';
+    prefix = `${dictionary.today} - `;
   } else if (date.getDate() === currentDate.getDate() - 1) {
-    prefix = 'Yesterday - ';
+    prefix = `${dictionary.yesterday} - `;
   }
 
-  const dayName = getDay(days, date);
-  const monthName = months[date.getMonth()];
+  const dayName = dictionary.days[getDayIndex(date)];
+  const monthName = dictionary.months[date.getMonth()];
 
   return `${prefix}${dayName}, ${monthName} ${date.getDate()}, ${date.getFullYear()}`;
 };
