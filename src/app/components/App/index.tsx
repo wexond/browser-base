@@ -4,6 +4,7 @@ import { hot } from 'react-hot-loader';
 import React from 'react';
 import { StyledApp } from './styles';
 import Store from '../../store';
+import GlobalStore from '../../../global-store';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
 import Menu from '../Menu';
@@ -81,6 +82,7 @@ class App extends React.Component {
 
   public render() {
     const editingHistory = HistoryStore.selectedItems.length > 0;
+    const dictionary = GlobalStore.dictionary;
 
     return (
       <StyledApp>
@@ -101,31 +103,56 @@ class App extends React.Component {
           <ContextMenu.Item onClick={this.onInspectElementClick}>Inspect element</ContextMenu.Item>
         </ContextMenu>
         <Menu title="Wexond">
-          <Menu.Item title="History" icon={historyIcon} searchVisible content={<History />}>
-            <Menu.Item title="Clear browsing history" icon={clearIcon} />
+          <Menu.Item
+            title={dictionary.history.title}
+            icon={historyIcon}
+            searchVisible
+            content={<History />}
+          >
+            <Menu.Item title={dictionary.history.clearHistory} icon={clearIcon} />
             <Menu.Item
-              title="Select all"
+              title={dictionary.selecting.selectAll}
               visible={!editingHistory}
               icon={selectAllIcon}
               onClick={historyActions.selectAll}
             />
             <Menu.Item
-              title="Deselect all"
+              title={dictionary.selecting.deselectAll}
               visible={editingHistory}
               icon={closeIcon}
               onClick={historyActions.deselectAll}
             />
             <Menu.Item
-              title="Delete selected items"
+              title={dictionary.selecting.deleteSelected}
               visible={editingHistory}
               icon={trashIcon}
               onClick={historyActions.deleteAllSelectedItems}
             />
           </Menu.Item>
-          <Menu.Item title="Bookmarks" icon={bookmarksIcon} searchVisible content={<div />} />
-          <Menu.Item title="Settings" icon={settingsIcon} searchVisible content={<div />} />
-          <Menu.Item title="Extensions" icon={extensionsIcon} searchVisible content={<div />} />
-          <Menu.Item title="About" icon={aboutIcon} searchVisible={false} content={<About />} />
+          <Menu.Item
+            title={dictionary.bookmarks.title}
+            icon={bookmarksIcon}
+            searchVisible
+            content={<div />}
+          />
+          <Menu.Item
+            title={dictionary.settings.title}
+            icon={settingsIcon}
+            searchVisible
+            content={<div />}
+          />
+          <Menu.Item
+            title={dictionary.extensions.title}
+            icon={extensionsIcon}
+            searchVisible
+            content={<div />}
+          />
+          <Menu.Item
+            title={dictionary.about.title}
+            icon={aboutIcon}
+            searchVisible={false}
+            content={<About />}
+          />
         </Menu>
         <WorkspacesMenu />
       </StyledApp>

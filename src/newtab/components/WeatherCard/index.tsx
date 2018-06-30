@@ -1,11 +1,12 @@
 import React from 'react';
+import GlobalStore from '../../../global-store';
 
 import colors from '../../../shared/defaults/colors';
 import Button from '../../../shared/components/Button';
 import Slider from '../../../shared/components/Slider';
 import opacity from '../../../shared/defaults/opacity';
-import { TimeUnit, ButtonType, SliderType } from '../../../shared/enums';
-import { formatTime, getDay } from '../../../shared/utils/time';
+import { ButtonType, SliderType } from '../../../shared/enums';
+import { formatTime, getDayIndex } from '../../../shared/utils/time';
 
 import {
   Card,
@@ -61,22 +62,18 @@ export default class WeatherCard extends React.Component<Props, State> {
     const { data } = this.props;
 
     if (data != null) {
-      const { timeUnit, daily } = data;
+      const dictionary = GlobalStore.dictionary.dateAndTime;
 
+      const { timeUnit, daily } = data;
       const { description, date } = daily[dailyForecastIndex];
 
       const currentDate = new Date();
-      const daysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      const dayName = dictionary.daysShort[getDayIndex(currentDate)];
 
-      return `${getDay(daysShort, currentDate)}, ${formatTime(date, timeUnit)}, ${description}`;
+      return `${dayName}, ${formatTime(date, timeUnit)}, ${description}`;
     }
 
     return null;
-  };
-
-  getDayName = (date: any) => {
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    return getDay(days, date);
   };
 
   onExpandButtonClick = () => {
@@ -97,12 +94,10 @@ export default class WeatherCard extends React.Component<Props, State> {
   public render() {
     const { data } = this.props;
     const { dailyForecastIndex, forecastHeight } = this.state;
+    const dictionary = GlobalStore.dictionary;
 
     const expanded = forecastHeight > 0;
-
     const current = data != null && data.daily[dailyForecastIndex];
-    const week = data != null && data.week;
-
     const city = this.getCity();
     const description = this.getDescription();
 
@@ -151,11 +146,15 @@ export default class WeatherCard extends React.Component<Props, State> {
               <ExtraInfoContainer>
                 <ExtraInfo>
                   <ExtraInfoIcon src={precipitationIcon} />
-                  <ExtraInfoText>{current.precipitation}% Precipitation</ExtraInfoText>
+                  <ExtraInfoText>
+                    {current.precipitation}% {dictionary.newTab.precipitation}
+                  </ExtraInfoText>
                 </ExtraInfo>
                 <ExtraInfo>
                   <ExtraInfoIcon src={windIcon} style={windIconStyle} />
-                  <ExtraInfoText>{current.windSpeed} Winds</ExtraInfoText>
+                  <ExtraInfoText>
+                    {current.windSpeed} {dictionary.newTab.winds}
+                  </ExtraInfoText>
                 </ExtraInfo>
               </ExtraInfoContainer>
               <Slider
@@ -171,7 +170,7 @@ export default class WeatherCard extends React.Component<Props, State> {
                 height={forecastHeight}
               >
                 {data.week.map((day: any, key: any) => {
-                  const dayName = this.getDayName(day.date);
+                  const dayName = GlobalStore.dictionary.dateAndTime.days[getDayIndex(day.date)];
                   return <ForecastItem data={day} dayName={dayName} key={key} />;
                 })}
               </ForecastContainer>
@@ -182,7 +181,8 @@ export default class WeatherCard extends React.Component<Props, State> {
                   onClick={this.onExpandButtonClick}
                   style={Object.assign({}, CardActionButtonStyle, { marginLeft: 0 })}
                 >
-                  {(!expanded && 'EXPAND') || 'COLLAPSE'}
+                  {(!expanded && dictionary.general.expand.toUpperCase())
+                    || dictionary.general.collapse.toUpperCase()}
                 </Button>
               </CardActions>
             </React.Fragment>
