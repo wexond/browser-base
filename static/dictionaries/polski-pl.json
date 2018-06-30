@@ -1,0 +1,64 @@
+{
+  "langName": "polski",
+  "langCode": "pl",
+  "addressBar": {
+    "search": "Wyszukaj"
+  },
+  "suggestions": {
+    "mostVisited": "Najczęściej odwiedzane",
+    "bookmarks": "Zakładki",
+    "history": "Historia",
+    "googleSuggestions": "Sugestie od Google",
+    "searchInGoogle": "wyszukaj w Google",
+    "openWebsite": "otwórz stronę"
+  },
+  "history": {
+    "title": "Historia",
+    "clearHistory": "Wyczyść historię"
+  },
+  "bookmarks": {
+    "title": "Zakładki"
+  },
+  "settings": {
+    "title": "Ustawienia"
+  },
+  "extensions": {
+    "title": "Rozszerzenia"
+  },
+  "about": {
+    "title": "Informacje",
+    "wexondVersion": "Wersja Wexond",
+    "reactVersion": "Wersja Reacta",
+    "electronVersion": "Wersja Electrona",
+    "nodejsVersion": "Wersja NodeJS"
+  },
+  "selecting": {
+    "selectAll": "Zaznacz wszystko",
+    "deselectAll": "Odznacz wszystko",
+    "deleteSelected": "Usuń zaznaczone"
+  },
+  "dateAndTime": {
+    "months": [
+      "Styczeń",
+      "Luty",
+      "Marzec",
+      "Kwiecień",
+      "Maj",
+      "Czerwiec",
+      "Lipiec",
+      "Sierpień",
+      "Wrzesień",
+      "Paźdźiernik",
+      "Listopad",
+      "Grudzień"
+    ],
+    "days": ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"],
+    "daysShort": ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Niedz"],
+    "today": "Dzisiaj",
+    "yesterday": "Wczoraj",
+    "oneMinuteAgo": "minutę temu",
+    "minutesAgo": "minut temu",
+    "oneHourAgo": "godzinę temu",
+    "hoursAgo": "godzin temu"
+  }
+}
