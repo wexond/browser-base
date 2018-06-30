@@ -56,9 +56,16 @@
     "daysShort": ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Niedz"],
     "today": "Dzisiaj",
     "yesterday": "Wczoraj",
-    "oneMinuteAgo": "minutę temu",
-    "minutesAgo": "minut temu",
-    "oneHourAgo": "godzinę temu",
-    "hoursAgo": "godzin temu"
+    "ago": "temu",
+    "oneMinute": "minutę",
+    "oneHour": "godzinę",
+    "minutes": {
+      "x<5": "minuty",
+      "x>6": "minut"
+    },
+    "hours": {
+      "x<5": "godziny",
+      "x>4": "godzin"
+    }
   }
 }

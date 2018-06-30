@@ -56,9 +56,10 @@
     "daysShort": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     "today": "Today",
     "yesterday": "Yesterday",
-    "oneMinuteAgo": "a minute ago",
-    "minutesAgo": "minutes ago",
-    "oneHourAgo": "an hour ago",
-    "hoursAgo": "hours ago"
+    "ago": "ago",
+    "oneMinute": "a minute ago",
+    "oneHour": "minutes ago",
+    "minutes": "minutes",
+    "hours": "hours"
   }
 }
