@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 
-const englishDictionary = require('../static/dictionaries/english.json');
+const englishDictionary = require('../static/dictionaries/english-en.json');
 
 class GlobalStore {
   // Observables
