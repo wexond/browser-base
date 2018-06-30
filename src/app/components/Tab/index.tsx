@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import tabAnimations from '../../defaults/tab-animations';
-import Tab from '../../models/tab';
+import TabModel from '../../models/tab';
 import Workspace from '../../models/workspace';
 import Store from '../../store';
 import { closeWindow } from '../../utils/window';
@@ -12,16 +12,16 @@ import components from '../../components';
 
 export interface TabProps {
   key: number;
-  tab: Tab;
+  tab: TabModel;
   workspace: Workspace;
   selected: boolean;
   onMouseDown?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  onTabMouseDown?: (e?: React.MouseEvent<HTMLDivElement>, tab?: Tab) => void;
+  onTabMouseDown?: (e?: React.MouseEvent<HTMLDivElement>, tab?: TabModel) => void;
   style?: any;
 }
 
 @observer
-export default class extends React.Component<TabProps, {}> {
+export default class Tab extends React.Component<TabProps, {}> {
   private ripples: Ripples;
 
   private iconRipples: Ripples;

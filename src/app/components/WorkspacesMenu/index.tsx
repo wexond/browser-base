@@ -17,7 +17,7 @@ export default class Workspaces extends Component<{}, {}> {
     const workspace: Workspace = new Workspace();
 
     Store.workspaces.list.push(workspace);
-    // Store.workspaces.selected = Store.workspaces.list.length;
+    Store.workspaces.selected = Store.workspaces.list[Store.workspaces.list.length - 1].id;
   };
 
   public render() {
@@ -27,14 +27,7 @@ export default class Workspaces extends Component<{}, {}> {
       <React.Fragment>
         <Root visible={visible} onClick={this.hide}>
           <ItemsContainer>
-            {list.map((workspace: Workspace) => (
-              <Item
-                icons={workspace.getIcons()}
-                label={workspace.name}
-                selected={selected === workspace.id}
-                key={workspace.id}
-              />
-            ))}
+            {list.map((workspace: Workspace) => <Item workspace={workspace} key={workspace.id} />)}
             <Add onClick={this.addNew} />
           </ItemsContainer>
           <Dark />
