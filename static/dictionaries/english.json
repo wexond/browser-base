@@ -1,0 +1,40 @@
+{
+  "langName": "english",
+  "langCode": "en",
+  "addressBar": {
+    "search": "Search"
+  },
+  "suggestions": {
+    "mostVisited": "Most visited",
+    "bookmarks": "Bookmarks",
+    "history": "History",
+    "googleSuggestions": "Google suggestions",
+    "searchInGoogle": "search in Google",
+    "openWebsite": "open website"
+  },
+  "history": {
+    "title": "History",
+    "clearHistory": "Clear browsing history"
+  },
+  "bookmarks": {
+    "title": "Bookmarks"
+  },
+  "settings": {
+    "title": "Settings"
+  },
+  "extensions": {
+    "title": "Extensions"
+  },
+  "about": {
+    "title": "About",
+    "wexondVersion": "Wexond version",
+    "reactVersion": "React version",
+    "electronVersion": "Electron version",
+    "nodejsVersion": "NodeJS version"
+  },
+  "selecting": {
+    "selectAll": "Select all",
+    "deselectAll": "Deselect all",
+    "deleteSelected": "Delete selected items"
+  }
+}
