@@ -4,6 +4,7 @@ import {
   Input, InputContainer, StyledAddressBar, Icon,
 } from './styles';
 import Store from '../../store';
+import GlobalStore from '../../../global-store';
 import Suggestions from '../Suggestions';
 import SuggestionItem from '../../models/suggestion-item';
 import { isURL, getAddressbarURL } from '../../../shared/utils/url';
@@ -149,7 +150,7 @@ export default class AddressBar extends Component<Props, {}> {
 
   public render() {
     const { visible } = this.props;
-    const dictionary = Store.dictionary.addressBar;
+    const dictionary = GlobalStore.dictionary.addressBar;
 
     if (Store.addressBar.toggled && this.visible !== Store.addressBar.toggled) {
       const page = Store.getSelectedPage();

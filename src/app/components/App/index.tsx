@@ -4,6 +4,7 @@ import { hot } from 'react-hot-loader';
 import React from 'react';
 import { StyledApp } from './styles';
 import Store from '../../store';
+import GlobalStore from '../../../global-store';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
 import Menu from '../Menu';
@@ -81,7 +82,7 @@ class App extends React.Component {
 
   public render() {
     const editingHistory = HistoryStore.selectedItems.length > 0;
-    const dictionary = Store.dictionary;
+    const dictionary = GlobalStore.dictionary;
 
     return (
       <StyledApp>
