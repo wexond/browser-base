@@ -2,6 +2,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { Caption, StyledSuggestions } from './styles';
 import Store from '../../store';
+import GlobalStore from '../../../global-store';
 import Suggestion from '../Suggestion';
 
 interface Props {
@@ -15,7 +16,7 @@ export default class Suggestions extends React.Component<Props, {}> {
   public render() {
     const { list } = Store.suggestions;
     const { visible } = this.props;
-    const dictionary = Store.dictionary.suggestions;
+    const dictionary = GlobalStore.dictionary.suggestions;
 
     const mostVisited = list.filter(x => x.type === 'most-visited');
     const history = list.filter(x => x.type === 'history');
