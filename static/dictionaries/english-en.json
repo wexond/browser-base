@@ -12,6 +12,10 @@
     "searchInGoogle": "search in Google",
     "openWebsite": "open website"
   },
+  "newTab": {
+    "precipitation": "Precipitation",
+    "winds": "Winds"
+  },
   "history": {
     "title": "History",
     "clearHistory": "Clear browsing history"
@@ -61,5 +65,9 @@
     "oneHour": "minutes ago",
     "minutes": "minutes",
     "hours": "hours"
+  },
+  "general": {
+    "expand": "expand",
+    "collapse": "collapse"
   }
 }
