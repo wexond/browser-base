@@ -35,6 +35,8 @@ export default class Workspace {
     time: 0,
   };
 
+  private interval: any;
+
   constructor() {
     observe(this, (change: any) => {
       if (change.name === 'selectedTab') {
@@ -45,7 +47,7 @@ export default class Workspace {
       }
     });
 
-    setInterval(() => {
+    this.interval = setInterval(() => {
       // Set widths and positions for tabs 3 seconds after a tab was closed
       if (this.timer.canReset && this.timer.time === 3) {
         this.updateTabsBounds();
@@ -184,5 +186,10 @@ export default class Workspace {
     }
 
     return icons;
+  }
+
+  public remove() {
+    clearInterval(this.interval);
+    Store.workspaces.list.splice(Store.workspaces.list.indexOf(this), 1);
   }
 }
