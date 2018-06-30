@@ -36,5 +36,29 @@
     "selectAll": "Select all",
     "deselectAll": "Deselect all",
     "deleteSelected": "Delete selected items"
+  },
+  "dateAndTime": {
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    "daysShort": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "oneMinuteAgo": "a minute ago",
+    "minutesAgo": "minutes ago",
+    "oneHourAgo": "an hour ago",
+    "hoursAgo": "hours ago"
   }
 }
