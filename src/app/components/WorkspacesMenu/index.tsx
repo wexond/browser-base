@@ -21,7 +21,7 @@ export default class Workspaces extends Component<{}, {}> {
   };
 
   public render() {
-    const { visible, selected, list } = Store.workspaces;
+    const { visible, list } = Store.workspaces;
 
     return (
       <React.Fragment>
