@@ -19,6 +19,7 @@ export const Content = styled.div`
   flex-flow: row;
   position: relative;
   padding-top: 24px;
+  padding-bottom: 24px;
   background-color: #f5f5f5;
   flex-wrap: wrap;
 
@@ -33,12 +34,24 @@ export const CardsContainer = styled.div`
 `;
 
 export const Credits = styled.div`
+  width: 100%;
+  height: 24px;
+  display: flex;
+  align-items: center;
   position: fixed;
-  bottom: 8px;
+  bottom: 0px;
   left: 8px;
   font-size: 12px;
-
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  background-color: #f5f5f5;
+
+  & a {
+    transition: 0.2s color;
+  }
+
+  & a:hover {
+    color: rgba(0, 0, 0, ${opacity.light.primaryText});
+  }
 `;
 
 export const Column = styled.div`
