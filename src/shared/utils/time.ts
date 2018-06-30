@@ -7,7 +7,7 @@ export const getTimePeriod = (hours: number, timeUnit: TimeUnit) => {
   return '';
 };
 
-export const getTime = (
+export const formatTime = (
   date?: Date,
   timeUnit: TimeUnit = TimeUnit.TwentyFourHours,
   minutes: boolean = true,
