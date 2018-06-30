@@ -36,10 +36,17 @@ export default class Scrollbar extends React.Component<Props, {}> {
     this.resizeScrollbar();
   }
 
+  public componentWillUnmount() {
+    window.removeEventListener('mouseup', this.onMouseUp);
+    window.removeEventListener('mousemove', this.onMouseMove);
+    window.removeEventListener('wheel', this.onWheel);
+  }
+
   public resizeScrollbar = () => {
-    if (this.props) {
-      const { scrollbar, getTabs } = this.props;
-      const tabs = getTabs();
+    const { scrollbar, getTabs } = this.props;
+    const tabs = getTabs();
+
+    if (this.props && tabs) {
       const { scrollWidth, offsetWidth, scrollLeft } = tabs;
 
       scrollbar.thumbWidth = offsetWidth ** 2 / scrollWidth;
