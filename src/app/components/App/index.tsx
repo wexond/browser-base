@@ -7,7 +7,7 @@ import Store from '../../store';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
 import Menu from '../Menu';
-import Workspaces from '../Workspaces';
+import WorkspacesMenu from '../WorkspacesMenu';
 import ContextMenu from '../../../shared/components/ContextMenu';
 import History from '../../../menu/history/components/History';
 import About from '../../../menu/about/components/About';
@@ -127,7 +127,7 @@ class App extends React.Component {
           <Menu.Item title="Extensions" icon={extensionsIcon} searchVisible content={<div />} />
           <Menu.Item title="About" icon={aboutIcon} searchVisible={false} content={<About />} />
         </Menu>
-        <Workspaces />
+        <WorkspacesMenu />
       </StyledApp>
     );
   }

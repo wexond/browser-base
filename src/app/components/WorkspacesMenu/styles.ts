@@ -12,10 +12,11 @@ export const Root = styled.div`
   z-index: 100;
   position: fixed;
   display: flex;
-  transition: 0.15s opacity;
+  transition: 0.2s opacity;
+  will-change: transition;
 
   opacity: ${({ visible }: Props) => (visible ? 1 : 0)};
-  pointer-events: ${({ visible }: Props) => (visible ? 'all' : 'none')};
+  pointer-events: ${({ visible }: Props) => (visible ? 'auto' : 'none')};
 `;
 
 export const ItemsContainer = styled.div`
@@ -32,5 +33,5 @@ export const Dark = styled.div`
   height: 100vh;
   position: absolute;
   z-index: 0;
-  background-color: rgba(0, 0, 0, 0.79);
+  background-color: rgba(0, 0, 0, 0.8);
 `;

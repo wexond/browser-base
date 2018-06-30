@@ -36,6 +36,7 @@ export const StyledTab = styled.div`
   height: 100%;
   align-items: center;
   transition: 0.2s background-color, 0.1s color;
+  will-change: transition, transform, width;
 
   z-index: ${({ selected }: TabProps) => (selected ? 2 : 1)};
   pointer-events: ${({ isRemoving, visible }) => (isRemoving || !visible ? 'none' : 'auto')};

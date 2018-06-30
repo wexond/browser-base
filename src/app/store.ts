@@ -18,8 +18,6 @@ class Store {
   // Observables
   @observable public workspaces = new Workspaces();
 
-  @observable public addTabButton = new AddTabButton();
-
   @observable public pages: Page[] = [];
 
   @observable public draggingTab = false;
@@ -33,6 +31,15 @@ class Store {
   @observable public menu = new Menu();
 
   @observable public pageMenu: ContextMenu;
+
+  @observable
+  public tabbarScrollbar = {
+    visible: false,
+    thumbWidth: 0,
+    thumbLeft: 0,
+    thumbVisible: false,
+    thumbDragging: false,
+  };
 
   @observable
   public navigationState = {
@@ -57,8 +64,6 @@ class Store {
     y: 0,
   };
 
-  public getTabBarWidth: () => number;
-
   public getCurrentWorkspace() {
     return this.getWorkspaceById(this.workspaces.selected);
   }
@@ -70,9 +75,14 @@ class Store {
   public getTabById(id: number) {
     const { workspaces } = this;
 
-    const tabs = this.workspaces.list.map(workspace => workspace.getTabById(id));
+    for (const workspace of workspaces.list) {
+      const tab = workspace.getTabById(id);
+      if (tab) {
+        return tab;
+      }
+    }
 
-    return tabs[0];
+    return null;
   }
 
   public getPageById(id: number) {
