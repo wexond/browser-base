@@ -7,13 +7,13 @@ export const Root = styled.div`
   height: 100%;
   width: 100%;
   position: absolute;
-  will-change: transition, transform, opacity;
-  transition: 0.3s transform, 0.2s opacity;
+  will-change: transition, margin-left, opacity;
+  transition: 0.3s margin-left, 0.35s opacity;
 
-  ${({ visible, hiding }: { visible: boolean; hiding: boolean }) => css`
+  ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
-    transform: ${visible ? 'scale(1)' : 'scale(0.8)'};
+    margin-left: ${visible ? '0' : '-50px'};
   `};
 `;
 

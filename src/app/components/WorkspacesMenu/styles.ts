@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export interface Props {
   visible: boolean;
@@ -26,6 +26,12 @@ export const ItemsContainer = styled.div`
   justify-content: center;
   align-self: center;
   z-index: 1;
+  transition: 0.2s transform;
+  will-change: transform;
+
+  ${({ visible }: { visible: boolean }) => css`
+    transform: ${visible ? 'scale(1)' : 'scale(1.2)'};
+  `};
 `;
 
 export const Dark = styled.div`

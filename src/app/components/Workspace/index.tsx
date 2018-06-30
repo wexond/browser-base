@@ -22,8 +22,6 @@ interface Props {
 export default class extends React.Component<Props, {}> {
   private tabs: HTMLDivElement;
 
-  private wasVisible: boolean;
-
   private tabDragData = {
     dragging: false,
     mouseStartX: 0,
@@ -310,16 +308,8 @@ export default class extends React.Component<Props, {}> {
 
     const selected = workspace.id === workspaces.selected;
 
-    let hiding = false;
-
-    if (this.wasVisible && !selected) {
-      hiding = true;
-    }
-
-    this.wasVisible = selected;
-
     return (
-      <Root visible={selected} hiding={hiding}>
+      <Root visible={selected}>
         <Tabs
           onWheel={this.onWheel}
           innerRef={(r: any) => (this.tabs = r)}
