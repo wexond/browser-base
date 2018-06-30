@@ -35,6 +35,45 @@ export const formatTime = (
 
 export const getDayIndex = (date: Date) => 0;
 
+const getOperator = (condition: string) => {
+  const operators = ['=', '<', '>'];
+
+  for (let i = 0; i < operators.length; i++) {
+    if (condition.indexOf(operators[i]) !== -1) {
+      return operators[i];
+    }
+  }
+
+  return null;
+};
+
+export const getConditionsTime = (time: number, conditions: any) => {
+  if (typeof conditions === 'object') {
+    const keys = Object.keys(conditions);
+
+    for (let i = 0; i < keys.length; i++) {
+      const condition = keys[i].replace('x', time.toString());
+      const operator = getOperator(condition);
+      const parts = condition.split(operator);
+
+      if (operator != null) {
+        const firstSide = parseInt(parts[0], 10);
+        const secondSide = parseInt(parts[1], 10);
+
+        if (
+          (operator === '<' && firstSide < secondSide)
+          || (operator === '>' && firstSide > secondSide)
+          || (operator === '=' && firstSide === secondSide)
+        ) {
+          return conditions[keys[i]];
+        }
+      }
+    }
+  }
+
+  return conditions;
+};
+
 export const getTimeOffset = (date: Date) => {
   const dictionary = GlobalStore.dictionary.dateAndTime;
   const currentdate = new Date();
@@ -42,20 +81,23 @@ export const getTimeOffset = (date: Date) => {
 
   const hours = diff.getHours() - 1;
   const minutes = diff.getMinutes();
+  let value = hours;
+  let showHours = true;
 
   if (hours === 0) {
     if (minutes <= 1) {
       return dictionary.oneMinuteAgo;
     }
 
-    return `${minutes} ${dictionary.minutesAgo}`;
-  }
-
-  if (hours === 1) {
+    showHours = false;
+    value = minutes;
+  } else if (hours === 1) {
     return dictionary.oneHourAgo;
   }
 
-  return `${hours} ${dictionary.hoursAgo}`;
+  return `${value} ${getConditionsTime(value, showHours ? dictionary.hours : dictionary.minutes)} ${
+    dictionary.ago
+  }`;
 };
 
 export const formatDate = (date: Date) => {
