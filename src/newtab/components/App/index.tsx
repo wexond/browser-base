@@ -66,7 +66,7 @@ export default class App extends React.Component<{}, IState> {
 
     return (
       <StyledApp>
-        {!contentVisible && <Preloader size={48} style={preloaderStyle} />}
+        {!contentVisible && <Preloader style={preloaderStyle} />}
         <Content visible={contentVisible}>
           <Column>
             <WeatherCard data={weatherData} />

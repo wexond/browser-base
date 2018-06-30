@@ -62,6 +62,10 @@ injectGlobal`
       stroke-dashoffset: -124px;
     }
   }
+
+  @keyframes nersent-ui-progressbar-first {
+
+  }
 `;
 
 function render(Component: any) {
