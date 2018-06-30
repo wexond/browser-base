@@ -7,16 +7,40 @@ import colors from '../../../../shared/defaults/colors';
 
 import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '../../../constants';
 
+const closeIcon = require('../../../../shared/icons/close.svg');
+
 export const Root = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   text-align: center;
   margin-left: 32px;
+  position: relative;
+  cursor: pointer;
 
   &:first-child {
     margin-left: 0px;
   }
+
+  &:hover .delete-icon {
+    opacity: 1;
+  }
+`;
+
+export const DeleteIcon = styled.div`
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: #fff;
+  border-radius: 100%;
+  background-image: url(${closeIcon});
+  box-shadow: ${shadows(2)};
+  opacity: 0;
+  transition: 0.2s opacity;
+
+  ${images.center('16px', 'auto')};
 `;
 
 export interface IconsContainerProps {
