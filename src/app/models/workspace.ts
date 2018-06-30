@@ -3,11 +3,14 @@ import TabsIndicator from './tabs-indicator';
 import Tab from './tab';
 import { TAB_MIN_WIDTH, WORKSPACE_MAX_ICONS_COUNT } from '../constants';
 import Store from '../store';
+import AddTabButton from './add-tab-button';
 
 const pageIcon = require('../../shared/icons/page.svg');
 
+let nextWorkspaceId = 0;
+
 export default class Workspace {
-  @observable public id: number = 0;
+  @observable public id: number = -1;
 
   @observable public name: string = 'Workspace';
 
@@ -16,6 +19,16 @@ export default class Workspace {
   @observable public tabs: Tab[] = [];
 
   @observable public tabsIndicator = new TabsIndicator();
+
+  @observable public addTabButton = new AddTabButton();
+
+  @observable
+  public scrollbar = {
+    thumbWidth: 0,
+    thumbLeft: 0,
+    thumbVisible: false,
+    visible: false,
+  };
 
   public timer = {
     canReset: true,
@@ -43,7 +56,11 @@ export default class Workspace {
       }
       this.timer.time++;
     }, 1000);
+
+    this.id = nextWorkspaceId++;
   }
+
+  public getContainerWidth: () => number;
 
   public getSelectedTab() {
     return this.getTabById(this.selectedTab);
@@ -55,7 +72,7 @@ export default class Workspace {
   }
 
   public setTabsPositions(animation = true, tabToIgnore: Tab = null) {
-    const { tabs } = this;
+    const { tabs, addTabButton } = this;
     const newTabs = tabs.filter(tab => !tab.isRemoving);
 
     let left = 0;
@@ -65,14 +82,9 @@ export default class Workspace {
       left += item.width;
     }
 
-    const marginLeft = parseInt(getComputedStyle(Store.addTabButton.ref).marginLeft, 10);
+    left = Math.min(left, this.getContainerWidth());
 
-    left = Math.min(
-      left,
-      Store.getTabBarWidth() - (marginLeft + Store.addTabButton.ref.offsetWidth),
-    );
-
-    Store.addTabButton.setLeft(left, animation);
+    addTabButton.setLeft(left, animation);
   }
 
   public setTabsWidths(animation = true) {
@@ -87,7 +99,7 @@ export default class Workspace {
   public getTabById = (id: number): Tab => this.tabs.filter(item => item.id === id)[0];
 
   public addTab = (): Tab => {
-    const index = this.tabs.push(new Tab()) - 1;
+    const index = this.tabs.push(new Tab(this)) - 1;
     const tab = this.tabs[index];
 
     this.selectTab(tab);

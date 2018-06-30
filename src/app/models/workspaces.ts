@@ -1,5 +1,6 @@
-import { observable } from 'mobx';
+import { observable, observe } from 'mobx';
 import Workspace from './workspace';
+import Store from '../store';
 
 export default class Workspaces {
   @observable public visible = false;
