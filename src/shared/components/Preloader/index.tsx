@@ -13,7 +13,7 @@ export interface IProps {
 export default class Preloader extends React.Component<IProps, {}> {
   public static defaultProps = {
     thickness: 4,
-    size: 32,
+    size: 48,
     color: colors.blue['500'],
   };
 
