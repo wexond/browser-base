@@ -5,7 +5,7 @@ import Button from '../../../shared/components/Button';
 import Slider from '../../../shared/components/Slider';
 import opacity from '../../../shared/defaults/opacity';
 import { TimeUnit, ButtonType, SliderType } from '../../../shared/enums';
-import { getTime, getDay } from '../../../shared/utils/time';
+import { formatTime, getDay } from '../../../shared/utils/time';
 
 import {
   Card,
@@ -68,7 +68,7 @@ export default class WeatherCard extends React.Component<Props, State> {
       const currentDate = new Date();
       const daysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-      return `${getDay(daysShort, currentDate)}, ${getTime(date, timeUnit)}, ${description}`;
+      return `${getDay(daysShort, currentDate)}, ${formatTime(date, timeUnit)}, ${description}`;
     }
 
     return null;
@@ -124,7 +124,7 @@ export default class WeatherCard extends React.Component<Props, State> {
 
     if (data != null) {
       for (let i = 0; i < data.daily.length; i++) {
-        sliderTicks.push(getTime(data.daily[i].date, data.timeUnit, false));
+        sliderTicks.push(formatTime(data.daily[i].date, data.timeUnit, false));
       }
     }
 
