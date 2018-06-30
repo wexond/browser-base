@@ -10,6 +10,8 @@ import Workspace from './models/workspace';
 import Menu from './models/menu';
 import ContextMenu from '../shared/components/ContextMenu';
 
+const englishDictionary = require('../../static/dictionaries/english.json');
+
 export interface Favicons {
   [key: string]: string;
 }
@@ -33,6 +35,8 @@ class Store {
   @observable public menu = new Menu();
 
   @observable public pageMenu: ContextMenu;
+
+  @observable public dictionary: any = englishDictionary;
 
   @observable
   public navigationState = {

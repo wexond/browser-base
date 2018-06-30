@@ -149,6 +149,7 @@ export default class AddressBar extends Component<Props, {}> {
 
   public render() {
     const { visible } = this.props;
+    const dictionary = Store.dictionary.addressBar;
 
     if (Store.addressBar.toggled && this.visible !== Store.addressBar.toggled) {
       const page = Store.getSelectedPage();
@@ -177,7 +178,7 @@ export default class AddressBar extends Component<Props, {}> {
             suggestionsVisible={suggestionsVisible}
             innerRef={r => (this.input = r)}
             onFocus={this.onInputFocus}
-            placeholder="Search"
+            placeholder={dictionary.search}
             onInput={this.onInput}
             visible={Store.addressBar.toggled}
             onKeyPress={this.onKeyPress}
