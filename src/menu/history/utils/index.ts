@@ -2,6 +2,7 @@ import Section from '../models/section';
 import AppStore from '../../../app/store';
 import HistoryStore from '../store';
 import db from '../../../shared/models/app-database';
+import { formatDate } from '../../../shared/utils/time';
 
 export async function getHistorySections(filter = '') {
   return new Promise(async (resolve: (r: Section[]) => void) => {
@@ -15,14 +16,7 @@ export async function getHistorySections(filter = '') {
       const item = items[i];
       const date = new Date(item.date);
 
-      const year = date
-        .getFullYear()
-        .toString()
-        .padStart(2, '0');
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = (date.getDay() + 1).toString().padStart(2, '0');
-
-      const dateStr = `${year}-${month}-${day}`;
+      const dateStr = formatDate(date);
 
       const foundSection = sections.find(x => x.date === dateStr);
 

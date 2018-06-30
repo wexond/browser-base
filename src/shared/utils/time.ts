@@ -1,7 +1,5 @@
 import { TimeUnit } from '../enums';
 
-export const getTimeWithZero = (time: number) => (time < 10 ? `0${time}` : time);
-
 export const getTimePeriod = (hours: number, timeUnit: TimeUnit) => {
   if (timeUnit === TimeUnit.TwelveHours) {
     return hours > 12 ? ' PM' : ' AM';
@@ -23,8 +21,13 @@ export const getTime = (
     hours -= 12;
   }
 
-  const _hours = getTimeWithZero(hours);
-  const _minutes = minutes ? getTimeWithZero(date.getMinutes()) : '';
+  const _hours = hours.toString().padStart(2, '0');
+  const _minutes = minutes
+    ? date
+      .getMinutes()
+      .toString()
+      .padStart(2, '0')
+    : '';
 
   return `${_hours}${minutes ? ':' : ''}${_minutes}${timePeriod}`;
 };
@@ -48,4 +51,39 @@ export const getTimeOffset = (date: Date) => {
 
   if (hours === 1) return 'an hour ago';
   return `${hours} hours ago`;
+};
+
+export const formatDate = (date: Date) => {
+  date = new Date();
+  const currentDate = new Date();
+
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  let prefix = '';
+
+  if (date.getDate() === currentDate.getDate()) {
+    prefix = 'Today - ';
+  } else if (date.getDate() === currentDate.getDate() - 1) {
+    prefix = 'Yesterday - ';
+  }
+
+  const dayName = getDay(days, date);
+  const monthName = months[date.getMonth()];
+
+  return `${prefix}${dayName}, ${monthName} ${date.getDate()}, ${date.getFullYear()}`;
 };
