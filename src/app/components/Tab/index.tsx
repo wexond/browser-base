@@ -2,7 +2,6 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import tabAnimations from '../../defaults/tab-animations';
 import TabModel from '../../models/tab';
-import Workspace from '../../models/workspace';
 import Store from '../../store';
 import { closeWindow } from '../../utils/window';
 
@@ -13,8 +12,6 @@ import components from '../../components';
 export interface TabProps {
   key: number;
   tab: TabModel;
-  workspace: Workspace;
-  selected: boolean;
   onMouseDown?: (e: React.MouseEvent<HTMLDivElement>) => void;
   onTabMouseDown?: (e?: React.MouseEvent<HTMLDivElement>, tab?: TabModel) => void;
   style?: any;
@@ -54,10 +51,11 @@ export default class Tab extends React.Component<TabProps, {}> {
   }
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    const {
-      selected, tab, workspace, onTabMouseDown,
-    } = this.props;
+    const { tab, onTabMouseDown } = this.props;
+    const { workspace } = tab;
     const { pageX, pageY } = e;
+
+    const selected = tab.workspace.selectedTab === tab.id;
 
     Store.addressBar.canToggle = selected;
     setTimeout(() => {
@@ -89,7 +87,9 @@ export default class Tab extends React.Component<TabProps, {}> {
   };
 
   public onClose = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { workspace, tab, selected } = this.props;
+    const { tab } = this.props;
+    const { workspace } = tab;
+    const selected = workspace.selectedTab === tab.id;
 
     e.stopPropagation();
 
@@ -131,9 +131,9 @@ export default class Tab extends React.Component<TabProps, {}> {
   };
 
   public render() {
-    const {
-      selected, tab, workspace, children,
-    } = this.props;
+    const { tab, children } = this.props;
+    const { workspace } = tab;
+    const selected = workspace.selectedTab === tab.id;
 
     const {
       title, isRemoving, hovered, dragging, favicon,
