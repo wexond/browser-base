@@ -5,6 +5,7 @@ import Store from '../store';
 import {
   TAB_MAX_WIDTH, TAB_MIN_WIDTH, TAB_PINNED_WIDTH, TOOLBAR_BUTTON_WIDTH,
 } from '../constants';
+import Workspace from './workspace';
 
 let nextTabId = 0;
 
@@ -33,22 +34,18 @@ export default class Tab {
 
   public tab: HTMLDivElement;
 
-  public workspace = Store.getCurrentWorkspace();
+  public workspace: Workspace;
 
-  constructor() {
+  constructor(workspace: Workspace) {
     this.id = nextTabId++;
+    this.workspace = workspace;
   }
 
   public getInitialWidth(): number {
     const newTabs = this.workspace.tabs.filter(tab => !tab.isRemoving);
-    const containerWidth = Store.getTabBarWidth();
+    const containerWidth = this.workspace.getContainerWidth();
 
-    let width: number = this.pinned
-      ? TAB_PINNED_WIDTH
-      : (containerWidth
-          - TOOLBAR_BUTTON_WIDTH
-          - parseInt(getComputedStyle(Store.addTabButton.ref).marginLeft, 10))
-        / newTabs.length;
+    let width: number = this.pinned ? TAB_PINNED_WIDTH : containerWidth / newTabs.length;
 
     if (width > TAB_MAX_WIDTH) {
       width = TAB_MAX_WIDTH;
