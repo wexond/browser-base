@@ -170,7 +170,7 @@ export default class WeatherCard extends React.Component<Props, State> {
                 height={forecastHeight}
               >
                 {data.week.map((day: any, key: any) => {
-                  const dayName = GlobalStore.dictionary.dateAndTime[getDayIndex(day.date)];
+                  const dayName = GlobalStore.dictionary.dateAndTime.days[getDayIndex(day.date)];
                   return <ForecastItem data={day} dayName={dayName} key={key} />;
                 })}
               </ForecastContainer>
