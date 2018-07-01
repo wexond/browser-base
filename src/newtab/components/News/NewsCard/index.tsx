@@ -40,7 +40,7 @@ export default class NewsCard extends React.Component<Props, State> {
         <Card>
           <CardImage visible={loaded} src={data.urlToImage} />
           <CardHeader>
-            <Overline>{getTimeOffset(new Date(data.publishedAt))}</Overline>
+            <Overline>{getTimeOffset(new Date(data.publishedAt), this)}</Overline>
             <Title>{data.title}</Title>
 
             {data.description
