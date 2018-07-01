@@ -1,16 +1,16 @@
-import { Expo, TweenLite } from 'gsap';
+import { TweenLite } from 'gsap';
 import { observe } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
 import {
-  Indicator, Scrollbar, ScrollbarThumb, Tabs, Root, AddTabButton,
+  Indicator, Tabs, Root, AddTabButton,
 } from './styles';
 import { TOOLBAR_HEIGHT } from '../../constants';
-import tabAnimations from '../../defaults/tab-animations';
 import Tab from '../../models/tab';
 import TabComponent from '../Tab';
 import Workspace from '../../models/workspace';
 import Store from '../../store';
+import Scrollbar from './Scrollbar';
 
 const addTabIcon = require('../../../shared/icons/add.svg');
 
@@ -22,6 +22,10 @@ interface Props {
 export default class extends React.Component<Props, {}> {
   private tabs: HTMLDivElement;
 
+  private scrollbar: Scrollbar;
+
+  private lastScrollLeft = 0;
+
   private tabDragData = {
     dragging: false,
     mouseStartX: 0,
@@ -29,19 +33,6 @@ export default class extends React.Component<Props, {}> {
     lastMouseX: 0,
     direction: '',
   };
-
-  private scrollData = {
-    dragging: false,
-    mouseStartX: 0,
-    startLeft: 0,
-    newScrollLeft: -1,
-    maxScrollLeft: 0,
-    lastScrollLeft: 0,
-  };
-
-  private scrollInterval: any;
-
-  private scrollTimeout: any;
 
   public componentDidMount() {
     const { workspace } = this.props;
@@ -58,8 +49,6 @@ export default class extends React.Component<Props, {}> {
       workspace.tabsIndicator.width = selectedTab.width;
     });
 
-    this.resizeScrollbar();
-
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
 
@@ -70,26 +59,10 @@ export default class extends React.Component<Props, {}> {
     observe(workspace.tabs, (change: any) => {
       if (change.addedCount > 0 && change.removedCount === 0) {
         const tab = change.added[0] as Tab;
-        const width = tab.getWidth();
-
-        this.scrollData.maxScrollLeft += width;
-
-        clearInterval(this.scrollInterval);
-
-        this.scrollInterval = setInterval(() => {
-          if (this.scrollData != null && this.tabs != null) {
-            this.tabs.scrollLeft = this.scrollData.maxScrollLeft;
-          }
-        }, 1);
-
-        clearTimeout(this.scrollTimeout);
-
-        this.scrollTimeout = setTimeout(() => {
-          clearInterval(this.scrollInterval);
-        }, tabAnimations.left.duration * 1000);
 
         requestAnimationFrame(() => {
           tab.setLeft(tab.getLeft(), false);
+          this.scrollbar.onNewTab(tab);
           workspace.updateTabsBounds();
         });
       }
@@ -98,28 +71,17 @@ export default class extends React.Component<Props, {}> {
     workspace.getContainerWidth = this.getTabsWidth;
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     const { workspace } = this.props;
-
-    clearInterval(this.scrollInterval);
     workspace.tabs = [];
+
+    window.removeEventListener('mouseup', this.onMouseUp);
+    window.removeEventListener('mouseup', this.onMouseMove);
   }
 
   public getTabsWidth = () => this.tabs.offsetWidth;
 
-  public resizeScrollbar = () => {
-    if (this.props) {
-      const { scrollWidth, offsetWidth, scrollLeft } = this.tabs;
-      const { workspace } = this.props;
-      const { scrollbar } = workspace;
-
-      scrollbar.thumbWidth = offsetWidth ** 2 / scrollWidth;
-      scrollbar.thumbLeft = (scrollLeft / scrollWidth) * offsetWidth;
-      scrollbar.visible = Math.ceil(scrollbar.thumbWidth) !== Math.ceil(this.tabs.offsetWidth);
-
-      requestAnimationFrame(this.resizeScrollbar);
-    }
-  };
+  public getTabs = () => this.tabs;
 
   public onTabMouseDown = (e: React.MouseEvent<HTMLDivElement>, tab: Tab) => {
     this.tabDragData = {
@@ -132,7 +94,7 @@ export default class extends React.Component<Props, {}> {
 
     Store.draggingTab = true;
 
-    this.scrollData.lastScrollLeft = this.tabs.scrollLeft;
+    this.lastScrollLeft = this.tabs.scrollLeft;
   };
 
   public onMouseEnter = () => {
@@ -145,27 +107,8 @@ export default class extends React.Component<Props, {}> {
     workspace.scrollbar.thumbVisible = false;
   };
 
-  public onScrollbarMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { workspace } = this.props;
-    const { scrollbar } = workspace;
-
-    clearInterval(this.scrollInterval);
-
-    this.scrollData = {
-      ...this.scrollData,
-      dragging: true,
-      mouseStartX: e.pageX,
-      startLeft: scrollbar.thumbLeft,
-    };
-  };
-
   public onMouseUp = () => {
     const { workspace } = this.props;
-
-    this.scrollData = {
-      ...this.scrollData,
-      dragging: false,
-    };
 
     this.tabDragData.dragging = false;
     workspace.setTabsPositions();
@@ -179,41 +122,6 @@ export default class extends React.Component<Props, {}> {
     }
   };
 
-  public onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    const { deltaX, deltaY } = e;
-    const { scrollLeft, scrollWidth, offsetWidth } = this.tabs;
-
-    let { newScrollLeft } = this.scrollData;
-
-    const delta = Math.abs(deltaX) >= Math.abs(deltaY) ? deltaX : -deltaY;
-    const target = delta / 2;
-
-    clearInterval(this.scrollInterval);
-
-    if (scrollLeft !== newScrollLeft && newScrollLeft !== -1) {
-      newScrollLeft += target;
-    } else {
-      newScrollLeft = scrollLeft + target;
-    }
-
-    if (newScrollLeft > scrollWidth - offsetWidth) {
-      newScrollLeft = scrollWidth - offsetWidth;
-    }
-    if (newScrollLeft < 0) {
-      newScrollLeft = 0;
-    }
-
-    this.scrollData = {
-      ...this.scrollData,
-      newScrollLeft,
-    };
-
-    TweenLite.to(this.tabs, 0.3, {
-      scrollLeft: newScrollLeft,
-      ease: Expo.easeOut,
-    });
-  };
-
   public onAddTabButtonClick = () => {
     const { workspace } = this.props;
     workspace.addTab();
@@ -225,11 +133,6 @@ export default class extends React.Component<Props, {}> {
     const { workspace } = this.props;
     const selectedTab = workspace.getSelectedTab();
 
-    if (this.scrollData.dragging) {
-      const { startLeft, mouseStartX } = this.scrollData;
-      const { offsetWidth, scrollWidth } = this.tabs;
-      this.tabs.scrollLeft = ((startLeft + e.pageX - mouseStartX) / offsetWidth) * scrollWidth;
-    }
     if (this.tabDragData.dragging) {
       const { startLeft, mouseStartX } = this.tabDragData;
       const { scrollLeft } = this.tabs;
@@ -243,19 +146,13 @@ export default class extends React.Component<Props, {}> {
       selectedTab.dragging = true;
       Store.addressBar.canToggle = false;
 
-      const newLeft = startLeft
-        + e.pageX
-        - mouseStartX
-        - (this.scrollData.lastScrollLeft - scrollLeft);
+      const newLeft = startLeft + e.pageX - mouseStartX - (this.lastScrollLeft - scrollLeft);
 
       let left = newLeft;
 
       if (newLeft < 0) {
         left = 0;
-      } else if (
-        newLeft + selectedTab.width
-        > workspace.addTabButton.left + scrollLeft
-      ) {
+      } else if (newLeft + selectedTab.width > workspace.addTabButton.left + scrollLeft) {
         left = workspace.addTabButton.left - selectedTab.width;
       }
 
@@ -299,31 +196,18 @@ export default class extends React.Component<Props, {}> {
   public render() {
     const { workspace } = this.props;
     const { workspaces } = Store;
-    const {
-      visible,
-      thumbWidth,
-      thumbLeft,
-      thumbVisible,
-    } = workspace.scrollbar;
 
     const selected = workspace.id === workspaces.selected;
 
     return (
       <Root visible={selected}>
         <Tabs
-          onWheel={this.onWheel}
           innerRef={(r: any) => (this.tabs = r)}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
           {workspace.tabs.map(tab => (
-            <TabComponent
-              key={tab.id}
-              workspace={workspace}
-              tab={tab}
-              selected={workspace.selectedTab === tab.id}
-              onTabMouseDown={this.onTabMouseDown}
-            />
+            <TabComponent key={tab.id} tab={tab} onTabMouseDown={this.onTabMouseDown} />
           ))}
           <Indicator
             style={{
@@ -337,16 +221,11 @@ export default class extends React.Component<Props, {}> {
           onClick={this.onAddTabButtonClick}
           divRef={r => (workspace.addTabButton.ref = r)}
         />
-        <Scrollbar visible={visible}>
-          <ScrollbarThumb
-            style={{
-              width: thumbWidth,
-              left: thumbLeft,
-            }}
-            visible={thumbVisible}
-            onMouseDown={this.onScrollbarMouseDown}
-          />
-        </Scrollbar>
+        <Scrollbar
+          ref={r => (this.scrollbar = r)}
+          scrollbar={workspace.scrollbar}
+          getTabs={this.getTabs}
+        />
       </Root>
     );
   }
