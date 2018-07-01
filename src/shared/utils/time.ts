@@ -74,7 +74,7 @@ export const getConditionsTime = (time: number, conditions: any) => {
   return conditions;
 };
 
-export const getTimeOffset = (date: Date) => {
+export const getTimeOffset = (date: Date, t?: any) => {
   const dictionary = GlobalStore.dictionary.dateAndTime;
   const currentdate = new Date();
   const diff = new Date(currentdate.getTime() - date.getTime());
@@ -86,13 +86,13 @@ export const getTimeOffset = (date: Date) => {
 
   if (hours === 0) {
     if (minutes <= 1) {
-      return dictionary.oneMinuteAgo;
+      return `${dictionary.oneMinute} ${dictionary.ago}`;
     }
 
     showHours = false;
     value = minutes;
   } else if (hours === 1) {
-    return dictionary.oneHourAgo;
+    return `${dictionary.oneHour} ${dictionary.ago}`;
   }
 
   return `${value} ${getConditionsTime(value, showHours ? dictionary.hours : dictionary.minutes)} ${
