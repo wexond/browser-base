@@ -80,8 +80,8 @@ export default class App extends React.Component<{}, IState> {
           </Column>
         </Content>
         <Credits>
-          APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and{' '}
-          <a href="https://newsapi.org/">News API</a>
+          APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and
+          <a href="https://newsapi.org/"> News API</a>
         </Credits>
       </StyledApp>
     );
