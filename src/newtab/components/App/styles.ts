@@ -35,10 +35,10 @@ export const CardsContainer = styled.div`
 
 export const Credits = styled.div`
   width: 100%;
-  height: 24px;
-  display: flex;
   align-items: center;
   position: fixed;
+  padding-top: 4px;
+  padding-bottom: 4px;
   bottom: 0px;
   left: 8px;
   font-size: 12px;
