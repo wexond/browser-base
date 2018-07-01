@@ -61,8 +61,8 @@
     "today": "Today",
     "yesterday": "Yesterday",
     "ago": "ago",
-    "oneMinute": "a minute ago",
-    "oneHour": "minutes ago",
+    "oneMinute": "a minute",
+    "oneHour": "an hour",
     "minutes": "minutes",
     "hours": "hours"
   },
