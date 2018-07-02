@@ -1,23 +1,24 @@
 import styled, { css } from 'styled-components';
-import images from '../../../../shared/mixins/images';
-import typography from '../../../../shared/mixins/typography';
-import opacity from '../../../../shared/defaults/opacity';
+import images from '../../mixins/images';
+import typography from '../../mixins/typography';
+import opacity from '../../defaults/opacity';
 
-const removeIcon = require('../../../../shared/icons/close.svg');
+const removeIcon = require('../../icons/close.svg');
 
-interface StyledItemProps {
+interface ItemProps {
   selected: boolean;
 }
 
-export const StyledItem = styled.div`
+export const PageItem = styled.div`
   height: 56px;
   width: 100%;
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   transition: 0.1s all;
+  position: relative;
 
-  background-color: ${({ selected }: StyledItemProps) =>
+  background-color: ${({ selected }: ItemProps) =>
     (selected ? 'rgba(0, 0, 0, 0.08)' : 'transparent')};
 
   &:hover {
@@ -30,7 +31,7 @@ export const StyledItem = styled.div`
   }
 `;
 
-export const Icon = styled.div`
+export const PageItemIcon = styled.div`
   height: 16px;
   min-width: 16px;
   margin-left: 24px;
@@ -42,7 +43,7 @@ interface RemoveIconProps {
   visible: boolean;
 }
 
-export const RemoveIcon = styled.div`
+export const PageItemRemoveIcon = styled.div`
   position: absolute;
   left: 24px;
   height: 16px;
@@ -62,19 +63,19 @@ export const RemoveIcon = styled.div`
   `};
 `;
 
-export const PrimaryText = styled.div`
+export const PageItemPrimaryText = styled.div`
   ${typography.robotoRegular()};
   font-size: 14px;
   opacity: ${opacity.light.primaryText};
 `;
 
-export const SecondaryText = styled.div`
+export const PageItemSecondaryText = styled.div`
   ${typography.robotoRegular()};
   font-size: 14px;
   opacity: ${opacity.light.secondaryText};
 `;
 
-export const Title = styled(PrimaryText)`
+export const PageItemTitle = styled(PageItemPrimaryText)`
   margin-left: 48px;
   overflow: hidden;
   white-space: nowrap;
@@ -82,6 +83,6 @@ export const Title = styled(PrimaryText)`
   margin-right: 24px;
 `;
 
-export const Time = styled(SecondaryText)`
+export const PageItemTime = styled(PageItemSecondaryText)`
   margin-left: 24px;
 `;
