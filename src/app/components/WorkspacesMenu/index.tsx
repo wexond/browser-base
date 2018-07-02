@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import React, { Component } from 'react';
+import React from 'react';
 import Store from '../../store';
 import Workspace from '../../models/workspace';
 import Add from './Add';
@@ -7,7 +7,7 @@ import Item from './Item';
 import { Root, ItemsContainer, Dark } from './styles';
 
 @observer
-export default class Workspaces extends Component<{}, {}> {
+export default class Workspaces extends React.Component<{}, {}> {
   hide = () => {
     Store.workspaces.visible = false;
   };
