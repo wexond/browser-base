@@ -73,26 +73,30 @@ class App extends React.Component {
       Store.pageMenu.toggle(false);
     });
 
+    /* eslint-disable brace-style */
     window.addEventListener('keydown', e => {
-      // 37 - Arrow left
-      // 39 - Arrow right
+      const { workspaces, menu } = Store;
 
-      const { workspaces } = Store;
-
-      if (e.ctrlKey && e.keyCode === 37) {
+      // Escape, hidding
+      if (e.keyCode === 27) {
+        if (workspaces.visible) workspaces.visible = false;
+        if (menu.visible) menu.visible = false;
+      }
+      // Ctrl + Arrows, switching between workspaces
+      else if (e.ctrlKey) {
         workspaces.visible = true;
 
-        if (workspaces.selected - 1 >= 0) {
+        // Left arrow
+        if (e.keyCode === 37 && workspaces.selected - 1 >= 0) {
           workspaces.selected--;
         }
-      } else if (e.ctrlKey && e.keyCode === 39) {
-        workspaces.visible = true;
-
-        if (workspaces.selected + 1 < workspaces.list.length) {
+        // Right arrow
+        else if (e.keyCode === 39 && workspaces.selected + 1 < workspaces.list.length) {
           workspaces.selected++;
         }
       }
     });
+    /* eslint-enable brace-style */
 
     // ipcRenderer.send(ipcMessages.PLUGIN_INSTALL, 'wexond/wexond-example-plugin');
   }
