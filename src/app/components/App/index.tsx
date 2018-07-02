@@ -83,25 +83,32 @@ class App extends React.Component {
       // hide menu and workspaces manager
       if (e.keyCode === 27) {
         if (workspaces.visible) workspaces.visible = false;
-        if (menu.visible) menu.visible = false;
+
+        if (menu.visible) {
+          menu.visible = false;
+          menu.selectedItem = null;
+        }
       }
       // ctrl + left or aight arrow,
       // switch between workspaces
       else if ((e.ctrlKey || workspaces.visible) && (e.keyCode === 37 || e.keyCode === 39)) {
+        const list = workspaces.list;
+        const index = list.indexOf(Store.getCurrentWorkspace());
+
         // left
         if (e.keyCode === 37) {
-          if (workspaces.selected <= 0) {
-            workspaces.selected = workspaces.list.length - 1;
+          if (index <= 0) {
+            workspaces.selected = list[list.length - 1].id;
           } else {
-            workspaces.selected--;
+            workspaces.selected = list[index - 1].id;
           }
         }
         // right
         else if (e.keyCode === 39) {
-          if (workspaces.selected + 1 === workspaces.list.length) {
+          if (index + 1 === workspaces.list.length) {
             workspaces.selected = 0;
           } else {
-            workspaces.selected++;
+            workspaces.selected = list[index + 1].id;
           }
         } else {
           return;
