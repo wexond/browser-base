@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react';
 import React from 'react';
 
 import {
@@ -11,6 +12,7 @@ export interface Props {
   workspace: Workspace;
 }
 
+@observer
 export default class extends React.Component<Props, {}> {
   public static defaultProps = {
     selected: false,
