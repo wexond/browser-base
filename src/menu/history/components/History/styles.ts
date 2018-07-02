@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import typography from '../../../../shared/mixins/typography';
 import opacity from '../../../../shared/defaults/opacity';
-import shadows from '../../../../shared/mixins/shadows';
 
 export const Content = styled.div`
   max-width: 640px;
