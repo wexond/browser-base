@@ -75,18 +75,19 @@ class App extends React.Component {
 
     /* eslint-disable brace-style */
     window.addEventListener('keydown', e => {
+      if (!e.isTrusted) return;
       const { workspaces, menu } = Store;
 
-      if (!e.isTrusted) return;
-
-      // Escape, hidding menu and workspaces manager
+      // escape
+      // hide menu and workspaces manager
       if (e.keyCode === 27) {
         if (workspaces.visible) workspaces.visible = false;
         if (menu.visible) menu.visible = false;
       }
-      // Ctrl + Left or Right arrow, Switching between workspaces
-      else if (e.ctrlKey && (e.keyCode === 37 || e.keyCode === 39)) {
-        // Left
+      // ctrl + left or aight arrow,
+      // switch between workspaces
+      else if ((e.ctrlKey || workspaces.visible) && (e.keyCode === 37 || e.keyCode === 39)) {
+        // left
         if (e.keyCode === 37) {
           if (workspaces.selected <= 0) {
             workspaces.selected = workspaces.list.length - 1;
@@ -94,7 +95,7 @@ class App extends React.Component {
             workspaces.selected--;
           }
         }
-        // Right
+        // right
         else if (e.keyCode === 39) {
           if (workspaces.selected + 1 === workspaces.list.length) {
             workspaces.selected = 0;
@@ -107,24 +108,42 @@ class App extends React.Component {
 
         clearTimeout(workspaces.timer);
 
+        workspaces.timer = setTimeout(workspaces.hide, workspaces.visible ? 500 : 200);
         workspaces.visible = true;
-        workspaces.timer = setTimeout(workspaces.hide, 200);
       }
-      // Ctrl + Digit, switching between tabs, 1-9 + 0
-      else if (e.ctrlKey && e.keyCode >= 48 && e.keyCode <= 57) {
+      // ctrl + digit
+      // switch between tabs, 1-9 + 0
+      else if (e.keyCode >= 48 && e.keyCode <= 57) {
         const current = Store.getCurrentWorkspace();
         const tabs = current.tabs;
 
         // 0
         if (e.keyCode === 48) {
           current.selectTab(tabs[tabs.length - 1]);
-        } else {
+        }
+        // 1-9
+        else {
           const index = e.keyCode - 49;
 
           if (tabs.length > index) {
             current.selectTab(tabs[index]);
           }
         }
+      }
+      // ctrl + s
+      // show workspaces manager
+      else if (e.ctrlKey && e.keyCode === 83 && !workspaces.visible) {
+        workspaces.visible = true;
+      }
+      // ctrl + r
+      // refresh a page
+      else if (e.ctrlKey && e.keyCode === 82) {
+        Store.getSelectedPage().webview.reload();
+      }
+      // ctrl + n
+      // add a new tab
+      else if (e.ctrlKey && e.keyCode === 78) {
+        Store.getCurrentWorkspace().addTab();
       }
     });
     /* eslint-enable brace-style */
