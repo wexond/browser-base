@@ -77,6 +77,8 @@ class App extends React.Component {
     window.addEventListener('keydown', e => {
       const { workspaces, menu } = Store;
 
+      if (!e.isTrusted) return;
+
       // Escape, hidding menu and workspaces manager
       if (e.keyCode === 27) {
         if (workspaces.visible) workspaces.visible = false;
@@ -107,6 +109,22 @@ class App extends React.Component {
 
         workspaces.visible = true;
         workspaces.timer = setTimeout(workspaces.hide, 200);
+      }
+      // Ctrl + Digit, switching between tabs, 1-9 + 0
+      else if (e.ctrlKey && e.keyCode >= 48 && e.keyCode <= 57) {
+        const current = Store.getCurrentWorkspace();
+        const tabs = current.tabs;
+
+        // 0
+        if (e.keyCode === 48) {
+          current.selectTab(tabs[tabs.length - 1]);
+        } else {
+          const index = e.keyCode - 49;
+
+          if (tabs.length > index) {
+            current.selectTab(tabs[index]);
+          }
+        }
       }
     });
     /* eslint-enable brace-style */
