@@ -12,6 +12,7 @@ import WorkspacesMenu from '../WorkspacesMenu';
 import ContextMenu from '../../../shared/components/ContextMenu';
 import History from '../../../menu/history/components/History';
 import About from '../../../menu/about/components/About';
+import Bookmarks from '../../../menu/bookmarks/components/Bookmarks';
 import HistoryStore from '../../../menu/history/store';
 import { deleteHistoryItem } from '../../../menu/history/utils';
 
@@ -208,7 +209,7 @@ class App extends React.Component {
             title={dictionary.bookmarks.title}
             icon={bookmarksIcon}
             searchVisible
-            content={<div />}
+            content={<Bookmarks />}
           />
           <Menu.Item
             title={dictionary.settings.title}
