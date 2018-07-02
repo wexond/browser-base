@@ -73,6 +73,27 @@ class App extends React.Component {
       Store.pageMenu.toggle(false);
     });
 
+    window.addEventListener('keydown', e => {
+      // 37 - Arrow left
+      // 39 - Arrow right
+
+      const { workspaces } = Store;
+
+      if (e.ctrlKey && e.keyCode === 37) {
+        workspaces.visible = true;
+
+        if (workspaces.selected - 1 >= 0) {
+          workspaces.selected--;
+        }
+      } else if (e.ctrlKey && e.keyCode === 39) {
+        workspaces.visible = true;
+
+        if (workspaces.selected + 1 < workspaces.list.length) {
+          workspaces.selected++;
+        }
+      }
+    });
+
     // ipcRenderer.send(ipcMessages.PLUGIN_INSTALL, 'wexond/wexond-example-plugin');
   }
 
