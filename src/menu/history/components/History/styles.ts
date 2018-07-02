@@ -3,12 +3,10 @@ import typography from '../../../../shared/mixins/typography';
 import opacity from '../../../../shared/defaults/opacity';
 
 export const Content = styled.div`
-  max-width: 640px;
   width: calc(100% - 64px);
+  max-width: 640px;
   padding-bottom: 32px;
-  left: 50%;
-  position: relative;
-  transform: translateX(-50%);
+  margin: 0 auto;
 `;
 
 export const Toolbar = styled.div`
