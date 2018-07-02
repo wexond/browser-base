@@ -77,23 +77,36 @@ class App extends React.Component {
     window.addEventListener('keydown', e => {
       const { workspaces, menu } = Store;
 
-      // Escape, hidding
+      // Escape, hidding menu and workspaces manager
       if (e.keyCode === 27) {
         if (workspaces.visible) workspaces.visible = false;
         if (menu.visible) menu.visible = false;
       }
-      // Ctrl + Arrows, switching between workspaces
-      else if (e.ctrlKey) {
-        workspaces.visible = true;
+      // Ctrl + Left or Right arrow, Switching between workspaces
+      else if (e.ctrlKey && (e.keyCode === 37 || e.keyCode === 39)) {
+        // Left
+        if (e.keyCode === 37) {
+          if (workspaces.selected <= 0) {
+            workspaces.selected = workspaces.list.length - 1;
+          } else {
+            workspaces.selected--;
+          }
+        }
+        // Right
+        else if (e.keyCode === 39) {
+          if (workspaces.selected + 1 === workspaces.list.length) {
+            workspaces.selected = 0;
+          } else {
+            workspaces.selected++;
+          }
+        } else {
+          return;
+        }
 
-        // Left arrow
-        if (e.keyCode === 37 && workspaces.selected - 1 >= 0) {
-          workspaces.selected--;
-        }
-        // Right arrow
-        else if (e.keyCode === 39 && workspaces.selected + 1 < workspaces.list.length) {
-          workspaces.selected++;
-        }
+        clearTimeout(workspaces.timer);
+
+        workspaces.visible = true;
+        workspaces.timer = setTimeout(workspaces.hide, 200);
       }
     });
     /* eslint-enable brace-style */
