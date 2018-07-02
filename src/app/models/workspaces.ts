@@ -6,14 +6,7 @@ export default class Workspaces {
 
   @observable public selected = 0;
 
-  @observable
-  public list = [
-    new Workspace(),
-    new Workspace(),
-    new Workspace(),
-    new Workspace(),
-    new Workspace(),
-  ];
+  @observable public list = [new Workspace()];
 
   public timer: any;
 
