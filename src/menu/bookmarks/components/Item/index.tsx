@@ -1,10 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import HistoryItem from '../../models/history-item';
 import transparency from '../../../../shared/defaults/opacity';
-import Store from '../../store';
-import { deleteHistoryItem } from '../../utils';
 
 import {
   PageItem,
@@ -17,7 +14,7 @@ import {
 const pageIcon = require('../../../../shared/icons/page.svg');
 
 interface Props {
-  data: HistoryItem;
+  data: any;
 }
 
 interface State {
@@ -44,38 +41,13 @@ export default class Item extends React.Component<Props, State> {
     });
   }
 
-  public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { data } = this.props;
-    const { selected } = data;
-    if (this.cmdPressed || e.ctrlKey) {
-      data.selected = !selected;
-
-      if (data.selected) {
-        Store.selectedItems.push(data);
-      } else {
-        Store.selectedItems.splice(Store.selectedItems.indexOf(data), 1);
-      }
-    }
-  };
-
   public onMouseEnter = () => this.setState({ hovered: true });
 
   public onMouseLeave = () => this.setState({ hovered: false });
 
-  public onRemoveClick = () => {
-    const { data } = this.props;
-    const { id } = data;
-    deleteHistoryItem(id);
-  };
-
   public render() {
     const { data } = this.props;
     const { hovered } = this.state;
-
-    const date = new Date(data.date);
-
-    const hour = date.getHours();
-    const minute = date.getMinutes();
 
     let opacity = 1;
     let favicon = data.favicon;
@@ -87,20 +59,15 @@ export default class Item extends React.Component<Props, State> {
 
     return (
       <PageItem
-        onClick={this.onClick}
         onFocus={() => null}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         selected={data.selected}
       >
-        <PageItemRemoveIcon onClick={this.onRemoveClick} visible={hovered} />
+        <PageItemRemoveIcon visible={hovered} />
         <PageItemIcon
           style={{ backgroundImage: `url(${favicon})`, opacity: hovered ? 0 : opacity }}
         />
-        <PageItemTime>{`${hour.toString().padStart(2, '0')}:${minute
-          .toString()
-          .padStart(2, '0')}`}
-        </PageItemTime>
         <PageItemTitle>{data.title}</PageItemTitle>
       </PageItem>
     );
