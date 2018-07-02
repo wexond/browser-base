@@ -18,6 +18,7 @@ export default class History extends React.Component {
       })
       .then(async () => {
         const sections = await getHistorySections();
+
         setTimeout(() => {
           Store.sections = sections;
         }, 100);
