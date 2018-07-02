@@ -38,11 +38,9 @@ export default class History extends React.Component {
 
   public render() {
     return (
-      <React.Fragment>
-        <Content>
-          {Store.sections.map(section => <Section key={section.id} section={section} />)}
-        </Content>
-      </React.Fragment>
+      <Content>
+        {Store.sections.map(section => <Section key={section.id} section={section} />)}
+      </Content>
     );
   }
 }
