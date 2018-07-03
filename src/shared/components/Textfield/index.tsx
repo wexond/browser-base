@@ -4,7 +4,16 @@ import colors from '../../defaults/colors';
 import { TextfieldType } from '../../enums';
 
 import {
-  Root, LeadingIcon, TrailingIcon, Container, Label, Input, Indicator,
+  Root,
+  HoverBorder,
+  LeadingIcon,
+  TrailingIcon,
+  Container,
+  Label,
+  Input,
+  Indicator,
+  HelperTexts,
+  AssistiveText,
 } from './styles';
 
 export type ClickEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
@@ -19,7 +28,7 @@ export interface IProps {
 }
 
 export interface IState {
-  focused: boolean;
+  activated: boolean;
 }
 
 export default class Textfield extends React.Component<IProps, IState> {
@@ -29,7 +38,7 @@ export default class Textfield extends React.Component<IProps, IState> {
   };
 
   public state: IState = {
-    focused: false,
+    activated: false,
   };
 
   public inputElement: HTMLInputElement;
@@ -40,16 +49,16 @@ export default class Textfield extends React.Component<IProps, IState> {
 
   private onFocus = () => {
     this.setState({
-      focused: true,
+      activated: true,
     });
   };
 
   private onBlur = () => {
-    const { focused } = this.state;
+    const { activated } = this.state;
 
-    if (this.inputElement.value.length === 0 && focused) {
+    if (this.inputElement.value.length === 0 && activated) {
       this.setState({
-        focused: false,
+        activated: false,
       });
     }
   };
@@ -69,25 +78,31 @@ export default class Textfield extends React.Component<IProps, IState> {
     const {
       color, label, leadingIcon, trailingIcon, onIconClick,
     } = this.props;
-    const { focused } = this.state;
+    const { activated } = this.state;
 
     return (
-      <Root onClick={this.onClick}>
-        {leadingIcon && <LeadingIcon src={leadingIcon} />}
-        <Container>
-          <Label color={color} focused={focused}>
-            {label}
-          </Label>
-          <Input
-            innerRef={r => (this.inputElement = r)}
-            color={color}
-            onFocus={this.onFocus}
-            onBlur={this.onBlur}
-          />
-        </Container>
-        {trailingIcon && <TrailingIcon src={trailingIcon} onClick={this.onTrailingIconClick} />}
-        <Indicator color={color} focused={focused} />
-      </Root>
+      <React.Fragment>
+        <Root onClick={this.onClick}>
+          {leadingIcon && <LeadingIcon src={leadingIcon} />}
+          <Container>
+            <Label color={color} activated={activated}>
+              {label}
+            </Label>
+            <Input
+              innerRef={r => (this.inputElement = r)}
+              color={color}
+              onFocus={this.onFocus}
+              onBlur={this.onBlur}
+            />
+          </Container>
+          {trailingIcon && <TrailingIcon src={trailingIcon} onClick={this.onTrailingIconClick} />}
+          <HoverBorder className="hover-border" />
+          <Indicator color={color} activated={activated} />
+        </Root>
+        <HelperTexts icon={!!leadingIcon}>
+          <AssistiveText>Helper text</AssistiveText>
+        </HelperTexts>
+      </React.Fragment>
     );
   }
 }
