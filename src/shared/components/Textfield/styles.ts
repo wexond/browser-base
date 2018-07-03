@@ -1,21 +1,44 @@
 import styled from 'styled-components';
 
+import images from '../../mixins/images';
 import typography from '../../mixins/typography';
 import opacity from '../../defaults/opacity';
 
 export const Root = styled.div`
   width: 280px;
   height: 56px;
+  display: flex;
   position: relative;
   cursor: text;
   background-color: rgba(0, 0, 0, 0.06);
   user-select: none;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  display: flex;
-  flex-wrap: wrap;
 
   //border-bottom: 1px solid rgba(0, 0, 0, 0.39);
+`;
+
+export interface LeadingIconProps {
+  src: string;
+}
+
+export const LeadingIcon = styled.div`
+  width: 24px;
+  height: 24px;
+  margin-left: 12px;
+  display: flex;
+  align-self: center;
+  opacity: ${opacity.light.inactiveIcon};
+
+  ${images.center('24px', 'auto')};
+  background-image: url(${({ src }: LeadingIconProps) => src});
+`;
+
+export const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
 `;
 
 export interface LabelProps {
