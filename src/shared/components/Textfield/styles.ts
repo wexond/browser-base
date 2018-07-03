@@ -39,6 +39,7 @@ export const LeadingIcon = styled(Icon)`
 
 export const TrailingIcon = styled(Icon)`
   margin-right: 12px;
+  cursor: pointer;
 `;
 
 export const Container = styled.div`
