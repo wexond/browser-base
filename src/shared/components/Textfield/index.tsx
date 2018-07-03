@@ -7,11 +7,15 @@ import {
   Root, LeadingIcon, TrailingIcon, Container, Label, Input, Indicator,
 } from './styles';
 
+export type ClickEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
+
 export interface IProps {
   color?: string;
+  label?: string;
   type?: TextfieldType;
   leadingIcon?: string;
   trailingIcon?: string;
+  onIconClick?: ClickEvent;
 }
 
 export interface IState {
@@ -30,6 +34,10 @@ export default class Textfield extends React.Component<IProps, IState> {
 
   public inputElement: HTMLInputElement;
 
+  private onClick = () => {
+    this.inputElement.focus();
+  };
+
   private onFocus = () => {
     this.setState({
       focused: true,
@@ -46,16 +54,29 @@ export default class Textfield extends React.Component<IProps, IState> {
     }
   };
 
+  private onTrailingIconClick = (e?: React.SyntheticEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const { onIconClick } = this.props;
+
+    if (typeof onIconClick === 'function') {
+      onIconClick(e);
+    }
+  };
+
   public render() {
-    const { color, leadingIcon, trailingIcon } = this.props;
+    const {
+      color, label, leadingIcon, trailingIcon, onIconClick,
+    } = this.props;
     const { focused } = this.state;
 
     return (
-      <Root>
-        {leadingIcon != null && <LeadingIcon src={leadingIcon} />}
+      <Root onClick={this.onClick}>
+        {leadingIcon && <LeadingIcon src={leadingIcon} />}
         <Container>
           <Label color={color} focused={focused}>
-            Label
+            {label}
           </Label>
           <Input
             innerRef={r => (this.inputElement = r)}
@@ -64,7 +85,7 @@ export default class Textfield extends React.Component<IProps, IState> {
             onBlur={this.onBlur}
           />
         </Container>
-        {trailingIcon != null && <TrailingIcon src={trailingIcon} />}
+        {trailingIcon && <TrailingIcon src={trailingIcon} onClick={this.onTrailingIconClick} />}
         <Indicator color={color} focused={focused} />
       </Root>
     );
