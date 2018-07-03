@@ -9,13 +9,26 @@ export const Root = styled.div`
   height: 56px;
   display: flex;
   position: relative;
-  cursor: text;
+  cursor: pointer;
   background-color: rgba(0, 0, 0, 0.06);
   user-select: none;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 
-  //border-bottom: 1px solid rgba(0, 0, 0, 0.39);
+  &:hover .hover-border {
+    opacity: 1;
+  }
+`;
+
+export const HoverBorder = styled.div`
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.39);
+  transition: 0.1s opacity;
 `;
 
 export interface IconProps {
@@ -50,7 +63,7 @@ export const Container = styled.div`
 
 export interface LabelProps {
   color: string;
-  focused: boolean;
+  activated: boolean;
 }
 
 export const Label = styled.div`
@@ -63,12 +76,12 @@ export const Label = styled.div`
   will-change: color, opacity, margin-top, font-size;
   transition: 0.2s color, 0.2s ease-out margin-top, 0.2s ease-out font-size, 0.2s opacity;
 
-  color: ${({ color, focused }) => (focused ? color : '#000')};
-  margin-top: ${({ focused }: LabelProps) => (focused ? '-12px' : 'unset')};
-  font-size: ${({ focused }) => (focused ? 12 : 16)}px;
-  opacity: ${({ focused }) => (focused ? 1 : opacity.light.secondaryText)};
+  margin-top: ${({ activated }: LabelProps) => (activated ? '-10px' : 'unset')};
+  color: ${({ color, activated }) => (activated ? color : '#000')};
+  font-size: ${({ activated }) => (activated ? 12 : 16)}px;
+  opacity: ${({ activated }) => (activated ? 1 : opacity.light.secondaryText)};
 
-  ${({ focused }) => (focused ? typography.robotoMedium() : typography.robotoRegular())};
+  ${({ activated }) => (activated ? typography.robotoMedium() : typography.robotoRegular())};
 `;
 
 export interface InputProps {
@@ -88,13 +101,18 @@ export const Input = styled.input`
   font-size: 16px;
   text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${opacity.light.primaryText})`};
   color: ${({ color }: InputProps) => color};
+  cursor: pointer;
 
   ${typography.robotoRegular()};
+
+  &:focus {
+    cursor: text;
+  }
 `;
 
 export interface IndicatorProps {
   color: string;
-  focused: boolean;
+  activated: boolean;
 }
 
 export const Indicator = styled.div`
@@ -107,6 +125,25 @@ export const Indicator = styled.div`
   transition: 0.2s ease-out;
   will-change: width;
 
-  width: ${({ focused }: IndicatorProps) => (focused ? 100 : 0)}%;
+  width: ${({ activated }: IndicatorProps) => (activated ? 100 : 0)}%;
   background-color: ${({ color }) => color};
+`;
+
+export interface HelperTextsProps {
+  icon: boolean;
+}
+
+export const HelperTexts = styled.div`
+  width: 100%;
+  position: relative;
+  padding-top: 8px;
+
+  padding-left: ${({ icon }: HelperTextsProps) => (icon ? 48 : 12)}px;
+`;
+
+export const AssistiveText = styled.div`
+  font-size: 12px;
+
+  ${typography.robotoRegular()};
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 `;
