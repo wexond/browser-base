@@ -8,7 +8,7 @@ export async function getHistorySections(filter = '') {
   return new Promise(async (resolve: (r: Section[]) => void) => {
     const sections: Section[] = [];
 
-    const items = await db.history.toArray();
+    const items = (await db.history.toArray()).reverse();
 
     const len = items.length < 20 ? items.length : 20;
 
@@ -42,9 +42,9 @@ export async function getHistorySections(filter = '') {
             date: dateStr,
             id: item.id,
           };
-          sections.unshift(section);
+          sections.push(section);
         } else {
-          foundSection.items.unshift(newItem);
+          foundSection.items.push(newItem);
         }
       }
     }
