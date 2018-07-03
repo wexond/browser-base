@@ -25,6 +25,11 @@ export enum ProgressType {
   Indeterminate,
 }
 
+export enum TextfieldType {
+  Filled,
+  Outlined,
+}
+
 /* eslint-disable camelcase */
 export enum Languages {
   ar,
