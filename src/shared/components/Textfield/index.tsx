@@ -4,13 +4,14 @@ import colors from '../../defaults/colors';
 import { TextfieldType } from '../../enums';
 
 import {
-  Root, LeadingIcon, Container, Label, Input, Indicator,
+  Root, LeadingIcon, TrailingIcon, Container, Label, Input, Indicator,
 } from './styles';
 
 export interface IProps {
   color?: string;
   type?: TextfieldType;
   leadingIcon?: string;
+  trailingIcon?: string;
 }
 
 export interface IState {
@@ -46,7 +47,7 @@ export default class Textfield extends React.Component<IProps, IState> {
   };
 
   public render() {
-    const { color, leadingIcon } = this.props;
+    const { color, leadingIcon, trailingIcon } = this.props;
     const { focused } = this.state;
 
     return (
@@ -63,6 +64,7 @@ export default class Textfield extends React.Component<IProps, IState> {
             onBlur={this.onBlur}
           />
         </Container>
+        {trailingIcon != null && <TrailingIcon src={trailingIcon} />}
         <Indicator color={color} focused={focused} />
       </Root>
     );
