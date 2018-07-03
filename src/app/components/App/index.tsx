@@ -121,7 +121,7 @@ class App extends React.Component {
       }
       // ctrl + digit
       // switch between tabs, 1-9 + 0
-      else if (e.keyCode >= 48 && e.keyCode <= 57) {
+      else if (e.ctrlKey && e.keyCode >= 48 && e.keyCode <= 57) {
         const current = Store.getCurrentWorkspace();
         const tabs = current.tabs;
 
