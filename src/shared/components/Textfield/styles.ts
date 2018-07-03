@@ -18,24 +18,30 @@ export const Root = styled.div`
   //border-bottom: 1px solid rgba(0, 0, 0, 0.39);
 `;
 
-export interface LeadingIconProps {
+export interface IconProps {
   src: string;
 }
 
-export const LeadingIcon = styled.div`
+export const Icon = styled.div`
   width: 24px;
   height: 24px;
-  margin-left: 12px;
   display: flex;
   align-self: center;
   opacity: ${opacity.light.inactiveIcon};
 
   ${images.center('24px', 'auto')};
-  background-image: url(${({ src }: LeadingIconProps) => src});
+  background-image: url(${({ src }: IconProps) => src});
+`;
+
+export const LeadingIcon = styled(Icon)`
+  margin-left: 12px;
+`;
+
+export const TrailingIcon = styled(Icon)`
+  margin-right: 12px;
 `;
 
 export const Container = styled.div`
-  width: 100%;
   display: flex;
   flex-wrap: wrap;
   position: relative;
@@ -47,11 +53,13 @@ export interface LabelProps {
 }
 
 export const Label = styled.div`
+  width: 100%;
+  padding-left: 12px;
   position: absolute;
-  left: 12px;
+  white-space: nowrap;
   display: flex;
   align-self: center;
-  will-change: margin-top, font-size;
+  will-change: color, opacity, margin-top, font-size;
   transition: 0.2s color, 0.2s ease-out margin-top, 0.2s ease-out font-size, 0.2s opacity;
 
   color: ${({ color, focused }) => (focused ? color : '#000')};
@@ -72,6 +80,7 @@ export const Input = styled.input`
   border: none;
   outline: none;
   padding-left: 12px;
+  padding-right: 12px;
   padding-top: 8px;
   -webkit-text-fill-color: transparent;
   background-color: transparent;
