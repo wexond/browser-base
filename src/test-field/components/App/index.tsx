@@ -11,6 +11,8 @@ import { TextfieldType, ProgressType, UITheme } from '../../../shared/enums';
 
 import { StyledApp } from './styles';
 
+const calendarIcon = require('../../../shared/icons/calendar.svg');
+
 export interface IState {
   darkTheme: boolean;
 }
@@ -26,7 +28,7 @@ export default class App extends React.Component<{}, IState> {
 
     return (
       <StyledApp theme={theme}>
-        <Textfield />
+        <Textfield leadingIcon={calendarIcon} />
       </StyledApp>
     );
   }
