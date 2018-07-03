@@ -23,13 +23,22 @@ export default class App extends React.Component<{}, IState> {
     darkTheme: false,
   };
 
+  private onIconClick = () => {
+    console.log('xd');
+  };
+
   public render() {
     const { darkTheme } = this.state;
     const theme: UITheme = darkTheme ? UITheme.Dark : UITheme.Light;
 
     return (
       <StyledApp theme={theme}>
-        <Textfield leadingIcon={calendarIcon} trailingIcon={cancelIcon} />
+        <Textfield
+          label="Label"
+          leadingIcon={calendarIcon}
+          trailingIcon={cancelIcon}
+          onIconClick={this.onIconClick}
+        />
       </StyledApp>
     );
   }
