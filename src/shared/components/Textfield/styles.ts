@@ -71,9 +71,9 @@ export const Indicator = styled.div`
   right: 0;
   margin: 0 auto;
   bottom: -1px;
+  transition: 0.2s ease-out;
   will-change: width;
 
   width: ${({ focused }: IndicatorProps) => (focused ? 100 : 0)}%;
-  transition: 0.2s ease-out;
   background-color: ${({ color }) => color};
 `;
