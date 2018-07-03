@@ -13,6 +13,14 @@ Wexond is a _free_, _open-source_ and _extensible_ web browser with material des
 
 </div>
 
+# Screenshots
+
+![Home page](screenshots/screenshot-1.png)
+
+![Menu](screenshots/screenshot-2.png)
+
+![Github page](screenshots/screenshot-3.png)
+
 # Contributing
 
 We really appreciate any changes and improvements, so feel free to open pull requests! If you have found any issues, please report them. This would really help us making the browser even better!
@@ -58,9 +66,3 @@ $ npm run <command>
 
 Guides and the API reference are located in [`docs`](https://github.com/Nersent/Wexond/docs).
 It also contains documents describing how to use the browser, and create extensions.
-
-## Screenshots
-
-![Home page](screenshots/screenshot-1.png)
-
-![GitHub page](screenshots/screenshot-2.png)
