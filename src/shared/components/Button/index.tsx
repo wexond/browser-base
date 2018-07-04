@@ -82,7 +82,7 @@ export default class Button extends React.Component<IProps, {}> {
           disabled={disabled}
           {...events}
         >
-          {icon != null && <Icon src={icon} white={whiteIcon} disabled={disabled} theme={theme} />}
+          {icon && <Icon src={icon} white={whiteIcon} disabled={disabled} theme={theme} />}
           {children}
           <Overlay className="overlay" color={foreground} />
           <Ripples ref={r => (this.ripples = r)} color={foreground} disabled={disabled} />
