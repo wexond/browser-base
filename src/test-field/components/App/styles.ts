@@ -13,5 +13,5 @@ export const StyledApp = styled.div`
   padding: 32px;
 
   background-color: ${({ theme }: StyledAppProps) =>
-    (theme === UITheme.Light ? '#f5f5f5' : '#212121')};
+    (theme === UITheme.Light ? '#F5F5F5' : '#212121')};
 `;
