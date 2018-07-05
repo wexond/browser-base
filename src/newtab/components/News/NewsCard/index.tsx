@@ -33,7 +33,10 @@ export default class NewsCard extends React.Component<Props, State> {
     const { data } = this.props;
     const { loaded } = this.state;
 
-    const desc = data.description.replace(/&nbsp;/g, '');
+    let desc: string = data.description;
+    if (data && data.description) {
+      desc = data.description.replace(/&nbsp;/g, '');
+    }
 
     return (
       <a href={data.url}>
@@ -43,8 +46,8 @@ export default class NewsCard extends React.Component<Props, State> {
             <Overline>{getTimeOffset(new Date(data.publishedAt), this)}</Overline>
             <Title>{data.title}</Title>
 
-            {data.description
-              && data.description.indexOf('�') === -1
+            {desc
+              && desc.indexOf('�') === -1
               && desc.trim() !== '' && <SecondaryText>{desc}</SecondaryText>}
 
             <SourceContainer>
