@@ -25,6 +25,8 @@ const aboutIcon = require('../../../shared/icons/info.svg');
 const selectAllIcon = require('../../../shared/icons/select-all.svg');
 const closeIcon = require('../../../shared/icons/close.svg');
 const trashIcon = require('../../../shared/icons/delete.svg');
+const addIcon = require('../../../shared/icons/add.svg');
+const addFolderIcon = require('../../../shared/icons/add-folder.svg');
 
 const historyActions = {
   selectAll: () => {
@@ -217,7 +219,11 @@ class App extends React.Component {
             icon={bookmarksIcon}
             searchVisible
             content={<Bookmarks />}
-          />
+          >
+            <Menu.Item title={dictionary.selecting.selectAll} icon={selectAllIcon} />
+            <Menu.Item title="Add" icon={addIcon} />
+            <Menu.Item title="New folder" icon={addFolderIcon} />
+          </Menu.Item>
           <Menu.Item
             title={dictionary.settings.title}
             icon={settingsIcon}
