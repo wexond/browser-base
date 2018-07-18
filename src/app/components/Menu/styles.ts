@@ -95,7 +95,6 @@ export const Content = styled.div`
   height: 100%;
   max-width: ${MENU_CONTENT_MAX_WIDTH}px;
   transition: 0.5s width cubic-bezier(0.19, 1, 0.22, 1);
-  overflow: auto;
   background-color: #fafafa;
   position: relative;
 
