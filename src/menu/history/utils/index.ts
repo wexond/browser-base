@@ -4,13 +4,13 @@ import HistoryStore from '../store';
 import db from '../../../shared/models/app-database';
 import { formatDate } from '../../../shared/utils/time';
 
-export async function getHistorySections(filter = '') {
+export async function getHistorySections(itemsCount: number, filter = '') {
   return new Promise(async (resolve: (r: Section[]) => void) => {
     const sections: Section[] = [];
 
     const items = (await db.history.toArray()).reverse();
 
-    const len = items.length < 20 ? items.length : 20;
+    const len = items.length < itemsCount ? items.length : itemsCount;
 
     for (let i = 0; i < len; i++) {
       const item = items[i];
