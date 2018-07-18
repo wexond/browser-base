@@ -41,7 +41,7 @@ class Bookmarks extends React.Component {
       items: [],
     };
 
-    Store.selected = Store.data.folders[1].folders[0].folders[0];
+    Store.selected = Store.data;
     Store.updatePath();
   }
 
