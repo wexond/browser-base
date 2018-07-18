@@ -1,14 +1,18 @@
 import React from 'react';
 import Store from '../../../store';
 
-import { Root, Icon } from './styles';
+import { Root, Icon, HomeIcon } from './styles';
 
 export interface IProps {
   data: any;
-  title: string;
+  home?: boolean;
 }
 
 export default class Item extends React.Component<IProps, {}> {
+  public static defaultProps = {
+    home: false,
+  };
+
   onClick = () => {
     const { data } = this.props;
 
@@ -17,11 +21,12 @@ export default class Item extends React.Component<IProps, {}> {
   };
 
   public render() {
-    const { title } = this.props;
+    const { home, data } = this.props;
 
     return (
       <Root onClick={this.onClick}>
-        {title}
+        {!home && data.title}
+        {home && <HomeIcon className="home-icon" />}
         <Icon className="icon" />
       </Root>
     );
