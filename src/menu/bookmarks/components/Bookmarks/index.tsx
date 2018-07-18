@@ -8,43 +8,41 @@ import Item from '../Item';
 import TreeBar from '../TreeBar';
 import { Content, Folders, Items } from './styles';
 
+import { getFolderPath } from '../../utils/bookmarks';
+
 @observer
 class Bookmarks extends React.Component {
   componentDidMount() {
     Store.data = {
       folders: [
         {
-          title: 'Folder',
+          title: 'A',
+          folders: [],
+          items: [],
+        },
+        {
+          title: 'B',
           folders: [
             {
-              title: 'Subfolder',
-              folders: [],
-              items: [
+              title: 'B.A',
+              folders: [
                 {
-                  title: 'YouTube',
-                  url: 'https://www.youtube.com',
+                  title: 'B.A.A',
+                  folders: [],
+                  items: [],
                 },
               ],
+              items: [],
             },
           ],
-          items: [
-            {
-              title: 'Facebook',
-              url: 'https://www.facebook.com',
-            },
-          ],
+          items: [],
         },
       ],
-      items: [
-        {
-          title:
-            'wexond/wexond: An extensible web browser with Material UI and built-in ad blocker.',
-          url: 'https://www.github.com/Wexond/Wexond',
-        },
-      ],
+      items: [],
     };
 
-    Store.selected = Store.data;
+    Store.selected = Store.data.folders[1].folders[0].folders[0];
+    Store.updatePath();
   }
 
   public render() {
