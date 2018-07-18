@@ -9,14 +9,58 @@ import { Content, Folders, Items } from './styles';
 
 @observer
 class Bookmarks extends React.Component {
+  public componentDidMount() {
+    Store.data = {
+      folders: [
+        {
+          title: 'Folder',
+          folders: [
+            {
+              title: 'Subfolder',
+              folders: [],
+              items: [
+                {
+                  title: 'YouTube',
+                  url: 'https://www.youtube.com',
+                },
+              ],
+            },
+          ],
+          items: [
+            {
+              title: 'Facebook',
+              url: 'https://www.facebook.com',
+            },
+          ],
+        },
+      ],
+      items: [
+        {
+          title:
+            'wexond/wexond: An extensible web browser with Material UI and built-in ad blocker.',
+          url: 'https://www.github.com/Wexond/Wexond',
+        },
+      ],
+    };
+
+    Store.selected = Store.data;
+  }
+
   public render() {
-    const folders = Store.data.folders;
-    const items = Store.data.items;
+    const selected = Store.selected;
 
     return (
       <Content>
-        <Folders>{folders.map((data: any, key: any) => <Folder data={data} key={key} />)}</Folders>
-        <Items>{items.map((data: any, key: any) => <Item data={data} key={key} />)}</Items>
+        {selected != null && (
+          <React.Fragment>
+            <Folders>
+              {selected.folders.map((data: any, key: any) => <Folder data={data} key={key} />)}
+            </Folders>
+            <Items>
+              {selected.items.map((data: any, key: any) => <Item data={data} key={key} />)}
+            </Items>
+          </React.Fragment>
+        )}
       </Content>
     );
   }
