@@ -3,6 +3,12 @@ import typography from '../../../../shared/mixins/typography';
 import opacity from '../../../../shared/defaults/opacity';
 
 export const Content = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+`;
+
+export const Container = styled.div`
   width: calc(100% - 64px);
   max-width: 640px;
   padding-bottom: 32px;
