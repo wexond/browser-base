@@ -8,8 +8,6 @@ import Item from '../Item';
 import TreeBar from '../TreeBar';
 import { Content, Folders, Items } from './styles';
 
-import { getFolderPath } from '../../utils/bookmarks';
-
 @observer
 class Bookmarks extends React.Component {
   componentDidMount() {
@@ -38,7 +36,13 @@ class Bookmarks extends React.Component {
           items: [],
         },
       ],
-      items: [],
+      items: [
+        {
+          title: 'Wexond',
+          url: 'https://github.com/wexond/wexond',
+          favicon: null,
+        },
+      ],
     };
 
     Store.selected = Store.data;
