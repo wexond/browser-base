@@ -1,3 +1,12 @@
 import styled from 'styled-components';
 
-export const Root = styled.div``;
+import opacity from '../../../../shared/defaults/opacity';
+
+export const Root = styled.div`
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding-left: 32px;
+  border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
+`;

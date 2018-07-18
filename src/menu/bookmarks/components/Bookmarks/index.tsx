@@ -5,11 +5,12 @@ import Store from '../../store';
 
 import Folder from '../Folder';
 import Item from '../Item';
+import TreeBar from '../TreeBar';
 import { Content, Folders, Items } from './styles';
 
 @observer
 class Bookmarks extends React.Component {
-  public componentDidMount() {
+  componentDidMount() {
     Store.data = {
       folders: [
         {
@@ -50,18 +51,19 @@ class Bookmarks extends React.Component {
     const selected = Store.selected;
 
     return (
-      <Content>
+      <React.Fragment>
+        <TreeBar />
         {selected != null && (
-          <React.Fragment>
+          <Content>
             <Folders>
               {selected.folders.map((data: any, key: any) => <Folder data={data} key={key} />)}
             </Folders>
             <Items>
               {selected.items.map((data: any, key: any) => <Item data={data} key={key} />)}
             </Items>
-          </React.Fragment>
+          </Content>
         )}
-      </Content>
+      </React.Fragment>
     );
   }
 }
