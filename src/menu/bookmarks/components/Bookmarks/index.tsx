@@ -47,18 +47,21 @@ class Bookmarks extends React.Component {
 
   public render() {
     const selected = Store.selected;
+    const noItems = selected && selected.items.length === 0;
 
     return (
       <React.Fragment>
         <TreeBar />
-        {selected != null && (
+        {selected && (
           <Content>
             <Folders>
               {selected.folders.map((data: any, key: any) => <Folder data={data} key={key} />)}
             </Folders>
-            <Items>
-              {selected.items.map((data: any, key: any) => <Item data={data} key={key} />)}
-            </Items>
+            {!noItems && (
+              <Items>
+                {selected.items.map((data: any, key: any) => <Item data={data} key={key} />)}
+              </Items>
+            )}
           </Content>
         )}
       </React.Fragment>
