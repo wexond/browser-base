@@ -9,4 +9,5 @@ export const Root = styled.div`
   align-items: center;
   padding-left: 32px;
   border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
+  overflow: hidden;
 `;
