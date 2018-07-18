@@ -7,7 +7,8 @@ export const Content = styled.div`
 `;
 
 export const Folders = styled.div`
-  padding: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   margin-top: 16px;
   display: flex;
   overflow: hidden;
