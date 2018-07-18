@@ -21,7 +21,7 @@ export const getFolderPath = (folder: any) => {
     const parent = getParentFolder(lastChild);
 
     if (parent != null) {
-      titles.push(parent.title);
+      titles.push(parent);
       lastChild = parent;
     } else {
       break;
@@ -29,7 +29,7 @@ export const getFolderPath = (folder: any) => {
   }
 
   titles.reverse();
-  titles.push(folder.title);
+  titles.push(folder);
 
   return titles;
 };
