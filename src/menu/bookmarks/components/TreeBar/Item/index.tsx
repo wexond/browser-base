@@ -32,6 +32,8 @@ export default class Item extends React.Component<IProps, IState> {
     Store.updatePath();
   };
 
+  componentDidUpdate() {}
+
   public render() {
     const { home, data } = this.props;
     const { hovered } = this.state;
@@ -43,7 +45,7 @@ export default class Item extends React.Component<IProps, IState> {
         onClick={this.onClick}
         hovered={hovered}
       >
-        {!home && data.title}
+        {!home && `${data.title}|`}
         {home && <HomeIcon hovered={hovered} />}
         <Icon className="icon" hovered={hovered} />
       </Root>
