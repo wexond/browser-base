@@ -51,10 +51,10 @@ export const Credits = styled.div`
 export const Column = styled.div`
   display: flex;
   flex-flow: column;
-  margin-right: 32px;
+  margin-left: 32px;
   align-items: flex-start;
 
-  &:last-child {
-    margin-right: 0px;
+  &:first-child {
+    margin-left: 0px;
   }
 `;

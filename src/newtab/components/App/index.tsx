@@ -19,18 +19,34 @@ import News from '../News';
 export interface IState {
   contentVisible: boolean;
   weatherData?: any;
-  newsData?: any;
+  columns?: any;
 }
 
 class App extends React.Component<{}, IState> {
+  private newsData: any[];
+
   public state: IState = {
     contentVisible: false,
-    newsData: [],
+    columns: [],
   };
 
   componentDidMount() {
     this.loadData();
+
+    window.addEventListener('resize', this.onResize);
   }
+
+  public onResize = () => {
+    let columns = this.getColumns(1);
+
+    if (window.innerWidth > 1128) {
+      columns = this.getColumns(3);
+    } else if (window.innerWidth > 752) {
+      columns = this.getColumns(2);
+    }
+
+    this.setState({ columns });
+  };
 
   async loadData() {
     const weatherData = await getWeather(
@@ -40,17 +56,40 @@ class App extends React.Component<{}, IState> {
       TimeUnit.TwentyFourHours,
     );
 
-    const newsData = await getNews(Countries.pl);
+    this.newsData = await getNews(Countries.pl);
+    let columns = this.getColumns(1);
+
+    if (window.innerWidth > 1128) {
+      columns = this.getColumns(3);
+    } else if (window.innerWidth > 752) {
+      columns = this.getColumns(2);
+    }
 
     this.setState({
       weatherData,
-      newsData,
+      columns,
       contentVisible: true,
     });
   }
 
+  public getColumns = (columnsCount: number) => {
+    const columns = [];
+
+    const itemsPerCol = Math.floor(this.newsData.length / columnsCount);
+
+    for (let i = 0; i < columnsCount; i++) {
+      if (i < columnsCount) {
+        columns.push(this.newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1)));
+      } else {
+        columns.push(this.newsData.slice(i * itemsPerCol, this.newsData.length));
+      }
+    }
+
+    return columns;
+  };
+
   public render() {
-    const { contentVisible, weatherData, newsData } = this.state;
+    const { contentVisible, weatherData, columns } = this.state;
 
     const preloaderStyle = {
       position: 'fixed',
@@ -59,26 +98,24 @@ class App extends React.Component<{}, IState> {
       transform: 'translate(-50%, -50%)',
     };
 
-    const items = newsData.length / 3;
-
-    const column1 = newsData.slice(1, items);
-    const column2 = newsData.slice(items, items * 2);
-    const column3 = newsData.slice(items * 2, items * 3);
-
     return (
       <StyledApp>
         {!contentVisible && <Preloader style={preloaderStyle} />}
         <Content visible={contentVisible}>
           <Column>
             <WeatherCard data={weatherData} />
-            <News data={column1} />
+            <News data={columns[0]} />
           </Column>
-          <Column>
-            <News data={column2} />
-          </Column>
-          <Column>
-            <News data={column3} />
-          </Column>
+          {columns[1] && (
+            <Column>
+              <News data={columns[1]} />
+            </Column>
+          )}
+          {columns[2] && (
+            <Column>
+              <News data={columns[2]} />
+            </Column>
+          )}
           <Credits>
             APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and
             <a href="https://newsapi.org/"> News API</a>
