@@ -1,7 +1,7 @@
 import React from 'react';
 import Store from '../../../store';
 
-import { Root, Icon, HomeIcon } from './styles';
+import { Root, Title, HomeIcon } from './styles';
 
 export interface IProps {
   data: any;
@@ -25,9 +25,8 @@ export default class Item extends React.Component<IProps, {}> {
 
     return (
       <Root onClick={this.onClick}>
-        {!home && data.title}
-        {home && <HomeIcon className="home-icon" />}
-        <Icon className="icon" />
+        {!home && <Title>{data.title}</Title>}
+        {home && <HomeIcon />}
       </Root>
     );
   }
