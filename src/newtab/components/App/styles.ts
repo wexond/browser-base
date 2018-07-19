@@ -19,7 +19,6 @@ export const Content = styled.div`
   flex-flow: row;
   position: relative;
   padding-top: 24px;
-  padding-bottom: 24px;
   background-color: #f5f5f5;
   flex-wrap: wrap;
 
