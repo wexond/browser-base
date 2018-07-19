@@ -98,6 +98,7 @@ export const Content = styled.div`
   transition: 0.5s width cubic-bezier(0.19, 1, 0.22, 1);
   background-color: #fafafa;
   position: relative;
+  overflow: hidden;
 
   ${({ visible }: ContentProps) => css`
     width: ${visible ? getWidth() : 0};

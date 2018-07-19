@@ -1,4 +1,5 @@
 import React from 'react';
+import { hot } from 'react-hot-loader';
 
 import Preloader from '../../../shared/components/Preloader';
 
@@ -9,7 +10,7 @@ import {
 } from '../../../shared/enums';
 
 import {
-  StyledApp, Content, CardsContainer, Credits, Column,
+  StyledApp, Content, Credits, Column,
 } from './styles';
 
 import WeatherCard from '../WeatherCard';
@@ -21,7 +22,7 @@ export interface IState {
   newsData?: any;
 }
 
-export default class App extends React.Component<{}, IState> {
+class App extends React.Component<{}, IState> {
   public state: IState = {
     contentVisible: false,
     newsData: [],
@@ -87,3 +88,5 @@ export default class App extends React.Component<{}, IState> {
     );
   }
 }
+
+export default hot(module)(App);
