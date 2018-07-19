@@ -79,7 +79,13 @@ class App extends React.Component<{}, IState> {
 
     for (let i = 0; i < columnsCount; i++) {
       if (i < columnsCount) {
-        columns.push(this.newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1)));
+        if (i === 0) {
+          columns.push(this.newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1) - 1));
+        } else if (i === 1) {
+          columns.push(this.newsData.slice(i * (itemsPerCol - 1), itemsPerCol * (i + 1)));
+        } else {
+          columns.push(this.newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1)));
+        }
       } else {
         columns.push(this.newsData.slice(i * itemsPerCol, this.newsData.length));
       }
