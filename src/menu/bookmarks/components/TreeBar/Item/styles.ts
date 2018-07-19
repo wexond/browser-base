@@ -34,7 +34,7 @@ export const Title = styled.div`
   padding-left: 2px;
   padding-right: 2px;
   font-size: 14px;
-  color: rgba(0, 0, 0, ${opacity.light.primaryText});
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 
   ${typography.robotoMedium()};
 `;
