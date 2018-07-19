@@ -6,7 +6,9 @@ import Store from '../../store';
 import Folder from '../Folder';
 import Item from '../Item';
 import TreeBar from '../TreeBar';
-import { Content, Folders, Items } from './styles';
+import {
+  Content, Folders, Items, SubTitle,
+} from './styles';
 
 @observer
 class Bookmarks extends React.Component {
@@ -58,9 +60,11 @@ class Bookmarks extends React.Component {
         <TreeBar />
         {selected && (
           <Content>
+            {selected.folders.length > 0 && <SubTitle>Folders</SubTitle>}
             <Folders>
               {selected.folders.map((data: any, key: any) => <Folder data={data} key={key} />)}
             </Folders>
+            {selected.items.length > 0 && <SubTitle>Items</SubTitle>}
             {!noItems && (
               <Items>
                 {selected.items.map((data: any, key: any) => <Item data={data} key={key} />)}
