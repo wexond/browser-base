@@ -22,25 +22,16 @@ export const Content = styled.div`
   opacity: ${({ visible }: ContentProps) => (visible ? 1 : 0)};
 `;
 
-export const CardsContainer = styled.div`
-  & .weather-card {
-    position: sticky;
-    top: 24px;
-  }
-`;
-
 export const Credits = styled.div`
   width: 100%;
-  align-items: center;
   padding: 8px;
-  bottom: 0px;
-  left: 8px;
   font-size: 12px;
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
   background-color: #f5f5f5;
 
   & a {
     transition: 0.2s color;
+    text-decoration: underline;
   }
 
   & a:hover {
