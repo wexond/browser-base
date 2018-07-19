@@ -1,4 +1,5 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import GlobalStore from '../../../global-store';
 import HistoryStore from '../../../menu/history/store';
 import Menu from '../Menu';
@@ -46,6 +47,7 @@ const historyActions = {
   },
 };
 
+@observer
 export default class GlobalMenu extends React.Component {
   public render() {
     const editingHistory = HistoryStore.selectedItems.length > 0;
