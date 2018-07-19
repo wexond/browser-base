@@ -78,11 +78,11 @@ export default class App extends React.Component<{}, IState> {
           <Column>
             <News data={column3} />
           </Column>
+          <Credits>
+            APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and
+            <a href="https://newsapi.org/"> News API</a>
+          </Credits>
         </Content>
-        <Credits>
-          APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and
-          <a href="https://newsapi.org/"> News API</a>
-        </Credits>
       </StyledApp>
     );
   }
