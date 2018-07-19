@@ -12,23 +12,19 @@ export const Root = styled.div`
   justify-content: center;
   display: flex;
   flex-flow: column;
-  width: 100px;
-  height: 100px;
+  width: 96px;
+  height: 96px;
   margin-left: 24px;
   background-color: white;
   border-radius: 4px;
   box-shadow: 0 1px 1px 0 rgba(60, 64, 67, 0.08), 0 1px 3px 1px rgba(60, 64, 67, 0.16);
   cursor: pointer;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  transition: 0.15s border;
 
   &:first-child {
     margin-left: 0px;
   }
 
   &:hover {
-    border: 1px solid rgba(0, 0, 0, 0.12);
-
     & .icon {
       background-image: url(${openFolderIcon});
     }
@@ -47,13 +43,8 @@ export const Icon = styled.div`
 
 export const Label = styled.div`
   font-size: 13px;
-<<<<<<< HEAD
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
   margin-top: 8px;
-=======
-  margin-left: 16px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
->>>>>>> 1e484180e8b55d76a7067c475c5421415b6ad422
 
   ${typography.robotoMedium()};
 `;
