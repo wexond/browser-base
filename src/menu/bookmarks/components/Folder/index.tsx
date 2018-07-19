@@ -20,7 +20,7 @@ export default class Folder extends React.Component<Props, {}> {
 
     return (
       <Root onClick={this.onClick}>
-        <Icon />
+        <Icon className="icon" />
         <Label>{data.title}</Label>
       </Root>
     );

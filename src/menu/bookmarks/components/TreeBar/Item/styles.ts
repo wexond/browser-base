@@ -5,50 +5,46 @@ import typography from '../../../../../shared/mixins/typography';
 import images from '../../../../../shared/mixins/images';
 
 const homeIcon = require('../../../../../shared/icons/home.svg');
-const forwardIcon = require('../../../../../shared/icons/forward.svg');
+
+export interface RootProps {
+  hovered: boolean;
+}
 
 export const Root = styled.div`
+  height: 32px;
+  margin-left: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
   display: flex;
   align-items: center;
-  margin-left: 6px;
   cursor: pointer;
-  font-size: 14px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
-  transition: 0.2s color;
-
-  ${typography.robotoRegular()};
+  border-radius: 4px;
+  transition: 0.2s background-color;
 
   &:first-child {
     margin-left: 0px;
   }
 
-  &:last-child .icon {
-    display: none;
-  }
-
   &:hover {
-    color: rgba(0, 0, 0, ${opacity.light.primaryText});
-
-    & .home-icon,
-    & .icon {
-      opacity: 1;
-    }
+    background-color: rgba(0, 0, 0, 0.06);
   }
 `;
 
-export const Icon = styled.div`
-  width: 16px;
-  height: 16px;
-  margin-left: 6px;
-  background-image: url(${forwardIcon});
-  opacity: ${opacity.light.inactiveIcon};
-  transition: 0.2s opacity;
+export const Title = styled.div`
+  padding-left: 2px;
+  padding-right: 2px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, ${opacity.light.primaryText});
 
-  ${images.center('100%', 'auto')};
+  ${typography.robotoMedium()};
 `;
 
-export const HomeIcon = styled(Icon)`
+export const HomeIcon = styled.div`
   width: 20px;
   height: 20px;
   background-image: url(${homeIcon});
+  transition: 0.2s opacity;
+  opacity: ${opacity.light.inactiveIcon};
+
+  ${images.center('100%', 'auto')};
 `;
