@@ -1,3 +1,4 @@
+import { shell } from 'electron';
 import { observer } from 'mobx-react';
 import { resolve } from 'path';
 import React from 'react';
@@ -40,6 +41,7 @@ export default class extends React.Component<Props, {}> {
     this.webview.addEventListener('dom-ready', this.onDomReady);
     this.webview.addEventListener('enter-html-full-screen', this.onFullScreenEnter);
     this.webview.addEventListener('leave-html-full-screen', this.onFullScreenLeave);
+    this.webview.addEventListener('will-navigate', this.onWillNavigate);
   }
 
   public componentWillUnmount() {
@@ -52,8 +54,18 @@ export default class extends React.Component<Props, {}> {
     this.webview.removeEventListener('page-favicon-updated', this.onPageFaviconUpdated);
     this.webview.removeEventListener('enter-html-full-screen', this.onFullScreenEnter);
     this.webview.removeEventListener('leave-html-full-screen', this.onFullScreenLeave);
+
     Store.isFullscreen = false;
   }
+
+  public onWillNavigate = (e: any) => {
+    /* if (isExternalUrl(e.url)) {
+      e.preventDefault();
+      webview.stop();
+      webview.getWebContents().stop();
+      shell.openExternal(e.url);
+    } */
+  };
 
   public onContextMenu = (e: Electron.Event, params: Electron.ContextMenuParams) => {
     requestAnimationFrame(() => {
