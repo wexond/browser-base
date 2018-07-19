@@ -14,6 +14,7 @@ export const Root = styled.div`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
     margin-left: ${visible ? '0' : '-50px'};
+    z-index: ${visible ? 1 : -1};
   `};
 `;
 
