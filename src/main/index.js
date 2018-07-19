@@ -1,5 +1,5 @@
 const {
-  app, BrowserWindow, ipcMain, protocol,
+  app, BrowserWindow, ipcMain, protocol, shell,
 } = require('electron');
 const path = require('path');
 const { platform, homedir } = require('os');
@@ -56,6 +56,8 @@ const createWindow = () => {
   mainWindow.on('leave-full-screen', () => {
     mainWindow.webContents.send('fullscreen', false);
   });
+
+  mainWindow.webContents.addListener('will-navigate', e => e.preventDefault());
 };
 
 app.on('activate', () => {
