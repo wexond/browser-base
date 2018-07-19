@@ -25,7 +25,7 @@ export const getFolderPath = (folder: FolderModel) => {
   const titles = [];
   let lastChild = folder;
 
-  while (true) {
+  for (;;) {
     const parent = getParentFolder(lastChild);
 
     if (parent != null) {
