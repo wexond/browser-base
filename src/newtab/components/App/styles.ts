@@ -1,7 +1,4 @@
 import styled from 'styled-components';
-
-import images from '../../../shared/mixins/images';
-import typography from '../../../shared/mixins/typography';
 import opacity from '../../../shared/defaults/opacity';
 
 export const StyledApp = styled.div`
@@ -19,7 +16,6 @@ export const Content = styled.div`
   flex-flow: row;
   position: relative;
   padding-top: 24px;
-  padding-bottom: 24px;
   background-color: #f5f5f5;
   flex-wrap: wrap;
 
@@ -36,9 +32,7 @@ export const CardsContainer = styled.div`
 export const Credits = styled.div`
   width: 100%;
   align-items: center;
-  position: fixed;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding: 8px;
   bottom: 0px;
   left: 8px;
   font-size: 12px;
