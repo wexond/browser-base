@@ -3,47 +3,33 @@ import { hot } from 'react-hot-loader';
 import React from 'react';
 import Store from '../../store';
 
+import FolderModel from '../../models/folder';
+import PageModel from '../../models/page';
+
 import Folder from '../Folder';
 import Item from '../Item';
 import TreeBar from '../TreeBar';
+
 import { Content, Folders, Items } from './styles';
 
 @observer
 class Bookmarks extends React.Component {
   componentDidMount() {
-    Store.data = {
-      folders: [
-        {
-          title: 'A',
-          folders: [],
-          items: [],
-        },
-        {
-          title: 'B',
-          folders: [
-            {
-              title: 'B.A',
-              folders: [
-                {
-                  title: 'B.A.A',
-                  folders: [],
-                  items: [],
-                },
-              ],
-              items: [],
-            },
-          ],
-          items: [],
-        },
+    // Temporary, for testing
+    Store.data = new FolderModel(
+      '',
+      [new PageModel('Wexond', 'https://github.com/wexond/wexond')],
+      [
+        new FolderModel('A'),
+        new FolderModel(
+          'B',
+          [],
+          [new FolderModel('B.A', [], [new FolderModel('B.A.A')]), new FolderModel('B.B', [], [])],
+        ),
+        new FolderModel('C'),
       ],
-      items: [
-        {
-          title: 'Wexond',
-          url: 'https://github.com/wexond/wexond',
-          favicon: null,
-        },
-      ],
-    };
+      true,
+    );
 
     Store.selected = Store.data;
     Store.updatePath();
