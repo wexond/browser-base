@@ -1,19 +1,27 @@
 import Store from '../store';
 
-export const getParentFolder = (folder: any, folders: any = Store.data.folders, parent?: any) => {
+import FolderModel from '../models/folder';
+
+export const getParentFolder = (
+  folder: FolderModel,
+  folders: FolderModel[] = Store.data.folders,
+  parent?: FolderModel,
+) => {
   for (let i = 0; i < folders.length; i++) {
     if (folders[i] === folder) {
       return parent;
     }
 
-    const p: any = getParentFolder(folder, folders[i].folders, folders[i]);
+    const p: FolderModel = getParentFolder(folder, folders[i].folders, folders[i]);
     if (p != null) return p;
   }
 
   return null;
 };
 
-export const getFolderPath = (folder: any) => {
+export const getFolderPath = (folder: FolderModel) => {
+  if (folder.root) return [];
+
   const titles = [];
   let lastChild = folder;
 
