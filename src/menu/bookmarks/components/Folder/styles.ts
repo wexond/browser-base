@@ -8,14 +8,15 @@ const folderIcon = require('../../../../shared/icons/folder.svg');
 
 export const Root = styled.div`
   align-items: center;
+  justify-content: center;
   display: flex;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 16px;
-  padding-right: 32px;
+  flex-flow: column;
+  width: 100px;
+  height: 100px;
   margin-left: 24px;
+  background-color: white;
   border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 1px 0 rgba(60, 64, 67, 0.08), 0 1px 3px 1px rgba(60, 64, 67, 0.16);
   cursor: pointer;
 
   &:first-child {
@@ -24,8 +25,8 @@ export const Root = styled.div`
 `;
 
 export const Icon = styled.div`
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   opacity: ${opacity.light.inactiveIcon};
   background-image: url(${folderIcon});
 
@@ -35,8 +36,7 @@ export const Icon = styled.div`
 export const Label = styled.div`
   font-size: 13px;
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
-
-  margin-left: 16px;
+  margin-top: 8px;
 
   ${typography.robotoMedium()};
 `;

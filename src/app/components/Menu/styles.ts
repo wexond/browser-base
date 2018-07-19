@@ -23,6 +23,7 @@ export const Container = styled.div`
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   right: 0;
   box-shadow: ${shadows(16)};
+  -webkit-app-region: no-drag;
 
   ${({ visible }: StyledProps) => css`
     transform: translateX(${visible ? 0 : MENU_WIDTH + 20}px);

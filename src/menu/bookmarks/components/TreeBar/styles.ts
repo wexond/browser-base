@@ -10,4 +10,5 @@ export const Root = styled.div`
   padding-left: 32px;
   border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
   overflow: hidden;
+  background-color: white;
 `;
