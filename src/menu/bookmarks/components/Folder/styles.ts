@@ -12,8 +12,8 @@ export const Root = styled.div`
   justify-content: center;
   display: flex;
   flex-flow: column;
-  width: 100px;
-  height: 100px;
+  width: 64px;
+  height: 64px;
   margin-left: 24px;
   background-color: white;
   border-radius: 4px;
@@ -47,13 +47,8 @@ export const Icon = styled.div`
 
 export const Label = styled.div`
   font-size: 13px;
-<<<<<<< HEAD
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
   margin-top: 8px;
-=======
-  margin-left: 16px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
->>>>>>> 1e484180e8b55d76a7067c475c5421415b6ad422
 
   ${typography.robotoMedium()};
 `;
