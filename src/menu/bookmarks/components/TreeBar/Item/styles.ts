@@ -7,16 +7,21 @@ import images from '../../../../../shared/mixins/images';
 const homeIcon = require('../../../../../shared/icons/home.svg');
 const forwardIcon = require('../../../../../shared/icons/forward.svg');
 
+export interface RootProps {
+  hovered: boolean;
+}
+
 export const Root = styled.div`
   display: flex;
   align-items: center;
   margin-left: 6px;
   cursor: pointer;
   font-size: 14px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
   transition: 0.2s color;
 
-  ${typography.robotoRegular()};
+  ${typography.robotoMedium()};
+  color: ${({ hovered }: RootProps) =>
+    `rgba(0, 0, 0, ${hovered ? opacity.light.primaryText : opacity.light.secondaryText})`};
 
   &:first-child {
     margin-left: 0px;
@@ -25,26 +30,22 @@ export const Root = styled.div`
   &:last-child .icon {
     display: none;
   }
-
-  &:hover {
-    color: rgba(0, 0, 0, ${opacity.light.primaryText});
-
-    & .home-icon,
-    & .icon {
-      opacity: 1;
-    }
-  }
 `;
+
+export interface IconProps {
+  hovered: boolean;
+}
 
 export const Icon = styled.div`
   width: 16px;
   height: 16px;
   margin-left: 6px;
   background-image: url(${forwardIcon});
-  opacity: ${opacity.light.inactiveIcon};
   transition: 0.2s opacity;
 
   ${images.center('100%', 'auto')};
+  opacity: ${({ hovered }: IconProps) =>
+    (hovered ? opacity.light.activeIcon : opacity.light.inactiveIcon)};
 `;
 
 export const HomeIcon = styled(Icon)`

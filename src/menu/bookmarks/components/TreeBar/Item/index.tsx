@@ -8,10 +8,22 @@ export interface IProps {
   home?: boolean;
 }
 
-export default class Item extends React.Component<IProps, {}> {
+export interface IState {
+  hovered: boolean;
+}
+
+export default class Item extends React.Component<IProps, IState> {
   public static defaultProps = {
     home: false,
   };
+
+  public state: IState = {
+    hovered: false,
+  };
+
+  onMouseEnter = () => this.setState({ hovered: true });
+
+  onMouseLeave = () => this.setState({ hovered: false });
 
   onClick = () => {
     const { data } = this.props;
@@ -22,12 +34,18 @@ export default class Item extends React.Component<IProps, {}> {
 
   public render() {
     const { home, data } = this.props;
+    const { hovered } = this.state;
 
     return (
-      <Root onClick={this.onClick}>
+      <Root
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onClick={this.onClick}
+        hovered={hovered}
+      >
         {!home && data.title}
-        {home && <HomeIcon className="home-icon" />}
-        <Icon className="icon" />
+        {home && <HomeIcon hovered={hovered} />}
+        <Icon className="icon" hovered={hovered} />
       </Root>
     );
   }
