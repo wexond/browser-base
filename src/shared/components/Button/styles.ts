@@ -79,11 +79,10 @@ export const StyledButton = styled.div`
   position: relative;
   overflow: hidden;
   transition: 0.2s box-shadow;
-  font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
 
-  ${typography.robotoMedium()}
+  ${typography.button()}
   background-color: ${(props: StyledButtonProps) => getBackground(props)};
   color: ${({ foreground, disabled, theme }) =>
     getComponentColor(foreground, true, disabled, theme, false)};

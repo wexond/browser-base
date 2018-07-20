@@ -6,10 +6,6 @@ import images from '../../../../../shared/mixins/images';
 
 const homeIcon = require('../../../../../shared/icons/home.svg');
 
-export interface RootProps {
-  hovered: boolean;
-}
-
 export const Root = styled.div`
   height: 32px;
   margin-left: 4px;
@@ -33,10 +29,8 @@ export const Root = styled.div`
 export const Title = styled.div`
   padding-left: 2px;
   padding-right: 2px;
-  font-size: 14px;
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
-
-  ${typography.robotoMedium()};
+  ${typography.subtitle2()};
 `;
 
 export const HomeIcon = styled.div`

@@ -1,9 +1,5 @@
 import styled from 'styled-components';
 
-interface RootProps {
-  visible: boolean;
-}
-
 export const Root = styled.div`
   position: absolute;
   height: 3px;
@@ -12,12 +8,8 @@ export const Root = styled.div`
   z-index: 10;
   width: 100%;
 
-  display: ${({ visible }: RootProps) => (visible ? 'block' : 'none')};
+  display: ${({ visible }: { visible: boolean }) => (visible ? 'block' : 'none')};
 `;
-
-interface ThumbProps {
-  visible: boolean;
-}
 
 export const Thumb = styled.div`
   position: absolute;
@@ -27,7 +19,7 @@ export const Thumb = styled.div`
   left: 0;
   transition: 0.2s opacity;
 
-  opacity: ${({ visible }: ThumbProps) => (visible ? 0.2 : 0)};
+  opacity: ${({ visible }: { visible: boolean }) => (visible ? 0.2 : 0)};
 
   &:hover {
     opacity: 0.4;

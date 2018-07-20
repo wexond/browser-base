@@ -181,7 +181,6 @@ export default class AddressBar extends Component<Props, {}> {
             onFocus={this.onInputFocus}
             placeholder={dictionary.search}
             onInput={this.onInput}
-            visible={Store.addressBar.toggled}
             onKeyPress={this.onKeyPress}
             onKeyDown={this.onKeyDown}
           />

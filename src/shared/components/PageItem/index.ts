@@ -64,14 +64,12 @@ export const PageItemRemoveIcon = styled.div`
 `;
 
 export const PageItemPrimaryText = styled.div`
-  ${typography.robotoRegular()};
-  font-size: 14px;
+  ${typography.body2()};
   opacity: ${opacity.light.primaryText};
 `;
 
 export const PageItemSecondaryText = styled.div`
-  ${typography.robotoRegular()};
-  font-size: 14px;
+  ${typography.body2()};
   opacity: ${opacity.light.secondaryText};
 `;
 
@@ -81,6 +79,7 @@ export const PageItemTitle = styled(PageItemPrimaryText)`
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-right: 24px;
+  ${typography.body2()};
 `;
 
 export const PageItemTime = styled(PageItemSecondaryText)`

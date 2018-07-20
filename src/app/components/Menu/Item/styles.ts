@@ -1,12 +1,7 @@
 import styled, { css } from 'styled-components';
-import images from '../../../../shared/mixins/images';
 import colors from '../../../../shared/defaults/colors';
 import typography from '../../../../shared/mixins/typography';
 import opacity from '../../../../shared/defaults/opacity';
-
-interface ItemProps {
-  selected: boolean;
-}
 
 export const StyledItem = styled.div`
   height: 48px;
@@ -22,7 +17,7 @@ export const StyledItem = styled.div`
     background-color: rgba(0, 0, 0, 0.03);
   }
 
-  ${({ selected }: ItemProps) => css`
+  ${({ selected }: { selected: boolean }) => css`
     pointer-events: ${selected ? 'none' : 'auto'};
   `};
 `;
@@ -45,10 +40,6 @@ export const Icon = styled.div`
   `};
 `;
 
-interface TitleProps {
-  selected: boolean;
-}
-
 export const Title = styled.div`
   font-size: 14px;
   margin-left: 32px;
@@ -56,15 +47,11 @@ export const Title = styled.div`
   ${typography.robotoMedium()};
   display: 'flex';
 
-  ${({ selected }: TitleProps) => css`
+  ${({ selected }: { selected: boolean }) => css`
     color: ${selected ? colors.blue['500'] : '#000'};
     opacity: ${selected ? 1 : opacity.light.primaryText};
   `};
 `;
-
-interface BackgroundProps {
-  selected: boolean;
-}
 
 export const Background = styled.div`
   opacity: 0.15;
@@ -76,7 +63,7 @@ export const Background = styled.div`
   height: calc(100% - 8px);
   transform: translate(-50%, -50%);
 
-  ${({ selected }: BackgroundProps) => css`
+  ${({ selected }: { selected: boolean }) => css`
     background: ${selected ? colors.blue['500'] : 'none'};
   `};
 `;
