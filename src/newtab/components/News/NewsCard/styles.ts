@@ -6,7 +6,7 @@ import typography from '../../../../shared/mixins/typography';
 
 export const Title = styled.div`
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
-  margin-top: 16px;
+  margin-top: 12px;
 
   ${typography.subtitle1()};
   ${typography.maxLines(3)};
@@ -60,7 +60,6 @@ export const CardImage = styled.div`
 
 export const Overline = styled.div`
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
-  margin-top: 4px;
   ${typography.overline()};
 `;
 
