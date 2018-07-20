@@ -1,14 +1,12 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Platforms } from '../../enums';
 import Store from '../../store';
 
-interface ContainerProps {
-  isFullscreen: boolean;
-}
-
 export const StyledContainer = styled.div`
-  margin-left: ${({ isFullscreen }: ContainerProps) =>
-    (!isFullscreen && Store.platform === Platforms.MacOS ? 72 : 0)}px;
   display: flex;
   -webkit-app-region: no-drag;
+
+  ${({ isFullscreen }: { isFullscreen: boolean }) => css`
+    margin-left: ${isFullscreen && Store.platform === Platforms.MacOS ? 0 : 72}px;
+  `};
 `;

@@ -1,9 +1,5 @@
 import styled, { css } from 'styled-components';
 
-export interface Props {
-  visible: boolean;
-}
-
 export const Root = styled.div`
   width: 100%;
   height: 100vh;
@@ -15,8 +11,10 @@ export const Root = styled.div`
   transition: 0.2s opacity;
   will-change: transition;
 
-  opacity: ${({ visible }: Props) => (visible ? 1 : 0)};
-  pointer-events: ${({ visible }: Props) => (visible ? 'auto' : 'none')};
+  ${({ visible }: { visible: boolean }) => css`
+    opacity: ${visible ? 1 : 0};
+    pointer-events: ${visible ? 'auto' : 'none'};
+  `};
 `;
 
 export const ItemsContainer = styled.div`

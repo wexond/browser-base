@@ -43,10 +43,6 @@ export const DeleteIcon = styled.div`
   ${images.center('16px', 'auto')};
 `;
 
-export interface IconsContainerProps {
-  selected: boolean;
-}
-
 export const IconsContainer = styled.div`
   width: ${WORKSPACE_FOLDER_SIZE}px;
   height: ${WORKSPACE_FOLDER_SIZE}px;
@@ -60,17 +56,13 @@ export const IconsContainer = styled.div`
   padding: 4px;
   box-shadow: ${shadows(3)};
 
-  ${({ selected }: IconsContainerProps) => {
+  ${({ selected }: { selected: boolean }) => {
     if (selected) {
       return `border: 3px solid ${colors.blue['500']}`;
     }
     return '';
   }};
 `;
-
-export interface IconProps {
-  src: string;
-}
 
 export const Icon = styled.div`
   width: ${WORKSPACE_ICON_SIZE}px;
@@ -79,15 +71,13 @@ export const Icon = styled.div`
   margin: 4px;
 
   ${images.center('100%', 'auto')};
-  background-image: url(${({ src }: IconProps) => src});
+  background-image: url(${({ src }: { src: string }) => src});
 `;
 
 export const Label = styled.div`
   width: 100%;
   white-space: nowrap;
   color: #fff;
-  font-size: 14px;
   margin-top: 12px;
-
-  ${typography.robotoMedium()};
+  ${typography.subtitle2()};
 `;

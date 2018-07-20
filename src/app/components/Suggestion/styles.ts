@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import images from '../../../shared/mixins/images';
 import opacity from '../../../shared/defaults/opacity';
+import typography from '../../../shared/mixins/typography';
 
 export const StyledSuggestion = styled.div`
   width: 100%;
@@ -21,19 +22,23 @@ export const StyledSuggestion = styled.div`
 `;
 
 export const PrimaryText = styled.div`
+  ${typography.body2()};
   margin-left: 64px;
-  opacity: ${opacity.light.primaryText};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 13px;
+  opacity: ${opacity.light.primaryText};
 `;
 
 export const SecondaryText = styled.div`
-  opacity: ${opacity.light.secondaryText};
+  ${typography.body2()};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   padding-right: 16px;
+  font-size: 13px;
+  opacity: ${opacity.light.secondaryText};
 `;
 
 export const Icon = styled.div`
@@ -41,7 +46,6 @@ export const Icon = styled.div`
   left: 16px;
   width: 16px;
   height: 16px;
-
   ${images.center('16px', '16px')};
 `;
 

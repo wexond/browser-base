@@ -12,7 +12,7 @@ import {
   PageItemTime,
   PageItemTitle,
   PageItemRemoveIcon,
-} from '../../../../shared/components/PageItem/styles';
+} from '../../../../shared/components/PageItem';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
 
@@ -97,9 +97,8 @@ export default class Item extends React.Component<Props, State> {
         <PageItemIcon
           style={{ backgroundImage: `url(${favicon})`, opacity: hovered ? 0 : opacity }}
         />
-        <PageItemTime>{`${hour.toString().padStart(2, '0')}:${minute
-          .toString()
-          .padStart(2, '0')}`}
+        <PageItemTime>
+          {`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}
         </PageItemTime>
         <PageItemTitle>{data.title}</PageItemTitle>
       </PageItem>

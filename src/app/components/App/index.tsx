@@ -31,37 +31,38 @@ class App extends React.Component {
       Store.pageMenu.toggle(false);
     });
 
-    /* eslint-disable brace-style */
     window.addEventListener('keydown', e => {
       if (!e.isTrusted) return;
       const { workspaces, menu } = Store;
 
-      // escape
-      // hide menu and workspaces manager
       if (e.keyCode === 27) {
+        // escape
+        // hide menu and workspaces manager
+
         if (workspaces.visible) workspaces.visible = false;
 
         if (menu.visible) {
           menu.visible = false;
           menu.selectedItem = null;
         }
-      }
-      // ctrl + left or aight arrow,
-      // switch between workspaces
-      else if ((e.ctrlKey || workspaces.visible) && (e.keyCode === 37 || e.keyCode === 39)) {
+      } else if ((e.ctrlKey || workspaces.visible) && (e.keyCode === 37 || e.keyCode === 39)) {
+        // ctrl + left or aight arrow,
+        // switch between workspaces
+
         const list = workspaces.list;
         const index = list.indexOf(Store.getCurrentWorkspace());
 
-        // left
         if (e.keyCode === 37) {
+          // left
+
           if (index <= 0) {
             workspaces.selected = list[list.length - 1].id;
           } else {
             workspaces.selected = list[index - 1].id;
           }
-        }
-        // right
-        else if (e.keyCode === 39) {
+        } else if (e.keyCode === 39) {
+          // right
+
           if (index + 1 === workspaces.list.length) {
             workspaces.selected = 0;
           } else {
@@ -75,43 +76,43 @@ class App extends React.Component {
 
         workspaces.timer = setTimeout(workspaces.hide, workspaces.visible ? 500 : 200);
         workspaces.visible = true;
-      }
-      // ctrl + digit
-      // switch between tabs, 1-9 + 0
-      else if (e.ctrlKey && e.keyCode >= 48 && e.keyCode <= 57) {
+      } else if (e.ctrlKey && e.keyCode >= 48 && e.keyCode <= 57) {
+        // ctrl + digit
+        // switch between tabs, 1-9 + 0
+
         const current = Store.getCurrentWorkspace();
         const tabs = current.tabs;
 
-        // 0
         if (e.keyCode === 48) {
+          // 0
+
           current.selectTab(tabs[tabs.length - 1]);
-        }
-        // 1-9
-        else {
+        } else {
+          // 1-9
+
           const index = e.keyCode - 49;
 
           if (tabs.length > index) {
             current.selectTab(tabs[index]);
           }
         }
-      }
-      // ctrl + s
-      // show workspaces manager
-      else if (e.ctrlKey && e.keyCode === 83 && !workspaces.visible) {
+      } else if (e.ctrlKey && e.keyCode === 83 && !workspaces.visible) {
+        // ctrl + s
+        // show workspaces manager
+
         workspaces.visible = true;
-      }
-      // ctrl + r
-      // refresh a page
-      else if (e.ctrlKey && e.keyCode === 82) {
+      } else if (e.ctrlKey && e.keyCode === 82) {
+        // ctrl + r
+        // refresh a page
+
         Store.getSelectedPage().webview.reload();
-      }
-      // ctrl + n
-      // add a new tab
-      else if (e.ctrlKey && e.keyCode === 78) {
+      } else if (e.ctrlKey && e.keyCode === 78) {
+        // ctrl + n
+        // add a new tab
+
         Store.getCurrentWorkspace().addTab();
       }
     });
-    /* eslint-enable brace-style */
 
     // ipcRenderer.send(ipcMessages.PLUGIN_INSTALL, 'wexond/wexond-example-plugin');
   }
