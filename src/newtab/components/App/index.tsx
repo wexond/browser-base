@@ -50,13 +50,13 @@ class App extends React.Component<{}, IState> {
 
   async loadData() {
     const weatherData = await getWeather(
-      'opole',
+      'california',
       Languages.en,
       TemperatureUnit.Celsius,
       TimeUnit.TwentyFourHours,
     );
 
-    this.newsData = await getNews(Countries.pl);
+    this.newsData = await getNews(Countries.us);
     let columns = this.getColumns(1);
 
     if (window.innerWidth > 1128) {
