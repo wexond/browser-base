@@ -1,5 +1,7 @@
 import Dexie from 'dexie';
 import HistoryItem from './history-item';
+import BookmarksFolder from './bookmarks-folder';
+import BookmarksPage from './bookmarks-page';
 import { Favicon } from './favicon';
 
 export class AppDatabase extends Dexie {
@@ -7,12 +9,18 @@ export class AppDatabase extends Dexie {
 
   public favicons: Dexie.Table<Favicon, number>;
 
+  public bookmarksFolder: Dexie.Table<BookmarksFolder, number>;
+
+  public bookmarksPages: Dexie.Table<BookmarksPage, number>;
+
   constructor() {
     super('AppDatabase');
 
     this.version(1).stores({
       history: '++id, title, url, favicon, date',
       favicons: '++id, url, favicon',
+      bookmarksFolder: '++id, title, folders, items',
+      bookmarksPage: '++id, title, url, favicon',
     });
   }
 
