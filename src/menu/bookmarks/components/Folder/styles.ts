@@ -42,9 +42,6 @@ export const Icon = styled.div`
 `;
 
 export const Label = styled.div`
-  font-size: 13px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
   margin-top: 8px;
-
-  ${typography.robotoMedium()};
+  ${typography.body2()};
 `;

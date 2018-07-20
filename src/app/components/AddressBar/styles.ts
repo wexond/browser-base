@@ -30,11 +30,6 @@ export const StyledAddressBar = styled.div`
   `};
 `;
 
-interface InputProps {
-  visible: boolean;
-  suggestionsVisible: boolean;
-}
-
 export const Input = styled.input`
   width: 100%;
   font-size: 13px;
@@ -49,29 +44,21 @@ export const Input = styled.input`
     color: rgba(0, 0, 0, ${opacity.light.disabledText});
   }
 
-  ${({ suggestionsVisible }: InputProps) => css`
+  ${({ suggestionsVisible }: { suggestionsVisible: boolean }) => css`
     padding-left: ${suggestionsVisible ? '30px' : '16px'};
   `};
 `;
-
-interface InputContainerProps {
-  suggestionsVisible: boolean;
-}
 
 export const InputContainer = styled.div`
   display: flex;
   align-items: center;
   transition: 0.2s background-color;
 
-  ${({ suggestionsVisible }: InputContainerProps) => css`
+  ${({ suggestionsVisible }: { suggestionsVisible: boolean }) => css`
     height: ${suggestionsVisible ? '40px' : '32px'};
     background-color: ${suggestionsVisible ? 'white' : 'rgba(0, 0, 0, 0.06)'};
   `};
 `;
-
-interface IconProps {
-  image: string;
-}
 
 export const Icon = styled.div`
   ${images.center('100%', '100%')};
@@ -80,7 +67,7 @@ export const Icon = styled.div`
   margin-left: 16px;
   opacity: 0.5;
 
-  ${({ image }: IconProps) => css`
+  ${({ image }: { image: string }) => css`
     background-image: url(${image});
   `};
 `;

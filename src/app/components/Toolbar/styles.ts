@@ -1,10 +1,7 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { TOOLBAR_HEIGHT } from '../../constants';
 import { EASE_FUNCTION } from '../../../shared/constants';
-
-export interface StyledToolbarProps {
-  isFullscreen: boolean;
-}
+import opacity from '../../../shared/defaults/opacity';
 
 export const StyledToolbar = styled.div`
   position: relative;
@@ -15,7 +12,9 @@ export const StyledToolbar = styled.div`
 
   height: ${TOOLBAR_HEIGHT}px;
   transition: 0.2s margin-top ${EASE_FUNCTION};
-  margin-top: ${({ isFullscreen }: StyledToolbarProps) => (isFullscreen ? -TOOLBAR_HEIGHT : 0)}px;
+  ${({ isFullscreen }: { isFullscreen: boolean }) => css`
+    margin-top: ${isFullscreen ? -TOOLBAR_HEIGHT : 0}px;
+  `};
 `;
 
 export const Handle = styled.div`
@@ -33,8 +32,7 @@ export const Line = styled.div`
   position: absolute;
   z-index: 1;
   bottom: 0;
-
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, ${opacity.light.dividers});
 `;
 
 export const TabsSection = styled.div`

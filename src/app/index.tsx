@@ -11,8 +11,6 @@ const robotoLight = require('../shared/fonts/Roboto-Light.ttf');
 const robotoMedium = require('../shared/fonts/Roboto-Medium.ttf');
 const robotoRegular = require('../shared/fonts/Roboto-Regular.ttf');
 
-declare const module: any;
-
 injectGlobal`
   @font-face {
     font-family: 'Roboto';
@@ -38,7 +36,7 @@ injectGlobal`
   body {
     user-select: none;
     cursor: default;
-    ${typography.body1()}
+    ${typography.body2()}
     margin: 0;
     padding: 0;
   }

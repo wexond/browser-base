@@ -5,11 +5,10 @@ import opacity from '../../../../shared/defaults/opacity';
 import typography from '../../../../shared/mixins/typography';
 
 export const Title = styled.div`
-  font-size: 20px;
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
   margin-top: 16px;
 
-  ${typography.robotoRegular()};
+  ${typography.subtitle1()};
   ${typography.maxLines(3)};
 `;
 
@@ -60,10 +59,9 @@ export const CardImage = styled.div`
 `;
 
 export const Overline = styled.div`
-  font-size: 10px;
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
-  text-transform: uppercase;
   margin-top: 4px;
+  ${typography.overline()};
 `;
 
 export const SourceContainer = styled.div`
