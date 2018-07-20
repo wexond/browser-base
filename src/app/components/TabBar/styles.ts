@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import ToolbarButton from '../Toolbar/Button';
 
 interface TabBarProps {
@@ -16,6 +16,8 @@ export const StyledTabBar = styled.div`
   transition: 0.2s opacity;
   overflow: hidden;
 
-  pointer-events: ${({ visible }: TabBarProps) => (visible ? 'auto' : 'none')};
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
+  ${({ visible }: { visible: boolean }) => css`
+    pointer-events: ${visible ? 'auto' : 'none'};
+    opacity: ${visible ? 1 : 0};
+  `};
 `;

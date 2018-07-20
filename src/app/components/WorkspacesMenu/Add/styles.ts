@@ -1,12 +1,8 @@
 import styled from 'styled-components';
-
-import typography from '../../../../shared/mixins/typography';
 import images from '../../../../shared/mixins/images';
-import shadows from '../../../../shared/mixins/shadows';
-import colors from '../../../../shared/defaults/colors';
 import icons from '../../../../shared/mixins/icons';
 
-import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '../../../constants';
+import { WORKSPACE_FOLDER_SIZE } from '../../../constants';
 
 const addIcon = require('../../../../shared/icons/add.svg');
 

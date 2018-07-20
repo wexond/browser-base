@@ -1,5 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import images from '../../../../shared/mixins/images';
+import icons from '../../../../shared/mixins/icons';
 
 interface ButtonProps {
   icon: string;
@@ -35,11 +36,13 @@ export const Icon = styled.div`
   width: 100%;
   height: 100%;
   transition: 0.2ss filter;
-
-  background-image: ${({ icon }: IconProps) => `url(${icon})`};
   ${images.center('11px', '11px')};
 
-  &:hover {
-    filter: ${({ isClose }) => isClose && 'invert(100%);'};
-  }
+  ${({ icon, isClose }: IconProps) => css`
+    background-image: url(${icon});
+
+    &:hover {
+      filter: ${isClose && 'invert(100%)'};
+    }
+  `};
 `;

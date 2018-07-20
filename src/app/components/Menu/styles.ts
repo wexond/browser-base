@@ -7,10 +7,6 @@ import { MENU_WIDTH, MENU_CONTENT_MAX_WIDTH, MENU_SPACE } from '../../constants'
 
 const searchIcon = require('../../../shared/icons/search.svg');
 
-export interface StyledProps {
-  visible: boolean;
-}
-
 export const Container = styled.div`
   height: 100%;
   position: fixed;
@@ -25,18 +21,16 @@ export const Container = styled.div`
   box-shadow: ${shadows(16)};
   -webkit-app-region: no-drag;
 
-  ${({ visible }: StyledProps) => css`
+  ${({ visible }: { visible: boolean }) => css`
     transform: translateX(${visible ? 0 : MENU_WIDTH + 20}px);
   `};
 `;
 
 export const Title = styled.div`
-  font-size: 20px;
+  ${typography.h6()};
   margin-left: 16px;
   margin-top: 10px;
   opacity: ${opacity.light.primaryText};
-  letter-spacing: 0.007rem;
-  ${typography.robotoMedium()};
 `;
 
 export const Header = styled.div`
@@ -48,10 +42,6 @@ export const Header = styled.div`
   margin-bottom: 8px;
 `;
 
-interface DarkProps {
-  visible: boolean;
-}
-
 export const Dark = styled.div`
   background-color: rgba(0, 0, 0, 0.7);
   position: fixed;
@@ -62,7 +52,7 @@ export const Dark = styled.div`
   z-index: 100;
   transition: 0.2s opacity;
 
-  ${({ visible }: DarkProps) => css`
+  ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
   `};
@@ -77,10 +67,6 @@ export const Menu = styled.div`
   flex-flow: column;
   transition: 0.2s all;
 `;
-
-interface ContentProps {
-  visible: boolean;
-}
 
 const getWidth = () => {
   const maxWidth = MENU_CONTENT_MAX_WIDTH;
@@ -100,7 +86,7 @@ export const Content = styled.div`
   position: relative;
   overflow: hidden;
 
-  ${({ visible }: ContentProps) => css`
+  ${({ visible }: { visible: boolean }) => css`
     width: ${visible ? getWidth() : 0};
   `};
 
@@ -122,9 +108,9 @@ export const Search = styled.div`
 `;
 
 export const Input = styled.input`
+  ${typography.body2()};
   background-color: transparent;
   outline: none;
-  font-size: 14px;
   border: none;
   padding-left: 16px;
   width: 100%;

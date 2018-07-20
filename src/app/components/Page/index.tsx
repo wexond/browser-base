@@ -1,4 +1,3 @@
-import { shell } from 'electron';
 import { observer } from 'mobx-react';
 import { resolve } from 'path';
 import React from 'react';
@@ -9,13 +8,8 @@ import Store from '../../store';
 import db from '../../../shared/models/app-database';
 import { BASE_PATH } from '../../constants';
 
-interface Props {
-  page: Page;
-  selected: boolean;
-}
-
 @observer
-export default class extends React.Component<Props, {}> {
+export default class extends React.Component<{ page: Page }, {}> {
   private lastURL = '';
 
   private lastHistoryItemID = -1;
@@ -41,7 +35,6 @@ export default class extends React.Component<Props, {}> {
     this.webview.addEventListener('dom-ready', this.onDomReady);
     this.webview.addEventListener('enter-html-full-screen', this.onFullScreenEnter);
     this.webview.addEventListener('leave-html-full-screen', this.onFullScreenLeave);
-    this.webview.addEventListener('will-navigate', this.onWillNavigate);
   }
 
   public componentWillUnmount() {
@@ -57,15 +50,6 @@ export default class extends React.Component<Props, {}> {
 
     Store.isFullscreen = false;
   }
-
-  public onWillNavigate = (e: any) => {
-    /* if (isExternalUrl(e.url)) {
-      e.preventDefault();
-      webview.stop();
-      webview.getWebContents().stop();
-      shell.openExternal(e.url);
-    } */
-  };
 
   public onContextMenu = (e: Electron.Event, params: Electron.ContextMenuParams) => {
     requestAnimationFrame(() => {
@@ -196,11 +180,11 @@ export default class extends React.Component<Props, {}> {
   };
 
   public render() {
-    const { page, selected } = this.props;
-    const { url } = page;
+    const { page } = this.props;
+    const { url, id } = page;
 
     return (
-      <StyledPage selected={selected}>
+      <StyledPage selected={Store.getCurrentWorkspace().selectedTab === id}>
         <webview
           src={url}
           style={{ height: '100%' }}

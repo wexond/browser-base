@@ -1,20 +1,4 @@
-const body1 = () => `
-  font-size: 13px;
-  font-family: Roboto;
-  font-weight: 400;
-`;
-
-const body2 = () => `
-  font-size: 14px;
-  font-family: Roboto;
-  font-weight: 500;
-`;
-
-const button = () => `
-  font-size: 14px;
-  font-family: Roboto;
-  font-weight: 500;
-`;
+const getLetterSpacing = (fontSize: number, tracking: number) => tracking / fontSize;
 
 const robotoLight = () => `
   font-family: Roboto;
@@ -31,6 +15,86 @@ const robotoMedium = () => `
   font-weight: 500;
 `;
 
+const h1 = () => `
+  ${robotoLight()};
+  letter-spacing: ${getLetterSpacing(96, -1.5)}rem;
+  font-size: 96px;
+`;
+
+const h2 = () => `
+  ${robotoLight()};
+  letter-spacing: ${getLetterSpacing(60, -0.5)}rem;
+  font-size: 60px;
+`;
+
+const h3 = () => `
+  ${robotoRegular()};
+  letter-spacing: ${getLetterSpacing(48, 0)}rem;
+  font-size: 48px;
+`;
+
+const h4 = () => `
+  ${robotoRegular()};
+  letter-spacing: ${getLetterSpacing(34, 0.25)}rem;
+  font-size: 34px;
+`;
+
+const h5 = () => `
+  ${robotoRegular()};
+  letter-spacing: ${getLetterSpacing(24, 0)}rem;
+  font-size: 24px;
+`;
+
+const h6 = () => `
+  ${robotoMedium()};
+  letter-spacing: ${getLetterSpacing(20, 0.15)}rem;
+  font-size: 20px;
+`;
+
+const subtitle1 = () => `
+  ${robotoRegular()};
+  letter-spacing: ${getLetterSpacing(16, 0.15)}rem;
+  font-size: 16px;
+`;
+
+const subtitle2 = () => `
+  ${robotoMedium()};
+  letter-spacing: ${getLetterSpacing(14, 0.1)}rem;
+  font-size: 14px;
+`;
+
+const body1 = () => `
+  ${robotoRegular()};
+  letter-spacing: ${getLetterSpacing(16, 0.5)}rem;
+  font-size: 16px;
+`;
+
+const body2 = () => `
+  ${robotoRegular()};
+  letter-spacing: ${getLetterSpacing(14, 0.25)}rem;
+  font-size: 14px;
+`;
+
+const button = () => `
+  ${robotoMedium()};
+  letter-spacing: ${getLetterSpacing(14, 0.75)}rem;
+  font-size: 14px;
+  text-transform: uppercase;
+`;
+
+const caption = () => `
+  ${robotoRegular()};
+  letter-spacing: ${getLetterSpacing(12, 0.4)}rem;
+  font-size: 12px;
+`;
+
+const overline = () => `
+  ${robotoRegular()};
+  letter-spacing: ${getLetterSpacing(10, 1.5)}rem;
+  font-size: 10px;
+  text-transform: uppercase;
+`;
+
 const maxLines = (count: number, lineHeight?: number) => `
   overflow: hidden;
   text-overflow: ellipsis;
@@ -42,11 +106,22 @@ const maxLines = (count: number, lineHeight?: number) => `
 `;
 
 export default {
-  body1,
-  body2,
-  button,
+  getLetterSpacing,
   robotoLight,
   robotoRegular,
   robotoMedium,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  subtitle1,
+  subtitle2,
+  body1,
+  body2,
+  button,
+  caption,
+  overline,
   maxLines,
 };

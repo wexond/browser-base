@@ -10,7 +10,7 @@ import Folder from '../Folder';
 import Item from '../Item';
 import TreeBar from '../TreeBar';
 import {
-  Content, Folders, Items, SubTitle,
+  Content, Folders, Items, Caption,
 } from './styles';
 
 @observer
@@ -45,11 +45,11 @@ class Bookmarks extends React.Component {
         <TreeBar />
         {selected && (
           <Content>
-            {selected.folders.length > 0 && <SubTitle>Folders</SubTitle>}
+            {selected.folders.length > 0 && <Caption>Folders</Caption>}
             <Folders>
               {selected.folders.map((data: any, key: any) => <Folder data={data} key={key} />)}
             </Folders>
-            {selected.items.length > 0 && <SubTitle>Items</SubTitle>}
+            {selected.items.length > 0 && <Caption>Items</Caption>}
             {!noItems && (
               <Items>
                 {selected.items.map((data: any, key: any) => <Item data={data} key={key} />)}

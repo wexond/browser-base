@@ -2,12 +2,9 @@ import styled, { css } from 'styled-components';
 import images from '../../../shared/mixins/images';
 import opacity from '../../../shared/defaults/opacity';
 import colors from '../../../shared/defaults/colors';
+import typography from '../../../shared/mixins/typography';
 
 const closeIcon = require('../../../shared/icons/close.svg');
-
-interface CloseProps {
-  hovered: boolean;
-}
 
 export const Close = styled.div`
   position: absolute;
@@ -19,7 +16,7 @@ export const Close = styled.div`
   z-index: 2;
 
   ${images.center('100%', '100%')};
-  opacity: ${({ hovered }: CloseProps) => (hovered ? opacity.light.inactiveIcon : 0)};
+  opacity: ${({ hovered }: { hovered: boolean }) => (hovered ? opacity.light.inactiveIcon : 0)};
 `;
 
 interface TabProps {
@@ -38,9 +35,11 @@ export const StyledTab = styled.div`
   transition: 0.2s background-color, 0.1s color;
   will-change: transition, transform, width;
 
-  z-index: ${({ selected }: TabProps) => (selected ? 2 : 1)};
-  pointer-events: ${({ isRemoving, visible }) => (isRemoving || !visible ? 'none' : 'auto')};
-  -webkit-app-region: ${({ visible }) => (visible ? 'no-drag' : '')};
+  ${({ selected, isRemoving, visible }: TabProps) => css`
+    z-index: ${selected ? 2 : 1};
+    pointer-events: ${isRemoving || !visible ? 'none' : 'auto'};
+    -webkit-app-region: ${visible ? 'no-drag' : ''};
+  `};
 `;
 
 interface OverlayProps {
@@ -56,6 +55,7 @@ export const Overlay = styled.div`
   bottom: 0;
   z-index: 0;
   transition: 0.2s opacity;
+  background-color: rgba(0, 0, 0, 0.04);
 
   opacity: ${({ selected, hovered }: OverlayProps) => {
     if (selected) {
@@ -69,10 +69,16 @@ export const Overlay = styled.div`
     }
     return 0;
   }};
-  background-color: rgba(0, 0, 0, 0.04);
 `;
 
+interface TitleProps {
+  favicon: string;
+  selected: boolean;
+}
+
 export const Title = styled.div`
+  ${typography.body2()};
+  font-size: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -80,19 +86,14 @@ export const Title = styled.div`
   font-weight: 500;
   margin-left: 12px;
 
-  ${({ favicon, selected }: { favicon: string; selected: boolean }) => css`
+  ${({ favicon, selected }: TitleProps) => css`
     color: ${selected ? colors.blue['500'] : `rgba(0, 0, 0, ${opacity.light.secondaryText})`};
     margin-left: ${favicon === '' ? 0 : 12}px;
   `};
 `;
 
-interface IconProps {
-  favicon: string;
-}
-
 export const Icon = styled.div.attrs({
-  style: ({ styleToApply, favicon }: any) => ({
-    ...styleToApply,
+  style: ({ favicon }: any) => ({
     backgroundImage: `url(${favicon})`,
     opacity: favicon === '' ? 0 : 1,
     minWidth: favicon === '' ? 0 : 16,
@@ -102,12 +103,8 @@ export const Icon = styled.div.attrs({
   min-width: 16px;
   transition: 0.2s opacity, 0.2s width;
   ${images.center('16px', '16px')};
-  ${({ favicon }: IconProps) => favicon};
+  ${({ favicon }: { favicon: string }) => favicon};
 `;
-
-interface ContentProps {
-  hovered: boolean;
-}
 
 export const Content = styled.div`
   position: absolute;
@@ -116,23 +113,18 @@ export const Content = styled.div`
   display: flex;
   transition: 0.1s max-width, 0.1s transform;
 
-  ${({ hovered }: ContentProps) => {
+  ${({ hovered }: { hovered: boolean }) => {
     let transform = 'transform: translateX(-50%);';
     if (hovered) {
       transform = 'transform: translateX(calc(-50% - 12px));';
     }
-    return `
-      ${transform}
+    return css`
+      ${transform};
       left: 50%;
+      max-width: calc(100% - ${24 + (hovered ? 24 : 0)}px);
     `;
-  }}
-
-  max-width: ${({ hovered }) => `calc(100% - ${24 + (hovered ? 24 : 0)}px)`};
+  }};
 `;
-
-interface RightBorderProps {
-  visible: boolean;
-}
 
 export const RightBorder = styled.div`
   height: calc(100% - 24px);
@@ -141,5 +133,5 @@ export const RightBorder = styled.div`
   position: absolute;
   right: 0;
 
-  display: ${({ visible }: RightBorderProps) => (visible ? 'block' : 'none')};
+  display: ${({ visible }: { visible: boolean }) => (visible ? 'block' : 'none')};
 `;

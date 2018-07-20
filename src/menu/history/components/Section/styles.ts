@@ -1,24 +1,15 @@
 import styled from 'styled-components';
-import shadows from '../../../../shared/mixins/shadows';
 import opacity from '../../../../shared/defaults/opacity';
 import typography from '../../../../shared/mixins/typography';
 
 export const Title = styled.div`
-  font-size: 16px;
-  ${typography.robotoRegular()};
-  opacity: ${opacity.light.primaryText};
-  letter-spacing: 0.0125rem * 0.15;
+  ${typography.subtitle2()};
+  opacity: ${opacity.light.secondaryText};
   margin-bottom: 16px;
   margin-top: 32px;
   border-radius: 4px;
   display: table;
-  padding: 6px;
-  margin-left: -6px;
   transition: 0.2s background-color;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.08);
-  }
 `;
 
 export const Items = styled.div`

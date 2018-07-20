@@ -10,17 +10,12 @@ import opacity from '../../../shared/defaults/opacity';
 const searchIcon = require('../../../shared/icons/search.svg');
 const pageIcon = require('../../../shared/icons/page.svg');
 
-interface Props {
-  suggestion: SuggestionItem;
-}
-
-interface State {
-  hovered: boolean;
-}
-
 @observer
-export default class Suggestion extends React.Component<Props, {}> {
-  public state: State = {
+export default class Suggestion extends React.Component<
+  { suggestion: SuggestionItem },
+  { hovered: boolean }
+  > {
+  public state = {
     hovered: false,
   };
 

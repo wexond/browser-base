@@ -3,11 +3,7 @@ import React from 'react';
 
 import transparency from '../../../../shared/defaults/opacity';
 
-import {
-  PageItem,
-  PageItemIcon,
-  PageItemRemoveIcon,
-} from '../../../../shared/components/PageItem/styles';
+import { PageItem, PageItemIcon, PageItemRemoveIcon } from '../../../../shared/components/PageItem';
 
 import { Title } from './styles';
 
@@ -68,7 +64,7 @@ export default class Item extends React.Component<Props, State> {
         <PageItemIcon
           style={{ backgroundImage: `url(${favicon})`, opacity: hovered ? 0 : opacity }}
         />
-        <Title style={{ marginLeft: 16 }}>{data.title}</Title>
+        <Title>{data.title}</Title>
       </PageItem>
     );
   }

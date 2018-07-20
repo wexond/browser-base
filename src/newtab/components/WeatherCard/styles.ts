@@ -13,32 +13,24 @@ export const InfoContainer = styled.div`
 `;
 
 export const Temperature = styled.div`
-  font-size: 96px;
   display: flex;
-
-  ${typography.robotoLight()};
+  ${typography.h1()};
 `;
 
 export const TemperatureDeg = styled.div`
   margin-top: 12px;
   margin-left: 4px;
-  font-size: 48px;
-
-  ${typography.robotoRegular()};
+  ${typography.h3()};
 `;
-
-export interface TemperatureIconProps {
-  src: string;
-}
 
 export const TemperatureIcon = styled.div`
   width: 96px;
   height: 96px;
   margin-right: 8px;
   align-self: center;
-
   ${images.center('100%', 'auto')};
-  background-image: url(${({ src }: TemperatureIconProps) => src});
+
+  background-image: url(${({ src }: { src: string }) => src});
 `;
 
 export const ExtraInfoContainer = styled.div`
@@ -53,7 +45,6 @@ export const ExtraInfoContainer = styled.div`
 export const ExtraInfo = styled.div`
   display: flex;
   margin-left: 24px;
-
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 
   &:first-child {
@@ -61,16 +52,12 @@ export const ExtraInfo = styled.div`
   }
 `;
 
-export interface ExtraInfoIconProps {
-  src: string;
-}
-
 export const ExtraInfoIcon = styled.div`
   width: 24px;
   height: 24px;
-
   ${images.center('24px', 'auto')};
-  background-image: url(${({ src }: ExtraInfoIconProps) => src});
+
+  background-image: url(${({ src }: { src: string }) => src});
 `;
 
 export const ExtraInfoText = styled.div`
@@ -78,14 +65,10 @@ export const ExtraInfoText = styled.div`
   align-self: center;
 `;
 
-export interface ForecastContainerProps {
-  height: number;
-}
-
 export const ForecastContainer = styled.div`
   margin-top: 48px;
   overflow: hidden;
   transition: 0.5s ${EASE_FUNCTION} height;
 
-  height: ${({ height }: ForecastContainerProps) => height}px;
+  height: ${({ height }: { height: number }) => height}px;
 `;
