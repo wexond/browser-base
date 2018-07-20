@@ -43,7 +43,7 @@ export default class NewsCard extends React.Component<Props, State> {
         <Card>
           <CardImage visible={loaded} src={data.urlToImage} />
           <CardHeader>
-            <Overline>{getTimeOffset(new Date(data.publishedAt), this)}</Overline>
+            <Overline>General</Overline>
             <Title>{data.title}</Title>
 
             {desc
@@ -52,7 +52,9 @@ export default class NewsCard extends React.Component<Props, State> {
 
             <SourceContainer>
               <Icon visible={loaded} source={data.icon} />
-              <Source>{data.source.name}</Source>
+              <Source>
+                {data.source.name} - {getTimeOffset(new Date(data.publishedAt), this)}
+              </Source>
             </SourceContainer>
           </CardHeader>
         </Card>
