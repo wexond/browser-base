@@ -93,8 +93,8 @@ class Store {
     return this.getPageById(this.getCurrentWorkspace().getSelectedTab().id);
   }
 
-  public addPage(tabId: number) {
-    const page = new Page(tabId);
+  public addPage(tabId: number, url: string) {
+    const page = new Page(tabId, url);
     const index = this.pages.push(page) - 1;
 
     return this.pages[index];

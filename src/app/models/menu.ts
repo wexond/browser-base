@@ -6,4 +6,9 @@ export default class Menu {
   @observable public selectedItem: number;
 
   @observable public hideContent = false;
+
+  public hide() {
+    this.visible = false;
+    this.selectedItem = null;
+  }
 }

@@ -21,8 +21,7 @@ export default class extends React.Component<Props, {}> {
 
   public onDarkClick = () => {
     requestAnimationFrame(() => {
-      Store.menu.visible = false;
-      Store.menu.selectedItem = null;
+      Store.menu.hide();
     });
   };
 

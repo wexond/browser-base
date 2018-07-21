@@ -19,6 +19,7 @@ export const Container = styled.div`
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   right: 0;
   box-shadow: ${shadows(16)};
+  will-change: transform, transition;
   -webkit-app-region: no-drag;
 
   ${({ visible }: { visible: boolean }) => css`
@@ -66,6 +67,7 @@ export const Menu = styled.div`
   display: flex;
   flex-flow: column;
   transition: 0.2s all;
+  will-change: transition;
 `;
 
 const getWidth = () => {
@@ -85,6 +87,7 @@ export const Content = styled.div`
   background-color: #fafafa;
   position: relative;
   overflow: hidden;
+  will-change: width, transition;
 
   ${({ visible }: { visible: boolean }) => css`
     width: ${visible ? getWidth() : 0};

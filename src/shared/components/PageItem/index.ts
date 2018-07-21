@@ -5,26 +5,22 @@ import opacity from '../../defaults/opacity';
 
 const removeIcon = require('../../icons/close.svg');
 
-interface ItemProps {
-  selected: boolean;
-}
-
 export const PageItem = styled.div`
   height: 56px;
   width: 100%;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  transition: 0.1s all;
+  border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
   position: relative;
+  cursor: pointer;
 
-  background-color: ${({ selected }: ItemProps) =>
-    (selected ? 'rgba(0, 0, 0, 0.08)' : 'transparent')};
+  ${({ selected }: { selected: boolean }) => css`
+    background-color: ${selected ? 'rgba(0, 0, 0, 0.08)' : 'transparent'};
 
-  &:hover {
-    background-color: ${({ selected }) =>
-    (selected ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.04)')};
-  }
+    &:hover {
+      background-color: ${selected ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.04)'};
+    }
+  `};
 
   &:last-child {
     border-bottom: none;
@@ -36,12 +32,7 @@ export const PageItemIcon = styled.div`
   min-width: 16px;
   margin-left: 24px;
   ${images.center('16px', 'auto')};
-  transition: 0.2s opacity;
 `;
-
-interface RemoveIconProps {
-  visible: boolean;
-}
 
 export const PageItemRemoveIcon = styled.div`
   position: absolute;
@@ -50,14 +41,13 @@ export const PageItemRemoveIcon = styled.div`
   min-width: 16px;
   ${images.center('24px', 'auto')};
   background-image: url(${removeIcon});
-  transition: 0.2s opacity;
   z-index: 2;
 
   &:hover {
     opacity: ${opacity.light.activeIcon};
   }
 
-  ${({ visible }: RemoveIconProps) => css`
+  ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? opacity.light.inactiveIcon : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
   `};

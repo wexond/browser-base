@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import HistoryItem from '../../models/history-item';
 import transparency from '../../../../shared/defaults/opacity';
 import Store from '../../store';
+import AppStore from '../../../../app/store';
 import { deleteHistoryItem } from '../../utils';
 
 import {
@@ -13,20 +13,13 @@ import {
   PageItemTitle,
   PageItemRemoveIcon,
 } from '../../../../shared/components/PageItem';
+import HistoryItem from '../../../../shared/models/history-item';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
 
-interface Props {
-  data: HistoryItem;
-}
-
-interface State {
-  hovered: boolean;
-}
-
 @observer
-export default class Item extends React.Component<Props, State> {
-  public state: State = {
+export default class Item extends React.Component<{ data: HistoryItem }, { hovered: boolean }> {
+  public state = {
     hovered: false,
   };
 
@@ -46,15 +39,16 @@ export default class Item extends React.Component<Props, State> {
 
   public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { data } = this.props;
-    const { selected } = data;
-    if (this.cmdPressed || e.ctrlKey) {
-      data.selected = !selected;
 
-      if (data.selected) {
-        Store.selectedItems.push(data);
+    if (this.cmdPressed || e.ctrlKey) {
+      if (Store.selectedItems.indexOf(data.id) === -1) {
+        Store.selectedItems.push(data.id);
       } else {
-        Store.selectedItems.splice(Store.selectedItems.indexOf(data), 1);
+        Store.selectedItems.splice(Store.selectedItems.indexOf(data.id), 1);
       }
+    } else {
+      AppStore.getCurrentWorkspace().addTab(data.url);
+      AppStore.menu.hide();
     }
   };
 
@@ -62,7 +56,9 @@ export default class Item extends React.Component<Props, State> {
 
   public onMouseLeave = () => this.setState({ hovered: false });
 
-  public onRemoveClick = () => {
+  public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+
     const { data } = this.props;
     const { id } = data;
     deleteHistoryItem(id);
@@ -91,7 +87,7 @@ export default class Item extends React.Component<Props, State> {
         onFocus={() => null}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        selected={data.selected}
+        selected={Store.selectedItems.indexOf(data.id) !== -1}
       >
         <PageItemRemoveIcon onClick={this.onRemoveClick} visible={hovered} />
         <PageItemIcon
