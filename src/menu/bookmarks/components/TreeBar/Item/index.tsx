@@ -2,30 +2,30 @@ import React from 'react';
 import Store from '../../../store';
 
 import { Root, Title, HomeIcon } from './styles';
+import BookmarkItem from '../../../../../shared/models/bookmark-item';
 
-export interface IProps {
-  data: any;
+export interface Props {
+  item?: BookmarkItem;
   home?: boolean;
 }
 
-export default class Item extends React.Component<IProps, {}> {
-  public static defaultProps = {
-    home: false,
-  };
-
+export default class Item extends React.Component<Props, {}> {
   onClick = () => {
-    const { data } = this.props;
+    const { item, home } = this.props;
 
-    Store.selected = data;
-    Store.updatePath();
+    if (home) {
+      Store.goTo(-1);
+    } else {
+      Store.goTo(item.id);
+    }
   };
 
   public render() {
-    const { home, data } = this.props;
+    const { home, item } = this.props;
 
     return (
       <Root onClick={this.onClick}>
-        {!home && <Title>{data.title}</Title>}
+        {!home && <Title>{item.title}</Title>}
         {home && <HomeIcon />}
       </Root>
     );
