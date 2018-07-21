@@ -32,6 +32,8 @@ class Store {
 
   @observable public pageMenu: ContextMenu;
 
+  @observable public bookmarksDialogVisible: boolean = false;
+
   @observable
   public tabbarScrollbar = {
     visible: false,
