@@ -90,9 +90,7 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
         selected={Store.selectedItems.indexOf(data.id) !== -1}
       >
         <PageItemRemoveIcon onClick={this.onRemoveClick} visible={hovered} />
-        <PageItemIcon
-          style={{ backgroundImage: `url(${favicon})`, opacity: hovered ? 0 : opacity }}
-        />
+        <PageItemIcon icon={favicon} style={{ opacity: hovered ? 0 : opacity }} />
         <PageItemTime>
           {`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}
         </PageItemTime>

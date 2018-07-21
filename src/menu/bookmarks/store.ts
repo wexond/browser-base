@@ -1,18 +1,18 @@
 import { observable } from 'mobx';
 
-import { getFolderPath } from './utils/bookmarks';
-import FolderModel from './models/folder';
+import BookmarkItem from '../../shared/models/bookmark-item';
+import { getPath } from './utils';
 
 class Store {
-  @observable public data: FolderModel = null;
+  @observable public bookmarks: BookmarkItem[] = [];
 
-  @observable public selected: FolderModel = null;
+  @observable public currentTree: number = -1;
 
-  @observable public path: any = [];
+  @observable public path: BookmarkItem[] = [];
 
-  public updatePath = () => {
-    if (this.selected == null) return;
-    this.path = getFolderPath(this.selected);
+  public goTo = (id: number) => {
+    this.currentTree = id;
+    this.path = getPath(id);
   };
 }
 
