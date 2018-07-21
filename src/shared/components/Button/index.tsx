@@ -73,6 +73,7 @@ export default class Button extends React.Component<IProps, {}> {
       <React.Fragment>
         {!inline && <div style={{ clear: 'both' }} />}
         <StyledButton
+          className="material-button"
           background={background}
           foreground={foreground}
           icon={icon != null}
