@@ -100,12 +100,12 @@ export default class Workspace {
 
   public getTabById = (id: number): Tab => this.tabs.filter(item => item.id === id)[0];
 
-  public addTab = (): Tab => {
-    const index = this.tabs.push(new Tab(this)) - 1;
-    const tab = this.tabs[index];
+  public addTab = (url = 'wexond://newtab', select = true): Tab => {
+    const tab = new Tab(this);
+    this.tabs.push(tab);
 
-    this.selectTab(tab);
-    Store.addPage(tab.id);
+    if (select) this.selectTab(tab);
+    Store.addPage(tab.id, url);
 
     return tab;
   };
