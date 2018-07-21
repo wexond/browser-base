@@ -14,6 +14,8 @@ export default class History extends React.Component {
 
   private container: HTMLDivElement;
 
+  private inputText = '';
+
   public async componentDidMount() {
     db.favicons
       .each(favicon => {
@@ -32,7 +34,7 @@ export default class History extends React.Component {
 
     this.content.addEventListener('scroll', async e => {
       if (this.content.scrollTop === this.content.scrollHeight - this.content.offsetHeight) {
-        Store.historyItems = await getHistoryItems('');
+        Store.historyItems = await getHistoryItems(this.inputText);
         Store.sections = await getHistorySections(Store.historyItems.slice(0, Store.itemsLimit));
         Store.itemsLimit += 10;
       }
@@ -44,7 +46,11 @@ export default class History extends React.Component {
   }
 
   public onMenuSearchInput = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    Store.historyItems = await getHistoryItems('');
+    const { currentTarget } = e;
+
+    this.inputText = currentTarget.value;
+
+    Store.historyItems = await getHistoryItems(this.inputText);
     Store.sections = await getHistorySections(Store.historyItems.slice(0, 30));
     Store.allSections = await getHistorySections(Store.historyItems);
     Store.itemsLimit = 50;
