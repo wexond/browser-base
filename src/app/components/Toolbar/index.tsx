@@ -33,6 +33,10 @@ export default class Toolbar extends React.Component {
     Store.menu.visible = !Store.menu.visible;
   };
 
+  public onStarClick = () => {
+    Store.bookmarksDialogVisible = !Store.bookmarksDialogVisible;
+  }
+
   public render() {
     const star = starBorderIcon;
 
@@ -47,8 +51,8 @@ export default class Toolbar extends React.Component {
         </TabsSection>
         <ToolbarSeparator style={{ marginLeft: 16 }} />
         <div style={{ position: 'relative' }}>
-          <ToolbarButton size={20} icon={star} />
-          <BookmarksDialog />
+          <ToolbarButton size={20} icon={star} onClick={this.onStarClick} />
+          <BookmarksDialog visible={Store.bookmarksDialogVisible} />
         </div>
         <ToolbarButton size={16} icon={workspacesIcon} onClick={this.onWorkspacesIconClick} />
         <ToolbarButton
