@@ -11,8 +11,8 @@ import {
   PageItemIcon,
   PageItemTime,
   PageItemTitle,
-  PageItemRemoveIcon,
 } from '../../../../shared/components/PageItem';
+import { RemoveIcon } from './styles';
 import HistoryItem from '../../../../shared/models/history-item';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
@@ -89,7 +89,7 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
         onMouseLeave={this.onMouseLeave}
         selected={Store.selectedItems.indexOf(data.id) !== -1}
       >
-        <PageItemRemoveIcon onClick={this.onRemoveClick} visible={hovered} />
+        <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
         <PageItemIcon icon={favicon} style={{ opacity: hovered ? 0 : opacity }} />
         <PageItemTime>
           {`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}
