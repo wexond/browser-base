@@ -79,7 +79,6 @@ const button = () => `
   ${robotoMedium()};
   letter-spacing: ${getLetterSpacing(14, 0.75)}rem;
   font-size: 14px;
-  text-transform: uppercase;
 `;
 
 const caption = () => `
