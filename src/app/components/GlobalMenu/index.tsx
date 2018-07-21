@@ -22,11 +22,9 @@ const addFolderIcon = require('../../../shared/icons/add-folder.svg');
 
 const historyActions = {
   selectAll: () => {
-    const { selectedItems, sections } = HistoryStore;
-    for (const section of sections) {
-      for (const item of section.items) {
-        selectedItems.push(item.id);
-      }
+    const { selectedItems, historyItems } = HistoryStore;
+    for (const item of historyItems) {
+      selectedItems.push(item.id);
     }
   },
   deselectAll: () => {
