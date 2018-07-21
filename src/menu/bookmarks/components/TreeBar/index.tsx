@@ -8,11 +8,11 @@ export default class TreeBar extends React.Component {
   public render() {
     return (
       <Root>
-        <Item data={Store.data} home />
-        {Store.path.map((data: any, key: any) => (
-          <React.Fragment key={key}>
+        <Item home />
+        {Store.path.map((data: any) => (
+          <React.Fragment key={data.id}>
             <ForwardIcon className="FORWARD-ICON" />
-            <Item data={data} key={key} />
+            <Item item={data} />
           </React.Fragment>
         ))}
       </Root>
