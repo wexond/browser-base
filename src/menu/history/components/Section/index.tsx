@@ -4,12 +4,8 @@ import { Items, Title } from './styles';
 import Item from '../Item';
 import Section from '../../models/section';
 
-interface Props {
-  section: Section;
-}
-
 @observer
-export default class extends React.Component<Props, {}> {
+export default class extends React.Component<{ section: Section }, {}> {
   public render() {
     const { section } = this.props;
     const { items, date } = section;

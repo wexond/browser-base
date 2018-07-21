@@ -7,10 +7,8 @@ import images from '../../../../../shared/mixins/images';
 const homeIcon = require('../../../../../shared/icons/home.svg');
 
 export const Root = styled.div`
-  height: 32px;
   margin-left: 4px;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding: 4px;
   display: flex;
   align-items: center;
   cursor: pointer;

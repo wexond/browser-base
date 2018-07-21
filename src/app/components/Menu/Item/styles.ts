@@ -71,4 +71,5 @@ export const Background = styled.div`
 export const SubItemsContainer = styled.div`
   overflow: hidden;
   transition: 0.2s height;
+  will-change: transition, height;
 `;
