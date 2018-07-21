@@ -24,7 +24,7 @@ export default class App extends React.Component<{}, IState> {
   };
 
   private onIconClick = () => {
-    console.log('xd');
+    console.log('icon click');
   };
 
   public render() {
@@ -33,12 +33,8 @@ export default class App extends React.Component<{}, IState> {
 
     return (
       <StyledApp theme={theme}>
-        <Textfield
-          label="Label"
-          leadingIcon={calendarIcon}
-          trailingIcon={cancelIcon}
-          onIconClick={this.onIconClick}
-        />
+        <Textfield style={{ width: 128 }} label="Label" helperText="Helper text" />
+        <br />
       </StyledApp>
     );
   }
