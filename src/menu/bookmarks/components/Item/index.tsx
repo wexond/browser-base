@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import transparency from '../../../../shared/defaults/opacity';
-import { PageItem, PageItemIcon, PageItemRemoveIcon } from '../../../../shared/components/PageItem';
+import { PageItem, PageItemIcon } from '../../../../shared/components/PageItem';
 import { Title } from './styles';
 import Store from '../../store';
 import BookmarkItem from '../../../../shared/models/bookmark-item';
@@ -73,8 +73,7 @@ export default class Item extends React.Component<{ data: BookmarkItem }, { hove
         onClick={this.onClick}
         selected={Store.selectedItems.indexOf(data.id) !== -1}
       >
-        <PageItemRemoveIcon visible={hovered} />
-        <PageItemIcon style={{ opacity: hovered ? 0 : opacity }} icon={favicon} />
+        <PageItemIcon style={{ opacity }} icon={favicon} />
         <Title>{data.title}</Title>
       </PageItem>
     );
