@@ -12,6 +12,7 @@ export const PageItem = styled.div`
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
   position: relative;
+  cursor: pointer;
 
   ${({ selected }: { selected: boolean }) => css`
     background-color: ${selected ? 'rgba(0, 0, 0, 0.08)' : 'transparent'};
