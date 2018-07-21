@@ -3,6 +3,7 @@ import React from 'react';
 
 import transparency from '../../../../shared/defaults/opacity';
 import Store from '../../store';
+import AppStore from '../../../../app/store';
 import { deleteHistoryItem } from '../../utils';
 
 import {
@@ -45,6 +46,9 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
       } else {
         Store.selectedItems.splice(Store.selectedItems.indexOf(data.id), 1);
       }
+    } else {
+      AppStore.getCurrentWorkspace().addTab(data.url);
+      AppStore.menu.hide();
     }
   };
 
@@ -52,7 +56,9 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
 
   public onMouseLeave = () => this.setState({ hovered: false });
 
-  public onRemoveClick = () => {
+  public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+
     const { data } = this.props;
     const { id } = data;
     deleteHistoryItem(id);
