@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import HistoryItem from '../../models/history-item';
 import transparency from '../../../../shared/defaults/opacity';
 import Store from '../../store';
 import { deleteHistoryItem } from '../../utils';
@@ -13,6 +12,7 @@ import {
   PageItemTitle,
   PageItemRemoveIcon,
 } from '../../../../shared/components/PageItem';
+import HistoryItem from '../../../../shared/models/history-item';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
 
@@ -46,14 +46,12 @@ export default class Item extends React.Component<Props, State> {
 
   public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { data } = this.props;
-    const { selected } = data;
-    if (this.cmdPressed || e.ctrlKey) {
-      data.selected = !selected;
 
-      if (data.selected) {
-        Store.selectedItems.push(data);
+    if (this.cmdPressed || e.ctrlKey) {
+      if (Store.selectedItems.indexOf(data.id) === -1) {
+        Store.selectedItems.push(data.id);
       } else {
-        Store.selectedItems.splice(Store.selectedItems.indexOf(data), 1);
+        Store.selectedItems.splice(Store.selectedItems.indexOf(data.id), 1);
       }
     }
   };
@@ -91,7 +89,7 @@ export default class Item extends React.Component<Props, State> {
         onFocus={() => null}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        selected={data.selected}
+        selected={Store.selectedItems.indexOf(data.id) !== -1}
       >
         <PageItemRemoveIcon onClick={this.onRemoveClick} visible={hovered} />
         <PageItemIcon
