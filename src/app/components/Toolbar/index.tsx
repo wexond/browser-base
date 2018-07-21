@@ -15,6 +15,8 @@ import { TOOLBAR_HEIGHT } from '../../constants';
 
 const workspacesIcon = require('../../../shared/icons/tab-groups.svg');
 const menuIcon = require('../../../shared/icons/menu.svg');
+const starIcon = require('../../../shared/icons/star.svg');
+const starBorderIcon = require('../../../shared/icons/star-border.svg');
 
 @observer
 export default class Toolbar extends React.Component {
@@ -31,6 +33,8 @@ export default class Toolbar extends React.Component {
   };
 
   public render() {
+    const star = starBorderIcon;
+
     return (
       <StyledToolbar isFullscreen={Store.isFullscreen}>
         <Handle />
@@ -41,6 +45,7 @@ export default class Toolbar extends React.Component {
           <TabBar />
         </TabsSection>
         <ToolbarSeparator style={{ marginLeft: 16 }} />
+        <ToolbarButton size={20} icon={star} />
         <ToolbarButton size={16} icon={workspacesIcon} onClick={this.onWorkspacesIconClick} />
         <ToolbarButton
           onClick={this.toggleMenu}
