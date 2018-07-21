@@ -1,25 +1,17 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-
 import transparency from '../../../../shared/defaults/opacity';
-
 import { PageItem, PageItemIcon, PageItemRemoveIcon } from '../../../../shared/components/PageItem';
-
 import { Title } from './styles';
+import Store from '../../store';
+import BookmarkItem from '../../../../shared/models/bookmark-item';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
-
-interface Props {
-  data: any;
-}
-
-interface State {
-  hovered: boolean;
-}
+const folderIcon = require('../../../../shared/icons/folder.svg');
 
 @observer
-export default class Item extends React.Component<Props, State> {
-  public state: State = {
+export default class Item extends React.Component<{ data: BookmarkItem }, { hovered: boolean }> {
+  public state = {
     hovered: false,
   };
 
@@ -37,6 +29,13 @@ export default class Item extends React.Component<Props, State> {
     });
   }
 
+  public onClick = () => {
+    const { data } = this.props;
+    if (data.type === 'folder') {
+      Store.goTo(data.id);
+    }
+  };
+
   public onMouseEnter = () => this.setState({ hovered: true });
 
   public onMouseLeave = () => this.setState({ hovered: false });
@@ -53,17 +52,18 @@ export default class Item extends React.Component<Props, State> {
       opacity = transparency.light.inactiveIcon;
     }
 
+    if (data.type === 'folder') favicon = folderIcon;
+
     return (
       <PageItem
         onFocus={() => null}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        selected={data.selected}
+        onClick={this.onClick}
+        selected={false}
       >
         <PageItemRemoveIcon visible={hovered} />
-        <PageItemIcon
-          style={{ backgroundImage: `url(${favicon})`, opacity: hovered ? 0 : opacity }}
-        />
+        <PageItemIcon style={{ opacity: hovered ? 0 : opacity }} icon={favicon} />
         <Title>{data.title}</Title>
       </PageItem>
     );

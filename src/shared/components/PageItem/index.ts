@@ -32,6 +32,10 @@ export const PageItemIcon = styled.div`
   min-width: 16px;
   margin-left: 24px;
   ${images.center('16px', 'auto')};
+
+  ${({ icon }: { icon: string }) => css`
+    background-image: url(${icon});
+  `};
 `;
 
 export const PageItemRemoveIcon = styled.div`
