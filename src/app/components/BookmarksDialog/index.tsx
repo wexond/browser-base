@@ -7,11 +7,17 @@ import Button from '../../../shared/components/Button';
 import colors from '../../../shared/defaults/colors';
 import { Root, Title, ButtonsContainer } from './styles';
 
+export interface IProps {
+  visible: boolean;
+}
+
 @observer
-export default class AddressBar extends Component {
+export default class AddressBar extends Component<IProps, {}> {
   public render() {
+    const { visible } = this.props;
+
     return (
-      <Root>
+      <Root visible={visible}>
         <Title>New bookmark</Title>
         <Textfield label="Name" style={{ marginTop: 16 }} />
         <ButtonsContainer>
