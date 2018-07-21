@@ -25,23 +25,21 @@ const historyActions = {
     const { selectedItems, sections } = HistoryStore;
     for (const section of sections) {
       for (const item of section.items) {
-        item.selected = true;
-        selectedItems.push(item);
+        selectedItems.push(item.id);
       }
     }
   },
   deselectAll: () => {
     const { selectedItems } = HistoryStore;
     for (let i = selectedItems.length - 1; i >= 0; i--) {
-      selectedItems[i].selected = false;
       selectedItems.splice(i, 1);
     }
   },
   deleteAllSelectedItems: () => {
-    const { selectedItems, sections } = HistoryStore;
+    const { selectedItems } = HistoryStore;
     for (let i = selectedItems.length - 1; i >= 0; i--) {
       const selectedItem = selectedItems[i];
-      deleteHistoryItem(selectedItem.id);
+      deleteHistoryItem(selectedItem);
       selectedItems.splice(i, 1);
     }
   },
