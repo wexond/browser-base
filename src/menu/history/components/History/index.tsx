@@ -34,7 +34,7 @@ export default class History extends React.Component {
       if (this.content.scrollTop === this.content.scrollHeight - this.content.offsetHeight) {
         Store.historyItems = await getHistoryItems('');
         Store.sections = await getHistorySections(Store.historyItems.slice(0, Store.itemsLimit));
-        Store.itemsLimit += 20;
+        Store.itemsLimit += 10;
       }
     });
   }

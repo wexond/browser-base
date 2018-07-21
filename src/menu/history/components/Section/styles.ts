@@ -10,6 +10,12 @@ export const Title = styled.div`
   border-radius: 4px;
   display: table;
   transition: 0.2s background-color;
+  padding: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 `;
 
 export const Items = styled.div`
