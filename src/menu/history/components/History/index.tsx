@@ -14,8 +14,6 @@ export default class History extends React.Component {
 
   private container: HTMLDivElement;
 
-  private historyItems: HistoryItem[];
-
   public async componentDidMount() {
     db.favicons
       .each(favicon => {
@@ -24,8 +22,9 @@ export default class History extends React.Component {
         }
       })
       .then(async () => {
-        this.historyItems = await getHistoryItems('');
-        Store.sections = await getHistorySections(this.historyItems.slice(0, 30));
+        Store.historyItems = await getHistoryItems('');
+        Store.sections = await getHistorySections(Store.historyItems.slice(0, 30));
+        Store.allSections = await getHistorySections(Store.historyItems);
         Store.itemsLimit = 50;
       });
 
@@ -33,8 +32,8 @@ export default class History extends React.Component {
 
     this.content.addEventListener('scroll', async e => {
       if (this.content.scrollTop === this.content.scrollHeight - this.content.offsetHeight) {
-        this.historyItems = await getHistoryItems('');
-        Store.sections = await getHistorySections(this.historyItems.slice(0, Store.itemsLimit));
+        Store.historyItems = await getHistoryItems('');
+        Store.sections = await getHistorySections(Store.historyItems.slice(0, Store.itemsLimit));
         Store.itemsLimit += 20;
       }
     });
@@ -45,8 +44,9 @@ export default class History extends React.Component {
   }
 
   public onMenuSearchInput = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    this.historyItems = await getHistoryItems('');
-    Store.sections = await getHistorySections(this.historyItems.slice(0, 30));
+    Store.historyItems = await getHistoryItems('');
+    Store.sections = await getHistorySections(Store.historyItems.slice(0, 30));
+    Store.allSections = await getHistorySections(Store.historyItems);
     Store.itemsLimit = 50;
   };
 
