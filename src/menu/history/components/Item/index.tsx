@@ -16,17 +16,9 @@ import HistoryItem from '../../../../shared/models/history-item';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
 
-interface Props {
-  data: HistoryItem;
-}
-
-interface State {
-  hovered: boolean;
-}
-
 @observer
-export default class Item extends React.Component<Props, State> {
-  public state: State = {
+export default class Item extends React.Component<{ data: HistoryItem }, { hovered: boolean }> {
+  public state = {
     hovered: false,
   };
 
