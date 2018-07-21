@@ -5,9 +5,13 @@ import typography from '../../mixins/typography';
 import opacity from '../../defaults/opacity';
 
 export const Root = styled.div`
-  width: 280px;
+  width: 100%;
+  position: relative;
+`;
+
+export const Container = styled.div`
+  width: 100%;
   height: 56px;
-  display: flex;
   position: relative;
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.06);
@@ -15,8 +19,10 @@ export const Root = styled.div`
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 
-  &:hover .hover-border {
-    opacity: 1;
+  &:hover {
+    & .hover-border {
+      opacity: 1;
+    }
   }
 `;
 
@@ -28,7 +34,7 @@ export const HoverBorder = styled.div`
   opacity: 0;
   pointer-events: none;
   background-color: rgba(0, 0, 0, 0.39);
-  transition: 0.1s opacity;
+  transition: 0.15s opacity;
 `;
 
 export interface IconProps {
@@ -55,10 +61,12 @@ export const TrailingIcon = styled(Icon)`
   cursor: pointer;
 `;
 
-export const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+export const InputContainer = styled.div`
+  width: 100%;
+  height: 100%;
   position: relative;
+  display: flex;
+  overflow: hidden;
 `;
 
 export interface LabelProps {
@@ -69,10 +77,10 @@ export interface LabelProps {
 export const Label = styled.div`
   width: 100%;
   padding-left: 12px;
-  position: absolute;
   white-space: nowrap;
   display: flex;
   align-self: center;
+  position: absolute;
   will-change: color, opacity, margin-top, font-size;
   transition: 0.2s color, 0.2s ease-out margin-top, 0.2s ease-out font-size, 0.2s opacity;
 
@@ -90,12 +98,13 @@ export interface InputProps {
 
 export const Input = styled.input`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 14px);
   border: none;
   outline: none;
+  margin: 0;
+  margin-top: 14px;
   padding-left: 12px;
   padding-right: 12px;
-  padding-top: 8px;
   -webkit-text-fill-color: transparent;
   background-color: transparent;
   font-size: 16px;
