@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { executeEventStopPropagation } from '../../utils/events';
 import colors from '../../defaults/colors';
 import { TextfieldType } from '../../enums';
 
@@ -9,6 +10,7 @@ import {
   LeadingIcon,
   TrailingIcon,
   Container,
+  InputContainer,
   Label,
   Input,
   Indicator,
@@ -24,7 +26,10 @@ export interface IProps {
   type?: TextfieldType;
   leadingIcon?: string;
   trailingIcon?: string;
-  onIconClick?: ClickEvent;
+  onLeadingIconClick?: ClickEvent;
+  onTrailingIconClick?: ClickEvent;
+  helperText?: any;
+  style?: any;
 }
 
 export interface IState {
@@ -33,7 +38,7 @@ export interface IState {
 
 export default class Textfield extends React.Component<IProps, IState> {
   public static defaultProps = {
-    color: colors.deepPurple['500'],
+    color: colors.blue['500'],
     type: TextfieldType.Filled,
   };
 
@@ -63,28 +68,27 @@ export default class Textfield extends React.Component<IProps, IState> {
     }
   };
 
-  private onTrailingIconClick = (e?: React.SyntheticEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  private onLeadingIconIconClick = (e?: React.SyntheticEvent<HTMLDivElement>) => {
+    // eslint-disable-next-line react/destructuring-assignment
+    executeEventStopPropagation(e, this.props.onLeadingIconClick);
+  };
 
-    const { onIconClick } = this.props;
-
-    if (typeof onIconClick === 'function') {
-      onIconClick(e);
-    }
+  public onTrailingIconClick = (e?: React.SyntheticEvent<HTMLDivElement>) => {
+    // eslint-disable-next-line react/destructuring-assignment
+    executeEventStopPropagation(e, this.props.onTrailingIconClick);
   };
 
   public render() {
     const {
-      color, label, leadingIcon, trailingIcon, onIconClick,
+      color, label, leadingIcon, trailingIcon, helperText, style,
     } = this.props;
     const { activated } = this.state;
 
     return (
-      <React.Fragment>
-        <Root onClick={this.onClick}>
-          {leadingIcon && <LeadingIcon src={leadingIcon} />}
-          <Container>
+      <Root onClick={this.onClick} style={style}>
+        <Container>
+          {leadingIcon && <LeadingIcon src={leadingIcon} onClick={this.onLeadingIconIconClick} />}
+          <InputContainer>
             <Label color={color} activated={activated}>
               {label}
             </Label>
@@ -94,15 +98,17 @@ export default class Textfield extends React.Component<IProps, IState> {
               onFocus={this.onFocus}
               onBlur={this.onBlur}
             />
-          </Container>
+          </InputContainer>
           {trailingIcon && <TrailingIcon src={trailingIcon} onClick={this.onTrailingIconClick} />}
           <HoverBorder className="hover-border" />
           <Indicator color={color} activated={activated} />
-        </Root>
-        <HelperTexts icon={!!leadingIcon}>
-          <AssistiveText>Helper text</AssistiveText>
-        </HelperTexts>
-      </React.Fragment>
+        </Container>
+        {helperText && (
+          <HelperTexts icon={!!leadingIcon}>
+            <AssistiveText>{helperText}</AssistiveText>
+          </HelperTexts>
+        )}
+      </Root>
     );
   }
 }
