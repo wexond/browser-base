@@ -133,7 +133,6 @@ const cosmeticFiltering = () => {
     const tempNodes = document.getElementsByTagName('*');
 
     const newVNodes = [];
-    const newNodes = [];
 
     for (const node of tempNodes) {
       const newVNode = createVirtualNode(node);
@@ -158,24 +157,21 @@ const cosmeticFiltering = () => {
   }, 1000);
 
   child.on('message', data => {
-    if (!(data instanceof Array)) {
-      console.log(data);
-    }
-
     if (data instanceof Array) {
       for (const selector of data) {
         const elements = document.querySelectorAll(selector);
         for (const element of elements) {
-          const vNode = createVirtualNode(element);
+          /* const vNode = createVirtualNode(element);
           virtualNodes.splice(virtualNodes.indexOf(vNode), 1);
-          const parents = findParentWithSize(element, element.offsetWidth, element.offsetHeight);
+          const parents = findParentWithSize(element, element.offsetWidth, element.offsetHeight); */
+
           element.remove();
 
-          for (const parent of parents) {
+          /* for (const parent of parents) {
             if (parent) {
-              // parent.remove();
+              parent.remove();
             }
-          }
+          } */
         }
       }
     }

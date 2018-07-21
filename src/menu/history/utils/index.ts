@@ -3,54 +3,52 @@ import AppStore from '../../../app/store';
 import HistoryStore from '../store';
 import db from '../../../shared/models/app-database';
 import { formatDate } from '../../../shared/utils/time';
+import HistoryItem from '../../../shared/models/history-item';
 
-export async function getHistorySections(itemsCount: number, filter = '') {
-  return new Promise(async (resolve: (r: Section[]) => void) => {
-    const sections: Section[] = [];
+export async function getHistoryItems(filter = '') {
+  return new Promise(async (resolve: (r: HistoryItem[]) => void) => {
+    const items = (await db.history
+      .filter(
+        item =>
+          item.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1
+          || item.url.toLowerCase().indexOf(filter.toLowerCase()) !== -1,
+      )
+      .toArray()).reverse();
 
-    const items = (await db.history.toArray()).reverse();
-
-    const len = items.length < itemsCount ? items.length : itemsCount;
-
-    for (let i = 0; i < len; i++) {
-      const item = items[i];
-      const date = new Date(item.date);
-
-      const dateStr = formatDate(date);
-
-      const foundSection = sections.find(x => x.date === dateStr);
-
-      const newItem = {
-        ...item,
-        favicon: AppStore.favicons[item.favicon],
-        selected: false,
-      };
-
-      if (
-        newItem.title
-          .toLowerCase()
-          .trim()
-          .indexOf(filter.toLowerCase().trim()) !== -1
-        || newItem.url
-          .toLowerCase()
-          .trim()
-          .indexOf(filter.toLowerCase().trim()) !== -1
-      ) {
-        if (foundSection == null) {
-          const section = {
-            items: [newItem],
-            date: dateStr,
-            id: item.id,
-          };
-          sections.push(section);
-        } else {
-          foundSection.items.push(newItem);
-        }
-      }
-    }
-
-    resolve(sections);
+    resolve(items);
   });
+}
+
+export async function getHistorySections(items: HistoryItem[]) {
+  const sections: Section[] = [];
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    const date = new Date(item.date);
+
+    const dateStr = formatDate(date);
+
+    const foundSection = sections.find(x => x.date === dateStr);
+
+    const newItem = {
+      ...item,
+      favicon: AppStore.favicons[item.favicon],
+      selected: false,
+    };
+
+    if (foundSection == null) {
+      const section = {
+        items: [newItem],
+        date: dateStr,
+        id: item.id,
+      };
+      sections.push(section);
+    } else {
+      foundSection.items.push(newItem);
+    }
+  }
+
+  return sections;
 }
 
 export function deleteHistoryItem(id: number) {

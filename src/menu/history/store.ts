@@ -1,11 +1,10 @@
 import { observable } from 'mobx';
 import Section from './models/section';
-import HistoryItem from './models/history-item';
 
 class Store {
   @observable sections: Section[] = [];
 
-  @observable selectedItems: HistoryItem[] = [];
+  @observable selectedItems: number[] = [];
 
   itemsLimit = 20;
 }
