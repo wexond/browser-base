@@ -9,6 +9,7 @@ import Store from '../../store';
 import AddressBar from '../AddressBar';
 import TabBar from '../TabBar';
 import ToolbarButton from './Button';
+import BookmarksDialog from '../BookmarksDialog';
 import { Platforms } from '../../enums';
 import WindowsControls from '../WindowsControls';
 import { TOOLBAR_HEIGHT } from '../../constants';
@@ -45,7 +46,10 @@ export default class Toolbar extends React.Component {
           <TabBar />
         </TabsSection>
         <ToolbarSeparator style={{ marginLeft: 16 }} />
-        <ToolbarButton size={20} icon={star} />
+        <div style={{ position: 'relative' }}>
+          <ToolbarButton size={20} icon={star} />
+          <BookmarksDialog />
+        </div>
         <ToolbarButton size={16} icon={workspacesIcon} onClick={this.onWorkspacesIconClick} />
         <ToolbarButton
           onClick={this.toggleMenu}
