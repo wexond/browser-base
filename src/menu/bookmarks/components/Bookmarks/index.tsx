@@ -28,18 +28,15 @@ class Bookmarks extends React.Component {
   };
 
   public render() {
+    const items = Store.bookmarks.filter(r => r.parent === Store.currentTree);
+
     return (
       <React.Fragment>
         <TreeBar />
         <Content>
-          {Store.bookmarks.length > 0 && (
+          {items.length > 0 && (
             <Items>
-              {Store.bookmarks.map(data => {
-                if (data.parent === Store.currentTree) {
-                  return <Item data={data} key={data.id} />;
-                }
-                return null;
-              })}
+              {items.map(data => <Item data={data} key={data.id} />)}
             </Items>
           )}
         </Content>
