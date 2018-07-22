@@ -15,6 +15,7 @@ import WindowsControls from '../WindowsControls';
 import { TOOLBAR_HEIGHT } from '../../constants';
 import Tab from '../../models/tab';
 import db from '../../../shared/models/app-database';
+import BookmarkItem from '../../../shared/models/bookmark-item';
 
 const workspacesIcon = require('../../../shared/icons/tab-groups.svg');
 const menuIcon = require('../../../shared/icons/menu.svg');
@@ -45,23 +46,28 @@ export default class Toolbar extends React.Component {
 
     const selectedTab = Store.getSelectedTab();
 
-    if (selectedTab.bookmarkId === -1) {
+    if (!selectedTab.bookmark) {
       db.transaction('rw', db.bookmarks, async () => {
-        const id = await db.bookmarks.add({
+        const bookmark: BookmarkItem = {
           title: selectedTab.title,
           url: selectedTab.url,
           parent: -1,
           type: 'item',
-        });
+        };
 
-        selectedTab.bookmarkId = id;
+        bookmark.id = await db.bookmarks.add(bookmark);
+        selectedTab.bookmark = bookmark;
+
+        Store.bookmarksDialog.onLoad();
       });
+    } else {
+      Store.bookmarksDialog.onLoad();
     }
   };
 
   public render() {
     const selectedTab = Store.getSelectedTab();
-    const star = selectedTab && selectedTab.bookmarkId !== -1 ? starIcon : starBorderIcon;
+    const star = selectedTab && selectedTab.bookmark ? starIcon : starBorderIcon;
 
     return (
       <StyledToolbar isFullscreen={Store.isFullscreen}>
@@ -80,7 +86,7 @@ export default class Toolbar extends React.Component {
             onMouseDown={this.onStarIconMouseDown}
             onClick={this.onStarIconClick}
           />
-          <BookmarksDialog />
+          <BookmarksDialog ref={r => (Store.bookmarksDialog = r)} />
         </div>
         <ToolbarButton size={16} icon={workspacesIcon} onClick={this.onWorkspacesIconClick} />
         <ToolbarButton

@@ -6,6 +6,7 @@ import {
   TAB_MAX_WIDTH, TAB_MIN_WIDTH, TAB_PINNED_WIDTH, TOOLBAR_BUTTON_WIDTH,
 } from '../constants';
 import Workspace from './workspace';
+import BookmarkItem from '../../shared/models/bookmark-item';
 
 let nextTabId = 0;
 
@@ -26,7 +27,7 @@ export default class Tab {
 
   @observable public loading = false;
 
-  @observable public bookmarkId = -1;
+  @observable public bookmark: BookmarkItem = null;
 
   public url = '';
 
