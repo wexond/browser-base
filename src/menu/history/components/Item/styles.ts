@@ -8,7 +8,7 @@ export const RemoveIcon = styled.div`
   position: absolute;
   left: 24px;
   height: 16px;
-  min-width: 16px;
+  width: 16px;
   ${images.center('24px', 'auto')};
   background-image: url(${removeIcon});
   z-index: 2;
