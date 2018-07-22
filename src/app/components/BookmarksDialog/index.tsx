@@ -45,8 +45,8 @@ export default class BookmarksDialog extends Component {
 
     if (name !== bookmark.title) {
       await db.bookmarks
-        .where('url')
-        .equals(bookmark.url)
+        .where('id')
+        .equals(bookmark.id)
         .modify({
           title: name,
         });

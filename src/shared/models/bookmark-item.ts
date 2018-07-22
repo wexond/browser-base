@@ -3,6 +3,6 @@ export default interface BookmarkItem {
   title?: string;
   url?: string;
   favicon?: string;
-  parent: number;
-  type: string;
+  parent?: number;
+  type?: string;
 } // eslint-disable-line
