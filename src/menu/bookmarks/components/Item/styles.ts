@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { PageItemTitle } from '../../../../shared/components/PageItem';
+import * as PageItem from '../../../../shared/components/PageItem';
 
-export const Title = styled(PageItemTitle)`
+export const Title = styled(PageItem.Title)`
   margin-left: 24px;
 `;

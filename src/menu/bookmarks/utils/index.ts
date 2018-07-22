@@ -17,6 +17,12 @@ export const getPath = (parent: number) => {
   return path;
 };
 
+export const addBookmark = async (item: BookmarkItem) => {
+  item.id = await db.bookmarks.add(item);
+  Store.bookmarks.push(item);
+  return item;
+};
+
 export const addFolder = (title: string, parent: number) => {
   db.transaction('rw', db.bookmarks, async () => {
     const item: BookmarkItem = {
