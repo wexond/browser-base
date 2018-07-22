@@ -98,11 +98,11 @@ export interface InputProps {
 
 export const Input = styled.input`
   width: 100%;
-  height: calc(100% - 14px);
+  height: calc(100% - 16px);
   border: none;
   outline: none;
   margin: 0;
-  margin-top: 14px;
+  margin-top: 16px;
   padding-left: 12px;
   padding-right: 12px;
   -webkit-text-fill-color: transparent;
