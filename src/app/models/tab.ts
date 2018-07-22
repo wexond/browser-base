@@ -28,6 +28,8 @@ export default class Tab {
 
   @observable public isSavedAsBookmark = false;
 
+  @observable public bookmarkId = -1;
+
   public url = '';
 
   public left = 0;
