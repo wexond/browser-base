@@ -6,6 +6,7 @@ import Textfield from '../../../shared/components/Textfield';
 import Button from '../../../shared/components/Button';
 import colors from '../../../shared/defaults/colors';
 import db from '../../../shared/models/app-database';
+import { removeItem } from '../../../menu/bookmarks/utils';
 import { Root, Title, ButtonsContainer } from './styles';
 
 @observer
@@ -26,11 +27,11 @@ export default class BookmarksDialog extends Component {
     this.textField.inputElement.blur();
   };
 
-  public onRemoveClick = () => {
+  public onRemoveClick = async () => {
     const selectedTab = Store.getSelectedTab();
 
     if (selectedTab.bookmark) {
-      db.bookmarks.delete(selectedTab.bookmark.id);
+      await removeItem(selectedTab.bookmark.id);
 
       selectedTab.bookmark = null;
       Store.bookmarksDialogVisible = false;

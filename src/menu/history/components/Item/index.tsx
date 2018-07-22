@@ -6,11 +6,7 @@ import AppStore from '../../../../app/store';
 import { deleteHistoryItem } from '../../utils';
 import HistoryItem from '../../../../shared/models/history-item';
 import {
-  PageItem,
-  PageItemIcon,
-  PageItemTime,
-  PageItemTitle,
-  PageItemRemoveIcon,
+  Root, Icon, Time, Title, RemoveIcon,
 } from '../../../../shared/components/PageItem';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
@@ -66,20 +62,18 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
     }
 
     return (
-      <PageItem
+      <Root
         onClick={this.onClick}
         onFocus={() => null}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         selected={Store.selectedItems.indexOf(data.id) !== -1}
       >
-        <PageItemRemoveIcon onClick={this.onRemoveClick} visible={hovered} />
-        <PageItemIcon icon={favicon} style={{ opacity: hovered ? 0 : opacity }} />
-        <PageItemTime>
-          {`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}
-        </PageItemTime>
-        <PageItemTitle>{data.title}</PageItemTitle>
-      </PageItem>
+        <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
+        <Icon icon={favicon} style={{ opacity: hovered ? 0 : opacity }} />
+        <Time>{`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
+        <Title>{data.title}</Title>
+      </Root>
     );
   }
 }
