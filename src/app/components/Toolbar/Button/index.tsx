@@ -5,6 +5,7 @@ import Ripples from '../../../../shared/components/Ripples';
 
 interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
+  onMouseDown?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
   size?: number;
   style?: any;
   icon: string;
@@ -25,7 +26,13 @@ export default class ToolbarButton extends React.Component<Props, {}> {
   private ref: HTMLDivElement;
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { onMouseDown } = this.props;
+
     this.ripples.makeRipple(e.pageX, e.pageY);
+
+    if (typeof onMouseDown === 'function') {
+      onMouseDown(e);
+    }
   };
 
   public componentDidMount() {

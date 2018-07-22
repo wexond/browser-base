@@ -12,19 +12,32 @@ export interface IProps {
 }
 
 @observer
-export default class AddressBar extends Component<IProps, {}> {
+export default class BookmarksDialog extends Component<IProps, {}> {
+  private textField: Textfield;
+
+  public onMouseDown = (e?: SyntheticEvent<any>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.textField.inputElement.blur();
+  };
+
+  public onDoneClick = () => {
+    Store.bookmarksDialogVisible = false;
+  };
+
   public render() {
     const { visible } = this.props;
 
     return (
-      <Root visible={visible}>
+      <Root visible={visible} onMouseDown={this.onMouseDown}>
         <Title>New bookmark</Title>
-        <Textfield label="Name" style={{ marginTop: 16 }} />
+        <Textfield ref={r => (this.textField = r)} label="Name" style={{ marginTop: 16 }} />
         <ButtonsContainer>
           <Button foreground={colors.blue['500']} type={ButtonType.Outlined}>
             REMOVE
           </Button>
-          <Button>DONE</Button>
+          <Button onClick={this.onDoneClick}>DONE</Button>
         </ButtonsContainer>
       </Root>
     );
