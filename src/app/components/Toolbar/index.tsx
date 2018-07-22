@@ -43,20 +43,22 @@ export default class Toolbar extends React.Component {
   public onStarIconClick = () => {
     Store.bookmarksDialogVisible = !Store.bookmarksDialogVisible;
 
-    db.transaction('rw', db.bookmarks, async () => {
-      const currentTab: Tab = Store.getCurrentWorkspace().getSelectedTab();
+    const selectedTab = Store.getSelectedTab();
 
-      const id = await db.bookmarks.add({
-        title: currentTab.title,
-        url: currentTab.url,
-        parent: -1,
-        type: 'item',
+    if (!selectedTab.isSavedAsBookmark) {
+      db.transaction('rw', db.bookmarks, async () => {
+        const id = await db.bookmarks.add({
+          title: selectedTab.title,
+          url: selectedTab.url,
+          parent: -1,
+          type: 'item',
+        });
       });
-    });
+    }
   };
 
   public render() {
-    const star = Store.getCurrentWorkspace().getSelectedTab().isSavedAsBookmark
+    const star = Store.getSelectedTab().isSavedAsBookmark
       ? starIcon
       : starBorderIcon;
 
