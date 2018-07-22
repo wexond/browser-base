@@ -57,13 +57,24 @@ export default class BookmarksDialog extends Component {
     Store.bookmarksDialogVisible = false;
   };
 
+  public onTextfieldKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      this.onDoneClick();
+    }
+  };
+
   public render() {
     const visible = Store.bookmarksDialogVisible;
 
     return (
       <Root visible={visible} onMouseDown={this.onMouseDown}>
         <Title>New bookmark</Title>
-        <Textfield ref={r => (this.textField = r)} label="Name" style={{ marginTop: 16 }} />
+        <Textfield
+          ref={r => (this.textField = r)}
+          label="Name"
+          onKeyPress={this.onTextfieldKeyPress}
+          style={{ marginTop: 16 }}
+        />
         <ButtonsContainer>
           <Button
             foreground={colors.blue['500']}

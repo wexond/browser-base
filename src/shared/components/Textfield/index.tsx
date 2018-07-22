@@ -19,6 +19,7 @@ import {
 } from './styles';
 
 export type ClickEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
+export type KeyboardEvent = (e?: React.KeyboardEvent<HTMLInputElement>) => void;
 
 export interface IProps {
   color?: string;
@@ -26,10 +27,11 @@ export interface IProps {
   type?: TextfieldType;
   leadingIcon?: string;
   trailingIcon?: string;
-  onLeadingIconClick?: ClickEvent;
-  onTrailingIconClick?: ClickEvent;
   helperText?: any;
   style?: any;
+  onLeadingIconClick?: ClickEvent;
+  onTrailingIconClick?: ClickEvent;
+  onKeyPress?: KeyboardEvent;
 }
 
 export interface IState {
@@ -87,7 +89,7 @@ export default class Textfield extends React.Component<IProps, IState> {
 
   public render() {
     const {
-      color, label, leadingIcon, trailingIcon, helperText, style,
+      color, label, leadingIcon, trailingIcon, helperText, style, onKeyPress,
     } = this.props;
     const { activated } = this.state;
 
@@ -104,6 +106,7 @@ export default class Textfield extends React.Component<IProps, IState> {
               color={color}
               onFocus={this.onFocus}
               onBlur={this.onBlur}
+              onKeyPress={onKeyPress}
             />
           </InputContainer>
           {trailingIcon && <TrailingIcon src={trailingIcon} onClick={this.onTrailingIconClick} />}
