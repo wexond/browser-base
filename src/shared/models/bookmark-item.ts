@@ -1,5 +1,5 @@
 export default interface BookmarkItem {
-  id: number;
+  id?: number;
   title?: string;
   url?: string;
   favicon?: string;
