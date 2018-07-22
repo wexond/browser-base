@@ -1,18 +1,27 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import transparency from '../../../../shared/defaults/opacity';
-import { PageItem, PageItemIcon } from '../../../../shared/components/PageItem';
+import { PageItem, PageItemIcon, PageItemRemoveIcon } from '../../../../shared/components/PageItem';
 import { Title } from './styles';
 import Store from '../../store';
 import BookmarkItem from '../../../../shared/models/bookmark-item';
 import AppStore from '../../../../app/store';
+import { removeItem } from '../../utils';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
 const folderIcon = require('../../../../shared/icons/folder.svg');
 
+export interface IProps {
+  data: BookmarkItem;
+}
+
+export interface IState {
+  hovered: boolean;
+}
+
 @observer
-export default class Item extends React.Component<{ data: BookmarkItem }, { hovered: boolean }> {
-  public state = {
+export default class Item extends React.Component<IProps, IState> {
+  public state: IState = {
     hovered: false,
   };
 
@@ -51,9 +60,19 @@ export default class Item extends React.Component<{ data: BookmarkItem }, { hove
 
   public onMouseLeave = () => this.setState({ hovered: false });
 
+  public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+
+    const { data } = this.props;
+    const { id, type } = data;
+
+    removeItem(id, type);
+  };
+
   public render() {
     const { data } = this.props;
     const { hovered } = this.state;
+
     let opacity = 1;
     let favicon = data.favicon;
 
@@ -64,6 +83,8 @@ export default class Item extends React.Component<{ data: BookmarkItem }, { hove
       favicon = AppStore.favicons[favicon];
     }
 
+    if (hovered) opacity = 0;
+
     return (
       <PageItem
         onFocus={() => null}
@@ -72,6 +93,7 @@ export default class Item extends React.Component<{ data: BookmarkItem }, { hove
         onClick={this.onClick}
         selected={Store.selectedItems.indexOf(data.id) !== -1}
       >
+        <PageItemRemoveIcon onClick={this.onRemoveClick} visible={hovered} />
         <PageItemIcon style={{ opacity }} icon={favicon} />
         <Title>{data.title}</Title>
       </PageItem>

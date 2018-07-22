@@ -3,6 +3,8 @@ import images from '../../mixins/images';
 import typography from '../../mixins/typography';
 import opacity from '../../defaults/opacity';
 
+const removeIcon = require('../../icons/close.svg');
+
 export const PageItem = styled.div`
   height: 56px;
   width: 100%;
@@ -57,4 +59,23 @@ export const PageItemTitle = styled(PageItemPrimaryText)`
 
 export const PageItemTime = styled(PageItemSecondaryText)`
   margin-left: 24px;
+`;
+
+export const PageItemRemoveIcon = styled.div`
+  position: absolute;
+  left: 24px;
+  height: 16px;
+  width: 16px;
+  ${images.center('24px', 'auto')};
+  background-image: url(${removeIcon});
+  z-index: 2;
+
+  &:hover {
+    opacity: ${opacity.light.activeIcon};
+  }
+
+  ${({ visible }: { visible: boolean }) => css`
+    opacity: ${visible ? opacity.light.inactiveIcon : 0};
+    pointer-events: ${visible ? 'auto' : 'none'};
+  `};
 `;
