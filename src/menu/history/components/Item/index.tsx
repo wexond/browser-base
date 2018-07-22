@@ -23,24 +23,10 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
     hovered: false,
   };
 
-  private cmdPressed = false;
-
-  public componentDidMount() {
-    window.addEventListener('keydown', e => {
-      this.cmdPressed = e.key === 'Meta'; // Command on macOS
-    });
-
-    window.addEventListener('keyup', e => {
-      if (e.key === 'Meta') {
-        this.cmdPressed = false;
-      }
-    });
-  }
-
   public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { data } = this.props;
 
-    if (this.cmdPressed || e.ctrlKey) {
+    if (Store.cmdPressed || e.ctrlKey) {
       if (Store.selectedItems.indexOf(data.id) === -1) {
         Store.selectedItems.push(data.id);
       } else {
