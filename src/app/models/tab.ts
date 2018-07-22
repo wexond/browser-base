@@ -26,8 +26,6 @@ export default class Tab {
 
   @observable public loading = false;
 
-  @observable public isSavedAsBookmark = false;
-
   @observable public bookmarkId = -1;
 
   public url = '';

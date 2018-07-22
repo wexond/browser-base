@@ -26,9 +26,8 @@ export default class BookmarksDialog extends Component {
 
     if (selectedTab.bookmarkId !== -1) {
       db.bookmarks.delete(selectedTab.bookmarkId);
-      selectedTab.isSavedAsBookmark = false;
-      selectedTab.bookmarkId = -1;
 
+      selectedTab.bookmarkId = -1;
       Store.bookmarksDialogVisible = false;
     } else {
       console.error(selectedTab); // eslint-disable-line
