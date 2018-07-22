@@ -82,7 +82,7 @@ export const Label = styled.div`
   align-self: center;
   position: absolute;
   will-change: color, opacity, margin-top, font-size;
-  transition: 0.2s color, 0.2s ease-out margin-top, 0.2s ease-out font-size, 0.2s opacity;
+  transition: 0.15s color, 0.15s ease-out margin-top, 0.15s ease-out font-size, 0.15s opacity;
 
   margin-top: ${({ activated }: LabelProps) => (activated ? '-10px' : 'unset')};
   color: ${({ color, activated }) => (activated ? color : '#000')};
@@ -131,7 +131,7 @@ export const Indicator = styled.div`
   right: 0;
   margin: 0 auto;
   bottom: -1px;
-  transition: 0.2s ease-out;
+  transition: 0.15s ease-out;
   will-change: width;
 
   width: ${({ activated }: IndicatorProps) => (activated ? 100 : 0)}%;
