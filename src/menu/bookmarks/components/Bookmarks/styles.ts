@@ -8,12 +8,6 @@ export const Content = styled.div`
   margin: 0 auto;
 `;
 
-export const Folders = styled.div`
-  margin-top: 16px;
-  display: flex;
-  border-radius: 4px;
-`;
-
 export const Items = styled.div`
   margin-top: 16px;
   display: flex;
