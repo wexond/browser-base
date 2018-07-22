@@ -53,6 +53,7 @@ export default class Toolbar extends React.Component {
           url: selectedTab.url,
           parent: -1,
           type: 'item',
+          favicon: selectedTab.favicon,
         };
 
         bookmark.id = await db.bookmarks.add(bookmark);
