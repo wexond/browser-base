@@ -16,9 +16,7 @@ export default class BookmarksDialog extends Component<IProps, {}> {
   private textField: Textfield;
 
   public onMouseDown = (e?: SyntheticEvent<any>) => {
-    e.preventDefault();
     e.stopPropagation();
-
     this.textField.inputElement.blur();
   };
 
