@@ -54,14 +54,11 @@ export default class Item extends React.Component<{ data: BookmarkItem }, { hove
   public render() {
     const { data } = this.props;
     const { hovered } = this.state;
-
     let opacity = 1;
     let favicon = data.favicon;
 
-    if (data.type === 'folder') {
-      favicon = folderIcon;
-    } else if (favicon == null) {
-      favicon = pageIcon;
+    if (favicon == null || favicon.trim() === '') {
+      favicon = data.type === 'folder' ? folderIcon : pageIcon;
       opacity = transparency.light.inactiveIcon;
     } else {
       favicon = AppStore.favicons[favicon];
