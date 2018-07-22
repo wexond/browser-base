@@ -7,6 +7,8 @@ class Store {
 
   @observable public selectedItems: number[] = [];
 
+  @observable public cmdPressed: boolean = false;
+
   public allSections: Section[] = [];
 
   public historyItems: HistoryItem[] = [];
