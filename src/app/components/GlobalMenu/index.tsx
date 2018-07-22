@@ -2,11 +2,13 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import GlobalStore from '../../../global-store';
 import HistoryStore from '../../../menu/history/store';
+import BookmarksStore from '../../../menu/bookmarks/store';
 import Menu from '../Menu';
 import History from '../../../menu/history/components/History';
 import About from '../../../menu/about/components/About';
 import Bookmarks from '../../../menu/bookmarks/components/Bookmarks';
 import { deleteHistoryItem } from '../../../menu/history/utils';
+import { addFolder } from '../../../menu/bookmarks/utils';
 
 const historyIcon = require('../../../shared/icons/history.svg');
 const clearIcon = require('../../../shared/icons/clear.svg');
@@ -40,6 +42,12 @@ const historyActions = {
       deleteHistoryItem(selectedItem);
       selectedItems.splice(i, 1);
     }
+  },
+};
+
+const bookmarksActions = {
+  addFolder: () => {
+    addFolder('New folder', BookmarksStore.currentTree);
   },
 };
 
@@ -84,8 +92,7 @@ export default class GlobalMenu extends React.Component {
           content={<Bookmarks />}
         >
           <Menu.Item title={dictionary.selecting.selectAll} icon={selectAllIcon} />
-          <Menu.Item title="Add" icon={addIcon} />
-          <Menu.Item title="New folder" icon={addFolderIcon} />
+          <Menu.Item title="New folder" icon={addFolderIcon} onClick={bookmarksActions.addFolder} />
         </Menu.Item>
         <Menu.Item
           title={dictionary.settings.title}
