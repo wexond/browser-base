@@ -39,6 +39,16 @@ export default class History extends React.Component {
         Store.itemsLimit += 10;
       }
     });
+
+    window.addEventListener('keydown', e => {
+      Store.cmdPressed = e.key === 'Meta'; // Command on macOS
+    });
+
+    window.addEventListener('keyup', e => {
+      if (e.key === 'Meta') {
+        Store.cmdPressed = false;
+      }
+    });
   }
 
   public componentWillUnmount() {
