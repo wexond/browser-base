@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { observer } from 'mobx-react';
 import NavigationButtons from '../NavigationButtons';
 import ToolbarSeparator from './Separator';
@@ -33,9 +33,14 @@ export default class Toolbar extends React.Component {
     Store.menu.visible = !Store.menu.visible;
   };
 
-  public onStarClick = () => {
+  public onStarIconMouseDown = (e: SyntheticEvent<any>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  public onStarIconClick = () => {
     Store.bookmarksDialogVisible = !Store.bookmarksDialogVisible;
-  }
+  };
 
   public render() {
     const star = starBorderIcon;
@@ -51,7 +56,12 @@ export default class Toolbar extends React.Component {
         </TabsSection>
         <ToolbarSeparator style={{ marginLeft: 16 }} />
         <div style={{ position: 'relative' }}>
-          <ToolbarButton size={20} icon={star} onClick={this.onStarClick} />
+          <ToolbarButton
+            size={20}
+            icon={star}
+            onMouseDown={this.onStarIconMouseDown}
+            onClick={this.onStarIconClick}
+          />
           <BookmarksDialog visible={Store.bookmarksDialogVisible} />
         </div>
         <ToolbarButton size={16} icon={workspacesIcon} onClick={this.onWorkspacesIconClick} />
