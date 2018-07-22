@@ -29,3 +29,20 @@ export const addFolder = (title: string, parent: number) => {
     Store.bookmarks.push(item);
   });
 };
+
+export const removeItem = async (id: number, type?: string) => {
+  if (type === 'folder') {
+    const items = await db.bookmarks.filter(item => item.parent === id).toArray();
+
+    for (let i = 0; i < items.length; i++) {
+      removeItem(items[i].id, items[i].type);
+    }
+  }
+
+  const bookmarks = Store.bookmarks;
+  const item = bookmarks.find(x => x.id === id);
+
+  bookmarks.splice(bookmarks.indexOf(item), 1);
+
+  await db.bookmarks.delete(id);
+};
