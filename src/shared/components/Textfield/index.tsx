@@ -78,6 +78,13 @@ export default class Textfield extends React.Component<IProps, IState> {
     executeEventStopPropagation(e, this.props.onTrailingIconClick);
   };
 
+  public getValue = () => this.inputElement.value;
+
+  public setValue = (value: string) => {
+    this.inputElement.value = value;
+    this.inputElement.focus();
+  };
+
   public render() {
     const {
       color, label, leadingIcon, trailingIcon, helperText, style,
