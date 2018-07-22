@@ -16,6 +16,7 @@ import { TOOLBAR_HEIGHT } from '../../constants';
 import Tab from '../../models/tab';
 import db from '../../../shared/models/app-database';
 import BookmarkItem from '../../../shared/models/bookmark-item';
+import { addBookmark } from '../../../menu/bookmarks/utils';
 
 const workspacesIcon = require('../../../shared/icons/tab-groups.svg');
 const menuIcon = require('../../../shared/icons/menu.svg');
@@ -41,29 +42,24 @@ export default class Toolbar extends React.Component {
     e.stopPropagation();
   };
 
-  public onStarIconClick = () => {
+  public onStarIconClick = async () => {
     Store.bookmarksDialogVisible = !Store.bookmarksDialogVisible;
 
     const selectedTab = Store.getSelectedTab();
 
     if (!selectedTab.bookmark) {
-      db.transaction('rw', db.bookmarks, async () => {
-        const bookmark: BookmarkItem = {
-          title: selectedTab.title,
-          url: selectedTab.url,
-          parent: -1,
-          type: 'item',
-          favicon: selectedTab.favicon,
-        };
-
-        bookmark.id = await db.bookmarks.add(bookmark);
-        selectedTab.bookmark = bookmark;
-
-        Store.bookmarksDialog.onLoad();
+      const data: BookmarkItem = await addBookmark({
+        title: selectedTab.title,
+        url: selectedTab.url,
+        parent: -1,
+        type: 'item',
+        favicon: selectedTab.favicon,
       });
-    } else {
-      Store.bookmarksDialog.onLoad();
+
+      selectedTab.bookmark = data;
     }
+
+    Store.bookmarksDialog.onLoad();
   };
 
   public render() {

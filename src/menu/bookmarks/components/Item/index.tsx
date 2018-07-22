@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import transparency from '../../../../shared/defaults/opacity';
-import { PageItem, PageItemIcon, PageItemRemoveIcon } from '../../../../shared/components/PageItem';
 import { Title } from './styles';
 import Store from '../../store';
 import BookmarkItem from '../../../../shared/models/bookmark-item';
 import AppStore from '../../../../app/store';
 import { removeItem } from '../../utils';
+import { Root, RemoveIcon, Icon } from '../../../../shared/components/PageItem';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
 const folderIcon = require('../../../../shared/icons/folder.svg');
@@ -86,17 +86,17 @@ export default class Item extends React.Component<IProps, IState> {
     if (hovered) opacity = 0;
 
     return (
-      <PageItem
+      <Root
         onFocus={() => null}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onClick={this.onClick}
         selected={Store.selectedItems.indexOf(data.id) !== -1}
       >
-        <PageItemRemoveIcon onClick={this.onRemoveClick} visible={hovered} />
-        <PageItemIcon style={{ opacity }} icon={favicon} />
+        <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
+        <Icon style={{ opacity }} icon={favicon} />
         <Title>{data.title}</Title>
-      </PageItem>
+      </Root>
     );
   }
 }
