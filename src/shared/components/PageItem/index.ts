@@ -5,7 +5,7 @@ import opacity from '../../defaults/opacity';
 
 const removeIcon = require('../../icons/close.svg');
 
-export const PageItem = styled.div`
+export const Root = styled.div`
   height: 56px;
   width: 100%;
   display: flex;
@@ -27,7 +27,7 @@ export const PageItem = styled.div`
   }
 `;
 
-export const PageItemIcon = styled.div`
+export const Icon = styled.div`
   height: 16px;
   min-width: 16px;
   margin-left: 24px;
@@ -38,17 +38,17 @@ export const PageItemIcon = styled.div`
   `};
 `;
 
-export const PageItemPrimaryText = styled.div`
+export const PrimaryText = styled.div`
   ${typography.body2()};
   opacity: ${opacity.light.primaryText};
 `;
 
-export const PageItemSecondaryText = styled.div`
+export const SecondaryText = styled.div`
   ${typography.body2()};
   opacity: ${opacity.light.secondaryText};
 `;
 
-export const PageItemTitle = styled(PageItemPrimaryText)`
+export const Title = styled(PrimaryText)`
   margin-left: 48px;
   overflow: hidden;
   white-space: nowrap;
@@ -57,11 +57,11 @@ export const PageItemTitle = styled(PageItemPrimaryText)`
   ${typography.body2()};
 `;
 
-export const PageItemTime = styled(PageItemSecondaryText)`
+export const Time = styled(SecondaryText)`
   margin-left: 24px;
 `;
 
-export const PageItemRemoveIcon = styled.div`
+export const RemoveIcon = styled.div`
   position: absolute;
   left: 24px;
   height: 16px;
