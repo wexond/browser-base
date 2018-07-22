@@ -45,7 +45,7 @@ export default class Toolbar extends React.Component {
 
     const selectedTab = Store.getSelectedTab();
 
-    if (!selectedTab.isSavedAsBookmark) {
+    if (selectedTab.bookmarkId === -1) {
       db.transaction('rw', db.bookmarks, async () => {
         const id = await db.bookmarks.add({
           title: selectedTab.title,
@@ -54,7 +54,6 @@ export default class Toolbar extends React.Component {
           type: 'item',
         });
 
-        selectedTab.isSavedAsBookmark = true;
         selectedTab.bookmarkId = id;
       });
     }
@@ -62,7 +61,7 @@ export default class Toolbar extends React.Component {
 
   public render() {
     const selectedTab = Store.getSelectedTab();
-    const star = selectedTab && selectedTab.isSavedAsBookmark ? starIcon : starBorderIcon;
+    const star = selectedTab && selectedTab.bookmarkId !== -1 ? starIcon : starBorderIcon;
 
     return (
       <StyledToolbar isFullscreen={Store.isFullscreen}>

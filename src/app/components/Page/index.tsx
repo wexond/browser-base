@@ -131,7 +131,6 @@ export default class extends React.Component<{ page: Page }, {}> {
       .equals(url)
       .toArray();
 
-    this.tab.isSavedAsBookmark = bookmarks.length > 0;
     this.tab.bookmarkId = bookmarks.length > 0 ? bookmarks[0].id : -1;
   };
 
