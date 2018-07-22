@@ -12,26 +12,49 @@ import { Root, Title, ButtonsContainer } from './styles';
 export default class BookmarksDialog extends Component {
   private textField: Textfield;
 
+  public onLoad = () => {
+    const bookmark = Store.getSelectedTab().bookmark;
+
+    if (bookmark != null && bookmark.title != null) {
+      this.textField.setValue(bookmark.title);
+      this.textField.inputElement.select();
+    }
+  };
+
   public onMouseDown = (e?: SyntheticEvent<any>) => {
     e.stopPropagation();
     this.textField.inputElement.blur();
   };
 
-  public onDoneClick = () => {
-    Store.bookmarksDialogVisible = false;
-  };
-
   public onRemoveClick = () => {
     const selectedTab = Store.getSelectedTab();
 
-    if (selectedTab.bookmarkId !== -1) {
-      db.bookmarks.delete(selectedTab.bookmarkId);
+    if (selectedTab.bookmark) {
+      db.bookmarks.delete(selectedTab.bookmark.id);
 
-      selectedTab.bookmarkId = -1;
+      selectedTab.bookmark = null;
       Store.bookmarksDialogVisible = false;
     } else {
       console.error(selectedTab); // eslint-disable-line
     }
+  };
+
+  public onDoneClick = async () => {
+    const bookmark = Store.getSelectedTab().bookmark;
+    const name = this.textField.getValue();
+
+    if (name !== bookmark.title) {
+      await db.bookmarks
+        .where('url')
+        .equals(bookmark.url)
+        .modify({
+          title: name,
+        });
+
+      bookmark.title = name;
+    }
+
+    Store.bookmarksDialogVisible = false;
   };
 
   public render() {
