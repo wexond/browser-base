@@ -13,6 +13,8 @@ import BookmarksDialog from '../BookmarksDialog';
 import { Platforms } from '../../enums';
 import WindowsControls from '../WindowsControls';
 import { TOOLBAR_HEIGHT } from '../../constants';
+import Tab from '../../models/tab';
+import db from '../../../shared/models/app-database';
 
 const workspacesIcon = require('../../../shared/icons/tab-groups.svg');
 const menuIcon = require('../../../shared/icons/menu.svg');
@@ -40,10 +42,23 @@ export default class Toolbar extends React.Component {
 
   public onStarIconClick = () => {
     Store.bookmarksDialogVisible = !Store.bookmarksDialogVisible;
+
+    db.transaction('rw', db.bookmarks, async () => {
+      const currentTab: Tab = Store.getCurrentWorkspace().getSelectedTab();
+
+      const id = await db.bookmarks.add({
+        title: currentTab.title,
+        url: currentTab.url,
+        parent: -1,
+        type: 'item',
+      });
+    });
   };
 
   public render() {
-    const star = starBorderIcon;
+    const star = Store.getCurrentWorkspace().getSelectedTab().isSavedAsBookmark
+      ? starIcon
+      : starBorderIcon;
 
     return (
       <StyledToolbar isFullscreen={Store.isFullscreen}>

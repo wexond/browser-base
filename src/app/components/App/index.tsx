@@ -29,9 +29,7 @@ class App extends React.Component {
 
     window.addEventListener('mousedown', (e: MouseEvent) => {
       Store.pageMenu.toggle(false);
-
       Store.bookmarksDialogVisible = false;
-      console.log('a');
     });
 
     window.addEventListener('keydown', e => {
