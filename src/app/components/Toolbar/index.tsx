@@ -53,6 +53,9 @@ export default class Toolbar extends React.Component {
           parent: -1,
           type: 'item',
         });
+
+        selectedTab.isSavedAsBookmark = true;
+        selectedTab.bookmarkId = id;
       });
     }
   };
@@ -78,7 +81,7 @@ export default class Toolbar extends React.Component {
             onMouseDown={this.onStarIconMouseDown}
             onClick={this.onStarIconClick}
           />
-          <BookmarksDialog visible={Store.bookmarksDialogVisible} />
+          <BookmarksDialog />
         </div>
         <ToolbarButton size={16} icon={workspacesIcon} onClick={this.onWorkspacesIconClick} />
         <ToolbarButton
