@@ -9,6 +9,7 @@ import Workspaces from './models/workspaces';
 import Workspace from './models/workspace';
 import Menu from './models/menu';
 import ContextMenu from '../shared/components/ContextMenu';
+import BookmarksDialog from './components/BookmarksDialog';
 
 export interface Favicons {
   [key: string]: string;
@@ -31,6 +32,8 @@ class Store {
   @observable public menu = new Menu();
 
   @observable public pageMenu: ContextMenu;
+
+  @observable public bookmarksDialog: BookmarksDialog;
 
   @observable public bookmarksDialogVisible: boolean = false;
 

@@ -131,7 +131,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       .equals(url)
       .toArray();
 
-    this.tab.bookmarkId = bookmarks.length > 0 ? bookmarks[0].id : -1;
+    this.tab.bookmark = bookmarks.length > 0 && bookmarks[0];
   };
 
   public onPageFaviconUpdated = ({ favicons }: Electron.PageFaviconUpdatedEvent) => {
