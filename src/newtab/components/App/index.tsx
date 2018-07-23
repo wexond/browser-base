@@ -5,6 +5,7 @@ import Preloader from '../../../shared/components/Preloader';
 
 import { getWeather } from '../../utils/weather';
 import { getNews } from '../../utils/news';
+
 import {
   TimeUnit, TemperatureUnit, Languages, Countries,
 } from '../../../shared/enums';
@@ -50,7 +51,7 @@ class App extends React.Component<{}, IState> {
 
   async loadData() {
     const weatherData = await getWeather(
-      'california',
+      'new york',
       Languages.en,
       TemperatureUnit.Celsius,
       TimeUnit.TwentyFourHours,
