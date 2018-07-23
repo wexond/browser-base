@@ -45,17 +45,21 @@ export const SecondaryText = styled.div`
   margin-top: 12px;
 `;
 
+export interface CardImageProps {
+  src: string;
+  visible: boolean;
+}
+
 export const CardImage = styled.div`
   width: 100%;
   height: 194px;
   background-size: cover;
   background-position: center;
-  transition: 0.2s opacity;
+  will-change: opacity;
+  transition: 0.3s opacity;
 
-  ${({ src, visible }: { src: string; visible: boolean }) => css`
-    background-image: url(${src});
-    opacity: ${visible ? 1 : 0};
-  `};
+  background-image: url(${({ src }: CardImageProps) => src});
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
 `;
 
 export const Overline = styled.div`
