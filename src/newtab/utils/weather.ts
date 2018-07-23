@@ -3,6 +3,7 @@ import { WEATHER_API_KEYS } from '../../shared/constants';
 import weatherIcons, { WeatherCodes } from '../defaults/weather-icons';
 import { TimeUnit, TemperatureUnit, Languages } from '../../shared/enums';
 import { capitalizeFirstLetter, capitalizeFirstLetterInEachWord } from '../../shared/utils/strings';
+import { getTimeZone } from './time-zone';
 
 export const convertTemperature = (celsiusTemp: number, tempUnit: TemperatureUnit) => {
   switch (tempUnit) {
