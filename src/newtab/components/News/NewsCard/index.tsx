@@ -26,7 +26,9 @@ export default class NewsCard extends React.Component<Props, State> {
     await loadImage(data.urlToImage);
     await loadImage(data.icon);
 
-    this.setState({ loaded: true });
+    requestAnimationFrame(() => {
+      this.setState({ loaded: true });
+    });
   }
 
   public render() {
