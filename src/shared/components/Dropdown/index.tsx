@@ -1,17 +1,27 @@
 import * as React from 'react';
+import { getEvents } from '../../utils/events';
+import { getRippleEvents } from '../../utils/ripple';
+import Ripples from '../Ripples';
 import Item from './Item';
+import colors from '../../defaults/colors';
 import {
   Root, Name, Icon, List,
 } from './styles';
 
-export interface IProps {}
+export interface IProps {
+  ripple?: boolean;
+  customRippleBehavior?: boolean;
+}
 
 export interface IState {
   activated: boolean;
 }
 
 export default class Button extends React.Component<IProps, IState> {
-  public static defaultProps = {};
+  public static defaultProps = {
+    customRippleBehavior: false,
+    ripple: true,
+  };
 
   public static Item = Item;
 
@@ -19,37 +29,31 @@ export default class Button extends React.Component<IProps, IState> {
     activated: false,
   };
 
+  private ripples: Ripples;
+
   public onClick = () => {
+    const { activated } = this.state;
+
     this.setState({
-      activated: true,
+      activated: !activated,
     });
-
-    requestAnimationFrame(() => {
-      window.addEventListener('click', this.onWindowClick);
-    });
-  };
-
-  public onWindowClick = () => {
-    this.setState({
-      activated: false,
-    });
-
-    window.removeEventListener('click', this.onWindowClick);
-  };
-
-  public onListClick = (e: React.SyntheticEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
   };
 
   public render() {
+    const { ripple, customRippleBehavior } = this.props;
     const { activated } = this.state;
 
+    const events = {
+      onClick: this.onClick,
+      ...getRippleEvents(this.props, () => this.ripples),
+    };
+
     return (
-      <Root onClick={this.onClick}>
+      <Root {...events}>
         <Name>Item 2</Name>
         <Icon activated={activated} />
-        <List onClick={this.onListClick} activated={activated}>
+        <Ripples ref={r => (this.ripples = r)} color="#000" />
+        <List activated={activated}>
           <Item>Item 1</Item>
           <Item>Item 2</Item>
           <Item>Item 3</Item>
