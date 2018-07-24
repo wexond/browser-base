@@ -15,6 +15,8 @@ import BookmarkItem from '../../../shared/models/bookmark-item';
 export default class BookmarksDialog extends Component {
   private textField: Textfield;
 
+  private dropDown: Dropdown;
+
   public onLoad = () => {
     const bookmark = Store.getSelectedTab().bookmark;
 
@@ -75,6 +77,16 @@ export default class BookmarksDialog extends Component {
       zIndex: 1,
     };
 
+    if (this.dropDown != null) {
+      const selectedItem = this.dropDown.state.selectedItem;
+
+      if (selectedItem == null) {
+        this.dropDown.setState({
+          selectedItem: this.dropDown.items[0],
+        });
+      }
+    }
+
     return (
       <Root visible={visible} onMouseUp={this.onMouseUp}>
         <Title>New bookmark</Title>
@@ -84,7 +96,7 @@ export default class BookmarksDialog extends Component {
           onKeyPress={this.onTextfieldKeyPress}
           style={{ marginTop: 16 }}
         />
-        <Dropdown style={dropDownStyle}>
+        <Dropdown ref={r => (this.dropDown = r)} style={dropDownStyle}>
           {Store.getBookmarkFolders().map((item: BookmarkItem, key: any) => (
             <Dropdown.Item key={key}>{item.title}</Dropdown.Item>
           ))}
