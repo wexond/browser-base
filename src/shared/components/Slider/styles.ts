@@ -1,11 +1,7 @@
-import * as React from 'react';
-import styled, { StyledComponentClass, css } from 'styled-components';
-
+import styled, { css } from 'styled-components';
 import opacity from '../../defaults/opacity';
-
 import { Align, SliderType } from '../../enums';
 import { EASE_FUNCTION } from '../../constants';
-
 import positioning from '../../mixins/positioning';
 import typography from '../../mixins/typography';
 
@@ -16,41 +12,37 @@ export const StyledSlider = styled.div`
   cursor: pointer;
 `;
 
-export const trackStyle = `
-  height: 2px;
-  position: absolute;
-  top: 0;
-  left: 0;
-`;
-
 export interface TrackProps {
   color: string;
   thumbAnimation?: boolean;
   type?: SliderType;
 }
 
-export const InactiveTrack = styled.div`
-  width: 100%;
+export const Track = styled.div`
+  height: 2px;
+  position: absolute;
+  top: 0;
+  left: 0;
 
-  ${trackStyle}
-  opacity: ${opacity.light.disabledControl};
-  background-color: ${({ color }: TrackProps) => color};
+  ${({ color }: TrackProps) => css`
+    background-color: ${color};
+  `};
 `;
 
-export const ActiveTrack = styled.div`
+export const InactiveTrack = styled(Track)`
+  width: 100%;
+  opacity: ${opacity.light.disabledControl};
+`;
+
+export const ActiveTrack = styled(Track)`
   width: 50%;
   transition: 0.2s opacity;
 
-  ${trackStyle}
-  background-color: ${({ color }: TrackProps) => color};
-  opacity: ${({ thumbAnimation }) => (thumbAnimation ? 0 : 1)};
-  transition: ${({ type }) =>
-    (type === SliderType.Discrete ? `0.15s width ${EASE_FUNCTION}` : 'unset')};
+  ${({ thumbAnimation, type }: TrackProps) => css`
+    opacity: ${thumbAnimation ? 0 : 1};
+    transition: ${type === SliderType.Discrete ? `0.15s width ${EASE_FUNCTION}` : 'unset'};
+  `};
 `;
-
-export interface ThumbContainerProps {
-  type: SliderType;
-}
 
 export const ThumbContainer = styled.div`
   width: 32px;
@@ -61,8 +53,9 @@ export const ThumbContainer = styled.div`
   position: relative;
   cursor: pointer;
 
-  transition: ${({ type }: ThumbContainerProps) =>
-    (type === SliderType.Discrete ? `0.15s left ${EASE_FUNCTION}` : 'unset')};
+  ${({ type }: { type: SliderType }) => css`
+    transition: ${type === SliderType.Discrete ? `0.15s left ${EASE_FUNCTION}` : 'unset'};
+  `};
 
   &:hover .thumb-hover {
     width: 32px;
@@ -70,20 +63,19 @@ export const ThumbContainer = styled.div`
   }
 `;
 
-export interface ThumbHoverProps {
-  color: string;
-}
-
 export const ThumbHover = styled.div`
   width: 0px;
   height: 0px;
   border-radius: 100%;
   position: absolute;
   transition: 0.2s width, 0.2s height;
+  opacity: ${opacity.light.dividers};
 
   ${positioning.center(Align.CenterBoth)};
-  opacity: ${opacity.light.dividers};
-  background-color: ${({ color }: ThumbHoverProps) => color};
+
+  ${({ color }: { color: string }) => css`
+    background-color: ${color};
+  `};
 `;
 
 export interface ThumbProps {
@@ -97,9 +89,12 @@ export const Thumb = styled.div`
   transition: 0.15s width, 0.15s height;
 
   ${positioning.center(Align.CenterBoth)};
-  background-color: ${({ color }: ThumbProps) => color};
-  width: ${({ thumbAnimation }) => (thumbAnimation ? 0 : 12)}px;
-  height: ${({ thumbAnimation }) => (thumbAnimation ? 0 : 12)}px;
+
+  ${({ color, thumbAnimation }: ThumbProps) => css`
+    background-color: ${color};
+    width: ${thumbAnimation ? 0 : 12}px;
+    height: ${thumbAnimation ? 0 : 12}px;
+  `};
 `;
 
 export const TicksContainer = styled.div`
@@ -121,7 +116,9 @@ export const Tick = styled.div`
   height: 2px;
   position: relative;
 
-  background-color: ${({ color }: TickProps) => color};
+  ${({ color }: { color: string }) => css`
+    background-color: ${color};
+  `};
 `;
 
 export const TickValue = styled.div`
@@ -131,8 +128,8 @@ export const TickValue = styled.div`
   white-space: nowrap;
   font-size: 12px;
   margin-top: 16px;
-
-  ${positioning.center(Align.CenterHorizontal)};
-  ${typography.robotoRegular()}
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+
+  ${typography.robotoRegular()};
+  ${positioning.center(Align.CenterHorizontal)};
 `;
