@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { getEvents } from '../../../utils/events';
 import { getRippleEvents } from '../../../utils/ripple';
 import Ripples from '../../Ripples';
 import { Root } from './styles';
@@ -9,6 +8,7 @@ export interface IProps {
   selectedItem?: Item; // eslint-disable-line
   ripple?: boolean;
   customRippleBehavior?: boolean;
+  data?: any;
 }
 
 export default class Item extends React.Component<IProps, {}> {
