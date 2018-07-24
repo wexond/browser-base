@@ -12,7 +12,16 @@ export const Root = styled.div`
   padding-left: 16px;
   padding-right: 8px;
   font-size: 14px;
+  overflow: hidden;
+  white-space: nowrap;
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
+  background-color: #fff;
+  will-change: background-color;
+  transition: 0.2s background-color;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
 
   &:first-child {
     margin-top: 8px;
