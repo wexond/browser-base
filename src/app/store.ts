@@ -134,9 +134,9 @@ class Store {
     return this.bookmarks.filter(el => el.type === 'folder');
   }
 
-  public isBookmarkSaved(id: number) {
+  public isBookmarkSaved(url: string) {
     if (this.bookmarks == null) return false;
-    return this.bookmarks.filter(r => r.id === id).length !== 0;
+    return this.bookmarks.filter(r => r.url === url).length !== 0;
   }
 
   public isBookmarkSavedTab(tab?: Tab) {
@@ -148,10 +148,10 @@ class Store {
         return false;
       }
 
-      return this.isBookmarkSaved(selectedTab.bookmark.id);
+      return this.isBookmarkSaved(selectedTab.url);
     }
 
-    return this.isBookmarkSaved(tab.bookmark.id);
+    return this.isBookmarkSaved(tab.url);
   }
 }
 
