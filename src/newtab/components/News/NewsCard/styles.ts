@@ -1,12 +1,11 @@
 import styled, { css } from 'styled-components';
-
 import images from '../../../../shared/mixins/images';
 import opacity from '../../../../shared/defaults/opacity';
 import typography from '../../../../shared/mixins/typography';
 
 export const Title = styled.div`
-  color: rgba(0, 0, 0, ${opacity.light.primaryText});
   margin-top: 12px;
+  color: rgba(0, 0, 0, ${opacity.light.primaryText});
 
   ${typography.subtitle1()};
   ${typography.maxLines(3)};
@@ -19,19 +18,17 @@ export const Info = styled.div`
   margin-bottom: 16px;
 `;
 
-export interface IconProps {
-  source: string;
-  visible: boolean;
-}
-
 export const Icon = styled.div`
   width: 18px;
   height: 18px;
   transition: 0.2s opacity;
 
   ${images.center('18px', 'auto')};
-  background-image: url(${({ source }: IconProps) => source});
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
+
+  ${({ src, visible }: { src: string; visible: boolean }) => css`
+    background-image: url(${src});
+    opacity: ${visible ? 1 : 0};
+  `};
 `;
 
 export const Source = styled.div`
@@ -41,8 +38,8 @@ export const Source = styled.div`
 
 export const SecondaryText = styled.div`
   font-size: 14px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
   margin-top: 12px;
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 `;
 
 export interface CardImageProps {
@@ -58,18 +55,21 @@ export const CardImage = styled.div`
   will-change: opacity;
   transition: 0.3s opacity;
 
-  background-image: url(${({ src }: CardImageProps) => src});
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
+  ${({ src, visible }: { src: string; visible: boolean }) => css`
+    opacity: ${visible ? 1 : 0};
+    background-image: url(${src});
+  `};
 `;
 
 export const Overline = styled.div`
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+
   ${typography.overline()};
 `;
 
 export const SourceContainer = styled.div`
   margin-top: 16px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
   display: flex;
   align-items: center;
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 `;
