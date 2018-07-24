@@ -16,6 +16,7 @@ export interface IProps {
 
 export interface IState {
   activated: boolean;
+  listHeight: number;
 }
 
 export default class Button extends React.Component<IProps, IState> {
@@ -28,9 +29,12 @@ export default class Button extends React.Component<IProps, IState> {
 
   public state: IState = {
     activated: false,
+    listHeight: 0,
   };
 
   private ripples: Ripples;
+
+  private listContainer: HTMLDivElement;
 
   public onClick = () => {
     const { activated } = this.state;
@@ -41,7 +45,7 @@ export default class Button extends React.Component<IProps, IState> {
       window.addEventListener('mousedown', this.onWindowMouseDown);
     }
 
-    this.setState({ activated: !activated });
+    this.toggle(!activated);
   };
 
   public onMouseDown = (e: React.SyntheticEvent<any>) => {
@@ -50,14 +54,20 @@ export default class Button extends React.Component<IProps, IState> {
   };
 
   public onWindowMouseDown = () => {
-    this.setState({ activated: false });
-
+    this.toggle(false);
     window.removeEventListener('mousedown', this.onWindowMouseDown);
+  };
+
+  public toggle = (flag: boolean) => {
+    this.setState({
+      activated: flag,
+      listHeight: flag ? this.listContainer.scrollHeight : 0,
+    });
   };
 
   public render() {
     const { ripple, customRippleBehavior, children } = this.props;
-    const { activated } = this.state;
+    const { activated, listHeight } = this.state;
 
     const events = {
       onClick: this.onClick,
@@ -72,7 +82,7 @@ export default class Button extends React.Component<IProps, IState> {
           <Ripples ref={r => (this.ripples = r)} color="#000" />
         </Container>
         {children != null && (
-          <List activated={activated}>
+          <List innerRef={r => (this.listContainer = r)} height={listHeight} activated={activated}>
             {React.Children.map(children, (el: React.ReactElement<any>) =>
               React.cloneElement(el, {}))}
           </List>
