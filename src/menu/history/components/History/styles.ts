@@ -1,11 +1,15 @@
 import styled from 'styled-components';
 import typography from '../../../../shared/mixins/typography';
 import opacity from '../../../../shared/defaults/opacity';
+import scroll from '../../../../shared/mixins/scroll';
 
 export const Content = styled.div`
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  ${scroll.noButtons('10px')};
 `;
 
 export const Container = styled.div`
