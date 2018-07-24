@@ -52,12 +52,11 @@ export const Icon = styled.div`
 
 export const List = styled.div`
   width: 100%;
-  max-height: 144px;
   position: absolute;
   top: 100%;
   left: 0;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   background-color: #fff;
   border-radius: 4px;
   will-change: max-height;
@@ -65,10 +64,8 @@ export const List = styled.div`
   transition: 0.5s max-height ${EASE_FUNCTION}, 0.2s opacity;
   box-shadow: ${shadows(7)};
 
-  ${scroll.noButtons()};
-
-  ${({ activated }: { activated: boolean }) => `
-    max-height: ${activated ? 144 : 0}px;
+  ${({ activated, height }: { activated: boolean; height: number }) => `
+    max-height: ${height}px;
     opacity: ${activated ? 1 : 0};
   `};
 `;
