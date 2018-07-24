@@ -6,7 +6,7 @@ import Store from '../../store';
 import db from '../../../../shared/models/app-database';
 import Item from '../Item';
 import TreeBar from '../TreeBar';
-import { Content, Items } from './styles';
+import { Content, Container, Items } from './styles';
 
 @observer
 class Bookmarks extends React.Component {
@@ -34,9 +34,11 @@ class Bookmarks extends React.Component {
       <React.Fragment>
         <TreeBar />
         <Content>
-          {items.length > 0 && (
-            <Items>{items.map(data => <Item data={data} key={data.id} />)}</Items>
-          )}
+          <Container>
+            {items.length > 0 && (
+              <Items>{items.map(data => <Item data={data} key={data.id} />)}</Items>
+            )}
+          </Container>
         </Content>
       </React.Fragment>
     );
