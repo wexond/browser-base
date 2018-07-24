@@ -55,7 +55,8 @@ export const List = styled.div`
   position: absolute;
   top: 100%;
   left: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-color: #fff;
   border-radius: 4px;
   will-change: max-height;
