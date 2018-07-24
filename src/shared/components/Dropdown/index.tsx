@@ -11,6 +11,7 @@ export interface IProps {
   customRippleBehavior?: boolean;
   children?: any;
   style?: any;
+  onChange?: (data?: any, item?: Item, element?: this) => void;
 }
 
 export interface IState {
@@ -76,6 +77,7 @@ export default class Button extends React.Component<IProps, IState> {
     if (item) {
       this.setState({ selectedItem: item });
       this.toggle(false);
+      this.onChange();
     }
   };
 
@@ -104,6 +106,8 @@ export default class Button extends React.Component<IProps, IState> {
     this.setState({
       selectedItem: this.items[index],
     });
+
+    this.onChange();
   };
 
   public toggle = (flag: boolean) => {
@@ -111,6 +115,15 @@ export default class Button extends React.Component<IProps, IState> {
       activated: flag,
       listHeight: flag ? this.listContainer.scrollHeight : 0,
     });
+  };
+
+  public onChange = () => {
+    const { onChange } = this.props;
+
+    if (typeof onChange === 'function') {
+      const { selectedItem } = this.state;
+      onChange(selectedItem.props.data, selectedItem, this);
+    }
   };
 
   public render() {
