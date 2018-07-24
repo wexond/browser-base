@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-
 import opacity from '../../../../shared/defaults/opacity';
 import images from '../../../../shared/mixins/images';
 
@@ -22,5 +21,6 @@ export const ForwardIcon = styled.div`
   margin-left: 4px;
   background-image: url(${forwardIcon});
   opacity: ${opacity.light.inactiveIcon};
+
   ${images.center('100%', 'auto')};
 `;

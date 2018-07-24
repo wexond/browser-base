@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-
 import opacity from '../../../../../shared/defaults/opacity';
 import typography from '../../../../../shared/mixins/typography';
 import images from '../../../../../shared/mixins/images';
@@ -28,14 +27,15 @@ export const Title = styled.div`
   padding-left: 2px;
   padding-right: 2px;
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+
   ${typography.subtitle2()};
 `;
 
 export const HomeIcon = styled.div`
   width: 20px;
   height: 20px;
-  background-image: url(${homeIcon});
   transition: 0.2s opacity;
+  background-image: url(${homeIcon});
   opacity: ${opacity.light.inactiveIcon};
 
   ${images.center('100%', 'auto')};
