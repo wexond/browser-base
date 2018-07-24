@@ -1,18 +1,10 @@
 /* eslint-disable no-console */
-
 import React from 'react';
-
 import colors from '../../../shared/defaults/colors';
-
-import Progressbar from '../../../shared/components/Progressbar';
-import Textfield from '../../../shared/components/Textfield';
-
-import { TextfieldType, ProgressType, UITheme } from '../../../shared/enums';
-
+import { UITheme } from '../../../shared/enums';
 import { StyledApp } from './styles';
 
-const calendarIcon = require('../../../shared/icons/calendar.svg');
-const cancelIcon = require('../../../shared/icons/cancel.svg');
+import Dropdown from '../../../shared/components/Dropdown';
 
 export interface IState {
   darkTheme: boolean;
@@ -33,8 +25,7 @@ export default class App extends React.Component<{}, IState> {
 
     return (
       <StyledApp theme={theme}>
-        <Textfield style={{ width: 128 }} label="Label" helperText="Helper text" />
-        <br />
+        <Dropdown />
       </StyledApp>
     );
   }
