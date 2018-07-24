@@ -1,14 +1,8 @@
-import styled from 'styled-components';
-
+import styled, { css } from 'styled-components';
 import shadows from '../../../shared/mixins/shadows';
 import typography from '../../../shared/mixins/typography';
 import opacity from '../../../shared/defaults/opacity';
-
 import { EASE_FUNCTION } from '../../../shared/constants';
-
-export interface RootProps {
-  visible: boolean;
-}
 
 export const Root = styled.div`
   width: 364px;
@@ -23,10 +17,12 @@ export const Root = styled.div`
   will-change: transform, opacity;
 
   box-shadow: ${shadows(6)};
-  transform: ${({ visible }: RootProps) => (visible ? 'scale(1)' : 'scale(0)')};
-  transition: ${({ visible }) =>
-    `0.5s ${EASE_FUNCTION} transform, ${visible ? 0.1 : 0.2}s opacity`};
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
+
+  ${({ visible }: { visible: boolean }) => css`
+    opacity: ${visible ? 1 : 0};
+    transform: ${visible ? 'scale(1)' : 'scale(0)'};
+    transition: ${`0.5s ${EASE_FUNCTION} transform, ${visible ? 0.1 : 0.2}s opacity`};
+  `};
 `;
 
 export const Title = styled.div`
