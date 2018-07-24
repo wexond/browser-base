@@ -30,6 +30,7 @@ export default class App extends React.Component<{}, IState> {
           <Dropdown.Item>Item 2</Dropdown.Item>
           <Dropdown.Item>Item 3</Dropdown.Item>
           <Dropdown.Item>Item 4</Dropdown.Item>
+          <Dropdown.Item>Item item item item item</Dropdown.Item>
         </Dropdown>
       </StyledApp>
     );
