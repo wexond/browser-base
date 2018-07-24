@@ -17,6 +17,7 @@ export interface IProps {
 export interface IState {
   activated: boolean;
   listHeight: number;
+  selectedItem?: Item;
 }
 
 export default class Button extends React.Component<IProps, IState> {
@@ -36,6 +37,18 @@ export default class Button extends React.Component<IProps, IState> {
 
   private listContainer: HTMLDivElement;
 
+  private items: Item[] = [];
+
+  public componentDidMount() {
+    const { selectedItem } = this.state;
+
+    if (selectedItem == null && this.items.length > 0) {
+      this.setState({
+        selectedItem: this.items[0],
+      });
+    }
+  }
+
   public onClick = () => {
     const { activated } = this.state;
 
@@ -53,6 +66,13 @@ export default class Button extends React.Component<IProps, IState> {
     e.stopPropagation();
   };
 
+  public onItemClick = (e: React.SyntheticEvent<any>, item: Item) => {
+    if (item) {
+      this.setState({ selectedItem: item });
+      this.toggle(false);
+    }
+  };
+
   public onWindowMouseDown = () => {
     this.toggle(false);
     window.removeEventListener('mousedown', this.onWindowMouseDown);
@@ -67,7 +87,9 @@ export default class Button extends React.Component<IProps, IState> {
 
   public render() {
     const { ripple, customRippleBehavior, children } = this.props;
-    const { activated, listHeight } = this.state;
+    const { activated, listHeight, selectedItem } = this.state;
+
+    this.items = [];
 
     const events = {
       onClick: this.onClick,
@@ -77,14 +99,18 @@ export default class Button extends React.Component<IProps, IState> {
     return (
       <Root onMouseDown={this.onMouseDown}>
         <Container {...events}>
-          <Name>Item 2</Name>
+          <Name>{selectedItem && selectedItem.props.children}</Name>
           <Icon activated={activated} />
           <Ripples ref={r => (this.ripples = r)} color="#000" />
         </Container>
         {children != null && (
           <List innerRef={r => (this.listContainer = r)} height={listHeight} activated={activated}>
             {React.Children.map(children, (el: React.ReactElement<any>) =>
-              React.cloneElement(el, {}))}
+              React.cloneElement(el, {
+                ref: (r: Item) => this.items.push(r),
+                onClick: this.onItemClick,
+                selectedItem,
+              }))}
           </List>
         )}
       </Root>

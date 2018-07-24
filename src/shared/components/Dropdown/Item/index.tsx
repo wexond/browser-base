@@ -2,21 +2,26 @@ import * as React from 'react';
 
 import { Root } from './styles';
 
-export type SEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
-
 export interface IProps {
-  onClick?: SEvent;
-  onMouseDown?: SEvent;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
+  selectedItem?: Item; // eslint-disable-line
 }
 
 export default class Item extends React.Component<IProps, {}> {
-  public static defaultProps = {};
+  private onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { onClick } = this.props;
+
+    if (typeof onClick === 'function') {
+      onClick(e, this);
+    }
+  };
 
   public render() {
-    const { children, onClick, onMouseDown } = this.props;
+    const { children, selectedItem } = this.props;
+    const selected = selectedItem === this;
 
     return (
-      <Root onClick={onClick} onMouseDown={onMouseDown}>
+      <Root onClick={this.onClick} selected={selected}>
         {children}
       </Root>
     );
