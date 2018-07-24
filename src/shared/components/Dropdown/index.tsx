@@ -47,6 +47,12 @@ export default class Button extends React.Component<IProps, IState> {
         selectedItem: this.items[0],
       });
     }
+
+    window.addEventListener('keydown', this.onWindowKeyDown);
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener('mousedown', this.onWindowMouseDown);
   }
 
   public onClick = () => {
@@ -78,6 +84,28 @@ export default class Button extends React.Component<IProps, IState> {
     window.removeEventListener('mousedown', this.onWindowMouseDown);
   };
 
+  public onWindowKeyDown = (e: KeyboardEvent) => {
+    const { selectedItem } = this.state;
+    const key = e.key;
+
+    if (selectedItem == null || (key !== 'ArrowDown' && key !== 'ArrowUp')) {
+      return;
+    }
+
+    let index = this.items.indexOf(selectedItem);
+    const maxIndex = this.items.length - 1;
+
+    if (key === 'ArrowDown') {
+      index = index === maxIndex ? 0 : index + 1;
+    } else {
+      index = index === 0 ? maxIndex : index - 1;
+    }
+
+    this.setState({
+      selectedItem: this.items[index],
+    });
+  };
+
   public toggle = (flag: boolean) => {
     this.setState({
       activated: flag,
@@ -107,7 +135,7 @@ export default class Button extends React.Component<IProps, IState> {
           <List innerRef={r => (this.listContainer = r)} height={listHeight} activated={activated}>
             {React.Children.map(children, (el: React.ReactElement<any>) =>
               React.cloneElement(el, {
-                ref: (r: Item) => this.items.push(r),
+                ref: (r: Item) => r != null && this.items.push(r),
                 onClick: this.onItemClick,
                 selectedItem,
               }))}
