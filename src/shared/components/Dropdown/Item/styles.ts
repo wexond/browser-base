@@ -13,6 +13,7 @@ export const Root = styled.div`
   padding-right: 8px;
   font-size: 14px;
   overflow: hidden;
+  position: relative;
   white-space: nowrap;
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
   will-change: background-color;
