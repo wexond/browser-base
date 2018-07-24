@@ -121,7 +121,7 @@ export const Overlay = styled.div`
   opacity: 0;
   transition: 0.2s opacity;
 
-  ${({ color }: { color: string }) => `
+  ${({ color }: { color: string }) => css`
     background-color: ${color};
   `};
 `;

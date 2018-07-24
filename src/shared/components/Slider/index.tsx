@@ -49,7 +49,7 @@ export default class Slider extends React.Component<Props, State> {
     type: SliderType.Continuous,
     ticks: [1, 2],
     showTicksLabels: false,
-    selectedTickColor: 'rgba(255, 255, 255, 0.38)',
+    selectedTickColor: 'rgba(255, 255, 255, 0.54)',
   };
 
   public state: State = {

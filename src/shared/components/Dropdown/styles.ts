@@ -1,11 +1,8 @@
-import * as React from 'react';
 import styled, { css } from 'styled-components';
-
 import opacity from '../../defaults/opacity';
 import typography from '../../mixins/typography';
 import images from '../../mixins/images';
 import shadows from '../../mixins/shadows';
-import scroll from '../../mixins/scroll';
 import { EASE_FUNCTION } from '../../constants';
 
 const dropDownIcon = require('../../icons/drop-down.svg');
@@ -45,7 +42,7 @@ export const Icon = styled.div`
 
   ${images.center('24px', 'auto')};
 
-  ${({ activated }: { activated: boolean }) => `
+  ${({ activated }: { activated: boolean }) => css`
     transform: rotate(${activated ? 180 : 0}deg);
   `};
 `;
@@ -64,7 +61,7 @@ export const List = styled.div`
   transition: 0.5s max-height ${EASE_FUNCTION}, 0.2s opacity;
   box-shadow: ${shadows(7)};
 
-  ${({ activated, height }: { activated: boolean; height: number }) => `
+  ${({ activated, height }: { activated: boolean; height: number }) => css`
     max-height: ${height}px;
     opacity: ${activated ? 1 : 0};
   `};
