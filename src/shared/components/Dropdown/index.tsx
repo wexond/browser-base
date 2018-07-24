@@ -55,6 +55,7 @@ export default class Button extends React.Component<IProps, IState> {
   }
 
   public onClick = () => {
+    if (this.items.length === 0) return;
     const { activated } = this.state;
 
     if (activated) {

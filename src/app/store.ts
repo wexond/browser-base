@@ -1,7 +1,6 @@
 import { observable } from 'mobx';
 import os from 'os';
 import { Platforms } from './enums';
-import AddTabButton from './models/add-tab-button';
 import AddressBar from './models/address-bar';
 import Page from './models/page';
 import Suggestions from './models/suggestions';
@@ -10,6 +9,7 @@ import Workspace from './models/workspace';
 import Menu from './models/menu';
 import ContextMenu from '../shared/components/ContextMenu';
 import BookmarksDialog from './components/BookmarksDialog';
+import BookmarkItem from '../shared/models/bookmark-item';
 
 export interface Favicons {
   [key: string]: string;
@@ -36,6 +36,8 @@ class Store {
   @observable public bookmarksDialog: BookmarksDialog;
 
   @observable public bookmarksDialogVisible: boolean = false;
+
+  @observable public bookmarkItems: BookmarkItem[] = [];
 
   @observable
   public tabbarScrollbar = {
@@ -125,6 +127,10 @@ class Store {
 
   public addWorkspace() {
     this.workspaces.list.push(new Workspace());
+  }
+
+  public getBookmarkFolders() {
+    return this.bookmarkItems.filter(el => el.type === 'folder');
   }
 }
 
