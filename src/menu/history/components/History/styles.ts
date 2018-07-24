@@ -16,20 +16,21 @@ export const Container = styled.div`
 `;
 
 export const Toolbar = styled.div`
+  width: calc(100% - 300px);
   height: 56px;
-  border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
   box-sizing: border-box;
   background-color: #fff;
   position: fixed;
   z-index: 999;
   top: 0;
-  width: calc(100% - 300px);
+  border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
 `;
 
 export const Title = styled.div`
-  ${typography.robotoMedium()};
   font-size: 32px;
-  opacity: ${opacity.light.primaryText};
   margin-top: 56px;
   margin-left: 64px;
+  opacity: ${opacity.light.primaryText};
+
+  ${typography.robotoMedium()};
 `;

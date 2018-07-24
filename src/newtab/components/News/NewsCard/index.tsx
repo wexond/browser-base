@@ -53,7 +53,7 @@ export default class NewsCard extends React.Component<Props, State> {
               && desc.trim() !== '' && <SecondaryText>{desc}</SecondaryText>}
 
             <SourceContainer>
-              <Icon visible={loaded} source={data.icon} />
+              <Icon visible={loaded} src={data.icon} />
               <Source>
                 {data.source.name} - {getTimeOffset(new Date(data.publishedAt), this)}
               </Source>
