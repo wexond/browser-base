@@ -10,17 +10,21 @@ import { EASE_FUNCTION } from '../../constants';
 const dropDownIcon = require('../../icons/drop-down.svg');
 
 export const Root = styled.div`
-  width: 128px;
-  height: 48px;
+  display: inline-block;
   background-color: rgba(0, 0, 0, 0.06);
   border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+`;
+
+export const Container = styled.div`
+  min-width: 104px;
+  height: 48px;
   padding-left: 16px;
   padding-right: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  cursor: pointer;
-  position: relative;
 `;
 
 export const Name = styled.div`
