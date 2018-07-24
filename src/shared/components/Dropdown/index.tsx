@@ -19,14 +19,37 @@ export default class Button extends React.Component<IProps, IState> {
     activated: false,
   };
 
+  public onClick = () => {
+    this.setState({
+      activated: true,
+    });
+
+    requestAnimationFrame(() => {
+      window.addEventListener('click', this.onWindowClick);
+    });
+  };
+
+  public onWindowClick = () => {
+    this.setState({
+      activated: false,
+    });
+
+    window.removeEventListener('click', this.onWindowClick);
+  };
+
+  public onListClick = (e: React.SyntheticEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   public render() {
     const { activated } = this.state;
 
     return (
-      <Root>
+      <Root onClick={this.onClick}>
         <Name>Item 2</Name>
         <Icon activated={activated} />
-        <List>
+        <List onClick={this.onListClick} activated={activated}>
           <Item>Item 1</Item>
           <Item>Item 2</Item>
           <Item>Item 3</Item>
