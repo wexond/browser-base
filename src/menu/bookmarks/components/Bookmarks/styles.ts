@@ -19,7 +19,8 @@ export const Items = styled.div`
 `;
 
 export const Caption = styled.div`
-  opacity: ${opacity.light.secondaryText};
   margin-top: 32px;
+  opacity: ${opacity.light.secondaryText};
+
   ${typography.subtitle2()};
 `;

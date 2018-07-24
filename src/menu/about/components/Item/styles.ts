@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-
 import opacity from '../../../../shared/defaults/opacity';
 import typography from '../../../../shared/mixins/typography';
 
@@ -12,14 +11,16 @@ export const StyledItem = styled.div`
 `;
 
 export const Title = styled.div`
-  opacity: ${opacity.light.primaryText};
   margin-left: 16px;
+  opacity: ${opacity.light.primaryText};
+
   ${typography.subtitle2()};
 `;
 
 export const Content = styled.div`
   text-align: right;
-  opacity: ${opacity.light.secondaryText};
   margin-right: 16px;
+  opacity: ${opacity.light.secondaryText};
+
   ${typography.body2()};
 `;

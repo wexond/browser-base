@@ -22,8 +22,9 @@ export const Content = styled.div`
 export const Credits = styled.div`
   width: 100%;
   padding: 8px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
   background-color: #f5f5f5;
+  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+
   ${typography.caption()};
 
   & a {
