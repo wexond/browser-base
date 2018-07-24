@@ -51,7 +51,7 @@ class App extends React.Component<{}, IState> {
 
   async loadData() {
     const weatherData = await getWeather(
-      'new york',
+      'warszawa',
       Languages.en,
       TemperatureUnit.Celsius,
       TimeUnit.TwentyFourHours,

@@ -9,6 +9,7 @@ import Toolbar from '../Toolbar';
 import GlobalMenu from '../GlobalMenu';
 import WorkspacesMenu from '../WorkspacesMenu';
 import ContextMenu from '../../../shared/components/ContextMenu';
+import db from '../../../shared/models/app-database';
 
 @observer
 class App extends React.Component {
@@ -29,6 +30,9 @@ class App extends React.Component {
 
     window.addEventListener('mousedown', (e: MouseEvent) => {
       Store.pageMenu.toggle(false);
+    });
+
+    window.addEventListener('mouseup', (e: MouseEvent) => {
       Store.bookmarksDialogVisible = false;
     });
 
@@ -114,6 +118,8 @@ class App extends React.Component {
         Store.getCurrentWorkspace().addTab();
       }
     });
+
+    Store.bookmarkItems = await db.bookmarks.toArray();
 
     // ipcRenderer.send(ipcMessages.PLUGIN_INSTALL, 'wexond/wexond-example-plugin');
   }

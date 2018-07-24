@@ -7,7 +7,9 @@ import Button from '../../../shared/components/Button';
 import colors from '../../../shared/defaults/colors';
 import db from '../../../shared/models/app-database';
 import { removeItem } from '../../../menu/bookmarks/utils';
+import Dropdown from '../../../shared/components/Dropdown';
 import { Root, Title, ButtonsContainer } from './styles';
+import BookmarkItem from '../../../shared/models/bookmark-item';
 
 @observer
 export default class BookmarksDialog extends Component {
@@ -22,7 +24,7 @@ export default class BookmarksDialog extends Component {
     }
   };
 
-  public onMouseDown = (e?: SyntheticEvent<any>) => {
+  public onMouseUp = (e?: SyntheticEvent<any>) => {
     e.stopPropagation();
     this.textField.inputElement.blur();
   };
@@ -67,8 +69,14 @@ export default class BookmarksDialog extends Component {
   public render() {
     const visible = Store.bookmarksDialogVisible;
 
+    const dropDownStyle = {
+      width: '100%',
+      marginTop: 24,
+      zIndex: 1,
+    };
+
     return (
-      <Root visible={visible} onMouseDown={this.onMouseDown}>
+      <Root visible={visible} onMouseUp={this.onMouseUp}>
         <Title>New bookmark</Title>
         <Textfield
           ref={r => (this.textField = r)}
@@ -76,6 +84,11 @@ export default class BookmarksDialog extends Component {
           onKeyPress={this.onTextfieldKeyPress}
           style={{ marginTop: 16 }}
         />
+        <Dropdown style={dropDownStyle}>
+          {Store.getBookmarkFolders().map((item: BookmarkItem, key: any) => (
+            <Dropdown.Item key={key}>{item.title}</Dropdown.Item>
+          ))}
+        </Dropdown>
         <ButtonsContainer>
           <Button
             foreground={colors.blue['500']}
