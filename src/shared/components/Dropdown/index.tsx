@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { getEvents } from '../../utils/events';
 import { getRippleEvents } from '../../utils/ripple';
 import Ripples from '../Ripples';
 import Item from './Item';
-import colors from '../../defaults/colors';
 import {
   Root, Container, Name, Icon, List,
 } from './styles';
@@ -12,6 +10,7 @@ export interface IProps {
   ripple?: boolean;
   customRippleBehavior?: boolean;
   children?: any;
+  style?: any;
 }
 
 export interface IState {
@@ -114,7 +113,9 @@ export default class Button extends React.Component<IProps, IState> {
   };
 
   public render() {
-    const { ripple, customRippleBehavior, children } = this.props;
+    const {
+      ripple, customRippleBehavior, children, style,
+    } = this.props;
     const { activated, listHeight, selectedItem } = this.state;
 
     this.items = [];
@@ -125,7 +126,7 @@ export default class Button extends React.Component<IProps, IState> {
     };
 
     return (
-      <Root onMouseDown={this.onMouseDown}>
+      <Root onMouseDown={this.onMouseDown} style={style}>
         <Container {...events}>
           <Name>{selectedItem && selectedItem.props.children}</Name>
           <Icon activated={activated} />
