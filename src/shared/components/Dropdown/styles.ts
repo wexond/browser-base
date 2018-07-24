@@ -1,10 +1,11 @@
 import * as React from 'react';
-import styled, { StyledComponentClass } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import opacity from '../../defaults/opacity';
 import typography from '../../mixins/typography';
 import images from '../../mixins/images';
 import shadows from '../../mixins/shadows';
+import { EASE_FUNCTION } from '../../constants';
 
 const dropDownIcon = require('../../icons/drop-down.svg');
 
@@ -29,40 +30,37 @@ export const Name = styled.div`
   ${typography.robotoRegular()};
 `;
 
-export interface IconProps {
-  activated: boolean;
-}
-
 export const Icon = styled.div`
   width: 24px;
   height: 24px;
   will-change: transform;
-  transition: 0.2s ease-out transform;
+  transition: 0.3s transform;
   opacity: ${opacity.light.inactiveIcon};
   background-image: url(${dropDownIcon});
 
   ${images.center('24px', 'auto')};
-  transform: rotate(${({ activated }: IconProps) => (activated ? 180 : 0)});
-`;
 
-export interface ListProps {
-  activated: boolean;
-}
+  ${({ activated }: { activated: boolean }) => `
+    transform: rotate(${activated ? 180 : 0}deg);
+  `};
+`;
 
 export const List = styled.div`
   width: 100%;
-  overflow: hidden;
   max-height: 144px;
   position: absolute;
   top: 100%;
   left: 0;
+  overflow: hidden;
   background-color: #fff;
   border-radius: 4px;
   will-change: max-height;
   opacity: 0;
-  transition: 0.3s ease-out max-height, 0.3s opacity;
+  transition: 0.5s max-height ${EASE_FUNCTION}, 0.2s opacity;
   box-shadow: ${shadows(7)};
 
-  max-height: ${({ activated }: ListProps) => (activated ? 144 : 0)}px;
-  opacity: ${({ activated }) => (activated ? 1 : 0)};
+  ${({ activated }: { activated: boolean }) => `
+    max-height: ${activated ? 144 : 0}px;
+    opacity: ${activated ? 1 : 0};
+  `};
 `;
