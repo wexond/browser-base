@@ -15,7 +15,7 @@ import BookmarkItem from '../../../shared/models/bookmark-item';
 export default class BookmarksDialog extends Component {
   private textField: Textfield;
 
-  private dropDown: Dropdown;
+  private bookmarkFolder: any = null;
 
   public onLoad = () => {
     const bookmark = Store.getSelectedTab().bookmark;
@@ -47,18 +47,17 @@ export default class BookmarksDialog extends Component {
   public onDoneClick = async () => {
     const bookmark = Store.getSelectedTab().bookmark;
     const name = this.textField.getValue();
+    const parent = this.bookmarkFolder == null ? -1 : this.bookmarkFolder.id;
 
-    if (name !== bookmark.title) {
-      await db.bookmarks
-        .where('id')
-        .equals(bookmark.id)
-        .modify({
-          title: name,
-        });
+    await db.bookmarks
+      .where('id')
+      .equals(bookmark.id)
+      .modify({
+        title: name,
+        parent,
+      });
 
-      bookmark.title = name;
-    }
-
+    bookmark.title = name;
     Store.bookmarksDialogVisible = false;
   };
 
@@ -69,7 +68,7 @@ export default class BookmarksDialog extends Component {
   };
 
   public onDropdownChange = (data: any) => {
-    console.log(data);
+    this.bookmarkFolder = data;
   };
 
   public render() {
@@ -81,16 +80,6 @@ export default class BookmarksDialog extends Component {
       zIndex: 1,
     };
 
-    if (this.dropDown != null) {
-      const selectedItem = this.dropDown.state.selectedItem;
-
-      if (selectedItem == null) {
-        this.dropDown.setState({
-          selectedItem: this.dropDown.items[0],
-        });
-      }
-    }
-
     return (
       <Root visible={visible} onMouseUp={this.onMouseUp}>
         <Title>New bookmark</Title>
@@ -100,11 +89,8 @@ export default class BookmarksDialog extends Component {
           onKeyPress={this.onTextfieldKeyPress}
           style={{ marginTop: 16 }}
         />
-        <Dropdown
-          ref={r => (this.dropDown = r)}
-          onChange={this.onDropdownChange}
-          style={dropDownStyle}
-        >
+        <Dropdown onChange={this.onDropdownChange} style={dropDownStyle}>
+          <Dropdown.Item>Home</Dropdown.Item>
           {Store.getBookmarkFolders().map((item: BookmarkItem, key: any) => (
             <Dropdown.Item data={item} key={key}>
               {item.title}
