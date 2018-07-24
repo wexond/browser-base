@@ -5,12 +5,13 @@ import Ripples from '../Ripples';
 import Item from './Item';
 import colors from '../../defaults/colors';
 import {
-  Root, Name, Icon, List,
+  Root, Container, Name, Icon, List,
 } from './styles';
 
 export interface IProps {
   ripple?: boolean;
   customRippleBehavior?: boolean;
+  children?: any;
 }
 
 export interface IState {
@@ -34,13 +35,28 @@ export default class Button extends React.Component<IProps, IState> {
   public onClick = () => {
     const { activated } = this.state;
 
-    this.setState({
-      activated: !activated,
-    });
+    if (activated) {
+      window.removeEventListener('mousedown', this.onWindowMouseDown);
+    } else {
+      window.addEventListener('mousedown', this.onWindowMouseDown);
+    }
+
+    this.setState({ activated: !activated });
+  };
+
+  public onMouseDown = (e: React.SyntheticEvent<any>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  public onWindowMouseDown = () => {
+    this.setState({ activated: false });
+
+    window.removeEventListener('mousedown', this.onWindowMouseDown);
   };
 
   public render() {
-    const { ripple, customRippleBehavior } = this.props;
+    const { ripple, customRippleBehavior, children } = this.props;
     const { activated } = this.state;
 
     const events = {
@@ -49,16 +65,18 @@ export default class Button extends React.Component<IProps, IState> {
     };
 
     return (
-      <Root {...events}>
-        <Name>Item 2</Name>
-        <Icon activated={activated} />
-        <Ripples ref={r => (this.ripples = r)} color="#000" />
-        <List activated={activated}>
-          <Item>Item 1</Item>
-          <Item>Item 2</Item>
-          <Item>Item 3</Item>
-          <Item>Item 4</Item>
-        </List>
+      <Root onMouseDown={this.onMouseDown}>
+        <Container {...events}>
+          <Name>Item 2</Name>
+          <Icon activated={activated} />
+          <Ripples ref={r => (this.ripples = r)} color="#000" />
+        </Container>
+        {children != null && (
+          <List activated={activated}>
+            {React.Children.map(children, (el: React.ReactElement<any>) =>
+              React.cloneElement(el, {}))}
+          </List>
+        )}
       </Root>
     );
   }
