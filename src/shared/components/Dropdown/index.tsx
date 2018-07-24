@@ -34,9 +34,9 @@ export default class Button extends React.Component<IProps, IState> {
 
   private ripples: Ripples;
 
-  private listContainer: HTMLDivElement;
+  public listContainer: HTMLDivElement;
 
-  private items: Item[] = [];
+  public items: Item[] = [];
 
   public componentDidMount() {
     const { selectedItem } = this.state;
