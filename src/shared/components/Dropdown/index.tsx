@@ -88,9 +88,9 @@ export default class Button extends React.Component<IProps, IState> {
     const { selectedItem } = this.state;
     const key = e.key;
 
-    if (selectedItem == null || (key !== 'ArrowDown' && key !== 'ArrowUp')) {
-      return;
-    }
+    if (selectedItem == null) return;
+    if (key === 'Enter' || key === 'Escape') return this.toggle(false); // eslint-disable-line
+    if (key !== 'ArrowDown' && key !== 'ArrowUp') return;
 
     let index = this.items.indexOf(selectedItem);
     const maxIndex = this.items.length - 1;
