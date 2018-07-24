@@ -7,7 +7,7 @@ export interface StyledAppProps {
 }
 
 export const StyledApp = styled.div`
-  height: 100vh;
+  height: calc(100vh - 64px);
   overflow-x: hidden;
   overflow-y: auto;
   padding: 32px;
