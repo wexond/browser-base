@@ -1,9 +1,10 @@
+import AppStore from '../../../app/store';
 import Store from '../store';
 import BookmarkItem from '../../../shared/models/bookmark-item';
 import db from '../../../shared/models/app-database';
 
 export const getPath = (parent: number) => {
-  const parentFolder = Store.bookmarks.find(x => x.id === parent);
+  const parentFolder = AppStore.bookmarks.find(x => x.id === parent);
   let path: BookmarkItem[] = [];
 
   if (parentFolder == null) return [];
@@ -19,7 +20,7 @@ export const getPath = (parent: number) => {
 
 export const addBookmark = async (item: BookmarkItem) => {
   item.id = await db.bookmarks.add(item);
-  Store.bookmarks.push(item);
+  AppStore.bookmarks.push(item);
   return item;
 };
 
@@ -32,7 +33,7 @@ export const addFolder = (title: string, parent: number) => {
     };
 
     item.id = await db.bookmarks.add(item);
-    Store.bookmarks.push(item);
+    AppStore.bookmarks.push(item);
   });
 };
 
@@ -45,7 +46,7 @@ export const removeItem = async (id: number, type?: string) => {
     }
   }
 
-  const bookmarks = Store.bookmarks;
+  const bookmarks = AppStore.bookmarks;
   const item = bookmarks.find(x => x.id === id);
 
   bookmarks.splice(bookmarks.indexOf(item), 1);

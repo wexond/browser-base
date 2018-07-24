@@ -10,6 +10,7 @@ import Menu from './models/menu';
 import ContextMenu from '../shared/components/ContextMenu';
 import BookmarksDialog from './components/BookmarksDialog';
 import BookmarkItem from '../shared/models/bookmark-item';
+import Tab from './models/tab';
 
 export interface Favicons {
   [key: string]: string;
@@ -37,7 +38,7 @@ class Store {
 
   @observable public bookmarksDialogVisible: boolean = false;
 
-  @observable public bookmarkItems: BookmarkItem[] = [];
+  @observable public bookmarks: BookmarkItem[] = [];
 
   @observable
   public tabbarScrollbar = {
@@ -130,7 +131,27 @@ class Store {
   }
 
   public getBookmarkFolders() {
-    return this.bookmarkItems.filter(el => el.type === 'folder');
+    return this.bookmarks.filter(el => el.type === 'folder');
+  }
+
+  public isBookmarkSaved(id: number) {
+    if (this.bookmarks == null) return false;
+    return this.bookmarks.filter(r => r.id === id).length !== 0;
+  }
+
+  public isBookmarkSavedTab(tab?: Tab) {
+    const workspace = this.getCurrentWorkspace();
+    const selectedTab = workspace && workspace.getSelectedTab();
+
+    if (tab == null) {
+      if (selectedTab == null || selectedTab.bookmark == null) {
+        return false;
+      }
+
+      return this.isBookmarkSaved(selectedTab.bookmark.id);
+    }
+
+    return this.isBookmarkSaved(tab.bookmark.id);
   }
 }
 
