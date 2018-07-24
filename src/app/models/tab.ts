@@ -27,7 +27,7 @@ export default class Tab {
 
   @observable public loading = false;
 
-  @observable public bookmark: BookmarkItem = null;
+  @observable public bookmark: BookmarkItem;
 
   public url = '';
 

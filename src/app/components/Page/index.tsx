@@ -126,12 +126,12 @@ export default class extends React.Component<{ page: Page }, {}> {
       this.lastURL = url;
     }
 
-    const bookmarks = await db.bookmarks
+    const bookmark = await db.bookmarks
       .where('url')
       .equals(url)
-      .toArray();
+      .first();
 
-    this.tab.bookmark = bookmarks.length > 0 && bookmarks[0];
+    this.tab.bookmark = bookmark;
   };
 
   public onPageFaviconUpdated = ({ favicons }: Electron.PageFaviconUpdatedEvent) => {
