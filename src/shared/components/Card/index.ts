@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components';
-
 import opacity from '../../defaults/opacity';
-
 import typography from '../../mixins/typography';
 import images from '../../mixins/images';
 

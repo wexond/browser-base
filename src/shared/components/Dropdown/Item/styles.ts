@@ -1,6 +1,4 @@
-import * as React from 'react';
-import styled, { StyledComponentClass } from 'styled-components';
-
+import styled, { css } from 'styled-components';
 import opacity from '../../../defaults/opacity';
 import typography from '../../../mixins/typography';
 
@@ -19,7 +17,7 @@ export const Root = styled.div`
   will-change: background-color;
   transition: 0.2s background-color;
 
-  ${({ selected }: { selected: boolean }) => `
+  ${({ selected }: { selected: boolean }) => css`
     background-color: ${selected ? 'rgba(0, 0, 0, 0.12)' : '#fff'};
 
     &:hover {
