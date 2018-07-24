@@ -4,8 +4,6 @@ import BookmarkItem from '../../shared/models/bookmark-item';
 import { getPath } from './utils';
 
 class Store {
-  @observable public bookmarks: BookmarkItem[] = [];
-
   @observable public currentTree: number = -1;
 
   @observable public path: BookmarkItem[] = [];
