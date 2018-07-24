@@ -39,13 +39,15 @@ export const Icon = styled.div`
 `;
 
 export const PrimaryText = styled.div`
-  ${typography.body2()};
   opacity: ${opacity.light.primaryText};
+
+  ${typography.body2()};
 `;
 
 export const SecondaryText = styled.div`
-  ${typography.body2()};
   opacity: ${opacity.light.secondaryText};
+
+  ${typography.body2()};
 `;
 
 export const Title = styled(PrimaryText)`
@@ -54,7 +56,8 @@ export const Title = styled(PrimaryText)`
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-right: 24px;
-  ${typography.body2()};
+
+  typography.body2()};
 `;
 
 export const Time = styled(SecondaryText)`
@@ -66,16 +69,17 @@ export const RemoveIcon = styled.div`
   left: 24px;
   height: 16px;
   width: 16px;
-  ${images.center('24px', 'auto')};
-  background-image: url(${removeIcon});
   z-index: 2;
+  background-image: url(${removeIcon});
 
-  &:hover {
-    opacity: ${opacity.light.activeIcon};
-  }
+  ${images.center('24px', 'auto')};
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? opacity.light.inactiveIcon : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
   `};
+
+  &:hover {
+    opacity: ${opacity.light.activeIcon};
+  }
 `;

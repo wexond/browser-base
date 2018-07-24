@@ -1,24 +1,15 @@
-import * as React from 'react';
-
-import styled, { StyledComponentClass } from 'styled-components';
-
-export interface PreloaderProps {
-  size: number;
-}
+import styled, { css } from 'styled-components';
 
 export const StyledPreloader = styled.div`
   transform-origin: center center;
   animation: nersent-ui-preloader-rotate 2s linear infinite;
   z-index: 5;
 
-  width: ${({ size }: PreloaderProps) => size}px;
-  height: ${({ size }) => size}px;
+  ${({ size }: { size: number }) => css`
+    width: ${size}px;
+    height: ${size}px;
+  `};
 `;
-
-export interface PathProps {
-  color: string;
-  thickness: number;
-}
 
 export const Path = styled.circle`
   stroke-dasharray: 1, 200;
@@ -27,6 +18,8 @@ export const Path = styled.circle`
   stroke-linecap: square;
   transition: 0.3s stroke;
 
-  stroke-width: ${({ thickness }: PathProps) => thickness};
-  stroke: ${({ color }) => color};
+  ${({ color, thickness }: { color: string; thickness: number }) => css`
+    stroke-width: ${thickness};
+    stroke: ${color};
+  `};
 `;
