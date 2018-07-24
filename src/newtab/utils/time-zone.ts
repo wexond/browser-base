@@ -13,7 +13,5 @@ export const getTimeZone = async (lat: number, lon: number, apiKey: string = TIM
   const offsets = json.dstOffset * 1000 + json.rawOffset * 1000;
   const local = new Date(timestamp * 1000 + offsets);
 
-  // console.log(local.getTimezoneOffset() / 60);
-
-  return local;
+  return local.getTimezoneOffset() / 60 + new Date().getTimezoneOffset() / 60;
 };
