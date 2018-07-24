@@ -77,7 +77,7 @@ export default class Button extends React.Component<IProps, IState> {
     if (item) {
       this.setState({ selectedItem: item });
       this.toggle(false);
-      this.onChange();
+      this.onChange(item);
     }
   };
 
@@ -103,11 +103,8 @@ export default class Button extends React.Component<IProps, IState> {
       index = index === 0 ? maxIndex : index - 1;
     }
 
-    this.setState({
-      selectedItem: this.items[index],
-    });
-
-    this.onChange();
+    this.setState({ selectedItem: this.items[index] });
+    this.onChange(this.items[index]);
   };
 
   public toggle = (flag: boolean) => {
@@ -117,12 +114,11 @@ export default class Button extends React.Component<IProps, IState> {
     });
   };
 
-  public onChange = () => {
+  public onChange = (item: Item) => {
     const { onChange } = this.props;
 
     if (typeof onChange === 'function') {
-      const { selectedItem } = this.state;
-      onChange(selectedItem.props.data, selectedItem, this);
+      onChange(item.props.data, item, this);
     }
   };
 
