@@ -45,15 +45,24 @@ export const Icon = styled.div`
   transform: rotate(${({ activated }: IconProps) => (activated ? 180 : 0)});
 `;
 
+export interface ListProps {
+  activated: boolean;
+}
+
 export const List = styled.div`
   width: 100%;
+  overflow: hidden;
   max-height: 144px;
   position: absolute;
   top: 100%;
   left: 0;
-  padding-top: 8px;
-  padding-bottom: 8px;
   background-color: #fff;
   border-radius: 4px;
+  will-change: max-height;
+  opacity: 0;
+  transition: 0.3s ease-out max-height, 0.3s opacity;
   box-shadow: ${shadows(7)};
+
+  max-height: ${({ activated }: ListProps) => (activated ? 144 : 0)}px;
+  opacity: ${({ activated }) => (activated ? 1 : 0)};
 `;

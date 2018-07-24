@@ -14,5 +14,13 @@ export const Root = styled.div`
   font-size: 14px;
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
 
+  &:first-child {
+    margin-top: 8px;
+  }
+
+  &:last-child {
+    margin-bottom: 8px;
+  }
+
   ${typography.robotoRegular()};
 `;
