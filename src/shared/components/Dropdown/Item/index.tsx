@@ -1,13 +1,24 @@
 import * as React from 'react';
-
+import { getEvents } from '../../../utils/events';
+import { getRippleEvents } from '../../../utils/ripple';
+import Ripples from '../../Ripples';
 import { Root } from './styles';
 
 export interface IProps {
   onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
   selectedItem?: Item; // eslint-disable-line
+  ripple?: boolean;
+  customRippleBehavior?: boolean;
 }
 
 export default class Item extends React.Component<IProps, {}> {
+  public static defaultProps = {
+    customRippleBehavior: false,
+    ripple: true,
+  };
+
+  private ripples: Ripples;
+
   private onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { onClick } = this.props;
 
@@ -17,12 +28,20 @@ export default class Item extends React.Component<IProps, {}> {
   };
 
   public render() {
-    const { children, selectedItem } = this.props;
+    const {
+      ripple, customRippleBehavior, children, selectedItem,
+    } = this.props;
     const selected = selectedItem === this;
 
+    const events = {
+      onClick: this.onClick,
+      ...getRippleEvents(this.props, () => this.ripples),
+    };
+
     return (
-      <Root onClick={this.onClick} selected={selected}>
+      <Root selected={selected} {...events}>
         {children}
+        <Ripples ref={r => (this.ripples = r)} color="#000" />
       </Root>
     );
   }
