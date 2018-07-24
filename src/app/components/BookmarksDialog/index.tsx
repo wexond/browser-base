@@ -68,6 +68,10 @@ export default class BookmarksDialog extends Component {
     }
   };
 
+  public onDropdownChange = (data: any) => {
+    console.log(data);
+  };
+
   public render() {
     const visible = Store.bookmarksDialogVisible;
 
@@ -96,9 +100,15 @@ export default class BookmarksDialog extends Component {
           onKeyPress={this.onTextfieldKeyPress}
           style={{ marginTop: 16 }}
         />
-        <Dropdown ref={r => (this.dropDown = r)} style={dropDownStyle}>
+        <Dropdown
+          ref={r => (this.dropDown = r)}
+          onChange={this.onDropdownChange}
+          style={dropDownStyle}
+        >
           {Store.getBookmarkFolders().map((item: BookmarkItem, key: any) => (
-            <Dropdown.Item key={key}>{item.title}</Dropdown.Item>
+            <Dropdown.Item data={item} key={key}>
+              {item.title}
+            </Dropdown.Item>
           ))}
         </Dropdown>
         <ButtonsContainer>
