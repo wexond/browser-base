@@ -69,15 +69,25 @@ export default class Item extends React.Component<IProps, IState> {
     removeItem(id, type);
   };
 
+  public onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { data } = this.props;
+
+    if (data.type === 'folder') {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
   public render() {
     const { data } = this.props;
     const { hovered } = this.state;
 
+    const isFolder = data.type === 'folder';
     let opacity = 1;
     let favicon = AppStore.favicons[data.favicon];
 
     if (favicon == null || favicon.trim() === '') {
-      favicon = data.type === 'folder' ? folderIcon : pageIcon;
+      favicon = isFolder ? folderIcon : pageIcon;
       opacity = transparency.light.inactiveIcon;
     }
 
@@ -93,7 +103,9 @@ export default class Item extends React.Component<IProps, IState> {
       >
         <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
         <Icon style={{ opacity }} icon={favicon} />
-        <Title>{data.title}</Title>
+        <Title isFolder={isFolder} onClick={this.onTitleClick}>
+          {data.title}
+        </Title>
       </Root>
     );
   }
