@@ -7,6 +7,7 @@ import Tab from '../../models/tab';
 import Store from '../../store';
 import db from '../../../shared/models/app-database';
 import { BASE_PATH } from '../../constants';
+import { ContextMenuMode } from '../../enums';
 
 @observer
 export default class extends React.Component<{ page: Page }, {}> {
@@ -65,6 +66,16 @@ export default class extends React.Component<{ page: Page }, {}> {
     });
 
     Store.webviewContextMenuParams = params;
+
+    if (params.linkURL && params.hasImageContents) {
+      Store.pageMenuData.mode = ContextMenuMode.ImageAndURL;
+    } else if (params.linkURL) {
+      Store.pageMenuData.mode = ContextMenuMode.URL;
+    } else if (params.hasImageContents) {
+      Store.pageMenuData.mode = ContextMenuMode.Image;
+    } else {
+      Store.pageMenuData.mode = ContextMenuMode.Normal;
+    }
 
     // Calculate new menu position
     // using cursor x, y and

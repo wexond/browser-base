@@ -16,6 +16,7 @@ import Button from '../../../shared/components/Button';
 import { ButtonType } from '../../../shared/enums';
 import colors from '../../../shared/defaults/colors';
 import ipcMessages from '../../../shared/defaults/ipc-messages';
+import { ContextMenuMode } from '../../enums';
 
 @observer
 class App extends React.Component {
@@ -134,6 +135,12 @@ class App extends React.Component {
   };
 
   public render() {
+    const { mode } = Store.pageMenuData;
+
+    const imageAndURLLink = mode === ContextMenuMode.ImageAndURL || mode === ContextMenuMode.URL;
+    const imageAndURLImage = mode === ContextMenuMode.ImageAndURL || mode === ContextMenuMode.Image;
+    const normal = mode === ContextMenuMode.Normal;
+
     return (
       <StyledApp>
         <Toolbar />
@@ -150,29 +157,45 @@ class App extends React.Component {
             zIndex: 999,
           }}
         >
-          <ContextMenu.Item onClick={this.onInspectElementClick}>
+          <ContextMenu.Item visible={imageAndURLLink} onClick={this.onInspectElementClick}>
             Open link in new tab
           </ContextMenu.Item>
-          <ContextMenu.Item disabled>Open link in new window</ContextMenu.Item>
-          <ContextMenu.Item disabled>Open link in new incognito window</ContextMenu.Item>
-          <ContextMenu.Item disabled>Save link as</ContextMenu.Item>
-          <ContextMenu.Item onClick={this.onInspectElementClick}>
+          <ContextMenu.Item visible={imageAndURLLink} disabled>
+            Open link in new window
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLLink} disabled>
+            Open link in new incognito window
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLLink} disabled>
+            Save link as
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLLink} onClick={this.onInspectElementClick}>
             Copy link address
           </ContextMenu.Item>
-          <ContextMenu.Separator />
-          <ContextMenu.Item onClick={this.onInspectElementClick}>
+          <ContextMenu.Separator visible={imageAndURLLink} />
+          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onInspectElementClick}>
             Open image in new tab
           </ContextMenu.Item>
-          <ContextMenu.Item onClick={this.onInspectElementClick}>Save image as</ContextMenu.Item>
-          <ContextMenu.Item onClick={this.onInspectElementClick}>Copy image</ContextMenu.Item>
-          <ContextMenu.Item onClick={this.onInspectElementClick}>
+          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onInspectElementClick}>
+            Save image as
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onInspectElementClick}>
+            Copy image
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onInspectElementClick}>
             Copy image address
           </ContextMenu.Item>
-          <ContextMenu.Separator />
-          <ContextMenu.Item onClick={this.onInspectElementClick}>Print</ContextMenu.Item>
-          <ContextMenu.Item disabled>Save as</ContextMenu.Item>
-          <ContextMenu.Separator />
-          <ContextMenu.Item disabled>View source</ContextMenu.Item>
+          <ContextMenu.Separator visible={imageAndURLImage} />
+          <ContextMenu.Item visible={normal} onClick={this.onInspectElementClick}>
+            Print
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={normal} disabled>
+            Save as
+          </ContextMenu.Item>
+          <ContextMenu.Separator visible={normal} />
+          <ContextMenu.Item visible={normal} disabled>
+            View source
+          </ContextMenu.Item>
           <ContextMenu.Item onClick={this.onInspectElementClick}>Inspect element</ContextMenu.Item>
         </ContextMenu>
         <GlobalMenu />
