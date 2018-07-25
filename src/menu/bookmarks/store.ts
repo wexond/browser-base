@@ -10,6 +10,8 @@ class Store {
 
   @observable public selectedItems: number[] = [];
 
+  @observable public bookmarks: BookmarkItem[] = [];
+
   public goTo = (id: number) => {
     this.currentTree = id;
     this.path = getPath(id);

@@ -17,7 +17,7 @@ export interface Props {
 export interface State {
   activated: boolean;
   listHeight: number;
-  selectedItem?: Item;
+  selectedItem: number;
 }
 
 export default class Dropdown extends React.Component<Props, State> {
@@ -31,6 +31,7 @@ export default class Dropdown extends React.Component<Props, State> {
   public state: State = {
     activated: false,
     listHeight: 0,
+    selectedItem: 0,
   };
 
   private ripples: Ripples;
@@ -40,14 +41,6 @@ export default class Dropdown extends React.Component<Props, State> {
   public items: Item[] = [];
 
   public componentDidMount() {
-    const { selectedItem } = this.state;
-
-    if (selectedItem == null && this.items.length > 0) {
-      this.setState({
-        selectedItem: this.items[0],
-      });
-    }
-
     window.addEventListener('keydown', this.onWindowKeyDown);
   }
 
@@ -75,7 +68,7 @@ export default class Dropdown extends React.Component<Props, State> {
 
   public onItemClick = (e: React.SyntheticEvent<any>, item: Item) => {
     if (item) {
-      this.setState({ selectedItem: item });
+      this.setState({ selectedItem: item.props.id });
       this.toggle(false);
       this.onChange(item);
     }
@@ -90,21 +83,19 @@ export default class Dropdown extends React.Component<Props, State> {
     const { selectedItem } = this.state;
     const key = e.key;
 
-    if (selectedItem == null) return;
-    if (key === 'Enter' || key === 'Escape') return this.toggle(false); // eslint-disable-line
-    if (key !== 'ArrowDown' && key !== 'ArrowUp') return;
-
-    let index = this.items.indexOf(selectedItem);
+    let index = selectedItem;
     const maxIndex = this.items.length - 1;
 
-    if (key === 'ArrowDown') {
+    if (key === 'Enter' || key === 'Escape') {
+      this.toggle(false);
+    } else if (key === 'ArrowDown') {
       index = index === maxIndex ? 0 : index + 1;
-    } else {
+    } else if (key === 'ArrowUp') {
       index = index === 0 ? maxIndex : index - 1;
     }
 
-    this.setState({ selectedItem: this.items[index] });
-    this.onChange(this.items[index]);
+    if (selectedItem !== index) this.onChange(this.items.find(x => x.props.id === index));
+    this.setState({ selectedItem: index });
   };
 
   public toggle = (flag: boolean) => {
@@ -118,27 +109,29 @@ export default class Dropdown extends React.Component<Props, State> {
     const { onChange } = this.props;
 
     if (typeof onChange === 'function') {
-      onChange(item.props.id);
+      onChange(item.props.value);
     }
   };
 
   public render() {
-    const {
-      ripple, customRippleBehavior, children, style,
-    } = this.props;
+    const { children, style } = this.props;
     const { activated, listHeight, selectedItem } = this.state;
 
-    this.items = [];
+    this.items = this.items.filter(Boolean);
 
     const events = {
       onClick: this.onClick,
       ...getRippleEvents(this.props, () => this.ripples),
     };
 
+    let id = 0;
+
+    const item = this.items.find(x => x.props.id === selectedItem);
+
     return (
       <Root onMouseDown={this.onMouseDown} style={style}>
         <Container {...events}>
-          <Name>{selectedItem && selectedItem.props.children}</Name>
+          <Name>{item && item.props.children}</Name>
           <Icon activated={activated} />
           <Ripples ref={r => (this.ripples = r)} color="#000" />
         </Container>
@@ -148,7 +141,8 @@ export default class Dropdown extends React.Component<Props, State> {
               React.cloneElement(el, {
                 ref: (r: Item) => r != null && this.items.push(r),
                 onClick: this.onItemClick,
-                selectedItem,
+                selected: selectedItem === id,
+                id: id++,
               }))}
           </List>
         )}
