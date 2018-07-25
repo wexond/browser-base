@@ -73,6 +73,6 @@
   },
   "dependencies": {
     "electron-updater": "2.21.10",
-    "wexond-package-manager": "1.3.5"
+    "wexond-package-manager": "1.4.5"
   }
 }
