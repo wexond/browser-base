@@ -76,6 +76,9 @@ export const Icon = styled.div`
 `;
 
 export const Label = styled.div`
+  max-width: 96px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
   color: #fff;
   margin-top: 8px;
