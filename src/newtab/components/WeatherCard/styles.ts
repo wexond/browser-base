@@ -77,6 +77,6 @@ export const ActionsContainer = styled(Actions)`
   border-top: 1px solid rgba(0, 0, 0, 0.12);
 
   ${({ expanded }: { expanded: boolean }) => `
-    margin-top: ${expanded ? 16 : 8}px,
+    margin-top: ${expanded ? 16 : 8}px;
   `};
 `;

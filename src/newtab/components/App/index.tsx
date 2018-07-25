@@ -105,6 +105,9 @@ class App extends React.Component {
           <Credits>
             APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and
             <a href="https://newsapi.org/"> News API</a>
+            <br />
+            Icons for temporary usage created by&nbsp;
+            <a href="https://www.uplabs.com/kevinttob">Kevin Aguilar</a>
           </Credits>
         </Content>
       </StyledApp>
