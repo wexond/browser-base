@@ -33,8 +33,8 @@ export interface TitleProps {
 
 export const Title = styled.div`
   position: relative;
-  left: 24px;
-  margin-right: 24px;
+  left: 16px;
+  margin-right: 16px;
 
   ${typography.robotoRegular()};
   ${userSelection.noUserSelect()};
