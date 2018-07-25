@@ -137,7 +137,7 @@ export default class Tab extends React.Component<TabProps, {}> {
     const selected = workspace.selectedTab === tab.id;
 
     const {
-      title, isRemoving, hovered, dragging, favicon, loading
+      title, isRemoving, hovered, dragging, favicon, loading,
     } = tab;
 
     let rightBorderVisible = true;
