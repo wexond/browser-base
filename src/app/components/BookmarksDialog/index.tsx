@@ -17,7 +17,7 @@ export default class BookmarksDialog extends Component {
 
   private dropDown: Dropdown;
 
-  private bookmarkFolder: any = null;
+  private bookmarkFolderID: number;
 
   public onLoad = () => {
     const bookmark = Store.getSelectedTab().bookmark;
@@ -28,7 +28,7 @@ export default class BookmarksDialog extends Component {
 
       if (bookmark.id !== -1) {
         const items = this.dropDown.items.filter(
-          r => r.props.data != null && r.props.data.id === bookmark.parent,
+          r => r.props.id != null && r.props.id === bookmark.parent,
         );
 
         if (items.length !== 0) {
@@ -65,7 +65,7 @@ export default class BookmarksDialog extends Component {
   public onDoneClick = async () => {
     const bookmark = Store.getSelectedTab().bookmark;
     const name = this.textField.getValue();
-    const parent = this.bookmarkFolder == null ? -1 : this.bookmarkFolder.id;
+    const parent = this.bookmarkFolderID == null ? -1 : this.bookmarkFolderID;
 
     await db.bookmarks
       .where('id')
@@ -85,8 +85,8 @@ export default class BookmarksDialog extends Component {
     }
   };
 
-  public onDropdownChange = (data: any) => {
-    this.bookmarkFolder = data;
+  public onDropdownChange = (id: number) => {
+    this.bookmarkFolderID = id;
   };
 
   public render() {
@@ -114,7 +114,7 @@ export default class BookmarksDialog extends Component {
         >
           <Dropdown.Item>Home</Dropdown.Item>
           {Store.getBookmarkFolders().map((item: BookmarkItem, key: any) => (
-            <Dropdown.Item data={item} key={key}>
+            <Dropdown.Item id={item.id} key={key}>
               {item.title}
             </Dropdown.Item>
           ))}

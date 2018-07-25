@@ -11,7 +11,7 @@ export interface Props {
   customRippleBehavior?: boolean;
   children?: any;
   style?: any;
-  onChange?: (data?: any, item?: Item, element?: this) => void;
+  onChange?: (id?: number) => void;
 }
 
 export interface State {
@@ -118,7 +118,7 @@ export default class Dropdown extends React.Component<Props, State> {
     const { onChange } = this.props;
 
     if (typeof onChange === 'function') {
-      onChange(item.props.data, item, this);
+      onChange(item.props.id);
     }
   };
 
