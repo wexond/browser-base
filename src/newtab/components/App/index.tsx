@@ -1,40 +1,28 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
 
+import Store from '../../store';
 import Preloader from '../../../shared/components/Preloader';
-
 import { getWeather } from '../../utils/weather';
 import { getNews } from '../../utils/news';
+import News from '../News';
+import WeatherCard from '../WeatherCard';
 
 import {
-  TimeUnit, TemperatureUnit, Languages, Countries,
+  TimeUnit, TemperatureUnit, WeatherLanguages, Countries,
 } from '../../../shared/enums';
-
 import {
   StyledApp, Content, Credits, Column,
 } from './styles';
 
-import WeatherCard from '../WeatherCard';
-import News from '../News';
-
-export interface IState {
-  contentVisible: boolean;
-  weatherData?: any;
-  columns?: any;
-}
-
-class App extends React.Component<{}, IState> {
+@observer
+class App extends React.Component {
   private newsData: any[];
 
-  public state: IState = {
-    contentVisible: false,
-    columns: [],
-  };
-
   componentDidMount() {
-    this.loadData();
-
     window.addEventListener('resize', this.onResize);
+    this.loadData();
   }
 
   public onResize = () => {
@@ -46,31 +34,22 @@ class App extends React.Component<{}, IState> {
       columns = this.getColumns(2);
     }
 
-    this.setState({ columns });
+    Store.columns = columns;
   };
 
   async loadData() {
     const weatherData = await getWeather(
-      'warszawa',
-      Languages.en,
+      'warsaw',
+      WeatherLanguages.en,
       TemperatureUnit.Celsius,
       TimeUnit.TwentyFourHours,
     );
 
     this.newsData = await getNews(Countries.us);
-    let columns = this.getColumns(1);
+    this.onResize();
 
-    if (window.innerWidth > 1128) {
-      columns = this.getColumns(3);
-    } else if (window.innerWidth > 752) {
-      columns = this.getColumns(2);
-    }
-
-    this.setState({
-      weatherData,
-      columns,
-      contentVisible: true,
-    });
+    Store.weatherForecast = weatherData;
+    Store.contentVisible = true;
   }
 
   public getColumns = (columnsCount: number) => {
@@ -96,7 +75,7 @@ class App extends React.Component<{}, IState> {
   };
 
   public render() {
-    const { contentVisible, weatherData, columns } = this.state;
+    const { weatherForecast, contentVisible, columns } = Store;
 
     const preloaderStyle = {
       position: 'fixed',
@@ -110,15 +89,15 @@ class App extends React.Component<{}, IState> {
         {!contentVisible && <Preloader style={preloaderStyle} />}
         <Content visible={contentVisible}>
           <Column>
-            <WeatherCard data={weatherData} />
-            <News data={columns[0]} />
+            <WeatherCard data={weatherForecast} />
+            {columns.length > 0 && <News data={columns[0]} />}
           </Column>
-          {columns[1] && (
+          {columns.length > 1 && (
             <Column>
               <News data={columns[1]} />
             </Column>
           )}
-          {columns[2] && (
+          {columns.length > 2 && (
             <Column>
               <News data={columns[2]} />
             </Column>
