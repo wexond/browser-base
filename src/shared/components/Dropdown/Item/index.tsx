@@ -28,9 +28,7 @@ export default class Item extends React.Component<IProps, {}> {
   };
 
   public render() {
-    const {
-      ripple, customRippleBehavior, children, selectedItem,
-    } = this.props;
+    const { children, selectedItem } = this.props;
     const selected = selectedItem === this;
 
     const events = {
