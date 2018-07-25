@@ -64,7 +64,7 @@ export default class Toolbar extends React.Component {
   };
 
   public render() {
-    const star = Store.isBookmarkSavedTab() ? starIcon : starBorderIcon;
+    const star = Store.isBookmarkSavedInSelectedTab() ? starIcon : starBorderIcon;
 
     return (
       <StyledToolbar isHTMLFullscreen={Store.isHTMLFullscreen}>

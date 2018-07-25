@@ -147,7 +147,8 @@ class Store {
     return this.bookmarks.filter(r => r.url === url).length !== 0;
   }
 
-  public isBookmarkSavedTab(tab?: Tab) {
+  public isBookmarkSavedInSelectedTab(tab?: Tab) {
+/*
     const workspace = this.getCurrentWorkspace();
     const selectedTab = workspace && workspace.getSelectedTab();
 
@@ -160,6 +161,8 @@ class Store {
     }
 
     return this.isBookmarkSaved(tab.url);
+    */
+   return false;
   }
 }
 
