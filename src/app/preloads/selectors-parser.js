@@ -246,8 +246,8 @@ process.on('message', data => {
     for (const selector of selectors) {
       for (const node of virtualNodes) {
         if (selector.attributes) {
-          if (matches(node, selector.attributes)) {
-            if (verified.indexOf(selector.raw) === -1) verified.push(selector.raw);
+          if (matches(node, selector.attributes) && verified.indexOf(selector.raw) === -1) {
+            verified.push(selector.raw);
           }
         } else if (verified.indexOf(selector.raw) === -1) verified.push(selector.raw);
       }

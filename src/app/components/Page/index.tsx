@@ -18,6 +18,8 @@ export default class extends React.Component<{ page: Page }, {}> {
 
   private tab: Tab;
 
+  private onURLChange: any;
+
   public componentDidMount() {
     const { page } = this.props;
     const { id } = page;
@@ -34,7 +36,7 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.webview.addEventListener('leave-html-full-screen', this.onFullscreenLeave);
 
     // Custom event: fires when webview URL changes.
-    setInterval(() => {
+    this.onURLChange = setInterval(() => {
       const url = this.webview.getURL();
       if (url !== tab.url) {
         this.tab.url = url;
@@ -51,6 +53,8 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.webview.removeEventListener('page-favicon-updated', this.onPageFaviconUpdated);
     this.webview.removeEventListener('enter-html-full-screen', this.onFullscreenEnter);
     this.webview.removeEventListener('leave-html-full-screen', this.onFullscreenLeave);
+
+    clearInterval(this.onURLChange);
 
     Store.isFullscreen = false;
   }
