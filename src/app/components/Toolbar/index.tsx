@@ -1,5 +1,6 @@
 import React, { SyntheticEvent } from 'react';
 import { observer } from 'mobx-react';
+
 import NavigationButtons from '../NavigationButtons';
 import ToolbarSeparator from './Separator';
 import {
@@ -12,8 +13,6 @@ import ToolbarButton from './Button';
 import BookmarksDialog from '../BookmarksDialog';
 import { Platforms } from '../../enums';
 import WindowsControls from '../WindowsControls';
-import { TOOLBAR_HEIGHT } from '../../constants';
-import Tab from '../../models/tab';
 import db from '../../../shared/models/app-database';
 import BookmarkItem from '../../../shared/models/bookmark-item';
 import { addBookmark } from '../../../menu/bookmarks/utils';
@@ -43,29 +42,24 @@ export default class Toolbar extends React.Component {
   };
 
   public onStarIconClick = async () => {
-    Store.bookmarksDialogVisible = !Store.bookmarksDialogVisible;
-
     const selectedTab = Store.getSelectedTab();
 
-    if (!selectedTab.bookmark) {
-      const data: BookmarkItem = await addBookmark({
+    let bookmark: BookmarkItem = Store.bookmarks.find(x => x.url === selectedTab.url);
+
+    if (!bookmark) {
+      bookmark = await addBookmark({
         title: selectedTab.title,
         url: selectedTab.url,
         parent: -1,
         type: 'item',
         favicon: selectedTab.favicon,
       });
-
-      selectedTab.bookmark = data;
-      Store.bookmarks.push(data);
     }
 
-    Store.bookmarksDialog.onLoad();
+    Store.bookmarksDialog.show(bookmark);
   };
 
   public render() {
-    const star = Store.isBookmarkSavedTab() ? starIcon : starBorderIcon;
-
     return (
       <StyledToolbar isHTMLFullscreen={Store.isHTMLFullscreen}>
         <Handle />
@@ -79,7 +73,7 @@ export default class Toolbar extends React.Component {
         <div style={{ position: 'relative' }}>
           <ToolbarButton
             size={20}
-            icon={star}
+            icon={Store.isStarred ? starIcon : starBorderIcon}
             onMouseDown={this.onStarIconMouseDown}
             onClick={this.onStarIconClick}
           />

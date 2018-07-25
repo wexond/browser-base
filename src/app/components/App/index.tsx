@@ -122,8 +122,6 @@ class App extends React.Component {
     });
 
     Store.bookmarks = await db.bookmarks.toArray();
-
-    // ipcRenderer.send(ipcMessages.PLUGIN_INSTALL, 'wexond/wexond-example-plugin');
   }
 
   public componentWillUnmount() {
