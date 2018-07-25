@@ -93,35 +93,40 @@ export const getWeather = async (
   timeUnit: TimeUnit = TimeUnit.TwentyFourHours,
   apiKey: string = WEATHER_API_KEY,
 ) => {
-  const celcius = tempUnit === TemperatureUnit.Celsius;
-  const units = celcius ? 'metric' : 'imperial';
-  const windsUnit = celcius ? 'km/h' : 'mph';
+  try {
+    const celcius = tempUnit === TemperatureUnit.Celsius;
+    const units = celcius ? 'metric' : 'imperial';
+    const windsUnit = celcius ? 'km/h' : 'mph';
 
-  const countryCode = WeatherLanguages[lang];
+    const countryCode = WeatherLanguages[lang];
 
-  const currentWeatherURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=${countryCode}&units=${units}`;
-  const weekWeatherURL = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&lang=${countryCode}&units=${units}`;
+    const currentWeatherURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=${countryCode}&units=${units}`;
+    const weekWeatherURL = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&lang=${countryCode}&units=${units}`;
 
-  const currentWeather = JSON.parse(await requestURL(currentWeatherURL));
-  const weekWeather = JSON.parse(await requestURL(weekWeatherURL));
+    const currentWeather = JSON.parse(await requestURL(currentWeatherURL));
+    const weekWeather = JSON.parse(await requestURL(weekWeatherURL));
 
-  const coord = currentWeather.coord;
-  const timeZoneOffset = await getTimeZoneOffset(coord.lat, coord.lon);
+    const coord = currentWeather.coord;
+    const timeZoneOffset = await getTimeZoneOffset(coord.lat, coord.lon);
 
-  const dailyForecast = getDaily(currentWeather, weekWeather, timeZoneOffset);
-  const weeklyForecast = getWeekly(weekWeather, timeZoneOffset);
+    const dailyForecast = getDaily(currentWeather, weekWeather, timeZoneOffset);
+    const weeklyForecast = getWeekly(weekWeather, timeZoneOffset);
 
-  const forecast: WeatherForecast = {
-    daily: dailyForecast,
-    weekly: weeklyForecast,
-    windsUnit,
-    timeUnit,
-    tempUnit,
-    lang,
-    city,
-  };
+    const forecast: WeatherForecast = {
+      daily: dailyForecast,
+      weekly: weeklyForecast,
+      windsUnit,
+      timeUnit,
+      tempUnit,
+      lang,
+      city,
+    };
 
-  return forecast;
+    return forecast;
+  } catch (e) {
+    console.warn(e); // eslint-disable-line
+    return null;
+  }
 };
 
 /**
