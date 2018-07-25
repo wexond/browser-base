@@ -23,14 +23,14 @@ export interface IProps {
   menu?: ContextMenu;
   i?: number;
   visible?: boolean;
-  hide?: boolean;
   disabled?: boolean;
   hideMenuOnClick?: boolean;
   dense?: boolean;
+  menuVisible?: boolean;
 }
 
 export interface IState {
-  visible: boolean;
+  animation: boolean;
 }
 
 export default class MenuItem extends React.Component<IProps, IState> {
@@ -38,10 +38,11 @@ export default class MenuItem extends React.Component<IProps, IState> {
     rippleColor: colors.black,
     ripple: true,
     hideMenuOnClick: true,
+    visible: true,
   };
 
   public state: IState = {
-    visible: false,
+    animation: false,
   };
 
   private ripples: Ripples;
@@ -49,16 +50,16 @@ export default class MenuItem extends React.Component<IProps, IState> {
   private timeout: any;
 
   public componentWillReceiveProps(nextProps: IProps) {
-    const { visible } = this.props;
+    const { menuVisible } = this.props;
 
-    if (nextProps.visible && !visible) {
+    if (nextProps.menuVisible && !menuVisible) {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
-        this.setState({ visible: true });
-      }, nextProps.i * 25);
-    } else if (!nextProps.visible) {
+        this.setState({ animation: true });
+      }, nextProps.i * 20);
+    } else if (!nextProps.menuVisible) {
       clearTimeout(this.timeout);
-      this.setState({ visible: false });
+      this.setState({ animation: false });
     }
   }
 
@@ -85,9 +86,9 @@ export default class MenuItem extends React.Component<IProps, IState> {
 
   public render() {
     const {
-      rippleColor, hide, disabled, dense, children,
+      rippleColor, visible, disabled, dense, children,
     } = this.props;
-    const { visible } = this.state;
+    const { animation } = this.state;
 
     const events = {
       ...getEvents(this.props),
@@ -97,7 +98,13 @@ export default class MenuItem extends React.Component<IProps, IState> {
     };
 
     return (
-      <StyledMenuItem dense={dense} hide={hide} visible={visible} {...events}>
+      <StyledMenuItem
+        disabled={disabled}
+        dense={dense}
+        animation={animation}
+        visible={visible}
+        {...events}
+      >
         <Title dense={dense} disabled={disabled}>
           {children}
         </Title>

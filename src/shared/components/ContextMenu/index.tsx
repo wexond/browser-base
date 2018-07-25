@@ -9,7 +9,6 @@ export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
 export interface IProps {
   visible?: boolean;
-  large?: boolean;
   onClick?: ButtonEvent;
   onMouseDown?: ButtonEvent;
   onMouseUp?: ButtonEvent;
@@ -18,6 +17,7 @@ export interface IProps {
   style?: any;
   className?: string;
   dense?: boolean;
+  width?: number;
   hideMenuOnMouseDown?: boolean;
 }
 
@@ -95,7 +95,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
   public render() {
     const { visible, height, heightTransition } = this.state;
     const {
-      large, style, className, dense, hideMenuOnMouseDown, children,
+      style, className, dense, hideMenuOnMouseDown, children, width,
     } = this.props;
 
     let i = 1;
@@ -108,14 +108,14 @@ export default class ContextMenu extends React.Component<IProps, IState> {
     return (
       <StyledMenu
         innerRef={r => (this.menu = r)}
-        large={large}
+        width={width}
         visible={visible}
         dense={dense}
         className={className}
         style={{
           ...style,
           height,
-          transition: `0.2s opacity, 0.2s margin-top ${heightTransition ? ', 0.2s height' : ''}`,
+          transition: `0.2s opacity, 0.3s margin-top ${heightTransition ? ', 0.3s height' : ''}`,
         }}
         {...events}
       >
@@ -124,7 +124,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
             menu: this,
             dense,
             i: i++,
-            visible,
+            menuVisible: visible,
             hideMenuOnClick: hideMenuOnMouseDown,
           }))}
       </StyledMenu>
