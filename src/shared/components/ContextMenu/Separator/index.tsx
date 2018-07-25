@@ -5,7 +5,7 @@ import { StyledSeparator } from './styles';
 export interface IProps {
   i?: number;
   visible?: boolean;
-  menuVisible: boolean;
+  menuVisible?: boolean;
 }
 
 export default class MenuSeparator extends React.Component<IProps, {}> {
