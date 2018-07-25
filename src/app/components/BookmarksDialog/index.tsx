@@ -17,7 +17,7 @@ export default class BookmarksDialog extends Component {
 
   private dropdown: Dropdown;
 
-  private bookmarkFolder: any = null;
+  private bookmarkFolderID: number;
 
   private bookmark: BookmarkItem;
 
@@ -31,9 +31,7 @@ export default class BookmarksDialog extends Component {
 
       this.bookmark = bookmark;
 
-      const item = this.dropdown.items.find(
-        x => x.props.data != null && x.props.data.id === bookmark.parent,
-      );
+      const item = this.dropdown.items.find(x => x.props.id === bookmark.parent);
 
       if (item) {
         this.dropdown.setState({
@@ -58,7 +56,7 @@ export default class BookmarksDialog extends Component {
 
   public onDoneClick = async () => {
     const name = this.textField.getValue();
-    const parent = this.bookmarkFolder == null ? -1 : this.bookmarkFolder.id;
+    const parent = this.bookmarkFolderID == null ? -1 : this.bookmarkFolderID;
 
     await db.bookmarks
       .where('id')
@@ -82,8 +80,8 @@ export default class BookmarksDialog extends Component {
     }
   };
 
-  public onDropdownChange = (data: any) => {
-    this.bookmarkFolder = data;
+  public onDropdownChange = (id: number) => {
+    this.bookmarkFolderID = id;
   };
 
   public render() {
@@ -111,7 +109,7 @@ export default class BookmarksDialog extends Component {
         >
           <Dropdown.Item>Home</Dropdown.Item>
           {getBookmarkFolders().map((item: BookmarkItem, key: any) => (
-            <Dropdown.Item data={item} key={key}>
+            <Dropdown.Item id={item.id} key={key}>
               {item.title}
             </Dropdown.Item>
           ))}
