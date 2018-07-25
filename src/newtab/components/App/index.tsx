@@ -8,6 +8,7 @@ import { getWeather } from '../../utils/weather';
 import { getNews } from '../../utils/news';
 import News from '../News';
 import WeatherCard from '../WeatherCard';
+import PatreonsCard from '../PatreonsCard';
 
 import {
   TimeUnit, TemperatureUnit, WeatherLanguages, Countries,
@@ -92,6 +93,7 @@ class App extends React.Component {
           </Column>
           {columns.length > 1 && (
             <Column>
+              <PatreonsCard />
               <News data={columns[1]} />
             </Column>
           )}
