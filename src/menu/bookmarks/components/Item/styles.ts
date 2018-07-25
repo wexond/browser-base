@@ -11,20 +11,15 @@ export const Title = styled(PageItem.Title)`
   margin-right: 12px;
   padding: 8px;
   border-radius: 4px;
+  display: table;
   will-change: background-color;
   transition: 0.2s background-color;
-  flex: 1;
 
-  ${({ isFolder }: { isFolder: boolean }) => css`
-    ${isFolder
-      && css`
-        cursor: text;
+  cursor: text;
 
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.06);
-        }
-      `};
-  `};
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
 `;
 
 export const Input = styled.input`
