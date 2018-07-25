@@ -17,7 +17,7 @@ export default class BookmarksDialog extends Component {
 
   private dropdown: Dropdown;
 
-  private bookmarkFolderID: number;
+  private bookmarkFolder: number = -1;
 
   private bookmark: BookmarkItem;
 
@@ -31,11 +31,11 @@ export default class BookmarksDialog extends Component {
 
       this.bookmark = bookmark;
 
-      const item = this.dropdown.items.find(x => x.props.id === bookmark.parent);
+      const item = this.dropdown.items.find(x => x.props.value === bookmark.parent);
 
       if (item) {
         this.dropdown.setState({
-          selectedItem: item,
+          selectedItem: item.props.id,
         });
       }
     }
@@ -56,20 +56,19 @@ export default class BookmarksDialog extends Component {
 
   public onDoneClick = async () => {
     const name = this.textField.getValue();
-    const parent = this.bookmarkFolderID == null ? -1 : this.bookmarkFolderID;
 
     await db.bookmarks
       .where('id')
       .equals(this.bookmark.id)
       .modify({
         title: name,
-        parent,
+        parent: this.bookmarkFolder,
       });
 
     const item = Store.bookmarks.find(x => x.id === this.bookmark.id);
 
     item.title = name;
-    item.parent = parent;
+    item.parent = this.bookmarkFolder;
 
     Store.bookmarksDialogVisible = false;
   };
@@ -81,7 +80,7 @@ export default class BookmarksDialog extends Component {
   };
 
   public onDropdownChange = (id: number) => {
-    this.bookmarkFolderID = id;
+    this.bookmarkFolder = id;
   };
 
   public render() {
@@ -107,9 +106,9 @@ export default class BookmarksDialog extends Component {
           onChange={this.onDropdownChange}
           style={dropDownStyle}
         >
-          <Dropdown.Item>Home</Dropdown.Item>
+          <Dropdown.Item value={-1}>Home</Dropdown.Item>
           {getBookmarkFolders().map((item: BookmarkItem, key: any) => (
-            <Dropdown.Item id={item.id} key={key}>
+            <Dropdown.Item value={item.id} key={key}>
               {item.title}
             </Dropdown.Item>
           ))}
