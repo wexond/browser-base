@@ -8,7 +8,7 @@ export interface Props {
   selectedItem?: Item; // eslint-disable-line
   ripple?: boolean;
   customRippleBehavior?: boolean;
-  data?: any;
+  id?: number;
 }
 
 export default class Item extends React.Component<Props, {}> {
