@@ -131,6 +131,7 @@ export default class Item extends React.Component<IProps, IState> {
             visible={inputVisible}
             onClick={this.onInputMouseEvent}
             onMouseDown={this.onInputMouseEvent}
+            placeholder="Name"
           />
         )}
       </Root>

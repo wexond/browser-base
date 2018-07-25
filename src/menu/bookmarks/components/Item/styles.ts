@@ -53,4 +53,8 @@ export const Input = styled.input`
     opacity: ${visible ? 1 : 0};
     z-index: ${visible ? 2 : -1};
   `};
+
+  &::placeholder {
+    opacity: ${opacity.light.secondaryText};
+  }
 `;
