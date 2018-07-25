@@ -139,7 +139,7 @@ class App extends React.Component {
         <Toolbar />
         <Pages />
         <ContextMenu
-          large
+          width={256}
           dense
           ref={(r: ContextMenu) => (Store.pageMenu = r)}
           onMouseDown={e => e.stopPropagation()}
@@ -150,6 +150,29 @@ class App extends React.Component {
             zIndex: 999,
           }}
         >
+          <ContextMenu.Item onClick={this.onInspectElementClick}>
+            Open link in new tab
+          </ContextMenu.Item>
+          <ContextMenu.Item disabled>Open link in new window</ContextMenu.Item>
+          <ContextMenu.Item disabled>Open link in new incognito window</ContextMenu.Item>
+          <ContextMenu.Item disabled>Save link as</ContextMenu.Item>
+          <ContextMenu.Item onClick={this.onInspectElementClick}>
+            Copy link address
+          </ContextMenu.Item>
+          <ContextMenu.Separator />
+          <ContextMenu.Item onClick={this.onInspectElementClick}>
+            Open image in new tab
+          </ContextMenu.Item>
+          <ContextMenu.Item onClick={this.onInspectElementClick}>Save image as</ContextMenu.Item>
+          <ContextMenu.Item onClick={this.onInspectElementClick}>Copy image</ContextMenu.Item>
+          <ContextMenu.Item onClick={this.onInspectElementClick}>
+            Copy image address
+          </ContextMenu.Item>
+          <ContextMenu.Separator />
+          <ContextMenu.Item onClick={this.onInspectElementClick}>Print</ContextMenu.Item>
+          <ContextMenu.Item disabled>Save as</ContextMenu.Item>
+          <ContextMenu.Separator />
+          <ContextMenu.Item disabled>View source</ContextMenu.Item>
           <ContextMenu.Item onClick={this.onInspectElementClick}>Inspect element</ContextMenu.Item>
         </ContextMenu>
         <GlobalMenu />
