@@ -11,29 +11,27 @@ import { Content, Container, Items } from './styles';
 @observer
 class Bookmarks extends React.Component {
   public componentDidMount() {
-    this.loadBookmarks();
-  }
-
-  public loadBookmarks = async () => {
-    db.favicons.each(favicon => {
-      if (AppStore.favicons[favicon.url] == null && favicon.favicon.byteLength !== 0) {
-        AppStore.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));
-      }
-    });
+    db.favicons
+      .each(favicon => {
+        if (AppStore.favicons[favicon.url] == null && favicon.favicon.byteLength !== 0) {
+          AppStore.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));
+        }
+      })
+      .then(() => {
+        Store.bookmarks = AppStore.bookmarks.filter(x => x.parent === Store.currentTree);
+      });
 
     Store.goTo(-1);
-  };
+  }
 
   public render() {
-    const items = AppStore.bookmarks.filter(x => x.parent === Store.currentTree);
-
     return (
       <React.Fragment>
         <TreeBar />
         <Content>
           <Container>
-            {items.length > 0 && (
-              <Items>{items.map(data => <Item data={data} key={data.id} />)}</Items>
+            {Store.bookmarks.length > 0 && (
+              <Items>{Store.bookmarks.map(data => <Item data={data} key={data.id} />)}</Items>
             )}
           </Container>
         </Content>
