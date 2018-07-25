@@ -18,8 +18,6 @@ import {
 
 @observer
 class App extends React.Component {
-  private newsData: any[];
-
   componentDidMount() {
     window.addEventListener('resize', this.onResize);
     this.loadData();
@@ -45,29 +43,29 @@ class App extends React.Component {
       TimeUnit.TwentyFourHours,
     );
 
-    this.newsData = await getNews(Countries.us);
-    this.onResize();
-
     Store.weatherForecast = weatherData;
+    Store.newsData = await getNews(Countries.us);
+
+    this.onResize();
     Store.contentVisible = true;
   }
 
   public getColumns = (columnsCount: number) => {
+    const { newsData } = Store;
     const columns = [];
-
-    const itemsPerCol = Math.floor(this.newsData.length / columnsCount);
+    const itemsPerCol = Math.floor(newsData.length / columnsCount);
 
     for (let i = 0; i < columnsCount; i++) {
       if (i < columnsCount) {
         if (i === 0) {
-          columns.push(this.newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1) - 1));
+          columns.push(newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1) - 1));
         } else if (i === 1) {
-          columns.push(this.newsData.slice(i * (itemsPerCol - 1), itemsPerCol * (i + 1)));
+          columns.push(newsData.slice(i * (itemsPerCol - 1), itemsPerCol * (i + 1)));
         } else {
-          columns.push(this.newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1)));
+          columns.push(newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1)));
         }
       } else {
-        columns.push(this.newsData.slice(i * itemsPerCol, this.newsData.length));
+        columns.push(newsData.slice(i * itemsPerCol, newsData.length));
       }
     }
 
@@ -102,13 +100,15 @@ class App extends React.Component {
               <News data={columns[2]} />
             </Column>
           )}
-          <Credits>
-            APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and
-            <a href="https://newsapi.org/"> News API</a>
-            <br />
-            Icons for temporary usage created by&nbsp;
-            <a href="https://www.uplabs.com/kevinttob">Kevin Aguilar</a>
-          </Credits>
+          {!navigator.onLine && (
+            <Credits>
+              APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and
+              <a href="https://newsapi.org/"> News API</a>
+              <br />
+              Icons for temporary usage created by&nbsp;
+              <a href="https://www.uplabs.com/kevinttob">Kevin Aguilar</a>
+            </Credits>
+          )}
         </Content>
       </StyledApp>
     );
