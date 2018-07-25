@@ -1,7 +1,13 @@
-import { ipcRenderer } from 'electron';
+import {
+  ipcRenderer, clipboard, remote, nativeImage,
+} from 'electron';
 import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
 import React from 'react';
+import { createWriteStream } from 'fs';
+import { basename, extname } from 'path';
+import http from 'http';
+import { parse } from 'url';
 
 import { StyledApp } from './styles';
 import Store from '../../store';
@@ -17,6 +23,8 @@ import { ButtonType } from '../../../shared/enums';
 import colors from '../../../shared/defaults/colors';
 import ipcMessages from '../../../shared/defaults/ipc-messages';
 import { ContextMenuMode } from '../../enums';
+
+const { dialog } = remote;
 
 @observer
 class App extends React.Component {
@@ -134,6 +142,79 @@ class App extends React.Component {
     ipcRenderer.send(ipcMessages.UPDATE_RESTART_AND_INSTALL);
   };
 
+  public onOpenLinkInNewTabClick = () => {
+    const { linkURL } = Store.webviewContextMenuParams;
+    Store.getCurrentWorkspace().addTab(linkURL, false);
+  };
+
+  public onCopyLinkAddressClick = () => {
+    const { linkURL } = Store.webviewContextMenuParams;
+    clipboard.clear();
+    clipboard.writeText(linkURL);
+  };
+
+  public onOpenImageInNewTabClick = () => {
+    const { srcURL } = Store.webviewContextMenuParams;
+    Store.getCurrentWorkspace().addTab(srcURL, false);
+  };
+
+  public onPrintClick = () => {
+    Store.getSelectedPage().webview.print();
+  };
+
+  public onCopyImageClick = () => {
+    const { srcURL } = Store.webviewContextMenuParams;
+    const img = nativeImage.createFromDataURL(srcURL);
+
+    clipboard.clear();
+    clipboard.writeImage(img);
+  };
+
+  public onCopyImageAddressClick = () => {
+    const { srcURL } = Store.webviewContextMenuParams;
+    clipboard.clear();
+    clipboard.writeText(srcURL);
+  };
+
+  public onSaveImageAsClick = () => {
+    const { srcURL } = Store.webviewContextMenuParams;
+    let name = basename(srcURL);
+    let extension = extname(name);
+
+    if (extension.trim() === '') {
+      name = '';
+      extension = srcURL.split('data:image/')[1].split(';base64,')[0];
+
+      const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+      for (let i = 0; i < 16; i++) {
+        name += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+    }
+
+    dialog.showSaveDialog(
+      {
+        defaultPath: `${name}.${extension}`,
+        filters: [
+          {
+            name: '',
+            extensions: [extension],
+          },
+        ],
+      },
+      path => {
+        const file = createWriteStream(path);
+
+        const options = parse(srcURL);
+
+        const request = http.request(options, res => {
+          res.pipe(file);
+        });
+        request.end();
+      },
+    );
+  };
+
   public render() {
     const { mode } = Store.pageMenuData;
 
@@ -157,7 +238,7 @@ class App extends React.Component {
             zIndex: 999,
           }}
         >
-          <ContextMenu.Item visible={imageAndURLLink} onClick={this.onInspectElementClick}>
+          <ContextMenu.Item visible={imageAndURLLink} onClick={this.onOpenLinkInNewTabClick}>
             Open link in new tab
           </ContextMenu.Item>
           <ContextMenu.Item visible={imageAndURLLink} disabled>
@@ -169,24 +250,24 @@ class App extends React.Component {
           <ContextMenu.Item visible={imageAndURLLink} disabled>
             Save link as
           </ContextMenu.Item>
-          <ContextMenu.Item visible={imageAndURLLink} onClick={this.onInspectElementClick}>
+          <ContextMenu.Item visible={imageAndURLLink} onClick={this.onCopyLinkAddressClick}>
             Copy link address
           </ContextMenu.Item>
           <ContextMenu.Separator visible={imageAndURLLink} />
-          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onInspectElementClick}>
+          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onOpenImageInNewTabClick}>
             Open image in new tab
           </ContextMenu.Item>
-          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onInspectElementClick}>
+          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onSaveImageAsClick}>
             Save image as
           </ContextMenu.Item>
-          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onInspectElementClick}>
+          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onCopyImageClick}>
             Copy image
           </ContextMenu.Item>
-          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onInspectElementClick}>
+          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onCopyImageAddressClick}>
             Copy image address
           </ContextMenu.Item>
           <ContextMenu.Separator visible={imageAndURLImage} />
-          <ContextMenu.Item visible={normal} onClick={this.onInspectElementClick}>
+          <ContextMenu.Item visible={normal} onClick={this.onPrintClick}>
             Print
           </ContextMenu.Item>
           <ContextMenu.Item visible={normal} disabled>
