@@ -17,6 +17,8 @@ export default class BookmarksDialog extends Component {
 
   private dropdown: Dropdown;
 
+  private dropDownClicked: boolean = false;
+
   private bookmarkFolder: number = -1;
 
   private bookmark: BookmarkItem;
@@ -41,9 +43,19 @@ export default class BookmarksDialog extends Component {
     }
   };
 
-  public onMouseUp = (e?: SyntheticEvent<any>) => {
+  public onMouseUp = (e?: React.MouseEvent<any>) => {
     e.stopPropagation();
     this.textField.inputElement.blur();
+
+    if (this.dropDownClicked) {
+      this.dropdown.ripples.removeRipples();
+      this.dropDownClicked = false;
+    }
+  };
+
+  public onDropdownMouseUp = (e?: React.MouseEvent<any>) => {
+    e.preventDefault();
+    this.dropDownClicked = true;
   };
 
   public onRemoveClick = async () => {
@@ -104,6 +116,7 @@ export default class BookmarksDialog extends Component {
         <Dropdown
           ref={r => (this.dropdown = r)}
           onChange={this.onDropdownChange}
+          onMouseUp={this.onDropdownMouseUp}
           style={dropDownStyle}
         >
           <Dropdown.Item value={-1}>Home</Dropdown.Item>
