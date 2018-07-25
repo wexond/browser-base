@@ -76,7 +76,7 @@ export default class Button extends React.Component<IProps, {}> {
           className="material-button"
           background={background}
           foreground={foreground}
-          icon={icon != null}
+          icon={icon ? true : undefined}
           style={style}
           type={type}
           theme={theme}

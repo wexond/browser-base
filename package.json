@@ -44,9 +44,6 @@
     "babel-core": "6.26.3",
     "babel-loader": "7.1.4",
     "cross-env": "5.2.0",
-    "css-loader": "0.28.11",
-    "css-select": "2.0.0",
-    "css-what": "2.1.0",
     "dexie": "2.0.4",
     "electron": "2.0.3",
     "electron-builder": "20.15.1",
@@ -60,16 +57,12 @@
     "gsap": "2.0.1",
     "mobx": "5.0.3",
     "mobx-react": "5.2.3",
-    "nwmatcher": "1.4.4",
     "prettier": "1.13.5",
     "prettier-eslint": "8.8.2",
     "prettier-eslint-cli": "4.7.1",
     "react": "16.4.1",
     "react-dom": "16.4.1",
-    "react-flip-move": "3.0.2",
     "react-hot-loader": "4.3.3",
-    "slick": "1.12.2",
-    "ts-loader": "4.4.1",
     "typescript": "2.9.2",
     "typescript-eslint-parser": "16.0.0",
     "url-loader": "1.0.1",
@@ -79,11 +72,8 @@
   },
   "dependencies": {
     "electron-updater": "2.21.10",
-    "jsdom": "^11.11.0",
     "npm": "6.1.0",
     "styled-components": "3.3.3",
-    "wexond-package-manager": "1.3.5",
-    "xmldom-qsa": "^1.0.3",
-    "xmlparser": "^0.1.0"
+    "wexond-package-manager": "1.3.5"
   }
 }

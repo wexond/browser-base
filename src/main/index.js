@@ -1,13 +1,15 @@
 const {
-  app, BrowserWindow, ipcMain, protocol, shell,
+  app, BrowserWindow, ipcMain, protocol,
 } = require('electron');
 const path = require('path');
 const { platform, homedir } = require('os');
 const wpm = require('wexond-package-manager');
+const { autoUpdater } = require('electron-updater');
+
 const ipcMessages = require('../shared/defaults/ipc-messages');
 
 const PROTOCOL = 'wexond';
-const URL_WHITELIST = ['history', 'settings', 'newtab', 'bookmarks', 'plugins', 'extensions'];
+const URL_WHITELIST = ['newtab'];
 
 app.setPath('userData', path.resolve(homedir(), '.wexond'));
 
@@ -50,11 +52,11 @@ const createWindow = () => {
   });
 
   mainWindow.on('enter-full-screen', () => {
-    mainWindow.webContents.send('fullscreen', true);
+    mainWindow.webContents.send(ipcMessages.FULLSCREEN, true);
   });
 
   mainWindow.on('leave-full-screen', () => {
-    mainWindow.webContents.send('fullscreen', false);
+    mainWindow.webContents.send(ipcMessages.FULLSCREEN, false);
   });
 
   mainWindow.webContents.addListener('will-navigate', e => e.preventDefault());
@@ -97,12 +99,24 @@ app.on('ready', () => {
   createWindow();
 });
 
+autoUpdater.on('update-downloaded', ({ version }) => {
+  mainWindow.webContents.send(ipcMessages.UPDATE_AVAILABLE, version);
+});
+
 app.on('window-all-closed', () => {
   if (platform() !== 'darwin') {
     app.quit();
   }
 });
 
-ipcMain.on(ipcMessages.PLUGIN_INSTALL, (event, arg) => {
-  wpm.default.install(arg);
+ipcMain.on(ipcMessages.PLUGIN_INSTALL, (e, repo) => {
+  wpm.default.install(repo);
+});
+
+ipcMain.on(ipcMessages.UPDATE_RESTART_AND_INSTALL, e => {
+  autoUpdater.quitAndInstall();
+});
+
+ipcMain.on(ipcMessages.UPDATE_CHECK, e => {
+  autoUpdater.checkForUpdates();
 });

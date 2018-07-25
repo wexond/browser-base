@@ -2,6 +2,7 @@ import { ipcRenderer } from 'electron';
 import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
 import React from 'react';
+
 import { StyledApp } from './styles';
 import Store from '../../store';
 import Pages from '../Pages';
@@ -10,6 +11,11 @@ import GlobalMenu from '../GlobalMenu';
 import WorkspacesMenu from '../WorkspacesMenu';
 import ContextMenu from '../../../shared/components/ContextMenu';
 import db from '../../../shared/models/app-database';
+import Snackbar from '../../../shared/components/Snackbar';
+import Button from '../../../shared/components/Button';
+import { ButtonType } from '../../../shared/enums';
+import colors from '../../../shared/defaults/colors';
+import ipcMessages from '../../../shared/defaults/ipc-messages';
 
 @observer
 class App extends React.Component {
@@ -19,10 +25,6 @@ class App extends React.Component {
   };
 
   public async componentDidMount() {
-    ipcRenderer.on('fullscreen', (e: Electron.IpcMessageEvent, isFullscreen: boolean) => {
-      Store.isFullscreen = isFullscreen;
-    });
-
     window.addEventListener('mousemove', e => {
       Store.mouse.x = e.pageX;
       Store.mouse.y = e.pageY;
@@ -128,6 +130,11 @@ class App extends React.Component {
     Store.pages = [];
   }
 
+  public onRestartClick = () => {
+    Store.updateInfo.available = false;
+    ipcRenderer.send(ipcMessages.UPDATE_RESTART_AND_INSTALL);
+  };
+
   public render() {
     return (
       <StyledApp>
@@ -149,6 +156,18 @@ class App extends React.Component {
         </ContextMenu>
         <GlobalMenu />
         <WorkspacesMenu />
+        <Snackbar visible={Store.updateInfo.available}>
+          <Snackbar.Content>An update is available</Snackbar.Content>
+          <Snackbar.Actions>
+            <Button
+              type={ButtonType.Text}
+              foreground={colors.blue['500']}
+              onClick={this.onRestartClick}
+            >
+              RESTART
+            </Button>
+          </Snackbar.Actions>
+        </Snackbar>
       </StyledApp>
     );
   }
