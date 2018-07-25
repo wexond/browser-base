@@ -24,14 +24,6 @@ export const StyledMenuItem = styled.div`
   &:hover {
     background-color: #eee;
   }
-
-  &:first-child {
-    margin-top: ${({ dense }) => (dense ? 4 : 8)}px;
-  }
-
-  &:last-child {
-    margin-bottom: ${({ dense }) => (dense ? 4 : 8)}px;
-  }
 `;
 
 export interface TitleProps {
