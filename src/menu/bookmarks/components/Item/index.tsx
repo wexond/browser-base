@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import transparency from '../../../../shared/defaults/opacity';
-import { Title } from './styles';
 import Store from '../../store';
 import BookmarkItem from '../../../../shared/models/bookmark-item';
 import AppStore from '../../../../app/store';
 import { removeItem } from '../../utils';
 import { Root, RemoveIcon, Icon } from '../../../../shared/components/PageItem';
+import { Title, Input } from './styles';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
 const folderIcon = require('../../../../shared/icons/folder.svg');
@@ -17,15 +17,19 @@ export interface IProps {
 
 export interface IState {
   hovered: boolean;
+  inputVisible: boolean;
 }
 
 @observer
 export default class Item extends React.Component<IProps, IState> {
   public state: IState = {
     hovered: false,
+    inputVisible: false,
   };
 
   private cmdPressed = false;
+
+  private input: HTMLInputElement;
 
   public componentDidMount() {
     window.addEventListener('keydown', e => {
@@ -62,6 +66,7 @@ export default class Item extends React.Component<IProps, IState> {
 
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
+    e.stopPropagation();
 
     const { data } = this.props;
     const { id, type } = data;
@@ -75,12 +80,26 @@ export default class Item extends React.Component<IProps, IState> {
     if (data.type === 'folder') {
       e.preventDefault();
       e.stopPropagation();
+
+      this.setState({ inputVisible: true });
+      this.input.focus();
+
+      window.addEventListener('mousedown', this.onWindowMouseDown);
     }
+  };
+
+  public onInputMouseEvent = (e: React.MouseEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+  };
+
+  public onWindowMouseDown = () => {
+    this.setState({ inputVisible: false });
+    window.removeEventListener('mousedown', this.onWindowMouseDown);
   };
 
   public render() {
     const { data } = this.props;
-    const { hovered } = this.state;
+    const { hovered, inputVisible } = this.state;
 
     const isFolder = data.type === 'folder';
     let opacity = 1;
@@ -106,6 +125,14 @@ export default class Item extends React.Component<IProps, IState> {
         <Title isFolder={isFolder} onClick={this.onTitleClick}>
           {data.title}
         </Title>
+        {isFolder && (
+          <Input
+            innerRef={r => (this.input = r)}
+            visible={inputVisible}
+            onClick={this.onInputMouseEvent}
+            onMouseDown={this.onInputMouseEvent}
+          />
+        )}
       </Root>
     );
   }
