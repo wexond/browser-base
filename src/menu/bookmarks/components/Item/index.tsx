@@ -1,12 +1,13 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import transparency from '../../../../shared/defaults/opacity';
-import { Title } from './styles';
+import AppStore from '../../../../app/store';
 import Store from '../../store';
 import BookmarkItem from '../../../../shared/models/bookmark-item';
-import AppStore from '../../../../app/store';
 import { removeItem } from '../../utils';
 import { Root, RemoveIcon, Icon } from '../../../../shared/components/PageItem';
+import db from '../../../../shared/models/app-database';
+import { Title, Input } from './styles';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
 const folderIcon = require('../../../../shared/icons/folder.svg');
@@ -17,15 +18,19 @@ export interface IProps {
 
 export interface IState {
   hovered: boolean;
+  inputVisible: boolean;
 }
 
 @observer
 export default class Item extends React.Component<IProps, IState> {
   public state: IState = {
     hovered: false,
+    inputVisible: false,
   };
 
   private cmdPressed = false;
+
+  private input: HTMLInputElement;
 
   public componentDidMount() {
     window.addEventListener('keydown', e => {
@@ -62,6 +67,7 @@ export default class Item extends React.Component<IProps, IState> {
 
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
+    e.stopPropagation();
 
     const { data } = this.props;
     const { id, type } = data;
@@ -69,15 +75,68 @@ export default class Item extends React.Component<IProps, IState> {
     removeItem(id, type);
   };
 
+  public onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { data } = this.props;
+
+    if (data.type === 'folder') {
+      e.preventDefault();
+      e.stopPropagation();
+
+      this.setState({ inputVisible: true });
+      this.input.value = data.title;
+      this.input.focus();
+
+      window.addEventListener('mousedown', this.onWindowMouseDown);
+    }
+  };
+
+  public onInputMouseEvent = (e: React.MouseEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+  };
+
+  public onWindowMouseDown = () => {
+    this.setState({ inputVisible: false });
+    this.saveFolderName();
+
+    window.removeEventListener('mousedown', this.onWindowMouseDown);
+  };
+
+  public onInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      this.onWindowMouseDown();
+    }
+  };
+
+  public saveFolderName = async () => {
+    const { data } = this.props;
+
+    if (data.type === 'folder') {
+      const title = this.input.value;
+
+      if (title !== data.title && title.length > 0) {
+        await db.bookmarks
+          .where('id')
+          .equals(data.id)
+          .modify({
+            title,
+          });
+
+        const item = AppStore.bookmarks.find(x => x.id === data.id);
+        item.title = title;
+      }
+    }
+  };
+
   public render() {
     const { data } = this.props;
-    const { hovered } = this.state;
+    const { hovered, inputVisible } = this.state;
 
+    const isFolder = data.type === 'folder';
     let opacity = 1;
     let favicon = AppStore.favicons[data.favicon];
 
     if (favicon == null || favicon.trim() === '') {
-      favicon = data.type === 'folder' ? folderIcon : pageIcon;
+      favicon = isFolder ? folderIcon : pageIcon;
       opacity = transparency.light.inactiveIcon;
     }
 
@@ -93,7 +152,19 @@ export default class Item extends React.Component<IProps, IState> {
       >
         <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
         <Icon style={{ opacity }} icon={favicon} />
-        <Title>{data.title}</Title>
+        <Title isFolder={isFolder} onClick={this.onTitleClick}>
+          {data.title}
+        </Title>
+        {isFolder && (
+          <Input
+            innerRef={r => (this.input = r)}
+            visible={inputVisible}
+            onClick={this.onInputMouseEvent}
+            onMouseDown={this.onInputMouseEvent}
+            onKeyPress={this.onInputKeyPress}
+            placeholder="Name"
+          />
+        )}
       </Root>
     );
   }

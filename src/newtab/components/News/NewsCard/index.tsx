@@ -1,7 +1,7 @@
 import React from 'react';
 import { loadImage } from '../../../../shared/utils/network';
 import { getTimeOffset } from '../../../../shared/utils/time';
-import { Card, CardHeader } from '../../../../shared/components/Card';
+import * as Card from '../../../../shared/components/Card';
 
 import {
   Title, Icon, Source, SecondaryText, CardImage, Overline, SourceContainer,
@@ -42,9 +42,9 @@ export default class NewsCard extends React.Component<Props, State> {
 
     return (
       <a href={data.url}>
-        <Card>
+        <Card.Root>
           <CardImage visible={loaded} src={data.urlToImage} />
-          <CardHeader>
+          <Card.Header>
             <Overline>General</Overline>
             <Title>{data.title}</Title>
 
@@ -58,8 +58,8 @@ export default class NewsCard extends React.Component<Props, State> {
                 {data.source.name} - {getTimeOffset(new Date(data.publishedAt), this)}
               </Source>
             </SourceContainer>
-          </CardHeader>
-        </Card>
+          </Card.Header>
+        </Card.Root>
       </a>
     );
   }
