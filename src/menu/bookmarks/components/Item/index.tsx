@@ -12,7 +12,6 @@ import { Title, Input, ActionIcon } from './styles';
 const pageIcon = require('../../../../shared/icons/page.svg');
 const folderIcon = require('../../../../shared/icons/folder.svg');
 const deleteIcon = require('../../../../shared/icons/delete.svg');
-const editIcon = require('../../../../shared/icons/edit.svg');
 
 export interface IProps {
   data: BookmarkItem;
@@ -80,16 +79,14 @@ export default class Item extends React.Component<IProps, IState> {
   public onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { data } = this.props;
 
-    if (data.type === 'folder') {
-      e.preventDefault();
-      e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
 
-      this.setState({ inputVisible: true });
-      this.input.value = data.title;
-      this.input.focus();
+    this.setState({ inputVisible: true });
+    this.input.value = data.title;
+    this.input.focus();
 
-      window.addEventListener('mousedown', this.onWindowMouseDown);
-    }
+    window.addEventListener('mousedown', this.onWindowMouseDown);
   };
 
   public onInputMouseEvent = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -112,20 +109,18 @@ export default class Item extends React.Component<IProps, IState> {
   public saveFolderName = async () => {
     const { data } = this.props;
 
-    if (data.type === 'folder') {
-      const title = this.input.value;
+    const title = this.input.value;
 
-      if (title !== data.title && title.length > 0) {
-        await db.bookmarks
-          .where('id')
-          .equals(data.id)
-          .modify({
-            title,
-          });
+    if (title !== data.title && title.length > 0) {
+      await db.bookmarks
+        .where('id')
+        .equals(data.id)
+        .modify({
+          title,
+        });
 
-        const item = AppStore.bookmarks.find(x => x.id === data.id);
-        item.title = title;
-      }
+      const item = AppStore.bookmarks.find(x => x.id === data.id);
+      item.title = title;
     }
   };
 
@@ -153,20 +148,17 @@ export default class Item extends React.Component<IProps, IState> {
         selected={Store.selectedItems.indexOf(data.id) !== -1}
       >
         <Icon style={{ opacity }} icon={favicon} />
-        <Title isFolder={isFolder} onClick={this.onTitleClick}>
-          {data.title}
-        </Title>
-        {isFolder && (
-          <Input
-            innerRef={r => (this.input = r)}
-            visible={inputVisible}
-            onClick={this.onInputMouseEvent}
-            onMouseDown={this.onInputMouseEvent}
-            onKeyPress={this.onInputKeyPress}
-            placeholder="Name"
-          />
-        )}
-        <ActionIcon icon={editIcon} onClick={this.onEditClick} visible={hovered} />
+        <div style={{ flex: 1 }}>
+          <Title onClick={this.onTitleClick}>{data.title}</Title>
+        </div>
+        <Input
+          innerRef={r => (this.input = r)}
+          visible={inputVisible}
+          onClick={this.onInputMouseEvent}
+          onMouseDown={this.onInputMouseEvent}
+          onKeyPress={this.onInputKeyPress}
+          placeholder="Name"
+        />
         <ActionIcon icon={deleteIcon} onClick={this.onRemoveClick} visible={hovered} />
       </Root>
     );
