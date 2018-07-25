@@ -8,6 +8,8 @@ class Store {
   @observable contentVisible: boolean = false;
 
   @observable columns: any = [];
+
+  @observable newsData: any[];
 }
 
 export default new Store();
