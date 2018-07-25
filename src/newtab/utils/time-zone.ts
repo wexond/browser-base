@@ -1,7 +1,11 @@
 import { requestURL } from '../../shared/utils/network';
 import { TIME_ZONE_API_KEY } from '../../shared/constants';
 
-export const getTimeZone = async (lat: number, lon: number, apiKey: string = TIME_ZONE_API_KEY) => {
+export const getTimeZoneOffset = async (
+  lat: number,
+  lon: number,
+  apiKey: string = TIME_ZONE_API_KEY,
+) => {
   const loc = `${lat}, ${lon}`;
   const currentDate = new Date();
   const timestamp = currentDate.getTime() / 1000 + currentDate.getTimezoneOffset() * 60;
@@ -13,5 +17,15 @@ export const getTimeZone = async (lat: number, lon: number, apiKey: string = TIM
   const offsets = json.dstOffset * 1000 + json.rawOffset * 1000;
   const local = new Date(timestamp * 1000 + offsets);
 
-  return local.getTimezoneOffset() / 60 + new Date().getTimezoneOffset() / 60;
+  return local.getHours() - currentDate.getUTCHours();
+};
+
+export const getTimeInZone = (date: Date, timeZoneOffset: number) => {
+  date = new Date(date.toUTCString());
+
+  const offset = timeZoneOffset * 60 * 60000;
+  const userOffset = date.getTimezoneOffset() * 60000;
+  const timeInZone = new Date(date.getTime() + offset + userOffset);
+
+  return timeInZone;
 };

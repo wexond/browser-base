@@ -1,177 +1,127 @@
 import { requestURL } from '../../shared/utils/network';
-import { WEATHER_API_KEYS } from '../../shared/constants';
+import { WEATHER_API_KEY } from '../../shared/constants';
 import weatherIcons, { WeatherCodes } from '../defaults/weather-icons';
-import {
-  TimeUnit, TemperatureUnit, Languages, Countries,
-} from '../../shared/enums';
-import { capitalizeFirstLetter, capitalizeFirstLetterInEachWord } from '../../shared/utils/strings';
-import { getTimeZone } from './time-zone';
+import { TimeUnit, TemperatureUnit, WeatherLanguages } from '../../shared/enums';
+import { getTimeZoneOffset, getTimeInZone } from './time-zone';
+import WeatherDailyItem from '../models/weather-daily-item';
+import WeatherWeeklyItem from '../models/weather-weekly-item';
+import WeatherForecast from '../models/weather-forecast';
 
-export const convertTemperature = (celsiusTemp: number, tempUnit: TemperatureUnit) => {
-  switch (tempUnit) {
-    case TemperatureUnit.Celsius: {
-      return Math.round(celsiusTemp);
-    }
-    case TemperatureUnit.Fahrenheit: {
-      return Math.round((celsiusTemp * 9) / 5 + 32);
-    }
-    case TemperatureUnit.Kelvin: {
-      return Math.round(celsiusTemp + 273.15);
-    }
-    default: {
-      return null;
-    }
-  }
+const createDailyItem = (data: any, timeZoneOffset: number) => {
+  const item: WeatherDailyItem = {
+    temp: Math.round(data.main.temp),
+    description: data.weather[0].description,
+    precipitation: data.main.humidity,
+    winds: data.wind.speed,
+    icon: weatherIcons[data.weather[0].icon as WeatherCodes],
+    date: getTimeInZone(new Date(data.dt * 1000), timeZoneOffset),
+  };
+
+  return item;
 };
 
-export const convertWindSpeed = (windSpeed: number, tempUnit: TemperatureUnit) => {
-  if (tempUnit === TemperatureUnit.Fahrenheit) {
-    return `${Math.round(windSpeed * 2.23693629)} mph`;
-  }
-  return `${Math.round(windSpeed * 3.6)} km/h`;
-};
+const getDaily = (current: any, weekly: any, timeZoneOffset: number) => {
+  const list: WeatherDailyItem[] = [createDailyItem(current, timeZoneOffset)];
+  const currentDate = new Date();
 
-export const getDailyItem = (json: any, tempUnit: TemperatureUnit) => ({
-  description: capitalizeFirstLetterInEachWord(json.weather[0].description),
-  temp: convertTemperature(json.main.temp, tempUnit),
-  windSpeed: convertWindSpeed(json.wind.speed, tempUnit),
-  icon: weatherIcons[json.weather[0].icon as WeatherCodes],
-  precipitation: json.main.humidity,
-  pressure: json.main.pressure,
-  date: new Date(json.dt * 1000),
-});
+  for (let i = 0; i < weekly.list.length; i++) {
+    const item = weekly.list[i];
+    const date = new Date(item.dt * 1000);
 
-export const getCountryCode = (json: any, contryCode: Countries) => ({
-  countryCode: json.country_code2,
-});
-
-export const requestCountryCode = async (apiKey: string, countryCode: Countries) => {
-  // Powered By IPGeoLocation  https://ipgeolocation.io/
-  try {
-    const url = `https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}`;
-
-    const data = await requestURL(url);
-    const json = JSON.parse(data);
-
-    return getCountryCode(json, countryCode);
-  } catch (e) {
-    console.error(e);
-  }
-
-  return null;
-};
-
-export const requestCurrentWeather = async (
-  city: string,
-  lang: Languages,
-  tempUnit: TemperatureUnit,
-  apiKey: string,
-) => {
-  try {
-    const langCode = Languages[lang];
-    const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=${langCode}&units=metric`;
-
-    const data = await requestURL(url);
-    const json = JSON.parse(data);
-
-    return getDailyItem(json, tempUnit);
-  } catch (e) {
-    console.error(e); // eslint-disable-line no-console
-  }
-
-  return null;
-};
-
-export const requestWeatherForecast = async (
-  city: string,
-  lang: Languages,
-  tempUnit: TemperatureUnit,
-  apiKey: string,
-) => {
-  try {
-    const langCode = Languages[lang];
-    const url = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&lang=${langCode}&units=metric`;
-
-    const data = await requestURL(url);
-    const json = JSON.parse(data);
-
-    const daily = [];
-    const week = [];
-
-    const currentDate = new Date();
-    const timeZoneOffset = currentDate.getTimezoneOffset() / 60;
-
-    let nightTemp = null;
-
-    for (let i = 0; i < json.list.length; i++) {
-      const item = json.list[i];
-      const date = new Date(item.dt * 1000);
-      const hoursDiff = date.getHours() + timeZoneOffset;
-
-      if (date.getDate() === currentDate.getDate()) {
-        daily.push(getDailyItem(item, tempUnit));
-      } else if (hoursDiff === 0) {
-        nightTemp = convertTemperature(item.main.temp, tempUnit);
-      } else if (hoursDiff === 15) {
-        week.push({
-          day: {
-            temp: convertTemperature(item.main.temp, tempUnit),
-            icon: weatherIcons[item.weather[0].icon as WeatherCodes],
-          },
-          night: {
-            temp: nightTemp,
-          },
-          date,
-        });
-      }
-    }
-
-    return { daily, week };
-  } catch (e) {
-    console.error(e); // eslint-disable-line no-console
-  }
-
-  return null;
-};
-
-export const getWeather = async (
-  city: string,
-  lang: Languages,
-  tempUnit: TemperatureUnit = TemperatureUnit.Celsius,
-  timeUnit: TimeUnit = TimeUnit.TwentyFourHours,
-) => {
-  let apiKeyIndex = 0;
-
-  let current;
-  let forecast;
-
-  for (apiKeyIndex = 0; apiKeyIndex < WEATHER_API_KEYS.length; apiKeyIndex++) {
-    current = await requestCurrentWeather(city, lang, tempUnit, WEATHER_API_KEYS[apiKeyIndex]);
-    forecast = await requestWeatherForecast(city, lang, tempUnit, WEATHER_API_KEYS[apiKeyIndex]);
-
-    if (current != null && forecast != null) {
+    if (date.getDate() === currentDate.getDate()) {
+      list.push(createDailyItem(item, timeZoneOffset));
+    } else {
       break;
     }
   }
 
-  if (apiKeyIndex < WEATHER_API_KEYS.length) {
-    const daily = [];
-    daily.push(current);
+  return list;
+};
 
-    for (let i = 0; i < forecast.daily.length; i++) {
-      daily.push(forecast.daily[i]);
+const getWeekly = (weekly: any, timeZoneOffset: number) => {
+  const list: WeatherWeeklyItem[] = [];
+  const currentDate = new Date();
+
+  for (let i = 0; i < weekly.list.length; i++) {
+    const item = weekly.list[i];
+    const date = new Date(item.dt * 1000);
+
+    if (date.getDate() !== currentDate.getDate()) {
+      const lastItem = list.length > 0 && list[list.length - 1];
+      const lastItemDay = lastItem && lastItem.date.getDate();
+      const time = getTimeInZone(date, timeZoneOffset);
+      const hoursInZone = time.getHours();
+      const isDay = item.sys.pod === 'd';
+      const temp = Math.round(item.main.temp);
+      const icon = item.weather[0].icon;
+
+      if (
+        (lastItem == null || lastItemDay !== time.getDate())
+        && isDay
+        && hoursInZone >= 11
+        && hoursInZone <= 15
+      ) {
+        const newItem: WeatherWeeklyItem = {
+          dayTemp: temp,
+          date: time,
+          dayIcon: weatherIcons[icon as WeatherCodes],
+        };
+
+        list.push(newItem);
+      } else if (
+        lastItem
+        && lastItem.nightTemp == null
+        && !isDay
+        && (hoursInZone >= 23 || hoursInZone < 6)
+      ) {
+        lastItem.nightTemp = temp;
+      }
     }
-
-    return {
-      city: capitalizeFirstLetter(city),
-      tempUnit,
-      timeUnit,
-      daily,
-      week: forecast.week,
-    };
   }
 
-  return null;
+  if (list.length > 0 && list[list.length - 1].nightTemp == null) {
+    list.pop();
+  }
+
+  return list;
+};
+
+export const getWeather = async (
+  city: string,
+  lang: WeatherLanguages,
+  tempUnit: TemperatureUnit = TemperatureUnit.Celsius,
+  timeUnit: TimeUnit = TimeUnit.TwentyFourHours,
+  apiKey: string = WEATHER_API_KEY,
+) => {
+  const celcius = tempUnit === TemperatureUnit.Celsius;
+  const units = celcius ? 'metric' : 'imperial';
+  const windsUnit = celcius ? 'km/h' : 'mph';
+
+  const countryCode = WeatherLanguages[lang];
+
+  const currentWeatherURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=${countryCode}&units=${units}`;
+  const weekWeatherURL = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&lang=${countryCode}&units=${units}`;
+
+  const currentWeather = JSON.parse(await requestURL(currentWeatherURL));
+  const weekWeather = JSON.parse(await requestURL(weekWeatherURL));
+
+  const coord = currentWeather.coord;
+  const timeZoneOffset = await getTimeZoneOffset(coord.lat, coord.lon);
+
+  const dailyForecast = getDaily(currentWeather, weekWeather, timeZoneOffset);
+  const weeklyForecast = getWeekly(weekWeather, timeZoneOffset);
+
+  const forecast: WeatherForecast = {
+    daily: dailyForecast,
+    weekly: weeklyForecast,
+    windsUnit,
+    timeUnit,
+    tempUnit,
+    lang,
+    city,
+  };
+
+  return forecast;
 };
 
 /**
