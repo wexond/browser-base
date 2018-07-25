@@ -1,5 +1,9 @@
 import styled, { css } from 'styled-components';
+
 import * as PageItem from '../../../../shared/components/PageItem';
+import opacity from '../../../../shared/defaults/opacity';
+import typography from '../../../../shared/mixins/typography';
+import colors from '../../../../shared/defaults/colors';
 
 export const Title = styled(PageItem.Title)`
   margin-left: 12px;
@@ -18,5 +22,35 @@ export const Title = styled(PageItem.Title)`
         background-color: rgba(0, 0, 0, 0.06);
       }
     `};
+  `};
+`;
+
+export const Input = styled.input`
+  width: 100%;
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding-left: 24px;
+  padding-right: 12px;
+  -webkit-text-fill-color: transparent;
+  background-color: transparent;
+  font-size: 16px;
+  text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${opacity.light.primaryText})`};
+  color: ${colors.blue['500']};
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  opacity: 0;
+  will-change: opacity;
+  transition: 0.2s opacity, 0.2s z-index;
+
+  ${typography.robotoRegular()};
+
+  ${({ visible }: { visible: boolean }) => css`
+    opacity: ${visible ? 1 : 0};
+    z-index: ${visible ? 2 : -1};
   `};
 `;
