@@ -5,12 +5,14 @@ import AppStore from '../../../../app/store';
 import Store from '../../store';
 import BookmarkItem from '../../../../shared/models/bookmark-item';
 import { removeItem } from '../../utils';
-import { Root, RemoveIcon, Icon } from '../../../../shared/components/PageItem';
+import { Root, Icon } from '../../../../shared/components/PageItem';
 import db from '../../../../shared/models/app-database';
-import { Title, Input } from './styles';
+import { Title, Input, ActionIcon } from './styles';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
 const folderIcon = require('../../../../shared/icons/folder.svg');
+const deleteIcon = require('../../../../shared/icons/delete.svg');
+const editIcon = require('../../../../shared/icons/edit.svg');
 
 export interface IProps {
   data: BookmarkItem;
@@ -127,6 +129,8 @@ export default class Item extends React.Component<IProps, IState> {
     }
   };
 
+  public onEditClick = (e: React.MouseEvent<HTMLDivElement>) => {};
+
   public render() {
     const { data } = this.props;
     const { hovered, inputVisible } = this.state;
@@ -140,8 +144,6 @@ export default class Item extends React.Component<IProps, IState> {
       opacity = transparency.light.inactiveIcon;
     }
 
-    if (hovered) opacity = 0;
-
     return (
       <Root
         onFocus={() => null}
@@ -150,7 +152,6 @@ export default class Item extends React.Component<IProps, IState> {
         onClick={this.onClick}
         selected={Store.selectedItems.indexOf(data.id) !== -1}
       >
-        <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
         <Icon style={{ opacity }} icon={favicon} />
         <Title isFolder={isFolder} onClick={this.onTitleClick}>
           {data.title}
@@ -165,6 +166,8 @@ export default class Item extends React.Component<IProps, IState> {
             placeholder="Name"
           />
         )}
+        <ActionIcon icon={editIcon} onClick={this.onEditClick} visible={hovered} />
+        <ActionIcon icon={deleteIcon} onClick={this.onRemoveClick} visible={hovered} />
       </Root>
     );
   }

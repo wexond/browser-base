@@ -41,8 +41,6 @@ const createWindow = () => {
     mainWindow.webContents.send('main-error', error);
   });
 
-  mainWindow.webContents.openDevTools({ mode: 'detach' });
-
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
