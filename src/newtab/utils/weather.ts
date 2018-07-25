@@ -1,7 +1,9 @@
 import { requestURL } from '../../shared/utils/network';
 import { WEATHER_API_KEYS } from '../../shared/constants';
 import weatherIcons, { WeatherCodes } from '../defaults/weather-icons';
-import { TimeUnit, TemperatureUnit, Languages } from '../../shared/enums';
+import {
+  TimeUnit, TemperatureUnit, Languages, Countries,
+} from '../../shared/enums';
 import { capitalizeFirstLetter, capitalizeFirstLetterInEachWord } from '../../shared/utils/strings';
 import { getTimeZone } from './time-zone';
 
@@ -38,6 +40,26 @@ export const getDailyItem = (json: any, tempUnit: TemperatureUnit) => ({
   pressure: json.main.pressure,
   date: new Date(json.dt * 1000),
 });
+
+export const getCountryCode = (json: any, contryCode: Countries) => ({
+  countryCode: json.country_code2,
+});
+
+export const requestCountryCode = async (apiKey: string, countryCode: Countries) => {
+  // Powered By IPGeoLocation  https://ipgeolocation.io/
+  try {
+    const url = `https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}`;
+
+    const data = await requestURL(url);
+    const json = JSON.parse(data);
+
+    return getCountryCode(json, countryCode);
+  } catch (e) {
+    console.error(e);
+  }
+
+  return null;
+};
 
 export const requestCurrentWeather = async (
   city: string,
