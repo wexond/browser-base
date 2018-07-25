@@ -18,6 +18,8 @@ export default class extends React.Component<{ page: Page }, {}> {
 
   private tab: Tab;
 
+  private onURLChange: any;
+
   public componentDidMount() {
     const { page } = this.props;
     const { id } = page;
@@ -26,27 +28,33 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.tab = tab;
 
     this.webview.addEventListener('did-stop-loading', this.onDidStopLoading);
-    this.webview.addEventListener('did-navigate', this.onNavigate);
-    this.webview.addEventListener('did-navigate-in-page', this.onNavigate);
-    this.webview.addEventListener('will-navigate', this.onNavigate);
     this.webview.addEventListener('page-title-updated', this.onPageTitleUpdated);
     this.webview.addEventListener('load-commit', this.onLoadCommit);
     this.webview.addEventListener('page-favicon-updated', this.onPageFaviconUpdated);
     this.webview.addEventListener('dom-ready', this.onDomReady);
     this.webview.addEventListener('enter-html-full-screen', this.onFullscreenEnter);
     this.webview.addEventListener('leave-html-full-screen', this.onFullscreenLeave);
+
+    // Custom event: fires when webview URL changes.
+    this.onURLChange = setInterval(() => {
+      const url = this.webview.getURL();
+      if (url !== tab.url) {
+        this.tab.url = url;
+        this.updateData();
+        Store.isStarred = !!Store.bookmarks.find(x => x.url === url);
+      }
+    }, 10);
   }
 
   public componentWillUnmount() {
     this.webview.removeEventListener('did-stop-loading', this.onDidStopLoading);
-    this.webview.removeEventListener('did-navigate', this.onNavigate);
-    this.webview.removeEventListener('did-navigate-in-page', this.onNavigate);
-    this.webview.removeEventListener('will-navigate', this.onNavigate);
     this.webview.removeEventListener('page-title-updated', this.onPageTitleUpdated);
     this.webview.removeEventListener('load-commit', this.onLoadCommit);
     this.webview.removeEventListener('page-favicon-updated', this.onPageFaviconUpdated);
     this.webview.removeEventListener('enter-html-full-screen', this.onFullscreenEnter);
     this.webview.removeEventListener('leave-html-full-screen', this.onFullscreenLeave);
+
+    clearInterval(this.onURLChange);
 
     Store.isFullscreen = false;
   }
@@ -95,17 +103,9 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.webview.removeEventListener('dom-ready', this.onDomReady);
   };
 
-  public onDidStopLoading = (e: Electron.Event) => {
-    this.onNavigate(e as any);
-    this.tab.loading = false;
-  };
-
-  public onNavigate = ({ isMainFrame, url }: any) => {
+  public onDidStopLoading = () => {
     Store.refreshNavigationState();
-
-    if (!isMainFrame && !url) return;
-    this.tab.url = url;
-    this.updateData();
+    this.tab.loading = false;
   };
 
   public onLoadCommit = async ({ url, isMainFrame }: Electron.LoadCommitEvent) => {
@@ -125,13 +125,6 @@ export default class extends React.Component<{ page: Page }, {}> {
 
       this.lastURL = url;
     }
-
-    const bookmark = await db.bookmarks
-      .where('url')
-      .equals(url)
-      .first();
-
-    this.tab.bookmark = bookmark;
   };
 
   public onPageFaviconUpdated = ({ favicons }: Electron.PageFaviconUpdatedEvent) => {

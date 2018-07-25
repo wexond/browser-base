@@ -3,15 +3,16 @@ import { getRippleEvents } from '../../../utils/ripple';
 import Ripples from '../../Ripples';
 import { Root } from './styles';
 
-export interface IProps {
+export interface Props {
   onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
-  selectedItem?: Item; // eslint-disable-line
   ripple?: boolean;
   customRippleBehavior?: boolean;
+  value: any;
   id?: number;
+  selected?: boolean;
 }
 
-export default class Item extends React.Component<IProps, {}> {
+export default class Item extends React.Component<Props, {}> {
   public static defaultProps = {
     customRippleBehavior: false,
     ripple: true,
@@ -28,8 +29,7 @@ export default class Item extends React.Component<IProps, {}> {
   };
 
   public render() {
-    const { children, selectedItem } = this.props;
-    const selected = selectedItem === this;
+    const { children, selected } = this.props;
 
     const events = {
       onClick: this.onClick,
