@@ -25,11 +25,6 @@ const appConfig = {
     app: ['react-hot-loader/patch', './src/app'],
   },
 
-  externals: {
-    sqlite3: 'commonjs sqlite3',
-    npm: 'require("npm")',
-  },
-
   devServer: {
     contentBase: './static/pages',
     port: PORT,
