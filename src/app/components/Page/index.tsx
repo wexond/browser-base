@@ -33,8 +33,8 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.webview.addEventListener('load-commit', this.onLoadCommit);
     this.webview.addEventListener('page-favicon-updated', this.onPageFaviconUpdated);
     this.webview.addEventListener('dom-ready', this.onDomReady);
-    this.webview.addEventListener('enter-html-full-screen', this.onFullScreenEnter);
-    this.webview.addEventListener('leave-html-full-screen', this.onFullScreenLeave);
+    this.webview.addEventListener('enter-html-full-screen', this.onFullscreenEnter);
+    this.webview.addEventListener('leave-html-full-screen', this.onFullscreenLeave);
   }
 
   public componentWillUnmount() {
@@ -45,8 +45,8 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.webview.removeEventListener('page-title-updated', this.onPageTitleUpdated);
     this.webview.removeEventListener('load-commit', this.onLoadCommit);
     this.webview.removeEventListener('page-favicon-updated', this.onPageFaviconUpdated);
-    this.webview.removeEventListener('enter-html-full-screen', this.onFullScreenEnter);
-    this.webview.removeEventListener('leave-html-full-screen', this.onFullScreenLeave);
+    this.webview.removeEventListener('enter-html-full-screen', this.onFullscreenEnter);
+    this.webview.removeEventListener('leave-html-full-screen', this.onFullscreenLeave);
 
     Store.isFullscreen = false;
   }
@@ -178,12 +178,12 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.updateData();
   };
 
-  public onFullScreenEnter = () => {
-    Store.isFullscreen = true;
+  public onFullscreenEnter = () => {
+    Store.isHTMLFullscreen = true;
   };
 
-  public onFullScreenLeave = () => {
-    Store.isFullscreen = false;
+  public onFullscreenLeave = () => {
+    Store.isHTMLFullscreen = false;
   };
 
   public render() {

@@ -30,6 +30,8 @@ class Store {
 
   @observable public isFullscreen: boolean;
 
+  @observable public isHTMLFullscreen: boolean;
+
   @observable public menu = new Menu();
 
   @observable public pageMenu: ContextMenu;
@@ -39,6 +41,12 @@ class Store {
   @observable public bookmarksDialogVisible: boolean = false;
 
   @observable public bookmarks: BookmarkItem[] = [];
+
+  @observable
+  public updateInfo = {
+    available: false,
+    version: '',
+  };
 
   @observable
   public tabbarScrollbar = {

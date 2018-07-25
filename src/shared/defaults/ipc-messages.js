@@ -1,16 +1,22 @@
 module.exports = {
-  BROWSER_GO_BACK: 'browser-go-back',
-  BROWSER_GO_FORWARD: 'browser-go-forward',
+  BROWSER_GO_BACK: '0',
+  BROWSER_GO_FORWARD: '1',
 
-  DOWNLOAD_STARTED: 'download-start',
-  DOWNLOAD_PAUSED: 'download-paused',
-  DOWNLOAD_INTERRUPTED: 'download-interrupted',
-  DOWNLOAD_PROGRESS: 'download-progress',
-  DOWNLOAD_COMPLETE: 'download-complete',
-  DOWNLOAD_FAILED: 'download-failed',
+  DOWNLOAD_STARTED: '2',
+  DOWNLOAD_PAUSED: '3',
+  DOWNLOAD_INTERRUPTED: '4',
+  DOWNLOAD_PROGRESS: '5',
+  DOWNLOAD_COMPLETE: '6',
+  DOWNLOAD_FAILED: '7',
 
-  EXTENSION_EXECUTE_EVENT: 'extension-execute-event',
-  EXTENSION_RELOAD: 'extension-reload',
+  EXTENSION_EXECUTE_EVENT: '8',
+  EXTENSION_RELOAD: '9',
 
-  PLUGIN_INSTALL: 'plugin-install',
+  PLUGIN_INSTALL: '10',
+
+  UPDATE_AVAILABLE: '11',
+  UPDATE_RESTART_AND_INSTALL: '12',
+  UPDATE_CHECK: '13',
+
+  FULLSCREEN: '14',
 };

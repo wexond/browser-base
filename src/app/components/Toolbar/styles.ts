@@ -12,8 +12,8 @@ export const StyledToolbar = styled.div`
 
   height: ${TOOLBAR_HEIGHT}px;
   transition: 0.2s margin-top ${EASE_FUNCTION};
-  ${({ isFullscreen }: { isFullscreen: boolean }) => css`
-    margin-top: ${isFullscreen ? -TOOLBAR_HEIGHT : 0}px;
+  ${({ isHTMLFullscreen }: { isHTMLFullscreen: boolean }) => css`
+    margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
   `};
 `;
 
