@@ -6,7 +6,7 @@ import {
   Root, Container, Name, Icon, List,
 } from './styles';
 
-export interface IProps {
+export interface Props {
   ripple?: boolean;
   customRippleBehavior?: boolean;
   children?: any;
@@ -14,21 +14,21 @@ export interface IProps {
   onChange?: (data?: any, item?: Item, element?: this) => void;
 }
 
-export interface IState {
+export interface State {
   activated: boolean;
   listHeight: number;
   selectedItem?: Item;
 }
 
-export default class Button extends React.Component<IProps, IState> {
+export default class Dropdown extends React.Component<Props, State> {
+  public static Item = Item;
+
   public static defaultProps = {
     customRippleBehavior: false,
     ripple: true,
   };
 
-  public static Item = Item;
-
-  public state: IState = {
+  public state: State = {
     activated: false,
     listHeight: 0,
   };

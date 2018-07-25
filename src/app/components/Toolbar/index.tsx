@@ -67,7 +67,7 @@ export default class Toolbar extends React.Component {
     const star = Store.isBookmarkSavedTab() ? starIcon : starBorderIcon;
 
     return (
-      <StyledToolbar isFullscreen={Store.isFullscreen}>
+      <StyledToolbar isHTMLFullscreen={Store.isHTMLFullscreen}>
         <Handle />
         <NavigationButtons />
         <ToolbarSeparator style={{ marginRight: 16 }} />
