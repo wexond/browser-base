@@ -87,7 +87,7 @@ const cosmeticFiltering = () => {
     return virtualNode;
   };
 
-  const child = fork(path.join(__dirname, 'child'));
+  const child = fork(path.join(__dirname, 'selectors-parser'));
 
   const virtualNodes = [];
 
@@ -110,7 +110,7 @@ const cosmeticFiltering = () => {
     return nodes;
   };
 
-  const attributeExists = (attributes, attribute) => {
+  const attributeEquals = (attributes, attribute) => {
     for (const attr of attributes) {
       if (attr.name === attribute.name && attribute.value === attr.value) return true;
     }
@@ -121,7 +121,7 @@ const cosmeticFiltering = () => {
     if (vNode1.tagName !== vNode2.tagName) return false;
 
     for (const attr of vNode1.attributes) {
-      if (!attributeExists(vNode2.attributes, attr)) return false;
+      if (!attributeEquals(vNode2.attributes, attr)) return false;
     }
 
     return true;
@@ -154,7 +154,7 @@ const cosmeticFiltering = () => {
     if (newVNodes.length > 0) {
       child.send({ virtualNodes: newVNodes });
     }
-  }, 1000);
+  }, 500);
 
   child.on('message', data => {
     if (data instanceof Array) {
@@ -178,4 +178,4 @@ const cosmeticFiltering = () => {
   });
 };
 
-// cosmeticFiltering();
+cosmeticFiltering();
