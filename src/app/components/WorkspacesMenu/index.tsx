@@ -9,7 +9,11 @@ import { Root, ItemsContainer, Dark } from './styles';
 @observer
 export default class Workspaces extends React.Component<{}, {}> {
   hide = () => {
-    Store.workspaces.visible = false;
+    const workspaces = Store.workspaces;
+
+    if (!workspaces.inputVisible) {
+      workspaces.visible = false;
+    }
   };
 
   // TODO: A dialog with workspace name
