@@ -113,7 +113,7 @@ export default class Item extends React.Component<IProps, IState> {
     if (data.type === 'folder') {
       const title = this.input.value;
 
-      if (title !== data.title) {
+      if (title !== data.title && title.length > 0) {
         await db.bookmarks
           .where('id')
           .equals(data.id)
