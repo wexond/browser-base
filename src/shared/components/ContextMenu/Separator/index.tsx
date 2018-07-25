@@ -3,35 +3,39 @@ import * as React from 'react';
 import { StyledSeparator } from './styles';
 
 export interface IProps {
-  hide?: boolean;
   i?: number;
   visible?: boolean;
+  menuVisible: boolean;
 }
 
 export default class MenuSeparator extends React.Component<IProps, {}> {
   private timeout: any;
 
+  public static defaultProps = {
+    visible: true,
+  };
+
   public state = {
-    visible: false,
+    animation: false,
   };
 
   public componentWillReceiveProps(nextProps: IProps) {
-    const { visible } = this.props;
-    if (nextProps.visible && !visible) {
+    const { menuVisible } = this.props;
+    if (nextProps.menuVisible && !menuVisible) {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
-        this.setState({ visible: true });
+        this.setState({ animation: true });
       }, nextProps.i * 25);
-    } else if (!nextProps.visible) {
+    } else if (!nextProps.menuVisible) {
       clearTimeout(this.timeout);
-      this.setState({ visible: false });
+      this.setState({ animation: false });
     }
   }
 
   public render() {
-    const { hide } = this.props;
-    const { visible } = this.state;
+    const { visible } = this.props;
+    const { animation } = this.state;
 
-    return <StyledSeparator visible={visible} hide={hide} />;
+    return <StyledSeparator animation={animation} visible={visible} />;
   }
 }
