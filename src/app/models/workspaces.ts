@@ -8,6 +8,8 @@ export default class Workspaces {
 
   @observable public list = [new Workspace()];
 
+  @observable public inputVisible: boolean = false;
+
   public timer: any;
 
   public hide = () => {

@@ -1,9 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import typography from '../../../../shared/mixins/typography';
 import images from '../../../../shared/mixins/images';
 import shadows from '../../../../shared/mixins/shadows';
 import colors from '../../../../shared/defaults/colors';
+import opacity from '../../../../shared/defaults/opacity';
 
 import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '../../../constants';
 
@@ -75,9 +76,48 @@ export const Icon = styled.div`
 `;
 
 export const Label = styled.div`
-  width: 100%;
   white-space: nowrap;
   color: #fff;
-  margin-top: 12px;
+  margin-top: 8px;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: text;
   ${typography.subtitle2()};
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+`;
+
+export const Input = styled.input`
+  width: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 4px;
+  -webkit-text-fill-color: transparent;
+  background-color: transparent;
+  font-size: 14px;
+  text-align: center;
+  text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${opacity.light.primaryText})`};
+  color: ${colors.blue['500']};
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: #fff;
+  border-radius: 4px;
+  will-change: opacity;
+  transition: 0.2s opacity, 0.2s z-index;
+
+  ${typography.robotoRegular()};
+
+  ${({ visible }: { visible: boolean }) => css`
+    opacity: ${visible ? 1 : 0};
+    z-index: ${visible ? 1 : -2};
+  `};
+
+  &::placeholder {
+    opacity: ${opacity.light.secondaryText};
+  }
 `;
