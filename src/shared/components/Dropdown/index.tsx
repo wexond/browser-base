@@ -6,12 +6,15 @@ import {
   Root, Container, Name, Icon, List,
 } from './styles';
 
+export type DropdownEvent = (e?: React.MouseEvent<any>) => void;
+
 export interface Props {
   ripple?: boolean;
   customRippleBehavior?: boolean;
   children?: any;
   style?: any;
   onChange?: (id?: number) => void;
+  onMouseUp?: DropdownEvent;
 }
 
 export interface State {
@@ -34,7 +37,7 @@ export default class Dropdown extends React.Component<Props, State> {
     selectedItem: 0,
   };
 
-  private ripples: Ripples;
+  public ripples: Ripples;
 
   public listContainer: HTMLDivElement;
 
@@ -61,12 +64,12 @@ export default class Dropdown extends React.Component<Props, State> {
     this.toggle(!activated);
   };
 
-  public onMouseDown = (e: React.SyntheticEvent<any>) => {
+  public onMouseDown = (e: React.MouseEvent<any>) => {
     e.preventDefault();
     e.stopPropagation();
   };
 
-  public onItemClick = (e: React.SyntheticEvent<any>, item: Item) => {
+  public onItemClick = (e: React.MouseEvent<any>, item: Item) => {
     if (item) {
       this.setState({ selectedItem: item.props.id });
       this.toggle(false);
@@ -114,7 +117,7 @@ export default class Dropdown extends React.Component<Props, State> {
   };
 
   public render() {
-    const { children, style } = this.props;
+    const { children, style, onMouseUp } = this.props;
     const { activated, listHeight, selectedItem } = this.state;
 
     this.items = this.items.filter(Boolean);
@@ -129,7 +132,7 @@ export default class Dropdown extends React.Component<Props, State> {
     const item = this.items.find(x => x.props.id === selectedItem);
 
     return (
-      <Root onMouseDown={this.onMouseDown} style={style}>
+      <Root onMouseDown={this.onMouseDown} onMouseUp={onMouseUp} style={style}>
         <Container {...events}>
           <Name>{item && item.props.children}</Name>
           <Icon activated={activated} />
