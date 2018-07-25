@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 import os from 'os';
-import { Platforms } from './enums';
+import { Platforms, ContextMenuMode } from './enums';
 import AddressBar from './models/address-bar';
 import Page from './models/page';
 import Suggestions from './models/suggestions';
@@ -69,6 +69,7 @@ class Store {
   public pageMenuData = {
     x: 0,
     y: 0,
+    mode: ContextMenuMode.Normal,
   };
 
   public webviewContextMenuParams: Electron.ContextMenuParams;
