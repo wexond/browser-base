@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import images from '../../../shared/mixins/images';
 import typography from '../../../shared/mixins/typography';
 import opacity from '../../../shared/defaults/opacity';
-
+import { Actions } from '../../../shared/components/Card';
 import { EASE_FUNCTION } from '../../../shared/constants';
 
 export const InfoContainer = styled.div`
@@ -71,4 +71,12 @@ export const ForecastContainer = styled.div`
   transition: 0.5s ${EASE_FUNCTION} height;
 
   height: ${({ height }: { height: number }) => height}px;
+`;
+
+export const ActionsContainer = styled(Actions)`
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+  ${({ expanded }: { expanded: boolean }) => `
+    margin-top: ${expanded ? 16 : 8}px,
+  `};
 `;

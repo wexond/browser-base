@@ -7,16 +7,10 @@ import Slider from '../../../shared/components/Slider';
 import opacity from '../../../shared/defaults/opacity';
 import { ButtonType, SliderType } from '../../../shared/enums';
 import { formatTime, getDayIndex } from '../../../shared/utils/time';
+import WeatherForecast from '../../models/weather-forecast';
+import { formatDescription } from '../../utils/weather-card';
 
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardSecondaryText,
-  CardContent,
-  CardActions,
-  CardActionButtonStyle,
-} from '../../../shared/components/Card';
+import * as Card from '../../../shared/components/Card';
 
 import {
   Temperature,
@@ -28,53 +22,32 @@ import {
   ExtraInfoIcon,
   ExtraInfoText,
   ForecastContainer,
+  ActionsContainer,
 } from './styles';
 
 import ForecastItem from './ForecastItem';
+import { capitalizeWord } from '../../../shared/utils/strings';
+import WeatherWeeklyItem from '../../models/weather-weekly-item';
 
 const precipitationIcon = require('../../../shared/icons/weather/precipitation.png');
 const windIcon = require('../../../shared/icons/weather/wind.svg');
 
-export interface Props {
-  data: any;
+export interface IProps {
+  data: WeatherForecast;
 }
 
-export interface State {
+export interface IState {
   dailyForecastIndex: number;
   forecastHeight: number;
 }
 
-export default class WeatherCard extends React.Component<Props, State> {
-  public state: State = {
+export default class WeatherCard extends React.Component<IProps, IState> {
+  public state: IState = {
     dailyForecastIndex: 0,
     forecastHeight: 0,
   };
 
   public forecastContainer: HTMLDivElement;
-
-  getCity = () => {
-    const { data } = this.props;
-    return data != null ? data.city : 'Weather info is unavailable';
-  };
-
-  getDescription = () => {
-    const { dailyForecastIndex } = this.state;
-    const { data } = this.props;
-
-    if (data != null) {
-      const dictionary = GlobalStore.dictionary.dateAndTime;
-
-      const { timeUnit, daily } = data;
-      const { description, date } = daily[dailyForecastIndex];
-
-      const currentDate = new Date();
-      const dayName = dictionary.daysShort[getDayIndex(currentDate)];
-
-      return `${dayName}, ${formatTime(date, timeUnit)}, ${description}`;
-    }
-
-    return null;
-  };
 
   onExpandButtonClick = () => {
     const { forecastHeight } = this.state;
@@ -97,17 +70,11 @@ export default class WeatherCard extends React.Component<Props, State> {
     const dictionary = GlobalStore.dictionary;
 
     const expanded = forecastHeight > 0;
-    const current = data != null && data.daily[dailyForecastIndex];
-    const city = this.getCity();
-    const description = this.getDescription();
+    const description = data && formatDescription(data, dailyForecastIndex);
+    const current = data && data.daily[dailyForecastIndex];
 
     const windIconStyle = {
       opacity: opacity.light.disabledIcon,
-    };
-
-    const cardActionsStyle = {
-      borderTop: '1px solid rgba(0,0,0,0.12)',
-      marginTop: expanded ? 16 : 8,
     };
 
     const sliderStyle = {
@@ -124,71 +91,69 @@ export default class WeatherCard extends React.Component<Props, State> {
     }
 
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle large>{city}</CardTitle>
-          <CardSecondaryText largeTop>
-            {data != null && description}
-            {data == null
+      <Card.Root>
+        <Card.Header>
+          <Card.Title large>
+            {(data && capitalizeWord(data.city)) || 'Weather info is unavailable'}
+          </Card.Title>
+          <Card.SecondaryText largeTop>
+            {data && description}
+            {!data
               && 'Check your internet connection or your settings. City name is probably incorrect.'}
-          </CardSecondaryText>
-        </CardHeader>
-        <CardContent>
-          {data != null && (
-            <React.Fragment>
-              <InfoContainer>
-                <Temperature>
-                  {current.temp}
-                  <TemperatureDeg>&deg;{data.tempUnit}</TemperatureDeg>
-                </Temperature>
-                <TemperatureIcon src={current.icon} />
-              </InfoContainer>
-              <ExtraInfoContainer>
-                <ExtraInfo>
-                  <ExtraInfoIcon src={precipitationIcon} />
-                  <ExtraInfoText>
-                    {current.precipitation}% {dictionary.newTab.precipitation}
-                  </ExtraInfoText>
-                </ExtraInfo>
-                <ExtraInfo>
-                  <ExtraInfoIcon src={windIcon} style={windIconStyle} />
-                  <ExtraInfoText>
-                    {current.windSpeed} {dictionary.newTab.winds}
-                  </ExtraInfoText>
-                </ExtraInfo>
-              </ExtraInfoContainer>
-              <Slider
-                onChange={this.onSliderChange}
-                type={SliderType.Discrete}
-                color="#000"
-                ticks={sliderTicks}
-                style={sliderStyle}
-                showTicksLabels
-              />
-              <ForecastContainer
-                innerRef={r => (this.forecastContainer = r)}
-                height={forecastHeight}
+          </Card.SecondaryText>
+        </Card.Header>
+        {data && (
+          <Card.Content>
+            <InfoContainer>
+              <Temperature>
+                {current.temp}
+                <TemperatureDeg>&deg;{data.tempUnit}</TemperatureDeg>
+              </Temperature>
+              <TemperatureIcon src={current.icon} />
+            </InfoContainer>
+            <ExtraInfoContainer>
+              <ExtraInfo>
+                <ExtraInfoIcon src={precipitationIcon} />
+                <ExtraInfoText>
+                  {current.precipitation}% {dictionary.newTab.precipitation}
+                </ExtraInfoText>
+              </ExtraInfo>
+              <ExtraInfo>
+                <ExtraInfoIcon src={windIcon} style={windIconStyle} />
+                <ExtraInfoText>
+                  {current.winds}
+                  {` ${data.windsUnit}`} {dictionary.newTab.winds}
+                </ExtraInfoText>
+              </ExtraInfo>
+            </ExtraInfoContainer>
+            <Slider
+              onChange={this.onSliderChange}
+              type={SliderType.Discrete}
+              color="#000"
+              ticks={sliderTicks}
+              style={sliderStyle}
+              showTicksLabels
+            />
+            <ForecastContainer innerRef={r => (this.forecastContainer = r)} height={forecastHeight}>
+              {data.weekly.map((day: WeatherWeeklyItem, key: any) => {
+                const dayName = GlobalStore.dictionary.dateAndTime.days[getDayIndex(day.date)];
+                return <ForecastItem data={day} dayName={dayName} key={key} />;
+              })}
+            </ForecastContainer>
+            <ActionsContainer expanded={expanded}>
+              <Button
+                foreground={colors.blue['500']}
+                type={ButtonType.Text}
+                onClick={this.onExpandButtonClick}
+                style={Object.assign({}, Card.ActionButtonStyle, { marginLeft: 0 })}
               >
-                {data.week.map((day: any, key: any) => {
-                  const dayName = GlobalStore.dictionary.dateAndTime.days[getDayIndex(day.date)];
-                  return <ForecastItem data={day} dayName={dayName} key={key} />;
-                })}
-              </ForecastContainer>
-              <CardActions style={cardActionsStyle}>
-                <Button
-                  foreground={colors.blue['500']}
-                  type={ButtonType.Text}
-                  onClick={this.onExpandButtonClick}
-                  style={Object.assign({}, CardActionButtonStyle, { marginLeft: 0 })}
-                >
-                  {(!expanded && dictionary.general.expand.toUpperCase())
-                    || dictionary.general.collapse.toUpperCase()}
-                </Button>
-              </CardActions>
-            </React.Fragment>
-          )}
-        </CardContent>
-      </Card>
+                {(!expanded && dictionary.general.expand.toUpperCase())
+                  || dictionary.general.collapse.toUpperCase()}
+              </Button>
+            </ActionsContainer>
+          </Card.Content>
+        )}
+      </Card.Root>
     );
   }
 }
