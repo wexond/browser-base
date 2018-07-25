@@ -8,7 +8,6 @@ import { getWeather } from '../../utils/weather';
 import { getNews } from '../../utils/news';
 import News from '../News';
 import WeatherCard from '../WeatherCard';
-import PatreonsCard from '../PatreonsCard';
 
 import {
   TimeUnit, TemperatureUnit, WeatherLanguages, Countries,
