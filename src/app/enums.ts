@@ -3,3 +3,10 @@ export enum Platforms {
   MacOS = 'darwin',
   Linux = 'linux',
 }
+
+export enum ContextMenuMode {
+  ImageAndURL,
+  Image,
+  URL,
+  Normal,
+}
