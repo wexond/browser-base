@@ -8,7 +8,7 @@ const getCardImageOpacity = (visible: boolean) => {
   return 1;
 };
 
-export const Card = styled.div`
+export const Root = styled.div`
   width: 344px;
   min-height: 72px;
   height: auto;
@@ -19,7 +19,7 @@ export const Card = styled.div`
   box-shadow: 0 1px 1px 0 rgba(60, 64, 67, 0.08), 0 1px 3px 1px rgba(60, 64, 67, 0.16);
 `;
 
-export const CardThumbnail = styled.div`
+export const Thumbnail = styled.div`
   width: 100%;
   height: 194px;
 
@@ -27,13 +27,13 @@ export const CardThumbnail = styled.div`
   ${images.center('100%', '194px')};
 `;
 
-export const CardHeader = styled.div`
+export const Header = styled.div`
   display: flex;
   flex-flow: column;
   padding: 16px;
 `;
 
-export const CardLogo = styled.div`
+export const Logo = styled.div`
   width: 40px;
   height: 40px;
   margin-left: 16px;
@@ -50,7 +50,7 @@ export interface ImageProps {
   visible?: boolean;
 }
 
-export const CardImage = styled.div`
+export const Image = styled.div`
   min-width: 80px;
   height: 80px;
   margin: 16px;
@@ -64,7 +64,7 @@ export const CardImage = styled.div`
   `};
 `;
 
-export const CardTitle = styled.div`
+export const Title = styled.div`
   opacity: ${opacity.light.primaryText};
 
   ${({ large }: { large: boolean }) => css`
@@ -72,13 +72,13 @@ export const CardTitle = styled.div`
   `};
 `;
 
-export const CardSecondaryText = styled.div`
+export const SecondaryText = styled.div`
   ${typography.body2()};
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
   margin-top: ${({ largeTop }: { largeTop?: boolean }) => (largeTop ? 8 : 2)}px;
 `;
 
-export const CardIcon = styled.div`
+export const Icon = styled.div`
   width: 42px;
   height: 42px;
   align-self: center;
@@ -91,7 +91,7 @@ export const CardIcon = styled.div`
   background-image: url(${({ src }: { src: string }) => src});
 `;
 
-export const CardSupportingText = styled.div`
+export const SupportingText = styled.div`
   ${typography.body2()};
   padding: 0px 16px 16px 16px;
   opacity: ${opacity.light.secondaryText};
@@ -99,12 +99,12 @@ export const CardSupportingText = styled.div`
   padding-top: ${({ paddingTop }: { paddingTop?: boolean }) => (paddingTop ? 16 : 0)}px;
 `;
 
-export const CardContent = styled.div`
+export const Content = styled.div`
   ${typography.body2()};
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
 `;
 
-export const CardActions = styled.div`
+export const Actions = styled.div`
   width: 100%;
   padding: 8px;
   margin-top: 24px;
@@ -112,7 +112,7 @@ export const CardActions = styled.div`
   align-content: center;
 `;
 
-export const CardActionButtonStyle = {
+export const ActionButtonStyle = {
   marginLeft: 8,
   paddingLeft: 8,
   paddingRight: 8,
