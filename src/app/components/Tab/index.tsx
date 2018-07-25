@@ -174,8 +174,8 @@ export default class Tab extends React.Component<TabProps, {}> {
       >
         <Content hovered={hovered}>
           {!loading && <Icon favicon={favicon.trim()} />}
-          {loading && <Preloader size={16} style={{ marginRight: 8 }} />}
-          <Title selected={selected} favicon={favicon}>
+          {loading && <Preloader size={16} />}
+          <Title selected={selected} loading={loading} favicon={favicon}>
             {title}
           </Title>
         </Content>

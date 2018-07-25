@@ -73,6 +73,7 @@ export const Overlay = styled.div`
 
 interface TitleProps {
   favicon: string;
+  loading: boolean;
   selected: boolean;
 }
 
@@ -82,13 +83,14 @@ export const Title = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: 0.2s all;
+  will-change: color, margin-left;
+  transition: 0.2s color, 0.2s margin-left;
   font-weight: 500;
   margin-left: 12px;
 
-  ${({ favicon, selected }: TitleProps) => css`
+  ${({ favicon, loading, selected }: TitleProps) => css`
     color: ${selected ? colors.blue['500'] : `rgba(0, 0, 0, ${opacity.light.secondaryText})`};
-    margin-left: ${favicon === '' ? 0 : 12}px;
+    margin-left: ${favicon === '' && !loading ? 0 : 12}px;
   `};
 `;
 
