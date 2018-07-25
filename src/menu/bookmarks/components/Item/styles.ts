@@ -4,6 +4,7 @@ import * as PageItem from '../../../../shared/components/PageItem';
 import opacity from '../../../../shared/defaults/opacity';
 import typography from '../../../../shared/mixins/typography';
 import colors from '../../../../shared/defaults/colors';
+import images from '../../../../shared/mixins/images';
 
 export const Title = styled(PageItem.Title)`
   margin-left: 12px;
@@ -12,16 +13,17 @@ export const Title = styled(PageItem.Title)`
   border-radius: 4px;
   will-change: background-color;
   transition: 0.2s background-color;
+  flex: 1;
 
   ${({ isFolder }: { isFolder: boolean }) => css`
     ${isFolder
-      && `
-      cursor: text;
+      && css`
+        cursor: text;
 
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.06);
-      }
-    `};
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.06);
+        }
+      `};
   `};
 `;
 
@@ -57,4 +59,23 @@ export const Input = styled.input`
   &::placeholder {
     opacity: ${opacity.light.secondaryText};
   }
+`;
+
+export const ActionIcon = styled.div`
+  width: 32px;
+  height: 32px;
+  ${images.center('16px', '16px')};
+
+  &:last-child {
+    margin-right: 12px;
+  }
+
+  &:hover {
+    opacity: ${opacity.light.activeIcon};
+  }
+
+  ${({ icon, visible }: { icon: string; visible: boolean }) => css`
+    background-image: url(${icon});
+    opacity: ${visible ? opacity.light.inactiveIcon : 0};
+  `};
 `;
