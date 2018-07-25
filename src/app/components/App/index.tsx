@@ -235,7 +235,6 @@ class App extends React.Component {
             position: 'absolute',
             left: Store.pageMenuData.x,
             top: Store.pageMenuData.y,
-            zIndex: 999,
           }}
         >
           <ContextMenu.Item visible={imageAndURLLink} onClick={this.onOpenLinkInNewTabClick}>
