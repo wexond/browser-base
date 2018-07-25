@@ -40,6 +40,8 @@ class Store {
 
   @observable public bookmarksDialogVisible: boolean = false;
 
+  @observable public isStarred: boolean = false;
+
   @observable public bookmarks: BookmarkItem[] = [];
 
   @observable
@@ -136,30 +138,6 @@ class Store {
 
   public addWorkspace() {
     this.workspaces.list.push(new Workspace());
-  }
-
-  public getBookmarkFolders() {
-    return this.bookmarks.filter(el => el.type === 'folder');
-  }
-
-  public isBookmarkSaved(url: string) {
-    if (this.bookmarks == null) return false;
-    return this.bookmarks.filter(r => r.url === url).length !== 0;
-  }
-
-  public isBookmarkSavedTab(tab?: Tab) {
-    const workspace = this.getCurrentWorkspace();
-    const selectedTab = workspace && workspace.getSelectedTab();
-
-    if (tab == null) {
-      if (selectedTab == null || selectedTab.bookmark == null) {
-        return false;
-      }
-
-      return this.isBookmarkSaved(selectedTab.url);
-    }
-
-    return this.isBookmarkSaved(tab.url);
   }
 }
 

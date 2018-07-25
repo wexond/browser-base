@@ -1,5 +1,4 @@
 import AppStore from '../../../app/store';
-import Store from '../store';
 import BookmarkItem from '../../../shared/models/bookmark-item';
 import db from '../../../shared/models/app-database';
 
@@ -37,19 +36,25 @@ export const addFolder = (title: string, parent: number) => {
   });
 };
 
-export const removeItem = async (id: number, type?: string) => {
+export const removeItem = async (id: number, type: string) => {
   if (type === 'folder') {
-    const items = await db.bookmarks.filter(item => item.parent === id).toArray();
+    const items = AppStore.bookmarks.filter(item => item.parent === id);
 
     for (let i = 0; i < items.length; i++) {
       removeItem(items[i].id, items[i].type);
     }
   }
 
-  const bookmarks = AppStore.bookmarks;
-  const item = bookmarks.find(x => x.id === id);
+  const item = AppStore.bookmarks.find(x => x.id === id);
+  AppStore.bookmarks.splice(AppStore.bookmarks.indexOf(item), 1);
 
-  bookmarks.splice(bookmarks.indexOf(item), 1);
+  const selectedTab = AppStore.getSelectedTab();
+
+  if (AppStore.isStarred && selectedTab.url === item.url) {
+    AppStore.isStarred = false;
+  }
 
   await db.bookmarks.delete(id);
 };
+
+export const getBookmarkFolders = () => AppStore.bookmarks.filter(el => el.type === 'folder');

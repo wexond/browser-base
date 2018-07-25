@@ -104,8 +104,11 @@ export default class extends React.Component<{ page: Page }, {}> {
     Store.refreshNavigationState();
 
     if (!isMainFrame && !url) return;
+
     this.tab.url = url;
     this.updateData();
+
+    Store.isStarred = !!Store.bookmarks.find(x => x.url === url);
   };
 
   public onLoadCommit = async ({ url, isMainFrame }: Electron.LoadCommitEvent) => {
@@ -126,12 +129,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       this.lastURL = url;
     }
 
-    const bookmark = await db.bookmarks
-      .where('url')
-      .equals(url)
-      .first();
-
-    this.tab.bookmark = bookmark;
+    Store.isStarred = !!Store.bookmarks.find(x => x.url === url);
   };
 
   public onPageFaviconUpdated = ({ favicons }: Electron.PageFaviconUpdatedEvent) => {

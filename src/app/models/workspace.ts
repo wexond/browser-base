@@ -40,9 +40,13 @@ export default class Workspace {
   constructor() {
     observe(this, (change: any) => {
       if (change.name === 'selectedTab') {
+        const tab = this.getTabById(change.object.selectedTab);
         requestAnimationFrame(() => {
-          this.tabsIndicator.moveToTab(this.getTabById(change.object.selectedTab));
+          this.tabsIndicator.moveToTab(tab);
         });
+
+        Store.isStarred = !!Store.bookmarks.find(x => x.url === tab.url);
+
         Store.refreshNavigationState();
       }
     });

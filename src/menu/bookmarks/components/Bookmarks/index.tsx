@@ -15,20 +15,17 @@ class Bookmarks extends React.Component {
   }
 
   public loadBookmarks = async () => {
-    const bookmarks = await db.bookmarks.toArray();
-
     db.favicons.each(favicon => {
       if (AppStore.favicons[favicon.url] == null && favicon.favicon.byteLength !== 0) {
         AppStore.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));
       }
     });
 
-    AppStore.bookmarks = bookmarks;
     Store.goTo(-1);
   };
 
   public render() {
-    const items = AppStore.bookmarks.filter(r => r.parent === Store.currentTree);
+    const items = AppStore.bookmarks.filter(x => x.parent === Store.currentTree);
 
     return (
       <React.Fragment>

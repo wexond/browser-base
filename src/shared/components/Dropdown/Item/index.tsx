@@ -3,7 +3,7 @@ import { getRippleEvents } from '../../../utils/ripple';
 import Ripples from '../../Ripples';
 import { Root } from './styles';
 
-export interface IProps {
+export interface Props {
   onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
   selectedItem?: Item; // eslint-disable-line
   ripple?: boolean;
@@ -11,7 +11,7 @@ export interface IProps {
   data?: any;
 }
 
-export default class Item extends React.Component<IProps, {}> {
+export default class Item extends React.Component<Props, {}> {
   public static defaultProps = {
     customRippleBehavior: false,
     ripple: true,
