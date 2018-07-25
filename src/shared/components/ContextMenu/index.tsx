@@ -119,14 +119,19 @@ export default class ContextMenu extends React.Component<IProps, IState> {
         }}
         {...events}
       >
-        {React.Children.map(children, child =>
-          React.cloneElement(child as React.ReactElement<any>, {
+        {React.Children.map(children, child => {
+          const clone = React.cloneElement(child as React.ReactElement<any>, {
             menu: this,
             dense,
-            i: i++,
+            i,
             menuVisible: visible,
             hideMenuOnClick: hideMenuOnMouseDown,
-          }))}
+          });
+
+          if (clone.props.visible) i++;
+
+          return clone;
+        })}
       </StyledMenu>
     );
   }

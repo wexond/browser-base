@@ -1,9 +1,5 @@
-import * as React from 'react';
-import styled, { StyledComponentClass } from 'styled-components';
+import styled from 'styled-components';
 import shadows from '../../mixins/shadows';
-
-const x = 64;
-const easing = 'cubic-bezier(0.215, 0.61, 0.355, 1)';
 
 export interface StyledMenuProps {
   visible: boolean;
@@ -16,6 +12,9 @@ export const StyledMenu = styled.div`
   height: 0;
   background-color: white;
   overflow: hidden;
+  display: block;
+  padding-top: ${({ dense }) => (dense ? 4 : 8)}px;
+  padding-bottom: ${({ dense }) => (dense ? 4 : 8)}px;
 
   box-shadow: ${shadows(5)};
 
