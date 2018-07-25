@@ -18,20 +18,22 @@ class Bookmarks extends React.Component {
         }
       })
       .then(() => {
-        Store.bookmarks = AppStore.bookmarks.filter(x => x.parent === Store.currentTree);
+        this.forceUpdate();
       });
 
     Store.goTo(-1);
   }
 
   public render() {
+    const items = AppStore.bookmarks.filter(x => x.parent === Store.currentTree);
+
     return (
       <React.Fragment>
         <TreeBar />
         <Content>
           <Container>
-            {Store.bookmarks.length > 0 && (
-              <Items>{Store.bookmarks.map(data => <Item data={data} key={data.id} />)}</Items>
+            {items.length > 0 && (
+              <Items>{items.map(data => <Item data={data} key={data.id} />)}</Items>
             )}
           </Container>
         </Content>
