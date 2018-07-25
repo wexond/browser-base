@@ -1,11 +1,12 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import transparency from '../../../../shared/defaults/opacity';
+import AppStore from '../../../../app/store';
 import Store from '../../store';
 import BookmarkItem from '../../../../shared/models/bookmark-item';
-import AppStore from '../../../../app/store';
 import { removeItem } from '../../utils';
 import { Root, RemoveIcon, Icon } from '../../../../shared/components/PageItem';
+import db from '../../../../shared/models/app-database';
 import { Title, Input } from './styles';
 
 const pageIcon = require('../../../../shared/icons/page.svg');
@@ -82,6 +83,7 @@ export default class Item extends React.Component<IProps, IState> {
       e.stopPropagation();
 
       this.setState({ inputVisible: true });
+      this.input.value = data.title;
       this.input.focus();
 
       window.addEventListener('mousedown', this.onWindowMouseDown);
@@ -94,7 +96,35 @@ export default class Item extends React.Component<IProps, IState> {
 
   public onWindowMouseDown = () => {
     this.setState({ inputVisible: false });
+    this.saveFolderName();
+
     window.removeEventListener('mousedown', this.onWindowMouseDown);
+  };
+
+  public onInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      this.onWindowMouseDown();
+    }
+  };
+
+  public saveFolderName = async () => {
+    const { data } = this.props;
+
+    if (data.type === 'folder') {
+      const title = this.input.value;
+
+      if (title !== data.title) {
+        await db.bookmarks
+          .where('id')
+          .equals(data.id)
+          .modify({
+            title,
+          });
+
+        const item = AppStore.bookmarks.find(x => x.id === data.id);
+        item.title = title;
+      }
+    }
   };
 
   public render() {
@@ -131,6 +161,7 @@ export default class Item extends React.Component<IProps, IState> {
             visible={inputVisible}
             onClick={this.onInputMouseEvent}
             onMouseDown={this.onInputMouseEvent}
+            onKeyPress={this.onInputKeyPress}
             placeholder="Name"
           />
         )}
