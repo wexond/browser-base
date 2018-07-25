@@ -1,10 +1,11 @@
 import { observer } from 'mobx-react';
 import React from 'react';
+
+import Preloader from '../../../shared/components/Preloader';
 import tabAnimations from '../../defaults/tab-animations';
 import TabModel from '../../models/tab';
 import Store from '../../store';
 import { closeWindow } from '../../utils/window';
-
 import Ripples from '../../../shared/components/Ripples';
 import colors from '../../../shared/defaults/colors';
 import components from '../../components';
@@ -136,7 +137,7 @@ export default class Tab extends React.Component<TabProps, {}> {
     const selected = workspace.selectedTab === tab.id;
 
     const {
-      title, isRemoving, hovered, dragging, favicon,
+      title, isRemoving, hovered, dragging, favicon, loading
     } = tab;
 
     let rightBorderVisible = true;
@@ -172,7 +173,8 @@ export default class Tab extends React.Component<TabProps, {}> {
         }}
       >
         <Content hovered={hovered}>
-          <Icon favicon={favicon.trim()} />
+          {!loading && <Icon favicon={favicon.trim()} />}
+          {loading && <Preloader size={16} style={{ marginRight: 8 }} />}
           <Title selected={selected} favicon={favicon}>
             {title}
           </Title>
