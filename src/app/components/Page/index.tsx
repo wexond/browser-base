@@ -35,6 +35,7 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.webview.addEventListener('dom-ready', this.onDomReady);
     this.webview.addEventListener('enter-html-full-screen', this.onFullscreenEnter);
     this.webview.addEventListener('leave-html-full-screen', this.onFullscreenLeave);
+    this.webview.addEventListener('new-window', this.onNewWindow);
 
     // Custom event: fires when webview URL changes.
     this.onURLChange = setInterval(() => {
@@ -54,11 +55,20 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.webview.removeEventListener('page-favicon-updated', this.onPageFaviconUpdated);
     this.webview.removeEventListener('enter-html-full-screen', this.onFullscreenEnter);
     this.webview.removeEventListener('leave-html-full-screen', this.onFullscreenLeave);
+    this.webview.removeEventListener('new-window', this.onNewWindow);
 
     clearInterval(this.onURLChange);
 
     Store.isFullscreen = false;
   }
+
+  public onNewWindow = (e: Electron.NewWindowEvent) => {
+    if (e.disposition === 'new-window' || e.disposition === 'foreground-tab') {
+      Store.getCurrentWorkspace().addTab(e.url, true);
+    } else if (e.disposition === 'background-tab') {
+      Store.getCurrentWorkspace().addTab(e.url, false);
+    }
+  };
 
   public onContextMenu = (e: Electron.Event, params: Electron.ContextMenuParams) => {
     requestAnimationFrame(() => {
