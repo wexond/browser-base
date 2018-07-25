@@ -124,7 +124,9 @@ export default class Item extends React.Component<IProps, IState> {
     }
   };
 
-  public onEditClick = (e: React.MouseEvent<HTMLDivElement>) => {};
+  public onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.currentTarget.select();
+  };
 
   public render() {
     const { data } = this.props;
@@ -155,6 +157,7 @@ export default class Item extends React.Component<IProps, IState> {
           innerRef={r => (this.input = r)}
           visible={inputVisible}
           onClick={this.onInputMouseEvent}
+          onFocus={this.onInputFocus}
           onMouseDown={this.onInputMouseEvent}
           onKeyPress={this.onInputKeyPress}
           placeholder="Name"
