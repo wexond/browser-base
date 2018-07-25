@@ -74,13 +74,11 @@ export default class Item extends React.Component<IProps, IState> {
     const { hovered } = this.state;
 
     let opacity = 1;
-    let favicon = data.favicon;
+    let favicon = AppStore.favicons[data.favicon];
 
     if (favicon == null || favicon.trim() === '') {
       favicon = data.type === 'folder' ? folderIcon : pageIcon;
       opacity = transparency.light.inactiveIcon;
-    } else {
-      favicon = AppStore.favicons[favicon];
     }
 
     if (hovered) opacity = 0;
