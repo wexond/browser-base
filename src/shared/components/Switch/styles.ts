@@ -9,98 +9,93 @@ import { getComponentColor } from '../../utils/component-color';
 import { TransparencyText } from '../../models/transparency';
 
 export interface IContainerProps {
-    disabled?: boolean;
+  disabled?: boolean;
 }
 
 export interface ITrackProps {
-    toggled: boolean;
-    disabled: boolean;
-    color: string;
-    theme: UITheme;
+  toggled: boolean;
+  disabled: boolean;
+  color: string;
+  theme: UITheme;
 }
 
 export interface IThumbProps {
-    toggled: boolean;
-    disabled: boolean;
-    color: string;
-    theme: UITheme;
-    thumbScaleAnimation: boolean;
+  toggled: boolean;
+  disabled: boolean;
+  color: string;
+  theme: UITheme;
+  thumbScaleAnimation: boolean;
 }
 
 export interface IThumbContainerProps {
-    toggled: boolean;
-    left: number;
+  toggled: boolean;
+  left: number;
 }
 
 export interface ITextProps {
-    disabled: boolean;
-    theme: UITheme;
+  disabled: boolean;
+  theme: UITheme;
 }
 
-
 const getThumbBackgroundColor = (props: IThumbProps) => {
-    const {
-        disabled, toggled, color, theme,
-    } = props;
+  const { disabled, toggled, color, theme } = props;
 
-    if (disabled) {
-        if (theme === UITheme.Light) {
-            return '#BDBDBD';
-        }
-        return '#424242';
-    } else if (!toggled) {
-        if (theme === UITheme.Light) {
-            return '#FAFAFA';
-        }
-        return '#BDBDBD';
+  if (disabled) {
+    if (theme === UITheme.Light) {
+      return '#BDBDBD';
     }
-    return color;
+    return '#424242';
+  } else if (!toggled) {
+    if (theme === UITheme.Light) {
+      return '#FAFAFA';
+    }
+    return '#BDBDBD';
+  }
+  return color;
 };
 
 const getTrackBackgroundColor = (props: ITrackProps) => {
-    const {
-        disabled, toggled, color, theme,
-    } = props;
+  const { disabled, toggled, color, theme } = props;
 
-    if (disabled) {
-        if (props.theme === UITheme.Light) {
-            return 'rgba(0,0,0,0.12)';
-        }
-        return 'rgba(255,255,255,0.10)';
-    } else if (!toggled) {
-        if (props.theme === UITheme.Light) {
-            return 'rgba(0,0,0,0.38)';
-        }
-        return 'rgba(255,255,255,0.30)';
+  if (disabled) {
+    if (props.theme === UITheme.Light) {
+      return 'rgba(0,0,0,0.12)';
     }
-    return color;
+    return 'rgba(255,255,255,0.10)';
+  } else if (!toggled) {
+    if (props.theme === UITheme.Light) {
+      return 'rgba(0,0,0,0.38)';
+    }
+    return 'rgba(255,255,255,0.30)';
+  }
+  return color;
 };
 
 const transparency = TransparencyText;
 const getComponentForeground = (
-    disabled: boolean,
-    theme: UITheme,
-    opacity = {
-        disabled: {
-            light: transparency.light.disabled,
-            dark: transparency.dark.disabled,
-        },
-        enabled: {
-            light: transparency.light.inactive,
-            dark: transparency.dark.inactive,
-        },
+  disabled: boolean,
+  theme: UITheme,
+  opacity = {
+    disabled: {
+      light: transparency.light.disabled,
+      dark: transparency.dark.disabled
     },
+    enabled: {
+      light: transparency.light.inactive,
+      dark: transparency.dark.inactive
+    }
+  }
 ) => {
-    if (disabled) {
-        if (theme === UITheme.Light) {
-            return `rgba(0,0,0,${opacity.disabled.light})`;
-        }
-        return `rgba(255,255,255,${opacity.disabled.dark})`;
-    }
+  if (disabled) {
     if (theme === UITheme.Light) {
-        return `rgba(0,0,0,${opacity.enabled.light})`;
+      return `rgba(0,0,0,${opacity.disabled.light})`;
     }
-    return `rgba(255,255,255,${opacity.enabled.dark})`;
+    return `rgba(255,255,255,${opacity.disabled.dark})`;
+  }
+  if (theme === UITheme.Light) {
+    return `rgba(0,0,0,${opacity.enabled.light})`;
+  }
+  return `rgba(255,255,255,${opacity.enabled.dark})`;
 };
 
 export const Container = styled.div`
@@ -134,7 +129,8 @@ export const Thumb = styled.div`
   z-index: 2;
   transition: 0.2s transform, 0.2s background-color;
   background-color: ${(props: IThumbProps) => getThumbBackgroundColor(props)};
-  transform: ${props => (!props.thumbScaleAnimation ? 'scale(1)' : 'scale(0.9)')};
+  transform: ${props =>
+    !props.thumbScaleAnimation ? 'scale(1)' : 'scale(0.9)'};
   box-shadow: ${Shadows(2)};
 `;
 
