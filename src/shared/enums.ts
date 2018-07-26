@@ -31,7 +31,7 @@ export enum TextfieldType {
 }
 
 /* eslint-disable camelcase */
-export enum Languages {
+export enum WeatherLanguages {
   ar,
   bg,
   ca,
@@ -144,5 +144,4 @@ export enum TimeUnit {
 export enum TemperatureUnit {
   Celsius = 'C',
   Fahrenheit = 'F',
-  Kelvin = 'K',
 }

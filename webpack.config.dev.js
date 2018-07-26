@@ -18,29 +18,11 @@ const config = Object.assign({}, baseConfig, {
 
 config.output = Object.assign(output, baseConfig.output);
 
-config.module.rules[1] = Object.assign({}, config.module.rules[1], {
-  use: [
-    {
-      loader: 'babel-loader',
-      options: {
-        babelrc: false,
-        plugins: ['react-hot-loader/babel'],
-      },
-    },
-    'ts-loader',
-  ],
-});
-
 const appConfig = {
   target: 'electron-renderer',
 
   entry: {
     app: ['react-hot-loader/patch', './src/app'],
-  },
-
-  externals: {
-    sqlite3: 'commonjs sqlite3',
-    npm: 'require("npm")',
   },
 
   devServer: {

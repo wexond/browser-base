@@ -1,40 +1,26 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
 
+import Store from '../../store';
 import Preloader from '../../../shared/components/Preloader';
-
 import { getWeather } from '../../utils/weather';
 import { getNews } from '../../utils/news';
+import News from '../News';
+import WeatherCard from '../WeatherCard';
 
 import {
-  TimeUnit, TemperatureUnit, Languages, Countries,
+  TimeUnit, TemperatureUnit, WeatherLanguages, Countries,
 } from '../../../shared/enums';
-
 import {
   StyledApp, Content, Credits, Column,
 } from './styles';
 
-import WeatherCard from '../WeatherCard';
-import News from '../News';
-
-export interface IState {
-  contentVisible: boolean;
-  weatherData?: any;
-  columns?: any;
-}
-
-class App extends React.Component<{}, IState> {
-  private newsData: any[];
-
-  public state: IState = {
-    contentVisible: false,
-    columns: [],
-  };
-
+@observer
+class App extends React.Component {
   componentDidMount() {
-    this.loadData();
-
     window.addEventListener('resize', this.onResize);
+    this.loadData();
   }
 
   public onResize = () => {
@@ -46,49 +32,40 @@ class App extends React.Component<{}, IState> {
       columns = this.getColumns(2);
     }
 
-    this.setState({ columns });
+    Store.columns = columns;
   };
 
   async loadData() {
     const weatherData = await getWeather(
-      'warszawa',
-      Languages.en,
+      'warsaw',
+      WeatherLanguages.en,
       TemperatureUnit.Celsius,
       TimeUnit.TwentyFourHours,
     );
 
-    this.newsData = await getNews(Countries.us);
-    let columns = this.getColumns(1);
+    Store.weatherForecast = weatherData;
+    Store.newsData = await getNews(Countries.us);
 
-    if (window.innerWidth > 1128) {
-      columns = this.getColumns(3);
-    } else if (window.innerWidth > 752) {
-      columns = this.getColumns(2);
-    }
-
-    this.setState({
-      weatherData,
-      columns,
-      contentVisible: true,
-    });
+    this.onResize();
+    Store.contentVisible = true;
   }
 
   public getColumns = (columnsCount: number) => {
+    const { newsData } = Store;
     const columns = [];
-
-    const itemsPerCol = Math.floor(this.newsData.length / columnsCount);
+    const itemsPerCol = Math.floor(newsData.length / columnsCount);
 
     for (let i = 0; i < columnsCount; i++) {
       if (i < columnsCount) {
         if (i === 0) {
-          columns.push(this.newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1) - 1));
+          columns.push(newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1) - 1));
         } else if (i === 1) {
-          columns.push(this.newsData.slice(i * (itemsPerCol - 1), itemsPerCol * (i + 1)));
+          columns.push(newsData.slice(i * (itemsPerCol - 1), itemsPerCol * (i + 1)));
         } else {
-          columns.push(this.newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1)));
+          columns.push(newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1)));
         }
       } else {
-        columns.push(this.newsData.slice(i * itemsPerCol, this.newsData.length));
+        columns.push(newsData.slice(i * itemsPerCol, newsData.length));
       }
     }
 
@@ -96,7 +73,7 @@ class App extends React.Component<{}, IState> {
   };
 
   public render() {
-    const { contentVisible, weatherData, columns } = this.state;
+    const { weatherForecast, contentVisible, columns } = Store;
 
     const preloaderStyle = {
       position: 'fixed',
@@ -110,23 +87,28 @@ class App extends React.Component<{}, IState> {
         {!contentVisible && <Preloader style={preloaderStyle} />}
         <Content visible={contentVisible}>
           <Column>
-            <WeatherCard data={weatherData} />
-            <News data={columns[0]} />
+            <WeatherCard data={weatherForecast} />
+            {columns.length > 0 && <News data={columns[0]} />}
           </Column>
-          {columns[1] && (
+          {columns.length > 1 && (
             <Column>
               <News data={columns[1]} />
             </Column>
           )}
-          {columns[2] && (
+          {columns.length > 2 && (
             <Column>
               <News data={columns[2]} />
             </Column>
           )}
-          <Credits>
-            APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and
-            <a href="https://newsapi.org/"> News API</a>
-          </Credits>
+          {!navigator.onLine && (
+            <Credits>
+              APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and
+              <a href="https://newsapi.org/"> News API</a>
+              <br />
+              Icons for temporary usage created by&nbsp;
+              <a href="https://www.uplabs.com/kevinttob">Kevin Aguilar</a>
+            </Credits>
+          )}
         </Content>
       </StyledApp>
     );

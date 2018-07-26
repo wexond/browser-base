@@ -1,22 +1,32 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import {
-  Root, IconsContainer, Icon, Label, DeleteIcon,
-} from './styles';
-
 import Store from '../../../store';
 import Workspace from '../../../models/workspace';
 
-export interface Props {
+import {
+  Root, IconsContainer, Icon, Label, DeleteIcon, Input,
+} from './styles';
+
+export interface IProps {
   workspace: Workspace;
 }
 
+export interface IState {
+  inputVisible: boolean;
+}
+
 @observer
-export default class extends React.Component<Props, {}> {
+export default class extends React.Component<IProps, IState> {
   public static defaultProps = {
     selected: false,
   };
+
+  public state: IState = {
+    inputVisible: false,
+  };
+
+  private input: HTMLInputElement;
 
   public onClick = () => {
     const { workspace } = this.props;
@@ -25,7 +35,7 @@ export default class extends React.Component<Props, {}> {
     workspaces.selected = workspace.id;
   };
 
-  public onDelete = (e?: React.SyntheticEvent<HTMLDivElement>) => {
+  public onDelete = (e?: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -50,8 +60,48 @@ export default class extends React.Component<Props, {}> {
     }
   };
 
+  public onLabelClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    this.toggleInput(true);
+  };
+
+  public onInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+  };
+
+  public onInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    this.toggleInput(false);
+  };
+
+  public onInputKeypress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      this.toggleInput(false);
+    }
+  };
+
+  public toggleInput = (flag: boolean) => {
+    const { workspace } = this.props;
+
+    if (flag) {
+      this.input.value = workspace.name;
+      this.input.select();
+    } else {
+      const value = this.input.value;
+
+      if (value.length > 0) {
+        this.input.value = value;
+        workspace.name = value;
+      }
+    }
+
+    this.setState({ inputVisible: flag });
+    Store.workspaces.inputVisible = flag;
+  };
+
   public render() {
     const { workspace } = this.props;
+    const { inputVisible } = this.state;
     const { workspaces } = Store;
 
     const selected = workspaces.selected === workspace.id;
@@ -65,7 +115,14 @@ export default class extends React.Component<Props, {}> {
         <IconsContainer selected={selected}>
           {icons != null && icons.map((data: any, key: any) => <Icon key={key} src={data} />)}
         </IconsContainer>
-        <Label>{workspace.name}</Label>
+        <Label onClick={this.onLabelClick}>{workspace.name}</Label>
+        <Input
+          innerRef={r => (this.input = r)}
+          visible={inputVisible}
+          onClick={this.onInputClick}
+          onBlur={this.onInputBlur}
+          onKeyPress={this.onInputKeypress}
+        />
       </Root>
     );
   }

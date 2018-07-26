@@ -7,6 +7,7 @@ import Tab from '../../models/tab';
 import Store from '../../store';
 import db from '../../../shared/models/app-database';
 import { BASE_PATH } from '../../constants';
+import { ContextMenuMode } from '../../enums';
 
 @observer
 export default class extends React.Component<{ page: Page }, {}> {
@@ -18,6 +19,8 @@ export default class extends React.Component<{ page: Page }, {}> {
 
   private tab: Tab;
 
+  private onURLChange: any;
+
   public componentDidMount() {
     const { page } = this.props;
     const { id } = page;
@@ -26,30 +29,46 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.tab = tab;
 
     this.webview.addEventListener('did-stop-loading', this.onDidStopLoading);
-    this.webview.addEventListener('did-navigate', this.onNavigate);
-    this.webview.addEventListener('did-navigate-in-page', this.onNavigate);
-    this.webview.addEventListener('will-navigate', this.onNavigate);
     this.webview.addEventListener('page-title-updated', this.onPageTitleUpdated);
     this.webview.addEventListener('load-commit', this.onLoadCommit);
     this.webview.addEventListener('page-favicon-updated', this.onPageFaviconUpdated);
     this.webview.addEventListener('dom-ready', this.onDomReady);
-    this.webview.addEventListener('enter-html-full-screen', this.onFullScreenEnter);
-    this.webview.addEventListener('leave-html-full-screen', this.onFullScreenLeave);
+    this.webview.addEventListener('enter-html-full-screen', this.onFullscreenEnter);
+    this.webview.addEventListener('leave-html-full-screen', this.onFullscreenLeave);
+    this.webview.addEventListener('new-window', this.onNewWindow);
+
+    // Custom event: fires when webview URL changes.
+    this.onURLChange = setInterval(() => {
+      const url = this.webview.getURL();
+      if (url !== tab.url) {
+        this.tab.url = url;
+        this.updateData();
+        Store.isStarred = !!Store.bookmarks.find(x => x.url === url);
+      }
+    }, 10);
   }
 
   public componentWillUnmount() {
     this.webview.removeEventListener('did-stop-loading', this.onDidStopLoading);
-    this.webview.removeEventListener('did-navigate', this.onNavigate);
-    this.webview.removeEventListener('did-navigate-in-page', this.onNavigate);
-    this.webview.removeEventListener('will-navigate', this.onNavigate);
     this.webview.removeEventListener('page-title-updated', this.onPageTitleUpdated);
     this.webview.removeEventListener('load-commit', this.onLoadCommit);
     this.webview.removeEventListener('page-favicon-updated', this.onPageFaviconUpdated);
-    this.webview.removeEventListener('enter-html-full-screen', this.onFullScreenEnter);
-    this.webview.removeEventListener('leave-html-full-screen', this.onFullScreenLeave);
+    this.webview.removeEventListener('enter-html-full-screen', this.onFullscreenEnter);
+    this.webview.removeEventListener('leave-html-full-screen', this.onFullscreenLeave);
+    this.webview.removeEventListener('new-window', this.onNewWindow);
+
+    clearInterval(this.onURLChange);
 
     Store.isFullscreen = false;
   }
+
+  public onNewWindow = (e: Electron.NewWindowEvent) => {
+    if (e.disposition === 'new-window' || e.disposition === 'foreground-tab') {
+      Store.getCurrentWorkspace().addTab(e.url, true);
+    } else if (e.disposition === 'background-tab') {
+      Store.getCurrentWorkspace().addTab(e.url, false);
+    }
+  };
 
   public onContextMenu = (e: Electron.Event, params: Electron.ContextMenuParams) => {
     requestAnimationFrame(() => {
@@ -57,6 +76,16 @@ export default class extends React.Component<{ page: Page }, {}> {
     });
 
     Store.webviewContextMenuParams = params;
+
+    if (params.linkURL && params.hasImageContents) {
+      Store.pageMenuData.mode = ContextMenuMode.ImageAndURL;
+    } else if (params.linkURL) {
+      Store.pageMenuData.mode = ContextMenuMode.URL;
+    } else if (params.hasImageContents) {
+      Store.pageMenuData.mode = ContextMenuMode.Image;
+    } else {
+      Store.pageMenuData.mode = ContextMenuMode.Normal;
+    }
 
     // Calculate new menu position
     // using cursor x, y and
@@ -95,17 +124,9 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.webview.removeEventListener('dom-ready', this.onDomReady);
   };
 
-  public onDidStopLoading = (e: Electron.Event) => {
-    this.onNavigate(e as any);
-    this.tab.loading = false;
-  };
-
-  public onNavigate = ({ isMainFrame, url }: any) => {
+  public onDidStopLoading = () => {
     Store.refreshNavigationState();
-
-    if (!isMainFrame && !url) return;
-    this.tab.url = url;
-    this.updateData();
+    this.tab.loading = false;
   };
 
   public onLoadCommit = async ({ url, isMainFrame }: Electron.LoadCommitEvent) => {
@@ -125,13 +146,6 @@ export default class extends React.Component<{ page: Page }, {}> {
 
       this.lastURL = url;
     }
-
-    const bookmark = await db.bookmarks
-      .where('url')
-      .equals(url)
-      .first();
-
-    this.tab.bookmark = bookmark;
   };
 
   public onPageFaviconUpdated = ({ favicons }: Electron.PageFaviconUpdatedEvent) => {
@@ -178,12 +192,12 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.updateData();
   };
 
-  public onFullScreenEnter = () => {
-    Store.isFullscreen = true;
+  public onFullscreenEnter = () => {
+    Store.isHTMLFullscreen = true;
   };
 
-  public onFullScreenLeave = () => {
-    Store.isFullscreen = false;
+  public onFullscreenLeave = () => {
+    Store.isHTMLFullscreen = false;
   };
 
   public render() {

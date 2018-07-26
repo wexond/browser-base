@@ -6,48 +6,44 @@ import {
   Root, Container, Name, Icon, List,
 } from './styles';
 
-export interface IProps {
+export type DropdownEvent = (e?: React.MouseEvent<any>) => void;
+
+export interface Props {
   ripple?: boolean;
   customRippleBehavior?: boolean;
   children?: any;
   style?: any;
-  onChange?: (data?: any, item?: Item, element?: this) => void;
+  onChange?: (id?: number) => void;
+  onMouseUp?: DropdownEvent;
 }
 
-export interface IState {
+export interface State {
   activated: boolean;
   listHeight: number;
-  selectedItem?: Item;
+  selectedItem: number;
 }
 
-export default class Button extends React.Component<IProps, IState> {
+export default class Dropdown extends React.Component<Props, State> {
+  public static Item = Item;
+
   public static defaultProps = {
     customRippleBehavior: false,
     ripple: true,
   };
 
-  public static Item = Item;
-
-  public state: IState = {
+  public state: State = {
     activated: false,
     listHeight: 0,
+    selectedItem: 0,
   };
 
-  private ripples: Ripples;
+  public ripples: Ripples;
 
   public listContainer: HTMLDivElement;
 
   public items: Item[] = [];
 
   public componentDidMount() {
-    const { selectedItem } = this.state;
-
-    if (selectedItem == null && this.items.length > 0) {
-      this.setState({
-        selectedItem: this.items[0],
-      });
-    }
-
     window.addEventListener('keydown', this.onWindowKeyDown);
   }
 
@@ -68,14 +64,14 @@ export default class Button extends React.Component<IProps, IState> {
     this.toggle(!activated);
   };
 
-  public onMouseDown = (e: React.SyntheticEvent<any>) => {
+  public onMouseDown = (e: React.MouseEvent<any>) => {
     e.preventDefault();
     e.stopPropagation();
   };
 
-  public onItemClick = (e: React.SyntheticEvent<any>, item: Item) => {
+  public onItemClick = (e: React.MouseEvent<any>, item: Item) => {
     if (item) {
-      this.setState({ selectedItem: item });
+      this.setState({ selectedItem: item.props.id });
       this.toggle(false);
       this.onChange(item);
     }
@@ -90,21 +86,19 @@ export default class Button extends React.Component<IProps, IState> {
     const { selectedItem } = this.state;
     const key = e.key;
 
-    if (selectedItem == null) return;
-    if (key === 'Enter' || key === 'Escape') return this.toggle(false); // eslint-disable-line
-    if (key !== 'ArrowDown' && key !== 'ArrowUp') return;
-
-    let index = this.items.indexOf(selectedItem);
+    let index = selectedItem;
     const maxIndex = this.items.length - 1;
 
-    if (key === 'ArrowDown') {
+    if (key === 'Enter' || key === 'Escape') {
+      this.toggle(false);
+    } else if (key === 'ArrowDown') {
       index = index === maxIndex ? 0 : index + 1;
-    } else {
+    } else if (key === 'ArrowUp') {
       index = index === 0 ? maxIndex : index - 1;
     }
 
-    this.setState({ selectedItem: this.items[index] });
-    this.onChange(this.items[index]);
+    if (selectedItem !== index) this.onChange(this.items.find(x => x.props.id === index));
+    this.setState({ selectedItem: index });
   };
 
   public toggle = (flag: boolean) => {
@@ -118,27 +112,29 @@ export default class Button extends React.Component<IProps, IState> {
     const { onChange } = this.props;
 
     if (typeof onChange === 'function') {
-      onChange(item.props.data, item, this);
+      onChange(item.props.value);
     }
   };
 
   public render() {
-    const {
-      ripple, customRippleBehavior, children, style,
-    } = this.props;
+    const { children, style, onMouseUp } = this.props;
     const { activated, listHeight, selectedItem } = this.state;
 
-    this.items = [];
+    this.items = this.items.filter(Boolean);
 
     const events = {
       onClick: this.onClick,
       ...getRippleEvents(this.props, () => this.ripples),
     };
 
+    let id = 0;
+
+    const item = this.items.find(x => x.props.id === selectedItem);
+
     return (
-      <Root onMouseDown={this.onMouseDown} style={style}>
+      <Root onMouseDown={this.onMouseDown} onMouseUp={onMouseUp} style={style}>
         <Container {...events}>
-          <Name>{selectedItem && selectedItem.props.children}</Name>
+          <Name>{item && item.props.children}</Name>
           <Icon activated={activated} />
           <Ripples ref={r => (this.ripples = r)} color="#000" />
         </Container>
@@ -148,7 +144,8 @@ export default class Button extends React.Component<IProps, IState> {
               React.cloneElement(el, {
                 ref: (r: Item) => r != null && this.items.push(r),
                 onClick: this.onItemClick,
-                selectedItem,
+                selected: selectedItem === id,
+                id: id++,
               }))}
           </List>
         )}

@@ -5,8 +5,9 @@ import opacity from '../../../defaults/opacity';
 
 export interface MenuItemProps {
   visible: boolean;
-  hide: boolean;
+  animation: boolean;
   dense: boolean;
+  disabled: boolean;
 }
 
 export const StyledMenuItem = styled.div`
@@ -15,20 +16,13 @@ export const StyledMenuItem = styled.div`
   overflow: hidden;
   transition: 0.2s opacity;
 
-  opacity: ${({ visible }: MenuItemProps) => (visible ? 1 : 0)};
-  display: ${({ hide }) => (hide ? 'none' : 'flex')};
+  opacity: ${({ animation }: MenuItemProps) => (animation ? 1 : 0)};
+  display: ${({ visible }) => (!visible ? 'none' : 'flex')};
   height: ${({ dense }) => (dense ? 24 : 32)}px;
+  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
 
   &:hover {
     background-color: #eee;
-  }
-
-  &:first-child {
-    margin-top: ${({ dense }) => (dense ? 4 : 8)}px;
-  }
-
-  &:last-child {
-    margin-bottom: ${({ dense }) => (dense ? 4 : 8)}px;
   }
 `;
 
@@ -39,7 +33,8 @@ export interface TitleProps {
 
 export const Title = styled.div`
   position: relative;
-  left: 24px;
+  left: 16px;
+  margin-right: 16px;
 
   ${typography.robotoRegular()};
   ${userSelection.noUserSelect()};
