@@ -215,6 +215,52 @@ class App extends React.Component {
     );
   };
 
+  public saveLinkAs = () => {
+    const url = Store.webviewContextMenuParams.linkText;
+    dialog.showSaveDialog({
+      defaultPath:url + '.html',
+      filters: [
+        {
+          name: '.html',
+          extensions: ['html'],
+        }
+      ]
+    },
+      function (path1) {
+        Store.getSelectedPage().webview.getWebContents().savePage(path1, 'HTMLComplete', (error) => {
+          if (error) {
+            console.error(error)
+          }
+        })
+      }
+    )
+  };
+
+  public saveAs = () => {
+    dialog.showSaveDialog({
+      defaultPath: Store.getSelectedPage().webview.getTitle() + '.html',
+      filters: [
+        {
+          name: '.html',
+          extensions: ['html'],
+        }
+      ]
+    },
+      function (path1) {
+        Store.getSelectedPage().webview.getWebContents().savePage(path1, 'HTMLComplete', (error) => {
+          if (error) {
+            console.error(error)
+          }
+        })
+      }
+    )
+  };
+
+  public viewSource = () => {
+    const url = Store.getSelectedPage().webview.getURL();
+    Store.getCurrentWorkspace().addTab('view-source:' + url, true);
+  };
+
   public render() {
     const { mode } = Store.pageMenuData;
 
@@ -246,7 +292,7 @@ class App extends React.Component {
           <ContextMenu.Item visible={imageAndURLLink} disabled>
             Open link in new incognito window
           </ContextMenu.Item>
-          <ContextMenu.Item visible={imageAndURLLink} disabled>
+          <ContextMenu.Item visible={imageAndURLLink} onClick={this.saveLinkAs}>
             Save link as
           </ContextMenu.Item>
           <ContextMenu.Item visible={imageAndURLLink} onClick={this.onCopyLinkAddressClick}>
@@ -269,11 +315,11 @@ class App extends React.Component {
           <ContextMenu.Item visible={normal} onClick={this.onPrintClick}>
             Print
           </ContextMenu.Item>
-          <ContextMenu.Item visible={normal} disabled>
+          <ContextMenu.Item visible={normal} onClick={this.saveAs}>
             Save as
           </ContextMenu.Item>
           <ContextMenu.Separator visible={normal} />
-          <ContextMenu.Item visible={normal} disabled>
+          <ContextMenu.Item visible={normal} onClick={this.viewSource} >
             View source
           </ContextMenu.Item>
           <ContextMenu.Item onClick={this.onInspectElementClick}>Inspect element</ContextMenu.Item>
