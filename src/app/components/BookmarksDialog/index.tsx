@@ -6,7 +6,7 @@ import Textfield from '../../../shared/components/Textfield';
 import Button from '../../../shared/components/Button';
 import colors from '../../../shared/defaults/colors';
 import db from '../../../shared/models/app-database';
-import { removeItem } from '../../../menu/bookmarks/utils';
+import { removeItem, getBookmarkFolders } from '../../../menu/bookmarks/utils';
 import Dropdown from '../../../shared/components/Dropdown';
 import { Root, Title, ButtonsContainer } from './styles';
 import BookmarkItem from '../../../shared/models/bookmark-item';
@@ -15,67 +15,73 @@ import BookmarkItem from '../../../shared/models/bookmark-item';
 export default class BookmarksDialog extends Component {
   private textField: Textfield;
 
-  private dropDown: Dropdown;
+  private dropdown: Dropdown;
 
-  private bookmarkFolder: any = null;
+  private dropDownClicked: boolean = false;
 
-  public onLoad = () => {
-    const bookmark = Store.getSelectedTab().bookmark;
+  private bookmarkFolder: number = -1;
 
+  private bookmark: BookmarkItem;
+
+  public show = (bookmark: BookmarkItem) => {
     if (bookmark != null && bookmark.title != null) {
+      Store.bookmarksDialogVisible = !Store.bookmarksDialogVisible;
+      Store.isStarred = true;
+
       this.textField.setValue(bookmark.title);
       this.textField.inputElement.select();
 
-      if (bookmark.id !== -1) {
-        const items = this.dropDown.items.filter(
-          r => r.props.data != null && r.props.data.id === bookmark.parent,
-        );
+      this.bookmark = bookmark;
 
-        if (items.length !== 0) {
-          if (items.length > 1) {
-            console.warn(bookmark, this.dropDown); // eslint-disable-line
-          }
+      const item = this.dropdown.items.find(x => x.props.value === bookmark.parent);
 
-          this.dropDown.setState({
-            selectedItem: items[0],
-          });
-        }
+      if (item) {
+        this.dropdown.setState({
+          selectedItem: item.props.id,
+        });
       }
     }
   };
 
-  public onMouseUp = (e?: SyntheticEvent<any>) => {
+  public onMouseUp = (e?: React.MouseEvent<any>) => {
     e.stopPropagation();
     this.textField.inputElement.blur();
+
+    if (this.dropDownClicked) {
+      this.dropdown.ripples.removeRipples();
+      this.dropDownClicked = false;
+    }
+  };
+
+  public onDropdownMouseUp = (e?: React.MouseEvent<any>) => {
+    e.preventDefault();
+    this.dropDownClicked = true;
   };
 
   public onRemoveClick = async () => {
-    const selectedTab = Store.getSelectedTab();
-
-    if (selectedTab.bookmark) {
-      await removeItem(selectedTab.bookmark.id);
-
-      selectedTab.bookmark = null;
+    if (this.bookmark) {
+      await removeItem(this.bookmark.id, 'item');
+      Store.isStarred = false;
       Store.bookmarksDialogVisible = false;
-    } else {
-      console.error(selectedTab); // eslint-disable-line
     }
   };
 
   public onDoneClick = async () => {
-    const bookmark = Store.getSelectedTab().bookmark;
     const name = this.textField.getValue();
-    const parent = this.bookmarkFolder == null ? -1 : this.bookmarkFolder.id;
 
     await db.bookmarks
       .where('id')
-      .equals(bookmark.id)
+      .equals(this.bookmark.id)
       .modify({
         title: name,
-        parent,
+        parent: this.bookmarkFolder,
       });
 
-    bookmark.title = name;
+    const item = Store.bookmarks.find(x => x.id === this.bookmark.id);
+
+    item.title = name;
+    item.parent = this.bookmarkFolder;
+
     Store.bookmarksDialogVisible = false;
   };
 
@@ -85,8 +91,8 @@ export default class BookmarksDialog extends Component {
     }
   };
 
-  public onDropdownChange = (data: any) => {
-    this.bookmarkFolder = data;
+  public onDropdownChange = (id: number) => {
+    this.bookmarkFolder = id;
   };
 
   public render() {
@@ -108,13 +114,14 @@ export default class BookmarksDialog extends Component {
           style={{ marginTop: 16 }}
         />
         <Dropdown
-          ref={r => (this.dropDown = r)}
+          ref={r => (this.dropdown = r)}
           onChange={this.onDropdownChange}
+          onMouseUp={this.onDropdownMouseUp}
           style={dropDownStyle}
         >
-          <Dropdown.Item>Home</Dropdown.Item>
-          {Store.getBookmarkFolders().map((item: BookmarkItem, key: any) => (
-            <Dropdown.Item data={item} key={key}>
+          <Dropdown.Item value={-1}>Home</Dropdown.Item>
+          {getBookmarkFolders().map((item: BookmarkItem, key: any) => (
+            <Dropdown.Item value={item.id} key={key}>
               {item.title}
             </Dropdown.Item>
           ))}

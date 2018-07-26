@@ -26,10 +26,10 @@ export default class App extends React.Component<{}, IState> {
     return (
       <StyledApp theme={theme}>
         <Dropdown>
-          <Dropdown.Item>Item 1</Dropdown.Item>
-          <Dropdown.Item>Item 2</Dropdown.Item>
-          <Dropdown.Item>Item 3</Dropdown.Item>
-          <Dropdown.Item>Item 4</Dropdown.Item>
+          <Dropdown.Item value="item-1">Item 1</Dropdown.Item>
+          <Dropdown.Item value="item-2">Item 2</Dropdown.Item>
+          <Dropdown.Item value="item-3">Item 3</Dropdown.Item>
+          <Dropdown.Item value="item-4">Item 4</Dropdown.Item>
         </Dropdown>
       </StyledApp>
     );

@@ -9,7 +9,6 @@ export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
 export interface IProps {
   visible?: boolean;
-  large?: boolean;
   onClick?: ButtonEvent;
   onMouseDown?: ButtonEvent;
   onMouseUp?: ButtonEvent;
@@ -18,6 +17,7 @@ export interface IProps {
   style?: any;
   className?: string;
   dense?: boolean;
+  width?: number;
   hideMenuOnMouseDown?: boolean;
 }
 
@@ -25,6 +25,7 @@ export interface IState {
   visible: boolean;
   height: number;
   heightTransition: boolean;
+  zIndex: number;
 }
 
 export default class ContextMenu extends React.Component<IProps, IState> {
@@ -40,11 +41,14 @@ export default class ContextMenu extends React.Component<IProps, IState> {
     visible: false,
     heightTransition: false,
     height: 0,
+    zIndex: -1,
   };
 
   private menu: HTMLDivElement;
 
   private height: number;
+
+  private timeout: any;
 
   public componentWillReceiveProps(nextProps: IProps) {
     this.toggle(nextProps.visible);
@@ -59,12 +63,17 @@ export default class ContextMenu extends React.Component<IProps, IState> {
 
     if (flag) {
       this.setState({ heightTransition: false });
+      clearTimeout(this.timeout);
       requestAnimationFrame(() => {
-        this.setState({ height: 0 });
+        this.setState({ height: 0, zIndex: 999 });
         this.updateHeight();
       });
     } else {
+      clearTimeout(this.timeout);
       this.setState({ heightTransition: false });
+      this.timeout = setTimeout(() => {
+        this.setState({ zIndex: -1 });
+      }, 300);
     }
   }
 
@@ -93,9 +102,11 @@ export default class ContextMenu extends React.Component<IProps, IState> {
   };
 
   public render() {
-    const { visible, height, heightTransition } = this.state;
     const {
-      large, style, className, dense, hideMenuOnMouseDown, children,
+      visible, height, heightTransition, zIndex,
+    } = this.state;
+    const {
+      style, className, dense, hideMenuOnMouseDown, children, width,
     } = this.props;
 
     let i = 1;
@@ -108,25 +119,31 @@ export default class ContextMenu extends React.Component<IProps, IState> {
     return (
       <StyledMenu
         innerRef={r => (this.menu = r)}
-        large={large}
+        width={width}
         visible={visible}
         dense={dense}
         className={className}
         style={{
           ...style,
           height,
-          transition: `0.2s opacity, 0.2s margin-top ${heightTransition ? ', 0.2s height' : ''}`,
+          transition: `0.2s opacity, 0.3s margin-top ${heightTransition ? ', 0.3s height' : ''}`,
+          zIndex,
         }}
         {...events}
       >
-        {React.Children.map(children, child =>
-          React.cloneElement(child as React.ReactElement<any>, {
+        {React.Children.map(children, child => {
+          const clone = React.cloneElement(child as React.ReactElement<any>, {
             menu: this,
             dense,
-            i: i++,
-            visible,
+            i,
+            menuVisible: visible,
             hideMenuOnClick: hideMenuOnMouseDown,
-          }))}
+          });
+
+          if (clone.props.visible) i++;
+
+          return clone;
+        })}
       </StyledMenu>
     );
   }

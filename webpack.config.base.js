@@ -21,7 +21,7 @@ const config = {
         test: /\.(tsx|ts|jsx|js)$/,
         include: INCLUDE,
         exclude: EXCLUDE,
-        use: ['ts-loader'],
+        use: ['awesome-typescript-loader'],
       },
     ],
   },

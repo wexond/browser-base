@@ -1,11 +1,15 @@
 import fs from 'fs';
+import { ipcRenderer } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
+
 import App from './components/App';
 import { loadPlugins } from './utils/plugins';
 import typography from '../shared/mixins/typography';
 import { getPath } from '../shared/utils/paths';
+import ipcMessages from '../shared/defaults/ipc-messages';
+import Store from './store';
 
 const robotoLight = require('../shared/fonts/Roboto-Light.ttf');
 const robotoMedium = require('../shared/fonts/Roboto-Medium.ttf');
@@ -39,6 +43,9 @@ injectGlobal`
     ${typography.body2()}
     margin: 0;
     padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
   }
 
   @keyframes nersent-ui-preloader-rotate {
@@ -67,6 +74,17 @@ injectGlobal`
     box-sizing: border-box;
   }
 `;
+
+ipcRenderer.on(ipcMessages.FULLSCREEN, (e: Electron.IpcMessageEvent, isFullscreen: boolean) => {
+  Store.isFullscreen = isFullscreen;
+});
+
+ipcRenderer.on(ipcMessages.UPDATE_AVAILABLE, (e: Electron.IpcMessageEvent, version: string) => {
+  Store.updateInfo.version = version;
+  Store.updateInfo.available = true;
+});
+
+ipcRenderer.send(ipcMessages.UPDATE_CHECK);
 
 async function setup() {
   if (!fs.existsSync(getPath('plugins'))) {

@@ -1,7 +1,14 @@
-import { ipcRenderer } from 'electron';
+import {
+  ipcRenderer, clipboard, remote, nativeImage,
+} from 'electron';
 import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
 import React from 'react';
+import { createWriteStream } from 'fs';
+import { basename, extname } from 'path';
+import http from 'http';
+import { parse } from 'url';
+
 import { StyledApp } from './styles';
 import Store from '../../store';
 import Pages from '../Pages';
@@ -10,6 +17,14 @@ import GlobalMenu from '../GlobalMenu';
 import WorkspacesMenu from '../WorkspacesMenu';
 import ContextMenu from '../../../shared/components/ContextMenu';
 import db from '../../../shared/models/app-database';
+import Snackbar from '../../../shared/components/Snackbar';
+import Button from '../../../shared/components/Button';
+import { ButtonType } from '../../../shared/enums';
+import colors from '../../../shared/defaults/colors';
+import ipcMessages from '../../../shared/defaults/ipc-messages';
+import { ContextMenuMode } from '../../enums';
+
+const { dialog } = remote;
 
 @observer
 class App extends React.Component {
@@ -19,10 +34,6 @@ class App extends React.Component {
   };
 
   public async componentDidMount() {
-    ipcRenderer.on('fullscreen', (e: Electron.IpcMessageEvent, isFullscreen: boolean) => {
-      Store.isFullscreen = isFullscreen;
-    });
-
     window.addEventListener('mousemove', e => {
       Store.mouse.x = e.pageX;
       Store.mouse.y = e.pageY;
@@ -120,21 +131,103 @@ class App extends React.Component {
     });
 
     Store.bookmarks = await db.bookmarks.toArray();
-
-    // ipcRenderer.send(ipcMessages.PLUGIN_INSTALL, 'wexond/wexond-example-plugin');
   }
 
   public componentWillUnmount() {
     Store.pages = [];
   }
 
+  public onRestartClick = () => {
+    Store.updateInfo.available = false;
+    ipcRenderer.send(ipcMessages.UPDATE_RESTART_AND_INSTALL);
+  };
+
+  public onOpenLinkInNewTabClick = () => {
+    const { linkURL } = Store.webviewContextMenuParams;
+    Store.getCurrentWorkspace().addTab(linkURL, false);
+  };
+
+  public onCopyLinkAddressClick = () => {
+    const { linkURL } = Store.webviewContextMenuParams;
+    clipboard.clear();
+    clipboard.writeText(linkURL);
+  };
+
+  public onOpenImageInNewTabClick = () => {
+    const { srcURL } = Store.webviewContextMenuParams;
+    Store.getCurrentWorkspace().addTab(srcURL, false);
+  };
+
+  public onPrintClick = () => {
+    Store.getSelectedPage().webview.print();
+  };
+
+  public onCopyImageClick = () => {
+    const { srcURL } = Store.webviewContextMenuParams;
+    const img = nativeImage.createFromDataURL(srcURL);
+
+    clipboard.clear();
+    clipboard.writeImage(img);
+  };
+
+  public onCopyImageAddressClick = () => {
+    const { srcURL } = Store.webviewContextMenuParams;
+    clipboard.clear();
+    clipboard.writeText(srcURL);
+  };
+
+  public onSaveImageAsClick = () => {
+    const { srcURL } = Store.webviewContextMenuParams;
+    let name = basename(srcURL);
+    let extension = extname(name);
+
+    if (extension.trim() === '') {
+      name = '';
+      extension = srcURL.split('data:image/')[1].split(';base64,')[0];
+
+      const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+      for (let i = 0; i < 16; i++) {
+        name += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+    }
+
+    dialog.showSaveDialog(
+      {
+        defaultPath: `${name}.${extension}`,
+        filters: [
+          {
+            name: '',
+            extensions: [extension],
+          },
+        ],
+      },
+      path => {
+        const file = createWriteStream(path);
+
+        const options = parse(srcURL);
+
+        const request = http.request(options, res => {
+          res.pipe(file);
+        });
+        request.end();
+      },
+    );
+  };
+
   public render() {
+    const { mode } = Store.pageMenuData;
+
+    const imageAndURLLink = mode === ContextMenuMode.ImageAndURL || mode === ContextMenuMode.URL;
+    const imageAndURLImage = mode === ContextMenuMode.ImageAndURL || mode === ContextMenuMode.Image;
+    const normal = mode === ContextMenuMode.Normal;
+
     return (
       <StyledApp>
         <Toolbar />
         <Pages />
         <ContextMenu
-          large
+          width={256}
           dense
           ref={(r: ContextMenu) => (Store.pageMenu = r)}
           onMouseDown={e => e.stopPropagation()}
@@ -142,13 +235,63 @@ class App extends React.Component {
             position: 'absolute',
             left: Store.pageMenuData.x,
             top: Store.pageMenuData.y,
-            zIndex: 999,
           }}
         >
+          <ContextMenu.Item visible={imageAndURLLink} onClick={this.onOpenLinkInNewTabClick}>
+            Open link in new tab
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLLink} disabled>
+            Open link in new window
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLLink} disabled>
+            Open link in new incognito window
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLLink} disabled>
+            Save link as
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLLink} onClick={this.onCopyLinkAddressClick}>
+            Copy link address
+          </ContextMenu.Item>
+          <ContextMenu.Separator visible={imageAndURLLink} />
+          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onOpenImageInNewTabClick}>
+            Open image in new tab
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onSaveImageAsClick}>
+            Save image as
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onCopyImageClick}>
+            Copy image
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onCopyImageAddressClick}>
+            Copy image address
+          </ContextMenu.Item>
+          <ContextMenu.Separator visible={imageAndURLImage} />
+          <ContextMenu.Item visible={normal} onClick={this.onPrintClick}>
+            Print
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={normal} disabled>
+            Save as
+          </ContextMenu.Item>
+          <ContextMenu.Separator visible={normal} />
+          <ContextMenu.Item visible={normal} disabled>
+            View source
+          </ContextMenu.Item>
           <ContextMenu.Item onClick={this.onInspectElementClick}>Inspect element</ContextMenu.Item>
         </ContextMenu>
         <GlobalMenu />
         <WorkspacesMenu />
+        <Snackbar visible={Store.updateInfo.available}>
+          <Snackbar.Content>An update is available</Snackbar.Content>
+          <Snackbar.Actions>
+            <Button
+              type={ButtonType.Text}
+              foreground={colors.blue['500']}
+              onClick={this.onRestartClick}
+            >
+              RESTART
+            </Button>
+          </Snackbar.Actions>
+        </Snackbar>
       </StyledApp>
     );
   }

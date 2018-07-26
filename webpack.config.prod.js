@@ -17,11 +17,6 @@ const appConfig = {
   entry: {
     app: ['./src/app'],
   },
-
-  externals: {
-    sqlite3: 'commonjs sqlite3',
-    npm: 'require("npm")',
-  },
 };
 
 const newTabConfig = {
