@@ -127,7 +127,15 @@ class App extends React.Component {
         // add a new tab
 
         Store.getCurrentWorkspace().addTab();
-      }
+      } else if (e.altKey && e.keyCode === 37) {
+        // alt + left arrow
+        // go back
+        Store.getSelectedPage().webview.goBack();
+      } else if (e.altKey && e.keyCode === 39) {
+        //alt + right arrow
+        //go forward
+        Store.getSelectedPage().webview.goForward();
+      } 
     });
 
     Store.bookmarks = await db.bookmarks.toArray();
