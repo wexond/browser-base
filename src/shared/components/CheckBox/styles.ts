@@ -1,12 +1,13 @@
-import * as React from 'react';
-import styled, { StyledComponentClass } from 'styled-components';
+import styled from 'styled-components';
 import { UITheme } from '../../enums';
 import icons from '../../mixins/icons';
 import images from '../../mixins/images';
 import userSelection from '../../mixins/user-selection';
-import { getComponentColor } from '../../utils/component-color';
+import {
+  getComponentColor,
+  getComponentForeground
+} from '../../utils/component-color';
 import Cursors from '../../mixins/cursors';
-import { TransparencyText } from '../../models/transparency';
 import typography from '../../mixins/typography';
 
 const checkIcon = require('../../icons/check.svg');
@@ -91,33 +92,6 @@ export const Container = styled.div`
   ${(props: IContainerProps) => props.disabled && 'pointer-events: none;'};
   ${Cursors.pointer()};
 `;
-
-const transparency = TransparencyText;
-const getComponentForeground = (
-  disabled: boolean,
-  theme: UITheme,
-  opacity = {
-    disabled: {
-      light: transparency.light.disabled,
-      dark: transparency.dark.disabled
-    },
-    enabled: {
-      light: transparency.light.inactive,
-      dark: transparency.dark.inactive
-    }
-  }
-) => {
-  if (disabled) {
-    if (theme === UITheme.Light) {
-      return `rgba(0,0,0,${opacity.disabled.light})`;
-    }
-    return `rgba(255,255,255,${opacity.disabled.dark})`;
-  }
-  if (theme === UITheme.Light) {
-    return `rgba(0,0,0,${opacity.enabled.light})`;
-  }
-  return `rgba(255,255,255,${opacity.enabled.dark})`;
-};
 
 export const ComponentText = styled.div`
   margin-left: 8px;

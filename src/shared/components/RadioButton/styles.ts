@@ -1,8 +1,10 @@
-import styled, { StyledComponentClass } from 'styled-components';
-import { TransparencyText } from '../../models/transparency';
+import styled from 'styled-components';
 import { UITheme, Align } from '../../enums';
 import Positioning from '../../mixins/positioning';
-import { getComponentColor } from '../../utils/component-color';
+import {
+  getComponentColor,
+  getComponentForeground
+} from '../../utils/component-color';
 import typography from '../../mixins/typography';
 import Cursors from '../../mixins/cursors';
 
@@ -84,33 +86,6 @@ export const Circle = styled.div`
   visibility: ${props => (props.visible ? 'visible' : 'hidden')};
   ${Positioning.center(Align.CenterBoth)};
 `;
-
-const transparency = TransparencyText;
-const getComponentForeground = (
-  disabled: boolean,
-  theme: UITheme,
-  opacity = {
-    disabled: {
-      light: transparency.light.disabled,
-      dark: transparency.dark.disabled
-    },
-    enabled: {
-      light: transparency.light.inactive,
-      dark: transparency.dark.inactive
-    }
-  }
-) => {
-  if (disabled) {
-    if (theme === UITheme.Light) {
-      return `rgba(0,0,0,${opacity.disabled.light})`;
-    }
-    return `rgba(255,255,255,${opacity.disabled.dark})`;
-  }
-  if (theme === UITheme.Light) {
-    return `rgba(0,0,0,${opacity.enabled.light})`;
-  }
-  return `rgba(255,255,255,${opacity.enabled.dark})`;
-};
 
 export const Container = styled.div`
   padding: 8px;
