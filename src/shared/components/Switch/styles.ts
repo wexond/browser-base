@@ -1,12 +1,10 @@
-import * as React from 'react';
-import styled, { StyledComponentClass } from 'styled-components';
+import styled from 'styled-components';
 import Cursors from '../../mixins/cursors';
 import { Align, UITheme } from '../../enums';
 import Positioning from '../../mixins/positioning';
 import Shadows from '../../mixins/shadows';
 import typography from '../../mixins/typography';
-import { getComponentColor } from '../../utils/component-color';
-import { TransparencyText } from '../../models/transparency';
+import { getComponentForeground } from '../../utils/component-color';
 
 export interface IContainerProps {
   disabled?: boolean;
@@ -69,33 +67,6 @@ const getTrackBackgroundColor = (props: ITrackProps) => {
     return 'rgba(255,255,255,0.30)';
   }
   return color;
-};
-
-const transparency = TransparencyText;
-const getComponentForeground = (
-  disabled: boolean,
-  theme: UITheme,
-  opacity = {
-    disabled: {
-      light: transparency.light.disabled,
-      dark: transparency.dark.disabled
-    },
-    enabled: {
-      light: transparency.light.inactive,
-      dark: transparency.dark.inactive
-    }
-  }
-) => {
-  if (disabled) {
-    if (theme === UITheme.Light) {
-      return `rgba(0,0,0,${opacity.disabled.light})`;
-    }
-    return `rgba(255,255,255,${opacity.disabled.dark})`;
-  }
-  if (theme === UITheme.Light) {
-    return `rgba(0,0,0,${opacity.enabled.light})`;
-  }
-  return `rgba(255,255,255,${opacity.enabled.dark})`;
 };
 
 export const Container = styled.div`

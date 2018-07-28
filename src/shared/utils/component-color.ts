@@ -43,3 +43,30 @@ export const getComponentOpacity = (
   background: boolean = true,
   transparency?: any,
 ) => getComponentColor(null, toggled, disabled, theme, background, transparency, true);
+
+const transparency = TransparencyText;
+export const getComponentForeground = (
+  disabled: boolean,
+  theme: UITheme,
+  opacity = {
+    disabled: {
+      light: transparency.light.disabled,
+      dark: transparency.dark.disabled
+    },
+    enabled: {
+      light: transparency.light.inactive,
+      dark: transparency.dark.inactive
+    }
+  }
+) => {
+  if (disabled) {
+    if (theme === UITheme.Light) {
+      return `rgba(0,0,0,${opacity.disabled.light})`;
+    }
+    return `rgba(255,255,255,${opacity.disabled.dark})`;
+  }
+  if (theme === UITheme.Light) {
+    return `rgba(0,0,0,${opacity.enabled.light})`;
+  }
+  return `rgba(255,255,255,${opacity.enabled.dark})`;
+};
