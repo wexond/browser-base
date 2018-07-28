@@ -154,6 +154,10 @@ class App extends React.Component {
         // To see About
         Store.menu.visible = true;
         Store.menu.selectedItem = 4;
+      } else if (e.altKey && e.keyCode === 69){
+        // alt + E
+        // Open Menu
+        Store.menu.visible = true;
       }
     });
 
