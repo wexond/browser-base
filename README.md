@@ -15,9 +15,9 @@ Wexond is a web browser built on top of `Electron`, `React` and `styled-componen
 
 # Features
 
-- **Built-in ad-block** Browse the web without any ads!
-- **Beautiful and minimalistic UI** The tabs and address bar are located in the same toolbar to make more space for content.
-- **Right sided navigation drawer** Access to all features of Wexond by clicking the hamburger menu in the right of the toolbar!
+- **Built-in ad-block** Browse the web without any ads.
+- **Beautiful and minimalistic UI** The tabs and address bar are located in the same toolbar to take less space.
+- **Right sided navigation drawer** Access to all features of Wexond very easily.
 - **Workspaces** Easily group tabs to workspaces and access them very fast.
 - **Expanded new tab page** Have all information such as news, weather or currency in only one page!
 
@@ -26,6 +26,10 @@ Wexond is a web browser built on top of `Electron`, `React` and `styled-componen
 ![Home page](screenshots/screenshot-1.png)
 
 ![Menu](screenshots/screenshot-2.png)
+
+# [Downloads](https://github.com/wexond/wexond/releases)
+
+All binaries are located in the [Releases page](https://github.com/wexond/wexond/releases).
 
 # [Roadmap](docs/roadmap.md)
 
