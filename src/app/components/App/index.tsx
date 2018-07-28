@@ -127,6 +127,37 @@ class App extends React.Component {
         // add a new tab
 
         Store.getCurrentWorkspace().addTab();
+      } else if (e.altKey && e.keyCode === 37) {
+        // alt + left arrow
+        // go back
+        Store.getSelectedPage().webview.goBack();
+      } else if (e.altKey && e.keyCode === 39) {
+        //alt + right arrow
+        //go forward
+        Store.getSelectedPage().webview.goForward();
+      } else if (e.ctrlKey && e.keyCode === 72) {
+        // ctrl + h
+        // To view history 
+        Store.menu.visible = true;
+        Store.menu.selectedItem = 0;
+      } else if (e.ctrlKey && e.keyCode === 75) {
+        // ctrl + k
+        // To view bookmarks
+        Store.menu.visible = true;
+        Store.menu.selectedItem = 1;
+      } else if (e.altKey && e.keyCode === 36) {
+        // alt + Home
+        // To go NewTab Page
+        Store.getSelectedPage().webview.loadURL("wexond://newtab");
+      } else if (e.altKey && e.keyCode === 112) {
+        // alt + F1
+        // To see About
+        Store.menu.visible = true;
+        Store.menu.selectedItem = 4;
+      } else if (e.altKey && e.keyCode === 69){
+        // alt + E
+        // Open Menu
+        Store.menu.visible = true;
       }
     });
 
@@ -215,6 +246,52 @@ class App extends React.Component {
     );
   };
 
+  public saveLinkAs = () => {
+    const url = Store.webviewContextMenuParams.linkText;
+    dialog.showSaveDialog({
+      defaultPath:url + '.html',
+      filters: [
+        {
+          name: '.html',
+          extensions: ['html'],
+        }
+      ]
+    },
+      function (path1) {
+        Store.getSelectedPage().webview.getWebContents().savePage(path1, 'HTMLComplete', (error) => {
+          if (error) {
+            console.error(error)
+          }
+        })
+      }
+    )
+  };
+
+  public saveAs = () => {
+    dialog.showSaveDialog({
+      defaultPath: Store.getSelectedPage().webview.getTitle() + '.html',
+      filters: [
+        {
+          name: '.html',
+          extensions: ['html'],
+        }
+      ]
+    },
+      function (path1) {
+        Store.getSelectedPage().webview.getWebContents().savePage(path1, 'HTMLComplete', (error) => {
+          if (error) {
+            console.error(error)
+          }
+        })
+      }
+    )
+  };
+
+  public viewSource = () => {
+    const url = Store.getSelectedPage().webview.getURL();
+    Store.getCurrentWorkspace().addTab('view-source:' + url, true);
+  };
+
   public render() {
     const { mode } = Store.pageMenuData;
 
@@ -246,7 +323,7 @@ class App extends React.Component {
           <ContextMenu.Item visible={imageAndURLLink} disabled>
             Open link in new incognito window
           </ContextMenu.Item>
-          <ContextMenu.Item visible={imageAndURLLink} disabled>
+          <ContextMenu.Item visible={imageAndURLLink} onClick={this.saveLinkAs}>
             Save link as
           </ContextMenu.Item>
           <ContextMenu.Item visible={imageAndURLLink} onClick={this.onCopyLinkAddressClick}>
@@ -269,11 +346,11 @@ class App extends React.Component {
           <ContextMenu.Item visible={normal} onClick={this.onPrintClick}>
             Print
           </ContextMenu.Item>
-          <ContextMenu.Item visible={normal} disabled>
+          <ContextMenu.Item visible={normal} onClick={this.saveAs}>
             Save as
           </ContextMenu.Item>
           <ContextMenu.Separator visible={normal} />
-          <ContextMenu.Item visible={normal} disabled>
+          <ContextMenu.Item visible={normal} onClick={this.viewSource} >
             View source
           </ContextMenu.Item>
           <ContextMenu.Item onClick={this.onInspectElementClick}>Inspect element</ContextMenu.Item>
