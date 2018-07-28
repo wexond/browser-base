@@ -9,9 +9,17 @@
 [![Travis](https://img.shields.io/travis/wexond/wexond.svg?style=flat-square)](https://travis-ci.org/wexond/wexond)
 [![AppVeyor](https://img.shields.io/appveyor/ci/Sential/wexond.svg?style=flat-square)](https://ci.appveyor.com/project/Sential/wexond)
 
-Wexond is a _free_, _open-source_ and _extensible_ web browser with material design, which lets you browse the web without any ads thanks to built-in ad blocker. The API in extensions system lets you to extend the browser by additional functionality and customize it to your own needs. Wexond works on each desktop platform, thanks to `Electron`. For building the browser interface, we use `React`, `styled-components` and `MobX`. We also use Material Design components from our framework [`nersent-ui`](https://github.com/nersent/nersent-ui). For simple extensions and themes management, we use [`wexond-package-manager`](https://github.com/wexond/wexond-package-manager) (wpm).
+Wexond is a web browser built on top of `Electron`, `React` and `styled-components`.
 
 </div>
+
+# Features
+
+- **Built-in ad-block** Browse the web without any ads!
+- **Beautiful and minimalistic UI** The tabs and address bar are located in the same toolbar to make more space for content.
+- **Right sided navigation drawer** Access to all features of Wexond by clicking the hamburger menu in the right of the toolbar!
+- **Workspaces** Easily group tabs to workspaces and access them very fast.
+- **Expanded new tab page** Have all information such as news, weather or currency in only one page!
 
 # Screenshots
 
@@ -19,11 +27,15 @@ Wexond is a _free_, _open-source_ and _extensible_ web browser with material des
 
 ![Menu](screenshots/screenshot-2.png)
 
-![Github page](screenshots/screenshot-3.png)
+# [Roadmap](docs/roadmap.md)
+
+We still have a lot of things to do, to make Wexond better and better. This is just a beginning. So to improve our web browser we have created a roadmap so that you can see the next features and improvements.
 
 # Contributing
 
 We really appreciate any changes and improvements, so feel free to open pull requests! If you have found any issues, please report them. This would really help us making the browser even better!
+
+If you want to contribute, check our [Contributing guidelines](CONTRIBUTING.md) and [Code Of Conduct](CODE_OF_CONDUCT.md).
 
 ## Development
 
@@ -71,7 +83,5 @@ $ npm run <command>
 
 ## Documentation
 
-> For this moment there is no `docs` folder
-
-Guides and the API reference are located in [`docs`](https://github.com/Nersent/Wexond/docs).
+Guides and the API reference are located in [`docs`](docs).
 It also contains documents describing how to use the browser, and create extensions.
