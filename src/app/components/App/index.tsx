@@ -135,7 +135,26 @@ class App extends React.Component {
         //alt + right arrow
         //go forward
         Store.getSelectedPage().webview.goForward();
-      } 
+      } else if (e.ctrlKey && e.keyCode === 72){
+        // ctrl + h
+        // To view history 
+        Store.menu.visible = true;
+        Store.menu.selectedItem = 0;
+      } else if (e.ctrlKey && e.keyCode === 75){
+        // ctrl + k
+        // To view bookmarks
+        Store.menu.visible = true;
+        Store.menu.selectedItem = 1;
+      }else if (e.altKey && e.keyCode === 36){
+        // alt + Home
+        // To go NewTab Page
+        Store.getSelectedPage().webview.loadURL("wexond://newtab");
+      }else if (e.altKey && e.keyCode === 112){
+        // alt + F1
+        // To see About
+        Store.menu.visible = true;
+        Store.menu.selectedItem = 4;
+      }
     });
 
     Store.bookmarks = await db.bookmarks.toArray();
