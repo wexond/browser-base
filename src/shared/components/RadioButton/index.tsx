@@ -19,7 +19,6 @@ import {
   Container
 } from './styles';
 
-
 export interface IProps {
   className?: string;
   style?: {};

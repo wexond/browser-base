@@ -11,7 +11,6 @@ import typography from '../../mixins/typography';
 
 const checkIcon = require('../../icons/check.svg');
 
-
 export interface IStyledCheckboxProps {
   scaleAnimation: boolean;
 }
@@ -128,4 +127,3 @@ export const ComponentText = styled.div`
   color: ${props => getComponentForeground(props.disabled, props.theme)};
   ${typography.body2()};
 `;
-
