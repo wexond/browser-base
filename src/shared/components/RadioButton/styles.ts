@@ -1,4 +1,3 @@
-import * as React from 'react';
 import styled, { StyledComponentClass } from 'styled-components';
 import { TransparencyText } from '../../models/transparency';
 import { UITheme, Align } from '../../enums';
