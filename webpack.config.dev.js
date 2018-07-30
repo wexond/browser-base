@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-const { spawn } = require('child_process');
 const baseConfig = require('./webpack.config.base');
 
 const PORT = 8080;

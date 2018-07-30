@@ -17,6 +17,7 @@ export const StyledAddressBar = styled.div`
   left: 50%;
   overflow: hidden;
   background-color: white;
+  will-change: opacity, transform, box-shadow, border-radius, transition;
 
   ${({ suggestionsVisible, visible }: AddressBarProps) => css`
     height: ${suggestionsVisible ? 'auto' : '32px'};
