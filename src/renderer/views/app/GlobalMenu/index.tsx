@@ -1,14 +1,12 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import GlobalStore from '../../../global-store';
-import HistoryStore from '../../../menu/history/store';
-import BookmarksStore from '../../../menu/bookmarks/store';
 import Menu from '../Menu';
-import History from '../../../menu/history/components/History';
-import About from '../../../menu/about/components/About';
-import Bookmarks from '../../../menu/bookmarks/components/Bookmarks';
-import { deleteHistoryItem } from '../../../menu/history/utils';
-import { addFolder } from '../../../menu/bookmarks/utils';
+import { deleteHistoryItem } from '../../../utils/history';
+import store from '../../../store';
+import { addFolder } from '../../../utils/bookmarks';
+import Bookmarks from '../../bookmarks/Bookmarks';
+import History from '../../history/History';
+import About from '../../about/About';
 
 const historyIcon = require('../../../shared/icons/history.svg');
 const clearIcon = require('../../../shared/icons/clear.svg');
@@ -24,38 +22,38 @@ const addFolderIcon = require('../../../shared/icons/add-folder.svg');
 
 const historyActions = {
   selectAll: () => {
-    const { selectedItems, historyItems } = HistoryStore;
+    const { selectedHistoryItems, historyItems } = store;
     for (const item of historyItems) {
-      selectedItems.push(item.id);
+      selectedHistoryItems.push(item.id);
     }
   },
   deselectAll: () => {
-    const { selectedItems } = HistoryStore;
-    for (let i = selectedItems.length - 1; i >= 0; i--) {
-      selectedItems.splice(i, 1);
+    const { selectedHistoryItems } = store;
+    for (let i = selectedHistoryItems.length - 1; i >= 0; i--) {
+      selectedHistoryItems.splice(i, 1);
     }
   },
   deleteAllSelectedItems: () => {
-    const { selectedItems } = HistoryStore;
-    for (let i = selectedItems.length - 1; i >= 0; i--) {
-      const selectedItem = selectedItems[i];
+    const { selectedHistoryItems } = store;
+    for (let i = selectedHistoryItems.length - 1; i >= 0; i--) {
+      const selectedItem = selectedHistoryItems[i];
       deleteHistoryItem(selectedItem);
-      selectedItems.splice(i, 1);
+      selectedHistoryItems.splice(i, 1);
     }
   },
 };
 
 const bookmarksActions = {
   addFolder: () => {
-    addFolder('New folder', BookmarksStore.currentTree);
+    addFolder('New folder', store.currentBookmarksTree);
   },
 };
 
 @observer
 export default class GlobalMenu extends React.Component {
   public render() {
-    const editingHistory = HistoryStore.selectedItems.length > 0;
-    const dictionary = GlobalStore.dictionary;
+    const editingHistory = store.selectedHistoryItems.length > 0;
+    const dictionary = store.dictionary;
 
     return (
       <Menu title="Wexond">

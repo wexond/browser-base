@@ -2,7 +2,7 @@ import { observable } from 'mobx';
 import Section from './models/section';
 import HistoryItem from '../../shared/models/history-item';
 
-class Store {
+class store {
   @observable public sections: Section[] = [];
 
   @observable public selectedItems: number[] = [];
@@ -16,4 +16,4 @@ class Store {
   public itemsLimit = 20;
 }
 
-export default new Store();
+export default new store();

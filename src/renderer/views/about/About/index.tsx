@@ -1,16 +1,16 @@
 import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
 import React from 'react';
-import GlobalStore from '../../../../global-store';
 import { Content, Logo, Card } from './styles';
 import Item from '../Item';
+import store from '../../../store';
 
 const packageFile = require('../../../../../package.json');
 
 @observer
 class About extends React.Component {
   public render() {
-    const dictionary = GlobalStore.dictionary.about;
+    const dictionary = store.dictionary.about;
 
     return (
       <React.Fragment>

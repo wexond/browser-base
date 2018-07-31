@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
-import shadows from '../../../shared/mixins/shadows';
-import typography from '../../../shared/mixins/typography';
-import opacity from '../../../shared/defaults/opacity';
-import { EASE_FUNCTION } from '../../../shared/constants';
+import shadows from '../../../mixins/shadows';
+import { EASE_FUNCTION } from '../../../constants';
+import opacity from '../../../defaults/opacity';
+import typography from '../../../mixins/typography';
 
 export const Root = styled.div`
   width: 364px;

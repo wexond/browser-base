@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { center } from '../../../../shared/mixins/images';
+import { center } from '../../../mixins/images';
 
 const wexondIcon = require('../../../../shared/icons/wexond.png');
 

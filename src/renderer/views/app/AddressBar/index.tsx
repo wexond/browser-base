@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import {
   Input, InputContainer, StyledAddressBar, Icon,
 } from './styles';
-import Store from '../../store';
-import GlobalStore from '../../../global-store';
 import Suggestions from '../Suggestions';
-import SuggestionItem from '../../models/suggestion-item';
-import { isURL, getAddressbarURL } from '../../../shared/utils/url';
+import SuggestionItem from '../../../models/suggestion-item';
+import store from '../../../store';
+import { isURL, getAddressbarURL } from '../../../utils/url';
+import { loadSuggestions } from '../../../utils/suggestions';
 
 const searchIcon = require('../../../shared/icons/search.svg');
 
@@ -21,14 +21,12 @@ export default class AddressBar extends Component<Props, {}> {
 
   private canSuggest = false;
 
-  private lastSuggestion: SuggestionItem;
-
   private visible = false;
 
   public componentDidMount() {
     window.addEventListener('mousedown', () => {
-      Store.addressBar.toggled = false;
-      Store.suggestions.clear();
+      store.addressBar.toggled = false;
+      store.suggestions = [];
     });
   }
 
@@ -36,9 +34,15 @@ export default class AddressBar extends Component<Props, {}> {
     this.input.select();
   };
 
-  public autoComplete(suggestion: SuggestionItem, text: string) {
+  public autoComplete(text: string) {
     const regex = /(http(s?)):\/\/(www.)?|www./gi;
     const regex2 = /(http(s?)):\/\//gi;
+
+    let suggestion: SuggestionItem;
+
+    if (store.suggestions[0] && store.suggestions[0].type === 'most-visited') {
+      suggestion = store.suggestions[0];
+    }
 
     const start = text.length;
 
@@ -75,13 +79,13 @@ export default class AddressBar extends Component<Props, {}> {
 
     if (e.keyCode === 38 || e.keyCode === 40) {
       e.preventDefault();
-      if (e.keyCode === 40) {
-        Store.suggestions.selectNext();
-      } else if (e.keyCode === 38) {
-        Store.suggestions.selectPrevious();
+      if (e.keyCode === 40 && store.selectedSuggestion + 1 <= store.suggestions.length - 1) {
+        store.selectedSuggestion++;
+      } else if (e.keyCode === 38 && store.selectedSuggestion - 1 >= 0) {
+        store.selectedSuggestion--;
       }
 
-      const suggestion = Store.suggestions.getSelected();
+      const suggestion = store.suggestions.find(x => x.id === store.selectedSuggestion);
 
       if (
         suggestion.type === 'history'
@@ -98,7 +102,7 @@ export default class AddressBar extends Component<Props, {}> {
   public onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.which === 13) {
       // Enter.
-      const workspace = Store.getCurrentWorkspace();
+      const workspace = store.getCurrentWorkspace();
       const tab = workspace.getSelectedTab();
 
       e.preventDefault();
@@ -114,11 +118,11 @@ export default class AddressBar extends Component<Props, {}> {
 
       this.input.value = url;
 
-      const page = Store.getPageById(tab.id);
+      const page = store.getPageById(tab.id);
 
       page.url = url;
 
-      Store.addressBar.toggled = false;
+      store.addressBar.toggled = false;
     }
   };
 
@@ -126,19 +130,17 @@ export default class AddressBar extends Component<Props, {}> {
     const text = this.input.value;
 
     if (this.canSuggest) {
-      this.autoComplete(this.lastSuggestion, text);
+      this.autoComplete(text);
     }
 
-    await Store.suggestions.load(this.input);
+    await loadSuggestions(this.input);
 
     if (this.canSuggest) {
-      const suggestion = Store.suggestions.suggest();
-      this.lastSuggestion = suggestion;
-      this.autoComplete(suggestion, text);
+      this.autoComplete(text);
       this.canSuggest = false;
     }
 
-    Store.suggestions.selected = 0;
+    store.selectedSuggestion = 0;
   };
 
   public getInputValue = () => {
@@ -150,10 +152,10 @@ export default class AddressBar extends Component<Props, {}> {
 
   public render() {
     const { visible } = this.props;
-    const dictionary = GlobalStore.dictionary.addressBar;
+    const dictionary = store.dictionary.addressBar;
 
-    if (Store.addressBar.toggled && this.visible !== Store.addressBar.toggled) {
-      const page = Store.getSelectedPage();
+    if (store.addressBar.toggled && this.visible !== store.addressBar.toggled) {
+      const page = store.getSelectedPage();
       if (page.webview != null && page.webview.getWebContents() != null) {
         this.input.value = getAddressbarURL(page.webview.getURL());
       }
@@ -161,11 +163,11 @@ export default class AddressBar extends Component<Props, {}> {
       this.input.focus();
     }
 
-    if (this.visible !== Store.addressBar.toggled) {
-      this.visible = Store.addressBar.toggled;
+    if (this.visible !== store.addressBar.toggled) {
+      this.visible = store.addressBar.toggled;
     }
 
-    const suggestionsVisible = Store.suggestions.getVisible();
+    const suggestionsVisible = store.suggestions.length !== 0;
 
     return (
       <StyledAddressBar

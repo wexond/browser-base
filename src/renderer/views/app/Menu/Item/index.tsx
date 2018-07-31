@@ -4,8 +4,7 @@ import { observer } from 'mobx-react';
 import {
   StyledItem, Icon, Title, Background, SubItemsContainer,
 } from './styles';
-
-import Store from '../../../store';
+import store from '../../../../store';
 
 interface Props {
   icon: string;
@@ -45,7 +44,7 @@ export default class Item extends React.Component<Props, {}> {
     let selected = false;
 
     if (!isSubItem) {
-      selected = Store.menu.selectedItem === id;
+      selected = store.menu.selectedItem === id;
     }
 
     let height = 0;

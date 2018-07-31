@@ -1,28 +1,19 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import Store from '../../../store';
-import Workspace from '../../../models/workspace';
-
 import {
   Root, IconsContainer, Icon, Label, DeleteIcon, Input,
 } from './styles';
-
-export interface IProps {
-  workspace: Workspace;
-}
-
-export interface IState {
-  inputVisible: boolean;
-}
+import Workspace from '../../../../models/workspace';
+import store from '../../../../store';
 
 @observer
-export default class extends React.Component<IProps, IState> {
+export default class extends React.Component<{ workspace: Workspace }, {}> {
   public static defaultProps = {
     selected: false,
   };
 
-  public state: IState = {
+  public state = {
     inputVisible: false,
   };
 
@@ -30,9 +21,8 @@ export default class extends React.Component<IProps, IState> {
 
   public onClick = () => {
     const { workspace } = this.props;
-    const { workspaces } = Store;
 
-    workspaces.selected = workspace.id;
+    store.selectedWorkspace = workspace.id;
   };
 
   public onDelete = (e?: React.MouseEvent<HTMLDivElement>) => {
@@ -40,22 +30,22 @@ export default class extends React.Component<IProps, IState> {
     e.stopPropagation();
 
     const { workspace } = this.props;
-    const { workspaces } = Store;
+    const { workspaces } = store;
 
-    if (workspaces.list.length > 0) {
-      let altWorkspaceIndex = workspaces.list.indexOf(workspace) + 1;
+    if (workspaces.length > 0) {
+      let altWorkspaceIndex = workspaces.indexOf(workspace) + 1;
 
-      if (altWorkspaceIndex === workspaces.list.length) {
-        altWorkspaceIndex = workspaces.list.indexOf(workspace) - 1;
+      if (altWorkspaceIndex === workspaces.length) {
+        altWorkspaceIndex = workspaces.indexOf(workspace) - 1;
       }
 
-      const altWorkspace = workspaces.list[altWorkspaceIndex];
+      const altWorkspace = workspaces[altWorkspaceIndex];
 
       for (const tab of workspace.tabs) {
-        Store.pages.splice(Store.pages.indexOf(Store.getPageById(tab.id)), 1);
+        store.pages.splice(store.pages.indexOf(store.getPageById(tab.id)), 1);
       }
 
-      workspaces.selected = altWorkspace.id;
+      store.selectedWorkspace = altWorkspace.id;
       workspace.remove();
     }
   };
@@ -101,16 +91,14 @@ export default class extends React.Component<IProps, IState> {
   public render() {
     const { workspace } = this.props;
     const { inputVisible } = this.state;
-    const { workspaces } = Store;
+    const { workspaces } = store;
 
-    const selected = workspaces.selected === workspace.id;
+    const selected = store.selectedWorkspace === workspace.id;
     const icons = workspace.getIcons();
 
     return (
       <Root onClick={this.onClick}>
-        {workspaces.list.length > 1 && (
-          <DeleteIcon className="delete-icon" onClick={this.onDelete} />
-        )}
+        {workspaces.length > 1 && <DeleteIcon className="delete-icon" onClick={this.onDelete} />}
         <IconsContainer selected={selected}>
           {icons != null && icons.map((data: any, key: any) => <Icon key={key} src={data} />)}
         </IconsContainer>

@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
-import images from '../../../shared/mixins/images';
-import opacity from '../../../shared/defaults/opacity';
-import colors from '../../../shared/defaults/colors';
-import typography from '../../../shared/mixins/typography';
+import images from '../../../mixins/images';
+import opacity from '../../../defaults/opacity';
+import typography from '../../../mixins/typography';
+import colors from '../../../defaults/colors';
 
 const closeIcon = require('../../../shared/icons/close.svg');
 

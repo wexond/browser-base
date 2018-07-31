@@ -1,7 +1,7 @@
 import { TweenLite } from 'gsap';
 import { observable } from 'mobx';
 import tabAnimations from '../defaults/tab-animations';
-import Store from '../store';
+import store from '../store';
 import {
   TAB_MAX_WIDTH, TAB_MIN_WIDTH, TAB_PINNED_WIDTH, TOOLBAR_BUTTON_WIDTH,
 } from '../constants';
