@@ -96,7 +96,6 @@ export default class extends React.Component<IProps, IState> {
     }
 
     this.setState({ inputVisible: flag });
-    Store.workspaces.inputVisible = flag;
   };
 
   public render() {
