@@ -56,7 +56,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         this.setState({ animation: true });
-      }, nextProps.i * 20);
+      }, nextProps.i * 25 + 100);
     } else if (!nextProps.menuVisible) {
       clearTimeout(this.timeout);
       this.setState({ animation: false });
