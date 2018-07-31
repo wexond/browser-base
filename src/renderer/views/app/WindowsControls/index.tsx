@@ -1,5 +1,5 @@
 import React from 'react';
-import { closeWindow, maximizeWindow, minimizeWindow } from '../../utils/window';
+import { closeWindow, maximizeWindow, minimizeWindow } from '../../../utils/window';
 import Button from './Button';
 import Toolbar from '../Toolbar';
 

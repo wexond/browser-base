@@ -1,12 +1,10 @@
 import styled, { css } from 'styled-components';
-
-import typography from '../../../../shared/mixins/typography';
-import images from '../../../../shared/mixins/images';
-import shadows from '../../../../shared/mixins/shadows';
-import colors from '../../../../shared/defaults/colors';
-import opacity from '../../../../shared/defaults/opacity';
-
-import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '../../../constants';
+import shadows from '../../../../mixins/shadows';
+import images from '../../../../mixins/images';
+import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '../../../../constants';
+import colors from '../../../../defaults/colors';
+import typography from '../../../../mixins/typography';
+import opacity from '../../../../defaults/opacity';
 
 const closeIcon = require('../../../../shared/icons/close.svg');
 

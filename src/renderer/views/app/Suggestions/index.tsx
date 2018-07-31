@@ -1,9 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { Caption, StyledSuggestions } from './styles';
-import Store from '../../store';
-import GlobalStore from '../../../global-store';
 import Suggestion from '../Suggestion';
+import store from '../../../store';
 
 interface Props {
   visible: boolean;
@@ -14,23 +13,22 @@ export default class Suggestions extends React.Component<Props, {}> {
   private suggestions: HTMLDivElement;
 
   public render() {
-    const { list } = Store.suggestions;
     const { visible } = this.props;
-    const dictionary = GlobalStore.dictionary.suggestions;
+    const dictionary = store.dictionary.suggestions;
 
-    const mostVisited = list.filter(x => x.type === 'most-visited');
-    const history = list.filter(x => x.type === 'history');
-    const bookmarks = list.filter(x => x.type === 'bookmarks');
-    const search = list.filter(x => x.type === 'search');
-    const noSubheader = list.filter(x => x.type.startsWith('no-subheader'));
+    const mostVisited = store.suggestions.filter(x => x.type === 'most-visited');
+    const history = store.suggestions.filter(x => x.type === 'history');
+    const bookmarks = store.suggestions.filter(x => x.type === 'bookmarks');
+    const search = store.suggestions.filter(x => x.type === 'search');
+    const noSubheader = store.suggestions.filter(x => x.type.startsWith('no-subheader'));
 
     let vis = visible;
 
-    if (!Store.suggestions.getVisible()) vis = false;
+    if (store.suggestions.length === 0) vis = false;
 
     let height = 0;
 
-    list.forEach(a => {
+    store.suggestions.forEach(a => {
       height += 40;
     });
 
@@ -60,19 +58,29 @@ export default class Suggestions extends React.Component<Props, {}> {
         }}
         onMouseDown={e => e.stopPropagation()}
       >
-        {noSubheader.map(suggestion => <Suggestion suggestion={suggestion} key={suggestion.id} />)}
+        {noSubheader.map(suggestion => (
+          <Suggestion suggestion={suggestion} key={suggestion.id} />
+        ))}
 
         {mostVisited.length > 0 && <Caption>{dictionary.mostVisited}</Caption>}
-        {mostVisited.map(suggestion => <Suggestion suggestion={suggestion} key={suggestion.id} />)}
+        {mostVisited.map(suggestion => (
+          <Suggestion suggestion={suggestion} key={suggestion.id} />
+        ))}
 
         {bookmarks.length > 0 && <Caption>{dictionary.bookmarks}</Caption>}
-        {bookmarks.map(suggestion => <Suggestion suggestion={suggestion} key={suggestion.id} />)}
+        {bookmarks.map(suggestion => (
+          <Suggestion suggestion={suggestion} key={suggestion.id} />
+        ))}
 
         {history.length > 0 && <Caption>{dictionary.history}</Caption>}
-        {history.map(suggestion => <Suggestion suggestion={suggestion} key={suggestion.id} />)}
+        {history.map(suggestion => (
+          <Suggestion suggestion={suggestion} key={suggestion.id} />
+        ))}
 
         {search.length > 0 && <Caption>{dictionary.googleSuggestions}</Caption>}
-        {search.map(suggestion => <Suggestion suggestion={suggestion} key={suggestion.id} />)}
+        {search.map(suggestion => (
+          <Suggestion suggestion={suggestion} key={suggestion.id} />
+        ))}
       </StyledSuggestions>
     );
   }

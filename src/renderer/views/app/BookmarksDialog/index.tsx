@@ -1,18 +1,18 @@
 import { observer } from 'mobx-react';
-import React, { Component, SyntheticEvent } from 'react';
-import Store from '../../store';
-import { ButtonType } from '../../../shared/enums';
-import Textfield from '../../../shared/components/Textfield';
-import Button from '../../../shared/components/Button';
-import colors from '../../../shared/defaults/colors';
-import db from '../../../shared/models/app-database';
-import { removeItem, getBookmarkFolders } from '../../../menu/bookmarks/utils';
-import Dropdown from '../../../shared/components/Dropdown';
+import React from 'react';
 import { Root, Title, ButtonsContainer } from './styles';
-import BookmarkItem from '../../../shared/models/bookmark-item';
 
+import Textfield from '../../../components/Textfield';
+import Dropdown from '../../../components/Dropdown';
+import BookmarkItem from '../../../models/bookmark-item';
+import store from '../../../store';
+import { removeItem, getBookmarkFolders } from '../../../utils/bookmarks';
+import database from '../../../database';
+import Button from '../../../components/Button';
+import colors from '../../../defaults/colors';
+import { ButtonType } from '../../../enums';
 @observer
-export default class BookmarksDialog extends Component {
+export default class BookmarksDialog extends React.Component {
   private textField: Textfield;
 
   private dropdown: Dropdown;
@@ -25,8 +25,8 @@ export default class BookmarksDialog extends Component {
 
   public show = (bookmark: BookmarkItem) => {
     if (bookmark != null && bookmark.title != null) {
-      Store.bookmarksDialogVisible = !Store.bookmarksDialogVisible;
-      Store.isStarred = true;
+      store.bookmarkDialogVisible = !store.bookmarkDialogVisible;
+      store.isBookmarked = true;
 
       this.textField.setValue(bookmark.title);
       this.textField.inputElement.select();
@@ -61,15 +61,15 @@ export default class BookmarksDialog extends Component {
   public onRemoveClick = async () => {
     if (this.bookmark) {
       await removeItem(this.bookmark.id, 'item');
-      Store.isStarred = false;
-      Store.bookmarksDialogVisible = false;
+      store.isBookmarked = false;
+      store.bookmarkDialogVisible = false;
     }
   };
 
   public onDoneClick = async () => {
     const name = this.textField.getValue();
 
-    await db.bookmarks
+    await database.bookmarks
       .where('id')
       .equals(this.bookmark.id)
       .modify({
@@ -77,12 +77,12 @@ export default class BookmarksDialog extends Component {
         parent: this.bookmarkFolder,
       });
 
-    const item = Store.bookmarks.find(x => x.id === this.bookmark.id);
+    const item = store.bookmarks.find(x => x.id === this.bookmark.id);
 
     item.title = name;
     item.parent = this.bookmarkFolder;
 
-    Store.bookmarksDialogVisible = false;
+    store.bookmarkDialogVisible = false;
   };
 
   public onTextfieldKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -96,7 +96,7 @@ export default class BookmarksDialog extends Component {
   };
 
   public render() {
-    const visible = Store.bookmarksDialogVisible;
+    const visible = store.bookmarkDialogVisible;
 
     const dropDownStyle = {
       width: '100%',

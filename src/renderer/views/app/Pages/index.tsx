@@ -1,9 +1,13 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import StyledPages from './styles';
-import Store from '../../store';
 import Page from '../Page';
+import store from '../../../store';
 
 export default observer(() => (
-  <StyledPages>{Store.pages.map(page => <Page key={page.id} page={page} />)}</StyledPages>
+  <StyledPages>
+    {store.pages.map(page => (
+      <Page key={page.id} page={page} />
+    ))}
+  </StyledPages>
 ));

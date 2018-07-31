@@ -1,7 +1,7 @@
 import { observable } from 'mobx';
 import WeatherForecast from './models/weather-forecast';
 
-class Store {
+class store {
   // Observables
   @observable weatherForecast: WeatherForecast;
 
@@ -12,4 +12,4 @@ class Store {
   @observable newsData: any[];
 }
 
-export default new Store();
+export default new store();

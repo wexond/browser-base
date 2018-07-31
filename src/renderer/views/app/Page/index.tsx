@@ -2,12 +2,12 @@ import { observer } from 'mobx-react';
 import { resolve } from 'path';
 import React from 'react';
 import StyledPage from './styles';
-import Page from '../../models/page';
-import Tab from '../../models/tab';
-import Store from '../../store';
-import db from '../../../shared/models/app-database';
-import { BASE_PATH } from '../../constants';
-import { ContextMenuMode } from '../../enums';
+import Page from '../../../models/page';
+import Tab from '../../../models/tab';
+import store from '../../../store';
+import { ContextMenuMode } from '../../../enums';
+import database from '../../../database';
+import { BASE_PATH } from '../../../constants';
 
 @observer
 export default class extends React.Component<{ page: Page }, {}> {
@@ -24,7 +24,7 @@ export default class extends React.Component<{ page: Page }, {}> {
   public componentDidMount() {
     const { page } = this.props;
     const { id } = page;
-    const tab = Store.getTabById(id);
+    const tab = store.getTabById(id);
 
     this.tab = tab;
 
@@ -43,7 +43,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       if (url !== tab.url) {
         this.tab.url = url;
         this.updateData();
-        Store.isStarred = !!Store.bookmarks.find(x => x.url === url);
+        store.isBookmarked = !!store.bookmarks.find(x => x.url === url);
       }
     }, 10);
   }
@@ -59,46 +59,46 @@ export default class extends React.Component<{ page: Page }, {}> {
 
     clearInterval(this.onURLChange);
 
-    Store.isFullscreen = false;
+    store.isFullscreen = false;
   }
 
   public onNewWindow = (e: Electron.NewWindowEvent) => {
     if (e.disposition === 'new-window' || e.disposition === 'foreground-tab') {
-      Store.getCurrentWorkspace().addTab(e.url, true);
+      store.getCurrentWorkspace().addTab(e.url, true);
     } else if (e.disposition === 'background-tab') {
-      Store.getCurrentWorkspace().addTab(e.url, false);
+      store.getCurrentWorkspace().addTab(e.url, false);
     }
   };
 
   public onContextMenu = (e: Electron.Event, params: Electron.ContextMenuParams) => {
     requestAnimationFrame(() => {
-      Store.pageMenu.toggle(true);
+      store.pageMenu.toggle(true);
     });
 
-    Store.webviewContextMenuParams = params;
+    store.webviewContextMenuParams = params;
 
     if (params.linkURL && params.hasImageContents) {
-      Store.pageMenuData.mode = ContextMenuMode.ImageAndURL;
+      store.pageMenuData.mode = ContextMenuMode.ImageAndURL;
     } else if (params.linkURL) {
-      Store.pageMenuData.mode = ContextMenuMode.URL;
+      store.pageMenuData.mode = ContextMenuMode.URL;
     } else if (params.hasImageContents) {
-      Store.pageMenuData.mode = ContextMenuMode.Image;
+      store.pageMenuData.mode = ContextMenuMode.Image;
     } else {
-      Store.pageMenuData.mode = ContextMenuMode.Normal;
+      store.pageMenuData.mode = ContextMenuMode.Normal;
     }
 
     // Calculate new menu position
     // using cursor x, y and
     // width, height of the menu.
-    const x = Store.mouse.x;
-    const y = Store.mouse.y;
+    const x = store.mouse.x;
+    const y = store.mouse.y;
 
     // By default it opens menu from upper left corner.
     let left = x;
     let top = y;
 
     const width = 3 * 64;
-    const height = Store.pageMenu.getHeight();
+    const height = store.pageMenu.getHeight();
 
     // Open menu from right corner.
     if (left + width > window.innerWidth) {
@@ -115,8 +115,8 @@ export default class extends React.Component<{ page: Page }, {}> {
     }
 
     // Set the new position.
-    Store.pageMenuData.x = left;
-    Store.pageMenuData.y = top;
+    store.pageMenuData.x = left;
+    store.pageMenuData.y = top;
   };
 
   public onDomReady = () => {
@@ -125,7 +125,7 @@ export default class extends React.Component<{ page: Page }, {}> {
   };
 
   public onDidStopLoading = () => {
-    Store.refreshNavigationState();
+    store.refreshNavigationState();
     this.tab.loading = false;
   };
 
@@ -133,8 +133,8 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.tab.loading = true;
 
     if (url !== this.lastURL && isMainFrame && !url.startsWith('wexond://')) {
-      db.transaction('rw', db.history, async () => {
-        const id = await db.history.add({
+      database.transaction('rw', database.history, async () => {
+        const id = await database.history.add({
           title: this.tab.title,
           url,
           favicon: this.tab.favicon,
@@ -156,7 +156,7 @@ export default class extends React.Component<{ page: Page }, {}> {
           this.tab.favicon = '';
         } else {
           this.tab.favicon = favicons[0];
-          db.addFavicon(favicons[0]);
+          database.addFavicon(favicons[0]);
         }
       }
       this.updateData();
@@ -169,8 +169,8 @@ export default class extends React.Component<{ page: Page }, {}> {
   public updateData = () => {
     if (this.lastURL === this.tab.url) {
       if (this.lastHistoryItemID !== -1) {
-        db.transaction('rw', db.history, async () => {
-          db.history
+        database.transaction('rw', database.history, async () => {
+          database.history
             .where('id')
             .equals(this.lastHistoryItemID)
             .modify({
@@ -186,18 +186,18 @@ export default class extends React.Component<{ page: Page }, {}> {
   public onPageTitleUpdated = ({ title }: Electron.PageTitleUpdatedEvent) => {
     const { page } = this.props;
     const { id } = page;
-    const tab = Store.getTabById(id);
+    const tab = store.getTabById(id);
 
     tab.title = title;
     this.updateData();
   };
 
   public onFullscreenEnter = () => {
-    Store.isHTMLFullscreen = true;
+    store.isHTMLFullscreen = true;
   };
 
   public onFullscreenLeave = () => {
-    Store.isHTMLFullscreen = false;
+    store.isHTMLFullscreen = false;
   };
 
   public render() {
@@ -205,7 +205,7 @@ export default class extends React.Component<{ page: Page }, {}> {
     const { url, id } = page;
 
     return (
-      <StyledPage selected={Store.getCurrentWorkspace().selectedTab === id}>
+      <StyledPage selected={store.getCurrentWorkspace().selectedTab === id}>
         <webview
           src={url}
           style={{ height: '100%' }}

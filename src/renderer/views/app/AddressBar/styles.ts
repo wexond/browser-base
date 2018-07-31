@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
-import images from '../../../shared/mixins/images';
-import shadows from '../../../shared/mixins/shadows';
-import opacity from '../../../shared/defaults/opacity';
+import shadows from '../../../mixins/shadows';
+import opacity from '../../../defaults/opacity';
+import images from '../../../mixins/images';
 
 interface AddressBarProps {
   visible: boolean;

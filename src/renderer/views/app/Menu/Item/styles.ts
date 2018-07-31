@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
-import colors from '../../../../shared/defaults/colors';
-import typography from '../../../../shared/mixins/typography';
-import opacity from '../../../../shared/defaults/opacity';
+import colors from '../../../../defaults/colors';
+import typography from '../../../../mixins/typography';
+import opacity from '../../../../defaults/opacity';
 
 export const StyledItem = styled.div`
   height: 48px;

@@ -1,9 +1,9 @@
 import Dexie from 'dexie';
-import HistoryItem from './history-item';
-import { Favicon } from './favicon';
-import BookmarkItem from './bookmark-item';
+import HistoryItem from './models/history-item';
+import { Favicon } from './models/favicon';
+import BookmarkItem from './models/bookmark-item';
 
-export class AppDatabase extends Dexie {
+export class Database extends Dexie {
   public history: Dexie.Table<HistoryItem, number>;
 
   public favicons: Dexie.Table<Favicon, number>;
@@ -48,4 +48,4 @@ export class AppDatabase extends Dexie {
   }
 }
 
-export default new AppDatabase();
+export default new Database();
