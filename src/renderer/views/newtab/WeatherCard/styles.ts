@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-
-import images from '../../../shared/mixins/images';
-import typography from '../../../shared/mixins/typography';
-import opacity from '../../../shared/defaults/opacity';
-import { Actions } from '../../../shared/components/Card';
-import { EASE_FUNCTION } from '../../../shared/constants';
+import typography from '../../../mixins/typography';
+import images from '../../../mixins/images';
+import opacity from '../../../defaults/opacity';
+import { EASE_FUNCTION } from '../../../constants';
+import { Actions } from '../../../components/Card';
 
 export const InfoContainer = styled.div`
   display: flex;

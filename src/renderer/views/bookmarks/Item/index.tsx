@@ -1,21 +1,12 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import transparency from '../../../../shared/defaults/opacity';
-import Appstore from '../../../../app/store';
-import store from '../../store';
-import BookmarkItem from '../../../../shared/models/bookmark-item';
-import { removeItem } from '../../utils';
-import { Root, Icon } from '../../../../shared/components/PageItem';
-import db from '../../../../shared/models/app-database';
 import { Title, Input, ActionIcon } from './styles';
-
-const pageIcon = require('../../../../shared/icons/page.svg');
-const folderIcon = require('../../../../shared/icons/folder.svg');
-const deleteIcon = require('../../../../shared/icons/delete.svg');
-
-export interface IProps {
-  data: BookmarkItem;
-}
+import BookmarkItem from '../../../models/bookmark-item';
+import store from '../../../store';
+import { removeItem } from '../../../utils/bookmarks';
+import database from '../../../database';
+import opacity from '../../../defaults/opacity';
+import { Root, Icon } from '../../../components/PageItem';
 
 export interface IState {
   hovered: boolean;
@@ -23,7 +14,7 @@ export interface IState {
 }
 
 @observer
-export default class Item extends React.Component<IProps, IState> {
+export default class Item extends React.Component<{ data: BookmarkItem }, IState> {
   public state: IState = {
     hovered: false,
     inputVisible: false,
@@ -49,16 +40,16 @@ export default class Item extends React.Component<IProps, IState> {
     const { data } = this.props;
 
     if (this.cmdPressed || e.ctrlKey) {
-      if (store.selectedItems.indexOf(data.id) === -1) {
-        store.selectedItems.push(data.id);
+      if (store.selectedBookmarkItems.indexOf(data.id) === -1) {
+        store.selectedBookmarkItems.push(data.id);
       } else {
-        store.selectedItems.splice(store.selectedItems.indexOf(data.id), 1);
+        store.selectedBookmarkItems.splice(store.selectedBookmarkItems.indexOf(data.id), 1);
       }
     } else if (data.type === 'folder') {
-      store.goTo(data.id);
+      store.goToBookmarkFolder(data.id);
     } else {
-      Appstore.getCurrentWorkspace().addTab(data.url);
-      Appstore.menu.hide();
+      store.getCurrentWorkspace().addTab(data.url);
+      store.menu.hide();
     }
   };
 
@@ -112,14 +103,14 @@ export default class Item extends React.Component<IProps, IState> {
     const title = this.input.value;
 
     if (title !== data.title && title.length > 0) {
-      await db.bookmarks
+      await database.bookmarks
         .where('id')
         .equals(data.id)
         .modify({
           title,
         });
 
-      const item = Appstore.bookmarks.find(x => x.id === data.id);
+      const item = store.bookmarks.find(x => x.id === data.id);
       item.title = title;
     }
   };
@@ -133,12 +124,12 @@ export default class Item extends React.Component<IProps, IState> {
     const { hovered, inputVisible } = this.state;
 
     const isFolder = data.type === 'folder';
-    let opacity = 1;
-    let favicon = Appstore.favicons[data.favicon];
+    let transparency = 1;
+    let favicon = store.favicons[data.favicon];
 
     if (favicon == null || favicon.trim() === '') {
       favicon = isFolder ? folderIcon : pageIcon;
-      opacity = transparency.light.inactiveIcon;
+      transparency = opacity.light.inactiveIcon;
     }
 
     return (
@@ -147,9 +138,9 @@ export default class Item extends React.Component<IProps, IState> {
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onClick={this.onClick}
-        selected={store.selectedItems.indexOf(data.id) !== -1}
+        selected={store.selectedBookmarkItems.indexOf(data.id) !== -1}
       >
-        <Icon style={{ opacity }} icon={favicon} />
+        <Icon style={{ opacity: transparency }} icon={favicon} />
         <div style={{ flex: 1 }}>
           <Title onClick={this.onTitleClick}>{data.title}</Title>
         </div>

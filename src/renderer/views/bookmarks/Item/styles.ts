@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
 
-import * as PageItem from '../../../../shared/components/PageItem';
-import opacity from '../../../../shared/defaults/opacity';
-import typography from '../../../../shared/mixins/typography';
-import colors from '../../../../shared/defaults/colors';
-import images from '../../../../shared/mixins/images';
+import * as PageItem from '../../../components/PageItem';
+import colors from '../../../defaults/colors';
+import opacity from '../../../defaults/opacity';
+import typography from '../../../mixins/typography';
+import images from '../../../mixins/images';
 
 export const Title = styled(PageItem.Title)`
   margin-left: 12px;

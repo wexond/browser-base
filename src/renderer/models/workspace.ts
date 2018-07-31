@@ -5,8 +5,6 @@ import { TAB_MIN_WIDTH, WORKSPACE_MAX_ICONS_COUNT } from '../constants';
 import store from '../store';
 import AddTabButton from './add-tab-button';
 
-const pageIcon = require('../../shared/icons/page.svg');
-
 let nextWorkspaceId = 0;
 
 export default class Workspace {

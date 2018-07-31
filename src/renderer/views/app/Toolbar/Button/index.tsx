@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { Button, Icon } from './styles';
-import Ripples from '../../../../shared/components/Ripples';
+import Ripples from '../../../../components/Ripples';
 
 interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;

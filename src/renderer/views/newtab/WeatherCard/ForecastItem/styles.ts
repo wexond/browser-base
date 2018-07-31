@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-
-import opacity from '../../../../shared/defaults/opacity';
-import typography from '../../../../shared/mixins/typography';
-import images from '../../../../shared/mixins/images';
+import typography from '../../../../mixins/typography';
+import opacity from '../../../../defaults/opacity';
+import images from '../../../../mixins/images';
 
 export const StyledForecastItem = styled.div`
   display: flex;

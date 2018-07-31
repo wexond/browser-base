@@ -9,8 +9,6 @@ import store from '../../../store';
 import { isURL, getAddressbarURL } from '../../../utils/url';
 import { loadSuggestions } from '../../../utils/suggestions';
 
-const searchIcon = require('../../../shared/icons/search.svg');
-
 interface Props {
   visible: boolean;
 }

@@ -1,8 +1,8 @@
 import React from 'react';
-import store from '../../../store';
 
 import { Root, Title, HomeIcon } from './styles';
-import BookmarkItem from '../../../../../shared/models/bookmark-item';
+import BookmarkItem from '../../../../models/bookmark-item';
+import store from '../../../../store';
 
 export interface Props {
   item?: BookmarkItem;
@@ -14,9 +14,9 @@ export default class Item extends React.Component<Props, {}> {
     const { item, home } = this.props;
 
     if (home) {
-      store.goTo(-1);
+      store.goToBookmarkFolder(-1);
     } else {
-      store.goTo(item.id);
+      store.goToBookmarkFolder(item.id);
     }
   };
 

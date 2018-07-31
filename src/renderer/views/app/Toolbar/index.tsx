@@ -16,11 +16,6 @@ import BookmarkItem from '../../../models/bookmark-item';
 import { addBookmark } from '../../../utils/bookmarks';
 import { Platforms } from '../../../enums';
 
-const workspacesIcon = require('../../../shared/icons/tab-groups.svg');
-const menuIcon = require('../../../shared/icons/menu.svg');
-const starIcon = require('../../../shared/icons/star.svg');
-const starBorderIcon = require('../../../shared/icons/star-border.svg');
-
 @observer
 export default class Toolbar extends React.Component {
   public static Button = ToolbarButton;

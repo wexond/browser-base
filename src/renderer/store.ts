@@ -11,14 +11,11 @@ import HistoryItem from './models/history-item';
 import { getBookmarkFolderPath } from './utils/bookmarks';
 import ContextMenu from './components/ContextMenu';
 import BookmarksDialog from './views/app/BookmarksDialog';
+import database from './database';
 
 const dictionary = require('../static/dictionaries/english-en.json');
 
-export interface Favicons {
-  [key: string]: string;
-}
-
-class Appstore {
+class Store {
   /** Workspaces */
   @observable
   public workspaces: Workspace[] = [];
@@ -44,6 +41,7 @@ class Appstore {
   @observable
   public addressBar = new AddressBar();
 
+  /** Menu */
   @observable
   public menu = new Menu();
 
@@ -72,6 +70,9 @@ class Appstore {
 
   @observable
   public bookmarksPath: BookmarkItem[] = [];
+
+  @observable
+  public selectedBookmarkItems: number[] = [];
 
   /** History */
   @observable
@@ -120,7 +121,7 @@ class Appstore {
   /** */
   public webviewContextMenuParams: Electron.ContextMenuParams;
 
-  public favicons: Favicons = {};
+  public favicons: { [key: string]: string } = {};
 
   public platform = os.platform() as Platforms;
 
@@ -128,6 +129,8 @@ class Appstore {
     x: 0,
     y: 0,
   };
+
+  public cmdPressed = false;
 
   /** Methods */
 
@@ -193,7 +196,7 @@ class Appstore {
 
   public loadFavicons() {
     return new Promise(async (resolve, reject) => {
-      await appDatabase.favicons.each(favicon => {
+      await database.favicons.each(favicon => {
         if (this.favicons[favicon.url] == null && favicon.favicon.byteLength !== 0) {
           this.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));
         }
@@ -201,10 +204,11 @@ class Appstore {
     });
   }
 
+  /** Bookmarks */
   public goToBookmarkFolder = (id: number) => {
     this.currentBookmarksTree = id;
     this.bookmarksPath = getBookmarkFolderPath(id);
   };
 }
 
-export default new Appstore();
+export default new Store();
