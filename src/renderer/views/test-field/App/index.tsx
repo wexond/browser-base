@@ -1,10 +1,8 @@
 /* eslint-disable no-console */
 import React from 'react';
-import colors from '../../../shared/defaults/colors';
-import { UITheme } from '../../../shared/enums';
 import { StyledApp } from './styles';
-
-import Dropdown from '../../../shared/components/Dropdown';
+import Dropdown from '../../../components/Dropdown';
+import { UITheme } from '../../../enums';
 
 export interface IState {
   darkTheme: boolean;

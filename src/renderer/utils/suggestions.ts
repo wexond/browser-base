@@ -187,9 +187,9 @@ export const getSearchSuggestions = (filter: string) =>
 
 let searchSuggestions: SuggestionItem[] = [];
 
-export const loadSuggestions = (input: HTMLInputElement) =>
+export const loadSuggestions = async (input: HTMLInputElement) =>
   new Promise(async resolve => {
-    const filter = input.value.replace(input.value.substring(0, input.selectionStart), '');
+    const filter = input.value.substring(0, input.selectionStart);
 
     const dictionary = store.dictionary.suggestions;
     const suggestions = await getHistorySuggestions(filter);
@@ -240,20 +240,20 @@ export const loadSuggestions = (input: HTMLInputElement) =>
       });
     }
 
-    store.suggestions = input.value === '' ? [] : searchSuggestions.concat(this.historySuggestions);
-
-    getSearchSuggestions(filter).then(data => {
-      searchSuggestions = [];
-      for (const item of data) {
-        searchSuggestions.push({
-          primaryText: item,
-          type: 'search',
-          id: id++,
-        });
-      }
-
-      store.suggestions = input.value === '' ? [] : historySuggestions.concat(this.searchSuggestions);
-    });
+    store.suggestions = input.value === '' ? [] : searchSuggestions.concat(historySuggestions);
 
     resolve();
+
+    const searchData = await getSearchSuggestions(filter);
+
+    searchSuggestions = [];
+    for (const item of searchData) {
+      searchSuggestions.push({
+        primaryText: item,
+        type: 'search',
+        id: id++,
+      });
+    }
+
+    store.suggestions = input.value === '' ? [] : historySuggestions.concat(searchSuggestions);
   });

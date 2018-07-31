@@ -9,31 +9,28 @@ import { getPath } from '../../utils/paths';
 import { loadPlugins } from '../../utils/plugins';
 import App from './App';
 import ipcMessages from '../../defaults/ipc-messages';
-
-const robotoLight = require('../shared/fonts/Roboto-Light.ttf');
-const robotoMedium = require('../shared/fonts/Roboto-Medium.ttf');
-const robotoRegular = require('../shared/fonts/Roboto-Regular.ttf');
+import fonts from '../../defaults/fonts';
 
 injectGlobal`
   @font-face {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    src: url(${robotoRegular}) format('truetype');
+    src: url(${fonts.robotoRegular}) format('truetype');
   }
 
   @font-face {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
-    src: url(${robotoMedium}) format('truetype');
+    src: url(${fonts.robotoMedium}) format('truetype');
   }
 
   @font-face {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;
-    src: url(${robotoLight}) format('truetype');
+    src: url(${fonts.robotoLight}) format('truetype');
   }
   
   body {

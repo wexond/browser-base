@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import { UITheme } from '../../../shared/enums';
+import { UITheme } from '../../../enums';
 
 export interface StyledAppProps {
   theme: UITheme;

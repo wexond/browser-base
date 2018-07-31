@@ -26,6 +26,7 @@ import WeatherWeeklyItem from '../../../models/weather-weekly-item';
 import Button from '../../../components/Button';
 import colors from '../../../defaults/colors';
 import * as Card from '../../../components/Card';
+import icons from '../../../defaults/icons';
 
 export interface IProps {
   data: WeatherForecast;
@@ -111,13 +112,13 @@ export default class WeatherCard extends React.Component<IProps, IState> {
             </InfoContainer>
             <ExtraInfoContainer>
               <ExtraInfo>
-                <ExtraInfoIcon src={precipitationIcon} />
+                <ExtraInfoIcon src={icons.precipitation} />
                 <ExtraInfoText>
                   {current.precipitation}% {dictionary.newTab.precipitation}
                 </ExtraInfoText>
               </ExtraInfo>
               <ExtraInfo>
-                <ExtraInfoIcon src={windIcon} style={windIconStyle} />
+                <ExtraInfoIcon src={icons.wind} style={windIconStyle} />
                 <ExtraInfoText>
                   {current.winds}
                   {` ${data.windsUnit}`} {dictionary.newTab.winds}

@@ -32,14 +32,12 @@ export class Database extends Dexie {
         .then(blob => {
           const reader = new FileReader();
           reader.onload = () => {
-            const generatedBuffer = reader.result;
-            this.transaction('rw', this.favicons, async () => {
-              if (count === 0) {
-                this.favicons.add({
-                  url,
-                  favicon: Buffer.from(generatedBuffer),
-                });
-              }
+            const generatedBuffer: any = reader.result;
+            this.transaction('rw', this.favicons, () => {
+              this.favicons.add({
+                url,
+                favicon: Buffer.from(generatedBuffer),
+              });
             });
           };
           reader.readAsArrayBuffer(blob);

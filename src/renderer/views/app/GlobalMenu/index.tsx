@@ -7,6 +7,7 @@ import { addFolder } from '../../../utils/bookmarks';
 import Bookmarks from '../../bookmarks/Bookmarks';
 import History from '../../history/History';
 import About from '../../about/About';
+import icons from '../../../defaults/icons';
 
 const historyActions = {
   selectAll: () => {
@@ -47,54 +48,58 @@ export default class GlobalMenu extends React.Component {
       <Menu title="Wexond">
         <Menu.Item
           title={dictionary.history.title}
-          icon={historyIcon}
+          icon={icons.history}
           searchVisible
           content={<History />}
         >
-          <Menu.Item title={dictionary.history.clearHistory} icon={clearIcon} />
+          <Menu.Item title={dictionary.history.clearHistory} icon={icons.clear} />
           <Menu.Item
             title={dictionary.selecting.selectAll}
             visible={!editingHistory}
-            icon={selectAllIcon}
+            icon={icons.selectAll}
             onClick={historyActions.selectAll}
           />
           <Menu.Item
             title={dictionary.selecting.deselectAll}
             visible={editingHistory}
-            icon={closeIcon}
+            icon={icons.close}
             onClick={historyActions.deselectAll}
           />
           <Menu.Item
             title={dictionary.selecting.deleteSelected}
             visible={editingHistory}
-            icon={trashIcon}
+            icon={icons.delete}
             onClick={historyActions.deleteAllSelectedItems}
           />
         </Menu.Item>
         <Menu.Item
           title={dictionary.bookmarks.title}
-          icon={bookmarksIcon}
+          icon={icons.bookmarks}
           searchVisible
           content={<Bookmarks />}
         >
-          <Menu.Item title={dictionary.selecting.selectAll} icon={selectAllIcon} />
-          <Menu.Item title="New folder" icon={addFolderIcon} onClick={bookmarksActions.addFolder} />
+          <Menu.Item title={dictionary.selecting.selectAll} icon={icons.selectAll} />
+          <Menu.Item
+            title="New folder"
+            icon={icons.addFolder}
+            onClick={bookmarksActions.addFolder}
+          />
         </Menu.Item>
         <Menu.Item
           title={dictionary.settings.title}
-          icon={settingsIcon}
+          icon={icons.settings}
           searchVisible
           content={<div />}
         />
         <Menu.Item
           title={dictionary.extensions.title}
-          icon={extensionsIcon}
+          icon={icons.extensions}
           searchVisible
           content={<div />}
         />
         <Menu.Item
           title={dictionary.about.title}
-          icon={aboutIcon}
+          icon={icons.info}
           searchVisible={false}
           content={<About />}
         />

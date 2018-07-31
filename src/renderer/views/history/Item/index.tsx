@@ -7,6 +7,7 @@ import opacity from '../../../defaults/opacity';
 import {
   Root, RemoveIcon, Icon, Time, Title,
 } from '../../../components/PageItem';
+import icons from '../../../defaults/icons';
 
 @observer
 export default class Item extends React.Component<{ data: HistoryItem }, { hovered: boolean }> {
@@ -54,7 +55,7 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
     let favicon = data.favicon;
 
     if (favicon == null) {
-      favicon = pageIcon;
+      favicon = icons.page;
       transparency = opacity.light.inactiveIcon;
     }
 

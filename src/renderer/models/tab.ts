@@ -1,31 +1,37 @@
 import { TweenLite } from 'gsap';
 import { observable } from 'mobx';
 import tabAnimations from '../defaults/tab-animations';
-import store from '../store';
 import {
   TAB_MAX_WIDTH, TAB_MIN_WIDTH, TAB_PINNED_WIDTH, TOOLBAR_BUTTON_WIDTH,
 } from '../constants';
 import Workspace from './workspace';
-import BookmarkItem from '../../shared/models/bookmark-item';
 
 let nextTabId = 0;
 
 export default class Tab {
-  @observable public id = -1;
+  @observable
+  public id = -1;
 
-  @observable public title = 'New tab';
+  @observable
+  public title = 'New tab';
 
-  @observable public pinned = false;
+  @observable
+  public pinned = false;
 
-  @observable public isRemoving = false;
+  @observable
+  public isRemoving = false;
 
-  @observable public hovered = false;
+  @observable
+  public hovered = false;
 
-  @observable public dragging = false;
+  @observable
+  public dragging = false;
 
-  @observable public favicon = '';
+  @observable
+  public favicon = '';
 
-  @observable public loading = false;
+  @observable
+  public loading = false;
 
   public url = '';
 
