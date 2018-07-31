@@ -27,16 +27,8 @@ const newTabConfig = {
   },
 };
 
-const testFieldConfig = {
-  target: 'web',
-
-  entry: {
-    testField: ['./src/test-field'],
-  },
-};
-
 function getConfig(cfg) {
   return Object.assign({}, config, cfg);
 }
 
-module.exports = [getConfig(appConfig), getConfig(newTabConfig), getConfig(testFieldConfig)];
+module.exports = [getConfig(appConfig), getConfig(newTabConfig)];
