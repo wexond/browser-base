@@ -175,6 +175,8 @@ class App extends React.Component {
       }
     });
 
+    await store.loadFavicons();
+
     store.bookmarks = await database.bookmarks.toArray();
     store.historyItems = await database.history.toArray();
   }
