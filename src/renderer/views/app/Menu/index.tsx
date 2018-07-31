@@ -57,7 +57,7 @@ export default class extends React.Component<Props, {}> {
         <Container visible={store.menu.visible}>
           <Content visible={selectedItem != null}>
             {React.Children.map(children, (el: React.ReactElement<any>) => {
-              if (!((el.type as any).prototype instanceof Item)) {
+              if (!el.props.title) {
                 id2++;
                 return (
                   <div
@@ -86,7 +86,8 @@ export default class extends React.Component<Props, {}> {
             </Header>
 
             {React.Children.map(children, (el: React.ReactElement<any>) => {
-              if ((el.type as any).prototype instanceof Item) {
+              console.log(el);
+              if (el.props.title) {
                 return React.cloneElement(el, {
                   id: id++,
                   ref: (r: Item) => this.items.push(r),
