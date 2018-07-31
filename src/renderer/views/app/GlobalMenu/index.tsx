@@ -46,12 +46,7 @@ export default class GlobalMenu extends React.Component {
 
     return (
       <Menu title="Wexond">
-        <Menu.Item
-          title={dictionary.history.title}
-          icon={icons.history}
-          searchVisible
-          content={<History />}
-        >
+        <Menu.Item title={dictionary.history.title} icon={icons.history} searchVisible>
           <Menu.Item title={dictionary.history.clearHistory} icon={icons.clear} />
           <Menu.Item
             title={dictionary.selecting.selectAll}
@@ -72,12 +67,7 @@ export default class GlobalMenu extends React.Component {
             onClick={historyActions.deleteAllSelectedItems}
           />
         </Menu.Item>
-        <Menu.Item
-          title={dictionary.bookmarks.title}
-          icon={icons.bookmarks}
-          searchVisible
-          content={<Bookmarks />}
-        >
+        <Menu.Item title={dictionary.bookmarks.title} icon={icons.bookmarks} searchVisible>
           <Menu.Item title={dictionary.selecting.selectAll} icon={icons.selectAll} />
           <Menu.Item
             title="New folder"
@@ -85,24 +75,15 @@ export default class GlobalMenu extends React.Component {
             onClick={bookmarksActions.addFolder}
           />
         </Menu.Item>
-        <Menu.Item
-          title={dictionary.settings.title}
-          icon={icons.settings}
-          searchVisible
-          content={<div />}
-        />
-        <Menu.Item
-          title={dictionary.extensions.title}
-          icon={icons.extensions}
-          searchVisible
-          content={<div />}
-        />
-        <Menu.Item
-          title={dictionary.about.title}
-          icon={icons.info}
-          searchVisible={false}
-          content={<About />}
-        />
+        <Menu.Item title={dictionary.settings.title} icon={icons.settings} searchVisible />
+        <Menu.Item title={dictionary.extensions.title} icon={icons.extensions} searchVisible />
+        <Menu.Item title={dictionary.about.title} icon={icons.info} searchVisible={false} />
+
+        <History />
+        <Bookmarks />
+        <div />
+        <div />
+        <About />
       </Menu>
     );
   }

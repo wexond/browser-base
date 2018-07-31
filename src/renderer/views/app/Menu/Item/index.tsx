@@ -13,7 +13,6 @@ interface Props {
   title: string;
   visible?: boolean;
   searchVisible?: boolean;
-  content?: any;
   id?: number;
   onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
 }
