@@ -86,7 +86,6 @@ export default class extends React.Component<Props, {}> {
             </Header>
 
             {React.Children.map(children, (el: React.ReactElement<any>) => {
-              console.log(el);
               if (el.props.title) {
                 return React.cloneElement(el, {
                   id: id++,
