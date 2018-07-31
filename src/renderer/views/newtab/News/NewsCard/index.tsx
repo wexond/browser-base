@@ -1,11 +1,11 @@
 import React from 'react';
-import { loadImage } from '../../../../shared/utils/network';
-import { getTimeOffset } from '../../../../shared/utils/time';
-import * as Card from '../../../../shared/components/Card';
+import * as Card from '../../../../components/Card';
 
 import {
   Title, Icon, Source, SecondaryText, CardImage, Overline, SourceContainer,
 } from './styles';
+import { loadImage } from '../../../../utils/network';
+import { getTimeOffset } from '../../../../utils/time';
 
 export interface Props {
   data: any;

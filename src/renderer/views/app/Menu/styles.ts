@@ -4,6 +4,7 @@ import shadows from '../../../mixins/shadows';
 import typography from '../../../mixins/typography';
 import opacity from '../../../defaults/opacity';
 import images from '../../../mixins/images';
+import icons from '../../../defaults/icons';
 
 export const Container = styled.div`
   height: 100%;
@@ -124,5 +125,5 @@ export const SearchIcon = styled.div`
   height: 24px;
   width: 24px;
   margin-left: 16px;
-  background-image: url(${searchIcon});
+  background-image: url(${icons.search});
 `;

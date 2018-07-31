@@ -1,3 +1,3 @@
-const loadContent = require('../../shared/utils/load-content');
+const loadContent = require('../renderer/utils/load-content');
 
 loadContent('app');

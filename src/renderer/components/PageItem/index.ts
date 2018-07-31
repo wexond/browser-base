@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import images from '../../mixins/images';
 import typography from '../../mixins/typography';
 import opacity from '../../defaults/opacity';
+import icons from '../../defaults/icons';
 
 export const Root = styled.div`
   height: 56px;
@@ -68,7 +69,7 @@ export const RemoveIcon = styled.div`
   height: 16px;
   width: 16px;
   z-index: 2;
-  background-image: url(${removeIcon});
+  background-image: url(${icons.close});
 
   ${images.center('24px', 'auto')};
 

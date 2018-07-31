@@ -4,6 +4,7 @@ import typography from '../../mixins/typography';
 import images from '../../mixins/images';
 import shadows from '../../mixins/shadows';
 import { EASE_FUNCTION } from '../../constants';
+import icons from '../../defaults/icons';
 
 export const Root = styled.div`
   display: inline-block;
@@ -36,7 +37,7 @@ export const Icon = styled.div`
   will-change: transform;
   transition: 0.3s transform;
   opacity: ${opacity.light.inactiveIcon};
-  background-image: url(${dropDownIcon});
+  background-image: url(${icons.dropDown});
 
   ${images.center('24px', 'auto')};
 

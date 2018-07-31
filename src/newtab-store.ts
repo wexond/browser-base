@@ -1,15 +1,19 @@
 import { observable } from 'mobx';
-import WeatherForecast from './models/weather-forecast';
+import WeatherForecast from './renderer/models/weather-forecast';
 
-class store {
+class Store {
   // Observables
-  @observable weatherForecast: WeatherForecast;
+  @observable
+  weatherForecast: WeatherForecast;
 
-  @observable contentVisible: boolean = false;
+  @observable
+  contentVisible: boolean = false;
 
-  @observable columns: any = [];
+  @observable
+  columns: any = [];
 
-  @observable newsData: any[];
+  @observable
+  newsData: any[];
 }
 
-export default new store();
+export default new Store();

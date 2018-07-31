@@ -47,4 +47,4 @@ function getConfig(cfg) {
   return Object.assign({}, config, cfg);
 }
 
-module.exports = [getConfig(appConfig), getConfig(testFieldConfig)];
+module.exports = [getConfig(appConfig)];

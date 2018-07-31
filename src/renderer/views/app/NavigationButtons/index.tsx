@@ -3,6 +3,7 @@ import React from 'react';
 import { StyledContainer } from './styles';
 import Toolbar from '../Toolbar';
 import store from '../../../store';
+import icons from '../../../defaults/icons';
 
 @observer
 export default class NavigationButtons extends React.Component {
@@ -24,17 +25,17 @@ export default class NavigationButtons extends React.Component {
         <Toolbar.Button
           disabled={!store.navigationState.canGoBack}
           size={24}
-          icon={backIcon}
+          icon={icons.back}
           style={{ marginLeft: 4 }}
           onClick={this.onBackClick}
         />
         <Toolbar.Button
           disabled={!store.navigationState.canGoForward}
           size={24}
-          icon={forwardIcon}
+          icon={icons.forward}
           onClick={this.onForwardClick}
         />
-        <Toolbar.Button size={20} icon={refreshIcon} onClick={this.onRefreshClick} />
+        <Toolbar.Button size={20} icon={icons.refresh} onClick={this.onRefreshClick} />
       </StyledContainer>
     );
   }

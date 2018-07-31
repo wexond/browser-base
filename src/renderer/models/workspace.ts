@@ -4,6 +4,7 @@ import Tab from './tab';
 import { TAB_MIN_WIDTH, WORKSPACE_MAX_ICONS_COUNT } from '../constants';
 import store from '../store';
 import AddTabButton from './add-tab-button';
+import icons from '../defaults/icons';
 
 let nextWorkspaceId = 0;
 
@@ -183,21 +184,21 @@ export default class Workspace {
   }
 
   public getIcons() {
-    const icons = [];
+    const favicons = [];
 
     for (let i = 0; i < this.tabs.length; i++) {
       const icon = this.tabs[i].favicon;
 
-      if (icons.length < WORKSPACE_MAX_ICONS_COUNT) {
-        icons.push(icon !== '' ? icon : pageIcon);
+      if (favicons.length < WORKSPACE_MAX_ICONS_COUNT) {
+        favicons.push(icon !== '' ? icon : icons.page);
       }
     }
 
-    return icons;
+    return favicons;
   }
 
   public remove() {
     clearInterval(this.interval);
-    store.workspaces.list.splice(store.workspaces.list.indexOf(this), 1);
+    store.workspaces.splice(store.workspaces.indexOf(this), 1);
   }
 }

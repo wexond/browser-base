@@ -6,7 +6,7 @@ const { platform, homedir } = require('os');
 const wpm = require('wexond-package-manager');
 const { autoUpdater } = require('electron-updater');
 
-const ipcMessages = require('../shared/defaults/ipc-messages');
+const ipcMessages = require('../renderer/defaults/ipc-messages');
 
 const PROTOCOL = 'wexond';
 const URL_WHITELIST = ['newtab'];

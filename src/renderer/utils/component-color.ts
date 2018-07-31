@@ -1,30 +1,22 @@
 import { UITheme } from '../enums';
-
-import { TransparencyComponent, TransparencyText } from '../models/transparency';
+import opacity from '../defaults/opacity';
 
 export const getComponentColor = (
   color: string,
   toggled: boolean,
   disabled: boolean,
   theme: UITheme,
-  background: boolean = true,
-  transparency?: any,
   returnOnlyAlpha: boolean = false,
 ) => {
-  if (transparency == null) {
-    transparency = background ? TransparencyComponent : TransparencyText;
-  }
-
-  const { light, dark } = transparency;
   const isLightTheme = theme === UITheme.Light;
   const rgb = isLightTheme ? 0 : 255;
 
   let alpha;
 
   if (disabled) {
-    alpha = isLightTheme ? light.disabled : dark.disabled;
+    alpha = isLightTheme ? opacity.light.disabledIcon : opacity.dark.disabledIcon;
   } else if (!toggled) {
-    alpha = isLightTheme ? light.inactive : dark.inactive;
+    alpha = isLightTheme ? opacity.light.inactiveIcon : opacity.dark.inactiveIcon;
   }
 
   if (returnOnlyAlpha) return alpha;
@@ -42,31 +34,17 @@ export const getComponentOpacity = (
   theme: UITheme,
   background: boolean = true,
   transparency?: any,
-) => getComponentColor(null, toggled, disabled, theme, background, transparency, true);
+) => getComponentColor(null, toggled, disabled, theme, true);
 
-const transparency = TransparencyText;
-export const getComponentForeground = (
-  disabled: boolean,
-  theme: UITheme,
-  opacity = {
-    disabled: {
-      light: transparency.light.disabled,
-      dark: transparency.dark.disabled
-    },
-    enabled: {
-      light: transparency.light.inactive,
-      dark: transparency.dark.inactive
-    }
-  }
-) => {
+export const getComponentForeground = (disabled: boolean, theme: UITheme) => {
   if (disabled) {
     if (theme === UITheme.Light) {
-      return `rgba(0,0,0,${opacity.disabled.light})`;
+      return `rgba(0,0,0,${opacity.light.disabledIcon})`;
     }
-    return `rgba(255,255,255,${opacity.disabled.dark})`;
+    return `rgba(255,255,255,${opacity.dark.disabledIcon})`;
   }
   if (theme === UITheme.Light) {
-    return `rgba(0,0,0,${opacity.enabled.light})`;
+    return `rgba(0,0,0,${opacity.light.inactiveIcon})`;
   }
-  return `rgba(255,255,255,${opacity.enabled.dark})`;
+  return `rgba(255,255,255,${opacity.dark.inactiveIcon})`;
 };

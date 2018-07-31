@@ -1,11 +1,11 @@
-import { requestURL } from '../../shared/utils/network';
-import { WEATHER_API_KEY } from '../../shared/constants';
 import weatherIcons, { WeatherCodes } from '../defaults/weather-icons';
-import { TimeUnit, TemperatureUnit, WeatherLanguages } from '../../shared/enums';
 import { getTimeZoneOffset, getTimeInZone } from './time-zone';
 import WeatherDailyItem from '../models/weather-daily-item';
 import WeatherWeeklyItem from '../models/weather-weekly-item';
 import WeatherForecast from '../models/weather-forecast';
+import { WeatherLanguages, TemperatureUnit, TimeUnit } from '../enums';
+import { WEATHER_API_KEY } from '../constants';
+import { requestURL } from './network';
 
 const createDailyItem = (data: any, timeZoneOffset: number) => {
   const item: WeatherDailyItem = {
