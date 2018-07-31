@@ -2,8 +2,8 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { TweenLite, Expo } from 'gsap';
 import { Root, Thumb } from './styles';
-import Tab from '../../../models/tab';
-import tabAnimations from '../../../defaults/tab-animations';
+import Tab from '../../../../models/tab';
+import tabAnimations from '../../../../defaults/tab-animations';
 
 interface Props {
   scrollbar: any;

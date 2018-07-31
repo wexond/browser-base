@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import transparency from '../../../../shared/defaults/opacity';
-import AppStore from '../../../../app/store';
-import Store from '../../store';
+import Appstore from '../../../../app/store';
+import store from '../../store';
 import BookmarkItem from '../../../../shared/models/bookmark-item';
 import { removeItem } from '../../utils';
 import { Root, Icon } from '../../../../shared/components/PageItem';
@@ -49,16 +49,16 @@ export default class Item extends React.Component<IProps, IState> {
     const { data } = this.props;
 
     if (this.cmdPressed || e.ctrlKey) {
-      if (Store.selectedItems.indexOf(data.id) === -1) {
-        Store.selectedItems.push(data.id);
+      if (store.selectedItems.indexOf(data.id) === -1) {
+        store.selectedItems.push(data.id);
       } else {
-        Store.selectedItems.splice(Store.selectedItems.indexOf(data.id), 1);
+        store.selectedItems.splice(store.selectedItems.indexOf(data.id), 1);
       }
     } else if (data.type === 'folder') {
-      Store.goTo(data.id);
+      store.goTo(data.id);
     } else {
-      AppStore.getCurrentWorkspace().addTab(data.url);
-      AppStore.menu.hide();
+      Appstore.getCurrentWorkspace().addTab(data.url);
+      Appstore.menu.hide();
     }
   };
 
@@ -119,7 +119,7 @@ export default class Item extends React.Component<IProps, IState> {
           title,
         });
 
-      const item = AppStore.bookmarks.find(x => x.id === data.id);
+      const item = Appstore.bookmarks.find(x => x.id === data.id);
       item.title = title;
     }
   };
@@ -134,7 +134,7 @@ export default class Item extends React.Component<IProps, IState> {
 
     const isFolder = data.type === 'folder';
     let opacity = 1;
-    let favicon = AppStore.favicons[data.favicon];
+    let favicon = Appstore.favicons[data.favicon];
 
     if (favicon == null || favicon.trim() === '') {
       favicon = isFolder ? folderIcon : pageIcon;
@@ -147,7 +147,7 @@ export default class Item extends React.Component<IProps, IState> {
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onClick={this.onClick}
-        selected={Store.selectedItems.indexOf(data.id) !== -1}
+        selected={store.selectedItems.indexOf(data.id) !== -1}
       >
         <Icon style={{ opacity }} icon={favicon} />
         <div style={{ flex: 1 }}>

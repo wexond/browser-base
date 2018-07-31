@@ -1,9 +1,4 @@
 import styled, { css } from 'styled-components';
-import ToolbarButton from '../Toolbar/Button';
-
-interface TabBarProps {
-  visible: boolean;
-}
 
 export const StyledTabBar = styled.div`
   transform: translateZ(0);

@@ -4,7 +4,7 @@ import {
   Container, Title, Header, Dark, Menu, Content, Search, Input, SearchIcon,
 } from './styles';
 import Item from './Item';
-import Store from '../../store';
+import store from '../../../store';
 
 interface Props {
   children?: any;
@@ -21,13 +21,13 @@ export default class extends React.Component<Props, {}> {
 
   public onDarkClick = () => {
     requestAnimationFrame(() => {
-      Store.menu.hide();
+      store.menu.hide();
     });
   };
 
   private onItemClick = (e: React.MouseEvent<HTMLDivElement>, item: Item) => {
     if (item) {
-      Store.menu.selectedItem = item.props.id;
+      store.menu.selectedItem = item.props.id;
     }
   };
 
@@ -48,7 +48,7 @@ export default class extends React.Component<Props, {}> {
 
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i];
-      if (item && item.props.id === Store.menu.selectedItem) {
+      if (item && item.props.id === store.menu.selectedItem) {
         selectedItem = item;
         break;
       }
@@ -56,7 +56,7 @@ export default class extends React.Component<Props, {}> {
 
     return (
       <React.Fragment>
-        <Container visible={Store.menu.visible}>
+        <Container visible={store.menu.visible}>
           <Content visible={selectedItem != null}>
             {selectedItem
               && React.cloneElement(selectedItem.props.content, {
@@ -82,7 +82,7 @@ export default class extends React.Component<Props, {}> {
               }))}
           </Menu>
         </Container>
-        <Dark onClick={this.onDarkClick} visible={Store.menu.visible} />
+        <Dark onClick={this.onDarkClick} visible={store.menu.visible} />
       </React.Fragment>
     );
   }

@@ -1,10 +1,9 @@
-import db from '../../shared/models/app-database';
-import HistoryItem from '../../shared/models/history-item';
-import { requestURL } from '../../shared/utils/network';
-
-interface Search {
-  title: string;
-}
+import store from '../store';
+import HistoryItem from '../models/history-item';
+import database from '../database';
+import { requestURL } from './network';
+import { isURL } from './url';
+import SuggestionItem from '../models/suggestion-item';
 
 const removeDuplicates = (array: any[], param: string) => {
   const tempArray = array.slice();
@@ -72,7 +71,7 @@ export const getHistorySuggestions = (filter: string) =>
 
     const filterPart = filter.replace(regex, '');
 
-    db.history
+    database.history
       .each(item => {
         let urlPart = item.url.replace(regex, '');
 
@@ -160,7 +159,7 @@ export const getHistorySuggestions = (filter: string) =>
 
 export const getSearchSuggestions = (filter: string) =>
   // eslint-disable-next-line
-  new Promise(async (resolve: (suggestions: Search[]) => void, reject) => {
+  new Promise(async (resolve: (suggestions: string[]) => void, reject) => {
     const input = filter.trim().toLowerCase();
 
     if (input === '') return resolve([]);
@@ -169,21 +168,92 @@ export const getSearchSuggestions = (filter: string) =>
       const data = await requestURL(`http://google.com/complete/search?client=chrome&q=${input}`);
       const json = JSON.parse(data);
 
-      let suggestions: Search[] = [];
+      let suggestions: string[] = [];
 
       for (const item of json[1]) {
         if (suggestions.indexOf(item) === -1) {
-          suggestions.push({
-            title: String(item).toLowerCase(),
-          });
+          suggestions.push(String(item).toLowerCase());
         }
       }
 
       // Sort suggestions array by length.
-      suggestions = suggestions.sort((a, b) => a.title.length - b.title.length).slice(0, 4);
+      suggestions = suggestions.sort((a, b) => a.length - b.length).slice(0, 4);
 
       resolve(suggestions);
     } catch (e) {
       reject(e);
     }
+  });
+
+let searchSuggestions: SuggestionItem[] = [];
+
+export const loadSuggestions = (input: HTMLInputElement) =>
+  new Promise(async resolve => {
+    const filter = input.value.replace(input.value.substring(0, input.selectionStart), '');
+
+    const dictionary = store.dictionary.suggestions;
+    const suggestions = await getHistorySuggestions(filter);
+
+    store.loadFavicons();
+
+    const historySuggestions: SuggestionItem[] = [];
+
+    let id = 0;
+
+    if (suggestions.mostVisited.length === 0 && filter.trim() !== '') {
+      historySuggestions.unshift({
+        primaryText: filter,
+        secondaryText: dictionary.searchInGoogle,
+        type: 'no-subheader-search',
+        id: 0,
+      });
+      id = 1;
+      if (isURL(filter)) {
+        historySuggestions[0].id = 1;
+        historySuggestions.unshift({
+          primaryText: filter,
+          secondaryText: dictionary.openWebsite,
+          type: 'no-subheader-website',
+          id: 0,
+        });
+        id = 2;
+      }
+    }
+
+    for (const item of suggestions.mostVisited) {
+      historySuggestions.push({
+        primaryText: item.title,
+        secondaryText: item.url,
+        favicon: store.favicons[item.favicon],
+        type: 'most-visited',
+        id: id++,
+      });
+    }
+
+    for (const item of suggestions.history) {
+      historySuggestions.push({
+        primaryText: item.title,
+        secondaryText: item.url,
+        favicon: store.favicons[item.favicon],
+        type: 'history',
+        id: id++,
+      });
+    }
+
+    store.suggestions = input.value === '' ? [] : searchSuggestions.concat(this.historySuggestions);
+
+    getSearchSuggestions(filter).then(data => {
+      searchSuggestions = [];
+      for (const item of data) {
+        searchSuggestions.push({
+          primaryText: item,
+          type: 'search',
+          id: id++,
+        });
+      }
+
+      store.suggestions = input.value === '' ? [] : historySuggestions.concat(this.searchSuggestions);
+    });
+
+    resolve();
   });

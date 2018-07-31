@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
-import images from '../../../shared/mixins/images';
-import opacity from '../../../shared/defaults/opacity';
-import typography from '../../../shared/mixins/typography';
+import typography from '../../../mixins/typography';
+import opacity from '../../../defaults/opacity';
+import images from '../../../mixins/images';
 
 export const StyledSuggestion = styled.div`
   width: 100%;

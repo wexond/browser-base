@@ -10,93 +10,98 @@ import http from 'http';
 import { parse } from 'url';
 
 import { StyledApp } from './styles';
-import Store from '../../store';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
 import GlobalMenu from '../GlobalMenu';
 import WorkspacesMenu from '../WorkspacesMenu';
-import ContextMenu from '../../../shared/components/ContextMenu';
-import db from '../../../shared/models/app-database';
-import Snackbar from '../../../shared/components/Snackbar';
-import Button from '../../../shared/components/Button';
-import { ButtonType } from '../../../shared/enums';
-import colors from '../../../shared/defaults/colors';
-import ipcMessages from '../../../shared/defaults/ipc-messages';
-import { ContextMenuMode } from '../../enums';
+import store from '../../../store';
+import database from '../../../database';
+import { ContextMenuMode, ButtonType } from '../../../enums';
+import ContextMenu from '../../../components/ContextMenu';
+import Snackbar from '../../../components/Snackbar';
+import Button from '../../../components/Button';
+import colors from '../../../defaults/colors';
+import ipcMessages from '../../../defaults/ipc-messages';
 
 const { dialog } = remote;
 
 @observer
 class App extends React.Component {
+  private workspacesTimer: any;
+
   public onInspectElementClick = () => {
-    const { x, y } = Store.webviewContextMenuParams;
-    Store.getSelectedPage().webview.inspectElement(x, y);
+    const { x, y } = store.webviewContextMenuParams;
+    store.getSelectedPage().webview.inspectElement(x, y);
   };
 
   public async componentDidMount() {
     window.addEventListener('mousemove', e => {
-      Store.mouse.x = e.pageX;
-      Store.mouse.y = e.pageY;
+      store.mouse.x = e.pageX;
+      store.mouse.y = e.pageY;
     });
 
     window.addEventListener('mousedown', (e: MouseEvent) => {
-      Store.pageMenu.toggle(false);
+      store.pageMenu.toggle(false);
     });
 
     window.addEventListener('mouseup', (e: MouseEvent) => {
-      Store.bookmarksDialogVisible = false;
+      store.bookmarkDialogVisible = false;
     });
 
     window.addEventListener('keydown', e => {
       if (!e.isTrusted) return;
-      const { workspaces, menu } = Store;
-
       if (e.keyCode === 27) {
         // escape
         // hide menu and workspaces manager
 
-        if (workspaces.visible) workspaces.visible = false;
+        if (store.workspacesMenuVisible) store.workspacesMenuVisible = false;
 
-        if (menu.visible) {
-          menu.visible = false;
-          menu.selectedItem = null;
+        if (store.menu.visible) {
+          store.menu.visible = false;
+          store.menu.selectedItem = null;
         }
-      } else if ((e.ctrlKey || workspaces.visible) && (e.keyCode === 37 || e.keyCode === 39)) {
+      } else if (
+        (e.ctrlKey || store.workspacesMenuVisible)
+        && (e.keyCode === 37 || e.keyCode === 39)
+      ) {
         // ctrl + left or aight arrow,
         // switch between workspaces
 
-        const list = workspaces.list;
-        const index = list.indexOf(Store.getCurrentWorkspace());
+        const list = store.workspaces;
+        const index = list.indexOf(store.getCurrentWorkspace());
 
         if (e.keyCode === 37) {
           // left
 
           if (index <= 0) {
-            workspaces.selected = list[list.length - 1].id;
+            store.selectedWorkspace = list[list.length - 1].id;
           } else {
-            workspaces.selected = list[index - 1].id;
+            store.selectedWorkspace = list[index - 1].id;
           }
         } else if (e.keyCode === 39) {
           // right
 
-          if (index + 1 === workspaces.list.length) {
-            workspaces.selected = 0;
+          if (index + 1 === store.workspaces.length) {
+            store.selectedWorkspace = 0;
           } else {
-            workspaces.selected = list[index + 1].id;
+            store.selectedWorkspace = list[index + 1].id;
           }
         } else {
           return;
         }
 
-        clearTimeout(workspaces.timer);
+        clearTimeout(this.workspacesTimer);
 
-        workspaces.timer = setTimeout(workspaces.hide, workspaces.visible ? 500 : 200);
-        workspaces.visible = true;
+        this.workspacesTimer = setTimeout(
+          () => (store.workspacesMenuVisible = false),
+          store.workspacesMenuVisible ? 500 : 200,
+        );
+        store.workspacesMenuVisible = true;
       } else if (e.ctrlKey && e.keyCode >= 48 && e.keyCode <= 57) {
         // ctrl + digit
         // switch between tabs, 1-9 + 0
 
-        const current = Store.getCurrentWorkspace();
+        const current = store.getCurrentWorkspace();
         const tabs = current.tabs;
 
         if (e.keyCode === 48) {
@@ -112,89 +117,89 @@ class App extends React.Component {
             current.selectTab(tabs[index]);
           }
         }
-      } else if (e.ctrlKey && e.keyCode === 83 && !workspaces.visible) {
+      } else if (e.ctrlKey && e.keyCode === 83 && !store.workspacesMenuVisible) {
         // ctrl + s
         // show workspaces manager
 
-        workspaces.visible = true;
+        store.workspacesMenuVisible = true;
       } else if (e.ctrlKey && e.keyCode === 82) {
         // ctrl + r
         // refresh a page
 
-        Store.getSelectedPage().webview.reload();
+        store.getSelectedPage().webview.reload();
       } else if (e.ctrlKey && e.keyCode === 78) {
         // ctrl + n
         // add a new tab
 
-        Store.getCurrentWorkspace().addTab();
+        store.getCurrentWorkspace().addTab();
       } else if (e.altKey && e.keyCode === 37) {
         // alt + left arrow
         // go back
-        Store.getSelectedPage().webview.goBack();
+        store.getSelectedPage().webview.goBack();
       } else if (e.altKey && e.keyCode === 39) {
-        //alt + right arrow
-        //go forward
-        Store.getSelectedPage().webview.goForward();
+        // alt + right arrow
+        // go forward
+        store.getSelectedPage().webview.goForward();
       } else if (e.ctrlKey && e.keyCode === 72) {
         // ctrl + h
-        // To view history 
-        Store.menu.visible = true;
-        Store.menu.selectedItem = 0;
+        // To view history
+        store.menu.visible = true;
+        store.menu.selectedItem = 0;
       } else if (e.ctrlKey && e.keyCode === 75) {
         // ctrl + k
         // To view bookmarks
-        Store.menu.visible = true;
-        Store.menu.selectedItem = 1;
+        store.menu.visible = true;
+        store.menu.selectedItem = 1;
       } else if (e.altKey && e.keyCode === 36) {
         // alt + Home
         // To go NewTab Page
-        Store.getSelectedPage().webview.loadURL("wexond://newtab");
+        store.getSelectedPage().webview.loadURL('wexond://newtab');
       } else if (e.altKey && e.keyCode === 112) {
         // alt + F1
         // To see About
-        Store.menu.visible = true;
-        Store.menu.selectedItem = 4;
-      } else if (e.altKey && e.keyCode === 69){
+        store.menu.visible = true;
+        store.menu.selectedItem = 4;
+      } else if (e.altKey && e.keyCode === 69) {
         // alt + E
         // Open Menu
-        Store.menu.visible = true;
+        store.menu.visible = true;
       }
     });
 
-    Store.bookmarks = await db.bookmarks.toArray();
+    store.bookmarks = await database.bookmarks.toArray();
   }
 
   public componentWillUnmount() {
-    Store.pages = [];
+    store.pages = [];
   }
 
   public onRestartClick = () => {
-    Store.updateInfo.available = false;
+    store.updateInfo.available = false;
     ipcRenderer.send(ipcMessages.UPDATE_RESTART_AND_INSTALL);
   };
 
   public onOpenLinkInNewTabClick = () => {
-    const { linkURL } = Store.webviewContextMenuParams;
-    Store.getCurrentWorkspace().addTab(linkURL, false);
+    const { linkURL } = store.webviewContextMenuParams;
+    store.getCurrentWorkspace().addTab(linkURL, false);
   };
 
   public onCopyLinkAddressClick = () => {
-    const { linkURL } = Store.webviewContextMenuParams;
+    const { linkURL } = store.webviewContextMenuParams;
     clipboard.clear();
     clipboard.writeText(linkURL);
   };
 
   public onOpenImageInNewTabClick = () => {
-    const { srcURL } = Store.webviewContextMenuParams;
-    Store.getCurrentWorkspace().addTab(srcURL, false);
+    const { srcURL } = store.webviewContextMenuParams;
+    store.getCurrentWorkspace().addTab(srcURL, false);
   };
 
   public onPrintClick = () => {
-    Store.getSelectedPage().webview.print();
+    store.getSelectedPage().webview.print();
   };
 
   public onCopyImageClick = () => {
-    const { srcURL } = Store.webviewContextMenuParams;
+    const { srcURL } = store.webviewContextMenuParams;
     const img = nativeImage.createFromDataURL(srcURL);
 
     clipboard.clear();
@@ -202,13 +207,13 @@ class App extends React.Component {
   };
 
   public onCopyImageAddressClick = () => {
-    const { srcURL } = Store.webviewContextMenuParams;
+    const { srcURL } = store.webviewContextMenuParams;
     clipboard.clear();
     clipboard.writeText(srcURL);
   };
 
   public onSaveImageAsClick = () => {
-    const { srcURL } = Store.webviewContextMenuParams;
+    const { srcURL } = store.webviewContextMenuParams;
     let name = basename(srcURL);
     let extension = extname(name);
 
@@ -247,53 +252,61 @@ class App extends React.Component {
   };
 
   public saveLinkAs = () => {
-    const url = Store.webviewContextMenuParams.linkText;
-    dialog.showSaveDialog({
-      defaultPath:url + '.html',
-      filters: [
-        {
-          name: '.html',
-          extensions: ['html'],
-        }
-      ]
-    },
-      function (path1) {
-        Store.getSelectedPage().webview.getWebContents().savePage(path1, 'HTMLComplete', (error) => {
-          if (error) {
-            console.error(error)
-          }
-        })
-      }
-    )
+    const url = store.webviewContextMenuParams.linkText;
+    dialog.showSaveDialog(
+      {
+        defaultPath: `${url}.html`,
+        filters: [
+          {
+            name: '.html',
+            extensions: ['html'],
+          },
+        ],
+      },
+      path1 => {
+        store
+          .getSelectedPage()
+          .webview.getWebContents()
+          .savePage(path1, 'HTMLComplete', error => {
+            if (error) {
+              console.error(error);
+            }
+          });
+      },
+    );
   };
 
   public saveAs = () => {
-    dialog.showSaveDialog({
-      defaultPath: Store.getSelectedPage().webview.getTitle() + '.html',
-      filters: [
-        {
-          name: '.html',
-          extensions: ['html'],
-        }
-      ]
-    },
-      function (path1) {
-        Store.getSelectedPage().webview.getWebContents().savePage(path1, 'HTMLComplete', (error) => {
-          if (error) {
-            console.error(error)
-          }
-        })
-      }
-    )
+    dialog.showSaveDialog(
+      {
+        defaultPath: `${store.getSelectedPage().webview.getTitle()}.html`,
+        filters: [
+          {
+            name: '.html',
+            extensions: ['html'],
+          },
+        ],
+      },
+      path1 => {
+        store
+          .getSelectedPage()
+          .webview.getWebContents()
+          .savePage(path1, 'HTMLComplete', error => {
+            if (error) {
+              console.error(error);
+            }
+          });
+      },
+    );
   };
 
   public viewSource = () => {
-    const url = Store.getSelectedPage().webview.getURL();
-    Store.getCurrentWorkspace().addTab('view-source:' + url, true);
+    const url = store.getSelectedPage().webview.getURL();
+    store.getCurrentWorkspace().addTab(`view-source:${url}`, true);
   };
 
   public render() {
-    const { mode } = Store.pageMenuData;
+    const { mode } = store.pageMenuData;
 
     const imageAndURLLink = mode === ContextMenuMode.ImageAndURL || mode === ContextMenuMode.URL;
     const imageAndURLImage = mode === ContextMenuMode.ImageAndURL || mode === ContextMenuMode.Image;
@@ -306,12 +319,12 @@ class App extends React.Component {
         <ContextMenu
           width={256}
           dense
-          ref={(r: ContextMenu) => (Store.pageMenu = r)}
+          ref={(r: ContextMenu) => (store.pageMenu = r)}
           onMouseDown={e => e.stopPropagation()}
           style={{
             position: 'absolute',
-            left: Store.pageMenuData.x,
-            top: Store.pageMenuData.y,
+            left: store.pageMenuData.x,
+            top: store.pageMenuData.y,
           }}
         >
           <ContextMenu.Item visible={imageAndURLLink} onClick={this.onOpenLinkInNewTabClick}>
@@ -350,14 +363,14 @@ class App extends React.Component {
             Save as
           </ContextMenu.Item>
           <ContextMenu.Separator visible={normal} />
-          <ContextMenu.Item visible={normal} onClick={this.viewSource} >
+          <ContextMenu.Item visible={normal} onClick={this.viewSource}>
             View source
           </ContextMenu.Item>
           <ContextMenu.Item onClick={this.onInspectElementClick}>Inspect element</ContextMenu.Item>
         </ContextMenu>
         <GlobalMenu />
         <WorkspacesMenu />
-        <Snackbar visible={Store.updateInfo.available}>
+        <Snackbar visible={store.updateInfo.available}>
           <Snackbar.Content>An update is available</Snackbar.Content>
           <Snackbar.Actions>
             <Button

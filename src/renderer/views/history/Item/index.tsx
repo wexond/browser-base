@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import transparency from '../../../../shared/defaults/opacity';
-import Store from '../../store';
-import AppStore from '../../../../app/store';
+import store from '../../store';
+import Appstore from '../../../../app/store';
 import { deleteHistoryItem } from '../../utils';
 import HistoryItem from '../../../../shared/models/history-item';
 import {
@@ -20,15 +20,15 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
   public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { data } = this.props;
 
-    if (Store.cmdPressed || e.ctrlKey) {
-      if (Store.selectedItems.indexOf(data.id) === -1) {
-        Store.selectedItems.push(data.id);
+    if (store.cmdPressed || e.ctrlKey) {
+      if (store.selectedItems.indexOf(data.id) === -1) {
+        store.selectedItems.push(data.id);
       } else {
-        Store.selectedItems.splice(Store.selectedItems.indexOf(data.id), 1);
+        store.selectedItems.splice(store.selectedItems.indexOf(data.id), 1);
       }
     } else {
-      AppStore.getCurrentWorkspace().addTab(data.url);
-      AppStore.menu.hide();
+      Appstore.getCurrentWorkspace().addTab(data.url);
+      Appstore.menu.hide();
     }
   };
 
@@ -67,7 +67,7 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
         onFocus={() => null}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        selected={Store.selectedItems.indexOf(data.id) !== -1}
+        selected={store.selectedItems.indexOf(data.id) !== -1}
       >
         <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
         <Icon icon={favicon} style={{ opacity: hovered ? 0 : opacity }} />

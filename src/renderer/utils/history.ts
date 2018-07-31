@@ -1,6 +1,6 @@
 import Section from '../models/section';
-import AppStore from '../../../app/store';
-import HistoryStore from '../store';
+import Appstore from '../../../app/store';
+import Historystore from '../store';
 import db from '../../../shared/models/app-database';
 import { formatDate } from '../../../shared/utils/time';
 import HistoryItem from '../../../shared/models/history-item';
@@ -32,7 +32,7 @@ export async function getHistorySections(items: HistoryItem[]) {
 
     const newItem = {
       ...item,
-      favicon: AppStore.favicons[item.favicon],
+      favicon: Appstore.favicons[item.favicon],
       selected: false,
     };
 
@@ -52,7 +52,7 @@ export async function getHistorySections(items: HistoryItem[]) {
 }
 
 export function deleteHistoryItem(id: number) {
-  const { sections } = HistoryStore;
+  const { sections } = Historystore;
   for (let i = sections.length - 1; i >= 0; i--) {
     const section = sections[i];
     const itm = section.items.find(x => x.id === id);

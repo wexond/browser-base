@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
 
-import Store from '../../store';
+import store from '../../store';
 import Preloader from '../../../shared/components/Preloader';
 import { getWeather } from '../../utils/weather';
 import { getNews } from '../../utils/news';
@@ -32,7 +32,7 @@ class App extends React.Component {
       columns = this.getColumns(2);
     }
 
-    Store.columns = columns;
+    store.columns = columns;
   };
 
   async loadData() {
@@ -43,15 +43,15 @@ class App extends React.Component {
       TimeUnit.TwentyFourHours,
     );
 
-    Store.weatherForecast = weatherData;
-    Store.newsData = await getNews(Countries.us);
+    store.weatherForecast = weatherData;
+    store.newsData = await getNews(Countries.us);
 
     this.onResize();
-    Store.contentVisible = true;
+    store.contentVisible = true;
   }
 
   public getColumns = (columnsCount: number) => {
-    const { newsData } = Store;
+    const { newsData } = store;
     const columns = [];
     const itemsPerCol = Math.floor(newsData.length / columnsCount);
 
@@ -73,7 +73,7 @@ class App extends React.Component {
   };
 
   public render() {
-    const { weatherForecast, contentVisible, columns } = Store;
+    const { weatherForecast, contentVisible, columns } = store;
 
     const preloaderStyle = {
       position: 'fixed',

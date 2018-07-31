@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import opacity from '../../../shared/defaults/opacity';
-import typography from '../../../shared/mixins/typography';
+import opacity from '../../../defaults/opacity';
+import typography from '../../../mixins/typography';
 
 export const StyledSuggestions = styled.div`
   z-index: 50;

@@ -1,5 +1,5 @@
 import React from 'react';
-import GlobalStore from '../../../global-store';
+import Globalstore from '../../../store';
 
 import colors from '../../../shared/defaults/colors';
 import Button from '../../../shared/components/Button';
@@ -67,7 +67,7 @@ export default class WeatherCard extends React.Component<IProps, IState> {
   public render() {
     const { data } = this.props;
     const { dailyForecastIndex, forecastHeight } = this.state;
-    const dictionary = GlobalStore.dictionary;
+    const dictionary = Globalstore.dictionary;
 
     const expanded = forecastHeight > 0;
     const description = data && formatDescription(data, dailyForecastIndex);
@@ -136,7 +136,7 @@ export default class WeatherCard extends React.Component<IProps, IState> {
             />
             <ForecastContainer innerRef={r => (this.forecastContainer = r)} height={forecastHeight}>
               {data.weekly.map((day: WeatherWeeklyItem, key: any) => {
-                const dayName = GlobalStore.dictionary.dateAndTime.days[getDayIndex(day.date)];
+                const dayName = Globalstore.dictionary.dateAndTime.days[getDayIndex(day.date)];
                 return <ForecastItem data={day} dayName={dayName} key={key} />;
               })}
             </ForecastContainer>

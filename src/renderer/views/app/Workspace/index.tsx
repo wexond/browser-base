@@ -5,12 +5,12 @@ import React from 'react';
 import {
   Indicator, Tabs, Root, AddTabButton,
 } from './styles';
-import { TOOLBAR_HEIGHT } from '../../constants';
-import Tab from '../../models/tab';
 import TabComponent from '../Tab';
-import Workspace from '../../models/workspace';
-import Store from '../../store';
 import Scrollbar from './Scrollbar';
+import Workspace from '../../../models/workspace';
+import Tab from '../../../models/tab';
+import store from '../../../store';
+import { TOOLBAR_HEIGHT } from '../../../constants';
 
 const addTabIcon = require('../../../shared/icons/add.svg');
 
@@ -92,7 +92,7 @@ export default class extends React.Component<Props, {}> {
       direction: '',
     };
 
-    Store.draggingTab = true;
+    store.isTabDragged = true;
 
     this.lastScrollLeft = this.tabs.scrollLeft;
   };
@@ -113,7 +113,7 @@ export default class extends React.Component<Props, {}> {
     this.tabDragData.dragging = false;
     workspace.setTabsPositions();
 
-    Store.draggingTab = false;
+    store.isTabDragged = false;
 
     const selectedTab = workspace.getSelectedTab();
     if (selectedTab != null) {
@@ -144,7 +144,7 @@ export default class extends React.Component<Props, {}> {
       }
 
       selectedTab.dragging = true;
-      Store.addressBar.canToggle = false;
+      store.addressBar.canToggle = false;
 
       const newLeft = startLeft + e.pageX - mouseStartX - (this.lastScrollLeft - scrollLeft);
 
@@ -158,20 +158,13 @@ export default class extends React.Component<Props, {}> {
 
       selectedTab.setLeft(left, false);
 
-      const createWindow = () => {
+      if (
+        e.pageY > TOOLBAR_HEIGHT + 16
+        || e.pageY < -16
+        || e.pageX < boundingRect.left
+        || e.pageX - boundingRect.left > workspace.addTabButton.left
+      ) {
         // TODO: Create a new window
-      };
-
-      if (e.pageY > TOOLBAR_HEIGHT + 16 || e.pageY < -16) {
-        createWindow();
-      }
-
-      if (e.pageX < boundingRect.left) {
-        createWindow();
-      }
-
-      if (e.pageX - boundingRect.left > workspace.addTabButton.left) {
-        createWindow();
       }
 
       TweenLite.to(workspace.tabsIndicator, 0, { left: selectedTab.left });
@@ -195,9 +188,9 @@ export default class extends React.Component<Props, {}> {
 
   public render() {
     const { workspace } = this.props;
-    const { workspaces } = Store;
+    const { workspaces } = store;
 
-    const selected = workspace.id === workspaces.selected;
+    const selected = workspace.id === store.selectedWorkspace;
 
     return (
       <Root visible={selected}>

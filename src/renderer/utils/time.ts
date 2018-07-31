@@ -1,5 +1,5 @@
-import GlobalStore from '../../global-store';
 import { TimeUnit } from '../enums';
+import store from '../store';
 
 export const getTimePeriod = (hours: number, timeUnit: TimeUnit) => {
   if (timeUnit === TimeUnit.TwelveHours) {
@@ -75,7 +75,7 @@ export const getConditionsTime = (time: number, conditions: any) => {
 };
 
 export const getTimeOffset = (date: Date, t?: any) => {
-  const dictionary = GlobalStore.dictionary.dateAndTime;
+  const dictionary = store.dictionary.dateAndTime;
   const currentdate = new Date();
   const diff = new Date(currentdate.getTime() - date.getTime());
 
@@ -101,7 +101,7 @@ export const getTimeOffset = (date: Date, t?: any) => {
 };
 
 export const formatDate = (date: Date) => {
-  const dictionary = GlobalStore.dictionary.dateAndTime;
+  const dictionary = store.dictionary.dateAndTime;
   const currentDate = new Date();
 
   let prefix = '';
