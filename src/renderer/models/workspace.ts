@@ -10,17 +10,23 @@ const pageIcon = require('../../shared/icons/page.svg');
 let nextWorkspaceId = 0;
 
 export default class Workspace {
-  @observable public id: number = -1;
+  @observable
+  public id: number = -1;
 
-  @observable public name: string = 'Workspace';
+  @observable
+  public name: string = 'Workspace';
 
-  @observable public selectedTab: number = -1;
+  @observable
+  public selectedTab: number = -1;
 
-  @observable public tabs: Tab[] = [];
+  @observable
+  public tabs: Tab[] = [];
 
-  @observable public tabsIndicator = new TabsIndicator();
+  @observable
+  public tabsIndicator = new TabsIndicator();
 
-  @observable public addTabButton = new AddTabButton();
+  @observable
+  public addTabButton = new AddTabButton();
 
   @observable
   public scrollbar = {
@@ -45,7 +51,7 @@ export default class Workspace {
           this.tabsIndicator.moveToTab(tab);
         });
 
-        Store.isStarred = !!Store.bookmarks.find(x => x.url === tab.url);
+        Store.isBookmarked = !!Store.bookmarks.find(x => x.url === tab.url);
 
         Store.refreshNavigationState();
       }
