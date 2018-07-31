@@ -6,16 +6,15 @@ import ToolbarSeparator from './Separator';
 import {
   StyledToolbar, Handle, TabsSection, Line,
 } from './styles';
-import Store from '../../store';
 import AddressBar from '../AddressBar';
 import TabBar from '../TabBar';
 import ToolbarButton from './Button';
 import BookmarksDialog from '../BookmarksDialog';
-import { Platforms } from '../../enums';
 import WindowsControls from '../WindowsControls';
-import db from '../../../shared/models/app-database';
-import BookmarkItem from '../../../shared/models/bookmark-item';
-import { addBookmark } from '../../../menu/bookmarks/utils';
+import store from '../../../store';
+import BookmarkItem from '../../../models/bookmark-item';
+import { addBookmark } from '../../../utils/bookmarks';
+import { Platforms } from '../../../enums';
 
 const workspacesIcon = require('../../../shared/icons/tab-groups.svg');
 const menuIcon = require('../../../shared/icons/menu.svg');
@@ -29,11 +28,11 @@ export default class Toolbar extends React.Component {
   public static Separator = ToolbarSeparator;
 
   public onWorkspacesIconClick = () => {
-    Store.workspaces.visible = true;
+    store.workspacesMenuVisible = true;
   };
 
   public toggleMenu = () => {
-    Store.menu.visible = !Store.menu.visible;
+    store.menu.visible = !store.menu.visible;
   };
 
   public onStarIconMouseDown = (e: SyntheticEvent<any>) => {
@@ -42,9 +41,9 @@ export default class Toolbar extends React.Component {
   };
 
   public onStarIconClick = async () => {
-    const selectedTab = Store.getSelectedTab();
+    const selectedTab = store.getSelectedTab();
 
-    let bookmark: BookmarkItem = Store.bookmarks.find(x => x.url === selectedTab.url);
+    let bookmark: BookmarkItem = store.bookmarks.find(x => x.url === selectedTab.url);
 
     if (!bookmark) {
       bookmark = await addBookmark({
@@ -56,28 +55,28 @@ export default class Toolbar extends React.Component {
       });
     }
 
-    Store.bookmarksDialog.show(bookmark);
+    store.bookmarkDialog.show(bookmark);
   };
 
   public render() {
     return (
-      <StyledToolbar isHTMLFullscreen={Store.isHTMLFullscreen}>
+      <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
         <Handle />
         <NavigationButtons />
         <ToolbarSeparator style={{ marginRight: 16 }} />
         <TabsSection>
-          <AddressBar visible={Store.addressBar.toggled} />
+          <AddressBar visible={store.addressBar.toggled} />
           <TabBar />
         </TabsSection>
         <ToolbarSeparator style={{ marginLeft: 16 }} />
         <div style={{ position: 'relative' }}>
           <ToolbarButton
             size={20}
-            icon={Store.isStarred ? starIcon : starBorderIcon}
+            icon={store.isBookmarked ? starIcon : starBorderIcon}
             onMouseDown={this.onStarIconMouseDown}
             onClick={this.onStarIconClick}
           />
-          <BookmarksDialog ref={r => (Store.bookmarksDialog = r)} />
+          <BookmarksDialog ref={r => (store.bookmarkDialog = r)} />
         </div>
         <ToolbarButton size={16} icon={workspacesIcon} onClick={this.onWorkspacesIconClick} />
         <ToolbarButton
@@ -86,7 +85,7 @@ export default class Toolbar extends React.Component {
           icon={menuIcon}
           style={{ marginRight: 4 }}
         />
-        {Store.platform !== Platforms.MacOS && <WindowsControls />}
+        {store.platform !== Platforms.MacOS && <WindowsControls />}
         <Line />
       </StyledToolbar>
     );

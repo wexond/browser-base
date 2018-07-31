@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { StyledContainer } from './styles';
-import Store from '../../store';
 import Toolbar from '../Toolbar';
+import store from '../../../store';
 
 const backIcon = require('../../../shared/icons/back.svg');
 const forwardIcon = require('../../../shared/icons/forward.svg');
@@ -11,29 +11,29 @@ const refreshIcon = require('../../../shared/icons/refresh.svg');
 @observer
 export default class NavigationButtons extends React.Component {
   public onBackClick = () => {
-    Store.getSelectedPage().webview.goBack();
+    store.getSelectedPage().webview.goBack();
   };
 
   public onForwardClick = () => {
-    Store.getSelectedPage().webview.goForward();
+    store.getSelectedPage().webview.goForward();
   };
 
   public onRefreshClick = () => {
-    Store.getSelectedPage().webview.reload();
+    store.getSelectedPage().webview.reload();
   };
 
   public render() {
     return (
-      <StyledContainer isFullscreen={Store.isFullscreen}>
+      <StyledContainer isFullscreen={store.isFullscreen}>
         <Toolbar.Button
-          disabled={!Store.navigationState.canGoBack}
+          disabled={!store.navigationState.canGoBack}
           size={24}
           icon={backIcon}
           style={{ marginLeft: 4 }}
           onClick={this.onBackClick}
         />
         <Toolbar.Button
-          disabled={!Store.navigationState.canGoForward}
+          disabled={!store.navigationState.canGoForward}
           size={24}
           icon={forwardIcon}
           onClick={this.onForwardClick}

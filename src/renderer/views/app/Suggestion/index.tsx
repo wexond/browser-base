@@ -3,9 +3,9 @@ import React from 'react';
 import {
   Dash, Icon, PrimaryText, SecondaryText, StyledSuggestion,
 } from './styles';
-import SuggestionItem from '../../models/suggestion-item';
-import Store from '../../store';
-import opacity from '../../../shared/defaults/opacity';
+import SuggestionItem from '../../../models/suggestion-item';
+import opacity from '../../../defaults/opacity';
+import store from '../../../store';
 
 const searchIcon = require('../../../shared/icons/search.svg');
 const pageIcon = require('../../../shared/icons/page.svg');
@@ -32,7 +32,7 @@ export default class Suggestion extends React.Component<
     const { hovered } = this.state;
     const { primaryText, secondaryText } = suggestion;
 
-    const selected = Store.suggestions.selected === suggestion.id;
+    const selected = store.selectedSuggestion === suggestion.id;
 
     let favicon = suggestion.favicon;
 

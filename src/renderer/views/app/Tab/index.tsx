@@ -1,14 +1,14 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import Preloader from '../../../shared/components/Preloader';
-import tabAnimations from '../../defaults/tab-animations';
-import TabModel from '../../models/tab';
-import Store from '../../store';
-import { closeWindow } from '../../utils/window';
-import Ripples from '../../../shared/components/Ripples';
-import colors from '../../../shared/defaults/colors';
-import components from '../../components';
+import TabModel from '../../../models/tab';
+import store from '../../../store';
+import Ripples from '../../../components/Ripples';
+import { closeWindow } from '../../../utils/window';
+import tabAnimations from '../../../defaults/tab-animations';
+import components from '../../../components';
+import Preloader from '../../../components/Preloader';
+import colors from '../../../defaults/colors';
 
 export interface TabProps {
   key: number;
@@ -33,12 +33,12 @@ export default class Tab extends React.Component<TabProps, {}> {
       if (this.tab != null) {
         const boundingRect = this.tab.getBoundingClientRect();
         if (
-          Store.mouse.x >= boundingRect.left
-          && Store.mouse.x <= boundingRect.left + this.tab.offsetWidth
-          && Store.mouse.y >= boundingRect.top
-          && Store.mouse.y <= boundingRect.top + this.tab.offsetHeight
+          store.mouse.x >= boundingRect.left
+          && store.mouse.x <= boundingRect.left + this.tab.offsetWidth
+          && store.mouse.y >= boundingRect.top
+          && store.mouse.y <= boundingRect.top + this.tab.offsetHeight
         ) {
-          if (!tab.hovered && !Store.draggingTab) {
+          if (!tab.hovered && !store.isTabDragged) {
             tab.hovered = true;
           }
         } else if (tab.hovered) {
@@ -58,7 +58,7 @@ export default class Tab extends React.Component<TabProps, {}> {
 
     const selected = tab.workspace.selectedTab === tab.id;
 
-    Store.addressBar.canToggle = selected;
+    store.addressBar.canToggle = selected;
     setTimeout(() => {
       if (tab !== workspace.getSelectedTab()) {
         workspace.selectTab(tab);
@@ -82,8 +82,8 @@ export default class Tab extends React.Component<TabProps, {}> {
   };
 
   public onClick = () => {
-    if (Store.addressBar.canToggle) {
-      Store.addressBar.toggled = true;
+    if (store.addressBar.canToggle) {
+      store.addressBar.toggled = true;
     }
   };
 
@@ -95,16 +95,16 @@ export default class Tab extends React.Component<TabProps, {}> {
     e.stopPropagation();
 
     const tabIndex = workspace.tabs.indexOf(tab);
-    const page = Store.getPageById(tab.id);
+    const page = store.getPageById(tab.id);
 
-    Store.pages.splice(Store.pages.indexOf(page), 1);
+    store.pages.splice(store.pages.indexOf(page), 1);
 
     if (selected) {
       if (tabIndex + 1 < workspace.tabs.length && !workspace.tabs[tabIndex + 1].isRemoving) {
         workspace.selectedTab = workspace.tabs[tabIndex + 1].id;
       } else if (tabIndex - 1 >= 0 && !workspace.tabs[tabIndex - 1].isRemoving) {
         workspace.selectedTab = workspace.tabs[tabIndex - 1].id;
-      } else if (Store.workspaces.list.length === 1) {
+      } else if (store.workspaces.length === 1) {
         closeWindow();
       }
     }
@@ -166,7 +166,7 @@ export default class Tab extends React.Component<TabProps, {}> {
         onMouseUp={this.onMouseUp}
         onClick={this.onClick}
         isRemoving={isRemoving}
-        visible={!Store.addressBar.toggled}
+        visible={!store.addressBar.toggled}
         innerRef={(r: HTMLDivElement) => {
           this.tab = r;
           tab.tab = r;

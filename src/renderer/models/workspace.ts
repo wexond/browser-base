@@ -2,7 +2,7 @@ import { observable, observe } from 'mobx';
 import TabsIndicator from './tabs-indicator';
 import Tab from './tab';
 import { TAB_MIN_WIDTH, WORKSPACE_MAX_ICONS_COUNT } from '../constants';
-import Store from '../store';
+import store from '../store';
 import AddTabButton from './add-tab-button';
 
 const pageIcon = require('../../shared/icons/page.svg');
@@ -51,9 +51,9 @@ export default class Workspace {
           this.tabsIndicator.moveToTab(tab);
         });
 
-        Store.isBookmarked = !!Store.bookmarks.find(x => x.url === tab.url);
+        store.isBookmarked = !!store.bookmarks.find(x => x.url === tab.url);
 
-        Store.refreshNavigationState();
+        store.refreshNavigationState();
       }
     });
 
@@ -115,7 +115,7 @@ export default class Workspace {
     this.tabs.push(tab);
 
     if (select) this.selectTab(tab);
-    Store.addPage(tab.id, url);
+    store.addPage(tab.id, url);
 
     return tab;
   };
@@ -129,7 +129,7 @@ export default class Workspace {
 
     if (tab.url.startsWith('wexond://newtab') || tab.url.trim() === '') {
       setTimeout(() => {
-        Store.addressBar.toggled = true;
+        store.addressBar.toggled = true;
       }, 50);
     }
   }
@@ -200,6 +200,6 @@ export default class Workspace {
 
   public remove() {
     clearInterval(this.interval);
-    Store.workspaces.list.splice(Store.workspaces.list.indexOf(this), 1);
+    store.workspaces.list.splice(store.workspaces.list.indexOf(this), 1);
   }
 }
