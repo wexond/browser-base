@@ -1,15 +1,12 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import transparency from '../../../../shared/defaults/opacity';
-import store from '../../store';
-import Appstore from '../../../../app/store';
-import { deleteHistoryItem } from '../../utils';
-import HistoryItem from '../../../../shared/models/history-item';
+import HistoryItem from '../../../models/history-item';
+import store from '../../../store';
+import { deleteHistoryItem } from '../../../utils/history';
+import opacity from '../../../defaults/opacity';
 import {
-  Root, Icon, Time, Title, RemoveIcon,
-} from '../../../../shared/components/PageItem';
-
-const pageIcon = require('../../../../shared/icons/page.svg');
+  Root, RemoveIcon, Icon, Time, Title,
+} from '../../../components/PageItem';
 
 @observer
 export default class Item extends React.Component<{ data: HistoryItem }, { hovered: boolean }> {
@@ -21,14 +18,14 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
     const { data } = this.props;
 
     if (store.cmdPressed || e.ctrlKey) {
-      if (store.selectedItems.indexOf(data.id) === -1) {
-        store.selectedItems.push(data.id);
+      if (store.selectedHistoryItems.indexOf(data.id) === -1) {
+        store.selectedHistoryItems.push(data.id);
       } else {
-        store.selectedItems.splice(store.selectedItems.indexOf(data.id), 1);
+        store.selectedHistoryItems.splice(store.selectedHistoryItems.indexOf(data.id), 1);
       }
     } else {
-      Appstore.getCurrentWorkspace().addTab(data.url);
-      Appstore.menu.hide();
+      store.getCurrentWorkspace().addTab(data.url);
+      store.menu.hide();
     }
   };
 
@@ -53,12 +50,12 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
     const hour = date.getHours();
     const minute = date.getMinutes();
 
-    let opacity = 1;
+    let transparency = 1;
     let favicon = data.favicon;
 
     if (favicon == null) {
       favicon = pageIcon;
-      opacity = transparency.light.inactiveIcon;
+      transparency = opacity.light.inactiveIcon;
     }
 
     return (
@@ -67,10 +64,10 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
         onFocus={() => null}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        selected={store.selectedItems.indexOf(data.id) !== -1}
+        selected={store.selectedHistoryItems.indexOf(data.id) !== -1}
       >
         <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
-        <Icon icon={favicon} style={{ opacity: hovered ? 0 : opacity }} />
+        <Icon icon={favicon} style={{ opacity: hovered ? 0 : transparency }} />
         <Time>{`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
         <Title>{data.title}</Title>
       </Root>

@@ -12,8 +12,6 @@ import Tab from '../../../models/tab';
 import store from '../../../store';
 import { TOOLBAR_HEIGHT } from '../../../constants';
 
-const addTabIcon = require('../../../shared/icons/add.svg');
-
 interface Props {
   workspace: Workspace;
 }

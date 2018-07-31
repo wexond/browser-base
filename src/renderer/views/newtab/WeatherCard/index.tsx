@@ -1,16 +1,4 @@
 import React from 'react';
-import Globalstore from '../../../store';
-
-import colors from '../../../shared/defaults/colors';
-import Button from '../../../shared/components/Button';
-import Slider from '../../../shared/components/Slider';
-import opacity from '../../../shared/defaults/opacity';
-import { ButtonType, SliderType } from '../../../shared/enums';
-import { formatTime, getDayIndex } from '../../../shared/utils/time';
-import WeatherForecast from '../../models/weather-forecast';
-import { formatDescription } from '../../utils/weather-card';
-
-import * as Card from '../../../shared/components/Card';
 
 import {
   Temperature,
@@ -26,11 +14,18 @@ import {
 } from './styles';
 
 import ForecastItem from './ForecastItem';
-import { capitalizeWord } from '../../../shared/utils/strings';
-import WeatherWeeklyItem from '../../models/weather-weekly-item';
-
-const precipitationIcon = require('../../../shared/icons/weather/precipitation.png');
-const windIcon = require('../../../shared/icons/weather/wind.svg');
+import WeatherForecast from '../../../models/weather-forecast';
+import store from '../../../store';
+import opacity from '../../../defaults/opacity';
+import { formatDescription } from '../../../utils/weather-card';
+import { formatTime, getDayIndex } from '../../../utils/time';
+import { capitalizeWord } from '../../../utils/strings';
+import Slider from '../../../components/Slider';
+import { SliderType, ButtonType } from '../../../enums';
+import WeatherWeeklyItem from '../../../models/weather-weekly-item';
+import Button from '../../../components/Button';
+import colors from '../../../defaults/colors';
+import * as Card from '../../../components/Card';
 
 export interface IProps {
   data: WeatherForecast;
@@ -67,7 +62,7 @@ export default class WeatherCard extends React.Component<IProps, IState> {
   public render() {
     const { data } = this.props;
     const { dailyForecastIndex, forecastHeight } = this.state;
-    const dictionary = Globalstore.dictionary;
+    const dictionary = store.dictionary;
 
     const expanded = forecastHeight > 0;
     const description = data && formatDescription(data, dailyForecastIndex);
@@ -107,7 +102,10 @@ export default class WeatherCard extends React.Component<IProps, IState> {
             <InfoContainer>
               <Temperature>
                 {current.temp}
-                <TemperatureDeg>&deg;{data.tempUnit}</TemperatureDeg>
+                <TemperatureDeg>
+                  &deg;
+                  {data.tempUnit}
+                </TemperatureDeg>
               </Temperature>
               <TemperatureIcon src={current.icon} />
             </InfoContainer>
@@ -136,7 +134,7 @@ export default class WeatherCard extends React.Component<IProps, IState> {
             />
             <ForecastContainer innerRef={r => (this.forecastContainer = r)} height={forecastHeight}>
               {data.weekly.map((day: WeatherWeeklyItem, key: any) => {
-                const dayName = Globalstore.dictionary.dateAndTime.days[getDayIndex(day.date)];
+                const dayName = store.dictionary.dateAndTime.days[getDayIndex(day.date)];
                 return <ForecastItem data={day} dayName={dayName} key={key} />;
               })}
             </ForecastContainer>

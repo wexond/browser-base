@@ -5,8 +5,6 @@ import typography from '../../../mixins/typography';
 import opacity from '../../../defaults/opacity';
 import images from '../../../mixins/images';
 
-const searchIcon = require('../../../shared/icons/search.svg');
-
 export const Container = styled.div`
   height: 100%;
   position: fixed;

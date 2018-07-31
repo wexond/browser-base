@@ -3,8 +3,6 @@ import images from '../../mixins/images';
 import typography from '../../mixins/typography';
 import opacity from '../../defaults/opacity';
 
-const removeIcon = require('../../icons/close.svg');
-
 export const Root = styled.div`
   height: 56px;
   width: 100%;

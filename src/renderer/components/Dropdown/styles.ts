@@ -5,8 +5,6 @@ import images from '../../mixins/images';
 import shadows from '../../mixins/shadows';
 import { EASE_FUNCTION } from '../../constants';
 
-const dropDownIcon = require('../../icons/drop-down.svg');
-
 export const Root = styled.div`
   display: inline-block;
   background-color: rgba(0, 0, 0, 0.06);

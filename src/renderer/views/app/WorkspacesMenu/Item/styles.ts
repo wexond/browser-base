@@ -6,8 +6,6 @@ import colors from '../../../../defaults/colors';
 import typography from '../../../../mixins/typography';
 import opacity from '../../../../defaults/opacity';
 
-const closeIcon = require('../../../../shared/icons/close.svg');
-
 export const Root = styled.div`
   display: flex;
   flex-direction: column;

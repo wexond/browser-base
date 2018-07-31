@@ -4,8 +4,6 @@ import opacity from '../../../defaults/opacity';
 import typography from '../../../mixins/typography';
 import colors from '../../../defaults/colors';
 
-const closeIcon = require('../../../shared/icons/close.svg');
-
 export const Close = styled.div`
   position: absolute;
   right: 12px;

@@ -1,25 +1,19 @@
 import Section from '../models/section';
-import Appstore from '../../../app/store';
-import Historystore from '../store';
-import db from '../../../shared/models/app-database';
-import { formatDate } from '../../../shared/utils/time';
-import HistoryItem from '../../../shared/models/history-item';
+import database from '../database';
+import HistoryItem from '../models/history-item';
+import store from '../store';
+import { formatDate } from './time';
 
-export async function getHistoryItems(filter = '') {
-  return new Promise(async (resolve: (r: HistoryItem[]) => void) => {
-    const items = (await db.history
-      .filter(
-        item =>
-          item.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1
-          || item.url.toLowerCase().indexOf(filter.toLowerCase()) !== -1,
-      )
-      .toArray()).reverse();
+export const getHistoryItems = (filter = '') =>
+  store.historyItems
+    .filter(
+      item =>
+        item.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1
+        || item.url.toLowerCase().indexOf(filter.toLowerCase()) !== -1,
+    )
+    .reverse();
 
-    resolve(items);
-  });
-}
-
-export async function getHistorySections(items: HistoryItem[]) {
+export const getHistorySections = (items: HistoryItem[]) => {
   const sections: Section[] = [];
 
   for (let i = 0; i < items.length; i++) {
@@ -32,7 +26,7 @@ export async function getHistorySections(items: HistoryItem[]) {
 
     const newItem = {
       ...item,
-      favicon: Appstore.favicons[item.favicon],
+      favicon: store.favicons[item.favicon],
       selected: false,
     };
 
@@ -49,21 +43,9 @@ export async function getHistorySections(items: HistoryItem[]) {
   }
 
   return sections;
-}
+};
 
 export function deleteHistoryItem(id: number) {
-  const { sections } = Historystore;
-  for (let i = sections.length - 1; i >= 0; i--) {
-    const section = sections[i];
-    const itm = section.items.find(x => x.id === id);
-    if (itm) {
-      section.items.splice(section.items.indexOf(itm), 1);
-      if (section.items.length === 0) {
-        sections.splice(i, 1);
-      }
-      break;
-    }
-  }
-
-  db.history.delete(id);
+  store.historyItems = store.historyItems.filter(x => x.id !== id);
+  database.history.delete(id);
 }

@@ -48,8 +48,17 @@ class App extends React.Component {
       store.bookmarkDialogVisible = false;
     });
 
+    window.addEventListener('keyup', e => {
+      if (e.key === 'Meta') {
+        store.cmdPressed = false;
+      }
+    });
+
     window.addEventListener('keydown', e => {
       if (!e.isTrusted) return;
+
+      store.cmdPressed = e.key === 'Meta'; // Command on macOS
+
       if (e.keyCode === 27) {
         // escape
         // hide menu and workspaces manager
@@ -167,6 +176,7 @@ class App extends React.Component {
     });
 
     store.bookmarks = await database.bookmarks.toArray();
+    store.historyItems = await database.history.toArray();
   }
 
   public componentWillUnmount() {
