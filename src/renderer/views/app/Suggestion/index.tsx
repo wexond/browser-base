@@ -7,9 +7,6 @@ import SuggestionItem from '../../../models/suggestion-item';
 import opacity from '../../../defaults/opacity';
 import store from '../../../store';
 
-const searchIcon = require('../../../shared/icons/search.svg');
-const pageIcon = require('../../../shared/icons/page.svg');
-
 @observer
 export default class Suggestion extends React.Component<
   { suggestion: SuggestionItem },

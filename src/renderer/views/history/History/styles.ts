@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import typography from '../../../../shared/mixins/typography';
-import opacity from '../../../../shared/defaults/opacity';
-import scroll from '../../../../shared/mixins/scroll';
+import scroll from '../../../mixins/scroll';
+import opacity from '../../../defaults/opacity';
+import typography from '../../../mixins/typography';
 
 export const Content = styled.div`
   width: 100%;

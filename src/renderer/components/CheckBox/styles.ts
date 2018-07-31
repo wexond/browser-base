@@ -3,14 +3,9 @@ import { UITheme } from '../../enums';
 import icons from '../../mixins/icons';
 import images from '../../mixins/images';
 import userSelection from '../../mixins/user-selection';
-import {
-  getComponentColor,
-  getComponentForeground
-} from '../../utils/component-color';
+import { getComponentColor, getComponentForeground } from '../../utils/component-color';
 import Cursors from '../../mixins/cursors';
 import typography from '../../mixins/typography';
-
-const checkIcon = require('../../icons/check.svg');
 
 export interface IStyledCheckboxProps {
   scaleAnimation: boolean;
@@ -48,8 +43,7 @@ export const StyledCheckbox = styled.div`
   transform: translate3d(0, 0, 0) translateZ(0);
   transition: 0.4s transform;
   -webkit-font-smoothing: subpixel-antialiased;
-  ${(props: IStyledCheckboxProps) =>
-    !props.scaleAnimation ? 'scale(1)' : 'scale(0.92)'};
+  ${(props: IStyledCheckboxProps) => (!props.scaleAnimation ? 'scale(1)' : 'scale(0.92)')};
   ${userSelection.noTapHighlight()};
 `;
 
@@ -75,7 +69,7 @@ export const Icon = styled.div`
   left: 0;
   -webkit-font-smoothing: antialiased;
   clip-path: ${(props: IIconProps) =>
-    props.pathAnimation ? 'inset(0 0 0 0)' : 'inset(100% 50% 0 50%)'};
+    (props.pathAnimation ? 'inset(0 0 0 0)' : 'inset(100% 50% 0 50%)')};
   transform: ${props => (!props.scaleAnimation ? 'scale(1)' : 'scale(0)')};
   ${props => (props.theme === UITheme.Light ? icons.invertColors() : '')}
   transition: ${props => props.transition};

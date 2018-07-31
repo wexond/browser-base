@@ -1,9 +1,9 @@
 import React from 'react';
 
-import WeatherWeeklyItem from '../../../models/weather-weekly-item';
 import {
   StyledForecastItem, InfoContainer, WeatherIcon, TempContainer, Temp,
 } from './styles';
+import WeatherWeeklyItem from '../../../../models/weather-weekly-item';
 
 export interface Props {
   data: WeatherWeeklyItem;
@@ -20,8 +20,14 @@ export default class ForecastItem extends React.Component<Props, {}> {
         <InfoContainer>
           <WeatherIcon src={data.dayIcon} />
           <TempContainer>
-            <Temp>{data.dayTemp}&deg;</Temp>
-            <Temp night>/{data.nightTemp}&deg;</Temp>
+            <Temp>
+              {data.dayTemp}
+              &deg;
+            </Temp>
+            <Temp night>
+              /{data.nightTemp}
+              &deg;
+            </Temp>
           </TempContainer>
         </InfoContainer>
       </StyledForecastItem>

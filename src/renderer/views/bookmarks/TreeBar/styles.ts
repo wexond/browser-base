@@ -1,8 +1,6 @@
 import styled from 'styled-components';
-import opacity from '../../../../shared/defaults/opacity';
-import images from '../../../../shared/mixins/images';
-
-const forwardIcon = require('../../../../shared/icons/forward.svg');
+import opacity from '../../../defaults/opacity';
+import images from '../../../mixins/images';
 
 export const Root = styled.div`
   width: 100%;

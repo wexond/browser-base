@@ -3,10 +3,6 @@ import { closeWindow, maximizeWindow, minimizeWindow } from '../../../utils/wind
 import Button from './Button';
 import Toolbar from '../Toolbar';
 
-const closeIcon = require('../../../shared/icons/windows/close.svg');
-const maximizeIcon = require('../../../shared/icons/windows/maximize.svg');
-const minimizeIcon = require('../../../shared/icons/windows/minimize.svg');
-
 export default class WindowsControls extends React.Component {
   public render() {
     return (

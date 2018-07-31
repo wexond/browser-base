@@ -8,18 +8,6 @@ import Bookmarks from '../../bookmarks/Bookmarks';
 import History from '../../history/History';
 import About from '../../about/About';
 
-const historyIcon = require('../../../shared/icons/history.svg');
-const clearIcon = require('../../../shared/icons/clear.svg');
-const bookmarksIcon = require('../../../shared/icons/bookmarks.svg');
-const settingsIcon = require('../../../shared/icons/settings.svg');
-const extensionsIcon = require('../../../shared/icons/extensions.svg');
-const aboutIcon = require('../../../shared/icons/info.svg');
-const selectAllIcon = require('../../../shared/icons/select-all.svg');
-const closeIcon = require('../../../shared/icons/close.svg');
-const trashIcon = require('../../../shared/icons/delete.svg');
-const addIcon = require('../../../shared/icons/add.svg');
-const addFolderIcon = require('../../../shared/icons/add-folder.svg');
-
 const historyActions = {
   selectAll: () => {
     const { selectedHistoryItems, historyItems } = store;

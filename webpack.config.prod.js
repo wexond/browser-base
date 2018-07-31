@@ -15,15 +15,7 @@ const appConfig = {
   target: 'electron-renderer',
 
   entry: {
-    app: ['./src/app'],
-  },
-};
-
-const newTabConfig = {
-  target: 'web',
-
-  entry: {
-    newtab: ['./src/newtab'],
+    app: ['./src/renderer/views/app'],
   },
 };
 
@@ -31,4 +23,4 @@ function getConfig(cfg) {
   return Object.assign({}, config, cfg);
 }
 
-module.exports = [getConfig(appConfig), getConfig(newTabConfig)];
+module.exports = [getConfig(appConfig)];

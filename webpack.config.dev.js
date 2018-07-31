@@ -21,7 +21,7 @@ const appConfig = {
   target: 'electron-renderer',
 
   entry: {
-    app: ['react-hot-loader/patch', './src/app'],
+    app: ['react-hot-loader/patch', './src/renderer/views/app'],
   },
 
   devServer: {
@@ -35,19 +35,11 @@ const appConfig = {
   },
 };
 
-const newTabConfig = {
-  target: 'web',
-
-  entry: {
-    newtab: ['react-hot-loader/patch', './src/newtab'],
-  },
-};
-
 const testFieldConfig = {
   target: 'web',
 
   entry: {
-    testField: ['react-hot-loader/patch', './src/test-field'],
+    testField: ['react-hot-loader/patch', './src/renderer/views/test-field'],
   },
 };
 
@@ -55,4 +47,4 @@ function getConfig(cfg) {
   return Object.assign({}, config, cfg);
 }
 
-module.exports = [getConfig(appConfig), getConfig(newTabConfig), getConfig(testFieldConfig)];
+module.exports = [getConfig(appConfig), getConfig(testFieldConfig)];

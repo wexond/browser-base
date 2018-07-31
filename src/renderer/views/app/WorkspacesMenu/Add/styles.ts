@@ -1,10 +1,7 @@
 import styled from 'styled-components';
-import images from '../../../../shared/mixins/images';
-import icons from '../../../../shared/mixins/icons';
-
-import { WORKSPACE_FOLDER_SIZE } from '../../../constants';
-
-const addIcon = require('../../../../shared/icons/add.svg');
+import { WORKSPACE_FOLDER_SIZE } from '../../../../constants';
+import images from '../../../../mixins/images';
+import icons from '../../../../mixins/icons';
 
 export const Root = styled.div`
   width: ${WORKSPACE_FOLDER_SIZE}px;
