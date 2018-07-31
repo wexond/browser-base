@@ -17,32 +17,52 @@ export interface Favicons {
 }
 
 class Store {
-  // Observables
-  @observable public workspaces = new Workspaces();
+  // Workspaces
+  @observable
+  public workspaces: Workspace[] = [];
 
-  @observable public pages: Page[] = [];
+  @observable
+  public selectedWorkspace = 0;
 
-  @observable public draggingTab = false;
+  @observable
+  public workspacesMenuVisible = false;
 
-  @observable public addressBar = new AddressBar();
+  @observable
+  public pages: Page[] = [];
 
-  @observable public suggestions = new Suggestions();
+  @observable
+  public isTabDragged = false;
 
-  @observable public isFullscreen: boolean;
+  @observable
+  public addressBar = new AddressBar();
 
-  @observable public isHTMLFullscreen: boolean;
+  @observable
+  public suggestions = new Suggestions();
 
-  @observable public menu = new Menu();
+  @observable
+  public isFullscreen: boolean;
 
-  @observable public pageMenu: ContextMenu;
+  @observable
+  public isHTMLFullscreen: boolean;
 
-  @observable public bookmarksDialog: BookmarksDialog;
+  @observable
+  public menu = new Menu();
 
-  @observable public bookmarksDialogVisible: boolean = false;
+  @observable
+  public pageMenu: ContextMenu;
 
-  @observable public isStarred: boolean = false;
+  // Bookmarks
+  @observable
+  public bookmarks: BookmarkItem[] = [];
 
-  @observable public bookmarks: BookmarkItem[] = [];
+  @observable
+  public isBookmarked = false;
+
+  @observable
+  public bookmarkDialog: BookmarksDialog;
+
+  @observable
+  public bookmarkDialogVisible = false;
 
   @observable
   public updateInfo = {
