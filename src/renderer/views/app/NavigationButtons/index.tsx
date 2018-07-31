@@ -4,10 +4,6 @@ import { StyledContainer } from './styles';
 import Toolbar from '../Toolbar';
 import store from '../../../store';
 
-const backIcon = require('../../../shared/icons/back.svg');
-const forwardIcon = require('../../../shared/icons/forward.svg');
-const refreshIcon = require('../../../shared/icons/refresh.svg');
-
 @observer
 export default class NavigationButtons extends React.Component {
   public onBackClick = () => {
