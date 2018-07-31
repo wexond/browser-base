@@ -15,6 +15,7 @@ import store from '../../../store';
 import BookmarkItem from '../../../models/bookmark-item';
 import { addBookmark } from '../../../utils/bookmarks';
 import { Platforms } from '../../../enums';
+import icons from '../../../defaults/icons';
 
 @observer
 export default class Toolbar extends React.Component {
@@ -67,17 +68,17 @@ export default class Toolbar extends React.Component {
         <div style={{ position: 'relative' }}>
           <ToolbarButton
             size={20}
-            icon={store.isBookmarked ? starIcon : starBorderIcon}
+            icon={store.isBookmarked ? icons.star : icons.starBorder}
             onMouseDown={this.onStarIconMouseDown}
             onClick={this.onStarIconClick}
           />
           <BookmarksDialog ref={r => (store.bookmarkDialog = r)} />
         </div>
-        <ToolbarButton size={16} icon={workspacesIcon} onClick={this.onWorkspacesIconClick} />
+        <ToolbarButton size={16} icon={icons.workspaces} onClick={this.onWorkspacesIconClick} />
         <ToolbarButton
           onClick={this.toggleMenu}
           size={20}
-          icon={menuIcon}
+          icon={icons.menu}
           style={{ marginRight: 4 }}
         />
         {store.platform !== Platforms.MacOS && <WindowsControls />}

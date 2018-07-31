@@ -1,6 +1,6 @@
-import { requestURL, hasSubdomain, removeSubdomain } from '../../shared/utils/network';
-import { NEWS_API_KEY } from '../../shared/constants';
-import { Countries, NewsCategories } from '../../shared/enums';
+import { Countries, NewsCategories } from '../enums';
+import { NEWS_API_KEY } from '../constants';
+import { requestURL, hasSubdomain, removeSubdomain } from './network';
 
 export const getNews = async (
   country: Countries,

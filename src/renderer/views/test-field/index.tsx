@@ -2,12 +2,9 @@ import React from 'react';
 import { AppContainer } from 'react-hot-loader';
 import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
-import App from './components/App';
-import typography from '../shared/mixins/typography';
-
-const robotoLight = require('../shared/fonts/Roboto-Light.ttf');
-const robotoMedium = require('../shared/fonts/Roboto-Medium.ttf');
-const robotoRegular = require('../shared/fonts/Roboto-Regular.ttf');
+import fonts from '../../defaults/fonts';
+import typography from '../../mixins/typography';
+import App from './App';
 
 declare const module: any;
 
@@ -16,21 +13,21 @@ injectGlobal`
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;
-    src: url(${robotoLight}) format('truetype');
+    src: url(${fonts.robotoLight}) format('truetype');
   }
   
   @font-face {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    src: url(${robotoRegular}) format('truetype');
+    src: url(${fonts.robotoRegular}) format('truetype');
   }
 
   @font-face {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
-    src: url(${robotoMedium}) format('truetype');
+    src: url(${fonts.robotoMedium}) format('truetype');
   }
   
   body {

@@ -1,23 +1,22 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { hot } from 'react-hot-loader';
 
-import store from '../../store';
-import Preloader from '../../../shared/components/Preloader';
-import { getWeather } from '../../utils/weather';
-import { getNews } from '../../utils/news';
 import News from '../News';
 import WeatherCard from '../WeatherCard';
 
 import {
-  TimeUnit, TemperatureUnit, WeatherLanguages, Countries,
-} from '../../../shared/enums';
-import {
   StyledApp, Content, Credits, Column,
 } from './styles';
+import {
+  WeatherLanguages, TemperatureUnit, TimeUnit, Countries,
+} from '../../../enums';
+import { getNews } from '../../../utils/news';
+import store from '../../../store';
+import { getWeather } from '../../../utils/weather';
+import Preloader from '../../../components/Preloader';
 
 @observer
-class App extends React.Component {
+export default class Newtab extends React.Component {
   componentDidMount() {
     window.addEventListener('resize', this.onResize);
     this.loadData();
@@ -32,7 +31,7 @@ class App extends React.Component {
       columns = this.getColumns(2);
     }
 
-    store.columns = columns;
+    store.newsColumns = columns;
   };
 
   async loadData() {
@@ -47,7 +46,7 @@ class App extends React.Component {
     store.newsData = await getNews(Countries.us);
 
     this.onResize();
-    store.contentVisible = true;
+    store.newTabContentVisible = true;
   }
 
   public getColumns = (columnsCount: number) => {
@@ -73,7 +72,7 @@ class App extends React.Component {
   };
 
   public render() {
-    const { weatherForecast, contentVisible, columns } = store;
+    const { weatherForecast, newTabContentVisible, newsColumns } = store;
 
     const preloaderStyle = {
       position: 'fixed',
@@ -84,20 +83,20 @@ class App extends React.Component {
 
     return (
       <StyledApp>
-        {!contentVisible && <Preloader style={preloaderStyle} />}
-        <Content visible={contentVisible}>
+        {!newTabContentVisible && <Preloader style={preloaderStyle} />}
+        <Content visible={newTabContentVisible}>
           <Column>
             <WeatherCard data={weatherForecast} />
-            {columns.length > 0 && <News data={columns[0]} />}
+            {newsColumns.length > 0 && <News data={newsColumns[0]} />}
           </Column>
-          {columns.length > 1 && (
+          {newsColumns.length > 1 && (
             <Column>
-              <News data={columns[1]} />
+              <News data={newsColumns[1]} />
             </Column>
           )}
-          {columns.length > 2 && (
+          {newsColumns.length > 2 && (
             <Column>
-              <News data={columns[2]} />
+              <News data={newsColumns[2]} />
             </Column>
           )}
           {!navigator.onLine && (
@@ -114,5 +113,3 @@ class App extends React.Component {
     );
   }
 }
-
-export default hot(module)(App);

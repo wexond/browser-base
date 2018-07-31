@@ -8,6 +8,7 @@ import SuggestionItem from '../../../models/suggestion-item';
 import store from '../../../store';
 import { isURL, getAddressbarURL } from '../../../utils/url';
 import { loadSuggestions } from '../../../utils/suggestions';
+import icons from '../../../defaults/icons';
 
 interface Props {
   visible: boolean;
@@ -20,6 +21,8 @@ export default class AddressBar extends Component<Props, {}> {
   private canSuggest = false;
 
   private visible = false;
+
+  private lastSuggestion: SuggestionItem;
 
   public componentDidMount() {
     window.addEventListener('mousedown', () => {
@@ -38,8 +41,11 @@ export default class AddressBar extends Component<Props, {}> {
 
     let suggestion: SuggestionItem;
 
-    if (store.suggestions[0] && store.suggestions[0].type === 'most-visited') {
+    if (store.suggestions.length > 0 && store.suggestions[0].type === 'most-visited') {
       suggestion = store.suggestions[0];
+      this.lastSuggestion = suggestion;
+    } else {
+      suggestion = this.lastSuggestion;
     }
 
     const start = text.length;
@@ -131,12 +137,12 @@ export default class AddressBar extends Component<Props, {}> {
       this.autoComplete(text);
     }
 
-    await loadSuggestions(this.input);
-
-    if (this.canSuggest) {
-      this.autoComplete(text);
-      this.canSuggest = false;
-    }
+    loadSuggestions(this.input).then(() => {
+      if (this.canSuggest) {
+        this.autoComplete(text);
+        this.canSuggest = false;
+      }
+    });
 
     store.selectedSuggestion = 0;
   };
@@ -174,7 +180,7 @@ export default class AddressBar extends Component<Props, {}> {
         onMouseDown={e => e.stopPropagation()}
       >
         <InputContainer suggestionsVisible={suggestionsVisible}>
-          <Icon image={searchIcon} />
+          <Icon image={icons.search} />
           <Input
             suggestionsVisible={suggestionsVisible}
             innerRef={r => (this.input = r)}

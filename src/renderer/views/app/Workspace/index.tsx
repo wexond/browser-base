@@ -11,6 +11,7 @@ import Workspace from '../../../models/workspace';
 import Tab from '../../../models/tab';
 import store from '../../../store';
 import { TOOLBAR_HEIGHT } from '../../../constants';
+import icons from '../../../defaults/icons';
 
 interface Props {
   workspace: Workspace;
@@ -208,7 +209,7 @@ export default class extends React.Component<Props, {}> {
           />
         </Tabs>
         <AddTabButton
-          icon={addTabIcon}
+          icon={icons.add}
           onClick={this.onAddTabButtonClick}
           divRef={r => (workspace.addTabButton.ref = r)}
         />

@@ -1,4 +1,4 @@
-import * as tabStyles from './components/Tab/styles';
+import * as tabStyles from './views/app/Tab/styles';
 
 class Components {
   // Tab

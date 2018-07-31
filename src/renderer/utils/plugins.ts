@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import wpm from 'wexond-package-manager';
-import colors from '../../shared/defaults/colors';
-import opacity from '../../shared/defaults/opacity';
 import components from '../components';
+import colors from '../defaults/colors';
+import opacity from '../defaults/opacity';
 
 export const loadPlugins = async () => {
   const plugins = await wpm.list();
