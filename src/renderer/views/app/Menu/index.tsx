@@ -17,11 +17,10 @@ export default class extends React.Component<Props, {}> {
 
   private items: Item[] = [];
 
-  private contentRef: any;
-
   public onDarkClick = () => {
     requestAnimationFrame(() => {
       store.menu.hide();
+      store.menu.searchText = '';
     });
   };
 
@@ -32,15 +31,14 @@ export default class extends React.Component<Props, {}> {
   };
 
   private onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (this.contentRef && typeof this.contentRef.onMenuSearchInput === 'function') {
-      this.contentRef.onMenuSearchInput(e);
-    }
+    store.menu.searchText = e.currentTarget.value;
   };
 
   public render() {
     const { title, children } = this.props;
 
     let id = 0;
+    let id2 = 0;
 
     this.items = this.items.filter(Boolean);
 
@@ -58,10 +56,23 @@ export default class extends React.Component<Props, {}> {
       <React.Fragment>
         <Container visible={store.menu.visible}>
           <Content visible={selectedItem != null}>
-            {selectedItem
-              && React.cloneElement(selectedItem.props.content, {
-                ref: (r: any) => (this.contentRef = r),
-              })}
+            {React.Children.map(children, (el: React.ReactElement<any>) => {
+              if (!((el.type as any).prototype instanceof Item)) {
+                id2++;
+                return (
+                  <div
+                    style={{
+                      display: store.menu.selectedItem === id2 - 1 ? 'block' : 'none',
+                      height: '100vh',
+                    }}
+                  >
+                    {React.cloneElement(el)}
+                  </div>
+                );
+              }
+
+              return null;
+            })}
           </Content>
           <Menu>
             <Header>
@@ -74,12 +85,17 @@ export default class extends React.Component<Props, {}> {
               )) || <Title>{title}</Title>}
             </Header>
 
-            {React.Children.map(children, (el: React.ReactElement<any>) =>
-              React.cloneElement(el, {
-                id: id++,
-                ref: (r: Item) => this.items.push(r),
-                onClick: this.onItemClick,
-              }))}
+            {React.Children.map(children, (el: React.ReactElement<any>) => {
+              if ((el.type as any).prototype instanceof Item) {
+                return React.cloneElement(el, {
+                  id: id++,
+                  ref: (r: Item) => this.items.push(r),
+                  onClick: this.onItemClick,
+                });
+              }
+
+              return null;
+            })}
           </Menu>
         </Container>
         <Dark onClick={this.onDarkClick} visible={store.menu.visible} />

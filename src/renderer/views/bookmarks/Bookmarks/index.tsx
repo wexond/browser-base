@@ -1,18 +1,13 @@
 import { observer } from 'mobx-react';
-import { hot } from 'react-hot-loader';
 import React from 'react';
 import Item from '../Item';
 import TreeBar from '../TreeBar';
 import { Content, Container, Items } from './styles';
-import database from '../../../database';
 import store from '../../../store';
 
 @observer
-class Bookmarks extends React.Component {
+export default class Bookmarks extends React.Component {
   public async componentDidMount() {
-    await store.loadFavicons();
-    this.forceUpdate();
-
     store.goToBookmarkFolder(-1);
   }
 
@@ -37,5 +32,3 @@ class Bookmarks extends React.Component {
     );
   }
 }
-
-export default hot(module)(Bookmarks);
