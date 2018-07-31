@@ -12,23 +12,20 @@ import { getBookmarkFolderPath } from './utils/bookmarks';
 import ContextMenu from './components/ContextMenu';
 import BookmarksDialog from './views/app/BookmarksDialog';
 import database from './database';
+import WeatherForecast from './models/weather-forecast';
 
-const dictionary = require('../static/dictionaries/english-en.json');
+const dictionary = require('../../static/dictionaries/english-en.json');
 
 class Store {
   /** Workspaces */
   @observable
-  public workspaces: Workspace[] = [];
+  public workspaces: Workspace[] = [new Workspace()];
 
   @observable
   public selectedWorkspace = 0;
 
   @observable
   public workspacesMenuVisible = false;
-
-  /** */
-  @observable
-  public pages: Page[] = [];
 
   /** Suggestions */
   @observable
@@ -37,23 +34,9 @@ class Store {
   @observable
   public selectedSuggestion = 0;
 
-  /** */
-  @observable
-  public addressBar = new AddressBar();
-
   /** Menu */
   @observable
   public menu = new Menu();
-
-  /** */
-  @observable
-  public isFullscreen = false;
-
-  @observable
-  public isHTMLFullscreen = false;
-
-  @observable
-  public isTabDragged = false;
 
   /** Bookmarks */
   @observable
@@ -80,6 +63,37 @@ class Store {
 
   @observable
   public selectedHistoryItems: number[] = [];
+
+  /** New tab */
+  @observable
+  public newsColumns: any[] = [];
+
+  @observable
+  public newsData: any[] = [];
+
+  @observable
+  public weatherForecast: WeatherForecast;
+
+  @observable
+  public newTabContentVisible = false;
+
+  /** */
+  @observable
+  public isFullscreen = false;
+
+  @observable
+  public isHTMLFullscreen = false;
+
+  @observable
+  public isTabDragged = false;
+
+  /** */
+  @observable
+  public addressBar = new AddressBar();
+
+  /** */
+  @observable
+  public pages: Page[] = [];
 
   /** */
   @observable

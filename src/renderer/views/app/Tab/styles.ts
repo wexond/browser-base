@@ -3,13 +3,14 @@ import images from '../../../mixins/images';
 import opacity from '../../../defaults/opacity';
 import typography from '../../../mixins/typography';
 import colors from '../../../defaults/colors';
+import icons from '../../../defaults/icons';
 
 export const Close = styled.div`
   position: absolute;
   right: 12px;
   height: 16px;
   width: 16px;
-  background-image: url(${closeIcon});
+  background-image: url(${icons.close});
   transition: 0.2s opacity, 0.2s filter;
   z-index: 2;
 

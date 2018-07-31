@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import typography from '../../../../mixins/typography';
 import opacity from '../../../../defaults/opacity';
 import images from '../../../../mixins/images';
+import icons from '../../../../defaults/icons';
 
 export const Root = styled.div`
   margin-left: 4px;
@@ -33,7 +34,7 @@ export const HomeIcon = styled.div`
   width: 20px;
   height: 20px;
   transition: 0.2s opacity;
-  background-image: url(${homeIcon});
+  background-image: url(${icons.home});
   opacity: ${opacity.light.inactiveIcon};
 
   ${images.center('100%', 'auto')};

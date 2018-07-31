@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { UITheme } from '../../enums';
-import icons from '../../mixins/icons';
+import icons from '../../defaults/icons';
 import images from '../../mixins/images';
 import userSelection from '../../mixins/user-selection';
 import { getComponentColor, getComponentForeground } from '../../utils/component-color';
@@ -71,9 +71,9 @@ export const Icon = styled.div`
   clip-path: ${(props: IIconProps) =>
     (props.pathAnimation ? 'inset(0 0 0 0)' : 'inset(100% 50% 0 50%)')};
   transform: ${props => (!props.scaleAnimation ? 'scale(1)' : 'scale(0)')};
-  ${props => (props.theme === UITheme.Light ? icons.invertColors() : '')}
+  ${props => (props.theme === UITheme.Light ? 'filter: invert(100%);' : '')}
   transition: ${props => props.transition};
-  background-image: ${`url(${checkIcon})`};
+  background-image: ${`url(${icons.check})`};
   ${images.center('22px', 'auto')}
 `;
 

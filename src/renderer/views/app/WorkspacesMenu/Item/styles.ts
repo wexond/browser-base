@@ -5,6 +5,7 @@ import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '../../../../constant
 import colors from '../../../../defaults/colors';
 import typography from '../../../../mixins/typography';
 import opacity from '../../../../defaults/opacity';
+import icons from '../../../../defaults/icons';
 
 export const Root = styled.div`
   display: flex;
@@ -32,7 +33,7 @@ export const DeleteIcon = styled.div`
   right: -10px;
   background-color: #fff;
   border-radius: 100%;
-  background-image: url(${closeIcon});
+  background-image: url(${icons.close});
   box-shadow: ${shadows(2)};
   opacity: 0;
   transition: 0.2s opacity;

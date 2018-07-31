@@ -7,6 +7,7 @@ import { removeItem } from '../../../utils/bookmarks';
 import database from '../../../database';
 import opacity from '../../../defaults/opacity';
 import { Root, Icon } from '../../../components/PageItem';
+import icons from '../../../defaults/icons';
 
 export interface IState {
   hovered: boolean;
@@ -128,7 +129,7 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
     let favicon = store.favicons[data.favicon];
 
     if (favicon == null || favicon.trim() === '') {
-      favicon = isFolder ? folderIcon : pageIcon;
+      favicon = isFolder ? icons.folder : icons.page;
       transparency = opacity.light.inactiveIcon;
     }
 
@@ -153,7 +154,7 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
           onKeyPress={this.onInputKeyPress}
           placeholder="Name"
         />
-        <ActionIcon icon={deleteIcon} onClick={this.onRemoveClick} visible={hovered} />
+        <ActionIcon icon={icons.delete} onClick={this.onRemoveClick} visible={hovered} />
       </Root>
     );
   }

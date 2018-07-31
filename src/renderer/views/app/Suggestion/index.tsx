@@ -6,6 +6,7 @@ import {
 import SuggestionItem from '../../../models/suggestion-item';
 import opacity from '../../../defaults/opacity';
 import store from '../../../store';
+import icons from '../../../defaults/icons';
 
 @observer
 export default class Suggestion extends React.Component<
@@ -36,10 +37,10 @@ export default class Suggestion extends React.Component<
     let customFavicon = true;
 
     if (suggestion.type === 'no-subheader-search' || suggestion.type === 'search') {
-      favicon = searchIcon;
+      favicon = icons.search;
       customFavicon = false;
     } else if (suggestion.type === 'no-subheader-website' || favicon == null) {
-      favicon = pageIcon;
+      favicon = icons.page;
       customFavicon = false;
     }
 
