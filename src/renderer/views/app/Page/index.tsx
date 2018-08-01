@@ -123,7 +123,7 @@ export default class extends React.Component<{ page: Page }, {}> {
 
   public onDomReady = () => {
     this.webview.getWebContents().on('context-menu', this.onContextMenu);
-    this.webview.removeEventListener('dom-ready', this.onDomReady);
+    this.webview.send('get-extensions', store.extensions);
   };
 
   public onDidStopLoading = () => {
@@ -217,7 +217,7 @@ export default class extends React.Component<{ page: Page }, {}> {
             page.webview = r;
             this.webview = r;
           }}
-          preload={`file://${resolve(BASE_PATH, 'src/app/preloads/index.js')}`}
+          preload={`file://${resolve(BASE_PATH, 'src/preloads/webview-preload.js')}`}
           allowFullScreen
         />
       </StyledPage>
