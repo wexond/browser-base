@@ -116,16 +116,10 @@ export default class Workspace {
     if (select) this.selectTab(tab);
     store.addPage(tab.id, url);
 
-    store.newTabVisible = true;
-
     return tab;
   };
 
   public removeTab(tab: Tab) {
-    if (tab.isNew) {
-      store.newTabVisible = false;
-    }
-
     (this.tabs as any).replace(this.tabs.filter(({ id }) => id !== tab.id));
   }
 

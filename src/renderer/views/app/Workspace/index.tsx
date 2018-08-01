@@ -188,9 +188,17 @@ export default class extends React.Component<Props, {}> {
 
   public render() {
     const { workspace } = this.props;
-    const { workspaces } = store;
 
     const selected = workspace.id === store.selectedWorkspace;
+
+    let addBtnVisible = true;
+
+    for (const tab of workspace.tabs) {
+      if (tab.isNew) {
+        addBtnVisible = false;
+        break;
+      }
+    }
 
     return (
       <Root visible={selected}>
@@ -211,8 +219,8 @@ export default class extends React.Component<Props, {}> {
         </Tabs>
         <AddTabButton
           style={{
-            opacity: store.newTabVisible ? opacity.light.disabledIcon : 1,
-            pointerEvents: store.newTabVisible ? 'none' : 'auto',
+            opacity: !addBtnVisible ? opacity.light.disabledIcon : 1,
+            pointerEvents: !addBtnVisible ? 'none' : 'auto',
           }}
           icon={icons.add}
           onClick={this.onAddTabButtonClick}
