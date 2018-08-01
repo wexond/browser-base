@@ -16,7 +16,7 @@ import { getWeather } from '../../../utils/weather';
 import Preloader from '../../../components/Preloader';
 
 @observer
-export default class Newtab extends React.Component {
+export default class Newtab extends React.Component<{ visible: boolean }, {}> {
   componentDidMount() {
     window.addEventListener('resize', this.onResize);
     this.loadData();
@@ -72,6 +72,7 @@ export default class Newtab extends React.Component {
   };
 
   public render() {
+    const { visible } = this.props;
     const { weatherForecast, newTabContentVisible, newsColumns } = store;
 
     const preloaderStyle = {
@@ -82,7 +83,7 @@ export default class Newtab extends React.Component {
     };
 
     return (
-      <StyledApp>
+      <StyledApp visible={visible}>
         {!newTabContentVisible && <Preloader style={preloaderStyle} />}
         <Content visible={newTabContentVisible}>
           <Column>

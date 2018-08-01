@@ -1,3 +1,4 @@
+import https from 'https';
 import http from 'http';
 import urlNode from 'url';
 
@@ -5,7 +6,11 @@ export const requestURL = (url: string) =>
   new Promise((resolve: (data: string) => void, reject) => {
     const options = urlNode.parse(url);
 
-    const request = http.request(options, res => {
+    let { request } = http;
+
+    if (options.protocol === 'https:') request = https.request;
+
+    const req = request(options, res => {
       let data = '';
       res.setEncoding('utf-8');
 
@@ -18,11 +23,11 @@ export const requestURL = (url: string) =>
       });
     });
 
-    request.on('error', e => {
+    req.on('error', e => {
       reject(e);
     });
 
-    request.end();
+    req.end();
   });
 
 /* eslint-disable no-new */

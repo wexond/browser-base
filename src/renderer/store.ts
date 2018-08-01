@@ -77,6 +77,9 @@ class Store {
   @observable
   public newTabContentVisible = false;
 
+  @observable
+  public newTabVisible = false;
+
   /** */
   @observable
   public isFullscreen = false;
