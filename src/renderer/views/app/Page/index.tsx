@@ -8,6 +8,7 @@ import store from '../../../store';
 import { ContextMenuMode } from '../../../enums';
 import database from '../../../database';
 import { BASE_PATH } from '../../../constants';
+import Newtab from '../../newtab/Newtab';
 
 @observer
 export default class extends React.Component<{ page: Page }, {}> {
@@ -41,6 +42,8 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.onURLChange = setInterval(() => {
       const url = this.webview.getURL();
       if (url !== tab.url) {
+        store.newTabVisible = false;
+        this.tab.isNew = false;
         this.tab.url = url;
         this.updateData();
         store.isBookmarked = !!store.bookmarks.find(x => x.url === url);
@@ -208,7 +211,9 @@ export default class extends React.Component<{ page: Page }, {}> {
       <StyledPage selected={store.getCurrentWorkspace().selectedTab === id}>
         <webview
           src={url}
-          style={{ height: '100%' }}
+          style={{
+            height: '100%',
+          }}
           ref={(r: Electron.WebviewTag) => {
             page.webview = r;
             this.webview = r;
