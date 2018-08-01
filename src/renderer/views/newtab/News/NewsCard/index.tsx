@@ -41,26 +41,24 @@ export default class NewsCard extends React.Component<Props, State> {
     }
 
     return (
-      <a href={data.url}>
-        <Card.Root>
-          <CardImage visible={loaded} src={data.urlToImage} />
-          <Card.Header>
-            <Overline>General</Overline>
-            <Title>{data.title}</Title>
+      <Card.Root>
+        <CardImage visible={loaded} src={data.urlToImage} />
+        <Card.Header>
+          <Overline>General</Overline>
+          <Title>{data.title}</Title>
 
-            {desc
-              && desc.indexOf('�') === -1
-              && desc.trim() !== '' && <SecondaryText>{desc}</SecondaryText>}
+          {desc
+            && desc.indexOf('�') === -1
+            && desc.trim() !== '' && <SecondaryText>{desc}</SecondaryText>}
 
-            <SourceContainer>
-              <Icon visible={loaded} src={data.icon} />
-              <Source>
-                {data.source.name} - {getTimeOffset(new Date(data.publishedAt), this)}
-              </Source>
-            </SourceContainer>
-          </Card.Header>
-        </Card.Root>
-      </a>
+          <SourceContainer>
+            <Icon visible={loaded} src={data.icon} />
+            <Source>
+              {data.source.name} - {getTimeOffset(new Date(data.publishedAt), this)}
+            </Source>
+          </SourceContainer>
+        </Card.Header>
+      </Card.Root>
     );
   }
 }

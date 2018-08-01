@@ -109,24 +109,30 @@ export default class Workspace {
 
   public getTabById = (id: number): Tab => this.tabs.filter(item => item.id === id)[0];
 
-  public addTab = (url = 'wexond://newtab', select = true): Tab => {
+  public addTab = (url = '', select = true): Tab => {
     const tab = new Tab(this);
     this.tabs.push(tab);
 
     if (select) this.selectTab(tab);
     store.addPage(tab.id, url);
 
+    store.newTabVisible = true;
+
     return tab;
   };
 
   public removeTab(tab: Tab) {
+    if (tab.isNew) {
+      store.newTabVisible = false;
+    }
+
     (this.tabs as any).replace(this.tabs.filter(({ id }) => id !== tab.id));
   }
 
   public selectTab(tab: Tab) {
     this.selectedTab = tab.id;
 
-    if (tab.url.startsWith('wexond://newtab') || tab.url.trim() === '') {
+    if (tab.isNew) {
       setTimeout(() => {
         store.addressBar.toggled = true;
       }, 50);

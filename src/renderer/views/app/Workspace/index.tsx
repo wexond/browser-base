@@ -12,6 +12,7 @@ import Tab from '../../../models/tab';
 import store from '../../../store';
 import { TOOLBAR_HEIGHT } from '../../../constants';
 import icons from '../../../defaults/icons';
+import opacity from '../../../defaults/opacity';
 
 interface Props {
   workspace: Workspace;
@@ -209,6 +210,10 @@ export default class extends React.Component<Props, {}> {
           />
         </Tabs>
         <AddTabButton
+          style={{
+            opacity: store.newTabVisible ? opacity.light.disabledIcon : 1,
+            pointerEvents: store.newTabVisible ? 'none' : 'auto',
+          }}
           icon={icons.add}
           onClick={this.onAddTabButtonClick}
           divRef={r => (workspace.addTabButton.ref = r)}

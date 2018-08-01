@@ -33,7 +33,11 @@ export default class Tab {
   @observable
   public loading = false;
 
+  @observable
   public url = '';
+
+  @observable
+  public isNew = true;
 
   public left = 0;
 

@@ -1,10 +1,20 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import opacity from '../../../defaults/opacity';
 import typography from '../../../mixins/typography';
 
 export const StyledApp = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  overflow: auto;
+  background-color: white;
+  position: absolute;
+  top: 0;
+
+  ${({ visible }: { visible: boolean }) => css`
+    visibility: ${visible ? 'visible' : 'hidden'};
+    width: ${visible ? '100%' : 0};
+    height: ${visible ? '100%' : 0};
+  `};
 `;
 
 export const Content = styled.div`
