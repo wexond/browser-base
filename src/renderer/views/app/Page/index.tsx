@@ -42,7 +42,6 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.onURLChange = setInterval(() => {
       const url = this.webview.getURL();
       if (url !== tab.url) {
-        store.newTabVisible = false;
         this.tab.isNew = false;
         this.tab.url = url;
         this.updateData();
