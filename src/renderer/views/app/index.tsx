@@ -1,5 +1,8 @@
-import fs from 'fs';
-import { ipcRenderer } from 'electron';
+import fs, {
+  readdir, stat, readFileSync, readdirSync, statSync,
+} from 'fs';
+import { resolve } from 'path';
+import { ipcRenderer, remote } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
@@ -86,6 +89,28 @@ async function setup() {
   if (!fs.existsSync(getPath('plugins'))) {
     fs.mkdirSync(getPath('plugins'));
   }
+
+  if (!fs.existsSync(getPath('extensions'))) {
+    fs.mkdirSync(getPath('extensions'));
+  }
+
+  const extensionsPath = getPath('extensions');
+
+  const files = readdirSync(extensionsPath);
+
+  for (const dir of files) {
+    const extensionPath = resolve(extensionsPath, dir);
+    const stats = statSync(extensionPath);
+
+    if (stats.isDirectory()) {
+      const manifestPath = resolve(extensionPath, 'manifest.json');
+      const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+
+      store.extensions.push(manifest);
+    }
+  }
+
+  ipcRenderer.send('save-extensions', store.extensions);
 
   await loadPlugins();
 
