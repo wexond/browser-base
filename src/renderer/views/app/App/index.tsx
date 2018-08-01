@@ -4,8 +4,8 @@ import {
 import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
 import React from 'react';
-import { createWriteStream } from 'fs';
-import { basename, extname } from 'path';
+import { createWriteStream, readdir, stat } from 'fs';
+import { basename, extname, resolve } from 'path';
 import http from 'http';
 import { parse } from 'url';
 
@@ -22,6 +22,7 @@ import Snackbar from '../../../components/Snackbar';
 import Button from '../../../components/Button';
 import colors from '../../../defaults/colors';
 import ipcMessages from '../../../defaults/ipc-messages';
+import { getPath } from '../../../utils/paths';
 
 const { dialog } = remote;
 
