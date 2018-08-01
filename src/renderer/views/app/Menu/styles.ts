@@ -8,6 +8,7 @@ import icons from '../../../defaults/icons';
 
 export const Container = styled.div`
   height: 100%;
+  width: 300px;
   position: fixed;
   display: flex;
   top: 0;
@@ -82,14 +83,17 @@ const getWidth = () => {
 export const Content = styled.div`
   height: 100%;
   max-width: ${MENU_CONTENT_MAX_WIDTH}px;
-  transition: 0.5s width cubic-bezier(0.19, 1, 0.22, 1);
   background-color: #fafafa;
-  position: relative;
+  position: absolute;
+  right: 299px;
   overflow: hidden;
-  will-change: width, transition;
+  transition: 0.2s opacity;
+  width: ${getWidth()};
+  will-change: transition, opacity;
 
   ${({ visible }: { visible: boolean }) => css`
-    width: ${visible ? getWidth() : 0};
+    opacity: ${visible ? 1 : 0};
+    pointer-events: ${visible ? 'auto' : 'none'};
   `};
 
   @media (max-width: ${MENU_CONTENT_MAX_WIDTH + MENU_WIDTH + MENU_SPACE}px) {
