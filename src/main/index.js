@@ -15,6 +15,8 @@ app.setPath('userData', path.resolve(homedir(), '.wexond'));
 
 let mainWindow;
 
+global.extensions = [];
+
 const createWindow = () => {
   mainWindow = new BrowserWindow({
     frame: process.env.NODE_ENV === 'dev',
@@ -117,4 +119,8 @@ ipcMain.on(ipcMessages.UPDATE_RESTART_AND_INSTALL, e => {
 
 ipcMain.on(ipcMessages.UPDATE_CHECK, e => {
   autoUpdater.checkForUpdates();
+});
+
+ipcMain.on('save-extensions', (e, extensions) => {
+  global.extensions = extensions;
 });
