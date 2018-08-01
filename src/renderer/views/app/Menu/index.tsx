@@ -62,7 +62,11 @@ export default class extends React.Component<Props, {}> {
                 return (
                   <div
                     style={{
-                      display: store.menu.selectedItem === id2 - 1 ? 'block' : 'none',
+                      opacity: store.menu.selectedItem === id2 - 1 ? 1 : 0,
+                      pointerEvents: store.menu.selectedItem === id2 - 1 ? 'auto' : 'none',
+                      position: 'absolute',
+                      top: 0,
+                      width: '100%',
                       height: '100vh',
                     }}
                   >
