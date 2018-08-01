@@ -32,17 +32,13 @@ export default class Suggestion extends React.Component<
 
     const selected = store.selectedSuggestion === suggestion.id;
 
-    let favicon = suggestion.favicon;
+    let { favicon } = suggestion;
 
-    let customFavicon = true;
-
-    if (suggestion.type === 'no-subheader-search' || suggestion.type === 'search') {
-      favicon = icons.search;
-      customFavicon = false;
-    } else if (suggestion.type === 'no-subheader-website' || favicon == null) {
+    if (favicon == null || favicon.trim() === '') {
       favicon = icons.page;
-      customFavicon = false;
     }
+
+    const customFavicon = favicon !== icons.page && favicon !== icons.search;
 
     return (
       <StyledSuggestion

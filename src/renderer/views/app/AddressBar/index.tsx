@@ -35,18 +35,9 @@ export default class AddressBar extends Component<Props, {}> {
     this.input.select();
   };
 
-  public autoComplete(text: string) {
+  public autoComplete(text: string, suggestion: SuggestionItem) {
     const regex = /(http(s?)):\/\/(www.)?|www./gi;
     const regex2 = /(http(s?)):\/\//gi;
-
-    let suggestion: SuggestionItem;
-
-    if (store.suggestions.length > 0 && store.suggestions[0].type === 'most-visited') {
-      suggestion = store.suggestions[0];
-      this.lastSuggestion = suggestion;
-    } else {
-      suggestion = this.lastSuggestion;
-    }
 
     const start = text.length;
 
@@ -91,15 +82,7 @@ export default class AddressBar extends Component<Props, {}> {
 
       const suggestion = store.suggestions.find(x => x.id === store.selectedSuggestion);
 
-      if (
-        suggestion.type === 'history'
-        || suggestion.type === 'bookmarks'
-        || suggestion.type === 'most-visited'
-      ) {
-        this.input.value = suggestion.secondaryText;
-      } else {
-        this.input.value = suggestion.primaryText;
-      }
+      this.input.value = suggestion.isSearch ? suggestion.primaryText : suggestion.secondaryText;
     }
   };
 
@@ -130,16 +113,15 @@ export default class AddressBar extends Component<Props, {}> {
     }
   };
 
-  public onInput = async () => {
-    const text = this.input.value;
-
+  public onInput = () => {
     if (this.canSuggest) {
-      this.autoComplete(text);
+      this.autoComplete(this.input.value, this.lastSuggestion);
     }
 
-    loadSuggestions(this.input).then(() => {
+    loadSuggestions(this.input).then(suggestion => {
+      this.lastSuggestion = suggestion;
       if (this.canSuggest) {
-        this.autoComplete(text);
+        this.autoComplete(this.input.value.substring(0, this.input.selectionStart), suggestion);
         this.canSuggest = false;
       }
     });
