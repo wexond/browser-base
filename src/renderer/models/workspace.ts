@@ -117,7 +117,7 @@ export default class Workspace {
     if (select) this.selectTab(tab);
     store.addPage(tab.id, url);
 
-    emitEvent('tabs', 'onCreated', tab);
+    emitEvent('tabs', 'onCreated', tab.getIpcTab());
 
     return tab;
   };
