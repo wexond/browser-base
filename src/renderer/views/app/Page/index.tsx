@@ -1,6 +1,8 @@
 import { observer } from 'mobx-react';
 import { resolve } from 'path';
 import React from 'react';
+import { remote } from 'electron';
+
 import StyledPage from './styles';
 import Page from '../../../models/page';
 import Tab from '../../../models/tab';
@@ -8,7 +10,6 @@ import store from '../../../store';
 import { ContextMenuMode } from '../../../enums';
 import database from '../../../database';
 import { BASE_PATH } from '../../../constants';
-import Newtab from '../../newtab/Newtab';
 
 @observer
 export default class extends React.Component<{ page: Page }, {}> {
@@ -22,6 +23,8 @@ export default class extends React.Component<{ page: Page }, {}> {
 
   private onURLChange: any;
 
+  private listeners: { name: string; callback: any }[] = [];
+
   public componentDidMount() {
     const { page } = this.props;
     const { id } = page;
@@ -29,14 +32,17 @@ export default class extends React.Component<{ page: Page }, {}> {
 
     this.tab = tab;
 
-    this.webview.addEventListener('did-stop-loading', this.onDidStopLoading);
-    this.webview.addEventListener('page-title-updated', this.onPageTitleUpdated);
-    this.webview.addEventListener('load-commit', this.onLoadCommit);
-    this.webview.addEventListener('page-favicon-updated', this.onPageFaviconUpdated);
-    this.webview.addEventListener('dom-ready', this.onDomReady);
-    this.webview.addEventListener('enter-html-full-screen', this.onFullscreenEnter);
-    this.webview.addEventListener('leave-html-full-screen', this.onFullscreenLeave);
-    this.webview.addEventListener('new-window', this.onNewWindow);
+    this.addWebviewListener('did-stop-loading', this.onDidStopLoading);
+    this.addWebviewListener('did-start-loading', this.onDidStartLoading);
+    this.addWebviewListener('page-title-updated', this.onPageTitleUpdated);
+    this.addWebviewListener('load-commit', this.onLoadCommit);
+    this.addWebviewListener('page-favicon-updated', this.onPageFaviconUpdated);
+    this.addWebviewListener('dom-ready', this.onDomReady);
+    this.addWebviewListener('enter-html-full-screen', this.onFullscreenEnter);
+    this.addWebviewListener('leave-html-full-screen', this.onFullscreenLeave);
+    this.addWebviewListener('new-window', this.onNewWindow);
+    this.addWebviewListener('did-navigate', this.onDidNavigate);
+    this.addWebviewListener('will-navigate', this.onWillNavigate);
 
     // Custom event: fires when webview URL changes.
     this.onURLChange = setInterval(() => {
@@ -44,6 +50,15 @@ export default class extends React.Component<{ page: Page }, {}> {
       if (url !== tab.url) {
         this.tab.isNew = false;
         this.tab.url = url;
+        this.emitEvent(
+          'tabs',
+          'onUpdated',
+          this.tab.id,
+          {
+            url,
+          },
+          this.tab,
+        );
         this.updateData();
         store.isBookmarked = !!store.bookmarks.find(x => x.url === url);
       }
@@ -51,25 +66,110 @@ export default class extends React.Component<{ page: Page }, {}> {
   }
 
   public componentWillUnmount() {
-    this.webview.removeEventListener('did-stop-loading', this.onDidStopLoading);
-    this.webview.removeEventListener('page-title-updated', this.onPageTitleUpdated);
-    this.webview.removeEventListener('load-commit', this.onLoadCommit);
-    this.webview.removeEventListener('page-favicon-updated', this.onPageFaviconUpdated);
-    this.webview.removeEventListener('enter-html-full-screen', this.onFullscreenEnter);
-    this.webview.removeEventListener('leave-html-full-screen', this.onFullscreenLeave);
-    this.webview.removeEventListener('new-window', this.onNewWindow);
+    for (const listener of this.listeners) {
+      this.webview.removeEventListener(listener.name, listener.callback);
+    }
 
     clearInterval(this.onURLChange);
 
     store.isFullscreen = false;
   }
 
-  public onNewWindow = (e: Electron.NewWindowEvent) => {
-    if (e.disposition === 'new-window' || e.disposition === 'foreground-tab') {
-      store.getCurrentWorkspace().addTab(e.url, true);
-    } else if (e.disposition === 'background-tab') {
-      store.getCurrentWorkspace().addTab(e.url, false);
+  public addWebviewListener(name: string, callback: any) {
+    this.webview.addEventListener(name, callback);
+    this.listeners.push({ name, callback });
+  }
+
+  emitEvent = (scope: string, name: string, ...data: any[]) => {
+    this.webview.send(`extension-emit-event-${scope}-${name}`, data);
+
+    const backgroundPages = remote.getGlobal('backgroundPages');
+
+    for (const backgroundPage of backgroundPages) {
+      const webContents = remote.webContents.fromId(backgroundPage.webContentsId);
+      webContents.send(`extension-emit-event-${scope}-${name}`, ...data);
     }
+  };
+
+  public onWillNavigate = (e: Electron.WillNavigateEvent) => {
+    this.emitEvent('webNavigation', 'onBeforeNavigate', {
+      tabId: this.tab.id,
+      url: e.url,
+      frameId: 0,
+      timeStamp: Date.now(),
+      processId: -1,
+      parentFrameId: -1,
+    });
+  };
+
+  public onDidStartLoading = () => {
+    this.emitEvent('webNavigation', 'onCommitted', {
+      tabId: this.tab.id,
+      url: this.webview.getURL(),
+      frameId: 0,
+      timeStamp: Date.now(),
+      processId: this.webview.getWebContents().getOSProcessId(),
+    });
+
+    this.emitEvent(
+      'tabs',
+      'onUpdated',
+      this.tab.id,
+      {
+        status: 'loading',
+      },
+      this.tab,
+    );
+  };
+
+  public onDidNavigate = (e: Electron.DidNavigateEvent) => {
+    this.emitEvent('webNavigation', 'onCompleted', {
+      tabId: this.tab.id,
+      url: e.url,
+      frameId: 0,
+      timeStamp: Date.now(),
+      processId: this.webview.getWebContents().getOSProcessId(),
+    });
+
+    this.emitEvent(
+      'tabs',
+      'onUpdated',
+      this.tab.id,
+      {
+        status: 'complete',
+      },
+      this.tab,
+    );
+  };
+
+  public onDomReady = () => {
+    this.webview.getWebContents().on('context-menu', this.onContextMenu);
+    this.emitEvent('webNavigation', 'onDOMContentLoaded', {
+      tabId: this.tab.id,
+      url: this.webview.getURL(),
+      frameId: 0,
+      timeStamp: Date.now(),
+      processId: this.webview.getWebContents().getOSProcessId(),
+    });
+  };
+
+  public onNewWindow = (e: Electron.NewWindowEvent) => {
+    let tab: Tab;
+
+    if (e.disposition === 'new-window' || e.disposition === 'foreground-tab') {
+      tab = store.getCurrentWorkspace().addTab(e.url, true);
+    } else if (e.disposition === 'background-tab') {
+      tab = store.getCurrentWorkspace().addTab(e.url, false);
+    }
+
+    this.emitEvent('webNavigation', 'onCreatedNavigationTarget', {
+      sourceTabId: this.tab.id,
+      sourceProcessId: this.webview.getWebContents().getOSProcessId(),
+      sourceFrameId: 0,
+      timeStamp: Date.now(),
+      url: e.url,
+      tabId: tab,
+    });
   };
 
   public onContextMenu = (e: Electron.Event, params: Electron.ContextMenuParams) => {
@@ -121,11 +221,6 @@ export default class extends React.Component<{ page: Page }, {}> {
     store.pageMenuData.y = top;
   };
 
-  public onDomReady = () => {
-    this.webview.getWebContents().on('context-menu', this.onContextMenu);
-    this.webview.send('get-extensions', store.extensions);
-  };
-
   public onDidStopLoading = () => {
     store.refreshNavigationState();
     this.tab.loading = false;
@@ -164,6 +259,16 @@ export default class extends React.Component<{ page: Page }, {}> {
       this.updateData();
     };
 
+    this.emitEvent(
+      'tabs',
+      'onUpdated',
+      this.tab.id,
+      {
+        favIconUrl: favicons[0],
+      },
+      this.tab,
+    );
+
     request.open('GET', favicons[0], true);
     request.send(null);
   };
@@ -192,6 +297,16 @@ export default class extends React.Component<{ page: Page }, {}> {
 
     tab.title = title;
     this.updateData();
+
+    this.emitEvent(
+      'tabs',
+      'onUpdated',
+      this.tab.id,
+      {
+        title,
+      },
+      this.tab,
+    );
   };
 
   public onFullscreenEnter = () => {
