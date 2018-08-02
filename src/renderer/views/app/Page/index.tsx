@@ -84,8 +84,6 @@ export default class extends React.Component<{ page: Page }, {}> {
   public emitEvent = (scope: string, name: string, ...data: any[]) => {
     this.webview.getWebContents().send(`extension-emit-event-${scope}-${name}`, ...data);
 
-    console.log(scope, name)
-
     const backgroundPages = remote.getGlobal('backgroundPages');
 
     for (const backgroundPage of backgroundPages) {
@@ -94,9 +92,9 @@ export default class extends React.Component<{ page: Page }, {}> {
     }
   };
 
-  public onIpcMessage = (channel: string, args: any[]) => {
-    if (channel === 'extension-get-current-tab') {
-      this.webview.send('extension-get-current-tab', this.tab.getIpcTab());
+  public onIpcMessage = (e: Electron.IpcMessageEvent, args: any[]) => {
+    if (e.channel === 'extension-get-current-tab') {
+      this.webview.getWebContents().send('extension-get-current-tab', this.tab.getIpcTab());
     }
   };
 
