@@ -57,7 +57,7 @@ export default class extends React.Component<{ page: Page }, {}> {
           {
             url,
           },
-          this.tab,
+          this.tab.getIpcTab(),
         );
         this.updateData();
         store.isBookmarked = !!store.bookmarks.find(x => x.url === url);
@@ -81,7 +81,9 @@ export default class extends React.Component<{ page: Page }, {}> {
   }
 
   emitEvent = (scope: string, name: string, ...data: any[]) => {
-    this.webview.send(`extension-emit-event-${scope}-${name}`, data);
+    if (this.webview && this.webview.getWebContents()) {
+      this.webview.send(`extension-emit-event-${scope}-${name}`, data);
+    }
 
     const backgroundPages = remote.getGlobal('backgroundPages');
 
@@ -118,7 +120,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         status: 'loading',
       },
-      this.tab,
+      this.tab.getIpcTab(),
     );
   };
 
@@ -138,7 +140,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         status: 'complete',
       },
-      this.tab,
+      this.tab.getIpcTab(),
     );
   };
 
@@ -266,7 +268,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         favIconUrl: favicons[0],
       },
-      this.tab,
+      this.tab.getIpcTab(),
     );
 
     request.open('GET', favicons[0], true);
@@ -305,7 +307,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         title,
       },
-      this.tab,
+      this.tab.getIpcTab(),
     );
   };
 
