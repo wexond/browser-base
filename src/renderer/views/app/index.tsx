@@ -1,8 +1,9 @@
 import fs, {
   readdir, stat, readFileSync, readdirSync, statSync,
 } from 'fs';
+import url from 'url';
 import { resolve } from 'path';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer, remote, webContents } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
@@ -13,6 +14,7 @@ import { loadPlugins } from '../../utils/plugins';
 import App from './App';
 import ipcMessages from '../../defaults/ipc-messages';
 import fonts from '../../defaults/fonts';
+import { BASE_PATH } from '../../constants';
 
 injectGlobal`
   @font-face {
@@ -93,24 +95,6 @@ async function setup() {
   if (!fs.existsSync(getPath('extensions'))) {
     fs.mkdirSync(getPath('extensions'));
   }
-
-  const extensionsPath = getPath('extensions');
-
-  const files = readdirSync(extensionsPath);
-
-  for (const dir of files) {
-    const extensionPath = resolve(extensionsPath, dir);
-    const stats = statSync(extensionPath);
-
-    if (stats.isDirectory()) {
-      const manifestPath = resolve(extensionPath, 'manifest.json');
-      const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
-
-      store.extensions.push(manifest);
-    }
-  }
-
-  ipcRenderer.send('save-extensions', store.extensions);
 
   await loadPlugins();
 

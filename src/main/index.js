@@ -1,21 +1,122 @@
 const {
-  app, BrowserWindow, ipcMain, protocol,
+  app, BrowserWindow, ipcMain, webContents,
 } = require('electron');
-const path = require('path');
+const { resolve } = require('path');
+const { format, parse } = require('url');
 const { platform, homedir } = require('os');
 const wpm = require('wexond-package-manager');
 const { autoUpdater } = require('electron-updater');
 
 const ipcMessages = require('../renderer/defaults/ipc-messages');
 
-const PROTOCOL = 'wexond';
-const URL_WHITELIST = ['newtab'];
+app.setPath('userData', resolve(homedir(), '.wexond'));
 
-app.setPath('userData', path.resolve(homedir(), '.wexond'));
-
-let mainWindow;
+const getPath = (...relativePaths) =>
+  resolve(app.getPath('userData'), ...relativePaths).replace(/\\/g, '/');
 
 global.extensions = [];
+
+const backgroundPages = [];
+const extensionsPath = getPath('extensions');
+
+const startBackgroundPage = manifest => {
+  if (manifest.background) {
+    let html = Buffer.from('');
+    let name;
+
+    if (manifest.background.page) {
+      name = manifest.background.page;
+      html = fs.readFileSync(resolve(manifest.srcDirectory, manifest.background.page));
+    } else {
+      name = '_generated_background_page.html';
+      if (manifest.background.scripts) {
+        const scripts = manifest.background.scripts
+          .map(script => `<script src="${script}"></script>`)
+          .join('');
+        html = Buffer.from(`<html><body>${scripts}</body></html>`, 'utf8');
+      }
+    }
+
+    const contents = webContents.create({
+      partition: 'persist:__wexond_extension',
+      isBackgroundPage: true,
+      commandLineSwitches: ['--background-page'],
+      preload: resolve(__dirname, '../preloads/extension-preload.js'),
+    });
+
+    backgroundPages[manifest.extensionId] = { html, name, webContentsId: contents.id };
+
+    contents.loadURL(
+      format({
+        protocol: 'wexond-extension',
+        slashes: true,
+        hostname: manifest.extensionId,
+        pathname: name,
+      }),
+    );
+  }
+};
+
+const loadExtensions = () => {
+  const files = readdirSync(extensionsPath);
+
+  for (const dir of files) {
+    const extensionPath = resolve(extensionsPath, dir);
+    const stats = statSync(extensionPath);
+
+    if (stats.isDirectory()) {
+      const manifestPath = resolve(extensionPath, 'manifest.json');
+      const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+
+      extensions.push(manifest);
+
+      startBackgroundPage(manifest);
+    }
+  }
+};
+
+loadExtensions();
+
+app.on('session-created', sess => {
+  sess.protocol.registerBufferProtocol(
+    'wexond-extension',
+    (request, callback) => {
+      const parsed = parse(request.url);
+      if (!parsed.hostname || !parsed.path) {
+        return callback();
+      }
+
+      const manifest = extensions[parsed.hostname];
+      if (!manifest) {
+        return callback();
+      }
+
+      const page = backgroundPages[parsed.hostname];
+      if (page && parsed.path === `/${page.name}`) {
+        return callback({
+          mimeType: 'text/html',
+          data: page.html,
+        });
+      }
+
+      fs.readFile(path.join(manifest.srcDirectory, parsed.path), (err, content) => {
+        if (err) {
+          return callback(-6); // FILE_NOT_FOUND
+        }
+        return callback(content);
+      });
+
+      return null;
+    },
+    error => {
+      if (error) {
+        console.error(`Unable to register wexond-extension protocol: ${error}`);
+      }
+    },
+  );
+});
+
+let mainWindow;
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -70,32 +171,7 @@ app.on('activate', () => {
   }
 });
 
-protocol.registerStandardSchemes([PROTOCOL]);
 app.on('ready', () => {
-  protocol.registerFileProtocol(
-    PROTOCOL,
-    (request, callback) => {
-      const url = request.url.substr(PROTOCOL.length + 3);
-
-      for (const item of URL_WHITELIST) {
-        if (url.startsWith(item)) {
-          callback({
-            path: path.resolve(__dirname, '../../static/pages', `${url.slice(0, -1)}.html`),
-          });
-          break;
-        }
-      }
-
-      if (url.startsWith('build')) {
-        callback({ path: path.resolve(__dirname, '../../', `${url}`) });
-      }
-    },
-    error => {
-      // eslint-disable-next-line
-      if (error) console.error('Failed to register protocol');
-    },
-  );
-
   createWindow();
 });
 
@@ -119,8 +195,4 @@ ipcMain.on(ipcMessages.UPDATE_RESTART_AND_INSTALL, e => {
 
 ipcMain.on(ipcMessages.UPDATE_CHECK, e => {
   autoUpdater.checkForUpdates();
-});
-
-ipcMain.on('save-extensions', (e, extensions) => {
-  global.extensions = extensions;
 });
