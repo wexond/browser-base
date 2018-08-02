@@ -2,7 +2,7 @@ const {
   app, BrowserWindow, ipcMain, webContents,
 } = require('electron');
 const {
-  readdirSync, readFileSync, statSync, readFile,
+  readdirSync, readFileSync, statSync, readFile, writeFileSync,
 } = require('fs');
 const { resolve, join } = require('path');
 const { format, parse } = require('url');
@@ -20,6 +20,7 @@ const getPath = (...relativePaths) =>
 global.extensions = [];
 global.backgroundPages = [];
 
+const windowDataPath = getPath('window-data.json');
 const extensionsPath = getPath('extensions');
 
 const startBackgroundPage = manifest => {
@@ -120,7 +121,17 @@ app.on('session-created', sess => {
 let mainWindow;
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({
+  let data = null;
+  let windowBounds = {};
+
+  try {
+    data = readFileSync(windowDataPath);
+    data = JSON.parse(data);
+  } catch (e) {
+    console.error(e);
+  }
+
+  const windowData = {
     frame: process.env.NODE_ENV === 'dev',
     minWidth: 300,
     minHeight: 430,
@@ -132,6 +143,39 @@ const createWindow = () => {
       preload: resolve(__dirname, 'preload.js'),
       plugins: true,
     },
+  };
+
+  if (data != null && data.bounds != null) {
+    Object.assign(windowData, data.bounds);
+  }
+
+  mainWindow = new BrowserWindow(windowData);
+
+  windowBounds = mainWindow.getBounds();
+
+  mainWindow.on('resize', () => {
+    if (!mainWindow.isMaximized()) {
+      windowBounds = mainWindow.getBounds();
+    }
+  });
+
+  mainWindow.on('move', () => {
+    if (!mainWindow.isMaximized()) {
+      windowBounds = mainWindow.getBounds();
+    }
+  });
+
+  if (data != null && data.maximized) {
+    mainWindow.maximize();
+  }
+
+  mainWindow.on('close', () => {
+    data = {
+      maximized: mainWindow.isMaximized(),
+      bounds: windowBounds,
+    };
+
+    writeFileSync(windowDataPath, JSON.stringify(data));
   });
 
   if (process.env.NODE_ENV === 'dev') {
@@ -140,8 +184,6 @@ const createWindow = () => {
   } else {
     mainWindow.loadURL(join('file://', __dirname, '../../static/pages/app.html'));
   }
-
-  mainWindow.webContents.openDevTools({ mode: 'detach' });
 
   process.on('uncaughtException', error => {
     mainWindow.webContents.send('main-error', error);
