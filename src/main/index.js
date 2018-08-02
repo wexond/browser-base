@@ -141,6 +141,8 @@ const createWindow = () => {
     mainWindow.loadURL(join('file://', __dirname, '../../static/pages/app.html'));
   }
 
+  mainWindow.webContents.openDevTools({ mode: 'detach' });
+
   process.on('uncaughtException', error => {
     mainWindow.webContents.send('main-error', error);
   });
