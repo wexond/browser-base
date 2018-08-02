@@ -9,6 +9,7 @@ import {
   TOOLBAR_HEIGHT,
 } from '../constants';
 import Workspace from './workspace';
+import store from '../store';
 
 let nextTabId = 0;
 
@@ -130,6 +131,7 @@ export default class Tab {
   public getIpcTab() {
     return {
       id: this.id,
+      index: this.workspace.tabs.indexOf(this),
       title: this.title,
       pinned: this.pinned,
       favIconUrl: this.favicon,
@@ -137,6 +139,7 @@ export default class Tab {
       status: this.loading ? 'loading' : 'complete',
       width: this.width,
       height: TOOLBAR_HEIGHT,
+      active: store.getCurrentWorkspace().selectedTab === this.id,
     };
   }
 }
