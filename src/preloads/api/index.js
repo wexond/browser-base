@@ -1,67 +1,97 @@
 const { ipcRenderer } = require('electron');
 
-/* eslint no-bitwise:0 */
-const hashCode = string => {
-  let hash = 0;
-
-  if (string.length === 0) {
-    return hash;
-  }
-
-  for (let i = 0; i < string.length; i++) {
-    const chr = string.charCodeAt(i);
-    hash = (hash << 5) - hash + chr;
-    hash |= 0;
-  }
-  return hash;
-};
-
-class EventEmitter {
+class IpcEvent {
   constructor(scope, name) {
     this.name = name;
     this.scope = scope;
-    this.listeners = [];
+    this.callbacks = [];
+    this.listener = false;
+
+    this.emit = this.emit.bind(this);
+  }
+
+  emit(e, ...args) {
+    this.callbacks.forEach(callback => {
+      callback(...args);
+    });
   }
 
   addListener(callback) {
-    const id = hashCode(callback.toString());
+    this.callbacks.push(callback);
 
-    ipcRenderer.on(`extension-emit-event-${this.scope}-${this.name}-${id}`, (e, args) => {
-      callback(...args);
-    });
-
-    ipcRenderer.send('extension-add-listener', this.scope, this.name, id);
-
-    this.listeners.push(id);
+    if (!this.listener) {
+      ipcRenderer.on(`extension-emit-event-${this.scope}-${this.name}`, this.emit);
+      this.listener = true;
+    }
   }
 
   removeListener(callback) {
-    const id = hashCode(callback.toString());
+    this.callbacks = this.callbacks.filter(x => x !== callback);
 
-    this.listeners = this.listeners.filter(x => x !== id);
-
-    ipcRenderer.removeAllListeners(`extension-emit-event-${this.scope}-${this.name}-${id}`);
-
-    ipcRenderer.send('extension-remove-listener', this.scope, this.name, id);
-  }
-
-  emit(...args) {
-    ipcRenderer.send(`extension-emit-event-${this.scope}-${this.name}`, args);
+    if (this.callbacks.length === 0) {
+      ipcRenderer.removeListener(`extension-emit-event-${this.scope}-${this.name}`, this.emit);
+      this.listener = false;
+    }
   }
 }
 
-const injectAPI = () => {
+const getAPI = () => {
+  // https://developer.chrome.com/extensions
   const api = {
+    // https://developer.chrome.com/extensions/webNavigation
     webNavigation: {
-      onCommitted: new EventEmitter('webNavigation', 'onCommitted'),
+      onBeforeNavigate: new IpcEvent('webNavigation', 'onBeforeNavigate'),
+      onCommitted: new IpcEvent('webNavigation', 'onCommitted'),
+      onDOMContentLoaded: new IpcEvent('webNavigation', 'onDOMContentLoaded'),
+      onCompleted: new IpcEvent('webNavigation', 'onCompleted'),
+      onCreatedNavigationTarget: new IpcEvent('webNavigation', 'onCreatedNavigationTarget'),
+      onReferenceFragmentUpdated: new IpcEvent('webNavigation', 'onReferenceFragmentUpdated'), // TODO
+      onTabReplaced: new IpcEvent('webNavigation', 'onTabReplaced'), // TODO
+      onHistoryStateUpdated: new IpcEvent('webNavigation', 'onHistoryStateUpdated'), // TODO
+
+      getFrame: (details, callback) => {}, // TODO
+      getAllFrames: (details, callback) => {}, // TODO
     },
+
+    // https://developer.chrome.com/extensions/extension
     extension: {
-      reload: () => {
-        ipcRenderer.sendToHost(ipcMessages.EXTENSION_RELOAD);
-      },
+      inIncognitoContext: false, // TODO
+
+      getBackgroundPage: () => null, // TODO
+      isAllowedIncognitoAccess: callback => {}, // TODO
+      isAllowedFileSchemeAccess: callback => {}, // TODO
+      setUpdateUrlData: data => {}, // TODO
+    },
+
+    // https://developer.chrome.com/extensions/alarms
+    alarms: {
+      create: (name, alarmInfo) => {}, // TODO
+      get: (name, callback) => {}, // TODO
+      getAll: callback => {}, // TODO
+      clear: (name, callback) => {}, // TODO
+      clearAll: callback => {}, // TODO
+
+      onAlarm: new IpcEvent('alarms', 'onAlarm'), // TODO
+    },
+
+    // https://developer.chrome.com/extensions/webRequest
+    webRequest: {},
+
+    // https://developer.chrome.com/extensions/tabs
+    tabs: {
+      onCreated: new IpcEvent('tabs', 'onCreated'),
+      onUpdated: new IpcEvent('tabs', 'onUpdated'),
+      onMoved: new IpcEvent('tabs', 'onMoved'), // TODO
+      onActivated: new IpcEvent('tabs', 'onActivated'), // TODO
+      onHighlighted: new IpcEvent('tabs', 'onHighlighted'), // TODO
+      onDetached: new IpcEvent('tabs', 'onDetached'), // TODO
+      onAttached: new IpcEvent('tabs', 'onAttached'), // TODO
+      onRemoved: new IpcEvent('tabs', 'onRemoved'), // TODO
+      onReplaced: new IpcEvent('tabs', 'onReplaced'), // TODO
+      onZoomChange: new IpcEvent('tabs', 'onZoomChange'), // TODO
     },
   };
   return api;
 };
 
-module.exports = injectAPI;
+module.exports = getAPI;

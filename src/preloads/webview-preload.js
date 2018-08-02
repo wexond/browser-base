@@ -3,7 +3,7 @@ const { runInThisContext } = require('vm');
 const fs = require('fs');
 const path = require('path');
 
-const injectAPI = require('./api');
+const getAPI = require('./api');
 
 const matchesPattern = pattern => {
   if (pattern === '<all_urls>') {
@@ -16,7 +16,7 @@ const matchesPattern = pattern => {
 };
 
 const runContentScript = (url, code) => {
-  const context = injectAPI();
+  const context = getAPI();
 
   const wrapper = `((wexond) => {
     var chrome = wexond;
@@ -102,8 +102,6 @@ for (const manifest of extensions) {
           css: script.css ? script.css.map(readArrayOfFiles) : [],
           runAt: script.run_at || 'document_idle',
         };
-
-        console.log(newScript.js);
 
         injectContentScript(newScript);
       });

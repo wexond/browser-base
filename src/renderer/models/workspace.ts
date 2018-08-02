@@ -5,6 +5,7 @@ import { TAB_MIN_WIDTH, WORKSPACE_MAX_ICONS_COUNT } from '../constants';
 import store from '../store';
 import AddTabButton from './add-tab-button';
 import icons from '../defaults/icons';
+import { emitEvent } from '../utils/extensions';
 
 let nextWorkspaceId = 0;
 
@@ -115,6 +116,8 @@ export default class Workspace {
 
     if (select) this.selectTab(tab);
     store.addPage(tab.id, url);
+
+    emitEvent('tabs', 'onCreated', tab);
 
     return tab;
   };

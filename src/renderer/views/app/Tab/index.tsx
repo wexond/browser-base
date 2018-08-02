@@ -9,6 +9,7 @@ import tabAnimations from '../../../defaults/tab-animations';
 import components from '../../../components';
 import Preloader from '../../../components/Preloader';
 import colors from '../../../defaults/colors';
+import { emitEvent } from '../../../utils/extensions';
 
 export interface TabProps {
   key: number;
@@ -105,9 +106,18 @@ export default class Tab extends React.Component<TabProps, {}> {
       } else if (tabIndex - 1 >= 0 && !workspace.tabs[tabIndex - 1].isRemoving) {
         workspace.selectedTab = workspace.tabs[tabIndex - 1].id;
       } else if (store.workspaces.length === 1) {
+        emitEvent('tabs', 'onRemoved', tab.id, {
+          windowId: 0,
+          isWindowClosing: true,
+        });
         closeWindow();
       }
     }
+
+    emitEvent('tabs', 'onRemoved', tab.id, {
+      windowId: 0,
+      isWindowClosing: true,
+    });
 
     workspace.resetTimer();
 
