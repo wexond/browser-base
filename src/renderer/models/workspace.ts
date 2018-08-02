@@ -107,6 +107,10 @@ export default class Workspace {
     left = Math.min(left, this.getContainerWidth());
 
     addTabButton.setLeft(left, animation);
+
+    requestAnimationFrame(() => {
+      this.tabsIndicator.moveToTab(this.getSelectedTab(), animation);
+    });
   }
 
   public setTabsWidths(animation = true) {
