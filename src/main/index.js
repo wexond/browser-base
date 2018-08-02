@@ -199,3 +199,7 @@ ipcMain.on(ipcMessages.UPDATE_RESTART_AND_INSTALL, e => {
 ipcMain.on(ipcMessages.UPDATE_CHECK, e => {
   autoUpdater.checkForUpdates();
 });
+
+ipcMain.on('extension-get-all-tabs', e => {
+  mainWindow.webContents.send('extension-get-all-tabs', { webContentsId: e.sender.id });
+});
