@@ -25,7 +25,7 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
         store.selectedHistoryItems.splice(store.selectedHistoryItems.indexOf(data.id), 1);
       }
     } else {
-      store.getCurrentWorkspace().addTab(data.url);
+      store.getCurrentWorkspace().addTab({ url: data.url });
       store.menu.hide();
     }
   };

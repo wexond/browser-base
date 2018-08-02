@@ -64,6 +64,7 @@ export default class extends React.Component<Props, {}> {
           tab.setLeft(tab.getLeft(), false);
           this.scrollbar.onNewTab(tab);
           workspace.updateTabsBounds();
+          workspace.tabsIndicator.moveToTab(workspace.getSelectedTab());
         });
       }
     });
