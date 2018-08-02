@@ -29,9 +29,7 @@ const runContentScript = (url, code) => {
     displayErrors: true,
   });
 
-  const { wexond } = context;
-
-  return compiledWrapper.call(this, wexond);
+  return compiledWrapper.call(this, context);
 };
 
 const runStylesheet = (url, code) => {
@@ -104,6 +102,8 @@ for (const manifest of extensions) {
           css: script.css ? script.css.map(readArrayOfFiles) : [],
           runAt: script.run_at || 'document_idle',
         };
+
+        console.log(newScript.js);
 
         injectContentScript(newScript);
       });
