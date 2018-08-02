@@ -1,5 +1,5 @@
-const injectAPI = require('./api');
+const getAPI = require('./api');
 
-const api = injectAPI();
+const api = getAPI();
 global.wexond = api;
 global.chrome = api;
