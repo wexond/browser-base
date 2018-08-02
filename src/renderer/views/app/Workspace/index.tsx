@@ -62,7 +62,7 @@ export default class extends React.Component<Props, {}> {
 
         requestAnimationFrame(() => {
           tab.setLeft(tab.getLeft(), false);
-          this.scrollbar.onNewTab(tab);
+          this.scrollbar.onNewTab(workspace.getSelectedTab());
           workspace.updateTabsBounds();
           workspace.tabsIndicator.moveToTab(workspace.getSelectedTab());
         });
