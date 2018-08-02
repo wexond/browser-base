@@ -166,9 +166,9 @@ export default class extends React.Component<{ page: Page }, {}> {
     let tab: Tab;
 
     if (e.disposition === 'new-window' || e.disposition === 'foreground-tab') {
-      tab = store.getCurrentWorkspace().addTab(e.url, true);
+      tab = store.getCurrentWorkspace().addTab({ url: e.url, active: true });
     } else if (e.disposition === 'background-tab') {
-      tab = store.getCurrentWorkspace().addTab(e.url, false);
+      tab = store.getCurrentWorkspace().addTab({ url: e.url, active: false });
     }
 
     this.emitEvent('webNavigation', 'onCreatedNavigationTarget', {

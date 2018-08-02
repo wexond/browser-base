@@ -106,6 +106,15 @@ const getAPI = () => {
           );
         });
       },
+      create: (createProperties, callback = null) => {
+        ipcRenderer.send('extension-create-tab', createProperties);
+
+        if (callback) {
+          ipcRenderer.once('extension-create-tab', (e, data) => {
+            callback(data);
+          });
+        }
+      },
 
       onCreated: new IpcEvent('tabs', 'onCreated'),
       onUpdated: new IpcEvent('tabs', 'onUpdated'),

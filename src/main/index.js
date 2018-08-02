@@ -201,5 +201,9 @@ ipcMain.on(ipcMessages.UPDATE_CHECK, e => {
 });
 
 ipcMain.on('extension-get-all-tabs', e => {
-  mainWindow.webContents.send('extension-get-all-tabs', { webContentsId: e.sender.id });
+  mainWindow.webContents.send('extension-get-all-tabs', e.sender.id);
+});
+
+ipcMain.on('extension-create-tab', (e, data) => {
+  mainWindow.webContents.send('extension-create-tab', data, e.sender.id);
 });

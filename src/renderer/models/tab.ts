@@ -13,6 +13,25 @@ import store from '../store';
 
 let nextTabId = 0;
 
+export interface CreateTabProperties {
+  url?: string;
+  index?: number;
+  active?: boolean;
+  pinned?: boolean;
+  windowId?: number;
+  openerTabId?: number;
+}
+
+export interface IpcTab extends CreateTabProperties {
+  id: number;
+  title: string;
+  favIconUrl: string;
+  status: 'loading' | 'complete';
+  width: number;
+  height: number;
+  highlighted: boolean;
+}
+
 export default class Tab {
   @observable
   public id = -1;
@@ -128,7 +147,7 @@ export default class Tab {
     this.width = width;
   }
 
-  public getIpcTab() {
+  public getIpcTab(): IpcTab {
     return {
       id: this.id,
       index: this.workspace.tabs.indexOf(this),

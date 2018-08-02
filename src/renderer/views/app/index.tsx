@@ -1,12 +1,9 @@
-import fs, {
-  readdir, stat, readFileSync, readdirSync, statSync,
-} from 'fs';
-import url from 'url';
-import { resolve } from 'path';
+import { existsSync, mkdirSync } from 'fs';
 import { ipcRenderer, remote, webContents } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
+
 import typography from '../../mixins/typography';
 import store from '../../store';
 import { getPath } from '../../utils/paths';
@@ -15,6 +12,7 @@ import App from './App';
 import ipcMessages from '../../defaults/ipc-messages';
 import fonts from '../../defaults/fonts';
 import { BASE_PATH } from '../../constants';
+import { CreateTabProperties, IpcTab } from '../../models/tab';
 
 injectGlobal`
   @font-face {
@@ -88,12 +86,12 @@ ipcRenderer.on(ipcMessages.UPDATE_AVAILABLE, (e: Electron.IpcMessageEvent, versi
 ipcRenderer.send(ipcMessages.UPDATE_CHECK);
 
 async function setup() {
-  if (!fs.existsSync(getPath('plugins'))) {
-    fs.mkdirSync(getPath('plugins'));
+  if (!existsSync(getPath('plugins'))) {
+    mkdirSync(getPath('plugins'));
   }
 
-  if (!fs.existsSync(getPath('extensions'))) {
-    fs.mkdirSync(getPath('extensions'));
+  if (!existsSync(getPath('extensions'))) {
+    mkdirSync(getPath('extensions'));
   }
 
   await loadPlugins();
@@ -103,10 +101,10 @@ async function setup() {
 
 setup();
 
-ipcRenderer.on('extension-get-all-tabs', (e: Electron.IpcMessageEvent, data: any) => {
-  const sender = remote.webContents.fromId(data.webContentsId);
+ipcRenderer.on('extension-get-all-tabs', (e: Electron.IpcMessageEvent, webContentsId: number) => {
+  const sender = remote.webContents.fromId(webContentsId);
 
-  let tabs: any[] = [];
+  let tabs: IpcTab[] = [];
 
   for (const workspace of store.workspaces) {
     tabs = tabs.concat(workspace.tabs.map(tab => tab.getIpcTab()));
@@ -114,3 +112,20 @@ ipcRenderer.on('extension-get-all-tabs', (e: Electron.IpcMessageEvent, data: any
 
   sender.send('extension-get-all-tabs', tabs);
 });
+
+ipcRenderer.on(
+  'extension-create-tab',
+  (e: Electron.IpcMessageEvent, data: CreateTabProperties, webContentsId: number) => {
+    const sender = remote.webContents.fromId(webContentsId);
+
+    const { url, active, index } = data;
+
+    const tab = store.getCurrentWorkspace().addTab({
+      url,
+      active,
+      index,
+    });
+
+    sender.send('extension-create-tab', tab.getIpcTab());
+  },
+);
