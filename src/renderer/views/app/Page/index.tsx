@@ -43,6 +43,7 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.addWebviewListener('new-window', this.onNewWindow);
     this.addWebviewListener('did-navigate', this.onDidNavigate);
     this.addWebviewListener('will-navigate', this.onWillNavigate);
+    this.addWebviewListener('ipc-message', this.onIpcMessage);
 
     // Custom event: fires when webview URL changes.
     this.onURLChange = setInterval(() => {
@@ -80,7 +81,7 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.listeners.push({ name, callback });
   }
 
-  emitEvent = (scope: string, name: string, ...data: any[]) => {
+  public emitEvent = (scope: string, name: string, ...data: any[]) => {
     if (this.webview && this.webview.getWebContents()) {
       this.webview.send(`extension-emit-event-${scope}-${name}`, data);
     }
@@ -90,6 +91,12 @@ export default class extends React.Component<{ page: Page }, {}> {
     for (const backgroundPage of backgroundPages) {
       const webContents = remote.webContents.fromId(backgroundPage.webContentsId);
       webContents.send(`extension-emit-event-${scope}-${name}`, ...data);
+    }
+  };
+
+  public onIpcMessage = (channel: string, args: any[]) => {
+    if (channel === 'extension-get-current-tab') {
+      this.webview.send('extension-get-current-tab', this.tab.getIpcTab());
     }
   };
 

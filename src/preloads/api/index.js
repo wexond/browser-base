@@ -67,7 +67,7 @@ const getAPI = () => {
     alarms: {
       create: (name, alarmInfo) => {}, // TODO
       get: (name, callback) => {}, // TODO
-      getAll: callback => {}, // TODO
+      getAll: callback => {},
       clear: (name, callback) => {}, // TODO
       clearAll: callback => {}, // TODO
 
@@ -79,6 +79,34 @@ const getAPI = () => {
 
     // https://developer.chrome.com/extensions/tabs
     tabs: {
+      get: (tabId, callback) => {
+        api.tabs.query({ id: tabId }, tabs => {
+          callback(tabs[0]);
+        });
+      },
+      getCurrent: callback => {
+        ipcRenderer.sendToHost('extension-get-current-tab');
+
+        ipcRenderer.once('extension-get-current-tab', (e, data) => {
+          callback(data);
+        });
+      },
+      query: (queryInfo, callback) => {
+        ipcRenderer.send('extension-get-all-tabs');
+
+        ipcRenderer.once('extension-get-all-tabs', (e, data) => {
+          callback(
+            data.filter(tab => {
+              for (const key in queryInfo) {
+                if (tab[key] == null || queryInfo[key] !== tab[key]) return false;
+              }
+
+              return true;
+            }),
+          );
+        });
+      },
+
       onCreated: new IpcEvent('tabs', 'onCreated'),
       onUpdated: new IpcEvent('tabs', 'onUpdated'),
       onMoved: new IpcEvent('tabs', 'onMoved'), // TODO

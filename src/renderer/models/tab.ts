@@ -140,6 +140,7 @@ export default class Tab {
       width: this.width,
       height: TOOLBAR_HEIGHT,
       active: store.getCurrentWorkspace().selectedTab === this.id,
+      highlighted: store.getCurrentWorkspace().selectedTab === this.id,
     };
   }
 }
