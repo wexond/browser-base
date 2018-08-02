@@ -45,8 +45,6 @@ export default class extends React.Component<Props, {}> {
       workspace.updateTabsBounds(false);
 
       const selectedTab = workspace.getSelectedTab();
-      workspace.tabsIndicator.left = selectedTab.left;
-      workspace.tabsIndicator.width = selectedTab.width;
     });
 
     window.addEventListener('mouseup', this.onMouseUp);
@@ -64,7 +62,6 @@ export default class extends React.Component<Props, {}> {
           tab.setLeft(tab.getLeft(), false);
           this.scrollbar.onNewTab(workspace.getSelectedTab());
           workspace.updateTabsBounds();
-          workspace.tabsIndicator.moveToTab(workspace.getSelectedTab());
         });
       }
     });
