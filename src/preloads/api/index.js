@@ -1,45 +1,63 @@
 const { ipcRenderer } = require('electron');
-const ipcMessages = require('../../renderer/defaults/ipc-messages');
+
+/* eslint no-bitwise:0 */
+const hashCode = string => {
+  let hash = 0;
+
+  if (string.length === 0) {
+    return hash;
+  }
+
+  for (let i = 0; i < string.length; i++) {
+    const chr = string.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0;
+  }
+  return hash;
+};
 
 class EventEmitter {
   constructor(scope, name) {
     this.name = name;
     this.scope = scope;
-
-    ipcRenderer.on(`${ipcMessages.EXTENSION_EXECUTE_EVENT}-${scope}-${name}`, (e, ...args) => {
-      this.emit(args);
-    });
+    this.listeners = [];
   }
 
   addListener(callback) {
-    this.listeners.push(callback);
+    const id = hashCode(callback.toString());
+
+    ipcRenderer.on(`extension-emit-event-${this.scope}-${this.name}-${id}`, (e, args) => {
+      callback(...args);
+    });
+
+    ipcRenderer.send('extension-add-listener', this.scope, this.name, id);
+
+    this.listeners.push(id);
   }
 
   removeListener(callback) {
-    this.listeners = this.listeners.filter(x => x !== callback);
+    const id = hashCode(callback.toString());
+
+    this.listeners = this.listeners.filter(x => x !== id);
+
+    ipcRenderer.removeAllListeners(`extension-emit-event-${this.scope}-${this.name}-${id}`);
+
+    ipcRenderer.send('extension-remove-listener', this.scope, this.name, id);
   }
 
   emit(...args) {
-    for (const listener of this.listeners) {
-      try {
-        listener(...args);
-      } catch (e) {
-        this.removeListener(listener);
-      }
-    }
+    ipcRenderer.send(`extension-emit-event-${this.scope}-${this.name}`, args);
   }
 }
 
 const injectAPI = () => {
   const api = {
-    wexond: {
-      webNavigation: {
-        onCommitted: new EventEmitter('webNavigation', 'onCommitted'),
-      },
-      extension: {
-        reload: () => {
-          ipcRenderer.sendToHost(ipcMessages.EXTENSION_RELOAD);
-        },
+    webNavigation: {
+      onCommitted: new EventEmitter('webNavigation', 'onCommitted'),
+    },
+    extension: {
+      reload: () => {
+        ipcRenderer.sendToHost(ipcMessages.EXTENSION_RELOAD);
       },
     },
   };
