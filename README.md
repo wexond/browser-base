@@ -41,6 +41,8 @@ We really appreciate any changes and improvements, so feel free to open pull req
 
 If you want to contribute, check our [Contributing guidelines](CONTRIBUTING.md) and [Code Of Conduct](CODE_OF_CONDUCT.md).
 
+# [Supported WebExtensions APIs](https://github.com/wexond/wexond/issues/110)
+
 ## Development
 
 If you want to develop Wexond, you will need to run some commands, but don't worry, we will explain you everything. Please make sure you have installed [`Node.js`](https://nodejs.org/en/). Also, we assume you have cloned the repository.
