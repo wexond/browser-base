@@ -1,7 +1,10 @@
 const {
   app, BrowserWindow, ipcMain, webContents,
 } = require('electron');
-const { resolve } = require('path');
+const {
+  readdirSync, readFileSync, statSync, readFile,
+} = require('fs');
+const { resolve, join } = require('path');
 const { format, parse } = require('url');
 const { platform, homedir } = require('os');
 const wpm = require('wexond-package-manager');
@@ -15,8 +18,8 @@ const getPath = (...relativePaths) =>
   resolve(app.getPath('userData'), ...relativePaths).replace(/\\/g, '/');
 
 global.extensions = [];
+global.backgroundPages = [];
 
-const backgroundPages = [];
 const extensionsPath = getPath('extensions');
 
 const startBackgroundPage = manifest => {
@@ -26,7 +29,7 @@ const startBackgroundPage = manifest => {
 
     if (manifest.background.page) {
       name = manifest.background.page;
-      html = fs.readFileSync(resolve(manifest.srcDirectory, manifest.background.page));
+      html = readFileSync(resolve(manifest.srcDirectory, manifest.background.page));
     } else {
       name = '_generated_background_page.html';
       if (manifest.background.scripts) {
@@ -44,7 +47,7 @@ const startBackgroundPage = manifest => {
       preload: resolve(__dirname, '../preloads/extension-preload.js'),
     });
 
-    backgroundPages[manifest.extensionId] = { html, name, webContentsId: contents.id };
+    global.backgroundPages[manifest.extensionId] = { html, name, webContentsId: contents.id };
 
     contents.loadURL(
       format({
@@ -75,8 +78,6 @@ const loadExtensions = () => {
   }
 };
 
-loadExtensions();
-
 app.on('session-created', sess => {
   sess.protocol.registerBufferProtocol(
     'wexond-extension',
@@ -99,7 +100,7 @@ app.on('session-created', sess => {
         });
       }
 
-      fs.readFile(path.join(manifest.srcDirectory, parsed.path), (err, content) => {
+      readFile(resolve(manifest.srcDirectory, parsed.path), (err, content) => {
         if (err) {
           return callback(-6); // FILE_NOT_FOUND
         }
@@ -128,7 +129,7 @@ const createWindow = () => {
     show: false,
     titleBarStyle: 'hiddenInset',
     webPreferences: {
-      preload: path.resolve(__dirname, 'preload.js'),
+      preload: resolve(__dirname, 'preload.js'),
       plugins: true,
     },
   });
@@ -137,7 +138,7 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
     mainWindow.loadURL('http://localhost:8080/app.html');
   } else {
-    mainWindow.loadURL(path.join('file://', __dirname, '../../static/pages/app.html'));
+    mainWindow.loadURL(join('file://', __dirname, '../../static/pages/app.html'));
   }
 
   process.on('uncaughtException', error => {
@@ -161,6 +162,8 @@ const createWindow = () => {
   });
 
   mainWindow.webContents.addListener('will-navigate', e => e.preventDefault());
+
+  loadExtensions();
 };
 
 app.on('activate', () => {
