@@ -1,13 +1,23 @@
 import { observable, observe } from 'mobx';
 import TabsIndicator from './tabs-indicator';
-import Tab from './tab';
+import Tab, { CreateTabProperties } from './tab';
 import { TAB_MIN_WIDTH, WORKSPACE_MAX_ICONS_COUNT } from '../constants';
 import store from '../store';
 import AddTabButton from './add-tab-button';
 import icons from '../defaults/icons';
 import { emitEvent } from '../utils/extensions';
+import tabAnimations from '../defaults/tab-animations';
 
 let nextWorkspaceId = 0;
+
+const moveLineToTab = false;
+
+const moveLineToTabAnimation = (tabsIndicator: TabsIndicator, tab: Tab) => {
+  if (moveLineToTab) {
+    tabsIndicator.moveToTab(tab, false);
+    requestAnimationFrame(() => moveLineToTabAnimation(tabsIndicator, tab));
+  }
+};
 
 export default class Workspace {
   @observable
@@ -110,11 +120,22 @@ export default class Workspace {
 
   public getTabById = (id: number): Tab => this.tabs.filter(item => item.id === id)[0];
 
-  public addTab = (url = '', select = true): Tab => {
-    const tab = new Tab(this);
-    this.tabs.push(tab);
+  public addTab = (createProperties: CreateTabProperties = { url: '', active: true }): Tab => {
+    const { active, url } = createProperties;
+    let { index } = createProperties;
 
-    if (select) this.selectTab(tab);
+    if (index == null) {
+      index = this.tabs.length;
+    } else if (index < 0) {
+      index = 0;
+    } else if (index > this.tabs.length) {
+      index = this.tabs.length;
+    }
+
+    const tab = new Tab(this);
+    this.tabs.splice(index, 0, tab);
+
+    if (active) this.selectTab(tab);
     store.addPage(tab.id, url);
 
     emitEvent('tabs', 'onCreated', tab.getIpcTab());

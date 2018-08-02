@@ -49,7 +49,7 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
     } else if (data.type === 'folder') {
       store.goToBookmarkFolder(data.id);
     } else {
-      store.getCurrentWorkspace().addTab(data.url);
+      store.getCurrentWorkspace().addTab({ url: data.url });
       store.menu.hide();
     }
   };
