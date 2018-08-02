@@ -102,3 +102,15 @@ async function setup() {
 }
 
 setup();
+
+ipcRenderer.on('extension-get-all-tabs', (e: Electron.IpcMessageEvent, data: any) => {
+  const sender = remote.webContents.fromId(data.webContentsId);
+
+  let tabs: any[] = [];
+
+  for (const workspace of store.workspaces) {
+    tabs = tabs.concat(workspace.tabs.map(tab => tab.getIpcTab()));
+  }
+
+  sender.send('extension-get-all-tabs', tabs);
+});
