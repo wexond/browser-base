@@ -5,7 +5,9 @@ export const emitEvent = (scope: string, name: string, ...data: any[]) => {
   const backgroundPages = remote.getGlobal('backgroundPages');
 
   for (const page of store.pages) {
-    page.webview.send(`extension-emit-event-${scope}-${name}`, data);
+    if (page.webview && page.webview.getWebContents()) {
+      page.webview.send(`extension-emit-event-${scope}-${name}`, data);
+    }
   }
 
   for (const backgroundPage of backgroundPages) {

@@ -2,7 +2,11 @@ import { TweenLite } from 'gsap';
 import { observable } from 'mobx';
 import tabAnimations from '../defaults/tab-animations';
 import {
-  TAB_MAX_WIDTH, TAB_MIN_WIDTH, TAB_PINNED_WIDTH, TOOLBAR_BUTTON_WIDTH,
+  TAB_MAX_WIDTH,
+  TAB_MIN_WIDTH,
+  TAB_PINNED_WIDTH,
+  TOOLBAR_BUTTON_WIDTH,
+  TOOLBAR_HEIGHT,
 } from '../constants';
 import Workspace from './workspace';
 
@@ -121,5 +125,18 @@ export default class Tab {
     }
 
     this.width = width;
+  }
+
+  public getIpcTab() {
+    return {
+      id: this.id,
+      title: this.title,
+      pinned: this.pinned,
+      favIconUrl: this.favicon,
+      url: this.url,
+      status: this.loading ? 'loading' : 'complete',
+      width: this.width,
+      height: TOOLBAR_HEIGHT,
+    };
   }
 }
