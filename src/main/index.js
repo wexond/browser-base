@@ -50,6 +50,8 @@ const startBackgroundPage = manifest => {
 
     global.backgroundPages[manifest.extensionId] = { html, name, webContentsId: contents.id };
 
+    contents.openDevTools({ mode: 'detach' });
+
     contents.loadURL(
       format({
         protocol: 'wexond-extension',
@@ -58,6 +60,8 @@ const startBackgroundPage = manifest => {
         pathname: name,
       }),
     );
+
+    contents.send('init-background-page', manifest);
   }
 };
 
@@ -84,16 +88,19 @@ app.on('session-created', sess => {
     'wexond-extension',
     (request, callback) => {
       const parsed = parse(request.url);
+
       if (!parsed.hostname || !parsed.path) {
         return callback();
       }
 
-      const manifest = extensions[parsed.hostname];
+      const manifest = extensions.find(x => x.extensionId === parsed.hostname);
+
       if (!manifest) {
         return callback();
       }
 
       const page = backgroundPages[parsed.hostname];
+
       if (page && parsed.path === `/${page.name}`) {
         return callback({
           mimeType: 'text/html',
@@ -101,10 +108,12 @@ app.on('session-created', sess => {
         });
       }
 
-      readFile(resolve(manifest.srcDirectory, parsed.path), (err, content) => {
+      readFile(join(manifest.srcDirectory, parsed.path), (err, content) => {
+        console.log(manifest.srcDirectory)
         if (err) {
           return callback(-6); // FILE_NOT_FOUND
         }
+        console.log(content)
         return callback(content);
       });
 
@@ -241,7 +250,9 @@ ipcMain.on(ipcMessages.UPDATE_RESTART_AND_INSTALL, e => {
 });
 
 ipcMain.on(ipcMessages.UPDATE_CHECK, e => {
-  autoUpdater.checkForUpdates();
+  if (process.env.NODE_ENV !== 'dev') {
+    autoUpdater.checkForUpdates();
+  }
 });
 
 ipcMain.on('extension-get-all-tabs', e => {
@@ -381,4 +392,12 @@ ipcMain.on('extension-add-listener-webRequest-onErrorOccurred', () => {
 
 ipcMain.on('extension-remove-listener-webRequest-onBeforeRequest', e => {
   session.defaultSession.webRequest.onBeforeRequest({}, null);
+});
+
+ipcMain.on('extension-tabs-insertCSS', (e, tabId, details) => {
+  mainWindow.webContents.send('extension-tabs-insertCSS', tabId, details, e.sender.id);
+});
+
+ipcMain.on('extension-tabs-executeScript', (e, tabId, details) => {
+  mainWindow.webContents.send('extension-tabs-executeScript', tabId, details, e.sender.id);
 });
