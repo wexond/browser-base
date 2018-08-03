@@ -20,6 +20,7 @@ const runContentScript = (url, code) => {
 
   const wrapper = `((wexond) => {
     var chrome = wexond;
+    var browser = wexond;
     ${code}
   });`;
 
