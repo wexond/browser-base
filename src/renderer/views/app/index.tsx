@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync } from 'fs';
-import { ipcRenderer, remote, webContents } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
@@ -135,5 +135,52 @@ ipcRenderer.on(
   'extension-emit-event-webRequest-onBeforeRequest',
   (e: Electron.IpcMessageEvent, details: any) => {
     emitEvent('webRequest', 'onBeforeRequest', details);
+  },
+);
+
+ipcRenderer.on(
+  'extension-emit-event-webRequest-onHeadersReceived',
+  (e: Electron.IpcMessageEvent, details: any) => {
+    emitEvent('webRequest', 'onHeadersReceived', details);
+  },
+);
+
+ipcRenderer.on(
+  'extension-emit-event-webRequest-onBeforeSendHeaders',
+  (e: Electron.IpcMessageEvent, details: any) => {
+    emitEvent('webRequest', 'onBeforeSendHeaders', details);
+  },
+);
+
+interface InsertCodeDetails {
+  code?: string;
+  file?: string;
+  allFrames?: boolean;
+  frameId?: number;
+  matchAboutBlank?: boolean;
+  runAt?: 'document_start' | 'document_end' | 'document_idle';
+  cssOrigin?: 'author' | 'user';
+}
+
+ipcRenderer.on(
+  'extension-tabs-insertCSS',
+  (e: Electron.IpcMessageEvent, tabId: number, details: InsertCodeDetails, sender: number) => {
+    const webContents = remote.webContents.fromId(sender);
+    const page = store.getPageById(tabId);
+
+    page.webview.insertCSS(details.code);
+    webContents.send('extension-tabs-insertCSS');
+  },
+);
+
+ipcRenderer.on(
+  'extension-tabs-executeScript',
+  (e: Electron.IpcMessageEvent, tabId: number, details: InsertCodeDetails, sender: number) => {
+    const webContents = remote.webContents.fromId(sender);
+    const page = store.getPageById(tabId);
+
+    page.webview.executeJavaScript(details.code, false, (result: any) => {
+      webContents.send('extension-tabs-executeScript', result);
+    });
   },
 );
