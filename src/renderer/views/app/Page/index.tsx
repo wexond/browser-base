@@ -86,10 +86,10 @@ export default class extends React.Component<{ page: Page }, {}> {
 
     const backgroundPages = remote.getGlobal('backgroundPages');
 
-    for (const backgroundPage of backgroundPages) {
-      const webContents = remote.webContents.fromId(backgroundPage.webContentsId);
+    Object.keys(backgroundPages).forEach((key) => {
+      const webContents = remote.webContents.fromId(backgroundPages[key].webContentsId);
       webContents.send(`extension-emit-event-${scope}-${name}`, ...data);
-    }
+    });
   };
 
   public onIpcMessage = (e: Electron.IpcMessageEvent, args: any[]) => {

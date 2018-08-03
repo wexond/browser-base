@@ -127,20 +127,18 @@ const getAPI = manifest => {
 
       onAlarm: new IpcEvent('alarms', 'onAlarm'), // TODO
     },
+
+    // https://developer.chrome.com/extensions/runtime
     runtime: {
       id: manifest.extensionId,
-
       lastError: undefined,
 
       onConnect: new IpcEvent('runtime', 'onConnect'),
 
-      reload: pageId => {},
-      connect: (extensionId, connectInfo) => {
-        connectInfo = {
-          name: '',
-          includeTlsChannelId: false,
-        };
+      reload: () => {
+        ipcRenderer.send('extension-runtime-reload', manifest.extensionId);
       },
+      connect: (extensionId, connectInfo) => {},
       getManifest: () => manifest,
       getURL: path =>
         format({
