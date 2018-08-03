@@ -1,22 +1,137 @@
 const {
-  app, BrowserWindow, ipcMain, protocol,
+  app, BrowserWindow, ipcMain, webContents,
 } = require('electron');
-const path = require('path');
+const {
+  readdirSync, readFileSync, statSync, readFile, writeFileSync,
+} = require('fs');
+const { resolve, join } = require('path');
+const { format, parse } = require('url');
 const { platform, homedir } = require('os');
 const wpm = require('wexond-package-manager');
 const { autoUpdater } = require('electron-updater');
 
-const ipcMessages = require('../shared/defaults/ipc-messages');
+const ipcMessages = require('../renderer/defaults/ipc-messages');
 
-const PROTOCOL = 'wexond';
-const URL_WHITELIST = ['newtab'];
+app.setPath('userData', resolve(homedir(), '.wexond'));
 
-app.setPath('userData', path.resolve(homedir(), '.wexond'));
+const getPath = (...relativePaths) =>
+  resolve(app.getPath('userData'), ...relativePaths).replace(/\\/g, '/');
+
+global.extensions = [];
+global.backgroundPages = [];
+
+const windowDataPath = getPath('window-data.json');
+const extensionsPath = getPath('extensions');
+
+const startBackgroundPage = manifest => {
+  if (manifest.background) {
+    let html = Buffer.from('');
+    let name;
+
+    if (manifest.background.page) {
+      name = manifest.background.page;
+      html = readFileSync(resolve(manifest.srcDirectory, manifest.background.page));
+    } else {
+      name = '_generated_background_page.html';
+      if (manifest.background.scripts) {
+        const scripts = manifest.background.scripts
+          .map(script => `<script src="${script}"></script>`)
+          .join('');
+        html = Buffer.from(`<html><body>${scripts}</body></html>`, 'utf8');
+      }
+    }
+
+    const contents = webContents.create({
+      partition: 'persist:__wexond_extension',
+      isBackgroundPage: true,
+      commandLineSwitches: ['--background-page'],
+      preload: resolve(__dirname, '../preloads/extension-preload.js'),
+    });
+
+    global.backgroundPages[manifest.extensionId] = { html, name, webContentsId: contents.id };
+
+    contents.loadURL(
+      format({
+        protocol: 'wexond-extension',
+        slashes: true,
+        hostname: manifest.extensionId,
+        pathname: name,
+      }),
+    );
+  }
+};
+
+const loadExtensions = () => {
+  const files = readdirSync(extensionsPath);
+
+  for (const dir of files) {
+    const extensionPath = resolve(extensionsPath, dir);
+    const stats = statSync(extensionPath);
+
+    if (stats.isDirectory()) {
+      const manifestPath = resolve(extensionPath, 'manifest.json');
+      const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+
+      extensions.push(manifest);
+
+      startBackgroundPage(manifest);
+    }
+  }
+};
+
+app.on('session-created', sess => {
+  sess.protocol.registerBufferProtocol(
+    'wexond-extension',
+    (request, callback) => {
+      const parsed = parse(request.url);
+      if (!parsed.hostname || !parsed.path) {
+        return callback();
+      }
+
+      const manifest = extensions[parsed.hostname];
+      if (!manifest) {
+        return callback();
+      }
+
+      const page = backgroundPages[parsed.hostname];
+      if (page && parsed.path === `/${page.name}`) {
+        return callback({
+          mimeType: 'text/html',
+          data: page.html,
+        });
+      }
+
+      readFile(resolve(manifest.srcDirectory, parsed.path), (err, content) => {
+        if (err) {
+          return callback(-6); // FILE_NOT_FOUND
+        }
+        return callback(content);
+      });
+
+      return null;
+    },
+    error => {
+      if (error) {
+        console.error(`Unable to register wexond-extension protocol: ${error}`);
+      }
+    },
+  );
+});
 
 let mainWindow;
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({
+  let data = null;
+  let windowBounds = {};
+
+  try {
+    data = readFileSync(windowDataPath);
+    data = JSON.parse(data);
+  } catch (e) {
+    console.error(e);
+  }
+
+  const windowData = {
     frame: process.env.NODE_ENV === 'dev',
     minWidth: 300,
     minHeight: 430,
@@ -25,16 +140,49 @@ const createWindow = () => {
     show: false,
     titleBarStyle: 'hiddenInset',
     webPreferences: {
-      preload: path.resolve(__dirname, 'preloads/index.js'),
+      preload: resolve(__dirname, 'preload.js'),
       plugins: true,
     },
+  };
+
+  if (data != null && data.bounds != null) {
+    Object.assign(windowData, data.bounds);
+  }
+
+  mainWindow = new BrowserWindow(windowData);
+
+  windowBounds = mainWindow.getBounds();
+
+  mainWindow.on('resize', () => {
+    if (!mainWindow.isMaximized()) {
+      windowBounds = mainWindow.getBounds();
+    }
+  });
+
+  mainWindow.on('move', () => {
+    if (!mainWindow.isMaximized()) {
+      windowBounds = mainWindow.getBounds();
+    }
+  });
+
+  if (data != null && data.maximized) {
+    mainWindow.maximize();
+  }
+
+  mainWindow.on('close', () => {
+    data = {
+      maximized: mainWindow.isMaximized(),
+      bounds: windowBounds,
+    };
+
+    writeFileSync(windowDataPath, JSON.stringify(data));
   });
 
   if (process.env.NODE_ENV === 'dev') {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
     mainWindow.loadURL('http://localhost:8080/app.html');
   } else {
-    mainWindow.loadURL(path.join('file://', __dirname, '../../static/pages/app.html'));
+    mainWindow.loadURL(join('file://', __dirname, '../../static/pages/app.html'));
   }
 
   process.on('uncaughtException', error => {
@@ -58,6 +206,8 @@ const createWindow = () => {
   });
 
   mainWindow.webContents.addListener('will-navigate', e => e.preventDefault());
+
+  loadExtensions();
 };
 
 app.on('activate', () => {
@@ -68,32 +218,7 @@ app.on('activate', () => {
   }
 });
 
-protocol.registerStandardSchemes([PROTOCOL]);
 app.on('ready', () => {
-  protocol.registerFileProtocol(
-    PROTOCOL,
-    (request, callback) => {
-      const url = request.url.substr(PROTOCOL.length + 3);
-
-      for (const item of URL_WHITELIST) {
-        if (url.startsWith(item)) {
-          callback({
-            path: path.resolve(__dirname, '../../static/pages', `${url.slice(0, -1)}.html`),
-          });
-          break;
-        }
-      }
-
-      if (url.startsWith('build')) {
-        callback({ path: path.resolve(__dirname, '../../', `${url}`) });
-      }
-    },
-    error => {
-      // eslint-disable-next-line
-      if (error) console.error('Failed to register protocol');
-    },
-  );
-
   createWindow();
 });
 
@@ -117,4 +242,12 @@ ipcMain.on(ipcMessages.UPDATE_RESTART_AND_INSTALL, e => {
 
 ipcMain.on(ipcMessages.UPDATE_CHECK, e => {
   autoUpdater.checkForUpdates();
+});
+
+ipcMain.on('extension-get-all-tabs', e => {
+  mainWindow.webContents.send('extension-get-all-tabs', e.sender.id);
+});
+
+ipcMain.on('extension-create-tab', (e, data) => {
+  mainWindow.webContents.send('extension-create-tab', data, e.sender.id);
 });

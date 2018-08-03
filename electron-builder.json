@@ -4,15 +4,9 @@
   "asar": true,
   "directories": {
     "output": "dist",
-    "buildResources": "static/icons"
+    "buildResources": "static/app-icons"
   },
-  "publish": [
-    {
-      "provider": "github",
-      "owner": "wexond",
-      "repo": "wexond"
-    }
-  ],
+  "publish": "github",
   "linux": {
     "category": "Network",
     "target": [

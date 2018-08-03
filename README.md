@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="static/icons/icon.png" width="256">
+  <img src="static/app-icons/icon.png" width="256">
 </p>
 
 <div align="center">
@@ -40,6 +40,8 @@ We still have a lot of things to do, to make Wexond better and better. This is j
 We really appreciate any changes and improvements, so feel free to open pull requests! If you have found any issues, please report them. This would really help us making the browser even better!
 
 If you want to contribute, check our [Contributing guidelines](CONTRIBUTING.md) and [Code Of Conduct](CODE_OF_CONDUCT.md).
+
+# [Supported WebExtensions APIs](https://github.com/wexond/wexond/issues/110)
 
 ## Development
 
