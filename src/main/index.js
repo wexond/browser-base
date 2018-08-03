@@ -1,5 +1,5 @@
 const {
-  app, BrowserWindow, ipcMain, webContents,
+  app, BrowserWindow, ipcMain, webContents, session,
 } = require('electron');
 const {
   readdirSync, readFileSync, statSync, readFile, writeFileSync,
@@ -50,6 +50,8 @@ const startBackgroundPage = manifest => {
 
     global.backgroundPages[manifest.extensionId] = { html, name, webContentsId: contents.id };
 
+    contents.openDevTools({ mode: 'detach' });
+
     contents.loadURL(
       format({
         protocol: 'wexond-extension',
@@ -58,6 +60,8 @@ const startBackgroundPage = manifest => {
         pathname: name,
       }),
     );
+
+    contents.send('init-background-page', manifest);
   }
 };
 
@@ -84,16 +88,19 @@ app.on('session-created', sess => {
     'wexond-extension',
     (request, callback) => {
       const parsed = parse(request.url);
+
       if (!parsed.hostname || !parsed.path) {
         return callback();
       }
 
-      const manifest = extensions[parsed.hostname];
+      const manifest = extensions.find(x => x.extensionId === parsed.hostname);
+
       if (!manifest) {
         return callback();
       }
 
       const page = backgroundPages[parsed.hostname];
+
       if (page && parsed.path === `/${page.name}`) {
         return callback({
           mimeType: 'text/html',
@@ -101,10 +108,12 @@ app.on('session-created', sess => {
         });
       }
 
-      readFile(resolve(manifest.srcDirectory, parsed.path), (err, content) => {
+      readFile(join(manifest.srcDirectory, parsed.path), (err, content) => {
+        console.log(manifest.srcDirectory)
         if (err) {
           return callback(-6); // FILE_NOT_FOUND
         }
+        console.log(content)
         return callback(content);
       });
 
@@ -241,7 +250,9 @@ ipcMain.on(ipcMessages.UPDATE_RESTART_AND_INSTALL, e => {
 });
 
 ipcMain.on(ipcMessages.UPDATE_CHECK, e => {
-  autoUpdater.checkForUpdates();
+  if (process.env.NODE_ENV !== 'dev') {
+    autoUpdater.checkForUpdates();
+  }
 });
 
 ipcMain.on('extension-get-all-tabs', e => {
@@ -250,4 +261,143 @@ ipcMain.on('extension-get-all-tabs', e => {
 
 ipcMain.on('extension-create-tab', (e, data) => {
   mainWindow.webContents.send('extension-create-tab', data, e.sender.id);
+});
+
+const a = (details, callback) => {
+  if (details.resourceType === 'mainFrame') {
+    details.type = 'main_frame';
+  } else if (details.resourceType === 'subFrame') {
+    details.type = 'sub_frame';
+  } else if (details.resourceType === 'cspReport') {
+    details.type = 'csp_report';
+  } else {
+    details.type = details.resourceType;
+  }
+
+  if (details.requestHeaders) {
+    const requestHeaders = [];
+    Object.keys(details.requestHeaders).forEach(k => {
+      requestHeaders.push({ name: k, value: details.requestHeaders[k] });
+    });
+    details.requestHeaders = requestHeaders;
+  }
+
+  ipcMain.once('extension-response-webRequest-onBeforeRequest', (e, request) => {
+    if (request) {
+      if (request.cancel) {
+        callback({ cancel: true });
+      } else if (request.requestHeaders) {
+        const requestHeaders = {};
+        request.requestHeaders.forEach(requestHeader => {
+          requestHeaders[requestHeader.name] = requestHeader.value;
+        });
+        callback({ requestHeaders, cancel: false });
+      } else if (request.redirectURL) {
+        callback({ redirectURL: request.redirectURL, cancel: false });
+      }
+    } else {
+      callback({ cancel: false });
+    }
+  });
+
+  mainWindow.webContents.send('extension-emit-event-webRequest-onBeforeRequest', details);
+};
+
+const b = (details, name) => {
+  details.type = details.resourceType;
+
+  if (details.requestHeaders) {
+    const requestHeaders = [];
+    Object.keys(details.requestHeaders).forEach(k => {
+      requestHeaders.push({ name: k, value: details.requestHeaders[k] });
+    });
+    details.requestHeaders = requestHeaders;
+  }
+  if (details.responseHeaders) {
+    const responseHeaders = [];
+    Object.keys(details.responseHeaders).forEach(k => {
+      responseHeaders.push({ name: k, value: details.responseHeaders[k][0] });
+    });
+    details.responseHeaders = responseHeaders;
+  }
+
+  mainWindow.webContents.send(`extension-emit-event-webRequest-${name}`, details);
+};
+
+const c = (details, callback) => {
+  details.type = details.resourceType;
+
+  if (details.responseHeaders) {
+    const responseHeaders = [];
+    Object.keys(details.responseHeaders).forEach(k => {
+      responseHeaders.push({ name: k, value: details.responseHeaders[k][0] });
+    });
+    details.responseHeaders = responseHeaders;
+  }
+
+  ipcMain.once('extension-response-webRequest-onHeadersReceived', (event, response) => {
+    if (response) {
+      if (response.cancel) {
+        callback({ cancel: true });
+      } else if (response.responseHeaders) {
+        const responseHeaders = {};
+        response.responseHeaders.forEach(responseHeader => {
+          responseHeaders[responseHeader.name] = responseHeader.value;
+        });
+        if (response.statusLine) {
+          callback({ responseHeaders, statusLine: response.statusLine, cancel: false });
+        } else {
+          callback({ responseHeaders, statusLine: details.statusLine, cancel: false });
+        }
+      }
+    } else {
+      callback({ cancel: false });
+    }
+  });
+
+  mainWindow.webContents.send('extension-emit-event-webRequest-onHeadersReceived', details);
+};
+
+ipcMain.on('extension-add-listener-webRequest-onBeforeRequest', () => {
+  session.defaultSession.webRequest.onBeforeRequest(a);
+});
+
+ipcMain.on('extension-add-listener-webRequest-onBeforeSendHeaders', () => {
+  session.defaultSession.webRequest.onBeforeSendHeaders(a);
+});
+
+ipcMain.on('extension-add-listener-webRequest-onHeadersReceived', () => {
+  session.defaultSession.webRequest.onHeadersReceived(c);
+});
+
+ipcMain.on('extension-add-listener-webRequest-onSendHeaders', () => {
+  session.defaultSession.webRequest.onSendHeaders(details => b(details, 'onSendHeaders'));
+});
+
+ipcMain.on('extension-add-listener-webRequest-onResponseStarted', () => {
+  session.defaultSession.webRequest.onResponseStarted(details => b(details, 'onResponseStarted'));
+});
+
+ipcMain.on('extension-add-listener-webRequest-onBeforeRedirect', () => {
+  session.defaultSession.webRequest.onBeforeRedirect(details => b(details, 'onBeforeRedirect'));
+});
+
+ipcMain.on('extension-add-listener-webRequest-onCompleted', () => {
+  session.defaultSession.webRequest.onCompleted(details => b(details, 'onCompleted'));
+});
+
+ipcMain.on('extension-add-listener-webRequest-onErrorOccurred', () => {
+  session.defaultSession.webRequest.onErrorOccurred(details => b(details, 'onErrorOccurred'));
+});
+
+ipcMain.on('extension-remove-listener-webRequest-onBeforeRequest', e => {
+  session.defaultSession.webRequest.onBeforeRequest({}, null);
+});
+
+ipcMain.on('extension-tabs-insertCSS', (e, tabId, details) => {
+  mainWindow.webContents.send('extension-tabs-insertCSS', tabId, details, e.sender.id);
+});
+
+ipcMain.on('extension-tabs-executeScript', (e, tabId, details) => {
+  mainWindow.webContents.send('extension-tabs-executeScript', tabId, details, e.sender.id);
 });
