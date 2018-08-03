@@ -13,6 +13,7 @@ import ipcMessages from '../../defaults/ipc-messages';
 import fonts from '../../defaults/fonts';
 import { BASE_PATH } from '../../constants';
 import { CreateTabProperties, IpcTab } from '../../models/tab';
+import { emitEvent } from '../../utils/extensions';
 
 injectGlobal`
   @font-face {
@@ -127,5 +128,12 @@ ipcRenderer.on(
     });
 
     sender.send('extension-create-tab', tab.getIpcTab());
+  },
+);
+
+ipcRenderer.on(
+  'extension-emit-event-webRequest-onBeforeRequest',
+  (e: Electron.IpcMessageEvent, details: any) => {
+    emitEvent('webRequest', 'onBeforeRequest', details);
   },
 );
