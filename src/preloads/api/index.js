@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const { format } = require('url');
 
 /* eslint no-bitwise: 0 */
 const hashCode = () => {
@@ -28,7 +29,7 @@ class WebRequestEvent {
 
   emit(e, details) {
     this.callbacks.forEach(callback => {
-      ipcRenderer.send(`extension-response-${this.scope}-${this.name}`, callback(details));
+      ipcRenderer.send(`extension-response-${this.scope}-${this.name}`, callback(...details));
     });
   }
 
@@ -88,7 +89,7 @@ class IpcEvent {
   }
 }
 
-const getAPI = () => {
+const getAPI = manifest => {
   // https://developer.chrome.com/extensions
   const api = {
     // https://developer.chrome.com/extensions/webNavigation
@@ -125,6 +126,29 @@ const getAPI = () => {
       clearAll: callback => {}, // TODO
 
       onAlarm: new IpcEvent('alarms', 'onAlarm'), // TODO
+    },
+    runtime: {
+      id: manifest.extensionId,
+
+      lastError: undefined,
+
+      onConnect: new IpcEvent('runtime', 'onConnect'),
+
+      reload: pageId => {},
+      connect: (extensionId, connectInfo) => {
+        connectInfo = {
+          name: '',
+          includeTlsChannelId: false,
+        };
+      },
+      getManifest: () => manifest,
+      getURL: path =>
+        format({
+          protocol: 'wexond-extension',
+          slashes: true,
+          hostname: api.runtime.id,
+          pathname: path,
+        }),
     },
 
     // https://developer.chrome.com/extensions/webRequest
@@ -176,6 +200,20 @@ const getAPI = () => {
             callback(data);
           });
         }
+      },
+      insertCSS: (tabId, details, callback) => {
+        ipcRenderer.send('extension-tabs-insertCSS', tabId, details);
+
+        ipcRenderer.on('extension-tabs-insertCSS', () => {
+          if (callback) callback();
+        });
+      },
+      executeScript: (tabId, details, callback) => {
+        ipcRenderer.send('extension-tabs-executeScript', tabId, details);
+
+        ipcRenderer.on('extension-tabs-executeScript', (e, result) => {
+          if (callback) callback(result);
+        });
       },
 
       onCreated: new IpcEvent('tabs', 'onCreated'),

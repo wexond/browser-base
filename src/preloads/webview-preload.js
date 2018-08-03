@@ -15,8 +15,8 @@ const matchesPattern = pattern => {
   return url.match(regexp);
 };
 
-const runContentScript = (url, code) => {
-  const context = getAPI();
+const runContentScript = (url, code, manifest) => {
+  const context = getAPI(manifest);
 
   const wrapper = `((wexond) => {
     var chrome = wexond;
@@ -52,7 +52,7 @@ const runStylesheet = (url, code) => {
   return compiledWrapper.call(this, code);
 };
 
-const injectContentScript = script => {
+const injectContentScript = (script, manifest) => {
   if (!script.matches.some(matchesPattern)) {
     return;
   }
@@ -61,7 +61,7 @@ const injectContentScript = script => {
 
   if (script.js) {
     script.js.forEach(js => {
-      const fire = runContentScript.bind(window, js.url, js.code);
+      const fire = runContentScript.bind(window, js.url, js.code, manifest);
       if (script.runAt === 'document_start') {
         process.once('document-start', fire);
       } else if (script.runAt === 'document_end') {
@@ -104,7 +104,7 @@ for (const manifest of extensions) {
           runAt: script.run_at || 'document_idle',
         };
 
-        injectContentScript(newScript);
+        injectContentScript(newScript, manifest);
       });
     } catch (readError) {
       console.error('Failed to read content scripts', readError);
