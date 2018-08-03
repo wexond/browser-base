@@ -88,7 +88,9 @@ const injectContentScript = (script, manifest) => {
 
 const extensions = remote.getGlobal('extensions');
 
-for (const manifest of extensions) {
+Object.keys(extensions).forEach(key => {
+  const manifest = extensions[key];
+
   if (manifest.content_scripts) {
     const readArrayOfFiles = relativePath => ({
       url: `wexond-extension://${manifest.extensionId}/${relativePath}`,
@@ -110,4 +112,4 @@ for (const manifest of extensions) {
       console.error('Failed to read content scripts', readError);
     }
   }
-}
+});

@@ -139,8 +139,6 @@ class Store {
 
   public platform = os.platform() as Platforms;
 
-  public extensions: any[] = [];
-
   public mouse = {
     x: 0,
     y: 0,
