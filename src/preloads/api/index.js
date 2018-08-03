@@ -63,6 +63,21 @@ const getAPI = () => {
       setUpdateUrlData: data => {}, // TODO
     },
 
+    runtime: {
+      sendMessage: (extensionId = '', message, options = { includeTlsChannelId: false, toProxyScript: false }) => {
+        const backgroundPages = remote.getGlobal('backgroundPages');
+        const extension = backgroundPages[extensionId];
+
+        if (extension) {
+          const webContents = Electron.remote.webContents.fromId(extension.webContentsId);
+          if (webContents) {
+            webContents.send('extension-runtime-send-message', message, options);
+          }
+        }
+      },
+
+    },
+
     // https://developer.chrome.com/extensions/alarms
     alarms: {
       create: (name, alarmInfo) => {}, // TODO

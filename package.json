@@ -45,7 +45,7 @@
     "babel-loader": "7.1.5",
     "cross-env": "5.2.0",
     "dexie": "2.0.4",
-    "electron": "2.0.5",
+    "electron": "2.0.6",
     "electron-builder": "20.26.0",
     "electron-react-devtools": "0.5.3",
     "eslint": "5.2.0",
