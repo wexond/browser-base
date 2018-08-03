@@ -1,5 +1,58 @@
 const { ipcRenderer } = require('electron');
 
+/* eslint no-bitwise: 0 */
+const hashCode = () => {
+  let hash = 0;
+
+  if (this.length === 0) {
+    return hash;
+  }
+
+  for (let i = 0; i < this.length; i++) {
+    const chr = this.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0;
+  }
+  return hash;
+};
+
+class WebRequestEvent {
+  constructor(scope, name) {
+    this.scope = scope;
+    this.name = name;
+    this.callbacks = [];
+    this.listener = false;
+
+    this.emit = this.emit.bind(this);
+  }
+
+  emit(e, details) {
+    this.callbacks.forEach(callback => {
+      ipcRenderer.send(`extension-response-${this.scope}-${this.name}`, callback(details));
+    });
+  }
+
+  addListener(callback) {
+    this.callbacks.push(callback);
+
+    if (!this.listener) {
+      ipcRenderer.on(`extension-emit-event-${this.scope}-${this.name}`, this.emit);
+      ipcRenderer.send(`extension-add-listener-${this.scope}-${this.name}`);
+      this.listener = true;
+    }
+  }
+
+  removeListener(callback) {
+    this.callbacks = this.callbacks.filter(c => c !== callback);
+
+    if (this.callbacks.length === 0) {
+      ipcRenderer.removeListener(`extension-emit-event-${this.scope}-${this.name}`, this.emit);
+      ipcRenderer.send(`extension-remove-listener-${this.scope}-${this.name}`);
+      this.listener = false;
+    }
+  }
+}
+
 class IpcEvent {
   constructor(scope, name) {
     this.name = name;
@@ -75,7 +128,16 @@ const getAPI = () => {
     },
 
     // https://developer.chrome.com/extensions/webRequest
-    webRequest: {},
+    webRequest: {
+      onBeforeRequest: new WebRequestEvent('webRequest', 'onBeforeRequest'),
+      onBeforeSendHeaders: new WebRequestEvent('webRequest', 'onBeforeSendHeaders'),
+      onHeadersReceived: new WebRequestEvent('webRequest', 'onHeadersReceived'),
+      onSendHeaders: new WebRequestEvent('webRequest', 'onSendHeaders'),
+      onResponseStarted: new WebRequestEvent('webRequest', 'onResponseStarted'),
+      onBeforeRedirect: new WebRequestEvent('webRequest', 'onBeforeRedirect'),
+      onCompleted: new WebRequestEvent('webRequest', 'onCompleted'),
+      onErrorOccurred: new WebRequestEvent('webRequest', 'onErrorOccurred'),
+    },
 
     // https://developer.chrome.com/extensions/tabs
     tabs: {
