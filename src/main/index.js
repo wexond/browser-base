@@ -17,8 +17,8 @@ app.setPath('userData', resolve(homedir(), '.wexond'));
 const getPath = (...relativePaths) =>
   resolve(app.getPath('userData'), ...relativePaths).replace(/\\/g, '/');
 
-global.extensions = [];
-global.backgroundPages = [];
+global.extensions = {};
+global.backgroundPages = {};
 
 const windowDataPath = getPath('window-data.json');
 const extensionsPath = getPath('extensions');
@@ -60,8 +60,6 @@ const startBackgroundPage = manifest => {
         pathname: name,
       }),
     );
-
-    contents.send('init-background-page', manifest);
   }
 };
 
@@ -76,7 +74,7 @@ const loadExtensions = () => {
       const manifestPath = resolve(extensionPath, 'manifest.json');
       const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
 
-      extensions.push(manifest);
+      extensions[manifest.extensionId] = manifest;
 
       startBackgroundPage(manifest);
     }
@@ -93,7 +91,7 @@ app.on('session-created', sess => {
         return callback();
       }
 
-      const manifest = extensions.find(x => x.extensionId === parsed.hostname);
+      const manifest = extensions[parsed.hostname];
 
       if (!manifest) {
         return callback();
@@ -109,11 +107,9 @@ app.on('session-created', sess => {
       }
 
       readFile(join(manifest.srcDirectory, parsed.path), (err, content) => {
-        console.log(manifest.srcDirectory)
         if (err) {
           return callback(-6); // FILE_NOT_FOUND
         }
-        console.log(content)
         return callback(content);
       });
 
@@ -400,4 +396,11 @@ ipcMain.on('extension-tabs-insertCSS', (e, tabId, details) => {
 
 ipcMain.on('extension-tabs-executeScript', (e, tabId, details) => {
   mainWindow.webContents.send('extension-tabs-executeScript', tabId, details, e.sender.id);
+});
+
+ipcMain.on('extension-runtime-reload', (e, extensionId) => {
+  if (global.backgroundPages[extensionId]) {
+    const contents = webContents.fromId(e.sender.id);
+    contents.reload();
+  }
 });

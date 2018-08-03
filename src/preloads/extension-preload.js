@@ -7,7 +7,7 @@ process.once('loaded', () => {
   const extensions = remote.getGlobal('extensions');
   const extensionId = parse(global.location.href).hostname;
 
-  const api = getAPI(extensions.find(x => x.extensionId === extensionId));
+  const api = getAPI(extensions[extensionId]);
   global.wexond = api;
   global.chrome = api;
   global.browser = api;
