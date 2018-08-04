@@ -11,7 +11,7 @@
     "sass"
   ],
   "homepage": "https://github.com/Nersent/wexond#readme",
-  "main": "src/main/index.js",
+  "main": "main.js",
   "author": {
     "name": "Nersent",
     "email": "sentialx@gmail.com"
@@ -24,18 +24,20 @@
     "url": "https://github.com/Nersent/wexond/issues"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=dev electron .",
-    "watch": "webpack-dev-server --config webpack.config.dev.js --mode development",
-    "postinstall": "npm run electron-rebuild",
-    "electron-rebuild": "electron-builder install-app-deps",
+    "start": "cross-env ENV=dev electron .",
+    "watch": "webpack-dev-server --config webpack.config.renderer.dev.js",
+    "watch-main": "webpack --config webpack.config.main.prod.js --watch --mode development",
+    "build-renderer": "webpack --config webpack.config.renderer.prod.js",
+    "build-main": "webpack --config webpack.config.main.prod.js",
+    "build": "npm run build-main && npm run build-renderer",
     "compile-win32": "npm run build && electron-builder -w -p always",
     "compile-darwin": "npm run build && electron-builder -m -p always",
     "compile-linux": "npm run build && electron-builder -l -p always",
-    "build": "webpack-cli --config webpack.config.prod.js --mode production",
     "lint": "eslint --ext .tsx --ext .ts --ext .js src/",
     "lint-fix": "prettier-eslint --write \"src/**/*.ts*\""
   },
   "devDependencies": {
+    "@types/chrome": "0.0.71",
     "@types/gsap": "1.19.2",
     "@types/node": "10.5.4",
     "@types/react": "16.4.7",
@@ -63,13 +65,14 @@
     "react": "16.4.1",
     "react-dom": "16.4.1",
     "react-hot-loader": "4.3.4",
+    "styled-components": "3.3.3",
     "typescript": "3.0.1",
     "typescript-eslint-parser": "17.0.1",
     "url-loader": "1.0.1",
     "webpack": "4.16.3",
     "webpack-cli": "3.1.0",
     "webpack-dev-server": "3.1.5",
-    "styled-components": "3.3.3"
+    "webpack-merge": "4.1.4"
   },
   "dependencies": {
     "electron-updater": "3.0.3",

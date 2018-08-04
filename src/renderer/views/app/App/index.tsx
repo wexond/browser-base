@@ -193,7 +193,7 @@ class App extends React.Component {
 
   public onOpenLinkInNewTabClick = () => {
     const { linkURL } = store.webviewContextMenuParams;
-    store.getCurrentWorkspace().addTab({ url: linkURL, active: false});
+    store.getCurrentWorkspace().addTab({ url: linkURL, active: false });
   };
 
   public onCopyLinkAddressClick = () => {
@@ -204,7 +204,7 @@ class App extends React.Component {
 
   public onOpenImageInNewTabClick = () => {
     const { srcURL } = store.webviewContextMenuParams;
-    store.getCurrentWorkspace().addTab({ url: srcURL, active: false});
+    store.getCurrentWorkspace().addTab({ url: srcURL, active: false });
   };
 
   public onPrintClick = () => {

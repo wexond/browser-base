@@ -29,7 +29,8 @@ class WebRequestEvent {
 
   emit(e, details) {
     this.callbacks.forEach(callback => {
-      ipcRenderer.send(`extension-response-${this.scope}-${this.name}`, callback(...details));
+      console.log(this.name, details);
+      ipcRenderer.send(`api-response-${this.scope}-${this.name}`, callback(details));
     });
   }
 
@@ -37,8 +38,8 @@ class WebRequestEvent {
     this.callbacks.push(callback);
 
     if (!this.listener) {
-      ipcRenderer.on(`extension-emit-event-${this.scope}-${this.name}`, this.emit);
-      ipcRenderer.send(`extension-add-listener-${this.scope}-${this.name}`);
+      ipcRenderer.on(`api-emit-event-${this.scope}-${this.name}`, this.emit);
+      ipcRenderer.send(`api-add-listener-${this.scope}-${this.name}`);
       this.listener = true;
     }
   }
@@ -47,8 +48,8 @@ class WebRequestEvent {
     this.callbacks = this.callbacks.filter(c => c !== callback);
 
     if (this.callbacks.length === 0) {
-      ipcRenderer.removeListener(`extension-emit-event-${this.scope}-${this.name}`, this.emit);
-      ipcRenderer.send(`extension-remove-listener-${this.scope}-${this.name}`);
+      ipcRenderer.removeListener(`api-emit-event-${this.scope}-${this.name}`, this.emit);
+      ipcRenderer.send(`api-remove-listener-${this.scope}-${this.name}`);
       this.listener = false;
     }
   }
@@ -74,7 +75,7 @@ class IpcEvent {
     this.callbacks.push(callback);
 
     if (!this.listener) {
-      ipcRenderer.on(`extension-emit-event-${this.scope}-${this.name}`, this.emit);
+      ipcRenderer.on(`api-emit-event-${this.scope}-${this.name}`, this.emit);
       this.listener = true;
     }
   }
@@ -83,7 +84,7 @@ class IpcEvent {
     this.callbacks = this.callbacks.filter(x => x !== callback);
 
     if (this.callbacks.length === 0) {
-      ipcRenderer.removeListener(`extension-emit-event-${this.scope}-${this.name}`, this.emit);
+      ipcRenderer.removeListener(`api-emit-event-${this.scope}-${this.name}`, this.emit);
       this.listener = false;
     }
   }
@@ -136,7 +137,7 @@ const getAPI = manifest => {
       onConnect: new IpcEvent('runtime', 'onConnect'),
 
       reload: () => {
-        ipcRenderer.send('extension-runtime-reload', manifest.extensionId);
+        ipcRenderer.send('api-runtime-reload', manifest.extensionId);
       },
       connect: (extensionId, connectInfo) => {},
       getManifest: () => manifest,
@@ -169,16 +170,16 @@ const getAPI = manifest => {
         });
       },
       getCurrent: callback => {
-        ipcRenderer.sendToHost('extension-get-current-tab');
+        ipcRenderer.sendToHost('api-tabs-getCurrent');
 
-        ipcRenderer.once('extension-get-current-tab', (e, data) => {
+        ipcRenderer.once('api-tabs-getCurrent', (e, data) => {
           callback(data);
         });
       },
       query: (queryInfo, callback) => {
-        ipcRenderer.send('extension-get-all-tabs');
+        ipcRenderer.send('api-tabs-query');
 
-        ipcRenderer.once('extension-get-all-tabs', (e, data) => {
+        ipcRenderer.once('api-tabs-query', (e, data) => {
           callback(
             data.filter(tab => {
               for (const key in queryInfo) {
@@ -191,25 +192,25 @@ const getAPI = manifest => {
         });
       },
       create: (createProperties, callback = null) => {
-        ipcRenderer.send('extension-create-tab', createProperties);
+        ipcRenderer.send('api-tabs-create', createProperties);
 
         if (callback) {
-          ipcRenderer.once('extension-create-tab', (e, data) => {
+          ipcRenderer.once('api-tabs-create', (e, data) => {
             callback(data);
           });
         }
       },
       insertCSS: (tabId, details, callback) => {
-        ipcRenderer.send('extension-tabs-insertCSS', tabId, details);
+        ipcRenderer.send('api-tabs-insertCSS', tabId, details);
 
-        ipcRenderer.on('extension-tabs-insertCSS', () => {
+        ipcRenderer.on('api-tabs-insertCSS', () => {
           if (callback) callback();
         });
       },
       executeScript: (tabId, details, callback) => {
-        ipcRenderer.send('extension-tabs-executeScript', tabId, details);
+        ipcRenderer.send('api-tabs-executeScript', tabId, details);
 
-        ipcRenderer.on('extension-tabs-executeScript', (e, result) => {
+        ipcRenderer.on('api-tabs-executeScript', (e, result) => {
           if (callback) callback(result);
         });
       },
@@ -224,6 +225,22 @@ const getAPI = manifest => {
       onRemoved: new IpcEvent('tabs', 'onRemoved'), // TODO
       onReplaced: new IpcEvent('tabs', 'onReplaced'), // TODO
       onZoomChange: new IpcEvent('tabs', 'onZoomChange'), // TODO
+    },
+    storage: {
+      local: {
+        get: () => {},
+      },
+      sync: {},
+      onChanged: {},
+    },
+    i18n: {
+      getMessage: () => {},
+    },
+    windows: {},
+    browserAction: {
+      onClicked: {
+        addListener: () => {},
+      },
     },
   };
   return api;
