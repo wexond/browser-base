@@ -59,6 +59,8 @@ export const createWindow = () => {
     writeFileSync(windowDataPath, JSON.stringify(windowState));
   });
 
+  window.webContents.openDevTools({ mode: 'detach' });
+
   if (process.env.ENV === 'dev') {
     window.webContents.openDevTools({ mode: 'detach' });
     window.loadURL('http://localhost:8080/app.html');
