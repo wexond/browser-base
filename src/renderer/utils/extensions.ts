@@ -6,12 +6,12 @@ export const emitEvent = (scope: string, name: string, ...data: any[]) => {
 
   for (const page of store.pages) {
     if (page.webview && page.webview.getWebContents()) {
-      page.webview.send(`extension-emit-event-${scope}-${name}`, data);
+      page.webview.send(`api-emit-event-${scope}-${name}`, data);
     }
   }
 
   Object.keys(backgroundPages).forEach(key => {
     const webContents = remote.webContents.fromId(backgroundPages[key].webContentsId);
-    webContents.send(`extension-emit-event-${scope}-${name}`, ...data);
+    webContents.send(`api-emit-event-${scope}-${name}`, ...data);
   });
 };

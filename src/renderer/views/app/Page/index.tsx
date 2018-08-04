@@ -82,19 +82,19 @@ export default class extends React.Component<{ page: Page }, {}> {
   }
 
   public emitEvent = (scope: string, name: string, ...data: any[]) => {
-    this.webview.getWebContents().send(`extension-emit-event-${scope}-${name}`, ...data);
+    this.webview.getWebContents().send(`api-emit-event-${scope}-${name}`, ...data);
 
     const backgroundPages = remote.getGlobal('backgroundPages');
 
     Object.keys(backgroundPages).forEach((key) => {
       const webContents = remote.webContents.fromId(backgroundPages[key].webContentsId);
-      webContents.send(`extension-emit-event-${scope}-${name}`, ...data);
+      webContents.send(`api-emit-event-${scope}-${name}`, ...data);
     });
   };
 
   public onIpcMessage = (e: Electron.IpcMessageEvent, args: any[]) => {
-    if (e.channel === 'extension-get-current-tab') {
-      this.webview.getWebContents().send('extension-get-current-tab', this.tab.getIpcTab());
+    if (e.channel === 'api-tabs-getCurrent') {
+      this.webview.getWebContents().send('api-tabs-getCurrent', this.tab.getIpcTab());
     }
   };
 

@@ -8,10 +8,10 @@ function loadScripts(scripts) {
 
 const loadContent = name => {
   document.addEventListener('DOMContentLoaded', () => {
-    if (process.env.NODE_ENV === 'dev') {
-      loadScripts([`http://localhost:8080/${name}.bundle.js`]);
+    if (process.env.ENV === 'dev') {
+      loadScripts([`http://localhost:8080/${name}.js`]);
     } else {
-      loadScripts([`file:///${__dirname}/../../../build/${name}.bundle.js`]);
+      loadScripts([`file:///${__dirname}/../../../build/${name}.js`]);
     }
   });
 };
