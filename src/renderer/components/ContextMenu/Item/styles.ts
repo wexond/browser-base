@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import typography from '../../../mixins/typography';
-import userSelection from '../../../mixins/user-selection';
-import opacity from '../../../defaults/opacity';
+import { opacity } from '../../../../defaults';
+import { noUserSelect, robotoRegular } from '../../../mixins';
 
 export interface MenuItemProps {
   visible: boolean;
@@ -36,8 +35,8 @@ export const Title = styled.div`
   left: 16px;
   margin-right: 16px;
 
-  ${typography.robotoRegular()};
-  ${userSelection.noUserSelect()};
+  ${robotoRegular()};
+  ${noUserSelect()};
   opacity: ${({ disabled }: TitleProps) =>
     (disabled ? opacity.light.disabledText : opacity.light.primaryText)};
   font-size: ${({ dense }) => (dense ? 13 : 15)}px;

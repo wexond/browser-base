@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { center } from '../../../mixins/images';
-import icons from '../../../defaults/icons';
+import { icons } from '../../../../defaults';
+import { centerImage } from '../../../mixins';
 
 export const Content = styled.div`
   max-width: 640px;
@@ -18,7 +18,7 @@ export const Logo = styled.div`
   margin-top: 32px;
   background-image: url(${icons.wexond});
 
-  ${center('100%', 'auto')};
+  ${centerImage('100%', 'auto')};
 `;
 
 export const Card = styled.div`

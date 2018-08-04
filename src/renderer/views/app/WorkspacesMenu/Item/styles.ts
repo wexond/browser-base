@@ -1,11 +1,9 @@
 import styled, { css } from 'styled-components';
-import shadows from '../../../../mixins/shadows';
-import images from '../../../../mixins/images';
-import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '../../../../constants';
-import colors from '../../../../defaults/colors';
-import typography from '../../../../mixins/typography';
-import opacity from '../../../../defaults/opacity';
-import icons from '../../../../defaults/icons';
+import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '../../../../../constants';
+import {
+  shadows, centerImage, subtitle2, robotoRegular,
+} from '../../../../mixins';
+import { icons, colors, opacity } from '../../../../../defaults';
 
 export const Root = styled.div`
   display: flex;
@@ -38,7 +36,7 @@ export const DeleteIcon = styled.div`
   opacity: 0;
   transition: 0.2s opacity;
 
-  ${images.center('16px', 'auto')};
+  ${centerImage('16px', 'auto')};
 `;
 
 export const IconsContainer = styled.div`
@@ -68,7 +66,7 @@ export const Icon = styled.div`
   display: flex;
   margin: 4px;
 
-  ${images.center('100%', 'auto')};
+  ${centerImage('100%', 'auto')};
   background-image: url(${({ src }: { src: string }) => src});
 `;
 
@@ -82,7 +80,7 @@ export const Label = styled.div`
   padding: 4px;
   border-radius: 4px;
   cursor: text;
-  ${typography.subtitle2()};
+  ${subtitle2()};
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.12);
@@ -110,7 +108,7 @@ export const Input = styled.input`
   will-change: opacity;
   transition: 0.2s opacity, 0.2s z-index;
 
-  ${typography.robotoRegular()};
+  ${robotoRegular()};
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};

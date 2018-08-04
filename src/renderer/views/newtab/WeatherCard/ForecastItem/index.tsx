@@ -3,7 +3,7 @@ import React from 'react';
 import {
   StyledForecastItem, InfoContainer, WeatherIcon, TempContainer, Temp,
 } from './styles';
-import WeatherWeeklyItem from '../../../../models/weather-weekly-item';
+import { WeatherWeeklyItem } from '../../../../../interfaces';
 
 export interface Props {
   data: WeatherWeeklyItem;
@@ -24,7 +24,7 @@ export default class ForecastItem extends React.Component<Props, {}> {
               {data.dayTemp}
               &deg;
             </Temp>
-            <Temp night>
+            <Temp>
               /{data.nightTemp}
               &deg;
             </Temp>

@@ -3,7 +3,7 @@ import React from 'react';
 import { StyledContainer } from './styles';
 import Toolbar from '../Toolbar';
 import store from '../../../store';
-import icons from '../../../defaults/icons';
+import { icons } from '../../../../defaults';
 
 @observer
 export default class NavigationButtons extends React.Component {

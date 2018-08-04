@@ -1,8 +1,7 @@
 import * as React from 'react';
 
-import { executeEventStopPropagation } from '../../utils/events';
-import colors from '../../defaults/colors';
-import { TextfieldType } from '../../enums';
+import { colors } from '../../../defaults/colors';
+import { TextfieldType } from '../../../enums';
 
 import {
   Root,
@@ -17,6 +16,7 @@ import {
   HelperTexts,
   AssistiveText,
 } from './styles';
+import { executeEventStopPropagation } from '../../../utils';
 
 export type ClickEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 export type KeyboardEvent = (e?: React.KeyboardEvent<HTMLInputElement>) => void;

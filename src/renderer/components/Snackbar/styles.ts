@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
-import shadows from '../../mixins/shadows';
-import opacity from '../../defaults/opacity';
-import typography from '../../mixins/typography';
+import { shadows, body2 } from '../../mixins';
+import { opacity } from '../../../defaults';
 
 export const Root = styled.div`
   height: 48px;
@@ -27,7 +26,7 @@ export const Root = styled.div`
 export const Content = styled.div`
   margin-left: 16px;
   flex: 1;
-  ${typography.body2()};
+  ${body2()};
   color: rgba(255, 255, 255, ${opacity.light.primaryText});
 `;
 

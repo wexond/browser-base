@@ -1,9 +1,6 @@
 import styled, { css } from 'styled-components';
-import images from '../../../mixins/images';
-import opacity from '../../../defaults/opacity';
-import typography from '../../../mixins/typography';
-import colors from '../../../defaults/colors';
-import icons from '../../../defaults/icons';
+import { icons, opacity, colors } from '../../../../defaults';
+import { centerImage, body2 } from '../../../mixins';
 
 export const Close = styled.div`
   position: absolute;
@@ -14,7 +11,7 @@ export const Close = styled.div`
   transition: 0.2s opacity, 0.2s filter;
   z-index: 2;
 
-  ${images.center('100%', '100%')};
+  ${centerImage('100%', '100%')};
   opacity: ${({ hovered }: { hovered: boolean }) => (hovered ? opacity.light.inactiveIcon : 0)};
 `;
 
@@ -77,7 +74,7 @@ interface TitleProps {
 }
 
 export const Title = styled.div`
-  ${typography.body2()};
+  ${body2()};
   font-size: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -103,7 +100,7 @@ export const Icon = styled.div.attrs({
   height: 16px;
   min-width: 16px;
   transition: 0.2s opacity, 0.2s width;
-  ${images.center('16px', '16px')};
+  ${centerImage('16px', '16px')};
   ${({ favicon }: { favicon: string }) => favicon};
 `;
 

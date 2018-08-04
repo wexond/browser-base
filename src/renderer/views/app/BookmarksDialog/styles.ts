@@ -1,8 +1,7 @@
 import styled, { css } from 'styled-components';
-import shadows from '../../../mixins/shadows';
-import { EASE_FUNCTION } from '../../../constants';
-import opacity from '../../../defaults/opacity';
-import typography from '../../../mixins/typography';
+import { EASE_FUNCTION } from '../../../../constants';
+import { shadows, robotoRegular } from '../../../mixins';
+import { opacity } from '../../../../defaults';
 
 export const Root = styled.div`
   width: 364px;
@@ -29,7 +28,7 @@ export const Title = styled.div`
   font-size: 16px;
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
 
-  ${typography.robotoRegular()};
+  ${robotoRegular()};
 `;
 
 export const ButtonsContainer = styled.div`

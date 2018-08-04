@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import scroll from '../../../mixins/scroll';
-import opacity from '../../../defaults/opacity';
-import typography from '../../../mixins/typography';
+import { noButtons, robotoMedium } from '../../../mixins';
+import { opacity } from '../../../../defaults';
 
 export const Content = styled.div`
   width: 100%;
@@ -9,7 +8,7 @@ export const Content = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
 
-  ${scroll.noButtons('10px')};
+  ${noButtons('10px')};
 `;
 
 export const Container = styled.div`
@@ -36,5 +35,5 @@ export const Title = styled.div`
   margin-left: 64px;
   opacity: ${opacity.light.primaryText};
 
-  ${typography.robotoMedium()};
+  ${robotoMedium()};
 `;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import opacity from '../../../defaults/opacity';
-import typography from '../../../mixins/typography';
+import { opacity } from '../../../../defaults';
+import { subtitle2, body2 } from '../../../mixins';
 
 export const StyledItem = styled.div`
   display: flex;
@@ -14,7 +14,7 @@ export const Title = styled.div`
   margin-left: 16px;
   opacity: ${opacity.light.primaryText};
 
-  ${typography.subtitle2()};
+  ${subtitle2()};
 `;
 
 export const Content = styled.div`
@@ -22,5 +22,5 @@ export const Content = styled.div`
   margin-right: 16px;
   opacity: ${opacity.light.secondaryText};
 
-  ${typography.body2()};
+  ${body2()};
 `;

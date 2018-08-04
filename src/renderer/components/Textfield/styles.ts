@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
-import images from '../../mixins/images';
-import typography from '../../mixins/typography';
-import opacity from '../../defaults/opacity';
+import { opacity } from '../../../defaults';
+import { centerImage, robotoMedium, robotoRegular } from '../../mixins';
 
 export const Root = styled.div`
   width: 100%;
@@ -43,7 +42,7 @@ export const Icon = styled.div`
   align-self: center;
   opacity: ${opacity.light.inactiveIcon};
 
-  ${images.center('24px', 'auto')};
+  ${centerImage('24px', 'auto')};
 
   ${({ src }: { src: string }) => css`
     background-image: url(${src});
@@ -88,7 +87,7 @@ export const Label = styled.div`
     font-size: ${activated ? 12 : 16}px;
     opacity: ${activated ? 1 : opacity.light.secondaryText};
 
-    ${activated ? typography.robotoMedium() : typography.robotoRegular()};
+    ${activated ? robotoMedium() : robotoRegular()};
   `};
 `;
 
@@ -107,7 +106,7 @@ export const Input = styled.input`
   cursor: pointer;
   text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${opacity.light.primaryText})`};
 
-  ${typography.robotoRegular()};
+  ${robotoRegular()};
 
   ${({ color }: { color: string }) => css`
     color: ${color};
@@ -153,5 +152,5 @@ export const AssistiveText = styled.div`
   font-size: 12px;
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 
-  ${typography.robotoRegular()};
+  ${robotoRegular()};
 `;

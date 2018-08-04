@@ -4,13 +4,14 @@ import { Root, Title, ButtonsContainer } from './styles';
 
 import Textfield from '../../../components/Textfield';
 import Dropdown from '../../../components/Dropdown';
-import BookmarkItem from '../../../models/bookmark-item';
 import store from '../../../store';
-import { removeItem, getBookmarkFolders } from '../../../utils/bookmarks';
-import database from '../../../database';
+import database from '../../../../database';
 import Button from '../../../components/Button';
-import colors from '../../../defaults/colors';
-import { ButtonType } from '../../../enums';
+import { ButtonType } from '../../../../enums';
+import { BookmarkItem } from '../../../../interfaces';
+import { removeItem, getBookmarkFolders } from '../../../../utils';
+import { colors } from '../../../../defaults';
+
 @observer
 export default class BookmarksDialog extends React.Component {
   private textField: Textfield;

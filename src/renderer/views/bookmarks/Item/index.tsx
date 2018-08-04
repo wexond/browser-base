@@ -1,13 +1,13 @@
 import { observer } from 'mobx-react';
 import React from 'react';
+
 import { Title, Input, ActionIcon } from './styles';
-import BookmarkItem from '../../../models/bookmark-item';
 import store from '../../../store';
-import { removeItem } from '../../../utils/bookmarks';
-import database from '../../../database';
-import opacity from '../../../defaults/opacity';
 import { Root, Icon } from '../../../components/PageItem';
-import icons from '../../../defaults/icons';
+import { BookmarkItem } from '../../../../interfaces';
+import { removeItem } from '../../../../utils';
+import database from '../../../../database';
+import { icons, opacity } from '../../../../defaults';
 
 export interface IState {
   hovered: boolean;

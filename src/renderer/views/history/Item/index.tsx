@@ -1,13 +1,13 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import HistoryItem from '../../../models/history-item';
+
 import store from '../../../store';
-import { deleteHistoryItem } from '../../../utils/history';
-import opacity from '../../../defaults/opacity';
 import {
   Root, RemoveIcon, Icon, Time, Title,
 } from '../../../components/PageItem';
-import icons from '../../../defaults/icons';
+import { HistoryItem } from '../../../../interfaces';
+import { deleteHistoryItem } from '../../../../utils';
+import { icons, opacity } from '../../../../defaults';
 
 @observer
 export default class Item extends React.Component<{ data: HistoryItem }, { hovered: boolean }> {

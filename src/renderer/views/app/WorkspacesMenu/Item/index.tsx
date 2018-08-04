@@ -4,7 +4,7 @@ import React from 'react';
 import {
   Root, IconsContainer, Icon, Label, DeleteIcon, Input,
 } from './styles';
-import Workspace from '../../../../models/workspace';
+import { Workspace } from '../../../../../models';
 import store from '../../../../store';
 
 @observer

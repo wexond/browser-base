@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import shadows from '../../mixins/shadows';
+import { shadows } from '../../mixins';
 
 export interface StyledMenuProps {
   visible: boolean;

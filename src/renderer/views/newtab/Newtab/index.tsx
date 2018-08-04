@@ -7,13 +7,12 @@ import WeatherCard from '../WeatherCard';
 import {
   StyledApp, Content, Credits, Column,
 } from './styles';
-import {
-  WeatherLanguages, TemperatureUnit, TimeUnit, Countries,
-} from '../../../enums';
-import { getNews } from '../../../utils/news';
 import store from '../../../store';
-import { getWeather } from '../../../utils/weather';
 import Preloader from '../../../components/Preloader';
+import { getWeather, getNews } from '../../../../utils';
+import {
+  Locales, TemperatureUnit, TimeUnit, Countries,
+} from '../../../../enums';
 
 @observer
 export default class Newtab extends React.Component<{ visible: boolean }, {}> {
@@ -37,7 +36,7 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
   async loadData() {
     const weatherData = await getWeather(
       'warsaw',
-      WeatherLanguages.en,
+      Locales.en,
       TemperatureUnit.Celsius,
       TimeUnit.TwentyFourHours,
     );

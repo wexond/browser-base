@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
-import shadows from '../../../mixins/shadows';
-import opacity from '../../../defaults/opacity';
-import images from '../../../mixins/images';
+import { shadows, centerImage } from '../../../mixins';
+import { opacity } from '../../../../defaults';
 
 interface AddressBarProps {
   visible: boolean;
@@ -62,7 +61,7 @@ export const InputContainer = styled.div`
 `;
 
 export const Icon = styled.div`
-  ${images.center('100%', '100%')};
+  ${centerImage('100%', '100%')};
   width: 20px;
   height: 20px;
   margin-left: 16px;

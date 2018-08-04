@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
-import opacity from '../../../../defaults/opacity';
-import images from '../../../../mixins/images';
-import { TOOLBAR_BUTTON_WIDTH } from '../../../../constants';
+
+import { TOOLBAR_BUTTON_WIDTH } from '../../../../../constants';
+import { opacity } from '../../../../../defaults';
+import { centerImage } from '../../../../mixins';
 
 export const Icon = styled.div`
   width: 100%;
@@ -10,7 +11,7 @@ export const Icon = styled.div`
   transition: 0.15s background-image;
 
   ${({ size, disabled, icon }: { size: number; disabled: boolean; icon: string }) => css`
-    ${images.center(`${size}px`, `${size}px`)};
+    ${centerImage(`${size}px`, `${size}px`)};
     opacity: ${disabled ? 0.25 : opacity.light.inactiveIcon};
     background-image: url(${icon});
   `};

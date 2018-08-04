@@ -1,10 +1,8 @@
 import styled, { css } from 'styled-components';
-import opacity from '../../defaults/opacity';
-import typography from '../../mixins/typography';
-import images from '../../mixins/images';
-import shadows from '../../mixins/shadows';
-import { EASE_FUNCTION } from '../../constants';
-import icons from '../../defaults/icons';
+import { opacity } from '../../../defaults/opacity';
+import { EASE_FUNCTION } from '../../../constants';
+import { icons } from '../../../defaults/icons';
+import { robotoRegular, centerImage, shadows } from '../../mixins';
 
 export const Root = styled.div`
   display: inline-block;
@@ -28,7 +26,7 @@ export const Name = styled.div`
   font-size: 14px;
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
 
-  ${typography.robotoRegular()};
+  ${robotoRegular()};
 `;
 
 export const Icon = styled.div`
@@ -39,7 +37,7 @@ export const Icon = styled.div`
   opacity: ${opacity.light.inactiveIcon};
   background-image: url(${icons.dropDown});
 
-  ${images.center('24px', 'auto')};
+  ${centerImage('24px', 'auto')};
 
   ${({ activated }: { activated: boolean }) => css`
     transform: rotate(${activated ? 180 : 0}deg);
