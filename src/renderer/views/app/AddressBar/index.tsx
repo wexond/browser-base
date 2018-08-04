@@ -139,11 +139,13 @@ export default class AddressBar extends Component<Props, {}> {
 
     if (store.addressBar.toggled && this.visible !== store.addressBar.toggled) {
       const page = store.getSelectedPage();
-      if (page.webview != null && page.webview.getWebContents() != null) {
-        this.input.value = getAddressbarURL(page.webview.getURL());
-      }
+      if (this.input) {
+        if (page.webview && page.webview.getWebContents()) {
+          this.input.value = getAddressbarURL(page.webview.getURL());
+        }
 
-      this.input.focus();
+        this.input.focus();
+      }
     }
 
     if (this.visible !== store.addressBar.toggled) {
