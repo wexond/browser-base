@@ -4,7 +4,6 @@ import {
   Input, InputContainer, StyledAddressBar, Icon,
 } from './styles';
 import Suggestions from '../Suggestions';
-import SuggestionItem from '../../../models/suggestion-item';
 import store from '../../../store';
 import { isURL, getAddressbarURL } from '../../../utils/url';
 import { loadSuggestions } from '../../../utils/suggestions';
