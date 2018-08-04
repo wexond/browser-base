@@ -3,11 +3,10 @@ import React from 'react';
 import {
   Dash, Icon, PrimaryText, SecondaryText, StyledSuggestion,
 } from './styles';
-import SuggestionItem from '../../../models/suggestion-item';
-import opacity from '../../../defaults/opacity';
 import store from '../../../store';
-import icons from '../../../defaults/icons';
 
+import { SuggestionItem } from '../../../../interfaces';
+import { icons, opacity } from '../../../../defaults';
 @observer
 export default class Suggestion extends React.Component<
   { suggestion: SuggestionItem },

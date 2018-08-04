@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { hexToRgb } from '../../utils/colors';
+import { hexToRgb } from '../../../utils';
 
 export const StyledRipples = styled.div`
   position: absolute;

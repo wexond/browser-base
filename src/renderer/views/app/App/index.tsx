@@ -8,20 +8,19 @@ import { basename, extname } from 'path';
 import http from 'http';
 import { parse } from 'url';
 
-import { StyledApp } from './styles';
-import Pages from '../Pages';
+import store from '../../../store';
+import database from '../../../../database';
 import Toolbar from '../Toolbar';
+import Pages from '../Pages';
+import ContextMenu from '../../../components/ContextMenu';
 import GlobalMenu from '../GlobalMenu';
 import WorkspacesMenu from '../WorkspacesMenu';
-import store from '../../../store';
-import database from '../../../database';
-import { ContextMenuMode, ButtonType } from '../../../enums';
-import ContextMenu from '../../../components/ContextMenu';
 import Snackbar from '../../../components/Snackbar';
 import Button from '../../../components/Button';
-import colors from '../../../defaults/colors';
-import ipcMessages from '../../../defaults/ipc-messages';
-import { getPath } from '../../../utils/paths';
+import { colors } from '../../../../defaults';
+import { UPDATE_RESTART_AND_INSTALL } from '../../../../constants';
+import { StyledApp } from './styles';
+import { PageMenuMode, ButtonType } from '../../../../enums';
 
 const { dialog } = remote;
 
@@ -187,7 +186,7 @@ class App extends React.Component {
 
   public onRestartClick = () => {
     store.updateInfo.available = false;
-    ipcRenderer.send(ipcMessages.UPDATE_RESTART_AND_INSTALL);
+    ipcRenderer.send(UPDATE_RESTART_AND_INSTALL);
   };
 
   public onOpenLinkInNewTabClick = () => {
@@ -320,9 +319,9 @@ class App extends React.Component {
   public render() {
     const { mode } = store.pageMenuData;
 
-    const imageAndURLLink = mode === ContextMenuMode.ImageAndURL || mode === ContextMenuMode.URL;
-    const imageAndURLImage = mode === ContextMenuMode.ImageAndURL || mode === ContextMenuMode.Image;
-    const normal = mode === ContextMenuMode.Normal;
+    const imageAndURLLink = mode === PageMenuMode.ImageAndURL || mode === PageMenuMode.URL;
+    const imageAndURLImage = mode === PageMenuMode.ImageAndURL || mode === PageMenuMode.Image;
+    const normal = mode === PageMenuMode.Normal;
 
     return (
       <StyledApp>

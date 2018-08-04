@@ -4,8 +4,7 @@ import * as Card from '../../../../components/Card';
 import {
   Title, Icon, Source, SecondaryText, CardImage, Overline, SourceContainer,
 } from './styles';
-import { loadImage } from '../../../../utils/network';
-import { getTimeOffset } from '../../../../utils/time';
+import { loadImage, getTimeOffset } from '../../../../../utils';
 
 export interface Props {
   data: any;

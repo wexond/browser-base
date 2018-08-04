@@ -3,7 +3,8 @@ import { runInThisContext } from 'vm';
 import fs from 'fs';
 import path from 'path';
 
-import { getAPI, Manifest } from './api';
+import { getAPI } from './api';
+import { Manifest } from '../interfaces/manifest';
 
 const matchesPattern = (pattern: string) => {
   if (pattern === '<all_urls>') {

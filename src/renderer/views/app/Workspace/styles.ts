@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
+
 import ToolbarButton from '../Toolbar/Button';
-import { TOOLBAR_BUTTON_WIDTH } from '../../../constants';
-import colors from '../../../defaults/colors';
+import { TOOLBAR_BUTTON_WIDTH } from '../../../../constants';
+import { colors } from '../../../../defaults';
 
 export const Root = styled.div`
   height: 100%;

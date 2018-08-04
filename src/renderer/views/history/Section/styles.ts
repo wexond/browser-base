@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import opacity from '../../../defaults/opacity';
-import typography from '../../../mixins/typography';
+import { subtitle2 } from '../../../mixins';
+import { opacity } from '../../../../defaults';
 
 export const Title = styled.div`
   margin-bottom: 16px;
@@ -12,7 +12,7 @@ export const Title = styled.div`
   cursor: pointer;
   opacity: ${opacity.light.secondaryText};
 
-  ${typography.subtitle2()};
+  ${subtitle2()};
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);

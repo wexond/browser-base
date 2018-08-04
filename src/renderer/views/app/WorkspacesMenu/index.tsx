@@ -4,7 +4,7 @@ import Add from './Add';
 import Item from './Item';
 import { Root, ItemsContainer, Dark } from './styles';
 import store from '../../../store';
-import Workspace from '../../../models/workspace';
+import { Workspace } from '../../../../models';
 
 @observer
 export default class Workspaces extends React.Component<{}, {}> {

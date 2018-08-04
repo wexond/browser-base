@@ -1,5 +1,3 @@
-import colors from '../defaults/colors';
-
 export const noButtons = (
   width: string = '6px',
   color: string = 'rgba(0, 0, 0, 0.38)',
@@ -28,5 +26,3 @@ export const noButtons = (
       background: transparent;
     }
   `;
-
-export default { noButtons };

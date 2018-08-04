@@ -1,18 +1,17 @@
 import { observable } from 'mobx';
 import os from 'os';
-import { Platforms, ContextMenuMode } from './enums';
-import AddressBar from './models/address-bar';
-import Page from './models/page';
-import Workspace from './models/workspace';
-import Menu from './models/menu';
-import SuggestionItem from './models/suggestion-item';
-import BookmarkItem from './models/bookmark-item';
-import HistoryItem from './models/history-item';
-import { getBookmarkFolderPath } from './utils/bookmarks';
+
+import {
+  Workspace, Menu, AddressBar, Page,
+} from '../models';
+import {
+  SuggestionItem, BookmarkItem, HistoryItem, WeatherForecast,
+} from '../interfaces';
+import { PageMenuMode, Platforms } from '../enums';
 import ContextMenu from './components/ContextMenu';
 import BookmarksDialog from './views/app/BookmarksDialog';
-import database from './database';
-import WeatherForecast from './models/weather-forecast';
+import database from '../database';
+import { getBookmarkFolderPath } from '../utils';
 
 const dictionary = require('../../static/dictionaries/english-en.json');
 
@@ -121,7 +120,7 @@ class Store {
   public pageMenuData = {
     x: 0,
     y: 0,
-    mode: ContextMenuMode.Normal,
+    mode: PageMenuMode.Normal,
   };
 
   @observable

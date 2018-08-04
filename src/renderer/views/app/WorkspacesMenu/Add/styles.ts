@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { WORKSPACE_FOLDER_SIZE } from '../../../../constants';
-import images from '../../../../mixins/images';
-import icons from '../../../../defaults/icons';
+import { WORKSPACE_FOLDER_SIZE } from '../../../../../constants';
+import { icons } from '../../../../../defaults';
+import { centerImage } from '../../../../mixins';
 
 export const Root = styled.div`
   width: ${WORKSPACE_FOLDER_SIZE}px;
@@ -33,5 +33,5 @@ export const Icon = styled.div`
   transition: 0.2s opacity;
   filter: invert(100%);
 
-  ${images.center('100%', 'auto')};
+  ${centerImage('100%', 'auto')};
 `;

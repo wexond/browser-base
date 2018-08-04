@@ -1,9 +1,10 @@
 import * as React from 'react';
 
 import { StyledMenu } from './styles';
-import { getEvents } from '../../utils/events';
 import Item from './Item';
 import Separator from './Separator';
+
+import { getEvents } from '../../../utils';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 

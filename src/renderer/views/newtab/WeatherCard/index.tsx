@@ -14,19 +14,16 @@ import {
 } from './styles';
 
 import ForecastItem from './ForecastItem';
-import WeatherForecast from '../../../models/weather-forecast';
 import store from '../../../store';
-import opacity from '../../../defaults/opacity';
-import { formatDescription } from '../../../utils/weather-card';
-import { formatTime, getDayIndex } from '../../../utils/time';
-import { capitalizeWord } from '../../../utils/strings';
 import Slider from '../../../components/Slider';
-import { SliderType, ButtonType } from '../../../enums';
-import WeatherWeeklyItem from '../../../models/weather-weekly-item';
+import { SliderType, ButtonType } from '../../../../enums';
 import Button from '../../../components/Button';
-import colors from '../../../defaults/colors';
 import * as Card from '../../../components/Card';
-import icons from '../../../defaults/icons';
+import { WeatherForecast, WeatherWeeklyItem } from '../../../../interfaces';
+import {
+  formatDescription, formatTime, capitalizeWord, getDayIndex,
+} from '../../../../utils';
+import { opacity, icons, colors } from '../../../../defaults';
 
 export interface IProps {
   data: WeatherForecast;
@@ -92,7 +89,7 @@ export default class WeatherCard extends React.Component<IProps, IState> {
           <Card.Title large>
             {(data && capitalizeWord(data.city)) || 'Weather info is unavailable'}
           </Card.Title>
-          <Card.SecondaryText largeTop>
+          <Card.SecondaryText>
             {data && description}
             {!data
               && 'Check your internet connection or your settings. City name is probably incorrect.'}

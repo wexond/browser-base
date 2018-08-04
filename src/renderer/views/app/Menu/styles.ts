@@ -1,10 +1,9 @@
 import styled, { css } from 'styled-components';
-import { MENU_WIDTH, MENU_CONTENT_MAX_WIDTH, MENU_SPACE } from '../../../constants';
-import shadows from '../../../mixins/shadows';
-import typography from '../../../mixins/typography';
-import opacity from '../../../defaults/opacity';
-import images from '../../../mixins/images';
-import icons from '../../../defaults/icons';
+import { MENU_WIDTH, MENU_CONTENT_MAX_WIDTH, MENU_SPACE } from '../../../../constants';
+import {
+  shadows, h6, centerImage, body2,
+} from '../../../mixins';
+import { opacity, icons } from '../../../../defaults';
 
 export const Container = styled.div`
   height: 100%;
@@ -28,7 +27,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.div`
-  ${typography.h6()};
+  ${h6()};
   margin-left: 16px;
   margin-top: 10px;
   opacity: ${opacity.light.primaryText};
@@ -114,7 +113,7 @@ export const Search = styled.div`
 `;
 
 export const Input = styled.input`
-  ${typography.body2()};
+  ${body2()};
   background-color: transparent;
   outline: none;
   border: none;
@@ -124,7 +123,7 @@ export const Input = styled.input`
 `;
 
 export const SearchIcon = styled.div`
-  ${images.center('24px', 'auto')};
+  ${centerImage('24px', 'auto')};
   opacity: ${opacity.light.inactiveIcon};
   height: 24px;
   width: 24px;

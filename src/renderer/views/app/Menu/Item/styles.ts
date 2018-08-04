@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
-import colors from '../../../../defaults/colors';
-import typography from '../../../../mixins/typography';
-import opacity from '../../../../defaults/opacity';
+import { colors, opacity } from '../../../../../defaults';
+import { robotoMedium } from '../../../../mixins';
 
 export const StyledItem = styled.div`
   height: 48px;
@@ -44,7 +43,7 @@ export const Title = styled.div`
   font-size: 14px;
   margin-left: 32px;
 
-  ${typography.robotoMedium()};
+  ${robotoMedium()};
   display: 'flex';
 
   ${({ selected }: { selected: boolean }) => css`

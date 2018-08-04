@@ -1,9 +1,8 @@
-import * as React from 'react';
-import styled, { StyledComponentClass } from 'styled-components';
+import styled from 'styled-components';
 
-import opacity from '../../defaults/opacity';
-import { ProgressType } from '../../enums';
-import { EASE_FUNCTION } from '../../constants';
+import { opacity } from '../../../defaults/opacity';
+import { ProgressType } from '../../../enums';
+import { EASE_FUNCTION } from '../../../constants';
 
 export const Root = styled.div`
   height: 4px;

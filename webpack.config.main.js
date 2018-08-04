@@ -11,4 +11,8 @@ module.exports = (env, argv) =>
       path: __dirname,
       filename: 'main.js',
     },
+
+    externals: {
+      chokidar: 'require("chokidar")',
+    },
   });

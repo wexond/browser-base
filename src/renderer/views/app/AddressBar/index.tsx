@@ -5,9 +5,8 @@ import {
 } from './styles';
 import Suggestions from '../Suggestions';
 import store from '../../../store';
-import { isURL, getAddressbarURL } from '../../../utils/url';
-import { loadSuggestions } from '../../../utils/suggestions';
-import icons from '../../../defaults/icons';
+import { isURL, loadSuggestions, getAddressbarURL } from '../../../../utils';
+import { icons } from '../../../../defaults';
 
 interface Props {
   visible: boolean;

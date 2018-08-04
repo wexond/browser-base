@@ -1,10 +1,8 @@
 import styled, { css } from 'styled-components';
 
 import * as PageItem from '../../../components/PageItem';
-import colors from '../../../defaults/colors';
-import opacity from '../../../defaults/opacity';
-import typography from '../../../mixins/typography';
-import images from '../../../mixins/images';
+import { opacity, colors } from '../../../../defaults';
+import { robotoRegular, centerImage } from '../../../mixins';
 
 export const Title = styled(PageItem.Title)`
   margin-left: 12px;
@@ -44,7 +42,7 @@ export const Input = styled.input`
   will-change: opacity;
   transition: 0.2s opacity, 0.2s z-index;
 
-  ${typography.robotoRegular()};
+  ${robotoRegular()};
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
@@ -59,7 +57,7 @@ export const Input = styled.input`
 export const ActionIcon = styled.div`
   width: 32px;
   height: 32px;
-  ${images.center('16px', '16px')};
+  ${centerImage('16px', '16px')};
 
   &:last-child {
     margin-right: 12px;

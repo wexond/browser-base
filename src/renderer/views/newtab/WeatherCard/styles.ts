@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import typography from '../../../mixins/typography';
-import images from '../../../mixins/images';
-import opacity from '../../../defaults/opacity';
-import { EASE_FUNCTION } from '../../../constants';
+import { EASE_FUNCTION } from '../../../../constants';
 import { Actions } from '../../../components/Card';
+import { h1, h3, centerImage } from '../../../mixins';
+import { opacity } from '../../../../defaults';
 
 export const InfoContainer = styled.div`
   display: flex;
@@ -13,13 +12,13 @@ export const InfoContainer = styled.div`
 
 export const Temperature = styled.div`
   display: flex;
-  ${typography.h1()};
+  ${h1()};
 `;
 
 export const TemperatureDeg = styled.div`
   margin-top: 12px;
   margin-left: 4px;
-  ${typography.h3()};
+  ${h3()};
 `;
 
 export const TemperatureIcon = styled.div`
@@ -27,7 +26,7 @@ export const TemperatureIcon = styled.div`
   height: 96px;
   margin-right: 8px;
   align-self: center;
-  ${images.center('100%', 'auto')};
+  ${centerImage('100%', 'auto')};
 
   background-image: url(${({ src }: { src: string }) => src});
 `;
@@ -54,7 +53,7 @@ export const ExtraInfo = styled.div`
 export const ExtraInfoIcon = styled.div`
   width: 24px;
   height: 24px;
-  ${images.center('24px', 'auto')};
+  ${centerImage('24px', 'auto')};
 
   background-image: url(${({ src }: { src: string }) => src});
 `;
