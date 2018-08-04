@@ -315,7 +315,7 @@ class App extends React.Component {
 
   public viewSource = () => {
     const url = store.getSelectedPage().webview.getURL();
-    store.getCurrentWorkspace().addTab({url: `view-source:${url}`, active: true });
+    store.getCurrentWorkspace().addTab({ url: `view-source:${url}`, active: true });
   };
 
   public render() {
