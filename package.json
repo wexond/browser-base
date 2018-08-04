@@ -39,9 +39,6 @@
     "lint": "eslint --ext .tsx --ext .ts --ext .js src/",
     "lint-fix": "prettier-eslint --write \"src/**/*.ts*\""
   },
-  "pre-commit": [
-    "lint-fix"
-  ],
   "devDependencies": {
     "@types/chrome": "0.0.71",
     "@types/gsap": "1.19.2",
@@ -65,7 +62,6 @@
     "gsap": "2.0.1",
     "mobx": "5.0.3",
     "mobx-react": "5.2.3",
-    "pre-commit": "1.2.2",
     "prettier": "1.14.0",
     "prettier-eslint": "8.8.2",
     "prettier-eslint-cli": "4.7.1",

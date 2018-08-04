@@ -2,7 +2,13 @@ import {
   app, BrowserWindow, ipcMain, webContents,
 } from 'electron';
 import {
-  readdirSync, readFileSync, statSync, readFile, writeFileSync, existsSync, mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  readFile,
+  writeFileSync,
+  existsSync,
+  mkdirSync,
 } from 'fs';
 import { resolve, join } from 'path';
 import { format, parse } from 'url';
