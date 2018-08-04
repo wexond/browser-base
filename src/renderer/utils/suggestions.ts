@@ -25,83 +25,99 @@ const removeDuplicates = (array: any[], param: string) => {
 const countVisitedTimes = (historyItems: HistoryItem[]) => {
   const items: any[] = [];
 
-  for (const hitem of historyItems) {
+  for (const historyItem of historyItems) {
+    const itemsWithUrl = historyItems.filter(x => x.url === historyItem.url);
+
     const itemToPush = {
-      id: hitem.id,
-      times: 1,
-      item: hitem,
+      id: historyItem.id,
+      times: itemsWithUrl.length - 1,
+      item: historyItem,
     };
 
-    let next = true;
-
-    for (const item of items) {
-      if (item.item.url === hitem.url) {
-        next = false;
-        break;
+    for (const item of itemsWithUrl) {
+      if (item !== historyItem) {
+        historyItems.splice(historyItems.indexOf(item), 1);
       }
     }
 
-    if (next) {
-      for (const hitem2 of historyItems) {
-        if (hitem2.url === hitem.url) {
-          itemToPush.times++;
-        }
-      }
-
-      items.push(itemToPush);
-    }
+    items.push(itemToPush);
   }
 
-  return items.sort((a, b) => a.times - b.times);
+  return items.sort((a, b) => b.times - a.times);
 };
 
 interface HistorySuggestion extends HistoryItem {
   canSuggest?: boolean;
+  isSearch?: boolean;
 }
 
-export const getHistorySuggestions = (filter: string) =>
-  new Promise(async (resolve: (suggestions: HistorySuggestion[]) => void, reject) => {
-    filter = filter.trim().toLowerCase();
+export const getHistorySuggestions = (filter: string) => {
+  filter = filter.trim().toLowerCase();
 
-    if (filter === '') resolve([]);
+  if (filter === '') return [];
 
-    const regex = /(http(s?)):\/\/(www.)?|www./gi;
+  const regex = /(http(s?)):\/\/(www.)?|www./gi;
 
-    let historyItems: HistorySuggestion[] = [];
+  let historyItems: HistorySuggestion[] = [];
+  const urlMatchedItems: HistorySuggestion[] = [];
+  const titleMatchedItems: HistorySuggestion[] = [];
 
-    const filterPart = filter.replace(regex, '');
+  const filterPart = filter.replace(regex, '');
 
-    await database.history.each(item => {
-      let urlPart = item.url.replace(regex, '');
+  for (const item of store.historyItems) {
+    let urlPart = item.url.replace(regex, '');
 
-      if (urlPart.endsWith('/')) {
-        urlPart = urlPart.slice(0, -1);
-      }
-
-      const itemToPush = {
-        ...item,
-        url: urlPart,
-      };
-
-      if (urlPart.toLowerCase().startsWith(filterPart) || `www.${urlPart}`.startsWith(filterPart)) {
-        historyItems.push({ ...itemToPush, canSuggest: true });
-      } else if (itemToPush.title.toLowerCase().includes(filter)) {
-        historyItems.push({ ...itemToPush, canSuggest: false });
-      }
-    });
-
-    const visitedTimes = countVisitedTimes(removeDuplicates(historyItems, 'url'))
-      .filter(Boolean)
-      .slice(0, 5);
-
-    historyItems = [];
-
-    for (const item of visitedTimes) {
-      historyItems.push(item.item);
+    if (urlPart.endsWith('/')) {
+      urlPart = urlPart.slice(0, -1);
     }
 
-    resolve(historyItems);
-  });
+    const itemToPush = {
+      ...item,
+      url: urlPart,
+    };
+
+    if (urlPart.indexOf('search?') !== -1) {
+      const query = urlPart
+        .split('q=')[1]
+        .split('&')[0]
+        .replace(/\+/g, ' ');
+      if (
+        query.startsWith(filterPart)
+        && urlMatchedItems.filter(x => x.url === query).length === 0
+      ) {
+        itemToPush.url = query;
+        urlMatchedItems.push({ url: query, canSuggest: true, isSearch: true });
+      }
+    } else if (
+      urlPart.toLowerCase().startsWith(filterPart)
+      || `www.${urlPart}`.startsWith(filterPart)
+    ) {
+      urlMatchedItems.push({ ...itemToPush, canSuggest: true });
+    } else if (itemToPush.title.toLowerCase().includes(filter)) {
+      titleMatchedItems.push({ ...itemToPush, canSuggest: false });
+    }
+  }
+
+  let visitedTimes = countVisitedTimes(urlMatchedItems)
+    .filter(Boolean)
+    .slice(0, 5);
+
+  historyItems = [];
+
+  for (const item of visitedTimes) {
+    historyItems.push(item.item);
+  }
+
+  visitedTimes = countVisitedTimes(titleMatchedItems)
+    .filter(Boolean)
+    .slice(0, 5);
+
+  for (const item of visitedTimes) {
+    historyItems.push(item.item);
+  }
+
+  return historyItems.slice(0, 5);
+};
 
 export const getSearchSuggestions = (filter: string) =>
   // eslint-disable-next-line
@@ -134,10 +150,10 @@ export const getSearchSuggestions = (filter: string) =>
 let searchSuggestions: SuggestionItem[] = [];
 
 export const loadSuggestions = async (input: HTMLInputElement) =>
-  new Promise(async (resolve: (suggestion: SuggestionItem) => void) => {
+  new Promise(async (resolve: (suggestion: string) => void) => {
     const filter = input.value.substring(0, input.selectionStart);
     const dictionary = store.dictionary.suggestions;
-    const history = await getHistorySuggestions(filter);
+    const history = getHistorySuggestions(filter);
 
     const historySuggestions: SuggestionItem[] = [];
 
@@ -158,12 +174,21 @@ export const loadSuggestions = async (input: HTMLInputElement) =>
     }
 
     for (const item of history) {
-      historySuggestions.push({
-        primaryText: item.title,
-        secondaryText: item.url,
-        favicon: store.favicons[item.favicon],
-        canSuggest: item.canSuggest,
-      });
+      if (!item.isSearch) {
+        historySuggestions.push({
+          primaryText: item.url,
+          secondaryText: item.title,
+          favicon: store.favicons[item.favicon],
+          canSuggest: item.canSuggest,
+        });
+      } else {
+        historySuggestions.push({
+          primaryText: item.url,
+          secondaryText: dictionary.searchInGoogle,
+          favicon: icons.search,
+          canSuggest: item.canSuggest,
+        });
+      }
     }
 
     const suggestions = input.value === '' ? [] : historySuggestions.concat(searchSuggestions);
@@ -175,7 +200,7 @@ export const loadSuggestions = async (input: HTMLInputElement) =>
     }
 
     if (historySuggestions.length > 0 && historySuggestions[0].canSuggest) {
-      resolve(historySuggestions[0]);
+      resolve(historySuggestions[0].primaryText);
     }
 
     const searchData = await getSearchSuggestions(filter);
