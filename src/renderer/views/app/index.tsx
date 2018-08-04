@@ -3,6 +3,7 @@ import { ipcRenderer, remote } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
+import { AppContainer } from 'react-hot-loader';
 
 import typography from '../../mixins/typography';
 import store from '../../store';
@@ -86,18 +87,26 @@ ipcRenderer.on(ipcMessages.UPDATE_AVAILABLE, (e: Electron.IpcMessageEvent, versi
 
 ipcRenderer.send(ipcMessages.UPDATE_CHECK);
 
+const render = (AppComponent: any) => {
+  ReactDOM.render(
+    <AppContainer>
+      <App />
+    </AppContainer>,
+    document.getElementById('app'),
+  );
+};
+
 async function setup() {
-  if (!existsSync(getPath('plugins'))) {
-    mkdirSync(getPath('plugins'));
-  }
-
-  if (!existsSync(getPath('extensions'))) {
-    mkdirSync(getPath('extensions'));
-  }
-
   await loadPlugins();
 
-  ReactDOM.render(<App />, document.getElementById('app'));
+  render(App);
+}
+
+if ((module as any).hot) {
+  (module as any).hot.accept('./App', () => {
+    // eslint-disable-next-line
+    render(require('./App'));
+  });
 }
 
 setup();

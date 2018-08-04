@@ -339,7 +339,7 @@ export default class extends React.Component<{ page: Page }, {}> {
             page.webview = r;
             this.webview = r;
           }}
-          preload={`file://${resolve(BASE_PATH, 'src/preloads/webview-preload.js')}`}
+          preload={`file://${resolve(BASE_PATH, 'build/webview-preload.js')}`}
           allowFullScreen
         />
       </StyledPage>

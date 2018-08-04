@@ -2,7 +2,7 @@ import {
   app, BrowserWindow, ipcMain, webContents,
 } from 'electron';
 import {
-  readdirSync, readFileSync, statSync, readFile, writeFileSync,
+  readdirSync, readFileSync, statSync, readFile, writeFileSync, existsSync, mkdirSync,
 } from 'fs';
 import { resolve, join } from 'path';
 import { format, parse } from 'url';
@@ -35,12 +35,27 @@ interface Global {
 
 declare const global: Global;
 
+if (process.env.ENV === 'dev') {
+  // eslint-disable-next-line
+  require('electron-reload')(__dirname, {
+    electron: join(__dirname, 'node_modules', '.bin', 'electron'),
+  });
+}
+
 const ipcMessages = require('../renderer/defaults/ipc-messages');
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
 const getPath = (...relativePaths: string[]) =>
   resolve(app.getPath('userData'), ...relativePaths).replace(/\\/g, '/');
+
+if (!existsSync(getPath('plugins'))) {
+  mkdirSync(getPath('plugins'));
+}
+
+if (!existsSync(getPath('extensions'))) {
+  mkdirSync(getPath('extensions'));
+}
 
 global.extensions = {};
 global.backgroundPages = {};
@@ -69,7 +84,7 @@ const startBackgroundPage = (manifest: Manifest) => {
       partition: 'persist:wexond_extension',
       isBackgroundPage: true,
       commandLineSwitches: ['--background-page'],
-      preload: resolve(__dirname, 'src/preloads/extension-preload.js'),
+      preload: resolve(__dirname, 'build/background-page-preload.js'),
     });
 
     global.backgroundPages[manifest.extensionId] = { html, name, webContentsId: contents.id };
