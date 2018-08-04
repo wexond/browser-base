@@ -22,7 +22,7 @@ export default class AddressBar extends Component<Props, {}> {
 
   private visible = false;
 
-  private lastSuggestion: SuggestionItem;
+  private lastSuggestion: string;
 
   public componentDidMount() {
     window.addEventListener('mousedown', () => {
@@ -35,19 +35,17 @@ export default class AddressBar extends Component<Props, {}> {
     this.input.select();
   };
 
-  public autoComplete(text: string, suggestion: SuggestionItem) {
+  public autoComplete(text: string, suggestion: string) {
     const regex = /(http(s?)):\/\/(www.)?|www./gi;
     const regex2 = /(http(s?)):\/\//gi;
 
     const start = text.length;
 
     if (suggestion) {
-      const { secondaryText } = suggestion;
-
-      if (secondaryText.startsWith(text.replace(regex, ''))) {
-        this.input.value = text + secondaryText.replace(text.replace(regex, ''), '');
-      } else if (`www.${secondaryText}`.startsWith(text.replace(regex2, ''))) {
-        this.input.value = text + `www.${secondaryText}`.replace(text.replace(regex2, ''), '');
+      if (suggestion.startsWith(text.replace(regex, ''))) {
+        this.input.value = text + suggestion.replace(text.replace(regex, ''), '');
+      } else if (`www.${suggestion}`.startsWith(text.replace(regex2, ''))) {
+        this.input.value = text + `www.${suggestion}`.replace(text.replace(regex2, ''), '');
       }
       this.input.setSelectionRange(start, this.input.value.length);
     }
@@ -82,7 +80,7 @@ export default class AddressBar extends Component<Props, {}> {
 
       const suggestion = store.suggestions.find(x => x.id === store.selectedSuggestion);
 
-      this.input.value = suggestion.isSearch ? suggestion.primaryText : suggestion.secondaryText;
+      this.input.value = suggestion.primaryText;
     }
   };
 

@@ -74,7 +74,7 @@ const startBackgroundPage = (manifest: Manifest) => {
 
     global.backgroundPages[manifest.extensionId] = { html, name, webContentsId: contents.id };
 
-    contents.openDevTools({ mode: 'detach' });
+    // contents.openDevTools({ mode: 'detach' });
 
     contents.loadURL(
       format({
