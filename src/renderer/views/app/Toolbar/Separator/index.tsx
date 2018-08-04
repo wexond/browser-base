@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import opacity from '../../../../defaults/opacity';
+import { opacity } from '../../../../../defaults';
 
 export default styled.div`
   height: calc(100% - 24px);

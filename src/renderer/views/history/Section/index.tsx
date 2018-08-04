@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { Items, Title } from './styles';
 import Item from '../Item';
-import Section from '../../../models/section';
+import { Section } from '../../../../interfaces';
 
 @observer
 export default class extends React.Component<{ section: Section }, {}> {

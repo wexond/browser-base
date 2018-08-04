@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import colors from '../../defaults/colors';
 import { Path, StyledPreloader } from './styles';
+import { colors } from '../../../defaults';
 
 export interface IProps {
   style?: any;

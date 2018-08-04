@@ -12,10 +12,10 @@ import ToolbarButton from './Button';
 import BookmarksDialog from '../BookmarksDialog';
 import WindowsControls from '../WindowsControls';
 import store from '../../../store';
-import BookmarkItem from '../../../models/bookmark-item';
-import { addBookmark } from '../../../utils/bookmarks';
-import { Platforms } from '../../../enums';
-import icons from '../../../defaults/icons';
+import { Platforms } from '../../../../enums';
+import { BookmarkItem } from '../../../../interfaces';
+import { addBookmark } from '../../../../utils';
+import { icons } from '../../../../defaults';
 
 @observer
 export default class Toolbar extends React.Component {

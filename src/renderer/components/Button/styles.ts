@@ -1,11 +1,10 @@
 import styled, { css } from 'styled-components';
-import opacity from '../../defaults/opacity';
-import { getComponentColor, getComponentOpacity } from '../../utils/component-color';
-import { invertColors } from '../../mixins/icons';
-import images from '../../mixins/images';
-import typography from '../../mixins/typography';
-import shadows from '../../mixins/shadows';
-import { ButtonType, UITheme } from '../../enums';
+import { opacity } from '../../../defaults/opacity';
+import { ButtonType } from '../../../enums';
+import { shadows, button, centerImage } from '../../mixins';
+import { getComponentColor, getComponentOpacity } from '../../../utils';
+
+type UITheme = 'light' | 'dark';
 
 const isTransparent = (type: ButtonType) =>
   type === ButtonType.Outlined || type === ButtonType.Text;
@@ -19,8 +18,8 @@ const getBackground = (background: string, disabled: boolean, type: ButtonType, 
 
 const getBorder = (type: ButtonType, theme: UITheme) => {
   if (type === ButtonType.Outlined) {
-    const rgb = theme === UITheme.Light ? 0 : 255;
-    const alpha = theme === UITheme.Light ? opacity.light.dividers : opacity.dark.dividers;
+    const rgb = theme === 'light' ? 0 : 255;
+    const alpha = theme === 'light' ? opacity.light.dividers : opacity.dark.dividers;
 
     return `1px solid rgba(${rgb}, ${rgb}, ${rgb}, ${alpha})`;
   }
@@ -35,11 +34,11 @@ const getBoxShadow = (type: ButtonType, disabled: boolean, z: number = 2) => {
 
 const iconInvertColors = (white: boolean, theme: UITheme, disabled: boolean) => {
   if (disabled) {
-    if (theme === UITheme.Dark) {
-      return invertColors();
+    if (theme === 'dark') {
+      return 'filter: invert(100%);';
     }
   } else if (white) {
-    return invertColors();
+    return 'filter: invert(100%);';
   }
 
   return null;
@@ -68,7 +67,7 @@ export const StyledButton = styled.div`
   white-space: nowrap;
   overflow: hidden;
 
-  ${typography.button()};
+  ${button()};
 
   ${({
     background, foreground, icon, disabled, type, theme,
@@ -100,7 +99,7 @@ export const Icon = styled.div`
   margin-left: 4px;
   margin-right: 8px;
 
-  ${images.center('18px', 'auto')};
+  ${centerImage('18px', 'auto')};
 
   ${({
     src, white, disabled, theme,

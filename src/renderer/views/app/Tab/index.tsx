@@ -1,26 +1,24 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import TabModel from '../../../models/tab';
 import store from '../../../store';
 import Ripples from '../../../components/Ripples';
-import { closeWindow } from '../../../utils/window';
-import tabAnimations from '../../../defaults/tab-animations';
 import components from '../../../components';
 import Preloader from '../../../components/Preloader';
-import colors from '../../../defaults/colors';
-import { emitEvent } from '../../../utils/extensions';
+import { Tab } from '../../../../models';
+import { emitEvent, closeWindow } from '../../../../utils';
+import { tabAnimations, colors } from '../../../../defaults';
 
 export interface TabProps {
   key: number;
-  tab: TabModel;
+  tab: Tab;
   onMouseDown?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  onTabMouseDown?: (e?: React.MouseEvent<HTMLDivElement>, tab?: TabModel) => void;
+  onTabMouseDown?: (e?: React.MouseEvent<HTMLDivElement>, tab?: Tab) => void;
   style?: any;
 }
 
 @observer
-export default class Tab extends React.Component<TabProps, {}> {
+export default class TabComponent extends React.Component<TabProps, {}> {
   private ripples: Ripples;
 
   private iconRipples: Ripples;

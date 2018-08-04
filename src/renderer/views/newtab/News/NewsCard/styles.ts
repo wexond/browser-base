@@ -1,14 +1,15 @@
 import styled, { css } from 'styled-components';
-import typography from '../../../../mixins/typography';
-import opacity from '../../../../defaults/opacity';
-import images from '../../../../mixins/images';
+import { opacity } from '../../../../../defaults';
+import {
+  subtitle1, maxLines, centerImage, overline,
+} from '../../../../mixins';
 
 export const Title = styled.div`
   margin-top: 12px;
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
 
-  ${typography.subtitle1()};
-  ${typography.maxLines(3)};
+  ${subtitle1()};
+  ${maxLines(3)};
 `;
 
 export const Info = styled.div`
@@ -23,7 +24,7 @@ export const Icon = styled.div`
   height: 18px;
   transition: 0.2s opacity;
 
-  ${images.center('18px', 'auto')};
+  ${centerImage('18px', 'auto')};
 
   ${({ src, visible }: { src: string; visible: boolean }) => css`
     background-image: url(${src});
@@ -64,7 +65,7 @@ export const CardImage = styled.div`
 export const Overline = styled.div`
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 
-  ${typography.overline()};
+  ${overline()};
 `;
 
 export const SourceContainer = styled.div`

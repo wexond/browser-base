@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import typography from '../../../../mixins/typography';
-import opacity from '../../../../defaults/opacity';
-import images from '../../../../mixins/images';
+import { opacity } from '../../../../../defaults';
+import { body2, centerImage } from '../../../../mixins';
 
 export const StyledForecastItem = styled.div`
   display: flex;
@@ -11,7 +10,7 @@ export const StyledForecastItem = styled.div`
   padding-top: 8px;
   padding-bottom: 8px;
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
-  ${typography.body2()};
+  ${body2()};
 `;
 
 export const InfoContainer = styled.div`
@@ -26,7 +25,7 @@ export const WeatherIcon = styled.div`
   height: 24px;
   display: flex;
   margin-right: 16px;
-  ${images.center('24px', 'auto')};
+  ${centerImage('24px', 'auto')};
 
   background-image: url(${({ src }: { src: string }) => src});
 `;

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { Platforms } from '../../../enums';
+import { Platforms } from '../../../../enums';
 import store from '../../../store';
 
 export const StyledContainer = styled.div`

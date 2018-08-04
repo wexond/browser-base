@@ -2,10 +2,9 @@ import * as React from 'react';
 
 import { StyledMenuItem, Title } from './styles';
 import Ripples from '../../Ripples';
-import colors from '../../../defaults/colors';
-import { getEvents } from '../../../utils/events';
-import { getRippleEvents } from '../../../utils/ripple';
 import ContextMenu from '..';
+import { colors } from '../../../../defaults';
+import { getEvents, getRippleEvents } from '../../../../utils';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 

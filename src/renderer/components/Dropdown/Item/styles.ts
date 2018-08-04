@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import opacity from '../../../defaults/opacity';
-import typography from '../../../mixins/typography';
+import { opacity } from '../../../../defaults';
+import { robotoRegular } from '../../../mixins';
 
 export const Root = styled.div`
   width: 100%;
@@ -33,5 +33,5 @@ export const Root = styled.div`
     margin-bottom: 8px;
   }
 
-  ${typography.robotoRegular()};
+  ${robotoRegular()};
 `;

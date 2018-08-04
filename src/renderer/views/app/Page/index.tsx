@@ -4,12 +4,11 @@ import React from 'react';
 import { remote } from 'electron';
 
 import StyledPage from './styles';
-import Page from '../../../models/page';
-import Tab from '../../../models/tab';
 import store from '../../../store';
-import { ContextMenuMode } from '../../../enums';
-import database from '../../../database';
-import { BASE_PATH } from '../../../constants';
+import database from '../../../../database';
+import { BASE_PATH } from '../../../../constants';
+import { Page, Tab } from '../../../../models';
+import { PageMenuMode } from '../../../../enums';
 
 @observer
 export default class extends React.Component<{ page: Page }, {}> {
@@ -187,13 +186,13 @@ export default class extends React.Component<{ page: Page }, {}> {
     store.webviewContextMenuParams = params;
 
     if (params.linkURL && params.hasImageContents) {
-      store.pageMenuData.mode = ContextMenuMode.ImageAndURL;
+      store.pageMenuData.mode = PageMenuMode.ImageAndURL;
     } else if (params.linkURL) {
-      store.pageMenuData.mode = ContextMenuMode.URL;
+      store.pageMenuData.mode = PageMenuMode.URL;
     } else if (params.hasImageContents) {
-      store.pageMenuData.mode = ContextMenuMode.Image;
+      store.pageMenuData.mode = PageMenuMode.Image;
     } else {
-      store.pageMenuData.mode = ContextMenuMode.Normal;
+      store.pageMenuData.mode = PageMenuMode.Normal;
     }
 
     // Calculate new menu position

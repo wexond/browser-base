@@ -1,14 +1,10 @@
 import * as React from 'react';
 
-import { getEvents } from '../../utils/events';
-import { getRippleEvents } from '../../utils/ripple';
-
 import Ripples from '../Ripples';
-
-import colors from '../../defaults/colors';
-import { UITheme, ButtonType } from '../../enums';
-
+import { colors } from '../../../defaults/colors';
+import { ButtonType } from '../../../enums';
 import { StyledButton, Icon, Overlay } from './styles';
+import { getEvents, getRippleEvents } from '../../../utils';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
@@ -21,7 +17,7 @@ export interface IProps {
   disabled?: boolean;
   ripple?: boolean;
   customRippleBehavior?: boolean;
-  theme?: UITheme;
+  theme?: 'light' | 'dark';
   type?: ButtonType;
   style?: any;
   onClick?: ButtonEvent;
@@ -42,7 +38,7 @@ export default class Button extends React.Component<IProps, {}> {
     disabled: false,
     customRippleBehavior: false,
     ripple: true,
-    theme: UITheme.Light,
+    theme: 'light',
     type: ButtonType.Contained,
   };
 

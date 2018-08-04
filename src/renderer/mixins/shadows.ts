@@ -1,4 +1,3 @@
-const baselineColor = 'black';
 const umbraOpacity = 0.2;
 const penumbraOpacity = 0.14;
 const ambientOpacity = 0.12;
@@ -87,7 +86,7 @@ const ambientMap = [
   '0px 9px 46px 8px',
 ];
 
-export default (z: number, color = '0, 0, 0', opacity = 1) => {
+export const shadows = (z: number, color = '0, 0, 0', opacity = 1) => {
   const umbraZ = umbraMap[z];
   const penumbraZ = penumbraMap[z];
   const ambientZ = ambientMap[z];

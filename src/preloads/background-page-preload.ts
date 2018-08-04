@@ -14,7 +14,7 @@ process.once('loaded', () => {
     browser?: typeof api;
   }
 
-  const globalObject: Global = global as Global;
+  const globalObject = global as Global;
 
   globalObject.wexond = api;
   globalObject.chrome = api;

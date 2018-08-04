@@ -7,8 +7,3 @@ export const defaultCursor = () => `
     user-select: none;
     cursor: default;
   `;
-
-export default {
-  pointer,
-  defaultCursor,
-};

@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import opacity from '../../../defaults/opacity';
-import images from '../../../mixins/images';
-import icons from '../../../defaults/icons';
+import { opacity, icons } from '../../../../defaults';
+import { centerImage } from '../../../mixins';
 
 export const Root = styled.div`
   width: 100%;
@@ -21,5 +20,5 @@ export const ForwardIcon = styled.div`
   background-image: url(${icons.forward});
   opacity: ${opacity.light.inactiveIcon};
 
-  ${images.center('100%', 'auto')};
+  ${centerImage('100%', 'auto')};
 `;

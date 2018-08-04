@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
-import opacity from '../../defaults/opacity';
-import typography from '../../mixins/typography';
-import images from '../../mixins/images';
+import {
+  centerImage, coverImage, h6, h5, body2,
+} from '../../mixins';
+import { opacity } from '../../../defaults';
 
 const getCardImageOpacity = (visible: boolean) => {
   if (visible != null) return visible ? 1 : 0;
@@ -24,7 +25,7 @@ export const Thumbnail = styled.div`
   height: 194px;
 
   background-image: url(${({ src }: { src: string }) => src});
-  ${images.center('100%', '194px')};
+  ${centerImage('100%', '194px')};
 `;
 
 export const Header = styled.div`
@@ -40,7 +41,7 @@ export const Logo = styled.div`
   align-self: center;
   justify-self: left;
   border-radius: 100%;
-  ${images.cover()};
+  ${coverImage()};
 
   background-image: url(${({ src }: { src: string }) => src});
 `;
@@ -56,7 +57,7 @@ export const Image = styled.div`
   margin: 16px;
   align-self: center;
   transition: 0.2s opacity;
-  ${images.cover()};
+  ${coverImage()};
 
   ${({ src, visible }: ImageProps) => css`
     background-image: url(${src});
@@ -68,12 +69,12 @@ export const Title = styled.div`
   opacity: ${opacity.light.primaryText};
 
   ${({ large }: { large: boolean }) => css`
-    ${large ? typography.h5() : typography.h6()};
+    ${large ? h5() : h6()};
   `};
 `;
 
 export const SecondaryText = styled.div`
-  ${typography.body2()};
+  ${body2()};
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
   margin-top: ${({ largeTop }: { largeTop?: boolean }) => (largeTop ? 8 : 2)}px;
 `;
@@ -85,14 +86,14 @@ export const Icon = styled.div`
   margin-left: auto;
   margin-right: 8px;
   cursor: pointer;
-  ${images.center('24px', 'auto')}
+  ${centerImage('24px', 'auto')}
   opacity: ${opacity.light.secondaryText};
 
   background-image: url(${({ src }: { src: string }) => src});
 `;
 
 export const SupportingText = styled.div`
-  ${typography.body2()};
+  ${body2()};
   padding: 0px 16px 16px 16px;
   opacity: ${opacity.light.secondaryText};
 
@@ -100,7 +101,7 @@ export const SupportingText = styled.div`
 `;
 
 export const Content = styled.div`
-  ${typography.body2()};
+  ${body2()};
   color: rgba(0, 0, 0, ${opacity.light.primaryText});
 `;
 

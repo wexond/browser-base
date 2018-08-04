@@ -2,17 +2,16 @@ import { TweenLite } from 'gsap';
 import { observe } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
+
 import {
   Indicator, Tabs, Root, AddTabButton,
 } from './styles';
 import TabComponent from '../Tab';
 import Scrollbar from './Scrollbar';
-import Workspace from '../../../models/workspace';
-import Tab from '../../../models/tab';
 import store from '../../../store';
-import { TOOLBAR_HEIGHT } from '../../../constants';
-import icons from '../../../defaults/icons';
-import opacity from '../../../defaults/opacity';
+import { TOOLBAR_HEIGHT } from '../../../../constants';
+import { Workspace, Tab } from '../../../../models';
+import { icons, opacity } from '../../../../defaults';
 
 interface Props {
   workspace: Workspace;
