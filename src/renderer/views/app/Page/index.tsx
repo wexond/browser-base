@@ -86,7 +86,7 @@ export default class extends React.Component<{ page: Page }, {}> {
 
     const backgroundPages = remote.getGlobal('backgroundPages');
 
-    Object.keys(backgroundPages).forEach((key) => {
+    Object.keys(backgroundPages).forEach(key => {
       const webContents = remote.webContents.fromId(backgroundPages[key].webContentsId);
       webContents.send(`api-emit-event-${scope}-${name}`, ...data);
     });
