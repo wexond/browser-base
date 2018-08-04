@@ -7,3 +7,5 @@ dist
 .vs
 .DS_Store
 .awcache
+main.js
+main.js.map
