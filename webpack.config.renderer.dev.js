@@ -11,13 +11,18 @@ module.exports = merge.smart(baseConfig, {
   mode: 'development',
 
   entry: {
-    app: ['react-hot-loader/patch', './src/renderer/views/app'],
+    app: [
+      'react-hot-loader/patch',
+      `webpack-dev-server/client?http://localhost:${PORT}`,
+      'webpack/hot/only-dev-server',
+      './src/renderer/views/app',
+    ],
   },
 
   output: {
-    publicPath: `http://localhost:${PORT}/`,
     hotUpdateChunkFilename: 'hot/hot-update.js',
     hotUpdateMainFilename: 'hot/hot-update.json',
+    publicPath: `http://localhost:${PORT}/`,
     path: resolve(__dirname, 'build'),
     filename: '[name].js',
   },
@@ -31,7 +36,7 @@ module.exports = merge.smart(baseConfig, {
     ],
   },
 
-  plugins: [new webpack.HotModuleReplacementPlugin({ multiStep: true })],
+  plugins: [new webpack.HotModuleReplacementPlugin()],
 
   devServer: {
     contentBase: './static/pages',
@@ -44,12 +49,7 @@ module.exports = merge.smart(baseConfig, {
       ignored: /node_modules/,
       poll: 100,
     },
-    historyApiFallback: {
-      verbose: true,
-      disableDotRule: false,
-    },
     hot: true,
     inline: true,
-    lazy: false,
   },
 });

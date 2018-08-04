@@ -1,11 +1,11 @@
-const { remote } = require('electron');
-const { runInThisContext } = require('vm');
-const fs = require('fs');
-const path = require('path');
+import { remote } from 'electron';
+import { runInThisContext } from 'vm';
+import fs from 'fs';
+import path from 'path';
 
-const getAPI = require('./api');
+import { getAPI, Manifest } from './api';
 
-const matchesPattern = pattern => {
+const matchesPattern = (pattern: string) => {
   if (pattern === '<all_urls>') {
     return true;
   }
@@ -15,7 +15,7 @@ const matchesPattern = pattern => {
   return url.match(regexp);
 };
 
-const runContentScript = (url, code, manifest) => {
+const runContentScript = (url: string, code: string, manifest: Manifest) => {
   const context = getAPI(manifest);
 
   const wrapper = `((wexond) => {
@@ -30,10 +30,10 @@ const runContentScript = (url, code, manifest) => {
     displayErrors: true,
   });
 
-  return compiledWrapper.call(this, context);
+  return compiledWrapper.call(window, context);
 };
 
-const runStylesheet = (url, code) => {
+const runStylesheet = (url: string, code: string) => {
   const wrapper = `((code) => {
     function init() {
       const styleElement = document.createElement('style');
@@ -49,10 +49,10 @@ const runStylesheet = (url, code) => {
     displayErrors: true,
   });
 
-  return compiledWrapper.call(this, code);
+  return compiledWrapper.call(window, code);
 };
 
-const injectContentScript = (script, manifest) => {
+const injectContentScript = (script: any, manifest: Manifest) => {
   if (!script.matches.some(matchesPattern)) {
     return;
   }
@@ -60,12 +60,12 @@ const injectContentScript = (script, manifest) => {
   process.setMaxListeners(0);
 
   if (script.js) {
-    script.js.forEach(js => {
+    script.js.forEach((js: any) => {
       const fire = runContentScript.bind(window, js.url, js.code, manifest);
       if (script.runAt === 'document_start') {
-        process.once('document-start', fire);
+        (process as any).once('document-start', fire);
       } else if (script.runAt === 'document_end') {
-        process.once('document-end', fire);
+        (process as any).once('document-end', fire);
       } else {
         document.addEventListener('DOMContentLoaded', fire);
       }
@@ -73,12 +73,12 @@ const injectContentScript = (script, manifest) => {
   }
 
   if (script.css) {
-    script.css.forEach(css => {
+    script.css.forEach((css: any) => {
       const fire = runStylesheet.bind(window, css.url, css.code);
       if (script.runAt === 'document_start') {
-        process.once('document-start', fire);
+        (process as any).once('document-start', fire);
       } else if (script.runAt === 'document_end') {
-        process.once('document-end', fire);
+        (process as any).once('document-end', fire);
       } else {
         document.addEventListener('DOMContentLoaded', fire);
       }
@@ -86,13 +86,13 @@ const injectContentScript = (script, manifest) => {
   }
 };
 
-const extensions = remote.getGlobal('extensions');
+const extensions: { [key: string]: Manifest } = remote.getGlobal('extensions');
 
 Object.keys(extensions).forEach(key => {
   const manifest = extensions[key];
 
   if (manifest.content_scripts) {
-    const readArrayOfFiles = relativePath => ({
+    const readArrayOfFiles = (relativePath: string) => ({
       url: `wexond-extension://${manifest.extensionId}/${relativePath}`,
       code: fs.readFileSync(path.join(manifest.srcDirectory, relativePath), 'utf8'),
     });

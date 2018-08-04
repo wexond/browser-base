@@ -1,16 +1,21 @@
-const { ipcRenderer } = require('electron');
-const { format } = require('url');
+import { ipcRenderer } from 'electron';
+import { format } from 'url';
+
+export interface Manifest extends chrome.runtime.Manifest {
+  extensionId: string;
+  srcDirectory: string;
+}
 
 /* eslint no-bitwise: 0 */
-const hashCode = () => {
+const hashCode = (string: string) => {
   let hash = 0;
 
-  if (this.length === 0) {
+  if (string.length === 0) {
     return hash;
   }
 
-  for (let i = 0; i < this.length; i++) {
-    const chr = this.charCodeAt(i);
+  for (let i = 0; i < string.length; i++) {
+    const chr = string.charCodeAt(i);
     hash = (hash << 5) - hash + chr;
     hash |= 0;
   }
@@ -18,23 +23,29 @@ const hashCode = () => {
 };
 
 class WebRequestEvent {
-  constructor(scope, name) {
+  private scope: string;
+
+  private name: string;
+
+  private callbacks: Function[] = [];
+
+  private listener: boolean = false;
+
+  constructor(scope: string, name: string) {
     this.scope = scope;
     this.name = name;
-    this.callbacks = [];
-    this.listener = false;
 
     this.emit = this.emit.bind(this);
   }
 
-  emit(e, details) {
+  emit(e: Electron.IpcMessageEvent, details: any) {
     this.callbacks.forEach(callback => {
       console.log(this.name, details);
       ipcRenderer.send(`api-response-${this.scope}-${this.name}`, callback(details));
     });
   }
 
-  addListener(callback) {
+  addListener(callback: Function) {
     this.callbacks.push(callback);
 
     if (!this.listener) {
@@ -44,7 +55,7 @@ class WebRequestEvent {
     }
   }
 
-  removeListener(callback) {
+  removeListener(callback: Function) {
     this.callbacks = this.callbacks.filter(c => c !== callback);
 
     if (this.callbacks.length === 0) {
@@ -56,22 +67,28 @@ class WebRequestEvent {
 }
 
 class IpcEvent {
-  constructor(scope, name) {
+  private scope: string;
+
+  private name: string;
+
+  private callbacks: Function[] = [];
+
+  private listener: boolean = false;
+
+  constructor(scope: string, name: string) {
     this.name = name;
     this.scope = scope;
-    this.callbacks = [];
-    this.listener = false;
 
     this.emit = this.emit.bind(this);
   }
 
-  emit(e, ...args) {
+  emit(e: Electron.IpcMessageEvent, ...args: any[]) {
     this.callbacks.forEach(callback => {
       callback(...args);
     });
   }
 
-  addListener(callback) {
+  addListener(callback: Function) {
     this.callbacks.push(callback);
 
     if (!this.listener) {
@@ -80,7 +97,7 @@ class IpcEvent {
     }
   }
 
-  removeListener(callback) {
+  removeListener(callback: Function) {
     this.callbacks = this.callbacks.filter(x => x !== callback);
 
     if (this.callbacks.length === 0) {
@@ -90,7 +107,11 @@ class IpcEvent {
   }
 }
 
-const getAPI = manifest => {
+function readProperty(obj: any, prop: string) {
+  return obj[prop];
+}
+
+export const getAPI = (manifest: Manifest) => {
   // https://developer.chrome.com/extensions
   const api = {
     // https://developer.chrome.com/extensions/webNavigation
@@ -103,45 +124,30 @@ const getAPI = manifest => {
       onReferenceFragmentUpdated: new IpcEvent('webNavigation', 'onReferenceFragmentUpdated'), // TODO
       onTabReplaced: new IpcEvent('webNavigation', 'onTabReplaced'), // TODO
       onHistoryStateUpdated: new IpcEvent('webNavigation', 'onHistoryStateUpdated'), // TODO
-
-      getFrame: (details, callback) => {}, // TODO
-      getAllFrames: (details, callback) => {}, // TODO
     },
 
     // https://developer.chrome.com/extensions/extension
     extension: {
       inIncognitoContext: false, // TODO
-
-      getBackgroundPage: () => null, // TODO
-      isAllowedIncognitoAccess: callback => {}, // TODO
-      isAllowedFileSchemeAccess: callback => {}, // TODO
-      setUpdateUrlData: data => {}, // TODO
     },
 
     // https://developer.chrome.com/extensions/alarms
     alarms: {
-      create: (name, alarmInfo) => {}, // TODO
-      get: (name, callback) => {}, // TODO
-      getAll: callback => {},
-      clear: (name, callback) => {}, // TODO
-      clearAll: callback => {}, // TODO
-
       onAlarm: new IpcEvent('alarms', 'onAlarm'), // TODO
     },
 
     // https://developer.chrome.com/extensions/runtime
     runtime: {
       id: manifest.extensionId,
-      lastError: undefined,
+      lastError: undefined as string,
 
       onConnect: new IpcEvent('runtime', 'onConnect'),
 
       reload: () => {
         ipcRenderer.send('api-runtime-reload', manifest.extensionId);
       },
-      connect: (extensionId, connectInfo) => {},
       getManifest: () => manifest,
-      getURL: path =>
+      getURL: (path: string) =>
         format({
           protocol: 'wexond-extension',
           slashes: true,
@@ -164,53 +170,72 @@ const getAPI = manifest => {
 
     // https://developer.chrome.com/extensions/tabs
     tabs: {
-      get: (tabId, callback) => {
-        api.tabs.query({ id: tabId }, tabs => {
-          callback(tabs[0]);
+      get: (tabId: number, callback: (tab: chrome.tabs.Tab) => void) => {
+        api.tabs.query({}, tabs => {
+          callback(tabs.find(x => x.id === tabId));
         });
       },
-      getCurrent: callback => {
+      getCurrent: (callback: (tab: chrome.tabs.Tab) => void) => {
         ipcRenderer.sendToHost('api-tabs-getCurrent');
 
-        ipcRenderer.once('api-tabs-getCurrent', (e, data) => {
-          callback(data);
-        });
+        ipcRenderer.once(
+          'api-tabs-getCurrent',
+          (e: Electron.IpcMessageEvent, data: chrome.tabs.Tab) => {
+            callback(data);
+          },
+        );
       },
-      query: (queryInfo, callback) => {
+      query: (queryInfo: chrome.tabs.QueryInfo, callback: (tabs: chrome.tabs.Tab[]) => void) => {
         ipcRenderer.send('api-tabs-query');
 
-        ipcRenderer.once('api-tabs-query', (e, data) => {
-          callback(
-            data.filter(tab => {
-              for (const key in queryInfo) {
-                if (tab[key] == null || queryInfo[key] !== tab[key]) return false;
-              }
+        ipcRenderer.once(
+          'api-tabs-query',
+          (e: Electron.IpcMessageEvent, data: chrome.tabs.Tab[]) => {
+            callback(
+              data.filter(tab => {
+                for (const key in queryInfo) {
+                  const tabProp = readProperty(tab, key);
+                  const queryInfoProp = readProperty(queryInfo, key);
 
-              return true;
-            }),
-          );
-        });
+                  if (tabProp == null || queryInfoProp !== tabProp) return false;
+                }
+
+                return true;
+              }),
+            );
+          },
+        );
       },
-      create: (createProperties, callback = null) => {
+      create: (
+        createProperties: chrome.tabs.CreateProperties,
+        callback: (tab: chrome.tabs.Tab) => void = null,
+      ) => {
         ipcRenderer.send('api-tabs-create', createProperties);
 
         if (callback) {
-          ipcRenderer.once('api-tabs-create', (e, data) => {
-            callback(data);
-          });
+          ipcRenderer.once(
+            'api-tabs-create',
+            (e: Electron.IpcMessageEvent, data: chrome.tabs.Tab) => {
+              callback(data);
+            },
+          );
         }
       },
-      insertCSS: (tabId, details, callback) => {
+      insertCSS: (tabId: number, details: chrome.tabs.InjectDetails, callback: () => void) => {
         ipcRenderer.send('api-tabs-insertCSS', tabId, details);
 
         ipcRenderer.on('api-tabs-insertCSS', () => {
           if (callback) callback();
         });
       },
-      executeScript: (tabId, details, callback) => {
+      executeScript: (
+        tabId: number,
+        details: chrome.tabs.InjectDetails,
+        callback: (result: any) => void,
+      ) => {
         ipcRenderer.send('api-tabs-executeScript', tabId, details);
 
-        ipcRenderer.on('api-tabs-executeScript', (e, result) => {
+        ipcRenderer.on('api-tabs-executeScript', (e: Electron.IpcMessageEvent, result: any) => {
           if (callback) callback(result);
         });
       },
@@ -245,5 +270,3 @@ const getAPI = manifest => {
   };
   return api;
 };
-
-module.exports = getAPI;
