@@ -1,6 +1,5 @@
-import * as React from 'react';
-import styled, { StyledComponentClass } from 'styled-components';
-import opacity from '../../../defaults/opacity';
+import styled from 'styled-components';
+import { opacity } from '../../../../defaults';
 
 export interface SeparatorProps {
   animation: boolean;

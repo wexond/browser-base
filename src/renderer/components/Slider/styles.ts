@@ -1,9 +1,9 @@
 import styled, { css } from 'styled-components';
-import opacity from '../../defaults/opacity';
-import { Align, SliderType } from '../../enums';
-import { EASE_FUNCTION } from '../../constants';
-import positioning from '../../mixins/positioning';
-import typography from '../../mixins/typography';
+
+import { opacity } from '../../../defaults/opacity';
+import { Align, SliderType } from '../../../enums';
+import { EASE_FUNCTION } from '../../../constants';
+import { center, robotoRegular } from '../../mixins';
 
 export const StyledSlider = styled.div`
   width: 100%;
@@ -71,7 +71,7 @@ export const ThumbHover = styled.div`
   transition: 0.2s width, 0.2s height;
   opacity: ${opacity.light.dividers};
 
-  ${positioning.center(Align.CenterBoth)};
+  ${center(Align.CenterBoth)};
 
   ${({ color }: { color: string }) => css`
     background-color: ${color};
@@ -88,7 +88,7 @@ export const Thumb = styled.div`
   position: absolute;
   transition: 0.15s width, 0.15s height;
 
-  ${positioning.center(Align.CenterBoth)};
+  ${center(Align.CenterBoth)};
 
   ${({ color, thumbAnimation }: ThumbProps) => css`
     background-color: ${color};
@@ -130,6 +130,6 @@ export const TickValue = styled.div`
   margin-top: 16px;
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 
-  ${typography.robotoRegular()};
-  ${positioning.center(Align.CenterHorizontal)};
+  ${robotoRegular()};
+  ${center(Align.CenterHorizontal)};
 `;

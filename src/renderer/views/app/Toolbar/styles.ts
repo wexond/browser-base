@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { TOOLBAR_HEIGHT, EASE_FUNCTION } from '../../../constants';
-import opacity from '../../../defaults/opacity';
+import { TOOLBAR_HEIGHT, EASE_FUNCTION } from '../../../../constants';
+import { opacity } from '../../../../defaults';
 
 export const StyledToolbar = styled.div`
   position: relative;

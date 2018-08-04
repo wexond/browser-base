@@ -1,4 +1,4 @@
-import { Align } from '../enums';
+import { Align } from '../../enums';
 
 export const center = (align: Align) => {
   switch (align) {
@@ -22,5 +22,3 @@ export const center = (align: Align) => {
       return '';
   }
 };
-
-export default { center };

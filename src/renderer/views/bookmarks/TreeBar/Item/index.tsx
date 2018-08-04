@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Root, Title, HomeIcon } from './styles';
-import BookmarkItem from '../../../../models/bookmark-item';
 import store from '../../../../store';
+import { BookmarkItem } from '../../../../../interfaces';
 
 export interface Props {
   item?: BookmarkItem;

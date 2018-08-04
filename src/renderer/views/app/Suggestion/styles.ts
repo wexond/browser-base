@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
-import typography from '../../../mixins/typography';
-import opacity from '../../../defaults/opacity';
-import images from '../../../mixins/images';
+import { body2, centerImage } from '../../../mixins';
+import { opacity } from '../../../../defaults';
 
 export const StyledSuggestion = styled.div`
   width: 100%;
@@ -22,7 +21,7 @@ export const StyledSuggestion = styled.div`
 `;
 
 export const PrimaryText = styled.div`
-  ${typography.body2()};
+  ${body2()};
   margin-left: 64px;
   white-space: nowrap;
   overflow: hidden;
@@ -32,7 +31,7 @@ export const PrimaryText = styled.div`
 `;
 
 export const SecondaryText = styled.div`
-  ${typography.body2()};
+  ${body2()};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -46,7 +45,7 @@ export const Icon = styled.div`
   left: 16px;
   width: 16px;
   height: 16px;
-  ${images.center('16px', '16px')};
+  ${centerImage('16px', '16px')};
 `;
 
 export const Dash = styled.div`

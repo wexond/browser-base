@@ -1,8 +1,6 @@
 import styled, { css } from 'styled-components';
-import images from '../../mixins/images';
-import typography from '../../mixins/typography';
-import opacity from '../../defaults/opacity';
-import icons from '../../defaults/icons';
+import { opacity, icons } from '../../../defaults';
+import { centerImage, body2 } from '../../mixins';
 
 export const Root = styled.div`
   height: 56px;
@@ -30,7 +28,7 @@ export const Icon = styled.div`
   height: 16px;
   min-width: 16px;
   margin-left: 24px;
-  ${images.center('16px', 'auto')};
+  ${centerImage('16px', 'auto')};
 
   ${({ icon }: { icon: string }) => css`
     background-image: url(${icon});
@@ -40,13 +38,13 @@ export const Icon = styled.div`
 export const PrimaryText = styled.div`
   opacity: ${opacity.light.primaryText};
 
-  ${typography.body2()};
+  ${body2()};
 `;
 
 export const SecondaryText = styled.div`
   opacity: ${opacity.light.secondaryText};
 
-  ${typography.body2()};
+  ${body2()};
 `;
 
 export const Title = styled(PrimaryText)`
@@ -56,7 +54,7 @@ export const Title = styled(PrimaryText)`
   text-overflow: ellipsis;
   margin-right: 24px;
 
-  typography.body2()};
+  ${body2()};
 `;
 
 export const Time = styled(SecondaryText)`
@@ -71,7 +69,7 @@ export const RemoveIcon = styled.div`
   z-index: 2;
   background-image: url(${icons.close});
 
-  ${images.center('24px', 'auto')};
+  ${centerImage('24px', 'auto')};
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? opacity.light.inactiveIcon : 0};

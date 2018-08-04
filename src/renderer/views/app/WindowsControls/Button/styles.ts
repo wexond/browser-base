@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import images from '../../../../mixins/images';
+import { centerImage } from '../../../../mixins';
 
 interface ButtonProps {
   icon: string;
@@ -35,7 +35,7 @@ export const Icon = styled.div`
   width: 100%;
   height: 100%;
   transition: 0.2ss filter;
-  ${images.center('11px', '11px')};
+  ${centerImage('11px', '11px')};
 
   ${({ icon, isClose }: IconProps) => css`
     background-image: url(${icon});

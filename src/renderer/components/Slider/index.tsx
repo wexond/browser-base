@@ -1,14 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 
-import { getEvents } from '../../utils/events';
-import { getRippleEvents } from '../../utils/ripple';
-import { hexToRgb } from '../../utils/colors';
-
-import Ripples from '../Ripples';
-
-import opacity from '../../defaults/opacity';
-import colors from '../../defaults/colors';
-import { SliderType, ButtonType } from '../../enums';
+import { opacity } from '../../../defaults/opacity';
+import { colors } from '../../../defaults/colors';
+import { SliderType } from '../../../enums';
 
 import {
   StyledSlider,
@@ -21,6 +15,8 @@ import {
   Tick,
   TickValue,
 } from './styles';
+
+import { hexToRgb } from '../../../utils';
 
 export type SliderEvent = (value?: any, type?: SliderType, element?: Slider) => void;
 
@@ -62,8 +58,6 @@ export default class Slider extends React.Component<Props, State> {
   private inactiveTrack: HTMLDivElement;
 
   private ticksList: any = [];
-
-  private ripples: Ripples;
 
   private isMouseDown: boolean = false;
 

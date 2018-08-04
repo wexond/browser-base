@@ -1,8 +1,6 @@
 import styled from 'styled-components';
-import typography from '../../../../mixins/typography';
-import opacity from '../../../../defaults/opacity';
-import images from '../../../../mixins/images';
-import icons from '../../../../defaults/icons';
+import { opacity, icons } from '../../../../../defaults';
+import { subtitle2, centerImage } from '../../../../mixins';
 
 export const Root = styled.div`
   margin-left: 4px;
@@ -27,7 +25,7 @@ export const Title = styled.div`
   padding-right: 2px;
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 
-  ${typography.subtitle2()};
+  ${subtitle2()};
 `;
 
 export const HomeIcon = styled.div`
@@ -37,5 +35,5 @@ export const HomeIcon = styled.div`
   background-image: url(${icons.home});
   opacity: ${opacity.light.inactiveIcon};
 
-  ${images.center('100%', 'auto')};
+  ${centerImage('100%', 'auto')};
 `;

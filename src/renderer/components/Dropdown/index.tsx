@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { getRippleEvents } from '../../utils/ripple';
 import Ripples from '../Ripples';
 import Item from './Item';
 import {
   Root, Container, Name, Icon, List,
 } from './styles';
+import { getRippleEvents } from '../../../utils';
 
 export type DropdownEvent = (e?: React.MouseEvent<any>) => void;
 

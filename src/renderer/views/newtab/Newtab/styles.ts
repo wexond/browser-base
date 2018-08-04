@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import opacity from '../../../defaults/opacity';
-import typography from '../../../mixins/typography';
+import { opacity } from '../../../../defaults';
+import { caption } from '../../../mixins';
 
 export const StyledApp = styled.div`
   width: 100%;
@@ -35,7 +35,7 @@ export const Credits = styled.div`
   background-color: #f5f5f5;
   color: rgba(0, 0, 0, ${opacity.light.secondaryText});
 
-  ${typography.caption()};
+  ${caption()};
 
   & a {
     transition: 0.2s color;

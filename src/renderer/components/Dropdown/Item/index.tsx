@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { getRippleEvents } from '../../../utils/ripple';
 import Ripples from '../../Ripples';
 import { Root } from './styles';
+import { getRippleEvents } from '../../../../utils';
 
 export interface Props {
   onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;

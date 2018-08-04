@@ -15,7 +15,9 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "lib": ["dom", "esnext"],
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+
+    "typeRoots": ["./node_modules/@types"]
   },
   "awesomeTypescriptLoaderOptions": {
     "reportFiles": ["src/**/*.{ts,tsx}"],

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import opacity from '../../../defaults/opacity';
-import typography from '../../../mixins/typography';
+import { opacity } from '../../../../defaults';
+import { caption } from '../../../mixins';
 
 export const StyledSuggestions = styled.div`
   z-index: 50;
@@ -16,5 +16,5 @@ export const Caption = styled.div`
   align-items: center;
   margin-left: 16px;
   opacity: ${opacity.light.secondaryText};
-  ${typography.caption()};
+  ${caption()};
 `;
