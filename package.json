@@ -32,7 +32,7 @@
     "build-renderer": "webpack --config webpack.config.renderer.prod.js",
     "build-main": "webpack --config webpack.config.main.js --mode production",
     "build-preloads": "webpack --config webpack.config.preloads.js --mode production",
-    "build": "npm run build-main && npm run build-preloads && npm run build-renderer",
+    "build": "concurrently \"npm run build-renderer\" \"npm run build-main\" \"npm run build-preloads\"",
     "compile-win32": "npm run build && electron-builder -w -p always",
     "compile-darwin": "npm run build && electron-builder -m -p always",
     "compile-linux": "npm run build && electron-builder -l -p always",
