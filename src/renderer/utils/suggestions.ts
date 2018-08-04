@@ -63,7 +63,8 @@ export const getHistorySuggestions = (filter: string) => {
       const query = urlPart
         .split('q=')[1]
         .split('&')[0]
-        .replace(/\+/g, ' ');
+        .replace(/\+/g, ' ')
+        .replace(/%20/g, ' ');
       if (
         query.startsWith(filterPart)
         && urlMatchedItems.filter(x => x.url === query).length === 0
