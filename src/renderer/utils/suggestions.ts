@@ -1,26 +1,9 @@
 import store from '../store';
 import HistoryItem from '../models/history-item';
-import database from '../database';
 import { requestURL } from './network';
 import { isURL } from './url';
 import SuggestionItem from '../models/suggestion-item';
 import icons from '../defaults/icons';
-
-const removeDuplicates = (array: any[], param: string) => {
-  const tempArray = array.slice();
-  array = [];
-  // Remove duplicates from array.
-  const seenItems = [];
-  for (let i = 0; i < tempArray.length; i++) {
-    const value = tempArray[i][param].replace(/\//g, '');
-    if (seenItems.indexOf(value) === -1) {
-      array.push(tempArray[i]);
-      seenItems.push(value);
-    }
-  }
-
-  return array;
-};
 
 const countVisitedTimes = (historyItems: HistoryItem[]) => {
   const items: any[] = [];
@@ -191,13 +174,13 @@ export const loadSuggestions = async (input: HTMLInputElement) =>
       }
     }
 
-    const suggestions = input.value === '' ? [] : historySuggestions.concat(searchSuggestions);
+    let suggestions: SuggestionItem[] = input.value === '' ? [] : historySuggestions.concat(searchSuggestions).slice(0, 6);
 
-    let id = 0;
-
-    for (const suggestion of suggestions) {
-      suggestion.id = id++;
+    for (let i = 0; i < suggestions.length; i++) {
+      suggestions[i].id = i;
     }
+
+    store.suggestions = suggestions;
 
     if (historySuggestions.length > 0 && historySuggestions[0].canSuggest) {
       resolve(historySuggestions[0].primaryText);
@@ -205,15 +188,22 @@ export const loadSuggestions = async (input: HTMLInputElement) =>
 
     const searchData = await getSearchSuggestions(filter);
 
-    searchSuggestions = [];
-    for (const item of searchData) {
-      searchSuggestions.push({
-        primaryText: item,
-        id: id++,
-        favicon: icons.search,
-        isSearch: true,
-      });
-    }
+    if (input.value.substring(0, input.selectionStart) === filter) {
+      searchSuggestions = [];
+      for (const item of searchData) {
+        searchSuggestions.push({
+          primaryText: item,
+          favicon: icons.search,
+          isSearch: true,
+        });
+      }
 
-    store.suggestions = input.value === '' ? [] : historySuggestions.concat(searchSuggestions);
+      suggestions = input.value === '' ? [] : historySuggestions.concat(searchSuggestions).slice(0, 6);
+
+      for (let i = 0; i < suggestions.length; i++) {
+        suggestions[i].id = i;
+      }
+
+      store.suggestions = suggestions;
+    }
   });
