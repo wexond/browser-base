@@ -2,10 +2,9 @@ import {
   ipcRenderer, clipboard, remote, nativeImage,
 } from 'electron';
 import { observer } from 'mobx-react';
-import { hot } from 'react-hot-loader';
 import React from 'react';
-import { createWriteStream, readdir, stat } from 'fs';
-import { basename, extname, resolve } from 'path';
+import { createWriteStream } from 'fs';
+import { basename, extname } from 'path';
 import http from 'http';
 import { parse } from 'url';
 
@@ -400,4 +399,4 @@ class App extends React.Component {
   }
 }
 
-export default hot(module)(App);
+export default App;
