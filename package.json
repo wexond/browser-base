@@ -34,7 +34,7 @@
     "compile-darwin": "npm run build && electron-builder -m -p always",
     "compile-linux": "npm run build && electron-builder -l -p always",
     "lint": "eslint --ext .tsx --ext .ts --ext .js src/",
-    "lint-fix": "eslint --fix --ext .tsx --ext .ts --ext .js src/ && prettier-eslint --write \"src/**/*.ts*\""
+    "lint-fix": "prettier-eslint --write \"src/**/*.ts*\""
   },
   "pre-commit": [
     "lint-fix"
