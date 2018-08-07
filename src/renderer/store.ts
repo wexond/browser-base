@@ -5,7 +5,11 @@ import {
   Workspace, Menu, AddressBar, Page,
 } from '../models';
 import {
-  SuggestionItem, BookmarkItem, HistoryItem, WeatherForecast,
+  SuggestionItem,
+  BookmarkItem,
+  HistoryItem,
+  WeatherForecast,
+  KeyBinding,
 } from '../interfaces';
 import { PageMenuMode, Platforms } from '../enums';
 import ContextMenu from './components/ContextMenu';
@@ -144,6 +148,8 @@ class Store {
   };
 
   public cmdPressed = false;
+
+  public keyBindings: KeyBinding[] = [];
 
   /** Methods */
 
