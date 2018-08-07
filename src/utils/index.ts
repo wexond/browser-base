@@ -16,3 +16,4 @@ export * from './weather-card';
 export * from './weather';
 export * from './window';
 export * from './other';
+export * from './key-bindings';
