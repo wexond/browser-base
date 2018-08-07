@@ -21,8 +21,10 @@ import { colors } from '../../../../defaults';
 import { UPDATE_RESTART_AND_INSTALL } from '../../../../constants';
 import { StyledApp } from './styles';
 import { PageMenuMode, ButtonType } from '../../../../enums';
+import { handleKeyBindings, parseKeyBindings } from '../../../../utils';
 
 const { dialog } = remote;
+const keyBindingsJSON = require('../../../../../static/bookmarks/key-bindings.json');
 
 @observer
 class App extends React.Component {
@@ -47,137 +49,15 @@ class App extends React.Component {
       store.bookmarkDialogVisible = false;
     });
 
-    window.addEventListener('keyup', e => {
-      if (e.key === 'Meta') {
-        store.cmdPressed = false;
-      }
-    });
-
-    window.addEventListener('keydown', e => {
-      if (!e.isTrusted) return;
-
-      store.cmdPressed = e.key === 'Meta'; // Command on macOS
-
-      if (e.keyCode === 27) {
-        // escape
-        // hide menu and workspaces manager
-
-        if (store.workspacesMenuVisible) store.workspacesMenuVisible = false;
-
-        if (store.menu.visible) {
-          store.menu.visible = false;
-          store.menu.selectedItem = null;
-        }
-      } else if (
-        (e.ctrlKey || store.workspacesMenuVisible)
-        && (e.keyCode === 37 || e.keyCode === 39)
-      ) {
-        // ctrl + left or aight arrow,
-        // switch between workspaces
-
-        const list = store.workspaces;
-        const index = list.indexOf(store.getCurrentWorkspace());
-
-        if (e.keyCode === 37) {
-          // left
-
-          if (index <= 0) {
-            store.selectedWorkspace = list[list.length - 1].id;
-          } else {
-            store.selectedWorkspace = list[index - 1].id;
-          }
-        } else if (e.keyCode === 39) {
-          // right
-
-          if (index + 1 === store.workspaces.length) {
-            store.selectedWorkspace = 0;
-          } else {
-            store.selectedWorkspace = list[index + 1].id;
-          }
-        } else {
-          return;
-        }
-
-        clearTimeout(this.workspacesTimer);
-
-        this.workspacesTimer = setTimeout(
-          () => (store.workspacesMenuVisible = false),
-          store.workspacesMenuVisible ? 500 : 200,
-        );
-        store.workspacesMenuVisible = true;
-      } else if (e.ctrlKey && e.keyCode >= 48 && e.keyCode <= 57) {
-        // ctrl + digit
-        // switch between tabs, 1-9 + 0
-
-        const current = store.getCurrentWorkspace();
-        const tabs = current.tabs;
-
-        if (e.keyCode === 48) {
-          // 0
-
-          current.selectTab(tabs[tabs.length - 1]);
-        } else {
-          // 1-9
-
-          const index = e.keyCode - 49;
-
-          if (tabs.length > index) {
-            current.selectTab(tabs[index]);
-          }
-        }
-      } else if (e.ctrlKey && e.keyCode === 83 && !store.workspacesMenuVisible) {
-        // ctrl + s
-        // show workspaces manager
-
-        store.workspacesMenuVisible = true;
-      } else if (e.ctrlKey && e.keyCode === 82) {
-        // ctrl + r
-        // refresh a page
-
-        store.getSelectedPage().webview.reload();
-      } else if (e.ctrlKey && e.keyCode === 78) {
-        // ctrl + n
-        // add a new tab
-
-        store.getCurrentWorkspace().addTab();
-      } else if (e.altKey && e.keyCode === 37) {
-        // alt + left arrow
-        // go back
-        store.getSelectedPage().webview.goBack();
-      } else if (e.altKey && e.keyCode === 39) {
-        // alt + right arrow
-        // go forward
-        store.getSelectedPage().webview.goForward();
-      } else if (e.ctrlKey && e.keyCode === 72) {
-        // ctrl + h
-        // To view history
-        store.menu.visible = true;
-        store.menu.selectedItem = 0;
-      } else if (e.ctrlKey && e.keyCode === 75) {
-        // ctrl + k
-        // To view bookmarks
-        store.menu.visible = true;
-        store.menu.selectedItem = 1;
-      } else if (e.altKey && e.keyCode === 36) {
-        // alt + Home
-        // To go NewTab Page
-        store.getSelectedPage().webview.loadURL('wexond://newtab');
-      } else if (e.altKey && e.keyCode === 112) {
-        // alt + F1
-        // To see About
-        store.menu.visible = true;
-        store.menu.selectedItem = 4;
-      } else if (e.altKey && e.keyCode === 69) {
-        // alt + E
-        // Open Menu
-        store.menu.visible = true;
-      }
-    });
+    window.addEventListener('keyup', handleKeyBindings);
+    window.addEventListener('keydown', handleKeyBindings);
 
     await store.loadFavicons();
 
     store.bookmarks = await database.bookmarks.toArray();
     store.historyItems = await database.history.toArray();
+
+    store.keyBindings = parseKeyBindings(keyBindingsJSON);
   }
 
   public componentWillUnmount() {

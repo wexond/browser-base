@@ -7,3 +7,4 @@ export * from './suggestion-item';
 export * from './weather-daily-item';
 export * from './weather-forecast';
 export * from './weather-weekly-item';
+export * from './key-binding';

@@ -14,6 +14,12 @@ export const getTimeZoneOffset = async (
   const data = await requestURL(url);
   const json = JSON.parse(data);
 
+  console.log(json);
+
+  if (json.status === 'OVER_QUERY_LIMIT') {
+    return null;
+  }
+
   const offsets = json.dstOffset * 1000 + json.rawOffset * 1000;
   const local = new Date(timestamp * 1000 + offsets);
 
