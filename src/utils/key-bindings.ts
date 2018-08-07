@@ -7,15 +7,18 @@ export const parseKeyBindings = (json: any) => {
 
   for (let i = 0; i < json.length; i++) {
     const item = json[i];
+    const isRange = item.keyMinRange != null && item.keyMaxRange != null;
 
-    if (item.command != null && item.key != null) {
+    if (item.command != null && (item.key != null || isRange)) {
       const keyBinding: KeyBinding = {
-        key: item.key.toLowerCase(),
+        key: item.key,
+        keyMinRange: item.keyMinRange,
+        keyMaxRange: item.keyMaxRange,
         altKey: item.altKey || false,
         ctrlKey: item.ctrlKey || false,
         metaKey: item.metaKey || false,
         command: item.command,
-        when: item.when,
+        isRange,
       };
 
       list.push(keyBinding);
@@ -28,17 +31,25 @@ export const parseKeyBindings = (json: any) => {
 export const handleKeyBindings = (e: KeyboardEvent) => {
   if (!e.isTrusted) return;
 
+  console.log(e.code);
+
   if (e.type === 'keydown') {
     for (let i = 0; i < Store.keyBindings.length; i++) {
       const binding = Store.keyBindings[i];
 
       if (
-        binding.key === e.key.toLowerCase()
-        && binding.altKey === e.altKey
-        && binding.ctrlKey === e.ctrlKey
-        && binding.metaKey === e.metaKey
+        binding.altKey !== e.altKey
+        || binding.ctrlKey !== e.ctrlKey
+        || binding.metaKey !== e.metaKey
       ) {
-        Commands[binding.command]();
+        return;
+      }
+
+      if (
+        (!binding.isRange && e.code === binding.key)
+        || (binding.isRange && e.keyCode >= binding.keyMinRange && e.keyCode <= binding.keyMaxRange)
+      ) {
+        Commands[binding.command](e.keyCode);
         return;
       }
     }

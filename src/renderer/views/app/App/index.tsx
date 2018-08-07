@@ -24,7 +24,7 @@ import { PageMenuMode, ButtonType } from '../../../../enums';
 import { handleKeyBindings, parseKeyBindings } from '../../../../utils';
 
 const { dialog } = remote;
-const keyBindingsJSON = require('../../../../../static/bookmarks/key-bindings.json');
+const keyBindingsJSON = require('../../../../../static/defaults/key-bindings.json');
 
 @observer
 class App extends React.Component {
