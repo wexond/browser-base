@@ -1,8 +1,8 @@
-import Store from '../renderer/store';
+import store from '../renderer/store';
 
 export const Commands: any = {
   'tabs.switch': (e?: KeyboardEvent) => {
-    const current = Store.getCurrentWorkspace();
+    const current = store.getCurrentWorkspace();
     const tabs = current.tabs;
 
     // 0
@@ -17,7 +17,36 @@ export const Commands: any = {
       }
     }
   },
+  'tabs.new': () => {
+    store.getCurrentWorkspace().addTab();
+  },
+  'tabs.reload': () => {
+    store.getSelectedPage().webview.reload();
+  },
+  'tabs.back': () => {
+    store.getSelectedPage().webview.goBack();
+  },
+  'tabs.forward': () => {
+    store.getSelectedPage().webview.goForward();
+  },
+  'tabs.home': () => {
+    console.log('home');
+  },
   'workspaces.show': () => {
-    Store.workspacesMenuVisible = true;
+    store.workspacesMenuVisible = true;
+  },
+  'history.show': () => {
+    store.menu.visible = true;
+    store.menu.selectedItem = 0;
+  },
+  'menu.show': () => {
+    store.menu.visible = true;
+  },
+  'wexond.hideAllMenu': () => {
+    store.workspacesMenuVisible = false;
+    store.menu.visible = false;
+    store.menu.selectedItem = null;
+    store.bookmarkDialogVisible = false;
+    store.pageMenu.toggle(false);
   },
 };
