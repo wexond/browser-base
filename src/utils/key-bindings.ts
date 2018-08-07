@@ -1,6 +1,5 @@
 import Mousetrap from 'mousetrap';
 
-import store from '../renderer/store';
 import { KeyBinding } from '../interfaces';
 import { Commands } from '../defaults';
 
