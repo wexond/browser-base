@@ -21,7 +21,7 @@ import { colors } from '../../../../defaults';
 import { UPDATE_RESTART_AND_INSTALL } from '../../../../constants';
 import { StyledApp } from './styles';
 import { PageMenuMode, ButtonType } from '../../../../enums';
-import { handleKeyBindings, parseKeyBindings } from '../../../../utils';
+import { parseKeyBindings, bindKeys } from '../../../../utils';
 
 const { dialog } = remote;
 const keyBindingsJSON = require('../../../../../static/defaults/key-bindings.json');
@@ -49,15 +49,13 @@ class App extends React.Component {
       store.bookmarkDialogVisible = false;
     });
 
-    window.addEventListener('keyup', handleKeyBindings);
-    window.addEventListener('keydown', handleKeyBindings);
-
     await store.loadFavicons();
 
     store.bookmarks = await database.bookmarks.toArray();
     store.historyItems = await database.history.toArray();
 
     store.keyBindings = parseKeyBindings(keyBindingsJSON);
+    bindKeys(store.keyBindings);
   }
 
   public componentWillUnmount() {
