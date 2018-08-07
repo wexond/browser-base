@@ -1,13 +1,21 @@
 [
   {
-    "keyMinRange": 48,
-    "keyMaxRange": 57,
-    "ctrlKey": true,
+    "key": [
+      "ctrl+0",
+      "ctrl+1",
+      "ctrl+2",
+      "ctrl+3",
+      "ctrl+4",
+      "ctrl+5",
+      "ctrl+6",
+      "ctrl+7",
+      "ctrl+8",
+      "ctrl+9"
+    ],
     "command": "tabs.switch"
   },
   {
-    "key": "KeyS",
-    "ctrlKey": true,
+    "key": "ctrl+s",
     "command": "workspaces.show"
   }
 ]
