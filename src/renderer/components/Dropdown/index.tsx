@@ -2,9 +2,7 @@ import * as React from 'react';
 import { getRippleEvents } from '../../../utils';
 import Ripples from '../Ripples';
 import Item from './Item';
-import {
-  Container, Icon, List, Name, Root,
-} from './styles';
+import { Container, Icon, List, Name, Root } from './styles';
 
 export type DropdownEvent = (e?: React.MouseEvent<any>) => void;
 
@@ -52,7 +50,9 @@ export default class Dropdown extends React.Component<Props, State> {
   }
 
   public onClick = () => {
-    if (this.items.length === 0) { return; }
+    if (this.items.length === 0) {
+      return;
+    }
     const { activated } = this.state;
 
     if (activated) {
@@ -97,7 +97,9 @@ export default class Dropdown extends React.Component<Props, State> {
       index = index === 0 ? maxIndex : index - 1;
     }
 
-    if (selectedItem !== index) { this.onChange(this.items.find((x) => x.props.id === index)); }
+    if (selectedItem !== index) {
+      this.onChange(this.items.find(x => x.props.id === index));
+    }
     this.setState({ selectedItem: index });
   }
 
@@ -129,24 +131,29 @@ export default class Dropdown extends React.Component<Props, State> {
 
     let id = 0;
 
-    const item = this.items.find((x) => x.props.id === selectedItem);
+    const item = this.items.find(x => x.props.id === selectedItem);
 
     return (
       <Root onMouseDown={this.onMouseDown} onMouseUp={onMouseUp} style={style}>
         <Container {...events}>
           <Name>{item && item.props.children}</Name>
           <Icon activated={activated} />
-          <Ripples ref={(r) => (this.ripples = r)} color="#000" />
+          <Ripples ref={r => (this.ripples = r)} color="#000" />
         </Container>
         {children != null && (
-          <List innerRef={(r) => (this.listContainer = r)} height={listHeight} activated={activated}>
+          <List
+            innerRef={r => (this.listContainer = r)}
+            height={listHeight}
+            activated={activated}
+          >
             {React.Children.map(children, (el: React.ReactElement<any>) =>
               React.cloneElement(el, {
                 ref: (r: Item) => r != null && this.items.push(r),
                 onClick: this.onItemClick,
                 selected: selectedItem === id,
                 id: id++,
-              }))}
+              }),
+            )}
           </List>
         )}
       </Root>

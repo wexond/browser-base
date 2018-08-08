@@ -63,9 +63,9 @@ export default class Ripple extends React.Component<IProps, IState> {
         this.timeouts.push(
           setTimeout(() => {
             removeRipple(id);
-          },         fadeOutTime * 1000),
+          }, fadeOutTime * 1000),
         );
-      },         100),
+      }, 100),
     );
   }
 
@@ -76,7 +76,13 @@ export default class Ripple extends React.Component<IProps, IState> {
   public render() {
     const { height, width, opacity } = this.state;
     const {
-      color, x, y, isRemoving, rippleTime, fadeOutTime, icon,
+      color,
+      x,
+      y,
+      isRemoving,
+      rippleTime,
+      fadeOutTime,
+      icon,
     } = this.props;
 
     if (isRemoving) {

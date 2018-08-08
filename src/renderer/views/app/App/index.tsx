@@ -1,6 +1,4 @@
-import {
-  clipboard, ipcRenderer, nativeImage, remote,
-} from 'electron';
+import { clipboard, ipcRenderer, nativeImage, remote } from 'electron';
 import { createWriteStream } from 'fs';
 import http from 'http';
 import { observer } from 'mobx-React';
@@ -12,7 +10,13 @@ import { UPDATE_RESTART_AND_INSTALL } from '../../../../constants';
 import database from '../../../../database';
 import { colors } from '../../../../defaults';
 import { ButtonType, PageMenuMode } from '../../../../enums';
-import { bindKeys, createTab, createWorkspace, getSelectedPage, parseKeyBindings } from '../../../../utils';
+import {
+  bindKeys,
+  createTab,
+  createWorkspace,
+  getSelectedPage,
+  parseKeyBindings,
+} from '../../../../utils';
 import Button from '../../../components/Button';
 import ContextMenu from '../../../components/ContextMenu';
 import Snackbar from '../../../components/Snackbar';
@@ -34,7 +38,7 @@ class App extends React.Component {
   }
 
   public async componentDidMount() {
-    window.addEventListener('mousemove', (e) => {
+    window.addEventListener('mousemove', e => {
       store.mouse.x = e.pageX;
       store.mouse.y = e.pageY;
     });
@@ -110,7 +114,8 @@ class App extends React.Component {
       name = '';
       extension = srcURL.split('data:image/')[1].split(';base64,')[0];
 
-      const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      const possible =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
       for (let i = 0; i < 16; i++) {
         name += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -127,12 +132,12 @@ class App extends React.Component {
           },
         ],
       },
-      (path) => {
+      path => {
         const file = createWriteStream(path);
 
         const options = parse(srcURL);
 
-        const request = http.request(options, (res) => {
+        const request = http.request(options, res => {
           res.pipe(file);
         });
         request.end();
@@ -152,10 +157,10 @@ class App extends React.Component {
           },
         ],
       },
-      (path1) => {
+      path1 => {
         getSelectedPage()
           .webview.getWebContents()
-          .savePage(path1, 'HTMLComplete', (error) => {
+          .savePage(path1, 'HTMLComplete', error => {
             if (error) {
               console.error(error);
             }
@@ -175,10 +180,10 @@ class App extends React.Component {
           },
         ],
       },
-      (path1) => {
+      path1 => {
         getSelectedPage()
           .webview.getWebContents()
-          .savePage(path1, 'HTMLComplete', (error) => {
+          .savePage(path1, 'HTMLComplete', error => {
             if (error) {
               console.error(error);
             }
@@ -195,8 +200,10 @@ class App extends React.Component {
   public render() {
     const { mode } = store.pageMenuData;
 
-    const imageAndURLLink = mode === PageMenuMode.ImageAndURL || mode === PageMenuMode.URL;
-    const imageAndURLImage = mode === PageMenuMode.ImageAndURL || mode === PageMenuMode.Image;
+    const imageAndURLLink =
+      mode === PageMenuMode.ImageAndURL || mode === PageMenuMode.URL;
+    const imageAndURLImage =
+      mode === PageMenuMode.ImageAndURL || mode === PageMenuMode.Image;
     const normal = mode === PageMenuMode.Normal;
 
     return (
@@ -207,14 +214,17 @@ class App extends React.Component {
           width={256}
           dense
           ref={(r: ContextMenu) => (store.pageMenu = r)}
-          onMouseDown={(e) => e.stopPropagation()}
+          onMouseDown={e => e.stopPropagation()}
           style={{
             position: 'absolute',
             left: store.pageMenuData.x,
             top: store.pageMenuData.y,
           }}
         >
-          <ContextMenu.Item visible={imageAndURLLink} onClick={this.onOpenLinkInNewTabClick}>
+          <ContextMenu.Item
+            visible={imageAndURLLink}
+            onClick={this.onOpenLinkInNewTabClick}
+          >
             Open link in new tab
           </ContextMenu.Item>
           <ContextMenu.Item visible={imageAndURLLink} disabled>
@@ -226,20 +236,35 @@ class App extends React.Component {
           <ContextMenu.Item visible={imageAndURLLink} onClick={this.saveLinkAs}>
             Save link as
           </ContextMenu.Item>
-          <ContextMenu.Item visible={imageAndURLLink} onClick={this.onCopyLinkAddressClick}>
+          <ContextMenu.Item
+            visible={imageAndURLLink}
+            onClick={this.onCopyLinkAddressClick}
+          >
             Copy link address
           </ContextMenu.Item>
           <ContextMenu.Separator visible={imageAndURLLink} />
-          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onOpenImageInNewTabClick}>
+          <ContextMenu.Item
+            visible={imageAndURLImage}
+            onClick={this.onOpenImageInNewTabClick}
+          >
             Open image in new tab
           </ContextMenu.Item>
-          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onSaveImageAsClick}>
+          <ContextMenu.Item
+            visible={imageAndURLImage}
+            onClick={this.onSaveImageAsClick}
+          >
             Save image as
           </ContextMenu.Item>
-          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onCopyImageClick}>
+          <ContextMenu.Item
+            visible={imageAndURLImage}
+            onClick={this.onCopyImageClick}
+          >
             Copy image
           </ContextMenu.Item>
-          <ContextMenu.Item visible={imageAndURLImage} onClick={this.onCopyImageAddressClick}>
+          <ContextMenu.Item
+            visible={imageAndURLImage}
+            onClick={this.onCopyImageAddressClick}
+          >
             Copy image address
           </ContextMenu.Item>
           <ContextMenu.Separator visible={imageAndURLImage} />
@@ -253,7 +278,9 @@ class App extends React.Component {
           <ContextMenu.Item visible={normal} onClick={this.viewSource}>
             View source
           </ContextMenu.Item>
-          <ContextMenu.Item onClick={this.onInspectElementClick}>Inspect element</ContextMenu.Item>
+          <ContextMenu.Item onClick={this.onInspectElementClick}>
+            Inspect element
+          </ContextMenu.Item>
         </ContextMenu>
         <GlobalMenu />
         <WorkspacesMenu />

@@ -25,15 +25,16 @@ export const formatTime = (
   hours = hours.toString().padStart(2, '0');
   const mins = minutes
     ? date
-      .getMinutes()
-      .toString()
-      .padStart(2, '0')
+        .getMinutes()
+        .toString()
+        .padStart(2, '0')
     : '';
 
   return `${hours}${mins ? ':' : ''}${_minutes}${timePeriod}`;
 };
 
-export const getDayIndex = (date: Date) => (date.getDay() === 0 ? 6 : date.getDay() - 1);
+export const getDayIndex = (date: Date) =>
+  date.getDay() === 0 ? 6 : date.getDay() - 1;
 
 const getOperator = (condition: string) => {
   const operators = ['=', '<', '>'];
@@ -61,9 +62,9 @@ export const getConditionsTime = (time: number, conditions: any) => {
         const secondSide = parseInt(parts[1], 10);
 
         if (
-          (operator === '<' && firstSide < secondSide)
-          || (operator === '>' && firstSide > secondSide)
-          || (operator === '=' && firstSide === secondSide)
+          (operator === '<' && firstSide < secondSide) ||
+          (operator === '>' && firstSide > secondSide) ||
+          (operator === '=' && firstSide === secondSide)
         ) {
           return conditions[keys[i]];
         }
@@ -95,9 +96,10 @@ export const getTimeOffset = (date: Date, t?: any) => {
     return `${dictionary.oneHour} ${dictionary.ago}`;
   }
 
-  return `${value} ${getConditionsTime(value, showHours ? dictionary.hours : dictionary.minutes)} ${
-    dictionary.ago
-    }`;
+  return `${value} ${getConditionsTime(
+    value,
+    showHours ? dictionary.hours : dictionary.minutes,
+  )} ${dictionary.ago}`;
 };
 
 export const formatDate = (date: Date) => {

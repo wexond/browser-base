@@ -1,23 +1,31 @@
 import { TweenLite } from 'gsap';
 import store from '../renderer/store';
 
-import { getCurrentWorkspace, getCurrentWorkspaceTabs, getWorkspaceById } from '.';
+import {
+  getCurrentWorkspace,
+  getCurrentWorkspaceTabs,
+  getWorkspaceById,
+} from '.';
 import { TOOLBAR_BUTTON_WIDTH } from '../constants';
 import { tabAnimations } from '../defaults';
 import { Tab } from '../models';
 import { createPage } from './pages';
 
 export const getTabbarWidth = (): number => {
-  if (!store.tabbarRef) { return 0; }
+  if (!store.tabbarRef) {
+    return 0;
+  }
   return store.tabbarRef.offsetWidth - TOOLBAR_BUTTON_WIDTH;
 };
 
 export const getSelectedTab = () =>
-  store.tabs.find((x) => x.id === getCurrentWorkspace().selectedTab);
+  store.tabs.find(x => x.id === getCurrentWorkspace().selectedTab);
 
 export const getTabWidth = (): number => {
   const workspace = getCurrentWorkspace();
-  const tabs = store.tabs.filter((x) => x.workspaceId === workspace.id && !x.isClosing);
+  const tabs = store.tabs.filter(
+    x => x.workspaceId === workspace.id && !x.isClosing,
+  );
   const width = getTabbarWidth() / tabs.length;
 
   if (width > 200) {
@@ -53,7 +61,11 @@ export const getTabNewLeft = (tab: Tab): number => {
   return left;
 };
 
-export const setLeft = (ref: HTMLDivElement, left: number, animation: boolean) => {
+export const setLeft = (
+  ref: HTMLDivElement,
+  left: number,
+  animation: boolean,
+) => {
   if (ref) {
     TweenLite.to(ref, animation ? tabAnimations.left.duration : 0, {
       x: left,
@@ -62,7 +74,11 @@ export const setLeft = (ref: HTMLDivElement, left: number, animation: boolean) =
   }
 };
 
-export const setWidth = (ref: HTMLDivElement, width: number, animation: boolean) => {
+export const setWidth = (
+  ref: HTMLDivElement,
+  width: number,
+  animation: boolean,
+) => {
   if (ref) {
     TweenLite.to(ref, animation ? tabAnimations.width.duration : 0, {
       width,
@@ -95,7 +111,9 @@ export const setTabWidth = (tab: Tab, width: number, animation: boolean) => {
 
 export const setTabsWidths = (animation: boolean) => {
   const workspace = getCurrentWorkspace();
-  const tabs = store.tabs.filter((x) => x.workspaceId === workspace.id && !x.isClosing);
+  const tabs = store.tabs.filter(
+    x => x.workspaceId === workspace.id && !x.isClosing,
+  );
 
   for (const tab of tabs) {
     setTabWidth(tab, getTabWidth(), animation);
@@ -104,7 +122,9 @@ export const setTabsWidths = (animation: boolean) => {
 
 export const setTabsLefts = (animation: boolean) => {
   const workspace = getCurrentWorkspace();
-  const tabs = store.tabs.filter((x) => x.workspaceId === workspace.id && !x.isClosing);
+  const tabs = store.tabs.filter(
+    x => x.workspaceId === workspace.id && !x.isClosing,
+  );
 
   let left = 0;
 
@@ -122,10 +142,10 @@ export const updateTabsBounds = (animation: boolean = true) => {
   setTabsLefts(animation);
 };
 
-export const getTabById = (id: number) => store.tabs.find((x) => x.id === id);
+export const getTabById = (id: number) => store.tabs.find(x => x.id === id);
 
 export const removeTab = (id: number) => {
-  store.tabs = store.tabs.filter((x) => x.id !== id);
+  store.tabs = store.tabs.filter(x => x.id !== id);
 };
 
 export const replaceTab = (firstTab: Tab, secondTab: Tab) => {
@@ -157,7 +177,10 @@ export const getTabsToReplace = (callingTab: Tab, direction: string) => {
     }
   } else if (direction === 'right') {
     for (let i = index + 1; i < tabs.length; i++) {
-      if (callingTab.left + callingTab.width >= tabs[i].width / 2 + tabs[i].left) {
+      if (
+        callingTab.left + callingTab.width >=
+        tabs[i].width / 2 + tabs[i].left
+      ) {
         tabs = replaceTab(tabs[i - 1], tabs[i]);
       }
     }
@@ -172,7 +195,9 @@ export const selectTab = (tab: Tab) => {
   }
 };
 
-export const createTab = (createProperties: chrome.tabs.CreateProperties = { url: '', active: true }) => {
+export const createTab = (
+  createProperties: chrome.tabs.CreateProperties = { url: '', active: true },
+) => {
   const workspace = getCurrentWorkspace();
   const tab = new Tab(workspace.id);
   store.tabs.push(tab);
@@ -185,6 +210,4 @@ export const createTab = (createProperties: chrome.tabs.CreateProperties = { url
   return tab;
 };
 
-export const getIpcTab = (tab: Tab) => {
-
-};
+export const getIpcTab = (tab: Tab) => {};

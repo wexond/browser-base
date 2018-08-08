@@ -34,7 +34,9 @@ export default class BookmarksDialog extends React.Component {
 
       this.bookmark = bookmark;
 
-      const item = this.dropdown.items.find((x) => x.props.value === bookmark.parent);
+      const item = this.dropdown.items.find(
+        x => x.props.value === bookmark.parent,
+      );
 
       if (item) {
         this.dropdown.setState({
@@ -78,7 +80,7 @@ export default class BookmarksDialog extends React.Component {
         parent: this.bookmarkFolder,
       });
 
-    const item = store.bookmarks.find((x) => x.id === this.bookmark.id);
+    const item = store.bookmarks.find(x => x.id === this.bookmark.id);
 
     item.title = name;
     item.parent = this.bookmarkFolder;
@@ -109,13 +111,13 @@ export default class BookmarksDialog extends React.Component {
       <Root visible={visible} onMouseUp={this.onMouseUp}>
         <Title>New bookmark</Title>
         <Textfield
-          ref={(r) => (this.textField = r)}
+          ref={r => (this.textField = r)}
           label="Name"
           onKeyPress={this.onTextfieldKeyPress}
           style={{ marginTop: 16 }}
         />
         <Dropdown
-          ref={(r) => (this.dropdown = r)}
+          ref={r => (this.dropdown = r)}
           onChange={this.onDropdownChange}
           onMouseUp={this.onDropdownMouseUp}
           style={dropDownStyle}

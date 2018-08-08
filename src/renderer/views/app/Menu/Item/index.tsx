@@ -3,7 +3,11 @@ import React from 'react';
 
 import store from '../../../../store';
 import {
-  Background, Icon, StyledItem, SubItemsContainer, Title,
+  Background,
+  Icon,
+  StyledItem,
+  SubItemsContainer,
+  Title,
 } from './styles';
 
 interface Props {
@@ -28,9 +32,7 @@ export default class Item extends React.Component<Props, {}> {
   private subItemsContainer: HTMLDivElement;
 
   public render() {
-    const {
-      icon, children, isSubItem, visible, title, id,
-    } = this.props;
+    const { icon, children, isSubItem, visible, title, id } = this.props;
 
     let selected = false;
 
@@ -53,9 +55,13 @@ export default class Item extends React.Component<Props, {}> {
           <Icon selected={selected} subItem={isSubItem} image={icon} />
           <Title selected={selected}>{title}</Title>
         </StyledItem>
-        <SubItemsContainer innerRef={(r) => (this.subItemsContainer = r)} style={{ height }}>
+        <SubItemsContainer
+          innerRef={r => (this.subItemsContainer = r)}
+          style={{ height }}
+        >
           {React.Children.map(children, (el: React.ReactElement<any>) =>
-            React.cloneElement(el, { isSubItem: true }))}
+            React.cloneElement(el, { isSubItem: true }),
+          )}
         </SubItemsContainer>
       </div>
     );

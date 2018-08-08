@@ -8,13 +8,15 @@ export const requestURL = (url: string) =>
 
     let { request } = http;
 
-    if (options.protocol === 'https:') { request = https.request; }
+    if (options.protocol === 'https:') {
+      request = https.request;
+    }
 
-    const req = request(options, (res) => {
+    const req = request(options, res => {
       let data = '';
       res.setEncoding('utf-8');
 
-      res.on('data', (chunk) => {
+      res.on('data', chunk => {
         data += chunk;
       });
 
@@ -23,7 +25,7 @@ export const requestURL = (url: string) =>
       });
     });
 
-    req.on('error', (e) => {
+    req.on('error', e => {
       reject(e);
     });
 

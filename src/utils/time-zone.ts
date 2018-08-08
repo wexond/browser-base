@@ -8,7 +8,8 @@ export const getTimeZoneOffset = async (
 ) => {
   const loc = `${lat}, ${lon}`;
   const currentDate = new Date();
-  const timestamp = currentDate.getTime() / 1000 + currentDate.getTimezoneOffset() * 60;
+  const timestamp =
+    currentDate.getTime() / 1000 + currentDate.getTimezoneOffset() * 60;
 
   const url = `https://maps.googleapis.com/maps/api/timezone/json?location=${loc}&timestamp=${timestamp}&key=${apiKey}`;
   const data = await requestURL(url);

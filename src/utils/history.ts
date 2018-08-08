@@ -6,9 +6,9 @@ import { formatDate } from './time';
 export const getHistoryItems = (filter = '') =>
   store.historyItems
     .filter(
-      (item) =>
-        item.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1
-        || item.url.toLowerCase().indexOf(filter.toLowerCase()) !== -1,
+      item =>
+        item.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1 ||
+        item.url.toLowerCase().indexOf(filter.toLowerCase()) !== -1,
     )
     .reverse();
 
@@ -21,7 +21,7 @@ export const getHistorySections = (items: HistoryItem[]) => {
 
     const dateStr = formatDate(date);
 
-    const foundSection = sections.find((x) => x.date === dateStr);
+    const foundSection = sections.find(x => x.date === dateStr);
 
     const newItem = {
       ...item,
@@ -45,6 +45,6 @@ export const getHistorySections = (items: HistoryItem[]) => {
 };
 
 export function deleteHistoryItem(id: number) {
-  store.historyItems = store.historyItems.filter((x) => x.id !== id);
+  store.historyItems = store.historyItems.filter(x => x.id !== id);
   database.history.delete(id);
 }

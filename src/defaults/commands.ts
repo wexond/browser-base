@@ -1,5 +1,11 @@
 import store from '../renderer/store';
-import { createTab, getCurrentWorkspace, getCurrentWorkspaceTabs, getSelectedPage, selectTab } from '../utils';
+import {
+  createTab,
+  getCurrentWorkspace,
+  getCurrentWorkspaceTabs,
+  getSelectedPage,
+  selectTab,
+} from '../utils';
 
 export const Commands: any = {
   'tabs.switch': (e?: KeyboardEvent) => {

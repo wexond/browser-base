@@ -33,9 +33,12 @@ export default class WebRequestEvent {
   }
 
   public emit(e: Electron.IpcMessageEvent, details: any) {
-    this.callbacks.forEach((callback) => {
+    this.callbacks.forEach(callback => {
       console.log(this.name, details);
-      ipcRenderer.send(`api-response-${this.scope}-${this.name}`, callback(details));
+      ipcRenderer.send(
+        `api-response-${this.scope}-${this.name}`,
+        callback(details),
+      );
     });
   }
 
@@ -50,10 +53,13 @@ export default class WebRequestEvent {
   }
 
   public removeListener(callback: Function) {
-    this.callbacks = this.callbacks.filter((c) => c !== callback);
+    this.callbacks = this.callbacks.filter(c => c !== callback);
 
     if (this.callbacks.length === 0) {
-      ipcRenderer.removeListener(`api-emit-event-${this.scope}-${this.name}`, this.emit);
+      ipcRenderer.removeListener(
+        `api-emit-event-${this.scope}-${this.name}`,
+        this.emit,
+      );
       ipcRenderer.send(`api-remove-listener-${this.scope}-${this.name}`);
       this.listener = false;
     }

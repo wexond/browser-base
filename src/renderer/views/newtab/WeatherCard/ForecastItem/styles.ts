@@ -42,6 +42,6 @@ export const Temp = styled.span`
     0,
     0,
     ${({ night }: { night?: boolean }) =>
-    (night ? opacity.light.secondaryText : opacity.light.primaryText)}
+      night ? opacity.light.secondaryText : opacity.light.primaryText}
   );
 `;

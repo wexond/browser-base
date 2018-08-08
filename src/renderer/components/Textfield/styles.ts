@@ -79,7 +79,8 @@ export const Label = styled.div`
   align-self: center;
   position: absolute;
   will-change: color, opacity, margin-top, font-size;
-  transition: 0.15s color, 0.15s ease-out margin-top, 0.15s ease-out font-size, 0.15s opacity;
+  transition: 0.15s color, 0.15s ease-out margin-top, 0.15s ease-out font-size,
+    0.15s opacity;
 
   ${({ color, activated }: LabelProps) => css`
     margin-top: ${activated ? '-10px' : 'unset'};
