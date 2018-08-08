@@ -137,6 +137,33 @@ export const getAPI = (manifest: Manifest) => {
           if (callback) callback(result);
         });
       },
+      setZoom: (tabId: number, zoomFactor: number, callback: () => void) => {
+        ipcRenderer.send('api-tabs-setZoom', tabId, zoomFactor);
+
+        ipcRenderer.on('api-tabs-setZoom', () => {
+          if (callback) callback();
+        });
+      },
+      getZoom: (
+        tabId: number,
+        callback: (zoomFactor: number) => void,
+      ) => {
+        ipcRenderer.send('api-tabs-getZoom', tabId);
+
+        ipcRenderer.on('api-tabs-getZoom', (e: Electron.IpcMessageEvent, zoomFactor: number) => {
+          if (callback) callback(zoomFactor);
+        });
+      },
+      detectLanguage: (
+        tabId: number,
+        callback: (language: string) => void,
+      ) => {
+        ipcRenderer.send('api-tabs-detectLanguage', tabId);
+
+        ipcRenderer.on('api-tabs-detectLanguage', (e: Electron.IpcMessageEvent, language: string) => {
+          if (callback) callback(language);
+        });
+      },
 
       onCreated: new IpcEvent('tabs', 'onCreated'),
       onUpdated: new IpcEvent('tabs', 'onUpdated'),
