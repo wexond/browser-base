@@ -1,11 +1,15 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { Content } from './styles';
+import { PageContent, PageContainer } from '../../app/Menu/styles';
 
 @observer
 export default class KeysManager extends React.Component {
   public render() {
-    return <Content>Keys manager</Content>;
+    return (
+      <PageContent>
+        <PageContainer>Keys manager</PageContainer>
+      </PageContent>
+    );
   }
 }
