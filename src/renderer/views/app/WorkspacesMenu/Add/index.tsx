@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Root, Icon } from './styles';
+import { Icon, Root } from './styles';
 
 export interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;

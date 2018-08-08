@@ -1,12 +1,12 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-React';
 import React, { Component } from 'react';
-import {
-  Input, InputContainer, StyledAddressBar, Icon,
-} from './styles';
-import Suggestions from '../Suggestions';
-import store from '../../../store';
-import { isURL, loadSuggestions, getAddressbarURL } from '../../../../utils';
 import { icons } from '../../../../defaults';
+import { getAddressbarURL, getPageById, getSelectedPage, getSelectedTab, isURL, loadSuggestions } from '../../../../utils';
+import store from '../../../store';
+import Suggestions from '../Suggestions';
+import {
+  Icon, Input, InputContainer, StyledAddressBar,
+} from './styles';
 
 interface Props {
   visible: boolean;
@@ -31,7 +31,7 @@ export default class AddressBar extends Component<Props, {}> {
 
   public onInputFocus = () => {
     this.input.select();
-  };
+  }
 
   public autoComplete(text: string, suggestion: string) {
     const regex = /(http(s?)):\/\/(www.)?|www./gi;
@@ -76,17 +76,16 @@ export default class AddressBar extends Component<Props, {}> {
         store.selectedSuggestion--;
       }
 
-      const suggestion = store.suggestions.find(x => x.id === store.selectedSuggestion);
+      const suggestion = store.suggestions.find((x) => x.id === store.selectedSuggestion);
 
       this.input.value = suggestion.primaryText;
     }
-  };
+  }
 
   public onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.which === 13) {
       // Enter.
-      const workspace = store.getCurrentWorkspace();
-      const tab = workspace.getSelectedTab();
+      const tab = getSelectedTab();
 
       e.preventDefault();
 
@@ -101,20 +100,20 @@ export default class AddressBar extends Component<Props, {}> {
 
       this.input.value = url;
 
-      const page = store.getPageById(tab.id);
+      const page = getPageById(tab.id);
 
       page.url = url;
 
       store.addressBar.toggled = false;
     }
-  };
+  }
 
   public onInput = () => {
     if (this.canSuggest) {
       this.autoComplete(this.input.value, this.lastSuggestion);
     }
 
-    loadSuggestions(this.input).then(suggestion => {
+    loadSuggestions(this.input).then((suggestion) => {
       this.lastSuggestion = suggestion;
       if (this.canSuggest) {
         this.autoComplete(this.input.value.substring(0, this.input.selectionStart), suggestion);
@@ -123,21 +122,21 @@ export default class AddressBar extends Component<Props, {}> {
     });
 
     store.selectedSuggestion = 0;
-  };
+  }
 
   public getInputValue = () => {
     if (this.input != null) {
       return this.input.value;
     }
     return null;
-  };
+  }
 
   public render() {
     const { visible } = this.props;
     const dictionary = store.dictionary.addressBar;
 
     if (store.addressBar.toggled && this.visible !== store.addressBar.toggled) {
-      const page = store.getSelectedPage();
+      const page = getSelectedPage();
       if (this.input) {
         if (page.webview && page.webview.getWebContents()) {
           this.input.value = getAddressbarURL(page.webview.getURL());
@@ -157,13 +156,13 @@ export default class AddressBar extends Component<Props, {}> {
       <StyledAddressBar
         visible={visible}
         suggestionsVisible={suggestionsVisible}
-        onMouseDown={e => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
       >
         <InputContainer suggestionsVisible={suggestionsVisible}>
           <Icon image={icons.search} />
           <Input
             suggestionsVisible={suggestionsVisible}
-            innerRef={r => (this.input = r)}
+            innerRef={(r) => (this.input = r)}
             onFocus={this.onInputFocus}
             placeholder={dictionary.search}
             onInput={this.onInput}

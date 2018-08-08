@@ -1,5 +1,5 @@
-import { executeEvent } from './events';
 import Ripples from '../renderer/components/Ripples';
+import { executeEvent } from './events';
 
 export const handleRipple = (
   {

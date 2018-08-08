@@ -22,15 +22,15 @@ export const formatTime = (
     hours -= 12;
   }
 
-  const _hours = hours.toString().padStart(2, '0');
-  const _minutes = minutes
+  hours = hours.toString().padStart(2, '0');
+  const mins = minutes
     ? date
       .getMinutes()
       .toString()
       .padStart(2, '0')
     : '';
 
-  return `${_hours}${minutes ? ':' : ''}${_minutes}${timePeriod}`;
+  return `${hours}${mins ? ':' : ''}${_minutes}${timePeriod}`;
 };
 
 export const getDayIndex = (date: Date) => (date.getDay() === 0 ? 6 : date.getDay() - 1);
@@ -97,7 +97,7 @@ export const getTimeOffset = (date: Date, t?: any) => {
 
   return `${value} ${getConditionsTime(value, showHours ? dictionary.hours : dictionary.minutes)} ${
     dictionary.ago
-  }`;
+    }`;
 };
 
 export const formatDate = (date: Date) => {

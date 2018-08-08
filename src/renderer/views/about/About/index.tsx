@@ -1,9 +1,9 @@
-import { observer } from 'mobx-react';
-import { hot } from 'react-hot-loader';
+import { observer } from 'mobx-React';
 import React from 'react';
-import { Content, Logo, Card } from './styles';
-import Item from '../Item';
+import { hot } from 'react-hot-loader';
 import store from '../../../store';
+import Item from '../Item';
+import { Card, Content, Logo } from './styles';
 
 const packageFile = require('../../../../../package.json');
 
@@ -18,7 +18,7 @@ class About extends React.Component {
           <Logo />
           <Card>
             <Item title={dictionary.wexondVersion}>v{packageFile.version}</Item>
-            <Item title={dictionary.reactVersion}>v{packageFile.devDependencies.react}</Item>
+            <Item title={dictionary.ReactVersion}>v{packageFile.devDependencies.React}</Item>
             <Item title={dictionary.electronVersion}>v{packageFile.devDependencies.electron}</Item>
             <Item title={dictionary.nodejsVersion}>{process.version}</Item>
           </Card>

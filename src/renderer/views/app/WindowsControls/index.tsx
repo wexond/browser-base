@@ -1,8 +1,8 @@
 import React from 'react';
-import Button from './Button';
-import Toolbar from '../Toolbar';
 import { icons } from '../../../../defaults';
-import { minimizeWindow, maximizeWindow, closeWindow } from '../../../../utils';
+import { closeWindow, maximizeWindow, minimizeWindow } from '../../../../utils';
+import Toolbar from '../Toolbar';
+import Button from './Button';
 
 export default class WindowsControls extends React.Component {
   public render() {

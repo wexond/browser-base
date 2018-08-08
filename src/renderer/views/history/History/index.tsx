@@ -1,9 +1,9 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-React';
 import React from 'react';
-import { Content, Container } from './styles';
+import { getHistoryItems, getHistorySections } from '../../../../utils';
 import store from '../../../store';
 import Section from '../Section';
-import { getHistorySections, getHistoryItems } from '../../../../utils';
+import { Container, Content } from './styles';
 
 @observer
 export default class History extends React.Component {
@@ -13,7 +13,7 @@ export default class History extends React.Component {
     return (
       <Content>
         <Container>
-          {sections.map(section => (
+          {sections.map((section) => (
             <Section key={section.id} section={section} />
           ))}
         </Container>

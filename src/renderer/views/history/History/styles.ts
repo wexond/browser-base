@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { noButtons, robotoMedium } from '../../../mixins';
 import { opacity } from '../../../../defaults';
+import { noButtons, robotoMedium } from '../../../mixins';
 
 export const Content = styled.div`
   width: 100%;

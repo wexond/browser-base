@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { opacity } from '../../../../../defaults';
 import {
-  subtitle1, maxLines, centerImage, overline,
+  centerImage, maxLines, overline, subtitle1,
 } from '../../../../mixins';
 
 export const Title = styled.div`

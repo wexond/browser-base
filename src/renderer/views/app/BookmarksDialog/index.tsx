@@ -1,16 +1,16 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-React';
 import React from 'react';
-import { Root, Title, ButtonsContainer } from './styles';
+import { ButtonsContainer, Root, Title } from './styles';
 
-import Textfield from '../../../components/Textfield';
-import Dropdown from '../../../components/Dropdown';
-import store from '../../../store';
 import database from '../../../../database';
-import Button from '../../../components/Button';
+import { colors } from '../../../../defaults';
 import { ButtonType } from '../../../../enums';
 import { BookmarkItem } from '../../../../interfaces';
-import { removeItem, getBookmarkFolders } from '../../../../utils';
-import { colors } from '../../../../defaults';
+import { getBookmarkFolders, removeItem } from '../../../../utils';
+import Button from '../../../components/Button';
+import Dropdown from '../../../components/Dropdown';
+import Textfield from '../../../components/Textfield';
+import store from '../../../store';
 
 @observer
 export default class BookmarksDialog extends React.Component {
@@ -34,7 +34,7 @@ export default class BookmarksDialog extends React.Component {
 
       this.bookmark = bookmark;
 
-      const item = this.dropdown.items.find(x => x.props.value === bookmark.parent);
+      const item = this.dropdown.items.find((x) => x.props.value === bookmark.parent);
 
       if (item) {
         this.dropdown.setState({
@@ -42,7 +42,7 @@ export default class BookmarksDialog extends React.Component {
         });
       }
     }
-  };
+  }
 
   public onMouseUp = (e?: React.MouseEvent<any>) => {
     e.stopPropagation();
@@ -52,12 +52,12 @@ export default class BookmarksDialog extends React.Component {
       this.dropdown.ripples.removeRipples();
       this.dropDownClicked = false;
     }
-  };
+  }
 
   public onDropdownMouseUp = (e?: React.MouseEvent<any>) => {
     e.preventDefault();
     this.dropDownClicked = true;
-  };
+  }
 
   public onRemoveClick = async () => {
     if (this.bookmark) {
@@ -65,7 +65,7 @@ export default class BookmarksDialog extends React.Component {
       store.isBookmarked = false;
       store.bookmarkDialogVisible = false;
     }
-  };
+  }
 
   public onDoneClick = async () => {
     const name = this.textField.getValue();
@@ -78,23 +78,23 @@ export default class BookmarksDialog extends React.Component {
         parent: this.bookmarkFolder,
       });
 
-    const item = store.bookmarks.find(x => x.id === this.bookmark.id);
+    const item = store.bookmarks.find((x) => x.id === this.bookmark.id);
 
     item.title = name;
     item.parent = this.bookmarkFolder;
 
     store.bookmarkDialogVisible = false;
-  };
+  }
 
   public onTextfieldKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       this.onDoneClick();
     }
-  };
+  }
 
   public onDropdownChange = (id: number) => {
     this.bookmarkFolder = id;
-  };
+  }
 
   public render() {
     const visible = store.bookmarkDialogVisible;
@@ -109,13 +109,13 @@ export default class BookmarksDialog extends React.Component {
       <Root visible={visible} onMouseUp={this.onMouseUp}>
         <Title>New bookmark</Title>
         <Textfield
-          ref={r => (this.textField = r)}
+          ref={(r) => (this.textField = r)}
           label="Name"
           onKeyPress={this.onTextfieldKeyPress}
           style={{ marginTop: 16 }}
         />
         <Dropdown
-          ref={r => (this.dropdown = r)}
+          ref={(r) => (this.dropdown = r)}
           onChange={this.onDropdownChange}
           onMouseUp={this.onDropdownMouseUp}
           style={dropDownStyle}

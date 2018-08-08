@@ -1,11 +1,11 @@
-import { writeFileSync, readFileSync } from 'fs';
-import { join } from 'path';
 import { BrowserWindow } from 'electron';
+import { readFileSync, writeFileSync } from 'fs';
+import { join } from 'path';
 
-import { loadExtensions } from './extensions';
 import { FULLSCREEN } from '../constants';
-import { WindowState } from './interfaces';
 import { getPath } from '../utils/other';
+import { loadExtensions } from './extensions';
+import { WindowState } from './interfaces';
 
 const windowDataPath = getPath('window-data.json');
 
@@ -80,7 +80,7 @@ export const createWindow = () => {
     window.webContents.send(FULLSCREEN, false);
   });
 
-  window.webContents.addListener('will-navigate', e => e.preventDefault());
+  window.webContents.addListener('will-navigate', (e) => e.preventDefault());
 
   loadExtensions();
 

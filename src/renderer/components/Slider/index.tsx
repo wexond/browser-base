@@ -1,18 +1,18 @@
 import React from 'react';
 
-import { opacity } from '../../../defaults/opacity';
 import { colors } from '../../../defaults/colors';
+import { opacity } from '../../../defaults/opacity';
 import { SliderType } from '../../../enums';
 
 import {
-  StyledSlider,
-  InactiveTrack,
   ActiveTrack,
+  InactiveTrack,
+  StyledSlider,
+  Thumb,
   ThumbContainer,
   ThumbHover,
-  Thumb,
-  TicksContainer,
   Tick,
+  TicksContainer,
   TickValue,
 } from './styles';
 
@@ -91,7 +91,7 @@ export default class Slider extends React.Component<Props, State> {
             thumbAnimation: false,
             trackWidth: width,
           });
-        }, 150);
+        },         150);
       } else {
         const gap = this.getGap();
 
@@ -124,15 +124,15 @@ export default class Slider extends React.Component<Props, State> {
         }
       }
     }
-  };
+  }
 
   public onThumbMouseDown = (e: React.MouseEvent<HTMLElement>) => {
     this.isMouseDown = true;
-  };
+  }
 
   public onWindowMouseUp = (e: MouseEvent) => {
     this.isMouseDown = false;
-  };
+  }
 
   public onWindowMouseMove = (e: MouseEvent) => {
     const { type } = this.props;
@@ -167,18 +167,18 @@ export default class Slider extends React.Component<Props, State> {
         }
       }
     }
-  };
+  }
 
   public getPercent = (clientX: number) => {
     const inactiveTrackRect = this.inactiveTrack.getBoundingClientRect();
     const posX = clientX - inactiveTrackRect.left;
     const percent = (posX * 100) / this.inactiveTrack.clientWidth;
 
-    if (percent < 0) return 0;
-    if (percent > 100) return 100;
+    if (percent < 0) { return 0; }
+    if (percent > 100) { return 100; }
 
     return percent;
-  };
+  }
 
   public getGap = () => this.inactiveTrack.clientWidth / (this.ticksList.length - 1);
 
@@ -192,7 +192,7 @@ export default class Slider extends React.Component<Props, State> {
         onChange(value, type, this);
       }
     }
-  };
+  }
 
   public render() {
     const {
@@ -212,7 +212,7 @@ export default class Slider extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <StyledSlider onMouseDown={this.onMouseDown} style={style}>
-          <InactiveTrack innerRef={r => (this.inactiveTrack = r)} color={color} />
+          <InactiveTrack innerRef={(r) => (this.inactiveTrack = r)} color={color} />
           <ActiveTrack
             type={type}
             color={color}
@@ -227,7 +227,7 @@ export default class Slider extends React.Component<Props, State> {
 
                 return (
                   <Tick
-                    innerRef={r => r != null && this.ticksList.push(r)}
+                    innerRef={(r) => r != null && this.ticksList.push(r)}
                     key={key}
                     color={tickIndex <= selectedTickIndex ? selectedTickColor : unselectedTickColor}
                   >

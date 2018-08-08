@@ -17,3 +17,6 @@ export * from './weather';
 export * from './window';
 export * from './other';
 export * from './key-bindings';
+export * from './workspaces';
+export * from './tabs';
+export * from './pages';
