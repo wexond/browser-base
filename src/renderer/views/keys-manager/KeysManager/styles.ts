@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { noButtons } from "../../../mixins";
+import { noButtons } from '../../../mixins';
 
 export const Content = styled.div`
   width: 100%;
@@ -8,5 +8,5 @@ export const Content = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
 
-  ${noButtons("10px")};
+  ${noButtons('10px')};
 `;
