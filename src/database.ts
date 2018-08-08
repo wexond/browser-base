@@ -26,8 +26,8 @@ export class Database extends Dexie {
 
     if (count === 0) {
       fetch(url)
-        .then((res) => res.blob())
-        .then((blob) => {
+        .then(res => res.blob())
+        .then(blob => {
           const reader = new FileReader();
           reader.onload = () => {
             const generatedBuffer: any = reader.result;

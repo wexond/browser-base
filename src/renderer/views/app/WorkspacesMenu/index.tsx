@@ -22,7 +22,7 @@ export default class Workspaces extends React.Component<{}, {}> {
       <React.Fragment>
         <Root visible={store.workspacesMenuVisible} onClick={this.onClick}>
           <ItemsContainer visible={store.workspacesMenuVisible}>
-            {store.workspaces.map((workspace) => (
+            {store.workspaces.map(workspace => (
               <Item workspace={workspace} key={workspace.id} />
             ))}
             <Add onClick={this.addNew} />

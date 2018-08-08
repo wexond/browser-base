@@ -13,7 +13,7 @@ export default class History extends React.Component {
     return (
       <Content>
         <Container>
-          {sections.map((section) => (
+          {sections.map(section => (
             <Section key={section.id} section={section} />
           ))}
         </Container>

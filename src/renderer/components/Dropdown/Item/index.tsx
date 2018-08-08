@@ -31,7 +31,7 @@ export default class Item extends React.Component<Props, {}> {
     return (
       <Root selected={selected} {...events}>
         {children}
-        <Ripples ref={(r) => (this.ripples = r)} color="#000" />
+        <Ripples ref={r => (this.ripples = r)} color="#000" />
       </Root>
     );
   }

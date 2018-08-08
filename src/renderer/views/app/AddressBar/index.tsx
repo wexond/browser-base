@@ -1,12 +1,17 @@
 import { observer } from 'mobx-React';
 import React, { Component } from 'react';
 import { icons } from '../../../../defaults';
-import { getAddressbarURL, getPageById, getSelectedPage, getSelectedTab, isURL, loadSuggestions } from '../../../../utils';
+import {
+  getAddressbarURL,
+  getPageById,
+  getSelectedPage,
+  getSelectedTab,
+  isURL,
+  loadSuggestions,
+} from '../../../../utils';
 import store from '../../../store';
 import Suggestions from '../Suggestions';
-import {
-  Icon, Input, InputContainer, StyledAddressBar,
-} from './styles';
+import { Icon, Input, InputContainer, StyledAddressBar } from './styles';
 
 interface Props {
   visible: boolean;
@@ -41,9 +46,11 @@ export default class AddressBar extends Component<Props, {}> {
 
     if (suggestion) {
       if (suggestion.startsWith(text.replace(regex, ''))) {
-        this.input.value = text + suggestion.replace(text.replace(regex, ''), '');
+        this.input.value =
+          text + suggestion.replace(text.replace(regex, ''), '');
       } else if (`www.${suggestion}`.startsWith(text.replace(regex2, ''))) {
-        this.input.value = text + `www.${suggestion}`.replace(text.replace(regex2, ''), '');
+        this.input.value =
+          text + `www.${suggestion}`.replace(text.replace(regex2, ''), '');
       }
       this.input.setSelectionRange(start, this.input.value.length);
     }
@@ -53,15 +60,15 @@ export default class AddressBar extends Component<Props, {}> {
     const key = e.keyCode;
 
     if (
-      key !== 8 // backspace
-      && key !== 13 // enter
-      && key !== 17 // ctrl
-      && key !== 18 // alt
-      && key !== 16 // shift
-      && key !== 9 // tab
-      && key !== 20 // capslock
-      && key !== 46 // delete
-      && key !== 32 // space
+      key !== 8 && // backspace
+      key !== 13 && // enter
+      key !== 17 && // ctrl
+      key !== 18 && // alt
+      key !== 16 && // shift
+      key !== 9 && // tab
+      key !== 20 && // capslock
+      key !== 46 && // delete
+      key !== 32 // space
     ) {
       this.canSuggest = true;
     } else {
@@ -70,13 +77,18 @@ export default class AddressBar extends Component<Props, {}> {
 
     if (e.keyCode === 38 || e.keyCode === 40) {
       e.preventDefault();
-      if (e.keyCode === 40 && store.selectedSuggestion + 1 <= store.suggestions.length - 1) {
+      if (
+        e.keyCode === 40 &&
+        store.selectedSuggestion + 1 <= store.suggestions.length - 1
+      ) {
         store.selectedSuggestion++;
       } else if (e.keyCode === 38 && store.selectedSuggestion - 1 >= 0) {
         store.selectedSuggestion--;
       }
 
-      const suggestion = store.suggestions.find((x) => x.id === store.selectedSuggestion);
+      const suggestion = store.suggestions.find(
+        x => x.id === store.selectedSuggestion,
+      );
 
       this.input.value = suggestion.primaryText;
     }
@@ -113,10 +125,13 @@ export default class AddressBar extends Component<Props, {}> {
       this.autoComplete(this.input.value, this.lastSuggestion);
     }
 
-    loadSuggestions(this.input).then((suggestion) => {
+    loadSuggestions(this.input).then(suggestion => {
       this.lastSuggestion = suggestion;
       if (this.canSuggest) {
-        this.autoComplete(this.input.value.substring(0, this.input.selectionStart), suggestion);
+        this.autoComplete(
+          this.input.value.substring(0, this.input.selectionStart),
+          suggestion,
+        );
         this.canSuggest = false;
       }
     });
@@ -156,13 +171,13 @@ export default class AddressBar extends Component<Props, {}> {
       <StyledAddressBar
         visible={visible}
         suggestionsVisible={suggestionsVisible}
-        onMouseDown={(e) => e.stopPropagation()}
+        onMouseDown={e => e.stopPropagation()}
       >
         <InputContainer suggestionsVisible={suggestionsVisible}>
           <Icon image={icons.search} />
           <Input
             suggestionsVisible={suggestionsVisible}
-            innerRef={(r) => (this.input = r)}
+            innerRef={r => (this.input = r)}
             onFocus={this.onInputFocus}
             placeholder={dictionary.search}
             onInput={this.onInput}

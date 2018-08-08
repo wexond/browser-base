@@ -13,9 +13,7 @@ import TabBar from '../TabBar';
 import WindowsControls from '../WindowsControls';
 import Button from './Button';
 import Separator from './Separator';
-import {
-  Handle, Line, StyledToolbar, TabsSection,
-} from './styles';
+import { Handle, Line, StyledToolbar, TabsSection } from './styles';
 
 @observer
 export default class Toolbar extends React.Component {
@@ -39,7 +37,9 @@ export default class Toolbar extends React.Component {
   public onStarIconClick = async () => {
     const selectedTab = getSelectedTab();
 
-    let bookmark: BookmarkItem = store.bookmarks.find((x) => x.url === selectedTab.url);
+    let bookmark: BookmarkItem = store.bookmarks.find(
+      x => x.url === selectedTab.url,
+    );
 
     if (!bookmark) {
       bookmark = await addBookmark({
@@ -72,9 +72,13 @@ export default class Toolbar extends React.Component {
             onMouseDown={this.onStarIconMouseDown}
             onClick={this.onStarIconClick}
           />
-          <BookmarksDialog ref={(r) => (store.bookmarkDialog = r)} />
+          <BookmarksDialog ref={r => (store.bookmarkDialog = r)} />
         </div>
-        <Button size={16} icon={icons.workspaces} onClick={this.onWorkspacesIconClick} />
+        <Button
+          size={16}
+          icon={icons.workspaces}
+          onClick={this.onWorkspacesIconClick}
+        />
         <Button
           onClick={this.toggleMenu}
           size={20}

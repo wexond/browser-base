@@ -2,7 +2,11 @@ import React from 'react';
 
 import { WeatherWeeklyItem } from '../../../../../interfaces';
 import {
-  InfoContainer, StyledForecastItem, Temp, TempContainer, WeatherIcon,
+  InfoContainer,
+  StyledForecastItem,
+  Temp,
+  TempContainer,
+  WeatherIcon,
 } from './styles';
 
 export interface Props {

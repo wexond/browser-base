@@ -2,9 +2,7 @@ import Ripples from '../renderer/components/Ripples';
 import { executeEvent } from './events';
 
 export const handleRipple = (
-  {
-    type, pageX, pageY, touches,
-  }: any,
+  { type, pageX, pageY, touches }: any,
   ripplesComponent: Ripples,
   props: any,
 ) => {

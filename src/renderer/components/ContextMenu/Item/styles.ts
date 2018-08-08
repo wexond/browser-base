@@ -38,6 +38,6 @@ export const Title = styled.div`
   ${robotoRegular()};
   ${noUserSelect()};
   opacity: ${({ disabled }: TitleProps) =>
-    (disabled ? opacity.light.disabledText : opacity.light.primaryText)};
+    disabled ? opacity.light.disabledText : opacity.light.primaryText};
   font-size: ${({ dense }) => (dense ? 13 : 15)}px;
 `;

@@ -1,4 +1,5 @@
-export const getLetterSpacing = (fontSize: number, tracking: number) => tracking / fontSize;
+export const getLetterSpacing = (fontSize: number, tracking: number) =>
+  tracking / fontSize;
 
 export const robotoLight = () => `
   font-family: Roboto;

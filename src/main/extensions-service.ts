@@ -16,28 +16,47 @@ export const runExtensionsService = (window: BrowserWindow) => {
     window.webContents.send('api-tabs-query', e.sender.id);
   });
 
-  ipcMain.on(API_TABS_CREATE, (e: Electron.IpcMessageEvent, data: chrome.tabs.CreateProperties) => {
-    window.webContents.send('api-tabs-create', data, e.sender.id);
-  });
+  ipcMain.on(
+    API_TABS_CREATE,
+    (e: Electron.IpcMessageEvent, data: chrome.tabs.CreateProperties) => {
+      window.webContents.send('api-tabs-create', data, e.sender.id);
+    },
+  );
 
   ipcMain.on(
     API_TABS_INSERT_CSS,
-    (e: Electron.IpcMessageEvent, tabId: number, details: chrome.tabs.InjectDetails) => {
+    (
+      e: Electron.IpcMessageEvent,
+      tabId: number,
+      details: chrome.tabs.InjectDetails,
+    ) => {
       window.webContents.send(API_TABS_INSERT_CSS, tabId, details, e.sender.id);
     },
   );
 
   ipcMain.on(
     API_TABS_EXECUTE_SCRIPT,
-    (e: Electron.IpcMessageEvent, tabId: number, details: chrome.tabs.InjectDetails) => {
-      window.webContents.send(API_TABS_EXECUTE_SCRIPT, tabId, details, e.sender.id);
+    (
+      e: Electron.IpcMessageEvent,
+      tabId: number,
+      details: chrome.tabs.InjectDetails,
+    ) => {
+      window.webContents.send(
+        API_TABS_EXECUTE_SCRIPT,
+        tabId,
+        details,
+        e.sender.id,
+      );
     },
   );
 
-  ipcMain.on(API_RUNTIME_RELOAD, (e: Electron.IpcMessageEvent, extensionId: string) => {
-    if (global.backgroundPages[extensionId]) {
-      const contents = webContents.fromId(e.sender.id);
-      contents.reload();
-    }
-  });
+  ipcMain.on(
+    API_RUNTIME_RELOAD,
+    (e: Electron.IpcMessageEvent, extensionId: string) => {
+      if (global.backgroundPages[extensionId]) {
+        const contents = webContents.fromId(e.sender.id);
+        contents.reload();
+      }
+    },
+  );
 };

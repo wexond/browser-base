@@ -13,7 +13,7 @@ export default class Pages extends React.Component {
 
     return (
       <StyledPages>
-        {store.pages.map((page) => (
+        {store.pages.map(page => (
           <Page key={page.id} page={page} />
         ))}
         <Newtab visible={tab && tab.isNew} />

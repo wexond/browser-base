@@ -58,7 +58,13 @@ export default class ToolbarButton extends React.Component<Props, {}> {
 
   public render() {
     const {
-      icon, onClick, size, disabled, className, divRef, children,
+      icon,
+      onClick,
+      size,
+      disabled,
+      className,
+      divRef,
+      children,
     } = this.props;
 
     let { style } = this.props;
@@ -74,7 +80,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
         onClick={onClick}
         className={className}
         style={style}
-        innerRef={(r) => {
+        innerRef={r => {
           this.ref = r;
           if (typeof divRef === 'function') {
             divRef(r);
@@ -85,7 +91,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
         <Icon icon={icon} size={size} disabled={disabled} />
         <Ripples
           icon
-          ref={(r) => (this.ripples = r)}
+          ref={r => (this.ripples = r)}
           color="#000"
           parentWidth={width}
           parentHeight={height}
