@@ -12,7 +12,9 @@ export default class Bookmarks extends React.Component {
   }
 
   public render() {
-    const items = store.bookmarks.filter((x) => x.parent === store.currentBookmarksTree);
+    const items = store.bookmarks.filter(
+      x => x.parent === store.currentBookmarksTree,
+    );
 
     return (
       <React.Fragment>
@@ -21,7 +23,7 @@ export default class Bookmarks extends React.Component {
           <Container>
             {items.length > 0 && (
               <Items>
-                {items.map((data) => (
+                {items.map(data => (
                   <Item data={data} key={data.id} />
                 ))}
               </Items>

@@ -55,7 +55,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         this.setState({ animation: true });
-      },                        nextProps.i * 25 + 100);
+      }, nextProps.i * 25 + 100);
     } else if (!nextProps.menuVisible) {
       clearTimeout(this.timeout);
       this.setState({ animation: false });
@@ -84,9 +84,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const {
-      rippleColor, visible, disabled, dense, children,
-    } = this.props;
+    const { rippleColor, visible, disabled, dense, children } = this.props;
     const { animation } = this.state;
 
     const events = {
@@ -107,7 +105,11 @@ export default class MenuItem extends React.Component<IProps, IState> {
         <Title dense={dense} disabled={disabled}>
           {children}
         </Title>
-        <Ripples ref={(r) => (this.ripples = r)} initialOpacity={0.1} color={rippleColor} />
+        <Ripples
+          ref={r => (this.ripples = r)}
+          initialOpacity={0.1}
+          color={rippleColor}
+        />
       </StyledMenuItem>
     );
   }

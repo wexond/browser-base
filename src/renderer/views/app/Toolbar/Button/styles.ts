@@ -10,7 +10,15 @@ export const Icon = styled.div`
   will-change: background-image;
   transition: 0.15s background-image;
 
-  ${({ size, disabled, icon }: { size: number; disabled: boolean; icon: string }) => css`
+  ${({
+    size,
+    disabled,
+    icon,
+  }: {
+    size: number;
+    disabled: boolean;
+    icon: string;
+  }) => css`
     ${centerImage(`${size}px`, `${size}px`)};
     opacity: ${disabled ? 0.25 : opacity.light.inactiveIcon};
     background-image: url(${icon});

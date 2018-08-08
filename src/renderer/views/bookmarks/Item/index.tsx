@@ -15,7 +15,10 @@ export interface IState {
 }
 
 @observer
-export default class Item extends React.Component<{ data: BookmarkItem }, IState> {
+export default class Item extends React.Component<
+  { data: BookmarkItem },
+  IState
+> {
   public state: IState = {
     hovered: false,
     inputVisible: false,
@@ -26,11 +29,11 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
   private input: HTMLInputElement;
 
   public componentDidMount() {
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', e => {
       this.cmdPressed = e.key === 'Meta'; // Command on macOS
     });
 
-    window.addEventListener('keyup', (e) => {
+    window.addEventListener('keyup', e => {
       if (e.key === 'Meta') {
         this.cmdPressed = false;
       }
@@ -44,7 +47,10 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
       if (store.selectedBookmarkItems.indexOf(data.id) === -1) {
         store.selectedBookmarkItems.push(data.id);
       } else {
-        store.selectedBookmarkItems.splice(store.selectedBookmarkItems.indexOf(data.id), 1);
+        store.selectedBookmarkItems.splice(
+          store.selectedBookmarkItems.indexOf(data.id),
+          1,
+        );
       }
     } else if (data.type === 'folder') {
       store.goToBookmarkFolder(data.id);
@@ -111,7 +117,7 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
           title,
         });
 
-      const item = store.bookmarks.find((x) => x.id === data.id);
+      const item = store.bookmarks.find(x => x.id === data.id);
       item.title = title;
     }
   }
@@ -146,7 +152,7 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
           <Title onClick={this.onTitleClick}>{data.title}</Title>
         </div>
         <Input
-          innerRef={(r) => (this.input = r)}
+          innerRef={r => (this.input = r)}
           visible={inputVisible}
           onClick={this.onInputMouseEvent}
           onFocus={this.onInputFocus}
@@ -154,7 +160,11 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
           onKeyPress={this.onInputKeyPress}
           placeholder="Name"
         />
-        <ActionIcon icon={icons.delete} onClick={this.onRemoveClick} visible={hovered} />
+        <ActionIcon
+          icon={icons.delete}
+          onClick={this.onRemoveClick}
+          visible={hovered}
+        />
       </Root>
     );
   }

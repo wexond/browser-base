@@ -4,7 +4,12 @@ export const centerImage = (width: string, height: string) => `
     background-repeat: no-repeat;
   `;
 
-export const customImage = (width: string, height: string, left: string, top: string) => `
+export const customImage = (
+  width: string,
+  height: string,
+  left: string,
+  top: string,
+) => `
     background-size: ${width} ${height};
     background-position: ${left} ${top};
     background-repeat: no-repeat;

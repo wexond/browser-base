@@ -15,17 +15,29 @@ export const getComponentColor = (
   let alpha;
 
   if (disabled) {
-    alpha = isLightTheme ? opacity.light.disabledIcon : opacity.dark.disabledIcon;
+    alpha = isLightTheme
+      ? opacity.light.disabledIcon
+      : opacity.dark.disabledIcon;
   } else if (!toggled) {
-    alpha = isLightTheme ? opacity.light.inactiveIcon : opacity.dark.inactiveIcon;
+    alpha = isLightTheme
+      ? opacity.light.inactiveIcon
+      : opacity.dark.inactiveIcon;
   }
 
-  if (returnOnlyAlpha) { return alpha; }
+  if (returnOnlyAlpha) {
+    return alpha;
+  }
   return alpha != null ? `rgba(${rgb}, ${rgb}, ${rgb}, ${alpha})` : color;
 };
 
-export const getComponentRippleColor = (color: string, toggled: boolean, theme: UITheme) => {
-  if (toggled) { return color; }
+export const getComponentRippleColor = (
+  color: string,
+  toggled: boolean,
+  theme: UITheme,
+) => {
+  if (toggled) {
+    return color;
+  }
   return theme === 'light' ? '#000' : '#fff';
 };
 

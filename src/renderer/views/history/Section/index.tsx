@@ -16,7 +16,7 @@ export default class extends React.Component<{ section: Section }, {}> {
       <React.Fragment>
         <Title>{title}</Title>
         <Items>
-          {items.map((item) => (
+          {items.map(item => (
             <Item key={item.id} data={item} />
           ))}
         </Items>

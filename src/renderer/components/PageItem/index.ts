@@ -15,7 +15,9 @@ export const Root = styled.div`
     background-color: ${selected ? 'rgba(0, 0, 0, 0.08)' : 'transparent'};
 
     &:hover {
-      background-color: ${selected ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.04)'};
+      background-color: ${selected
+        ? 'rgba(0, 0, 0, 0.1)'
+        : 'rgba(0, 0, 0, 0.04)'};
     }
   `};
 

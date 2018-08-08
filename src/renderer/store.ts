@@ -11,11 +11,12 @@ import {
   WeatherForecast,
   Workspace,
 } from '../interfaces';
+import { AddressBar, Menu, Page, Tab } from '../models';
 import {
-  AddressBar, Menu, Page, Tab,
-} from '../models';
-import {
-  getBookmarkFolderPath, getSelectedPage, moveIndicatorToSelectedTab, updateTabsBounds,
+  getBookmarkFolderPath,
+  getSelectedPage,
+  moveIndicatorToSelectedTab,
+  updateTabsBounds,
 } from '../utils';
 import ContextMenu from './components/ContextMenu';
 import BookmarksDialog from './views/app/BookmarksDialog';
@@ -181,14 +182,14 @@ class Store {
   };
 
   constructor() {
-    rearrangeTabsTimer.interval = setInterval(() => {
+    this.rearrangeTabsTimer.interval = setInterval(() => {
       // Set widths and positions for tabs 3 seconds after a tab was closed
-      if (rearrangeTabsTimer.canReset && rearrangeTabsTimer.time === 3) {
+      if (this.rearrangeTabsTimer.canReset && this.rearrangeTabsTimer.time === 3) {
         updateTabsBounds();
         moveIndicatorToSelectedTab(true);
-        rearrangeTabsTimer.canReset = false;
+        this.rearrangeTabsTimer.canReset = false;
       }
-      rearrangeTabsTimer.time++;
+      this.rearrangeTabsTimer.time++;
     }, 1000);
   }
 
@@ -214,10 +215,15 @@ class Store {
   }
 
   public loadFavicons() {
-    return new Promise(async (resolve) => {
-      await database.favicons.each((favicon) => {
-        if (this.favicons[favicon.url] == null && favicon.favicon.byteLength !== 0) {
-          this.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));
+    return new Promise(async resolve => {
+      await database.favicons.each(favicon => {
+        if (
+          this.favicons[favicon.url] == null &&
+          favicon.favicon.byteLength !== 0
+        ) {
+          this.favicons[favicon.url] = window.URL.createObjectURL(
+            new Blob([favicon.favicon]),
+          );
         }
       });
       resolve();

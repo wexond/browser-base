@@ -2,11 +2,14 @@ import { observer } from 'mobx-React';
 import React from 'react';
 
 import { Workspace } from '../../../../../interfaces';
-import { getPageById, getWorkspaceTabs, removeWorkspace, selectWorkspace } from '../../../../../utils';
-import store from '../../../../store';
 import {
-  DeleteIcon, Icon, IconsContainer, Input, Label, Root,
-} from './styles';
+  getPageById,
+  getWorkspaceTabs,
+  removeWorkspace,
+  selectWorkspace,
+} from '../../../../../utils';
+import store from '../../../../store';
+import { DeleteIcon, Icon, IconsContainer, Input, Label, Root } from './styles';
 
 @observer
 export default class extends React.Component<{ workspace: Workspace }, {}> {
@@ -100,13 +103,15 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
 
     return (
       <Root onClick={this.onClick}>
-        {workspaces.length > 1 && <DeleteIcon className="delete-icon" onClick={this.onDelete} />}
+        {workspaces.length > 1 && (
+          <DeleteIcon className="delete-icon" onClick={this.onDelete} />
+        )}
         <IconsContainer selected={selected}>
           {/* {icons != null && icons.map((data: any, key: any) => <Icon key={key} src={data} />)} */}
         </IconsContainer>
         <Label onClick={this.onLabelClick}>{workspace.name}</Label>
         <Input
-          innerRef={(r) => (this.input = r)}
+          innerRef={r => (this.input = r)}
           visible={inputVisible}
           onClick={this.onInputClick}
           onBlur={this.onInputBlur}

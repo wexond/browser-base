@@ -92,7 +92,9 @@ export default class Ripples extends React.Component<IProps, IState> {
   public removeRipple = (id: number) => {
     const { ripples } = this.state;
 
-    const index = ripples.indexOf(ripples.filter((ripple) => ripple.id === id)[0]);
+    const index = ripples.indexOf(
+      ripples.filter(ripple => ripple.id === id)[0],
+    );
 
     this.setState({
       ripples: [...ripples.slice(0, index), ...ripples.slice(index + 1)],
@@ -136,12 +138,10 @@ export default class Ripples extends React.Component<IProps, IState> {
     } = this.props;
 
     const component = (
-      <StyledRipples innerRef={(r) => (this.ripples = r)}>
+      <StyledRipples innerRef={r => (this.ripples = r)}>
         {ripples.map((ripple: IRipple) => {
           const { offsetHeight, offsetWidth } = this.ripples;
-          const {
-            id, x, y, isRemoving,
-          } = ripple;
+          const { id, x, y, isRemoving } = ripple;
 
           return (
             <Ripple
@@ -176,8 +176,8 @@ export default class Ripples extends React.Component<IProps, IState> {
         >
           {component}
         </IconRipple>
-      ))
-      || component
+      )) ||
+      component
     );
   }
 }

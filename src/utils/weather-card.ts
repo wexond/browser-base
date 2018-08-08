@@ -8,5 +8,7 @@ export const formatDescription = (forecast: WeatherForecast, index: number) => {
   const { description, date } = daily[index];
   const dayName = dictionary.daysShort[getDayIndex(date)];
 
-  return `${dayName}, ${formatTime(date, timeUnit)}, ${capitalizeEachWord(description)}`;
+  return `${dayName}, ${formatTime(date, timeUnit)}, ${capitalizeEachWord(
+    description,
+  )}`;
 };

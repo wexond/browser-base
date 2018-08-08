@@ -13,15 +13,22 @@ import { createTab, getIpcTab, getPageById } from '../utils';
 import store from './store';
 
 export const runExtensionsService = () => {
-  ipcRenderer.on(API_TABS_QUERY, (e: Electron.IpcMessageEvent, webContentsId: number) => {
-    const sender = remote.webContents.fromId(webContentsId);
+  ipcRenderer.on(
+    API_TABS_QUERY,
+    (e: Electron.IpcMessageEvent, webContentsId: number) => {
+      const sender = remote.webContents.fromId(webContentsId);
 
-    sender.send(API_TABS_QUERY, store.tabs.map((tab) => getIpcTab(tab)));
-  });
+      sender.send(API_TABS_QUERY, store.tabs.map(tab => getIpcTab(tab)));
+    },
+  );
 
   ipcRenderer.on(
     API_TABS_CREATE,
-    (e: Electron.IpcMessageEvent, data: chrome.tabs.CreateProperties, webContentsId: number) => {
+    (
+      e: Electron.IpcMessageEvent,
+      data: chrome.tabs.CreateProperties,
+      webContentsId: number,
+    ) => {
       const sender = remote.webContents.fromId(webContentsId);
 
       const { url, active, index } = data;
@@ -71,7 +78,12 @@ export const runExtensionsService = () => {
 
   ipcRenderer.on(
     API_TABS_SET_ZOOM,
-    (e: Electron.IpcMessageEvent, tabId: number, zoomFactor: number, sender: number) => {
+    (
+      e: Electron.IpcMessageEvent,
+      tabId: number,
+      zoomFactor: number,
+      sender: number,
+    ) => {
       const webContents = remote.webContents.fromId(sender);
       const page = getPageById(tabId);
 
@@ -98,13 +110,23 @@ export const runExtensionsService = () => {
       const webContents = remote.webContents.fromId(sender);
       const page = getPageById(tabId);
 
-      page.webview.executeJavaScript('document.documentElement.lang', true, (language: string) => {
-        if (language !== '') { webContents.send(API_TABS_DETECT_LANGUAGE, language); } else {
-          page.webview.executeJavaScript('navigator.language', true, (lang: string) => {
-            webContents.send(API_TABS_DETECT_LANGUAGE, lang);
-          });
-        }
-      });
+      page.webview.executeJavaScript(
+        'document.documentElement.lang',
+        true,
+        (language: string) => {
+          if (language !== '') {
+            webContents.send(API_TABS_DETECT_LANGUAGE, language);
+          } else {
+            page.webview.executeJavaScript(
+              'navigator.language',
+              true,
+              (lang: string) => {
+                webContents.send(API_TABS_DETECT_LANGUAGE, lang);
+              },
+            );
+          }
+        },
+      );
     },
   );
 };

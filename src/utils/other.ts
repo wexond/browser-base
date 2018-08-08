@@ -3,7 +3,11 @@ import path from 'path';
 
 export const isObject = (item: any) => typeof item === 'object';
 
-export const merge = (target: any, source: any, onlyNotExisting = false): any => {
+export const merge = (
+  target: any,
+  source: any,
+  onlyNotExisting = false,
+): any => {
   target = { ...target };
 
   if (source == null) {
@@ -16,7 +20,10 @@ export const merge = (target: any, source: any, onlyNotExisting = false): any =>
     Object.keys(source).forEach((key: string) => {
       if (isObject(source[key])) {
         target[key] = merge(target[key], source[key], onlyNotExisting);
-      } else if (!onlyNotExisting || (target[key] == null || target[key] === '')) {
+      } else if (
+        !onlyNotExisting ||
+        (target[key] == null || target[key] === '')
+      ) {
         target[key] = source[key];
       }
     });
@@ -27,9 +34,13 @@ export const merge = (target: any, source: any, onlyNotExisting = false): any =>
 
 export const getPath = (...relativePaths: string[]) => {
   if (remote) {
-    return path.resolve(remote.app.getPath('userData'), ...relativePaths).replace(/\\/g, '/');
+    return path
+      .resolve(remote.app.getPath('userData'), ...relativePaths)
+      .replace(/\\/g, '/');
   }
-  return path.resolve(app.getPath('userData'), ...relativePaths).replace(/\\/g, '/');
+  return path
+    .resolve(app.getPath('userData'), ...relativePaths)
+    .replace(/\\/g, '/');
 };
 
 export const capitalizeWord = (str: string) =>
@@ -45,7 +56,10 @@ export const capitalizeEachWord = (str: string) => {
   return splited.join(' ');
 };
 
-export const makeId = (length: number, possible: string = 'abcdefghijklmnopqrstuvwxyz') => {
+export const makeId = (
+  length: number,
+  possible: string = 'abcdefghijklmnopqrstuvwxyz',
+) => {
   let id = '';
   for (let i = 0; i < length; i++) {
     id += possible.charAt(Math.floor(Math.random() * possible.length));

@@ -3,7 +3,15 @@ import React from 'react';
 import store from '../../../store';
 import Item from './Item';
 import {
-  Container, Content, Dark, Header, Input, Menu, Search, SearchIcon, Title,
+  Container,
+  Content,
+  Dark,
+  Header,
+  Input,
+  Menu,
+  Search,
+  SearchIcon,
+  Title,
 } from './styles';
 
 interface Props {
@@ -53,7 +61,8 @@ export default class extends React.Component<Props, {}> {
                   <div
                     style={{
                       opacity: store.menu.selectedItem === id2 - 1 ? 1 : 0,
-                      pointerEvents: store.menu.selectedItem === id2 - 1 ? 'auto' : 'none',
+                      pointerEvents:
+                        store.menu.selectedItem === id2 - 1 ? 'auto' : 'none',
                       position: 'absolute',
                       top: 0,
                       width: '100%',
@@ -70,8 +79,8 @@ export default class extends React.Component<Props, {}> {
           </Content>
           <Menu>
             <Header>
-              {(selectedItem
-                && selectedItem.props.searchVisible && (
+              {(selectedItem &&
+                selectedItem.props.searchVisible && (
                   <Search>
                     <SearchIcon />
                     <Input placeholder="Search" onInput={this.onInput} />

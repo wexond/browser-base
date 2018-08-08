@@ -1,11 +1,11 @@
 import styled, { css } from 'styled-components';
 import { opacity } from '../../../defaults';
-import {
-  body2, centerImage, coverImage, h5, h6,
-} from '../../mixins';
+import { body2, centerImage, coverImage, h5, h6 } from '../../mixins';
 
 const getCardImageOpacity = (visible: boolean) => {
-  if (visible != null) { return visible ? 1 : 0; }
+  if (visible != null) {
+    return visible ? 1 : 0;
+  }
   return 1;
 };
 
@@ -17,7 +17,8 @@ export const Root = styled.div`
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 24px;
-  box-shadow: 0 1px 1px 0 rgba(60, 64, 67, 0.08), 0 1px 3px 1px rgba(60, 64, 67, 0.16);
+  box-shadow: 0 1px 1px 0 rgba(60, 64, 67, 0.08),
+    0 1px 3px 1px rgba(60, 64, 67, 0.16);
 `;
 
 export const Thumbnail = styled.div`
@@ -97,7 +98,8 @@ export const SupportingText = styled.div`
   padding: 0px 16px 16px 16px;
   opacity: ${opacity.light.secondaryText};
 
-  padding-top: ${({ paddingTop }: { paddingTop?: boolean }) => (paddingTop ? 16 : 0)}px;
+  padding-top: ${({ paddingTop }: { paddingTop?: boolean }) =>
+    paddingTop ? 16 : 0}px;
 `;
 
 export const Content = styled.div`

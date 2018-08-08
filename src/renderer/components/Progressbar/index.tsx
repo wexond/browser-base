@@ -20,10 +20,11 @@ export default class Button extends React.Component<IProps, {}> {
   public render() {
     const { color, progress, type } = this.props;
 
-    const firstIndicatorStyle = (type === ProgressType.Determinate && {
-      width: `${progress}}%`,
-    })
-      || {};
+    const firstIndicatorStyle =
+      (type === ProgressType.Determinate && {
+        width: `${progress}}%`,
+      }) ||
+      {};
 
     return (
       <Root>
