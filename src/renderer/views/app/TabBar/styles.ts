@@ -1,18 +1,30 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+import { TOOLBAR_BUTTON_WIDTH } from '../../../../constants';
 
-export const StyledTabBar = styled.div`
-  transform: translateZ(0);
-  position: absolute;
-  z-index: 8;
+export const StyledTabbar = styled.div`
   height: 100%;
   width: 100%;
-  top: 0;
-  left: 0;
-  transition: 0.2s opacity;
+  position: relative;
   overflow: hidden;
+`;
 
-  ${({ visible }: { visible: boolean }) => css`
-    pointer-events: ${visible ? 'auto' : 'none'};
-    opacity: ${visible ? 1 : 0};
-  `};
+export const TabsContainer = styled.div`
+  height: 100%;
+  width: calc(100% - 32px);
+  position: relative;
+  overflow: hidden;
+`;
+
+export const AddTab = styled.div`
+  height: 100%;
+  width: ${TOOLBAR_BUTTON_WIDTH}px;
+  position: absolute;
+  top: 0;
+`;
+
+export const Indicator = styled.div`
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  background-color: black;
 `;

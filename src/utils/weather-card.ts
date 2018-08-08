@@ -1,6 +1,6 @@
-import store from '../renderer/store';
+import { capitalizeEachWord, formatTime, getDayIndex } from '.';
 import { WeatherForecast } from '../interfaces';
-import { getDayIndex, capitalizeEachWord, formatTime } from '.';
+import store from '../renderer/store';
 
 export const formatDescription = (forecast: WeatherForecast, index: number) => {
   const dictionary = store.dictionary.dateAndTime;

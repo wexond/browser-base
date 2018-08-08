@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { colors } from '../../../defaults/colors';
-import { Root, Track, Indicator } from './styles';
 import { ProgressType } from '../../../enums';
+import { Indicator, Root, Track } from './styles';
 
 export interface IProps {
   color?: string;

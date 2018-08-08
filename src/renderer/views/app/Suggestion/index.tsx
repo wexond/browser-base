@@ -1,28 +1,28 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-React';
 import React from 'react';
+import store from '../../../store';
 import {
   Dash, Icon, PrimaryText, SecondaryText, StyledSuggestion,
 } from './styles';
-import store from '../../../store';
 
-import { SuggestionItem } from '../../../../interfaces';
 import { icons, opacity } from '../../../../defaults';
+import { SuggestionItem } from '../../../../interfaces';
 @observer
 export default class Suggestion extends React.Component<
-  { suggestion: SuggestionItem },
-  { hovered: boolean }
-  > {
+{ suggestion: SuggestionItem },
+{ hovered: boolean }
+> {
   public state = {
     hovered: false,
   };
 
   public onMouseLeave = () => {
     this.setState({ hovered: false });
-  };
+  }
 
   public onMouseEnter = () => {
     this.setState({ hovered: true });
-  };
+  }
 
   public render() {
     const { suggestion } = this.props;

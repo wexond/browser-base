@@ -1,10 +1,10 @@
+import { observer } from 'mobx-React';
 import React from 'react';
-import { observer } from 'mobx-react';
 
-import {
-  StyledItem, Icon, Title, Background, SubItemsContainer,
-} from './styles';
 import store from '../../../../store';
+import {
+  Background, Icon, StyledItem, SubItemsContainer, Title,
+} from './styles';
 
 interface Props {
   icon: string;
@@ -19,21 +19,13 @@ interface Props {
 
 @observer
 export default class Item extends React.Component<Props, {}> {
-  static defaultProps = {
+  public static defaultProps = {
     visible: true,
     selected: false,
     display: true,
   };
 
   private subItemsContainer: HTMLDivElement;
-
-  private onClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { onClick } = this.props;
-
-    if (typeof onClick === 'function') {
-      onClick(e, this);
-    }
-  };
 
   public render() {
     const {
@@ -61,11 +53,19 @@ export default class Item extends React.Component<Props, {}> {
           <Icon selected={selected} subItem={isSubItem} image={icon} />
           <Title selected={selected}>{title}</Title>
         </StyledItem>
-        <SubItemsContainer innerRef={r => (this.subItemsContainer = r)} style={{ height }}>
+        <SubItemsContainer innerRef={(r) => (this.subItemsContainer = r)} style={{ height }}>
           {React.Children.map(children, (el: React.ReactElement<any>) =>
             React.cloneElement(el, { isSubItem: true }))}
         </SubItemsContainer>
       </div>
     );
+  }
+
+  private onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { onClick } = this.props;
+
+    if (typeof onClick === 'function') {
+      onClick(e, this);
+    }
   }
 }

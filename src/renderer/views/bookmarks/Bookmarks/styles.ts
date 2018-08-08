@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { opacity } from '../../../../defaults';
-import { subtitle2, noButtons } from '../../../mixins';
+import { noButtons, subtitle2 } from '../../../mixins';
 
 export const Content = styled.div`
   width: 100%;

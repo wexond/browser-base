@@ -1,13 +1,13 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-React';
 import React from 'react';
 
-import { Title, Input, ActionIcon } from './styles';
-import store from '../../../store';
-import { Root, Icon } from '../../../components/PageItem';
-import { BookmarkItem } from '../../../../interfaces';
-import { removeItem } from '../../../../utils';
 import database from '../../../../database';
 import { icons, opacity } from '../../../../defaults';
+import { BookmarkItem } from '../../../../interfaces';
+import { createTab, removeItem } from '../../../../utils';
+import { Icon, Root } from '../../../components/PageItem';
+import store from '../../../store';
+import { ActionIcon, Input, Title } from './styles';
 
 export interface IState {
   hovered: boolean;
@@ -26,11 +26,11 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
   private input: HTMLInputElement;
 
   public componentDidMount() {
-    window.addEventListener('keydown', e => {
+    window.addEventListener('keydown', (e) => {
       this.cmdPressed = e.key === 'Meta'; // Command on macOS
     });
 
-    window.addEventListener('keyup', e => {
+    window.addEventListener('keyup', (e) => {
       if (e.key === 'Meta') {
         this.cmdPressed = false;
       }
@@ -49,10 +49,10 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
     } else if (data.type === 'folder') {
       store.goToBookmarkFolder(data.id);
     } else {
-      store.getCurrentWorkspace().addTab({ url: data.url });
+      createTab({ url: data.url });
       store.menu.hide();
     }
-  };
+  }
 
   public onMouseEnter = () => this.setState({ hovered: true });
 
@@ -66,7 +66,7 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
     const { id, type } = data;
 
     removeItem(id, type);
-  };
+  }
 
   public onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { data } = this.props;
@@ -79,24 +79,24 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
     this.input.focus();
 
     window.addEventListener('mousedown', this.onWindowMouseDown);
-  };
+  }
 
   public onInputMouseEvent = (e: React.MouseEvent<HTMLInputElement>) => {
     e.stopPropagation();
-  };
+  }
 
   public onWindowMouseDown = () => {
     this.setState({ inputVisible: false });
     this.saveFolderName();
 
     window.removeEventListener('mousedown', this.onWindowMouseDown);
-  };
+  }
 
   public onInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       this.onWindowMouseDown();
     }
-  };
+  }
 
   public saveFolderName = async () => {
     const { data } = this.props;
@@ -111,14 +111,14 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
           title,
         });
 
-      const item = store.bookmarks.find(x => x.id === data.id);
+      const item = store.bookmarks.find((x) => x.id === data.id);
       item.title = title;
     }
-  };
+  }
 
   public onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     e.currentTarget.select();
-  };
+  }
 
   public render() {
     const { data } = this.props;
@@ -146,7 +146,7 @@ export default class Item extends React.Component<{ data: BookmarkItem }, IState
           <Title onClick={this.onTitleClick}>{data.title}</Title>
         </div>
         <Input
-          innerRef={r => (this.input = r)}
+          innerRef={(r) => (this.input = r)}
           visible={inputVisible}
           onClick={this.onInputMouseEvent}
           onFocus={this.onInputFocus}

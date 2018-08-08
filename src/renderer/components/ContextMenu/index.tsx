@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { StyledMenu } from './styles';
 import Item from './Item';
 import Separator from './Separator';
+import { StyledMenu } from './styles';
 
 import { getEvents } from '../../../utils';
 
@@ -34,7 +34,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
 
   public static Separator = Separator;
 
-  static defaultProps = {
+  public static defaultProps = {
     hideMenuOnMouseDown: true,
   };
 
@@ -58,7 +58,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
   public toggle(flag: boolean) {
     const { visible } = this.state;
 
-    if (flag === visible) return;
+    if (flag === visible) { return; }
 
     this.setState({ visible: flag });
 
@@ -74,7 +74,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
       this.setState({ heightTransition: false });
       this.timeout = setTimeout(() => {
         this.setState({ zIndex: -1 });
-      }, 300);
+      },                        300);
     }
   }
 
@@ -95,12 +95,12 @@ export default class ContextMenu extends React.Component<IProps, IState> {
   public onMouseDown = (e: React.SyntheticEvent<HTMLDivElement>) => {
     const { hideMenuOnMouseDown, onMouseDown } = this.props;
 
-    if (hideMenuOnMouseDown) this.toggle(false);
+    if (hideMenuOnMouseDown) { this.toggle(false); }
 
     if (typeof onMouseDown === 'function') {
       onMouseDown(e);
     }
-  };
+  }
 
   public render() {
     const {
@@ -119,7 +119,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
 
     return (
       <StyledMenu
-        innerRef={r => (this.menu = r)}
+        innerRef={(r) => (this.menu = r)}
         width={width}
         visible={visible}
         dense={dense}
@@ -132,7 +132,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
         }}
         {...events}
       >
-        {React.Children.map(children, child => {
+        {React.Children.map(children, (child) => {
           const clone = React.cloneElement(child as React.ReactElement<any>, {
             menu: this,
             dense,
@@ -141,7 +141,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
             hideMenuOnClick: hideMenuOnMouseDown,
           });
 
-          if (clone.props.visible) i++;
+          if (clone.props.visible) { i++; }
 
           return clone;
         })}

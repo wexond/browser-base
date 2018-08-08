@@ -1,7 +1,7 @@
 import Mousetrap from 'mousetrap';
 
-import { KeyBinding } from '../interfaces';
 import { Commands } from '../defaults';
+import { KeyBinding } from '../interfaces';
 
 export const parseKeyBindings = (json: any) => {
   const list: KeyBinding[] = [];

@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { EASE_FUNCTION } from '../../../../constants';
-import { shadows, robotoRegular } from '../../../mixins';
 import { opacity } from '../../../../defaults';
+import { robotoRegular, shadows } from '../../../mixins';
 
 export const Root = styled.div`
   width: 364px;

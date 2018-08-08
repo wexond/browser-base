@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { body2, centerImage } from '../../../mixins';
 import { opacity } from '../../../../defaults';
+import { body2, centerImage } from '../../../mixins';
 
 export const StyledSuggestion = styled.div`
   width: 100%;
@@ -11,8 +11,7 @@ export const StyledSuggestion = styled.div`
   ${({ selected, hovered }: { selected: boolean; hovered: boolean }) => {
     let backgroundColor = 'transparent';
 
-    if (selected) backgroundColor = 'rgba(0, 0, 0, 0.08)';
-    else if (hovered) backgroundColor = 'rgba(0, 0, 0, 0.04)';
+    if (selected) { backgroundColor = 'rgba(0, 0, 0, 0.08)'; } else if (hovered) { backgroundColor = 'rgba(0, 0, 0, 0.04)'; }
 
     return css`
       background-color: ${backgroundColor};

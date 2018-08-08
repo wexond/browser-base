@@ -34,12 +34,12 @@ export const IconRipple = styled.div`
 
   &:hover {
     ${({ color, hoverOverShade, disabled }) => {
-    const rgb = hexToRgb(color);
+      const rgb = hexToRgb(color);
 
-    if (hoverOverShade && !disabled) {
-      return `background-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.04);`;
-    }
-    return '';
-  }};
+      if (hoverOverShade && !disabled) {
+        return `background-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.04);`;
+      }
+      return '';
+    }};
   }
 `;

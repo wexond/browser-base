@@ -9,7 +9,6 @@ export interface IProps {
 }
 
 export default class MenuSeparator extends React.Component<IProps, {}> {
-  private timeout: any;
 
   public static defaultProps = {
     visible: true,
@@ -18,6 +17,7 @@ export default class MenuSeparator extends React.Component<IProps, {}> {
   public state = {
     animation: false,
   };
+  private timeout: any;
 
   public componentWillReceiveProps(nextProps: IProps) {
     const { menuVisible } = this.props;
@@ -25,7 +25,7 @@ export default class MenuSeparator extends React.Component<IProps, {}> {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         this.setState({ animation: true });
-      }, nextProps.i * 25);
+      },                        nextProps.i * 25);
     } else if (!nextProps.menuVisible) {
       clearTimeout(this.timeout);
       this.setState({ animation: false });

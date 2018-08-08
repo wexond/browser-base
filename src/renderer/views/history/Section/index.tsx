@@ -1,8 +1,8 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-React';
 import React from 'react';
-import { Items, Title } from './styles';
-import Item from '../Item';
 import { Section } from '../../../../interfaces';
+import Item from '../Item';
+import { Items, Title } from './styles';
 
 @observer
 export default class extends React.Component<{ section: Section }, {}> {
@@ -16,7 +16,7 @@ export default class extends React.Component<{ section: Section }, {}> {
       <React.Fragment>
         <Title>{title}</Title>
         <Items>
-          {items.map(item => (
+          {items.map((item) => (
             <Item key={item.id} data={item} />
           ))}
         </Items>
