@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import Ripples from '../Ripples';
 import { colors } from '../../../defaults/colors';
 import { ButtonType } from '../../../enums';
-import { StyledButton, Icon, Overlay } from './styles';
 import { getEvents, getRippleEvents } from '../../../utils';
+import Ripples from '../Ripples';
+import { Icon, Overlay, StyledButton } from './styles';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
@@ -82,7 +82,7 @@ export default class Button extends React.Component<IProps, {}> {
           {icon && <Icon src={icon} white={whiteIcon} disabled={disabled} theme={theme} />}
           {children}
           <Overlay className="overlay" color={foreground} />
-          <Ripples ref={r => (this.ripples = r)} color={foreground} disabled={disabled} />
+          <Ripples ref={(r) => (this.ripples = r)} color={foreground} disabled={disabled} />
         </StyledButton>
       </React.Fragment>
     );

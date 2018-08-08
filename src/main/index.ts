@@ -1,13 +1,13 @@
 import { app } from 'electron';
-import { resolve, join } from 'path';
-import { platform, homedir } from 'os';
-import { mkdirSync, existsSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
+import { homedir, platform } from 'os';
+import { join, resolve } from 'path';
 
-import { Global } from './interfaces';
-import { runExtensionsService } from './extensions-service';
-import { runAutoUpdaterService } from './auto-updater';
-import { createWindow } from './window';
 import { getPath } from '../utils/other';
+import { runAutoUpdaterService } from './auto-updater';
+import { runExtensionsService } from './extensions-service';
+import { Global } from './interfaces';
+import { createWindow } from './window';
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 

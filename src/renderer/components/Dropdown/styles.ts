@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
-import { opacity } from '../../../defaults/opacity';
 import { EASE_FUNCTION } from '../../../constants';
 import { icons } from '../../../defaults/icons';
-import { robotoRegular, centerImage, shadows } from '../../mixins';
+import { opacity } from '../../../defaults/opacity';
+import { centerImage, robotoRegular, shadows } from '../../mixins';
 
 export const Root = styled.div`
   display: inline-block;

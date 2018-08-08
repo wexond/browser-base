@@ -1,11 +1,11 @@
-import { ipcMain, BrowserWindow, webContents } from 'electron';
+import { BrowserWindow, ipcMain, webContents } from 'electron';
 
 import {
-  API_TABS_QUERY,
-  API_TABS_CREATE,
-  API_TABS_INSERT_CSS,
-  API_TABS_EXECUTE_SCRIPT,
   API_RUNTIME_RELOAD,
+  API_TABS_CREATE,
+  API_TABS_EXECUTE_SCRIPT,
+  API_TABS_INSERT_CSS,
+  API_TABS_QUERY,
 } from '../constants';
 import { Global } from './interfaces';
 

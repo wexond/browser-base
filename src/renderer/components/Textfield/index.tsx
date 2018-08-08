@@ -3,20 +3,20 @@ import * as React from 'react';
 import { colors } from '../../../defaults/colors';
 import { TextfieldType } from '../../../enums';
 
+import { executeEventStopPropagation } from '../../../utils';
 import {
-  Root,
-  HoverBorder,
-  LeadingIcon,
-  TrailingIcon,
+  AssistiveText,
   Container,
+  HelperTexts,
+  HoverBorder,
+  Indicator,
+  Input,
   InputContainer,
   Label,
-  Input,
-  Indicator,
-  HelperTexts,
-  AssistiveText,
+  LeadingIcon,
+  Root,
+  TrailingIcon,
 } from './styles';
-import { executeEventStopPropagation } from '../../../utils';
 
 export type ClickEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 export type KeyboardEvent = (e?: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -50,42 +50,17 @@ export default class Textfield extends React.Component<IProps, IState> {
 
   public inputElement: HTMLInputElement;
 
-  private onClick = () => {
-    this.inputElement.focus();
-  };
-
-  private onFocus = () => {
-    this.setState({
-      activated: true,
-    });
-  };
-
-  private onBlur = () => {
-    const { activated } = this.state;
-
-    if (this.inputElement.value.length === 0 && activated) {
-      this.setState({
-        activated: false,
-      });
-    }
-  };
-
-  private onLeadingIconIconClick = (e?: React.SyntheticEvent<HTMLDivElement>) => {
-    // eslint-disable-next-line react/destructuring-assignment
-    executeEventStopPropagation(e, this.props.onLeadingIconClick);
-  };
-
   public onTrailingIconClick = (e?: React.SyntheticEvent<HTMLDivElement>) => {
-    // eslint-disable-next-line react/destructuring-assignment
+    // eslint-disable-next-line React/destructuring-assignment
     executeEventStopPropagation(e, this.props.onTrailingIconClick);
-  };
+  }
 
   public getValue = () => this.inputElement.value;
 
   public setValue = (value: string) => {
     this.inputElement.value = value;
     this.inputElement.focus();
-  };
+  }
 
   public render() {
     const {
@@ -102,7 +77,7 @@ export default class Textfield extends React.Component<IProps, IState> {
               {label}
             </Label>
             <Input
-              innerRef={r => (this.inputElement = r)}
+              innerRef={(r) => (this.inputElement = r)}
               color={color}
               onFocus={this.onFocus}
               onBlur={this.onBlur}
@@ -120,5 +95,30 @@ export default class Textfield extends React.Component<IProps, IState> {
         )}
       </Root>
     );
+  }
+
+  private onClick = () => {
+    this.inputElement.focus();
+  }
+
+  private onFocus = () => {
+    this.setState({
+      activated: true,
+    });
+  }
+
+  private onBlur = () => {
+    const { activated } = this.state;
+
+    if (this.inputElement.value.length === 0 && activated) {
+      this.setState({
+        activated: false,
+      });
+    }
+  }
+
+  private onLeadingIconIconClick = (e?: React.SyntheticEvent<HTMLDivElement>) => {
+    // eslint-disable-next-line React/destructuring-assignment
+    executeEventStopPropagation(e, this.props.onLeadingIconClick);
   }
 }

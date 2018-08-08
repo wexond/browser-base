@@ -1,9 +1,9 @@
-import { readFileSync, statSync, readdirSync } from 'fs';
-import { resolve, format } from 'url';
 import { webContents } from 'electron';
+import { readdirSync, readFileSync, statSync } from 'fs';
+import { format, resolve } from 'url';
 
 import { Manifest } from '../interfaces';
-import { makeId, getPath } from '../utils/other';
+import { getPath, makeId } from '../utils/other';
 import { Global } from './interfaces';
 
 declare const global: Global;
@@ -26,7 +26,7 @@ export const startBackgroundPage = (manifest: Manifest) => {
       name = 'generated.html';
       html = Buffer.from(
         `<html>
-          <body>${scripts.map(script => `<script src="${script}"></script>`).join('')}
+          <body>${scripts.map((script) => `<script src="${script}"></script>`).join('')}
           </body>
         </html>`,
         'utf8',

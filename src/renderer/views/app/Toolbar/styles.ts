@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { TOOLBAR_HEIGHT, EASE_FUNCTION } from '../../../../constants';
+import { EASE_FUNCTION, TOOLBAR_HEIGHT } from '../../../../constants';
 import { opacity } from '../../../../defaults';
 
 export const StyledToolbar = styled.div`

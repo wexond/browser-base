@@ -1,7 +1,7 @@
 import { app } from 'electron';
-import { parse } from 'url';
-import { join } from 'path';
 import { readFile } from 'fs';
+import { join } from 'path';
+import { parse } from 'url';
 
 import { Global } from './interfaces';
 
@@ -41,7 +41,7 @@ declare const global: Global;
 
       return null;
     },
-    error => {
+    (error) => {
       if (error) {
         console.error(`Failed to register wexond-extension protocol: ${error}`);
       }

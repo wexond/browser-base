@@ -1,7 +1,7 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-React';
 import React from 'react';
 
-import { StyledItem, Title, Content } from './styles';
+import { Content, StyledItem, Title } from './styles';
 
 interface Props {
   title?: string;

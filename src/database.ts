@@ -1,5 +1,5 @@
 import Dexie from 'dexie';
-import { BookmarkItem, HistoryItem, Favicon } from './interfaces';
+import { BookmarkItem, Favicon, HistoryItem } from './interfaces';
 
 export class Database extends Dexie {
   public history: Dexie.Table<HistoryItem, number>;
@@ -26,8 +26,8 @@ export class Database extends Dexie {
 
     if (count === 0) {
       fetch(url)
-        .then(res => res.blob())
-        .then(blob => {
+        .then((res) => res.blob())
+        .then((blob) => {
           const reader = new FileReader();
           reader.onload = () => {
             const generatedBuffer: any = reader.result;

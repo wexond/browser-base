@@ -1,14 +1,15 @@
-import { observer } from 'mobx-react';
+import { remote } from 'electron';
+import { observer } from 'mobx-React';
 import { resolve } from 'path';
 import React from 'react';
-import { remote } from 'electron';
 
-import StyledPage from './styles';
-import store from '../../../store';
-import database from '../../../../database';
 import { BASE_PATH } from '../../../../constants';
-import { Page, Tab } from '../../../../models';
+import database from '../../../../database';
 import { PageMenuMode } from '../../../../enums';
+import { Page, Tab } from '../../../../models';
+import { createTab, getCurrentWorkspace, getIpcTab, getTabById } from '../../../../utils';
+import store from '../../../store';
+import StyledPage from './styles';
 
 @observer
 export default class extends React.Component<{ page: Page }, {}> {
@@ -27,7 +28,7 @@ export default class extends React.Component<{ page: Page }, {}> {
   public componentDidMount() {
     const { page } = this.props;
     const { id } = page;
-    const tab = store.getTabById(id);
+    const tab = getTabById(id);
 
     this.tab = tab;
 
@@ -57,12 +58,12 @@ export default class extends React.Component<{ page: Page }, {}> {
           {
             url,
           },
-          this.tab.getIpcTab(),
+          getIpcTab(this.tab),
         );
         this.updateData();
-        store.isBookmarked = !!store.bookmarks.find(x => x.url === url);
+        store.isBookmarked = !!store.bookmarks.find((x) => x.url === url);
       }
-    }, 10);
+    },                             10);
   }
 
   public componentWillUnmount() {
@@ -85,17 +86,17 @@ export default class extends React.Component<{ page: Page }, {}> {
 
     const backgroundPages = remote.getGlobal('backgroundPages');
 
-    Object.keys(backgroundPages).forEach(key => {
+    Object.keys(backgroundPages).forEach((key) => {
       const webContents = remote.webContents.fromId(backgroundPages[key].webContentsId);
       webContents.send(`api-emit-event-${scope}-${name}`, ...data);
     });
-  };
+  }
 
   public onIpcMessage = (e: Electron.IpcMessageEvent, args: any[]) => {
     if (e.channel === 'api-tabs-getCurrent') {
-      this.webview.getWebContents().send('api-tabs-getCurrent', this.tab.getIpcTab());
+      this.webview.getWebContents().send('api-tabs-getCurrent', getIpcTab(this.tab));
     }
-  };
+  }
 
   public onWillNavigate = (e: Electron.WillNavigateEvent) => {
     this.emitEvent('webNavigation', 'onBeforeNavigate', {
@@ -106,7 +107,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       processId: -1,
       parentFrameId: -1,
     });
-  };
+  }
 
   public onDidStartLoading = () => {
     this.emitEvent('webNavigation', 'onCommitted', {
@@ -124,9 +125,9 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         status: 'loading',
       },
-      this.tab.getIpcTab(),
+      getIpcTab(this.tab),
     );
-  };
+  }
 
   public onDidNavigate = (e: Electron.DidNavigateEvent) => {
     this.emitEvent('webNavigation', 'onCompleted', {
@@ -144,9 +145,9 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         status: 'complete',
       },
-      this.tab.getIpcTab(),
+      getIpcTab(this.tab),
     );
-  };
+  }
 
   public onDomReady = () => {
     this.webview.getWebContents().on('context-menu', this.onContextMenu);
@@ -157,15 +158,15 @@ export default class extends React.Component<{ page: Page }, {}> {
       timeStamp: Date.now(),
       processId: this.webview.getWebContents().getOSProcessId(),
     });
-  };
+  }
 
   public onNewWindow = (e: Electron.NewWindowEvent) => {
     let tab: Tab;
 
     if (e.disposition === 'new-window' || e.disposition === 'foreground-tab') {
-      tab = store.getCurrentWorkspace().addTab({ url: e.url, active: true });
+      tab = createTab({ url: e.url, active: true });
     } else if (e.disposition === 'background-tab') {
-      tab = store.getCurrentWorkspace().addTab({ url: e.url, active: false });
+      tab = createTab({ url: e.url, active: false });
     }
 
     this.emitEvent('webNavigation', 'onCreatedNavigationTarget', {
@@ -176,7 +177,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       url: e.url,
       tabId: tab,
     });
-  };
+  }
 
   public onContextMenu = (e: Electron.Event, params: Electron.ContextMenuParams) => {
     requestAnimationFrame(() => {
@@ -225,12 +226,12 @@ export default class extends React.Component<{ page: Page }, {}> {
     // Set the new position.
     store.pageMenuData.x = left;
     store.pageMenuData.y = top;
-  };
+  }
 
   public onDidStopLoading = () => {
     store.refreshNavigationState();
     this.tab.loading = false;
-  };
+  }
 
   public onLoadCommit = async ({ url, isMainFrame }: Electron.LoadCommitEvent) => {
     this.tab.loading = true;
@@ -249,7 +250,7 @@ export default class extends React.Component<{ page: Page }, {}> {
 
       this.lastURL = url;
     }
-  };
+  }
 
   public onPageFaviconUpdated = ({ favicons }: Electron.PageFaviconUpdatedEvent) => {
     const request = new XMLHttpRequest();
@@ -272,12 +273,12 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         favIconUrl: favicons[0],
       },
-      this.tab.getIpcTab(),
+      getIpcTab(this.tab),
     );
 
     request.open('GET', favicons[0], true);
     request.send(null);
-  };
+  }
 
   public updateData = () => {
     if (this.lastURL === this.tab.url) {
@@ -294,12 +295,12 @@ export default class extends React.Component<{ page: Page }, {}> {
         });
       }
     }
-  };
+  }
 
   public onPageTitleUpdated = ({ title }: Electron.PageTitleUpdatedEvent) => {
     const { page } = this.props;
     const { id } = page;
-    const tab = store.getTabById(id);
+    const tab = getTabById(id);
 
     tab.title = title;
     this.updateData();
@@ -311,24 +312,24 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         title,
       },
-      this.tab.getIpcTab(),
+      getIpcTab(this.tab),
     );
-  };
+  }
 
   public onFullscreenEnter = () => {
     store.isHTMLFullscreen = true;
-  };
+  }
 
   public onFullscreenLeave = () => {
     store.isHTMLFullscreen = false;
-  };
+  }
 
   public render() {
     const { page } = this.props;
     const { url, id } = page;
 
     return (
-      <StyledPage selected={store.getCurrentWorkspace().selectedTab === id}>
+      <StyledPage selected={getCurrentWorkspace().selectedTab === id}>
         <webview
           src={url}
           style={{

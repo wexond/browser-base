@@ -1,10 +1,10 @@
 import { remote } from 'electron';
-import { runInThisContext } from 'vm';
 import fs from 'fs';
 import path from 'path';
+import { runInThisContext } from 'vm';
 
-import { getAPI } from './api';
 import { Manifest } from '../interfaces/manifest';
+import { getAPI } from './api';
 
 const matchesPattern = (pattern: string) => {
   if (pattern === '<all_urls>') {
@@ -89,7 +89,7 @@ const injectContentScript = (script: any, manifest: Manifest) => {
 
 const extensions: { [key: string]: Manifest } = remote.getGlobal('extensions');
 
-Object.keys(extensions).forEach(key => {
+Object.keys(extensions).forEach((key) => {
   const manifest = extensions[key];
 
   if (manifest.content_scripts) {
@@ -99,7 +99,7 @@ Object.keys(extensions).forEach(key => {
     });
 
     try {
-      manifest.content_scripts.forEach(script => {
+      manifest.content_scripts.forEach((script) => {
         const newScript = {
           matches: script.matches,
           js: script.js ? script.js.map(readArrayOfFiles) : [],

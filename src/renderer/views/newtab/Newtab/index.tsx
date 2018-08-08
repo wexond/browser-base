@@ -1,22 +1,22 @@
+import { observer } from 'mobx-React';
 import React from 'react';
-import { observer } from 'mobx-react';
 
 import News from '../News';
 import WeatherCard from '../WeatherCard';
 
 import {
-  StyledApp, Content, Credits, Column,
-} from './styles';
-import store from '../../../store';
-import Preloader from '../../../components/Preloader';
-import { getWeather, getNews } from '../../../../utils';
-import {
-  Locales, TemperatureUnit, TimeUnit, Countries,
+  Countries, Locales, TemperatureUnit, TimeUnit,
 } from '../../../../enums';
+import { getNews, getWeather } from '../../../../utils';
+import Preloader from '../../../components/Preloader';
+import store from '../../../store';
+import {
+  Column, Content, Credits, StyledApp,
+} from './styles';
 
 @observer
 export default class Newtab extends React.Component<{ visible: boolean }, {}> {
-  componentDidMount() {
+  public componentDidMount() {
     window.addEventListener('resize', this.onResize);
     this.loadData();
   }
@@ -31,9 +31,9 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
     }
 
     store.newsColumns = columns;
-  };
+  }
 
-  async loadData() {
+  public async loadData() {
     const weatherData = await getWeather(
       'warsaw',
       Locales.en,
@@ -68,7 +68,7 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
     }
 
     return columns;
-  };
+  }
 
   public render() {
     const { visible } = this.props;

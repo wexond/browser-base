@@ -1,9 +1,9 @@
 import { ipcRenderer } from 'electron';
 import { format } from 'url';
 
+import { Manifest } from '../../interfaces/manifest';
 import IpcEvent from './ipc-event';
 import WebRequestEvent from './web-request-event';
-import { Manifest } from '../../interfaces/manifest';
 
 function readProperty(obj: any, prop: string) {
   return obj[prop];
@@ -69,8 +69,8 @@ export const getAPI = (manifest: Manifest) => {
     // https://developer.chrome.com/extensions/tabs
     tabs: {
       get: (tabId: number, callback: (tab: chrome.tabs.Tab) => void) => {
-        api.tabs.query({}, tabs => {
-          callback(tabs.find(x => x.id === tabId));
+        api.tabs.query({}, (tabs) => {
+          callback(tabs.find((x) => x.id === tabId));
         });
       },
       getCurrent: (callback: (tab: chrome.tabs.Tab) => void) => {
@@ -90,12 +90,12 @@ export const getAPI = (manifest: Manifest) => {
           'api-tabs-query',
           (e: Electron.IpcMessageEvent, data: chrome.tabs.Tab[]) => {
             callback(
-              data.filter(tab => {
+              data.filter((tab) => {
                 for (const key in queryInfo) {
                   const tabProp = readProperty(tab, key);
                   const queryInfoProp = readProperty(queryInfo, key);
 
-                  if (tabProp == null || queryInfoProp !== tabProp) return false;
+                  if (tabProp == null || queryInfoProp !== tabProp) { return false; }
                 }
 
                 return true;
@@ -123,7 +123,7 @@ export const getAPI = (manifest: Manifest) => {
         ipcRenderer.send('api-tabs-insertCSS', tabId, details);
 
         ipcRenderer.on('api-tabs-insertCSS', () => {
-          if (callback) callback();
+          if (callback) { callback(); }
         });
       },
       executeScript: (
@@ -134,35 +134,32 @@ export const getAPI = (manifest: Manifest) => {
         ipcRenderer.send('api-tabs-executeScript', tabId, details);
 
         ipcRenderer.on('api-tabs-executeScript', (e: Electron.IpcMessageEvent, result: any) => {
-          if (callback) callback(result);
+          if (callback) { callback(result); }
         });
       },
       setZoom: (tabId: number, zoomFactor: number, callback: () => void) => {
         ipcRenderer.send('api-tabs-setZoom', tabId, zoomFactor);
 
         ipcRenderer.on('api-tabs-setZoom', () => {
-          if (callback) callback();
+          if (callback) { callback(); }
         });
       },
-      getZoom: (
-        tabId: number,
-        callback: (zoomFactor: number) => void,
-      ) => {
+      getZoom: (tabId: number, callback: (zoomFactor: number) => void) => {
         ipcRenderer.send('api-tabs-getZoom', tabId);
 
         ipcRenderer.on('api-tabs-getZoom', (e: Electron.IpcMessageEvent, zoomFactor: number) => {
-          if (callback) callback(zoomFactor);
+          if (callback) { callback(zoomFactor); }
         });
       },
-      detectLanguage: (
-        tabId: number,
-        callback: (language: string) => void,
-      ) => {
+      detectLanguage: (tabId: number, callback: (language: string) => void) => {
         ipcRenderer.send('api-tabs-detectLanguage', tabId);
 
-        ipcRenderer.on('api-tabs-detectLanguage', (e: Electron.IpcMessageEvent, language: string) => {
-          if (callback) callback(language);
-        });
+        ipcRenderer.on(
+          'api-tabs-detectLanguage',
+          (e: Electron.IpcMessageEvent, language: string) => {
+            if (callback) { callback(language); }
+          },
+        );
       },
 
       onCreated: new IpcEvent('tabs', 'onCreated'),
@@ -178,18 +175,18 @@ export const getAPI = (manifest: Manifest) => {
     },
     storage: {
       local: {
-        get: () => {},
+        get: () => { },
       },
       sync: {},
       onChanged: {},
     },
     i18n: {
-      getMessage: () => {},
+      getMessage: () => { },
     },
     windows: {},
     browserAction: {
       onClicked: {
-        addListener: () => {},
+        addListener: () => { },
       },
     },
   };

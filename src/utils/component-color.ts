@@ -20,12 +20,12 @@ export const getComponentColor = (
     alpha = isLightTheme ? opacity.light.inactiveIcon : opacity.dark.inactiveIcon;
   }
 
-  if (returnOnlyAlpha) return alpha;
+  if (returnOnlyAlpha) { return alpha; }
   return alpha != null ? `rgba(${rgb}, ${rgb}, ${rgb}, ${alpha})` : color;
 };
 
 export const getComponentRippleColor = (color: string, toggled: boolean, theme: UITheme) => {
-  if (toggled) return color;
+  if (toggled) { return color; }
   return theme === 'light' ? '#000' : '#fff';
 };
 

@@ -1,5 +1,5 @@
+import { app, remote } from 'electron';
 import path from 'path';
-import { remote, app } from 'electron';
 
 export const isObject = (item: any) => typeof item === 'object';
 

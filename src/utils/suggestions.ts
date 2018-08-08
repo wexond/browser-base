@@ -1,13 +1,13 @@
+import { isURL, requestURL } from '.';
+import { icons } from '../defaults';
 import { HistoryItem, SuggestionItem } from '../interfaces';
 import store from '../renderer/store';
-import { requestURL, isURL } from '.';
-import { icons } from '../defaults';
 
 const countVisitedTimes = (historyItems: HistoryItem[]) => {
   const items: any[] = [];
 
   for (const historyItem of historyItems) {
-    const itemsWithUrl = historyItems.filter(x => x.url === historyItem.url);
+    const itemsWithUrl = historyItems.filter((x) => x.url === historyItem.url);
 
     const itemToPush = {
       id: historyItem.id,
@@ -35,7 +35,7 @@ interface HistorySuggestion extends HistoryItem {
 export const getHistorySuggestions = (filter: string) => {
   filter = filter.trim().toLowerCase();
 
-  if (filter === '') return [];
+  if (filter === '') { return []; }
 
   const regex = /(http(s?)):\/\/(www.)?|www./gi;
 
@@ -65,7 +65,7 @@ export const getHistorySuggestions = (filter: string) => {
         .replace(/%20/g, ' ');
       if (
         query.startsWith(filterPart)
-        && urlMatchedItems.filter(x => x.url === query).length === 0
+        && urlMatchedItems.filter((x) => x.url === query).length === 0
       ) {
         itemToPush.url = query;
         urlMatchedItems.push({ url: query, canSuggest: true, isSearch: true });
@@ -106,7 +106,7 @@ export const getSearchSuggestions = (filter: string) =>
   new Promise(async (resolve: (suggestions: string[]) => void, reject) => {
     const input = filter.trim().toLowerCase();
 
-    if (input === '') return resolve([]);
+    if (input === '') { return resolve([]); }
 
     try {
       const data = await requestURL(`http://google.com/complete/search?client=chrome&q=${input}`);

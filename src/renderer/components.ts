@@ -5,11 +5,11 @@ class Components {
   public tab = {
     Root: tabStyles.StyledTab,
     Close: tabStyles.Close,
-    Overlay: tabStyles.Overlay,
-    Title: tabStyles.Title,
-    Icon: tabStyles.Icon,
-    Content: tabStyles.Content,
-    RightBorder: tabStyles.RightBorder,
+    // Overlay: tabStyles.Overlay,
+    // Title: tabStyles.Title,
+    // Icon: tabStyles.Icon,
+    // Content: tabStyles.Content,
+    // RightBorder: tabStyles.RightBorder,
   };
 
   [key: string]: any;

@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
+import { EASE_FUNCTION } from '../../../constants';
 import { opacity } from '../../../defaults/opacity';
 import { Align, SliderType } from '../../../enums';
-import { EASE_FUNCTION } from '../../../constants';
 import { center, robotoRegular } from '../../mixins';
 
 export const StyledSlider = styled.div`

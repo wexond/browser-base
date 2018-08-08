@@ -1,6 +1,6 @@
 import React from 'react';
-import { IconRipple, StyledRipples } from './styles';
 import Ripple from '../Ripple';
+import { IconRipple, StyledRipples } from './styles';
 
 export interface IProps {
   className?: string;
@@ -92,12 +92,12 @@ export default class Ripples extends React.Component<IProps, IState> {
   public removeRipple = (id: number) => {
     const { ripples } = this.state;
 
-    const index = ripples.indexOf(ripples.filter(ripple => ripple.id === id)[0]);
+    const index = ripples.indexOf(ripples.filter((ripple) => ripple.id === id)[0]);
 
     this.setState({
       ripples: [...ripples.slice(0, index), ...ripples.slice(index + 1)],
     });
-  };
+  }
 
   public removeRipples = () => {
     const { ripples } = this.state;
@@ -111,7 +111,7 @@ export default class Ripples extends React.Component<IProps, IState> {
         }),
       ],
     });
-  };
+  }
 
   public getRipplePosition(offsetX = 0, x = 0, y = 0) {
     return {
@@ -136,7 +136,7 @@ export default class Ripples extends React.Component<IProps, IState> {
     } = this.props;
 
     const component = (
-      <StyledRipples innerRef={r => (this.ripples = r)}>
+      <StyledRipples innerRef={(r) => (this.ripples = r)}>
         {ripples.map((ripple: IRipple) => {
           const { offsetHeight, offsetWidth } = this.ripples;
           const {
