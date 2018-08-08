@@ -76,12 +76,7 @@ export const runExtensionsService = () => {
 
   ipcRenderer.on(
     API_TABS_SET_ZOOM,
-    (
-      e: Electron.IpcMessageEvent,
-      tabId: number,
-      zoomFactor: number,
-      sender: number,
-    ) => {
+    (e: Electron.IpcMessageEvent, tabId: number, zoomFactor: number, sender: number) => {
       const webContents = remote.webContents.fromId(sender);
       const page = store.getPageById(tabId);
 
@@ -92,11 +87,7 @@ export const runExtensionsService = () => {
 
   ipcRenderer.on(
     API_TABS_GET_ZOOM,
-    (
-      e: Electron.IpcMessageEvent,
-      tabId: number,
-      sender: number,
-    ) => {
+    (e: Electron.IpcMessageEvent, tabId: number, sender: number) => {
       const webContents = remote.webContents.fromId(sender);
       const page = store.getPageById(tabId);
 
@@ -108,19 +99,17 @@ export const runExtensionsService = () => {
 
   ipcRenderer.on(
     API_TABS_DETECT_LANGUAGE,
-    (
-      e: Electron.IpcMessageEvent,
-      tabId: number,
-      sender: number,
-    ) => {
+    (e: Electron.IpcMessageEvent, tabId: number, sender: number) => {
       const webContents = remote.webContents.fromId(sender);
       const page = store.getPageById(tabId);
 
       page.webview.executeJavaScript('document.documentElement.lang', true, (language: string) => {
-        if (language !== "") webContents.send(API_TABS_DETECT_LANGUAGE, language);
-        else page.webview.executeJavaScript('navigator.language', true, (language: string) => {
-          webContents.send(API_TABS_DETECT_LANGUAGE, language);
-        });
+        if (language !== '') webContents.send(API_TABS_DETECT_LANGUAGE, language);
+        else {
+          page.webview.executeJavaScript('navigator.language', true, (language: string) => {
+            webContents.send(API_TABS_DETECT_LANGUAGE, language);
+          });
+        }
       });
     },
   );

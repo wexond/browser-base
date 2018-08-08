@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { opacity } from "../../../../defaults";
-import { subtitle2, noButtons } from "../../../mixins";
+import { opacity } from '../../../../defaults';
+import { subtitle2, noButtons } from '../../../mixins';
 
 export const Content = styled.div`
   width: 100%;
@@ -9,7 +9,7 @@ export const Content = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
 
-  ${noButtons("10px")};
+  ${noButtons('10px')};
 `;
 
 export const Container = styled.div`
@@ -27,8 +27,7 @@ export const Items = styled.div`
   overflow: hidden;
   border-radius: 4px;
   background-color: #fff;
-  box-shadow: 0 1px 1px 0 rgba(60, 64, 67, 0.08),
-    0 1px 3px 1px rgba(60, 64, 67, 0.16);
+  box-shadow: 0 1px 1px 0 rgba(60, 64, 67, 0.08), 0 1px 3px 1px rgba(60, 64, 67, 0.16);
 `;
 
 export const Caption = styled.div`
