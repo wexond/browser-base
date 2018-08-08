@@ -5,14 +5,15 @@ import News from '../News';
 import WeatherCard from '../WeatherCard';
 
 import {
-  Countries, Locales, TemperatureUnit, TimeUnit,
+  Countries,
+  Locales,
+  TemperatureUnit,
+  TimeUnit,
 } from '../../../../enums';
 import { getNews, getWeather } from '../../../../utils';
 import Preloader from '../../../components/Preloader';
 import store from '../../../store';
-import {
-  Column, Content, Credits, StyledApp,
-} from './styles';
+import { Column, Content, Credits, StyledApp } from './styles';
 
 @observer
 export default class Newtab extends React.Component<{ visible: boolean }, {}> {
@@ -56,9 +57,13 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
     for (let i = 0; i < columnsCount; i++) {
       if (i < columnsCount) {
         if (i === 0) {
-          columns.push(newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1) - 1));
+          columns.push(
+            newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1) - 1),
+          );
         } else if (i === 1) {
-          columns.push(newsData.slice(i * (itemsPerCol - 1), itemsPerCol * (i + 1)));
+          columns.push(
+            newsData.slice(i * (itemsPerCol - 1), itemsPerCol * (i + 1)),
+          );
         } else {
           columns.push(newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1)));
         }
@@ -101,7 +106,8 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
           )}
           {!navigator.onLine && (
             <Credits>
-              APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and
+              APIs powered by{' '}
+              <a href="https://openweathermap.org/">OpenWeatherMap</a> and
               <a href="https://newsapi.org/"> News API</a>
               <br />
               Icons for temporary usage created by&nbsp;

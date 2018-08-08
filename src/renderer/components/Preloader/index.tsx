@@ -18,9 +18,7 @@ export default class Preloader extends React.Component<IProps, {}> {
   };
 
   public render() {
-    const {
-      style, color, size, thickness,
-    } = this.props;
+    const { style, color, size, thickness } = this.props;
 
     return (
       <div style={style}>

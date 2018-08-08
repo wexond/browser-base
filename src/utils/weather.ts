@@ -2,7 +2,11 @@ import { getTimeInZone, getTimeZoneOffset, requestURL } from '.';
 import { WEATHER_API_KEY } from '../constants';
 import { WeatherCodes, weatherIcons } from '../defaults';
 import { Locales, TemperatureUnit, TimeUnit } from '../enums';
-import { WeatherDailyItem, WeatherForecast, WeatherWeeklyItem } from '../interfaces';
+import {
+  WeatherDailyItem,
+  WeatherForecast,
+  WeatherWeeklyItem,
+} from '../interfaces';
 
 const createDailyItem = (data: any, timeZoneOffset: number) => {
   const item: WeatherDailyItem = {
@@ -51,10 +55,10 @@ const getWeekly = (weekly: any, timeZoneOffset: number) => {
       const icon = item.weather[0].icon;
 
       if (
-        (lastItem == null || lastItemDay !== time.getDate())
-        && isDay
-        && hoursInZone >= 11
-        && hoursInZone <= 15
+        (lastItem == null || lastItemDay !== time.getDate()) &&
+        isDay &&
+        hoursInZone >= 11 &&
+        hoursInZone <= 15
       ) {
         const newItem: WeatherWeeklyItem = {
           dayTemp: temp,
@@ -64,10 +68,10 @@ const getWeekly = (weekly: any, timeZoneOffset: number) => {
 
         list.push(newItem);
       } else if (
-        lastItem
-        && lastItem.nightTemp == null
-        && !isDay
-        && (hoursInZone >= 23 || hoursInZone < 6)
+        lastItem &&
+        lastItem.nightTemp == null &&
+        !isDay &&
+        (hoursInZone >= 23 || hoursInZone < 6)
       ) {
         lastItem.nightTemp = temp;
       }

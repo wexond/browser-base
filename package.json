@@ -36,11 +36,11 @@
     "compile-win32": "npm run build && electron-builder -w -p always",
     "compile-darwin": "npm run build && electron-builder -m -p always",
     "compile-linux": "npm run build && electron-builder -l -p always",
-    "lint": "tslint \"src/**/*.ts*\" --fix",
-    "lint-fix": "prettier-eslint --write \"src/**/*.ts*\""
+    "lint": "tslint \"src/**/*.ts*\"",
+    "lint-fix": "prettier --write \"src/**/*.ts*\" && tslint \"src/**/*.ts*\" --fix"
   },
   "pre-commit": [
-    "lint"
+    "lint-fix"
   ],
   "devDependencies": {
     "@types/chrome": "0.0.71",
@@ -68,6 +68,7 @@
     "styled-components": "3.4.0",
     "tslint": "5.11.0",
     "tslint-config-airbnb": "5.9.2",
+    "tslint-config-prettier": "1.14.0",
     "typescript": "3.0.1",
     "url-loader": "1.0.1",
     "webpack": "4.16.4",

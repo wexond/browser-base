@@ -89,17 +89,20 @@ const injectContentScript = (script: any, manifest: Manifest) => {
 
 const extensions: { [key: string]: Manifest } = remote.getGlobal('extensions');
 
-Object.keys(extensions).forEach((key) => {
+Object.keys(extensions).forEach(key => {
   const manifest = extensions[key];
 
   if (manifest.content_scripts) {
     const readArrayOfFiles = (relativePath: string) => ({
       url: `wexond-extension://${manifest.extensionId}/${relativePath}`,
-      code: fs.readFileSync(path.join(manifest.srcDirectory, relativePath), 'utf8'),
+      code: fs.readFileSync(
+        path.join(manifest.srcDirectory, relativePath),
+        'utf8',
+      ),
     });
 
     try {
-      manifest.content_scripts.forEach((script) => {
+      manifest.content_scripts.forEach(script => {
         const newScript = {
           matches: script.matches,
           js: script.js ? script.js.map(readArrayOfFiles) : [],

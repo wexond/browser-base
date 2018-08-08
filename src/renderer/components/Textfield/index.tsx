@@ -64,27 +64,43 @@ export default class Textfield extends React.Component<IProps, IState> {
 
   public render() {
     const {
-      color, label, leadingIcon, trailingIcon, helperText, style, onKeyPress,
+      color,
+      label,
+      leadingIcon,
+      trailingIcon,
+      helperText,
+      style,
+      onKeyPress,
     } = this.props;
     const { activated } = this.state;
 
     return (
       <Root onClick={this.onClick} style={style}>
         <Container>
-          {leadingIcon && <LeadingIcon src={leadingIcon} onClick={this.onLeadingIconIconClick} />}
+          {leadingIcon && (
+            <LeadingIcon
+              src={leadingIcon}
+              onClick={this.onLeadingIconIconClick}
+            />
+          )}
           <InputContainer>
             <Label color={color} activated={activated}>
               {label}
             </Label>
             <Input
-              innerRef={(r) => (this.inputElement = r)}
+              innerRef={r => (this.inputElement = r)}
               color={color}
               onFocus={this.onFocus}
               onBlur={this.onBlur}
               onKeyPress={onKeyPress}
             />
           </InputContainer>
-          {trailingIcon && <TrailingIcon src={trailingIcon} onClick={this.onTrailingIconClick} />}
+          {trailingIcon && (
+            <TrailingIcon
+              src={trailingIcon}
+              onClick={this.onTrailingIconClick}
+            />
+          )}
           <HoverBorder className="hover-border" />
           <Indicator color={color} activated={activated} />
         </Container>
@@ -117,7 +133,9 @@ export default class Textfield extends React.Component<IProps, IState> {
     }
   }
 
-  private onLeadingIconIconClick = (e?: React.SyntheticEvent<HTMLDivElement>) => {
+  private onLeadingIconIconClick = (
+    e?: React.SyntheticEvent<HTMLDivElement>,
+  ) => {
     // eslint-disable-next-line React/destructuring-assignment
     executeEventStopPropagation(e, this.props.onLeadingIconClick);
   }

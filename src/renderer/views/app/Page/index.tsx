@@ -7,7 +7,12 @@ import { BASE_PATH } from '../../../../constants';
 import database from '../../../../database';
 import { PageMenuMode } from '../../../../enums';
 import { Page, Tab } from '../../../../models';
-import { createTab, getCurrentWorkspace, getIpcTab, getTabById } from '../../../../utils';
+import {
+  createTab,
+  getCurrentWorkspace,
+  getIpcTab,
+  getTabById,
+} from '../../../../utils';
 import store from '../../../store';
 import StyledPage from './styles';
 
@@ -61,9 +66,9 @@ export default class extends React.Component<{ page: Page }, {}> {
           getIpcTab(this.tab),
         );
         this.updateData();
-        store.isBookmarked = !!store.bookmarks.find((x) => x.url === url);
+        store.isBookmarked = !!store.bookmarks.find(x => x.url === url);
       }
-    },                             10);
+    }, 10);
   }
 
   public componentWillUnmount() {
@@ -82,19 +87,25 @@ export default class extends React.Component<{ page: Page }, {}> {
   }
 
   public emitEvent = (scope: string, name: string, ...data: any[]) => {
-    this.webview.getWebContents().send(`api-emit-event-${scope}-${name}`, ...data);
+    this.webview
+      .getWebContents()
+      .send(`api-emit-event-${scope}-${name}`, ...data);
 
     const backgroundPages = remote.getGlobal('backgroundPages');
 
-    Object.keys(backgroundPages).forEach((key) => {
-      const webContents = remote.webContents.fromId(backgroundPages[key].webContentsId);
+    Object.keys(backgroundPages).forEach(key => {
+      const webContents = remote.webContents.fromId(
+        backgroundPages[key].webContentsId,
+      );
       webContents.send(`api-emit-event-${scope}-${name}`, ...data);
     });
   }
 
   public onIpcMessage = (e: Electron.IpcMessageEvent, args: any[]) => {
     if (e.channel === 'api-tabs-getCurrent') {
-      this.webview.getWebContents().send('api-tabs-getCurrent', getIpcTab(this.tab));
+      this.webview
+        .getWebContents()
+        .send('api-tabs-getCurrent', getIpcTab(this.tab));
     }
   }
 
@@ -179,7 +190,10 @@ export default class extends React.Component<{ page: Page }, {}> {
     });
   }
 
-  public onContextMenu = (e: Electron.Event, params: Electron.ContextMenuParams) => {
+  public onContextMenu = (
+    e: Electron.Event,
+    params: Electron.ContextMenuParams,
+  ) => {
     requestAnimationFrame(() => {
       store.pageMenu.toggle(true);
     });
@@ -233,7 +247,10 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.tab.loading = false;
   }
 
-  public onLoadCommit = async ({ url, isMainFrame }: Electron.LoadCommitEvent) => {
+  public onLoadCommit = async ({
+    url,
+    isMainFrame,
+  }: Electron.LoadCommitEvent) => {
     this.tab.loading = true;
 
     if (url !== this.lastURL && isMainFrame && !url.startsWith('wexond://')) {
@@ -252,7 +269,9 @@ export default class extends React.Component<{ page: Page }, {}> {
     }
   }
 
-  public onPageFaviconUpdated = ({ favicons }: Electron.PageFaviconUpdatedEvent) => {
+  public onPageFaviconUpdated = ({
+    favicons,
+  }: Electron.PageFaviconUpdatedEvent) => {
     const request = new XMLHttpRequest();
     request.onreadystatechange = async () => {
       if (request.readyState === 4) {

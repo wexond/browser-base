@@ -11,7 +11,9 @@ const windowDataPath = getPath('window-data.json');
 
 export const createWindow = () => {
   // Read the last window state from file.
-  const windowState: WindowState = JSON.parse(readFileSync(windowDataPath, 'utf8'));
+  const windowState: WindowState = JSON.parse(
+    readFileSync(windowDataPath, 'utf8'),
+  );
 
   let windowData: Electron.BrowserWindowConstructorOptions = {
     frame: process.env.ENV === 'dev',
@@ -80,7 +82,7 @@ export const createWindow = () => {
     window.webContents.send(FULLSCREEN, false);
   });
 
-  window.webContents.addListener('will-navigate', (e) => e.preventDefault());
+  window.webContents.addListener('will-navigate', e => e.preventDefault());
 
   loadExtensions();
 

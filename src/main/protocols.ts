@@ -41,7 +41,7 @@ declare const global: Global;
 
       return null;
     },
-    (error) => {
+    error => {
       if (error) {
         console.error(`Failed to register wexond-extension protocol: ${error}`);
       }

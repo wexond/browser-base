@@ -1,8 +1,14 @@
 import styled, { css } from 'styled-components';
-import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '../../../../../constants';
+import {
+  WORKSPACE_FOLDER_SIZE,
+  WORKSPACE_ICON_SIZE,
+} from '../../../../../constants';
 import { colors, icons, opacity } from '../../../../../defaults';
 import {
-  centerImage, robotoRegular, shadows, subtitle2,
+  centerImage,
+  robotoRegular,
+  shadows,
+  subtitle2,
 } from '../../../../mixins';
 
 export const Root = styled.div`

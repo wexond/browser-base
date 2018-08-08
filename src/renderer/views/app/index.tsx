@@ -68,14 +68,20 @@ injectGlobal`
   }
 `;
 
-ipcRenderer.on(FULLSCREEN, (e: Electron.IpcMessageEvent, isFullscreen: boolean) => {
-  store.isFullscreen = isFullscreen;
-});
+ipcRenderer.on(
+  FULLSCREEN,
+  (e: Electron.IpcMessageEvent, isFullscreen: boolean) => {
+    store.isFullscreen = isFullscreen;
+  },
+);
 
-ipcRenderer.on(UPDATE_AVAILABLE, (e: Electron.IpcMessageEvent, version: string) => {
-  store.updateInfo.version = version;
-  store.updateInfo.available = true;
-});
+ipcRenderer.on(
+  UPDATE_AVAILABLE,
+  (e: Electron.IpcMessageEvent, version: string) => {
+    store.updateInfo.version = version;
+    store.updateInfo.available = true;
+  },
+);
 
 ipcRenderer.send(UPDATE_CHECK);
 
@@ -93,7 +99,7 @@ const render = (AppComponent: any) => {
   runExtensionsService();
 
   render(App);
-}());
+})();
 
 // React-hot-loader
 if ((module as any).hot) {

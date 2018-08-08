@@ -18,10 +18,19 @@ export const getAPI = (manifest: Manifest) => {
       onCommitted: new IpcEvent('webNavigation', 'onCommitted'),
       onDOMContentLoaded: new IpcEvent('webNavigation', 'onDOMContentLoaded'),
       onCompleted: new IpcEvent('webNavigation', 'onCompleted'),
-      onCreatedNavigationTarget: new IpcEvent('webNavigation', 'onCreatedNavigationTarget'),
-      onReferenceFragmentUpdated: new IpcEvent('webNavigation', 'onReferenceFragmentUpdated'), // TODO
+      onCreatedNavigationTarget: new IpcEvent(
+        'webNavigation',
+        'onCreatedNavigationTarget',
+      ),
+      onReferenceFragmentUpdated: new IpcEvent(
+        'webNavigation',
+        'onReferenceFragmentUpdated',
+      ), // TODO
       onTabReplaced: new IpcEvent('webNavigation', 'onTabReplaced'), // TODO
-      onHistoryStateUpdated: new IpcEvent('webNavigation', 'onHistoryStateUpdated'), // TODO
+      onHistoryStateUpdated: new IpcEvent(
+        'webNavigation',
+        'onHistoryStateUpdated',
+      ), // TODO
     },
 
     // https://developer.chrome.com/extensions/extension
@@ -57,7 +66,10 @@ export const getAPI = (manifest: Manifest) => {
     // https://developer.chrome.com/extensions/webRequest
     webRequest: {
       onBeforeRequest: new WebRequestEvent('webRequest', 'onBeforeRequest'),
-      onBeforeSendHeaders: new WebRequestEvent('webRequest', 'onBeforeSendHeaders'),
+      onBeforeSendHeaders: new WebRequestEvent(
+        'webRequest',
+        'onBeforeSendHeaders',
+      ),
       onHeadersReceived: new WebRequestEvent('webRequest', 'onHeadersReceived'),
       onSendHeaders: new WebRequestEvent('webRequest', 'onSendHeaders'),
       onResponseStarted: new WebRequestEvent('webRequest', 'onResponseStarted'),
@@ -69,8 +81,8 @@ export const getAPI = (manifest: Manifest) => {
     // https://developer.chrome.com/extensions/tabs
     tabs: {
       get: (tabId: number, callback: (tab: chrome.tabs.Tab) => void) => {
-        api.tabs.query({}, (tabs) => {
-          callback(tabs.find((x) => x.id === tabId));
+        api.tabs.query({}, tabs => {
+          callback(tabs.find(x => x.id === tabId));
         });
       },
       getCurrent: (callback: (tab: chrome.tabs.Tab) => void) => {
@@ -83,19 +95,24 @@ export const getAPI = (manifest: Manifest) => {
           },
         );
       },
-      query: (queryInfo: chrome.tabs.QueryInfo, callback: (tabs: chrome.tabs.Tab[]) => void) => {
+      query: (
+        queryInfo: chrome.tabs.QueryInfo,
+        callback: (tabs: chrome.tabs.Tab[]) => void,
+      ) => {
         ipcRenderer.send('api-tabs-query');
 
         ipcRenderer.once(
           'api-tabs-query',
           (e: Electron.IpcMessageEvent, data: chrome.tabs.Tab[]) => {
             callback(
-              data.filter((tab) => {
+              data.filter(tab => {
                 for (const key in queryInfo) {
                   const tabProp = readProperty(tab, key);
                   const queryInfoProp = readProperty(queryInfo, key);
 
-                  if (tabProp == null || queryInfoProp !== tabProp) { return false; }
+                  if (tabProp == null || queryInfoProp !== tabProp) {
+                    return false;
+                  }
                 }
 
                 return true;
@@ -119,11 +136,17 @@ export const getAPI = (manifest: Manifest) => {
           );
         }
       },
-      insertCSS: (tabId: number, details: chrome.tabs.InjectDetails, callback: () => void) => {
+      insertCSS: (
+        tabId: number,
+        details: chrome.tabs.InjectDetails,
+        callback: () => void,
+      ) => {
         ipcRenderer.send('api-tabs-insertCSS', tabId, details);
 
         ipcRenderer.on('api-tabs-insertCSS', () => {
-          if (callback) { callback(); }
+          if (callback) {
+            callback();
+          }
         });
       },
       executeScript: (
@@ -133,23 +156,35 @@ export const getAPI = (manifest: Manifest) => {
       ) => {
         ipcRenderer.send('api-tabs-executeScript', tabId, details);
 
-        ipcRenderer.on('api-tabs-executeScript', (e: Electron.IpcMessageEvent, result: any) => {
-          if (callback) { callback(result); }
-        });
+        ipcRenderer.on(
+          'api-tabs-executeScript',
+          (e: Electron.IpcMessageEvent, result: any) => {
+            if (callback) {
+              callback(result);
+            }
+          },
+        );
       },
       setZoom: (tabId: number, zoomFactor: number, callback: () => void) => {
         ipcRenderer.send('api-tabs-setZoom', tabId, zoomFactor);
 
         ipcRenderer.on('api-tabs-setZoom', () => {
-          if (callback) { callback(); }
+          if (callback) {
+            callback();
+          }
         });
       },
       getZoom: (tabId: number, callback: (zoomFactor: number) => void) => {
         ipcRenderer.send('api-tabs-getZoom', tabId);
 
-        ipcRenderer.on('api-tabs-getZoom', (e: Electron.IpcMessageEvent, zoomFactor: number) => {
-          if (callback) { callback(zoomFactor); }
-        });
+        ipcRenderer.on(
+          'api-tabs-getZoom',
+          (e: Electron.IpcMessageEvent, zoomFactor: number) => {
+            if (callback) {
+              callback(zoomFactor);
+            }
+          },
+        );
       },
       detectLanguage: (tabId: number, callback: (language: string) => void) => {
         ipcRenderer.send('api-tabs-detectLanguage', tabId);
@@ -157,7 +192,9 @@ export const getAPI = (manifest: Manifest) => {
         ipcRenderer.on(
           'api-tabs-detectLanguage',
           (e: Electron.IpcMessageEvent, language: string) => {
-            if (callback) { callback(language); }
+            if (callback) {
+              callback(language);
+            }
           },
         );
       },
@@ -175,18 +212,18 @@ export const getAPI = (manifest: Manifest) => {
     },
     storage: {
       local: {
-        get: () => { },
+        get: () => {},
       },
       sync: {},
       onChanged: {},
     },
     i18n: {
-      getMessage: () => { },
+      getMessage: () => {},
     },
     windows: {},
     browserAction: {
       onClicked: {
-        addListener: () => { },
+        addListener: () => {},
       },
     },
   };

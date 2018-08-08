@@ -64,7 +64,7 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
 
     store.resetRearrangeTabsTimer();
 
-    const notClosingTabs = workspaceTabs.filter((x) => !x.isClosing);
+    const notClosingTabs = workspaceTabs.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(tab);
 
     tab.isClosing = true;
@@ -80,7 +80,10 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
     if (selected) {
       index = workspaceTabs.indexOf(tab);
 
-      if (index + 1 < workspaceTabs.length && !workspaceTabs[index + 1].isClosing) {
+      if (
+        index + 1 < workspaceTabs.length &&
+        !workspaceTabs[index + 1].isClosing
+      ) {
         selectTab(workspaceTabs[index + 1]);
       } else if (index - 1 >= 0 && !workspaceTabs[index - 1].isClosing) {
         selectTab(workspaceTabs[index - 1]);
@@ -94,7 +97,7 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
 
     setTimeout(() => {
       removeTab(tab.id);
-    },         300);
+    }, 300);
   }
 
   public render() {
@@ -105,9 +108,12 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
       <StyledTab
         visible={currentWorkspace.id === tab.workspaceId}
         onMouseDown={this.onMouseDown}
-        innerRef={(r) => (tab.ref = r)}
+        innerRef={r => (tab.ref = r)}
       >
-        <Close onMouseDown={this.onCloseMouseDown} onClick={this.onCloseClick} />
+        <Close
+          onMouseDown={this.onCloseMouseDown}
+          onClick={this.onCloseClick}
+        />
       </StyledTab>
     );
   }

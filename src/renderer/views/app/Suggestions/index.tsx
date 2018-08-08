@@ -18,25 +18,27 @@ export default class Suggestions extends React.Component<Props, {}> {
 
     let vis = visible;
 
-    if (store.suggestions.length === 0) { vis = false; }
+    if (store.suggestions.length === 0) {
+      vis = false;
+    }
 
     let height = 0;
 
-    store.suggestions.forEach((a) => {
+    store.suggestions.forEach(a => {
       height += 40;
     });
 
     return (
       <StyledSuggestions
-        innerRef={(r) => (this.suggestions = r)}
+        innerRef={r => (this.suggestions = r)}
         style={{
           opacity: vis ? 1 : 0,
           pointerEvents: !vis ? 'none' : 'auto',
           height,
         }}
-        onMouseDown={(e) => e.stopPropagation()}
+        onMouseDown={e => e.stopPropagation()}
       >
-        {store.suggestions.map((suggestion) => (
+        {store.suggestions.map(suggestion => (
           <Suggestion suggestion={suggestion} key={suggestion.id} />
         ))}
       </StyledSuggestions>

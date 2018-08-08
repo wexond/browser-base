@@ -56,23 +56,30 @@ export default class Tabs extends React.Component {
       selectedTab.isDragging = true;
       store.addressBar.canToggle = false;
 
-      const newLeft = tabStartX + e.pageX - mouseStartX - (lastTabbarScrollLeft - tabbarRef.scrollLeft);
+      const newLeft =
+        tabStartX +
+        e.pageX -
+        mouseStartX -
+        (lastTabbarScrollLeft - tabbarRef.scrollLeft);
 
       let left = newLeft;
 
       if (newLeft < 0) {
         left = 0;
-      } else if (newLeft + selectedTab.width > store.addTabLeft + tabbarRef.scrollLeft) {
+      } else if (
+        newLeft + selectedTab.width >
+        store.addTabLeft + tabbarRef.scrollLeft
+      ) {
         left = store.addTabLeft - selectedTab.width;
       }
 
       setTabLeft(selectedTab, left, false);
 
       if (
-        e.pageY > TOOLBAR_HEIGHT + 16
-        || e.pageY < -16
-        || e.pageX < boundingRect.left
-        || e.pageX - boundingRect.left > store.addTabLeft
+        e.pageY > TOOLBAR_HEIGHT + 16 ||
+        e.pageY < -16 ||
+        e.pageX < boundingRect.left ||
+        e.pageX - boundingRect.left > store.addTabLeft
       ) {
         // TODO: Create a new window
       }
@@ -100,7 +107,7 @@ export default class Tabs extends React.Component {
   public render() {
     return (
       <React.Fragment>
-        {store.tabs.map((tab) => (
+        {store.tabs.map(tab => (
           <Tab key={tab.id} tab={tab} />
         ))}
       </React.Fragment>

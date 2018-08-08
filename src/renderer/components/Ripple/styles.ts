@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 
-const getSize = (x: number, y: number, width: number, height: number, icon: number) => {
+const getSize = (
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  icon: number,
+) => {
   if (width === 0 || height === 0) {
     return 0;
   }
@@ -33,9 +39,7 @@ export interface StyledRippleProps {
 }
 
 export const StyledRipple = styled.div.attrs({
-  style: ({
-    x, y, width, height, icon, opacity,
-  }: any) => {
+  style: ({ x, y, width, height, icon, opacity }: any) => {
     const newX = Math.min(x, width);
     const size = getSize(x, y, width, height, icon);
 
@@ -54,7 +58,8 @@ export const StyledRipple = styled.div.attrs({
   overflow: hidden;
   pointer-events: none;
 
-  transition: ${({ rippleTime }: StyledRippleProps) => rippleTime}s width ${easing},
+  transition: ${({ rippleTime }: StyledRippleProps) => rippleTime}s width
+      ${easing},
     ${({ rippleTime }) => rippleTime}s height ${easing},
     ${({ fadeOutTime }) => fadeOutTime}s opacity, 0.3s background-color;
   background-color: ${({ color }) => color};
