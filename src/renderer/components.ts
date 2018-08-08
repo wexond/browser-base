@@ -1,4 +1,4 @@
-import * as tabStyles from './views/app/Tab/styles';
+import * as tabStyles from "./views/app/Tab/styles";
 
 class Components {
   // Tab
@@ -9,7 +9,7 @@ class Components {
     Title: tabStyles.Title,
     Icon: tabStyles.Icon,
     Content: tabStyles.Content,
-    RightBorder: tabStyles.RightBorder,
+    RightBorder: tabStyles.RightBorder
   };
 
   [key: string]: any;
