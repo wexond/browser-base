@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { subtitle2 } from '../../../mixins';
 import { opacity } from '../../../../defaults';
+import { subtitle2 } from '../../../mixins';
 
 export const Title = styled.div`
   margin-bottom: 16px;

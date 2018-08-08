@@ -1,11 +1,11 @@
 import styled, { css } from 'styled-components';
-import {
-  centerImage, coverImage, h6, h5, body2,
-} from '../../mixins';
 import { opacity } from '../../../defaults';
+import {
+  body2, centerImage, coverImage, h5, h6,
+} from '../../mixins';
 
 const getCardImageOpacity = (visible: boolean) => {
-  if (visible != null) return visible ? 1 : 0;
+  if (visible != null) { return visible ? 1 : 0; }
   return 1;
 };
 

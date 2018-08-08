@@ -1,27 +1,22 @@
-import { remote, ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 
-import store from './store';
 import {
-  API_TABS_QUERY,
   API_TABS_CREATE,
-  API_TABS_INSERT_CSS,
-  API_TABS_EXECUTE_SCRIPT,
-  API_TABS_SET_ZOOM,
-  API_TABS_GET_ZOOM,
   API_TABS_DETECT_LANGUAGE,
+  API_TABS_EXECUTE_SCRIPT,
+  API_TABS_GET_ZOOM,
+  API_TABS_INSERT_CSS,
+  API_TABS_QUERY,
+  API_TABS_SET_ZOOM,
 } from '../constants';
+import { createTab, getIpcTab, getPageById } from '../utils';
+import store from './store';
 
 export const runExtensionsService = () => {
   ipcRenderer.on(API_TABS_QUERY, (e: Electron.IpcMessageEvent, webContentsId: number) => {
     const sender = remote.webContents.fromId(webContentsId);
 
-    let tabs: chrome.tabs.Tab[] = [];
-
-    for (const workspace of store.workspaces) {
-      tabs = tabs.concat(workspace.tabs.map(tab => tab.getIpcTab()));
-    }
-
-    sender.send(API_TABS_QUERY, tabs);
+    sender.send(API_TABS_QUERY, store.tabs.map((tab) => getIpcTab(tab)));
   });
 
   ipcRenderer.on(
@@ -31,13 +26,13 @@ export const runExtensionsService = () => {
 
       const { url, active, index } = data;
 
-      const tab = store.getCurrentWorkspace().addTab({
+      const tab = createTab({
         url,
         active,
         index,
       });
 
-      sender.send(API_TABS_CREATE, tab.getIpcTab());
+      sender.send(API_TABS_CREATE, getIpcTab(tab));
     },
   );
 
@@ -50,7 +45,7 @@ export const runExtensionsService = () => {
       sender: number,
     ) => {
       const webContents = remote.webContents.fromId(sender);
-      const page = store.getPageById(tabId);
+      const page = getPageById(tabId);
 
       page.webview.insertCSS(details.code);
       webContents.send(API_TABS_INSERT_CSS);
@@ -66,7 +61,7 @@ export const runExtensionsService = () => {
       sender: number,
     ) => {
       const webContents = remote.webContents.fromId(sender);
-      const page = store.getPageById(tabId);
+      const page = getPageById(tabId);
 
       page.webview.executeJavaScript(details.code, false, (result: any) => {
         webContents.send(API_TABS_EXECUTE_SCRIPT, result);
@@ -76,14 +71,9 @@ export const runExtensionsService = () => {
 
   ipcRenderer.on(
     API_TABS_SET_ZOOM,
-    (
-      e: Electron.IpcMessageEvent,
-      tabId: number,
-      zoomFactor: number,
-      sender: number,
-    ) => {
+    (e: Electron.IpcMessageEvent, tabId: number, zoomFactor: number, sender: number) => {
       const webContents = remote.webContents.fromId(sender);
-      const page = store.getPageById(tabId);
+      const page = getPageById(tabId);
 
       page.webview.setZoomFactor(zoomFactor);
       webContents.send(API_TABS_SET_ZOOM);
@@ -92,13 +82,9 @@ export const runExtensionsService = () => {
 
   ipcRenderer.on(
     API_TABS_GET_ZOOM,
-    (
-      e: Electron.IpcMessageEvent,
-      tabId: number,
-      sender: number,
-    ) => {
+    (e: Electron.IpcMessageEvent, tabId: number, sender: number) => {
       const webContents = remote.webContents.fromId(sender);
-      const page = store.getPageById(tabId);
+      const page = getPageById(tabId);
 
       page.webview.getWebContents().getZoomFactor((zoomFactor: number) => {
         webContents.send(API_TABS_GET_ZOOM, zoomFactor);
@@ -108,19 +94,16 @@ export const runExtensionsService = () => {
 
   ipcRenderer.on(
     API_TABS_DETECT_LANGUAGE,
-    (
-      e: Electron.IpcMessageEvent,
-      tabId: number,
-      sender: number,
-    ) => {
+    (e: Electron.IpcMessageEvent, tabId: number, sender: number) => {
       const webContents = remote.webContents.fromId(sender);
-      const page = store.getPageById(tabId);
+      const page = getPageById(tabId);
 
       page.webview.executeJavaScript('document.documentElement.lang', true, (language: string) => {
-        if (language !== "") webContents.send(API_TABS_DETECT_LANGUAGE, language);
-        else page.webview.executeJavaScript('navigator.language', true, (language: string) => {
-          webContents.send(API_TABS_DETECT_LANGUAGE, language);
-        });
+        if (language !== '') { webContents.send(API_TABS_DETECT_LANGUAGE, language); } else {
+          page.webview.executeJavaScript('navigator.language', true, (lang: string) => {
+            webContents.send(API_TABS_DETECT_LANGUAGE, lang);
+          });
+        }
       });
     },
   );

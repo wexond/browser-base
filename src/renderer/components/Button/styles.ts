@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 import { opacity } from '../../../defaults/opacity';
 import { ButtonType } from '../../../enums';
-import { shadows, button, centerImage } from '../../mixins';
 import { getComponentColor, getComponentOpacity } from '../../../utils';
+import { button, centerImage, shadows } from '../../mixins';
 
 type UITheme = 'light' | 'dark';
 
@@ -12,7 +12,7 @@ const isTransparent = (type: ButtonType) =>
 const getPadding = (icon: boolean) => (icon ? 8 : 16);
 
 const getBackground = (background: string, disabled: boolean, type: ButtonType, theme: UITheme) => {
-  if (isTransparent(type)) return 'transparent';
+  if (isTransparent(type)) { return 'transparent'; }
   return getComponentColor(background, true, disabled, theme);
 };
 
@@ -28,7 +28,7 @@ const getBorder = (type: ButtonType, theme: UITheme) => {
 };
 
 const getBoxShadow = (type: ButtonType, disabled: boolean, z: number = 2) => {
-  if (!disabled && !isTransparent(type)) return shadows(z);
+  if (!disabled && !isTransparent(type)) { return shadows(z); }
   return 'unset';
 };
 

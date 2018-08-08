@@ -1,13 +1,13 @@
+import { observer } from 'mobx-React';
 import React from 'react';
-import { observer } from 'mobx-react';
 
-import Menu from '../Menu';
+import { icons } from '../../../../defaults';
+import { addFolder, deleteHistoryItem } from '../../../../utils';
 import store from '../../../store';
+import About from '../../about/About';
 import Bookmarks from '../../bookmarks/Bookmarks';
 import History from '../../history/History';
-import About from '../../about/About';
-import { deleteHistoryItem, addFolder } from '../../../../utils';
-import { icons } from '../../../../defaults';
+import Menu from '../Menu';
 
 const historyActions = {
   selectAll: () => {

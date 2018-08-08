@@ -1,9 +1,9 @@
 import styled, { css } from 'styled-components';
-import { MENU_WIDTH, MENU_CONTENT_MAX_WIDTH, MENU_SPACE } from '../../../../constants';
+import { MENU_CONTENT_MAX_WIDTH, MENU_SPACE, MENU_WIDTH } from '../../../../constants';
+import { icons, opacity } from '../../../../defaults';
 import {
-  shadows, h6, centerImage, body2,
+  body2, centerImage, h6, shadows,
 } from '../../../mixins';
-import { opacity, icons } from '../../../../defaults';
 
 export const Container = styled.div`
   height: 100%;

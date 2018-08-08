@@ -1,8 +1,8 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-React';
 import React from 'react';
-import { Caption, StyledSuggestions } from './styles';
-import Suggestion from '../Suggestion';
 import store from '../../../store';
+import Suggestion from '../Suggestion';
+import { Caption, StyledSuggestions } from './styles';
 
 interface Props {
   visible: boolean;
@@ -18,25 +18,25 @@ export default class Suggestions extends React.Component<Props, {}> {
 
     let vis = visible;
 
-    if (store.suggestions.length === 0) vis = false;
+    if (store.suggestions.length === 0) { vis = false; }
 
     let height = 0;
 
-    store.suggestions.forEach(a => {
+    store.suggestions.forEach((a) => {
       height += 40;
     });
 
     return (
       <StyledSuggestions
-        innerRef={r => (this.suggestions = r)}
+        innerRef={(r) => (this.suggestions = r)}
         style={{
           opacity: vis ? 1 : 0,
           pointerEvents: !vis ? 'none' : 'auto',
           height,
         }}
-        onMouseDown={e => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
       >
-        {store.suggestions.map(suggestion => (
+        {store.suggestions.map((suggestion) => (
           <Suggestion suggestion={suggestion} key={suggestion.id} />
         ))}
       </StyledSuggestions>

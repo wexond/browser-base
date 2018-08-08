@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { StyledMenuItem, Title } from './styles';
-import Ripples from '../../Ripples';
-import ContextMenu from '..';
 import { colors } from '../../../../defaults';
 import { getEvents, getRippleEvents } from '../../../../utils';
+import Ripples from '../../Ripples';
+import { StyledMenuItem, Title } from './styles';
+import ContextMenu from '..';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
@@ -33,7 +33,7 @@ export interface IState {
 }
 
 export default class MenuItem extends React.Component<IProps, IState> {
-  static defaultProps: IProps = {
+  public static defaultProps: IProps = {
     rippleColor: colors.black,
     ripple: true,
     hideMenuOnClick: true,
@@ -55,7 +55,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         this.setState({ animation: true });
-      }, nextProps.i * 25 + 100);
+      },                        nextProps.i * 25 + 100);
     } else if (!nextProps.menuVisible) {
       clearTimeout(this.timeout);
       this.setState({ animation: false });
@@ -71,7 +71,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
     if (typeof onClick === 'function') {
       onClick(e);
     }
-  };
+  }
 
   public onMouseDown = (e: React.SyntheticEvent<HTMLDivElement>) => {
     const { onMouseDown } = this.props;
@@ -81,7 +81,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
     if (typeof onMouseDown === 'function') {
       onMouseDown(e);
     }
-  };
+  }
 
   public render() {
     const {
@@ -107,7 +107,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
         <Title dense={dense} disabled={disabled}>
           {children}
         </Title>
-        <Ripples ref={r => (this.ripples = r)} initialOpacity={0.1} color={rippleColor} />
+        <Ripples ref={(r) => (this.ripples = r)} initialOpacity={0.1} color={rippleColor} />
       </StyledMenuItem>
     );
   }

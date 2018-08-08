@@ -1,6 +1,6 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import { UPDATE_CHECK, UPDATE_RESTART_AND_INSTALL, UPDATE_AVAILABLE } from '../constants';
+import { UPDATE_AVAILABLE, UPDATE_CHECK, UPDATE_RESTART_AND_INSTALL } from '../constants';
 
 export const runAutoUpdaterService = (window: BrowserWindow) => {
   autoUpdater.on('update-downloaded', ({ version }) => {

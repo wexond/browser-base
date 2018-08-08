@@ -1,13 +1,13 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-React';
 import React from 'react';
 
-import store from '../../../store';
-import {
-  Root, RemoveIcon, Icon, Time, Title,
-} from '../../../components/PageItem';
-import { HistoryItem } from '../../../../interfaces';
-import { deleteHistoryItem } from '../../../../utils';
 import { icons, opacity } from '../../../../defaults';
+import { HistoryItem } from '../../../../interfaces';
+import { createTab, deleteHistoryItem } from '../../../../utils';
+import {
+  Icon, RemoveIcon, Root, Time, Title,
+} from '../../../components/PageItem';
+import store from '../../../store';
 
 @observer
 export default class Item extends React.Component<{ data: HistoryItem }, { hovered: boolean }> {
@@ -25,10 +25,10 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
         store.selectedHistoryItems.splice(store.selectedHistoryItems.indexOf(data.id), 1);
       }
     } else {
-      store.getCurrentWorkspace().addTab({ url: data.url });
+      createTab({ url: data.url });
       store.menu.hide();
     }
-  };
+  }
 
   public onMouseEnter = () => this.setState({ hovered: true });
 
@@ -40,7 +40,7 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
     const { data } = this.props;
     const { id } = data;
     deleteHistoryItem(id);
-  };
+  }
 
   public render() {
     const { data } = this.props;

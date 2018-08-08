@@ -1,8 +1,8 @@
-import { weatherIcons, WeatherCodes } from '../defaults';
-import { getTimeInZone, requestURL, getTimeZoneOffset } from '.';
-import { Locales, TemperatureUnit, TimeUnit } from '../enums';
+import { getTimeInZone, getTimeZoneOffset, requestURL } from '.';
 import { WEATHER_API_KEY } from '../constants';
-import { WeatherDailyItem, WeatherWeeklyItem, WeatherForecast } from '../interfaces';
+import { WeatherCodes, weatherIcons } from '../defaults';
+import { Locales, TemperatureUnit, TimeUnit } from '../enums';
+import { WeatherDailyItem, WeatherForecast, WeatherWeeklyItem } from '../interfaces';
 
 const createDailyItem = (data: any, timeZoneOffset: number) => {
   const item: WeatherDailyItem = {
@@ -21,8 +21,7 @@ const getDaily = (current: any, weekly: any, timeZoneOffset: number) => {
   const list: WeatherDailyItem[] = [createDailyItem(current, timeZoneOffset)];
   const currentDate = new Date();
 
-  for (let i = 0; i < weekly.list.length; i++) {
-    const item = weekly.list[i];
+  for (const item of weekly.list) {
     const date = new Date(item.dt * 1000);
 
     if (date.getDate() === currentDate.getDate()) {
@@ -39,8 +38,7 @@ const getWeekly = (weekly: any, timeZoneOffset: number) => {
   const list: WeatherWeeklyItem[] = [];
   const currentDate = new Date();
 
-  for (let i = 0; i < weekly.list.length; i++) {
-    const item = weekly.list[i];
+  for (const item of weekly.list) {
     const date = new Date(item.dt * 1000);
 
     if (date.getDate() !== currentDate.getDate()) {
@@ -110,13 +108,13 @@ export const getWeather = async (
     const weeklyForecast = getWeekly(weekWeather, timeZoneOffset);
 
     const forecast: WeatherForecast = {
-      daily: dailyForecast,
-      weekly: weeklyForecast,
       windsUnit,
       timeUnit,
       tempUnit,
       lang,
       city,
+      daily: dailyForecast,
+      weekly: weeklyForecast,
     };
 
     return forecast;

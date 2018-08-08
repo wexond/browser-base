@@ -1,4 +1,4 @@
-import { remote, app } from 'electron';
+import { app, remote } from 'electron';
 
 export * from './api-ipc-messages';
 export * from './ipc-messages';

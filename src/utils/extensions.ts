@@ -10,7 +10,7 @@ export const emitEvent = (scope: string, name: string, ...data: any[]) => {
     }
   }
 
-  Object.keys(backgroundPages).forEach(key => {
+  Object.keys(backgroundPages).forEach((key) => {
     const webContents = remote.webContents.fromId(backgroundPages[key].webContentsId);
     webContents.send(`api-emit-event-${scope}-${name}`, ...data);
   });

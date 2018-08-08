@@ -63,9 +63,9 @@ export default class Ripple extends React.Component<IProps, IState> {
         this.timeouts.push(
           setTimeout(() => {
             removeRipple(id);
-          }, fadeOutTime * 1000),
+          },         fadeOutTime * 1000),
         );
-      }, 100),
+      },         100),
     );
   }
 

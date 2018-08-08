@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../Button';
-import { Actions, Root, Content } from './styles';
+import { Actions, Content, Root } from './styles';
 
 interface Props {
   children: any;

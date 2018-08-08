@@ -1,9 +1,9 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-React';
 import React from 'react';
+import store from '../../../store';
 import Item from '../Item';
 import TreeBar from '../TreeBar';
-import { Content, Container, Items } from './styles';
-import store from '../../../store';
+import { Container, Content, Items } from './styles';
 
 @observer
 export default class Bookmarks extends React.Component {
@@ -12,7 +12,7 @@ export default class Bookmarks extends React.Component {
   }
 
   public render() {
-    const items = store.bookmarks.filter(x => x.parent === store.currentBookmarksTree);
+    const items = store.bookmarks.filter((x) => x.parent === store.currentBookmarksTree);
 
     return (
       <React.Fragment>
@@ -21,7 +21,7 @@ export default class Bookmarks extends React.Component {
           <Container>
             {items.length > 0 && (
               <Items>
-                {items.map(data => (
+                {items.map((data) => (
                   <Item data={data} key={data.id} />
                 ))}
               </Items>
