@@ -17,8 +17,8 @@ export const getCurrentWorkspaceTabs = () =>
 
 export const selectWorkspace = (id: number) => {
   store.currentWorkspace = id;
-  updateTabsBounds(false);
   requestAnimationFrame(() => {
+    updateTabsBounds(false);
     moveIndicatorToSelectedTab(false);
   });
 };

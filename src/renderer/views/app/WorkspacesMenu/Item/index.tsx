@@ -48,6 +48,7 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
 
       for (const tab of tabs) {
         store.pages.splice(store.pages.indexOf(getPageById(tab.id)), 1);
+        store.tabs.splice(store.tabs.indexOf(tab), 1);
       }
 
       selectWorkspace(altWorkspace.id);
