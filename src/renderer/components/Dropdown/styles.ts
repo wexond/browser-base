@@ -47,7 +47,7 @@ export const Icon = styled.div`
 export const List = styled.div`
   width: 100%;
   position: absolute;
-  top: 100%;
+  top: calc(100% - 4px);
   left: 0;
   overflow-x: hidden;
   overflow-y: hidden;

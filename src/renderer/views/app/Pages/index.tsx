@@ -9,14 +9,14 @@ import StyledPages from './styles';
 @observer
 export default class Pages extends React.Component {
   public render() {
-    const tab = getSelectedTab();
+    // const tab = getSelectedTab();
 
     return (
       <StyledPages>
         {store.pages.map(page => (
           <Page key={page.id} page={page} />
         ))}
-        <Newtab visible={tab && tab.isNew} />
+        {/* <Newtab visible={tab && tab.isNew} /> */}
       </StyledPages>
     );
   }
