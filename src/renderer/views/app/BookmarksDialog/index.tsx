@@ -51,13 +51,12 @@ export default class BookmarksDialog extends React.Component {
     this.textField.inputElement.blur();
 
     if (this.dropDownClicked) {
-      this.dropdown.ripples.removeRipples();
+      this.dropdown.ripple.fadeOut();
       this.dropDownClicked = false;
     }
   }
 
   public onDropdownMouseUp = (e?: React.MouseEvent<any>) => {
-    e.preventDefault();
     this.dropDownClicked = true;
   }
 

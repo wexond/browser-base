@@ -37,3 +37,19 @@ export const Button = styled.div`
     pointer-events: ${disabled ? 'none' : 'auto'};
   `};
 `;
+
+export const Circle = styled.div`
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  transition: 0.2s background-color;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+`;

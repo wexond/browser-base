@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { getRippleEvents } from '../../../utils';
-import Ripples from '../Ripples';
 import Item from './Item';
 import { Container, Icon, List, Name, Root } from './styles';
+import Ripple from '../Ripple';
 
 export type DropdownEvent = (e?: React.MouseEvent<any>) => void;
 
@@ -35,7 +34,7 @@ export default class Dropdown extends React.Component<Props, State> {
     selectedItem: 0,
   };
 
-  public ripples: Ripples;
+  public ripple: Ripple;
 
   public listContainer: HTMLDivElement;
 
@@ -67,6 +66,7 @@ export default class Dropdown extends React.Component<Props, State> {
   public onMouseDown = (e: React.MouseEvent<any>) => {
     e.preventDefault();
     e.stopPropagation();
+    this.ripple.makeRipple(e.pageX, e.pageY);
   }
 
   public onItemClick = (e: React.MouseEvent<any>, item: Item) => {
@@ -126,7 +126,6 @@ export default class Dropdown extends React.Component<Props, State> {
 
     const events = {
       onClick: this.onClick,
-      ...getRippleEvents(this.props, () => this.ripples),
     };
 
     let id = 0;
@@ -138,7 +137,7 @@ export default class Dropdown extends React.Component<Props, State> {
         <Container {...events}>
           <Name>{item && item.props.children}</Name>
           <Icon activated={activated} />
-          <Ripples ref={r => (this.ripples = r)} color="#000" />
+          <Ripple ref={r => (this.ripple = r)} color="#000" />
         </Container>
         {children != null && (
           <List
