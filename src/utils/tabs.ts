@@ -159,7 +159,6 @@ export const replaceTab = (firstTab: Tab, secondTab: Tab) => {
   tabsCopy[secondIndex] = firstTab;
 
   setTabLeft(secondTab, getTabLeft(firstTab), true);
-
   (tabs as any).replace(tabsCopy);
 
   return getCurrentWorkspaceTabs();
@@ -205,6 +204,7 @@ export const createTab = (
 
   requestAnimationFrame(() => {
     selectTab(tab);
+    store.addressBar.toggled = true;
   });
 
   return tab;

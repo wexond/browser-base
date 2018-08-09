@@ -6,7 +6,6 @@ import { parse } from 'url';
 import { Global } from './interfaces';
 
 declare const global: Global;
-
 (app as any).on('session-created', (sess: Electron.session) => {
   sess.protocol.registerBufferProtocol(
     'wexond-extension',

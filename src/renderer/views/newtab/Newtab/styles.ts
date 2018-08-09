@@ -12,8 +12,6 @@ export const StyledApp = styled.div`
 
   ${({ visible }: { visible: boolean }) => css`
     visibility: ${visible ? 'visible' : 'hidden'};
-    width: ${visible ? '100%' : 0};
-    height: ${visible ? '100%' : 0};
   `};
 `;
 

@@ -1,25 +1,33 @@
-import { observer } from 'mobx-React';
+import { observer } from 'mobx-react';
 import React from 'react';
 
 import { createTab } from '../../../../utils';
 import store from '../../../store';
 import Tabs from '../Tabs';
 import { AddTab, Indicator, StyledTabbar, TabsContainer } from './styles';
+import { icons } from '../../../../defaults';
 
 @observer
 export default class Tabbar extends React.Component {
-  public onClick = () => {
+  public onAddTabClick = () => {
     createTab();
   }
 
   public render() {
     return (
-      <StyledTabbar innerRef={r => (store.tabbarRef = r)}>
+      <StyledTabbar
+        visible={!store.addressBar.toggled}
+        innerRef={r => (store.tabbarRef = r)}
+      >
         <TabsContainer>
           <Tabs />
           <Indicator innerRef={r => (store.tabIndicatorRef = r)} />
         </TabsContainer>
-        <AddTab innerRef={r => (store.addTabRef = r)} onClick={this.onClick} />
+        <AddTab
+          icon={icons.add}
+          onClick={this.onAddTabClick}
+          divRef={r => (store.addTabRef = r)}
+        />
       </StyledTabbar>
     );
   }
