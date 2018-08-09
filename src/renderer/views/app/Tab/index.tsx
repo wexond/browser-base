@@ -1,4 +1,4 @@
-import { observer } from 'mobx-React';
+import { observer } from 'mobx-react';
 import React from 'react';
 
 import { Tab } from '../../../../models';
@@ -18,21 +18,57 @@ import {
   setTabsLefts,
   setTabWidth,
   updateTabsBounds,
+  emitEvent,
+  getCurrentWorkspaceTabs,
 } from '../../../../utils';
 import store from '../../../store';
 import { Close, StyledTab } from './styles';
+import { colors, tabAnimations } from '../../../../defaults';
+import components from '../../../components';
+import Preloader from '../../../components/Preloader';
+import Ripples from '../../../components/Ripples';
 
 @observer
 export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
+  private ripples: Ripples;
+
   public componentDidMount() {
     const { tab } = this.props;
 
     setTabLeft(tab, getTabLeft(tab), false);
     updateTabsBounds(true);
+
+    const frame = () => {
+      if (tab.ref != null) {
+        const boundingRect = tab.ref.getBoundingClientRect();
+        if (
+          store.mouse.x >= boundingRect.left &&
+          store.mouse.x <= boundingRect.left + tab.ref.offsetWidth &&
+          store.mouse.y >= boundingRect.top &&
+          store.mouse.y <= boundingRect.top + tab.ref.offsetHeight
+        ) {
+          if (!tab.hovered && !store.isTabDragged) {
+            tab.hovered = true;
+          }
+        } else if (tab.hovered) {
+          tab.hovered = false;
+        }
+        requestAnimationFrame(frame);
+      }
+    };
+
+    requestAnimationFrame(frame);
   }
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { pageX, pageY } = e;
     const { tab } = this.props;
+
+    const workspace = getWorkspaceById(tab.workspaceId);
+    const selected = workspace.selectedTab === tab.id;
+
+    store.addressBar.canToggle = selected;
+
     selectTab(tab);
 
     store.tabDragData = {
@@ -46,6 +82,8 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
     store.isTabDragged = true;
 
     store.lastTabbarScrollLeft = store.tabbarRef.scrollLeft;
+
+    this.ripples.makeRipple(pageX, pageY);
   }
 
   public onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -84,12 +122,19 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
         index + 1 < workspaceTabs.length &&
         !workspaceTabs[index + 1].isClosing
       ) {
-        selectTab(workspaceTabs[index + 1]);
+        const nextTab = workspaceTabs[index + 1];
+        if (nextTab.isNew) {
+          store.addressBar.toggled = true;
+        }
+        selectTab(nextTab);
       } else if (index - 1 >= 0 && !workspaceTabs[index - 1].isClosing) {
-        selectTab(workspaceTabs[index - 1]);
+        const prevTab = workspaceTabs[index - 1];
+        if (prevTab.isNew) {
+          store.addressBar.toggled = true;
+        }
+        selectTab(prevTab);
       } else if (store.workspaces.length === 1) {
-        console.log('aha');
-        // closeWindow();
+        closeWindow();
       }
     } else {
       moveIndicatorToSelectedTab(true);
@@ -97,24 +142,102 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
 
     setTimeout(() => {
       removeTab(tab.id);
-    }, 300);
+    }, tabAnimations.width.duration * 1000);
+
+    emitEvent('tabs', 'onRemoved', tab.id, {
+      windowId: 0,
+      isWindowClosing: true,
+    });
+  }
+
+  public onClick = () => {
+    const { tab } = this.props;
+    if (store.addressBar.canToggle) {
+      store.addressBar.toggled = true;
+    }
+
+    if (tab.isNew) {
+      store.addressBar.toggled = true;
+    }
+  }
+
+  public onMouseUp = () => {
+    this.ripples.removeRipples();
   }
 
   public render() {
-    const { tab } = this.props;
-    const currentWorkspace = getCurrentWorkspace();
+    const { tab, children } = this.props;
+    const {
+      title,
+      isClosing,
+      hovered,
+      isDragging,
+      favicon,
+      loading,
+      workspaceId,
+    } = tab;
+    const workspace = getWorkspaceById(workspaceId);
+    const tabs = getWorkspaceTabs(workspace.id);
+
+    const selected = workspace.selectedTab === tab.id;
+
+    let rightBorderVisible = true;
+
+    const tabIndex = tabs.indexOf(tab);
+
+    if (
+      hovered ||
+      selected ||
+      ((tabIndex + 1 !== tabs.length &&
+        (tabs[tabIndex + 1].hovered ||
+          workspace.selectedTab === tabs[tabIndex + 1].id)) ||
+        tabIndex === tabs.length - 1)
+    ) {
+      rightBorderVisible = false;
+    }
+
+    const {
+      Root,
+      Content,
+      Icon,
+      Title,
+      Close,
+      Overlay,
+      RightBorder,
+    } = components.tab;
 
     return (
-      <StyledTab
-        visible={currentWorkspace.id === tab.workspaceId}
+      <Root
+        selected={selected}
         onMouseDown={this.onMouseDown}
-        innerRef={r => (tab.ref = r)}
+        onMouseUp={this.onMouseUp}
+        onClick={this.onClick}
+        isRemoving={isClosing}
+        workspaceSelected={store.currentWorkspace === workspaceId}
+        visible={!store.addressBar.toggled}
+        innerRef={(r: HTMLDivElement) => (tab.ref = r)}
       >
+        <Content hovered={hovered}>
+          {!loading && <Icon favicon={favicon.trim()} />}
+          {loading && <Preloader thickness={6} size={16} />}
+          <Title selected={selected} loading={loading} favicon={favicon}>
+            {title}
+          </Title>
+        </Content>
         <Close
           onMouseDown={this.onCloseMouseDown}
           onClick={this.onCloseClick}
+          hovered={hovered}
         />
-      </StyledTab>
+        {children}
+        <Overlay hovered={hovered} selected={selected} />
+        <Ripples
+          rippleTime={0.6}
+          ref={r => (this.ripples = r)}
+          color={colors.blue['500']}
+        />
+        <RightBorder visible={rightBorderVisible} />
+      </Root>
     );
   }
 }

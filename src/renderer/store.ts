@@ -184,7 +184,10 @@ class Store {
   constructor() {
     this.rearrangeTabsTimer.interval = setInterval(() => {
       // Set widths and positions for tabs 3 seconds after a tab was closed
-      if (this.rearrangeTabsTimer.canReset && this.rearrangeTabsTimer.time === 3) {
+      if (
+        this.rearrangeTabsTimer.canReset &&
+        this.rearrangeTabsTimer.time === 3
+      ) {
         updateTabsBounds();
         moveIndicatorToSelectedTab(true);
         this.rearrangeTabsTimer.canReset = false;

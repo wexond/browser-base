@@ -66,6 +66,7 @@
     "react-dom": "16.4.2",
     "react-hot-loader": "4.3.4",
     "styled-components": "3.4.0",
+    "ts-loader": "4.4.2",
     "tslint": "5.11.0",
     "tslint-config-airbnb": "5.9.2",
     "tslint-config-prettier": "1.14.0",
