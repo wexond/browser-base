@@ -4,7 +4,7 @@ const { resolve } = require('path');
 const baseConfig = require('./webpack.config.base');
 
 module.exports = merge.smart(baseConfig, {
-  devtool: 'cheap-module-source-map',
+  devtool: 'source-map',
   target: 'electron-renderer',
   mode: 'production',
 

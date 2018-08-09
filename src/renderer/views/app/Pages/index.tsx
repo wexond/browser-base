@@ -1,6 +1,6 @@
-import { observer } from 'mobx-React';
+import { observer } from 'mobx-react';
 import React from 'react';
-import { getSelectedTab } from '../../../../utils';
+import { getSelectedTab, getCurrentWorkspace } from '../../../../utils';
 import store from '../../../store';
 import Newtab from '../../newtab/Newtab';
 import Page from '../Page';
