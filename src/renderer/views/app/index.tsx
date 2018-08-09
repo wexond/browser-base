@@ -6,7 +6,7 @@ import { injectGlobal } from 'styled-components';
 
 import { FULLSCREEN, UPDATE_AVAILABLE, UPDATE_CHECK } from '../../../constants';
 import { fonts } from '../../../defaults';
-import { loadPlugins } from '../../../utils';
+import { loadPlugins, createWorkspace } from '../../../utils';
 import { runExtensionsService } from '../../extensions-service';
 import { body2 } from '../../mixins';
 import store from '../../store';
@@ -93,18 +93,16 @@ const render = (AppComponent: any) => {
     document.getElementById('app'),
   );
 };
-
 (async function setup() {
   await loadPlugins();
   runExtensionsService();
 
   render(App);
+
+  createWorkspace();
 })();
 
 // React-hot-loader
 if ((module as any).hot) {
-  (module as any).hot.accept('./App', () => {
-    // eslint-disable-next-line
-    render(require('./App'));
-  });
+  (module as any).hot.accept();
 }

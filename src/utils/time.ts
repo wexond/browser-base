@@ -22,7 +22,6 @@ export const formatTime = (
     hours -= 12;
   }
 
-  hours = hours.toString().padStart(2, '0');
   const mins = minutes
     ? date
         .getMinutes()
@@ -30,7 +29,9 @@ export const formatTime = (
         .padStart(2, '0')
     : '';
 
-  return `${hours}${mins ? ':' : ''}${_minutes}${timePeriod}`;
+  return `${hours.toString().padStart(2, '0')}${
+    mins ? ':' : ''
+  }${mins}${timePeriod}`;
 };
 
 export const getDayIndex = (date: Date) =>

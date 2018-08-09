@@ -6,4 +6,8 @@ export const getPageById = (id: number) => store.pages.find(x => x.id === id);
 
 export const getSelectedPage = () => getPageById(getSelectedTab().id);
 
-export const createPage = (tabId: number, url: string) => new Page(tabId, url);
+export const createPage = (tabId: number, url: string) => {
+  const page = new Page(tabId, url);
+  store.pages.push(page);
+  return page;
+};

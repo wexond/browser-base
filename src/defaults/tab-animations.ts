@@ -5,11 +5,11 @@ export const tabAnimations = {
     duration: 0.2,
   },
   left: {
-    duration: 0.3,
+    duration: 0.4,
     easing: Power4.easeOut,
   },
   width: {
-    duration: 0.3,
+    duration: 0.4,
     easing: Power4.easeOut,
   },
 };

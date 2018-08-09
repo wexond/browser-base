@@ -1,4 +1,4 @@
-import { observer } from 'mobx-React';
+import { observer } from 'mobx-react';
 import React from 'react';
 import { createWorkspace } from '../../../../utils';
 import store from '../../../store';

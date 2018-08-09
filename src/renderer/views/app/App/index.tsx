@@ -1,22 +1,13 @@
 import { clipboard, ipcRenderer, nativeImage, remote } from 'electron';
 import { createWriteStream } from 'fs';
 import http from 'http';
-import { observer } from 'mobx-React';
+import { observer } from 'mobx-react';
 import { basename, extname } from 'path';
 import React from 'react';
 import { parse } from 'url';
 
 import { UPDATE_RESTART_AND_INSTALL } from '../../../../constants';
 import database from '../../../../database';
-import { colors } from '../../../../defaults';
-import { ButtonType, PageMenuMode } from '../../../../enums';
-import {
-  bindKeys,
-  createTab,
-  createWorkspace,
-  getSelectedPage,
-  parseKeyBindings,
-} from '../../../../utils';
 import Button from '../../../components/Button';
 import ContextMenu from '../../../components/ContextMenu';
 import Snackbar from '../../../components/Snackbar';
@@ -26,6 +17,14 @@ import Pages from '../Pages';
 import Toolbar from '../Toolbar';
 import WorkspacesMenu from '../WorkspacesMenu';
 import { StyledApp } from './styles';
+import {
+  parseKeyBindings,
+  bindKeys,
+  getSelectedPage,
+  createTab,
+} from '../../../../utils';
+import { PageMenuMode, ButtonType } from '../../../../enums';
+import { colors } from '../../../../defaults';
 
 const { dialog } = remote;
 const keyBindingsJSON = require('../../../../../static/defaults/key-bindings.json');
@@ -38,18 +37,9 @@ class App extends React.Component {
   }
 
   public async componentDidMount() {
-    window.addEventListener('mousemove', e => {
-      store.mouse.x = e.pageX;
-      store.mouse.y = e.pageY;
-    });
-
-    window.addEventListener('mousedown', (e: MouseEvent) => {
-      store.pageMenu.toggle(false);
-    });
-
-    window.addEventListener('mouseup', (e: MouseEvent) => {
-      store.bookmarkDialogVisible = false;
-    });
+    window.addEventListener('mousemove', this.onWindowMouseMove);
+    window.addEventListener('mousedown', this.onWindowMouseDown);
+    window.addEventListener('mouseup', this.onWindowMouseUp);
 
     await store.loadFavicons();
 
@@ -58,12 +48,27 @@ class App extends React.Component {
 
     store.keyBindings = parseKeyBindings(keyBindingsJSON);
     bindKeys(store.keyBindings);
+  }
 
-    createWorkspace();
+  public onWindowMouseMove = (e: MouseEvent) => {
+    store.mouse.x = e.pageX;
+    store.mouse.y = e.pageY;
+  }
+
+  public onWindowMouseDown = (e: MouseEvent) => {
+    store.pageMenu.toggle(false);
+  }
+
+  public onWindowMouseUp = (e: MouseEvent) => {
+    store.bookmarkDialogVisible = false;
   }
 
   public componentWillUnmount() {
     store.pages = [];
+
+    window.removeEventListener('mousemove', this.onWindowMouseMove);
+    window.removeEventListener('mousedown', this.onWindowMouseDown);
+    window.removeEventListener('mouseup', this.onWindowMouseUp);
   }
 
   public onRestartClick = () => {

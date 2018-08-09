@@ -1,5 +1,5 @@
 import { remote } from 'electron';
-import { observer } from 'mobx-React';
+import { observer } from 'mobx-react';
 import { resolve } from 'path';
 import React from 'react';
 
@@ -52,23 +52,26 @@ export default class extends React.Component<{ page: Page }, {}> {
 
     // Custom event: fires when webview URL changes.
     this.onURLChange = setInterval(() => {
-      const url = this.webview.getURL();
-      if (url !== tab.url) {
-        this.tab.isNew = false;
-        this.tab.url = url;
-        this.emitEvent(
-          'tabs',
-          'onUpdated',
-          this.tab.id,
-          {
-            url,
-          },
-          getIpcTab(this.tab),
-        );
-        this.updateData();
-        store.isBookmarked = !!store.bookmarks.find(x => x.url === url);
+      if (this.webview.getWebContents()) {
+        const url = this.webview.getURL();
+        if (url !== tab.url) {
+          console.log('aha');
+          this.tab.isNew = false;
+          this.tab.url = url;
+          this.emitEvent(
+            'tabs',
+            'onUpdated',
+            this.tab.id,
+            {
+              url,
+            },
+            getIpcTab(this.tab),
+          );
+          this.updateData();
+          store.isBookmarked = !!store.bookmarks.find(x => x.url === url);
+        }
       }
-    }, 10);
+    }, 30);
   }
 
   public componentWillUnmount() {
