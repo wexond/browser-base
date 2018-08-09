@@ -4,7 +4,6 @@ import React from 'react';
 import { Tab } from '../../../../models';
 import {
   closeWindow,
-  getCurrentWorkspace,
   getPageById,
   getTabLeft,
   getTabNewLeft,
@@ -19,18 +18,16 @@ import {
   setTabWidth,
   updateTabsBounds,
   emitEvent,
-  getCurrentWorkspaceTabs,
 } from '../../../../utils';
 import store from '../../../store';
-import { Close, StyledTab } from './styles';
 import { colors, tabAnimations } from '../../../../defaults';
 import components from '../../../components';
 import Preloader from '../../../components/Preloader';
-import Ripples from '../../../components/Ripples';
+import Ripple from '../../../components/Ripple';
 
 @observer
 export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
-  private ripples: Ripples;
+  private ripple: Ripple;
 
   public componentDidMount() {
     const { tab } = this.props;
@@ -74,7 +71,7 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
     store.tabDragData = {
       lastMouseX: 0,
       dragging: true,
-      mouseStartX: e.pageX,
+      mouseStartX: pageX,
       tabStartX: tab.left,
       direction: '',
     };
@@ -83,7 +80,7 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
 
     store.lastTabbarScrollLeft = store.tabbarRef.scrollLeft;
 
-    this.ripples.makeRipple(pageX, pageY);
+    this.ripple.makeRipple(pageX, pageY);
   }
 
   public onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -161,10 +158,6 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
     }
   }
 
-  public onMouseUp = () => {
-    this.ripples.removeRipples();
-  }
-
   public render() {
     const { tab, children } = this.props;
     const {
@@ -210,7 +203,6 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
       <Root
         selected={selected}
         onMouseDown={this.onMouseDown}
-        onMouseUp={this.onMouseUp}
         onClick={this.onClick}
         isRemoving={isClosing}
         workspaceSelected={store.currentWorkspace === workspaceId}
@@ -231,9 +223,9 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
         />
         {children}
         <Overlay hovered={hovered} selected={selected} />
-        <Ripples
+        <Ripple
           rippleTime={0.6}
-          ref={r => (this.ripples = r)}
+          ref={r => (this.ripple = r)}
           color={colors.blue['500']}
         />
         <RightBorder visible={rightBorderVisible} />

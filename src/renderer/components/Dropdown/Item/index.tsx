@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { getRippleEvents } from '../../../../utils';
-import Ripples from '../../Ripples';
 import { Root } from './styles';
+import Ripple from '../../Ripple';
 
 export interface Props {
   onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
@@ -18,29 +17,21 @@ export default class Item extends React.Component<Props, {}> {
     ripple: true,
   };
 
-  private ripples: Ripples;
-
-  public render() {
-    const { children, selected } = this.props;
-
-    const events = {
-      onClick: this.onClick,
-      ...getRippleEvents(this.props, () => this.ripples),
-    };
-
-    return (
-      <Root selected={selected} {...events}>
-        {children}
-        <Ripples ref={r => (this.ripples = r)} color="#000" />
-      </Root>
-    );
-  }
-
-  private onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { onClick } = this.props;
 
     if (typeof onClick === 'function') {
       onClick(e, this);
     }
+  }
+
+  public render() {
+    const { children, selected } = this.props;
+
+    return (
+      <Root selected={selected} onClick={this.onClick}>
+        {children}
+      </Root>
+    );
   }
 }

@@ -1,106 +1,144 @@
 import React from 'react';
-import { StyledRipple } from './styles';
+import { Root, StyledRipple } from './styles';
 
 export interface IProps {
-  height: number;
-  width: number;
-  color: string;
-  initialOpacity: number;
-  fadeOutTime: number;
-  rippleTime: number;
-  x: number;
-  y: number;
-  removeRipple: (id: number) => void;
-  id: number;
-  isRemoving: boolean;
-  icon: boolean;
+  className?: string;
+  style?: {};
+  fadeOutTime?: number;
+  rippleTime?: number;
+  opacity?: number;
+  color?: string;
 }
 
 export interface IRipple {
-  color: string;
+  x: number;
+  y: number;
+  id: number;
+  isRemoving: boolean;
 }
 
 export interface IState {
-  width: number;
-  height: number;
-  opacity: number;
+  rippleX: number;
+  rippleY: number;
+  rippleSize: number;
+  rippleOpacity: number;
+  opacityTransition: boolean;
+  sizeTransition: boolean;
 }
 
-export default class Ripple extends React.Component<IProps, IState> {
-  public state = {
-    width: 0,
-    height: 0,
-    opacity: 1,
-  };
-
-  public timeouts: any[] = [];
-
-  public componentDidMount() {
-    const { height, width, initialOpacity } = this.props;
-
-    this.setState({
-      opacity: initialOpacity,
-    });
-
-    this.timeouts.push(
-      setTimeout(() => {
-        this.setState({
-          width,
-          height,
-        });
-      }),
-    );
+const getSize = (x: number, y: number, width: number, height: number) => {
+  if (width === 0 || height === 0) {
+    return 0;
   }
 
-  public remove() {
-    const { removeRipple, id, fadeOutTime } = this.props;
+  // Calculate points relative to the center of a component.
+  const newX = x - width / 2;
+  const newY = y - height / 2;
 
-    this.timeouts.push(
-      setTimeout(() => {
-        this.setState({
-          opacity: 0,
-        });
-        this.timeouts.push(
-          setTimeout(() => {
-            removeRipple(id);
-          }, fadeOutTime * 1000),
-        );
-      }, 100),
-    );
+  let result = 2 * Math.abs(newY) + Math.abs(newX);
+
+  if (Math.abs(newX) > Math.abs(newY)) {
+    result = 2 * Math.abs(newX) + Math.abs(newY);
+  }
+
+  return Math.max(width, height) + result + 10;
+};
+
+export default class Ripple extends React.Component<IProps, IState> {
+  public static defaultProps: IProps = {
+    fadeOutTime: 0.6,
+    opacity: 0.2,
+    color: '#000',
+    rippleTime: 0.6,
+  };
+
+  public state: IState = {
+    rippleX: 0,
+    rippleY: 0,
+    rippleSize: 0,
+    rippleOpacity: 0,
+    opacityTransition: false,
+    sizeTransition: false,
+  };
+
+  private root: HTMLDivElement;
+
+  public componentDidMount() {
+    window.addEventListener('mouseup', this.onMouseUp);
   }
 
   public componentWillUnmount() {
-    this.timeouts.forEach(clearTimeout);
+    window.removeEventListener('mouseup', this.onMouseUp);
+  }
+
+  public onMouseUp = () => {
+    this.fadeOut();
+  }
+
+  public fadeOut = () => {
+    requestAnimationFrame(() => {
+      this.setState({
+        rippleOpacity: 0,
+        opacityTransition: true,
+      });
+    });
+  }
+
+  public makeRipple(mouseX: number, mouseY: number) {
+    const { opacity } = this.props;
+    const { left, top, width, height } = this.root.getBoundingClientRect();
+
+    const x = mouseX - left;
+    const y = mouseY - top;
+
+    const size = getSize(x, y, width, height);
+
+    this.setState({
+      rippleSize: 0,
+      opacityTransition: false,
+      sizeTransition: false,
+    });
+
+    requestAnimationFrame(() => {
+      this.setState({
+        rippleX: Math.min(x, width),
+        rippleY: y,
+        rippleSize: size,
+        rippleOpacity: opacity,
+        sizeTransition: true,
+      });
+    });
   }
 
   public render() {
-    const { height, width, opacity } = this.state;
-    const {
-      color,
-      x,
-      y,
-      isRemoving,
-      rippleTime,
-      fadeOutTime,
-      icon,
-    } = this.props;
+    const { color, fadeOutTime, rippleTime } = this.props;
 
-    if (isRemoving) {
-      this.remove();
-    }
+    const {
+      rippleX,
+      rippleY,
+      rippleSize,
+      rippleOpacity,
+      opacityTransition,
+      sizeTransition,
+    } = this.state;
 
     return (
-      <StyledRipple
-        height={height}
-        width={width}
-        color={color}
-        opacity={opacity}
-        rippleTime={rippleTime}
-        fadeOutTime={fadeOutTime}
-        icon={icon ? 1 : 0}
-        x={x}
-        y={y}
-      />
+      <Root innerRef={r => (this.root = r)}>
+        <StyledRipple
+          fadeOutTime={fadeOutTime}
+          rippleTime={rippleTime}
+          opacity={rippleOpacity}
+          opacityTransition={opacityTransition}
+          sizeTransition={sizeTransition}
+          color={color}
+          style={{
+            left: rippleX,
+            top: rippleY,
+            width: rippleSize,
+            height: rippleSize,
+          }}
+        />
+      </Root>
     );
   }
 }
