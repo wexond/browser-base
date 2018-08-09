@@ -14,7 +14,7 @@ if (remote) {
 export const BASE_PATH = basePath;
 
 // Toolbar
-export const TOOLBAR_HEIGHT = 48;
+export const TOOLBAR_HEIGHT = 45;
 export const TOOLBAR_BUTTON_WIDTH = 44;
 
 // Tabs

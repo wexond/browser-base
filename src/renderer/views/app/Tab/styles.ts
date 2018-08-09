@@ -31,6 +31,7 @@ export const StyledTab = styled.div`
   top: 0;
   display: flex;
   height: 100%;
+  overflow: hidden;
   align-items: center;
   transition: 0.2s background-color, 0.1s color;
   will-change: transition, transform, width, left;

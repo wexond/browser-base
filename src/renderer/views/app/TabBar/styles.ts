@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { colors } from '../../../../defaults';
 import ToolbarButton from '../Toolbar/Button';
+import { TOOLBAR_BUTTON_WIDTH } from '../../../../constants';
 
 export const StyledTabbar = styled.div`
   height: 100%;
@@ -18,7 +19,7 @@ export const StyledTabbar = styled.div`
 
 export const TabsContainer = styled.div`
   height: 100%;
-  width: calc(100% - 32px);
+  width: calc(100% - ${TOOLBAR_BUTTON_WIDTH}px);
   position: relative;
   overflow: hidden;
 `;
