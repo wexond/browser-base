@@ -45,6 +45,10 @@ injectGlobal`
     overflow: hidden;
   }
 
+  * {
+    box-sizing: border-box;
+  }
+
   @keyframes nersent-ui-preloader-rotate {
     100% {
       -webkit-transform: rotate(360deg);
@@ -68,14 +72,20 @@ injectGlobal`
   }
 `;
 
-ipcRenderer.on(FULLSCREEN, (e: Electron.IpcMessageEvent, isFullscreen: boolean) => {
-  store.isFullscreen = isFullscreen;
-});
+ipcRenderer.on(
+  FULLSCREEN,
+  (e: Electron.IpcMessageEvent, isFullscreen: boolean) => {
+    store.isFullscreen = isFullscreen;
+  },
+);
 
-ipcRenderer.on(UPDATE_AVAILABLE, (e: Electron.IpcMessageEvent, version: string) => {
-  store.updateInfo.version = version;
-  store.updateInfo.available = true;
-});
+ipcRenderer.on(
+  UPDATE_AVAILABLE,
+  (e: Electron.IpcMessageEvent, version: string) => {
+    store.updateInfo.version = version;
+    store.updateInfo.available = true;
+  },
+);
 
 ipcRenderer.send(UPDATE_CHECK);
 
@@ -93,7 +103,7 @@ const render = (AppComponent: any) => {
   runExtensionsService();
 
   render(App);
-}());
+})();
 
 // react-hot-loader
 if ((module as any).hot) {
