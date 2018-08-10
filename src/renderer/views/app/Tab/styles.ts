@@ -4,6 +4,11 @@ import { centerImage, body2 } from '../../../mixins';
 import { opacity } from '../../../../defaults/opacity';
 import { colors } from '../../../../defaults/colors';
 
+interface CloseProps {
+  hovered: boolean;
+  selected: boolean;
+}
+
 export const Close = styled.div`
   position: absolute;
   right: 12px;
@@ -14,8 +19,8 @@ export const Close = styled.div`
   z-index: 2;
 
   ${centerImage('100%', '100%')};
-  opacity: ${({ hovered }: { hovered: boolean }) =>
-    hovered ? opacity.light.inactiveIcon : 0};
+  opacity: ${({ hovered, selected }: CloseProps) =>
+    hovered || selected ? opacity.light.inactiveIcon : 0};
 `;
 
 interface TabProps {
@@ -28,9 +33,11 @@ interface TabProps {
 export const StyledTab = styled.div`
   position: absolute;
   left: 0;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
-  height: 100%;
+  height: calc(100% - 8px);
+  border-radius: 4px;
   overflow: hidden;
   align-items: center;
   transition: 0.2s background-color, 0.1s color;
@@ -41,6 +48,7 @@ export const StyledTab = styled.div`
     pointer-events: ${isRemoving || !visible ? 'none' : 'auto'};
     -webkit-app-region: ${visible ? 'no-drag' : ''};
     display: ${workspaceSelected ? 'flex' : 'none'};
+    background-color: ${selected ? 'rgba(33, 150, 243, 0.12)' : 'transparent'};
   `};
 `;
 
@@ -59,18 +67,12 @@ export const Overlay = styled.div`
   transition: 0.2s opacity;
   background-color: rgba(0, 0, 0, 0.04);
 
-  opacity: ${({ selected, hovered }: OverlayProps) => {
-    if (selected) {
-      if (hovered) {
-        return 1;
-      }
-      return 0;
-    }
-    if (hovered) {
-      return 1;
-    }
-    return 0;
-  }};
+  ${({ selected, hovered }: OverlayProps) => css`
+    background-color: ${selected
+      ? 'rgba(33, 150, 243, 0.08)'
+      : `rgba(0, 0, 0, 0.04)`};
+    opacity: ${hovered ? 1 : 0};
+  `};
 `;
 
 interface TitleProps {
@@ -112,28 +114,26 @@ export const Icon = styled.div.attrs({
   ${({ favicon }: { favicon: string }) => favicon};
 `;
 
+interface ContentProps {
+  hovered: boolean;
+  selected: boolean;
+}
+
 export const Content = styled.div`
   position: absolute;
   overflow: hidden;
   z-index: 2;
   display: flex;
   transition: 0.1s max-width, 0.1s transform;
+  margin-left: 16px;
 
-  ${({ hovered }: { hovered: boolean }) => {
-    let transform = 'transform: translateX(-50%);';
-    if (hovered) {
-      transform = 'transform: translateX(calc(-50% - 12px));';
-    }
-    return css`
-      ${transform};
-      left: 50%;
-      max-width: calc(100% - ${24 + (hovered ? 24 : 0)}px);
-    `;
-  }};
+  ${({ hovered, selected }: ContentProps) => css`
+    max-width: calc(100% - ${24 + (hovered || selected ? 24 : 0)}px);
+  `};
 `;
 
 export const RightBorder = styled.div`
-  height: calc(100% - 24px);
+  height: calc(100% - 16px);
   width: 1px;
   background-color: rgba(0, 0, 0, ${opacity.light.dividers});
   position: absolute;
@@ -141,4 +141,20 @@ export const RightBorder = styled.div`
 
   display: ${({ visible }: { visible: boolean }) =>
     visible ? 'block' : 'none'};
+`;
+
+export const Circle = styled.div`
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  transition: 0.2s background-color;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
 `;
