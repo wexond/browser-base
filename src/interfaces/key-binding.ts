@@ -1,6 +1,6 @@
 export interface KeyBinding {
   id?: number;
-  key?: string;
+  key?: any;
   isChanged?: boolean;
   command?: string;
 }
