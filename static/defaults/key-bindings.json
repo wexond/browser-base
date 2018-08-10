@@ -47,6 +47,10 @@
     "command": "menu.show"
   },
   {
+    "key": "ctrl+b",
+    "command": "bookmarks.show"
+  },
+  {
     "key": "esc",
     "command": "wexond.hideAllMenu"
   }
