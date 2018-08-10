@@ -4,9 +4,8 @@ import React from 'react';
 import Store from '../../../store';
 import { PageContent } from '../../app/Menu/styles';
 import {
-  Table, HeadRow, HeadItem, BodyRow, BodyItem,
-} from '../../../components/Table';
-import { Container } from './styles';
+  Container, Table, HeadRow, HeadItem, BodyRow, BodyItem, Key,
+} from './styles';
 
 @observer
 export default class KeysManager extends React.Component {
@@ -16,7 +15,7 @@ export default class KeysManager extends React.Component {
         <Container>
           <Table>
             <thead>
-              <HeadRow style={{ height: 55 }}>
+              <HeadRow>
                 <HeadItem>Command</HeadItem>
                 <HeadItem>Keybinding</HeadItem>
                 <HeadItem>Source</HeadItem>
@@ -26,7 +25,9 @@ export default class KeysManager extends React.Component {
               {Store.keyBindings.map((data, key) => (
                 <BodyRow key={key}>
                   <BodyItem>{data.command}</BodyItem>
-                  <BodyItem>{data.key}</BodyItem>
+                  <BodyItem>
+                    {(typeof data.key === 'object' && '...') || <Key>{data.key}</Key>}
+                  </BodyItem>
                   <BodyItem>{data.isChanged ? 'User' : 'Default'}</BodyItem>
                 </BodyRow>
               ))}
