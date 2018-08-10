@@ -1,4 +1,5 @@
 {
+  "langNameEN": "polish",
   "langName": "polski",
   "langCode": "pl",
   "addressBar": {
@@ -56,7 +57,15 @@
       "Listopad",
       "Grudzień"
     ],
-    "days": ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"],
+    "days": [
+      "Poniedziałek",
+      "Wtorek",
+      "Środa",
+      "Czwartek",
+      "Piątek",
+      "Sobota",
+      "Niedziela"
+    ],
     "daysShort": ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Niedz"],
     "today": "Dzisiaj",
     "yesterday": "Wczoraj",
