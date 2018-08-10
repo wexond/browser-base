@@ -1,4 +1,4 @@
-import { moveIndicatorToSelectedTab, updateTabsBounds } from '.';
+import { updateTabsBounds } from '.';
 import { Workspace } from '../interfaces';
 import store from '../renderer/store';
 import { createTab } from './tabs';
@@ -19,7 +19,6 @@ export const selectWorkspace = (id: number) => {
   store.currentWorkspace = id;
   requestAnimationFrame(() => {
     updateTabsBounds(false);
-    moveIndicatorToSelectedTab(false);
   });
 };
 

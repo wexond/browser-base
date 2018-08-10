@@ -15,7 +15,6 @@ import { AddressBar, Menu, Page, Tab } from '../models';
 import {
   getBookmarkFolderPath,
   getSelectedPage,
-  moveIndicatorToSelectedTab,
   updateTabsBounds,
 } from '../utils';
 import ContextMenu from './components/ContextMenu';
@@ -189,7 +188,6 @@ class Store {
         this.rearrangeTabsTimer.time === 3
       ) {
         updateTabsBounds();
-        moveIndicatorToSelectedTab(true);
         this.rearrangeTabsTimer.canReset = false;
       }
       this.rearrangeTabsTimer.time++;

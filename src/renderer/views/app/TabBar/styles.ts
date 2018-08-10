@@ -28,10 +28,3 @@ export const AddTab = styled(ToolbarButton)`
   position: absolute;
   top: 0;
 `;
-
-export const Indicator = styled.div`
-  height: 2px;
-  position: absolute;
-  bottom: 0;
-  background-color: ${colors.blue['500']};
-`;
