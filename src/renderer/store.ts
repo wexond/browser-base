@@ -86,25 +86,25 @@ class Store {
 
   @observable
   public isHTMLFullscreen = false;
-
+  
   @observable
   public isTabDragged = false;
-
+  
   /** */
   @observable
   public addressBar = new AddressBar();
-
+  
   /** */
   @observable
   public pages: Page[] = [];
-
+  
   /** */
   @observable
   public updateInfo = {
     available: false,
     version: '',
   };
-
+  
   @observable
   public tabbarScrollbar = {
     visible: false,
@@ -113,31 +113,34 @@ class Store {
     thumbVisible: false,
     thumbDragging: false,
   };
-
+  
   @observable
   public navigationState = {
     canGoBack: false,
     canGoForward: false,
   };
-
+  
   @observable
   public pageMenuData = {
     x: 0,
     y: 0,
     mode: PageMenuMode.Normal,
   };
-
+  
   @observable
   public dictionary: any = dictionary;
-
+  
+  @observable
+  public keyBindings: KeyBinding[] = [];
+  
   /** Components refs */
   public pageMenu: ContextMenu;
-
+  
   public bookmarkDialog: BookmarksDialog;
-
+  
   /** */
   public webviewContextMenuParams: Electron.ContextMenuParams;
-
+  
   public favicons: { [key: string]: string } = {};
 
   public platform = os.platform() as Platforms;
@@ -148,8 +151,6 @@ class Store {
   };
 
   public cmdPressed = false;
-
-  public keyBindings: KeyBinding[] = [];
 
   /** Methods */
 
