@@ -42,6 +42,10 @@ export const Commands: any = {
   'menu.show': () => {
     store.menu.visible = true;
   },
+  'bookmarks.show': () => {
+    store.menu.visible = true;
+    store.menu.selectedItem = 1;
+  },
   'wexond.hideAllMenu': () => {
     store.workspacesMenuVisible = false;
     store.menu.visible = false;
