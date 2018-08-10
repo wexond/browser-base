@@ -22,7 +22,6 @@ import { PageMenuMode, ButtonType } from '../../../../enums';
 import { getKeyBindings, bindKeys } from '../../../../utils';
 
 const { dialog } = remote;
-const keyBindingsJSON = require('../../../../../static/defaults/key-bindings.json');
 
 @observer
 class App extends React.Component {
@@ -52,7 +51,7 @@ class App extends React.Component {
     store.bookmarks = await database.bookmarks.toArray();
     store.historyItems = await database.history.toArray();
 
-    store.keyBindings = await getKeyBindings(keyBindingsJSON);
+    store.keyBindings = await getKeyBindings();
     bindKeys(store.keyBindings);
   }
 
