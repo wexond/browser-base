@@ -4,7 +4,7 @@ import React from 'react';
 import { createTab } from '../../../../utils';
 import store from '../../../store';
 import Tabs from '../Tabs';
-import { AddTab, Indicator, StyledTabbar, TabsContainer } from './styles';
+import { AddTab, StyledTabbar, TabsContainer } from './styles';
 import { icons } from '../../../../defaults';
 
 @observer
@@ -21,7 +21,6 @@ export default class Tabbar extends React.Component {
       >
         <TabsContainer>
           <Tabs />
-          <Indicator innerRef={r => (store.tabIndicatorRef = r)} />
         </TabsContainer>
         <AddTab
           icon={icons.add}

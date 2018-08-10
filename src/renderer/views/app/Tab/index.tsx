@@ -10,7 +10,6 @@ import {
   getTabWidth,
   getWorkspaceById,
   getWorkspaceTabs,
-  moveIndicatorToSelectedTab,
   removeTab,
   selectTab,
   setTabLeft,
@@ -24,6 +23,7 @@ import { colors, tabAnimations } from '../../../../defaults';
 import components from '../../../components';
 import Preloader from '../../../components/Preloader';
 import Ripple from '../../../components/Ripple';
+import { Circle } from './styles';
 
 @observer
 export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
@@ -133,8 +133,6 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
       } else if (store.workspaces.length === 1) {
         closeWindow();
       }
-    } else {
-      moveIndicatorToSelectedTab(true);
     }
 
     setTimeout(() => {
@@ -209,7 +207,7 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
         visible={!store.addressBar.toggled}
         innerRef={(r: HTMLDivElement) => (tab.ref = r)}
       >
-        <Content hovered={hovered}>
+        <Content hovered={hovered} selected={selected}>
           {!loading && <Icon favicon={favicon.trim()} />}
           {loading && <Preloader thickness={6} size={16} />}
           <Title selected={selected} loading={loading} favicon={favicon}>
@@ -220,12 +218,16 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
           onMouseDown={this.onCloseMouseDown}
           onClick={this.onCloseClick}
           hovered={hovered}
-        />
+          selected={selected}
+        >
+          <Circle />
+        </Close>
         {children}
         <Overlay hovered={hovered} selected={selected} />
         <Ripple
           rippleTime={0.6}
           ref={r => (this.ripple = r)}
+          opacity={0.15}
           color={colors.blue['500']}
         />
         <RightBorder visible={rightBorderVisible} />

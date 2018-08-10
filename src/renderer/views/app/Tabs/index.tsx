@@ -5,7 +5,6 @@ import { TOOLBAR_HEIGHT } from '../../../../constants';
 import {
   getSelectedTab,
   getTabsToReplace,
-  moveIndicatorToSelectedTab,
   setTabLeft,
   setTabsLefts,
 } from '../../../../utils';
@@ -29,7 +28,6 @@ export default class Tabs extends React.Component {
 
     store.tabDragData.dragging = false;
     setTabsLefts(true);
-    moveIndicatorToSelectedTab(true);
 
     store.isTabDragged = false;
 
@@ -83,9 +81,6 @@ export default class Tabs extends React.Component {
       ) {
         // TODO: Create a new window
       }
-
-      moveIndicatorToSelectedTab(false);
-      // TweenLite.to(workspace.tabsIndicator, 0, { left: selectedTab.left });
 
       let direction = '';
       if (lastMouseX - e.pageX >= 1) {
