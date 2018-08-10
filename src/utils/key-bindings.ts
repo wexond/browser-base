@@ -1,10 +1,11 @@
+import fs from 'fs';
 import Mousetrap from 'mousetrap';
 
 import { KeyBinding } from '../interfaces';
 import { Commands } from '../defaults';
-import database from '../database';
+import { getPath, compareArrays } from './other';
 
-const keyBindingsJSON = require('../../static/defaults/key-bindings.json');
+const defaultKeyBindings = require('../../static/defaults/key-bindings.json');
 
 export const bindKeys = (bindings: KeyBinding[], reset = true) => {
   Mousetrap.reset();
@@ -15,29 +16,16 @@ export const bindKeys = (bindings: KeyBinding[], reset = true) => {
   }
 };
 
-export const parseKeyBindings = (json: any) => {
-  const list: KeyBinding[] = [];
+export const isKeyBindingChanged = (command: string, key: string) => {
+  for (let i = 0; i < defaultKeyBindings.length; i++) {
+    const binding = defaultKeyBindings[i];
 
-  for (let i = 0; i < json.length; i++) {
-    const item = json[i];
+    if (binding.command === command) {
+      if (typeof binding.key === 'object') {
+        return !compareArrays(binding.key, key);
+      }
 
-    if (item.command != null && item.key != null) {
-      const keyBinding: KeyBinding = {
-        key: item.key,
-        command: item.command,
-      };
-
-      list.push(keyBinding);
-    }
-  }
-
-  return list;
-};
-
-export const getKeyBindingByCommand = (list: KeyBinding[], command: string) => {
-  for (let i = 0; i < list.length; i++) {
-    if (list[i].command === command) {
-      return list[i];
+      return binding.key !== key;
     }
   }
 
@@ -45,16 +33,26 @@ export const getKeyBindingByCommand = (list: KeyBinding[], command: string) => {
 };
 
 export const getKeyBindings = async () => {
-  const list = parseKeyBindings(keyBindingsJSON);
-  const bindings = await database.keyBindings.toArray();
+  const list: KeyBinding[] = [];
+  const path = getPath('key-bindings.json');
 
-  for (let i = 0; i < list.length; i++) {
-    const bind = getKeyBindingByCommand(bindings, list[i].command);
+  const data = fs.readFileSync(path, 'utf8');
+  const json = JSON.parse(data);
 
-    if (bind != null) {
-      list[i].defaultKey = list[i].key;
-      list[i].key = bind.key;
+  for (let i = 0; i < json.length; i++) {
+    if (!json[i].command || !json[i].key) {
+      continue; // eslint-disable-line
     }
+
+    const isChanged = isKeyBindingChanged(json[i].command, json[i].key);
+
+    const binding: KeyBinding = {
+      command: json[i].command,
+      key: json[i].key,
+      isChanged,
+    };
+
+    list.push(binding);
   }
 
   return list;
