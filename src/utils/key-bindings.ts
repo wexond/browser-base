@@ -4,6 +4,17 @@ import { KeyBinding } from '../interfaces';
 import { Commands } from '../defaults';
 import database from '../database';
 
+const keyBindingsJSON = require('../../static/defaults/key-bindings.json');
+
+export const bindKeys = (bindings: KeyBinding[], reset = true) => {
+  Mousetrap.reset();
+
+  for (let i = 0; i < bindings.length; i++) {
+    const binding = bindings[i];
+    Mousetrap.bind(binding.key, Commands[binding.command]);
+  }
+};
+
 export const parseKeyBindings = (json: any) => {
   const list: KeyBinding[] = [];
 
@@ -23,29 +34,28 @@ export const parseKeyBindings = (json: any) => {
   return list;
 };
 
-export const getKeyBindings = async (json: any) => {
-  const bindings: KeyBinding[] = parseKeyBindings(json);
-  const bindingsInDB = await database.keyBindings.toArray();
-
-  for (let i = 0; i < bindingsInDB.length; i++) {
-    const bind = bindings.filter(r => r.command === bindingsInDB[i].command);
-
-    if (bind.length > 0) {
-      bind[0].defaultKey = bindings[0].key;
-      bind[0].key = bindingsInDB[i].key;
+export const getKeyBindingByCommand = (list: KeyBinding[], command: string) => {
+  for (let i = 0; i < list.length; i++) {
+    if (list[i].command === command) {
+      return list[i];
     }
   }
 
-  console.log(bindings);
-
-  return bindings;
+  return null;
 };
 
-export const bindKeys = (bindings: KeyBinding[], reset = true) => {
-  Mousetrap.reset();
+export const getKeyBindings = async () => {
+  const list = parseKeyBindings(keyBindingsJSON);
+  const bindings = await database.keyBindings.toArray();
 
-  for (let i = 0; i < bindings.length; i++) {
-    const binding = bindings[i];
-    Mousetrap.bind(binding.key, Commands[binding.command]);
+  for (let i = 0; i < list.length; i++) {
+    const bind = getKeyBindingByCommand(bindings, list[i].command);
+
+    if (bind != null) {
+      list[i].defaultKey = list[i].key;
+      list[i].key = bind.key;
+    }
   }
+
+  return list;
 };
