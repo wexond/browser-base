@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { opacity } from '../../../defaults';
 import { robotoRegular, robotoMedium } from '../../mixins';
@@ -28,9 +28,15 @@ export const HeadItem = styled.th`
 export const BodyRow = styled.tr`
   height: 48px;
   border-top: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
+  will-change: background-color;
+  transition: 0.2s background-color;
 
   &:first-child {
     border-top: unset;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
   }
 `;
 
