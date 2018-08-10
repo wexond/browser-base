@@ -1,5 +1,5 @@
 import Dexie from 'dexie';
-import { BookmarkItem, HistoryItem, Favicon, KeyBinding } from './interfaces';
+import { BookmarkItem, HistoryItem, Favicon } from './interfaces';
 
 export class Database extends Dexie {
   public history: Dexie.Table<HistoryItem, number>;
@@ -8,8 +8,6 @@ export class Database extends Dexie {
 
   public bookmarks: Dexie.Table<BookmarkItem, number>;
 
-  public keyBindings: Dexie.Table<KeyBinding, number>;
-
   constructor() {
     super('AppDatabase');
 
@@ -17,7 +15,6 @@ export class Database extends Dexie {
       history: '++id, title, url, favicon, date',
       favicons: '++id, url, favicon',
       bookmarks: '++id, title, url, favicon, parent, type',
-      keyBindings: '++id, key, command',
     });
   }
 
