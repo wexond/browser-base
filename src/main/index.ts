@@ -33,7 +33,11 @@ if (!existsSync(extensionsPath)) {
 }
 
 if (!existsSync(keyBindingsPath)) {
-  writeFileSync(keyBindingsPath, JSON.stringify(defaultKeyBindings, null, 2));
+  writeFileSync(
+    keyBindingsPath,
+    JSON.stringify(defaultKeyBindings, null, 2),
+    'utf8',
+  );
 }
 
 app.on('activate', () => {
