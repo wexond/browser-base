@@ -41,6 +41,7 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.addWebviewListener('did-start-loading', this.onDidStartLoading);
     this.addWebviewListener('page-title-updated', this.onPageTitleUpdated);
     this.addWebviewListener('load-commit', this.onLoadCommit);
+    this.webview.addEventListener('load-commit', this.onceLoadCommit);
     this.addWebviewListener('page-favicon-updated', this.onPageFaviconUpdated);
     this.addWebviewListener('dom-ready', this.onDomReady);
     this.addWebviewListener('enter-html-full-screen', this.onFullscreenEnter);
@@ -49,13 +50,26 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.addWebviewListener('did-navigate', this.onDidNavigate);
     this.addWebviewListener('will-navigate', this.onWillNavigate);
     this.addWebviewListener('ipc-message', this.onIpcMessage);
+  }
 
+  public componentWillUnmount() {
+    for (const listener of this.listeners) {
+      this.webview.removeEventListener(listener.name, listener.callback);
+    }
+
+    this.listeners = [];
+
+    clearInterval(this.onURLChange);
+
+    store.isFullscreen = false;
+  }
+
+  public onceLoadCommit = () => {
     // Custom event: fires when webview URL changes.
     this.onURLChange = setInterval(() => {
       if (this.webview.getWebContents()) {
         const url = this.webview.getURL();
-        if (url !== tab.url) {
-          console.log('aha');
+        if (url !== this.tab.url) {
           this.tab.isNew = false;
           this.tab.url = url;
           this.emitEvent(
@@ -72,16 +86,8 @@ export default class extends React.Component<{ page: Page }, {}> {
         }
       }
     }, 30);
-  }
 
-  public componentWillUnmount() {
-    for (const listener of this.listeners) {
-      this.webview.removeEventListener(listener.name, listener.callback);
-    }
-
-    clearInterval(this.onURLChange);
-
-    store.isFullscreen = false;
+    this.webview.removeEventListener('load-commit', this.onceLoadCommit);
   }
 
   public addWebviewListener(name: string, callback: any) {

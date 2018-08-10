@@ -26,13 +26,13 @@ export const getTabWidth = (): number => {
   const tabs = store.tabs.filter(
     x => x.workspaceId === workspace.id && !x.isClosing,
   );
-  const width = getTabbarWidth() / tabs.length;
+  const width = getTabbarWidth() / tabs.length - 2;
 
-  if (width > 200) {
-    return 200;
+  if (width > 200 - 2) {
+    return 200 - 2;
   }
-  if (width < 72) {
-    return 72;
+  if (width < 72 - 2) {
+    return 72 - 2;
   }
 
   return width;
@@ -44,7 +44,7 @@ export const getTabLeft = (tab: Tab): number => {
 
   let left = 0;
   for (let i = 0; i < index; i++) {
-    left += tabs[i].width;
+    left += tabs[i].width + 2;
   }
 
   return left;
@@ -55,7 +55,7 @@ export const getTabNewLeft = (tab: Tab): number => {
 
   let left = 0;
   for (let i = 0; i < index; i++) {
-    left += getTabWidth();
+    left += getTabWidth() + 2;
   }
 
   return left;
@@ -84,18 +84,6 @@ export const setWidth = (
       width,
       ease: animation ? tabAnimations.width.easing : null,
     });
-  }
-};
-
-export const moveIndicatorToTab = (tab: Tab, animation: boolean) => {
-  setLeft(store.tabIndicatorRef, tab.left, animation);
-  setWidth(store.tabIndicatorRef, tab.width, animation);
-};
-
-export const moveIndicatorToSelectedTab = (animation: boolean) => {
-  const tab = getSelectedTab();
-  if (tab) {
-    moveIndicatorToTab(tab, animation);
   }
 };
 
@@ -130,7 +118,7 @@ export const setTabsLefts = (animation: boolean) => {
 
   for (const tab of tabs) {
     setTabLeft(tab, left, animation);
-    left += tab.width;
+    left += tab.width + 2;
   }
 
   store.addTabLeft = Math.min(left, getTabbarWidth());
@@ -190,7 +178,6 @@ export const selectTab = (tab: Tab) => {
   if (!tab.isClosing) {
     const workspace = getWorkspaceById(tab.workspaceId);
     workspace.selectedTab = tab.id;
-    moveIndicatorToSelectedTab(true);
   }
 };
 

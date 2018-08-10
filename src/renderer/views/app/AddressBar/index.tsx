@@ -32,7 +32,7 @@ export default class AddressBar extends Component<Props, {}> {
 
   public onInputFocus = () => {
     this.input.select();
-  };
+  }
 
   public autoComplete(text: string, suggestion: string) {
     const regex = /(http(s?)):\/\/(www.)?|www./gi;
@@ -88,7 +88,7 @@ export default class AddressBar extends Component<Props, {}> {
 
       this.input.value = suggestion.primaryText;
     }
-  };
+  }
 
   public onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.which === 13) {
@@ -114,7 +114,7 @@ export default class AddressBar extends Component<Props, {}> {
 
       store.addressBar.toggled = false;
     }
-  };
+  }
 
   public onInput = () => {
     if (this.canSuggest) {
@@ -133,14 +133,14 @@ export default class AddressBar extends Component<Props, {}> {
     });
 
     store.selectedSuggestion = 0;
-  };
+  }
 
   public getInputValue = () => {
     if (this.input != null) {
       return this.input.value;
     }
     return null;
-  };
+  }
 
   public render() {
     const { visible } = this.props;
