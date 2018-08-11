@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { opacity } from '../../../../defaults/opacity';
 import { Align } from '../../../../enums';
@@ -14,6 +14,10 @@ export const Root = styled.div`
   box-shadow: ${shadows(5)};
 
   ${center(Align.CenterBoth)};
+
+  ${({ visible }: { visible: boolean }) => css`
+    opacity: ${visible ? 1 : 0};
+  `};
 `;
 
 export const Title = styled.div`
