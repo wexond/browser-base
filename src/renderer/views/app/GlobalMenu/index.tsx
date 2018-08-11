@@ -6,7 +6,7 @@ import store from '../../../store';
 import Bookmarks from '../../bookmarks/Bookmarks';
 import History from '../../history/History';
 import About from '../../about/About';
-import KeysManager from '../../keys-manager/KeysManager';
+import KeyManager from '../../keys-manager/KeyManager';
 import { deleteHistoryItem, addFolder } from '../../../../utils';
 import { icons } from '../../../../defaults';
 
@@ -47,15 +47,8 @@ export default class GlobalMenu extends React.Component {
 
     return (
       <Menu title="Wexond">
-        <Menu.Item
-          title={dictionary.history.title}
-          icon={icons.history}
-          searchVisible
-        >
-          <Menu.Item
-            title={dictionary.history.clearHistory}
-            icon={icons.clear}
-          />
+        <Menu.Item title={dictionary.history.title} icon={icons.history} searchVisible>
+          <Menu.Item title={dictionary.history.clearHistory} icon={icons.clear} />
           <Menu.Item
             title={dictionary.selecting.selectAll}
             visible={!editingHistory}
@@ -75,46 +68,23 @@ export default class GlobalMenu extends React.Component {
             onClick={historyActions.deleteAllSelectedItems}
           />
         </Menu.Item>
-        <Menu.Item
-          title={dictionary.bookmarks.title}
-          icon={icons.bookmarks}
-          searchVisible
-        >
-          <Menu.Item
-            title={dictionary.selecting.selectAll}
-            icon={icons.selectAll}
-          />
+        <Menu.Item title={dictionary.bookmarks.title} icon={icons.bookmarks} searchVisible>
+          <Menu.Item title={dictionary.selecting.selectAll} icon={icons.selectAll} />
           <Menu.Item
             title="New folder"
             icon={icons.addFolder}
             onClick={bookmarksActions.addFolder}
           />
         </Menu.Item>
-        <Menu.Item
-          title={dictionary.settings.title}
-          icon={icons.settings}
-          searchVisible
-        />
-        <Menu.Item
-          title="Keys manager"
-          icon={icons.keysManager}
-          searchVisible
-        />
-        <Menu.Item
-          title={dictionary.extensions.title}
-          icon={icons.extensions}
-          searchVisible
-        />
-        <Menu.Item
-          title={dictionary.about.title}
-          icon={icons.info}
-          searchVisible={false}
-        />
+        <Menu.Item title={dictionary.settings.title} icon={icons.settings} searchVisible />
+        <Menu.Item title="Key manager" icon={icons.keyManager} searchVisible />
+        <Menu.Item title={dictionary.extensions.title} icon={icons.extensions} searchVisible />
+        <Menu.Item title={dictionary.about.title} icon={icons.info} searchVisible={false} />
 
         <History />
         <Bookmarks />
         <div />
-        <KeysManager />
+        <KeyManager />
         <div />
         <About />
       </Menu>
