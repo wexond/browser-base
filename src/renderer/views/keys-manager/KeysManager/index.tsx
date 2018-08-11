@@ -3,6 +3,7 @@ import React from 'react';
 
 import Store from '../../../store';
 import { PageContent } from '../../app/Menu/styles';
+import Dialog from '../Dialog';
 import {
   Container, Table, HeadRow, HeadItem, BodyRow, BodyItem, Key,
 } from './styles';
@@ -26,13 +27,14 @@ export default class KeysManager extends React.Component {
                 <BodyRow key={key}>
                   <BodyItem>{data.command}</BodyItem>
                   <BodyItem>
-                    {(typeof data.key === 'object' && '...') || <Key>{data.key}</Key>}
+                    {(typeof data.key === 'object' && <Key>...</Key>) || <Key>{data.key}</Key>}
                   </BodyItem>
                   <BodyItem>{data.isChanged ? 'User' : 'Default'}</BodyItem>
                 </BodyRow>
               ))}
             </tbody>
           </Table>
+          <Dialog />
         </Container>
       </PageContent>
     );
