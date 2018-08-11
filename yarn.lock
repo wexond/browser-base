@@ -3656,6 +3656,10 @@ mobx@5.0.3:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-5.0.3.tgz#53b97f2a0f9b0dd7774c96249f81bf2d513d8e1c"
 
+mousetrap-record@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mousetrap-record/-/mousetrap-record-1.0.1.tgz#c8301a616576e4d619e7fd69384616badf19d876"
+
 mousetrap@1.6.2:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/mousetrap/-/mousetrap-1.6.2.tgz#caadd9cf886db0986fb2fee59a82f6bd37527587"

@@ -3,7 +3,7 @@ import Mousetrap from 'mousetrap';
 
 import { KeyBinding } from '../interfaces';
 import { Commands } from '../defaults';
-import { getPath, compareArrays } from './other';
+import { getPath } from './other';
 
 const defaultKeyBindings = require('../../static/defaults/key-bindings.json');
 
@@ -12,7 +12,17 @@ export const bindKeys = (bindings: KeyBinding[], reset = true) => {
 
   for (let i = 0; i < bindings.length; i++) {
     const binding = bindings[i];
-    Mousetrap.bind(binding.key, Commands[binding.command]);
+    const digitIndex = binding.key.indexOf('digit');
+
+    if (digitIndex === -1) {
+      Mousetrap.bind(binding.key, Commands[binding.command]);
+    } else {
+      const firstPart = binding.key.substring(0, digitIndex);
+
+      for (let x = 0; x <= 9; x++) {
+        Mousetrap.bind(firstPart + x, Commands[binding.command]);
+      }
+    }
   }
 };
 
@@ -20,11 +30,7 @@ export const isKeyBindingChanged = (command: string, key: string) => {
   for (let i = 0; i < defaultKeyBindings.length; i++) {
     const binding = defaultKeyBindings[i];
 
-    if (binding.command === command) {
-      if (typeof binding.key === 'object') {
-        return !compareArrays(binding.key, key);
-      }
-
+    if (binding.command === command && typeof binding.key === 'string') {
       return binding.key !== key;
     }
   }
