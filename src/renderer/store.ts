@@ -132,6 +132,9 @@ class Store {
   
   @observable
   public keyBindings: KeyBinding[] = [];
+
+  @observable
+  public keysDialogVisible = false;
   
   /** Components refs */
   public pageMenu: ContextMenu;
