@@ -1,17 +1,6 @@
 [
   {
-    "key": [
-      "ctrl+0",
-      "ctrl+1",
-      "ctrl+2",
-      "ctrl+3",
-      "ctrl+4",
-      "ctrl+5",
-      "ctrl+6",
-      "ctrl+7",
-      "ctrl+8",
-      "ctrl+9"
-    ],
+    "key": "ctrl+digit",
     "command": "tabs.switch"
   },
   {
