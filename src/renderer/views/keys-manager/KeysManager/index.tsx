@@ -1,21 +1,17 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import Store from '../../../store';
+import store from '../../../store';
 import { PageContent } from '../../app/Menu/styles';
-import Dialog from '../Dialog';
-import Key from '../Key';
+import Chip from '../Chip';
 import {
   Container, Table, HeadRow, HeadItem, BodyRow, BodyItem,
 } from './styles';
+import { KeyBinding } from '../../../../interfaces';
 
 @observer
 export default class KeysManager extends React.Component {
-  public onKeyClick = (element?: Key) => {
-    const { keyBinding } = element.props;
-
-    Store.keysDialogVisible = true;
-  };
+  public onChipClick = (keyBinding: KeyBinding) => {};
 
   public render() {
     return (
@@ -30,12 +26,12 @@ export default class KeysManager extends React.Component {
               </HeadRow>
             </thead>
             <tbody>
-              {Store.keyBindings.map((data, key) => (
+              {store.keyBindings.map((data, key) => (
                 <BodyRow key={key}>
                   <BodyItem>{data.command}</BodyItem>
                   <BodyItem>
-                    {(typeof data.key === 'object' && <Key>...</Key>) || (
-                      <Key keyBinding={data} onClick={this.onKeyClick} />
+                    {typeof data.key === 'string' && (
+                      <Chip keyBinding={data} onClick={this.onChipClick} />
                     )}
                   </BodyItem>
                   <BodyItem>{data.isChanged ? 'User' : 'Default'}</BodyItem>
@@ -43,7 +39,6 @@ export default class KeysManager extends React.Component {
               ))}
             </tbody>
           </Table>
-          <Dialog />
         </Container>
       </PageContent>
     );

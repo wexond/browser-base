@@ -3,19 +3,19 @@ import React from 'react';
 import { KeyBinding } from '../../../../interfaces';
 import { Root } from './styles';
 
-export type KeyEvent = (element?: Key) => void;
+export type ChipEvent = (keyBinding?: KeyBinding) => void;
 
 export interface Props {
   keyBinding?: KeyBinding;
-  onClick?: KeyEvent;
+  onClick?: ChipEvent;
 }
 
-export default class Key extends React.Component<Props, {}> {
+export default class Chip extends React.Component<Props, {}> {
   private onClick = () => {
-    const { onClick } = this.props;
+    const { onClick, keyBinding } = this.props;
 
     if (typeof onClick === 'function') {
-      onClick(this);
+      onClick(keyBinding);
     }
   };
 
