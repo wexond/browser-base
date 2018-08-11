@@ -31,7 +31,7 @@ Wexond is a web browser built on top of `Electron`, `React` and `styled-componen
 
 All binaries are located in the [Releases page](https://github.com/wexond/wexond/releases).
 
-# [Roadmap](docs/ROADMAP.md)
+# [Roadmap](ROADMAP.md)
 
 We still have a lot of things to do, to make Wexond better and better. This is just a beginning. So to improve our web browser we have created a roadmap so that you can see the next features and improvements.
 
