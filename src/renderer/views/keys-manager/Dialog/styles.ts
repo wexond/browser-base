@@ -11,12 +11,16 @@ export const Root = styled.div`
   position: absolute;
   background-color: #fafafa;
   border-radius: 4px;
+  will-change: opacity, margin-top;
+  transition: 0.2s opacity, 0.2s margin-top;
   box-shadow: ${shadows(5)};
 
   ${center(Align.CenterBoth)};
 
   ${({ visible }: { visible: boolean }) => css`
+    pointer-events: ${visible ? 'all' : 'none'};
     opacity: ${visible ? 1 : 0};
+    margin-top: ${visible ? 0 : -24}px;
   `};
 `;
 
