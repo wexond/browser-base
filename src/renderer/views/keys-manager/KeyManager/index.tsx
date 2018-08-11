@@ -10,7 +10,7 @@ import {
 import { KeyBinding } from '../../../../interfaces';
 
 @observer
-export default class KeysManager extends React.Component {
+export default class KeyManager extends React.Component {
   public onChipClick = (keyBinding: KeyBinding) => {};
 
   public render() {
