@@ -44,7 +44,8 @@ export const weatherIcons = {
 };
 /* eslint-enable global-require */
 
-export type WeatherCodes = | '01d'
+export type WeatherCodes =
+  | '01d'
   | '02d'
   | '03d'
   | '04d'

@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import Ripples from '../Ripples';
 import { colors } from '../../../defaults/colors';
 import { ButtonType } from '../../../enums';
-import { StyledButton, Icon, Overlay } from './styles';
-import { getEvents, getRippleEvents } from '../../../utils';
+import { Icon, Overlay, StyledButton } from './styles';
+import Ripple from '../Ripple';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
@@ -15,18 +14,10 @@ export interface IProps {
   whiteIcon?: boolean;
   inline?: boolean;
   disabled?: boolean;
-  ripple?: boolean;
-  customRippleBehavior?: boolean;
   theme?: 'light' | 'dark';
   type?: ButtonType;
   style?: any;
   onClick?: ButtonEvent;
-  onMouseDown?: ButtonEvent;
-  onMouseUp?: ButtonEvent;
-  onMouseLeave?: ButtonEvent;
-  onMouseEnter?: ButtonEvent;
-  onTouchStart?: ButtonEvent;
-  onTouchEnd?: ButtonEvent;
 }
 
 export default class Button extends React.Component<IProps, {}> {
@@ -42,7 +33,11 @@ export default class Button extends React.Component<IProps, {}> {
     type: ButtonType.Contained,
   };
 
-  private ripples: Ripples;
+  private ripple: Ripple;
+
+  public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    this.ripple.makeRipple(e.pageX, e.pageY);
+  }
 
   public render() {
     const {
@@ -52,18 +47,12 @@ export default class Button extends React.Component<IProps, {}> {
       whiteIcon,
       inline,
       type,
-      ripple,
-      customRippleBehavior,
       disabled,
       theme,
       style,
       children,
+      onClick,
     } = this.props;
-
-    const events = {
-      ...getEvents(this.props),
-      ...getRippleEvents(this.props, () => this.ripples),
-    };
 
     return (
       <React.Fragment>
@@ -77,12 +66,20 @@ export default class Button extends React.Component<IProps, {}> {
           type={type}
           theme={theme}
           disabled={disabled}
-          {...events}
+          onMouseDown={this.onMouseDown}
+          onClick={onClick}
         >
-          {icon && <Icon src={icon} white={whiteIcon} disabled={disabled} theme={theme} />}
+          {icon && (
+            <Icon
+              src={icon}
+              white={whiteIcon}
+              disabled={disabled}
+              theme={theme}
+            />
+          )}
           {children}
           <Overlay className="overlay" color={foreground} />
-          <Ripples ref={r => (this.ripples = r)} color={foreground} disabled={disabled} />
+          <Ripple ref={r => (this.ripple = r)} color={foreground} />
         </StyledButton>
       </React.Fragment>
     );

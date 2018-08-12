@@ -1,14 +1,14 @@
-import { formatDate } from './time';
-import store from '../renderer/store';
-import { Section, HistoryItem } from '../interfaces';
 import database from '../database';
+import { HistoryItem, Section } from '../interfaces';
+import store from '../renderer/store';
+import { formatDate } from './time';
 
 export const getHistoryItems = (filter = '') =>
   store.historyItems
     .filter(
       item =>
-        item.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1
-        || item.url.toLowerCase().indexOf(filter.toLowerCase()) !== -1,
+        item.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1 ||
+        item.url.toLowerCase().indexOf(filter.toLowerCase()) !== -1,
     )
     .reverse();
 

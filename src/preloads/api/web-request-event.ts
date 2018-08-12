@@ -1,15 +1,15 @@
 import { ipcRenderer } from 'electron';
 
 /* eslint no-bitwise: 0 */
-const hashCode = (string: string) => {
+const hashCode = (str: string) => {
   let hash = 0;
 
-  if (string.length === 0) {
+  if (str.length === 0) {
     return hash;
   }
 
-  for (let i = 0; i < string.length; i++) {
-    const chr = string.charCodeAt(i);
+  for (let i = 0; i < str.length; i++) {
+    const chr = str.charCodeAt(i);
     hash = (hash << 5) - hash + chr;
     hash |= 0;
   }
@@ -32,14 +32,17 @@ export default class WebRequestEvent {
     this.emit = this.emit.bind(this);
   }
 
-  emit(e: Electron.IpcMessageEvent, details: any) {
+  public emit(e: Electron.IpcMessageEvent, details: any) {
     this.callbacks.forEach(callback => {
       console.log(this.name, details);
-      ipcRenderer.send(`api-response-${this.scope}-${this.name}`, callback(details));
+      ipcRenderer.send(
+        `api-response-${this.scope}-${this.name}`,
+        callback(details),
+      );
     });
   }
 
-  addListener(callback: Function) {
+  public addListener(callback: Function) {
     this.callbacks.push(callback);
 
     if (!this.listener) {
@@ -49,11 +52,14 @@ export default class WebRequestEvent {
     }
   }
 
-  removeListener(callback: Function) {
+  public removeListener(callback: Function) {
     this.callbacks = this.callbacks.filter(c => c !== callback);
 
     if (this.callbacks.length === 0) {
-      ipcRenderer.removeListener(`api-emit-event-${this.scope}-${this.name}`, this.emit);
+      ipcRenderer.removeListener(
+        `api-emit-event-${this.scope}-${this.name}`,
+        this.emit,
+      );
       ipcRenderer.send(`api-remove-listener-${this.scope}-${this.name}`);
       this.listener = false;
     }

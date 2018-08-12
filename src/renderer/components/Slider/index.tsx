@@ -1,24 +1,28 @@
 import React from 'react';
 
-import { opacity } from '../../../defaults/opacity';
 import { colors } from '../../../defaults/colors';
+import { opacity } from '../../../defaults/opacity';
 import { SliderType } from '../../../enums';
 
 import {
-  StyledSlider,
-  InactiveTrack,
   ActiveTrack,
+  InactiveTrack,
+  StyledSlider,
+  Thumb,
   ThumbContainer,
   ThumbHover,
-  Thumb,
-  TicksContainer,
   Tick,
+  TicksContainer,
   TickValue,
 } from './styles';
 
-import { hexToRgb } from '../../../utils';
+import { hexToRgb } from '../../../utils/colors';
 
-export type SliderEvent = (value?: any, type?: SliderType, element?: Slider) => void;
+export type SliderEvent = (
+  value?: any,
+  type?: SliderType,
+  element?: Slider,
+) => void;
 
 export interface Props {
   color?: string;
@@ -65,7 +69,9 @@ export default class Slider extends React.Component<Props, State> {
     const { color } = this.props;
 
     const rgb = hexToRgb(color);
-    const rgba = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity.light.disabledIcon})`;
+    const rgba = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${
+      opacity.light.disabledIcon
+    })`;
 
     this.setState({
       unselectedTickColor: rgba,
@@ -124,15 +130,15 @@ export default class Slider extends React.Component<Props, State> {
         }
       }
     }
-  };
+  }
 
   public onThumbMouseDown = (e: React.MouseEvent<HTMLElement>) => {
     this.isMouseDown = true;
-  };
+  }
 
   public onWindowMouseUp = (e: MouseEvent) => {
     this.isMouseDown = false;
-  };
+  }
 
   public onWindowMouseMove = (e: MouseEvent) => {
     const { type } = this.props;
@@ -167,20 +173,25 @@ export default class Slider extends React.Component<Props, State> {
         }
       }
     }
-  };
+  }
 
   public getPercent = (clientX: number) => {
     const inactiveTrackRect = this.inactiveTrack.getBoundingClientRect();
     const posX = clientX - inactiveTrackRect.left;
     const percent = (posX * 100) / this.inactiveTrack.clientWidth;
 
-    if (percent < 0) return 0;
-    if (percent > 100) return 100;
+    if (percent < 0) {
+      return 0;
+    }
+    if (percent > 100) {
+      return 100;
+    }
 
     return percent;
-  };
+  }
 
-  public getGap = () => this.inactiveTrack.clientWidth / (this.ticksList.length - 1);
+  public getGap = () =>
+    this.inactiveTrack.clientWidth / (this.ticksList.length - 1)
 
   public triggerEvent = (value: any) => {
     const { type, onChange } = this.props;
@@ -192,15 +203,23 @@ export default class Slider extends React.Component<Props, State> {
         onChange(value, type, this);
       }
     }
-  };
+  }
 
   public render() {
     const {
-      color, ticks, style, type, selectedTickColor, showTicksLabels,
+      color,
+      ticks,
+      style,
+      type,
+      selectedTickColor,
+      showTicksLabels,
     } = this.props;
 
     const {
-      trackWidth, thumbAnimation, unselectedTickColor, selectedTickIndex,
+      trackWidth,
+      thumbAnimation,
+      unselectedTickColor,
+      selectedTickIndex,
     } = this.state;
 
     const trackStyle = { width: `${trackWidth}%` };
@@ -212,7 +231,10 @@ export default class Slider extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <StyledSlider onMouseDown={this.onMouseDown} style={style}>
-          <InactiveTrack innerRef={r => (this.inactiveTrack = r)} color={color} />
+          <InactiveTrack
+            innerRef={r => (this.inactiveTrack = r)}
+            color={color}
+          />
           <ActiveTrack
             type={type}
             color={color}
@@ -220,23 +242,32 @@ export default class Slider extends React.Component<Props, State> {
             style={trackStyle}
           />
           <TicksContainer>
-            {type === SliderType.Discrete
-              && typeof ticks === 'object'
-              && ticks.map((data: any, key: any) => {
+            {type === SliderType.Discrete &&
+              typeof ticks === 'object' &&
+              ticks.map((data: any, key: any) => {
                 tickIndex++;
 
                 return (
                   <Tick
                     innerRef={r => r != null && this.ticksList.push(r)}
                     key={key}
-                    color={tickIndex <= selectedTickIndex ? selectedTickColor : unselectedTickColor}
+                    color={
+                      tickIndex <= selectedTickIndex
+                        ? selectedTickColor
+                        : unselectedTickColor
+                    }
                   >
-                    {showTicksLabels && data != null && <TickValue>{data}</TickValue>}
+                    {showTicksLabels &&
+                      data != null && <TickValue>{data}</TickValue>}
                   </Tick>
                 );
               })}
           </TicksContainer>
-          <ThumbContainer type={type} style={thumbStyle} onMouseDown={this.onThumbMouseDown}>
+          <ThumbContainer
+            type={type}
+            style={thumbStyle}
+            onMouseDown={this.onThumbMouseDown}
+          >
             <ThumbHover className="thumb-hover" color={color} />
             <Thumb thumbAnimation={thumbAnimation} color={color} />
           </ThumbContainer>

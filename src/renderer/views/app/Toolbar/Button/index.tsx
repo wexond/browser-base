@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Button, Icon } from './styles';
-import Ripples from '../../../../components/Ripples';
+
+import { Button, Icon, Circle } from './styles';
+import Ripple from '../../../../components/Ripple';
 
 interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
@@ -21,27 +22,23 @@ export default class ToolbarButton extends React.Component<Props, {}> {
     size: 20,
   };
 
-  private ripples: Ripples;
+  private ripple: Ripple;
 
   private ref: HTMLDivElement;
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const { onMouseDown } = this.props;
 
-    this.ripples.makeRipple(e.pageX, e.pageY);
+    this.ripple.makeRipple(e.pageX, e.pageY);
 
     if (typeof onMouseDown === 'function') {
       onMouseDown(e);
     }
-  };
+  }
 
   public componentDidMount() {
     this.forceUpdate();
   }
-
-  public onMouseUp = () => {
-    this.ripples.removeRipples();
-  };
 
   public getSize = () => {
     if (this.ref) {
@@ -54,23 +51,26 @@ export default class ToolbarButton extends React.Component<Props, {}> {
       height: 0,
       width: 0,
     };
-  };
+  }
 
   public render() {
     const {
-      icon, onClick, size, disabled, className, divRef, children,
+      icon,
+      onClick,
+      size,
+      disabled,
+      className,
+      divRef,
+      children,
     } = this.props;
 
     let { style } = this.props;
 
     style = { ...style };
 
-    const { height, width } = this.getSize();
-
     return (
       <Button
         onMouseDown={this.onMouseDown}
-        onMouseUp={this.onMouseUp}
         onClick={onClick}
         className={className}
         style={style}
@@ -83,16 +83,14 @@ export default class ToolbarButton extends React.Component<Props, {}> {
         disabled={disabled}
       >
         <Icon icon={icon} size={size} disabled={disabled} />
-        <Ripples
-          icon
-          ref={r => (this.ripples = r)}
-          color="#000"
-          parentWidth={width}
-          parentHeight={height}
-          rippleTime={0.6}
-          initialOpacity={0.1}
-          size={38}
-        />
+        <Circle>
+          <Ripple
+            ref={r => (this.ripple = r)}
+            color="#000"
+            rippleTime={0.8}
+            opacity={0.1}
+          />
+        </Circle>
         {children}
       </Button>
     );

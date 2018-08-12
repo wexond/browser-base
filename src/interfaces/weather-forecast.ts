@@ -1,5 +1,5 @@
-import { WeatherWeeklyItem, WeatherDailyItem } from '.';
-import { Locales, TimeUnit, TemperatureUnit } from '../enums';
+import { WeatherDailyItem, WeatherWeeklyItem } from '.';
+import { Locales, TemperatureUnit, TimeUnit } from '../enums';
 
 export interface WeatherForecast {
   tempUnit?: TemperatureUnit;

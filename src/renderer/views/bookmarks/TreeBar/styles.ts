@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { opacity, icons } from '../../../../defaults';
+import { icons, opacity } from '../../../../defaults';
 import { centerImage } from '../../../mixins';
 
 export const Root = styled.div`

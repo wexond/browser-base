@@ -1,29 +1,32 @@
 import React from 'react';
 
 import {
-  Temperature,
-  InfoContainer,
-  TemperatureDeg,
-  TemperatureIcon,
-  ExtraInfoContainer,
+  ActionsContainer,
   ExtraInfo,
+  ExtraInfoContainer,
   ExtraInfoIcon,
   ExtraInfoText,
   ForecastContainer,
-  ActionsContainer,
+  InfoContainer,
+  Temperature,
+  TemperatureDeg,
+  TemperatureIcon,
 } from './styles';
 
-import ForecastItem from './ForecastItem';
-import store from '../../../store';
-import Slider from '../../../components/Slider';
-import { SliderType, ButtonType } from '../../../../enums';
+import { ButtonType, SliderType } from '../../../../enums';
+import { WeatherForecast, WeatherWeeklyItem } from '../../../../interfaces';
 import Button from '../../../components/Button';
 import * as Card from '../../../components/Card';
-import { WeatherForecast, WeatherWeeklyItem } from '../../../../interfaces';
-import {
-  formatDescription, formatTime, capitalizeWord, getDayIndex,
-} from '../../../../utils';
-import { opacity, icons, colors } from '../../../../defaults';
+import Slider from '../../../components/Slider';
+import ForecastItem from './ForecastItem';
+
+import { formatDescription } from '../../../../utils/weather-card';
+import { formatTime, getDayIndex } from '../../../../utils/time';
+import { capitalizeWord } from '../../../../utils/other';
+import { newtabStore } from '../../../newtab-store';
+import { opacity } from '../../../../defaults/opacity';
+import { icons } from '../../../../defaults/icons';
+import { colors } from '../../../../defaults/colors';
 
 export interface IProps {
   data: WeatherForecast;
@@ -42,25 +45,25 @@ export default class WeatherCard extends React.Component<IProps, IState> {
 
   public forecastContainer: HTMLDivElement;
 
-  onExpandButtonClick = () => {
+  public onExpandButtonClick = () => {
     const { forecastHeight } = this.state;
     const expanded = forecastHeight > 0;
 
     this.setState({
       forecastHeight: expanded ? 0 : this.forecastContainer.scrollHeight,
     });
-  };
+  }
 
-  onSliderChange = (index: any) => {
+  public onSliderChange = (index: any) => {
     this.setState({
       dailyForecastIndex: index,
     });
-  };
+  }
 
   public render() {
     const { data } = this.props;
     const { dailyForecastIndex, forecastHeight } = this.state;
-    const dictionary = store.dictionary;
+    const dictionary = newtabStore.dictionary;
 
     const expanded = forecastHeight > 0;
     const description = data && formatDescription(data, dailyForecastIndex);
@@ -87,12 +90,13 @@ export default class WeatherCard extends React.Component<IProps, IState> {
       <Card.Root>
         <Card.Header>
           <Card.Title large>
-            {(data && capitalizeWord(data.city)) || 'Weather info is unavailable'}
+            {(data && capitalizeWord(data.city)) ||
+              'Weather info is unavailable'}
           </Card.Title>
           <Card.SecondaryText>
             {data && description}
-            {!data
-              && 'Check your internet connection or your settings. City name is probably incorrect.'}
+            {!data &&
+              'Check your internet connection or your settings. City name is probably incorrect.'}
           </Card.SecondaryText>
         </Card.Header>
         {data && (
@@ -130,9 +134,14 @@ export default class WeatherCard extends React.Component<IProps, IState> {
               style={sliderStyle}
               showTicksLabels
             />
-            <ForecastContainer innerRef={r => (this.forecastContainer = r)} height={forecastHeight}>
+            <ForecastContainer
+              innerRef={r => (this.forecastContainer = r)}
+              height={forecastHeight}
+            >
               {data.weekly.map((day: WeatherWeeklyItem, key: any) => {
-                const dayName = store.dictionary.dateAndTime.days[getDayIndex(day.date)];
+                const dayName =
+                  newtabStore.dictionary.dateAndTime.days[getDayIndex(day.date)
+];
                 return <ForecastItem data={day} dayName={dayName} key={key} />;
               })}
             </ForecastContainer>
@@ -141,10 +150,10 @@ export default class WeatherCard extends React.Component<IProps, IState> {
                 foreground={colors.blue['500']}
                 type={ButtonType.Text}
                 onClick={this.onExpandButtonClick}
-                style={Object.assign({}, Card.ActionButtonStyle, { marginLeft: 0 })}
+                style={{ ...Card.ActionButtonStyle, marginLeft: 0 }}
               >
-                {(!expanded && dictionary.general.expand.toUpperCase())
-                  || dictionary.general.collapse.toUpperCase()}
+                {(!expanded && dictionary.general.expand.toUpperCase()) ||
+                  dictionary.general.collapse.toUpperCase()}
               </Button>
             </ActionsContainer>
           </Card.Content>

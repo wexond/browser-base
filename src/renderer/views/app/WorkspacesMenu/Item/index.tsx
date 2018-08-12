@@ -1,11 +1,15 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
+import { Workspace } from '../../../../../interfaces';
 import {
-  Root, IconsContainer, Icon, Label, DeleteIcon, Input,
-} from './styles';
-import { Workspace } from '../../../../../models';
+  getPageById,
+  getWorkspaceTabs,
+  removeWorkspace,
+  selectWorkspace,
+} from '../../../../../utils';
 import store from '../../../../store';
+import { DeleteIcon, Icon, IconsContainer, Input, Label, Root } from './styles';
 
 @observer
 export default class extends React.Component<{ workspace: Workspace }, {}> {
@@ -21,9 +25,8 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
 
   public onClick = () => {
     const { workspace } = this.props;
-
-    store.selectedWorkspace = workspace.id;
-  };
+    selectWorkspace(workspace.id);
+  }
 
   public onDelete = (e?: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -41,34 +44,37 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
 
       const altWorkspace = workspaces[altWorkspaceIndex];
 
-      for (const tab of workspace.tabs) {
-        store.pages.splice(store.pages.indexOf(store.getPageById(tab.id)), 1);
+      const tabs = getWorkspaceTabs(workspace.id);
+
+      for (const tab of tabs) {
+        store.pages.splice(store.pages.indexOf(getPageById(tab.id)), 1);
+        store.tabs.splice(store.tabs.indexOf(tab), 1);
       }
 
-      store.selectedWorkspace = altWorkspace.id;
-      workspace.remove();
+      selectWorkspace(altWorkspace.id);
+      removeWorkspace(workspace.id);
     }
-  };
+  }
 
   public onLabelClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     this.toggleInput(true);
-  };
+  }
 
   public onInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
     e.stopPropagation();
-  };
+  }
 
   public onInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     e.stopPropagation();
     this.toggleInput(false);
-  };
+  }
 
   public onInputKeypress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       this.toggleInput(false);
     }
-  };
+  }
 
   public toggleInput = (flag: boolean) => {
     const { workspace } = this.props;
@@ -86,21 +92,23 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
     }
 
     this.setState({ inputVisible: flag });
-  };
+  }
 
   public render() {
     const { workspace } = this.props;
     const { inputVisible } = this.state;
     const { workspaces } = store;
 
-    const selected = store.selectedWorkspace === workspace.id;
-    const icons = workspace.getIcons();
+    const selected = store.currentWorkspace === workspace.id;
+    // const icons = workspace.getIcons();
 
     return (
       <Root onClick={this.onClick}>
-        {workspaces.length > 1 && <DeleteIcon className="delete-icon" onClick={this.onDelete} />}
+        {workspaces.length > 1 && (
+          <DeleteIcon className="delete-icon" onClick={this.onDelete} />
+        )}
         <IconsContainer selected={selected}>
-          {icons != null && icons.map((data: any, key: any) => <Icon key={key} src={data} />)}
+          {/* {icons != null && icons.map((data: any, key: any) => <Icon key={key} src={data} />)} */}
         </IconsContainer>
         <Label onClick={this.onLabelClick}>{workspace.name}</Label>
         <Input
