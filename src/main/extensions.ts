@@ -9,8 +9,6 @@ import { getPath } from '../utils/paths';
 
 declare const global: Global;
 
-const extensionsPath = getPath('extensions');
-
 export const startBackgroundPage = (manifest: Manifest) => {
   if (manifest.background) {
     const { background, extensionId } = manifest;
@@ -64,6 +62,7 @@ export const startBackgroundPage = (manifest: Manifest) => {
 };
 
 export const loadExtensions = () => {
+  const extensionsPath = getPath('extensions');
   const files = readdirSync(extensionsPath);
 
   for (const dir of files) {
