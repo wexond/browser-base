@@ -56,7 +56,7 @@ class App extends React.Component {
   }
 
   public onWindowMouseDown = (e: MouseEvent) => {
-    store.pageMenu.toggle(false);
+    store.pageMenuVisible = false;
   }
 
   public onWindowMouseUp = (e: MouseEvent) => {
@@ -225,6 +225,7 @@ class App extends React.Component {
             left: store.pageMenuData.x,
             top: store.pageMenuData.y,
           }}
+          visible={store.pageMenuVisible}
         >
           <ContextMenu.Item
             visible={imageAndURLLink}

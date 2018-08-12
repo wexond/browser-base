@@ -203,9 +203,7 @@ export default class extends React.Component<{ page: Page }, {}> {
     e: Electron.Event,
     params: Electron.ContextMenuParams,
   ) => {
-    requestAnimationFrame(() => {
-      store.pageMenu.toggle(true);
-    });
+    store.pageMenuVisible = true;
 
     store.webviewContextMenuParams = params;
 
