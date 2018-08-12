@@ -19,7 +19,7 @@ import {
 } from '../utils';
 import ContextMenu from './components/ContextMenu';
 import BookmarksDialog from './views/app/BookmarksDialog';
-import KeyRecordingDialog from './views/keys-manager/KeyRecordingDialog';
+import KeyRecordingDialog from './views/keyboard-shortcuts/KeyRecordingDialog';
 
 const dictionary = require('../../static/dictionaries/english-en.json');
 
