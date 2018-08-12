@@ -53,6 +53,6 @@ export const Commands: any = {
     store.menu.visible = false;
     store.menu.selectedItem = null;
     store.bookmarkDialogVisible = false;
-    store.pageMenu.toggle(false);
+    store.pageMenuVisible = false;
   },
 };

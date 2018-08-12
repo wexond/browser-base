@@ -132,6 +132,9 @@ class Store {
   };
 
   @observable
+  public pageMenuVisible: boolean = false;
+
+  @observable
   public dictionary: any = dictionary;
 
   /** Components refs */
