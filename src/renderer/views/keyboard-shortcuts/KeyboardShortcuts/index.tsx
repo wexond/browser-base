@@ -6,18 +6,23 @@ import { PageContent } from '../../app/Menu/styles';
 import Chip from '../Chip';
 import KeyRecordingDialog from '../KeyRecordingDialog';
 import {
-  Container, Table, HeadRow, HeadItem, BodyRow, BodyItem,
+  Container,
+  Table,
+  HeadRow,
+  HeadItem,
+  BodyRow,
+  BodyItem,
 } from './styles';
 import { KeyBinding } from '../../../../interfaces';
 
 @observer
-export default class KeyManager extends React.Component {
+export default class KeyboardShortcuts extends React.Component {
   public onChipClick = (keyBinding: KeyBinding) => {
     store.keyRecordingDialogVisible = true;
     store.keyRecordingDialog.input.value = keyBinding.key;
     store.keyRecordingDialog.combination = null;
     store.selectedKeyBinding = keyBinding;
-  };
+  }
 
   public render() {
     return (

@@ -6,9 +6,9 @@ import store from '../../../store';
 import Bookmarks from '../../bookmarks/Bookmarks';
 import History from '../../history/History';
 import About from '../../about/About';
-import KeyManager from '../../keys-manager/KeyManager';
 import { deleteHistoryItem, addFolder } from '../../../../utils';
 import { icons } from '../../../../defaults';
+import KeyboardShortcuts from '../../keyboard-shortcuts/KeyboardShortcuts';
 
 const historyActions = {
   selectAll: () => {
@@ -95,7 +95,11 @@ export default class GlobalMenu extends React.Component {
           icon={icons.settings}
           searchVisible
         />
-        <Menu.Item title="Key manager" icon={icons.keyManager} searchVisible />
+        <Menu.Item
+          title="Keyboard shortcuts"
+          icon={icons.keyboardShortcuts}
+          searchVisible
+        />
         <Menu.Item
           title={dictionary.extensions.title}
           icon={icons.extensions}
@@ -110,7 +114,7 @@ export default class GlobalMenu extends React.Component {
         <History />
         <Bookmarks />
         <div />
-        <KeyManager />
+        <KeyboardShortcuts />
         <div />
         <About />
       </Menu>
