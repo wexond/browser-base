@@ -3,11 +3,12 @@ import { resolve, join } from 'path';
 import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';
 
-import { Global } from './interfaces';
-import { runExtensionsService } from './extensions-service';
+import { getPath } from '../utils/paths';
 import { runAutoUpdaterService } from './auto-updater';
+import { runExtensionsService } from './extensions-service';
+import { Global } from './interfaces';
 import { createWindow } from './window';
-import { getPath } from '../utils/other';
+import { registerProtocols } from './protocols';
 
 const defaultKeyBindings = require('../../static/defaults/key-bindings.json');
 
@@ -64,6 +65,7 @@ app.on('window-all-closed', () => {
 
 runAutoUpdaterService(mainWindow);
 runExtensionsService(mainWindow);
+registerProtocols();
 
 // Electron live reload
 if (process.env.ENV === 'dev') {

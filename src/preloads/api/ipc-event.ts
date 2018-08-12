@@ -16,13 +16,13 @@ export default class IpcEvent {
     this.emit = this.emit.bind(this);
   }
 
-  emit(e: Electron.IpcMessageEvent, ...args: any[]) {
+  public emit(e: Electron.IpcMessageEvent, ...args: any[]) {
     this.callbacks.forEach(callback => {
       callback(...args);
     });
   }
 
-  addListener(callback: Function) {
+  public addListener(callback: Function) {
     this.callbacks.push(callback);
 
     if (!this.listener) {
@@ -31,11 +31,14 @@ export default class IpcEvent {
     }
   }
 
-  removeListener(callback: Function) {
+  public removeListener(callback: Function) {
     this.callbacks = this.callbacks.filter(x => x !== callback);
 
     if (this.callbacks.length === 0) {
-      ipcRenderer.removeListener(`api-emit-event-${this.scope}-${this.name}`, this.emit);
+      ipcRenderer.removeListener(
+        `api-emit-event-${this.scope}-${this.name}`,
+        this.emit,
+      );
       this.listener = false;
     }
   }

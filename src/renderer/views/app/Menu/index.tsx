@@ -1,10 +1,18 @@
-import React from 'react';
 import { observer } from 'mobx-react';
-import {
-  Container, Title, Header, Dark, Menu, Content, Search, Input, SearchIcon,
-} from './styles';
-import Item from './Item';
+import React from 'react';
 import store from '../../../store';
+import Item from './Item';
+import {
+  Container,
+  Content,
+  Dark,
+  Header,
+  Input,
+  Menu,
+  Search,
+  SearchIcon,
+  Title,
+} from './styles';
 
 interface Props {
   children?: any;
@@ -22,17 +30,7 @@ export default class extends React.Component<Props, {}> {
       store.menu.hide();
       store.menu.searchText = '';
     });
-  };
-
-  private onItemClick = (e: React.MouseEvent<HTMLDivElement>, item: Item) => {
-    if (item) {
-      store.menu.selectedItem = item.props.id;
-    }
-  };
-
-  private onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    store.menu.searchText = e.currentTarget.value;
-  };
+  }
 
   public render() {
     const { title, children } = this.props;
@@ -63,7 +61,8 @@ export default class extends React.Component<Props, {}> {
                   <div
                     style={{
                       opacity: store.menu.selectedItem === id2 - 1 ? 1 : 0,
-                      pointerEvents: store.menu.selectedItem === id2 - 1 ? 'auto' : 'none',
+                      pointerEvents:
+                        store.menu.selectedItem === id2 - 1 ? 'auto' : 'none',
                       position: 'absolute',
                       top: 0,
                       width: '100%',
@@ -80,13 +79,13 @@ export default class extends React.Component<Props, {}> {
           </Content>
           <Menu>
             <Header>
-              {(selectedItem
-                && selectedItem.props.searchVisible && (
+              {(selectedItem &&
+                selectedItem.props.searchVisible && (
                   <Search>
                     <SearchIcon />
                     <Input placeholder="Search" onInput={this.onInput} />
                   </Search>
-              )) || <Title>{title}</Title>}
+                )) || <Title>{title}</Title>}
             </Header>
 
             {React.Children.map(children, (el: React.ReactElement<any>) => {
@@ -105,5 +104,15 @@ export default class extends React.Component<Props, {}> {
         <Dark onClick={this.onDarkClick} visible={store.menu.visible} />
       </React.Fragment>
     );
+  }
+
+  private onItemClick = (e: React.MouseEvent<HTMLDivElement>, item: Item) => {
+    if (item) {
+      store.menu.selectedItem = item.props.id;
+    }
+  }
+
+  private onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    store.menu.searchText = e.currentTarget.value;
   }
 }

@@ -1,16 +1,17 @@
 import { ipcRenderer } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { injectGlobal } from 'styled-components';
 import { AppContainer } from 'react-hot-loader';
+import { injectGlobal } from 'styled-components';
 
-import store from '../../store';
-import App from './App';
-import { runExtensionsService } from '../../extensions-service';
-import { loadPlugins } from '../../../utils';
 import { FULLSCREEN, UPDATE_AVAILABLE, UPDATE_CHECK } from '../../../constants';
 import { fonts } from '../../../defaults';
+import { createWorkspace } from '../../../utils';
+import { runExtensionsService } from '../../extensions-service';
 import { body2 } from '../../mixins';
+import store from '../../store';
+import App from './App';
+import { loadPlugins } from '../../../utils/plugins';
 
 injectGlobal`
   @font-face {
@@ -33,7 +34,7 @@ injectGlobal`
     font-weight: 300;
     src: url(${fonts.robotoLight}) format('truetype');
   }
-  
+
   body {
     user-select: none;
     cursor: default;
@@ -97,18 +98,16 @@ const render = (AppComponent: any) => {
     document.getElementById('app'),
   );
 };
-
 (async function setup() {
   await loadPlugins();
   runExtensionsService();
 
   render(App);
+
+  createWorkspace();
 })();
 
-// react-hot-loader
+// React-hot-loader
 if ((module as any).hot) {
-  (module as any).hot.accept('./App', () => {
-    // eslint-disable-next-line
-    render(require('./App'));
-  });
+  (module as any).hot.accept();
 }

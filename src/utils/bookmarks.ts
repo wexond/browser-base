@@ -1,3 +1,4 @@
+import { getSelectedTab } from '.';
 import database from '../database';
 import { BookmarkItem } from '../interfaces';
 import store from '../renderer/store';
@@ -6,7 +7,9 @@ export const getBookmarkFolderPath = (parent: number) => {
   const parentFolder = store.bookmarks.find(x => x.id === parent);
   let path: BookmarkItem[] = [];
 
-  if (parentFolder == null) return [];
+  if (parentFolder == null) {
+    return [];
+  }
 
   if (parentFolder.parent !== -1) {
     path = path.concat(getBookmarkFolderPath(parentFolder.parent));
@@ -48,7 +51,7 @@ export const removeItem = async (id: number, type: string) => {
   const item = store.bookmarks.find(x => x.id === id);
   store.bookmarks.splice(store.bookmarks.indexOf(item), 1);
 
-  const selectedTab = store.getSelectedTab();
+  const selectedTab = getSelectedTab();
 
   if (store.isBookmarked && selectedTab.url === item.url) {
     store.isBookmarked = false;
@@ -57,4 +60,5 @@ export const removeItem = async (id: number, type: string) => {
   await database.bookmarks.delete(id);
 };
 
-export const getBookmarkFolders = () => store.bookmarks.filter(el => el.type === 'folder');
+export const getBookmarkFolders = () =>
+  store.bookmarks.filter(el => el.type === 'folder');

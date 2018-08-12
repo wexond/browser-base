@@ -1,14 +1,21 @@
+import { remote } from 'electron';
 import { observer } from 'mobx-react';
 import { resolve } from 'path';
 import React from 'react';
-import { remote } from 'electron';
 
-import StyledPage from './styles';
-import store from '../../../store';
-import database from '../../../../database';
 import { BASE_PATH } from '../../../../constants';
-import { Page, Tab } from '../../../../models';
+import database from '../../../../database';
 import { PageMenuMode } from '../../../../enums';
+import { Tab } from '../../../../models';
+import {
+  createTab,
+  getCurrentWorkspace,
+  getIpcTab,
+  getTabById,
+} from '../../../../utils';
+import store from '../../../store';
+import StyledPage from './styles';
+import { Page } from '../../../../interfaces';
 
 @observer
 export default class extends React.Component<{ page: Page }, {}> {
@@ -27,7 +34,7 @@ export default class extends React.Component<{ page: Page }, {}> {
   public componentDidMount() {
     const { page } = this.props;
     const { id } = page;
-    const tab = store.getTabById(id);
+    const tab = getTabById(id);
 
     this.tab = tab;
 
@@ -35,6 +42,7 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.addWebviewListener('did-start-loading', this.onDidStartLoading);
     this.addWebviewListener('page-title-updated', this.onPageTitleUpdated);
     this.addWebviewListener('load-commit', this.onLoadCommit);
+    this.webview.addEventListener('load-commit', this.onceLoadCommit);
     this.addWebviewListener('page-favicon-updated', this.onPageFaviconUpdated);
     this.addWebviewListener('dom-ready', this.onDomReady);
     this.addWebviewListener('enter-html-full-screen', this.onFullscreenEnter);
@@ -43,26 +51,6 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.addWebviewListener('did-navigate', this.onDidNavigate);
     this.addWebviewListener('will-navigate', this.onWillNavigate);
     this.addWebviewListener('ipc-message', this.onIpcMessage);
-
-    // Custom event: fires when webview URL changes.
-    this.onURLChange = setInterval(() => {
-      const url = this.webview.getURL();
-      if (url !== tab.url) {
-        this.tab.isNew = false;
-        this.tab.url = url;
-        this.emitEvent(
-          'tabs',
-          'onUpdated',
-          this.tab.id,
-          {
-            url,
-          },
-          this.tab.getIpcTab(),
-        );
-        this.updateData();
-        store.isBookmarked = !!store.bookmarks.find(x => x.url === url);
-      }
-    }, 10);
   }
 
   public componentWillUnmount() {
@@ -70,9 +58,36 @@ export default class extends React.Component<{ page: Page }, {}> {
       this.webview.removeEventListener(listener.name, listener.callback);
     }
 
+    this.listeners = [];
+
     clearInterval(this.onURLChange);
 
     store.isFullscreen = false;
+  }
+
+  public onceLoadCommit = () => {
+    // Custom event: fires when webview URL changes.
+    this.onURLChange = setInterval(() => {
+      if (this.webview.getWebContents()) {
+        const url = this.webview.getURL();
+        if (url !== this.tab.url) {
+          this.tab.url = url;
+          this.emitEvent(
+            'tabs',
+            'onUpdated',
+            this.tab.id,
+            {
+              url,
+            },
+            getIpcTab(this.tab),
+          );
+          this.updateData();
+          store.isBookmarked = !!store.bookmarks.find(x => x.url === url);
+        }
+      }
+    }, 30);
+
+    this.webview.removeEventListener('load-commit', this.onceLoadCommit);
   }
 
   public addWebviewListener(name: string, callback: any) {
@@ -81,21 +96,27 @@ export default class extends React.Component<{ page: Page }, {}> {
   }
 
   public emitEvent = (scope: string, name: string, ...data: any[]) => {
-    this.webview.getWebContents().send(`api-emit-event-${scope}-${name}`, ...data);
+    this.webview
+      .getWebContents()
+      .send(`api-emit-event-${scope}-${name}`, ...data);
 
     const backgroundPages = remote.getGlobal('backgroundPages');
 
     Object.keys(backgroundPages).forEach(key => {
-      const webContents = remote.webContents.fromId(backgroundPages[key].webContentsId);
+      const webContents = remote.webContents.fromId(
+        backgroundPages[key].webContentsId,
+      );
       webContents.send(`api-emit-event-${scope}-${name}`, ...data);
     });
-  };
+  }
 
   public onIpcMessage = (e: Electron.IpcMessageEvent, args: any[]) => {
     if (e.channel === 'api-tabs-getCurrent') {
-      this.webview.getWebContents().send('api-tabs-getCurrent', this.tab.getIpcTab());
+      this.webview
+        .getWebContents()
+        .send('api-tabs-getCurrent', getIpcTab(this.tab));
     }
-  };
+  }
 
   public onWillNavigate = (e: Electron.WillNavigateEvent) => {
     this.emitEvent('webNavigation', 'onBeforeNavigate', {
@@ -106,7 +127,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       processId: -1,
       parentFrameId: -1,
     });
-  };
+  }
 
   public onDidStartLoading = () => {
     this.emitEvent('webNavigation', 'onCommitted', {
@@ -124,9 +145,9 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         status: 'loading',
       },
-      this.tab.getIpcTab(),
+      getIpcTab(this.tab),
     );
-  };
+  }
 
   public onDidNavigate = (e: Electron.DidNavigateEvent) => {
     this.emitEvent('webNavigation', 'onCompleted', {
@@ -144,9 +165,9 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         status: 'complete',
       },
-      this.tab.getIpcTab(),
+      getIpcTab(this.tab),
     );
-  };
+  }
 
   public onDomReady = () => {
     this.webview.getWebContents().on('context-menu', this.onContextMenu);
@@ -157,15 +178,15 @@ export default class extends React.Component<{ page: Page }, {}> {
       timeStamp: Date.now(),
       processId: this.webview.getWebContents().getOSProcessId(),
     });
-  };
+  }
 
   public onNewWindow = (e: Electron.NewWindowEvent) => {
     let tab: Tab;
 
     if (e.disposition === 'new-window' || e.disposition === 'foreground-tab') {
-      tab = store.getCurrentWorkspace().addTab({ url: e.url, active: true });
+      tab = createTab({ url: e.url, active: true });
     } else if (e.disposition === 'background-tab') {
-      tab = store.getCurrentWorkspace().addTab({ url: e.url, active: false });
+      tab = createTab({ url: e.url, active: false });
     }
 
     this.emitEvent('webNavigation', 'onCreatedNavigationTarget', {
@@ -176,12 +197,13 @@ export default class extends React.Component<{ page: Page }, {}> {
       url: e.url,
       tabId: tab,
     });
-  };
+  }
 
-  public onContextMenu = (e: Electron.Event, params: Electron.ContextMenuParams) => {
-    requestAnimationFrame(() => {
-      store.pageMenu.toggle(true);
-    });
+  public onContextMenu = (
+    e: Electron.Event,
+    params: Electron.ContextMenuParams,
+  ) => {
+    store.pageMenuVisible = true;
 
     store.webviewContextMenuParams = params;
 
@@ -225,14 +247,17 @@ export default class extends React.Component<{ page: Page }, {}> {
     // Set the new position.
     store.pageMenuData.x = left;
     store.pageMenuData.y = top;
-  };
+  }
 
   public onDidStopLoading = () => {
     store.refreshNavigationState();
     this.tab.loading = false;
-  };
+  }
 
-  public onLoadCommit = async ({ url, isMainFrame }: Electron.LoadCommitEvent) => {
+  public onLoadCommit = async ({
+    url,
+    isMainFrame,
+  }: Electron.LoadCommitEvent) => {
     this.tab.loading = true;
 
     if (url !== this.lastURL && isMainFrame && !url.startsWith('wexond://')) {
@@ -249,9 +274,11 @@ export default class extends React.Component<{ page: Page }, {}> {
 
       this.lastURL = url;
     }
-  };
+  }
 
-  public onPageFaviconUpdated = ({ favicons }: Electron.PageFaviconUpdatedEvent) => {
+  public onPageFaviconUpdated = ({
+    favicons,
+  }: Electron.PageFaviconUpdatedEvent) => {
     const request = new XMLHttpRequest();
     request.onreadystatechange = async () => {
       if (request.readyState === 4) {
@@ -272,12 +299,12 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         favIconUrl: favicons[0],
       },
-      this.tab.getIpcTab(),
+      getIpcTab(this.tab),
     );
 
     request.open('GET', favicons[0], true);
     request.send(null);
-  };
+  }
 
   public updateData = () => {
     if (this.lastURL === this.tab.url) {
@@ -294,12 +321,12 @@ export default class extends React.Component<{ page: Page }, {}> {
         });
       }
     }
-  };
+  }
 
   public onPageTitleUpdated = ({ title }: Electron.PageTitleUpdatedEvent) => {
     const { page } = this.props;
     const { id } = page;
-    const tab = store.getTabById(id);
+    const tab = getTabById(id);
 
     tab.title = title;
     this.updateData();
@@ -311,24 +338,24 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         title,
       },
-      this.tab.getIpcTab(),
+      getIpcTab(this.tab),
     );
-  };
+  }
 
   public onFullscreenEnter = () => {
     store.isHTMLFullscreen = true;
-  };
+  }
 
   public onFullscreenLeave = () => {
     store.isHTMLFullscreen = false;
-  };
+  }
 
   public render() {
     const { page } = this.props;
     const { url, id } = page;
 
     return (
-      <StyledPage selected={store.getCurrentWorkspace().selectedTab === id}>
+      <StyledPage selected={getCurrentWorkspace().selectedTab === id}>
         <webview
           src={url}
           style={{

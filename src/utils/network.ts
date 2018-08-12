@@ -1,5 +1,5 @@
-import https from 'https';
 import http from 'http';
+import https from 'https';
 import { parse } from 'url';
 
 export const requestURL = (url: string) =>
@@ -8,7 +8,9 @@ export const requestURL = (url: string) =>
 
     let { request } = http;
 
-    if (options.protocol === 'https:') request = https.request;
+    if (options.protocol === 'https:') {
+      request = https.request;
+    }
 
     const req = request(options, res => {
       let data = '';

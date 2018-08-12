@@ -1,10 +1,10 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
+import { getHistoryItems, getHistorySections } from '../../../../utils';
 import store from '../../../store';
-import Section from '../Section';
-import { getHistorySections, getHistoryItems } from '../../../../utils';
 import { PageContent, PageContainer } from '../../app/Menu/styles';
+import Section from '../Section';
 
 @observer
 export default class History extends React.Component {

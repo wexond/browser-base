@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
+import { EASE_FUNCTION } from '../../../constants/design';
 import { opacity } from '../../../defaults/opacity';
 import { Align, SliderType } from '../../../enums';
-import { EASE_FUNCTION } from '../../../constants';
 import { center, robotoRegular } from '../../mixins';
 
 export const StyledSlider = styled.div`
@@ -40,7 +40,9 @@ export const ActiveTrack = styled(Track)`
 
   ${({ thumbAnimation, type }: TrackProps) => css`
     opacity: ${thumbAnimation ? 0 : 1};
-    transition: ${type === SliderType.Discrete ? `0.15s width ${EASE_FUNCTION}` : 'unset'};
+    transition: ${type === SliderType.Discrete
+      ? `0.15s width ${EASE_FUNCTION}`
+      : 'unset'};
   `};
 `;
 
@@ -54,7 +56,9 @@ export const ThumbContainer = styled.div`
   cursor: pointer;
 
   ${({ type }: { type: SliderType }) => css`
-    transition: ${type === SliderType.Discrete ? `0.15s left ${EASE_FUNCTION}` : 'unset'};
+    transition: ${type === SliderType.Discrete
+      ? `0.15s left ${EASE_FUNCTION}`
+      : 'unset'};
   `};
 
   &:hover .thumb-hover {

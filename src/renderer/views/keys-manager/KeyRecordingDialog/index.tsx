@@ -6,9 +6,7 @@ import store from '../../../store';
 import Button from '../../../components/Button';
 import { colors, Commands } from '../../../../defaults';
 import { ButtonType } from '../../../../enums';
-import {
-  Root, Title, ButtonsContainer, Content, KeyInput,
-} from './styles';
+import { Root, Title, ButtonsContainer, Content, KeyInput } from './styles';
 import { KeyBinding } from '../../../../interfaces';
 
 @observer
@@ -27,11 +25,11 @@ export default class KeyRecordingDialog extends React.Component {
     e.preventDefault();
 
     if (
-      e.key !== 'Control'
-      && e.key !== 'Alt'
-      && e.key !== 'Shift'
-      && e.key !== 'Alt'
-      && e.key !== 'Meta'
+      e.key !== 'Control' &&
+      e.key !== 'Alt' &&
+      e.key !== 'Shift' &&
+      e.key !== 'Alt' &&
+      e.key !== 'Meta'
     ) {
       this.combination = {
         key: e.key,
@@ -43,7 +41,7 @@ export default class KeyRecordingDialog extends React.Component {
 
       e.currentTarget.value = this.getCombination();
     }
-  };
+  }
 
   public getCombination = () => {
     let text = '';
@@ -55,11 +53,11 @@ export default class KeyRecordingDialog extends React.Component {
     if (this.combination.key !== '') text += this.combination.key;
 
     return text;
-  };
+  }
 
   public onCancelClick = () => {
     store.keyRecordingDialogVisible = false;
-  };
+  }
 
   public onOKClick = () => {
     if (this.combination != null) {
@@ -73,14 +71,17 @@ export default class KeyRecordingDialog extends React.Component {
     }
 
     store.keyRecordingDialogVisible = false;
-  };
+  }
 
   public render() {
     return (
       <Root visible={store.keyRecordingDialogVisible}>
         <Title>Recording key combination</Title>
         <Content>
-          <KeyInput innerRef={r => (this.input = r)} onKeyDown={this.onKeyDown} />
+          <KeyInput
+            innerRef={r => (this.input = r)}
+            onKeyDown={this.onKeyDown}
+          />
         </Content>
         <ButtonsContainer>
           <Button
@@ -90,7 +91,11 @@ export default class KeyRecordingDialog extends React.Component {
           >
             CANCEL
           </Button>
-          <Button type={ButtonType.Text} foreground={colors.blue['500']} onClick={this.onOKClick}>
+          <Button
+            type={ButtonType.Text}
+            foreground={colors.blue['500']}
+            onClick={this.onOKClick}
+          >
             OK
           </Button>
         </ButtonsContainer>

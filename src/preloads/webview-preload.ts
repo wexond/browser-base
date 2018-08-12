@@ -1,10 +1,23 @@
 import { remote } from 'electron';
-import { runInThisContext } from 'vm';
 import fs from 'fs';
 import path from 'path';
+import { runInThisContext } from 'vm';
 
-import { getAPI } from './api';
 import { Manifest } from '../interfaces/manifest';
+import { getAPI } from './api';
+import { loadContent } from './load-content';
+
+if (
+  window.location.href.startsWith('wexond://newtab') ||
+  window.location.href.startsWith('http://localhost:8080/newtab.html')
+) {
+  loadContent('newtab');
+} else if (
+  window.location.href.startsWith('wexond://test-field') ||
+  window.location.href.startsWith('http://localhost:8080/test-field.html')
+) {
+  loadContent('testField');
+}
 
 const matchesPattern = (pattern: string) => {
   if (pattern === '<all_urls>') {
@@ -95,7 +108,10 @@ Object.keys(extensions).forEach(key => {
   if (manifest.content_scripts) {
     const readArrayOfFiles = (relativePath: string) => ({
       url: `wexond-extension://${manifest.extensionId}/${relativePath}`,
-      code: fs.readFileSync(path.join(manifest.srcDirectory, relativePath), 'utf8'),
+      code: fs.readFileSync(
+        path.join(manifest.srcDirectory, relativePath),
+        'utf8',
+      ),
     });
 
     try {

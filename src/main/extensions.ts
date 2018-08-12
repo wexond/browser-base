@@ -1,10 +1,11 @@
-import { readFileSync, statSync, readdirSync } from 'fs';
-import { resolve, format } from 'url';
 import { webContents } from 'electron';
+import { readdirSync, readFileSync, statSync } from 'fs';
+import { format, resolve } from 'url';
 
 import { Manifest } from '../interfaces';
-import { makeId, getPath } from '../utils/other';
+import { makeId } from '../utils/other';
 import { Global } from './interfaces';
+import { getPath } from '../utils/paths';
 
 declare const global: Global;
 
@@ -26,7 +27,9 @@ export const startBackgroundPage = (manifest: Manifest) => {
       name = 'generated.html';
       html = Buffer.from(
         `<html>
-          <body>${scripts.map(script => `<script src="${script}"></script>`).join('')}
+          <body>${scripts
+            .map(script => `<script src="${script}"></script>`)
+            .join('')}
           </body>
         </html>`,
         'utf8',
@@ -41,7 +44,11 @@ export const startBackgroundPage = (manifest: Manifest) => {
       preload: resolve(__dirname, 'build/background-page-preload.js'),
     });
 
-    global.backgroundPages[extensionId] = { html, name, webContentsId: contents.id };
+    global.backgroundPages[extensionId] = {
+      html,
+      name,
+      webContentsId: contents.id,
+    };
 
     // contents.openDevTools({ mode: 'detach' });
 
