@@ -10,13 +10,14 @@ import {
   TemperatureUnit,
   TimeUnit,
 } from '../../../../enums';
-import { getNews, getWeather } from '../../../../utils';
 import Preloader from '../../../components/Preloader';
-import store from '../../../store';
-import { Column, Content, Credits, StyledApp } from './styles';
+import { Column, Content, StyledApp } from './styles';
+import { newtabStore } from '../../../newtab-store';
+import { getWeather } from '../../../../utils/weather';
+import { getNews } from '../../../../utils/news';
 
 @observer
-export default class Newtab extends React.Component<{ visible: boolean }, {}> {
+export default class App extends React.Component<{ visible: boolean }, {}> {
   public componentDidMount() {
     window.addEventListener('resize', this.onResize);
     this.loadData();
@@ -31,7 +32,7 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
       columns = this.getColumns(2);
     }
 
-    store.newsColumns = columns;
+    newtabStore.newsColumns = columns;
   }
 
   public async loadData() {
@@ -42,15 +43,15 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
       TimeUnit.TwentyFourHours,
     );
 
-    store.weatherForecast = weatherData;
-    store.newsData = await getNews(Countries.us);
+    newtabStore.weatherForecast = weatherData;
+    newtabStore.newsData = await getNews(Countries.us);
 
     this.onResize();
-    store.newTabContentVisible = true;
+    newtabStore.newTabContentVisible = true;
   }
 
   public getColumns = (columnsCount: number) => {
-    const { newsData } = store;
+    const { newsData } = newtabStore;
     const columns = [];
     const itemsPerCol = Math.floor(newsData.length / columnsCount);
 
@@ -76,8 +77,7 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
   }
 
   public render() {
-    const { visible } = this.props;
-    const { weatherForecast, newTabContentVisible, newsColumns } = store;
+    const { weatherForecast, newTabContentVisible, newsColumns } = newtabStore;
 
     const preloaderStyle = {
       position: 'fixed',
@@ -87,7 +87,7 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
     };
 
     return (
-      <StyledApp visible={visible}>
+      <StyledApp>
         {!newTabContentVisible && <Preloader style={preloaderStyle} />}
         <Content visible={newTabContentVisible}>
           <Column>
@@ -103,16 +103,6 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
             <Column>
               <News data={newsColumns[2]} />
             </Column>
-          )}
-          {!navigator.onLine && (
-            <Credits>
-              APIs powered by{' '}
-              <a href="https://openweathermap.org/">OpenWeatherMap</a> and
-              <a href="https://newsapi.org/"> News API</a>
-              <br />
-              Icons for temporary usage created by&nbsp;
-              <a href="https://www.uplabs.com/kevinttob">Kevin Aguilar</a>
-            </Credits>
           )}
         </Content>
       </StyledApp>

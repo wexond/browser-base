@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { opacity } from '../../../../../defaults';
+import { opacity } from '../../../../../defaults/opacity';
 import { body2, centerImage } from '../../../../mixins';
 
 export const StyledForecastItem = styled.div`

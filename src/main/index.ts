@@ -3,11 +3,12 @@ import { existsSync, mkdirSync } from 'fs';
 import { homedir, platform } from 'os';
 import { join, resolve } from 'path';
 
-import { getPath } from '../utils/other';
+import { getPath } from '../utils/paths';
 import { runAutoUpdaterService } from './auto-updater';
 import { runExtensionsService } from './extensions-service';
 import { Global } from './interfaces';
 import { createWindow } from './window';
+import { registerProtocols } from './protocols';
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
@@ -50,6 +51,7 @@ app.on('window-all-closed', () => {
 
 runAutoUpdaterService(mainWindow);
 runExtensionsService(mainWindow);
+registerProtocols();
 
 // Electron live reload
 if (process.env.ENV === 'dev') {

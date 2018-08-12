@@ -6,7 +6,7 @@ import React from 'react';
 import { BASE_PATH } from '../../../../constants';
 import database from '../../../../database';
 import { PageMenuMode } from '../../../../enums';
-import { Page, Tab } from '../../../../models';
+import { Tab } from '../../../../models';
 import {
   createTab,
   getCurrentWorkspace,
@@ -15,6 +15,7 @@ import {
 } from '../../../../utils';
 import store from '../../../store';
 import StyledPage from './styles';
+import { Page } from '../../../../interfaces';
 
 @observer
 export default class extends React.Component<{ page: Page }, {}> {

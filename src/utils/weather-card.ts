@@ -1,9 +1,10 @@
-import { capitalizeEachWord, formatTime, getDayIndex } from '.';
 import { WeatherForecast } from '../interfaces';
-import store from '../renderer/store';
+import { capitalizeEachWord } from './other';
+import { getDayIndex, formatTime } from './time';
+import { newtabStore } from '../renderer/newtab-store';
 
 export const formatDescription = (forecast: WeatherForecast, index: number) => {
-  const dictionary = store.dictionary.dateAndTime;
+  const dictionary = newtabStore.dictionary.dateAndTime;
   const { timeUnit, daily } = forecast;
   const { description, date } = daily[index];
   const dayName = dictionary.daysShort[getDayIndex(date)];
