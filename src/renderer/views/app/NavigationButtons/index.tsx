@@ -22,7 +22,7 @@ export default class NavigationButtons extends React.Component {
 
   public render() {
     return (
-      <StyledContainer isFullscreen={store.isFullscreen}>
+      <StyledContainer>
         <Toolbar.Button
           disabled={!store.navigationState.canGoBack}
           size={24}

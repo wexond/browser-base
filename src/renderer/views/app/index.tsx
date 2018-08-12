@@ -46,6 +46,10 @@ injectGlobal`
     overflow: hidden;
   }
 
+  * {
+    box-sizing: border-box;
+  }
+
   @keyframes nersent-ui-preloader-rotate {
     100% {
       -webkit-transform: rotate(360deg);
@@ -99,6 +103,7 @@ const render = (AppComponent: any) => {
   runExtensionsService();
 
   render(App);
+})();
 
   createWorkspace();
 })();
