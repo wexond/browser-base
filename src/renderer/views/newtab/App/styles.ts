@@ -2,9 +2,9 @@ import styled, { css } from 'styled-components';
 
 export const StyledApp = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   overflow: auto;
-  background-color: white;
+  background-color: #f5f5f5;
   position: absolute;
   top: 0;
 `;
@@ -15,10 +15,7 @@ export const Content = styled.div`
   flex-flow: row;
   position: relative;
   padding-top: 24px;
-  background-color: #f5f5f5;
   flex-wrap: wrap;
-
-  opacity: ${({ visible }: { visible: boolean }) => (visible ? 1 : 0)};
 `;
 
 export const Column = styled.div`

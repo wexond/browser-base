@@ -3,11 +3,9 @@ const merge = require('webpack-merge');
 const { resolve } = require('path');
 const baseConfig = require('./webpack.config.base');
 
-const appConfig = merge.smart(baseConfig, {
+const config = merge.smart(baseConfig, {
   devtool: 'source-map',
-  target: 'electron-renderer',
   mode: 'production',
-
   output: {
     path: resolve(__dirname, 'build'),
     filename: '[name].js',
@@ -22,10 +20,6 @@ const appConfig = merge.smart(baseConfig, {
     ],
   },
 
-  entry: {
-    app: ['./src/renderer/views/app'],
-  },
-
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
@@ -33,21 +27,19 @@ const appConfig = merge.smart(baseConfig, {
   ],
 });
 
-const newTabConfig = merge.smart(baseConfig, {
-  target: 'web',
-  mode: 'production',
-
-  module: {
-    rules: [
-      {
-        test: /\.(png|gif|jpg|woff2|ttf|svg)$/,
-        use: ['url-loader'],
-      },
-    ],
-  },
+const appConfig = merge.smart(config, {
+  target: 'electron-renderer',
 
   entry: {
-    newtab: ['react-hot-loader/patch', './src/renderer/views/newtab'],
+    app: ['./src/renderer/views/app'],
+  },
+});
+
+const newTabConfig = merge.smart(config, {
+  target: 'web',
+
+  entry: {
+    newtab: ['./src/renderer/views/newtab'],
   },
 });
 
