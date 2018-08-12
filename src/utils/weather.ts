@@ -1,8 +1,13 @@
-import { weatherIcons, WeatherCodes } from '../defaults';
-import { getTimeInZone, requestURL, getTimeZoneOffset } from '.';
+import { WeatherCodes, weatherIcons } from '../defaults/weather-icons';
 import { Locales, TemperatureUnit, TimeUnit } from '../enums';
-import { WEATHER_API_KEY } from '../constants';
-import { WeatherDailyItem, WeatherWeeklyItem, WeatherForecast } from '../interfaces';
+import {
+  WeatherDailyItem,
+  WeatherForecast,
+  WeatherWeeklyItem,
+} from '../interfaces';
+import { getTimeInZone, getTimeZoneOffset } from './time-zone';
+import { requestURL } from './network';
+import { WEATHER_API_KEY } from '../constants/api-keys';
 
 const createDailyItem = (data: any, timeZoneOffset: number) => {
   const item: WeatherDailyItem = {
@@ -21,8 +26,7 @@ const getDaily = (current: any, weekly: any, timeZoneOffset: number) => {
   const list: WeatherDailyItem[] = [createDailyItem(current, timeZoneOffset)];
   const currentDate = new Date();
 
-  for (let i = 0; i < weekly.list.length; i++) {
-    const item = weekly.list[i];
+  for (const item of weekly.list) {
     const date = new Date(item.dt * 1000);
 
     if (date.getDate() === currentDate.getDate()) {
@@ -39,8 +43,7 @@ const getWeekly = (weekly: any, timeZoneOffset: number) => {
   const list: WeatherWeeklyItem[] = [];
   const currentDate = new Date();
 
-  for (let i = 0; i < weekly.list.length; i++) {
-    const item = weekly.list[i];
+  for (const item of weekly.list) {
     const date = new Date(item.dt * 1000);
 
     if (date.getDate() !== currentDate.getDate()) {
@@ -53,10 +56,10 @@ const getWeekly = (weekly: any, timeZoneOffset: number) => {
       const icon = item.weather[0].icon;
 
       if (
-        (lastItem == null || lastItemDay !== time.getDate())
-        && isDay
-        && hoursInZone >= 11
-        && hoursInZone <= 15
+        (lastItem == null || lastItemDay !== time.getDate()) &&
+        isDay &&
+        hoursInZone >= 11 &&
+        hoursInZone <= 15
       ) {
         const newItem: WeatherWeeklyItem = {
           dayTemp: temp,
@@ -66,10 +69,10 @@ const getWeekly = (weekly: any, timeZoneOffset: number) => {
 
         list.push(newItem);
       } else if (
-        lastItem
-        && lastItem.nightTemp == null
-        && !isDay
-        && (hoursInZone >= 23 || hoursInZone < 6)
+        lastItem &&
+        lastItem.nightTemp == null &&
+        !isDay &&
+        (hoursInZone >= 23 || hoursInZone < 6)
       ) {
         lastItem.nightTemp = temp;
       }
@@ -110,13 +113,13 @@ export const getWeather = async (
     const weeklyForecast = getWeekly(weekWeather, timeZoneOffset);
 
     const forecast: WeatherForecast = {
-      daily: dailyForecast,
-      weekly: weeklyForecast,
       windsUnit,
       timeUnit,
       tempUnit,
       lang,
       city,
+      daily: dailyForecast,
+      weekly: weeklyForecast,
     };
 
     return forecast;

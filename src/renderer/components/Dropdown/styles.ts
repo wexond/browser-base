@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
-import { opacity } from '../../../defaults/opacity';
 import { EASE_FUNCTION } from '../../../constants';
 import { icons } from '../../../defaults/icons';
-import { robotoRegular, centerImage, shadows } from '../../mixins';
+import { opacity } from '../../../defaults/opacity';
+import { centerImage, robotoRegular, shadows } from '../../mixins';
 
 export const Root = styled.div`
   display: inline-block;
@@ -47,7 +47,7 @@ export const Icon = styled.div`
 export const List = styled.div`
   width: 100%;
   position: absolute;
-  top: 100%;
+  top: calc(100% - 4px);
   left: 0;
   overflow-x: hidden;
   overflow-y: hidden;

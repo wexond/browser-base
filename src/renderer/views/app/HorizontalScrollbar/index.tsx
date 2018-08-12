@@ -1,18 +1,27 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { TweenLite, Expo } from 'gsap';
 
 import { Root, Thumb } from './styles';
-import { tabAnimations } from '../../../../../defaults';
-import { Tab } from '../../../../../models';
 
 interface Props {
-  scrollbar: any;
-  getTabs: () => HTMLDivElement;
+  getContainer: () => HTMLDivElement;
+  visible: boolean;
+}
+
+interface State {
+  visible: boolean;
+  thumbWidth: number;
+  thumbLeft: number;
 }
 
 @observer
-export default class Scrollbar extends React.Component<Props, {}> {
+export default class HorizontalScrollbar extends React.Component<Props, State> {
+  public state: State = {
+    visible: false,
+    thumbWidth: 0,
+    thumbLeft: 0,
+  };
+
   private scrollData = {
     dragging: false,
     mouseStartX: 0,
@@ -21,18 +30,18 @@ export default class Scrollbar extends React.Component<Props, {}> {
     maxScrollLeft: 0,
   };
 
+  private container: HTMLDivElement;
+
   private scrollInterval: any;
 
   private scrollTimeout: any;
 
   public componentDidMount() {
-    const { getTabs } = this.props;
-    const tabs = getTabs();
+    this.container = this.props.getContainer();
 
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
-
-    tabs.addEventListener('wheel', this.onWheel);
+    this.container.addEventListener('wheel', this.onWheel);
 
     this.resizeScrollbar();
   }
@@ -40,29 +49,32 @@ export default class Scrollbar extends React.Component<Props, {}> {
   public componentWillUnmount() {
     window.removeEventListener('mouseup', this.onMouseUp);
     window.removeEventListener('mousemove', this.onMouseMove);
-    window.removeEventListener('wheel', this.onWheel);
+    this.container.removeEventListener('wheel', this.onWheel);
   }
 
   public resizeScrollbar = () => {
-    const { scrollbar, getTabs } = this.props;
-    const tabs = getTabs();
+    const container = this.props.getContainer();
 
-    if (this.props && tabs) {
-      const { scrollWidth, offsetWidth, scrollLeft } = tabs;
+    if (this.props && container) {
+      const { scrollWidth, offsetWidth, scrollLeft } = container;
 
-      scrollbar.thumbWidth = offsetWidth ** 2 / scrollWidth;
-      scrollbar.thumbLeft = (scrollLeft / scrollWidth) * offsetWidth;
-      scrollbar.visible = Math.ceil(scrollbar.thumbWidth) !== Math.ceil(tabs.offsetWidth);
+      this.setState(({ thumbWidth }) => {
+        return {
+          thumbLeft: (scrollLeft / scrollWidth) * offsetWidth,
+          thumbWidth: offsetWidth ** 2 / scrollWidth,
+          visible: Math.ceil(thumbWidth) !== Math.ceil(container.offsetWidth),
+        };
+      });
 
       requestAnimationFrame(this.resizeScrollbar);
     }
-  };
+  }
 
   public onWheel = (e: any) => {
-    const { getTabs } = this.props;
-    const tabs = getTabs();
+    if (!this.container) return;
+
     const { deltaX, deltaY } = e;
-    const { scrollLeft, scrollWidth, offsetWidth } = tabs;
+    const { scrollLeft, scrollWidth, offsetWidth } = this.container;
 
     let { newScrollLeft } = this.scrollData;
 
@@ -89,68 +101,56 @@ export default class Scrollbar extends React.Component<Props, {}> {
       newScrollLeft,
     };
 
-    TweenLite.to(tabs, 0.3, {
-      scrollLeft: newScrollLeft,
-      ease: Expo.easeOut,
-    });
-  };
+    this.container.scrollLeft = newScrollLeft;
+  }
 
   public onMouseUp = () => {
     this.scrollData = {
       ...this.scrollData,
       dragging: false,
     };
-  };
+  }
 
   public onMouseMove = (e: any) => {
-    if (this.scrollData.dragging) {
-      const { getTabs } = this.props;
-      const tabs = getTabs();
-
+    if (this.scrollData.dragging && this.container) {
       const { startLeft, mouseStartX } = this.scrollData;
-      const { offsetWidth, scrollWidth } = tabs;
-      tabs.scrollLeft = ((startLeft + e.pageX - mouseStartX) / offsetWidth) * scrollWidth;
+      const { offsetWidth, scrollWidth } = this.container;
+      this.container.scrollLeft =
+        ((startLeft + e.pageX - mouseStartX) / offsetWidth) * scrollWidth;
     }
-  };
+  }
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { scrollbar } = this.props;
-
     clearInterval(this.scrollInterval);
 
     this.scrollData = {
       ...this.scrollData,
       dragging: true,
       mouseStartX: e.pageX,
-      startLeft: scrollbar.thumbLeft,
+      startLeft: this.state.thumbLeft,
     };
-  };
+  }
 
-  public onNewTab = (tab: Tab) => {
-    const { getTabs } = this.props;
-    const width = tab.getWidth();
-    const tabs = getTabs();
+  public scrollToEnd = (width: number, milliseconds: number) => {
+    if (!this.container) return;
 
     this.scrollData.maxScrollLeft += width;
 
     clearInterval(this.scrollInterval);
 
     this.scrollInterval = setInterval(() => {
-      tabs.scrollLeft = this.scrollData.maxScrollLeft;
+      this.container.scrollLeft = this.scrollData.maxScrollLeft;
     }, 1);
 
     clearTimeout(this.scrollTimeout);
 
     this.scrollTimeout = setTimeout(() => {
       clearInterval(this.scrollInterval);
-    }, tabAnimations.left.duration * 1000);
-  };
+    }, milliseconds);
+  }
 
   public render() {
-    const { scrollbar } = this.props;
-    const {
-      visible, thumbWidth, thumbLeft, thumbVisible,
-    } = scrollbar;
+    const { visible, thumbWidth, thumbLeft } = this.state;
 
     return (
       <Root visible={visible}>
@@ -159,7 +159,7 @@ export default class Scrollbar extends React.Component<Props, {}> {
             width: thumbWidth,
             left: thumbLeft,
           }}
-          visible={thumbVisible}
+          visible={this.props.visible}
           onMouseDown={this.onMouseDown}
         />
       </Root>

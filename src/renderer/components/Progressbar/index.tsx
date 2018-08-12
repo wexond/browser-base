@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { colors } from '../../../defaults/colors';
-import { Root, Track, Indicator } from './styles';
 import { ProgressType } from '../../../enums';
+import { Indicator, Root, Track } from './styles';
 
 export interface IProps {
   color?: string;
@@ -20,10 +20,11 @@ export default class Button extends React.Component<IProps, {}> {
   public render() {
     const { color, progress, type } = this.props;
 
-    const firstIndicatorStyle = (type === ProgressType.Determinate && {
-      width: `${progress}}%`,
-    })
-      || {};
+    const firstIndicatorStyle =
+      (type === ProgressType.Determinate && {
+        width: `${progress}}%`,
+      }) ||
+      {};
 
     return (
       <Root>

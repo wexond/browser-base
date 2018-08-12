@@ -1,50 +1,44 @@
-import { ipcRenderer, clipboard, remote, nativeImage } from 'electron';
-import { observer } from 'mobx-react';
-import React from 'react';
+import { clipboard, ipcRenderer, nativeImage, remote } from 'electron';
 import { createWriteStream } from 'fs';
-import { basename, extname } from 'path';
 import http from 'http';
+import { observer } from 'mobx-react';
+import { basename, extname } from 'path';
+import React from 'react';
 import { parse } from 'url';
 
-import store from '../../../store';
-import database from '../../../../database';
-import Toolbar from '../Toolbar';
-import Pages from '../Pages';
-import ContextMenu from '../../../components/ContextMenu';
-import GlobalMenu from '../GlobalMenu';
-import WorkspacesMenu from '../WorkspacesMenu';
-import Snackbar from '../../../components/Snackbar';
-import Button from '../../../components/Button';
-import { colors } from '../../../../defaults';
 import { UPDATE_RESTART_AND_INSTALL } from '../../../../constants';
+import database from '../../../../database';
+import Button from '../../../components/Button';
+import ContextMenu from '../../../components/ContextMenu';
+import Snackbar from '../../../components/Snackbar';
+import store from '../../../store';
+import GlobalMenu from '../GlobalMenu';
+import Pages from '../Pages';
+import Toolbar from '../Toolbar';
+import WorkspacesMenu from '../WorkspacesMenu';
 import { StyledApp } from './styles';
+import {
+  getSelectedPage,
+  createTab,
+  bindKeys,
+  getKeyBindings,
+} from '../../../../utils';
 import { PageMenuMode, ButtonType } from '../../../../enums';
-import { getKeyBindings, bindKeys } from '../../../../utils';
+import { colors } from '../../../../defaults';
 
 const { dialog } = remote;
 
 @observer
 class App extends React.Component {
-  private workspacesTimer: any;
-
   public onInspectElementClick = () => {
     const { x, y } = store.webviewContextMenuParams;
-    store.getSelectedPage().webview.inspectElement(x, y);
-  };
+    getSelectedPage().webview.inspectElement(x, y);
+  }
 
   public async componentDidMount() {
-    window.addEventListener('mousemove', e => {
-      store.mouse.x = e.pageX;
-      store.mouse.y = e.pageY;
-    });
-
-    window.addEventListener('mousedown', (e: MouseEvent) => {
-      store.pageMenu.toggle(false);
-    });
-
-    window.addEventListener('mouseup', (e: MouseEvent) => {
-      store.bookmarkDialogVisible = false;
-    });
+    window.addEventListener('mousemove', this.onWindowMouseMove);
+    window.addEventListener('mousedown', this.onWindowMouseDown);
+    window.addEventListener('mouseup', this.onWindowMouseUp);
 
     await store.loadFavicons();
 
@@ -55,34 +49,51 @@ class App extends React.Component {
     bindKeys(store.keyBindings);
   }
 
+  public onWindowMouseMove = (e: MouseEvent) => {
+    store.mouse.x = e.pageX;
+    store.mouse.y = e.pageY;
+  }
+
+  public onWindowMouseDown = (e: MouseEvent) => {
+    store.pageMenuVisible = false;
+  }
+
+  public onWindowMouseUp = (e: MouseEvent) => {
+    store.bookmarkDialogVisible = false;
+  }
+
   public componentWillUnmount() {
     store.pages = [];
+
+    window.removeEventListener('mousemove', this.onWindowMouseMove);
+    window.removeEventListener('mousedown', this.onWindowMouseDown);
+    window.removeEventListener('mouseup', this.onWindowMouseUp);
   }
 
   public onRestartClick = () => {
     store.updateInfo.available = false;
     ipcRenderer.send(UPDATE_RESTART_AND_INSTALL);
-  };
+  }
 
   public onOpenLinkInNewTabClick = () => {
     const { linkURL } = store.webviewContextMenuParams;
-    store.getCurrentWorkspace().addTab({ url: linkURL, active: false });
-  };
+    createTab({ url: linkURL, active: false });
+  }
 
   public onCopyLinkAddressClick = () => {
     const { linkURL } = store.webviewContextMenuParams;
     clipboard.clear();
     clipboard.writeText(linkURL);
-  };
+  }
 
   public onOpenImageInNewTabClick = () => {
     const { srcURL } = store.webviewContextMenuParams;
-    store.getCurrentWorkspace().addTab({ url: srcURL, active: false });
-  };
+    createTab({ url: srcURL, active: false });
+  }
 
   public onPrintClick = () => {
-    store.getSelectedPage().webview.print();
-  };
+    getSelectedPage().webview.print();
+  }
 
   public onCopyImageClick = () => {
     const { srcURL } = store.webviewContextMenuParams;
@@ -90,13 +101,13 @@ class App extends React.Component {
 
     clipboard.clear();
     clipboard.writeImage(img);
-  };
+  }
 
   public onCopyImageAddressClick = () => {
     const { srcURL } = store.webviewContextMenuParams;
     clipboard.clear();
     clipboard.writeText(srcURL);
-  };
+  }
 
   public onSaveImageAsClick = () => {
     const { srcURL } = store.webviewContextMenuParams;
@@ -136,7 +147,7 @@ class App extends React.Component {
         request.end();
       },
     );
-  };
+  }
 
   public saveLinkAs = () => {
     const url = store.webviewContextMenuParams.linkText;
@@ -151,8 +162,7 @@ class App extends React.Component {
         ],
       },
       path1 => {
-        store
-          .getSelectedPage()
+        getSelectedPage()
           .webview.getWebContents()
           .savePage(path1, 'HTMLComplete', error => {
             if (error) {
@@ -161,12 +171,12 @@ class App extends React.Component {
           });
       },
     );
-  };
+  }
 
   public saveAs = () => {
     dialog.showSaveDialog(
       {
-        defaultPath: `${store.getSelectedPage().webview.getTitle()}.html`,
+        defaultPath: `${getSelectedPage().webview.getTitle()}.html`,
         filters: [
           {
             name: '.html',
@@ -175,8 +185,7 @@ class App extends React.Component {
         ],
       },
       path1 => {
-        store
-          .getSelectedPage()
+        getSelectedPage()
           .webview.getWebContents()
           .savePage(path1, 'HTMLComplete', error => {
             if (error) {
@@ -185,14 +194,12 @@ class App extends React.Component {
           });
       },
     );
-  };
+  }
 
   public viewSource = () => {
-    const url = store.getSelectedPage().webview.getURL();
-    store
-      .getCurrentWorkspace()
-      .addTab({ url: `view-source:${url}`, active: true });
-  };
+    const url = getSelectedPage().webview.getURL();
+    createTab({ url: `view-source:${url}`, active: true });
+  }
 
   public render() {
     const { mode } = store.pageMenuData;
@@ -217,6 +224,7 @@ class App extends React.Component {
             left: store.pageMenuData.x,
             top: store.pageMenuData.y,
           }}
+          visible={store.pageMenuVisible}
         >
           <ContextMenu.Item
             visible={imageAndURLLink}

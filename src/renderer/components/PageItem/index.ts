@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { opacity, icons } from '../../../defaults';
-import { centerImage, body2 } from '../../mixins';
+import { icons, opacity } from '../../../defaults';
+import { body2, centerImage } from '../../mixins';
 
 export const Root = styled.div`
   height: 56px;
@@ -15,7 +15,9 @@ export const Root = styled.div`
     background-color: ${selected ? 'rgba(0, 0, 0, 0.08)' : 'transparent'};
 
     &:hover {
-      background-color: ${selected ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.04)'};
+      background-color: ${selected
+        ? 'rgba(0, 0, 0, 0.1)'
+        : 'rgba(0, 0, 0, 0.04)'};
     }
   `};
 

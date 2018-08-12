@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { opacity } from '../../../../../defaults';
+import { opacity } from '../../../../../defaults/opacity';
 import { body2, centerImage } from '../../../../mixins';
 
 export const StyledForecastItem = styled.div`
@@ -42,6 +42,6 @@ export const Temp = styled.span`
     0,
     0,
     ${({ night }: { night?: boolean }) =>
-    (night ? opacity.light.secondaryText : opacity.light.primaryText)}
+      night ? opacity.light.secondaryText : opacity.light.primaryText}
   );
 `;

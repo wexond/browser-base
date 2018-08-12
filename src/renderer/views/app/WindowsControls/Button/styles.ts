@@ -22,7 +22,7 @@ export const Button = styled.div`
 
   &:hover {
     background-color: ${({ isClose }: ButtonProps) =>
-    (!isClose ? 'rgba(196, 196, 196, 0.4)' : '#e81123')};
+      !isClose ? 'rgba(196, 196, 196, 0.4)' : '#e81123'};
   }
 `;
 

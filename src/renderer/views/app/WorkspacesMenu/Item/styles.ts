@@ -1,9 +1,15 @@
 import styled, { css } from 'styled-components';
-import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '../../../../../constants';
 import {
-  shadows, centerImage, subtitle2, robotoRegular,
+  WORKSPACE_FOLDER_SIZE,
+  WORKSPACE_ICON_SIZE,
+} from '../../../../../constants';
+import { colors, icons, opacity } from '../../../../../defaults';
+import {
+  centerImage,
+  robotoRegular,
+  shadows,
+  subtitle2,
 } from '../../../../mixins';
-import { icons, colors, opacity } from '../../../../../defaults';
 
 export const Root = styled.div`
   display: flex;

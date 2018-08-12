@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "tslint-config-airbnb"
+  ],
+  "rules": {
+    "no-increment-decrement": false,
+    "max-line-length": false,
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-pascal-case"
+    ],
+    "import-name": false,
+    "ter-arrow-parens": false,
+    "no-parameter-reassignment": false,
+    "object-shorthand-properties-first": false,
+    "align": false
+  }
+}

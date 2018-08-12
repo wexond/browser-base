@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
+import { EASE_FUNCTION } from '../../../constants';
 import { opacity } from '../../../defaults/opacity';
 import { ProgressType } from '../../../enums';
-import { EASE_FUNCTION } from '../../../constants';
 
 export const Root = styled.div`
   height: 4px;

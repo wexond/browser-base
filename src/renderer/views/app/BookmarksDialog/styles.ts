@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { EASE_FUNCTION } from '../../../../constants';
-import { shadows, robotoRegular } from '../../../mixins';
 import { opacity } from '../../../../defaults';
+import { robotoRegular, shadows } from '../../../mixins';
 
 export const Root = styled.div`
   width: 364px;
@@ -20,7 +20,9 @@ export const Root = styled.div`
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
     transform: ${visible ? 'scale(1)' : 'scale(0)'};
-    transition: ${`0.5s ${EASE_FUNCTION} transform, ${visible ? 0.1 : 0.2}s opacity`};
+    transition: ${`0.5s ${EASE_FUNCTION} transform, ${
+      visible ? 0.1 : 0.2
+    }s opacity`};
   `};
 `;
 

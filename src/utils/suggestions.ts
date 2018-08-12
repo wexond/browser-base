@@ -1,7 +1,7 @@
+import { isURL, requestURL } from '.';
+import { icons } from '../defaults';
 import { HistoryItem, SuggestionItem } from '../interfaces';
 import store from '../renderer/store';
-import { requestURL, isURL } from '.';
-import { icons } from '../defaults';
 
 const countVisitedTimes = (historyItems: HistoryItem[]) => {
   const items: any[] = [];
@@ -35,7 +35,9 @@ interface HistorySuggestion extends HistoryItem {
 export const getHistorySuggestions = (filter: string) => {
   filter = filter.trim().toLowerCase();
 
-  if (filter === '') return [];
+  if (filter === '') {
+    return [];
+  }
 
   const regex = /(http(s?)):\/\/(www.)?|www./gi;
 
@@ -64,15 +66,15 @@ export const getHistorySuggestions = (filter: string) => {
         .replace(/\+/g, ' ')
         .replace(/%20/g, ' ');
       if (
-        query.startsWith(filterPart)
-        && urlMatchedItems.filter(x => x.url === query).length === 0
+        query.startsWith(filterPart) &&
+        urlMatchedItems.filter(x => x.url === query).length === 0
       ) {
         itemToPush.url = query;
         urlMatchedItems.push({ url: query, canSuggest: true, isSearch: true });
       }
     } else if (
-      urlPart.toLowerCase().startsWith(filterPart)
-      || `www.${urlPart}`.startsWith(filterPart)
+      urlPart.toLowerCase().startsWith(filterPart) ||
+      `www.${urlPart}`.startsWith(filterPart)
     ) {
       urlMatchedItems.push({ ...itemToPush, canSuggest: true });
     } else if (itemToPush.title.toLowerCase().includes(filter)) {
@@ -106,10 +108,14 @@ export const getSearchSuggestions = (filter: string) =>
   new Promise(async (resolve: (suggestions: string[]) => void, reject) => {
     const input = filter.trim().toLowerCase();
 
-    if (input === '') return resolve([]);
+    if (input === '') {
+      return resolve([]);
+    }
 
     try {
-      const data = await requestURL(`http://google.com/complete/search?client=chrome&q=${input}`);
+      const data = await requestURL(
+        `http://google.com/complete/search?client=chrome&q=${input}`,
+      );
       const json = JSON.parse(data);
 
       let suggestions: string[] = [];
@@ -173,7 +179,10 @@ export const loadSuggestions = async (input: HTMLInputElement) =>
       }
     }
 
-    let suggestions: SuggestionItem[] = input.value === '' ? [] : historySuggestions.concat(searchSuggestions).slice(0, 6);
+    let suggestions: SuggestionItem[] =
+      input.value === ''
+        ? []
+        : historySuggestions.concat(searchSuggestions).slice(0, 6);
 
     for (let i = 0; i < suggestions.length; i++) {
       suggestions[i].id = i;
@@ -197,7 +206,10 @@ export const loadSuggestions = async (input: HTMLInputElement) =>
         });
       }
 
-      suggestions = input.value === '' ? [] : historySuggestions.concat(searchSuggestions).slice(0, 6);
+      suggestions =
+        input.value === ''
+          ? []
+          : historySuggestions.concat(searchSuggestions).slice(0, 6);
 
       for (let i = 0; i < suggestions.length; i++) {
         suggestions[i].id = i;
