@@ -6,7 +6,7 @@ import {
   MENU_WIDTH,
 } from '../../../../constants';
 import { icons, opacity } from '../../../../defaults';
-import { body2, centerImage, h6, shadows } from '../../../mixins';
+import { body2, centerImage, h6, shadows, noButtons } from '../../../mixins';
 
 export const Container = styled.div`
   height: 100%;
