@@ -57,10 +57,8 @@ export const registerProtocols = () => {
       (request, callback: any) => {
         const parsed = parse(request.url);
 
-        console.log(parsed);
-
         if (parsed.hostname === 'build' && parsed.path) {
-          return callback({ path: join(__dirname, parsed.path) });
+          return callback({ path: join(__dirname, 'build', parsed.path) });
         }
 
         if (parsed.hostname === 'newtab') {

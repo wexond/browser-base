@@ -5,15 +5,9 @@ const baseConfig = require('./webpack.config.base');
 
 const PORT = 8080;
 
-const appConfig = merge.smart(baseConfig, {
+const config = merge.smart(baseConfig, {
   devtool: 'eval-source-map',
-  target: 'electron-renderer',
   mode: 'development',
-
-  entry: {
-    app: ['react-hot-loader/patch', './src/renderer/views/app'],
-  },
-
   output: {
     hotUpdateChunkFilename: 'hot/hot-update.js',
     hotUpdateMainFilename: 'hot/hot-update.json',
@@ -32,6 +26,14 @@ const appConfig = merge.smart(baseConfig, {
   },
 
   plugins: [new webpack.HotModuleReplacementPlugin()],
+});
+
+const appConfig = merge.smart(config, {
+  target: 'electron-renderer',
+
+  entry: {
+    app: ['react-hot-loader/patch', './src/renderer/views/app'],
+  },
 
   devServer: {
     contentBase: './static/pages',
@@ -49,28 +51,8 @@ const appConfig = merge.smart(baseConfig, {
   },
 });
 
-const newTabConfig = merge.smart(baseConfig, {
+const newTabConfig = merge.smart(config, {
   target: 'web',
-  mode: 'development',
-
-  output: {
-    hotUpdateChunkFilename: 'hot/hot-update.js',
-    hotUpdateMainFilename: 'hot/hot-update.json',
-    publicPath: `http://localhost:${PORT}/`,
-    path: resolve(__dirname, 'build'),
-    filename: '[name].js',
-  },
-
-  plugins: [new webpack.HotModuleReplacementPlugin()],
-
-  module: {
-    rules: [
-      {
-        test: /\.(png|gif|jpg|woff2|ttf|svg)$/,
-        use: ['url-loader'],
-      },
-    ],
-  },
 
   entry: {
     newtab: ['react-hot-loader/patch', './src/renderer/views/newtab'],
