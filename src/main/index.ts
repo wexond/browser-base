@@ -51,8 +51,6 @@ app.on('ready', () => {
   }
 
   mainWindow = createWindow();
-  
-  runExtensionsService(mainWindow);
 
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -66,6 +64,7 @@ app.on('window-all-closed', () => {
 });
 
 runAutoUpdaterService(mainWindow);
+runExtensionsService(mainWindow);
 registerProtocols();
 
 // Electron live reload
