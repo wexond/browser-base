@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { opacity } from '../../../../defaults';
 
 export interface SeparatorProps {
-  animation: boolean;
   visible: boolean;
 }
 
@@ -14,6 +13,6 @@ export const StyledSeparator = styled.div`
   width: 100%;
   transition: 0.2s opacity;
 
-  opacity: ${({ animation }: SeparatorProps) => (animation ? 1 : 0)};
-  display: ${({ visible }) => (!visible ? 'none' : 'block')};
+  display: ${({ visible }: { visible: boolean }) =>
+    visible ? 'block' : 'none'};
 `;
