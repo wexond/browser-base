@@ -4,7 +4,7 @@ import React from 'react';
 import store from '../../../store';
 import { PageContent } from '../../app/Menu/styles';
 import Chip from '../Chip';
-import Dialog from '../Dialog';
+import KeyRecordingDialog from '../KeyRecordingDialog';
 import {
   Container, Table, HeadRow, HeadItem, BodyRow, BodyItem,
 } from './styles';
@@ -14,6 +14,9 @@ import { KeyBinding } from '../../../../interfaces';
 export default class KeyManager extends React.Component {
   public onChipClick = (keyBinding: KeyBinding) => {
     store.keyRecordingDialogVisible = true;
+    store.keyRecordingDialog.input.value = keyBinding.key;
+    store.keyRecordingDialog.combination = null;
+    store.selectedKeyBinding = keyBinding;
   };
 
   public render() {
@@ -42,7 +45,7 @@ export default class KeyManager extends React.Component {
               ))}
             </tbody>
           </Table>
-          <Dialog />
+          <KeyRecordingDialog ref={r => (store.keyRecordingDialog = r)} />
         </Container>
       </PageContent>
     );
