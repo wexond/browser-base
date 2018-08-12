@@ -25,22 +25,6 @@ const pluginsPath = getPath('plugins');
 const extensionsPath = getPath('extensions');
 const keyBindingsPath = getPath('key-bindings.json');
 
-if (!existsSync(pluginsPath)) {
-  mkdirSync(pluginsPath);
-}
-
-if (!existsSync(extensionsPath)) {
-  mkdirSync(extensionsPath);
-}
-
-if (!existsSync(keyBindingsPath)) {
-  writeFileSync(
-    keyBindingsPath,
-    JSON.stringify(defaultKeyBindings, null, 2),
-    'utf8',
-  );
-}
-
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -50,6 +34,22 @@ app.on('activate', () => {
 });
 
 app.on('ready', () => {
+  if (!existsSync(pluginsPath)) {
+    mkdirSync(pluginsPath);
+  }
+
+  if (!existsSync(extensionsPath)) {
+    mkdirSync(extensionsPath);
+  }
+
+  if (!existsSync(keyBindingsPath)) {
+    writeFileSync(
+      keyBindingsPath,
+      JSON.stringify(defaultKeyBindings, null, 2),
+      'utf8',
+    );
+  }
+
   mainWindow = createWindow();
 
   mainWindow.on('closed', () => {
