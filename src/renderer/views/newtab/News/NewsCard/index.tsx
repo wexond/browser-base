@@ -1,7 +1,6 @@
 import React from 'react';
 import * as Card from '../../../../components/Card';
 
-import { getTimeOffset, loadImage } from '../../../../../utils';
 import {
   CardImage,
   Icon,
@@ -11,6 +10,8 @@ import {
   SourceContainer,
   Title,
 } from './styles';
+import { loadImage } from '../../../../../utils/network';
+import { getTimeOffset } from '../../../../../utils/time';
 
 export interface Props {
   data: any;

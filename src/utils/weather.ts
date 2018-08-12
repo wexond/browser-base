@@ -1,12 +1,13 @@
-import { getTimeInZone, getTimeZoneOffset, requestURL } from '.';
-import { WEATHER_API_KEY } from '../constants';
-import { WeatherCodes, weatherIcons } from '../defaults';
+import { WeatherCodes, weatherIcons } from '../defaults/weather-icons';
 import { Locales, TemperatureUnit, TimeUnit } from '../enums';
 import {
   WeatherDailyItem,
   WeatherForecast,
   WeatherWeeklyItem,
 } from '../interfaces';
+import { getTimeInZone, getTimeZoneOffset } from './time-zone';
+import { requestURL } from './network';
+import { WEATHER_API_KEY } from '../constants/api-keys';
 
 const createDailyItem = (data: any, timeZoneOffset: number) => {
   const item: WeatherDailyItem = {

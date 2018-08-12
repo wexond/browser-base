@@ -1,17 +1,11 @@
-import { ipcRenderer } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { injectGlobal } from 'styled-components';
 
-import { FULLSCREEN, UPDATE_AVAILABLE, UPDATE_CHECK } from '../../../constants';
-import { fonts } from '../../../defaults';
-import { createWorkspace } from '../../../utils';
-import { runExtensionsService } from '../../extensions-service';
 import { body2 } from '../../mixins';
-import store from '../../store';
 import App from './App';
-import { loadPlugins } from '../../../utils/plugins';
+import { fonts } from '../../../defaults/fonts';
 
 injectGlobal`
   @font-face {
@@ -69,23 +63,6 @@ injectGlobal`
   }
 `;
 
-ipcRenderer.on(
-  FULLSCREEN,
-  (e: Electron.IpcMessageEvent, isFullscreen: boolean) => {
-    store.isFullscreen = isFullscreen;
-  },
-);
-
-ipcRenderer.on(
-  UPDATE_AVAILABLE,
-  (e: Electron.IpcMessageEvent, version: string) => {
-    store.updateInfo.version = version;
-    store.updateInfo.available = true;
-  },
-);
-
-ipcRenderer.send(UPDATE_CHECK);
-
 const render = (AppComponent: any) => {
   ReactDOM.render(
     <AppContainer>
@@ -94,14 +71,8 @@ const render = (AppComponent: any) => {
     document.getElementById('app'),
   );
 };
-(async function setup() {
-  await loadPlugins();
-  runExtensionsService();
 
-  render(App);
-
-  createWorkspace();
-})();
+render(App);
 
 // React-hot-loader
 if ((module as any).hot) {

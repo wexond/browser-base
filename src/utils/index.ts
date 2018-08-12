@@ -6,7 +6,6 @@ export * from './extensions';
 export * from './history';
 export * from './network';
 export * from './news';
-export * from './plugins';
 export * from './suggestions';
 export * from './time-zone';
 export * from './time';
