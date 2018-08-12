@@ -13,20 +13,20 @@ import {
   TemperatureIcon,
 } from './styles';
 
-import { colors, icons, opacity } from '../../../../defaults';
 import { ButtonType, SliderType } from '../../../../enums';
 import { WeatherForecast, WeatherWeeklyItem } from '../../../../interfaces';
-import {
-  capitalizeWord,
-  formatDescription,
-  formatTime,
-  getDayIndex,
-} from '../../../../utils';
 import Button from '../../../components/Button';
 import * as Card from '../../../components/Card';
 import Slider from '../../../components/Slider';
-import store from '../../../store';
 import ForecastItem from './ForecastItem';
+
+import { formatDescription } from '../../../../utils/weather-card';
+import { formatTime, getDayIndex } from '../../../../utils/time';
+import { capitalizeWord } from '../../../../utils/other';
+import { newtabStore } from '../../../newtab-store';
+import { opacity } from '../../../../defaults/opacity';
+import { icons } from '../../../../defaults/icons';
+import { colors } from '../../../../defaults/colors';
 
 export interface IProps {
   data: WeatherForecast;
@@ -63,7 +63,7 @@ export default class WeatherCard extends React.Component<IProps, IState> {
   public render() {
     const { data } = this.props;
     const { dailyForecastIndex, forecastHeight } = this.state;
-    const dictionary = store.dictionary;
+    const dictionary = newtabStore.dictionary;
 
     const expanded = forecastHeight > 0;
     const description = data && formatDescription(data, dailyForecastIndex);
@@ -140,7 +140,8 @@ export default class WeatherCard extends React.Component<IProps, IState> {
             >
               {data.weekly.map((day: WeatherWeeklyItem, key: any) => {
                 const dayName =
-                  store.dictionary.dateAndTime.days[getDayIndex(day.date)];
+                  newtabStore.dictionary.dateAndTime.days[getDayIndex(day.date)
+];
                 return <ForecastItem data={day} dayName={dayName} key={key} />;
               })}
             </ForecastContainer>

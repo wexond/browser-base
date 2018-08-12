@@ -8,10 +8,10 @@ import {
   HistoryItem,
   KeyBinding,
   SuggestionItem,
-  WeatherForecast,
   Workspace,
+  Page,
 } from '../interfaces';
-import { AddressBar, Menu, Page, Tab } from '../models';
+import { AddressBar, Menu, Tab } from '../models';
 import {
   getBookmarkFolderPath,
   getSelectedPage,
@@ -101,19 +101,6 @@ class Store {
 
   @observable
   public selectedHistoryItems: number[] = [];
-
-  /** New tab */
-  @observable
-  public newsColumns: any[] = [];
-
-  @observable
-  public newsData: any[] = [];
-
-  @observable
-  public weatherForecast: WeatherForecast;
-
-  @observable
-  public newTabContentVisible = false;
 
   /** */
   @observable

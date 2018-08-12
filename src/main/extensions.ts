@@ -3,8 +3,9 @@ import { readdirSync, readFileSync, statSync } from 'fs';
 import { format, resolve } from 'url';
 
 import { Manifest } from '../interfaces';
-import { getPath, makeId } from '../utils/other';
+import { makeId } from '../utils/other';
 import { Global } from './interfaces';
+import { getPath } from '../utils/paths';
 
 declare const global: Global;
 

@@ -16,7 +16,7 @@ import {
   TickValue,
 } from './styles';
 
-import { hexToRgb } from '../../../utils';
+import { hexToRgb } from '../../../utils/colors';
 
 export type SliderEvent = (
   value?: any,

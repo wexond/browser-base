@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { EASE_FUNCTION } from '../../../constants';
+import { EASE_FUNCTION } from '../../../constants/design';
 import { opacity } from '../../../defaults/opacity';
 import { Align, SliderType } from '../../../enums';
 import { center, robotoRegular } from '../../mixins';
