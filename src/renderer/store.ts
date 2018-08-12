@@ -36,13 +36,7 @@ class Store {
   public currentWorkspace: number = 0;
 
   @observable
-  public tabbarScrollbar = {
-    visible: false,
-    thumbWidth: 0,
-    thumbLeft: 0,
-    thumbVisible: false,
-    thumbDragging: false,
-  };
+  public tabbarScrollbarVisible: boolean = false;
 
   public addTabLeft: number = 0;
 
