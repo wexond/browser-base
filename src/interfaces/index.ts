@@ -8,3 +8,5 @@ export * from './weather-daily-item';
 export * from './weather-forecast';
 export * from './weather-weekly-item';
 export * from './key-binding';
+export * from './workspace';
+export * from './page';

@@ -1,32 +1,61 @@
 import { observable } from 'mobx';
 import os from 'os';
 
+import database from '../database';
+import { PageMenuMode, Platforms } from '../enums';
 import {
-  Workspace, Menu, AddressBar, Page,
-} from '../models';
-import {
-  SuggestionItem,
   BookmarkItem,
   HistoryItem,
-  WeatherForecast,
   KeyBinding,
+  SuggestionItem,
+  Workspace,
+  Page,
 } from '../interfaces';
-import { PageMenuMode, Platforms } from '../enums';
+import { AddressBar, Menu, Tab } from '../models';
+import {
+  getBookmarkFolderPath,
+  getSelectedPage,
+  updateTabsBounds,
+} from '../utils';
 import ContextMenu from './components/ContextMenu';
 import BookmarksDialog from './views/app/BookmarksDialog';
-import database from '../database';
-import { getBookmarkFolderPath } from '../utils';
 import KeyRecordingDialog from './views/keys-manager/KeyRecordingDialog';
 
 const dictionary = require('../../static/dictionaries/english-en.json');
 
 class Store {
-  /** Workspaces */
   @observable
-  public workspaces: Workspace[] = [new Workspace()];
+  public tabs: Tab[] = [];
 
   @observable
-  public selectedWorkspace = 0;
+  public isTabDragged: boolean = false;
+
+  @observable
+  public workspaces: Workspace[] = [];
+
+  @observable
+  public currentWorkspace: number = 0;
+
+  @observable
+  public tabbarScrollbarVisible: boolean = false;
+
+  public addTabLeft: number = 0;
+
+  public addTabRef: HTMLDivElement;
+
+  public tabbarRef: HTMLDivElement;
+
+  public tabIndicatorRef: HTMLDivElement;
+
+  public tabDragData = {
+    lastMouseX: 0,
+    dragging: false,
+    mouseStartX: 0,
+    tabStartX: 0,
+    direction: '',
+  };
+
+  public lastTabbarScrollLeft: number = 0;
 
   @observable
   public workspacesMenuVisible = false;
@@ -68,31 +97,12 @@ class Store {
   @observable
   public selectedHistoryItems: number[] = [];
 
-  /** New tab */
-  @observable
-  public newsColumns: any[] = [];
-
-  @observable
-  public newsData: any[] = [];
-
-  @observable
-  public weatherForecast: WeatherForecast;
-
-  @observable
-  public newTabContentVisible = false;
-
-  @observable
-  public keyRecordingDialogVisible = false;
-
   /** */
   @observable
   public isFullscreen = false;
 
   @observable
   public isHTMLFullscreen = false;
-
-  @observable
-  public isTabDragged = false;
 
   /** */
   @observable
@@ -110,15 +120,6 @@ class Store {
   };
 
   @observable
-  public tabbarScrollbar = {
-    visible: false,
-    thumbWidth: 0,
-    thumbLeft: 0,
-    thumbVisible: false,
-    thumbDragging: false,
-  };
-
-  @observable
   public navigationState = {
     canGoBack: false,
     canGoForward: false,
@@ -132,6 +133,9 @@ class Store {
   };
 
   @observable
+  public pageMenuVisible: boolean = false;
+
+  @observable
   public dictionary: any = dictionary;
 
   @observable
@@ -139,6 +143,9 @@ class Store {
 
   @observable
   public selectedKeyBinding: KeyBinding;
+
+  @observable
+  public keyRecordingDialogVisible: boolean = false;
 
   /** Components refs */
   public pageMenu: ContextMenu;
@@ -161,58 +168,37 @@ class Store {
 
   public cmdPressed = false;
 
+  private rearrangeTabsTimer = {
+    canReset: false,
+    time: 0,
+    interval: null as any,
+  };
+
+  constructor() {
+    this.rearrangeTabsTimer.interval = setInterval(() => {
+      // Set widths and positions for tabs 3 seconds after a tab was closed
+      if (
+        this.rearrangeTabsTimer.canReset &&
+        this.rearrangeTabsTimer.time === 3
+      ) {
+        updateTabsBounds();
+        this.rearrangeTabsTimer.canReset = false;
+      }
+      this.rearrangeTabsTimer.time++;
+    }, 1000);
+  }
+
+  public resetRearrangeTabsTimer() {
+    this.rearrangeTabsTimer.time = 0;
+    this.rearrangeTabsTimer.canReset = true;
+  }
+
   /** Methods */
 
-  /** Workspaces */
-  public getCurrentWorkspace() {
-    return this.getWorkspaceById(this.selectedWorkspace);
-  }
-
-  public getWorkspaceById(id: number) {
-    return this.workspaces.filter(workspace => workspace.id === id)[0];
-  }
-
-  public addWorkspace() {
-    this.workspaces.push(new Workspace());
-  }
-
-  /** Tabs */
-  public getTabById(id: number) {
-    for (const workspace of this.workspaces) {
-      const tab = workspace.getTabById(id);
-      if (tab) {
-        return tab;
-      }
-    }
-
-    return null;
-  }
-
-  public getSelectedTab() {
-    return this.getCurrentWorkspace().getSelectedTab();
-  }
-
-  /** Pages */
-  public getPageById(id: number) {
-    return this.pages.filter(page => page.id === id)[0];
-  }
-
-  public getSelectedPage() {
-    return this.getPageById(this.getCurrentWorkspace().getSelectedTab().id);
-  }
-
-  public addPage(tabId: number, url: string) {
-    const page = new Page(tabId, url);
-    const index = this.pages.push(page) - 1;
-
-    return this.pages[index];
-  }
-
-  /** */
   public refreshNavigationState() {
-    const page = this.getSelectedPage();
+    const page = getSelectedPage();
     if (page) {
-      const { webview } = this.getSelectedPage();
+      const { webview } = getSelectedPage();
 
       if (webview && webview.getWebContents()) {
         this.navigationState = {
@@ -226,8 +212,13 @@ class Store {
   public loadFavicons() {
     return new Promise(async resolve => {
       await database.favicons.each(favicon => {
-        if (this.favicons[favicon.url] == null && favicon.favicon.byteLength !== 0) {
-          this.favicons[favicon.url] = window.URL.createObjectURL(new Blob([favicon.favicon]));
+        if (
+          this.favicons[favicon.url] == null &&
+          favicon.favicon.byteLength !== 0
+        ) {
+          this.favicons[favicon.url] = window.URL.createObjectURL(
+            new Blob([favicon.favicon]),
+          );
         }
       });
       resolve();
@@ -238,7 +229,7 @@ class Store {
   public goToBookmarkFolder = (id: number) => {
     this.currentBookmarksTree = id;
     this.bookmarksPath = getBookmarkFolderPath(id);
-  };
+  }
 }
 
 export default new Store();

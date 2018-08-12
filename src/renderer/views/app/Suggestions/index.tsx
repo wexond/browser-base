@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Caption, StyledSuggestions } from './styles';
-import Suggestion from '../Suggestion';
 import store from '../../../store';
+import Suggestion from '../Suggestion';
+import { Caption, StyledSuggestions } from './styles';
 
 interface Props {
   visible: boolean;
@@ -18,7 +18,9 @@ export default class Suggestions extends React.Component<Props, {}> {
 
     let vis = visible;
 
-    if (store.suggestions.length === 0) vis = false;
+    if (store.suggestions.length === 0) {
+      vis = false;
+    }
 
     let height = 0;
 

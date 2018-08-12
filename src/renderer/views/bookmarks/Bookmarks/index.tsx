@@ -1,10 +1,10 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
+import store from '../../../store';
 import Item from '../Item';
 import TreeBar from '../TreeBar';
-import { Items, Container } from './styles';
-import store from '../../../store';
+import { Container, Items } from './styles';
 import { PageContent } from '../../app/Menu/styles';
 
 @observer

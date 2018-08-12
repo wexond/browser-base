@@ -1,10 +1,7 @@
 import * as React from 'react';
-import Ripples from '../Ripples';
 import Item from './Item';
-import {
-  Root, Container, Name, Icon, List,
-} from './styles';
-import { getRippleEvents } from '../../../utils';
+import { Container, Icon, List, Name, Root } from './styles';
+import Ripple from '../Ripple';
 
 export type DropdownEvent = (e?: React.MouseEvent<any>) => void;
 
@@ -37,7 +34,7 @@ export default class Dropdown extends React.Component<Props, State> {
     selectedItem: 0,
   };
 
-  public ripples: Ripples;
+  public ripple: Ripple;
 
   public listContainer: HTMLDivElement;
 
@@ -52,7 +49,9 @@ export default class Dropdown extends React.Component<Props, State> {
   }
 
   public onClick = () => {
-    if (this.items.length === 0) return;
+    if (this.items.length === 0) {
+      return;
+    }
     const { activated } = this.state;
 
     if (activated) {
@@ -62,12 +61,13 @@ export default class Dropdown extends React.Component<Props, State> {
     }
 
     this.toggle(!activated);
-  };
+  }
 
   public onMouseDown = (e: React.MouseEvent<any>) => {
     e.preventDefault();
     e.stopPropagation();
-  };
+    this.ripple.makeRipple(e.pageX, e.pageY);
+  }
 
   public onItemClick = (e: React.MouseEvent<any>, item: Item) => {
     if (item) {
@@ -75,12 +75,12 @@ export default class Dropdown extends React.Component<Props, State> {
       this.toggle(false);
       this.onChange(item);
     }
-  };
+  }
 
   public onWindowMouseDown = () => {
     this.toggle(false);
     window.removeEventListener('mousedown', this.onWindowMouseDown);
-  };
+  }
 
   public onWindowKeyDown = (e: KeyboardEvent) => {
     const { selectedItem } = this.state;
@@ -97,16 +97,18 @@ export default class Dropdown extends React.Component<Props, State> {
       index = index === 0 ? maxIndex : index - 1;
     }
 
-    if (selectedItem !== index) this.onChange(this.items.find(x => x.props.id === index));
+    if (selectedItem !== index) {
+      this.onChange(this.items.find(x => x.props.id === index));
+    }
     this.setState({ selectedItem: index });
-  };
+  }
 
   public toggle = (flag: boolean) => {
     this.setState({
       activated: flag,
       listHeight: flag ? this.listContainer.scrollHeight : 0,
     });
-  };
+  }
 
   public onChange = (item: Item) => {
     const { onChange } = this.props;
@@ -114,7 +116,7 @@ export default class Dropdown extends React.Component<Props, State> {
     if (typeof onChange === 'function') {
       onChange(item.props.value);
     }
-  };
+  }
 
   public render() {
     const { children, style, onMouseUp } = this.props;
@@ -124,7 +126,6 @@ export default class Dropdown extends React.Component<Props, State> {
 
     const events = {
       onClick: this.onClick,
-      ...getRippleEvents(this.props, () => this.ripples),
     };
 
     let id = 0;
@@ -136,17 +137,22 @@ export default class Dropdown extends React.Component<Props, State> {
         <Container {...events}>
           <Name>{item && item.props.children}</Name>
           <Icon activated={activated} />
-          <Ripples ref={r => (this.ripples = r)} color="#000" />
+          <Ripple ref={r => (this.ripple = r)} color="#000" />
         </Container>
         {children != null && (
-          <List innerRef={r => (this.listContainer = r)} height={listHeight} activated={activated}>
+          <List
+            innerRef={r => (this.listContainer = r)}
+            height={listHeight}
+            activated={activated}
+          >
             {React.Children.map(children, (el: React.ReactElement<any>) =>
               React.cloneElement(el, {
                 ref: (r: Item) => r != null && this.items.push(r),
                 onClick: this.onItemClick,
                 selected: selectedItem === id,
                 id: id++,
-              }))}
+              }),
+            )}
           </List>
         )}
       </Root>

@@ -2,9 +2,16 @@ import React from 'react';
 import * as Card from '../../../../components/Card';
 
 import {
-  Title, Icon, Source, SecondaryText, CardImage, Overline, SourceContainer,
+  CardImage,
+  Icon,
+  Overline,
+  SecondaryText,
+  Source,
+  SourceContainer,
+  Title,
 } from './styles';
-import { loadImage, getTimeOffset } from '../../../../../utils';
+import { loadImage } from '../../../../../utils/network';
+import { getTimeOffset } from '../../../../../utils/time';
 
 export interface Props {
   data: any;
@@ -46,14 +53,15 @@ export default class NewsCard extends React.Component<Props, State> {
           <Overline>General</Overline>
           <Title>{data.title}</Title>
 
-          {desc
-            && desc.indexOf('�') === -1
-            && desc.trim() !== '' && <SecondaryText>{desc}</SecondaryText>}
+          {desc &&
+            desc.indexOf('�') === -1 &&
+            desc.trim() !== '' && <SecondaryText>{desc}</SecondaryText>}
 
           <SourceContainer>
             <Icon visible={loaded} src={data.icon} />
             <Source>
-              {data.source.name} - {getTimeOffset(new Date(data.publishedAt), this)}
+              {data.source.name} -{' '}
+              {getTimeOffset(new Date(data.publishedAt), this)}
             </Source>
           </SourceContainer>
         </Card.Header>

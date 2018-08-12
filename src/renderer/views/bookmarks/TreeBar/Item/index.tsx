@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Root, Title, HomeIcon } from './styles';
-import store from '../../../../store';
 import { BookmarkItem } from '../../../../../interfaces';
+import store from '../../../../store';
+import { HomeIcon, Root, Title } from './styles';
 
 export interface Props {
   item?: BookmarkItem;
@@ -10,7 +10,7 @@ export interface Props {
 }
 
 export default class Item extends React.Component<Props, {}> {
-  onClick = () => {
+  public onClick = () => {
     const { item, home } = this.props;
 
     if (home) {
@@ -18,7 +18,7 @@ export default class Item extends React.Component<Props, {}> {
     } else {
       store.goToBookmarkFolder(item.id);
     }
-  };
+  }
 
   public render() {
     const { home, item } = this.props;

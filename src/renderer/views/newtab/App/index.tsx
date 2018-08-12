@@ -1,22 +1,23 @@
-import React from 'react';
 import { observer } from 'mobx-react';
+import React from 'react';
 
 import News from '../News';
 import WeatherCard from '../WeatherCard';
 
 import {
-  StyledApp, Content, Credits, Column,
-} from './styles';
-import store from '../../../store';
-import Preloader from '../../../components/Preloader';
-import { getWeather, getNews } from '../../../../utils';
-import {
-  Locales, TemperatureUnit, TimeUnit, Countries,
+  Countries,
+  Locales,
+  TemperatureUnit,
+  TimeUnit,
 } from '../../../../enums';
+import { Column, Content, StyledApp } from './styles';
+import { newtabStore } from '../../../newtab-store';
+import { getWeather } from '../../../../utils/weather';
+import { getNews } from '../../../../utils/news';
 
 @observer
-export default class Newtab extends React.Component<{ visible: boolean }, {}> {
-  componentDidMount() {
+export default class App extends React.Component<{ visible: boolean }, {}> {
+  public componentDidMount() {
     window.addEventListener('resize', this.onResize);
     this.loadData();
   }
@@ -30,10 +31,10 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
       columns = this.getColumns(2);
     }
 
-    store.newsColumns = columns;
-  };
+    newtabStore.newsColumns = columns;
+  }
 
-  async loadData() {
+  public async loadData() {
     const weatherData = await getWeather(
       'warsaw',
       Locales.en,
@@ -41,24 +42,27 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
       TimeUnit.TwentyFourHours,
     );
 
-    store.weatherForecast = weatherData;
-    store.newsData = await getNews(Countries.us);
+    newtabStore.weatherForecast = weatherData;
+    newtabStore.newsData = await getNews(Countries.us);
 
     this.onResize();
-    store.newTabContentVisible = true;
   }
 
   public getColumns = (columnsCount: number) => {
-    const { newsData } = store;
+    const { newsData } = newtabStore;
     const columns = [];
     const itemsPerCol = Math.floor(newsData.length / columnsCount);
 
     for (let i = 0; i < columnsCount; i++) {
       if (i < columnsCount) {
         if (i === 0) {
-          columns.push(newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1) - 1));
+          columns.push(
+            newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1) - 1),
+          );
         } else if (i === 1) {
-          columns.push(newsData.slice(i * (itemsPerCol - 1), itemsPerCol * (i + 1)));
+          columns.push(
+            newsData.slice(i * (itemsPerCol - 1), itemsPerCol * (i + 1)),
+          );
         } else {
           columns.push(newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1)));
         }
@@ -68,23 +72,14 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
     }
 
     return columns;
-  };
+  }
 
   public render() {
-    const { visible } = this.props;
-    const { weatherForecast, newTabContentVisible, newsColumns } = store;
-
-    const preloaderStyle = {
-      position: 'fixed',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-    };
+    const { weatherForecast, newsColumns } = newtabStore;
 
     return (
-      <StyledApp visible={visible}>
-        {!newTabContentVisible && <Preloader style={preloaderStyle} />}
-        <Content visible={newTabContentVisible}>
+      <StyledApp>
+        <Content>
           <Column>
             <WeatherCard data={weatherForecast} />
             {newsColumns.length > 0 && <News data={newsColumns[0]} />}
@@ -98,15 +93,6 @@ export default class Newtab extends React.Component<{ visible: boolean }, {}> {
             <Column>
               <News data={newsColumns[2]} />
             </Column>
-          )}
-          {!navigator.onLine && (
-            <Credits>
-              APIs powered by <a href="https://openweathermap.org/">OpenWeatherMap</a> and
-              <a href="https://newsapi.org/"> News API</a>
-              <br />
-              Icons for temporary usage created by&nbsp;
-              <a href="https://www.uplabs.com/kevinttob">Kevin Aguilar</a>
-            </Credits>
           )}
         </Content>
       </StyledApp>

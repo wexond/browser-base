@@ -10,15 +10,8 @@
   <div id="app"></div>
 </body>
 
+<script src="./load-scripts.js"></script>
 <script>
-  function loadScripts(scripts) {
-    scripts.forEach(item => {
-      const script = document.createElement('script');
-      script.src = item;
-      document.body.appendChild(script);
-    });
-  }
-
   if (process.env.ENV === 'dev') {
     loadScripts([`http://localhost:8080/app.js`]);
   } else {

@@ -1,8 +1,6 @@
 import styled, { css } from 'styled-components';
-import { opacity } from '../../../../../defaults';
-import {
-  subtitle1, maxLines, centerImage, overline,
-} from '../../../../mixins';
+import { opacity } from '../../../../../defaults/opacity';
+import { centerImage, maxLines, overline, subtitle1 } from '../../../../mixins';
 
 export const Title = styled.div`
   margin-top: 12px;

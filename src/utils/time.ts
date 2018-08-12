@@ -1,5 +1,5 @@
 import { TimeUnit } from '../enums';
-import store from '../renderer/store';
+import { newtabStore } from '../renderer/newtab-store';
 
 export const getTimePeriod = (hours: number, timeUnit: TimeUnit) => {
   if (timeUnit === TimeUnit.TwelveHours) {
@@ -22,18 +22,20 @@ export const formatTime = (
     hours -= 12;
   }
 
-  const _hours = hours.toString().padStart(2, '0');
-  const _minutes = minutes
+  const mins = minutes
     ? date
-      .getMinutes()
-      .toString()
-      .padStart(2, '0')
+        .getMinutes()
+        .toString()
+        .padStart(2, '0')
     : '';
 
-  return `${_hours}${minutes ? ':' : ''}${_minutes}${timePeriod}`;
+  return `${hours.toString().padStart(2, '0')}${
+    mins ? ':' : ''
+  }${mins}${timePeriod}`;
 };
 
-export const getDayIndex = (date: Date) => (date.getDay() === 0 ? 6 : date.getDay() - 1);
+export const getDayIndex = (date: Date) =>
+  date.getDay() === 0 ? 6 : date.getDay() - 1;
 
 const getOperator = (condition: string) => {
   const operators = ['=', '<', '>'];
@@ -61,9 +63,9 @@ export const getConditionsTime = (time: number, conditions: any) => {
         const secondSide = parseInt(parts[1], 10);
 
         if (
-          (operator === '<' && firstSide < secondSide)
-          || (operator === '>' && firstSide > secondSide)
-          || (operator === '=' && firstSide === secondSide)
+          (operator === '<' && firstSide < secondSide) ||
+          (operator === '>' && firstSide > secondSide) ||
+          (operator === '=' && firstSide === secondSide)
         ) {
           return conditions[keys[i]];
         }
@@ -75,7 +77,7 @@ export const getConditionsTime = (time: number, conditions: any) => {
 };
 
 export const getTimeOffset = (date: Date, t?: any) => {
-  const dictionary = store.dictionary.dateAndTime;
+  const dictionary = newtabStore.dictionary.dateAndTime;
   const currentdate = new Date();
   const diff = new Date(currentdate.getTime() - date.getTime());
 
@@ -95,13 +97,14 @@ export const getTimeOffset = (date: Date, t?: any) => {
     return `${dictionary.oneHour} ${dictionary.ago}`;
   }
 
-  return `${value} ${getConditionsTime(value, showHours ? dictionary.hours : dictionary.minutes)} ${
-    dictionary.ago
-  }`;
+  return `${value} ${getConditionsTime(
+    value,
+    showHours ? dictionary.hours : dictionary.minutes,
+  )} ${dictionary.ago}`;
 };
 
 export const formatDate = (date: Date) => {
-  const dictionary = store.dictionary.dateAndTime;
+  const dictionary = newtabStore.dictionary.dateAndTime;
   const currentDate = new Date();
 
   let prefix = '';

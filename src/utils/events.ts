@@ -37,7 +37,10 @@ export const getEvents = (props: any) => ({
   onTouchEnd: (e: any) => executeEvent(e, props),
 });
 
-export const executeEventStopPropagation = (e: SyntheticEvent<any>, event: any) => {
+export const executeEventStopPropagation = (
+  e: SyntheticEvent<any>,
+  event: any,
+) => {
   e.preventDefault();
   e.stopPropagation();
 

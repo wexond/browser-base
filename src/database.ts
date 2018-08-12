@@ -1,5 +1,5 @@
 import Dexie from 'dexie';
-import { BookmarkItem, HistoryItem, Favicon } from './interfaces';
+import { BookmarkItem, Favicon, HistoryItem } from './interfaces';
 
 export class Database extends Dexie {
   public history: Dexie.Table<HistoryItem, number>;

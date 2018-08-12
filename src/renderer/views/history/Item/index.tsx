@@ -1,16 +1,23 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import store from '../../../store';
-import {
-  Root, RemoveIcon, Icon, Time, Title,
-} from '../../../components/PageItem';
-import { HistoryItem } from '../../../../interfaces';
-import { deleteHistoryItem } from '../../../../utils';
 import { icons, opacity } from '../../../../defaults';
+import { HistoryItem } from '../../../../interfaces';
+import { createTab, deleteHistoryItem } from '../../../../utils';
+import {
+  Icon,
+  RemoveIcon,
+  Root,
+  Time,
+  Title,
+} from '../../../components/PageItem';
+import store from '../../../store';
 
 @observer
-export default class Item extends React.Component<{ data: HistoryItem }, { hovered: boolean }> {
+export default class Item extends React.Component<
+  { data: HistoryItem },
+  { hovered: boolean }
+> {
   public state = {
     hovered: false,
   };
@@ -22,13 +29,16 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
       if (store.selectedHistoryItems.indexOf(data.id) === -1) {
         store.selectedHistoryItems.push(data.id);
       } else {
-        store.selectedHistoryItems.splice(store.selectedHistoryItems.indexOf(data.id), 1);
+        store.selectedHistoryItems.splice(
+          store.selectedHistoryItems.indexOf(data.id),
+          1,
+        );
       }
     } else {
-      store.getCurrentWorkspace().addTab({ url: data.url });
+      createTab({ url: data.url });
       store.menu.hide();
     }
-  };
+  }
 
   public onMouseEnter = () => this.setState({ hovered: true });
 
@@ -40,7 +50,7 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
     const { data } = this.props;
     const { id } = data;
     deleteHistoryItem(id);
-  };
+  }
 
   public render() {
     const { data } = this.props;
@@ -69,7 +79,9 @@ export default class Item extends React.Component<{ data: HistoryItem }, { hover
       >
         <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
         <Icon icon={favicon} style={{ opacity: hovered ? 0 : transparency }} />
-        <Time>{`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
+        <Time>{`${hour
+          .toString()
+          .padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
         <Title>{data.title}</Title>
       </Root>
     );

@@ -1,33 +1,39 @@
 import store from '../renderer/store';
+import {
+  createTab,
+  getCurrentWorkspace,
+  getCurrentWorkspaceTabs,
+  getSelectedPage,
+  selectTab,
+} from '../utils';
 
 export const Commands: any = {
   'tabs.switch': (e?: KeyboardEvent) => {
-    const current = store.getCurrentWorkspace();
-    const tabs = current.tabs;
+    const tabs = getCurrentWorkspaceTabs();
 
     // 0
     if (e.keyCode === 48) {
-      current.selectTab(tabs[tabs.length - 1]);
+      selectTab(tabs[tabs.length - 1]);
     } else {
       // 1-9
       const index = e.keyCode - 49;
 
       if (tabs.length > index) {
-        current.selectTab(tabs[index]);
+        selectTab(tabs[index]);
       }
     }
   },
   'tabs.new': () => {
-    store.getCurrentWorkspace().addTab();
+    createTab();
   },
   'tabs.reload': () => {
-    store.getSelectedPage().webview.reload();
+    getSelectedPage().webview.reload();
   },
   'tabs.back': () => {
-    store.getSelectedPage().webview.goBack();
+    getSelectedPage().webview.goBack();
   },
   'tabs.forward': () => {
-    store.getSelectedPage().webview.goForward();
+    getSelectedPage().webview.goForward();
   },
   'tabs.home': () => {
     console.log('home');
@@ -51,6 +57,6 @@ export const Commands: any = {
     store.menu.visible = false;
     store.menu.selectedItem = null;
     store.bookmarkDialogVisible = false;
-    store.pageMenu.toggle(false);
+    store.pageMenuVisible = false;
   },
 };

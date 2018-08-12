@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
-import { shadows, centerImage } from '../../../mixins';
 import { opacity } from '../../../../defaults';
+import { centerImage, shadows } from '../../../mixins';
+import { ADDRESS_BAR_HEIGHT } from '../../../../constants';
 
 interface AddressBarProps {
   visible: boolean;
@@ -10,20 +11,22 @@ interface AddressBarProps {
 export const StyledAddressBar = styled.div`
   position: absolute;
   width: 100%;
-  transition: 0.2s opacity, 0.2s transform, 0.2s box-shadow, 0.2s border-radius;
+  transition: 0.3s opacity;
   z-index: 10;
   max-width: 640px;
   left: 50%;
   overflow: hidden;
   background-color: white;
-  will-change: opacity, transform, box-shadow, border-radius, transition;
+  will-change: transition, opacity;
 
   ${({ suggestionsVisible, visible }: AddressBarProps) => css`
-    height: ${suggestionsVisible ? 'auto' : '32px'};
-    border-radius: ${suggestionsVisible ? 10 : 20}px;
+    height: ${suggestionsVisible ? 'auto' : `${ADDRESS_BAR_HEIGHT}px`};
+    border-radius: ${suggestionsVisible ? 4 : 20}px;
     box-shadow: ${suggestionsVisible ? shadows(8) : 'none'};
-    top: ${suggestionsVisible ? '4px' : 'calc(50% - 32px / 2)'};
-    transform: translateX(-50%) ${visible ? 'scale(1)' : 'scale(1.1)'};
+    top: ${suggestionsVisible
+      ? '4px'
+      : `calc(50% - ${ADDRESS_BAR_HEIGHT}px / 2)`};
+    transform: translateX(-50%);
     opacity: ${visible ? 1 : 0};
     -webkit-app-region: ${visible ? 'no-drag' : ''};
     pointer-events: ${visible ? 'auto' : 'none'};
@@ -36,7 +39,7 @@ export const Input = styled.input`
   outline: none;
   border: none;
   position: relative;
-  height: 32px;
+  height: 30px;
   background-color: transparent;
   transition: 0.1s padding-left;
 
@@ -55,7 +58,7 @@ export const InputContainer = styled.div`
   transition: 0.2s background-color;
 
   ${({ suggestionsVisible }: { suggestionsVisible: boolean }) => css`
-    height: ${suggestionsVisible ? '40px' : '32px'};
+    height: ${suggestionsVisible ? 40 : ADDRESS_BAR_HEIGHT}px;
     background-color: ${suggestionsVisible ? 'white' : 'rgba(0, 0, 0, 0.06)'};
   `};
 `;

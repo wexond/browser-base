@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { opacity } from '../../../../defaults';
-import { subtitle2, body2 } from '../../../mixins';
+import { body2, subtitle2 } from '../../../mixins';
 
 export const StyledItem = styled.div`
   display: flex;
