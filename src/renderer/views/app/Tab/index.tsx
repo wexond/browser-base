@@ -120,15 +120,9 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
         !workspaceTabs[index + 1].isClosing
       ) {
         const nextTab = workspaceTabs[index + 1];
-        if (nextTab.isNew) {
-          store.addressBar.toggled = true;
-        }
         selectTab(nextTab);
       } else if (index - 1 >= 0 && !workspaceTabs[index - 1].isClosing) {
         const prevTab = workspaceTabs[index - 1];
-        if (prevTab.isNew) {
-          store.addressBar.toggled = true;
-        }
         selectTab(prevTab);
       } else if (store.workspaces.length === 1) {
         closeWindow();
@@ -148,10 +142,6 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
   public onClick = () => {
     const { tab } = this.props;
     if (store.addressBar.canToggle) {
-      store.addressBar.toggled = true;
-    }
-
-    if (tab.isNew) {
       store.addressBar.toggled = true;
     }
   }
