@@ -103,7 +103,6 @@ const render = (AppComponent: any) => {
   runExtensionsService();
 
   render(App);
-})();
 
   createWorkspace();
 })();

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { Platforms } from '../../../../enums';
 import store from '../../../store';

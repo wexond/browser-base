@@ -18,14 +18,13 @@ import Toolbar from '../Toolbar';
 import WorkspacesMenu from '../WorkspacesMenu';
 import { StyledApp } from './styles';
 import {
-  parseKeyBindings,
-  bindKeys,
   getSelectedPage,
   createTab,
+  bindKeys,
+  getKeyBindings,
 } from '../../../../utils';
 import { PageMenuMode, ButtonType } from '../../../../enums';
 import { colors } from '../../../../defaults';
-import { getKeyBindings, bindKeys } from '../../../../utils';
 
 const { dialog } = remote;
 
