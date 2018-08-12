@@ -1,22 +1,11 @@
 import styled from 'styled-components';
+
 import { opacity } from '../../../../defaults';
-import { noButtons, subtitle2 } from '../../../mixins';
+import { subtitle2 } from '../../../mixins';
+import { PageContainer } from '../../app/Menu/styles';
 
-export const Content = styled.div`
-  width: 100%;
-  height: calc(100% - 56px);
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  ${noButtons('10px')};
-`;
-
-export const Container = styled.div`
-  width: calc(100% - 64px);
-  max-width: 640px;
+export const Container = styled(PageContainer)`
   padding-top: 16px;
-  padding-bottom: 32px;
-  margin: 0 auto;
 `;
 
 export const Items = styled.div`

@@ -78,12 +78,7 @@ export const runExtensionsService = () => {
 
   ipcRenderer.on(
     API_TABS_SET_ZOOM,
-    (
-      e: Electron.IpcMessageEvent,
-      tabId: number,
-      zoomFactor: number,
-      sender: number,
-    ) => {
+    (e: Electron.IpcMessageEvent, tabId: number, zoomFactor: number, sender: number) => {
       const webContents = remote.webContents.fromId(sender);
       const page = getPageById(tabId);
 

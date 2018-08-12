@@ -1,7 +1,7 @@
 import { app } from 'electron';
-import { existsSync, mkdirSync } from 'fs';
-import { homedir, platform } from 'os';
-import { join, resolve } from 'path';
+import { resolve, join } from 'path';
+import { platform, homedir } from 'os';
+import { mkdirSync, existsSync, writeFileSync } from 'fs';
 
 import { getPath } from '../utils/paths';
 import { runAutoUpdaterService } from './auto-updater';
@@ -9,6 +9,8 @@ import { runExtensionsService } from './extensions-service';
 import { Global } from './interfaces';
 import { createWindow } from './window';
 import { registerProtocols } from './protocols';
+
+const defaultKeyBindings = require('../../static/defaults/key-bindings.json');
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
@@ -19,12 +21,24 @@ let mainWindow: Electron.BrowserWindow;
 global.extensions = {};
 global.backgroundPages = {};
 
-if (!existsSync(getPath('plugins'))) {
-  mkdirSync(getPath('plugins'));
+const pluginsPath = getPath('plugins');
+const extensionsPath = getPath('extensions');
+const keyBindingsPath = getPath('key-bindings.json');
+
+if (!existsSync(pluginsPath)) {
+  mkdirSync(pluginsPath);
 }
 
-if (!existsSync(getPath('extensions'))) {
-  mkdirSync(getPath('extensions'));
+if (!existsSync(extensionsPath)) {
+  mkdirSync(extensionsPath);
+}
+
+if (!existsSync(keyBindingsPath)) {
+  writeFileSync(
+    keyBindingsPath,
+    JSON.stringify(defaultKeyBindings, null, 2),
+    'utf8',
+  );
 }
 
 app.on('activate', () => {
