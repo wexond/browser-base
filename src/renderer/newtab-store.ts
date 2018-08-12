@@ -13,9 +13,6 @@ class NewtabStore {
   @observable
   public weatherForecast: WeatherForecast;
 
-  @observable
-  public newTabContentVisible = false;
-
   public dictionary: any = dictionary;
 }
 
