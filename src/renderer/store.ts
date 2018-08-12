@@ -80,6 +80,9 @@ class Store {
   @observable
   public newTabContentVisible = false;
 
+  @observable
+  public keyRecordingDialogVisible = false;
+
   /** */
   @observable
   public isFullscreen = false;

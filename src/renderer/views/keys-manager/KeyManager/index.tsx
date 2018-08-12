@@ -4,6 +4,7 @@ import React from 'react';
 import store from '../../../store';
 import { PageContent } from '../../app/Menu/styles';
 import Chip from '../Chip';
+import Dialog from '../Dialog';
 import {
   Container, Table, HeadRow, HeadItem, BodyRow, BodyItem,
 } from './styles';
@@ -11,7 +12,9 @@ import { KeyBinding } from '../../../../interfaces';
 
 @observer
 export default class KeyManager extends React.Component {
-  public onChipClick = (keyBinding: KeyBinding) => {};
+  public onChipClick = (keyBinding: KeyBinding) => {
+    store.keyRecordingDialogVisible = true;
+  };
 
   public render() {
     return (
@@ -39,6 +42,7 @@ export default class KeyManager extends React.Component {
               ))}
             </tbody>
           </Table>
+          <Dialog />
         </Container>
       </PageContent>
     );
