@@ -18,8 +18,8 @@ class About extends React.Component {
           <Logo />
           <Card>
             <Item title={dictionary.wexondVersion}>v{packageFile.version}</Item>
-            <Item title={dictionary.ReactVersion}>
-              v{packageFile.devDependencies.React}
+            <Item title={dictionary.reactVersion}>
+              v{packageFile.devDependencies.react}
             </Item>
             <Item title={dictionary.electronVersion}>
               v{packageFile.devDependencies.electron}
