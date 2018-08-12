@@ -19,9 +19,6 @@ import {
 } from '../utils';
 import ContextMenu from './components/ContextMenu';
 import BookmarksDialog from './views/app/BookmarksDialog';
-
-import database from '../database';
-import { getBookmarkFolderPath } from '../utils';
 import KeyRecordingDialog from './views/keys-manager/KeyRecordingDialog';
 
 const dictionary = require('../../static/dictionaries/english-en.json');
@@ -147,6 +144,9 @@ class Store {
   @observable
   public selectedKeyBinding: KeyBinding;
 
+  @observable
+  public keyRecordingDialogVisible: boolean = false;
+
   /** Components refs */
   public pageMenu: ContextMenu;
 
@@ -167,8 +167,6 @@ class Store {
   };
 
   public cmdPressed = false;
-
-  public keyBindings: KeyBinding[] = [];
 
   private rearrangeTabsTimer = {
     canReset: false,

@@ -3,7 +3,7 @@ import Mousetrap from 'mousetrap';
 
 import { Commands } from '../defaults';
 import { KeyBinding } from '../interfaces';
-import { getPath } from './other';
+import { getPath } from './paths';
 
 const defaultKeyBindings = require('../../static/defaults/key-bindings.json');
 
