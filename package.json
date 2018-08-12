@@ -26,7 +26,7 @@
   "scripts": {
     "start": "cross-env ENV=dev electron .",
     "watch": "concurrently \"npm run watch-renderer\" \"npm run watch-main\" \"npm run watch-preloads\"",
-    "watch-renderer": "node server.js",
+    "watch-renderer": "webpack-dev-server --config webpack.config.renderer.dev.js",
     "watch-main": "webpack --config webpack.config.main.js --watch --mode development",
     "watch-preloads": "webpack --config webpack.config.preloads.js --watch --mode development",
     "build-renderer": "webpack --config webpack.config.renderer.prod.js",

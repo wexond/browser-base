@@ -1,7 +1,10 @@
 import styled, { css } from 'styled-components';
 import { opacity } from '../../../defaults/opacity';
 import { ButtonType } from '../../../enums';
-import { getComponentColor, getComponentOpacity } from '../../../utils';
+import {
+  getComponentColor,
+  getComponentOpacity,
+} from '../../../utils/component-color';
 import { button, centerImage, shadows } from '../../mixins';
 
 type UITheme = 'light' | 'dark';

@@ -1,6 +1,4 @@
 import styled, { css } from 'styled-components';
-import { opacity } from '../../../../defaults';
-import { caption } from '../../../mixins';
 
 export const StyledApp = styled.div`
   width: 100%;
@@ -9,10 +7,6 @@ export const StyledApp = styled.div`
   background-color: white;
   position: absolute;
   top: 0;
-
-  ${({ visible }: { visible: boolean }) => css`
-    visibility: ${visible ? 'visible' : 'hidden'};
-  `};
 `;
 
 export const Content = styled.div`
@@ -25,24 +19,6 @@ export const Content = styled.div`
   flex-wrap: wrap;
 
   opacity: ${({ visible }: { visible: boolean }) => (visible ? 1 : 0)};
-`;
-
-export const Credits = styled.div`
-  width: 100%;
-  padding: 8px;
-  background-color: #f5f5f5;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
-
-  ${caption()};
-
-  & a {
-    transition: 0.2s color;
-    text-decoration: underline;
-  }
-
-  & a:hover {
-    color: rgba(0, 0, 0, ${opacity.light.primaryText});
-  }
 `;
 
 export const Column = styled.div`

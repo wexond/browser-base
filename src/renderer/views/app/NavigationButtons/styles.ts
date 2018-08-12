@@ -7,8 +7,8 @@ export const StyledContainer = styled.div`
   -webkit-app-region: no-drag;
 
   ${({ isFullscreen }: { isFullscreen: boolean }) => css`
-    margin-left: ${isFullscreen && store.platform === Platforms.MacOS
-      ? 0
-      : 72}px;
+    margin-left: ${store.platform === Platforms.MacOS && !isFullscreen
+      ? 72
+      : 0}px;
   `};
 `;

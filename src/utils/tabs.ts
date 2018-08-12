@@ -182,7 +182,13 @@ export const selectTab = (tab: Tab) => {
 };
 
 export const createTab = (
-  createProperties: chrome.tabs.CreateProperties = { url: '', active: true },
+  createProperties: chrome.tabs.CreateProperties = {
+    url:
+      process.env.ENV === 'dev'
+        ? 'http://localhost:8080/newtab.html'
+        : 'wexond://newtab',
+    active: true,
+  },
 ) => {
   const workspace = getCurrentWorkspace();
   const tab = new Tab(workspace.id);

@@ -124,7 +124,7 @@ export const Content = styled.div`
   overflow: hidden;
   z-index: 2;
   display: flex;
-  transition: 0.1s max-width, 0.1s transform;
+  transition: 0.1s max-width;
   margin-left: 16px;
 
   ${({ hovered, selected }: ContentProps) => css`

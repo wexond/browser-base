@@ -1,6 +1,3 @@
-import { app, remote } from 'electron';
-import path from 'path';
-
 export const isObject = (item: any) => typeof item === 'object';
 
 export const merge = (
@@ -30,17 +27,6 @@ export const merge = (
   }
 
   return target;
-};
-
-export const getPath = (...relativePaths: string[]) => {
-  if (remote) {
-    return path
-      .resolve(remote.app.getPath('userData'), ...relativePaths)
-      .replace(/\\/g, '/');
-  }
-  return path
-    .resolve(app.getPath('userData'), ...relativePaths)
-    .replace(/\\/g, '/');
 };
 
 export const capitalizeWord = (str: string) =>
