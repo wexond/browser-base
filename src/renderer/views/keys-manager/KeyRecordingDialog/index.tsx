@@ -1,9 +1,10 @@
 import React from 'react';
+import mousetrap from 'mousetrap';
 import { observer } from 'mobx-react';
 
 import store from '../../../store';
 import Button from '../../../components/Button';
-import { colors } from '../../../../defaults';
+import { colors, Commands } from '../../../../defaults';
 import { ButtonType } from '../../../../enums';
 import {
   Root, Title, ButtonsContainer, Content, KeyInput,
@@ -62,7 +63,13 @@ export default class KeyRecordingDialog extends React.Component {
 
   public onOKClick = () => {
     if (this.combination != null) {
-      console.log(store.selectedKeyBinding);
+      const selected = store.selectedKeyBinding;
+      const combination = this.getCombination();
+
+      mousetrap.unbind(selected.key);
+      mousetrap.bind(combination, Commands[selected.command]);
+
+      selected.key = combination;
     }
 
     store.keyRecordingDialogVisible = false;
