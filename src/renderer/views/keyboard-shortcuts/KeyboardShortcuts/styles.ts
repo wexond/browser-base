@@ -6,6 +6,8 @@ import { opacity } from '../../../../defaults';
 
 export const Container = styled(PageContainer)`
   width: 100%;
+  height: 100%;
+  background-color: #fff;
 `;
 
 export const Table = styled.table`
