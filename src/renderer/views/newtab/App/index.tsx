@@ -10,7 +10,6 @@ import {
   TemperatureUnit,
   TimeUnit,
 } from '../../../../enums';
-import Preloader from '../../../components/Preloader';
 import { Column, Content, StyledApp } from './styles';
 import { newtabStore } from '../../../newtab-store';
 import { getWeather } from '../../../../utils/weather';
@@ -47,7 +46,6 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
     newtabStore.newsData = await getNews(Countries.us);
 
     this.onResize();
-    newtabStore.newTabContentVisible = true;
   }
 
   public getColumns = (columnsCount: number) => {
@@ -77,19 +75,11 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
   }
 
   public render() {
-    const { weatherForecast, newTabContentVisible, newsColumns } = newtabStore;
-
-    const preloaderStyle = {
-      position: 'fixed',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-    };
+    const { weatherForecast, newsColumns } = newtabStore;
 
     return (
       <StyledApp>
-        {!newTabContentVisible && <Preloader style={preloaderStyle} />}
-        <Content visible={newTabContentVisible}>
+        <Content>
           <Column>
             <WeatherCard data={weatherForecast} />
             {newsColumns.length > 0 && <News data={newsColumns[0]} />}
