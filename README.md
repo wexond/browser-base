@@ -35,13 +35,13 @@ All binaries are located in the [Releases page](https://github.com/wexond/wexond
 
 We still have a lot of things to do, to make Wexond better and better. This is just a beginning. So to improve our web browser we have created a roadmap so that you can see the next features and improvements.
 
+# [Supported WebExtensions APIs](https://github.com/wexond/wexond/issues/110)
+
 # Contributing
 
 We really appreciate any changes and improvements, so feel free to open pull requests! If you have found any issues, please report them. This would really help us making the browser even better!
 
 If you want to contribute, check our [Contributing guidelines](CONTRIBUTING.md) and [Code Of Conduct](CODE_OF_CONDUCT.md).
-
-# [Supported WebExtensions APIs](https://github.com/wexond/wexond/issues/110)
 
 ## Development
 
