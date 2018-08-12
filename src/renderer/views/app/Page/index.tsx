@@ -71,7 +71,6 @@ export default class extends React.Component<{ page: Page }, {}> {
       if (this.webview.getWebContents()) {
         const url = this.webview.getURL();
         if (url !== this.tab.url) {
-          this.tab.isNew = false;
           this.tab.url = url;
           this.emitEvent(
             'tabs',

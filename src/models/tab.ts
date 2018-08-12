@@ -24,9 +24,6 @@ export class Tab {
   @observable
   public hovered: boolean = false;
 
-  @observable
-  public isNew: boolean = true;
-
   public url: string = '';
 
   public width: number = 0;
