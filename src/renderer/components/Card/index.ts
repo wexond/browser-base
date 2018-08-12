@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+
 import { opacity } from '../../../defaults/opacity';
 import { body2, centerImage, coverImage, h5, h6 } from '../../mixins';
 

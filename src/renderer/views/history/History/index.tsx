@@ -1,9 +1,9 @@
-import { observer } from 'mobx-react';
 import React from 'react';
+import { observer } from 'mobx-react';
+
 import { getHistoryItems, getHistorySections } from '../../../../utils';
 import store from '../../../store';
-import Section from '../Section';
-import { Container, Content } from './styles';
+import { PageContent, PageContainer } from '../../app/Menu/styles';
 
 @observer
 export default class History extends React.Component {
@@ -11,13 +11,13 @@ export default class History extends React.Component {
     const sections = getHistorySections(getHistoryItems(store.menu.searchText));
 
     return (
-      <Content>
-        <Container>
+      <PageContent>
+        <PageContainer>
           {sections.map(section => (
             <Section key={section.id} section={section} />
           ))}
-        </Container>
-      </Content>
+        </PageContainer>
+      </PageContent>
     );
   }
 }

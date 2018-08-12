@@ -1,4 +1,5 @@
 {
+  "langNameEN": "english",
   "langName": "english",
   "langCode": "en",
   "addressBar": {
@@ -56,7 +57,15 @@
       "November",
       "December"
     ],
-    "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    "days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
     "daysShort": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     "today": "Today",
     "yesterday": "Yesterday",
