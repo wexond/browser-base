@@ -1,14 +1,14 @@
-import { observer } from 'mobx-react';
 import React from 'react';
+import { observer } from 'mobx-react';
 
-import { icons } from '../../../../defaults';
-import { addFolder, deleteHistoryItem } from '../../../../utils';
+import Menu from '../Menu';
 import store from '../../../store';
-import About from '../../about/About';
 import Bookmarks from '../../bookmarks/Bookmarks';
 import History from '../../history/History';
-import Menu from '../Menu';
+import About from '../../about/About';
 import KeyManager from '../../keys-manager/KeyManager';
+import { deleteHistoryItem, addFolder } from '../../../../utils';
+import { icons } from '../../../../defaults';
 
 const historyActions = {
   selectAll: () => {
@@ -95,6 +95,7 @@ export default class GlobalMenu extends React.Component {
           icon={icons.settings}
           searchVisible
         />
+        <Menu.Item title="Key manager" icon={icons.keyManager} searchVisible />
         <Menu.Item
           title={dictionary.extensions.title}
           icon={icons.extensions}
