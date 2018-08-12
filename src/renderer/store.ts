@@ -20,6 +20,10 @@ import {
 import ContextMenu from './components/ContextMenu';
 import BookmarksDialog from './views/app/BookmarksDialog';
 
+import database from '../database';
+import { getBookmarkFolderPath } from '../utils';
+import KeyRecordingDialog from './views/keys-manager/KeyRecordingDialog';
+
 const dictionary = require('../../static/dictionaries/english-en.json');
 
 class Store {
@@ -137,10 +141,18 @@ class Store {
   @observable
   public dictionary: any = dictionary;
 
+  @observable
+  public keyBindings: KeyBinding[] = [];
+
+  @observable
+  public selectedKeyBinding: KeyBinding;
+
   /** Components refs */
   public pageMenu: ContextMenu;
 
   public bookmarkDialog: BookmarksDialog;
+
+  public keyRecordingDialog: KeyRecordingDialog;
 
   /** */
   public webviewContextMenuParams: Electron.ContextMenuParams;

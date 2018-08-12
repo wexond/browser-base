@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+
 import {
   MENU_CONTENT_MAX_WIDTH,
   MENU_SPACE,
@@ -131,4 +132,20 @@ export const SearchIcon = styled.div`
   width: 24px;
   margin-left: 16px;
   background-image: url(${icons.search});
+`;
+
+export const PageContent = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  ${noButtons('10px')};
+`;
+
+export const PageContainer = styled.div`
+  width: calc(100% - 64px);
+  max-width: 640px;
+  padding-bottom: 32px;
+  margin: 0 auto;
 `;

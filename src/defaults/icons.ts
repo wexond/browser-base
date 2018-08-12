@@ -41,4 +41,5 @@ export const icons = {
   windowsMinimize: require('../renderer/resources/icons/windows/minimize.svg'),
   wind: require('../renderer/resources/icons/weather/wind.svg'),
   precipitation: require('../renderer/resources/icons/weather/precipitation.png'),
+  keyManager: require('../renderer/resources/icons/keyboard.svg'),
 };

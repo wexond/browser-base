@@ -8,6 +8,7 @@ import About from '../../about/About';
 import Bookmarks from '../../bookmarks/Bookmarks';
 import History from '../../history/History';
 import Menu from '../Menu';
+import KeyManager from '../../keys-manager/KeyManager';
 
 const historyActions = {
   selectAll: () => {
@@ -108,6 +109,7 @@ export default class GlobalMenu extends React.Component {
         <History />
         <Bookmarks />
         <div />
+        <KeyManager />
         <div />
         <About />
       </Menu>

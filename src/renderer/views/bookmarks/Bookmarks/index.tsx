@@ -1,9 +1,11 @@
-import { observer } from 'mobx-react';
 import React from 'react';
+import { observer } from 'mobx-react';
+
 import store from '../../../store';
 import Item from '../Item';
 import TreeBar from '../TreeBar';
-import { Container, Content, Items } from './styles';
+import { Container, Items } from './styles';
+import { PageContent } from '../../app/Menu/styles';
 
 @observer
 export default class Bookmarks extends React.Component {
@@ -19,7 +21,7 @@ export default class Bookmarks extends React.Component {
     return (
       <React.Fragment>
         <TreeBar />
-        <Content>
+        <PageContent>
           <Container>
             {items.length > 0 && (
               <Items>
@@ -29,7 +31,7 @@ export default class Bookmarks extends React.Component {
               </Items>
             )}
           </Container>
-        </Content>
+        </PageContent>
       </React.Fragment>
     );
   }
