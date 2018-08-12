@@ -197,7 +197,6 @@ export const createTab = (
 
   requestAnimationFrame(() => {
     selectTab(tab);
-    store.addressBar.toggled = true;
   });
 
   return tab;
