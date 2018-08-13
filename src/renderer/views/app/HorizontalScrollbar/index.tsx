@@ -32,7 +32,7 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
 
   private container: HTMLDivElement;
 
-  private scrollInterval: any;
+  private isScrollingToEnd: boolean = false;
 
   private scrollTimeout: any;
 
@@ -81,7 +81,7 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
     const delta = Math.abs(deltaX) >= Math.abs(deltaY) ? deltaX : -deltaY;
     const target = delta / 2;
 
-    clearInterval(this.scrollInterval);
+    this.isScrollingToEnd = false;
 
     if (scrollLeft !== newScrollLeft && newScrollLeft !== -1) {
       newScrollLeft += target;
@@ -121,7 +121,7 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
   }
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    clearInterval(this.scrollInterval);
+    this.isScrollingToEnd = false;
 
     this.scrollData = {
       ...this.scrollData,
@@ -131,21 +131,22 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
     };
   }
 
-  public scrollToEnd = (width: number, milliseconds: number) => {
-    if (!this.container) return;
+  public scrollToEnd = (milliseconds: number) => {
+    const frame = () => {
+      if (!this.isScrollingToEnd) return;
+      this.container.scrollLeft = Number.MAX_SAFE_INTEGER;
+      requestAnimationFrame(frame);
+    };
 
-    this.scrollData.maxScrollLeft += width;
-
-    clearInterval(this.scrollInterval);
-
-    this.scrollInterval = setInterval(() => {
-      this.container.scrollLeft = this.scrollData.maxScrollLeft;
-    }, 1);
+    if (!this.isScrollingToEnd) {
+      this.isScrollingToEnd = true;
+      requestAnimationFrame(frame);
+    }
 
     clearTimeout(this.scrollTimeout);
 
     this.scrollTimeout = setTimeout(() => {
-      clearInterval(this.scrollInterval);
+      this.isScrollingToEnd = false;
     }, milliseconds);
   }
 

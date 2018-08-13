@@ -18,10 +18,15 @@ export default class MenuItem extends React.Component<IProps, {}> {
   };
 
   public render() {
-    const { visible, disabled, dense, children } = this.props;
+    const { visible, disabled, dense, children, onClick } = this.props;
 
     return (
-      <StyledMenuItem disabled={disabled} dense={dense} visible={visible}>
+      <StyledMenuItem
+        onClick={onClick}
+        disabled={disabled}
+        dense={dense}
+        visible={visible}
+      >
         <Title dense={dense} disabled={disabled}>
           {children}
         </Title>

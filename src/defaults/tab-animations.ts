@@ -1,4 +1,4 @@
-import { Power4 } from 'gsap';
+import { Power2 } from 'gsap';
 
 export const tabAnimations = {
   backgroundColor: {
@@ -6,10 +6,10 @@ export const tabAnimations = {
   },
   left: {
     duration: 0.4,
-    easing: Power4.easeOut,
+    easing: Power2.easeOut,
   },
   width: {
     duration: 0.4,
-    easing: Power4.easeOut,
+    easing: Power2.easeOut,
   },
 };

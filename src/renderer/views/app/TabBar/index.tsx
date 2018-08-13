@@ -18,16 +18,9 @@ export default class Tabbar extends React.Component {
   public componentDidMount() {
     observe(store.tabs, (change: any) => {
       if (change.addedCount > 0 && change.removedCount === 0) {
-        const tab = change.added[0] as Tab;
-
-        requestAnimationFrame(() => {
-          if (this.scrollbar) {
-            this.scrollbar.scrollToEnd(
-              getTabWidth(),
-              tabAnimations.width.duration * 1000,
-            );
-          }
-        });
+        if (this.scrollbar) {
+          this.scrollbar.scrollToEnd(tabAnimations.width.duration * 1000);
+        }
       }
     });
 
