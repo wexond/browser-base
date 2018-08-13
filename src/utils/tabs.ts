@@ -132,9 +132,8 @@ export const updateTabsBounds = (animation: boolean = true) => {
 
 export const getTabById = (id: number) => store.tabs.find(x => x.id === id);
 
-export const removeTab = (id: number) => {
+export const removeTab = (id: number) =>
   (store.tabs as any).replace(store.tabs.filter(x => x.id !== id));
-};
 
 export const replaceTab = (firstTab: Tab, secondTab: Tab) => {
   const { tabs } = store;
@@ -183,7 +182,10 @@ export const selectTab = (tab: Tab) => {
 
 export const createTab = (
   createProperties: chrome.tabs.CreateProperties = {
-    url: 'https://google.pl',
+    url:
+      process.env.ENV === 'dev'
+        ? 'http://localhost:8080/newtab.html'
+        : 'wexond://newtab',
     active: true,
   },
 ) => {
