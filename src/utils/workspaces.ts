@@ -23,7 +23,7 @@ export const selectWorkspace = (id: number) => {
 };
 
 export const removeWorkspace = (id: number) =>
-  (store.workspaces = store.workspaces.filter(x => x.id !== id));
+  (store.workspaces as any).replace(store.workspaces.filter(x => x.id !== id));
 
 let id = 0;
 
