@@ -140,7 +140,7 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
 
     if (!this.isScrollingToEnd) {
       this.isScrollingToEnd = true;
-      requestAnimationFrame(frame);
+      frame();
     }
 
     clearTimeout(this.scrollTimeout);

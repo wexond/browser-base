@@ -24,7 +24,7 @@ export const StyledAddressBar = styled.div`
     border-radius: ${suggestionsVisible ? 4 : 20}px;
     box-shadow: ${suggestionsVisible ? shadows(8) : 'none'};
     top: ${suggestionsVisible
-      ? '4px'
+      ? '1px'
       : `calc(50% - ${ADDRESS_BAR_HEIGHT}px / 2)`};
     transform: translateX(-50%);
     opacity: ${visible ? 1 : 0};

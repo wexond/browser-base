@@ -40,7 +40,7 @@ export const StyledTab = styled.div`
   border-radius: 4px;
   overflow: hidden;
   align-items: center;
-  transition: 0.1s background-color, 0.1s color;
+  transition: 0.1s color;
   will-change: transition, transform, width, left;
 
   ${({ selected, isRemoving, visible, workspaceSelected }: TabProps) => css`

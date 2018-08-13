@@ -193,10 +193,7 @@ export const createTab = (
   const tab = new Tab(workspace.id);
   store.tabs.push(tab);
   createPage(tab.id, createProperties.url);
-
-  requestAnimationFrame(() => {
-    selectTab(tab);
-  });
+  selectTab(tab);
 
   return tab;
 };
