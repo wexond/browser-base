@@ -1,11 +1,12 @@
 import { webContents } from 'electron';
 import { readdirSync, readFileSync, statSync } from 'fs';
-import { format, resolve } from 'url';
+import { format } from 'url';
 
 import { Manifest } from '../interfaces';
 import { makeId } from '../utils/other';
 import { Global } from './interfaces';
 import { getPath } from '../utils/paths';
+import { join, resolve } from 'path';
 
 declare const global: Global;
 
@@ -42,6 +43,8 @@ export const startBackgroundPage = (manifest: Manifest) => {
       preload: resolve(__dirname, 'build/background-page-preload.js'),
     });
 
+    contents.openDevTools({ mode: 'detach' });
+
     global.backgroundPages[extensionId] = {
       html,
       name,
@@ -67,6 +70,7 @@ export const loadExtensions = () => {
 
   for (const dir of files) {
     const extensionPath = resolve(extensionsPath, dir);
+    console.log(extensionPath);
     const stats = statSync(extensionPath);
 
     if (stats.isDirectory()) {

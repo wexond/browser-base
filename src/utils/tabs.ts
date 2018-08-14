@@ -6,10 +6,12 @@ import {
   getCurrentWorkspaceTabs,
   getWorkspaceById,
 } from '.';
-import { TOOLBAR_BUTTON_WIDTH } from '../constants';
+import { TOOLBAR_BUTTON_WIDTH, TOOLBAR_HEIGHT } from '../constants';
 import { tabAnimations } from '../defaults';
 import { Tab } from '../models';
 import { createPage } from './pages';
+import { emitEvent } from './extensions';
+import { getWorkspaceTabs } from './workspaces';
 
 export const getTabbarWidth = (): number => {
   if (!store.tabbarRef) {
@@ -177,6 +179,11 @@ export const selectTab = (tab: Tab) => {
   if (!tab.isClosing) {
     const workspace = getWorkspaceById(tab.workspaceId);
     workspace.selectedTab = tab.id;
+
+    emitEvent('tabs', 'onActivated', {
+      tabId: tab.id,
+      windowId: 0,
+    });
   }
 };
 
@@ -198,4 +205,26 @@ export const createTab = (
   return tab;
 };
 
-export const getIpcTab = (tab: Tab) => {};
+export const getIpcTab = (tab: Tab): chrome.tabs.Tab => {
+  const tabs = getWorkspaceTabs(tab.workspaceId);
+  const selected = getSelectedTab().id === tab.id;
+
+  return {
+    id: tab.id,
+    index: tabs.indexOf(tab),
+    title: tab.title,
+    pinned: false,
+    favIconUrl: tab.favicon,
+    url: tab.url,
+    status: tab.loading ? 'loading' : 'complete',
+    width: tab.width,
+    height: TOOLBAR_HEIGHT,
+    active: selected,
+    highlighted: selected,
+    selected,
+    windowId: 0,
+    discarded: false,
+    incognito: false,
+    autoDiscardable: false,
+  };
+};

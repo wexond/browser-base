@@ -13,13 +13,13 @@ declare const global: Global;
 
 export const runExtensionsService = (window: BrowserWindow) => {
   ipcMain.on(API_TABS_QUERY, (e: Electron.IpcMessageEvent) => {
-    window.webContents.send('api-tabs-query', e.sender.id);
+    window.webContents.send(API_TABS_QUERY, e.sender.id);
   });
 
   ipcMain.on(
     API_TABS_CREATE,
     (e: Electron.IpcMessageEvent, data: chrome.tabs.CreateProperties) => {
-      window.webContents.send('api-tabs-create', data, e.sender.id);
+      window.webContents.send(API_TABS_CREATE, data, e.sender.id);
     },
   );
 
