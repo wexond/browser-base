@@ -43,15 +43,13 @@ export const startBackgroundPage = (manifest: Manifest) => {
       preload: resolve(__dirname, 'build/background-page-preload.js'),
     });
 
-    contents.openDevTools({ mode: 'detach' });
-
     global.backgroundPages[extensionId] = {
       html,
       name,
       webContentsId: contents.id,
     };
 
-    // contents.openDevTools({ mode: 'detach' });
+    contents.openDevTools({ mode: 'detach' });
 
     contents.loadURL(
       format({
