@@ -26,6 +26,10 @@ const config = merge.smart(baseConfig, {
   },
 
   plugins: [new webpack.HotModuleReplacementPlugin()],
+
+  externals: {
+    sqlite3: 'require("sqlite3")',
+  },
 });
 
 const appConfig = merge.smart(config, {
