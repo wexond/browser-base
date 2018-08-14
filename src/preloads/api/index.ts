@@ -1,5 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { format } from 'url';
+import sqlite from 'sqlite3';
 
 import { Manifest } from '../../interfaces/manifest';
 import IpcEvent from './ipc-event';
@@ -208,7 +209,12 @@ export const getAPI = (manifest: Manifest) => {
     // https://developer.chrome.com/extensions/storage
     storage: {
       local: {
-        get: () => {},
+        set: (key: string, value: string) => {
+          console.log(key, value);
+        },
+        get: (key: any) => {
+          console.log(typeof key, key);
+        },
       },
       sync: {},
       onChanged: {},
