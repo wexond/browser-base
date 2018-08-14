@@ -67,11 +67,3 @@ app.on('window-all-closed', () => {
 });
 
 registerProtocols();
-
-// Electron live reload
-if (process.env.ENV === 'dev') {
-  // eslint-disable-next-line
-  require('electron-reload')(__dirname, {
-    electron: join(__dirname, 'node_modules', '.bin', 'electron'),
-  });
-}
