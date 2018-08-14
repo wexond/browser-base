@@ -112,6 +112,11 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
     setTabWidth(tab, 0, true);
     setTabsLefts(true);
 
+    emitEvent('tabs', 'onRemoved', tab.id, {
+      windowId: 0,
+      isWindowClosing: false,
+    });
+
     if (selected) {
       index = workspaceTabs.indexOf(tab);
 
@@ -121,11 +126,26 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
       ) {
         const nextTab = workspaceTabs[index + 1];
         selectTab(nextTab);
+
+        emitEvent('tabs', 'onRemoved', tab.id, {
+          windowId: 0,
+          isWindowClosing: false,
+        });
       } else if (index - 1 >= 0 && !workspaceTabs[index - 1].isClosing) {
         const prevTab = workspaceTabs[index - 1];
         selectTab(prevTab);
+
+        emitEvent('tabs', 'onRemoved', tab.id, {
+          windowId: 0,
+          isWindowClosing: false,
+        });
       } else if (store.workspaces.length === 1) {
         closeWindow();
+
+        emitEvent('tabs', 'onRemoved', tab.id, {
+          windowId: 0,
+          isWindowClosing: true,
+        });
       }
     }
 

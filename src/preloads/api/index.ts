@@ -201,15 +201,11 @@ export const getAPI = (manifest: Manifest) => {
 
       onCreated: new IpcEvent('tabs', 'onCreated'),
       onUpdated: new IpcEvent('tabs', 'onUpdated'),
-      onMoved: new IpcEvent('tabs', 'onMoved'), // TODO
-      onActivated: new IpcEvent('tabs', 'onActivated'), // TODO
-      onHighlighted: new IpcEvent('tabs', 'onHighlighted'), // TODO
-      onDetached: new IpcEvent('tabs', 'onDetached'), // TODO
-      onAttached: new IpcEvent('tabs', 'onAttached'), // TODO
+      onActivated: new IpcEvent('tabs', 'onActivated'),
       onRemoved: new IpcEvent('tabs', 'onRemoved'), // TODO
-      onReplaced: new IpcEvent('tabs', 'onReplaced'), // TODO
-      onZoomChange: new IpcEvent('tabs', 'onZoomChange'), // TODO
     },
+
+    // https://developer.chrome.com/extensions/storage
     storage: {
       local: {
         get: () => {},
@@ -217,10 +213,12 @@ export const getAPI = (manifest: Manifest) => {
       sync: {},
       onChanged: {},
     },
+
+    // https://developer.chrome.com/extensions/i18n
     i18n: {
       getMessage: () => {},
     },
-    windows: {},
+
     browserAction: {
       onClicked: {
         addListener: () => {},
