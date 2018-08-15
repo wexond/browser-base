@@ -1,6 +1,5 @@
 import { ipcRenderer } from 'electron';
 import { format } from 'url';
-import sqlite from 'sqlite3';
 
 import { Manifest } from '../../interfaces/manifest';
 import IpcEvent from './ipc-event';
