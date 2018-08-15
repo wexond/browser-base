@@ -44,7 +44,7 @@ export default class BookmarksDialog extends React.Component {
         });
       }
     }
-  }
+  };
 
   public onMouseUp = (e?: React.MouseEvent<any>) => {
     e.stopPropagation();
@@ -54,11 +54,11 @@ export default class BookmarksDialog extends React.Component {
       this.dropdown.ripple.fadeOut();
       this.dropDownClicked = false;
     }
-  }
+  };
 
   public onDropdownMouseUp = (e?: React.MouseEvent<any>) => {
     this.dropDownClicked = true;
-  }
+  };
 
   public onRemoveClick = async () => {
     if (this.bookmark) {
@@ -66,12 +66,13 @@ export default class BookmarksDialog extends React.Component {
       store.isBookmarked = false;
       store.bookmarkDialogVisible = false;
     }
-  }
+  };
 
   public onDoneClick = async () => {
     const name = this.textField.getValue();
 
-    await database.bookmarks
+    // TODO: nedb
+    /*await database.bookmarks
       .where('id')
       .equals(this.bookmark.id)
       .modify({
@@ -82,20 +83,20 @@ export default class BookmarksDialog extends React.Component {
     const item = store.bookmarks.find(x => x.id === this.bookmark.id);
 
     item.title = name;
-    item.parent = this.bookmarkFolder;
+    item.parent = this.bookmarkFolder;*/
 
     store.bookmarkDialogVisible = false;
-  }
+  };
 
   public onTextfieldKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       this.onDoneClick();
     }
-  }
+  };
 
   public onDropdownChange = (id: number) => {
     this.bookmarkFolder = id;
-  }
+  };
 
   public render() {
     const visible = store.bookmarkDialogVisible;
