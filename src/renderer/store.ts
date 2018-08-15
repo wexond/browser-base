@@ -210,7 +210,8 @@ class Store {
   }
 
   public loadFavicons() {
-    return new Promise(async resolve => {
+    // TODO: nedb
+    /*return new Promise(async resolve => {
       await database.favicons.each(favicon => {
         if (
           this.favicons[favicon.url] == null &&
@@ -222,14 +223,14 @@ class Store {
         }
       });
       resolve();
-    });
+    });*/
   }
 
   /** Bookmarks */
   public goToBookmarkFolder = (id: number) => {
     this.currentBookmarksTree = id;
     this.bookmarksPath = getBookmarkFolderPath(id);
-  }
+  };
 }
 
 export default new Store();
