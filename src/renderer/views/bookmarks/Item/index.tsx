@@ -58,7 +58,7 @@ export default class Item extends React.Component<
       createTab({ url: data.url });
       store.menu.hide();
     }
-  }
+  };
 
   public onMouseEnter = () => this.setState({ hovered: true });
 
@@ -72,7 +72,7 @@ export default class Item extends React.Component<
     const { id, type } = data;
 
     removeItem(id, type);
-  }
+  };
 
   public onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { data } = this.props;
@@ -85,24 +85,24 @@ export default class Item extends React.Component<
     this.input.focus();
 
     window.addEventListener('mousedown', this.onWindowMouseDown);
-  }
+  };
 
   public onInputMouseEvent = (e: React.MouseEvent<HTMLInputElement>) => {
     e.stopPropagation();
-  }
+  };
 
   public onWindowMouseDown = () => {
     this.setState({ inputVisible: false });
     this.saveFolderName();
 
     window.removeEventListener('mousedown', this.onWindowMouseDown);
-  }
+  };
 
   public onInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       this.onWindowMouseDown();
     }
-  }
+  };
 
   public saveFolderName = async () => {
     const { data } = this.props;
@@ -110,7 +110,8 @@ export default class Item extends React.Component<
     const title = this.input.value;
 
     if (title !== data.title && title.length > 0) {
-      await database.bookmarks
+      // TODO: nedb
+      /*await database.bookmarks
         .where('id')
         .equals(data.id)
         .modify({
@@ -118,13 +119,13 @@ export default class Item extends React.Component<
         });
 
       const item = store.bookmarks.find(x => x.id === data.id);
-      item.title = title;
+      item.title = title;*/
     }
-  }
+  };
 
   public onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     e.currentTarget.select();
-  }
+  };
 
   public render() {
     const { data } = this.props;

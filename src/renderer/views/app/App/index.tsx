@@ -33,17 +33,17 @@ class App extends React.Component {
   public onInspectElementClick = () => {
     const { x, y } = store.webviewContextMenuParams;
     getSelectedPage().webview.inspectElement(x, y);
-  }
+  };
 
   public async componentDidMount() {
     window.addEventListener('mousemove', this.onWindowMouseMove);
     window.addEventListener('mousedown', this.onWindowMouseDown);
     window.addEventListener('mouseup', this.onWindowMouseUp);
 
-    await store.loadFavicons();
-
+    // TODO: nedb
+    /*await store.loadFavicons();
     store.bookmarks = await database.bookmarks.toArray();
-    store.historyItems = await database.history.toArray();
+    store.historyItems = await database.history.toArray();*/
 
     store.keyBindings = await getKeyBindings();
     bindKeys(store.keyBindings);
@@ -52,15 +52,15 @@ class App extends React.Component {
   public onWindowMouseMove = (e: MouseEvent) => {
     store.mouse.x = e.pageX;
     store.mouse.y = e.pageY;
-  }
+  };
 
   public onWindowMouseDown = (e: MouseEvent) => {
     store.pageMenuVisible = false;
-  }
+  };
 
   public onWindowMouseUp = (e: MouseEvent) => {
     store.bookmarkDialogVisible = false;
-  }
+  };
 
   public componentWillUnmount() {
     store.pages = [];
@@ -73,27 +73,27 @@ class App extends React.Component {
   public onRestartClick = () => {
     store.updateInfo.available = false;
     ipcRenderer.send(UPDATE_RESTART_AND_INSTALL);
-  }
+  };
 
   public onOpenLinkInNewTabClick = () => {
     const { linkURL } = store.webviewContextMenuParams;
     createTab({ url: linkURL, active: false });
-  }
+  };
 
   public onCopyLinkAddressClick = () => {
     const { linkURL } = store.webviewContextMenuParams;
     clipboard.clear();
     clipboard.writeText(linkURL);
-  }
+  };
 
   public onOpenImageInNewTabClick = () => {
     const { srcURL } = store.webviewContextMenuParams;
     createTab({ url: srcURL, active: false });
-  }
+  };
 
   public onPrintClick = () => {
     getSelectedPage().webview.print();
-  }
+  };
 
   public onCopyImageClick = () => {
     const { srcURL } = store.webviewContextMenuParams;
@@ -101,13 +101,13 @@ class App extends React.Component {
 
     clipboard.clear();
     clipboard.writeImage(img);
-  }
+  };
 
   public onCopyImageAddressClick = () => {
     const { srcURL } = store.webviewContextMenuParams;
     clipboard.clear();
     clipboard.writeText(srcURL);
-  }
+  };
 
   public onSaveImageAsClick = () => {
     const { srcURL } = store.webviewContextMenuParams;
@@ -147,7 +147,7 @@ class App extends React.Component {
         request.end();
       },
     );
-  }
+  };
 
   public saveLinkAs = () => {
     const url = store.webviewContextMenuParams.linkText;
@@ -171,7 +171,7 @@ class App extends React.Component {
           });
       },
     );
-  }
+  };
 
   public saveAs = () => {
     dialog.showSaveDialog(
@@ -194,12 +194,12 @@ class App extends React.Component {
           });
       },
     );
-  }
+  };
 
   public viewSource = () => {
     const url = getSelectedPage().webview.getURL();
     createTab({ url: `view-source:${url}`, active: true });
-  }
+  };
 
   public render() {
     const { mode } = store.pageMenuData;

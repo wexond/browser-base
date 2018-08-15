@@ -47,13 +47,13 @@
     "@types/chrome": "0.0.71",
     "@types/gsap": "1.19.2",
     "@types/mousetrap": "1.6.0",
+    "@types/nedb": "1.8.5",
     "@types/node": "10.5.6",
     "@types/react": "16.4.7",
     "@types/react-dom": "16.0.6",
     "awesome-typescript-loader": "5.2.0",
     "concurrently": "3.6.1",
     "cross-env": "5.2.0",
-    "dexie": "2.0.4",
     "electron": "2.0.6",
     "electron-builder": "20.26.1",
     "electron-react-devtools": "0.5.3",
@@ -79,6 +79,6 @@
   },
   "dependencies": {
     "electron-updater": "3.0.3",
-    "sqlite3": "^4.0.2"
+    "nedb": "1.8.0"
   }
 }

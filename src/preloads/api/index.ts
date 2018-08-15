@@ -208,7 +208,12 @@ export const getAPI = (manifest: Manifest) => {
     // https://developer.chrome.com/extensions/storage
     storage: {
       local: {
-        get: () => {},
+        set: (key: string, value: string) => {
+          console.log(key, value);
+        },
+        get: (key: any) => {
+          console.log(typeof key, key);
+        },
       },
       sync: {},
       onChanged: {},

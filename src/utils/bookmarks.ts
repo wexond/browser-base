@@ -21,13 +21,15 @@ export const getBookmarkFolderPath = (parent: number) => {
 };
 
 export const addBookmark = async (item: BookmarkItem) => {
-  item.id = await database.bookmarks.add(item);
-  store.bookmarks.push(item);
+  // TODO: nedb
+  /*item.id = await database.bookmarks.add(item);
+  store.bookmarks.push(item);*/
   return item;
 };
 
 export const addFolder = (title: string, parent: number) => {
-  database.transaction('rw', database.bookmarks, async () => {
+  // TODO: nedb
+  /*database.transaction('rw', database.bookmarks, async () => {
     const item: BookmarkItem = {
       title,
       parent,
@@ -36,7 +38,7 @@ export const addFolder = (title: string, parent: number) => {
 
     item.id = await database.bookmarks.add(item);
     store.bookmarks.push(item);
-  });
+  });*/
 };
 
 export const removeItem = async (id: number, type: string) => {
@@ -57,7 +59,8 @@ export const removeItem = async (id: number, type: string) => {
     store.isBookmarked = false;
   }
 
-  await database.bookmarks.delete(id);
+  // TODO: nedb
+  // await database.bookmarks.delete(id);
 };
 
 export const getBookmarkFolders = () =>
