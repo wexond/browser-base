@@ -4,8 +4,8 @@ import http from 'http';
 import { observer } from 'mobx-react';
 import { basename, extname } from 'path';
 import React from 'react';
-import sqlite from 'sqlite3';
 import { parse } from 'url';
+import nedb from 'nedb';
 
 import { UPDATE_RESTART_AND_INSTALL } from '../../../../constants';
 import database from '../../../../database';
@@ -49,13 +49,17 @@ class App extends React.Component {
     store.keyBindings = await getKeyBindings();
     bindKeys(store.keyBindings);
 
-    const path = remote.app.getPath('userData') + 'test.db';
+    const testDB = new nedb('./test.db');
+    testDB.loadDatabase();
 
-    const testdb = new sqlite.Database(path, sqlite.OPEN_READWRITE, err => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log('Connected to the database.');
+    const item = {
+      message: 'Hello world from the database!',
+      date: new Date(),
+    };
+
+    testDB.insert(item, (err, data) => {
+      if (err) return console.warn(err);
+      console.log(data);
     });
   }
 

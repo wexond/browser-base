@@ -17,6 +17,5 @@ module.exports = (env, argv) =>
 
     externals: {
       chokidar: 'require("chokidar")',
-      sqlite3: 'require("sqlite3")',
     },
   });
