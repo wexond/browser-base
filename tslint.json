@@ -1,7 +1,5 @@
 {
-  "extends": [
-    "tslint-config-airbnb"
-  ],
+  "extends": ["tslint-config-airbnb"],
   "rules": {
     "no-increment-decrement": false,
     "max-line-length": false,
@@ -15,6 +13,7 @@
     "ter-arrow-parens": false,
     "no-parameter-reassignment": false,
     "object-shorthand-properties-first": false,
+    "semicolon": false,
     "align": false
   }
 }
