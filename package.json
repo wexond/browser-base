@@ -79,6 +79,6 @@
   },
   "dependencies": {
     "electron-updater": "3.0.3",
-    "sqlite3": "4.0.2"
+    "sqlite3": "^4.0.2"
   }
 }
