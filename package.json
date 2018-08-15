@@ -54,7 +54,6 @@
     "awesome-typescript-loader": "5.2.0",
     "concurrently": "3.6.1",
     "cross-env": "5.2.0",
-    "dexie": "2.0.4",
     "electron": "2.0.6",
     "electron-builder": "20.26.1",
     "electron-react-devtools": "0.5.3",

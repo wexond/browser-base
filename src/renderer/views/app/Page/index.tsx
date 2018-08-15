@@ -88,7 +88,7 @@ export default class extends React.Component<{ page: Page }, {}> {
     }, 30);
 
     this.webview.removeEventListener('load-commit', this.onceLoadCommit);
-  }
+  };
 
   public addWebviewListener(name: string, callback: any) {
     this.webview.addEventListener(name, callback);
@@ -108,7 +108,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       );
       webContents.send(`api-emit-event-${scope}-${name}`, ...data);
     });
-  }
+  };
 
   public onIpcMessage = (e: Electron.IpcMessageEvent, args: any[]) => {
     if (e.channel === 'api-tabs-getCurrent') {
@@ -116,7 +116,7 @@ export default class extends React.Component<{ page: Page }, {}> {
         .getWebContents()
         .send('api-tabs-getCurrent', getIpcTab(this.tab));
     }
-  }
+  };
 
   public onWillNavigate = (e: Electron.WillNavigateEvent) => {
     this.emitEvent('webNavigation', 'onBeforeNavigate', {
@@ -127,7 +127,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       processId: -1,
       parentFrameId: -1,
     });
-  }
+  };
 
   public onDidStartLoading = () => {
     this.emitEvent('webNavigation', 'onCommitted', {
@@ -147,7 +147,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       },
       getIpcTab(this.tab),
     );
-  }
+  };
 
   public onDidNavigate = (e: Electron.DidNavigateEvent) => {
     this.emitEvent('webNavigation', 'onCompleted', {
@@ -167,7 +167,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       },
       getIpcTab(this.tab),
     );
-  }
+  };
 
   public onDomReady = () => {
     this.webview.getWebContents().on('context-menu', this.onContextMenu);
@@ -178,7 +178,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       timeStamp: Date.now(),
       processId: this.webview.getWebContents().getOSProcessId(),
     });
-  }
+  };
 
   public onNewWindow = (e: Electron.NewWindowEvent) => {
     let tab: Tab;
@@ -197,7 +197,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       url: e.url,
       tabId: tab,
     });
-  }
+  };
 
   public onContextMenu = (
     e: Electron.Event,
@@ -247,12 +247,12 @@ export default class extends React.Component<{ page: Page }, {}> {
     // Set the new position.
     store.pageMenuData.x = left;
     store.pageMenuData.y = top;
-  }
+  };
 
   public onDidStopLoading = () => {
     store.refreshNavigationState();
     this.tab.loading = false;
-  }
+  };
 
   public onLoadCommit = async ({
     url,
@@ -261,7 +261,8 @@ export default class extends React.Component<{ page: Page }, {}> {
     this.tab.loading = true;
 
     if (url !== this.lastURL && isMainFrame && !url.startsWith('wexond://')) {
-      database.transaction('rw', database.history, async () => {
+      // TODO: nedb
+      /*database.transaction('rw', database.history, async () => {
         const id = await database.history.add({
           title: this.tab.title,
           url,
@@ -270,11 +271,11 @@ export default class extends React.Component<{ page: Page }, {}> {
         });
 
         this.lastHistoryItemID = id;
-      });
+      });*/
 
       this.lastURL = url;
     }
-  }
+  };
 
   public onPageFaviconUpdated = ({
     favicons,
@@ -286,7 +287,8 @@ export default class extends React.Component<{ page: Page }, {}> {
           this.tab.favicon = '';
         } else {
           this.tab.favicon = favicons[0];
-          database.addFavicon(favicons[0]);
+          // TODO: nedb
+          // database.addFavicon(favicons[0]);
         }
       }
       this.updateData();
@@ -304,12 +306,13 @@ export default class extends React.Component<{ page: Page }, {}> {
 
     request.open('GET', favicons[0], true);
     request.send(null);
-  }
+  };
 
   public updateData = () => {
     if (this.lastURL === this.tab.url) {
       if (this.lastHistoryItemID !== -1) {
-        database.transaction('rw', database.history, async () => {
+        // TODO: nedb
+        /*database.transaction('rw', database.history, async () => {
           database.history
             .where('id')
             .equals(this.lastHistoryItemID)
@@ -318,10 +321,10 @@ export default class extends React.Component<{ page: Page }, {}> {
               url: this.webview.getURL(),
               favicon: this.tab.favicon,
             });
-        });
+        });*/
       }
     }
-  }
+  };
 
   public onPageTitleUpdated = ({ title }: Electron.PageTitleUpdatedEvent) => {
     const { page } = this.props;
@@ -340,15 +343,15 @@ export default class extends React.Component<{ page: Page }, {}> {
       },
       getIpcTab(this.tab),
     );
-  }
+  };
 
   public onFullscreenEnter = () => {
     store.isHTMLFullscreen = true;
-  }
+  };
 
   public onFullscreenLeave = () => {
     store.isHTMLFullscreen = false;
-  }
+  };
 
   public render() {
     const { page } = this.props;

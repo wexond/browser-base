@@ -45,6 +45,7 @@ export const getHistorySections = (items: HistoryItem[]) => {
 };
 
 export function deleteHistoryItem(id: number) {
-  store.historyItems = store.historyItems.filter(x => x.id !== id);
-  database.history.delete(id);
+  // TODO: nedb
+  /*store.historyItems = store.historyItems.filter(x => x.id !== id);
+  database.history.delete(id);*/
 }
