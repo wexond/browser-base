@@ -5,7 +5,6 @@ import { observer } from 'mobx-react';
 import { basename, extname } from 'path';
 import React from 'react';
 import { parse } from 'url';
-import nedb from 'nedb';
 
 import { UPDATE_RESTART_AND_INSTALL } from '../../../../constants';
 import database from '../../../../database';
@@ -41,26 +40,13 @@ class App extends React.Component {
     window.addEventListener('mousedown', this.onWindowMouseDown);
     window.addEventListener('mouseup', this.onWindowMouseUp);
 
-    await store.loadFavicons();
-
+    // TODO: nedb
+    /*await store.loadFavicons();
     store.bookmarks = await database.bookmarks.toArray();
-    store.historyItems = await database.history.toArray();
+    store.historyItems = await database.history.toArray();*/
 
     store.keyBindings = await getKeyBindings();
     bindKeys(store.keyBindings);
-
-    const testDB = new nedb('./test.db');
-    testDB.loadDatabase();
-
-    const item = {
-      message: 'Hello world from the database!',
-      date: new Date(),
-    };
-
-    testDB.insert(item, (err, data) => {
-      if (err) return console.warn(err);
-      console.log(data);
-    });
   }
 
   public onWindowMouseMove = (e: MouseEvent) => {
