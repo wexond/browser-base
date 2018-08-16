@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { EASE_FUNCTION } from '../../../constants';
-import { icons } from '../../../defaults/icons';
-import { opacity } from '../../../defaults/transparency';
+import { icons } from '../../defaults/icons';
+import { opacity } from '../../defaults/transparency';
 import { centerImage, robotoRegular, shadows } from '../../mixins';
 
 export const Root = styled.div`

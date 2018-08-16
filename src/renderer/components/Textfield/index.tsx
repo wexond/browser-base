@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { colors } from '../../../defaults/colors';
+import { colors } from '../../defaults/colors';
 import { TextfieldType } from '../../../enums';
 
 import { executeEventStopPropagation } from '../../../utils';
@@ -53,14 +53,14 @@ export default class Textfield extends React.Component<IProps, IState> {
   public onTrailingIconClick = (e?: React.SyntheticEvent<HTMLDivElement>) => {
     // eslint-disable-next-line React/destructuring-assignment
     executeEventStopPropagation(e, this.props.onTrailingIconClick);
-  }
+  };
 
   public getValue = () => this.inputElement.value;
 
   public setValue = (value: string) => {
     this.inputElement.value = value;
     this.inputElement.focus();
-  }
+  };
 
   public render() {
     const {
@@ -115,13 +115,13 @@ export default class Textfield extends React.Component<IProps, IState> {
 
   private onClick = () => {
     this.inputElement.focus();
-  }
+  };
 
   private onFocus = () => {
     this.setState({
       activated: true,
     });
-  }
+  };
 
   private onBlur = () => {
     const { activated } = this.state;
@@ -131,12 +131,12 @@ export default class Textfield extends React.Component<IProps, IState> {
         activated: false,
       });
     }
-  }
+  };
 
   private onLeadingIconIconClick = (
     e?: React.SyntheticEvent<HTMLDivElement>,
   ) => {
     // eslint-disable-next-line React/destructuring-assignment
     executeEventStopPropagation(e, this.props.onLeadingIconClick);
-  }
+  };
 }

@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
-import { icons } from '../../../../defaults/icons';
+import { icons } from '../../../defaults/icons';
 import { centerImage, body2 } from '../../../mixins';
-import { opacity } from '../../../../defaults/transparency';
-import { colors } from '../../../../defaults/colors';
+import { opacity } from '../../../defaults/transparency';
+import { colors } from '../../../defaults/colors';
 
 interface CloseProps {
   hovered: boolean;
