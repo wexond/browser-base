@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import database from '../../../../database';
 import { icons, opacity } from '../../../../defaults';
 import { BookmarkItem } from '../../../../interfaces';
 import { createTab, removeItem } from '../../../../utils';
