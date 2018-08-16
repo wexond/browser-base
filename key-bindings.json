@@ -1,0 +1,46 @@
+[
+  {
+    "key": "ctrl+digit",
+    "command": "tabs.switch"
+  },
+  {
+    "key": "ctrl+n",
+    "command": "tabs.new"
+  },
+  {
+    "key": "ctrl+r",
+    "command": "tabs.reload"
+  },
+  {
+    "key": "ctrl+left",
+    "command": "tabs.back"
+  },
+  {
+    "key": "ctrl+right",
+    "command": "tabs.forward"
+  },
+  {
+    "key": "alt+home",
+    "command": "tabs.home"
+  },
+  {
+    "key": "ctrl+s",
+    "command": "workspaces.show"
+  },
+  {
+    "key": "ctrl+h",
+    "command": "history.show"
+  },
+  {
+    "key": "ctrl+e",
+    "command": "menu.show"
+  },
+  {
+    "key": "ctrl+b",
+    "command": "bookmarks.show"
+  },
+  {
+    "key": "esc",
+    "command": "wexond.hideAllMenu"
+  }
+]
