@@ -8,8 +8,11 @@ import {
   removeWorkspace,
   selectWorkspace,
 } from '../../../../../utils';
+import { opacity } from '../../../../../defaults';
 import store from '../../../../store';
 import { DeleteIcon, Icon, IconsContainer, Input, Label, Root } from './styles';
+
+const pageIcon = require('../../../../resources/icons/page.svg');
 
 @observer
 export default class extends React.Component<{ workspace: Workspace }, {}> {
@@ -26,7 +29,7 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
   public onClick = () => {
     const { workspace } = this.props;
     selectWorkspace(workspace.id);
-  }
+  };
 
   public onDelete = (e?: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -54,27 +57,27 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
       selectWorkspace(altWorkspace.id);
       removeWorkspace(workspace.id);
     }
-  }
+  };
 
   public onLabelClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     this.toggleInput(true);
-  }
+  };
 
   public onInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
     e.stopPropagation();
-  }
+  };
 
   public onInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     e.stopPropagation();
     this.toggleInput(false);
-  }
+  };
 
   public onInputKeypress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       this.toggleInput(false);
     }
-  }
+  };
 
   public toggleInput = (flag: boolean) => {
     const { workspace } = this.props;
@@ -92,7 +95,7 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
     }
 
     this.setState({ inputVisible: flag });
-  }
+  };
 
   public render() {
     const { workspace } = this.props;
@@ -100,7 +103,6 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
     const { workspaces } = store;
 
     const selected = store.currentWorkspace === workspace.id;
-    // const icons = workspace.getIcons();
 
     return (
       <Root onClick={this.onClick}>
@@ -108,7 +110,22 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
           <DeleteIcon className="delete-icon" onClick={this.onDelete} />
         )}
         <IconsContainer selected={selected}>
-          {/* {icons != null && icons.map((data: any, key: any) => <Icon key={key} src={data} />)} */}
+          {store.tabs.map((tab, key) => {
+            if (tab.workspaceId === workspace.id) {
+              const favicon = tab.favicon !== '' ? tab.favicon : pageIcon;
+              return (
+                <Icon
+                  key={key}
+                  src={favicon}
+                  style={{
+                    opacity:
+                      tab.favicon === '' ? opacity.light.inactiveIcon : 1,
+                  }}
+                />
+              );
+            }
+            return null;
+          })}
         </IconsContainer>
         <Label onClick={this.onLabelClick}>{workspace.name}</Label>
         <Input
