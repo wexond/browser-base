@@ -7,7 +7,6 @@ import React from 'react';
 import { parse } from 'url';
 
 import { UPDATE_RESTART_AND_INSTALL } from '../../../../constants';
-import database from '../../../../database';
 import Button from '../../../components/Button';
 import ContextMenu from '../../../components/ContextMenu';
 import Snackbar from '../../../components/Snackbar';
