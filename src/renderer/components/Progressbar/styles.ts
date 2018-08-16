@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { EASE_FUNCTION } from '../../../constants';
-import { opacity } from '../../../defaults/transparency';
+import { opacity } from '../../defaults/transparency';
 import { ProgressType } from '../../../enums';
 
 export const Root = styled.div`

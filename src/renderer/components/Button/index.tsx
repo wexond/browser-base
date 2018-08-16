@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { colors } from '../../../defaults/colors';
+import { colors } from '../../defaults/colors';
 import { ButtonType } from '../../../enums';
 import { Icon, Overlay, StyledButton } from './styles';
 import Ripple from '../Ripple';
@@ -37,7 +37,7 @@ export default class Button extends React.Component<IProps, {}> {
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     this.ripple.makeRipple(e.pageX, e.pageY);
-  }
+  };
 
   public render() {
     const {

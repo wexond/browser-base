@@ -1,10 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import { opacity } from '../../../../defaults/transparency';
+import { opacity } from '../../../defaults/transparency';
 import { Align } from '../../../../enums';
-import {
-  center, shadows, robotoRegular, robotoMedium,
-} from '../../../mixins';
+import { center, shadows, robotoRegular, robotoMedium } from '../../../mixins';
 import { colors } from '../../../../defaults';
 
 export const Root = styled.div`
