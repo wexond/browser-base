@@ -1,7 +1,6 @@
 import { observable } from 'mobx';
 import os from 'os';
 
-import database from '../database';
 import { PageMenuMode, Platforms } from '../enums';
 import {
   BookmarkItem,

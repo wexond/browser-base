@@ -68,7 +68,6 @@ export const loadExtensions = () => {
 
   for (const dir of files) {
     const extensionPath = resolve(extensionsPath, dir);
-    console.log(extensionPath);
     const stats = statSync(extensionPath);
 
     if (stats.isDirectory()) {
