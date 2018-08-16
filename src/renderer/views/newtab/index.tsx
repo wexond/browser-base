@@ -61,6 +61,10 @@ injectGlobal`
       stroke-dashoffset: -124px;
     }
   }
+
+  a {
+    text-decoration: none;
+  }
 `;
 
 const render = (AppComponent: any) => {
