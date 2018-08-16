@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { opacity } from '../../../defaults/transparency';
+import { opacity } from '../../defaults/transparency';
 import { body2, centerImage, coverImage, h5, h6 } from '../../mixins';
 
 const getCardImageOpacity = (visible: boolean) => {

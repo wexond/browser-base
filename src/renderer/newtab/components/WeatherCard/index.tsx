@@ -24,9 +24,9 @@ import { formatDescription } from '../../../../utils/weather-card';
 import { formatTime, getDayIndex } from '../../../newtab/utils/time';
 import { capitalizeWord } from '../../../../utils/other';
 import { newtabStore } from '../../../newtab-store';
-import { opacity } from '../../../../defaults/transparency';
-import { icons } from '../../../../defaults/icons';
-import { colors } from '../../../../defaults/colors';
+import { opacity } from '../../../defaults/transparency';
+import { icons } from '../../../defaults/icons';
+import { colors } from '../../../defaults/colors';
 
 export interface IProps {
   data: WeatherForecast;
@@ -52,13 +52,13 @@ export default class WeatherCard extends React.Component<IProps, IState> {
     this.setState({
       forecastHeight: expanded ? 0 : this.forecastContainer.scrollHeight,
     });
-  }
+  };
 
   public onSliderChange = (index: any) => {
     this.setState({
       dailyForecastIndex: index,
     });
-  }
+  };
 
   public render() {
     const { data } = this.props;
@@ -140,8 +140,9 @@ export default class WeatherCard extends React.Component<IProps, IState> {
             >
               {data.weekly.map((day: WeatherWeeklyItem, key: any) => {
                 const dayName =
-                  newtabStore.dictionary.dateAndTime.days[getDayIndex(day.date)
-];
+                  newtabStore.dictionary.dateAndTime.days[
+                    getDayIndex(day.date)
+                  ];
                 return <ForecastItem data={day} dayName={dayName} key={key} />;
               })}
             </ForecastContainer>

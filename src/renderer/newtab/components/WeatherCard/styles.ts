@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { opacity } from '../../../../defaults/transparency';
+import { opacity } from '../../../defaults/transparency';
 import { Actions } from '../../../components/Card';
 import { centerImage, h1, h3 } from '../../../mixins';
 import { EASE_FUNCTION } from '../../../../constants/design';
