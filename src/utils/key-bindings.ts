@@ -7,20 +7,16 @@ import { getPath } from './paths';
 
 const defaultKeyBindings = require('../../static/defaults/key-bindings.json');
 
-export const bindKeys = (bindings: KeyBinding[], reset = true) => {
-  Mousetrap.reset();
-
-  for (let i = 0; i < bindings.length; i++) {
-    const binding = bindings[i];
-    const digitIndex = binding.key.indexOf('digit');
-
-    if (digitIndex === -1) {
+export const bindKeys = (bindings: KeyBinding[]) => {
+  for (const binding of bindings) {
+    if (!binding.key.includes('digit')) {
       Mousetrap.bind(binding.key, Commands[binding.command]);
     } else {
-      const firstPart = binding.key.substring(0, digitIndex);
-
-      for (let x = 0; x <= 9; x++) {
-        Mousetrap.bind(firstPart + x, Commands[binding.command]);
+      for (let i = 0; i <= 9; i++) {
+        Mousetrap.bind(
+          binding.key.replace('digit', i),
+          Commands[binding.command],
+        );
       }
     }
   }
