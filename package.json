@@ -8,20 +8,30 @@
     "electron",
     "react",
     "mobx",
-    "sass"
+    "styled-components"
   ],
-  "homepage": "https://github.com/Nersent/wexond#readme",
+  "homepage": "https://github.com/wexond/wexond#readme",
   "main": "main.js",
   "author": {
-    "name": "Nersent",
+    "name": "Wexond",
     "email": "sentialx@gmail.com"
   },
+  "contributors": [
+    {
+      "name": "Eryk Rakowski",
+      "email": "sentialx@gmail.com"
+    },
+    {
+      "name": "Mikołaj Palkiewicz",
+      "email": "xnerhu@gmail.com"
+    }
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Nersent/wexond.git"
+    "url": "git+https://github.com/wexond/wexond.git"
   },
   "bugs": {
-    "url": "https://github.com/Nersent/wexond/issues"
+    "url": "https://github.com/wexond/wexond/issues"
   },
   "scripts": {
     "start": "cross-env ENV=dev electron .",

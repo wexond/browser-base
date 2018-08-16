@@ -25,8 +25,6 @@ Wexond is a web browser built on top of `Electron`, `React` and `styled-componen
 
 ![Home page](screenshots/screenshot-1.png)
 
-![Menu](screenshots/screenshot-2.png)
-
 # [Downloads](https://github.com/wexond/wexond/releases)
 
 All binaries are located in the [Releases page](https://github.com/wexond/wexond/releases).
