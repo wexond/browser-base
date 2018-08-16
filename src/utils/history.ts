@@ -1,4 +1,3 @@
-import database from '../database';
 import { HistoryItem, Section } from '../interfaces';
 import store from '../renderer/store';
 import { formatDate } from './time';

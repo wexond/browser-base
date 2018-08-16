@@ -1,5 +1,4 @@
 import { getSelectedTab } from '.';
-import database from '../database';
 import { BookmarkItem } from '../interfaces';
 import store from '../renderer/store';
 
