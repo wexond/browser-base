@@ -1,4 +1,4 @@
-import { observer } from 'mobx-react';
+import { observer, Provider } from 'mobx-react';
 import React from 'react';
 
 import News from '../News';
@@ -11,9 +11,11 @@ import {
   TimeUnit,
 } from '../../../../enums';
 import { Column, Content, StyledApp } from './styles';
-import { newtabStore } from '../../../newtab-store';
 import { getWeather } from '../../../newtab/utils/weather';
 import { getNews } from '../../../newtab/utils/news';
+import { Store } from '../../store';
+
+const store = new Store();
 
 @observer
 export default class App extends React.Component<{ visible: boolean }, {}> {
@@ -31,8 +33,8 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
       columns = this.getColumns(2);
     }
 
-    newtabStore.newsColumns = columns;
-  }
+    store.newsColumns = columns;
+  };
 
   public async loadData() {
     const weatherData = await getWeather(
@@ -42,14 +44,14 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
       TimeUnit.TwentyFourHours,
     );
 
-    newtabStore.weatherForecast = weatherData;
-    newtabStore.newsData = await getNews(Countries.us);
+    store.weatherForecast = weatherData;
+    store.newsData = await getNews(Countries.us);
 
     this.onResize();
   }
 
   public getColumns = (columnsCount: number) => {
-    const { newsData } = newtabStore;
+    const { newsData } = store;
     const columns = [];
     const itemsPerCol = Math.floor(newsData.length / columnsCount);
 
@@ -72,30 +74,32 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
     }
 
     return columns;
-  }
+  };
 
   public render() {
-    const { weatherForecast, newsColumns } = newtabStore;
+    const { weatherForecast, newsColumns } = store;
 
     return (
-      <StyledApp>
-        <Content>
-          <Column>
-            <WeatherCard data={weatherForecast} />
-            {newsColumns.length > 0 && <News data={newsColumns[0]} />}
-          </Column>
-          {newsColumns.length > 1 && (
+      <Provider store={store}>
+        <StyledApp>
+          <Content>
             <Column>
-              <News data={newsColumns[1]} />
+              <WeatherCard data={weatherForecast} />
+              {newsColumns.length > 0 && <News data={newsColumns[0]} />}
             </Column>
-          )}
-          {newsColumns.length > 2 && (
-            <Column>
-              <News data={newsColumns[2]} />
-            </Column>
-          )}
-        </Content>
-      </StyledApp>
+            {newsColumns.length > 1 && (
+              <Column>
+                <News data={newsColumns[1]} />
+              </Column>
+            )}
+            {newsColumns.length > 2 && (
+              <Column>
+                <News data={newsColumns[2]} />
+              </Column>
+            )}
+          </Content>
+        </StyledApp>
+      </Provider>
     );
   }
 }
