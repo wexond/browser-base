@@ -1,7 +1,7 @@
 import fs from 'fs';
 import Mousetrap from 'mousetrap';
 
-import { Commands } from '../defaults';
+import { Commands, defaultPaths } from '../defaults';
 import { KeyBinding } from '../interfaces';
 import { getPath } from './paths';
 
@@ -26,39 +26,20 @@ export const bindKeys = (bindings: KeyBinding[], reset = true) => {
   }
 };
 
-export const isKeyBindingChanged = (command: string, key: string) => {
-  for (let i = 0; i < defaultKeyBindings.length; i++) {
-    const binding = defaultKeyBindings[i];
-
-    if (binding.command === command && typeof binding.key === 'string') {
-      return binding.key !== key;
-    }
-  }
-
-  return null;
-};
-
 export const getKeyBindings = async () => {
   const list: KeyBinding[] = [];
-  const path = getPath('key-bindings.json');
+  const data = fs.readFileSync(getPath(defaultPaths.keyBindings), 'utf8');
+  const userBindings = JSON.parse(data);
 
-  const data = fs.readFileSync(path, 'utf8');
-  const json = JSON.parse(data);
+  for (const binding of defaultKeyBindings as KeyBinding[]) {
+    const userBinding: KeyBinding = userBindings.filter(
+      (r: any) => r.command === binding.command,
+    )[0];
 
-  for (let i = 0; i < json.length; i++) {
-    if (!json[i].command || !json[i].key) {
-      continue; // eslint-disable-line
-    }
+    if (userBinding != null) binding.key = userBinding.key;
+    binding.isChanged = userBinding != null;
 
-    const isChanged = isKeyBindingChanged(json[i].command, json[i].key);
-
-    const binding: KeyBinding = {
-      command: json[i].command,
-      key: json[i].key,
-      isChanged,
-    };
-
-    list.push(binding);
+    list.push(binding as KeyBinding);
   }
 
   return list;
