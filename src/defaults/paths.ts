@@ -1,9 +1,11 @@
-import { getPath } from '../utils/paths';
+const defaultKeyBindings = require('../../static/defaults/key-bindings.json');
 
-export const defaultPaths = {
-  plugins: getPath('plugins'),
-  extensions: getPath('extensions'),
-  keyBindings: getPath('key-bindings.json'),
+export const defaultPaths: { [key: string]: string } = {
+  plugins: 'plugins',
+  extensions: 'extensions',
+  keyBindings: 'key-bindings.json',
 };
 
-export default defaultPaths;
+export const filesContent: { [key: string]: string } = {
+  keyBindings: JSON.stringify(defaultKeyBindings, null, 2),
+};
