@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { colors } from '../../../defaults/colors';
-import { opacity } from '../../../defaults/transparency';
+import { colors } from '../../defaults/colors';
+import { opacity } from '../../defaults/transparency';
 import { SliderType } from '../../../enums';
 
 import {
@@ -130,15 +130,15 @@ export default class Slider extends React.Component<Props, State> {
         }
       }
     }
-  }
+  };
 
   public onThumbMouseDown = (e: React.MouseEvent<HTMLElement>) => {
     this.isMouseDown = true;
-  }
+  };
 
   public onWindowMouseUp = (e: MouseEvent) => {
     this.isMouseDown = false;
-  }
+  };
 
   public onWindowMouseMove = (e: MouseEvent) => {
     const { type } = this.props;
@@ -173,7 +173,7 @@ export default class Slider extends React.Component<Props, State> {
         }
       }
     }
-  }
+  };
 
   public getPercent = (clientX: number) => {
     const inactiveTrackRect = this.inactiveTrack.getBoundingClientRect();
@@ -188,10 +188,10 @@ export default class Slider extends React.Component<Props, State> {
     }
 
     return percent;
-  }
+  };
 
   public getGap = () =>
-    this.inactiveTrack.clientWidth / (this.ticksList.length - 1)
+    this.inactiveTrack.clientWidth / (this.ticksList.length - 1);
 
   public triggerEvent = (value: any) => {
     const { type, onChange } = this.props;
@@ -203,7 +203,7 @@ export default class Slider extends React.Component<Props, State> {
         onChange(value, type, this);
       }
     }
-  }
+  };
 
   public render() {
     const {
