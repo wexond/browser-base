@@ -3,8 +3,6 @@ import { observer } from 'mobx-react';
 import { resolve } from 'path';
 import React from 'react';
 
-import { BASE_PATH } from '../../../../constants';
-import database from '../../../../database';
 import { PageMenuMode } from '../../../../enums';
 import { Tab } from '../../../../models';
 import {
@@ -368,7 +366,10 @@ export default class extends React.Component<{ page: Page }, {}> {
             page.webview = r;
             this.webview = r;
           }}
-          preload={`file://${resolve(BASE_PATH, 'build/webview-preload.js')}`}
+          preload={`file://${resolve(
+            remote.app.getAppPath(),
+            'build/webview-preload.js',
+          )}`}
           allowFullScreen
         />
       </StyledPage>
