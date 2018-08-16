@@ -4,11 +4,11 @@ import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';
 
 import { getPath, isPathFile } from '../utils/paths';
-import { runAutoUpdaterService } from './auto-updater';
-import { runExtensionsService } from './extensions-service';
+import { runAutoUpdaterService } from './services/auto-updater';
+import { runExtensionsService } from './services/extensions-service';
 import { Global } from './interfaces';
-import { createWindow } from './window';
-import { registerProtocols } from './protocols';
+import { createWindow } from './utils/window';
+import { registerProtocols } from './utils/protocols';
 import { defaultPaths, filesContent } from '../defaults/paths';
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
