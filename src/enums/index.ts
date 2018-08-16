@@ -32,7 +32,7 @@ export const enum TextfieldType {
 }
 
 export const enum TimeUnit {
-  TwentyFourHours,
+  Hours24,
   TwelveHours,
 }
 
