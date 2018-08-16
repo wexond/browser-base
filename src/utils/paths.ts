@@ -11,3 +11,7 @@ export const getPath = (...relativePaths: string[]) => {
     .resolve(app.getPath('userData'), ...relativePaths)
     .replace(/\\/g, '/');
 };
+
+export const isPathFile = (file: string) => {
+  return path.extname(file) !== '';
+};
