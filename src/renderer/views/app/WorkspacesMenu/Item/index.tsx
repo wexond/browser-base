@@ -8,6 +8,7 @@ import {
   removeWorkspace,
   selectWorkspace,
 } from '../../../../../utils';
+import { opacity } from '../../../../../defaults';
 import store from '../../../../store';
 import { DeleteIcon, Icon, IconsContainer, Input, Label, Root } from './styles';
 
@@ -112,7 +113,16 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
           {store.tabs.map((tab, key) => {
             if (tab.workspaceId === workspace.id) {
               const favicon = tab.favicon !== '' ? tab.favicon : pageIcon;
-              return <Icon key={key} src={favicon} />;
+              return (
+                <Icon
+                  key={key}
+                  src={favicon}
+                  style={{
+                    opacity:
+                      tab.favicon === '' ? opacity.light.inactiveIcon : 1,
+                  }}
+                />
+              );
             }
             return null;
           })}
