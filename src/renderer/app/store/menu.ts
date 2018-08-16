@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 
-export class Menu {
+export class MenuStore {
   @observable
   public visible = false;
 

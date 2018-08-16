@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 
-export class AddressBar {
+export class AddressBarStore {
   @observable
   public toggled = false;
 
