@@ -2,7 +2,6 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { ButtonsContainer, Root, Title } from './styles';
 
-import database from '../../../../database';
 import { colors } from '../../../../defaults';
 import { ButtonType } from '../../../../enums';
 import { BookmarkItem } from '../../../../interfaces';
