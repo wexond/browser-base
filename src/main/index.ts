@@ -3,13 +3,11 @@ import { resolve, join } from 'path';
 import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';
 
-import { getPath, isPathFile } from '../utils/paths';
-import { runAutoUpdaterService } from './services/auto-updater';
-import { runExtensionsService } from './services/extensions-service';
+import { getPath } from '../utils/paths';
 import { Global } from './interfaces';
-import { createWindow } from './utils/window';
-import { registerProtocols } from './utils/protocols';
 import { defaultPaths, filesContent } from '../defaults/paths';
+import { createWindow, registerProtocols } from './utils';
+import { runAutoUpdaterService, runExtensionsService } from './services';
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
@@ -33,7 +31,7 @@ app.on('ready', () => {
     const filePath = getPath(defaultPaths[key]);
     if (existsSync(filePath)) continue;
 
-    if (!isPathFile(filePath)) {
+    if (filePath.indexOf('.') === -1) {
       mkdirSync(filePath);
     } else {
       writeFileSync(filePath, filesContent[key], 'utf8');
