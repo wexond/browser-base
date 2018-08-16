@@ -1,7 +1,8 @@
-import { app, remote } from 'electron';
 import path from 'path';
 
 export const getPath = (...relativePaths: string[]) => {
+  const { app, remote } = require('electron');
+
   if (remote) {
     return path
       .resolve(remote.app.getPath('userData'), ...relativePaths)
@@ -10,8 +11,4 @@ export const getPath = (...relativePaths: string[]) => {
   return path
     .resolve(app.getPath('userData'), ...relativePaths)
     .replace(/\\/g, '/');
-};
-
-export const isPathFile = (file: string) => {
-  return path.extname(file) !== '';
 };

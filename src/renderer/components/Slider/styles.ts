@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { EASE_FUNCTION } from '../../../constants/design';
-import { opacity } from '../../../defaults/opacity';
+import { opacity } from '../../../defaults/transparency';
 import { Align, SliderType } from '../../../enums';
 import { center, robotoRegular } from '../../mixins';
 
