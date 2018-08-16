@@ -3,14 +3,13 @@ import { resolve, join } from 'path';
 import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';
 
-import { getPath } from '../utils/paths';
+import { getPath, isPathFile } from '../utils/paths';
 import { runAutoUpdaterService } from './auto-updater';
 import { runExtensionsService } from './extensions-service';
 import { Global } from './interfaces';
 import { createWindow } from './window';
 import { registerProtocols } from './protocols';
-
-const defaultKeyBindings = require('../../static/defaults/key-bindings.json');
+import { defaultPaths, filesContent } from '../defaults/paths';
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
@@ -21,10 +20,6 @@ let mainWindow: Electron.BrowserWindow;
 global.extensions = {};
 global.backgroundPages = {};
 
-const pluginsPath = getPath('plugins');
-const extensionsPath = getPath('extensions');
-const keyBindingsPath = getPath('key-bindings.json');
-
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -34,20 +29,15 @@ app.on('activate', () => {
 });
 
 app.on('ready', () => {
-  if (!existsSync(pluginsPath)) {
-    mkdirSync(pluginsPath);
-  }
+  for (const key in defaultPaths) {
+    const filePath = getPath(defaultPaths[key]);
+    if (existsSync(filePath)) continue;
 
-  if (!existsSync(extensionsPath)) {
-    mkdirSync(extensionsPath);
-  }
-
-  if (!existsSync(keyBindingsPath)) {
-    writeFileSync(
-      keyBindingsPath,
-      JSON.stringify(defaultKeyBindings, null, 2),
-      'utf8',
-    );
+    if (!isPathFile(filePath)) {
+      mkdirSync(filePath);
+    } else {
+      writeFileSync(filePath, filesContent[key], 'utf8');
+    }
   }
 
   mainWindow = createWindow();

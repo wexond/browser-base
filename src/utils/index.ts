@@ -18,3 +18,4 @@ export * from './key-bindings';
 export * from './workspaces';
 export * from './tabs';
 export * from './pages';
+export * from './paths';
