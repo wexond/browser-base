@@ -5,3 +5,4 @@ export * from './opacity';
 export * from './tab-animations';
 export * from './weather-icons';
 export * from './commands';
+export * from './paths';
