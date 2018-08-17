@@ -1,9 +1,9 @@
 import fs from 'fs';
 import Mousetrap from 'mousetrap';
 
-import { Commands } from '../../../defaults';
-import { KeyBinding } from '../../../interfaces';
-import { getPath } from '../../../utils/paths';
+import { commands } from '../defaults/commands';
+import { KeyBinding } from '../interfaces';
+import { getPath } from './paths';
 
 const defaultKeyBindings = require('../../static/defaults/key-bindings.json');
 
@@ -15,12 +15,12 @@ export const bindKeys = (bindings: KeyBinding[], reset = true) => {
     const digitIndex = binding.key.indexOf('digit');
 
     if (digitIndex === -1) {
-      Mousetrap.bind(binding.key, Commands[binding.command]);
+      Mousetrap.bind(binding.key, commands[binding.command]);
     } else {
       const firstPart = binding.key.substring(0, digitIndex);
 
       for (let x = 0; x <= 9; x++) {
-        Mousetrap.bind(firstPart + x, Commands[binding.command]);
+        Mousetrap.bind(firstPart + x, commands[binding.command]);
       }
     }
   }
@@ -47,7 +47,7 @@ export const getKeyBindings = async () => {
 
   for (let i = 0; i < json.length; i++) {
     if (!json[i].command || !json[i].key) {
-      continue; // eslint-disable-line
+      continue;
     }
 
     const isChanged = isKeyBindingChanged(json[i].command, json[i].key);

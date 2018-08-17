@@ -1,6 +1,7 @@
 import { observable } from 'mobx';
 
 import { TabGroup } from '../models';
+import { defaultCreateTabProperties } from 'defaults/create-tab-properties';
 
 export class TabGroupsStore {
   @observable
@@ -22,5 +23,9 @@ export class TabGroupsStore {
 
   public getSelectedTab() {
     return this.getCurrent().getSelectedTab();
+  }
+
+  public addTab(details = defaultCreateTabProperties) {
+    this.getCurrent().addTab(details);
   }
 }

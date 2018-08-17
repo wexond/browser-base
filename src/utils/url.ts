@@ -26,13 +26,3 @@ export const getDomain = (url: string): string => {
 
   return hostname;
 };
-
-export const getAddressbarURL = (url: string) => {
-  const blacklist = ['wexond://error', 'wexond://newtab'];
-  for (const item of blacklist) {
-    if (url.startsWith(item)) {
-      return '';
-    }
-  }
-  return url;
-};

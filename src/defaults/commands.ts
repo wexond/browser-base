@@ -1,16 +1,22 @@
-export const Commands: any = {
+import store from 'app-store';
+
+interface Commands {
+  [key: string]: () => void;
+}
+
+export const commands: Commands = {
   'tabs.switch': (e?: KeyboardEvent) => {
-    const tabs = getCurrentWorkspaceTabs();
+    const { tabs } = store.tabGroupsStore.getCurrent();
 
     // 0
     if (e.keyCode === 48) {
-      selectTab(tabs[tabs.length - 1]);
+      tabs[tabs.length - 1].select();
     } else {
       // 1-9
       const index = e.keyCode - 49;
 
       if (tabs.length > index) {
-        selectTab(tabs[index]);
+        tabs[index].select();
       }
     }
   },

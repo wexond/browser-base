@@ -17,7 +17,15 @@
     "lib": ["dom", "esnext"],
     "experimentalDecorators": true,
 
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"],
+
+    "baseUrl": "./src",
+
+    "paths": {
+      "app-store": ["renderer/app/store"],
+      "mixins": ["renderer/mixins"],
+      "constants": ["constants"]
+    }
   },
   "awesomeTypescriptLoaderOptions": {
     "reportFiles": ["src/**/*.{ts,tsx}"],

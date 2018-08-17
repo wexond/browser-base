@@ -1,15 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { TOOLBAR_HEIGHT } from '../../../../constants';
-import {
-  getSelectedTab,
-  getTabsToReplace,
-  setTabLeft,
-  setTabsLefts,
-} from '../../../../utils';
-import store from '../../../store';
 import Tab from '../Tab';
+import { TOOLBAR_HEIGHT } from 'constants';
 
 @observer
 export default class Tabs extends React.Component {
@@ -34,7 +27,7 @@ export default class Tabs extends React.Component {
     if (selectedTab) {
       selectedTab.isDragging = false;
     }
-  }
+  };
 
   public onMouseMove = (e: any) => {
     const selectedTab = getSelectedTab();
@@ -97,7 +90,7 @@ export default class Tabs extends React.Component {
 
       tabDragData.lastMouseX = e.pageX;
     }
-  }
+  };
 
   public render() {
     return (

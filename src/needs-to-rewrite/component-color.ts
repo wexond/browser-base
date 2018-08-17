@@ -1,5 +1,3 @@
-import { opacity } from '../renderer/defaults/transparency';
-
 type UITheme = 'light' | 'dark';
 
 export const getComponentColor = (

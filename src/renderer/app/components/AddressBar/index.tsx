@@ -1,13 +1,8 @@
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
-import store from '../../../store';
-import Suggestions from '../Suggestions';
-import { Icon, Input, InputContainer, StyledAddressBar } from './styles';
-import { getSelectedTab } from '../../../../utils/tabs';
-import { isURL, getAddressbarURL } from '../../../../utils/url';
-import { getPageById, getSelectedPage } from '../../../../utils/pages';
-import { loadSuggestions } from '../../../app/utils/suggestions';
-import { icons } from '../../../defaults/icons';
+import store from 'app-store';
+import { isURL } from 'utils';
+import { observe } from 'mobx';
 
 interface Props {
   visible: boolean;
@@ -27,6 +22,25 @@ export default class AddressBar extends Component<Props, {}> {
     window.addEventListener('mousedown', () => {
       store.addressBar.toggled = false;
       store.suggestions = [];
+    });
+
+    observe(store.addressBarStore, change => {
+      if (change.object.toggled && change.name === 'toggled') {
+        const page = getSelectedPage();
+        if (this.input) {
+          if (page.webview && page.webview.getWebContents()) {
+            let text = page.webview.getURL();
+
+            if (text.startsWith('wexond://newtab')) {
+              text = '';
+            } else if (!text.startsWith('wexond://error')) {
+              this.input.value = text;
+            }
+          }
+
+          this.input.focus();
+        }
+      }
     });
   }
 
@@ -145,21 +159,6 @@ export default class AddressBar extends Component<Props, {}> {
   public render() {
     const { visible } = this.props;
     const dictionary = store.dictionary.addressBar;
-
-    if (store.addressBar.toggled && this.visible !== store.addressBar.toggled) {
-      const page = getSelectedPage();
-      if (this.input) {
-        if (page.webview && page.webview.getWebContents()) {
-          this.input.value = getAddressbarURL(page.webview.getURL());
-        }
-
-        this.input.focus();
-      }
-    }
-
-    if (this.visible !== store.addressBar.toggled) {
-      this.visible = store.addressBar.toggled;
-    }
 
     const suggestionsVisible = store.suggestions.length !== 0;
 

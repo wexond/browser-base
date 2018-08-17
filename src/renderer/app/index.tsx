@@ -1,13 +1,13 @@
-import { ipcRenderer } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { injectGlobal } from 'styled-components';
+
 import { Style } from './styles';
+import { runServices } from './services';
+import App from './components/app';
 
 injectGlobal`${Style}`;
-
-ipcRenderer.send(UPDATE_CHECK);
 
 const render = (AppComponent: any) => {
   ReactDOM.render(
@@ -18,15 +18,14 @@ const render = (AppComponent: any) => {
   );
 };
 (async function setup() {
-  await loadPlugins();
-  runExtensionsService();
+  runServices();
 
   render(App);
 
   createWorkspace();
 })();
 
-// React-hot-loader
+// react-hot-loader
 if ((module as any).hot) {
   (module as any).hot.accept();
 }

@@ -20,5 +20,13 @@ module.exports = {
   resolve: {
     modules: ['node_modules'],
     extensions: ['.js', '.tsx', '.ts', '.json'],
+    alias: {
+      utils: './src/utils',
+      constants: './src/constants',
+      defaults: './src/defaults',
+      models: './src/models',
+      interfaces: './src/interfaces',
+      enums: './src/enums',
+    },
   },
 };

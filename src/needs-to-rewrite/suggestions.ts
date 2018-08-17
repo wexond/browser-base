@@ -1,7 +1,5 @@
-import { isURL, requestURL } from '../../../utils';
-import { icons } from '../../../defaults';
-import { HistoryItem, SuggestionItem } from '../../../interfaces';
-import store from '../../store';
+import { HistoryItem, Suggestion } from '../interfaces';
+import { requestURL } from '../utils/network';
 
 const countVisitedTimes = (historyItems: HistoryItem[]) => {
   const items: any[] = [];
@@ -10,7 +8,6 @@ const countVisitedTimes = (historyItems: HistoryItem[]) => {
     const itemsWithUrl = historyItems.filter(x => x.url === historyItem.url);
 
     const itemToPush = {
-      id: historyItem.id,
       times: itemsWithUrl.length - 1,
       item: historyItem,
     };
@@ -135,15 +132,14 @@ export const getSearchSuggestions = (filter: string) =>
     }
   });
 
-let searchSuggestions: SuggestionItem[] = [];
+let searchSuggestions: Suggestion[] = [];
 
 export const loadSuggestions = async (input: HTMLInputElement) =>
   new Promise(async (resolve: (suggestion: string) => void) => {
     const filter = input.value.substring(0, input.selectionStart);
-    const dictionary = store.dictionary.suggestions;
     const history = getHistorySuggestions(filter);
 
-    const historySuggestions: SuggestionItem[] = [];
+    const historySuggestions: Suggestion[] = [];
 
     if ((!history[0] || !history[0].canSuggest) && filter.trim() !== '') {
       historySuggestions.unshift({
