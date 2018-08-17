@@ -1,5 +1,6 @@
 import { observable } from 'mobx';
 import os from 'os';
+
 import { AddressBarStore } from './address-bar';
 import { MenuStore } from './menu';
 import { TabsStore } from './tabs';
@@ -12,7 +13,7 @@ import { AddTabStore } from './add-tab';
 import { SuggestionsStore } from './suggestions';
 import { KeyboardShortcutsStore } from './keyboard-shortcuts';
 
-export class Store {
+class Store {
   public tabbarStore = new TabbarStore();
   public tabGroupsStore = new TabGroupsStore();
   public tabsStore = new TabsStore();
@@ -82,3 +83,5 @@ export class Store {
     });*/
   }
 }
+
+export default new Store();
