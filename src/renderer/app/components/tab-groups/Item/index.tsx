@@ -1,21 +1,15 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { Workspace } from '../../../../../interfaces';
-import {
-  getPageById,
-  getWorkspaceTabs,
-  removeWorkspace,
-  selectWorkspace,
-} from '../../../../../utils';
+import { TabGroup } from '../../../models';
 import { opacity } from '../../../../../defaults';
-import store from '../../../../store';
+import store from '../../../store';
 import { DeleteIcon, Icon, IconsContainer, Input, Label, Root } from './styles';
 
 const pageIcon = require('../../../../resources/icons/page.svg');
 
 @observer
-export default class extends React.Component<{ workspace: Workspace }, {}> {
+export default class extends React.Component<{ tabGroup: TabGroup }, {}> {
   public static defaultProps = {
     selected: false,
   };
@@ -27,25 +21,27 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
   private input: HTMLInputElement;
 
   public onClick = () => {
-    const { workspace } = this.props;
-    selectWorkspace(workspace.id);
+    const { tabGroup } = this.props;
+    // selectWorkspace(workspace.id);
   };
 
   public onDelete = (e?: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const { workspace } = this.props;
-    const { workspaces } = store;
+    /*
+    const { tabGroup } = this.props;
+    const tabGroupsStore = store.tabGroupsStore;
+    const { tabGroups } = tabGroupsStore;
 
-    if (workspaces.length > 0) {
-      let altWorkspaceIndex = workspaces.indexOf(workspace) + 1;
+    if (tabGroups.length > 0) {
+      let altWorkspaceIndex = tabGroups.indexOf(tabGroup) + 1;
 
-      if (altWorkspaceIndex === workspaces.length) {
-        altWorkspaceIndex = workspaces.indexOf(workspace) - 1;
+      if (altWorkspaceIndex === tabGroups.length) {
+        altWorkspaceIndex = tabGroups.indexOf(tabGroup) - 1;
       }
 
-      const altWorkspace = workspaces[altWorkspaceIndex];
+      const altWorkspace = tabGroups[altWorkspaceIndex];
 
       const tabs = getWorkspaceTabs(workspace.id);
 
@@ -57,6 +53,7 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
       selectWorkspace(altWorkspace.id);
       removeWorkspace(workspace.id);
     }
+    */
   };
 
   public onLabelClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -80,10 +77,10 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
   };
 
   public toggleInput = (flag: boolean) => {
-    const { workspace } = this.props;
+    /*const { tabGroup } = this.props;
 
     if (flag) {
-      this.input.value = workspace.name;
+      this.input.value = tabGroup.name;
       this.input.select();
     } else {
       const value = this.input.value;
@@ -94,11 +91,18 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
       }
     }
 
-    this.setState({ inputVisible: flag });
+    this.setState({ inputVisible: flag });*/
   };
 
   public render() {
-    const { workspace } = this.props;
+    return (
+      <Root onClick={this.onClick}>
+        <IconsContainer selected={false} />
+        <Label>Label</Label>
+      </Root>
+    );
+
+    /*const { workspace } = this.props;
     const { inputVisible } = this.state;
     const { workspaces } = store;
 
@@ -136,6 +140,6 @@ export default class extends React.Component<{ workspace: Workspace }, {}> {
           onKeyPress={this.onInputKeypress}
         />
       </Root>
-    );
+    );*/
   }
 }
