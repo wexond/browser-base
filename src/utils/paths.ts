@@ -1,8 +1,7 @@
 import path from 'path';
+import { remote, app } from 'electron';
 
 export const getPath = (...relativePaths: string[]) => {
-  const { app, remote } = require('electron');
-
   if (remote) {
     return path
       .resolve(remote.app.getPath('userData'), ...relativePaths)
