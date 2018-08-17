@@ -1,4 +1,6 @@
 import { observable } from 'mobx';
+import { TabGroup } from './tab-group';
+import store from '../store';
 
 let id = 0;
 
@@ -24,17 +26,29 @@ export class Tab {
   @observable
   public hovered: boolean = false;
 
+  @observable
+  public isBookmarked: boolean = false;
+
   public url: string = '';
-
   public width: number = 0;
-
   public left: number = 0;
+  public isClosing: boolean = false;
+  public tabGroup: TabGroup;
 
   public ref: HTMLDivElement;
 
-  public isClosing: boolean = false;
+  constructor(tabGroup: TabGroup) {
+    this.tabGroup = tabGroup;
+  }
 
-  constructor(workspaceId: number) {
-    this.workspaceId = workspaceId;
+  public select() {
+    if (!this.isClosing) {
+      this.tabGroup.selectedTab = this.id;
+
+      store.extensionsStore.emitExtensionEvent('tabs', 'onActivated', {
+        tabId: this.id,
+        windowId: 0,
+      });
+    }
   }
 }

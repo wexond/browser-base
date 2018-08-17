@@ -1,7 +1,7 @@
 import { HistoryItem } from '.';
 
-export interface Section {
+export interface HistorySection {
   items: HistoryItem[];
   date: string;
-  id: number;
+  id: string;
 }
