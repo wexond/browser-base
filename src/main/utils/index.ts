@@ -1,4 +1,4 @@
-export * from '../../utils';
+export * from '../../utils/strings';
 export * from '../../utils/paths';
 export * from './extensions';
 export * from './protocols';

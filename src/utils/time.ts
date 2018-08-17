@@ -1,5 +1,3 @@
-import { Dictionary } from '../interfaces';
-
 export const getTimePeriod = (hours: number, format: 24 | 12) => {
   if (format === 12) {
     return hours > 12 ? ' PM' : ' AM';
@@ -105,7 +103,7 @@ export const getTimeOffset = (date: Date, t?: any) => {
 };
 */
 
-export const formatDate = (dictionary: Dictionary, date: Date) => {
+export const formatDate = (dictionary: any, date: Date) => {
   const { dateAndTime } = dictionary;
   const currentDate = new Date();
 

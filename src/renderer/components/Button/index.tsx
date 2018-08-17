@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { colors } from '../../defaults/colors';
+import { colors } from '../../../defaults/colors';
 import { ButtonType } from '../../../enums';
 import { Icon, Overlay, StyledButton } from './styles';
 import Ripple from '../Ripple';

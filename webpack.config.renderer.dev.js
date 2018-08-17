@@ -6,7 +6,7 @@ const baseConfig = require('./webpack.config.base');
 const PORT = 8080;
 
 const config = merge.smart(baseConfig, {
-  devtool: 'eval-source-map',
+  devtool: 'eval',
   mode: 'development',
   output: {
     hotUpdateChunkFilename: 'hot/hot-update.js',
@@ -32,7 +32,7 @@ const appConfig = merge.smart(config, {
   target: 'electron-renderer',
 
   entry: {
-    app: ['react-hot-loader/patch', './src/renderer/views/app'],
+    app: ['react-hot-loader/patch', './src/renderer/app'],
   },
 
   devServer: {
@@ -55,7 +55,7 @@ const newTabConfig = merge.smart(config, {
   target: 'web',
 
   entry: {
-    newtab: ['react-hot-loader/patch', './src/renderer/views/newtab'],
+    newtab: ['react-hot-loader/patch', './src/renderer/newtab'],
   },
 });
 

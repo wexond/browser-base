@@ -1,17 +1,16 @@
-import { Countries, NewsCategories } from '../../../enums';
-import { hasSubdomain, removeSubdomain, requestURL } from '../../../utils/network';
-import { NEWS_API_KEY } from '../../../constants/api-keys';
+import { NewsCategories } from '../enums';
+import { hasSubdomain, removeSubdomain, requestURL } from './network';
+import { NEWS_API_KEY } from '../constants/api-keys';
 
 export const getNews = async (
-  country: Countries,
+  country: string,
   category: NewsCategories = NewsCategories.General,
   newsCount: number = 100,
   apiKey: string = NEWS_API_KEY,
 ) => {
   try {
-    const langCode = Countries[country];
     const newsCategory = NewsCategories[category];
-    const url = `https://newsapi.org/v2/top-headlines?country=${langCode}&category=${newsCategory}&pageSize=${newsCount}&apiKey=${apiKey}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${newsCategory}&pageSize=${newsCount}&apiKey=${apiKey}`;
 
     const data = await requestURL(url);
     const json = JSON.parse(data);

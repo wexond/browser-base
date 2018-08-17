@@ -1,16 +1,6 @@
 import { TweenLite } from 'gsap';
-import store from '../renderer/store';
 
-import {
-  getCurrentWorkspace,
-  getCurrentWorkspaceTabs,
-  getWorkspaceById,
-} from '.';
 import { TOOLBAR_BUTTON_WIDTH, TOOLBAR_HEIGHT } from '../constants';
-import { tabAnimations } from '../defaults';
-import { Tab } from '../models';
-import { createPage } from './pages';
-import { emitEvent } from '../renderer/app/utils/extensions';
 import { getWorkspaceTabs } from './workspaces';
 
 export const getTabbarWidth = (): number => {
