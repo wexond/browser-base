@@ -12,6 +12,7 @@ import { BookmarksStore } from './bookmarks';
 import { AddTabStore } from './add-tab';
 import { SuggestionsStore } from './suggestions';
 import { KeyboardShortcutsStore } from './keyboard-shortcuts';
+import { Platforms } from '../../../enums';
 
 class Store {
   public tabbarStore = new TabbarStore();
