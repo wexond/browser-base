@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { colors } from '../../defaults/colors';
-import { opacity } from '../../defaults/transparency';
+import { colors } from '../../../defaults/colors';
+import { opacity } from '../../../defaults/transparency';
 import { SliderType } from '../../../enums';
 
 import {

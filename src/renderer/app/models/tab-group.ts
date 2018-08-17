@@ -1,7 +1,7 @@
 import { observable } from 'mobx';
 import { Tab, Page } from '.';
 import store from '../store';
-import { defaultCreateTabProperties } from '../defaults/create-tab-properties';
+import { defaultCreateTabProperties } from '../../../defaults/create-tab-properties';
 
 export class TabGroup {
   @observable

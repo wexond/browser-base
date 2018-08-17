@@ -1,5 +1,5 @@
-import { WeatherDailyItem, WeatherWeeklyItem } from '../../../interfaces';
-import { Locales } from '../../../enums';
+import { WeatherDailyItem, WeatherWeeklyItem } from '.';
+import { Locales } from '../enums';
 
 export interface WeatherForecast {
   tempUnit?: 'C' | 'F';

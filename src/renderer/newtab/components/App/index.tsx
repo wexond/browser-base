@@ -11,8 +11,8 @@ import {
   TimeUnit,
 } from '../../../../enums';
 import { Column, Content, StyledApp } from './styles';
-import { getWeather } from '../../../newtab/utils/weather';
-import { getNews } from '../../../newtab/utils/news';
+import { getWeather } from '../../../../utils/weather';
+import { getNews } from '../../../../utils/news';
 import { Store } from '../../store';
 
 const store = new Store();

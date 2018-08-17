@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { colors } from '../../defaults/colors';
+import { colors } from '../../../defaults/colors';
 import { ProgressType } from '../../../enums';
 import { Indicator, Root, Track } from './styles';
 

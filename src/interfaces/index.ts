@@ -6,3 +6,6 @@ export * from './history-section';
 export * from './suggestion';
 export * from './keyboard-shortcut';
 export * from './dictionary';
+export * from './weather-daily-item';
+export * from './weather-forecast';
+export * from './weather-weekly-item';

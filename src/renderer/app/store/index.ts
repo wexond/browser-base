@@ -1,5 +1,6 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import os from 'os';
+import { remote } from 'electron';
 
 import { AddressBarStore } from './address-bar';
 import { MenuStore } from './menu';
@@ -17,7 +18,8 @@ import { PagesStore } from './pages';
 import { NavigationStateStore } from './navigation-state';
 import { FaviconsStore } from './favicons';
 import { ExtensionsStore } from './extensions';
-import { remote } from 'electron';
+import { readFileSync } from 'fs';
+import { Dictionary } from '../../../interfaces';
 
 export class Store {
   public tabbarStore = new TabbarStore();
@@ -63,6 +65,16 @@ export class Store {
     x: 0,
     y: 0,
   };
+
+  @computed
+  get dictionary(): Dictionary {
+    return JSON.parse(
+      readFileSync(
+        `../../../../static/dictionaries/${this.locale}.json`,
+        'utf8',
+      ),
+    );
+  }
 }
 
 export default new Store();
