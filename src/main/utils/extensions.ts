@@ -1,11 +1,11 @@
 import { webContents } from 'electron';
 import { readdirSync, readFileSync, statSync } from 'fs';
 import { format } from 'url';
-import { join, resolve } from 'path';
+import { resolve } from 'path';
 
 import { Manifest } from '../../interfaces';
-import { makeId, getPath } from '../../utils';
 import { Global } from '../interfaces';
+import { getPath, makeId } from '.';
 
 declare const global: Global;
 

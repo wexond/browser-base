@@ -9,8 +9,7 @@ import {
   API_TABS_QUERY,
   API_TABS_SET_ZOOM,
 } from '../../../constants';
-import { createTab, getIpcTab, getPageById } from '../utils';
-import store from './store';
+import store from '../store';
 
 export const runExtensionsService = () => {
   ipcRenderer.on(

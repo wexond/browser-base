@@ -5,7 +5,7 @@ import { join } from 'path';
 import { FULLSCREEN } from '../../constants';
 import { loadExtensions } from './extensions';
 import { WindowState } from '../interfaces';
-import { getPath } from '../../utils/paths';
+import { getPath } from '.';
 
 const windowDataPath = getPath('window-data.json');
 

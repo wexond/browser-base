@@ -1,18 +1,14 @@
-import {
-  WeatherCodes,
-  weatherIcons,
-} from '../defaults/weather-icons';
-import { Locales, TemperatureUnit, TimeUnit } from '../../../enums';
-import {
-  WeatherDailyItem,
-  WeatherForecast,
-  WeatherWeeklyItem,
-} from '../../../interfaces';
+import { weatherIcons } from '../defaults/weather-icons';
 import { getTimeInZone, getTimeZoneOffset } from './time-zone';
 import { requestURL } from '../../../utils/network';
 import { WEATHER_API_KEY } from '../../../constants/api-keys';
-import { newtabStore } from '../../newtab-store';
-import { getDayIndex, capitalizeEachWord, formatTime } from '../../../utils';
+import {
+  WeatherDailyItem,
+  WeatherWeeklyItem,
+  Dictionary,
+  WeatherForecast,
+} from '../interfaces';
+import { getDayIndex, formatTime, capitalizeEachWord } from '.';
 
 const createDailyItem = (data: any, timeZoneOffset: number) => {
   const item: WeatherDailyItem = {
@@ -20,7 +16,7 @@ const createDailyItem = (data: any, timeZoneOffset: number) => {
     description: data.weather[0].description,
     precipitation: data.main.humidity,
     winds: data.wind.speed,
-    icon: weatherIcons[data.weather[0].icon as WeatherCodes],
+    icon: weatherIcons[data.weather[0].icon],
     date: getTimeInZone(new Date(data.dt * 1000), timeZoneOffset),
   };
 
@@ -69,7 +65,7 @@ const getWeekly = (weekly: any, timeZoneOffset: number) => {
         const newItem: WeatherWeeklyItem = {
           dayTemp: temp,
           date: time,
-          dayIcon: weatherIcons[icon as WeatherCodes],
+          dayIcon: weatherIcons[icon],
         };
 
         list.push(newItem);
@@ -93,20 +89,18 @@ const getWeekly = (weekly: any, timeZoneOffset: number) => {
 
 export const getWeather = async (
   city: string,
-  lang: Locales,
-  tempUnit: TemperatureUnit = TemperatureUnit.Celsius,
-  timeUnit: TimeUnit = TimeUnit.TwentyFourHours,
+  lang: string,
+  tempUnit: 'C' | 'F' = 'C',
+  timeUnit: 24 | 12 = 24,
   apiKey: string = WEATHER_API_KEY,
 ) => {
   try {
-    const celcius = tempUnit === TemperatureUnit.Celsius;
+    const celcius = tempUnit === 'C';
     const units = celcius ? 'metric' : 'imperial';
     const windsUnit = celcius ? 'km/h' : 'mph';
 
-    const countryCode = Locales[lang];
-
-    const currentWeatherURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=${countryCode}&units=${units}`;
-    const weekWeatherURL = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&lang=${countryCode}&units=${units}`;
+    const currentWeatherURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=${lang}&units=${units}`;
+    const weekWeatherURL = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&lang=${lang}&units=${units}`;
 
     const currentWeather = JSON.parse(await requestURL(currentWeatherURL));
     const weekWeather = JSON.parse(await requestURL(weekWeatherURL));
@@ -134,11 +128,15 @@ export const getWeather = async (
   }
 };
 
-export const formatDescription = (forecast: WeatherForecast, index: number) => {
-  const dictionary = newtabStore.dictionary.dateAndTime;
+export const formatDescription = (
+  dictionary: Dictionary,
+  forecast: WeatherForecast,
+  index: number,
+) => {
+  const { dateAndTime } = dictionary;
   const { timeUnit, daily } = forecast;
   const { description, date } = daily[index];
-  const dayName = dictionary.daysShort[getDayIndex(date)];
+  const dayName = dateAndTime.daysShort[getDayIndex(date)];
 
   return `${dayName}, ${formatTime(date, timeUnit)}, ${capitalizeEachWord(
     description,

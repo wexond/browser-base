@@ -1,8 +1,7 @@
-import { TimeUnit } from '../../../enums';
-import { newtabStore } from '../../newtab-store';
+import { Dictionary } from '../interfaces';
 
-export const getTimePeriod = (hours: number, timeUnit: TimeUnit) => {
-  if (timeUnit === TimeUnit.TwelveHours) {
+export const getTimePeriod = (hours: number, format: 24 | 12) => {
+  if (format === 12) {
     return hours > 12 ? ' PM' : ' AM';
   }
   return '';
@@ -10,7 +9,7 @@ export const getTimePeriod = (hours: number, timeUnit: TimeUnit) => {
 
 export const formatTime = (
   date?: Date,
-  timeUnit: TimeUnit = TimeUnit.TwentyFourHours,
+  timeUnit: 24 | 12 = 24,
   minutes: boolean = true,
 ) => {
   if (date == null) date = new Date();
@@ -18,7 +17,7 @@ export const formatTime = (
   let hours = date.getHours();
   const timePeriod = getTimePeriod(hours, timeUnit);
 
-  if (timeUnit === TimeUnit.TwelveHours && hours > 12) {
+  if (timeUnit === 12 && hours > 12) {
     hours -= 12;
   }
 
@@ -76,6 +75,8 @@ export const getConditionsTime = (time: number, conditions: any) => {
   return conditions;
 };
 
+/*
+TODO
 export const getTimeOffset = (date: Date, t?: any) => {
   const dictionary = newtabStore.dictionary.dateAndTime;
   const currentdate = new Date();
@@ -102,9 +103,10 @@ export const getTimeOffset = (date: Date, t?: any) => {
     showHours ? dictionary.hours : dictionary.minutes,
   )} ${dictionary.ago}`;
 };
+*/
 
-export const formatDate = (date: Date) => {
-  const dictionary = newtabStore.dictionary.dateAndTime;
+export const formatDate = (dictionary: Dictionary, date: Date) => {
+  const { dateAndTime } = dictionary;
   const currentDate = new Date();
 
   let prefix = '';

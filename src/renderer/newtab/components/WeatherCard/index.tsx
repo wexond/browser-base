@@ -21,7 +21,7 @@ import Slider from '../../../components/Slider';
 import ForecastItem from './ForecastItem';
 
 import { formatDescription } from '../../../../utils/weather-card';
-import { formatTime, getDayIndex } from '../../../newtab/utils/time';
+import { formatTime, getDayIndex } from '../../../../utils/time';
 import { capitalizeWord } from '../../../../utils/other';
 import { newtabStore } from '../../../newtab-store';
 import { opacity } from '../../../defaults/transparency';
