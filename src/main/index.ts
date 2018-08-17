@@ -1,12 +1,11 @@
 import { app } from 'electron';
-import { resolve, join } from 'path';
+import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';
 
-import { getPath } from '../utils/paths';
 import { Global } from './interfaces';
 import { defaultPaths, filesContent } from '../defaults/paths';
-import { createWindow, registerProtocols } from './utils';
+import { createWindow, registerProtocols, getPath } from './utils';
 import { runAutoUpdaterService, runExtensionsService } from './services';
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
@@ -17,6 +16,7 @@ let mainWindow: Electron.BrowserWindow;
 
 global.extensions = {};
 global.backgroundPages = {};
+global.locale = 'en-US';
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the

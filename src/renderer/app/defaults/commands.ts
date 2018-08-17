@@ -1,12 +1,3 @@
-import store from '../../store';
-import {
-  createTab,
-  getCurrentWorkspace,
-  getCurrentWorkspaceTabs,
-  getSelectedPage,
-  selectTab,
-} from '../../../utils';
-
 export const Commands: any = {
   'tabs.switch': (e?: KeyboardEvent) => {
     const tabs = getCurrentWorkspaceTabs();

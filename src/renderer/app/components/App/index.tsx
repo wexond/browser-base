@@ -23,11 +23,9 @@ import {
 } from '../../../../utils';
 import { PageMenuMode, ButtonType } from '../../../../enums';
 import { colors } from '../../../../defaults';
-import { Store } from '../../store';
+import store from '../../store';
 
 const { dialog } = remote;
-
-const store = new Store();
 
 @observer
 class App extends React.Component {
@@ -212,102 +210,97 @@ class App extends React.Component {
     const normal = mode === PageMenuMode.Normal;
 
     return (
-      <Provider store={store}>
-        <StyledApp>
-          <Toolbar />
-          <Pages />
-          <ContextMenu
-            width={256}
-            dense
-            ref={(r: ContextMenu) => (store.pageMenu = r)}
-            onMouseDown={e => e.stopPropagation()}
-            style={{
-              position: 'absolute',
-              left: store.pageMenuData.x,
-              top: store.pageMenuData.y,
-            }}
-            visible={store.pageMenuVisible}
+      <StyledApp>
+        <Toolbar />
+        <Pages />
+        <ContextMenu
+          width={256}
+          dense
+          ref={(r: ContextMenu) => (store.pageMenu = r)}
+          onMouseDown={e => e.stopPropagation()}
+          style={{
+            position: 'absolute',
+            left: store.pageMenuData.x,
+            top: store.pageMenuData.y,
+          }}
+          visible={store.pageMenuVisible}
+        >
+          <ContextMenu.Item
+            visible={imageAndURLLink}
+            onClick={this.onOpenLinkInNewTabClick}
           >
-            <ContextMenu.Item
-              visible={imageAndURLLink}
-              onClick={this.onOpenLinkInNewTabClick}
+            Open link in new tab
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLLink} disabled>
+            Open link in new window
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLLink} disabled>
+            Open link in new incognito window
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={imageAndURLLink} onClick={this.saveLinkAs}>
+            Save link as
+          </ContextMenu.Item>
+          <ContextMenu.Item
+            visible={imageAndURLLink}
+            onClick={this.onCopyLinkAddressClick}
+          >
+            Copy link address
+          </ContextMenu.Item>
+          <ContextMenu.Separator visible={imageAndURLLink} />
+          <ContextMenu.Item
+            visible={imageAndURLImage}
+            onClick={this.onOpenImageInNewTabClick}
+          >
+            Open image in new tab
+          </ContextMenu.Item>
+          <ContextMenu.Item
+            visible={imageAndURLImage}
+            onClick={this.onSaveImageAsClick}
+          >
+            Save image as
+          </ContextMenu.Item>
+          <ContextMenu.Item
+            visible={imageAndURLImage}
+            onClick={this.onCopyImageClick}
+          >
+            Copy image
+          </ContextMenu.Item>
+          <ContextMenu.Item
+            visible={imageAndURLImage}
+            onClick={this.onCopyImageAddressClick}
+          >
+            Copy image address
+          </ContextMenu.Item>
+          <ContextMenu.Separator visible={imageAndURLImage} />
+          <ContextMenu.Item visible={normal} onClick={this.onPrintClick}>
+            Print
+          </ContextMenu.Item>
+          <ContextMenu.Item visible={normal} onClick={this.saveAs}>
+            Save as
+          </ContextMenu.Item>
+          <ContextMenu.Separator visible={normal} />
+          <ContextMenu.Item visible={normal} onClick={this.viewSource}>
+            View source
+          </ContextMenu.Item>
+          <ContextMenu.Item onClick={this.onInspectElementClick}>
+            Inspect element
+          </ContextMenu.Item>
+        </ContextMenu>
+        <GlobalMenu />
+        <WorkspacesMenu />
+        <Snackbar visible={store.updateInfo.available}>
+          <Snackbar.Content>An update is available</Snackbar.Content>
+          <Snackbar.Actions>
+            <Button
+              type={ButtonType.Text}
+              foreground={colors.blue['500']}
+              onClick={this.onRestartClick}
             >
-              Open link in new tab
-            </ContextMenu.Item>
-            <ContextMenu.Item visible={imageAndURLLink} disabled>
-              Open link in new window
-            </ContextMenu.Item>
-            <ContextMenu.Item visible={imageAndURLLink} disabled>
-              Open link in new incognito window
-            </ContextMenu.Item>
-            <ContextMenu.Item
-              visible={imageAndURLLink}
-              onClick={this.saveLinkAs}
-            >
-              Save link as
-            </ContextMenu.Item>
-            <ContextMenu.Item
-              visible={imageAndURLLink}
-              onClick={this.onCopyLinkAddressClick}
-            >
-              Copy link address
-            </ContextMenu.Item>
-            <ContextMenu.Separator visible={imageAndURLLink} />
-            <ContextMenu.Item
-              visible={imageAndURLImage}
-              onClick={this.onOpenImageInNewTabClick}
-            >
-              Open image in new tab
-            </ContextMenu.Item>
-            <ContextMenu.Item
-              visible={imageAndURLImage}
-              onClick={this.onSaveImageAsClick}
-            >
-              Save image as
-            </ContextMenu.Item>
-            <ContextMenu.Item
-              visible={imageAndURLImage}
-              onClick={this.onCopyImageClick}
-            >
-              Copy image
-            </ContextMenu.Item>
-            <ContextMenu.Item
-              visible={imageAndURLImage}
-              onClick={this.onCopyImageAddressClick}
-            >
-              Copy image address
-            </ContextMenu.Item>
-            <ContextMenu.Separator visible={imageAndURLImage} />
-            <ContextMenu.Item visible={normal} onClick={this.onPrintClick}>
-              Print
-            </ContextMenu.Item>
-            <ContextMenu.Item visible={normal} onClick={this.saveAs}>
-              Save as
-            </ContextMenu.Item>
-            <ContextMenu.Separator visible={normal} />
-            <ContextMenu.Item visible={normal} onClick={this.viewSource}>
-              View source
-            </ContextMenu.Item>
-            <ContextMenu.Item onClick={this.onInspectElementClick}>
-              Inspect element
-            </ContextMenu.Item>
-          </ContextMenu>
-          <GlobalMenu />
-          <WorkspacesMenu />
-          <Snackbar visible={store.updateInfo.available}>
-            <Snackbar.Content>An update is available</Snackbar.Content>
-            <Snackbar.Actions>
-              <Button
-                type={ButtonType.Text}
-                foreground={colors.blue['500']}
-                onClick={this.onRestartClick}
-              >
-                RESTART
-              </Button>
-            </Snackbar.Actions>
-          </Snackbar>
-        </StyledApp>
-      </Provider>
+              RESTART
+            </Button>
+          </Snackbar.Actions>
+        </Snackbar>
+      </StyledApp>
     );
   }
 }

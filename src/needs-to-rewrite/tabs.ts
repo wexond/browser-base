@@ -175,36 +175,6 @@ export const getTabsToReplace = (callingTab: Tab, direction: string) => {
   }
 };
 
-export const selectTab = (tab: Tab) => {
-  if (!tab.isClosing) {
-    const workspace = getWorkspaceById(tab.workspaceId);
-    workspace.selectedTab = tab.id;
-
-    emitEvent('tabs', 'onActivated', {
-      tabId: tab.id,
-      windowId: 0,
-    });
-  }
-};
-
-export const createTab = (
-  createProperties: chrome.tabs.CreateProperties = {
-    url:
-      process.env.ENV === 'dev'
-        ? 'http://localhost:8080/newtab.html'
-        : 'wexond://newtab',
-    active: true,
-  },
-) => {
-  const workspace = getCurrentWorkspace();
-  const tab = new Tab(workspace.id);
-  store.tabs.push(tab);
-  createPage(tab.id, createProperties.url);
-  selectTab(tab);
-
-  return tab;
-};
-
 export const getIpcTab = (tab: Tab): chrome.tabs.Tab => {
   const tabs = getWorkspaceTabs(tab.workspaceId);
   const selected = getSelectedTab().id === tab.id;

@@ -1,8 +1,8 @@
 export interface Bookmark {
-  id?: number;
+  _id?: string;
   title?: string;
   url?: string;
   favicon?: string;
-  parent?: number;
-  type?: string;
+  parent?: string;
+  type?: 'folder' | 'item';
 }

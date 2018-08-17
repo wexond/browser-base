@@ -13,11 +13,17 @@ import { AddTabStore } from './add-tab';
 import { SuggestionsStore } from './suggestions';
 import { KeyboardShortcutsStore } from './keyboard-shortcuts';
 import { Platforms } from '../../../enums';
+import { PagesStore } from './pages';
+import { NavigationStateStore } from './navigation-state';
+import { FaviconsStore } from './favicons';
+import { ExtensionsStore } from './extensions';
+import { remote } from 'electron';
 
-class Store {
+export class Store {
   public tabbarStore = new TabbarStore();
   public tabGroupsStore = new TabGroupsStore();
   public tabsStore = new TabsStore();
+  public pagesStore = new PagesStore();
   public menuStore = new MenuStore();
   public addressBarStore = new AddressBarStore();
   public pageMenuStore = new PageMenuStore();
@@ -26,6 +32,9 @@ class Store {
   public addTabStore = new AddTabStore();
   public suggestionsStore = new SuggestionsStore();
   public keyboardShortcutsStore = new KeyboardShortcutsStore();
+  public navigationStateStore = new NavigationStateStore();
+  public faviconsStore = new FaviconsStore();
+  public extensionsStore = new ExtensionsStore();
 
   @observable
   public isFullscreen = false;
@@ -45,44 +54,15 @@ class Store {
     canGoForward: false,
   };
 
-  public favicons: { [key: string]: string } = {};
+  @observable
+  public locale: string = remote.getGlobal('locale');
+
   public platform = os.platform() as Platforms;
   public cmdPressed = false;
   public mouse = {
     x: 0,
     y: 0,
   };
-
-  public refreshNavigationState() {
-    const page = getSelectedPage();
-    if (page) {
-      const { webview } = getSelectedPage();
-
-      if (webview && webview.getWebContents()) {
-        this.navigationState = {
-          canGoBack: webview.canGoBack(),
-          canGoForward: webview.canGoForward(),
-        };
-      }
-    }
-  }
-
-  public loadFavicons() {
-    // TODO: nedb
-    /*return new Promise(async resolve => {
-      await database.favicons.each(favicon => {
-        if (
-          this.favicons[favicon.url] == null &&
-          favicon.favicon.byteLength !== 0
-        ) {
-          this.favicons[favicon.url] = window.URL.createObjectURL(
-            new Blob([favicon.favicon]),
-          );
-        }
-      });
-      resolve();
-    });*/
-  }
 }
 
 export default new Store();
