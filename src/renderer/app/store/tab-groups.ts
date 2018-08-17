@@ -1,5 +1,7 @@
 import { observable } from 'mobx';
 
+import { TabGroup } from '../models';
+
 export class TabGroupsStore {
   @observable
   public tabGroups: TabGroup[];
@@ -8,5 +10,5 @@ export class TabGroupsStore {
   public currentTabGroup: number = 0;
 
   @observable
-  public tabGroupsMenuVisible: boolean = false;
+  public menuVisible: boolean = false;
 }
