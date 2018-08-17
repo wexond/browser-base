@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { opacity } from '../../defaults/transparency';
+import { opacity } from '../../../defaults/transparency';
 import { ButtonType } from '../../../enums';
 import {
   getComponentColor,

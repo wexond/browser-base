@@ -1,14 +1,13 @@
-import { weatherIcons } from '../defaults/weather-icons';
-import { getTimeInZone, getTimeZoneOffset } from './time-zone';
-import { requestURL } from '../../../utils/network';
-import { WEATHER_API_KEY } from '../../../constants/api-keys';
 import {
   WeatherDailyItem,
   WeatherWeeklyItem,
-  Dictionary,
   WeatherForecast,
-} from '../interfaces';
-import { getDayIndex, formatTime, capitalizeEachWord } from '.';
+  Dictionary,
+} from 'interfaces';
+import { weatherIcons } from 'defaults/weather-icons';
+import { getTimeInZone, getTimeZoneOffset } from 'utils/time-zone';
+import { WEATHER_API_KEY } from 'constants/api-keys';
+import { requestURL, getDayIndex, capitalizeEachWord, formatTime } from 'utils';
 
 const createDailyItem = (data: any, timeZoneOffset: number) => {
   const item: WeatherDailyItem = {
