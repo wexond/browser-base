@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { icons, transparency } from 'defaults';
-import { centerImage } from 'mixins';
+import { icons, transparency } from '~/defaults';
+import { centerImage } from '@mixins';
 
 export const RemoveIcon = styled.div`
   position: absolute;

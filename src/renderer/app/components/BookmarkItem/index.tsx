@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { transparency } from 'defaults';
-import { Bookmark } from 'interfaces';
+import { transparency } from '~/defaults';
+import { Bookmark } from '~/interfaces';
 import { Icon, Root } from '../../../components/PageItem';
 import { ActionIcon, Input, Title } from './styles';
-import { icons } from 'defaults/icons';
-import store from 'app-store';
+import { icons } from '~/defaults/icons';
+import store from '@app/store';
 
 export interface Props {
   data: Bookmark;

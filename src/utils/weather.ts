@@ -3,11 +3,16 @@ import {
   WeatherWeeklyItem,
   WeatherForecast,
   Dictionary,
-} from 'interfaces';
-import { weatherIcons } from 'defaults/weather-icons';
-import { getTimeInZone, getTimeZoneOffset } from 'utils/time-zone';
-import { WEATHER_API_KEY } from 'constants/api-keys';
-import { requestURL, getDayIndex, capitalizeEachWord, formatTime } from 'utils';
+} from '~/interfaces';
+import { weatherIcons } from '~/defaults/weather-icons';
+import { getTimeInZone, getTimeZoneOffset } from '~/utils/time-zone';
+import { WEATHER_API_KEY } from '~/constants';
+import {
+  requestURL,
+  getDayIndex,
+  capitalizeEachWord,
+  formatTime,
+} from '~/utils';
 
 const createDailyItem = (data: any, timeZoneOffset: number) => {
   const item: WeatherDailyItem = {

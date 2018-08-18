@@ -1,7 +1,7 @@
 import { observable, computed } from 'mobx';
 import { NewsStore } from './news';
 import { WeatherStore } from './weather';
-import { dictionaries } from 'defaults';
+import { dictionaries } from '~/defaults';
 
 export class Store {
   public newsStore = new NewsStore();

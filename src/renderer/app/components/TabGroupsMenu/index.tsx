@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 
 import { Dark, ItemsContainer, Root } from './styles';
-import store from 'app-store';
+import store from '@app/store';
 import TabGroupItem from '../TabGroupItem';
 import TabGroupAdd from '../TabGroupAdd';
 

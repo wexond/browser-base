@@ -5,9 +5,9 @@ import News from '../News';
 import WeatherCard from '../WeatherCard';
 
 import { Column, Content, StyledApp } from './styles';
-import { getWeather } from 'utils/weather';
+import { getWeather } from '~/utils/weather';
 
-import store from 'newtab-store';
+import store from '@newtab/store';
 
 @observer
 export default class App extends React.Component<{ visible: boolean }, {}> {

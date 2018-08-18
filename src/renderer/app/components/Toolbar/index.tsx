@@ -8,10 +8,10 @@ import TabBar from '../TabBar';
 import { Handle, Line, StyledToolbar, TabsSection } from './styles';
 import ToolbarButton from '../ToolbarButton';
 import ToolbarSeparator from '../ToolbarSeparator';
-import store from 'app-store';
-import { Bookmark } from 'interfaces';
-import { icons } from 'defaults';
-import { Platforms } from 'enums';
+import store from '@app/store';
+import { Bookmark } from '~/interfaces';
+import { icons } from '~/defaults';
+import { Platforms } from '~/enums';
 import WindowsControls from '../WindowsButtons';
 
 @observer

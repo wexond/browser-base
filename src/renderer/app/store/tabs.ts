@@ -1,7 +1,7 @@
 import { observable } from 'mobx';
 import { TabGroup } from '../models';
-import { defaultCreateTabProperties } from 'defaults/create-tab-properties';
-import { TAB_ANIMATION_EASING, TAB_ANIMATION_DURATION } from 'constants/';
+import { defaultCreateTabProperties } from '~/defaults/create-tab-properties';
+import { TAB_ANIMATION_EASING, TAB_ANIMATION_DURATION } from '~/constants';
 import { TweenLite } from 'gsap';
 
 export class TabsStore {
@@ -69,6 +69,13 @@ export class TabsStore {
 
   public addTab(details = defaultCreateTabProperties) {
     return this.getCurrentGroup().addTab(details);
+  }
+
+  public addGroup() {
+    const tabGroup: TabGroup = new TabGroup();
+    this.groups.push(tabGroup);
+    this.currentGroup = tabGroup.id;
+    this.addTab();
   }
 
   public animateProperty(

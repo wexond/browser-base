@@ -19,12 +19,14 @@
 
     "typeRoots": ["./node_modules/@types"],
 
-    "baseUrl": "./src",
+    "baseUrl": "./",
 
     "paths": {
-      "app-store": ["renderer/app/store"],
-      "newtab-store": ["renderer/newtab/store"],
-      "mixins": ["renderer/mixins"]
+      "@app/*": ["src/renderer/app/*"],
+      "@newtab/*": ["src/renderer/newtab/*"],
+      "@mixins": ["src/renderer/mixins"],
+      "@components/*": ["src/renderer/components/*"],
+      "~/*": ["src/*"]
     }
   },
   "awesomeTypescriptLoaderOptions": {

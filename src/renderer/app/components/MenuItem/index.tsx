@@ -8,7 +8,7 @@ import {
   SubItemsContainer,
   Title,
 } from './styles';
-import store from 'app-store';
+import store from '@app/store';
 
 interface Props {
   icon: string;

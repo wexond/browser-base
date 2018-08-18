@@ -1,7 +1,7 @@
 import { observable } from 'mobx';
 import { Tab, Page } from '.';
 import store from '../store';
-import { defaultCreateTabProperties } from '../../../defaults/create-tab-properties';
+import { defaultCreateTabProperties } from '~/defaults/create-tab-properties';
 
 export class TabGroup {
   @observable
@@ -15,6 +15,13 @@ export class TabGroup {
 
   @observable
   public selectedTab: number;
+
+  public select() {
+    store.tabsStore.currentGroup = this.id;
+    requestAnimationFrame(() => {
+      this.updateTabsBounds(false);
+    });
+  }
 
   public addTab({ url, active } = defaultCreateTabProperties) {
     const tab = new Tab(this);

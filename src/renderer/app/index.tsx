@@ -6,6 +6,7 @@ import { injectGlobal } from 'styled-components';
 import { Style } from './styles';
 import { runServices } from './services';
 import App from './components/app';
+import store from '@app/store';
 
 injectGlobal`${Style}`;
 
@@ -22,7 +23,7 @@ const render = (AppComponent: any) => {
 
   render(App);
 
-  createWorkspace();
+  store.tabsStore.addGroup();
 })();
 
 // react-hot-loader

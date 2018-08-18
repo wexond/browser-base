@@ -1,5 +1,5 @@
-import { Favicon } from 'interfaces';
-import { databases } from 'defaults/databases';
+import { Favicon } from '~/interfaces';
+import { databases } from '~/defaults/databases';
 
 export const getFavicons = (query: Favicon = {}) => {
   return new Promise((resolve: (favicons: Favicon[]) => void, reject) => {

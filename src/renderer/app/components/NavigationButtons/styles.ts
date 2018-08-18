@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import store from 'app-store';
-import { Platforms } from 'enums';
+import store from '@app/store';
+import { Platforms } from '~/enums';
 
 export const StyledContainer = styled.div`
   display: flex;

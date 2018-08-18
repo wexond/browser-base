@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import { TOOLBAR_BUTTON_WIDTH } from 'constants/';
-import { transparency } from 'defaults';
-import { centerImage } from 'mixins';
+import { TOOLBAR_BUTTON_WIDTH } from '~/constants';
+import { transparency } from '~/defaults';
+import { centerImage } from '@mixins';
 
 export const Icon = styled.div`
   width: 100%;

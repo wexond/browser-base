@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import { KeyBinding } from 'interfaces';
+import { KeyBinding } from '~/interfaces';
 import KeyRecordingDialog from '../components/KeyRecordingDialog';
 
 export class KeyBindingsStore {

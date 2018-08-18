@@ -1,11 +1,7 @@
-import { readFileSync } from 'fs';
-
 const locales = ['en-US', 'pl-PL'];
 
 const getDictionary = (name: string) => {
-  return JSON.parse(
-    readFileSync(`../../static/dictionaries/${name}.json`, 'utf8'),
-  );
+  return require(`../../static/dictionaries/${name}.json`);
 };
 
 export const dictionaries: { [key: string]: any } = {};

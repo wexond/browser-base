@@ -11,8 +11,8 @@ import {
   BodyRow,
   BodyItem,
 } from './styles';
-import store from 'app-store';
-import { KeyBinding } from 'interfaces';
+import store from '@app/store';
+import { KeyBinding } from '~/interfaces';
 import { PageContent } from '../Menu/styles';
 
 @observer
