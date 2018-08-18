@@ -6,7 +6,7 @@ const baseConfig = require('./webpack.config.base');
 const PORT = 8080;
 
 const config = merge.smart(baseConfig, {
-  devtool: 'eval',
+  devtool: 'eval-source-map',
   mode: 'development',
   output: {
     hotUpdateChunkFilename: 'hot/hot-update.js',

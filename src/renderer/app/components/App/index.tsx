@@ -6,7 +6,7 @@ import { basename, extname } from 'path';
 import React from 'react';
 import { parse } from 'url';
 
-import { UPDATE_RESTART_AND_INSTALL } from 'constants/';
+import { UPDATE_RESTART_AND_INSTALL } from '~/constants';
 import Button from '../../../components/Button';
 import ContextMenu from '../../../components/ContextMenu';
 import Snackbar from '../../../components/Snackbar';
@@ -14,10 +14,10 @@ import GlobalMenu from '../GlobalMenu';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
 import { StyledApp } from './styles';
-import { PageMenuMode } from 'enums';
-import { colors } from 'defaults';
+import { PageMenuMode } from '~/enums';
+import { colors } from '~/defaults';
 import store from '../../store';
-import { getKeyBindings, bindKeys } from 'utils/keyboard-shortcuts';
+import { getKeyBindings, bindKeys } from '~/utils/keyboard-shortcuts';
 import TabGroupsMenu from '../TabGroupsMenu';
 
 const { dialog } = remote;

@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import Suggestion from '../Suggestion';
 import { Caption, StyledSuggestions } from './styles';
-import store from 'app-store';
+import store from '@app/store';
 
 interface Props {
   visible: boolean;

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-import { WORKSPACE_FOLDER_SIZE } from 'constants/';
-import { icons } from 'defaults/icons';
-import { centerImage } from 'mixins';
+import { WORKSPACE_FOLDER_SIZE } from '~/constants';
+import { icons } from '~/defaults/icons';
+import { centerImage } from '@mixins';
 
 export const Root = styled.div`
   width: ${WORKSPACE_FOLDER_SIZE}px;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { icons } from 'defaults/icons';
+import { icons } from '~/defaults/icons';
 
 export const Content = styled.div`
   max-width: 640px;

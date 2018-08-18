@@ -1,8 +1,7 @@
 import styled, { css } from 'styled-components';
-
-import { opacity } from '../../../defaults/opacity';
-import { button, shadows } from '../../mixins';
-import { getComponentColor } from '../../../utils/component-color';
+import { transparency } from '~/defaults';
+import { button, shadows } from '@mixins';
+import { getComponentColor } from '~/utils/component-color';
 
 type UITheme = 'light' | 'dark';
 
@@ -20,7 +19,9 @@ export const getBorder = (isOutlined: boolean, theme: UITheme) => {
   if (isOutlined) {
     const rgb = theme === 'light' ? 0 : 255;
     const alpha =
-      theme === 'light' ? opacity.light.dividers : opacity.dark.dividers;
+      theme === 'light'
+        ? transparency.light.dividers
+        : transparency.dark.dividers;
     return `1px solid rgba(${rgb}, ${rgb}, ${rgb}, ${alpha})`;
   }
   return 'unset';

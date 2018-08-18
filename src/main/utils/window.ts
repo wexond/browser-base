@@ -2,7 +2,7 @@ import { BrowserWindow } from 'electron';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
-import { FULLSCREEN } from 'constants/';
+import { FULLSCREEN } from '~/constants';
 import { loadExtensions } from './extensions';
 import { WindowState } from '../interfaces';
 import { getPath } from '.';

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { transparency } from '../../../../defaults';
-import { noButtons, robotoMedium } from '../../../mixins';
+import { transparency } from '~/defaults';
+import { robotoMedium } from '@mixins';
 
 export const Toolbar = styled.div`
   width: calc(100% - 300px);

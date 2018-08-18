@@ -11,7 +11,7 @@ import {
   SearchIcon,
   Title,
 } from './styles';
-import store from 'app-store';
+import store from '@app/store';
 import MenuItem from '../MenuItem';
 
 interface Props {

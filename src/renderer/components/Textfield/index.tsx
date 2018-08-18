@@ -1,9 +1,8 @@
 import * as React from 'react';
 
-import { colors } from '../../../defaults/colors';
-import { TextfieldType } from '../../../enums';
+import { colors } from '~/defaults/colors';
 
-import { executeEventStopPropagation } from '../../../utils';
+import { executeEventStopPropagation } from '~/utils';
 import {
   AssistiveText,
   Container,

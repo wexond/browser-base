@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Root } from './styles';
-import Ripple from '../../Ripple';
 
 export interface Props {
   onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
@@ -23,7 +22,7 @@ export default class Item extends React.Component<Props, {}> {
     if (typeof onClick === 'function') {
       onClick(e, this);
     }
-  }
+  };
 
   public render() {
     const { children, selected } = this.props;

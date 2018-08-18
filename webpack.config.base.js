@@ -1,4 +1,4 @@
-const { resolve } = require('path');
+const { resolve, join } = require('path');
 
 module.exports = {
   module: {
@@ -21,9 +21,11 @@ module.exports = {
     modules: ['node_modules'],
     extensions: ['.js', '.tsx', '.ts', '.json'],
     alias: {
-      'app-store': './src/renderer/app/store',
-      'newtab-store': './src/renderer/newtab/store',
-      mixins: './src/renderer/mixins',
+      '@app': join(__dirname, './src/renderer/app'),
+      '@newtab': join(__dirname, './src/renderer/newtab'),
+      '@mixins': join(__dirname, './src/renderer/mixins'),
+      '@components': join(__dirname, './src/renderer/components'),
+      '~': join(__dirname, './src'),
     },
   },
 };

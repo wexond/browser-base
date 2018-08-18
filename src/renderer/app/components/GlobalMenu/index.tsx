@@ -2,8 +2,8 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 import Menu from '../Menu';
-import store from 'app-store';
-import { icons } from 'defaults';
+import store from '@app/store';
+import { icons } from '~/defaults';
 import Bookmarks from '../Bookmarks';
 import KeyboardShortcuts from '../KeyboardShortcuts';
 import About from '../About';

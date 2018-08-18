@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { transparency } from 'defaults';
+import { transparency } from '~/defaults';
 
 export const Root = styled.div`
   height: 4px;
@@ -28,7 +28,7 @@ export const Track = styled.div`
 
 export interface IndicatorProps {
   color: string;
-  type: ProgressType;
+  indeterminate: boolean;
 }
 
 export const Indicator = styled.div`
@@ -37,8 +37,8 @@ export const Indicator = styled.div`
 
   ${trackStyle}
   background-color: ${({ color }: IndicatorProps) => color};
-  animation: ${({ type }) => {
-    if (type === ProgressType.Indeterminate) {
+  animation: ${({ indeterminate }) => {
+    if (indeterminate) {
       return 'nersent-ui-progressbar-first 3s ease-in infinite';
     }
     return 'unset';

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { icons, transparency } from '../../../defaults';
-import { body2, centerImage } from '../../mixins';
+import { icons, transparency } from '~/defaults';
+import { body2, centerImage } from '@mixins';
 
 export const PageItem = styled.div`
   height: 56px;

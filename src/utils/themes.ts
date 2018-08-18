@@ -1,6 +1,5 @@
 import wpm from 'wexond-package-manager';
-import { colors } from '../defaults/colors';
-import { transparency } from '../defaults/transparency';
+import { colors, transparency } from '~/defaults';
 
 export const loadPlugins = async () => {
   const plugins = await wpm.list();
@@ -10,7 +9,7 @@ export const loadPlugins = async () => {
       fs: {},
       wexond: {
         colors,
-        opacity,
+        transparency,
       },
     };
 

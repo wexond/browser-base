@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Root } from './styles';
-import { KeyBinding } from 'interfaces';
+import { KeyBinding } from '~/interfaces';
 
 export type ChipEvent = (keyBinding?: KeyBinding) => void;
 

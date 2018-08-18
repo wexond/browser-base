@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import { WeatherForecast } from 'interfaces';
+import { WeatherForecast } from '~/interfaces';
 
 export class WeatherStore {
   @observable

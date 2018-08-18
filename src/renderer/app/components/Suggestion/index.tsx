@@ -7,9 +7,9 @@ import {
   SecondaryText,
   StyledSuggestion,
 } from './styles';
-import { Suggestion } from 'interfaces';
-import store from 'app-store';
-import { icons, transparency } from 'defaults';
+import { Suggestion } from '~/interfaces';
+import store from '@app/store';
+import { icons, transparency } from '~/defaults';
 
 interface Props {
   suggestion: Suggestion;

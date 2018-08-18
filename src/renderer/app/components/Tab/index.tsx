@@ -14,10 +14,10 @@ import {
   RightBorder,
 } from './styles';
 import { Tab } from '../../models';
-import store from 'app-store';
-import { closeWindow } from 'utils/window';
-import { TAB_ANIMATION_DURATION } from 'constants/';
-import { colors } from 'defaults';
+import store from '@app/store';
+import { closeWindow } from '~/utils/window';
+import { TAB_ANIMATION_DURATION } from '~/constants';
+import { colors } from '~/defaults';
 
 @observer
 export default class extends React.Component<{ tab: Tab }, {}> {

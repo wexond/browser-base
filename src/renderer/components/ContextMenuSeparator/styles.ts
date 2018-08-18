@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { transparency } from '../../../../defaults';
+import { transparency } from '~/defaults';
 
 export interface SeparatorProps {
   visible: boolean;
