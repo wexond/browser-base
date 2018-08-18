@@ -1,27 +1,21 @@
 import { observer } from 'mobx-react';
 import React from 'react';
+import { TabGroup } from '../../models';
+import { StyledTabGroupItem, IconsContainer, Label } from './styles';
 
-import { TabGroup } from '../../../models';
-import { transparency } from '../../../../../defaults';
-import store from '../../../store';
-import { DeleteIcon, Icon, IconsContainer, Input, Label, Root } from './styles';
-
-const pageIcon = require('../../../../resources/icons/page.svg');
+interface Props {
+  data: TabGroup;
+}
 
 @observer
-export default class extends React.Component<{ tabGroup: TabGroup }, {}> {
+export default class TabGroupItem extends React.Component<Props, {}> {
   public static defaultProps = {
     selected: false,
-  };
-
-  public state = {
-    inputVisible: false,
   };
 
   private input: HTMLInputElement;
 
   public onClick = () => {
-    const { tabGroup } = this.props;
     // selectWorkspace(workspace.id);
   };
 
@@ -96,10 +90,10 @@ export default class extends React.Component<{ tabGroup: TabGroup }, {}> {
 
   public render() {
     return (
-      <Root onClick={this.onClick}>
+      <StyledTabGroupItem onClick={this.onClick}>
         <IconsContainer selected={false} />
         <Label>Label</Label>
-      </Root>
+      </StyledTabGroupItem>
     );
 
     /*const { workspace } = this.props;

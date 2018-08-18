@@ -1,7 +1,5 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import store from '../../../store';
-import Item from './Item';
 import {
   Container,
   Content,
@@ -13,6 +11,8 @@ import {
   SearchIcon,
   Title,
 } from './styles';
+import store from 'app-store';
+import MenuItem from '../MenuItem';
 
 interface Props {
   children?: any;
@@ -21,16 +21,15 @@ interface Props {
 
 @observer
 export default class extends React.Component<Props, {}> {
-  public static Item = Item;
+  public static Item = MenuItem;
 
-  private items: Item[] = [];
+  private items: MenuItem[] = [];
 
   public onDarkClick = () => {
     requestAnimationFrame(() => {
-      store.menu.hide();
-      store.menu.searchText = '';
+      store.menuStore.hide();
     });
-  }
+  };
 
   public render() {
     const { title, children } = this.props;
@@ -44,7 +43,7 @@ export default class extends React.Component<Props, {}> {
 
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i];
-      if (item && item.props.id === store.menu.selectedItem) {
+      if (item && item.props.id === store.menuStore.selectedItem) {
         selectedItem = item;
         break;
       }
@@ -52,7 +51,7 @@ export default class extends React.Component<Props, {}> {
 
     return (
       <React.Fragment>
-        <Container visible={store.menu.visible}>
+        <Container visible={store.menuStore.visible}>
           <Content visible={selectedItem != null}>
             {React.Children.map(children, (el: React.ReactElement<any>) => {
               if (!el.props.title) {
@@ -60,9 +59,11 @@ export default class extends React.Component<Props, {}> {
                 return (
                   <div
                     style={{
-                      opacity: store.menu.selectedItem === id2 - 1 ? 1 : 0,
+                      opacity: store.menuStore.selectedItem === id2 - 1 ? 1 : 0,
                       pointerEvents:
-                        store.menu.selectedItem === id2 - 1 ? 'auto' : 'none',
+                        store.menuStore.selectedItem === id2 - 1
+                          ? 'auto'
+                          : 'none',
                       position: 'absolute',
                       top: 0,
                       width: '100%',
@@ -92,7 +93,7 @@ export default class extends React.Component<Props, {}> {
               if (el.props.title) {
                 return React.cloneElement(el, {
                   id: id++,
-                  ref: (r: Item) => this.items.push(r),
+                  ref: (r: MenuItem) => this.items.push(r),
                   onClick: this.onItemClick,
                 });
               }
@@ -101,18 +102,21 @@ export default class extends React.Component<Props, {}> {
             })}
           </Menu>
         </Container>
-        <Dark onClick={this.onDarkClick} visible={store.menu.visible} />
+        <Dark onClick={this.onDarkClick} visible={store.menuStore.visible} />
       </React.Fragment>
     );
   }
 
-  private onItemClick = (e: React.MouseEvent<HTMLDivElement>, item: Item) => {
+  private onItemClick = (
+    e: React.MouseEvent<HTMLDivElement>,
+    item: MenuItem,
+  ) => {
     if (item) {
-      store.menu.selectedItem = item.props.id;
+      store.menuStore.selectedItem = item.props.id;
     }
-  }
+  };
 
   private onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    store.menu.searchText = e.currentTarget.value;
-  }
+    store.menuStore.searchText = e.currentTarget.value;
+  };
 }

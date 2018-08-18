@@ -1,8 +1,6 @@
 import styled, { css } from 'styled-components';
-import { icons } from '../../../defaults/icons';
-import { centerImage, body2 } from '../../../mixins';
-import { transparency } from '../../../defaults/transparency';
-import { colors } from '../../../defaults/colors';
+import { icons, transparency, colors } from 'defaults';
+import { centerImage, body2 } from 'mixins';
 
 interface CloseProps {
   hovered: boolean;
@@ -25,9 +23,8 @@ export const Close = styled.div`
 
 interface TabProps {
   selected: boolean;
-  isRemoving: boolean;
+  isClosing: boolean;
   visible: boolean;
-  workspaceSelected: boolean;
 }
 
 export const StyledTab = styled.div`
@@ -43,11 +40,10 @@ export const StyledTab = styled.div`
   transition: 0.1s color;
   will-change: transition, transform, width, left;
 
-  ${({ selected, isRemoving, visible, workspaceSelected }: TabProps) => css`
+  ${({ selected, isClosing, visible }: TabProps) => css`
     z-index: ${selected ? 2 : 1};
-    pointer-events: ${isRemoving || !visible ? 'none' : 'auto'};
+    pointer-events: ${isClosing || !visible ? 'none' : 'auto'};
     -webkit-app-region: ${visible ? 'no-drag' : ''};
-    display: ${workspaceSelected ? 'flex' : 'none'};
     background-color: ${selected ? 'rgba(33, 150, 243, 0.12)' : 'transparent'};
   `};
 `;

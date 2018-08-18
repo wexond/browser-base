@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Card from '../../../../components/Card';
+import * as Card from 'renderer/components/Card';
 
 import {
   CardImage,
@@ -10,8 +10,8 @@ import {
   SourceContainer,
   Title,
 } from './styles';
-import { loadImage } from '../../../../../utils/network';
-import { getTimeOffset } from '../../../../newtab/utils/time';
+import { loadImage, getTimeOffset } from 'utils';
+import store from 'newtab-store';
 
 export interface Props {
   data: any;
@@ -62,7 +62,11 @@ export default class NewsCard extends React.Component<Props, State> {
               <Icon visible={loaded} src={data.icon} />
               <Source>
                 {data.source.name} -{' '}
-                {getTimeOffset(new Date(data.publishedAt), this)}
+                {getTimeOffset(
+                  store.dictionary,
+                  new Date(data.publishedAt),
+                  this,
+                )}
               </Source>
             </SourceContainer>
           </Card.Header>

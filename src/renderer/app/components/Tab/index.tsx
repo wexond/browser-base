@@ -1,39 +1,33 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { Tab } from '../../../../models';
-import {
-  closeWindow,
-  getPageById,
-  getTabLeft,
-  getTabNewLeft,
-  getTabWidth,
-  getWorkspaceById,
-  getWorkspaceTabs,
-  removeTab,
-  selectTab,
-  setTabLeft,
-  setTabsLefts,
-  setTabWidth,
-  updateTabsBounds,
-  emitEvent,
-} from '../../../../utils';
-import store from '../../../store';
-import { colors, tabAnimations } from '../../../../defaults';
-import components from '../../../components';
 import Preloader from '../../../components/Preloader';
 import Ripple from '../../../components/Ripple';
-import { Circle } from './styles';
+import {
+  Circle,
+  StyledTab,
+  Content,
+  Icon,
+  Title,
+  Close,
+  Overlay,
+  RightBorder,
+} from './styles';
+import { Tab } from '../../models';
+import store from 'app-store';
+import { closeWindow } from 'utils/window';
+import { TAB_ANIMATION_DURATION } from 'constants/';
+import { colors } from 'defaults';
 
 @observer
-export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
+export default class extends React.Component<{ tab: Tab }, {}> {
   private ripple: Ripple;
 
   public componentDidMount() {
     const { tab } = this.props;
 
-    setTabLeft(tab, getTabLeft(tab), false);
-    updateTabsBounds(true);
+    tab.setLeft(tab.getLeft(), false);
+    tab.tabGroup.updateTabsBounds(true);
 
     const frame = () => {
       if (tab.ref != null) {
@@ -44,7 +38,7 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
           store.mouse.y >= boundingRect.top &&
           store.mouse.y <= boundingRect.top + tab.ref.offsetHeight
         ) {
-          if (!tab.hovered && !store.isTabDragged) {
+          if (!tab.hovered && !store.tabsStore.isDragging) {
             tab.hovered = true;
           }
         } else if (tab.hovered) {
@@ -60,89 +54,82 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const { pageX, pageY } = e;
     const { tab } = this.props;
+    const { tabGroup } = tab;
 
-    const workspace = getWorkspaceById(tab.workspaceId);
-    const selected = workspace.selectedTab === tab.id;
+    const selected = tabGroup.selectedTab === tab.id;
 
-    store.addressBar.canToggle = selected;
+    store.addressBarStore.canToggle = selected;
 
-    selectTab(tab);
+    tab.select();
 
-    store.tabDragData = {
-      lastMouseX: 0,
-      dragging: true,
-      mouseStartX: pageX,
-      tabStartX: tab.left,
-      direction: '',
-    };
+    store.tabsStore.lastMouseX = 0;
+    store.tabsStore.isDragging = true;
+    store.tabsStore.mouseStartX = pageX;
+    store.tabsStore.tabStartX = tab.left;
+    store.tabsStore.dragDirection = '';
 
-    store.isTabDragged = true;
-
-    store.lastTabbarScrollLeft = store.tabbarRef.scrollLeft;
+    store.tabbarStore.lastScrollLeft = store.tabbarStore.ref.scrollLeft;
 
     this.ripple.makeRipple(pageX, pageY);
-  }
+  };
 
   public onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-  }
+  };
 
   public onCloseClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { tab } = this.props;
-    const workspace = getWorkspaceById(tab.workspaceId);
-    const selected = workspace.selectedTab === tab.id;
-    const workspaceTabs = getWorkspaceTabs(workspace.id);
+    const { tabGroup } = tab;
+    const { tabs } = tabGroup;
+    const selected = tabGroup.selectedTab === tab.id;
 
     e.stopPropagation();
 
-    store.pages.splice(store.pages.indexOf(getPageById(tab.id)), 1);
+    store.pagesStore.removePage(tab.id);
 
-    store.resetRearrangeTabsTimer();
+    store.tabsStore.resetRearrangeTabsTimer();
 
-    const notClosingTabs = workspaceTabs.filter(x => !x.isClosing);
+    const notClosingTabs = tabs.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(tab);
 
     tab.isClosing = true;
     if (notClosingTabs.length - 1 === index) {
-      const previousTab = workspaceTabs[index - 1];
-      setTabLeft(tab, getTabNewLeft(previousTab) + getTabWidth(), true);
-      updateTabsBounds();
+      const previousTab = tabs[index - 1];
+      tab.setLeft(previousTab.getNewLeft() + tab.getWidth(), true);
+      tabGroup.updateTabsBounds(true);
     }
 
-    setTabWidth(tab, 0, true);
-    setTabsLefts(true);
+    tab.setWidth(0, true);
+    tabGroup.setTabsLefts(true);
 
-    emitEvent('tabs', 'onRemoved', tab.id, {
+    store.extensionsStore.emitEvent('tabs', 'onRemoved', tab.id, {
       windowId: 0,
       isWindowClosing: false,
     });
 
     if (selected) {
-      index = workspaceTabs.indexOf(tab);
+      index = tabs.indexOf(tab);
 
-      if (
-        index + 1 < workspaceTabs.length &&
-        !workspaceTabs[index + 1].isClosing
-      ) {
-        const nextTab = workspaceTabs[index + 1];
-        selectTab(nextTab);
+      if (index + 1 < tabs.length && !tabs[index + 1].isClosing) {
+        const nextTab = tabs[index + 1];
+        nextTab.select();
 
-        emitEvent('tabs', 'onRemoved', tab.id, {
+        store.extensionsStore.emitEvent('tabs', 'onRemoved', tab.id, {
           windowId: 0,
           isWindowClosing: false,
         });
-      } else if (index - 1 >= 0 && !workspaceTabs[index - 1].isClosing) {
-        const prevTab = workspaceTabs[index - 1];
-        selectTab(prevTab);
+      } else if (index - 1 >= 0 && !tabs[index - 1].isClosing) {
+        const prevTab = tabs[index - 1];
+        prevTab.select();
 
-        emitEvent('tabs', 'onRemoved', tab.id, {
+        store.extensionsStore.emitEvent('tabs', 'onRemoved', tab.id, {
           windowId: 0,
           isWindowClosing: false,
         });
-      } else if (store.workspaces.length === 1) {
+      } else if (store.tabsStore.groups.length === 1) {
         closeWindow();
 
-        emitEvent('tabs', 'onRemoved', tab.id, {
+        store.extensionsStore.emitEvent('tabs', 'onRemoved', tab.id, {
           windowId: 0,
           isWindowClosing: true,
         });
@@ -150,71 +137,49 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
     }
 
     setTimeout(() => {
-      removeTab(tab.id);
-    }, tabAnimations.width.duration * 1000);
+      tabGroup.removeTab(tab.id);
+    }, TAB_ANIMATION_DURATION * 1000);
 
-    emitEvent('tabs', 'onRemoved', tab.id, {
+    store.extensionsStore.emitEvent('tabs', 'onRemoved', tab.id, {
       windowId: 0,
       isWindowClosing: true,
     });
-  }
+  };
 
   public onClick = () => {
-    const { tab } = this.props;
-    if (store.addressBar.canToggle) {
-      store.addressBar.toggled = true;
+    if (store.addressBarStore.canToggle) {
+      store.addressBarStore.toggled = true;
     }
-  }
+  };
 
   public render() {
     const { tab, children } = this.props;
-    const {
-      title,
-      isClosing,
-      hovered,
-      isDragging,
-      favicon,
-      loading,
-      workspaceId,
-    } = tab;
-    const workspace = getWorkspaceById(workspaceId);
-    const tabs = getWorkspaceTabs(workspace.id);
+    const { title, isClosing, hovered, favicon, loading, tabGroup } = tab;
+    const { tabs } = tabGroup;
 
-    const selected = workspace.selectedTab === tab.id;
+    const selected = tabGroup.selectedTab === tab.id;
+    const tabIndex = tabs.indexOf(tab);
 
     let rightBorderVisible = true;
-
-    const tabIndex = tabs.indexOf(tab);
 
     if (
       hovered ||
       selected ||
       ((tabIndex + 1 !== tabs.length &&
         (tabs[tabIndex + 1].hovered ||
-          workspace.selectedTab === tabs[tabIndex + 1].id)) ||
+          tabGroup.selectedTab === tabs[tabIndex + 1].id)) ||
         tabIndex === tabs.length - 1)
     ) {
       rightBorderVisible = false;
     }
 
-    const {
-      Root,
-      Content,
-      Icon,
-      Title,
-      Close,
-      Overlay,
-      RightBorder,
-    } = components.tab;
-
     return (
-      <Root
+      <StyledTab
         selected={selected}
         onMouseDown={this.onMouseDown}
         onClick={this.onClick}
-        isRemoving={isClosing}
-        workspaceSelected={store.currentWorkspace === workspaceId}
-        visible={!store.addressBar.toggled}
+        isClosing={isClosing}
+        visible={!store.addressBarStore.toggled}
         innerRef={(r: HTMLDivElement) => (tab.ref = r)}
       >
         <Content hovered={hovered} selected={selected}>
@@ -241,7 +206,7 @@ export default class TabComponent extends React.Component<{ tab: Tab }, {}> {
           color={colors.blue['500']}
         />
         <RightBorder visible={rightBorderVisible} />
-      </Root>
+      </StyledTab>
     );
   }
 }

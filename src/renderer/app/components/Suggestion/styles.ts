@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { transparency } from '../../../../defaults';
-import { body2, centerImage } from '../../../mixins';
+import { body2, centerImage } from 'mixins';
+import { transparency } from 'defaults';
 
 export const StyledSuggestion = styled.div`
   width: 100%;

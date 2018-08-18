@@ -3,20 +3,13 @@ import { observer } from 'mobx-react';
 import { resolve } from 'path';
 import React from 'react';
 
-import { PageMenuMode } from '../../../../enums';
-import { Tab } from '../../../../models';
-import {
-  createTab,
-  getCurrentWorkspace,
-  getIpcTab,
-  getTabById,
-} from '../../../../utils';
-import store from '../../../store';
 import StyledPage from './styles';
-import { Page } from '../../../../interfaces';
+import { Page, Tab } from '../../models';
+import store from 'app-store';
+import { PageMenuMode } from 'enums';
 
 @observer
-export default class extends React.Component<{ page: Page }, {}> {
+export default class extends React.Component<{ page: Page }> {
   private lastURL = '';
 
   private lastHistoryItemID = -1;
@@ -32,7 +25,7 @@ export default class extends React.Component<{ page: Page }, {}> {
   public componentDidMount() {
     const { page } = this.props;
     const { id } = page;
-    const tab = getTabById(id);
+    const tab = store.tabsStore.getTabById(id);
 
     this.tab = tab;
 
@@ -77,10 +70,12 @@ export default class extends React.Component<{ page: Page }, {}> {
             {
               url,
             },
-            getIpcTab(this.tab),
+            this.tab.getApiTab(),
           );
           this.updateData();
-          store.isBookmarked = !!store.bookmarks.find(x => x.url === url);
+          this.tab.isBookmarked = !!store.bookmarksStore.bookmarks.find(
+            x => x.url === url,
+          );
         }
       }
     }, 30);
@@ -112,7 +107,7 @@ export default class extends React.Component<{ page: Page }, {}> {
     if (e.channel === 'api-tabs-getCurrent') {
       this.webview
         .getWebContents()
-        .send('api-tabs-getCurrent', getIpcTab(this.tab));
+        .send('api-tabs-getCurrent', this.tab.getApiTab());
     }
   };
 
@@ -143,7 +138,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         status: 'loading',
       },
-      getIpcTab(this.tab),
+      this.tab.getApiTab(),
     );
   };
 
@@ -163,7 +158,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         status: 'complete',
       },
-      getIpcTab(this.tab),
+      this.tab.getApiTab(),
     );
   };
 
@@ -182,9 +177,9 @@ export default class extends React.Component<{ page: Page }, {}> {
     let tab: Tab;
 
     if (e.disposition === 'new-window' || e.disposition === 'foreground-tab') {
-      tab = createTab({ url: e.url, active: true });
+      tab = store.tabsStore.addTab({ url: e.url, active: true });
     } else if (e.disposition === 'background-tab') {
-      tab = createTab({ url: e.url, active: false });
+      tab = store.tabsStore.addTab({ url: e.url, active: false });
     }
 
     this.emitEvent('webNavigation', 'onCreatedNavigationTarget', {
@@ -201,18 +196,17 @@ export default class extends React.Component<{ page: Page }, {}> {
     e: Electron.Event,
     params: Electron.ContextMenuParams,
   ) => {
-    store.pageMenuVisible = true;
-
-    store.webviewContextMenuParams = params;
+    store.pageMenuStore.visible = true;
+    store.pageMenuStore.params = params;
 
     if (params.linkURL && params.hasImageContents) {
-      store.pageMenuData.mode = PageMenuMode.ImageAndURL;
+      store.pageMenuStore.mode = PageMenuMode.ImageAndURL;
     } else if (params.linkURL) {
-      store.pageMenuData.mode = PageMenuMode.URL;
+      store.pageMenuStore.mode = PageMenuMode.URL;
     } else if (params.hasImageContents) {
-      store.pageMenuData.mode = PageMenuMode.Image;
+      store.pageMenuStore.mode = PageMenuMode.Image;
     } else {
-      store.pageMenuData.mode = PageMenuMode.Normal;
+      store.pageMenuStore.mode = PageMenuMode.Normal;
     }
 
     // Calculate new menu position
@@ -226,7 +220,7 @@ export default class extends React.Component<{ page: Page }, {}> {
     let top = y;
 
     const width = 3 * 64;
-    const height = store.pageMenu.getHeight();
+    const height = store.pageMenuStore.ref.getHeight();
 
     // Open menu from right corner.
     if (left + width > window.innerWidth) {
@@ -243,12 +237,12 @@ export default class extends React.Component<{ page: Page }, {}> {
     }
 
     // Set the new position.
-    store.pageMenuData.x = left;
-    store.pageMenuData.y = top;
+    store.pageMenuStore.x = left;
+    store.pageMenuStore.y = top;
   };
 
   public onDidStopLoading = () => {
-    store.refreshNavigationState();
+    store.navigationStateStore.refresh();
     this.tab.loading = false;
   };
 
@@ -299,7 +293,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         favIconUrl: favicons[0],
       },
-      getIpcTab(this.tab),
+      this.tab.getApiTab(),
     );
 
     request.open('GET', favicons[0], true);
@@ -327,7 +321,7 @@ export default class extends React.Component<{ page: Page }, {}> {
   public onPageTitleUpdated = ({ title }: Electron.PageTitleUpdatedEvent) => {
     const { page } = this.props;
     const { id } = page;
-    const tab = getTabById(id);
+    const tab = store.tabsStore.getTabById(id);
 
     tab.title = title;
     this.updateData();
@@ -339,7 +333,7 @@ export default class extends React.Component<{ page: Page }, {}> {
       {
         title,
       },
-      getIpcTab(this.tab),
+      this.tab.getApiTab(),
     );
   };
 
@@ -356,7 +350,9 @@ export default class extends React.Component<{ page: Page }, {}> {
     const { url, id } = page;
 
     return (
-      <StyledPage selected={getCurrentWorkspace().selectedTab === id}>
+      <StyledPage
+        selected={store.tabsStore.getCurrentGroup().selectedTab === id}
+      >
         <webview
           src={url}
           style={{

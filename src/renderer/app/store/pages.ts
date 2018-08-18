@@ -11,7 +11,11 @@ export class PagesStore {
   }
 
   public getSelected() {
-    const tabGroup = store.tabGroupsStore.getCurrent();
+    const tabGroup = store.tabsStore.getCurrentGroup();
     return this.getById(tabGroup.selectedTab);
+  }
+
+  public removePage(id: number) {
+    this.pages = this.pages.filter(x => x.id !== id);
   }
 }

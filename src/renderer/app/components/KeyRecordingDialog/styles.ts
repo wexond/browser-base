@@ -1,9 +1,6 @@
 import styled, { css } from 'styled-components';
-
-import { transparency } from '../../../defaults/transparency';
-import { Align } from '../../../../enums';
-import { center, shadows, robotoRegular, robotoMedium } from '../../../mixins';
-import { colors } from '../../../../defaults';
+import { shadows, robotoMedium, robotoRegular, centerBoth } from 'mixins';
+import { transparency, colors } from 'defaults';
 
 export const Root = styled.div`
   width: 340px;
@@ -13,7 +10,7 @@ export const Root = styled.div`
   will-change: opacity, margin-top;
   transition: 0.2s opacity, 0.2s margin-top;
   box-shadow: ${shadows(5)};
-  ${center(Align.CenterBoth)};
+  ${centerBoth()};
   ${({ visible }: { visible: boolean }) => css`
     pointer-events: ${visible ? 'all' : 'none'};
     opacity: ${visible ? 1 : 0};

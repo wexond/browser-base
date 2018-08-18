@@ -1,24 +1,24 @@
 import React from 'react';
 
-import { BookmarkItem } from '../../../../../interfaces';
-import store from '../../../../store';
 import { HomeIcon, Root, Title } from './styles';
+import { Bookmark } from 'interfaces';
+import store from 'app-store';
 
 export interface Props {
-  item?: BookmarkItem;
+  item?: Bookmark;
   home?: boolean;
 }
 
-export default class Item extends React.Component<Props, {}> {
+export default class TreeBarItem extends React.Component<Props, {}> {
   public onClick = () => {
     const { item, home } = this.props;
 
     if (home) {
-      store.goToBookmarkFolder(-1);
+      store.bookmarksStore.goToFolder(null);
     } else {
-      store.goToBookmarkFolder(item.id);
+      store.bookmarksStore.goToFolder(item._id);
     }
-  }
+  };
 
   public render() {
     const { home, item } = this.props;

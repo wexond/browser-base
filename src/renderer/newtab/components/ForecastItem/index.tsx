@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { WeatherWeeklyItem } from '../../../../../interfaces';
 import {
   InfoContainer,
   StyledForecastItem,
@@ -8,6 +7,7 @@ import {
   TempContainer,
   WeatherIcon,
 } from './styles';
+import { WeatherWeeklyItem } from 'interfaces';
 
 export interface Props {
   data: WeatherWeeklyItem;

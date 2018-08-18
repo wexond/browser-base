@@ -1,3 +1,5 @@
+import { Power2 } from 'gsap';
+
 // Toolbar
 export const TOOLBAR_HEIGHT = 42;
 export const TOOLBAR_BUTTON_WIDTH = 38;
@@ -6,6 +8,9 @@ export const TOOLBAR_BUTTON_WIDTH = 38;
 export const TAB_MAX_WIDTH = 200;
 export const TAB_MIN_WIDTH = 72;
 export const TAB_PINNED_WIDTH = 32;
+export const TAB_ANIMATION_DURATION = 0.3;
+export const TAB_ANIMATION_EASING = Power2.easeOut;
+export const TABS_PADDING = 2;
 
 // Widths
 export const WINDOWS_BUTTON_WIDTH = 45;

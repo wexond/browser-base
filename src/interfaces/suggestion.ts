@@ -5,4 +5,5 @@ export interface Suggestion {
   favicon?: string;
   canSuggest?: boolean;
   isSearch?: boolean;
+  hovered?: boolean;
 }

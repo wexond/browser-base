@@ -73,7 +73,7 @@ export default class Ripple extends React.Component<IProps, IState> {
 
   public onMouseUp = () => {
     this.fadeOut();
-  }
+  };
 
   public fadeOut = () => {
     requestAnimationFrame(() => {
@@ -82,10 +82,10 @@ export default class Ripple extends React.Component<IProps, IState> {
         opacityTransition: true,
       });
     });
-  }
+  };
 
   public makeRipple(mouseX: number, mouseY: number) {
-    const { transparency } = this.props;
+    const { opacity } = this.props;
     const { left, top, width, height } = this.root.getBoundingClientRect();
 
     const x = mouseX - left;

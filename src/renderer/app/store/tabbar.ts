@@ -6,4 +6,8 @@ export class TabbarStore {
 
   public lastScrollLeft: number = 0;
   public ref: HTMLDivElement;
+
+  public getWidth() {
+    return this.ref.offsetWidth;
+  }
 }
