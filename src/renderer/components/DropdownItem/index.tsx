@@ -2,7 +2,10 @@ import * as React from 'react';
 import { Root } from './styles';
 
 export interface Props {
-  onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
+  onClick?: (
+    e: React.MouseEvent<HTMLDivElement>,
+    element?: DropdownItem,
+  ) => void;
   ripple?: boolean;
   customRippleBehavior?: boolean;
   value: any;
@@ -10,7 +13,7 @@ export interface Props {
   selected?: boolean;
 }
 
-export default class Item extends React.Component<Props, {}> {
+export default class DropdownItem extends React.Component<Props, {}> {
   public static defaultProps = {
     customRippleBehavior: false,
     ripple: true,

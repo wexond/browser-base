@@ -9,11 +9,11 @@ import TabGroupAdd from '../TabGroupAdd';
 @observer
 export default class TabGroupsMenu extends React.Component<{}, {}> {
   public onClick = () => {
-    store.tabsStore.menuVisible = true;
+    store.tabsStore.menuVisible = false;
   };
 
   public addNew = () => {
-    // createWorkspace();
+    store.tabsStore.addGroup();
   };
 
   public render() {

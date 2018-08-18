@@ -1,4 +1,5 @@
 import { observable } from 'mobx';
+import { TOOLBAR_BUTTON_WIDTH } from '~/constants';
 
 export class TabbarStore {
   @observable
@@ -8,6 +9,7 @@ export class TabbarStore {
   public ref: HTMLDivElement;
 
   public getWidth() {
-    return this.ref.offsetWidth;
+    if (this.ref) return this.ref.offsetWidth - TOOLBAR_BUTTON_WIDTH;
+    return null;
   }
 }

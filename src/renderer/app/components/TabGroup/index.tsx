@@ -10,6 +10,7 @@ import Tab from '../Tab';
 export default class extends React.Component<{ tabGroup: TabGroup }> {
   public render() {
     const { tabGroup } = this.props;
+
     return (
       <StyledTabGroup visible={tabGroup.id === store.tabsStore.currentGroup}>
         {tabGroup.tabs.map(tab => (

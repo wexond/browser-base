@@ -3,7 +3,7 @@ import React from 'react';
 
 import { transparency } from '~/defaults';
 import { Bookmark } from '~/interfaces';
-import { Icon, Root } from '../../../components/PageItem';
+import { Icon, PageItem } from '@components/PageItem';
 import { ActionIcon, Input, Title } from './styles';
 import { icons } from '~/defaults/icons';
 import store from '@app/store';
@@ -129,8 +129,7 @@ export default class BookmarkItem extends React.Component<Props> {
     }
 
     return (
-      <Root
-        onFocus={() => null}
+      <PageItem
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onClick={this.onClick}
@@ -154,7 +153,7 @@ export default class BookmarkItem extends React.Component<Props> {
           onClick={this.onRemoveClick}
           visible={data.hovered}
         />
-      </Root>
+      </PageItem>
     );
   }
 }

@@ -7,9 +7,9 @@ import { loadExtensions } from './extensions';
 import { WindowState } from '../interfaces';
 import { getPath } from '.';
 
-const windowDataPath = getPath('window-data.json');
-
 export const createWindow = () => {
+  const windowDataPath = getPath('window-data.json');
+
   let windowState: WindowState = null;
 
   if (existsSync(windowDataPath)) {

@@ -68,7 +68,11 @@ export default class Toolbar extends React.Component {
         <div style={{ position: 'relative' }}>
           <ToolbarButton
             size={20}
-            icon={selectedTab.isBookmarked ? icons.star : icons.starBorder}
+            icon={
+              selectedTab && selectedTab.isBookmarked
+                ? icons.star
+                : icons.starBorder
+            }
             onMouseDown={this.onStarIconMouseDown}
             onClick={this.onStarIconClick}
           />

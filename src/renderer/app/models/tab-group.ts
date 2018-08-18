@@ -3,9 +3,11 @@ import { Tab, Page } from '.';
 import store from '../store';
 import { defaultCreateTabProperties } from '~/defaults/create-tab-properties';
 
+let id = 0;
+
 export class TabGroup {
   @observable
-  public id: number;
+  public id: number = id++;
 
   @observable
   public tabs: Tab[] = [];
