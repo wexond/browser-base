@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
-import { opacity } from '../../../../../defaults/transparency';
+import { transparency } from '../../../../../defaults/transparency';
 import { centerImage, maxLines, overline, subtitle1 } from '../../../../mixins';
 
 export const Title = styled.div`
   margin-top: 12px;
-  color: rgba(0, 0, 0, ${opacity.light.primaryText});
+  color: rgba(0, 0, 0, ${transparency.light.primaryText});
 
   ${subtitle1()};
   ${maxLines(3)};
@@ -38,7 +38,7 @@ export const Source = styled.div`
 export const SecondaryText = styled.div`
   font-size: 14px;
   margin-top: 12px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
 `;
 
 export interface CardImageProps {
@@ -61,7 +61,7 @@ export const CardImage = styled.div`
 `;
 
 export const Overline = styled.div`
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
 
   ${overline()};
 `;
@@ -70,5 +70,5 @@ export const SourceContainer = styled.div`
   margin-top: 16px;
   display: flex;
   align-items: center;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
 `;

@@ -1,12 +1,12 @@
 import { clipboard, ipcRenderer, nativeImage, remote } from 'electron';
 import { createWriteStream } from 'fs';
 import http from 'http';
-import { observer, Provider } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { basename, extname } from 'path';
 import React from 'react';
 import { parse } from 'url';
 
-import { UPDATE_RESTART_AND_INSTALL } from '../../../../constants';
+import { UPDATE_RESTART_AND_INSTALL } from 'constants/';
 import Button from '../../../components/Button';
 import ContextMenu from '../../../components/ContextMenu';
 import Snackbar from '../../../components/Snackbar';
@@ -15,14 +15,8 @@ import Pages from '../Pages';
 import Toolbar from '../Toolbar';
 import WorkspacesMenu from '../WorkspacesMenu';
 import { StyledApp } from './styles';
-import {
-  getSelectedPage,
-  createTab,
-  bindKeys,
-  getKeyBindings,
-} from '../../../../utils';
-import { PageMenuMode, ButtonType } from '../../../../enums';
-import { colors } from '../../../../defaults';
+import { PageMenuMode } from 'enums';
+import { colors } from 'defaults';
 import store from '../../store';
 
 const { dialog } = remote;

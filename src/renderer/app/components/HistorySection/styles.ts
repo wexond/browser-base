@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { opacity } from '../../../../defaults';
+import { transparency } from '../../../../defaults';
 import { subtitle2 } from '../../../mixins';
 
 export const Title = styled.div`
@@ -10,7 +10,7 @@ export const Title = styled.div`
   transition: 0.2s background-color;
   padding: 4px;
   cursor: pointer;
-  opacity: ${opacity.light.secondaryText};
+  opacity: ${transparency.light.secondaryText};
 
   ${subtitle2()};
 

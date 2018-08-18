@@ -21,39 +21,38 @@ export const commands: Commands = {
     }
   },
   'tabs.new': () => {
-    createTab();
+    store.tabGroupsStore.addTab();
   },
   'tabs.reload': () => {
-    getSelectedPage().webview.reload();
+    store.pagesStore.getSelected().webview.reload();
   },
   'tabs.back': () => {
-    getSelectedPage().webview.goBack();
+    store.pagesStore.getSelected().webview.goBack();
   },
   'tabs.forward': () => {
-    getSelectedPage().webview.goForward();
+    store.pagesStore.getSelected().webview.goForward();
   },
   'tabs.home': () => {
     console.log('home');
   },
-  'workspaces.show': () => {
-    store.workspacesMenuVisible = true;
+  'tabGroups.show': () => {
+    store.tabGroupsStore.menuVisible = true;
   },
   'history.show': () => {
-    store.menu.visible = true;
-    store.menu.selectedItem = 0;
+    store.menuStore.visible = true;
+    store.menuStore.selectedItem = 0;
   },
   'menu.show': () => {
-    store.menu.visible = true;
+    store.menuStore.visible = true;
   },
   'bookmarks.show': () => {
-    store.menu.visible = true;
-    store.menu.selectedItem = 1;
+    store.menuStore.visible = true;
+    store.menuStore.selectedItem = 1;
   },
   'wexond.hideAllMenu': () => {
-    store.workspacesMenuVisible = false;
-    store.menu.visible = false;
-    store.menu.selectedItem = null;
-    store.bookmarkDialogVisible = false;
-    store.pageMenuVisible = false;
+    store.menuStore.hide();
+    store.tabGroupsStore.menuVisible = false;
+    store.bookmarksStore.dialogVisible = false;
+    store.pageMenuStore.visible = false;
   },
 };

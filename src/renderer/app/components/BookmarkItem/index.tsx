@@ -1,12 +1,11 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { icons, opacity } from '../../../../defaults';
-import { BookmarkItem } from '../../../../interfaces';
-import { createTab, removeItem } from '../../../../utils';
+import { transparency } from 'defaults';
+import { Bookmark } from 'interfaces';
 import { Icon, Root } from '../../../components/PageItem';
-import store from '../../../store';
 import { ActionIcon, Input, Title } from './styles';
+import { icons } from 'defaults/icons';
 
 export interface IState {
   hovered: boolean;
@@ -14,10 +13,7 @@ export interface IState {
 }
 
 @observer
-export default class Item extends React.Component<
-  { data: BookmarkItem },
-  IState
-> {
+export default class Item extends React.Component<{ data: Bookmark }, IState> {
   public state: IState = {
     hovered: false,
     inputVisible: false,
@@ -131,12 +127,12 @@ export default class Item extends React.Component<
     const { hovered, inputVisible } = this.state;
 
     const isFolder = data.type === 'folder';
-    let transparency = 1;
+    let opacity = 1;
     let favicon = store.favicons[data.favicon];
 
     if (favicon == null || favicon.trim() === '') {
       favicon = isFolder ? icons.folder : icons.page;
-      transparency = opacity.light.inactiveIcon;
+      opacity = transparency.light.inactiveIcon;
     }
 
     return (
@@ -147,7 +143,7 @@ export default class Item extends React.Component<
         onClick={this.onClick}
         selected={store.selectedBookmarkItems.indexOf(data.id) !== -1}
       >
-        <Icon style={{ opacity: transparency }} icon={favicon} />
+        <Icon style={{ opacity }} icon={favicon} />
         <div style={{ flex: 1 }}>
           <Title onClick={this.onTitleClick}>{data.title}</Title>
         </div>

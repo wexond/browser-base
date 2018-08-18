@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { icons, opacity } from '../../../defaults';
+import { icons, transparency } from '../../../defaults';
 import { body2, centerImage } from '../../mixins';
 
 export const Root = styled.div`
@@ -7,7 +7,7 @@ export const Root = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
+  border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
   position: relative;
   cursor: pointer;
 
@@ -38,13 +38,13 @@ export const Icon = styled.div`
 `;
 
 export const PrimaryText = styled.div`
-  opacity: ${opacity.light.primaryText};
+  opacity: ${transparency.light.primaryText};
 
   ${body2()};
 `;
 
 export const SecondaryText = styled.div`
-  opacity: ${opacity.light.secondaryText};
+  opacity: ${transparency.light.secondaryText};
 
   ${body2()};
 `;
@@ -74,11 +74,11 @@ export const RemoveIcon = styled.div`
   ${centerImage('24px', 'auto')};
 
   ${({ visible }: { visible: boolean }) => css`
-    opacity: ${visible ? opacity.light.inactiveIcon : 0};
+    opacity: ${visible ? transparency.light.inactiveIcon : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
   `};
 
   &:hover {
-    opacity: ${opacity.light.activeIcon};
+    opacity: ${transparency.light.activeIcon};
   }
 `;

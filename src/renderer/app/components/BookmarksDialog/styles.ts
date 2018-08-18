@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { EASE_FUNCTION } from '../../../../constants';
-import { opacity } from '../../../../defaults';
+import { EASE_FUNCTION } from 'constants/';
+import { transparency } from '../../../../defaults';
 import { robotoRegular, shadows } from '../../../mixins';
 
 export const Root = styled.div`
@@ -28,7 +28,7 @@ export const Root = styled.div`
 
 export const Title = styled.div`
   font-size: 16px;
-  color: rgba(0, 0, 0, ${opacity.light.primaryText});
+  color: rgba(0, 0, 0, ${transparency.light.primaryText});
 
   ${robotoRegular()};
 `;
