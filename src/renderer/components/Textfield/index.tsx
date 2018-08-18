@@ -23,7 +23,6 @@ export type KeyboardEvent = (e?: React.KeyboardEvent<HTMLInputElement>) => void;
 export interface IProps {
   color?: string;
   label?: string;
-  type?: TextfieldType;
   leadingIcon?: string;
   trailingIcon?: string;
   helperText?: any;
@@ -40,7 +39,6 @@ export interface IState {
 export default class Textfield extends React.Component<IProps, IState> {
   public static defaultProps = {
     color: colors.blue['500'],
-    type: TextfieldType.Filled,
   };
 
   public state: IState = {
