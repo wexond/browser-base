@@ -1,15 +1,12 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { ButtonsContainer, Root, Title } from './styles';
-
-import { colors } from '../../../../defaults';
-import { ButtonType } from '../../../../enums';
-import { BookmarkItem } from '../../../../interfaces';
-import { getBookmarkFolders, removeItem } from '../../../../utils';
-import Button from '../../../components/Button';
-import Dropdown from '../../../components/Dropdown';
-import Textfield from '../../../components/Textfield';
-import store from '../../../store';
+import Textfield from 'renderer/components/Textfield';
+import Dropdown from 'renderer/components/Dropdown';
+import store from 'app-store';
+import { Bookmark } from 'interfaces';
+import { colors } from 'defaults';
+import Button from 'renderer/components/Button';
 
 @observer
 export default class BookmarksDialog extends React.Component {
@@ -21,12 +18,12 @@ export default class BookmarksDialog extends React.Component {
 
   private bookmarkFolder: number = -1;
 
-  private bookmark: BookmarkItem;
+  private bookmark: Bookmark;
 
-  public show = (bookmark: BookmarkItem) => {
+  public show = (bookmark: Bookmark) => {
     if (bookmark != null && bookmark.title != null) {
-      store.bookmarkDialogVisible = !store.bookmarkDialogVisible;
-      store.isBookmarked = true;
+      store.bookmarksStore.dialogVisible = !store.bookmarksStore.dialogVisible;
+      store.tabsStore.getSelectedTab().isBookmarked = true;
 
       this.textField.setValue(bookmark.title);
       this.textField.inputElement.select();
@@ -61,9 +58,9 @@ export default class BookmarksDialog extends React.Component {
 
   public onRemoveClick = async () => {
     if (this.bookmark) {
-      await removeItem(this.bookmark.id, 'item');
-      store.isBookmarked = false;
-      store.bookmarkDialogVisible = false;
+      store.bookmarksStore.removeItem(this.bookmark);
+      store.tabsStore.getSelectedTab().isBookmarked = false;
+      store.bookmarksStore.dialogVisible = false;
     }
   };
 
@@ -84,7 +81,7 @@ export default class BookmarksDialog extends React.Component {
     item.title = name;
     item.parent = this.bookmarkFolder;*/
 
-    store.bookmarkDialogVisible = false;
+    store.bookmarksStore.dialogVisible = false;
   };
 
   public onTextfieldKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -98,7 +95,7 @@ export default class BookmarksDialog extends React.Component {
   };
 
   public render() {
-    const visible = store.bookmarkDialogVisible;
+    const visible = store.bookmarksStore.dialogVisible;
 
     const dropDownStyle = {
       width: '100%',
@@ -122,16 +119,18 @@ export default class BookmarksDialog extends React.Component {
           style={dropDownStyle}
         >
           <Dropdown.Item value={-1}>Home</Dropdown.Item>
-          {getBookmarkFolders().map((item: BookmarkItem, key: any) => (
-            <Dropdown.Item value={item.id} key={key}>
-              {item.title}
-            </Dropdown.Item>
-          ))}
+          {store.bookmarksStore.bookmarks
+            .filter(x => x.type === 'folder')
+            .map((item: Bookmark, key: any) => (
+              <Dropdown.Item value={item._id} key={key}>
+                {item.title}
+              </Dropdown.Item>
+            ))}
         </Dropdown>
         <ButtonsContainer>
           <Button
+            outlined
             foreground={colors.blue['500']}
-            type={ButtonType.Outlined}
             onClick={this.onRemoveClick}
           >
             REMOVE

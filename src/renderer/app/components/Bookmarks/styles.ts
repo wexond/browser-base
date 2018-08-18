@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 import { transparency } from 'defaults';
-import { subtitle2 } from '../../../mixins';
 import { PageContainer } from '../Menu/styles';
+import { subtitle2 } from 'mixins';
 
 export const Container = styled(PageContainer)`
   padding-top: 16px;

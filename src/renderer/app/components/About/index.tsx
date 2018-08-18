@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import store from '../../../store';
-import Item from '../Item';
 import { Card, Content, Logo } from './styles';
+import AboutItem from '../AboutItem';
+import store from 'app-store';
 
 const packageFile = require('../../../../../package.json');
 
@@ -17,14 +17,18 @@ class About extends React.Component {
         <Content>
           <Logo />
           <Card>
-            <Item title={dictionary.wexondVersion}>v{packageFile.version}</Item>
-            <Item title={dictionary.reactVersion}>
+            <AboutItem title={dictionary.wexondVersion}>
+              v{packageFile.version}
+            </AboutItem>
+            <AboutItem title={dictionary.reactVersion}>
               v{packageFile.devDependencies.react}
-            </Item>
-            <Item title={dictionary.electronVersion}>
+            </AboutItem>
+            <AboutItem title={dictionary.electronVersion}>
               v{packageFile.devDependencies.electron}
-            </Item>
-            <Item title={dictionary.nodejsVersion}>{process.version}</Item>
+            </AboutItem>
+            <AboutItem title={dictionary.nodejsVersion}>
+              {process.version}
+            </AboutItem>
           </Card>
         </Content>
       </React.Fragment>

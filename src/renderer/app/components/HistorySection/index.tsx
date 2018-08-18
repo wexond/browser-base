@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Section } from '../../../../interfaces';
-import Item from '../Item';
 import { Items, Title } from './styles';
+import { HistorySection } from 'interfaces';
+import HistoryItem from '../HistoryItem';
 
 @observer
-export default class extends React.Component<{ section: Section }, {}> {
+export default class extends React.Component<{ section: HistorySection }, {}> {
   public render() {
     const { section } = this.props;
     const { items, date } = section;
@@ -17,7 +17,7 @@ export default class extends React.Component<{ section: Section }, {}> {
         <Title>{title}</Title>
         <Items>
           {items.map(item => (
-            <Item key={item.id} data={item} />
+            <HistoryItem key={item._id} data={item} />
           ))}
         </Items>
       </React.Fragment>

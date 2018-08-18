@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { KeyBinding } from '../../../../interfaces';
 import { Root } from './styles';
+import { KeyBinding } from 'interfaces';
 
 export type ChipEvent = (keyBinding?: KeyBinding) => void;
 
@@ -22,6 +22,10 @@ export default class Chip extends React.Component<Props, {}> {
   public render() {
     const { keyBinding, children } = this.props;
 
-    return <Root onClick={this.onClick}>{(keyBinding && keyBinding.key) || children}</Root>;
+    return (
+      <Root onClick={this.onClick}>
+        {(keyBinding && keyBinding.key) || children}
+      </Root>
+    );
   }
 }

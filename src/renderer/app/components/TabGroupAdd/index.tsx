@@ -6,7 +6,7 @@ export interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 }
 
-export default class extends React.Component<Props, {}> {
+export default class TabGroupAdd extends React.Component<Props, {}> {
   public render() {
     const { onClick } = this.props;
 

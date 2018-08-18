@@ -17,9 +17,9 @@ export class BookmarksStore {
   public path: Bookmark[] = [];
 
   @observable
-  public selectedItems: number[] = [];
+  public selectedItems: string[] = [];
 
-  public bookmarkDialogRef: BookmarksDialog;
+  public dialogRef: BookmarksDialog;
 
   public async addBookmark(item: Bookmark) {
     // TODO: nedb
@@ -28,7 +28,7 @@ export class BookmarksStore {
     return item;
   }
 
-  public addFolder(title: string, parent: number) {
+  public addFolder(title: string, parent: string) {
     // TODO: nedb
     /*database.transaction('rw', database.bookmarks, async () => {
       const item: BookmarkItem = {
@@ -75,7 +75,7 @@ export class BookmarksStore {
 
     this.bookmarks = this.bookmarks.filter(x => x._id !== item._id);
 
-    const selectedTab = store.tabGroupsStore.getSelectedTab();
+    const selectedTab = store.tabsStore.getSelectedTab();
     if (selectedTab.isBookmarked && selectedTab.url === item.url) {
       selectedTab.isBookmarked = false;
     }

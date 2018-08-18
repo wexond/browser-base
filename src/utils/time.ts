@@ -73,10 +73,8 @@ export const getConditionsTime = (time: number, conditions: any) => {
   return conditions;
 };
 
-/*
-TODO
-export const getTimeOffset = (date: Date, t?: any) => {
-  const dictionary = newtabStore.dictionary.dateAndTime;
+export const getTimeOffset = (dictionary: any, date: Date, t?: any) => {
+  const { dateAndTime } = dictionary.dateAndTime;
   const currentdate = new Date();
   const diff = new Date(currentdate.getTime() - date.getTime());
 
@@ -87,21 +85,20 @@ export const getTimeOffset = (date: Date, t?: any) => {
 
   if (hours === 0) {
     if (minutes <= 1) {
-      return `${dictionary.oneMinute} ${dictionary.ago}`;
+      return `${dateAndTime.oneMinute} ${dateAndTime.ago}`;
     }
 
     showHours = false;
     value = minutes;
   } else if (hours === 1) {
-    return `${dictionary.oneHour} ${dictionary.ago}`;
+    return `${dateAndTime.oneHour} ${dateAndTime.ago}`;
   }
 
   return `${value} ${getConditionsTime(
     value,
-    showHours ? dictionary.hours : dictionary.minutes,
-  )} ${dictionary.ago}`;
+    showHours ? dateAndTime.hours : dateAndTime.minutes,
+  )} ${dateAndTime.ago}`;
 };
-*/
 
 export const formatDate = (dictionary: any, date: Date) => {
   const { dateAndTime } = dictionary;

@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 import { EASE_FUNCTION } from 'constants/';
 import { transparency } from 'defaults';
-import { center, robotoRegular } from 'mixins';
+import { robotoRegular, centerBoth, centerHorizontal } from 'mixins';
 
 export const StyledSlider = styled.div`
   width: 100%;
@@ -74,7 +74,7 @@ export const ThumbHover = styled.div`
   transition: 0.2s width, 0.2s height;
   opacity: ${transparency.light.dividers};
 
-  ${center(Align.CenterBoth)};
+  ${centerBoth()};
 
   ${({ color }: { color: string }) => css`
     background-color: ${color};
@@ -91,7 +91,7 @@ export const Thumb = styled.div`
   position: absolute;
   transition: 0.15s width, 0.15s height;
 
-  ${center(Align.CenterBoth)};
+  ${centerBoth()};
 
   ${({ color, thumbAnimation }: ThumbProps) => css`
     background-color: ${color};
@@ -134,5 +134,5 @@ export const TickValue = styled.div`
   color: rgba(0, 0, 0, ${transparency.light.secondaryText});
 
   ${robotoRegular()};
-  ${center(Align.CenterHorizontal)};
+  ${centerHorizontal()};
 `;

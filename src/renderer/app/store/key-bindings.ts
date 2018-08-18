@@ -2,15 +2,15 @@ import { observable } from 'mobx';
 import { KeyBinding } from 'interfaces';
 import KeyRecordingDialog from '../components/KeyRecordingDialog';
 
-export class KeyboardShortcutsStore {
+export class KeyBindingsStore {
   @observable
   public keyBindings: KeyBinding[] = [];
 
   @observable
-  public selectedKeyBinding: KeyBinding;
+  public selected: KeyBinding;
 
   @observable
-  public keyRecordingDialogVisible: boolean = false;
+  public dialogVisible: boolean = false;
 
-  public keyRecordingDialog: KeyRecordingDialog;
+  public dialog: KeyRecordingDialog;
 }

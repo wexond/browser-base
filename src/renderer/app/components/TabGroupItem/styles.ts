@@ -4,7 +4,7 @@ import { colors, transparency } from 'defaults';
 import { centerImage, robotoRegular, shadows, subtitle2 } from 'mixins';
 import { icons } from 'defaults/icons';
 
-export const Root = styled.div`
+export const StyledTabGroupItem = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;

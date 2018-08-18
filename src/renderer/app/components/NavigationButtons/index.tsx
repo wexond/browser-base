@@ -1,37 +1,36 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { icons } from '../../../../defaults';
-import { getSelectedPage } from '../../../../utils';
-import store from '../../../store';
 import Toolbar from '../Toolbar';
 import { StyledContainer } from './styles';
+import store from 'app-store';
+import { icons } from 'defaults';
 
 @observer
 export default class NavigationButtons extends React.Component {
   public onBackClick = () => {
-    getSelectedPage().webview.goBack();
-  }
+    store.pagesStore.getSelected().webview.goBack();
+  };
 
   public onForwardClick = () => {
-    getSelectedPage().webview.goForward();
-  }
+    store.pagesStore.getSelected().webview.goForward();
+  };
 
   public onRefreshClick = () => {
-    getSelectedPage().webview.reload();
-  }
+    store.pagesStore.getSelected().webview.reload();
+  };
 
   public render() {
     return (
       <StyledContainer isFullscreen={store.isFullscreen}>
         <Toolbar.Button
-          disabled={!store.navigationState.canGoBack}
+          disabled={!store.navigationStateStore.canGoBack}
           size={24}
           icon={icons.back}
           style={{ marginLeft: 4 }}
           onClick={this.onBackClick}
         />
         <Toolbar.Button
-          disabled={!store.navigationState.canGoForward}
+          disabled={!store.navigationStateStore.canGoForward}
           size={24}
           icon={icons.forward}
           onClick={this.onForwardClick}

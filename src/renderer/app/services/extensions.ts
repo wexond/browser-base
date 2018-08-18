@@ -10,6 +10,7 @@ import {
   API_TABS_SET_ZOOM,
 } from 'constants/';
 import store from '../store';
+import { Tab } from '../models';
 
 export const runExtensionsService = () => {
   ipcRenderer.on(
@@ -17,7 +18,13 @@ export const runExtensionsService = () => {
     (e: Electron.IpcMessageEvent, webContentsId: number) => {
       const sender = remote.webContents.fromId(webContentsId);
 
-      sender.send(API_TABS_QUERY, store.tabs.map(tab => getIpcTab(tab)));
+      const tabs: Tab[] = [];
+
+      store.tabsStore.groups.forEach(element => {
+        tabs.concat(element.tabs);
+      });
+
+      sender.send(API_TABS_QUERY, tabs.map(tab => tab.getApiTab()));
     },
   );
 
@@ -32,13 +39,13 @@ export const runExtensionsService = () => {
 
       const { url, active, index } = data;
 
-      const tab = createTab({
+      const tab = store.tabsStore.addTab({
         url,
         active,
         index,
       });
 
-      sender.send(API_TABS_CREATE, getIpcTab(tab));
+      sender.send(API_TABS_CREATE, tab.getApiTab());
     },
   );
 
@@ -51,7 +58,7 @@ export const runExtensionsService = () => {
       sender: number,
     ) => {
       const webContents = remote.webContents.fromId(sender);
-      const page = getPageById(tabId);
+      const page = store.pagesStore.getById(tabId);
 
       page.webview.insertCSS(details.code);
       webContents.send(API_TABS_INSERT_CSS);
@@ -67,7 +74,7 @@ export const runExtensionsService = () => {
       sender: number,
     ) => {
       const webContents = remote.webContents.fromId(sender);
-      const page = getPageById(tabId);
+      const page = store.pagesStore.getById(tabId);
 
       page.webview.executeJavaScript(details.code, false, (result: any) => {
         webContents.send(API_TABS_EXECUTE_SCRIPT, result);
@@ -84,7 +91,7 @@ export const runExtensionsService = () => {
       sender: number,
     ) => {
       const webContents = remote.webContents.fromId(sender);
-      const page = getPageById(tabId);
+      const page = store.pagesStore.getById(tabId);
 
       page.webview.setZoomFactor(zoomFactor);
       webContents.send(API_TABS_SET_ZOOM);
@@ -95,7 +102,7 @@ export const runExtensionsService = () => {
     API_TABS_GET_ZOOM,
     (e: Electron.IpcMessageEvent, tabId: number, sender: number) => {
       const webContents = remote.webContents.fromId(sender);
-      const page = getPageById(tabId);
+      const page = store.pagesStore.getById(tabId);
 
       page.webview.getWebContents().getZoomFactor((zoomFactor: number) => {
         webContents.send(API_TABS_GET_ZOOM, zoomFactor);
@@ -107,7 +114,7 @@ export const runExtensionsService = () => {
     API_TABS_DETECT_LANGUAGE,
     (e: Electron.IpcMessageEvent, tabId: number, sender: number) => {
       const webContents = remote.webContents.fromId(sender);
-      const page = getPageById(tabId);
+      const page = store.pagesStore.getById(tabId);
 
       page.webview.executeJavaScript(
         'document.documentElement.lang',

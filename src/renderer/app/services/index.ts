@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 
 import store from '../store';
-import { FULLSCREEN } from 'constants';
+import { FULLSCREEN } from 'constants/';
 import { runAutoUpdaterService } from './auto-updater';
 import { runExtensionsService } from './extensions';
 

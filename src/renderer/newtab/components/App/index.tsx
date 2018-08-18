@@ -4,18 +4,10 @@ import React from 'react';
 import News from '../News';
 import WeatherCard from '../WeatherCard';
 
-import {
-  Countries,
-  Locales,
-  TemperatureUnit,
-  TimeUnit,
-} from '../../../../enums';
 import { Column, Content, StyledApp } from './styles';
-import { getWeather } from '../../../../utils/weather';
-import { getNews } from '../../../../utils/news';
-import { Store } from '../../store';
+import { getWeather } from 'utils/weather';
 
-const store = new Store();
+import store from 'newtab-store';
 
 @observer
 export default class App extends React.Component<{ visible: boolean }, {}> {
@@ -25,76 +17,47 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
   }
 
   public onResize = () => {
-    let columns = this.getColumns(1);
+    const { newsStore } = store;
+
+    let columns = newsStore.getColumns(1);
 
     if (window.innerWidth > 1128) {
-      columns = this.getColumns(3);
+      columns = newsStore.getColumns(3);
     } else if (window.innerWidth > 752) {
-      columns = this.getColumns(2);
+      columns = newsStore.getColumns(2);
     }
 
-    store.newsColumns = columns;
+    newsStore.columns = columns;
   };
 
   public async loadData() {
-    const weatherData = await getWeather(
-      'warsaw',
-      Locales.en,
-      TemperatureUnit.Celsius,
-      TimeUnit.TwentyFourHours,
-    );
+    const weatherData = await getWeather('warsaw', 'en', 'C', 24);
 
-    store.weatherForecast = weatherData;
-    store.newsData = await getNews(Countries.us);
+    store.weatherStore.forecast = weatherData;
+    store.newsStore.news = await store.newsStore.getNews('us');
 
     this.onResize();
   }
 
-  public getColumns = (columnsCount: number) => {
-    const { newsData } = store;
-    const columns = [];
-    const itemsPerCol = Math.floor(newsData.length / columnsCount);
-
-    for (let i = 0; i < columnsCount; i++) {
-      if (i < columnsCount) {
-        if (i === 0) {
-          columns.push(
-            newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1) - 1),
-          );
-        } else if (i === 1) {
-          columns.push(
-            newsData.slice(i * (itemsPerCol - 1), itemsPerCol * (i + 1)),
-          );
-        } else {
-          columns.push(newsData.slice(i * itemsPerCol, itemsPerCol * (i + 1)));
-        }
-      } else {
-        columns.push(newsData.slice(i * itemsPerCol, newsData.length));
-      }
-    }
-
-    return columns;
-  };
-
   public render() {
-    const { weatherForecast, newsColumns } = store;
+    const { columns } = store.newsStore;
 
     return (
       <Provider store={store}>
         <StyledApp>
           <Content>
             <Column>
-              <WeatherCard data={weatherForecast} />
-              {newsColumns.length > 0 && <News data={newsColumns[0]} />}
+              <WeatherCard data={store.weatherStore.forecast} />
+              {columns.length > 0 && <News data={columns[0]} />}
             </Column>
-            {newsColumns.length > 1 && (
+            {columns.length > 1 && (
               <Column>
-                <News data={newsColumns[1]} />
+                <News data={columns[1]} />
               </Column>
             )}
-            {newsColumns.length > 2 && (
+            {columns.length > 2 && (
               <Column>
-                <News data={newsColumns[2]} />
+                <News data={columns[2]} />
               </Column>
             )}
           </Content>

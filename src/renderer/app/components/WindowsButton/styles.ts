@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { centerImage } from '../../../../mixins';
+import { centerImage } from 'mixins';
 
 interface ButtonProps {
   icon: string;

@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 
 import { Button, Icon, Circle } from './styles';
-import Ripple from '../../../../components/Ripple';
+import Ripple from 'renderer/components/Ripple';
 
 interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
@@ -34,7 +34,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
     if (typeof onMouseDown === 'function') {
       onMouseDown(e);
     }
-  }
+  };
 
   public componentDidMount() {
     this.forceUpdate();
@@ -51,7 +51,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
       height: 0,
       width: 0,
     };
-  }
+  };
 
   public render() {
     const {

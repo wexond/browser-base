@@ -1,4 +1,3 @@
-import { Dictionary } from '../interfaces';
 import { readFileSync } from 'fs';
 
 const locales = ['en-US', 'pl-PL'];
@@ -9,5 +8,5 @@ const getDictionary = (name: string) => {
   );
 };
 
-export const dictionaries: { [key: string]: Dictionary } = {};
+export const dictionaries: { [key: string]: any } = {};
 locales.forEach(locale => (dictionaries[locale] = getDictionary(locale)));

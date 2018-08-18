@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-
-import { PageContainer } from '../../app/Menu/styles';
-import { robotoMedium, robotoRegular } from '../../../mixins';
-import { transparency } from '../../../../defaults';
+import { PageContainer } from '../Menu/styles';
+import { transparency } from 'defaults';
+import { robotoMedium, robotoRegular } from 'mixins';
 
 export const Container = styled(PageContainer)`
   width: 100%;
