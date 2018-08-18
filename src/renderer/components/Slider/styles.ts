@@ -1,8 +1,7 @@
 import styled, { css } from 'styled-components';
-
-import { EASE_FUNCTION } from 'constants/';
 import { transparency } from 'defaults';
-import { robotoRegular, centerBoth, centerHorizontal } from 'mixins';
+import { EASE_FUNCTION } from 'constants/';
+import { centerBoth, robotoRegular, centerHorizontal } from 'mixins';
 
 export const StyledSlider = styled.div`
   width: 100%;
@@ -14,7 +13,7 @@ export const StyledSlider = styled.div`
 export interface TrackProps {
   color: string;
   thumbAnimation?: boolean;
-  type?: SliderType;
+  discrete?: boolean;
 }
 
 export const Track = styled.div`
@@ -37,11 +36,9 @@ export const ActiveTrack = styled(Track)`
   width: 50%;
   transition: 0.2s opacity;
 
-  ${({ thumbAnimation, type }: TrackProps) => css`
+  ${({ thumbAnimation, discrete }: TrackProps) => css`
     opacity: ${thumbAnimation ? 0 : 1};
-    transition: ${type === SliderType.Discrete
-      ? `0.15s width ${EASE_FUNCTION}`
-      : 'unset'};
+    transition: ${discrete ? `0.15s width ${EASE_FUNCTION}` : 'unset'};
   `};
 `;
 
@@ -54,10 +51,8 @@ export const ThumbContainer = styled.div`
   position: relative;
   cursor: pointer;
 
-  ${({ type }: { type: SliderType }) => css`
-    transition: ${type === SliderType.Discrete
-      ? `0.15s left ${EASE_FUNCTION}`
-      : 'unset'};
+  ${({ discrete }: { discrete: boolean }) => css`
+    transition: ${discrete ? `0.15s left ${EASE_FUNCTION}` : 'unset'};
   `};
 
   &:hover .thumb-hover {
