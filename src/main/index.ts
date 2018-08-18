@@ -6,7 +6,7 @@ import { mkdirSync, existsSync, writeFileSync } from 'fs';
 import { runAutoUpdaterService, runExtensionsService } from './services';
 import { Global } from './interfaces';
 import { createWindow, getPath, registerProtocols } from './utils';
-import { defaultPaths, filesContent } from '~/defaults';
+import { defaultPaths, filesContent } from '~/defaults/paths';
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 

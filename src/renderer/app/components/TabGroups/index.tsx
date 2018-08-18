@@ -93,9 +93,9 @@ export default class TabGroups extends React.Component {
   public render() {
     return (
       <React.Fragment>
-        {store.tabsStore.groups.map(item => {
-          <TabGroup tabGroup={item} key={item.id} />;
-        })}
+        {store.tabsStore.groups.map(item => (
+          <TabGroup tabGroup={item} key={item.id} />
+        ))}
       </React.Fragment>
     );
   }

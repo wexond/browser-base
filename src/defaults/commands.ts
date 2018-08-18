@@ -6,7 +6,7 @@ interface Commands {
 
 export const commands: Commands = {
   'tabs.switch': (e?: KeyboardEvent) => {
-    const { tabs } = store.tabsStore.getCurrent();
+    const { tabs } = store.tabsStore.getCurrentGroup();
 
     // 0
     if (e.keyCode === 48) {

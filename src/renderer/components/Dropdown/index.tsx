@@ -1,7 +1,7 @@
 import * as React from 'react';
-import Item from './Item';
 import { Container, Icon, List, Name, Root } from './styles';
 import Ripple from '../Ripple';
+import DropdownItem from '@components/DropdownItem';
 
 export type DropdownEvent = (e?: React.MouseEvent<any>) => void;
 
@@ -21,7 +21,7 @@ export interface State {
 }
 
 export default class Dropdown extends React.Component<Props, State> {
-  public static Item = Item;
+  public static Item = DropdownItem;
 
   public static defaultProps = {
     customRippleBehavior: false,
@@ -38,7 +38,7 @@ export default class Dropdown extends React.Component<Props, State> {
 
   public listContainer: HTMLDivElement;
 
-  public items: Item[] = [];
+  public items: DropdownItem[] = [];
 
   public componentDidMount() {
     window.addEventListener('keydown', this.onWindowKeyDown);
@@ -61,26 +61,26 @@ export default class Dropdown extends React.Component<Props, State> {
     }
 
     this.toggle(!activated);
-  }
+  };
 
   public onMouseDown = (e: React.MouseEvent<any>) => {
     e.preventDefault();
     e.stopPropagation();
     this.ripple.makeRipple(e.pageX, e.pageY);
-  }
+  };
 
-  public onItemClick = (e: React.MouseEvent<any>, item: Item) => {
+  public onItemClick = (e: React.MouseEvent<any>, item: DropdownItem) => {
     if (item) {
       this.setState({ selectedItem: item.props.id });
       this.toggle(false);
       this.onChange(item);
     }
-  }
+  };
 
   public onWindowMouseDown = () => {
     this.toggle(false);
     window.removeEventListener('mousedown', this.onWindowMouseDown);
-  }
+  };
 
   public onWindowKeyDown = (e: KeyboardEvent) => {
     const { selectedItem } = this.state;
@@ -101,22 +101,22 @@ export default class Dropdown extends React.Component<Props, State> {
       this.onChange(this.items.find(x => x.props.id === index));
     }
     this.setState({ selectedItem: index });
-  }
+  };
 
   public toggle = (flag: boolean) => {
     this.setState({
       activated: flag,
       listHeight: flag ? this.listContainer.scrollHeight : 0,
     });
-  }
+  };
 
-  public onChange = (item: Item) => {
+  public onChange = (item: DropdownItem) => {
     const { onChange } = this.props;
 
     if (typeof onChange === 'function') {
       onChange(item.props.value);
     }
-  }
+  };
 
   public render() {
     const { children, style, onMouseUp } = this.props;
@@ -147,7 +147,7 @@ export default class Dropdown extends React.Component<Props, State> {
           >
             {React.Children.map(children, (el: React.ReactElement<any>) =>
               React.cloneElement(el, {
-                ref: (r: Item) => r != null && this.items.push(r),
+                ref: (r: DropdownItem) => r != null && this.items.push(r),
                 onClick: this.onItemClick,
                 selected: selectedItem === id,
                 id: id++,
