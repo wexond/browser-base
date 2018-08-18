@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { format } from 'url';
 
-import { Manifest } from '../../interfaces/manifest';
+import { Manifest } from '~/interfaces/manifest';
 import IpcEvent from './ipc-event';
 import WebRequestEvent from './web-request-event';
 

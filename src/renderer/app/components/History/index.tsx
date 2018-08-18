@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import store from 'app-store';
+import store from '@app/store';
 import { PageContent, PageContainer } from '../Menu/styles';
 import HistorySection from '../HistorySection';
 

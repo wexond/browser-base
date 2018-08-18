@@ -1,6 +1,6 @@
-import { HistoryItem, Suggestion } from '../interfaces';
-import { requestURL } from '../utils/network';
-import store from 'app-store';
+import { HistoryItem, Suggestion } from '~/interfaces';
+import { requestURL } from '~/utils/network';
+import store from '@app/store';
 
 const countVisitedTimes = (historyItems: HistoryItem[]) => {
   const items: any[] = [];

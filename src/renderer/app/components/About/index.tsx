@@ -3,7 +3,7 @@ import React from 'react';
 import { hot } from 'react-hot-loader';
 import { Card, Content, Logo } from './styles';
 import AboutItem from '../AboutItem';
-import store from 'app-store';
+import store from '@app/store';
 
 const packageFile = require('../../../../../package.json');
 

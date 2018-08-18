@@ -8,7 +8,7 @@ import {
   API_TABS_INSERT_CSS,
   API_TABS_QUERY,
   API_TABS_SET_ZOOM,
-} from 'constants/';
+} from '~/constants';
 import store from '../store';
 import { Tab } from '../models';
 

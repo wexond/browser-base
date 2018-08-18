@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
-import { EASE_FUNCTION } from 'constants/';
-import { icons } from 'defaults/icons';
-import { transparency } from 'defaults';
-import { centerImage, robotoRegular, shadows } from 'mixins';
+import { EASE_FUNCTION } from '~/constants';
+import { icons } from '~/defaults/icons';
+import { transparency } from '~/defaults';
+import { centerImage, robotoRegular, shadows } from '@mixins';
 
 export const Root = styled.div`
   display: inline-block;

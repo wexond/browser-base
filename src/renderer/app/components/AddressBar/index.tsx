@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
-import store from 'app-store';
-import { isURL } from 'utils';
+import store from '@app/store';
+import { isURL } from '~/utils';
 import { observe } from 'mobx';
 import { StyledAddressBar, InputContainer, Icon, Input } from './styles';
 import Suggestions from '../Suggestions';
-import { icons } from 'defaults';
+import { icons } from '~/defaults';
 
 interface Props {
   visible: boolean;

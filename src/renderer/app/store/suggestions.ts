@@ -1,9 +1,12 @@
 import { observable } from 'mobx';
-import { Suggestion } from 'interfaces';
-import store from 'app-store';
-import { icons } from 'defaults';
-import { isURL } from 'utils';
-import { getSearchSuggestions, getHistorySuggestions } from 'utils/suggestions';
+import { Suggestion } from '~/interfaces';
+import store from '@app/store';
+import { icons } from '~/defaults';
+import { isURL } from '~/utils';
+import {
+  getSearchSuggestions,
+  getHistorySuggestions,
+} from '~/utils/suggestions';
 
 let searchSuggestions: Suggestion[] = [];
 
@@ -15,7 +18,7 @@ export class SuggestionsStore {
   public selected = 0;
 
   public load(input: HTMLInputElement) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve: (result: string) => void, reject) => {
       const filter = input.value.substring(0, input.selectionStart);
       const history = getHistorySuggestions(filter);
 

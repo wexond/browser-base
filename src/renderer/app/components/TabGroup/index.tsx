@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 import { TabGroup } from '../../models';
-import store from 'app-store';
+import store from '@app/store';
 import { StyledTabGroup } from './styles';
 import Tab from '../Tab';
 

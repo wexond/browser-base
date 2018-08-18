@@ -5,8 +5,8 @@ import React from 'react';
 
 import StyledPage from './styles';
 import { Page, Tab } from '../../models';
-import store from 'app-store';
-import { PageMenuMode } from 'enums';
+import store from '@app/store';
+import { PageMenuMode } from '~/enums';
 
 @observer
 export default class extends React.Component<{ page: Page }> {

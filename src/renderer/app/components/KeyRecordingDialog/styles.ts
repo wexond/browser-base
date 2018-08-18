@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { shadows, robotoMedium, robotoRegular, centerBoth } from 'mixins';
-import { transparency, colors } from 'defaults';
+import { shadows, robotoMedium, robotoRegular, centerBoth } from '@mixins';
+import { transparency, colors } from '~/defaults';
 
 export const Root = styled.div`
   width: 340px;

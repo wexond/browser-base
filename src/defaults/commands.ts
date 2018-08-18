@@ -1,4 +1,4 @@
-import store from 'app-store';
+import store from '@app/store';
 
 interface Commands {
   [key: string]: () => void;
@@ -6,7 +6,7 @@ interface Commands {
 
 export const commands: Commands = {
   'tabs.switch': (e?: KeyboardEvent) => {
-    const { tabs } = store.tabGroupsStore.getCurrent();
+    const { tabs } = store.tabsStore.getCurrent();
 
     // 0
     if (e.keyCode === 48) {
@@ -21,7 +21,7 @@ export const commands: Commands = {
     }
   },
   'tabs.new': () => {
-    store.tabGroupsStore.addTab();
+    store.tabsStore.addTab();
   },
   'tabs.reload': () => {
     store.pagesStore.getSelected().webview.reload();
@@ -36,7 +36,7 @@ export const commands: Commands = {
     console.log('home');
   },
   'tabGroups.show': () => {
-    store.tabGroupsStore.menuVisible = true;
+    store.tabsStore.menuVisible = true;
   },
   'history.show': () => {
     store.menuStore.visible = true;
@@ -51,7 +51,7 @@ export const commands: Commands = {
   },
   'wexond.hideAllMenu': () => {
     store.menuStore.hide();
-    store.tabGroupsStore.menuVisible = false;
+    store.tabsStore.menuVisible = false;
     store.bookmarksStore.dialogVisible = false;
     store.pageMenuStore.visible = false;
   },

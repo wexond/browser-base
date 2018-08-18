@@ -7,7 +7,7 @@ import {
   TempContainer,
   WeatherIcon,
 } from './styles';
-import { WeatherWeeklyItem } from 'interfaces';
+import { WeatherWeeklyItem } from '~/interfaces';
 
 export interface Props {
   data: WeatherWeeklyItem;

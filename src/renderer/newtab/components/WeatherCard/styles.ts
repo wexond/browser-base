@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-import { transparency } from 'defaults';
-import { Actions } from '../../../components/Card';
-import { centerImage, h1, h3 } from 'mixins';
-import { EASE_FUNCTION } from 'constants/';
+import { transparency } from '~/defaults';
+import { Actions } from '@components/Card';
+import { centerImage, h1, h3 } from '@mixins';
+import { EASE_FUNCTION } from '~/constants';
 
 export const InfoContainer = styled.div`
   display: flex;

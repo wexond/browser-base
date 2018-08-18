@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { HistoryItem } from 'interfaces';
-import store from 'app-store';
+import { HistoryItem } from '~/interfaces';
+import store from '@app/store';
 import { PageItem, Icon, Time, Title } from '../../../components/PageItem';
 import { RemoveIcon } from './styles';
-import { icons, transparency } from 'defaults';
+import { icons, transparency } from '~/defaults';
 
 interface Props {
   data: HistoryItem;

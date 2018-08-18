@@ -1,7 +1,7 @@
 {
   "langNameEN": "polish",
   "langName": "polski",
-  "langCode": "pl",
+  "langCode": "pl-PL",
   "addressBar": {
     "search": "Wyszukaj"
   },
@@ -14,7 +14,7 @@
     "openWebsite": "otwórz stronę"
   },
   "newTab": {
-    "precipitation": "Wilgotność",
+    "precipitation": "Opady deszczu",
     "winds": "Wiatry"
   },
   "history": {
@@ -33,9 +33,9 @@
   "about": {
     "title": "O Wexond",
     "wexondVersion": "Wersja Wexond",
-    "reactVersion": "Wersja Reacta",
-    "electronVersion": "Wersja Electrona",
-    "nodejsVersion": "Wersja NodeJS"
+    "reactVersion": "Wersja React",
+    "electronVersion": "Wersja Electron",
+    "nodejsVersion": "Wersja Node"
   },
   "selecting": {
     "selectAll": "Zaznacz wszystko",
