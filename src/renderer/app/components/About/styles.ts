@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { icons } from '~/defaults/icons';
+import { centerImage } from '@mixins';
 
 export const Content = styled.div`
   max-width: 640px;

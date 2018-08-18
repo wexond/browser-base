@@ -14,7 +14,7 @@ export const Root = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  border: 1px dashed rgba(255, 255, 255, 0.39);
+  border: 1px solid rgba(255, 255, 255, 0.39);
   transition: 0.2s border;
 
   &:hover {

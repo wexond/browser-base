@@ -9,7 +9,7 @@ export class NavigationStateStore {
   public canGoForward: boolean = false;
 
   public refresh() {
-    const page = store.pagesStore.getSelectedPage();
+    const page = store.pagesStore.getSelected();
     if (page) {
       const { webview } = page;
 

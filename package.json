@@ -63,7 +63,7 @@
     "awesome-typescript-loader": "5.2.0",
     "concurrently": "3.6.1",
     "cross-env": "5.2.0",
-    "electron": "3.0.0-beta.5",
+    "electron": "2.0.7",
     "electron-builder": "20.26.1",
     "electron-react-devtools": "0.5.3",
     "electron-updater": "3.0.3",
