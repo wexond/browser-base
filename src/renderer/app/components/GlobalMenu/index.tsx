@@ -2,47 +2,47 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 import Menu from '../Menu';
-import store from '../../../store';
-import Bookmarks from '../../bookmarks/Bookmarks';
-import History from '../../history/History';
-import About from '../../about/About';
-import { deleteHistoryItem, addFolder } from '../../../../utils';
-import { icons } from '../../../../defaults';
-import KeyboardShortcuts from '../../keyboard-shortcuts/KeyboardShortcuts';
+import store from 'app-store';
+import { icons } from 'defaults';
+import Bookmarks from '../Bookmarks';
+import KeyboardShortcuts from '../KeyboardShortcuts';
+import About from '../About';
+import History from '../History';
 
 const historyActions = {
   selectAll: () => {
-    const { selectedHistoryItems, historyItems } = store;
+    const { selectedItems, historyItems } = store.historyStore;
     for (const item of historyItems) {
-      selectedHistoryItems.push(item.id);
+      selectedItems.push(item._id);
     }
   },
   deselectAll: () => {
-    const { selectedHistoryItems } = store;
-    for (let i = selectedHistoryItems.length - 1; i >= 0; i--) {
-      selectedHistoryItems.splice(i, 1);
+    const { selectedItems } = store.historyStore;
+    for (let i = selectedItems.length - 1; i >= 0; i--) {
+      selectedItems.splice(i, 1);
     }
   },
   deleteAllSelectedItems: () => {
-    const { selectedHistoryItems } = store;
-    for (let i = selectedHistoryItems.length - 1; i >= 0; i--) {
-      const selectedItem = selectedHistoryItems[i];
-      deleteHistoryItem(selectedItem);
-      selectedHistoryItems.splice(i, 1);
+    const { selectedItems } = store.historyStore;
+    for (let i = selectedItems.length - 1; i >= 0; i--) {
+      const selectedItem = selectedItems[i];
+      store.historyStore.removeItem(selectedItem);
+      selectedItems.splice(i, 1);
     }
   },
 };
 
 const bookmarksActions = {
   addFolder: () => {
-    addFolder('New folder', store.currentBookmarksTree);
+    const { bookmarksStore } = store;
+    bookmarksStore.addFolder('New folder', bookmarksStore.currentTree);
   },
 };
 
 @observer
 export default class GlobalMenu extends React.Component {
   public render() {
-    const editingHistory = store.selectedHistoryItems.length > 0;
+    const editingHistory = store.historyStore.selectedItems.length > 0;
     const dictionary = store.dictionary;
 
     return (

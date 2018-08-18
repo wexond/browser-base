@@ -1,19 +1,11 @@
-const styled = require('styled-components').default;
+import styled, { css } from 'styled-components';
 
-interface PageProps {
-  selected: boolean;
-}
-
-export default styled.div.attrs({
-  style: ({ selected }: PageProps) => ({
-    flex: selected ? 1 : '0 1',
-    height: !selected ? 0 : 'auto',
-    width: !selected ? 0 : 'auto',
-    position: !selected ? 'absolute' : 'initial',
-    top: !selected ? 0 : 'auto',
-    left: !selected ? 0 : 'auto',
-    visibility: !selected ? 'hidden' : 'visible',
-  }),
-})`
-  ${({ selected }: PageProps) => (selected ? '' : '')};
+export default styled.div`
+  ${({ selected }: { selected: boolean }) => css`
+    flex: ${selected ? 1 : '0 1'};
+    position: ${!selected ? 'absolute' : 'initial'};
+    top: ${!selected ? 0 : 'auto'};
+    left: ${!selected ? 0 : 'auto'};
+    visibility: ${!selected ? 'hidden' : 'visible'};
+  `};
 `;

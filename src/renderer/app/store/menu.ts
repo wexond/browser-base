@@ -16,5 +16,6 @@ export class MenuStore {
   public hide() {
     this.visible = false;
     this.selectedItem = null;
+    this.searchText = '';
   }
 }

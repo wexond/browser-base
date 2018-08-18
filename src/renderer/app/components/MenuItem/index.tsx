@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import store from '../../../../store';
 import {
   Background,
   Icon,
@@ -9,6 +8,7 @@ import {
   SubItemsContainer,
   Title,
 } from './styles';
+import store from 'app-store';
 
 interface Props {
   icon: string;
@@ -18,11 +18,11 @@ interface Props {
   visible?: boolean;
   searchVisible?: boolean;
   id?: number;
-  onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: Item) => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>, element?: MenuItem) => void;
 }
 
 @observer
-export default class Item extends React.Component<Props, {}> {
+export default class MenuItem extends React.Component<Props, {}> {
   public static defaultProps = {
     visible: true,
     selected: false,
@@ -37,7 +37,7 @@ export default class Item extends React.Component<Props, {}> {
     let selected = false;
 
     if (!isSubItem) {
-      selected = store.menu.selectedItem === id;
+      selected = store.menuStore.selectedItem === id;
     }
 
     let height = 0;
@@ -73,5 +73,5 @@ export default class Item extends React.Component<Props, {}> {
     if (typeof onClick === 'function') {
       onClick(e, this);
     }
-  }
+  };
 }

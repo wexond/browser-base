@@ -1,13 +1,6 @@
 import styled, { css } from 'styled-components';
-import { transparency } from '../../../defaults/transparency';
-import { ButtonType } from '../../../enums';
-import {
-  getComponentColor,
-  getComponentOpacity,
-} from '../../../utils/component-color';
-import { button, centerImage, shadows } from '../../mixins';
-
-type UITheme = 'light' | 'dark';
+import { button, centerImage } from 'mixins';
+import { transparency } from 'defaults';
 
 const isTransparent = (type: ButtonType) =>
   type === ButtonType.Outlined || type === ButtonType.Text;
@@ -18,7 +11,6 @@ const getBackground = (
   background: string,
   disabled: boolean,
   type: ButtonType,
-  theme: UITheme,
 ) => {
   if (isTransparent(type)) {
     return 'transparent';
@@ -45,29 +37,11 @@ const getBoxShadow = (type: ButtonType, disabled: boolean, z: number = 2) => {
   return 'unset';
 };
 
-const iconInvertColors = (
-  white: boolean,
-  theme: UITheme,
-  disabled: boolean,
-) => {
-  if (disabled) {
-    if (theme === 'dark') {
-      return 'filter: invert(100%);';
-    }
-  } else if (white) {
-    return 'filter: invert(100%);';
-  }
-
-  return null;
-};
-
 export interface StyledButtonProps {
   background: string;
   foreground: string;
   icon: boolean;
   disabled: boolean;
-  type: ButtonType;
-  theme: UITheme;
 }
 
 export const StyledButton = styled.div`
@@ -91,11 +65,9 @@ export const StyledButton = styled.div`
     foreground,
     icon,
     disabled,
-    type,
-    theme,
   }: StyledButtonProps) => css`
-    background-color: ${getBackground(background, disabled, type, theme)};
-    color: ${getComponentColor(foreground, true, disabled, theme, false)}};
+    background-color: ${};
+    color: ${};
     border: ${getBorder(type, theme)};
     box-shadow: ${getBoxShadow(type, disabled)};
     padding-left: ${getPadding(icon)}px;
@@ -112,7 +84,6 @@ export interface IconProps {
   src: string;
   white: boolean;
   disabled: boolean;
-  theme: UITheme;
 }
 
 export const Icon = styled.div`
@@ -123,11 +94,10 @@ export const Icon = styled.div`
 
   ${centerImage('18px', 'auto')};
 
-  ${({ src, white, disabled, theme }: IconProps) => css`
+  ${({ src, white, disabled }: IconProps) => css`
     background-image: url(${src});
-    opacity: ${getComponentOpacity(true, disabled, theme, false)};
-
-    ${iconInvertColors(white, theme, disabled)};
+    opacity: ${disabled ? transparency.light.disabledIcon : transparency.light.inactiveIcon};
+    filter: ${white ? 'invert(100%)' : ''};
   `};
 `;
 

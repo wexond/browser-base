@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { transparency } from '../../../../../defaults/transparency';
-import { body2, centerImage } from '../../../../mixins';
+import { transparency } from 'defaults';
+import { body2, centerImage } from 'mixins';
 
 export const StyledForecastItem = styled.div`
   display: flex;

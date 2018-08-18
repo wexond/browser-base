@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { colors, transparency } from '../../../../../defaults';
-import { robotoMedium } from '../../../../mixins';
+import { colors, transparency } from 'defaults';
+import { robotoMedium } from 'mixins';
 
 export const StyledItem = styled.div`
   height: 48px;

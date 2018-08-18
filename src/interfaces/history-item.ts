@@ -4,4 +4,5 @@ export interface HistoryItem {
   url?: string;
   date?: string;
   favicon?: string;
+  hovered?: boolean;
 }
