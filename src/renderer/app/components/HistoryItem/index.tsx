@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { icons, opacity } from '../../../../defaults';
+import { icons, transparency } from '../../../../defaults';
 import { HistoryItem } from '../../../../interfaces';
 import { createTab, deleteHistoryItem } from '../../../../utils';
 import {
@@ -38,7 +38,7 @@ export default class Item extends React.Component<
       createTab({ url: data.url });
       store.menu.hide();
     }
-  }
+  };
 
   public onMouseEnter = () => this.setState({ hovered: true });
 
@@ -50,7 +50,7 @@ export default class Item extends React.Component<
     const { data } = this.props;
     const { id } = data;
     deleteHistoryItem(id);
-  }
+  };
 
   public render() {
     const { data } = this.props;
@@ -66,7 +66,7 @@ export default class Item extends React.Component<
 
     if (favicon == null) {
       favicon = icons.page;
-      transparency = opacity.light.inactiveIcon;
+      transparency = transparency.light.inactiveIcon;
     }
 
     return (
@@ -78,7 +78,10 @@ export default class Item extends React.Component<
         selected={store.selectedHistoryItems.indexOf(data.id) !== -1}
       >
         <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
-        <Icon icon={favicon} style={{ opacity: hovered ? 0 : transparency }} />
+        <Icon
+          icon={favicon}
+          style={{ transparency: hovered ? 0 : transparency }}
+        />
         <Time>{`${hour
           .toString()
           .padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>

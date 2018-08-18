@@ -4,7 +4,7 @@ import {
   UPDATE_AVAILABLE,
   UPDATE_CHECK,
   UPDATE_RESTART_AND_INSTALL,
-} from '../../constants';
+} from 'constants/';
 
 export const runAutoUpdaterService = (window: BrowserWindow) => {
   autoUpdater.on('update-downloaded', ({ version }) => {

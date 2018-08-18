@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { opacity } from '../../../../defaults';
+import { transparency } from '../../../../defaults';
 import { robotoRegular } from '../../../mixins';
 
 export const Root = styled.div`
@@ -13,7 +13,7 @@ export const Root = styled.div`
   overflow: hidden;
   position: relative;
   white-space: nowrap;
-  color: rgba(0, 0, 0, ${opacity.light.primaryText});
+  color: rgba(0, 0, 0, ${transparency.light.primaryText});
   will-change: background-color;
   transition: 0.2s background-color;
 

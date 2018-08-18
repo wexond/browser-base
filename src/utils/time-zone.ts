@@ -1,5 +1,5 @@
 import { requestURL } from './network';
-import { TIME_ZONE_API_KEY } from '../constants/api-keys';
+import { TIME_ZONE_API_KEY } from 'constants/';
 
 export const getTimeZoneOffset = async (
   lat: number,

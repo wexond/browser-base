@@ -1,6 +1,6 @@
 import { TweenLite } from 'gsap';
 
-import { TOOLBAR_BUTTON_WIDTH, TOOLBAR_HEIGHT } from '../constants';
+import { TOOLBAR_BUTTON_WIDTH, TOOLBAR_HEIGHT } from 'constants/';
 import { getWorkspaceTabs } from './workspaces';
 
 export const getTabbarWidth = (): number => {

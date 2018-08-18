@@ -1,15 +1,8 @@
 import styled, { css } from 'styled-components';
-import {
-  WORKSPACE_FOLDER_SIZE,
-  WORKSPACE_ICON_SIZE,
-} from '../../../../../constants';
-import { colors, icons, opacity } from '../../../../../defaults';
-import {
-  centerImage,
-  robotoRegular,
-  shadows,
-  subtitle2,
-} from '../../../../mixins';
+import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from 'constants/';
+import { colors, transparency } from 'defaults';
+import { centerImage, robotoRegular, shadows, subtitle2 } from 'mixins';
+import { icons } from 'defaults/icons';
 
 export const Root = styled.div`
   display: flex;
@@ -104,7 +97,7 @@ export const Input = styled.input`
   background-color: transparent;
   font-size: 14px;
   text-align: center;
-  text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${opacity.light.primaryText})`};
+  text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${transparency.light.primaryText})`};
   color: ${colors.blue['500']};
   position: absolute;
   left: 0;
@@ -122,6 +115,6 @@ export const Input = styled.input`
   `};
 
   &::placeholder {
-    opacity: ${opacity.light.secondaryText};
+    opacity: ${transparency.light.secondaryText};
   }
 `;

@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 
 import { TabGroup } from '../../../models';
-import { opacity } from '../../../../../defaults';
+import { transparency } from '../../../../../defaults';
 import store from '../../../store';
 import { DeleteIcon, Icon, IconsContainer, Input, Label, Root } from './styles';
 
@@ -123,7 +123,7 @@ export default class extends React.Component<{ tabGroup: TabGroup }, {}> {
                   src={favicon}
                   style={{
                     opacity:
-                      tab.favicon === '' ? opacity.light.inactiveIcon : 1,
+                      tab.favicon === '' ? transparency.light.inactiveIcon : 1,
                   }}
                 />
               );

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { EASE_FUNCTION, TOOLBAR_HEIGHT } from '../../../../constants';
-import { opacity } from '../../../../defaults';
+import { EASE_FUNCTION, TOOLBAR_HEIGHT } from 'constants/';
+import { transparency } from 'defaults';
 
 export const StyledToolbar = styled.div`
   position: relative;
@@ -31,7 +31,7 @@ export const Line = styled.div`
   position: absolute;
   z-index: 1;
   bottom: 0;
-  background-color: rgba(0, 0, 0, ${opacity.light.dividers});
+  background-color: rgba(0, 0, 0, ${transparency.light.dividers});
 `;
 
 export const TabsSection = styled.div`
