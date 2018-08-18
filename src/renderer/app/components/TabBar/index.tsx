@@ -12,20 +12,8 @@ import TabGroups from '../TabGroups';
 @observer
 export default class Tabbar extends React.Component {
   private tabsContainer: HTMLDivElement;
-  private scrollbar: HorizontalScrollbar;
 
   public componentDidMount() {
-    observe(store.tabsStore.groups, (change: any) => {
-      console.log(change);
-      /*
-        TODO:
-        if (change.addedCount > 0 && change.removedCount === 0) {
-        if (this.scrollbar) {
-          this.scrollbar.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
-        }
-      }*/
-    });
-
     window.addEventListener('resize', this.onResize);
   }
 
@@ -69,7 +57,7 @@ export default class Tabbar extends React.Component {
           <TabGroups />
         </TabsContainer>
         <HorizontalScrollbar
-          ref={r => (this.scrollbar = r)}
+          ref={r => (store.tabbarStore.scrollbarRef = r)}
           visible={store.tabbarStore.scrollbarVisible}
           getContainer={this.getContainer}
         />
