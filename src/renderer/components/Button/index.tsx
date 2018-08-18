@@ -1,18 +1,20 @@
 import * as React from 'react';
 
 import { colors } from '../../../defaults/colors';
-import { Icon, Overlay, StyledButton } from './styles';
 import Ripple from '../Ripple';
+import { StyledButton } from './styles';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
 export interface Props {
   background?: string;
   foreground?: string;
-  icon?: string;
-  whiteIcon?: boolean;
   inline?: boolean;
   disabled?: boolean;
+  contained?: boolean;
+  outlined?: boolean;
+  text?: boolean;
+  theme?: 'light' | 'dark';
   style?: any;
   onClick?: ButtonEvent;
   text?: boolean;
@@ -26,7 +28,13 @@ export default class Button extends React.Component<Props, {}> {
     whiteIcon: true,
     inline: false,
     disabled: false,
+    customRippleBehavior: false,
+    ripple: true,
     contained: true,
+    outlined: false,
+    text: false,
+    theme: 'light',
+    type: ButtonType.Contained,
   };
 
   private ripple: Ripple;
@@ -39,9 +47,10 @@ export default class Button extends React.Component<Props, {}> {
     const {
       background,
       foreground,
-      icon,
-      whiteIcon,
       inline,
+      contained,
+      outlined,
+      text,
       disabled,
       style,
       children,
@@ -55,15 +64,16 @@ export default class Button extends React.Component<Props, {}> {
           className="material-button"
           background={background}
           foreground={foreground}
-          icon={icon ? true : undefined}
-          style={style}
+          isContained={contained}
+          isOutlined={outlined}
+          isText={text}
+          theme={theme}
           disabled={disabled}
           onMouseDown={this.onMouseDown}
           onClick={onClick}
+          style={style}
         >
-          {icon && <Icon src={icon} white={whiteIcon} disabled={disabled} />}
           {children}
-          <Overlay className="overlay" color={foreground} />
           <Ripple ref={r => (this.ripple = r)} color={foreground} />
         </StyledButton>
       </React.Fragment>
