@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { opacity } from '../../../defaults/transparency';
+import { transparency } from '../../../defaults/transparency';
 import { body2, centerImage, coverImage, h5, h6 } from '../../mixins';
 
 const getCardImageOpacity = (visible: boolean) => {
@@ -68,7 +68,7 @@ export const Image = styled.div`
 `;
 
 export const Title = styled.div`
-  opacity: ${opacity.light.primaryText};
+  opacity: ${transparency.light.primaryText};
 
   ${({ large }: { large: boolean }) => css`
     ${large ? h5() : h6()};
@@ -77,7 +77,7 @@ export const Title = styled.div`
 
 export const SecondaryText = styled.div`
   ${body2()};
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
   margin-top: ${({ largeTop }: { largeTop?: boolean }) => (largeTop ? 8 : 2)}px;
 `;
 
@@ -89,7 +89,7 @@ export const Icon = styled.div`
   margin-right: 8px;
   cursor: pointer;
   ${centerImage('24px', 'auto')}
-  opacity: ${opacity.light.secondaryText};
+  opacity: ${transparency.light.secondaryText};
 
   background-image: url(${({ src }: { src: string }) => src});
 `;
@@ -97,7 +97,7 @@ export const Icon = styled.div`
 export const SupportingText = styled.div`
   ${body2()};
   padding: 0px 16px 16px 16px;
-  opacity: ${opacity.light.secondaryText};
+  opacity: ${transparency.light.secondaryText};
 
   padding-top: ${({ paddingTop }: { paddingTop?: boolean }) =>
     paddingTop ? 16 : 0}px;
@@ -105,7 +105,7 @@ export const SupportingText = styled.div`
 
 export const Content = styled.div`
   ${body2()};
-  color: rgba(0, 0, 0, ${opacity.light.primaryText});
+  color: rgba(0, 0, 0, ${transparency.light.primaryText});
 `;
 
 export const Actions = styled.div`

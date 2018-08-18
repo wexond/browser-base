@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { opacity } from 'defaults';
+import { transparency } from 'defaults';
 import { subtitle2, body2 } from 'mixins';
 
 export const StyledItem = styled.div`
@@ -12,7 +12,7 @@ export const StyledItem = styled.div`
 
 export const Title = styled.div`
   margin-left: 16px;
-  opacity: ${opacity.light.primaryText};
+  opacity: ${transparency.light.primaryText};
 
   ${subtitle2()};
 `;
@@ -20,7 +20,7 @@ export const Title = styled.div`
 export const Content = styled.div`
   text-align: right;
   margin-right: 16px;
-  opacity: ${opacity.light.secondaryText};
+  opacity: ${transparency.light.secondaryText};
 
   ${body2()};
 `;

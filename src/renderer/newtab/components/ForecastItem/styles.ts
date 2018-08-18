@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { opacity } from '../../../../../defaults/transparency';
+import { transparency } from '../../../../../defaults/transparency';
 import { body2, centerImage } from '../../../../mixins';
 
 export const StyledForecastItem = styled.div`
@@ -9,7 +9,7 @@ export const StyledForecastItem = styled.div`
   padding-left: 16px;
   padding-top: 8px;
   padding-bottom: 8px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
   ${body2()};
 `;
 
@@ -42,6 +42,6 @@ export const Temp = styled.span`
     0,
     0,
     ${({ night }: { night?: boolean }) =>
-      night ? opacity.light.secondaryText : opacity.light.primaryText}
+      night ? transparency.light.secondaryText : transparency.light.primaryText}
   );
 `;

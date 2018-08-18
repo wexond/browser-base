@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { opacity } from '../../../../defaults';
+import { transparency } from '../../../../defaults';
 import { noUserSelect, robotoRegular } from '../../../mixins';
 
 export interface MenuItemProps {
@@ -39,8 +39,8 @@ export const Title = styled.div`
 
   ${({ disabled, dense }: TitleProps) => css`
     opacity: ${disabled
-      ? opacity.light.disabledText
-      : opacity.light.primaryText};
+      ? transparency.light.disabledText
+      : transparency.light.primaryText};
     font-size: ${dense ? 13 : 15}px;
   `};
 `;

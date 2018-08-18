@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { icons, opacity } from '../../../../defaults';
+import { icons, transparency } from '../../../../defaults';
 import { centerImage } from '../../../mixins';
 
 export const Root = styled.div`
@@ -8,7 +8,7 @@ export const Root = styled.div`
   display: flex;
   align-items: center;
   padding-left: 32px;
-  border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
+  border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
   overflow: hidden;
   background-color: white;
 `;
@@ -18,7 +18,7 @@ export const ForwardIcon = styled.div`
   height: 18px;
   margin-left: 4px;
   background-image: url(${icons.forward});
-  opacity: ${opacity.light.inactiveIcon};
+  opacity: ${transparency.light.inactiveIcon};
 
   ${centerImage('100%', 'auto')};
 `;

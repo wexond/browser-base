@@ -6,7 +6,7 @@ import {
   API_TABS_EXECUTE_SCRIPT,
   API_TABS_INSERT_CSS,
   API_TABS_QUERY,
-} from '../../constants';
+} from 'constants/';
 import { Global } from '../interfaces';
 
 declare const global: Global;

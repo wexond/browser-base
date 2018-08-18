@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { opacity } from '../../../defaults/transparency';
+import { transparency } from '../../../defaults/transparency';
 import { Align } from '../../../../enums';
 import { center, shadows, robotoRegular, robotoMedium } from '../../../mixins';
 import { colors } from '../../../../defaults';
@@ -23,7 +23,7 @@ export const Root = styled.div`
 
 export const Title = styled.div`
   font-size: 20px;
-  color: rgba(0, 0, 0, ${opacity.light.primaryText});
+  color: rgba(0, 0, 0, ${transparency.light.primaryText});
   margin-top: 24px;
   padding-left: 24px;
   padding-right: 32px;
@@ -50,7 +50,7 @@ export const Content = styled.div`
   padding-right: 24px;
   position: relative;
   font-size: 16px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
   ${robotoRegular()};
 `;
 
@@ -68,7 +68,7 @@ export const KeyInput = styled.input`
   text-align: center;
   font-size: 16px;
   color: ${colors.blue['500']};
-  text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${opacity.light.primaryText})`};
+  text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${transparency.light.primaryText})`};
   -webkit-text-fill-color: transparent;
   border-bottom: 2px solid ${colors.blue['500']};
 

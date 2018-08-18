@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { opacity } from '../../../../defaults';
+import { transparency } from '../../../../defaults';
 import { body2, centerImage } from '../../../mixins';
 
 export const StyledSuggestion = styled.div`
@@ -30,7 +30,7 @@ export const PrimaryText = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 13px;
-  opacity: ${opacity.light.primaryText};
+  opacity: ${transparency.light.primaryText};
 `;
 
 export const SecondaryText = styled.div`
@@ -40,7 +40,7 @@ export const SecondaryText = styled.div`
   text-overflow: ellipsis;
   padding-right: 16px;
   font-size: 13px;
-  opacity: ${opacity.light.secondaryText};
+  opacity: ${transparency.light.secondaryText};
 `;
 
 export const Icon = styled.div`
@@ -54,5 +54,5 @@ export const Icon = styled.div`
 export const Dash = styled.div`
   margin-left: 4px;
   margin-right: 4px;
-  opacity: ${opacity.light.secondaryText};
+  opacity: ${transparency.light.secondaryText};
 `;

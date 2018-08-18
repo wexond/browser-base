@@ -24,7 +24,7 @@ import { formatDescription } from '../../../../utils/weather-card';
 import { formatTime, getDayIndex } from '../../../../utils/time';
 import { capitalizeWord } from '../../../../utils/other';
 import { newtabStore } from '../../../newtab-store';
-import { opacity } from '../../../../defaults/transparency';
+import { transparency } from '../../../../defaults/transparency';
 import { icons } from '../../../../defaults/icons';
 import { colors } from '../../../../defaults/colors';
 
@@ -70,7 +70,7 @@ export default class WeatherCard extends React.Component<IProps, IState> {
     const current = data && data.daily[dailyForecastIndex];
 
     const windIconStyle = {
-      opacity: opacity.light.disabledIcon,
+      opacity: transparency.light.disabledIcon,
     };
 
     const sliderStyle = {

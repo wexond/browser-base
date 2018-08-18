@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-import { opacity } from '../../../../defaults';
+import { transparency } from 'defaults';
 import { subtitle2 } from '../../../mixins';
-import { PageContainer } from '../../app/Menu/styles';
+import { PageContainer } from '../Menu/styles';
 
 export const Container = styled(PageContainer)`
   padding-top: 16px;
@@ -21,7 +21,7 @@ export const Items = styled.div`
 
 export const Caption = styled.div`
   margin-top: 32px;
-  opacity: ${opacity.light.secondaryText};
+  opacity: ${transparency.light.secondaryText};
 
   ${subtitle2()};
 `;

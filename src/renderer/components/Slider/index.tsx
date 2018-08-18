@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { colors } from '../../../defaults/colors';
-import { opacity } from '../../../defaults/transparency';
+import { transparency } from '../../../defaults/transparency';
 import { SliderType } from '../../../enums';
 
 import {
@@ -70,7 +70,7 @@ export default class Slider extends React.Component<Props, State> {
 
     const rgb = hexToRgb(color);
     const rgba = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${
-      opacity.light.disabledIcon
+      transparency.light.disabledIcon
     })`;
 
     this.setState({

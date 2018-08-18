@@ -24,7 +24,6 @@ module.exports = {
       utils: './src/utils',
       constants: './src/constants',
       defaults: './src/defaults',
-      models: './src/models',
       interfaces: './src/interfaces',
       enums: './src/enums',
     },

@@ -1,9 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import { EASE_FUNCTION } from '../../../constants/design';
-import { opacity } from '../../../defaults/transparency';
-import { Align, SliderType } from '../../../enums';
-import { center, robotoRegular } from '../../mixins';
+import { EASE_FUNCTION } from 'constants/';
+import { transparency } from 'defaults';
+import { center, robotoRegular } from 'mixins';
 
 export const StyledSlider = styled.div`
   width: 100%;
@@ -31,7 +30,7 @@ export const Track = styled.div`
 
 export const InactiveTrack = styled(Track)`
   width: 100%;
-  opacity: ${opacity.light.disabledControl};
+  opacity: ${transparency.light.disabledControl};
 `;
 
 export const ActiveTrack = styled(Track)`
@@ -73,7 +72,7 @@ export const ThumbHover = styled.div`
   border-radius: 100%;
   position: absolute;
   transition: 0.2s width, 0.2s height;
-  opacity: ${opacity.light.dividers};
+  opacity: ${transparency.light.dividers};
 
   ${center(Align.CenterBoth)};
 
@@ -132,7 +131,7 @@ export const TickValue = styled.div`
   white-space: nowrap;
   font-size: 12px;
   margin-top: 16px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
 
   ${robotoRegular()};
   ${center(Align.CenterHorizontal)};
