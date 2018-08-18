@@ -9,7 +9,7 @@ export class TabsStore {
   public isDragging: boolean = false;
 
   @observable
-  public groups: TabGroup[];
+  public groups: TabGroup[] = [];
 
   @observable
   public currentGroup: number = 0;
@@ -56,7 +56,9 @@ export class TabsStore {
   }
 
   public getSelectedTab() {
-    return this.getCurrentGroup().getSelectedTab();
+    const group = this.getCurrentGroup();
+    if (group) return group.getSelectedTab();
+    return null;
   }
 
   public getTabById(id: number) {

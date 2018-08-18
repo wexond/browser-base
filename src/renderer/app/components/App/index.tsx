@@ -53,11 +53,12 @@ class App extends React.Component {
   };
 
   public onWindowMouseUp = (e: MouseEvent) => {
-    store.pageMenuStore.visible = false;
+    store.bookmarksStore.dialogVisible = false;
   };
 
   public componentWillUnmount() {
     store.pagesStore.pages = [];
+    store.tabsStore.groups = [];
 
     window.removeEventListener('mousemove', this.onWindowMouseMove);
     window.removeEventListener('mousedown', this.onWindowMouseDown);
@@ -209,7 +210,7 @@ class App extends React.Component {
         <Toolbar />
         <Pages />
         <ContextMenu
-          width={256}
+          width={240}
           dense
           ref={(r: ContextMenu) => (store.pageMenuStore.ref = r)}
           onMouseDown={e => e.stopPropagation()}
