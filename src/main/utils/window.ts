@@ -10,7 +10,7 @@ import { getPath } from '.';
 export const createWindow = () => {
   const windowDataPath = getPath('window-data.json');
 
-  let windowState: WindowState = null;
+  let windowState: WindowState = {};
 
   if (existsSync(windowDataPath)) {
     // Read the last window state from file.

@@ -68,7 +68,7 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
 
       requestAnimationFrame(this.resizeScrollbar);
     }
-  }
+  };
 
   public onWheel = (e: any) => {
     if (!this.container) return;
@@ -102,14 +102,14 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
     };
 
     this.container.scrollLeft = newScrollLeft;
-  }
+  };
 
   public onMouseUp = () => {
     this.scrollData = {
       ...this.scrollData,
       dragging: false,
     };
-  }
+  };
 
   public onMouseMove = (e: any) => {
     if (this.scrollData.dragging && this.container) {
@@ -118,7 +118,7 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
       this.container.scrollLeft =
         ((startLeft + e.pageX - mouseStartX) / offsetWidth) * scrollWidth;
     }
-  }
+  };
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     this.isScrollingToEnd = false;
@@ -129,7 +129,7 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
       mouseStartX: e.pageX,
       startLeft: this.state.thumbLeft,
     };
-  }
+  };
 
   public scrollToEnd = (milliseconds: number) => {
     const frame = () => {
@@ -148,7 +148,7 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
     this.scrollTimeout = setTimeout(() => {
       this.isScrollingToEnd = false;
     }, milliseconds);
-  }
+  };
 
   public render() {
     const { visible, thumbWidth, thumbLeft } = this.state;
