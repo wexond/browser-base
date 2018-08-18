@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { colors } from '../../../defaults/colors';
-import { transparency } from '../../../defaults/transparency';
-import { SliderType } from '../../../enums';
+import { opacity } from '../../../defaults/opacity';
 
 import {
   ActiveTrack,
@@ -18,15 +17,12 @@ import {
 
 import { hexToRgb } from '../../../utils/colors';
 
-export type SliderEvent = (
-  value?: any,
-  type?: SliderType,
-  element?: Slider,
-) => void;
+export type SliderEvent = (value?: any, element?: Slider) => void;
 
 export interface Props {
   color?: string;
-  type?: SliderType;
+  continuous?: boolean;
+  discrete?: boolean;
   minValue?: number;
   maxValue?: number;
   ticks?: any;
@@ -46,7 +42,8 @@ export interface State {
 export default class Slider extends React.Component<Props, State> {
   public static defaultProps = {
     color: colors.blue['500'],
-    type: SliderType.Continuous,
+    continuous: true,
+    discreate: false,
     ticks: [1, 2],
     showTicksLabels: false,
     selectedTickColor: 'rgba(255, 255, 255, 0.54)',
@@ -70,7 +67,7 @@ export default class Slider extends React.Component<Props, State> {
 
     const rgb = hexToRgb(color);
     const rgba = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${
-      transparency.light.disabledIcon
+      opacity.light.disabledIcon
     })`;
 
     this.setState({
@@ -82,11 +79,11 @@ export default class Slider extends React.Component<Props, State> {
   }
 
   public onMouseDown = (e: React.MouseEvent<HTMLElement>) => {
-    const { type } = this.props;
+    const { continuous, discrete } = this.props;
     const clientX = e.clientX;
 
     if (!this.isMouseDown) {
-      if (type !== SliderType.Discrete) {
+      if (continuous && !discrete) {
         const width = this.getPercent(clientX);
 
         this.setState({ thumbAnimation: true });
@@ -98,7 +95,7 @@ export default class Slider extends React.Component<Props, State> {
             trackWidth: width,
           });
         }, 150);
-      } else {
+      } else if (discrete) {
         const gap = this.getGap();
 
         for (let i = 0; i < this.ticksList.length; i++) {
@@ -141,15 +138,15 @@ export default class Slider extends React.Component<Props, State> {
   };
 
   public onWindowMouseMove = (e: MouseEvent) => {
-    const { type } = this.props;
+    const { continuous, discrete } = this.props;
 
     if (this.isMouseDown) {
-      if (type !== SliderType.Discrete) {
+      if (continuous && !discrete) {
         const width = this.getPercent(e.clientX);
 
         this.setState({ trackWidth: width });
         this.triggerEvent(width);
-      } else {
+      } else if (discrete) {
         const gap = this.getGap();
 
         const { selectedTickIndex } = this.state;
@@ -194,14 +191,10 @@ export default class Slider extends React.Component<Props, State> {
     this.inactiveTrack.clientWidth / (this.ticksList.length - 1);
 
   public triggerEvent = (value: any) => {
-    const { type, onChange } = this.props;
+    const { onChange } = this.props;
 
     if (typeof onChange === 'function') {
-      if (type === SliderType.Continuous) {
-        onChange(value, type, this);
-      } else {
-        onChange(value, type, this);
-      }
+      onChange(value, this);
     }
   };
 
@@ -210,7 +203,8 @@ export default class Slider extends React.Component<Props, State> {
       color,
       ticks,
       style,
-      type,
+      continuous,
+      discrete,
       selectedTickColor,
       showTicksLabels,
     } = this.props;
@@ -236,13 +230,13 @@ export default class Slider extends React.Component<Props, State> {
             color={color}
           />
           <ActiveTrack
-            type={type}
+            discrete={discrete}
             color={color}
             thumbAnimation={thumbAnimation}
             style={trackStyle}
           />
           <TicksContainer>
-            {type === SliderType.Discrete &&
+            {discrete &&
               typeof ticks === 'object' &&
               ticks.map((data: any, key: any) => {
                 tickIndex++;
@@ -264,7 +258,7 @@ export default class Slider extends React.Component<Props, State> {
               })}
           </TicksContainer>
           <ThumbContainer
-            type={type}
+            discrete={discrete}
             style={thumbStyle}
             onMouseDown={this.onThumbMouseDown}
           >
