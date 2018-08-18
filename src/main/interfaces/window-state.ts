@@ -1,4 +1,4 @@
 export interface WindowState {
-  bounds: Electron.Rectangle;
-  maximized: boolean;
+  bounds?: Electron.Rectangle;
+  maximized?: boolean;
 }

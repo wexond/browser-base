@@ -4,8 +4,10 @@ export const defaultPaths: { [key: string]: string } = {
   plugins: 'plugins',
   extensions: 'extensions',
   keyBindings: 'key-bindings.json',
+  windowData: 'window-data.json',
 };
 
 export const filesContent: { [key: string]: string } = {
   keyBindings: JSON.stringify(defaultKeyBindings, null, 2),
+  windowData: JSON.stringify({}),
 };
