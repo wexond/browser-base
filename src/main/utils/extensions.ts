@@ -3,7 +3,7 @@ import { readdirSync, readFileSync, statSync } from 'fs';
 import { format } from 'url';
 import { resolve } from 'path';
 
-import { Manifest } from '../../interfaces';
+import { Manifest } from '~/interfaces';
 import { Global } from '../interfaces';
 import { getPath, makeId } from '.';
 

@@ -11,13 +11,12 @@ import { HistoryStore } from './history';
 import { BookmarksStore } from './bookmarks';
 import { AddTabStore } from './add-tab';
 import { SuggestionsStore } from './suggestions';
-import { Platforms } from '../../../enums';
+import { Platforms } from '~/enums';
 import { PagesStore } from './pages';
 import { NavigationStateStore } from './navigation-state';
 import { FaviconsStore } from './favicons';
 import { ExtensionsStore } from './extensions';
-import { Dictionary } from '../../../interfaces';
-import { dictionaries } from 'defaults';
+import { dictionaries } from '~/defaults';
 import { KeyBindingsStore } from './key-bindings';
 
 export class Store {

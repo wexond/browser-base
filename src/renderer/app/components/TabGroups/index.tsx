@@ -1,7 +1,7 @@
 import React from 'react';
-import store from 'app-store';
+import store from '@app/store';
 import TabGroup from '../TabGroup';
-import { TOOLBAR_HEIGHT } from 'constants/';
+import { TOOLBAR_HEIGHT } from '~/constants';
 import { observer } from 'mobx-react';
 
 @observer

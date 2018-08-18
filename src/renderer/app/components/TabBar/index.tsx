@@ -4,9 +4,9 @@ import { observe } from 'mobx';
 
 import { AddTab, StyledTabbar, TabsContainer } from './styles';
 import HorizontalScrollbar from '../HorizontalScrollbar';
-import store from 'app-store';
-import { TAB_ANIMATION_DURATION } from 'constants/';
-import { icons } from 'defaults';
+import store from '@app/store';
+import { TAB_ANIMATION_DURATION } from '~/constants';
+import { icons } from '~/defaults';
 import TabGroups from '../TabGroups';
 
 @observer

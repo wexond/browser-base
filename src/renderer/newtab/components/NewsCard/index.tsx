@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Card from 'renderer/components/Card';
+import * as Card from '@components/Card';
 
 import {
   CardImage,
@@ -10,8 +10,8 @@ import {
   SourceContainer,
   Title,
 } from './styles';
-import { loadImage, getTimeOffset } from 'utils';
-import store from 'newtab-store';
+import { loadImage, getTimeOffset } from '~/utils';
+import store from '@newtab/store';
 
 export interface Props {
   data: any;

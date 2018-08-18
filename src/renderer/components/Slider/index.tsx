@@ -1,8 +1,5 @@
 import React from 'react';
 
-import { colors } from '../../../defaults/colors';
-import { opacity } from '../../../defaults/opacity';
-
 import {
   ActiveTrack,
   InactiveTrack,
@@ -15,7 +12,8 @@ import {
   TickValue,
 } from './styles';
 
-import { hexToRgb } from '../../../utils/colors';
+import { colors, transparency } from '~/defaults';
+import { hexToRgb } from '~/utils';
 
 export type SliderEvent = (value?: any, element?: Slider) => void;
 
@@ -67,7 +65,7 @@ export default class Slider extends React.Component<Props, State> {
 
     const rgb = hexToRgb(color);
     const rgba = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${
-      opacity.light.disabledIcon
+      transparency.light.disabledIcon
     })`;
 
     this.setState({

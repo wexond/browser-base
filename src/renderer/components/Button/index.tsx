@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { colors } from '../../../defaults/colors';
+import { colors } from '~/defaults/colors';
 import Ripple from '../Ripple';
 import { StyledButton } from './styles';
 
@@ -11,9 +11,7 @@ export interface Props {
   foreground?: string;
   inline?: boolean;
   disabled?: boolean;
-  contained?: boolean;
   outlined?: boolean;
-  text?: boolean;
   theme?: 'light' | 'dark';
   style?: any;
   onClick?: ButtonEvent;
@@ -25,16 +23,12 @@ export default class Button extends React.Component<Props, {}> {
   public static defaultProps: Props = {
     background: colors.blue['500'],
     foreground: '#fff',
-    whiteIcon: true,
     inline: false,
     disabled: false,
-    customRippleBehavior: false,
-    ripple: true,
     contained: true,
     outlined: false,
     text: false,
     theme: 'light',
-    type: ButtonType.Contained,
   };
 
   private ripple: Ripple;
@@ -55,6 +49,7 @@ export default class Button extends React.Component<Props, {}> {
       style,
       children,
       onClick,
+      theme,
     } = this.props;
 
     return (

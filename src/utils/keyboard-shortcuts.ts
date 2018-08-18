@@ -1,8 +1,8 @@
 import fs from 'fs';
 import Mousetrap from 'mousetrap';
 
-import { commands } from '../defaults/commands';
-import { KeyBinding } from '../interfaces';
+import { commands } from '~/defaults/commands';
+import { KeyBinding } from '~/interfaces';
 import { getPath } from './paths';
 
 const defaultKeyBindings = require('../../static/defaults/key-bindings.json');

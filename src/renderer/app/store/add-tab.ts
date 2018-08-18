@@ -1,4 +1,4 @@
-import store from 'app-store';
+import store from '@app/store';
 
 export class AddTabStore {
   public left = 0;
