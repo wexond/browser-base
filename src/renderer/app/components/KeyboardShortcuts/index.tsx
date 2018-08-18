@@ -1,8 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import store from '../../../store';
-import { PageContent } from '../../app/Menu/styles';
 import Chip from '../Chip';
 import KeyRecordingDialog from '../KeyRecordingDialog';
 import {
@@ -13,16 +11,18 @@ import {
   BodyRow,
   BodyItem,
 } from './styles';
-import { KeyBinding } from '../../../../interfaces';
+import store from 'app-store';
+import { KeyBinding } from 'interfaces';
+import { PageContent } from '../Menu/styles';
 
 @observer
 export default class KeyboardShortcuts extends React.Component {
   public onChipClick = (keyBinding: KeyBinding) => {
-    store.keyRecordingDialogVisible = true;
-    store.keyRecordingDialog.input.value = keyBinding.key;
-    store.keyRecordingDialog.combination = null;
-    store.selectedKeyBinding = keyBinding;
-  }
+    store.keyBindingsStore.dialogVisible = true;
+    store.keyBindingsStore.dialog.input.value = keyBinding.key;
+    store.keyBindingsStore.dialog.combination = null;
+    store.keyBindingsStore.selected = keyBinding;
+  };
 
   public render() {
     return (
@@ -37,7 +37,7 @@ export default class KeyboardShortcuts extends React.Component {
               </HeadRow>
             </thead>
             <tbody>
-              {store.keyBindings.map((data, key) => (
+              {store.keyBindingsStore.keyBindings.map((data, key) => (
                 <BodyRow key={key}>
                   <BodyItem>{data.command}</BodyItem>
                   <BodyItem>
@@ -50,7 +50,7 @@ export default class KeyboardShortcuts extends React.Component {
               ))}
             </tbody>
           </Table>
-          <KeyRecordingDialog ref={r => (store.keyRecordingDialog = r)} />
+          <KeyRecordingDialog ref={r => (store.keyBindingsStore.dialog = r)} />
         </Container>
       </PageContent>
     );

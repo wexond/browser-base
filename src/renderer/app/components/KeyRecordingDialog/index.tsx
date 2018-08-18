@@ -2,12 +2,11 @@ import React from 'react';
 import mousetrap from 'mousetrap';
 import { observer } from 'mobx-react';
 
-import store from '../../../store';
 import Button from '../../../components/Button';
-import { colors, Commands } from '../../../../defaults';
-import { ButtonType } from '../../../../enums';
 import { Root, Title, ButtonsContainer, Content, KeyInput } from './styles';
-import { KeyBinding } from '../../../../interfaces';
+import store from 'app-store';
+import { commands } from 'defaults/commands';
+import { colors } from 'defaults';
 
 @observer
 export default class KeyRecordingDialog extends React.Component {
@@ -41,7 +40,7 @@ export default class KeyRecordingDialog extends React.Component {
 
       e.currentTarget.value = this.getCombination();
     }
-  }
+  };
 
   public getCombination = () => {
     let text = '';
@@ -53,29 +52,29 @@ export default class KeyRecordingDialog extends React.Component {
     if (this.combination.key !== '') text += this.combination.key;
 
     return text;
-  }
+  };
 
   public onCancelClick = () => {
-    store.keyRecordingDialogVisible = false;
-  }
+    store.keyBindingsStore.dialogVisible = false;
+  };
 
   public onOKClick = () => {
     if (this.combination != null) {
-      const selected = store.selectedKeyBinding;
+      const selected = store.keyBindingsStore.selected;
       const combination = this.getCombination();
 
       mousetrap.unbind(selected.key);
-      mousetrap.bind(combination, Commands[selected.command]);
+      mousetrap.bind(combination, commands[selected.command]);
 
       selected.key = combination;
     }
 
-    store.keyRecordingDialogVisible = false;
-  }
+    store.keyBindingsStore.dialogVisible = false;
+  };
 
   public render() {
     return (
-      <Root visible={store.keyRecordingDialogVisible}>
+      <Root visible={store.keyBindingsStore.dialogVisible}>
         <Title>Recording key combination</Title>
         <Content>
           <KeyInput
@@ -85,17 +84,13 @@ export default class KeyRecordingDialog extends React.Component {
         </Content>
         <ButtonsContainer>
           <Button
-            type={ButtonType.Text}
+            text
             foreground={colors.blue['500']}
             onClick={this.onCancelClick}
           >
             CANCEL
           </Button>
-          <Button
-            type={ButtonType.Text}
-            foreground={colors.blue['500']}
-            onClick={this.onOKClick}
-          >
+          <Button text foreground={colors.blue['500']} onClick={this.onOKClick}>
             OK
           </Button>
         </ButtonsContainer>

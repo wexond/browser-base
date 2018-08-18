@@ -2,7 +2,7 @@ import { remote } from 'electron';
 import store from '.';
 
 export class ExtensionsStore {
-  public emitExtensionEvent(scope: string, name: string, ...data: any[]) {
+  public emitEvent(scope: string, name: string, ...data: any[]) {
     const backgroundPages = remote.getGlobal('backgroundPages');
 
     for (const page of store.pagesStore.pages) {

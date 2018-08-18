@@ -1,85 +1,85 @@
 import { observer } from 'mobx-react';
 import React, { SyntheticEvent } from 'react';
 
-import { icons } from '../../../../defaults';
-import { Platforms } from '../../../../enums';
-import { BookmarkItem } from '../../../../interfaces';
-import { addBookmark, getSelectedTab } from '../../../../utils';
-import store from '../../../store';
 import AddressBar from '../AddressBar';
 import BookmarksDialog from '../BookmarksDialog';
 import NavigationButtons from '../NavigationButtons';
 import TabBar from '../TabBar';
-import WindowsControls from '../WindowsControls';
-import Button from './Button';
-import Separator from './Separator';
 import { Handle, Line, StyledToolbar, TabsSection } from './styles';
+import ToolbarButton from '../ToolbarButton';
+import ToolbarSeparator from '../ToolbarSeparator';
+import store from 'app-store';
+import { Bookmark } from 'interfaces';
+import { icons } from 'defaults';
+import { Platforms } from 'enums';
+import WindowsControls from '../WindowsButtons';
 
 @observer
 export default class Toolbar extends React.Component {
-  public static Button = Button;
-
-  public static Separator = Separator;
+  public static Button = ToolbarButton;
+  public static Separator = ToolbarSeparator;
 
   public onWorkspacesIconClick = () => {
-    store.workspacesMenuVisible = true;
-  }
+    store.tabsStore.menuVisible = true;
+  };
 
   public toggleMenu = () => {
-    store.menu.visible = !store.menu.visible;
-  }
+    store.menuStore.visible = !store.menuStore.visible;
+  };
 
   public onStarIconMouseDown = (e: SyntheticEvent<any>) => {
     e.preventDefault();
     e.stopPropagation();
-  }
+  };
 
   public onStarIconClick = async () => {
-    const selectedTab = getSelectedTab();
+    const selectedTab = store.tabsStore.getSelectedTab();
 
-    let bookmark: BookmarkItem = store.bookmarks.find(
+    let bookmark: Bookmark = store.bookmarksStore.bookmarks.find(
       x => x.url === selectedTab.url,
     );
 
     if (!bookmark) {
-      bookmark = await addBookmark({
+      bookmark = await store.bookmarksStore.addBookmark({
         title: selectedTab.title,
         url: selectedTab.url,
-        parent: -1,
+        parent: null,
         type: 'item',
         favicon: selectedTab.favicon,
       });
     }
 
-    store.bookmarkDialog.show(bookmark);
-  }
+    store.bookmarksStore.dialogRef.show(bookmark);
+  };
 
   public render() {
+    const selectedTab = store.tabsStore.getSelectedTab();
+
     return (
       <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
         <Handle />
         <NavigationButtons />
-        <Separator style={{ marginRight: 16 }} />
+        <ToolbarSeparator style={{ marginRight: 16 }} />
         <TabsSection>
-          <AddressBar visible={store.addressBar.toggled} />
+          <AddressBar visible={store.addressBarStore.toggled} />
           <TabBar />
         </TabsSection>
-        <Separator style={{ marginLeft: 16 }} />
+        <ToolbarSeparator style={{ marginLeft: 16 }} />
         <div style={{ position: 'relative' }}>
-          <Button
+          <ToolbarButton
             size={20}
-            icon={store.isBookmarked ? icons.star : icons.starBorder}
+            icon={selectedTab.isBookmarked ? icons.star : icons.starBorder}
             onMouseDown={this.onStarIconMouseDown}
             onClick={this.onStarIconClick}
           />
-          <BookmarksDialog ref={r => (store.bookmarkDialog = r)} />
+          <BookmarksDialog ref={r => (store.bookmarksStore.dialogRef = r)} />
         </div>
-        <Button
+        <ToolbarButton
           size={16}
           icon={icons.workspaces}
           onClick={this.onWorkspacesIconClick}
         />
-        <Button
+        <ToolbarButton
           onClick={this.toggleMenu}
           size={20}
           icon={icons.menu}

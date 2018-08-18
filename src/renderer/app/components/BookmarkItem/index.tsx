@@ -6,19 +6,14 @@ import { Bookmark } from 'interfaces';
 import { Icon, Root } from '../../../components/PageItem';
 import { ActionIcon, Input, Title } from './styles';
 import { icons } from 'defaults/icons';
+import store from 'app-store';
 
-export interface IState {
-  hovered: boolean;
-  inputVisible: boolean;
+export interface Props {
+  data: Bookmark;
 }
 
 @observer
-export default class Item extends React.Component<{ data: Bookmark }, IState> {
-  public state: IState = {
-    hovered: false,
-    inputVisible: false,
-  };
-
+export default class BookmarkItem extends React.Component<Props> {
   private cmdPressed = false;
 
   private input: HTMLInputElement;
@@ -38,20 +33,20 @@ export default class Item extends React.Component<{ data: Bookmark }, IState> {
   public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { data } = this.props;
 
+    const { bookmarksStore } = store;
+    const { selectedItems } = bookmarksStore;
+
     if (this.cmdPressed || e.ctrlKey) {
-      if (store.selectedBookmarkItems.indexOf(data.id) === -1) {
-        store.selectedBookmarkItems.push(data.id);
+      if (selectedItems.indexOf(data._id) === -1) {
+        selectedItems.push(data._id);
       } else {
-        store.selectedBookmarkItems.splice(
-          store.selectedBookmarkItems.indexOf(data.id),
-          1,
-        );
+        selectedItems.splice(selectedItems.indexOf(data._id), 1);
       }
     } else if (data.type === 'folder') {
-      store.goToBookmarkFolder(data.id);
+      bookmarksStore.goToFolder(data._id);
     } else {
-      createTab({ url: data.url });
-      store.menu.hide();
+      store.tabsStore.addTab({ url: data.url });
+      store.menuStore.hide();
     }
   };
 
@@ -64,9 +59,8 @@ export default class Item extends React.Component<{ data: Bookmark }, IState> {
     e.stopPropagation();
 
     const { data } = this.props;
-    const { id, type } = data;
 
-    removeItem(id, type);
+    store.bookmarksStore.removeItem(data);
   };
 
   public onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -124,11 +118,10 @@ export default class Item extends React.Component<{ data: Bookmark }, IState> {
 
   public render() {
     const { data } = this.props;
-    const { hovered, inputVisible } = this.state;
 
     const isFolder = data.type === 'folder';
     let opacity = 1;
-    let favicon = store.favicons[data.favicon];
+    let favicon = store.faviconsStore.favicons[data.favicon];
 
     if (favicon == null || favicon.trim() === '') {
       favicon = isFolder ? icons.folder : icons.page;
@@ -141,7 +134,7 @@ export default class Item extends React.Component<{ data: Bookmark }, IState> {
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onClick={this.onClick}
-        selected={store.selectedBookmarkItems.indexOf(data.id) !== -1}
+        selected={store.bookmarksStore.selectedItems.indexOf(data._id) !== -1}
       >
         <Icon style={{ opacity }} icon={favicon} />
         <div style={{ flex: 1 }}>
@@ -149,7 +142,7 @@ export default class Item extends React.Component<{ data: Bookmark }, IState> {
         </div>
         <Input
           innerRef={r => (this.input = r)}
-          visible={inputVisible}
+          visible={data.inputVisible}
           onClick={this.onInputMouseEvent}
           onFocus={this.onInputFocus}
           onMouseDown={this.onInputMouseEvent}
@@ -159,7 +152,7 @@ export default class Item extends React.Component<{ data: Bookmark }, IState> {
         <ActionIcon
           icon={icons.delete}
           onClick={this.onRemoveClick}
-          visible={hovered}
+          visible={data.hovered}
         />
       </Root>
     );

@@ -1,36 +1,32 @@
 import * as React from 'react';
 
 import { colors } from '../../../defaults/colors';
-import { ButtonType } from '../../../enums';
 import { Icon, Overlay, StyledButton } from './styles';
 import Ripple from '../Ripple';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
-export interface IProps {
+export interface Props {
   background?: string;
   foreground?: string;
   icon?: string;
   whiteIcon?: boolean;
   inline?: boolean;
   disabled?: boolean;
-  theme?: 'light' | 'dark';
-  type?: ButtonType;
   style?: any;
   onClick?: ButtonEvent;
+  text?: boolean;
+  contained?: boolean;
 }
 
-export default class Button extends React.Component<IProps, {}> {
-  public static defaultProps = {
+export default class Button extends React.Component<Props, {}> {
+  public static defaultProps: Props = {
     background: colors.blue['500'],
     foreground: '#fff',
     whiteIcon: true,
     inline: false,
     disabled: false,
-    customRippleBehavior: false,
-    ripple: true,
-    theme: 'light',
-    type: ButtonType.Contained,
+    contained: true,
   };
 
   private ripple: Ripple;
@@ -46,9 +42,7 @@ export default class Button extends React.Component<IProps, {}> {
       icon,
       whiteIcon,
       inline,
-      type,
       disabled,
-      theme,
       style,
       children,
       onClick,
@@ -63,20 +57,11 @@ export default class Button extends React.Component<IProps, {}> {
           foreground={foreground}
           icon={icon ? true : undefined}
           style={style}
-          type={type}
-          theme={theme}
           disabled={disabled}
           onMouseDown={this.onMouseDown}
           onClick={onClick}
         >
-          {icon && (
-            <Icon
-              src={icon}
-              white={whiteIcon}
-              disabled={disabled}
-              theme={theme}
-            />
-          )}
+          {icon && <Icon src={icon} white={whiteIcon} disabled={disabled} />}
           {children}
           <Overlay className="overlay" color={foreground} />
           <Ripple ref={r => (this.ripple = r)} color={foreground} />

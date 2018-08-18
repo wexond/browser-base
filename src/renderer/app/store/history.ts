@@ -8,7 +8,7 @@ export class HistoryStore {
   public historyItems: HistoryItem[] = [];
 
   @observable
-  public selectedItems: number[] = [];
+  public selectedItems: string[] = [];
 
   public getItems(filter = '') {
     return this.historyItems
@@ -27,7 +27,7 @@ export class HistoryStore {
       const item = items[i];
       const date = new Date(item.date);
 
-      const dateStr = formatDate(date);
+      const dateStr = formatDate(store.dictionary, date);
 
       const foundSection = sections.find(x => x.date === dateStr);
 

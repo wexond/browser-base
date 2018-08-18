@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import store from 'app-store';
 import { isURL } from 'utils';
 import { observe } from 'mobx';
+import { StyledAddressBar, InputContainer, Icon, Input } from './styles';
+import Suggestions from '../Suggestions';
+import { icons } from 'defaults';
 
 interface Props {
   visible: boolean;
@@ -17,13 +20,14 @@ export default class AddressBar extends Component<Props, {}> {
 
   public componentDidMount() {
     window.addEventListener('mousedown', () => {
-      store.addressBar.toggled = false;
-      store.suggestions = [];
+      store.addressBarStore.toggled = false;
+      store.suggestionsStore.suggestions = [];
     });
 
     observe(store.addressBarStore, change => {
       if (change.object.toggled && change.name === 'toggled') {
-        const page = getSelectedPage();
+        const page = store.pagesStore.getSelected();
+
         if (this.input) {
           if (page.webview && page.webview.getWebContents()) {
             let text = page.webview.getURL();
@@ -65,6 +69,8 @@ export default class AddressBar extends Component<Props, {}> {
 
   public onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const key = e.keyCode;
+    const { suggestionsStore } = store;
+    const { suggestions } = suggestionsStore;
 
     if (
       key !== 8 && // backspace
@@ -86,15 +92,15 @@ export default class AddressBar extends Component<Props, {}> {
       e.preventDefault();
       if (
         e.keyCode === 40 &&
-        store.selectedSuggestion + 1 <= store.suggestions.length - 1
+        suggestionsStore.selected + 1 <= suggestions.length - 1
       ) {
-        store.selectedSuggestion++;
-      } else if (e.keyCode === 38 && store.selectedSuggestion - 1 >= 0) {
-        store.selectedSuggestion--;
+        suggestionsStore.selected++;
+      } else if (e.keyCode === 38 && suggestionsStore.selected - 1 >= 0) {
+        suggestionsStore.selected--;
       }
 
-      const suggestion = store.suggestions.find(
-        x => x.id === store.selectedSuggestion,
+      const suggestion = suggestions.find(
+        x => x.id === suggestionsStore.selected,
       );
 
       this.input.value = suggestion.primaryText;
@@ -104,7 +110,7 @@ export default class AddressBar extends Component<Props, {}> {
   public onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.which === 13) {
       // Enter.
-      const tab = getSelectedTab();
+      const tab = store.tabsStore.getSelectedTab();
 
       e.preventDefault();
 
@@ -119,20 +125,22 @@ export default class AddressBar extends Component<Props, {}> {
 
       this.input.value = url;
 
-      const page = getPageById(tab.id);
+      const page = store.pagesStore.getById(tab.id);
 
       page.url = url;
 
-      store.addressBar.toggled = false;
+      store.addressBarStore.toggled = false;
     }
   };
 
   public onInput = () => {
+    const { suggestionsStore } = store;
+
     if (this.canSuggest) {
       this.autoComplete(this.input.value, this.lastSuggestion);
     }
 
-    loadSuggestions(this.input).then(suggestion => {
+    suggestionsStore.load(this.input).then(suggestion => {
       this.lastSuggestion = suggestion;
       if (this.canSuggest) {
         this.autoComplete(
@@ -143,7 +151,7 @@ export default class AddressBar extends Component<Props, {}> {
       }
     });
 
-    store.selectedSuggestion = 0;
+    suggestionsStore.selected = 0;
   };
 
   public getInputValue = () => {
@@ -156,8 +164,7 @@ export default class AddressBar extends Component<Props, {}> {
   public render() {
     const { visible } = this.props;
     const dictionary = store.dictionary.addressBar;
-
-    const suggestionsVisible = store.suggestions.length !== 0;
+    const suggestionsVisible = store.suggestionsStore.suggestions.length !== 0;
 
     return (
       <StyledAddressBar

@@ -13,19 +13,20 @@ import Snackbar from '../../../components/Snackbar';
 import GlobalMenu from '../GlobalMenu';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
-import WorkspacesMenu from '../WorkspacesMenu';
 import { StyledApp } from './styles';
 import { PageMenuMode } from 'enums';
 import { colors } from 'defaults';
 import store from '../../store';
+import { getKeyBindings, bindKeys } from 'utils/keyboard-shortcuts';
+import TabGroupsMenu from '../TabGroupsMenu';
 
 const { dialog } = remote;
 
 @observer
 class App extends React.Component {
   public onInspectElementClick = () => {
-    const { x, y } = store.webviewContextMenuParams;
-    getSelectedPage().webview.inspectElement(x, y);
+    const { x, y } = store.pageMenuStore.params;
+    store.pagesStore.getSelected().webview.inspectElement(x, y);
   };
 
   public async componentDidMount() {
@@ -38,8 +39,8 @@ class App extends React.Component {
     store.bookmarks = await database.bookmarks.toArray();
     store.historyItems = await database.history.toArray();*/
 
-    store.keyBindings = await getKeyBindings();
-    bindKeys(store.keyBindings);
+    store.keyBindingsStore.keyBindings = await getKeyBindings();
+    bindKeys(store.keyBindingsStore.keyBindings);
   }
 
   public onWindowMouseMove = (e: MouseEvent) => {
@@ -48,15 +49,15 @@ class App extends React.Component {
   };
 
   public onWindowMouseDown = (e: MouseEvent) => {
-    store.pageMenuVisible = false;
+    store.pageMenuStore.visible = false;
   };
 
   public onWindowMouseUp = (e: MouseEvent) => {
-    store.bookmarkDialogVisible = false;
+    store.pageMenuStore.visible = false;
   };
 
   public componentWillUnmount() {
-    store.pages = [];
+    store.pagesStore.pages = [];
 
     window.removeEventListener('mousemove', this.onWindowMouseMove);
     window.removeEventListener('mousedown', this.onWindowMouseDown);
@@ -69,27 +70,27 @@ class App extends React.Component {
   };
 
   public onOpenLinkInNewTabClick = () => {
-    const { linkURL } = store.webviewContextMenuParams;
-    createTab({ url: linkURL, active: false });
+    const { linkURL } = store.pageMenuStore.params;
+    store.tabsStore.addTab({ url: linkURL, active: false });
   };
 
   public onCopyLinkAddressClick = () => {
-    const { linkURL } = store.webviewContextMenuParams;
+    const { linkURL } = store.pageMenuStore.params;
     clipboard.clear();
     clipboard.writeText(linkURL);
   };
 
   public onOpenImageInNewTabClick = () => {
-    const { srcURL } = store.webviewContextMenuParams;
-    createTab({ url: srcURL, active: false });
+    const { srcURL } = store.pageMenuStore.params;
+    store.tabsStore.addTab({ url: srcURL, active: false });
   };
 
   public onPrintClick = () => {
-    getSelectedPage().webview.print();
+    store.pagesStore.getSelected().webview.print();
   };
 
   public onCopyImageClick = () => {
-    const { srcURL } = store.webviewContextMenuParams;
+    const { srcURL } = store.pageMenuStore.params;
     const img = nativeImage.createFromDataURL(srcURL);
 
     clipboard.clear();
@@ -97,13 +98,13 @@ class App extends React.Component {
   };
 
   public onCopyImageAddressClick = () => {
-    const { srcURL } = store.webviewContextMenuParams;
+    const { srcURL } = store.pageMenuStore.params;
     clipboard.clear();
     clipboard.writeText(srcURL);
   };
 
   public onSaveImageAsClick = () => {
-    const { srcURL } = store.webviewContextMenuParams;
+    const { srcURL } = store.pageMenuStore.params;
     let name = basename(srcURL);
     let extension = extname(name);
 
@@ -143,7 +144,9 @@ class App extends React.Component {
   };
 
   public saveLinkAs = () => {
-    const url = store.webviewContextMenuParams.linkText;
+    const url = store.pageMenuStore.params.linkText;
+    const { webview } = store.pagesStore.getSelected();
+
     dialog.showSaveDialog(
       {
         defaultPath: `${url}.html`,
@@ -155,21 +158,21 @@ class App extends React.Component {
         ],
       },
       path1 => {
-        getSelectedPage()
-          .webview.getWebContents()
-          .savePage(path1, 'HTMLComplete', error => {
-            if (error) {
-              console.error(error);
-            }
-          });
+        webview.getWebContents().savePage(path1, 'HTMLComplete', error => {
+          if (error) {
+            console.error(error);
+          }
+        });
       },
     );
   };
 
   public saveAs = () => {
+    const { webview } = store.pagesStore.getSelected();
+
     dialog.showSaveDialog(
       {
-        defaultPath: `${getSelectedPage().webview.getTitle()}.html`,
+        defaultPath: `${webview.getTitle()}.html`,
         filters: [
           {
             name: '.html',
@@ -178,24 +181,22 @@ class App extends React.Component {
         ],
       },
       path1 => {
-        getSelectedPage()
-          .webview.getWebContents()
-          .savePage(path1, 'HTMLComplete', error => {
-            if (error) {
-              console.error(error);
-            }
-          });
+        webview.getWebContents().savePage(path1, 'HTMLComplete', error => {
+          if (error) {
+            console.error(error);
+          }
+        });
       },
     );
   };
 
   public viewSource = () => {
-    const url = getSelectedPage().webview.getURL();
-    createTab({ url: `view-source:${url}`, active: true });
+    const url = store.pagesStore.getSelected().webview.getURL();
+    store.tabsStore.addTab({ url: `view-source:${url}`, active: true });
   };
 
   public render() {
-    const { mode } = store.pageMenuData;
+    const { mode } = store.pageMenuStore;
 
     const imageAndURLLink =
       mode === PageMenuMode.ImageAndURL || mode === PageMenuMode.URL;
@@ -210,14 +211,14 @@ class App extends React.Component {
         <ContextMenu
           width={256}
           dense
-          ref={(r: ContextMenu) => (store.pageMenu = r)}
+          ref={(r: ContextMenu) => (store.pageMenuStore.ref = r)}
           onMouseDown={e => e.stopPropagation()}
           style={{
             position: 'absolute',
-            left: store.pageMenuData.x,
-            top: store.pageMenuData.y,
+            left: store.pageMenuStore.x,
+            top: store.pageMenuStore.y,
           }}
-          visible={store.pageMenuVisible}
+          visible={store.pageMenuStore.visible}
         >
           <ContextMenu.Item
             visible={imageAndURLLink}
@@ -281,12 +282,12 @@ class App extends React.Component {
           </ContextMenu.Item>
         </ContextMenu>
         <GlobalMenu />
-        <WorkspacesMenu />
+        <TabGroupsMenu />
         <Snackbar visible={store.updateInfo.available}>
           <Snackbar.Content>An update is available</Snackbar.Content>
           <Snackbar.Actions>
             <Button
-              type={ButtonType.Text}
+              text
               foreground={colors.blue['500']}
               onClick={this.onRestartClick}
             >

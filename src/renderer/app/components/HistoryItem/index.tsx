@@ -1,92 +1,76 @@
 import { observer } from 'mobx-react';
 import React from 'react';
+import { HistoryItem } from 'interfaces';
+import store from 'app-store';
+import { PageItem, Icon, Time, Title } from '../../../components/PageItem';
+import { RemoveIcon } from './styles';
+import { icons, transparency } from 'defaults';
 
-import { icons, transparency } from '../../../../defaults';
-import { HistoryItem } from '../../../../interfaces';
-import { createTab, deleteHistoryItem } from '../../../../utils';
-import {
-  Icon,
-  RemoveIcon,
-  Root,
-  Time,
-  Title,
-} from '../../../components/PageItem';
-import store from '../../../store';
+interface Props {
+  data: HistoryItem;
+}
 
 @observer
-export default class Item extends React.Component<
-  { data: HistoryItem },
-  { hovered: boolean }
-> {
-  public state = {
-    hovered: false,
-  };
-
+export default class extends React.Component<Props> {
   public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { data } = this.props;
+    const { selectedItems } = store.historyStore;
 
     if (store.cmdPressed || e.ctrlKey) {
-      if (store.selectedHistoryItems.indexOf(data.id) === -1) {
-        store.selectedHistoryItems.push(data.id);
+      if (selectedItems.indexOf(data._id) === -1) {
+        selectedItems.push(data._id);
       } else {
-        store.selectedHistoryItems.splice(
-          store.selectedHistoryItems.indexOf(data.id),
-          1,
-        );
+        selectedItems.splice(selectedItems.indexOf(data._id), 1);
       }
     } else {
-      createTab({ url: data.url });
-      store.menu.hide();
+      store.tabsStore.addTab({ url: data.url });
+      store.menuStore.hide();
     }
   };
 
-  public onMouseEnter = () => this.setState({ hovered: true });
+  public onMouseEnter = () => (this.props.data.hovered = true);
 
-  public onMouseLeave = () => this.setState({ hovered: false });
+  public onMouseLeave = () => (this.props.data.hovered = false);
 
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-
     const { data } = this.props;
-    const { id } = data;
-    deleteHistoryItem(id);
+
+    e.stopPropagation();
+    store.historyStore.removeItem(data._id);
   };
 
   public render() {
     const { data } = this.props;
-    const { hovered } = this.state;
+    const { hovered } = data;
 
     const date = new Date(data.date);
 
     const hour = date.getHours();
     const minute = date.getMinutes();
 
-    let transparency = 1;
+    let opacity = 1;
     let favicon = data.favicon;
 
     if (favicon == null) {
       favicon = icons.page;
-      transparency = transparency.light.inactiveIcon;
+      opacity = transparency.light.inactiveIcon;
     }
 
     return (
-      <Root
+      <PageItem
         onClick={this.onClick}
         onFocus={() => null}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        selected={store.selectedHistoryItems.indexOf(data.id) !== -1}
+        selected={store.historyStore.selectedItems.indexOf(data._id) !== -1}
       >
         <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
-        <Icon
-          icon={favicon}
-          style={{ transparency: hovered ? 0 : transparency }}
-        />
+        <Icon icon={favicon} style={{ opacity: hovered ? 0 : opacity }} />
         <Time>{`${hour
           .toString()
           .padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
         <Title>{data.title}</Title>
-      </Root>
+      </PageItem>
     );
   }
 }

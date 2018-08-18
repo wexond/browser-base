@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { StyledNews } from './styles';
-
-import NewsCard from './NewsCard';
+import NewsCard from '../NewsCard';
 
 export interface Props {
   data: any;

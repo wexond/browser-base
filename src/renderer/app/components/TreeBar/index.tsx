@@ -1,18 +1,18 @@
 import React from 'react';
 
-import store from '../../../store';
-import Item from './Item';
 import { ForwardIcon, Root } from './styles';
+import TreeBarItem from '../TreeBarItem';
+import store from 'app-store';
 
 export default class TreeBar extends React.Component {
   public render() {
     return (
       <Root>
-        <Item home />
-        {store.bookmarksPath.map((data: any) => (
+        <TreeBarItem home />
+        {store.bookmarksStore.path.map((data: any) => (
           <React.Fragment key={data.id}>
             <ForwardIcon className="FORWARD-ICON" />
-            <Item item={data} />
+            <TreeBarItem item={data} />
           </React.Fragment>
         ))}
       </Root>

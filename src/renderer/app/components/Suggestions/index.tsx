@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import store from '../../../store';
 import Suggestion from '../Suggestion';
 import { Caption, StyledSuggestions } from './styles';
+import store from 'app-store';
 
 interface Props {
   visible: boolean;
@@ -14,17 +14,17 @@ export default class Suggestions extends React.Component<Props, {}> {
 
   public render() {
     const { visible } = this.props;
-    const dictionary = store.dictionary.suggestions;
+    const { suggestions } = store.suggestionsStore;
 
     let vis = visible;
 
-    if (store.suggestions.length === 0) {
+    if (suggestions.length === 0) {
       vis = false;
     }
 
     let height = 0;
 
-    store.suggestions.forEach(a => {
+    suggestions.forEach(a => {
       height += 40;
     });
 
@@ -38,7 +38,7 @@ export default class Suggestions extends React.Component<Props, {}> {
         }}
         onMouseDown={e => e.stopPropagation()}
       >
-        {store.suggestions.map(suggestion => (
+        {suggestions.map(suggestion => (
           <Suggestion suggestion={suggestion} key={suggestion.id} />
         ))}
       </StyledSuggestions>

@@ -1,5 +1,6 @@
 import { HistoryItem, Suggestion } from '../interfaces';
 import { requestURL } from '../utils/network';
+import store from 'app-store';
 
 const countVisitedTimes = (historyItems: HistoryItem[]) => {
   const items: any[] = [];
@@ -44,7 +45,7 @@ export const getHistorySuggestions = (filter: string) => {
 
   const filterPart = filter.replace(regex, '');
 
-  for (const item of store.historyItems) {
+  for (const item of store.historyStore.historyItems) {
     let urlPart = item.url.replace(regex, '');
 
     if (urlPart.endsWith('/')) {
@@ -129,88 +130,5 @@ export const getSearchSuggestions = (filter: string) =>
       resolve(suggestions);
     } catch (e) {
       reject(e);
-    }
-  });
-
-let searchSuggestions: Suggestion[] = [];
-
-export const loadSuggestions = async (input: HTMLInputElement) =>
-  new Promise(async (resolve: (suggestion: string) => void) => {
-    const filter = input.value.substring(0, input.selectionStart);
-    const history = getHistorySuggestions(filter);
-
-    const historySuggestions: Suggestion[] = [];
-
-    if ((!history[0] || !history[0].canSuggest) && filter.trim() !== '') {
-      historySuggestions.unshift({
-        primaryText: filter,
-        secondaryText: dictionary.searchInGoogle,
-        favicon: icons.search,
-        isSearch: true,
-      });
-      if (isURL(filter)) {
-        historySuggestions.unshift({
-          primaryText: filter,
-          secondaryText: dictionary.openWebsite,
-          favicon: icons.page,
-        });
-      }
-    }
-
-    for (const item of history) {
-      if (!item.isSearch) {
-        historySuggestions.push({
-          primaryText: item.url,
-          secondaryText: item.title,
-          favicon: store.favicons[item.favicon],
-          canSuggest: item.canSuggest,
-        });
-      } else {
-        historySuggestions.push({
-          primaryText: item.url,
-          secondaryText: dictionary.searchInGoogle,
-          favicon: icons.search,
-          canSuggest: item.canSuggest,
-        });
-      }
-    }
-
-    let suggestions: SuggestionItem[] =
-      input.value === ''
-        ? []
-        : historySuggestions.concat(searchSuggestions).slice(0, 6);
-
-    for (let i = 0; i < suggestions.length; i++) {
-      suggestions[i].id = i;
-    }
-
-    store.suggestions = suggestions;
-
-    if (historySuggestions.length > 0 && historySuggestions[0].canSuggest) {
-      resolve(historySuggestions[0].primaryText);
-    }
-
-    const searchData = await getSearchSuggestions(filter);
-
-    if (input.value.substring(0, input.selectionStart) === filter) {
-      searchSuggestions = [];
-      for (const item of searchData) {
-        searchSuggestions.push({
-          primaryText: item,
-          favicon: icons.search,
-          isSearch: true,
-        });
-      }
-
-      suggestions =
-        input.value === ''
-          ? []
-          : historySuggestions.concat(searchSuggestions).slice(0, 6);
-
-      for (let i = 0; i < suggestions.length; i++) {
-        suggestions[i].id = i;
-      }
-
-      store.suggestions = suggestions;
     }
   });

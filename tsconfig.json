@@ -23,8 +23,8 @@
 
     "paths": {
       "app-store": ["renderer/app/store"],
-      "mixins": ["renderer/mixins"],
-      "constants": ["constants"]
+      "newtab-store": ["renderer/newtab/store"],
+      "mixins": ["renderer/mixins"]
     }
   },
   "awesomeTypescriptLoaderOptions": {

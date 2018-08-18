@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import store from '../../../store';
 import {
   Dash,
   Icon,
@@ -8,32 +7,30 @@ import {
   SecondaryText,
   StyledSuggestion,
 } from './styles';
+import { Suggestion } from 'interfaces';
+import store from 'app-store';
+import { icons, transparency } from 'defaults';
 
-import { icons, transparency } from '../../../../defaults';
-import { SuggestionItem } from '../../../../interfaces';
+interface Props {
+  suggestion: Suggestion;
+}
+
 @observer
-export default class Suggestion extends React.Component<
-  { suggestion: SuggestionItem },
-  { hovered: boolean }
-> {
-  public state = {
-    hovered: false,
-  };
-
+export default class extends React.Component<Props> {
   public onMouseLeave = () => {
-    this.setState({ hovered: false });
+    this.props.suggestion.hovered = false;
   };
 
   public onMouseEnter = () => {
-    this.setState({ hovered: true });
+    this.props.suggestion.hovered = true;
   };
 
   public render() {
     const { suggestion } = this.props;
-    const { hovered } = this.state;
+    const { hovered } = suggestion;
     const { primaryText, secondaryText } = suggestion;
 
-    const selected = store.selectedSuggestion === suggestion.id;
+    const selected = store.suggestionsStore.selected === suggestion.id;
 
     let { favicon } = suggestion;
 

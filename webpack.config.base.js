@@ -21,11 +21,9 @@ module.exports = {
     modules: ['node_modules'],
     extensions: ['.js', '.tsx', '.ts', '.json'],
     alias: {
-      utils: './src/utils',
-      constants: './src/constants',
-      defaults: './src/defaults',
-      interfaces: './src/interfaces',
-      enums: './src/enums',
+      'app-store': './src/renderer/app/store',
+      'newtab-store': './src/renderer/newtab/store',
+      mixins: './src/renderer/mixins',
     },
   },
 };
