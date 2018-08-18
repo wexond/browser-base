@@ -1,4 +1,4 @@
-export const opacity = {
+export const transparency = {
   light: {
     primaryText: 0.87,
     secondaryText: 0.54,

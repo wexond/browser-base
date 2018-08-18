@@ -85,7 +85,7 @@ export default class Ripple extends React.Component<IProps, IState> {
   }
 
   public makeRipple(mouseX: number, mouseY: number) {
-    const { opacity } = this.props;
+    const { transparency } = this.props;
     const { left, top, width, height } = this.root.getBoundingClientRect();
 
     const x = mouseX - left;

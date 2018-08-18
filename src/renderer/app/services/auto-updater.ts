@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { UPDATE_AVAILABLE, UPDATE_CHECK } from '../../../constants';
+import { UPDATE_AVAILABLE, UPDATE_CHECK } from 'constants/';
 import store from '../store';
 
 export const runAutoUpdaterService = () => {

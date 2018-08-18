@@ -9,7 +9,7 @@ import {
   StyledSuggestion,
 } from './styles';
 
-import { icons, opacity } from '../../../../defaults';
+import { icons, transparency } from '../../../../defaults';
 import { SuggestionItem } from '../../../../interfaces';
 @observer
 export default class Suggestion extends React.Component<
@@ -22,11 +22,11 @@ export default class Suggestion extends React.Component<
 
   public onMouseLeave = () => {
     this.setState({ hovered: false });
-  }
+  };
 
   public onMouseEnter = () => {
     this.setState({ hovered: true });
-  }
+  };
 
   public render() {
     const { suggestion } = this.props;
@@ -53,7 +53,7 @@ export default class Suggestion extends React.Component<
         <Icon
           style={{
             backgroundImage: `url(${favicon})`,
-            opacity: customFavicon ? 1 : opacity.light.inactiveIcon,
+            opacity: customFavicon ? 1 : transparency.light.inactiveIcon,
           }}
         />
         <PrimaryText>{primaryText}</PrimaryText>

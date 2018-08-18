@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { colors, opacity } from '../../../../../defaults';
+import { colors, transparency } from '../../../../../defaults';
 import { robotoMedium } from '../../../../mixins';
 
 export const StyledItem = styled.div`
@@ -48,7 +48,7 @@ export const Title = styled.div`
 
   ${({ selected }: { selected: boolean }) => css`
     color: ${selected ? colors.blue['500'] : '#000'};
-    opacity: ${selected ? 1 : opacity.light.primaryText};
+    opacity: ${selected ? 1 : transparency.light.primaryText};
   `};
 `;
 

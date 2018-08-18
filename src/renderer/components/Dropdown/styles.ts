@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
-import { EASE_FUNCTION } from '../../../constants';
-import { icons } from '../../../defaults/icons';
-import { opacity } from '../../../defaults/transparency';
-import { centerImage, robotoRegular, shadows } from '../../mixins';
+import { EASE_FUNCTION } from 'constants/';
+import { icons } from 'defaults/icons';
+import { transparency } from 'defaults';
+import { centerImage, robotoRegular, shadows } from 'mixins';
 
 export const Root = styled.div`
   display: inline-block;
@@ -24,7 +24,7 @@ export const Container = styled.div`
 
 export const Name = styled.div`
   font-size: 14px;
-  color: rgba(0, 0, 0, ${opacity.light.primaryText});
+  color: rgba(0, 0, 0, ${transparency.light.primaryText});
 
   ${robotoRegular()};
 `;
@@ -34,7 +34,7 @@ export const Icon = styled.div`
   height: 24px;
   will-change: transform;
   transition: 0.3s transform;
-  opacity: ${opacity.light.inactiveIcon};
+  opacity: ${transparency.light.inactiveIcon};
   background-image: url(${icons.dropDown});
 
   ${centerImage('24px', 'auto')};

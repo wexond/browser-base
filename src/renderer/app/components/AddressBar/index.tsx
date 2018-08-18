@@ -11,11 +11,8 @@ interface Props {
 @observer
 export default class AddressBar extends Component<Props, {}> {
   private input: HTMLInputElement;
-
   private canSuggest = false;
-
   private visible = false;
-
   private lastSuggestion: string;
 
   public componentDidMount() {

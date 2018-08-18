@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { icons, opacity } from '../../../../../defaults';
+import { icons, transparency } from '../../../../../defaults';
 import { centerImage, subtitle2 } from '../../../../mixins';
 
 export const Root = styled.div`
@@ -23,7 +23,7 @@ export const Root = styled.div`
 export const Title = styled.div`
   padding-left: 2px;
   padding-right: 2px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
 
   ${subtitle2()};
 `;
@@ -33,7 +33,7 @@ export const HomeIcon = styled.div`
   height: 20px;
   transition: 0.2s opacity;
   background-image: url(${icons.home});
-  opacity: ${opacity.light.inactiveIcon};
+  opacity: ${transparency.light.inactiveIcon};
 
   ${centerImage('100%', 'auto')};
 `;

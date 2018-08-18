@@ -1,12 +1,9 @@
 import styled, { css } from 'styled-components';
 
-import {
-  MENU_CONTENT_MAX_WIDTH,
-  MENU_SPACE,
-  MENU_WIDTH,
-} from '../../../../constants';
-import { icons, opacity } from '../../../../defaults';
-import { body2, centerImage, h6, shadows, noButtons } from '../../../mixins';
+import { MENU_CONTENT_MAX_WIDTH, MENU_SPACE, MENU_WIDTH } from 'constants/';
+import { transparency } from 'defaults';
+import { body2, centerImage, h6, shadows, noButtons } from 'mixins';
+import { icons } from 'defaults/icons';
 
 export const Container = styled.div`
   height: 100%;
@@ -33,7 +30,7 @@ export const Title = styled.div`
   ${h6()};
   margin-left: 16px;
   margin-top: 10px;
-  opacity: ${opacity.light.primaryText};
+  opacity: ${transparency.light.primaryText};
 `;
 
 export const Header = styled.div`
@@ -63,7 +60,7 @@ export const Dark = styled.div`
 
 export const Menu = styled.div`
   width: 300px;
-  border-left: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
+  border-left: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
   position: relative;
   z-index: 999;
   display: flex;
@@ -104,7 +101,7 @@ export const Content = styled.div`
 `;
 
 export const Search = styled.div`
-  border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
+  border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
   height: 56px;
   box-sizing: border-box;
   width: 100%;
@@ -127,7 +124,7 @@ export const Input = styled.input`
 
 export const SearchIcon = styled.div`
   ${centerImage('24px', 'auto')};
-  opacity: ${opacity.light.inactiveIcon};
+  opacity: ${transparency.light.inactiveIcon};
   height: 24px;
   width: 24px;
   margin-left: 16px;

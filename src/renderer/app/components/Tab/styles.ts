@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { icons } from '../../../defaults/icons';
 import { centerImage, body2 } from '../../../mixins';
-import { opacity } from '../../../defaults/transparency';
+import { transparency } from '../../../defaults/transparency';
 import { colors } from '../../../defaults/colors';
 
 interface CloseProps {
@@ -20,7 +20,7 @@ export const Close = styled.div`
 
   ${centerImage('100%', '100%')};
   opacity: ${({ hovered, selected }: CloseProps) =>
-    hovered || selected ? opacity.light.inactiveIcon : 0};
+    hovered || selected ? transparency.light.inactiveIcon : 0};
 `;
 
 interface TabProps {
@@ -95,7 +95,7 @@ export const Title = styled.div`
   ${({ favicon, loading, selected }: TitleProps) => css`
     color: ${selected
       ? colors.blue['500']
-      : `rgba(0, 0, 0, ${opacity.light.secondaryText})`};
+      : `rgba(0, 0, 0, ${transparency.light.secondaryText})`};
     margin-left: ${favicon === '' && !loading ? 0 : 12}px;
   `};
 `;
@@ -135,7 +135,7 @@ export const Content = styled.div`
 export const RightBorder = styled.div`
   height: calc(100% - 16px);
   width: 1px;
-  background-color: rgba(0, 0, 0, ${opacity.light.dividers});
+  background-color: rgba(0, 0, 0, ${transparency.light.dividers});
   position: absolute;
   right: 0;
 

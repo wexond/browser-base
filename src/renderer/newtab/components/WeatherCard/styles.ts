@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { opacity } from '../../../../defaults/transparency';
+
+import { transparency } from 'defaults';
 import { Actions } from '../../../components/Card';
-import { centerImage, h1, h3 } from '../../../mixins';
-import { EASE_FUNCTION } from '../../../../constants/design';
+import { centerImage, h1, h3 } from 'mixins';
+import { EASE_FUNCTION } from 'constants/';
 
 export const InfoContainer = styled.div`
   display: flex;
@@ -43,7 +44,7 @@ export const ExtraInfoContainer = styled.div`
 export const ExtraInfo = styled.div`
   display: flex;
   margin-left: 24px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
 
   &:first-child {
     margin-left: 0px;

@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { ADDRESS_BAR_HEIGHT } from 'constants/';
 import { shadows, centerImage } from 'mixins';
-import { opacity } from 'defaults';
+import { transparency } from 'defaults';
 
 interface AddressBarProps {
   visible: boolean;
@@ -44,7 +44,7 @@ export const Input = styled.input`
   transition: 0.1s padding-left;
 
   ::placeholder {
-    color: rgba(0, 0, 0, ${opacity.light.disabledText});
+    color: rgba(0, 0, 0, ${transparency.light.disabledText});
   }
 
   ${({ suggestionsVisible }: { suggestionsVisible: boolean }) => css`

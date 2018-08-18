@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import { TOOLBAR_BUTTON_WIDTH } from '../../../../../constants';
-import { opacity } from '../../../../../defaults';
-import { centerImage } from '../../../../mixins';
+import { TOOLBAR_BUTTON_WIDTH } from 'constants/';
+import { transparency } from 'defaults';
+import { centerImage } from 'mixins';
 
 export const Icon = styled.div`
   width: 100%;
@@ -20,7 +20,7 @@ export const Icon = styled.div`
     icon: string;
   }) => css`
     ${centerImage(`${size}px`, `${size}px`)};
-    opacity: ${disabled ? 0.25 : opacity.light.inactiveIcon};
+    opacity: ${disabled ? 0.25 : transparency.light.inactiveIcon};
     background-image: url(${icon});
   `};
 `;

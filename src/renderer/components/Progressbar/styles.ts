@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
-import { EASE_FUNCTION } from '../../../constants';
-import { opacity } from '../../../defaults/transparency';
-import { ProgressType } from '../../../enums';
+import { transparency } from 'defaults';
 
 export const Root = styled.div`
   height: 4px;
@@ -22,7 +20,7 @@ export interface TrackProps {
 
 export const Track = styled.div`
   width: 100%;
-  opacity: ${opacity.light.disabledControl};
+  opacity: ${transparency.light.disabledControl};
 
   ${trackStyle}
   background-color: ${({ color }: TrackProps) => color};

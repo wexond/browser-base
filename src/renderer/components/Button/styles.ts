@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { opacity } from '../../../defaults/transparency';
+import { transparency } from '../../../defaults/transparency';
 import { ButtonType } from '../../../enums';
 import {
   getComponentColor,
@@ -30,7 +30,7 @@ const getBorder = (type: ButtonType, theme: UITheme) => {
   if (type === ButtonType.Outlined) {
     const rgb = theme === 'light' ? 0 : 255;
     const alpha =
-      theme === 'light' ? opacity.light.dividers : opacity.dark.dividers;
+      theme === 'light' ? transparency.light.dividers : transparency.dark.dividers;
 
     return `1px solid rgba(${rgb}, ${rgb}, ${rgb}, ${alpha})`;
   }

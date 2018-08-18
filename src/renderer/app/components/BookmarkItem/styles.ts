@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import { colors, opacity } from '../../../../defaults';
+import { colors, transparency } from 'defaults';
 import * as PageItem from '../../../components/PageItem';
-import { centerImage, robotoRegular } from '../../../mixins';
+import { centerImage, robotoRegular } from 'mixins';
 
 export const Title = styled(PageItem.Title)`
   margin-left: 12px;
@@ -32,7 +32,7 @@ export const Input = styled.input`
   -webkit-text-fill-color: transparent;
   background-color: transparent;
   font-size: 16px;
-  text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${opacity.light.primaryText})`};
+  text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${transparency.light.primaryText})`};
   color: ${colors.blue['500']};
   position: absolute;
   top: 0;
@@ -50,7 +50,7 @@ export const Input = styled.input`
   `};
 
   &::placeholder {
-    opacity: ${opacity.light.secondaryText};
+    opacity: ${transparency.light.secondaryText};
   }
 `;
 
@@ -64,11 +64,11 @@ export const ActionIcon = styled.div`
   }
 
   &:hover {
-    opacity: ${opacity.light.activeIcon};
+    opacity: ${transparency.light.activeIcon};
   }
 
   ${({ icon, visible }: { icon: string; visible: boolean }) => css`
     background-image: url(${icon});
-    opacity: ${visible ? opacity.light.inactiveIcon : 0};
+    opacity: ${visible ? transparency.light.inactiveIcon : 0};
   `};
 `;
