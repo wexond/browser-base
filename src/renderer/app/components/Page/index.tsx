@@ -7,7 +7,7 @@ import StyledPage from './styles';
 import { Page, Tab } from '../../models';
 import store from '@app/store';
 import { PageMenuMode } from '~/enums';
-import { databases } from '~/defaults';
+import { databases } from '~/defaults/databases';
 
 @observer
 export default class extends React.Component<{ page: Page }> {
