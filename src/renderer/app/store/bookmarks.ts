@@ -44,6 +44,16 @@ export class BookmarksStore {
     );
   }
 
+  public load() {
+    return new Promise(async resolve => {
+      databases.bookmarks.find({}, (err: any, docs: Bookmark[]) => {
+        if (err) return console.warn(err);
+        this.bookmarks = docs;
+        resolve();
+      });
+    });
+  }
+
   public goToFolder(id: string) {
     this.currentTree = id;
     this.path = this.getFolderPath(id);
@@ -84,16 +94,6 @@ export class BookmarksStore {
 
     databases.bookmarks.remove({ _id: item._id }, (err: any) => {
       if (err) return console.warn(err);
-    });
-  }
-
-  public load() {
-    return new Promise(async resolve => {
-      databases.bookmarks.find({}, (err: any, docs: Bookmark[]) => {
-        if (err) return console.warn(err);
-        this.bookmarks = docs;
-        resolve();
-      });
     });
   }
 }
