@@ -4,4 +4,3 @@ export * from './paths';
 export * from './transparency';
 export * from './icons';
 export * from './fonts';
-export * from './databases';
