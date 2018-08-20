@@ -7,11 +7,12 @@ import StyledPage from './styles';
 import { Page, Tab } from '../../models';
 import store from '@app/store';
 import { PageMenuMode } from '~/enums';
+import { databases } from '~/defaults';
 
 @observer
 export default class extends React.Component<{ page: Page }> {
   private lastURL = '';
-  private lastHistoryItemID = -1;
+  private lastHistoryItemID: string;
   private webview: Electron.WebviewTag;
   private tab: Tab;
   private listeners: { name: string; callback: any }[] = [];
@@ -242,17 +243,18 @@ export default class extends React.Component<{ page: Page }> {
     this.tab.loading = true;
 
     if (url !== this.lastURL && isMainFrame && !url.startsWith('wexond://')) {
-      // TODO: nedb
-      /*database.transaction('rw', database.history, async () => {
-        const id = await database.history.add({
+      databases.history.insert(
+        {
           title: this.tab.title,
           url,
           favicon: this.tab.favicon,
           date: new Date().toString(),
-        });
-
-        this.lastHistoryItemID = id;
-      });*/
+        },
+        (err, doc: any) => {
+          if (err) return console.warn(err);
+          this.lastHistoryItemID = doc._id;
+        },
+      );
 
       this.lastURL = url;
     }
@@ -291,18 +293,19 @@ export default class extends React.Component<{ page: Page }> {
 
   public updateData = () => {
     if (this.lastURL === this.tab.url) {
-      if (this.lastHistoryItemID !== -1) {
-        // TODO: nedb
-        /*database.transaction('rw', database.history, async () => {
-          database.history
-            .where('id')
-            .equals(this.lastHistoryItemID)
-            .modify({
+      if (this.lastHistoryItemID != null) {
+        databases.history.update(
+          {
+            _id: this.lastHistoryItemID,
+          },
+          {
+            $set: {
               title: this.tab.title,
               url: this.webview.getURL(),
               favicon: this.tab.favicon,
-            });
-        });*/
+            },
+          },
+        );
       }
     }
   };
