@@ -12,8 +12,16 @@ export interface Props {
   data: Bookmark;
 }
 
+export interface State {
+  inputVisible: boolean;
+}
+
 @observer
-export default class BookmarkItem extends React.Component<Props> {
+export default class BookmarkItem extends React.Component<Props, State> {
+  public state: State = {
+    inputVisible: false,
+  };
+
   private cmdPressed = false;
 
   private input: HTMLInputElement;
@@ -50,9 +58,13 @@ export default class BookmarkItem extends React.Component<Props> {
     }
   };
 
-  public onMouseEnter = () => this.setState({ hovered: true });
+  public onMouseEnter = () => {
+    this.props.data.hovered = true;
+  };
 
-  public onMouseLeave = () => this.setState({ hovered: false });
+  public onMouseLeave = () => {
+    this.props.data.hovered = false;
+  };
 
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
