@@ -7,6 +7,7 @@ import store from '@app/store';
 import { Bookmark } from '~/interfaces';
 import { colors } from '~/defaults';
 import Button from '@components/Button';
+import { databases } from '~/defaults/databases';
 
 @observer
 export default class BookmarksDialog extends React.Component {
@@ -16,7 +17,7 @@ export default class BookmarksDialog extends React.Component {
 
   private dropDownClicked: boolean = false;
 
-  private bookmarkFolder: number = -1;
+  private bookmarkFolder: string;
 
   private bookmark: Bookmark;
 
@@ -65,21 +66,30 @@ export default class BookmarksDialog extends React.Component {
   };
 
   public onDoneClick = async () => {
-    const name = this.textField.getValue();
+    const title = this.textField.getValue();
 
-    // TODO: nedb
-    /*await database.bookmarks
-      .where('id')
-      .equals(this.bookmark.id)
-      .modify({
-        title: name,
-        parent: this.bookmarkFolder,
-      });
+    databases.bookmarks.update(
+      {
+        _id: this.bookmark._id,
+      },
+      {
+        $set: {
+          title,
+          parent: this.bookmarkFolder,
+        },
+      },
+      {},
+      (err: any) => {
+        if (err) return console.warn(err);
 
-    const item = store.bookmarks.find(x => x.id === this.bookmark.id);
+        const item = store.bookmarksStore.bookmarks.find(
+          x => x._id === this.bookmark._id,
+        );
 
-    item.title = name;
-    item.parent = this.bookmarkFolder;*/
+        item.title = name;
+        item.parent = this.bookmarkFolder;
+      },
+    );
 
     store.bookmarksStore.dialogVisible = false;
   };
@@ -90,7 +100,7 @@ export default class BookmarksDialog extends React.Component {
     }
   };
 
-  public onDropdownChange = (id: number) => {
+  public onDropdownChange = (id: string) => {
     this.bookmarkFolder = id;
   };
 
@@ -118,7 +128,7 @@ export default class BookmarksDialog extends React.Component {
           onMouseUp={this.onDropdownMouseUp}
           style={dropDownStyle}
         >
-          <Dropdown.Item value={-1}>Home</Dropdown.Item>
+          <Dropdown.Item value={null}>Home</Dropdown.Item>
           {store.bookmarksStore.bookmarks
             .filter(x => x.type === 'folder')
             .map((item: Bookmark, key: any) => (
