@@ -51,13 +51,19 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
   }
 
   public shouldComponentUpdate(nextProps: Props, nextState: State) {
-    if (
-      this.state.thumbLeft !== nextState.thumbLeft ||
-      this.state.thumbWidth !== nextState.thumbWidth ||
-      this.state.visible !== nextState.visible ||
-      this.props.visible !== nextProps.visible
-    ) {
+    if (this.state.visible !== nextState.visible) return true;
+
+    if (nextState.visible && this.props.visible !== nextProps.visible) {
       return true;
+    }
+
+    if (nextProps.visible && nextState.visible) {
+      if (
+        this.state.thumbLeft !== nextState.thumbLeft ||
+        this.state.thumbWidth !== nextState.thumbWidth
+      ) {
+        return true;
+      }
     }
 
     return false;
