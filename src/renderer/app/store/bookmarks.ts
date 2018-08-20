@@ -44,6 +44,11 @@ export class BookmarksStore {
     );
   }
 
+  public isBookmarked(url: string) {
+    // console.log(url, this.bookmarks);
+    return !!this.bookmarks.find(x => x.url === url);
+  }
+
   public load() {
     return new Promise(async resolve => {
       databases.bookmarks.find({}, (err: any, docs: Bookmark[]) => {
