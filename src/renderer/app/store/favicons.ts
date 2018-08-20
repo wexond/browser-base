@@ -19,6 +19,8 @@ export class FaviconsStore {
             );
           }
         });
+
+        resolve();
       });
     });
   }
