@@ -1,7 +1,19 @@
 import Datastore from 'nedb';
 
+import { defaultPaths } from './paths';
+import { getPath } from '~/utils/paths';
+
 export const databases = {
-  history: new Datastore({ filename: 'history.db', autoload: true }),
-  bookmarks: new Datastore({ filename: 'bookmarks.db', autoload: true }),
-  favicons: new Datastore({ filename: 'favicons.db', autoload: true }),
+  history: new Datastore({
+    filename: getPath(defaultPaths.storage, 'history.db'),
+    autoload: true,
+  }),
+  bookmarks: new Datastore({
+    filename: getPath(defaultPaths.storage, 'bookmarks.db'),
+    autoload: true,
+  }),
+  favicons: new Datastore({
+    filename: getPath(defaultPaths.storage, 'favicons.db'),
+    autoload: true,
+  }),
 };
