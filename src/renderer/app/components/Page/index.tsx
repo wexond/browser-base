@@ -14,8 +14,8 @@ export default class extends React.Component<{ page: Page }> {
   private lastHistoryItemID = -1;
   private webview: Electron.WebviewTag;
   private tab: Tab;
-  private onURLChange: any;
   private listeners: { name: string; callback: any }[] = [];
+  private processId: number;
 
   public componentDidMount() {
     const { page } = this.props;
@@ -28,7 +28,6 @@ export default class extends React.Component<{ page: Page }> {
     this.addWebviewListener('did-start-loading', this.onDidStartLoading);
     this.addWebviewListener('page-title-updated', this.onPageTitleUpdated);
     this.addWebviewListener('load-commit', this.onLoadCommit);
-    this.webview.addEventListener('load-commit', this.onceLoadCommit);
     this.addWebviewListener('page-favicon-updated', this.onPageFaviconUpdated);
     this.addWebviewListener('dom-ready', this.onDomReady);
     this.addWebviewListener('enter-html-full-screen', this.onFullscreenEnter);
@@ -37,6 +36,9 @@ export default class extends React.Component<{ page: Page }> {
     this.addWebviewListener('did-navigate', this.onDidNavigate);
     this.addWebviewListener('will-navigate', this.onWillNavigate);
     this.addWebviewListener('ipc-message', this.onIpcMessage);
+    this.webview.addEventListener('dom-ready', this.onceDomReady);
+
+    this.processId = this.webview.getWebContents().getOSProcessId();
   }
 
   public componentWillUnmount() {
@@ -46,36 +48,29 @@ export default class extends React.Component<{ page: Page }> {
 
     this.listeners = [];
 
-    clearInterval(this.onURLChange);
-
     store.isFullscreen = false;
   }
 
-  public onceLoadCommit = () => {
-    // Custom event: fires when webview URL changes.
-    this.onURLChange = setInterval(() => {
-      if (this.webview.getWebContents()) {
-        const url = this.webview.getURL();
-        if (url !== this.tab.url) {
-          this.tab.url = url;
-          this.updateData();
-          this.tab.isBookmarked = !!store.bookmarksStore.bookmarks.find(
-            x => x.url === url,
-          );
-          this.emitEvent(
-            'tabs',
-            'onUpdated',
-            this.tab.id,
-            {
-              url,
-            },
-            this.tab.getApiTab(),
-          );
-        }
-      }
-    }, 30);
+  public onceDomReady = () => {
+    this.webview.getWebContents().on('context-menu', this.onContextMenu);
+    this.webview.removeEventListener('dom-ready', this.onceDomReady);
+  };
 
-    this.webview.removeEventListener('load-commit', this.onceLoadCommit);
+  public onURLChange = (url: string) => {
+    this.tab.url = url;
+    this.updateData();
+    this.tab.isBookmarked = !!store.bookmarksStore.bookmarks.find(
+      x => x.url === url,
+    );
+    this.emitEvent(
+      'tabs',
+      'onUpdated',
+      this.tab.id,
+      {
+        url,
+      },
+      this.tab.getApiTab(),
+    );
   };
 
   public addWebviewListener(name: string, callback: any) {
@@ -123,7 +118,7 @@ export default class extends React.Component<{ page: Page }> {
       url: this.webview.getURL(),
       frameId: 0,
       timeStamp: Date.now(),
-      processId: this.webview.getWebContents().getOSProcessId(),
+      processId: this.processId,
     });
 
     this.emitEvent(
@@ -143,7 +138,7 @@ export default class extends React.Component<{ page: Page }> {
       url: e.url,
       frameId: 0,
       timeStamp: Date.now(),
-      processId: this.webview.getWebContents().getOSProcessId(),
+      processId: this.processId,
     });
 
     this.emitEvent(
@@ -158,13 +153,12 @@ export default class extends React.Component<{ page: Page }> {
   };
 
   public onDomReady = () => {
-    this.webview.getWebContents().on('context-menu', this.onContextMenu);
     this.emitEvent('webNavigation', 'onDOMContentLoaded', {
       tabId: this.tab.id,
       url: this.webview.getURL(),
       frameId: 0,
       timeStamp: Date.now(),
-      processId: this.webview.getWebContents().getOSProcessId(),
+      processId: this.processId,
     });
   };
 
@@ -179,7 +173,7 @@ export default class extends React.Component<{ page: Page }> {
 
     this.emitEvent('webNavigation', 'onCreatedNavigationTarget', {
       sourceTabId: this.tab.id,
-      sourceProcessId: this.webview.getWebContents().getOSProcessId(),
+      sourceProcessId: this.processId,
       sourceFrameId: 0,
       timeStamp: Date.now(),
       url: e.url,

@@ -32,6 +32,15 @@ class App extends React.Component {
     bindKeys(store.keyBindingsStore.keyBindings);
   }
 
+  public componentWillUnmount() {
+    store.pagesStore.pages = [];
+    store.tabsStore.groups = [];
+
+    window.removeEventListener('mousemove', this.onWindowMouseMove);
+    window.removeEventListener('mousedown', this.onWindowMouseDown);
+    window.removeEventListener('mouseup', this.onWindowMouseUp);
+  }
+
   public onWindowMouseMove = (e: MouseEvent) => {
     store.mouse.x = e.pageX;
     store.mouse.y = e.pageY;
@@ -44,15 +53,6 @@ class App extends React.Component {
   public onWindowMouseUp = (e: MouseEvent) => {
     store.bookmarksStore.dialogVisible = false;
   };
-
-  public componentWillUnmount() {
-    store.pagesStore.pages = [];
-    store.tabsStore.groups = [];
-
-    window.removeEventListener('mousemove', this.onWindowMouseMove);
-    window.removeEventListener('mousedown', this.onWindowMouseDown);
-    window.removeEventListener('mouseup', this.onWindowMouseUp);
-  }
 
   public render() {
     return (
