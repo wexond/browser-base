@@ -11,15 +11,10 @@ import { PageMenuMode } from '~/enums';
 @observer
 export default class extends React.Component<{ page: Page }> {
   private lastURL = '';
-
   private lastHistoryItemID = -1;
-
   private webview: Electron.WebviewTag;
-
   private tab: Tab;
-
   private onURLChange: any;
-
   private listeners: { name: string; callback: any }[] = [];
 
   public componentDidMount() {
@@ -63,6 +58,10 @@ export default class extends React.Component<{ page: Page }> {
         const url = this.webview.getURL();
         if (url !== this.tab.url) {
           this.tab.url = url;
+          this.updateData();
+          this.tab.isBookmarked = !!store.bookmarksStore.bookmarks.find(
+            x => x.url === url,
+          );
           this.emitEvent(
             'tabs',
             'onUpdated',
@@ -71,10 +70,6 @@ export default class extends React.Component<{ page: Page }> {
               url,
             },
             this.tab.getApiTab(),
-          );
-          this.updateData();
-          this.tab.isBookmarked = !!store.bookmarksStore.bookmarks.find(
-            x => x.url === url,
           );
         }
       }
@@ -319,11 +314,8 @@ export default class extends React.Component<{ page: Page }> {
   };
 
   public onPageTitleUpdated = ({ title }: Electron.PageTitleUpdatedEvent) => {
-    const { page } = this.props;
-    const { id } = page;
-    const tab = store.tabsStore.getTabById(id);
+    this.tab.title = title;
 
-    tab.title = title;
     this.updateData();
 
     this.emitEvent(

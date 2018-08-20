@@ -7,15 +7,10 @@ import { StyledAddressBar, InputContainer, Icon, Input } from './styles';
 import Suggestions from '../Suggestions';
 import { icons } from '~/defaults';
 
-interface Props {
-  visible: boolean;
-}
-
 @observer
-export default class AddressBar extends Component<Props, {}> {
+export default class AddressBar extends Component {
   private input: HTMLInputElement;
   private canSuggest = false;
-  private visible = false;
   private lastSuggestion: string;
 
   public componentDidMount() {
@@ -162,13 +157,12 @@ export default class AddressBar extends Component<Props, {}> {
   };
 
   public render() {
-    const { visible } = this.props;
     const dictionary = store.dictionary.addressBar;
     const suggestionsVisible = store.suggestionsStore.suggestions.length !== 0;
 
     return (
       <StyledAddressBar
-        visible={visible}
+        visible={store.addressBarStore.toggled}
         suggestionsVisible={suggestionsVisible}
         onMouseDown={e => e.stopPropagation()}
       >
@@ -185,7 +179,7 @@ export default class AddressBar extends Component<Props, {}> {
           />
           <div style={{ clear: 'both' }} />
         </InputContainer>
-        <Suggestions visible={visible} />
+        <Suggestions />
       </StyledAddressBar>
     );
   }

@@ -26,8 +26,6 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
     dragging: false,
     mouseStartX: 0,
     startLeft: 0,
-    newScrollLeft: -1,
-    maxScrollLeft: 0,
   };
 
   private container: HTMLDivElement;
@@ -52,6 +50,19 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
     this.container.removeEventListener('wheel', this.onWheel);
   }
 
+  public shouldComponentUpdate(nextProps: Props, nextState: State) {
+    if (
+      this.state.thumbLeft !== nextState.thumbLeft ||
+      this.state.thumbWidth !== nextState.thumbWidth ||
+      this.state.visible !== nextState.visible ||
+      this.props.visible !== nextProps.visible
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
   public resizeScrollbar = () => {
     const container = this.props.getContainer();
 
@@ -74,34 +85,14 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
     if (!this.container) return;
 
     const { deltaX, deltaY } = e;
-    const { scrollLeft, scrollWidth, offsetWidth } = this.container;
-
-    let { newScrollLeft } = this.scrollData;
+    const { scrollLeft } = this.container;
 
     const delta = Math.abs(deltaX) >= Math.abs(deltaY) ? deltaX : -deltaY;
     const target = delta / 2;
 
     this.isScrollingToEnd = false;
 
-    if (scrollLeft !== newScrollLeft && newScrollLeft !== -1) {
-      newScrollLeft += target;
-    } else {
-      newScrollLeft = scrollLeft + target;
-    }
-
-    if (newScrollLeft > scrollWidth - offsetWidth) {
-      newScrollLeft = scrollWidth - offsetWidth;
-    }
-    if (newScrollLeft < 0) {
-      newScrollLeft = 0;
-    }
-
-    this.scrollData = {
-      ...this.scrollData,
-      newScrollLeft,
-    };
-
-    this.container.scrollLeft = newScrollLeft;
+    this.container.scrollLeft = scrollLeft + target;
   };
 
   public onMouseUp = () => {
@@ -134,7 +125,7 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
   public scrollToEnd = (milliseconds: number) => {
     const frame = () => {
       if (!this.isScrollingToEnd) return;
-      this.container.scrollLeft = Number.MAX_SAFE_INTEGER;
+      this.container.scrollLeft = this.container.scrollWidth;
       requestAnimationFrame(frame);
     };
 

@@ -24,7 +24,8 @@ export const Close = styled.div`
 interface TabProps {
   selected: boolean;
   isClosing: boolean;
-  visible: boolean;
+  hovered: boolean;
+  borderVisible: boolean;
 }
 
 export const StyledTab = styled.div`
@@ -33,42 +34,47 @@ export const StyledTab = styled.div`
   top: 50%;
   transform: translateY(-50%);
   display: flex;
-  height: calc(100% - 8px);
+  height: calc(100% - 5px);
   border-radius: 4px;
   overflow: hidden;
   align-items: center;
-  transition: 0.1s color;
-  will-change: transition, transform, width, left;
+  -webkit-app-region: no-drag;
 
-  ${({ selected, isClosing, visible }: TabProps) => css`
+  ${({ selected }: TabProps) => css`
     z-index: ${selected ? 2 : 1};
-    pointer-events: ${isClosing || !visible ? 'none' : 'auto'};
-    -webkit-app-region: ${visible ? 'no-drag' : ''};
     background-color: ${selected ? 'rgba(33, 150, 243, 0.12)' : 'transparent'};
   `};
-`;
 
-interface OverlayProps {
-  hovered: boolean;
-  selected: boolean;
-}
+  &:before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: calc(100% - 12px);
+    background-color: rgba(0, 0, 0, ${transparency.light.dividers});
+    right: 0px;
 
-export const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 0;
-  transition: 0.2s opacity;
-  background-color: rgba(0, 0, 0, 0.04);
+    ${({ borderVisible }: TabProps) => css`
+      visibility: ${borderVisible ? 'visible' : 'hidden'};
+    `};
+  }
 
-  ${({ selected, hovered }: OverlayProps) => css`
-    background-color: ${selected
-      ? 'rgba(33, 150, 243, 0.08)'
-      : `rgba(0, 0, 0, 0.04)`};
-    opacity: ${hovered ? 1 : 0};
-  `};
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: 0.2s opacity;
+    background-color: rgba(0, 0, 0, 0.04);
+
+    ${({ hovered, selected }: TabProps) => css`
+      background-color: ${selected
+        ? 'rgba(33, 150, 243, 0.08)'
+        : `rgba(0, 0, 0, 0.04)`};
+      opacity: ${hovered ? 1 : 0};
+    `};
+  }
 `;
 
 interface TitleProps {
@@ -83,8 +89,7 @@ export const Title = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  will-change: color, margin-left;
-  transition: 0.2s color, 0.2s margin-left;
+  transition: 0.2s margin-left;
   font-weight: 500;
   margin-left: 12px;
 
@@ -126,17 +131,6 @@ export const Content = styled.div`
   ${({ hovered, selected }: ContentProps) => css`
     max-width: calc(100% - ${24 + (hovered || selected ? 24 : 0)}px);
   `};
-`;
-
-export const RightBorder = styled.div`
-  height: calc(100% - 16px);
-  width: 1px;
-  background-color: rgba(0, 0, 0, ${transparency.light.dividers});
-  position: absolute;
-  right: 0;
-
-  display: ${({ visible }: { visible: boolean }) =>
-    visible ? 'block' : 'none'};
 `;
 
 export const Circle = styled.div`
