@@ -24,7 +24,8 @@ class App extends React.Component {
     window.addEventListener('mouseup', this.onWindowMouseUp);
 
     await store.faviconsStore.load();
-    /* store.bookmarks = await database.bookmarks.toArray();
+    await store.bookmarksStore.load();
+    /*
     store.historyItems = await database.history.toArray();*/
 
     store.keyBindingsStore.keyBindings = await getKeyBindings();
