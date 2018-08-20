@@ -17,7 +17,7 @@ export default class BookmarksDialog extends React.Component {
 
   private dropDownClicked: boolean = false;
 
-  private bookmarkFolder: string;
+  private bookmarkFolder: string = null;
 
   private bookmark: Bookmark;
 
@@ -30,6 +30,7 @@ export default class BookmarksDialog extends React.Component {
       this.textField.inputElement.select();
 
       this.bookmark = bookmark;
+      this.bookmarkFolder = bookmark.parent;
 
       const item = this.dropdown.items.find(
         x => x.props.value === bookmark.parent,
@@ -68,28 +69,26 @@ export default class BookmarksDialog extends React.Component {
   public onDoneClick = async () => {
     const title = this.textField.getValue();
 
-    databases.bookmarks.update(
-      {
-        _id: this.bookmark._id,
-      },
-      {
-        $set: {
-          title,
-          parent: this.bookmarkFolder,
+    if (title.length > 0) {
+      databases.bookmarks.update(
+        {
+          _id: this.bookmark._id,
         },
-      },
-      {},
-      (err: any) => {
-        if (err) return console.warn(err);
+        {
+          $set: {
+            title,
+            parent: this.bookmarkFolder,
+          },
+        },
+        {},
+        (err: any) => {
+          if (err) return console.warn(err);
 
-        const item = store.bookmarksStore.bookmarks.find(
-          x => x._id === this.bookmark._id,
-        );
-
-        item.title = name;
-        item.parent = this.bookmarkFolder;
-      },
-    );
+          this.bookmark.title = title;
+          this.bookmark.parent = this.bookmarkFolder;
+        },
+      );
+    }
 
     store.bookmarksStore.dialogVisible = false;
   };
