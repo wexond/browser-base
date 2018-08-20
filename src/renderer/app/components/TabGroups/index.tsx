@@ -32,11 +32,15 @@ export default class TabGroups extends React.Component {
     const selectedTab = tabGroup.getSelectedTab();
 
     if (store.tabsStore.isDragging) {
-      const { tabStartX, mouseStartX, lastMouseX } = store.tabsStore;
-      const { lastScrollLeft } = store.tabbarStore;
-      const tabbarRef = store.tabbarStore.ref;
+      const container = store.tabsStore.containerRef;
+      const {
+        tabStartX,
+        mouseStartX,
+        lastMouseX,
+        lastScrollLeft,
+      } = store.tabsStore;
 
-      const boundingRect = tabbarRef.getBoundingClientRect();
+      const boundingRect = container.getBoundingClientRect();
 
       if (Math.abs(e.pageX - mouseStartX) < 5) {
         return;
@@ -49,17 +53,15 @@ export default class TabGroups extends React.Component {
         tabStartX +
         e.pageX -
         mouseStartX -
-        (lastScrollLeft - tabbarRef.scrollLeft);
+        (lastScrollLeft - container.scrollLeft);
 
-      let left = newLeft;
+      let left = Math.max(0, newLeft);
 
-      if (newLeft < 0) {
-        left = 0;
-      } else if (
+      if (
         newLeft + selectedTab.width >
-        store.addTabStore.left + tabbarRef.scrollLeft
+        store.addTabStore.left + container.scrollLeft
       ) {
-        left = store.addTabStore.left - selectedTab.width;
+        left = store.addTabStore.left - selectedTab.width + lastScrollLeft;
       }
 
       selectedTab.setLeft(left, false);
@@ -73,18 +75,10 @@ export default class TabGroups extends React.Component {
         // TODO: Create a new window
       }
 
-      let direction: 'left' | 'right' | '' = '';
-      if (lastMouseX - e.pageX >= 1) {
-        direction = 'left';
-      } else if (lastMouseX - e.pageX <= -1) {
-        direction = 'right';
-      }
-
-      if (direction !== '') {
-        store.tabsStore.dragDirection = direction;
-      }
-
-      tabGroup.getTabsToReplace(selectedTab, store.tabsStore.dragDirection);
+      tabGroup.getTabsToReplace(
+        selectedTab,
+        lastMouseX - e.pageX >= 1 ? 'left' : 'right',
+      );
 
       store.tabsStore.lastMouseX = e.pageX;
     }

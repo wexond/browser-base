@@ -8,12 +8,12 @@ export const StyledTabbar = styled.div`
   width: 100%;
   position: relative;
   overflow: hidden;
-  transition: 0.2s opacity;
-  will-change: opacity, transform;
+  transition: 0.3s opacity, 0.3s transform;
 
   ${({ visible }: { visible: boolean }) => css`
-    pointer-events: ${visible ? 'auto' : 'none'};
     opacity: ${visible ? 1 : 0};
+    transform: ${visible ? '' : 'translateY(30px)'};
+    pointer-events: ${visible ? 'auto' : 'none'};
   `};
 `;
 

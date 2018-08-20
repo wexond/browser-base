@@ -52,7 +52,8 @@ export class Tab {
 
   public getWidth() {
     const tabs = this.tabGroup.tabs.filter(x => !x.isClosing);
-    const width = store.tabbarStore.getWidth() / tabs.length - TABS_PADDING;
+    const width =
+      store.tabsStore.getContainerWidth() / tabs.length - TABS_PADDING;
 
     if (width > 200 - TABS_PADDING) {
       return 200 - TABS_PADDING;
