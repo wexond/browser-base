@@ -34,17 +34,11 @@ export default class BookmarkButton extends React.Component {
   };
 
   public render() {
-    const selectedTab = store.tabsStore.getSelectedTab();
-
     return (
       <div style={{ position: 'relative' }}>
         <ToolbarButton
           size={20}
-          icon={
-            selectedTab && selectedTab.isBookmarked
-              ? icons.star
-              : icons.starBorder
-          }
+          icon={store.tabsStore.isBookmarked ? icons.star : icons.starBorder}
           onMouseDown={this.onStarIconMouseDown}
           onClick={this.onStarIconClick}
         />

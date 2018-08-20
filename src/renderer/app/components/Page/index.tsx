@@ -336,9 +336,7 @@ export default class extends React.Component<{ page: Page }> {
     const { url, id } = page;
 
     return (
-      <StyledPage
-        selected={store.tabsStore.getCurrentGroup().selectedTab === id}
-      >
+      <StyledPage selected={page.isSelected}>
         <webview
           src={url}
           style={{

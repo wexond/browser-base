@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { TabGroup } from '../models';
 import { defaultCreateTabProperties } from '~/defaults/create-tab-properties';
 import { TAB_ANIMATION_EASING, TAB_ANIMATION_DURATION } from '~/constants';
@@ -20,6 +20,11 @@ export class TabsStore {
 
   @observable
   public scrollbarVisible: boolean = false;
+
+  @computed
+  get isBookmarked() {
+    return this.getSelectedTab().isBookmarked;
+  }
 
   public lastScrollLeft: number = 0;
   public lastMouseX: number = 0;
