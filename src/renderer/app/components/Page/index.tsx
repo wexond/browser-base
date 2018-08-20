@@ -233,8 +233,13 @@ export default class extends React.Component<{ page: Page }> {
   };
 
   public onDidStopLoading = () => {
+    const url = this.webview.getURL();
+
     store.navigationStateStore.refresh();
+
+    this.tab.url = url; // pal
     this.tab.loading = false;
+    this.tab.isBookmarked = store.bookmarksStore.isBookmarked(url);
   };
 
   public onLoadCommit = async ({

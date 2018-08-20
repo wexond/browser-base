@@ -16,6 +16,8 @@ export default class BookmarkButton extends React.Component {
   public onStarIconClick = async () => {
     const selectedTab = store.tabsStore.getSelectedTab();
 
+    console.log(store.tabsStore.getSelectedTab());
+
     let bookmark: Bookmark = store.bookmarksStore.bookmarks.find(
       x => x.url === selectedTab.url,
     );
@@ -28,6 +30,8 @@ export default class BookmarkButton extends React.Component {
         type: 'item',
         favicon: selectedTab.favicon,
       });
+
+      store.bookmarksStore.bookmarks.push(bookmark);
     }
 
     store.bookmarksStore.dialogRef.show(bookmark);
