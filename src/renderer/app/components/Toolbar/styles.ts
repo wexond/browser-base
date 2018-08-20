@@ -8,6 +8,8 @@ export const StyledToolbar = styled.div`
   display: flex;
   background-color: #fff;
   color: rgba(0, 0, 0, 0.8);
+  -webkit-app-region: drag;
+  border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
 
   height: ${TOOLBAR_HEIGHT}px;
   transition: 0.2s margin-top ${EASE_FUNCTION};
@@ -16,26 +18,15 @@ export const StyledToolbar = styled.div`
   `};
 `;
 
-export const Handle = styled.div`
-  position: absolute;
-  left: 3px;
-  top: 3px;
-  right: 3px;
-  bottom: 0px;
-  -webkit-app-region: drag;
-`;
-
-export const Line = styled.div`
-  height: 1px;
-  width: 100%;
-  position: absolute;
-  z-index: 1;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, ${transparency.light.dividers});
-`;
-
 export const TabsSection = styled.div`
   flex: 1;
   height: 100%;
   position: relative;
+`;
+
+export const Tabs = styled.div`
+  flex: 1;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
 `;

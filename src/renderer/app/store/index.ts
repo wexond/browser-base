@@ -5,7 +5,6 @@ import { remote } from 'electron';
 import { AddressBarStore } from './address-bar';
 import { MenuStore } from './menu';
 import { TabsStore } from './tabs';
-import { TabbarStore } from './tabbar';
 import { PageMenuStore } from './page-menu';
 import { HistoryStore } from './history';
 import { BookmarksStore } from './bookmarks';
@@ -20,7 +19,6 @@ import { dictionaries } from '~/defaults';
 import { KeyBindingsStore } from './key-bindings';
 
 export class Store {
-  public tabbarStore = new TabbarStore();
   public tabsStore = new TabsStore();
   public pagesStore = new PagesStore();
   public menuStore = new MenuStore();

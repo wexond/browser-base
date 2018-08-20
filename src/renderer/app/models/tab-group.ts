@@ -40,7 +40,7 @@ export class TabGroup {
   }
 
   public removeTab(id: number) {
-    this.tabs = this.tabs.filter(x => x.id !== id);
+    (this.tabs as any).replace(this.tabs.filter(x => x.id !== id));
   }
 
   public getSelectedTab() {
@@ -62,7 +62,7 @@ export class TabGroup {
 
   public setTabsLefts(animation: boolean) {
     const tabs = this.tabs.filter(x => !x.isClosing);
-    const tabbarWidth = store.tabbarStore.getWidth();
+    const tabbarWidth = store.tabsStore.getContainerWidth();
 
     let left = 0;
 
@@ -92,17 +92,20 @@ export class TabGroup {
 
     if (direction === 'left') {
       for (let i = index; i--;) {
-        if (callingTab.left <= this.tabs[i].width / 2 + this.tabs[i].left) {
-          this.replaceTab(this.tabs[i + 1], this.tabs[i]);
+        const tab = this.tabs[i];
+        if (callingTab.left <= tab.width / 2 + tab.left) {
+          this.replaceTab(this.tabs[i + 1], tab);
+        } else {
+          break;
         }
       }
     } else if (direction === 'right') {
       for (let i = index + 1; i < this.tabs.length; i++) {
-        if (
-          callingTab.left + callingTab.width >=
-          this.tabs[i].width / 2 + this.tabs[i].left
-        ) {
-          this.replaceTab(this.tabs[i - 1], this.tabs[i]);
+        const tab = this.tabs[i];
+        if (callingTab.left + callingTab.width >= tab.width / 2 + tab.left) {
+          this.replaceTab(this.tabs[i - 1], tab);
+        } else {
+          break;
         }
       }
     }

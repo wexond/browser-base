@@ -4,16 +4,12 @@ import Suggestion from '../Suggestion';
 import { Caption, StyledSuggestions } from './styles';
 import store from '@app/store';
 
-interface Props {
-  visible: boolean;
-}
-
 @observer
-export default class Suggestions extends React.Component<Props, {}> {
+export default class Suggestions extends React.Component {
   private suggestions: HTMLDivElement;
 
   public render() {
-    const { visible } = this.props;
+    const visible = store.addressBarStore.toggled;
     const { suggestions } = store.suggestionsStore;
 
     let vis = visible;

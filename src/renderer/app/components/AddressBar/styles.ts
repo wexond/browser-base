@@ -11,7 +11,7 @@ interface AddressBarProps {
 export const StyledAddressBar = styled.div`
   position: absolute;
   width: 100%;
-  transition: 0.3s opacity;
+  transition: 0.3s opacity, 0.2s transform;
   z-index: 10;
   max-width: 640px;
   left: 50%;
@@ -26,7 +26,7 @@ export const StyledAddressBar = styled.div`
     top: ${suggestionsVisible
       ? '1px'
       : `calc(50% - ${ADDRESS_BAR_HEIGHT}px / 2)`};
-    transform: translateX(-50%);
+    transform: translateX(-50%) ${visible ? '' : 'translateY(-30px)'};
     opacity: ${visible ? 1 : 0};
     -webkit-app-region: ${visible ? 'no-drag' : ''};
     pointer-events: ${visible ? 'auto' : 'none'};
