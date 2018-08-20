@@ -1,7 +1,7 @@
 import { Power2 } from 'gsap';
 
 // Toolbar
-export const TOOLBAR_HEIGHT = 42;
+export const TOOLBAR_HEIGHT = 40;
 export const TOOLBAR_BUTTON_WIDTH = 38;
 
 // Tabs

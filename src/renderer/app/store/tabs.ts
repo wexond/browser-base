@@ -3,6 +3,7 @@ import { TabGroup } from '../models';
 import { defaultCreateTabProperties } from '~/defaults/create-tab-properties';
 import { TAB_ANIMATION_EASING, TAB_ANIMATION_DURATION } from '~/constants';
 import { TweenLite } from 'gsap';
+import HorizontalScrollbar from '@app/components/HorizontalScrollbar';
 
 export class TabsStore {
   @observable
@@ -17,10 +18,16 @@ export class TabsStore {
   @observable
   public menuVisible: boolean = false;
 
+  @observable
+  public scrollbarVisible: boolean = false;
+
+  public lastScrollLeft: number = 0;
   public lastMouseX: number = 0;
   public mouseStartX: number = 0;
   public tabStartX: number = 0;
-  public dragDirection: 'left' | 'right' | '' = '';
+
+  public scrollbarRef: HorizontalScrollbar;
+  public containerRef: HTMLDivElement;
 
   private rearrangeTabsTimer = {
     canReset: false,
@@ -45,6 +52,11 @@ export class TabsStore {
   public resetRearrangeTabsTimer() {
     this.rearrangeTabsTimer.time = 0;
     this.rearrangeTabsTimer.canReset = true;
+  }
+
+  public getContainerWidth() {
+    if (this.containerRef) return this.containerRef.offsetWidth;
+    return 0;
   }
 
   public getGroupById(id: number) {

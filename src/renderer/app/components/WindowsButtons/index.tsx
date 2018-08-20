@@ -1,14 +1,14 @@
 import React from 'react';
-import Toolbar from '../Toolbar';
 import WindowsButton from '../WindowsButton';
 import { minimizeWindow, maximizeWindow, closeWindow } from '~/utils/window';
 import { icons } from '~/defaults';
+import ToolbarSeparator from '@app/components/ToolbarSeparator';
 
 export default class WindowsControls extends React.Component {
   public render() {
     return (
       <React.Fragment>
-        <Toolbar.Separator />
+        <ToolbarSeparator />
         <WindowsButton icon={icons.windowsMinimize} onClick={minimizeWindow} />
         <WindowsButton icon={icons.windowsMaximize} onClick={maximizeWindow} />
         <WindowsButton

@@ -13,8 +13,8 @@ export default class extends React.Component<{ tabGroup: TabGroup }> {
   public componentDidMount() {
     observe(this.props.tabGroup.tabs, (change: any) => {
       if (change.addedCount > 0 && change.removedCount === 0) {
-        if (store.tabbarStore.scrollbarRef) {
-          store.tabbarStore.scrollbarRef.scrollToEnd(
+        if (store.tabsStore.scrollbarRef) {
+          store.tabsStore.scrollbarRef.scrollToEnd(
             TAB_ANIMATION_DURATION * 1000,
           );
         }

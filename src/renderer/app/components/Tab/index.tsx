@@ -3,16 +3,7 @@ import React from 'react';
 
 import Preloader from '../../../components/Preloader';
 import Ripple from '../../../components/Ripple';
-import {
-  Circle,
-  StyledTab,
-  Content,
-  Icon,
-  Title,
-  Close,
-  Overlay,
-  RightBorder,
-} from './styles';
+import { Circle, StyledTab, Content, Icon, Title, Close } from './styles';
 import { Tab } from '../../models';
 import store from '@app/store';
 import { closeWindow } from '~/utils/window';
@@ -28,37 +19,13 @@ export default class extends React.Component<{ tab: Tab }, {}> {
 
     tab.setLeft(tab.getLeft(), false);
     tab.tabGroup.updateTabsBounds(true);
-
-    const frame = () => {
-      if (tab.ref != null) {
-        const boundingRect = tab.ref.getBoundingClientRect();
-        if (
-          store.mouse.x >= boundingRect.left &&
-          store.mouse.x <= boundingRect.left + tab.ref.offsetWidth &&
-          store.mouse.y >= boundingRect.top &&
-          store.mouse.y <= boundingRect.top + tab.ref.offsetHeight
-        ) {
-          if (!tab.hovered && !store.tabsStore.isDragging) {
-            tab.hovered = true;
-          }
-        } else if (tab.hovered) {
-          tab.hovered = false;
-        }
-        requestAnimationFrame(frame);
-      }
-    };
-
-    requestAnimationFrame(frame);
   }
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const { pageX, pageY } = e;
     const { tab } = this.props;
-    const { tabGroup } = tab;
 
-    const selected = tabGroup.selectedTab === tab.id;
-
-    store.addressBarStore.canToggle = selected;
+    store.addressBarStore.canToggle = tab.tabGroup.selectedTab === tab.id;
 
     tab.select();
 
@@ -66,9 +33,8 @@ export default class extends React.Component<{ tab: Tab }, {}> {
     store.tabsStore.isDragging = true;
     store.tabsStore.mouseStartX = pageX;
     store.tabsStore.tabStartX = tab.left;
-    store.tabsStore.dragDirection = '';
 
-    store.tabbarStore.lastScrollLeft = store.tabbarStore.ref.scrollLeft;
+    store.tabsStore.lastScrollLeft = store.tabsStore.containerRef.scrollLeft;
 
     this.ripple.makeRipple(pageX, pageY);
   };
@@ -152,6 +118,12 @@ export default class extends React.Component<{ tab: Tab }, {}> {
     }
   };
 
+  public onMouseOver = () => {
+    this.props.tab.hovered = true;
+  };
+
+  public onMouseLeave = () => (this.props.tab.hovered = false);
+
   public render() {
     const { tab, children } = this.props;
     const { title, isClosing, hovered, favicon, loading, tabGroup } = tab;
@@ -176,10 +148,13 @@ export default class extends React.Component<{ tab: Tab }, {}> {
     return (
       <StyledTab
         selected={selected}
+        hovered={hovered}
         onMouseDown={this.onMouseDown}
+        onMouseOver={this.onMouseOver}
+        onMouseLeave={this.onMouseLeave}
         onClick={this.onClick}
+        borderVisible={rightBorderVisible}
         isClosing={isClosing}
-        visible={!store.addressBarStore.toggled}
         innerRef={(r: HTMLDivElement) => (tab.ref = r)}
       >
         <Content hovered={hovered} selected={selected}>
@@ -198,14 +173,12 @@ export default class extends React.Component<{ tab: Tab }, {}> {
           <Circle />
         </Close>
         {children}
-        <Overlay hovered={hovered} selected={selected} />
         <Ripple
           rippleTime={0.6}
           ref={r => (this.ripple = r)}
           opacity={0.15}
           color={colors.blue['500']}
         />
-        <RightBorder visible={rightBorderVisible} />
       </StyledTab>
     );
   }

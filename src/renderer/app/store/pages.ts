@@ -16,6 +16,6 @@ export class PagesStore {
   }
 
   public removePage(id: number) {
-    this.pages = this.pages.filter(x => x.id !== id);
+    (this.pages as any).replace(this.pages.filter(x => x.id !== id));
   }
 }
