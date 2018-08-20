@@ -10,7 +10,7 @@ export interface Props {
   customRippleBehavior?: boolean;
   children?: any;
   style?: any;
-  onChange?: (id?: number) => void;
+  onChange?: (value?: any) => void;
   onMouseUp?: DropdownEvent;
 }
 

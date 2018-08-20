@@ -251,7 +251,7 @@ export default class extends React.Component<{ page: Page }> {
           favicon: this.tab.favicon,
           date: new Date().toString(),
         },
-        (err, doc: HistoryItem) => {
+        (err: any, doc: HistoryItem) => {
           if (err) return console.warn(err);
           this.lastHistoryItemID = doc._id;
         },
