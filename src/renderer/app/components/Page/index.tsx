@@ -8,6 +8,8 @@ import { Page, Tab } from '../../models';
 import store from '@app/store';
 import { PageMenuMode } from '~/enums';
 import { databases } from '~/defaults/databases';
+import { HistoryItem } from '~/interfaces';
+import { addFavicon } from '~/utils/favicons';
 
 @observer
 export default class extends React.Component<{ page: Page }> {
@@ -250,7 +252,7 @@ export default class extends React.Component<{ page: Page }> {
           favicon: this.tab.favicon,
           date: new Date().toString(),
         },
-        (err, doc: any) => {
+        (err, doc: HistoryItem) => {
           if (err) return console.warn(err);
           this.lastHistoryItemID = doc._id;
         },
@@ -270,8 +272,7 @@ export default class extends React.Component<{ page: Page }> {
           this.tab.favicon = '';
         } else {
           this.tab.favicon = favicons[0];
-          // TODO: nedb
-          // database.addFavicon(favicons[0]);
+          addFavicon(favicons[0]);
         }
       }
       this.updateData();
