@@ -9,7 +9,6 @@ import store from '@app/store';
 import { PageMenuMode } from '~/enums';
 import { databases } from '~/defaults/databases';
 import { HistoryItem } from '~/interfaces';
-import { addFavicon } from '~/utils/favicons';
 
 @observer
 export default class extends React.Component<{ page: Page }> {
@@ -272,7 +271,7 @@ export default class extends React.Component<{ page: Page }> {
           this.tab.favicon = '';
         } else {
           this.tab.favicon = favicons[0];
-          addFavicon(favicons[0]);
+          store.faviconsStore.addFavicon(favicons[0]);
         }
       }
       this.updateData();
