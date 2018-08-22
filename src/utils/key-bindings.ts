@@ -1,7 +1,8 @@
 import fs from 'fs';
 import Mousetrap from 'mousetrap';
 
-import { Commands, defaultPaths } from '../defaults';
+import { commands } from '~/defaults/commands';
+import { defaultPaths } from '~/defaults';
 import { KeyBinding } from '../interfaces';
 import { getPath } from './paths';
 
@@ -10,12 +11,12 @@ const defaultKeyBindings = require('../../static/defaults/key-bindings.json');
 export const bindKeys = (bindings: KeyBinding[]) => {
   for (const binding of bindings) {
     if (!binding.key.includes('digit')) {
-      Mousetrap.bind(binding.key, Commands[binding.command]);
+      Mousetrap.bind(binding.key, commands[binding.command]);
     } else {
       for (let i = 0; i <= 9; i++) {
         Mousetrap.bind(
           binding.key.replace('digit', i),
-          Commands[binding.command],
+          commands[binding.command],
         );
       }
     }
