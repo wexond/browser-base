@@ -86,7 +86,7 @@ export default class TabGroupItem extends React.Component<Props, {}> {
       }
     }
 
-    this.setState({ inputVisible: flag });
+    data.inputVisible = flag;
   };
 
   public render() {
