@@ -249,18 +249,12 @@ export default class extends React.Component<{ page: Page }> {
     this.tab.loading = true;
 
     if (url !== this.lastURL && isMainFrame && !url.startsWith('wexond://')) {
-      databases.history.insert(
-        {
-          title: this.tab.title,
-          url,
-          favicon: this.tab.favicon,
-          date: new Date().toString(),
-        },
-        (err: any, doc: HistoryItem) => {
-          if (err) return console.warn(err);
-          this.lastHistoryItemID = doc._id;
-        },
-      );
+      this.lastHistoryItemID = await store.historyStore.addItem({
+        title: this.tab.title,
+        url,
+        favicon: this.tab.favicon,
+        date: new Date().toString(),
+      });
 
       this.lastURL = url;
     }
