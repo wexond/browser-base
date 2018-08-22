@@ -39,7 +39,9 @@ export default class KeyboardShortcuts extends React.Component {
             <tbody>
               {store.keyBindingsStore.keyBindings.map((data, key) => (
                 <BodyRow key={key}>
-                  <BodyItem>{data.command}</BodyItem>
+                  <BodyItem>
+                    {store.dictionary.keyCommands[data.command]}
+                  </BodyItem>
                   <BodyItem>
                     {typeof data.key === 'string' && (
                       <Chip keyBinding={data} onClick={this.onChipClick} />

@@ -1,11 +1,10 @@
-import { observer, Provider } from 'mobx-react';
+import { observer } from 'mobx-react';
 import React from 'react';
 
 import News from '../News';
-import WeatherCard from '../WeatherCard';
-
+/*import WeatherCard from '../WeatherCard';
+import { getWeather } from '~/utils/weather';*/
 import { Column, Content, StyledApp } from './styles';
-import { getWeather } from '~/utils/weather';
 
 import store from '@newtab/store';
 
@@ -31,9 +30,9 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
   };
 
   public async loadData() {
-    const weatherData = await getWeather('warsaw', 'en', 'C', 24);
+    /*const weatherData = await getWeather('warsaw', 'en', 'C', 24);
 
-    store.weatherStore.forecast = weatherData;
+    store.weatherStore.forecast = weatherData;*/
     store.newsStore.news = await store.newsStore.getNews('us');
 
     this.onResize();
@@ -43,26 +42,40 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
     const { columns } = store.newsStore;
 
     return (
-      <Provider store={store}>
-        <StyledApp>
-          <Content>
+      <StyledApp>
+        <Content>
+          <Column>{columns.length > 0 && <News data={columns[0]} />}</Column>
+          {columns.length > 1 && (
             <Column>
-              <WeatherCard data={store.weatherStore.forecast} />
-              {columns.length > 0 && <News data={columns[0]} />}
+              <News data={columns[1]} />
             </Column>
-            {columns.length > 1 && (
-              <Column>
-                <News data={columns[1]} />
-              </Column>
-            )}
-            {columns.length > 2 && (
-              <Column>
-                <News data={columns[2]} />
-              </Column>
-            )}
-          </Content>
-        </StyledApp>
-      </Provider>
+          )}
+          {columns.length > 2 && (
+            <Column>
+              <News data={columns[2]} />
+            </Column>
+          )}
+        </Content>
+      </StyledApp>
     );
   }
 }
+
+/*
+      <Content>
+        <Column>
+          <WeatherCard data={store.weatherStore.forecast} />
+          {columns.length > 0 && <News data={columns[0]} />}
+        </Column>
+        {columns.length > 1 && (
+          <Column>
+            <News data={columns[1]} />
+          </Column>
+        )}
+        {columns.length > 2 && (
+          <Column>
+            <News data={columns[2]} />
+          </Column>
+        )}
+      </Content>
+        */
