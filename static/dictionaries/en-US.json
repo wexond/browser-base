@@ -78,5 +78,18 @@
   "general": {
     "expand": "expand",
     "collapse": "collapse"
+  },
+  "keyCommands": {
+    "tabs.switch": "Switch between tabs",
+    "tabs.new": "Open newtab",
+    "tabs.reload": "Reload current tab",
+    "tabs.back": "Go back",
+    "tabs.forward": "Go forward",
+    "tabs.home": "Back to newtab",
+    "tabGroups.show": "Show tab groups",
+    "menu.show": "Show menu",
+    "history.show": "Show history",
+    "bookmarks.show": "Show bookmarks",
+    "wexond.hideAllMenu": "Hide all menu"
   }
 }

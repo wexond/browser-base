@@ -86,7 +86,7 @@ export default class BookmarkItem extends React.Component<Props> {
 
   public onWindowMouseDown = () => {
     this.props.data.inputVisible = false;
-    this.saveFolderName();
+    this.saveName();
 
     window.removeEventListener('mousedown', this.onWindowMouseDown);
   };
@@ -97,7 +97,7 @@ export default class BookmarkItem extends React.Component<Props> {
     }
   };
 
-  public saveFolderName = async () => {
+  public saveName = async () => {
     const { data } = this.props;
     const title = this.input.value;
 
