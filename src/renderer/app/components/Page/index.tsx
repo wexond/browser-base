@@ -358,6 +358,7 @@ export default class extends React.Component<{ page: Page }> {
             page.webview = r;
             this.webview = r;
           }}
+          partition="persist:webviewsession"
           preload={`file://${resolve(
             remote.app.getAppPath(),
             'build/webview-preload.js',

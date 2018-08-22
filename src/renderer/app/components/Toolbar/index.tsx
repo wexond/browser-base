@@ -48,7 +48,6 @@ class SecondSeparator extends React.Component {
     return (
       <ToolbarSeparator
         style={{
-          marginLeft: toggled ? 0 : 8,
           visibility: toggled ? 'hidden' : 'visible',
         }}
       />
