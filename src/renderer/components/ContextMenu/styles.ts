@@ -4,7 +4,6 @@ import { shadows } from '@mixins';
 export interface StyledMenuProps {
   visible: boolean;
   width: number;
-  dense: boolean;
 }
 
 export const StyledMenu = styled.div`
@@ -16,10 +15,10 @@ export const StyledMenu = styled.div`
 
   box-shadow: ${shadows(8)};
 
-  ${({ visible, width, dense }: StyledMenuProps) => css`
+  ${({ visible, width }: StyledMenuProps) => css`
     visibility: ${visible ? 'visible' : 'hidden'};
     width: ${width}px;
-    padding-top: ${dense ? 4 : 8}px;
-    padding-bottom: ${dense ? 4 : 8}px;
+    padding-top: 4px;
+    padding-bottom: 4px;
   `};
 `;
