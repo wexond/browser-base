@@ -26,9 +26,18 @@ export interface Dictionary {
   };
   bookmarks: {
     title: string;
+    newFolder: string;
   };
   settings: {
     title: string;
+  };
+  keyboardShortcuts: {
+    title: string;
+    command: string;
+    keyBinding: string;
+    source: string;
+    default: string;
+    user: string;
   };
   extensions: {
     title: string;

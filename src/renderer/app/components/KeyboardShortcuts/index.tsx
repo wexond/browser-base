@@ -12,7 +12,7 @@ import {
   BodyItem,
 } from './styles';
 import store from '@app/store';
-import { KeyBinding } from '~/interfaces';
+import { KeyBinding, Dictionary } from '~/interfaces';
 import { PageContent } from '../Menu/styles';
 
 @observer
@@ -25,15 +25,17 @@ export default class KeyboardShortcuts extends React.Component {
   };
 
   public render() {
+    const keyboardShortcuts = store.dictionary.keyboardShortcuts;
+
     return (
       <PageContent>
         <Container>
           <Table>
             <thead>
               <HeadRow>
-                <HeadItem>Command</HeadItem>
-                <HeadItem>Keybinding</HeadItem>
-                <HeadItem>Source</HeadItem>
+                <HeadItem>{keyboardShortcuts.command}</HeadItem>
+                <HeadItem>{keyboardShortcuts.keyBinding}</HeadItem>
+                <HeadItem>{keyboardShortcuts.source}</HeadItem>
               </HeadRow>
             </thead>
             <tbody>
@@ -47,7 +49,11 @@ export default class KeyboardShortcuts extends React.Component {
                       <Chip keyBinding={data} onClick={this.onChipClick} />
                     )}
                   </BodyItem>
-                  <BodyItem>{data.isChanged ? 'User' : 'Default'}</BodyItem>
+                  <BodyItem>
+                    {data.isChanged
+                      ? keyboardShortcuts.user
+                      : keyboardShortcuts.default}
+                  </BodyItem>
                 </BodyRow>
               ))}
             </tbody>

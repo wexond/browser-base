@@ -8,6 +8,7 @@ import Bookmarks from '../Bookmarks';
 import KeyboardShortcuts from '../KeyboardShortcuts';
 import About from '../About';
 import History from '../History';
+import { Dictionary } from '~/interfaces';
 
 const historyActions = {
   selectAll: () => {
@@ -43,7 +44,7 @@ const bookmarksActions = {
 export default class GlobalMenu extends React.Component {
   public render() {
     const editingHistory = store.historyStore.selectedItems.length > 0;
-    const dictionary = store.dictionary;
+    const dictionary: Dictionary = store.dictionary;
 
     return (
       <Menu title="Wexond">
@@ -85,7 +86,7 @@ export default class GlobalMenu extends React.Component {
             icon={icons.selectAll}
           />
           <Menu.Item
-            title="New folder"
+            title={dictionary.bookmarks.newFolder}
             icon={icons.addFolder}
             onClick={bookmarksActions.addFolder}
           />
@@ -96,7 +97,7 @@ export default class GlobalMenu extends React.Component {
           searchVisible
         />
         <Menu.Item
-          title="Keyboard shortcuts"
+          title={dictionary.keyboardShortcuts.title}
           icon={icons.keyboardShortcuts}
           searchVisible
         />

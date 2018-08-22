@@ -14,18 +14,27 @@
     "openWebsite": "otwórz stronę"
   },
   "newTab": {
-    "precipitation": "Opady deszczu",
-    "winds": "Wiatry"
+    "precipitation": "Opady",
+    "winds": "Wiatr"
   },
   "history": {
     "title": "Historia",
     "clearHistory": "Wyczyść historię"
   },
   "bookmarks": {
-    "title": "Zakładki"
+    "title": "Zakładki",
+    "newFolder": "Nowy folder"
   },
   "settings": {
     "title": "Ustawienia"
+  },
+  "keyboardShortcuts": {
+    "title": "Skróty klawiaturowe",
+    "command": "Komenda",
+    "keyBinding": "Skrót",
+    "source": "Źródło",
+    "default": "Domyślny",
+    "user": "Użytkownik"
   },
   "extensions": {
     "title": "Rozszerzenia"
