@@ -84,5 +84,18 @@
   "general": {
     "expand": "więcej",
     "collapse": "mniej"
+  },
+  "keyCommands": {
+    "tabs.switch": "Przełącz między kartami",
+    "tabs.new": "Otwórz nową kartę",
+    "tabs.reload": "Odśwież kartę",
+    "tabs.back": "Cofnij się do tyłu",
+    "tabs.forward": "Cofnij się do przodu",
+    "tabs.home": "Cofnij się do strony nowej karty",
+    "workspaces.show": "Pokaż grupy kart",
+    "menu.show": "Pokaż menu",
+    "history.show": "Pokaż historię",
+    "bookmarks.show": "Pokaż zakładki",
+    "wexond.hideAllMenu": "Ukryj wszystkie menu"
   }
 }
