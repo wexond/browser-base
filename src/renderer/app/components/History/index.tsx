@@ -8,14 +8,11 @@ import HistorySection from '../HistorySection';
 export default class History extends React.Component {
   public render() {
     const { historyStore } = store;
-    const sections = historyStore.getSections(
-      historyStore.getItems(store.menuStore.searchText),
-    );
 
     return (
       <PageContent>
         <PageContainer>
-          {sections.map(section => (
+          {historyStore.historySections.map(section => (
             <HistorySection key={section.id} section={section} />
           ))}
         </PageContainer>
