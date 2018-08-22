@@ -2,8 +2,8 @@ import { observer } from 'mobx-react';
 import React from 'react';
 
 import News from '../News';
-/*import WeatherCard from '../WeatherCard';
-import { getWeather } from '~/utils/weather';*/
+import WeatherCard from '../WeatherCard';
+import { getWeather } from '~/utils/weather';
 import { Column, Content, StyledApp } from './styles';
 
 import store from '@newtab/store';
@@ -30,9 +30,9 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
   };
 
   public async loadData() {
-    /*const weatherData = await getWeather('warsaw', 'en', 'C', 24);
+    const weatherData = await getWeather('warsaw', 'en', 'C', 24);
 
-    store.weatherStore.forecast = weatherData;*/
+    store.weatherStore.forecast = weatherData;
     store.newsStore.news = await store.newsStore.getNews('us');
 
     this.onResize();
@@ -44,7 +44,10 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
     return (
       <StyledApp>
         <Content>
-          <Column>{columns.length > 0 && <News data={columns[0]} />}</Column>
+          <Column>
+            <WeatherCard data={store.weatherStore.forecast} />
+            {columns.length > 0 && <News data={columns[0]} />}
+          </Column>
           {columns.length > 1 && (
             <Column>
               <News data={columns[1]} />
@@ -60,22 +63,3 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
     );
   }
 }
-
-/*
-      <Content>
-        <Column>
-          <WeatherCard data={store.weatherStore.forecast} />
-          {columns.length > 0 && <News data={columns[0]} />}
-        </Column>
-        {columns.length > 1 && (
-          <Column>
-            <News data={columns[1]} />
-          </Column>
-        )}
-        {columns.length > 2 && (
-          <Column>
-            <News data={columns[2]} />
-          </Column>
-        )}
-      </Content>
-        */
