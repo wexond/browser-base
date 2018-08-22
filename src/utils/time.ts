@@ -114,8 +114,6 @@ export const formatDate = (dictionary: Dictionary, date: Date) => {
     prefix = `${dateAndTime.yesterday} - `;
   }
 
-  return '';
-
   const dayName = dateAndTime.days[getDayIndex(date)];
   const monthName = dateAndTime.months[date.getMonth()];
 
