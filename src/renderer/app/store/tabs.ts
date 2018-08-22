@@ -60,6 +60,10 @@ export class TabsStore {
     this.rearrangeTabsTimer.canReset = true;
   }
 
+  public removeGroup(id: number) {
+    (this.groups as any).replace(this.groups.filter(x => x.id !== id));
+  }
+
   public getContainerWidth() {
     if (this.containerRef) return this.containerRef.offsetWidth;
     return 0;
