@@ -78,5 +78,8 @@
   "general": {
     "expand": "expand",
     "collapse": "collapse"
+  },
+  "keyCommands": {
+    "tabs.switch": "Switch between tabs"
   }
 }
