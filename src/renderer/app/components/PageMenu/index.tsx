@@ -7,9 +7,11 @@ import { createWriteStream } from 'fs';
 import { parse } from 'url';
 import { basename, extname } from 'path';
 import http from 'http';
+import { observer } from 'mobx-react';
 
 const { dialog } = remote;
 
+@observer
 export default class PageMenu extends React.Component {
   public onInspectElementClick = () => {
     const { x, y } = store.pageMenuStore.params;
