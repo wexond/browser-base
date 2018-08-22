@@ -20,13 +20,17 @@ export class HistoryStore {
         if (err) return console.warn(err);
 
         this.historyItems = items;
-        this.historySections = this.getSections(
-          this.getItems(store.menuStore.searchText),
-        );
+        this.loadSections();
 
         resolve();
       });
     });
+  }
+
+  public loadSections() {
+    this.historySections = this.getSections(
+      this.getItems(store.menuStore.searchText),
+    );
   }
 
   public getItems(filter = '') {
@@ -72,8 +76,16 @@ export class HistoryStore {
   }
 
   public removeItem(id: string) {
-    // TODO: nedb
-    /*store.historyItems = store.historyItems.filter(x => x.id !== id);
-    database.history.delete(id);*/
+    this.historyItems = this.historyItems.filter(x => x._id !== id);
+
+    databases.history.remove(
+      {
+        _id: id,
+      },
+      err => {
+        if (err) return console.warn(err);
+        this.loadSections();
+      },
+    );
   }
 }
