@@ -22,10 +22,19 @@
     "clearHistory": "Clear browsing history"
   },
   "bookmarks": {
-    "title": "Bookmarks"
+    "title": "Bookmarks",
+    "newFolder": "New folder"
   },
   "settings": {
     "title": "Settings"
+  },
+  "keyboardShortcuts": {
+    "title": "Keyboard shortcuts",
+    "command": "Command",
+    "keyBinding": "Keybinding",
+    "source": "Source",
+    "default": "Default",
+    "user": "User"
   },
   "extensions": {
     "title": "Extensions"
