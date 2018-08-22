@@ -76,11 +76,9 @@ export default class Ripple extends React.Component<IProps, IState> {
   };
 
   public fadeOut = () => {
-    requestAnimationFrame(() => {
-      this.setState({
-        rippleOpacity: 0,
-        opacityTransition: true,
-      });
+    this.setState({
+      rippleOpacity: 0,
+      opacityTransition: true,
     });
   };
 
