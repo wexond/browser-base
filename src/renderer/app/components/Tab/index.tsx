@@ -8,7 +8,7 @@ import { Tab } from '../../models';
 import store from '@app/store';
 import { closeWindow } from '~/utils/window';
 import { TAB_ANIMATION_DURATION } from '~/constants';
-import { colors } from '~/defaults';
+import { colors, transparency } from '~/defaults';
 
 @observer
 export default class extends React.Component<{ tab: Tab }, {}> {
@@ -158,7 +158,7 @@ export default class extends React.Component<{ tab: Tab }, {}> {
         innerRef={(r: HTMLDivElement) => (tab.ref = r)}
       >
         <Content hovered={hovered} selected={selected}>
-          {!loading && <Icon favicon={favicon.trim()} />}
+          {!loading && favicon !== '' && <Icon favicon={favicon.trim()} />}
           {loading && <Preloader thickness={6} size={16} />}
           <Title selected={selected} loading={loading} favicon={favicon}>
             {title}
