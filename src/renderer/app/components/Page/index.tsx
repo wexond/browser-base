@@ -300,15 +300,23 @@ export default class extends React.Component<{ page: Page }> {
 
   public updateData = () => {
     if (this.lastURL === this.tab.url && this.lastHistoryItemID) {
+      const url = this.webview.getURL();
+      const { title, favicon } = this.tab;
+
+      const item = store.historyStore.getById(this.lastHistoryItemID);
+      item.title = title;
+      item.url = url;
+      item.favicon = favicon;
+
       databases.history.update(
         {
           _id: this.lastHistoryItemID,
         },
         {
           $set: {
-            title: this.tab.title,
-            url: this.webview.getURL(),
-            favicon: this.tab.favicon,
+            title,
+            url,
+            favicon,
           },
         },
       );
