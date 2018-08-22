@@ -28,10 +28,11 @@ app.on('activate', () => {
 
 app.on('ready', () => {
   for (const key in defaultPaths) {
-    const filePath = getPath(defaultPaths[key]);
+    const path = defaultPaths[key];
+    const filePath = getPath(path);
     if (existsSync(filePath)) continue;
 
-    if (filePath.indexOf('.') === -1) {
+    if (path.indexOf('.') === -1) {
       mkdirSync(filePath);
     } else {
       writeFileSync(filePath, filesContent[key], 'utf8');
