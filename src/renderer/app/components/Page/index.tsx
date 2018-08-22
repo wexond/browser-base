@@ -59,20 +59,22 @@ export default class extends React.Component<{ page: Page }> {
   };
 
   public onURLChange = (url: string) => {
-    this.tab.url = url;
-    this.updateData();
-    this.tab.isBookmarked = !!store.bookmarksStore.bookmarks.find(
-      x => x.url === url,
-    );
-    this.emitEvent(
-      'tabs',
-      'onUpdated',
-      this.tab.id,
-      {
-        url,
-      },
-      this.tab.getApiTab(),
-    );
+    if (this.tab.url !== url) {
+      this.tab.url = url;
+      this.updateData();
+      this.tab.isBookmarked = !!store.bookmarksStore.bookmarks.find(
+        x => x.url === url,
+      );
+      this.emitEvent(
+        'tabs',
+        'onUpdated',
+        this.tab.id,
+        {
+          url,
+        },
+        this.tab.getApiTab(),
+      );
+    }
   };
 
   public addWebviewListener(name: string, callback: any) {
@@ -237,7 +239,7 @@ export default class extends React.Component<{ page: Page }> {
 
     store.navigationStateStore.refresh();
 
-    this.tab.url = url; // pal
+    this.onURLChange(url);
     this.tab.loading = false;
     this.tab.isBookmarked = store.bookmarksStore.isBookmarked(url);
   };
@@ -291,21 +293,27 @@ export default class extends React.Component<{ page: Page }> {
   };
 
   public updateData = () => {
-    if (this.lastURL === this.tab.url) {
-      if (this.lastHistoryItemID != null) {
-        databases.history.update(
-          {
-            _id: this.lastHistoryItemID,
+    if (this.lastURL === this.tab.url && this.lastHistoryItemID) {
+      const url = this.webview.getURL();
+      const { title, favicon } = this.tab;
+
+      const item = store.historyStore.getById(this.lastHistoryItemID);
+      item.title = title;
+      item.url = url;
+      item.favicon = favicon;
+
+      databases.history.update(
+        {
+          _id: this.lastHistoryItemID,
+        },
+        {
+          $set: {
+            title,
+            url,
+            favicon,
           },
-          {
-            $set: {
-              title: this.tab.title,
-              url: this.webview.getURL(),
-              favicon: this.tab.favicon,
-            },
-          },
-        );
-      }
+        },
+      );
     }
   };
 
