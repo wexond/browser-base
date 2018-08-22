@@ -29,10 +29,9 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
   };
 
   private container: HTMLDivElement;
-
   private isScrollingToEnd: boolean = false;
-
   private scrollTimeout: any;
+  private unmounted: boolean = false;
 
   public componentDidMount() {
     this.container = this.props.getContainer();
@@ -40,6 +39,7 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
     this.container.addEventListener('wheel', this.onWheel);
+    this.unmounted = false;
 
     this.resizeScrollbar();
   }
@@ -48,6 +48,7 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
     window.removeEventListener('mouseup', this.onMouseUp);
     window.removeEventListener('mousemove', this.onMouseMove);
     this.container.removeEventListener('wheel', this.onWheel);
+    this.unmounted = true;
   }
 
   public shouldComponentUpdate(nextProps: Props, nextState: State) {
@@ -73,6 +74,8 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
     const container = this.props.getContainer();
 
     if (this.props && container) {
+      if (this.unmounted) return;
+
       const { scrollWidth, offsetWidth, scrollLeft } = container;
 
       this.setState(({ thumbWidth }) => {
