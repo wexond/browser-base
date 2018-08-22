@@ -12,9 +12,10 @@ import {
 } from './styles';
 import { loadImage, getTimeOffset } from '~/utils';
 import store from '@newtab/store';
+import { NewsArticle } from '~/interfaces';
 
 export interface Props {
-  data: any;
+  data: NewsArticle;
 }
 
 export interface State {
@@ -62,11 +63,7 @@ export default class NewsCard extends React.Component<Props, State> {
               <Icon visible={loaded} src={data.icon} />
               <Source>
                 {data.source.name} -{' '}
-                {getTimeOffset(
-                  store.dictionary,
-                  new Date(data.publishedAt),
-                  this,
-                )}
+                {getTimeOffset(store.dictionary, new Date(data.publishedAt))}
               </Source>
             </SourceContainer>
           </Card.Header>

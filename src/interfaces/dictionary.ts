@@ -61,4 +61,7 @@ export interface Dictionary {
     expand: string;
     collapse: string;
   };
+  keyCommands: {
+    'tabs.switch': string;
+  };
 }
