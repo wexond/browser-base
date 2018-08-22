@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { hexToRgb } from '../../../utils';
 
 export const Root = styled.div`
   position: absolute;

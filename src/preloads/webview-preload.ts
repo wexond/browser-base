@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { runInThisContext } from 'vm';
 
-import { Manifest } from '../interfaces/manifest';
+import { Manifest } from '~/interfaces/manifest';
 import { getAPI } from './api';
 import { loadContent } from './load-content';
 

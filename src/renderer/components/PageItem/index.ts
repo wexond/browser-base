@@ -1,13 +1,13 @@
 import styled, { css } from 'styled-components';
-import { icons, opacity } from '../../../defaults';
-import { body2, centerImage } from '../../mixins';
+import { icons, transparency } from '~/defaults';
+import { body2, centerImage } from '@mixins';
 
-export const Root = styled.div`
+export const PageItem = styled.div`
   height: 56px;
   width: 100%;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, ${opacity.light.dividers});
+  border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
   position: relative;
   cursor: pointer;
 
@@ -38,13 +38,13 @@ export const Icon = styled.div`
 `;
 
 export const PrimaryText = styled.div`
-  opacity: ${opacity.light.primaryText};
+  opacity: ${transparency.light.primaryText};
 
   ${body2()};
 `;
 
 export const SecondaryText = styled.div`
-  opacity: ${opacity.light.secondaryText};
+  opacity: ${transparency.light.secondaryText};
 
   ${body2()};
 `;
@@ -61,24 +61,4 @@ export const Title = styled(PrimaryText)`
 
 export const Time = styled(SecondaryText)`
   margin-left: 24px;
-`;
-
-export const RemoveIcon = styled.div`
-  position: absolute;
-  left: 24px;
-  height: 16px;
-  width: 16px;
-  z-index: 2;
-  background-image: url(${icons.close});
-
-  ${centerImage('24px', 'auto')};
-
-  ${({ visible }: { visible: boolean }) => css`
-    opacity: ${visible ? opacity.light.inactiveIcon : 0};
-    pointer-events: ${visible ? 'auto' : 'none'};
-  `};
-
-  &:hover {
-    opacity: ${opacity.light.activeIcon};
-  }
 `;

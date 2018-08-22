@@ -1,9 +1,8 @@
 import * as React from 'react';
 
-import { colors } from '../../../defaults/colors';
-import { TextfieldType } from '../../../enums';
+import { colors } from '~/defaults/colors';
 
-import { executeEventStopPropagation } from '../../../utils';
+import { executeEventStopPropagation } from '~/utils';
 import {
   AssistiveText,
   Container,
@@ -24,7 +23,6 @@ export type KeyboardEvent = (e?: React.KeyboardEvent<HTMLInputElement>) => void;
 export interface IProps {
   color?: string;
   label?: string;
-  type?: TextfieldType;
   leadingIcon?: string;
   trailingIcon?: string;
   helperText?: any;
@@ -41,7 +39,6 @@ export interface IState {
 export default class Textfield extends React.Component<IProps, IState> {
   public static defaultProps = {
     color: colors.blue['500'],
-    type: TextfieldType.Filled,
   };
 
   public state: IState = {
@@ -53,14 +50,14 @@ export default class Textfield extends React.Component<IProps, IState> {
   public onTrailingIconClick = (e?: React.SyntheticEvent<HTMLDivElement>) => {
     // eslint-disable-next-line React/destructuring-assignment
     executeEventStopPropagation(e, this.props.onTrailingIconClick);
-  }
+  };
 
   public getValue = () => this.inputElement.value;
 
   public setValue = (value: string) => {
     this.inputElement.value = value;
     this.inputElement.focus();
-  }
+  };
 
   public render() {
     const {
@@ -115,13 +112,13 @@ export default class Textfield extends React.Component<IProps, IState> {
 
   private onClick = () => {
     this.inputElement.focus();
-  }
+  };
 
   private onFocus = () => {
     this.setState({
       activated: true,
     });
-  }
+  };
 
   private onBlur = () => {
     const { activated } = this.state;
@@ -131,12 +128,12 @@ export default class Textfield extends React.Component<IProps, IState> {
         activated: false,
       });
     }
-  }
+  };
 
   private onLeadingIconIconClick = (
     e?: React.SyntheticEvent<HTMLDivElement>,
   ) => {
     // eslint-disable-next-line React/destructuring-assignment
     executeEventStopPropagation(e, this.props.onLeadingIconClick);
-  }
+  };
 }

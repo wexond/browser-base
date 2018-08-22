@@ -1,10 +1,9 @@
 import { WeatherDailyItem, WeatherWeeklyItem } from '.';
-import { Locales, TemperatureUnit, TimeUnit } from '../enums';
 
 export interface WeatherForecast {
-  tempUnit?: TemperatureUnit;
-  timeUnit?: TimeUnit;
-  lang?: Locales;
+  tempUnit?: 'C' | 'F';
+  timeUnit?: 24 | 12;
+  lang?: string;
   daily?: WeatherDailyItem[];
   weekly?: WeatherWeeklyItem[];
   city?: string;

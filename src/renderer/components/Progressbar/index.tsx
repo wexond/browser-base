@@ -1,27 +1,28 @@
 import React from 'react';
 
-import { colors } from '../../../defaults/colors';
-import { ProgressType } from '../../../enums';
 import { Indicator, Root, Track } from './styles';
+import { colors } from '~/defaults';
 
 export interface IProps {
   color?: string;
-  type?: ProgressType;
+  determinate?: boolean;
+  indeterminate?: boolean;
   progress?: number;
 }
 
 export default class Button extends React.Component<IProps, {}> {
-  public static defaultProps = {
+  public static defaultProps: IProps = {
     color: colors.deepPurple['500'],
-    type: ProgressType.Indeterminate,
+    indeterminate: false,
+    determinate: false,
     progress: 50,
   };
 
   public render() {
-    const { color, progress, type } = this.props;
+    const { color, progress, determinate, indeterminate } = this.props;
 
     const firstIndicatorStyle =
-      (type === ProgressType.Determinate && {
+      (determinate && {
         width: `${progress}}%`,
       }) ||
       {};
@@ -29,7 +30,11 @@ export default class Button extends React.Component<IProps, {}> {
     return (
       <Root>
         <Track color={color} />
-        <Indicator type={type} color={color} style={firstIndicatorStyle} />
+        <Indicator
+          indeterminate={indeterminate}
+          color={color}
+          style={firstIndicatorStyle}
+        />
       </Root>
     );
   }

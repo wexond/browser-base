@@ -1,62 +1,58 @@
-import store from '../renderer/store';
-import {
-  createTab,
-  getCurrentWorkspace,
-  getCurrentWorkspaceTabs,
-  getSelectedPage,
-  selectTab,
-} from '../utils';
+import store from '@app/store';
 
-export const Commands: any = {
+interface Commands {
+  [key: string]: () => void;
+}
+
+export const commands: Commands = {
   'tabs.switch': (e?: KeyboardEvent) => {
-    const tabs = getCurrentWorkspaceTabs();
+    const { tabs } = store.tabsStore.getCurrentGroup();
 
     // 0
     if (e.keyCode === 48) {
-      selectTab(tabs[tabs.length - 1]);
+      tabs[tabs.length - 1].select();
     } else {
       // 1-9
       const index = e.keyCode - 49;
 
       if (tabs.length > index) {
-        selectTab(tabs[index]);
+        tabs[index].select();
       }
     }
   },
   'tabs.new': () => {
-    createTab();
+    store.tabsStore.addTab();
   },
   'tabs.reload': () => {
-    getSelectedPage().webview.reload();
+    store.pagesStore.getSelected().webview.reload();
   },
   'tabs.back': () => {
-    getSelectedPage().webview.goBack();
+    store.pagesStore.getSelected().webview.goBack();
   },
   'tabs.forward': () => {
-    getSelectedPage().webview.goForward();
+    store.pagesStore.getSelected().webview.goForward();
   },
   'tabs.home': () => {
     console.log('home');
   },
-  'workspaces.show': () => {
-    store.workspacesMenuVisible = true;
+  'tabGroups.show': () => {
+    store.tabsStore.menuVisible = true;
   },
   'history.show': () => {
-    store.menu.visible = true;
-    store.menu.selectedItem = 0;
+    store.menuStore.visible = true;
+    store.menuStore.selectedItem = 0;
   },
   'menu.show': () => {
-    store.menu.visible = true;
+    store.menuStore.visible = true;
   },
   'bookmarks.show': () => {
-    store.menu.visible = true;
-    store.menu.selectedItem = 1;
+    store.menuStore.visible = true;
+    store.menuStore.selectedItem = 1;
   },
   'wexond.hideAllMenu': () => {
-    store.workspacesMenuVisible = false;
-    store.menu.visible = false;
-    store.menu.selectedItem = null;
-    store.bookmarkDialogVisible = false;
-    store.pageMenuVisible = false;
+    store.menuStore.hide();
+    store.tabsStore.menuVisible = false;
+    store.bookmarksStore.dialogVisible = false;
+    store.pageMenuStore.visible = false;
   },
 };
