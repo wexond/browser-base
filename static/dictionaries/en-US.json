@@ -80,6 +80,16 @@
     "collapse": "collapse"
   },
   "keyCommands": {
-    "tabs.switch": "Switch between tabs"
+    "tabs.switch": "Switch between tabs",
+    "tabs.new": "Open newtab",
+    "tabs.reload": "Reload current tab",
+    "tabs.back": "Go backward",
+    "tabs.forward": "Go forward",
+    "tabs.home": "Back to newtab",
+    "workspaces.show": "Show workspaces",
+    "menu.show": "Show menu",
+    "history.show": "Show history",
+    "bookmarks.show": "Show bookmarks",
+    "wexond.hideAllMenu": "Hide all menu"
   }
 }
