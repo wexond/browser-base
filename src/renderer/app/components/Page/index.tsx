@@ -59,20 +59,22 @@ export default class extends React.Component<{ page: Page }> {
   };
 
   public onURLChange = (url: string) => {
-    this.tab.url = url;
-    this.updateData();
-    this.tab.isBookmarked = !!store.bookmarksStore.bookmarks.find(
-      x => x.url === url,
-    );
-    this.emitEvent(
-      'tabs',
-      'onUpdated',
-      this.tab.id,
-      {
-        url,
-      },
-      this.tab.getApiTab(),
-    );
+    if (this.tab.url !== url) {
+      this.tab.url = url;
+      this.updateData();
+      this.tab.isBookmarked = !!store.bookmarksStore.bookmarks.find(
+        x => x.url === url,
+      );
+      this.emitEvent(
+        'tabs',
+        'onUpdated',
+        this.tab.id,
+        {
+          url,
+        },
+        this.tab.getApiTab(),
+      );
+    }
   };
 
   public addWebviewListener(name: string, callback: any) {
@@ -237,7 +239,7 @@ export default class extends React.Component<{ page: Page }> {
 
     store.navigationStateStore.refresh();
 
-    this.tab.url = url; // pal
+    this.onURLChange(url);
     this.tab.loading = false;
     this.tab.isBookmarked = store.bookmarksStore.isBookmarked(url);
   };
@@ -297,21 +299,19 @@ export default class extends React.Component<{ page: Page }> {
   };
 
   public updateData = () => {
-    if (this.lastURL === this.tab.url) {
-      if (this.lastHistoryItemID != null) {
-        databases.history.update(
-          {
-            _id: this.lastHistoryItemID,
+    if (this.lastURL === this.tab.url && this.lastHistoryItemID) {
+      databases.history.update(
+        {
+          _id: this.lastHistoryItemID,
+        },
+        {
+          $set: {
+            title: this.tab.title,
+            url: this.webview.getURL(),
+            favicon: this.tab.favicon,
           },
-          {
-            $set: {
-              title: this.tab.title,
-              url: this.webview.getURL(),
-              favicon: this.tab.favicon,
-            },
-          },
-        );
-      }
+        },
+      );
     }
   };
 
