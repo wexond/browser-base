@@ -9,13 +9,21 @@ export class HistoryStore {
   public historyItems: HistoryItem[] = [];
 
   @observable
+  public historySections: HistorySection[] = [];
+
+  @observable
   public selectedItems: string[] = [];
 
   public load() {
     return new Promise(async resolve => {
       databases.history.find({}, (err: any, items: HistoryItem[]) => {
         if (err) return console.warn(err);
+
         this.historyItems = items;
+        this.historySections = this.getSections(
+          this.getItems(store.menuStore.searchText),
+        );
+
         resolve();
       });
     });
