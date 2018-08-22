@@ -13,16 +13,8 @@ export interface Props {
   data: Bookmark;
 }
 
-export interface State {
-  inputVisible: boolean;
-}
-
 @observer
-export default class BookmarkItem extends React.Component<Props, State> {
-  public state: State = {
-    inputVisible: false,
-  };
-
+export default class BookmarkItem extends React.Component<Props> {
   private cmdPressed = false;
 
   private input: HTMLInputElement;
@@ -81,7 +73,7 @@ export default class BookmarkItem extends React.Component<Props, State> {
     e.preventDefault();
     e.stopPropagation();
 
-    this.setState({ inputVisible: true });
+    data.inputVisible = true;
     this.input.value = data.title;
     this.input.focus();
 
@@ -93,7 +85,7 @@ export default class BookmarkItem extends React.Component<Props, State> {
   };
 
   public onWindowMouseDown = () => {
-    this.setState({ inputVisible: false });
+    this.props.data.inputVisible = false;
     this.saveFolderName();
 
     window.removeEventListener('mousedown', this.onWindowMouseDown);
