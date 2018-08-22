@@ -25,15 +25,15 @@
   },
   {
     "key": "ctrl+s",
-    "command": "workspaces.show"
-  },
-  {
-    "key": "ctrl+h",
-    "command": "history.show"
+    "command": "tabGroups.show"
   },
   {
     "key": "ctrl+e",
     "command": "menu.show"
+  },
+  {
+    "key": "ctrl+h",
+    "command": "history.show"
   },
   {
     "key": "ctrl+b",
