@@ -1,3 +1,5 @@
+import { Dictionary } from '~/interfaces';
+
 export const getTimePeriod = (hours: number, format: 24 | 12) => {
   if (format === 12) {
     return hours > 12 ? ' PM' : ' AM';
@@ -100,20 +102,22 @@ export const getTimeOffset = (dictionary: any, date: Date, t?: any) => {
   )} ${dateAndTime.ago}`;
 };
 
-export const formatDate = (dictionary: any, date: Date) => {
+export const formatDate = (dictionary: Dictionary, date: Date) => {
   const { dateAndTime } = dictionary;
   const currentDate = new Date();
 
   let prefix = '';
 
   if (date.getDate() === currentDate.getDate()) {
-    prefix = `${dictionary.today} - `;
+    prefix = `${dateAndTime.today} - `;
   } else if (date.getDate() === currentDate.getDate() - 1) {
-    prefix = `${dictionary.yesterday} - `;
+    prefix = `${dateAndTime.yesterday} - `;
   }
 
-  const dayName = dictionary.days[getDayIndex(date)];
-  const monthName = dictionary.months[date.getMonth()];
+  return '';
+
+  const dayName = dateAndTime.days[getDayIndex(date)];
+  const monthName = dateAndTime.months[date.getMonth()];
 
   return `${prefix}${dayName}, ${monthName} ${date.getDate()}, ${date.getFullYear()}`;
 };

@@ -25,8 +25,7 @@ class App extends React.Component {
 
     await store.faviconsStore.load();
     await store.bookmarksStore.load();
-    /*
-    store.historyItems = await database.history.toArray();*/
+    await store.historyStore.load();
 
     store.keyBindingsStore.keyBindings = await getKeyBindings();
     bindKeys(store.keyBindingsStore.keyBindings);
