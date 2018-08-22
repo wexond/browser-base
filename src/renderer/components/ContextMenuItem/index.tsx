@@ -9,7 +9,6 @@ export interface IProps {
   onMouseDown?: ButtonEvent;
   visible?: boolean;
   disabled?: boolean;
-  dense?: boolean;
 }
 
 export default class MenuItem extends React.Component<IProps, {}> {
@@ -18,18 +17,11 @@ export default class MenuItem extends React.Component<IProps, {}> {
   };
 
   public render() {
-    const { visible, disabled, dense, children, onClick } = this.props;
+    const { visible, disabled, children, onClick } = this.props;
 
     return (
-      <StyledMenuItem
-        onClick={onClick}
-        disabled={disabled}
-        dense={dense}
-        visible={visible}
-      >
-        <Title dense={dense} disabled={disabled}>
-          {children}
-        </Title>
+      <StyledMenuItem onClick={onClick} disabled={disabled} visible={visible}>
+        <Title disabled={disabled}>{children}</Title>
       </StyledMenuItem>
     );
   }
