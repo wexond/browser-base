@@ -23,9 +23,9 @@ class App extends React.Component {
     window.addEventListener('mousedown', this.onWindowMouseDown);
     window.addEventListener('mouseup', this.onWindowMouseUp);
 
-    // TODO: nedb
-    /*await store.loadFavicons();
-    store.bookmarks = await database.bookmarks.toArray();
+    await store.faviconsStore.load();
+    await store.bookmarksStore.load();
+    /*
     store.historyItems = await database.history.toArray();*/
 
     store.keyBindingsStore.keyBindings = await getKeyBindings();
