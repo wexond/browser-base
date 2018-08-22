@@ -298,9 +298,11 @@ export default class extends React.Component<{ page: Page }> {
       const { title, favicon } = this.tab;
 
       const item = store.historyStore.getById(this.lastHistoryItemID);
-      item.title = title;
-      item.url = url;
-      item.favicon = favicon;
+      if (item) {
+        item.title = title;
+        item.url = url;
+        item.favicon = favicon;
+      }
 
       databases.history.update(
         {
