@@ -1,7 +1,14 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { TabGroup } from '../../models';
-import { StyledTabGroupItem, IconsContainer, Label } from './styles';
+import {
+  StyledTabGroupItem,
+  IconsContainer,
+  Label,
+  DeleteIcon,
+  Input,
+} from './styles';
+import store from '@app/store';
 
 interface Props {
   data: TabGroup;
@@ -16,38 +23,32 @@ export default class TabGroupItem extends React.Component<Props, {}> {
   private input: HTMLInputElement;
 
   public onClick = () => {
-    // selectWorkspace(workspace.id);
+    this.props.data.select();
   };
 
   public onDelete = (e?: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
     e.stopPropagation();
 
-    /*
-    const { tabGroup } = this.props;
-    const tabGroupsStore = store.tabGroupsStore;
-    const { tabGroups } = tabGroupsStore;
+    const { data } = this.props;
+    const { groups } = store.tabsStore;
+    const { pages } = store.pagesStore;
 
-    if (tabGroups.length > 0) {
-      let altWorkspaceIndex = tabGroups.indexOf(tabGroup) + 1;
+    if (groups.length > 0) {
+      let altGroupIndex = groups.indexOf(data) + 1;
 
-      if (altWorkspaceIndex === tabGroups.length) {
-        altWorkspaceIndex = tabGroups.indexOf(tabGroup) - 1;
+      if (altGroupIndex === groups.length) {
+        altGroupIndex = groups.indexOf(data) - 1;
       }
 
-      const altWorkspace = tabGroups[altWorkspaceIndex];
+      const altGroup = groups[altGroupIndex];
 
-      const tabs = getWorkspaceTabs(workspace.id);
-
-      for (const tab of tabs) {
-        store.pages.splice(store.pages.indexOf(getPageById(tab.id)), 1);
-        store.tabs.splice(store.tabs.indexOf(tab), 1);
+      for (const tab of data.tabs) {
+        pages.splice(pages.indexOf(store.pagesStore.getById(tab.id)), 1);
       }
 
-      selectWorkspace(altWorkspace.id);
-      removeWorkspace(workspace.id);
+      altGroup.select();
+      store.tabsStore.removeGroup(data.id);
     }
-    */
   };
 
   public onLabelClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -71,61 +72,37 @@ export default class TabGroupItem extends React.Component<Props, {}> {
   };
 
   public toggleInput = (flag: boolean) => {
-    /*const { tabGroup } = this.props;
+    const { data } = this.props;
 
     if (flag) {
-      this.input.value = tabGroup.name;
+      this.input.value = data.name;
       this.input.select();
     } else {
       const value = this.input.value;
 
       if (value.length > 0) {
         this.input.value = value;
-        workspace.name = value;
+        data.name = value;
       }
     }
 
-    this.setState({ inputVisible: flag });*/
+    this.setState({ inputVisible: flag });
   };
 
   public render() {
+    const { data } = this.props;
+    const { inputVisible } = data;
+    const { groups } = store.tabsStore;
+
+    const selected = data.isSelected;
+
     return (
       <StyledTabGroupItem onClick={this.onClick}>
-        <IconsContainer selected={false} />
-        <Label>Label</Label>
-      </StyledTabGroupItem>
-    );
-
-    /*const { workspace } = this.props;
-    const { inputVisible } = this.state;
-    const { workspaces } = store;
-
-    const selected = store.currentWorkspace === workspace.id;
-
-    return (
-      <Root onClick={this.onClick}>
-        {workspaces.length > 1 && (
+        {groups.length > 1 && (
           <DeleteIcon className="delete-icon" onClick={this.onDelete} />
         )}
-        <IconsContainer selected={selected}>
-          {store.tabs.map((tab, key) => {
-            if (tab.workspaceId === workspace.id) {
-              const favicon = tab.favicon !== '' ? tab.favicon : pageIcon;
-              return (
-                <Icon
-                  key={key}
-                  src={favicon}
-                  style={{
-                    opacity:
-                      tab.favicon === '' ? transparency.light.inactiveIcon : 1,
-                  }}
-                />
-              );
-            }
-            return null;
-          })}
-        </IconsContainer>
-        <Label onClick={this.onLabelClick}>{workspace.name}</Label>
+        <IconsContainer selected={selected} />
+        <Label onClick={this.onLabelClick}>{data.name}</Label>
         <Input
           innerRef={r => (this.input = r)}
           visible={inputVisible}
@@ -133,7 +110,7 @@ export default class TabGroupItem extends React.Component<Props, {}> {
           onBlur={this.onInputBlur}
           onKeyPress={this.onInputKeypress}
         />
-      </Root>
-    );*/
+      </StyledTabGroupItem>
+    );
   }
 }

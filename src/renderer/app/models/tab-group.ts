@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { Tab, Page } from '.';
 import store from '../store';
 import { defaultCreateTabProperties } from '~/defaults/create-tab-properties';
@@ -13,10 +13,18 @@ export class TabGroup {
   public tabs: Tab[] = [];
 
   @observable
-  public name: string;
+  public name: string = 'New group';
 
   @observable
   public selectedTab: number;
+
+  @observable
+  public inputVisible: boolean = false;
+
+  @computed
+  public get isSelected() {
+    return store.tabsStore.currentGroup === this.id;
+  }
 
   public select() {
     store.tabsStore.currentGroup = this.id;

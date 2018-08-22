@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { TabGroup } from './tab-group';
 import store from '../store';
 import { TABS_PADDING, TOOLBAR_HEIGHT } from '~/constants';
@@ -26,6 +26,11 @@ export class Tab {
 
   @observable
   public isBookmarked: boolean = false;
+
+  @computed
+  public get isSelected() {
+    return this.tabGroup.selectedTab === this.id;
+  }
 
   public url: string = '';
   public width: number = 0;
