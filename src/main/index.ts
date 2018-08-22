@@ -1,15 +1,12 @@
 import { app } from 'electron';
-import { resolve, join } from 'path';
+import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';
 
-import { getPath, isPathFile } from '../utils/paths';
-import { runAutoUpdaterService } from './auto-updater';
-import { runExtensionsService } from './extensions-service';
+import { runAutoUpdaterService, runExtensionsService } from './services';
 import { Global } from './interfaces';
-import { createWindow } from './window';
-import { registerProtocols } from './protocols';
-import { defaultPaths, filesContent } from '../defaults/paths';
+import { createWindow, getPath, registerProtocols } from './utils';
+import { defaultPaths, filesContent } from '~/defaults/paths';
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
@@ -19,6 +16,7 @@ let mainWindow: Electron.BrowserWindow;
 
 global.extensions = {};
 global.backgroundPages = {};
+global.locale = 'en-US';
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
@@ -30,10 +28,11 @@ app.on('activate', () => {
 
 app.on('ready', () => {
   for (const key in defaultPaths) {
-    const filePath = getPath(defaultPaths[key]);
+    const path = defaultPaths[key];
+    const filePath = getPath(path);
     if (existsSync(filePath)) continue;
 
-    if (!isPathFile(filePath)) {
+    if (path.indexOf('.') === -1) {
       mkdirSync(filePath);
     } else {
       writeFileSync(filePath, filesContent[key], 'utf8');

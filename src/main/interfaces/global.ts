@@ -11,4 +11,5 @@ export interface Global {
       webContentsId: number;
     };
   };
+  locale: string;
 }

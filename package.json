@@ -63,13 +63,16 @@
     "awesome-typescript-loader": "5.2.0",
     "concurrently": "3.6.1",
     "cross-env": "5.2.0",
-    "electron": "2.0.6",
+    "devtron": "1.4.0",
+    "electron": "2.0.7",
     "electron-builder": "20.26.1",
     "electron-react-devtools": "0.5.3",
+    "electron-updater": "3.0.3",
     "gsap": "2.0.1",
     "mobx": "5.0.3",
     "mobx-react": "5.2.3",
     "mousetrap": "1.6.2",
+    "nedb": "1.8.0",
     "prettier": "1.14.0",
     "react": "16.4.2",
     "react-dom": "16.4.2",
@@ -84,8 +87,6 @@
     "webpack-cli": "3.1.0",
     "webpack-dev-server": "3.1.5",
     "webpack-merge": "4.1.4",
-    "wexond-package-manager": "1.4.5",
-    "nedb": "1.8.0",
-    "electron-updater": "3.0.3"
+    "wexond-package-manager": "1.4.5"
   }
 }
