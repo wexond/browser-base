@@ -20,14 +20,17 @@ export class HistoryStore {
 
   public load() {
     return new Promise(async resolve => {
-      databases.history.find({}, (err: any, items: HistoryItem[]) => {
-        if (err) return console.warn(err);
+      databases.history
+        .find({})
+        .sort({ date: 1 })
+        .exec((err: any, items: HistoryItem[]) => {
+          if (err) return console.warn(err);
 
-        this.historyItems = items;
-        this.loadSections();
+          this.historyItems = items;
+          this.loadSections();
 
-        resolve();
-      });
+          resolve();
+        });
     });
   }
 
@@ -77,6 +80,19 @@ export class HistoryStore {
     }
 
     return sections;
+  }
+
+  public addItem(item: HistoryItem) {
+    return new Promise((resolve: (id: string) => void) => {
+      databases.history.insert(item, (err: any, doc: HistoryItem) => {
+        if (err) return console.warn(err);
+
+        this.historyItems.push(doc);
+        this.loadSections();
+
+        resolve(doc._id);
+      });
+    });
   }
 
   public removeItem(id: string) {
