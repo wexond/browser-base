@@ -11,7 +11,7 @@ interface Props {
 }
 
 @observer
-export default class extends React.Component<Props> {
+export default class extends React.Component<Props, {}> {
   public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const { data } = this.props;
     const { selectedItems } = store.historyStore;
@@ -28,14 +28,18 @@ export default class extends React.Component<Props> {
     }
   };
 
-  public onMouseEnter = () => (this.props.data.hovered = true);
+  public onMouseEnter = () => {
+    this.props.data.hovered = true;
+  };
 
-  public onMouseLeave = () => (this.props.data.hovered = false);
+  public onMouseLeave = () => {
+    this.props.data.hovered = false;
+  };
 
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { data } = this.props;
-
     e.stopPropagation();
+
+    const { data } = this.props;
     store.historyStore.removeItem(data._id);
   };
 
