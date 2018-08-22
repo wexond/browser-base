@@ -1,5 +1,5 @@
 export interface Favicon {
   url?: string;
-  favicon?: Buffer;
+  data?: string;
   _id?: string;
 }
