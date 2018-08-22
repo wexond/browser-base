@@ -1,9 +1,9 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
+import store from '@app/store';
 import TreeBar from '../TreeBar';
 import { Container, Items } from './styles';
-import store from '@app/store';
 import { PageContent } from '../Menu/styles';
 import BookmarkItem from '../BookmarkItem';
 
