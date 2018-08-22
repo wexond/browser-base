@@ -14,6 +14,10 @@ export class HistoryStore {
   @observable
   public selectedItems: string[] = [];
 
+  public getById(id: string) {
+    return this.historyItems.find(x => x._id === id);
+  }
+
   public load() {
     return new Promise(async resolve => {
       databases.history.find({}, (err: any, items: HistoryItem[]) => {
