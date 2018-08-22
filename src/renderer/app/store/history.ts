@@ -30,13 +30,11 @@ export class HistoryStore {
   }
 
   public getItems(filter = '') {
-    return this.historyItems
-      .filter(
-        item =>
-          item.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1 ||
-          item.url.toLowerCase().indexOf(filter.toLowerCase()) !== -1,
-      )
-      .reverse();
+    return this.historyItems.filter(
+      item =>
+        item.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1 ||
+        item.url.toLowerCase().indexOf(filter.toLowerCase()) !== -1,
+    );
   }
 
   public getSections(items: HistoryItem[]) {
