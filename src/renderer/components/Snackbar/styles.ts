@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { opacity } from '../../../defaults';
-import { body2, shadows } from '../../mixins';
+import { transparency } from '~/defaults';
+import { body2, shadows } from '@mixins';
 
 export const Root = styled.div`
   height: 48px;
@@ -14,7 +14,7 @@ export const Root = styled.div`
   left: 50%;
   transform: translateX(-50%);
   border-radius: 4px;
-  background-color: rgba(0, 0, 0, ${opacity.light.primaryText});
+  background-color: rgba(0, 0, 0, ${transparency.light.primaryText});
   transition: 0.2s bottom;
   will-change: transition, bottom;
 
@@ -27,7 +27,7 @@ export const Content = styled.div`
   margin-left: 16px;
   flex: 1;
   ${body2()};
-  color: rgba(255, 255, 255, ${opacity.light.primaryText});
+  color: rgba(255, 255, 255, ${transparency.light.primaryText});
 `;
 
 export const Actions = styled.div`

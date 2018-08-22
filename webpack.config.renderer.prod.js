@@ -31,7 +31,7 @@ const appConfig = merge.smart(config, {
   target: 'electron-renderer',
 
   entry: {
-    app: ['./src/renderer/views/app'],
+    app: ['./src/renderer/app'],
   },
 });
 
@@ -39,7 +39,7 @@ const newTabConfig = merge.smart(config, {
   target: 'web',
 
   entry: {
-    newtab: ['./src/renderer/views/newtab'],
+    newtab: ['./src/renderer/newtab'],
   },
 });
 

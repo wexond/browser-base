@@ -32,7 +32,7 @@ const appConfig = merge.smart(config, {
   target: 'electron-renderer',
 
   entry: {
-    app: ['react-hot-loader/patch', './src/renderer/views/app'],
+    app: ['react-hot-loader/patch', './src/renderer/app'],
   },
 
   devServer: {
@@ -55,7 +55,7 @@ const newTabConfig = merge.smart(config, {
   target: 'web',
 
   entry: {
-    newtab: ['react-hot-loader/patch', './src/renderer/views/newtab'],
+    newtab: ['react-hot-loader/patch', './src/renderer/newtab'],
   },
 });
 

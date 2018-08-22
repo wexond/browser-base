@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
-import { EASE_FUNCTION } from '../../../constants';
-import { opacity } from '../../../defaults/opacity';
-import { ProgressType } from '../../../enums';
+import { transparency } from '~/defaults';
 
 export const Root = styled.div`
   height: 4px;
@@ -22,7 +20,7 @@ export interface TrackProps {
 
 export const Track = styled.div`
   width: 100%;
-  opacity: ${opacity.light.disabledControl};
+  opacity: ${transparency.light.disabledControl};
 
   ${trackStyle}
   background-color: ${({ color }: TrackProps) => color};
@@ -30,7 +28,7 @@ export const Track = styled.div`
 
 export interface IndicatorProps {
   color: string;
-  type: ProgressType;
+  indeterminate: boolean;
 }
 
 export const Indicator = styled.div`
@@ -39,8 +37,8 @@ export const Indicator = styled.div`
 
   ${trackStyle}
   background-color: ${({ color }: IndicatorProps) => color};
-  animation: ${({ type }) => {
-    if (type === ProgressType.Indeterminate) {
+  animation: ${({ indeterminate }) => {
+    if (indeterminate) {
       return 'nersent-ui-progressbar-first 3s ease-in infinite';
     }
     return 'unset';
