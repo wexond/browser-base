@@ -7,6 +7,7 @@ import {
   Label,
   DeleteIcon,
   Input,
+  Icon,
 } from './styles';
 import store from '@app/store';
 
@@ -101,7 +102,11 @@ export default class TabGroupItem extends React.Component<Props, {}> {
         {groups.length > 1 && (
           <DeleteIcon className="delete-icon" onClick={this.onDelete} />
         )}
-        <IconsContainer selected={selected} />
+        <IconsContainer selected={selected}>
+          {data.tabs.map(tab => (
+            <Icon src={tab.favicon} key={tab.id} />
+          ))}
+        </IconsContainer>
         <Label onClick={this.onLabelClick}>{data.name}</Label>
         <Input
           innerRef={r => (this.input = r)}
