@@ -101,18 +101,16 @@ export const Title = styled.div`
   `};
 `;
 
-export const Icon = styled.div.attrs({
-  style: ({ favicon }: any) => ({
-    backgroundImage: `url(${favicon})`,
-    opacity: favicon === '' ? 0 : 1,
-    minWidth: favicon === '' ? 0 : 16,
-  }),
-})`
+export const Icon = styled.div`
   height: 16px;
   min-width: 16px;
   transition: 0.2s opacity, 0.2s width;
   ${centerImage('16px', '16px')};
-  ${({ favicon }: { favicon: string }) => favicon};
+  ${({ favicon }: { favicon: string }) => css`
+    background-image: url(${favicon});
+    min-width: ${favicon === '' ? 0 : 16},
+    opacity: ${favicon === '' ? 0 : 1};
+  `};
 `;
 
 interface ContentProps {
