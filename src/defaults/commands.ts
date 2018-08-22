@@ -33,7 +33,7 @@ export const commands: Commands = {
     store.pagesStore.getSelected().webview.goForward();
   },
   'tabs.home': () => {
-    console.log('home');
+    store.pagesStore.getSelected().webview.loadURL('wexond://newtab');
   },
   'tabGroups.show': () => {
     store.tabsStore.menuVisible = true;
