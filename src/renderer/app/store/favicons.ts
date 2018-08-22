@@ -26,7 +26,7 @@ export class FaviconsStore {
 
             databases.favicons.insert({
               url,
-              favicon: Buffer.from(generatedBuffer),
+              data: JSON.stringify(Buffer.from(generatedBuffer)),
             });
           };
           reader.readAsArrayBuffer(blob);
@@ -40,12 +40,10 @@ export class FaviconsStore {
         if (err) return console.warn(err);
 
         docs.forEach(favicon => {
-          if (
-            this.favicons[favicon.url] == null &&
-            favicon.favicon.byteLength !== 0
-          ) {
+          const data = Buffer.from(JSON.parse(favicon.data).data);
+          if (this.favicons[favicon.url] == null && data.byteLength !== 0) {
             this.favicons[favicon.url] = window.URL.createObjectURL(
-              new Blob([favicon.favicon]),
+              new Blob([data]),
             );
           }
         });
