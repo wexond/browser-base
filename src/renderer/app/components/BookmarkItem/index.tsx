@@ -107,17 +107,15 @@ export default class BookmarkItem extends React.Component<Props> {
           _id: data._id,
         },
         {
-          title,
+          $set: {
+            title,
+          },
         },
         {},
         (err: any) => {
           if (err) return console.warn(err);
 
-          const item = store.bookmarksStore.bookmarks.find(
-            x => x._id === data._id,
-          );
-
-          item.title = title;
+          data.title = title;
         },
       );
     }
