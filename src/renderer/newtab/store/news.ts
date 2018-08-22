@@ -2,13 +2,14 @@ import { observable } from 'mobx';
 import { NewsCategories } from '~/enums';
 import { NEWS_API_KEY } from '~/constants';
 import { requestURL, hasSubdomain, removeSubdomain } from '~/utils';
+import { NewsArticle } from '~/interfaces';
 
 export class NewsStore {
   @observable
   public columns: any[][] = [];
 
   @observable
-  public news: any[] = [];
+  public news: NewsArticle[] = [];
 
   public getColumns(columnsCount: number) {
     const columns = [];
@@ -49,16 +50,14 @@ export class NewsStore {
       const json = JSON.parse(data);
 
       if (json.status === 'ok') {
-        const news = [];
+        const news: NewsArticle[] = [];
 
         for (let i = 0; i < json.articles.length; i++) {
           const item = json.articles[i];
 
           if (item.urlToImage != null) {
-            const sourceUrl = item.source.name;
-
-            if (hasSubdomain(sourceUrl)) {
-              item.source.name = removeSubdomain(sourceUrl);
+            if (hasSubdomain(item.source.name)) {
+              item.source.name = removeSubdomain(item.source.name);
             }
 
             item.icon = `https://www.google.com/s2/favicons?domain=${item.url}`;
@@ -69,12 +68,11 @@ export class NewsStore {
         return news;
       }
 
-      console.error(json); // eslint-disable-line no-console
-      return null;
+      console.error(json);
     } catch (e) {
-      console.error(e); // eslint-disable-line no-console
+      console.error(e);
     }
 
-    return null;
+    return [];
   };
 }

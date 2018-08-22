@@ -75,8 +75,8 @@ export const getConditionsTime = (time: number, conditions: any) => {
   return conditions;
 };
 
-export const getTimeOffset = (dictionary: any, date: Date, t?: any) => {
-  const { dateAndTime } = dictionary.dateAndTime;
+export const getTimeOffset = (dictionary: Dictionary, date: Date) => {
+  const { dateAndTime } = dictionary;
   const currentdate = new Date();
   const diff = new Date(currentdate.getTime() - date.getTime());
 
