@@ -1,0 +1,88 @@
+{
+  "langNameEN": "polish",
+  "langName": "polski",
+  "langCode": "pl-PL",
+  "addressBar": {
+    "search": "Wyszukaj"
+  },
+  "suggestions": {
+    "mostVisited": "Najczęściej odwiedzane",
+    "bookmarks": "Zakładki",
+    "history": "Historia",
+    "googleSuggestions": "Sugestie od Google",
+    "searchInGoogle": "wyszukaj w Google",
+    "openWebsite": "otwórz stronę"
+  },
+  "newTab": {
+    "precipitation": "Opady deszczu",
+    "winds": "Wiatry"
+  },
+  "history": {
+    "title": "Historia",
+    "clearHistory": "Wyczyść historię"
+  },
+  "bookmarks": {
+    "title": "Zakładki"
+  },
+  "settings": {
+    "title": "Ustawienia"
+  },
+  "extensions": {
+    "title": "Rozszerzenia"
+  },
+  "about": {
+    "title": "O Wexond",
+    "wexondVersion": "Wersja Wexond",
+    "reactVersion": "Wersja React",
+    "electronVersion": "Wersja Electron",
+    "nodejsVersion": "Wersja Node"
+  },
+  "selecting": {
+    "selectAll": "Zaznacz wszystko",
+    "deselectAll": "Odznacz wszystko",
+    "deleteSelected": "Usuń zaznaczone"
+  },
+  "dateAndTime": {
+    "months": [
+      "Styczeń",
+      "Luty",
+      "Marzec",
+      "Kwiecień",
+      "Maj",
+      "Czerwiec",
+      "Lipiec",
+      "Sierpień",
+      "Wrzesień",
+      "Paźdźiernik",
+      "Listopad",
+      "Grudzień"
+    ],
+    "days": [
+      "Poniedziałek",
+      "Wtorek",
+      "Środa",
+      "Czwartek",
+      "Piątek",
+      "Sobota",
+      "Niedziela"
+    ],
+    "daysShort": ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Niedz"],
+    "today": "Dzisiaj",
+    "yesterday": "Wczoraj",
+    "ago": "temu",
+    "oneMinute": "minutę",
+    "oneHour": "godzinę",
+    "minutes": {
+      "x<5": "minuty",
+      "x>6": "minut"
+    },
+    "hours": {
+      "x<5": "godziny",
+      "x>4": "godzin"
+    }
+  },
+  "general": {
+    "expand": "więcej",
+    "collapse": "mniej"
+  }
+}

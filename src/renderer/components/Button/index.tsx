@@ -1,57 +1,55 @@
 import * as React from 'react';
 
-import { colors } from '../../../defaults/colors';
-import { ButtonType } from '../../../enums';
-import { Icon, Overlay, StyledButton } from './styles';
+import { colors } from '~/defaults/colors';
 import Ripple from '../Ripple';
+import { StyledButton } from './styles';
 
 export type ButtonEvent = (e?: React.SyntheticEvent<HTMLDivElement>) => void;
 
-export interface IProps {
+export interface Props {
   background?: string;
   foreground?: string;
-  icon?: string;
-  whiteIcon?: boolean;
   inline?: boolean;
   disabled?: boolean;
+  outlined?: boolean;
   theme?: 'light' | 'dark';
-  type?: ButtonType;
   style?: any;
   onClick?: ButtonEvent;
+  text?: boolean;
+  contained?: boolean;
 }
 
-export default class Button extends React.Component<IProps, {}> {
-  public static defaultProps = {
+export default class Button extends React.Component<Props, {}> {
+  public static defaultProps: Props = {
     background: colors.blue['500'],
     foreground: '#fff',
-    whiteIcon: true,
     inline: false,
     disabled: false,
-    customRippleBehavior: false,
-    ripple: true,
+    contained: true,
+    outlined: false,
+    text: false,
     theme: 'light',
-    type: ButtonType.Contained,
   };
 
   private ripple: Ripple;
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     this.ripple.makeRipple(e.pageX, e.pageY);
-  }
+  };
 
   public render() {
     const {
       background,
       foreground,
-      icon,
-      whiteIcon,
       inline,
-      type,
+      contained,
+      outlined,
+      text,
       disabled,
-      theme,
       style,
       children,
       onClick,
+      theme,
     } = this.props;
 
     return (
@@ -61,24 +59,16 @@ export default class Button extends React.Component<IProps, {}> {
           className="material-button"
           background={background}
           foreground={foreground}
-          icon={icon ? true : undefined}
-          style={style}
-          type={type}
+          isContained={contained}
+          isOutlined={outlined}
+          isText={text}
           theme={theme}
           disabled={disabled}
           onMouseDown={this.onMouseDown}
           onClick={onClick}
+          style={style}
         >
-          {icon && (
-            <Icon
-              src={icon}
-              white={whiteIcon}
-              disabled={disabled}
-              theme={theme}
-            />
-          )}
           {children}
-          <Overlay className="overlay" color={foreground} />
           <Ripple ref={r => (this.ripple = r)} color={foreground} />
         </StyledButton>
       </React.Fragment>

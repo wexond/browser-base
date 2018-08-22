@@ -1,9 +1,7 @@
 import styled, { css } from 'styled-components';
-
-import { EASE_FUNCTION } from '../../../constants/design';
-import { opacity } from '../../../defaults/opacity';
-import { Align, SliderType } from '../../../enums';
-import { center, robotoRegular } from '../../mixins';
+import { transparency } from '~/defaults';
+import { EASE_FUNCTION } from '~/constants';
+import { centerBoth, robotoRegular, centerHorizontal } from '@mixins';
 
 export const StyledSlider = styled.div`
   width: 100%;
@@ -15,7 +13,7 @@ export const StyledSlider = styled.div`
 export interface TrackProps {
   color: string;
   thumbAnimation?: boolean;
-  type?: SliderType;
+  discrete?: boolean;
 }
 
 export const Track = styled.div`
@@ -31,18 +29,16 @@ export const Track = styled.div`
 
 export const InactiveTrack = styled(Track)`
   width: 100%;
-  opacity: ${opacity.light.disabledControl};
+  opacity: ${transparency.light.disabledControl};
 `;
 
 export const ActiveTrack = styled(Track)`
   width: 50%;
   transition: 0.2s opacity;
 
-  ${({ thumbAnimation, type }: TrackProps) => css`
+  ${({ thumbAnimation, discrete }: TrackProps) => css`
     opacity: ${thumbAnimation ? 0 : 1};
-    transition: ${type === SliderType.Discrete
-      ? `0.15s width ${EASE_FUNCTION}`
-      : 'unset'};
+    transition: ${discrete ? `0.15s width ${EASE_FUNCTION}` : 'unset'};
   `};
 `;
 
@@ -55,10 +51,8 @@ export const ThumbContainer = styled.div`
   position: relative;
   cursor: pointer;
 
-  ${({ type }: { type: SliderType }) => css`
-    transition: ${type === SliderType.Discrete
-      ? `0.15s left ${EASE_FUNCTION}`
-      : 'unset'};
+  ${({ discrete }: { discrete: boolean }) => css`
+    transition: ${discrete ? `0.15s left ${EASE_FUNCTION}` : 'unset'};
   `};
 
   &:hover .thumb-hover {
@@ -73,9 +67,9 @@ export const ThumbHover = styled.div`
   border-radius: 100%;
   position: absolute;
   transition: 0.2s width, 0.2s height;
-  opacity: ${opacity.light.dividers};
+  opacity: ${transparency.light.dividers};
 
-  ${center(Align.CenterBoth)};
+  ${centerBoth()};
 
   ${({ color }: { color: string }) => css`
     background-color: ${color};
@@ -92,7 +86,7 @@ export const Thumb = styled.div`
   position: absolute;
   transition: 0.15s width, 0.15s height;
 
-  ${center(Align.CenterBoth)};
+  ${centerBoth()};
 
   ${({ color, thumbAnimation }: ThumbProps) => css`
     background-color: ${color};
@@ -132,8 +126,8 @@ export const TickValue = styled.div`
   white-space: nowrap;
   font-size: 12px;
   margin-top: 16px;
-  color: rgba(0, 0, 0, ${opacity.light.secondaryText});
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
 
   ${robotoRegular()};
-  ${center(Align.CenterHorizontal)};
+  ${centerHorizontal()};
 `;

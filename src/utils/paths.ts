@@ -1,5 +1,5 @@
-import { app, remote } from 'electron';
 import path from 'path';
+import { remote, app } from 'electron';
 
 export const getPath = (...relativePaths: string[]) => {
   if (remote) {
@@ -10,8 +10,4 @@ export const getPath = (...relativePaths: string[]) => {
   return path
     .resolve(app.getPath('userData'), ...relativePaths)
     .replace(/\\/g, '/');
-};
-
-export const isPathFile = (file: string) => {
-  return path.extname(file) !== '';
 };

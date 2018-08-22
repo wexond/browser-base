@@ -1,7 +1,8 @@
 export interface HistoryItem {
-  id?: number;
+  _id?: string;
   title?: string;
   url?: string;
   date?: string;
   favicon?: string;
+  hovered?: boolean;
 }
