@@ -23,16 +23,8 @@ export class TabsStore {
 
   @computed
   get isBookmarked() {
-<<<<<<< HEAD
-    const tab = this.getSelectedTab();
-    if (tab) {
-      return tab.isBookmarked;
-    }
-    return false;
-=======
     const selectedTab = this.getSelectedTab();
     return selectedTab && selectedTab.isBookmarked;
->>>>>>> 5565a139a293f11eff3419beb86c94ca3d055dc6
   }
 
   public lastScrollLeft: number = 0;
