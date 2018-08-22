@@ -7,13 +7,22 @@ import { Icon, PageItem } from '@components/PageItem';
 import { ActionIcon, Input, Title } from './styles';
 import { icons } from '~/defaults/icons';
 import store from '@app/store';
+import { databases } from '~/defaults/databases';
 
 export interface Props {
   data: Bookmark;
 }
 
+export interface State {
+  inputVisible: boolean;
+}
+
 @observer
-export default class BookmarkItem extends React.Component<Props> {
+export default class BookmarkItem extends React.Component<Props, State> {
+  public state: State = {
+    inputVisible: false,
+  };
+
   private cmdPressed = false;
 
   private input: HTMLInputElement;
@@ -50,16 +59,19 @@ export default class BookmarkItem extends React.Component<Props> {
     }
   };
 
-  public onMouseEnter = () => this.setState({ hovered: true });
+  public onMouseEnter = () => {
+    this.props.data.hovered = true;
+  };
 
-  public onMouseLeave = () => this.setState({ hovered: false });
+  public onMouseLeave = () => {
+    this.props.data.hovered = false;
+  };
 
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     e.stopPropagation();
 
     const { data } = this.props;
-
     store.bookmarksStore.removeItem(data);
   };
 
@@ -95,20 +107,27 @@ export default class BookmarkItem extends React.Component<Props> {
 
   public saveFolderName = async () => {
     const { data } = this.props;
-
     const title = this.input.value;
 
     if (title !== data.title && title.length > 0) {
-      // TODO: nedb
-      /*await database.bookmarks
-        .where('id')
-        .equals(data.id)
-        .modify({
+      databases.bookmarks.update(
+        {
+          _id: data._id,
+        },
+        {
           title,
-        });
+        },
+        {},
+        (err: any) => {
+          if (err) return console.warn(err);
 
-      const item = store.bookmarks.find(x => x.id === data.id);
-      item.title = title;*/
+          const item = store.bookmarksStore.bookmarks.find(
+            x => x._id === data._id,
+          );
+
+          item.title = title;
+        },
+      );
     }
   };
 

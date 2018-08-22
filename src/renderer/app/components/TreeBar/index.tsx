@@ -9,8 +9,8 @@ export default class TreeBar extends React.Component {
     return (
       <Root>
         <TreeBarItem home />
-        {store.bookmarksStore.path.map((data: any) => (
-          <React.Fragment key={data.id}>
+        {store.bookmarksStore.path.map((data: any, key: any) => (
+          <React.Fragment key={key}>
             <ForwardIcon className="FORWARD-ICON" />
             <TreeBarItem item={data} />
           </React.Fragment>

@@ -1,5 +1,7 @@
 import { observable } from 'mobx';
+
 import BookmarksDialog from '../components/BookmarksDialog';
+import { databases } from '~/defaults/databases';
 import { Bookmark } from '~/interfaces';
 import store from '.';
 
@@ -22,24 +24,38 @@ export class BookmarksStore {
   public dialogRef: BookmarksDialog;
 
   public async addBookmark(item: Bookmark) {
-    // TODO: nedb
-    /*item.id = await database.bookmarks.add(item);
-    store.bookmarks.push(item);*/
+    databases.bookmarks.insert(item, (err: any, doc: Bookmark) => {
+      store.bookmarksStore.bookmarks.push(doc);
+    });
     return item;
   }
 
   public addFolder(title: string, parent: string) {
-    // TODO: nedb
-    /*database.transaction('rw', database.bookmarks, async () => {
-      const item: BookmarkItem = {
+    databases.bookmarks.insert(
+      {
         title,
         parent,
         type: 'folder',
-      };
+      },
+      (err: any, doc: Bookmark) => {
+        if (err) return console.warn(err);
+        this.bookmarks.push(doc);
+      },
+    );
+  }
 
-      item.id = await database.bookmarks.add(item);
-      store.bookmarks.push(item);
-    });*/
+  public isBookmarked(url: string) {
+    return !!this.bookmarks.find(x => x.url === url);
+  }
+
+  public load() {
+    return new Promise(async resolve => {
+      databases.bookmarks.find({}, (err: any, docs: Bookmark[]) => {
+        if (err) return console.warn(err);
+        this.bookmarks = docs;
+        resolve();
+      });
+    });
   }
 
   public goToFolder(id: string) {
@@ -80,7 +96,8 @@ export class BookmarksStore {
       selectedTab.isBookmarked = false;
     }
 
-    // TODO: nedb
-    // await database.bookmarks.delete(id);
+    databases.bookmarks.remove({ _id: item._id }, (err: any) => {
+      if (err) return console.warn(err);
+    });
   }
 }
