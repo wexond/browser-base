@@ -83,7 +83,7 @@
     "tabs.switch": "Switch between tabs",
     "tabs.new": "Open newtab",
     "tabs.reload": "Reload current tab",
-    "tabs.back": "Go backward",
+    "tabs.back": "Go back",
     "tabs.forward": "Go forward",
     "tabs.home": "Back to newtab",
     "tabGroups.show": "Show tab groups",
