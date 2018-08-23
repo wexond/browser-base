@@ -1,4 +1,4 @@
-import { app } from 'electron';
+import { app, session } from 'electron';
 import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';
@@ -40,6 +40,16 @@ app.on('ready', () => {
   }
 
   mainWindow = createWindow();
+
+  session
+    .fromPartition('persist:webviewsession')
+    .webRequest.onBeforeSendHeaders(
+      { urls: ['http://*/*', 'https://*/*'] },
+      (details: any, callback: any) => {
+        details.requestHeaders['DNT'] = '1';
+        callback({ cancel: false, requestHeaders: details.requestHeaders });
+      },
+    );
 
   runAutoUpdaterService(mainWindow);
   runExtensionsService(mainWindow);

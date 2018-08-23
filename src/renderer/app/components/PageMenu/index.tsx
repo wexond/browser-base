@@ -155,8 +155,7 @@ export default class PageMenu extends React.Component {
 
     return (
       <ContextMenu
-        width={240}
-        dense
+        width={300}
         ref={(r: ContextMenu) => (store.pageMenuStore.ref = r)}
         onMouseDown={e => e.stopPropagation()}
         style={{
