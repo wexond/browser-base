@@ -1,13 +1,13 @@
-import { Dictionary } from '~/interfaces';
-
-const localeBase = 'en-US';
 const locales = ['en-US', 'pl-PL'];
+const localeBaseName = 'en-US';
 
-const getDictionary = (name: string) => {
-  const defaultLocale = require(`../../static/dictionaries/${localeBase}.json`);
+const localeBase = require(`../../static/dictionaries/${localeBaseName}.json`);
+
+export const getDictionary = (name: string) => {
+  if (name === localeBaseName) return localeBase;
+
   const locale = require(`../../static/dictionaries/${name}.json`);
-
-  return Object.assign(defaultLocale, locale) as Dictionary;
+  return Object.assign({}, localeBase, locale);
 };
 
 export const dictionaries: { [key: string]: any } = {};
