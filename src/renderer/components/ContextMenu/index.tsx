@@ -12,7 +12,6 @@ export interface IProps {
   onMouseDown?: ButtonEvent;
   style?: any;
   className?: string;
-  dense?: boolean;
   width?: number;
 }
 
@@ -43,7 +42,6 @@ export default class ContextMenu extends React.Component<IProps, IState> {
     const {
       style,
       className,
-      dense,
       children,
       width,
       visible,
@@ -55,16 +53,11 @@ export default class ContextMenu extends React.Component<IProps, IState> {
         innerRef={r => (this.menu = r)}
         width={width}
         visible={visible}
-        dense={dense}
         className={className}
         style={style}
         onMouseDown={onMouseDown}
       >
-        {React.Children.map(children, (child: React.ReactElement<any>) =>
-          React.cloneElement(child, {
-            dense,
-          }),
-        )}
+        {children}
       </StyledMenu>
     );
   }
