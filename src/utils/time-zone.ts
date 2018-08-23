@@ -1,38 +1,18 @@
-import { requestURL } from './network';
-import { TIME_ZONE_API_KEY } from '~/constants';
+const tzlookup = require('tz-lookup');
 
-export const getTimeZoneOffset = async (
-  lat: number,
-  lon: number,
-  apiKey: string = TIME_ZONE_API_KEY,
-) => {
-  const loc = `${lat}, ${lon}`;
-  const currentDate = new Date();
-  const timestamp =
-    currentDate.getTime() / 1000 + currentDate.getTimezoneOffset() * 60;
+export const getTimeZoneOffset = (lat: number, lon: number) => {
+  const timeZone = tzlookup(lat, lon);
+  const current = new Date();
+  const local = new Date(new Date().toLocaleString('en-US', { timeZone }));
 
-  const url = `https://maps.googleapis.com/maps/api/timezone/json?location=${loc}&timestamp=${timestamp}&key=${apiKey}`;
-  const data = await requestURL(url);
-  const json = JSON.parse(data);
-
-  console.log(json);
-
-  if (json.status === 'OVER_QUERY_LIMIT') {
-    return null;
-  }
-
-  const offsets = json.dstOffset * 1000 + json.rawOffset * 1000;
-  const local = new Date(timestamp * 1000 + offsets);
-
-  return local.getHours() - currentDate.getUTCHours();
+  return local.getHours() - current.getUTCHours();
 };
 
 export const getTimeInZone = (date: Date, timeZoneOffset: number) => {
   date = new Date(date.toUTCString());
 
-  const offset = timeZoneOffset * 60 * 60000;
-  const userOffset = date.getTimezoneOffset() * 60000;
-  const timeInZone = new Date(date.getTime() + offset + userOffset);
+  const utc = date.getTime() + date.getTimezoneOffset() * 60000;
+  const local = new Date(utc + 3600000 * timeZoneOffset);
 
-  return timeInZone;
+  return local;
 };
