@@ -110,7 +110,7 @@ export const getWeather = async (
     const weekWeather = JSON.parse(await requestURL(weekWeatherURL));
 
     const coord = currentWeather.coord;
-    const timeZoneOffset = await getTimeZoneOffset(coord.lat, coord.lon);
+    const timeZoneOffset = getTimeZoneOffset(coord.lat, coord.lon);
 
     const dailyForecast = getDaily(currentWeather, weekWeather, timeZoneOffset);
     const weeklyForecast = getWeekly(weekWeather, timeZoneOffset);
@@ -127,7 +127,7 @@ export const getWeather = async (
 
     return forecast;
   } catch (e) {
-    console.warn(e); // eslint-disable-line
+    console.warn(e);
     return null;
   }
 };

@@ -78,15 +78,20 @@
     "react-dom": "16.4.2",
     "react-hot-loader": "4.3.4",
     "styled-components": "3.4.0",
+    "timezone": "^1.0.13",
     "tslint": "5.11.0",
     "tslint-config-airbnb": "5.9.2",
     "tslint-config-prettier": "1.14.0",
     "typescript": "3.0.1",
+    "tz-lookup": "6.1.8",
     "url-loader": "1.0.1",
     "webpack": "4.16.4",
     "webpack-cli": "3.1.0",
     "webpack-dev-server": "3.1.5",
     "webpack-merge": "4.1.4",
     "wexond-package-manager": "1.4.5"
+  },
+  "dependencies": {
+    "remove": "^0.1.5"
   }
 }
