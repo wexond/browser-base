@@ -4,7 +4,6 @@ import { transparency } from '~/defaults';
 
 export interface MenuItemProps {
   visible: boolean;
-  dense: boolean;
   disabled: boolean;
 }
 
@@ -14,9 +13,9 @@ export const StyledMenuItem = styled.div`
   overflow: hidden;
   transition: 0.2s opacity;
 
-  ${({ visible, dense, disabled }: MenuItemProps) => css`
+  ${({ visible, disabled }: MenuItemProps) => css`
     display: ${!visible ? 'none' : 'flex'};
-    height: ${dense ? 24 : 32}px;
+    height: 32px;
     pointer-events: ${disabled ? 'none' : 'auto'};
   `};
 
@@ -27,20 +26,19 @@ export const StyledMenuItem = styled.div`
 
 export interface TitleProps {
   disabled: boolean;
-  dense: boolean;
 }
 
 export const Title = styled.div`
   position: relative;
-  left: 16px;
-  margin-right: 16px;
+  left: 24px;
+  margin-right: 24px;
+  font-size: 13px;
   ${robotoRegular()};
   ${noUserSelect()};
 
-  ${({ disabled, dense }: TitleProps) => css`
+  ${({ disabled }: TitleProps) => css`
     opacity: ${disabled
       ? transparency.light.disabledText
       : transparency.light.primaryText};
-    font-size: ${dense ? 13 : 15}px;
   `};
 `;
