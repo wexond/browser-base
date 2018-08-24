@@ -1,10 +1,6 @@
-import { ipcRenderer } from 'electron';
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { UPDATE_RESTART_AND_INSTALL } from '~/constants';
-import Button from '../../../components/Button';
-import Snackbar from '../../../components/Snackbar';
 import GlobalMenu from '../GlobalMenu';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
