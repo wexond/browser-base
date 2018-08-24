@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { PageContainer } from '../Menu/styles';
-import { transparency } from '~/defaults';
+import { transparency } from '~/renderer/defaults';
 import { robotoMedium, robotoRegular } from '@mixins';
 
 export const Container = styled(PageContainer)`

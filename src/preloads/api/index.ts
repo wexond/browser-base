@@ -9,7 +9,10 @@ function readProperty(obj: any, prop: string) {
   return obj[prop];
 }
 
-export const getAPI = (manifest: Manifest) => {
+export const getAPI = (
+  manifest: Manifest,
+  { local }: { [key: string]: Nedb },
+) => {
   // https://developer.chrome.com/extensions
   const api = {
     // https://developer.chrome.com/extensions/webNavigation

@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { StyledContainer } from './styles';
 import store from '@app/store';
-import { icons } from '~/defaults';
+import { icons } from '~/renderer/defaults';
 import ToolbarButton from '@app/components/ToolbarButton';
 
 @observer
