@@ -4,15 +4,37 @@ import { format } from 'url';
 import { Manifest } from '~/interfaces/manifest';
 import IpcEvent from './ipc-event';
 import WebRequestEvent from './web-request-event';
+import { API_STORAGE_OPERATION } from '~/constants/api-ipc-messages';
+import { makeId } from '~/utils';
 
 function readProperty(obj: any, prop: string) {
   return obj[prop];
 }
 
-export const getAPI = (
-  manifest: Manifest,
-  { local }: { [key: string]: Nedb },
+const sendStorageOperation = (
+  extensionId: string,
+  arg: any,
+  area: string,
+  type: string,
+  callback: any,
 ) => {
+  const id = makeId(32);
+  ipcRenderer.send(API_STORAGE_OPERATION, {
+    extensionId,
+    id,
+    arg,
+    type,
+    area,
+  });
+
+  if (callback) {
+    ipcRenderer.once(API_STORAGE_OPERATION + id, (e: any, ...data: any[]) => {
+      callback(...data);
+    });
+  }
+};
+
+export const getAPI = (manifest: Manifest) => {
   // https://developer.chrome.com/extensions
   const api = {
     // https://developer.chrome.com/extensions/webNavigation
@@ -211,14 +233,44 @@ export const getAPI = (
     // https://developer.chrome.com/extensions/storage
     storage: {
       local: {
-        set: (key: string, value: string) => {
-          console.log(key, value);
+        set: (arg: any, cb: any) => {
+          sendStorageOperation(manifest.extensionId, arg, 'local', 'set', cb);
         },
-        get: (key: any) => {
-          console.log(typeof key, key);
+        get: (arg: any, cb: any) => {
+          sendStorageOperation(manifest.extensionId, arg, 'local', 'get', cb);
+        },
+        remove: (arg: any, cb: any) => {
+          sendStorageOperation(
+            manifest.extensionId,
+            arg,
+            'local',
+            'remove',
+            cb,
+          );
+        },
+        clear: (arg: any, cb: any) => {
+          sendStorageOperation(manifest.extensionId, arg, 'local', 'clear', cb);
         },
       },
-      sync: {},
+      sync: {
+        set: (arg: any, cb: any) => {
+          sendStorageOperation(manifest.extensionId, arg, 'sync', 'set', cb);
+        },
+        get: (arg: any, cb: any) => {
+          sendStorageOperation(manifest.extensionId, arg, 'sync', 'get', cb);
+        },
+        remove: (arg: any, cb: any) => {
+          sendStorageOperation(manifest.extensionId, arg, 'sync', 'remove', cb);
+        },
+        clear: (arg: any, cb: any) => {
+          sendStorageOperation(manifest.extensionId, arg, 'sync', 'clear', cb);
+        },
+      },
+      managed: {
+        get: (arg: any, cb: any) => {
+          sendStorageOperation(manifest.extensionId, arg, 'managed', 'get', cb);
+        },
+      },
       onChanged: {},
     },
 
@@ -230,6 +282,9 @@ export const getAPI = (
     browserAction: {
       onClicked: {
         addListener: () => {},
+      },
+      setBadgeText: (details: any, cb: any) => {
+        console.log(details);
       },
     },
   };

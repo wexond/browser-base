@@ -6,6 +6,7 @@ import {
   API_TABS_EXECUTE_SCRIPT,
   API_TABS_INSERT_CSS,
   API_TABS_QUERY,
+  API_STORAGE_OPERATION,
 } from '~/constants';
 import { Global } from '../interfaces';
 
@@ -56,6 +57,34 @@ export const runExtensionsService = (window: BrowserWindow) => {
       if (global.backgroundPages[extensionId]) {
         const contents = webContents.fromId(e.sender.id);
         contents.reload();
+      }
+    },
+  );
+
+  ipcMain.on(
+    API_STORAGE_OPERATION,
+    (e: Electron.IpcMessageEvent, data: any) => {
+      const contents = webContents.fromId(e.sender.id);
+      const storage = global.databases[data.extensionId];
+      const msg = API_STORAGE_OPERATION + data.id;
+
+      if (data.type === 'get') {
+        storage[data.area].get(data.arg, d => {
+          console.log(d);
+          contents.send(msg, d);
+        });
+      } else if (data.type === 'set') {
+        storage[data.area].set(data.arg, () => {
+          contents.send(msg);
+        });
+      } else if (data.type === 'clear') {
+        storage[data.area].clear(() => {
+          contents.send(msg);
+        });
+      } else if (data.type === 'remove') {
+        storage[data.area].set(data.arg, () => {
+          contents.send(msg);
+        });
       }
     },
   );
