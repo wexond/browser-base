@@ -29,6 +29,7 @@ export const Style = css`
     user-select: none;
     cursor: default;
     ${body2()} margin: 0;
+    background-color: white;
     padding: 0;
     width: 100vw;
     height: 100vh;
