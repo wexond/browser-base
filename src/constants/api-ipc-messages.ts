@@ -8,3 +8,5 @@ export const API_TABS_GET_ZOOM = 'api-tabs-getZoom';
 export const API_TABS_DETECT_LANGUAGE = 'api-tabs-detectLanguage';
 
 export const API_RUNTIME_RELOAD = 'api-runtime-reload';
+
+export const API_STORAGE_OPERATION = 'api-storage-operation';

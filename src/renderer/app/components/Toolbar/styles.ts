@@ -9,7 +9,6 @@ export const StyledToolbar = styled.div`
   background-color: #fff;
   color: rgba(0, 0, 0, 0.8);
   -webkit-app-region: drag;
-  border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
 
   height: ${TOOLBAR_HEIGHT}px;
   transition: 0.2s margin-top ${EASE_FUNCTION};

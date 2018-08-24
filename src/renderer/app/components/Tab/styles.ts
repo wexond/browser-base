@@ -34,7 +34,7 @@ export const StyledTab = styled.div`
   top: 50%;
   transform: translateY(-50.1%);
   display: flex;
-  height: calc(100% - 5px);
+  height: calc(100% - 6px);
   border-radius: 4px;
   overflow: hidden;
   align-items: center;

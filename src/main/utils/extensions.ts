@@ -5,13 +5,17 @@ import {
   statSync,
   writeFileSync,
   existsSync,
+  mkdirSync,
 } from 'fs';
 import { format } from 'url';
 import { resolve } from 'path';
 
 import { Manifest } from '~/interfaces';
 import { Global } from '../interfaces';
-import { getPath, makeId } from '.';
+import { getPath } from '.';
+import { defaultPaths } from '~/defaults';
+import Nedb from 'nedb';
+import { StorageArea } from '~/main/models/storage-area';
 
 declare const global: Global;
 
@@ -86,6 +90,19 @@ export const loadExtensions = () => {
         manifest.srcDirectory = extensionPath;
 
         global.extensions[manifest.extensionId] = manifest;
+
+        const extensionStoragePath = getPath(
+          defaultPaths.extensionsStorage,
+          manifest.extensionId,
+        );
+
+        const local = new StorageArea(resolve(extensionStoragePath, 'local'));
+        const sync = new StorageArea(resolve(extensionStoragePath, 'sync'));
+        const managed = new StorageArea(
+          resolve(extensionStoragePath, 'managed'),
+        );
+
+        global.databases[manifest.extensionId] = { local, sync, managed };
 
         startBackgroundPage(manifest);
       }
