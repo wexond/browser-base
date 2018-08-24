@@ -90,7 +90,6 @@ export const Title = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: 0.2s margin-left;
-  font-weight: 500;
   margin-left: 12px;
 
   ${({ favicon, loading, selected }: TitleProps) => css`
