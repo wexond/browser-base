@@ -137,10 +137,9 @@ export default class extends React.Component<{ tab: Tab }, {}> {
     if (
       hovered ||
       selected ||
-      ((tabIndex + 1 !== tabs.length &&
+      (tabIndex + 1 !== tabs.length &&
         (tabs[tabIndex + 1].hovered ||
-          tabGroup.selectedTab === tabs[tabIndex + 1].id)) ||
-        tabIndex === tabs.length - 1)
+          tabGroup.selectedTab === tabs[tabIndex + 1].id))
     ) {
       rightBorderVisible = false;
     }
