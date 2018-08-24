@@ -9,7 +9,7 @@ import {
 } from './styles';
 import { Suggestion } from '~/interfaces';
 import store from '@app/store';
-import { icons, transparency } from '~/defaults';
+import { icons, transparency } from '~/renderer/defaults';
 
 interface Props {
   suggestion: Suggestion;

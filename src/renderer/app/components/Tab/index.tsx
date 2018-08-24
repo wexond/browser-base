@@ -8,7 +8,7 @@ import { Tab } from '../../models';
 import store from '@app/store';
 import { closeWindow } from '~/utils/window';
 import { TAB_ANIMATION_DURATION } from '~/constants';
-import { colors, transparency } from '~/defaults';
+import { colors, transparency } from '~/renderer/defaults';
 
 @observer
 export default class extends React.Component<{ tab: Tab }, {}> {

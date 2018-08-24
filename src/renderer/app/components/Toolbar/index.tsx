@@ -8,10 +8,10 @@ import { StyledToolbar, TabsSection, Tabs } from './styles';
 import ToolbarButton from '../ToolbarButton';
 import ToolbarSeparator from '../ToolbarSeparator';
 import store from '@app/store';
-import { icons } from '~/defaults';
 import { Platforms } from '~/enums';
 import WindowsControls from '../WindowsButtons';
 import BookmarkButton from '@app/components/BookmarkButton';
+import { icons } from '~/renderer/defaults';
 
 @observer
 class FirstSeparator extends React.Component {

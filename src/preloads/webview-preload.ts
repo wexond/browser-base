@@ -1,11 +1,12 @@
 import { remote } from 'electron';
-import fs from 'fs';
-import path from 'path';
+import { join } from 'path';
 import { runInThisContext } from 'vm';
 
 import { Manifest } from '~/interfaces/manifest';
 import { getAPI } from './api';
 import { loadContent } from './load-content';
+import { getExtensionDatabases } from '~/utils/extensions';
+import { readFileSync } from 'fs';
 
 if (
   window.location.href.startsWith('wexond://newtab') ||
@@ -30,7 +31,7 @@ const matchesPattern = (pattern: string) => {
 };
 
 const runContentScript = (url: string, code: string, manifest: Manifest) => {
-  const context = getAPI(manifest);
+  const context = getAPI(manifest, getExtensionDatabases(manifest));
 
   const wrapper = `((wexond) => {
     var chrome = wexond;
@@ -108,10 +109,7 @@ Object.keys(extensions).forEach(key => {
   if (manifest.content_scripts) {
     const readArrayOfFiles = (relativePath: string) => ({
       url: `wexond-extension://${manifest.extensionId}/${relativePath}`,
-      code: fs.readFileSync(
-        path.join(manifest.srcDirectory, relativePath),
-        'utf8',
-      ),
+      code: readFileSync(join(manifest.srcDirectory, relativePath), 'utf8'),
     });
 
     try {

@@ -6,7 +6,7 @@ import Button from '../../../components/Button';
 import { Root, Title, ButtonsContainer, Content, KeyInput } from './styles';
 import store from '@app/store';
 import { commands } from '~/defaults/commands';
-import { colors } from '~/defaults';
+import { colors } from '~/renderer/defaults';
 
 @observer
 export default class KeyRecordingDialog extends React.Component {
