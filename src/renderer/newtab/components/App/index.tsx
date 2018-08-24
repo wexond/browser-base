@@ -1,12 +1,11 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
+import store from '@newtab/store';
 import News from '../News';
 import WeatherCard from '../WeatherCard';
 import { getWeather } from '~/utils/weather';
 import { Column, Content, StyledApp } from './styles';
-
-import store from '@newtab/store';
 
 @observer
 export default class App extends React.Component<{ visible: boolean }, {}> {
@@ -30,7 +29,7 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
   };
 
   public async loadData() {
-    const weatherData = await getWeather('warsaw', 'en', 'C', 24);
+    const weatherData = await getWeather('san francisco', 'en', 'C', 24);
 
     store.weatherStore.forecast = weatherData;
     store.newsStore.news = await store.newsStore.getNews('us');
@@ -45,7 +44,7 @@ export default class App extends React.Component<{ visible: boolean }, {}> {
       <StyledApp>
         <Content>
           <Column>
-            <WeatherCard data={store.weatherStore.forecast} />
+            {true && <WeatherCard data={store.weatherStore.forecast} />}
             {columns.length > 0 && <News data={columns[0]} />}
           </Column>
           {columns.length > 1 && (

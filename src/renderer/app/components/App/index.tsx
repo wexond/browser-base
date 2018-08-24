@@ -9,7 +9,6 @@ import GlobalMenu from '../GlobalMenu';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
 import { StyledApp } from './styles';
-import { colors } from '~/defaults';
 import store from '../../store';
 import { getKeyBindings, bindKeys } from '~/utils/keyboard-shortcuts';
 import TabGroupsMenu from '../TabGroupsMenu';
