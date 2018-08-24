@@ -8,7 +8,7 @@ import Snackbar from '../../../components/Snackbar';
 import GlobalMenu from '../GlobalMenu';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
-import { StyledApp } from './styles';
+import { StyledApp, Line } from './styles';
 import store from '../../store';
 import { getKeyBindings, bindKeys } from '~/utils/keyboard-shortcuts';
 import TabGroupsMenu from '../TabGroupsMenu';
@@ -56,6 +56,7 @@ class App extends React.Component {
     return (
       <StyledApp>
         <Toolbar />
+        <Line />
         <Pages />
         <PageMenu />
         <GlobalMenu />
