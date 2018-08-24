@@ -64,7 +64,7 @@
     "concurrently": "3.6.1",
     "cross-env": "5.2.0",
     "devtron": "1.4.0",
-    "electron": "3.0.0-beta.7",
+    "electron": "2.0.8",
     "electron-builder": "20.26.1",
     "electron-react-devtools": "0.5.3",
     "electron-updater": "3.0.3",

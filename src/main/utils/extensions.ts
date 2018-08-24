@@ -1,5 +1,11 @@
 import { webContents } from 'electron';
-import { readdirSync, readFileSync, statSync } from 'fs';
+import {
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+  existsSync,
+} from 'fs';
 import { format } from 'url';
 import { resolve } from 'path';
 
@@ -71,14 +77,18 @@ export const loadExtensions = () => {
 
     if (stats.isDirectory()) {
       const manifestPath = resolve(extensionPath, 'manifest.json');
-      const manifest: Manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+      if (existsSync(manifestPath)) {
+        const manifest: Manifest = JSON.parse(
+          readFileSync(manifestPath, 'utf8'),
+        );
 
-      manifest.extensionId = makeId(32);
-      manifest.srcDirectory = extensionPath;
+        manifest.extensionId = dir;
+        manifest.srcDirectory = extensionPath;
 
-      global.extensions[manifest.extensionId] = manifest;
+        global.extensions[manifest.extensionId] = manifest;
 
-      startBackgroundPage(manifest);
+        startBackgroundPage(manifest);
+      }
     }
   }
 };

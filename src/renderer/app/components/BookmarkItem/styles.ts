@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { colors, transparency } from '~/defaults';
+import { colors, transparency } from '~/renderer/defaults';
 import * as PageItem from '../../../components/PageItem';
 import { centerImage, robotoRegular } from '@mixins';
 
