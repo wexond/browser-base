@@ -1627,15 +1627,9 @@ electron-updater@3.0.3:
     semver "^5.5.0"
     source-map-support "^0.5.6"
 
-<<<<<<< HEAD
 electron@3.0.0-beta.7:
   version "3.0.0-beta.7"
   resolved "https://registry.yarnpkg.com/electron/-/electron-3.0.0-beta.7.tgz#fe72a3e27fa823ea3966d21538e0ff66e1089612"
-=======
-electron@2.0.8:
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-2.0.8.tgz#6ec7113b356e09cc9899797e0d41ebff8163e962"
->>>>>>> f53231ca6bd6349a7a89a043d1f53d9ac694e869
   dependencies:
     "@types/node" "^8.0.24"
     electron-download "^4.1.0"
