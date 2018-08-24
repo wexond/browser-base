@@ -4,7 +4,7 @@ import { ipcRenderer } from 'electron';
 import Snackbar from '@components/Snackbar';
 import store from '@app/store';
 import Button from '@components/Button';
-import { colors } from '~/defaults';
+import { colors } from '~/renderer/defaults';
 import { UPDATE_RESTART_AND_INSTALL } from '~/constants';
 
 export default class UpdateSnackbar extends React.Component {

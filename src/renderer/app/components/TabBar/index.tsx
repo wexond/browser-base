@@ -4,7 +4,7 @@ import React from 'react';
 import { AddTab, StyledTabbar, TabsContainer } from './styles';
 import HorizontalScrollbar from '../HorizontalScrollbar';
 import store from '@app/store';
-import { icons } from '~/defaults';
+import { icons } from '~/renderer/defaults';
 import TabGroups from '../TabGroups';
 
 @observer

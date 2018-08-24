@@ -1,4 +1,4 @@
-import { transparency } from '~/defaults';
+import { transparency } from '~/renderer/defaults';
 
 type UITheme = 'light' | 'dark';
 

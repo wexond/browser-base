@@ -1,7 +1,7 @@
 import { observable } from 'mobx';
 import { Suggestion } from '~/interfaces';
 import store from '@app/store';
-import { icons } from '~/defaults';
+import { icons } from '~/renderer/defaults';
 import { isURL } from '~/utils';
 import {
   getSearchSuggestions,

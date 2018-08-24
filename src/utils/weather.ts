@@ -4,7 +4,7 @@ import {
   WeatherForecast,
   Dictionary,
 } from '~/interfaces';
-import { weatherIcons } from '~/defaults/weather-icons';
+import { weatherIcons } from '@newtab/defaults/weather-icons';
 import { getTimeInZone, getTimeZoneOffset } from '~/utils/time-zone';
 import { WEATHER_API_KEY } from '~/constants';
 import {

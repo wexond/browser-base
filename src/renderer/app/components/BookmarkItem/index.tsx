@@ -1,11 +1,10 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { transparency } from '~/defaults';
+import { transparency, icons } from '~/renderer/defaults';
 import { Bookmark } from '~/interfaces';
 import { Icon, PageItem } from '@components/PageItem';
 import { ActionIcon, Input, Title } from './styles';
-import { icons } from '~/defaults/icons';
 import store from '@app/store';
 import { databases } from '~/defaults/databases';
 
