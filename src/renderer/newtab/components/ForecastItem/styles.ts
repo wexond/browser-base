@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { transparency } from '~/defaults';
+import { transparency } from '~/renderer/defaults';
 import { body2, centerImage } from '@mixins';
 
 export const StyledForecastItem = styled.div`

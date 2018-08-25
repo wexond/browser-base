@@ -1,7 +1,7 @@
 import { css } from 'styled-components';
 
 import { body2 } from '@mixins';
-import { fonts } from '~/defaults';
+import { fonts } from '~/renderer/defaults';
 
 export const Style = css`
   @font-face {
@@ -29,6 +29,7 @@ export const Style = css`
     user-select: none;
     cursor: default;
     ${body2()} margin: 0;
+    background-color: white;
     padding: 0;
     width: 100vw;
     height: 100vh;

@@ -4,7 +4,6 @@ export const StyledApp = styled.div`
   width: 100%;
   height: 100vh;
   overflow: auto;
-  background-color: #f5f5f5;
   position: absolute;
   top: 0;
 `;

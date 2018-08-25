@@ -4,7 +4,7 @@ import { HistoryItem } from '~/interfaces';
 import store from '@app/store';
 import { PageItem, Icon, Time, Title } from '../../../components/PageItem';
 import { RemoveIcon } from './styles';
-import { icons, transparency } from '~/defaults';
+import { icons, transparency } from '~/renderer/defaults';
 
 interface Props {
   data: HistoryItem;

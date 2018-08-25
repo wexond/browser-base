@@ -1,9 +1,9 @@
 import { observable, computed } from 'mobx';
 import { TabGroup } from '../models';
-import { defaultCreateTabProperties } from '~/defaults/create-tab-properties';
 import { TAB_ANIMATION_EASING, TAB_ANIMATION_DURATION } from '~/constants';
 import { TweenLite } from 'gsap';
 import HorizontalScrollbar from '@app/components/HorizontalScrollbar';
+import { defaultAddTabOptions } from '~/defaults';
 
 export class TabsStore {
   @observable
@@ -91,7 +91,7 @@ export class TabsStore {
     return null;
   }
 
-  public addTab(details = defaultCreateTabProperties) {
+  public addTab(details = defaultAddTabOptions) {
     return this.getCurrentGroup().addTab(details);
   }
 

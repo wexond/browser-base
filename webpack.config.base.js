@@ -28,4 +28,8 @@ module.exports = {
       '~': join(__dirname, './src'),
     },
   },
+
+  externals: {
+    leveldown: 'require("leveldown")',
+  },
 };
