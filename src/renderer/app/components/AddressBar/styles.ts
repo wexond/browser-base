@@ -21,7 +21,7 @@ export const StyledAddressBar = styled.div`
 
   ${({ suggestionsVisible, visible }: AddressBarProps) => css`
     height: ${suggestionsVisible ? 'auto' : `${ADDRESS_BAR_HEIGHT}px`};
-    border-radius: ${suggestionsVisible ? 4 : 20}px;
+    border-radius: ${suggestionsVisible ? 8 : 20}px;
     box-shadow: ${suggestionsVisible ? shadows(8) : 'none'};
     top: ${suggestionsVisible
       ? '1px'
