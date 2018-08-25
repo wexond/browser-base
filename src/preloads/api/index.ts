@@ -4,8 +4,63 @@ import { format } from 'url';
 import { Manifest } from '~/interfaces/manifest';
 import IpcEvent from './ipc-event';
 import WebRequestEvent from './web-request-event';
-import { API_STORAGE_OPERATION } from '~/constants/api-ipc-messages';
+import {
+  API_STORAGE_OPERATION,
+  API_RUNTIME_CONNECT,
+  API_PORT_POSTMESSAGE,
+} from '~/constants/api-ipc-messages';
 import { makeId } from '~/utils';
+
+class Event {
+  private callbacks: Function[] = [];
+
+  public emit(...args: any[]) {
+    this.callbacks.forEach(callback => {
+      callback(...args);
+    });
+  }
+
+  public addListener(callback: Function) {
+    this.callbacks.push(callback);
+  }
+
+  public removeListener(callback: Function) {
+    this.callbacks = this.callbacks.filter(x => x !== callback);
+  }
+}
+
+class Port {
+  public sender: chrome.runtime.MessageSender;
+  public name: string;
+  public onMessage = new Event();
+  public onDisconnect = new Event();
+
+  private portId: string;
+
+  constructor(
+    portId: string,
+    name: string = null,
+    sender: chrome.runtime.MessageSender = null,
+  ) {
+    if (sender) {
+      this.sender = sender;
+    }
+
+    if (name) {
+      this.name = name;
+    }
+
+    this.portId = portId;
+
+    ipcRenderer.on(API_PORT_POSTMESSAGE + portId, (e: any, msg: any) => {
+      this.onMessage.emit(msg, this);
+    });
+  }
+
+  public postMessage(msg: any) {
+    ipcRenderer.send(API_PORT_POSTMESSAGE, { portId: this.portId, msg });
+  }
+}
 
 function readProperty(obj: any, prop: string) {
   return obj[prop];
@@ -29,6 +84,7 @@ const sendStorageOperation = (
 
   if (callback) {
     ipcRenderer.once(API_STORAGE_OPERATION + id, (e: any, ...data: any[]) => {
+      console.log(...data);
       callback(...data);
     });
   }
@@ -73,7 +129,32 @@ export const getAPI = (manifest: Manifest) => {
       id: manifest.extensionId,
       lastError: undefined as string,
 
-      onConnect: new IpcEvent('runtime', 'onConnect'),
+      onConnect: new Event(),
+
+      connect: (extensionId: string = null, connectInfo: any = null) => {
+        const sender: any = {
+          id: manifest.extensionId,
+        };
+        const portId = makeId(32);
+
+        let name: string = null;
+
+        if (connectInfo) {
+          if (connectInfo.includeTlsChannelId) {
+            sender.tlsChannelId = portId;
+          }
+          name = connectInfo.name;
+        }
+
+        ipcRenderer.send(API_RUNTIME_CONNECT, {
+          extensionId: manifest.extensionId,
+          portId,
+          sender,
+          name,
+        });
+
+        return new Port(portId, name);
+      },
 
       reload: () => {
         ipcRenderer.send('api-runtime-reload', manifest.extensionId);
@@ -227,7 +308,7 @@ export const getAPI = (manifest: Manifest) => {
       onCreated: new IpcEvent('tabs', 'onCreated'),
       onUpdated: new IpcEvent('tabs', 'onUpdated'),
       onActivated: new IpcEvent('tabs', 'onActivated'),
-      onRemoved: new IpcEvent('tabs', 'onRemoved'), // TODO
+      onRemoved: new IpcEvent('tabs', 'onRemoved'),
     },
 
     // https://developer.chrome.com/extensions/storage
@@ -288,5 +369,15 @@ export const getAPI = (manifest: Manifest) => {
       },
     },
   };
+
+  ipcRenderer.on(
+    API_RUNTIME_CONNECT,
+    (e: Electron.IpcMessageEvent, data: any) => {
+      const { portId, sender, name } = data;
+      const port = new Port(portId, name, sender);
+      api.runtime.onConnect.emit(port);
+    },
+  );
+
   return api;
 };
