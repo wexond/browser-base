@@ -8,8 +8,7 @@ import { Root, Title, ButtonsContainer, Content, KeyInput } from './styles';
 import store from '@app/store';
 import { commands } from '~/defaults/commands';
 import { colors } from '~/renderer/defaults';
-import { defaultPaths } from '~/defaults';
-import { getPath } from '~/utils/paths';
+import { saveKeyBindings } from '~/utils/key-bindings';
 
 @observer
 export default class KeyRecordingDialog extends React.Component {
@@ -73,12 +72,7 @@ export default class KeyRecordingDialog extends React.Component {
       selected.key = combination;
       selected.isChanged = true;
 
-      const path = getPath(defaultPaths.keyBindings);
-      const changed = store.keyBindingsStore.keyBindings.filter(
-        e => e.isChanged,
-      );
-
-      writeFileSync(path, JSON.stringify(changed, null, 2), 'utf8');
+      saveKeyBindings();
     }
 
     store.keyBindingsStore.dialogVisible = false;
