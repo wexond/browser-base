@@ -33,10 +33,11 @@ export const ButtonsContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+
   & .material-button {
     margin-right: 8px;
-    padding-right: 8px;
     padding-left: 8px;
+    padding-right: 8px;
   }
 `;
 

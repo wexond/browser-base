@@ -17,6 +17,7 @@ import { FaviconsStore } from './favicons';
 import { ExtensionsStore } from './extensions';
 import { dictionaries } from '~/defaults';
 import { KeyBindingsStore } from './key-bindings';
+import { KeyBindingsMenuStore } from './key-bindings-menu';
 
 export class Store {
   public tabsStore = new TabsStore();
@@ -32,6 +33,7 @@ export class Store {
   public navigationStateStore = new NavigationStateStore();
   public faviconsStore = new FaviconsStore();
   public extensionsStore = new ExtensionsStore();
+  public keyBindingsMenuStore = new KeyBindingsMenuStore();
 
   @observable
   public isFullscreen = false;
