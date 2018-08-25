@@ -12,8 +12,9 @@ import {
   BodyItem,
 } from './styles';
 import store from '@app/store';
-import { KeyBinding, Dictionary } from '~/interfaces';
+import { KeyBinding } from '~/interfaces';
 import { PageContent } from '../Menu/styles';
+import { getContextMenuPos } from '~/utils/context-menu';
 
 @observer
 export default class KeyboardShortcuts extends React.Component {
@@ -22,6 +23,18 @@ export default class KeyboardShortcuts extends React.Component {
     store.keyBindingsStore.dialog.input.value = keyBinding.key;
     store.keyBindingsStore.dialog.combination = null;
     store.keyBindingsStore.selected = keyBinding;
+  };
+
+  public onContextMenu = (e: any, binding: KeyBinding) => {
+    // Get position
+    const pos = getContextMenuPos(store.keyBindingsMenuStore.ref);
+
+    // Set the new position.
+    store.keyBindingsMenuStore.x = pos.x;
+    store.keyBindingsMenuStore.y = pos.y;
+
+    store.keyBindingsStore.selected = binding;
+    store.keyBindingsMenuStore.visible = true;
   };
 
   public render() {
@@ -40,7 +53,10 @@ export default class KeyboardShortcuts extends React.Component {
             </thead>
             <tbody>
               {store.keyBindingsStore.keyBindings.map((data, key) => (
-                <BodyRow key={key}>
+                <BodyRow
+                  key={key}
+                  onContextMenu={e => this.onContextMenu(e, data)}
+                >
                   <BodyItem>
                     {store.dictionary.keyCommands[data.command]}
                   </BodyItem>
