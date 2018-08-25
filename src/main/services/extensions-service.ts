@@ -7,6 +7,8 @@ import {
   API_TABS_INSERT_CSS,
   API_TABS_QUERY,
   API_STORAGE_OPERATION,
+  API_RUNTIME_CONNECT,
+  API_PORT_POSTMESSAGE,
 } from '~/constants';
 import { Global } from '../interfaces';
 
@@ -60,6 +62,34 @@ export const runExtensionsService = (window: BrowserWindow) => {
       }
     },
   );
+
+  ipcMain.on(API_RUNTIME_CONNECT, (e: Electron.IpcMessageEvent, data: any) => {
+    const { extensionId, portId, sender, name } = data;
+    const bgPage = global.backgroundPages[extensionId];
+
+    if (e.sender.id !== bgPage.webContentsId) {
+      const contents = webContents.fromId(bgPage.webContentsId);
+      contents.send(API_RUNTIME_CONNECT, { portId, sender, name });
+    }
+  });
+
+  ipcMain.on(API_PORT_POSTMESSAGE, (e: Electron.IpcMessageEvent, data: any) => {
+    const { portId, msg } = data;
+
+    Object.keys(global.backgroundPages).forEach(key => {
+      const bgPage = global.backgroundPages[key];
+      if (e.sender.id !== bgPage.webContentsId) {
+        const contents = webContents.fromId(bgPage.webContentsId);
+        contents.send(API_PORT_POSTMESSAGE + portId, msg);
+      }
+    });
+
+    window.webContents.send(API_PORT_POSTMESSAGE, {
+      portId,
+      msg,
+      senderId: e.sender.id,
+    });
+  });
 
   ipcMain.on(
     API_STORAGE_OPERATION,
