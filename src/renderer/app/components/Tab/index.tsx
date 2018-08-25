@@ -8,7 +8,7 @@ import { Tab } from '../../models';
 import store from '@app/store';
 import { closeWindow } from '~/utils/window';
 import { TAB_ANIMATION_DURATION } from '~/constants';
-import { colors, transparency } from '~/defaults';
+import { colors, transparency } from '~/renderer/defaults';
 
 @observer
 export default class extends React.Component<{ tab: Tab }, {}> {
@@ -137,10 +137,9 @@ export default class extends React.Component<{ tab: Tab }, {}> {
     if (
       hovered ||
       selected ||
-      ((tabIndex + 1 !== tabs.length &&
+      (tabIndex + 1 !== tabs.length &&
         (tabs[tabIndex + 1].hovered ||
-          tabGroup.selectedTab === tabs[tabIndex + 1].id)) ||
-        tabIndex === tabs.length - 1)
+          tabGroup.selectedTab === tabs[tabIndex + 1].id))
     ) {
       rightBorderVisible = false;
     }

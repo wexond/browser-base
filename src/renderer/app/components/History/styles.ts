@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { transparency } from '~/defaults';
+import { transparency } from '~/renderer/defaults';
 import { robotoMedium } from '@mixins';
 
 export const Toolbar = styled.div`

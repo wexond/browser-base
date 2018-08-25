@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Indicator, Root, Track } from './styles';
-import { colors } from '~/defaults';
+import { colors } from '~/renderer/defaults';
 
 export interface IProps {
   color?: string;

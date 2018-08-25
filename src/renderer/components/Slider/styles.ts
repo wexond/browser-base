@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { transparency } from '~/defaults';
+import { transparency } from '~/renderer/defaults';
 import { EASE_FUNCTION } from '~/constants';
 import { centerBoth, robotoRegular, centerHorizontal } from '@mixins';
 

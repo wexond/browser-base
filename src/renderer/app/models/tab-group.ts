@@ -1,7 +1,7 @@
 import { observable, computed } from 'mobx';
 import { Tab, Page } from '.';
 import store from '../store';
-import { defaultCreateTabProperties } from '~/defaults/create-tab-properties';
+import { defaultAddTabOptions } from '~/defaults';
 
 let id = 0;
 
@@ -33,7 +33,7 @@ export class TabGroup {
     });
   }
 
-  public addTab({ url, active } = defaultCreateTabProperties) {
+  public addTab({ url, active } = defaultAddTabOptions) {
     const tab = new Tab(this);
     this.tabs.push(tab);
 

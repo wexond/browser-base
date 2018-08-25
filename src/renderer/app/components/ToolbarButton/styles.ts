@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { TOOLBAR_BUTTON_WIDTH } from '~/constants';
-import { transparency } from '~/defaults';
+import { transparency } from '~/renderer/defaults';
 import { centerImage } from '@mixins';
 
 export const Icon = styled.div`
@@ -40,8 +40,8 @@ export const Button = styled.div`
 
 export const Circle = styled.div`
   border-radius: 50%;
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   position: absolute;
   top: 50%;
   left: 50%;

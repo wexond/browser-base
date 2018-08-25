@@ -6,7 +6,8 @@ import { getAPI } from './api';
 process.once('loaded', () => {
   const extensions = remote.getGlobal('extensions');
   const extensionId = parse(window.location.href).hostname;
-  const api = getAPI(extensions[extensionId]);
+  const manifest = extensions[extensionId];
+  const api = getAPI(manifest);
 
   interface Global extends NodeJS.Global {
     wexond?: typeof api;
