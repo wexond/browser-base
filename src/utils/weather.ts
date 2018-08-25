@@ -31,14 +31,26 @@ const getDaily = (current: any, weekly: any, timeZoneOffset: number) => {
   const list: WeatherDailyItem[] = [createDailyItem(current, timeZoneOffset)];
   const currentDate = new Date();
 
+  console.log(weekly);
+
   for (const item of weekly.list) {
     const date = new Date(item.dt * 1000);
 
-    if (date.getDate() === currentDate.getDate()) {
-      list.push(createDailyItem(item, timeZoneOffset));
-    } else {
+    // console.log(date.getDate(), currentDate.getDate(), timeZoneOffset);
+
+    list.push(createDailyItem(item, timeZoneOffset));
+
+    if (list.length >= 6) {
       break;
     }
+
+    /*if (date.getDate() === currentDate.getDate()) {
+      list.push(createDailyItem(item, timeZoneOffset));
+    } else if () 
+    
+    else {
+      break;
+    }*/
   }
 
   return list;
