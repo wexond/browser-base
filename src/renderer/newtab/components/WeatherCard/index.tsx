@@ -17,7 +17,7 @@ import * as Card from '@components/Card';
 import { WeatherForecast, WeatherWeeklyItem } from '~/interfaces';
 import store from '@newtab/store';
 import { formatDescription } from '~/utils/weather';
-import { transparency, icons, colors } from '~/defaults';
+import { transparency, icons, colors } from '~/renderer/defaults';
 import { formatTime, capitalizeWord, getDayIndex } from '~/utils';
 import Slider from '@components/Slider';
 import ForecastItem from '../ForecastItem';

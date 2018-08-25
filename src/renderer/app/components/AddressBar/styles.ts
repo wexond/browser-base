@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { ADDRESS_BAR_HEIGHT } from '~/constants';
 import { shadows, centerImage } from '@mixins';
-import { transparency } from '~/defaults';
+import { transparency } from '~/renderer/defaults';
 
 interface AddressBarProps {
   visible: boolean;

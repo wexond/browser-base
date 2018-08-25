@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 
 import Menu from '../Menu';
 import store from '@app/store';
-import { icons } from '~/defaults';
+import { icons } from '~/renderer/defaults';
 import Bookmarks from '../Bookmarks';
 import KeyboardShortcuts from '../KeyboardShortcuts';
 import About from '../About';

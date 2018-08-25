@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { icons, transparency, colors } from '~/defaults';
+import { icons, transparency, colors } from '~/renderer/defaults';
 import { centerImage, body2 } from '@mixins';
 
 interface CloseProps {
@@ -34,7 +34,7 @@ export const StyledTab = styled.div`
   top: 50%;
   transform: translateY(-50.1%);
   display: flex;
-  height: calc(100% - 5px);
+  height: calc(100% - 6px);
   border-radius: 4px;
   overflow: hidden;
   align-items: center;
@@ -90,7 +90,6 @@ export const Title = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: 0.2s margin-left;
-  font-weight: 500;
   margin-left: 12px;
 
   ${({ favicon, loading, selected }: TitleProps) => css`

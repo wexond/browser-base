@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { transparency } from '~/defaults';
+import { transparency } from '~/renderer/defaults';
 import { PageContainer } from '../Menu/styles';
 import { subtitle2 } from '@mixins';
 

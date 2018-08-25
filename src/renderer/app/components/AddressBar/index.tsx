@@ -5,7 +5,7 @@ import { isURL } from '~/utils';
 import { observe } from 'mobx';
 import { StyledAddressBar, InputContainer, Icon, Input } from './styles';
 import Suggestions from '../Suggestions';
-import { icons } from '~/defaults';
+import { icons } from '~/renderer/defaults';
 
 @observer
 export default class AddressBar extends Component {
