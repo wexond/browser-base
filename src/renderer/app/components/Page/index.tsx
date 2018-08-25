@@ -9,6 +9,7 @@ import store from '@app/store';
 import { PageMenuMode } from '~/enums';
 import { databases } from '~/defaults/databases';
 import { HistoryItem } from '~/interfaces';
+import { getContextMenuPos } from '~/utils/context-menu';
 
 @observer
 export default class extends React.Component<{ page: Page }> {
@@ -202,36 +203,12 @@ export default class extends React.Component<{ page: Page }> {
       store.pageMenuStore.mode = PageMenuMode.Normal;
     }
 
-    // Calculate new menu position
-    // using cursor x, y and
-    // width, height of the menu.
-    const x = store.mouse.x;
-    const y = store.mouse.y;
-
-    // By default it opens menu from upper left corner.
-    let left = x;
-    let top = y;
-
-    const width = 3 * 64;
-    const height = store.pageMenuStore.ref.getHeight();
-
-    // Open menu from right corner.
-    if (left + width > window.innerWidth) {
-      left = x - width;
-    }
-
-    // Open menu from bottom corner.
-    if (top + height > window.innerHeight) {
-      top = y - height;
-    }
-
-    if (top < 0) {
-      top = 96;
-    }
+    // Get position
+    const pos = getContextMenuPos(store.pageMenuStore.ref);
 
     // Set the new position.
-    store.pageMenuStore.x = left;
-    store.pageMenuStore.y = top;
+    store.pageMenuStore.x = pos.x;
+    store.pageMenuStore.y = pos.y;
   };
 
   public onDidStopLoading = () => {
