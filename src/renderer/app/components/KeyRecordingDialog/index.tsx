@@ -1,12 +1,15 @@
 import React from 'react';
 import mousetrap from 'mousetrap';
 import { observer } from 'mobx-react';
+import { writeFileSync } from 'fs';
 
 import Button from '../../../components/Button';
 import { Root, Title, ButtonsContainer, Content, KeyInput } from './styles';
 import store from '@app/store';
 import { commands } from '~/defaults/commands';
 import { colors } from '~/renderer/defaults';
+import { defaultPaths } from '~/defaults';
+import { getPath } from '~/utils/paths';
 
 @observer
 export default class KeyRecordingDialog extends React.Component {
@@ -43,6 +46,7 @@ export default class KeyRecordingDialog extends React.Component {
   };
 
   public getCombination = () => {
+    if (this.combination == null) return null;
     let text = '';
 
     if (this.combination.ctrl) text += 'ctrl+';
@@ -58,15 +62,23 @@ export default class KeyRecordingDialog extends React.Component {
     store.keyBindingsStore.dialogVisible = false;
   };
 
-  public onOKClick = () => {
-    if (this.combination != null) {
-      const selected = store.keyBindingsStore.selected;
-      const combination = this.getCombination();
+  public onSaveClick = () => {
+    const selected = store.keyBindingsStore.selected;
+    const combination = this.getCombination();
 
+    if (combination != null && combination !== selected.key) {
       mousetrap.unbind(selected.key);
       mousetrap.bind(combination, commands[selected.command]);
 
       selected.key = combination;
+      selected.isChanged = true;
+
+      const path = getPath(defaultPaths.keyBindings);
+      const changed = store.keyBindingsStore.keyBindings.filter(
+        e => e.isChanged,
+      );
+
+      writeFileSync(path, JSON.stringify(changed, null, 2), 'utf8');
     }
 
     store.keyBindingsStore.dialogVisible = false;
@@ -90,8 +102,12 @@ export default class KeyRecordingDialog extends React.Component {
           >
             CANCEL
           </Button>
-          <Button text foreground={colors.blue['500']} onClick={this.onOKClick}>
-            OK
+          <Button
+            text
+            foreground={colors.blue['500']}
+            onClick={this.onSaveClick}
+          >
+            SAVE
           </Button>
         </ButtonsContainer>
       </Root>
