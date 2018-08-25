@@ -18,11 +18,8 @@ const hashCode = (str: string) => {
 
 export default class WebRequestEvent {
   private scope: string;
-
   private name: string;
-
   private callbacks: Function[] = [];
-
   private listener: boolean = false;
 
   constructor(scope: string, name: string) {
