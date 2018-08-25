@@ -71,17 +71,17 @@ export class StorageArea {
   }
 
   public set(items: any, callback: any) {
-    console.log(items);
+    if (items === Object(items)) {
+      const batch = this.db.batch();
 
-    const batch = this.db.batch();
+      for (const key in items) {
+        batch.put(key, JSON.stringify(items[key]).toString());
+      }
 
-    for (const key in items) {
-      batch.put(key, items[key]);
+      batch.write(() => {
+        callback();
+      });
     }
-
-    batch.write(() => {
-      callback();
-    });
   }
 
   public remove(keys: any, callback: any) {

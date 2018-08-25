@@ -84,8 +84,8 @@ const sendStorageOperation = (
 
   if (callback) {
     ipcRenderer.once(API_STORAGE_OPERATION + id, (e: any, ...data: any[]) => {
-      console.log(...data);
-      callback(...data);
+      console.log(data[0]);
+      callback(data[0]);
     });
   }
 };
@@ -352,12 +352,18 @@ export const getAPI = (manifest: Manifest) => {
           sendStorageOperation(manifest.extensionId, arg, 'managed', 'get', cb);
         },
       },
-      onChanged: {},
+      onChanged: {
+        addListener: () => {
+          console.log('onchanged');
+        },
+      },
     },
 
     // https://developer.chrome.com/extensions/i18n
     i18n: {
-      getMessage: () => {},
+      getMessage: (msg: string, substitutions: any) => {
+        return 'test';
+      },
     },
 
     browserAction: {
