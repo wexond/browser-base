@@ -10,6 +10,6 @@ export const defaultPaths: { [key: string]: string } = {
 };
 
 export const filesContent: { [key: string]: string } = {
-  keyBindings: JSON.stringify(defaultKeyBindings, null, 2),
+  keyBindings: '[]',
   windowData: JSON.stringify({}),
 };
