@@ -8,6 +8,7 @@ import {
   API_TABS_INSERT_CSS,
   API_TABS_QUERY,
   API_TABS_SET_ZOOM,
+  API_PORT_POSTMESSAGE,
 } from '~/constants';
 import store from '../store';
 import { Tab } from '../models';
@@ -133,6 +134,19 @@ export const runExtensionsService = () => {
           }
         },
       );
+    },
+  );
+
+  ipcRenderer.on(
+    API_PORT_POSTMESSAGE,
+    (e: Electron.IpcMessageEvent, data: any) => {
+      const { pageId, msg, senderId } = data;
+
+      for (const page of store.pagesStore.pages) {
+        if (page.webview.getWebContents().id !== senderId) {
+          page.webview.send(API_PORT_POSTMESSAGE + pageId, msg);
+        }
+      }
     },
   );
 };
