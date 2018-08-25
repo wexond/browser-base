@@ -1,7 +1,7 @@
 import React from 'react';
 import WindowsButton from '../WindowsButton';
 import { minimizeWindow, maximizeWindow, closeWindow } from '~/utils/window';
-import { icons } from '~/defaults';
+import { icons } from '~/renderer/defaults';
 import ToolbarSeparator from '@app/components/ToolbarSeparator';
 
 export default class WindowsControls extends React.Component {

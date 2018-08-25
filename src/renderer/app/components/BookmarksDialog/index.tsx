@@ -5,7 +5,7 @@ import Textfield from '@components/Textfield';
 import Dropdown from '@components/Dropdown';
 import store from '@app/store';
 import { Bookmark } from '~/interfaces';
-import { colors } from '~/defaults';
+import { colors } from '~/renderer/defaults';
 import Button from '@components/Button';
 import { databases } from '~/defaults/databases';
 

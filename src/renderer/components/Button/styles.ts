@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { transparency } from '~/defaults';
+import { transparency } from '~/renderer/defaults';
 import { button, shadows } from '@mixins';
 import { getComponentColor } from '~/utils/component-color';
 

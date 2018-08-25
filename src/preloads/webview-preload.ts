@@ -1,11 +1,11 @@
 import { remote } from 'electron';
-import fs from 'fs';
-import path from 'path';
+import { join } from 'path';
 import { runInThisContext } from 'vm';
 
 import { Manifest } from '~/interfaces/manifest';
 import { getAPI } from './api';
 import { loadContent } from './load-content';
+import { readFileSync } from 'fs';
 
 if (
   window.location.href.startsWith('wexond://newtab') ||
@@ -102,31 +102,34 @@ const injectContentScript = (script: any, manifest: Manifest) => {
 
 const extensions: { [key: string]: Manifest } = remote.getGlobal('extensions');
 
-Object.keys(extensions).forEach(key => {
-  const manifest = extensions[key];
+const setImmediateTemp: any = setImmediate;
 
-  if (manifest.content_scripts) {
-    const readArrayOfFiles = (relativePath: string) => ({
-      url: `wexond-extension://${manifest.extensionId}/${relativePath}`,
-      code: fs.readFileSync(
-        path.join(manifest.srcDirectory, relativePath),
-        'utf8',
-      ),
-    });
+process.once('loaded', () => {
+  global.setImmediate = setImmediateTemp;
 
-    try {
-      manifest.content_scripts.forEach(script => {
-        const newScript = {
-          matches: script.matches,
-          js: script.js ? script.js.map(readArrayOfFiles) : [],
-          css: script.css ? script.css.map(readArrayOfFiles) : [],
-          runAt: script.run_at || 'document_idle',
-        };
+  Object.keys(extensions).forEach(key => {
+    const manifest = extensions[key];
 
-        injectContentScript(newScript, manifest);
+    if (manifest.content_scripts) {
+      const readArrayOfFiles = (relativePath: string) => ({
+        url: `wexond-extension://${manifest.extensionId}/${relativePath}`,
+        code: readFileSync(join(manifest.srcDirectory, relativePath), 'utf8'),
       });
-    } catch (readError) {
-      console.error('Failed to read content scripts', readError);
+
+      try {
+        manifest.content_scripts.forEach(script => {
+          const newScript = {
+            matches: script.matches,
+            js: script.js ? script.js.map(readArrayOfFiles) : [],
+            css: script.css ? script.css.map(readArrayOfFiles) : [],
+            runAt: script.run_at || 'document_idle',
+          };
+
+          injectContentScript(newScript, manifest);
+        });
+      } catch (readError) {
+        console.error('Failed to read content scripts', readError);
+      }
     }
-  }
+  });
 });

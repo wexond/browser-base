@@ -12,7 +12,7 @@ import {
   TickValue,
 } from './styles';
 
-import { colors, transparency } from '~/defaults';
+import { colors, transparency } from '~/renderer/defaults';
 import { hexToRgb } from '~/utils';
 
 export type SliderEvent = (value?: any, element?: Slider) => void;

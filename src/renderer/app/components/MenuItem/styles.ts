@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { colors, transparency } from '~/defaults';
+import { colors, transparency } from '~/renderer/defaults';
 import { robotoMedium } from '@mixins';
 
 export const StyledItem = styled.div`

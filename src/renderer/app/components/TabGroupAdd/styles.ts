@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { WORKSPACE_FOLDER_SIZE } from '~/constants';
-import { icons } from '~/defaults/icons';
+import { icons } from '~/renderer/defaults';
 import { centerImage } from '@mixins';
 
 export const Root = styled.div`

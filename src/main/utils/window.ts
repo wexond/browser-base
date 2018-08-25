@@ -6,6 +6,7 @@ import { FULLSCREEN } from '~/constants';
 import { loadExtensions } from './extensions';
 import { WindowState } from '../interfaces';
 import { getPath } from '.';
+import { filesContent } from '~/defaults';
 
 export const createWindow = () => {
   const windowDataPath = getPath('window-data.json');
@@ -13,8 +14,12 @@ export const createWindow = () => {
   let windowState: WindowState = {};
 
   if (existsSync(windowDataPath)) {
-    // Read the last window state from file.
-    windowState = JSON.parse(readFileSync(windowDataPath, 'utf8'));
+    try {
+      // Read the last window state from file.
+      windowState = JSON.parse(readFileSync(windowDataPath, 'utf8'));
+    } catch (e) {
+      writeFileSync(windowDataPath, filesContent.windowData);
+    }
   }
 
   let windowData: Electron.BrowserWindowConstructorOptions = {
