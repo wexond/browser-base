@@ -100,7 +100,11 @@ export const runExtensionsService = (window: BrowserWindow) => {
 
       if (data.type === 'get') {
         storage[data.area].get(data.arg, d => {
-          console.log(d);
+          for (const key in d) {
+            if (Buffer.isBuffer(d[key])) {
+              d[key] = JSON.parse(d[key].toString());
+            }
+          }
           contents.send(msg, d);
         });
       } else if (data.type === 'set') {
