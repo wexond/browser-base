@@ -164,16 +164,18 @@ export const runExtensionsService = (window: BrowserWindow) => {
 
       e.returnValue = message;
     } else if (data.type === 'get-accept-languages') {
+      // TODO
       const contents = webContents.fromId(e.sender.id);
       const msg = API_I18N_OPERATION + data.id;
 
-      // TODO
       const locales = [global.locale];
       if (global.locale !== localeBaseName) {
         locales.push(localeBaseName);
       }
 
       contents.send(msg, locales);
+    } else if (data.type === 'get-ui-language') {
+      e.returnValue = global.locale;
     }
 
     return '';

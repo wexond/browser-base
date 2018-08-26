@@ -388,6 +388,12 @@ export const getAPI = (manifest: Manifest) => {
           type: 'get-message',
         });
       },
+      getUILanguage: () => {
+        return ipcRenderer.sendSync(API_I18N_OPERATION, {
+          extensionId: manifest.extensionId,
+          type: 'get-ui-language',
+        });
+      },
     },
 
     browserAction: {
