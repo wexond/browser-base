@@ -9,8 +9,10 @@ import {
   API_RUNTIME_CONNECT,
   API_PORT_POSTMESSAGE,
   API_I18N_OPERATION,
+  API_ALARMS_OPERATION,
 } from '~/constants/api-ipc-messages';
 import { makeId } from '~/utils';
+import { ExtensionsAlarmInfo } from '~/interfaces';
 
 class Event {
   private callbacks: Function[] = [];
@@ -122,7 +124,14 @@ export const getAPI = (manifest: Manifest) => {
 
     // https://developer.chrome.com/extensions/alarms
     alarms: {
-      create: (name: string, alarmInfo: any) => {},
+      create: (name: string, alarmInfo: ExtensionsAlarmInfo) => {
+        ipcRenderer.sendSync(API_ALARMS_OPERATION, {
+          extensionId: manifest.extensionId,
+          type: 'create',
+          name,
+          alarmInfo,
+        });
+      },
       get: (name: string, cb: any) => {},
       getAll: (cb: any) => {},
       clear: (name: string, cb: any) => {},
