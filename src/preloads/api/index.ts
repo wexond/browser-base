@@ -403,6 +403,8 @@ export const getAPI = (manifest: Manifest) => {
         }
       },
       getMessage: (messageName: string, substitutions: any) => {
+        console.log('GET MESSAGE', messageName, substitutions);
+        return 'test xd';
         return ipcRenderer.sendSync(API_I18N_OPERATION, {
           extensionId: manifest.extensionId,
           type: 'get-message',
