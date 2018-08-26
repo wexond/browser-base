@@ -9,6 +9,7 @@ import {
   API_STORAGE_OPERATION,
   API_RUNTIME_CONNECT,
   API_PORT_POSTMESSAGE,
+  API_I18N_OPERATION,
 } from '~/constants';
 import { Global } from '../interfaces';
 
@@ -118,4 +119,20 @@ export const runExtensionsService = (window: BrowserWindow) => {
       }
     },
   );
+
+  ipcMain.on(API_I18N_OPERATION, (e: Electron.IpcMessageEvent, data: any) => {
+    const { extensionId } = data;
+    const manifest = global.extensions[extensionId];
+    const defaultLocale = manifest.default_locale;
+    const locale = global.extensionsLocales[extensionId][defaultLocale];
+
+    if (data.type === 'get') {
+      const { messageName, substitutions } = data;
+      const item = locale[messageName];
+
+      if (item != null) {
+        e.returnValue = item.message;
+      }
+    }
+  });
 };
