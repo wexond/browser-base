@@ -6,6 +6,7 @@ import {
   writeFileSync,
   existsSync,
   mkdirSync,
+  readFile,
 } from 'fs';
 import { format } from 'url';
 import { resolve } from 'path';
@@ -91,15 +92,17 @@ export const loadExtensions = () => {
         manifest.srcDirectory = extensionPath;
         manifest.default_locale = manifest.default_locale;
 
-        global.extensions[manifest.extensionId] = manifest;
+        const id = dir;
+
+        global.extensions[id] = manifest;
 
         const extensionStoragePath = getPath(
           defaultPaths.extensionsStorage,
-          manifest.extensionId,
+          id,
         );
 
         if (existsSync(localesPath)) {
-          global.extensionsLocales[manifest.extensionId] = {};
+          global.extensionsLocales[id] = {};
 
           const locales = readdirSync(localesPath);
 
@@ -113,20 +116,10 @@ export const loadExtensions = () => {
             const stats = statSync(extensionPath);
 
             if (existsSync(messagesPath) && stats.isDirectory()) {
-              const messages = readFileSync(messagesPath, 'utf8');
-
-              try {
-                if (localeDir === 'pl') {
-                  JSON.parse(messages);
-                }
-              } catch (e) {
-                console.warn(e);
-              }
-              // const locale = JSON.parse(messages);
-
-              /* global.extensionsLocales[manifest.extensionId][
-                localeDir
-              ] = locale;*/
+              readFile(messagesPath, 'utf8', (err, data) => {
+                const locale = JSON.parse(data);
+                global.extensionsLocales[id][localeDir] = locale;
+              });
             }
           }
         }
