@@ -132,9 +132,17 @@ export const runExtensionsService = (window: BrowserWindow) => {
 
     if (data.type === 'get') {
       const { messageName, substitutions } = data;
+      const substitutionsArray = substitutions instanceof Array;
       const item = locale[messageName];
 
-      if (item == null) return (e.returnValue = '');
+      if (item == null) {
+        return (e.returnValue = '');
+      }
+
+      if (substitutionsArray && substitutions.length >= 9) {
+        return (e.returnValue = null);
+      }
+
       let message = item.message;
 
       if (typeof item.placeholders === 'object') {
@@ -147,9 +155,9 @@ export const runExtensionsService = (window: BrowserWindow) => {
         }
       }
 
-      if (substitutions instanceof Array) {
-        for (let i = 0; i < substitutions.length; i++) {
-          message = replaceAll(message, `$${i + 1}`, substitutions[i]);
+      if (substitutionsArray) {
+        for (let i = 0; i < 9; i++) {
+          message = replaceAll(message, `$${i + 1}`, substitutions[i] || ' ');
         }
       }
 
