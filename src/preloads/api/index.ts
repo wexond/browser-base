@@ -122,6 +122,11 @@ export const getAPI = (manifest: Manifest) => {
 
     // https://developer.chrome.com/extensions/alarms
     alarms: {
+      create: (name: string, alarmInfo: any) => {},
+      get: (name: string, cb: any) => {},
+      getAll: (cb: any) => {},
+      clear: (name: string, cb: any) => {},
+      clearAll: (cb: any) => {},
       onAlarm: new IpcEvent('alarms', 'onAlarm'), // TODO
     },
 
@@ -389,6 +394,15 @@ export const getAPI = (manifest: Manifest) => {
           extensionId: manifest.extensionId,
           type: 'get-ui-language',
         });
+      },
+      detectLanguage: (text: string, cb: any) => {
+        // TODO
+        if (cb) {
+          cb({
+            isReliable: false,
+            languages: [],
+          });
+        }
       },
     },
 
