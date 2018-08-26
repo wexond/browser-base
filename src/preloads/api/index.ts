@@ -93,18 +93,21 @@ const sendStorageOperation = (
 
 const sendi18nOperation = (
   extensionId: string,
-  messageName: string,
-  substitutions: any,
   type: string,
+  callback: any,
 ) => {
-  const data = ipcRenderer.sendSync(API_I18N_OPERATION, {
+  const id = makeId(32);
+  ipcRenderer.send(API_I18N_OPERATION, {
     extensionId,
-    messageName,
-    substitutions,
+    id,
     type,
   });
 
-  return data;
+  if (callback) {
+    ipcRenderer.once(API_I18N_OPERATION + id, (e: any, ...data: any[]) => {
+      callback(...data);
+    });
+  }
 };
 
 export const getAPI = (manifest: Manifest) => {
@@ -374,13 +377,16 @@ export const getAPI = (manifest: Manifest) => {
 
     // https://developer.chrome.com/extensions/i18n
     i18n: {
+      getAcceptLanguages: (cb: any) => {
+        sendi18nOperation(manifest.extensionId, 'get-accept-languages', cb);
+      },
       getMessage: (messageName: string, substitutions: any) => {
-        return sendi18nOperation(
-          manifest.extensionId,
+        return ipcRenderer.sendSync(API_I18N_OPERATION, {
+          extensionId: manifest.extensionId,
           messageName,
           substitutions,
-          'get',
-        );
+          type: 'get-message',
+        });
       },
     },
 
