@@ -13,4 +13,14 @@ export class KeyBindingsStore {
   public dialogVisible: boolean = false;
 
   public dialog: KeyRecordingDialog;
+
+  public editKeyBinding(keyBinding: KeyBinding) {
+    this.dialogVisible = true;
+
+    this.dialog.combination = null;
+    this.dialog.input.value = keyBinding.key;
+    this.dialog.input.focus();
+
+    this.selected = keyBinding;
+  }
 }
