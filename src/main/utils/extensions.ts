@@ -99,6 +99,8 @@ export const loadExtensions = () => {
         );
 
         if (existsSync(localesPath)) {
+          global.extensionsLocales[manifest.extensionId] = {};
+
           const locales = readdirSync(localesPath);
 
           for (const localeDir of locales) {
@@ -110,9 +112,19 @@ export const loadExtensions = () => {
 
             if (existsSync(messagesPath)) {
               const messages = readFileSync(messagesPath, 'utf8');
-              const locale: ExtensionsLocale = JSON.parse(messages);
 
-              global.extensionsLocales[manifest.extensionId] = { en: locale };
+              try {
+                if (localeDir === 'pl') {
+                  JSON.parse(messages);
+                }
+              } catch (e) {
+                console.warn(e);
+              }
+              // const locale = JSON.parse(messages);
+
+              /* global.extensionsLocales[manifest.extensionId][
+                localeDir
+              ] = locale;*/
             }
           }
         }
