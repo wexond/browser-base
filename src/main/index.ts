@@ -16,8 +16,9 @@ let mainWindow: Electron.BrowserWindow;
 
 global.extensions = {};
 global.backgroundPages = {};
-global.locale = 'en-US';
 global.databases = {};
+global.extensionsLocales = {};
+global.locale = 'en-US';
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the

@@ -8,6 +8,7 @@ import {
   API_STORAGE_OPERATION,
   API_RUNTIME_CONNECT,
   API_PORT_POSTMESSAGE,
+  API_I18N_OPERATION,
 } from '~/constants/api-ipc-messages';
 import { makeId } from '~/utils';
 
@@ -88,6 +89,22 @@ const sendStorageOperation = (
       callback(...data);
     });
   }
+};
+
+const sendi18nOperation = (
+  extensionId: string,
+  messageName: string,
+  substitutions: any,
+  type: string,
+) => {
+  const data = ipcRenderer.sendSync(API_I18N_OPERATION, {
+    extensionId,
+    messageName,
+    substitutions,
+    type,
+  });
+
+  return data;
 };
 
 export const getAPI = (manifest: Manifest) => {
@@ -357,7 +374,14 @@ export const getAPI = (manifest: Manifest) => {
 
     // https://developer.chrome.com/extensions/i18n
     i18n: {
-      getMessage: () => {},
+      getMessage: (messageName: string, substitutions: any) => {
+        return sendi18nOperation(
+          manifest.extensionId,
+          messageName,
+          substitutions,
+          'get',
+        );
+      },
     },
 
     browserAction: {

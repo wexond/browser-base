@@ -10,11 +10,10 @@ import {
 import { format } from 'url';
 import { resolve } from 'path';
 
-import { Manifest } from '~/interfaces';
+import { Manifest, ExtensionLocale } from '~/interfaces';
 import { Global } from '../interfaces';
 import { getPath } from '.';
 import { defaultPaths } from '~/defaults';
-import Nedb from 'nedb';
 import { StorageArea } from '~/main/models/storage-area';
 
 declare const global: Global;
@@ -81,6 +80,8 @@ export const loadExtensions = () => {
 
     if (stats.isDirectory()) {
       const manifestPath = resolve(extensionPath, 'manifest.json');
+      const localesPath = resolve(extensionPath, '_locales');
+
       if (existsSync(manifestPath)) {
         const manifest: Manifest = JSON.parse(
           readFileSync(manifestPath, 'utf8'),
@@ -88,6 +89,7 @@ export const loadExtensions = () => {
 
         manifest.extensionId = dir;
         manifest.srcDirectory = extensionPath;
+        manifest.default_locale = manifest.default_locale;
 
         global.extensions[manifest.extensionId] = manifest;
 
@@ -95,6 +97,25 @@ export const loadExtensions = () => {
           defaultPaths.extensionsStorage,
           manifest.extensionId,
         );
+
+        if (existsSync(localesPath)) {
+          const locales = readdirSync(localesPath);
+
+          for (const localeDir of locales) {
+            const messagesPath = resolve(
+              localesPath,
+              localeDir,
+              'messages.json',
+            );
+
+            if (existsSync(messagesPath)) {
+              const messages = readFileSync(messagesPath, 'utf8');
+              const locale: ExtensionLocale = JSON.parse(messages);
+
+              global.extensionsLocales[manifest.extensionId] = { en: locale };
+            }
+          }
+        }
 
         const local = new StorageArea(resolve(extensionStoragePath, 'local'));
         const sync = new StorageArea(resolve(extensionStoragePath, 'sync'));
