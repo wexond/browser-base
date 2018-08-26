@@ -99,7 +99,6 @@ export default class GlobalMenu extends React.Component {
         <Menu.Item
           title={dictionary.keyboardShortcuts.title}
           icon={icons.keyboardShortcuts}
-          searchVisible
         />
         <Menu.Item
           title={dictionary.extensions.title}
