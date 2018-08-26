@@ -108,7 +108,9 @@ export const loadExtensions = () => {
               'messages.json',
             );
 
-            if (existsSync(messagesPath)) {
+            const stats = statSync(extensionPath);
+
+            if (existsSync(messagesPath) && stats.isDirectory()) {
               const messages = readFileSync(messagesPath, 'utf8');
               const locale: ExtensionsLocale = JSON.parse(messages);
 
