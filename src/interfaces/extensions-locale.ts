@@ -1,4 +1,4 @@
-export interface ExtensionLocale {
+export interface ExtensionsLocale {
   [key: string]: {
     message?: string;
     description?: string;
