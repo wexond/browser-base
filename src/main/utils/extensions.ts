@@ -10,7 +10,7 @@ import {
 import { format } from 'url';
 import { resolve } from 'path';
 
-import { Manifest, ExtensionLocale } from '~/interfaces';
+import { Manifest, ExtensionsLocale } from '~/interfaces';
 import { Global } from '../interfaces';
 import { getPath } from '.';
 import { defaultPaths } from '~/defaults';
@@ -110,7 +110,7 @@ export const loadExtensions = () => {
 
             if (existsSync(messagesPath)) {
               const messages = readFileSync(messagesPath, 'utf8');
-              const locale: ExtensionLocale = JSON.parse(messages);
+              const locale: ExtensionsLocale = JSON.parse(messages);
 
               global.extensionsLocales[manifest.extensionId] = { en: locale };
             }
