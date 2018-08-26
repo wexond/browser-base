@@ -12,6 +12,8 @@ import {
   API_I18N_OPERATION,
 } from '~/constants';
 import { Global } from '../interfaces';
+import { ExtensionLocale } from '~/interfaces';
+import { replaceAll } from '~/utils';
 
 declare const global: Global;
 
@@ -124,15 +126,33 @@ export const runExtensionsService = (window: BrowserWindow) => {
     const { extensionId } = data;
     const manifest = global.extensions[extensionId];
     const defaultLocale = manifest.default_locale;
-    const locale = global.extensionsLocales[extensionId][defaultLocale];
+
+    const locale: ExtensionLocale =
+      global.extensionsLocales[extensionId][defaultLocale];
 
     if (data.type === 'get') {
       const { messageName, substitutions } = data;
       const item = locale[messageName];
 
+      let message = item.message;
+
+      if (item.placeholders) {
+        for (const placeholder in item.placeholders) {
+          message = replaceAll(
+            message,
+            `$${placeholder}$`,
+            item.placeholders[placeholder].content,
+          );
+        }
+      }
+
+      console.log(message);
+
       if (item != null) {
-        e.returnValue = item.message;
+        e.returnValue = message;
       }
     }
+
+    e.returnValue = '';
   });
 };
