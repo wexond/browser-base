@@ -1,7 +1,7 @@
-const locales = ['en-US', 'pl-PL'];
-const localeBaseName = 'en-US';
+export const locales = ['en-US', 'pl-PL'];
+export const localeBaseName = 'en-US';
 
-const localeBase = require(`../../static/dictionaries/${localeBaseName}.json`);
+export const localeBase = require(`../../static/dictionaries/${localeBaseName}.json`);
 
 export const getDictionary = (name: string) => {
   if (name === localeBaseName) return localeBase;
