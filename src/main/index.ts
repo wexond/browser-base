@@ -18,6 +18,7 @@ global.extensions = {};
 global.backgroundPages = {};
 global.databases = {};
 global.extensionsLocales = {};
+global.extensionsAlarms = {};
 global.locale = 'en-US';
 
 app.on('activate', () => {

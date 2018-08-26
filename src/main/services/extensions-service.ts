@@ -10,6 +10,7 @@ import {
   API_RUNTIME_CONNECT,
   API_PORT_POSTMESSAGE,
   API_I18N_OPERATION,
+  API_ALARMS_OPERATION,
 } from '~/constants';
 import { Global } from '../interfaces';
 import { localeBaseName } from '~/defaults';
@@ -170,6 +171,14 @@ export const runExtensionsService = (window: BrowserWindow) => {
 
     if (type === 'get-ui-language') {
       return (e.returnValue = global.locale);
+    }
+  });
+
+  ipcMain.on(API_ALARMS_OPERATION, (e: Electron.IpcMessageEvent, data: any) => {
+    const { extensionId, type } = data;
+
+    if (type === 'create') {
+      console.log(global.extensionsAlarms);
     }
   });
 };
