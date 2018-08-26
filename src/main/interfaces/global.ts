@@ -1,5 +1,6 @@
 import { Manifest } from '../../interfaces/manifest';
 import { StorageArea } from '~/main/models/storage-area';
+import { ExtensionsLocale, ExtensionsAlarm } from '~/interfaces';
 
 export interface Global {
   extensions: {
@@ -16,6 +17,14 @@ export interface Global {
     [key: string]: {
       [key: string]: StorageArea;
     };
+  };
+  extensionsLocales: {
+    [key: string]: {
+      [key: string]: ExtensionsLocale;
+    };
+  };
+  extensionsAlarms: {
+    [key: string]: ExtensionsAlarm[];
   };
   locale: string;
 }
