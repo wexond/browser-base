@@ -13,7 +13,6 @@ import {
   API_ALARMS_OPERATION,
 } from '~/constants';
 import { Global } from '../interfaces';
-import { localeBaseName } from '~/defaults';
 import { replaceAll } from '~/utils';
 
 declare const global: Global;
