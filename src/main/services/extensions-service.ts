@@ -9,8 +9,12 @@ import {
   API_STORAGE_OPERATION,
   API_RUNTIME_CONNECT,
   API_PORT_POSTMESSAGE,
+  API_I18N_OPERATION,
+  API_ALARMS_OPERATION,
 } from '~/constants';
 import { Global } from '../interfaces';
+import { localeBaseName } from '~/defaults';
+import { replaceAll } from '~/utils';
 
 declare const global: Global;
 
@@ -122,4 +126,63 @@ export const runExtensionsService = (window: BrowserWindow) => {
       }
     },
   );
+
+  ipcMain.on(API_I18N_OPERATION, (e: Electron.IpcMessageEvent, data: any) => {
+    const { extensionId, type } = data;
+
+    if (type === 'get-message') {
+      const manifest = global.extensions[extensionId];
+      const defaultLocale = manifest.default_locale;
+      const locale = global.extensionsLocales[extensionId][defaultLocale];
+
+      const { messageName, substitutions } = data;
+      const substitutionsArray = substitutions instanceof Array;
+      const item = locale[messageName];
+
+      if (item == null) return (e.returnValue = '');
+      if (substitutionsArray && substitutions.length >= 9) {
+        return (e.returnValue = null);
+      }
+
+      let message = item.message;
+
+      if (typeof item.placeholders === 'object') {
+        for (const placeholder in item.placeholders) {
+          message = replaceAll(
+            message,
+            `$${placeholder}$`,
+            item.placeholders[placeholder].content,
+          );
+        }
+      }
+
+      if (substitutionsArray) {
+        for (let i = 0; i < 9; i++) {
+          message = replaceAll(message, `$${i + 1}`, substitutions[i] || ' ');
+        }
+      }
+
+      return (e.returnValue = message);
+    }
+
+    if (type === 'get-accept-languages') {
+      // TODO
+      const contents = webContents.fromId(e.sender.id);
+      const msg = API_I18N_OPERATION + data.id;
+
+      return contents.send(msg, [global.locale]);
+    }
+
+    if (type === 'get-ui-language') {
+      return (e.returnValue = global.locale);
+    }
+  });
+
+  ipcMain.on(API_ALARMS_OPERATION, (e: Electron.IpcMessageEvent, data: any) => {
+    const { extensionId, type } = data;
+
+    if (type === 'create') {
+      console.log(global.extensionsAlarms);
+    }
+  });
 };
