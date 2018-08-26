@@ -31,7 +31,6 @@ export default class WebRequestEvent {
       `api-webRequest-intercepted-${this.name}-${id}`,
       (e: any, details: any) => {
         const response = callback(details);
-        console.log(response);
         ipcRenderer.send(
           `api-webRequest-response-${this.name}-${id}`,
           response,
