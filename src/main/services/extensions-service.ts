@@ -12,7 +12,6 @@ import {
   API_I18N_OPERATION,
 } from '~/constants';
 import { Global } from '../interfaces';
-import { ExtensionLocale } from '~/interfaces';
 import { localeBaseName } from '~/defaults';
 import { replaceAll } from '~/utils';
 
@@ -124,22 +123,18 @@ export const runExtensionsService = (window: BrowserWindow) => {
   );
 
   ipcMain.on(API_I18N_OPERATION, (e: Electron.IpcMessageEvent, data: any) => {
-    const { extensionId } = data;
-    const manifest = global.extensions[extensionId];
-    const defaultLocale = manifest.default_locale;
+    const { extensionId, type } = data;
 
-    const locale: ExtensionLocale =
-      global.extensionsLocales[extensionId][defaultLocale];
+    if (type === 'get-message') {
+      const manifest = global.extensions[extensionId];
+      const defaultLocale = manifest.default_locale;
+      const locale = global.extensionsLocales[extensionId][defaultLocale];
 
-    if (data.type === 'get-message') {
       const { messageName, substitutions } = data;
       const substitutionsArray = substitutions instanceof Array;
       const item = locale[messageName];
 
-      if (item == null) {
-        return (e.returnValue = '');
-      }
-
+      if (item == null) return (e.returnValue = '');
       if (substitutionsArray && substitutions.length >= 9) {
         return (e.returnValue = null);
       }
@@ -162,22 +157,19 @@ export const runExtensionsService = (window: BrowserWindow) => {
         }
       }
 
-      e.returnValue = message;
-    } else if (data.type === 'get-accept-languages') {
+      return (e.returnValue = message);
+    }
+
+    if (type === 'get-accept-languages') {
       // TODO
       const contents = webContents.fromId(e.sender.id);
       const msg = API_I18N_OPERATION + data.id;
 
-      const locales = [global.locale];
-      if (global.locale !== localeBaseName) {
-        locales.push(localeBaseName);
-      }
-
-      contents.send(msg, locales);
-    } else if (data.type === 'get-ui-language') {
-      e.returnValue = global.locale;
+      return contents.send(msg, [global.locale]);
     }
 
-    return '';
+    if (type === 'get-ui-language') {
+      return (e.returnValue = global.locale);
+    }
   });
 };
