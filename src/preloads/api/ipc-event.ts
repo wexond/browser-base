@@ -2,11 +2,8 @@ import { ipcRenderer } from 'electron';
 
 export default class IpcEvent {
   private scope: string;
-
   private name: string;
-
   private callbacks: Function[] = [];
-
   private listener: boolean = false;
 
   constructor(scope: string, name: string) {
