@@ -95,13 +95,13 @@
     "collapse": "mniej"
   },
   "keyCommands": {
-    "tabs.switch": "Przełącz między kartami",
+    "tabs.switch": "Przełącz kartę",
     "tabs.new": "Otwórz nową kartę",
     "tabs.reload": "Odśwież kartę",
-    "tabs.back": "Do tyłu",
-    "tabs.forward": "Do przodu",
+    "tabs.back": "Otwórz poprzednią stronę",
+    "tabs.forward": "Otwórz następną stronę",
     "tabs.home": "Cofnij do strony nowej karty",
-    "tabGroups.show": "Pokaż grupy kart",
+    "tabGroups.show": "Zarządzaj grupami kart",
     "menu.show": "Pokaż menu",
     "history.show": "Pokaż historię",
     "bookmarks.show": "Pokaż zakładki",

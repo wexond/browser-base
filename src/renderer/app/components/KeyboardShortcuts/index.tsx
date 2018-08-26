@@ -19,10 +19,7 @@ import { getContextMenuPos } from '~/utils/context-menu';
 @observer
 export default class KeyboardShortcuts extends React.Component {
   public onChipClick = (keyBinding: KeyBinding) => {
-    store.keyBindingsStore.dialogVisible = true;
-    store.keyBindingsStore.dialog.input.value = keyBinding.key;
-    store.keyBindingsStore.dialog.combination = null;
-    store.keyBindingsStore.selected = keyBinding;
+    store.keyBindingsStore.editKeyBinding(keyBinding);
   };
 
   public onContextMenu = (e: any, binding: KeyBinding) => {
