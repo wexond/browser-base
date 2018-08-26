@@ -31,7 +31,11 @@ export default class DropdownItem extends React.Component<Props, {}> {
     const { children, selected } = this.props;
 
     return (
-      <Root selected={selected} onClick={this.onClick}>
+      <Root
+        selected={selected}
+        onClick={this.onClick}
+        onMouseDown={e => e.stopPropagation()}
+      >
         {children}
       </Root>
     );
