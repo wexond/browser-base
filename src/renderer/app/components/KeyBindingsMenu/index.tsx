@@ -10,20 +10,24 @@ const defaultKeyBindings = require('../../../../../static/defaults/key-bindings.
 
 @observer
 export default class KeyBindingsMenu extends React.Component {
-  public onMouseDown = (e: React.MouseEvent<any>) => {
-    e.stopPropagation();
-  };
-
-  public onCopyClick = () => {
+  public onCopyClick = (e: React.MouseEvent<any>) => {
     const { key } = store.keyBindingsStore.selected;
     clipboard.clear();
     clipboard.writeText(key);
+    store.keyBindingsMenuStore.visible = false;
   };
 
   public onCopyCommandClick = () => {
     const { command } = store.keyBindingsStore.selected;
     clipboard.clear();
     clipboard.writeText(command);
+    store.keyBindingsMenuStore.visible = false;
+  };
+
+  public onEditClick = () => {
+    const selected = store.keyBindingsStore.selected;
+    store.keyBindingsStore.editKeyBinding(selected);
+    store.keyBindingsMenuStore.visible = false;
   };
 
   public onResetClick = () => {
@@ -40,14 +44,19 @@ export default class KeyBindingsMenu extends React.Component {
         }
       }
     }
+
+    store.keyBindingsMenuStore.visible = false;
   };
 
   public render() {
+    const selected = store.keyBindingsStore.selected;
+    const isResetDisabled = selected && !selected.isChanged;
+
     return (
       <ContextMenu
         width={300}
         ref={(r: ContextMenu) => (store.keyBindingsMenuStore.ref = r)}
-        onMouseDown={this.onMouseDown}
+        onMouseDown={e => e.stopPropagation()}
         style={{
           position: 'absolute',
           left: store.keyBindingsMenuStore.x,
@@ -60,7 +69,13 @@ export default class KeyBindingsMenu extends React.Component {
           Copy command
         </ContextMenu.Item>
         <ContextMenu.Separator />
-        <ContextMenu.Item onClick={this.onResetClick}>Reset</ContextMenu.Item>
+        <ContextMenu.Item onClick={this.onEditClick}>Edit</ContextMenu.Item>
+        <ContextMenu.Item
+          onClick={this.onResetClick}
+          disabled={isResetDisabled}
+        >
+          Reset
+        </ContextMenu.Item>
       </ContextMenu>
     );
   }
