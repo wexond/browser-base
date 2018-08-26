@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, webFrame } from 'electron';
 import { format } from 'url';
 
 import { Manifest } from '~/interfaces/manifest';
@@ -126,7 +126,7 @@ export const getAPI = (manifest: Manifest) => {
     // https://developer.chrome.com/extensions/runtime
     runtime: {
       id: manifest.extensionId,
-      lastError: undefined as string,
+      lastError: {},
 
       onConnect: new Event(),
 
@@ -238,39 +238,51 @@ export const getAPI = (manifest: Manifest) => {
           );
         }
       },
-      insertCSS: (
-        tabId: number,
-        details: chrome.tabs.InjectDetails,
-        callback: () => void,
-      ) => {
-        ipcRenderer.send('api-tabs-insertCSS', tabId, details);
+      insertCSS: (arg1: any = null, arg2: any = null, arg3: any = null) => {
+        if (typeof arg1 === 'object') {
+          api.tabs.getCurrent(tab => {
+            ipcRenderer.send('api-tabs-insertCSS', tab.id, arg2);
 
-        ipcRenderer.on('api-tabs-insertCSS', () => {
-          if (callback) {
-            callback();
-          }
-        });
-      },
-      executeScript: (
-        tabId: number,
-        details: chrome.tabs.InjectDetails,
-        callback: (result: any) => void,
-      ) => {
-        ipcRenderer.send('api-tabs-executeScript', tabId, details);
+            ipcRenderer.once('api-tabs-insertCSS', () => {
+              if (arg3) {
+                arg3();
+              }
+            });
+          });
+        } else if (typeof arg1 === 'number') {
+          ipcRenderer.send('api-tabs-insertCSS', arg1, arg2);
 
-        ipcRenderer.on(
-          'api-tabs-executeScript',
-          (e: Electron.IpcMessageEvent, result: any) => {
-            if (callback) {
-              callback(result);
+          ipcRenderer.once('api-tabs-insertCSS', () => {
+            if (arg3) {
+              arg3();
             }
-          },
-        );
+          });
+        }
+      },
+      executeScript: (arg1: any = null, arg2: any = null, arg3: any = null) => {
+        if (typeof arg1 === 'object') {
+          webFrame.executeJavaScript(arg1.code, false, (result: any) => {
+            if (arg2) {
+              arg2(result);
+            }
+          });
+        } else if (typeof arg1 === 'number') {
+          ipcRenderer.send('api-tabs-executeScript', arg1, arg2);
+
+          ipcRenderer.once(
+            'api-tabs-executeScript',
+            (e: Electron.IpcMessageEvent, result: any) => {
+              if (arg3) {
+                arg3(result);
+              }
+            },
+          );
+        }
       },
       setZoom: (tabId: number, zoomFactor: number, callback: () => void) => {
         ipcRenderer.send('api-tabs-setZoom', tabId, zoomFactor);
 
-        ipcRenderer.on('api-tabs-setZoom', () => {
+        ipcRenderer.once('api-tabs-setZoom', () => {
           if (callback) {
             callback();
           }
@@ -279,7 +291,7 @@ export const getAPI = (manifest: Manifest) => {
       getZoom: (tabId: number, callback: (zoomFactor: number) => void) => {
         ipcRenderer.send('api-tabs-getZoom', tabId);
 
-        ipcRenderer.on(
+        ipcRenderer.once(
           'api-tabs-getZoom',
           (e: Electron.IpcMessageEvent, zoomFactor: number) => {
             if (callback) {
@@ -291,7 +303,7 @@ export const getAPI = (manifest: Manifest) => {
       detectLanguage: (tabId: number, callback: (language: string) => void) => {
         ipcRenderer.send('api-tabs-detectLanguage', tabId);
 
-        ipcRenderer.on(
+        ipcRenderer.once(
           'api-tabs-detectLanguage',
           (e: Electron.IpcMessageEvent, language: string) => {
             if (callback) {
@@ -360,12 +372,21 @@ export const getAPI = (manifest: Manifest) => {
       getMessage: (msg: string, substitutions: any) => {
         return 'test';
       },
+      getUILanguage: () => {
+        return 'en';
+      },
+      detectLanguage: () => {
+        return 'en';
+      },
+      getAcceptLanguages: () => {},
     },
 
     browserAction: {
       onClicked: {
         addListener: () => {},
       },
+      setIcon: () => {},
+      setBadgeBackgroundColor: () => {},
       setBadgeText: (details: any, cb: any) => {
         console.log(details);
       },

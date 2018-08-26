@@ -1,6 +1,33 @@
-import { existsSync, writeFileSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
+import { sep, resolve, isAbsolute } from 'path';
 import levelup, { LevelUp } from 'levelup';
 import leveldown from 'leveldown';
+
+function mkDirByPathSync(targetDir: any, { isRelativeToScript = false } = {}) {
+  const initDir = isAbsolute(targetDir) ? sep : '';
+  const baseDir = isRelativeToScript ? __dirname : '.';
+
+  return targetDir.split(sep).reduce((parentDir: any, childDir: any) => {
+    const curDir = resolve(baseDir, parentDir, childDir);
+    try {
+      mkdirSync(curDir);
+    } catch (err) {
+      if (err.code === 'EEXIST') {
+        return curDir;
+      }
+      if (err.code === 'ENOENT') {
+        throw new Error(`EACCES: permission denied, mkdir '${parentDir}'`);
+      }
+
+      const caughtErr = ['EACCES', 'EPERM', 'EISDIR'].indexOf(err.code) > -1;
+      if (!caughtErr || (caughtErr && targetDir === curDir)) {
+        throw err;
+      }
+    }
+
+    return curDir;
+  }, initDir);
+}
 
 export class StorageArea {
   public db: LevelUp;
@@ -9,6 +36,8 @@ export class StorageArea {
 
   constructor(path: string) {
     this.path = path;
+
+    mkDirByPathSync(path);
 
     this.db = (levelup as any)(leveldown(this.path));
   }
