@@ -13,6 +13,7 @@ import {
 } from '~/constants';
 import { Global } from '../interfaces';
 import { ExtensionLocale } from '~/interfaces';
+import { localeBaseName } from '~/defaults';
 import { replaceAll } from '~/utils';
 
 declare const global: Global;
@@ -130,7 +131,7 @@ export const runExtensionsService = (window: BrowserWindow) => {
     const locale: ExtensionLocale =
       global.extensionsLocales[extensionId][defaultLocale];
 
-    if (data.type === 'get') {
+    if (data.type === 'get-message') {
       const { messageName, substitutions } = data;
       const substitutionsArray = substitutions instanceof Array;
       const item = locale[messageName];
@@ -162,6 +163,17 @@ export const runExtensionsService = (window: BrowserWindow) => {
       }
 
       e.returnValue = message;
+    } else if (data.type === 'get-accept-languages') {
+      const contents = webContents.fromId(e.sender.id);
+      const msg = API_I18N_OPERATION + data.id;
+
+      // TODO
+      const locales = [global.locale];
+      if (global.locale !== localeBaseName) {
+        locales.push(localeBaseName);
+      }
+
+      contents.send(msg, locales);
     }
 
     return '';
