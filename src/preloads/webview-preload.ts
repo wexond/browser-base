@@ -19,13 +19,12 @@ if (
   loadContent('testField');
 }
 
-const matchesPattern = (pattern: string) => {
+const matchesPattern = (pattern: string, url: string) => {
   if (pattern === '<all_urls>') {
     return true;
   }
 
   const regexp = new RegExp(`^${pattern.replace(/\*/g, '.*')}$`);
-  const url = `${location.protocol}//${location.host}${location.pathname}`;
   return url.match(regexp);
 };
 
@@ -67,7 +66,14 @@ const runStylesheet = (url: string, code: string) => {
 };
 
 const injectContentScript = (script: any, manifest: Manifest) => {
-  if (!script.matches.some(matchesPattern)) {
+  if (
+    !script.matches.some((x: string) =>
+      matchesPattern(
+        x,
+        `${location.protocol}//${location.host}${location.pathname}`,
+      ),
+    )
+  ) {
     return;
   }
 
