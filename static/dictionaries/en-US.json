@@ -89,12 +89,12 @@
     "collapse": "collapse"
   },
   "keyCommands": {
-    "tabs.switch": "Switch between tabs",
+    "tabs.switch": "Switch tabs",
     "tabs.new": "Open newtab",
-    "tabs.reload": "Reload current tab",
+    "tabs.reload": "Reload",
     "tabs.back": "Go back",
     "tabs.forward": "Go forward",
-    "tabs.home": "Back to newtab",
+    "tabs.home": "Open newtab in current tab",
     "tabGroups.show": "Show tab groups",
     "menu.show": "Show menu",
     "history.show": "Show history",
