@@ -84,7 +84,6 @@ const sendStorageOperation = (
 
   if (callback) {
     ipcRenderer.once(API_STORAGE_OPERATION + id, (e: any, ...data: any[]) => {
-      console.log(data[0]);
       callback(data[0]);
     });
   }
@@ -171,17 +170,14 @@ export const getAPI = (manifest: Manifest) => {
 
     // https://developer.chrome.com/extensions/webRequest
     webRequest: {
-      onBeforeRequest: new WebRequestEvent('webRequest', 'onBeforeRequest'),
-      onBeforeSendHeaders: new WebRequestEvent(
-        'webRequest',
-        'onBeforeSendHeaders',
-      ),
-      onHeadersReceived: new WebRequestEvent('webRequest', 'onHeadersReceived'),
-      onSendHeaders: new WebRequestEvent('webRequest', 'onSendHeaders'),
-      onResponseStarted: new WebRequestEvent('webRequest', 'onResponseStarted'),
-      onBeforeRedirect: new WebRequestEvent('webRequest', 'onBeforeRedirect'),
-      onCompleted: new WebRequestEvent('webRequest', 'onCompleted'),
-      onErrorOccurred: new WebRequestEvent('webRequest', 'onErrorOccurred'),
+      onBeforeRequest: new WebRequestEvent('onBeforeRequest'),
+      onBeforeSendHeaders: new WebRequestEvent('onBeforeSendHeaders'),
+      onHeadersReceived: new WebRequestEvent('onHeadersReceived'),
+      onSendHeaders: new WebRequestEvent('onSendHeaders'),
+      onResponseStarted: new WebRequestEvent('onResponseStarted'),
+      onBeforeRedirect: new WebRequestEvent('onBeforeRedirect'),
+      onCompleted: new WebRequestEvent('onCompleted'),
+      onErrorOccurred: new WebRequestEvent('onErrorOccurred'),
     },
 
     // https://developer.chrome.com/extensions/tabs

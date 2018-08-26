@@ -1,6 +1,5 @@
 import { ipcRenderer } from 'electron';
 
-/* eslint no-bitwise: 0 */
 const hashCode = (str: string) => {
   let hash = 0;
 
@@ -17,48 +16,43 @@ const hashCode = (str: string) => {
 };
 
 export default class WebRequestEvent {
-  private scope: string;
   private name: string;
-  private callbacks: Function[] = [];
-  private listener: boolean = false;
+  private listeners: number[] = [];
 
-  constructor(scope: string, name: string) {
-    this.scope = scope;
+  constructor(name: string) {
     this.name = name;
-
-    this.emit = this.emit.bind(this);
   }
 
-  public emit(e: Electron.IpcMessageEvent, details: any) {
-    this.callbacks.forEach(callback => {
-      console.log(this.name, details);
-      ipcRenderer.send(
-        `api-response-${this.scope}-${this.name}`,
-        callback(details),
-      );
+  public addListener(callback: Function, filters: string[] = null) {
+    const id = hashCode(callback.toString());
+    this.listeners.push(id);
+
+    ipcRenderer.on(
+      `api-webRequest-intercepted-${this.name}-${id}`,
+      (e: any, details: any) => {
+        const response = callback(details);
+        console.log(response);
+        ipcRenderer.send(
+          `api-webRequest-response-${this.name}-${id}`,
+          response,
+        );
+      },
+    );
+    ipcRenderer.send(`api-add-webRequest-listener`, {
+      id,
+      name: this.name,
+      filters,
     });
   }
 
-  public addListener(callback: Function) {
-    this.callbacks.push(callback);
-
-    if (!this.listener) {
-      ipcRenderer.on(`api-emit-event-${this.scope}-${this.name}`, this.emit);
-      ipcRenderer.send(`api-add-listener-${this.scope}-${this.name}`);
-      this.listener = true;
-    }
-  }
-
   public removeListener(callback: Function) {
-    this.callbacks = this.callbacks.filter(c => c !== callback);
+    const id = hashCode(callback.toString());
+    this.listeners = this.listeners.filter(c => c !== id);
 
-    if (this.callbacks.length === 0) {
-      ipcRenderer.removeListener(
-        `api-emit-event-${this.scope}-${this.name}`,
-        this.emit,
-      );
-      ipcRenderer.send(`api-remove-listener-${this.scope}-${this.name}`);
-      this.listener = false;
-    }
+    ipcRenderer.removeAllListeners(
+      `api-webRequest-intercepted-${this.name}-${id}`,
+    );
+
+    ipcRenderer.send(`api-remove-webRequest-listener`, { id, name: this.name });
   }
 }
