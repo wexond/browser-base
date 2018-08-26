@@ -14,17 +14,20 @@ export default class KeyBindingsMenu extends React.Component {
     const { key } = store.keyBindingsStore.selected;
     clipboard.clear();
     clipboard.writeText(key);
+    store.keyBindingsMenuStore.visible = false;
   };
 
   public onCopyCommandClick = () => {
     const { command } = store.keyBindingsStore.selected;
     clipboard.clear();
     clipboard.writeText(command);
+    store.keyBindingsMenuStore.visible = false;
   };
 
   public onEditClick = () => {
     const selected = store.keyBindingsStore.selected;
     store.keyBindingsStore.editKeyBinding(selected);
+    store.keyBindingsMenuStore.visible = false;
   };
 
   public onResetClick = () => {
@@ -41,11 +44,12 @@ export default class KeyBindingsMenu extends React.Component {
         }
       }
     }
+
+    store.keyBindingsMenuStore.visible = false;
   };
 
   public render() {
     const selected = store.keyBindingsStore.selected;
-
     const isResetDisabled = selected && !selected.isChanged;
 
     return (
