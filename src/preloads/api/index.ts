@@ -8,8 +8,11 @@ import {
   API_STORAGE_OPERATION,
   API_RUNTIME_CONNECT,
   API_PORT_POSTMESSAGE,
+  API_I18N_OPERATION,
+  API_ALARMS_OPERATION,
 } from '~/constants/api-ipc-messages';
 import { makeId } from '~/utils';
+import { ExtensionsAlarmInfo } from '~/interfaces';
 
 class Event {
   private callbacks: Function[] = [];
@@ -120,6 +123,18 @@ export const getAPI = (manifest: Manifest) => {
 
     // https://developer.chrome.com/extensions/alarms
     alarms: {
+      create: (name: string, alarmInfo: ExtensionsAlarmInfo) => {
+        ipcRenderer.sendSync(API_ALARMS_OPERATION, {
+          extensionId: manifest.extensionId,
+          type: 'create',
+          name,
+          alarmInfo,
+        });
+      },
+      get: (name: string, cb: any) => {},
+      getAll: (cb: any) => {},
+      clear: (name: string, cb: any) => {},
+      clearAll: (cb: any) => {},
       onAlarm: new IpcEvent('alarms', 'onAlarm'), // TODO
     },
 
@@ -369,16 +384,47 @@ export const getAPI = (manifest: Manifest) => {
 
     // https://developer.chrome.com/extensions/i18n
     i18n: {
-      getMessage: (msg: string, substitutions: any) => {
-        return 'test';
+      getAcceptLanguages: (cb: any) => {
+        const id = makeId(32);
+
+        ipcRenderer.send(API_I18N_OPERATION, {
+          extensionId: manifest.extensionId,
+          type: 'get-accept-languages',
+          id,
+        });
+
+        if (cb) {
+          ipcRenderer.once(
+            API_I18N_OPERATION + id,
+            (e: any, ...data: any[]) => {
+              cb(...data);
+            },
+          );
+        }
+      },
+      getMessage: (messageName: string, substitutions: any) => {
+        return ipcRenderer.sendSync(API_I18N_OPERATION, {
+          extensionId: manifest.extensionId,
+          type: 'get-message',
+          substitutions,
+          messageName,
+        });
       },
       getUILanguage: () => {
-        return 'en';
+        return ipcRenderer.sendSync(API_I18N_OPERATION, {
+          extensionId: manifest.extensionId,
+          type: 'get-ui-language',
+        });
       },
-      detectLanguage: () => {
-        return 'en';
+      detectLanguage: (text: string, cb: any) => {
+        // TODO
+        if (cb) {
+          cb({
+            isReliable: false,
+            languages: [],
+          });
+        }
       },
-      getAcceptLanguages: () => {},
     },
 
     browserAction: {
