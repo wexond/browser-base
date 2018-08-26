@@ -134,9 +134,10 @@ export const runExtensionsService = (window: BrowserWindow) => {
       const { messageName, substitutions } = data;
       const item = locale[messageName];
 
+      if (item == null) return (e.returnValue = '');
       let message = item.message;
 
-      if (item.placeholders) {
+      if (typeof item.placeholders === 'object') {
         for (const placeholder in item.placeholders) {
           message = replaceAll(
             message,
@@ -146,13 +147,15 @@ export const runExtensionsService = (window: BrowserWindow) => {
         }
       }
 
-      console.log(message);
-
-      if (item != null) {
-        e.returnValue = message;
+      if (substitutions instanceof Array) {
+        for (let i = 0; i < substitutions.length; i++) {
+          message = replaceAll(message, `$${i + 1}`, substitutions[i]);
+        }
       }
+
+      e.returnValue = message;
     }
 
-    e.returnValue = '';
+    return '';
   });
 };
