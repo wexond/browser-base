@@ -1,5 +1,6 @@
 import { BrowserWindow, ipcMain, session, webContents } from 'electron';
 import { matchesPattern } from '~/utils';
+import { resolve } from 'path';
 
 const eventListeners: any = {};
 
@@ -23,17 +24,19 @@ const getRequestType = (type: string): any => {
 };
 
 const getDetails = (details: any) => {
-  return {
-    requestId: details.id.toString(),
-    url: details.url,
-    method: details.method,
-    frameId: 0,
-    initiator: 'https://www.detectadblock.com',
-    parentFrameId: -1,
-    tabId: 0,
-    type: getRequestType(details.resourceType),
-    timeStamp: Date.now(),
-  };
+  return new Promise(resolve => {
+    resolve({
+      requestId: details.id.toString(),
+      url: details.url,
+      method: details.method,
+      frameId: 0,
+      initiator: 'https://www.detectadblock.com',
+      parentFrameId: -1,
+      tabId: getTabIdByWebContentsId(details.webContentsId),
+      type: getRequestType(details.resourceType),
+      timeStamp: Date.now(),
+    });
+  });
 };
 
 const matchesFilter = (filter: any, url: string) => {
@@ -61,7 +64,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
       });
 
       const newDetails: any = {
-        ...getDetails(details),
+        ...(await getDetails(details)),
         requestHeaders,
       };
 
@@ -114,7 +117,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
     .fromPartition('persist:webviewsession')
     .webRequest.onBeforeRequest(async (details, callback) => {
       const eventName = 'onBeforeRequest';
-      const newDetails = getDetails(details);
+      const newDetails = await getDetails(details);
 
       let callbackCalled = false;
       let isIntercepted = false;
@@ -132,10 +135,14 @@ export const runWebRequestService = (window: BrowserWindow) => {
           ipcMain.once(
             `api-webRequest-response-${eventName}-${event.id}`,
             (e: any, res: any) => {
+              console.log(res, details.url);
               if (!callbackCalled) {
                 if (res) {
-                  console.log(res, details.url);
-                  callback(res);
+                  if (res.cancel) {
+                    callback({ cancel: true });
+                  } else if (res.redirectUrl) {
+                    callback({ cancel: false, redirectURL: res.redirectUrl });
+                  }
                 } else {
                   callback({ cancel: false });
                 }
