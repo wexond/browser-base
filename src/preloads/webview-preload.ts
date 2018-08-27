@@ -141,8 +141,6 @@ process.once('loaded', () => {
   });
 });
 
-/*
 window.onload = () => {
-  applyDarkTheme();
+  // applyDarkTheme();
 };
-*/
