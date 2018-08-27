@@ -19,9 +19,7 @@ export interface Global {
     };
   };
   extensionsLocales: {
-    [key: string]: {
-      [key: string]: ExtensionsLocale;
-    };
+    [key: string]: ExtensionsLocale;
   };
   extensionsAlarms: {
     [key: string]: ExtensionsAlarm[];
