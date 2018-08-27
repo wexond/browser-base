@@ -145,7 +145,7 @@ export const getAPI = (manifest: Manifest) => {
 
       onConnect: new Event(),
 
-      connect: (extensionId: string = null, connectInfo: any = null) => {
+      connect: (arg1: any = null, arg2: any = null) => {
         const sender: any = {
           id: manifest.extensionId,
         };
@@ -153,11 +153,11 @@ export const getAPI = (manifest: Manifest) => {
 
         let name: string = null;
 
-        if (connectInfo) {
-          if (connectInfo.includeTlsChannelId) {
+        if (typeof arg1 === 'object') {
+          if (arg1.includeTlsChannelId) {
             sender.tlsChannelId = portId;
           }
-          name = connectInfo.name;
+          name = arg1.name;
         }
 
         ipcRenderer.send(API_RUNTIME_CONNECT, {
