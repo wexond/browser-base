@@ -122,6 +122,11 @@ export const runWebRequestService = (window: BrowserWindow) => {
       let callbackCalled = false;
       let isIntercepted = false;
 
+      const cb = (data: any) => {
+        callback(data);
+        callbackCalled = true;
+      };
+
       if (Array.isArray(eventListeners[eventName])) {
         for (const event of eventListeners[eventName]) {
           if (!matchesFilter(event.filters, details.url)) continue;
@@ -135,19 +140,16 @@ export const runWebRequestService = (window: BrowserWindow) => {
           ipcMain.once(
             `api-webRequest-response-${eventName}-${event.id}`,
             (e: any, res: any) => {
-              console.log(res, details.url);
               if (!callbackCalled) {
                 if (res) {
                   if (res.cancel) {
-                    callback({ cancel: true });
+                    cb({ cancel: true });
                   } else if (res.redirectUrl) {
-                    callback({ cancel: false, redirectURL: res.redirectUrl });
+                    cb({ cancel: false, redirectURL: res.redirectUrl });
                   }
                 } else {
-                  callback({ cancel: false });
+                  cb({ cancel: false });
                 }
-
-                callbackCalled = true;
               }
             },
           );
@@ -157,7 +159,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
       }
 
       if (!isIntercepted) {
-        callback({ cancel: false });
+        cb({ cancel: false });
       }
     });
 
