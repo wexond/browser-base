@@ -183,26 +183,29 @@ export const runExtensionsService = (window: BrowserWindow) => {
 
     if (type === 'create') {
       const { name, alarmInfo } = data;
-      /*const exists =
+      const exists =
         global.extensionsAlarms[extensionId].findIndex(e => e.name === name) !==
         -1;
 
+      e.returnValue = null;
       if (exists) return;
 
-      return global.extensionsAlarms[extensionId].push({
-        scheduledTime: alarmInfo,
-        name,
-      });*/
-      console.log(name, alarmInfo);
-    }
+      let scheduledTime = 0;
 
-    if (type === 'get-all') {
+      if (typeof alarmInfo.when === 'number') {
+        scheduledTime = alarmInfo.when;
+      }
+
+      global.extensionsAlarms[extensionId].push({
+        periodInMinutes: alarmInfo.periodInMinutes,
+        scheduledTime,
+        name,
+      });
+    } else if (type === 'get-all') {
       const contents = webContents.fromId(e.sender.id);
       const msg = API_ALARMS_OPERATION + data.id;
 
-      console.log(global.extensionsAlarms[extensionId]);
-
-      return contents.send(msg, [global.extensionsAlarms[extensionId]]);
+      contents.send(msg, [global.extensionsAlarms[extensionId]]);
     }
   });
 };
