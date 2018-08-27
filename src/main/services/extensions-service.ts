@@ -132,7 +132,7 @@ export const runExtensionsService = (window: BrowserWindow) => {
     if (type === 'get-message') {
       const manifest = global.extensions[extensionId];
       const defaultLocale = manifest.default_locale;
-      const locale = global.extensionsLocales[extensionId][defaultLocale];
+      const locale = global.extensionsLocales[extensionId];
 
       const { messageName, substitutions } = data;
       const substitutionsArray = substitutions instanceof Array;
