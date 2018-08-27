@@ -403,6 +403,10 @@ export const getAPI = (manifest: Manifest) => {
         }
       },
       getMessage: (messageName: string, substitutions: any) => {
+        if (messageName === '@@ui_locale') {
+          return 'en';
+        }
+
         return ipcRenderer.sendSync(API_I18N_OPERATION, {
           extensionId: manifest.extensionId,
           type: 'get-message',

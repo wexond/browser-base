@@ -24,7 +24,7 @@ const getRequestType = (type: string): any => {
 };
 
 const getDetails = (details: any) => {
-  return new Promise(resolve => {
+  return new Promise(async resolve => {
     resolve({
       requestId: details.id.toString(),
       url: details.url,
@@ -32,7 +32,7 @@ const getDetails = (details: any) => {
       frameId: 0,
       initiator: 'https://www.detectadblock.com',
       parentFrameId: -1,
-      tabId: getTabIdByWebContentsId(details.webContentsId),
+      tabId: await getTabIdByWebContentsId(details.webContentsId),
       type: getRequestType(details.resourceType),
       timeStamp: Date.now(),
     });
