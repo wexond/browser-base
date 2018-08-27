@@ -4,6 +4,7 @@ import { runInThisContext } from 'vm';
 
 import { Manifest } from '~/interfaces/manifest';
 import { getAPI } from './api';
+import { applyDarkTheme } from './dark-theme';
 import { loadContent } from './load-content';
 import { readFileSync } from 'fs';
 
@@ -139,3 +140,7 @@ process.once('loaded', () => {
     }
   });
 });
+
+window.onload = () => {
+  applyDarkTheme();
+};
