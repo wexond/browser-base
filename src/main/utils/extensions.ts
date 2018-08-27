@@ -100,21 +100,23 @@ export const loadExtensions = () => {
           id,
         );
 
-        const defaultLocalePath = resolve(
-          extensionPath,
-          '_locales',
-          manifest.default_locale,
-        );
+        if (typeof manifest.default_locale === 'string') {
+          const defaultLocalePath = resolve(
+            extensionPath,
+            '_locales',
+            manifest.default_locale,
+          );
 
-        if (existsSync(defaultLocalePath)) {
-          const messagesPath = resolve(defaultLocalePath, 'messages.json');
-          const stats = statSync(messagesPath);
+          if (existsSync(defaultLocalePath)) {
+            const messagesPath = resolve(defaultLocalePath, 'messages.json');
+            const stats = statSync(messagesPath);
 
-          if (existsSync(messagesPath) && !stats.isDirectory()) {
-            readFile(messagesPath, 'utf8', (err, data) => {
-              const locale = JSON.parse(data);
-              global.extensionsLocales[id] = locale;
-            });
+            if (existsSync(messagesPath) && !stats.isDirectory()) {
+              readFile(messagesPath, 'utf8', (err, data) => {
+                const locale = JSON.parse(data);
+                global.extensionsLocales[id] = locale;
+              });
+            }
           }
         }
 
@@ -125,6 +127,7 @@ export const loadExtensions = () => {
         );
 
         global.databases[manifest.extensionId] = { local, sync, managed };
+        global.extensionsAlarms[manifest.extensionId] = [];
 
         startBackgroundPage(manifest);
       }
