@@ -12,7 +12,6 @@ import {
   API_ALARMS_OPERATION,
 } from '~/constants/api-ipc-messages';
 import { makeId } from '~/utils';
-import { ExtensionsAlarmInfo } from '~/interfaces';
 
 class Event {
   private callbacks: Function[] = [];
@@ -123,7 +122,7 @@ export const getAPI = (manifest: Manifest) => {
 
     // https://developer.chrome.com/extensions/alarms
     alarms: {
-      create: (name: string, alarmInfo: ExtensionsAlarmInfo) => {
+      create: (name: string, alarmInfo: any) => {
         ipcRenderer.sendSync(API_ALARMS_OPERATION, {
           extensionId: manifest.extensionId,
           type: 'create',
@@ -132,7 +131,24 @@ export const getAPI = (manifest: Manifest) => {
         });
       },
       get: (name: string, cb: any) => {},
-      getAll: (cb: any) => {},
+      getAll: (cb: any) => {
+        const id = makeId(32);
+
+        ipcRenderer.send(API_ALARMS_OPERATION, {
+          extensionId: manifest.extensionId,
+          type: 'get-all',
+          id,
+        });
+
+        if (cb) {
+          ipcRenderer.once(
+            API_ALARMS_OPERATION + id,
+            (e: any, ...data: any[]) => {
+              cb(...data);
+            },
+          );
+        }
+      },
       clear: (name: string, cb: any) => {},
       clearAll: (cb: any) => {},
       onAlarm: new IpcEvent('alarms', 'onAlarm'), // TODO
