@@ -81,7 +81,6 @@ export const loadExtensions = () => {
 
     if (stats.isDirectory()) {
       const manifestPath = resolve(extensionPath, 'manifest.json');
-      const localesPath = resolve(extensionPath, '_locales');
 
       if (existsSync(manifestPath)) {
         const manifest: Manifest = JSON.parse(
@@ -101,26 +100,21 @@ export const loadExtensions = () => {
           id,
         );
 
-        if (existsSync(localesPath)) {
-          global.extensionsLocales[id] = {};
+        const defaultLocalePath = resolve(
+          extensionPath,
+          '_locales',
+          manifest.default_locale,
+        );
 
-          const locales = readdirSync(localesPath);
+        if (existsSync(defaultLocalePath)) {
+          const messagesPath = resolve(defaultLocalePath, 'messages.json');
+          const stats = statSync(messagesPath);
 
-          for (const localeDir of locales) {
-            const messagesPath = resolve(
-              localesPath,
-              localeDir,
-              'messages.json',
-            );
-
-            const stats = statSync(extensionPath);
-
-            if (existsSync(messagesPath) && stats.isDirectory()) {
-              readFile(messagesPath, 'utf8', (err, data) => {
-                const locale = JSON.parse(data);
-                global.extensionsLocales[id][localeDir] = locale;
-              });
-            }
+          if (existsSync(messagesPath) && !stats.isDirectory()) {
+            readFile(messagesPath, 'utf8', (err, data) => {
+              const locale = JSON.parse(data);
+              global.extensionsLocales[id] = locale;
+            });
           }
         }
 
