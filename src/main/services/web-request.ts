@@ -1,6 +1,5 @@
 import { BrowserWindow, ipcMain, session, webContents } from 'electron';
 import { matchesPattern } from '~/utils';
-import { resolve } from 'path';
 
 const eventListeners: any = {};
 
@@ -50,6 +49,40 @@ const matchesFilter = (filter: any, url: string) => {
   return false;
 };
 
+const getCallback = (callback: any) => {
+  return function cb(data: any) {
+    if (!cb.prototype.callbackCalled) {
+      callback(data);
+      cb.prototype.callbackCalled = true;
+    }
+  };
+};
+
+const interceptRequest = (eventName: string, details: any, callback: any) => {
+  let isIntercepted = false;
+
+  if (Array.isArray(eventListeners[eventName])) {
+    for (const event of eventListeners[eventName]) {
+      if (!matchesFilter(event.filters, details.url)) continue;
+
+      const contents = webContents.fromId(event.webContentsId);
+      contents.send(
+        `api-webRequest-intercepted-${eventName}-${event.id}`,
+        details,
+      );
+
+      ipcMain.once(
+        `api-webRequest-response-${eventName}-${event.id}`,
+        callback,
+      );
+
+      isIntercepted = true;
+    }
+  }
+
+  return isIntercepted;
+};
+
 export const runWebRequestService = (window: BrowserWindow) => {
   mainWindow = window;
 
@@ -68,48 +101,30 @@ export const runWebRequestService = (window: BrowserWindow) => {
         requestHeaders,
       };
 
-      let callbackCalled = false;
-      let isIntercepted = false;
+      const cb = getCallback(callback);
 
-      if (Array.isArray(eventListeners[eventName])) {
-        for (const event of eventListeners[eventName]) {
-          if (!matchesFilter(event.filters, details.url)) continue;
-
-          const contents = webContents.fromId(event.webContentsId);
-          contents.send(
-            `api-webRequest-intercepted-${eventName}-${event.id}`,
-            newDetails,
-          );
-
-          ipcMain.once(
-            `api-webRequest-response-${eventName}-${event.id}`,
-            (e: any, res: any) => {
-              if (!callbackCalled) {
-                if (res) {
-                  if (res.cancel) {
-                    callback({ cancel: true });
-                  } else if (res.requestHeaders) {
-                    const requestHeaders: any = {};
-                    res.requestHeaders.forEach((requestHeader: any) => {
-                      requestHeaders[requestHeader.name] = requestHeader.value;
-                    });
-                    callback({ requestHeaders, cancel: false });
-                  }
-                } else {
-                  callback({ cancel: false });
-                }
-
-                callbackCalled = true;
-              }
-            },
-          );
-
-          isIntercepted = true;
-        }
-      }
+      const isIntercepted = interceptRequest(
+        eventName,
+        newDetails,
+        (e: any, res: any) => {
+          if (res) {
+            if (res.cancel) {
+              callback({ cancel: true });
+            } else if (res.requestHeaders) {
+              const requestHeaders: any = {};
+              res.requestHeaders.forEach((requestHeader: any) => {
+                requestHeaders[requestHeader.name] = requestHeader.value;
+              });
+              callback({ requestHeaders, cancel: false });
+            }
+          } else {
+            callback({ cancel: false });
+          }
+        },
+      );
 
       if (!isIntercepted) {
-        callback({ cancel: false });
+        cb({ cancel: false });
       }
     });
 
@@ -118,45 +133,23 @@ export const runWebRequestService = (window: BrowserWindow) => {
     .webRequest.onBeforeRequest(async (details, callback) => {
       const eventName = 'onBeforeRequest';
       const newDetails = await getDetails(details);
+      const cb = getCallback(callback);
 
-      let callbackCalled = false;
-      let isIntercepted = false;
-
-      const cb = (data: any) => {
-        callback(data);
-        callbackCalled = true;
-      };
-
-      if (Array.isArray(eventListeners[eventName])) {
-        for (const event of eventListeners[eventName]) {
-          if (!matchesFilter(event.filters, details.url)) continue;
-
-          const contents = webContents.fromId(event.webContentsId);
-          contents.send(
-            `api-webRequest-intercepted-${eventName}-${event.id}`,
-            newDetails,
-          );
-
-          ipcMain.once(
-            `api-webRequest-response-${eventName}-${event.id}`,
-            (e: any, res: any) => {
-              if (!callbackCalled) {
-                if (res) {
-                  if (res.cancel) {
-                    cb({ cancel: true });
-                  } else if (res.redirectUrl) {
-                    cb({ cancel: false, redirectURL: res.redirectUrl });
-                  }
-                } else {
-                  cb({ cancel: false });
-                }
-              }
-            },
-          );
-
-          isIntercepted = true;
-        }
-      }
+      const isIntercepted = interceptRequest(
+        eventName,
+        newDetails,
+        (e: any, res: any) => {
+          if (res) {
+            if (res.cancel) {
+              cb({ cancel: true });
+            } else if (res.redirectUrl) {
+              cb({ cancel: false, redirectURL: res.redirectUrl });
+            }
+          } else {
+            cb({ cancel: false });
+          }
+        },
+      );
 
       if (!isIntercepted) {
         cb({ cancel: false });
