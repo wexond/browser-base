@@ -96,6 +96,10 @@ export const runWebRequestService = (window: BrowserWindow) => {
       const eventName = 'onBeforeSendHeaders';
       const requestHeaders: object[] = [];
 
+      details.requestHeaders['User-Agent'] =
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36';
+      details.requestHeaders['DNT'] = '1';
+
       Object.keys(details.requestHeaders).forEach(k => {
         requestHeaders.push({ name: k, value: details.requestHeaders[k] });
       });
@@ -122,14 +126,13 @@ export const runWebRequestService = (window: BrowserWindow) => {
               cb({ requestHeaders, cancel: false });
             }
           } else {
-            cb({ cancel: false });
+            cb({ cancel: false, requestHeaders: details.requestHeaders });
           }
-          cb({ cancel: false });
         },
       );
 
       if (!isIntercepted) {
-        cb({ cancel: false });
+        cb({ cancel: false, requestHeaders: details.requestHeaders });
       }
     });
 
