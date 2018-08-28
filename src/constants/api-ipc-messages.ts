@@ -14,6 +14,4 @@ export const API_PORT_POSTMESSAGE = 'api-port-postmessage';
 
 export const API_STORAGE_OPERATION = 'api-storage-operation';
 
-export const API_I18N_GET_MESSAGE = 'api-i18n-getMessage';
-
 export const API_ALARMS_OPERATION = 'api-alarms-operation';
