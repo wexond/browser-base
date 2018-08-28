@@ -5,10 +5,10 @@ export const hexToRgb = (hex: string) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16),
-    }
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
     : null;
 };
 
@@ -49,4 +49,23 @@ export const getForegroundColor = (color: string) => {
     return 'white';
   }
   return 'black';
+};
+
+export const decToHex = (num: string | number) => {
+  return Number(num)
+    .toString(16)
+    .padStart(2, '0');
+};
+
+export const rgbToHex = (color: string) => {
+  if (color.startsWith('rgb(') && color.endsWith(')')) {
+    color = color.slice(4, color.length - 1);
+    const colors = color.split(',');
+
+    return `#${decToHex(colors[0])}${decToHex(colors[1])}${decToHex(
+      colors[2],
+    )}`;
+  }
+
+  return null;
 };
