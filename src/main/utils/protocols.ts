@@ -35,12 +35,15 @@ export const registerProtocols = () => {
           });
         }
 
-        readFile(join(manifest.srcDirectory, parsed.path), (err, content) => {
-          if (err) {
-            return (callback as any)(-6); // FILE_NOT_FOUND
-          }
-          return callback(content);
-        });
+        readFile(
+          join(manifest.srcDirectory, parsed.path.split('%3F')[0]),
+          (err, content) => {
+            if (err) {
+              return (callback as any)(-6); // FILE_NOT_FOUND
+            }
+            return callback(content);
+          },
+        );
 
         return null;
       },
