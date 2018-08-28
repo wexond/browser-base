@@ -7,7 +7,10 @@ export const getDictionary = (name: string) => {
   if (name === localeBaseName) return localeBase;
 
   const locale = require(`../../static/dictionaries/${name}.json`);
-  return Object.assign({}, localeBase, locale);
+  return {
+    ...localeBase,
+    ...locale,
+  };
 };
 
 export const dictionaries: { [key: string]: any } = {};

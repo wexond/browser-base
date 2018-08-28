@@ -8,8 +8,8 @@ import {
   API_STORAGE_OPERATION,
   API_RUNTIME_CONNECT,
   API_PORT_POSTMESSAGE,
-  API_I18N_OPERATION,
   API_ALARMS_OPERATION,
+  API_I18N_GET_MESSAGE,
 } from '~/constants/api-ipc-messages';
 import { makeId } from '~/utils';
 import { readFileSync } from 'fs';
@@ -420,40 +420,23 @@ export const getAPI = (manifest: Manifest) => {
     // https://developer.chrome.com/extensions/i18n
     i18n: {
       getAcceptLanguages: (cb: any) => {
-        const id = makeId(32);
-
-        ipcRenderer.send(API_I18N_OPERATION, {
-          extensionId: manifest.extensionId,
-          type: 'get-accept-languages',
-          id,
-        });
-
         if (cb) {
-          ipcRenderer.once(
-            API_I18N_OPERATION + id,
-            (e: any, ...data: any[]) => {
-              cb(...data);
-            },
-          );
+          cb(navigator.languages);
         }
       },
       getMessage: (messageName: string, substitutions: any) => {
         if (messageName === '@@ui_locale') {
-          return 'en';
+          return 'en_US';
         }
 
-        return ipcRenderer.sendSync(API_I18N_OPERATION, {
+        return ipcRenderer.sendSync(API_I18N_GET_MESSAGE, {
           extensionId: manifest.extensionId,
-          type: 'get-message',
           substitutions,
           messageName,
         });
       },
       getUILanguage: () => {
-        return ipcRenderer.sendSync(API_I18N_OPERATION, {
-          extensionId: manifest.extensionId,
-          type: 'get-ui-language',
-        });
+        return navigator.language;
       },
       detectLanguage: (text: string, cb: any) => {
         // TODO
