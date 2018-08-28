@@ -1,4 +1,4 @@
-import { remote } from 'electron';
+import { remote, webFrame } from 'electron';
 import { join } from 'path';
 import { runInThisContext } from 'vm';
 
@@ -7,6 +7,8 @@ import { getAPI } from './api';
 import { applyDarkTheme } from './dark-theme';
 import { loadContent } from './load-content';
 import { readFileSync } from 'fs';
+
+webFrame.registerURLSchemeAsSecure('wexond-extension');
 
 if (
   window.location.href.startsWith('wexond://newtab') ||

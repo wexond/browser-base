@@ -1,5 +1,5 @@
 import { BrowserWindow, ipcMain, session, webContents } from 'electron';
-import { matchesPattern } from '~/utils';
+import { matchesPattern, makeId } from '~/utils';
 
 const eventListeners: any = {};
 
@@ -63,15 +63,21 @@ const interceptRequest = (eventName: string, details: any, callback: any) => {
   if (Array.isArray(eventListeners[eventName])) {
     for (const event of eventListeners[eventName]) {
       if (!matchesFilter(event.filters, details.url)) continue;
+
+      const id = makeId(32);
+
+      ipcMain.once(
+        `api-webRequest-response-${eventName}-${event.id}-${id}`,
+        (e: any, res: any) => {
+          callback(res);
+        },
+      );
+
       const contents = webContents.fromId(event.webContentsId);
       contents.send(
         `api-webRequest-intercepted-${eventName}-${event.id}`,
         details,
-      );
-
-      ipcMain.once(
-        `api-webRequest-response-${eventName}-${event.id}`,
-        callback,
+        id,
       );
 
       isIntercepted = true;
@@ -104,7 +110,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
       const isIntercepted = interceptRequest(
         eventName,
         newDetails,
-        (e: any, res: any) => {
+        (res: any) => {
           if (res) {
             if (res.cancel) {
               cb({ cancel: true });
@@ -118,6 +124,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
           } else {
             cb({ cancel: false });
           }
+          cb({ cancel: false });
         },
       );
 
@@ -136,7 +143,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
       const isIntercepted = interceptRequest(
         eventName,
         newDetails,
-        (e: any, res: any) => {
+        (res: any) => {
           if (res) {
             if (res.cancel) {
               cb({ cancel: true });
@@ -146,8 +153,6 @@ export const runWebRequestService = (window: BrowserWindow) => {
           } else {
             cb({ cancel: false });
           }
-
-          cb({ cancel: false });
         },
       );
 

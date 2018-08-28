@@ -16,7 +16,7 @@ export const registerProtocols = () => {
       (request, callback) => {
         const parsed = parse(request.url);
 
-        if (!parsed.hostname || !parsed.path) {
+        if (!parsed.hostname || !parsed.pathname) {
           return callback();
         }
 
@@ -28,7 +28,7 @@ export const registerProtocols = () => {
 
         const page = global.backgroundPages[parsed.hostname];
 
-        if (page && parsed.path === `/${page.name}`) {
+        if (page && parsed.pathname === `/${page.name}`) {
           return callback({
             mimeType: 'text/html',
             data: page.html,
@@ -36,7 +36,7 @@ export const registerProtocols = () => {
         }
 
         readFile(
-          join(manifest.srcDirectory, parsed.path.split('%3F')[0]),
+          join(manifest.srcDirectory, parsed.pathname),
           (err, content) => {
             if (err) {
               return (callback as any)(-6); // FILE_NOT_FOUND
