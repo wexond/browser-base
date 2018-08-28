@@ -14,6 +14,7 @@ import {
 } from '~/constants';
 import { Global } from '../interfaces';
 import { replaceAll } from '~/utils';
+import { ExtensionsAlarm } from '~/interfaces';
 
 declare const global: Global;
 
@@ -181,7 +182,30 @@ export const runExtensionsService = (window: BrowserWindow) => {
     const { extensionId, type } = data;
 
     if (type === 'create') {
-      console.log(global.extensionsAlarms);
+      const { name, alarmInfo } = data;
+      const exists =
+        global.extensionsAlarms[extensionId].findIndex(e => e.name === name) !==
+        -1;
+
+      e.returnValue = null;
+      if (exists) return;
+
+      let scheduledTime = 0;
+
+      if (typeof alarmInfo.when === 'number') {
+        scheduledTime = alarmInfo.when;
+      }
+
+      global.extensionsAlarms[extensionId].push({
+        periodInMinutes: alarmInfo.periodInMinutes,
+        scheduledTime,
+        name,
+      });
+    } else if (type === 'get-all') {
+      const contents = webContents.fromId(e.sender.id);
+      const msg = API_ALARMS_OPERATION + data.id;
+
+      contents.send(msg, [global.extensionsAlarms[extensionId]]);
     }
   });
 };
