@@ -140,11 +140,11 @@ export const runExtensionsService = () => {
   ipcRenderer.on(
     API_PORT_POSTMESSAGE,
     (e: Electron.IpcMessageEvent, data: any) => {
-      const { pageId, msg, senderId } = data;
+      const { portId, msg, senderId } = data;
 
       for (const page of store.pagesStore.pages) {
         if (page.webview.getWebContents().id !== senderId) {
-          page.webview.send(API_PORT_POSTMESSAGE + pageId, msg);
+          page.webview.send(API_PORT_POSTMESSAGE + portId, msg);
         }
       }
     },
