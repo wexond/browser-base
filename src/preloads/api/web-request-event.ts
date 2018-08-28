@@ -29,10 +29,11 @@ export default class WebRequestEvent {
 
     ipcRenderer.on(
       `api-webRequest-intercepted-${this.name}-${id}`,
-      (e: any, details: any) => {
+      (e: any, details: any, requestId: string) => {
         const response = callback(details);
+
         ipcRenderer.send(
-          `api-webRequest-response-${this.name}-${id}`,
+          `api-webRequest-response-${this.name}-${id}-${requestId}`,
           response,
         );
       },

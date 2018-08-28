@@ -59,6 +59,10 @@ class Port {
     });
   }
 
+  public disconnect() {
+    ipcRenderer.removeAllListeners(API_PORT_POSTMESSAGE + this.portId);
+  }
+
   public postMessage(msg: any) {
     ipcRenderer.send(API_PORT_POSTMESSAGE, { portId: this.portId, msg });
   }
