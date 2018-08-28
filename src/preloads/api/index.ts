@@ -1,4 +1,4 @@
-import { ipcRenderer, webFrame } from 'electron';
+import { ipcRenderer, webFrame, remote } from 'electron';
 import { format } from 'url';
 
 import { Manifest } from '~/interfaces/manifest';
@@ -9,9 +9,8 @@ import {
   API_RUNTIME_CONNECT,
   API_PORT_POSTMESSAGE,
   API_ALARMS_OPERATION,
-  API_I18N_GET_MESSAGE,
 } from '~/constants/api-ipc-messages';
-import { makeId } from '~/utils';
+import { makeId, replaceAll } from '~/utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -424,16 +423,37 @@ export const getAPI = (manifest: Manifest) => {
           cb(navigator.languages);
         }
       },
-      getMessage: (messageName: string, substitutions: any) => {
-        if (messageName === '@@ui_locale') {
-          return 'en_US';
+      getMessage: (messageName: string, substitutions?: any) => {
+        if (messageName === '@@ui_locale') return 'en_US';
+
+        const { extensionId } = manifest;
+        const locale = remote.getGlobal('extensionsLocales')[extensionId];
+        const substitutionsArray = substitutions instanceof Array;
+
+        const item = locale[messageName];
+
+        if (item == null) return '';
+        if (substitutionsArray && substitutions.length >= 9) return null;
+
+        let message = item.message;
+
+        if (typeof item.placeholders === 'object') {
+          for (const placeholder in item.placeholders) {
+            message = replaceAll(
+              message,
+              `$${placeholder}$`,
+              item.placeholders[placeholder].content,
+            );
+          }
         }
 
-        return ipcRenderer.sendSync(API_I18N_GET_MESSAGE, {
-          extensionId: manifest.extensionId,
-          substitutions,
-          messageName,
-        });
+        if (substitutionsArray) {
+          for (let i = 0; i < 9; i++) {
+            message = replaceAll(message, `$${i + 1}`, substitutions[i] || ' ');
+          }
+        }
+
+        return message;
       },
       getUILanguage: () => {
         return navigator.language;
