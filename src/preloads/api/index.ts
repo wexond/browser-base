@@ -12,6 +12,8 @@ import {
   API_ALARMS_OPERATION,
 } from '~/constants/api-ipc-messages';
 import { makeId } from '~/utils';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 class Event {
   private callbacks: Function[] = [];
@@ -274,44 +276,57 @@ export const getAPI = (manifest: Manifest) => {
         }
       },
       insertCSS: (arg1: any = null, arg2: any = null, arg3: any = null) => {
-        if (typeof arg1 === 'object') {
-          api.tabs.getCurrent(tab => {
-            ipcRenderer.send('api-tabs-insertCSS', tab.id, arg2);
+        const insertCSS = (tabId: number, details: any, callback: any) => {
+          if (details.hasOwnProperty('file')) {
+            details.code = readFileSync(
+              join(manifest.srcDirectory, details.file),
+              'utf8',
+            );
+          }
 
-            ipcRenderer.once('api-tabs-insertCSS', () => {
-              if (arg3) {
-                arg3();
-              }
-            });
-          });
-        } else if (typeof arg1 === 'number') {
-          ipcRenderer.send('api-tabs-insertCSS', arg1, arg2);
+          ipcRenderer.send('api-tabs-insertCSS', tabId, details);
 
           ipcRenderer.once('api-tabs-insertCSS', () => {
-            if (arg3) {
-              arg3();
+            if (callback) {
+              callback();
             }
           });
+        };
+
+        if (typeof arg1 === 'object') {
+          api.tabs.getCurrent(tab => {
+            insertCSS(tab.id, arg1, arg2);
+          });
+        } else if (typeof arg1 === 'number') {
+          insertCSS(arg1, arg2, arg3);
         }
       },
       executeScript: (arg1: any = null, arg2: any = null, arg3: any = null) => {
-        if (typeof arg1 === 'object') {
-          webFrame.executeJavaScript(arg1.code, false, (result: any) => {
-            if (arg2) {
-              arg2(result);
-            }
-          });
-        } else if (typeof arg1 === 'number') {
-          ipcRenderer.send('api-tabs-executeScript', arg1, arg2);
+        const executeScript = (tabId: number, details: any, callback: any) => {
+          if (details.hasOwnProperty('file')) {
+            details.code = readFileSync(
+              join(manifest.srcDirectory, details.file),
+              'utf8',
+            );
+          }
+
+          ipcRenderer.send('api-tabs-executeScript', tabId, details);
 
           ipcRenderer.once(
             'api-tabs-executeScript',
             (e: Electron.IpcMessageEvent, result: any) => {
-              if (arg3) {
-                arg3(result);
+              if (callback) {
+                callback(result);
               }
             },
           );
+        };
+        if (typeof arg1 === 'object') {
+          api.tabs.getCurrent(tab => {
+            executeScript(tab.id, arg1, arg2);
+          });
+        } else if (typeof arg1 === 'number') {
+          executeScript(arg1, arg2, arg3);
         }
       },
       setZoom: (tabId: number, zoomFactor: number, callback: () => void) => {
