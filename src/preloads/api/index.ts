@@ -162,7 +162,7 @@ export const getAPI = (manifest: Manifest) => {
     // https://developer.chrome.com/extensions/runtime
     runtime: {
       id: manifest.extensionId,
-      lastError: {},
+      lastError: undefined as any,
 
       onConnect: new Event(),
 
@@ -475,7 +475,7 @@ export const getAPI = (manifest: Manifest) => {
       },
       setIcon: () => {},
       setBadgeBackgroundColor: () => {},
-      setBadgeText: (details: any, cb: any) => {
+      setBadgeText: (details: any) => {
         console.log(details);
       },
     },
