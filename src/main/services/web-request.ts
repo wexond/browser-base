@@ -29,7 +29,6 @@ const getDetails = (details: any) => {
       url: details.url,
       method: details.method,
       frameId: 0,
-      initiator: 'https://www.detectadblock.com',
       parentFrameId: -1,
       tabId: await getTabIdByWebContentsId(details.webContentsId),
       type: getRequestType(details.resourceType),
@@ -64,7 +63,6 @@ const interceptRequest = (eventName: string, details: any, callback: any) => {
   if (Array.isArray(eventListeners[eventName])) {
     for (const event of eventListeners[eventName]) {
       if (!matchesFilter(event.filters, details.url)) continue;
-
       const contents = webContents.fromId(event.webContentsId);
       contents.send(
         `api-webRequest-intercepted-${eventName}-${event.id}`,
@@ -109,16 +107,16 @@ export const runWebRequestService = (window: BrowserWindow) => {
         (e: any, res: any) => {
           if (res) {
             if (res.cancel) {
-              callback({ cancel: true });
+              cb({ cancel: true });
             } else if (res.requestHeaders) {
               const requestHeaders: any = {};
               res.requestHeaders.forEach((requestHeader: any) => {
                 requestHeaders[requestHeader.name] = requestHeader.value;
               });
-              callback({ requestHeaders, cancel: false });
+              cb({ requestHeaders, cancel: false });
             }
           } else {
-            callback({ cancel: false });
+            cb({ cancel: false });
           }
         },
       );
@@ -148,6 +146,8 @@ export const runWebRequestService = (window: BrowserWindow) => {
           } else {
             cb({ cancel: false });
           }
+
+          cb({ cancel: false });
         },
       );
 
