@@ -46,16 +46,6 @@ app.on('ready', () => {
 
   mainWindow = createWindow();
 
-  // session
-  //   .fromPartition('persist:webviewsession')
-  //   .webRequest.onBeforeSendHeaders(
-  //     { urls: ['http://*/*', 'https:// */*'] },
-  //     (details: any, callback: any) => {
-  //       details.requestHeaders['DNT'] = '1';
-  //       callback({ cancel: false, requestHeaders: details.requestHeaders });
-  //     },
-  //   );
-
   runAutoUpdaterService(mainWindow);
   runExtensionsService(mainWindow);
   runWebRequestService(mainWindow);
