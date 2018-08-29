@@ -1,9 +1,12 @@
 import { BrowserWindow, ipcMain, session, webContents } from 'electron';
 import { matchesPattern, makeId } from '~/utils';
+import { Global } from '~/main/interfaces';
 
 const eventListeners: any = {};
 
 let mainWindow: BrowserWindow;
+
+declare const global: Global;
 
 const getTabIdByWebContentsId = async (webContentsId: number) => {
   return new Promise((resolve: (result: number) => void) => {
@@ -93,13 +96,22 @@ export const runWebRequestService = (window: BrowserWindow) => {
   mainWindow = window;
 
   session
+    .fromPartition('persist:wexond_extension')
+    .webRequest.onBeforeSendHeaders((details: any, callback: any) => {
+      details.requestHeaders['User-Agent'] = global.userAgent;
+
+      console.log('aha');
+
+      callback({ requestHeaders: details.requestHeaders, cancel: false });
+    });
+
+  session
     .fromPartition('persist:webviewsession')
     .webRequest.onBeforeSendHeaders(async (details: any, callback: any) => {
       const eventName = 'onBeforeSendHeaders';
       const requestHeaders: object[] = [];
 
-      details.requestHeaders['User-Agent'] =
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36';
+      details.requestHeaders['User-Agent'] = 'Chrome/68.0.3440.106';
       details.requestHeaders['DNT'] = '1';
 
       Object.keys(details.requestHeaders).forEach(k => {

@@ -28,6 +28,9 @@ global.extensionsLocales = {};
 global.extensionsAlarms = {};
 global.locale = 'en-US';
 
+global.userAgent =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36';
+
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.

@@ -207,6 +207,21 @@ export const getAPI = (manifest: Manifest) => {
 
     // https://developer.chrome.com/extensions/webRequest
     webRequest: {
+      ResourceType: {
+        CSP_REPORT: 'csp_report',
+        FONT: 'font',
+        IMAGE: 'image',
+        MAIN_FRAME: 'main_frame',
+        MEDIA: 'media',
+        OBJECT: 'object',
+        OTHER: 'other',
+        PING: 'ping',
+        SCRIPT: 'script',
+        STYLESHEET: 'stylesheet',
+        SUB_FRAME: 'sub_frame',
+        WEBSOCKET: 'websocket',
+        XMLHTTPREQUEST: 'xmlhttprequest',
+      },
       onBeforeRequest: new WebRequestEvent('onBeforeRequest'),
       onBeforeSendHeaders: new WebRequestEvent('onBeforeSendHeaders'),
       onHeadersReceived: new WebRequestEvent('onHeadersReceived'),
@@ -362,6 +377,7 @@ export const getAPI = (manifest: Manifest) => {
           },
         );
       },
+      update: () => {},
 
       onCreated: new IpcEvent('tabs', 'onCreated'),
       onUpdated: new IpcEvent('tabs', 'onUpdated'),
@@ -391,7 +407,7 @@ export const getAPI = (manifest: Manifest) => {
           sendStorageOperation(manifest.extensionId, arg, 'local', 'clear', cb);
         },
       },
-      sync: {
+      /*sync: {
         set: (arg: any, cb: any) => {
           sendStorageOperation(manifest.extensionId, arg, 'sync', 'set', cb);
         },
@@ -409,7 +425,7 @@ export const getAPI = (manifest: Manifest) => {
         get: (arg: any, cb: any) => {
           sendStorageOperation(manifest.extensionId, arg, 'managed', 'get', cb);
         },
-      },
+      },*/
       onChanged: {
         addListener: () => {
           console.log('onchanged');
