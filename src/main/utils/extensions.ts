@@ -1,15 +1,8 @@
-import { webContents } from 'electron';
-import {
-  readdirSync,
-  readFileSync,
-  statSync,
-  writeFileSync,
-  existsSync,
-  mkdirSync,
-  readFile,
-} from 'fs';
+import { webContents, BrowserWindow } from 'electron';
+import fs from 'fs';
 import { format } from 'url';
 import { resolve } from 'path';
+import { promisify } from 'util';
 
 import { Manifest, ExtensionsLocale } from '~/interfaces';
 import { Global } from '../interfaces';
@@ -17,9 +10,14 @@ import { getPath } from '.';
 import { defaultPaths } from '~/defaults';
 import { StorageArea } from '~/main/models/storage-area';
 
+const readFile = promisify(fs.readFile);
+const readdir = promisify(fs.readdir);
+const stat = promisify(fs.stat);
+const exists = promisify(fs.exists);
+
 declare const global: Global;
 
-export const startBackgroundPage = (manifest: Manifest) => {
+export const startBackgroundPage = async (manifest: Manifest) => {
   if (manifest.background) {
     const { background, extensionId } = manifest;
     const { page, scripts } = background;
@@ -30,7 +28,7 @@ export const startBackgroundPage = (manifest: Manifest) => {
 
     if (page) {
       name = page;
-      html = readFileSync(resolve(srcDirectory, page));
+      html = await readFile(resolve(srcDirectory, page));
     } else if (scripts) {
       name = 'generated.html';
       html = Buffer.from(
@@ -71,20 +69,20 @@ export const startBackgroundPage = (manifest: Manifest) => {
   }
 };
 
-export const loadExtensions = () => {
+export const loadExtensions = async (window: BrowserWindow) => {
   const extensionsPath = getPath('extensions');
-  const files = readdirSync(extensionsPath);
+  const files = await readdir(extensionsPath);
 
   for (const dir of files) {
     const extensionPath = resolve(extensionsPath, dir);
-    const stats = statSync(extensionPath);
+    const stats = await stat(extensionPath);
 
     if (stats.isDirectory()) {
       const manifestPath = resolve(extensionPath, 'manifest.json');
 
-      if (existsSync(manifestPath)) {
+      if (await exists(manifestPath)) {
         const manifest: Manifest = JSON.parse(
-          readFileSync(manifestPath, 'utf8'),
+          await readFile(manifestPath, 'utf8'),
         );
 
         manifest.extensionId = dir;
@@ -107,15 +105,14 @@ export const loadExtensions = () => {
             manifest.default_locale,
           );
 
-          if (existsSync(defaultLocalePath)) {
+          if (await exists(defaultLocalePath)) {
             const messagesPath = resolve(defaultLocalePath, 'messages.json');
-            const stats = statSync(messagesPath);
+            const stats = await stat(messagesPath);
 
-            if (existsSync(messagesPath) && !stats.isDirectory()) {
-              readFile(messagesPath, 'utf8', (err, data) => {
-                const locale = JSON.parse(data);
-                global.extensionsLocales[id] = locale;
-              });
+            if ((await exists(messagesPath)) && !stats.isDirectory()) {
+              const data = await readFile(messagesPath, 'utf8');
+              const locale = JSON.parse(data);
+              global.extensionsLocales[id] = locale;
             }
           }
         }

@@ -11,6 +11,7 @@ import {
   API_RUNTIME_CONNECT,
   API_PORT_POSTMESSAGE,
   API_ALARMS_OPERATION,
+  API_BROWSER_ACTION_SET_BADGE_TEXT,
 } from '~/constants/api-ipc-messages';
 import { makeId, replaceAll } from '~/utils';
 import { Event } from '../models/event';
@@ -456,10 +457,30 @@ export const getAPI = (manifest: Manifest) => {
       onClicked: {
         addListener: () => {},
       },
-      setIcon: () => {},
-      setBadgeBackgroundColor: () => {},
-      setBadgeText: (details: any) => {
-        console.log(details);
+      setIcon: (details: chrome.browserAction.TabIconDetails, cb: any) => {
+        if (cb) cb();
+      },
+      setBadgeBackgroundColor: (
+        details: chrome.browserAction.BadgeBackgroundColorDetails,
+        cb: any,
+      ) => {
+        if (cb) cb();
+      },
+      setBadgeText: (
+        details: chrome.browserAction.BadgeTextDetails,
+        cb: any,
+      ) => {
+        ipcRenderer.send(
+          API_BROWSER_ACTION_SET_BADGE_TEXT,
+          manifest.extensionId,
+          details,
+        );
+
+        if (cb) {
+          ipcRenderer.once(API_BROWSER_ACTION_SET_BADGE_TEXT, () => {
+            cb();
+          });
+        }
       },
     },
   };

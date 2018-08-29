@@ -5,7 +5,12 @@ import { mkdirSync, existsSync, writeFileSync } from 'fs';
 
 import { runAutoUpdaterService, runExtensionsService } from './services';
 import { Global } from './interfaces';
-import { createWindow, getPath, registerProtocols } from './utils';
+import {
+  createWindow,
+  getPath,
+  registerProtocols,
+  loadExtensions,
+} from './utils';
 import { defaultPaths, filesContent } from '~/defaults';
 import { matchesPattern } from '~/utils/url';
 import { runWebRequestService } from '~/main/services/web-request';
@@ -45,6 +50,8 @@ app.on('ready', () => {
   }
 
   mainWindow = createWindow();
+
+  loadExtensions(mainWindow);
 
   runAutoUpdaterService(mainWindow);
   runExtensionsService(mainWindow);
