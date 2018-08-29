@@ -12,7 +12,7 @@ import {
   API_ALARMS_OPERATION,
 } from '~/constants';
 import { Global } from '../interfaces';
-import { replaceAll } from '~/utils';
+import { ExtensionsAlarm } from '~/interfaces';
 
 declare const global: Global;
 
@@ -127,32 +127,45 @@ export const runExtensionsService = (window: BrowserWindow) => {
 
   ipcMain.on(API_ALARMS_OPERATION, (e: Electron.IpcMessageEvent, data: any) => {
     const { extensionId, type } = data;
+    const contents = webContents.fromId(e.sender.id);
 
     if (type === 'create') {
       const { name, alarmInfo } = data;
-      const exists =
-        global.extensionsAlarms[extensionId].findIndex(e => e.name === name) !==
-        -1;
+      const alarms = global.extensionsAlarms[extensionId];
+      const exists = alarms.findIndex(e => e.name === name) !== -1;
 
       e.returnValue = null;
       if (exists) return;
 
       let scheduledTime = 0;
 
-      if (typeof alarmInfo.when === 'number') {
+      if (alarmInfo.when != null) {
         scheduledTime = alarmInfo.when;
       }
 
-      global.extensionsAlarms[extensionId].push({
+      if (alarmInfo.delayInMinutes != null) {
+        if (alarmInfo.delayInMinutes < 1) {
+          return console.error(
+            `Alarm delay is less than minimum of 1 minutes. In released .crx, alarm "${name}" will fire in approximately 1 minutes.`,
+          );
+        }
+
+        scheduledTime = Date.now() + alarmInfo.delayInMinutes * 60000;
+      }
+
+      const alarm: ExtensionsAlarm = {
         periodInMinutes: alarmInfo.periodInMinutes,
         scheduledTime,
         name,
-      });
-    } else if (type === 'get-all') {
-      const contents = webContents.fromId(e.sender.id);
-      const msg = API_ALARMS_OPERATION + data.id;
+      };
 
-      contents.send(msg, [global.extensionsAlarms[extensionId]]);
+      global.extensionsAlarms[extensionId].push(alarm);
+
+      if (!alarm.periodInMinutes) {
+        setTimeout(() => {
+          contents.send(`api-emit-event-alarms-onAlarm`, alarm);
+        }, alarm.scheduledTime - Date.now());
+      }
     }
   });
 };
