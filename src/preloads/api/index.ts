@@ -1,5 +1,7 @@
 import { ipcRenderer, webFrame, remote } from 'electron';
 import { format } from 'url';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 import { Manifest } from '~/interfaces/manifest';
 import IpcEvent from './ipc-event';
@@ -12,26 +14,7 @@ import {
   API_BROWSER_ACTION_SET_BADGE_TEXT,
 } from '~/constants/api-ipc-messages';
 import { makeId, replaceAll } from '~/utils';
-import { readFileSync } from 'fs';
-import { join } from 'path';
-
-class Event {
-  private callbacks: Function[] = [];
-
-  public emit(...args: any[]) {
-    this.callbacks.forEach(callback => {
-      callback(...args);
-    });
-  }
-
-  public addListener(callback: Function) {
-    this.callbacks.push(callback);
-  }
-
-  public removeListener(callback: Function) {
-    this.callbacks = this.callbacks.filter(x => x !== callback);
-  }
-}
+import { Event } from '../models/event';
 
 class Port {
   public sender: chrome.runtime.MessageSender;
@@ -157,7 +140,7 @@ export const getAPI = (manifest: Manifest) => {
       },
       clear: (name: string, cb: any) => {},
       clearAll: (cb: any) => {},
-      onAlarm: new IpcEvent('alarms', 'onAlarm'), // TODO
+      onAlarm: new IpcEvent('alarms', 'onAlarm'),
     },
 
     // https://developer.chrome.com/extensions/runtime
