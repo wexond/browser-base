@@ -7,7 +7,7 @@ let mainWindow: BrowserWindow;
 
 const getTabIdByWebContentsId = async (webContentsId: number) => {
   return new Promise((resolve: (result: number) => void) => {
-    mainWindow.webContents.send('get-tab-id', { webContentsId });
+    mainWindow.webContents.send('get-tab-id', webContentsId);
 
     ipcMain.once('get-tab-id', (e: any, tabId: number) => {
       resolve(tabId);
@@ -22,7 +22,7 @@ const getRequestType = (type: string): any => {
   return type;
 };
 
-const getDetails = (details: any) => {
+const getDetails = (details: any, tabId: number = null) => {
   return new Promise(async resolve => {
     resolve({
       requestId: details.id.toString(),
@@ -30,7 +30,9 @@ const getDetails = (details: any) => {
       method: details.method,
       frameId: 0,
       parentFrameId: -1,
-      tabId: await getTabIdByWebContentsId(details.webContentsId),
+      tabId: tabId
+        ? tabId
+        : await getTabIdByWebContentsId(details.webContentsId),
       type: getRequestType(details.resourceType),
       timeStamp: Date.now(),
     });
@@ -140,7 +142,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
     .fromPartition('persist:webviewsession')
     .webRequest.onBeforeRequest(async (details, callback) => {
       const eventName = 'onBeforeRequest';
-      const newDetails = await getDetails(details);
+      const newDetails: any = await getDetails(details);
       const cb = getCallback(callback);
 
       const isIntercepted = interceptRequest(
@@ -163,6 +165,34 @@ export const runWebRequestService = (window: BrowserWindow) => {
         cb({ cancel: false });
       }
     });
+
+  session.defaultSession.webRequest.onBeforeRequest(
+    async (details, callback) => {
+      const eventName = 'onBeforeRequest';
+      const newDetails: any = await getDetails(details, -1);
+      const cb = getCallback(callback);
+
+      const isIntercepted = interceptRequest(
+        eventName,
+        newDetails,
+        (res: any) => {
+          if (res) {
+            if (res.cancel) {
+              cb({ cancel: true });
+            } else if (res.redirectUrl) {
+              cb({ cancel: false, redirectURL: res.redirectUrl });
+            }
+          } else {
+            cb({ cancel: false });
+          }
+        },
+      );
+
+      if (!isIntercepted) {
+        cb({ cancel: false });
+      }
+    },
+  );
 
   ipcMain.on('api-add-webRequest-listener', (e: any, data: any) => {
     const { id, name, filters } = data;
