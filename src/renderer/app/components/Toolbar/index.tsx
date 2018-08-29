@@ -49,23 +49,6 @@ class SecondSeparator extends React.Component {
     return (
       <ToolbarSeparator
         style={{
-          visibility:
-            toggled && store.extensionsStore.browserActions.length === 0
-              ? 'hidden'
-              : 'visible',
-        }}
-      />
-    );
-  }
-}
-
-@observer
-class ThirdSeparator extends React.Component {
-  public render() {
-    const { toggled } = store.addressBarStore;
-    return (
-      <ToolbarSeparator
-        style={{
           visibility: toggled ? 'hidden' : 'visible',
         }}
       />
@@ -94,10 +77,6 @@ export default class Toolbar extends React.Component {
             <TabBar />
           </Tabs>
         </TabsSection>
-        {store.extensionsStore.browserActions.length > 0 && <ThirdSeparator />}
-        {store.extensionsStore.browserActions.map((item, key) => (
-          <BrowserAction browserAction={item} key={key} />
-        ))}
         <SecondSeparator />
         <BookmarkButton />
         <ToolbarButton
@@ -105,6 +84,10 @@ export default class Toolbar extends React.Component {
           icon={icons.workspaces}
           onClick={this.onWorkspacesIconClick}
         />
+        <ToolbarSeparator />
+        {store.extensionsStore.browserActions.map((item, key) => (
+          <BrowserAction browserAction={item} key={key} />
+        ))}
         <ToolbarButton
           onClick={this.toggleMenu}
           size={20}
