@@ -8,6 +8,7 @@ export class Page {
   @observable
   public url: string;
 
+  public webContentsId: number;
   public webview: Electron.WebviewTag;
 
   constructor(id: number, url: string) {

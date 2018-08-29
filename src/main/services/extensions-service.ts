@@ -14,6 +14,7 @@ import {
 } from '~/constants';
 import { Global } from '../interfaces';
 import { ExtensionsAlarm } from '~/interfaces';
+import { getTabByWebContentsId } from '~/main/utils';
 
 declare const global: Global;
 
@@ -66,15 +67,18 @@ export const runExtensionsService = (window: BrowserWindow) => {
     },
   );
 
-  ipcMain.on(API_RUNTIME_CONNECT, (e: Electron.IpcMessageEvent, data: any) => {
-    const { extensionId, portId, sender, name } = data;
-    const bgPage = global.backgroundPages[extensionId];
+  ipcMain.on(
+    API_RUNTIME_CONNECT,
+    async (e: Electron.IpcMessageEvent, data: any) => {
+      const { extensionId, portId, sender, name } = data;
+      const bgPage = global.backgroundPages[extensionId];
 
-    if (e.sender.id !== bgPage.webContentsId) {
-      const contents = webContents.fromId(bgPage.webContentsId);
-      contents.send(API_RUNTIME_CONNECT, { portId, sender, name });
-    }
-  });
+      if (e.sender.id !== bgPage.webContentsId) {
+        const contents = webContents.fromId(bgPage.webContentsId);
+        contents.send(API_RUNTIME_CONNECT, { portId, sender, name });
+      }
+    },
+  );
 
   ipcMain.on(API_PORT_POSTMESSAGE, (e: Electron.IpcMessageEvent, data: any) => {
     const { portId, msg } = data;
