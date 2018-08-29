@@ -37,7 +37,7 @@ export default class extends React.Component<{ page: Page }> {
     this.addWebviewListener('leave-html-full-screen', this.onFullscreenLeave);
     this.addWebviewListener('new-window', this.onNewWindow);
     this.addWebviewListener('did-navigate', this.onDidNavigate);
-    this.addWebviewListener('will-navigate', this.onWillNavigate);
+    this.addWebviewListener('did-get-redirect-request', this.onWillNavigate);
     this.addWebviewListener('ipc-message', this.onIpcMessage);
     this.webview.addEventListener('dom-ready', this.onceDomReady);
 
@@ -106,24 +106,16 @@ export default class extends React.Component<{ page: Page }> {
     }
   };
 
-  public onWillNavigate = (e: Electron.WillNavigateEvent) => {
+  public onWillNavigate = (e: Electron.WillNavigateEvent) => {};
+
+  public onDidStartLoading = () => {
     this.emitEvent('webNavigation', 'onBeforeNavigate', {
       tabId: this.tab.id,
-      url: e.url,
+      url: this.tab.url,
       frameId: 0,
       timeStamp: Date.now(),
       processId: -1,
       parentFrameId: -1,
-    });
-  };
-
-  public onDidStartLoading = () => {
-    this.emitEvent('webNavigation', 'onCommitted', {
-      tabId: this.tab.id,
-      url: this.webview.getURL(),
-      frameId: 0,
-      timeStamp: Date.now(),
-      processId: this.processId,
     });
 
     this.emitEvent(
@@ -165,6 +157,7 @@ export default class extends React.Component<{ page: Page }> {
       timeStamp: Date.now(),
       processId: this.processId,
     });
+    this.webview.getWebContents().setUserAgent(remote.getGlobal('userAgent'));
   };
 
   public onNewWindow = (e: Electron.NewWindowEvent) => {
@@ -226,6 +219,14 @@ export default class extends React.Component<{ page: Page }> {
     isMainFrame,
   }: Electron.LoadCommitEvent) => {
     this.tab.loading = true;
+
+    this.emitEvent('webNavigation', 'onCommitted', {
+      tabId: this.tab.id,
+      url: this.webview.getURL(),
+      frameId: 0,
+      timeStamp: Date.now(),
+      processId: this.processId,
+    });
 
     if (url !== this.lastURL && isMainFrame && !url.startsWith('wexond://')) {
       this.lastHistoryItemID = await store.historyStore.addItem({

@@ -65,6 +65,9 @@ export const startBackgroundPage = async (manifest: Manifest) => {
         hostname: extensionId,
         pathname: name,
       }),
+      {
+        userAgent: global.userAgent,
+      },
     );
   }
 };

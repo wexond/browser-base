@@ -25,4 +25,5 @@ export interface Global {
     [key: string]: ExtensionsAlarm[];
   };
   locale: string;
+  userAgent: string;
 }
