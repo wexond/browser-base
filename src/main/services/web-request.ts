@@ -25,21 +25,32 @@ const getRequestType = (type: string): any => {
   return type;
 };
 
-const getDetails = (details: any, tabId: number = null) => {
-  return new Promise(async resolve => {
-    resolve({
-      requestId: details.id.toString(),
-      url: details.url,
-      method: details.method,
-      frameId: 0,
-      parentFrameId: -1,
-      tabId: tabId
-        ? tabId
-        : await getTabIdByWebContentsId(details.webContentsId),
-      type: getRequestType(details.resourceType),
-      timeStamp: Date.now(),
-    });
+const getDetails = (details: any) => {
+  return {
+    requestId: details.id.toString(),
+    url: details.url,
+    method: details.method,
+    frameId: 0,
+    parentFrameId: -1,
+    type: getRequestType(details.resourceType),
+    timeStamp: Date.now(),
+  };
+};
+
+const objectToArray = (obj: any) => {
+  const arr: any = [];
+  Object.keys(obj).forEach(k => {
+    arr.push({ name: k, value: obj[k] });
   });
+  return arr;
+};
+
+const arrayToObject = (arr: any[]) => {
+  const obj: any = {};
+  arr.forEach((item: any) => {
+    arr[item.name] = item.value;
+  });
+  return obj;
 };
 
 const matchesFilter = (filter: any, url: string) => {
@@ -62,7 +73,11 @@ const getCallback = (callback: any) => {
   };
 };
 
-const interceptRequest = (eventName: string, details: any, callback: any) => {
+const interceptRequest = (
+  eventName: string,
+  details: any,
+  callback: any = null,
+) => {
   let isIntercepted = false;
 
   if (Array.isArray(eventListeners[eventName])) {
@@ -71,12 +86,14 @@ const interceptRequest = (eventName: string, details: any, callback: any) => {
 
       const id = makeId(32);
 
-      ipcMain.once(
-        `api-webRequest-response-${eventName}-${event.id}-${id}`,
-        (e: any, res: any) => {
-          callback(res);
-        },
-      );
+      if (callback) {
+        ipcMain.once(
+          `api-webRequest-response-${eventName}-${event.id}-${id}`,
+          (e: any, res: any) => {
+            callback(res);
+          },
+        );
+      }
 
       const contents = webContents.fromId(event.webContentsId);
       contents.send(
@@ -95,116 +112,188 @@ const interceptRequest = (eventName: string, details: any, callback: any) => {
 export const runWebRequestService = (window: BrowserWindow) => {
   mainWindow = window;
 
+  const webviewRequest = session.fromPartition('persist:webviewsession')
+    .webRequest;
+  const defaultRequest = session.defaultSession.webRequest;
+
   session
     .fromPartition('persist:wexond_extension')
     .webRequest.onBeforeSendHeaders((details: any, callback: any) => {
       details.requestHeaders['User-Agent'] = global.userAgent;
-
-      console.log('aha');
-
       callback({ requestHeaders: details.requestHeaders, cancel: false });
     });
 
-  session
-    .fromPartition('persist:webviewsession')
-    .webRequest.onBeforeSendHeaders(async (details: any, callback: any) => {
-      const eventName = 'onBeforeSendHeaders';
-      const requestHeaders: object[] = [];
+  // onBeforeSendHeaders
 
-      details.requestHeaders['User-Agent'] = 'Chrome/68.0.3440.106';
-      details.requestHeaders['DNT'] = '1';
+  const onBeforeSendHeaders = async (
+    details: any,
+    callback: any,
+    isTabRelated: boolean,
+  ) => {
+    const requestHeaders = objectToArray(details.requestHeaders);
 
-      Object.keys(details.requestHeaders).forEach(k => {
-        requestHeaders.push({ name: k, value: details.requestHeaders[k] });
-      });
+    const newDetails: any = {
+      ...(await getDetails(details)),
+      tabId: isTabRelated
+        ? await getTabIdByWebContentsId(details.webContentsId)
+        : -1,
+      requestHeaders,
+    };
 
-      const newDetails: any = {
-        ...(await getDetails(details)),
-        requestHeaders,
-      };
+    const cb = getCallback(callback);
 
-      const cb = getCallback(callback);
-
-      const isIntercepted = interceptRequest(
-        eventName,
-        newDetails,
-        (res: any) => {
-          if (res) {
-            if (res.cancel) {
-              cb({ cancel: true });
-            } else if (res.requestHeaders) {
-              const requestHeaders: any = {};
-              res.requestHeaders.forEach((requestHeader: any) => {
-                requestHeaders[requestHeader.name] = requestHeader.value;
-              });
-              cb({ requestHeaders, cancel: false });
-            }
-          } else {
-            cb({ cancel: false, requestHeaders: details.requestHeaders });
+    const isIntercepted = interceptRequest(
+      'onBeforeSendHeaders',
+      newDetails,
+      (res: any) => {
+        if (res) {
+          if (res.cancel) {
+            cb({ cancel: true });
+          } else if (res.requestHeaders) {
+            const requestHeaders = arrayToObject(res.requestHeaders);
+            cb({ requestHeaders, cancel: false });
           }
-        },
-      );
-
-      if (!isIntercepted) {
+        }
         cb({ cancel: false, requestHeaders: details.requestHeaders });
-      }
-    });
+      },
+    );
 
-  session
-    .fromPartition('persist:webviewsession')
-    .webRequest.onBeforeRequest(async (details, callback) => {
-      const eventName = 'onBeforeRequest';
-      const newDetails: any = await getDetails(details);
-      const cb = getCallback(callback);
+    if (!isIntercepted) {
+      cb({ cancel: false, requestHeaders: details.requestHeaders });
+    }
+  };
 
-      const isIntercepted = interceptRequest(
-        eventName,
-        newDetails,
-        (res: any) => {
-          if (res) {
-            if (res.cancel) {
-              cb({ cancel: true });
-            } else if (res.redirectUrl) {
-              cb({ cancel: false, redirectURL: res.redirectUrl });
-            }
-          } else {
-            cb({ cancel: false });
+  defaultRequest.onBeforeSendHeaders(async (details: any, callback: any) => {
+    await onBeforeSendHeaders(details, callback, false);
+  });
+
+  webviewRequest.onBeforeSendHeaders(async (details: any, callback: any) => {
+    details.requestHeaders['User-Agent'] = global.userAgent;
+    details.requestHeaders['DNT'] = '1';
+
+    await onBeforeSendHeaders(details, callback, true);
+  });
+
+  // onBeforeRequest
+
+  const onBeforeRequest = async (
+    details: any,
+    callback: any,
+    isTabRelated: boolean,
+  ) => {
+    const newDetails: any = {
+      ...(await getDetails(details)),
+      tabId: isTabRelated
+        ? await getTabIdByWebContentsId(details.webContentsId)
+        : -1,
+    };
+    const cb = getCallback(callback);
+
+    const isIntercepted = interceptRequest(
+      'onBeforeRequest',
+      newDetails,
+      (res: any) => {
+        if (res) {
+          if (res.cancel) {
+            cb({ cancel: true });
+          } else if (res.redirectUrl) {
+            cb({ cancel: false, redirectURL: res.redirectUrl });
           }
-        },
-      );
-
-      if (!isIntercepted) {
+        }
         cb({ cancel: false });
-      }
-    });
+      },
+    );
 
-  session.defaultSession.webRequest.onBeforeRequest(
-    async (details, callback) => {
-      const eventName = 'onBeforeRequest';
-      const newDetails: any = await getDetails(details, -1);
-      const cb = getCallback(callback);
+    if (!isIntercepted) {
+      cb({ cancel: false });
+    }
+  };
 
-      const isIntercepted = interceptRequest(
-        eventName,
-        newDetails,
-        (res: any) => {
-          if (res) {
-            if (res.cancel) {
-              cb({ cancel: true });
-            } else if (res.redirectUrl) {
-              cb({ cancel: false, redirectURL: res.redirectUrl });
-            }
-          } else {
-            cb({ cancel: false });
+  defaultRequest.onBeforeRequest(async (details, callback) => {
+    await onBeforeRequest(details, callback, false);
+  });
+
+  webviewRequest.onBeforeRequest(async (details, callback) => {
+    await onBeforeRequest(details, callback, true);
+  });
+
+  // onHeadersReceived
+
+  const onHeadersReceived = async (
+    details: any,
+    callback: any,
+    isTabRelated: boolean,
+  ) => {
+    const responseHeaders = objectToArray(details.responseHeaders);
+    const newDetails: any = {
+      ...(await getDetails(details)),
+      tabId: isTabRelated
+        ? await getTabIdByWebContentsId(details.webContentsId)
+        : -1,
+      responseHeaders,
+      statusLine: details.statusLine,
+      statusCode: details.statusCode,
+    };
+
+    const cb = getCallback(callback);
+
+    const isIntercepted = interceptRequest(
+      'onHeadersReceived',
+      newDetails,
+      (res: any) => {
+        if (res) {
+          if (res.cancel) {
+            cb({ cancel: true });
+          } else if (res.responseHeaders) {
+            const responseHeaders = arrayToObject(res.responseHeaders);
+            cb({
+              responseHeaders,
+              statusLine: details.statusLine,
+              cancel: false,
+            });
           }
-        },
-      );
+        }
+        cb({ cancel: false, responseHeaders: details.responseHeaders });
+      },
+    );
 
-      if (!isIntercepted) {
-        cb({ cancel: false });
-      }
-    },
-  );
+    if (!isIntercepted) {
+      cb({ cancel: false, responseHeaders: details.responseHeaders });
+    }
+  };
+
+  defaultRequest.onHeadersReceived(async (details: any, callback: any) => {
+    await onHeadersReceived(details, callback, false);
+  });
+
+  webviewRequest.onHeadersReceived(async (details: any, callback: any) => {
+    await onHeadersReceived(details, callback, true);
+  });
+
+  // onSendHeaders
+
+  const onSendHeaders = async (details: any, isTabRelated: boolean) => {
+    const requestHeaders = objectToArray(details.requestHeaders);
+    const newDetails: any = {
+      ...(await getDetails(details)),
+      tabId: isTabRelated
+        ? await getTabIdByWebContentsId(details.webContentsId)
+        : -1,
+      requestHeaders,
+    };
+
+    interceptRequest('onSendHeaders', newDetails);
+  };
+
+  defaultRequest.onSendHeaders(async (details: any) => {
+    await onSendHeaders(details, false);
+  });
+
+  webviewRequest.onSendHeaders(async (details: any) => {
+    await onSendHeaders(details, true);
+  });
+
+  // Handle listener add and remove.
 
   ipcMain.on('api-add-webRequest-listener', (e: any, data: any) => {
     const { id, name, filters } = data;
