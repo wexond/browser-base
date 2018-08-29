@@ -14,7 +14,7 @@ export const StyledAddressBar = styled.div`
   transition: 0.3s opacity, 0.2s transform;
   z-index: 10;
   max-width: 640px;
-  left: 50%;
+  left: calc(50% + 4px);
   overflow: hidden;
   background-color: white;
   will-change: transition, opacity;
