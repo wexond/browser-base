@@ -49,7 +49,7 @@ export const StyledTab = styled.div`
     content: '';
     position: absolute;
     width: 1px;
-    height: calc(100% - 12px);
+    height: calc(100% - 14px);
     background-color: rgba(0, 0, 0, ${transparency.light.dividers});
     right: 0px;
 
