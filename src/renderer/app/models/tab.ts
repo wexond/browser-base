@@ -3,7 +3,7 @@ import { TabGroup } from './tab-group';
 import store from '../store';
 import { TABS_PADDING, TOOLBAR_HEIGHT } from '~/constants';
 
-let id = 0;
+let id = 1;
 
 export class Tab {
   @observable
