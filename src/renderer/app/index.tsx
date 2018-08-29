@@ -1,5 +1,5 @@
 import React from 'react';
-import { remote } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { injectGlobal } from 'styled-components';
@@ -55,6 +55,8 @@ const render = (AppComponent: any) => {
       store.extensionsStore.browserActions.push(browserAction);
     }
   }
+
+  ipcRenderer.send('renderer-load');
 })();
 
 // react-hot-loader

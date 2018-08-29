@@ -30,7 +30,7 @@ export const runServices = () => {
       }
     }
     if (!sent) {
-      ipcRenderer.send('get-tab-id', null);
+      ipcRenderer.send('get-tab-id', -1);
     }
   });
 
