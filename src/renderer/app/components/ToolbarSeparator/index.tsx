@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { transparency } from '~/renderer/defaults';
 
 export default styled.div`
-  height: calc(100% - 16px);
+  height: 20px;
   min-width: 1px;
   top: 50%;
   position: relative;

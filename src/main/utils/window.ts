@@ -3,7 +3,6 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
 import { FULLSCREEN } from '~/constants';
-import { loadExtensions } from './extensions';
 import { WindowState } from '../interfaces';
 import { getPath } from '.';
 import { filesContent } from '~/defaults';
@@ -90,8 +89,6 @@ export const createWindow = () => {
   });
 
   window.webContents.addListener('will-navigate', e => e.preventDefault());
-
-  loadExtensions();
 
   return window;
 };

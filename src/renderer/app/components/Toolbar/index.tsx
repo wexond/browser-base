@@ -12,6 +12,7 @@ import { Platforms } from '~/enums';
 import WindowsControls from '../WindowsButtons';
 import BookmarkButton from '@app/components/BookmarkButton';
 import { icons } from '~/renderer/defaults';
+import BrowserAction from '@app/components/BrowserAction';
 
 @observer
 class FirstSeparator extends React.Component {
@@ -83,6 +84,10 @@ export default class Toolbar extends React.Component {
           icon={icons.workspaces}
           onClick={this.onWorkspacesIconClick}
         />
+        <ToolbarSeparator />
+        {store.extensionsStore.browserActions.map((item, key) => (
+          <BrowserAction browserAction={item} key={key} />
+        ))}
         <ToolbarButton
           onClick={this.toggleMenu}
           size={20}

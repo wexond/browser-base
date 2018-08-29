@@ -10,6 +10,7 @@ import {
   API_RUNTIME_CONNECT,
   API_PORT_POSTMESSAGE,
   API_ALARMS_OPERATION,
+  API_BROWSER_ACTION_SET_BADGE_TEXT,
 } from '~/constants';
 import { Global } from '../interfaces';
 import { ExtensionsAlarm } from '~/interfaces';
@@ -168,4 +169,15 @@ export const runExtensionsService = (window: BrowserWindow) => {
       }
     }
   });
+
+  ipcMain.on(
+    API_BROWSER_ACTION_SET_BADGE_TEXT,
+    (e: Electron.IpcMessageEvent, ...args: any[]) => {
+      window.webContents.send(
+        API_BROWSER_ACTION_SET_BADGE_TEXT,
+        e.sender.id,
+        ...args,
+      );
+    },
+  );
 };
