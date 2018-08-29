@@ -41,6 +41,8 @@ export default class extends React.Component<{ page: Page }> {
     this.addWebviewListener('ipc-message', this.onIpcMessage);
     this.webview.addEventListener('dom-ready', this.onceDomReady);
 
+    page.webContentsId = this.webview.getWebContents().id;
+
     this.processId = this.webview.getWebContents().getOSProcessId();
   }
 
@@ -339,7 +341,7 @@ export default class extends React.Component<{ page: Page }> {
           partition="persist:webviewsession"
           preload={`file://${resolve(
             remote.app.getAppPath(),
-            'build/webview-preload.js',
+            'build/webview-preload.js?test=test',
           )}`}
           allowFullScreen
         />

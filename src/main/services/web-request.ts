@@ -1,22 +1,13 @@
 import { BrowserWindow, ipcMain, session, webContents } from 'electron';
 import { matchesPattern, makeId } from '~/utils';
 import { Global } from '~/main/interfaces';
+import { getTabByWebContentsId } from '~/main/utils';
 
 const eventListeners: any = {};
 
 let mainWindow: BrowserWindow;
 
 declare const global: Global;
-
-const getTabIdByWebContentsId = async (webContentsId: number) => {
-  return new Promise((resolve: (result: number) => void) => {
-    mainWindow.webContents.send('get-tab-id', webContentsId);
-
-    ipcMain.once('get-tab-id', (e: any, tabId: number) => {
-      resolve(tabId);
-    });
-  });
-};
 
 const getRequestType = (type: string): any => {
   if (type === 'mainFrame') return 'main_frame';
@@ -40,7 +31,9 @@ const getDetails = (details: any) => {
 const objectToArray = (obj: any) => {
   const arr: any = [];
   Object.keys(obj).forEach(k => {
-    arr.push({ name: k, value: obj[k] });
+    if (obj[k]) {
+      arr.push({ name: k, value: obj[k] });
+    }
   });
   return arr;
 };
@@ -135,7 +128,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
     const newDetails: any = {
       ...(await getDetails(details)),
       tabId: isTabRelated
-        ? await getTabIdByWebContentsId(details.webContentsId)
+        ? (await getTabByWebContentsId(window, details.webContentsId)).id
         : -1,
       requestHeaders,
     };
@@ -184,7 +177,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
     const newDetails: any = {
       ...(await getDetails(details)),
       tabId: isTabRelated
-        ? await getTabIdByWebContentsId(details.webContentsId)
+        ? (await getTabByWebContentsId(window, details.webContentsId)).id
         : -1,
     };
     const cb = getCallback(callback);
@@ -228,7 +221,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
     const newDetails: any = {
       ...(await getDetails(details)),
       tabId: isTabRelated
-        ? await getTabIdByWebContentsId(details.webContentsId)
+        ? (await getTabByWebContentsId(window, details.webContentsId)).id
         : -1,
       responseHeaders,
       statusLine: details.statusLine,
@@ -245,10 +238,13 @@ export const runWebRequestService = (window: BrowserWindow) => {
           if (res.cancel) {
             cb({ cancel: true });
           } else if (res.responseHeaders) {
-            const responseHeaders = arrayToObject(res.responseHeaders);
+            const responseHeaders = Object.assign(
+              {},
+              details.responseHeaders,
+              arrayToObject(res.responseHeaders),
+            );
             cb({
               responseHeaders,
-              statusLine: details.statusLine,
               cancel: false,
             });
           }
@@ -277,7 +273,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
     const newDetails: any = {
       ...(await getDetails(details)),
       tabId: isTabRelated
-        ? await getTabIdByWebContentsId(details.webContentsId)
+        ? await getTabByWebContentsId(window, details.webContentsId)
         : -1,
       requestHeaders,
     };
