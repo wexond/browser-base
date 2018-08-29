@@ -3,6 +3,7 @@ import React from 'react';
 
 import { Button, Icon, Circle } from './styles';
 import Ripple from '@components/Ripple';
+import { transparency } from '~/renderer/defaults';
 
 interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
@@ -14,12 +15,14 @@ interface Props {
   disabled?: boolean;
   className?: string;
   children?: any;
+  opacity?: number;
 }
 
 @observer
 export default class ToolbarButton extends React.Component<Props, {}> {
   public static defaultProps = {
     size: 20,
+    opacity: transparency.light.inactiveIcon,
   };
 
   private ripple: Ripple;
@@ -62,6 +65,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
       className,
       divRef,
       children,
+      opacity,
     } = this.props;
 
     let { style } = this.props;
@@ -82,7 +86,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
         }}
         disabled={disabled}
       >
-        <Icon icon={icon} size={size} disabled={disabled} />
+        <Icon icon={icon} size={size} disabled={disabled} opacity={opacity} />
         <Circle>
           <Ripple
             ref={r => (this.ripple = r)}

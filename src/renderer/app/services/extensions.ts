@@ -12,6 +12,7 @@ import {
 } from '~/constants';
 import store from '../store';
 import { Tab } from '../models';
+import { resolve } from 'path';
 
 export const runExtensionsService = () => {
   ipcRenderer.on(
