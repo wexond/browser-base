@@ -10,6 +10,9 @@ export const API_TABS_DETECT_LANGUAGE = 'api-tabs-detectLanguage';
 export const API_RUNTIME_RELOAD = 'api-runtime-reload';
 export const API_RUNTIME_CONNECT = 'api-runtime-connect';
 
+export const API_BROWSER_ACTION_SET_BADGE_TEXT =
+  'api-browser-action-set-badge-text';
+
 export const API_PORT_POSTMESSAGE = 'api-port-postmessage';
 
 export const API_STORAGE_OPERATION = 'api-storage-operation';

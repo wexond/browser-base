@@ -23,4 +23,8 @@ export class ExtensionsStore {
       webContents.send(`api-emit-event-${scope}-${name}`, ...data);
     });
   }
+
+  public getBrowserActionById(id: string) {
+    return this.browserActions.find(x => x.extensionId === id);
+  }
 }
