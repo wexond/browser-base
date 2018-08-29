@@ -1,4 +1,4 @@
-import { remote, webFrame } from 'electron';
+import { remote, webFrame, ipcRenderer } from 'electron';
 import { join } from 'path';
 import { runInThisContext } from 'vm';
 

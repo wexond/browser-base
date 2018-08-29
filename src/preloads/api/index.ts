@@ -153,7 +153,11 @@ export const getAPI = (manifest: Manifest) => {
       connect: (arg1: any = null, arg2: any = null) => {
         const sender: any = {
           id: manifest.extensionId,
+          tab: { id: 1 },
+          url: window.location.href,
+          frameId: 0,
         };
+
         const portId = makeId(32);
 
         let name: string = null;
