@@ -12,6 +12,7 @@ import { Platforms } from '~/enums';
 import WindowsControls from '../WindowsButtons';
 import BookmarkButton from '@app/components/BookmarkButton';
 import { icons } from '~/renderer/defaults';
+import BrowserAction from '@app/components/BrowserAction';
 
 @observer
 class FirstSeparator extends React.Component {
@@ -48,6 +49,23 @@ class SecondSeparator extends React.Component {
     return (
       <ToolbarSeparator
         style={{
+          visibility:
+            toggled && store.extensionsStore.browserActions.length === 0
+              ? 'hidden'
+              : 'visible',
+        }}
+      />
+    );
+  }
+}
+
+@observer
+class ThirdSeparator extends React.Component {
+  public render() {
+    const { toggled } = store.addressBarStore;
+    return (
+      <ToolbarSeparator
+        style={{
           visibility: toggled ? 'hidden' : 'visible',
         }}
       />
@@ -76,6 +94,10 @@ export default class Toolbar extends React.Component {
             <TabBar />
           </Tabs>
         </TabsSection>
+        {store.extensionsStore.browserActions.length > 0 && <ThirdSeparator />}
+        {store.extensionsStore.browserActions.map((item, key) => (
+          <BrowserAction browserAction={item} key={key} />
+        ))}
         <SecondSeparator />
         <BookmarkButton />
         <ToolbarButton

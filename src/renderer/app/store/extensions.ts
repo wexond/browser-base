@@ -1,7 +1,12 @@
 import { remote } from 'electron';
 import store from '.';
+import { observable } from 'mobx';
+import { BrowserAction } from '@app/models/browser-action';
 
 export class ExtensionsStore {
+  @observable
+  public browserActions: BrowserAction[] = [];
+
   public emitEvent(scope: string, name: string, ...data: any[]) {
     const backgroundPages = remote.getGlobal('backgroundPages');
 

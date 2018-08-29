@@ -14,13 +14,15 @@ export const Icon = styled.div`
     size,
     disabled,
     icon,
+    opacity,
   }: {
     size: number;
     disabled: boolean;
     icon: string;
+    opacity: number;
   }) => css`
     ${centerImage(`${size}px`, `${size}px`)};
-    opacity: ${disabled ? 0.25 : transparency.light.inactiveIcon};
+    opacity: ${disabled ? 0.25 : opacity};
     background-image: url(${icon});
   `};
 `;
