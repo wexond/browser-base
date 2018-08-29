@@ -1,4 +1,4 @@
-import { webContents, BrowserWindow } from 'electron';
+import { webContents, BrowserWindow, ipcMain } from 'electron';
 import fs from 'fs';
 import { format } from 'url';
 import { resolve } from 'path';
@@ -133,4 +133,17 @@ export const loadExtensions = async (window: BrowserWindow) => {
       }
     }
   }
+};
+
+export const getTabByWebContentsId = async (
+  window: BrowserWindow,
+  webContentsId: number,
+) => {
+  return new Promise((resolve: (a: any) => void) => {
+    window.webContents.send('get-tab-by-web-contents-id', webContentsId);
+
+    ipcMain.once('get-tab-by-web-contents-id', (e: any, tab: any) => {
+      resolve(tab);
+    });
+  });
 };
