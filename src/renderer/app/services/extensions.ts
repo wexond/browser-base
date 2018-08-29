@@ -9,6 +9,7 @@ import {
   API_TABS_QUERY,
   API_TABS_SET_ZOOM,
   API_PORT_POSTMESSAGE,
+  API_BROWSER_ACTION_SET_BADGE_TEXT,
 } from '~/constants';
 import store from '../store';
 import { Tab } from '../models';
@@ -20,10 +21,10 @@ export const runExtensionsService = () => {
     (e: Electron.IpcMessageEvent, webContentsId: number) => {
       const sender = remote.webContents.fromId(webContentsId);
 
-      const tabs: Tab[] = [];
+      let tabs: Tab[] = [];
 
       store.tabsStore.groups.forEach(element => {
-        tabs.concat(element.tabs);
+        tabs = tabs.concat(element.tabs);
       });
 
       sender.send(API_TABS_QUERY, tabs.map(tab => tab.getApiTab()));
@@ -148,6 +149,23 @@ export const runExtensionsService = () => {
           page.webview.send(API_PORT_POSTMESSAGE + portId, msg);
         }
       }
+    },
+  );
+
+  ipcRenderer.on(
+    API_BROWSER_ACTION_SET_BADGE_TEXT,
+    (
+      e: Electron.IpcMessageEvent,
+      senderId: number,
+      extensionId: string,
+      details: chrome.browserAction.BadgeTextDetails,
+    ) => {
+      const browserAction = store.extensionsStore.getBrowserActionById(
+        extensionId,
+      );
+      browserAction.badgeText = details.text;
+      const contents = remote.webContents.fromId(senderId);
+      contents.send(API_BROWSER_ACTION_SET_BADGE_TEXT);
     },
   );
 };

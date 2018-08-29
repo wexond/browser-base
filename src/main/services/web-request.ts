@@ -7,7 +7,7 @@ let mainWindow: BrowserWindow;
 
 const getTabIdByWebContentsId = async (webContentsId: number) => {
   return new Promise((resolve: (result: number) => void) => {
-    mainWindow.webContents.send('get-tab-id', { webContentsId });
+    mainWindow.webContents.send('get-tab-id', webContentsId);
 
     ipcMain.once('get-tab-id', (e: any, tabId: number) => {
       resolve(tabId);
@@ -140,7 +140,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
     .fromPartition('persist:webviewsession')
     .webRequest.onBeforeRequest(async (details, callback) => {
       const eventName = 'onBeforeRequest';
-      const newDetails = await getDetails(details);
+      const newDetails: any = await getDetails(details);
       const cb = getCallback(callback);
 
       const isIntercepted = interceptRequest(
