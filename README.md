@@ -18,8 +18,9 @@ Wexond is a web browser built on top of `Electron`, `React` and `styled-componen
 - **Built-in ad-block** Browse the web without any ads.
 - **Beautiful and minimalistic UI** The tabs and address bar are located in the same toolbar to take less space.
 - **Right sided navigation drawer** Access to all features of Wexond very easily.
-- **Workspaces** Easily group tabs to workspaces and access them very fast.
+- **Tab groups** Easily group tabs to tab groups and access them very fast.
 - **Expanded new tab page** Have all information such as news, weather or currency in only one page!
+- **Partial support for Chrome extensions** Install some extensions from Chrome Web Store (see https://github.com/wexond/wexond/issues/110)
 
 # Screenshots
 
@@ -34,6 +35,8 @@ All binaries are located in the [Releases page](https://github.com/wexond/wexond
 We still have a lot of things to do, to make Wexond better and better. This is just a beginning. So to improve our web browser we have created a roadmap so that you can see the next features and improvements.
 
 # [Supported WebExtensions APIs](https://github.com/wexond/wexond/issues/110)
+
+There is a lot of APIs, but we are only two very young programmers, so any help would be really appreciated and welcomed.
 
 # Contributing
 
@@ -87,5 +90,7 @@ $ npm run <command>
 
 ## Documentation
 
+> At this moment there are no docs for the theming system.
+
 Guides and the API reference are located in [`docs`](docs).
-It also contains documents describing how to use the browser, and create extensions.
+It also contains documents describing how to use the browser, and create themes.
