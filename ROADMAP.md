@@ -1,6 +1,6 @@
 # Roadmap
 
-- [*] Support uBlock Origin.
+- [x] Support uBlock Origin.
 - [ ] Add extensions system compatible with [Chrome's API](https://developer.chrome.com/apps/api_index).
 - [ ] Add theming system that could let users to customize every component however they want.
 - [ ] Add more keyboard shortcuts.
