@@ -6,7 +6,6 @@ import { AddressBarStore } from './address-bar';
 import { MenuStore } from './menu';
 import { TabsStore } from './tabs';
 import { PageMenuStore } from './page-menu';
-import { HistoryStore } from './history';
 import { BookmarksStore } from './bookmarks';
 import { AddTabStore } from './add-tab';
 import { SuggestionsStore } from './suggestions';
@@ -18,6 +17,7 @@ import { ExtensionsStore } from './extensions';
 import { dictionaries } from '~/defaults';
 import { KeyBindingsStore } from './key-bindings';
 import { KeyBindingsMenuStore } from './key-bindings-menu';
+import { HistoryStore } from './history';
 
 export class Store {
   public tabsStore = new TabsStore();

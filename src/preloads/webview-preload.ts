@@ -7,6 +7,9 @@ import { getAPI } from './api';
 import { applyDarkTheme } from './dark-theme';
 import { loadContent } from './load-content';
 import { readFileSync } from 'fs';
+import { GlobalAPI } from '~/interfaces/global-api';
+import { getHistory } from '~/utils/global-api';
+import { dictionaries } from '~/defaults/dictionaries';
 
 webFrame.registerURLSchemeAsSecure('wexond-extension');
 
@@ -21,6 +24,11 @@ for (const page in pages) {
     window.location.href.startsWith(`wexond://${pages[page]}`) ||
     window.location.href.startsWith(`http://localhost:8080/${pages[page]}.html`)
   ) {
+    const globalObject = global as GlobalAPI;
+
+    globalObject.dictionary = dictionaries[remote.getGlobal('locale')];
+    globalObject.getHistory = getHistory;
+
     loadContent(page);
   }
 }
