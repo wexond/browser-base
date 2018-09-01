@@ -43,6 +43,7 @@ class App extends React.Component {
   public onWindowMouseDown = (e: MouseEvent) => {
     store.pageMenuStore.visible = false;
     store.keyBindingsMenuStore.visible = false;
+    store.menuStore.visible = false;
   };
 
   public onWindowMouseUp = (e: MouseEvent) => {
