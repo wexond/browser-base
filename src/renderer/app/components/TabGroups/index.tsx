@@ -29,6 +29,8 @@ export default class TabGroups extends React.Component {
 
   public onMouseMove = (e: any) => {
     const tabGroup = store.tabsStore.getCurrentGroup();
+    if (!tabGroup) return;
+
     const selectedTab = tabGroup.getSelectedTab();
 
     if (store.tabsStore.isDragging) {

@@ -102,6 +102,13 @@ export default class extends React.Component<{ tab: Tab }, {}> {
       }
     }
 
+    const query = store.extensionsStore.queryBrowserAction({ tabId: tab.id });
+    const { browserActions } = store.extensionsStore;
+
+    for (const item of query) {
+      browserActions.splice(browserActions.indexOf(item), 1);
+    }
+
     setTimeout(() => {
       tabGroup.removeTab(tab.id);
     }, TAB_ANIMATION_DURATION * 1000);
