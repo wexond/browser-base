@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { transparency } from '~/renderer/defaults';
 import { subtitle2, body2 } from '@mixins';
 
