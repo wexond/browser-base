@@ -5,11 +5,20 @@ import NavigationDrawer from '@components/NavigationDrawer';
 import store from '@history/store';
 import { StyledApp } from './styles';
 import { icons } from '~/renderer/defaults';
+import { HistoryItem } from '~/interfaces';
+
+declare const global: any;
 
 @observer
 export default class App extends React.Component {
   componentDidMount() {
-    store.loadHistory();
+    // store.loadHistory();
+
+    global.onIpcReceived.addListener((name: string, items: HistoryItem[]) => {
+      if (name === 'history') {
+        console.log(items);
+      }
+    });
   }
 
   public render() {

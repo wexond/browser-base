@@ -10,6 +10,7 @@ import { PageMenuMode } from '~/enums';
 import { databases } from '~/defaults/databases';
 import { HistoryItem } from '~/interfaces';
 import { getContextMenuPos } from '~/utils/context-menu';
+import { isWexondURL } from '~/utils';
 
 @observer
 export default class extends React.Component<{ page: Page }> {
@@ -131,11 +132,15 @@ export default class extends React.Component<{ page: Page }> {
   public onDidFinishLoad = (e: Electron.DidNavigateEvent) => {
     this.emitEvent('webNavigation', 'onCompleted', {
       tabId: this.tab.id,
-      url: e.url,
+      url: this.tab.url,
       frameId: 0,
       timeStamp: Date.now(),
       processId: this.processId,
     });
+
+    if (isWexondURL(this.tab.url)) {
+      this.webview.send('history', store.historyStore.historyItems);
+    }
   };
 
   public onDomReady = () => {
