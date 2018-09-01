@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { transparency } from '~/renderer/defaults';
-import { shadows } from '@mixins';
+import { transparency, icons } from '~/renderer/defaults';
+import { shadows, h6, body2, centerImage } from '@mixins';
 
 export const Root = styled.div`
   height: 100%;
@@ -19,4 +19,51 @@ export const Root = styled.div`
   transition: 0.4s transform cubic-bezier(0.19, 1, 0.22, 1);
 
   box-shadow: ${shadows(16)};
+`;
+
+export const Header = styled.div`
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  position: relative;
+`;
+
+export const Title = styled.div`
+  ${h6()};
+  margin-left: 16px;
+  margin-top: 10px;
+  opacity: ${transparency.light.primaryText};
+`;
+
+export const Search = styled.div`
+  border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
+  height: 56px;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: transparent;
+  -webkit-app-region: no-drag;
+`;
+
+export const Input = styled.input`
+  ${body2()};
+  background-color: transparent;
+  outline: none;
+  border: none;
+  padding-left: 16px;
+  width: 100%;
+  height: 100%;
+`;
+
+export const SearchIcon = styled.div`
+  ${centerImage('24px', 'auto')};
+  opacity: ${transparency.light.inactiveIcon};
+  height: 24px;
+  width: 24px;
+  margin-left: 16px;
+  background-image: url(${icons.search});
 `;
