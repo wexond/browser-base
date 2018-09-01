@@ -23,7 +23,7 @@ export default class extends React.Component<Props, {}> {
 
   public render() {
     return (
-      <Container>
+      <Container visible={store.menuStore.visible}>
         <MenuItem
           title="History"
           icon={icons.history}

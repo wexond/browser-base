@@ -5,11 +5,11 @@ import { transparency } from '~/renderer/defaults';
 
 export const Root = styled.div`
   width: 100%;
-  height: 32px;
+  height: 48px;
   display: flex;
   align-items: center;
   text-align: center;
-  font-size: 13px;
+  font-size: 14px;
   position: relative;
   color: rgba(0, 0, 0, ${transparency.light.primaryText});
 
@@ -17,20 +17,20 @@ export const Root = styled.div`
   ${noUserSelect()};
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: rgba(0, 0, 0, 0.08);
   }
 `;
 
 export const Icon = styled.div`
-  width: 16px;
-  height: 16px;
-  margin-left: 16px;
-  margin-right: 16px;
+  width: 20px;
+  height: 20px;
+  margin-left: 24px;
+  margin-right: 20px;
   opacity: ${transparency.light.inactiveIcon};
+
+  ${centerImage('20px', '20px')};
 
   ${({ src }: { src: string }) => css`
     background-image: url(${src});
   `};
-
-  ${centerImage('16px', '16px')};
 `;
