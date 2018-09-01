@@ -23,6 +23,8 @@ export default class App extends React.Component {
   }
 
   public render() {
+    let i = -1;
+
     return (
       <StyledApp>
         <NavigationDrawer title="History" search>
@@ -31,9 +33,13 @@ export default class App extends React.Component {
         </NavigationDrawer>
         <PageContainer>
           <Content>
-            {store.historySections.map(section => (
-              <Section key={section.id} section={section} />
-            ))}
+            {store.historySections.map(section => {
+              i++;
+              if (i < store.sectionsCount) {
+                return <Section key={section.id} section={section} />;
+              }
+              return null;
+            })}
           </Content>
         </PageContainer>
       </StyledApp>
