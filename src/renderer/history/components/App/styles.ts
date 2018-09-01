@@ -6,6 +6,7 @@ export const StyledApp = styled.div`
   overflow: auto;
   position: absolute;
   top: 0;
+  background-color: #f5f5f5;
 `;
 
 export const PageContainer = styled.div`
