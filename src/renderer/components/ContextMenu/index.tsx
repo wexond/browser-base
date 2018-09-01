@@ -45,6 +45,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
       children,
       width,
       visible,
+      onClick,
       onMouseDown,
     } = this.props;
 
@@ -55,6 +56,7 @@ export default class ContextMenu extends React.Component<IProps, IState> {
         visible={visible}
         className={className}
         style={style}
+        onClick={onClick}
         onMouseDown={onMouseDown}
       >
         {children}
