@@ -27,7 +27,9 @@ const render = (AppComponent: any) => {
   if (store.extensionsStore.defaultBrowserActions.length === 0) {
     await store.extensionsStore.load();
   }
-  store.tabsStore.addGroup();
+  if (store.tabsStore.groups.length === 0) {
+    store.tabsStore.addGroup();
+  }
 
   ipcRenderer.send('renderer-load');
 })();
