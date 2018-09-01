@@ -46,7 +46,7 @@ export default class BookmarkItem extends React.Component<Props> {
       bookmarksStore.goToFolder(data._id);
     } else {
       store.tabsStore.addTab({ url: data.url });
-      store.menuStore.hide();
+      store.menuStore.visible = false;
     }
   };
 
