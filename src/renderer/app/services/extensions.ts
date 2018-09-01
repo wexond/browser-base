@@ -63,7 +63,10 @@ export const runExtensionsService = () => {
       const webContents = remote.webContents.fromId(sender);
       const page = store.pagesStore.getById(tabId);
 
-      page.webview.insertCSS(details.code);
+      if (page) {
+        page.webview.insertCSS(details.code);
+      }
+
       webContents.send(API_TABS_INSERT_CSS);
     },
   );
@@ -79,9 +82,11 @@ export const runExtensionsService = () => {
       const webContents = remote.webContents.fromId(sender);
       const page = store.pagesStore.getById(tabId);
 
-      page.webview.executeJavaScript(details.code, false, (result: any) => {
-        webContents.send(API_TABS_EXECUTE_SCRIPT, result);
-      });
+      if (page) {
+        page.webview.executeJavaScript(details.code, false, (result: any) => {
+          webContents.send(API_TABS_EXECUTE_SCRIPT, result);
+        });
+      }
     },
   );
 
