@@ -14,13 +14,7 @@ export class Store {
   public historyItems: HistoryItem[] = [];
 
   @observable
-  public historySections: HistorySection[] = [
-    {
-      date: new Date().toString(),
-      id: '0wrwa',
-      items: [],
-    },
-  ];
+  public historySections: HistorySection[] = [];
 
   public loadedCount = 0;
 
@@ -35,11 +29,32 @@ export class Store {
   }
 
   public loadSections(count: number) {
-    const section = this.historySections[0];
-
     for (let i = this.loadedCount; i < count + this.loadedCount; i++) {
       if (i < this.historyItems.length) {
-        section.items.push(this.historyItems[i]);
+        const item = this.historyItems[i];
+        const date = new Date(item.date);
+
+        const dateStr = formatDate(this.dictionary, date);
+
+        const foundSection = this.historySections.find(x => x.date === dateStr);
+
+        const newItem = {
+          ...item,
+          favicon: '', // store.faviconsStore.favicons[item.favicon]
+          selected: false,
+        };
+
+        if (foundSection == null) {
+          const section: HistorySection = {
+            items: [newItem],
+            date: dateStr,
+            id: item._id,
+          };
+
+          this.historySections.push(section);
+        } else {
+          foundSection.items.push(newItem);
+        }
       }
     }
 
