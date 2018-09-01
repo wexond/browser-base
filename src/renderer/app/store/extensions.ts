@@ -1,9 +1,17 @@
 import { remote } from 'electron';
 import store from '.';
 import { observable } from 'mobx';
-import { BrowserAction } from '@app/models/browser-action';
+import { BrowserAction } from '@app/models';
+import { resolve } from 'path';
+import fs from 'fs';
+import { promisify } from 'util';
+
+const readFile = promisify(fs.readFile);
 
 export class ExtensionsStore {
+  @observable
+  public defaultBrowserActions: BrowserAction[] = [];
+
   @observable
   public browserActions: BrowserAction[] = [];
 
@@ -24,7 +32,47 @@ export class ExtensionsStore {
     });
   }
 
-  public getBrowserActionById(id: string) {
-    return this.browserActions.find(x => x.extensionId === id);
+  public queryBrowserAction(query: any) {
+    const readProperty = (obj: any, prop: string) => obj[prop];
+
+    return this.browserActions.filter(item => {
+      for (const key in query) {
+        const itemProp = readProperty(item, key);
+        const queryInfoProp = readProperty(query, key);
+
+        if (itemProp == null || queryInfoProp !== itemProp) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }
+
+  public async load() {
+    const extensions = remote.getGlobal('extensions');
+
+    for (const key in extensions) {
+      const manifest = extensions[key];
+      if (manifest.browser_action) {
+        const {
+          default_icon,
+          default_title,
+          default_popup,
+        } = manifest.browser_action;
+        const path = resolve(manifest.srcDirectory, default_icon['32']);
+
+        const data = await readFile(path);
+        const icon = window.URL.createObjectURL(new Blob([data]));
+        const browserAction = new BrowserAction({
+          extensionId: manifest.extensionId,
+          icon,
+          title: default_title,
+          popup: default_popup,
+        });
+
+        store.extensionsStore.defaultBrowserActions.push(browserAction);
+      }
+    }
   }
 }

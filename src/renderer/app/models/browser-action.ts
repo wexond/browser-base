@@ -1,5 +1,12 @@
 import { observable } from 'mobx';
 
+interface Options {
+  icon: string;
+  title: string;
+  popup: string;
+  extensionId: string;
+}
+
 export class BrowserAction {
   @observable
   public icon: string;
@@ -19,14 +26,13 @@ export class BrowserAction {
   @observable
   public badgeText: string = '';
 
+  @observable
+  public tabId: number;
+
   public extensionId: string;
 
-  constructor(
-    extensionId: string,
-    icon: string,
-    title: string,
-    popup: string = null,
-  ) {
+  constructor(options: Options) {
+    const { icon, title, extensionId, popup } = options;
     this.icon = icon;
     this.title = title;
     this.popup = popup;
