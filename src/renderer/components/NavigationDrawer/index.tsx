@@ -1,10 +1,12 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { Root } from './styles';
+import { Root, Header, Search, SearchIcon, Input, Title } from './styles';
 import NavigationDrawerItem from '../NavigationDrawerItem';
 
 interface Props {
+  title?: string;
+  search?: boolean;
   children?: any;
 }
 
@@ -29,13 +31,30 @@ export default class extends React.Component<Props, State> {
     }
   };
 
+  private onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // store.menuStore.searchText = e.currentTarget.value;
+  };
+
   public render() {
-    const { children } = this.props;
+    const { selectedItem } = this.state;
+    const { title, search, children } = this.props;
 
     let id = -1;
 
     return (
       <Root>
+        {(title != null || search) && (
+          <Header>
+            {(search && (
+              <Search>
+                <SearchIcon />
+                <Input placeholder="Search" onInput={this.onInput} />
+              </Search>
+            )) ||
+              (title != null && <Title>{title}</Title>)}
+          </Header>
+        )}
+
         {React.Children.map(children, (el: React.ReactElement<any>) => {
           if (el.props.title) {
             id++;
@@ -43,7 +62,7 @@ export default class extends React.Component<Props, State> {
             return React.cloneElement(el, {
               id,
               onClick: this.onItemClick,
-              selected: id === this.state.selectedItem,
+              selected: id === selectedItem,
             });
           }
 

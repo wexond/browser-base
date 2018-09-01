@@ -15,7 +15,7 @@ export default class App extends React.Component {
   public render() {
     return (
       <StyledApp>
-        <NavigationDrawer>
+        <NavigationDrawer title="History" search>
           <NavigationDrawer.Item title="Select all" icon={icons.selectAll} />
           <NavigationDrawer.Item title="Delete all" icon={icons.delete} />
         </NavigationDrawer>
