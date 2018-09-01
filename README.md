@@ -17,7 +17,6 @@ Wexond is a web browser built on top of `Electron`, `React` and `styled-componen
 
 - **Built-in ad-block** Browse the web without any ads.
 - **Beautiful and minimalistic UI** The tabs and address bar are located in the same toolbar to take less space.
-- **Right sided navigation drawer** Access to all features of Wexond very easily.
 - **Tab groups** Easily group tabs to tab groups and access them very fast.
 - **Expanded new tab page** Have all information such as news, weather or currency in only one page!
 - **Partial support for Chrome extensions** Install some extensions from Chrome Web Store (see https://github.com/wexond/wexond/issues/110)
