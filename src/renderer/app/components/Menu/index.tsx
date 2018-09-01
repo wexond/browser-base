@@ -23,7 +23,10 @@ export default class extends React.Component<Props, {}> {
 
   public render() {
     return (
-      <Container visible={store.menuStore.visible}>
+      <Container
+        onMouseDown={e => e.stopPropagation()}
+        visible={store.menuStore.visible}
+      >
         <MenuItem
           title="History"
           icon={icons.history}
