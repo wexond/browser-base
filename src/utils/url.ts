@@ -37,3 +37,20 @@ export const matchesPattern = (pattern: string, url: string) => {
   );
   return url.match(regexp) != null;
 };
+
+export const isWexondURL = (url: string) => {
+  const pages: any = {
+    newtab: 'newtab',
+    history: 'history',
+  };
+
+  for (const page in pages) {
+    if (
+      url.startsWith(`wexond://${pages[page]}`) ||
+      url.startsWith(`http://localhost:8080/${pages[page]}.html`)
+    ) {
+      return page;
+    }
+  }
+  return null;
+};

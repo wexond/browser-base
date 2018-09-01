@@ -7,30 +7,34 @@ import { getAPI } from './api';
 import { applyDarkTheme } from './dark-theme';
 import { loadContent } from './load-content';
 import { readFileSync } from 'fs';
-import { GlobalAPI } from '~/interfaces/global-api';
-import { getHistory } from '~/utils/global-api';
-import { dictionaries } from '~/defaults/dictionaries';
+import { isWexondURL } from '~/utils';
+
+declare const global: any;
 
 webFrame.registerURLSchemeAsSecure('wexond-extension');
 
-const pages: any = {
-  newtab: 'newtab',
-  testField: 'test-field',
-  history: 'history',
-};
+const wexondUrl = isWexondURL(window.location.href);
 
-for (const page in pages) {
-  if (
-    window.location.href.startsWith(`wexond://${pages[page]}`) ||
-    window.location.href.startsWith(`http://localhost:8080/${pages[page]}.html`)
-  ) {
-    const globalObject = global as GlobalAPI;
+if (wexondUrl) {
+  global.onIpcReceived = {
+    listeners: [],
+    addListener: (cb: any) => {
+      if (cb) {
+        global.onIpcReceived.listeners.push(cb);
+      }
+    },
+    emit: (...args: any[]) => {
+      for (const cb of global.onIpcReceived.listeners) {
+        if (cb) cb(...args);
+      }
+    },
+  };
 
-    globalObject.dictionary = dictionaries[remote.getGlobal('locale')];
-    globalObject.getHistory = getHistory;
+  ipcRenderer.on('history', (e: any, history: any) => {
+    global.onIpcReceived.emit('history', history);
+  });
 
-    loadContent(page);
-  }
+  loadContent(wexondUrl);
 }
 
 const matchesPattern = (pattern: string, url: string) => {
