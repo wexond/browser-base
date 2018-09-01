@@ -19,9 +19,9 @@ class App extends React.Component {
     window.addEventListener('mousedown', this.onWindowMouseDown);
     window.addEventListener('mouseup', this.onWindowMouseUp);
 
+    await store.historyStore.load();
     await store.faviconsStore.load();
     await store.bookmarksStore.load();
-    await store.historyStore.load();
 
     store.keyBindingsStore.keyBindings = await getKeyBindings();
     bindKeys(store.keyBindingsStore.keyBindings);
