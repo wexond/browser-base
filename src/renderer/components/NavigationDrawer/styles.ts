@@ -17,8 +17,6 @@ export const Root = styled.div`
   border-right: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
   will-change: transform, transition;
   transition: 0.4s transform cubic-bezier(0.19, 1, 0.22, 1);
-
-  box-shadow: ${shadows(16)};
 `;
 
 export const Header = styled.div`
