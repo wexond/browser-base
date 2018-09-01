@@ -20,6 +20,11 @@ if (
   window.location.href.startsWith('http://localhost:8080/test-field.html')
 ) {
   loadContent('testField');
+} else if (
+  window.location.href.startsWith('wexond://history') ||
+  window.location.href.startsWith('http://localhost:8080/history.html')
+) {
+  loadContent('history');
 }
 
 const matchesPattern = (pattern: string, url: string) => {

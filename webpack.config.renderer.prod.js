@@ -43,4 +43,12 @@ const newTabConfig = merge.smart(config, {
   },
 });
 
-module.exports = [appConfig, newTabConfig];
+const historyConfig = merge.smart(config, {
+  target: 'web',
+
+  entry: {
+    history: ['./src/renderer/history'],
+  },
+});
+
+module.exports = [appConfig, newTabConfig, historyConfig];
