@@ -36,8 +36,7 @@ export default class extends React.Component<{ page: Page }> {
     this.addWebviewListener('enter-html-full-screen', this.onFullscreenEnter);
     this.addWebviewListener('leave-html-full-screen', this.onFullscreenLeave);
     this.addWebviewListener('new-window', this.onNewWindow);
-    this.addWebviewListener('did-navigate', this.onDidNavigate);
-    this.addWebviewListener('did-get-redirect-request', this.onWillNavigate);
+    this.addWebviewListener('did-finish-load', this.onDidFinishLoad);
     this.addWebviewListener('ipc-message', this.onIpcMessage);
     this.webview.addEventListener('dom-ready', this.onceDomReady);
 
@@ -61,7 +60,7 @@ export default class extends React.Component<{ page: Page }> {
     this.webview.removeEventListener('dom-ready', this.onceDomReady);
   };
 
-  public onURLChange = (url: string) => {
+  public updateURL = (url: string) => {
     if (this.tab.url !== url) {
       this.tab.url = url;
       this.updateData();
@@ -108,8 +107,6 @@ export default class extends React.Component<{ page: Page }> {
     }
   };
 
-  public onWillNavigate = (e: Electron.WillNavigateEvent) => {};
-
   public onDidStartLoading = () => {
     this.emitEvent('webNavigation', 'onBeforeNavigate', {
       tabId: this.tab.id,
@@ -131,7 +128,7 @@ export default class extends React.Component<{ page: Page }> {
     );
   };
 
-  public onDidNavigate = (e: Electron.DidNavigateEvent) => {
+  public onDidFinishLoad = (e: Electron.DidNavigateEvent) => {
     this.emitEvent('webNavigation', 'onCompleted', {
       tabId: this.tab.id,
       url: e.url,
@@ -139,16 +136,6 @@ export default class extends React.Component<{ page: Page }> {
       timeStamp: Date.now(),
       processId: this.processId,
     });
-
-    this.emitEvent(
-      'tabs',
-      'onUpdated',
-      this.tab.id,
-      {
-        status: 'complete',
-      },
-      this.tab.getApiTab(),
-    );
   };
 
   public onDomReady = () => {
@@ -211,9 +198,19 @@ export default class extends React.Component<{ page: Page }> {
 
     store.navigationStateStore.refresh();
 
-    this.onURLChange(url);
+    this.updateURL(url);
     this.tab.loading = false;
     this.tab.isBookmarked = store.bookmarksStore.isBookmarked(url);
+
+    this.emitEvent(
+      'tabs',
+      'onUpdated',
+      this.tab.id,
+      {
+        status: 'complete',
+      },
+      this.tab.getApiTab(),
+    );
   };
 
   public onLoadCommit = async ({
@@ -230,15 +227,18 @@ export default class extends React.Component<{ page: Page }> {
       processId: this.processId,
     });
 
-    if (url !== this.lastURL && isMainFrame && !url.startsWith('wexond://')) {
-      this.lastHistoryItemID = await store.historyStore.addItem({
-        title: this.tab.title,
-        url,
-        favicon: this.tab.favicon,
-        date: new Date().toString(),
-      });
+    if (isMainFrame) {
+      if (url !== this.lastURL && !url.startsWith('wexond://')) {
+        this.lastHistoryItemID = await store.historyStore.addItem({
+          title: this.tab.title,
+          url,
+          favicon: this.tab.favicon,
+          date: new Date().toString(),
+        });
 
-      this.lastURL = url;
+        this.lastURL = url;
+      }
+      this.updateURL(url);
     }
   };
 
