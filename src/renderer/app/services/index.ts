@@ -19,21 +19,8 @@ export const runServices = () => {
   ipcRenderer.on(
     'get-tab-by-web-contents-id',
     (e: any, webContentsId: number) => {
-      let sent = false;
-      for (const page of store.pagesStore.pages) {
-        if (
-          page.webview.getWebContents() &&
-          page.webview.getWebContents().id === webContentsId
-        ) {
-          const tab = store.tabsStore.getTabById(page.id).getApiTab();
-          ipcRenderer.send('get-tab-by-web-contents-id', tab);
-          sent = true;
-          break;
-        }
-      }
-      if (!sent) {
-        ipcRenderer.send('get-tab-by-web-contents-id', {});
-      }
+      const tab = store.tabsStore.getTabByWebContentsId(webContentsId);
+      ipcRenderer.send('get-tab-by-web-contents-id', tab ? tab : {});
     },
   );
 
