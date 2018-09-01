@@ -14,17 +14,18 @@ export class Store {
   public historyItems: HistoryItem[] = [];
 
   @observable
-  public historySections: HistorySection[] = [];
+  public historySections: HistorySection[] = [
+    {
+      date: new Date().toString(),
+      id: '0wrwa',
+      items: [],
+    },
+  ];
 
-  @observable
-  public sectionsCount = 1;
+  public loadedCount = 0;
 
-  public loadSections() {
-    this.historySections = this.getSections(this.getItems());
-  }
-
-  public getItems(filter = '') {
-    return this.historyItems
+  public filterItems(filter = '') {
+    this.historyItems = this.historyItems
       .filter(
         item =>
           item.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1 ||
@@ -33,36 +34,16 @@ export class Store {
       .reverse();
   }
 
-  public getSections(items: HistoryItem[]) {
-    const sections: HistorySection[] = [];
+  public loadSections(count: number) {
+    const section = this.historySections[0];
 
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-      const date = new Date(item.date);
-
-      const dateStr = formatDate(this.dictionary, date);
-
-      const foundSection = sections.find(x => x.date === dateStr);
-
-      const newItem = {
-        ...item,
-        favicon: '', // store.faviconsStore.favicons[item.favicon]
-        selected: false,
-      };
-
-      if (foundSection == null) {
-        const section: HistorySection = {
-          items: [newItem],
-          date: dateStr,
-          id: item._id,
-        };
-        sections.push(section);
-      } else {
-        foundSection.items.push(newItem);
+    for (let i = this.loadedCount; i < count + this.loadedCount; i++) {
+      if (i < this.historyItems.length) {
+        section.items.push(this.historyItems[i]);
       }
     }
 
-    return sections;
+    this.loadedCount += count;
   }
 }
 
