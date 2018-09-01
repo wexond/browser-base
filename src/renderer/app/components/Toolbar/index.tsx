@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
+import Menu from '../Menu';
 import AddressBar from '../AddressBar';
 import NavigationButtons from '../NavigationButtons';
 import TabBar from '../TabBar';
@@ -93,7 +94,9 @@ export default class Toolbar extends React.Component {
           size={20}
           icon={icons.menu}
           style={{ marginRight: 4 }}
-        />
+        >
+          <Menu />
+        </ToolbarButton>
         {store.platform !== Platforms.MacOS && <WindowsControls />}
       </StyledToolbar>
     );
