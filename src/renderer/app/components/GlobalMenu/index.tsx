@@ -7,7 +7,6 @@ import { icons } from '~/renderer/defaults';
 import Bookmarks from '../Bookmarks';
 import KeyboardShortcuts from '../KeyboardShortcuts';
 import About from '../About';
-import History from '../History';
 import { Dictionary } from '~/interfaces';
 
 const historyActions = {
@@ -49,34 +48,6 @@ export default class GlobalMenu extends React.Component {
     return (
       <Menu title="Wexond">
         <Menu.Item
-          title={dictionary.history.title}
-          icon={icons.history}
-          searchVisible
-        >
-          <Menu.Item
-            title={dictionary.history.clearHistory}
-            icon={icons.clear}
-          />
-          <Menu.Item
-            title={dictionary.selecting.selectAll}
-            visible={!editingHistory}
-            icon={icons.selectAll}
-            onClick={historyActions.selectAll}
-          />
-          <Menu.Item
-            title={dictionary.selecting.deselectAll}
-            visible={editingHistory}
-            icon={icons.close}
-            onClick={historyActions.deselectAll}
-          />
-          <Menu.Item
-            title={dictionary.selecting.deleteSelected}
-            visible={editingHistory}
-            icon={icons.delete}
-            onClick={historyActions.deleteAllSelectedItems}
-          />
-        </Menu.Item>
-        <Menu.Item
           title={dictionary.bookmarks.title}
           icon={icons.bookmarks}
           searchVisible
@@ -111,7 +82,6 @@ export default class GlobalMenu extends React.Component {
           searchVisible={false}
         />
 
-        <History />
         <Bookmarks />
         <div />
         <KeyboardShortcuts />
