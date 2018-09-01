@@ -7,7 +7,7 @@ import { getAPI } from './api';
 import { applyDarkTheme } from './dark-theme';
 import { loadContent } from './load-content';
 import { readFileSync } from 'fs';
-import { isWexondURL } from '~/utils';
+import { isWexondURL } from '~/utils/';
 
 declare const global: any;
 
@@ -29,6 +29,10 @@ if (wexondUrl) {
       }
     },
   };
+
+  ipcRenderer.on('dictionary', (e: any, dictionary: any) => {
+    global.onIpcReceived.emit('dictionary', dictionary);
+  });
 
   ipcRenderer.on('history', (e: any, history: any) => {
     global.onIpcReceived.emit('history', history);

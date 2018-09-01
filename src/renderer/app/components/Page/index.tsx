@@ -139,6 +139,7 @@ export default class extends React.Component<{ page: Page }> {
     });
 
     if (isWexondURL(this.tab.url)) {
+      this.webview.send('dictionary', store.dictionary);
       this.webview.send('history', store.historyStore.historyItems);
     }
   };
