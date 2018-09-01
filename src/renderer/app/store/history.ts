@@ -1,7 +1,5 @@
 import { observable } from 'mobx';
-import store from '.';
-import { HistoryItem, HistorySection } from '~/interfaces';
-import { formatDate } from '~/utils';
+import { HistoryItem } from '~/interfaces';
 import { databases } from '~/defaults/databases';
 
 export class HistoryStore {
