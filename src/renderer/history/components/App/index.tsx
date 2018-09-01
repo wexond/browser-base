@@ -16,21 +16,31 @@ export default class App extends React.Component {
     global.onIpcReceived.addListener((name: string, data: any) => {
       if (name === 'history') {
         store.historyItems = Object.values(data);
-        store.loadSections();
+
+        store.filterItems();
+        store.loadSections(20);
+
         store.loading = false;
       } else if (name === 'dictionary') {
         store.dictionary = data;
       }
     });
+
+    window.addEventListener('scroll', this.onWindowScroll);
   }
 
-  public onScroll = (e: any) => {
-    console.log(e);
+  public onWindowScroll = () => {
+    const el = document.documentElement;
+    const yPos = window.scrollY;
+    const maxYPos = el.scrollHeight - el.clientHeight;
+    const itemOffset = 4;
+
+    if (yPos >= maxYPos - itemOffset * 56) {
+      store.loadSections(20);
+    }
   };
 
   public render() {
-    let i = -1;
-
     return (
       <StyledApp>
         <NavigationDrawer title="History" search>
@@ -39,14 +49,10 @@ export default class App extends React.Component {
         </NavigationDrawer>
         <PageContainer>
           {(!store.loading && (
-            <Content onScroll={this.onScroll}>
-              {store.historySections.map(section => {
-                i++;
-                if (i < store.sectionsCount) {
-                  return <Section key={section.id} section={section} />;
-                }
-                return null;
-              })}
+            <Content>
+              {store.historySections.map(section => (
+                <Section key={section.id} section={section} />
+              ))}
             </Content>
           )) || (
             <Preloader
