@@ -16,4 +16,9 @@ export const Container = styled.div`
   -webkit-app-region: no-drag;
   box-sizing: border-box;
   box-shadow: ${shadows(6)};
+
+  ${({ visible }: { visible: boolean }) => css`
+    opacity: ${visible ? 1 : 0};
+    pointer-events: ${visible ? 'all' : 'none'};
+  `};
 `;
