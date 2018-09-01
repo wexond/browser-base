@@ -17,7 +17,7 @@ interface State {
 @observer
 export default class extends React.Component<Props, State> {
   public state: State = {
-    selectedItem: 0,
+    selectedItem: -1,
   };
 
   public static Item = NavigationDrawerItem;

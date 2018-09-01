@@ -9,8 +9,8 @@ export const StyledApp = styled.div`
 `;
 
 export const PageContainer = styled.div`
-  width: calc(100% - 64px);
-  max-width: 640px;
+  width: calc(100% - 256px);
+  height: 100vh;
+  margin-left: 256px;
   padding-bottom: 32px;
-  margin: 0 auto;
 `;
