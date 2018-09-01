@@ -42,6 +42,7 @@ export const isWexondURL = (url: string) => {
   const pages: any = {
     newtab: 'newtab',
     history: 'history',
+    about: 'about',
   };
 
   for (const page in pages) {
