@@ -7,3 +7,11 @@ export const StyledApp = styled.div`
   position: absolute;
   top: 0;
 `;
+
+export const PageContainer = styled.div`
+  width: calc(100% - 64px);
+  max-width: 640px;
+  padding-bottom: 32px;
+  margin: 0 auto;
+  background-color: #fff;
+`;
