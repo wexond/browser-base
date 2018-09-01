@@ -6,7 +6,6 @@ export const StyledApp = styled.div`
   overflow: auto;
   position: absolute;
   top: 0;
-  background-color: #f5f5f5;
 `;
 
 export const PageContainer = styled.div`
@@ -14,5 +13,4 @@ export const PageContainer = styled.div`
   max-width: 640px;
   padding-bottom: 32px;
   margin: 0 auto;
-  background-color: #fff;
 `;

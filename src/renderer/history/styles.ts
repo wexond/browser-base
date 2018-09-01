@@ -34,7 +34,7 @@ export const Style = css`
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background-color: #f5f5f5;
+    background-color: #fff;
   }
 
   @keyframes nersent-ui-preloader-rotate {
