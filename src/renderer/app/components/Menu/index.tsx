@@ -14,10 +14,21 @@ interface Props {
 
 @observer
 export default class extends React.Component<Props, {}> {
+  public onHistoryClick = () => {
+    store.tabsStore.addTab({
+      url: 'http://localhost:8080/history.html',
+      active: true,
+    });
+  };
+
   public render() {
     return (
       <Container>
-        <MenuItem title="History" icon={icons.history} />
+        <MenuItem
+          title="History"
+          icon={icons.history}
+          onClick={this.onHistoryClick}
+        />
         <MenuItem title="Downloads" icon={icons.download} />
         <MenuItem title="Bookmarks" icon={icons.bookmarks} />
         <ContextMenuSeparator />
