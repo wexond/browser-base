@@ -1,4 +1,5 @@
 import { observable, computed } from 'mobx';
+
 import { Tab, Page } from '.';
 import store from '../store';
 import { defaultAddTabOptions } from '~/defaults';

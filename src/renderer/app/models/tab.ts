@@ -2,6 +2,7 @@ import { observable, computed } from 'mobx';
 import { TabGroup } from './tab-group';
 import store from '../store';
 import { TABS_PADDING, TOOLBAR_HEIGHT } from '~/constants';
+import { BrowserAction } from '.';
 
 let id = 1;
 
@@ -41,7 +42,15 @@ export class Tab {
   public ref: HTMLDivElement;
 
   constructor(tabGroup: TabGroup) {
+    const { defaultBrowserActions, browserActions } = store.extensionsStore;
+
     this.tabGroup = tabGroup;
+
+    for (const item of defaultBrowserActions) {
+      const browserAction = { ...item };
+      browserAction.tabId = this.id;
+      browserActions.push(browserAction);
+    }
   }
 
   public select() {
@@ -52,6 +61,8 @@ export class Tab {
         tabId: this.id,
         windowId: 0,
       });
+
+      store.tabsStore.selectedTab = this.id;
     }
   }
 
