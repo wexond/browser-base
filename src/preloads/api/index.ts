@@ -53,10 +53,6 @@ class Port {
   }
 }
 
-function readProperty(obj: any, prop: string) {
-  return obj[prop];
-}
-
 const sendStorageOperation = (
   extensionId: string,
   arg: any,
@@ -245,6 +241,8 @@ export const getAPI = (manifest: Manifest) => {
         ipcRenderer.once(
           'api-tabs-query',
           (e: Electron.IpcMessageEvent, data: chrome.tabs.Tab[]) => {
+            const readProperty = (obj: any, prop: string) => obj[prop];
+
             callback(
               data.filter(tab => {
                 for (const key in queryInfo) {

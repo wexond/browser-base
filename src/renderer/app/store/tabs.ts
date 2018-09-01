@@ -21,6 +21,9 @@ export class TabsStore {
   @observable
   public scrollbarVisible: boolean = false;
 
+  @observable
+  public selectedTab: number;
+
   @computed
   get isBookmarked() {
     const selectedTab = this.getSelectedTab();

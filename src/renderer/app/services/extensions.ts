@@ -63,7 +63,10 @@ export const runExtensionsService = () => {
       const webContents = remote.webContents.fromId(sender);
       const page = store.pagesStore.getById(tabId);
 
-      page.webview.insertCSS(details.code);
+      if (page) {
+        page.webview.insertCSS(details.code);
+      }
+
       webContents.send(API_TABS_INSERT_CSS);
     },
   );
@@ -79,9 +82,11 @@ export const runExtensionsService = () => {
       const webContents = remote.webContents.fromId(sender);
       const page = store.pagesStore.getById(tabId);
 
-      page.webview.executeJavaScript(details.code, false, (result: any) => {
-        webContents.send(API_TABS_EXECUTE_SCRIPT, result);
-      });
+      if (page) {
+        page.webview.executeJavaScript(details.code, false, (result: any) => {
+          webContents.send(API_TABS_EXECUTE_SCRIPT, result);
+        });
+      }
     },
   );
 
@@ -160,10 +165,23 @@ export const runExtensionsService = () => {
       extensionId: string,
       details: chrome.browserAction.BadgeTextDetails,
     ) => {
-      const browserAction = store.extensionsStore.getBrowserActionById(
-        extensionId,
-      );
-      browserAction.badgeText = details.text;
+      if (details.tabId) {
+        const browserAction = store.extensionsStore.queryBrowserAction({
+          extensionId,
+          tabId: details.tabId,
+        })[0];
+        if (browserAction) {
+          browserAction.badgeText = details.text;
+        }
+      } else {
+        store.extensionsStore
+          .queryBrowserAction({
+            extensionId,
+          })
+          .forEach(item => {
+            item.badgeText = details.text;
+          });
+      }
       const contents = remote.webContents.fromId(senderId);
       contents.send(API_BROWSER_ACTION_SET_BADGE_TEXT);
     },
