@@ -64,7 +64,7 @@ export const registerProtocols = () => {
           return callback({ path: join(__dirname, 'build', parsed.path) });
         }
 
-        if (parsed.hostname === 'newtab') {
+        if (parsed.hostname === 'newtab' || parsed.hostname === 'history') {
           if (parsed.path === '/') {
             return callback({
               path: join(__dirname, 'static/pages', parsed.hostname + '.html'),

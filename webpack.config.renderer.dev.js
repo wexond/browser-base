@@ -59,4 +59,12 @@ const newTabConfig = merge.smart(config, {
   },
 });
 
-module.exports = [appConfig, newTabConfig];
+const historyConfig = merge.smart(config, {
+  target: 'web',
+
+  entry: {
+    history: ['react-hot-loader/patch', './src/renderer/history'],
+  },
+});
+
+module.exports = [appConfig, newTabConfig, historyConfig];
