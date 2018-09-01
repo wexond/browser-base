@@ -49,7 +49,9 @@ class Port {
   }
 
   public postMessage(msg: any) {
-    ipcRenderer.send(API_PORT_POSTMESSAGE, { portId: this.portId, msg });
+    setTimeout(() => {
+      ipcRenderer.send(API_PORT_POSTMESSAGE, { portId: this.portId, msg });
+    });
   }
 }
 
@@ -157,16 +159,26 @@ export const getAPI = (manifest: Manifest) => {
         const portId = makeId(32);
 
         let name: string = null;
+        let extensionId: string = manifest.extensionId;
 
-        if (typeof arg1 === 'object') {
+        if (arg1 && typeof arg1 === 'object') {
           if (arg1.includeTlsChannelId) {
             sender.tlsChannelId = portId;
           }
           name = arg1.name;
+        } else if (arg2 && typeof arg2 === 'object') {
+          if (arg2.includeTlsChannelId) {
+            sender.tlsChannelId = portId;
+          }
+          name = arg2.name;
+        }
+
+        if (typeof arg1 === 'string') {
+          extensionId = arg1;
         }
 
         ipcRenderer.send(API_RUNTIME_CONNECT, {
-          extensionId: manifest.extensionId,
+          extensionId,
           portId,
           sender,
           name,
@@ -508,6 +520,7 @@ export const getAPI = (manifest: Manifest) => {
     (e: Electron.IpcMessageEvent, data: any) => {
       const { portId, sender, name } = data;
       const port = new Port(portId, name, sender);
+
       api.runtime.onConnect.emit(port);
     },
   );
