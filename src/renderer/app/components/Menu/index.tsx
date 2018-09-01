@@ -21,6 +21,13 @@ export default class extends React.Component<Props, {}> {
     });
   };
 
+  public onAboutClick = () => {
+    store.tabsStore.addTab({
+      url: 'http://localhost:8080/about.html',
+      active: true,
+    });
+  };
+
   public render() {
     return (
       <Container
@@ -38,7 +45,7 @@ export default class extends React.Component<Props, {}> {
         <MenuItem title="Extensions" icon={icons.extensions} />
         <MenuItem title="Settings" icon={icons.settings} />
         <Separator visible={true} />
-        <MenuItem title="About" icon={icons.info} />
+        <MenuItem title="About" icon={icons.info} onClick={this.onAboutClick} />
       </Container>
     );
   }
