@@ -38,19 +38,13 @@ export const commands: Commands = {
   'tabGroups.show': () => {
     store.tabsStore.menuVisible = true;
   },
-  'history.show': () => {
-    store.menuStore.visible = true;
-    store.menuStore.selectedItem = 0;
-  },
+  'history.show': () => {},
   'menu.show': () => {
     store.menuStore.visible = true;
   },
-  'bookmarks.show': () => {
-    store.menuStore.visible = true;
-    store.menuStore.selectedItem = 1;
-  },
+  'bookmarks.show': () => {},
   'wexond.hideAllMenu': () => {
-    store.menuStore.hide();
+    store.menuStore.visible = false;
     store.tabsStore.menuVisible = false;
     store.bookmarksStore.dialogVisible = false;
     store.pageMenuStore.visible = false;
