@@ -5,6 +5,9 @@ import { formatDate } from '~/utils/time';
 
 export class Store {
   @observable
+  public loading = true;
+
+  @observable
   public dictionary: Dictionary;
 
   @observable
