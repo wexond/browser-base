@@ -23,6 +23,7 @@ module.exports = {
     alias: {
       '@app': join(__dirname, './src/renderer/app'),
       '@newtab': join(__dirname, './src/renderer/newtab'),
+      '@history': join(__dirname, './src/renderer/history'),
       '@mixins': join(__dirname, './src/renderer/mixins'),
       '@components': join(__dirname, './src/renderer/components'),
       '~': join(__dirname, './src'),
