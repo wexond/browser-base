@@ -10,6 +10,7 @@ import {
   API_TABS_SET_ZOOM,
   API_PORT_POSTMESSAGE,
   API_BROWSER_ACTION_SET_BADGE_TEXT,
+  API_RUNTIME_CONNECT,
 } from '~/constants';
 import store from '../store';
 import { Tab } from '../models';
@@ -154,6 +155,22 @@ export const runExtensionsService = () => {
           page.webview.send(API_PORT_POSTMESSAGE + portId, msg);
         }
       }
+    },
+  );
+
+  ipcRenderer.on(
+    API_RUNTIME_CONNECT,
+    (e: Electron.IpcMessageEvent, data: any) => {
+      const { bgPageId, sender, name, portId, webContentsId } = data;
+      const contents = remote.webContents.fromId(bgPageId);
+
+      sender.tab = store.tabsStore.getTabByWebContentsId(webContentsId);
+
+      contents.send(API_RUNTIME_CONNECT, {
+        portId,
+        sender,
+        name,
+      });
     },
   );
 

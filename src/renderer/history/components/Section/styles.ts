@@ -8,7 +8,7 @@ export const Title = styled.div`
   border-radius: 4px;
   display: table;
   transition: 0.2s background-color;
-  padding: 4px;
+  padding: 8px;
   cursor: pointer;
   opacity: ${transparency.light.secondaryText};
 
