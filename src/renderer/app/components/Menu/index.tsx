@@ -4,7 +4,7 @@ import React from 'react';
 import store from '@app/store';
 import ContextMenuSeparator from '@components/ContextMenuSeparator';
 import MenuItem from '../MenuItem';
-import { Container } from './styles';
+import { Container, Separator } from './styles';
 import { icons } from '~/renderer/defaults';
 
 interface Props {
@@ -34,10 +34,10 @@ export default class extends React.Component<Props, {}> {
         />
         <MenuItem title="Downloads" icon={icons.download} />
         <MenuItem title="Bookmarks" icon={icons.bookmarks} />
-        <ContextMenuSeparator />
+        <Separator visible={true} />
         <MenuItem title="Extensions" icon={icons.extensions} />
         <MenuItem title="Settings" icon={icons.settings} />
-        <ContextMenuSeparator />
+        <Separator visible={true} />
         <MenuItem title="About" icon={icons.info} />
       </Container>
     );
