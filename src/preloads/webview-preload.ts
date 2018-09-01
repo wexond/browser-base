@@ -17,6 +17,7 @@ const pages: any = {
   newtab: 'newtab',
   testField: 'test-field',
   history: 'history',
+  about: 'about',
 };
 
 for (const page in pages) {
