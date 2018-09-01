@@ -15,6 +15,10 @@ export const Root = styled.div`
 
   ${robotoRegular()};
   ${noUserSelect()};
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
 `;
 
 export const Icon = styled.div`
