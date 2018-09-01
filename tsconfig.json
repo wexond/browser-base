@@ -25,6 +25,7 @@
       "@app/*": ["src/renderer/app/*"],
       "@newtab/*": ["src/renderer/newtab/*"],
       "@history/*": ["src/renderer/history/*"],
+      "@about/*": ["src/renderer/about/*"],
       "@mixins": ["src/renderer/mixins"],
       "@components/*": ["src/renderer/components/*"],
       "~/*": ["src/*"]
