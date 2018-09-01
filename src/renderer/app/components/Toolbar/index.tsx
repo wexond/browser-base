@@ -58,6 +58,27 @@ class SecondSeparator extends React.Component {
 }
 
 @observer
+class BrowserActions extends React.Component {
+  public render() {
+    const { selectedTab } = store.tabsStore;
+
+    return (
+      <React.Fragment>
+        {selectedTab &&
+          store.extensionsStore.browserActions.map(item => {
+            if (item.tabId === selectedTab) {
+              return (
+                <BrowserAction browserAction={item} key={item.extensionId} />
+              );
+            }
+            return null;
+          })}
+      </React.Fragment>
+    );
+  }
+}
+
+@observer
 export default class Toolbar extends React.Component {
   public onWorkspacesIconClick = () => {
     store.tabsStore.menuVisible = true;
@@ -86,9 +107,7 @@ export default class Toolbar extends React.Component {
           onClick={this.onWorkspacesIconClick}
         />
         <ToolbarSeparator />
-        {store.extensionsStore.browserActions.map((item, key) => (
-          <BrowserAction browserAction={item} key={key} />
-        ))}
+        <BrowserActions />
         <ToolbarButton
           onClick={this.toggleMenu}
           size={20}

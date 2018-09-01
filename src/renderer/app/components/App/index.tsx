@@ -27,9 +27,6 @@ class App extends React.Component {
   }
 
   public componentWillUnmount() {
-    store.pagesStore.pages = [];
-    store.tabsStore.groups = [];
-
     window.removeEventListener('mousemove', this.onWindowMouseMove);
     window.removeEventListener('mousedown', this.onWindowMouseDown);
     window.removeEventListener('mouseup', this.onWindowMouseUp);
