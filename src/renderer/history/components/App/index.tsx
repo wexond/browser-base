@@ -1,9 +1,10 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
+import NavigationDrawer from '@components/NavigationDrawer';
 import store from '@history/store';
-import Section from '../Section';
-import { StyledApp, PageContainer } from './styles';
+import { StyledApp } from './styles';
+import { icons } from '~/renderer/defaults';
 
 @observer
 export default class App extends React.Component {
@@ -14,11 +15,10 @@ export default class App extends React.Component {
   public render() {
     return (
       <StyledApp>
-        <PageContainer>
-          {store.historySections.map(section => (
-            <Section key={section.id} section={section} />
-          ))}
-        </PageContainer>
+        <NavigationDrawer title="History" search>
+          <NavigationDrawer.Item title="Select all" icon={icons.selectAll} />
+          <NavigationDrawer.Item title="Delete all" icon={icons.delete} />
+        </NavigationDrawer>
       </StyledApp>
     );
   }
