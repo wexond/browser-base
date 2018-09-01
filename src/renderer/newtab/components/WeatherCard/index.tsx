@@ -18,7 +18,7 @@ import { WeatherForecast, WeatherWeeklyItem } from '~/interfaces';
 import store from '@newtab/store';
 import { formatDescription } from '~/utils/weather';
 import { transparency, icons, colors } from '~/renderer/defaults';
-import { formatTime, capitalizeWord, getDayIndex } from '~/utils';
+import { formatTime, getDayIndex, capitalizeEachWord } from '~/utils';
 import Slider from '@components/Slider';
 import ForecastItem from '../ForecastItem';
 import Button from '@components/Button';
@@ -86,7 +86,7 @@ export default class WeatherCard extends React.Component<IProps, IState> {
       <Card.Root>
         <Card.Header>
           <Card.Title large>
-            {(data && capitalizeWord(data.city)) ||
+            {(data && capitalizeEachWord(data.city)) ||
               'Weather info is unavailable'}
           </Card.Title>
           <Card.SecondaryText>
