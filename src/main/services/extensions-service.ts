@@ -74,8 +74,13 @@ export const runExtensionsService = (window: BrowserWindow) => {
       const bgPage = global.backgroundPages[extensionId];
 
       if (e.sender.id !== bgPage.webContentsId) {
-        const contents = webContents.fromId(bgPage.webContentsId);
-        contents.send(API_RUNTIME_CONNECT, { portId, sender, name });
+        window.webContents.send(API_RUNTIME_CONNECT, {
+          bgPageId: bgPage.webContentsId,
+          portId,
+          sender,
+          name,
+          webContentsId: e.sender.id,
+        });
       }
     },
   );
