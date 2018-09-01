@@ -22,8 +22,8 @@ export const Root = styled.div`
 `;
 
 export const Icon = styled.div`
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   margin-left: 24px;
   margin-right: 20px;
   opacity: ${transparency.light.inactiveIcon};
