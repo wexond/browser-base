@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import GlobalMenu from '../GlobalMenu';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
 import { StyledApp, Line } from './styles';
@@ -57,7 +56,6 @@ class App extends React.Component {
         <Line />
         <Pages />
         <PageMenu />
-        <GlobalMenu />
         <TabGroupsMenu />
         <UpdateSnackbar />
         <KeyBindingsMenu />
