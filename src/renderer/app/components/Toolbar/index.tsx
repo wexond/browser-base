@@ -63,8 +63,13 @@ export default class Toolbar extends React.Component {
     store.tabsStore.menuVisible = true;
   };
 
-  public toggleMenu = () => {
+  public onMenuIconClick = () => {
     store.menuStore.visible = !store.menuStore.visible;
+  };
+
+  public onMenuIconMouseDown = (e: React.MouseEvent<any>) => {
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   public render() {
@@ -90,7 +95,8 @@ export default class Toolbar extends React.Component {
           <BrowserAction browserAction={item} key={key} />
         ))}
         <ToolbarButton
-          onClick={this.toggleMenu}
+          onClick={this.onMenuIconClick}
+          onMouseDown={this.onMenuIconMouseDown}
           size={20}
           icon={icons.menu}
           style={{ marginRight: 4 }}
