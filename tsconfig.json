@@ -24,6 +24,7 @@
     "paths": {
       "@app/*": ["src/renderer/app/*"],
       "@newtab/*": ["src/renderer/newtab/*"],
+      "@history/*": ["src/renderer/history/*"],
       "@mixins": ["src/renderer/mixins"],
       "@components/*": ["src/renderer/components/*"],
       "~/*": ["src/*"]
