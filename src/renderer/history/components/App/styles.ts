@@ -14,3 +14,10 @@ export const PageContainer = styled.div`
   margin-left: 256px;
   padding-bottom: 32px;
 `;
+
+export const Content = styled.div`
+  width: calc(100% - 64px);
+  max-width: 640px;
+  padding-bottom: 32px;
+  margin: 0 auto;
+`;
