@@ -14,7 +14,7 @@ export class Store {
   public historySections: HistorySection[] = [];
 
   @observable
-  public selectedItems: string[] = [];
+  public sectionsCount = 1;
 
   public loadSections() {
     this.historySections = this.getSections(this.getItems());

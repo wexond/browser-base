@@ -30,8 +30,6 @@ if (wexondUrl) {
     },
   };
 
-  loadContent(wexondUrl);
-
   ipcRenderer.on('dictionary', (e: any, dictionary: any) => {
     global.onIpcReceived.emit('dictionary', dictionary);
   });
@@ -39,6 +37,8 @@ if (wexondUrl) {
   ipcRenderer.on('history', (e: any, history: any) => {
     global.onIpcReceived.emit('history', history);
   });
+
+  loadContent(wexondUrl);
 }
 
 const matchesPattern = (pattern: string, url: string) => {
