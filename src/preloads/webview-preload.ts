@@ -10,21 +10,19 @@ import { readFileSync } from 'fs';
 
 webFrame.registerURLSchemeAsSecure('wexond-extension');
 
-if (
-  window.location.href.startsWith('wexond://newtab') ||
-  window.location.href.startsWith('http://localhost:8080/newtab.html')
-) {
-  loadContent('newtab');
-} else if (
-  window.location.href.startsWith('wexond://test-field') ||
-  window.location.href.startsWith('http://localhost:8080/test-field.html')
-) {
-  loadContent('testField');
-} else if (
-  window.location.href.startsWith('wexond://history') ||
-  window.location.href.startsWith('http://localhost:8080/history.html')
-) {
-  loadContent('history');
+const pages: any = {
+  newtab: 'newtab',
+  testField: 'test-field',
+  history: 'history',
+};
+
+for (const page in pages) {
+  if (
+    window.location.href.startsWith(`wexond://${pages[page]}`) ||
+    window.location.href.startsWith(`http://localhost:8080/${pages[page]}.html`)
+  ) {
+    loadContent(page);
+  }
 }
 
 const matchesPattern = (pattern: string, url: string) => {
