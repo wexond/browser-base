@@ -28,13 +28,14 @@ export const Style = css`
   body {
     user-select: none;
     cursor: default;
-    ${body2()} margin: 0;
+    margin: 0;
     background-color: white;
     padding: 0;
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
     background-color: #fff;
+    ${body2()};
   }
 
   @keyframes nersent-ui-preloader-rotate {
