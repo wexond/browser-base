@@ -22,6 +22,10 @@ Wexond is a web browser built on top of `Electron`, `React` and `styled-componen
 - **Expanded new tab page** Have all information such as news, weather or currency in only one page!
 - **Partial support for Chrome extensions** Install some extensions from Chrome Web Store (see https://github.com/wexond/wexond/issues/110)
 
+<a href="https://www.patreon.com/bePatron?u=12270966">
+	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
+</a>
+
 # Screenshots
 
 ![Home page](screenshots/screenshot-1.png)
