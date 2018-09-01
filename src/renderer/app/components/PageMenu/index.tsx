@@ -158,6 +158,7 @@ export default class PageMenu extends React.Component {
         width={300}
         ref={(r: ContextMenu) => (store.pageMenuStore.ref = r)}
         onMouseDown={e => e.stopPropagation()}
+        onClick={() => (store.pageMenuStore.visible = false)}
         style={{
           position: 'absolute',
           left: store.pageMenuStore.x,

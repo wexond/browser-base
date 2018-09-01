@@ -12,12 +12,12 @@ export const PageContainer = styled.div`
   width: calc(100% - 256px);
   height: 100vh;
   margin-left: 256px;
-  padding-bottom: 32px;
+  position: relative;
 `;
 
 export const Content = styled.div`
   width: calc(100% - 64px);
   max-width: 640px;
-  padding-bottom: 32px;
   margin: 0 auto;
+  padding-bottom: 32px;
 `;
