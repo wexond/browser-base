@@ -1,7 +1,7 @@
 import { remote } from 'electron';
 import { parse } from 'url';
 
-import { getAPI } from './api';
+import { getAPI } from '@/utils/extensions';
 
 process.once('loaded', () => {
   const extensions = remote.getGlobal('extensions');
