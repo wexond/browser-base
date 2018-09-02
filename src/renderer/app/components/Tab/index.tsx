@@ -1,14 +1,14 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import Preloader from '../../../components/Preloader';
-import Ripple from '../../../components/Ripple';
-import { Circle, StyledTab, Content, Icon, Title, Close } from './styles';
-import { Tab } from '../../models';
+import Preloader from '@/components/Preloader';
+import Ripple from '@/components/Ripple';
+import { Tab } from '@/models/app';
 import store from '@app/store';
-import { closeWindow } from '~/utils/app/window';
-import { TAB_ANIMATION_DURATION } from '~/constants';
-import { colors, transparency } from '~/renderer/defaults';
+import { closeWindow } from '@/utils/app/window';
+import { TAB_ANIMATION_DURATION } from '@/constants/app';
+import { colors } from '@/constants/renderer';
+import { Circle, StyledTab, Content, Icon, Title, Close } from './styles';
 
 @observer
 export default class extends React.Component<{ tab: Tab }, {}> {

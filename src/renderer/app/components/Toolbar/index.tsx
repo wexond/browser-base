@@ -5,15 +5,15 @@ import Menu from '../Menu';
 import AddressBar from '../AddressBar';
 import NavigationButtons from '../NavigationButtons';
 import TabBar from '../TabBar';
-import { StyledToolbar, TabsSection, Tabs } from './styles';
 import ToolbarButton from '../ToolbarButton';
 import ToolbarSeparator from '../ToolbarSeparator';
 import store from '@app/store';
-import { Platforms } from '~/enums';
+import { Platforms } from '@/enums';
 import WindowsControls from '../WindowsButtons';
 import BookmarkButton from '@app/components/BookmarkButton';
-import { icons } from '~/renderer/defaults';
+import { icons } from '@/constants/renderer';
 import BrowserAction from '@app/components/BrowserAction';
+import { StyledToolbar, TabsSection, Tabs } from './styles';
 
 @observer
 class FirstSeparator extends React.Component {

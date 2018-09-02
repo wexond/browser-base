@@ -1,13 +1,14 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { ButtonsContainer, Root, Title } from './styles';
-import Textfield from '@components/Textfield';
-import Dropdown from '@components/Dropdown';
+
+import { databases } from '@/constants/app';
+import { Bookmark } from '@/interfaces';
+import { colors } from '@/constants/renderer';
+import Textfield from '@/components/Textfield';
+import Dropdown from '@/components/Dropdown';
 import store from '@app/store';
-import { Bookmark } from '~/interfaces';
-import { colors } from '~/renderer/defaults';
-import Button from '@components/Button';
-import { databases } from '~/defaults/app/databases';
+import Button from '@/components/Button';
+import { ButtonsContainer, Root, Title } from './styles';
 
 @observer
 export default class BookmarksDialog extends React.Component {

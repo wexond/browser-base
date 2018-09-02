@@ -2,10 +2,9 @@ import { observer } from 'mobx-react';
 import React from 'react';
 
 import store from '@app/store';
-import ContextMenuSeparator from '@components/ContextMenuSeparator';
 import MenuItem from '../MenuItem';
+import { icons } from '@/constants/renderer';
 import { Container, Separator } from './styles';
-import { icons } from '~/renderer/defaults';
 
 interface Props {
   children?: any;

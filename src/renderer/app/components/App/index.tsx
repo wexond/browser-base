@@ -5,7 +5,7 @@ import Pages from '../Pages';
 import Toolbar from '../Toolbar';
 import { StyledApp, Line } from './styles';
 import store from '../../store';
-import { getKeyBindings, bindKeys } from '~/utils/keyboard-shortcuts';
+import { getKeyBindings, bindKeys } from '@/utils/key-bindings';
 import TabGroupsMenu from '../TabGroupsMenu';
 import PageMenu from '@app/components/PageMenu';
 import UpdateSnackbar from '@app/components/UpdateSnackbar';
