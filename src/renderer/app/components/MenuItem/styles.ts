@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
-import { robotoRegular, noUserSelect, centerImage } from '@mixins';
-import { transparency } from '~/renderer/defaults';
+import { robotoRegular, noUserSelect, centerImage } from '@/mixins';
+import { transparency } from '@/constants/renderer';
 
 export const Root = styled.div`
   width: 100%;
