@@ -1,5 +1,6 @@
 import { observable } from 'mobx';
-import ContextMenu from '../../components/ContextMenu';
+
+import ContextMenu from '@/components/ContextMenu';
 
 export class KeyBindingsMenuStore {
   @observable

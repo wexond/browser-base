@@ -1,8 +1,8 @@
+import { ipcRenderer } from 'electron';
+
 import { API_ALARMS_OPERATION } from '@/constants/extensions';
 import { makeId } from '@/utils/strings';
-import { ipcRenderer } from 'electron';
 import { IpcEvent } from '@/models/extensions';
-import { Manifest } from '@/interfaces/extensions';
 import { API } from '.';
 
 let api: API;

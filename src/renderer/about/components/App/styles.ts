@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-import { centerImage } from '@mixins';
+import { centerImage } from '@/mixins';
 
-const wexondIcon = require('../../../resources/icons/wexond.png');
+const wexondIcon = require('../../../../shared/resources/icons/wexond.png');
 
 export const StyledApp = styled.div`
   width: 100%;

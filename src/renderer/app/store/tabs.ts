@@ -1,9 +1,13 @@
 import { observable, computed } from 'mobx';
-import { TabGroup } from '../models';
-import { TAB_ANIMATION_EASING, TAB_ANIMATION_DURATION } from '~/constants';
 import { TweenLite } from 'gsap';
+
+import { TabGroup } from '@/models/app';
+import {
+  TAB_ANIMATION_EASING,
+  TAB_ANIMATION_DURATION,
+  defaultAddTabOptions,
+} from '@/constants/app';
 import HorizontalScrollbar from '@app/components/HorizontalScrollbar';
-import { defaultAddTabOptions } from '~/defaults';
 import store from '@app/store';
 
 export class TabsStore {

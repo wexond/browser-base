@@ -1,6 +1,7 @@
 import { observable } from 'mobx';
-import { PageMenuMode } from '~/enums';
-import ContextMenu from '../../components/ContextMenu';
+
+import { PageMenuMode } from '@/enums/app';
+import ContextMenu from '@/components/ContextMenu';
 
 export class PageMenuStore {
   @observable

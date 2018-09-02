@@ -2,9 +2,9 @@ import { observer } from 'mobx-react';
 import React from 'react';
 
 import store from '@newtab/store';
-import WeatherCard from '../WeatherCard';
 import { getWeather } from '@/utils/newtab';
 import News from '../News';
+import WeatherCard from '../WeatherCard';
 import { Column, Content, StyledApp } from './styles';
 
 @observer
