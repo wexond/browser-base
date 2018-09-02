@@ -13,29 +13,6 @@ import {
 import { Manifest } from '@/interfaces/extensions';
 import { IpcEvent, Event, Port, WebRequestEvent } from '@/models/extensions';
 
-const sendStorageOperation = (
-  extensionId: string,
-  arg: any,
-  area: string,
-  type: string,
-  callback: any,
-) => {
-  const id = makeId(32);
-  ipcRenderer.send(API_STORAGE_OPERATION, {
-    extensionId,
-    id,
-    arg,
-    type,
-    area,
-  });
-
-  if (callback) {
-    ipcRenderer.once(API_STORAGE_OPERATION + id, (e: any, ...data: any[]) => {
-      callback(data[0]);
-    });
-  }
-};
-
 export const getAPI = (manifest: Manifest) => {
   // https://developer.chrome.com/extensions
   const api = {
@@ -224,54 +201,6 @@ export const getAPI = (manifest: Manifest) => {
       onUpdated: new IpcEvent('tabs', 'onUpdated'),
       onActivated: new IpcEvent('tabs', 'onActivated'),
       onRemoved: new IpcEvent('tabs', 'onRemoved'),
-    },
-
-    // https://developer.chrome.com/extensions/storage
-    storage: {
-      local: {
-        set: (arg: any, cb: any) => {
-          sendStorageOperation(manifest.extensionId, arg, 'local', 'set', cb);
-        },
-        get: (arg: any, cb: any) => {
-          sendStorageOperation(manifest.extensionId, arg, 'local', 'get', cb);
-        },
-        remove: (arg: any, cb: any) => {
-          sendStorageOperation(
-            manifest.extensionId,
-            arg,
-            'local',
-            'remove',
-            cb,
-          );
-        },
-        clear: (arg: any, cb: any) => {
-          sendStorageOperation(manifest.extensionId, arg, 'local', 'clear', cb);
-        },
-      },
-      /*sync: {
-        set: (arg: any, cb: any) => {
-          sendStorageOperation(manifest.extensionId, arg, 'sync', 'set', cb);
-        },
-        get: (arg: any, cb: any) => {
-          sendStorageOperation(manifest.extensionId, arg, 'sync', 'get', cb);
-        },
-        remove: (arg: any, cb: any) => {
-          sendStorageOperation(manifest.extensionId, arg, 'sync', 'remove', cb);
-        },
-        clear: (arg: any, cb: any) => {
-          sendStorageOperation(manifest.extensionId, arg, 'sync', 'clear', cb);
-        },
-      },
-      managed: {
-        get: (arg: any, cb: any) => {
-          sendStorageOperation(manifest.extensionId, arg, 'managed', 'get', cb);
-        },
-      },*/
-      onChanged: {
-        addListener: () => {
-          console.log('onchanged');
-        },
-      },
     },
 
     // https://developer.chrome.com/extensions/i18n
