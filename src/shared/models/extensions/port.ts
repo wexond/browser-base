@@ -1,4 +1,4 @@
-import { Event } from './event';
+import { Event } from '@/models/extensions/custom-event';
 import { ipcRenderer } from 'electron';
 import { API_PORT_POSTMESSAGE } from '@/constants/extensions';
 
