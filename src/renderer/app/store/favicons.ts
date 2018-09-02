@@ -1,4 +1,4 @@
-import { databases } from '~/defaults/databases';
+import { databases } from '~/defaults/app/databases';
 import { Favicon } from '~/interfaces';
 
 export class FaviconsStore {

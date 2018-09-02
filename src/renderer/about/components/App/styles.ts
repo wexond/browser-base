@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
-import { icons } from '~/renderer/defaults';
 import { centerImage } from '@mixins';
+
+const wexondIcon = require('../../../resources/icons/wexond.png');
 
 export const StyledApp = styled.div`
   width: 100%;
@@ -16,7 +17,7 @@ export const Logo = styled.div`
   height: 196px;
   margin: 0 auto;
   margin-top: 32px;
-  background-image: url(${icons.wexond});
+  background-image: url(${wexondIcon});
 
   ${centerImage('100%', 'auto')};
 `;

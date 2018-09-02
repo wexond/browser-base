@@ -6,7 +6,7 @@ import { Bookmark } from '~/interfaces';
 import { Icon, PageItem } from '@components/PageItem';
 import { ActionIcon, Input, Title } from './styles';
 import store from '@app/store';
-import { databases } from '~/defaults/databases';
+import { databases } from '~/defaults/app/databases';
 
 export interface Props {
   data: Bookmark;
