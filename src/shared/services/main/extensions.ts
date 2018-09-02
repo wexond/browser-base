@@ -1,4 +1,5 @@
 import { BrowserWindow, ipcMain, webContents } from 'electron';
+
 import * as apiMessages from '@/constants/extensions';
 import { Alarm } from '@/interfaces/extensions';
 import { Global } from '@/interfaces/main';

@@ -1,5 +1,20 @@
 import { ipcRenderer, remote } from 'electron';
 
+import {
+  API_TABS_QUERY,
+  API_TABS_CREATE,
+  API_TABS_INSERT_CSS,
+  API_TABS_EXECUTE_SCRIPT,
+  API_TABS_SET_ZOOM,
+  API_TABS_GET_ZOOM,
+  API_TABS_DETECT_LANGUAGE,
+  API_PORT_POSTMESSAGE,
+  API_RUNTIME_CONNECT,
+  API_BROWSER_ACTION_SET_BADGE_TEXT,
+} from '@/constants/extensions';
+import { Tab } from '@/models/app';
+import store from '@app/store';
+
 export const runExtensionsService = () => {
   ipcRenderer.on(
     API_TABS_QUERY,
