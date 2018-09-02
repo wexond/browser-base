@@ -7,13 +7,12 @@ import { PageItem, Icon, Time, Title } from '../../../components/PageItem';
 import { RemoveIcon } from './styles';
 import { icons, transparency } from '~/renderer/defaults';
 
+interface Props {
+  data: HistoryItem;
+}
+
 @observer
-export default class extends React.Component<
-  {
-    data: HistoryItem;
-  },
-  {}
-> {
+export default class extends React.Component<Props> {
   public onClick = (e: React.MouseEvent<HTMLDivElement>) => {};
 
   public onMouseEnter = () => {
