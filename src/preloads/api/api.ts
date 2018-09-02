@@ -1,5 +1,6 @@
 import { Manifest } from '@/interfaces/extensions';
 import { Runtime, WebNavigation, Alarms, Storage, Extension, Tabs } from '.';
+import { WebRequest } from '~/preloads/api/web-request';
 
 let manifest: Manifest;
 
@@ -12,6 +13,7 @@ export class API {
   public storage = new Storage(this);
   public extension = new Extension();
   public tabs = new Tabs(this);
+  public webRequest = new WebRequest();
 
   // tslint:disable-next-line
   constructor(_manifest: Manifest) {
