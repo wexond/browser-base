@@ -19,12 +19,6 @@ const config = merge.smart(baseConfig, {
       },
     ],
   },
-
-  plugins: [
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: 'production',
-    }),
-  ],
 });
 
 const appConfig = merge.smart(config, {

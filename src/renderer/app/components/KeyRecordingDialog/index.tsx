@@ -6,7 +6,7 @@ import { writeFileSync } from 'fs';
 import Button from '../../../components/Button';
 import { Root, Title, ButtonsContainer, Content, KeyInput } from './styles';
 import store from '@app/store';
-import { commands } from '~/defaults/commands';
+import { commands } from '~/defaults/app/commands';
 import { colors } from '~/renderer/defaults';
 import { saveKeyBindings } from '~/utils/key-bindings';
 
