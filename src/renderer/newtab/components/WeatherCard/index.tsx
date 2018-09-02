@@ -1,5 +1,15 @@
 import React from 'react';
 
+import store from '@newtab/store';
+import { WeatherForecast, WeatherWeeklyItem } from '@/interfaces/newtab';
+import { formatDescription } from '@/utils/newtab/weather';
+import { transparency, icons, colors } from '@/constants/renderer';
+import { formatTime, getDayIndex } from '@/utils/time';
+import { capitalizeEachWord } from '@/utils/strings';
+import Slider from '@/components/Slider';
+import * as Card from '@/components/Card';
+import Button from '@/components/Button';
+import ForecastItem from '../ForecastItem';
 import {
   ActionsContainer,
   ExtraInfo,
@@ -12,16 +22,6 @@ import {
   TemperatureDeg,
   TemperatureIcon,
 } from './styles';
-
-import * as Card from '@components/Card';
-import { WeatherForecast, WeatherWeeklyItem } from '~/interfaces';
-import store from '@newtab/store';
-import { formatDescription } from '~/utils/newtab/weather';
-import { transparency, icons, colors } from '~/renderer/defaults';
-import { formatTime, getDayIndex, capitalizeEachWord } from '~/utils';
-import Slider from '@components/Slider';
-import ForecastItem from '../ForecastItem';
-import Button from '@components/Button';
 
 export interface IProps {
   data: WeatherForecast;

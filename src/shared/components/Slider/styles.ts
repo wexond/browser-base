@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
-import { transparency } from '~/renderer/defaults';
-import { EASE_FUNCTION } from '~/constants';
-import { centerBoth, robotoRegular, centerHorizontal } from '@mixins';
+
+import { transparency } from '@/constants/renderer';
+import { EASE_FUNCTION } from '@/constants/app';
+import { centerBoth, robotoRegular, centerHorizontal } from '@/mixins';
 
 export const StyledSlider = styled.div`
   width: 100%;

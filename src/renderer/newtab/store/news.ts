@@ -1,8 +1,9 @@
 import { observable } from 'mobx';
-import { NewsCategories } from '~/enums';
-import { NEWS_API_KEY } from '~/constants';
-import { requestURL, hasSubdomain, removeSubdomain } from '~/utils';
-import { NewsArticle } from '~/interfaces';
+
+import { NewsCategories } from '@/enums/newtab';
+import { NEWS_API_KEY } from '@/constants/newtab';
+import { NewsArticle } from '@/interfaces/newtab';
+import { requestURL, hasSubdomain, removeSubdomain } from '@/utils/network';
 
 export class NewsStore {
   @observable
