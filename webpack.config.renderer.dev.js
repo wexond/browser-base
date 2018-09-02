@@ -75,5 +75,4 @@ const aboutConfig = merge.smart(config, {
   },
 });
 
-// module.exports = [appConfig, newTabConfig, historyConfig, aboutConfig];
-module.exports = [appConfig];
+module.exports = [appConfig, newTabConfig, historyConfig, aboutConfig];
