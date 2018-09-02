@@ -2,12 +2,12 @@ import { remote, webFrame, ipcRenderer } from 'electron';
 import { join } from 'path';
 import { runInThisContext } from 'vm';
 
-import { Manifest } from '~/interfaces/extensions/manifest';
-import { getAPI } from './api';
 import { applyDarkTheme } from './dark-theme';
 import { loadContent } from './load-content';
 import { readFileSync } from 'fs';
-import { isWexondURL } from '~/utils/';
+import { isWexondURL } from '@/utils/url';
+import { getAPI } from '@/utils/extensions/get-api';
+import { Manifest } from '@/interfaces/extensions';
 
 declare const global: any;
 
