@@ -34,4 +34,12 @@ export class HistoryStore {
       });
     });
   }
+
+  public removeItem(id: string) {
+    this.historyItems = this.historyItems.filter(x => x._id !== id);
+
+    databases.history.remove({ _id: id }, err => {
+      if (err) return console.warn(err);
+    });
+  }
 }
