@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
-import { transparency } from '~/renderer/defaults';
-import { body2, centerImage, coverImage, h5, h6 } from '@mixins';
+import { transparency } from '@/constants/renderer';
+import { body2, centerImage, coverImage, h5, h6 } from '@/mixins';
 
 const getCardImageOpacity = (visible: boolean) => {
   if (visible != null) {
