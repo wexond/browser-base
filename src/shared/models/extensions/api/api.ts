@@ -7,9 +7,9 @@ import {
   Extension,
   Tabs,
   BrowserAction,
+  WebRequest,
+  I18n,
 } from '.';
-import { WebRequest } from '~/preloads/api/web-request';
-import { I18n } from '~/preloads/api/i18n';
 
 let manifest: Manifest;
 
