@@ -1,8 +1,7 @@
 import * as React from 'react';
 
-import { colors } from '~/renderer/defaults';
-
-import { executeEventStopPropagation } from '~/utils';
+import { colors } from '@/constants/renderer';
+import { executeEventStopPropagation } from '@/utils/events';
 import {
   AssistiveText,
   Container,

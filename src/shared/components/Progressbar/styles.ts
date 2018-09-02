@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { transparency } from '~/renderer/defaults';
+import { transparency } from '@/constants/renderer';
 
 export const Root = styled.div`
   height: 4px;
