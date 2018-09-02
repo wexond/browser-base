@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
-import { transparency } from '~/renderer/defaults';
-import { button, shadows } from '@mixins';
-import { getComponentColor } from '~/utils/components/component-color';
+
+import { transparency } from '@/constants/renderer';
+import { button, shadows } from '@/mixins';
+import { getComponentColor } from '@/utils/components/component-color';
 
 type UITheme = 'light' | 'dark';
 
