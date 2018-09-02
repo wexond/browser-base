@@ -16,8 +16,6 @@ declare const global: any;
 
 @observer
 export default class extends React.Component<Props> {
-  public onClick = (e: React.MouseEvent<HTMLDivElement>) => {};
-
   public onMouseEnter = () => {
     this.props.data.hovered = true;
   };
@@ -31,12 +29,11 @@ export default class extends React.Component<Props> {
     const { data, section } = this.props;
 
     global.historyAPI.delete(data._id);
-
     section.items = section.items.filter(x => x._id !== data._id);
 
     if (section.items.length === 0) {
-      const sectionIndex = store.historySections.indexOf(section);
-      store.historySections.splice(sectionIndex, 1);
+      const index = store.historySections.indexOf(section);
+      store.historySections.splice(index, 1);
     }
   };
 
@@ -59,7 +56,6 @@ export default class extends React.Component<Props> {
 
     return (
       <PageItem
-        onClick={this.onClick}
         onFocus={() => null}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
@@ -67,10 +63,13 @@ export default class extends React.Component<Props> {
       >
         <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
         <Icon icon={favicon} style={{ opacity: hovered ? 0 : opacity }} />
+
         <Time>{`${hour
           .toString()
           .padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
-        <Title>{data.title}</Title>
+        <a href={data.url}>
+          <Title>{data.title}</Title>
+        </a>
       </PageItem>
     );
   }
