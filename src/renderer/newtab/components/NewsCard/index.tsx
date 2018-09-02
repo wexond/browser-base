@@ -1,6 +1,10 @@
 import React from 'react';
-import * as Card from '@components/Card';
 
+import { loadImage } from '@/utils/network';
+import { getTimeOffset } from '@/utils/time';
+import store from '@newtab/store';
+import { NewsArticle } from '@/interfaces/newtab';
+import * as Card from '@/components/Card';
 import {
   CardImage,
   Icon,
@@ -10,9 +14,6 @@ import {
   SourceContainer,
   Title,
 } from './styles';
-import { loadImage, getTimeOffset } from '~/utils';
-import store from '@newtab/store';
-import { NewsArticle } from '~/interfaces';
 
 export interface Props {
   data: NewsArticle;
