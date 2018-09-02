@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { transparency } from '@/constants/renderer';
 import { Actions } from '@/components/Card';
 import { centerImage, h1, h3 } from '@/mixins';
-import { EASE_FUNCTION } from '@/constants/app';
+import { EASE_FUNCTION } from '@/constants/design';
 
 export const InfoContainer = styled.div`
   display: flex;

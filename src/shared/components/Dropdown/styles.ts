@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { EASE_FUNCTION } from '@/constants/app';
+import { EASE_FUNCTION } from '@/constants/design';
 import { transparency, icons } from '@/constants/renderer';
 import { centerImage, robotoRegular, shadows } from '@/mixins';
 
