@@ -51,8 +51,12 @@ export class Runtime {
    * Extensions may connect to content scripts embedded in tabs via tabs.connect.
    *
    * @param {string | ConnectInfo} arg1
-   * @param {ConnectInfo} arg2
-   * @returns {Port}
+   * (optional) The ID of the extension or app to connect to.
+   * If omitted, a connection will be attempted with your own extension.
+   * Required if sending messages from a web page for web messaging.
+   *
+   * @param {ConnectInfo} arg2 (optional) connectInfo
+   * @returns {Port} port
    */
   public connect(arg1: string | any = null, arg2: any = null) {
     const sender: any = {
