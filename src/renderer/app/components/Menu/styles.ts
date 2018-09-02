@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import { shadows } from '@mixins';
-import { EASE_FUNCTION } from '~/constants';
-import { transparency } from '~/renderer/defaults';
+import { EASE_FUNCTION } from '@/constants/app';
+import { transparency } from '@/constants/renderer';
+import { shadows } from '@/mixins';
 
 export const Container = styled.div`
   width: 300px;

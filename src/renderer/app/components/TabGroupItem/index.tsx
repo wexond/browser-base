@@ -1,6 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { TabGroup } from '../../models';
+
+import { TabGroup } from '@/models/app';
+import store from '@app/store';
 import {
   StyledTabGroupItem,
   IconsContainer,
@@ -9,7 +11,6 @@ import {
   Input,
   Icon,
 } from './styles';
-import store from '@app/store';
 
 interface Props {
   data: TabGroup;
