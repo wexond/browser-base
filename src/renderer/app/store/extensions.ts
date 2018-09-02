@@ -1,10 +1,11 @@
 import { remote } from 'electron';
-import store from '.';
 import { observable } from 'mobx';
-import { BrowserAction } from '@app/models';
 import { resolve } from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
+
+import store from '.';
+import { BrowserAction } from '@/models/app';
 
 const readFile = promisify(fs.readFile);
 

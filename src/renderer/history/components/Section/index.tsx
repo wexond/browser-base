@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
+import { HistorySection } from '@/interfaces/history';
 import Item from '../Item';
-import { HistorySection } from '~/interfaces';
 import { Items, Title } from './styles';
 
 @observer

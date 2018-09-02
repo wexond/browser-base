@@ -1,7 +1,8 @@
 import { observable, computed } from 'mobx';
-import { TabGroup } from './tab-group';
+
 import store from '@app/store';
-import { TABS_PADDING, TOOLBAR_HEIGHT } from '~/constants/app';
+import { TabGroup } from './tab-group';
+import { TABS_PADDING, TOOLBAR_HEIGHT } from '@/constants/app';
 
 let id = 1;
 

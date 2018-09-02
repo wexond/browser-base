@@ -2,7 +2,7 @@ import { observable, computed } from 'mobx';
 
 import store from '@app/store';
 import { Tab, Page } from '.';
-import { defaultAddTabOptions } from '~/defaults/app';
+import { defaultAddTabOptions } from '@/constants/app';
 
 let id = 0;
 
@@ -100,7 +100,7 @@ export class TabGroup {
     const index = this.tabs.indexOf(callingTab);
 
     if (direction === 'left') {
-      for (let i = index; i--;) {
+      for (let i = index; i--; ) {
         const tab = this.tabs[i];
         if (callingTab.left <= tab.width / 2 + tab.left) {
           this.replaceTab(this.tabs[i + 1], tab);
