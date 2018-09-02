@@ -105,6 +105,10 @@ export default class extends React.Component<{ page: Page }> {
       this.webview
         .getWebContents()
         .send('api-tabs-getCurrent', this.tab.getApiTab());
+    } else if (e.channel === 'history-delete') {
+      for (const id of e.args) {
+        store.historyStore.removeItem(id);
+      }
     }
   };
 
