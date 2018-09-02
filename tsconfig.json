@@ -7,7 +7,7 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
 
-    "module": "commonjs",
+    "module": "es2015",
     "target": "es2017",
     "jsx": "react",
     "allowJs": true,
