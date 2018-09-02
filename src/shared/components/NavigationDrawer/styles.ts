@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { transparency, icons } from '~/renderer/defaults';
-import { shadows, h6, body2, centerImage } from '@mixins';
+import { transparency, icons } from '@/constants/renderer';
+import { h6, body2, centerImage } from '@/mixins';
 
 export const Root = styled.div`
   height: 100%;

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Root, StyledRipple } from './styles';
 
 export interface IProps {

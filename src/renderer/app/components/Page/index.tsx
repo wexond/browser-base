@@ -3,14 +3,14 @@ import { observer } from 'mobx-react';
 import { resolve } from 'path';
 import React from 'react';
 
-import StyledPage from './styles';
-import { Page, Tab } from '../../models';
+import { Page, Tab } from '@/models/app';
 import store from '@app/store';
-import { PageMenuMode } from '~/enums';
-import { databases } from '~/defaults/app/databases';
-import { HistoryItem } from '~/interfaces';
-import { getContextMenuPos } from '~/utils/app/context-menu';
-import { isWexondURL } from '~/utils';
+import { PageMenuMode } from '@/enums/app';
+import { databases } from '@/constants/app';
+import { HistoryItem } from '@/interfaces';
+import { getContextMenuPos } from '@/utils/app/context-menu';
+import { isWexondURL } from '@/utils/url';
+import StyledPage from './styles';
 
 @observer
 export default class extends React.Component<{ page: Page }> {

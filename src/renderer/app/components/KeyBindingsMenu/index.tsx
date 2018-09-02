@@ -2,9 +2,9 @@ import React from 'react';
 import { clipboard } from 'electron';
 import { observer } from 'mobx-react';
 
-import ContextMenu from '@components/ContextMenu';
+import ContextMenu from '@/components/ContextMenu';
 import store from '@app/store';
-import { saveKeyBindings } from '~/utils/key-bindings';
+import { saveKeyBindings } from '@/utils/key-bindings';
 
 const defaultKeyBindings = require('../../../../../static/defaults/key-bindings.json');
 

@@ -7,7 +7,7 @@ import store from '@app/store';
 import { commands } from '@/constants/app';
 import { defaultPaths } from '@/constants/paths';
 
-const defaultKeyBindings = require('../../static/defaults/key-bindings.json');
+const defaultKeyBindings = require('../../../key-bindings.json');
 
 export const bindKeys = (bindings: KeyBinding[]) => {
   for (const binding of bindings) {

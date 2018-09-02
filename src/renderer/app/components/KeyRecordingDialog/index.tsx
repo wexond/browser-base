@@ -1,14 +1,13 @@
 import React from 'react';
 import mousetrap from 'mousetrap';
 import { observer } from 'mobx-react';
-import { writeFileSync } from 'fs';
 
-import Button from '../../../components/Button';
-import { Root, Title, ButtonsContainer, Content, KeyInput } from './styles';
+import Button from '@/components/Button';
 import store from '@app/store';
-import { commands } from '~/defaults/app/commands';
-import { colors } from '~/renderer/defaults';
-import { saveKeyBindings } from '~/utils/key-bindings';
+import { commands } from '@/constants/app';
+import { colors } from '@/constants/renderer';
+import { saveKeyBindings } from '@/utils/key-bindings';
+import { Root, Title, ButtonsContainer, Content, KeyInput } from './styles';
 
 @observer
 export default class KeyRecordingDialog extends React.Component {

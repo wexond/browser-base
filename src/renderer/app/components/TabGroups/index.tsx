@@ -1,8 +1,9 @@
 import React from 'react';
+import { observer } from 'mobx-react';
+
 import store from '@app/store';
 import TabGroup from '../TabGroup';
-import { TOOLBAR_HEIGHT } from '~/constants';
-import { observer } from 'mobx-react';
+import { TOOLBAR_HEIGHT } from '@/constants/app';
 
 @observer
 export default class TabGroups extends React.Component {
