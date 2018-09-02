@@ -6,7 +6,7 @@ import { isURL } from '~/utils';
 import {
   getSearchSuggestions,
   getHistorySuggestions,
-} from '~/utils/suggestions';
+} from '~/utils/app/suggestions';
 
 let searchSuggestions: Suggestion[] = [];
 

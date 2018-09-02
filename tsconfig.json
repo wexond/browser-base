@@ -7,7 +7,7 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
 
-    "module": "es2015",
+    "module": "commonjs",
     "target": "es2017",
     "jsx": "react",
     "allowJs": true,
@@ -26,8 +26,7 @@
       "@newtab/*": ["src/renderer/newtab/*"],
       "@history/*": ["src/renderer/history/*"],
       "@about/*": ["src/renderer/about/*"],
-      "@mixins": ["src/renderer/mixins"],
-      "@components/*": ["src/renderer/components/*"],
+      "@/*": ["src/shared/*"],
       "~/*": ["src/*"]
     }
   },
@@ -35,7 +34,6 @@
     "reportFiles": ["src/**/*.{ts,tsx}"],
     "useCache": true
   },
-  "exclude": ["node_modules", "dist", "build"],
-  "include": ["src/**/*"],
-  "files": ["src/renderer/views/app/index.tsx"]
+  "exclude": ["node_modules", "dist", "build", "static"],
+  "include": ["src/**/*"]
 }

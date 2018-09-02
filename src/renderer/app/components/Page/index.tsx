@@ -7,9 +7,9 @@ import StyledPage from './styles';
 import { Page, Tab } from '../../models';
 import store from '@app/store';
 import { PageMenuMode } from '~/enums';
-import { databases } from '~/defaults/databases';
+import { databases } from '~/defaults/app/databases';
 import { HistoryItem } from '~/interfaces';
-import { getContextMenuPos } from '~/utils/context-menu';
+import { getContextMenuPos } from '~/utils/app/context-menu';
 import { isWexondURL } from '~/utils';
 
 @observer

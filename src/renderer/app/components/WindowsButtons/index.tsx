@@ -1,6 +1,6 @@
 import React from 'react';
 import WindowsButton from '../WindowsButton';
-import { minimizeWindow, maximizeWindow, closeWindow } from '~/utils/window';
+import { minimizeWindow, maximizeWindow, closeWindow } from '~/utils/app/window';
 import { icons } from '~/renderer/defaults';
 import ToolbarSeparator from '@app/components/ToolbarSeparator';
 
