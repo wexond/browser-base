@@ -2,8 +2,7 @@ import { ipcRenderer } from 'electron';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import { IpcEvent } from '@/models/extensions';
-import { API } from '~/preloads/api/api';
+import { IpcEvent, API } from '@/models/extensions';
 
 let api: API;
 
