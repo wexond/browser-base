@@ -10,6 +10,7 @@ export const PageItem = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
   position: relative;
   cursor: pointer;
+  user-select: auto;
 
   ${({ selected }: { selected: boolean }) => css`
     background-color: ${selected ? 'rgba(0, 0, 0, 0.08)' : 'transparent'};
@@ -38,14 +39,12 @@ export const Icon = styled.div`
 `;
 
 export const PrimaryText = styled.div`
-  opacity: ${transparency.light.primaryText};
-
+  color: rgba(0, 0, 0, ${transparency.light.primaryText});
   ${body2()};
 `;
 
 export const SecondaryText = styled.div`
-  opacity: ${transparency.light.secondaryText};
-
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
   ${body2()};
 `;
 
@@ -55,8 +54,6 @@ export const Title = styled(PrimaryText)`
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-right: 24px;
-
-  ${body2()};
 `;
 
 export const Time = styled(SecondaryText)`
