@@ -1,4 +1,5 @@
 import { observable } from 'mobx';
+
 import store from '.';
 
 export class NavigationStateStore {

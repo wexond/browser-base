@@ -5,7 +5,7 @@ import { AppContainer } from 'react-hot-loader';
 import { injectGlobal } from 'styled-components';
 
 import { Style } from './styles';
-import { runServices } from './services';
+import { runServices } from '@/services/app';
 import App from './components/App';
 import store from '@app/store';
 

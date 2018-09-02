@@ -2,11 +2,11 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 import Section from '../Section';
-import NavigationDrawer from '@components/NavigationDrawer';
 import store from '@history/store';
-import { icons } from '~/renderer/defaults';
+import NavigationDrawer from '@/components/NavigationDrawer';
+import { icons } from '@/constants/renderer';
+import Preloader from '@/components/Preloader';
 import { StyledApp, PageContainer, Content } from './styles';
-import Preloader from '@components/Preloader';
 
 declare const global: any;
 

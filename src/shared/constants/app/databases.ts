@@ -1,7 +1,7 @@
 import Datastore from 'nedb';
 
-import { defaultPaths } from '~/defaults/paths';
-import { getPath } from '~/utils/paths';
+import { defaultPaths } from '@/constants/paths';
+import { getPath } from '@/utils/paths';
 
 export const databases = {
   history: new Datastore({

@@ -1,5 +1,6 @@
 import { observable } from 'mobx';
-import { Page } from '~/models/app/page';
+
+import { Page } from '@/models/app';
 import store from '.';
 
 export class PagesStore {

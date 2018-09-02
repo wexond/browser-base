@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { transparency } from '~/renderer/defaults';
-import { subtitle2, body2 } from '@mixins';
+import { transparency } from '@/constants/renderer';
+import { subtitle2, body2 } from '@/mixins';
 
 export const StyledItem = styled.div`
   display: flex;

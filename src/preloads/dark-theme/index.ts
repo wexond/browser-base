@@ -1,4 +1,4 @@
-import { colorBrightness } from '../../utils/colors';
+import { colorBrightness } from '@/utils/colors';
 
 export const applyDarkTheme = () => {
   colorizeChildren(document.body);

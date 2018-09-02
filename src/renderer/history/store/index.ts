@@ -1,14 +1,15 @@
 import { observable } from 'mobx';
 
-import { HistoryItem, HistorySection, Dictionary } from '~/interfaces';
-import { formatDate } from '~/utils/time';
+import { HistoryItem } from '@/interfaces';
+import { HistorySection } from '@/interfaces/history';
+import { formatDate } from '@/utils/time';
 
 export class Store {
   @observable
   public loading = true;
 
   @observable
-  public dictionary: Dictionary;
+  public dictionary: any;
 
   @observable
   public historyItems: HistoryItem[] = [];
