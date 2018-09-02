@@ -30,6 +30,14 @@ if (wexondUrl) {
     },
   };
 
+  global.historyAPI = {
+    delete: (id: string | string[]) => {
+      {
+        ipcRenderer.sendToHost('history-delete', id);
+      }
+    },
+  };
+
   ipcRenderer.on('dictionary', (e: any, dictionary: any) => {
     global.onIpcReceived.emit('dictionary', dictionary);
   });
