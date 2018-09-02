@@ -7,7 +7,7 @@ import store from '@app/store';
 import { Bookmark } from '~/interfaces';
 import { colors } from '~/renderer/defaults';
 import Button from '@components/Button';
-import { databases } from '~/defaults/databases';
+import { databases } from '~/defaults/app/databases';
 
 @observer
 export default class BookmarksDialog extends React.Component {

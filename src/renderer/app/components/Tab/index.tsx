@@ -6,7 +6,7 @@ import Ripple from '../../../components/Ripple';
 import { Circle, StyledTab, Content, Icon, Title, Close } from './styles';
 import { Tab } from '../../models';
 import store from '@app/store';
-import { closeWindow } from '~/utils/window';
+import { closeWindow } from '~/utils/app/window';
 import { TAB_ANIMATION_DURATION } from '~/constants';
 import { colors, transparency } from '~/renderer/defaults';
 

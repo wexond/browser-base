@@ -2,7 +2,7 @@ import { remote, webFrame, ipcRenderer } from 'electron';
 import { join } from 'path';
 import { runInThisContext } from 'vm';
 
-import { Manifest } from '~/interfaces/manifest';
+import { Manifest } from '~/interfaces/extensions/manifest';
 import { getAPI } from './api';
 import { applyDarkTheme } from './dark-theme';
 import { loadContent } from './load-content';

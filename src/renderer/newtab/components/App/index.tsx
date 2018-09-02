@@ -4,7 +4,7 @@ import React from 'react';
 import store from '@newtab/store';
 import News from '../News';
 import WeatherCard from '../WeatherCard';
-import { getWeather } from '~/utils/weather';
+import { getWeather } from '~/utils/newtab/weather';
 import { Column, Content, StyledApp } from './styles';
 
 @observer
