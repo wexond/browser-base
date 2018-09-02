@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import { colors, transparency } from '~/renderer/defaults';
-import * as PageItem from '../../../components/PageItem';
-import { centerImage, robotoRegular } from '@mixins';
+import { colors, transparency } from '@/constants/renderer';
+import * as PageItem from '@/components/PageItem';
+import { centerImage, robotoRegular } from '@/mixins';
 
 export const Title = styled(PageItem.Title)`
   margin-left: 12px;
