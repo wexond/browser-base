@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { HistoryItem } from '~/interfaces';
+import { HistoryItem, HistorySection } from '~/interfaces';
 import store from '@history/store';
 import { PageItem, Icon, Time, Title } from '../../../components/PageItem';
 import { RemoveIcon } from './styles';
@@ -9,7 +9,10 @@ import { icons, transparency } from '~/renderer/defaults';
 
 interface Props {
   data: HistoryItem;
+  section: HistorySection;
 }
+
+declare const global: any;
 
 @observer
 export default class extends React.Component<Props> {
@@ -25,6 +28,16 @@ export default class extends React.Component<Props> {
 
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
+    const { data, section } = this.props;
+
+    global.historyAPI.delete(data._id);
+
+    section.items = section.items.filter(x => x._id !== data._id);
+
+    if (section.items.length === 0) {
+      const sectionIndex = store.historySections.indexOf(section);
+      store.historySections.splice(sectionIndex, 1);
+    }
   };
 
   public render() {
