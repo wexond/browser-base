@@ -24,7 +24,7 @@ export class Runtime {
    * @type {object}
    * @property {string} message (optional)
    */
-  public lastError: chrome.runtime.LastError;
+  public lastError: chrome.runtime.LastError; // TODO
 
   /**
    * Fired when a connection is made from either an extension process
