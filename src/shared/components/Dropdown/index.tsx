@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Container, Icon, List, Name, Root } from './styles';
+
+import DropdownItem from '@/components/DropdownItem';
 import Ripple from '../Ripple';
-import DropdownItem from '@components/DropdownItem';
+import { Container, Icon, List, Name, Root } from './styles';
 
 export type DropdownEvent = (e?: React.MouseEvent<any>) => void;
 

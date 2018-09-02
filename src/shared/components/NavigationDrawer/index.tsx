@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { Root, Header, Search, SearchIcon, Input, Title } from './styles';
 import NavigationDrawerItem from '../NavigationDrawerItem';
+import { Root, Header, Search, SearchIcon, Input, Title } from './styles';
 
 interface Props {
   title?: string;

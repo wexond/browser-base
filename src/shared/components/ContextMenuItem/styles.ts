@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
-import { robotoRegular, noUserSelect } from '@mixins';
-import { transparency } from '~/renderer/defaults';
+
+import { robotoRegular, noUserSelect } from '@/mixins';
+import { transparency } from '@/constants/renderer';
 
 export interface MenuItemProps {
   visible: boolean;

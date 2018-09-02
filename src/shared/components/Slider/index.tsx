@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { colors, transparency } from '@/constants/renderer';
+import { hexToRgb } from '@/utils/colors';
+
 import {
   ActiveTrack,
   InactiveTrack,
@@ -11,9 +14,6 @@ import {
   TicksContainer,
   TickValue,
 } from './styles';
-
-import { colors, transparency } from '~/renderer/defaults';
-import { hexToRgb } from '~/utils';
 
 export type SliderEvent = (value?: any, element?: Slider) => void;
 
