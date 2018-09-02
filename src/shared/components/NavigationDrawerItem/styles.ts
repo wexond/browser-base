@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
-import { colors, transparency } from '~/renderer/defaults';
-import { robotoMedium } from '@mixins';
+import { colors, transparency } from '@/constants/renderer';
+import { robotoMedium } from '@/mixins';
 
 export const StyledItem = styled.div`
   width: calc(100% - 16px);

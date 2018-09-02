@@ -1,5 +1,9 @@
 import { observer } from 'mobx-react';
 import React from 'react';
+
+import { Suggestion } from '@/interfaces/app';
+import store from '@app/store';
+import { icons, transparency } from '@/constants/renderer';
 import {
   Dash,
   Icon,
@@ -7,9 +11,6 @@ import {
   SecondaryText,
   StyledSuggestion,
 } from './styles';
-import { Suggestion } from '~/interfaces';
-import store from '@app/store';
-import { icons, transparency } from '~/renderer/defaults';
 
 interface Props {
   suggestion: Suggestion;

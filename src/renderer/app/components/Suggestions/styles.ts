@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { transparency } from '~/renderer/defaults';
-import { caption } from '@mixins';
+
+import { transparency } from '@/constants/renderer';
+import { caption } from '@/mixins';
 
 export const StyledSuggestions = styled.div`
   z-index: 50;

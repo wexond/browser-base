@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
-import { transparency } from '~/renderer/defaults';
-import { body2, shadows } from '@mixins';
+
+import { transparency } from '@/constants/renderer';
+import { body2, shadows } from '@/mixins';
 
 export const Root = styled.div`
   height: 48px;
