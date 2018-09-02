@@ -25,5 +25,3 @@ export const WORKSPACE_MAX_ICONS_COUNT = 9;
 
 // Address bar
 export const ADDRESS_BAR_HEIGHT = 30;
-
-export const EASE_FUNCTION = 'cubic-bezier(0.19, 1, 0.22, 1)';
