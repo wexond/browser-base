@@ -7,6 +7,10 @@ let api: API;
 // https://developer.chrome.com/extensions/browserAction
 
 export class BrowserAction {
+  public onClicked = {
+    addListener: () => {},
+  };
+
   // tslint:disable-next-line
   constructor(_api: API) {
     api = _api;

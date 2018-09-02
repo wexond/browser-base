@@ -11,12 +11,10 @@ import {
   I18n,
 } from '.';
 
-let manifest: Manifest;
-
 // https://developer.chrome.com/extensions/api_index
 
 export class API {
-  public runtime = new Runtime(manifest);
+  public runtime: Runtime;
   public webNavigation = new WebNavigation();
   public alarms = new Alarms(this);
   public storage = new Storage(this);
@@ -28,6 +26,6 @@ export class API {
 
   // tslint:disable-next-line
   constructor(_manifest: Manifest) {
-    manifest = _manifest;
+    this.runtime = new Runtime(_manifest);
   }
 }
