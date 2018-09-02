@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { ForwardIcon, Root } from './styles';
 import TreeBarItem from '../TreeBarItem';
 import store from '@app/store';
+import { ForwardIcon, Root } from './styles';
 
 export default class TreeBar extends React.Component {
   public render() {

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { transparency, icons } from '~/renderer/defaults';
-import { subtitle2, centerImage } from '@mixins';
+import { transparency, icons } from '@/constants/renderer';
+import { subtitle2, centerImage } from '@/mixins';
 
 export const Root = styled.div`
   margin-left: 4px;
