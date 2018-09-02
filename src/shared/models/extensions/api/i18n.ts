@@ -1,6 +1,6 @@
 import { replaceAll } from '@/utils/strings';
 import { remote } from 'electron';
-import { API } from '~/preloads/api/api';
+import { API } from '.';
 
 let api: API;
 
