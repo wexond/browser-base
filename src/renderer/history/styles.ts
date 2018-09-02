@@ -1,7 +1,7 @@
 import { css } from 'styled-components';
 
-import { body2 } from '@mixins';
-import { fonts } from '~/renderer/defaults';
+import { fonts } from '@/constants/renderer';
+import { body2 } from '@/mixins';
 
 export const Style = css`
   @font-face {

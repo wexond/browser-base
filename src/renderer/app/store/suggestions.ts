@@ -1,12 +1,13 @@
 import { observable } from 'mobx';
-import { Suggestion } from '~/interfaces';
+
+import { Suggestion } from '@/interfaces/app';
 import store from '@app/store';
-import { icons } from '~/renderer/defaults';
-import { isURL } from '~/utils';
+import { icons } from '@/constants/renderer';
+import { isURL } from '@/utils/url';
 import {
   getSearchSuggestions,
   getHistorySuggestions,
-} from '~/utils/app/suggestions';
+} from '@/utils/app/suggestions';
 
 let searchSuggestions: Suggestion[] = [];
 

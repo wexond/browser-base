@@ -1,5 +1,5 @@
-import { databases } from '~/defaults/app/databases';
-import { Favicon } from '~/interfaces';
+import { databases } from '@/constants/app';
+import { Favicon } from '@/interfaces';
 
 export class FaviconsStore {
   public favicons: { [key: string]: string } = {};

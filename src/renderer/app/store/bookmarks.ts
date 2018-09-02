@@ -1,8 +1,8 @@
 import { observable } from 'mobx';
 
 import BookmarksDialog from '../components/BookmarksDialog';
-import { databases } from '~/defaults/app/databases';
-import { Bookmark } from '~/interfaces';
+import { databases } from '@/constants/app';
+import { Bookmark } from '@/interfaces';
 import store from '.';
 
 export class BookmarksStore {

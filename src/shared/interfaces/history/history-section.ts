@@ -1,4 +1,4 @@
-import { HistoryItem } from '~/interfaces';
+import { HistoryItem } from '@/interfaces';
 
 export interface HistorySection {
   items: HistoryItem[];

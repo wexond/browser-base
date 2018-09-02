@@ -1,12 +1,13 @@
-import { Event } from '@/models/extensions/custom-event';
 import { ipcRenderer } from 'electron';
+
+import { CustomEvent } from '@/models/extensions/custom-event';
 import { API_PORT_POSTMESSAGE } from '@/constants/extensions';
 
 export class Port {
   public sender: chrome.runtime.MessageSender;
   public name: string;
-  public onMessage = new Event();
-  public onDisconnect = new Event();
+  public onMessage = new CustomEvent();
+  public onDisconnect = new CustomEvent();
 
   private portId: string;
 
