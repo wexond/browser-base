@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
-import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '~/constants';
-import { colors, transparency, icons } from '~/renderer/defaults';
-import { centerImage, robotoRegular, shadows, subtitle2 } from '@mixins';
+
+import { WORKSPACE_FOLDER_SIZE, WORKSPACE_ICON_SIZE } from '@/constants/app';
+import { colors, transparency, icons } from '@/constants/renderer';
+import { centerImage, robotoRegular, shadows, subtitle2 } from '@/mixins';
 
 export const StyledTabGroupItem = styled.div`
   display: flex;

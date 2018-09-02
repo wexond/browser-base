@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { icons, transparency } from '~/renderer/defaults';
-import { centerImage } from '@mixins';
+
+import { icons, transparency } from '@/constants/renderer';
+import { centerImage } from '@/mixins';
 
 export const Root = styled.div`
   width: 100%;

@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import store from '@app/store';
 import { Root, Icon } from './styles';
 
 interface Props {

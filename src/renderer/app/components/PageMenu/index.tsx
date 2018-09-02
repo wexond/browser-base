@@ -1,13 +1,14 @@
 import React from 'react';
-import ContextMenu from '@components/ContextMenu';
-import store from '@app/store';
-import { PageMenuMode } from '~/enums';
 import { remote, clipboard, nativeImage } from 'electron';
 import { createWriteStream } from 'fs';
 import { parse } from 'url';
 import { basename, extname } from 'path';
 import http from 'http';
 import { observer } from 'mobx-react';
+
+import ContextMenu from '@/components/ContextMenu';
+import store from '@app/store';
+import { PageMenuMode } from '@/enums/app';
 
 const { dialog } = remote;
 
@@ -107,11 +108,13 @@ export default class PageMenu extends React.Component {
         ],
       },
       path1 => {
-        webview.getWebContents().savePage(path1, 'HTMLComplete', error => {
-          if (error) {
-            console.error(error);
-          }
-        });
+        webview
+          .getWebContents()
+          .savePage(path1, 'HTMLComplete', (error: any) => {
+            if (error) {
+              console.error(error);
+            }
+          });
       },
     );
   };
@@ -130,11 +133,13 @@ export default class PageMenu extends React.Component {
         ],
       },
       path1 => {
-        webview.getWebContents().savePage(path1, 'HTMLComplete', error => {
-          if (error) {
-            console.error(error);
-          }
-        });
+        webview
+          .getWebContents()
+          .savePage(path1, 'HTMLComplete', (error: any) => {
+            if (error) {
+              console.error(error);
+            }
+          });
       },
     );
   };
