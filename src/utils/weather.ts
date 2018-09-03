@@ -46,8 +46,8 @@ const getDaily = (current: any, weekly: any, timeZoneOffset: number) => {
 
     /*if (date.getDate() === currentDate.getDate()) {
       list.push(createDailyItem(item, timeZoneOffset));
-    } else if () 
-    
+    } else if ()
+
     else {
       break;
     }*/
