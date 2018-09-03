@@ -10,33 +10,21 @@ import { databases } from '~/defaults/databases';
 
 export interface Props {
   data: Bookmark;
+  cmdPressed: boolean;
 }
 
 @observer
 export default class BookmarkItem extends React.Component<Props> {
-  private cmdPressed = false;
 
   private input: HTMLInputElement;
 
-  public componentDidMount() {
-    window.addEventListener('keydown', e => {
-      this.cmdPressed = e.key === 'Meta'; // Command on macOS
-    });
-
-    window.addEventListener('keyup', e => {
-      if (e.key === 'Meta') {
-        this.cmdPressed = false;
-      }
-    });
-  }
-
   public onClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { data } = this.props;
+    const { data, cmdPressed } = this.props;
 
     const { bookmarksStore } = store;
     const { selectedItems } = bookmarksStore;
 
-    if (this.cmdPressed || e.ctrlKey) {
+    if (cmdPressed || e.ctrlKey) {
       if (selectedItems.indexOf(data._id) === -1) {
         selectedItems.push(data._id);
       } else {
