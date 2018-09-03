@@ -13,18 +13,35 @@ interface Props {
 
 @observer
 export default class extends React.Component<Props, {}> {
-  public onHistoryClick = () => {
+  public openTab = (page: string) => {
     store.tabsStore.addTab({
-      url: 'http://localhost:8080/history.html',
+      url: `http://localhost:8080/${page}.html`,
       active: true,
     });
   };
 
+  public onHistoryClick = () => {
+    this.openTab('history');
+  };
+
+  public onDownloadsClick = () => {
+    this.openTab('downloads');
+  };
+
+  public onBookmarksClick = () => {
+    this.openTab('bookmarks');
+  };
+
+  public onExtensionsClick = () => {
+    this.openTab('extensions');
+  };
+
+  public onSettingsClick = () => {
+    this.openTab('settings');
+  };
+
   public onAboutClick = () => {
-    store.tabsStore.addTab({
-      url: 'http://localhost:8080/about.html',
-      active: true,
-    });
+    this.openTab('about');
   };
 
   public render() {
@@ -38,11 +55,27 @@ export default class extends React.Component<Props, {}> {
           icon={icons.history}
           onClick={this.onHistoryClick}
         />
-        <MenuItem title="Downloads" icon={icons.download} />
-        <MenuItem title="Bookmarks" icon={icons.bookmarks} />
+        <MenuItem
+          title="Downloads"
+          icon={icons.download}
+          onClick={this.onDownloadsClick}
+        />
+        <MenuItem
+          title="Bookmarks"
+          icon={icons.bookmarks}
+          onClick={this.onBookmarksClick}
+        />
         <Separator visible={true} />
-        <MenuItem title="Extensions" icon={icons.extensions} />
-        <MenuItem title="Settings" icon={icons.settings} />
+        <MenuItem
+          title="Extensions"
+          icon={icons.extensions}
+          onClick={this.onExtensionsClick}
+        />
+        <MenuItem
+          title="Settings"
+          icon={icons.settings}
+          onClick={this.onSettingsClick}
+        />
         <Separator visible={true} />
         <MenuItem title="About" icon={icons.info} onClick={this.onAboutClick} />
       </Container>
