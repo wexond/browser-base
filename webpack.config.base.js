@@ -25,6 +25,7 @@ module.exports = {
       '@newtab': join(__dirname, './src/renderer/newtab'),
       '@history': join(__dirname, './src/renderer/history'),
       '@about': join(__dirname, './src/renderer/about'),
+      '@bookmarks': join(__dirname, './src/renderer/bookmarks'),
       '@': join(__dirname, './src/shared'),
       '~': join(__dirname, './src'),
     },
