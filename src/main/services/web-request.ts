@@ -9,7 +9,7 @@ let mainWindow: BrowserWindow;
 
 declare const global: Global;
 
-const getRequestType = (type: string): any => {
+const getRequestType = (type: string): string => {
   if (type === 'mainFrame') return 'main_frame';
   if (type === 'subFrame') return 'sub_frame';
   if (type === 'cspReport') return 'csp_report';
@@ -28,7 +28,7 @@ const getDetails = (details: any) => {
   };
 };
 
-const objectToArray = (obj: any) => {
+const objectToArray = (obj: any): any[] => {
   const arr: any = [];
   Object.keys(obj).forEach(k => {
     if (obj[k]) {
@@ -46,7 +46,7 @@ const arrayToObject = (arr: any[]) => {
   return obj;
 };
 
-const matchesFilter = (filter: any, url: string) => {
+const matchesFilter = (filter: any, url: string): boolean => {
   if (filter && Array.isArray(filter.urls)) {
     for (const item of filter.urls) {
       if (matchesPattern(item, url)) {
@@ -70,7 +70,7 @@ const interceptRequest = (
   eventName: string,
   details: any,
   callback: any = null,
-) => {
+): boolean => {
   let isIntercepted = false;
 
   if (Array.isArray(eventListeners[eventName])) {
