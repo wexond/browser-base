@@ -8,6 +8,7 @@ interface Props {
   title?: string;
   search?: boolean;
   children?: any;
+  onSearch?: (str?: string) => void;
 }
 
 interface State {
@@ -22,6 +23,10 @@ export default class extends React.Component<Props, State> {
 
   public static Item = NavigationDrawerItem;
 
+  public input: HTMLInputElement;
+
+  private typingTimer: any;
+
   private onItemClick = (
     e: React.MouseEvent<HTMLDivElement>,
     item: NavigationDrawerItem,
@@ -31,8 +36,26 @@ export default class extends React.Component<Props, State> {
     }
   };
 
-  private onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // store.menuStore.searchText = e.currentTarget.value;
+  private onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const { onSearch } = this.props;
+    if (typeof onSearch !== 'function') return;
+
+    clearTimeout(this.typingTimer);
+
+    if (e.key === 'Enter') {
+      onSearch(this.input.value);
+    } else {
+      this.typingTimer = setTimeout(() => {
+        onSearch(this.input.value);
+      }, 500);
+    }
+  };
+
+  private onBlur = () => {
+    const { onSearch } = this.props;
+    if (typeof onSearch !== 'function') return;
+
+    onSearch(this.input.value);
   };
 
   public render() {
@@ -48,7 +71,12 @@ export default class extends React.Component<Props, State> {
             {(search && (
               <Search>
                 <SearchIcon />
-                <Input placeholder="Search" onInput={this.onInput} />
+                <Input
+                  innerRef={r => (this.input = r)}
+                  placeholder="Search"
+                  onKeyDown={this.onKeyDown}
+                  onBlur={this.onBlur}
+                />
               </Search>
             )) ||
               (title != null && <Title>{title}</Title>)}
