@@ -26,6 +26,7 @@
       "@newtab/*": ["src/renderer/newtab/*"],
       "@history/*": ["src/renderer/history/*"],
       "@about/*": ["src/renderer/about/*"],
+      "@bookmarks/*": ["src/renderer/bookmarks/*"],
       "@/*": ["src/shared/*"],
       "~/*": ["src/*"]
     }
