@@ -53,4 +53,18 @@ const aboutConfig = merge.smart(config, {
   },
 });
 
-module.exports = [appConfig, newTabConfig, historyConfig, aboutConfig];
+const bookmarksConfig = merge.smart(config, {
+  target: 'web',
+
+  entry: {
+    bookmarks: ['./src/renderer/bookmarks'],
+  },
+});
+
+module.exports = [
+  appConfig,
+  newTabConfig,
+  historyConfig,
+  aboutConfig,
+  bookmarksConfig,
+];
