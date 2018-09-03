@@ -40,10 +40,14 @@ export default class App extends React.Component {
     }
   };
 
+  public onSearch = (str: string) => {
+    console.log(str);
+  };
+
   public render() {
     return (
       <StyledApp>
-        <NavigationDrawer title="History" search>
+        <NavigationDrawer title="History" onSearch={this.onSearch} search>
           <NavigationDrawer.Item title="Select all" icon={icons.selectAll} />
           <NavigationDrawer.Item title="Delete all" icon={icons.delete} />
         </NavigationDrawer>
