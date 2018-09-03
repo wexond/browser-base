@@ -8,6 +8,12 @@ import { Style } from '../styles';
 
 injectGlobal`${Style}`;
 
+injectGlobal`
+  body {
+    overflow-y: auto;
+  }
+`;
+
 const render = (AppComponent: any) => {
   ReactDOM.render(
     <AppContainer>
