@@ -4,7 +4,7 @@ import { AppContainer } from 'react-hot-loader';
 import { injectGlobal } from 'styled-components';
 
 import App from './components/App';
-import { Style } from './styles';
+import { Style } from '../styles';
 
 injectGlobal`${Style}`;
 

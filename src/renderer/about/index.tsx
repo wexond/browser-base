@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { injectGlobal } from 'styled-components';
 
+import { Style } from '../styles';
 import App from './components/App';
-import { Style } from './styles';
 
 injectGlobal`${Style}`;
 
