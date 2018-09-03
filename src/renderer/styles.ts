@@ -26,15 +26,15 @@ export const Style = css`
   }
 
   body {
+    width: 100vw;
+    height: 100vh;
     user-select: none;
     cursor: default;
     margin: 0;
-    background-color: white;
     padding: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow-x: hidden;
-    background-color: #fff;
+    background-color: white;
+    overflow: hidden;
+
     ${body2()};
   }
 
@@ -58,6 +58,10 @@ export const Style = css`
       stroke-dasharray: 89, 200;
       stroke-dashoffset: -124px;
     }
+  }
+
+  * {
+    box-sizing: border-box;
   }
 
   a {
