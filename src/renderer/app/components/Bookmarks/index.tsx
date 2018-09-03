@@ -9,8 +9,20 @@ import BookmarkItem from '../BookmarkItem';
 
 @observer
 export default class Bookmarks extends React.Component {
+  private cmdPressed = false;
+
   public async componentDidMount() {
     store.bookmarksStore.goToFolder(null);
+
+    window.addEventListener('keydown', e => {
+      this.cmdPressed = e.key === 'Meta'; // Command on macOS
+    });
+
+    window.addEventListener('keyup', e => {
+      if (e.key === 'Meta') {
+        this.cmdPressed = false;
+      }
+    });
   }
 
   public render() {
@@ -26,7 +38,7 @@ export default class Bookmarks extends React.Component {
             {items.length > 0 && (
               <Items>
                 {items.map(data => (
-                  <BookmarkItem data={data} key={data._id} />
+                  <BookmarkItem cmdPressed={this.cmdPressed} data={data} key={data._id} />
                 ))}
               </Items>
             )}
