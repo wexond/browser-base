@@ -34,7 +34,9 @@ export default class App extends React.Component {
         store.historyItems = Object.values(data);
 
         store.filterItems();
-        store.loadSections(20);
+        store.loadSections(
+          Math.ceil(document.documentElement.clientHeight / 56),
+        );
 
         store.loading = false;
       } else if (name === 'dictionary') {
@@ -64,7 +66,7 @@ export default class App extends React.Component {
     const itemOffset = 4;
 
     if (yPos >= maxYPos - itemOffset * 56) {
-      store.loadSections(20);
+      store.loadSections(10);
     }
   };
 
