@@ -4,7 +4,7 @@ import { colors, transparency } from '@/constants/renderer';
 import { robotoMedium } from '@/mixins';
 
 export const StyledItem = styled.div`
-  width: calc(100% - 16px);
+  width: 100%;
   height: 48px;
   padding-right: 16px;
   position: relative;

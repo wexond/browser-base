@@ -9,6 +9,9 @@ export class Store {
   public loading = true;
 
   @observable
+  public selected: HistoryItem[] = [];
+
+  @observable
   public dictionary: any;
 
   @observable
