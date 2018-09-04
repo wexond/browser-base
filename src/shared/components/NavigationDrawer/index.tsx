@@ -84,7 +84,7 @@ export default class extends React.Component<Props, State> {
         )}
 
         {React.Children.map(children, (el: React.ReactElement<any>) => {
-          if (el.props.title) {
+          if (el && el.props.title && el.props.visible) {
             id++;
 
             return React.cloneElement(el, {
