@@ -9,9 +9,7 @@ import { Items, Title } from './styles';
 export default class extends React.Component<{ section: HistorySection }, {}> {
   public render() {
     const { section } = this.props;
-    const { items, date } = section;
-
-    const title = date;
+    const { items, title } = section;
 
     return (
       <React.Fragment>

@@ -17,7 +17,7 @@ export default class App extends React.Component {
       if (name === 'history') {
         store.historyItems = Object.values(data);
 
-        store.filterItems();
+        store.validateItems();
         store.loadSections(20);
 
         store.loading = false;
@@ -41,7 +41,7 @@ export default class App extends React.Component {
   };
 
   public onSearch = (str: string) => {
-    console.log(str);
+    store.search(str.toLowerCase());
   };
 
   public render() {
