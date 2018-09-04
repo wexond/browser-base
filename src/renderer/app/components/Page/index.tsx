@@ -7,7 +7,6 @@ import { Page, Tab } from '@/models/app';
 import store from '@app/store';
 import { PageMenuMode } from '@/enums/app';
 import { databases } from '@/constants/app';
-import { HistoryItem } from '@/interfaces';
 import { getContextMenuPos } from '@/utils/app/context-menu';
 import { isWexondURL } from '@/utils/url';
 import StyledPage from './styles';

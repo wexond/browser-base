@@ -31,9 +31,9 @@ if (wexondUrl) {
   };
 
   global.historyAPI = {
-    delete: (id: string | string[]) => {
+    delete: (...id: string[]) => {
       {
-        ipcRenderer.sendToHost('history-delete', id);
+        ipcRenderer.sendToHost('history-delete', ...id);
       }
     },
   };
