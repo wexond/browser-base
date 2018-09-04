@@ -45,11 +45,23 @@ export default class App extends React.Component {
   };
 
   public render() {
+    const selectedItems = store.selected;
+    const selected = selectedItems.length !== 0;
+
     return (
       <StyledApp>
         <NavigationDrawer title="History" onSearch={this.onSearch} search>
           <NavigationDrawer.Item title="Select all" icon={icons.selectAll} />
-          <NavigationDrawer.Item title="Delete all" icon={icons.delete} />
+          <NavigationDrawer.Item
+            title="Delete all"
+            icon={icons.delete}
+            visible={selected}
+          />
+          <NavigationDrawer.Item
+            title="Clear"
+            icon={icons.close}
+            visible={selected}
+          />
         </NavigationDrawer>
         <PageContainer>
           {(!store.loading && (
