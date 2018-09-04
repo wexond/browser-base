@@ -9,8 +9,9 @@ interface Props {
   visible?: boolean;
   selected?: boolean;
   id?: number;
-  onClick?: (
-    e: React.MouseEvent<HTMLDivElement>,
+  onClick?: (e?: React.MouseEvent<HTMLDivElement>) => void;
+  onClick2?: (
+    e?: React.MouseEvent<HTMLDivElement>,
     element?: NavigationDrawerItem,
   ) => void;
 }
@@ -23,8 +24,10 @@ export default class NavigationDrawerItem extends React.Component<Props, {}> {
   };
 
   private onClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { onClick } = this.props;
-    if (typeof onClick === 'function') onClick(e, this);
+    const { onClick, onClick2 } = this.props;
+
+    if (typeof onClick === 'function') onClick(e);
+    if (typeof onClick2 === 'function') onClick2(e, this);
   };
 
   public render() {

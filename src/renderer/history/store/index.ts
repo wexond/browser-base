@@ -9,9 +9,6 @@ export class Store {
   public loading = true;
 
   @observable
-  public selected: HistoryItem[] = [];
-
-  @observable
   public dictionary: any;
 
   @observable
@@ -19,6 +16,9 @@ export class Store {
 
   @observable
   public historySections: HistorySection[] = [];
+
+  @observable
+  public selectedItems: string[] = [];
 
   public loadedCount = 0;
 
@@ -89,6 +89,10 @@ export class Store {
     };
 
     this.historySections = [section];
+  }
+
+  public removeItem(id: string) {
+    console.log(id);
   }
 }
 

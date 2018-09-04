@@ -89,7 +89,7 @@ export default class extends React.Component<Props, State> {
 
             return React.cloneElement(el, {
               id,
-              onClick: this.onItemClick,
+              onClick2: this.onItemClick,
               selected: id === selectedItem,
             });
           }
