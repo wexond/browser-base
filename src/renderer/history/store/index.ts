@@ -73,22 +73,26 @@ export class Store {
       this.loadedCount = 0;
       this.loadSections(20);
 
-      return;
+      return null;
     }
 
-    const foundItems = this.historyItems.filter(item =>
+    const items = this.historyItems.filter(item =>
       item.title.toLowerCase().includes(filter),
     );
 
-    if (foundItems.length === 0) return;
+    if (items.length === 0) {
+      return (this.historySections = []);
+    }
 
     const section: HistorySection = {
-      id: foundItems[0]._id,
-      title: `Search results for '${filter}'`,
-      items: foundItems,
+      id: items[0]._id,
+      title: `Found ${items.length} search ${
+        items.length > 1 ? 'results' : 'result'
+      } for '${filter}'`,
+      items,
     };
 
-    this.historySections = [section];
+    return (this.historySections = [section]);
   }
 
   public removeItem(id: string) {
