@@ -4,6 +4,8 @@ import { HistoryItem } from '@/interfaces';
 import { HistorySection } from '@/interfaces/history';
 import { formatDate } from '@/utils/time';
 
+declare const global: any;
+
 export class Store {
   @observable
   public loading = true;
@@ -67,13 +69,12 @@ export class Store {
     this.loadedCount += count;
   }
 
-  public search(filter: string) {
+  public search(filter: string): any {
     if (filter === '') {
       this.historySections = [];
       this.loadedCount = 0;
       this.loadSections(20);
-
-      return null;
+      return;
     }
 
     const items = this.historyItems.filter(item =>
@@ -81,7 +82,8 @@ export class Store {
     );
 
     if (items.length === 0) {
-      return (this.historySections = []);
+      this.historySections = [];
+      return;
     }
 
     const section: HistorySection = {
@@ -92,11 +94,15 @@ export class Store {
       items,
     };
 
-    return (this.historySections = [section]);
+    this.historySections = [section];
   }
 
-  public removeItem(id: string) {
-    console.log(id);
+  public removeItem(...ids: string[]) {
+    for (const id of ids) {
+      this.historyItems = this.historyItems.filter(x => x._id !== id);
+    }
+
+    global.historyAPI.delete(...ids);
   }
 }
 
