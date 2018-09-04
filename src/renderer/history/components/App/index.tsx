@@ -21,11 +21,7 @@ const actions = {
     store.selectedItems = [];
   },
   deleteAllSelected: () => {
-    for (let i = store.selectedItems.length - 1; i >= 0; i--) {
-      const selectedItem = store.selectedItems[i];
-      store.removeItem(selectedItem);
-    }
-
+    store.removeItem(...store.selectedItems);
     store.selectedItems = [];
   },
 };
