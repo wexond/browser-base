@@ -19,7 +19,7 @@ export class Store {
 
   public loadedCount = 0;
 
-  public filterItems(filter = '') {
+  public validateItems(filter = '') {
     this.historyItems = this.historyItems
       .filter(
         item =>
@@ -37,7 +37,9 @@ export class Store {
 
         const dateStr = formatDate(this.dictionary, date);
 
-        const foundSection = this.historySections.find(x => x.date === dateStr);
+        const foundSection = this.historySections.find(
+          x => x.title === dateStr,
+        );
 
         const newItem = {
           ...item,
@@ -48,7 +50,7 @@ export class Store {
         if (foundSection == null) {
           const section: HistorySection = {
             items: [newItem],
-            date: dateStr,
+            title: dateStr,
             id: item._id,
           };
 
@@ -60,6 +62,22 @@ export class Store {
     }
 
     this.loadedCount += count;
+  }
+
+  public search(filter: string) {
+    const foundItems = this.historyItems.filter(item =>
+      item.title.toLowerCase().includes(filter),
+    );
+
+    if (foundItems.length === 0) return;
+
+    const section: HistorySection = {
+      id: foundItems[0]._id,
+      title: `Search results for '${filter}'`,
+      items: foundItems,
+    };
+
+    this.historySections = [section];
   }
 }
 
