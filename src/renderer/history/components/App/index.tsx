@@ -10,6 +10,26 @@ import { StyledApp, PageContainer, Content } from './styles';
 
 declare const global: any;
 
+const actions = {
+  selectAll: () => {
+    const { selectedItems, historyItems } = store;
+    for (const item of historyItems) {
+      selectedItems.push(item._id);
+    }
+  },
+  deselectAll: () => {
+    store.selectedItems = [];
+  },
+  deleteAllSelected: () => {
+    for (let i = store.selectedItems.length - 1; i >= 0; i--) {
+      const selectedItem = store.selectedItems[i];
+      store.removeItem(selectedItem);
+    }
+
+    store.selectedItems = [];
+  },
+};
+
 @observer
 export default class App extends React.Component {
   componentDidMount() {
@@ -45,22 +65,28 @@ export default class App extends React.Component {
   };
 
   public render() {
-    const selectedItems = store.selected;
+    const selectedItems = store.selectedItems;
     const selected = selectedItems.length !== 0;
 
     return (
       <StyledApp>
         <NavigationDrawer title="History" onSearch={this.onSearch} search>
-          <NavigationDrawer.Item title="Select all" icon={icons.selectAll} />
           <NavigationDrawer.Item
-            title="Delete all"
+            title="Select all"
+            icon={icons.selectAll}
+            onClick={actions.selectAll}
+          />
+          <NavigationDrawer.Item
+            title="Delete selected"
             icon={icons.delete}
             visible={selected}
+            onClick={actions.deleteAllSelected}
           />
           <NavigationDrawer.Item
             title="Clear"
             icon={icons.close}
             visible={selected}
+            onClick={actions.deselectAll}
           />
         </NavigationDrawer>
         <PageContainer>

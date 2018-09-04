@@ -55,12 +55,16 @@ export default class extends React.Component<Props> {
       opacity = transparency.light.inactiveIcon;
     }
 
+    const selected = store.selectedItems.indexOf(data._id) !== -1;
+
+    // console.log(store.selectedItems);
+
     return (
       <PageItem
         onFocus={() => null}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        selected={false}
+        selected={selected}
       >
         <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
         <Icon icon={favicon} style={{ opacity: hovered ? 0 : opacity }} />
