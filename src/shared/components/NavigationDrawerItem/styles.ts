@@ -13,10 +13,6 @@ export const StyledItem = styled.div`
   overflow: hidden;
   cursor: pointer;
 
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
-  }
-
   &::before {
     content: '';
     width: calc(100% - 16px);
@@ -31,6 +27,10 @@ export const StyledItem = styled.div`
 
   ${({ selected }: { selected: boolean }) => css`
     pointer-events: ${selected ? 'none' : 'auto'};
+
+    &:hover {
+      background-color: ${selected ? 'transparent' : 'rgba(0, 0, 0, 0.04)'};
+    }
 
     &::before {
       background-color: ${selected ? colors.blue['500'] : 'unset'};
