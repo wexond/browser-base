@@ -65,6 +65,14 @@ export class Store {
   }
 
   public search(filter: string) {
+    if (filter === '') {
+      this.historySections = [];
+      this.loadedCount = 0;
+      this.loadSections(20);
+
+      return;
+    }
+
     const foundItems = this.historyItems.filter(item =>
       item.title.toLowerCase().includes(filter),
     );
