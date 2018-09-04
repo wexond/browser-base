@@ -13,8 +13,6 @@ interface Props {
   section: HistorySection;
 }
 
-declare const global: any;
-
 @observer
 export default class extends React.Component<Props> {
   public onMouseEnter = () => {
@@ -29,13 +27,14 @@ export default class extends React.Component<Props> {
     e.stopPropagation();
     const { data, section } = this.props;
 
-    global.historyAPI.delete(data._id);
     section.items = section.items.filter(x => x._id !== data._id);
 
     if (section.items.length === 0) {
       const index = store.historySections.indexOf(section);
       store.historySections.splice(index, 1);
     }
+
+    store.removeItem(data._id);
   };
 
   public render() {
@@ -56,8 +55,6 @@ export default class extends React.Component<Props> {
     }
 
     const selected = store.selectedItems.indexOf(data._id) !== -1;
-
-    // console.log(store.selectedItems);
 
     return (
       <PageItem
