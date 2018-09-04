@@ -54,8 +54,8 @@ export default class App extends React.Component {
         <PageContainer>
           {(!store.loading && (
             <Content>
-              {store.historySections.map(section => (
-                <Section key={section.id} section={section} />
+              {store.historySections.map((section, key) => (
+                <Section key={key} section={section} />
               ))}
             </Content>
           )) || (
