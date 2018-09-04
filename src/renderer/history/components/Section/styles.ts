@@ -8,10 +8,10 @@ export const Title = styled.div`
   margin-top: 32px;
   border-radius: 4px;
   display: table;
-  transition: 0.2s background-color;
   padding: 8px;
   cursor: pointer;
-  opacity: ${transparency.light.secondaryText};
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
+  transition: 0.2s background-color;
 
   ${subtitle2()};
 
