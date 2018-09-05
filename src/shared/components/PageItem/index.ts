@@ -11,7 +11,6 @@ export const PageItem = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
   position: relative;
   cursor: pointer;
-  user-select: auto;
 
   ${({ selected }: { selected: boolean }) => css`
     background-color: ${selected ? 'rgba(0, 0, 0, 0.08)' : 'transparent'};

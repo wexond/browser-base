@@ -21,6 +21,21 @@ export default class extends React.Component<Props> {
     this.props.data.hovered = false;
   };
 
+  public onClick = (e: React.MouseEvent<any>) => {
+    if (store.cmdPressed || e.ctrlKey) {
+      e.preventDefault();
+
+      const { data } = this.props;
+      const index = store.selectedItems.indexOf(data._id);
+
+      if (index === -1) {
+        store.selectedItems.push(data._id);
+      } else {
+        store.selectedItems.splice(index, 1);
+      }
+    }
+  };
+
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
 
@@ -50,6 +65,7 @@ export default class extends React.Component<Props> {
     return (
       <PageItem
         onFocus={() => null}
+        onClick={this.onClick}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         selected={selected}
