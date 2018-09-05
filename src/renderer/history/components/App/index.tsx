@@ -71,8 +71,8 @@ export default class App extends React.Component {
   };
 
   public render() {
-    const selectedItems = store.selectedItems;
-    const selected = selectedItems.length !== 0;
+    const count = store.selectedItems.length;
+    const selected = count !== 0;
 
     return (
       <StyledApp>
@@ -81,19 +81,19 @@ export default class App extends React.Component {
             title="Select all"
             icon={icons.selectAll}
             onClick={actions.selectAll}
-            visible={store.historySections.length !== 0}
+            visible={count < store.historyItems.length}
           />
           <NavigationDrawer.Item
-            title="Delete selected"
-            icon={icons.delete}
-            visible={selected}
-            onClick={actions.deleteAllSelected}
-          />
-          <NavigationDrawer.Item
-            title="Clear"
+            title="Deselect"
             icon={icons.close}
             visible={selected}
             onClick={actions.deselectAll}
+          />
+          <NavigationDrawer.Item
+            title="Delete"
+            icon={icons.delete}
+            visible={selected}
+            onClick={actions.deleteAllSelected}
           />
         </NavigationDrawer>
         <PageContainer>
