@@ -11,30 +11,13 @@ interface Props {
   onSearch?: (str?: string) => void;
 }
 
-interface State {
-  selectedItem: number;
-}
-
 @observer
-export default class extends React.Component<Props, State> {
-  public state: State = {
-    selectedItem: -1,
-  };
-
+export default class extends React.Component<Props, {}> {
   public static Item = NavigationDrawerItem;
 
   public input: HTMLInputElement;
 
   private typingTimer: any;
-
-  private onItemClick = (
-    e: React.MouseEvent<HTMLDivElement>,
-    item: NavigationDrawerItem,
-  ) => {
-    if (item) {
-      this.setState({ selectedItem: item.props.id });
-    }
-  };
 
   private onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const { onSearch } = this.props;
@@ -59,10 +42,7 @@ export default class extends React.Component<Props, State> {
   };
 
   public render() {
-    const { selectedItem } = this.state;
     const { title, search, children } = this.props;
-
-    let id = -1;
 
     return (
       <Root>
@@ -85,15 +65,8 @@ export default class extends React.Component<Props, State> {
 
         {React.Children.map(children, (el: React.ReactElement<any>) => {
           if (el && el.props.title && el.props.visible) {
-            id++;
-
-            return React.cloneElement(el, {
-              id,
-              onClick2: this.onItemClick,
-              selected: id === selectedItem,
-            });
+            return React.cloneElement(el);
           }
-
           return null;
         })}
       </Root>
