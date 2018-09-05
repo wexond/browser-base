@@ -24,7 +24,7 @@ export class Store {
 
   public loadedCount = 0;
 
-  public validateItems(filter = '') {
+  public filterItems(filter = '') {
     this.historyItems = this.historyItems
       .filter(
         item =>
@@ -46,7 +46,7 @@ export class Store {
           x => x.title === dateStr,
         );
 
-        const newItem = {
+        const newItem: HistoryItem = {
           ...item,
           favicon: '', // store.faviconsStore.favicons[item.favicon]
           selected: false,
@@ -99,7 +99,16 @@ export class Store {
 
   public removeItem(...ids: string[]) {
     for (const id of ids) {
-      this.historyItems = this.historyItems.filter(x => x._id !== id);
+      this.historyItems = this.historyItems.filter(e => e._id !== id);
+
+      this.historySections.map(e => {
+        e.items = e.items.filter(e => e._id !== id);
+
+        if (e.items.length === 0) {
+          const index = this.historySections.indexOf(e);
+          this.historySections.splice(index, 1);
+        }
+      });
     }
 
     global.historyAPI.delete(...ids);

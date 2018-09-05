@@ -1,3 +1,5 @@
+import { HistorySection } from '@/interfaces/history/history-section';
+
 export interface HistoryItem {
   _id?: string;
   title?: string;
@@ -5,4 +7,5 @@ export interface HistoryItem {
   date?: string;
   favicon?: string;
   hovered?: boolean;
+  selected?: boolean;
 }

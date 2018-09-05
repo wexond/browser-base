@@ -16,7 +16,7 @@ export default class extends React.Component<{ section: HistorySection }, {}> {
         <Title>{title}</Title>
         <Items>
           {items.map((item, key) => (
-            <Item key={key} data={item} section={section} />
+            <Item key={key} data={item} />
           ))}
         </Items>
       </React.Fragment>
