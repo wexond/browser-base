@@ -43,6 +43,16 @@ export default class App extends React.Component {
     });
 
     window.addEventListener('scroll', this.onWindowScroll);
+
+    window.addEventListener('keydown', e => {
+      store.cmdPressed = e.key === 'Meta';
+    });
+
+    window.addEventListener('keyup', e => {
+      if (e.key === 'Meta') {
+        store.cmdPressed = false;
+      }
+    });
   }
 
   public onWindowScroll = () => {

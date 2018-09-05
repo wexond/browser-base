@@ -24,6 +24,8 @@ export class Store {
 
   public loadedCount = 0;
 
+  public cmdPressed = false;
+
   public filterItems(filter = '') {
     this.historyItems = this.historyItems
       .filter(
