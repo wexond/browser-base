@@ -5,12 +5,10 @@ import store from '@history/store';
 import { PageItem, Icon, Time, Title } from '@/components/PageItem';
 import { icons, transparency } from '@/constants/renderer';
 import { HistoryItem } from '@/interfaces';
-import { HistorySection } from '@/interfaces/history';
 import { RemoveIcon } from './styles';
 
 interface Props {
   data: HistoryItem;
-  section: HistorySection;
 }
 
 @observer
@@ -25,15 +23,8 @@ export default class extends React.Component<Props> {
 
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    const { data, section } = this.props;
 
-    section.items = section.items.filter(x => x._id !== data._id);
-
-    if (section.items.length === 0) {
-      const index = store.historySections.indexOf(section);
-      store.historySections.splice(index, 1);
-    }
-
+    const { data } = this.props;
     store.removeItem(data._id);
   };
 
