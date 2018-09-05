@@ -33,7 +33,7 @@ export default class App extends React.Component {
       if (name === 'history') {
         store.historyItems = Object.values(data);
 
-        store.validateItems();
+        store.filterItems();
         store.loadSections(20);
 
         store.loading = false;
@@ -71,6 +71,7 @@ export default class App extends React.Component {
             title="Select all"
             icon={icons.selectAll}
             onClick={actions.selectAll}
+            visible={store.historySections.length !== 0}
           />
           <NavigationDrawer.Item
             title="Delete selected"
