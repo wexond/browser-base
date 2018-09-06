@@ -24,6 +24,7 @@ export class BookmarksStore {
         }
       }
     });
+
     return item;
   }
 
