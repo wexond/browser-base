@@ -15,8 +15,7 @@ import { NavigationStateStore } from './navigation-state';
 import { FaviconsStore } from './favicons';
 import { ExtensionsStore } from './extensions';
 import { dictionaries } from '@/constants/dictionaries';
-import { KeyBindingsStore } from './key-bindings';
-import { KeyBindingsMenuStore } from './key-bindings-menu';
+import { KeyBindings } from './key-bindings';
 import { HistoryStore } from './history';
 
 export class Store {
@@ -29,11 +28,10 @@ export class Store {
   public bookmarksStore = new BookmarksStore();
   public addTabStore = new AddTabStore();
   public suggestionsStore = new SuggestionsStore();
-  public keyBindingsStore = new KeyBindingsStore();
   public navigationStateStore = new NavigationStateStore();
   public faviconsStore = new FaviconsStore();
   public extensionsStore = new ExtensionsStore();
-  public keyBindingsMenuStore = new KeyBindingsMenuStore();
+  public keyBindings = new KeyBindings();
 
   @observable
   public isFullscreen = false;

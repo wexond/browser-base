@@ -1,27 +1,39 @@
-import { observable } from 'mobx';
+import { readFileSync } from 'fs';
+import Mousetrap from 'mousetrap';
 
-import { KeyBinding } from '@/interfaces';
-import KeyRecordingDialog from '../components/KeyRecordingDialog';
+import { KeyBinding } from '~/shared/interfaces';
+import { getPath } from '~/shared/utils/paths';
+import { commands } from '@/constants/app';
+import { defaultPaths } from '@/constants/paths';
 
-export class KeyBindingsStore {
-  @observable
-  public keyBindings: KeyBinding[] = [];
+const defaultKeyBindings = require('../../../../static/defaults/key-bindings.json');
 
-  @observable
-  public selected: KeyBinding;
+export class KeyBindings {
+  public load = () => {
+    const data = readFileSync(getPath(defaultPaths.keyBindings), 'utf8');
+    const userBindings = JSON.parse(data);
 
-  @observable
-  public dialogVisible: boolean = false;
+    for (const binding of defaultKeyBindings as KeyBinding[]) {
+      const userBinding: KeyBinding = userBindings.filter(
+        (r: any) => r.command === binding.command,
+      )[0];
 
-  public dialog: KeyRecordingDialog;
+      if (userBinding != null) {
+        binding.key = userBinding.key;
+      }
 
-  public editKeyBinding(keyBinding: KeyBinding) {
-    this.dialogVisible = true;
+      binding.isChanged = userBinding != null;
 
-    this.dialog.combination = null;
-    this.dialog.input.value = keyBinding.key;
-    this.dialog.input.focus();
-
-    this.selected = keyBinding;
-  }
+      if (!binding.key.includes('digit')) {
+        Mousetrap.bind(binding.key, commands[binding.command]);
+      } else {
+        for (let i = 0; i <= 9; i++) {
+          Mousetrap.bind(
+            binding.key.replace('digit', i),
+            commands[binding.command],
+          );
+        }
+      }
+    }
+  };
 }
