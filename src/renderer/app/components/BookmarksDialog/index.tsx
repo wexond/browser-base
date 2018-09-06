@@ -9,6 +9,7 @@ import Dropdown from '@/components/Dropdown';
 import store from '@app/store';
 import Button from '@/components/Button';
 import { ButtonsContainer, Root, Title } from './styles';
+import { isWexondURL } from '@/utils/url';
 
 @observer
 export default class BookmarksDialog extends React.Component {
@@ -61,8 +62,10 @@ export default class BookmarksDialog extends React.Component {
 
   public onRemoveClick = async () => {
     if (this.bookmark) {
+      const selectedTab = store.tabsStore.getSelectedTab();
+
       store.bookmarksStore.removeItem(this.bookmark);
-      store.tabsStore.getSelectedTab().isBookmarked = false;
+      selectedTab.isBookmarked = false;
       store.bookmarksStore.dialogVisible = false;
     }
   };
