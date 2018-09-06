@@ -17,6 +17,12 @@ export class BookmarksStore {
   public async addBookmark(item: Bookmark) {
     databases.bookmarks.insert(item, (err: any, doc: Bookmark) => {
       store.bookmarksStore.bookmarks.push(doc);
+
+      for (const page of store.pagesStore.pages) {
+        if (page.wexondPage === 'bookmarks') {
+          page.webview.send('bookmarks-add', doc);
+        }
+      }
     });
     return item;
   }
@@ -61,6 +67,7 @@ export class BookmarksStore {
     this.bookmarks = this.bookmarks.filter(x => x._id !== item._id);
 
     const selectedTab = store.tabsStore.getSelectedTab();
+
     if (selectedTab.isBookmarked && selectedTab.url === item.url) {
       selectedTab.isBookmarked = false;
     }
@@ -68,5 +75,11 @@ export class BookmarksStore {
     databases.bookmarks.remove({ _id: item._id }, (err: any) => {
       if (err) return console.warn(err);
     });
+
+    for (const page of store.pagesStore.pages) {
+      if (page.wexondPage === 'bookmarks') {
+        page.webview.send('bookmarks-remove', item);
+      }
+    }
   }
 }

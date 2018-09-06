@@ -11,6 +11,8 @@ export class Page {
   public webContentsId: number;
   public webview: Electron.WebviewTag;
 
+  public wexondPage: string;
+
   constructor(id: number, url: string) {
     this.url = url;
     this.id = id;
