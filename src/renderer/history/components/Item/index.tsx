@@ -53,11 +53,12 @@ export default class extends React.Component<Props> {
     const minute = date.getMinutes();
 
     let opacity = 1;
-    let favicon = data.favicon;
+    let favicon = icons.page;
 
-    if (favicon == null) {
-      favicon = icons.page;
+    if (data.favicon === '') {
       opacity = transparency.light.inactiveIcon;
+    } else {
+      favicon = data.favicon;
     }
 
     const selected = store.selectedItems.indexOf(data._id) !== -1;
