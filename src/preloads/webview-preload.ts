@@ -46,6 +46,10 @@ if (wexondUrl) {
     global.onIpcReceived.emit('history', history);
   });
 
+  ipcRenderer.on('favicons', (e: any, favicons: any) => {
+    global.onIpcReceived.emit('favicons', favicons);
+  });
+
   loadContent(wexondUrl);
 }
 
