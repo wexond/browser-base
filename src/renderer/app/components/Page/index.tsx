@@ -150,7 +150,7 @@ export default class extends React.Component<{ page: Page }> {
         this.webview.send('favicons', store.faviconsStore.favicons);
         this.webview.send('history', store.historyStore.historyItems);
       } else if (page === 'bookmarks') {
-        this.webview.send('bookmarks', store.bookmarksStore.bookmarks);
+        this.webview.send('bookmarks-add', store.bookmarksStore.bookmarks);
       }
     }
   };

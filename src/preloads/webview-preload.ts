@@ -38,7 +38,7 @@ if (wexondUrl) {
     },
   };
 
-  const ipcEvents = ['dictionary', 'favicons', 'history', 'bookmarks'];
+  const ipcEvents = ['dictionary', 'favicons', 'history', 'bookmarks-add'];
 
   for (const name of ipcEvents) {
     ipcRenderer.on(name, (e: any, data: any) => {
