@@ -1,4 +1,4 @@
-import { app, session, ipcMain, webContents } from 'electron';
+import { app } from 'electron';
 import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';

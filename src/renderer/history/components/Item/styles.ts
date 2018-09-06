@@ -13,12 +13,12 @@ export const RemoveIcon = styled.div`
 
   ${centerImage('24px', 'auto')};
 
+  &:hover {
+    opacity: ${transparency.light.activeIcon};
+  }
+
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? transparency.light.inactiveIcon : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
   `};
-
-  &:hover {
-    opacity: ${transparency.light.activeIcon};
-  }
 `;

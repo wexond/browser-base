@@ -39,6 +39,8 @@ export default class App extends React.Component {
         store.loading = false;
       } else if (name === 'dictionary') {
         store.dictionary = data;
+      } else if (name === 'favicons') {
+        store.favicons = data;
       }
     });
 
