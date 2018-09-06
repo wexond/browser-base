@@ -141,10 +141,17 @@ export default class extends React.Component<{ page: Page }> {
       processId: this.processId,
     });
 
-    if (isWexondURL(this.tab.url)) {
-      this.webview.send('favicons', store.faviconsStore.favicons);
+    const page = isWexondURL(this.tab.url);
+
+    if (page) {
       this.webview.send('dictionary', store.dictionary);
-      this.webview.send('history', store.historyStore.historyItems);
+
+      if (page === 'history') {
+        this.webview.send('favicons', store.faviconsStore.favicons);
+        this.webview.send('history', store.historyStore.historyItems);
+      } else if (page === 'bookmarks') {
+        this.webview.send('bookmarks', store.bookmarksStore.bookmarks);
+      }
     }
   };
 

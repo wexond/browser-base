@@ -8,7 +8,7 @@ export const Root = styled.div`
   height: 56px;
   display: flex;
   align-items: center;
-  padding-left: 32px;
+  padding-left: 24px;
   border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
   overflow: hidden;
   background-color: white;

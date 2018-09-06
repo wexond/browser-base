@@ -38,17 +38,13 @@ if (wexondUrl) {
     },
   };
 
-  ipcRenderer.on('dictionary', (e: any, dictionary: any) => {
-    global.onIpcReceived.emit('dictionary', dictionary);
-  });
+  const ipcEvents = ['dictionary', 'favicons', 'history', 'bookmarks'];
 
-  ipcRenderer.on('history', (e: any, history: any) => {
-    global.onIpcReceived.emit('history', history);
-  });
-
-  ipcRenderer.on('favicons', (e: any, favicons: any) => {
-    global.onIpcReceived.emit('favicons', favicons);
-  });
+  for (const name of ipcEvents) {
+    ipcRenderer.on(name, (e: any, data: any) => {
+      global.onIpcReceived.emit(name, data);
+    });
+  }
 
   loadContent(wexondUrl);
 }
