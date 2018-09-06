@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 
-import { HistoryItem } from '@/interfaces';
+import { HistoryItem, Favicon } from '@/interfaces';
 import { HistorySection } from '@/interfaces/history';
 import { formatDate } from '@/utils/time';
 
@@ -26,6 +26,8 @@ export class Store {
 
   public cmdPressed = false;
 
+  public favicons: { [key: string]: string } = {};
+
   public filterItems(filter = '') {
     this.historyItems = this.historyItems
       .filter(
@@ -50,7 +52,6 @@ export class Store {
 
         const newItem: HistoryItem = {
           ...item,
-          favicon: '', // store.faviconsStore.favicons[item.favicon]
           selected: false,
         };
 
