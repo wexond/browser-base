@@ -5,6 +5,7 @@ import NavigationDrawer from '@/components/NavigationDrawer';
 import { icons } from '@/constants/renderer';
 import store from '@bookmarks/store';
 import TreeBar from '../TreeBar';
+import Item from '../Item';
 import { StyledApp, PageContainer } from './styles';
 
 declare const global: any;
@@ -26,6 +27,14 @@ const actions = {
 
 @observer
 export default class App extends React.Component {
+  componentDidMount() {
+    global.onIpcReceived.addListener((name: string, data: any) => {
+      if (name === 'bookmarks-add') {
+        store.bookmarks = [...store.bookmarks, ...Object.values(data)];
+      }
+    });
+  }
+
   public render() {
     return (
       <StyledApp>
@@ -48,7 +57,10 @@ export default class App extends React.Component {
         </NavigationDrawer>
         <PageContainer>
           <TreeBar />
-          Bookmarks
+          {store.bookmarks.map((data, key) => {
+            // Temporary for testing
+            return <Item data={data} key={key} />;
+          })}
         </PageContainer>
       </StyledApp>
     );
