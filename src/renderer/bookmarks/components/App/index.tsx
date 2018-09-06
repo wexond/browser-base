@@ -30,7 +30,13 @@ export default class App extends React.Component {
   componentDidMount() {
     global.onIpcReceived.addListener((name: string, data: any) => {
       if (name === 'bookmarks-add') {
-        store.bookmarks = [...store.bookmarks, ...Object.values(data)];
+        if (data[0] != null) {
+          store.bookmarks = Object.values(data);
+        } else {
+          store.bookmarks.push(data);
+        }
+      } else if (name === 'bookmarks-remove') {
+        store.bookmarks = store.bookmarks.filter(x => x._id !== data._id);
       }
     });
   }
