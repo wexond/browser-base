@@ -12,15 +12,6 @@ export class BookmarksStore {
   @observable
   public dialogVisible = false;
 
-  @observable
-  public currentTree: string = null;
-
-  @observable
-  public path: Bookmark[] = [];
-
-  @observable
-  public selectedItems: string[] = [];
-
   public dialogRef: BookmarksDialog;
 
   public async addBookmark(item: Bookmark) {
@@ -56,28 +47,6 @@ export class BookmarksStore {
         resolve();
       });
     });
-  }
-
-  public goToFolder(id: string) {
-    this.currentTree = id;
-    this.path = this.getFolderPath(id);
-  }
-
-  public getFolderPath(parent: string) {
-    const parentFolder = this.bookmarks.find(x => x._id === parent);
-    let path: Bookmark[] = [];
-
-    if (parentFolder == null) {
-      return [];
-    }
-
-    if (parentFolder.parent != null) {
-      path = path.concat(this.getFolderPath(parentFolder.parent));
-    }
-
-    path.push(parentFolder);
-
-    return path;
   }
 
   public async removeItem(item: Bookmark) {
