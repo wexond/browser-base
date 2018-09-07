@@ -202,11 +202,11 @@ export const runWebRequestService = (window: BrowserWindow) => {
     }
   };
 
-  defaultRequest.onBeforeRequest(async (details, callback) => {
+  defaultRequest.onBeforeRequest(async (details: any, callback: any) => {
     await onBeforeRequest(details, callback, false);
   });
 
-  webviewRequest.onBeforeRequest(async (details, callback) => {
+  webviewRequest.onBeforeRequest(async (details: any, callback: any) => {
     await onBeforeRequest(details, callback, true);
   });
 
@@ -287,6 +287,98 @@ export const runWebRequestService = (window: BrowserWindow) => {
 
   webviewRequest.onSendHeaders(async (details: any) => {
     await onSendHeaders(details, true);
+  });
+
+  // onCompleted
+
+  const onCompleted = async (
+    details: any,
+    callback: any,
+    isTabRelated: boolean,
+  ) => {
+    const newDetails: any = {
+      ...(await getDetails(details)),
+      tabId: isTabRelated
+        ? (await getTabByWebContentsId(window, details.webContentsId)).id
+        : -1,
+      statusLine: details.statusLine,
+      statusCode: details.statusCode,
+      fromCache: details.fromCache,
+      error: "",
+    };
+    const cb = getCallback(callback);
+  
+    const isIntercepted = interceptRequest(
+      'onCompleted',
+      newDetails,
+      (res: any) => {
+        if (res) {
+          if (res.cancel) {
+            cb({ cancel: true });
+          } else if (res.redirectUrl) {
+            cb({ cancel: false, redirectURL: res.redirectUrl });
+          }
+        }
+        cb({ cancel: false });
+      },
+    );
+  
+    if (!isIntercepted) {
+      cb({ cancel: false });
+    }
+  };
+  
+  defaultRequest.onCompleted(async (details: any, callback: any) => {
+    await onCompleted(details, callback, false);
+  });
+  
+  webviewRequest.onCompleted(async (details: any, callback: any) => {
+    await onCompleted(details, callback, true);
+  });
+
+  // onErrorOccurred
+
+  const onErrorOccurred = async (
+    details: any,
+    callback: any,
+    isTabRelated: boolean,
+  ) => {
+    const newDetails: any = {
+      ...(await getDetails(details)),
+      tabId: isTabRelated
+        ? (await getTabByWebContentsId(window, details.webContentsId)).id
+        : -1,
+      fromCache: details.fromCache,
+      error: details.error,
+    };
+    const cb = getCallback(callback);
+  
+    const isIntercepted = interceptRequest(
+      'onErrorOccurred',
+      newDetails,
+      (res: any) => {
+        if (res) {
+          if (res.cancel) {
+            cb({ cancel: true });
+          } else if (res.redirectUrl) {
+            cb({ cancel: false, redirectURL: res.redirectUrl });
+          }
+        }
+        cb({ cancel: false });
+      },
+    );
+  
+    if (!isIntercepted) {
+      cb({ cancel: false });
+    }
+  };
+  
+  defaultRequest.onErrorOccurred(async (details: any, callback: any) => {
+    await onErrorOccurred(details, callback, false);
+  });
+  
+  webviewRequest.onErrorOccurred(async (details: any, callback: any) => {
+    await onErrorOccurred(details, callback, true);
   });
 
   // Handle listener add and remove.
