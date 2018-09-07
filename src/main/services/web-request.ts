@@ -202,11 +202,11 @@ export const runWebRequestService = (window: BrowserWindow) => {
     }
   };
 
-  defaultRequest.onBeforeRequest(async (details, callback) => {
+  defaultRequest.onBeforeRequest(async (details: any, callback: any) => {
     await onBeforeRequest(details, callback, false);
   });
 
-  webviewRequest.onBeforeRequest(async (details, callback) => {
+  webviewRequest.onBeforeRequest(async (details: any, callback: any) => {
     await onBeforeRequest(details, callback, true);
   });
 
@@ -287,6 +287,60 @@ export const runWebRequestService = (window: BrowserWindow) => {
 
   webviewRequest.onSendHeaders(async (details: any) => {
     await onSendHeaders(details, true);
+  });
+
+  // onCompleted
+
+  const onCompleted = async (
+    details: any,
+    isTabRelated: boolean,
+  ) => {
+    const newDetails: any = {
+      ...(await getDetails(details)),
+      tabId: isTabRelated
+        ? (await getTabByWebContentsId(window, details.webContentsId)).id
+        : -1,
+      statusLine: details.statusLine,
+      statusCode: details.statusCode,
+      fromCache: details.fromCache,
+      error: "",
+    };
+
+    interceptRequest('onCompleted', newDetails);
+  };
+  
+  defaultRequest.onCompleted(async (details: any) => {
+    await onCompleted(details, false);
+  });
+  
+  webviewRequest.onCompleted(async (details: any) => {
+    await onCompleted(details, true);
+  });
+
+  // onErrorOccurred
+
+  const onErrorOccurred = async (
+    details: any,
+    isTabRelated: boolean,
+  ) => {
+    const newDetails: any = {
+      ...(await getDetails(details)),
+      tabId: isTabRelated
+        ? (await getTabByWebContentsId(window, details.webContentsId)).id
+        : -1,
+      fromCache: details.fromCache,
+      error: details.error,
+    };
+  
+    interceptRequest('onErrorOccurred', newDetails);
+  };
+  
+  defaultRequest.onErrorOccurred(async (details: any) => {
+    await onErrorOccurred(details, false);
+  });
+  
+  webviewRequest.onErrorOccurred(async (details: any) => {
+    await onErrorOccurred(details, true);
   });
 
   // Handle listener add and remove.
