@@ -1,15 +1,21 @@
 import styled, { css } from 'styled-components';
 
-import { colors, transparency } from '~/shared/constants/renderer';
-import * as PageItem from '~/shared/components/PageItem';
+import { transparency, colors } from '~/shared/constants/renderer';
 import { centerImage, robotoRegular } from '@/mixins';
+import * as PageItem from '~/shared/components/PageItem';
+
+export const Root = styled(PageItem.PageItem)`
+  &:hover .DELETE-ICON {
+    opacity: ${transparency.light.inactiveIcon};
+  }
+`;
 
 export const Title = styled(PageItem.Title)`
+  padding: 8px;
   margin-left: 12px;
   margin-right: 12px;
-  padding: 8px;
-  border-radius: 4px;
   display: table;
+  border-radius: 4px;
   will-change: background-color;
   transition: 0.2s background-color;
   cursor: text;
@@ -22,19 +28,49 @@ export const Title = styled(PageItem.Title)`
 export const ActionIcon = styled.div`
   width: 32px;
   height: 32px;
+  margin-right: 12px;
+  opacity: 0;
 
   ${centerImage('16px', '16px')};
 
-  &:last-child {
-    margin-right: 12px;
-  }
-
   &:hover {
-    opacity: ${transparency.light.activeIcon};
+    opacity: 1 !important;
   }
 
-  ${({ icon, visible }: { icon: string; visible: boolean }) => css`
+  ${({ icon }: { icon: string }) => css`
     background-image: url(${icon});
-    opacity: ${visible ? transparency.light.inactiveIcon : 0};
+  `};
+`;
+
+export const Input = styled.input`
+  width: 100%;
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding-left: 24px;
+  padding-right: 12px;
+  -webkit-text-fill-color: transparent;
+  background-color: transparent;
+  font-size: 16px;
+  text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${transparency.light.primaryText})`};
+  color: ${colors.blue['500']};
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  will-change: opacity;
+  transition: 0.2s opacity, 0.2s z-index;
+
+  ${robotoRegular()};
+
+  &::placeholder {
+    opacity: ${transparency.light.secondaryText};
+  }
+
+  ${({ visible }: { visible: boolean }) => css`
+    opacity: ${visible ? 1 : 0};
+    pointer-events: ${visible ? 'all' : 'none'};
   `};
 `;

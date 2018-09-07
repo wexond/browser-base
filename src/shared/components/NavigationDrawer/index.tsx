@@ -2,7 +2,15 @@ import { observer } from 'mobx-react';
 import React from 'react';
 
 import NavigationDrawerItem from '../NavigationDrawerItem';
-import { Root, Header, Search, SearchIcon, Input, Title } from './styles';
+import {
+  Root,
+  Header,
+  Search,
+  SearchIcon,
+  Input,
+  Title,
+  Divider,
+} from './styles';
 
 interface Props {
   title?: string;
@@ -14,6 +22,8 @@ interface Props {
 @observer
 export default class extends React.Component<Props, {}> {
   public static Item = NavigationDrawerItem;
+
+  public static Divider = Divider;
 
   public input: HTMLInputElement;
 
@@ -63,12 +73,7 @@ export default class extends React.Component<Props, {}> {
           </Header>
         )}
 
-        {React.Children.map(children, (el: React.ReactElement<any>) => {
-          if (el && el.props.title && el.props.visible) {
-            return React.cloneElement(el);
-          }
-          return null;
-        })}
+        {children}
       </Root>
     );
   }

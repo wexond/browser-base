@@ -17,7 +17,9 @@ export default class NavigationDrawerItem extends React.Component<Props, {}> {
   };
 
   public render() {
-    const { icon, title, onClick } = this.props;
+    const { icon, title, onClick, visible } = this.props;
+
+    if (!visible) return null;
 
     return (
       <StyledItem onClick={onClick}>
