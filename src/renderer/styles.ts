@@ -33,7 +33,7 @@ export const Style = css`
     margin: 0;
     padding: 0;
     background-color: white;
-    overflow: hidden;
+    overflow-x: hidden;
 
     ${body2()};
   }
