@@ -6,7 +6,7 @@ import { icons } from '@/constants/renderer';
 import store from '@bookmarks/store';
 import TreeBar from '../TreeBar';
 import Item from '../Item';
-import { StyledApp, PageContainer } from './styles';
+import { StyledApp, PageContainer, Content } from './styles';
 import { Bookmark } from '@/interfaces';
 
 declare const global: any;
@@ -102,9 +102,11 @@ export default class App extends React.Component {
         </NavigationDrawer>
         <PageContainer>
           <TreeBar />
-          {items.map((data, key) => {
-            return <Item data={data} key={key} />;
-          })}
+          <Content>
+            {items.map((data, key) => {
+              return <Item data={data} key={key} />;
+            })}
+          </Content>
         </PageContainer>
       </StyledApp>
     );
