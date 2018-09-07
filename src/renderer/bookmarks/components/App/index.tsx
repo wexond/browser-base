@@ -42,29 +42,43 @@ export default class App extends React.Component {
   }
 
   public render() {
+    const selected = store.selectedItems.length > 0;
+
     return (
       <StyledApp>
         <NavigationDrawer title="History" onSearch={actions.search} search>
-          <NavigationDrawer.Item
-            title="Select all"
-            icon={icons.selectAll}
-            onClick={actions.selectAll}
-          />
-          <NavigationDrawer.Item
-            title="Deselect"
-            icon={icons.close}
-            onClick={actions.deselectAll}
-          />
-          <NavigationDrawer.Item
-            title="Delete"
-            icon={icons.delete}
-            onClick={actions.deleteAllSelected}
-          />
+          {(!selected && (
+            <React.Fragment>
+              <NavigationDrawer.Item title="Add" icon={icons.add} />
+              <NavigationDrawer.Item
+                title="New folder"
+                icon={icons.addFolder}
+              />
+              <NavigationDrawer.Divider />
+              <NavigationDrawer.Item
+                title="Select all"
+                icon={icons.selectAll}
+                onClick={actions.selectAll}
+              />
+            </React.Fragment>
+          )) || (
+            <React.Fragment>
+              <NavigationDrawer.Item
+                title="Deselect"
+                icon={icons.close}
+                onClick={actions.deselectAll}
+              />
+              <NavigationDrawer.Item
+                title="Delete"
+                icon={icons.delete}
+                onClick={actions.deleteAllSelected}
+              />
+            </React.Fragment>
+          )}
         </NavigationDrawer>
         <PageContainer>
           <TreeBar />
           {store.bookmarks.map((data, key) => {
-            // Temporary for testing
             return <Item data={data} key={key} />;
           })}
         </PageContainer>

@@ -65,3 +65,10 @@ export const SearchIcon = styled.div`
   margin-left: 16px;
   background-image: url(${icons.search});
 `;
+
+export const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  margin-top: 8px;
+  background-color: rgba(0, 0, 0, 0.12);
+`;
