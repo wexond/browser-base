@@ -31,7 +31,10 @@ export const ActionIcon = styled.div`
   width: 32px;
   height: 32px;
   margin-right: 12px;
+  z-index: 1;
   opacity: 0;
+  will-change: opacity;
+  transition: 0.2s opacity;
 
   ${centerImage('16px', '16px')};
 
@@ -59,6 +62,7 @@ export const Input = styled.input`
   text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${transparency.light.primaryText})`};
   color: ${colors.blue['500']};
   position: absolute;
+  z-index: 2;
   top: 0;
   left: 0;
   background-color: #fff;
