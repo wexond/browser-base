@@ -7,6 +7,7 @@ import store from '@bookmarks/store';
 import TreeBar from '../TreeBar';
 import Item from '../Item';
 import { StyledApp, PageContainer } from './styles';
+import { Bookmark } from '@/interfaces';
 
 declare const global: any;
 
@@ -23,6 +24,25 @@ const actions = {
   search: (str: string) => {
     store.search(str.toLowerCase());
   },
+  addFolder: () => {
+    // TODO
+    const a: Bookmark = {
+      _id: 'abcedfghi',
+      parent: null,
+      title: 'A folder',
+      type: 'folder',
+    };
+
+    const aa: Bookmark = {
+      _id: 'abcedfghib',
+      parent: 'abcedfghi',
+      title: 'AA folder',
+      type: 'folder',
+    };
+
+    store.bookmarks.push(a);
+    store.bookmarks.push(aa);
+  },
 };
 
 @observer
@@ -35,6 +55,8 @@ export default class App extends React.Component {
         } else {
           store.bookmarks.push(data);
         }
+
+        store.goToFolder(null);
       } else if (name === 'bookmarks-remove') {
         store.bookmarks = store.bookmarks.filter(x => x._id !== data._id);
       }
@@ -42,6 +64,7 @@ export default class App extends React.Component {
   }
 
   public render() {
+    const items = store.bookmarks.filter(x => x.parent === store.currentTree);
     const selected = store.selectedItems.length > 0;
 
     return (
@@ -53,6 +76,7 @@ export default class App extends React.Component {
               <NavigationDrawer.Item
                 title="New folder"
                 icon={icons.addFolder}
+                onClick={actions.addFolder}
               />
               <NavigationDrawer.Divider />
               <NavigationDrawer.Item
@@ -78,7 +102,7 @@ export default class App extends React.Component {
         </NavigationDrawer>
         <PageContainer>
           <TreeBar />
-          {store.bookmarks.map((data, key) => {
+          {items.map((data, key) => {
             return <Item data={data} key={key} />;
           })}
         </PageContainer>

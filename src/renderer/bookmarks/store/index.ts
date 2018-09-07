@@ -6,7 +6,7 @@ export class Store {
   public bookmarks: Bookmark[] = [];
 
   @observable
-  public currentTree: string = null;
+  public currentTree: string;
 
   @observable
   public path: Bookmark[] = [];
@@ -25,9 +25,7 @@ export class Store {
     const parentFolder = this.bookmarks.find(x => x._id === parent);
     let path: Bookmark[] = [];
 
-    if (parentFolder == null) {
-      return [];
-    }
+    if (parentFolder == null) return [];
 
     if (parentFolder.parent != null) {
       path = path.concat(this.getFolderPath(parentFolder.parent));
