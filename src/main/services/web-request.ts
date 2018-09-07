@@ -293,7 +293,6 @@ export const runWebRequestService = (window: BrowserWindow) => {
 
   const onCompleted = async (
     details: any,
-    callback: any,
     isTabRelated: boolean,
   ) => {
     const newDetails: any = {
@@ -306,41 +305,22 @@ export const runWebRequestService = (window: BrowserWindow) => {
       fromCache: details.fromCache,
       error: "",
     };
-    const cb = getCallback(callback);
-  
-    const isIntercepted = interceptRequest(
-      'onCompleted',
-      newDetails,
-      (res: any) => {
-        if (res) {
-          if (res.cancel) {
-            cb({ cancel: true });
-          } else if (res.redirectUrl) {
-            cb({ cancel: false, redirectURL: res.redirectUrl });
-          }
-        }
-        cb({ cancel: false });
-      },
-    );
-  
-    if (!isIntercepted) {
-      cb({ cancel: false });
-    }
+
+    interceptRequest('onCompleted', newDetails);
   };
   
-  defaultRequest.onCompleted(async (details: any, callback: any) => {
-    await onCompleted(details, callback, false);
+  defaultRequest.onCompleted(async (details: any) => {
+    await onCompleted(details, false);
   });
   
-  webviewRequest.onCompleted(async (details: any, callback: any) => {
-    await onCompleted(details, callback, true);
+  webviewRequest.onCompleted(async (details: any) => {
+    await onCompleted(details, true);
   });
 
   // onErrorOccurred
 
   const onErrorOccurred = async (
     details: any,
-    callback: any,
     isTabRelated: boolean,
   ) => {
     const newDetails: any = {
@@ -351,34 +331,16 @@ export const runWebRequestService = (window: BrowserWindow) => {
       fromCache: details.fromCache,
       error: details.error,
     };
-    const cb = getCallback(callback);
   
-    const isIntercepted = interceptRequest(
-      'onErrorOccurred',
-      newDetails,
-      (res: any) => {
-        if (res) {
-          if (res.cancel) {
-            cb({ cancel: true });
-          } else if (res.redirectUrl) {
-            cb({ cancel: false, redirectURL: res.redirectUrl });
-          }
-        }
-        cb({ cancel: false });
-      },
-    );
-  
-    if (!isIntercepted) {
-      cb({ cancel: false });
-    }
+    interceptRequest('onErrorOccurred', newDetails);
   };
   
-  defaultRequest.onErrorOccurred(async (details: any, callback: any) => {
-    await onErrorOccurred(details, callback, false);
+  defaultRequest.onErrorOccurred(async (details: any) => {
+    await onErrorOccurred(details, false);
   });
   
-  webviewRequest.onErrorOccurred(async (details: any, callback: any) => {
-    await onErrorOccurred(details, callback, true);
+  webviewRequest.onErrorOccurred(async (details: any) => {
+    await onErrorOccurred(details, true);
   });
 
   // Handle listener add and remove.
