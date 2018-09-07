@@ -8,6 +8,7 @@ export const PageItem = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  background-color: #fff;
   border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
   position: relative;
   cursor: pointer;

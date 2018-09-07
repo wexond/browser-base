@@ -5,6 +5,8 @@ import { centerImage, robotoRegular } from '@/mixins';
 import * as PageItem from '~/shared/components/PageItem';
 
 export const Root = styled(PageItem.PageItem)`
+  box-sizing: content-box;
+
   &:hover .DELETE-ICON {
     opacity: ${transparency.light.inactiveIcon};
   }
