@@ -50,17 +50,17 @@ export class Alarms {
    * after the initial event. If neither when or delayInMinutes is set for a repeating alarm,
    * periodInMinutes is used as the default for delayInMinutes.
    */
-  public create(
+  public create = (
     name: string | chrome.alarms.AlarmCreateInfo,
     alarmInfo: chrome.alarms.AlarmCreateInfo,
-  ) {
+  ) => {
     ipcRenderer.sendSync(API_ALARMS_OPERATION, {
       extensionId: api.runtime.id,
       type: 'create',
       name,
       alarmInfo,
     });
-  }
+  };
 
   /**
    * Retrieves details about the specified alarm.
@@ -70,7 +70,7 @@ export class Alarms {
    * @callback cb
    * @param {Alarm} alarm
    */
-  public get(name: string, cb: any) {}
+  public get = (name: string, cb: any) => {};
 
   /**
    * Gets an array of all the alarms.
@@ -78,7 +78,7 @@ export class Alarms {
    * @callback cb
    * @param {Alarm[]} alarms
    */
-  public getAll(cb: any) {
+  public getAll = (cb: any) => {
     const id = makeId(32);
 
     ipcRenderer.send(API_ALARMS_OPERATION, {
@@ -92,7 +92,7 @@ export class Alarms {
         cb(...data);
       });
     }
-  }
+  };
 
   /**
    * Clears the alarm with the given name.
@@ -102,7 +102,7 @@ export class Alarms {
    * @callback cb (optional)
    * @param {boolean} wasDeclared
    */
-  public clear(name: string, cb: any) {}
+  public clear = (name: string, cb: any) => {};
 
   /**
    * Clears all alarms.
@@ -110,5 +110,5 @@ export class Alarms {
    * @callback cb (optional)
    * @param {boolean} wasDeclared
    */
-  public clearAll(cb: any) {}
+  public clearAll = (cb: any) => {};
 }
