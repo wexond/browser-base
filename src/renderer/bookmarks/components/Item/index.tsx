@@ -17,6 +17,14 @@ declare const global: any;
 export default class BookmarkItem extends React.Component<Props> {
   private input: HTMLInputElement;
 
+  public onClick = () => {
+    const { data } = this.props;
+
+    if (data.type === 'folder') {
+      store.goToFolder(data._id);
+    }
+  };
+
   public onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
 
@@ -34,6 +42,7 @@ export default class BookmarkItem extends React.Component<Props> {
   };
 
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     e.preventDefault();
 
     const { data } = this.props;
@@ -55,7 +64,11 @@ export default class BookmarkItem extends React.Component<Props> {
     const selected = store.selectedItems.indexOf(data._id) !== -1;
 
     return (
-      <Root href={isFolder ? null : data.url} selected={selected}>
+      <Root
+        href={isFolder ? null : data.url}
+        selected={selected}
+        onClick={this.onClick}
+      >
         <Icon icon={favicon} style={{ opacity }} />
         <div style={{ flex: 1 }}>
           <Title onClick={this.onTitleClick}>{data.title}</Title>
