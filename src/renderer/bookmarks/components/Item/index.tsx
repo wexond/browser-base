@@ -11,6 +11,8 @@ export interface Props {
   data: Bookmark;
 }
 
+declare const global: any;
+
 @observer
 export default class BookmarkItem extends React.Component<Props> {
   private input: HTMLInputElement;
@@ -35,7 +37,7 @@ export default class BookmarkItem extends React.Component<Props> {
     e.preventDefault();
 
     const { data } = this.props;
-    store.removeItem(data._id);
+    global.wexondPages.bookmarks.delete(data._id);
   };
 
   public render() {
