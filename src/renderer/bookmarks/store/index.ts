@@ -1,8 +1,6 @@
 import { observable } from 'mobx';
 import { Bookmark } from '@/interfaces';
 
-declare const global: any;
-
 export class Store {
   @observable
   public bookmarks: Bookmark[] = [];
@@ -37,10 +35,6 @@ export class Store {
   }
 
   public search(str: string) {}
-
-  public removeItem(...ids: string[]) {
-    global.wexondPages.bookmarks.delete(...ids);
-  }
 }
 
 export default new Store();
