@@ -30,11 +30,20 @@ if (wexondUrl) {
     },
   };
 
-  global.historyAPI = {
-    delete: (...id: string[]) => {
-      {
-        ipcRenderer.sendToHost('history-delete', ...id);
-      }
+  global.wexondPages = {
+    history: {
+      delete: (...id: string[]) => {
+        {
+          ipcRenderer.sendToHost('history-delete', ...id);
+        }
+      },
+    },
+    bookmarks: {
+      delete: (...id: string[]) => {
+        {
+          ipcRenderer.sendToHost('bookmarks-delete', ...id);
+        }
+      },
     },
   };
 
@@ -43,7 +52,7 @@ if (wexondUrl) {
     'favicons',
     'history',
     'bookmarks-add',
-    'bookmarks-remove',
+    'bookmarks-delete',
   ];
 
   for (const name of ipcEvents) {

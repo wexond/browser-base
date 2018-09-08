@@ -1,6 +1,8 @@
 import { observable } from 'mobx';
 import { Bookmark } from '@/interfaces';
 
+declare const global: any;
+
 export class Store {
   @observable
   public bookmarks: Bookmark[] = [];
@@ -13,8 +15,6 @@ export class Store {
 
   @observable
   public selectedItems: string[] = [];
-
-  public search(str: string) {}
 
   public goToFolder(id: string) {
     this.currentTree = id;
@@ -34,6 +34,12 @@ export class Store {
     path.push(parentFolder);
 
     return path;
+  }
+
+  public search(str: string) {}
+
+  public removeItem(...ids: string[]) {
+    global.wexondPages.bookmarks.delete(...ids);
   }
 }
 
