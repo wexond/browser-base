@@ -1,74 +1,37 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+import { centerImage } from '@/mixins';
 
-import { colors, transparency } from '~/renderer/defaults';
-import * as PageItem from '../../../components/PageItem';
-import { centerImage, robotoRegular } from '@mixins';
-
-export const Title = styled(PageItem.Title)`
-  margin-left: 12px;
-  margin-right: 12px;
-  padding: 8px;
-  border-radius: 4px;
-  display: table;
-  will-change: background-color;
+export const StyledBookmarkItem = styled.div`
+  padding: 6px 10px;
+  font-size: 13px;
+  border-radius: 30px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
   transition: 0.2s background-color;
-
-  cursor: text;
+  background-color: rgba(0, 0, 0, 0.04);
+  margin-left: 4px;
+  margin-bottom: 4px;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.06);
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  &:first-child {
+    margin-left: 8px;
   }
 `;
 
-export const Input = styled.input`
-  width: 100%;
-  height: 100%;
-  width: 100%;
-  border: none;
-  outline: none;
-  margin: 0;
-  padding-left: 24px;
-  padding-right: 12px;
-  -webkit-text-fill-color: transparent;
-  background-color: transparent;
-  font-size: 16px;
-  text-shadow: ${`0px 0px 0px rgba(0, 0, 0,${transparency.light.primaryText})`};
-  color: ${colors.blue['500']};
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: #fff;
-  opacity: 0;
-  will-change: opacity;
-  transition: 0.2s opacity, 0.2s z-index;
-
-  ${robotoRegular()};
-
-  ${({ visible }: { visible: boolean }) => css`
-    opacity: ${visible ? 1 : 0};
-    z-index: ${visible ? 2 : -1};
-  `};
-
-  &::placeholder {
-    opacity: ${transparency.light.secondaryText};
-  }
-`;
-
-export const ActionIcon = styled.div`
-  width: 32px;
-  height: 32px;
+export const Icon = styled.div`
   ${centerImage('16px', '16px')};
+  height: 16px;
+  min-width: 16px;
+  margin-right: 8px;
+`;
 
-  &:last-child {
-    margin-right: 12px;
-  }
-
-  &:hover {
-    opacity: ${transparency.light.activeIcon};
-  }
-
-  ${({ icon, visible }: { icon: string; visible: boolean }) => css`
-    background-image: url(${icon});
-    opacity: ${visible ? transparency.light.inactiveIcon : 0};
-  `};
+export const Title = styled.div`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 128px;
 `;

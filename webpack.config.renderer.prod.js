@@ -19,12 +19,6 @@ const config = merge.smart(baseConfig, {
       },
     ],
   },
-
-  plugins: [
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: 'production',
-    }),
-  ],
 });
 
 const appConfig = merge.smart(config, {
@@ -51,4 +45,26 @@ const historyConfig = merge.smart(config, {
   },
 });
 
-module.exports = [appConfig, newTabConfig, historyConfig];
+const aboutConfig = merge.smart(config, {
+  target: 'web',
+
+  entry: {
+    about: ['./src/renderer/about'],
+  },
+});
+
+const bookmarksConfig = merge.smart(config, {
+  target: 'web',
+
+  entry: {
+    bookmarks: ['./src/renderer/bookmarks'],
+  },
+});
+
+module.exports = [
+  appConfig,
+  newTabConfig,
+  historyConfig,
+  aboutConfig,
+  bookmarksConfig,
+];

@@ -1,19 +1,17 @@
-import { app, session, ipcMain, webContents } from 'electron';
+import { app } from 'electron';
 import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';
 
-import { runAutoUpdaterService, runExtensionsService } from './services';
-import { Global } from './interfaces';
+import { Global } from '@/interfaces/main';
+import { createWindow, loadExtensions, registerProtocols } from '@/utils/main';
+import { defaultPaths, filesContent } from '@/constants/paths';
+import { getPath } from '@/utils/paths';
 import {
-  createWindow,
-  getPath,
-  registerProtocols,
-  loadExtensions,
-} from './utils';
-import { defaultPaths, filesContent } from '~/defaults';
-import { matchesPattern } from '~/utils/url';
-import { runWebRequestService } from '~/main/services/web-request';
+  runAutoUpdaterService,
+  runExtensionsService,
+  runWebRequestService,
+} from '@/services/main';
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 

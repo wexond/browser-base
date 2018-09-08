@@ -1,16 +1,13 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import GlobalMenu from '../GlobalMenu';
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
 import { StyledApp, Line } from './styles';
 import store from '../../store';
-import { getKeyBindings, bindKeys } from '~/utils/keyboard-shortcuts';
 import TabGroupsMenu from '../TabGroupsMenu';
 import PageMenu from '@app/components/PageMenu';
 import UpdateSnackbar from '@app/components/UpdateSnackbar';
-import KeyBindingsMenu from '@app/components/KeyBindingsMenu';
 
 @observer
 class App extends React.Component {
@@ -23,8 +20,7 @@ class App extends React.Component {
     await store.faviconsStore.load();
     await store.bookmarksStore.load();
 
-    store.keyBindingsStore.keyBindings = await getKeyBindings();
-    bindKeys(store.keyBindingsStore.keyBindings);
+    store.keyBindings.load();
   }
 
   public componentWillUnmount() {
@@ -40,7 +36,7 @@ class App extends React.Component {
 
   public onWindowMouseDown = (e: MouseEvent) => {
     store.pageMenuStore.visible = false;
-    store.keyBindingsMenuStore.visible = false;
+    store.menuStore.visible = false;
   };
 
   public onWindowMouseUp = (e: MouseEvent) => {
@@ -54,10 +50,8 @@ class App extends React.Component {
         <Line />
         <Pages />
         <PageMenu />
-        <GlobalMenu />
         <TabGroupsMenu />
         <UpdateSnackbar />
-        <KeyBindingsMenu />
       </StyledApp>
     );
   }

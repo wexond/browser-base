@@ -1,10 +1,11 @@
 import React from 'react';
+import { observer } from 'mobx-react';
+
 import ToolbarButton from '@app/components/ToolbarButton';
 import BookmarksDialog from '@app/components/BookmarksDialog';
 import store from '@app/store';
-import { Bookmark } from '~/interfaces';
-import { observer } from 'mobx-react';
-import { icons } from '~/renderer/defaults';
+import { Bookmark } from '@/interfaces';
+import { icons } from '@/constants/renderer';
 
 @observer
 export default class BookmarkButton extends React.Component {

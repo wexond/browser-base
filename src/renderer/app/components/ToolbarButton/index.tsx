@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
+import Ripple from '@/components/Ripple';
+import { transparency } from '@/constants/renderer';
 import { Button, Icon, Circle } from './styles';
-import Ripple from '@components/Ripple';
-import { transparency } from '~/renderer/defaults';
 
 interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
