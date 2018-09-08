@@ -24,7 +24,7 @@ const actions = {
     store.search(str.toLowerCase());
   },
   addFolder: () => {
-    global.wexondPages.bookmarks.addFolder('New folder', null);
+    global.wexondPages.bookmarks.addFolder('New folder', store.currentTree);
   },
 };
 
@@ -33,6 +33,10 @@ export default class App extends React.Component {
   componentDidMount() {
     global.onIpcReceived.addListener((name: string, data: any) => {
       if (name === 'bookmarks-add') {
+        if (store.bookmarks.length === 0) {
+          store.goToFolder(null);
+        }
+
         if (data[0] != null) {
           for (const item of Object.values(data)) {
             store.bookmarks.push(item);
@@ -40,8 +44,6 @@ export default class App extends React.Component {
         } else {
           store.bookmarks.push(data);
         }
-
-        store.goToFolder(null);
       } else if (name === 'bookmarks-delete') {
         store.bookmarks = store.bookmarks.filter(x => x._id !== data._id);
       }
