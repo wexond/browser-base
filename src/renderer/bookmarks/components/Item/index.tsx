@@ -15,9 +15,15 @@ export interface Props {
 export default class BookmarkItem extends React.Component<Props> {
   private input: HTMLInputElement;
 
-  public onTitleClick = () => {
+  public onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    const { data } = this.props;
+
     this.props.data.inputVisible = true;
+    this.input.value = data.title;
     this.input.focus();
+    this.input.select();
   };
 
   public onInputBlur = () => {
@@ -26,10 +32,10 @@ export default class BookmarkItem extends React.Component<Props> {
   };
 
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    e.stopPropagation();
+    e.preventDefault();
 
-    console.log('remove');
+    const { data } = this.props;
+    store.removeItem(data._id);
   };
 
   public render() {
@@ -47,16 +53,17 @@ export default class BookmarkItem extends React.Component<Props> {
     const selected = store.selectedItems.indexOf(data._id) !== -1;
 
     return (
-      <Root selected={selected}>
+      <Root href={isFolder ? null : data.url} selected={selected}>
         <Icon icon={favicon} style={{ opacity }} />
         <div style={{ flex: 1 }}>
           <Title onClick={this.onTitleClick}>{data.title}</Title>
         </div>
         <Input
+          placeholder="Name"
           innerRef={r => (this.input = r)}
           onBlur={this.onInputBlur}
           visible={data.inputVisible}
-          placeholder="Name"
+          onClick={e => e.preventDefault()}
         />
         <ActionIcon
           className="DELETE-ICON"

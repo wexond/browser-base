@@ -114,7 +114,7 @@ export class Store {
       });
     }
 
-    global.historyAPI.delete(...ids);
+    global.wexondPages.history.delete(...ids);
   }
 }
 

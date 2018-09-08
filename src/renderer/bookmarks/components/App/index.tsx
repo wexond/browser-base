@@ -6,7 +6,7 @@ import { icons } from '@/constants/renderer';
 import store from '@bookmarks/store';
 import TreeBar from '../TreeBar';
 import Item from '../Item';
-import { StyledApp, PageContainer, Content } from './styles';
+import { StyledApp, PageContainer, Items } from './styles';
 import { Bookmark } from '@/interfaces';
 
 declare const global: any;
@@ -57,7 +57,7 @@ export default class App extends React.Component {
         }
 
         store.goToFolder(null);
-      } else if (name === 'bookmarks-remove') {
+      } else if (name === 'bookmarks-delete') {
         store.bookmarks = store.bookmarks.filter(x => x._id !== data._id);
       }
     });
@@ -100,13 +100,15 @@ export default class App extends React.Component {
             </React.Fragment>
           )}
         </NavigationDrawer>
+        <TreeBar />
         <PageContainer>
-          <TreeBar />
-          <Content>
-            {items.map((data, key) => {
-              return <Item data={data} key={key} />;
-            })}
-          </Content>
+          {items.length > 0 && (
+            <Items>
+              {items.map((data, key) => {
+                return <Item data={data} key={key} />;
+              })}
+            </Items>
+          )}
         </PageContainer>
       </StyledApp>
     );

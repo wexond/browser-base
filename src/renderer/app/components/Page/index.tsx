@@ -108,6 +108,10 @@ export default class extends React.Component<{ page: Page }> {
       for (const id of e.args) {
         store.historyStore.removeItem(id);
       }
+    } else if (e.channel === 'bookmarks-delete') {
+      for (const id of e.args) {
+        store.bookmarksStore.removeItem(id);
+      }
     }
   };
 
