@@ -1,13 +1,15 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { ButtonsContainer, Root, Title } from './styles';
-import Textfield from '@components/Textfield';
-import Dropdown from '@components/Dropdown';
+
+import { databases } from '@/constants/app';
+import { Bookmark } from '@/interfaces';
+import { colors } from '@/constants/renderer';
+import Textfield from '@/components/Textfield';
+import Dropdown from '@/components/Dropdown';
 import store from '@app/store';
-import { Bookmark } from '~/interfaces';
-import { colors } from '~/renderer/defaults';
-import Button from '@components/Button';
-import { databases } from '~/defaults/databases';
+import Button from '@/components/Button';
+import { ButtonsContainer, Root, Title } from './styles';
+import { isWexondURL } from '@/utils/url';
 
 @observer
 export default class BookmarksDialog extends React.Component {
@@ -60,8 +62,10 @@ export default class BookmarksDialog extends React.Component {
 
   public onRemoveClick = async () => {
     if (this.bookmark) {
+      const selectedTab = store.tabsStore.getSelectedTab();
+
       store.bookmarksStore.removeItem(this.bookmark);
-      store.tabsStore.getSelectedTab().isBookmarked = false;
+      selectedTab.isBookmarked = false;
       store.bookmarksStore.dialogVisible = false;
     }
   };

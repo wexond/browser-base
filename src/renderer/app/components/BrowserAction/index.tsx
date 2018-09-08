@@ -1,8 +1,9 @@
 import React from 'react';
-import ToolbarButton from '@app/components/ToolbarButton';
-import { StyledBrowserAction, Badge } from './styles';
-import { BrowserAction } from '@app/models/browser-action';
 import { observer } from 'mobx-react';
+
+import ToolbarButton from '@app/components/ToolbarButton';
+import { BrowserAction } from '@/models/app';
+import { StyledBrowserAction, Badge } from './styles';
 
 interface Props {
   browserAction: BrowserAction;

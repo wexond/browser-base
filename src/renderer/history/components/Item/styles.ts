@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
-import { icons, transparency } from '~/renderer/defaults';
-import { centerImage } from '@mixins';
+
+import { icons, transparency } from '@/constants/renderer';
+import { centerImage } from '@/mixins';
 
 export const RemoveIcon = styled.div`
   position: absolute;
@@ -12,12 +13,12 @@ export const RemoveIcon = styled.div`
 
   ${centerImage('24px', 'auto')};
 
+  &:hover {
+    opacity: ${transparency.light.activeIcon};
+  }
+
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? transparency.light.inactiveIcon : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
   `};
-
-  &:hover {
-    opacity: ${transparency.light.activeIcon};
-  }
 `;

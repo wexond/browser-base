@@ -1,21 +1,18 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { HistoryItem } from '~/interfaces';
 import store from '@history/store';
-import { PageItem, Icon, Time, Title } from '../../../components/PageItem';
+import { PageItem, Icon, Time, Title } from '@/components/PageItem';
+import { icons, transparency } from '@/constants/renderer';
+import { HistoryItem } from '@/interfaces';
 import { RemoveIcon } from './styles';
-import { icons, transparency } from '~/renderer/defaults';
+
+interface Props {
+  data: HistoryItem;
+}
 
 @observer
-export default class extends React.Component<
-  {
-    data: HistoryItem;
-  },
-  {}
-> {
-  public onClick = (e: React.MouseEvent<HTMLDivElement>) => {};
-
+export default class extends React.Component<Props> {
   public onMouseEnter = () => {
     this.props.data.hovered = true;
   };
@@ -24,8 +21,26 @@ export default class extends React.Component<
     this.props.data.hovered = false;
   };
 
+  public onClick = (e: React.MouseEvent<any>) => {
+    if (store.cmdPressed || e.ctrlKey) {
+      e.preventDefault();
+
+      const { data } = this.props;
+      const index = store.selectedItems.indexOf(data._id);
+
+      if (index === -1) {
+        store.selectedItems.push(data._id);
+      } else {
+        store.selectedItems.splice(index, 1);
+      }
+    }
+  };
+
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
+
+    const { data } = this.props;
+    store.removeItem(data._id);
   };
 
   public render() {
@@ -38,27 +53,33 @@ export default class extends React.Component<
     const minute = date.getMinutes();
 
     let opacity = 1;
-    let favicon = data.favicon;
+    let favicon = icons.page;
 
-    if (favicon == null) {
-      favicon = icons.page;
+    if (data.favicon === '') {
       opacity = transparency.light.inactiveIcon;
+    } else {
+      favicon = data.favicon;
     }
+
+    const selected = store.selectedItems.indexOf(data._id) !== -1;
 
     return (
       <PageItem
-        onClick={this.onClick}
         onFocus={() => null}
+        onClick={this.onClick}
         onMouseOver={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        selected={false}
+        selected={selected}
       >
         <RemoveIcon onClick={this.onRemoveClick} visible={hovered} />
         <Icon icon={favicon} style={{ opacity: hovered ? 0 : opacity }} />
+
         <Time>{`${hour
           .toString()
           .padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}</Time>
-        <Title>{data.title}</Title>
+        <a href={data.url}>
+          <Title>{data.title}</Title>
+        </a>
       </PageItem>
     );
   }

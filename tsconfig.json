@@ -25,8 +25,9 @@
       "@app/*": ["src/renderer/app/*"],
       "@newtab/*": ["src/renderer/newtab/*"],
       "@history/*": ["src/renderer/history/*"],
-      "@mixins": ["src/renderer/mixins"],
-      "@components/*": ["src/renderer/components/*"],
+      "@about/*": ["src/renderer/about/*"],
+      "@bookmarks/*": ["src/renderer/bookmarks/*"],
+      "@/*": ["src/shared/*"],
       "~/*": ["src/*"]
     }
   },
@@ -34,7 +35,6 @@
     "reportFiles": ["src/**/*.{ts,tsx}"],
     "useCache": true
   },
-  "exclude": ["node_modules", "dist", "build"],
-  "include": ["src/**/*"],
-  "files": ["src/renderer/views/app/index.tsx"]
+  "exclude": ["node_modules", "dist", "build", "static"],
+  "include": ["src/**/*"]
 }

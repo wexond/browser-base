@@ -1,11 +1,11 @@
 import React from 'react';
 import { ipcRenderer } from 'electron';
 
-import Snackbar from '@components/Snackbar';
 import store from '@app/store';
-import Button from '@components/Button';
-import { colors } from '~/renderer/defaults';
-import { UPDATE_RESTART_AND_INSTALL } from '~/constants';
+import Snackbar from '@/components/Snackbar';
+import Button from '@/components/Button';
+import { colors } from '@/constants/renderer';
+import { UPDATE_RESTART_AND_INSTALL } from '@/constants/ipc-messages';
 
 export default class UpdateSnackbar extends React.Component {
   public onRestartClick = () => {

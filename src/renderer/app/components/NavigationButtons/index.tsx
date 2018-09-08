@@ -1,9 +1,10 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { StyledContainer } from './styles';
+
 import store from '@app/store';
-import { icons } from '~/renderer/defaults';
 import ToolbarButton from '@app/components/ToolbarButton';
+import { icons } from '@/constants/renderer';
+import { StyledContainer } from './styles';
 
 @observer
 export default class NavigationButtons extends React.Component {

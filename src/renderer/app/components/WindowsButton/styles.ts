@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
-import { centerImage } from '@mixins';
+
+import { centerImage } from '@/mixins';
 
 interface ButtonProps {
   icon: string;
@@ -8,17 +9,15 @@ interface ButtonProps {
 
 export const Button = styled.div`
   height: 100%;
-  -webkit-app-region: no-drag;
   width: 45px;
-  position: relative;
-
   margin-right: 1px;
+  position: relative;
+  transition: 0.2s background-color;
+  -webkit-app-region: no-drag;
 
   &:first-child {
     margin-right: 0;
   }
-
-  transition: 0.2ss background-color;
 
   &:hover {
     background-color: ${({ isClose }: ButtonProps) =>
