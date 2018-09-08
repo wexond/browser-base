@@ -6,7 +6,7 @@ export class Store {
   public bookmarks: Bookmark[] = [];
 
   @observable
-  public currentTree: string;
+  public currentTree: string = null;
 
   @observable
   public path: Bookmark[] = [];
