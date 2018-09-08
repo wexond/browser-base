@@ -40,6 +40,9 @@ if (wexondUrl) {
       delete: (...id: string[]) => {
         ipcRenderer.sendToHost('bookmarks-delete', ...id);
       },
+      edit: (id: string, title: string, parent: string) => {
+        ipcRenderer.sendToHost('bookmarks-edit', id, title, parent);
+      },
       addFolder: (title: string, parent: string) => {
         ipcRenderer.sendToHost('bookmarks-add-folder', title, parent);
       },
@@ -51,6 +54,7 @@ if (wexondUrl) {
     'favicons',
     'history',
     'bookmarks-add',
+    'bookmarks-edit',
     'bookmarks-delete',
   ];
 
