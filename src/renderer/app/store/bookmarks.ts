@@ -4,6 +4,7 @@ import BookmarksDialog from '../components/BookmarksDialog';
 import { databases } from '@/constants/app';
 import { Bookmark } from '@/interfaces';
 import store from '.';
+import TabGroupsMenu from '@app/components/TabGroupsMenu';
 
 export class BookmarksStore {
   @observable
@@ -56,7 +57,16 @@ export class BookmarksStore {
     });
   }
 
-  public async removeItem(item: Bookmark) {
+  public async removeItem(id: string | Bookmark) {
+    const index =
+      typeof id === 'string'
+        ? this.bookmarks.findIndex(x => x._id === id)
+        : this.bookmarks.indexOf(id);
+
+    const item = this.bookmarks[index];
+
+    this.bookmarks.splice(index, 1);
+
     if (item.type === 'folder') {
       const items = this.bookmarks.filter(x => x.parent === item._id);
 
@@ -65,22 +75,20 @@ export class BookmarksStore {
       }
     }
 
-    this.bookmarks = this.bookmarks.filter(x => x._id !== item._id);
+    for (const page of store.pagesStore.pages) {
+      const tab = store.tabsStore.getTabById(page.id);
 
-    const selectedTab = store.tabsStore.getSelectedTab();
+      if (tab.isBookmarked && tab.url === item.url) {
+        tab.isBookmarked = false;
+      }
 
-    if (selectedTab.isBookmarked && selectedTab.url === item.url) {
-      selectedTab.isBookmarked = false;
+      if (page.wexondPage === 'bookmarks') {
+        page.webview.send('bookmarks-delete', item);
+      }
     }
 
     databases.bookmarks.remove({ _id: item._id }, (err: any) => {
       if (err) return console.warn(err);
     });
-
-    for (const page of store.pagesStore.pages) {
-      if (page.wexondPage === 'bookmarks') {
-        page.webview.send('bookmarks-remove', item);
-      }
-    }
   }
 }

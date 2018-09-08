@@ -4,7 +4,7 @@ import { icons, transparency } from '@/constants/renderer';
 import { centerImage } from '@/mixins';
 
 export const Root = styled.div`
-  width: 100%;
+  width: calc(100vw - 256px);
   height: 56px;
   display: flex;
   align-items: center;
@@ -12,6 +12,9 @@ export const Root = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
   overflow: hidden;
   background-color: white;
+  position: absolute;
+  top: 0px;
+  left: 256px;
 `;
 
 export const ForwardIcon = styled.div`
