@@ -99,7 +99,7 @@ export default class extends React.Component<{ page: Page }> {
     });
   };
 
-  public onIpcMessage = (e: Electron.IpcMessageEvent, args: any[]) => {
+  public onIpcMessage = (e: Electron.IpcMessageEvent) => {
     if (e.channel === 'api-tabs-getCurrent') {
       this.webview
         .getWebContents()
