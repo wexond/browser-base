@@ -10,12 +10,16 @@ interface Props {
 
 @observer
 export default class BookmarkItem extends React.Component<Props> {
+  public onClick = () => {
+    store.pagesStore.getSelected().url = this.props.item.url;
+  };
+
   public render() {
     const { title, favicon } = this.props.item;
     const icon = store.faviconsStore.favicons[favicon];
 
     return (
-      <StyledBookmarkItem>
+      <StyledBookmarkItem onClick={this.onClick}>
         <Icon
           style={{
             backgroundImage: `url(${icon})`,
