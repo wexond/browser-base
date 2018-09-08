@@ -1,17 +1,24 @@
 import styled, { css } from 'styled-components';
-import { EASE_FUNCTION, TOOLBAR_HEIGHT } from '~/constants';
-import { transparency } from '~/renderer/defaults';
+
+import { TOOLBAR_HEIGHT } from '@/constants/app';
+import { EASE_FUNCTION } from '@/constants/design';
+
+export const Section = styled.div`
+  display: flex;
+  flex: 1;
+  height: ${TOOLBAR_HEIGHT}px;
+  -webkit-app-region: drag;
+`;
 
 export const StyledToolbar = styled.div`
   position: relative;
   z-index: 100;
   display: flex;
+  flex-flow: column;
   background-color: #fff;
   color: rgba(0, 0, 0, 0.8);
-  -webkit-app-region: drag;
-
-  height: ${TOOLBAR_HEIGHT}px;
   transition: 0.2s margin-top ${EASE_FUNCTION};
+
   ${({ isHTMLFullscreen }: { isHTMLFullscreen: boolean }) => css`
     margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
   `};

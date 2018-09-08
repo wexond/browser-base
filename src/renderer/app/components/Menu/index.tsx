@@ -1,18 +1,10 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import {
-  Container,
-  Content,
-  Dark,
-  Header,
-  Input,
-  Menu,
-  Search,
-  SearchIcon,
-  Title,
-} from './styles';
+
 import store from '@app/store';
 import MenuItem from '../MenuItem';
+import { icons } from '@/constants/renderer';
+import { Container, Separator } from './styles';
 
 interface Props {
   children?: any;
@@ -21,102 +13,75 @@ interface Props {
 
 @observer
 export default class extends React.Component<Props, {}> {
-  public static Item = MenuItem;
-
-  private items: MenuItem[] = [];
-
-  public onDarkClick = () => {
-    requestAnimationFrame(() => {
-      store.menuStore.hide();
+  public openTab = (page: string) => {
+    store.tabsStore.addTab({
+      url:
+        process.env.ENV === 'dev'
+          ? `http://localhost:8080/${page}.html`
+          : `wexond://${page}`,
+      active: true,
     });
   };
 
+  public onHistoryClick = () => {
+    this.openTab('history');
+  };
+
+  public onDownloadsClick = () => {
+    this.openTab('downloads');
+  };
+
+  public onBookmarksClick = () => {
+    this.openTab('bookmarks');
+  };
+
+  public onExtensionsClick = () => {
+    this.openTab('extensions');
+  };
+
+  public onSettingsClick = () => {
+    this.openTab('settings');
+  };
+
+  public onAboutClick = () => {
+    this.openTab('about');
+  };
+
   public render() {
-    const { title, children } = this.props;
-
-    let id = 0;
-    let id2 = 0;
-
-    this.items = this.items.filter(Boolean);
-
-    let selectedItem;
-
-    for (let i = 0; i < this.items.length; i++) {
-      const item = this.items[i];
-      if (item && item.props.id === store.menuStore.selectedItem) {
-        selectedItem = item;
-        break;
-      }
-    }
-
     return (
-      <React.Fragment>
-        <Container visible={store.menuStore.visible}>
-          <Content visible={selectedItem != null}>
-            {React.Children.map(children, (el: React.ReactElement<any>) => {
-              if (!el.props.title) {
-                id2++;
-                return (
-                  <div
-                    style={{
-                      opacity: store.menuStore.selectedItem === id2 - 1 ? 1 : 0,
-                      pointerEvents:
-                        store.menuStore.selectedItem === id2 - 1
-                          ? 'auto'
-                          : 'none',
-                      position: 'absolute',
-                      top: 0,
-                      width: '100%',
-                      height: '100vh',
-                    }}
-                  >
-                    {React.cloneElement(el)}
-                  </div>
-                );
-              }
-
-              return null;
-            })}
-          </Content>
-          <Menu>
-            <Header>
-              {(selectedItem &&
-                selectedItem.props.searchVisible && (
-                  <Search>
-                    <SearchIcon />
-                    <Input placeholder="Search" onInput={this.onInput} />
-                  </Search>
-                )) || <Title>{title}</Title>}
-            </Header>
-
-            {React.Children.map(children, (el: React.ReactElement<any>) => {
-              if (el.props.title) {
-                return React.cloneElement(el, {
-                  id: id++,
-                  ref: (r: MenuItem) => this.items.push(r),
-                  onClick: this.onItemClick,
-                });
-              }
-
-              return null;
-            })}
-          </Menu>
-        </Container>
-        <Dark onClick={this.onDarkClick} visible={store.menuStore.visible} />
-      </React.Fragment>
+      <Container
+        onMouseDown={e => e.stopPropagation()}
+        visible={store.menuStore.visible}
+      >
+        <MenuItem
+          title="History"
+          icon={icons.history}
+          onClick={this.onHistoryClick}
+        />
+        <MenuItem
+          title="Downloads"
+          icon={icons.download}
+          onClick={this.onDownloadsClick}
+        />
+        <MenuItem
+          title="Bookmarks"
+          icon={icons.bookmarks}
+          onClick={this.onBookmarksClick}
+        />
+        <Separator visible={true} />
+        <MenuItem
+          title="Extensions"
+          icon={icons.extensions}
+          onClick={this.onExtensionsClick}
+        />
+        <MenuItem
+          title="Settings"
+          icon={icons.settings}
+          onClick={this.onSettingsClick}
+        />
+        <Separator visible={true} />
+        <MenuItem title="About" icon={icons.info} onClick={this.onAboutClick} />
+      </Container>
     );
   }
-
-  private onItemClick = (
-    e: React.MouseEvent<HTMLDivElement>,
-    item: MenuItem,
-  ) => {
-    if (item) {
-      store.menuStore.selectedItem = item.props.id;
-    }
-  };
-
-  private onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    store.menuStore.searchText = e.currentTarget.value;
-  };
 }

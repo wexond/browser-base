@@ -1,12 +1,12 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-
-import { TabGroup } from '../../models';
-import store from '@app/store';
-import { StyledTabGroup } from './styles';
-import Tab from '../Tab';
 import { observe } from 'mobx';
-import { TAB_ANIMATION_DURATION } from '~/constants';
+
+import { TabGroup } from '@/models/app';
+import store from '@app/store';
+import Tab from '../Tab';
+import { TAB_ANIMATION_DURATION } from '@/constants/app';
+import { StyledTabGroup } from './styles';
 
 @observer
 export default class extends React.Component<{ tabGroup: TabGroup }> {

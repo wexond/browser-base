@@ -1,15 +1,17 @@
 import { observable } from 'mobx';
 
-import { GlobalAPI, HistoryItem, HistorySection } from '~/interfaces';
-import { formatDate } from '~/utils/time';
+import { HistoryItem, Favicon } from '@/interfaces';
+import { HistorySection } from '@/interfaces/history';
+import { formatDate } from '@/utils/time';
 
-/*
-import { HistoryItem } from '~/interfaces/history-item';*/
-/*import { HistorySection } from '~/interfaces/history-section';
-import {  } from '~/interfaces/global-api';
-*/
+declare const global: any;
+
 export class Store {
-  public globalObject = global as GlobalAPI;
+  @observable
+  public loading = true;
+
+  @observable
+  public dictionary: any;
 
   @observable
   public historyItems: HistoryItem[] = [];
@@ -20,23 +22,14 @@ export class Store {
   @observable
   public selectedItems: string[] = [];
 
-  public getById(id: string) {
-    return this.historyItems.find(x => x._id === id);
-  }
+  public loadedCount = 0;
 
-  public async loadHistory() {
-    const items = await this.globalObject.getHistory();
+  public cmdPressed = false;
 
-    this.historyItems = items;
-    this.loadSections();
-  }
+  public favicons: { [key: string]: string } = {};
 
-  public loadSections() {
-    this.historySections = this.getSections(this.getItems());
-  }
-
-  public getItems(filter = '') {
-    return this.historyItems
+  public filterItems(filter = '') {
+    this.historyItems = this.historyItems
       .filter(
         item =>
           item.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1 ||
@@ -45,41 +38,84 @@ export class Store {
       .reverse();
   }
 
-  public getSections(items: HistoryItem[]) {
-    const sections: HistorySection[] = [];
+  public loadSections(count: number) {
+    for (let i = this.loadedCount; i < count + this.loadedCount; i++) {
+      if (i < this.historyItems.length) {
+        const item = this.historyItems[i];
+        const date = new Date(item.date);
 
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-      const date = new Date(item.date);
+        const dateStr = formatDate(this.dictionary, date);
 
-      const dateStr = formatDate(this.globalObject.dictionary, date);
+        const foundSection = this.historySections.find(
+          x => x.title === dateStr,
+        );
 
-      const foundSection = sections.find(x => x.date === dateStr);
-
-      const newItem = {
-        ...item,
-        favicon: '', // store.faviconsStore.favicons[item.favicon]
-        selected: false,
-      };
-
-      if (foundSection == null) {
-        const section: HistorySection = {
-          items: [newItem],
-          date: dateStr,
-          id: item._id,
+        const newItem: HistoryItem = {
+          ...item,
+          selected: false,
         };
-        sections.push(section);
-      } else {
-        foundSection.items.push(newItem);
+
+        if (foundSection == null) {
+          const section: HistorySection = {
+            items: [newItem],
+            title: dateStr,
+            id: item._id,
+          };
+
+          this.historySections.push(section);
+        } else {
+          foundSection.items.push(newItem);
+        }
       }
     }
 
-    return sections;
+    this.loadedCount += count;
   }
 
-  public addItem(item: HistoryItem) {}
+  public search(filter: string): any {
+    if (filter === '') {
+      this.historySections = [];
+      this.loadedCount = 0;
+      this.loadSections(20);
+      return;
+    }
 
-  public removeItem(id: string) {}
+    const items = this.historyItems.filter(item =>
+      item.title.toLowerCase().includes(filter),
+    );
+
+    if (items.length === 0) {
+      this.historySections = [];
+      return;
+    }
+
+    const section: HistorySection = {
+      id: items[0]._id,
+      title: `Found ${items.length} search ${
+        items.length > 1 ? 'results' : 'result'
+      } for '${filter}'`,
+      items,
+    };
+
+    this.historySections = [section];
+  }
+
+  public removeItem(...ids: string[]) {
+    for (const id of ids) {
+      this.historyItems = this.historyItems.filter(e => e._id !== id);
+
+      this.historySections.map(e => {
+        e.items = e.items.filter(e => e._id !== id);
+
+        if (e.items.length === 0) {
+          const index = this.historySections.indexOf(e);
+          this.historySections.splice(index, 1);
+        }
+      });
+    }
+
+    global.wexondPages.history.delete(...ids);
+  }
 }
 
 export default new Store();

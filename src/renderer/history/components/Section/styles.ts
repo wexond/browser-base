@@ -1,16 +1,17 @@
 import styled from 'styled-components';
-import { transparency } from '~/renderer/defaults';
-import { subtitle2 } from '@mixins';
+
+import { transparency } from '@/constants/renderer';
+import { subtitle2 } from '@/mixins';
 
 export const Title = styled.div`
   margin-bottom: 16px;
   margin-top: 32px;
   border-radius: 4px;
   display: table;
-  transition: 0.2s background-color;
-  padding: 4px;
+  padding: 8px;
   cursor: pointer;
-  opacity: ${transparency.light.secondaryText};
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
+  transition: 0.2s background-color;
 
   ${subtitle2()};
 
