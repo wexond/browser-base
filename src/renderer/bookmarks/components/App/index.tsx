@@ -32,8 +32,6 @@ const actions = {
 export default class App extends React.Component {
   componentDidMount() {
     global.onIpcReceived.addListener((name: string, data: any) => {
-      console.log(name);
-
       if (name === 'bookmarks-add') {
         if (data[0] != null) {
           for (const item of Object.values(data)) {
