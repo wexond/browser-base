@@ -1,9 +1,14 @@
 import { observable, computed } from 'mobx';
-import { TabGroup } from '../models';
-import { TAB_ANIMATION_EASING, TAB_ANIMATION_DURATION } from '~/constants';
 import { TweenLite } from 'gsap';
+
+import { TabGroup } from '@/models/app';
+import {
+  TAB_ANIMATION_EASING,
+  TAB_ANIMATION_DURATION,
+  defaultAddTabOptions,
+} from '@/constants/app';
 import HorizontalScrollbar from '@app/components/HorizontalScrollbar';
-import { defaultAddTabOptions } from '~/defaults';
+import store from '@app/store';
 
 export class TabsStore {
   @observable
@@ -119,4 +124,17 @@ export class TabsStore {
       TweenLite.to(ref, animation ? TAB_ANIMATION_DURATION : 0, props);
     }
   }
+
+  public getTabByWebContentsId = (id: number) => {
+    for (const page of store.pagesStore.pages) {
+      if (
+        page.webview.getWebContents() &&
+        page.webview.getWebContents().id === id
+      ) {
+        const tab = store.tabsStore.getTabById(page.id).getApiTab();
+        return tab;
+      }
+    }
+    return null;
+  };
 }

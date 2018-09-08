@@ -1,13 +1,14 @@
 import styled, { css } from 'styled-components';
-import { EASE_FUNCTION } from '~/constants';
-import { shadows, robotoRegular } from '@mixins';
-import { transparency } from '~/renderer/defaults';
+
+import { EASE_FUNCTION } from '@/constants/design';
+import { shadows, robotoRegular } from '@/mixins';
+import { transparency } from '@/constants/renderer';
 
 export const Root = styled.div`
   width: 364px;
   background-color: #fff;
   position: absolute;
-  top: 56px;
+  top: 44px;
   right: 0;
   z-index: 100;
   border-radius: 4px;
@@ -15,7 +16,7 @@ export const Root = styled.div`
   transform-origin: top right;
   will-change: transform, opacity;
 
-  box-shadow: ${shadows(6)};
+  box-shadow: ${shadows(8)};
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};

@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { AddTab, StyledTabbar, TabsContainer } from './styles';
 import HorizontalScrollbar from '../HorizontalScrollbar';
 import store from '@app/store';
-import { icons } from '~/renderer/defaults';
+import { icons } from '@/constants/renderer';
 import TabGroups from '../TabGroups';
+import { AddTab, StyledTabbar, TabsContainer } from './styles';
 
 @observer
 export default class Tabbar extends React.Component {

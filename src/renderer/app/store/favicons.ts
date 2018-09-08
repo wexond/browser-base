@@ -1,5 +1,5 @@
-import { databases } from '~/defaults/databases';
-import { Favicon } from '~/interfaces';
+import { databases } from '@/constants/app';
+import { Favicon } from '@/interfaces';
 
 export class FaviconsStore {
   public favicons: { [key: string]: string } = {};
@@ -29,6 +29,7 @@ export class FaviconsStore {
               data: JSON.stringify(Buffer.from(generatedBuffer)),
             });
           };
+
           reader.readAsArrayBuffer(blob);
         });
     }

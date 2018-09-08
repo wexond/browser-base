@@ -1,11 +1,12 @@
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
+
 import store from '@app/store';
-import { isURL } from '~/utils';
+import { isURL } from '@/utils/url';
 import { observe } from 'mobx';
 import { StyledAddressBar, InputContainer, Icon, Input } from './styles';
 import Suggestions from '../Suggestions';
-import { icons } from '~/renderer/defaults';
+import { icons } from '@/constants/renderer';
 
 @observer
 export default class AddressBar extends Component {
