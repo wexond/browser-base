@@ -17,7 +17,7 @@ declare const global: any;
 export default class BookmarkItem extends React.Component<Props> {
   private input: HTMLInputElement;
 
-  public onClick = () => {
+  private onClick = () => {
     const { data } = this.props;
 
     if (data.type === 'folder') {
@@ -25,7 +25,7 @@ export default class BookmarkItem extends React.Component<Props> {
     }
   };
 
-  public onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  private onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     e.preventDefault();
 
@@ -37,25 +37,17 @@ export default class BookmarkItem extends React.Component<Props> {
     this.input.select();
   };
 
-  public onInputBlur = () => {
+  private save = (e: any) => {
     const { data } = this.props;
     const value = this.input.value;
 
+    if (e.type === 'keydown' && e.key !== 'Escape' && e.key !== 'Enter') {
+      return;
+    }
+
     data.inputVisible = false;
-    if (value.length === 0) return;
 
-    global.wexondPages.bookmarks.edit(data._id, this.input.value, data.parent);
-  };
-
-  public onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const value = this.input.value;
-
-    if (e.key === 'Escape' || e.key === 'Enter') {
-      const { data } = this.props;
-      data.inputVisible = false;
-
-      if (value.length === 0) return;
-
+    if (value.length !== 0) {
       global.wexondPages.bookmarks.edit(
         data._id,
         this.input.value,
@@ -64,7 +56,7 @@ export default class BookmarkItem extends React.Component<Props> {
     }
   };
 
-  public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  private onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     e.preventDefault();
 
@@ -99,8 +91,8 @@ export default class BookmarkItem extends React.Component<Props> {
         <Input
           placeholder="Name"
           innerRef={r => (this.input = r)}
-          onBlur={this.onInputBlur}
-          onKeyDown={this.onInputKeyDown}
+          onBlur={this.save}
+          onKeyDown={this.save}
           visible={data.inputVisible}
           onClick={e => e.preventDefault()}
         />
