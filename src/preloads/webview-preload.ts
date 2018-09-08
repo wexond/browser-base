@@ -33,16 +33,15 @@ if (wexondUrl) {
   global.wexondPages = {
     history: {
       delete: (...id: string[]) => {
-        {
-          ipcRenderer.sendToHost('history-delete', ...id);
-        }
+        ipcRenderer.sendToHost('history-delete', ...id);
       },
     },
     bookmarks: {
       delete: (...id: string[]) => {
-        {
-          ipcRenderer.sendToHost('bookmarks-delete', ...id);
-        }
+        ipcRenderer.sendToHost('bookmarks-delete', ...id);
+      },
+      addFolder: (title: string, parent: string) => {
+        ipcRenderer.sendToHost('bookmarks-add-folder', title, parent);
       },
     },
   };

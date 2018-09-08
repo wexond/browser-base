@@ -15,6 +15,20 @@ export class BookmarksStore {
 
   public dialogRef: BookmarksDialog;
 
+  public load() {
+    return new Promise(async resolve => {
+      databases.bookmarks.find({}, (err: any, docs: Bookmark[]) => {
+        if (err) return console.warn(err);
+        this.bookmarks = docs;
+        resolve();
+      });
+    });
+  }
+
+  public isBookmarked(url: string) {
+    return !!this.bookmarks.find(x => x.url === url);
+  }
+
   public async addBookmark(item: Bookmark) {
     databases.bookmarks.insert(item, (err: any, doc: Bookmark) => {
       store.bookmarksStore.bookmarks.push(doc);
@@ -30,30 +44,22 @@ export class BookmarksStore {
   }
 
   public addFolder(title: string, parent: string) {
-    databases.bookmarks.insert(
-      {
-        title,
-        parent,
-        type: 'folder',
-      },
-      (err: any, doc: Bookmark) => {
-        if (err) return console.warn(err);
-        this.bookmarks.push(doc);
-      },
-    );
-  }
+    const data: Bookmark = {
+      title,
+      parent,
+      type: 'folder',
+    };
 
-  public isBookmarked(url: string) {
-    return !!this.bookmarks.find(x => x.url === url);
-  }
+    databases.bookmarks.insert(data, (err: any, item: Bookmark) => {
+      if (err) return console.warn(err);
 
-  public load() {
-    return new Promise(async resolve => {
-      databases.bookmarks.find({}, (err: any, docs: Bookmark[]) => {
-        if (err) return console.warn(err);
-        this.bookmarks = docs;
-        resolve();
-      });
+      this.bookmarks.push(item);
+
+      for (const page of store.pagesStore.pages) {
+        if (page.wexondPage === 'bookmarks') {
+          page.webview.send('bookmarks-add', item);
+        }
+      }
     });
   }
 
@@ -78,7 +84,7 @@ export class BookmarksStore {
     for (const page of store.pagesStore.pages) {
       const tab = store.tabsStore.getTabById(page.id);
 
-      if (tab.isBookmarked && tab.url === item.url) {
+      if (tab.url === item.url) {
         tab.isBookmarked = false;
       }
 

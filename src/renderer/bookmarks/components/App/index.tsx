@@ -7,7 +7,6 @@ import store from '@bookmarks/store';
 import TreeBar from '../TreeBar';
 import Item from '../Item';
 import { StyledApp, PageContainer, Items } from './styles';
-import { Bookmark } from '@/interfaces';
 
 declare const global: any;
 
@@ -25,23 +24,7 @@ const actions = {
     store.search(str.toLowerCase());
   },
   addFolder: () => {
-    // TODO
-    const a: Bookmark = {
-      _id: 'abcedfghi',
-      parent: null,
-      title: 'A folder',
-      type: 'folder',
-    };
-
-    const aa: Bookmark = {
-      _id: 'abcedfghib',
-      parent: 'abcedfghi',
-      title: 'AA folder',
-      type: 'folder',
-    };
-
-    store.bookmarks.push(a);
-    store.bookmarks.push(aa);
+    global.wexondPages.bookmarks.addFolder('New folder', null);
   },
 };
 
@@ -49,9 +32,13 @@ const actions = {
 export default class App extends React.Component {
   componentDidMount() {
     global.onIpcReceived.addListener((name: string, data: any) => {
+      console.log(name);
+
       if (name === 'bookmarks-add') {
         if (data[0] != null) {
-          store.bookmarks = Object.values(data);
+          for (const item of Object.values(data)) {
+            store.bookmarks.push(item);
+          }
         } else {
           store.bookmarks.push(data);
         }
