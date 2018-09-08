@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledApp = styled.div`
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   position: absolute;
   display: flex;
@@ -10,14 +10,16 @@ export const StyledApp = styled.div`
 
 export const PageContainer = styled.div`
   width: calc(100% - 256px);
+  height: calc(100% - 56px);
+  margin-top: 56px;
   margin-left: 256px;
-  position: relative;
+  overflow-y: auto;
 `;
 
-export const Content = styled.div`
+export const Items = styled.div`
   width: calc(100% - 64px);
   max-width: 640px;
-  margin: 24px auto;
+  margin: 32px auto;
   overflow: hidden;
   background-color: #fff;
   border-radius: 4px;
