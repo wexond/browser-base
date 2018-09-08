@@ -30,5 +30,5 @@ export const Title = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  max-width: 96px;
+  max-width: 128px;
 `;
