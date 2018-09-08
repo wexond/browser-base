@@ -44,6 +44,9 @@ export default class App extends React.Component {
         } else {
           store.bookmarks.push(data);
         }
+      } else if (name === 'bookmarks-edit') {
+        const index = store.bookmarks.findIndex(x => x._id === data._id);
+        store.bookmarks[index] = data;
       } else if (name === 'bookmarks-delete') {
         store.bookmarks = store.bookmarks.filter(x => x._id !== data._id);
       }
