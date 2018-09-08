@@ -12,13 +12,13 @@ export class I18n {
     api = _api;
   }
 
-  public getAcceptLanguages(cb: any) {
+  public getAcceptLanguages = (cb: any) => {
     if (cb) {
       cb(navigator.languages);
     }
-  }
+  };
 
-  public getMessage(messageName: string, substitutions?: any) {
+  public getMessage = (messageName: string, substitutions?: any) => {
     if (messageName === '@@ui_locale') return 'en_US';
 
     const { extensionId } = api.runtime.getManifest();
@@ -49,13 +49,13 @@ export class I18n {
     }
 
     return message;
-  }
+  };
 
-  public getUILanguage() {
+  public getUILanguage = () => {
     return navigator.language;
-  }
+  };
 
-  public detectLanguage(text: string, cb: any) {
+  public detectLanguage = (text: string, cb: any) => {
     // TODO
     if (cb) {
       cb({
@@ -63,5 +63,5 @@ export class I18n {
         languages: [],
       });
     }
-  }
+  };
 }

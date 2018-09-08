@@ -38,7 +38,6 @@ export class Runtime {
   // tslint:disable-next-line
   constructor(_manifest: Manifest) {
     manifest = _manifest;
-
     this.id = manifest.extensionId;
   }
 
@@ -58,7 +57,7 @@ export class Runtime {
    * @param {ConnectInfo} arg2 (optional) connectInfo
    * @returns {Port} port
    */
-  public connect(arg1: string | any = null, arg2: any = null) {
+  public connect = (arg1: string | any = null, arg2: any = null) => {
     const sender: any = {
       id: this.id,
       url: window.location.href,
@@ -94,16 +93,16 @@ export class Runtime {
     });
 
     return new Port(portId, name);
-  }
+  };
 
   /**
    * Reloads the app or extension.
    * This method is not supported in kiosk mode.
    * For kiosk mode, use chrome.runtime.restart() method.
    */
-  public reload() {
+  public reload = () => {
     ipcRenderer.send('api-runtime-reload', this.id);
-  }
+  };
 
   /**
    * Converts a relative path within an app/extension install directory to a fully-qualified URL.
@@ -113,14 +112,14 @@ export class Runtime {
    *
    * @returns {string}
    */
-  public getURL(path: string) {
+  public getURL = (path: string) => {
     return format({
       protocol: 'wexond-extension',
       slashes: true,
-      hostname: this.id,
+      hostname: manifest.extensionId,
       pathname: path,
     });
-  }
+  };
 
   /**
    * Returns details about the app or extension from the manifest.
