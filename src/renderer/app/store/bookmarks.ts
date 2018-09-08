@@ -4,7 +4,6 @@ import BookmarksDialog from '../components/BookmarksDialog';
 import { databases } from '@/constants/app';
 import { Bookmark } from '@/interfaces';
 import store from '.';
-import TabGroupsMenu from '@app/components/TabGroupsMenu';
 
 export class BookmarksStore {
   @observable
@@ -70,6 +69,7 @@ export class BookmarksStore {
         : this.bookmarks.indexOf(id);
 
     const item = this.bookmarks[index];
+    if (item == null) return;
 
     this.bookmarks.splice(index, 1);
 
@@ -96,5 +96,27 @@ export class BookmarksStore {
     databases.bookmarks.remove({ _id: item._id }, (err: any) => {
       if (err) return console.warn(err);
     });
+  }
+
+  public editItem(id: string, title: string, parent: string) {
+    const item = this.bookmarks.find(x => x._id === id);
+
+    item.title = title;
+    item.parent = parent;
+
+    for (const page of store.pagesStore.pages) {
+      if (page.wexondPage === 'bookmarks') {
+        page.webview.send('bookmarks-edit', item);
+      }
+    }
+
+    databases.bookmarks.update(
+      { _id: id },
+      { $set: { title, parent } },
+      {},
+      (err: any) => {
+        if (err) return console.warn(err);
+      },
+    );
   }
 }
