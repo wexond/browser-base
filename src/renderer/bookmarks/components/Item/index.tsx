@@ -26,6 +26,7 @@ export default class BookmarkItem extends React.Component<Props> {
   };
 
   public onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     e.preventDefault();
 
     const { data } = this.props;
@@ -37,8 +38,30 @@ export default class BookmarkItem extends React.Component<Props> {
   };
 
   public onInputBlur = () => {
-    this.props.data.inputVisible = false;
-    console.log(this.input.value);
+    const { data } = this.props;
+    const value = this.input.value;
+
+    data.inputVisible = false;
+    if (value.length === 0) return;
+
+    global.wexondPages.bookmarks.edit(data._id, this.input.value, data.parent);
+  };
+
+  public onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const value = this.input.value;
+
+    if (e.key === 'Escape' || e.key === 'Enter') {
+      const { data } = this.props;
+      data.inputVisible = false;
+
+      if (value.length === 0) return;
+
+      global.wexondPages.bookmarks.edit(
+        data._id,
+        this.input.value,
+        data.parent,
+      );
+    }
   };
 
   public onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -77,6 +100,7 @@ export default class BookmarkItem extends React.Component<Props> {
           placeholder="Name"
           innerRef={r => (this.input = r)}
           onBlur={this.onInputBlur}
+          onKeyDown={this.onInputKeyDown}
           visible={data.inputVisible}
           onClick={e => e.preventDefault()}
         />
