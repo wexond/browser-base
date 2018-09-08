@@ -13,7 +13,8 @@ import WindowsControls from '../WindowsButtons';
 import BookmarkButton from '@app/components/BookmarkButton';
 import { icons } from '@/constants/renderer';
 import BrowserAction from '@app/components/BrowserAction';
-import { StyledToolbar, TabsSection, Tabs } from './styles';
+import { StyledToolbar, TabsSection, Tabs, Section } from './styles';
+import BookmarksBar from '@app/components/BookmarksBar';
 
 @observer
 class FirstSeparator extends React.Component {
@@ -96,33 +97,36 @@ export default class Toolbar extends React.Component {
   public render() {
     return (
       <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
-        <NavigationButtons />
-        <FirstSeparator />
-        <TabsSection>
-          <AddressBar />
-          <Tabs>
-            <TabBar />
-          </Tabs>
-        </TabsSection>
-        <SecondSeparator />
-        <BookmarkButton />
-        <ToolbarButton
-          size={16}
-          icon={icons.workspaces}
-          onClick={this.onWorkspacesIconClick}
-        />
-        <ToolbarSeparator />
-        <BrowserActions />
-        <ToolbarButton
-          onClick={this.onMenuIconClick}
-          onMouseDown={this.onMenuIconMouseDown}
-          size={20}
-          icon={icons.menu}
-          style={{ marginRight: 4 }}
-        >
-          <Menu />
-        </ToolbarButton>
-        {store.platform !== Platforms.MacOS && <WindowsControls />}
+        <Section>
+          <NavigationButtons />
+          <FirstSeparator />
+          <TabsSection>
+            <AddressBar />
+            <Tabs>
+              <TabBar />
+            </Tabs>
+          </TabsSection>
+          <SecondSeparator />
+          <BookmarkButton />
+          <ToolbarButton
+            size={16}
+            icon={icons.workspaces}
+            onClick={this.onWorkspacesIconClick}
+          />
+          <ToolbarSeparator />
+          <BrowserActions />
+          <ToolbarButton
+            onClick={this.onMenuIconClick}
+            onMouseDown={this.onMenuIconMouseDown}
+            size={20}
+            icon={icons.menu}
+            style={{ marginRight: 4 }}
+          >
+            <Menu />
+          </ToolbarButton>
+          {store.platform !== Platforms.MacOS && <WindowsControls />}
+        </Section>
+        <BookmarksBar />
       </StyledToolbar>
     );
   }
