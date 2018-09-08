@@ -16,18 +16,21 @@ export class BrowserAction {
     api = _api;
   }
 
-  public setIcon(details: chrome.browserAction.TabIconDetails, cb: any) {
+  public setIcon = (details: chrome.browserAction.TabIconDetails, cb: any) => {
     if (cb) cb();
-  }
+  };
 
-  public setBadgeBackgroundColor(
+  public setBadgeBackgroundColor = (
     details: chrome.browserAction.BadgeBackgroundColorDetails,
     cb: any,
-  ) {
+  ) => {
     if (cb) cb();
-  }
+  };
 
-  public setBadgeText(details: chrome.browserAction.BadgeTextDetails, cb: any) {
+  public setBadgeText = (
+    details: chrome.browserAction.BadgeTextDetails,
+    cb: any,
+  ) => {
     ipcRenderer.send(
       API_BROWSER_ACTION_SET_BADGE_TEXT,
       api.runtime.id,
@@ -39,5 +42,5 @@ export class BrowserAction {
         cb();
       });
     }
-  }
+  };
 }

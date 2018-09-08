@@ -15,7 +15,10 @@ interface Props {
 export default class extends React.Component<Props, {}> {
   public openTab = (page: string) => {
     store.tabsStore.addTab({
-      url: process.env.ENV === 'dev' ? `http://localhost:8080/${page}.html` : 'wexond://history',
+      url:
+        process.env.ENV === 'dev'
+          ? `http://localhost:8080/${page}.html`
+          : `wexond://${page}`,
       active: true,
     });
   };

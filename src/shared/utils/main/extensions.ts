@@ -48,6 +48,9 @@ export const startBackgroundPage = async (manifest: Manifest) => {
       isBackgroundPage: true,
       commandLineSwitches: ['--background-page'],
       preload: resolve(__dirname, 'build/background-page-preload.js'),
+      webPreferences: {
+        webSecurity: false,
+      },
     });
 
     global.backgroundPages[extensionId] = {

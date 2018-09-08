@@ -39,21 +39,21 @@ export class StorageArea {
     this._area = area;
   }
 
-  public set(arg: any, cb: any) {
+  public set = (arg: any, cb: any) => {
     sendStorageOperation(api.runtime.id, arg, this._area, 'set', cb);
-  }
+  };
 
-  public get(arg: any, cb: any) {
+  public get = (arg: any, cb: any) => {
     sendStorageOperation(api.runtime.id, arg, this._area, 'get', cb);
-  }
+  };
 
-  public remove(arg: any, cb: any) {
+  public remove = (arg: any, cb: any) => {
     sendStorageOperation(api.runtime.id, arg, this._area, 'remove', cb);
-  }
+  };
 
-  public clear(arg: any, cb: any) {
+  public clear = (arg: any, cb: any) => {
     sendStorageOperation(api.runtime.id, arg, this._area, 'clear', cb);
-  }
+  };
 }
 
 export class Storage {

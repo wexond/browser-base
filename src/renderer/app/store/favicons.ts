@@ -29,6 +29,7 @@ export class FaviconsStore {
               data: JSON.stringify(Buffer.from(generatedBuffer)),
             });
           };
+
           reader.readAsArrayBuffer(blob);
         });
     }
