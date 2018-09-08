@@ -29,9 +29,10 @@ export class TabGroup {
 
   public select() {
     store.tabsStore.currentGroup = this.id;
-    requestAnimationFrame(() => {
+
+    setTimeout(() => {
       this.updateTabsBounds(false);
-    });
+    }, 1);
   }
 
   public addTab({ url, active } = defaultAddTabOptions) {
@@ -100,7 +101,7 @@ export class TabGroup {
     const index = this.tabs.indexOf(callingTab);
 
     if (direction === 'left') {
-      for (let i = index; i--; ) {
+      for (let i = index; i--;) {
         const tab = this.tabs[i];
         if (callingTab.left <= tab.width / 2 + tab.left) {
           this.replaceTab(this.tabs[i + 1], tab);

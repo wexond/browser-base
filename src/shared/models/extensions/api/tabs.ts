@@ -19,13 +19,13 @@ export class Tabs {
     api = _api;
   }
 
-  public get(tabId: number, callback: (tab: chrome.tabs.Tab) => void) {
+  public get = (tabId: number, callback: (tab: chrome.tabs.Tab) => void) => {
     this.query({}, tabs => {
       callback(tabs.find(x => x.id === tabId));
     });
-  }
+  };
 
-  public getCurrent(callback: (tab: chrome.tabs.Tab) => void) {
+  public getCurrent = (callback: (tab: chrome.tabs.Tab) => void) => {
     ipcRenderer.sendToHost('api-tabs-getCurrent');
 
     ipcRenderer.once(
@@ -34,12 +34,12 @@ export class Tabs {
         callback(data);
       },
     );
-  }
+  };
 
-  public query(
+  public query = (
     queryInfo: chrome.tabs.QueryInfo,
     callback: (tabs: chrome.tabs.Tab[]) => void,
-  ) {
+  ) => {
     ipcRenderer.send('api-tabs-query');
 
     ipcRenderer.once(
@@ -63,12 +63,12 @@ export class Tabs {
         );
       },
     );
-  }
+  };
 
-  public create(
+  public create = (
     createProperties: chrome.tabs.CreateProperties,
     callback: (tab: chrome.tabs.Tab) => void = null,
-  ) {
+  ) => {
     ipcRenderer.send('api-tabs-create', createProperties);
 
     if (callback) {
@@ -79,9 +79,9 @@ export class Tabs {
         },
       );
     }
-  }
+  };
 
-  public insertCSS(arg1: any = null, arg2: any = null, arg3: any = null) {
+  public insertCSS = (arg1: any = null, arg2: any = null, arg3: any = null) => {
     const insertCSS = (tabId: number, details: any, callback: any) => {
       if (details.hasOwnProperty('file')) {
         details.code = readFileSync(
@@ -106,9 +106,13 @@ export class Tabs {
     } else if (typeof arg1 === 'number') {
       insertCSS(arg1, arg2, arg3);
     }
-  }
+  };
 
-  public executeScript(arg1: any = null, arg2: any = null, arg3: any = null) {
+  public executeScript = (
+    arg1: any = null,
+    arg2: any = null,
+    arg3: any = null,
+  ) => {
     const executeScript = (tabId: number, details: any, callback: any) => {
       if (details.hasOwnProperty('file')) {
         details.code = readFileSync(
@@ -135,9 +139,13 @@ export class Tabs {
     } else if (typeof arg1 === 'number') {
       executeScript(arg1, arg2, arg3);
     }
-  }
+  };
 
-  public setZoom(tabId: number, zoomFactor: number, callback: () => void) {
+  public setZoom = (
+    tabId: number,
+    zoomFactor: number,
+    callback: () => void,
+  ) => {
     ipcRenderer.send('api-tabs-setZoom', tabId, zoomFactor);
 
     ipcRenderer.once('api-tabs-setZoom', () => {
@@ -145,9 +153,9 @@ export class Tabs {
         callback();
       }
     });
-  }
+  };
 
-  public getZoom(tabId: number, callback: (zoomFactor: number) => void) {
+  public getZoom = (tabId: number, callback: (zoomFactor: number) => void) => {
     ipcRenderer.send('api-tabs-getZoom', tabId);
 
     ipcRenderer.once(
@@ -158,9 +166,12 @@ export class Tabs {
         }
       },
     );
-  }
+  };
 
-  public detectLanguage(tabId: number, callback: (language: string) => void) {
+  public detectLanguage = (
+    tabId: number,
+    callback: (language: string) => void,
+  ) => {
     ipcRenderer.send('api-tabs-detectLanguage', tabId);
 
     ipcRenderer.once(
@@ -171,7 +182,7 @@ export class Tabs {
         }
       },
     );
-  }
+  };
 
-  public update() {}
+  public update = () => {};
 }
