@@ -112,6 +112,8 @@ export default class extends React.Component<{ page: Page }> {
       for (const id of e.args) {
         store.bookmarksStore.removeItem(id);
       }
+    } else if (e.channel === 'bookmarks-edit') {
+      store.bookmarksStore.editItem(e.args[0], e.args[1], e.args[2]);
     } else if (e.channel === 'bookmarks-add-folder') {
       store.bookmarksStore.addFolder(e.args[0], e.args[1]);
     }
