@@ -56,7 +56,7 @@ export default class BookmarkItem extends React.Component<Props> {
     global.wexondPages.bookmarks.delete(data._id);
   };
 
-  private onClick = () => {
+  private onDoubleClick = () => {
     const { data } = this.props;
 
     if (data.type === 'folder') {
@@ -68,10 +68,15 @@ export default class BookmarkItem extends React.Component<Props> {
     if (!store.draggedVisible) return;
     const { data } = this.props;
 
-    const index = store.bookmarks.indexOf(data);
-    const draggedIndex = store.bookmarks.indexOf(store.dragged);
+    if (data.type === 'item') {
+      const index = store.bookmarks.indexOf(data);
+      const draggedIndex = store.bookmarks.indexOf(store.dragged);
 
-    store.dividerPos = index < draggedIndex ? 'top' : 'bottom';
+      store.dividerPos = index < draggedIndex ? 'top' : 'bottom';
+    } else {
+      store.dividerPos = null;
+    }
+
     store.hovered = data === store.dragged ? null : data;
   };
 
@@ -92,7 +97,7 @@ export default class BookmarkItem extends React.Component<Props> {
     return (
       <Root
         selected={selected}
-        onClick={this.onClick}
+        onDoubleClick={this.onDoubleClick}
         onMouseDown={() => (store.dragged = this.props.data)}
         onMouseEnter={this.onMouseEnter}
       >
@@ -118,7 +123,8 @@ export default class BookmarkItem extends React.Component<Props> {
           onClick={this.onRemoveClick}
           onMouseDown={e => e.stopPropagation()}
         />
-        {store.hovered === data && <Divider pos={store.dividerPos} />}
+        {store.hovered === data &&
+          store.dividerPos != null && <Divider pos={store.dividerPos} />}
       </Root>
     );
   }
