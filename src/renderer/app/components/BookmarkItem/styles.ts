@@ -9,7 +9,6 @@ export const StyledBookmarkItem = styled.div`
   display: flex;
   align-items: center;
   transition: 0.2s background-color;
-  background-color: rgba(0, 0, 0, 0.04);
   margin-left: 4px;
   margin-bottom: 4px;
 
