@@ -50,6 +50,12 @@ export class Store {
   }
 
   public search(str: string) {}
+
+  public resetDragging() {
+    this.hovered = null;
+    this.dragged = null;
+    this.draggedVisible = false;
+  }
 }
 
 export default new Store();
