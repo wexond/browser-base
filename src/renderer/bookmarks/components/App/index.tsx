@@ -69,17 +69,19 @@ export default class App extends React.Component {
     };
   };
 
-  public onWindowMouseUp = (e: MouseEvent) => {
-    if (!store.dragged || store.hovered == null) return;
+  public onWindowMouseUp = () => {
+    if (!store.dragged) return;
 
     const oldIndex = store.bookmarks.indexOf(store.dragged);
     const newIndex = store.bookmarks.indexOf(store.hovered);
 
-    moveItem(store.bookmarks, oldIndex, newIndex);
-
+    store.hovered = null;
     store.dragged = null;
     store.draggedVisible = false;
-    store.hovered = null;
+
+    if (newIndex !== -1) {
+      moveItem(store.bookmarks, oldIndex, newIndex);
+    }
   };
 
   public render() {
