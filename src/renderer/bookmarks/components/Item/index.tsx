@@ -86,29 +86,27 @@ export default class BookmarkItem extends React.Component<Props> {
         onMouseDown={() => (store.dragged = this.props.data)}
       >
         <Icon icon={favicon} style={{ opacity }} />
-        <div style={{ flex: 1 }}>
-          <Title
-            onClick={this.onTitleClick}
-            onMouseDown={e => e.stopPropagation()}
-          >
-            {data.title}
-          </Title>
-        </div>
-        <div onMouseDown={e => e.stopPropagation()}>
-          <Input
-            placeholder="Name"
-            innerRef={r => (this.input = r)}
-            onBlur={this.save}
-            onKeyDown={this.save}
-            visible={data.inputVisible}
-            onClick={e => e.preventDefault()}
-          />
-          <ActionIcon
-            className="DELETE-ICON"
-            icon={icons.delete}
-            onClick={this.onRemoveClick}
-          />
-        </div>
+        <Title
+          onClick={this.onTitleClick}
+          onMouseDown={e => e.stopPropagation()}
+        >
+          {data.title}
+        </Title>
+        <Input
+          placeholder="Name"
+          innerRef={r => (this.input = r)}
+          onBlur={this.save}
+          onKeyDown={this.save}
+          visible={data.inputVisible}
+          onClick={e => e.preventDefault()}
+          onMouseDown={e => e.stopPropagation()}
+        />
+        <ActionIcon
+          className="DELETE-ICON"
+          icon={icons.delete}
+          onClick={this.onRemoveClick}
+          onMouseDown={e => e.stopPropagation()}
+        />
       </Root>
     );
   }
