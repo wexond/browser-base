@@ -14,6 +14,15 @@ export class Store {
   @observable
   public selectedItems: string[] = [];
 
+  @observable
+  public dragged: Bookmark;
+
+  @observable
+  public draggedVisible = false;
+
+  @observable
+  public mousePos: { x: number; y: number } = null;
+
   public goToFolder(id: string) {
     this.currentTree = id;
     this.path = this.getFolderPath(id);
