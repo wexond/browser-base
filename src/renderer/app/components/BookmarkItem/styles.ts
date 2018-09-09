@@ -2,19 +2,18 @@ import styled from 'styled-components';
 import { centerImage } from '@/mixins';
 
 export const StyledBookmarkItem = styled.div`
-  padding: 6px 10px;
+  padding: 7px 10px;
   font-size: 13px;
   border-radius: 30px;
   overflow: hidden;
   display: flex;
   align-items: center;
   transition: 0.2s background-color;
-  background-color: rgba(0, 0, 0, 0.04);
   margin-left: 4px;
   margin-bottom: 4px;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.06);
   }
 
   &:first-child {
