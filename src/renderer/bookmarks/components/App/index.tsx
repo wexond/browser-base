@@ -72,16 +72,19 @@ export default class App extends React.Component {
   public onWindowMouseUp = () => {
     if (!store.dragged) return;
 
+    if (store.hovered && store.hovered.type === 'folder') {
+      store.dragged.parent = store.hovered._id;
+      return store.resetDragging();
+    }
+
     const oldIndex = store.bookmarks.indexOf(store.dragged);
     const newIndex = store.bookmarks.indexOf(store.hovered);
-
-    store.hovered = null;
-    store.dragged = null;
-    store.draggedVisible = false;
 
     if (newIndex !== -1) {
       moveItem(store.bookmarks, oldIndex, newIndex);
     }
+
+    store.resetDragging();
   };
 
   public render() {
