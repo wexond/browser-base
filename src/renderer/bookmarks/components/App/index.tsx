@@ -7,6 +7,8 @@ import store from '@bookmarks/store';
 import TreeBar from '../TreeBar';
 import Item from '../Item';
 import { StyledApp, PageContainer, Items } from './styles';
+import Dragged from '@bookmarks/components/Dragged';
+import { DRAG_ELEMENT_WIDTH } from '@/constants/bookmarks';
 
 declare const global: any;
 
@@ -51,7 +53,26 @@ export default class App extends React.Component {
         store.bookmarks = store.bookmarks.filter(x => x._id !== data._id);
       }
     });
+
+    window.addEventListener('mousemove', this.onWindowMouseMove);
+    window.addEventListener('mouseup', this.onWindowMouseUp);
   }
+
+  public onWindowMouseMove = (e: MouseEvent) => {
+    if (!store.dragged) return;
+    if (!store.draggedVisible) store.draggedVisible = true;
+
+    store.mousePos = {
+      x: e.clientX - DRAG_ELEMENT_WIDTH / 2,
+      y: e.clientY,
+    };
+  };
+
+  public onWindowMouseUp = (e: MouseEvent) => {
+    if (!store.dragged) return;
+    store.dragged = null;
+    store.draggedVisible = false;
+  };
 
   public render() {
     const items = store.bookmarks.filter(x => x.parent === store.currentTree);
@@ -100,6 +121,7 @@ export default class App extends React.Component {
             </Items>
           )}
         </PageContainer>
+        {store.draggedVisible && <Dragged />}
       </StyledApp>
     );
   }

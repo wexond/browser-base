@@ -6,6 +6,7 @@ import { transparency, icons } from '~/shared/constants/renderer';
 import { Bookmark } from '~/shared/interfaces';
 import { Icon } from '~/shared/components/PageItem';
 import { Root, ActionIcon, Title, Input } from './styles';
+import { DRAG_ELEMENT_WIDTH } from '@/constants/bookmarks';
 
 export interface Props {
   data: Bookmark;
@@ -80,27 +81,34 @@ export default class BookmarkItem extends React.Component<Props> {
 
     return (
       <Root
-        href={isFolder ? null : data.url}
         selected={selected}
         onClick={this.onClick}
+        onMouseDown={() => (store.dragged = this.props.data)}
       >
         <Icon icon={favicon} style={{ opacity }} />
         <div style={{ flex: 1 }}>
-          <Title onClick={this.onTitleClick}>{data.title}</Title>
+          <Title
+            onClick={this.onTitleClick}
+            onMouseDown={e => e.stopPropagation()}
+          >
+            {data.title}
+          </Title>
         </div>
-        <Input
-          placeholder="Name"
-          innerRef={r => (this.input = r)}
-          onBlur={this.save}
-          onKeyDown={this.save}
-          visible={data.inputVisible}
-          onClick={e => e.preventDefault()}
-        />
-        <ActionIcon
-          className="DELETE-ICON"
-          icon={icons.delete}
-          onClick={this.onRemoveClick}
-        />
+        <div onMouseDown={e => e.stopPropagation()}>
+          <Input
+            placeholder="Name"
+            innerRef={r => (this.input = r)}
+            onBlur={this.save}
+            onKeyDown={this.save}
+            visible={data.inputVisible}
+            onClick={e => e.preventDefault()}
+          />
+          <ActionIcon
+            className="DELETE-ICON"
+            icon={icons.delete}
+            onClick={this.onRemoveClick}
+          />
+        </div>
       </Root>
     );
   }
