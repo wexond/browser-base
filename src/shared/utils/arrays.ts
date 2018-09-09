@@ -13,6 +13,8 @@ export const compareArrays = (first: any, second: any) => {
 };
 
 export const moveItem = (list: any, oldIndex: number, newIndex: number) => {
+  if (newIndex === oldIndex) return list;
+
   if (newIndex >= list.length) {
     let i = newIndex - list.length + 1;
 
