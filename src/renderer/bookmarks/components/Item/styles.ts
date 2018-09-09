@@ -84,3 +84,11 @@ export const Input = styled.input`
     pointer-events: ${visible ? 'all' : 'none'};
   `};
 `;
+
+export const Divider = styled.div`
+  width: 100%;
+  height: 2px;
+  background-color: ${colors.blue['500']};
+  position: absolute;
+  bottom: 0;
+`;
