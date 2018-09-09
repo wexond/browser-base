@@ -5,8 +5,7 @@ import store from '@bookmarks/store';
 import { transparency, icons } from '~/shared/constants/renderer';
 import { Bookmark } from '~/shared/interfaces';
 import { Icon } from '~/shared/components/PageItem';
-import { Root, ActionIcon, Title, Input } from './styles';
-import { DRAG_ELEMENT_WIDTH } from '@/constants/bookmarks';
+import { Root, ActionIcon, Title, Input, Divider } from './styles';
 
 export interface Props {
   data: Bookmark;
@@ -17,14 +16,6 @@ declare const global: any;
 @observer
 export default class BookmarkItem extends React.Component<Props> {
   private input: HTMLInputElement;
-
-  private onClick = () => {
-    const { data } = this.props;
-
-    if (data.type === 'folder') {
-      store.goToFolder(data._id);
-    }
-  };
 
   private onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -65,6 +56,21 @@ export default class BookmarkItem extends React.Component<Props> {
     global.wexondPages.bookmarks.delete(data._id);
   };
 
+  private onClick = () => {
+    const { data } = this.props;
+
+    if (data.type === 'folder') {
+      store.goToFolder(data._id);
+    }
+  };
+
+  public onMouseEnter = () => {
+    if (!store.draggedVisible) return;
+
+    const { data } = this.props;
+    store.hovered = data;
+  };
+
   public render() {
     const { data } = this.props;
     const isFolder = data.type === 'folder';
@@ -84,6 +90,7 @@ export default class BookmarkItem extends React.Component<Props> {
         selected={selected}
         onClick={this.onClick}
         onMouseDown={() => (store.dragged = this.props.data)}
+        onMouseEnter={this.onMouseEnter}
       >
         <Icon icon={favicon} style={{ opacity }} />
         <Title
@@ -107,6 +114,7 @@ export default class BookmarkItem extends React.Component<Props> {
           onClick={this.onRemoveClick}
           onMouseDown={e => e.stopPropagation()}
         />
+        {store.hovered === data && <Divider />}
       </Root>
     );
   }

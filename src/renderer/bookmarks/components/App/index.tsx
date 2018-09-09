@@ -9,6 +9,7 @@ import Item from '../Item';
 import { StyledApp, PageContainer, Items } from './styles';
 import Dragged from '@bookmarks/components/Dragged';
 import { DRAG_ELEMENT_WIDTH } from '@/constants/bookmarks';
+import { moveItem } from '@/utils/arrays';
 
 declare const global: any;
 
@@ -69,9 +70,16 @@ export default class App extends React.Component {
   };
 
   public onWindowMouseUp = (e: MouseEvent) => {
-    if (!store.dragged) return;
+    if (!store.dragged || store.hovered == null) return;
+
+    const oldIndex = store.bookmarks.indexOf(store.dragged);
+    const newIndex = store.bookmarks.indexOf(store.hovered);
+
+    store.bookmarks = moveItem(store.bookmarks, oldIndex, newIndex);
+
     store.dragged = null;
     store.draggedVisible = false;
+    store.hovered = null;
   };
 
   public render() {
