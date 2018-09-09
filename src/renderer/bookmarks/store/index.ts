@@ -23,6 +23,9 @@ export class Store {
   @observable
   public mousePos: { x: number; y: number } = null;
 
+  @observable
+  public hovered: Bookmark;
+
   public goToFolder(id: string) {
     this.currentTree = id;
     this.path = this.getFolderPath(id);
