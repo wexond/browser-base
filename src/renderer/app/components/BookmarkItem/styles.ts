@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { centerImage } from '@/mixins';
 
 export const StyledBookmarkItem = styled.div`
-  padding: 6px 10px;
+  padding: 7px 10px;
   font-size: 13px;
   border-radius: 30px;
   overflow: hidden;
