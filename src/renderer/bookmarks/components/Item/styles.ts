@@ -85,10 +85,17 @@ export const Input = styled.input`
   `};
 `;
 
+export interface DividerProps {
+  pos: 'top' | 'bottom';
+}
+
 export const Divider = styled.div`
   width: 100%;
   height: 2px;
-  background-color: ${colors.blue['500']};
   position: absolute;
-  bottom: 0;
+  background-color: ${colors.blue['500']};
+
+  ${({ pos }: DividerProps) => css`
+    ${pos}: 0;
+  `};
 `;
