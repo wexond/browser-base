@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { transparency } from '@/constants/renderer';
 import { body2, centerImage } from '@/mixins';
 
-export const PageItem = styled.a`
+export const PageItem = styled.div`
   height: 56px;
   width: 100%;
   display: flex;

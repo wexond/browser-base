@@ -12,7 +12,7 @@ export const Root = styled.div`
   display: flex;
   top: 0;
   left: 0;
-  z-index: 9999;
+  z-index: 10;
   box-sizing: border-box;
   border-right: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
   will-change: transform, transition;
