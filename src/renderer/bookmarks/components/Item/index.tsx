@@ -72,7 +72,7 @@ export default class BookmarkItem extends React.Component<Props> {
     const draggedIndex = store.bookmarks.indexOf(store.dragged);
 
     store.dividerPos = index < draggedIndex ? 'top' : 'bottom';
-    store.hovered = data;
+    store.hovered = data === store.dragged ? null : data;
   };
 
   public render() {
