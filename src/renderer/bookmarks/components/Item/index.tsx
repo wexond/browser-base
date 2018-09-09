@@ -66,8 +66,12 @@ export default class BookmarkItem extends React.Component<Props> {
 
   public onMouseEnter = () => {
     if (!store.draggedVisible) return;
-
     const { data } = this.props;
+
+    const index = store.bookmarks.indexOf(data);
+    const draggedIndex = store.bookmarks.indexOf(store.dragged);
+
+    store.dividerPos = index < draggedIndex ? 'top' : 'bottom';
     store.hovered = data;
   };
 
@@ -114,7 +118,7 @@ export default class BookmarkItem extends React.Component<Props> {
           onClick={this.onRemoveClick}
           onMouseDown={e => e.stopPropagation()}
         />
-        {store.hovered === data && <Divider />}
+        {store.hovered === data && <Divider pos={store.dividerPos} />}
       </Root>
     );
   }
