@@ -18,7 +18,9 @@ export default class extends React.Component {
     let opacity = transparency.light.inactiveIcon;
     let favicon = icons.page;
 
-    if (dragged != null && dragged.favicon.trim() !== '') {
+    if (dragged != null && dragged.type === 'folder') {
+      favicon = icons.folder;
+    } else if (dragged != null && dragged.favicon.trim() !== '') {
       favicon = dragged.favicon;
       opacity = 1;
     }

@@ -20,6 +20,8 @@ export const Items = styled.div`
   width: calc(100% - 64px);
   max-width: 640px;
   margin: 32px auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
   overflow: hidden;
   background-color: #fff;
   border-radius: 4px;
