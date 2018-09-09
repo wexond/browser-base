@@ -19,12 +19,20 @@ export const Root = styled.div`
   box-shadow: ${shadows(6)};
 `;
 
-export const Icon = styled.div`
+export const IconContainer = styled.div`
   min-width: 24px;
   min-height: 24px;
   margin-left: 8px;
   background-color: #fff;
   border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Icon = styled.div`
+  width: 16px;
+  height: 16px;
 
   ${centerImage('16px', '16px')};
 
@@ -40,6 +48,7 @@ export const Title = styled.div`
   color: #fff;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 
   ${robotoMedium()};
 `;
