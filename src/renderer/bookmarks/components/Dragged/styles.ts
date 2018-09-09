@@ -7,15 +7,14 @@ import { DRAG_ELEMENT_WIDTH } from '@/constants/bookmarks';
 export const Root = styled.div`
   width: ${DRAG_ELEMENT_WIDTH}px;
   height: 42px;
-  background-color: ${colors.blue['500']};
   position: fixed;
-  bottom: 128px;
-  left: 50%;
   transform: translateY(-50%);
   border-radius: 24px;
   display: flex;
   align-items: center;
   z-index: 100;
+  pointer-events: none;
+  background-color: ${colors.blue['500']};
   box-shadow: ${shadows(6)};
 `;
 
