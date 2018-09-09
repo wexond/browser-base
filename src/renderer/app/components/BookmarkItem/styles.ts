@@ -13,7 +13,7 @@ export const StyledBookmarkItem = styled.div`
   margin-bottom: 4px;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.06);
   }
 
   &:first-child {
