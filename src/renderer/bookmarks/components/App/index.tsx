@@ -75,7 +75,7 @@ export default class App extends React.Component {
     const oldIndex = store.bookmarks.indexOf(store.dragged);
     const newIndex = store.bookmarks.indexOf(store.hovered);
 
-    store.bookmarks = moveItem(store.bookmarks, oldIndex, newIndex);
+    moveItem(store.bookmarks, oldIndex, newIndex);
 
     store.dragged = null;
     store.draggedVisible = false;
