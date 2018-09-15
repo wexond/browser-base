@@ -9,6 +9,7 @@ import Item from '../Item';
 import { StyledApp, PageContainer, Items } from './styles';
 import Dragged from '@bookmarks/components/Dragged';
 import { DRAG_ELEMENT_WIDTH } from '@/constants/bookmarks';
+import { moveItem } from '@/utils/arrays';
 
 declare const global: any;
 
@@ -68,10 +69,29 @@ export default class App extends React.Component {
     };
   };
 
-  public onWindowMouseUp = (e: MouseEvent) => {
+  public onWindowMouseUp = () => {
     if (!store.dragged) return;
-    store.dragged = null;
-    store.draggedVisible = false;
+
+    if (store.hovered && store.hovered.type === 'folder') {
+      store.dragged.parent = store.hovered._id;
+
+      global.wexondPages.bookmarks.edit(
+        store.dragged._id,
+        store.dragged.title,
+        store.hovered._id,
+      );
+
+      return store.resetDragging();
+    }
+
+    const oldIndex = store.bookmarks.indexOf(store.dragged);
+    const newIndex = store.bookmarks.indexOf(store.hovered);
+
+    if (newIndex !== -1) {
+      moveItem(store.bookmarks, oldIndex, newIndex);
+    }
+
+    store.resetDragging();
   };
 
   public render() {

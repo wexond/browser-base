@@ -5,8 +5,7 @@ import store from '@bookmarks/store';
 import { transparency, icons } from '~/shared/constants/renderer';
 import { Bookmark } from '~/shared/interfaces';
 import { Icon } from '~/shared/components/PageItem';
-import { Root, ActionIcon, Title, Input } from './styles';
-import { DRAG_ELEMENT_WIDTH } from '@/constants/bookmarks';
+import { Root, ActionIcon, Title, Input, Divider } from './styles';
 
 export interface Props {
   data: Bookmark;
@@ -17,14 +16,6 @@ declare const global: any;
 @observer
 export default class BookmarkItem extends React.Component<Props> {
   private input: HTMLInputElement;
-
-  private onClick = () => {
-    const { data } = this.props;
-
-    if (data.type === 'folder') {
-      store.goToFolder(data._id);
-    }
-  };
 
   private onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -65,6 +56,30 @@ export default class BookmarkItem extends React.Component<Props> {
     global.wexondPages.bookmarks.delete(data._id);
   };
 
+  private onDoubleClick = () => {
+    const { data } = this.props;
+
+    if (data.type === 'folder') {
+      store.goToFolder(data._id);
+    }
+  };
+
+  public onMouseEnter = () => {
+    if (!store.draggedVisible) return;
+    const { data } = this.props;
+
+    if (data.type === 'item') {
+      const index = store.bookmarks.indexOf(data);
+      const draggedIndex = store.bookmarks.indexOf(store.dragged);
+
+      store.dividerPos = index < draggedIndex ? 'top' : 'bottom';
+    } else {
+      store.dividerPos = null;
+    }
+
+    store.hovered = data === store.dragged ? null : data;
+  };
+
   public render() {
     const { data } = this.props;
     const isFolder = data.type === 'folder';
@@ -82,33 +97,34 @@ export default class BookmarkItem extends React.Component<Props> {
     return (
       <Root
         selected={selected}
-        onClick={this.onClick}
+        onDoubleClick={this.onDoubleClick}
         onMouseDown={() => (store.dragged = this.props.data)}
+        onMouseEnter={this.onMouseEnter}
       >
         <Icon icon={favicon} style={{ opacity }} />
-        <div style={{ flex: 1 }}>
-          <Title
-            onClick={this.onTitleClick}
-            onMouseDown={e => e.stopPropagation()}
-          >
-            {data.title}
-          </Title>
-        </div>
-        <div onMouseDown={e => e.stopPropagation()}>
-          <Input
-            placeholder="Name"
-            innerRef={r => (this.input = r)}
-            onBlur={this.save}
-            onKeyDown={this.save}
-            visible={data.inputVisible}
-            onClick={e => e.preventDefault()}
-          />
-          <ActionIcon
-            className="DELETE-ICON"
-            icon={icons.delete}
-            onClick={this.onRemoveClick}
-          />
-        </div>
+        <Title
+          onClick={this.onTitleClick}
+          onMouseDown={e => e.stopPropagation()}
+        >
+          {data.title}
+        </Title>
+        <Input
+          placeholder="Name"
+          innerRef={r => (this.input = r)}
+          onBlur={this.save}
+          onKeyDown={this.save}
+          visible={data.inputVisible}
+          onClick={e => e.preventDefault()}
+          onMouseDown={e => e.stopPropagation()}
+        />
+        <ActionIcon
+          className="DELETE-ICON"
+          icon={icons.delete}
+          onClick={this.onRemoveClick}
+          onMouseDown={e => e.stopPropagation()}
+        />
+        {store.hovered === data &&
+          store.dividerPos != null && <Divider pos={store.dividerPos} />}
       </Root>
     );
   }
