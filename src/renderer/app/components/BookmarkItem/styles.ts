@@ -10,7 +10,7 @@ export const StyledBookmarkItem = styled.div`
   align-items: center;
   transition: 0.2s background-color;
   margin-left: 4px;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.06);
