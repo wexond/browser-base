@@ -3,6 +3,7 @@ import { StyledBookmarkItem, Icon, Title } from './styles';
 import { Bookmark } from '@/interfaces';
 import { observer } from 'mobx-react';
 import store from '@app/store';
+import { icons, transparency } from '@/constants/renderer';
 
 interface Props {
   item: Bookmark;
@@ -15,8 +16,15 @@ export default class BookmarkItem extends React.Component<Props> {
   };
 
   public render() {
-    const { title, favicon } = this.props.item;
-    const icon = store.faviconsStore.favicons[favicon];
+    const { title, favicon, type } = this.props.item;
+
+    let icon = favicon;
+    let opacity = 1;
+
+    if (type === 'folder') {
+      icon = icons.folder;
+      opacity = transparency.light.inactiveIcon;
+    }
 
     return (
       <StyledBookmarkItem onClick={this.onClick}>
@@ -25,6 +33,7 @@ export default class BookmarkItem extends React.Component<Props> {
             backgroundImage: `url(${icon})`,
             marginRight: icon == null ? 0 : 8,
             minWidth: icon == null ? 0 : 16,
+            opacity,
           }}
         />
         <Title>{title}</Title>

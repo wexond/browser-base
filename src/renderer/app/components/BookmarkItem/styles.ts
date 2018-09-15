@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { centerImage } from '@/mixins';
 
 export const StyledBookmarkItem = styled.div`
@@ -22,10 +22,11 @@ export const StyledBookmarkItem = styled.div`
 `;
 
 export const Icon = styled.div`
-  ${centerImage('16px', '16px')};
   height: 16px;
   min-width: 16px;
   margin-right: 8px;
+
+  ${centerImage('16px', '16px')};
 `;
 
 export const Title = styled.div`
