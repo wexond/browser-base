@@ -74,6 +74,13 @@ export default class App extends React.Component {
 
     if (store.hovered && store.hovered.type === 'folder') {
       store.dragged.parent = store.hovered._id;
+
+      global.wexondPages.bookmarks.edit(
+        store.dragged._id,
+        store.dragged.title,
+        store.hovered._id,
+      );
+
       return store.resetDragging();
     }
 

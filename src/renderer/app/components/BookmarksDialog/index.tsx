@@ -9,7 +9,6 @@ import Dropdown from '@/components/Dropdown';
 import store from '@app/store';
 import Button from '@/components/Button';
 import { ButtonsContainer, Root, Title } from './styles';
-import { isWexondURL } from '@/utils/url';
 
 @observer
 export default class BookmarksDialog extends React.Component {
@@ -74,24 +73,14 @@ export default class BookmarksDialog extends React.Component {
     const title = this.textField.getValue();
 
     if (title.length > 0) {
-      databases.bookmarks.update(
-        {
-          _id: this.bookmark._id,
-        },
-        {
-          $set: {
-            title,
-            parent: this.bookmarkFolder,
-          },
-        },
-        {},
-        (err: any) => {
-          if (err) return console.warn(err);
-
-          this.bookmark.title = title;
-          this.bookmark.parent = this.bookmarkFolder;
-        },
+      store.bookmarksStore.editItem(
+        this.bookmark._id,
+        title,
+        this.bookmarkFolder,
       );
+
+      this.bookmark.title = title;
+      this.bookmark.parent = this.bookmarkFolder;
     }
 
     store.bookmarksStore.dialogVisible = false;
