@@ -100,6 +100,7 @@ export class BookmarksStore {
 
   public editItem(id: string, title: string, parent: string) {
     const item = this.bookmarks.find(x => x._id === id);
+    if (item == null) return;
 
     item.title = title;
     item.parent = parent;
