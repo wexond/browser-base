@@ -45,7 +45,6 @@ export class Store {
     }
 
     path.push(parentFolder);
-
     return path;
   }
 
