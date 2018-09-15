@@ -23,6 +23,12 @@ export class Store {
   @observable
   public mousePos: { x: number; y: number } = null;
 
+  @observable
+  public hovered: Bookmark;
+
+  @observable
+  public dividerPos: 'top' | 'bottom' = 'bottom';
+
   public goToFolder(id: string) {
     this.currentTree = id;
     this.path = this.getFolderPath(id);
@@ -39,11 +45,16 @@ export class Store {
     }
 
     path.push(parentFolder);
-
     return path;
   }
 
   public search(str: string) {}
+
+  public resetDragging() {
+    this.hovered = null;
+    this.dragged = null;
+    this.draggedVisible = false;
+  }
 }
 
 export default new Store();

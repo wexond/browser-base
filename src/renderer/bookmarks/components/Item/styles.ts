@@ -7,7 +7,6 @@ import * as PageItem from '~/shared/components/PageItem';
 export const Root = styled(PageItem.PageItem)`
   box-sizing: content-box;
   background-color: #fff;
-  opacity: 1;
 
   &:hover .DELETE-ICON {
     opacity: ${transparency.light.inactiveIcon};
@@ -15,14 +14,16 @@ export const Root = styled(PageItem.PageItem)`
 `;
 
 export const Title = styled(PageItem.Title)`
+  max-width: calc(100% - 160px);
   padding: 8px;
   margin-left: 12px;
   margin-right: 12px;
-  display: table;
   border-radius: 4px;
   will-change: background-color;
   transition: 0.2s background-color;
   cursor: text;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.06);
@@ -35,6 +36,7 @@ export const ActionIcon = styled.div`
   margin-right: 12px;
   z-index: 1;
   opacity: 0;
+  margin-left: auto;
   will-change: opacity;
   transition: 0.2s opacity;
 
@@ -80,5 +82,20 @@ export const Input = styled.input`
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'all' : 'none'};
+  `};
+`;
+
+export interface DividerProps {
+  pos: 'top' | 'bottom';
+}
+
+export const Divider = styled.div`
+  width: 100%;
+  height: 2px;
+  position: absolute;
+  background-color: ${colors.blue['500']};
+
+  ${({ pos }: DividerProps) => css`
+    ${pos}: 0;
   `};
 `;
