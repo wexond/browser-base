@@ -128,6 +128,7 @@ export class TabsStore {
   public getTabByWebContentsId = (id: number) => {
     for (const page of store.pagesStore.pages) {
       if (
+        page.webview &&
         page.webview.getWebContents() &&
         page.webview.getWebContents().id === id
       ) {
