@@ -4,6 +4,7 @@ import BookmarksDialog from '../components/BookmarksDialog';
 import { databases } from '@/constants/app';
 import { Bookmark } from '@/interfaces';
 import store from '.';
+import { moveItem } from '@/utils/arrays';
 
 export class BookmarksStore {
   @observable
@@ -16,11 +17,14 @@ export class BookmarksStore {
 
   public load() {
     return new Promise(async resolve => {
-      databases.bookmarks.find({}, (err: any, docs: Bookmark[]) => {
-        if (err) return console.warn(err);
-        this.bookmarks = docs;
-        resolve();
-      });
+      databases.bookmarks
+        .find({})
+        .sort({ order: 1 })
+        .exec((err: any, items: Bookmark[]) => {
+          if (err) return console.warn(err);
+          this.bookmarks = items;
+          resolve();
+        });
     });
   }
 
@@ -44,10 +48,12 @@ export class BookmarksStore {
   }
 
   public addFolder(title: string, parent: string) {
+    const siblingItems = this.bookmarks.filter(e => e.parent === parent);
     const data: Bookmark = {
       title,
       parent,
       type: 'folder',
+      order: siblingItems.length,
     };
 
     databases.bookmarks.insert(data, (err: any, item: Bookmark) => {
@@ -119,5 +125,45 @@ export class BookmarksStore {
         if (err) return console.warn(err);
       },
     );
+  }
+
+  public reorderItemDB(id: string, index: number) {
+    databases.bookmarks.update(
+      { _id: id },
+      { $set: { order: index } },
+      {},
+      (err: any) => {
+        if (err) return console.warn(err);
+      },
+    );
+  }
+
+  public reorderItem(
+    id: string,
+    parent: string,
+    oldIndex: number,
+    newIndex: number,
+  ) {
+    const reorderedItem = this.bookmarks[oldIndex];
+
+    moveItem(this.bookmarks, oldIndex, newIndex);
+
+    reorderedItem.order = newIndex;
+
+    if (oldIndex < newIndex) {
+      for (let i = oldIndex; i < newIndex; i++) {
+        const item = this.bookmarks[i];
+        item.order--;
+        this.reorderItemDB(item._id, item.order);
+      }
+    } else {
+      for (let i = newIndex + 1; i <= oldIndex; i++) {
+        const item = this.bookmarks[i];
+        item.order++;
+        this.reorderItemDB(item._id, item.order);
+      }
+    }
+
+    this.reorderItemDB(id, newIndex);
   }
 }

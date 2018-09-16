@@ -18,12 +18,12 @@ export default class BookmarkItem extends React.Component<Props> {
   public render() {
     const { title, favicon, type } = this.props.item;
 
-    let icon = favicon;
-    let opacity = 1;
+    let icon = type === 'folder' ? icons.folder : icons.page;
+    let opacity = transparency.light.inactiveIcon;
 
-    if (type === 'folder') {
-      icon = icons.folder;
-      opacity = transparency.light.inactiveIcon;
+    if (favicon != null && favicon !== '') {
+      icon = favicon;
+      opacity = 1;
     }
 
     return (
@@ -31,12 +31,12 @@ export default class BookmarkItem extends React.Component<Props> {
         <Icon
           style={{
             backgroundImage: `url(${icon})`,
-            marginRight: icon == null ? 0 : 8,
-            minWidth: icon == null ? 0 : 16,
             opacity,
           }}
         />
-        <Title>{title}</Title>
+        <Title>
+          {title} {this.props.item.order}
+        </Title>
       </StyledBookmarkItem>
     );
   }

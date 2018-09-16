@@ -116,6 +116,13 @@ export default class extends React.Component<{ page: Page }> {
       store.bookmarksStore.editItem(e.args[0], e.args[1], e.args[2]);
     } else if (e.channel === 'bookmarks-add-folder') {
       store.bookmarksStore.addFolder(e.args[0], e.args[1]);
+    } else if (e.channel === 'bookmarks-reorder-item') {
+      store.bookmarksStore.reorderItem(
+        e.args[0],
+        e.args[1],
+        e.args[2],
+        e.args[3],
+      );
     }
   };
 

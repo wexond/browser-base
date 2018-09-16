@@ -4,6 +4,7 @@ export interface Bookmark {
   url?: string;
   favicon?: string;
   parent?: string;
+  order?: number;
   type?: 'folder' | 'item';
   inputVisible?: boolean;
 }
