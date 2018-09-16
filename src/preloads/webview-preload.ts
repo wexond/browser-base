@@ -46,6 +46,20 @@ if (wexondUrl) {
       addFolder: (title: string, parent: string) => {
         ipcRenderer.sendToHost('bookmarks-add-folder', title, parent);
       },
+      reorder: (
+        id: string,
+        parent: string,
+        oldIndex: number,
+        newIndex: number,
+      ) => {
+        ipcRenderer.sendToHost(
+          'bookmarks-reorder-item',
+          id,
+          parent,
+          oldIndex,
+          newIndex,
+        );
+      },
     },
   };
 

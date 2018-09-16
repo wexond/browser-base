@@ -22,12 +22,17 @@ export default class BookmarkButton extends React.Component {
     );
 
     if (!bookmark) {
+      const siblingItems = store.bookmarksStore.bookmarks.filter(
+        e => e.parent === null,
+      );
+
       bookmark = await store.bookmarksStore.addBookmark({
         title: selectedTab.title,
         url: selectedTab.url,
         parent: null,
         type: 'item',
         favicon: selectedTab.favicon,
+        order: siblingItems.length,
       });
     }
 
