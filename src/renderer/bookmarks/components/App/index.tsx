@@ -128,16 +128,17 @@ export default class App extends React.Component {
                 icon={icons.addFolder}
                 onClick={actions.addFolder}
               />
-              <NavigationDrawer.Divider />
+              {items.length > 0 && <NavigationDrawer.Divider />}
             </React.Fragment>
           )}
-          {store.selectedItems.length !== store.bookmarks.length && (
-            <NavigationDrawer.Item
-              title="Select all"
-              icon={icons.selectAll}
-              onClick={actions.selectAll}
-            />
-          )}
+          {items.length > 0 &&
+            store.selectedItems.length !== items.length && (
+              <NavigationDrawer.Item
+                title="Select all"
+                icon={icons.selectAll}
+                onClick={actions.selectAll}
+              />
+            )}
           {selected && (
             <React.Fragment>
               <NavigationDrawer.Item
