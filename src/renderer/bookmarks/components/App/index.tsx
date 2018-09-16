@@ -89,6 +89,13 @@ export default class App extends React.Component {
 
     if (newIndex !== -1) {
       moveItem(store.bookmarks, oldIndex, newIndex);
+
+      global.wexondPages.bookmarks.reorder(
+        store.dragged._id,
+        store.hovered.parent,
+        oldIndex,
+        newIndex,
+      );
     }
 
     store.resetDragging();
