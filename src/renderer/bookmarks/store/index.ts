@@ -29,6 +29,8 @@ export class Store {
   @observable
   public dividerPos: 'top' | 'bottom' = 'bottom';
 
+  public cmdPressed: boolean = false;
+
   public goToFolder(id: string) {
     this.currentTree = id;
     this.path = this.getFolderPath(id);

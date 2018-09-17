@@ -7,6 +7,8 @@ const packageFile = require('../../../../../package.json');
 
 export default class App extends React.Component {
   public render() {
+    console.log(process);
+
     return (
       <StyledApp>
         <Logo />
@@ -18,7 +20,6 @@ export default class App extends React.Component {
           <Item title="Electron version">
             v{packageFile.devDependencies.electron}
           </Item>
-          <Item title="NodeJS version">{process.version}</Item>
         </Container>
       </StyledApp>
     );
