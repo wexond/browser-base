@@ -9,6 +9,8 @@ import { isWexondURL } from '@/utils/url';
 import { getAPI } from '@/utils/extensions/get-api';
 import { Manifest } from '@/interfaces/extensions';
 
+ipcRenderer.setMaxListeners(0);
+
 declare const global: any;
 
 webFrame.registerURLSchemeAsSecure('wexond-extension');

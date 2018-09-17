@@ -289,10 +289,7 @@ export const runWebRequestService = (window: BrowserWindow) => {
 
   // onCompleted
 
-  const onCompleted = async (
-    details: any,
-    isTabRelated: boolean,
-  ) => {
+  const onCompleted = async (details: any, isTabRelated: boolean) => {
     const newDetails: any = {
       ...(await getDetails(details)),
       tabId: isTabRelated
@@ -301,26 +298,23 @@ export const runWebRequestService = (window: BrowserWindow) => {
       statusLine: details.statusLine,
       statusCode: details.statusCode,
       fromCache: details.fromCache,
-      error: "",
+      error: '',
     };
 
     interceptRequest('onCompleted', newDetails);
   };
-  
+
   defaultRequest.onCompleted(async (details: any) => {
     await onCompleted(details, false);
   });
-  
+
   webviewRequest.onCompleted(async (details: any) => {
     await onCompleted(details, true);
   });
 
   // onErrorOccurred
 
-  const onErrorOccurred = async (
-    details: any,
-    isTabRelated: boolean,
-  ) => {
+  const onErrorOccurred = async (details: any, isTabRelated: boolean) => {
     const newDetails: any = {
       ...(await getDetails(details)),
       tabId: isTabRelated
@@ -329,14 +323,14 @@ export const runWebRequestService = (window: BrowserWindow) => {
       fromCache: details.fromCache,
       error: details.error,
     };
-  
+
     interceptRequest('onErrorOccurred', newDetails);
   };
-  
+
   defaultRequest.onErrorOccurred(async (details: any) => {
     await onErrorOccurred(details, false);
   });
-  
+
   webviewRequest.onErrorOccurred(async (details: any) => {
     await onErrorOccurred(details, true);
   });
