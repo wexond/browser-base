@@ -24,6 +24,5 @@ export const moveItem = (list: any, oldIndex: number, newIndex: number) => {
   }
 
   list.splice(newIndex, 0, list.splice(oldIndex, 1)[0]);
-
   return list;
 };

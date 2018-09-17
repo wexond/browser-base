@@ -6,7 +6,6 @@ import * as PageItem from '~/shared/components/PageItem';
 
 export const Root = styled(PageItem.PageItem)`
   box-sizing: content-box;
-  background-color: #fff;
 
   &:hover .DELETE-ICON {
     opacity: ${transparency.light.inactiveIcon};
