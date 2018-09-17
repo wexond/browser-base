@@ -1,4 +1,4 @@
-import { app } from 'electron';
+import { app, ipcMain } from 'electron';
 import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';
@@ -12,6 +12,8 @@ import {
   runExtensionsService,
   runWebRequestService,
 } from '@/services/main';
+
+ipcMain.setMaxListeners(0);
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
