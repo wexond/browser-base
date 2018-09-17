@@ -17,6 +17,45 @@ declare const global: any;
 export default class BookmarkItem extends React.Component<Props> {
   private input: HTMLInputElement;
 
+  private onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (store.cmdPressed || e.ctrlKey) {
+      e.preventDefault();
+
+      const { data } = this.props;
+      const index = store.selectedItems.indexOf(data._id);
+
+      if (index === -1) {
+        store.selectedItems.push(data._id);
+      } else {
+        store.selectedItems.splice(index, 1);
+      }
+    }
+  };
+
+  private onDoubleClick = () => {
+    const { data } = this.props;
+
+    if (data.type === 'folder') {
+      store.goToFolder(data._id);
+    }
+  };
+
+  private onMouseEnter = () => {
+    if (!store.draggedVisible) return;
+    const { data } = this.props;
+
+    if (data.type === 'item') {
+      const index = store.bookmarks.indexOf(data);
+      const draggedIndex = store.bookmarks.indexOf(store.dragged);
+
+      store.dividerPos = index < draggedIndex ? 'top' : 'bottom';
+    } else {
+      store.dividerPos = null;
+    }
+
+    store.hovered = data === store.dragged ? null : data;
+  };
+
   private onTitleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     e.preventDefault();
@@ -27,6 +66,14 @@ export default class BookmarkItem extends React.Component<Props> {
     this.input.value = data.title;
     this.input.focus();
     this.input.select();
+  };
+
+  private onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const { data } = this.props;
+    global.wexondPages.bookmarks.delete(data._id);
   };
 
   private save = (e: any) => {
@@ -48,38 +95,6 @@ export default class BookmarkItem extends React.Component<Props> {
     }
   };
 
-  private onRemoveClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    const { data } = this.props;
-    global.wexondPages.bookmarks.delete(data._id);
-  };
-
-  private onDoubleClick = () => {
-    const { data } = this.props;
-
-    if (data.type === 'folder') {
-      store.goToFolder(data._id);
-    }
-  };
-
-  public onMouseEnter = () => {
-    if (!store.draggedVisible) return;
-    const { data } = this.props;
-
-    if (data.type === 'item') {
-      const index = store.bookmarks.indexOf(data);
-      const draggedIndex = store.bookmarks.indexOf(store.dragged);
-
-      store.dividerPos = index < draggedIndex ? 'top' : 'bottom';
-    } else {
-      store.dividerPos = null;
-    }
-
-    store.hovered = data === store.dragged ? null : data;
-  };
-
   public render() {
     const { data } = this.props;
     const isFolder = data.type === 'folder';
@@ -97,6 +112,7 @@ export default class BookmarkItem extends React.Component<Props> {
     return (
       <Root
         selected={selected}
+        onClick={this.onClick}
         onDoubleClick={this.onDoubleClick}
         onMouseDown={() => (store.dragged = this.props.data)}
         onMouseEnter={this.onMouseEnter}

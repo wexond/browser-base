@@ -15,13 +15,17 @@ declare const global: any;
 
 const actions = {
   selectAll: () => {
-    console.log('select all');
+    for (const bookmark of store.bookmarks) {
+      if (store.selectedItems.indexOf(bookmark._id) === -1) {
+        store.selectedItems.push(bookmark._id);
+      }
+    }
   },
   deselectAll: () => {
-    console.log('deselect all');
+    store.selectedItems = [];
   },
   deleteAllSelected: () => {
-    console.log('delete all selected');
+    global.wexondPages.bookmarks.delete(...store.selectedItems);
   },
   search: (str: string) => {
     store.search(str.toLowerCase());
@@ -57,6 +61,14 @@ export default class App extends React.Component {
 
     window.addEventListener('mousemove', this.onWindowMouseMove);
     window.addEventListener('mouseup', this.onWindowMouseUp);
+
+    window.addEventListener('keydown', e => {
+      store.cmdPressed = e.key === 'Meta';
+    });
+
+    window.addEventListener('keyup', e => {
+      if (e.key === 'Meta') store.cmdPressed = false;
+    });
   }
 
   public onWindowMouseMove = (e: MouseEvent) => {
@@ -89,6 +101,13 @@ export default class App extends React.Component {
 
     if (newIndex !== -1) {
       moveItem(store.bookmarks, oldIndex, newIndex);
+
+      global.wexondPages.bookmarks.reorder(
+        store.dragged._id,
+        store.hovered.parent,
+        oldIndex,
+        newIndex,
+      );
     }
 
     store.resetDragging();
@@ -101,7 +120,7 @@ export default class App extends React.Component {
     return (
       <StyledApp>
         <NavigationDrawer title="History" onSearch={actions.search} search>
-          {(!selected && (
+          {!selected && (
             <React.Fragment>
               <NavigationDrawer.Item title="Add" icon={icons.add} />
               <NavigationDrawer.Item
@@ -109,14 +128,18 @@ export default class App extends React.Component {
                 icon={icons.addFolder}
                 onClick={actions.addFolder}
               />
-              <NavigationDrawer.Divider />
+              {items.length > 0 && <NavigationDrawer.Divider />}
+            </React.Fragment>
+          )}
+          {items.length > 0 &&
+            store.selectedItems.length !== items.length && (
               <NavigationDrawer.Item
                 title="Select all"
                 icon={icons.selectAll}
                 onClick={actions.selectAll}
               />
-            </React.Fragment>
-          )) || (
+            )}
+          {selected && (
             <React.Fragment>
               <NavigationDrawer.Item
                 title="Deselect"
