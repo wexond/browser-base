@@ -9,6 +9,8 @@ export * from './extensions';
 export * from './auto-updater';
 
 export const runServices = () => {
+  ipcRenderer.setMaxListeners(0);
+
   ipcRenderer.on(
     FULLSCREEN,
     (e: Electron.IpcMessageEvent, isFullscreen: boolean) => {
