@@ -14,11 +14,6 @@ export default class MenuItem extends React.Component<Props, {}> {
   public render() {
     const { icon, title, onClick } = this.props;
 
-    return (
-      <Root onClick={onClick}>
-        <Icon src={icon} />
-        {title}
-      </Root>
-    );
+    return <Root onClick={onClick}>{title}</Root>;
   }
 }
