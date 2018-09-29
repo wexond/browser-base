@@ -19,7 +19,7 @@ Wexond is a web browser built on top of `Electron`, `React` and `styled-componen
 - **Beautiful and minimalistic UI** The tabs and address bar are located in the same toolbar to take less space.
 - **Tab groups** Easily group tabs to tab groups and access them very fast.
 - **Expanded new tab page** Have all information such as news, weather or currency in only one page!
-- **Partial support for Chrome extensions** Install some extensions from Chrome Web Store (Electron doesn't support Chrome extensions) (see https://github.com/wexond/wexond/issues/110)
+- **Partial support for Chrome extensions** Install some extensions from Chrome Web Store (see https://github.com/wexond/wexond/issues/110)
 
 <a href="https://www.patreon.com/bePatron?u=12270966">
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
