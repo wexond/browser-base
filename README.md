@@ -2,6 +2,7 @@
   <img src="static/app-icons/icon.png" width="256">
 </p>
 
+
 <div align="center">
   <h1>Wexond</h1>
 
