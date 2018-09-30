@@ -12,18 +12,13 @@ export default class Suggestions extends React.Component {
   public render() {
     const visible = store.addressBarStore.toggled;
     const { suggestions } = store.suggestionsStore;
+    const { bookmarks } = store.bookmarksStore;
 
     let vis = visible;
 
-    if (suggestions.length === 0) {
+    if (suggestions.length === 0 && bookmarks.length === 0) {
       vis = false;
     }
-
-    let height = 0;
-
-    suggestions.forEach(a => {
-      height += 40;
-    });
 
     return (
       <StyledSuggestions
@@ -31,12 +26,14 @@ export default class Suggestions extends React.Component {
         style={{
           opacity: vis ? 1 : 0,
           pointerEvents: !vis ? 'none' : 'auto',
-          height,
         }}
         onMouseDown={e => e.stopPropagation()}
       >
         {suggestions.map(suggestion => (
           <Suggestion suggestion={suggestion} key={suggestion.id} />
+        ))}
+        {bookmarks.map(bookmark => (
+          <BookmarkTile />
         ))}
       </StyledSuggestions>
     );
