@@ -8,19 +8,19 @@ export const StyledAddressBar = styled.div`
   position: absolute;
   transition: 0.3s opacity;
   z-index: 9999;
-  width: 640px;
-  left: 50%;
+  width: 652px;
   top: 48px;
+  left: 50%;
   background-color: white;
-  transform: translateX(-50%);
   box-shadow: ${shadows(6)};
   border-radius: 4px;
-  transition: 0.2s opacity;
+  transition: 0.2s opacity, 0.2s transform;
   padding-bottom: 8px;
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
+    transform: ${visible ? 'translate(-50%, 0)' : 'translate(-50%, -20px)'};
   `};
 `;
 

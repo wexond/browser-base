@@ -5,7 +5,7 @@ import { transparency } from '@/constants/renderer';
 
 export const Root = styled.div`
   width: 100%;
-  height: 42px;
+  height: 40px;
   display: flex;
   align-items: center;
   text-align: center;

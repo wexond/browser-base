@@ -13,18 +13,15 @@ import { ButtonsContainer, Root, Title } from './styles';
 @observer
 export default class BookmarksDialog extends React.Component {
   private textField: Textfield;
-
   private dropdown: Dropdown;
-
   private dropDownClicked: boolean = false;
-
   private bookmarkFolder: string = null;
-
   private bookmark: Bookmark;
 
   public show = (bookmark: Bookmark) => {
     if (bookmark != null && bookmark.title != null) {
       store.bookmarksStore.dialogVisible = !store.bookmarksStore.dialogVisible;
+
       store.tabsStore.getSelectedTab().isBookmarked = true;
 
       this.textField.setValue(bookmark.title);
