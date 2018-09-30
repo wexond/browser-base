@@ -10,7 +10,7 @@
 [![Travis](https://img.shields.io/travis/Sential/wexond.svg?style=flat-square)](https://travis-ci.org/Sential/wexond)
 [![AppVeyor](https://img.shields.io/appveyor/ci/Sential/wexond.svg?style=flat-square)](https://ci.appveyor.com/project/Sential/wexond)
 
-Wexond is a web browser built on top of `Electron`, `React` and `styled-components`.
+Wexond is an extensible web browser with a totally different user experience, built on top of `Electron`, `React` and `styled-components`.
 
 </div>
 
