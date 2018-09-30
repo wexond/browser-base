@@ -7,14 +7,15 @@ import { centerImage, robotoRegular, shadows } from '@/mixins';
 export const Root = styled.div`
   display: inline-block;
   background-color: rgba(0, 0, 0, 0.06);
-  border-radius: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
   cursor: pointer;
   position: relative;
 `;
 
 export const Container = styled.div`
   min-width: 104px;
-  height: 48px;
+  height: 56px;
   padding-left: 16px;
   padding-right: 8px;
   display: flex;
@@ -23,8 +24,8 @@ export const Container = styled.div`
 `;
 
 export const Name = styled.div`
-  font-size: 14px;
-  color: rgba(0, 0, 0, ${transparency.light.primaryText});
+  font-size: 16px;
+  color: rgba(0, 0, 0, ${transparency.light.secondaryText});
 
   ${robotoRegular()};
 `;

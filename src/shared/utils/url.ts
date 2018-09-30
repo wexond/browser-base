@@ -44,6 +44,9 @@ export const isWexondURL = (url: string) => {
     history: 'history',
     about: 'about',
     bookmarks: 'bookmarks',
+    downloads: 'downloads',
+    settings: 'settings',
+    extensions: 'extensions',
   };
 
   for (const page in pages) {

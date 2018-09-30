@@ -21,7 +21,7 @@ export interface Props {
 
 export default class Button extends React.Component<Props, {}> {
   public static defaultProps: Props = {
-    background: colors.blue['500'],
+    background: 'transparent',
     foreground: '#fff',
     inline: false,
     disabled: false,

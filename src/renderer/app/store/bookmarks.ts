@@ -78,8 +78,6 @@ export class BookmarksStore {
 
     const item = this.bookmarks[index];
 
-    console.log(id, item, index);
-
     if (item == null) return;
 
     this.bookmarks.splice(index, 1);
