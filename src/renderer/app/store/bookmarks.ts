@@ -33,18 +33,20 @@ export class BookmarksStore {
   }
 
   public async addBookmark(item: Bookmark) {
-    databases.bookmarks.insert(item, (err: any, item: Bookmark) => {
-      if (err) return console.warn(err);
-      this.bookmarks.push(item);
+    return new Promise((resolve: (item: Bookmark) => void) => {
+      databases.bookmarks.insert(item, (err: any, doc: Bookmark) => {
+        if (err) return console.warn(err);
+        this.bookmarks.push(doc);
 
-      for (const page of store.pagesStore.pages) {
-        if (page.wexondPage === 'bookmarks') {
-          page.webview.send('bookmarks-add', item);
+        for (const page of store.pagesStore.pages) {
+          if (page.wexondPage === 'bookmarks') {
+            page.webview.send('bookmarks-add', doc);
+          }
         }
-      }
-    });
 
-    return item;
+        resolve(doc);
+      });
+    });
   }
 
   public addFolder(title: string, parent: string) {
@@ -75,6 +77,9 @@ export class BookmarksStore {
         : this.bookmarks.indexOf(id);
 
     const item = this.bookmarks[index];
+
+    console.log(id, item, index);
+
     if (item == null) return;
 
     this.bookmarks.splice(index, 1);
