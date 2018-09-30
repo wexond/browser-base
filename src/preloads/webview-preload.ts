@@ -13,7 +13,7 @@ ipcRenderer.setMaxListeners(0);
 
 declare const global: any;
 
-webFrame.registerURLSchemeAsSecure('wexond-extension');
+webFrame.registerURLSchemeAsPrivileged('wexond-extension');
 
 const wexondUrl = isWexondURL(window.location.href);
 

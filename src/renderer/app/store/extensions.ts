@@ -29,7 +29,9 @@ export class ExtensionsStore {
       const webContents = remote.webContents.fromId(
         backgroundPages[key].webContentsId,
       );
-      webContents.send(`api-emit-event-${scope}-${name}`, ...data);
+      if (webContents) {
+        webContents.send(`api-emit-event-${scope}-${name}`, ...data);
+      }
     });
   }
 
