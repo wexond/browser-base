@@ -85,7 +85,7 @@ export class StorageArea {
           callback(result);
         });
     } else if (typeof query === 'string') {
-      this.db.get(query, (err, value) => {
+      this.db.get(query, (err: any, value) => {
         if (err) {
           if (err.notFound) {
             return callback({});
