@@ -6,7 +6,7 @@ import { caption } from '@/mixins';
 export const StyledSuggestions = styled.div`
   z-index: 50;
   width: 100%;
-  transition: 0.1s height;
+  transition: 0.2s opacity;
   color: rgba(0, 0, 0, ${transparency.light.primaryText});
   border-top: 0px solid rgba(0, 0, 0, ${transparency.light.dividers});
 `;
