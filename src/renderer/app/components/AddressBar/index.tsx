@@ -43,7 +43,9 @@ export default class AddressBar extends Component {
   }
 
   public onInputFocus = () => {
-    this.input.select();
+    setTimeout(() => {
+      this.input.select();
+    }, 1);
   };
 
   public autoComplete(text: string, suggestion: string) {

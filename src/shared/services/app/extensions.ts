@@ -150,7 +150,7 @@ export const runExtensionsService = () => {
       const { portId, msg, senderId } = data;
 
       for (const page of store.pagesStore.pages) {
-        if (page.webview.getWebContents().id !== senderId) {
+        if (page.webview && page.webview.getWebContents().id !== senderId) {
           page.webview.send(API_PORT_POSTMESSAGE + portId, msg);
         }
       }
