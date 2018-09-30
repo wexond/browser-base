@@ -98,7 +98,7 @@ export default class BookmarksDialog extends React.Component {
 
     const dropDownStyle = {
       width: '100%',
-      marginTop: 24,
+      marginTop: 16,
       zIndex: 1,
     };
 
@@ -129,12 +129,19 @@ export default class BookmarksDialog extends React.Component {
         <ButtonsContainer>
           <Button
             outlined
-            foreground={colors.blue['500']}
+            style={{ color: 'rgba(0, 0, 0, 0.54)' }}
+            foreground={'#000'}
             onClick={this.onRemoveClick}
           >
-            REMOVE
+            Remove
           </Button>
-          <Button onClick={this.onDoneClick}>DONE</Button>
+          <Button
+            text
+            background={colors.blue['500']}
+            onClick={this.onDoneClick}
+          >
+            Done
+          </Button>
         </ButtonsContainer>
       </Root>
     );

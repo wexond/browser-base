@@ -74,7 +74,7 @@ export interface LabelProps {
 
 export const Label = styled.div`
   width: 100%;
-  padding-left: 12px;
+  padding-left: 16px;
   white-space: nowrap;
   display: flex;
   align-self: center;
@@ -88,8 +88,6 @@ export const Label = styled.div`
     color: ${activated ? color : '#000'};
     font-size: ${activated ? 12 : 16}px;
     opacity: ${activated ? 1 : transparency.light.secondaryText};
-
-    ${activated ? robotoMedium() : robotoRegular()};
   `};
 `;
 
@@ -100,8 +98,8 @@ export const Input = styled.input`
   outline: none;
   margin: 0;
   margin-top: 16px;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 16px;
+  padding-right: 16px;
   -webkit-text-fill-color: transparent;
   background-color: transparent;
   font-size: 16px;
