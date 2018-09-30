@@ -4,7 +4,7 @@ import { parse } from 'url';
 
 export const requestURL = (url: string) =>
   new Promise((resolve: (data: string) => void, reject) => {
-    const options = parse(url);
+    const options: any = parse(url);
 
     let { request } = http;
 
@@ -12,9 +12,16 @@ export const requestURL = (url: string) =>
       request = https.request;
     }
 
+    options.headers = {
+      'Accept-Charset': 'utf-8',
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+
+    console.log(options);
+
     const req = request(options, res => {
       let data = '';
-      res.setEncoding('utf-8');
+      res.setEncoding('binary');
 
       res.on('data', chunk => {
         data += chunk;
