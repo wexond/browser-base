@@ -13,7 +13,7 @@ import WindowsControls from '../WindowsButtons';
 import BookmarkButton from '@app/components/BookmarkButton';
 import { icons } from '@/constants/renderer';
 import BrowserAction from '@app/components/BrowserAction';
-import { StyledToolbar, TabsSection, Tabs, Section } from './styles';
+import { StyledToolbar, Tabs, Section } from './styles';
 import BookmarksBar from '@app/components/BookmarksBar';
 
 @observer
@@ -100,12 +100,9 @@ export default class Toolbar extends React.Component {
         <Section>
           <NavigationButtons />
           <FirstSeparator />
-          <TabsSection>
-            <AddressBar />
-            <Tabs>
-              <TabBar />
-            </Tabs>
-          </TabsSection>
+          <Tabs>
+            <TabBar />
+          </Tabs>
           <SecondSeparator />
           <BookmarkButton />
           <ToolbarButton

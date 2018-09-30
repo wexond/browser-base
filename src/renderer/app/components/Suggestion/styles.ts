@@ -4,8 +4,10 @@ import { body2, centerImage } from '@/mixins';
 import { transparency } from '@/constants/renderer';
 
 export const StyledSuggestion = styled.div`
-  width: 100%;
+  width: calc(100% - 16px);
+  margin-left: 8px;
   height: 40px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
 
@@ -13,9 +15,9 @@ export const StyledSuggestion = styled.div`
     let backgroundColor = 'transparent';
 
     if (selected) {
-      backgroundColor = 'rgba(0, 0, 0, 0.08)';
+      backgroundColor = 'rgba(0, 0, 0, 0.06)';
     } else if (hovered) {
-      backgroundColor = 'rgba(0, 0, 0, 0.04)';
+      backgroundColor = 'rgba(0, 0, 0, 0.03)';
     }
 
     return css`
@@ -26,7 +28,7 @@ export const StyledSuggestion = styled.div`
 
 export const PrimaryText = styled.div`
   ${body2()};
-  margin-left: 64px;
+  margin-left: 24px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -45,8 +47,7 @@ export const SecondaryText = styled.div`
 `;
 
 export const Icon = styled.div`
-  position: absolute;
-  left: 16px;
+  margin-left: 16px;
   width: 16px;
   height: 16px;
   ${centerImage('16px', '16px')};
