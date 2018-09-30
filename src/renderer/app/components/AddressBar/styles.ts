@@ -8,7 +8,7 @@ export const StyledAddressBar = styled.div`
   position: absolute;
   transition: 0.3s opacity;
   z-index: 9999;
-  width: 652px;
+  width: 546px;
   top: 48px;
   left: 50%;
   background-color: white;
