@@ -9,6 +9,7 @@ export const StyledSuggestion = styled.div`
   height: 40px;
   border-radius: 4px;
   display: flex;
+  position: relative;
   align-items: center;
 
   ${({ selected, hovered }: { selected: boolean; hovered: boolean }) => {
@@ -28,7 +29,7 @@ export const StyledSuggestion = styled.div`
 
 export const PrimaryText = styled.div`
   ${body2()};
-  margin-left: 24px;
+  margin-left: calc(24px + 32px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -47,7 +48,8 @@ export const SecondaryText = styled.div`
 `;
 
 export const Icon = styled.div`
-  margin-left: 16px;
+  left: 16px;
+  position: absolute;
   width: 16px;
   height: 16px;
   ${centerImage('16px', '16px')};
