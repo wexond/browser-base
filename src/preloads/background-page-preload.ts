@@ -1,7 +1,9 @@
-import { remote } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 import { parse } from 'url';
 
 import { getAPI } from '@/utils/extensions';
+
+ipcRenderer.setMaxListeners(0);
 
 process.once('loaded', () => {
   const extensions = remote.getGlobal('extensions');

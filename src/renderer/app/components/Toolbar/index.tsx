@@ -78,6 +78,8 @@ export default class Toolbar extends React.Component {
   public onMenuIconMouseDown = (e: React.MouseEvent<any>) => {
     e.stopPropagation();
     store.addressBarStore.toggled = false;
+    store.bookmarksStore.dialogVisible = false;
+    store.pageMenuStore.visible = false;
   };
 
   public render() {

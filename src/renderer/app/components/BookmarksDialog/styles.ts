@@ -3,12 +3,13 @@ import styled, { css } from 'styled-components';
 import { EASE_FUNCTION } from '@/constants/design';
 import { shadows, robotoRegular } from '@/mixins';
 import { transparency } from '@/constants/renderer';
+import { TOOLBAR_HEIGHT } from '@/constants/app';
 
 export const Root = styled.div`
   width: 364px;
   background-color: #fff;
   position: absolute;
-  top: 44px;
+  top: ${TOOLBAR_HEIGHT}px;
   right: 0;
   z-index: 100;
   border-radius: 4px;
@@ -20,7 +21,8 @@ export const Root = styled.div`
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
-    transform: ${visible ? 'scale(1)' : 'scale(0)'};
+    transform: ${visible ? 'translateY(0)' : 'translateY(-20px)'};
+    pointer-events: ${visible ? 'auto' : 'none'};
     transition: ${`0.3s ${EASE_FUNCTION} transform, ${
       visible ? 0.1 : 0.2
     }s opacity`};
