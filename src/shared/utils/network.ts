@@ -17,8 +17,6 @@ export const requestURL = (url: string) =>
       'Content-Type': 'application/json; charset=UTF-8',
     };
 
-    console.log(options);
-
     const req = request(options, res => {
       let data = '';
       res.setEncoding('binary');
