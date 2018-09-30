@@ -5,14 +5,13 @@ import { transparency } from '@/constants/renderer';
 
 export const Root = styled.div`
   width: 100%;
-  height: 32px;
+  height: 40px;
   display: flex;
   align-items: center;
   text-align: center;
   font-size: 13px;
   position: relative;
   color: rgba(0, 0, 0, ${transparency.light.primaryText});
-  padding-left: 24px;
 
   ${robotoRegular()};
   ${noUserSelect()};
@@ -25,8 +24,8 @@ export const Root = styled.div`
 export const Icon = styled.div`
   width: 20px;
   height: 20px;
-  margin-left: 16px;
-  margin-right: 16px;
+  margin-left: 24px;
+  margin-right: 24px;
   opacity: ${transparency.light.inactiveIcon};
 
   ${centerImage('20px', '20px')};

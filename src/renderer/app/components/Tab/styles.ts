@@ -43,7 +43,7 @@ export const StyledTab = styled.div`
 
   ${({ selected }: TabProps) => css`
     z-index: ${selected ? 2 : 1};
-    background-color: ${selected ? 'rgba(33, 150, 243, 0.12)' : 'transparent'};
+    background-color: ${selected ? 'rgba(33, 150, 243, 0.15)' : 'transparent'};
   `};
 
   &:before {
