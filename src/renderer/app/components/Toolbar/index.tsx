@@ -126,7 +126,7 @@ export default class Toolbar extends React.Component {
           </ToolbarButton>
           {store.platform !== Platforms.MacOS && <WindowsControls />}
         </Section>
-        <BookmarksBar />
+        {false && <BookmarksBar />}
       </StyledToolbar>
     );
   }
