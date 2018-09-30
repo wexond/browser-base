@@ -3,13 +3,14 @@ import styled, { css } from 'styled-components';
 import { EASE_FUNCTION } from '@/constants/design';
 import { transparency } from '@/constants/renderer';
 import { shadows } from '@/mixins';
+import { TOOLBAR_HEIGHT } from '@/constants/app';
 
 export const Container = styled.div`
   width: 300px;
   padding-top: 8px;
   padding-bottom: 8px;
   position: absolute;
-  top: 42px;
+  top: ${TOOLBAR_HEIGHT}px;
   right: 0;
   background-color: #fff;
   z-index: 9999;

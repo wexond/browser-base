@@ -12,6 +12,9 @@ export default class BookmarkButton extends React.Component {
   public onStarIconMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    store.addressBarStore.toggled = false;
+    store.menuStore.visible = false;
+    store.pageMenuStore.visible = false;
   };
 
   public onStarIconClick = async () => {
