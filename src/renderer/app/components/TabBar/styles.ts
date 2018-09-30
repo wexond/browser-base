@@ -9,12 +9,6 @@ export const StyledTabbar = styled.div`
   position: relative;
   overflow: hidden;
   transition: 0.3s opacity, 0.3s transform;
-
-  ${({ visible }: { visible: boolean }) => css`
-    opacity: ${visible ? 1 : 0};
-    transform: ${visible ? '' : 'translateY(30px)'};
-    pointer-events: ${visible ? 'auto' : 'none'};
-  `};
 `;
 
 export const TabsContainer = styled.div`

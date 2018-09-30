@@ -159,18 +159,18 @@ export default class AddressBar extends Component {
 
   public render() {
     const dictionary = store.dictionary.addressBar;
-    const suggestionsVisible = store.suggestionsStore.suggestions.length !== 0;
+    const suggestionsVisible =
+      store.bookmarksStore.bookmarks.length !== 0 &&
+      store.addressBarStore.toggled;
 
     return (
       <StyledAddressBar
         visible={store.addressBarStore.toggled}
-        suggestionsVisible={suggestionsVisible}
         onMouseDown={e => e.stopPropagation()}
       >
-        <InputContainer suggestionsVisible={suggestionsVisible}>
+        <InputContainer>
           <Icon image={icons.search} />
           <Input
-            suggestionsVisible={suggestionsVisible}
             innerRef={r => (this.input = r)}
             onFocus={this.onInputFocus}
             placeholder={dictionary.search}
@@ -178,9 +178,8 @@ export default class AddressBar extends Component {
             onKeyPress={this.onKeyPress}
             onKeyDown={this.onKeyDown}
           />
-          <div style={{ clear: 'both' }} />
         </InputContainer>
-        <Suggestions />
+        <Suggestions visible={suggestionsVisible} />
       </StyledAddressBar>
     );
   }

@@ -41,7 +41,7 @@ export default class Tabbar extends React.Component {
 
   public render() {
     return (
-      <StyledTabbar visible={!store.addressBarStore.toggled}>
+      <StyledTabbar>
         <TabsContainer
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
