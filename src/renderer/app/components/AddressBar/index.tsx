@@ -7,6 +7,7 @@ import { observe } from 'mobx';
 import { StyledAddressBar, InputContainer, Icon, Input } from './styles';
 import Suggestions from '../Suggestions';
 import { icons } from '@/constants/renderer';
+import Dial from '@app/components/Dial';
 
 @observer
 export default class AddressBar extends Component {
@@ -160,8 +161,8 @@ export default class AddressBar extends Component {
   public render() {
     const dictionary = store.dictionary.addressBar;
     const suggestionsVisible =
-      store.bookmarksStore.bookmarks.length !== 0 &&
-      store.addressBarStore.toggled;
+      store.bookmarksStore.bookmarks.length !== 0 ||
+      store.suggestionsStore.suggestions.length !== 0;
 
     return (
       <StyledAddressBar
@@ -180,6 +181,7 @@ export default class AddressBar extends Component {
           />
         </InputContainer>
         <Suggestions visible={suggestionsVisible} />
+        <Dial />
       </StyledAddressBar>
     );
   }
