@@ -160,9 +160,7 @@ export default class AddressBar extends Component {
 
   public render() {
     const dictionary = store.dictionary.addressBar;
-    const suggestionsVisible =
-      store.bookmarksStore.bookmarks.length !== 0 ||
-      store.suggestionsStore.suggestions.length !== 0;
+    const suggestionsVisible = store.suggestionsStore.suggestions.length !== 0;
 
     return (
       <StyledAddressBar
