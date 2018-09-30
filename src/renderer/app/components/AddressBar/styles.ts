@@ -15,7 +15,6 @@ export const StyledAddressBar = styled.div`
   box-shadow: ${shadows(6)};
   border-radius: 4px;
   transition: 0.2s opacity, 0.2s transform;
-  padding-bottom: 8px;
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
