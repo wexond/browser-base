@@ -6,8 +6,8 @@ import { shadows } from '@/mixins';
 
 export const Container = styled.div`
   width: 300px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   position: absolute;
   top: 42px;
   right: 0;
@@ -29,8 +29,8 @@ export const Container = styled.div`
 `;
 
 export const Separator = styled.div`
-  margin-top: 4px;
-  margin-bottom: 4px;
+  margin-top: 8px;
+  margin-bottom: 8px;
   background-color: rgba(0, 0, 0, ${transparency.light.dividers});
   height: 1px;
   width: 100%;

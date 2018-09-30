@@ -48,5 +48,6 @@ export const commands: Commands = {
     store.tabsStore.menuVisible = false;
     store.bookmarksStore.dialogVisible = false;
     store.pageMenuStore.visible = false;
+    store.addressBarStore.toggled = false;
   },
 };
