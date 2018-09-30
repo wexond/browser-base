@@ -43,7 +43,9 @@ export const ButtonsContainer = styled.div`
   margin-top: 16px;
 
   & .material-button {
-    margin-right: 16px;
+    margin-right: 8px;
+    font-weight: 400;
+    font-size: 13px;
 
     &:last-child {
       margin-right: 0px;

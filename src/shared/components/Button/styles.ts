@@ -55,7 +55,7 @@ export const StyledButton = styled.div`
     theme,
   }: StyledButtonProps) => css`
     background-color: ${isOutlined || isText
-      ? 'transparent'
+      ? background
       : getComponentColor(background, true, disabled, theme)};
 
     box-shadow: ${!disabled && !isOutlined && !isText ? shadows(2) : 'unset'};
@@ -64,10 +64,9 @@ export const StyledButton = styled.div`
     cursor: ${disabled ? 'unset' : 'pointer'};
     pointer-events: ${disabled ? 'none' : 'all'};
 
-    &::before {
+    &::after {
       content: '';
-      display: block;
-      width: 100%;
+      width: calc(100% + 1px);
       height: 100%;
       top: 0;
       left: 0;
@@ -77,7 +76,7 @@ export const StyledButton = styled.div`
       transition: 0.2s opacity;
     }
 
-    &:hover::before {
+    &:hover::after {
       opacity: 0.12;
     }
   `};
