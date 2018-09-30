@@ -2,14 +2,15 @@
   <img src="static/app-icons/icon.png" width="256">
 </p>
 
+
 <div align="center">
   <h1>Wexond</h1>
 
 [![Discord](https://img.shields.io/discord/307605794680209409.svg?style=flat-square)](https://discord.gg/yAA8DdK)
-[![Travis](https://img.shields.io/travis/wexond/wexond.svg?style=flat-square)](https://travis-ci.org/wexond/wexond)
+[![Travis](https://img.shields.io/travis/Sential/wexond.svg?style=flat-square)](https://travis-ci.org/Sential/wexond)
 [![AppVeyor](https://img.shields.io/appveyor/ci/Sential/wexond.svg?style=flat-square)](https://ci.appveyor.com/project/Sential/wexond)
 
-Wexond is a web browser built on top of `Electron`, `React` and `styled-components`.
+Wexond is an extensible web browser with a totally different user experience, built on top of `Electron`, `React` and `styled-components`.
 
 </div>
 
