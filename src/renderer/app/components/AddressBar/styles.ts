@@ -29,7 +29,7 @@ export const Input = styled.input`
   outline: none;
   border: none;
   position: relative;
-  height: 30px;
+  height: 100%;
   background-color: transparent;
   padding-left: 20px;
 
@@ -41,11 +41,9 @@ export const Input = styled.input`
 export const InputContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 40px;
-  margin: 8px;
+  height: 48px;
   position: relative;
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, ${transparency.light.dividers});
 `;
 
 export const Icon = styled.div`
