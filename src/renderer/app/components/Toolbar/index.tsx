@@ -45,20 +45,6 @@ class FirstSeparator extends React.Component {
 }
 
 @observer
-class SecondSeparator extends React.Component {
-  public render() {
-    const { toggled } = store.addressBarStore;
-    return (
-      <ToolbarSeparator
-        style={{
-          visibility: toggled ? 'hidden' : 'visible',
-        }}
-      />
-    );
-  }
-}
-
-@observer
 class BrowserActions extends React.Component {
   public render() {
     const { selectedTab } = store.tabsStore;
@@ -103,7 +89,7 @@ export default class Toolbar extends React.Component {
           <Tabs>
             <TabBar />
           </Tabs>
-          <SecondSeparator />
+          <ToolbarSeparator />
           <BookmarkButton />
           <ToolbarButton
             size={16}
