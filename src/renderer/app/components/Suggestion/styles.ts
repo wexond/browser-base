@@ -4,10 +4,8 @@ import { body2, centerImage } from '@/mixins';
 import { transparency } from '@/constants/renderer';
 
 export const StyledSuggestion = styled.div`
-  width: calc(100% - 16px);
-  margin-left: 8px;
-  height: 40px;
-  border-radius: 4px;
+  width: 100%;
+  height: 48px;
   display: flex;
   position: relative;
   align-items: center;
@@ -29,7 +27,7 @@ export const StyledSuggestion = styled.div`
 
 export const PrimaryText = styled.div`
   ${body2()};
-  margin-left: calc(24px + 32px);
+  margin-left: calc(24px + 31px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
