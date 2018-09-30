@@ -8,6 +8,7 @@ import store from '../../store';
 import TabGroupsMenu from '../TabGroupsMenu';
 import PageMenu from '@app/components/PageMenu';
 import UpdateSnackbar from '@app/components/UpdateSnackbar';
+import AddressBar from '@app/components/AddressBar';
 
 @observer
 class App extends React.Component {
@@ -47,6 +48,7 @@ class App extends React.Component {
     return (
       <StyledApp>
         <Toolbar />
+        <AddressBar />
         <Line />
         <Pages />
         <PageMenu />

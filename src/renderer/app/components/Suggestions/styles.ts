@@ -1,14 +1,14 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { transparency } from '@/constants/renderer';
-import { caption } from '@/mixins';
+import { caption, shadows } from '@/mixins';
+import { TOOLBAR_HEIGHT } from '@/constants/app';
 
 export const StyledSuggestions = styled.div`
-  z-index: 50;
   width: 100%;
-  transition: 0.2s opacity;
   color: rgba(0, 0, 0, ${transparency.light.primaryText});
-  border-top: 0px solid rgba(0, 0, 0, ${transparency.light.dividers});
+  overflow: hidden;
+  padding-bottom: 8px;
 `;
 
 export const Caption = styled.div`
@@ -18,4 +18,13 @@ export const Caption = styled.div`
   margin-left: 16px;
   opacity: ${transparency.light.secondaryText};
   ${caption()};
+`;
+
+export const Dial = styled.div`
+  padding: 16px;
+  justify-content: center;
+
+  ${({ visible }: { visible: boolean }) => css`
+    display: ${visible ? 'flex' : 'none'};
+  `};
 `;

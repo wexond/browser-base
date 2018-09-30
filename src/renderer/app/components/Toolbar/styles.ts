@@ -24,12 +24,6 @@ export const StyledToolbar = styled.div`
   `};
 `;
 
-export const TabsSection = styled.div`
-  flex: 1;
-  height: 100%;
-  position: relative;
-`;
-
 export const Tabs = styled.div`
   flex: 1;
   height: 100%;
