@@ -37,6 +37,7 @@ export class TabGroup {
 
   public addTab({ url, active } = defaultAddTabOptions) {
     const tab = new Tab(this);
+    tab.url = url;
     this.tabs.push(tab);
 
     const page = new Page(tab.id, url);
