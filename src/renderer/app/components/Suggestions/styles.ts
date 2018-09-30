@@ -8,7 +8,6 @@ export const StyledSuggestions = styled.div`
   width: 100%;
   color: rgba(0, 0, 0, ${transparency.light.primaryText});
   overflow: hidden;
-  padding-bottom: 8px;
 
   ${({ visible }: { visible: boolean }) => css`
     display: ${visible ? 'block' : 'none'};
