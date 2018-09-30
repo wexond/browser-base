@@ -10,7 +10,12 @@ export default class Dial extends React.Component {
     const { bookmarks } = store.bookmarksStore;
 
     return (
-      <StyledDial visible={store.suggestionsStore.suggestions.length === 0}>
+      <StyledDial
+        visible={
+          store.suggestionsStore.suggestions.length === 0 &&
+          bookmarks.length > 0
+        }
+      >
         {bookmarks.map(bookmark => (
           <BookmarkTile key={bookmark._id} data={bookmark} />
         ))}
