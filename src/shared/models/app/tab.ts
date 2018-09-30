@@ -63,6 +63,15 @@ export class Tab {
       });
 
       store.tabsStore.selectedTab = this.id;
+
+      setTimeout(() => {
+        if (
+          this.url.startsWith('wexond://newtab') ||
+          this.url.startsWith('http://localhost:8080/newtab.html')
+        ) {
+          store.addressBarStore.toggled = true;
+        }
+      }, 1);
     }
   }
 
