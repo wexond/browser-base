@@ -60,7 +60,7 @@ export default class BookmarksDialog extends React.Component {
     if (this.bookmark) {
       const selectedTab = store.tabsStore.getSelectedTab();
 
-      store.bookmarksStore.removeItem(this.bookmark);
+      store.bookmarksStore.removeItem(this.bookmark._id);
       selectedTab.isBookmarked = false;
       store.bookmarksStore.dialogVisible = false;
     }
