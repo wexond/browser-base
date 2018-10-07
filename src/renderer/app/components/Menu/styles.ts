@@ -7,8 +7,8 @@ import { TOOLBAR_HEIGHT } from '@/constants/app';
 
 export const Container = styled.div`
   width: 300px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   position: absolute;
   top: ${TOOLBAR_HEIGHT}px;
   right: 0;
@@ -30,8 +30,8 @@ export const Container = styled.div`
 `;
 
 export const Separator = styled.div`
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin-top: 4px;
+  margin-bottom: 4px;
   background-color: rgba(0, 0, 0, ${transparency.light.dividers});
   height: 1px;
   width: 100%;
