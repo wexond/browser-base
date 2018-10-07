@@ -62,21 +62,21 @@ export const StyledButton = styled.div`
     color: ${getComponentColor(foreground, true, disabled, theme, false)}};
     border: ${getBorder(isOutlined, theme)};
     cursor: ${disabled ? 'unset' : 'pointer'};
-    pointer-events: ${disabled ? 'none' : 'all'};
+    pointer-events: ${disabled ? 'none' : 'inherit'};
 
-    &::after {
+    &::before {
       content: '';
-      width: calc(100% + 1px);
+      width: calc(100% + 2px);
       height: 100%;
       top: 0;
-      left: 0;
+      left: -1px;
       position: absolute;
       background-color: ${foreground};
       opacity: 0;
       transition: 0.2s opacity;
     }
 
-    &:hover::after {
+    &:hover::before {
       opacity: 0.12;
     }
   `};
