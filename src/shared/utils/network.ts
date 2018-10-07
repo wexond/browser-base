@@ -12,11 +12,6 @@ export const requestURL = (url: string) =>
       request = https.request;
     }
 
-    options.headers = {
-      'Accept-Charset': 'utf-8',
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
-
     const req = request(options, res => {
       let data = '';
       res.setEncoding('binary');

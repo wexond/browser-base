@@ -13,7 +13,7 @@
   "homepage": "https://github.com/wexond/wexond#readme",
   "main": "main.js",
   "author": {
-    "name": "Wexond",
+    "name": "Eryk Rakowski",
     "email": "sentialx@gmail.com"
   },
   "contributors": [
@@ -68,7 +68,7 @@
     "concurrently": "4.0.1",
     "cross-env": "5.2.0",
     "devtron": "1.4.0",
-    "electron": "2.0.10",
+    "electron": "2.0.11",
     "electron-builder": "20.28.4",
     "electron-react-devtools": "0.5.3",
     "electron-updater": "3.1.2",
