@@ -171,7 +171,7 @@ export const runExtensionsService = (window: BrowserWindow) => {
 
         if (!alarm.periodInMinutes) {
           setTimeout(() => {
-            contents.send(`api-emit-event-alarms-onAlarm`, alarm);
+            contents.send('api-emit-event-alarms-onAlarm', alarm);
           }, alarm.scheduledTime - Date.now());
         }
       }

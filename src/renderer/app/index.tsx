@@ -19,6 +19,7 @@ const render = (AppComponent: any) => {
     document.getElementById('app'),
   );
 };
+
 (async function setup() {
   runServices();
   render(App);
@@ -28,13 +29,13 @@ const render = (AppComponent: any) => {
   }
 
   if (store.tabsStore.groups.length === 0) {
-    const argv = remote.process.argv;
-
     store.tabsStore.addGroup();
 
-    if (argv.length > 1 && argv[1] !== '.') {
-      store.tabsStore.getSelectedTab().url = argv[1];
-      store.pagesStore.getSelected().url = argv[1];
+    const openedFilePath = remote.process.argv[1];
+
+    if (openedFilePath !== '.') {
+      store.tabsStore.getSelectedTab().url = openedFilePath;
+      store.pagesStore.getSelected().url = openedFilePath;
     }
   }
 
