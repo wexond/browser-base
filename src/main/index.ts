@@ -1,4 +1,4 @@
-import { app, ipcMain } from 'electron';
+import { app, ipcMain, BrowserWindow } from 'electron';
 import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';
@@ -19,7 +19,7 @@ app.setPath('userData', resolve(homedir(), '.wexond'));
 
 declare const global: Global;
 
-let mainWindow: Electron.BrowserWindow;
+let mainWindow: BrowserWindow;
 
 global.extensions = {};
 global.backgroundPages = {};
@@ -31,44 +31,64 @@ global.locale = 'en-US';
 global.userAgent =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36';
 
-app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    mainWindow = createWindow();
-  }
-});
+const shouldQuit = app.makeSingleInstance(argv => {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore();
+    }
 
-app.on('ready', () => {
-  for (const key in defaultPaths) {
-    const path = defaultPaths[key];
-    const filePath = getPath(path);
-    if (existsSync(filePath)) continue;
+    mainWindow.focus();
 
-    if (path.indexOf('.') === -1) {
-      mkdirSync(filePath);
-    } else {
-      writeFileSync(filePath, filesContent[key], 'utf8');
+    if (argv[1] !== '.') {
+      mainWindow.webContents.send('open-url', argv[1]);
     }
   }
 
-  mainWindow = createWindow();
+  return true;
+});
 
-  loadExtensions(mainWindow);
-
-  runAutoUpdaterService(mainWindow);
-  runExtensionsService(mainWindow);
-  runWebRequestService(mainWindow);
-
-  mainWindow.on('closed', () => {
-    mainWindow = null;
+if (shouldQuit) {
+  app.quit();
+} else {
+  app.on('activate', () => {
+    // On OS X it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (mainWindow === null) {
+      mainWindow = createWindow();
+    }
   });
-});
 
-app.on('window-all-closed', () => {
-  if (platform() !== 'darwin') {
-    app.quit();
-  }
-});
+  app.on('ready', () => {
+    for (const key in defaultPaths) {
+      const path = defaultPaths[key];
+      const filePath = getPath(path);
+      if (existsSync(filePath)) continue;
 
-registerProtocols();
+      if (path.indexOf('.') === -1) {
+        mkdirSync(filePath);
+      } else {
+        writeFileSync(filePath, filesContent[key], 'utf8');
+      }
+    }
+
+    mainWindow = createWindow();
+
+    loadExtensions(mainWindow);
+
+    runAutoUpdaterService(mainWindow);
+    runExtensionsService(mainWindow);
+    runWebRequestService(mainWindow);
+
+    mainWindow.on('closed', () => {
+      mainWindow = null;
+    });
+  });
+
+  app.on('window-all-closed', () => {
+    if (platform() !== 'darwin') {
+      app.quit();
+    }
+  });
+
+  registerProtocols();
+}
