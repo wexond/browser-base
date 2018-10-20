@@ -20,11 +20,15 @@ export const runServices = () => {
 
   ipcRenderer.on(
     'get-tab-by-web-contents-id',
-    (e: any, webContentsId: number) => {
+    (e: Electron.IpcMessageEvent, webContentsId: number) => {
       const tab = store.tabsStore.getTabByWebContentsId(webContentsId);
       ipcRenderer.send('get-tab-by-web-contents-id', tab ? tab : {});
     },
   );
+
+  ipcRenderer.on('open-url', (e: Electron.IpcMessageEvent, url: any) => {
+    store.tabsStore.addTab({ url, active: true });
+  });
 
   runAutoUpdaterService();
   runExtensionsService();
