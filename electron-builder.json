@@ -25,5 +25,10 @@
   },
   "mac": {
     "category": "public.app-category.navigation"
+  },
+  "fileAssociations": {
+    "ext": [".html"],
+    "description": "Wexond",
+    "role": "Viewer"
   }
 }
