@@ -97,6 +97,10 @@ export const loadExtensions = async (window: BrowserWindow) => {
 
         const id = dir;
 
+        if (global.extensions[id]) {
+          return;
+        }
+
         global.extensions[id] = manifest;
 
         const extensionStoragePath = getPath(
