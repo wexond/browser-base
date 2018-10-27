@@ -1,6 +1,7 @@
 import { BrowserWindow, app } from 'electron';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
-import { join } from 'path';
+import { join, resolve } from 'path';
+import os from 'os';
 
 import { getPath } from '@/utils/paths';
 import { WindowState } from '@/interfaces/main';
@@ -22,7 +23,7 @@ export const createWindow = () => {
   }
 
   let windowData: Electron.BrowserWindowConstructorOptions = {
-    frame: process.env.ENV === 'dev',
+    frame: process.env.ENV === 'dev' || os.platform() === 'darwin',
     minWidth: 400,
     minHeight: 450,
     width: 900,
@@ -32,6 +33,7 @@ export const createWindow = () => {
     webPreferences: {
       plugins: true,
     },
+    icon: resolve(__dirname, 'static/app-icons/icon.png'),
   };
 
   // Merge bounds from the last window state to the current window options.
@@ -66,8 +68,6 @@ export const createWindow = () => {
     windowState.maximized = window.isMaximized();
     writeFileSync(windowDataPath, JSON.stringify(windowState));
   });
-
-  window.webContents.openDevTools({ mode: 'detach' });
 
   if (process.env.ENV === 'dev') {
     window.webContents.openDevTools({ mode: 'detach' });
