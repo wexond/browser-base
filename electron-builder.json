@@ -26,9 +26,12 @@
   "mac": {
     "category": "public.app-category.navigation"
   },
-  "fileAssociations": {
-    "ext": [".html"],
-    "description": "Wexond",
-    "role": "Viewer"
-  }
+  "fileAssociations": [
+    {
+      "name": "Document",
+      "description": "Wexond",
+      "role": "Viewer",
+      "ext": "html"
+    }
+  ]
 }
