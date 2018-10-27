@@ -12,6 +12,7 @@ import {
   runExtensionsService,
   runWebRequestService,
 } from '@/services/main';
+import extract from 'extract-zip';
 
 ipcMain.setMaxListeners(0);
 
@@ -69,6 +70,18 @@ if (shouldQuit) {
       } else {
         writeFileSync(filePath, filesContent[key], 'utf8');
       }
+    }
+
+    if (!existsSync(resolve(getPath('extensions'), 'uBlock0.chromium'))) {
+      extract(
+        resolve(__dirname, 'static/extensions/ublock.zip'),
+        { dir: getPath('extensions') },
+        err => {
+          if (err) console.error(err);
+
+          loadExtensions(mainWindow);
+        },
+      );
     }
 
     mainWindow = createWindow();
