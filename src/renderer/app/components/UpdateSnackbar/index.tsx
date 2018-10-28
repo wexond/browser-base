@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { ipcRenderer } from 'electron';
 
 import store from '@app/store';

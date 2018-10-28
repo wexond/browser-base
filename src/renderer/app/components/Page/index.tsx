@@ -1,7 +1,7 @@
 import { remote } from 'electron';
 import { observer } from 'mobx-react';
 import { resolve } from 'path';
-import React from 'react';
+import * as React from 'react';
 
 import { Page, Tab } from '@/models/app';
 import store from '@app/store';
@@ -361,6 +361,8 @@ export default class extends React.Component<{ page: Page }> {
     const { page } = this.props;
     const { url, id } = page;
 
+    console.log(resolve(remote.app.getAppPath(), 'build/webview-preload.js'));
+
     return (
       <StyledPage selected={page.isSelected}>
         <webview
@@ -375,7 +377,7 @@ export default class extends React.Component<{ page: Page }> {
           partition="persist:webviewsession"
           preload={`file://${resolve(
             remote.app.getAppPath(),
-            'build/webview-preload.js?test=test',
+            'build/webview-preload.js',
           )}`}
           allowFullScreen
         />

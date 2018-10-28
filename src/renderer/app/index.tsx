@@ -1,7 +1,6 @@
-import React from 'react';
+import * as React from 'react';
 import { ipcRenderer, remote } from 'electron';
-import ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
+import * as ReactDOM from 'react-dom';
 import { injectGlobal } from 'styled-components';
 
 import { Style } from '../styles';
@@ -12,12 +11,7 @@ import store from '@app/store';
 injectGlobal`${Style}`;
 
 const render = (AppComponent: any) => {
-  ReactDOM.render(
-    <AppContainer>
-      <AppComponent />
-    </AppContainer>,
-    document.getElementById('app'),
-  );
+  ReactDOM.render(<AppComponent />, document.getElementById('app'));
 };
 
 (async function setup() {
@@ -41,8 +35,3 @@ const render = (AppComponent: any) => {
 
   ipcRenderer.send('renderer-load');
 })();
-
-// react-hot-loader
-if ((module as any).hot) {
-  (module as any).hot.accept();
-}

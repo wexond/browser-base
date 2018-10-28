@@ -8,15 +8,8 @@
 
 <body>
   <div id="app"></div>
-</body>
 
-<script src="./load-scripts.js"></script>
-<script>
-  if (process.env.ENV === 'dev') {
-    loadScripts([`http://localhost:8080/app.js`]);
-  } else {
-    loadScripts([`file:///${__dirname}/../../build/app.js`]);
-  }
-</script>
+  $bundles
+</body>
 
 </html>
