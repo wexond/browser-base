@@ -11,7 +11,7 @@
     "styled-components"
   ],
   "homepage": "https://github.com/wexond/wexond#readme",
-  "main": "main.js",
+  "main": "build/main.js",
   "author": {
     "name": "Eryk Rakowski",
     "email": "sentialx@gmail.com"
@@ -34,8 +34,9 @@
     "url": "https://github.com/wexond/wexond/issues"
   },
   "scripts": {
-    "dev": "node fuse.js",
+    "dev": "cross-env NODE_ENV='dev' node fuse.js",
     "build": "node fuse.js",
+    "start": "cross-env ENV='dev' electron .",
     "compile-win32": "npm run build && electron-builder -w -p always",
     "compile-darwin": "npm run build && electron-builder -m -p always",
     "compile-linux": "npm run build && electron-builder -l -p always",
@@ -60,11 +61,14 @@
     "@types/react-dom": "16.0.8",
     "concurrently": "4.0.1",
     "cross-env": "5.2.0",
-    "electron": "2.0.11",
+    "deepmerge": "2.2.1",
+    "electron": "2.0.12",
     "electron-builder": "20.28.4",
     "electron-react-devtools": "0.5.3",
     "electron-updater": "3.1.2",
+    "express": "4.16.4",
     "extract-zip": "1.6.7",
+    "fuse-box": "3.5.0",
     "gsap": "2.0.2",
     "levelup": "3.1.1",
     "mobx": "5.5.0",
@@ -74,13 +78,13 @@
     "prettier": "1.14.3",
     "react": "16.5.2",
     "react-dom": "16.5.2",
+    "source-map-support": "0.5.9",
     "styled-components": "3.4.9",
     "tslint": "5.11.0",
     "tslint-config-airbnb": "5.11.0",
     "tslint-config-prettier": "1.15.0",
     "typescript": "3.1.1",
     "tz-lookup": "6.1.8",
-    "url-loader": "1.1.1",
     "wexond-package-manager": "1.4.5"
   },
   "dependencies": {
