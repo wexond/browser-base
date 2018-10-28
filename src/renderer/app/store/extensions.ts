@@ -1,7 +1,7 @@
 import { remote } from 'electron';
 import { observable } from 'mobx';
 import { resolve } from 'path';
-import fs from 'fs';
+import * as fs from 'fs';
 import { promisify } from 'util';
 
 import store from '.';
