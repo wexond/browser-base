@@ -60,18 +60,20 @@ export const registerProtocols = () => {
       (request, callback: any) => {
         const parsed = parse(request.url);
 
-        if (parsed.hostname === 'build' && parsed.path) {
-          return callback({ path: join(__dirname, 'build', parsed.path) });
-        }
-
         if (parsed.path === '/') {
           return callback({
-            path: join(__dirname, 'static/pages', parsed.hostname + '.html'),
+            path: join(
+              app.getAppPath(),
+              'build',
+              `${parsed.hostname}${
+                parsed.hostname.indexOf('.') === -1 ? '.html' : ''
+              }`,
+            ),
           });
         }
 
         return callback({
-          path: join(__dirname, 'static/pages', parsed.path),
+          path: join(app.getAppPath(), 'build', parsed.path),
         });
       },
       error => {

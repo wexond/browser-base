@@ -113,6 +113,7 @@ export const getSearchSuggestions = (filter: string) =>
     try {
       const json = await requestURL(
         `http://google.com/complete/search?client=chrome&q=${input}`,
+        false,
       );
 
       let suggestions: string[] = [];
