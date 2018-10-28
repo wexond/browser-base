@@ -1,4 +1,4 @@
-import Datastore from 'nedb';
+import * as Datastore from 'nedb';
 
 import { defaultPaths } from '@/constants/paths';
 import { getPath } from '@/utils/paths';

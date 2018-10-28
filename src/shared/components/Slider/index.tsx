@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { colors, transparency } from '@/constants/renderer';
 import { hexToRgb } from '@/utils/colors';
