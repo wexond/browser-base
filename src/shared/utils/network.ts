@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-export const requestURL = (url: string) =>
-  new Promise((resolve: (data: any) => void, reject) => {
-    let adapter: any = require('axios/lib/adapters/xhr');
+let adapter: any = require('axios/lib/adapters/xhr');
 
-    if (process) {
+export const requestURL = (url: string, xhr: boolean = true) =>
+  new Promise((resolve: (data: any) => void, reject) => {
+    if (!xhr) {
       adapter = require('axios/lib/adapters/http');
     }
 
