@@ -4,6 +4,7 @@ const {
   QuantumPlugin,
   EnvPlugin,
   CopyPlugin,
+  JSONPlugin,
 } = require('fuse-box');
 const express = require('express');
 const { spawn } = require('child_process');
@@ -17,12 +18,12 @@ const getConfig = (target, type) => {
     target,
     output: `build/$name.js`,
     tsConfig: './tsconfig.json',
+    useTypescriptCompiler: true,
     plugins: [
       EnvPlugin({ NODE_ENV: production ? 'production' : 'development' }),
       production &&
         QuantumPlugin({
           bakeApiIntoBundle: type,
-          target,
           treeshake: true,
           removeExportsInterop: false,
           uglify: true,
@@ -65,13 +66,6 @@ const mainProcess = () => {
 
   if (!production) {
     app.watch();
-
-    return fuse.run().then(() => {
-      const child = spawn('npm', ['start'], {
-        shell: true,
-        stdio: 'inherit',
-      });
-    });
   }
 
   fuse.run();
@@ -81,6 +75,7 @@ const renderer = () => {
   const cfg = getRendererConfig('electron');
 
   cfg.plugins.push(getWebIndexPlugin('app'));
+  cfg.plugins.push(JSONPlugin());
   cfg.plugins.push(CopyPlugin({ files: ['*.woff2', '*.png', '*.svg'] }));
 
   const fuse = FuseBox.init(cfg);
@@ -98,18 +93,23 @@ const renderer = () => {
 
   if (!production) {
     app.hmr().watch();
+
+    return fuse.run().then(() => {
+      const child = spawn('npm', ['start'], {
+        shell: true,
+        stdio: 'inherit',
+      });
+    });
   }
 
   fuse.run();
 };
 
 const applets = () => {
-  const cfg = getRendererConfig('browser@es6');
+  const cfg = getRendererConfig('browser@es5');
 
-  cfg.plugins.push(getWebIndexPlugin('history'));
-  cfg.plugins.push(getWebIndexPlugin('about'));
   cfg.plugins.push(getWebIndexPlugin('newtab'));
-  cfg.plugins.push(getWebIndexPlugin('bookmarks'));
+  cfg.plugins.push(JSONPlugin());
   cfg.plugins.push(CopyPlugin({ files: ['*.woff2', '*.png', '*.svg'] }));
 
   const fuse = FuseBox.init(cfg);
@@ -123,26 +123,11 @@ const applets = () => {
     });
   }
 
-  const about = fuse
-    .bundle('about')
-    .instructions('> [renderer/about/index.tsx]');
-
-  const history = fuse
-    .bundle('history')
-    .instructions('> [renderer/history/index.tsx]');
-
-  const bookmarks = fuse
-    .bundle('bookmarks')
-    .instructions('> [renderer/bookmarks/index.tsx]');
-
   const newtab = fuse
     .bundle('newtab')
-    .instructions('> [renderer/newtab/index.tsx]');
+    .instructions('> renderer/newtab/index.tsx');
 
   if (!production) {
-    about.hmr().watch();
-    history.hmr().watch();
-    bookmarks.hmr().watch();
     newtab.hmr().watch();
   }
 
@@ -150,19 +135,20 @@ const applets = () => {
 };
 
 const preloads = () => {
-  const fuse = FuseBox.init(getRendererConfig());
+  const fuse = FuseBox.init(getRendererConfig('electron'));
 
   const webviewPreload = fuse
     .bundle('webview-preload')
-    .instructions('> [preloads/webview-preload.ts]');
+    .instructions('> preloads/webview-preload.ts');
 
   const backgroundPagePreload = fuse
     .bundle('background-page-preload')
-    .instructions('> [preloads/background-page-preload.ts]');
+    .instructions('> preloads/background-page-preload.ts');
 
   if (!production) {
     webviewPreload.watch();
     backgroundPagePreload.watch();
+    return;
   }
 
   fuse.run();
@@ -170,5 +156,5 @@ const preloads = () => {
 
 renderer();
 preloads();
-applets();
 mainProcess();
+applets();
