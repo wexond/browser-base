@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
-import defaultKeyBindings from '../../../shared/resources/defaults/key-bindings.json';
 import * as Mousetrap from 'mousetrap';
 
+import defaultKeyBindings = require('../../../shared/resources/defaults/key-bindings.json');
 import { KeyBinding } from '~/shared/interfaces';
 import { getPath } from '~/shared/utils/paths';
 import { commands } from '@/constants/app';
