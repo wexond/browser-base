@@ -7,6 +7,14 @@
     "key": "ctrl+n",
     "command": "tabs.new"
   },
+    {
+    "key": "ctrl+w",
+    "command": "tabs.close"
+  },
+    {
+    "key": "ctrl+tab",
+    "command": "tabs.switch"
+  },
   {
     "key": "ctrl+r",
     "command": "tabs.reload"
