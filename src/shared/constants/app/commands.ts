@@ -1,4 +1,6 @@
 import store from '@app/store';
+import { Tabs } from '@/models/extensions';
+import { debug } from 'util';
 
 interface Commands {
   [key: string]: () => void;
@@ -20,8 +22,14 @@ export const commands: Commands = {
       }
     }
   },
+  'tabs.tabswitch': () => {
+    store.tabsStore.nextTab();
+  },
   'tabs.new': () => {
     store.tabsStore.addTab();
+  },
+  'tabs.close': () => {
+    store.tabsStore.closeTab();
   },
   'tabs.reload': () => {
     store.pagesStore.getSelected().webview.reload();
