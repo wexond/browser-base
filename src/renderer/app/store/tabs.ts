@@ -1,7 +1,7 @@
 import { observable, computed } from 'mobx';
 import { TweenLite } from 'gsap';
 
-import { TabGroup } from '@/models/app';
+import { TabGroup, Tab } from '@/models/app';
 import {
   TAB_ANIMATION_EASING,
   TAB_ANIMATION_DURATION,
@@ -68,6 +68,44 @@ export class TabsStore {
     this.rearrangeTabsTimer.canReset = true;
   }
 
+  public nextTab(){
+    const selectedTab = this.getSelectedTab();
+    const {tabs} = store.tabsStore.getCurrentGroup()
+    if(selectedTab.id +1 == tabs.length +1){
+      tabs[0].select();
+    } else {
+      tabs[selectedTab.id].select();
+    }
+  }
+
+  public closeTab(){
+    const selectedTab = this.getSelectedTab();
+    const { tabs } = store.tabsStore.getCurrentGroup();
+    const { tabGroup } = this.getSelectedTab();
+
+    store.pagesStore.removePage(selectedTab.id);
+
+    store.tabsStore.resetRearrangeTabsTimer();
+
+    const notClosingTabs = tabs.filter(x => !x.isClosing);
+    let index = notClosingTabs.indexOf(selectedTab);
+
+    selectedTab.isClosing = true;
+    if (notClosingTabs.length - 1 === index) {
+      const previousTab = tabs[index - 1];
+      selectedTab.setLeft(previousTab.getNewLeft() + selectedTab.getWidth(), true);
+      tabGroup.updateTabsBounds(true);
+  }
+
+
+  selectedTab.setWidth(0, true);
+  tabGroup.setTabsLefts(true);
+
+  store.extensionsStore.emitEvent('tabs', 'onRemoved', selectedTab.id, {
+    windowId: 0,
+    isWindowClosing: false,})
+}
+
   public removeGroup(id: number) {
     (this.groups as any).replace(this.groups.filter(x => x.id !== id));
   }
@@ -98,7 +136,6 @@ export class TabsStore {
     }
     return null;
   }
-
   public addTab(details = defaultAddTabOptions) {
     return this.getCurrentGroup().addTab(details);
   }

@@ -4,8 +4,12 @@
     "command": "tabs.switch"
   },
   {
-    "key": "ctrl+n",
+    "key": "ctrl+t",
     "command": "tabs.new"
+  },
+  {
+    "key": "ctrl+w",
+    "command": "tabs.close"
   },
   {
     "key": "ctrl+r",
@@ -16,7 +20,7 @@
     "command": "tabs.back"
   },
   {
-    "key": "ctrl+right",
+    "key": "ctrl+tab",
     "command": "tabs.forward"
   },
   {

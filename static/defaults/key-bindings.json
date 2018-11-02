@@ -4,8 +4,16 @@
     "command": "tabs.switch"
   },
   {
-    "key": "ctrl+n",
+    "key": "ctrl+tab",
+    "command": "tabs.tabswitch"
+  },
+  {
+    "key": "ctrl+t",
     "command": "tabs.new"
+  },
+  {
+    "key": "ctrl+w",
+    "command": "tabs.close"
   },
   {
     "key": "ctrl+r",
@@ -25,15 +33,15 @@
   },
   {
     "key": "ctrl+s",
-    "command": "tabGroups.show"
-  },
-  {
-    "key": "ctrl+e",
-    "command": "menu.show"
+    "command": "workspaces.show"
   },
   {
     "key": "ctrl+h",
     "command": "history.show"
+  },
+  {
+    "key": "ctrl+e",
+    "command": "menu.show"
   },
   {
     "key": "ctrl+b",
