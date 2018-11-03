@@ -79,7 +79,7 @@ export class TabsStore {
   }
 
   public closeTab(){
-    const selectedTab = this.getSelectedTab();
+   const selectedTab = this.getSelectedTab();
     const { tabs } = store.tabsStore.getCurrentGroup();
     const { tabGroup } = this.getSelectedTab();
 
