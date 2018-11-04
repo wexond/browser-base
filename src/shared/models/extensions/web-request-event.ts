@@ -38,7 +38,7 @@ export class WebRequestEvent {
         );
       },
     );
-    ipcRenderer.send(`api-add-webRequest-listener`, {
+    ipcRenderer.send('api-add-webRequest-listener', {
       id,
       name: this.name,
       filters,
@@ -53,6 +53,6 @@ export class WebRequestEvent {
       `api-webRequest-intercepted-${this.name}-${id}`,
     );
 
-    ipcRenderer.send(`api-remove-webRequest-listener`, { id, name: this.name });
+    ipcRenderer.send('api-remove-webRequest-listener', { id, name: this.name });
   }
 }
