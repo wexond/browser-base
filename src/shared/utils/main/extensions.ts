@@ -91,11 +91,11 @@ export const loadExtensions = async (window: BrowserWindow) => {
           await readFile(manifestPath, 'utf8'),
         );
 
-        manifest.extensionId = dir;
+        const id = dir.toLowerCase();
+
+        manifest.extensionId = id;
         manifest.srcDirectory = extensionPath;
         manifest.default_locale = manifest.default_locale;
-
-        const id = dir;
 
         if (global.extensions[id]) {
           return;
