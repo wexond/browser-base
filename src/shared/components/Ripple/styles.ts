@@ -39,8 +39,8 @@ export const StyledRipple = styled.div`
     transition: 0.3s background-color
       ${sizeTransition
         ? `, ${rippleTime}s width ${easing}, ${rippleTime}s height ${easing}`
-        : ``}
-      ${opacityTransition ? `, ${fadeOutTime}s opacity` : ``};
+        : ''}
+      ${opacityTransition ? `, ${fadeOutTime}s opacity` : ''};
     background-color: ${color};
     opacity: ${opacity};
   `};
