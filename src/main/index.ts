@@ -1,4 +1,4 @@
-import { app, ipcMain, BrowserWindow } from 'electron';
+import {ipcMain, BrowserWindow } from 'electron';
 import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';
@@ -15,6 +15,8 @@ import {
 import extract from 'extract-zip';
 
 ipcMain.setMaxListeners(0);
+
+const {app,Menu} = require('electron');
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
@@ -52,6 +54,9 @@ if (shouldQuit) {
   app.quit();
 } else {
   app.on('activate', () => {
+    if (process.platform === 'darwin') {
+      // Create our menu entries so that we can use MAC shortcuts
+    }
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
@@ -60,7 +65,26 @@ if (shouldQuit) {
   });
 
   app.on('ready', () => {
-    for (const key in defaultPaths) {
+    if (process.platform === 'darwin') {
+      // Create our menu entries so that we can use MAC shortcuts
+      Menu.setApplicationMenu(Menu.buildFromTemplate([
+        {
+          label: 'Edit',
+          submenu: [
+            { role: 'undo' },
+            { role: 'redo' },
+            { type: 'separator' },
+            { role: 'cut' },
+            { role: 'copy' },
+            { role: 'paste' },
+            { role: 'pasteandmatchstyle' },
+            { role: 'delete' },
+            { role: 'selectall' },
+            { role: 'quit' }
+          ]
+        }
+      ]));
+      for (const key in defaultPaths) {
       const path = defaultPaths[key];
       const filePath = getPath(path);
       if (existsSync(filePath)) continue;
@@ -95,13 +119,14 @@ if (shouldQuit) {
     mainWindow.on('closed', () => {
       mainWindow = null;
     });
-  });
+  }});
 
   app.on('window-all-closed', () => {
     if (platform() !== 'darwin') {
       app.quit();
     }
   });
+
 
   registerProtocols();
 }
