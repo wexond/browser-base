@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import React from 'react';
+import * as React from 'react';
 
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';

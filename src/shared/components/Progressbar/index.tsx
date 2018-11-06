@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { colors } from '@/constants/renderer';
 import { Indicator, Root, Track } from './styles';
