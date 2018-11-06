@@ -1,4 +1,4 @@
-import {ipcMain, BrowserWindow } from 'electron';
+import { ipcMain, BrowserWindow } from 'electron';
 import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { mkdirSync, existsSync, writeFileSync } from 'fs';
@@ -16,7 +16,7 @@ import extract from 'extract-zip';
 
 ipcMain.setMaxListeners(0);
 
-const {app,Menu} = require('electron');
+const { app, Menu } = require('electron');
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
@@ -67,66 +67,68 @@ if (shouldQuit) {
   app.on('ready', () => {
     if (process.platform === 'darwin') {
       // Create our menu entries so that we can use MAC shortcuts
-      Menu.setApplicationMenu(Menu.buildFromTemplate([
-        {
-          label: 'Edit',
-          submenu: [
-            { role: 'undo' },
-            { role: 'redo' },
-            { type: 'separator' },
-            { role: 'cut' },
-            { role: 'copy' },
-            { role: 'paste' },
-            { role: 'pasteandmatchstyle' },
-            { role: 'delete' },
-            { role: 'selectall' },
-            { role: 'quit' }
-          ]
-        }
-      ]));
-      for (const key in defaultPaths) {
-      const path = defaultPaths[key];
-      const filePath = getPath(path);
-      if (existsSync(filePath)) continue;
-
-      if (path.indexOf('.') === -1) {
-        mkdirSync(filePath);
-      } else {
-        writeFileSync(filePath, filesContent[key], 'utf8');
-      }
-    }
-
-    if (!existsSync(resolve(getPath('extensions'), 'uBlock0.chromium'))) {
-      extract(
-        resolve(__dirname, 'static/extensions/ublock.zip'),
-        { dir: getPath('extensions') },
-        err => {
-          if (err) console.error(err);
-
-          loadExtensions(mainWindow);
-        },
+      Menu.setApplicationMenu(
+        Menu.buildFromTemplate([
+          {
+            label: 'Edit',
+            submenu: [
+              { role: 'undo' },
+              { role: 'redo' },
+              { type: 'separator' },
+              { role: 'cut' },
+              { role: 'copy' },
+              { role: 'paste' },
+              { role: 'pasteandmatchstyle' },
+              { role: 'delete' },
+              { role: 'selectall' },
+              { role: 'quit' },
+            ],
+          },
+        ]),
       );
+      for (const key in defaultPaths) {
+        const path = defaultPaths[key];
+        const filePath = getPath(path);
+        if (existsSync(filePath)) continue;
+
+        if (path.indexOf('.') === -1) {
+          mkdirSync(filePath);
+        } else {
+          writeFileSync(filePath, filesContent[key], 'utf8');
+        }
+      }
+
+      if (!existsSync(resolve(getPath('extensions'), 'uBlock0.chromium'))) {
+        extract(
+          resolve(__dirname, 'static/extensions/ublock.zip'),
+          { dir: getPath('extensions') },
+          err => {
+            if (err) console.error(err);
+
+            loadExtensions(mainWindow);
+          },
+        );
+      }
+
+      mainWindow = createWindow();
+
+      loadExtensions(mainWindow);
+
+      runAutoUpdaterService(mainWindow);
+      runExtensionsService(mainWindow);
+      runWebRequestService(mainWindow);
+
+      mainWindow.on('closed', () => {
+        mainWindow = null;
+      });
     }
-
-    mainWindow = createWindow();
-
-    loadExtensions(mainWindow);
-
-    runAutoUpdaterService(mainWindow);
-    runExtensionsService(mainWindow);
-    runWebRequestService(mainWindow);
-
-    mainWindow.on('closed', () => {
-      mainWindow = null;
-    });
-  }});
+  });
 
   app.on('window-all-closed', () => {
     if (platform() !== 'darwin') {
       app.quit();
     }
   });
-
 
   registerProtocols();
 }
