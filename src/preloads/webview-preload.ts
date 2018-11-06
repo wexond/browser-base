@@ -2,7 +2,6 @@ import { remote, webFrame, ipcRenderer } from 'electron';
 import { join } from 'path';
 import { runInThisContext } from 'vm';
 
-import { applyDarkTheme } from './dark-theme';
 import { readFileSync } from 'fs';
 import { isWexondURL } from '@/utils/url';
 import { getAPI } from '@/utils/extensions/get-api';
