@@ -1,5 +1,5 @@
 import { webContents, BrowserWindow, ipcMain } from 'electron';
-import fs from 'fs';
+import * as fs from 'fs';
 import { format } from 'url';
 import { resolve } from 'path';
 import { promisify } from 'util';

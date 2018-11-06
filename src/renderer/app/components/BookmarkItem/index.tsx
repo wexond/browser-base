@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { StyledBookmarkItem, Icon, Title } from './styles';
 import { Bookmark } from '@/interfaces';
 import { observer } from 'mobx-react';

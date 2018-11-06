@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import ToolbarSeparator from '@app/components/ToolbarSeparator';
 import { icons } from '@/constants/renderer';
