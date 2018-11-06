@@ -1,35 +1,20 @@
-import http from 'http';
-import https from 'https';
-import { parse } from 'url';
+import axios from 'axios';
 
-export const requestURL = (url: string) =>
-  new Promise((resolve: (data: string) => void, reject) => {
-    const options: any = parse(url);
+let adapter: any = require('axios/lib/adapters/xhr');
 
-    let { request } = http;
-
-    if (options.protocol === 'https:') {
-      request = https.request;
+export const requestURL = (url: string, xhr: boolean = true) =>
+  new Promise((resolve: (data: any) => void, reject) => {
+    if (!xhr) {
+      adapter = require('axios/lib/adapters/http');
     }
 
-    const req = request(options, res => {
-      let data = '';
-      res.setEncoding('binary');
-
-      res.on('data', chunk => {
-        data += chunk;
+    axios({ method: 'get', url, headers: {}, adapter })
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(e => {
+        console.error(e);
       });
-
-      res.on('end', () => {
-        resolve(data);
-      });
-    });
-
-    req.on('error', e => {
-      reject(e);
-    });
-
-    req.end();
   });
 
 /* eslint-disable no-new */

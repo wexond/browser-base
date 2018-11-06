@@ -12,7 +12,7 @@ import {
   runExtensionsService,
   runWebRequestService,
 } from '@/services/main';
-import extract from 'extract-zip';
+import * as extract from 'extract-zip';
 
 ipcMain.setMaxListeners(0);
 

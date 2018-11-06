@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import React from 'react';
+import * as React from 'react';
 
 import store from '@app/store';
 import TabGroupItem from '../TabGroupItem';
