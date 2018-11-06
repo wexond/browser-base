@@ -5,10 +5,14 @@ import { getAPI } from '@/utils/extensions';
 
 ipcRenderer.setMaxListeners(0);
 
-process.once('loaded', () => {
-  const extensions = remote.getGlobal('extensions');
-  const extensionId = parse(window.location.href).hostname;
+const extensions = remote.getGlobal('extensions');
+const parsed = parse(window.location.href);
+
+if (parsed.protocol !== 'data:') {
+  const extensionId = parsed.hostname;
+
   const manifest = extensions[extensionId];
+
   const api = getAPI(manifest);
 
   interface Global extends NodeJS.Global {
@@ -22,4 +26,4 @@ process.once('loaded', () => {
   globalObject.wexond = api;
   globalObject.chrome = api;
   globalObject.browser = api;
-});
+}
