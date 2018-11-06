@@ -6,6 +6,7 @@ const {
   CopyPlugin,
   JSONPlugin,
 } = require('fuse-box');
+const express = require('express');
 const { spawn } = require('child_process');
 
 const production = process.env.NODE_ENV === 'dev' ? false : true;
@@ -109,7 +110,7 @@ const renderer = () => {
 };
 
 const applet = () => {
-  const cfg = getRendererConfig('browser@es6');
+  const cfg = getRendererConfig('browser@es6', 'newtab');
 
   cfg.plugins.push(getWebIndexPlugin('newtab'));
   cfg.plugins.push(JSONPlugin());
