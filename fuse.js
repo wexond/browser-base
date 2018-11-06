@@ -10,10 +10,11 @@ const { spawn } = require('child_process');
 
 const production = process.env.NODE_ENV === 'dev' ? false : true;
 
-const getConfig = () => {
+const getConfig = (target, name) => {
   return {
     homeDir: 'src/',
     cache: !production,
+    target,
     output: `build/$name.js`,
     tsConfig: './tsconfig.json',
     useTypescriptCompiler: true,
@@ -21,8 +22,9 @@ const getConfig = () => {
       EnvPlugin({ NODE_ENV: production ? 'production' : 'development' }),
       production &&
         QuantumPlugin({
-          bakeApiIntoBundle: true,
+          bakeApiIntoBundle: name,
           treeshake: true,
+          removeExportsInterop: false,
           uglify: {
             es6: true,
           },
@@ -40,8 +42,8 @@ const getConfig = () => {
   };
 };
 
-const getRendererConfig = () => {
-  const cfg = Object.assign({}, getConfig(), {
+const getRendererConfig = (target, name) => {
+  const cfg = Object.assign({}, getConfig(target, name), {
     sourceMaps: true,
   });
 
@@ -54,7 +56,6 @@ const getWebIndexPlugin = name => {
     path: production ? '.' : '/',
     target: `${name}.html`,
     bundles: [name],
-    defer: true,
   });
 };
 
@@ -67,7 +68,7 @@ const getCopyPlugin = () => {
 };
 
 const mainProcess = () => {
-  const fuse = FuseBox.init(getConfig('server'));
+  const fuse = FuseBox.init(getConfig('server', 'main'));
 
   const app = fuse.bundle('main').instructions(`> [main/index.ts]`);
 
@@ -79,7 +80,7 @@ const mainProcess = () => {
 };
 
 const renderer = () => {
-  const cfg = getRendererConfig();
+  const cfg = getRendererConfig('electron', 'app');
 
   cfg.plugins.push(getWebIndexPlugin('app'));
   cfg.plugins.push(JSONPlugin());
@@ -91,10 +92,7 @@ const renderer = () => {
     fuse.dev({ httpServer: true });
   }
 
-  const app = fuse
-    .bundle('app')
-    .target('electron')
-    .instructions('> [renderer/app/index.tsx]');
+  const app = fuse.bundle('app').instructions('> [renderer/app/index.tsx]');
 
   if (!production) {
     app.hmr().watch();
@@ -111,7 +109,7 @@ const renderer = () => {
 };
 
 const applet = () => {
-  const cfg = getRendererConfig();
+  const cfg = getRendererConfig('browser@es6');
 
   cfg.plugins.push(getWebIndexPlugin('newtab'));
   cfg.plugins.push(JSONPlugin());
@@ -120,16 +118,11 @@ const applet = () => {
   const fuse = FuseBox.init(cfg);
 
   if (!production) {
-    fuse.dev({
-      httpServer: true,
-      port: 8080,
-      socketURI: 'ws://localhost:8080',
-    });
+    fuse.dev({ httpServer: true, port: 8080 });
   }
 
   const newtab = fuse
     .bundle('newtab')
-    .target('browser@es6')
     .instructions('> renderer/newtab/index.tsx');
 
   if (!production) {
@@ -140,12 +133,9 @@ const applet = () => {
 };
 
 const preload = name => {
-  const fuse = FuseBox.init(getRendererConfig());
+  const fuse = FuseBox.init(getRendererConfig('electron', name));
 
-  const bundle = fuse
-    .bundle(name)
-    .target('electron')
-    .instructions(`> [preloads/${name}.ts]`);
+  const bundle = fuse.bundle(name).instructions(`> [preloads/${name}.ts]`);
 
   if (!production) {
     bundle.watch();
