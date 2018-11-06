@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import { remote, clipboard, nativeImage } from 'electron';
 import { createWriteStream } from 'fs';
 import { parse } from 'url';
 import { basename, extname } from 'path';
-import http from 'http';
+import * as http from 'http';
 import { observer } from 'mobx-react';
 
 import ContextMenu from '@/components/ContextMenu';

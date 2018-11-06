@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import React, { Component } from 'react';
+import * as React from 'react';
 
 import store from '@app/store';
 import { isURL } from '@/utils/url';
@@ -10,7 +10,7 @@ import { icons } from '@/constants/renderer';
 import Dial from '@app/components/Dial';
 
 @observer
-export default class AddressBar extends Component {
+export default class AddressBar extends React.Component {
   private input: HTMLInputElement;
   private canSuggest = false;
   private lastSuggestion: string;
