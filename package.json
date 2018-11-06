@@ -63,7 +63,6 @@
     "cross-env": "5.2.0",
     "electron-builder": "20.28.4",
     "electron-react-devtools": "0.5.3",
-    "express": "4.16.4",
     "fuse-box": "3.5.0",
     "prettier": "1.14.3",
     "tslint": "5.11.0",
