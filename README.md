@@ -40,8 +40,6 @@ We still have a lot of things to do, to make Wexond better and better. This is j
 
 # [Supported WebExtensions APIs](https://github.com/wexond/wexond/issues/110)
 
-There is a lot of APIs, but we are only two very young programmers, so any help would be really appreciated and welcomed.
-
 # Contributing
 
 We really appreciate any changes and improvements, so feel free to open pull requests! If you have found any issues, please report them. This would really help us making the browser even better!
