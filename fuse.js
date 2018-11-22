@@ -6,7 +6,6 @@ const {
   CopyPlugin,
   JSONPlugin,
 } = require('fuse-box');
-const express = require('express');
 const { spawn } = require('child_process');
 
 const production = process.env.NODE_ENV === 'dev' ? false : true;
