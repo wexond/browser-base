@@ -22,6 +22,8 @@ class App extends React.Component {
     await store.bookmarksStore.load();
 
     store.keyBindings.load();
+
+    console.log('xd');
   }
 
   public componentWillUnmount() {
