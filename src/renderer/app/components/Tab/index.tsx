@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import React from 'react';
+import * as React from 'react';
 
 import Preloader from '@/components/Preloader';
 import Ripple from '@/components/Ripple';
