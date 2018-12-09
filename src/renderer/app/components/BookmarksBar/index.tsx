@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { StyledBookmarksBar } from './styles';
 import store from '@app/store';
 import BookmarkItem from '@app/components/BookmarkItem';

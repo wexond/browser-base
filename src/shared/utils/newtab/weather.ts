@@ -113,8 +113,8 @@ export const getWeather = async (
     const currentWeatherURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=${lang}&units=${units}`;
     const weekWeatherURL = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&lang=${lang}&units=${units}`;
 
-    const currentWeather = JSON.parse(await requestURL(currentWeatherURL));
-    const weekWeather = JSON.parse(await requestURL(weekWeatherURL));
+    const currentWeather = await requestURL(currentWeatherURL);
+    const weekWeather = await requestURL(weekWeatherURL);
 
     const coord = currentWeather.coord;
     const timeZoneOffset = getTimeZoneOffset(coord.lat, coord.lon);
