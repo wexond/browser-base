@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import React from 'react';
+import * as React from 'react';
 
 import Pages from '../Pages';
 import Toolbar from '../Toolbar';
@@ -22,6 +22,8 @@ class App extends React.Component {
     await store.bookmarksStore.load();
 
     store.keyBindings.load();
+
+    console.log('xd');
   }
 
   public componentWillUnmount() {

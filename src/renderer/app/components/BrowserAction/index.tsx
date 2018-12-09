@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import ToolbarButton from '@app/components/ToolbarButton';

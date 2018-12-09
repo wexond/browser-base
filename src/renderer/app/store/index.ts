@@ -1,5 +1,5 @@
 import { observable, computed } from 'mobx';
-import os from 'os';
+import { platform } from 'os';
 import { remote } from 'electron';
 
 import { AddressBarStore } from './address-bar';
@@ -48,7 +48,7 @@ export class Store {
   @observable
   public locale: string = remote.getGlobal('locale');
 
-  public platform = os.platform() as Platforms;
+  public platform = platform() as Platforms;
   public cmdPressed = false;
   public mouse = {
     x: 0,
