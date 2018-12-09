@@ -2,8 +2,6 @@ import { remote, webFrame, ipcRenderer } from 'electron';
 import { join } from 'path';
 import { runInThisContext } from 'vm';
 
-import { applyDarkTheme } from './dark-theme';
-import { loadContent } from './load-content';
 import { readFileSync } from 'fs';
 import { isWexondURL } from '@/utils/url';
 import { getAPI } from '@/utils/extensions/get-api';
@@ -79,8 +77,6 @@ if (wexondUrl) {
       global.onIpcReceived.emit(name, data);
     });
   }
-
-  loadContent(wexondUrl);
 }
 
 const matchesPattern = (pattern: string, url: string) => {

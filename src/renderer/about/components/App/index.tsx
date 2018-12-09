@@ -1,9 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 
 import Item from '../Item';
 import { StyledApp, Logo, Container } from './styles';
-
-const packageFile = require('../../../../../package.json');
 
 export default class App extends React.Component {
   public render() {
@@ -13,13 +11,9 @@ export default class App extends React.Component {
       <StyledApp>
         <Logo />
         <Container>
-          <Item title="Wexond version">v{packageFile.version}</Item>
-          <Item title="React version">
-            v{packageFile.devDependencies.react}
-          </Item>
-          <Item title="Electron version">
-            v{packageFile.devDependencies.electron}
-          </Item>
+          <Item title="Wexond version">v1</Item>
+          <Item title="React version">v1</Item>
+          <Item title="Electron version">v1</Item>
         </Container>
       </StyledApp>
     );

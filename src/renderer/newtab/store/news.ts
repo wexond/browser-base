@@ -47,8 +47,7 @@ export class NewsStore {
       const newsCategory = NewsCategories[category];
       const url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${newsCategory}&pageSize=${newsCount}&apiKey=${apiKey}`;
 
-      const data = await requestURL(url);
-      const json = JSON.parse(data);
+      const json = await requestURL(url);
 
       if (json.status === 'ok') {
         const news: NewsArticle[] = [];
