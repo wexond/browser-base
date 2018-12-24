@@ -1,20 +1,13 @@
 import { ipcMain, BrowserWindow, app, Menu } from 'electron';
 import { resolve } from 'path';
 import { platform, homedir } from 'os';
-
-import { createBrowserWindow } from './windows';
+import { AppWindow } from './app-window';
 
 ipcMain.setMaxListeners(0);
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
-let mainWindow: BrowserWindow;
-
-app.on('activate', () => {
-  if (mainWindow === null) {
-    mainWindow = createBrowserWindow();
-  }
-});
+const appWindow = new AppWindow();
 
 app.on('ready', () => {
   // Create our menu entries so that we can use macOS shortcuts
@@ -38,11 +31,7 @@ app.on('ready', () => {
     ]),
   );
 
-  mainWindow = createBrowserWindow();
-
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
+  appWindow.createWindow();
 });
 
 app.on('window-all-closed', () => {
