@@ -12,11 +12,11 @@ const GlobalStyle = createGlobalStyle`${Style}`;
 class App extends React.Component {
   public render() {
     return (
-      <div>
+      <React.Fragment>
         <GlobalStyle />
         <Toolbar />
         <Line />
-      </div>
+      </React.Fragment>
     );
   }
 }
