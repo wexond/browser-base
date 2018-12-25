@@ -31,12 +31,6 @@ const getConfig = (target, name) => {
         }),
     ],
     alias: {
-      '@': '~/shared/',
-      '@app': '~/renderer/app/',
-      '@history': '~/renderer/history/',
-      '@bookmarks': '~/renderer/bookmarks/',
-      '@about': '~/renderer/about/',
-      '@newtab': '~/renderer/newtab/',
       '~': '~/',
     },
   };
