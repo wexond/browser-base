@@ -1,15 +1,29 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { observe } from 'mobx';
 
 import store from '~/renderer/app/store';
-import TabGroup from '../TabGroup';
-import { TOOLBAR_HEIGHT } from '~/renderer/app/constants';
+import {
+  TOOLBAR_HEIGHT,
+  TAB_ANIMATION_DURATION,
+} from '~/renderer/app/constants';
+import Tab from '../Tab';
 
 @observer
-export default class TabGroups extends React.Component {
+export default class Tabs extends React.Component {
   public componentDidMount() {
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
+
+    observe(store.tabsStore.tabs, (change: any) => {
+      if (change.addedCount > 0 && change.removedCount === 0) {
+        if (store.tabsStore.scrollbarRef) {
+          store.tabsStore.scrollbarRef.current.scrollToEnd(
+            TAB_ANIMATION_DURATION * 1000,
+          );
+        }
+      }
+    });
   }
 
   public componentWillUnmount() {
@@ -18,10 +32,10 @@ export default class TabGroups extends React.Component {
   }
 
   public onMouseUp = () => {
-    const selectedTab = store.tabsStore.getSelectedTab();
+    const selectedTab = store.tabsStore.selectedTab;
 
     store.tabsStore.isDragging = false;
-    store.tabsStore.getCurrentGroup().setTabsLefts(true);
+    store.tabsStore.setTabsLefts(true);
 
     if (selectedTab) {
       selectedTab.isDragging = false;
@@ -29,10 +43,10 @@ export default class TabGroups extends React.Component {
   };
 
   public onMouseMove = (e: any) => {
-    const tabGroup = store.tabsStore.getCurrentGroup();
+    const tabGroup = store.tabGroupsStore.currentGroup;
     if (!tabGroup) return;
 
-    const selectedTab = tabGroup.getSelectedTab();
+    const { selectedTab } = store.tabsStore;
 
     if (store.tabsStore.isDragging) {
       const container = store.tabsStore.containerRef;
@@ -77,7 +91,7 @@ export default class TabGroups extends React.Component {
         // TODO: Create a new window
       }
 
-      tabGroup.getTabsToReplace(
+      store.tabsStore.getTabsToReplace(
         selectedTab,
         lastMouseX - e.pageX >= 1 ? 'left' : 'right',
       );
@@ -89,9 +103,11 @@ export default class TabGroups extends React.Component {
   public render() {
     return (
       <React.Fragment>
-        {store.tabsStore.groups.map(item => (
-          <TabGroup tabGroup={item} key={item.id} />
-        ))}
+        {store.tabsStore.tabs
+          .filter(x => x.tabGroupId === store.tabGroupsStore.currentGroupId)
+          .map(item => (
+            <Tab key={item.id} tab={item} />
+          ))}
       </React.Fragment>
     );
   }
