@@ -42,6 +42,7 @@ export const StyledTab = styled.div`
     z-index: ${selected ? 2 : 1};
     background-color: ${selected ? 'rgba(33, 150, 243, 0.15)' : 'transparent'};
   `};
+  backface-visibility: hidden;
 
   &:before {
     content: '';
@@ -86,7 +87,6 @@ export const Title = styled.div`
   white-space: nowrap;
   transition: 0.2s margin-left;
   margin-left: 12px;
-  backface-visibility: hidden;
 
   ${({ favicon, loading, selected }: TitleProps) => css`
     color: ${selected
