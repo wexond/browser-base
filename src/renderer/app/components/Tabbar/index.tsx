@@ -4,8 +4,8 @@ import * as React from 'react';
 import HorizontalScrollbar from '../HorizontalScrollbar';
 import store from '~/renderer/app/store';
 import { icons } from '~/renderer/app/constants/icons';
-import TabGroups from '../TabGroups';
 import { AddTab, StyledTabbar, TabsContainer } from './style';
+import Tabs from '../Tabs';
 
 @observer
 export default class Tabbar extends React.Component {
@@ -19,7 +19,7 @@ export default class Tabbar extends React.Component {
 
   public onResize = (e: Event) => {
     if (e.isTrusted) {
-      store.tabsStore.getCurrentGroup().updateTabsBounds(false);
+      store.tabsStore.updateTabsBounds(false);
     }
   };
 
@@ -47,7 +47,7 @@ export default class Tabbar extends React.Component {
           onMouseLeave={this.onMouseLeave}
           ref={store.tabsStore.containerRef}
         >
-          <TabGroups />
+          <Tabs />
         </TabsContainer>
         <HorizontalScrollbar
           ref={store.tabsStore.scrollbarRef}

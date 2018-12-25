@@ -18,6 +18,8 @@ export const TabsContainer = styled.div`
   width: calc(100% - ${TOOLBAR_BUTTON_WIDTH}px);
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
 `;
 
 export const AddTab = styled(ToolbarButton)`

@@ -1,8 +1,10 @@
 import { observable } from 'mobx';
 import { TabsStore } from './tabs';
 import { AddTabStore } from './add-tab';
+import { TabGroupsStore } from './tab-groups';
 
 export class Store {
+  public tabGroupsStore = new TabGroupsStore();
   public tabsStore = new TabsStore();
   public addTabStore = new AddTabStore();
 
