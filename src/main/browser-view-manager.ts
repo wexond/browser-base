@@ -60,7 +60,6 @@ export class BrowserViewManager {
   public remove(tabId: number) {
     const view = this.views[tabId];
     if (!view || view.isDestroyed()) return;
-    appWindow.window.setBrowserView(null);
     view.destroy();
   }
 }
