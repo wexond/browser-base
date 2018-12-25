@@ -41,7 +41,10 @@ export class BrowserViewManager {
   public select(id: number) {
     const view = BrowserView.fromId(id);
 
-    if (!view || view.isDestroyed()) return;
+    if (!view || view.isDestroyed()) {
+      appWindow.window.setBrowserView(null);
+      return;
+    }
 
     appWindow.window.setBrowserView(view);
 
@@ -57,6 +60,7 @@ export class BrowserViewManager {
   public remove(id: number) {
     const view = BrowserView.fromId(id);
     if (!view || view.isDestroyed()) return;
+    appWindow.window.setBrowserView(null);
     view.destroy();
   }
 }
