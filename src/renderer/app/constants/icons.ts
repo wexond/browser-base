@@ -7,6 +7,8 @@ import forward from '~/shared/resources/icons/forward.svg';
 import refresh from '~/shared/resources/icons/refresh.svg';
 import close from '~/shared/resources/icons/close.svg';
 
+console.log(close);
+
 export const icons = {
   windowsClose,
   windowsMaximize,

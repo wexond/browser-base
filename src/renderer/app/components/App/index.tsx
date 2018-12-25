@@ -15,7 +15,6 @@ class App extends React.Component {
       <React.Fragment>
         <GlobalStyle />
         <Toolbar />
-        <Line />
       </React.Fragment>
     );
   }
