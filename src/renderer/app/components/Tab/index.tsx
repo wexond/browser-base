@@ -16,7 +16,7 @@ export default class extends React.Component<{ tab: Tab }, {}> {
     const { tab } = this.props;
 
     tab.setLeft(tab.getLeft(), false);
-    tab.tabGroup.updateTabsBounds(true);
+    store.tabsStore.updateTabsBounds(true);
   }
 
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -59,7 +59,7 @@ export default class extends React.Component<{ tab: Tab }, {}> {
     const { title, isClosing, hovered, favicon, loading, tabGroup } = tab;
     const { tabs } = tabGroup;
 
-    const selected = tabGroup.selectedTab === tab.id;
+    const selected = store.tabsStore.selectedTabId === tab.id;
     const tabIndex = tabs.indexOf(tab);
 
     let rightBorderVisible = true;
@@ -69,7 +69,7 @@ export default class extends React.Component<{ tab: Tab }, {}> {
       selected ||
       (tabIndex + 1 !== tabs.length &&
         (tabs[tabIndex + 1].hovered ||
-          tabGroup.selectedTab === tabs[tabIndex + 1].id))
+          store.tabsStore.selectedTabId === tabs[tabIndex + 1].id))
     ) {
       rightBorderVisible = false;
     }
