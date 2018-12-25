@@ -46,7 +46,6 @@ export class Tab {
   public left: number = 0;
   public isClosing: boolean = false;
   public tabGroup: TabGroup;
-  public browserViewId: number;
 
   public ref = React.createRef<HTMLDivElement>();
 
@@ -60,14 +59,9 @@ export class Tab {
 
     ipcRenderer.send('browserview-create', this.id);
 
-    ipcRenderer.once(
-      `new-browserview-id-${this.id}`,
-      (e: Electron.IpcMessageEvent, id: number) => {
-        this.browserViewId = id;
-
-        ipcRenderer.send('browserview-select', this.browserViewId);
-      },
-    );
+    ipcRenderer.once(`browserview-created-${this.id}`, () => {
+      ipcRenderer.send('browserview-select', this.id);
+    });
   }
 
   public select() {
@@ -76,9 +70,7 @@ export class Tab {
 
       store.tabsStore.selectedTab = this.id;
 
-      if (this.browserViewId) {
-        ipcRenderer.send('browserview-select', this.browserViewId);
-      }
+      ipcRenderer.send('browserview-select', this.id);
     }
   }
 
@@ -139,8 +131,7 @@ export class Tab {
     const { tabs } = this.tabGroup;
     const selected = this.tabGroup.selectedTab === this.id;
 
-    console.log(this.browserViewId);
-    ipcRenderer.send('browserview-remove', this.browserViewId);
+    ipcRenderer.send('browserview-remove', this.id);
 
     store.tabsStore.resetRearrangeTabsTimer();
 
