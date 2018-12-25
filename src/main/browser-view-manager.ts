@@ -1,4 +1,4 @@
-import { BrowserView, ipcMain } from 'electron';
+import { BrowserView, ipcMain, app } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
 import { appWindow } from '.';
 
@@ -71,6 +71,10 @@ export class BrowserViewManager {
   public remove(tabId: number) {
     const view = this.views[tabId];
     if (!view || view.isDestroyed()) return;
+    if (appWindow.window.getBrowserView() === view) {
+      appWindow.window.setBrowserView(null);
+    }
+
     view.destroy();
   }
 }
