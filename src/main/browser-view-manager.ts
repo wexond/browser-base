@@ -48,12 +48,12 @@ export class BrowserViewManager {
 
     appWindow.window.setBrowserView(view);
 
-    const { width, height } = appWindow.window.getBounds();
+    const { width, height } = appWindow.window.getContentBounds();
     view.setBounds({
       x: 0,
       y: TOOLBAR_HEIGHT + 1,
       width,
-      height,
+      height: height - TOOLBAR_HEIGHT,
     });
   }
 
