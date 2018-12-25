@@ -3,15 +3,15 @@ import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
 import { appWindow } from '.';
 
 export class BrowserViewManager {
+  public views: { [key: number]: BrowserView } = {};
+
   constructor() {
     ipcMain.on(
       'browserview-create',
       (e: Electron.IpcMessageEvent, tabId: number) => {
-        const view = this.create();
-        appWindow.window.webContents.send(
-          `new-browserview-id-${tabId}`,
-          view.id,
-        );
+        this.create(tabId);
+
+        appWindow.window.webContents.send(`browserview-created-${tabId}`);
       },
     );
 
@@ -30,16 +30,16 @@ export class BrowserViewManager {
     );
   }
 
-  public create() {
+  public create(tabId: number) {
     const view = new BrowserView();
     view.setAutoResize({ width: true, height: true });
     view.webContents.loadURL('https://google.com');
 
-    return view;
+    this.views[tabId] = view;
   }
 
-  public select(id: number) {
-    const view = BrowserView.fromId(id);
+  public select(tabId: number) {
+    const view = this.views[tabId];
 
     if (!view || view.isDestroyed()) {
       appWindow.window.setBrowserView(null);
@@ -57,8 +57,8 @@ export class BrowserViewManager {
     });
   }
 
-  public remove(id: number) {
-    const view = BrowserView.fromId(id);
+  public remove(tabId: number) {
+    const view = this.views[tabId];
     if (!view || view.isDestroyed()) return;
     appWindow.window.setBrowserView(null);
     view.destroy();
