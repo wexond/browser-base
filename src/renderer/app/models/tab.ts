@@ -74,10 +74,16 @@ export class Tab {
     }
   }
 
-  public getWidth() {
-    const tabs = this.tabGroup.tabs.filter(x => !x.isClosing);
-    const width =
-      store.tabsStore.getContainerWidth() / tabs.length - TABS_PADDING;
+  public getWidth(containerWidth: number = null, tabs: Tab[] = null) {
+    if (containerWidth === null) {
+      containerWidth = store.tabsStore.getContainerWidth();
+    }
+
+    if (tabs === null) {
+      tabs = this.tabGroup.tabs.filter(x => !x.isClosing);
+    }
+
+    const width = containerWidth / tabs.length - TABS_PADDING;
 
     if (width > 200 - TABS_PADDING) {
       return 200 - TABS_PADDING;
@@ -113,7 +119,7 @@ export class Tab {
   }
 
   public setLeft(left: number, animation: boolean) {
-    store.tabsStore.animateProperty('left', this.ref.current, left, animation);
+    store.tabsStore.animateProperty('x', this.ref.current, left, animation);
     this.left = left;
   }
 
