@@ -1,9 +1,16 @@
 import { observable, computed } from 'mobx';
-import React from 'react';
+import * as React from 'react';
 
 import store from '~/renderer/app/store';
 import { TabGroup } from './tab-group';
-import { TABS_PADDING, TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
+import {
+  TABS_PADDING,
+  TOOLBAR_HEIGHT,
+  defaultTabOptions,
+  TAB_ANIMATION_DURATION,
+} from '~/renderer/app/constants';
+import { ipcRenderer } from 'electron';
+import { closeWindow } from '../utils';
 
 let id = 1;
 
@@ -39,11 +46,28 @@ export class Tab {
   public left: number = 0;
   public isClosing: boolean = false;
   public tabGroup: TabGroup;
+  public browserViewId: number;
 
   public ref = React.createRef<HTMLDivElement>();
 
-  constructor(tabGroup: TabGroup) {
+  constructor(tabGroup: TabGroup, { url, active } = defaultTabOptions) {
     this.tabGroup = tabGroup;
+    this.url = url;
+
+    if (active) {
+      this.select();
+    }
+
+    ipcRenderer.send('browserview-create', this.id);
+
+    ipcRenderer.once(
+      `new-browserview-id-${this.id}`,
+      (e: Electron.IpcMessageEvent, id: number) => {
+        this.browserViewId = id;
+
+        ipcRenderer.send('browserview-select', this.browserViewId);
+      },
+    );
   }
 
   public select() {
@@ -51,6 +75,10 @@ export class Tab {
       this.tabGroup.selectedTab = this.id;
 
       store.tabsStore.selectedTab = this.id;
+
+      if (this.browserViewId) {
+        ipcRenderer.send('browserview-select', this.browserViewId);
+      }
     }
   }
 
@@ -105,6 +133,46 @@ export class Tab {
       animation,
     );
     this.width = width;
+  }
+
+  public remove() {
+    const { tabs } = this.tabGroup;
+    const selected = this.tabGroup.selectedTab === this.id;
+
+    ipcRenderer.send('browserview-remove', this.browserViewId);
+
+    store.tabsStore.resetRearrangeTabsTimer();
+
+    const notClosingTabs = tabs.filter(x => !x.isClosing);
+    let index = notClosingTabs.indexOf(this);
+
+    this.isClosing = true;
+    if (notClosingTabs.length - 1 === index) {
+      const previousTab = tabs[index - 1];
+      this.setLeft(previousTab.getNewLeft() + this.getWidth(), true);
+      this.tabGroup.updateTabsBounds(true);
+    }
+
+    this.setWidth(0, true);
+    this.tabGroup.setTabsLefts(true);
+
+    if (selected) {
+      index = tabs.indexOf(this);
+
+      if (index + 1 < tabs.length && !tabs[index + 1].isClosing) {
+        const nextTab = tabs[index + 1];
+        nextTab.select();
+      } else if (index - 1 >= 0 && !tabs[index - 1].isClosing) {
+        const prevTab = tabs[index - 1];
+        prevTab.select();
+      } else if (store.tabsStore.groups.length === 1) {
+        closeWindow();
+      }
+    }
+
+    setTimeout(() => {
+      this.tabGroup.removeTab(this.id);
+    }, TAB_ANIMATION_DURATION * 1000);
   }
 
   public getApiTab(): chrome.tabs.Tab {

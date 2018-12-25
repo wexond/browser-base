@@ -43,47 +43,9 @@ export default class extends React.Component<{ tab: Tab }, {}> {
   };
 
   public onCloseClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { tab } = this.props;
-    const { tabGroup } = tab;
-    const { tabs } = tabGroup;
-    const selected = tabGroup.selectedTab === tab.id;
-
     e.stopPropagation();
 
-    // TODO: remove page
-
-    store.tabsStore.resetRearrangeTabsTimer();
-
-    const notClosingTabs = tabs.filter(x => !x.isClosing);
-    let index = notClosingTabs.indexOf(tab);
-
-    tab.isClosing = true;
-    if (notClosingTabs.length - 1 === index) {
-      const previousTab = tabs[index - 1];
-      tab.setLeft(previousTab.getNewLeft() + tab.getWidth(), true);
-      tabGroup.updateTabsBounds(true);
-    }
-
-    tab.setWidth(0, true);
-    tabGroup.setTabsLefts(true);
-
-    if (selected) {
-      index = tabs.indexOf(tab);
-
-      if (index + 1 < tabs.length && !tabs[index + 1].isClosing) {
-        const nextTab = tabs[index + 1];
-        nextTab.select();
-      } else if (index - 1 >= 0 && !tabs[index - 1].isClosing) {
-        const prevTab = tabs[index - 1];
-        prevTab.select();
-      } else if (store.tabsStore.groups.length === 1) {
-        closeWindow();
-      }
-    }
-
-    setTimeout(() => {
-      tabGroup.removeTab(tab.id);
-    }, TAB_ANIMATION_DURATION * 1000);
+    this.props.tab.remove();
   };
 
   public onClick = () => {};
