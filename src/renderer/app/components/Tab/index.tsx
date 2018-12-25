@@ -5,8 +5,6 @@ import Preloader from '~/renderer/components/Preloader';
 import Ripple from '~/renderer/components/Ripple';
 import { Tab } from '~/renderer/app/models';
 import store from '~/renderer/app/store';
-import { closeWindow } from '~/renderer/app/utils';
-import { TAB_ANIMATION_DURATION } from '~/renderer/app/constants';
 import { colors } from '~/renderer/constants';
 import { Circle, StyledTab, Content, Icon, Title, Close } from './style';
 

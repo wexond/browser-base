@@ -139,6 +139,7 @@ export class Tab {
     const { tabs } = this.tabGroup;
     const selected = this.tabGroup.selectedTab === this.id;
 
+    console.log(this.browserViewId);
     ipcRenderer.send('browserview-remove', this.browserViewId);
 
     store.tabsStore.resetRearrangeTabsTimer();
