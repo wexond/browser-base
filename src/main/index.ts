@@ -1,4 +1,4 @@
-import { ipcMain, BrowserWindow, app, Menu } from 'electron';
+import { ipcMain, app, Menu } from 'electron';
 import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { AppWindow } from './app-window';
