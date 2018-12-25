@@ -127,7 +127,7 @@ export class Tab {
     this.width = width;
   }
 
-  public remove() {
+  public close() {
     const { tabs } = this.tabGroup;
     const selected = this.tabGroup.selectedTab === this.id;
 
@@ -141,7 +141,9 @@ export class Tab {
     this.isClosing = true;
     if (notClosingTabs.length - 1 === index) {
       const previousTab = tabs[index - 1];
-      this.setLeft(previousTab.getNewLeft() + this.getWidth(), true);
+      if (previousTab) {
+        this.setLeft(previousTab.getNewLeft() + this.getWidth(), true);
+      }
       this.tabGroup.updateTabsBounds(true);
     }
 

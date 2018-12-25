@@ -74,32 +74,6 @@ export class TabsStore {
     }
   }
 
-  public closeTab() {
-    const selectedTab = this.getSelectedTab();
-    const { tabs } = this.getCurrentGroup();
-    const { tabGroup } = this.getSelectedTab();
-
-    // TODO: remove page
-
-    this.resetRearrangeTabsTimer();
-
-    const notClosingTabs = tabs.filter(x => !x.isClosing);
-    const index = notClosingTabs.indexOf(selectedTab);
-
-    selectedTab.isClosing = true;
-    if (notClosingTabs.length - 1 === index) {
-      const previousTab = tabs[index - 1];
-      selectedTab.setLeft(
-        previousTab.getNewLeft() + selectedTab.getWidth(),
-        true,
-      );
-      tabGroup.updateTabsBounds(true);
-    }
-
-    selectedTab.setWidth(0, true);
-    tabGroup.setTabsLefts(true);
-  }
-
   public removeGroup(id: number) {
     (this.groups as any).replace(this.groups.filter(x => x.id !== id));
   }
