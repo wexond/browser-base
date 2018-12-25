@@ -32,8 +32,6 @@ interface TabProps {
 export const StyledTab = styled.div`
   position: absolute;
   left: 0;
-  top: 50%;
-  transform: translateY(-50.1%);
   display: flex;
   height: calc(100% - 6px);
   border-radius: 4px;
@@ -44,6 +42,7 @@ export const StyledTab = styled.div`
     z-index: ${selected ? 2 : 1};
     background-color: ${selected ? 'rgba(33, 150, 243, 0.15)' : 'transparent'};
   `};
+
   &:before {
     content: '';
     position: absolute;
@@ -87,10 +86,12 @@ export const Title = styled.div`
   white-space: nowrap;
   transition: 0.2s margin-left;
   margin-left: 12px;
+  backface-visibility: hidden;
+
   ${({ favicon, loading, selected }: TitleProps) => css`
     color: ${selected
       ? colors.blue['500']
-      : `rgba(0, 0, 0, ${transparency.text.medium})`};
+      : `rgba(0, 0, 0, ${transparency.text.high})`};
     margin-left: ${favicon === '' && !loading ? 0 : 12}px;
   `};
 `;

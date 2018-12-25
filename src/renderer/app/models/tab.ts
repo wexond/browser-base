@@ -121,7 +121,7 @@ export class Tab {
   }
 
   public setLeft(left: number, animation: boolean) {
-    store.tabsStore.animateProperty('x', this.ref.current, left, animation);
+    store.tabsStore.animateProperty('left', this.ref.current, left, animation);
     this.left = left;
   }
 
