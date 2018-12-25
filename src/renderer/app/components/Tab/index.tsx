@@ -43,7 +43,7 @@ export default class extends React.Component<{ tab: Tab }, {}> {
   public onCloseClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
 
-    this.props.tab.remove();
+    this.props.tab.close();
   };
 
   public onClick = () => {};
