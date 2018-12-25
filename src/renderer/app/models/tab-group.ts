@@ -2,7 +2,7 @@ import { observable, computed } from 'mobx';
 
 import store from '~/renderer/app/store';
 import { Tab } from '.';
-import { defaultTabOptions } from '~/renderer/app/constants/tabs';
+import { defaultTabOptions, TABS_PADDING } from '~/renderer/app/constants/tabs';
 
 let id = 0;
 
@@ -58,23 +58,46 @@ export class TabGroup {
   public setTabsWidths(animation: boolean) {
     const tabs = this.tabs.filter(x => !x.isClosing);
 
+    const scrollLeft = store.tabsStore.containerRef.current.scrollLeft;
+    const containerWidth = store.tabsStore.getContainerWidth();
+
     for (const tab of tabs) {
-      tab.setWidth(tab.getWidth(), animation);
+      const width = tab.getWidth(containerWidth, tabs);
+      if (
+        tab.left + tab.width > scrollLeft &&
+        tab.left < containerWidth + scrollLeft + 32 &&
+        tab.width !== width
+      ) {
+        tab.setWidth(width, animation);
+      } else {
+        tab.setWidth(width, false);
+      }
     }
   }
 
   public setTabsLefts(animation: boolean) {
     const tabs = this.tabs.filter(x => !x.isClosing);
-    const tabbarWidth = store.tabsStore.getContainerWidth();
+
+    const containerWidth = store.tabsStore.getContainerWidth();
+    const scrollLeft = store.tabsStore.containerRef.current.scrollLeft;
 
     let left = 0;
 
     for (const tab of tabs) {
-      tab.setLeft(left, animation);
-      left += tab.width + 2;
+      if (
+        tab.left + tab.width > scrollLeft &&
+        tab.left < containerWidth + scrollLeft + 32 &&
+        tab.left !== left
+      ) {
+        tab.setLeft(left, animation);
+      } else {
+        tab.setLeft(left, false);
+      }
+
+      left += tab.width + TABS_PADDING;
     }
 
-    store.addTabStore.setLeft(Math.min(left, tabbarWidth), animation);
+    store.addTabStore.setLeft(Math.min(left, containerWidth), animation);
   }
 
   public replaceTab(firstTab: Tab, secondTab: Tab) {
