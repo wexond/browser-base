@@ -28,6 +28,10 @@ export class BrowserViewManager {
         this.remove(id);
       },
     );
+
+    ipcMain.on('browserview-clear', () => {
+      this.clear();
+    });
   }
 
   public create(tabId: number) {
@@ -36,6 +40,13 @@ export class BrowserViewManager {
     view.webContents.loadURL('https://google.com');
 
     this.views[tabId] = view;
+  }
+
+  public clear() {
+    appWindow.window.setBrowserView(null);
+    for (const key in this.views) {
+      this.remove(parseInt(key, 10));
+    }
   }
 
   public select(tabId: number) {
