@@ -11,6 +11,7 @@ export const StyledToolbar = styled.div`
   color: rgba(0, 0, 0, 0.8);
   width: 100%;
   height: ${TOOLBAR_HEIGHT}px;
+  -webkit-app-region: drag;
 
   ${({ isHTMLFullscreen }: { isHTMLFullscreen: boolean }) => css`
     margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;

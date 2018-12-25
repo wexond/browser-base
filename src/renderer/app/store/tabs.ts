@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 import { TweenLite } from 'gsap';
-import React from 'react';
+import * as React from 'react';
 
 import { TabGroup } from '~/renderer/app/models';
 

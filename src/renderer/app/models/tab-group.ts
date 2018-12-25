@@ -35,14 +35,9 @@ export class TabGroup {
     }, 1);
   }
 
-  public addTab({ url, active } = defaultTabOptions) {
-    const tab = new Tab(this);
-    tab.url = url;
+  public addTab(options = defaultTabOptions) {
+    const tab = new Tab(this, options);
     this.tabs.push(tab);
-
-    if (active) {
-      tab.select();
-    }
 
     return tab;
   }

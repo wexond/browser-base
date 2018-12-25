@@ -4,6 +4,7 @@ import { createGlobalStyle } from 'styled-components';
 
 import { Style } from '~/renderer/app/style';
 import Toolbar from '../Toolbar';
+import { Line } from './style';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -14,6 +15,7 @@ class App extends React.Component {
       <div>
         <GlobalStyle />
         <Toolbar />
+        <Line />
       </div>
     );
   }
