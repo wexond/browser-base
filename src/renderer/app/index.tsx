@@ -36,8 +36,7 @@ const render = (AppComponent: any) => {
 
 (async function () {
   render(App);
-
-  if (store.tabsStore.groups.length === 0) {
-    store.tabsStore.addGroup();
+  if (store.tabGroupsStore.groups.length === 0) {
+    store.tabGroupsStore.addGroup();
   }
 })();

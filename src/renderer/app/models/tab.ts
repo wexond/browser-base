@@ -1,15 +1,14 @@
 import { observable, computed } from 'mobx';
 import * as React from 'react';
+import { ipcRenderer } from 'electron';
 
 import store from '~/renderer/app/store';
-import { TabGroup } from './tab-group';
 import {
   TABS_PADDING,
   TOOLBAR_HEIGHT,
   defaultTabOptions,
   TAB_ANIMATION_DURATION,
 } from '~/renderer/app/constants';
-import { ipcRenderer } from 'electron';
 import { closeWindow } from '../utils';
 
 let id = 1;
@@ -34,23 +33,22 @@ export class Tab {
   public hovered: boolean = false;
 
   @observable
-  public isBookmarked: boolean = false;
+  public tabGroupId: number;
 
   @computed
   public get isSelected() {
-    return this.tabGroup.selectedTab === this.id;
+    return store.tabsStore.selectedTabId === this.id;
   }
 
   public url: string = '';
   public width: number = 0;
   public left: number = 0;
   public isClosing: boolean = false;
-  public tabGroup: TabGroup;
 
   public ref = React.createRef<HTMLDivElement>();
 
-  constructor(tabGroup: TabGroup, { url, active } = defaultTabOptions) {
-    this.tabGroup = tabGroup;
+  constructor({ url, active } = defaultTabOptions, tabGroupId: number) {
+    this.tabGroupId = tabGroupId;
     this.url = url;
 
     if (active) {
@@ -64,11 +62,14 @@ export class Tab {
     });
   }
 
+  public get tabGroup() {
+    return store.tabGroupsStore.getGroupById(this.tabGroupId);
+  }
+
   public select() {
     if (!this.isClosing) {
-      this.tabGroup.selectedTab = this.id;
-
-      store.tabsStore.selectedTab = this.id;
+      this.tabGroup.selectedTabId = this.id;
+      store.tabsStore.selectedTabId = this.id;
 
       ipcRenderer.send('browserview-select', this.id);
     }
@@ -76,11 +77,13 @@ export class Tab {
 
   public getWidth(containerWidth: number = null, tabs: Tab[] = null) {
     if (containerWidth === null) {
-      containerWidth = store.tabsStore.getContainerWidth();
+      containerWidth = store.tabsStore.containerWidth;
     }
 
     if (tabs === null) {
-      tabs = this.tabGroup.tabs.filter(x => !x.isClosing);
+      tabs = store.tabsStore.tabs.filter(
+        x => x.tabGroupId === this.tabGroupId && !x.isClosing,
+      );
     }
 
     const width = containerWidth / tabs.length - TABS_PADDING;
@@ -134,8 +137,9 @@ export class Tab {
   }
 
   public close() {
-    const { tabs } = this.tabGroup;
-    const selected = this.tabGroup.selectedTab === this.id;
+    const tabGroup = this.tabGroup;
+    const { tabs } = tabGroup;
+    const selected = tabGroup.selectedTabId === this.id;
 
     ipcRenderer.send('browserview-remove', this.id);
 
@@ -150,11 +154,11 @@ export class Tab {
       if (previousTab) {
         this.setLeft(previousTab.getNewLeft() + this.getWidth(), true);
       }
-      this.tabGroup.updateTabsBounds(true);
+      store.tabsStore.updateTabsBounds(true);
     }
 
     this.setWidth(0, true);
-    this.tabGroup.setTabsLefts(true);
+    store.tabsStore.setTabsLefts(true);
 
     if (selected) {
       index = tabs.indexOf(this);
@@ -165,18 +169,18 @@ export class Tab {
       } else if (index - 1 >= 0 && !tabs[index - 1].isClosing) {
         const prevTab = tabs[index - 1];
         prevTab.select();
-      } else if (store.tabsStore.groups.length === 1) {
+      } else if (store.tabGroupsStore.groups.length === 1) {
         closeWindow();
       }
     }
 
     setTimeout(() => {
-      this.tabGroup.removeTab(this.id);
+      store.tabsStore.removeTab(this.id);
     }, TAB_ANIMATION_DURATION * 1000);
   }
 
   public getApiTab(): chrome.tabs.Tab {
-    const selected = store.tabsStore.getCurrentGroup().selectedTab === this.id;
+    const selected = store.tabsStore.selectedTabId === this.id;
 
     return {
       id: this.id,
