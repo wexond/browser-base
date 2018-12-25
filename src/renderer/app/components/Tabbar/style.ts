@@ -10,6 +10,7 @@ export const StyledTabbar = styled.div`
   overflow: hidden;
   transition: 0.3s opacity, 0.3s transform;
   margin-left: 8px;
+  margin-right: 32px;
 `;
 
 export const TabsContainer = styled.div`
