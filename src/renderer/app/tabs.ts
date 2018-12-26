@@ -41,19 +41,12 @@ export class TabsStore {
   public setTabsWidths = (animation: boolean) => {
     const tabsTemp = this.list.filter(x => !x.isClosing && x.tabGroupId === 0);
 
-    const { scrollLeft, offsetWidth } = this.container;
+    const { offsetWidth } = this.container;
 
     for (const tab of tabsTemp) {
       const width = tab.getWidth(offsetWidth, tabsTemp);
       if (tab.width !== width) {
-        if (
-          tab.left + tab.width > scrollLeft &&
-          tab.left < offsetWidth + scrollLeft + TABS_PADDING + 1
-        ) {
-          tab.setWidth(width, animation);
-        } else {
-          tab.setWidth(width, false);
-        }
+        tab.setWidth(width, animation);
       }
     }
   };
@@ -61,20 +54,13 @@ export class TabsStore {
   public setTabsLefts = (animation: boolean) => {
     const tabsTemp = this.list.filter(x => !x.isClosing && x.tabGroupId === 0);
 
-    const { scrollLeft, offsetWidth } = this.container;
+    const { offsetWidth } = this.container;
 
     let left = 0;
 
     for (const tab of tabsTemp) {
       if (tab.left !== left) {
-        if (
-          tab.left + tab.width > scrollLeft &&
-          tab.left < offsetWidth + scrollLeft + TABS_PADDING + 1
-        ) {
-          tab.setLeft(left, animation);
-        } else {
-          tab.setLeft(left, false);
-        }
+        tab.setLeft(left, animation);
       }
 
       left += tab.width + TABS_PADDING;

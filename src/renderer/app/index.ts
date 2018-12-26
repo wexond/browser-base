@@ -29,7 +29,9 @@ export class App {
       minimizeWindow();
     };
 
-    new Tab(true);
+    requestAnimationFrame(() => {
+      new Tab(true);
+    });
   }
 
   public mouse = {
