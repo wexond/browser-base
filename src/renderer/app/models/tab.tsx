@@ -2,11 +2,12 @@ import app from '..';
 import { ipcRenderer } from 'electron';
 import { TABS_PADDING, TAB_ANIMATION_DURATION } from '../constants';
 import { closeWindow } from '../utils';
+import { createElement } from 'ui';
 
 let id = 0;
 
 export class Tab {
-  public rootElement: HTMLElement;
+  public rootElement: any;
   public titleElement: HTMLElement;
 
   public tabGroupId = 0;
@@ -16,30 +17,20 @@ export class Tab {
   public id = id++;
 
   constructor(active: boolean) {
-    this.rootElement = document.createElement('div');
-    this.rootElement.classList.add('tab');
+    let closeElement: HTMLElement;
+
+    this.rootElement = (
+      <div className="tab">
+        <div className="tab-content">
+          <div ref={r => (this.titleElement = r)} className="tab-title">
+            New tab
+          </div>
+        </div>
+        <div ref={r => (closeElement = r)} className="tab-close" />
+      </div>
+    );
+
     app.tabs.container.appendChild(this.rootElement);
-
-    const contentElement = document.createElement('div');
-    contentElement.classList.add('tab-content');
-    this.rootElement.appendChild(contentElement);
-
-    this.titleElement = document.createElement('div');
-    this.titleElement.classList.add('tab-title');
-    contentElement.appendChild(this.titleElement);
-
-    this.titleElement.textContent = 'New tab';
-
-    const closeElement = document.createElement('div');
-    closeElement.classList.add('tab-close');
-    this.rootElement.appendChild(closeElement);
-
-    app.tabs.list.push(this);
-
-    this.setLeft(this.getLeft(), false);
-    app.tabs.updateTabsBounds(true);
-
-    app.tabs.scrollbar.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
 
     this.rootElement.addEventListener('mousedown', this.onMouseDown);
     closeElement.addEventListener('click', this.onCloseClick);
