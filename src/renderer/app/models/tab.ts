@@ -1,92 +1,145 @@
-import { observable, computed } from 'mobx';
-import * as React from 'react';
+import app from '..';
 import { ipcRenderer } from 'electron';
-
-import store from '~/renderer/app/store';
-import {
-  TABS_PADDING,
-  TOOLBAR_HEIGHT,
-  defaultTabOptions,
-  TAB_ANIMATION_DURATION,
-} from '~/renderer/app/constants';
+import { TABS_PADDING, TAB_ANIMATION_DURATION } from '../constants';
 import { closeWindow } from '../utils';
 
-let id = 1;
+let id = 0;
 
 export class Tab {
-  @observable
-  public id: number = id++;
+  public rootElement: HTMLElement;
+  public titleElement: HTMLElement;
 
-  @observable
-  public isDragging: boolean = false;
+  public tabGroupId = 0;
+  public isClosing = false;
+  public width = 0;
+  public left = 0;
+  public id = id++;
 
-  @observable
-  public title: string = 'New tab';
+  constructor(active: boolean) {
+    this.rootElement = document.createElement('div');
+    this.rootElement.classList.add('tab');
+    app.tabs.container.appendChild(this.rootElement);
 
-  @observable
-  public loading: boolean = false;
+    const contentElement = document.createElement('div');
+    contentElement.classList.add('tab-content');
+    this.rootElement.appendChild(contentElement);
 
-  @observable
-  public favicon: string = '';
+    this.titleElement = document.createElement('div');
+    this.titleElement.classList.add('tab-title');
+    contentElement.appendChild(this.titleElement);
 
-  @observable
-  public hovered: boolean = false;
+    this.titleElement.textContent = 'New tab';
 
-  @observable
-  public tabGroupId: number;
+    const closeElement = document.createElement('div');
+    closeElement.classList.add('tab-close');
+    this.rootElement.appendChild(closeElement);
 
-  @computed
-  public get isSelected() {
-    return store.tabsStore.selectedTabId === this.id;
-  }
+    app.tabs.list.push(this);
 
-  public url: string = '';
-  public width: number = 0;
-  public left: number = 0;
-  public isClosing: boolean = false;
+    this.setLeft(this.getLeft(), false);
+    app.tabs.updateTabsBounds(true);
 
-  public ref = React.createRef<HTMLDivElement>();
+    app.tabs.scrollbar.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
 
-  constructor({ url, active } = defaultTabOptions, tabGroupId: number) {
-    this.tabGroupId = tabGroupId;
-    this.url = url;
-
-    if (active) {
-      this.select();
-    }
+    this.rootElement.addEventListener('mousedown', this.onMouseDown);
+    closeElement.addEventListener('click', this.onCloseClick);
+    closeElement.addEventListener('mousedown', this.onCloseMouseDown);
 
     ipcRenderer.send('browserview-create', this.id);
 
-    ipcRenderer.once(`browserview-created-${this.id}`, () => {
-      ipcRenderer.send('browserview-select', this.id);
-    });
+    if (active) {
+      ipcRenderer.once(`browserview-created-${this.id}`, () => {
+        ipcRenderer.send('browserview-select', this.id);
+      });
+
+      this.select();
+    }
   }
 
-  public get tabGroup() {
-    return store.tabGroupsStore.getGroupById(this.tabGroupId);
+  public onMouseDown = () => {
+    this.select();
+  };
+
+  public onCloseMouseDown = (e: Event) => {
+    e.stopPropagation();
+  };
+
+  public onCloseClick = () => {
+    this.close();
+  };
+
+  public close() {
+    const tabsTemp = app.tabs.list.filter(
+      x => x.tabGroupId === this.tabGroupId,
+    );
+    const selected = app.tabs.selectedTabId === this.id;
+
+    ipcRenderer.send('browserview-remove', this.id);
+
+    // app.tabsapp.resetRearrangeTabsTimer();
+
+    const notClosingTabs = tabsTemp.filter(x => !x.isClosing);
+    let index = notClosingTabs.indexOf(this);
+
+    this.isClosing = true;
+    if (notClosingTabs.length - 1 === index) {
+      const previousTab = tabsTemp[index - 1];
+      if (previousTab) {
+        this.setLeft(previousTab.getNewLeft() + this.getWidth(), true);
+      }
+
+      app.tabs.updateTabsBounds(true);
+    }
+
+    this.setWidth(0, true);
+    app.tabs.setTabsLefts(true);
+
+    if (selected) {
+      index = tabsTemp.indexOf(this);
+
+      if (index + 1 < tabsTemp.length && !tabsTemp[index + 1].isClosing) {
+        const nextTab = tabsTemp[index + 1];
+        nextTab.select();
+      } else if (index - 1 >= 0 && !tabsTemp[index - 1].isClosing) {
+        const prevTab = tabsTemp[index - 1];
+        prevTab.select();
+        // } else if (app.tabGroupsapp.groups.length === 1) {
+      } else {
+        closeWindow();
+      }
+    }
+
+    setTimeout(() => {
+      this.rootElement.remove();
+      app.tabs.list.splice(app.tabs.list.indexOf(this), 1);
+    }, TAB_ANIMATION_DURATION * 1000);
   }
 
   public select() {
-    if (!this.isClosing) {
-      this.tabGroup.selectedTabId = this.id;
-      store.tabsStore.selectedTabId = this.id;
+    if (this.isClosing) return;
 
-      ipcRenderer.send('browserview-select', this.id);
-    }
+    const selectedTab = document.getElementsByClassName('tab-selected')[0];
+
+    if (selectedTab) selectedTab.classList.remove('tab-selected');
+
+    this.rootElement.classList.add('tab-selected');
+    app.tabs.selectedTabId = this.id;
+
+    ipcRenderer.send('browserview-select', this.id);
   }
 
-  public getWidth(containerWidth: number = null, tabs: Tab[] = null) {
+  public getWidth(containerWidth: number = null, tabsTemp: Tab[] = null) {
     if (containerWidth === null) {
-      containerWidth = store.tabsStore.containerWidth;
+      containerWidth = app.tabs.container.offsetWidth;
     }
 
-    if (tabs === null) {
-      tabs = store.tabsStore.tabs.filter(
+    if (tabsTemp === null) {
+      tabsTemp = app.tabs.list.filter(
         x => x.tabGroupId === this.tabGroupId && !x.isClosing,
       );
     }
 
-    const width = containerWidth / tabs.length - TABS_PADDING;
+    const width = containerWidth / tabsTemp.length - TABS_PADDING;
 
     if (width > 200 - TABS_PADDING) {
       return 200 - TABS_PADDING;
@@ -99,19 +152,24 @@ export class Tab {
   }
 
   public getLeft() {
-    const { tabs } = this.tabGroup;
-    const index = tabs.indexOf(this);
+    const tabsTemp = app.tabs.list.filter(
+      x => x.tabGroupId === this.tabGroupId && !x.isClosing,
+    );
+    const index = tabsTemp.indexOf(this);
 
     let left = 0;
     for (let i = 0; i < index; i++) {
-      left += tabs[i].width + TABS_PADDING;
+      left += tabsTemp[i].width + TABS_PADDING;
     }
 
     return left;
   }
 
   public getNewLeft() {
-    const index = this.tabGroup.tabs.indexOf(this);
+    const tabsTemp = app.tabs.list.filter(
+      x => x.tabGroupId === this.tabGroupId && !x.isClosing,
+    );
+    const index = tabsTemp.indexOf(this);
 
     let left = 0;
     for (let i = 0; i < index; i++) {
@@ -122,83 +180,12 @@ export class Tab {
   }
 
   public setLeft(left: number, animation: boolean) {
-    store.tabsStore.animateProperty('x', this.ref.current, left, animation);
+    app.tabs.animateProperty('x', this.rootElement, left, animation);
     this.left = left;
   }
 
   public setWidth(width: number, animation: boolean) {
-    store.tabsStore.animateProperty(
-      'width',
-      this.ref.current,
-      width,
-      animation,
-    );
+    app.tabs.animateProperty('width', this.rootElement, width, animation);
     this.width = width;
-  }
-
-  public close() {
-    const tabGroup = this.tabGroup;
-    const { tabs } = tabGroup;
-    const selected = tabGroup.selectedTabId === this.id;
-
-    ipcRenderer.send('browserview-remove', this.id);
-
-    store.tabsStore.resetRearrangeTabsTimer();
-
-    const notClosingTabs = tabs.filter(x => !x.isClosing);
-    let index = notClosingTabs.indexOf(this);
-
-    this.isClosing = true;
-    if (notClosingTabs.length - 1 === index) {
-      const previousTab = tabs[index - 1];
-      if (previousTab) {
-        this.setLeft(previousTab.getNewLeft() + this.getWidth(), true);
-      }
-      store.tabsStore.updateTabsBounds(true);
-    }
-
-    this.setWidth(0, true);
-    store.tabsStore.setTabsLefts(true);
-
-    if (selected) {
-      index = tabs.indexOf(this);
-
-      if (index + 1 < tabs.length && !tabs[index + 1].isClosing) {
-        const nextTab = tabs[index + 1];
-        nextTab.select();
-      } else if (index - 1 >= 0 && !tabs[index - 1].isClosing) {
-        const prevTab = tabs[index - 1];
-        prevTab.select();
-      } else if (store.tabGroupsStore.groups.length === 1) {
-        closeWindow();
-      }
-    }
-
-    setTimeout(() => {
-      store.tabsStore.removeTab(this.id);
-    }, TAB_ANIMATION_DURATION * 1000);
-  }
-
-  public getApiTab(): chrome.tabs.Tab {
-    const selected = store.tabsStore.selectedTabId === this.id;
-
-    return {
-      id: this.id,
-      index: this.tabGroup.tabs.indexOf(this),
-      title: this.title,
-      pinned: false,
-      favIconUrl: this.favicon,
-      url: this.url,
-      status: this.loading ? 'loading' : 'complete',
-      width: this.width,
-      height: TOOLBAR_HEIGHT,
-      active: selected,
-      highlighted: selected,
-      selected,
-      windowId: 0,
-      discarded: false,
-      incognito: false,
-      autoDiscardable: false,
-    };
   }
 }
