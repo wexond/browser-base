@@ -17,24 +17,22 @@ export class Tab {
   public id = id++;
 
   constructor(active: boolean) {
-    let closeElement: HTMLElement;
-
     this.rootElement = (
-      <div className="tab">
+      <div className="tab" onMouseDown={this.onMouseDown}>
         <div className="tab-content">
           <div ref={r => (this.titleElement = r)} className="tab-title">
             New tab
           </div>
         </div>
-        <div ref={r => (closeElement = r)} className="tab-close" />
+        <div
+          className="tab-close"
+          onClick={this.onCloseClick}
+          onMouseDown={this.onCloseMouseDown}
+        />
       </div>
     );
 
     app.tabs.container.appendChild(this.rootElement);
-
-    this.rootElement.addEventListener('mousedown', this.onMouseDown);
-    closeElement.addEventListener('click', this.onCloseClick);
-    closeElement.addEventListener('mousedown', this.onCloseMouseDown);
 
     ipcRenderer.send('browserview-create', this.id);
 
@@ -51,7 +49,7 @@ export class Tab {
     this.select();
   };
 
-  public onCloseMouseDown = (e: Event) => {
+  public onCloseMouseDown = (e: any) => {
     e.stopPropagation();
   };
 
