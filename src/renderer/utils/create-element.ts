@@ -19,6 +19,8 @@ export const createElement = (
         element.setAttribute('class', props[key]);
       } else if (key === 'ref') {
         props[key](element);
+      } else if (key.startsWith('on')) {
+        (element as any)[key.toLowerCase()] = props[key];
       } else {
         element.setAttribute(key, props[key]);
       }
