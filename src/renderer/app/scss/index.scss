@@ -1,6 +1,29 @@
 body {
   margin: 0;
   padding: 0;
+  font-family: Roboto;
+  font-weight: 400;
+  user-select: none;
+  cursor: default;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../../../shared/resources/fonts/roboto-regular.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src: url(../../../shared/resources/fonts/roboto-medium.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: url(../../../shared/resources/fonts/roboto-bold.woff2) format('woff2');
 }
 
 .toolbar {
