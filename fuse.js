@@ -5,6 +5,9 @@ const {
   EnvPlugin,
   CopyPlugin,
   JSONPlugin,
+  CSSResourcePlugin,
+  SassPlugin,
+  CSSPlugin,
 } = require('fuse-box');
 const { spawn } = require('child_process');
 
@@ -28,6 +31,7 @@ const getConfig = (target, name) => {
           uglify: {
             es6: true,
           },
+          css: true,
         }),
     ],
     alias: {
@@ -46,7 +50,7 @@ const getRendererConfig = (target, name) => {
 
 const getWebIndexPlugin = name => {
   return WebIndexPlugin({
-    template: `static/pages/${name}.html`,
+    template: `src/renderer/pages/${name}.html`,
     path: production ? '.' : '/',
     target: `${name}.html`,
     bundles: [name],
@@ -78,7 +82,11 @@ const renderer = () => {
 
   cfg.plugins.push(getWebIndexPlugin('app'));
   cfg.plugins.push(JSONPlugin());
-  cfg.plugins.push(getCopyPlugin());
+  cfg.plugins.push([
+    SassPlugin(),
+    CSSResourcePlugin({ dist: 'build/css-resources' }),
+    CSSPlugin(),
+  ]);
 
   const fuse = FuseBox.init(cfg);
 
@@ -86,7 +94,9 @@ const renderer = () => {
     fuse.dev({ httpServer: true });
   }
 
-  const app = fuse.bundle('app').instructions('> [renderer/app/index.tsx]');
+  const app = fuse
+    .bundle('app')
+    .instructions('> renderer/app/index.ts -electron');
 
   if (!production) {
     app.hmr().watch();
