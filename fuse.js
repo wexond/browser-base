@@ -20,7 +20,6 @@ const getConfig = (target, name) => {
     output: `build/$name.js`,
     tsConfig: './tsconfig.json',
     useTypescriptCompiler: true,
-    hash: production,
     plugins: [
       EnvPlugin({ NODE_ENV: production ? 'production' : 'development' }),
       production &&
