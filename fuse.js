@@ -3,7 +3,6 @@ const {
   WebIndexPlugin,
   QuantumPlugin,
   EnvPlugin,
-  CopyPlugin,
   JSONPlugin,
   CSSResourcePlugin,
   SassPlugin,
@@ -21,6 +20,7 @@ const getConfig = (target, name) => {
     output: `build/$name.js`,
     tsConfig: './tsconfig.json',
     useTypescriptCompiler: true,
+    hash: production,
     plugins: [
       EnvPlugin({ NODE_ENV: production ? 'production' : 'development' }),
       production &&
@@ -42,7 +42,7 @@ const getConfig = (target, name) => {
 
 const getRendererConfig = (target, name) => {
   const cfg = Object.assign({}, getConfig(target, name), {
-    sourceMaps: true,
+    sourceMaps: production,
   });
 
   return cfg;
@@ -54,14 +54,6 @@ const getWebIndexPlugin = name => {
     path: production ? '.' : '/',
     target: `${name}.html`,
     bundles: [name],
-  });
-};
-
-const getCopyPlugin = () => {
-  return CopyPlugin({
-    files: ['*.woff2', '*.png', '*.svg'],
-    dest: 'assets',
-    resolve: production ? './assets' : '/assets',
   });
 };
 
@@ -84,7 +76,7 @@ const renderer = () => {
   cfg.plugins.push(JSONPlugin());
   cfg.plugins.push([
     SassPlugin(),
-    CSSResourcePlugin({ dist: 'build/css-resources' }),
+    CSSResourcePlugin({ dist: 'build/css-resources', inline: true }),
     CSSPlugin(),
   ]);
 
