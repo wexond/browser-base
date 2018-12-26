@@ -37,6 +37,7 @@ export class AppWindow {
       this.window.webContents.openDevTools({ mode: 'detach' });
       this.window.loadURL('http://localhost:4444/app.html');
     } else {
+      this.window.webContents.openDevTools({ mode: 'detach' });
       this.window.loadURL(join('file://', app.getAppPath(), 'build/app.html'));
     }
 

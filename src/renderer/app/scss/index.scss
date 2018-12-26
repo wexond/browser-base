@@ -11,19 +11,19 @@ body {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
-  src: url(../../../shared/resources/fonts/roboto-regular.woff2) format('woff2');
+  src: url(../../assets/fonts/roboto-regular.woff2) format('woff2');
 }
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
-  src: url(../../../shared/resources/fonts/roboto-medium.woff2) format('woff2');
+  src: url(../../assets/fonts/roboto-medium.woff2) format('woff2');
 }
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 300;
-  src: url(../../../shared/resources/fonts/roboto-bold.woff2) format('woff2');
+  src: url(../../assets/fonts/roboto-bold.woff2) format('woff2');
 }
 
 .toolbar {
@@ -91,7 +91,7 @@ body {
 }
 
 .add-tab-icon {
-  background-image: url(../../../shared/resources/icons/add.svg);
+  background-image: url(../../assets/icons/add.svg);
   background-size: 20px;
 }
 
@@ -186,7 +186,7 @@ body {
   right: 12px;
   height: 16px;
   width: 16px;
-  background-image: url(../../../shared/resources/icons/close.svg);
+  background-image: url(../../assets/icons/close.svg);
   transition: 0.2s opacity;
   z-index: 2;
   background-position: center;
