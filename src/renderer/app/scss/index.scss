@@ -47,6 +47,7 @@ body {
   margin-left: 8px;
   margin-right: 32px;
   display: flex;
+  align-items: center;
 }
 
 .tabs-container {
@@ -59,40 +60,27 @@ body {
 }
 
 .toolbar-button {
-  height: 100%;
+  height: 32px;
   -webkit-app-region: no-drag;
   position: relative;
   transition: 0.2s background-color;
-  width: 36px;
-}
-
-.toolbar-button-circle {
-  border-radius: 50%;
   width: 32px;
-  height: 32px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  overflow: hidden;
-  transition: 0.2s background-color;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.06);
-  }
-}
-
-.toolbar-button-icon {
-  width: 100%;
-  height: 100%;
-  opacity: 0.54;
   background-position: center;
   background-size: 24px;
   background-repeat: no-repeat;
-}
+  opacity: 0.54;
+  border-radius: 50%;
+  overflow: hidden;
+  transition: 0.2s background-color;
 
-.add-tab-icon {
-  background-image: url(../../assets/icons/add.svg);
-  background-size: 20px;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+
+  &.add-tab {
+    background-image: url(../../assets/icons/add.svg);
+    background-size: 20px;
+  }
 }
 
 #new-tab {
@@ -183,19 +171,21 @@ body {
 
 .tab-close {
   position: absolute;
-  right: 12px;
-  height: 16px;
-  width: 16px;
+  right: 8px;
+  height: 24px;
+  width: 24px;
   background-image: url(../../assets/icons/close.svg);
-  transition: 0.2s opacity;
+  transition: 0.2s opacity, 0.2s background-color;
   z-index: 2;
+  border-radius: 100%;
   background-position: center;
-  background-size: 100%;
+  background-size: 16px;
   background-repeat: no-repeat;
   opacity: 0;
 
   &:hover {
     opacity: 0.54;
+    background-color: rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -224,5 +214,60 @@ body {
   }
   &:active {
     opacity: 0.4;
+  }
+}
+
+.windows-buttons {
+  display: flex;
+}
+
+.windows-button {
+  height: 100%;
+  width: 45px;
+  margin-right: 1px;
+  position: relative;
+  transition: 0.2s background-color;
+  -webkit-app-region: no-drag;
+  background-position: center;
+  background-size: 11px;
+  background-repeat: no-repeat;
+
+  &:first-child {
+    margin-right: 0;
+  }
+
+  &:hover {
+    background-color: rgba(196, 196, 196, 0.4);
+
+    & .windows-button-icon {
+      filter: invert(100%);
+    }
+  }
+
+  & .windows-button-icon {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: 11px;
+    background-repeat: no-repeat;
+    transition: 0.2s filter;
+
+    &.windows-close {
+      background-image: url(../../assets/icons/windows/close.svg);
+    }
+  }
+
+  &.windows-close {
+    &:hover {
+      background-color: #e81123;
+    }
+  }
+
+  &.windows-maximize {
+    background-image: url(../../assets/icons/windows/maximize.svg);
+  }
+
+  &.windows-minimize {
+    background-image: url(../../assets/icons/windows/minimize.svg);
   }
 }
