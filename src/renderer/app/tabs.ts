@@ -7,7 +7,7 @@ import {
 import { HorizontalScrollbar } from './horizontal-scrollbar';
 import { TweenLite } from 'gsap';
 
-export class TabsStore {
+export class Tabs {
   public list: Tab[] = [];
 
   public selectedTabId: number = 0;
@@ -28,15 +28,26 @@ export class TabsStore {
       }
     });
 
-    this.addTabButton.addEventListener('click', () => {
-      new Tab(true);
-    });
+    this.addTabButton.onclick = () => {
+      this.addTab();
+    };
   }
 
   public updateTabsBounds = (animation: boolean) => {
     this.setTabsWidths(animation);
     this.setTabsLefts(animation);
   };
+
+  public addTab() {
+    const tab = new Tab(true);
+
+    this.list.push(tab);
+
+    tab.setLeft(tab.getLeft(), false);
+    this.updateTabsBounds(true);
+
+    this.scrollbar.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
+  }
 
   public setTabsWidths = (animation: boolean) => {
     const tabsTemp = this.list.filter(x => !x.isClosing && x.tabGroupId === 0);
