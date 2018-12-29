@@ -35,6 +35,7 @@ const getConfig = (target, name) => {
     ],
     alias: {
       '~': '~/',
+      ui: '~/renderer/utils/create-element',
     },
   };
 };
