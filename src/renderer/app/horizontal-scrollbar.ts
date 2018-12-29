@@ -6,6 +6,14 @@ export class HorizontalScrollbar {
   private isScrollingToEnd = false;
   private scrollTimeout: any;
 
+  private scrollData = {
+    dragging: false,
+    mouseStartX: 0,
+    startLeft: 0,
+  };
+
+  private thumbLeft: number;
+
   constructor(
     containerElement: HTMLElement,
     rootElement: HTMLElement,
@@ -16,13 +24,57 @@ export class HorizontalScrollbar {
     this.thumbElement = thumbElement;
 
     requestAnimationFrame(this.resizeScrollbar);
+
+    this.thumbElement.onmousedown = this.onMouseDown;
+    window.addEventListener('mouseup', this.onMouseUp);
+    window.addEventListener('mousemove', this.onMouseMove);
+    this.containerElement.addEventListener('wheel', this.onWheel);
   }
+
+  public onWheel = (e: any) => {
+    const { deltaX, deltaY } = e;
+    const { scrollLeft } = this.containerElement;
+
+    const delta = Math.abs(deltaX) >= Math.abs(deltaY) ? deltaX : -deltaY;
+    const target = delta / 2;
+
+    this.isScrollingToEnd = false;
+
+    this.containerElement.scrollLeft = scrollLeft + target;
+  };
+
+  public onMouseUp = () => {
+    this.scrollData = {
+      ...this.scrollData,
+      dragging: false,
+    };
+  };
+
+  public onMouseMove = (e: any) => {
+    if (this.scrollData.dragging && this.containerElement) {
+      const { startLeft, mouseStartX } = this.scrollData;
+      const { offsetWidth, scrollWidth } = this.containerElement;
+      this.containerElement.scrollLeft =
+        ((startLeft + e.pageX - mouseStartX) / offsetWidth) * scrollWidth;
+    }
+  };
+
+  public onMouseDown = (e: any) => {
+    this.isScrollingToEnd = false;
+
+    this.scrollData = {
+      ...this.scrollData,
+      dragging: true,
+      mouseStartX: e.pageX,
+      startLeft: this.thumbLeft,
+    };
+  };
 
   public resizeScrollbar = () => {
     const { scrollWidth, offsetWidth, scrollLeft } = this.containerElement;
 
-    this.thumbElement.style.left = `${(scrollLeft / scrollWidth) *
-      offsetWidth}px`;
+    this.thumbLeft = (scrollLeft / scrollWidth) * offsetWidth;
+    this.thumbElement.style.left = `${this.thumbLeft}px`;
 
     const thumbWidth = offsetWidth ** 2 / scrollWidth;
     this.thumbElement.style.width = `${thumbWidth}px`;
