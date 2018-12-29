@@ -1,11 +1,11 @@
 import './scss/index.scss';
-import { TabsStore } from './tabs';
+import { Tabs } from './tabs';
 import { platform } from 'os';
 import { closeWindow, maximizeWindow, minimizeWindow } from './utils';
 import { Tab } from './models';
 
 export class App {
-  public tabs = new TabsStore();
+  public tabs = new Tabs();
 
   public windowsButtons = document.getElementById('windows-buttons');
   public windowsCloseButton = document.getElementById('window-close');
@@ -31,7 +31,7 @@ export class App {
     };
 
     requestAnimationFrame(() => {
-      new Tab(true);
+      this.tabs.addTab();
     });
 
     if (platform() === 'darwin') {
