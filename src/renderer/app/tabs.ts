@@ -6,6 +6,7 @@ import {
 } from './constants';
 import { HorizontalScrollbar } from './horizontal-scrollbar';
 import { TweenLite } from 'gsap';
+import app from '.';
 
 export class Tabs {
   public list: Tab[] = [];
@@ -50,7 +51,9 @@ export class Tabs {
   }
 
   public setTabsWidths = (animation: boolean) => {
-    const tabsTemp = this.list.filter(x => !x.isClosing && x.tabGroupId === 0);
+    const tabsTemp = this.list.filter(
+      x => !x.isClosing && x.tabGroupId === app.tabGroups.currentGroupId,
+    );
 
     const { offsetWidth } = this.container;
 
@@ -63,7 +66,9 @@ export class Tabs {
   };
 
   public setTabsLefts = (animation: boolean) => {
-    const tabsTemp = this.list.filter(x => !x.isClosing && x.tabGroupId === 0);
+    const tabsTemp = this.list.filter(
+      x => !x.isClosing && x.tabGroupId === app.tabGroups.currentGroupId,
+    );
 
     const { offsetWidth } = this.container;
 
