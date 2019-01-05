@@ -100,9 +100,13 @@ body {
   -webkit-app-region: no-drag;
   z-index: 1;
 
-  &:hover {
+  &.hover {
     & .tab-close {
       opacity: 0.54;
+    }
+
+    &:after {
+      opacity: 1;
     }
 
     & .tab-content {
@@ -134,12 +138,6 @@ body {
     opacity: 0;
   }
 
-  &.hover {
-    &:after {
-      opacity: 1;
-    }
-  }
-
   &.tab-selected {
     z-index: 2;
     background-color: rgba(33, 150, 243, 0.15);
@@ -156,10 +154,12 @@ body {
       opacity: 0.54;
     }
 
-    &:hover {
-      &:after {
-        background-color: rgba(33, 150, 243, 0.08);
-      }
+    & .tab-right-border {
+      display: none !important;
+    }
+
+    &:after {
+      background-color: rgba(33, 150, 243, 0.08);
     }
   }
 }
