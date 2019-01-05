@@ -5,6 +5,8 @@ body {
   font-weight: 400;
   user-select: none;
   cursor: default;
+  display: flex;
+  flex-flow: column;
 }
 
 @font-face {
@@ -33,7 +35,6 @@ body {
   flex-flow: row;
   background-color: #fff;
   color: rgba(0, 0, 0, 0.87);
-  width: 100%;
   height: 40px;
   -webkit-app-region: drag;
 }
