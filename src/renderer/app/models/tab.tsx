@@ -53,7 +53,7 @@ export class Tab {
       app.mouse.x >= left - scrollLeft &&
       app.mouse.x <= left + width - scrollLeft &&
       app.mouse.y >= top &&
-      app.mouse.y <= height + top - 1
+      app.mouse.y <= height + top
     ) {
       this.onMouseEnter();
     } else {
