@@ -92,7 +92,7 @@ export class Tab {
       } else if (index - 1 >= 0 && !tabsTemp[index - 1].isClosing) {
         const prevTab = tabsTemp[index - 1];
         prevTab.select();
-        // } else if (app.tabGroupsapp.groups.length === 1) {
+        // } else if (app.tabGroups.groups.length === 1) {
       } else {
         closeWindow();
       }
