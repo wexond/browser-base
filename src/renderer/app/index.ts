@@ -2,10 +2,11 @@ import './scss/index.scss';
 import { Tabs } from './tabs';
 import { platform } from 'os';
 import { closeWindow, maximizeWindow, minimizeWindow } from './utils';
-import { Tab } from './models';
+import { TabGroups } from './tab-groups';
 
 export class App {
   public tabs = new Tabs();
+  public tabGroups = new TabGroups();
 
   public windowsButtons = document.getElementById('windows-buttons');
   public windowsCloseButton = document.getElementById('window-close');
