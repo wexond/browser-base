@@ -101,10 +101,6 @@ body {
   z-index: 1;
 
   &:hover {
-    &:after {
-      opacity: 1;
-    }
-
     & .tab-close {
       opacity: 0.54;
     }
@@ -112,6 +108,18 @@ body {
     & .tab-content {
       max-width: calc(100% - 48px);
     }
+
+    & .tab-right-border {
+      display: none !important;
+    }
+  }
+
+  & .tab-right-border {
+    height: 20px;
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.12);
+    position: absolute;
+    right: 0;
   }
 
   &:after {
@@ -124,6 +132,12 @@ body {
     transition: 0.2s opacity;
     background-color: rgba(0, 0, 0, 0.04);
     opacity: 0;
+  }
+
+  &.hover {
+    &:after {
+      opacity: 1;
+    }
   }
 
   &.tab-selected {
