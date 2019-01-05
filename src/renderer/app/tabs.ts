@@ -7,6 +7,7 @@ import {
 import { HorizontalScrollbar } from './horizontal-scrollbar';
 import { TweenLite } from 'gsap';
 import app from '.';
+import { ipcRenderer } from 'electron';
 
 export class Tabs {
   public list: Tab[] = [];
@@ -39,8 +40,16 @@ export class Tabs {
     this.setTabsLefts(animation);
   };
 
+  public getTabById(id: number) {
+    return this.list.find(x => x.id === id);
+  }
+
+  public get selectedTab() {
+    return this.getTabById(this.selectedTabId);
+  }
+
   public addTab() {
-    const tab = new Tab(true);
+    const tab = new Tab();
 
     this.list.push(tab);
 
@@ -48,6 +57,14 @@ export class Tabs {
     this.updateTabsBounds(true);
 
     this.scrollbar.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
+
+    if (true) {
+      ipcRenderer.once(`browserview-created-${tab.id}`, () => {
+        ipcRenderer.send('browserview-select', tab.id);
+      });
+
+      tab.select();
+    }
   }
 
   public setTabsWidths = (animation: boolean) => {

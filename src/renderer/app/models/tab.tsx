@@ -1,14 +1,19 @@
 import app from '..';
 import { ipcRenderer } from 'electron';
-import { TABS_PADDING, TAB_ANIMATION_DURATION } from '../constants';
+import {
+  TABS_PADDING,
+  TAB_ANIMATION_DURATION,
+  TOOLBAR_HEIGHT,
+} from '../constants';
 import { closeWindow } from '../utils';
 import { createElement } from 'ui';
 
 let id = 0;
 
 export class Tab {
-  public rootElement: any;
-  public titleElement: HTMLElement;
+  public root: HTMLElement;
+  public title: HTMLElement;
+  public rightBorder: HTMLElement;
 
   public tabGroupId = 0;
   public isClosing = false;
@@ -16,11 +21,11 @@ export class Tab {
   public left = 0;
   public id = id++;
 
-  constructor(active: boolean) {
-    this.rootElement = (
+  constructor() {
+    this.root = (
       <div className="tab" onMouseDown={this.onMouseDown}>
         <div className="tab-content">
-          <div ref={r => (this.titleElement = r)} className="tab-title">
+          <div ref={r => (this.title = r)} className="tab-title">
             New tab
           </div>
         </div>
@@ -29,21 +34,62 @@ export class Tab {
           onClick={this.onCloseClick}
           onMouseDown={this.onCloseMouseDown}
         />
+        <div className="tab-right-border" ref={r => (this.rightBorder = r)} />
       </div>
-    );
+    ) as any;
 
-    app.tabs.container.appendChild(this.rootElement);
+    app.tabs.container.appendChild(this.root);
 
     ipcRenderer.send('browserview-create', this.id);
 
-    if (active) {
-      ipcRenderer.once(`browserview-created-${this.id}`, () => {
-        ipcRenderer.send('browserview-select', this.id);
-      });
-
-      this.select();
-    }
+    requestAnimationFrame(this.tick);
   }
+
+  public tick = () => {
+    const { scrollLeft } = app.tabs.container;
+    const { top, height } = this.root.getBoundingClientRect();
+
+    if (
+      app.mouse.x >= this.left - scrollLeft &&
+      app.mouse.x <= this.left + this.width - scrollLeft &&
+      app.mouse.y >= top &&
+      app.mouse.y <= height + top - 1
+    ) {
+      this.onMouseEnter();
+    } else {
+      this.onMouseLeave();
+    }
+
+    if (!this.isClosing) {
+      requestAnimationFrame(this.tick);
+    }
+  };
+
+  public get selected() {
+    return app.tabs.selectedTabId === this.id;
+  }
+
+  public get previousTab() {
+    return app.tabs.list[app.tabs.list.indexOf(this) - 1];
+  }
+
+  public onMouseEnter = () => {
+    this.root.classList.add('hover');
+
+    const previousTab = this.previousTab;
+    if (previousTab) {
+      previousTab.rightBorder.style.display = 'none';
+    }
+  };
+
+  public onMouseLeave = () => {
+    this.root.classList.remove('hover');
+
+    const previousTab = this.previousTab;
+    if (previousTab && !this.selected && !this.isClosing) {
+      previousTab.rightBorder.style.display = 'block';
+    }
+  };
 
   public onMouseDown = () => {
     this.select();
@@ -99,7 +145,7 @@ export class Tab {
     }
 
     setTimeout(() => {
-      this.rootElement.remove();
+      this.root.remove();
       app.tabs.list.splice(app.tabs.list.indexOf(this), 1);
     }, TAB_ANIMATION_DURATION * 1000);
   }
@@ -107,12 +153,27 @@ export class Tab {
   public select() {
     if (this.isClosing) return;
 
-    const selectedTab = document.getElementsByClassName('tab-selected')[0];
+    const { selectedTab } = app.tabs;
 
-    if (selectedTab) selectedTab.classList.remove('tab-selected');
+    if (selectedTab) {
+      selectedTab.rightBorder.style.display = 'block';
+      selectedTab.root.classList.remove('tab-selected');
 
-    this.rootElement.classList.add('tab-selected');
+      const previousTab = selectedTab.previousTab;
+      if (previousTab) {
+        previousTab.rightBorder.style.display = 'block';
+      }
+    }
+
+    this.root.classList.add('tab-selected');
+    this.rightBorder.style.display = 'none';
+
     app.tabs.selectedTabId = this.id;
+
+    const previousTab = this.previousTab;
+    if (previousTab) {
+      previousTab.rightBorder.style.display = 'none';
+    }
 
     ipcRenderer.send('browserview-select', this.id);
   }
@@ -169,12 +230,12 @@ export class Tab {
   }
 
   public setLeft(left: number, animation: boolean) {
-    app.tabs.animateProperty('x', this.rootElement, left, animation);
+    app.tabs.animateProperty('x', this.root, left, animation);
     this.left = left;
   }
 
   public setWidth(width: number, animation: boolean) {
-    app.tabs.animateProperty('width', this.rootElement, width, animation);
+    app.tabs.animateProperty('width', this.root, width, animation);
     this.width = width;
   }
 }
