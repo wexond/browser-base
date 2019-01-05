@@ -12,6 +12,7 @@ export class App {
   public windowsCloseButton = document.getElementById('window-close');
   public windowsMaximizeButton = document.getElementById('window-maximize');
   public windowsMinimizeButton = document.getElementById('window-minimize');
+  public toolbar = document.getElementById('toolbar');
 
   constructor() {
     if (platform() === 'darwin') {
@@ -33,6 +34,10 @@ export class App {
     requestAnimationFrame(() => {
       this.tabs.addTab();
     });
+
+    if (platform() === 'darwin') {
+      this.toolbar.style.paddingLeft = '72px';
+    }
   }
 
   public mouse = {
