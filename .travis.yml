@@ -22,6 +22,3 @@ addons:
 script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-darwin ;fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-linux ;fi
-before_install: yarn global add greenkeeper-lockfile@1
-before_script: greenkeeper-lockfile-update
-after_script: greenkeeper-lockfile-upload
