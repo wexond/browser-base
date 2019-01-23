@@ -46,12 +46,11 @@ export class Tab {
   }
 
   public tick = () => {
-    const { scrollLeft } = app.tabs.container;
     const { top, height, left, width } = this.root.getBoundingClientRect();
 
     if (
-      app.mouse.x >= left - scrollLeft &&
-      app.mouse.x <= left + width - scrollLeft &&
+      app.mouse.x >= left &&
+      app.mouse.x <= left + width &&
       app.mouse.y >= top &&
       app.mouse.y <= height + top
     ) {
