@@ -68,6 +68,25 @@ export class App {
       this.mouse.x = e.pageX;
       this.mouse.y = e.pageY;
     });
+
+    this.back.onclick = () => {
+      this.sendNavigationAction('back');
+    };
+
+    this.forward.onclick = () => {
+      this.sendNavigationAction('forward');
+    };
+
+    this.refresh.onclick = () => {
+      this.sendNavigationAction('refresh');
+    };
+  }
+
+  private sendNavigationAction(action: 'back' | 'forward' | 'refresh') {
+    ipcRenderer.send('browserview-navigation-action', {
+      id: this.tabs.selectedTabId,
+      action,
+    });
   }
 
   public mouse = {
