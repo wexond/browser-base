@@ -31,6 +31,31 @@ export class BrowserViewManager {
       },
     );
 
+    ipcMain.on(
+      'browserview-navigation-action',
+      (e: Electron.IpcMessageEvent, data: any) => {
+        const { id, action } = data;
+
+        const view = this.views[id];
+
+        if (!view || view.isDestroyed()) {
+          return;
+        }
+
+        switch (action) {
+          case 'back':
+            view.webContents.goBack();
+            break;
+          case 'forward':
+            view.webContents.goForward();
+            break;
+          case 'refresh':
+            view.webContents.reload();
+            break;
+        }
+      },
+    );
+
     ipcMain.on('browserview-clear', () => {
       this.clear();
     });
