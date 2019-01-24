@@ -37,6 +37,7 @@ body {
   color: rgba(0, 0, 0, 0.87);
   height: 40px;
   -webkit-app-region: drag;
+  align-items: center;
 }
 
 .tabbar {
@@ -45,7 +46,6 @@ body {
   position: relative;
   overflow: hidden;
   transition: 0.3s opacity, 0.3s transform;
-  margin-left: 8px;
   margin-right: 32px;
   display: flex;
   align-items: center;
@@ -75,13 +75,20 @@ body {
   transition: 0.2s background-color;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.06);
+    background-color: rgba(0, 0, 0, 0.08);
   }
 
   &.add-tab {
     background-image: url(../../assets/icons/add.svg);
     background-size: 20px;
   }
+}
+
+.toolbar-separator {
+  height: 16px;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.12);
+  margin-left: 8px;
 }
 
 #new-tab {
@@ -118,15 +125,6 @@ body {
       display: none !important;
     }
   }
-
-  & .tab-right-border {
-    height: 20px;
-    width: 1px;
-    background-color: rgba(0, 0, 0, 0.12);
-    position: absolute;
-    right: 0;
-  }
-
   &:after {
     content: '';
     position: absolute;
@@ -163,6 +161,14 @@ body {
       background-color: rgba(33, 150, 243, 0.08);
     }
   }
+}
+
+.tab-right-border {
+  height: 20px;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.12);
+  position: absolute;
+  right: 0;
 }
 
 .tab-content {
@@ -285,5 +291,26 @@ body {
 
   &.windows-minimize {
     background-image: url(../../assets/icons/windows/minimize.svg);
+  }
+}
+
+.navigation-icons {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+
+  & .back {
+    background-image: url(../../assets/icons/back.svg);
+  }
+
+  & .forward {
+    background-image: url(../../assets/icons/forward.svg);
+    margin-left: 4px;
+  }
+
+  & .refresh {
+    background-image: url(../../assets/icons/refresh.svg);
+    background-size: 20px;
+    margin-left: 4px;
   }
 }
