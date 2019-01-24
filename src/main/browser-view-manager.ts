@@ -4,6 +4,7 @@ import { appWindow } from '.';
 
 export class BrowserViewManager {
   public views: { [key: number]: BrowserView } = {};
+  public selectedId = 0;
 
   constructor() {
     ipcMain.on(
@@ -19,6 +20,7 @@ export class BrowserViewManager {
       'browserview-select',
       (e: Electron.IpcMessageEvent, id: number) => {
         this.select(id);
+        this.updateNavigationState(id);
       },
     );
 
@@ -34,8 +36,32 @@ export class BrowserViewManager {
     });
   }
 
+  public updateNavigationState(tabId: number) {
+    const view = this.views[tabId];
+
+    if (!view || view.isDestroyed()) {
+      return;
+    }
+
+    if (this.selectedId === tabId) {
+      appWindow.window.webContents.send('update-navigation-state', {
+        canGoBack: view.webContents.canGoBack(),
+        canGoForward: view.webContents.canGoForward(),
+      });
+    }
+  }
+
   public create(tabId: number) {
     const view = new BrowserView();
+
+    view.webContents.addListener('did-stop-loading', () => {
+      this.updateNavigationState(tabId);
+    });
+
+    view.webContents.addListener('did-start-loading', () => {
+      this.updateNavigationState(tabId);
+    });
+
     view.setAutoResize({ width: true, height: true });
     view.webContents.loadURL('https://google.com');
 
@@ -51,6 +77,7 @@ export class BrowserViewManager {
 
   public select(tabId: number) {
     const view = this.views[tabId];
+    this.selectedId = tabId;
 
     if (!view || view.isDestroyed()) {
       appWindow.window.setBrowserView(null);

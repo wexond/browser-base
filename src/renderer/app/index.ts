@@ -3,6 +3,7 @@ import { Tabs } from './tabs';
 import { platform } from 'os';
 import { closeWindow, maximizeWindow, minimizeWindow } from './utils';
 import { TabGroups } from './tab-groups';
+import { ipcRenderer } from 'electron';
 
 export class App {
   public tabs = new Tabs();
@@ -37,6 +38,23 @@ export class App {
     this.windowsMinimizeButton.onclick = () => {
       minimizeWindow();
     };
+
+    ipcRenderer.on(
+      'update-navigation-state',
+      (e: Electron.IpcMessageEvent, data: any) => {
+        if (data.canGoBack) {
+          this.back.classList.remove('disabled');
+        } else {
+          this.back.classList.add('disabled');
+        }
+
+        if (data.canGoForward) {
+          this.forward.classList.remove('disabled');
+        } else {
+          this.forward.classList.add('disabled');
+        }
+      },
+    );
 
     requestAnimationFrame(() => {
       this.tabs.addTab();
