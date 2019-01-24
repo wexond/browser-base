@@ -99,6 +99,7 @@ body {
   align-items: center;
   -webkit-app-region: no-drag;
   z-index: 1;
+  background-color: #fff;
 
   &.hover {
     & .tab-close {
@@ -140,7 +141,7 @@ body {
 
   &.tab-selected {
     z-index: 2;
-    background-color: rgba(33, 150, 243, 0.15);
+    background-color: #e3f2fd;
 
     & .tab-content {
       max-width: calc(100% - 48px);
