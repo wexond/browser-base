@@ -26,6 +26,12 @@ export class Tabs {
 
   public addTabX = 0;
 
+  private rearrangeTabsTimer = {
+    canReset: false,
+    time: 0,
+    interval: null as any,
+  };
+
   public scrollbar = new HorizontalScrollbar(
     this.container,
     document.getElementById('tabs-scrollbar'),
@@ -42,9 +48,26 @@ export class Tabs {
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
 
+    this.rearrangeTabsTimer.interval = setInterval(() => {
+      // Set widths and positions for tabs 3 seconds after a tab was closed
+      if (
+        this.rearrangeTabsTimer.canReset &&
+        this.rearrangeTabsTimer.time === 3
+      ) {
+        this.updateTabsBounds(true);
+        this.rearrangeTabsTimer.canReset = false;
+      }
+      this.rearrangeTabsTimer.time++;
+    }, 1000);
+
     this.addTabButton.onclick = () => {
       this.addTab();
     };
+  }
+
+  public resetRearrangeTabsTimer() {
+    this.rearrangeTabsTimer.time = 0;
+    this.rearrangeTabsTimer.canReset = true;
   }
 
   public onMouseUp = () => {

@@ -128,7 +128,7 @@ export class Tab {
 
     ipcRenderer.send('browserview-remove', this.id);
 
-    // app.tabsapp.resetRearrangeTabsTimer();
+    app.tabs.resetRearrangeTabsTimer();
 
     const notClosingTabs = tabsTemp.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
