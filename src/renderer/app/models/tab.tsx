@@ -15,11 +15,14 @@ export class Tab {
   public title: HTMLElement;
   public rightBorder: HTMLElement;
 
-  public tabGroupId = 0;
-  public isClosing = false;
   public width = 0;
   public left = 0;
+
+  public tabGroupId = 0;
   public id = id++;
+
+  public isDragging = false;
+  public isClosing = false;
 
   constructor() {
     this.root = (
@@ -52,7 +55,8 @@ export class Tab {
       app.mouse.x >= left &&
       app.mouse.x <= left + width &&
       app.mouse.y >= top &&
-      app.mouse.y <= height + top
+      app.mouse.y <= height + top &&
+      !app.tabs.isDragging
     ) {
       this.onMouseEnter();
     } else {
@@ -90,11 +94,25 @@ export class Tab {
     }
   };
 
-  public onMouseDown = () => {
+  public onMouseDown = (e: any) => {
+    e = e as MouseEvent;
+
+    const { pageX, pageY } = e;
+
+    app.tabs.lastMouseX = 0;
+    app.tabs.isDragging = true;
+    app.tabs.mouseStartX = pageX;
+    app.tabs.tabStartX = this.left;
+    app.tabs.lastScrollX = app.tabs.container.scrollLeft;
+
+    // TODO: ripple
+
     this.select();
   };
 
   public onCloseMouseDown = (e: any) => {
+    e = e as MouseEvent;
+
     e.stopPropagation();
   };
 
