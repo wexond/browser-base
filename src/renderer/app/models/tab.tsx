@@ -173,6 +173,9 @@ export class Tab {
     const { selectedTab } = app.tabs;
 
     if (selectedTab) {
+      app.toolbarSeparator.style.visibility =
+        app.tabs.list.indexOf(this) === 0 ? 'hidden' : 'visible';
+
       selectedTab.rightBorder.style.display = 'block';
       selectedTab.root.classList.remove('tab-selected');
 
