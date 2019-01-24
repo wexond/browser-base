@@ -299,6 +299,11 @@ body {
   align-items: center;
   margin-left: 8px;
 
+  & .disabled {
+    opacity: 0.38;
+    pointer-events: none;
+  }
+
   & .back {
     background-image: url(../../assets/icons/back.svg);
   }
