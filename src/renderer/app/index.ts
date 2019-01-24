@@ -12,7 +12,14 @@ export class App {
   public windowsCloseButton = document.getElementById('window-close');
   public windowsMaximizeButton = document.getElementById('window-maximize');
   public windowsMinimizeButton = document.getElementById('window-minimize');
+
   public toolbar = document.getElementById('toolbar');
+
+  public back = document.getElementById('back');
+  public forward = document.getElementById('forward');
+  public refresh = document.getElementById('refresh');
+
+  public toolbarSeparator = document.getElementById('separator-1');
 
   constructor() {
     if (platform() === 'darwin') {
