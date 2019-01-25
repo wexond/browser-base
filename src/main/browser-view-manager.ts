@@ -20,8 +20,9 @@ export class BrowserViewManager {
     ipcMain.on(
       'browserview-select',
       (e: Electron.IpcMessageEvent, id: number) => {
+        const view = this.views[id];
         this.select(id);
-        this.updateNavigationState(id);
+        view.updateNavigationState();
       },
     );
 
@@ -73,40 +74,9 @@ export class BrowserViewManager {
     });
   }
 
-  public updateNavigationState(tabId: number) {
-    const view = this.views[tabId];
-
-    if (!view || view.isDestroyed()) {
-      return;
-    }
-
-    if (this.selectedId === tabId) {
-      appWindow.window.webContents.send('update-navigation-state', {
-        canGoBack: view.webContents.canGoBack(),
-        canGoForward: view.webContents.canGoForward(),
-      });
-    }
-  }
-
   public create(tabId: number) {
-    const view = new BrowserView();
-
-    view.webContents.addListener('destroyed', () => {
-      delete this.views[tabId];
-    });
-
-    view.webContents.addListener('did-stop-loading', () => {
-      this.updateNavigationState(tabId);
-    });
-
-    view.webContents.addListener('did-start-loading', () => {
-      this.updateNavigationState(tabId);
-    });
-
-    view.setAutoResize({ width: true, height: true });
-    view.webContents.loadURL('https://google.com');
-
-    this.views[tabId] = view as BrowserViewWrapper;
+    const view = new BrowserViewWrapper(tabId);
+    this.views[tabId] = view;
   }
 
   public clear() {
@@ -121,6 +91,7 @@ export class BrowserViewManager {
     this.selectedId = tabId;
 
     if (!view || view.isDestroyed()) {
+      this.remove(tabId);
       appWindow.window.setBrowserView(null);
       return;
     }
@@ -138,11 +109,18 @@ export class BrowserViewManager {
 
   public remove(tabId: number) {
     const view = this.views[tabId];
-    if (!view || view.isDestroyed()) return;
+
+    if (!view || view.isDestroyed()) {
+      delete this.views[tabId];
+      return;
+    }
+
     if (appWindow.window.getBrowserView() === view) {
       appWindow.window.setBrowserView(null);
     }
 
     view.destroy();
+
+    delete this.views[tabId];
   }
 }
