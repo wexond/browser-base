@@ -1,9 +1,10 @@
 import { BrowserView, ipcMain, app } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
 import { appWindow } from '.';
+import BrowserViewWrapper from './browser-view-wrapper';
 
 export class BrowserViewManager {
-  public views: { [key: number]: BrowserView } = {};
+  public views: { [key: number]: BrowserViewWrapper } = {};
   public selectedId = 0;
 
   constructor() {
@@ -31,16 +32,27 @@ export class BrowserViewManager {
       },
     );
 
+    setInterval(() => {
+      for (const key in this.views) {
+        const view = this.views[key];
+        const title = view.webContents.getTitle();
+
+        if (title !== view.title) {
+          appWindow.window.webContents.send(
+            `browserview-title-updated-${key}`,
+            title,
+          );
+          view.title = title;
+        }
+      }
+    }, 200);
+
     ipcMain.on(
       'browserview-navigation-action',
       (e: Electron.IpcMessageEvent, data: any) => {
         const { id, action } = data;
 
         const view = this.views[id];
-
-        if (!view || view.isDestroyed()) {
-          return;
-        }
 
         switch (action) {
           case 'back':
@@ -79,6 +91,10 @@ export class BrowserViewManager {
   public create(tabId: number) {
     const view = new BrowserView();
 
+    view.webContents.addListener('destroyed', () => {
+      delete this.views[tabId];
+    });
+
     view.webContents.addListener('did-stop-loading', () => {
       this.updateNavigationState(tabId);
     });
@@ -90,7 +106,7 @@ export class BrowserViewManager {
     view.setAutoResize({ width: true, height: true });
     view.webContents.loadURL('https://google.com');
 
-    this.views[tabId] = view;
+    this.views[tabId] = view as BrowserViewWrapper;
   }
 
   public clear() {

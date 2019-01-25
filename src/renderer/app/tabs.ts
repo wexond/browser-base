@@ -125,6 +125,11 @@ export class Tabs {
     }
   };
 
+  public updateToolbarSeparator(tab: Tab) {
+    app.toolbarSeparator.style.visibility =
+      app.tabs.list.indexOf(tab) === 0 ? 'hidden' : 'visible';
+  }
+
   public replaceTab(firstTab: Tab, secondTab: Tab) {
     const tabsCopy = this.list.slice();
 
@@ -139,8 +144,7 @@ export class Tabs {
     this.list = tabsCopy;
 
     if (firstTab.selected) {
-      app.toolbarSeparator.style.visibility =
-        app.tabs.list.indexOf(firstTab) === 0 ? 'hidden' : 'visible';
+      this.updateToolbarSeparator(firstTab);
     }
   }
 
