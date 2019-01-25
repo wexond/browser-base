@@ -135,7 +135,13 @@ export class Tabs {
     tabsCopy[secondIndex] = firstTab;
 
     secondTab.setLeft(firstTab.getLeft(), true);
+
     this.list = tabsCopy;
+
+    if (firstTab.selected) {
+      app.toolbarSeparator.style.visibility =
+        app.tabs.list.indexOf(firstTab) === 0 ? 'hidden' : 'visible';
+    }
   }
 
   public getTabsToReplace(callingTab: Tab, direction: string) {
