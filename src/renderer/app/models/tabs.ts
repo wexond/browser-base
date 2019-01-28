@@ -127,7 +127,9 @@ export class Tabs {
 
   public updateToolbarSeparator(tab: Tab) {
     app.toolbarSeparator.style.visibility =
-      app.tabs.list.indexOf(tab) === 0 ? 'hidden' : 'visible';
+      app.tabs.list.indexOf(tab) === 0 && (tab.selected || tab.isHovered)
+        ? 'hidden'
+        : 'visible';
   }
 
   public replaceTab(firstTab: Tab, secondTab: Tab) {
@@ -152,7 +154,7 @@ export class Tabs {
     const index = this.list.indexOf(callingTab);
 
     if (direction === 'left') {
-      for (let i = index; i--; ) {
+      for (let i = index; i--;) {
         const tab = this.list[i];
         if (callingTab.left <= tab.width / 2 + tab.left) {
           this.replaceTab(this.list[i + 1], tab);

@@ -19,6 +19,7 @@ export class Tab {
 
   public isDragging = false;
   public isClosing = false;
+  public isHovered = false;
 
   private _title: string;
 
@@ -63,8 +64,12 @@ export class Tab {
       app.mouse.y <= height + top &&
       !app.tabs.isDragging
     ) {
-      this.onMouseEnter();
-    } else {
+      if (!this.isHovered) {
+        this.isHovered = true;
+        this.onMouseEnter();
+      }
+    } else if (this.isHovered) {
+      this.isHovered = false;
       this.onMouseLeave();
     }
 
@@ -97,6 +102,10 @@ export class Tab {
     if (previousTab) {
       previousTab.rightBorder.style.display = 'none';
     }
+
+    if (app.tabs.list.indexOf(this) === 0) {
+      app.toolbarSeparator.style.visibility = 'hidden';
+    }
   };
 
   public onMouseLeave = () => {
@@ -105,6 +114,10 @@ export class Tab {
     const previousTab = this.previousTab;
     if (previousTab && !this.selected && !this.isClosing) {
       previousTab.rightBorder.style.display = 'block';
+    }
+
+    if (app.tabs.list.indexOf(this) === 0 && !this.selected) {
+      app.toolbarSeparator.style.visibility = 'visible';
     }
   };
 
@@ -187,8 +200,6 @@ export class Tab {
     const { selectedTab } = app.tabs;
 
     if (selectedTab) {
-      app.tabs.updateToolbarSeparator(this);
-
       selectedTab.rightBorder.style.display = 'block';
       selectedTab.root.classList.remove('tab-selected');
 
@@ -207,6 +218,8 @@ export class Tab {
     if (previousTab) {
       previousTab.rightBorder.style.display = 'none';
     }
+
+    app.tabs.updateToolbarSeparator(this);
 
     ipcRenderer.send('browserview-select', this.id);
   }
