@@ -3,6 +3,7 @@ import {
   TABS_PADDING,
   TAB_ANIMATION_EASING,
   TAB_ANIMATION_DURATION,
+  TOOLBAR_HEIGHT,
 } from './constants';
 import { HorizontalScrollbar } from './horizontal-scrollbar';
 import { TweenLite } from 'gsap';
@@ -17,6 +18,20 @@ export class Tabs {
   public container = document.getElementById('tabs');
   public addTabButton = document.getElementById('new-tab');
 
+  public lastMouseX = 0;
+  public isDragging = false;
+  public mouseStartX = 0;
+  public tabStartX = 0;
+  public lastScrollX = 0;
+
+  public addTabX = 0;
+
+  private rearrangeTabsTimer = {
+    canReset: false,
+    time: 0,
+    interval: null as any,
+  };
+
   public scrollbar = new HorizontalScrollbar(
     this.container,
     document.getElementById('tabs-scrollbar'),
@@ -30,9 +45,131 @@ export class Tabs {
       }
     });
 
+    window.addEventListener('mouseup', this.onMouseUp);
+    window.addEventListener('mousemove', this.onMouseMove);
+
+    this.rearrangeTabsTimer.interval = setInterval(() => {
+      // Set widths and positions for tabs 3 seconds after a tab was closed
+      if (
+        this.rearrangeTabsTimer.canReset &&
+        this.rearrangeTabsTimer.time === 3
+      ) {
+        this.updateTabsBounds(true);
+        this.rearrangeTabsTimer.canReset = false;
+      }
+      this.rearrangeTabsTimer.time++;
+    }, 1000);
+
     this.addTabButton.onclick = () => {
       this.addTab();
     };
+  }
+
+  public resetRearrangeTabsTimer() {
+    this.rearrangeTabsTimer.time = 0;
+    this.rearrangeTabsTimer.canReset = true;
+  }
+
+  public onMouseUp = () => {
+    this.isDragging = false;
+    this.setTabsLefts(true);
+
+    if (this.selectedTab) {
+      this.selectedTab.isDragging = false;
+    }
+  };
+
+  public onMouseMove = (e: any) => {
+    if (this.isDragging) {
+      const boundingRect = this.container.getBoundingClientRect();
+
+      if (Math.abs(e.pageX - this.mouseStartX) < 5) {
+        return;
+      }
+
+      this.selectedTab.isDragging = true;
+      // store.addressBarStore.canToggle = false;
+
+      const newLeft =
+        this.tabStartX +
+        e.pageX -
+        this.mouseStartX -
+        (this.lastScrollX - this.container.scrollLeft);
+
+      let left = Math.max(0, newLeft);
+
+      if (
+        newLeft + this.selectedTab.width >
+        this.addTabX + this.container.scrollLeft
+      ) {
+        left = this.addTabX - this.selectedTab.width + this.lastScrollX;
+      }
+
+      this.selectedTab.setLeft(left, false);
+
+      if (
+        e.pageY > TOOLBAR_HEIGHT + 16 ||
+        e.pageY < -16 ||
+        e.pageX < boundingRect.left ||
+        e.pageX - boundingRect.left > this.addTabX
+      ) {
+        // TODO: Create a new window
+      }
+
+      this.getTabsToReplace(
+        this.selectedTab,
+        this.lastMouseX - e.pageX >= 1 ? 'left' : 'right',
+      );
+
+      this.lastMouseX = e.pageX;
+    }
+  };
+
+  public updateToolbarSeparator(tab: Tab) {
+    app.toolbarSeparator.style.visibility =
+      app.tabs.list.indexOf(tab) === 0 ? 'hidden' : 'visible';
+  }
+
+  public replaceTab(firstTab: Tab, secondTab: Tab) {
+    const tabsCopy = this.list.slice();
+
+    const firstIndex = tabsCopy.indexOf(firstTab);
+    const secondIndex = tabsCopy.indexOf(secondTab);
+
+    tabsCopy[firstIndex] = secondTab;
+    tabsCopy[secondIndex] = firstTab;
+
+    secondTab.setLeft(firstTab.getLeft(), true);
+
+    this.list = tabsCopy;
+
+    if (firstTab.selected) {
+      this.updateToolbarSeparator(firstTab);
+    }
+  }
+
+  public getTabsToReplace(callingTab: Tab, direction: string) {
+    const index = this.list.indexOf(callingTab);
+
+    if (direction === 'left') {
+      for (let i = index; i--;) {
+        const tab = this.list[i];
+        if (callingTab.left <= tab.width / 2 + tab.left) {
+          this.replaceTab(this.list[i + 1], tab);
+        } else {
+          break;
+        }
+      }
+    } else if (direction === 'right') {
+      for (let i = index + 1; i < this.list.length; i++) {
+        const tab = this.list[i];
+        if (callingTab.left + callingTab.width >= tab.width / 2 + tab.left) {
+          this.replaceTab(this.list[i - 1], tab);
+        } else {
+          break;
+        }
+      }
+    }
   }
 
   public updateTabsBounds = (animation: boolean) => {
@@ -98,12 +235,10 @@ export class Tabs {
 
       left += tab.width + TABS_PADDING;
     }
-    this.animateProperty(
-      'x',
-      this.addTabButton,
-      Math.min(left, offsetWidth),
-      animation,
-    );
+
+    this.addTabX = Math.min(left, offsetWidth);
+
+    this.animateProperty('x', this.addTabButton, this.addTabX, animation);
   };
 
   public animateProperty = (
