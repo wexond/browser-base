@@ -12,20 +12,25 @@ let id = 0;
 
 export class Tab {
   public root: HTMLElement;
-  public title: HTMLElement;
+  public titleElement: HTMLElement;
   public rightBorder: HTMLElement;
 
-  public tabGroupId = 0;
-  public isClosing = false;
   public width = 0;
   public left = 0;
+
+  public tabGroupId = 0;
   public id = id++;
+
+  public isDragging = false;
+  public isClosing = false;
+
+  private _title: string;
 
   constructor() {
     this.root = (
       <div className="tab" onMouseDown={this.onMouseDown}>
         <div className="tab-content">
-          <div ref={r => (this.title = r)} className="tab-title">
+          <div ref={r => (this.titleElement = r)} className="tab-title">
             New tab
           </div>
         </div>
@@ -42,6 +47,13 @@ export class Tab {
 
     ipcRenderer.send('browserview-create', this.id);
 
+    ipcRenderer.on(
+      `browserview-title-updated-${this.id}`,
+      (e: any, title: string) => {
+        this.title = title;
+      },
+    );
+
     requestAnimationFrame(this.tick);
   }
 
@@ -52,7 +64,8 @@ export class Tab {
       app.mouse.x >= left &&
       app.mouse.x <= left + width &&
       app.mouse.y >= top &&
-      app.mouse.y <= height + top
+      app.mouse.y <= height + top &&
+      !app.tabs.isDragging
     ) {
       this.onMouseEnter();
     } else {
@@ -70,6 +83,15 @@ export class Tab {
 
   public get previousTab() {
     return app.tabs.list[app.tabs.list.indexOf(this) - 1];
+  }
+
+  public get title() {
+    return this._title;
+  }
+
+  public set title(newTitle: string) {
+    this.titleElement.textContent = newTitle;
+    this._title = newTitle;
   }
 
   public onMouseEnter = () => {
@@ -90,11 +112,25 @@ export class Tab {
     }
   };
 
-  public onMouseDown = () => {
+  public onMouseDown = (e: any) => {
+    e = e as MouseEvent;
+
+    const { pageX, pageY } = e;
+
+    app.tabs.lastMouseX = 0;
+    app.tabs.isDragging = true;
+    app.tabs.mouseStartX = pageX;
+    app.tabs.tabStartX = this.left;
+    app.tabs.lastScrollX = app.tabs.container.scrollLeft;
+
+    // TODO: ripple
+
     this.select();
   };
 
   public onCloseMouseDown = (e: any) => {
+    e = e as MouseEvent;
+
     e.stopPropagation();
   };
 
@@ -106,11 +142,10 @@ export class Tab {
     const tabsTemp = app.tabs.list.filter(
       x => x.tabGroupId === this.tabGroupId,
     );
-    const selected = app.tabs.selectedTabId === this.id;
 
     ipcRenderer.send('browserview-remove', this.id);
 
-    // app.tabsapp.resetRearrangeTabsTimer();
+    app.tabs.resetRearrangeTabsTimer();
 
     const notClosingTabs = tabsTemp.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
@@ -128,7 +163,7 @@ export class Tab {
     this.setWidth(0, true);
     app.tabs.setTabsLefts(true);
 
-    if (selected) {
+    if (this.selected) {
       index = tabsTemp.indexOf(this);
 
       if (index + 1 < tabsTemp.length && !tabsTemp[index + 1].isClosing) {
@@ -146,6 +181,7 @@ export class Tab {
     setTimeout(() => {
       this.root.remove();
       app.tabs.list.splice(app.tabs.list.indexOf(this), 1);
+      app.tabs.updateToolbarSeparator(app.tabs.selectedTab);
     }, TAB_ANIMATION_DURATION * 1000);
   }
 
@@ -155,6 +191,8 @@ export class Tab {
     const { selectedTab } = app.tabs;
 
     if (selectedTab) {
+      app.tabs.updateToolbarSeparator(this);
+
       selectedTab.rightBorder.style.display = 'block';
       selectedTab.root.classList.remove('tab-selected');
 

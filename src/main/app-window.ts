@@ -3,10 +3,12 @@ import { resolve, join } from 'path';
 import { platform } from 'os';
 
 import { OverlayWindow } from './overlay-window';
+import { BrowserViewManager } from './browser-view-manager';
 
 export class AppWindow {
   public overlayWindow: OverlayWindow;
   public window: BrowserWindow;
+  public browserViewManager: BrowserViewManager = new BrowserViewManager();
 
   constructor() {
     app.on('activate', () => {
