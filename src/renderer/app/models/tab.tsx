@@ -104,7 +104,7 @@ export class Tab {
     }
 
     if (app.tabs.list.indexOf(this) === 0) {
-      app.toolbarSeparator.style.visibility = 'hidden';
+      app.toolbarSeparator1.style.visibility = 'hidden';
     }
   };
 
@@ -117,7 +117,7 @@ export class Tab {
     }
 
     if (app.tabs.list.indexOf(this) === 0 && !this.selected) {
-      app.toolbarSeparator.style.visibility = 'visible';
+      app.toolbarSeparator1.style.visibility = 'visible';
     }
   };
 
@@ -190,7 +190,7 @@ export class Tab {
     setTimeout(() => {
       this.root.remove();
       app.tabs.list.splice(app.tabs.list.indexOf(this), 1);
-      app.tabs.updateToolbarSeparator(app.tabs.selectedTab);
+      app.tabs.selectedTab.select();
     }, TAB_ANIMATION_DURATION * 1000);
   }
 
@@ -198,9 +198,13 @@ export class Tab {
     if (this.isClosing) return;
 
     const { selectedTab } = app.tabs;
+    const { scrollLeft, scrollWidth, offsetWidth } = app.tabs.container;
 
     if (selectedTab) {
-      selectedTab.rightBorder.style.display = 'block';
+      if (app.tabs.list.indexOf(selectedTab) !== app.tabs.list.length - 1) {
+        selectedTab.rightBorder.style.display = 'block';
+      }
+
       selectedTab.root.classList.remove('tab-selected');
 
       const previousTab = selectedTab.previousTab;
@@ -219,7 +223,14 @@ export class Tab {
       previousTab.rightBorder.style.display = 'none';
     }
 
-    app.tabs.updateToolbarSeparator(this);
+    app.toolbarSeparator1.style.visibility =
+      app.tabs.list.indexOf(this) === 0 ? 'hidden' : 'visible';
+
+    app.toolbarSeparator2.style.visibility =
+      app.tabs.list.indexOf(this) === app.tabs.list.length - 1 &&
+      scrollLeft + offsetWidth === scrollWidth
+        ? 'hidden'
+        : 'visible';
 
     ipcRenderer.send('browserview-select', this.id);
   }
