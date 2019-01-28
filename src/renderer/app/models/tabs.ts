@@ -48,6 +48,21 @@ export class Tabs {
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
 
+    this.container.addEventListener('scroll', () => {
+      const { scrollLeft, scrollWidth, offsetWidth } = app.tabs.container;
+
+      app.toolbarSeparator2.style.visibility =
+        this.list.indexOf(this.selectedTab) === this.list.length - 1 &&
+        scrollLeft + offsetWidth === scrollWidth
+          ? 'hidden'
+          : 'visible';
+
+      app.toolbarSeparator1.style.visibility =
+        this.list.indexOf(this.selectedTab) === 0 && scrollLeft === 0
+          ? 'hidden'
+          : 'visible';
+    });
+
     this.rearrangeTabsTimer.interval = setInterval(() => {
       // Set widths and positions for tabs 3 seconds after a tab was closed
       if (
@@ -125,13 +140,6 @@ export class Tabs {
     }
   };
 
-  public updateToolbarSeparator(tab: Tab) {
-    app.toolbarSeparator.style.visibility =
-      app.tabs.list.indexOf(tab) === 0 && (tab.selected || tab.isHovered)
-        ? 'hidden'
-        : 'visible';
-  }
-
   public replaceTab(firstTab: Tab, secondTab: Tab) {
     const tabsCopy = this.list.slice();
 
@@ -145,8 +153,12 @@ export class Tabs {
 
     this.list = tabsCopy;
 
-    if (firstTab.selected) {
-      this.updateToolbarSeparator(firstTab);
+    if (
+      firstTab.selected &&
+      app.tabs.container.scrollLeft === 0 &&
+      this.list.indexOf(firstTab) === 0
+    ) {
+      app.toolbarSeparator1.style.visibility = 'hidden';
     }
   }
 
