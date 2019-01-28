@@ -1,0 +1,34 @@
+.toolbar {
+  position: relative;
+  z-index: 100;
+  display: flex;
+  flex-flow: row;
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.87);
+  height: 40px;
+  -webkit-app-region: drag;
+}
+
+.toolbar-button {
+  height: 32px;
+  -webkit-app-region: no-drag;
+  position: relative;
+  transition: 0.2s background-color;
+  width: 32px;
+  background-position: center;
+  background-size: 24px;
+  background-repeat: no-repeat;
+  opacity: 0.54;
+  border-radius: 50%;
+  overflow: hidden;
+  transition: 0.2s background-color;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+
+  &.add-tab {
+    background-image: url(../../assets/icons/add.svg);
+    background-size: 20px;
+  }
+}

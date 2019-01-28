@@ -1,0 +1,140 @@
+.tabbar {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s opacity, 0.3s transform;
+  margin-left: 8px;
+  margin-right: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.tabs-container {
+  height: 100%;
+  width: calc(100% - 36px);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+#new-tab {
+  position: absolute;
+  left: 0;
+}
+
+.tab {
+  position: absolute;
+  left: 0;
+  display: flex;
+  height: calc(100% - 6px);
+  border-radius: 4px;
+  overflow: hidden;
+  align-items: center;
+  -webkit-app-region: no-drag;
+  z-index: 1;
+
+  &.hover {
+    & .tab-close {
+      opacity: 0.54;
+    }
+
+    &:after {
+      opacity: 1;
+    }
+
+    & .tab-content {
+      max-width: calc(100% - 48px);
+    }
+
+    & .tab-right-border {
+      display: none !important;
+    }
+  }
+
+  & .tab-right-border {
+    height: 20px;
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.12);
+    position: absolute;
+    right: 0;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: 0.2s opacity;
+    background-color: rgba(0, 0, 0, 0.04);
+    opacity: 0;
+  }
+
+  &.tab-selected {
+    z-index: 2;
+    background-color: rgba(33, 150, 243, 0.15);
+
+    & .tab-content {
+      max-width: calc(100% - 48px);
+    }
+
+    & .tab-title {
+      color: #2196f3;
+    }
+
+    & .tab-close {
+      opacity: 0.54;
+    }
+
+    & .tab-right-border {
+      display: none !important;
+    }
+
+    &:after {
+      background-color: rgba(33, 150, 243, 0.08);
+    }
+  }
+}
+
+.tab-content {
+  position: absolute;
+  overflow: hidden;
+  z-index: 2;
+  display: flex;
+  transition: 0.1s max-width;
+  margin-left: 16px;
+  max-width: calc(100% - 24px);
+}
+
+.tab-title {
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: 0.2s margin-left;
+  margin-left: 0;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.tab-close {
+  position: absolute;
+  right: 8px;
+  height: 24px;
+  width: 24px;
+  background-image: url(../../assets/icons/close.svg);
+  transition: 0.2s opacity, 0.2s background-color;
+  z-index: 2;
+  border-radius: 100%;
+  background-position: center;
+  background-size: 16px;
+  background-repeat: no-repeat;
+  opacity: 0;
+
+  &:hover {
+    opacity: 0.54;
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+}
