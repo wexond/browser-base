@@ -1,13 +1,13 @@
-import { Tab } from './models';
+import { Tab } from '.';
 import {
   TABS_PADDING,
   TAB_ANIMATION_EASING,
   TAB_ANIMATION_DURATION,
   TOOLBAR_HEIGHT,
-} from './constants';
+} from '../constants';
 import { HorizontalScrollbar } from './horizontal-scrollbar';
 import { TweenLite } from 'gsap';
-import app from '.';
+import app from '..';
 import { ipcRenderer } from 'electron';
 
 export class Tabs {
@@ -152,7 +152,7 @@ export class Tabs {
     const index = this.list.indexOf(callingTab);
 
     if (direction === 'left') {
-      for (let i = index; i--;) {
+      for (let i = index; i--; ) {
         const tab = this.list[i];
         if (callingTab.left <= tab.width / 2 + tab.left) {
           this.replaceTab(this.list[i + 1], tab);

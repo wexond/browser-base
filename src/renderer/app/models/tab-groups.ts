@@ -1,4 +1,4 @@
-import { TabGroup } from './models';
+import { TabGroup } from '.';
 
 export class TabGroups {
   public list: TabGroup[] = [];
