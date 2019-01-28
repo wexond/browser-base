@@ -1,8 +1,8 @@
 import './scss/index.scss';
-import { Tabs } from './tabs';
+import { Tabs } from './models/tabs';
 import { platform } from 'os';
 import { closeWindow, maximizeWindow, minimizeWindow } from './utils';
-import { TabGroups } from './tab-groups';
+import { TabGroups } from './models/tab-groups';
 import { ipcRenderer } from 'electron';
 
 export class App {
