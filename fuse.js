@@ -3,8 +3,10 @@ const {
   WebIndexPlugin,
   QuantumPlugin,
   EnvPlugin,
-  CopyPlugin,
   JSONPlugin,
+  CSSResourcePlugin,
+  SassPlugin,
+  CSSPlugin,
 } = require('fuse-box');
 const { spawn } = require('child_process');
 
@@ -28,23 +30,19 @@ const getConfig = (target, name) => {
           uglify: {
             es6: true,
           },
+          css: true,
         }),
     ],
     alias: {
-      '@': '~/shared/',
-      '@app': '~/renderer/app/',
-      '@history': '~/renderer/history/',
-      '@bookmarks': '~/renderer/bookmarks/',
-      '@about': '~/renderer/about/',
-      '@newtab': '~/renderer/newtab/',
       '~': '~/',
+      ui: '~/renderer/utils/create-element',
     },
   };
 };
 
 const getRendererConfig = (target, name) => {
   const cfg = Object.assign({}, getConfig(target, name), {
-    sourceMaps: true,
+    sourceMaps: production,
   });
 
   return cfg;
@@ -52,18 +50,10 @@ const getRendererConfig = (target, name) => {
 
 const getWebIndexPlugin = name => {
   return WebIndexPlugin({
-    template: `static/pages/${name}.html`,
+    template: `src/renderer/pages/${name}.html`,
     path: production ? '.' : '/',
     target: `${name}.html`,
     bundles: [name],
-  });
-};
-
-const getCopyPlugin = () => {
-  return CopyPlugin({
-    files: ['*.woff2', '*.png', '*.svg'],
-    dest: 'assets',
-    resolve: production ? './assets' : '/assets',
   });
 };
 
@@ -84,7 +74,11 @@ const renderer = () => {
 
   cfg.plugins.push(getWebIndexPlugin('app'));
   cfg.plugins.push(JSONPlugin());
-  cfg.plugins.push(getCopyPlugin());
+  cfg.plugins.push([
+    SassPlugin(),
+    CSSResourcePlugin({ dist: 'build/css-resources', inline: true }),
+    CSSPlugin(),
+  ]);
 
   const fuse = FuseBox.init(cfg);
 
@@ -92,7 +86,9 @@ const renderer = () => {
     fuse.dev({ httpServer: true });
   }
 
-  const app = fuse.bundle('app').instructions('> [renderer/app/index.tsx]');
+  const app = fuse
+    .bundle('app')
+    .instructions('> renderer/app/index.ts -electron');
 
   if (!production) {
     app.hmr().watch();
@@ -108,45 +104,5 @@ const renderer = () => {
   fuse.run();
 };
 
-const applet = () => {
-  const cfg = getRendererConfig('browser@es6', 'newtab');
-
-  cfg.plugins.push(getWebIndexPlugin('newtab'));
-  cfg.plugins.push(JSONPlugin());
-  cfg.plugins.push(getCopyPlugin());
-
-  const fuse = FuseBox.init(cfg);
-
-  if (!production) {
-    fuse.dev({ httpServer: true, port: 8080 });
-  }
-
-  const newtab = fuse
-    .bundle('newtab')
-    .instructions('> renderer/newtab/index.tsx');
-
-  if (!production) {
-    newtab.hmr().watch();
-  }
-
-  fuse.run();
-};
-
-const preload = name => {
-  const fuse = FuseBox.init(getRendererConfig('electron', name));
-
-  const bundle = fuse.bundle(name).instructions(`> [preloads/${name}.ts]`);
-
-  if (!production) {
-    bundle.watch();
-    return;
-  }
-
-  fuse.run();
-};
-
 renderer();
-preload('webview-preload');
-preload('background-page-preload');
 mainProcess();
-applet();

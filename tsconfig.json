@@ -10,6 +10,7 @@
     "module": "commonjs",
     "target": "es6",
     "jsx": "react",
+    "jsxFactory": "createElement",
     "allowJs": true,
     "sourceMap": true,
     "moduleResolution": "node",
@@ -20,8 +21,8 @@
     "baseUrl": "./",
 
     "paths": {
-      "@/*": ["src/shared/*"],
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "ui": ["src/renderer/utils/create-element"]
     }
   }
 }
