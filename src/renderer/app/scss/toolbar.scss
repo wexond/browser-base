@@ -24,11 +24,44 @@
   transition: 0.2s background-color;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.06);
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+}
+
+.add-tab {
+  background-image: url(../../assets/icons/add.svg);
+  background-size: 20px;
+}
+
+.navigation-icons {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+
+  & .disabled {
+    opacity: 0.38;
+    pointer-events: none;
   }
 
-  &.add-tab {
-    background-image: url(../../assets/icons/add.svg);
-    background-size: 20px;
+  & .back {
+    background-image: url(../../assets/icons/back.svg);
   }
+
+  & .forward {
+    background-image: url(../../assets/icons/forward.svg);
+    margin-left: 4px;
+  }
+
+  & .refresh {
+    background-image: url(../../assets/icons/refresh.svg);
+    background-size: 20px;
+    margin-left: 4px;
+  }
+}
+
+.toolbar-separator {
+  height: 16px;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.12);
+  margin-left: 8px;
 }
