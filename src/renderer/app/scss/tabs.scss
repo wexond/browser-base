@@ -34,6 +34,7 @@
   align-items: center;
   -webkit-app-region: no-drag;
   z-index: 1;
+  background-color: #fff;
 
   &.hover {
     & .tab-close {
@@ -52,15 +53,6 @@
       display: none !important;
     }
   }
-
-  & .tab-right-border {
-    height: 20px;
-    width: 1px;
-    background-color: rgba(0, 0, 0, 0.12);
-    position: absolute;
-    right: 0;
-  }
-
   &:after {
     content: '';
     position: absolute;
@@ -75,7 +67,7 @@
 
   &.tab-selected {
     z-index: 2;
-    background-color: rgba(33, 150, 243, 0.15);
+    background-color: #e3f2fd;
 
     & .tab-content {
       max-width: calc(100% - 48px);
@@ -97,6 +89,14 @@
       background-color: rgba(33, 150, 243, 0.08);
     }
   }
+}
+
+.tab-right-border {
+  height: 20px;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.12);
+  position: absolute;
+  right: 0;
 }
 
 .tab-content {
