@@ -8,7 +8,7 @@
 
 [![Discord](https://img.shields.io/discord/307605794680209409.svg?style=flat-square)](https://discord.gg/yAA8DdK)
 [![Travis](https://img.shields.io/travis/com/wexond/wexond.svg?style=flat-square)](https://travis-ci.com/wexond/wexond)
-[![AppVeyor](https://img.shields.io/appveyor/ci/sential/wexond.svg?style=flat-square)](https://ci.appveyor.com/project/sential/wexond)
+[![AppVeyor](https://img.shields.io/appveyor/ci/sentialx/wexond.svg?style=flat-square)](https://ci.appveyor.com/project/sentialx/wexond)
 
 Wexond is an extensible web browser with a totally different user experience, built on top of `Electron`, `TypeScript` and `Sass`.
 
