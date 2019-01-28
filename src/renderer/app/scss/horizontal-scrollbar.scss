@@ -1,0 +1,27 @@
+.horizontal-scrollbar {
+  position: absolute;
+  height: 3px;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  display: block;
+}
+
+.horizontal-scrollbar-thumb {
+  position: absolute;
+  background-color: black;
+  height: 100%;
+  top: 0;
+  left: 0;
+  transition: 0.2s opacity;
+  -webkit-app-region: no-drag;
+  opacity: 0.2;
+
+  &:hover {
+    opacity: 0.4;
+  }
+  &:active {
+    opacity: 0.4;
+  }
+}
