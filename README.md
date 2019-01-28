@@ -96,3 +96,6 @@ $ npm run <command>
 
 Guides and the API reference are located in [`docs`](docs).
 It also contains documents describing how to use the browser, and create themes.
+
+# Authors
+[@sentialx](https://github.com/sentialx)
