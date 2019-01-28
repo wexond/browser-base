@@ -1,10 +1,6 @@
 import app from '..';
 import { ipcRenderer } from 'electron';
-import {
-  TABS_PADDING,
-  TAB_ANIMATION_DURATION,
-  TOOLBAR_HEIGHT,
-} from '../constants';
+import { TABS_PADDING, TAB_ANIMATION_DURATION } from '../constants';
 import { closeWindow } from '../utils';
 import { createElement } from 'ui';
 
