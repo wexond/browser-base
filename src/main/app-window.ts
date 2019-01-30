@@ -29,6 +29,7 @@ export class AppWindow {
       titleBarStyle: 'hiddenInset',
       webPreferences: {
         plugins: true,
+        nodeIntegration: true,
       },
       icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
     };
