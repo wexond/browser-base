@@ -11,6 +11,7 @@ export class Tab {
   public titleElement: HTMLElement;
   public rightBorder: HTMLElement;
   public closeElement: HTMLElement;
+  public faviconElement: HTMLElement;
 
   public width = 0;
   public left = 0;
@@ -21,12 +22,14 @@ export class Tab {
   public isDragging = false;
   public isHovered = false;
 
+  private _favicon: string = '';
   private _title: string;
 
   constructor() {
     this.root = (
       <div className="tab" onMouseDown={this.onMouseDown}>
         <div className="tab-content">
+          <div className="tab-icon" ref={r => (this.faviconElement = r)} />
           <div ref={r => (this.titleElement = r)} className="tab-title">
             New tab
           </div>
@@ -49,6 +52,13 @@ export class Tab {
       `browserview-title-updated-${this.id}`,
       (e: any, title: string) => {
         this.title = title;
+      },
+    );
+
+    ipcRenderer.on(
+      `browserview-favicon-updated-${this.id}`,
+      (e: any, favicon: string) => {
+        this.favicon = favicon;
       },
     );
 
@@ -85,17 +95,29 @@ export class Tab {
     return app.tabs.list[app.tabs.list.indexOf(this) - 1];
   }
 
-  public get title() {
-    return this._title;
+  public get favicon() {
+    return this._favicon;
   }
 
-  public set rightBorderVisible(value: boolean) {
-    this.rightBorder.style.display = value ? 'block' : 'none';
+  public set favicon(value: string) {
+    this.faviconElement.style.opacity = value === '' ? '0' : '1';
+    this.titleElement.style.marginLeft = value === '' ? '0' : '26px';
+
+    this._favicon = value;
+    this.faviconElement.style.backgroundImage = `url(${value})`;
+  }
+
+  public get title() {
+    return this._title;
   }
 
   public set title(newTitle: string) {
     this.titleElement.textContent = newTitle;
     this._title = newTitle;
+  }
+
+  public set rightBorderVisible(value: boolean) {
+    this.rightBorder.style.display = value ? 'block' : 'none';
   }
 
   public onMouseEnter = () => {
