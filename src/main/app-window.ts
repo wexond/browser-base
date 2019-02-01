@@ -50,5 +50,18 @@ export class AppWindow {
     this.window.on('closed', () => {
       this.window = null;
     });
+
+    this.window.on('scroll-touch-begin', () => {
+      console.log('scroll-touch-begin');
+      this.window.webContents.send('scroll-touch-begin');
+    });
+    this.window.on('scroll-touch-end', () => {
+      console.log('scroll-touch-end');
+      this.window.webContents.send('scroll-touch-end');
+    });
+    this.window.on('scroll-touch-edge', () => {
+      console.log('scroll-touch-edge');
+      this.window.webContents.send('scroll-touch-edge');
+    });
   }
 }
