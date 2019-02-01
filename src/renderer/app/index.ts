@@ -20,9 +20,6 @@ export class App {
   public forward = document.getElementById('forward');
   public refresh = document.getElementById('refresh');
 
-  public toolbarSeparator1 = document.getElementById('separator-1');
-  public toolbarSeparator2 = document.getElementById('separator-2');
-
   constructor() {
     if (platform() === 'darwin') {
       this.windowsButtons.style.display = 'none';

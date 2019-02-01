@@ -48,21 +48,6 @@ export class Tabs {
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
 
-    this.container.addEventListener('scroll', () => {
-      const { scrollLeft, scrollWidth, offsetWidth } = app.tabs.container;
-
-      app.toolbarSeparator2.style.visibility =
-        this.list.indexOf(this.selectedTab) === this.list.length - 1 &&
-        scrollLeft + offsetWidth === scrollWidth
-          ? 'hidden'
-          : 'visible';
-
-      app.toolbarSeparator1.style.visibility =
-        this.list.indexOf(this.selectedTab) === 0 && scrollLeft === 0
-          ? 'hidden'
-          : 'visible';
-    });
-
     this.container.onmouseenter = () => {
       this.scrollbar.visible = true;
     };
@@ -160,14 +145,6 @@ export class Tabs {
     secondTab.setLeft(firstTab.getLeft(), true);
 
     this.list = tabsCopy;
-
-    if (
-      firstTab.selected &&
-      app.tabs.container.scrollLeft === 0 &&
-      this.list.indexOf(firstTab) === 0
-    ) {
-      app.toolbarSeparator1.style.visibility = 'hidden';
-    }
   }
 
   public getTabsToReplace(callingTab: Tab, direction: string) {
@@ -258,7 +235,7 @@ export class Tabs {
       left += tab.width + TABS_PADDING;
     }
 
-    this.addTabX = Math.min(left, offsetWidth);
+    this.addTabX = Math.min(left, offsetWidth + TABS_PADDING);
 
     this.animateProperty('x', this.addTabButton, this.addTabX, animation);
   };
