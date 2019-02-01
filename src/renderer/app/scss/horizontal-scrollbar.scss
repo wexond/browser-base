@@ -16,12 +16,16 @@
   left: 0;
   transition: 0.2s opacity;
   -webkit-app-region: no-drag;
-  opacity: 0.2;
+  opacity: 0;
 
   &:hover {
     opacity: 0.4;
   }
   &:active {
     opacity: 0.4;
+  }
+
+  &.visible {
+    opacity: 0.2;
   }
 }

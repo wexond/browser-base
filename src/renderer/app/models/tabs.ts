@@ -63,6 +63,14 @@ export class Tabs {
           : 'visible';
     });
 
+    this.container.onmouseenter = () => {
+      this.scrollbar.visible = true;
+    };
+
+    this.container.onmouseleave = () => {
+      this.scrollbar.visible = false;
+    };
+
     this.rearrangeTabsTimer.interval = setInterval(() => {
       // Set widths and positions for tabs 3 seconds after a tab was closed
       if (
