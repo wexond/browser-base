@@ -145,6 +145,12 @@ export class Tabs {
     secondTab.setLeft(firstTab.getLeft(), true);
 
     this.list = tabsCopy;
+
+    for (const tab of this.list) {
+      tab.rightBorderVisible = true;
+    }
+
+    firstTab.select();
   }
 
   public getTabsToReplace(callingTab: Tab, direction: string) {
