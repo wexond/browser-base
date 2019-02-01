@@ -153,18 +153,6 @@ export class Tab {
 
     let index = app.tabs.list.indexOf(this);
 
-    if (app.tabs.list.length - 1 === index) {
-      const previousTab = tabsTemp[index - 1];
-      if (previousTab) {
-        this.setLeft(previousTab.getNewLeft() + this.getWidth(), true);
-      }
-
-      app.tabs.updateTabsBounds(true);
-    }
-
-    this.setWidth(0, true);
-    app.tabs.setTabsLefts(true);
-
     if (this.selected) {
       index = tabsTemp.indexOf(this);
 
@@ -182,7 +170,17 @@ export class Tab {
 
     app.tabs.list.splice(index, 1);
 
-    app.tabs.selectedTab.select();
+    if (app.tabs.list.length === index) {
+      const previousTab = tabsTemp[index - 1];
+      if (previousTab) {
+        this.setLeft(previousTab.getNewLeft() + this.getWidth(), true);
+      }
+
+      app.tabs.updateTabsBounds(true);
+    }
+
+    this.setWidth(0, true);
+    app.tabs.setTabsLefts(true);
 
     setTimeout(() => {
       this.root.remove();
