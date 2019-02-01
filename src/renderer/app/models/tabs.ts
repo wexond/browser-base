@@ -211,7 +211,7 @@ export class Tabs {
 
   public setTabsWidths = (animation: boolean) => {
     const tabsTemp = this.list.filter(
-      x => !x.isClosing && x.tabGroupId === app.tabGroups.currentGroupId,
+      x => x.tabGroupId === app.tabGroups.currentGroupId,
     );
 
     const { offsetWidth } = this.container;
@@ -226,7 +226,7 @@ export class Tabs {
 
   public setTabsLefts = (animation: boolean) => {
     const tabsTemp = this.list.filter(
-      x => !x.isClosing && x.tabGroupId === app.tabGroups.currentGroupId,
+      x => x.tabGroupId === app.tabGroups.currentGroupId,
     );
 
     const { offsetWidth } = this.container;
@@ -241,7 +241,11 @@ export class Tabs {
       left += tab.width + TABS_PADDING;
     }
 
-    this.addTabX = Math.min(left, offsetWidth + TABS_PADDING);
+    this.addTabX = left;
+
+    if (left >= offsetWidth) {
+      this.addTabX = offsetWidth + TABS_PADDING;
+    }
 
     this.animateProperty('x', this.addTabButton, this.addTabX, animation);
   };

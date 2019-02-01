@@ -19,7 +19,6 @@ export class Tab {
   public id = id++;
 
   public isDragging = false;
-  public isClosing = false;
   public isHovered = false;
 
   private _title: string;
@@ -75,9 +74,7 @@ export class Tab {
       this.onMouseLeave();
     }
 
-    if (!this.isClosing) {
-      requestAnimationFrame(this.tick);
-    }
+    requestAnimationFrame(this.tick);
   };
 
   public get selected() {
@@ -114,7 +111,7 @@ export class Tab {
     this.root.classList.remove('hover');
 
     const previousTab = this.previousTab;
-    if (previousTab && !this.selected && !this.isClosing) {
+    if (previousTab && !this.selected) {
       previousTab.rightBorderVisible = true;
     }
   };
@@ -156,7 +153,6 @@ export class Tab {
 
     let index = app.tabs.list.indexOf(this);
 
-    this.isClosing = true;
     if (app.tabs.list.length - 1 === index) {
       const previousTab = tabsTemp[index - 1];
       if (previousTab) {
@@ -172,10 +168,10 @@ export class Tab {
     if (this.selected) {
       index = tabsTemp.indexOf(this);
 
-      if (index + 1 < tabsTemp.length && !tabsTemp[index + 1].isClosing) {
+      if (index + 1 < tabsTemp.length) {
         const nextTab = tabsTemp[index + 1];
         nextTab.select();
-      } else if (index - 1 >= 0 && !tabsTemp[index - 1].isClosing) {
+      } else if (index - 1 >= 0) {
         const prevTab = tabsTemp[index - 1];
         prevTab.select();
         // } else if (app.tabGroups.groups.length === 1) {
@@ -194,8 +190,6 @@ export class Tab {
   }
 
   public select() {
-    if (this.isClosing) return;
-
     const { selectedTab } = app.tabs;
 
     if (selectedTab) {
@@ -227,9 +221,7 @@ export class Tab {
     }
 
     if (tabsTemp === null) {
-      tabsTemp = app.tabs.list.filter(
-        x => x.tabGroupId === this.tabGroupId && !x.isClosing,
-      );
+      tabsTemp = app.tabs.list.filter(x => x.tabGroupId === this.tabGroupId);
     }
 
     const width = containerWidth / tabsTemp.length - TABS_PADDING;
@@ -246,7 +238,7 @@ export class Tab {
 
   public getLeft() {
     const tabsTemp = app.tabs.list.filter(
-      x => x.tabGroupId === this.tabGroupId && !x.isClosing,
+      x => x.tabGroupId === this.tabGroupId,
     );
     const index = tabsTemp.indexOf(this);
 
@@ -260,7 +252,7 @@ export class Tab {
 
   public getNewLeft() {
     const tabsTemp = app.tabs.list.filter(
-      x => x.tabGroupId === this.tabGroupId && !x.isClosing,
+      x => x.tabGroupId === this.tabGroupId,
     );
     const index = tabsTemp.indexOf(this);
 
