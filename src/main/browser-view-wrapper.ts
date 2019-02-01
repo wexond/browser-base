@@ -13,8 +13,6 @@ export default class BrowserViewWrapper extends BrowserView {
       },
     });
 
-    this.webContents.openDevTools({ mode: 'detach' });
-
     this.tabId = id;
 
     this.webContents.addListener('did-stop-loading', () => {
