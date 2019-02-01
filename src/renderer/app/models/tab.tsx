@@ -10,6 +10,7 @@ export class Tab {
   public root: HTMLElement;
   public titleElement: HTMLElement;
   public rightBorder: HTMLElement;
+  public closeElement: HTMLElement;
 
   public width = 0;
   public left = 0;
@@ -35,6 +36,7 @@ export class Tab {
           className="tab-close"
           onClick={this.onCloseClick}
           onMouseDown={this.onCloseMouseDown}
+          ref={r => (this.closeElement = r)}
         />
         <div className="tab-right-border" ref={r => (this.rightBorder = r)} />
       </div>
@@ -191,11 +193,10 @@ export class Tab {
     if (this.isClosing) return;
 
     const { selectedTab } = app.tabs;
-    const { scrollLeft, scrollWidth, offsetWidth } = app.tabs.container;
 
     if (selectedTab) {
       selectedTab.rightBorder.style.display = 'block';
-      selectedTab.root.classList.remove('tab-selected');
+      selectedTab.root.classList.remove('selected');
 
       const previousTab = selectedTab.previousTab;
       if (previousTab) {
@@ -203,7 +204,7 @@ export class Tab {
       }
     }
 
-    this.root.classList.add('tab-selected');
+    this.root.classList.add('selected');
     this.rightBorder.style.display = 'none';
 
     app.tabs.selectedTabId = this.id;
@@ -273,6 +274,12 @@ export class Tab {
   }
 
   public setWidth(width: number, animation: boolean) {
+    if (width > 72) {
+      this.root.classList.add('close-visible');
+    } else {
+      this.root.classList.remove('close-visible');
+    }
+
     app.tabs.animateProperty('width', this.root, width, animation);
     this.width = width;
   }
