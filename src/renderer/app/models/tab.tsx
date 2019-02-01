@@ -92,6 +92,10 @@ export class Tab {
     return this._title;
   }
 
+  public set rightBorderVisible(value: boolean) {
+    this.rightBorder.style.display = value ? 'block' : 'none';
+  }
+
   public set title(newTitle: string) {
     this.titleElement.textContent = newTitle;
     this._title = newTitle;
@@ -102,7 +106,7 @@ export class Tab {
 
     const previousTab = this.previousTab;
     if (previousTab) {
-      previousTab.rightBorder.style.display = 'none';
+      previousTab.rightBorderVisible = false;
     }
   };
 
@@ -111,7 +115,7 @@ export class Tab {
 
     const previousTab = this.previousTab;
     if (previousTab && !this.selected && !this.isClosing) {
-      previousTab.rightBorder.style.display = 'block';
+      previousTab.rightBorderVisible = true;
     }
   };
 
@@ -195,23 +199,23 @@ export class Tab {
     const { selectedTab } = app.tabs;
 
     if (selectedTab) {
-      selectedTab.rightBorder.style.display = 'block';
+      selectedTab.rightBorderVisible = true;
       selectedTab.root.classList.remove('selected');
 
       const previousTab = selectedTab.previousTab;
       if (previousTab) {
-        previousTab.rightBorder.style.display = 'block';
+        previousTab.rightBorderVisible = true;
       }
     }
 
     this.root.classList.add('selected');
-    this.rightBorder.style.display = 'none';
+    this.rightBorderVisible = false;
 
     app.tabs.selectedTabId = this.id;
 
     const previousTab = this.previousTab;
     if (previousTab) {
-      previousTab.rightBorder.style.display = 'none';
+      previousTab.rightBorderVisible = false;
     }
 
     ipcRenderer.send('browserview-select', this.id);
