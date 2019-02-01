@@ -32,6 +32,22 @@ export default class BrowserViewWrapper extends BrowserView {
       );
     });
 
+    (this.webContents as any).addListener(
+      'certificate-error',
+      (
+        event: Electron.Event,
+        url: string,
+        error: string,
+        certificate: Electron.Certificate,
+        callback: Function,
+      ) => {
+        console.log(certificate, error, url);
+        // TODO: properly handle insecure websites.
+        event.preventDefault();
+        callback(true);
+      },
+    );
+
     this.setAutoResize({ width: true, height: true });
     this.webContents.loadURL('https://google.com');
   }
