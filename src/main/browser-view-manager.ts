@@ -78,6 +78,10 @@ export class BrowserViewManager {
     });
   }
 
+  public get selected() {
+    return this.views[this.selectedId];
+  }
+
   public create(tabId: number) {
     const view = new BrowserViewWrapper(tabId);
     this.views[tabId] = view;
