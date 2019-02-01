@@ -13,6 +13,7 @@ export class HorizontalScrollbar {
   };
 
   private thumbLeft: number;
+  private _visible = false;
 
   constructor(
     containerElement: HTMLElement,
@@ -29,6 +30,20 @@ export class HorizontalScrollbar {
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
     this.containerElement.addEventListener('wheel', this.onWheel);
+  }
+
+  public set visible(val: boolean) {
+    this._visible = val;
+
+    if (val) {
+      this.thumbElement.classList.add('visible');
+    } else {
+      this.thumbElement.classList.remove('visible');
+    }
+  }
+
+  public get visible() {
+    return this._visible;
   }
 
   public onWheel = (e: any) => {
