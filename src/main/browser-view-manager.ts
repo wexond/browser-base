@@ -3,6 +3,10 @@ import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
 import { appWindow } from '.';
 import BrowserViewWrapper from './browser-view-wrapper';
 
+declare const global: any;
+
+global.viewsMap = {};
+
 export class BrowserViewManager {
   public views: { [key: number]: BrowserViewWrapper } = {};
   public selectedId = 0;
@@ -77,6 +81,7 @@ export class BrowserViewManager {
   public create(tabId: number) {
     const view = new BrowserViewWrapper(tabId);
     this.views[tabId] = view;
+    global.viewsMap[view.id] = tabId;
   }
 
   public clear() {
