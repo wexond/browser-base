@@ -36,23 +36,31 @@
   z-index: 1;
   background-color: #fff;
 
-  &.hover {
+  &.close-visible,
+  &.hover,
+  &.selected {
+    & .tab-content {
+      max-width: calc(100% - 42px);
+    }
+
     & .tab-close {
       opacity: 0.54;
     }
+  }
 
+  &.hover {
     &:after {
       opacity: 1;
     }
+  }
 
-    & .tab-content {
-      max-width: calc(100% - 48px);
-    }
-
+  &.hover,
+  &.selected {
     & .tab-right-border {
       display: none !important;
     }
   }
+
   &:after {
     content: '';
     position: absolute;
@@ -65,24 +73,12 @@
     opacity: 0;
   }
 
-  &.tab-selected {
+  &.selected {
     z-index: 2;
     background-color: #e3f2fd;
 
-    & .tab-content {
-      max-width: calc(100% - 48px);
-    }
-
     & .tab-title {
       color: #2196f3;
-    }
-
-    & .tab-close {
-      opacity: 0.54;
-    }
-
-    & .tab-right-border {
-      display: none !important;
     }
 
     &:after {
@@ -132,6 +128,10 @@
   background-size: 16px;
   background-repeat: no-repeat;
   opacity: 0;
+
+  &.visible {
+    opacity: 0.54;
+  }
 
   &:hover {
     opacity: 0.54;
