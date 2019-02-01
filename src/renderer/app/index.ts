@@ -59,7 +59,7 @@ export class App {
     });
 
     if (platform() === 'darwin') {
-      this.toolbar.style.paddingLeft = '72px';
+      this.toolbar.style.paddingLeft = '65px';
     }
 
     window.addEventListener('mousemove', e => {
