@@ -1,4 +1,4 @@
-import { BrowserView } from 'electron';
+import { BrowserView, app } from 'electron';
 import { appWindow } from '.';
 
 export default class BrowserViewWrapper extends BrowserView {
@@ -6,7 +6,14 @@ export default class BrowserViewWrapper extends BrowserView {
   public tabId: number;
 
   constructor(id: number) {
-    super();
+    super({
+      webPreferences: {
+        preload: `${app.getAppPath()}/src/main/preload.js`,
+        nodeIntegration: false,
+      },
+    });
+
+    this.webContents.openDevTools({ mode: 'detach' });
 
     this.tabId = id;
 
@@ -14,7 +21,7 @@ export default class BrowserViewWrapper extends BrowserView {
       this.updateNavigationState();
     });
 
-    this.webContents.addListener('did-start-loading', () => {
+    this.webContents.addListener('did-start-navigation', () => {
       this.updateNavigationState();
     });
 
