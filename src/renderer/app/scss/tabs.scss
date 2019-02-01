@@ -7,6 +7,7 @@
   display: flex;
   align-items: center;
   margin-right: 32px;
+  margin-left: 8px;
 }
 
 .tabs-container {
@@ -104,7 +105,7 @@
   z-index: 2;
   display: flex;
   transition: 0.1s max-width;
-  margin-left: 16px;
+  margin-left: 12px;
   max-width: calc(100% - 24px);
 }
 
@@ -120,7 +121,7 @@
 
 .tab-close {
   position: absolute;
-  right: 8px;
+  right: 5px;
   height: 24px;
   width: 24px;
   background-image: url(../../assets/icons/close.svg);

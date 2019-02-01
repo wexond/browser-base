@@ -102,10 +102,6 @@ export class Tab {
     if (previousTab) {
       previousTab.rightBorder.style.display = 'none';
     }
-
-    if (app.tabs.list.indexOf(this) === 0) {
-      app.toolbarSeparator1.style.visibility = 'hidden';
-    }
   };
 
   public onMouseLeave = () => {
@@ -114,10 +110,6 @@ export class Tab {
     const previousTab = this.previousTab;
     if (previousTab && !this.selected && !this.isClosing) {
       previousTab.rightBorder.style.display = 'block';
-    }
-
-    if (app.tabs.list.indexOf(this) === 0 && !this.selected) {
-      app.toolbarSeparator1.style.visibility = 'visible';
     }
   };
 
@@ -156,11 +148,10 @@ export class Tab {
 
     app.tabs.resetRearrangeTabsTimer();
 
-    const notClosingTabs = tabsTemp.filter(x => !x.isClosing);
-    let index = notClosingTabs.indexOf(this);
+    let index = app.tabs.list.indexOf(this);
 
     this.isClosing = true;
-    if (notClosingTabs.length - 1 === index) {
+    if (app.tabs.list.length - 1 === index) {
       const previousTab = tabsTemp[index - 1];
       if (previousTab) {
         this.setLeft(previousTab.getNewLeft() + this.getWidth(), true);
@@ -187,10 +178,12 @@ export class Tab {
       }
     }
 
+    app.tabs.list.splice(index, 1);
+
+    app.tabs.selectedTab.select();
+
     setTimeout(() => {
       this.root.remove();
-      app.tabs.list.splice(app.tabs.list.indexOf(this), 1);
-      app.tabs.selectedTab.select();
     }, TAB_ANIMATION_DURATION * 1000);
   }
 
@@ -201,10 +194,7 @@ export class Tab {
     const { scrollLeft, scrollWidth, offsetWidth } = app.tabs.container;
 
     if (selectedTab) {
-      if (app.tabs.list.indexOf(selectedTab) !== app.tabs.list.length - 1) {
-        selectedTab.rightBorder.style.display = 'block';
-      }
-
+      selectedTab.rightBorder.style.display = 'block';
       selectedTab.root.classList.remove('tab-selected');
 
       const previousTab = selectedTab.previousTab;
@@ -223,15 +213,6 @@ export class Tab {
       previousTab.rightBorder.style.display = 'none';
     }
 
-    app.toolbarSeparator1.style.visibility =
-      app.tabs.list.indexOf(this) === 0 ? 'hidden' : 'visible';
-
-    app.toolbarSeparator2.style.visibility =
-      app.tabs.list.indexOf(this) === app.tabs.list.length - 1 &&
-      scrollLeft + offsetWidth === scrollWidth
-        ? 'hidden'
-        : 'visible';
-
     ipcRenderer.send('browserview-select', this.id);
   }
 
@@ -248,11 +229,11 @@ export class Tab {
 
     const width = containerWidth / tabsTemp.length - TABS_PADDING;
 
-    if (width > 200 - TABS_PADDING) {
-      return 200 - TABS_PADDING;
+    if (width > 200) {
+      return 200;
     }
-    if (width < 72 - TABS_PADDING) {
-      return 72 - TABS_PADDING;
+    if (width < 72) {
+      return 72;
     }
 
     return width;
