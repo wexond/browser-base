@@ -49,7 +49,7 @@
   }
 
   &.hover {
-    &:after {
+    & .tab-overlay {
       opacity: 1;
     }
   }
@@ -61,8 +61,7 @@
     }
   }
 
-  &:after {
-    content: '';
+  & .tab-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -75,10 +74,6 @@
 
   &.selected {
     z-index: 2;
-
-    &:after {
-      background-color: rgba(33, 150, 243, 0.08);
-    }
   }
 }
 

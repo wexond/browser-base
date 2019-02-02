@@ -13,6 +13,7 @@ export class Tab {
   public rightBorder: HTMLElement;
   public closeElement: HTMLElement;
   public faviconElement: HTMLElement;
+  public tabOverlay: HTMLElement;
 
   public width = 0;
   public left = 0;
@@ -43,6 +44,7 @@ export class Tab {
           ref={r => (this.closeElement = r)}
         />
         <div className="tab-right-border" ref={r => (this.rightBorder = r)} />
+        <div className="tab-overlay" ref={r => (this.tabOverlay = r)} />
       </div>
     ) as any;
 
@@ -62,6 +64,7 @@ export class Tab {
     ipcRenderer.on(
       `browserview-favicon-updated-${this.id}`,
       (e: any, favicon: string) => {
+        console.log(favicon);
         this.favicon = favicon;
       },
     );
@@ -161,15 +164,21 @@ export class Tab {
     if (this.selected) {
       this.root.classList.add('selected');
 
-      const background = shadeBlendConvert(0.85, this.background);
-
-      this.root.style.backgroundColor = background;
+      this.root.style.backgroundColor = shadeBlendConvert(
+        0.85,
+        this.background,
+      );
       this.titleElement.style.color = this.background;
+      this.tabOverlay.style.backgroundColor = shadeBlendConvert(
+        0.8,
+        this.background,
+      );
     } else {
       this.root.classList.remove('selected');
 
       this.titleElement.style.color = 'rgba(0, 0, 0, 0.87)';
       this.root.style.backgroundColor = 'transparent';
+      this.tabOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.04)';
     }
 
     if (this.isHovered) {
