@@ -23,12 +23,15 @@ export default class BrowserViewWrapper extends BrowserView {
       this.updateNavigationState();
     });
 
-    this.webContents.addListener('page-favicon-updated', (e, favicons) => {
-      appWindow.window.webContents.send(
-        `browserview-favicon-updated-${this.tabId}`,
-        favicons[0],
-      );
-    });
+    this.webContents.addListener(
+      'page-favicon-updated',
+      async (e, favicons) => {
+        appWindow.window.webContents.send(
+          `browserview-favicon-updated-${this.tabId}`,
+          favicons[0],
+        );
+      },
+    );
 
     this.webContents.addListener('did-change-theme-color', (e, color) => {
       appWindow.window.webContents.send(
@@ -54,7 +57,7 @@ export default class BrowserViewWrapper extends BrowserView {
     );
 
     this.setAutoResize({ width: true, height: true });
-    this.webContents.loadURL('https://google.com');
+    this.webContents.loadURL('http://google.pl');
   }
 
   public updateNavigationState() {
