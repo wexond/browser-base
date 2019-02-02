@@ -119,10 +119,21 @@ export class Tab {
   }
 
   public set favicon(value: string) {
-    this.faviconElement.style.opacity = value === '' ? '0' : '1';
-    this.titleElement.style.marginLeft = value === '' ? '0' : '26px';
+    const image = new Image();
+    image.onerror = () => {
+      this.faviconElement.style.opacity = '0';
+      this.titleElement.style.marginLeft = '0';
+      this._favicon = '';
+    };
 
-    this._favicon = value;
+    image.onload = () => {
+      this.faviconElement.style.opacity = '1';
+      this.titleElement.style.marginLeft = '26px';
+      this._favicon = value;
+    };
+
+    image.src = value;
+
     this.faviconElement.style.backgroundImage = `url(${value})`;
   }
 
