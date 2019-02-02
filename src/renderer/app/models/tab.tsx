@@ -3,6 +3,7 @@ import { ipcRenderer } from 'electron';
 import { TABS_PADDING, TAB_ANIMATION_DURATION } from '../constants';
 import { closeWindow } from '../utils';
 import { createElement } from 'ui';
+import { shadeBlendConvert, getColorBrightness } from '../utils/colors';
 
 let id = 0;
 
@@ -24,6 +25,7 @@ export class Tab {
 
   private _favicon: string = '';
   private _title: string;
+  private _background: string | null = null;
 
   constructor() {
     this.root = (
@@ -44,6 +46,8 @@ export class Tab {
       </div>
     ) as any;
 
+    this.background = null;
+
     app.tabs.container.appendChild(this.root);
 
     ipcRenderer.send('browserview-create', this.id);
@@ -59,6 +63,14 @@ export class Tab {
       `browserview-favicon-updated-${this.id}`,
       (e: any, favicon: string) => {
         this.favicon = favicon;
+      },
+    );
+
+    ipcRenderer.on(
+      `browserview-theme-color-updated-${this.id}`,
+      (e: any, themeColor: string) => {
+        console.log(themeColor);
+        this.background = themeColor;
       },
     );
 
@@ -95,6 +107,10 @@ export class Tab {
     return app.tabs.list[app.tabs.list.indexOf(this) - 1];
   }
 
+  public get nextTab() {
+    return app.tabs.list[app.tabs.list.indexOf(this) + 1];
+  }
+
   public get favicon() {
     return this._favicon;
   }
@@ -120,22 +136,56 @@ export class Tab {
     this.rightBorder.style.display = value ? 'block' : 'none';
   }
 
-  public onMouseEnter = () => {
-    this.root.classList.add('hover');
+  public get background() {
+    return this._background;
+  }
+
+  public set background(value: string | null) {
+    if (value && getColorBrightness(value) > 170) {
+      return;
+    }
+
+    this._background = value || '#2196F3';
+    this.update();
+  }
+
+  public update = () => {
+    const canHideSeparator = this.isHovered || this.selected;
 
     const previousTab = this.previousTab;
     if (previousTab) {
-      previousTab.rightBorderVisible = false;
+      previousTab.rightBorderVisible = !canHideSeparator;
+    }
+    this.rightBorderVisible = !canHideSeparator;
+
+    if (this.selected) {
+      this.root.classList.add('selected');
+
+      const background = shadeBlendConvert(0.85, this.background);
+
+      this.root.style.backgroundColor = background;
+      this.titleElement.style.color = this.background;
+    } else {
+      this.root.classList.remove('selected');
+
+      this.titleElement.style.color = 'rgba(0, 0, 0, 0.87)';
+      this.root.style.backgroundColor = 'transparent';
+    }
+
+    if (this.isHovered) {
+      this.root.classList.add('hover');
+    } else {
+      this.root.classList.remove('hover');
     }
   };
 
-  public onMouseLeave = () => {
-    this.root.classList.remove('hover');
+  public onMouseEnter = () => {
+    this.update();
+  };
 
-    const previousTab = this.previousTab;
-    if (previousTab && !this.selected) {
-      previousTab.rightBorderVisible = true;
-    }
+  public onMouseLeave = () => {
+    this.update();
+    if (this.nextTab) this.nextTab.update();
   };
 
   public onMouseDown = (e: any) => {
@@ -212,25 +262,13 @@ export class Tab {
   public select() {
     const { selectedTab } = app.tabs;
 
-    if (selectedTab) {
-      selectedTab.rightBorderVisible = true;
-      selectedTab.root.classList.remove('selected');
-
-      const previousTab = selectedTab.previousTab;
-      if (previousTab) {
-        previousTab.rightBorderVisible = true;
-      }
-    }
-
-    this.root.classList.add('selected');
-    this.rightBorderVisible = false;
-
     app.tabs.selectedTabId = this.id;
 
-    const previousTab = this.previousTab;
-    if (previousTab) {
-      previousTab.rightBorderVisible = false;
+    if (selectedTab) {
+      selectedTab.update();
     }
+
+    this.update();
 
     ipcRenderer.send('browserview-select', this.id);
   }
