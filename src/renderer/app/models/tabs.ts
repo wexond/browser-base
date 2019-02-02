@@ -147,10 +147,8 @@ export class Tabs {
     this.list = tabsCopy;
 
     for (const tab of this.list) {
-      tab.rightBorderVisible = true;
+      tab.update();
     }
-
-    firstTab.select();
   }
 
   public getTabsToReplace(callingTab: Tab, direction: string) {

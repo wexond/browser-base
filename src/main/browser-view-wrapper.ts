@@ -30,6 +30,13 @@ export default class BrowserViewWrapper extends BrowserView {
       );
     });
 
+    this.webContents.addListener('did-change-theme-color', (e, color) => {
+      appWindow.window.webContents.send(
+        `browserview-theme-color-updated-${this.tabId}`,
+        color,
+      );
+    });
+
     (this.webContents as any).addListener(
       'certificate-error',
       (
