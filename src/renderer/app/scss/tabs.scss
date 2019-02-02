@@ -75,11 +75,6 @@
 
   &.selected {
     z-index: 2;
-    background-color: #e3f2fd;
-
-    & .tab-title {
-      color: #2196f3;
-    }
 
     &:after {
       background-color: rgba(33, 150, 243, 0.08);
@@ -117,8 +112,10 @@
 
 .tab-icon {
   min-width: 16px;
-  height: 16px;
+  height: 100%;
   background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
   margin-right: 8px;
   opacity: 0;
   transition: 0.2s opacity;
