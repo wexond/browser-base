@@ -108,9 +108,13 @@ export class Tabs {
 
       if (
         newLeft + this.selectedTab.width >
-        this.addTabX + this.container.scrollLeft
+        this.addTabX + this.container.scrollLeft - TABS_PADDING
       ) {
-        left = this.addTabX - this.selectedTab.width + this.lastScrollX;
+        left =
+          this.addTabX -
+          this.selectedTab.width +
+          this.lastScrollX -
+          TABS_PADDING;
       }
 
       this.selectedTab.setLeft(left, false);
