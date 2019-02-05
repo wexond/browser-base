@@ -12,15 +12,15 @@
 
 Wexond is an extensible web browser with a totally different user experience, built on top of `Electron`, `TypeScript` and `Sass`.
 
-</div>
-
 [![Sponsors](https://opencollective.com/wexond/tiers/sponsor.svg?avatarHeight=48)](https://opencollective.com/wexond)
 
 [![Backers](https://opencollective.com/wexond/tiers/backer.svg?avatarHeight=48)](https://opencollective.com/wexond)
 
-<a href="https://www.patreon.com/bePatron?u=12270966">
-	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
-</a>
+  <a href="https://www.patreon.com/bePatron?u=12270966">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
+  </a>
+
+</div>
 
 # Features
 
