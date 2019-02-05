@@ -166,11 +166,15 @@ export class Tab {
   public update = () => {
     const canHideSeparator = this.isHovered || this.selected;
 
-    const previousTab = this.previousTab;
-    if (previousTab) {
-      previousTab.rightBorderVisible = !canHideSeparator;
+    if (this.previousTab) {
+      this.previousTab.rightBorderVisible = !canHideSeparator;
     }
+
     this.rightBorderVisible = !canHideSeparator;
+
+    if (this.nextTab && this.nextTab.selected) {
+      this.rightBorderVisible = false;
+    }
 
     if (this.selected) {
       this.root.classList.add('selected');
@@ -205,7 +209,6 @@ export class Tab {
 
   public onMouseLeave = () => {
     this.update();
-    if (this.nextTab) this.nextTab.update();
   };
 
   public onMouseDown = (e: any) => {
