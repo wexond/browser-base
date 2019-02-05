@@ -10,15 +10,7 @@
 [![Travis](https://img.shields.io/travis/com/wexond/wexond.svg?style=flat-square)](https://travis-ci.com/wexond/wexond)
 [![AppVeyor](https://img.shields.io/appveyor/ci/sentialx/wexond.svg?style=flat-square)](https://ci.appveyor.com/project/sentialx/wexond)
 
-  <a href="https://www.patreon.com/bePatron?u=12270966">
-    <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
-  </a>
-
 Wexond is an extensible web browser with a totally different user experience, built on top of `Electron`, `TypeScript` and `Sass`.
-
-[![Sponsors](https://opencollective.com/wexond/tiers/sponsor.svg?avatarHeight=48)](https://opencollective.com/wexond)
-
-[![Backers](https://opencollective.com/wexond/tiers/backer.svg?avatarHeight=48)](https://opencollective.com/wexond)
 
 </div>
 
@@ -29,6 +21,14 @@ Wexond is an extensible web browser with a totally different user experience, bu
 - **Tab groups** Easily group tabs to tab groups and access them very fast.
 - **Expanded new tab page** Have all information such as news, weather or currency in only one page!
 - **Partial support for Chrome extensions** Install some extensions from Chrome Web Store (see https://github.com/wexond/wexond/issues/110)
+
+<a href="https://www.patreon.com/bePatron?u=12270966">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
+</a>
+
+[![Sponsors](https://opencollective.com/wexond/tiers/sponsor.svg?avatarHeight=48)](https://opencollective.com/wexond)
+
+[![Backers](https://opencollective.com/wexond/tiers/backer.svg?avatarHeight=48)](https://opencollective.com/wexond)
 
 # Screenshots
 
