@@ -63,16 +63,10 @@ $ npm install
 If you have installed all dependencies successfully, just type
 
 ```bash
-$ npm run watch
+$ npm run dev
 ```
 
-This will watch code for changes
-
-and to start Wexond, type
-
-```bash
-$ npm start
-```
+This will run Wexond in development mode.
 
 ### Other commands
 
@@ -92,7 +86,7 @@ $ npm run <command>
 | `lint`             | Lints code.                                 |
 | `lint-fix`         | Fixes eslint errors if any                  |
 | `start`            | Starts Wexond.                              |
-| `watch`            | Watches code for changes                    |
+| `dev`              | Starts Wexond in the development mode       |
 
 ## Documentation
 
