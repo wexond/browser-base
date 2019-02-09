@@ -11,7 +11,7 @@ import {
 } from '~/renderer/app/constants';
 import { closeWindow } from '../utils';
 
-let id = 1;
+let id = 0;
 
 export class Tab {
   @observable
@@ -43,6 +43,7 @@ export class Tab {
 
   public width: number = 0;
   public left = 0;
+  public position = id;
 
   @computed
   public get isSelected() {
@@ -107,7 +108,10 @@ export class Tab {
   }
 
   public getLeft(calcNewLeft: boolean = false) {
-    const { tabs } = this.tabGroup;
+    const tabs = this.tabGroup.tabs
+      .slice()
+      .sort((a, b) => a.position - b.position);
+
     const index = tabs.indexOf(this);
 
     let left = 0;
@@ -135,7 +139,8 @@ export class Tab {
 
   public close() {
     const tabGroup = this.tabGroup;
-    const { tabs } = tabGroup;
+    const tabs = tabGroup.tabs.slice().sort((a, b) => a.position - b.position);
+
     const selected = tabGroup.selectedTabId === this.id;
 
     ipcRenderer.send('browserview-remove', this.id);

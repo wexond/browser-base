@@ -105,9 +105,13 @@ export class TabsStore {
   }
 
   public setTabsLefts(animation: boolean) {
-    const tabs = this.tabs.filter(
-      x => !x.isClosing && x.tabGroupId === store.tabGroupsStore.currentGroupId,
-    );
+    const tabs = this.tabs
+      .filter(
+        x =>
+          !x.isClosing && x.tabGroupId === store.tabGroupsStore.currentGroupId,
+      )
+      .slice()
+      .sort((a, b) => a.position - b.position);
 
     const { containerWidth } = store.tabsStore;
 
@@ -126,35 +130,35 @@ export class TabsStore {
   }
 
   public replaceTab(firstTab: Tab, secondTab: Tab) {
-    const tabsCopy = this.tabs.slice();
-
-    const firstIndex = tabsCopy.indexOf(firstTab);
-    const secondIndex = tabsCopy.indexOf(secondTab);
-
-    tabsCopy[firstIndex] = secondTab;
-    tabsCopy[secondIndex] = firstTab;
+    const position1 = firstTab.position;
 
     secondTab.setLeft(firstTab.getLeft(), true);
-    (this.tabs as any).replace(tabsCopy);
+
+    firstTab.position = secondTab.position;
+    secondTab.position = position1;
   }
 
   public getTabsToReplace(callingTab: Tab, direction: string) {
-    const index = this.tabs.indexOf(callingTab);
+    let tabs = this.tabs.slice().sort((a, b) => a.position - b.position);
+
+    const index = tabs.indexOf(callingTab);
 
     if (direction === 'left') {
       for (let i = index; i--;) {
-        const tab = this.tabs[i];
+        const tab = tabs[i];
         if (callingTab.left <= tab.width / 2 + tab.left) {
-          this.replaceTab(this.tabs[i + 1], tab);
+          this.replaceTab(tabs[i + 1], tab);
+          tabs = tabs.sort((a, b) => a.position - b.position);
         } else {
           break;
         }
       }
     } else if (direction === 'right') {
-      for (let i = index + 1; i < this.tabs.length; i++) {
-        const tab = this.tabs[i];
+      for (let i = index + 1; i < tabs.length; i++) {
+        const tab = tabs[i];
         if (callingTab.left + callingTab.width >= tab.width / 2 + tab.left) {
-          this.replaceTab(this.tabs[i - 1], tab);
+          this.replaceTab(tabs[i - 1], tab);
+          tabs = tabs.sort((a, b) => a.position - b.position);
         } else {
           break;
         }
