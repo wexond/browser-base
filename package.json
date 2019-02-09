@@ -64,26 +64,27 @@
     "electron": "4.0.4",
     "electron-builder": "20.38.5",
     "fuse-box": "3.7.0",
-    "gsap": "2.0.2",
     "prettier": "1.16.4",
+    "terser": "3.16.1",
     "tslint": "5.12.1",
     "tslint-config-airbnb": "5.11.1",
     "tslint-config-prettier": "1.18.0",
     "typescript": "3.3.3",
-    "uglify-es": "3.3.9"
+    "typescript-plugin-styled-components": "1.2.0"
   },
   "dependencies": {
-    "axios": "0.18.0",
     "electron-updater": "4.0.6",
     "leveldown": "4.0.1",
     "levelup": "4.0.0",
+    "nedb": "1.8.0",
+    "tz-lookup": "6.1.8",
+    "axios": "0.18.0",
+    "gsap": "2.0.2",
     "mobx": "5.9.0",
     "mobx-react": "5.4.3",
-    "mousetrap": "1.6.2",
-    "nedb": "1.8.0",
     "react": "16.8.1",
     "react-dom": "16.8.1",
     "styled-components": "4.1.3",
-    "tz-lookup": "6.1.8"
+    "mousetrap": "1.6.2"
   }
 }

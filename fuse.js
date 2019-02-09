@@ -5,6 +5,7 @@ const {
   EnvPlugin,
   CopyPlugin,
   JSONPlugin,
+  StyledComponentsPlugin,
 } = require('fuse-box');
 const { spawn } = require('child_process');
 
@@ -38,7 +39,7 @@ const getConfig = (target, name) => {
 
 const getRendererConfig = (target, name) => {
   const cfg = Object.assign({}, getConfig(target, name), {
-    sourceMaps: true,
+    sourceMaps: !production,
   });
 
   return cfg;
@@ -79,6 +80,7 @@ const renderer = () => {
   cfg.plugins.push(getWebIndexPlugin('app'));
   cfg.plugins.push(JSONPlugin());
   cfg.plugins.push(getCopyPlugin());
+  cfg.plugins.push(StyledComponentsPlugin());
 
   const fuse = FuseBox.init(cfg);
 
@@ -86,7 +88,9 @@ const renderer = () => {
     fuse.dev({ httpServer: true });
   }
 
-  const app = fuse.bundle('app').instructions('> [renderer/app/index.tsx]');
+  const app = fuse
+    .bundle('app')
+    .instructions('> [renderer/app/index.tsx]');
 
   if (!production) {
     app.hmr().watch();
