@@ -3,10 +3,8 @@ const {
   WebIndexPlugin,
   QuantumPlugin,
   EnvPlugin,
+  CopyPlugin,
   JSONPlugin,
-  CSSResourcePlugin,
-  SassPlugin,
-  CSSPlugin,
 } = require('fuse-box');
 const { spawn } = require('child_process');
 
@@ -30,19 +28,17 @@ const getConfig = (target, name) => {
           uglify: {
             es6: true,
           },
-          css: true,
         }),
     ],
     alias: {
       '~': '~/',
-      ui: '~/renderer/utils/create-element',
     },
   };
 };
 
 const getRendererConfig = (target, name) => {
   const cfg = Object.assign({}, getConfig(target, name), {
-    sourceMaps: !production,
+    sourceMaps: true,
   });
 
   return cfg;
@@ -50,10 +46,18 @@ const getRendererConfig = (target, name) => {
 
 const getWebIndexPlugin = name => {
   return WebIndexPlugin({
-    template: `src/renderer/pages/${name}.html`,
+    template: `static/pages/${name}.html`,
     path: production ? '.' : '/',
     target: `${name}.html`,
     bundles: [name],
+  });
+};
+
+const getCopyPlugin = () => {
+  return CopyPlugin({
+    files: ['*.woff2', '*.png', '*.svg'],
+    dest: 'assets',
+    resolve: production ? './assets' : '/assets',
   });
 };
 
@@ -74,11 +78,7 @@ const renderer = () => {
 
   cfg.plugins.push(getWebIndexPlugin('app'));
   cfg.plugins.push(JSONPlugin());
-  cfg.plugins.push([
-    SassPlugin(),
-    CSSResourcePlugin({ dist: 'build/css-resources', inline: true }),
-    CSSPlugin(),
-  ]);
+  cfg.plugins.push(getCopyPlugin());
 
   const fuse = FuseBox.init(cfg);
 
@@ -86,9 +86,7 @@ const renderer = () => {
     fuse.dev({ httpServer: true });
   }
 
-  const app = fuse
-    .bundle('app')
-    .instructions('> renderer/app/index.ts -electron');
+  const app = fuse.bundle('app').instructions('> [renderer/app/index.tsx]');
 
   if (!production) {
     app.hmr().watch();
