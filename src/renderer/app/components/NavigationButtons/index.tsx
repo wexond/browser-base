@@ -19,7 +19,7 @@ export const NavigationButtons = observer(() => {
         disabled={false}
         size={24}
         icon={icons.back}
-        style={{ marginLeft: 4 }}
+        style={{ marginLeft: 8 }}
         onClick={onBackClick}
       />
       <ToolbarButton
