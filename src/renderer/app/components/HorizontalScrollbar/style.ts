@@ -1,14 +1,17 @@
-.horizontal-scrollbar {
+import styled from 'styled-components';
+
+export const Root = styled.div`
   position: absolute;
   height: 3px;
   bottom: 0;
   left: 0;
   z-index: 10;
   width: 100%;
-  display: block;
-}
+  display: ${({ visible }: { visible: boolean }) =>
+    visible ? 'block' : 'none'};
+`;
 
-.horizontal-scrollbar-thumb {
+export const Thumb = styled.div`
   position: absolute;
   background-color: black;
   height: 100%;
@@ -16,16 +19,11 @@
   left: 0;
   transition: 0.2s opacity;
   -webkit-app-region: no-drag;
-  opacity: 0;
-
+  opacity: ${({ visible }: { visible: boolean }) => (visible ? 0.2 : 0)};
   &:hover {
     opacity: 0.4;
   }
   &:active {
     opacity: 0.4;
   }
-
-  &.visible {
-    opacity: 0.2;
-  }
-}
+`;
