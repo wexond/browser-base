@@ -119,7 +119,10 @@ export class TabsStore {
       left += tab.width + TABS_PADDING;
     }
 
-    store.addTabStore.setLeft(Math.min(left, containerWidth), animation);
+    store.addTabStore.setLeft(
+      Math.min(left, containerWidth + TABS_PADDING),
+      animation,
+    );
   }
 
   public replaceTab(firstTab: Tab, secondTab: Tab) {
