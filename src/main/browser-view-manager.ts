@@ -114,6 +114,7 @@ export class BrowserViewManager {
       width,
       height: height - TOOLBAR_HEIGHT,
     });
+    view.setAutoResize({ width: true, height: true });
   }
 
   public remove(tabId: number) {
