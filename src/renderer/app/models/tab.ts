@@ -138,6 +138,8 @@ export class Tab {
 
   public select() {
     if (!this.isClosing) {
+      store.canToggleMenu = store.tabsStore.selectedTabId === this.id;
+
       this.tabGroup.selectedTabId = this.id;
       store.tabsStore.selectedTabId = this.id;
 
