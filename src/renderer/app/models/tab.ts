@@ -36,18 +36,41 @@ export class Tab {
   public tabGroupId: number;
 
   @observable
-  public transformX: number = 0;
-
-  @observable
-  public animateX = false;
-
   public width: number = 0;
+
   public left = 0;
   public position = id;
 
   @computed
   public get isSelected() {
     return store.tabsStore.selectedTabId === this.id;
+  }
+
+  @computed
+  public get borderVisible() {
+    const selectedTab = store.tabsStore.selectedTab;
+    const hoveredTab = store.tabsStore.hoveredTab;
+
+    if (
+      (selectedTab && selectedTab.position === this.position + 1) ||
+      (hoveredTab && hoveredTab.position === this.position + 1) ||
+      this.isSelected ||
+      this.hovered
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @computed
+  public get isExpanded() {
+    return this.hovered || this.isSelected || !store.tabsStore.scrollable;
+  }
+
+  @computed
+  public get isIconSet() {
+    return this.favicon !== '' || this.loading;
   }
 
   public url: string = '';
@@ -95,7 +118,7 @@ export class Tab {
       );
     }
 
-    const width = containerWidth / tabs.length - TABS_PADDING;
+    const width = containerWidth / tabs.length;
 
     if (width > 200) {
       return 200;
@@ -116,7 +139,7 @@ export class Tab {
 
     let left = 0;
     for (let i = 0; i < index; i++) {
-      left += (calcNewLeft ? this.getWidth() : tabs[i].width) + TABS_PADDING;
+      left += calcNewLeft ? this.getWidth() : tabs[i].width;
     }
 
     return left;
@@ -173,6 +196,8 @@ export class Tab {
         closeWindow();
       }
     }
+
+    store.tabsStore.setPositions();
 
     setTimeout(() => {
       store.tabsStore.removeTab(this.id);

@@ -6,7 +6,14 @@ import Ripple from '~/renderer/components/Ripple';
 import { Tab } from '~/renderer/app/models';
 import store from '~/renderer/app/store';
 import { colors } from '~/renderer/constants';
-import { StyledTab, Content, Icon, Title, Close } from './style';
+import {
+  StyledTab,
+  StyledContent,
+  StyledIcon,
+  StyledTitle,
+  StyledClose,
+  StyledBorder,
+} from './style';
 
 const removeTab = (tab: Tab) => () => {
   tab.close();
@@ -27,12 +34,45 @@ const onMouseDown = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
 };
 
 const onMouseEnter = (tab: Tab) => () => {
-  tab.hovered = true;
+  if (!store.tabsStore.isDragging) {
+    tab.hovered = true;
+  }
 };
 
 const onMouseLeave = (tab: Tab) => () => {
   tab.hovered = false;
 };
+
+const Content = observer(({ tab }: { tab: Tab }) => {
+  return (
+    <StyledContent collapsed={tab.isExpanded}>
+      {!tab.loading && tab.favicon !== '' && (
+        <StyledIcon
+          isIconSet={tab.favicon !== ''}
+          style={{ backgroundImage: `url(${tab.favicon})` }}
+        />
+      )}
+      {tab.loading && <Preloader thickness={6} size={16} />}
+      <StyledTitle selected={tab.isSelected} isIcon={tab.isIconSet}>
+        {tab.title}
+      </StyledTitle>
+    </StyledContent>
+  );
+});
+
+const Close = observer(({ tab }: { tab: Tab }) => {
+  return (
+    <StyledClose
+      // onMouseDown={}
+      onClick={removeTab(tab)}
+      visible={tab.isExpanded}
+    />
+  );
+});
+
+const Border = observer(({ tab }: { tab: Tab }) => {
+  return <StyledBorder visible={tab.borderVisible} />;
+});
 
 export default observer(({ tab }: { tab: Tab }) => {
   return (
@@ -42,29 +82,12 @@ export default observer(({ tab }: { tab: Tab }) => {
       onMouseDown={onMouseDown(tab)}
       onMouseEnter={onMouseEnter(tab)}
       onMouseLeave={onMouseLeave(tab)}
-      borderVisible={false}
       isClosing={tab.isClosing}
       ref={tab.ref}
     >
-      <Content hovered={tab.hovered} selected={tab.isSelected}>
-        {!tab.loading && tab.favicon !== '' && (
-          <Icon favicon={tab.favicon.trim()} />
-        )}
-        {tab.loading && <Preloader thickness={6} size={16} />}
-        <Title
-          selected={tab.isSelected}
-          loading={tab.loading}
-          favicon={tab.favicon}
-        >
-          {tab.title}
-        </Title>
-      </Content>
-      <Close
-        // onMouseDown={}
-        onClick={removeTab(tab)}
-        hovered={tab.hovered}
-        selected={tab.isSelected}
-      />
+      <Content tab={tab} />
+      <Close tab={tab} />
+      <Border tab={tab} />
     </StyledTab>
   );
 });
