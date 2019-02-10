@@ -5,25 +5,39 @@ import store from '~/renderer/app/store';
 import ToolbarButton from '~/renderer/app/components/ToolbarButton';
 import { icons } from '~/renderer/app/constants/icons';
 import { StyledContainer } from './style';
+import { ipcRenderer } from 'electron';
 
-const onBackClick = () => {};
+const sendNavigationAction = (action: 'back' | 'forward' | 'refresh') => {
+  ipcRenderer.send('browserview-navigation-action', {
+    id: store.tabsStore.selectedTabId,
+    action,
+  });
+};
 
-const onForwardClick = () => {};
+const onBackClick = () => {
+  sendNavigationAction('back');
+};
 
-const onRefreshClick = () => {};
+const onForwardClick = () => {
+  sendNavigationAction('forward');
+};
+
+const onRefreshClick = () => {
+  sendNavigationAction('refresh');
+};
 
 export const NavigationButtons = observer(() => {
   return (
     <StyledContainer isFullscreen={store.isFullscreen}>
       <ToolbarButton
-        disabled={false}
+        disabled={!store.navigationState.canGoBack}
         size={24}
         icon={icons.back}
         style={{ marginLeft: 8 }}
         onClick={onBackClick}
       />
       <ToolbarButton
-        disabled={false}
+        disabled={!store.navigationState.canGoForward}
         size={24}
         icon={icons.forward}
         onClick={onForwardClick}

@@ -9,7 +9,8 @@ import {
   defaultTabOptions,
   TAB_ANIMATION_DURATION,
 } from '~/renderer/app/constants';
-import { closeWindow } from '../utils';
+import { closeWindow, getColorBrightness } from '../utils';
+import { colors } from '~/renderer/constants';
 
 let id = 0;
 
@@ -35,10 +36,13 @@ export class Tab {
   @observable
   public width: number = 0;
 
-  public left = 0;
-
   @observable
   public position = id;
+
+  @observable
+  public background: string = colors.blue['500'];
+
+  public left = 0;
 
   public tempPosition = id;
 
@@ -101,6 +105,31 @@ export class Tab {
         this.select();
       }
     });
+
+    ipcRenderer.on(
+      `browserview-title-updated-${this.id}`,
+      (e: any, title: string) => {
+        this.title = title;
+      },
+    );
+
+    ipcRenderer.on(
+      `browserview-favicon-updated-${this.id}`,
+      (e: any, favicon: string) => {
+        this.favicon = favicon;
+      },
+    );
+
+    ipcRenderer.on(
+      `browserview-theme-color-updated-${this.id}`,
+      (e: any, themeColor: string) => {
+        if (themeColor && getColorBrightness(themeColor) < 170) {
+          this.background = themeColor;
+        } else {
+          this.background = colors.blue['500'];
+        }
+      },
+    );
   }
 
   public get tabGroup() {
