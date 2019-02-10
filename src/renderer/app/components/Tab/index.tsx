@@ -11,7 +11,10 @@ import {
   StyledTitle,
   StyledClose,
   StyledBorder,
+  StyledOverlay,
 } from './style';
+import { shadeBlendConvert } from '../../utils';
+import { colors, transparency } from '~/renderer/constants';
 
 const removeTab = (tab: Tab) => () => {
   tab.close();
@@ -55,7 +58,14 @@ const Content = observer(({ tab }: { tab: Tab }) => {
         />
       )}
       {tab.loading && <Preloader thickness={6} size={16} />}
-      <StyledTitle selected={tab.isSelected} isIcon={tab.isIconSet}>
+      <StyledTitle
+        isIcon={tab.isIconSet}
+        style={{
+          color: tab.isSelected
+            ? tab.background
+            : `rgba(0, 0, 0, ${transparency.text.high})`,
+        }}
+      >
         {tab.title}
       </StyledTitle>
     </StyledContent>
@@ -76,6 +86,19 @@ const Border = observer(({ tab }: { tab: Tab }) => {
   return <StyledBorder visible={tab.borderVisible} />;
 });
 
+const Overlay = observer(({ tab }: { tab: Tab }) => {
+  return (
+    <StyledOverlay
+      hovered={tab.isHovered}
+      style={{
+        backgroundColor: tab.isSelected
+          ? shadeBlendConvert(0.8, tab.background)
+          : 'rgba(0, 0, 0, 0.04)',
+      }}
+    />
+  );
+});
+
 export default observer(({ tab }: { tab: Tab }) => {
   return (
     <StyledTab
@@ -86,10 +109,16 @@ export default observer(({ tab }: { tab: Tab }) => {
       onMouseLeave={onMouseLeave}
       isClosing={tab.isClosing}
       ref={tab.ref}
+      style={{
+        backgroundColor: tab.isSelected
+          ? shadeBlendConvert(0.85, tab.background)
+          : 'transparent',
+      }}
     >
       <Content tab={tab} />
       <Close tab={tab} />
       <Border tab={tab} />
+      <Overlay tab={tab} />
     </StyledTab>
   );
 });
