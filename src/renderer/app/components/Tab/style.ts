@@ -10,15 +10,34 @@ interface CloseProps {
 
 export const StyledClose = styled.div`
   position: absolute;
-  right: 12px;
-  height: 16px;
-  width: 16px;
+  right: 6px;
+  height: 24px;
+  width: 24px;
   background-image: url('${icons.close}');
   transition: 0.1s opacity;
   z-index: 2;
-  ${centerImage('100%', '100%')};
+  ${centerImage('16px', '16px')};
   opacity: ${({ visible }: CloseProps) =>
     visible ? transparency.icons.inactive : 0};
+
+  &:hover {
+    &:after {
+      opacity: 1;
+    }
+  }
+
+  &:after {
+    content: '';
+    border-radius: 50px;
+    background-color: rgba(0, 0, 0, 0.08);
+    transition: 0.2s opacity;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+  }
 `;
 
 interface TabProps {
@@ -44,27 +63,22 @@ export const StyledTab = styled.div`
   `};
   backface-visibility: hidden;
   margin-right: ${TABS_PADDING}px;
+`;
 
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    transition: 0.1s opacity;
-    background-color: rgba(0, 0, 0, 0.04);
-    ${({ hovered, selected }: TabProps) => css`
-      background-color: ${selected
-        ? 'rgba(33, 150, 243, 0.08)'
-        : 'rgba(0, 0, 0, 0.04)'};
-      opacity: ${hovered ? 1 : 0};
-    `};
-  }
+export const StyledOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.1s opacity;
+  background-color: rgba(0, 0, 0, 0.04);
+  ${({ hovered }: { hovered: boolean }) => css`
+    opacity: ${hovered ? 1 : 0};
+  `};
 `;
 
 interface TitleProps {
-  selected: boolean;
   isIcon: boolean;
 }
 
@@ -75,12 +89,9 @@ export const StyledTitle = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: 0.2s margin-left;
-  margin-left: 12px;
+  margin-left: 8px;
 
-  ${({ isIcon, selected }: TitleProps) => css`
-    color: ${selected
-      ? colors.blue['500']
-      : `rgba(0, 0, 0, ${transparency.text.high})`};
+  ${({ isIcon }: TitleProps) => css`
     margin-left: ${!isIcon ? 0 : 12}px;
   `};
 `;
@@ -105,7 +116,7 @@ export const StyledContent = styled.div`
   overflow: hidden;
   z-index: 2;
   display: flex;
-  margin-left: 16px;
+  margin-left: 12px;
   ${({ collapsed }: ContentProps) => css`
     max-width: calc(100% - ${24 + (collapsed ? 24 : 0)}px);
   `};
