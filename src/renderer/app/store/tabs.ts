@@ -26,6 +26,9 @@ export class TabsStore {
   public selectedTabId: number;
 
   @observable
+  public hoveredTabId: number;
+
+  @observable
   public tabs: Tab[] = [];
 
   @observable
@@ -39,10 +42,33 @@ export class TabsStore {
   public scrollbarRef = React.createRef<HorizontalScrollbar>();
   public containerRef = React.createRef<HTMLDivElement>();
 
+  private rearrangeTabsTimer = {
+    canReset: false,
+    time: 0,
+    interval: null as any,
+  };
+
   constructor() {
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('resize', this.onResize);
+
+    this.rearrangeTabsTimer.interval = setInterval(() => {
+      // Set widths and positions for tabs 3 seconds after a tab was closed
+      if (
+        this.rearrangeTabsTimer.canReset &&
+        this.rearrangeTabsTimer.time === 3
+      ) {
+        this.updateTabsBounds(true);
+        this.rearrangeTabsTimer.canReset = false;
+      }
+      this.rearrangeTabsTimer.time++;
+    }, 1000);
+  }
+
+  public resetRearrangeTabsTimer() {
+    this.rearrangeTabsTimer.time = 0;
+    this.rearrangeTabsTimer.canReset = true;
   }
 
   public onResize = (e: Event) => {
@@ -63,7 +89,7 @@ export class TabsStore {
   }
 
   public get hoveredTab() {
-    return this.tabs.find(x => x.hovered);
+    return this.getTabById(this.hoveredTabId);
   }
 
   public getTabById(id: number) {
@@ -73,7 +99,6 @@ export class TabsStore {
   public addTab(options = defaultTabOptions) {
     const tab = new Tab(options, store.tabGroupsStore.currentGroupId);
     this.tabs.push(tab);
-    this.setPositions();
 
     requestAnimationFrame(() => {
       tab.setLeft(tab.getLeft(), false);
@@ -86,7 +111,7 @@ export class TabsStore {
   }
 
   public removeTab(id: number) {
-    (this.tabs as any).replace(this.tabs.filter(x => x.id !== id));
+    (this.tabs as any).remove(this.getTabById(id));
   }
 
   public updateTabsBounds(animation: boolean) {
@@ -125,34 +150,28 @@ export class TabsStore {
     for (const tab of tabs) {
       tab.setLeft(left, animation);
 
-      left += tab.width;
+      left += tab.width + TABS_PADDING;
     }
 
-    store.addTabStore.setLeft(Math.min(left, containerWidth), animation);
+    store.addTabStore.setLeft(
+      Math.min(left, containerWidth + TABS_PADDING),
+      animation,
+    );
   }
 
   public replaceTab(firstTab: Tab, secondTab: Tab) {
-    const position1 = firstTab.position;
+    const position1 = firstTab.tempPosition;
 
-    secondTab.setLeft(firstTab.getLeft(), true);
+    secondTab.setLeft(firstTab.getLeft(true), true);
 
-    firstTab.position = secondTab.position;
-    secondTab.position = position1;
-  }
-
-  public setPositions() {
-    const tabs = this.tabs
-      .slice()
-      .filter(x => !x.isClosing)
-      .sort((a, b) => a.position - b.position);
-
-    for (let i = 0; i < tabs.length; i++) {
-      tabs[i].position = i;
-    }
+    firstTab.tempPosition = secondTab.tempPosition;
+    secondTab.tempPosition = position1;
   }
 
   public getTabsToReplace(callingTab: Tab, direction: string) {
-    let tabs = this.tabs.slice().sort((a, b) => a.position - b.position);
+    let tabs = this.tabs
+      .slice()
+      .sort((a, b) => a.tempPosition - b.tempPosition);
 
     const index = tabs.indexOf(callingTab);
 
@@ -161,7 +180,7 @@ export class TabsStore {
         const tab = tabs[i];
         if (callingTab.left <= tab.width / 2 + tab.left) {
           this.replaceTab(tabs[i + 1], tab);
-          tabs = tabs.sort((a, b) => a.position - b.position);
+          tabs = tabs.sort((a, b) => a.tempPosition - b.tempPosition);
         } else {
           break;
         }
@@ -171,7 +190,7 @@ export class TabsStore {
         const tab = tabs[i];
         if (callingTab.left + callingTab.width >= tab.width / 2 + tab.left) {
           this.replaceTab(tabs[i - 1], tab);
-          tabs = tabs.sort((a, b) => a.position - b.position);
+          tabs = tabs.sort((a, b) => a.tempPosition - b.tempPosition);
         } else {
           break;
         }
@@ -180,10 +199,15 @@ export class TabsStore {
   }
 
   public onMouseUp = () => {
-    const selectedTab = store.tabsStore.selectedTab;
+    const selectedTab = this.selectedTab;
 
-    store.tabsStore.isDragging = false;
-    store.tabsStore.setTabsLefts(true);
+    this.isDragging = false;
+
+    for (const tab of this.tabs) {
+      tab.position = tab.tempPosition;
+    }
+
+    this.setTabsLefts(true);
 
     if (selectedTab) {
       selectedTab.isDragging = false;
@@ -196,8 +220,8 @@ export class TabsStore {
 
     const { selectedTab } = store.tabsStore;
 
-    if (store.tabsStore.isDragging) {
-      const container = store.tabsStore.containerRef;
+    if (this.isDragging) {
+      const container = this.containerRef;
       const {
         tabStartX,
         mouseStartX,
@@ -239,12 +263,12 @@ export class TabsStore {
         // TODO: Create a new window
       }
 
-      store.tabsStore.getTabsToReplace(
+      this.getTabsToReplace(
         selectedTab,
         lastMouseX - e.pageX >= 1 ? 'left' : 'right',
       );
 
-      store.tabsStore.lastMouseX = e.pageX;
+      this.lastMouseX = e.pageX;
     }
   };
 

@@ -14,7 +14,7 @@ export const StyledClose = styled.div`
   height: 16px;
   width: 16px;
   background-image: url('${icons.close}');
-  transition: 0.2s opacity, 0.2s filter;
+  transition: 0.1s opacity;
   z-index: 2;
   ${centerImage('100%', '100%')};
   opacity: ${({ visible }: CloseProps) =>
@@ -52,7 +52,7 @@ export const StyledTab = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    transition: 0.2s opacity;
+    transition: 0.1s opacity;
     background-color: rgba(0, 0, 0, 0.04);
     ${({ hovered, selected }: TabProps) => css`
       background-color: ${selected
@@ -88,7 +88,7 @@ export const StyledTitle = styled.div`
 export const StyledIcon = styled.div`
   height: 16px;
   min-width: 16px;
-  transition: 0.2s opacity, 0.2s width;
+  transition: 0.2s opacity, 0.2s min-width;
   ${centerImage('16px', '16px')};
   ${({ isIconSet }: { isIconSet: boolean }) => css`
     min-width: ${isIconSet ? 0 : 16},
@@ -105,7 +105,6 @@ export const StyledContent = styled.div`
   overflow: hidden;
   z-index: 2;
   display: flex;
-  transition: 0.1s max-width;
   margin-left: 16px;
   ${({ collapsed }: ContentProps) => css`
     max-width: calc(100% - ${24 + (collapsed ? 24 : 0)}px);

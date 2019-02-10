@@ -2,10 +2,8 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 
 import Preloader from '~/renderer/components/Preloader';
-import Ripple from '~/renderer/components/Ripple';
 import { Tab } from '~/renderer/app/models';
 import store from '~/renderer/app/store';
-import { colors } from '~/renderer/constants';
 import {
   StyledTab,
   StyledContent,
@@ -17,6 +15,10 @@ import {
 
 const removeTab = (tab: Tab) => () => {
   tab.close();
+};
+
+const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+  e.stopPropagation();
 };
 
 const onMouseDown = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
@@ -35,12 +37,12 @@ const onMouseDown = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
 
 const onMouseEnter = (tab: Tab) => () => {
   if (!store.tabsStore.isDragging) {
-    tab.hovered = true;
+    store.tabsStore.hoveredTabId = tab.id;
   }
 };
 
-const onMouseLeave = (tab: Tab) => () => {
-  tab.hovered = false;
+const onMouseLeave = () => {
+  store.tabsStore.hoveredTabId = -1;
 };
 
 const Content = observer(({ tab }: { tab: Tab }) => {
@@ -63,7 +65,7 @@ const Content = observer(({ tab }: { tab: Tab }) => {
 const Close = observer(({ tab }: { tab: Tab }) => {
   return (
     <StyledClose
-      // onMouseDown={}
+      onMouseDown={onCloseMouseDown}
       onClick={removeTab(tab)}
       visible={tab.isExpanded}
     />
@@ -78,10 +80,10 @@ export default observer(({ tab }: { tab: Tab }) => {
   return (
     <StyledTab
       selected={tab.isSelected}
-      hovered={tab.hovered}
+      hovered={tab.isHovered}
       onMouseDown={onMouseDown(tab)}
       onMouseEnter={onMouseEnter(tab)}
-      onMouseLeave={onMouseLeave(tab)}
+      onMouseLeave={onMouseLeave}
       isClosing={tab.isClosing}
       ref={tab.ref}
     >
@@ -91,59 +93,3 @@ export default observer(({ tab }: { tab: Tab }) => {
     </StyledTab>
   );
 });
-
-/*@observer
-class extends React.Component<, {}> {
-  private ripple = React.createRef<Ripple>();
-
-  public componentDidMount() {
-    const { tab } = this.props;
-  }
-
-  public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { pageX, pageY } = e;
-    const { tab } = this.props;
-
-    tab.select();
-
-    store.tabsStore.lastMouseX = 0;
-    store.tabsStore.isDragging = true;
-    store.tabsStore.mouseStartX = pageX;
-    store.tabsStore.tabStartX = tab.left;
-
-    store.tabsStore.lastScrollLeft =
-      store.tabsStore.containerRef.current.scrollLeft;
-
-    this.ripple.current.makeRipple(pageX, pageY);
-  };
-
-  public onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-  };
-
-  public onCloseClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-
-    this.props.tab.close();
-  };
-
-  public render() {
-    const { tab } = this.props;
-    const { title, isClosing, hovered, favicon, loading, isSelected } = tab;
-
-    const rightBorderVisible = true;
-
-    if (
-      hovered ||
-      isSelected ||
-      (tabIndex + 1 !== tabs.length &&
-        (tabs[tabIndex + 1].hovered ||
-          store.tabsStore.selectedTabId === tabs[tabIndex + 1].id))
-    ) {
-      rightBorderVisible = false;
-    }
-
-    return
-  }
-}
-*/
