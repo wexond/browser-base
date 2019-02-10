@@ -1,4 +1,4 @@
-import { ipcMain, app, Menu } from 'electron';
+import { ipcMain, app, Menu, session } from 'electron';
 import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { AppWindow } from './app-window';
@@ -8,6 +8,16 @@ ipcMain.setMaxListeners(0);
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
 export const appWindow = new AppWindow();
+
+session.defaultSession.setPermissionRequestHandler(
+  (webContents, permission, callback) => {
+    if (permission === 'notifications' || permission === 'fullscreen') {
+      callback(true);
+    } else {
+      callback(false);
+    }
+  },
+);
 
 app.on('ready', () => {
   // Create our menu entries so that we can use macOS shortcuts
