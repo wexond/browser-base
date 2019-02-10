@@ -32,6 +32,8 @@ export class Store {
     y: 0,
   };
 
+  public canToggleMenu = false;
+
   constructor() {
     ipcRenderer.on(
       'update-navigation-state',

@@ -35,6 +35,7 @@ export class AppWindow {
     };
 
     this.window = new BrowserWindow(windowData);
+    this.overlayWindow = new OverlayWindow();
 
     if (process.env.ENV === 'dev') {
       this.window.webContents.openDevTools({ mode: 'detach' });

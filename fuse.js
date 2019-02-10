@@ -74,10 +74,10 @@ const mainProcess = () => {
   fuse.run();
 };
 
-const renderer = () => {
-  const cfg = getRendererConfig('electron', 'app');
+const renderer = (name, port) => {
+  const cfg = getRendererConfig('electron', name);
 
-  cfg.plugins.push(getWebIndexPlugin('app'));
+  cfg.plugins.push(getWebIndexPlugin(name));
   cfg.plugins.push(JSONPlugin());
   cfg.plugins.push(getCopyPlugin());
   cfg.plugins.push(StyledComponentsPlugin());
@@ -85,26 +85,27 @@ const renderer = () => {
   const fuse = FuseBox.init(cfg);
 
   if (!production) {
-    fuse.dev({ httpServer: true });
+    fuse.dev({ httpServer: true, port, socketURI: `ws://localhost:${port}` });
   }
 
-  const app = fuse
-    .bundle('app')
-    .instructions('> [renderer/app/index.tsx]');
+  const app = fuse.bundle(name).instructions(`> [renderer/${name}/index.tsx]`);
 
   if (!production) {
-    app.hmr().watch();
+    app.hmr({ port, socketURI: `ws://localhost:${port}` }).watch();
 
-    return fuse.run().then(() => {
-      const child = spawn('npm', ['start'], {
-        shell: true,
-        stdio: 'inherit',
+    if (name === 'app') {
+      return fuse.run().then(() => {
+        const child = spawn('npm', ['start'], {
+          shell: true,
+          stdio: 'inherit',
+        });
       });
-    });
+    }
   }
 
   fuse.run();
 };
 
-renderer();
+renderer('app', 4444);
+renderer('overlay', 8080);
 mainProcess();

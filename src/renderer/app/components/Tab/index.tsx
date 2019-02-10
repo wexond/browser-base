@@ -15,6 +15,7 @@ import {
 } from './style';
 import { shadeBlendConvert } from '../../utils';
 import { colors, transparency } from '~/renderer/constants';
+import { ipcRenderer } from 'electron';
 
 const removeTab = (tab: Tab) => () => {
   tab.close();
@@ -46,6 +47,12 @@ const onMouseEnter = (tab: Tab) => () => {
 
 const onMouseLeave = () => {
   store.tabsStore.hoveredTabId = -1;
+};
+
+const onClick = () => {
+  if (store.canToggleMenu) {
+    ipcRenderer.send('show-overlay');
+  }
 };
 
 const Content = observer(({ tab }: { tab: Tab }) => {
@@ -106,6 +113,7 @@ export default observer(({ tab }: { tab: Tab }) => {
       hovered={tab.isHovered}
       onMouseDown={onMouseDown(tab)}
       onMouseEnter={onMouseEnter(tab)}
+      onClick={onClick}
       onMouseLeave={onMouseLeave}
       isClosing={tab.isClosing}
       ref={tab.ref}
