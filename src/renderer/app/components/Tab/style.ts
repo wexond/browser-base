@@ -5,11 +5,10 @@ import { icons, TABS_PADDING } from '~/renderer/app/constants';
 import { centerImage, body2 } from '~/shared/mixins';
 
 interface CloseProps {
-  hovered: boolean;
-  selected: boolean;
+  visible: boolean;
 }
 
-export const Close = styled.div`
+export const StyledClose = styled.div`
   position: absolute;
   right: 12px;
   height: 16px;
@@ -18,15 +17,14 @@ export const Close = styled.div`
   transition: 0.2s opacity, 0.2s filter;
   z-index: 2;
   ${centerImage('100%', '100%')};
-  opacity: ${({ hovered, selected }: CloseProps) =>
-    hovered || selected ? transparency.icons.inactive : 0};
+  opacity: ${({ visible }: CloseProps) =>
+    visible ? transparency.icons.inactive : 0};
 `;
 
 interface TabProps {
   selected: boolean;
   isClosing: boolean;
   hovered: boolean;
-  borderVisible: boolean;
 }
 
 export const StyledTab = styled.div`
@@ -47,17 +45,6 @@ export const StyledTab = styled.div`
   backface-visibility: hidden;
   margin-right: ${TABS_PADDING}px;
 
-  &:before {
-    content: '';
-    position: absolute;
-    width: 1px;
-    height: 20px;
-    background-color: rgba(0, 0, 0, ${transparency.dividers});
-    right: 0px;
-    ${({ borderVisible }: TabProps) => css`
-      visibility: ${borderVisible ? 'visible' : 'hidden'};
-    `};
-  }
   &:after {
     content: '';
     position: absolute;
@@ -77,12 +64,11 @@ export const StyledTab = styled.div`
 `;
 
 interface TitleProps {
-  favicon: string;
-  loading: boolean;
   selected: boolean;
+  isIcon: boolean;
 }
 
-export const Title = styled.div`
+export const StyledTitle = styled.div`
   ${body2()};
   font-size: 13px;
   overflow: hidden;
@@ -91,39 +77,49 @@ export const Title = styled.div`
   transition: 0.2s margin-left;
   margin-left: 12px;
 
-  ${({ favicon, loading, selected }: TitleProps) => css`
+  ${({ isIcon, selected }: TitleProps) => css`
     color: ${selected
       ? colors.blue['500']
       : `rgba(0, 0, 0, ${transparency.text.high})`};
-    margin-left: ${favicon === '' && !loading ? 0 : 12}px;
+    margin-left: ${!isIcon ? 0 : 12}px;
   `};
 `;
 
-export const Icon = styled.div`
+export const StyledIcon = styled.div`
   height: 16px;
   min-width: 16px;
   transition: 0.2s opacity, 0.2s width;
   ${centerImage('16px', '16px')};
-  ${({ favicon }: { favicon: string }) => css`
-    background-image: url(${favicon});
-    min-width: ${favicon === '' ? 0 : 16},
-    opacity: ${favicon === '' ? 0 : 1};
+  ${({ isIconSet }: { isIconSet: boolean }) => css`
+    min-width: ${isIconSet ? 0 : 16},
+    opacity: ${isIconSet ? 0 : 1};
   `};
 `;
 
 interface ContentProps {
-  hovered: boolean;
-  selected: boolean;
+  collapsed: boolean;
 }
 
-export const Content = styled.div`
+export const StyledContent = styled.div`
   position: absolute;
   overflow: hidden;
   z-index: 2;
   display: flex;
   transition: 0.1s max-width;
   margin-left: 16px;
-  ${({ hovered, selected }: ContentProps) => css`
-    max-width: calc(100% - ${24 + (hovered || selected ? 24 : 0)}px);
+  ${({ collapsed }: ContentProps) => css`
+    max-width: calc(100% - ${24 + (collapsed ? 24 : 0)}px);
+  `};
+`;
+
+export const StyledBorder = styled.div`
+  position: absolute;
+  width: 1px;
+  height: 20px;
+  background-color: rgba(0, 0, 0, ${transparency.dividers});
+  right: 0px;
+
+  ${({ visible }: { visible: boolean }) => css`
+    visibility: ${visible ? 'visible' : 'hidden'};
   `};
 `;

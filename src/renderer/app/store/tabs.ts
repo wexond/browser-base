@@ -62,6 +62,10 @@ export class TabsStore {
     return this.getTabById(this.selectedTabId);
   }
 
+  public get hoveredTab() {
+    return this.tabs.find(x => x.hovered);
+  }
+
   public getTabById(id: number) {
     return this.tabs.find(x => x.id === id);
   }
@@ -69,6 +73,7 @@ export class TabsStore {
   public addTab(options = defaultTabOptions) {
     const tab = new Tab(options, store.tabGroupsStore.currentGroupId);
     this.tabs.push(tab);
+    this.setPositions();
 
     requestAnimationFrame(() => {
       tab.setLeft(tab.getLeft(), false);
@@ -120,13 +125,10 @@ export class TabsStore {
     for (const tab of tabs) {
       tab.setLeft(left, animation);
 
-      left += tab.width + TABS_PADDING;
+      left += tab.width;
     }
 
-    store.addTabStore.setLeft(
-      Math.min(left, containerWidth + TABS_PADDING),
-      animation,
-    );
+    store.addTabStore.setLeft(Math.min(left, containerWidth), animation);
   }
 
   public replaceTab(firstTab: Tab, secondTab: Tab) {
@@ -136,6 +138,17 @@ export class TabsStore {
 
     firstTab.position = secondTab.position;
     secondTab.position = position1;
+  }
+
+  public setPositions() {
+    const tabs = this.tabs
+      .slice()
+      .filter(x => !x.isClosing)
+      .sort((a, b) => a.position - b.position);
+
+    for (let i = 0; i < tabs.length; i++) {
+      tabs[i].position = i;
+    }
   }
 
   public getTabsToReplace(callingTab: Tab, direction: string) {
