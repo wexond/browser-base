@@ -9,16 +9,6 @@ app.setPath('userData', resolve(homedir(), '.wexond'));
 
 export const appWindow = new AppWindow();
 
-session.defaultSession.setPermissionRequestHandler(
-  (webContents, permission, callback) => {
-    if (permission === 'notifications' || permission === 'fullscreen') {
-      callback(true);
-    } else {
-      callback(false);
-    }
-  },
-);
-
 app.on('ready', () => {
   // Create our menu entries so that we can use macOS shortcuts
   Menu.setApplicationMenu(
@@ -39,6 +29,16 @@ app.on('ready', () => {
         ],
       },
     ]),
+  );
+
+  session.defaultSession.setPermissionRequestHandler(
+    (webContents, permission, callback) => {
+      if (permission === 'notifications' || permission === 'fullscreen') {
+        callback(true);
+      } else {
+        callback(false);
+      }
+    },
   );
 
   appWindow.createWindow();
