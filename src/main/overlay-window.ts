@@ -44,6 +44,8 @@ export class OverlayWindow {
       show: platform() === 'win32',
       parent: appWindow.window,
       transparent: true,
+      fullscreenable: false,
+      titleBarStyle: 'default',
       skipTaskbar: true,
       resizable: false,
       webPreferences: {
