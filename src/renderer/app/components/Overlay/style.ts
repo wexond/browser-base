@@ -21,10 +21,21 @@ export const StyledOverlay = styled.div`
 `;
 
 export const HeaderText = styled.div`
-  display: flex;
-  align-items: center;
+  position: relative;
+  display: table;
   ${subtitle2()};
-  padding-bottom: 16px;
+  padding-left: 8px;
+  padding-top: 6px;
+  padding-right: 24px;
+  padding-bottom: 6px;
+  margin-left: -8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  transition: 0.2s background-color;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
 `;
 
 export const HeaderArrow = styled.div`
@@ -33,6 +44,11 @@ export const HeaderArrow = styled.div`
   height: 16px;
   width: 16px;
   background-image: url(${icons.forward});
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 4px;
 `;
 
 export const StyledTabGroup = styled.div`
@@ -44,6 +60,25 @@ export const StyledTabGroup = styled.div`
   color: white;
   border-radius: 50px;
   margin-right: 8px;
+
+  &:after {
+    content: '';
+    background-color: rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    border-radius: 50px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    transition: 0.2s opacity;
+  }
+
+  &:hover {
+    &:after {
+      opacity: 1;
+    }
+  }
 `;
 
 export const StyledTabGroups = styled.div`
@@ -71,7 +106,7 @@ export const SelectedIndicator = styled.div`
   width: 5px;
   height: 5px;
   position: absolute;
-  bottom: -8px;
+  bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
   border-radius: 50%;
@@ -84,7 +119,8 @@ export const Separator = styled.div`
   background-color: rgba(0, 0, 0, 0.12);
   height: 1px;
   width: 100%;
-  margin-top: 16px;
+  margin-top: 24px;
+  margin-bottom: 16px;
 `;
 
 export const Section = styled.div`

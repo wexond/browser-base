@@ -26,7 +26,7 @@ const onClick = () => {
 const Header = ({ children }: any) => {
   return (
     <HeaderText>
-      {children}
+      <div style={{ display: 'inline-block' }}>{children}</div>
       <HeaderArrow />
     </HeaderText>
   );
@@ -64,6 +64,9 @@ export const Overlay = observer(() => {
           <TabGroups />
         </Section>
         <Separator />
+        <Section>
+          <Header>Downloads</Header>
+        </Section>
       </BottomSheet>
     </StyledOverlay>
   );
