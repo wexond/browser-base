@@ -9,6 +9,7 @@ export const StyledBottomSheet = styled.div`
   left: 50%;
   width: 512px;
   transition: 0.2s transform;
+  will-change: transform;
   color: black;
 
   ${({ visible }: { visible: boolean }) => css`
