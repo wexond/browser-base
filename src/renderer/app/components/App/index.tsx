@@ -4,21 +4,14 @@ import { createGlobalStyle } from 'styled-components';
 
 import { Style } from '~/renderer/app/style';
 import { Toolbar } from '../Toolbar';
+import { Overlay } from '../Overlay';
 import { ipcRenderer } from 'electron';
-import { Line, Overlay } from './style';
-import store from '../../store';
+import { Line } from './style';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
 window.onbeforeunload = () => {
   ipcRenderer.send('browserview-clear');
-};
-
-const onClick = () => {
-  store.overlayVisible = false;
-  setTimeout(() => {
-    ipcRenderer.send('browserview-show');
-  }, 200);
 };
 
 export const App = observer(() => {
@@ -27,7 +20,7 @@ export const App = observer(() => {
       <GlobalStyle />
       <Toolbar />
       <Line />
-      <Overlay visible={store.overlayVisible} onClick={onClick} />
+      <Overlay />
     </React.Fragment>
   );
 });
