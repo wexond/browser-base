@@ -21,6 +21,7 @@ import { BottomSheet } from '../BottomSheet';
 import { colors } from '~/renderer/constants';
 
 const onClick = () => {
+  store.overlayTransition = true;
   store.overlayVisible = false;
   store.overlayExpanded = false;
   store.overlayBottom = 275;
@@ -92,47 +93,41 @@ export class Overlay extends React.Component {
 
   onWheel = (e: any) => {
     const rect = this.bsRef.getBoundingClientRect();
-    if (e.deltaY > 0) {
-      if (store.usingTrackpad || wasUsingTrackpad) {
-        store.overlayTransition = false;
 
-        store.overlayBottom += e.deltaY;
-        wasUsingTrackpad = true;
-
-        if (store.overlayBottom > rect.height) {
-          store.overlayBottom = rect.height;
-          wasUsingTrackpad = false;
-        }
-      } else if (!store.overlayExpanded) {
+    if (store.usingTrackpad || wasUsingTrackpad) {
+      store.overlayTransition = false;
+      wasUsingTrackpad = true;
+    } else if (e.deltaY > 0) {
+      if (!store.overlayExpanded) {
         requestAnimationFrame(() => {
           store.overlayTransition = true;
         });
         store.overlayBottom = Math.min(rect.height, window.innerHeight);
       } else {
         store.overlayBottom += e.deltaY;
-
-        if (store.overlayBottom > rect.height) {
-          store.overlayBottom = rect.height;
-        }
       }
+    }
 
+    if (store.usingTrackpad || wasUsingTrackpad || e.deltaY < 0) {
+      store.overlayBottom += e.deltaY;
+    }
+
+    if (store.overlayBottom > rect.height) {
+      store.overlayBottom = rect.height;
+      wasUsingTrackpad = false;
+    }
+
+    if (e.deltaY > 0) {
       store.overlayExpanded = true;
     } else if (e.deltaY < 0) {
-      if (store.usingTrackpad || wasUsingTrackpad) {
-        store.overlayTransition = false;
-        wasUsingTrackpad = true;
-      }
-
-      store.overlayBottom += e.deltaY;
-
       if (store.overlayBottom < 275) {
         store.overlayBottom = 275;
-        wasUsingTrackpad = false;
 
         if (store.overlayExpanded) {
           requestAnimationFrame(() => {
             store.overlayTransition = true;
           });
+          wasUsingTrackpad = false;
         } else if (wasUsingTrackpad) {
           store.overlayTransition = true;
           store.overlayVisible = false;
