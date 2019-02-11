@@ -4,11 +4,12 @@ import { StyledBottomSheet, SmallBar, Content } from './style';
 interface Props {
   visible?: boolean;
   children?: any;
+  onClick?: any;
 }
 
-export const BottomSheet = ({ visible, children }: Props) => {
+export const BottomSheet = ({ visible, children, onClick }: Props) => {
   return (
-    <StyledBottomSheet visible={visible}>
+    <StyledBottomSheet onClick={onClick} visible={visible}>
       <SmallBar />
       <Content>{children}</Content>
     </StyledBottomSheet>

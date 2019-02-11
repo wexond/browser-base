@@ -23,6 +23,10 @@ const onClick = () => {
   }, 200);
 };
 
+const onBsClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  e.stopPropagation();
+};
+
 const Header = ({ children }: any) => {
   return (
     <HeaderText>
@@ -58,7 +62,7 @@ const TabGroup = observer(({ selected, color }: any) => {
 export const Overlay = observer(() => {
   return (
     <StyledOverlay visible={store.overlayVisible} onClick={onClick}>
-      <BottomSheet visible={store.overlayVisible}>
+      <BottomSheet visible={store.overlayVisible} onClick={onBsClick}>
         <Section>
           <Header>Tab groups</Header>
           <TabGroups />
