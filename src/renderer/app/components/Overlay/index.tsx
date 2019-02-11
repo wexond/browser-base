@@ -80,6 +80,7 @@ let wasUsingTrackpad = false;
 @observer
 export class Overlay extends React.Component {
   private bsRef: HTMLDivElement;
+  private canHide: boolean = false;
 
   componentDidMount() {
     window.addEventListener('wheel', this.onWheel);
@@ -122,16 +123,22 @@ export class Overlay extends React.Component {
         wasUsingTrackpad = true;
       }
 
-      if (store.overlayExpanded) {
-        store.overlayBottom += e.deltaY;
-        if (store.overlayBottom < 275) {
-          store.overlayBottom = 275;
-          store.overlayExpanded = false;
-          wasUsingTrackpad = false;
+      store.overlayBottom += e.deltaY;
+
+      if (store.overlayBottom < 275) {
+        store.overlayBottom = 275;
+        wasUsingTrackpad = false;
+
+        if (store.overlayExpanded) {
           requestAnimationFrame(() => {
             store.overlayTransition = true;
           });
+        } else if (wasUsingTrackpad) {
+          store.overlayTransition = true;
+          store.overlayVisible = false;
         }
+
+        store.overlayExpanded = false;
       }
     }
   };
