@@ -117,6 +117,14 @@ export class BrowserViewManager {
     view.setAutoResize({ width: true, height: true });
   }
 
+  public hideView() {
+    appWindow.window.setBrowserView(null);
+  }
+
+  public showView() {
+    this.select(this.selectedId);
+  }
+
   public remove(tabId: number) {
     const view = this.views[tabId];
 

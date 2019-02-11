@@ -107,5 +107,4 @@ const renderer = (name, port) => {
 };
 
 renderer('app', 4444);
-renderer('overlay', 8080);
 mainProcess();

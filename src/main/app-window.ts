@@ -2,11 +2,9 @@ import { BrowserWindow, app } from 'electron';
 import { resolve, join } from 'path';
 import { platform } from 'os';
 
-import { OverlayWindow } from './overlay-window';
 import { BrowserViewManager } from './browser-view-manager';
 
 export class AppWindow {
-  public overlayWindow: OverlayWindow;
   public window: BrowserWindow;
   public browserViewManager: BrowserViewManager = new BrowserViewManager();
 
@@ -35,7 +33,6 @@ export class AppWindow {
     };
 
     this.window = new BrowserWindow(windowData);
-    this.overlayWindow = new OverlayWindow();
 
     if (process.env.ENV === 'dev') {
       this.window.webContents.openDevTools({ mode: 'detach' });
@@ -47,15 +44,6 @@ export class AppWindow {
     this.window.once('ready-to-show', () => {
       this.window.show();
     });
-
-    const onResize = () => {
-      if (this.overlayWindow.visible) {
-        this.overlayWindow.window.setBounds(this.window.getContentBounds());
-      }
-    };
-
-    this.window.on('resize', onResize);
-    this.window.on('move', onResize);
 
     this.window.on('closed', () => {
       this.window = null;
