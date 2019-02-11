@@ -47,6 +47,8 @@ export class OverlayWindow {
       fullscreenable: false,
       titleBarStyle: 'default',
       skipTaskbar: true,
+      thickFrame: false,
+      titleBarStyle: 'hiddenInset',
       resizable: false,
       webPreferences: {
         plugins: true,
