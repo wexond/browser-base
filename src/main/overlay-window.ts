@@ -45,6 +45,8 @@ export class OverlayWindow {
       parent: appWindow.window,
       transparent: true,
       skipTaskbar: true,
+      thickFrame: false,
+      titleBarStyle: 'hiddenInset',
       resizable: false,
       webPreferences: {
         plugins: true,
