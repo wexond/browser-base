@@ -49,8 +49,13 @@ export class AppWindow {
       this.window = null;
     });
 
+    this.window.on('scroll-touch-begin', () => {
+      this.window.webContents.send('scroll-touch-begin');
+    });
+
     this.window.on('scroll-touch-end', () => {
       this.browserViewManager.selected.webContents.send('scroll-touch-end');
+      this.window.webContents.send('scroll-touch-end');
     });
   }
 }

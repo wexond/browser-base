@@ -1,17 +1,42 @@
 import * as React from 'react';
-import { StyledBottomSheet, SmallBar, Content } from './style';
+import { StyledBottomSheet, SmallBar } from './style';
 
 interface Props {
   visible?: boolean;
   children?: any;
   onClick?: any;
+  bottom?: number;
+  innerRef?: any;
+  transition?: boolean;
 }
 
-export const BottomSheet = ({ visible, children, onClick }: Props) => {
+export const BottomSheet = ({
+  visible,
+  children,
+  bottom,
+  onClick,
+  innerRef,
+  transition,
+}: Props) => {
+  const transform = `translate(-50%, ${
+    visible ? `calc(100% - ${bottom}px)` : '100%'
+  })`;
+
   return (
-    <StyledBottomSheet onClick={onClick} visible={visible}>
+    <StyledBottomSheet
+      onClick={onClick}
+      style={{
+        transform,
+        transition: transition ? '0.2s transform' : '',
+      }}
+      ref={innerRef}
+    >
       <SmallBar />
-      <Content>{children}</Content>
+      {children}
     </StyledBottomSheet>
   );
+};
+
+BottomSheet.defaultProps = {
+  bottom: 0,
 };

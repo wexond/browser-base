@@ -120,19 +120,16 @@ export const Separator = styled.div`
   background-color: rgba(0, 0, 0, 0.12);
   height: 1px;
   width: 100%;
-  margin-top: 24px;
-  margin-bottom: 16px;
 `;
 
 export const Section = styled.div`
-  padding: 0 24px;
+  padding: 24px;
 `;
 
 export const Menu = styled.div`
   display: flex;
-  padding: 0 24px;
-  margin-top: -8px;
   margin-left: -16px;
+  margin-top: -16px;
   flex-wrap: wrap;
 `;
 
