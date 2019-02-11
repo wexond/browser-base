@@ -5,16 +5,12 @@ export const StyledBottomSheet = styled.div`
   bottom: 0;
   z-index: 99999;
   background-color: white;
-  border-radius: 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   left: 50%;
   width: 512px;
-  transition: 0.2s transform;
   will-change: transform;
   color: black;
-
-  ${({ visible }: { visible: boolean }) => css`
-    transform: translate(-50%, ${visible ? '8px' : '100%'});
-  `};
 `;
 
 export const SmallBar = styled.div`
@@ -26,8 +22,4 @@ export const SmallBar = styled.div`
   width: 32px;
   background-color: rgba(0, 0, 0, 0.12);
   margin-top: 8px;
-`;
-
-export const Content = styled.div`
-  padding: 16px 0 32px 0;
 `;

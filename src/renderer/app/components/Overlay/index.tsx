@@ -22,6 +22,9 @@ import { colors } from '~/renderer/constants';
 
 const onClick = () => {
   store.overlayVisible = false;
+  store.overlayExpanded = false;
+  store.overlayBottom = 275;
+
   setTimeout(() => {
     ipcRenderer.send('browserview-show');
   }, 200);
@@ -72,31 +75,94 @@ const MenuItem = ({ children }: any) => {
   );
 };
 
-export const Overlay = observer(() => {
-  return (
-    <StyledOverlay visible={store.overlayVisible} onClick={onClick}>
-      <BottomSheet visible={store.overlayVisible} onClick={onBsClick}>
-        <Section>
-          <Header>Tab groups</Header>
-          <TabGroups />
-        </Section>
-        <Separator />
-        <Section>
-          <Header>Downloads</Header>
-        </Section>
-        <Separator />
-        <Menu>
-          <MenuItem>History</MenuItem>
-          <MenuItem>Bookmarks</MenuItem>
-          <MenuItem>Downloads</MenuItem>
-          <MenuItem>Settings</MenuItem>
-          <MenuItem>Extensions</MenuItem>
-          <MenuItem>New window</MenuItem>
-          <MenuItem>New incognito window</MenuItem>
-          <MenuItem>Find</MenuItem>
-          <MenuItem>More tools</MenuItem>
-        </Menu>
-      </BottomSheet>
-    </StyledOverlay>
-  );
-});
+let wasUsingTrackpad = false;
+
+@observer
+export class Overlay extends React.Component {
+  private bsRef: HTMLDivElement;
+
+  componentDidMount() {
+    window.addEventListener('wheel', this.onWheel);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('wheel', this.onWheel);
+  }
+
+  onWheel = (e: any) => {
+    const rect = this.bsRef.getBoundingClientRect();
+    if (e.deltaY > 0) {
+      if (store.usingTrackpad || wasUsingTrackpad) {
+        store.overlayTransition = false;
+
+        store.overlayBottom += e.deltaY;
+        wasUsingTrackpad = true;
+
+        if (store.overlayBottom > rect.height) {
+          store.overlayBottom = rect.height;
+          wasUsingTrackpad = false;
+        }
+      } else if (!store.overlayExpanded) {
+        requestAnimationFrame(() => {
+          store.overlayTransition = true;
+        });
+        store.overlayBottom = window.innerHeight - 64;
+      }
+
+      store.overlayExpanded = true;
+    } else if (e.deltaY < 0) {
+      if (store.usingTrackpad || wasUsingTrackpad) {
+        store.overlayTransition = false;
+      }
+
+      if (store.overlayExpanded) {
+        store.overlayBottom += e.deltaY;
+        if (store.overlayBottom < 275) {
+          store.overlayBottom = 275;
+          store.overlayExpanded = false;
+          wasUsingTrackpad = false;
+          requestAnimationFrame(() => {
+            store.overlayTransition = true;
+          });
+        }
+      }
+    }
+  };
+
+  render() {
+    return (
+      <StyledOverlay visible={store.overlayVisible} onClick={onClick}>
+        <BottomSheet
+          visible={store.overlayVisible}
+          onClick={onBsClick}
+          bottom={store.overlayBottom}
+          transition={store.overlayTransition}
+          innerRef={(r: any) => (this.bsRef = r)}
+        >
+          <Section>
+            <Header>Tab groups</Header>
+            <TabGroups />
+          </Section>
+          <Separator />
+          <Section>
+            <Header>Downloads</Header>
+          </Section>
+          <Separator />
+          <Section>
+            <Menu>
+              <MenuItem>History</MenuItem>
+              <MenuItem>Bookmarks</MenuItem>
+              <MenuItem>Downloads</MenuItem>
+              <MenuItem>Settings</MenuItem>
+              <MenuItem>Extensions</MenuItem>
+              <MenuItem>New window</MenuItem>
+              <MenuItem>New incognito window</MenuItem>
+              <MenuItem>Find</MenuItem>
+              <MenuItem>More tools</MenuItem>
+            </Menu>
+          </Section>
+        </BottomSheet>
+      </StyledOverlay>
+    );
+  }
+}
