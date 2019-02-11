@@ -37,6 +37,14 @@ export class BrowserViewManager {
       },
     );
 
+    ipcMain.on('browserview-hide', () => {
+      this.hideView();
+    });
+
+    ipcMain.on('browserview-show', () => {
+      this.showView();
+    });
+
     setInterval(() => {
       for (const key in this.views) {
         const view = this.views[key];
