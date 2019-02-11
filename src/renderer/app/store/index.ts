@@ -27,6 +27,9 @@ export class Store {
     canGoForward: false,
   };
 
+  @observable
+  public overlayVisible = false;
+
   public mouse = {
     x: 0,
     y: 0,
