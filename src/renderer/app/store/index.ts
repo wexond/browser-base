@@ -30,6 +30,17 @@ export class Store {
   @observable
   public overlayVisible = false;
 
+  @observable
+  public overlayBottom = 275;
+
+  @observable
+  public overlayExpanded = false;
+
+  @observable
+  public overlayTransition = true;
+
+  public usingTrackpad = false;
+
   public mouse = {
     x: 0,
     y: 0,
@@ -44,6 +55,14 @@ export class Store {
         this.navigationState = data;
       },
     );
+
+    ipcRenderer.on('scroll-touch-begin', () => {
+      this.usingTrackpad = true;
+    });
+
+    ipcRenderer.on('scroll-touch-end', () => {
+      this.usingTrackpad = false;
+    });
   }
 }
 
