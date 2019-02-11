@@ -15,7 +15,7 @@ export const StyledClose = styled.div`
   width: 24px;
   background-image: url('${icons.close}');
   transition: 0.1s opacity;
-  z-index: 2;
+  z-index: 10;
   ${centerImage('16px', '16px')};
   opacity: ${({ visible }: CloseProps) =>
     visible ? transparency.icons.inactive : 0};

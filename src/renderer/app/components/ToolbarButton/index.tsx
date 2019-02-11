@@ -32,16 +32,10 @@ export default class ToolbarButton extends React.Component<Props, {}> {
   public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const { onMouseDown } = this.props;
 
-    this.ripple.current.makeRipple(e.pageX, e.pageY);
-
     if (typeof onMouseDown === 'function') {
       onMouseDown(e);
     }
   };
-
-  public componentDidMount() {
-    this.forceUpdate();
-  }
 
   public getSize = () => {
     if (this.ref) {

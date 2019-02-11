@@ -27,6 +27,8 @@ export interface IState {
   sizeTransition: boolean;
 }
 
+const easing = 'cubic-bezier(0.215, 0.61, 0.355, 1)';
+
 const getSize = (x: number, y: number, width: number, height: number) => {
   if (width === 0 || height === 0) {
     return 0;
@@ -83,6 +85,10 @@ export default class Ripple extends React.Component<IProps, IState> {
     });
   };
 
+  public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    this.makeRipple(e.pageX, e.pageY);
+  };
+
   public makeRipple(mouseX: number, mouseY: number) {
     const { opacity } = this.props;
     const {
@@ -115,7 +121,7 @@ export default class Ripple extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const { color, fadeOutTime, rippleTime } = this.props;
+    const { color, fadeOutTime, rippleTime, style } = this.props;
 
     const {
       rippleX,
@@ -127,19 +133,21 @@ export default class Ripple extends React.Component<IProps, IState> {
     } = this.state;
 
     return (
-      <Root ref={this.root}>
+      <Root onMouseDown={this.onMouseDown} ref={this.root} style={style}>
         <StyledRipple
-          fadeOutTime={fadeOutTime}
-          rippleTime={rippleTime}
-          opacity={rippleOpacity}
-          opacityTransition={opacityTransition}
-          sizeTransition={sizeTransition}
-          color={color}
           style={{
-            left: rippleX,
-            top: rippleY,
+            transform: `translate3d(calc(-50.1% + ${rippleX}px), calc(-50.1% + ${rippleY}px), 0)`,
             width: rippleSize,
             height: rippleSize,
+            transition: `0.3s background-color
+            ${
+              sizeTransition
+                ? `, ${rippleTime}s width ${easing}, ${rippleTime}s height ${easing}`
+                : ''
+            }
+            ${opacityTransition ? `, ${fadeOutTime}s opacity` : ''}`,
+            backgroundColor: color,
+            opacity: rippleOpacity,
           }}
         />
       </Root>
