@@ -11,6 +11,10 @@ import {
   SelectedIndicator,
   Separator,
   Section,
+  Menu,
+  StyledMenuItem,
+  Title,
+  Icon,
 } from './style';
 import { ipcRenderer } from 'electron';
 import { BottomSheet } from '../BottomSheet';
@@ -59,6 +63,15 @@ const TabGroup = observer(({ selected, color }: any) => {
   );
 });
 
+const MenuItem = ({ children }: any) => {
+  return (
+    <StyledMenuItem>
+      <Icon />
+      <Title>{children}</Title>
+    </StyledMenuItem>
+  );
+};
+
 export const Overlay = observer(() => {
   return (
     <StyledOverlay visible={store.overlayVisible} onClick={onClick}>
@@ -71,6 +84,18 @@ export const Overlay = observer(() => {
         <Section>
           <Header>Downloads</Header>
         </Section>
+        <Separator />
+        <Menu>
+          <MenuItem>History</MenuItem>
+          <MenuItem>Bookmarks</MenuItem>
+          <MenuItem>Downloads</MenuItem>
+          <MenuItem>Settings</MenuItem>
+          <MenuItem>Extensions</MenuItem>
+          <MenuItem>New window</MenuItem>
+          <MenuItem>New incognito window</MenuItem>
+          <MenuItem>Find</MenuItem>
+          <MenuItem>More tools</MenuItem>
+        </Menu>
       </BottomSheet>
     </StyledOverlay>
   );
