@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { body2, subtitle2, centerImage } from '~/shared/mixins';
+import { body2, subtitle2, centerImage, caption } from '~/shared/mixins';
 import { colors } from '~/renderer/constants';
 import { icons } from '../../constants';
 
@@ -30,8 +30,9 @@ export const HeaderText = styled.div`
   padding-bottom: 6px;
   margin-left: -8px;
   margin-bottom: 8px;
-  border-radius: 4px;
-  transition: 0.2s background-color;
+  border-radius: 50px;
+  transition: 0.1s background-color;
+  cursor: pointer;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.08);
@@ -71,7 +72,7 @@ export const StyledTabGroup = styled.div`
     top: 0;
     right: 0;
     bottom: 0;
-    transition: 0.2s opacity;
+    transition: 0.1s opacity;
   }
 
   &:hover {
@@ -94,7 +95,7 @@ export const AddTabGroup = styled.div`
   border-radius: 50px;
   ${centerImage('18px', '18px')};
   background-image: url(${icons.add});
-  transition: 0.2s opacity;
+  transition: 0.1s opacity;
 
   &:hover {
     opacity: 1;
@@ -125,4 +126,43 @@ export const Separator = styled.div`
 
 export const Section = styled.div`
   padding: 0 24px;
+`;
+
+export const Menu = styled.div`
+  display: flex;
+  padding: 0 24px;
+  margin-top: -8px;
+  margin-left: -16px;
+  flex-wrap: wrap;
+`;
+
+export const StyledMenuItem = styled.div`
+  border-radius: 8px;
+  min-width: 104px;
+  max-width: 104px;
+  height: 104px;
+  margin-left: 16px;
+  margin-top: 16px;
+  transition: 0.1s background-color;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+`;
+
+export const Icon = styled.div`
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.54);
+  width: 42px;
+  height: 42px;
+  margin-bottom: 16px;
+`;
+
+export const Title = styled.div`
+  ${caption()};
+  text-align: center;
 `;
