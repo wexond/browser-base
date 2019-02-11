@@ -11,15 +11,26 @@ export class OverlayWindow {
     this.createWindow();
 
     ipcMain.on('show-overlay', () => {
-      this.window.setResizable(false);
       this.window.setBounds(appWindow.window.getContentBounds());
+
+      if (platform() === 'win32') {
+        this.window.setResizable(false);
+      } else {
+        this.window.show();
+      }
+
       this.window.focus();
       this.visible = true;
     });
 
     ipcMain.on('hide-overlay', () => {
-      this.window.setResizable(true);
-      this.window.setSize(0, 0);
+      if (platform() === 'win32') {
+        this.window.setResizable(true);
+        this.window.setSize(0, 0);
+      } else {
+        this.window.hide();
+      }
+
       appWindow.window.focus();
       this.visible = false;
     });
@@ -30,12 +41,11 @@ export class OverlayWindow {
       frame: false,
       width: 0,
       height: 0,
-      show: true,
+      show: platform() === 'win32',
       parent: appWindow.window,
       transparent: true,
       skipTaskbar: true,
-      thickFrame: false,
-      titleBarStyle: 'hiddenInset',
+      resizable: false,
       webPreferences: {
         plugins: true,
         nodeIntegration: true,
