@@ -5,18 +5,23 @@ import { appWindow } from '.';
 
 export class OverlayWindow {
   public window: BrowserWindow;
+  public visible = false;
 
   constructor() {
     this.createWindow();
 
     ipcMain.on('show-overlay', () => {
+      this.window.setResizable(false);
       this.window.setBounds(appWindow.window.getContentBounds());
       this.window.focus();
+      this.visible = true;
     });
 
     ipcMain.on('hide-overlay', () => {
+      this.window.setResizable(true);
       this.window.setSize(0, 0);
       appWindow.window.focus();
+      this.visible = false;
     });
   }
 

@@ -48,6 +48,15 @@ export class AppWindow {
       this.window.show();
     });
 
+    const onResize = () => {
+      if (this.overlayWindow.visible) {
+        this.overlayWindow.window.setBounds(this.window.getContentBounds());
+      }
+    };
+
+    this.window.on('resize', onResize);
+    this.window.on('move', onResize);
+
     this.window.on('closed', () => {
       this.window = null;
     });
