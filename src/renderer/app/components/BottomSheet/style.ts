@@ -28,5 +28,5 @@ export const SmallBar = styled.div`
 `;
 
 export const Content = styled.div`
-  padding: 16px 0 24px 0;
+  padding: 16px 0 32px 0;
 `;
