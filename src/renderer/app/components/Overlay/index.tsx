@@ -106,13 +106,20 @@ export class Overlay extends React.Component {
         requestAnimationFrame(() => {
           store.overlayTransition = true;
         });
-        store.overlayBottom = window.innerHeight - 64;
+        store.overlayBottom = Math.min(rect.height, window.innerHeight);
+      } else {
+        store.overlayBottom += e.deltaY;
+
+        if (store.overlayBottom > rect.height) {
+          store.overlayBottom = rect.height;
+        }
       }
 
       store.overlayExpanded = true;
     } else if (e.deltaY < 0) {
       if (store.usingTrackpad || wasUsingTrackpad) {
         store.overlayTransition = false;
+        wasUsingTrackpad = true;
       }
 
       if (store.overlayExpanded) {
