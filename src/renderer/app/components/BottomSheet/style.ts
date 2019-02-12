@@ -8,7 +8,7 @@ export const StyledBottomSheet = styled.div`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   left: 50%;
-  width: 512px;
+  width: 700px;
   will-change: transform;
   color: black;
 `;
