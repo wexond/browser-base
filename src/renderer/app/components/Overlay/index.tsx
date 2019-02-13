@@ -81,7 +81,6 @@ let wasUsingTrackpad = false;
 @observer
 export class Overlay extends React.Component {
   private bsRef: HTMLDivElement;
-  private canHide: boolean = false;
 
   componentDidMount() {
     window.addEventListener('wheel', this.onWheel);
@@ -94,32 +93,31 @@ export class Overlay extends React.Component {
   onWheel = (e: any) => {
     const rect = this.bsRef.getBoundingClientRect();
 
-    if (store.usingTrackpad || wasUsingTrackpad) {
-      store.overlayTransition = false;
-      wasUsingTrackpad = true;
-    } else if (e.deltaY > 0) {
+    const maxBottom = Math.min(rect.height, window.innerHeight - 8);
+
+    console.log(e.deltaMode);
+
+    if (e.deltaY > 0) {
       if (!store.overlayExpanded) {
         requestAnimationFrame(() => {
           store.overlayTransition = true;
         });
-        store.overlayBottom = Math.min(rect.height, window.innerHeight);
+        store.overlayBottom = maxBottom;
+        store.overlayExpanded = true;
       } else {
         store.overlayBottom += e.deltaY;
+
+        if (store.overlayBottom > rect.height) {
+          store.overlayBottom = rect.height;
+        }
       }
-    }
-
-    if (store.usingTrackpad || wasUsingTrackpad || e.deltaY < 0) {
-      store.overlayBottom += e.deltaY;
-    }
-
-    if (store.overlayBottom > rect.height) {
-      store.overlayBottom = rect.height;
-      wasUsingTrackpad = false;
-    }
-
-    if (e.deltaY > 0) {
-      store.overlayExpanded = true;
     } else if (e.deltaY < 0) {
+      if (store.overlayBottom === maxBottom) {
+        store.overlayBottom = 275;
+      }
+
+      store.overlayBottom += e.deltaY;
+
       if (store.overlayBottom < 275) {
         store.overlayBottom = 275;
 
@@ -128,9 +126,6 @@ export class Overlay extends React.Component {
             store.overlayTransition = true;
           });
           wasUsingTrackpad = false;
-        } else if (wasUsingTrackpad) {
-          store.overlayTransition = true;
-          store.overlayVisible = false;
         }
 
         store.overlayExpanded = false;
