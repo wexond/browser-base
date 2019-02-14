@@ -73,8 +73,11 @@ export class Overlay extends React.Component {
 
     if (e.deltaY > 0) {
       if (target.scrollTop === 0) {
+        const bsHeight = this.bsRef.getBoundingClientRect().height;
+        const newScrollTop = Math.min(window.innerHeight - 8, bsHeight);
+
         TweenLite.to(target, 0.2, {
-          scrollTop: target.scrollHeight - window.innerHeight,
+          scrollTop: newScrollTop - 275,
         });
       }
     } else {
