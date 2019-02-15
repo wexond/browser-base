@@ -15,7 +15,7 @@ export const BottomSheet = ({
   innerRef,
 }: Props) => {
   return (
-    <StyledBottomSheet onClick={onClick} ref={innerRef}>
+    <StyledBottomSheet onClick={onClick} visible={visible} ref={innerRef}>
       <SmallBar />
       {children}
     </StyledBottomSheet>
