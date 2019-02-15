@@ -167,3 +167,17 @@ export const Title = styled.div`
   ${caption()};
   text-align: center;
 `;
+
+export const Scrollable = styled.div`
+  position: absolute;
+  z-index: 9999;
+  overflow-y: scroll;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;

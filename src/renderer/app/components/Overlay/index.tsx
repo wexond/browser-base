@@ -15,25 +15,13 @@ import {
   StyledMenuItem,
   Title,
   Icon,
+  Scrollable,
 } from './style';
 import { ipcRenderer } from 'electron';
 import { BottomSheet } from '../BottomSheet';
 import { colors } from '~/renderer/constants';
-
-const onClick = () => {
-  store.overlayTransition = true;
-  store.overlayVisible = false;
-  store.overlayExpanded = false;
-  store.overlayBottom = 275;
-
-  setTimeout(() => {
-    ipcRenderer.send('browserview-show');
-  }, 200);
-};
-
-const onBsClick = (e: React.MouseEvent<HTMLDivElement>) => {
-  e.stopPropagation();
-};
+import { TweenLite } from 'gsap';
+import { TAB_ANIMATION_EASING } from '../../constants';
 
 const Header = ({ children }: any) => {
   return (
@@ -76,96 +64,76 @@ const MenuItem = ({ children }: any) => {
   );
 };
 
-let wasUsingTrackpad = false;
-
 @observer
 export class Overlay extends React.Component {
   private bsRef: HTMLDivElement;
 
-  componentDidMount() {
-    window.addEventListener('wheel', this.onWheel);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('wheel', this.onWheel);
-  }
-
-  onWheel = (e: any) => {
-    const rect = this.bsRef.getBoundingClientRect();
-
-    const maxBottom = Math.min(rect.height, window.innerHeight - 8);
-
-    console.log(e.deltaMode);
+  onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
 
     if (e.deltaY > 0) {
-      if (!store.overlayExpanded) {
-        requestAnimationFrame(() => {
-          store.overlayTransition = true;
+      if (target.scrollTop === 0) {
+        TweenLite.to(target, 0.2, {
+          scrollTop: target.scrollHeight - window.innerHeight,
         });
-        store.overlayBottom = maxBottom;
-        store.overlayExpanded = true;
-      } else {
-        store.overlayBottom += e.deltaY;
-
-        if (store.overlayBottom > rect.height) {
-          store.overlayBottom = rect.height;
-        }
       }
-    } else if (e.deltaY < 0) {
-      if (store.overlayBottom === maxBottom) {
-        store.overlayBottom = 275;
-      }
-
-      store.overlayBottom += e.deltaY;
-
-      if (store.overlayBottom < 275) {
-        store.overlayBottom = 275;
-
-        if (store.overlayExpanded) {
-          requestAnimationFrame(() => {
-            store.overlayTransition = true;
-          });
-          wasUsingTrackpad = false;
-        }
-
-        store.overlayExpanded = false;
+    } else {
+      if (target.scrollTop === target.scrollHeight - window.innerHeight) {
+        TweenLite.to(target, 0.2, {
+          scrollTop: 0,
+        });
       }
     }
   };
 
+  onClick = () => {
+    store.overlayTransition = true;
+    store.overlayVisible = false;
+    store.overlayExpanded = false;
+    store.overlayBottom = 275;
+
+    setTimeout(() => {
+      ipcRenderer.send('browserview-show');
+    }, 200);
+  };
+
+  onBsClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
   render() {
     return (
-      <StyledOverlay visible={store.overlayVisible} onClick={onClick}>
-        <BottomSheet
-          visible={store.overlayVisible}
-          onClick={onBsClick}
-          bottom={store.overlayBottom}
-          transition={store.overlayTransition}
-          innerRef={(r: any) => (this.bsRef = r)}
-        >
-          <Section>
-            <Header>Tab groups</Header>
-            <TabGroups />
-          </Section>
-          <Separator />
-          <Section>
-            <Header>Downloads</Header>
-          </Section>
-          <Separator />
-          <Section>
-            <Menu>
-              <MenuItem>History</MenuItem>
-              <MenuItem>Bookmarks</MenuItem>
-              <MenuItem>Downloads</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Extensions</MenuItem>
-              <MenuItem>New window</MenuItem>
-              <MenuItem>New incognito window</MenuItem>
-              <MenuItem>Find</MenuItem>
-              <MenuItem>More tools</MenuItem>
-            </Menu>
-          </Section>
-        </BottomSheet>
+      <StyledOverlay visible={store.overlayVisible} onClick={this.onClick}>
+        <Scrollable onWheel={this.onWheel}>
+          <BottomSheet
+            visible={store.overlayVisible}
+            onClick={this.onBsClick}
+            innerRef={(r: any) => (this.bsRef = r)}
+          >
+            <Section>
+              <Header>Tab groups</Header>
+              <TabGroups />
+            </Section>
+            <Separator />
+            <Section>
+              <Header>Downloads</Header>
+            </Section>
+            <Separator />
+            <Section>
+              <Menu>
+                <MenuItem>History</MenuItem>
+                <MenuItem>Bookmarks</MenuItem>
+                <MenuItem>Downloads</MenuItem>
+                <MenuItem>Settings</MenuItem>
+                <MenuItem>Extensions</MenuItem>
+                <MenuItem>New window</MenuItem>
+                <MenuItem>New incognito window</MenuItem>
+                <MenuItem>Find</MenuItem>
+                <MenuItem>More tools</MenuItem>
+              </Menu>
+            </Section>
+          </BottomSheet>
+        </Scrollable>
       </StyledOverlay>
     );
   }
