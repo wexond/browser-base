@@ -70,21 +70,21 @@ export class Overlay extends React.Component {
 
   onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
+    const bsHeight = this.bsRef.getBoundingClientRect().height;
 
-    if (e.deltaY > 0) {
-      if (target.scrollTop === 0) {
-        const bsHeight = this.bsRef.getBoundingClientRect().height;
-        const newScrollTop = Math.min(window.innerHeight - 8, bsHeight);
-
-        TweenLite.to(target, 0.2, {
-          scrollTop: newScrollTop - 275,
-        });
-      }
-    } else {
-      if (target.scrollTop === target.scrollHeight - window.innerHeight) {
-        TweenLite.to(target, 0.2, {
-          scrollTop: 0,
-        });
+    if (bsHeight <= window.innerHeight) {
+      if (e.deltaY > 0) {
+        if (target.scrollTop === 0) {
+          TweenLite.to(target, 0.2, {
+            scrollTop: bsHeight - 275,
+          });
+        }
+      } else {
+        if (target.scrollTop === target.scrollHeight - window.innerHeight) {
+          TweenLite.to(target, 0.2, {
+            scrollTop: 0,
+          });
+        }
       }
     }
   };
