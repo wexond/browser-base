@@ -52,8 +52,7 @@ const onMouseLeave = () => {
 
 const onClick = () => {
   if (store.canToggleMenu) {
-    ipcRenderer.send('browserview-hide');
-    store.overlayVisible = true;
+    store.overlayStore.visible = true;
   }
 };
 
