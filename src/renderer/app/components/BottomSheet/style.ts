@@ -2,14 +2,14 @@ import styled, { css } from 'styled-components';
 
 export const StyledBottomSheet = styled.div`
   position: absolute;
-  bottom: 0;
+  top: calc(100% - 275px);
   z-index: 99999;
   background-color: white;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   left: 50%;
+  transform: translateX(-50%);
   width: 700px;
-  will-change: transform;
   color: black;
 `;
 
