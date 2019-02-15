@@ -67,6 +67,7 @@ const MenuItem = ({ children }: any) => {
 @observer
 export class Overlay extends React.Component {
   private bsRef: HTMLDivElement;
+  public scrollRef = React.createRef<HTMLDivElement>();
 
   onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
@@ -90,26 +91,24 @@ export class Overlay extends React.Component {
   };
 
   onClick = () => {
-    store.overlayTransition = true;
-    store.overlayVisible = false;
-    store.overlayExpanded = false;
-    store.overlayBottom = 275;
-
-    setTimeout(() => {
-      ipcRenderer.send('browserview-show');
-    }, 200);
+    store.overlayStore.visible = false;
   };
 
   onBsClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
 
+  show() {}
+
   render() {
     return (
-      <StyledOverlay visible={store.overlayVisible} onClick={this.onClick}>
-        <Scrollable onWheel={this.onWheel}>
+      <StyledOverlay
+        visible={store.overlayStore.visible}
+        onClick={this.onClick}
+      >
+        <Scrollable onWheel={this.onWheel} ref={this.scrollRef}>
           <BottomSheet
-            visible={store.overlayVisible}
+            visible={store.overlayStore.visible}
             onClick={this.onBsClick}
             innerRef={(r: any) => (this.bsRef = r)}
           >
