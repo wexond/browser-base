@@ -7,6 +7,7 @@ import { Toolbar } from '../Toolbar';
 import { Overlay } from '../Overlay';
 import { ipcRenderer } from 'electron';
 import { Line } from './style';
+import store from '../../store';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -20,7 +21,7 @@ export const App = observer(() => {
       <GlobalStyle />
       <Toolbar />
       <Line />
-      <Overlay />
+      <Overlay ref={store.overlayStore.ref} />
     </React.Fragment>
   );
 });
