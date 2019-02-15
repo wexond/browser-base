@@ -2,13 +2,15 @@ import styled, { css } from 'styled-components';
 
 export const StyledBottomSheet = styled.div`
   position: absolute;
-  top: calc(100% - 275px);
+  top: ${({ visible }: { visible: boolean }) =>
+    visible ? 'calc(100% - 275px)' : '100%'};
   z-index: 99999;
   background-color: white;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   left: 50%;
   transform: translateX(-50%);
+  transition: 0.3s top;
   width: 700px;
   color: black;
 `;
