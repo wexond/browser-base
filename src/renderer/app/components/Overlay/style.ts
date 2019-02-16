@@ -61,14 +61,15 @@ export const StyledTabGroup = styled.div`
   color: white;
   border-radius: 50px;
   margin-right: 8px;
-  transition: 0.1s opacity, 0.1s padding;
+  transition: 0.1s opacity, 0.2s padding;
 
   ${({ selected }: { selected: boolean }) => css`
     opacity: ${selected ? 1 : 0.54};
+    padding-right: ${selected ? '32px' : '12px'};
 
     &:hover {
       opacity: 1;
-      padding: 0 32px 0 12px;
+      padding-right: 32px;
 
       div${TabGroupClose} {
         opacity: 1;
@@ -86,9 +87,6 @@ export const TabGroupContent = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  ${({ selected }: { selected: boolean }) => css`
-    max-width: ${selected ? 'calc(100% - 8px)' : '100%'};
-  `}
 `;
 
 export const TabGroupClose = styled.div`
