@@ -41,10 +41,15 @@ export class FaviconsStore {
       reader.onload = () => {
         const generatedBuffer: any = reader.result;
 
+        const buf = Buffer.from(generatedBuffer);
+        const data = JSON.stringify(buf);
+
         this.db.insert({
           url,
-          data: JSON.stringify(Buffer.from(generatedBuffer)),
+          data,
         });
+
+        this.favicons[url] = window.URL.createObjectURL(new Blob([buf]));
       };
 
       reader.readAsArrayBuffer(new Blob([data]));
