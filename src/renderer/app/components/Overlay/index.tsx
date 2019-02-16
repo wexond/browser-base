@@ -1,10 +1,11 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
+import { TweenLite } from 'gsap';
+
 import store from '../../store';
 import {
   StyledOverlay,
   HeaderText,
-  StyledTabGroup,
   StyledTabGroups,
   AddTabGroup,
   HeaderArrow,
@@ -12,14 +13,12 @@ import {
   Section,
   Menu,
   Scrollable,
-  TabGroupContent,
-  TabGroupClose,
 } from './style';
 import { BottomSheet } from '../BottomSheet';
 import { colors } from '~/renderer/constants';
-import { TweenLite } from 'gsap';
 import { SearchBox } from '../SearchBox';
 import { MenuItem } from '../MenuItem';
+import { TabGroup } from '../TabGroup';
 
 const Header = ({ children }: any) => {
   return (
@@ -39,20 +38,6 @@ const TabGroups = observer(() => {
       <TabGroup selected={false} color={colors.green['500']} />
       <AddTabGroup />
     </StyledTabGroups>
-  );
-});
-
-const TabGroup = observer(({ selected, color }: any) => {
-  return (
-    <StyledTabGroup
-      style={{
-        backgroundColor: color,
-      }}
-      selected={selected}
-    >
-      <TabGroupContent>Tab group</TabGroupContent>
-      <TabGroupClose selected={selected} />
-    </StyledTabGroup>
   );
 });
 
