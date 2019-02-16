@@ -66,16 +66,9 @@ export default class Ripple extends React.Component<IProps, IState> {
 
   private root = React.createRef<HTMLDivElement>();
 
-  public componentDidMount() {
-    window.addEventListener('mouseup', this.onMouseUp);
-  }
-
-  public componentWillUnmount() {
-    window.removeEventListener('mouseup', this.onMouseUp);
-  }
-
   public onMouseUp = () => {
     this.fadeOut();
+    window.removeEventListener('mouseup', this.onMouseUp);
   };
 
   public fadeOut = () => {
@@ -97,6 +90,8 @@ export default class Ripple extends React.Component<IProps, IState> {
       width,
       height,
     } = this.root.current.getBoundingClientRect();
+
+    window.addEventListener('mouseup', this.onMouseUp);
 
     const x = mouseX - left;
     const y = mouseY - top;
