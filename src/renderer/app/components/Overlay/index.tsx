@@ -20,6 +20,8 @@ import {
   Input,
   SearchIcon,
   InputContainer,
+  TabGroupContent,
+  TabGroupClose,
 } from './style';
 import { BottomSheet } from '../BottomSheet';
 import { colors } from '~/renderer/constants';
@@ -52,9 +54,10 @@ const TabGroup = observer(({ selected, color }: any) => {
       style={{
         backgroundColor: color,
       }}
+      selected={selected}
     >
-      Tab group
-      <SelectedIndicator visible={selected} />
+      <TabGroupContent selected={selected}>Tab group</TabGroupContent>
+      <TabGroupClose selected={selected} />
     </StyledTabGroup>
   );
 });

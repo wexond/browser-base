@@ -61,25 +61,48 @@ export const StyledTabGroup = styled.div`
   color: white;
   border-radius: 50px;
   margin-right: 8px;
+  transition: 0.1s opacity, 0.1s padding;
 
-  &:after {
-    content: '';
-    background-color: rgba(255, 255, 255, 0.2);
-    opacity: 0;
-    position: absolute;
-    left: 0;
-    border-radius: 50px;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    transition: 0.1s opacity;
-  }
+  ${({ selected }: { selected: boolean }) => css`
+    opacity: ${selected ? 1 : 0.54};
 
-  &:hover {
-    &:after {
+    &:hover {
       opacity: 1;
+      padding: 0 32px 0 12px;
+
+      div${TabGroupClose} {
+        opacity: 1;
+      }
+
+      div${TabGroupContent} {
+        max-width: 100%;
+      }
     }
-  }
+  `}
+`;
+
+export const TabGroupContent = styled.div`
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  ${({ selected }: { selected: boolean }) => css`
+    max-width: ${selected ? 'calc(100% - 8px)' : '100%'};
+  `}
+`;
+
+export const TabGroupClose = styled.div`
+  position: absolute;
+  right: 8px;
+  background-image: url(${icons.close});
+  ${centerImage('16px', '16px')};
+  width: 16px;
+  height: 16px;
+  filter: invert(100%);
+
+  ${({ selected }: { selected: boolean }) => css`
+    opacity: ${selected ? 1 : 0};
+  `}
 `;
 
 export const StyledTabGroups = styled.div`
