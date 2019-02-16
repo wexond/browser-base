@@ -6,9 +6,11 @@ import { ipcRenderer } from 'electron';
 import { OverlayStore } from './overlay';
 import { HistoryStore } from './history';
 import { FaviconsStore } from './favicons';
+import { SuggestionsStore } from './suggestions';
 
 export class Store {
   public historyStore = new HistoryStore();
+  public suggestionsStore = new SuggestionsStore();
   public faviconsStore = new FaviconsStore();
   public addTabStore = new AddTabStore();
   public tabGroupsStore = new TabGroupsStore();
