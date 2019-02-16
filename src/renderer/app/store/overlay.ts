@@ -29,12 +29,11 @@ export class OverlayStore {
     } else {
       this.scrollRef.current.scrollTop = 0;
       ipcRenderer.send('browserview-hide');
-      this.inputRef.current.focus();
 
       callBrowserViewMethod(store.tabsStore.selectedTabId, 'getURL').then(
         (url: string) => {
           this.inputRef.current.value = url;
-          this.inputRef.current.select();
+          this.inputRef.current.focus();
         },
       );
     }
