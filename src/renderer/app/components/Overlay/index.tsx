@@ -34,7 +34,7 @@ const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     if (e.deltaY > 0) {
       if (target.scrollTop === 0) {
         TweenLite.to(target, 0.2, {
-          scrollTop: bsHeight - 275,
+          scrollTop: bsHeight - 128,
         });
       }
     } else {
