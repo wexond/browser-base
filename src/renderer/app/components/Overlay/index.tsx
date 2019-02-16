@@ -19,6 +19,7 @@ import {
   SearchBox,
   Input,
   SearchIcon,
+  InputContainer,
 } from './style';
 import { ipcRenderer } from 'electron';
 import { BottomSheet } from '../BottomSheet';
@@ -109,11 +110,13 @@ export class Overlay extends React.Component {
         onClick={this.onClick}
       >
         <SearchBox onClick={this.onSearchClick}>
-          <SearchIcon />
-          <Input
-            placeholder="Search or type in URL"
-            ref={store.overlayStore.inputRef}
-          />
+          <InputContainer>
+            <SearchIcon />
+            <Input
+              placeholder="Search or type in URL"
+              ref={store.overlayStore.inputRef}
+            />
+          </InputContainer>
         </SearchBox>
         <Scrollable onWheel={this.onWheel} ref={store.overlayStore.scrollRef}>
           <BottomSheet
