@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { shadows } from '~/shared/mixins';
 
 export const StyledBottomSheet = styled.div`
   position: absolute;
@@ -13,6 +14,7 @@ export const StyledBottomSheet = styled.div`
   transition: 0.3s top;
   width: 700px;
   color: black;
+  box-shadow: ${shadows(4)};
 `;
 
 export const SmallBar = styled.div`
