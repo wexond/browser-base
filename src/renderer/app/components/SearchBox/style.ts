@@ -9,7 +9,7 @@ export const StyledSearchBox = styled.div`
   width: 700px;
   z-index: 2;
   background-color: white;
-  border-radius: 30px;
+  border-radius: 20px;
   transform: translateX(-50%);
   display: flex;
   flex-flow: column;
