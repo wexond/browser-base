@@ -27,6 +27,7 @@ export class OverlayStore {
     } else {
       this.scrollRef.current.scrollTop = 0;
       ipcRenderer.send('browserview-hide');
+      this.inputRef.current.focus();
     }
 
     this._visible = val;

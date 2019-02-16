@@ -21,7 +21,3 @@ export const BottomSheet = ({
     </StyledBottomSheet>
   );
 };
-
-BottomSheet.defaultProps = {
-  bottom: 0,
-};
