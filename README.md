@@ -2,7 +2,6 @@
   <img src="static/app-icons/icon.png" width="256">
 </p>
 
-
 <div align="center">
   <h1>Wexond</h1>
 
@@ -33,6 +32,18 @@ Wexond is an extensible web browser with a totally different user experience, bu
 # Screenshots
 
 ![Home page](screenshots/screenshot-1.png)
+
+### Advanced tabs system
+
+![](screenshots/screen1.gif)
+
+### Support for theme-color
+
+![](screenshots/screen2.gif)
+
+### Overlay with everything you need
+
+![](screenshots/screen3.gif)
 
 # [Downloads](https://github.com/wexond/wexond/releases)
 
@@ -96,4 +107,5 @@ Guides and the API reference are located in [`docs`](docs).
 It also contains documents describing how to use the browser, and create themes.
 
 # Authors
+
 [@sentialx](https://github.com/sentialx)
