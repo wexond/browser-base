@@ -65,7 +65,7 @@ export const Overlay = observer(() => {
           onClick={onBsClick}
           innerRef={(r: any) => (store.overlayStore.bsRef = r)}
         >
-          <Section>
+          <Section style={{ paddingTop: 8 }}>
             <Header>Tab groups</Header>
             <TabGroups />
           </Section>
