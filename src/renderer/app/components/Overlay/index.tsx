@@ -127,6 +127,10 @@ export class Overlay extends React.Component {
     }
   };
 
+  public onInputFocus = () => {
+    store.overlayStore.inputRef.current.select();
+  };
+
   render() {
     return (
       <StyledOverlay
@@ -139,6 +143,7 @@ export class Overlay extends React.Component {
             <Input
               placeholder="Search or type in URL"
               onKeyPress={this.onKeyPress}
+              onFocus={this.onInputFocus}
               ref={store.overlayStore.inputRef}
             />
           </InputContainer>
