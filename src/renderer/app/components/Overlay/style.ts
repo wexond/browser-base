@@ -123,20 +123,6 @@ export const AddTabGroup = styled.div`
   }
 `;
 
-export const SelectedIndicator = styled.div`
-  background-color: rgba(0, 0, 0, 0.54);
-  width: 5px;
-  height: 5px;
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 50%;
-
-  display: ${({ visible }: { visible: boolean }) =>
-    visible ? 'block' : 'none'};
-`;
-
 export const Separator = styled.div`
   background-color: rgba(0, 0, 0, 0.12);
   height: 1px;
@@ -200,41 +186,4 @@ export const Scrollable = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-`;
-
-export const SearchBox = styled.div`
-  position: absolute;
-  top: 15%;
-  left: 50%;
-  width: 700px;
-  z-index: 2;
-  background-color: white;
-  border-radius: 30px;
-  transform: translateX(-50%);
-  display: flex;
-  flex-flow: column;
-`;
-
-export const SearchIcon = styled.div`
-  ${centerImage('16px', '16px')};
-  background-image: url(${icons.search});
-  height: 16px;
-  min-width: 16px;
-  margin-left: 16px;
-`;
-
-export const Input = styled.input`
-  height: 100%;
-  flex: 1;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  color: black;
-  margin-left: 16px;
-`;
-
-export const InputContainer = styled.div`
-  display: flex;
-  align-items: center;
-  height: 42px;
 `;
