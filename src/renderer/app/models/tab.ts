@@ -125,6 +125,7 @@ export class Tab {
       `browserview-favicon-updated-${this.id}`,
       (e: any, favicon: string) => {
         this.favicon = favicon;
+        store.faviconsStore.addFavicon(favicon);
         this.updateData();
       },
     );
