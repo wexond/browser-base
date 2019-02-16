@@ -95,6 +95,14 @@ export class AppWindow {
       this.window = null;
     });
 
+    this.window.on('enter-full-screen', () => {
+      this.window.webContents.send('fullscreen', true);
+    });
+
+    this.window.on('leave-full-screen', () => {
+      this.window.webContents.send('fullscreen', false);
+    });
+
     this.window.on('scroll-touch-begin', () => {
       this.window.webContents.send('scroll-touch-begin');
     });
