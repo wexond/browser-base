@@ -7,13 +7,15 @@
       true,
       "ban-keywords",
       "check-format",
-      "allow-pascal-case"
+      "allow-pascal-case",
+      "allow-leading-underscore"
     ],
     "import-name": false,
     "ter-arrow-parens": false,
     "no-parameter-reassignment": false,
     "object-shorthand-properties-first": false,
     "semicolon": false,
-    "align": false
+    "align": false,
+    "no-this-assignment": false
   }
 }

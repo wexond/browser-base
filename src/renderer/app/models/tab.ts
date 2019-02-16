@@ -43,8 +43,12 @@ export class Tab {
   public background: string = colors.blue['500'];
 
   public left = 0;
-
   public tempPosition = id;
+  public url = '';
+  public lastUrl = '';
+  public isClosing = false;
+  public ref = React.createRef<HTMLDivElement>();
+  public lastHistoryId: string;
 
   @computed
   public get isSelected() {
@@ -86,14 +90,6 @@ export class Tab {
     return this.favicon !== '' || this.loading;
   }
 
-  public url: string = '';
-
-  public isClosing: boolean = false;
-
-  public ref = React.createRef<HTMLDivElement>();
-
-  public currentX = 0;
-
   constructor({ url, active } = defaultTabOptions, tabGroupId: number) {
     this.tabGroupId = tabGroupId;
     this.url = url;
@@ -107,9 +103,21 @@ export class Tab {
     });
 
     ipcRenderer.on(
-      `browserview-title-updated-${this.id}`,
-      (e: any, title: string) => {
+      `browserview-data-updated-${this.id}`,
+      async (e: any, { title, url }: any) => {
+        if (url !== this.url) {
+          this.lastHistoryId = await store.historyStore.addItem({
+            title: this.title,
+            url,
+            favicon: this.favicon,
+            date: new Date().toString(),
+          });
+        }
+
         this.title = title;
+        this.url = url;
+
+        this.updateData();
       },
     );
 
@@ -117,6 +125,7 @@ export class Tab {
       `browserview-favicon-updated-${this.id}`,
       (e: any, favicon: string) => {
         this.favicon = favicon;
+        this.updateData();
       },
     );
 
@@ -130,6 +139,33 @@ export class Tab {
         }
       },
     );
+  }
+
+  public updateData() {
+    if (this.lastHistoryId) {
+      const { title, url, favicon } = this;
+
+      const item = store.historyStore.getById(this.lastHistoryId);
+
+      if (item) {
+        item.title = title;
+        item.url = url;
+        item.favicon = favicon;
+      }
+
+      store.historyStore.db.update(
+        {
+          _id: this.lastHistoryId,
+        },
+        {
+          $set: {
+            title,
+            url,
+            favicon,
+          },
+        },
+      );
+    }
   }
 
   public get tabGroup() {

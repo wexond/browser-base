@@ -3,6 +3,7 @@ import { appWindow } from '.';
 
 export default class BrowserViewWrapper extends BrowserView {
   public title: string = '';
+  public url: string = '';
   public tabId: number;
 
   constructor(id: number) {
