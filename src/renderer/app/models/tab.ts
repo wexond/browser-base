@@ -210,7 +210,7 @@ export class Tab {
 
     const selected = tabGroup.selectedTabId === this.id;
 
-    ipcRenderer.send('browserview-remove', this.id);
+    ipcRenderer.send('browserview-destroy', this.id);
 
     const notClosingTabs = tabs.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(this);

@@ -1,4 +1,4 @@
-import { BrowserView, ipcMain, app } from 'electron';
+import { ipcMain } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
 import { appWindow } from '.';
 import BrowserViewWrapper from './browser-view-wrapper';
@@ -31,9 +31,9 @@ export class BrowserViewManager {
     );
 
     ipcMain.on(
-      'browserview-remove',
+      'browserview-destroy',
       (e: Electron.IpcMessageEvent, id: number) => {
-        this.remove(id);
+        this.destroy(id);
       },
     );
 
@@ -93,7 +93,7 @@ export class BrowserViewManager {
   public clear() {
     appWindow.window.setBrowserView(null);
     for (const key in this.views) {
-      this.remove(parseInt(key, 10));
+      this.destroy(parseInt(key, 10));
     }
   }
 
@@ -102,7 +102,7 @@ export class BrowserViewManager {
     this.selectedId = tabId;
 
     if (!view || view.isDestroyed()) {
-      this.remove(tabId);
+      this.destroy(tabId);
       appWindow.window.setBrowserView(null);
       return;
     }
@@ -127,7 +127,7 @@ export class BrowserViewManager {
     this.select(this.selectedId);
   }
 
-  public remove(tabId: number) {
+  public destroy(tabId: number) {
     const view = this.views[tabId];
 
     if (!view || view.isDestroyed()) {

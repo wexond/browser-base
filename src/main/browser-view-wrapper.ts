@@ -57,7 +57,7 @@ export default class BrowserViewWrapper extends BrowserView {
     );
 
     this.setAutoResize({ width: true, height: true });
-    this.webContents.loadURL('http://google.pl');
+    this.webContents.loadURL('about:blank');
   }
 
   public updateNavigationState() {
