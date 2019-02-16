@@ -5,6 +5,10 @@ import { isURL } from '~/shared/utils/url';
 import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 import { observer } from 'mobx-react';
 import { StyledSearchBox, InputContainer, SearchIcon, Input } from './style';
+import { Suggestions } from '../Suggestions';
+
+let canSuggest = false;
+let lastSuggestion: string;
 
 const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
@@ -38,7 +42,88 @@ const onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   e.currentTarget.select();
 };
 
+const autoComplete = (text: string, suggestion: string) => {
+  const regex = /(http(s?)):\/\/(www.)?|www./gi;
+  const regex2 = /(http(s?)):\/\//gi;
+
+  const start = text.length;
+
+  const input = store.overlayStore.inputRef.current;
+
+  if (suggestion) {
+    if (suggestion.startsWith(text.replace(regex, ''))) {
+      input.value = text + suggestion.replace(text.replace(regex, ''), '');
+    } else if (`www.${suggestion}`.startsWith(text.replace(regex2, ''))) {
+      input.value =
+        text + `www.${suggestion}`.replace(text.replace(regex2, ''), '');
+    }
+    input.setSelectionRange(start, input.value.length);
+  }
+};
+
+const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const key = e.keyCode;
+  const { suggestionsStore } = store;
+  const { suggestions } = suggestionsStore;
+  const input = store.overlayStore.inputRef.current;
+
+  if (
+    key !== 8 && // backspace
+    key !== 13 && // enter
+    key !== 17 && // ctrl
+    key !== 18 && // alt
+    key !== 16 && // shift
+    key !== 9 && // tab
+    key !== 20 && // capslock
+    key !== 46 && // delete
+    key !== 32 // space
+  ) {
+    canSuggest = true;
+  } else {
+    canSuggest = false;
+  }
+
+  if (e.keyCode === 38 || e.keyCode === 40) {
+    e.preventDefault();
+    if (
+      e.keyCode === 40 &&
+      suggestionsStore.selected + 1 <= suggestions.length - 1
+    ) {
+      suggestionsStore.selected++;
+    } else if (e.keyCode === 38 && suggestionsStore.selected - 1 >= 0) {
+      suggestionsStore.selected--;
+    }
+
+    const suggestion = suggestions.find(
+      x => x.id === suggestionsStore.selected,
+    );
+
+    input.value = suggestion.primaryText;
+  }
+};
+
+const onInput = () => {
+  const { suggestionsStore } = store;
+  const input = store.overlayStore.inputRef.current;
+
+  if (canSuggest) {
+    autoComplete(input.value, lastSuggestion);
+  }
+
+  suggestionsStore.load(input).then(suggestion => {
+    lastSuggestion = suggestion;
+    if (canSuggest) {
+      autoComplete(input.value.substring(0, input.selectionStart), suggestion);
+      canSuggest = false;
+    }
+  });
+
+  suggestionsStore.selected = 0;
+};
+
 export const SearchBox = observer(() => {
+  const suggestionsVisible = store.suggestionsStore.suggestions.length !== 0;
+
   return (
     <StyledSearchBox onClick={onClick}>
       <InputContainer>
@@ -47,9 +132,12 @@ export const SearchBox = observer(() => {
           placeholder="Search or type in URL"
           onKeyPress={onKeyPress}
           onFocus={onInputFocus}
+          onInput={onInput}
+          onKeyDown={onKeyDown}
           ref={store.overlayStore.inputRef}
         />
       </InputContainer>
+      <Suggestions visible={suggestionsVisible} />
     </StyledSearchBox>
   );
 });

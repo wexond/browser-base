@@ -1,5 +1,4 @@
 import { observable, computed } from 'mobx';
-import { Overlay } from '../components/Overlay';
 import * as React from 'react';
 import { ipcRenderer } from 'electron';
 import store from '.';
