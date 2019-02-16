@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 export const StyledBottomSheet = styled.div`
   position: absolute;
   top: ${({ visible }: { visible: boolean }) =>
-    visible ? 'calc(100% - 275px)' : '100%'};
+    visible ? 'calc(100% - 128px)' : '100%'};
   z-index: 99999;
   background-color: white;
   border-top-left-radius: 8px;

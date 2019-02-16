@@ -4,7 +4,7 @@ import { icons } from '../../constants';
 
 export const StyledSearchBox = styled.div`
   position: absolute;
-  top: 15%;
+  top: 10%;
   left: 50%;
   width: 700px;
   z-index: 2;
