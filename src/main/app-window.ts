@@ -3,6 +3,10 @@ import { resolve, join } from 'path';
 import { platform } from 'os';
 
 import { BrowserViewManager } from './browser-view-manager';
+import { getPath } from '~/shared/utils/paths';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
+
+const windowDataPath = getPath('window-data.json');
 
 export class AppWindow {
   public window: BrowserWindow;
@@ -17,7 +21,18 @@ export class AppWindow {
   }
 
   public createWindow() {
-    const windowData: Electron.BrowserWindowConstructorOptions = {
+    let windowState: any = {};
+
+    if (existsSync(windowDataPath)) {
+      try {
+        // Read the last window state from file.
+        windowState = JSON.parse(readFileSync(windowDataPath, 'utf8'));
+      } catch (e) {
+        writeFileSync(windowDataPath, JSON.stringify({}));
+      }
+    }
+
+    let windowData: Electron.BrowserWindowConstructorOptions = {
       frame: process.env.ENV === 'dev' || platform() === 'darwin',
       minWidth: 400,
       minHeight: 450,
@@ -32,7 +47,38 @@ export class AppWindow {
       icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
     };
 
+    // Merge bounds from the last window state to the current window options.
+    if (windowState) {
+      windowData = {
+        ...windowData,
+        ...windowState.bounds,
+      };
+    }
+
     this.window = new BrowserWindow(windowData);
+
+    // Maximize if the last window was maximized.
+    if (windowState && windowState.maximized) {
+      this.window.maximize();
+    }
+
+    // Update window bounds on resize and on move when window is not maximized.
+    this.window.on('resize', () => {
+      if (!this.window.isMaximized()) {
+        windowState.bounds = this.window.getBounds();
+      }
+    });
+    this.window.on('move', () => {
+      if (!this.window.isMaximized()) {
+        windowState.bounds = this.window.getBounds();
+      }
+    });
+
+    // Save current window state to file.
+    this.window.on('close', () => {
+      windowState.maximized = this.window.isMaximized();
+      writeFileSync(windowDataPath, JSON.stringify(windowState));
+    });
 
     if (process.env.ENV === 'dev') {
       this.window.webContents.openDevTools({ mode: 'detach' });
