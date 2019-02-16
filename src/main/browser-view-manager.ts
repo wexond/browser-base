@@ -64,12 +64,14 @@ export class BrowserViewManager {
       for (const key in this.views) {
         const view = this.views[key];
         const title = view.webContents.getTitle();
+        const url = view.webContents.getURL();
 
         if (title !== view.title) {
-          appWindow.window.webContents.send(
-            `browserview-title-updated-${key}`,
+          appWindow.window.webContents.send(`browserview-data-updated-${key}`, {
             title,
-          );
+            url,
+          });
+          view.url = url;
           view.title = title;
         }
       }
