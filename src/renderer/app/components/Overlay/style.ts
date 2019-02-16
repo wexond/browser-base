@@ -29,7 +29,7 @@ export const HeaderText = styled.div`
   padding-right: 24px;
   padding-bottom: 6px;
   margin-left: -8px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   border-radius: 50px;
   transition: 0.1s background-color;
   cursor: pointer;
