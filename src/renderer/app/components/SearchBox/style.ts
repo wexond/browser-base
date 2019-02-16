@@ -13,6 +13,7 @@ export const StyledSearchBox = styled.div`
   transform: translateX(-50%);
   display: flex;
   flex-flow: column;
+  overflow: hidden;
 `;
 
 export const SearchIcon = styled.div`

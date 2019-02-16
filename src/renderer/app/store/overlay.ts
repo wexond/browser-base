@@ -24,6 +24,7 @@ export class OverlayStore {
       setTimeout(() => {
         ipcRenderer.send('browserview-show');
       }, 200);
+      store.suggestionsStore.suggestions = [];
     } else {
       this.scrollRef.current.scrollTop = 0;
       ipcRenderer.send('browserview-hide');
