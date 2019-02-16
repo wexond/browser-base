@@ -6,8 +6,6 @@ import store from '../../store';
 import {
   StyledOverlay,
   HeaderText,
-  StyledTabGroups,
-  AddTabGroup,
   HeaderArrow,
   Separator,
   Section,
@@ -15,10 +13,9 @@ import {
   Scrollable,
 } from './style';
 import { BottomSheet } from '../BottomSheet';
-import { colors } from '~/renderer/constants';
 import { SearchBox } from '../SearchBox';
 import { MenuItem } from '../MenuItem';
-import { TabGroup } from '../TabGroup';
+import { TabGroups } from '../TabGroups';
 
 const Header = ({ children }: any) => {
   return (
@@ -28,18 +25,6 @@ const Header = ({ children }: any) => {
     </HeaderText>
   );
 };
-
-const TabGroups = observer(() => {
-  return (
-    <StyledTabGroups>
-      <TabGroup selected={false} color={colors.purple['500']} />
-      <TabGroup selected={true} color={colors.lightBlue['500']} />
-      <TabGroup selected={false} color={colors.orange['500']} />
-      <TabGroup selected={false} color={colors.green['500']} />
-      <AddTabGroup />
-    </StyledTabGroups>
-  );
-});
 
 const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
   const target = e.currentTarget;
