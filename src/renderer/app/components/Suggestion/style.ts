@@ -8,6 +8,12 @@ export const StyledSuggestion = styled.div`
   display: flex;
   position: relative;
   align-items: center;
+  overflow: hidden;
+
+  &:first-child {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
   ${({ selected, hovered }: { selected: boolean; hovered: boolean }) => {
     let backgroundColor = 'transparent';
     if (selected) {
