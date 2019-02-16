@@ -4,8 +4,10 @@ import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
 import { ipcRenderer } from 'electron';
 import { OverlayStore } from './overlay';
+import { HistoryStore } from './history';
 
 export class Store {
+  public historyStore = new HistoryStore();
   public addTabStore = new AddTabStore();
   public tabGroupsStore = new TabGroupsStore();
   public tabsStore = new TabsStore();
