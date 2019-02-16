@@ -7,19 +7,19 @@ const browserViewId = remote.BrowserView.fromWebContents(
 
 let tabId = viewsMap[browserViewId];
 
+const goBack = () => {
+  ipcRenderer.send('browserview-call', { tabId, method: 'goBack' });
+};
+
+const goForward = () => {
+  ipcRenderer.send('browserview-call', { tabId, method: 'goBack' });
+};
+
 window.addEventListener('mouseup', e => {
   if (e.button === 3) {
-    // Back button
-    ipcRenderer.send('browserview-navigation-action', {
-      id: tabId,
-      action: 'back',
-    });
+    goBack();
   } else if (e.button === 4) {
-    // Forward button
-    ipcRenderer.send('browserview-navigation-action', {
-      id: tabId,
-      action: 'forward',
-    });
+    goForward();
   }
 });
 
@@ -67,10 +67,7 @@ ipcRenderer.on('scroll-touch-end', () => {
     Math.abs(horizontalMouseMove / verticalMouseMove) > 2.5
   ) {
     if (beginningScrollRight < 10) {
-      ipcRenderer.send('browserview-navigation-action', {
-        id: tabId,
-        action: 'forward',
-      });
+      goForward();
     }
   }
 
@@ -79,10 +76,7 @@ ipcRenderer.on('scroll-touch-end', () => {
     Math.abs(horizontalMouseMove / verticalMouseMove) > 2.5
   ) {
     if (beginningScrollLeft < 10) {
-      ipcRenderer.send('browserview-navigation-action', {
-        id: tabId,
-        action: 'back',
-      });
+      goBack();
     }
   }
 
