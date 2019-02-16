@@ -6,7 +6,6 @@ import store from '.';
 import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 
 export class OverlayStore {
-  public ref = React.createRef<Overlay>();
   public scrollRef = React.createRef<HTMLDivElement>();
   public bsRef: HTMLDivElement;
   public inputRef = React.createRef<HTMLInputElement>();

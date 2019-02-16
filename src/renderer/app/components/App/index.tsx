@@ -21,7 +21,7 @@ export const App = observer(() => {
       <GlobalStyle />
       <Toolbar />
       <Line />
-      <Overlay ref={store.overlayStore.ref} />
+      <Overlay />
     </React.Fragment>
   );
 });
