@@ -41,8 +41,10 @@ const Header = ({ children }: any) => {
 const TabGroups = observer(() => {
   return (
     <StyledTabGroups>
+      <TabGroup selected={false} color={colors.purple['500']} />
       <TabGroup selected={true} color={colors.lightBlue['500']} />
       <TabGroup selected={false} color={colors.orange['500']} />
+      <TabGroup selected={false} color={colors.green['500']} />
       <AddTabGroup />
     </StyledTabGroups>
   );
@@ -56,7 +58,7 @@ const TabGroup = observer(({ selected, color }: any) => {
       }}
       selected={selected}
     >
-      <TabGroupContent selected={selected}>Tab group</TabGroupContent>
+      <TabGroupContent>Tab group</TabGroupContent>
       <TabGroupClose selected={selected} />
     </StyledTabGroup>
   );
