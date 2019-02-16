@@ -6,24 +6,18 @@ import ToolbarButton from '~/renderer/app/components/ToolbarButton';
 import { icons } from '~/renderer/app/constants/icons';
 import { StyledContainer } from './style';
 import { ipcRenderer } from 'electron';
-
-const sendNavigationAction = (action: 'back' | 'forward' | 'refresh') => {
-  ipcRenderer.send('browserview-navigation-action', {
-    id: store.tabsStore.selectedTabId,
-    action,
-  });
-};
+import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 
 const onBackClick = () => {
-  sendNavigationAction('back');
+  callBrowserViewMethod(store.tabsStore.selectedTabId, 'goBack');
 };
 
 const onForwardClick = () => {
-  sendNavigationAction('forward');
+  callBrowserViewMethod(store.tabsStore.selectedTabId, 'goForward');
 };
 
 const onRefreshClick = () => {
-  sendNavigationAction('refresh');
+  callBrowserViewMethod(store.tabsStore.selectedTabId, 'refresh');
 };
 
 export const NavigationButtons = observer(() => {

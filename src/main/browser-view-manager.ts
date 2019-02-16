@@ -37,6 +37,21 @@ export class BrowserViewManager {
       },
     );
 
+    ipcMain.on('browserview-call', (e: any, data: any) => {
+      const view = this.views[data.tabId];
+      const result = (view.webContents as any)[data.method].apply(
+        view.webContents,
+        data.args,
+      );
+
+      if (data.callId) {
+        appWindow.window.webContents.send(
+          `browserview-call-result-${data.callId}`,
+          result,
+        );
+      }
+    });
+
     ipcMain.on('browserview-hide', () => {
       this.hideView();
     });
@@ -59,27 +74,6 @@ export class BrowserViewManager {
         }
       }
     }, 200);
-
-    ipcMain.on(
-      'browserview-navigation-action',
-      (e: Electron.IpcMessageEvent, data: any) => {
-        const { id, action } = data;
-
-        const view = this.views[id];
-
-        switch (action) {
-          case 'back':
-            view.webContents.goBack();
-            break;
-          case 'forward':
-            view.webContents.goForward();
-            break;
-          case 'refresh':
-            view.webContents.reload();
-            break;
-        }
-      },
-    );
 
     ipcMain.on('browserview-clear', () => {
       this.clear();
