@@ -185,19 +185,19 @@ export const SearchBox = styled.div`
   position: absolute;
   top: 15%;
   left: 50%;
-  height: 42px;
   width: 700px;
   z-index: 2;
   background-color: white;
   border-radius: 30px;
   transform: translateX(-50%);
   display: flex;
+  flex-flow: column;
 `;
 
 export const SearchIcon = styled.div`
   ${centerImage('16px', '16px')};
   background-image: url(${icons.search});
-  height: 100%;
+  height: 16px;
   min-width: 16px;
   margin-left: 16px;
 `;
@@ -210,4 +210,10 @@ export const Input = styled.input`
   outline: none;
   color: black;
   margin-left: 16px;
+`;
+
+export const InputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 42px;
 `;
