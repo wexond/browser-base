@@ -155,10 +155,6 @@ export class Overlay extends React.Component {
             </Section>
             <Separator />
             <Section>
-              <Header>Downloads</Header>
-            </Section>
-            <Separator />
-            <Section>
               <Menu>
                 <MenuItem>History</MenuItem>
                 <MenuItem>Bookmarks</MenuItem>
