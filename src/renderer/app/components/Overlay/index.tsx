@@ -21,11 +21,11 @@ import {
   SearchIcon,
   InputContainer,
 } from './style';
-import { ipcRenderer } from 'electron';
 import { BottomSheet } from '../BottomSheet';
 import { colors } from '~/renderer/constants';
 import { TweenLite } from 'gsap';
-import { TAB_ANIMATION_EASING } from '../../constants';
+import { callBrowserViewMethod } from '~/shared/utils/browser-view';
+import { isURL } from '~/shared/utils/url';
 
 const Header = ({ children }: any) => {
   return (
@@ -103,6 +103,30 @@ export class Overlay extends React.Component {
     e.stopPropagation();
   };
 
+  public onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.which === 13) {
+      // Enter.
+      const tab = store.tabsStore.selectedTab;
+
+      e.preventDefault();
+
+      const text = e.currentTarget.value;
+      let url = text;
+
+      if (isURL(text) && !text.includes('://')) {
+        url = `http://${text}`;
+      } else if (!text.includes('://')) {
+        url = `https://www.google.com/search?q=${text}`;
+      }
+
+      store.overlayStore.inputRef.current.value = url;
+      tab.url = url;
+      callBrowserViewMethod(tab.id, 'loadURL', url);
+
+      store.overlayStore.visible = false;
+    }
+  };
+
   render() {
     return (
       <StyledOverlay
@@ -114,6 +138,7 @@ export class Overlay extends React.Component {
             <SearchIcon />
             <Input
               placeholder="Search or type in URL"
+              onKeyPress={this.onKeyPress}
               ref={store.overlayStore.inputRef}
             />
           </InputContainer>
