@@ -5,6 +5,9 @@ import { ipcRenderer } from 'electron';
 
 export class OverlayStore {
   public ref = React.createRef<Overlay>();
+  public scrollRef = React.createRef<HTMLDivElement>();
+  public bsRef: HTMLDivElement;
+  public inputRef = React.createRef<HTMLInputElement>();
 
   @observable
   private _visible = false;
@@ -22,7 +25,7 @@ export class OverlayStore {
         ipcRenderer.send('browserview-show');
       }, 200);
     } else {
-      this.ref.current.scrollRef.current.scrollTop = 0;
+      this.scrollRef.current.scrollTop = 0;
       ipcRenderer.send('browserview-hide');
     }
 

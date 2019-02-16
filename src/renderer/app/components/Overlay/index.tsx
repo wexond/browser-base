@@ -69,12 +69,9 @@ const MenuItem = ({ children }: any) => {
 
 @observer
 export class Overlay extends React.Component {
-  private bsRef: HTMLDivElement;
-  public scrollRef = React.createRef<HTMLDivElement>();
-
   onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
-    const bsHeight = this.bsRef.getBoundingClientRect().height;
+    const bsHeight = store.overlayStore.bsRef.getBoundingClientRect().height;
 
     if (bsHeight <= window.innerHeight) {
       if (e.deltaY > 0) {
@@ -105,8 +102,6 @@ export class Overlay extends React.Component {
     e.stopPropagation();
   };
 
-  show() {}
-
   render() {
     return (
       <StyledOverlay
@@ -115,13 +110,16 @@ export class Overlay extends React.Component {
       >
         <SearchBox onClick={this.onSearchClick}>
           <SearchIcon />
-          <Input placeholder="Search or type in URL" />
+          <Input
+            placeholder="Search or type in URL"
+            ref={store.overlayStore.inputRef}
+          />
         </SearchBox>
-        <Scrollable onWheel={this.onWheel} ref={this.scrollRef}>
+        <Scrollable onWheel={this.onWheel} ref={store.overlayStore.scrollRef}>
           <BottomSheet
             visible={store.overlayStore.visible}
             onClick={this.onBsClick}
-            innerRef={(r: any) => (this.bsRef = r)}
+            innerRef={(r: any) => (store.overlayStore.bsRef = r)}
           >
             <Section>
               <Header>Tab groups</Header>
