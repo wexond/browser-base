@@ -12,7 +12,7 @@ const goBack = () => {
 };
 
 const goForward = () => {
-  ipcRenderer.send('browserview-call', { tabId, method: 'goBack' });
+  ipcRenderer.send('browserview-call', { tabId, method: 'goForward' });
 };
 
 window.addEventListener('mouseup', e => {
