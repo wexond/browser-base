@@ -16,6 +16,9 @@ import {
   Title,
   Icon,
   Scrollable,
+  SearchBox,
+  Input,
+  SearchIcon,
 } from './style';
 import { ipcRenderer } from 'electron';
 import { BottomSheet } from '../BottomSheet';
@@ -98,6 +101,10 @@ export class Overlay extends React.Component {
     e.stopPropagation();
   };
 
+  onSearchClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
   show() {}
 
   render() {
@@ -106,6 +113,10 @@ export class Overlay extends React.Component {
         visible={store.overlayStore.visible}
         onClick={this.onClick}
       >
+        <SearchBox onClick={this.onSearchClick}>
+          <SearchIcon />
+          <Input placeholder="Search or type in URL" />
+        </SearchBox>
         <Scrollable onWheel={this.onWheel} ref={this.scrollRef}>
           <BottomSheet
             visible={store.overlayStore.visible}
