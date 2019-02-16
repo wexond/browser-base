@@ -2,6 +2,8 @@ import { observable, computed } from 'mobx';
 import { Overlay } from '../components/Overlay';
 import * as React from 'react';
 import { ipcRenderer } from 'electron';
+import store from '.';
+import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 
 export class OverlayStore {
   public ref = React.createRef<Overlay>();
@@ -28,6 +30,13 @@ export class OverlayStore {
       this.scrollRef.current.scrollTop = 0;
       ipcRenderer.send('browserview-hide');
       this.inputRef.current.focus();
+
+      callBrowserViewMethod(store.tabsStore.selectedTabId, 'getURL').then(
+        (url: string) => {
+          this.inputRef.current.value = url;
+          this.inputRef.current.select();
+        },
+      );
     }
 
     this._visible = val;
