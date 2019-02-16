@@ -9,17 +9,17 @@ export const StyledSearchBox = styled.div`
   width: 700px;
   z-index: 2;
   background-color: white;
-  border-radius: 20px;
+  border-radius: 23px;
   transform: translateX(-50%);
   display: flex;
   flex-flow: column;
 `;
 
 export const SearchIcon = styled.div`
-  ${centerImage('16px', '16px')};
+  ${centerImage('18px', '18px')};
   background-image: url(${icons.search});
-  height: 16px;
-  min-width: 16px;
+  height: 18px;
+  min-width: 18px;
   margin-left: 16px;
 `;
 
@@ -30,11 +30,12 @@ export const Input = styled.input`
   border: none;
   outline: none;
   color: black;
+  font-size: 16px;
   margin-left: 16px;
 `;
 
 export const InputContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 42px;
+  height: 48px;
 `;
