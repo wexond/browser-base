@@ -6,6 +6,7 @@ import back from '~/shared/resources/icons/back.svg';
 import forward from '~/shared/resources/icons/forward.svg';
 import refresh from '~/shared/resources/icons/refresh.svg';
 import close from '~/shared/resources/icons/close.svg';
+import search from '~/shared/resources/icons/search.svg';
 
 export const icons = {
   windowsClose,
@@ -16,4 +17,5 @@ export const icons = {
   forward,
   close,
   refresh,
+  search,
 };

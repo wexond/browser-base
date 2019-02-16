@@ -170,7 +170,6 @@ export const Title = styled.div`
 
 export const Scrollable = styled.div`
   position: absolute;
-  z-index: 9999;
   overflow-y: scroll;
   top: 0;
   left: 0;
@@ -180,4 +179,35 @@ export const Scrollable = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+export const SearchBox = styled.div`
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  height: 42px;
+  width: 700px;
+  z-index: 2;
+  background-color: white;
+  border-radius: 30px;
+  transform: translateX(-50%);
+  display: flex;
+`;
+
+export const SearchIcon = styled.div`
+  ${centerImage('16px', '16px')};
+  background-image: url(${icons.search});
+  height: 100%;
+  min-width: 16px;
+  margin-left: 16px;
+`;
+
+export const Input = styled.input`
+  height: 100%;
+  flex: 1;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: black;
+  margin-left: 16px;
 `;
