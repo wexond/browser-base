@@ -32,6 +32,7 @@ const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
 
   if (bsHeight <= window.innerHeight) {
     if (e.deltaY > 0) {
+      store.suggestionsStore.suggestions = [];
       if (target.scrollTop === 0) {
         TweenLite.to(target, 0.2, {
           scrollTop: bsHeight - 128,
