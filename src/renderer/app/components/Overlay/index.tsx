@@ -11,9 +11,6 @@ import {
   Separator,
   Section,
   Menu,
-  StyledMenuItem,
-  Title,
-  Icon,
   Scrollable,
   TabGroupContent,
   TabGroupClose,
@@ -22,6 +19,7 @@ import { BottomSheet } from '../BottomSheet';
 import { colors } from '~/renderer/constants';
 import { TweenLite } from 'gsap';
 import { SearchBox } from '../SearchBox';
+import { MenuItem } from '../MenuItem';
 
 const Header = ({ children }: any) => {
   return (
@@ -57,15 +55,6 @@ const TabGroup = observer(({ selected, color }: any) => {
     </StyledTabGroup>
   );
 });
-
-const MenuItem = ({ children }: any) => {
-  return (
-    <StyledMenuItem>
-      <Icon />
-      <Title>{children}</Title>
-    </StyledMenuItem>
-  );
-};
 
 const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
   const target = e.currentTarget;
