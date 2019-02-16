@@ -23,7 +23,7 @@ export const StyledSuggestion = styled.div`
 
 export const PrimaryText = styled.div`
   ${body2()};
-  margin-left: calc(24px + 31px);
+  margin-left: 16px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -42,8 +42,7 @@ export const SecondaryText = styled.div`
 `;
 
 export const Icon = styled.div`
-  left: 16px;
-  position: absolute;
+  margin-left: 16px;
   width: 16px;
   height: 16px;
   ${centerImage('16px', '16px')};
