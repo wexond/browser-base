@@ -3,6 +3,8 @@ import axios from 'axios';
 import { HistoryItem } from '../models';
 import store from '../store';
 
+const adapter = require('axios/lib/adapters/http');
+
 const countVisitedTimes = (historyItems: HistoryItem[]) => {
   const items: any[] = [];
 
@@ -114,6 +116,7 @@ export const getSearchSuggestions = (filter: string) =>
     try {
       const { data } = await axios.get(
         `http://google.com/complete/search?client=chrome&q=${input}`,
+        { adapter },
       );
 
       let suggestions: string[] = [];
