@@ -176,7 +176,7 @@ export class TabsStore {
     const index = tabs.indexOf(callingTab);
 
     if (direction === 'left') {
-      for (let i = index; i--;) {
+      for (let i = index; i--; ) {
         const tab = tabs[i];
         if (callingTab.left <= tab.width / 2 + tab.left) {
           this.replaceTab(tabs[i + 1], tab);
@@ -248,9 +248,13 @@ export class TabsStore {
 
       if (
         newLeft + selectedTab.width >
-        store.addTabStore.left + container.current.scrollLeft
+        store.addTabStore.left + container.current.scrollLeft - TABS_PADDING
       ) {
-        left = store.addTabStore.left - selectedTab.width + lastScrollLeft;
+        left =
+          store.addTabStore.left -
+          selectedTab.width +
+          lastScrollLeft -
+          TABS_PADDING;
       }
 
       selectedTab.setLeft(left, false);
