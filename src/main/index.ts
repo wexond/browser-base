@@ -7,9 +7,11 @@ ipcMain.setMaxListeners(0);
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
-export const appWindow = new AppWindow();
+export let appWindow: AppWindow;
 
 app.on('ready', () => {
+  appWindow = new AppWindow();
+
   // Create our menu entries so that we can use macOS shortcuts
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
