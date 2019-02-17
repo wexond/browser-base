@@ -6,13 +6,15 @@ import { BrowserViewManager } from './browser-view-manager';
 import { getPath } from '~/shared/utils/paths';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 
-const windowDataPath = getPath('window-data.json');
+let windowDataPath: string;
 
 export class AppWindow {
   public window: BrowserWindow;
   public browserViewManager: BrowserViewManager = new BrowserViewManager();
 
   constructor() {
+    windowDataPath = getPath('window-data.json');
+
     app.on('activate', () => {
       if (this.window === null) {
         this.createWindow();
