@@ -11,7 +11,7 @@ export const StyledBottomSheet = styled.div`
   border-top-right-radius: 8px;
   left: 50%;
   transform: translateX(-50%);
-  transition: 0.3s top;
+  transition: 0.2s top;
   width: 700px;
   color: black;
   box-shadow: ${shadows(4)};
