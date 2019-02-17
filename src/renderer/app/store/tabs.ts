@@ -176,7 +176,7 @@ export class TabsStore {
     const index = tabs.indexOf(callingTab);
 
     if (direction === 'left') {
-      for (let i = index; i--; ) {
+      for (let i = index - 1; i >= 0; i--) {
         const tab = tabs[i];
         if (callingTab.left <= tab.width / 2 + tab.left) {
           this.replaceTab(tabs[i + 1], tab);
@@ -279,16 +279,16 @@ export class TabsStore {
 
   public animateProperty(
     property: string,
-    ref: HTMLDivElement,
+    obj: any,
     value: number,
     animation: boolean,
   ) {
-    if (ref) {
+    if (obj) {
       const props: any = {
         ease: animation ? TAB_ANIMATION_EASING : null,
       };
       props[property] = value;
-      TweenLite.to(ref, animation ? TAB_ANIMATION_DURATION : 0, props);
+      TweenLite.to(obj, animation ? TAB_ANIMATION_DURATION : 0, props);
     }
   }
 }
