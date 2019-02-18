@@ -18,6 +18,12 @@ export default class BrowserViewWrapper extends BrowserView {
 
     this.webContents.addListener('did-stop-loading', () => {
       this.updateNavigationState();
+      appWindow.webContents.send(`view-loading-${this.tabId}`, false);
+    });
+
+    this.webContents.addListener('did-start-loading', () => {
+      this.updateNavigationState();
+      appWindow.webContents.send(`view-loading-${this.tabId}`, true);
     });
 
     this.webContents.addListener('did-start-navigation', () => {
