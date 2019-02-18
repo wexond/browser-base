@@ -27,7 +27,7 @@ export default class BrowserViewWrapper extends BrowserView {
     this.webContents.addListener(
       'page-favicon-updated',
       async (e, favicons) => {
-        appWindow.window.webContents.send(
+        appWindow.webContents.send(
           `browserview-favicon-updated-${this.tabId}`,
           favicons[0],
         );
@@ -35,7 +35,7 @@ export default class BrowserViewWrapper extends BrowserView {
     );
 
     this.webContents.addListener('did-change-theme-color', (e, color) => {
-      appWindow.window.webContents.send(
+      appWindow.webContents.send(
         `browserview-theme-color-updated-${this.tabId}`,
         color,
       );
@@ -65,7 +65,7 @@ export default class BrowserViewWrapper extends BrowserView {
     if (this.isDestroyed()) return;
 
     if (appWindow.browserViewManager.selectedId === this.tabId) {
-      appWindow.window.webContents.send('update-navigation-state', {
+      appWindow.webContents.send('update-navigation-state', {
         canGoBack: this.webContents.canGoBack(),
         canGoForward: this.webContents.canGoForward(),
       });

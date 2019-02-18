@@ -27,7 +27,7 @@ export class BrowserViewManager {
       (e: Electron.IpcMessageEvent, tabId: number) => {
         this.create(tabId);
 
-        appWindow.window.webContents.send(`browserview-created-${tabId}`);
+        appWindow.webContents.send(`browserview-created-${tabId}`);
       },
     );
 
@@ -55,7 +55,7 @@ export class BrowserViewManager {
       );
 
       if (data.callId) {
-        appWindow.window.webContents.send(
+        appWindow.webContents.send(
           `browserview-call-result-${data.callId}`,
           result,
         );
@@ -77,7 +77,7 @@ export class BrowserViewManager {
         const url = view.webContents.getURL();
 
         if (title !== view.title) {
-          appWindow.window.webContents.send(`browserview-data-updated-${key}`, {
+          appWindow.webContents.send(`browserview-data-updated-${key}`, {
             title,
             url,
           });
@@ -103,7 +103,7 @@ export class BrowserViewManager {
   }
 
   public clear() {
-    appWindow.window.setBrowserView(null);
+    appWindow.setBrowserView(null);
     for (const key in this.views) {
       this.destroy(parseInt(key, 10));
     }
@@ -115,11 +115,11 @@ export class BrowserViewManager {
 
     if (!view || view.isDestroyed()) {
       this.destroy(tabId);
-      appWindow.window.setBrowserView(null);
+      appWindow.setBrowserView(null);
       return;
     }
 
-    appWindow.window.setBrowserView(view);
+    appWindow.setBrowserView(view);
 
     this.fixBounds();
   }
@@ -129,7 +129,7 @@ export class BrowserViewManager {
 
     if (!view) return;
 
-    const { width, height } = appWindow.window.getContentBounds();
+    const { width, height } = appWindow.getContentBounds();
     view.setBounds({
       x: 0,
       y: this.fullscreen ? 0 : TOOLBAR_HEIGHT + 1,
@@ -140,7 +140,7 @@ export class BrowserViewManager {
   }
 
   public hideView() {
-    appWindow.window.setBrowserView(null);
+    appWindow.setBrowserView(null);
   }
 
   public showView() {
@@ -155,8 +155,8 @@ export class BrowserViewManager {
       return;
     }
 
-    if (appWindow.window.getBrowserView() === view) {
-      appWindow.window.setBrowserView(null);
+    if (appWindow.getBrowserView() === view) {
+      appWindow.setBrowserView(null);
     }
 
     view.destroy();

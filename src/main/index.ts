@@ -10,8 +10,6 @@ app.setPath('userData', resolve(homedir(), '.wexond'));
 export let appWindow: AppWindow;
 
 app.on('ready', () => {
-  appWindow = new AppWindow();
-
   // Create our menu entries so that we can use macOS shortcuts
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
@@ -43,7 +41,13 @@ app.on('ready', () => {
     },
   );
 
-  appWindow.createWindow();
+  app.on('activate', () => {
+    if (appWindow === null) {
+      appWindow = new AppWindow();
+    }
+  });
+
+  appWindow = new AppWindow();
 });
 
 app.on('window-all-closed', () => {

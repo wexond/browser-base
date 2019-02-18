@@ -6,35 +6,11 @@ import { BrowserViewManager } from './browser-view-manager';
 import { getPath } from '~/shared/utils/paths';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 
-let windowDataPath: string;
-
-export class AppWindow {
-  public window: BrowserWindow;
+export class AppWindow extends BrowserWindow {
   public browserViewManager: BrowserViewManager = new BrowserViewManager();
 
   constructor() {
-    windowDataPath = getPath('window-data.json');
-
-    app.on('activate', () => {
-      if (this.window === null) {
-        this.createWindow();
-      }
-    });
-  }
-
-  public createWindow() {
-    let windowState: any = {};
-
-    if (existsSync(windowDataPath)) {
-      try {
-        // Read the last window state from file.
-        windowState = JSON.parse(readFileSync(windowDataPath, 'utf8'));
-      } catch (e) {
-        writeFileSync(windowDataPath, JSON.stringify({}));
-      }
-    }
-
-    let windowData: Electron.BrowserWindowConstructorOptions = {
+    super({
       frame: process.env.ENV === 'dev' || platform() === 'darwin',
       minWidth: 400,
       minHeight: 450,
@@ -47,81 +23,95 @@ export class AppWindow {
         nodeIntegration: true,
       },
       icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
-    };
+    });
+
+    const windowDataPath = getPath('window-data.json');
+
+    let windowState: any = {};
+
+    if (existsSync(windowDataPath)) {
+      try {
+        // Read the last window state from file.
+        windowState = JSON.parse(readFileSync(windowDataPath, 'utf8'));
+      } catch (e) {
+        writeFileSync(windowDataPath, JSON.stringify({}));
+      }
+    }
 
     // Merge bounds from the last window state to the current window options.
     if (windowState) {
-      windowData = {
-        ...windowData,
-        ...windowState.bounds,
-      };
+      this.setBounds({ ...windowState.bounds });
     }
-
-    this.window = new BrowserWindow(windowData);
 
     // Maximize if the last window was maximized.
     if (windowState && windowState.maximized) {
-      this.window.maximize();
+      this.maximize();
     }
 
     // Update window bounds on resize and on move when window is not maximized.
-    this.window.on('resize', () => {
-      if (!this.window.isMaximized()) {
-        windowState.bounds = this.window.getBounds();
+    this.on('resize', () => {
+      if (!this.isMaximized()) {
+        windowState.bounds = this.getBounds();
       }
     });
-    this.window.on('move', () => {
-      if (!this.window.isMaximized()) {
-        windowState.bounds = this.window.getBounds();
+    this.on('move', () => {
+      if (!this.isMaximized()) {
+        windowState.bounds = this.getBounds();
       }
     });
 
     // Save current window state to file.
-    this.window.on('close', () => {
-      windowState.maximized = this.window.isMaximized();
+    this.on('close', () => {
+      windowState.maximized = this.isMaximized();
       writeFileSync(windowDataPath, JSON.stringify(windowState));
     });
 
     if (process.env.ENV === 'dev') {
-      this.window.webContents.openDevTools({ mode: 'detach' });
-      this.window.loadURL('http://localhost:4444/app.html');
+      this.webContents.openDevTools({ mode: 'detach' });
+      this.loadURL('http://localhost:4444/app.html');
     } else {
-      this.window.loadURL(join('file://', app.getAppPath(), 'build/app.html'));
+      this.loadURL(join('file://', app.getAppPath(), 'build/app.html'));
     }
 
-    this.window.once('ready-to-show', () => {
-      this.window.show();
+    this.once('ready-to-show', () => {
+      this.show();
     });
 
-    this.window.on('closed', () => {
-      this.window = null;
+    this.on('enter-full-screen', () => {
+      this.webContents.send('fullscreen', true);
     });
 
-    this.window.on('enter-full-screen', () => {
-      this.window.webContents.send('fullscreen', true);
+    this.on('leave-full-screen', () => {
+      this.webContents.send('fullscreen', false);
     });
 
-    this.window.on('leave-full-screen', () => {
-      this.window.webContents.send('fullscreen', false);
-    });
-
-    this.window.on('enter-html-full-screen', () => {
+    this.on('enter-html-full-screen', () => {
       this.browserViewManager.fullscreen = true;
-      this.window.webContents.send('html-fullscreen', true);
+      this.webContents.send('html-fullscreen', true);
     });
 
-    this.window.on('leave-html-full-screen', () => {
+    this.on('leave-html-full-screen', () => {
       this.browserViewManager.fullscreen = false;
-      this.window.webContents.send('html-fullscreen', false);
+      this.webContents.send('html-fullscreen', false);
     });
 
-    this.window.on('scroll-touch-begin', () => {
-      this.window.webContents.send('scroll-touch-begin');
+    this.on('scroll-touch-begin', () => {
+      this.webContents.send('scroll-touch-begin');
     });
 
-    this.window.on('scroll-touch-end', () => {
+    this.on('scroll-touch-end', () => {
       this.browserViewManager.selected.webContents.send('scroll-touch-end');
-      this.window.webContents.send('scroll-touch-end');
+      this.webContents.send('scroll-touch-end');
     });
+  }
+
+  public maximize() {
+    super.maximize;
+    this.browserViewManager.fixBounds();
+  }
+
+  public unmaximize() {
+    super.unmaximize;
+    this.browserViewManager.fixBounds();
   }
 }
