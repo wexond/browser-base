@@ -5,7 +5,6 @@ import store from '~/renderer/app/store';
 import ToolbarButton from '~/renderer/app/components/ToolbarButton';
 import { icons } from '~/renderer/app/constants/icons';
 import { StyledContainer } from './style';
-import { ipcRenderer } from 'electron';
 import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 
 const onBackClick = () => {
