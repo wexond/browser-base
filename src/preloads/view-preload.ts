@@ -1,11 +1,13 @@
-const { ipcRenderer, remote } = require('electron');
+import { ipcRenderer, remote } from 'electron';
 
 const viewsMap = remote.getGlobal('viewsMap');
 const browserViewId = remote.BrowserView.fromWebContents(
   remote.getCurrentWebContents(),
 ).id;
 
-let tabId = viewsMap[browserViewId];
+console.log(process.argv);
+
+const tabId = viewsMap[browserViewId];
 
 const goBack = () => {
   ipcRenderer.send('browserview-call', { tabId, method: 'goBack' });
@@ -23,8 +25,8 @@ window.addEventListener('mouseup', e => {
   }
 });
 
-let beginningScrollLeft = null;
-let beginningScrollRight = null;
+let beginningScrollLeft: number = null;
+let beginningScrollRight: number = null;
 let horizontalMouseMove = 0;
 let verticalMouseMove = 0;
 
@@ -35,11 +37,12 @@ const resetCounters = () => {
   verticalMouseMove = 0;
 };
 
-function getScrollStartPoint(x, y) {
-  var left = 0;
-  var right = 0;
+function getScrollStartPoint(x: number, y: number) {
+  let left = 0;
+  let right = 0;
 
-  var n = document.elementFromPoint(x, y);
+  let n = document.elementFromPoint(x, y);
+
   while (n) {
     if (n.scrollLeft !== undefined) {
       left = Math.max(left, n.scrollLeft);
