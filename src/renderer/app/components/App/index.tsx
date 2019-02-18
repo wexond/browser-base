@@ -5,7 +5,7 @@ import { createGlobalStyle } from 'styled-components';
 import { Style } from '~/renderer/app/style';
 import { Toolbar } from '../Toolbar';
 import { Overlay } from '../Overlay';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { Line } from './style';
 import store from '../../store';
 

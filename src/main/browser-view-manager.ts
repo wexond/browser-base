@@ -121,6 +121,8 @@ export class BrowserViewManager {
 
     appWindow.setBrowserView(view);
 
+    view.webContents.focus();
+
     this.fixBounds();
   }
 
