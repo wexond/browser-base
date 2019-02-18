@@ -57,6 +57,16 @@ export class Store {
     ipcRenderer.on('html-fullscreen', (e: any, fullscreen: boolean) => {
       this.isHTMLFullscreen = fullscreen;
     });
+
+    ipcRenderer.on(
+      'update-available',
+      (e: Electron.IpcMessageEvent, version: string) => {
+        this.updateInfo.version = version;
+        this.updateInfo.available = true;
+      },
+    );
+
+    ipcRenderer.send('update-check');
   }
 }
 

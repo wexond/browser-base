@@ -2,6 +2,7 @@ import { ipcMain, app, Menu, session } from 'electron';
 import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { AppWindow } from './app-window';
+import { autoUpdater } from 'electron-updater';
 
 ipcMain.setMaxListeners(0);
 
@@ -48,6 +49,20 @@ app.on('ready', () => {
   });
 
   appWindow = new AppWindow();
+
+  autoUpdater.on('update-downloaded', ({ version }) => {
+    appWindow.webContents.send('update-available', version);
+  });
+
+  ipcMain.on('update-install', () => {
+    autoUpdater.quitAndInstall();
+  });
+
+  ipcMain.on('update-check', () => {
+    if (process.env.ENV !== 'dev') {
+      autoUpdater.checkForUpdates();
+    }
+  });
 });
 
 app.on('window-all-closed', () => {
