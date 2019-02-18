@@ -67,6 +67,7 @@ export class OverlayStore {
       this.inputRef.current.value = '';
     } else {
       this.show();
+      remote.getCurrentWebContents().focus();
 
       callBrowserViewMethod(store.tabsStore.selectedTabId, 'getURL').then(
         (url: string) => {
