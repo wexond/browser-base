@@ -43,9 +43,13 @@ export class AppWindow extends BrowserWindow {
       this.setBounds({ ...windowState.bounds });
     }
 
-    // Maximize if the last window was maximized.
-    if (windowState && windowState.maximized) {
-      this.maximize();
+    if (windowState) {
+      if (windowState.maximized) {
+        this.maximize();
+      }
+      if (windowState.fullscreen) {
+        this.setFullScreen(true);
+      }
     }
 
     // Update window bounds on resize and on move when window is not maximized.
@@ -60,9 +64,14 @@ export class AppWindow extends BrowserWindow {
       }
     });
 
+    this.on('maximize', () => this.browserViewManager.fixBounds());
+    this.on('restore', () => this.browserViewManager.fixBounds());
+    this.on('unmaximize', () => this.browserViewManager.fixBounds());
+
     // Save current window state to file.
     this.on('close', () => {
       windowState.maximized = this.isMaximized();
+      windowState.fullscreen = this.isFullScreen();
       writeFileSync(windowDataPath, JSON.stringify(windowState));
     });
 
@@ -79,10 +88,12 @@ export class AppWindow extends BrowserWindow {
 
     this.on('enter-full-screen', () => {
       this.webContents.send('fullscreen', true);
+      this.browserViewManager.fixBounds();
     });
 
     this.on('leave-full-screen', () => {
       this.webContents.send('fullscreen', false);
+      this.browserViewManager.fixBounds();
     });
 
     this.on('enter-html-full-screen', () => {
@@ -103,15 +114,5 @@ export class AppWindow extends BrowserWindow {
       this.browserViewManager.selected.webContents.send('scroll-touch-end');
       this.webContents.send('scroll-touch-end');
     });
-  }
-
-  public maximize() {
-    super.maximize;
-    this.browserViewManager.fixBounds();
-  }
-
-  public unmaximize() {
-    super.unmaximize;
-    this.browserViewManager.fixBounds();
   }
 }
