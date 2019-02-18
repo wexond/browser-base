@@ -9,7 +9,7 @@ export default class BrowserViewWrapper extends BrowserView {
   constructor(id: number, url: string) {
     super({
       webPreferences: {
-        preload: `${app.getAppPath()}/src/main/preload.js`,
+        preload: `${app.getAppPath()}/build/view-preload.js`,
         nodeIntegration: false,
       },
     });
