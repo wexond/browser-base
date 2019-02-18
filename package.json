@@ -35,7 +35,7 @@
   },
   "scripts": {
     "dev": "concurrently \"npm run watch-app\" \"npm run watch-preloads\"",
-    "watch-preloads": "tsc src/preloads/view-preload.ts --watch -p src/preloads/tsconfig.json",
+    "watch-preloads": "tsc --watch -p src/preloads/tsconfig.json",
     "watch-app": "cross-env NODE_ENV='dev' node fuse.js",
     "build-preloads": "tsc -p src/preloads/tsconfig.json",
     "build-app": "node fuse.js",
