@@ -1,6 +1,6 @@
 {
   "name": "wexond",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.1",
   "description": "Extensible, fast and innovative web browser with material UI.",
   "keywords": [
     "web-browser",
@@ -49,21 +49,18 @@
     "lint-fix"
   ],
   "devDependencies": {
-    "@types/chrome": "0.0.79",
+    "@types/chrome": "0.0.80",
     "@types/gsap": "1.20.1",
-    "@types/leveldown": "4.0.0",
-    "@types/levelup": "3.1.0",
-    "@types/mousetrap": "1.6.1",
     "@types/nedb": "1.8.7",
-    "@types/node": "10.12.24",
-    "@types/react": "16.8.2",
-    "@types/react-dom": "16.8.0",
-    "@types/styled-components": "4.1.8",
+    "@types/node": "11.9.4",
+    "@types/react": "16.8.3",
+    "@types/react-dom": "16.8.2",
+    "@types/styled-components": "4.1.10",
     "concurrently": "4.1.0",
     "cross-env": "5.2.0",
-    "electron": "4.0.4",
+    "electron": "5.0.0-beta.3",
     "electron-builder": "20.38.5",
-    "fuse-box": "3.7.0",
+    "fuse-box": "3.7.1",
     "prettier": "1.16.4",
     "terser": "3.16.1",
     "tslint": "5.12.1",
@@ -73,18 +70,14 @@
     "typescript-plugin-styled-components": "1.2.0"
   },
   "dependencies": {
-    "electron-updater": "4.0.6",
-    "leveldown": "4.0.1",
-    "levelup": "4.0.0",
-    "nedb": "1.8.0",
-    "tz-lookup": "6.1.8",
     "axios": "0.18.0",
-    "gsap": "2.0.2",
+    "electron-updater": "4.0.6",
+    "gsap": "2.1.0",
     "mobx": "5.9.0",
     "mobx-react": "5.4.3",
-    "react": "16.8.1",
-    "react-dom": "16.8.1",
-    "styled-components": "4.1.3",
-    "mousetrap": "1.6.2"
+    "nedb": "1.8.0",
+    "react": "16.8.2",
+    "react-dom": "16.8.2",
+    "styled-components": "4.1.3"
   }
 }
