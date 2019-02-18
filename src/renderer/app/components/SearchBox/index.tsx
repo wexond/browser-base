@@ -6,6 +6,7 @@ import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 import { observer } from 'mobx-react';
 import { StyledSearchBox, InputContainer, SearchIcon, Input } from './style';
 import { Suggestions } from '../Suggestions';
+import { remote } from 'electron';
 
 const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
@@ -85,6 +86,13 @@ const onInput = () => {
   store.overlayStore.suggest();
 };
 
+const onInputBlur = () => {
+  if (store.tabsStore.selectedTab.url === 'about:blank') {
+    remote.getCurrentWebContents().focus();
+    store.overlayStore.inputRef.current.focus();
+  }
+};
+
 export const SearchBox = observer(() => {
   const suggestionsVisible = store.suggestionsStore.suggestions.length !== 0;
 
@@ -98,6 +106,7 @@ export const SearchBox = observer(() => {
           onFocus={onInputFocus}
           onChange={onInput}
           onKeyDown={onKeyDown}
+          onBlur={onInputBlur}
           ref={store.overlayStore.inputRef}
         />
       </InputContainer>
