@@ -8,6 +8,27 @@ export const StyledPreloader = styled.div`
     width: ${size}px;
     height: ${size}px;
   `};
+
+  @keyframes nersent-ui-preloader-rotate {
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes nersent-ui-preloader-dash {
+    0% {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -35px;
+    }
+    100% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -124px;
+    }
+  }
 `;
 
 export const Path = styled.circle`

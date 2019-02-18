@@ -140,6 +140,10 @@ export class Tab {
         }
       },
     );
+
+    ipcRenderer.on(`view-loading-${this.id}`, (e: any, loading: boolean) => {
+      this.loading = loading;
+    });
   }
 
   public updateData() {
