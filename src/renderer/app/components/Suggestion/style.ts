@@ -50,6 +50,7 @@ export const SecondaryText = styled.div`
 export const Icon = styled.div`
   margin-left: 16px;
   width: 16px;
+  min-width: 16px;
   height: 16px;
   ${centerImage('16px', '16px')};
 `;
