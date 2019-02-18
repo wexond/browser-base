@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import Preloader from '~/renderer/components/Preloader';
+import { Preloader } from '~/renderer/components/Preloader';
 import { Tab } from '~/renderer/app/models';
 import store from '~/renderer/app/store';
 import {
@@ -65,7 +65,9 @@ const Content = observer(({ tab }: { tab: Tab }) => {
           style={{ backgroundImage: `url(${tab.favicon})` }}
         />
       )}
-      {tab.loading && <Preloader thickness={6} size={16} />}
+      {tab.loading && (
+        <Preloader thickness={6} size={16} style={{ minWidth: 16 }} />
+      )}
       <StyledTitle
         isIcon={tab.isIconSet}
         style={{
