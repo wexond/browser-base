@@ -53,6 +53,10 @@ export class Store {
     ipcRenderer.on('fullscreen', (e: any, fullscreen: boolean) => {
       this.isFullscreen = fullscreen;
     });
+
+    ipcRenderer.on('html-fullscreen', (e: any, fullscreen: boolean) => {
+      this.isHTMLFullscreen = fullscreen;
+    });
   }
 }
 

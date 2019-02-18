@@ -105,6 +105,16 @@ export class AppWindow {
       this.window.webContents.send('fullscreen', false);
     });
 
+    this.window.on('enter-html-full-screen', () => {
+      this.browserViewManager.fullscreen = true;
+      this.window.webContents.send('html-fullscreen', true);
+    });
+
+    this.window.on('leave-html-full-screen', () => {
+      this.browserViewManager.fullscreen = false;
+      this.window.webContents.send('html-fullscreen', false);
+    });
+
     this.window.on('scroll-touch-begin', () => {
       this.window.webContents.send('scroll-touch-begin');
     });
