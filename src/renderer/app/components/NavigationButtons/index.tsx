@@ -17,7 +17,7 @@ const onForwardClick = () => {
 };
 
 const onRefreshClick = () => {
-  callBrowserViewMethod(store.tabsStore.selectedTabId, 'refresh');
+  callBrowserViewMethod(store.tabsStore.selectedTabId, 'reload');
 };
 
 export const NavigationButtons = observer(() => {
