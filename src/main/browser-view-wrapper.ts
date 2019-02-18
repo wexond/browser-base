@@ -6,7 +6,7 @@ export default class BrowserViewWrapper extends BrowserView {
   public url: string = '';
   public tabId: number;
 
-  constructor(id: number) {
+  constructor(id: number, url: string) {
     super({
       webPreferences: {
         preload: `${app.getAppPath()}/src/main/preload.js`,
@@ -29,6 +29,17 @@ export default class BrowserViewWrapper extends BrowserView {
     this.webContents.addListener('did-start-navigation', () => {
       this.updateNavigationState();
     });
+
+    this.webContents.addListener(
+      'new-window',
+      (e, url, frameName, disposition) => {
+        if (disposition === 'new-window' || disposition === 'foreground-tab') {
+          appWindow.webContents.send('tabs-create', { url, active: true });
+        } else if (disposition === 'background-tab') {
+          appWindow.webContents.send('tabs-create', { url, active: false });
+        }
+      },
+    );
 
     this.webContents.addListener(
       'page-favicon-updated',
@@ -64,7 +75,7 @@ export default class BrowserViewWrapper extends BrowserView {
     );
 
     this.setAutoResize({ width: true, height: true });
-    this.webContents.loadURL('about:blank');
+    this.webContents.loadURL(url);
   }
 
   public updateNavigationState() {

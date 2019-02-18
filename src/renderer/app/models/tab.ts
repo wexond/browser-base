@@ -94,7 +94,7 @@ export class Tab {
     this.tabGroupId = tabGroupId;
     this.url = url;
 
-    ipcRenderer.send('browserview-create', this.id);
+    ipcRenderer.send('browserview-create', { tabId: this.id, url });
 
     ipcRenderer.once(`browserview-created-${this.id}`, () => {
       if (active) {

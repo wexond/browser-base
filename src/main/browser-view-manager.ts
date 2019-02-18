@@ -24,8 +24,8 @@ export class BrowserViewManager {
   constructor() {
     ipcMain.on(
       'browserview-create',
-      (e: Electron.IpcMessageEvent, tabId: number) => {
-        this.create(tabId);
+      (e: Electron.IpcMessageEvent, { tabId, url }: any) => {
+        this.create(tabId, url);
 
         appWindow.webContents.send(`browserview-created-${tabId}`);
       },
@@ -96,8 +96,8 @@ export class BrowserViewManager {
     return this.views[this.selectedId];
   }
 
-  public create(tabId: number) {
-    const view = new BrowserViewWrapper(tabId);
+  public create(tabId: number, url: string) {
+    const view = new BrowserViewWrapper(tabId, url);
     this.views[tabId] = view;
     global.viewsMap[view.id] = tabId;
   }
