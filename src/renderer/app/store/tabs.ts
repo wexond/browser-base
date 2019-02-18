@@ -14,6 +14,7 @@ import {
 
 import HorizontalScrollbar from '~/renderer/app/components/HorizontalScrollbar';
 import store from '.';
+import { ipcRenderer } from 'electron';
 
 export class TabsStore {
   @observable
@@ -64,6 +65,13 @@ export class TabsStore {
       }
       this.rearrangeTabsTimer.time++;
     }, 1000);
+
+    ipcRenderer.on(
+      'tabs-create',
+      (e: any, options: chrome.tabs.CreateProperties) => {
+        this.addTab(options);
+      },
+    );
   }
 
   public resetRearrangeTabsTimer() {
