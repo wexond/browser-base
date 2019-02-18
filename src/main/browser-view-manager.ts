@@ -10,6 +10,16 @@ global.viewsMap = {};
 export class BrowserViewManager {
   public views: { [key: number]: BrowserViewWrapper } = {};
   public selectedId = 0;
+  public _fullscreen = false;
+
+  public get fullscreen() {
+    return this._fullscreen;
+  }
+
+  public set fullscreen(val: boolean) {
+    this._fullscreen = val;
+    this.fixBounds();
+  }
 
   constructor() {
     ipcMain.on(
@@ -111,12 +121,20 @@ export class BrowserViewManager {
 
     appWindow.window.setBrowserView(view);
 
+    this.fixBounds();
+  }
+
+  public fixBounds() {
+    const view = this.views[this.selectedId];
+
+    if (!view) return;
+
     const { width, height } = appWindow.window.getContentBounds();
     view.setBounds({
       x: 0,
-      y: TOOLBAR_HEIGHT + 1,
+      y: this.fullscreen ? 0 : TOOLBAR_HEIGHT + 1,
       width,
-      height: height - TOOLBAR_HEIGHT,
+      height: this.fullscreen ? height : height - TOOLBAR_HEIGHT,
     });
     view.setAutoResize({ width: true, height: true });
   }
