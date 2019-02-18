@@ -7,9 +7,6 @@ import { observer } from 'mobx-react';
 import { StyledSearchBox, InputContainer, SearchIcon, Input } from './style';
 import { Suggestions } from '../Suggestions';
 
-let canSuggest = false;
-let lastSuggestion: string;
-
 const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 };
@@ -39,26 +36,7 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 };
 
 const onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-  e.currentTarget.select();
-};
-
-const autoComplete = (text: string, suggestion: string) => {
-  const regex = /(http(s?)):\/\/(www.)?|www./gi;
-  const regex2 = /(http(s?)):\/\//gi;
-
-  const start = text.length;
-
-  const input = store.overlayStore.inputRef.current;
-
-  if (suggestion) {
-    if (suggestion.startsWith(text.replace(regex, ''))) {
-      input.value = text + suggestion.replace(text.replace(regex, ''), '');
-    } else if (`www.${suggestion}`.startsWith(text.replace(regex2, ''))) {
-      input.value =
-        text + `www.${suggestion}`.replace(text.replace(regex2, ''), '');
-    }
-    input.setSelectionRange(start, input.value.length);
-  }
+  store.overlayStore.inputRef.current.select();
 };
 
 const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -78,9 +56,9 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     key !== 46 && // delete
     key !== 32 // space
   ) {
-    canSuggest = true;
+    store.overlayStore.canSuggest = true;
   } else {
-    canSuggest = false;
+    store.overlayStore.canSuggest = false;
   }
 
   if (e.keyCode === 38 || e.keyCode === 40) {
@@ -103,22 +81,8 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 };
 
 const onInput = () => {
-  const { suggestionsStore } = store;
-  const input = store.overlayStore.inputRef.current;
-
-  if (canSuggest) {
-    autoComplete(input.value, lastSuggestion);
-  }
-
-  suggestionsStore.load(input).then(suggestion => {
-    lastSuggestion = suggestion;
-    if (canSuggest) {
-      autoComplete(input.value.substring(0, input.selectionStart), suggestion);
-      canSuggest = false;
-    }
-  });
-
-  suggestionsStore.selected = 0;
+  store.overlayStore.show();
+  store.overlayStore.suggest();
 };
 
 export const SearchBox = observer(() => {
@@ -132,7 +96,7 @@ export const SearchBox = observer(() => {
           placeholder="Search or type in URL"
           onKeyPress={onKeyPress}
           onFocus={onInputFocus}
-          onInput={onInput}
+          onChange={onInput}
           onKeyDown={onKeyDown}
           ref={store.overlayStore.inputRef}
         />
