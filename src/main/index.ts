@@ -27,6 +27,16 @@ app.on('ready', () => {
           { role: 'delete' },
           { role: 'selectall' },
           { role: 'quit' },
+          { role: 'reload' },
+          {
+            type: 'normal',
+            accelerator: 'CmdOrCtrl+Shift+R',
+            label: 'Reload main process',
+            click() {
+              app.relaunch();
+              app.exit();
+            },
+          },
         ],
       },
     ]),

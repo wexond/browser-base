@@ -78,7 +78,6 @@
     "axios": "0.18.0",
     "electron-updater": "4.0.6",
     "gsap": "2.1.0",
-    "ico-to-png": "0.1.3",
     "mobx": "5.9.0",
     "mobx-react": "5.4.3",
     "nedb": "1.8.0",
