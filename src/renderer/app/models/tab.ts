@@ -131,6 +131,13 @@ export class Tab {
         this.favicon = fav.url;
         this.faviconOrigin = favicon;
         this.updateData();
+
+        if (!this.hasThemeColor) {
+          const palette = await Vibrant.from(fav.data).getPalette();
+          if (getColorBrightness(palette.Vibrant.hex) < 170) {
+            this.background = palette.Vibrant.hex;
+          }
+        }
       },
     );
 
