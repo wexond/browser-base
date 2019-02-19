@@ -4,7 +4,6 @@ import { Favicon } from '../models';
 import { getPath } from '~/shared/utils/paths';
 import { requestURL } from '../utils/network';
 
-const got = require('got');
 const icojs = require('icojs');
 const fileType = require('file-type');
 
