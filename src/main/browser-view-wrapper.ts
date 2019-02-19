@@ -17,7 +17,7 @@ export default class BrowserViewWrapper extends BrowserView {
 
     this.tabId = id;
 
-    this.webContents.openDevTools();
+    // this.webContents.openDevTools();
 
     this.webContents.addListener('did-stop-loading', () => {
       this.updateNavigationState();
