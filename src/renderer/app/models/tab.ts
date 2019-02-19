@@ -12,7 +12,6 @@ import {
 } from '~/renderer/app/constants';
 import { closeWindow, getColorBrightness } from '../utils';
 import { colors } from '~/renderer/constants';
-import Axios from 'axios';
 
 let id = 0;
 
@@ -132,14 +131,6 @@ export class Tab {
         this.favicon = fav.url;
         this.faviconOrigin = favicon;
         this.updateData();
-
-        /*icoToPng(fav.data, 16).then((png: any) => {
-          Vibrant.from(png)
-            .getPalette()
-            .then(palette => {
-              this.background = palette.DarkVibrant.hex;
-            });
-        });*/
       },
     );
 

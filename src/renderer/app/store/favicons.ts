@@ -2,9 +2,10 @@ import * as Datastore from 'nedb';
 
 import { Favicon } from '../models';
 import { getPath } from '~/shared/utils/paths';
-import Axios from 'axios';
+import { requestURL } from '../utils/network';
 
-const adapter = require('axios/lib/adapters/http');
+const got = require('got');
+const icojs = require('icojs');
 
 export class FaviconsStore {
   public db = new Datastore({
@@ -31,28 +32,27 @@ export class FaviconsStore {
   public addFavicon = async (url: string) => {
     return new Promise(async (resolve: (a: any) => void) => {
       if (!this.favicons[url]) {
-        const { data } = await Axios(url, {
-          responseType: 'arraybuffer',
-          adapter,
+        const data = Buffer.from(await requestURL(url), 'binary');
+
+        icojs.parse(data, 'image/png').then((images: any) => {
+          const reader = new FileReader();
+
+          reader.onload = () => {
+            const buffer: any = Buffer.from(reader.result as any);
+            const newData = JSON.stringify(buffer);
+
+            this.db.insert({
+              url,
+              data: newData,
+            });
+
+            this.favicons[url] = window.URL.createObjectURL(new Blob([buffer]));
+            this.faviconsBuffers[url] = buffer;
+            resolve({ url: this.favicons[url], data: buffer });
+          };
+
+          reader.readAsArrayBuffer(new Blob([images[0].buffer]));
         });
-
-        const reader = new FileReader();
-
-        reader.onload = () => {
-          const buffer: any = Buffer.from(reader.result as any);
-          const newData = JSON.stringify(buffer);
-
-          this.db.insert({
-            url,
-            data: newData,
-          });
-
-          this.favicons[url] = window.URL.createObjectURL(new Blob([buffer]));
-          this.faviconsBuffers[url] = buffer;
-          resolve({ url: this.favicons[url], data: buffer });
-        };
-
-        reader.readAsArrayBuffer(new Blob([data]));
       } else {
         resolve({ url: this.favicons[url], data: this.faviconsBuffers[url] });
       }
