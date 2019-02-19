@@ -14,8 +14,6 @@ import { closeWindow, getColorBrightness } from '../utils';
 import { colors } from '~/renderer/constants';
 import Axios from 'axios';
 
-const icoToPng = require('ico-to-png');
-
 let id = 0;
 
 export class Tab {

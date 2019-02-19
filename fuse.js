@@ -62,7 +62,7 @@ const getCopyPlugin = () => {
   });
 };
 
-const mainProcess = () => {
+const main = () => {
   const fuse = FuseBox.init(getConfig('server', 'main'));
 
   const app = fuse.bundle('main').instructions(`> [main/index.ts]`);
@@ -106,5 +106,20 @@ const renderer = (name, port) => {
   fuse.run();
 };
 
+const preload = name => {
+  const cfg = getRendererConfig('electron', name);
+
+  const fuse = FuseBox.init(cfg);
+
+  const app = fuse.bundle(name).instructions(`> [preloads/${name}]`);
+
+  if (!production) {
+    app.watch();
+  }
+
+  fuse.run();
+};
+
 renderer('app', 4444);
-mainProcess();
+preload('view-preload.ts');
+main();
