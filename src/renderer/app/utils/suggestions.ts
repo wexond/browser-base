@@ -2,8 +2,6 @@ import { HistoryItem } from '../models';
 import store from '../store';
 import { requestURL } from './network';
 
-const got = require('got');
-
 const countVisitedTimes = (historyItems: HistoryItem[]) => {
   const items: any[] = [];
 
