@@ -1,13 +1,9 @@
 import { ipcRenderer, remote } from 'electron';
 
-const viewsMap = remote.getGlobal('viewsMap');
-const browserViewId = remote.BrowserView.fromWebContents(
-  remote.getCurrentWebContents(),
-).id;
-
-console.log(process.argv);
-
-const tabId = viewsMap[browserViewId];
+const tabId = parseInt(
+  process.argv.find(x => x.startsWith('--tab-id=')).split('=')[1],
+  10,
+);
 
 const goBack = () => {
   ipcRenderer.send('browserview-call', { tabId, method: 'goBack' });
