@@ -11,10 +11,13 @@ export default class BrowserViewWrapper extends BrowserView {
       webPreferences: {
         preload: `${app.getAppPath()}/build/view-preload.js`,
         nodeIntegration: false,
+        additionalArguments: [`--tab-id=${id}`],
       },
     });
 
     this.tabId = id;
+
+    this.webContents.openDevTools();
 
     this.webContents.addListener('did-stop-loading', () => {
       this.updateNavigationState();
