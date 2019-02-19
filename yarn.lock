@@ -33,10 +33,6 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@canvas/image-data@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@canvas/image-data/-/image-data-1.0.0.tgz#3bd2cd856e13fc9e2c25feff360a4056857b0367"
-
 "@emotion/is-prop-valid@^0.7.3":
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-0.7.3.tgz#a6bf4fa5387cbba59d44e698a4680f481a8da6cc"
@@ -1211,19 +1207,6 @@ decamelize@^1.1.2, decamelize@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
 
-decode-bmp@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/decode-bmp/-/decode-bmp-0.1.0.tgz#a7a0ad133dcdc717a437132e86fd91124254d090"
-  dependencies:
-    to-data-view "^1.0.0"
-
-decode-ico@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/decode-ico/-/decode-ico-0.3.1.tgz#8ef97be1c8507761a8e14c5b5c732b29d4c102a2"
-  dependencies:
-    decode-bmp "^0.1.0"
-    to-data-view "^1.0.0"
-
 decode-uri-component@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
@@ -2050,14 +2033,6 @@ http-signature@~1.2.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
-ico-to-png@0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/ico-to-png/-/ico-to-png-0.1.3.tgz#0e87e282b68ba2ea204649d545d765c58c919424"
-  dependencies:
-    decode-ico "^0.3.1"
-    lodepng "^1.2.0"
-    resize-image-data "^0.2.0"
-
 iconv-lite@0.4.23:
   version "0.4.23"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.23.tgz#297871f63be507adcfbfca715d0cd0eed84e9a63"
@@ -2552,12 +2527,6 @@ lodash@^4.17.10, lodash@^4.17.11, lodash@^4.3.0:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
 
-lodepng@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/lodepng/-/lodepng-1.2.0.tgz#088cc1192578e652025006caef0971d1b4f296c5"
-  dependencies:
-    nan "^2.6.2"
-
 loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
@@ -2790,7 +2759,7 @@ mute-stream@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
 
-nan@^2.6.2, nan@^2.9.2:
+nan@^2.9.2:
   version "2.12.1"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.12.1.tgz#7b1aa193e9aa86057e3c7bbd0ac448e770925552"
 
@@ -3582,12 +3551,6 @@ require-main-filename@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-1.0.1.tgz#97f717b69d48784f5f526a6c5aa8ffdda055a4d1"
 
-resize-image-data@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/resize-image-data/-/resize-image-data-0.2.0.tgz#1b1be122357ae7cb50bee565fa04f821fbf83ac5"
-  dependencies:
-    "@canvas/image-data" "^1.0.0"
-
 resolve-url@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/resolve-url/-/resolve-url-0.2.1.tgz#2c637fe77c893afd2a663fe21aa9080068e2052a"
@@ -4070,10 +4033,6 @@ tmp@^0.0.33:
   resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"
   dependencies:
     os-tmpdir "~1.0.2"
-
-to-data-view@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/to-data-view/-/to-data-view-1.0.0.tgz#4980623719ccb6a2232ae6d82d9ffd0a2e2e39fd"
 
 to-fast-properties@^2.0.0:
   version "2.0.0"
