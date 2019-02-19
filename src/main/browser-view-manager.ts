@@ -121,7 +121,11 @@ export class BrowserViewManager {
 
     appWindow.setBrowserView(view);
 
-    view.webContents.focus();
+    if (view.webContents.getURL() !== 'about:blank') {
+      view.webContents.focus();
+    } else {
+      appWindow.webContents.focus();
+    }
 
     this.fixBounds();
   }

@@ -1,6 +1,6 @@
 import { observable, computed } from 'mobx';
 import * as React from 'react';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import store from '.';
 import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 
@@ -67,7 +67,7 @@ export class OverlayStore {
       this.inputRef.current.value = '';
     } else {
       this.show();
-      remote.getCurrentWebContents().focus();
+      ipcRenderer.send('window-focus');
 
       callBrowserViewMethod(store.tabsStore.selectedTabId, 'getURL').then(
         (url: string) => {
