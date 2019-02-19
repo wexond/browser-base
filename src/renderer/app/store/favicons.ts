@@ -13,6 +13,7 @@ export class FaviconsStore {
   });
 
   public favicons: { [key: string]: string } = {};
+  public faviconsBuffers: { [key: string]: Buffer } = {};
 
   constructor() {
     this.load();
@@ -28,32 +29,34 @@ export class FaviconsStore {
   };
 
   public addFavicon = async (url: string) => {
-    const favicons = await this.getFavicons({ url });
-
-    if (favicons.length === 0) {
-      const { data } = await Axios.get(url, {
-        responseType: 'arraybuffer',
-        adapter,
-      });
-
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const generatedBuffer: any = reader.result;
-
-        const buf = Buffer.from(generatedBuffer);
-        const data = JSON.stringify(buf);
-
-        this.db.insert({
-          url,
-          data,
+    return new Promise(async (resolve: (a: any) => void) => {
+      if (!this.favicons[url]) {
+        const { data } = await Axios(url, {
+          responseType: 'arraybuffer',
+          adapter,
         });
 
-        this.favicons[url] = window.URL.createObjectURL(new Blob([buf]));
-      };
+        const reader = new FileReader();
 
-      reader.readAsArrayBuffer(new Blob([data]));
-    }
+        reader.onload = () => {
+          const buffer: any = Buffer.from(reader.result as any);
+          const newData = JSON.stringify(buffer);
+
+          this.db.insert({
+            url,
+            data: newData,
+          });
+
+          this.favicons[url] = window.URL.createObjectURL(new Blob([buffer]));
+          this.faviconsBuffers[url] = buffer;
+          resolve({ url: this.favicons[url], data: buffer });
+        };
+
+        reader.readAsArrayBuffer(new Blob([data]));
+      } else {
+        resolve({ url: this.favicons[url], data: this.faviconsBuffers[url] });
+      }
+    });
   };
 
   public async load() {
@@ -66,6 +69,7 @@ export class FaviconsStore {
           this.favicons[favicon.url] = window.URL.createObjectURL(
             new Blob([data]),
           );
+          this.faviconsBuffers[favicon.url] = data;
         }
       });
     });

@@ -1,6 +1,7 @@
 import { observable, computed } from 'mobx';
 import * as React from 'react';
 import { ipcRenderer, remote } from 'electron';
+import * as Vibrant from 'node-vibrant';
 
 import store from '~/renderer/app/store';
 import {
@@ -11,6 +12,9 @@ import {
 } from '~/renderer/app/constants';
 import { closeWindow, getColorBrightness } from '../utils';
 import { colors } from '~/renderer/constants';
+import Axios from 'axios';
+
+const icoToPng = require('ico-to-png');
 
 let id = 0;
 
@@ -49,6 +53,8 @@ export class Tab {
   public isClosing = false;
   public ref = React.createRef<HTMLDivElement>();
   public lastHistoryId: string;
+  public hasThemeColor = false;
+  public faviconOrigin: string;
 
   @computed
   public get isSelected() {
@@ -123,10 +129,19 @@ export class Tab {
 
     ipcRenderer.on(
       `browserview-favicon-updated-${this.id}`,
-      (e: any, favicon: string) => {
-        this.favicon = favicon;
-        store.faviconsStore.addFavicon(favicon);
+      async (e: any, favicon: string) => {
+        const fav = await store.faviconsStore.addFavicon(favicon);
+        this.favicon = fav.url;
+        this.faviconOrigin = favicon;
         this.updateData();
+
+        /*icoToPng(fav.data, 16).then((png: any) => {
+          Vibrant.from(png)
+            .getPalette()
+            .then(palette => {
+              this.background = palette.DarkVibrant.hex;
+            });
+        });*/
       },
     );
 
@@ -135,8 +150,10 @@ export class Tab {
       (e: any, themeColor: string) => {
         if (themeColor && getColorBrightness(themeColor) < 170) {
           this.background = themeColor;
+          this.hasThemeColor = true;
         } else {
           this.background = colors.blue['500'];
+          this.hasThemeColor = false;
         }
       },
     );
@@ -148,14 +165,14 @@ export class Tab {
 
   public updateData() {
     if (this.lastHistoryId) {
-      const { title, url, favicon } = this;
+      const { title, url, faviconOrigin } = this;
 
       const item = store.historyStore.getById(this.lastHistoryId);
 
       if (item) {
         item.title = title;
         item.url = url;
-        item.favicon = favicon;
+        item.favicon = faviconOrigin;
       }
 
       store.historyStore.db.update(
@@ -166,7 +183,7 @@ export class Tab {
           $set: {
             title,
             url,
-            favicon,
+            favicon: faviconOrigin,
           },
         },
       );
