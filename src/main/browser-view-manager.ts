@@ -121,10 +121,15 @@ export class BrowserViewManager {
 
     appWindow.setBrowserView(view);
 
-    if (view.webContents.getURL() !== 'about:blank') {
-      view.webContents.focus();
-    } else {
+    const currUrl = view.webContents.getURL();
+
+    if (
+      (currUrl === '' && view.homeUrl === 'about:blank') ||
+      currUrl === 'about:blank'
+    ) {
       appWindow.webContents.focus();
+    } else {
+      view.webContents.focus();
     }
 
     this.fixBounds();
