@@ -63,6 +63,10 @@ app.on('ready', () => {
       autoUpdater.checkForUpdates();
     }
   });
+
+  ipcMain.on('window-focus', () => {
+    appWindow.webContents.focus();
+  });
 });
 
 app.on('window-all-closed', () => {

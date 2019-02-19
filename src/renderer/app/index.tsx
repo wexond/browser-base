@@ -6,6 +6,8 @@ import { fonts } from '../constants';
 import store from './store';
 import { ipcRenderer } from 'electron';
 
+ipcRenderer.setMaxListeners(0);
+
 const styleElement = document.createElement('style');
 
 styleElement.textContent = `

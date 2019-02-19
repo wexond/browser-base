@@ -1,6 +1,6 @@
 import { observable, computed } from 'mobx';
 import * as React from 'react';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import * as Vibrant from 'node-vibrant';
 
 import store from '~/renderer/app/store';
@@ -204,10 +204,7 @@ export class Tab {
       ipcRenderer.send('browserview-select', this.id);
 
       if (this.url === 'about:blank') {
-        setTimeout(() => {
-          remote.getCurrentWindow().webContents.focus();
-          store.overlayStore.inputRef.current.focus();
-        }, 1);
+        store.overlayStore.inputRef.current.focus();
       }
     }
   }

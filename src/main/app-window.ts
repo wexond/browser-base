@@ -68,6 +68,10 @@ export class AppWindow extends BrowserWindow {
     this.on('restore', () => this.browserViewManager.fixBounds());
     this.on('unmaximize', () => this.browserViewManager.fixBounds());
 
+    process.on('uncaughtException', error => {
+      console.error(error);
+    });
+
     // Save current window state to file.
     this.on('close', () => {
       windowState.maximized = this.isMaximized();
