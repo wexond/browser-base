@@ -5,6 +5,7 @@ export default class BrowserViewWrapper extends BrowserView {
   public title: string = '';
   public url: string = '';
   public tabId: number;
+  public homeUrl: string;
 
   constructor(id: number, url: string) {
     super({
@@ -15,6 +16,7 @@ export default class BrowserViewWrapper extends BrowserView {
       },
     });
 
+    this.homeUrl = url;
     this.tabId = id;
 
     // this.webContents.openDevTools();
