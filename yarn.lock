@@ -1656,7 +1656,7 @@ file-system@^2.1.0, file-system@^2.1.1:
     file-match "^1.0.1"
     utils-extend "^1.0.4"
 
-file-type@^10.7.0:
+file-type@10.8.0, file-type@^10.7.0:
   version "10.8.0"
   resolved "https://registry.yarnpkg.com/file-type/-/file-type-10.8.0.tgz#676dfd43fdb75d8ccdba1cff53351b71190c25ff"
 

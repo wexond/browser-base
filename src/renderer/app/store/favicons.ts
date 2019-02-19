@@ -6,6 +6,27 @@ import { requestURL } from '../utils/network';
 
 const got = require('got');
 const icojs = require('icojs');
+const fileType = require('file-type');
+
+const convertIcoToPng = (icoData: Buffer) => {
+  return new Promise((resolve: (b: Buffer) => void) => {
+    icojs.parse(icoData, 'image/png').then((images: any) => {
+      resolve(images[0].buffer);
+    });
+  });
+};
+
+const readImage = (buffer: Buffer) => {
+  return new Promise((resolve: (b: Buffer) => void) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      resolve(Buffer.from(reader.result as any));
+    };
+
+    reader.readAsArrayBuffer(new Blob([buffer]));
+  });
+};
 
 export class FaviconsStore {
   public db = new Datastore({
@@ -33,26 +54,22 @@ export class FaviconsStore {
     return new Promise(async (resolve: (a: any) => void) => {
       if (!this.favicons[url]) {
         const data = Buffer.from(await requestURL(url), 'binary');
+        let img = data;
 
-        icojs.parse(data, 'image/png').then((images: any) => {
-          const reader = new FileReader();
+        if (fileType(data).ext === 'ico') {
+          img = await convertIcoToPng(img);
+        }
 
-          reader.onload = () => {
-            const buffer: any = Buffer.from(reader.result as any);
-            const newData = JSON.stringify(buffer);
+        const buffer = await readImage(img);
 
-            this.db.insert({
-              url,
-              data: newData,
-            });
-
-            this.favicons[url] = window.URL.createObjectURL(new Blob([buffer]));
-            this.faviconsBuffers[url] = buffer;
-            resolve({ url: this.favicons[url], data: buffer });
-          };
-
-          reader.readAsArrayBuffer(new Blob([images[0].buffer]));
+        this.db.insert({
+          url,
+          data: JSON.stringify(buffer),
         });
+
+        this.favicons[url] = window.URL.createObjectURL(new Blob([buffer]));
+        this.faviconsBuffers[url] = buffer;
+        resolve({ url: this.favicons[url], data: buffer });
       } else {
         resolve({ url: this.favicons[url], data: this.faviconsBuffers[url] });
       }
