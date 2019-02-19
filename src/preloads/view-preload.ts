@@ -1,4 +1,4 @@
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 
 const tabId = parseInt(
   process.argv.find(x => x.startsWith('--tab-id=')).split('=')[1],
