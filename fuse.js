@@ -34,6 +34,10 @@ const getConfig = (target, name) => {
     alias: {
       '~': '~/',
     },
+    log: {
+      showBundledFiles: false,
+      clearTerminalOnBundle: true,
+    },
   };
 };
 
