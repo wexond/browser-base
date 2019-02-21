@@ -63,9 +63,9 @@ If you have found any bugs or just want to see some new features in Wexond, feel
 
 ## Running
 
-Before running Wexond, please ensure you have [`Node.js`](https://nodejs.org/en/) installed on your machine. You can use `npm` although I highly recommend to use `yarn`. In this guide I will use `yarn`.
+Before running Wexond, please ensure you have [`Node.js`](https://nodejs.org/en/) installed on your machine. You can use `npm`, although I highly recommend to use `yarn`. In this guide I will use `yarn`.
 
-Firstly, run this command to install all needed dependencies. If you have encountered any problem, please report it. I will try to help as much as I can.
+Firstly, run this command to install all needed dependencies. If you have encountered any problems, please report it. I will try to help as much as I can.
 ```bash
 $ yarn
 ```
