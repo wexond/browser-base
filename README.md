@@ -55,39 +55,43 @@ All binaries are located in the [Releases page](https://github.com/wexond/wexond
 
 We still have a lot of things to do, to make Wexond better and better. This is just a beginning. So to improve our web browser we have created a roadmap so that you can see the next features and improvements.
 
-# [Supported WebExtensions APIs](https://github.com/wexond/wexond/issues/110)
+# [Supported Chrome APIs](https://github.com/wexond/wexond/issues/110)
 
 # Contributing
 
-We really appreciate any changes and improvements, so feel free to open pull requests! If you have found any issues, please report them. This would really help us making the browser even better!
+If you have found any bugs or just want to see some new features in Wexond, feel free to open an issue. I'm open to any suggestions and bug reports would be really helpful for me and appreciated very much. Wexond is in heavy development and some bugs may occur. Also, please don't hesitate to open a pull request. This is really important to me and for the further development of this project.
 
-If you want to contribute, check our [Contributing guidelines](CONTRIBUTING.md) and [Code Of Conduct](CODE_OF_CONDUCT.md).
+## Running
 
-## Development
+Before running Wexond, please ensure you have [`Node.js`](https://nodejs.org/en/) installed on your machine. You can use `npm` although I highly recommend to use `yarn`. In this guide I will use `yarn`.
 
-If you want to develop Wexond, you will need to run some commands, but don't worry, we will explain you everything. Please make sure you have installed [`Node.js`](https://nodejs.org/en/). Also, we assume you have cloned the repository.
-
-First, you will need to install all needed dependencies to run and build Wexond by typing this simple command:
-
+Firstly, run this command to install all needed dependencies. If you have encountered any problem, please report it. I will try to help as much as I can.
 ```bash
-$ npm install
+$ yarn
 ```
 
-If you have installed all dependencies successfully, just type
-
+The given command below will run Wexond in the development mode.
 ```bash
-$ npm run dev
+$ yarn dev
 ```
 
-This will run Wexond in development mode.
+## Other commands
 
-### Other commands
+You can also run other commands, for other tasks like building the app or linting the code, by using the commands described below.
 
-#### Usage:
+### Usage:
 
+Using `yarn`:
+```bash
+$ yarn <command>
+```
+
+Using `npm`:
 ```bash
 $ npm run <command>
 ```
+
+#### List of available commands:
 
 | Command            | Description                                 |
 | ------------------ | ------------------------------------------- |
@@ -101,9 +105,9 @@ $ npm run <command>
 | `start`            | Starts Wexond.                              |
 | `dev`              | Starts Wexond in the development mode       |
 
-## Documentation
+# Documentation
 
-> At this moment there are no docs for the theming system.
+> At this moment there are no docs, however this may change in the future, see #147.
 
 Guides and the API reference are located in [`docs`](docs).
 It also contains documents describing how to use the browser, and create themes.
