@@ -53,8 +53,6 @@ All binaries are located in the [Releases page](https://github.com/wexond/wexond
 
 # [Roadmap](https://github.com/wexond/wexond/projects)
 
-We still have a lot of things to do, to make Wexond better and better. This is just a beginning. So to improve our web browser we have created a roadmap so that you can see the next features and improvements.
-
 # [Supported Chrome APIs](https://github.com/wexond/wexond/issues/110)
 
 # Contributing
