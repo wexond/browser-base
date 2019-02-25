@@ -10,7 +10,7 @@
 [![AppVeyor](https://img.shields.io/appveyor/ci/sentialx/wexond.svg?style=flat-square)](https://ci.appveyor.com/project/sentialx/wexond)
 [![Twitter](https://img.shields.io/twitter/follow/sentialx.svg?label=Follow&style=flat-square)](https://twitter.com/sentialx)
 
-Wexond is an extensible web browser with a totally different user experience, built on top of `Electron`, `TypeScript`, `React` and `styled-components`.
+Wexond is an extensible web browser with a totally different user experience, built on top of `Electron`, `TypeScript`, `React` and `styled-components`. It aims to be fast, beautiful, extensible and functional.
 
 </div>
 
