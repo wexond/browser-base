@@ -64,9 +64,14 @@ export class AppWindow extends BrowserWindow {
       }
     });
 
-    this.on('maximize', () => this.browserViewManager.fixBounds());
-    this.on('restore', () => this.browserViewManager.fixBounds());
-    this.on('unmaximize', () => this.browserViewManager.fixBounds());
+    const resize = () => {
+      this.browserViewManager.fixBounds();
+      this.webContents.send('tabs-resize');
+    };
+
+    this.on('maximize', resize);
+    this.on('restore', resize);
+    this.on('unmaximize', resize);
 
     process.on('uncaughtException', error => {
       console.error(error);
