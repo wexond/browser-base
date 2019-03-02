@@ -66,7 +66,12 @@ const Content = observer(({ tab }: { tab: Tab }) => {
         />
       )}
       {tab.loading && (
-        <Preloader thickness={6} size={16} style={{ minWidth: 16 }} />
+        <Preloader
+          color={tab.background}
+          thickness={6}
+          size={16}
+          style={{ minWidth: 16 }}
+        />
       )}
       <StyledTitle
         isIcon={tab.isIconSet}
