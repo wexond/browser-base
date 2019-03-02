@@ -115,7 +115,7 @@ const preload = name => {
 
   const fuse = FuseBox.init(cfg);
 
-  const app = fuse.bundle(name).instructions(`> [preloads/${name}]`);
+  const app = fuse.bundle(name).instructions(`> [preloads/${name}.ts]`);
 
   if (!production) {
     app.watch();
@@ -125,5 +125,5 @@ const preload = name => {
 };
 
 renderer('app', 4444);
-preload('view-preload.ts');
+preload('view-preload');
 main();
