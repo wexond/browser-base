@@ -16,7 +16,11 @@ const onForwardClick = () => {
 };
 
 const onRefreshClick = () => {
-  callBrowserViewMethod(store.tabsStore.selectedTabId, 'reload');
+  if (store.tabsStore.selectedTab && store.tabsStore.selectedTab.loading) {
+    callBrowserViewMethod(store.tabsStore.selectedTabId, 'stop');
+  } else {
+    callBrowserViewMethod(store.tabsStore.selectedTabId, 'reload');
+  }
 };
 
 export const NavigationButtons = observer(() => {
@@ -35,7 +39,15 @@ export const NavigationButtons = observer(() => {
         icon={icons.forward}
         onClick={onForwardClick}
       />
-      <ToolbarButton size={20} icon={icons.refresh} onClick={onRefreshClick} />
+      <ToolbarButton
+        size={20}
+        icon={
+          store.tabsStore.selectedTab && store.tabsStore.selectedTab.loading
+            ? icons.close
+            : icons.refresh
+        }
+        onClick={onRefreshClick}
+      />
     </StyledContainer>
   );
 });
