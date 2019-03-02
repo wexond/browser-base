@@ -52,25 +52,28 @@ export class FaviconsStore {
   public addFavicon = async (url: string) => {
     return new Promise(async (resolve: (a: any) => void) => {
       if (!this.favicons[url]) {
-        const data = Buffer.from(await requestURL(url), 'binary');
-        let img = data;
+        let data = Buffer.from(await requestURL(url), 'binary');
 
-        if (fileType(data).ext === 'ico') {
-          img = await convertIcoToPng(img);
+        const type = fileType(data);
+
+        if (type && type.ext === 'ico') {
+          data = await convertIcoToPng(data);
         }
 
-        const buffer = await readImage(img);
+        data = await readImage(data);
+
+        const str = `data:png;base64,${data.toString('base64')}`;
 
         this.db.insert({
           url,
-          data: JSON.stringify(buffer),
+          data: str,
         });
 
-        this.favicons[url] = window.URL.createObjectURL(new Blob([buffer]));
-        this.faviconsBuffers[url] = buffer;
-        resolve({ url: this.favicons[url], data: buffer });
+        this.favicons[url] = str;
+
+        resolve(str);
       } else {
-        resolve({ url: this.favicons[url], data: this.faviconsBuffers[url] });
+        resolve(this.favicons[url]);
       }
     });
   };
@@ -80,12 +83,10 @@ export class FaviconsStore {
       if (err) return console.warn(err);
 
       docs.forEach(favicon => {
-        const data = Buffer.from(JSON.parse(favicon.data).data);
-        if (this.favicons[favicon.url] == null && data.byteLength !== 0) {
-          this.favicons[favicon.url] = window.URL.createObjectURL(
-            new Blob([data]),
-          );
-          this.faviconsBuffers[favicon.url] = data;
+        const { data } = favicon;
+
+        if (this.favicons[favicon.url] == null) {
+          this.favicons[favicon.url] = data;
         }
       });
     });
