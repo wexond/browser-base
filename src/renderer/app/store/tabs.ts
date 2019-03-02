@@ -72,6 +72,13 @@ export class TabsStore {
         this.addTab(options);
       },
     );
+
+    ipcRenderer.on(
+      'tabs-resize',
+      (e: any, options: chrome.tabs.CreateProperties) => {
+        this.updateTabsBounds(false);
+      },
+    );
   }
 
   public resetRearrangeTabsTimer() {
