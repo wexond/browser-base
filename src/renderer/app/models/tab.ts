@@ -51,7 +51,6 @@ export class Tab {
   public ref = React.createRef<HTMLDivElement>();
   public lastHistoryId: string;
   public hasThemeColor = false;
-  public faviconOrigin: string;
 
   @computed
   public get isSelected() {
@@ -127,15 +126,23 @@ export class Tab {
     ipcRenderer.on(
       `browserview-favicon-updated-${this.id}`,
       async (e: any, favicon: string) => {
-        const fav = await store.faviconsStore.addFavicon(favicon);
-        this.favicon = fav.url;
-        this.faviconOrigin = favicon;
+        this.favicon = favicon;
         this.updateData();
 
+        const fav = await store.faviconsStore.addFavicon(favicon);
+
+        const buf = Buffer.from(fav.split('base64,')[1], 'base64');
+
         if (!this.hasThemeColor) {
-          const palette = await Vibrant.from(fav.data).getPalette();
-          if (getColorBrightness(palette.Vibrant.hex) < 170) {
-            this.background = palette.Vibrant.hex;
+          try {
+            const palette = await Vibrant.from(buf).getPalette();
+            if (getColorBrightness(palette.Vibrant.hex) < 170) {
+              this.background = palette.Vibrant.hex;
+            } else {
+              this.background = colors.blue['500'];
+            }
+          } catch (e) {
+            console.error(e);
           }
         }
       },
@@ -161,14 +168,14 @@ export class Tab {
 
   public updateData() {
     if (this.lastHistoryId) {
-      const { title, url, faviconOrigin } = this;
+      const { title, url, favicon } = this;
 
       const item = store.historyStore.getById(this.lastHistoryId);
 
       if (item) {
         item.title = title;
         item.url = url;
-        item.favicon = faviconOrigin;
+        item.favicon = favicon;
       }
 
       store.historyStore.db.update(
@@ -179,7 +186,7 @@ export class Tab {
           $set: {
             title,
             url,
-            favicon: faviconOrigin,
+            favicon,
           },
         },
       );
