@@ -31,6 +31,8 @@ Wexond is an extensible web browser with a totally different user experience, bu
 ### Backers
 [![Backers](https://opencollective.com/wexond/tiers/backer.svg?avatarHeight=48)](https://opencollective.com/wexond)
 
+https://digital-presence.agency/
+
 # Screenshots
 
 ![Home page](screenshots/screenshot-1.png)
