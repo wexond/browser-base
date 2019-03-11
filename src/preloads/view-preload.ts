@@ -1,4 +1,10 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, webFrame } from 'electron';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { getAPI } from '~/shared/utils/extensions';
+import { format, parse } from 'url';
+import { IpcExtension } from '~/shared/models';
+import { runInThisContext } from 'vm';
 
 const tabId = parseInt(
   process.argv.find(x => x.startsWith('--tab-id=')).split('=')[1],
@@ -80,4 +86,159 @@ ipcRenderer.on('scroll-touch-end', () => {
   }
 
   resetCounters();
+});
+
+const matchesPattern = (pattern: string, url: string) => {
+  if (pattern === '<all_urls>') {
+    return true;
+  }
+
+  const regexp = new RegExp(`^${pattern.replace(/\*/g, '.*')}$`);
+  return url.match(regexp);
+};
+
+const runContentScript = (
+  url: string,
+  code: string,
+  extension: IpcExtension,
+  worldId: number,
+) => {
+  const parsed = parse(url);
+  const context = getAPI(extension);
+
+  webFrame.setIsolatedWorldHumanReadableName(worldId, name);
+  webFrame.executeJavaScriptInIsolatedWorld(
+    worldId,
+    [
+      {
+        code: 'window',
+      },
+    ],
+    false,
+    (window: any) => {
+      window.chrome = window.wexond = window.browser = context;
+    },
+  );
+
+  webFrame.executeJavaScriptInIsolatedWorld(worldId, [
+    {
+      code,
+      url: format({
+        protocol: parsed.protocol,
+        slashes: true,
+        hostname: extension.id,
+        pathname: parsed.pathname,
+      }),
+    },
+  ]);
+};
+
+const runStylesheet = (url: string, code: string) => {
+  const wrapper = `((code) => {
+    function init() {
+      const styleElement = document.createElement('style');
+      styleElement.textContent = code;
+      document.head.append(styleElement);
+    }
+    document.addEventListener('DOMContentLoaded', init);
+  })`;
+
+  const compiledWrapper = runInThisContext(wrapper, {
+    filename: url,
+    lineOffset: 1,
+    displayErrors: true,
+  });
+
+  return compiledWrapper.call(window, code);
+};
+
+const injectContentScript = (script: any, extension: IpcExtension) => {
+  if (
+    !script.matches.some((x: string) =>
+      matchesPattern(
+        x,
+        `${location.protocol}//${location.host}${location.pathname}`,
+      ),
+    )
+  ) {
+    return;
+  }
+
+  process.setMaxListeners(0);
+
+  if (script.js) {
+    script.js.forEach((js: any) => {
+      const fire = runContentScript.bind(
+        window,
+        js.url,
+        js.code,
+        extension,
+        getIsolatedWorldId(),
+      );
+
+      if (script.runAt === 'document_start') {
+        (process as any).once('document-start', fire);
+      } else if (script.runAt === 'document_end') {
+        (process as any).once('document-end', fire);
+      } else {
+        document.addEventListener('DOMContentLoaded', fire);
+      }
+    });
+  }
+
+  if (script.css) {
+    script.css.forEach((css: any) => {
+      const fire = runStylesheet.bind(window, css.url, css.code);
+      if (script.runAt === 'document_start') {
+        (process as any).once('document-start', fire);
+      } else if (script.runAt === 'document_end') {
+        (process as any).once('document-end', fire);
+      } else {
+        document.addEventListener('DOMContentLoaded', fire);
+      }
+    });
+  }
+};
+
+let nextIsolatedWorldId = 1000;
+
+const getIsolatedWorldId = () => {
+  return nextIsolatedWorldId++;
+};
+
+const setImmediateTemp: any = setImmediate;
+
+process.once('loaded', () => {
+  global.setImmediate = setImmediateTemp;
+
+  const extensions: { [key: string]: IpcExtension } = ipcRenderer.sendSync(
+    'get-extensions',
+  );
+
+  Object.keys(extensions).forEach(key => {
+    const extension = extensions[key];
+    const { manifest } = extension;
+
+    if (manifest.content_scripts) {
+      const readArrayOfFiles = (relativePath: string) => ({
+        url: `wexond-extension://${manifest.id}/${relativePath}`,
+        code: readFileSync(join(manifest.path, relativePath), 'utf8'),
+      });
+
+      try {
+        manifest.content_scripts.forEach(script => {
+          const newScript = {
+            matches: script.matches,
+            js: script.js ? script.js.map(readArrayOfFiles) : [],
+            css: script.css ? script.css.map(readArrayOfFiles) : [],
+            runAt: script.run_at || 'document_idle',
+          };
+
+          injectContentScript(newScript, extension);
+        });
+      } catch (readError) {
+        console.error('Failed to read content scripts', readError);
+      }
+    }
+  });
 });
