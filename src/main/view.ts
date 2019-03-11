@@ -1,4 +1,4 @@
-import { BrowserView, app } from 'electron';
+import { BrowserView, app, Menu } from 'electron';
 import { appWindow } from '.';
 
 export class View extends BrowserView {
@@ -20,7 +20,23 @@ export class View extends BrowserView {
     this.homeUrl = url;
     this.tabId = id;
 
-    // this.webContents.openDevTools();
+    this.webContents.on('context-menu', (e, params) => {
+      const menu = Menu.buildFromTemplate([
+        {
+          id: 'inspect',
+          label: 'Inspect Element',
+          click: () => {
+            this.webContents.inspectElement(params.x, params.y);
+
+            if (this.webContents.isDevToolsOpened()) {
+              this.webContents.devToolsWebContents.focus();
+            }
+          },
+        },
+      ]);
+
+      menu.popup();
+    });
 
     this.webContents.addListener('did-stop-loading', () => {
       this.updateNavigationState();
