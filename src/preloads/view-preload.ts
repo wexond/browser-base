@@ -221,8 +221,8 @@ process.once('loaded', () => {
 
     if (manifest.content_scripts) {
       const readArrayOfFiles = (relativePath: string) => ({
-        url: `wexond-extension://${manifest.id}/${relativePath}`,
-        code: readFileSync(join(manifest.path, relativePath), 'utf8'),
+        url: `wexond-extension://${extension.id}/${relativePath}`,
+        code: readFileSync(join(extension.path, relativePath), 'utf8'),
       });
 
       try {
