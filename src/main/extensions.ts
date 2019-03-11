@@ -154,3 +154,13 @@ export const loadExtensions = async () => {
 ipcMain.on('get-extension', (e: IpcMessageEvent, id: string) => {
   e.returnValue = getIpcExtension(id);
 });
+
+ipcMain.on('get-extensions', (e: IpcMessageEvent) => {
+  const list = { ...extensions };
+
+  for (const key in list) {
+    list[key] = getIpcExtension(key);
+  }
+
+  e.returnValue = list;
+});
