@@ -13,6 +13,7 @@ export class View extends BrowserView {
         preload: `${app.getAppPath()}/build/view-preload.js`,
         nodeIntegration: false,
         additionalArguments: [`--tab-id=${id}`],
+        contextIsolation: true,
       },
     });
 
