@@ -8,3 +8,13 @@ export const makeId = (
   }
   return id;
 };
+
+export const replaceAll = (
+  str: string,
+  find: string,
+  replace: string,
+  options = 'gi',
+) => {
+  find = find.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
+  return str.replace(new RegExp(find, options), replace);
+};

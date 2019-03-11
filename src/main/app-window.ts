@@ -2,12 +2,12 @@ import { BrowserWindow, app } from 'electron';
 import { resolve, join } from 'path';
 import { platform } from 'os';
 
-import { BrowserViewManager } from './browser-view-manager';
+import { ViewManager } from './view-manager';
 import { getPath } from '~/shared/utils/paths';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 
 export class AppWindow extends BrowserWindow {
-  public browserViewManager: BrowserViewManager = new BrowserViewManager();
+  public viewManager: ViewManager = new ViewManager();
 
   constructor() {
     super({
@@ -21,6 +21,7 @@ export class AppWindow extends BrowserWindow {
       webPreferences: {
         plugins: true,
         nodeIntegration: true,
+        contextIsolation: false,
       },
       icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
     });
@@ -65,7 +66,7 @@ export class AppWindow extends BrowserWindow {
     });
 
     const resize = () => {
-      this.browserViewManager.fixBounds();
+      this.viewManager.fixBounds();
       this.webContents.send('tabs-resize');
     };
 
@@ -97,21 +98,21 @@ export class AppWindow extends BrowserWindow {
 
     this.on('enter-full-screen', () => {
       this.webContents.send('fullscreen', true);
-      this.browserViewManager.fixBounds();
+      this.viewManager.fixBounds();
     });
 
     this.on('leave-full-screen', () => {
       this.webContents.send('fullscreen', false);
-      this.browserViewManager.fixBounds();
+      this.viewManager.fixBounds();
     });
 
     this.on('enter-html-full-screen', () => {
-      this.browserViewManager.fullscreen = true;
+      this.viewManager.fullscreen = true;
       this.webContents.send('html-fullscreen', true);
     });
 
     this.on('leave-html-full-screen', () => {
-      this.browserViewManager.fullscreen = false;
+      this.viewManager.fullscreen = false;
       this.webContents.send('html-fullscreen', false);
     });
 
@@ -120,7 +121,7 @@ export class AppWindow extends BrowserWindow {
     });
 
     this.on('scroll-touch-end', () => {
-      this.browserViewManager.selected.webContents.send('scroll-touch-end');
+      this.viewManager.selected.webContents.send('scroll-touch-end');
       this.webContents.send('scroll-touch-end');
     });
   }
