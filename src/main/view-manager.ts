@@ -1,14 +1,14 @@
 import { ipcMain } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
 import { appWindow } from '.';
-import BrowserViewWrapper from './browser-view-wrapper';
+import { View } from './view';
 
 declare const global: any;
 
 global.viewsMap = {};
 
-export class BrowserViewManager {
-  public views: { [key: number]: BrowserViewWrapper } = {};
+export class ViewManager {
+  public views: { [key: number]: View } = {};
   public selectedId = 0;
   public _fullscreen = false;
 
@@ -97,7 +97,7 @@ export class BrowserViewManager {
   }
 
   public create(tabId: number, url: string) {
-    const view = new BrowserViewWrapper(tabId, url);
+    const view = new View(tabId, url);
     this.views[tabId] = view;
     global.viewsMap[view.id] = tabId;
   }

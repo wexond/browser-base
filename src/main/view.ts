@@ -1,7 +1,7 @@
 import { BrowserView, app } from 'electron';
 import { appWindow } from '.';
 
-export default class BrowserViewWrapper extends BrowserView {
+export class View extends BrowserView {
   public title: string = '';
   public url: string = '';
   public tabId: number;
@@ -86,7 +86,7 @@ export default class BrowserViewWrapper extends BrowserView {
   public updateNavigationState() {
     if (this.isDestroyed()) return;
 
-    if (appWindow.browserViewManager.selectedId === this.tabId) {
+    if (appWindow.viewManager.selectedId === this.tabId) {
       appWindow.webContents.send('update-navigation-state', {
         canGoBack: this.webContents.canGoBack(),
         canGoForward: this.webContents.canGoForward(),

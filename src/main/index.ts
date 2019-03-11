@@ -3,12 +3,16 @@ import { resolve } from 'path';
 import { platform, homedir } from 'os';
 import { AppWindow } from './app-window';
 import { autoUpdater } from 'electron-updater';
+import { loadExtensions } from './extensions';
+import { registerProtocols } from './protocols';
 
 ipcMain.setMaxListeners(0);
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
 
 export let appWindow: AppWindow;
+
+registerProtocols();
 
 app.on('ready', () => {
   // Create our menu entries so that we can use macOS shortcuts
@@ -77,6 +81,8 @@ app.on('ready', () => {
   ipcMain.on('window-focus', () => {
     appWindow.webContents.focus();
   });
+
+  loadExtensions();
 });
 
 app.on('window-all-closed', () => {
