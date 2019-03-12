@@ -14,6 +14,7 @@ export class View extends BrowserView {
         nodeIntegration: false,
         additionalArguments: [`--tab-id=${id}`],
         contextIsolation: true,
+        partition: 'persist:view',
       },
     });
 

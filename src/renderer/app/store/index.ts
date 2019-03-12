@@ -2,7 +2,7 @@ import { observable } from 'mobx';
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, IpcMessageEvent, remote } from 'electron';
 import { OverlayStore } from './overlay';
 import { HistoryStore } from './history';
 import { FaviconsStore } from './favicons';
@@ -45,7 +45,7 @@ export class Store {
   constructor() {
     ipcRenderer.on(
       'update-navigation-state',
-      (e: Electron.IpcMessageEvent, data: any) => {
+      (e: IpcMessageEvent, data: any) => {
         this.navigationState = data;
       },
     );
@@ -60,9 +60,21 @@ export class Store {
 
     ipcRenderer.on(
       'update-available',
-      (e: Electron.IpcMessageEvent, version: string) => {
+      (e: IpcMessageEvent, version: string) => {
         this.updateInfo.version = version;
         this.updateInfo.available = true;
+      },
+    );
+
+    ipcRenderer.on(
+      'api-tabs-query',
+      (e: IpcMessageEvent, webContentsId: number) => {
+        const sender = remote.webContents.fromId(webContentsId);
+
+        sender.send(
+          'api-tabs-query',
+          this.tabsStore.tabs.map(tab => tab.getApiTab()),
+        );
       },
     );
 
