@@ -25,7 +25,7 @@ export class API {
   public browserAction: BrowserAction;
 
   // tslint:disable-next-line
-  constructor(extension: IpcExtension) {
+  constructor(extension: IpcExtension, tabId: number) {
     this._extension = extension;
 
     this.runtime = new Runtime(this);
@@ -33,7 +33,7 @@ export class API {
     this.alarms = new Alarms(this);
     this.storage = new Storage(this);
     this.extension = new Extension();
-    this.tabs = new Tabs(this);
+    this.tabs = new Tabs(this, tabId);
     this.webRequest = new WebRequest();
     this.i18n = new I18n(this);
     this.browserAction = new BrowserAction(this);

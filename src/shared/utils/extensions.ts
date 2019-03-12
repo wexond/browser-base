@@ -2,8 +2,8 @@ import { ipcRenderer } from 'electron';
 import { IpcExtension } from '../models';
 import { Port, API } from '~/extensions';
 
-export const getAPI = (extension: IpcExtension) => {
-  const api = new API(extension);
+export const getAPI = (extension: IpcExtension, tabId: number = null) => {
+  const api = new API(extension, tabId);
 
   ipcRenderer.on(
     'api-runtime-connect',

@@ -13,7 +13,7 @@ export const registerProtocols = () => {
     sess.protocol.registerBufferProtocol(
       'wexond-extension',
       (request, callback) => {
-        const parsed = parse(request.url.replace('%3F', '?'));
+        const parsed = parse(decodeURIComponent(request.url));
 
         if (!parsed.hostname || !parsed.pathname) {
           return callback();

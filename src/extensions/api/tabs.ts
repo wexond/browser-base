@@ -5,6 +5,7 @@ import { API } from '.';
 import { IpcEvent } from '..';
 
 let api: API;
+let currentTabId: number;
 
 // https://developer.chrome.com/extensions/tabs
 
@@ -15,8 +16,9 @@ export class Tabs {
   public onRemoved = new IpcEvent('tabs', 'onRemoved');
 
   // tslint:disable-next-line
-  constructor(_api: API) {
+  constructor(_api: API, tabId: number) {
     api = _api;
+    currentTabId = tabId;
   }
 
   public get = (tabId: number, callback: (tab: chrome.tabs.Tab) => void) => {
@@ -26,14 +28,9 @@ export class Tabs {
   };
 
   public getCurrent = (callback: (tab: chrome.tabs.Tab) => void) => {
-    ipcRenderer.sendToHost('api-tabs-getCurrent');
-
-    ipcRenderer.once(
-      'api-tabs-getCurrent',
-      (e: Electron.IpcMessageEvent, data: chrome.tabs.Tab) => {
-        callback(data);
-      },
-    );
+    this.get(currentTabId, tab => {
+      callback(tab);
+    });
   };
 
   public query = (
@@ -52,6 +49,10 @@ export class Tabs {
             for (const key in queryInfo) {
               const tabProp = readProperty(tab, key);
               const queryInfoProp = readProperty(queryInfo, key);
+
+              if (key === 'url' && queryInfoProp === '<all_urls>') {
+                return true;
+              }
 
               if (tabProp == null || queryInfoProp !== tabProp) {
                 return false;
@@ -134,7 +135,9 @@ export class Tabs {
     };
     if (typeof arg1 === 'object') {
       this.getCurrent(tab => {
-        executeScript(tab.id, arg1, arg2);
+        if (tab) {
+          executeScript(tab.id, arg1, arg2);
+        }
       });
     } else if (typeof arg1 === 'number') {
       executeScript(arg1, arg2, arg3);

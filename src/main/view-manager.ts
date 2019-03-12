@@ -174,4 +174,11 @@ export class ViewManager {
 
     delete this.views[tabId];
   }
+
+  sendToAll(name: string, ...args: any[]) {
+    for (const key in this.views) {
+      const view = this.views[key];
+      view.webContents.send(name, ...args);
+    }
+  }
 }

@@ -5,6 +5,7 @@ import { AppWindow } from './app-window';
 import { autoUpdater } from 'electron-updater';
 import { loadExtensions } from './extensions';
 import { registerProtocols } from './protocols';
+import { runWebRequestService } from './services/web-request';
 
 ipcMain.setMaxListeners(0);
 
@@ -83,6 +84,7 @@ app.on('ready', () => {
   });
 
   loadExtensions();
+  runWebRequestService(appWindow);
 });
 
 app.on('window-all-closed', () => {

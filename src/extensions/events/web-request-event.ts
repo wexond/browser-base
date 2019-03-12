@@ -38,6 +38,7 @@ export class WebRequestEvent {
         );
       },
     );
+
     ipcRenderer.send('api-add-webRequest-listener', {
       id,
       name: this.name,

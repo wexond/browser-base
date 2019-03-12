@@ -104,7 +104,7 @@ const runContentScript = (
   worldId: number,
 ) => {
   const parsed = parse(url);
-  const context = getAPI(extension);
+  const context = getAPI(extension, tabId);
 
   webFrame.setIsolatedWorldHumanReadableName(worldId, name);
   webFrame.executeJavaScriptInIsolatedWorld(
