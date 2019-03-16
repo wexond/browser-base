@@ -2,6 +2,7 @@ import { ipcMain } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
 import { appWindow } from '.';
 import { View } from './view';
+import { sendToAllExtensions } from './extensions';
 
 declare const global: any;
 

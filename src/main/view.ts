@@ -1,5 +1,6 @@
 import { BrowserView, app, Menu } from 'electron';
 import { appWindow } from '.';
+import { sendToAllExtensions } from './extensions';
 
 export class View extends BrowserView {
   public title: string = '';
@@ -51,6 +52,25 @@ export class View extends BrowserView {
 
     this.webContents.addListener('did-start-navigation', () => {
       this.updateNavigationState();
+
+      this.emitWebNavigationEvent('onBeforeNavigate', {
+        tabId: this.tabId,
+        url: this.webContents.getURL(),
+        frameId: 0,
+        timeStamp: Date.now(),
+        processId: -1,
+        parentFrameId: -1,
+      });
+    });
+
+    this.webContents.addListener('did-finish-load', () => {
+      this.emitWebNavigationEvent('onCompleted', {
+        tabId: this.tabId,
+        url: this.webContents.getURL(),
+        frameId: 0,
+        timeStamp: Date.now(),
+        processId: process.pid,
+      });
     });
 
     this.webContents.addListener(
@@ -61,8 +81,25 @@ export class View extends BrowserView {
         } else if (disposition === 'background-tab') {
           appWindow.webContents.send('tabs-create', { url, active: false });
         }
+
+        this.emitWebNavigationEvent('onCreatedNavigationTarget', {
+          tabId: this.tabId,
+          url,
+          sourceFrameId: 0,
+          timeStamp: Date.now(),
+        });
       },
     );
+
+    this.webContents.addListener('dom-ready', () => {
+      this.emitWebNavigationEvent('onDOMContentLoaded', {
+        tabId: this.tabId,
+        url: this.webContents.getURL(),
+        frameId: 0,
+        timeStamp: Date.now(),
+        processId: process.pid,
+      });
+    });
 
     this.webContents.addListener(
       'page-favicon-updated',
@@ -111,4 +148,10 @@ export class View extends BrowserView {
       });
     }
   }
+
+  public emitWebNavigationEvent = (name: string, ...data: any[]) => {
+    this.webContents.send(`api-emit-event-webNavigation-${name}`, ...data);
+
+    sendToAllExtensions(`api-emit-event-webNavigation-${name}`, ...data);
+  };
 }
