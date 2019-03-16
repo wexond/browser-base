@@ -107,6 +107,8 @@ export class Tab {
     ipcRenderer.on(
       `browserview-data-updated-${this.id}`,
       async (e: any, { title, url }: any) => {
+        let updated = null;
+
         if (url !== this.url) {
           this.lastHistoryId = await store.historyStore.addItem({
             title: this.title,
@@ -114,6 +116,20 @@ export class Tab {
             favicon: this.favicon,
             date: new Date().toString(),
           });
+
+          updated = {
+            url,
+          };
+        }
+
+        if (title !== this.title) {
+          updated = {
+            title,
+          };
+        }
+
+        if (updated) {
+          this.emitEvent('onUpdated', updated);
         }
 
         this.title = title;
@@ -163,7 +179,21 @@ export class Tab {
 
     ipcRenderer.on(`view-loading-${this.id}`, (e: any, loading: boolean) => {
       this.loading = loading;
+
+      this.emitEvent('onUpdated', {
+        status: loading ? 'loading' : 'complete',
+      });
     });
+  }
+
+  public emitEvent(name: string, data: any) {
+    ipcRenderer.send(
+      'emit-extension-event',
+      `api-emit-event-tabs-${name}`,
+      this.id,
+      data,
+      this.getApiTab(),
+    );
   }
 
   public updateData() {

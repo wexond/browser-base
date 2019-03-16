@@ -336,3 +336,20 @@ ipcMain.on(
     );
   },
 );
+
+ipcMain.on(
+  'emit-tabs-event',
+  (e: any, msg: string, tabId: number, data: any, tab: any) => {
+    appWindow.viewManager.views[tabId].webContents.send(msg, tabId, data, tab);
+    sendToAllExtensions(msg, tabId, data, tab);
+  },
+);
+
+export const sendToAllExtensions = (msg: string, ...args: any[]) => {
+  for (const key in extensions) {
+    const ext = extensions[key];
+
+    const view = webContents.fromId(ext.backgroundPage.webContentsId);
+    view.send(msg, ...args);
+  }
+};
