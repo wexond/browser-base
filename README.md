@@ -26,16 +26,16 @@ Wexond is an extensible web browser with a totally different user experience, bu
 - **Packages** - Extend Wexond for you needs, by installing or developing your own packages. Packages can add custom components to the Overlay and also theme the browser!
 
 ### Sponsors
+
 [![Sponsors](https://opencollective.com/wexond/tiers/sponsor.svg?avatarHeight=48)](https://opencollective.com/wexond)
 
 ### Backers
+
 [![Backers](https://opencollective.com/wexond/tiers/backer.svg?avatarHeight=48)](https://opencollective.com/wexond)
 
 https://digital-presence.agency/
 
 # Screenshots
-
-![Home page](screenshots/screenshot-1.png)
 
 ### Advanced tabs system
 
@@ -62,11 +62,13 @@ If you have found any bugs or just want to see some new features in Wexond, feel
 Before running Wexond, please ensure you have [`Node.js`](https://nodejs.org/en/) installed on your machine. You can use `npm`, although I highly recommend to use `yarn`. In this guide I will use `yarn`.
 
 Firstly, run this command to install all needed dependencies. If you have encountered any problems, please report it. I will try to help as much as I can.
+
 ```bash
 $ yarn
 ```
 
 The given command below will run Wexond in the development mode.
+
 ```bash
 $ yarn dev
 ```
@@ -78,11 +80,13 @@ You can also run other commands, for other tasks like building the app or lintin
 ### Usage:
 
 Using `yarn`:
+
 ```bash
 $ yarn <command>
 ```
 
 Using `npm`:
+
 ```bash
 $ npm run <command>
 ```
