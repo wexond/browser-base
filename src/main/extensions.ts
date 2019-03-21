@@ -216,13 +216,16 @@ ipcMain.on(
     const { backgroundPage } = extensions[extensionId];
 
     if (e.sender.id !== backgroundPage.webContentsId) {
-      appWindow.viewManager.sendToAll('api-runtime-connect', {
-        bgPageId: backgroundPage.webContentsId,
-        portId,
-        sender,
-        name,
-        webContentsId: e.sender.id,
-      });
+      const view = webContents.fromId(backgroundPage.webContentsId);
+      if (view) {
+        view.send('api-runtime-connect', {
+          bgPageId: view.id,
+          portId,
+          sender,
+          name,
+          webContentsId: e.sender.id,
+        });
+      }
     }
   },
 );

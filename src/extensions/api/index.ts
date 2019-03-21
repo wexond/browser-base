@@ -28,7 +28,7 @@ export class API {
   constructor(extension: IpcExtension, tabId: number) {
     this._extension = extension;
 
-    this.runtime = new Runtime(this);
+    this.runtime = new Runtime(this, tabId);
     this.webNavigation = new WebNavigation();
     this.alarms = new Alarms(this);
     this.storage = new Storage(this);
