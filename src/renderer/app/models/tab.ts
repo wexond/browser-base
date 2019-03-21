@@ -180,20 +180,19 @@ export class Tab {
     ipcRenderer.on(`view-loading-${this.id}`, (e: any, loading: boolean) => {
       this.loading = loading;
 
-      this.emitEvent('onUpdated', {
-        status: loading ? 'loading' : 'complete',
-      });
+      this.emitEvent(
+        'onUpdated',
+        this.id,
+        {
+          status: loading ? 'loading' : 'complete',
+        },
+        this.getApiTab(),
+      );
     });
   }
 
-  public emitEvent(name: string, data: any) {
-    ipcRenderer.send(
-      'emit-extension-event',
-      `api-emit-event-tabs-${name}`,
-      this.id,
-      data,
-      this.getApiTab(),
-    );
+  public emitEvent(name: string, ...data: any[]) {
+    ipcRenderer.send('emit-tabs-event', name, ...data);
   }
 
   public updateData() {
@@ -239,6 +238,11 @@ export class Tab {
       if (this.url === 'about:blank') {
         store.overlayStore.inputRef.current.focus();
       }
+
+      this.emitEvent('onActivated', {
+        tabId: this.id,
+        windowId: 0,
+      });
     }
   }
 

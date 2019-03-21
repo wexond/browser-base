@@ -15,6 +15,7 @@ export class IpcEvent {
 
   public emit(e: Electron.IpcMessageEvent, ...args: any[]) {
     this.callbacks.forEach(callback => {
+      console.log(this.name, ...args);
       callback(...args);
     });
   }
