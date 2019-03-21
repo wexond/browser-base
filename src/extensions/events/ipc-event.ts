@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, IpcMessageEvent } from 'electron';
 
 export class IpcEvent {
   private scope: string;
@@ -13,12 +13,11 @@ export class IpcEvent {
     this.emit = this.emit.bind(this);
   }
 
-  public emit(e: Electron.IpcMessageEvent, ...args: any[]) {
+  public emit = (e: IpcMessageEvent, ...args: any[]) => {
     this.callbacks.forEach(callback => {
-      console.log(this.name, ...args);
       callback(...args);
     });
-  }
+  };
 
   public addListener(callback: Function) {
     this.callbacks.push(callback);

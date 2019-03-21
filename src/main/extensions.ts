@@ -350,6 +350,9 @@ export const sendToAllExtensions = (msg: string, ...args: any[]) => {
     const ext = extensions[key];
 
     const view = webContents.fromId(ext.backgroundPage.webContentsId);
-    view.send(msg, ...args);
+
+    if (view) {
+      view.send(msg, ...args);
+    }
   }
 };
