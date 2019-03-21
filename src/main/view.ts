@@ -58,7 +58,17 @@ export class View extends BrowserView {
         url: this.webContents.getURL(),
         frameId: 0,
         timeStamp: Date.now(),
-        processId: -1,
+        processId: process.pid,
+        parentFrameId: -1,
+      });
+
+      this.emitWebNavigationEvent('onCommitted', {
+        tabId: this.tabId,
+        url,
+        sourceFrameId: 0,
+        timeStamp: Date.now(),
+        processId: process.pid,
+        frameId: 0,
         parentFrameId: -1,
       });
     });
