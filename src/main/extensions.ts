@@ -340,13 +340,10 @@ ipcMain.on(
   },
 );
 
-ipcMain.on(
-  'emit-tabs-event',
-  (e: any, msg: string, tabId: number, data: any, tab: any) => {
-    appWindow.viewManager.views[tabId].webContents.send(msg, tabId, data, tab);
-    sendToAllExtensions(msg, tabId, data, tab);
-  },
-);
+ipcMain.on('emit-tabs-event', (e: any, name: string, ...data: any[]) => {
+  appWindow.viewManager.sendToAll(`api-emit-event-tabs-${name}`, ...data);
+  sendToAllExtensions(`api-emit-event-tabs-${name}`, ...data);
+});
 
 export const sendToAllExtensions = (msg: string, ...args: any[]) => {
   for (const key in extensions) {
