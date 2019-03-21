@@ -115,6 +115,8 @@ export class TabsStore {
     const tab = new Tab(options, store.tabGroupsStore.currentGroupId);
     this.tabs.push(tab);
 
+    this.emitEvent('onCreated', tab.getApiTab());
+
     requestAnimationFrame(() => {
       tab.setLeft(tab.getLeft(), false);
       this.updateTabsBounds(true);
@@ -305,5 +307,9 @@ export class TabsStore {
       props[property] = value;
       TweenLite.to(obj, animation ? TAB_ANIMATION_DURATION : 0, props);
     }
+  }
+
+  public emitEvent(name: string, ...data: any[]) {
+    ipcRenderer.send('emit-tabs-event', name, ...data);
   }
 }

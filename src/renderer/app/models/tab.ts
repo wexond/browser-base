@@ -129,7 +129,7 @@ export class Tab {
         }
 
         if (updated) {
-          this.emitEvent('onUpdated', updated);
+          this.emitOnUpdated(updated);
         }
 
         this.title = title;
@@ -180,19 +180,10 @@ export class Tab {
     ipcRenderer.on(`view-loading-${this.id}`, (e: any, loading: boolean) => {
       this.loading = loading;
 
-      this.emitEvent(
-        'onUpdated',
-        this.id,
-        {
-          status: loading ? 'loading' : 'complete',
-        },
-        this.getApiTab(),
-      );
+      this.emitOnUpdated({
+        status: loading ? 'loading' : 'complete',
+      });
     });
-  }
-
-  public emitEvent(name: string, ...data: any[]) {
-    ipcRenderer.send('emit-tabs-event', name, ...data);
   }
 
   public updateData() {
@@ -239,7 +230,7 @@ export class Tab {
         store.overlayStore.inputRef.current.focus();
       }
 
-      this.emitEvent('onActivated', {
+      store.tabsStore.emitEvent('onActivated', {
         tabId: this.id,
         windowId: 0,
       });
@@ -350,6 +341,10 @@ export class Tab {
       store.tabsStore.removeTab(this.id);
     }, TAB_ANIMATION_DURATION * 1000);
   }
+
+  public emitOnUpdated = (data: any) => {
+    store.tabsStore.emitEvent('onUpdated', this.id, data, this.getApiTab());
+  };
 
   public getApiTab(): chrome.tabs.Tab {
     const selected = store.tabsStore.selectedTabId === this.id;
