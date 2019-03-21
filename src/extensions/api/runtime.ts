@@ -7,6 +7,7 @@ import { API } from '.';
 // https://developer.chrome.com/extensions/runtime
 
 let api: API;
+let currentTabId: number = null;
 
 export class Runtime {
   public id: string;
@@ -15,17 +16,22 @@ export class Runtime {
 
   public onConnect = new ApiEvent();
 
-  constructor(_api: API) {
+  constructor(_api: API, tabId: number) {
     api = _api;
     this.id = api._extension.id;
+    currentTabId = tabId;
   }
 
-  public connect(arg1: string | any = null, arg2: any = null) {
+  public connect = (arg1: string | any = null, arg2: any = null) => {
     const sender: any = {
       id: this.id,
       url: window.location.href,
       frameId: 0,
     };
+
+    if (currentTabId !== null) {
+      sender.tab = currentTabId;
+    }
 
     const portId = makeId(32);
 
@@ -56,22 +62,22 @@ export class Runtime {
     });
 
     return new Port(portId, name);
-  }
+  };
 
-  public reload() {
+  public reload = () => {
     ipcRenderer.send('api-runtime-reload', this.id);
-  }
+  };
 
-  public getURL(path: string) {
+  public getURL = (path: string) => {
     return format({
       protocol: 'wexond-extension',
       slashes: true,
       hostname: this.id,
       pathname: path,
     });
-  }
+  };
 
-  public getManifest() {
+  public getManifest = () => {
     return api._extension.manifest;
-  }
+  };
 }

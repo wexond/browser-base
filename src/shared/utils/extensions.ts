@@ -10,7 +10,6 @@ export const getAPI = (extension: IpcExtension, tabId: number = null) => {
     (e: Electron.IpcMessageEvent, data: any) => {
       const { portId, sender, name } = data;
       const port = new Port(portId, name, sender);
-
       api.runtime.onConnect.emit(port);
     },
   );
