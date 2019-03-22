@@ -179,11 +179,12 @@ ipcMain.on(
 
 ipcMain.on(
   'api-tabs-insertCSS',
-  (e: any, tabId: number, details: chrome.tabs.InjectDetails) => {
+  (e: IpcMessageEvent, tabId: number, details: chrome.tabs.InjectDetails) => {
     const view = appWindow.viewManager.views[tabId];
 
     if (view) {
       view.webContents.insertCSS(details.code);
+      e.sender.send('api-tabs-insertCSS');
     }
   },
 );
