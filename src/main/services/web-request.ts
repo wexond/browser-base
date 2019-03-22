@@ -2,6 +2,7 @@ import { ipcMain, session, webContents } from 'electron';
 import { makeId } from '~/shared/utils/string';
 import { AppWindow } from '../app-window';
 import { matchesPattern } from '~/shared/utils/url';
+import { USER_AGENT } from '~/shared/constants';
 
 const eventListeners: any = {};
 
@@ -117,7 +118,7 @@ export const runWebRequestService = (window: AppWindow) => {
   session
     .fromPartition('persist:wexond_extension')
     .webRequest.onBeforeSendHeaders((details: any, callback: any) => {
-      // details.requestHeaders['User-Agent'] = global.userAgent;
+      details.requestHeaders['User-Agent'] = USER_AGENT;
       callback({ requestHeaders: details.requestHeaders, cancel: false });
     });
 
