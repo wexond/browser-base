@@ -6,6 +6,8 @@ import { format, parse } from 'url';
 import { IpcExtension } from '~/shared/models';
 import { runInThisContext } from 'vm';
 
+webFrame.registerURLSchemeAsPrivileged('wexond-extension');
+
 const tabId = parseInt(
   process.argv.find(x => x.startsWith('--tab-id=')).split('=')[1],
   10,
