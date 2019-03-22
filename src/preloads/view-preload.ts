@@ -173,7 +173,7 @@ const injectContentScript = (script: any, extension: IpcExtension) => {
         js.url,
         js.code,
         extension,
-        getIsolatedWorldId(),
+        getIsolatedWorldId(extension.id),
       );
 
       if (script.runAt === 'document_start') {
@@ -201,9 +201,14 @@ const injectContentScript = (script: any, extension: IpcExtension) => {
 };
 
 let nextIsolatedWorldId = 1000;
+const isolatedWorldsRegistry: any = {};
 
-const getIsolatedWorldId = () => {
-  return nextIsolatedWorldId++;
+const getIsolatedWorldId = (id: string) => {
+  if (isolatedWorldsRegistry[id]) {
+    return isolatedWorldsRegistry[id];
+  }
+  nextIsolatedWorldId++;
+  return (isolatedWorldsRegistry[id] = nextIsolatedWorldId);
 };
 
 const setImmediateTemp: any = setImmediate;
