@@ -242,11 +242,12 @@ ipcMain.on(
       }
     });
 
-    appWindow.viewManager.sendToAll('api-port-postMessage', {
-      portId,
-      msg,
-      senderId: e.sender.id,
-    });
+    for (const key in appWindow.viewManager.views) {
+      const view = appWindow.viewManager.views[key];
+      if (view.id !== e.sender.id) {
+        view.webContents.send(`api-port-postMessage-${portId}`, msg);
+      }
+    }
   },
 );
 

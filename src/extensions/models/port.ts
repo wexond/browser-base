@@ -25,6 +25,7 @@ export class Port {
     this.portId = portId;
 
     ipcRenderer.on(`api-port-postMessage-${portId}`, (e: any, msg: any) => {
+      console.log('received', msg);
       this.onMessage.emit(msg, this);
     });
   }
@@ -34,6 +35,7 @@ export class Port {
   }
 
   public postMessage(msg: any) {
+    console.log('post', msg);
     ipcRenderer.send('api-port-postMessage', { portId: this.portId, msg });
   }
 }
