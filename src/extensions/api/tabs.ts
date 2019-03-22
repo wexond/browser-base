@@ -86,7 +86,7 @@ export class Tabs {
     const insertCSS = (tabId: number, details: any, callback: any) => {
       if (details.hasOwnProperty('file')) {
         details.code = readFileSync(
-          join(api.runtime.getManifest().srcDirectory, details.file),
+          join(api._extension.path, details.file),
           'utf8',
         );
       }
@@ -117,7 +117,7 @@ export class Tabs {
     const executeScript = (tabId: number, details: any, callback: any) => {
       if (details.hasOwnProperty('file')) {
         details.code = readFileSync(
-          join(api.runtime.getManifest().srcDirectory, details.file),
+          join(api._extension.path, details.file),
           'utf8',
         );
       }

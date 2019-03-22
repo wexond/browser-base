@@ -32,9 +32,10 @@ export class BrowserAction {
     ipcRenderer.send('api-browserAction-setBadgeText', api.runtime.id, details);
 
     if (cb) {
-      ipcRenderer.once('api-browserAction-setBadgeText', () => {
-        cb();
-      });
+      cb();
+      /*ipcRenderer.once('api-browserAction-setBadgeText', () => {
+
+      });*/
     }
   };
 }
