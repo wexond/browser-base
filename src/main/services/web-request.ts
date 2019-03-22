@@ -29,7 +29,7 @@ const objectToArray = (obj: any): any[] => {
   const arr: any = [];
   Object.keys(obj).forEach(k => {
     if (obj[k]) {
-      arr.push({ name: k, value: obj[k] });
+      arr.push({ name: k, value: obj[k][0] });
     }
   });
   return arr;
@@ -216,6 +216,7 @@ export const runWebRequestService = (window: AppWindow) => {
     isTabRelated: boolean,
   ) => {
     const responseHeaders = objectToArray(details.responseHeaders);
+
     const newDetails: any = {
       ...getDetails(details),
       tabId: isTabRelated
@@ -241,6 +242,7 @@ export const runWebRequestService = (window: AppWindow) => {
               details.responseHeaders,
               arrayToObject(res.responseHeaders),
             );
+
             cb({
               responseHeaders,
               cancel: false,
