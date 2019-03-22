@@ -133,6 +133,7 @@ export class Tabs {
         },
       );
     };
+
     if (typeof arg1 === 'object') {
       this.getCurrent(tab => {
         if (tab) {

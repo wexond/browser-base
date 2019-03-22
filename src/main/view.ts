@@ -87,9 +87,9 @@ export class View extends BrowserView {
       'new-window',
       (e, url, frameName, disposition) => {
         if (disposition === 'new-window' || disposition === 'foreground-tab') {
-          appWindow.webContents.send('tabs-create', { url, active: true });
+          appWindow.webContents.send('api-tabs-create', { url, active: true });
         } else if (disposition === 'background-tab') {
-          appWindow.webContents.send('tabs-create', { url, active: false });
+          appWindow.webContents.send('api-tabs-create', { url, active: false });
         }
 
         this.emitWebNavigationEvent('onCreatedNavigationTarget', {

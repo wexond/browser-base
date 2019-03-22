@@ -217,6 +217,7 @@ ipcMain.on(
 
     if (e.sender.id !== backgroundPage.webContentsId) {
       const view = webContents.fromId(backgroundPage.webContentsId);
+
       if (view) {
         view.send('api-runtime-connect', {
           bgPageId: view.id,
