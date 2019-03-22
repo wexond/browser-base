@@ -66,17 +66,14 @@ export class TabsStore {
       this.rearrangeTabsTimer.time++;
     }, 1000);
 
-    ipcRenderer.on(
-      'tabs-create',
-      (e: any, options: chrome.tabs.CreateProperties) => {
-        this.addTab(options);
-      },
-    );
+    ipcRenderer.on('tabs-resize', (e: any) => {
+      this.updateTabsBounds(false);
+    });
 
     ipcRenderer.on(
-      'tabs-resize',
+      'api-tabs-create',
       (e: any, options: chrome.tabs.CreateProperties) => {
-        this.updateTabsBounds(false);
+        this.addTab(options);
       },
     );
   }

@@ -27,11 +27,8 @@ export class Runtime {
       id: this.id,
       url: window.location.href,
       frameId: 0,
+      tab: { id: currentTabId },
     };
-
-    if (currentTabId !== null) {
-      sender.tab = currentTabId;
-    }
 
     const portId = makeId(32);
 
