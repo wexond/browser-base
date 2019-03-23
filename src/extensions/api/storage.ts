@@ -59,7 +59,6 @@ export class StorageArea {
 
 export class Storage {
   public local = new StorageArea('local');
-  public sync = new StorageArea('sync');
   public managed = new StorageArea('managed');
 
   constructor(_api: API) {

@@ -142,25 +142,26 @@ export class Tab {
     ipcRenderer.on(
       `browserview-favicon-updated-${this.id}`,
       async (e: any, favicon: string) => {
-        this.favicon = favicon;
-        this.updateData();
+        try {
+          const fav = await store.faviconsStore.addFavicon(favicon);
 
-        const fav = await store.faviconsStore.addFavicon(favicon);
+          this.favicon = favicon;
 
-        const buf = Buffer.from(fav.split('base64,')[1], 'base64');
+          const buf = Buffer.from(fav.split('base64,')[1], 'base64');
 
-        if (!this.hasThemeColor) {
-          try {
+          if (!this.hasThemeColor) {
             const palette = await Vibrant.from(buf).getPalette();
             if (getColorBrightness(palette.Vibrant.hex) < 170) {
               this.background = palette.Vibrant.hex;
             } else {
               this.background = colors.blue['500'];
             }
-          } catch (e) {
-            console.error(e);
           }
+        } catch (e) {
+          this.favicon = '';
+          console.error(e);
         }
+        this.updateData();
       },
     );
 
