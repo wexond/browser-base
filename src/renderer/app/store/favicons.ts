@@ -3,6 +3,7 @@ import * as Datastore from 'nedb';
 import { Favicon } from '../models';
 import { getPath } from '~/shared/utils/paths';
 import { requestURL } from '../utils/network';
+import { rejects } from 'assert';
 
 const icojs = require('icojs');
 const fileType = require('file-type');
@@ -52,26 +53,30 @@ export class FaviconsStore {
   public addFavicon = async (url: string) => {
     return new Promise(async (resolve: (a: any) => void) => {
       if (!this.favicons[url]) {
-        let data = Buffer.from(await requestURL(url), 'binary');
+        try {
+          let data = Buffer.from(await requestURL(url), 'binary');
 
-        const type = fileType(data);
+          const type = fileType(data);
 
-        if (type && type.ext === 'ico') {
-          data = await convertIcoToPng(data);
+          if (type && type.ext === 'ico') {
+            data = await convertIcoToPng(data);
+          }
+
+          data = await readImage(data);
+
+          const str = `data:png;base64,${data.toString('base64')}`;
+
+          this.db.insert({
+            url,
+            data: str,
+          });
+
+          this.favicons[url] = str;
+
+          resolve(str);
+        } catch (e) {
+          rejects(e);
         }
-
-        data = await readImage(data);
-
-        const str = `data:png;base64,${data.toString('base64')}`;
-
-        this.db.insert({
-          url,
-          data: str,
-        });
-
-        this.favicons[url] = str;
-
-        resolve(str);
       } else {
         resolve(this.favicons[url]);
       }
