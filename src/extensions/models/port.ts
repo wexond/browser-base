@@ -34,6 +34,8 @@ export class Port {
   }
 
   public postMessage(msg: any) {
-    ipcRenderer.send('api-port-postMessage', { portId: this.portId, msg });
+    setTimeout(() => {
+      ipcRenderer.send('api-port-postMessage', { portId: this.portId, msg });
+    });
   }
 }

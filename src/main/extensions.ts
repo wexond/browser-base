@@ -221,11 +221,9 @@ ipcMain.on(
 
       if (view) {
         view.send('api-runtime-connect', {
-          bgPageId: view.id,
           portId,
           sender,
           name,
-          webContentsId: e.sender.id,
         });
       }
     }
@@ -246,7 +244,7 @@ ipcMain.on(
 
     for (const key in appWindow.viewManager.views) {
       const view = appWindow.viewManager.views[key];
-      if (view.id !== e.sender.id) {
+      if (view.webContents.id !== e.sender.id) {
         view.webContents.send(`api-port-postMessage-${portId}`, msg);
       }
     }
