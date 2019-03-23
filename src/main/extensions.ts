@@ -183,8 +183,15 @@ ipcMain.on(
     const view = appWindow.viewManager.views[tabId];
 
     if (view) {
-      view.webContents.insertCSS(details.code);
-      e.sender.send('api-tabs-insertCSS');
+      view.webContents.executeJavaScript(
+        `
+      document.styleSheets[0].insertRule(\`${details.code}\`, 0);
+      `,
+        true,
+        () => {
+          e.sender.send('api-tabs-insertCSS');
+        },
+      );
     }
   },
 );
