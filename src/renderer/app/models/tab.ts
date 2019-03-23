@@ -12,8 +12,9 @@ import {
 } from '~/renderer/app/constants';
 import { closeWindow, getColorBrightness } from '../utils';
 import { colors } from '~/renderer/constants';
+import { BrowserAction } from './browser-action';
 
-let id = 0;
+let id = 1;
 
 export class Tab {
   @observable
@@ -185,6 +186,14 @@ export class Tab {
         status: loading ? 'loading' : 'complete',
       });
     });
+
+    const { defaultBrowserActions, browserActions } = store.extensionsStore;
+
+    for (const item of defaultBrowserActions) {
+      const browserAction = { ...item };
+      browserAction.tabId = this.id;
+      browserActions.push(browserAction);
+    }
   }
 
   public updateData() {

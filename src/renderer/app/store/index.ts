@@ -7,6 +7,7 @@ import { OverlayStore } from './overlay';
 import { HistoryStore } from './history';
 import { FaviconsStore } from './favicons';
 import { SuggestionsStore } from './suggestions';
+import { ExtensionsStore } from './extensions';
 
 export class Store {
   public historyStore = new HistoryStore();
@@ -16,6 +17,7 @@ export class Store {
   public tabGroupsStore = new TabGroupsStore();
   public tabsStore = new TabsStore();
   public overlayStore = new OverlayStore();
+  public extensionsStore = new ExtensionsStore();
 
   @observable
   public isFullscreen = false;
@@ -75,6 +77,38 @@ export class Store {
           'api-tabs-query',
           this.tabsStore.tabs.map(tab => tab.getApiTab()),
         );
+      },
+    );
+
+    ipcRenderer.on(
+      'api-browserAction-setBadgeText',
+      (
+        e: IpcMessageEvent,
+        senderId: number,
+        extensionId: string,
+        details: chrome.browserAction.BadgeTextDetails,
+      ) => {
+        if (details.tabId) {
+          const browserAction = this.extensionsStore.queryBrowserAction({
+            extensionId,
+            tabId: details.tabId,
+          })[0];
+
+          if (browserAction) {
+            browserAction.badgeText = details.text;
+          }
+        } else {
+          this.extensionsStore
+            .queryBrowserAction({
+              extensionId,
+            })
+            .forEach(item => {
+              console.log(item);
+              item.badgeText = details.text;
+            });
+        }
+        const contents = remote.webContents.fromId(senderId);
+        contents.send('api-browserAction-setBadgeText');
       },
     );
 
