@@ -10,16 +10,37 @@ import { Tabbar } from '../Tabbar';
 import ToolbarButton from '../ToolbarButton';
 import { icons } from '../../constants';
 import { ipcRenderer } from 'electron';
+import BrowserAction from '../BrowserAction';
 
 const onUpdateClick = () => {
   ipcRenderer.send('update-install');
 };
+
+@observer
+class BrowserActions extends React.Component {
+  public render() {
+    const { selectedTabId } = store.tabsStore;
+
+    return (
+      <React.Fragment>
+        {selectedTabId &&
+          store.extensionsStore.browserActions.map(item => {
+            if (item.tabId === selectedTabId) {
+              return <BrowserAction data={item} key={item.extensionId} />;
+            }
+            return null;
+          })}
+      </React.Fragment>
+    );
+  }
+}
 
 export const Toolbar = observer(() => {
   return (
     <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
       <NavigationButtons />
       <Tabbar />
+      <BrowserActions />
       {store.updateInfo.available && (
         <ToolbarButton
           icon={icons.download}
