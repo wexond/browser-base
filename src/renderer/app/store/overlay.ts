@@ -68,7 +68,6 @@ export class OverlayStore {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         ipcRenderer.send('browserview-show');
-        store.screenshot = '';
       }, 150);
       store.suggestionsStore.suggestions = [];
       lastSuggestion = undefined;
@@ -77,26 +76,18 @@ export class OverlayStore {
     } else {
       this.adjustBottom();
 
-      callBrowserViewMethod('getScreenshot').then(data => {
-        store.screenshot = data;
+      this.show();
+      ipcRenderer.send('window-focus');
 
-        setTimeout(() => {
-          this.show();
-          ipcRenderer.send('window-focus');
+      callBrowserViewMethod('webContents.getURL').then(async (url: string) => {
+        this.inputRef.current.value = url;
+        this.inputRef.current.focus();
+        this.inputRef.current.select();
 
-          callBrowserViewMethod('webContents.getURL').then(
-            async (url: string) => {
-              this.inputRef.current.value = url;
-              this.inputRef.current.focus();
-              this.inputRef.current.select();
-
-              this.lastUrl = url;
-            },
-          );
-
-          this._visible = val;
-        }, 20);
+        this.lastUrl = url;
       });
+
+      this._visible = val;
     }
   }
 

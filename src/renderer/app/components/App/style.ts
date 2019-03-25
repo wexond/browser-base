@@ -5,6 +5,8 @@ export const Line = styled.div`
   background-color: rgba(0, 0, 0, ${transparency.dividers});
   height: 1px;
   width: 100%;
+  z-index: 2;
+  position: relative;
 `;
 
 export const Screenshot = styled.div`
@@ -12,6 +14,9 @@ export const Screenshot = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   flex: 1;
+  filter: blur(20px);
+  margin: -20px;
+  position: relative;
 `;
 
 export const StyledApp = styled.div`

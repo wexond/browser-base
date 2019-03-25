@@ -21,7 +21,12 @@ export const App = observer(() => {
       <GlobalStyle />
       <Toolbar />
       <Line />
-      <Screenshot style={{ backgroundImage: `url(${store.screenshot})` }} />
+      <Screenshot
+        style={{
+          backgroundImage: `url(${store.tabsStore.selectedTab &&
+            store.tabsStore.selectedTab.screenshot})`,
+        }}
+      />
       <Overlay />
     </StyledApp>
   );
