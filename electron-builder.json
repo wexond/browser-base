@@ -6,6 +6,7 @@
     "output": "dist",
     "buildResources": "static/app-icons"
   },
+  "files": ["build/**/*", "package.json"],
   "publish": "github",
   "linux": {
     "category": "Network",
