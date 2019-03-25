@@ -39,15 +39,15 @@ https://digital-presence.agency/
 
 ### Advanced tabs system
 
-![](screenshots/screen1.gif)
+![](https://media.giphy.com/media/uBnO0xf1kLsuGo2jUU/giphy.gif)
 
 ### Support for theme-color
 
-![](screenshots/screen2.gif)
+![](https://media.giphy.com/media/Y0wYXWF31ld4ZXYxB7/giphy.gif)
 
 ### Overlay with everything you need
 
-![](screenshots/screen3.gif)
+![](https://media.giphy.com/media/kKIjqEejww4IHqSqkp/giphy.gif)
 
 # [Roadmap](https://github.com/wexond/wexond/projects)
 
