@@ -73,7 +73,7 @@ export class View extends BrowserView {
       });
     });
 
-    this.webContents.addListener('did-finish-load', () => {
+    this.webContents.addListener('did-finish-load', async () => {
       this.emitWebNavigationEvent('onCompleted', {
         tabId: this.tabId,
         url: this.webContents.getURL(),
@@ -81,6 +81,11 @@ export class View extends BrowserView {
         timeStamp: Date.now(),
         processId: process.pid,
       });
+
+      appWindow.webContents.send(
+        `new-screenshot-${this.tabId}`,
+        await this.getScreenshot(),
+      );
     });
 
     this.webContents.addListener(

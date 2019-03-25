@@ -43,6 +43,9 @@ export class Tab {
   @observable
   public background: string = colors.blue['500'];
 
+  @observable
+  public screenshot: string;
+
   public left = 0;
   public tempPosition = id;
   public url = '';
@@ -186,6 +189,13 @@ export class Tab {
         status: loading ? 'loading' : 'complete',
       });
     });
+
+    ipcRenderer.on(
+      `new-screenshot-${this.id}`,
+      (e: any, screenshot: string) => {
+        this.screenshot = screenshot;
+      },
+    );
 
     const { defaultBrowserActions, browserActions } = store.extensionsStore;
 

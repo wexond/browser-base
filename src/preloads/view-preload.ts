@@ -8,6 +8,22 @@ import { runInThisContext } from 'vm';
 
 webFrame.registerURLSchemeAsPrivileged('wexond-extension');
 
+webFrame.executeJavaScript('window', false, w => {
+  w.chrome = {
+    webstorePrivate: {
+      install: () => {},
+    },
+    app: {
+      isInstalled: false,
+      getIsInstalled: () => {
+        return false;
+      },
+      getDetails: () => {},
+      installState: () => {},
+    },
+  };
+});
+
 const tabId = parseInt(
   process.argv.find(x => x.startsWith('--tab-id=')).split('=')[1],
   10,
