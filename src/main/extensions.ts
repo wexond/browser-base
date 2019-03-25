@@ -76,7 +76,9 @@ export const startBackgroundPage = async (extension: Extension) => {
       webContentsId: contents.id,
     };
 
-    contents.openDevTools({ mode: 'detach' });
+    if (process.env.ENV === 'dev') {
+      contents.openDevTools({ mode: 'detach' });
+    }
 
     contents.loadURL(
       format({
