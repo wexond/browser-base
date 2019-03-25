@@ -51,10 +51,16 @@ export class FaviconsStore {
   };
 
   public addFavicon = async (url: string) => {
-    return new Promise(async (resolve: (a: any) => void) => {
+    return new Promise(async (resolve: (a: any) => void, reject: any) => {
       if (!this.favicons[url]) {
         try {
-          let data = Buffer.from(await requestURL(url), 'binary');
+          const res = await requestURL(url);
+
+          if (res.statusCode === 404) {
+            throw new Error('404 favicon not found');
+          }
+
+          let data = Buffer.from(res.data, 'binary');
 
           const type = fileType(data);
 
@@ -75,7 +81,7 @@ export class FaviconsStore {
 
           resolve(str);
         } catch (e) {
-          rejects(e);
+          reject(e);
         }
       } else {
         resolve(this.favicons[url]);
