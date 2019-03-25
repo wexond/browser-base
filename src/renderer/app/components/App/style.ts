@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { transparency } from '~/renderer/constants';
 
 export const Line = styled.div`
-  background-color: rgba(0, 0, 0, ${transparency.dividers});
+  background-color: #e5e5e5;
   height: 1px;
   width: 100%;
   z-index: 2;
