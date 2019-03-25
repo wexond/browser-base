@@ -13,6 +13,7 @@ import {
 import { closeWindow, getColorBrightness } from '../utils';
 import { colors } from '~/renderer/constants';
 import { BrowserAction } from './browser-action';
+import { requestURL } from '../utils/network';
 
 let id = 1;
 
@@ -144,10 +145,9 @@ export class Tab {
       `browserview-favicon-updated-${this.id}`,
       async (e: any, favicon: string) => {
         try {
-          const fav = await store.faviconsStore.addFavicon(favicon);
-
           this.favicon = favicon;
 
+          const fav = await store.faviconsStore.addFavicon(favicon);
           const buf = Buffer.from(fav.split('base64,')[1], 'base64');
 
           if (!this.hasThemeColor) {

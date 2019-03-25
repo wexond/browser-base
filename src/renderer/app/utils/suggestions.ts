@@ -112,11 +112,11 @@ export const getSearchSuggestions = (filter: string) =>
 
     try {
       const data = JSON.parse(
-        await requestURL(
+        (await requestURL(
           `http://google.com/complete/search?client=chrome&q=${encodeURIComponent(
             input,
           )}`,
-        ),
+        )).data,
       );
 
       let suggestions: string[] = [];
