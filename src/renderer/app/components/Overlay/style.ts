@@ -12,7 +12,7 @@ export const StyledOverlay = styled.div`
   bottom: 0;
   right: 0;
   z-index: 9999;
-  transition: 0.2s opacity;
+  transition: 0.15s opacity;
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
