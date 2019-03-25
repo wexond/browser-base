@@ -17,3 +17,8 @@ export const StyledToolbar = styled.div`
     margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
   `};
 `;
+
+export const StyledBrowserActions = styled.div`
+  display: flex;
+  margin-right: 2px;
+`;
