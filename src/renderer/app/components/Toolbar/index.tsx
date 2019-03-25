@@ -3,7 +3,7 @@ import * as React from 'react';
 import { platform } from 'os';
 
 import store from '~/renderer/app/store';
-import { StyledToolbar } from './style';
+import { StyledToolbar, StyledBrowserActions } from './style';
 import { WindowsButtons } from '../WindowsButtons';
 import { NavigationButtons } from '../NavigationButtons';
 import { Tabbar } from '../Tabbar';
@@ -22,7 +22,7 @@ class BrowserActions extends React.Component {
     const { selectedTabId } = store.tabsStore;
 
     return (
-      <React.Fragment>
+      <StyledBrowserActions>
         {selectedTabId &&
           store.extensionsStore.browserActions.map(item => {
             if (item.tabId === selectedTabId) {
@@ -30,7 +30,7 @@ class BrowserActions extends React.Component {
             }
             return null;
           })}
-      </React.Fragment>
+      </StyledBrowserActions>
     );
   }
 }

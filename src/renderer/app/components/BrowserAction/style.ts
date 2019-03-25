@@ -14,9 +14,9 @@ export const Badge = styled.div`
   padding: 0 1.5px;
   border-radius: 4px;
   border: 1px solid white;
-  bottom: 3px;
+  bottom: 6px;
   pointer-events: none;
-  right: 2px;
+  right: 6px;
   z-index: 5;
   font-size: 10px;
   ${({ background, color }: BadgeProps) => css`
