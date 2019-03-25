@@ -12,8 +12,6 @@ import {
 } from '~/renderer/app/constants';
 import { closeWindow, getColorBrightness } from '../utils';
 import { colors } from '~/renderer/constants';
-import { BrowserAction } from './browser-action';
-import { requestURL } from '../utils/network';
 
 let id = 1;
 
