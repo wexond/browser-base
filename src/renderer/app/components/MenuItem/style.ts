@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { caption } from '~/shared/mixins';
+import { caption, centerImage } from '~/shared/mixins';
 
 const width = 700;
 const itemsPerRow = 5;
@@ -24,11 +24,11 @@ export const StyledMenuItem = styled.div`
 `;
 
 export const Icon = styled.div`
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.54);
+  opacity: 0.54;
   width: 42px;
   height: 42px;
   margin-bottom: 16px;
+  ${centerImage('42px', '42px')};
 `;
 
 export const Title = styled.div`

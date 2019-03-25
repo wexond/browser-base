@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { StyledMenuItem, Title, Icon } from './style';
 
-export const MenuItem = ({ children }: any) => {
+export const MenuItem = ({ children, icon }: any) => {
   return (
     <StyledMenuItem>
-      <Icon />
+      <Icon style={{ backgroundImage: `url(${icon})` }} />
       <Title>{children}</Title>
     </StyledMenuItem>
   );

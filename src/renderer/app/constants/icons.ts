@@ -9,6 +9,13 @@ import close from '~/shared/resources/icons/close.svg';
 import search from '~/shared/resources/icons/search.svg';
 import page from '~/shared/resources/icons/page.svg';
 import download from '~/shared/resources/icons/download.svg';
+import history from '~/shared/resources/icons/history.svg';
+import bookmarks from '~/shared/resources/icons/bookmarks.svg';
+import settings from '~/shared/resources/icons/settings.svg';
+import extensions from '~/shared/resources/icons/extensions.svg';
+import window from '~/shared/resources/icons/window.svg';
+import more from '~/shared/resources/icons/more.svg';
+import find from '~/shared/resources/icons/find.svg';
 
 export const icons = {
   windowsClose,
@@ -22,4 +29,11 @@ export const icons = {
   search,
   page,
   download,
+  history,
+  bookmarks,
+  settings,
+  extensions,
+  window,
+  more,
+  find,
 };
