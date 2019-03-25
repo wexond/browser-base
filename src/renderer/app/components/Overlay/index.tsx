@@ -27,23 +27,11 @@ const Header = ({ children }: any) => {
 };
 
 const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-  const target = e.currentTarget;
   const bsHeight = store.overlayStore.bsRef.getBoundingClientRect().height;
 
   if (bsHeight <= window.innerHeight) {
     if (e.deltaY > 0) {
       store.suggestionsStore.suggestions = [];
-      if (target.scrollTop === 0) {
-        TweenLite.to(target, 0.2, {
-          scrollTop: bsHeight - 128,
-        });
-      }
-    } else {
-      if (target.scrollTop === target.scrollHeight - window.innerHeight) {
-        TweenLite.to(target, 0.2, {
-          scrollTop: 0,
-        });
-      }
     }
   }
 };
@@ -64,6 +52,7 @@ export const Overlay = observer(() => {
         <BottomSheet
           visible={store.overlayStore.visible}
           onClick={onBsClick}
+          bottom={store.overlayStore.bottom}
           innerRef={(r: any) => (store.overlayStore.bsRef = r)}
         >
           <Section style={{ paddingTop: 8 }}>

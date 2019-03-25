@@ -39,6 +39,9 @@ export class OverlayStore {
   @observable
   private _visible = false;
 
+  @observable
+  public bottom = 128;
+
   private timeout: any;
 
   @computed
@@ -72,6 +75,12 @@ export class OverlayStore {
       this.inputRef.current.value = '';
       this._visible = val;
     } else {
+      const rect = this.inputRef.current.getBoundingClientRect();
+      this.bottom = Math.min(
+        window.innerHeight - (rect.top + rect.height + 300),
+        this.bsRef.offsetHeight,
+      );
+
       callBrowserViewMethod('getScreenshot').then(data => {
         store.screenshot = data;
 
