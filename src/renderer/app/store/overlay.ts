@@ -3,6 +3,8 @@ import * as React from 'react';
 import { ipcRenderer } from 'electron';
 import store from '.';
 import { callBrowserViewMethod } from '~/shared/utils/browser-view';
+import { readFile } from 'fs';
+import { getPath } from '~/shared/utils/paths';
 
 let lastSuggestion: string;
 
@@ -32,6 +34,8 @@ export class OverlayStore {
 
   public canSuggest = false;
 
+  public lastUrl: string;
+
   @observable
   private _visible = false;
 
@@ -42,7 +46,7 @@ export class OverlayStore {
     return this._visible;
   }
 
-  public show() {
+  public async show() {
     clearTimeout(this.timeout);
 
     if (this.scrollRef.current) {
@@ -69,13 +73,22 @@ export class OverlayStore {
       this.show();
       ipcRenderer.send('window-focus');
 
-      callBrowserViewMethod(store.tabsStore.selectedTabId, 'getURL').then(
-        (url: string) => {
-          this.inputRef.current.value = url;
-          this.inputRef.current.focus();
-          this.inputRef.current.select();
-        },
-      );
+      callBrowserViewMethod('webContents.getURL').then((url: string) => {
+        if (url !== this.lastUrl) {
+          store.screenshot = '';
+        }
+
+        this.inputRef.current.value = url;
+        this.inputRef.current.focus();
+        this.inputRef.current.select();
+
+        this.lastUrl = url;
+
+        setTimeout(async () => {
+          const screen = await callBrowserViewMethod('getScreenshot');
+          store.screenshot = screen;
+        }, 200);
+      });
     }
 
     this._visible = val;

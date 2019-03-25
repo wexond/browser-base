@@ -164,4 +164,12 @@ export class View extends BrowserView {
 
     sendToAllExtensions(`api-emit-event-webNavigation-${name}`, ...data);
   };
+
+  public async getScreenshot(): Promise<string> {
+    return new Promise(resolve => {
+      this.webContents.capturePage(img => {
+        resolve(img.toDataURL());
+      });
+    });
+  }
 }

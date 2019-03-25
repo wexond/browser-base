@@ -28,7 +28,10 @@ export class ViewManager {
       (e: Electron.IpcMessageEvent, { tabId, url }: any) => {
         this.create(tabId, url);
 
-        appWindow.webContents.send(`browserview-created-${tabId}`);
+        appWindow.webContents.send(
+          `browserview-created-${tabId}`,
+          this.views[tabId].id,
+        );
       },
     );
 
@@ -48,12 +51,22 @@ export class ViewManager {
       },
     );
 
-    ipcMain.on('browserview-call', (e: any, data: any) => {
+    ipcMain.on('browserview-call', async (e: any, data: any) => {
       const view = this.views[data.tabId];
-      const result = (view.webContents as any)[data.method].apply(
-        view.webContents,
-        data.args,
-      );
+      let scope: any = view;
+
+      if (data.scope && data.scope.trim() !== '') {
+        const scopes = data.scope.split('.');
+        for (const s of scopes) {
+          scope = scope[s];
+        }
+      }
+
+      let result = scope.apply(view.webContents, data.args);
+
+      if (result instanceof Promise) {
+        result = await result;
+      }
 
       if (data.callId) {
         appWindow.webContents.send(

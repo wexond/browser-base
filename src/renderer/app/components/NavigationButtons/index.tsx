@@ -8,18 +8,18 @@ import { StyledContainer } from './style';
 import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 
 const onBackClick = () => {
-  callBrowserViewMethod(store.tabsStore.selectedTabId, 'goBack');
+  callBrowserViewMethod('webContents.goBack');
 };
 
 const onForwardClick = () => {
-  callBrowserViewMethod(store.tabsStore.selectedTabId, 'goForward');
+  callBrowserViewMethod('webContents.goForward');
 };
 
 const onRefreshClick = () => {
   if (store.tabsStore.selectedTab && store.tabsStore.selectedTab.loading) {
-    callBrowserViewMethod(store.tabsStore.selectedTabId, 'stop');
+    callBrowserViewMethod('webContents.stop');
   } else {
-    callBrowserViewMethod(store.tabsStore.selectedTabId, 'reload');
+    callBrowserViewMethod('webContents.reload');
   }
 };
 
