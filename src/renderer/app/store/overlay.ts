@@ -65,33 +65,34 @@ export class OverlayStore {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         ipcRenderer.send('browserview-show');
-      }, 200);
+        store.screenshot = '';
+      }, 150);
       store.suggestionsStore.suggestions = [];
       lastSuggestion = undefined;
       this.inputRef.current.value = '';
+      this._visible = val;
     } else {
-      this.show();
-      ipcRenderer.send('window-focus');
+      callBrowserViewMethod('getScreenshot').then(data => {
+        store.screenshot = data;
 
-      callBrowserViewMethod('webContents.getURL').then((url: string) => {
-        if (url !== this.lastUrl) {
-          store.screenshot = '';
-        }
+        setTimeout(() => {
+          this.show();
+          ipcRenderer.send('window-focus');
 
-        this.inputRef.current.value = url;
-        this.inputRef.current.focus();
-        this.inputRef.current.select();
+          callBrowserViewMethod('webContents.getURL').then(
+            async (url: string) => {
+              this.inputRef.current.value = url;
+              this.inputRef.current.focus();
+              this.inputRef.current.select();
 
-        this.lastUrl = url;
+              this.lastUrl = url;
+            },
+          );
 
-        setTimeout(async () => {
-          const screen = await callBrowserViewMethod('getScreenshot');
-          store.screenshot = screen;
-        }, 200);
+          this._visible = val;
+        }, 20);
       });
     }
-
-    this._visible = val;
   }
 
   public suggest() {
