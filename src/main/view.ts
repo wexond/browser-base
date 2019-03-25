@@ -88,6 +88,13 @@ export class View extends BrowserView {
       );
     });
 
+    this.webContents.addListener('did-frame-finish-load', async () => {
+      appWindow.webContents.send(
+        `new-screenshot-${this.tabId}`,
+        await this.getScreenshot(),
+      );
+    });
+
     this.webContents.addListener(
       'new-window',
       (e, url, frameName, disposition) => {
