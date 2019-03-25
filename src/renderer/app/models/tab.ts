@@ -51,6 +51,7 @@ export class Tab {
   public ref = React.createRef<HTMLDivElement>();
   public lastHistoryId: string;
   public hasThemeColor = false;
+  public webContentsId: number;
 
   @computed
   public get isSelected() {
@@ -98,7 +99,8 @@ export class Tab {
 
     ipcRenderer.send('browserview-create', { tabId: this.id, url });
 
-    ipcRenderer.once(`browserview-created-${this.id}`, () => {
+    ipcRenderer.once(`browserview-created-${this.id}`, (e: any, id: number) => {
+      this.webContentsId = id;
       if (active) {
         this.select();
       }

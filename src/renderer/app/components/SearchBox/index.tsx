@@ -29,7 +29,7 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
     e.currentTarget.value = url;
     tab.url = url;
-    callBrowserViewMethod(tab.id, 'loadURL', url);
+    callBrowserViewMethod('webContents.loadURL', tab.id, url);
 
     store.overlayStore.visible = false;
   }

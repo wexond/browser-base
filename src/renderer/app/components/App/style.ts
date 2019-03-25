@@ -6,3 +6,16 @@ export const Line = styled.div`
   height: 1px;
   width: 100%;
 `;
+
+export const Screenshot = styled.div`
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  flex: 1;
+`;
+
+export const StyledApp = styled.div`
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
+`;

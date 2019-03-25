@@ -1,16 +1,17 @@
 import { ipcRenderer } from 'electron';
 import { makeId } from './string';
+import store from '~/renderer/app/store';
 
 export const callBrowserViewMethod = (
-  tabId: number,
-  method: string,
+  scope: string,
+  tabId: number = store.tabsStore.selectedTabId,
   ...args: any[]
 ) => {
   return new Promise((resolve: any) => {
     const callId = makeId(32);
     ipcRenderer.send('browserview-call', {
       args,
-      method,
+      scope,
       tabId,
       callId,
     });

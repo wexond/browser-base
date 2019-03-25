@@ -6,7 +6,8 @@ import { Style } from '~/renderer/app/style';
 import { Toolbar } from '../Toolbar';
 import { Overlay } from '../Overlay';
 import { ipcRenderer } from 'electron';
-import { Line } from './style';
+import { Line, Screenshot, StyledApp } from './style';
+import store from '../../store';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -16,11 +17,12 @@ window.onbeforeunload = () => {
 
 export const App = observer(() => {
   return (
-    <React.Fragment>
+    <StyledApp>
       <GlobalStyle />
       <Toolbar />
       <Line />
+      <Screenshot style={{ backgroundImage: `url(${store.screenshot})` }} />
       <Overlay />
-    </React.Fragment>
+    </StyledApp>
   );
 });
