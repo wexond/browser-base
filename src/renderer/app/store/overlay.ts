@@ -75,11 +75,7 @@ export class OverlayStore {
       this.inputRef.current.value = '';
       this._visible = val;
     } else {
-      const rect = this.inputRef.current.getBoundingClientRect();
-      this.bottom = Math.min(
-        window.innerHeight - (rect.top + rect.height + 300),
-        this.bsRef.offsetHeight,
-      );
+      this.adjustBottom();
 
       callBrowserViewMethod('getScreenshot').then(data => {
         store.screenshot = data;
@@ -102,6 +98,14 @@ export class OverlayStore {
         }, 20);
       });
     }
+  }
+
+  public adjustBottom() {
+    const rect = this.inputRef.current.getBoundingClientRect();
+    this.bottom = Math.min(
+      window.innerHeight - (rect.top + rect.height + 300),
+      this.bsRef.offsetHeight,
+    );
   }
 
   public suggest() {
