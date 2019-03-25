@@ -16,6 +16,7 @@ import { BottomSheet } from '../BottomSheet';
 import { SearchBox } from '../SearchBox';
 import { MenuItem } from '../MenuItem';
 import { TabGroups } from '../TabGroups';
+import { icons } from '../../constants';
 
 const Header = ({ children }: any) => {
   return (
@@ -62,15 +63,15 @@ export const Overlay = observer(() => {
           <Separator />
           <Section>
             <Menu>
-              <MenuItem>History</MenuItem>
-              <MenuItem>Bookmarks</MenuItem>
-              <MenuItem>Downloads</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Extensions</MenuItem>
-              <MenuItem>New window</MenuItem>
-              <MenuItem>New incognito window</MenuItem>
-              <MenuItem>Find</MenuItem>
-              <MenuItem>More tools</MenuItem>
+              <MenuItem icon={icons.history}>History</MenuItem>
+              <MenuItem icon={icons.bookmarks}>Bookmarks</MenuItem>
+              <MenuItem icon={icons.download}>Downloads</MenuItem>
+              <MenuItem icon={icons.settings}>Settings</MenuItem>
+              <MenuItem icon={icons.extensions}>Extensions</MenuItem>
+              <MenuItem icon={icons.window}>New window</MenuItem>
+              <MenuItem icon={icons.window}>New incognito window</MenuItem>
+              <MenuItem icon={icons.find}>Find</MenuItem>
+              <MenuItem icon={icons.more}>More tools</MenuItem>
             </Menu>
           </Section>
         </BottomSheet>
