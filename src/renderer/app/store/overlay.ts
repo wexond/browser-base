@@ -92,6 +92,8 @@ export class OverlayStore {
   }
 
   public adjustBottom() {
+    if (!this.inputRef.current) return;
+
     const rect = this.inputRef.current.getBoundingClientRect();
     this.bottom = Math.min(
       window.innerHeight - (rect.top + rect.height + 300),
