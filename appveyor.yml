@@ -1,13 +1,11 @@
 os: unstable
 environment:
   matrix:
-    - nodejs_version: '10'
-cache:
- - "%LOCALAPPDATA%\\Yarn"
+    - nodejs_version: '11'
 install:
   - ps: Install-Product node $env:nodejs_version
   - set CI=true
-  - yarn
+  - npm ci
 matrix:
   fast_finish: true
 build: off
