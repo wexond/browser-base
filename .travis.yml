@@ -1,7 +1,12 @@
 language: node_js
-node_js: '10'
+node_js: '11'
 sudo: enabled
 dist: trusty
+install:
+- npm ci
+cache:
+  directories:
+  - "$HOME/.npm"
 os:
   - linux
   - osx
