@@ -33,7 +33,7 @@ Wexond is an extensible web browser with a totally different user experience, bu
 
 [![Backers](https://opencollective.com/wexond/tiers/backer.svg?avatarHeight=48)](https://opencollective.com/wexond)
 
-https://digital-presence.agency/
+<a href="https://digital-presence.agency/"><img src="https://i.imgur.com/iNY6XA4.jpg" width="256"></a>
 
 # Screenshots
 
