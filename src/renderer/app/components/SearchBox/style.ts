@@ -3,7 +3,7 @@ import { centerImage } from '~/shared/mixins';
 import { icons } from '../../constants';
 
 export const StyledSearchBox = styled.div`
-  margin-top: 10%;
+  margin-top: 64px;
   width: 700px;
   z-index: 2;
   background-color: rgba(255, 255, 255, 0.15);
@@ -12,6 +12,8 @@ export const StyledSearchBox = styled.div`
   display: flex;
   flex-flow: column;
   overflow: hidden;
+  min-height: 48px;
+  transition: 0.2s height;
 `;
 
 export const SearchIcon = styled.div`
@@ -31,7 +33,7 @@ export const Input = styled.input`
   outline: none;
   color: white;
   font-size: 16px;
-  margin-left: 16px;
+  margin-left: 12px;
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.54);
@@ -42,4 +44,5 @@ export const InputContainer = styled.div`
   display: flex;
   align-items: center;
   height: 48px;
+  min-height: 48px;
 `;

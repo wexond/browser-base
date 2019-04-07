@@ -94,8 +94,14 @@ const onInputBlur = () => {
 export const SearchBox = observer(() => {
   const suggestionsVisible = store.suggestionsStore.suggestions.length !== 0;
 
+  let height = 48;
+
+  for (const s of store.suggestionsStore.suggestions) {
+    height += 48;
+  }
+
   return (
-    <StyledSearchBox onClick={onClick}>
+    <StyledSearchBox style={{ height }} onClick={onClick}>
       <InputContainer>
         <SearchIcon />
         <Input

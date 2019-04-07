@@ -5,14 +5,11 @@ import { transparency } from '~/renderer/constants';
 export const StyledSuggestion = styled.div`
   width: 100%;
   height: 48px;
+  min-height: 48px;
   display: flex;
   position: relative;
   align-items: center;
   overflow: hidden;
-
-  &:first-child {
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
-  }
 
   ${({ selected, hovered }: { selected: boolean; hovered: boolean }) => {
     let backgroundColor = 'transparent';

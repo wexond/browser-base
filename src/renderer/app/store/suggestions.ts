@@ -14,6 +14,9 @@ export class SuggestionsStore {
   @observable
   public selected = 0;
 
+  @observable
+  public height = 0;
+
   public load(input: HTMLInputElement) {
     return new Promise(async (resolve: (result: string) => void, reject) => {
       const filter = input.value.substring(0, input.selectionStart);
