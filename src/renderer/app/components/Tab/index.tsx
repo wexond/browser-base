@@ -12,6 +12,7 @@ import {
   StyledClose,
   StyledBorder,
   StyledOverlay,
+  TabContainer,
 } from './style';
 import { shadeBlendConvert } from '../../utils';
 import { transparency } from '~/renderer/constants';
@@ -118,29 +119,32 @@ export default observer(({ tab }: { tab: Tab }) => {
   return (
     <StyledTab
       selected={tab.isSelected}
-      hovered={tab.isHovered}
       onMouseDown={onMouseDown(tab)}
       onMouseEnter={onMouseEnter(tab)}
       onClick={onClick}
       onMouseLeave={onMouseLeave}
-      isClosing={tab.isClosing}
       ref={tab.ref}
-      style={{
-        backgroundColor: tab.isSelected
-          ? shadeBlendConvert(0.85, tab.background)
-          : 'transparent',
-      }}
     >
-      <Content tab={tab} />
-      <Close tab={tab} />
+      <TabContainer
+        selected={tab.isSelected}
+        style={{
+          backgroundColor: tab.isSelected
+            ? shadeBlendConvert(0.85, tab.background)
+            : 'transparent',
+        }}
+      >
+        <Content tab={tab} />
+        <Close tab={tab} />
+
+        <Overlay tab={tab} />
+        <Ripple
+          rippleTime={0.6}
+          opacity={0.15}
+          color={tab.background}
+          style={{ zIndex: 9 }}
+        />
+      </TabContainer>
       <Border tab={tab} />
-      <Overlay tab={tab} />
-      <Ripple
-        rippleTime={0.6}
-        opacity={0.15}
-        color={tab.background}
-        style={{ zIndex: 9 }}
-      />
     </StyledTab>
   );
 });

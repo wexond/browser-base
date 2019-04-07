@@ -42,27 +42,18 @@ export const StyledClose = styled.div`
 
 interface TabProps {
   selected: boolean;
-  isClosing: boolean;
-  hovered: boolean;
 }
 
 export const StyledTab = styled.div`
   position: absolute;
   height: 100%;
-  border-radius: 30px;
-  overflow: hidden;
   width: 0;
   left: 0;
   will-change: width;
-  display: inline-flex;
-  align-items: center;
   -webkit-app-region: no-drag;
   ${({ selected }: TabProps) => css`
     z-index: ${selected ? 2 : 1};
-    background-color: ${selected ? 'rgba(33, 150, 243, 0.15)' : 'transparent'};
   `};
-  backface-visibility: hidden;
-  margin-right: ${TABS_PADDING}px;
 `;
 
 export const StyledOverlay = styled.div`
@@ -125,11 +116,27 @@ export const StyledContent = styled.div`
 export const StyledBorder = styled.div`
   position: absolute;
   width: 1px;
-  height: 20px;
+  height: 16px;
   background-color: rgba(0, 0, 0, ${transparency.dividers});
-  right: 0px;
+  right: -1px;
+  top: 50%;
+  transform: translateY(-50%);
 
   ${({ visible }: { visible: boolean }) => css`
     visibility: ${visible ? 'visible' : 'hidden'};
+  `};
+`;
+
+export const TabContainer = styled.div`
+  position: relative;
+  border-radius: 17px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  backface-visibility: hidden;
+  ${({ selected }: TabProps) => css`
+    background-color: ${selected ? 'rgba(33, 150, 243, 0.15)' : 'transparent'};
   `};
 `;
