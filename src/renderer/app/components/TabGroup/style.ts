@@ -6,8 +6,8 @@ export const StyledTabGroup = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0 12px;
-  height: 32px;
+  padding: 0 16px;
+  height: 42px;
   color: white;
   border-radius: 50px;
   margin-right: 8px;

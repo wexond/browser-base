@@ -9,12 +9,12 @@ export const StyledTabGroups = styled.div`
 `;
 
 export const AddTabGroup = styled.div`
-  width: 32px;
-  height: 32px;
+  width: 42px;
+  height: 42px;
   border: 1px solid black;
   opacity: 0.54;
   border-radius: 50px;
-  ${centerImage('18px', '18px')};
+  ${centerImage('24px', '24px')};
   background-image: url(${icons.add});
   transition: 0.1s opacity;
   filter: invert(100%);
