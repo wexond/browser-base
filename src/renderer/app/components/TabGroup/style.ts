@@ -16,19 +16,10 @@ export const StyledTabGroup = styled.div`
 
   ${({ selected }: { selected: boolean }) => css`
     opacity: ${selected ? 1 : 0.6};
-    padding-right: ${selected ? '32px' : '12px'};
 
     &:hover {
       opacity: 1;
-      padding-right: 32px;
-
-      div${Close} {
-        opacity: 1;
-      }
-
-      div${Content} {
-        max-width: 100%;
-      }
+      cursor: ${selected ? 'default' : 'pointer'};
     }
   `}
 `;
@@ -38,18 +29,23 @@ export const Content = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  flex: 1;
 `;
 
-export const Close = styled.div`
-  position: absolute;
-  right: 8px;
-  background-image: url(${icons.close});
+export const Icons = styled.div`
+  display: flex;
+  margin-left: 8px;
+`;
+
+export const Icon = styled.div`
   ${centerImage('16px', '16px')};
   width: 16px;
   height: 16px;
+  margin-left: 4px;
   filter: invert(100%);
+  opacity: 0.54;
 
-  ${({ selected }: { selected: boolean }) => css`
-    opacity: ${selected ? 1 : 0};
-  `}
+  &:hover {
+    opacity: 1;
+  }
 `;
