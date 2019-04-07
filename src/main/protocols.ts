@@ -10,11 +10,11 @@ export const registerProtocols = () => {
   protocol.registerSchemesAsPrivileged([
     {
       scheme: 'wexond',
-      privileges: { bypassCSP: true },
+      privileges: { bypassCSP: true, secure: true },
     },
     {
       scheme: 'wexond-extension',
-      privileges: { bypassCSP: true },
+      privileges: { bypassCSP: true, secure: true },
     },
   ]);
 
