@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { caption, centerImage } from '~/shared/mixins';
 
-const width = 700;
+const width = 800;
 const itemsPerRow = 5;
 const size = (width - 48 - (itemsPerRow - 1) * 16) / itemsPerRow;
 
@@ -9,7 +9,7 @@ export const StyledMenuItem = styled.div`
   border-radius: 16px;
   min-width: ${size}px;
   max-width: ${size}px;
-  height: 140px;
+  height: ${size}px;
   margin-left: 16px;
   margin-top: 16px;
   transition: 0.1s background-color;

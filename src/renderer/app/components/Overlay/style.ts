@@ -73,6 +73,7 @@ export const Menu = styled.div`
   margin-left: -16px;
   margin-top: -16px;
   flex-wrap: wrap;
+  justify-content: center;
 `;
 
 export const Scrollable = styled.div`
@@ -98,7 +99,8 @@ export const Title = styled.div`
 `;
 
 export const Content = styled.div`
-  width: 700px;
+  width: calc(100% - 64px);
+  max-width: 800px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);

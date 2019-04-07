@@ -4,7 +4,6 @@ import { icons } from '../../constants';
 
 export const StyledSearchBox = styled.div`
   margin-top: 64px;
-  width: 700px;
   z-index: 2;
   background-color: rgba(255, 255, 255, 0.15);
   border-radius: 23px;

@@ -48,8 +48,8 @@ interface TabProps {
 
 export const StyledTab = styled.div`
   position: absolute;
-  height: calc(100% - 6px);
-  border-radius: 4px;
+  height: 100%;
+  border-radius: 30px;
   overflow: hidden;
   width: 0;
   left: 0;
