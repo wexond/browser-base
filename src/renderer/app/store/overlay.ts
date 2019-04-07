@@ -29,7 +29,6 @@ const autoComplete = (text: string, suggestion: string) => {
 
 export class OverlayStore {
   public scrollRef = React.createRef<HTMLDivElement>();
-  public bsRef: HTMLDivElement;
   public inputRef = React.createRef<HTMLInputElement>();
 
   public canSuggest = false;
@@ -74,8 +73,6 @@ export class OverlayStore {
       this.inputRef.current.value = '';
       this._visible = val;
     } else {
-      this.adjustBottom();
-
       this.show();
       ipcRenderer.send('window-focus');
 
@@ -89,16 +86,6 @@ export class OverlayStore {
 
       this._visible = val;
     }
-  }
-
-  public adjustBottom() {
-    if (!this.inputRef.current) return;
-
-    const rect = this.inputRef.current.getBoundingClientRect();
-    this.bottom = Math.min(
-      window.innerHeight - (rect.top + rect.height + 300),
-      this.bsRef.offsetHeight,
-    );
   }
 
   public suggest() {

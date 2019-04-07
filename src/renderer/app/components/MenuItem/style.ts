@@ -9,7 +9,7 @@ export const StyledMenuItem = styled.div`
   border-radius: 8px;
   min-width: ${size}px;
   max-width: ${size}px;
-  height: ${size}px;
+  height: 140px;
   margin-left: 16px;
   margin-top: 16px;
   transition: 0.1s background-color;
@@ -19,19 +19,23 @@ export const StyledMenuItem = styled.div`
   justify-content: center;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.08);
+    background-color: rgba(255, 255, 255, 0.08);
   }
 `;
 
 export const Icon = styled.div`
-  opacity: 0.54;
-  width: 42px;
-  height: 42px;
+  opacity: 1;
+  width: 64px;
+  height: 64px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
   margin-bottom: 16px;
-  ${centerImage('42px', '42px')};
+  filter: invert(100%);
+  ${centerImage('32px', '32px')};
 `;
 
 export const Title = styled.div`
-  ${caption()};
+  font-size: 14px;
   text-align: center;
+  color: white;
 `;

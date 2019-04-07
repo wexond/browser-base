@@ -4,7 +4,7 @@ import { colors } from '~/renderer/constants';
 import { icons } from '../../constants';
 
 export const StyledOverlay = styled.div`
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.8);
   color: white;
   position: absolute;
   left: 0;
@@ -23,13 +23,14 @@ export const StyledOverlay = styled.div`
 export const HeaderText = styled.div`
   position: relative;
   display: table;
-  ${subtitle2()};
+  font-size: 16px;
   padding-left: 8px;
   padding-top: 6px;
   padding-right: 24px;
   padding-bottom: 6px;
   margin-left: -8px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  margin-top: -8px;
   border-radius: 50px;
   transition: 0.1s background-color;
   cursor: pointer;
@@ -40,13 +41,14 @@ export const HeaderText = styled.div`
 `;
 
 export const HeaderArrow = styled.div`
-  ${centerImage('16px', '16px')};
+  ${centerImage('18px', '18px')};
   margin-left: 8px;
   height: 16px;
   width: 16px;
   background-image: url(${icons.forward});
   display: inline-block;
   position: absolute;
+  filter: invert(100%);
   top: 50%;
   transform: translateY(-50%);
   right: 4px;
@@ -60,6 +62,10 @@ export const Separator = styled.div`
 
 export const Section = styled.div`
   padding: 24px;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin-bottom: 24px;
+  border-radius: 30px;
+  color: white;
 `;
 
 export const Menu = styled.div`
@@ -80,4 +86,20 @@ export const Scrollable = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+export const Title = styled.div`
+  font-size: 24px;
+  margin-left: 24px;
+  font-weight: 300;
+  margin-bottom: 16px;
+  margin-top: 24px;
+  color: white;
+`;
+
+export const Content = styled.div`
+  width: 700px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 `;

@@ -50,6 +50,7 @@ export const SuggestionComponent = observer(({ suggestion }: Props) => {
         style={{
           backgroundImage: `url(${favicon})`,
           opacity: customFavicon ? 1 : transparency.icons.inactive,
+          filter: customFavicon ? 'none' : 'invert(100%)',
         }}
       />
       <PrimaryText>{primaryText}</PrimaryText>

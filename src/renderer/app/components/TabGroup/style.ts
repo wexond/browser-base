@@ -14,7 +14,7 @@ export const StyledTabGroup = styled.div`
   transition: 0.1s opacity, 0.2s padding;
 
   ${({ selected }: { selected: boolean }) => css`
-    opacity: ${selected ? 1 : 0.54};
+    opacity: ${selected ? 1 : 0.6};
     padding-right: ${selected ? '32px' : '12px'};
 
     &:hover {

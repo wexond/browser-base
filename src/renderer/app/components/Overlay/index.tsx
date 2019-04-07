@@ -11,6 +11,8 @@ import {
   Section,
   Menu,
   Scrollable,
+  Title,
+  Content,
 } from './style';
 import { BottomSheet } from '../BottomSheet';
 import { SearchBox } from '../SearchBox';
@@ -27,16 +29,6 @@ const Header = ({ children }: any) => {
   );
 };
 
-const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-  const bsHeight = store.overlayStore.bsRef.getBoundingClientRect().height;
-
-  if (bsHeight <= window.innerHeight) {
-    if (e.deltaY > 0) {
-      store.suggestionsStore.suggestions = [];
-    }
-  }
-};
-
 const onClick = () => {
   store.overlayStore.visible = false;
 };
@@ -48,20 +40,16 @@ const onBsClick = (e: React.MouseEvent<HTMLDivElement>) => {
 export const Overlay = observer(() => {
   return (
     <StyledOverlay visible={store.overlayStore.visible} onClick={onClick}>
-      <SearchBox />
-      <Scrollable onWheel={onWheel} ref={store.overlayStore.scrollRef}>
-        <BottomSheet
-          visible={store.overlayStore.visible}
-          onClick={onBsClick}
-          bottom={store.overlayStore.bottom}
-          innerRef={(r: any) => (store.overlayStore.bsRef = r)}
-        >
-          <Section style={{ paddingTop: 8 }}>
+      <Scrollable ref={store.overlayStore.scrollRef}>
+        <Content>
+          <SearchBox />
+          <Title>Overview</Title>
+          <Section>
             <Header>Tab groups</Header>
             <TabGroups />
           </Section>
-          <Separator />
           <Section>
+            <Header>Menu</Header>
             <Menu>
               <MenuItem icon={icons.history}>History</MenuItem>
               <MenuItem icon={icons.bookmarks}>Bookmarks</MenuItem>
@@ -74,7 +62,7 @@ export const Overlay = observer(() => {
               <MenuItem icon={icons.more}>More tools</MenuItem>
             </Menu>
           </Section>
-        </BottomSheet>
+        </Content>
       </Scrollable>
     </StyledOverlay>
   );

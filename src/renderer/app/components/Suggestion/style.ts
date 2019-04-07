@@ -31,6 +31,7 @@ export const PrimaryText = styled.div`
   ${body2()};
   margin-left: 16px;
   white-space: nowrap;
+  color: white;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 13px;
@@ -42,6 +43,7 @@ export const SecondaryText = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: white;
   padding-right: 16px;
   font-size: 13px;
   opacity: ${transparency.text.medium};
@@ -58,5 +60,6 @@ export const Icon = styled.div`
 export const Dash = styled.div`
   margin-left: 4px;
   margin-right: 4px;
+  color: white;
   opacity: ${transparency.text.medium};
 `;

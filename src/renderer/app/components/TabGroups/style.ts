@@ -16,6 +16,7 @@ export const AddTabGroup = styled.div`
   ${centerImage('18px', '18px')};
   background-image: url(${icons.add});
   transition: 0.1s opacity;
+  filter: invert(100%);
 
   &:hover {
     opacity: 1;

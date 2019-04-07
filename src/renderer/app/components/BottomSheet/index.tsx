@@ -22,7 +22,6 @@ export const BottomSheet = ({
       onClick={onClick}
       ref={innerRef}
     >
-      <SmallBar />
       {children}
     </StyledBottomSheet>
   );

@@ -86,7 +86,6 @@ export class TabsStore {
   public onResize = (e: Event) => {
     if (e.isTrusted) {
       store.tabsStore.updateTabsBounds(false);
-      store.overlayStore.adjustBottom();
     }
   };
 
