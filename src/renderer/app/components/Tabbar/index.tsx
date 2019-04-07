@@ -13,7 +13,10 @@ const onMouseEnter = () => (store.tabsStore.scrollbarVisible = true);
 
 const onMouseLeave = () => (store.tabsStore.scrollbarVisible = false);
 
-const onAddTabClick = () => store.tabsStore.addTab();
+const onAddTabClick = () => {
+  store.overlayStore.isNewTab = true;
+  store.overlayStore.visible = true;
+};
 
 export const Tabbar = observer(() => {
   return (

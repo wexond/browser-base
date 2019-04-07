@@ -14,8 +14,6 @@ const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
 const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.which === 13) {
     // Enter.
-    const tab = store.tabsStore.selectedTab;
-
     e.preventDefault();
 
     const text = e.currentTarget.value;
@@ -28,8 +26,14 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     }
 
     e.currentTarget.value = url;
-    tab.url = url;
-    callBrowserViewMethod('webContents.loadURL', tab.id, url);
+
+    const tab = store.tabsStore.selectedTab;
+    if (!tab || store.overlayStore.isNewTab) {
+      store.tabsStore.addTab({ url, active: true });
+    } else {
+      tab.url = url;
+      callBrowserViewMethod('webContents.loadURL', tab.id, url);
+    }
 
     store.overlayStore.visible = false;
   }
@@ -83,10 +87,12 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 const onInput = () => {
   store.overlayStore.show();
   store.overlayStore.suggest();
+  store.overlayStore.scrollRef.current.scrollTop = 0;
 };
 
 const onInputBlur = () => {
-  if (store.tabsStore.selectedTab.url === 'about:blank') {
+  const { selectedTab } = store.tabsStore;
+  if (selectedTab && selectedTab.url === 'about:blank') {
     store.overlayStore.inputRef.current.focus();
   }
 };

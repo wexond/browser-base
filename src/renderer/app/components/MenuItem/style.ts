@@ -6,7 +6,7 @@ const itemsPerRow = 5;
 const size = (width - 48 - (itemsPerRow - 1) * 16) / itemsPerRow;
 
 export const StyledMenuItem = styled.div`
-  border-radius: 8px;
+  border-radius: 16px;
   min-width: ${size}px;
   max-width: ${size}px;
   height: 140px;

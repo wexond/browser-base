@@ -30,11 +30,9 @@ const Header = ({ children }: any) => {
 };
 
 const onClick = () => {
-  store.overlayStore.visible = false;
-};
-
-const onBsClick = (e: React.MouseEvent<HTMLDivElement>) => {
-  e.stopPropagation();
+  if (store.tabsStore.tabs.length > 0) {
+    store.overlayStore.visible = false;
+  }
 };
 
 export const Overlay = observer(() => {

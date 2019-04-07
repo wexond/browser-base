@@ -33,10 +33,11 @@ export class OverlayStore {
 
   public canSuggest = false;
 
-  public lastUrl: string;
+  @observable
+  private _visible = true;
 
   @observable
-  private _visible = false;
+  public isNewTab = true;
 
   @observable
   public bottom = 128;
@@ -72,17 +73,24 @@ export class OverlayStore {
       lastSuggestion = undefined;
       this.inputRef.current.value = '';
       this._visible = val;
+      this.isNewTab = false;
     } else {
       this.show();
       ipcRenderer.send('window-focus');
 
-      callBrowserViewMethod('webContents.getURL').then(async (url: string) => {
-        this.inputRef.current.value = url;
+      if (!this.isNewTab) {
+        callBrowserViewMethod('webContents.getURL').then(
+          async (url: string) => {
+            this.inputRef.current.value = url;
+            this.inputRef.current.focus();
+            this.inputRef.current.select();
+          },
+        );
+      } else {
+        this.inputRef.current.value = '';
         this.inputRef.current.focus();
         this.inputRef.current.select();
-
-        this.lastUrl = url;
-      });
+      }
 
       this._visible = val;
     }

@@ -26,6 +26,5 @@ export class TabGroupsStore {
     const tabGroup: TabGroup = new TabGroup();
     this.groups.push(tabGroup);
     this.currentGroupId = tabGroup.id;
-    store.tabsStore.addTab();
   }
 }
