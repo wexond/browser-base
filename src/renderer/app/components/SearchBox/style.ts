@@ -6,7 +6,7 @@ export const StyledSearchBox = styled.div`
   margin-top: 10%;
   width: 700px;
   z-index: 2;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.15);
   border-radius: 23px;
   margin-bottom: 64px;
   display: flex;

@@ -4,7 +4,7 @@ import { colors } from '~/renderer/constants';
 import { icons } from '../../constants';
 
 export const StyledOverlay = styled.div`
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.9);
   color: white;
   position: absolute;
   left: 0;
@@ -62,7 +62,7 @@ export const Separator = styled.div`
 
 export const Section = styled.div`
   padding: 24px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.15);
   margin-bottom: 24px;
   border-radius: 30px;
   color: white;
