@@ -1,4 +1,4 @@
-import { remote, ipcRenderer } from 'electron';
+import { ipcRenderer } from 'electron';
 import { observable } from 'mobx';
 import { resolve } from 'path';
 import * as fs from 'fs';

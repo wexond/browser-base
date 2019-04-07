@@ -12,6 +12,10 @@ export const registerProtocols = () => {
       scheme: 'wexond',
       privileges: { bypassCSP: true },
     },
+    {
+      scheme: 'wexond-extension',
+      privileges: { bypassCSP: true },
+    },
   ]);
 
   (app as any).on('session-created', (sess: Electron.session) => {

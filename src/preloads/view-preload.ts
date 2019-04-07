@@ -6,8 +6,6 @@ import { format, parse } from 'url';
 import { IpcExtension } from '~/shared/models';
 import { runInThisContext } from 'vm';
 
-webFrame.registerURLSchemeAsPrivileged('wexond-extension');
-
 webFrame.executeJavaScript('window', false, w => {
   w.chrome = {
     webstorePrivate: {
