@@ -36,7 +36,7 @@ export const HeaderText = styled.div`
   cursor: pointer;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.08);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 `;
 
@@ -66,6 +66,7 @@ export const Section = styled.div`
   margin-bottom: 24px;
   border-radius: 30px;
   color: white;
+  overflow: hidden;
 `;
 
 export const Menu = styled.div`

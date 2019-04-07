@@ -5,6 +5,7 @@ import { centerImage } from '~/shared/mixins';
 export const StyledTabGroups = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 `;
 
 export const AddTabGroup = styled.div`

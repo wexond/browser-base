@@ -11,6 +11,7 @@ export const StyledTabGroup = styled.div`
   color: white;
   border-radius: 50px;
   margin-right: 8px;
+  margin-bottom: 8px;
   transition: 0.1s opacity, 0.2s padding;
 
   ${({ selected }: { selected: boolean }) => css`
