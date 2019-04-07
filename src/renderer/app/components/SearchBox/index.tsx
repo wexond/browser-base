@@ -40,7 +40,9 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 };
 
 const onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-  store.overlayStore.inputRef.current.select();
+  if (store.overlayStore.inputRef.current) {
+    store.overlayStore.inputRef.current.select();
+  }
 };
 
 const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -111,6 +113,7 @@ export const SearchBox = observer(() => {
       <InputContainer>
         <SearchIcon />
         <Input
+          autoFocus
           placeholder="Search or type in URL"
           onKeyPress={onKeyPress}
           onFocus={onInputFocus}

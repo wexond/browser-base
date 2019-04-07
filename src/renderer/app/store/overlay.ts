@@ -88,8 +88,11 @@ export class OverlayStore {
         );
       } else {
         this.inputRef.current.value = '';
-        this.inputRef.current.focus();
-        this.inputRef.current.select();
+
+        setTimeout(() => {
+          this.inputRef.current.focus();
+          this.inputRef.current.select();
+        });
       }
 
       this._visible = val;
