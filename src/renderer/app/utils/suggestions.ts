@@ -2,8 +2,9 @@ import { HistoryItem } from '../models';
 import store from '../store';
 import { requestURL } from './network';
 
-export const countVisitedTimes = (historyItems: HistoryItem[]) => {
+export const countVisitedTimes = (hItems: HistoryItem[]) => {
   const items: any[] = [];
+  const historyItems = hItems.slice();
 
   for (const historyItem of historyItems) {
     const itemsWithUrl = historyItems.filter(x => x.url === historyItem.url);
