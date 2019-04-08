@@ -17,6 +17,7 @@ import { SearchBox } from '../SearchBox';
 import { MenuItem } from '../MenuItem';
 import { TabGroups } from '../TabGroups';
 import { icons } from '../../constants';
+import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 
 const Header = ({ children, clickable }: any) => {
   return (
@@ -37,6 +38,19 @@ const preventHiding = (e: any) => {
   e.stopPropagation();
 };
 
+const onSiteClick = (url: string) => () => {
+  const tab = store.tabsStore.selectedTab;
+
+  if (!tab || store.overlayStore.isNewTab) {
+    store.tabsStore.addTab({ url, active: true });
+  } else {
+    tab.url = url;
+    callBrowserViewMethod('webContents.loadURL', tab.id, url);
+  }
+
+  store.overlayStore.visible = false;
+};
+
 export const Overlay = observer(() => {
   return (
     <StyledOverlay visible={store.overlayStore.visible} onClick={onClick}>
@@ -49,7 +63,13 @@ export const Overlay = observer(() => {
           </Title>
           <Menu>
             {store.historyStore.topSites.map(item => (
-              <MenuItem maxLines={1} light icon={item.favicon}>
+              <MenuItem
+                onClick={onSiteClick(item.url)}
+                key={item._id}
+                maxLines={1}
+                light
+                icon={item.favicon}
+              >
                 {item.title}
               </MenuItem>
             ))}

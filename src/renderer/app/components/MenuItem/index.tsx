@@ -1,9 +1,16 @@
 import * as React from 'react';
 import { StyledMenuItem, Title, Icon } from './style';
 
-export const MenuItem = ({ children, icon, invert, light, maxLines }: any) => {
+export const MenuItem = ({
+  children,
+  icon,
+  invert,
+  light,
+  maxLines,
+  onClick,
+}: any) => {
   return (
-    <StyledMenuItem>
+    <StyledMenuItem onClick={onClick}>
       <Icon
         invert={invert}
         light={light}
