@@ -82,6 +82,10 @@ export default class Ripple extends React.Component<IProps, IState> {
     this.makeRipple(e.pageX, e.pageY);
   };
 
+  public onMouseLeave = () => {
+    this.onMouseUp();
+  };
+
   public makeRipple(mouseX: number, mouseY: number) {
     const { opacity } = this.props;
     const {
@@ -128,7 +132,12 @@ export default class Ripple extends React.Component<IProps, IState> {
     } = this.state;
 
     return (
-      <Root onMouseDown={this.onMouseDown} ref={this.root} style={style}>
+      <Root
+        onMouseLeave={this.onMouseLeave}
+        onMouseDown={this.onMouseDown}
+        ref={this.root}
+        style={style}
+      >
         <StyledRipple
           style={{
             transform: `translate3d(calc(-50.1% + ${rippleX}px), calc(-50.1% + ${rippleY}px), 0)`,

@@ -4,7 +4,7 @@ import { colors } from '~/renderer/constants';
 import { icons } from '../../constants';
 
 export const StyledOverlay = styled.div`
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 0.87);
   color: white;
   position: absolute;
   left: 0;
