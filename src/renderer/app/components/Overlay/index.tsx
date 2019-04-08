@@ -57,23 +57,28 @@ export const Overlay = observer(() => {
       <Scrollable ref={store.overlayStore.scrollRef}>
         <Content>
           <SearchBox />
-          <Title>
-            <div style={{ display: 'inline-block' }}>Top Sites</div>
-            <DropArrow />
-          </Title>
-          <Menu>
-            {store.historyStore.topSites.map(item => (
-              <MenuItem
-                onClick={onSiteClick(item.url)}
-                key={item._id}
-                maxLines={1}
-                light
-                icon={item.favicon}
-              >
-                {item.title}
-              </MenuItem>
-            ))}
-          </Menu>
+          {store.historyStore.topSites.length > 0 && (
+            <>
+              <Title>
+                <div style={{ display: 'inline-block' }}>Top Sites</div>
+                <DropArrow />
+              </Title>
+              <Menu>
+                {store.historyStore.topSites.map(item => (
+                  <MenuItem
+                    onClick={onSiteClick(item.url)}
+                    key={item._id}
+                    maxLines={1}
+                    light
+                    icon={item.favicon}
+                  >
+                    {item.title}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </>
+          )}
+
           <Title>Overview</Title>
           <Section onClick={preventHiding}>
             <Header>Tab groups</Header>
