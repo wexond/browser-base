@@ -4,6 +4,7 @@ import { Favicon } from '../models';
 import { getPath } from '~/shared/utils/paths';
 import { requestURL } from '../utils/network';
 import { rejects } from 'assert';
+import { observable } from 'mobx';
 
 const icojs = require('icojs');
 const fileType = require('file-type');
@@ -34,7 +35,9 @@ export class FaviconsStore {
     autoload: true,
   });
 
+  @observable
   public favicons: { [key: string]: string } = {};
+
   public faviconsBuffers: { [key: string]: Buffer } = {};
 
   constructor() {

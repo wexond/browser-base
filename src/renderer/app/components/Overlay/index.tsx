@@ -18,7 +18,6 @@ import {
   WeatherNumber,
   WeatherSymbol,
   WeatherContent,
-  WeatherLine,
   WeatherLeft,
   WeatherIcon,
 } from './style';
@@ -86,7 +85,7 @@ export const Overlay = observer(() => {
                     maxLines={1}
                     iconSize={20}
                     light
-                    icon={item.favicon}
+                    icon={store.faviconsStore.favicons[item.favicon]}
                   >
                     {item.title}
                   </MenuItem>
