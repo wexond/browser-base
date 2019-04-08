@@ -24,9 +24,6 @@ export class TabsStore {
   public scrollbarVisible: boolean = false;
 
   @observable
-  public selectedTabId: number;
-
-  @observable
   public hoveredTabId: number;
 
   @observable
@@ -97,7 +94,7 @@ export class TabsStore {
   }
 
   public get selectedTab() {
-    return this.getTabById(this.selectedTabId);
+    return this.getTabById(store.tabGroupsStore.currentGroup.selectedTabId);
   }
 
   public get hoveredTab() {

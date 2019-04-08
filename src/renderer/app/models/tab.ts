@@ -38,7 +38,7 @@ export class Tab {
   public width: number = 0;
 
   @observable
-  public position = id;
+  public position = 0;
 
   @observable
   public background: string = colors.blue['500'];
@@ -47,7 +47,7 @@ export class Tab {
   public screenshot: string;
 
   public left = 0;
-  public tempPosition = id;
+  public tempPosition = 0;
   public url = '';
   public lastUrl = '';
   public isClosing = false;
@@ -58,7 +58,7 @@ export class Tab {
 
   @computed
   public get isSelected() {
-    return store.tabsStore.selectedTabId === this.id;
+    return store.tabGroupsStore.currentGroup.selectedTabId === this.id;
   }
 
   @computed
@@ -99,6 +99,9 @@ export class Tab {
   constructor({ url, active } = defaultTabOptions, tabGroupId: number) {
     this.tabGroupId = tabGroupId;
     this.url = url;
+
+    this.position = this.tabGroup.nextPosition++;
+    this.tempPosition = this.position;
 
     ipcRenderer.send('browserview-create', { tabId: this.id, url });
 
@@ -239,10 +242,9 @@ export class Tab {
 
   public select() {
     if (!this.isClosing) {
-      store.canToggleMenu = store.tabsStore.selectedTabId === this.id;
+      store.canToggleMenu = this.isSelected;
 
       this.tabGroup.selectedTabId = this.id;
-      store.tabsStore.selectedTabId = this.id;
 
       ipcRenderer.send('browserview-select', this.id);
 
@@ -367,7 +369,7 @@ export class Tab {
   };
 
   public getApiTab(): chrome.tabs.Tab {
-    const selected = store.tabsStore.selectedTabId === this.id;
+    const selected = this.isSelected;
 
     return {
       id: this.id,

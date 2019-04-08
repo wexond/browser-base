@@ -1,14 +1,35 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import * as React from 'react';
 
 import { TabGroup } from '~/renderer/app/models';
 import store from '.';
 
 export class TabGroupsStore {
+  @observable
   public groups: TabGroup[] = [];
 
   @observable
-  public currentGroupId = 0;
+  public _currentGroupId = 0;
+
+  @computed
+  public get currentGroupId() {
+    return this._currentGroupId;
+  }
+
+  public set currentGroupId(id: number) {
+    this._currentGroupId = id;
+    const group = this.currentGroup;
+    const tab = store.tabsStore.getTabById(group.selectedTabId);
+
+    if (tab) {
+      tab.select();
+      store.overlayStore.visible = false;
+    }
+
+    setTimeout(() => {
+      store.tabsStore.updateTabsBounds(false);
+    });
+  }
 
   public get currentGroup() {
     return this.getGroupById(this.currentGroupId);

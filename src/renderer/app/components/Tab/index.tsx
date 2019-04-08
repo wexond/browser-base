@@ -123,6 +123,7 @@ export default observer(({ tab }: { tab: Tab }) => {
       onMouseEnter={onMouseEnter(tab)}
       onClick={onClick}
       onMouseLeave={onMouseLeave}
+      visible={tab.tabGroupId === store.tabGroupsStore.currentGroupId}
       ref={tab.ref}
     >
       <TabContainer

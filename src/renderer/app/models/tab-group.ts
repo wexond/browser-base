@@ -1,6 +1,7 @@
 import { observable, computed } from 'mobx';
 
 import store from '~/renderer/app/store';
+import { colors } from '~/renderer/constants';
 
 let id = 0;
 
@@ -13,6 +14,11 @@ export class TabGroup {
 
   @observable
   public selectedTabId: number;
+
+  @observable
+  public color = colors.lightBlue['500'];
+
+  public nextPosition = 0;
 
   @computed
   public get isSelected() {

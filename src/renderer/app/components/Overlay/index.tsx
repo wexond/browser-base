@@ -1,20 +1,17 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
-import { TweenLite } from 'gsap';
 
 import store from '../../store';
 import {
   StyledOverlay,
   HeaderText,
   HeaderArrow,
-  Separator,
   Section,
   Menu,
   Scrollable,
   Title,
   Content,
 } from './style';
-import { BottomSheet } from '../BottomSheet';
 import { SearchBox } from '../SearchBox';
 import { MenuItem } from '../MenuItem';
 import { TabGroups } from '../TabGroups';
@@ -30,7 +27,7 @@ const Header = ({ children, clickable }: any) => {
 };
 
 const onClick = () => {
-  if (store.tabsStore.tabs.length > 0) {
+  if (store.tabGroupsStore.currentGroup.tabs.length > 0) {
     store.overlayStore.visible = false;
   }
 };

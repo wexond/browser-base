@@ -13,6 +13,8 @@ export class ViewManager {
   public selectedId = 0;
   public _fullscreen = false;
 
+  public isHidden = false;
+
   public get fullscreen() {
     return this._fullscreen;
   }
@@ -133,6 +135,8 @@ export class ViewManager {
       return;
     }
 
+    if (this.isHidden) return;
+
     appWindow.setBrowserView(view);
 
     const currUrl = view.webContents.getURL();
@@ -165,10 +169,12 @@ export class ViewManager {
   }
 
   public hideView() {
+    this.isHidden = true;
     appWindow.setBrowserView(null);
   }
 
   public showView() {
+    this.isHidden = false;
     this.select(this.selectedId);
   }
 
