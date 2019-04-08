@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { centerImage } from '~/shared/mixins';
+import { centerImage, shadows } from '~/shared/mixins';
 
 export const StyledTabGroup = styled.div`
   position: relative;
@@ -16,6 +16,7 @@ export const StyledTabGroup = styled.div`
 
   ${({ selected }: { selected: boolean }) => css`
     opacity: ${selected ? 1 : 0.6};
+    box-shadow: ${selected ? shadows(6) : 'none'};
 
     &:hover {
       opacity: 1;
