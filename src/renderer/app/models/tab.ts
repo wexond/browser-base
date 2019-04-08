@@ -356,6 +356,8 @@ export class Tab {
         prevTab.select();
       } else if (store.tabGroupsStore.groups.length === 1) {
         closeWindow();
+      } else if (this.tabGroup.tabs.length === 0) {
+        store.overlayStore.visible = true;
       }
     }
 
