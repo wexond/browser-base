@@ -92,13 +92,6 @@ const onInput = () => {
   store.overlayStore.scrollRef.current.scrollTop = 0;
 };
 
-const onInputBlur = () => {
-  const { selectedTab } = store.tabsStore;
-  if (selectedTab && selectedTab.url === 'about:blank') {
-    store.overlayStore.inputRef.current.focus();
-  }
-};
-
 export const SearchBox = observer(() => {
   const suggestionsVisible = store.suggestionsStore.suggestions.length !== 0;
 
@@ -119,7 +112,6 @@ export const SearchBox = observer(() => {
           onFocus={onInputFocus}
           onChange={onInput}
           onKeyDown={onKeyDown}
-          onBlur={onInputBlur}
           ref={store.overlayStore.inputRef}
         />
       </InputContainer>

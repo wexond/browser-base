@@ -18,6 +18,9 @@ export class TabGroup {
   @observable
   public color: string = colors.lightBlue['500'];
 
+  @observable
+  public editMode = false;
+
   constructor() {
     const { palette } = store.tabGroupsStore;
     this.color = palette[Math.floor(Math.random() * palette.length)];

@@ -248,10 +248,6 @@ export class Tab {
 
       ipcRenderer.send('browserview-select', this.id);
 
-      if (this.url === 'about:blank') {
-        store.overlayStore.inputRef.current.focus();
-      }
-
       store.tabsStore.emitEvent('onActivated', {
         tabId: this.id,
         windowId: 0,

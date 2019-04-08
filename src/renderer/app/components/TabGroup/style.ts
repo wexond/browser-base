@@ -9,6 +9,7 @@ export const StyledTabGroup = styled.div`
   height: 42px;
   color: white;
   border-radius: 50px;
+  max-width: 200px;
   margin-right: 8px;
   margin-bottom: 8px;
   transition: 0.1s opacity, 0.2s padding;
@@ -47,4 +48,13 @@ export const Icon = styled.div`
   &:hover {
     opacity: 1;
   }
+`;
+
+export const Input = styled.input`
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  font-size: 14px;
+  width: 100%;
 `;
