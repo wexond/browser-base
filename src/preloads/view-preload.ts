@@ -28,11 +28,14 @@ const tabId = parseInt(
 );
 
 const goBack = () => {
-  ipcRenderer.send('browserview-call', { tabId, method: 'goBack' });
+  ipcRenderer.send('browserview-call', { tabId, scope: 'webContents.goBack' });
 };
 
 const goForward = () => {
-  ipcRenderer.send('browserview-call', { tabId, method: 'goForward' });
+  ipcRenderer.send('browserview-call', {
+    tabId,
+    scope: 'webContents.goForward',
+  });
 };
 
 window.addEventListener('mouseup', e => {
