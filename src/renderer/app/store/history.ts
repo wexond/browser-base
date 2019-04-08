@@ -19,10 +19,12 @@ export class HistoryStore {
     const newItems: HistoryItem[] = [];
 
     for (const item of top1) {
-      newItems.push(item.item);
+      if (item.times > 1) {
+        newItems.push(item.item);
+      }
     }
 
-    return newItems.slice(0, 5);
+    return newItems.slice(0, 10);
   }
 
   constructor() {

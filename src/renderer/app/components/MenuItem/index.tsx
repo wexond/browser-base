@@ -7,6 +7,7 @@ export const MenuItem = ({
   invert,
   light,
   maxLines,
+  iconSize,
   onClick,
 }: any) => {
   return (
@@ -14,7 +15,10 @@ export const MenuItem = ({
       <Icon
         invert={invert}
         light={light}
-        style={{ backgroundImage: `url(${icon})` }}
+        style={{
+          backgroundImage: `url(${icon})`,
+          backgroundSize: `${iconSize}px`,
+        }}
       />
       <Title
         style={{
@@ -29,4 +33,5 @@ export const MenuItem = ({
 
 MenuItem.defaultProps = {
   maxLines: 2,
+  iconSize: 32,
 };

@@ -69,6 +69,7 @@ export const Overlay = observer(() => {
                     onClick={onSiteClick(item.url)}
                     key={item._id}
                     maxLines={1}
+                    iconSize={24}
                     light
                     icon={item.favicon}
                   >
