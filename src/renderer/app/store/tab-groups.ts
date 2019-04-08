@@ -24,6 +24,12 @@ export class TabGroupsStore {
     if (tab) {
       tab.select();
       store.overlayStore.visible = false;
+    } else {
+      const { current } = store.overlayStore.inputRef;
+      if (current) {
+        current.value = '';
+        current.focus();
+      }
     }
 
     setTimeout(() => {
@@ -47,5 +53,11 @@ export class TabGroupsStore {
     const tabGroup: TabGroup = new TabGroup();
     this.groups.push(tabGroup);
     this.currentGroupId = tabGroup.id;
+
+    const { current } = store.overlayStore.inputRef;
+    if (current) {
+      current.value = '';
+      current.focus();
+    }
   }
 }
