@@ -4,7 +4,7 @@ import store from '~/renderer/app/store';
 
 export const callBrowserViewMethod = (
   scope: string,
-  tabId: number = store.tabsStore.selectedTabId,
+  tabId: number = store.tabGroupsStore.currentGroup.selectedTabId,
   ...args: any[]
 ) => {
   return new Promise((resolve: any) => {
