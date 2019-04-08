@@ -7,13 +7,29 @@ import {
   maximizeWindow,
   closeWindow,
 } from '~/renderer/app/utils';
+import { Buttons } from './style';
+import { observer } from 'mobx-react';
+import store from '../../store';
 
-export const WindowsButtons = () => {
+export const WindowsButtons = observer(() => {
   return (
-    <React.Fragment>
-      <WindowsButton icon={icons.windowsMinimize} onClick={minimizeWindow} />
-      <WindowsButton icon={icons.windowsMaximize} onClick={maximizeWindow} />
-      <WindowsButton icon={icons.windowsClose} onClick={closeWindow} isClose />
-    </React.Fragment>
+    <Buttons>
+      <WindowsButton
+        isDark={store.overlayStore.visible}
+        icon={icons.windowsMinimize}
+        onClick={minimizeWindow}
+      />
+      <WindowsButton
+        isDark={store.overlayStore.visible}
+        icon={icons.windowsMaximize}
+        onClick={maximizeWindow}
+      />
+      <WindowsButton
+        isDark={store.overlayStore.visible}
+        icon={icons.windowsClose}
+        onClick={closeWindow}
+        isClose
+      />
+    </Buttons>
   );
-};
+});

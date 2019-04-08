@@ -8,6 +8,8 @@ import { Overlay } from '../Overlay';
 import { ipcRenderer } from 'electron';
 import { Line, Screenshot, StyledApp } from './style';
 import store from '../../store';
+import { WindowsButtons } from '../WindowsButtons';
+import { platform } from 'os';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -28,6 +30,7 @@ export const App = observer(() => {
         }}
       />
       <Overlay />
+      {platform() !== 'darwin' && <WindowsButtons />}
     </StyledApp>
   );
 });

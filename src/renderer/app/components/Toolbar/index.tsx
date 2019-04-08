@@ -19,10 +19,12 @@ const onUpdateClick = () => {
 @observer
 class BrowserActions extends React.Component {
   public render() {
-    const { selectedTabId } = store.tabsStore;
+    const { selectedTabId } = store.tabGroupsStore.currentGroup;
 
     return (
-      <StyledBrowserActions>
+      <StyledBrowserActions
+        style={{ marginRight: platform() !== 'darwin' ? 138 : 0 }}
+      >
         {selectedTabId &&
           store.extensionsStore.browserActions.map(item => {
             if (item.tabId === selectedTabId) {
@@ -48,7 +50,6 @@ export const Toolbar = observer(() => {
           onClick={onUpdateClick}
         />
       )}
-      {platform() !== 'darwin' && <WindowsButtons />}
     </StyledToolbar>
   );
 });

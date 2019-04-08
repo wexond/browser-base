@@ -27,14 +27,16 @@ export const Button = styled.div`
 interface IconProps {
   icon: string;
   isClose?: boolean;
+  isDark?: boolean;
 }
 
 export const Icon = styled.div`
   width: 100%;
   height: 100%;
-  transition: 0.2ss filter;
+  transition: 0.2s filter;
   ${centerImage('11px', '11px')};
-  ${({ icon, isClose }: IconProps) => css`
+  ${({ icon, isClose, isDark }: IconProps) => css`
+    filter: ${isDark ? 'invert(100%)' : 'none'};
     background-image: url(${icon});
     &:hover {
       filter: ${isClose && 'invert(100%)'};
