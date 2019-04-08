@@ -160,7 +160,7 @@ export const Title = styled.div`
 
   &:hover {
     ${DropArrow} {
-      background-color: rgba(0, 0, 0, 0.08);
+      background-color: rgba(0, 0, 0, 0.15);
     }
   }
 `;
