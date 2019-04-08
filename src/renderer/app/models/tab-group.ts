@@ -16,7 +16,12 @@ export class TabGroup {
   public selectedTabId: number;
 
   @observable
-  public color = colors.lightBlue['500'];
+  public color: string = colors.lightBlue['500'];
+
+  constructor() {
+    const { palette } = store.tabGroupsStore;
+    this.color = palette[Math.floor(Math.random() * palette.length)];
+  }
 
   public nextPosition = 0;
 

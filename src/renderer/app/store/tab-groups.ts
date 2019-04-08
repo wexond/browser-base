@@ -4,6 +4,7 @@ import * as React from 'react';
 import { TabGroup } from '~/renderer/app/models';
 import store from '.';
 import { ipcRenderer } from 'electron';
+import { colors } from '~/renderer/constants';
 
 export class TabGroupsStore {
   @observable
@@ -11,6 +12,16 @@ export class TabGroupsStore {
 
   @observable
   public _currentGroupId = 0;
+
+  public palette: string[] = [];
+
+  constructor() {
+    for (const key in colors) {
+      if ((colors as any)[key]['500'] && key !== 'yellow') {
+        this.palette.push((colors as any)[key]['500']);
+      }
+    }
+  }
 
   @computed
   public get currentGroupId() {
