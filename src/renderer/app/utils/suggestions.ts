@@ -2,7 +2,7 @@ import { HistoryItem } from '../models';
 import store from '../store';
 import { requestURL } from './network';
 
-const countVisitedTimes = (historyItems: HistoryItem[]) => {
+export const countVisitedTimes = (historyItems: HistoryItem[]) => {
   const items: any[] = [];
 
   for (const historyItem of historyItems) {

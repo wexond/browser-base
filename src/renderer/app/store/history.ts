@@ -1,7 +1,8 @@
 import * as Datastore from 'nedb';
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { HistoryItem } from '../models';
 import { getPath } from '~/shared/utils/paths';
+import { countVisitedTimes } from '../utils';
 
 export class HistoryStore {
   public db = new Datastore({
@@ -11,6 +12,18 @@ export class HistoryStore {
 
   @observable
   public historyItems: HistoryItem[] = [];
+
+  @computed
+  public get topSites() {
+    const top1 = countVisitedTimes(this.historyItems);
+    const newItems: HistoryItem[] = [];
+
+    for (const item of top1) {
+      newItems.push(item.item);
+    }
+
+    return newItems.slice(0, 5);
+  }
 
   constructor() {
     this.load();

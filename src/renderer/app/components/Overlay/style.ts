@@ -57,6 +57,22 @@ export const HeaderArrow = styled.div`
   right: 4px;
 `;
 
+export const DropArrow = styled.div`
+  ${centerImage('24px', '24px')};
+  margin-left: 8px;
+  height: 32px;
+  width: 32px;
+  background-image: url(${icons.down});
+  display: inline-block;
+  position: absolute;
+  filter: invert(100%);
+  top: 50%;
+  transform: translateY(-50%);
+  right: 4px;
+  border-radius: 50%;
+  transition: 0.1s background-color;
+`;
+
 export const Separator = styled.div`
   background-color: rgba(0, 0, 0, 0.12);
   height: 1px;
@@ -100,6 +116,15 @@ export const Title = styled.div`
   margin-bottom: 16px;
   margin-top: 24px;
   color: white;
+  position: relative;
+  display: table;
+  padding-right: 42px;
+
+  &:hover {
+    ${DropArrow} {
+      background-color: rgba(0, 0, 0, 0.08);
+    }
+  }
 `;
 
 export const Content = styled.div`

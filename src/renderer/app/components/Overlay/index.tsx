@@ -11,6 +11,7 @@ import {
   Scrollable,
   Title,
   Content,
+  DropArrow,
 } from './style';
 import { SearchBox } from '../SearchBox';
 import { MenuItem } from '../MenuItem';
@@ -42,6 +43,17 @@ export const Overlay = observer(() => {
       <Scrollable ref={store.overlayStore.scrollRef}>
         <Content>
           <SearchBox />
+          <Title>
+            <div style={{ display: 'inline-block' }}>Top Sites</div>
+            <DropArrow />
+          </Title>
+          <Menu>
+            {store.historyStore.topSites.map(item => (
+              <MenuItem maxLines={1} light icon={item.favicon}>
+                {item.title}
+              </MenuItem>
+            ))}
+          </Menu>
           <Title>Overview</Title>
           <Section onClick={preventHiding}>
             <Header>Tab groups</Header>
@@ -50,15 +62,33 @@ export const Overlay = observer(() => {
           <Section onClick={preventHiding}>
             <Header>Menu</Header>
             <Menu>
-              <MenuItem icon={icons.history}>History</MenuItem>
-              <MenuItem icon={icons.bookmarks}>Bookmarks</MenuItem>
-              <MenuItem icon={icons.download}>Downloads</MenuItem>
-              <MenuItem icon={icons.settings}>Settings</MenuItem>
-              <MenuItem icon={icons.extensions}>Extensions</MenuItem>
-              <MenuItem icon={icons.window}>New window</MenuItem>
-              <MenuItem icon={icons.window}>New incognito window</MenuItem>
-              <MenuItem icon={icons.find}>Find</MenuItem>
-              <MenuItem icon={icons.more}>More tools</MenuItem>
+              <MenuItem invert icon={icons.history}>
+                History
+              </MenuItem>
+              <MenuItem invert icon={icons.bookmarks}>
+                Bookmarks
+              </MenuItem>
+              <MenuItem invert icon={icons.download}>
+                Downloads
+              </MenuItem>
+              <MenuItem invert icon={icons.settings}>
+                Settings
+              </MenuItem>
+              <MenuItem invert icon={icons.extensions}>
+                Extensions
+              </MenuItem>
+              <MenuItem invert icon={icons.window}>
+                New window
+              </MenuItem>
+              <MenuItem invert icon={icons.window}>
+                New incognito window
+              </MenuItem>
+              <MenuItem invert icon={icons.find}>
+                Find
+              </MenuItem>
+              <MenuItem invert icon={icons.more}>
+                More tools
+              </MenuItem>
             </Menu>
           </Section>
         </Content>

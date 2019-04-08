@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { caption, centerImage } from '~/shared/mixins';
 
 const width = 800;
@@ -30,12 +30,21 @@ export const Icon = styled.div`
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 50%;
   margin-bottom: 16px;
-  filter: invert(100%);
   ${centerImage('32px', '32px')};
+
+  ${({ invert, light }: { invert: boolean; light: boolean }) => css`
+    filter: ${invert ? 'invert(100%)' : 'none'};
+    background-color: ${light
+      ? 'rgba(255, 255, 255, 0.2)'
+      : 'rgba(0, 0, 0, 0.2)'};
+  `}
 `;
 
 export const Title = styled.div`
   font-size: 14px;
   text-align: center;
   color: white;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
 `;

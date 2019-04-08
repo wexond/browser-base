@@ -17,6 +17,7 @@ import window from '~/shared/resources/icons/window.svg';
 import more from '~/shared/resources/icons/more.svg';
 import find from '~/shared/resources/icons/find.svg';
 import edit from '~/shared/resources/icons/edit.svg';
+import down from '~/shared/resources/icons/down.svg';
 
 export const icons = {
   windowsClose,
@@ -38,4 +39,5 @@ export const icons = {
   more,
   find,
   edit,
+  down,
 };

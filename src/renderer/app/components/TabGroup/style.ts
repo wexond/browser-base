@@ -12,7 +12,7 @@ export const StyledTabGroup = styled.div`
   max-width: 200px;
   margin-right: 8px;
   margin-bottom: 8px;
-  transition: 0.1s opacity, 0.2s padding;
+  transition: 0.1s opacity;
 
   ${({ selected }: { selected: boolean }) => css`
     opacity: ${selected ? 1 : 0.6};
