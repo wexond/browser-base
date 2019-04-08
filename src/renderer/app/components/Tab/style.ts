@@ -129,7 +129,7 @@ export const StyledBorder = styled.div`
 
 export const TabContainer = styled.div`
   position: relative;
-  border-radius: 15px;
+  border-radius: 6px;
   width: 100%;
   height: 100%;
   overflow: hidden;
