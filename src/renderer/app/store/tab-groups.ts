@@ -5,6 +5,7 @@ import { TabGroup } from '~/renderer/app/models';
 import store from '.';
 import { ipcRenderer } from 'electron';
 import { colors } from '~/renderer/constants';
+import { closeWindow } from '../utils';
 
 export class TabGroupsStore {
   @observable
@@ -71,6 +72,10 @@ export class TabGroupsStore {
     }
 
     this.groups.splice(index, 1);
+
+    if (this.groups.length === 0) {
+      closeWindow();
+    }
   }
 
   public getGroupById(id: number) {
