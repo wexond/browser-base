@@ -22,7 +22,7 @@ import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 const Header = ({ children, clickable }: any) => {
   return (
     <HeaderText clickable={clickable}>
-      <div style={{ display: 'inline-block' }}>{children}</div>
+      {children}
       {clickable && <HeaderArrow />}
     </HeaderText>
   );
@@ -51,6 +51,11 @@ const onSiteClick = (url: string) => () => {
   store.overlayStore.visible = false;
 };
 
+const getSize = (i: number) => {
+  const width = 800;
+  return (width - 48 - (i - 1)) / i;
+};
+
 export const Overlay = observer(() => {
   return (
     <StyledOverlay visible={store.overlayStore.visible} onClick={onClick}>
@@ -59,17 +64,18 @@ export const Overlay = observer(() => {
           <SearchBox />
           {store.historyStore.topSites.length > 0 && (
             <>
-              <Title>
-                <div style={{ display: 'inline-block' }}>Top Sites</div>
+              <Title style={{ marginBottom: 24 }}>
+                Top Sites
                 <DropArrow />
               </Title>
               <Menu>
                 {store.historyStore.topSites.map(item => (
                   <MenuItem
+                    width={getSize(6)}
                     onClick={onSiteClick(item.url)}
                     key={item._id}
                     maxLines={1}
-                    iconSize={24}
+                    iconSize={20}
                     light
                     icon={item.favicon}
                   >
@@ -102,12 +108,6 @@ export const Overlay = observer(() => {
               </MenuItem>
               <MenuItem invert icon={icons.extensions}>
                 Extensions
-              </MenuItem>
-              <MenuItem invert icon={icons.window}>
-                New window
-              </MenuItem>
-              <MenuItem invert icon={icons.window}>
-                New incognito window
               </MenuItem>
               <MenuItem invert icon={icons.find}>
                 Find

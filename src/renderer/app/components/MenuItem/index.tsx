@@ -9,9 +9,13 @@ export const MenuItem = ({
   maxLines,
   iconSize,
   onClick,
+  width,
 }: any) => {
   return (
-    <StyledMenuItem onClick={onClick}>
+    <StyledMenuItem
+      style={{ minWidth: width, maxWidth: width }}
+      onClick={onClick}
+    >
       <Icon
         invert={invert}
         light={light}
@@ -33,5 +37,6 @@ export const MenuItem = ({
 
 MenuItem.defaultProps = {
   maxLines: 2,
-  iconSize: 32,
+  iconSize: 24,
+  width: (800 - 48 - (7 - 1)) / 7,
 };

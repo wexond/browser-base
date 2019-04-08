@@ -22,7 +22,7 @@ export const StyledOverlay = styled.div`
 
 export const HeaderText = styled.div`
   position: relative;
-  display: table;
+  display: flex;
   font-size: 16px;
   padding-left: 8px;
   padding-top: 6px;
@@ -49,12 +49,7 @@ export const HeaderArrow = styled.div`
   height: 16px;
   width: 16px;
   background-image: url(${icons.forward});
-  display: inline-block;
-  position: absolute;
   filter: invert(100%);
-  top: 50%;
-  transform: translateY(-50%);
-  right: 4px;
 `;
 
 export const DropArrow = styled.div`
@@ -63,12 +58,7 @@ export const DropArrow = styled.div`
   height: 32px;
   width: 32px;
   background-image: url(${icons.down});
-  display: inline-block;
-  position: absolute;
   filter: invert(100%);
-  top: 50%;
-  transform: translateY(-50%);
-  right: 4px;
   border-radius: 50%;
   transition: 0.1s background-color;
 `;
@@ -117,7 +107,7 @@ export const Title = styled.div`
   margin-top: 24px;
   color: white;
   position: relative;
-  display: table;
+  display: flex;
   padding-right: 42px;
 
   &:hover {

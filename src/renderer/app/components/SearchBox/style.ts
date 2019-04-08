@@ -3,7 +3,7 @@ import { centerImage } from '~/shared/mixins';
 import { icons } from '../../constants';
 
 export const StyledSearchBox = styled.div`
-  margin-top: 96px;
+  margin-top: 64px;
   z-index: 2;
   background-color: rgba(255, 255, 255, 0.15);
   border-radius: 23px;

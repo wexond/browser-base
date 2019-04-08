@@ -24,7 +24,7 @@ export class HistoryStore {
       }
     }
 
-    return newItems.slice(0, 10);
+    return newItems.slice(0, 12);
   }
 
   constructor() {
