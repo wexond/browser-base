@@ -4,7 +4,7 @@ import { colors } from '~/renderer/constants';
 import { icons } from '../../constants';
 
 export const StyledOverlay = styled.div`
-  background-color: rgba(0, 0, 0, 0.87);
+  background-color: black;
   color: white;
   position: absolute;
   left: 0;
@@ -71,11 +71,59 @@ export const Separator = styled.div`
 
 export const Section = styled.div`
   padding: 24px;
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.12);
   margin-bottom: 24px;
   border-radius: 30px;
   color: white;
   overflow: hidden;
+`;
+
+export const Card = styled.div`
+  background-color: rgba(255, 255, 255, 0.12);
+  margin-bottom: 24px;
+  border-radius: 30px;
+  color: white;
+  overflow: hidden;
+  width: 50%;
+`;
+
+export const WeatherHeader = styled.div`
+  width: 100%;
+  padding: 24px;
+  background-image: linear-gradient(to bottom right, #2196f3, #64b5f6);
+  display: flex;
+`;
+
+export const WeatherTitle = styled.div`
+  font-size: 24px;
+  font-weight: 300;
+  margin-bottom: 8px;
+`;
+
+export const WeatherNumber = styled.div`
+  font-size: 96px;
+  font-weight: 300;
+  display: flex;
+`;
+
+export const WeatherSymbol = styled.div`
+  font-size: 24px;
+  font-weight: 300;
+  margin-top: 16px;
+`;
+
+export const WeatherLeft = styled.div`
+  flex: 1;
+`;
+
+export const WeatherIcon = styled.div`
+  ${centerImage('96px', '96px')};
+  width: 96px;
+  height: 96px;
+`;
+
+export const WeatherContent = styled.div`
+  padding: 24px;
 `;
 
 export const Menu = styled.div`

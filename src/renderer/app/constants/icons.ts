@@ -19,6 +19,8 @@ import find from '~/shared/resources/icons/find.svg';
 import edit from '~/shared/resources/icons/edit.svg';
 import down from '~/shared/resources/icons/down.svg';
 
+import fewClouds from '~/shared/resources/icons/weather/few-clouds.png';
+
 export const icons = {
   windowsClose,
   windowsMaximize,
@@ -40,4 +42,5 @@ export const icons = {
   find,
   edit,
   down,
+  fewClouds,
 };

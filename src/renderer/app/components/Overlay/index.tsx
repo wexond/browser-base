@@ -12,6 +12,15 @@ import {
   Title,
   Content,
   DropArrow,
+  Card,
+  WeatherHeader,
+  WeatherTitle,
+  WeatherNumber,
+  WeatherSymbol,
+  WeatherContent,
+  WeatherLine,
+  WeatherLeft,
+  WeatherIcon,
 } from './style';
 import { SearchBox } from '../SearchBox';
 import { MenuItem } from '../MenuItem';
@@ -117,6 +126,31 @@ export const Overlay = observer(() => {
               </MenuItem>
             </Menu>
           </Section>
+
+          <Title>News</Title>
+          <Card>
+            <WeatherHeader>
+              <WeatherLeft>
+                <WeatherTitle>Warsaw</WeatherTitle>
+                <WeatherNumber>
+                  20<WeatherSymbol>°C</WeatherSymbol>
+                </WeatherNumber>
+              </WeatherLeft>
+              <div
+                style={{
+                  display: 'flex',
+                  flexFlow: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <WeatherIcon
+                  style={{ backgroundImage: `url(${icons.fewClouds})` }}
+                />
+              </div>
+            </WeatherHeader>
+            <WeatherContent>More info</WeatherContent>
+          </Card>
         </Content>
       </Scrollable>
     </StyledOverlay>
