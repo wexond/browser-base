@@ -49,6 +49,8 @@ export const StyledTab = styled.div`
   height: 100%;
   width: 0;
   left: 0;
+  display: flex;
+  align-items: center;
   will-change: width;
   -webkit-app-region: no-drag;
   ${({ selected }: TabProps) => css`
@@ -131,7 +133,7 @@ export const TabContainer = styled.div`
   position: relative;
   border-radius: 6px;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 4px);
   overflow: hidden;
   display: flex;
   align-items: center;
