@@ -10,21 +10,29 @@ const onClick = (id: number) => () => {
   store.tabGroupsStore.currentGroupId = id;
 };
 
+const onCloseClick = (id: number) => (e: any) => {
+  e.stopPropagation();
+  store.tabGroupsStore.removeGroup(id);
+};
+
 export default observer(({ data }: { data: TabGroup }) => {
-  const { name, color } = data;
+  const { name, color, id } = data;
 
   return (
     <StyledTabGroup
       style={{
         backgroundColor: color,
       }}
-      selected={store.tabGroupsStore.currentGroupId === data.id}
-      onClick={onClick(data.id)}
+      selected={store.tabGroupsStore.currentGroupId === id}
+      onClick={onClick(id)}
     >
       <Content>{name}</Content>
       <Icons>
         <Icon style={{ backgroundImage: `url(${icons.edit})` }} />
-        <Icon style={{ backgroundImage: `url(${icons.close})` }} />
+        <Icon
+          onClick={onCloseClick(id)}
+          style={{ backgroundImage: `url(${icons.close})` }}
+        />
       </Icons>
     </StyledTabGroup>
   );

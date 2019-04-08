@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import { TabGroup } from '~/renderer/app/models';
 import store from '.';
+import { ipcRenderer } from 'electron';
 
 export class TabGroupsStore {
   @observable
@@ -42,7 +43,23 @@ export class TabGroupsStore {
   }
 
   public removeGroup(id: number) {
-    (this.groups as any).replace(this.groups.filter(x => x.id !== id));
+    const group = this.getGroupById(id);
+    const index = this.groups.indexOf(group);
+
+    for (const tab of group.tabs) {
+      store.tabsStore.removeTab(tab.id);
+      ipcRenderer.send('browserview-destroy', tab.id);
+    }
+
+    if (group.isSelected) {
+      if (this.groups.length - 1 > index + 1) {
+        this.currentGroupId = this.groups[index + 1].id;
+      } else if (index - 1 >= 0) {
+        this.currentGroupId = this.groups[index - 1].id;
+      }
+    }
+
+    this.groups.splice(index, 1);
   }
 
   public getGroupById(id: number) {

@@ -32,6 +32,10 @@ const onClick = () => {
   }
 };
 
+const preventHiding = (e: any) => {
+  e.stopPropagation();
+};
+
 export const Overlay = observer(() => {
   return (
     <StyledOverlay visible={store.overlayStore.visible} onClick={onClick}>
@@ -39,11 +43,11 @@ export const Overlay = observer(() => {
         <Content>
           <SearchBox />
           <Title>Overview</Title>
-          <Section>
+          <Section onClick={preventHiding}>
             <Header>Tab groups</Header>
             <TabGroups />
           </Section>
-          <Section>
+          <Section onClick={preventHiding}>
             <Header>Menu</Header>
             <Menu>
               <MenuItem icon={icons.history}>History</MenuItem>
