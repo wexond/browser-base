@@ -14,9 +14,9 @@ export const StyledSuggestion = styled.div`
   ${({ selected, hovered }: { selected: boolean; hovered: boolean }) => {
     let backgroundColor = 'transparent';
     if (selected) {
-      backgroundColor = 'rgba(0, 0, 0, 0.06)';
+      backgroundColor = 'rgba(255, 255, 255, 0.06)';
     } else if (hovered) {
-      backgroundColor = 'rgba(0, 0, 0, 0.03)';
+      backgroundColor = 'rgba(255, 255, 255, 0.03)';
     }
     return css`
       background-color: ${backgroundColor};

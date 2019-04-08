@@ -20,11 +20,11 @@ import { MenuItem } from '../MenuItem';
 import { TabGroups } from '../TabGroups';
 import { icons } from '../../constants';
 
-const Header = ({ children }: any) => {
+const Header = ({ children, clickable }: any) => {
   return (
-    <HeaderText>
+    <HeaderText clickable={clickable}>
       <div style={{ display: 'inline-block' }}>{children}</div>
-      <HeaderArrow />
+      {clickable && <HeaderArrow />}
     </HeaderText>
   );
 };

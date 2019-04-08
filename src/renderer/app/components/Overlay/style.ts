@@ -28,12 +28,15 @@ export const HeaderText = styled.div`
   padding-top: 6px;
   padding-right: 24px;
   padding-bottom: 6px;
-  margin-left: -8px;
   margin-bottom: 16px;
   margin-top: -8px;
   border-radius: 50px;
   transition: 0.1s background-color;
   cursor: pointer;
+
+  ${({ clickable }: { clickable: boolean }) => css`
+    pointer-events: ${clickable ? 'auto' : 'none'};
+  `}
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);

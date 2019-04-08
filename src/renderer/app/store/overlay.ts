@@ -3,8 +3,6 @@ import * as React from 'react';
 import { ipcRenderer } from 'electron';
 import store from '.';
 import { callBrowserViewMethod } from '~/shared/utils/browser-view';
-import { readFile } from 'fs';
-import { getPath } from '~/shared/utils/paths';
 
 let lastSuggestion: string;
 
