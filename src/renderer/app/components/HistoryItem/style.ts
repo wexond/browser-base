@@ -15,9 +15,9 @@ export const Item = styled.div`
 `;
 
 export const Remove = styled.div`
-  ${centerImage('24px', '24px')};
-  height: 24px;
-  width: 24px;
+  ${centerImage('16px', '16px')};
+  height: 16px;
+  width: 16px;
   background-image: url(${icons.close});
   opacity: 0.54;
   filter: invert(100%);
@@ -35,10 +35,15 @@ export const Favicon = styled.div`
 `;
 
 export const Title = styled.div`
-  flex: 1;
+  flex: 2;
 
   &:hover {
     cursor: pointer;
     text-decoration: underline;
   }
+`;
+
+export const Site = styled.div`
+  flex: 1;
+  opacity: 0.54;
 `;
