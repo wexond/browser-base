@@ -22,7 +22,7 @@ export const History = observer(() => {
         onClick={preventHiding}
       >
         {store.historyStore.historyItems.slice(0, 30).map(item => (
-          <HistoryItem data={item} />
+          <HistoryItem key={item._id} data={item} />
         ))}
       </Section>
     </Content>
