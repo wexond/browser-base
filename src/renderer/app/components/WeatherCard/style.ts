@@ -7,7 +7,7 @@ export const StyledCard = styled.div`
   border-radius: 30px;
   color: white;
   overflow: hidden;
-  width: 50%;
+  width: 33%;
 `;
 
 export const Header = styled.div`
@@ -36,9 +36,9 @@ export const Left = styled.div`
 `;
 
 export const Icon = styled.div`
-  ${centerImage('110px', '110px')};
-  width: 110px;
-  height: 110px;
+  ${centerImage('80px', '80px')};
+  width: 80px;
+  height: 80px;
 `;
 
 export const SmallIcon = styled.div`
@@ -65,7 +65,7 @@ export const Item = styled.div`
 `;
 
 export const SmallDegrees = styled.div`
-  font-size: 13px;
+  font-size: 14px;
 
   ${({ night }: { night?: boolean }) => css`
     margin-top: ${night ? 4 : 16}px;

@@ -66,12 +66,6 @@ export const WeatherCard = observer(() => {
           <SmallDegrees>20°</SmallDegrees>
           <SmallDegrees night>12°</SmallDegrees>
         </Item>
-        <Item>
-          <Overline>SUN</Overline>
-          <SmallIcon style={{ backgroundImage: `url(${icons.fewClouds})` }} />
-          <SmallDegrees>20°</SmallDegrees>
-          <SmallDegrees night>12°</SmallDegrees>
-        </Item>
       </Items>
     </StyledCard>
   );
