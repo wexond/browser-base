@@ -64,10 +64,12 @@ export class TabGroupsStore {
     }
 
     if (group.isSelected) {
-      if (this.groups.length - 1 > index + 1) {
+      if (this.groups.length > index + 1) {
         this.currentGroupId = this.groups[index + 1].id;
       } else if (index - 1 >= 0) {
         this.currentGroupId = this.groups[index - 1].id;
+      } else {
+        this.currentGroupId = this.groups[0].id;
       }
     }
 
