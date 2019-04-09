@@ -26,6 +26,7 @@ import { MenuItem } from '../MenuItem';
 import { TabGroups } from '../TabGroups';
 import { icons } from '../../constants';
 import { callBrowserViewMethod } from '~/shared/utils/browser-view';
+import { WeatherCard } from '../WeatherCard';
 
 const Header = ({ children, clickable }: any) => {
   return (
@@ -127,29 +128,7 @@ export const Overlay = observer(() => {
           </Section>
 
           <Title>News</Title>
-          <Card>
-            <WeatherHeader>
-              <WeatherLeft>
-                <WeatherTitle>Warsaw</WeatherTitle>
-                <WeatherNumber>
-                  20<WeatherSymbol>°C</WeatherSymbol>
-                </WeatherNumber>
-              </WeatherLeft>
-              <div
-                style={{
-                  display: 'flex',
-                  flexFlow: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <WeatherIcon
-                  style={{ backgroundImage: `url(${icons.fewClouds})` }}
-                />
-              </div>
-            </WeatherHeader>
-            <WeatherContent>More info</WeatherContent>
-          </Card>
+          <WeatherCard />
         </Content>
       </Scrollable>
     </StyledOverlay>
