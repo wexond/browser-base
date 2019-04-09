@@ -23,6 +23,10 @@ import { WeatherCard } from '../WeatherCard';
 import { History } from '../History';
 import TopSites from '../TopSites';
 
+const onScroll = (e: any) => {
+  store.overlayStore.isToolbarFixed = e.currentTarget.scrollTop >= 56;
+};
+
 const Header = ({ children, clickable }: any) => {
   return (
     <HeaderText clickable={clickable}>
@@ -54,7 +58,7 @@ const onBackClick = () => {
 export const Overlay = observer(() => {
   return (
     <StyledOverlay visible={store.overlayStore.visible} onClick={onClick}>
-      <Scrollable ref={store.overlayStore.scrollRef}>
+      <Scrollable onScroll={onScroll} ref={store.overlayStore.scrollRef}>
         <Content
           visible={
             store.overlayStore.currentContent === 'default' &&
@@ -108,6 +112,7 @@ export const Overlay = observer(() => {
           <WeatherCard />
         </Content>
         <Toolbar
+          fixed={store.overlayStore.isToolbarFixed}
           onClick={preventHiding}
           visible={
             store.overlayStore.currentContent !== 'default' &&

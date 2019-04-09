@@ -18,7 +18,7 @@ export const History = observer(() => {
       }
     >
       <Section
-        style={{ padding: 0, paddingTop: 16 + 56 + 16, marginTop: 0 }}
+        style={{ padding: 0, paddingTop: 16 + 56 + 16, marginTop: 56 }}
         onClick={preventHiding}
       >
         {store.historyStore.historyItems.slice(0, 30).map(item => (

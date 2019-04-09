@@ -40,6 +40,9 @@ export class OverlayStore {
   @observable
   public currentContent: 'default' | 'history' = 'default';
 
+  @observable
+  public isToolbarFixed = false;
+
   private timeout: any;
 
   @computed

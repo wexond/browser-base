@@ -152,9 +152,11 @@ export const Toolbar = styled.div`
   z-index: 999;
   transition: 0.3s opacity;
 
-  ${({ visible }: { visible: boolean }) => css`
+  ${({ visible, fixed }: { visible: boolean; fixed: boolean }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
+    position: ${fixed ? 'fixed' : 'absolute'};
+    top: ${fixed ? 16 : 56 + 16}px;
   `};
 `;
 
