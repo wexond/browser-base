@@ -1,4 +1,4 @@
-export const MonthsList = [
+export const monthsList = [
   'January',
   'February',
   'March',
@@ -13,12 +13,12 @@ export const MonthsList = [
   'December',
 ];
 
-export const DaysList = [
+export const daysList = [
+  'Sunday',
   'Monday',
   'Tuesday',
   'Wednesday',
   'Thursday',
   'Friday',
   'Saturday',
-  'Sunday',
 ];

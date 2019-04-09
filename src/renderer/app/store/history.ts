@@ -2,7 +2,7 @@ import * as Datastore from 'nedb';
 import { observable, computed } from 'mobx';
 import { HistoryItem, HistorySection } from '../models';
 import { getPath } from '~/shared/utils/paths';
-import { countVisitedTimes, compareDates } from '../utils';
+import { countVisitedTimes, compareDates, getSectionLabel } from '../utils';
 
 export class HistoryStore {
   public db = new Datastore({
@@ -78,7 +78,7 @@ export class HistoryStore {
         section.items.push(item);
       } else {
         section = {
-          label: `${i} ${item.date}`,
+          label: getSectionLabel(date),
           items: [item],
           date,
         };
@@ -86,6 +86,8 @@ export class HistoryStore {
       }
     }
 
-    return section;
+    console.log(list);
+
+    return list;
   }
 }

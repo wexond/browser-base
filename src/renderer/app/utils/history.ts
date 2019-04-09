@@ -1,3 +1,5 @@
+import { daysList, monthsList } from '~/renderer/constants';
+
 export const compareDates = (first: Date, second: Date) => {
   return (
     first != null &&
@@ -6,4 +8,24 @@ export const compareDates = (first: Date, second: Date) => {
     first.getMonth() === second.getMonth() &&
     first.getDate() === second.getDate()
   );
+};
+
+export const getSectionLabel = (date: Date) => {
+  let prefix = '';
+  const current = new Date();
+
+  if (
+    date.getFullYear() === current.getFullYear() &&
+    date.getMonth() === current.getMonth()
+  ) {
+    if (current.getDate() === date.getDate()) {
+      prefix = 'Today - ';
+    } else if (current.getDate() - 1 === date.getDate()) {
+      prefix = 'Yesterday - ';
+    }
+  }
+
+  return `${prefix}${daysList[date.getDay()]}, ${
+    monthsList[date.getMonth()]
+  } ${date.getDate()}, ${date.getFullYear()}`;
 };
