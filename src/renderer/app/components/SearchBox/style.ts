@@ -27,12 +27,14 @@ export const SearchIcon = styled.div`
 export const Input = styled.input`
   height: 100%;
   flex: 1;
+  width: 100%;
   background-color: transparent;
   border: none;
   outline: none;
   color: white;
   font-size: 16px;
   margin-left: 12px;
+  margin-right: 16px;
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.54);
