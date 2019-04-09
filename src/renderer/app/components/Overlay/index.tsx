@@ -12,14 +12,6 @@ import {
   Title,
   Content,
   DropArrow,
-  Card,
-  WeatherHeader,
-  WeatherTitle,
-  WeatherNumber,
-  WeatherSymbol,
-  WeatherContent,
-  WeatherLeft,
-  WeatherIcon,
 } from './style';
 import { SearchBox } from '../SearchBox';
 import { MenuItem } from '../MenuItem';
@@ -127,7 +119,7 @@ export const Overlay = observer(() => {
             </Menu>
           </Section>
 
-          <Title>News</Title>
+          <Title>World</Title>
           <WeatherCard />
         </Content>
       </Scrollable>
