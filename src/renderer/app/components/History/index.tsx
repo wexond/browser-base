@@ -9,6 +9,7 @@ const preventHiding = (e: any) => {
 };
 
 export const History = observer(() => {
+  console.log(store.historyStore.historySections);
   return (
     <Content
       right
@@ -21,7 +22,12 @@ export const History = observer(() => {
         style={{ padding: 0, paddingTop: 16 + 56 + 16, marginTop: 56 }}
         onClick={preventHiding}
       >
-        {store.historyStore.historyItems.slice(0, 30).map(item => (
+        {store.historyStore.historyItems.slice(0, 1).map(item => (
+          <HistoryItem key={item._id} data={item} />
+        ))}
+      </Section>
+      <Section style={{ padding: 0, marginTop: 56 }} onClick={preventHiding}>
+        {store.historyStore.historyItems.slice(1, 30).map(item => (
           <HistoryItem key={item._id} data={item} />
         ))}
       </Section>

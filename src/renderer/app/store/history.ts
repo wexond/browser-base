@@ -1,8 +1,8 @@
 import * as Datastore from 'nedb';
 import { observable, computed } from 'mobx';
-import { HistoryItem } from '../models';
+import { HistoryItem, HistorySection } from '../models';
 import { getPath } from '~/shared/utils/paths';
-import { countVisitedTimes } from '../utils';
+import { countVisitedTimes, compareDates } from '../utils';
 
 export class HistoryStore {
   public db = new Datastore({
@@ -63,5 +63,29 @@ export class HistoryStore {
     this.db.remove({ _id: id }, err => {
       if (err) return console.warn(err);
     });
+  }
+
+  @computed
+  public get historySections() {
+    const list: HistorySection[] = [];
+    let section: HistorySection;
+
+    for (let i = this.historyItems.length; i-- > 0;) {
+      const item = this.historyItems[i];
+      const date = new Date(item.date);
+
+      if (compareDates(section && section.date, date)) {
+        section.items.push(item);
+      } else {
+        section = {
+          label: `${i} ${item.date}`,
+          items: [item],
+          date,
+        };
+        list.push(section);
+      }
+    }
+
+    return section;
   }
 }
