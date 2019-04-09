@@ -12,13 +12,16 @@ import {
   Title,
   Content,
   DropArrow,
+  Toolbar,
+  Back,
 } from './style';
 import { SearchBox } from '../SearchBox';
 import { MenuItem } from '../MenuItem';
 import { TabGroups } from '../TabGroups';
 import { icons } from '../../constants';
-import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 import { WeatherCard } from '../WeatherCard';
+import { History } from '../History';
+import TopSites from '../TopSites';
 
 const Header = ({ children, clickable }: any) => {
   return (
@@ -39,29 +42,25 @@ const preventHiding = (e: any) => {
   e.stopPropagation();
 };
 
-const onSiteClick = (url: string) => () => {
-  const tab = store.tabsStore.selectedTab;
-
-  if (!tab || store.overlayStore.isNewTab) {
-    store.tabsStore.addTab({ url, active: true });
-  } else {
-    tab.url = url;
-    callBrowserViewMethod('webContents.loadURL', tab.id, url);
-  }
-
-  store.overlayStore.visible = false;
+const onHistoryClick = () => {
+  store.overlayStore.currentContent = 'history';
 };
 
-const getSize = (i: number) => {
-  const width = 800;
-  return (width - 48 - (i - 1)) / i;
+const onBackClick = () => {
+  store.overlayStore.scrollRef.current.scrollTop = 0;
+  store.overlayStore.currentContent = 'default';
 };
 
 export const Overlay = observer(() => {
   return (
     <StyledOverlay visible={store.overlayStore.visible} onClick={onClick}>
       <Scrollable ref={store.overlayStore.scrollRef}>
-        <Content>
+        <Content
+          visible={
+            store.overlayStore.currentContent === 'default' &&
+            store.overlayStore.visible
+          }
+        >
           <SearchBox />
           {store.historyStore.topSites.length > 0 && (
             <>
@@ -69,21 +68,7 @@ export const Overlay = observer(() => {
                 Top Sites
                 <DropArrow />
               </Title>
-              <Menu>
-                {store.historyStore.topSites.map(item => (
-                  <MenuItem
-                    width={getSize(6)}
-                    onClick={onSiteClick(item.url)}
-                    key={item._id}
-                    maxLines={1}
-                    iconSize={20}
-                    light
-                    icon={store.faviconsStore.favicons[item.favicon]}
-                  >
-                    {item.title}
-                  </MenuItem>
-                ))}
-              </Menu>
+              <TopSites />
             </>
           )}
 
@@ -95,7 +80,7 @@ export const Overlay = observer(() => {
           <Section onClick={preventHiding}>
             <Header>Menu</Header>
             <Menu>
-              <MenuItem invert icon={icons.history}>
+              <MenuItem onClick={onHistoryClick} invert icon={icons.history}>
                 History
               </MenuItem>
               <MenuItem invert icon={icons.bookmarks}>
@@ -122,6 +107,17 @@ export const Overlay = observer(() => {
           <Title>World</Title>
           <WeatherCard />
         </Content>
+        <Toolbar
+          onClick={preventHiding}
+          visible={
+            store.overlayStore.currentContent !== 'default' &&
+            store.overlayStore.visible
+          }
+        >
+          <Back onClick={onBackClick} />
+          History
+        </Toolbar>
+        <History />
       </Scrollable>
     </StyledOverlay>
   );

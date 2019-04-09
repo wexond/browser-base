@@ -38,7 +38,7 @@ export class OverlayStore {
   public isNewTab = true;
 
   @observable
-  public bottom = 128;
+  public currentContent: 'default' | 'history' = 'default';
 
   private timeout: any;
 
@@ -66,12 +66,16 @@ export class OverlayStore {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         ipcRenderer.send('browserview-show');
-      }, 150);
+      }, 200);
+
       store.suggestionsStore.suggestions = [];
       lastSuggestion = undefined;
+
       this.inputRef.current.value = '';
+
       this._visible = val;
       this.isNewTab = false;
+      this.currentContent = 'default';
     } else {
       this.show();
       ipcRenderer.send('window-focus');

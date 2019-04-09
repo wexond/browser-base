@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
-import { centerImage } from '~/shared/mixins';
+import { centerImage, shadows } from '~/shared/mixins';
 import { icons } from '../../constants';
+import { colors } from '~/renderer/constants';
 
 export const StyledOverlay = styled.div`
   background-color: rgba(0, 0, 0, 0.9);
@@ -11,7 +12,7 @@ export const StyledOverlay = styled.div`
   bottom: 0;
   right: 0;
   z-index: 9999;
-  transition: 0.15s opacity;
+  transition: 0.2s opacity;
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
@@ -122,4 +123,50 @@ export const Content = styled.div`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  transition: 0.3s all;
+
+  ${({ visible, right }: { visible: boolean; right?: boolean }) => css`
+    margin-left: ${visible ? 0 : right ? 72 : -72}px;
+    opacity: ${visible ? 1 : 0};
+    pointer-events: ${visible ? 'auto' : 'none'};
+  `};
+`;
+
+export const Toolbar = styled.div`
+  width: calc(100% - 64px - 32px);
+  max-width: calc(800px - 32px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 300;
+  background-color: black;
+  position: fixed;
+  top: 16px;
+  width: 100%;
+  height: 56px;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: ${shadows(12)};
+  z-index: 999;
+  transition: 0.3s opacity;
+
+  ${({ visible }: { visible: boolean }) => css`
+    opacity: ${visible ? 1 : 0};
+    pointer-events: ${visible ? 'auto' : 'none'};
+  `};
+`;
+
+export const Back = styled.div`
+  ${centerImage('24px', '24px')};
+  background-image: url(${icons.back});
+  height: 56px;
+  width: 56px;
+  opacity: 0.54;
+  filter: invert(100%);
+
+  &:hover {
+    opacity: 1;
+  }
 `;
