@@ -86,8 +86,6 @@ export class HistoryStore {
       }
     }
 
-    console.log(list);
-
     return list;
   }
 }
