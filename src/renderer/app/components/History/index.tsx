@@ -62,7 +62,6 @@ export const History = observer(() => {
             </MenuItem>
             <MenuItem>Yesterday</MenuItem>
             <MenuItem>Last week</MenuItem>
-            <MenuItem>Last month</MenuItem>
             <MenuItem>Older</MenuItem>
           </MenuItems>
         </LeftMenu>
