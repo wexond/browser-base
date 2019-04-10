@@ -8,6 +8,7 @@ export const StyledOverlay = styled.div`
   position: absolute;
   display: flex;
   flex-flow: column;
+  align-items: center;
   left: 0;
   top: 0;
   bottom: 0;
@@ -91,10 +92,12 @@ export const Menu = styled.div`
 `;
 
 export const Scrollable = styled.div`
-  position: relative;
   width: 100%;
   flex: 1;
   overflow-y: scroll;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
 
   ::-webkit-scrollbar {
     width: 6px;
@@ -131,19 +134,27 @@ export const Title = styled.div`
   }
 `;
 
-export const Content = styled.div`
-  width: calc(100% - 64px);
-  max-width: 800px;
+export const Container = styled.div`
   position: absolute;
-  left: 50%;
   transition: 0.3s transform, 0.3s opacity;
   will-change: transform, opacity;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
 
   ${({ visible, right }: { visible: boolean; right?: boolean }) => css`
-    transform: translateX(calc(-50% - ${visible ? 0 : right ? 72 : -72}px));
+    transform: translateX(${visible ? 0 : right ? 72 : -72}px);
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
   `};
+`;
+
+export const Content = styled.div`
+  width: calc(100% - 64px);
+  max-width: 800px;
 `;
 
 export const ToolbarContent = styled.div`
@@ -166,11 +177,6 @@ export const Toolbar = styled.div`
   transition: 0.3s opacity;
   box-shadow: ${shadows(8)};
   position: relative;
-
-  ${({ visible }: { visible: boolean }) => css`
-    opacity: ${visible ? 1 : 0};
-    pointer-events: ${visible ? 'auto' : 'none'};
-  `};
 `;
 
 export const Back = styled.div`
