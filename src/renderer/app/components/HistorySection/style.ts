@@ -4,7 +4,7 @@ import { Section } from '../Overlay/style';
 
 export const Item = styled(Section)`
   margin-top: 56px;
-  padding: 0px 0px 4px 0px;
+  padding: 0px 0px 8px 0px;
 
   &:first-child {
     margin-top: 176px;
