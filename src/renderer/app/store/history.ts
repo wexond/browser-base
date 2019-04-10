@@ -70,7 +70,11 @@ export class HistoryStore {
     const list: HistorySection[] = [];
     let section: HistorySection;
 
-    for (let i = this.historyItems.length; i-- > 0;) {
+    for (
+      let i = this.historyItems.length - 1;
+      i >= Math.max(0, this.historyItems.length - 10);
+      i--
+    ) {
       const item = this.historyItems[i];
       const date = new Date(item.date);
 

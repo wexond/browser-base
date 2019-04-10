@@ -154,7 +154,6 @@ export const Toolbar = styled.div`
   font-size: 20px;
   font-weight: 300;
   background-color: black;
-  position: fixed;
   top: 16px;
   width: 100%;
   height: 56px;
