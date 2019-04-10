@@ -148,7 +148,7 @@ export const Content = styled.div`
 export const Toolbar = styled.div`
   width: calc(100% - 64px);
   max-width: calc(800px);
-  left: 50%;
+  left: calc(50% - 6px);
   transform: translateX(-50%);
   display: flex;
   border-radius: 30px;
