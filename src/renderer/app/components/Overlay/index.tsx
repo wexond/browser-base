@@ -14,6 +14,7 @@ import {
   DropArrow,
   Toolbar,
   Back,
+  ToolbarContent,
 } from './style';
 import { SearchBox } from '../SearchBox';
 import { MenuItem } from '../MenuItem';
@@ -55,6 +56,18 @@ const onBackClick = () => {
 export const Overlay = observer(() => {
   return (
     <StyledOverlay visible={store.overlayStore.visible} onClick={onClick}>
+      <Toolbar
+        onClick={preventHiding}
+        visible={
+          store.overlayStore.currentContent !== 'default' &&
+          store.overlayStore.visible
+        }
+      >
+        <ToolbarContent>
+          <Back onClick={onBackClick} />
+          History
+        </ToolbarContent>
+      </Toolbar>
       <Scrollable ref={store.overlayStore.scrollRef}>
         <Content
           visible={
@@ -108,16 +121,7 @@ export const Overlay = observer(() => {
           <Title>World</Title>
           <WeatherCard />
         </Content>
-        <Toolbar
-          onClick={preventHiding}
-          visible={
-            store.overlayStore.currentContent !== 'default' &&
-            store.overlayStore.visible
-          }
-        >
-          <Back onClick={onBackClick} />
-          History
-        </Toolbar>
+
         <History />
       </Scrollable>
     </StyledOverlay>

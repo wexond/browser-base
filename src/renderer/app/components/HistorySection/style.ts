@@ -7,7 +7,7 @@ export const Item = styled(Section)`
   padding: 0px 0px 8px 0px;
 
   &:first-child {
-    margin-top: 176px;
+    margin-top: 48px;
   }
 `;
 

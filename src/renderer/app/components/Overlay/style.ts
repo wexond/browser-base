@@ -88,12 +88,10 @@ export const Menu = styled.div`
 `;
 
 export const Scrollable = styled.div`
-  position: absolute;
+  position: relative;
+  width: 100%;
+  height: 100%;
   overflow-y: scroll;
-  top: ${TOOLBAR_HEIGHT}px;
-  left: 0;
-  right: 0;
-  bottom: 0;
 
   ::-webkit-scrollbar {
     width: 6px;
@@ -145,38 +143,41 @@ export const Content = styled.div`
   `};
 `;
 
-export const Toolbar = styled.div`
-  width: calc(100% - 64px);
-  max-width: calc(800px);
-  left: calc(50% - 6px);
-  transform: translateX(-50%);
-  display: flex;
-  border-radius: 30px;
-  align-items: center;
-  font-size: 20px;
-  font-weight: 300;
-  background-color: #3a3a3a;
+export const ToolbarContent = styled.div`
   width: 100%;
+  max-width: 800px;
+  display: flex;
+  align-items: center;
+`;
+
+export const Toolbar = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 400;
+  background-color: #3a3a3a;
   height: 56px;
   overflow: hidden;
   z-index: 999;
   transition: 0.3s opacity;
   box-shadow: ${shadows(8)};
+  position: relative;
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
-    position: fixed;
-    top: 16px;
   `};
 `;
 
 export const Back = styled.div`
   ${centerImage('24px', '24px')};
-  background-image: url(${icons.back});
+  background-image: url(${icons.arrowBack});
   height: 56px;
-  width: 56px;
+  width: 24px;
   opacity: 0.54;
+  margin-right: 24px;
   filter: invert(100%);
 
   &:hover {

@@ -18,6 +18,7 @@ import more from '~/shared/resources/icons/more.svg';
 import find from '~/shared/resources/icons/find.svg';
 import edit from '~/shared/resources/icons/edit.svg';
 import down from '~/shared/resources/icons/down.svg';
+import arrowBack from '~/shared/resources/icons/arrow-back.svg';
 
 import fewClouds from '~/shared/resources/icons/weather/few-clouds.png';
 
@@ -43,4 +44,5 @@ export const icons = {
   edit,
   down,
   fewClouds,
+  arrowBack,
 };
