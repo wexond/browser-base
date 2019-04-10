@@ -12,6 +12,13 @@ const onClick = (item: HistoryItem) => (e: React.MouseEvent) => {
   }
 };
 
+const onTitleClick = (url: string) => (e: React.MouseEvent) => {
+  if (!e.ctrlKey) {
+    store.tabsStore.addTab({ url, active: true });
+    store.overlayStore.visible = false;
+  }
+};
+
 const onRemoveClick = (item: HistoryItem) => () => {
   store.historyStore.removeItem(item._id);
 };
@@ -24,7 +31,7 @@ export default observer(({ data }: { data: HistoryItem }) => {
           backgroundImage: `url(${store.faviconsStore.favicons[data.favicon]})`,
         }}
       />
-      <Title>{data.title}</Title>
+      <Title onClick={onTitleClick(data.url)}>{data.title}</Title>
       <Site>{data.url.split('/')[2]}</Site>
       <Time>{formatTime(new Date(data.date))}</Time>
       <Remove onClick={onRemoveClick(data)} />
