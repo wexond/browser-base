@@ -7,10 +7,12 @@ export const countVisitedTimes = (hItems: HistoryItem[]) => {
   const historyItems = hItems.slice();
 
   for (const historyItem of historyItems) {
-    const itemsWithUrl = historyItems.filter(x => x.url === historyItem.url);
+    const itemsWithUrl = historyItems.filter(
+      x => x.url.replace('/', '') === historyItem.url.replace('/', ''),
+    );
 
     const itemToPush = {
-      times: itemsWithUrl.length - 1,
+      times: itemsWithUrl.length,
       item: historyItem,
     };
 
