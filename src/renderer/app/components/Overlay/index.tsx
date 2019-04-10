@@ -27,7 +27,7 @@ const onScroll = (e: any) => {
   store.overlayStore.isToolbarFixed = e.currentTarget.scrollTop > 56;
 };
 
-const Header = ({ children, clickable }: any) => {
+export const Header = ({ children, clickable }: any) => {
   return (
     <HeaderText clickable={clickable}>
       {children}

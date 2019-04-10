@@ -3,10 +3,15 @@ import styled from 'styled-components';
 import { Section } from '../Overlay/style';
 
 export const Item = styled(Section)`
-  padding: 0px;
   margin-top: 56px;
+  padding: 0px 0px 4px 0px;
 
   &:first-child {
-    padding-top: 88px;
+    margin-top: 176px;
   }
+`;
+
+export const Label = styled.div`
+  font-size: 16px;
+  padding: 24px;
 `;
