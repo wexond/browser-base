@@ -6,10 +6,14 @@ import { HistoryItem } from '../../models';
 import { formatTime } from '../../utils';
 import { Favicon, Item, Remove, Title, Time, Site } from './style';
 
-const onClick = (data: HistoryItem) => (e: React.MouseEvent) => {
+const onClick = (item: HistoryItem) => (e: React.MouseEvent) => {
   if (e.ctrlKey) {
-    data.selected = !data.selected;
+    item.selected = !item.selected;
   }
+};
+
+const onRemoveClick = (item: HistoryItem) => () => {
+  store.historyStore.removeItem(item._id);
 };
 
 export default observer(({ data }: { data: HistoryItem }) => {
@@ -23,7 +27,7 @@ export default observer(({ data }: { data: HistoryItem }) => {
       <Title>{data.title}</Title>
       <Site>{data.url.split('/')[2]}</Site>
       <Time>{formatTime(new Date(data.date))}</Time>
-      <Remove />
+      <Remove onClick={onRemoveClick(data)} />
     </Item>
   );
 });
