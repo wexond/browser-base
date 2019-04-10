@@ -45,9 +45,9 @@ export const History = observer(() => {
           </Search>
           <MenuItems>
             <MenuItem selected>All</MenuItem>
+            <MenuItem>Today</MenuItem>
             <MenuItem>Yesterday</MenuItem>
             <MenuItem>Last week</MenuItem>
-            <MenuItem>Last month</MenuItem>
             <MenuItem>Older</MenuItem>
           </MenuItems>
         </LeftMenu>
