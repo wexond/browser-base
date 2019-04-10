@@ -52,10 +52,23 @@ const onBackClick = () => {
   store.overlayStore.currentContent = 'default';
 };
 
+const onScroll = (e: React.UIEvent) => {
+  const { currentContent } = store.overlayStore;
+
+  if (currentContent === 'history') {
+    const scrollPos = e.target.scrollTop;
+    const scrollMax = e.target.scrollHeight - e.target.clientHeight - 64;
+
+    if (scrollPos >= scrollMax) {
+      store.historyStore.page++;
+    }
+  }
+};
+
 export const Overlay = observer(() => {
   return (
     <StyledOverlay visible={store.overlayStore.visible} onClick={onClick}>
-      <Scrollable ref={store.overlayStore.scrollRef}>
+      <Scrollable ref={store.overlayStore.scrollRef} onScroll={onScroll}>
         <Content
           visible={
             store.overlayStore.currentContent === 'default' &&
