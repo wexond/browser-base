@@ -34,6 +34,10 @@ export class HistoryStore {
     this.load();
   }
 
+  public resetLoadedItems() {
+    this.itemsLoaded = window.innerHeight / 48;
+  }
+
   public getById(id: string) {
     return this.historyItems.find(x => x._id === id);
   }

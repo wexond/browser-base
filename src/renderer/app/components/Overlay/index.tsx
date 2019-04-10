@@ -50,10 +50,11 @@ const onHistoryClick = () => {
 
 const onBackClick = () => {
   store.overlayStore.scrollRef.current.scrollTop = 0;
+  store.historyStore.resetLoadedItems();
   store.overlayStore.currentContent = 'default';
 };
 
-const onScroll = (e: React.UIEvent) => {
+const onScroll = (e: any) => {
   const { currentContent } = store.overlayStore;
 
   if (currentContent === 'history') {
