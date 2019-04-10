@@ -147,8 +147,7 @@ export const Content = styled.div`
 `;
 
 export const ToolbarContent = styled.div`
-  width: calc(100% - 64px);
-  max-width: 800px;
+  width: calc(100% - 48px);
   display: flex;
   align-items: center;
 `;
