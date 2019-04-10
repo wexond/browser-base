@@ -12,6 +12,7 @@ export const StyledOverlay = styled.div`
   right: 0;
   z-index: 9999;
   transition: 0.2s opacity;
+  backdrop-filter: blur(15px);
   background-color: rgba(0, 0, 0, 0.9);
 
   ${({ visible }: { visible: boolean }) => css`
@@ -134,40 +135,39 @@ export const Content = styled.div`
   max-width: 800px;
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
-  transition: 0.3s all;
+  transition: 0.3s transform, 0.3s opacity;
+  will-change: transform, opacity;
 
   ${({ visible, right }: { visible: boolean; right?: boolean }) => css`
-    margin-left: ${visible ? 0 : right ? 72 : -72}px;
+    transform: translateX(calc(-50% - ${visible ? 0 : right ? 72 : -72}px));
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
   `};
 `;
 
 export const Toolbar = styled.div`
-  width: calc(100% - 64px - 32px);
-  max-width: calc(800px - 32px);
-  left: 50%;
+  width: calc(100% - 64px);
+  max-width: calc(800px);
+  left: calc(50% - 6px);
   transform: translateX(-50%);
   display: flex;
+  border-radius: 30px;
   align-items: center;
   font-size: 20px;
   font-weight: 300;
-  background-color: black;
-  top: 16px;
+  background-color: #3a3a3a;
   width: 100%;
   height: 56px;
-  border-radius: 30px;
   overflow: hidden;
-  box-shadow: ${shadows(12)};
   z-index: 999;
   transition: 0.3s opacity;
+  box-shadow: ${shadows(8)};
 
-  ${({ visible, fixed }: { visible: boolean; fixed: boolean }) => css`
+  ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
-    position: ${fixed ? 'fixed' : 'absolute'};
-    top: ${fixed ? 16 : 56 - TOOLBAR_HEIGHT + 16}px;
+    position: fixed;
+    top: 16px;
   `};
 `;
 
