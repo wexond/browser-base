@@ -6,6 +6,8 @@ import { colors } from '~/renderer/constants';
 export const StyledOverlay = styled.div`
   color: white;
   position: absolute;
+  display: flex;
+  flex-flow: column;
   left: 0;
   top: 0;
   bottom: 0;
@@ -90,7 +92,7 @@ export const Menu = styled.div`
 export const Scrollable = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
+  flex: 1;
   overflow-y: scroll;
 
   ::-webkit-scrollbar {
@@ -144,7 +146,7 @@ export const Content = styled.div`
 `;
 
 export const ToolbarContent = styled.div`
-  width: 100%;
+  width: calc(100% - 64px);
   max-width: 800px;
   display: flex;
   align-items: center;
