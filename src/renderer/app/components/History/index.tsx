@@ -11,6 +11,8 @@ import {
   MenuItem,
   MenuItems,
   Sections,
+  Search,
+  Input,
 } from './style';
 
 const onBackClick = () => {
@@ -38,11 +40,15 @@ export const History = observer(() => {
             <Back onClick={onBackClick} />
             <Title>History</Title>
           </Header>
+          <Search>
+            <Input placeholder="Search" />
+          </Search>
           <MenuItems>
             <MenuItem selected>All</MenuItem>
             <MenuItem>Yesterday</MenuItem>
             <MenuItem>Last week</MenuItem>
             <MenuItem>Last month</MenuItem>
+            <MenuItem>Older</MenuItem>
           </MenuItems>
         </LeftMenu>
         <Sections>
