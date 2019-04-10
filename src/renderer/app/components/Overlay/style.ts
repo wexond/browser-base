@@ -95,7 +95,7 @@ export const Scrollable = styled.div`
   bottom: 0;
 
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 6px;
   }
 
   ::-webkit-scrollbar-track {
