@@ -24,7 +24,7 @@ import { History } from '../History';
 import TopSites from '../TopSites';
 
 const onScroll = (e: any) => {
-  store.overlayStore.isToolbarFixed = e.currentTarget.scrollTop >= 56;
+  store.overlayStore.isToolbarFixed = e.currentTarget.scrollTop > 56;
 };
 
 const Header = ({ children, clickable }: any) => {
@@ -47,6 +47,7 @@ const preventHiding = (e: any) => {
 };
 
 const onHistoryClick = () => {
+  store.overlayStore.scrollRef.current.scrollTop = 0;
   store.overlayStore.currentContent = 'history';
 };
 
