@@ -12,9 +12,6 @@ import {
   Title,
   Content,
   DropArrow,
-  Toolbar,
-  Back,
-  ToolbarContent,
   Container,
 } from './style';
 import { SearchBox } from '../SearchBox';
@@ -71,11 +68,7 @@ export const Overlay = observer(() => {
           store.overlayStore.visible
         }
       >
-        <Scrollable
-          style={{ marginTop: TOOLBAR_HEIGHT }}
-          ref={store.overlayStore.scrollRef}
-          onScroll={onScroll}
-        >
+        <Scrollable ref={store.overlayStore.scrollRef} onScroll={onScroll}>
           <Content>
             <SearchBox />
             {store.historyStore.topSites.length > 0 && (

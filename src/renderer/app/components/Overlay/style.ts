@@ -98,6 +98,7 @@ export const Scrollable = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
+  margin-top: ${TOOLBAR_HEIGHT}px;
 
   ::-webkit-scrollbar {
     width: 6px;
@@ -157,32 +158,10 @@ export const Content = styled.div`
   max-width: 800px;
 `;
 
-export const ToolbarContent = styled.div`
-  width: calc(100% - 48px);
-  display: flex;
-  align-items: center;
-`;
-
-export const Toolbar = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 400;
-  background-color: #3a3a3a;
-  height: 56px;
-  overflow: hidden;
-  z-index: 999;
-  transition: 0.3s opacity;
-  box-shadow: ${shadows(8)};
-  position: relative;
-`;
-
 export const Back = styled.div`
   ${centerImage('24px', '24px')};
   background-image: url(${icons.arrowBack});
-  height: 56px;
+  height: 24px;
   width: 24px;
   opacity: 0.54;
   margin-right: 24px;
