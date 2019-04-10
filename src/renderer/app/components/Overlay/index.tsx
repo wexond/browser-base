@@ -60,7 +60,7 @@ const onScroll = (e: React.UIEvent) => {
     const scrollMax = e.target.scrollHeight - e.target.clientHeight - 64;
 
     if (scrollPos >= scrollMax) {
-      store.historyStore.page++;
+      store.historyStore.itemsLoaded += window.innerHeight / 48;
     }
   }
 };

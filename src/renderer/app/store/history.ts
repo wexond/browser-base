@@ -14,7 +14,7 @@ export class HistoryStore {
   public historyItems: HistoryItem[] = [];
 
   @observable
-  public page = 0;
+  public itemsLoaded = window.innerHeight / 48;
 
   @computed
   public get topSites() {
@@ -73,11 +73,7 @@ export class HistoryStore {
     const list: HistorySection[] = [];
     let section: HistorySection;
 
-    const itemsPerPage = 10;
-    const max = Math.max(
-      0,
-      this.historyItems.length - itemsPerPage * this.page,
-    );
+    const max = Math.max(0, this.historyItems.length - this.itemsLoaded);
 
     for (let i = this.historyItems.length - 1; i >= max; i--) {
       const item = this.historyItems[i];
