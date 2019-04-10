@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
 import { centerImage } from '~/shared/mixins';
 import { icons } from '../../constants';
 
@@ -12,6 +13,10 @@ export const Item = styled.div`
   &:hover {
     background-color: rgba(255, 255, 255, 0.08);
   }
+
+  ${({ selected }: { selected: boolean }) => css`
+    background-color: ${selected ? 'rgba(255, 255, 255, 0.12)' : 'transparent'};
+  `};
 `;
 
 export const Remove = styled.div`
