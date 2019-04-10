@@ -25,6 +25,19 @@ const preventHiding = (e: any) => {
   e.stopPropagation();
 };
 
+const onScroll = (e: any) => {
+  const scrollPos = e.target.scrollTop;
+  const scrollMax = e.target.scrollHeight - e.target.clientHeight - 64;
+
+  if (scrollPos >= scrollMax) {
+    store.historyStore.itemsLoaded += window.innerHeight / 48;
+  }
+};
+
+const select = (
+  item: 'all' | 'yesterday' | 'last-week' | 'last-month' | 'older',
+) => () => {};
+
 export const History = observer(() => {
   return (
     <Container
@@ -34,7 +47,7 @@ export const History = observer(() => {
         store.overlayStore.visible
       }
     >
-      <Scrollable>
+      <Scrollable onScroll={onScroll}>
         <LeftMenu onClick={preventHiding}>
           <Header>
             <Back onClick={onBackClick} />
@@ -44,7 +57,9 @@ export const History = observer(() => {
             <Input placeholder="Search" />
           </Search>
           <MenuItems>
-            <MenuItem selected>All</MenuItem>
+            <MenuItem onClick={select('all')} selected>
+              All
+            </MenuItem>
             <MenuItem>Yesterday</MenuItem>
             <MenuItem>Last week</MenuItem>
             <MenuItem>Last month</MenuItem>

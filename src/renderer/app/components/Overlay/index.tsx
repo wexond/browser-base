@@ -46,19 +46,6 @@ const onHistoryClick = () => {
   store.overlayStore.currentContent = 'history';
 };
 
-const onScroll = (e: any) => {
-  const { currentContent } = store.overlayStore;
-
-  if (currentContent === 'history') {
-    const scrollPos = e.target.scrollTop;
-    const scrollMax = e.target.scrollHeight - e.target.clientHeight - 64;
-
-    if (scrollPos >= scrollMax) {
-      store.historyStore.itemsLoaded += window.innerHeight / 48;
-    }
-  }
-};
-
 export const Overlay = observer(() => {
   return (
     <StyledOverlay visible={store.overlayStore.visible} onClick={onClick}>
@@ -68,7 +55,7 @@ export const Overlay = observer(() => {
           store.overlayStore.visible
         }
       >
-        <Scrollable ref={store.overlayStore.scrollRef} onScroll={onScroll}>
+        <Scrollable ref={store.overlayStore.scrollRef}>
           <Content>
             <SearchBox />
             {store.historyStore.topSites.length > 0 && (

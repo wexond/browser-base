@@ -16,6 +16,10 @@ export class HistoryStore {
   @observable
   public itemsLoaded = window.innerHeight / 48;
 
+  public minDate: Date;
+
+  public maxDate: Date;
+
   @computed
   public get topSites() {
     const top1 = countVisitedTimes(this.historyItems);
@@ -82,6 +86,11 @@ export class HistoryStore {
     for (let i = this.historyItems.length - 1; i >= max; i--) {
       const item = this.historyItems[i];
       const date = new Date(item.date);
+
+      if (date < this.minDate || date > this.maxDate) {
+        console.log('XDDDD');
+        return list;
+      }
 
       if (compareDates(section && section.date, date)) {
         section.items.push(item);
