@@ -81,7 +81,6 @@ export const Overlay = observer(() => {
           History
         </ToolbarContent>
       </Toolbar>
-      <Scrollable ref={store.overlayStore.scrollRef}>
       <Scrollable ref={store.overlayStore.scrollRef} onScroll={onScroll}>
         <Content
           visible={
@@ -141,4 +140,3 @@ export const Overlay = observer(() => {
     </StyledOverlay>
   );
 });
-  
