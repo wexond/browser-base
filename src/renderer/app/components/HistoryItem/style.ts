@@ -9,10 +9,6 @@ export const Item = styled.div`
   height: 48px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
 
-  &:first-child {
-    border-top: 0px;
-  }
-
   &:hover {
     background-color: rgba(255, 255, 255, 0.08);
   }

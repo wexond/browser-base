@@ -1,10 +1,9 @@
 import styled, { css } from 'styled-components';
 import { centerImage, shadows } from '~/shared/mixins';
-import { icons } from '../../constants';
+import { icons, TOOLBAR_HEIGHT } from '../../constants';
 import { colors } from '~/renderer/constants';
 
 export const StyledOverlay = styled.div`
-  background-color: rgba(0, 0, 0, 0.9);
   color: white;
   position: absolute;
   left: 0;
@@ -13,6 +12,7 @@ export const StyledOverlay = styled.div`
   right: 0;
   z-index: 9999;
   transition: 0.2s opacity;
+  background-color: rgba(0, 0, 0, 0.9);
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
@@ -89,13 +89,25 @@ export const Menu = styled.div`
 export const Scrollable = styled.div`
   position: absolute;
   overflow-y: scroll;
-  top: 0;
+  top: ${TOOLBAR_HEIGHT}px;
   left: 0;
   right: 0;
   bottom: 0;
 
-  &::-webkit-scrollbar {
-    display: none;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.48);
   }
 `;
 
@@ -156,7 +168,7 @@ export const Toolbar = styled.div`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
     position: ${fixed ? 'fixed' : 'absolute'};
-    top: ${fixed ? 16 : 56 + 16}px;
+    top: ${fixed ? 16 : 56 - TOOLBAR_HEIGHT + 16}px;
   `};
 `;
 
