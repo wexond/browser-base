@@ -13,6 +13,9 @@ export class HistoryStore {
   @observable
   public historyItems: HistoryItem[] = [];
 
+  @observable
+  public itemsLoaded = window.innerHeight / 48;
+
   @computed
   public get topSites() {
     const top1 = countVisitedTimes(this.historyItems);
@@ -70,11 +73,9 @@ export class HistoryStore {
     const list: HistorySection[] = [];
     let section: HistorySection;
 
-    for (
-      let i = this.historyItems.length - 1;
-      i >= Math.max(0, this.historyItems.length - 10);
-      i--
-    ) {
+    const max = Math.max(0, this.historyItems.length - this.itemsLoaded);
+
+    for (let i = this.historyItems.length - 1; i >= max; i--) {
       const item = this.historyItems[i];
       const date = new Date(item.date);
 
