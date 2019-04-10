@@ -98,7 +98,6 @@ export const Scrollable = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
-  margin-top: ${TOOLBAR_HEIGHT}px;
 
   ::-webkit-scrollbar {
     width: 6px;
