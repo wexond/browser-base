@@ -41,6 +41,10 @@ export const Favicon = styled.div`
 
 export const Title = styled.div`
   flex: 3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 16px;
 
   &:hover {
     cursor: pointer;
