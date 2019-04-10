@@ -6,9 +6,15 @@ import { HistoryItem } from '../../models';
 import { formatTime } from '../../utils';
 import { Favicon, Item, Remove, Title, Time, Site } from './style';
 
+const onClick = (data: HistoryItem) => (e: React.MouseEvent) => {
+  if (e.ctrlKey) {
+    data.selected = !data.selected;
+  }
+};
+
 export default observer(({ data }: { data: HistoryItem }) => {
   return (
-    <Item key={data._id}>
+    <Item key={data._id} onClick={onClick(data)} selected={data.selected}>
       <Favicon
         style={{
           backgroundImage: `url(${store.faviconsStore.favicons[data.favicon]})`,
