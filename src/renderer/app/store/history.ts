@@ -77,7 +77,7 @@ export class HistoryStore {
     const list: HistorySection[] = [];
     let section: HistorySection;
 
-    const max = Math.max(0, this.historyItems.length - this.itemsLoaded);
+    const max = Math.max(0, this.historyItems.length - this.itemsLoaded - 1);
 
     for (let i = this.historyItems.length - 1; i >= max; i--) {
       const item = this.historyItems[i];

@@ -1,7 +1,9 @@
-import { ipcRenderer, protocol } from 'electron';
+import { ipcRenderer, webFrame } from 'electron';
 import { IpcExtension } from '~/shared/models';
 import { getAPI } from '~/shared/utils/extensions';
 import { parse } from 'url';
+
+webFrame.registerURLSchemeAsPrivileged('wexond-extension');
 
 ipcRenderer.setMaxListeners(0);
 

@@ -7,7 +7,10 @@ import { extensions } from './extensions';
 const applets = ['newtab'];
 
 export const registerProtocols = () => {
-  protocol.registerSchemesAsPrivileged([
+  protocol.registerStandardSchemes(['wexond', 'wexond-extension']);
+
+  // TODO: Electron 5.0.0
+  /*protocol.registerSchemesAsPrivileged([
     {
       scheme: 'wexond',
       privileges: { bypassCSP: true, secure: true },
@@ -16,7 +19,7 @@ export const registerProtocols = () => {
       scheme: 'wexond-extension',
       privileges: { bypassCSP: true, secure: true },
     },
-  ]);
+  ]);*/
 
   (app as any).on('session-created', (sess: Electron.session) => {
     sess.protocol.registerBufferProtocol(

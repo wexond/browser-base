@@ -27,7 +27,7 @@ export const App = observer(() => {
         style={{
           backgroundImage: `url(${store.tabsStore.selectedTab &&
             store.tabsStore.selectedTab.screenshot})`,
-          display: store.overlayStore.visible ? 'block' : 'none',
+          opacity: store.overlayStore.screenshotVisible ? 1 : 0,
         }}
       />
       <Overlay />

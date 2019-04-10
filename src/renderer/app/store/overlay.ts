@@ -43,6 +43,9 @@ export class OverlayStore {
   @observable
   public isToolbarFixed = false;
 
+  @observable
+  public screenshotVisible = false;
+
   private timeout: any;
 
   @computed
@@ -60,6 +63,7 @@ export class OverlayStore {
     ipcRenderer.send('browserview-hide');
 
     this._visible = true;
+    this.screenshotVisible = true;
   }
 
   public set visible(val: boolean) {
@@ -69,6 +73,7 @@ export class OverlayStore {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         ipcRenderer.send('browserview-show');
+        this.screenshotVisible = false;
       }, 200);
 
       store.suggestionsStore.suggestions = [];

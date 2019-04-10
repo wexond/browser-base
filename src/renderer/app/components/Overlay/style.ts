@@ -14,12 +14,13 @@ export const StyledOverlay = styled.div`
   right: 0;
   z-index: 9999;
   transition: 0.2s opacity;
-  backdrop-filter: blur(15px);
+
   background-color: rgba(0, 0, 0, 0.9);
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
+    backdrop-filter: ${visible ? 'blur(15px)' : 'none'};
   `};
 `;
 
