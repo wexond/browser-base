@@ -9,6 +9,10 @@ export const Item = styled.div`
   height: 48px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
 
+  &:first-child {
+    border-top: 0px;
+  }
+
   &:hover {
     background-color: rgba(255, 255, 255, 0.08);
   }
@@ -35,7 +39,7 @@ export const Favicon = styled.div`
 `;
 
 export const Title = styled.div`
-  flex: 2;
+  flex: 3;
 
   &:hover {
     cursor: pointer;
@@ -44,6 +48,11 @@ export const Title = styled.div`
 `;
 
 export const Site = styled.div`
+  flex: 2;
+  opacity: 0.54;
+`;
+
+export const Time = styled.div`
   flex: 1;
   opacity: 0.54;
 `;
