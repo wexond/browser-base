@@ -36,7 +36,46 @@ const onScroll = (e: any) => {
 
 const select = (
   item: 'all' | 'yesterday' | 'last-week' | 'last-month' | 'older',
-) => () => {};
+) => () => {
+  const current = new Date(); // new Date(2019, 3, 21);
+  const day = current.getDate();
+  const month = current.getMonth();
+  const year = current.getFullYear();
+  let minDate: Date;
+  let maxDate: Date;
+
+  switch (item) {
+    case 'yesterday': {
+      minDate = new Date(year, month, day - 1, 0, 0, 0, 0);
+      maxDate = new Date(year, month, day - 1, 23, 59, 59, 999);
+      break;
+    }
+    case 'last-week': {
+      // TODO
+      minDate = new Date(year, month, day - current.getDay() - 6, 0, 0, 0, 0);
+
+      console.clear();
+      console.log(minDate);
+      break;
+    }
+    case 'last-month': {
+      minDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
+      maxDate = new Date(year, month - 1, 0, 0, 0, 0, 0);
+      break;
+    }
+    case 'older': {
+      // store.historyStore.maxDate = null;
+      break;
+    }
+  }
+
+  store.historyStore.range = item !== 'all' && {
+    min: minDate.getTime(),
+    max: maxDate.getTime(),
+  };
+
+  store.historyStore.itemsLoaded = window.innerHeight / 48;
+};
 
 export const History = observer(() => {
   return (
@@ -60,8 +99,9 @@ export const History = observer(() => {
             <MenuItem onClick={select('all')} selected>
               All
             </MenuItem>
-            <MenuItem>Yesterday</MenuItem>
+            <MenuItem onClick={select('yesterday')}>Yesterday</MenuItem>
             <MenuItem>Last week</MenuItem>
+            <MenuItem onClick={select('last-month')}>Last month</MenuItem>
             <MenuItem>Older</MenuItem>
           </MenuItems>
         </LeftMenu>

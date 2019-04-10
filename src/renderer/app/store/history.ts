@@ -4,6 +4,11 @@ import { HistoryItem, HistorySection } from '../models';
 import { getPath } from '~/shared/utils/paths';
 import { countVisitedTimes, compareDates, getSectionLabel } from '../utils';
 
+interface IRange {
+  min: number;
+  max: number;
+}
+
 export class HistoryStore {
   public db = new Datastore({
     filename: getPath('storage/history.db'),
@@ -16,9 +21,7 @@ export class HistoryStore {
   @observable
   public itemsLoaded = window.innerHeight / 48;
 
-  public minDate: Date;
-
-  public maxDate: Date;
+  public range: IRange;
 
   @computed
   public get topSites() {
@@ -87,9 +90,12 @@ export class HistoryStore {
       const item = this.historyItems[i];
       const date = new Date(item.date);
 
-      if (date < this.minDate || date > this.maxDate) {
-        console.log('XDDDD');
-        return list;
+      if (this.range != null) {
+        if (date.getTime() >= this.range.max) {
+          continue;
+        } else if (date.getTime() <= this.range.min) {
+          return list;
+        }
       }
 
       if (compareDates(section && section.date, date)) {
