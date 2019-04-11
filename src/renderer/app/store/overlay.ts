@@ -48,6 +48,20 @@ export class OverlayStore {
 
   private timeout: any;
 
+  constructor() {
+    window.addEventListener('keydown', this.onWindowKeyDown);
+  }
+
+  public onWindowKeyDown = (e: KeyboardEvent) => {
+    if (!this._visible || e.keyCode !== 27) return; // Escape
+
+    if (this.currentContent === 'history') {
+      this.currentContent = 'default';
+    } else if (this.currentContent === 'default') {
+      this._visible = false;
+    }
+  };
+
   @computed
   public get visible() {
     return this._visible;

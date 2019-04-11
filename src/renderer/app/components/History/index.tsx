@@ -9,7 +9,7 @@ import {
   LeftMenu,
   Header,
   Title,
-  MenuItem,
+  StyledMenuItem,
   MenuItems,
   Sections,
   Search,
@@ -31,17 +31,24 @@ const onScroll = (e: any) => {
   const scrollMax = e.target.scrollHeight - e.target.clientHeight - 64;
 
   if (scrollPos >= scrollMax) {
-    store.historyStore.itemsLoaded += Math.floor(window.innerHeight / 48);
+    store.historyStore.itemsLoaded += store.historyStore.getDefaultLoaded();
   }
-};
-
-const onMenuItemClick = (range: QuickRange) => () => {
-  store.historyStore.select(range);
 };
 
 const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
   store.historyStore.search(e.currentTarget.value);
 };
+
+const MenuItem = observer(
+  ({ range, children }: { range: QuickRange; children: any }) => (
+    <StyledMenuItem
+      onClick={() => (store.historyStore.selectedRange = range)}
+      selected={store.historyStore.selectedRange === range}
+    >
+      {children}
+    </StyledMenuItem>
+  ),
+);
 
 export const History = observer(() => {
   return (
@@ -62,19 +69,12 @@ export const History = observer(() => {
             <Input placeholder="Search" onInput={onInput} />
           </Search>
           <MenuItems>
-            <MenuItem onClick={onMenuItemClick('all')} selected>
-              All
-            </MenuItem>
-            <MenuItem onClick={onMenuItemClick('yesterday')}>
-              Yesterday
-            </MenuItem>
-            <MenuItem onClick={onMenuItemClick('last-week')}>
-              Last week
-            </MenuItem>
-            <MenuItem onClick={onMenuItemClick('last-month')}>
-              Last month
-            </MenuItem>
-            <MenuItem onClick={onMenuItemClick('older')}>Older</MenuItem>
+            <MenuItem range="all">All</MenuItem>
+            <MenuItem range="today">Today</MenuItem>
+            <MenuItem range="yesterday">Yesterday</MenuItem>
+            <MenuItem range="last-week">Last week</MenuItem>
+            <MenuItem range="last-month">Last month</MenuItem>
+            <MenuItem range="older">Older</MenuItem>
           </MenuItems>
         </LeftMenu>
         <Sections>
