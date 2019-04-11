@@ -193,7 +193,6 @@ export class HistoryStore {
 
   public deleteSelected() {
     for (const item of this.selectedItems) {
-      console.log(item);
       this.removeItem(item);
     }
     this.selectedItems = [];

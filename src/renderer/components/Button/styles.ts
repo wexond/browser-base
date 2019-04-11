@@ -4,7 +4,8 @@ import { shadows, button } from '~/shared/mixins';
 
 interface StyledButtonProps {
   background: string;
-  overShadeColor: string;
+  foreground: string;
+  type?: 'contained' | 'outlined';
 }
 
 export const StyledButton = styled.div`
@@ -18,7 +19,6 @@ export const StyledButton = styled.div`
   border-radius: 4px;
   position: relative;
   cursor: pointer;
-  box-shadow: ${shadows(2)};
 
   &::before {
     content: '';
@@ -36,15 +36,17 @@ export const StyledButton = styled.div`
     opacity: 0.12;
   }
 
-  &:active {
-    box-shadow: ${shadows(4)};
-  }
-
-  ${({ background, overShadeColor }: StyledButtonProps) => css`
-    background-color: ${background || '#2196F3'};
+  ${({ background, foreground, type }: StyledButtonProps) => css`
+    color: ${foreground || '#fff'};
+    border: ${type === 'outlined'
+      ? `1px solid ${background || '#2196F3'}`
+      : 'unset'};
+    background-color: ${type === 'outlined'
+      ? 'transparent'
+      : background || '#2196F3'};
 
     &::before {
-      background-color: ${overShadeColor || '#fff'};
+      background-color: ${foreground || '#fff'};
     }
   `};
 `;
@@ -52,8 +54,4 @@ export const StyledButton = styled.div`
 export const StyledLabel = styled.div`
   z-index: 1;
   ${button()};
-
-  ${({ foreground }: { foreground: string }) => css`
-    color: ${foreground || '#fff'};
-  `};
 `;
