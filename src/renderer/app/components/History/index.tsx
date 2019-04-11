@@ -14,6 +14,10 @@ import {
   Sections,
   Search,
   Input,
+  DeletionDialog,
+  DeletionDialogLabel,
+  DeletionDialogButton,
+  DeletionDialogDelButton,
 } from './style';
 
 const onBackClick = () => {
@@ -85,6 +89,11 @@ export const History = observer(() => {
           </Content>
         </Sections>
       </Scrollable>
+      <DeletionDialog>
+        <DeletionDialogLabel>2 selected</DeletionDialogLabel>
+        <DeletionDialogDelButton>Delete</DeletionDialogDelButton>
+        <DeletionDialogButton>Cancel</DeletionDialogButton>
+      </DeletionDialog>
     </Container>
   );
 });
