@@ -56,9 +56,6 @@ const MenuItem = observer(
 const onCancelClick = (e: React.MouseEvent) => {
   e.stopPropagation();
   store.historyStore.selectedItems = [];
-  for (const item of store.historyStore.historyItems) {
-    if (item.selected) item.selected = false;
-  }
 };
 
 const onDeleteClick = (e: React.MouseEvent) => {

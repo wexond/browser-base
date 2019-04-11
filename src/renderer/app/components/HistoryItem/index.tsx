@@ -7,15 +7,14 @@ import { formatTime } from '../../utils';
 import { Favicon, Item, Remove, Title, Time, Site } from './style';
 
 const onClick = (item: HistoryItem) => (e: React.MouseEvent) => {
-  if (e.ctrlKey) {
-    item.selected = !item.selected;
+  if (!e.ctrlKey) return;
 
-    if (item.selected) {
-      store.historyStore.selectedItems.push(item._id);
-    } else {
-      const index = store.historyStore.selectedItems.indexOf(item._id);
-      store.historyStore.selectedItems.splice(index, 1);
-    }
+  const index = store.historyStore.selectedItems.indexOf(item._id);
+
+  if (index === -1) {
+    store.historyStore.selectedItems.push(item._id);
+  } else {
+    store.historyStore.selectedItems.splice(index, 1);
   }
 };
 
@@ -31,8 +30,10 @@ const onRemoveClick = (item: HistoryItem) => () => {
 };
 
 export default observer(({ data }: { data: HistoryItem }) => {
+  const selected = store.historyStore.selectedItems.indexOf(data._id) !== -1;
+
   return (
-    <Item key={data._id} onClick={onClick(data)} selected={data.selected}>
+    <Item key={data._id} onClick={onClick(data)} selected={selected}>
       <Favicon
         style={{
           backgroundImage: `url(${store.faviconsStore.favicons[data.favicon]})`,
