@@ -14,7 +14,7 @@ export const MenuItems = styled.div`
   margin-top: 24px;
 `;
 
-export const MenuItem = styled.div`
+export const StyledMenuItem = styled.div`
   padding: 0 16px;
   margin-left: 32px;
   margin-right: 32px;
