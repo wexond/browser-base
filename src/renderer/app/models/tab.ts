@@ -98,7 +98,6 @@ export class Tab {
 
   constructor({ url, active } = defaultTabOptions, tabGroupId: number) {
     this.tabGroupId = tabGroupId;
-    this.url = url;
 
     this.position = this.tabGroup.nextPosition++;
     this.tempPosition = this.position;
@@ -118,6 +117,7 @@ export class Tab {
         let updated = null;
 
         if (url !== this.url) {
+          console.log(url);
           this.lastHistoryId = await store.historyStore.addItem({
             title: this.title,
             url,
