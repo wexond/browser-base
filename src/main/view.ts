@@ -1,4 +1,4 @@
-import { BrowserView, app, Menu } from 'electron';
+import { BrowserView, app, Menu, nativeImage, clipboard } from 'electron';
 import { appWindow } from '.';
 import { sendToAllExtensions } from './extensions';
 
@@ -23,19 +23,153 @@ export class View extends BrowserView {
     this.tabId = id;
 
     this.webContents.on('context-menu', (e, params) => {
-      const menu = Menu.buildFromTemplate([
-        {
-          id: 'inspect',
-          label: 'Inspect Element',
-          click: () => {
-            this.webContents.inspectElement(params.x, params.y);
+      let menuItems: Electron.MenuItemConstructorOptions[] = [];
 
-            if (this.webContents.isDevToolsOpened()) {
-              this.webContents.devToolsWebContents.focus();
-            }
+      if (params.linkURL !== '') {
+        menuItems = menuItems.concat([
+          {
+            label: 'Open link in new tab',
+            click: () => {
+              appWindow.webContents.send('api-tabs-create', {
+                url: params.linkURL,
+                active: false,
+              });
+            },
           },
+          {
+            type: 'separator',
+          },
+          {
+            label: 'Copy link address',
+            click: () => {
+              clipboard.clear();
+              clipboard.writeText(params.linkURL);
+            },
+          },
+          {
+            type: 'separator',
+          },
+        ])
+      }
+
+      if (params.hasImageContents) {
+        menuItems = menuItems.concat([
+          {
+            label: 'Open image in new tab',
+            click: () => {
+              appWindow.webContents.send('api-tabs-create', {
+                url: params.srcURL,
+                active: false,
+              });
+            },
+          },
+          {
+            label: 'Copy image',
+            click: () => {
+              const img = nativeImage.createFromDataURL(params.srcURL);
+
+              clipboard.clear();
+              clipboard.writeImage(img);
+            },
+          },
+          {
+            label: 'Copy image address',
+            click: () => {
+              clipboard.clear();
+              clipboard.writeText(params.srcURL);
+            },
+          },
+          {
+            type: 'separator',
+          },
+        ])
+      }
+
+      if (params.isEditable) {
+        menuItems = menuItems.concat([
+          {
+            role: 'undo',
+          },
+          {
+            role: 'redo',
+          },
+          {
+            type: 'separator',
+          },
+          {
+            role: 'cut',
+          },
+          {
+            role: 'copy',
+          },
+          {
+            role: 'pasteAndMatchStyle',
+          },
+          {
+            role: 'paste',
+          },
+          {
+            role: 'selectAll',
+          },
+          {
+            type: 'separator',
+          },
+        ])
+      }
+
+      if (!params.isEditable && params.selectionText !== '') {
+        menuItems = menuItems.concat([
+          {
+            role: 'copy',
+          },
+        ])
+      }
+
+      if (
+        !params.hasImageContents &&
+        params.linkURL === '' &&
+        params.selectionText === '' &&
+        !params.isEditable
+      ) {
+        menuItems = menuItems.concat([
+          {
+            label: 'Go back',
+            enabled: this.webContents.canGoBack(),
+            click: () => {
+              this.webContents.goBack();
+            },
+          },
+          {
+            label: 'Go forward',
+            enabled: this.webContents.canGoForward(),
+            click: () => {
+              this.webContents.goForward();
+            },
+          },
+          {
+            label: 'Refresh',
+            click: () => {
+              this.webContents.reload();
+            },
+          },
+          {
+            type: 'separator',
+          },
+        ])
+      }
+
+      menuItems.push({
+        label: 'Inspect Element',
+        click: () => {
+          this.webContents.inspectElement(params.x, params.y);
+
+          if (this.webContents.isDevToolsOpened()) {
+            this.webContents.devToolsWebContents.focus();
+          }
         },
-      ]);
+      })
+
+      const menu = Menu.buildFromTemplate(menuItems);
 
       menu.popup();
     });
@@ -190,11 +324,11 @@ export class View extends BrowserView {
     sendToAllExtensions(`api-emit-event-webNavigation-${name}`, ...data);
   };
 
-  public async getScreenshot(): Promise<string> {
+  public async getScreenshot(): Promise < string > {
     return new Promise(resolve => {
       this.webContents.capturePage(img => {
         resolve(img.toDataURL());
       });
-    });
+    }); , , , ,
   }
 }
