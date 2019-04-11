@@ -29,6 +29,9 @@ export class HistoryStore {
     max: number;
   };
 
+  @observable
+  public searched = '';
+
   @computed
   public get topSites() {
     const top1 = countVisitedTimes(this.historyItems);
@@ -97,6 +100,13 @@ export class HistoryStore {
       const item = this.historyItems[i];
       const date = new Date(item.date);
 
+      if (
+        this.searched !== '' &&
+        !item.title.toLowerCase().includes(this.searched)
+      ) {
+        continue;
+      }
+
       if (this.range) {
         if (date.getTime() >= this.range.max) continue;
         if (date.getTime() <= this.range.min) break;
@@ -119,7 +129,6 @@ export class HistoryStore {
     return list;
   }
 
-  @action
   public select(range: QuickRange) {
     const current = new Date();
     const day = current.getDate();
@@ -160,6 +169,11 @@ export class HistoryStore {
       max: maxDate.getTime(),
     };
 
+    this.itemsLoaded = Math.floor(window.innerHeight / 48);
+  }
+
+  public search(str: string) {
+    this.searched = str.toLowerCase().toLowerCase();
     this.itemsLoaded = Math.floor(window.innerHeight / 48);
   }
 }

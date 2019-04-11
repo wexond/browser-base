@@ -39,6 +39,10 @@ const onMenuItemClick = (range: QuickRange) => () => {
   store.historyStore.select(range);
 };
 
+const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  store.historyStore.search(e.currentTarget.value);
+};
+
 export const History = observer(() => {
   return (
     <Container
@@ -55,7 +59,7 @@ export const History = observer(() => {
             <Title>History</Title>
           </Header>
           <Search>
-            <Input placeholder="Search" />
+            <Input placeholder="Search" onInput={onInput} />
           </Search>
           <MenuItems>
             <MenuItem onClick={onMenuItemClick('all')} selected>
