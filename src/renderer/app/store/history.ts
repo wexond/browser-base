@@ -1,13 +1,15 @@
 import * as Datastore from 'nedb';
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import { HistoryItem, HistorySection } from '../models';
 import { getPath } from '~/shared/utils/paths';
 import { countVisitedTimes, compareDates, getSectionLabel } from '../utils';
 
-interface IRange {
-  min: number;
-  max: number;
-}
+export type QuickRange =
+  | 'all'
+  | 'yesterday'
+  | 'last-week'
+  | 'last-month'
+  | 'older';
 
 export class HistoryStore {
   public db = new Datastore({
@@ -19,9 +21,16 @@ export class HistoryStore {
   public historyItems: HistoryItem[] = [];
 
   @observable
-  public itemsLoaded = window.innerHeight / 48;
+  public itemsLoaded = Math.floor(window.innerHeight / 48);
 
-  public range: IRange;
+  @observable
+  public range: {
+    min: number;
+    max: number;
+  };
+
+  @observable
+  public searched = '';
 
   @computed
   public get topSites() {
@@ -83,19 +92,24 @@ export class HistoryStore {
   public get historySections() {
     const list: HistorySection[] = [];
     let section: HistorySection;
+    let loaded = 0;
 
-    const max = Math.max(0, this.historyItems.length - this.itemsLoaded - 1);
+    for (let i = this.historyItems.length - 1; i >= 0; i--) {
+      if (loaded > this.itemsLoaded) break;
 
-    for (let i = this.historyItems.length - 1; i >= max; i--) {
       const item = this.historyItems[i];
       const date = new Date(item.date);
 
-      if (this.range != null) {
-        if (date.getTime() >= this.range.max) {
-          continue;
-        } else if (date.getTime() <= this.range.min) {
-          return list;
-        }
+      if (
+        this.searched !== '' &&
+        !item.title.toLowerCase().includes(this.searched)
+      ) {
+        continue;
+      }
+
+      if (this.range) {
+        if (date.getTime() >= this.range.max) continue;
+        if (date.getTime() <= this.range.min) break;
       }
 
       if (compareDates(section && section.date, date)) {
@@ -108,8 +122,58 @@ export class HistoryStore {
         };
         list.push(section);
       }
+
+      loaded++;
     }
 
     return list;
+  }
+
+  public select(range: QuickRange) {
+    const current = new Date();
+    const day = current.getDate();
+    const month = current.getMonth();
+    const year = current.getFullYear();
+    let minDate: Date;
+    let maxDate: Date;
+
+    switch (range) {
+      case 'yesterday': {
+        minDate = new Date(year, month, day - 1, 0, 0, 0, 0);
+        maxDate = new Date(year, month, day - 1, 23, 59, 59, 999);
+        break;
+      }
+      case 'last-week': {
+        let currentDay = current.getDay() - 1;
+        if (currentDay === -1) currentDay = 6;
+        minDate = new Date(year, month, day - currentDay - 7, 0, 0, 0, 0);
+        maxDate = new Date(year, month, day - currentDay - 1, 0, 0, 0, 0);
+        break;
+      }
+      case 'last-month': {
+        minDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
+        maxDate = new Date(year, month, 0, 0, 0, 0, 0);
+        break;
+      }
+      case 'older': {
+        let currentDay = current.getDay() - 1;
+        if (currentDay === -1) currentDay = 6;
+        minDate = new Date(0);
+        maxDate = new Date(year, month, day - currentDay - 7, 0, 0, 0, 0);
+        break;
+      }
+    }
+
+    this.range = range !== 'all' && {
+      min: minDate.getTime(),
+      max: maxDate.getTime(),
+    };
+
+    this.itemsLoaded = Math.floor(window.innerHeight / 48);
+  }
+
+  public search(str: string) {
+    this.searched = str.toLowerCase().toLowerCase();
+    this.itemsLoaded = Math.floor(window.innerHeight / 48);
   }
 }
