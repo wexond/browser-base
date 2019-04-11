@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 import { centerImage, shadows } from '~/shared/mixins';
 import { icons } from '../../constants';
+import { Button } from '~/renderer/components/Button';
 
 export const LeftMenu = styled.div`
   width: 300px;

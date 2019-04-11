@@ -6,7 +6,7 @@ import { StyledButton, StyledLabel } from './styles';
 interface Props {
   background?: string;
   foreground?: string;
-  overShadeColor?: string;
+  type?: 'contained' | 'outlined';
   children?: any;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   style?: any;
@@ -15,18 +15,19 @@ interface Props {
 export const Button = ({
   background,
   foreground,
-  overShadeColor,
+  type,
   onClick,
   children,
   style,
 }: Props) => (
   <StyledButton
     background={background}
-    overShadeColor={overShadeColor}
+    foreground={foreground}
+    type={type}
     onClick={onClick}
     style={style}
   >
-    <StyledLabel foreground={foreground}>{children}</StyledLabel>
+    <StyledLabel>{children}</StyledLabel>
     <Ripple color={foreground || '#fff'} />
   </StyledButton>
 );
