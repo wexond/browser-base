@@ -1,9 +1,8 @@
 import { observable, computed } from 'mobx';
-import * as React from 'react';
 
 import { TabGroup } from '~/renderer/app/models';
 import store from '.';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { colors } from '~/renderer/constants';
 import { closeWindow } from '../utils';
 

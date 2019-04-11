@@ -88,12 +88,12 @@ export const History = observer(() => {
             ))}
           </Content>
         </Sections>
+        <DeletionDialog>
+          <DeletionDialogLabel>2 selected</DeletionDialogLabel>
+          <DeletionDialogDelButton>Delete</DeletionDialogDelButton>
+          <DeletionDialogButton>Cancel</DeletionDialogButton>
+        </DeletionDialog>
       </Scrollable>
-      <DeletionDialog>
-        <DeletionDialogLabel>2 selected</DeletionDialogLabel>
-        <DeletionDialogDelButton>Delete</DeletionDialogDelButton>
-        <DeletionDialogButton>Cancel</DeletionDialogButton>
-      </DeletionDialog>
     </Container>
   );
 });

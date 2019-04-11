@@ -14,7 +14,8 @@ import {
 
 import HorizontalScrollbar from '~/renderer/app/components/HorizontalScrollbar';
 import store from '.';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
+import { extname } from 'path';
 
 export class TabsStore {
   @observable
