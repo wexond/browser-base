@@ -2,8 +2,9 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import store from '../../store';
-import { Container, Scrollable, Content, Back } from '../Overlay/style';
 import HistorySection from '../HistorySection';
+import { QuickRange } from '../../store/history';
+import { Container, Scrollable, Content, Back } from '../Overlay/style';
 import {
   LeftMenu,
   Header,
@@ -30,13 +31,11 @@ const onScroll = (e: any) => {
   const scrollMax = e.target.scrollHeight - e.target.clientHeight - 64;
 
   if (scrollPos >= scrollMax) {
-    store.historyStore.itemsLoaded += window.innerHeight / 48;
+    store.historyStore.itemsLoaded += Math.floor(window.innerHeight / 48);
   }
 };
 
-const onMenuItemClick = (
-  range: 'all' | 'yesterday' | 'last-week' | 'last-month' | 'older',
-) => () => {
+const onMenuItemClick = (range: QuickRange) => () => {
   store.historyStore.select(range);
 };
 

@@ -4,10 +4,12 @@ import { HistoryItem, HistorySection } from '../models';
 import { getPath } from '~/shared/utils/paths';
 import { countVisitedTimes, compareDates, getSectionLabel } from '../utils';
 
-interface IDateRange {
-  min: number;
-  max: number;
-}
+export type QuickRange =
+  | 'all'
+  | 'yesterday'
+  | 'last-week'
+  | 'last-month'
+  | 'older';
 
 export class HistoryStore {
   public db = new Datastore({
@@ -19,10 +21,13 @@ export class HistoryStore {
   public historyItems: HistoryItem[] = [];
 
   @observable
-  public itemsLoaded = window.innerHeight / 48;
+  public itemsLoaded = Math.floor(window.innerHeight / 48);
 
   @observable
-  public range: IDateRange;
+  public range: {
+    min: number;
+    max: number;
+  };
 
   @computed
   public get topSites() {
@@ -93,13 +98,8 @@ export class HistoryStore {
       const date = new Date(item.date);
 
       if (this.range) {
-        if (date.getTime() >= this.range.max) {
-          continue;
-        }
-
-        if (date.getTime() <= this.range.min) {
-          break;
-        }
+        if (date.getTime() >= this.range.max) continue;
+        if (date.getTime() <= this.range.min) break;
       }
 
       if (compareDates(section && section.date, date)) {
@@ -120,9 +120,7 @@ export class HistoryStore {
   }
 
   @action
-  public select(
-    range: 'all' | 'yesterday' | 'last-week' | 'last-month' | 'older',
-  ) {
+  public select(range: QuickRange) {
     const current = new Date();
     const day = current.getDate();
     const month = current.getMonth();
@@ -137,7 +135,6 @@ export class HistoryStore {
         break;
       }
       case 'last-week': {
-        // TODO
         let currentDay = current.getDay() - 1;
         if (currentDay === -1) currentDay = 6;
         minDate = new Date(year, month, day - currentDay - 7, 0, 0, 0, 0);
@@ -163,6 +160,6 @@ export class HistoryStore {
       max: maxDate.getTime(),
     };
 
-    this.itemsLoaded = window.innerHeight / 48;
+    this.itemsLoaded = Math.floor(window.innerHeight / 48);
   }
 }
