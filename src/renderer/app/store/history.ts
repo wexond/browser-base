@@ -84,18 +84,21 @@ export class HistoryStore {
   public get historySections() {
     const list: HistorySection[] = [];
     let section: HistorySection;
+    let loaded = 0;
 
-    const max = Math.max(0, this.historyItems.length - this.itemsLoaded);
+    for (let i = this.historyItems.length - 1; i >= 0; i--) {
+      if (loaded > this.itemsLoaded) break;
 
-    for (let i = this.historyItems.length - 1; i >= max; i--) {
       const item = this.historyItems[i];
       const date = new Date(item.date);
 
       if (this.range) {
         if (date.getTime() >= this.range.max) {
           continue;
-        } else if (date.getTime() <= this.range.min) {
-          return list;
+        }
+
+        if (date.getTime() <= this.range.min) {
+          break;
         }
       }
 
@@ -109,6 +112,8 @@ export class HistoryStore {
         };
         list.push(section);
       }
+
+      loaded++;
     }
 
     return list;
@@ -118,7 +123,7 @@ export class HistoryStore {
   public select(
     range: 'all' | 'yesterday' | 'last-week' | 'last-month' | 'older',
   ) {
-    const current = new Date(); // new Date(2019, 3, 21);
+    const current = new Date();
     const day = current.getDate();
     const month = current.getMonth();
     const year = current.getFullYear();
@@ -133,19 +138,22 @@ export class HistoryStore {
       }
       case 'last-week': {
         // TODO
-        minDate = new Date(year, month, day - current.getDay() - 6, 0, 0, 0, 0);
-
-        console.clear();
-        console.log(minDate);
+        let currentDay = current.getDay() - 1;
+        if (currentDay === -1) currentDay = 6;
+        minDate = new Date(year, month, day - currentDay - 7, 0, 0, 0, 0);
+        maxDate = new Date(year, month, day - currentDay - 1, 0, 0, 0, 0);
         break;
       }
       case 'last-month': {
         minDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
-        maxDate = new Date(year, month - 1, 0, 0, 0, 0, 0);
+        maxDate = new Date(year, month, 0, 0, 0, 0, 0);
         break;
       }
       case 'older': {
-        // store.historyStore.maxDate = null;
+        let currentDay = current.getDay() - 1;
+        if (currentDay === -1) currentDay = 6;
+        minDate = new Date(0);
+        maxDate = new Date(year, month, day - currentDay - 7, 0, 0, 0, 0);
         break;
       }
     }

@@ -65,11 +65,13 @@ export const History = observer(() => {
             <MenuItem onClick={onMenuItemClick('yesterday')}>
               Yesterday
             </MenuItem>
-            <MenuItem>Last week</MenuItem>
+            <MenuItem onClick={onMenuItemClick('last-week')}>
+              Last week
+            </MenuItem>
             <MenuItem onClick={onMenuItemClick('last-month')}>
               Last month
             </MenuItem>
-            <MenuItem>Older</MenuItem>
+            <MenuItem onClick={onMenuItemClick('older')}>Older</MenuItem>
           </MenuItems>
         </LeftMenu>
         <Sections>
