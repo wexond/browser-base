@@ -21,6 +21,7 @@ import { icons, TOOLBAR_HEIGHT } from '../../constants';
 import { WeatherCard } from '../WeatherCard';
 import { History } from '../History';
 import TopSites from '../TopSites';
+import { Button } from '~/renderer/components/Button';
 
 export const Header = ({ children, clickable }: any) => {
   return (
@@ -47,6 +48,12 @@ const onHistoryClick = () => {
 };
 
 export const Overlay = observer(() => {
+  return (
+    <React.Fragment>
+      <Button>Label</Button>
+    </React.Fragment>
+  );
+
   return (
     <StyledOverlay visible={store.overlayStore.visible} onClick={onClick}>
       <Container
