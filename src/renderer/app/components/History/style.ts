@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { centerImage, shadows } from '~/shared/mixins';
 import { icons } from '../../constants';
 import { Button } from '~/renderer/components/Button';
+import { platform } from 'os';
 
 export const LeftMenu = styled.div`
   width: 300px;
@@ -46,7 +47,7 @@ export const StyledMenuItem = styled.div`
 
 export const Header = styled.div`
   display: flex;
-  margin-top: 48px;
+  margin-top: ${platform() === 'darwin' ? 48 : 32}px;
   margin-left: 32px;
   align-items: center;
 `;
