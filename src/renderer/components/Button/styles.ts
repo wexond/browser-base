@@ -9,7 +9,7 @@ interface StyledButtonProps {
 }
 
 export const StyledButton = styled.div`
-  min-width: 64px;
+  min-width: 88px;
   width: fit-content;
   height: 36px;
   display: flex;
