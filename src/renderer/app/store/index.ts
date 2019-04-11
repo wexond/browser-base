@@ -8,6 +8,7 @@ import { HistoryStore } from './history';
 import { FaviconsStore } from './favicons';
 import { SuggestionsStore } from './suggestions';
 import { ExtensionsStore } from './extensions';
+import { extname } from 'path';
 
 export class Store {
   public historyStore = new HistoryStore();
@@ -106,7 +107,6 @@ export class Store {
               extensionId,
             })
             .forEach(item => {
-              console.log(item);
               item.badgeText = details.text;
             });
         }
@@ -116,6 +116,17 @@ export class Store {
     );
 
     ipcRenderer.send('update-check');
+
+    requestAnimationFrame(() => {
+      if (remote.process.argv.length > 1 && remote.process.env.ENV !== 'dev') {
+        const path = remote.process.argv[1];
+        const ext = extname(path);
+
+        if (ext === '.html') {
+          this.tabsStore.addTab({ url: `file:///${path}`, active: true });
+        }
+      }
+    });
   }
 }
 
