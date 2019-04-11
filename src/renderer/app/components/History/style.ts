@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { centerImage } from '~/shared/mixins';
+import { centerImage, shadows } from '~/shared/mixins';
 import { icons } from '../../constants';
 
 export const LeftMenu = styled.div`
@@ -99,4 +99,44 @@ export const Search = styled.div`
     background-image: url(${icons.search});
     filter: invert(100%);
   }
+`;
+
+export const DeletionDialog = styled.div`
+  width: fit-content;
+  height: 68px;
+  background-color: #3a3a3a;
+  position: absolute;
+  top: 48px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  transform: translateX(300px);
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0px 24px;
+  box-shadow: ${shadows(5)};
+`;
+
+export const DeletionDialogLabel = styled.div`
+  font-size: 14px;
+`;
+
+export const DeletionDialogButton = styled.div`
+  min-width: 88px;
+  width: auto;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  margin-left: 8px;
+  cursor: pointer;
+`;
+
+export const DeletionDialogDelButton = styled(DeletionDialogButton)`
+  margin-left: 24px;
+  background-color: #2196f3;
 `;
