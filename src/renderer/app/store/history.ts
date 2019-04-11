@@ -190,4 +190,11 @@ export class HistoryStore {
   public getDefaultLoaded() {
     return Math.floor(window.innerHeight / 48);
   }
+
+  public deleteSelected() {
+    for (const item in this.selectedItems) {
+      this.removeItem(item);
+    }
+    this.selectedItems = [];
+  }
 }

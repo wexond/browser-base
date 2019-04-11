@@ -53,6 +53,17 @@ const MenuItem = observer(
   ),
 );
 
+const onCancelClick = () => {
+  store.historyStore.selectedItems = [];
+  for (const item of store.historyStore.historyItems) {
+    if (item.selected) item.selected = false;
+  }
+};
+
+const onDeleteClick = () => {
+  store.historyStore.deleteSelected();
+};
+
 export const History = observer(() => {
   const selectedCount = store.historyStore.selectedItems.length;
 
@@ -91,8 +102,14 @@ export const History = observer(() => {
         </Sections>
         <DeletionDialog visible={selectedCount !== 0}>
           <DeletionDialogLabel>{selectedCount} selected</DeletionDialogLabel>
-          <Button style={{ marginLeft: 16 }}>Delete</Button>
-          <Button background="#757575" style={{ marginLeft: 8 }}>
+          <Button style={{ marginLeft: 16 }} onClick={onDeleteClick}>
+            Delete
+          </Button>
+          <Button
+            background="#757575"
+            style={{ marginLeft: 8 }}
+            onClick={onCancelClick}
+          >
             Cancel
           </Button>
         </DeletionDialog>
