@@ -31,7 +31,7 @@ export class HistoryStore {
   public searched = '';
 
   @observable
-  public selectedItems: HistoryItem[] = [];
+  public selectedItems: string[] = [];
 
   @computed
   public get topSites() {
@@ -192,7 +192,8 @@ export class HistoryStore {
   }
 
   public deleteSelected() {
-    for (const item in this.selectedItems) {
+    for (const item of this.selectedItems) {
+      console.log(item);
       this.removeItem(item);
     }
     this.selectedItems = [];

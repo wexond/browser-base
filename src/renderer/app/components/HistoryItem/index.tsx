@@ -11,9 +11,9 @@ const onClick = (item: HistoryItem) => (e: React.MouseEvent) => {
     item.selected = !item.selected;
 
     if (item.selected) {
-      store.historyStore.selectedItems.push(item);
+      store.historyStore.selectedItems.push(item._id);
     } else {
-      const index = store.historyStore.selectedItems.indexOf(item);
+      const index = store.historyStore.selectedItems.indexOf(item._id);
       store.historyStore.selectedItems.splice(index, 1);
     }
   }
