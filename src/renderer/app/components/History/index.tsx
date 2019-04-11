@@ -33,7 +33,7 @@ const preventHiding = (e: any) => {
 
 const onScroll = (e: any) => {
   const scrollPos = e.target.scrollTop;
-  const scrollMax = e.target.scrollHeight - e.target.clientHeight - 64;
+  const scrollMax = e.target.scrollHeight - e.target.clientHeight - 256;
 
   if (scrollPos >= scrollMax) {
     store.historyStore.itemsLoaded += store.historyStore.getDefaultLoaded();
