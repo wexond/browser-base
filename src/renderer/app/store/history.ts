@@ -1,10 +1,10 @@
 import * as Datastore from 'nedb';
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import { HistoryItem, HistorySection } from '../models';
 import { getPath } from '~/shared/utils/paths';
 import { countVisitedTimes, compareDates, getSectionLabel } from '../utils';
 
-interface IRange {
+interface IDateRange {
   min: number;
   max: number;
 }
@@ -21,7 +21,8 @@ export class HistoryStore {
   @observable
   public itemsLoaded = window.innerHeight / 48;
 
-  public range: IRange;
+  @observable
+  public range: IDateRange;
 
   @computed
   public get topSites() {
@@ -84,13 +85,13 @@ export class HistoryStore {
     const list: HistorySection[] = [];
     let section: HistorySection;
 
-    const max = Math.max(0, this.historyItems.length - this.itemsLoaded - 1);
+    const max = Math.max(0, this.historyItems.length - this.itemsLoaded);
 
     for (let i = this.historyItems.length - 1; i >= max; i--) {
       const item = this.historyItems[i];
       const date = new Date(item.date);
 
-      if (this.range != null) {
+      if (this.range) {
         if (date.getTime() >= this.range.max) {
           continue;
         } else if (date.getTime() <= this.range.min) {
@@ -111,5 +112,49 @@ export class HistoryStore {
     }
 
     return list;
+  }
+
+  @action
+  public select(
+    range: 'all' | 'yesterday' | 'last-week' | 'last-month' | 'older',
+  ) {
+    const current = new Date(); // new Date(2019, 3, 21);
+    const day = current.getDate();
+    const month = current.getMonth();
+    const year = current.getFullYear();
+    let minDate: Date;
+    let maxDate: Date;
+
+    switch (range) {
+      case 'yesterday': {
+        minDate = new Date(year, month, day - 1, 0, 0, 0, 0);
+        maxDate = new Date(year, month, day - 1, 23, 59, 59, 999);
+        break;
+      }
+      case 'last-week': {
+        // TODO
+        minDate = new Date(year, month, day - current.getDay() - 6, 0, 0, 0, 0);
+
+        console.clear();
+        console.log(minDate);
+        break;
+      }
+      case 'last-month': {
+        minDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
+        maxDate = new Date(year, month - 1, 0, 0, 0, 0, 0);
+        break;
+      }
+      case 'older': {
+        // store.historyStore.maxDate = null;
+        break;
+      }
+    }
+
+    this.range = range !== 'all' && {
+      min: minDate.getTime(),
+      max: maxDate.getTime(),
+    };
+
+    this.itemsLoaded = window.innerHeight / 48;
   }
 }
