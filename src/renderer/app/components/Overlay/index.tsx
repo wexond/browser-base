@@ -49,12 +49,6 @@ const onHistoryClick = () => {
 
 export const Overlay = observer(() => {
   return (
-    <React.Fragment>
-      <Button>Label</Button>
-    </React.Fragment>
-  );
-
-  return (
     <StyledOverlay visible={store.overlayStore.visible} onClick={onClick}>
       <Container
         visible={
