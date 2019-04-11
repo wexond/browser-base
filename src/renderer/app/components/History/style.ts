@@ -110,13 +110,13 @@ export const DeletionDialog = styled.div`
   left: 0;
   right: 0;
   margin: 0 auto;
-  transform: translateX(300px);
-  border-radius: 4px;
+  transform: translateX(150px);
+  border-radius: 8px;
   overflow: hidden;
   display: flex;
   align-items: center;
-  padding: 0px 24px;
-  box-shadow: ${shadows(5)};
+  padding: 0px 16px;
+  box-shadow: ${shadows(8)};
 `;
 
 export const DeletionDialogLabel = styled.div`
