@@ -46,7 +46,7 @@ export const StyledMenuItem = styled.div`
 
 export const Header = styled.div`
   display: flex;
-  margin-top: 32px;
+  margin-top: 48px;
   margin-left: 32px;
   align-items: center;
 `;
