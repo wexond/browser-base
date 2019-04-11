@@ -19,8 +19,10 @@ import {
   DeletionDialogLabel,
 } from './style';
 
+const scrollRef = React.createRef<HTMLDivElement>();
+
 const onBackClick = () => {
-  store.overlayStore.scrollRef.current.scrollTop = 0;
+  scrollRef.current.scrollTop = 0;
   store.historyStore.resetLoadedItems();
   store.overlayStore.currentContent = 'default';
 };
@@ -74,7 +76,7 @@ export const History = observer(() => {
         store.overlayStore.visible
       }
     >
-      <Scrollable onScroll={onScroll}>
+      <Scrollable onScroll={onScroll} ref={scrollRef}>
         <LeftMenu onClick={preventHiding}>
           <Header>
             <Back onClick={onBackClick} />

@@ -52,7 +52,7 @@ export class HistoryStore {
   }
 
   public resetLoadedItems() {
-    this.itemsLoaded = window.innerHeight / 48;
+    this.itemsLoaded = Math.floor(window.innerHeight / 48);
   }
 
   public getById(id: string) {
