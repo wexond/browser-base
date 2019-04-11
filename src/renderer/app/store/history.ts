@@ -60,14 +60,15 @@ export class HistoryStore {
   }
 
   public async load() {
-    await this.db
-      .find({})
-      .sort({ date: 1 })
-      .exec((err: any, items: HistoryItem[]) => {
-        if (err) return console.warn(err);
+    await this.db.find({}).exec((err: any, items: HistoryItem[]) => {
+      if (err) return console.warn(err);
 
-        this.historyItems = items;
-      });
+      items = items.sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+      );
+
+      this.historyItems = items;
+    });
   }
 
   public addItem(item: HistoryItem) {
