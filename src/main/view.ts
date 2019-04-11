@@ -98,9 +98,22 @@ export class View extends BrowserView {
     this.webContents.addListener(
       'new-window',
       (e, url, frameName, disposition) => {
-        if (disposition === 'new-window' || disposition === 'foreground-tab') {
+        if (disposition === 'new-window') {
+          if (frameName === '_self') {
+            e.preventDefault();
+            appWindow.viewManager.selected.webContents.loadURL(url);
+          } else if (frameName === '_blank') {
+            e.preventDefault();
+            appWindow.webContents.send('api-tabs-create', {
+              url,
+              active: true,
+            });
+          }
+        } else if (disposition === 'foreground-tab') {
+          e.preventDefault();
           appWindow.webContents.send('api-tabs-create', { url, active: true });
         } else if (disposition === 'background-tab') {
+          e.preventDefault();
           appWindow.webContents.send('api-tabs-create', { url, active: false });
         }
 
