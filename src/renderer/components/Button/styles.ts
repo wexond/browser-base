@@ -47,8 +47,6 @@ export const StyledButton = styled.div`
       background-color: ${overShadeColor || '#fff'};
     }
   `};
-
-  margin: 320px;
 `;
 
 export const StyledLabel = styled.div`

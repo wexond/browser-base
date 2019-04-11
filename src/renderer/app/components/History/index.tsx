@@ -5,6 +5,7 @@ import store from '../../store';
 import HistorySection from '../HistorySection';
 import { QuickRange } from '../../store/history';
 import { Container, Scrollable, Content, Back } from '../Overlay/style';
+import { Button } from '~/renderer/components/Button';
 import {
   LeftMenu,
   Header,
@@ -16,8 +17,6 @@ import {
   Input,
   DeletionDialog,
   DeletionDialogLabel,
-  DeletionDialogButton,
-  DeletionDialogDelButton,
 } from './style';
 
 const onBackClick = () => {
@@ -55,6 +54,8 @@ const MenuItem = observer(
 );
 
 export const History = observer(() => {
+  const selectedCount = store.historyStore.selectedItems.length;
+
   return (
     <Container
       right
@@ -82,16 +83,18 @@ export const History = observer(() => {
           </MenuItems>
         </LeftMenu>
         <Sections>
-          <Content>
+          <Content style={{ paddingTop: selectedCount === 0 ? 0 : 108 }}>
             {store.historyStore.historySections.map((data, key) => (
               <HistorySection data={data} key={key} />
             ))}
           </Content>
         </Sections>
-        <DeletionDialog>
-          <DeletionDialogLabel>2 selected</DeletionDialogLabel>
-          <DeletionDialogDelButton>Delete</DeletionDialogDelButton>
-          <DeletionDialogButton>Cancel</DeletionDialogButton>
+        <DeletionDialog visible={selectedCount !== 0}>
+          <DeletionDialogLabel>{selectedCount} selected</DeletionDialogLabel>
+          <Button style={{ marginLeft: 16 }}>Delete</Button>
+          <Button background="#757575" style={{ marginLeft: 8 }}>
+            Cancel
+          </Button>
         </DeletionDialog>
       </Scrollable>
     </Container>

@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+
 import { centerImage, shadows } from '~/shared/mixins';
 import { icons } from '../../constants';
 
@@ -110,33 +111,22 @@ export const DeletionDialog = styled.div`
   left: 0;
   right: 0;
   margin: 0 auto;
-  transform: translateX(150px);
   border-radius: 8px;
   overflow: hidden;
   display: flex;
   align-items: center;
   padding: 0px 16px;
+  transform: translateX(150px);
   box-shadow: ${shadows(8)};
+  will-change: opacity;
+  transition: 0.15s opacity;
+
+  ${({ visible }: { visible: boolean }) => css`
+    opacity: ${visible ? 1 : 0};
+    pointer-events: ${visible ? 'auto' : 'none'};
+  `};
 `;
 
 export const DeletionDialogLabel = styled.div`
   font-size: 14px;
-`;
-
-export const DeletionDialogButton = styled.div`
-  min-width: 88px;
-  width: auto;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-  margin-left: 8px;
-  cursor: pointer;
-`;
-
-export const DeletionDialogDelButton = styled(DeletionDialogButton)`
-  margin-left: 24px;
-  background-color: #2196f3;
 `;

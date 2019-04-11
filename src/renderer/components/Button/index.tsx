@@ -7,19 +7,26 @@ interface Props {
   background?: string;
   foreground?: string;
   overShadeColor?: string;
-  rippleColor?: string;
   children?: any;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  style?: any;
 }
 
 export const Button = ({
   background,
   foreground,
   overShadeColor,
-  rippleColor,
+  onClick,
   children,
+  style,
 }: Props) => (
-  <StyledButton background={background} overShadeColor={overShadeColor}>
+  <StyledButton
+    background={background}
+    overShadeColor={overShadeColor}
+    onClick={onClick}
+    style={style}
+  >
     <StyledLabel foreground={foreground}>{children}</StyledLabel>
-    <Ripple color={rippleColor || '#fff'} />
+    <Ripple color={foreground || '#fff'} />
   </StyledButton>
 );

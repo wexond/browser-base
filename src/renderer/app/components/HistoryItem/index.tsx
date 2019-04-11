@@ -9,6 +9,13 @@ import { Favicon, Item, Remove, Title, Time, Site } from './style';
 const onClick = (item: HistoryItem) => (e: React.MouseEvent) => {
   if (e.ctrlKey) {
     item.selected = !item.selected;
+
+    if (item.selected) {
+      store.historyStore.selectedItems.push(item);
+    } else {
+      const index = store.historyStore.selectedItems.indexOf(item);
+      store.historyStore.selectedItems.splice(index, 1);
+    }
   }
 };
 

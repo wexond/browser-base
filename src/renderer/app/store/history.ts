@@ -30,6 +30,9 @@ export class HistoryStore {
   @observable
   public searched = '';
 
+  @observable
+  public selectedItems: HistoryItem[] = [];
+
   @computed
   public get topSites() {
     const top1 = countVisitedTimes(this.historyItems);
