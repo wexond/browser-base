@@ -15,6 +15,7 @@ export const StyledOverlay = styled.div`
   right: 0;
   z-index: 9999;
   transition: 0.2s opacity;
+  backface-visibility: hidden;
 
   background-color: black;
 
@@ -135,8 +136,9 @@ export const Title = styled.div`
 
 export const Container = styled.div`
   position: absolute;
-  transition: 0.3s transform, 0.3s opacity;
-  will-change: transform, opacity;
+  transition: 0.2s transform, 0.2s opacity, 0.2s visibility;
+  will-change: transform, opacity, pointer-events;
+  backface-visibility: hidden;
   top: 0;
   left: 0;
   width: 100%;
@@ -145,7 +147,7 @@ export const Container = styled.div`
   flex-flow: column;
 
   ${({ visible, right }: { visible: boolean; right?: boolean }) => css`
-    transform: translateX(${visible ? 0 : right ? 72 : -72}px);
+    transform: translateX(${visible ? 0 : right ? 32 : -32}px);
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
   `};

@@ -96,8 +96,8 @@ export const History = observer(() => {
         </LeftMenu>
         <Sections>
           <Content style={{ paddingTop: selectedCount === 0 ? 0 : 108 }}>
-            {store.historyStore.historySections.map((data, key) => (
-              <HistorySection data={data} key={key} />
+            {store.historyStore.historySections.map(data => (
+              <HistorySection data={data} key={data.date.getTime()} />
             ))}
           </Content>
         </Sections>

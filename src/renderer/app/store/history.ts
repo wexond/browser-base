@@ -22,7 +22,7 @@ export class HistoryStore {
   public historyItems: HistoryItem[] = [];
 
   @observable
-  public itemsLoaded = Math.floor(window.innerHeight / 48);
+  public itemsLoaded = this.getDefaultLoaded();
 
   @observable
   public selectedRange: QuickRange = 'all';
@@ -52,7 +52,7 @@ export class HistoryStore {
   }
 
   public resetLoadedItems() {
-    this.itemsLoaded = Math.floor(window.innerHeight / 48);
+    this.itemsLoaded = this.getDefaultLoaded();
   }
 
   public getById(id: string) {
@@ -189,7 +189,7 @@ export class HistoryStore {
   }
 
   public getDefaultLoaded() {
-    return Math.floor(window.innerHeight / 48);
+    return Math.floor(window.innerHeight / 56);
   }
 
   public deleteSelected() {

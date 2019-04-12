@@ -114,7 +114,6 @@ export class Tab {
         let updated = null;
 
         if (url !== this.url) {
-          console.log(url);
           this.lastHistoryId = await store.historyStore.addItem({
             title: this.title,
             url,
