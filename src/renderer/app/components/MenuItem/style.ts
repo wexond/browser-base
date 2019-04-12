@@ -21,7 +21,7 @@ export const Icon = styled.div`
   opacity: 1;
   width: 56px;
   height: 56px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #212121;
   border-radius: 50%;
   margin-bottom: 16px;
   ${centerImage('32px', '32px')};

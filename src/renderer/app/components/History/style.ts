@@ -8,7 +8,7 @@ import { platform } from 'os';
 export const LeftMenu = styled.div`
   width: 300px;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: #212121;
   position: fixed;
   left: 0;
 `;

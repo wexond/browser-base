@@ -43,7 +43,6 @@ const preventHiding = (e: any) => {
 };
 
 const onHistoryClick = () => {
-  store.overlayStore.scrollRef.current.scrollTop = 0;
   store.overlayStore.currentContent = 'history';
 };
 

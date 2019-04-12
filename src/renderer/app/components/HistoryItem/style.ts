@@ -8,7 +8,6 @@ export const Item = styled.div`
   align-items: center;
   padding: 0 24px;
   height: 48px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.08);

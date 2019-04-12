@@ -76,7 +76,7 @@ export const Separator = styled.div`
 
 export const Section = styled.div`
   padding: 24px;
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: #212121;
   margin-bottom: 24px;
   border-radius: 30px;
   color: white;
