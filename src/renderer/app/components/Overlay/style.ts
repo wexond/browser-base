@@ -16,12 +16,11 @@ export const StyledOverlay = styled.div`
   z-index: 9999;
   transition: 0.2s opacity;
 
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: black;
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
-    backdrop-filter: ${visible ? 'blur(15px)' : 'none'};
   `};
 `;
 

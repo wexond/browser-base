@@ -215,18 +215,6 @@ export class View extends BrowserView {
         timeStamp: Date.now(),
         processId: process.pid,
       });
-
-      appWindow.webContents.send(
-        `new-screenshot-${this.tabId}`,
-        await this.getScreenshot(),
-      );
-    });
-
-    this.webContents.addListener('did-frame-finish-load', async () => {
-      appWindow.webContents.send(
-        `new-screenshot-${this.tabId}`,
-        await this.getScreenshot(),
-      );
     });
 
     this.webContents.addListener(

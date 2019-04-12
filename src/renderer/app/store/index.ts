@@ -38,9 +38,6 @@ export class Store {
     canGoForward: false,
   };
 
-  @observable
-  public screenshot: any;
-
   public canToggleMenu = false;
 
   public mouse = {

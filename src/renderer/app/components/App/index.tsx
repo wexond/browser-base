@@ -23,13 +23,6 @@ export const App = observer(() => {
       <GlobalStyle />
       <Toolbar />
       <Line />
-      <Screenshot
-        style={{
-          backgroundImage: `url(${store.tabsStore.selectedTab &&
-            store.tabsStore.selectedTab.screenshot})`,
-          opacity: store.overlayStore.screenshotVisible ? 1 : 0,
-        }}
-      />
       <Overlay />
       {platform() !== 'darwin' && <WindowsButtons />}
     </StyledApp>
