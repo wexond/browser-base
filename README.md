@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="static/app-icons/icon.png" width="256">
+  <a href="https://wexond.net"><img src="static/app-icons/icon.png" width="256"></a>
 </p>
 
 <div align="center">
@@ -10,6 +10,8 @@
 [![Twitter](https://img.shields.io/twitter/follow/sentialx.svg?label=Follow&style=for-the-badge)](https://twitter.com/sentialx)
 [![Discord](https://img.shields.io/discord/307605794680209409.svg?style=for-the-badge)](https://discord.gg/yAA8DdK)
 [![Downloads](https://img.shields.io/github/downloads/wexond/wexond/total.svg?style=for-the-badge)](https://github.com/wexond/wexond/releases)
+
+https://wexond.net
 
 Wexond is an extensible web browser with a totally different user experience, built on top of `Electron`, `TypeScript`, `React` and `styled-components`. It aims to be fast, beautiful, extensible and functional.
 
