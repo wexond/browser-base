@@ -65,9 +65,41 @@ const onDeleteClick = (e: React.MouseEvent) => {
   store.historyStore.deleteSelected();
 };
 
-export const History = observer(() => {
+const HistorySections = observer(() => {
   const selectedCount = store.historyStore.selectedItems.length;
 
+  return (
+    <Sections>
+      <Content style={{ paddingTop: selectedCount === 0 ? 0 : 108 }}>
+        {store.historyStore.historySections.map(data => (
+          <HistorySection data={data} key={data.date.getTime()} />
+        ))}
+      </Content>
+    </Sections>
+  );
+});
+
+const Dialog = observer(() => {
+  const selectedCount = store.historyStore.selectedItems.length;
+
+  return (
+    <DeletionDialog visible={selectedCount !== 0}>
+      <DeletionDialogLabel>{selectedCount} selected</DeletionDialogLabel>
+      <Button style={{ marginLeft: 16 }} onClick={onDeleteClick}>
+        Delete
+      </Button>
+      <Button
+        background="#757575"
+        style={{ marginLeft: 8 }}
+        onClick={onCancelClick}
+      >
+        Cancel
+      </Button>
+    </DeletionDialog>
+  );
+});
+
+export const History = observer(() => {
   return (
     <Container
       right
@@ -94,26 +126,8 @@ export const History = observer(() => {
             <MenuItem range="older">Older</MenuItem>
           </MenuItems>
         </LeftMenu>
-        <Sections>
-          <Content style={{ paddingTop: selectedCount === 0 ? 0 : 108 }}>
-            {store.historyStore.historySections.map(data => (
-              <HistorySection data={data} key={data.date.getTime()} />
-            ))}
-          </Content>
-        </Sections>
-        <DeletionDialog visible={selectedCount !== 0}>
-          <DeletionDialogLabel>{selectedCount} selected</DeletionDialogLabel>
-          <Button style={{ marginLeft: 16 }} onClick={onDeleteClick}>
-            Delete
-          </Button>
-          <Button
-            background="#757575"
-            style={{ marginLeft: 8 }}
-            onClick={onCancelClick}
-          >
-            Cancel
-          </Button>
-        </DeletionDialog>
+        <HistorySections />
+        <Dialog />
       </Scrollable>
     </Container>
   );
