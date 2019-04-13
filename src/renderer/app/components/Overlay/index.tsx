@@ -79,11 +79,16 @@ export const Dial = observer(() => {
               style={{ top: 42 }}
               visible={store.overlay.dialTypeMenuVisible}
             >
-              <MenuItem icon={icons.fire} onClick={changeDialType('top-sites')}>
+              <MenuItem
+                icon={icons.fire}
+                selected={dialType === 'top-sites'}
+                onClick={changeDialType('top-sites')}
+              >
                 Top Sites
               </MenuItem>
               <MenuItem
                 icon={icons.bookmarks}
+                selected={dialType === 'bookmarks'}
                 onClick={changeDialType('bookmarks')}
               >
                 Bookmarks

@@ -194,11 +194,13 @@ export const MenuItem = styled.div`
   font-weight: 400;
   font-size: 14px;
 
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-  }
+  ${({ icon, selected }: { icon?: string; selected?: boolean }) => css`
+    background-color: ${selected ? 'rgba(255, 255, 255, 0.15)' : 'none'};
 
-  ${({ icon }: { icon: string }) => css`
+    &:hover {
+      background-color: rgba(255, 255, 255, ${selected ? 0.15 : 0.08});
+    }
+
     ${icon &&
       `
       padding-left: ${24 + 16 + 8}px;
