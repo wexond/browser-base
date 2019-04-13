@@ -1,4 +1,4 @@
-import { observable, observe } from 'mobx';
+import { observable, observe, action } from 'mobx';
 import * as React from 'react';
 import { TweenLite } from 'gsap';
 
@@ -81,6 +81,7 @@ export class TabsStore {
     this.rearrangeTabsTimer.canReset = true;
   }
 
+  @action
   public onResize = (e: Event) => {
     if (e.isTrusted) {
       store.tabs.updateTabsBounds(false);
@@ -106,6 +107,7 @@ export class TabsStore {
     return this.list.find(x => x.id === id);
   }
 
+  @action
   public addTab(options = defaultTabOptions) {
     const tab = new Tab(options, store.tabGroups.currentGroupId);
     this.list.push(tab);
@@ -126,11 +128,13 @@ export class TabsStore {
     (this.list as any).remove(this.getTabById(id));
   }
 
+  @action
   public updateTabsBounds(animation: boolean) {
     this.setTabsWidths(animation);
     this.setTabsLefts(animation);
   }
 
+  @action
   public setTabsWidths(animation: boolean) {
     const tabs = this.list.filter(
       x => !x.isClosing && x.tabGroupId === store.tabGroups.currentGroupId,
@@ -146,6 +150,7 @@ export class TabsStore {
     }
   }
 
+  @action
   public setTabsLefts(animation: boolean) {
     const tabs = this.list
       .filter(
@@ -170,6 +175,7 @@ export class TabsStore {
     );
   }
 
+  @action
   public replaceTab(firstTab: Tab, secondTab: Tab) {
     const position1 = firstTab.tempPosition;
 
@@ -209,6 +215,7 @@ export class TabsStore {
     }
   }
 
+  @action
   public onMouseUp = () => {
     const selectedTab = this.selectedTab;
 
@@ -225,6 +232,7 @@ export class TabsStore {
     }
   };
 
+  @action
   public onMouseMove = (e: any) => {
     const tabGroup = store.tabGroups.currentGroup;
     if (!tabGroup) return;

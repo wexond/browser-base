@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action, action } from 'mobx';
 import * as React from 'react';
 import { ipcRenderer } from 'electron';
 import * as Vibrant from 'node-vibrant';
@@ -198,6 +198,7 @@ export class Tab {
     }
   }
 
+  @action
   public updateData() {
     if (this.lastHistoryId) {
       const { title, url, favicon } = this;
@@ -229,6 +230,7 @@ export class Tab {
     return store.tabGroups.getGroupById(this.tabGroupId);
   }
 
+  @action
   public select() {
     if (!this.isClosing) {
       store.canToggleMenu = this.isSelected;
@@ -286,16 +288,19 @@ export class Tab {
     return left;
   }
 
+  @action
   public setLeft(left: number, animation: boolean) {
     store.tabs.animateProperty('x', this.ref.current, left, animation);
     this.left = left;
   }
 
+  @action
   public setWidth(width: number, animation: boolean) {
     store.tabs.animateProperty('width', this.ref.current, width, animation);
     this.width = width;
   }
 
+  @action
   public close() {
     const tabGroup = this.tabGroup;
     const tabs = tabGroup.tabs.slice().sort((a, b) => a.position - b.position);

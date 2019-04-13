@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 
 import { TabGroup } from '~/renderer/app/models';
 import store from '.';
@@ -53,6 +53,7 @@ export class TabGroupsStore {
     return this.getGroupById(this.currentGroupId);
   }
 
+  @action
   public removeGroup(id: number) {
     const group = this.getGroupById(id);
     const index = this.list.indexOf(group);
@@ -83,6 +84,7 @@ export class TabGroupsStore {
     return this.list.find(x => x.id === id);
   }
 
+  @action
   public addGroup() {
     const tabGroup: TabGroup = new TabGroup();
     this.list.push(tabGroup);

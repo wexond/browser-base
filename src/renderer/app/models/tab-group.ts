@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 
 import store from '~/renderer/app/store';
 import { colors } from '~/renderer/constants';
@@ -37,6 +37,7 @@ export class TabGroup {
     return store.tabs.list.filter(x => x.tabGroupId === this.id);
   }
 
+  @action
   public select() {
     store.tabGroups.currentGroupId = this.id;
 
