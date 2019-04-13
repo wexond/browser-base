@@ -64,6 +64,15 @@ export class OverlayStore {
     return this._visible;
   }
 
+  @computed
+  public get isBookmarked() {
+    if (!store.tabs.selectedTab) return false;
+
+    return !!store.bookmarks.list.find(
+      x => x.url === store.tabs.selectedTab.url,
+    );
+  }
+
   public async show() {
     clearTimeout(this.timeout);
 

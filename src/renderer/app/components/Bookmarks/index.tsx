@@ -2,13 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import store from '../../store';
-import {
-  Container,
-  Scrollable,
-  Content,
-  Back,
-  Section,
-} from '../Overlay/style';
+import { Container, Scrollable, Content, Back } from '../Overlay/style';
 import { Button } from '~/renderer/components/Button';
 import {
   LeftMenu,
@@ -20,6 +14,7 @@ import {
   Input,
   DeletionDialog,
   DeletionDialogLabel,
+  BookmarkSection,
 } from './style';
 import Bookmark from '../Bookmark';
 
@@ -62,11 +57,11 @@ const BookmarksList = observer(() => {
   return (
     <Sections>
       <Content>
-        <Section style={{ marginTop: 56 }}>
-          {store.bookmarks.list.map(data => (
+        <BookmarkSection style={{ marginTop: 56 }}>
+          {store.bookmarks.visibleItems.map(data => (
             <Bookmark data={data} key={data._id} />
           ))}
-        </Section>
+        </BookmarkSection>
       </Content>
     </Sections>
   );
@@ -95,13 +90,14 @@ const Dialog = observer(() => {
 export const Bookmarks = observer(() => {
   return (
     <Container
+      onClick={preventHiding}
       right
       visible={
         store.overlay.currentContent === 'bookmarks' && store.overlay.visible
       }
     >
       <Scrollable onScroll={onScroll} ref={scrollRef}>
-        <LeftMenu onClick={preventHiding}>
+        <LeftMenu>
           <Header>
             <Back onClick={onBackClick} />
             <Title>Bookmarks</Title>
@@ -111,7 +107,7 @@ export const Bookmarks = observer(() => {
           </Search>
           <MenuItems />
         </LeftMenu>
-        {store.bookmarks.list.length > 0 && <BookmarksList />}
+        {store.bookmarks.visibleItems.length > 0 && <BookmarksList />}
         <Dialog />
       </Scrollable>
     </Container>

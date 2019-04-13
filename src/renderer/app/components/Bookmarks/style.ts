@@ -4,6 +4,7 @@ import { centerImage, shadows } from '~/shared/mixins';
 import { icons } from '../../constants';
 import { Button } from '~/renderer/components/Button';
 import { platform } from 'os';
+import { Section } from '../Overlay/style';
 
 export const LeftMenu = styled.div`
   width: 300px;
@@ -15,6 +16,11 @@ export const LeftMenu = styled.div`
 
 export const MenuItems = styled.div`
   margin-top: 24px;
+`;
+
+export const BookmarkSection = styled(Section)`
+  padding: 8px 0px;
+  margin-top: 48px;
 `;
 
 export const StyledMenuItem = styled.div`

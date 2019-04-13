@@ -101,6 +101,7 @@ export const History = observer(() => {
   return (
     <Container
       right
+      onClick={preventHiding}
       visible={
         store.overlay.currentContent === 'history' && store.overlay.visible
       }

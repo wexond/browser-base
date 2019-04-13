@@ -4,4 +4,6 @@ export interface Bookmark {
   url?: string;
   favicon?: string;
   hovered?: boolean;
+  type?: 'item' | 'folder';
+  parent?: string;
 }

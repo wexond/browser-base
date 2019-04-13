@@ -6,6 +6,8 @@ import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 import { observer } from 'mobx-react';
 import { StyledSearchBox, InputContainer, SearchIcon, Input } from './style';
 import { Suggestions } from '../Suggestions';
+import { icons } from '../../constants';
+import ToolbarButton from '../ToolbarButton';
 
 const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
@@ -87,6 +89,18 @@ const onInput = () => {
   store.overlay.scrollRef.current.scrollTop = 0;
 };
 
+const onStarClick = async () => {
+  const { selectedTab } = store.tabs;
+
+  await store.bookmarks.addItem({
+    title: selectedTab.title,
+    url: store.overlay.inputRef.current.value,
+    parent: null,
+    type: 'item',
+    favicon: selectedTab.favicon,
+  });
+};
+
 export const SearchBox = observer(() => {
   const suggestionsVisible = store.suggestions.list.length !== 0;
 
@@ -108,6 +122,20 @@ export const SearchBox = observer(() => {
           onChange={onInput}
           onKeyDown={onKeyDown}
           ref={store.overlay.inputRef}
+        />
+        <ToolbarButton
+          invert
+          icon={store.overlay.isBookmarked ? icons.starFilled : icons.star}
+          onClick={onStarClick}
+          style={{
+            marginRight: 8,
+            display:
+              store.tabs.selectedTab &&
+              store.tabs.selectedTab.url ===
+                store.overlay.inputRef.current.value
+                ? 'block'
+                : 'none',
+          }}
         />
       </InputContainer>
       <Suggestions visible={suggestionsVisible} />

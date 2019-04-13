@@ -21,6 +21,13 @@ export class BookmarksStore {
   @observable
   public selectedItems: string[] = [];
 
+  @computed
+  public get visibleItems() {
+    return this.list.filter(
+      x => x.url.includes(this.searched) || x.title.includes(this.searched),
+    );
+  }
+
   constructor() {
     this.load();
   }

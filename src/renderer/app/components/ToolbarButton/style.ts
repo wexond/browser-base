@@ -31,8 +31,9 @@ export const Button = styled.div`
   position: relative;
   transition: 0.2s background-color;
   width: ${TOOLBAR_BUTTON_WIDTH}px;
-  ${({ disabled }: { disabled: boolean }) => css`
+  ${({ disabled, invert }: { disabled: boolean; invert: boolean }) => css`
     pointer-events: ${disabled ? 'none' : 'auto'};
+    filter: ${invert ? 'invert(100%)' : 'none'};
   `};
 `;
 
