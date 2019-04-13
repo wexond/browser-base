@@ -9,12 +9,12 @@ export const Item = styled.div`
   padding: 0 24px;
   height: 48px;
 
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-  }
-
   ${({ selected }: { selected: boolean }) => css`
     background-color: ${selected ? 'rgba(255, 255, 255, 0.12)' : 'transparent'};
+
+    &:hover {
+      background-color: rgba(255, 255, 255, ${selected ? 0.15 : 0.08});
+    }
   `};
 `;
 
