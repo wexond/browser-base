@@ -7,7 +7,6 @@
 
 [![Travis](https://img.shields.io/travis/com/wexond/wexond.svg?style=for-the-badge)](https://travis-ci.com/wexond/wexond)
 [![AppVeyor](https://img.shields.io/appveyor/ci/sentialx/wexond.svg?style=for-the-badge)](https://ci.appveyor.com/project/sentialx/wexond)
-[![Twitter](https://img.shields.io/twitter/follow/sentialx.svg?label=Follow&style=for-the-badge)](https://twitter.com/sentialx)
 [![Discord](https://img.shields.io/discord/307605794680209409.svg?style=for-the-badge)](https://discord.gg/yAA8DdK)
 [![Downloads](https://img.shields.io/github/downloads/wexond/wexond/total.svg?style=for-the-badge)](https://github.com/wexond/wexond/releases)
 
