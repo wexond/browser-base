@@ -43,9 +43,11 @@ export class Tab {
   @observable
   public background: string = colors.blue['500'];
 
+  @observable
+  public url = '';
+
   public left = 0;
   public tempPosition = 0;
-  public url = '';
   public lastUrl = '';
   public isClosing = false;
   public ref = React.createRef<HTMLDivElement>();

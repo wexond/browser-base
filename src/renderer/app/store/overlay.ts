@@ -43,7 +43,20 @@ export class OverlayStore {
   @observable
   public dialTypeMenuVisible = false;
 
+  @observable
+  public _searchBoxValue = '';
+
   private timeout: any;
+
+  @computed
+  public get searchBoxValue() {
+    return this._searchBoxValue;
+  }
+
+  public set searchBoxValue(val: string) {
+    this._searchBoxValue = val;
+    this.inputRef.current.value = val;
+  }
 
   constructor() {
     window.addEventListener('keydown', this.onWindowKeyDown);
@@ -109,7 +122,7 @@ export class OverlayStore {
       if (!this.isNewTab) {
         callBrowserViewMethod('webContents.getURL').then(
           async (url: string) => {
-            this.inputRef.current.value = url;
+            this.searchBoxValue = url;
             this.inputRef.current.focus();
             this.inputRef.current.select();
           },

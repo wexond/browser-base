@@ -83,10 +83,11 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
   }
 };
 
-const onInput = () => {
+const onInput = (e: any) => {
   store.overlay.show();
   store.overlay.suggest();
   store.overlay.scrollRef.current.scrollTop = 0;
+  store.overlay.searchBoxValue = e.currentTarget.value;
 };
 
 const onStarClick = async () => {
@@ -131,8 +132,7 @@ export const SearchBox = observer(() => {
             marginRight: 8,
             display:
               store.tabs.selectedTab &&
-              store.tabs.selectedTab.url ===
-                store.overlay.inputRef.current.value
+              store.tabs.selectedTab.url === store.overlay.searchBoxValue
                 ? 'block'
                 : 'none',
           }}

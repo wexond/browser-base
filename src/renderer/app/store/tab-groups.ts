@@ -39,7 +39,7 @@ export class TabGroupsStore {
     } else {
       const { current } = store.overlay.inputRef;
       if (current) {
-        current.value = '';
+        store.overlay.searchBoxValue = '';
         current.focus();
       }
     }
@@ -92,7 +92,7 @@ export class TabGroupsStore {
 
     const { current } = store.overlay.inputRef;
     if (current) {
-      current.value = '';
+      store.overlay.searchBoxValue = '';
       current.focus();
     }
   }
