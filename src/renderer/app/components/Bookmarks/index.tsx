@@ -111,7 +111,7 @@ export const Bookmarks = observer(() => {
           </Search>
           <MenuItems />
         </LeftMenu>
-        <BookmarksList />
+        {store.bookmarks.list.length > 0 && <BookmarksList />}
         <Dialog />
       </Scrollable>
     </Container>
