@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { caption, centerImage } from '~/shared/mixins';
 
-export const StyledMenuItem = styled.div`
+export const StyledBubble = styled.div`
   border-radius: 16px;
   margin-top: 8px;
   padding: 16px;

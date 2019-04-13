@@ -7,22 +7,24 @@ import {
   HeaderText,
   HeaderArrow,
   Section,
-  Menu,
   Scrollable,
   Title,
   Content,
   DropArrow,
   Container,
+  Actions,
+  Menu,
+  MenuItem,
 } from './style';
 import { SearchBox } from '../SearchBox';
-import { MenuItem } from '../MenuItem';
 import { TabGroups } from '../TabGroups';
-import { icons, TOOLBAR_HEIGHT } from '../../constants';
+import { icons } from '../../constants';
 import { WeatherCard } from '../WeatherCard';
 import { History } from '../History';
-import TopSites from '../TopSites';
-import { Button } from '~/renderer/components/Button';
 import { Bookmarks } from '../Bookmarks';
+import { Bubble } from '../Bubble';
+import { BookmarksDial } from './Dials/bookmarks';
+import { TopSites } from './Dials/top-sites';
 
 export const Header = ({ children, clickable }: any) => {
   return (
@@ -37,15 +39,59 @@ const onClick = () => {
   if (store.tabGroups.currentGroup.tabs.length > 0) {
     store.overlay.visible = false;
   }
+  store.overlay.dialTypeMenuVisible = false;
 };
 
 const preventHiding = (e: any) => {
   e.stopPropagation();
+  store.overlay.dialTypeMenuVisible = false;
 };
 
 const changeContent = (content: 'history' | 'default' | 'bookmarks') => () => {
   store.overlay.currentContent = content;
 };
+
+const changeDialType = (type: 'top-sites' | 'bookmarks') => () => {
+  store.settings.dialType = type;
+};
+
+const onDialTitleClick = (e: any) => {
+  e.stopPropagation();
+  store.overlay.dialTypeMenuVisible = !store.overlay.dialTypeMenuVisible;
+};
+
+export const Dial = observer(() => {
+  const { dialType } = store.settings;
+
+  return (
+    <>
+      {(store.history.topSites.length > 0 ||
+        store.bookmarks.list.length > 0) && (
+        <>
+          <Title
+            onClick={onDialTitleClick}
+            style={{ marginBottom: 24, cursor: 'pointer' }}
+          >
+            {dialType === 'bookmarks' ? 'Bookmarks' : 'Top Sites'}
+            <DropArrow />
+            <Menu
+              style={{ top: 42 }}
+              visible={store.overlay.dialTypeMenuVisible}
+            >
+              <MenuItem onClick={changeDialType('top-sites')}>
+                Top Sites
+              </MenuItem>
+              <MenuItem onClick={changeDialType('bookmarks')}>
+                Bookmarks
+              </MenuItem>
+            </Menu>
+          </Title>
+          {dialType === 'bookmarks' ? <BookmarksDial /> : <TopSites />}
+        </>
+      )}
+    </>
+  );
+});
 
 export const Overlay = observer(() => {
   return (
@@ -58,15 +104,7 @@ export const Overlay = observer(() => {
         <Scrollable ref={store.overlay.scrollRef}>
           <Content>
             <SearchBox />
-            {store.history.topSites.length > 0 && (
-              <>
-                <Title style={{ marginBottom: 24 }}>
-                  Top Sites
-                  <DropArrow />
-                </Title>
-                <TopSites />
-              </>
-            )}
+            <Dial />
 
             <Title>Overview</Title>
             <Section onClick={preventHiding}>
@@ -75,37 +113,37 @@ export const Overlay = observer(() => {
             </Section>
             <Section onClick={preventHiding}>
               <Header>Menu</Header>
-              <Menu>
-                <MenuItem
+              <Actions>
+                <Bubble
                   onClick={changeContent('history')}
                   invert
                   icon={icons.history}
                 >
                   History
-                </MenuItem>
-                <MenuItem
+                </Bubble>
+                <Bubble
                   onClick={changeContent('bookmarks')}
                   invert
                   icon={icons.bookmarks}
                 >
                   Bookmarks
-                </MenuItem>
-                <MenuItem invert icon={icons.download}>
+                </Bubble>
+                <Bubble invert icon={icons.download}>
                   Downloads
-                </MenuItem>
-                <MenuItem invert icon={icons.settings}>
+                </Bubble>
+                <Bubble invert icon={icons.settings}>
                   Settings
-                </MenuItem>
-                <MenuItem invert icon={icons.extensions}>
+                </Bubble>
+                <Bubble invert icon={icons.extensions}>
                   Extensions
-                </MenuItem>
-                <MenuItem invert icon={icons.find}>
+                </Bubble>
+                <Bubble invert icon={icons.find}>
                   Find
-                </MenuItem>
-                <MenuItem invert icon={icons.more}>
+                </Bubble>
+                <Bubble invert icon={icons.more}>
                   More tools
-                </MenuItem>
-              </Menu>
+                </Bubble>
+              </Actions>
             </Section>
 
             <Title>World</Title>

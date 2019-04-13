@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { StyledMenuItem, Title, Icon } from './style';
+import { StyledBubble, Title, Icon } from './style';
 
-export const MenuItem = ({
+export const Bubble = ({
   children,
   icon,
   invert,
@@ -12,7 +12,7 @@ export const MenuItem = ({
   width,
 }: any) => {
   return (
-    <StyledMenuItem
+    <StyledBubble
       style={{ minWidth: width, maxWidth: width }}
       onClick={onClick}
     >
@@ -31,11 +31,11 @@ export const MenuItem = ({
       >
         {children}
       </Title>
-    </StyledMenuItem>
+    </StyledBubble>
   );
 };
 
-MenuItem.defaultProps = {
+Bubble.defaultProps = {
   maxLines: 2,
   iconSize: 24,
   width: (800 - 48 - (7 - 1)) / 7,

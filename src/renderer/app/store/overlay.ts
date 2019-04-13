@@ -41,7 +41,7 @@ export class OverlayStore {
   public currentContent: 'default' | 'history' | 'bookmarks' = 'default';
 
   @observable
-  public isToolbarFixed = false;
+  public dialTypeMenuVisible = false;
 
   private timeout: any;
 

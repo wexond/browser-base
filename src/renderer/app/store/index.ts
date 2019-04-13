@@ -2,7 +2,7 @@ import { observable } from 'mobx';
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
-import { ipcRenderer, IpcMessageEvent, remote, Settings } from 'electron';
+import { ipcRenderer, IpcMessageEvent, remote } from 'electron';
 import { OverlayStore } from './overlay';
 import { HistoryStore } from './history';
 import { FaviconsStore } from './favicons';
@@ -12,6 +12,7 @@ import { extname } from 'path';
 import { BookmarksStore } from './bookmarks';
 import { readFileSync } from 'fs';
 import { getPath } from '~/shared/utils/paths';
+import { Settings } from '../models/settings';
 
 export class Store {
   public history = new HistoryStore();
@@ -43,7 +44,9 @@ export class Store {
   };
 
   @observable
-  public settings: Settings = {};
+  public settings: Settings = {
+    dialType: 'top-sites',
+  };
 
   public canToggleMenu = false;
 
@@ -132,7 +135,10 @@ export class Store {
       }
     });
 
-    this.settings = JSON.parse(readFileSync(getPath('settings.json'), 'utf8'));
+    this.settings = {
+      ...this.settings,
+      ...JSON.parse(readFileSync(getPath('settings.json'), 'utf8')),
+    };
   }
 }
 
