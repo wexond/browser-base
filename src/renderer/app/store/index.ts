@@ -2,7 +2,7 @@ import { observable } from 'mobx';
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
-import { ipcRenderer, IpcMessageEvent, remote } from 'electron';
+import { ipcRenderer, IpcMessageEvent, remote, Settings } from 'electron';
 import { OverlayStore } from './overlay';
 import { HistoryStore } from './history';
 import { FaviconsStore } from './favicons';
@@ -10,6 +10,8 @@ import { SuggestionsStore } from './suggestions';
 import { ExtensionsStore } from './extensions';
 import { extname } from 'path';
 import { BookmarksStore } from './bookmarks';
+import { readFileSync } from 'fs';
+import { getPath } from '~/shared/utils/paths';
 
 export class Store {
   public history = new HistoryStore();
@@ -39,6 +41,9 @@ export class Store {
     canGoBack: false,
     canGoForward: false,
   };
+
+  @observable
+  public settings: Settings = {};
 
   public canToggleMenu = false;
 
@@ -126,6 +131,8 @@ export class Store {
         }
       }
     });
+
+    this.settings = JSON.parse(readFileSync(getPath('settings.json'), 'utf8'));
   }
 }
 

@@ -6,6 +6,9 @@ import { autoUpdater } from 'electron-updater';
 import { loadExtensions } from './extensions';
 import { registerProtocols } from './protocols';
 import { runWebRequestService } from './services/web-request';
+import { existsSync, writeFileSync } from 'fs';
+import { getPath } from '~/shared/utils/paths';
+import { Settings } from '~/renderer/app/models/settings';
 
 ipcMain.setMaxListeners(0);
 
@@ -14,6 +17,15 @@ app.setPath('userData', resolve(homedir(), '.wexond'));
 export let appWindow: AppWindow;
 
 registerProtocols();
+
+if (!existsSync(getPath('settings.json'))) {
+  writeFileSync(
+    getPath('settings.json'),
+    JSON.stringify({
+      dialType: 'top-sites',
+    } as Settings),
+  );
+}
 
 app.on('ready', () => {
   // Create our menu entries so that we can use macOS shortcuts

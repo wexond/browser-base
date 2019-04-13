@@ -19,9 +19,9 @@ export const Item = styled.div`
 `;
 
 export const More = styled.div`
-  ${centerImage('16px', '16px')};
-  height: 16px;
-  width: 16px;
+  ${centerImage('20px', '20px')};
+  height: 24px;
+  width: 24px;
   background-image: url(${icons.more});
   opacity: 0.54;
   filter: invert(100%);
