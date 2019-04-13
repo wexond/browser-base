@@ -175,7 +175,7 @@ export const Back = styled.div`
 export const Menu = styled.div`
   position: absolute;
   transition: 0.2s opacity, 0.2s margin-top;
-  width: 200px;
+  width: 150px;
   cursor: default;
   padding: 8px 0;
   box-shadow: ${shadows(8)};
@@ -190,7 +190,7 @@ export const Menu = styled.div`
 `;
 
 export const MenuItem = styled.div`
-  padding: 16px 24px;
+  padding: 12px 24px;
   font-weight: 400;
   font-size: 14px;
 

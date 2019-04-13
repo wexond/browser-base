@@ -53,6 +53,7 @@ const changeContent = (content: 'history' | 'default' | 'bookmarks') => () => {
 
 const changeDialType = (type: 'top-sites' | 'bookmarks') => () => {
   store.settings.dialType = type;
+  store.saveSettings();
 };
 
 const onDialTitleClick = (e: any) => {

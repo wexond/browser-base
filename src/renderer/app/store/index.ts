@@ -10,7 +10,7 @@ import { SuggestionsStore } from './suggestions';
 import { ExtensionsStore } from './extensions';
 import { extname } from 'path';
 import { BookmarksStore } from './bookmarks';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFile } from 'fs';
 import { getPath } from '~/shared/utils/paths';
 import { Settings } from '../models/settings';
 
@@ -139,6 +139,12 @@ export class Store {
       ...this.settings,
       ...JSON.parse(readFileSync(getPath('settings.json'), 'utf8')),
     };
+  }
+
+  public saveSettings() {
+    writeFile(getPath('settings.json'), JSON.stringify(this.settings), err => {
+      if (err) console.error(err);
+    });
   }
 }
 
