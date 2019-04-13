@@ -192,6 +192,7 @@ export class HistoryStore {
     return Math.floor(window.innerHeight / 56);
   }
 
+  @action
   public deleteSelected() {
     for (const item of this.selectedItems) {
       this.removeItem(item);

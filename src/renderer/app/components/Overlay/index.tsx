@@ -22,6 +22,7 @@ import { WeatherCard } from '../WeatherCard';
 import { History } from '../History';
 import TopSites from '../TopSites';
 import { Button } from '~/renderer/components/Button';
+import { Bookmarks } from '../Bookmarks';
 
 export const Header = ({ children, clickable }: any) => {
   return (
@@ -42,8 +43,8 @@ const preventHiding = (e: any) => {
   e.stopPropagation();
 };
 
-const onHistoryClick = () => {
-  store.overlay.currentContent = 'history';
+const changeContent = (content: 'history' | 'default' | 'bookmarks') => () => {
+  store.overlay.currentContent = content;
 };
 
 export const Overlay = observer(() => {
@@ -75,10 +76,18 @@ export const Overlay = observer(() => {
             <Section onClick={preventHiding}>
               <Header>Menu</Header>
               <Menu>
-                <MenuItem onClick={onHistoryClick} invert icon={icons.history}>
+                <MenuItem
+                  onClick={changeContent('history')}
+                  invert
+                  icon={icons.history}
+                >
                   History
                 </MenuItem>
-                <MenuItem invert icon={icons.bookmarks}>
+                <MenuItem
+                  onClick={changeContent('bookmarks')}
+                  invert
+                  icon={icons.bookmarks}
+                >
                   Bookmarks
                 </MenuItem>
                 <MenuItem invert icon={icons.download}>
@@ -105,6 +114,7 @@ export const Overlay = observer(() => {
         </Scrollable>
       </Container>
       <History />
+      <Bookmarks />
     </StyledOverlay>
   );
 });

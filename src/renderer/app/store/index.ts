@@ -9,9 +9,11 @@ import { FaviconsStore } from './favicons';
 import { SuggestionsStore } from './suggestions';
 import { ExtensionsStore } from './extensions';
 import { extname } from 'path';
+import { BookmarksStore } from './bookmarks';
 
 export class Store {
   public history = new HistoryStore();
+  public bookmarks = new BookmarksStore();
   public suggestions = new SuggestionsStore();
   public favicons = new FaviconsStore();
   public addTab = new AddTabStore();

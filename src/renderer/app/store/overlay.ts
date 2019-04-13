@@ -38,7 +38,7 @@ export class OverlayStore {
   public isNewTab = true;
 
   @observable
-  public currentContent: 'default' | 'history' = 'default';
+  public currentContent: 'default' | 'history' | 'bookmarks' = 'default';
 
   @observable
   public isToolbarFixed = false;

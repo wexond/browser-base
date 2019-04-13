@@ -1,7 +1,7 @@
 import * as Datastore from 'nedb';
 import { observable, computed, action } from 'mobx';
-import { HistoryItem, HistorySection } from '../models';
 import { getPath } from '~/shared/utils/paths';
+import { Bookmark } from '../models/bookmark';
 
 export class BookmarksStore {
   public db = new Datastore({
@@ -10,7 +10,7 @@ export class BookmarksStore {
   });
 
   @observable
-  public list: HistoryItem[] = [];
+  public list: Bookmark[] = [];
 
   @observable
   public itemsLoaded = this.getDefaultLoaded();
@@ -34,20 +34,16 @@ export class BookmarksStore {
   }
 
   public async load() {
-    await this.db.find({}).exec((err: any, items: HistoryItem[]) => {
+    await this.db.find({}).exec((err: any, items: Bookmark[]) => {
       if (err) return console.warn(err);
-
-      items = items.sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-      );
 
       this.list = items;
     });
   }
 
-  public addItem(item: HistoryItem) {
+  public addItem(item: Bookmark) {
     return new Promise((resolve: (id: string) => void) => {
-      this.db.insert(item, (err: any, doc: HistoryItem) => {
+      this.db.insert(item, (err: any, doc: Bookmark) => {
         if (err) return console.error(err);
 
         this.list.push(doc);
@@ -74,6 +70,7 @@ export class BookmarksStore {
     return Math.floor(window.innerHeight / 56);
   }
 
+  @action
   public deleteSelected() {
     for (const item of this.selectedItems) {
       this.removeItem(item);

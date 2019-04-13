@@ -2,15 +2,18 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import store from '../../store';
-import HistorySection from '../HistorySection';
-import { QuickRange } from '../../store/history';
-import { Container, Scrollable, Content, Back } from '../Overlay/style';
+import {
+  Container,
+  Scrollable,
+  Content,
+  Back,
+  Section,
+} from '../Overlay/style';
 import { Button } from '~/renderer/components/Button';
 import {
   LeftMenu,
   Header,
   Title,
-  StyledMenuItem,
   MenuItems,
   Sections,
   Search,
@@ -18,12 +21,13 @@ import {
   DeletionDialog,
   DeletionDialogLabel,
 } from './style';
+import Bookmark from '../Bookmark';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
 const onBackClick = () => {
   scrollRef.current.scrollTop = 0;
-  store.history.resetLoadedItems();
+  store.bookmarks.resetLoadedItems();
   store.overlay.currentContent = 'default';
 };
 
@@ -36,24 +40,13 @@ const onScroll = (e: any) => {
   const scrollMax = e.target.scrollHeight - e.target.clientHeight - 256;
 
   if (scrollPos >= scrollMax) {
-    store.history.itemsLoaded += store.history.getDefaultLoaded();
+    store.bookmarks.itemsLoaded += store.bookmarks.getDefaultLoaded();
   }
 };
 
 const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  store.history.search(e.currentTarget.value);
+  store.bookmarks.search(e.currentTarget.value);
 };
-
-const MenuItem = observer(
-  ({ range, children }: { range: QuickRange; children: any }) => (
-    <StyledMenuItem
-      onClick={() => (store.history.selectedRange = range)}
-      selected={store.history.selectedRange === range}
-    >
-      {children}
-    </StyledMenuItem>
-  ),
-);
 
 const onCancelClick = (e: React.MouseEvent) => {
   e.stopPropagation();
@@ -65,13 +58,15 @@ const onDeleteClick = (e: React.MouseEvent) => {
   store.history.deleteSelected();
 };
 
-const HistorySections = observer(() => {
+const BookmarksList = observer(() => {
   return (
     <Sections>
       <Content>
-        {store.history.sections.map(data => (
-          <HistorySection data={data} key={data.date.getTime()} />
-        ))}
+        <Section style={{ marginTop: 56 }}>
+          {store.bookmarks.list.map(data => (
+            <Bookmark data={data} key={data._id} />
+          ))}
+        </Section>
       </Content>
     </Sections>
   );
@@ -97,33 +92,26 @@ const Dialog = observer(() => {
   );
 });
 
-export const History = observer(() => {
+export const Bookmarks = observer(() => {
   return (
     <Container
       right
       visible={
-        store.overlay.currentContent === 'history' && store.overlay.visible
+        store.overlay.currentContent === 'bookmarks' && store.overlay.visible
       }
     >
       <Scrollable onScroll={onScroll} ref={scrollRef}>
         <LeftMenu onClick={preventHiding}>
           <Header>
             <Back onClick={onBackClick} />
-            <Title>History</Title>
+            <Title>Bookmarks</Title>
           </Header>
           <Search>
             <Input placeholder="Search" onInput={onInput} />
           </Search>
-          <MenuItems>
-            <MenuItem range="all">All</MenuItem>
-            <MenuItem range="today">Today</MenuItem>
-            <MenuItem range="yesterday">Yesterday</MenuItem>
-            <MenuItem range="last-week">Last week</MenuItem>
-            <MenuItem range="last-month">Last month</MenuItem>
-            <MenuItem range="older">Older</MenuItem>
-          </MenuItems>
+          <MenuItems />
         </LeftMenu>
-        <HistorySections />
+        <BookmarksList />
         <Dialog />
       </Scrollable>
     </Container>
