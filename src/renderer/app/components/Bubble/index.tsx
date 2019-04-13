@@ -10,10 +10,12 @@ export const Bubble = ({
   iconSize,
   onClick,
   width,
+  disabled,
 }: any) => {
   return (
     <StyledBubble
       style={{ minWidth: width, maxWidth: width }}
+      disabled={disabled}
       onClick={onClick}
     >
       <Icon

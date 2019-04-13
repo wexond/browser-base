@@ -197,4 +197,22 @@ export const MenuItem = styled.div`
   &:hover {
     background-color: rgba(255, 255, 255, 0.08);
   }
+
+  ${({ icon }: { icon: string }) => css`
+    ${icon &&
+      `
+      padding-left: ${24 + 16 + 8}px;
+      &:before {
+        content: '';
+        filter: invert(100%);
+        opacity: 0.54;
+        ${centerImage('16px', '16px')};
+        width: 16px;
+        height: 16px;
+        left: 16px;
+        position: absolute;
+        background-image: url(${icon});
+      }
+    `}
+  `}
 `;

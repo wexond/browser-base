@@ -15,6 +15,11 @@ export const StyledBubble = styled.div`
   &:hover {
     background-color: rgba(255, 255, 255, 0.08);
   }
+
+  ${({ disabled }: { disabled: boolean }) => css`
+    pointer-events: ${disabled ? 'none' : 'inherit'};
+    opacity: ${disabled ? 0.54 : 1};
+  `};
 `;
 
 export const Icon = styled.div`

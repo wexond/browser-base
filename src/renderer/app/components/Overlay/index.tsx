@@ -79,10 +79,13 @@ export const Dial = observer(() => {
               style={{ top: 42 }}
               visible={store.overlay.dialTypeMenuVisible}
             >
-              <MenuItem onClick={changeDialType('top-sites')}>
+              <MenuItem icon={icons.fire} onClick={changeDialType('top-sites')}>
                 Top Sites
               </MenuItem>
-              <MenuItem onClick={changeDialType('bookmarks')}>
+              <MenuItem
+                icon={icons.bookmarks}
+                onClick={changeDialType('bookmarks')}
+              >
                 Bookmarks
               </MenuItem>
             </Menu>
@@ -129,19 +132,19 @@ export const Overlay = observer(() => {
                 >
                   Bookmarks
                 </Bubble>
-                <Bubble invert icon={icons.download}>
+                <Bubble disabled invert icon={icons.download}>
                   Downloads
                 </Bubble>
-                <Bubble invert icon={icons.settings}>
+                <Bubble disabled invert icon={icons.settings}>
                   Settings
                 </Bubble>
-                <Bubble invert icon={icons.extensions}>
+                <Bubble disabled invert icon={icons.extensions}>
                   Extensions
                 </Bubble>
-                <Bubble invert icon={icons.find}>
+                <Bubble disabled invert icon={icons.find}>
                   Find
                 </Bubble>
-                <Bubble invert icon={icons.more}>
+                <Bubble disabled invert icon={icons.more}>
                   More tools
                 </Bubble>
               </Actions>
