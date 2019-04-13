@@ -49,7 +49,7 @@ export class View extends BrowserView {
           {
             type: 'separator',
           },
-        ])
+        ]);
       }
 
       if (params.hasImageContents) {
@@ -82,7 +82,7 @@ export class View extends BrowserView {
           {
             type: 'separator',
           },
-        ])
+        ]);
       }
 
       if (params.isEditable) {
@@ -114,7 +114,7 @@ export class View extends BrowserView {
           {
             type: 'separator',
           },
-        ])
+        ]);
       }
 
       if (!params.isEditable && params.selectionText !== '') {
@@ -122,7 +122,7 @@ export class View extends BrowserView {
           {
             role: 'copy',
           },
-        ])
+        ]);
       }
 
       if (
@@ -155,7 +155,7 @@ export class View extends BrowserView {
           {
             type: 'separator',
           },
-        ])
+        ]);
       }
 
       menuItems.push({
@@ -167,7 +167,7 @@ export class View extends BrowserView {
             this.webContents.devToolsWebContents.focus();
           }
         },
-      })
+      });
 
       const menu = Menu.buildFromTemplate(menuItems);
 
@@ -312,11 +312,11 @@ export class View extends BrowserView {
     sendToAllExtensions(`api-emit-event-webNavigation-${name}`, ...data);
   };
 
-  public async getScreenshot(): Promise < string > {
+  public async getScreenshot(): Promise<string> {
     return new Promise(resolve => {
       this.webContents.capturePage(img => {
         resolve(img.toDataURL());
       });
-    }); , , , ,
+    });
   }
 }

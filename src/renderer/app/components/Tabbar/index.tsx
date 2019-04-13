@@ -7,15 +7,15 @@ import { icons } from '~/renderer/app/constants/icons';
 import { AddTab, StyledTabbar, TabsContainer } from './style';
 import { Tabs } from '../Tabs';
 
-const getContainer = () => store.tabsStore.containerRef.current;
+const getContainer = () => store.tabs.containerRef.current;
 
-const onMouseEnter = () => (store.tabsStore.scrollbarVisible = true);
+const onMouseEnter = () => (store.tabs.scrollbarVisible = true);
 
-const onMouseLeave = () => (store.tabsStore.scrollbarVisible = false);
+const onMouseLeave = () => (store.tabs.scrollbarVisible = false);
 
 const onAddTabClick = () => {
-  store.overlayStore.isNewTab = true;
-  store.overlayStore.visible = true;
+  store.overlay.isNewTab = true;
+  store.overlay.visible = true;
 };
 
 export const Tabbar = observer(() => {
@@ -24,19 +24,19 @@ export const Tabbar = observer(() => {
       <TabsContainer
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        ref={store.tabsStore.containerRef}
+        ref={store.tabs.containerRef}
       >
         <Tabs />
       </TabsContainer>
       <AddTab
         icon={icons.add}
         onClick={onAddTabClick}
-        divRef={(r: any) => (store.addTabStore.ref = r)}
+        divRef={(r: any) => (store.addTab.ref = r)}
       />
       <HorizontalScrollbar
-        ref={store.tabsStore.scrollbarRef}
-        enabled={store.tabsStore.scrollable}
-        visible={store.tabsStore.scrollbarVisible}
+        ref={store.tabs.scrollbarRef}
+        enabled={store.tabs.scrollable}
+        visible={store.tabs.scrollbarVisible}
         getContainer={getContainer}
       />
     </StyledTabbar>

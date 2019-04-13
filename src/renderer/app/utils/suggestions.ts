@@ -48,7 +48,7 @@ export const getHistorySuggestions = (filter: string) => {
 
   const filterPart = filter.replace(regex, '');
 
-  for (const item of store.historyStore.historyItems) {
+  for (const item of store.history.items) {
     let urlPart = item.url.replace(regex, '');
 
     if (urlPart.endsWith('/')) {

@@ -19,14 +19,14 @@ const onUpdateClick = () => {
 @observer
 class BrowserActions extends React.Component {
   public render() {
-    const { selectedTabId } = store.tabGroupsStore.currentGroup;
+    const { selectedTabId } = store.tabGroups.currentGroup;
 
     return (
       <StyledBrowserActions
         style={{ marginRight: platform() !== 'darwin' ? 138 : 0 }}
       >
         {selectedTabId &&
-          store.extensionsStore.browserActions.map(item => {
+          store.extensions.browserActions.map(item => {
             if (item.tabId === selectedTabId) {
               return <BrowserAction data={item} key={item.extensionId} />;
             }

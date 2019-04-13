@@ -11,14 +11,14 @@ import { ExtensionsStore } from './extensions';
 import { extname } from 'path';
 
 export class Store {
-  public historyStore = new HistoryStore();
-  public suggestionsStore = new SuggestionsStore();
-  public faviconsStore = new FaviconsStore();
-  public addTabStore = new AddTabStore();
-  public tabGroupsStore = new TabGroupsStore();
-  public tabsStore = new TabsStore();
-  public overlayStore = new OverlayStore();
-  public extensionsStore = new ExtensionsStore();
+  public history = new HistoryStore();
+  public suggestions = new SuggestionsStore();
+  public favicons = new FaviconsStore();
+  public addTab = new AddTabStore();
+  public tabGroups = new TabGroupsStore();
+  public tabs = new TabsStore();
+  public overlay = new OverlayStore();
+  public extensions = new ExtensionsStore();
 
   @observable
   public isFullscreen = false;
@@ -76,7 +76,7 @@ export class Store {
 
         sender.send(
           'api-tabs-query',
-          this.tabsStore.tabs.map(tab => tab.getApiTab()),
+          this.tabs.list.map(tab => tab.getApiTab()),
         );
       },
     );
@@ -90,7 +90,7 @@ export class Store {
         details: chrome.browserAction.BadgeTextDetails,
       ) => {
         if (details.tabId) {
-          const browserAction = this.extensionsStore.queryBrowserAction({
+          const browserAction = this.extensions.queryBrowserAction({
             extensionId,
             tabId: details.tabId,
           })[0];
@@ -99,7 +99,7 @@ export class Store {
             browserAction.badgeText = details.text;
           }
         } else {
-          this.extensionsStore
+          this.extensions
             .queryBrowserAction({
               extensionId,
             })
@@ -120,7 +120,7 @@ export class Store {
         const ext = extname(path);
 
         if (ext === '.html') {
-          this.tabsStore.addTab({ url: `file:///${path}`, active: true });
+          this.tabs.addTab({ url: `file:///${path}`, active: true });
         }
       }
     });

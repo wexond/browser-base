@@ -12,7 +12,7 @@ const autoComplete = (text: string, suggestion: string) => {
 
   const start = text.length;
 
-  const input = store.overlayStore.inputRef.current;
+  const input = store.overlay.inputRef.current;
 
   if (suggestion) {
     if (suggestion.startsWith(text.replace(regex, ''))) {
@@ -85,7 +85,7 @@ export class OverlayStore {
         ipcRenderer.send('browserview-show');
       }, 200);
 
-      store.suggestionsStore.suggestions = [];
+      store.suggestions.list = [];
       lastSuggestion = undefined;
 
       this.inputRef.current.value = '';
@@ -119,14 +119,14 @@ export class OverlayStore {
   }
 
   public suggest() {
-    const { suggestionsStore } = store;
+    const { suggestions } = store;
     const input = this.inputRef.current;
 
     if (this.canSuggest) {
       autoComplete(input.value, lastSuggestion);
     }
 
-    suggestionsStore.load(input).then(suggestion => {
+    suggestions.load(input).then(suggestion => {
       lastSuggestion = suggestion;
       if (this.canSuggest) {
         autoComplete(
@@ -137,6 +137,6 @@ export class OverlayStore {
       }
     });
 
-    suggestionsStore.selected = 0;
+    suggestions.selected = 0;
   }
 }

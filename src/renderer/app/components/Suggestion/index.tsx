@@ -29,7 +29,7 @@ export const SuggestionComponent = observer(({ suggestion }: Props) => {
   const { hovered } = suggestion;
   const { primaryText, secondaryText } = suggestion;
 
-  const selected = store.suggestionsStore.selected === suggestion.id;
+  const selected = store.suggestions.selected === suggestion.id;
 
   let { favicon } = suggestion;
 

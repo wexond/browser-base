@@ -23,8 +23,8 @@ const scrollRef = React.createRef<HTMLDivElement>();
 
 const onBackClick = () => {
   scrollRef.current.scrollTop = 0;
-  store.historyStore.resetLoadedItems();
-  store.overlayStore.currentContent = 'default';
+  store.history.resetLoadedItems();
+  store.overlay.currentContent = 'default';
 };
 
 const preventHiding = (e: any) => {
@@ -36,19 +36,19 @@ const onScroll = (e: any) => {
   const scrollMax = e.target.scrollHeight - e.target.clientHeight - 256;
 
   if (scrollPos >= scrollMax) {
-    store.historyStore.itemsLoaded += store.historyStore.getDefaultLoaded();
+    store.history.itemsLoaded += store.history.getDefaultLoaded();
   }
 };
 
 const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  store.historyStore.search(e.currentTarget.value);
+  store.history.search(e.currentTarget.value);
 };
 
 const MenuItem = observer(
   ({ range, children }: { range: QuickRange; children: any }) => (
     <StyledMenuItem
-      onClick={() => (store.historyStore.selectedRange = range)}
-      selected={store.historyStore.selectedRange === range}
+      onClick={() => (store.history.selectedRange = range)}
+      selected={store.history.selectedRange === range}
     >
       {children}
     </StyledMenuItem>
@@ -57,21 +57,21 @@ const MenuItem = observer(
 
 const onCancelClick = (e: React.MouseEvent) => {
   e.stopPropagation();
-  store.historyStore.selectedItems = [];
+  store.history.selectedItems = [];
 };
 
 const onDeleteClick = (e: React.MouseEvent) => {
   e.stopPropagation();
-  store.historyStore.deleteSelected();
+  store.history.deleteSelected();
 };
 
 const HistorySections = observer(() => {
-  const selectedCount = store.historyStore.selectedItems.length;
+  const selectedCount = store.history.selectedItems.length;
 
   return (
     <Sections>
       <Content style={{ paddingTop: selectedCount === 0 ? 0 : 108 }}>
-        {store.historyStore.historySections.map(data => (
+        {store.history.sections.map(data => (
           <HistorySection data={data} key={data.date.getTime()} />
         ))}
       </Content>
@@ -80,7 +80,7 @@ const HistorySections = observer(() => {
 });
 
 const Dialog = observer(() => {
-  const selectedCount = store.historyStore.selectedItems.length;
+  const selectedCount = store.history.selectedItems.length;
 
   return (
     <DeletionDialog visible={selectedCount !== 0}>
@@ -104,8 +104,7 @@ export const History = observer(() => {
     <Container
       right
       visible={
-        store.overlayStore.currentContent !== 'default' &&
-        store.overlayStore.visible
+        store.overlay.currentContent !== 'default' && store.overlay.visible
       }
     >
       <Scrollable onScroll={onScroll} ref={scrollRef}>

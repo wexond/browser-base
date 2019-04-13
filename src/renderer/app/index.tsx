@@ -33,5 +33,5 @@ styleElement.textContent = `
 
 document.head.appendChild(styleElement);
 
-store.tabGroupsStore.addGroup();
+store.tabGroups.addGroup();
 ReactDOM.render(<App />, document.getElementById('app'));

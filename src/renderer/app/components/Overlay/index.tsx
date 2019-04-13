@@ -33,8 +33,8 @@ export const Header = ({ children, clickable }: any) => {
 };
 
 const onClick = () => {
-  if (store.tabGroupsStore.currentGroup.tabs.length > 0) {
-    store.overlayStore.visible = false;
+  if (store.tabGroups.currentGroup.tabs.length > 0) {
+    store.overlay.visible = false;
   }
 };
 
@@ -43,22 +43,21 @@ const preventHiding = (e: any) => {
 };
 
 const onHistoryClick = () => {
-  store.overlayStore.currentContent = 'history';
+  store.overlay.currentContent = 'history';
 };
 
 export const Overlay = observer(() => {
   return (
-    <StyledOverlay visible={store.overlayStore.visible} onClick={onClick}>
+    <StyledOverlay visible={store.overlay.visible} onClick={onClick}>
       <Container
         visible={
-          store.overlayStore.currentContent === 'default' &&
-          store.overlayStore.visible
+          store.overlay.currentContent === 'default' && store.overlay.visible
         }
       >
-        <Scrollable ref={store.overlayStore.scrollRef}>
+        <Scrollable ref={store.overlay.scrollRef}>
           <Content>
             <SearchBox />
-            {store.historyStore.topSites.length > 0 && (
+            {store.history.topSites.length > 0 && (
               <>
                 <Title style={{ marginBottom: 24 }}>
                   Top Sites

@@ -6,13 +6,13 @@ import TabGroup from '../TabGroup';
 import store from '../../store';
 
 const onAddClick = () => {
-  store.tabGroupsStore.addGroup();
+  store.tabGroups.addGroup();
 };
 
 export const TabGroups = observer(() => {
   return (
     <StyledTabGroups>
-      {store.tabGroupsStore.groups.map(item => (
+      {store.tabGroups.list.map(item => (
         <TabGroup data={item} key={item.id} />
       ))}
 

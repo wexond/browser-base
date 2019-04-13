@@ -8,7 +8,7 @@ import { closeWindow } from '../utils';
 
 export class TabGroupsStore {
   @observable
-  public groups: TabGroup[] = [];
+  public list: TabGroup[] = [];
 
   @observable
   public _currentGroupId = 0;
@@ -31,13 +31,13 @@ export class TabGroupsStore {
   public set currentGroupId(id: number) {
     this._currentGroupId = id;
     const group = this.currentGroup;
-    const tab = store.tabsStore.getTabById(group.selectedTabId);
+    const tab = store.tabs.getTabById(group.selectedTabId);
 
     if (tab) {
       tab.select();
-      store.overlayStore.visible = false;
+      store.overlay.visible = false;
     } else {
-      const { current } = store.overlayStore.inputRef;
+      const { current } = store.overlay.inputRef;
       if (current) {
         current.value = '';
         current.focus();
@@ -45,7 +45,7 @@ export class TabGroupsStore {
     }
 
     setTimeout(() => {
-      store.tabsStore.updateTabsBounds(false);
+      store.tabs.updateTabsBounds(false);
     });
   }
 
@@ -55,40 +55,40 @@ export class TabGroupsStore {
 
   public removeGroup(id: number) {
     const group = this.getGroupById(id);
-    const index = this.groups.indexOf(group);
+    const index = this.list.indexOf(group);
 
     for (const tab of group.tabs) {
-      store.tabsStore.removeTab(tab.id);
+      store.tabs.removeTab(tab.id);
       ipcRenderer.send('browserview-destroy', tab.id);
     }
 
     if (group.isSelected) {
-      if (this.groups.length > index + 1) {
-        this.currentGroupId = this.groups[index + 1].id;
+      if (this.list.length > index + 1) {
+        this.currentGroupId = this.list[index + 1].id;
       } else if (index - 1 >= 0) {
-        this.currentGroupId = this.groups[index - 1].id;
+        this.currentGroupId = this.list[index - 1].id;
       } else {
-        this.currentGroupId = this.groups[0].id;
+        this.currentGroupId = this.list[0].id;
       }
     }
 
-    this.groups.splice(index, 1);
+    this.list.splice(index, 1);
 
-    if (this.groups.length === 0) {
+    if (this.list.length === 0) {
       closeWindow();
     }
   }
 
   public getGroupById(id: number) {
-    return this.groups.find(x => x.id === id);
+    return this.list.find(x => x.id === id);
   }
 
   public addGroup() {
     const tabGroup: TabGroup = new TabGroup();
-    this.groups.push(tabGroup);
+    this.list.push(tabGroup);
     this.currentGroupId = tabGroup.id;
 
-    const { current } = store.overlayStore.inputRef;
+    const { current } = store.overlay.inputRef;
     if (current) {
       current.value = '';
       current.focus();

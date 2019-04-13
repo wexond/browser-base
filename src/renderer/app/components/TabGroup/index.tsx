@@ -8,13 +8,13 @@ import store from '../../store';
 
 const onClick = (item: TabGroup) => () => {
   if (!item.editMode) {
-    store.tabGroupsStore.currentGroupId = item.id;
+    store.tabGroups.currentGroupId = item.id;
   }
 };
 
 const onCloseClick = (id: number) => (e: any) => {
   e.stopPropagation();
-  store.tabGroupsStore.removeGroup(id);
+  store.tabGroups.removeGroup(id);
 };
 
 const onEditClick = (item: TabGroup) => (e: any) => {
@@ -48,7 +48,7 @@ export default observer(({ data }: { data: TabGroup }) => {
       style={{
         backgroundColor: color,
       }}
-      selected={store.tabGroupsStore.currentGroupId === id}
+      selected={store.tabGroups.currentGroupId === id}
       onClick={onClick(data)}
     >
       {editMode && (

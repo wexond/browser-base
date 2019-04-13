@@ -16,7 +16,7 @@ const onForwardClick = () => {
 };
 
 const onRefreshClick = () => {
-  if (store.tabsStore.selectedTab && store.tabsStore.selectedTab.loading) {
+  if (store.tabs.selectedTab && store.tabs.selectedTab.loading) {
     callBrowserViewMethod('webContents.stop');
   } else {
     callBrowserViewMethod('webContents.reload');
@@ -42,7 +42,7 @@ export const NavigationButtons = observer(() => {
       <ToolbarButton
         size={20}
         icon={
-          store.tabsStore.selectedTab && store.tabsStore.selectedTab.loading
+          store.tabs.selectedTab && store.tabs.selectedTab.loading
             ? icons.close
             : icons.refresh
         }

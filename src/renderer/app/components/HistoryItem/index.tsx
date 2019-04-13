@@ -9,34 +9,34 @@ import { Favicon, Item, Remove, Title, Time, Site } from './style';
 const onClick = (item: HistoryItem) => (e: React.MouseEvent) => {
   if (!e.ctrlKey) return;
 
-  const index = store.historyStore.selectedItems.indexOf(item._id);
+  const index = store.history.selectedItems.indexOf(item._id);
 
   if (index === -1) {
-    store.historyStore.selectedItems.push(item._id);
+    store.history.selectedItems.push(item._id);
   } else {
-    store.historyStore.selectedItems.splice(index, 1);
+    store.history.selectedItems.splice(index, 1);
   }
 };
 
 const onTitleClick = (url: string) => (e: React.MouseEvent) => {
   if (!e.ctrlKey) {
-    store.tabsStore.addTab({ url, active: true });
-    store.overlayStore.visible = false;
+    store.tabs.addTab({ url, active: true });
+    store.overlay.visible = false;
   }
 };
 
 const onRemoveClick = (item: HistoryItem) => () => {
-  store.historyStore.removeItem(item._id);
+  store.history.removeItem(item._id);
 };
 
 export default observer(({ data }: { data: HistoryItem }) => {
-  const selected = store.historyStore.selectedItems.indexOf(data._id) !== -1;
+  const selected = store.history.selectedItems.indexOf(data._id) !== -1;
 
   return (
     <Item key={data._id} onClick={onClick(data)} selected={selected}>
       <Favicon
         style={{
-          backgroundImage: `url(${store.faviconsStore.favicons[data.favicon]})`,
+          backgroundImage: `url(${store.favicons.favicons[data.favicon]})`,
         }}
       />
       <Title onClick={onTitleClick(data.url)}>{data.title}</Title>

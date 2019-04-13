@@ -7,6 +7,7 @@ const {
   JSONPlugin,
   StyledComponentsPlugin,
 } = require('fuse-box');
+
 const { spawn } = require('child_process');
 
 const production = process.env.NODE_ENV === 'dev' ? false : true;
@@ -17,7 +18,6 @@ const getConfig = (target, name) => {
     cache: !production,
     target,
     output: `build/$name.js`,
-    tsConfig: './tsconfig.json',
     useTypescriptCompiler: true,
     plugins: [
       EnvPlugin({ NODE_ENV: production ? 'production' : 'development' }),
@@ -36,7 +36,6 @@ const getConfig = (target, name) => {
     },
     log: {
       showBundledFiles: false,
-      clearTerminalOnBundle: true,
     },
   };
 };

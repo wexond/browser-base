@@ -19,7 +19,7 @@ export class HistoryStore {
   });
 
   @observable
-  public historyItems: HistoryItem[] = [];
+  public items: HistoryItem[] = [];
 
   @observable
   public itemsLoaded = this.getDefaultLoaded();
@@ -35,7 +35,7 @@ export class HistoryStore {
 
   @computed
   public get topSites() {
-    const top1 = countVisitedTimes(this.historyItems);
+    const top1 = countVisitedTimes(this.items);
     const newItems: HistoryItem[] = [];
 
     for (const item of top1) {
@@ -56,7 +56,7 @@ export class HistoryStore {
   }
 
   public getById(id: string) {
-    return this.historyItems.find(x => x._id === id);
+    return this.items.find(x => x._id === id);
   }
 
   public async load() {
@@ -67,7 +67,7 @@ export class HistoryStore {
         (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
       );
 
-      this.historyItems = items;
+      this.items = items;
     });
   }
 
@@ -76,14 +76,14 @@ export class HistoryStore {
       this.db.insert(item, (err: any, doc: HistoryItem) => {
         if (err) return console.error(err);
 
-        this.historyItems.push(doc);
+        this.items.push(doc);
         resolve(doc._id);
       });
     });
   }
 
   public removeItem(id: string) {
-    this.historyItems = this.historyItems.filter(x => x._id !== id);
+    this.items = this.items.filter(x => x._id !== id);
 
     this.db.remove({ _id: id }, err => {
       if (err) return console.warn(err);
@@ -91,15 +91,15 @@ export class HistoryStore {
   }
 
   @computed
-  public get historySections() {
+  public get sections() {
     const list: HistorySection[] = [];
     let section: HistorySection;
     let loaded = 0;
 
-    for (let i = this.historyItems.length - 1; i >= 0; i--) {
+    for (let i = this.items.length - 1; i >= 0; i--) {
       if (loaded > this.itemsLoaded) break;
 
-      const item = this.historyItems[i];
+      const item = this.items[i];
       const date = new Date(item.date);
 
       if (

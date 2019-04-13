@@ -28,7 +28,7 @@ export class TabsStore {
   public hoveredTabId: number;
 
   @observable
-  public tabs: Tab[] = [];
+  public list: Tab[] = [];
 
   @observable
   public scrollable = false;
@@ -83,7 +83,7 @@ export class TabsStore {
 
   public onResize = (e: Event) => {
     if (e.isTrusted) {
-      store.tabsStore.updateTabsBounds(false);
+      store.tabs.updateTabsBounds(false);
     }
   };
 
@@ -95,7 +95,7 @@ export class TabsStore {
   }
 
   public get selectedTab() {
-    return this.getTabById(store.tabGroupsStore.currentGroup.selectedTabId);
+    return this.getTabById(store.tabGroups.currentGroup.selectedTabId);
   }
 
   public get hoveredTab() {
@@ -103,12 +103,12 @@ export class TabsStore {
   }
 
   public getTabById(id: number) {
-    return this.tabs.find(x => x.id === id);
+    return this.list.find(x => x.id === id);
   }
 
   public addTab(options = defaultTabOptions) {
-    const tab = new Tab(options, store.tabGroupsStore.currentGroupId);
-    this.tabs.push(tab);
+    const tab = new Tab(options, store.tabGroups.currentGroupId);
+    this.list.push(tab);
 
     this.emitEvent('onCreated', tab.getApiTab());
 
@@ -123,7 +123,7 @@ export class TabsStore {
   }
 
   public removeTab(id: number) {
-    (this.tabs as any).remove(this.getTabById(id));
+    (this.list as any).remove(this.getTabById(id));
   }
 
   public updateTabsBounds(animation: boolean) {
@@ -132,8 +132,8 @@ export class TabsStore {
   }
 
   public setTabsWidths(animation: boolean) {
-    const tabs = this.tabs.filter(
-      x => !x.isClosing && x.tabGroupId === store.tabGroupsStore.currentGroupId,
+    const tabs = this.list.filter(
+      x => !x.isClosing && x.tabGroupId === store.tabGroups.currentGroupId,
     );
 
     const containerWidth = this.containerWidth;
@@ -147,15 +147,14 @@ export class TabsStore {
   }
 
   public setTabsLefts(animation: boolean) {
-    const tabs = this.tabs
+    const tabs = this.list
       .filter(
-        x =>
-          !x.isClosing && x.tabGroupId === store.tabGroupsStore.currentGroupId,
+        x => !x.isClosing && x.tabGroupId === store.tabGroups.currentGroupId,
       )
       .slice()
       .sort((a, b) => a.position - b.position);
 
-    const { containerWidth } = store.tabsStore;
+    const { containerWidth } = store.tabs;
 
     let left = 0;
 
@@ -165,7 +164,7 @@ export class TabsStore {
       left += tab.width + TABS_PADDING;
     }
 
-    store.addTabStore.setLeft(
+    store.addTab.setLeft(
       Math.min(left, containerWidth + TABS_PADDING),
       animation,
     );
@@ -181,7 +180,7 @@ export class TabsStore {
   }
 
   public getTabsToReplace(callingTab: Tab, direction: string) {
-    let tabs = this.tabs
+    let tabs = this.list
       .slice()
       .sort((a, b) => a.tempPosition - b.tempPosition);
 
@@ -215,7 +214,7 @@ export class TabsStore {
 
     this.isDragging = false;
 
-    for (const tab of this.tabs) {
+    for (const tab of this.list) {
       tab.position = tab.tempPosition;
     }
 
@@ -227,19 +226,14 @@ export class TabsStore {
   };
 
   public onMouseMove = (e: any) => {
-    const tabGroup = store.tabGroupsStore.currentGroup;
+    const tabGroup = store.tabGroups.currentGroup;
     if (!tabGroup) return;
 
-    const { selectedTab } = store.tabsStore;
+    const { selectedTab } = store.tabs;
 
     if (this.isDragging) {
       const container = this.containerRef;
-      const {
-        tabStartX,
-        mouseStartX,
-        lastMouseX,
-        lastScrollLeft,
-      } = store.tabsStore;
+      const { tabStartX, mouseStartX, lastMouseX, lastScrollLeft } = store.tabs;
 
       const boundingRect = container.current.getBoundingClientRect();
 
@@ -260,13 +254,10 @@ export class TabsStore {
 
       if (
         newLeft + selectedTab.width >
-        store.addTabStore.left + container.current.scrollLeft - TABS_PADDING
+        store.addTab.left + container.current.scrollLeft - TABS_PADDING
       ) {
         left =
-          store.addTabStore.left -
-          selectedTab.width +
-          lastScrollLeft -
-          TABS_PADDING;
+          store.addTab.left - selectedTab.width + lastScrollLeft - TABS_PADDING;
       }
 
       selectedTab.setLeft(left, false);
@@ -275,7 +266,7 @@ export class TabsStore {
         e.pageY > TOOLBAR_HEIGHT + 16 ||
         e.pageY < -16 ||
         e.pageX < boundingRect.left ||
-        e.pageX - boundingRect.left > store.addTabStore.left
+        e.pageX - boundingRect.left > store.addTab.left
       ) {
         // TODO: Create a new window
       }

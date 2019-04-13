@@ -32,28 +32,27 @@ const onMouseDown = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
 
   tab.select();
 
-  store.tabsStore.lastMouseX = 0;
-  store.tabsStore.isDragging = true;
-  store.tabsStore.mouseStartX = pageX;
-  store.tabsStore.tabStartX = tab.left;
+  store.tabs.lastMouseX = 0;
+  store.tabs.isDragging = true;
+  store.tabs.mouseStartX = pageX;
+  store.tabs.tabStartX = tab.left;
 
-  store.tabsStore.lastScrollLeft =
-    store.tabsStore.containerRef.current.scrollLeft;
+  store.tabs.lastScrollLeft = store.tabs.containerRef.current.scrollLeft;
 };
 
 const onMouseEnter = (tab: Tab) => () => {
-  if (!store.tabsStore.isDragging) {
-    store.tabsStore.hoveredTabId = tab.id;
+  if (!store.tabs.isDragging) {
+    store.tabs.hoveredTabId = tab.id;
   }
 };
 
 const onMouseLeave = () => {
-  store.tabsStore.hoveredTabId = -1;
+  store.tabs.hoveredTabId = -1;
 };
 
 const onClick = () => {
   if (store.canToggleMenu) {
-    store.overlayStore.visible = true;
+    store.overlay.visible = true;
   }
 };
 
@@ -123,7 +122,7 @@ export default observer(({ tab }: { tab: Tab }) => {
       onMouseEnter={onMouseEnter(tab)}
       onClick={onClick}
       onMouseLeave={onMouseLeave}
-      visible={tab.tabGroupId === store.tabGroupsStore.currentGroupId}
+      visible={tab.tabGroupId === store.tabGroups.currentGroupId}
       ref={tab.ref}
     >
       <TabContainer

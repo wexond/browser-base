@@ -107,7 +107,7 @@ export const Search = styled.div`
 export const DeletionDialog = styled.div`
   width: fit-content;
   height: 68px;
-  background-color: #3a3a3a;
+  background-color: #303030;
   position: absolute;
   top: 48px;
   left: 0;
