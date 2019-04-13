@@ -38,17 +38,7 @@ Wexond is an extensible web browser with a totally different user experience, bu
 
 # Screenshots
 
-### Advanced tabs system
-
-![](https://media.giphy.com/media/uBnO0xf1kLsuGo2jUU/giphy.gif)
-
-### Support for theme-color
-
-![](https://media.giphy.com/media/Y0wYXWF31ld4ZXYxB7/giphy.gif)
-
-### Overlay with everything you need
-
-![](https://media.giphy.com/media/kKIjqEejww4IHqSqkp/giphy.gif)
+![](https://wexond.net/img/screen.png)
 
 # [Roadmap](https://github.com/wexond/wexond/projects)
 
