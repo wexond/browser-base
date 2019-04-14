@@ -13,6 +13,7 @@ import { BookmarksStore } from './bookmarks';
 import { readFileSync, writeFile } from 'fs';
 import { getPath } from '~/shared/utils/paths';
 import { Settings } from '../models/settings';
+import { DownloadsStore } from './downloads';
 
 export class Store {
   public history = new HistoryStore();
@@ -24,6 +25,7 @@ export class Store {
   public tabs = new TabsStore();
   public overlay = new OverlayStore();
   public extensions = new ExtensionsStore();
+  public downloads = new DownloadsStore();
 
   @observable
   public isFullscreen = false;

@@ -50,7 +50,7 @@ const onCancelClick = (e: React.MouseEvent) => {
 
 const onDeleteClick = (e: React.MouseEvent) => {
   e.stopPropagation();
-  store.history.deleteSelected();
+  store.bookmarks.deleteSelected();
 };
 
 const BookmarksList = observer(() => {

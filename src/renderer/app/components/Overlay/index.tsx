@@ -25,6 +25,7 @@ import { Bookmarks } from '../Bookmarks';
 import { Bubble } from '../Bubble';
 import { BookmarksDial } from './Dials/bookmarks';
 import { TopSites } from './Dials/top-sites';
+import DownloadItem from '../DownloadItem';
 
 export const Header = ({ children, clickable }: any) => {
   return (
@@ -120,6 +121,14 @@ export const Overlay = observer(() => {
               <Header>Tab groups</Header>
               <TabGroups />
             </Section>
+            {store.downloads.list.length > 0 && (
+              <Section onClick={preventHiding}>
+                <Header>Downloads</Header>
+                {store.downloads.list.map(item => (
+                  <DownloadItem data={item} key={item.id} />
+                ))}
+              </Section>
+            )}
             <Section onClick={preventHiding}>
               <Header>Menu</Header>
               <Actions>

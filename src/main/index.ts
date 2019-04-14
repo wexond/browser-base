@@ -9,6 +9,7 @@ import { runWebRequestService } from './services/web-request';
 import { existsSync, writeFileSync } from 'fs';
 import { getPath } from '~/shared/utils/paths';
 import { Settings } from '~/renderer/app/models/settings';
+import { makeId } from '~/shared/utils/string';
 
 ipcMain.setMaxListeners(0);
 
@@ -94,6 +95,46 @@ app.on('ready', () => {
   ipcMain.on('window-focus', () => {
     appWindow.webContents.focus();
   });
+
+  session
+    .fromPartition('persist:view')
+    .on('will-download', (event, item, webContents) => {
+      const fileName = item.getFilename();
+      const savePath = resolve(app.getPath('downloads'), fileName);
+      const id = makeId(32);
+
+      item.setSavePath(savePath);
+
+      appWindow.webContents.send('download-started', {
+        fileName,
+        receivedBytes: 0,
+        totalBytes: item.getTotalBytes(),
+        savePath,
+        id,
+      });
+
+      item.on('updated', (event, state) => {
+        if (state === 'interrupted') {
+          console.log('Download is interrupted but can be resumed');
+        } else if (state === 'progressing') {
+          if (item.isPaused()) {
+            console.log('Download is paused');
+          } else {
+            appWindow.webContents.send('download-progress', {
+              id,
+              receivedBytes: item.getReceivedBytes(),
+            });
+          }
+        }
+      });
+      item.once('done', (event, state) => {
+        if (state === 'completed') {
+          appWindow.webContents.send('download-completed', id);
+        } else {
+          console.log(`Download failed: ${state}`);
+        }
+      });
+    });
 
   loadExtensions();
   runWebRequestService(appWindow);

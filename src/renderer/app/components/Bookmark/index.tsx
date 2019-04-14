@@ -24,10 +24,6 @@ const onTitleClick = (url: string) => (e: React.MouseEvent) => {
   }
 };
 
-const onRemoveClick = (item: Bookmark) => () => {
-  store.history.removeItem(item._id);
-};
-
 export default observer(({ data }: { data: Bookmark }) => {
   const selected = store.history.selectedItems.indexOf(data._id) !== -1;
 
