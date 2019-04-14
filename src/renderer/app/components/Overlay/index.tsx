@@ -15,6 +15,7 @@ import {
   Actions,
   Menu,
   MenuItem,
+  Downloads,
 } from './style';
 import { SearchBox } from '../SearchBox';
 import { TabGroups } from '../TabGroups';
@@ -124,9 +125,11 @@ export const Overlay = observer(() => {
             {store.downloads.list.length > 0 && (
               <Section onClick={preventHiding}>
                 <Header>Downloads</Header>
-                {store.downloads.list.map(item => (
-                  <DownloadItem data={item} key={item.id} />
-                ))}
+                <Downloads>
+                  {store.downloads.list.map(item => (
+                    <DownloadItem data={item} key={item.id} />
+                  ))}
+                </Downloads>
               </Section>
             )}
             <Section onClick={preventHiding}>

@@ -17,6 +17,12 @@ export default observer(({ data }: { data: DownloadItem }) => {
 
   return (
     <StyledItem onClick={onClick(data.savePath)}>
+      <Progress
+        style={{
+          width: progress,
+          display: data.completed ? 'none' : 'block',
+        }}
+      />
       <Icon />
       <Info>
         <Name>{data.fileName}</Name>
@@ -26,12 +32,6 @@ export default observer(({ data }: { data: DownloadItem }) => {
           </div>
         </Details>
       </Info>
-      <Progress
-        style={{
-          width: progress,
-          display: data.completed ? 'none' : 'block',
-        }}
-      />
     </StyledItem>
   );
 });

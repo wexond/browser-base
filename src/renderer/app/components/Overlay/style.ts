@@ -218,3 +218,26 @@ export const MenuItem = styled.div`
     `}
   `}
 `;
+
+export const Downloads = styled.div`
+  display: flex;
+  width: 100%;
+  padding-bottom: 8px;
+  overflow: auto;
+
+  ::-webkit-scrollbar {
+    height: 3px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.48);
+  }
+`;

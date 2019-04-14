@@ -6,6 +6,7 @@ import { colors } from '~/renderer/constants';
 export const StyledItem = styled.div`
   height: 50px;
   width: 200px;
+  min-width: 200px;
   margin-right: 16px;
   background-color: rgba(255, 255, 255, 0.12);
   border-radius: 30px;
