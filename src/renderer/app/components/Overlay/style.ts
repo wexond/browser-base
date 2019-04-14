@@ -178,6 +178,7 @@ export const Menu = styled.div`
   width: 150px;
   cursor: default;
   padding: 8px 0;
+  z-index: 9999;
   box-shadow: ${shadows(8)};
   background-color: #303030;
   border-radius: 8px;
