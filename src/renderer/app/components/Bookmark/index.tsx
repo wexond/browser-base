@@ -24,6 +24,17 @@ const onTitleClick = (url: string) => (e: React.MouseEvent) => {
   }
 };
 
+const onMoreClick = (data: Bookmark) => (e: any) => {
+  e.stopPropagation();
+
+  const { left, top } = e.currentTarget.getBoundingClientRect();
+
+  store.bookmarks.menuVisible = true;
+  store.bookmarks.menuLeft = left;
+  store.bookmarks.menuTop = top;
+  store.bookmarks.currentBookmark = data;
+};
+
 export default observer(({ data }: { data: Bookmark }) => {
   const selected = store.history.selectedItems.indexOf(data._id) !== -1;
 
@@ -36,7 +47,7 @@ export default observer(({ data }: { data: Bookmark }) => {
       />
       <Title onClick={onTitleClick(data.url)}>{data.title}</Title>
       <Site>{data.url}</Site>
-      <More />
+      <More onClick={onMoreClick(data)} />
     </Item>
   );
 });

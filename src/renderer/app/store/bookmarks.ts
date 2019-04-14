@@ -21,6 +21,17 @@ export class BookmarksStore {
   @observable
   public selectedItems: string[] = [];
 
+  @observable
+  public menuLeft: number = 0;
+
+  @observable
+  public menuTop: number = 0;
+
+  @observable
+  public menuVisible = false;
+
+  public currentBookmark: Bookmark;
+
   @computed
   public get visibleItems() {
     return this.list.filter(

@@ -2,7 +2,14 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import store from '../../store';
-import { Container, Scrollable, Content, Back } from '../Overlay/style';
+import {
+  Container,
+  Scrollable,
+  Content,
+  Back,
+  Menu,
+  MenuItem,
+} from '../Overlay/style';
 import { Button } from '~/renderer/components/Button';
 import {
   LeftMenu,
@@ -16,7 +23,9 @@ import {
   DeletionDialogLabel,
   BookmarkSection,
 } from './style';
-import Bookmark from '../Bookmark';
+import BookmarkC from '../Bookmark';
+import { Bookmark } from '../../models/bookmark';
+import { icons } from '../../constants';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -28,6 +37,7 @@ const onBackClick = () => {
 
 const preventHiding = (e: any) => {
   e.stopPropagation();
+  store.bookmarks.menuVisible = false;
 };
 
 const onScroll = (e: any) => {
@@ -45,12 +55,16 @@ const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
 const onCancelClick = (e: React.MouseEvent) => {
   e.stopPropagation();
-  store.history.selectedItems = [];
+  store.bookmarks.selectedItems = [];
 };
 
 const onDeleteClick = (e: React.MouseEvent) => {
   e.stopPropagation();
   store.bookmarks.deleteSelected();
+};
+
+const onRemoveClick = (item: Bookmark) => () => {
+  store.bookmarks.removeItem(item._id);
 };
 
 const BookmarksList = observer(() => {
@@ -59,7 +73,7 @@ const BookmarksList = observer(() => {
       <Content>
         <BookmarkSection style={{ marginTop: 56 }}>
           {store.bookmarks.visibleItems.map(data => (
-            <Bookmark data={data} key={data._id} />
+            <BookmarkC data={data} key={data._id} />
           ))}
         </BookmarkSection>
       </Content>
@@ -68,7 +82,7 @@ const BookmarksList = observer(() => {
 });
 
 const Dialog = observer(() => {
-  const selectedCount = store.history.selectedItems.length;
+  const selectedCount = store.bookmarks.selectedItems.length;
 
   return (
     <DeletionDialog visible={selectedCount !== 0}>
@@ -109,6 +123,20 @@ export const Bookmarks = observer(() => {
         </LeftMenu>
         {store.bookmarks.visibleItems.length > 0 && <BookmarksList />}
         <Dialog />
+        <Menu
+          style={{
+            top: store.bookmarks.menuTop,
+            left: store.bookmarks.menuLeft - 130,
+          }}
+          visible={store.bookmarks.menuVisible}
+        >
+          <MenuItem
+            onClick={onRemoveClick(store.bookmarks.currentBookmark)}
+            icon={icons.trash}
+          >
+            Remove
+          </MenuItem>
+        </Menu>
       </Scrollable>
     </Container>
   );
