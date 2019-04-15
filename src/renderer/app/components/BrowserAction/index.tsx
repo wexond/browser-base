@@ -8,14 +8,15 @@ interface Props {
   data: BrowserAction;
   size?: number;
   style?: any;
+  opacity?: number;
 }
 
-const Component = observer(({ data, size, style }: Props) => {
+const Component = observer(({ data, size, style, opacity }: Props) => {
   const { icon, badgeText, badgeBackgroundColor, badgeTextColor } = data;
 
   return (
     <StyledBrowserAction style={style}>
-      <ToolbarButton opacity={1} size={size} icon={icon} />
+      <ToolbarButton opacity={opacity} size={size} icon={icon} />
       {badgeText.trim() !== '' && (
         <Badge background={badgeBackgroundColor} color={badgeTextColor}>
           {badgeText}
@@ -27,6 +28,7 @@ const Component = observer(({ data, size, style }: Props) => {
 
 (Component as any).defaultProps = {
   size: 16,
+  opacity: 1,
 };
 
 export default Component;

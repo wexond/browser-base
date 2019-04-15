@@ -49,7 +49,8 @@ export const Toolbar = observer(() => {
         {store.extensions.browserActions.length > 0 && <Separator />}
         <BrowserAction
           size={18}
-          style={{ marginLeft: 0, opacity: 0.54 }}
+          style={{ marginLeft: 0 }}
+          opacity={0.54}
           data={{
             badgeBackgroundColor: 'gray',
             badgeText: store.tabs.selectedTab
