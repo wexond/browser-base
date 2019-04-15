@@ -276,6 +276,10 @@ export class Tab {
         tabId: this.id,
         windowId: 0,
       });
+
+      requestAnimationFrame(() => {
+        store.tabs.updateTabsBounds(true);
+      });
     }
   }
 
