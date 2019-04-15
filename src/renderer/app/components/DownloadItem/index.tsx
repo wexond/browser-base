@@ -5,11 +5,12 @@ import store from '../../store';
 import { DownloadItem } from '../../models/download-item';
 import { StyledItem, Icon, Progress, Name, Info, Details } from './style';
 import { execFile } from 'child_process';
+import { shell } from 'electron';
 
 const prettyBytes = require('pretty-bytes');
 
 const onClick = (path: string) => () => {
-  execFile(path);
+  shell.openItem(path);
 };
 
 export default observer(({ data }: { data: DownloadItem }) => {
