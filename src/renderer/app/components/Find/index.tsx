@@ -11,10 +11,11 @@ import { observer } from 'mobx-react';
 import { icons } from '../../constants';
 import store from '../../store';
 
-const onCloseClick = () => {
+const close = () => {
   const { selectedTab } = store.tabs;
   selectedTab.findVisible = false;
   selectedTab.callViewMethod('webContents.stopFindInPage', 'clearSelection');
+  selectedTab.findOccurrences = '0/0';
 };
 
 const onInput = async () => {
@@ -25,6 +26,7 @@ const onInput = async () => {
 
   if (value === '') {
     selectedTab.callViewMethod('webContents.stopFindInPage', 'clearSelection');
+    selectedTab.findOccurrences = '0/0';
     return;
   }
 
@@ -58,6 +60,12 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
   }
 };
 
+const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  if (e.key === 'Escape') {
+    close();
+  }
+};
+
 export const Find = observer(() => {
   const { selectedTab } = store.tabs;
 
@@ -68,7 +76,10 @@ export const Find = observer(() => {
   }
 
   return (
-    <StyledFind visible={selectedTab && selectedTab.findVisible}>
+    <StyledFind
+      visible={selectedTab && selectedTab.findVisible}
+      onKeyUp={onKeyUp}
+    >
       <SearchIcon style={{ filter: 'none' }} />
       <Input
         value={value}
@@ -81,7 +92,7 @@ export const Find = observer(() => {
       <Buttons>
         <Button onClick={move(false)} icon={icons.up} size={20} />
         <Button onClick={move(true)} icon={icons.down} size={20} />
-        <Button onClick={onCloseClick} icon={icons.close} size={16} />
+        <Button onClick={close} icon={icons.close} size={16} />
       </Buttons>
     </StyledFind>
   );

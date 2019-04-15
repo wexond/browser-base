@@ -388,8 +388,8 @@ export class Tab {
     store.tabs.emitEvent('onUpdated', this.id, data, this.getApiTab());
   };
 
-  callViewMethod = (scope: string, ...args: any[]) => {
-    return new Promise((resolve: any) => {
+  callViewMethod = (scope: string, ...args: any[]): Promise<any> => {
+    return new Promise(resolve => {
       const callId = makeId(32);
       ipcRenderer.send('browserview-call', {
         args,
