@@ -180,6 +180,15 @@ export class Tab {
     );
 
     ipcRenderer.on(
+      `load-commit-${this.id}`,
+      (e: any, url: string, isInPlace: boolean, isMainFrame: boolean) => {
+        if (isMainFrame) {
+          this.blockedAds = 0;
+        }
+      },
+    );
+
+    ipcRenderer.on(
       `browserview-favicon-updated-${this.id}`,
       async (e: any, favicon: string) => {
         try {
@@ -223,10 +232,6 @@ export class Tab {
 
     ipcRenderer.on(`view-loading-${this.id}`, (e: any, loading: boolean) => {
       this.loading = loading;
-
-      if (loading) {
-        this.blockedAds = 0;
-      }
 
       this.emitOnUpdated({
         status: loading ? 'loading' : 'complete',

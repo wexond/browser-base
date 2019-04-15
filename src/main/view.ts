@@ -188,8 +188,10 @@ export class View extends BrowserView {
       appWindow.webContents.send(`view-loading-${this.tabId}`, true);
     });
 
-    this.webContents.addListener('did-start-navigation', () => {
+    this.webContents.addListener('did-start-navigation', (...args: any[]) => {
       this.updateNavigationState();
+
+      appWindow.webContents.send(`load-commit-${this.tabId}`, ...args);
 
       this.emitWebNavigationEvent('onBeforeNavigate', {
         tabId: this.tabId,
