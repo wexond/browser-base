@@ -1,4 +1,4 @@
-import { observable, computed, action, action } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import * as React from 'react';
 import { ipcRenderer } from 'electron';
 import * as Vibrant from 'node-vibrant';

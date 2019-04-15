@@ -1,6 +1,25 @@
 import styled, { css } from 'styled-components';
-import { centerImage, shadows } from '~/shared/mixins';
+import { centerImage } from '~/shared/mixins';
 import { icons } from '../../constants';
+
+export const OverlayScrollbarStyle = `
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 3px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.48);
+  }
+`;
 
 export const StyledOverlay = styled.div`
   color: white;
@@ -97,22 +116,7 @@ export const Scrollable = styled.div`
   flex-flow: column;
   align-items: center;
 
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 3px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.16);
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.48);
-  }
+  ${OverlayScrollbarStyle};
 `;
 
 export const Title = styled.div`
@@ -155,11 +159,4 @@ export const Container = styled.div`
 export const Content = styled.div`
   width: calc(100% - 64px);
   max-width: 800px;
-`;
-
-export const Downloads = styled.div`
-  display: flex;
-  width: 100%;
-  padding-bottom: 8px;
-  overflow: auto;
 `;

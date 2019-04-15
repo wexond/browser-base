@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-
 import { Section } from '../Overlay/style';
 
 export const Item = styled(Section)`

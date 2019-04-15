@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import store from '../../store';
-import { Title } from '../Bookmark/style';
-import { DropArrow } from './style';
 import { icons } from '../../constants';
-import { BookmarksDial } from './Dials/bookmarks';
-import { TopSites } from './Dials/top-sites';
 import { ContextMenu, ContextMenuItem } from '../ContextMenu';
+import { DropArrow, Title } from '../Overlay/style';
+import { BookmarksDial } from '../BookmarksDial';
+import { TopSites } from '../TopSites';
 
 const changeDialType = (type: 'top-sites' | 'bookmarks') => () => {
   store.settings.dialType = type;

@@ -4,12 +4,11 @@ import { createGlobalStyle } from 'styled-components';
 
 import { Style } from '~/renderer/app/style';
 import { Toolbar } from '../Toolbar';
-import { Overlay } from '../Overlay';
 import { ipcRenderer } from 'electron';
-import { Line, Screenshot, StyledApp } from './style';
-import store from '../../store';
+import { Line, StyledApp } from './style';
 import { WindowsButtons } from '../WindowsButtons';
 import { platform } from 'os';
+import { Overlay } from '../Overlay';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import store from '../../../store';
-import { Bubble } from '../../Bubble';
-import { Actions } from '../../Overlay/style';
-import { getSize, onSiteClick } from './utils';
+import { Actions } from '../Overlay/style';
+import store from '../../store';
+import { Bubble } from '../Bubble';
+import { getSize, onSiteClick } from '../../utils/dials';
 
-export const BookmarksDial = observer(() => {
+export const TopSites = observer(() => {
   return (
     <Actions>
-      {store.bookmarks.list.map(item => (
+      {store.history.topSites.map(item => (
         <Bubble
           width={getSize(6)}
           onClick={onSiteClick(item.url)}

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import store from '../../store';
-import { Container, Scrollable, Content } from '../Overlay/style';
 import { Button } from '~/renderer/components/Button';
 import {
   Sections,
@@ -15,6 +14,7 @@ import { Bookmark } from '../../models/bookmark';
 import { icons } from '../../constants';
 import { NavigationDrawer } from '../NavigationDrawer';
 import { ContextMenu, ContextMenuItem } from '../ContextMenu';
+import { Content, Container, Scrollable } from '../Overlay/style';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 

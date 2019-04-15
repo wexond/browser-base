@@ -1,5 +1,5 @@
-import store from '../../../store';
 import { callBrowserViewMethod } from '~/shared/utils/browser-view';
+import store from '../store';
 
 export const onSiteClick = (url: string) => () => {
   const tab = store.tabs.selectedTab;
