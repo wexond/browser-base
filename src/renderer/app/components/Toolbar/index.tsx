@@ -3,7 +3,7 @@ import * as React from 'react';
 import { platform } from 'os';
 
 import store from '~/renderer/app/store';
-import { StyledToolbar, Buttons } from './style';
+import { StyledToolbar, Buttons, Separator } from './style';
 import { NavigationButtons } from '../NavigationButtons';
 import { Tabbar } from '../Tabbar';
 import ToolbarButton from '../ToolbarButton';
@@ -46,6 +46,21 @@ export const Toolbar = observer(() => {
         {store.updateInfo.available && (
           <ToolbarButton icon={icons.download} onClick={onUpdateClick} />
         )}
+        {store.extensions.browserActions.length > 0 && <Separator />}
+        <BrowserAction
+          size={18}
+          style={{ marginLeft: 0 }}
+          data={{
+            badgeBackgroundColor: 'gray',
+            badgeText: store.tabs.selectedTab
+              ? store.tabs.selectedTab.blockedAds > 0
+                ? store.tabs.selectedTab.blockedAds.toString()
+                : ''
+              : '',
+            icon: icons.shield,
+            badgeTextColor: 'white',
+          }}
+        />
       </Buttons>
     </StyledToolbar>
   );

@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 export const StyledBrowserAction = styled.div`
   position: relative;
-  margin-right: 8px;
+  margin-left: 8px;
 `;
 
 interface BadgeProps {

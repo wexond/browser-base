@@ -3,8 +3,53 @@ import { makeId } from '~/shared/utils/string';
 import { AppWindow } from '../app-window';
 import { matchesPattern } from '~/shared/utils/url';
 import { USER_AGENT } from '~/shared/constants';
+import { getPath } from '~/shared/utils/paths';
+import { existsSync, mkdirSync, writeFile, readdirSync, readFile } from 'fs';
+import Axios from 'axios';
+import { requestURL } from '~/renderer/app/utils/network';
+import console = require('console');
+import { resolve } from 'path';
+import { appWindow } from '..';
+
+const { AdBlockClient, FilterOptions } = require('ad-block');
+
+const client = new AdBlockClient();
 
 const eventListeners: any = {};
+
+const defaultFilters = ['easyprivacy.dat', 'easylist.dat'];
+
+export const loadFilters = async () => {
+  const path = getPath('filters');
+
+  if (!existsSync(path)) {
+    mkdirSync(path);
+
+    for (const filter of defaultFilters) {
+      const { data } = await Axios.request({
+        url: `https://wexond.net/filters/${filter}`,
+        responseType: 'arraybuffer',
+        method: 'get',
+      });
+
+      client.deserialize(data);
+
+      writeFile(getPath('filters', filter), data, err => {
+        if (err) return console.error(err);
+      });
+    }
+  } else {
+    const files = readdirSync(path);
+
+    for (const file of files) {
+      readFile(resolve(path, file), (err, buffer) => {
+        if (err) return console.error(err);
+
+        client.deserialize(buffer);
+      });
+    }
+  }
+};
 
 const getTabByWebContentsId = (window: AppWindow, id: number) => {
   for (const key in window.viewManager.views) {
@@ -190,6 +235,16 @@ export const runWebRequestService = (window: AppWindow) => {
   };
 
   webviewRequest.onBeforeRequest(async (details: any, callback: any) => {
+    const tabId = getTabByWebContentsId(window, details.webContentsId);
+
+    if (client.matches(details.url, FilterOptions.noFilterOption)) {
+      callback({ cancel: true });
+
+      appWindow.webContents.send(`blocked-ad-${tabId}`);
+
+      return;
+    }
+
     await onBeforeRequest(details, callback);
   });
 

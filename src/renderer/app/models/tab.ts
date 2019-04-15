@@ -56,6 +56,9 @@ export class Tab {
   @observable
   public findText = '';
 
+  @observable
+  public blockedAds = 0;
+
   @computed
   public get findVisible() {
     return this._findVisible;
@@ -201,6 +204,10 @@ export class Tab {
       },
     );
 
+    ipcRenderer.on(`blocked-ad-${this.id}`, () => {
+      this.blockedAds++;
+    });
+
     ipcRenderer.on(
       `browserview-theme-color-updated-${this.id}`,
       (e: any, themeColor: string) => {
@@ -216,6 +223,10 @@ export class Tab {
 
     ipcRenderer.on(`view-loading-${this.id}`, (e: any, loading: boolean) => {
       this.loading = loading;
+
+      if (loading) {
+        this.blockedAds = 0;
+      }
 
       this.emitOnUpdated({
         status: loading ? 'loading' : 'complete',

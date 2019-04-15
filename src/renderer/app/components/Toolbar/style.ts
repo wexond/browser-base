@@ -23,4 +23,13 @@ export const StyledToolbar = styled.div`
 
 export const Buttons = styled.div`
   display: flex;
+  align-items: center;
+`;
+
+export const Separator = styled.div`
+  height: 16px;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.12);
+  margin-left: 8px;
+  margin-right: 8px;
 `;

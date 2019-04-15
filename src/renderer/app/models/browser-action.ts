@@ -9,26 +9,26 @@ interface Options {
 
 export class BrowserAction {
   @observable
-  public icon: string;
+  public icon?: string;
 
   @observable
-  public popup: string;
+  public popup?: string;
 
   @observable
-  public title: string;
+  public title?: string;
 
   @observable
-  public badgeBackgroundColor: string = 'gray';
+  public badgeBackgroundColor?: string = 'gray';
 
   @observable
-  public badgeTextColor: string = 'white';
+  public badgeTextColor?: string = 'white';
 
   @observable
-  public badgeText: string = '';
+  public badgeText?: string = '';
 
-  public tabId: number;
+  public tabId?: number;
 
-  public extensionId: string;
+  public extensionId?: string;
 
   constructor(options: Options) {
     const { icon, title, extensionId, popup } = options;

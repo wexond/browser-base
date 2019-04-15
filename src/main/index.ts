@@ -5,7 +5,7 @@ import { AppWindow } from './app-window';
 import { autoUpdater } from 'electron-updater';
 import { loadExtensions } from './extensions';
 import { registerProtocols } from './protocols';
-import { runWebRequestService } from './services/web-request';
+import { runWebRequestService, loadFilters } from './services/web-request';
 import { existsSync, writeFileSync } from 'fs';
 import { getPath } from '~/shared/utils/paths';
 import { Settings } from '~/renderer/app/models/settings';
@@ -134,6 +134,7 @@ app.on('ready', () => {
       });
     });
 
+  loadFilters();
   loadExtensions();
   runWebRequestService(appWindow);
 });
