@@ -34,8 +34,8 @@ export const Icon = styled.div`
   ${({ invert, light }: { invert: boolean; light: boolean }) => css`
     filter: ${invert ? 'invert(100%)' : 'none'};
     background-color: ${light
-      ? 'rgba(255, 255, 255, 0.2)'
-      : 'rgba(0, 0, 0, 0.2)'};
+      ? 'rgba(255, 255, 255, 0.12)'
+      : 'rgba(0, 0, 0, 0.12)'};
   `}
 `;
 

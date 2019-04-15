@@ -9,13 +9,13 @@ import {
   Back,
   Menu,
   MenuItem,
+  LeftMenu,
+  Header,
+  HeaderTitle,
+  MenuItems,
 } from '../Overlay/style';
 import { Button } from '~/renderer/components/Button';
 import {
-  LeftMenu,
-  Header,
-  Title,
-  MenuItems,
   Sections,
   Search,
   Input,
@@ -114,7 +114,7 @@ export const Bookmarks = observer(() => {
         <LeftMenu>
           <Header>
             <Back onClick={onBackClick} />
-            <Title>Bookmarks</Title>
+            <HeaderTitle>Bookmarks</HeaderTitle>
           </Header>
           <Search>
             <Input placeholder="Search" onInput={onInput} />

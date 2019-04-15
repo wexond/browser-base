@@ -5,7 +5,7 @@ import { icons } from '../../constants';
 export const StyledSearchBox = styled.div`
   margin-top: 48px;
   z-index: 2;
-  background-color: #212121;
+  background-color: rgba(255, 255, 255, 0.08);
   border-radius: 23px;
   margin-bottom: 32px;
   display: flex;

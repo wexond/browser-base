@@ -4,14 +4,20 @@ import { observer } from 'mobx-react';
 import store from '../../store';
 import HistorySection from '../HistorySection';
 import { QuickRange } from '../../store/history';
-import { Container, Scrollable, Content, Back } from '../Overlay/style';
-import { Button } from '~/renderer/components/Button';
 import {
+  Container,
+  Scrollable,
+  Content,
+  Back,
   LeftMenu,
   Header,
-  Title,
-  StyledMenuItem,
+  HeaderTitle,
   MenuItems,
+  StyledMenuItem,
+} from '../Overlay/style';
+import { Button } from '~/renderer/components/Button';
+import {
+  Title,
   Sections,
   Search,
   Input,
@@ -110,7 +116,7 @@ export const History = observer(() => {
         <LeftMenu onClick={preventHiding}>
           <Header>
             <Back onClick={onBackClick} />
-            <Title>History</Title>
+            <HeaderTitle>History</HeaderTitle>
           </Header>
           <Search>
             <Input placeholder="Search" onInput={onInput} />
