@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import store from '../../store';
 import { DownloadItem } from '../../models/download-item';
 import { StyledItem, Icon, Progress, Name, Info, Details } from './style';
-import { execFile } from 'child_process';
 import { shell } from 'electron';
 
 const prettyBytes = require('pretty-bytes');
