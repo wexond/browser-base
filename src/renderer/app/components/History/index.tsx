@@ -4,26 +4,12 @@ import { observer } from 'mobx-react';
 import store from '../../store';
 import HistorySection from '../HistorySection';
 import { QuickRange } from '../../store/history';
-import {
-  Container,
-  Scrollable,
-  Content,
-} from '../Overlay/style';
+import { Container, Scrollable, Content } from '../Overlay/style';
 import { Button } from '~/renderer/components/Button';
-import {
-  Sections,
-  DeletionDialog,
-  DeletionDialogLabel,
-} from './style';
+import { Sections, DeletionDialog, DeletionDialogLabel } from './style';
 import { NavigationDrawer } from '../NavigationDrawer';
 
 const scrollRef = React.createRef<HTMLDivElement>();
-
-const onBackClick = () => {
-  scrollRef.current.scrollTop = 0;
-  store.history.resetLoadedItems();
-  store.overlay.currentContent = 'default';
-};
 
 const preventHiding = (e: any) => {
   e.stopPropagation();
@@ -105,7 +91,7 @@ export const History = observer(() => {
       }
     >
       <Scrollable onScroll={onScroll} ref={scrollRef}>
-        <NavigationDrawer title='History' search onSearchInput={onInput}>
+        <NavigationDrawer title="History" search onSearchInput={onInput}>
           <MenuItem range="all">All</MenuItem>
           <MenuItem range="today">Today</MenuItem>
           <MenuItem range="yesterday">Yesterday</MenuItem>
