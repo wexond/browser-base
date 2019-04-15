@@ -2,7 +2,6 @@ import { observable, computed } from 'mobx';
 import * as React from 'react';
 import { ipcRenderer } from 'electron';
 import store from '.';
-import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 
 let lastSuggestion: string;
 
@@ -120,13 +119,13 @@ export class OverlayStore {
       ipcRenderer.send('window-focus');
 
       if (!this.isNewTab) {
-        callBrowserViewMethod('webContents.getURL').then(
-          async (url: string) => {
+        store.tabs.selectedTab
+          .callViewMethod('webContents.getURL')
+          .then(async (url: string) => {
             this.searchBoxValue = url;
             this.inputRef.current.focus();
             this.inputRef.current.select();
-          },
-        );
+          });
       } else {
         this.inputRef.current.value = '';
 

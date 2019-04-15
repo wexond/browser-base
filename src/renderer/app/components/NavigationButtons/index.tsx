@@ -5,21 +5,20 @@ import store from '~/renderer/app/store';
 import ToolbarButton from '~/renderer/app/components/ToolbarButton';
 import { icons } from '~/renderer/app/constants/icons';
 import { StyledContainer } from './style';
-import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 
 const onBackClick = () => {
-  callBrowserViewMethod('webContents.goBack');
+  store.tabs.selectedTab.callViewMethod('webContents.goBack');
 };
 
 const onForwardClick = () => {
-  callBrowserViewMethod('webContents.goForward');
+  store.tabs.selectedTab.callViewMethod('webContents.goForward');
 };
 
 const onRefreshClick = () => {
   if (store.tabs.selectedTab && store.tabs.selectedTab.loading) {
-    callBrowserViewMethod('webContents.stop');
+    store.tabs.selectedTab.callViewMethod('webContents.stop');
   } else {
-    callBrowserViewMethod('webContents.reload');
+    store.tabs.selectedTab.callViewMethod('webContents.reload');
   }
 };
 

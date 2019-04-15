@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { centerImage, overline } from '~/shared/mixins';
+import { centerIcon, overline } from '~/shared/mixins';
 
 export const StyledCard = styled.div`
   background-color: rgba(255, 255, 255, 0.08);
@@ -36,13 +36,13 @@ export const Left = styled.div`
 `;
 
 export const Icon = styled.div`
-  ${centerImage('80px', '80px')};
+  ${centerIcon()};
   width: 80px;
   height: 80px;
 `;
 
 export const SmallIcon = styled.div`
-  ${centerImage('32px', '32px')};
+  ${centerIcon()};
   width: 32px;
   height: 32px;
   margin-top: 16px;

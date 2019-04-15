@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { caption, centerImage } from '~/shared/mixins';
+import { caption, centerIcon } from '~/shared/mixins';
 
 export const StyledBubble = styled.div`
   border-radius: 16px;
@@ -29,7 +29,7 @@ export const Icon = styled.div`
   background-color: #212121;
   border-radius: 50%;
   margin-bottom: 16px;
-  ${centerImage('32px', '32px')};
+  ${centerIcon(32)};
 
   ${({ invert, light }: { invert: boolean; light: boolean }) => css`
     filter: ${invert ? 'invert(100%)' : 'none'};

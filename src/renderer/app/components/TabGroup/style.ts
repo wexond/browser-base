@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { centerImage, shadows } from '~/shared/mixins';
+import { centerIcon, shadows } from '~/shared/mixins';
 
 export const StyledTabGroup = styled.div`
   position: relative;
@@ -39,7 +39,7 @@ export const Icons = styled.div`
 `;
 
 export const Icon = styled.div`
-  ${centerImage('16px', '16px')};
+  ${centerIcon()};
   width: 16px;
   height: 16px;
   margin-left: 4px;

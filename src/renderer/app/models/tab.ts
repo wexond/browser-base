@@ -12,6 +12,7 @@ import {
 } from '~/renderer/app/constants';
 import { closeWindow, getColorBrightness } from '../utils';
 import { colors } from '~/renderer/constants';
+import { makeId } from '~/shared/utils/string';
 
 let id = 1;
 
@@ -46,14 +47,34 @@ export class Tab {
   @observable
   public url = '';
 
-  public left = 0;
-  public tempPosition = 0;
-  public lastUrl = '';
-  public isClosing = false;
-  public ref = React.createRef<HTMLDivElement>();
-  public lastHistoryId: string;
-  public hasThemeColor = false;
-  public webContentsId: number;
+  @observable
+  private _findVisible = false;
+
+  @observable
+  public findOccurrences = '0/0';
+
+  @observable
+  public findText = '';
+
+  @computed
+  public get findVisible() {
+    return this._findVisible;
+  }
+
+  public set findVisible(val: boolean) {
+    this._findVisible = val;
+
+    if (val) {
+      ipcRenderer.send('window-focus');
+    }
+
+    requestAnimationFrame(() => {
+      store.tabs.updateTabsBounds(true);
+      if (val) {
+        store.findInputRef.current.focus();
+      }
+    });
+  }
 
   @computed
   public get isSelected() {
@@ -94,6 +115,16 @@ export class Tab {
   public get isIconSet() {
     return this.favicon !== '' || this.loading;
   }
+
+  public left = 0;
+  public tempPosition = 0;
+  public lastUrl = '';
+  public isClosing = false;
+  public ref = React.createRef<HTMLDivElement>();
+  public lastHistoryId: string;
+  public hasThemeColor = false;
+  public webContentsId: number;
+  public findRequestId: number;
 
   constructor({ url, active } = defaultTabOptions, tabGroupId: number) {
     this.tabGroupId = tabGroupId;
@@ -355,6 +386,25 @@ export class Tab {
 
   public emitOnUpdated = (data: any) => {
     store.tabs.emitEvent('onUpdated', this.id, data, this.getApiTab());
+  };
+
+  callViewMethod = (scope: string, ...args: any[]) => {
+    return new Promise((resolve: any) => {
+      const callId = makeId(32);
+      ipcRenderer.send('browserview-call', {
+        args,
+        scope,
+        tabId: this.id,
+        callId,
+      });
+
+      ipcRenderer.once(
+        `browserview-call-result-${callId}`,
+        (e: any, result: any) => {
+          resolve(result);
+        },
+      );
+    });
   };
 
   public getApiTab(): chrome.tabs.Tab {

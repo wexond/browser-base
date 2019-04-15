@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import store from '../../store';
 import { isURL } from '~/shared/utils/url';
-import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 import { observer } from 'mobx-react';
 import { StyledSearchBox, InputContainer, SearchIcon, Input } from './style';
 import { Suggestions } from '../Suggestions';
@@ -34,7 +33,7 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
       store.tabs.addTab({ url, active: true });
     } else {
       tab.url = url;
-      callBrowserViewMethod('webContents.loadURL', tab.id, url);
+      tab.callViewMethod('webContents.loadURL', url);
     }
 
     store.overlay.visible = false;

@@ -1,4 +1,6 @@
-import { observable } from 'mobx';
+import * as React from 'react';
+import { observable, computed } from 'mobx';
+
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
@@ -49,6 +51,8 @@ export class Store {
   public settings: Settings = {
     dialType: 'top-sites',
   };
+
+  public findInputRef = React.createRef<HTMLInputElement>();
 
   public canToggleMenu = false;
 
@@ -123,6 +127,12 @@ export class Store {
         contents.send('api-browserAction-setBadgeText');
       },
     );
+
+    ipcRenderer.on('find', () => {
+      if (this.tabs.selectedTab) {
+        this.tabs.selectedTab.findVisible = true;
+      }
+    });
 
     ipcRenderer.send('update-check');
 

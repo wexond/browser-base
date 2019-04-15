@@ -1,4 +1,4 @@
-import { shadows, centerImage } from '~/shared/mixins';
+import { shadows, centerIcon } from '~/shared/mixins';
 import styled, { css } from 'styled-components';
 
 export const ContextMenu = styled.div`
@@ -38,7 +38,7 @@ export const ContextMenuItem = styled.div`
         content: '';
         filter: invert(100%);
         opacity: 0.54;
-        ${centerImage('16px', '16px')};
+        ${centerIcon()};
         width: 16px;
         height: 16px;
         left: 16px;

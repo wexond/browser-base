@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { platform } from 'os';
-import { centerImage } from '~/shared/mixins';
+import { centerIcon } from '~/shared/mixins';
 import { icons } from '../../constants';
 
 export const StyledNavigationDrawer = styled.div`
@@ -28,7 +28,7 @@ export const Title = styled.div`
 `;
 
 export const Back = styled.div`
-  ${centerImage('24px', '24px')};
+  ${centerIcon()};
   background-image: url(${icons.arrowBack});
   height: 24px;
   width: 24px;
@@ -74,7 +74,7 @@ export const Search = styled.div`
     transform: translateY(-50%);
     width: 16px;
     height: 16px;
-    ${centerImage('16px', '16px')};
+    ${centerIcon(16)};
     background-image: url(${icons.search});
     filter: invert(100%);
   }

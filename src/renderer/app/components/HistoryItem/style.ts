@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
 
-import { centerImage } from '~/shared/mixins';
+import { centerIcon } from '~/shared/mixins';
 import { icons } from '../../constants';
 
 export const Remove = styled.div`
-  ${centerImage('16px', '16px')};
+  ${centerIcon()};
   height: 16px;
   width: 16px;
   background-image: url(${icons.close});
@@ -17,7 +17,7 @@ export const Remove = styled.div`
 `;
 
 export const Favicon = styled.div`
-  ${centerImage('16px', '16px')};
+  ${centerIcon()};
   height: 16px;
   width: 16px;
   margin-right: 24px;

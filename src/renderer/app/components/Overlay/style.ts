@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { centerImage } from '~/shared/mixins';
+import { centerIcon } from '~/shared/mixins';
 import { icons } from '../../constants';
 
 export const OverlayScrollbarStyle = `
@@ -66,16 +66,16 @@ export const HeaderText = styled.div`
 `;
 
 export const HeaderArrow = styled.div`
-  ${centerImage('18px', '18px')};
+  ${centerIcon()};
   margin-left: 8px;
-  height: 16px;
-  width: 16px;
+  height: 18px;
+  width: 18px;
   background-image: url(${icons.forward});
   filter: invert(100%);
 `;
 
 export const DropArrow = styled.div`
-  ${centerImage('24px', '24px')};
+  ${centerIcon(24)};
   margin-left: 8px;
   height: 32px;
   width: 32px;

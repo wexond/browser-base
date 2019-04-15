@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { centerImage, shadows } from '~/shared/mixins';
+import { centerIcon, shadows } from '~/shared/mixins';
 import { icons } from '../../constants';
 import { Button } from '~/renderer/components/Button';
 import { platform } from 'os';

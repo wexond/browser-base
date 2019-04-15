@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { centerImage } from '~/shared/mixins';
+import { centerIcon } from '~/shared/mixins';
 import { icons } from '../../constants';
 import { colors } from '~/renderer/constants';
 
@@ -34,7 +34,7 @@ export const Progress = styled.div`
 export const Icon = styled.div`
   height: 20px;
   width: 20px;
-  ${centerImage('100%', '100%')};
+  ${centerIcon()};
   margin-left: 16px;
   margin-right: 16px;
   background-image: url(${icons.page});

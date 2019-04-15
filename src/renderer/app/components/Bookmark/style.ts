@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
 
-import { centerImage } from '~/shared/mixins';
+import { centerIcon } from '~/shared/mixins';
 import { icons } from '../../constants';
 
 export const More = styled.div`
-  ${centerImage('20px', '20px')};
+  ${centerIcon(20)};
   height: 24px;
   width: 24px;
   background-image: url(${icons.more});
@@ -17,7 +17,7 @@ export const More = styled.div`
 `;
 
 export const Favicon = styled.div`
-  ${centerImage('16px', '16px')};
+  ${centerIcon()};
   height: 16px;
   width: 16px;
   margin-right: 24px;

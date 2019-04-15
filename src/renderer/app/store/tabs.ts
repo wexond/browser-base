@@ -74,6 +74,20 @@ export class TabsStore {
         this.addTab(options);
       },
     );
+
+    ipcRenderer.on(
+      `found-in-page`,
+      (
+        e: any,
+        { activeMatchOrdinal, matches, requestId }: Electron.FoundInPageResult,
+      ) => {
+        const tab = this.list.find(x => x.findRequestId === requestId);
+
+        if (tab) {
+          tab.findOccurrences = `${activeMatchOrdinal}/${matches}`;
+        }
+      },
+    );
   }
 
   public resetRearrangeTabsTimer() {

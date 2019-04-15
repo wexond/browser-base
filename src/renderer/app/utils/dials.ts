@@ -1,4 +1,3 @@
-import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 import store from '../store';
 
 export const onSiteClick = (url: string) => () => {
@@ -8,7 +7,7 @@ export const onSiteClick = (url: string) => () => {
     store.tabs.addTab({ url, active: true });
   } else {
     tab.url = url;
-    callBrowserViewMethod('webContents.loadURL', tab.id, url);
+    tab.callViewMethod('webContents.loadURL', url);
   }
 
   store.overlay.visible = false;

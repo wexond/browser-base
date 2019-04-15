@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { centerImage } from '~/shared/mixins';
+import { centerIcon } from '~/shared/mixins';
 import { icons } from '../../constants';
 
 export const StyledSearchBox = styled.div`
@@ -16,7 +16,7 @@ export const StyledSearchBox = styled.div`
 `;
 
 export const SearchIcon = styled.div`
-  ${centerImage('18px', '18px')};
+  ${centerIcon()};
   background-image: url(${icons.search});
   height: 18px;
   filter: invert(100%);

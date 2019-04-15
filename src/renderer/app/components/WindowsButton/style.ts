@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { centerImage } from '~/shared/mixins';
+import { centerIcon } from '~/shared/mixins';
 
 interface ButtonProps {
   icon: string;
@@ -34,7 +34,7 @@ export const Icon = styled.div`
   width: 100%;
   height: 100%;
   transition: 0.2s filter;
-  ${centerImage('11px', '11px')};
+  ${centerIcon(11)};
   ${({ icon, isClose, isDark }: IconProps) => css`
     filter: ${isDark ? 'invert(100%)' : 'none'};
     background-image: url(${icon});

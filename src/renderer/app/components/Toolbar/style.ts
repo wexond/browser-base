@@ -8,6 +8,7 @@ export const StyledToolbar = styled.div`
   z-index: 100;
   display: flex;
   flex-flow: row;
+  align-items: center;
   background-color: #fff;
   color: rgba(0, 0, 0, 0.8);
   width: 100%;
@@ -20,7 +21,6 @@ export const StyledToolbar = styled.div`
   `};
 `;
 
-export const StyledBrowserActions = styled.div`
+export const Buttons = styled.div`
   display: flex;
-  margin-right: 2px;
 `;

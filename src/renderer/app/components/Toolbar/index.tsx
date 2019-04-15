@@ -3,14 +3,14 @@ import * as React from 'react';
 import { platform } from 'os';
 
 import store from '~/renderer/app/store';
-import { StyledToolbar, StyledBrowserActions } from './style';
-import { WindowsButtons } from '../WindowsButtons';
+import { StyledToolbar, Buttons } from './style';
 import { NavigationButtons } from '../NavigationButtons';
 import { Tabbar } from '../Tabbar';
 import ToolbarButton from '../ToolbarButton';
 import { icons } from '../../constants';
 import { ipcRenderer } from 'electron';
 import BrowserAction from '../BrowserAction';
+import { Find } from '../Find';
 
 const onUpdateClick = () => {
   ipcRenderer.send('update-install');
@@ -22,7 +22,7 @@ class BrowserActions extends React.Component {
     const { selectedTabId } = store.tabGroups.currentGroup;
 
     return (
-      <StyledBrowserActions>
+      <>
         {selectedTabId &&
           store.extensions.browserActions.map(item => {
             if (item.tabId === selectedTabId) {
@@ -30,7 +30,7 @@ class BrowserActions extends React.Component {
             }
             return null;
           })}
-      </StyledBrowserActions>
+      </>
     );
   }
 }
@@ -40,14 +40,13 @@ export const Toolbar = observer(() => {
     <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
       <NavigationButtons />
       <Tabbar />
-      <BrowserActions />
-      {store.updateInfo.available && (
-        <ToolbarButton
-          icon={icons.download}
-          style={{ marginRight: 16 }}
-          onClick={onUpdateClick}
-        />
-      )}
+      <Find />
+      <Buttons>
+        <BrowserActions />
+        {store.updateInfo.available && (
+          <ToolbarButton icon={icons.download} onClick={onUpdateClick} />
+        )}
+      </Buttons>
     </StyledToolbar>
   );
 });

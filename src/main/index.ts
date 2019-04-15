@@ -47,12 +47,10 @@ app.on('ready', () => {
           { role: 'quit' },
           { role: 'reload' },
           {
-            type: 'normal',
-            accelerator: 'CmdOrCtrl+Shift+R',
-            label: 'Reload main process',
+            accelerator: 'CmdOrCtrl+F',
+            label: 'Find in page',
             click() {
-              app.relaunch();
-              app.exit();
+              appWindow.webContents.send('find');
             },
           },
         ],

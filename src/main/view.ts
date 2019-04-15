@@ -174,6 +174,10 @@ export class View extends BrowserView {
       menu.popup();
     });
 
+    this.webContents.addListener('found-in-page', (e, result) => {
+      appWindow.webContents.send('found-in-page', result);
+    });
+
     this.webContents.addListener('did-stop-loading', () => {
       this.updateNavigationState();
       appWindow.webContents.send(`view-loading-${this.tabId}`, false);

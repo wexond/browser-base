@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { body2, centerImage } from '~/shared/mixins';
+import { body2, centerIcon } from '~/shared/mixins';
 import { transparency } from '~/renderer/constants';
 
 export const StyledSuggestion = styled.div`
@@ -51,7 +51,7 @@ export const Icon = styled.div`
   width: 16px;
   min-width: 16px;
   height: 16px;
-  ${centerImage('16px', '16px')};
+  ${centerIcon()};
 `;
 
 export const Dash = styled.div`

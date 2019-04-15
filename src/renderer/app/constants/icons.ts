@@ -23,6 +23,7 @@ import star from '~/shared/resources/icons/star.svg';
 import starFilled from '~/shared/resources/icons/star-filled.svg';
 import fire from '~/shared/resources/icons/fire.svg';
 import trash from '~/shared/resources/icons/delete.svg';
+import up from '~/shared/resources/icons/up.svg';
 
 import fewClouds from '~/shared/resources/icons/weather/few-clouds.png';
 
@@ -53,4 +54,5 @@ export const icons = {
   starFilled,
   fire,
   trash,
+  up,
 };
