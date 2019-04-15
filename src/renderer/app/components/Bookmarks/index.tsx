@@ -2,13 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import store from '../../store';
-import {
-  Container,
-  Scrollable,
-  Content,
-  Menu,
-  MenuItem,
-} from '../Overlay/style';
+import { Container, Scrollable, Content } from '../Overlay/style';
 import { Button } from '~/renderer/components/Button';
 import {
   Sections,
@@ -20,6 +14,7 @@ import BookmarkC from '../Bookmark';
 import { Bookmark } from '../../models/bookmark';
 import { icons } from '../../constants';
 import { NavigationDrawer } from '../NavigationDrawer';
+import { ContextMenu, ContextMenuItem } from '../ContextMenu';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -105,23 +100,23 @@ export const Bookmarks = observer(() => {
       }
     >
       <Scrollable onScroll={onScroll} ref={scrollRef}>
-        <NavigationDrawer title="Bookmarks" search onSearchInput={onInput}></NavigationDrawer>
+        <NavigationDrawer title="Bookmarks" search onSearchInput={onInput} />
         {store.bookmarks.visibleItems.length > 0 && <BookmarksList />}
         <Dialog />
-        <Menu
+        <ContextMenu
           style={{
             top: store.bookmarks.menuTop,
             left: store.bookmarks.menuLeft - 130,
           }}
           visible={store.bookmarks.menuVisible}
         >
-          <MenuItem
+          <ContextMenuItem
             onClick={onRemoveClick(store.bookmarks.currentBookmark)}
             icon={icons.trash}
           >
             Remove
-          </MenuItem>
-        </Menu>
+          </ContextMenuItem>
+        </ContextMenu>
       </Scrollable>
     </Container>
   );

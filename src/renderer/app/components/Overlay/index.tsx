@@ -10,11 +10,8 @@ import {
   Scrollable,
   Title,
   Content,
-  DropArrow,
   Container,
   Actions,
-  Menu,
-  MenuItem,
   Downloads,
 } from './style';
 import { SearchBox } from '../SearchBox';
@@ -24,9 +21,8 @@ import { WeatherCard } from '../WeatherCard';
 import { History } from '../History';
 import { Bookmarks } from '../Bookmarks';
 import { Bubble } from '../Bubble';
-import { BookmarksDial } from './Dials/bookmarks';
-import { TopSites } from './Dials/top-sites';
 import DownloadItem from '../DownloadItem';
+import { Dial } from './dial';
 
 export const Header = ({ children, clickable }: any) => {
   return (
@@ -52,57 +48,6 @@ const preventHiding = (e: any) => {
 const changeContent = (content: 'history' | 'default' | 'bookmarks') => () => {
   store.overlay.currentContent = content;
 };
-
-const changeDialType = (type: 'top-sites' | 'bookmarks') => () => {
-  store.settings.dialType = type;
-  store.saveSettings();
-};
-
-const onDialTitleClick = (e: any) => {
-  e.stopPropagation();
-  store.overlay.dialTypeMenuVisible = !store.overlay.dialTypeMenuVisible;
-};
-
-export const Dial = observer(() => {
-  const { dialType } = store.settings;
-
-  return (
-    <>
-      {(store.history.topSites.length > 0 ||
-        store.bookmarks.list.length > 0) && (
-        <>
-          <Title
-            onClick={onDialTitleClick}
-            style={{ marginBottom: 24, cursor: 'pointer' }}
-          >
-            {dialType === 'bookmarks' ? 'Bookmarks' : 'Top Sites'}
-            <DropArrow />
-            <Menu
-              style={{ top: 42 }}
-              visible={store.overlay.dialTypeMenuVisible}
-            >
-              <MenuItem
-                icon={icons.fire}
-                selected={dialType === 'top-sites'}
-                onClick={changeDialType('top-sites')}
-              >
-                Top Sites
-              </MenuItem>
-              <MenuItem
-                icon={icons.bookmarks}
-                selected={dialType === 'bookmarks'}
-                onClick={changeDialType('bookmarks')}
-              >
-                Bookmarks
-              </MenuItem>
-            </Menu>
-          </Title>
-          {dialType === 'bookmarks' ? <BookmarksDial /> : <TopSites />}
-        </>
-      )}
-    </>
-  );
-});
 
 export const Overlay = observer(() => {
   return (
