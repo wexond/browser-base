@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { centerImage, overline } from '~/shared/mixins';
 
 export const StyledCard = styled.div`
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.08);
   margin-bottom: 24px;
   border-radius: 30px;
   color: white;

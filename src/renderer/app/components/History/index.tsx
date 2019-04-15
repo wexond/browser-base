@@ -8,22 +8,14 @@ import {
   Container,
   Scrollable,
   Content,
-  Back,
-  LeftMenu,
-  Header,
-  HeaderTitle,
-  MenuItems,
-  StyledMenuItem,
 } from '../Overlay/style';
 import { Button } from '~/renderer/components/Button';
 import {
-  Title,
   Sections,
-  Search,
-  Input,
   DeletionDialog,
   DeletionDialogLabel,
 } from './style';
+import { NavigationDrawer } from '../NavigationDrawer';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -49,17 +41,6 @@ const onScroll = (e: any) => {
 const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
   store.history.search(e.currentTarget.value);
 };
-
-const MenuItem = observer(
-  ({ range, children }: { range: QuickRange; children: any }) => (
-    <StyledMenuItem
-      onClick={() => (store.history.selectedRange = range)}
-      selected={store.history.selectedRange === range}
-    >
-      {children}
-    </StyledMenuItem>
-  ),
-);
 
 const onCancelClick = (e: React.MouseEvent) => {
   e.stopPropagation();
@@ -103,6 +84,17 @@ const Dialog = observer(() => {
   );
 });
 
+const MenuItem = observer(
+  ({ range, children }: { range: QuickRange; children: any }) => (
+    <NavigationDrawer.Item
+      onClick={() => (store.history.selectedRange = range)}
+      selected={store.history.selectedRange === range}
+    >
+      {children}
+    </NavigationDrawer.Item>
+  ),
+);
+
 export const History = observer(() => {
   return (
     <Container
@@ -113,23 +105,14 @@ export const History = observer(() => {
       }
     >
       <Scrollable onScroll={onScroll} ref={scrollRef}>
-        <LeftMenu onClick={preventHiding}>
-          <Header>
-            <Back onClick={onBackClick} />
-            <HeaderTitle>History</HeaderTitle>
-          </Header>
-          <Search>
-            <Input placeholder="Search" onInput={onInput} />
-          </Search>
-          <MenuItems>
-            <MenuItem range="all">All</MenuItem>
-            <MenuItem range="today">Today</MenuItem>
-            <MenuItem range="yesterday">Yesterday</MenuItem>
-            <MenuItem range="last-week">Last week</MenuItem>
-            <MenuItem range="last-month">Last month</MenuItem>
-            <MenuItem range="older">Older</MenuItem>
-          </MenuItems>
-        </LeftMenu>
+        <NavigationDrawer title='History' search onSearchInput={onInput}>
+          <MenuItem range="all">All</MenuItem>
+          <MenuItem range="today">Today</MenuItem>
+          <MenuItem range="yesterday">Yesterday</MenuItem>
+          <MenuItem range="last-week">Last week</MenuItem>
+          <MenuItem range="last-month">Last month</MenuItem>
+          <MenuItem range="older">Older</MenuItem>
+        </NavigationDrawer>
         <HistorySections />
         <Dialog />
       </Scrollable>

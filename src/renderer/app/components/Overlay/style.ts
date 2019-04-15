@@ -158,20 +158,6 @@ export const Content = styled.div`
   max-width: 800px;
 `;
 
-export const Back = styled.div`
-  ${centerImage('24px', '24px')};
-  background-image: url(${icons.arrowBack});
-  height: 24px;
-  width: 24px;
-  opacity: 0.54;
-  margin-right: 24px;
-  filter: invert(100%);
-
-  &:hover {
-    opacity: 1;
-  }
-`;
-
 export const Menu = styled.div`
   position: absolute;
   transition: 0.2s opacity, 0.2s margin-top;
@@ -240,54 +226,5 @@ export const Downloads = styled.div`
 
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.48);
-  }
-`;
-
-export const LeftMenu = styled.div`
-  width: 300px;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.08);
-  position: fixed;
-  left: 0;
-`;
-
-export const MenuItems = styled.div`
-  margin-top: 24px;
-`;
-
-export const Header = styled.div`
-  display: flex;
-  margin-top: ${platform() === 'darwin' ? 48 : 32}px;
-  margin-left: 32px;
-  align-items: center;
-`;
-
-export const HeaderTitle = styled.div`
-  font-size: 24px;
-  font-weight: 300;
-`;
-
-export const StyledMenuItem = styled.div`
-  padding: 0 16px;
-  margin-left: 32px;
-  margin-right: 32px;
-  display: flex;
-  height: 42px;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-  &:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    width: 2px;
-    height: 16px;
-    background-color: white;
-    ${({ selected }: { selected?: boolean }) => css`
-      opacity: ${selected ? 1 : 0};
-    `};
-  }
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.12);
   }
 `;

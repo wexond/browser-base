@@ -6,19 +6,12 @@ import {
   Container,
   Scrollable,
   Content,
-  Back,
   Menu,
   MenuItem,
-  LeftMenu,
-  Header,
-  HeaderTitle,
-  MenuItems,
 } from '../Overlay/style';
 import { Button } from '~/renderer/components/Button';
 import {
   Sections,
-  Search,
-  Input,
   DeletionDialog,
   DeletionDialogLabel,
   BookmarkSection,
@@ -26,6 +19,7 @@ import {
 import BookmarkC from '../Bookmark';
 import { Bookmark } from '../../models/bookmark';
 import { icons } from '../../constants';
+import { NavigationDrawer } from '../NavigationDrawer';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -111,16 +105,7 @@ export const Bookmarks = observer(() => {
       }
     >
       <Scrollable onScroll={onScroll} ref={scrollRef}>
-        <LeftMenu>
-          <Header>
-            <Back onClick={onBackClick} />
-            <HeaderTitle>Bookmarks</HeaderTitle>
-          </Header>
-          <Search>
-            <Input placeholder="Search" onInput={onInput} />
-          </Search>
-          <MenuItems />
-        </LeftMenu>
+        <NavigationDrawer title="Bookmarks" search onSearchInput={onInput}></NavigationDrawer>
         {store.bookmarks.visibleItems.length > 0 && <BookmarksList />}
         <Dialog />
         <Menu
