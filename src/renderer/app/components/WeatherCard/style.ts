@@ -7,7 +7,7 @@ export const StyledCard = styled.div`
   border-radius: 30px;
   color: white;
   overflow: hidden;
-  width: 33%;
+  width: 264px;
 `;
 
 export const Header = styled.div`
