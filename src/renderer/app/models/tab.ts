@@ -70,7 +70,7 @@ export class Tab {
 
     requestAnimationFrame(() => {
       store.tabs.updateTabsBounds(true);
-      if (val) {
+      if (val && store.findInputRef.current) {
         store.findInputRef.current.focus();
       }
     });

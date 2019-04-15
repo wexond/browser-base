@@ -82,6 +82,7 @@ export const Find = observer(() => {
     >
       <SearchIcon style={{ filter: 'none' }} />
       <Input
+        autoFocus
         value={value}
         onKeyPress={onKeyPress}
         onChange={onInput}
