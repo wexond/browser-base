@@ -2,6 +2,9 @@ os: unstable
 environment:
   matrix:
     - nodejs_version: '11'
+platform:
+  - x86
+  - x64
 install:
   - ps: Install-Product node $env:nodejs_version
   - set CI=true
