@@ -10,6 +10,16 @@ const changeContent = (content: 'history' | 'default' | 'bookmarks') => () => {
   store.overlay.currentContent = content;
 };
 
+const onFindClick = () => {
+  store.overlay.visible = false;
+
+  store.tabs.selectedTab.findVisible = true;
+
+  setTimeout(() => {
+    store.tabs.selectedTab.findVisible = true;
+  }, 200);
+};
+
 export const QuickMenu = observer(() => {
   return (
     <Section onClick={preventHiding}>
@@ -34,7 +44,12 @@ export const QuickMenu = observer(() => {
         <Bubble disabled invert icon={icons.extensions}>
           Extensions
         </Bubble>
-        <Bubble disabled invert icon={icons.find}>
+        <Bubble
+          disabled={!store.tabs.selectedTab}
+          invert
+          icon={icons.find}
+          onClick={onFindClick}
+        >
           Find
         </Bubble>
         <Bubble disabled invert icon={icons.more}>
