@@ -3,21 +3,6 @@ import styled, { css } from 'styled-components';
 import { centerImage } from '~/shared/mixins';
 import { icons } from '../../constants';
 
-export const Item = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0 24px;
-  height: 48px;
-
-  ${({ selected }: { selected: boolean }) => css`
-    background-color: ${selected ? 'rgba(255, 255, 255, 0.12)' : 'transparent'};
-
-    &:hover {
-      background-color: rgba(255, 255, 255, ${selected ? 0.15 : 0.08});
-    }
-  `};
-`;
-
 export const More = styled.div`
   ${centerImage('20px', '20px')};
   height: 24px;

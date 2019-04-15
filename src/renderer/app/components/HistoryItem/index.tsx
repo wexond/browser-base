@@ -4,7 +4,8 @@ import { observer } from 'mobx-react';
 import store from '../../store';
 import { HistoryItem } from '../../models';
 import { formatTime } from '../../utils';
-import { Favicon, Item, Remove, Title, Time, Site } from './style';
+import { Favicon, Remove, Title, Time, Site } from './style';
+import { ListItem } from '../ListItem';
 
 const onClick = (item: HistoryItem) => (e: React.MouseEvent) => {
   if (!e.ctrlKey) return;
@@ -30,10 +31,10 @@ const onRemoveClick = (item: HistoryItem) => () => {
 };
 
 export default observer(({ data }: { data: HistoryItem }) => {
-  const selected = store.history.selectedItems.indexOf(data._id) !== -1;
+  const selected = store.history.selectedItems.includes(data._id);
 
   return (
-    <Item key={data._id} onClick={onClick(data)} selected={selected}>
+    <ListItem key={data._id} onClick={onClick(data)} selected={selected}>
       <Favicon
         style={{
           backgroundImage: `url(${store.favicons.favicons[data.favicon]})`,
@@ -43,6 +44,6 @@ export default observer(({ data }: { data: HistoryItem }) => {
       <Site>{data.url.split('/')[2]}</Site>
       <Time>{formatTime(new Date(data.date))}</Time>
       <Remove onClick={onRemoveClick(data)} />
-    </Item>
+    </ListItem>
   );
 });

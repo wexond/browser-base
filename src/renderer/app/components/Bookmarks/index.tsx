@@ -3,30 +3,21 @@ import { observer } from 'mobx-react';
 
 import store from '../../store';
 import { Button } from '~/renderer/components/Button';
-import {
-  Sections,
-  DeletionDialog,
-  DeletionDialogLabel,
-  BookmarkSection,
-} from './style';
+import { Sections, BookmarkSection } from './style';
 import BookmarkC from '../Bookmark';
 import { Bookmark } from '../../models/bookmark';
 import { icons } from '../../constants';
 import { NavigationDrawer } from '../NavigationDrawer';
 import { ContextMenu, ContextMenuItem } from '../ContextMenu';
 import { Content, Container, Scrollable } from '../Overlay/style';
+import { SelectionDialog } from '../SelectionDialog';
+import { preventHiding } from '../Overlay';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
 const onBackClick = () => {
   scrollRef.current.scrollTop = 0;
   store.bookmarks.resetLoadedItems();
-  store.overlay.currentContent = 'default';
-};
-
-const preventHiding = (e: any) => {
-  e.stopPropagation();
-  store.bookmarks.menuVisible = false;
 };
 
 const onScroll = (e: any) => {
@@ -43,12 +34,10 @@ const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
 };
 
 const onCancelClick = (e: React.MouseEvent) => {
-  e.stopPropagation();
   store.bookmarks.selectedItems = [];
 };
 
 const onDeleteClick = (e: React.MouseEvent) => {
-  e.stopPropagation();
   store.bookmarks.deleteSelected();
 };
 
@@ -70,27 +59,9 @@ const BookmarksList = observer(() => {
   );
 });
 
-const Dialog = observer(() => {
-  const selectedCount = store.bookmarks.selectedItems.length;
-
-  return (
-    <DeletionDialog visible={selectedCount !== 0}>
-      <DeletionDialogLabel>{selectedCount} selected</DeletionDialogLabel>
-      <Button style={{ marginLeft: 16 }} onClick={onDeleteClick}>
-        Delete
-      </Button>
-      <Button
-        background="#757575"
-        style={{ marginLeft: 8 }}
-        onClick={onCancelClick}
-      >
-        Cancel
-      </Button>
-    </DeletionDialog>
-  );
-});
-
 export const Bookmarks = observer(() => {
+  const { length } = store.bookmarks.selectedItems;
+
   return (
     <Container
       onClick={preventHiding}
@@ -100,9 +71,19 @@ export const Bookmarks = observer(() => {
       }
     >
       <Scrollable onScroll={onScroll} ref={scrollRef}>
-        <NavigationDrawer title="Bookmarks" search onSearchInput={onInput} />
+        <NavigationDrawer
+          title="Bookmarks"
+          search
+          onSearchInput={onInput}
+          onBackClick={onBackClick}
+        />
         {store.bookmarks.visibleItems.length > 0 && <BookmarksList />}
-        <Dialog />
+        <SelectionDialog
+          visible={length > 0}
+          amount={length}
+          onDeleteClick={onDeleteClick}
+          onCancelClick={onCancelClick}
+        />
         <ContextMenu
           style={{
             top: store.bookmarks.menuTop,

@@ -8,6 +8,7 @@ import { Button } from '~/renderer/components/Button';
 import { Sections, DeletionDialog, DeletionDialogLabel } from './style';
 import { NavigationDrawer } from '../NavigationDrawer';
 import { Content, Container, Scrollable } from '../Overlay/style';
+import { SelectionDialog } from '../SelectionDialog';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -38,6 +39,11 @@ const onDeleteClick = (e: React.MouseEvent) => {
   store.history.deleteSelected();
 };
 
+const onBackClick = () => {
+  scrollRef.current.scrollTop = 0;
+  store.history.resetLoadedItems();
+};
+
 const HistorySections = observer(() => {
   return (
     <Sections>
@@ -47,26 +53,6 @@ const HistorySections = observer(() => {
         ))}
       </Content>
     </Sections>
-  );
-});
-
-const Dialog = observer(() => {
-  const selectedCount = store.history.selectedItems.length;
-
-  return (
-    <DeletionDialog visible={selectedCount !== 0}>
-      <DeletionDialogLabel>{selectedCount} selected</DeletionDialogLabel>
-      <Button style={{ marginLeft: 16 }} onClick={onDeleteClick}>
-        Delete
-      </Button>
-      <Button
-        background="#757575"
-        style={{ marginLeft: 8 }}
-        onClick={onCancelClick}
-      >
-        Cancel
-      </Button>
-    </DeletionDialog>
   );
 });
 
@@ -82,6 +68,8 @@ const MenuItem = observer(
 );
 
 export const History = observer(() => {
+  const { length } = store.history.selectedItems;
+
   return (
     <Container
       right
@@ -91,7 +79,12 @@ export const History = observer(() => {
       }
     >
       <Scrollable onScroll={onScroll} ref={scrollRef}>
-        <NavigationDrawer title="History" search onSearchInput={onInput}>
+        <NavigationDrawer
+          title="History"
+          search
+          onSearchInput={onInput}
+          onBackClick={onBackClick}
+        >
           <MenuItem range="all">All</MenuItem>
           <MenuItem range="today">Today</MenuItem>
           <MenuItem range="yesterday">Yesterday</MenuItem>
@@ -100,7 +93,12 @@ export const History = observer(() => {
           <MenuItem range="older">Older</MenuItem>
         </NavigationDrawer>
         <HistorySections />
-        <Dialog />
+        <SelectionDialog
+          visible={length > 0}
+          amount={length}
+          onDeleteClick={onDeleteClick}
+          onCancelClick={onCancelClick}
+        />
       </Scrollable>
     </Container>
   );

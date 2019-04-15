@@ -2,8 +2,9 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import store from '../../store';
-import { Favicon, Item, Title, Site, More } from './style';
+import { Favicon, Title, Site, More } from './style';
 import { Bookmark } from '../../models/bookmark';
+import { ListItem } from '../ListItem';
 
 const onClick = (item: Bookmark) => (e: React.MouseEvent) => {
   if (!e.ctrlKey) return;
@@ -36,10 +37,10 @@ const onMoreClick = (data: Bookmark) => (e: any) => {
 };
 
 export default observer(({ data }: { data: Bookmark }) => {
-  const selected = store.history.selectedItems.indexOf(data._id) !== -1;
+  const selected = store.bookmarks.selectedItems.includes(data._id);
 
   return (
-    <Item key={data._id} onClick={onClick(data)} selected={selected}>
+    <ListItem key={data._id} onClick={onClick(data)} selected={selected}>
       <Favicon
         style={{
           backgroundImage: `url(${store.favicons.favicons[data.favicon]})`,
@@ -48,6 +49,6 @@ export default observer(({ data }: { data: Bookmark }) => {
       <Title onClick={onTitleClick(data.url)}>{data.title}</Title>
       <Site>{data.url}</Site>
       <More onClick={onMoreClick(data)} />
-    </Item>
+    </ListItem>
   );
 });

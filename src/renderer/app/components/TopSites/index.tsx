@@ -3,14 +3,14 @@ import { observer } from 'mobx-react';
 import { Actions } from '../Overlay/style';
 import store from '../../store';
 import { Bubble } from '../Bubble';
-import { getSize, onSiteClick } from '../../utils/dials';
+import { onSiteClick } from '../../utils/dials';
 
 export const TopSites = observer(() => {
   return (
     <Actions>
       {store.history.topSites.map(item => (
         <Bubble
-          width={getSize(6)}
+          itemsPerRow={6}
           onClick={onSiteClick(item.url)}
           key={item._id}
           maxLines={1}

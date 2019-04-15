@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { StyledBubble, Title, Icon } from './style';
 
+export const getSize = (i: number) => {
+  const width = 800;
+  return (width - 48 - (i - 1)) / i;
+};
+
 export const Bubble = ({
   children,
   icon,
@@ -9,9 +14,21 @@ export const Bubble = ({
   maxLines,
   iconSize,
   onClick,
-  width,
+  itemsPerRow,
   disabled,
-}: any) => {
+}: {
+  children?: any;
+  icon?: string;
+  invert?: boolean;
+  maxLines?: number;
+  light?: boolean;
+  iconSize?: number;
+  onClick?: (e?: React.MouseEvent<HTMLDivElement>) => void;
+  itemsPerRow?: number;
+  disabled?: boolean;
+}) => {
+  const width = getSize(itemsPerRow);
+
   return (
     <StyledBubble
       style={{ minWidth: width, maxWidth: width }}
@@ -40,5 +57,5 @@ export const Bubble = ({
 Bubble.defaultProps = {
   maxLines: 2,
   iconSize: 24,
-  width: (800 - 48 - (7 - 1)) / 7,
+  itemsPerRow: 7,
 };

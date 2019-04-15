@@ -11,25 +11,35 @@ import {
 } from './style';
 import { NavigationDrawerItem } from './NavigationDrawerItem';
 
-const onBackClick = () => {
+const onBack = (cb: (e?: React.MouseEvent<HTMLDivElement>) => void) => (
+  e: React.MouseEvent<HTMLDivElement>,
+) => {
+  if (cb) {
+    cb(e);
+  }
+
   store.overlay.currentContent = 'default';
 };
 
 export const NavigationDrawer = ({
   children,
   title,
-  onSearchInput,
+
   search,
+  onSearchInput,
+  onBackClick,
 }: {
   children?: any;
   title?: string;
-  onSearchInput?: (event: React.FormEvent<HTMLInputElement>) => void;
+
   search?: boolean;
+  onSearchInput?: (event: React.FormEvent<HTMLInputElement>) => void;
+  onBackClick?: (e?: React.MouseEvent<HTMLDivElement>) => void;
 }) => {
   return (
     <StyledNavigationDrawer>
       <Header>
-        <Back onClick={onBackClick} />
+        <Back onClick={onBack(onBackClick)} />
         <Title>{title}</Title>
       </Header>
       {search && (

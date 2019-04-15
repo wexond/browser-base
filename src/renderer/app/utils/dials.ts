@@ -13,8 +13,3 @@ export const onSiteClick = (url: string) => () => {
 
   store.overlay.visible = false;
 };
-
-export const getSize = (i: number) => {
-  const width = 800;
-  return (width - 48 - (i - 1)) / i;
-};
