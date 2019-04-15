@@ -22,9 +22,7 @@ class BrowserActions extends React.Component {
     const { selectedTabId } = store.tabGroups.currentGroup;
 
     return (
-      <StyledBrowserActions
-        style={{ marginRight: platform() !== 'darwin' ? 138 : 0 }}
-      >
+      <StyledBrowserActions>
         {selectedTabId &&
           store.extensions.browserActions.map(item => {
             if (item.tabId === selectedTabId) {

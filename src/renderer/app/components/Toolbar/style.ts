@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { platform } from 'os';
 
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
 
@@ -12,6 +13,7 @@ export const StyledToolbar = styled.div`
   width: 100%;
   height: ${TOOLBAR_HEIGHT}px;
   -webkit-app-region: drag;
+  padding-right: ${platform() !== 'darwin' ? 138 : 0}px;
 
   ${({ isHTMLFullscreen }: { isHTMLFullscreen: boolean }) => css`
     margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
