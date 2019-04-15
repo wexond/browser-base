@@ -21,7 +21,6 @@ Wexond is an extensible web browser with a totally different user experience, bu
 - **Built-in ad-block** - Browse the web without any ads.
 - **Beautiful and minimalistic UI** - The address bar is hidden in Overlay to take less space, but doesn't impact on usability.
 - **Tab groups** - Easily group tabs to groups and access them really fast.
-- **Expanded new tab page** - Have all information such as news, weather or currency in only one page!
 - **Partial support for Chrome extensions** - Install some extensions from Chrome Web Store (see [#110](https://github.com/wexond/wexond/issues/110))
 - **Overlay** - It contains everything you will need. Search box, bookmarks, menu, your custom components and so on!
 - **Packages** - Extend Wexond for you needs, by installing or developing your own packages. Packages can add custom components to the Overlay and also theme the browser!
