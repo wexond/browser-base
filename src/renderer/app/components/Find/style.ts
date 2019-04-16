@@ -7,7 +7,7 @@ export const StyledFind = styled.div`
   background-color: rgba(0, 0, 0, 0.08);
   border-radius: 30px;
   margin-right: 8px;
-
+  -webkit-app-region: no-drag;
   align-items: center;
   min-width: 300px;
   width: 300px;
