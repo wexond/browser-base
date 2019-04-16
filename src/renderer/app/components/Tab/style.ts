@@ -109,6 +109,7 @@ export const StyledContent = styled.div`
   position: absolute;
   overflow: hidden;
   z-index: 2;
+  align-items: center;
   display: flex;
   margin-left: 12px;
   ${({ collapsed }: ContentProps) => css`
