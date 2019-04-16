@@ -1,6 +1,8 @@
 import { BrowserView, app, Menu, nativeImage, clipboard } from 'electron';
 import { appWindow } from '.';
 import { sendToAllExtensions } from './extensions';
+import { engine } from './services/web-request';
+import { parse } from 'tldts';
 
 export class View extends BrowserView {
   public title: string = '';
@@ -190,6 +192,19 @@ export class View extends BrowserView {
 
     this.webContents.addListener('did-start-navigation', (...args: any[]) => {
       this.updateNavigationState();
+
+      const url = this.webContents.getURL();
+
+      const { styles, scripts } = engine.getCosmeticsFilters({
+        url,
+        ...parse(url),
+      });
+
+      this.webContents.insertCSS(styles);
+
+      for (const script of scripts) {
+        this.webContents.executeJavaScript(script);
+      }
 
       appWindow.webContents.send(`load-commit-${this.tabId}`, ...args);
 

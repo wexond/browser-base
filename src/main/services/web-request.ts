@@ -11,7 +11,7 @@ import { appWindow } from '..';
 import { FiltersEngine, makeRequest } from '@cliqz/adblocker';
 import { parse } from 'tldts';
 
-let engine: FiltersEngine;
+export let engine: FiltersEngine;
 
 const eventListeners: any = {};
 
