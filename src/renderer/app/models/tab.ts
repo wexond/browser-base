@@ -181,7 +181,13 @@ export class Tab {
 
     ipcRenderer.on(
       `load-commit-${this.id}`,
-      (e: any, url: string, isInPlace: boolean, isMainFrame: boolean) => {
+      (
+        e: any,
+        event: any,
+        url: string,
+        isInPlace: boolean,
+        isMainFrame: boolean,
+      ) => {
         if (isMainFrame) {
           this.blockedAds = 0;
         }
