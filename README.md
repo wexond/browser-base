@@ -10,20 +10,18 @@
 [![Discord](https://img.shields.io/discord/307605794680209409.svg?style=for-the-badge)](https://discord.gg/yAA8DdK)
 [![Downloads](https://img.shields.io/github/downloads/wexond/wexond/total.svg?style=for-the-badge)](https://github.com/wexond/wexond/releases)
 
-https://wexond.net
-
-Wexond is an extensible and privacy-focused web browser with a totally different user experience, built on top of `Electron`, `TypeScript`, `React` and `styled-components`. It aims to be fast, beautiful, extensible and functional.
+Wexond is an extensible and privacy-focused web browser with a totally different user experience, built on top of `Electron`, `TypeScript`, `React` and `styled-components`. It aims to be fast, private, beautiful, extensible and functional.
 
 </div>
 
 # Features
 
-- **Built-in ad-block** - Browse the web without any ads.
-- **Beautiful and minimalistic UI** - The address bar is hidden in Overlay to take less space, but doesn't impact on usability.
+- **Wexond Shield** - Browse the web without any ads and don't let websites to track you. Thanks to the Wexond Shield, websites can load even 2 times faster!
+- **Beautiful and minimalistic UI** - The address bar is hidden in Overlay to take less space, but it doesn't impact on usability in any way. It's even better! [Give it a shot](https://wexond.net)
 - **Tab groups** - Easily group tabs to groups and access them really fast.
 - **Partial support for Chrome extensions** - Install some extensions from Chrome Web Store (see [#110](https://github.com/wexond/wexond/issues/110))
-- **Overlay** - It contains everything you will need. Search box, bookmarks, menu, your custom components and so on!
-- **Packages** - Extend Wexond for you needs, by installing or developing your own packages. Packages can add custom components to the Overlay and also theme the browser!
+- **Overlay** - It contains everything you will need. Search box, bookmarks, menu, your custom components and much more!
+- **Packages** - Extend Wexond for you needs, by installing or developing your own packages. They can theme the browser and even add custom components to the Overlay! ([#147](https://github.com/wexond/wexond/issues/147))
 
 ### Sponsors
 
@@ -77,11 +75,10 @@ $ npm run <command>
 
 | Command            | Description                                 |
 | ------------------ | ------------------------------------------- |
-| `build-production` | Bundles Wexond's source in production mode. |
+| `build`            | Bundles Wexond's source in production mode. |
 | `compile-win32`    | Compiles Wexond binaries for Windows.       |
 | `compile-darwin`   | Compiles Wexond binaries for macOS.         |
 | `compile-linux`    | Compiles Wexond binaries for Linux.         |
-| `electron-rebuild` | Rebuilds all dependencies for `Electron`.   |
 | `lint`             | Lints code.                                 |
 | `lint-fix`         | Fixes eslint errors if any                  |
 | `start`            | Starts Wexond.                              |
@@ -89,7 +86,7 @@ $ npm run <command>
 
 # Documentation
 
-> At this moment there are no docs, however this may change in the future, see #147.
+> At this moment there are no docs, however this may change in the future, see ([#147](https://github.com/wexond/wexond/issues/147)).
 
 Guides and the API reference are located in [`docs`](docs).
 It also contains documents describing how to use the browser, and create themes.
