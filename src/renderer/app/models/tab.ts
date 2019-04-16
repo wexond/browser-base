@@ -205,6 +205,9 @@ export class Tab {
 
           if (!this.hasThemeColor) {
             const palette = await Vibrant.from(buf).getPalette();
+
+            if (!palette.Vibrant) return;
+
             if (getColorBrightness(palette.Vibrant.hex) < 170) {
               this.background = palette.Vibrant.hex;
             } else {
