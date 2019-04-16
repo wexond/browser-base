@@ -1,4 +1,4 @@
-import { ipcMain, session, webContents } from 'electron';
+import { ipcMain, session, webContents, app } from 'electron';
 import { makeId } from '~/shared/utils/string';
 import { AppWindow } from '../app-window';
 import { matchesPattern } from '~/shared/utils/url';
@@ -16,7 +16,7 @@ export let engine: FiltersEngine;
 const eventListeners: any = {};
 
 export const loadFilters = async () => {
-  const path = 'filters/default.dat';
+  const path = resolve(app.getAppPath(), 'filters/default.dat');
 
   if (existsSync(path)) {
     readFile(resolve(path), (err, buffer) => {
