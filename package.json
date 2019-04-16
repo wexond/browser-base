@@ -34,15 +34,16 @@
     "url": "https://github.com/wexond/wexond/issues"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV='dev' node fuse.js",
-    "build": "node fuse.js",
+    "dev": "npm run download-filters && cross-env NODE_ENV='dev' node fuse.js",
+    "build": "npm run download-filters && node fuse.js",
     "start": "cross-env ENV='dev' electron .",
     "compile-win32": "npm run build && electron-builder -w -p always",
     "compile-darwin": "npm run build && electron-builder -m -p always",
     "compile-linux": "npm run build && electron-builder -l -p always",
     "lint": "tslint \"src/**/*.ts*\"",
     "lint-fix": "prettier --write \"src/**/*.ts*\" && tslint \"src/**/*.ts*\" --fix",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "download-filters": "node tools/download-filters.js"
   },
   "pre-commit": [
     "lint-fix"
@@ -58,11 +59,13 @@
     "@types/react": "16.8.13",
     "@types/react-dom": "16.8.4",
     "@types/styled-components": "4.1.14",
+    "axios": "0.18.0",
     "concurrently": "4.1.0",
     "cross-env": "5.2.0",
     "electron": "4.1.4",
     "electron-builder": "20.39.0",
     "fuse-box": "3.7.1",
+    "log-update": "3.2.0",
     "prettier": "1.17.0",
     "terser": "3.17.0",
     "tslint": "5.15.0",
@@ -72,8 +75,7 @@
     "typescript-plugin-styled-components": "1.4.2"
   },
   "dependencies": {
-    "ad-block": "4.1.3",
-    "axios": "0.18.0",
+    "@cliqz/adblocker": "0.8.0",
     "electron-updater": "4.0.6",
     "file-type": "10.11.0",
     "gsap": "2.1.2",
@@ -87,6 +89,7 @@
     "pretty-bytes": "5.1.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
-    "styled-components": "4.2.0"
+    "styled-components": "4.2.0",
+    "tldts": "4.0.6"
   }
 }

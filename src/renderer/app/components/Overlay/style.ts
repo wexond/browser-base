@@ -34,7 +34,7 @@ export const StyledOverlay = styled.div`
   z-index: 9999;
   transition: 0.2s opacity;
   backface-visibility: hidden;
-  background-color: #212121;
+  background-color: #1c1c1c;
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};

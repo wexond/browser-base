@@ -3,51 +3,27 @@ import { makeId } from '~/shared/utils/string';
 import { AppWindow } from '../app-window';
 import { matchesPattern } from '~/shared/utils/url';
 import { USER_AGENT } from '~/shared/constants';
-import { getPath } from '~/shared/utils/paths';
-import { existsSync, mkdirSync, writeFile, readdirSync, readFile } from 'fs';
-import Axios from 'axios';
-import { requestURL } from '~/renderer/app/utils/network';
+import { existsSync, readFile } from 'fs';
 import console = require('console');
 import { resolve } from 'path';
 import { appWindow } from '..';
 
-const { AdBlockClient, FilterOptions } = require('ad-block');
+import { FiltersEngine, makeRequest } from '@cliqz/adblocker';
+import { parse } from 'tldts';
 
-const client = new AdBlockClient();
+let engine: FiltersEngine;
 
 const eventListeners: any = {};
 
-const defaultFilters = ['easyprivacy.dat', 'easylist.dat'];
-
 export const loadFilters = async () => {
-  const path = getPath('filters');
+  const path = 'filters/default.dat';
 
-  if (!existsSync(path)) {
-    mkdirSync(path);
+  if (existsSync(path)) {
+    readFile(resolve(path), (err, buffer) => {
+      if (err) return console.error(err);
 
-    for (const filter of defaultFilters) {
-      const { data } = await Axios.request({
-        url: `https://wexond.net/filters/${filter}`,
-        responseType: 'arraybuffer',
-        method: 'get',
-      });
-
-      client.deserialize(data);
-
-      writeFile(getPath('filters', filter), data, err => {
-        if (err) return console.error(err);
-      });
-    }
-  } else {
-    const files = readdirSync(path);
-
-    for (const file of files) {
-      readFile(resolve(path, file), (err, buffer) => {
-        if (err) return console.error(err);
-
-        client.deserialize(buffer);
-      });
-    }
+      engine = FiltersEngine.deserialize(buffer);
+    });
   }
 };
 
@@ -234,19 +210,27 @@ export const runWebRequestService = (window: AppWindow) => {
     interceptRequest('onBeforeRequest', newDetails, callback);
   };
 
-  webviewRequest.onBeforeRequest(async (details: any, callback: any) => {
-    const tabId = getTabByWebContentsId(window, details.webContentsId);
+  webviewRequest.onBeforeRequest(
+    async (details: Electron.OnBeforeRequestDetails, callback: any) => {
+      const tabId = getTabByWebContentsId(window, details.webContentsId);
 
-    if (client.matches(details.url, FilterOptions.noFilterOption)) {
-      callback({ cancel: true });
+      if (engine) {
+        const { match } = engine.match(
+          makeRequest({ type: details.resourceType, url: details.url }, parse),
+        );
 
-      appWindow.webContents.send(`blocked-ad-${tabId}`);
+        if (match) {
+          callback({ cancel: true });
 
-      return;
-    }
+          appWindow.webContents.send(`blocked-ad-${tabId}`);
 
-    await onBeforeRequest(details, callback);
-  });
+          return;
+        }
+      }
+
+      await onBeforeRequest(details, callback);
+    },
+  );
 
   // onHeadersReceived
 
