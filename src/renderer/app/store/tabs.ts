@@ -90,7 +90,7 @@ export class TabsStore {
         tab = this.addTab({}, true);
         tab.id = options.id;
         tab.title = options.title;
-        tab.favicon = options.icon;
+        tab.favicon = URL.createObjectURL(new Blob([options.icon]));
         tab.select();
       }
     });
