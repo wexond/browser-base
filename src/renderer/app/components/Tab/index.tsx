@@ -50,8 +50,8 @@ const onMouseLeave = () => {
   store.tabs.hoveredTabId = -1;
 };
 
-const onClick = () => {
-  if (store.canToggleMenu) {
+const onClick = (tab: Tab) => () => {
+  if (store.canToggleMenu && !tab.isWindow) {
     store.overlay.visible = true;
   }
 };
@@ -120,7 +120,7 @@ export default observer(({ tab }: { tab: Tab }) => {
       selected={tab.isSelected}
       onMouseDown={onMouseDown(tab)}
       onMouseEnter={onMouseEnter(tab)}
-      onClick={onClick}
+      onClick={onClick(tab)}
       onMouseLeave={onMouseLeave}
       visible={tab.tabGroupId === store.tabGroups.currentGroupId}
       ref={tab.ref}

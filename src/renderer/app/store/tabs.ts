@@ -75,6 +75,47 @@ export class TabsStore {
       },
     );
 
+    ipcRenderer.on('add-tab', (e: any, options: any) => {
+      let tab = this.list.find(x => x.id === options.id);
+
+      if (tab) {
+        tab.isClosing = false;
+        this.updateTabsBounds(true);
+        clearTimeout(tab.removeTimeout);
+
+        if (options.active) {
+          tab.select();
+        }
+      } else {
+        tab = this.addTab({}, true);
+        tab.id = options.id;
+        tab.title = options.title;
+        tab.favicon = options.icon;
+        tab.select();
+      }
+    });
+
+    ipcRenderer.on('remove-tab', (e: any, id: number) => {
+      const tab = this.getTabById(id);
+      if (tab) {
+        tab.close();
+      }
+    });
+
+    ipcRenderer.on('update-tab-title', (e: any, data: any) => {
+      const tab = this.getTabById(data.id);
+      if (tab) {
+        tab.title = data.title;
+      }
+    });
+
+    ipcRenderer.on('select-tab', (e: any, id: number) => {
+      const tab = this.getTabById(id);
+      if (tab) {
+        tab.select();
+      }
+    });
+
     ipcRenderer.on(
       `found-in-page`,
       (
@@ -122,11 +163,13 @@ export class TabsStore {
   }
 
   @action
-  public addTab(options = defaultTabOptions) {
-    const tab = new Tab(options, store.tabGroups.currentGroupId);
+  public addTab(options = defaultTabOptions, isWindow: boolean = false) {
+    const tab = new Tab(options, store.tabGroups.currentGroupId, isWindow);
     this.list.push(tab);
 
-    this.emitEvent('onCreated', tab.getApiTab());
+    if (!isWindow) {
+      this.emitEvent('onCreated', tab.getApiTab());
+    }
 
     requestAnimationFrame(() => {
       tab.setLeft(tab.getLeft(), false);

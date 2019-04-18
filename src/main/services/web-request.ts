@@ -240,8 +240,6 @@ export const runWebRequestService = (window: AppWindow) => {
         );
 
         if (match || redirect) {
-          console.log(match, redirect, details.url);
-
           appWindow.webContents.send(`blocked-ad-${tabId}`);
 
           if (redirect) {
