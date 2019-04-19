@@ -45,7 +45,17 @@ app.on('ready', () => {
           { role: 'delete' },
           { role: 'selectall' },
           { role: 'quit' },
-          { role: 'reload' },
+          {
+            label: 'Reload',
+            accelerator: 'CmdOrCtrl+R',
+            click: () => {
+              if (process.env.ENV === 'dev') {
+                appWindow.webContents.reload();
+              } else {
+                appWindow.viewManager.selected.webContents.reload();
+              }
+            },
+          },
           {
             accelerator: 'CmdOrCtrl+F',
             label: 'Find in page',

@@ -393,8 +393,12 @@ export class AppWindow extends BrowserWindow {
     if (!window) return;
 
     if (this.selectedWindow) {
-      if (window.handle === this.selectedWindow.handle && !this.isWindowHidden)
+      if (
+        window.handle === this.selectedWindow.handle &&
+        !this.isWindowHidden
+      ) {
         return;
+      }
 
       this.selectedWindow.hide();
     }
