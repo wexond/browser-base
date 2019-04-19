@@ -5,10 +5,10 @@
 <div align="center">
   <h1>Wexond</h1>
 
-[![Travis](https://img.shields.io/travis/com/wexond/wexond.svg?style=for-the-badge)](https://travis-ci.com/wexond/wexond)
-[![AppVeyor](https://img.shields.io/appveyor/ci/sentialx/wexond.svg?style=for-the-badge)](https://ci.appveyor.com/project/sentialx/wexond)
-[![Discord](https://img.shields.io/discord/307605794680209409.svg?style=for-the-badge)](https://discord.gg/yAA8DdK)
-[![Downloads](https://img.shields.io/github/downloads/wexond/wexond/total.svg?style=for-the-badge)](https://github.com/wexond/wexond/releases)
+[![Travis](https://img.shields.io/travis/com/wexond/wexond.svg?style=flat-square)](https://travis-ci.com/wexond/wexond)
+[![AppVeyor](https://img.shields.io/appveyor/ci/sentialx/wexond.svg?style=flat-square)](https://ci.appveyor.com/project/sentialx/wexond)
+[![Discord](https://img.shields.io/discord/307605794680209409.svg?style=flat-square)](https://discord.gg/yAA8DdK)
+[![Downloads](https://img.shields.io/github/downloads/wexond/wexond/total.svg?style=flat-square)](https://github.com/wexond/wexond/releases)
 
 Wexond is an extensible and privacy-focused web browser with a totally different user experience, built on top of `Electron`, `TypeScript`, `React` and `styled-components`. It aims to be fast, private, beautiful, extensible and functional.
 
