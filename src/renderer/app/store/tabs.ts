@@ -16,6 +16,8 @@ import HorizontalScrollbar from '~/renderer/app/components/HorizontalScrollbar';
 import store from '.';
 import { ipcRenderer, remote } from 'electron';
 import { extname } from 'path';
+import { getColorBrightness } from '../utils';
+import Vibrant = require('node-vibrant');
 
 export class TabsStore {
   @observable
@@ -91,6 +93,15 @@ export class TabsStore {
         tab.id = options.id;
         tab.title = options.title;
         tab.favicon = URL.createObjectURL(new Blob([options.icon]));
+
+        Vibrant.from(options.icon)
+        .getPalette()
+        .then(palette => {
+          if (getColorBrightness(palette.Vibrant.hex) < 170) {
+            tab.background = palette.Vibrant.hex;
+          }
+        });
+
         tab.select();
       }
     });
