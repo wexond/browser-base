@@ -132,14 +132,19 @@ export class Tab {
   public isWindow: boolean = false;
 
   constructor(
-    { url, active } = defaultTabOptions,
+    { url, active, index } = defaultTabOptions,
     tabGroupId: number,
     isWindow: boolean,
   ) {
     this.isWindow = isWindow;
     this.tabGroupId = tabGroupId;
 
-    this.position = this.tabGroup.nextPosition++;
+    if (index) {
+      this.position = index;
+    } else {
+      this.position = this.tabGroup.nextPosition++;
+    }
+
     this.tempPosition = this.position;
 
     if (isWindow) return;

@@ -72,7 +72,11 @@ export class TabsStore {
 
     ipcRenderer.on(
       'api-tabs-create',
-      (e: any, options: chrome.tabs.CreateProperties) => {
+      (e: any, options: chrome.tabs.CreateProperties, isNext: boolean) => {
+        if (isNext) {
+          options.index = this.list.indexOf(this.selectedTab) + 1;
+        }
+
         this.addTab(options);
       },
     );
@@ -95,12 +99,12 @@ export class TabsStore {
         tab.favicon = URL.createObjectURL(new Blob([options.icon]));
 
         Vibrant.from(options.icon)
-        .getPalette()
-        .then(palette => {
-          if (getColorBrightness(palette.Vibrant.hex) < 170) {
-            tab.background = palette.Vibrant.hex;
-          }
-        });
+          .getPalette()
+          .then(palette => {
+            if (getColorBrightness(palette.Vibrant.hex) < 170) {
+              tab.background = palette.Vibrant.hex;
+            }
+          });
 
         tab.select();
       }
@@ -176,7 +180,12 @@ export class TabsStore {
   @action
   public addTab(options = defaultTabOptions, isWindow: boolean = false) {
     const tab = new Tab(options, store.tabGroups.currentGroupId, isWindow);
-    this.list.push(tab);
+
+    if (options.index !== undefined) {
+      this.list.splice(options.index, 0, tab);
+    } else {
+      this.list.push(tab);
+    }
 
     if (!isWindow) {
       this.emitEvent('onCreated', tab.getApiTab());

@@ -32,10 +32,14 @@ export class View extends BrowserView {
           {
             label: 'Open link in new tab',
             click: () => {
-              appWindow.webContents.send('api-tabs-create', {
-                url: params.linkURL,
-                active: false,
-              });
+              appWindow.webContents.send(
+                'api-tabs-create',
+                {
+                  url: params.linkURL,
+                  active: false,
+                },
+                true,
+              );
             },
           },
           {
@@ -59,10 +63,14 @@ export class View extends BrowserView {
           {
             label: 'Open image in new tab',
             click: () => {
-              appWindow.webContents.send('api-tabs-create', {
-                url: params.srcURL,
-                active: false,
-              });
+              appWindow.webContents.send(
+                'api-tabs-create',
+                {
+                  url: params.srcURL,
+                  active: false,
+                },
+                true,
+              );
             },
           },
           {
@@ -247,17 +255,29 @@ export class View extends BrowserView {
             appWindow.viewManager.selected.webContents.loadURL(url);
           } else if (frameName === '_blank') {
             e.preventDefault();
-            appWindow.webContents.send('api-tabs-create', {
-              url,
-              active: true,
-            });
+            appWindow.webContents.send(
+              'api-tabs-create',
+              {
+                url,
+                active: true,
+              },
+              true,
+            );
           }
         } else if (disposition === 'foreground-tab') {
           e.preventDefault();
-          appWindow.webContents.send('api-tabs-create', { url, active: true });
+          appWindow.webContents.send(
+            'api-tabs-create',
+            { url, active: true },
+            true,
+          );
         } else if (disposition === 'background-tab') {
           e.preventDefault();
-          appWindow.webContents.send('api-tabs-create', { url, active: false });
+          appWindow.webContents.send(
+            'api-tabs-create',
+            { url, active: false },
+            true,
+          );
         }
 
         this.emitWebNavigationEvent('onCreatedNavigationTarget', {
