@@ -38,6 +38,8 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 
 ![](https://wexond.net/img/screen.png)
 
+![](https://wexond.net/img/screen2.gif)
+
 # [Roadmap](https://github.com/wexond/wexond/projects)
 
 # [Supported Chrome APIs](https://github.com/wexond/wexond/issues/110)
@@ -95,6 +97,8 @@ It also contains documents describing how to use the browser, and create themes.
 # Authors
 
 [@sentialx](https://github.com/sentialx)
+
+[@xnerhu](https://github.com/xnerhu)
 
 <a href="https://www.patreon.com/bePatron?u=12270966">
     <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
