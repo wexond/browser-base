@@ -155,6 +155,12 @@ export class AppWindow extends BrowserWindow {
       this.webContents.send('scroll-touch-end');
     });
 
+    if (platform() === 'win32') {
+      this.activateWindowCapturing();
+    }
+  }
+
+  public activateWindowCapturing() {
     const updateBounds = () => {
       this.isMoving = true;
 
