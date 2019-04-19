@@ -19,16 +19,16 @@ export let appWindow: AppWindow;
 
 registerProtocols();
 
-if (!existsSync(getPath('settings.json'))) {
-  writeFileSync(
-    getPath('settings.json'),
-    JSON.stringify({
-      dialType: 'top-sites',
-    } as Settings),
-  );
-}
-
 app.on('ready', () => {
+  if (!existsSync(getPath('settings.json'))) {
+    writeFileSync(
+      getPath('settings.json'),
+      JSON.stringify({
+        dialType: 'top-sites',
+      } as Settings),
+    );
+  }
+
   // Create our menu entries so that we can use macOS shortcuts
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([

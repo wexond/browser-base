@@ -3,10 +3,10 @@ import { makeId } from '~/shared/utils/string';
 import { AppWindow } from '../app-window';
 import { matchesPattern } from '~/shared/utils/url';
 import { USER_AGENT } from '~/shared/constants';
-import { existsSync, readFile } from 'fs';
-import console = require('console');
+import { existsSync, readFile, writeFile, mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { appWindow } from '..';
+import Axios from 'axios';
 
 import {
   FiltersEngine,
@@ -16,13 +16,34 @@ import {
 } from '@cliqz/adblocker';
 import { parse } from 'tldts';
 import { requestURL } from '~/renderer/app/utils/network';
+import { getPath } from '~/shared/utils/paths';
+
+const lists: any = {
+  easylist: 'https://easylist.to/easylist/easylist.txt',
+  easyprivacy: 'https://easylist.to/easylist/easyprivacy.txt',
+  malwaredomains: 'http://mirror1.malwaredomains.com/files/justdomains',
+  nocoin:
+    'https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt',
+  'ublock-filters':
+    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
+  'ublock-badware':
+    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
+  'ublock-privacy':
+    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
+  'ublock-unbreak':
+    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+};
 
 export let engine: FiltersEngine;
 
 const eventListeners: any = {};
 
 export const loadFilters = async () => {
-  const path = resolve(app.getAppPath(), 'filters/default.dat');
+  if (!existsSync(getPath('adblock'))) {
+    mkdirSync(getPath('adblock'));
+  }
+
+  const path = resolve(getPath('adblock/cache.dat'));
 
   /*const { data } = await requestURL(
     'https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-adblock-filters/adblock.txt',
@@ -43,6 +64,26 @@ export const loadFilters = async () => {
         newNetworkFilters: networkFilters,
         newCosmeticFilters: cosmeticFilters,
       });*/
+    });
+  } else {
+    const ops = [];
+
+    for (const key in lists) {
+      ops.push(Axios.get(lists[key]));
+    }
+
+    Axios.all(ops).then(res => {
+      let data = '';
+
+      for (const res1 of res) {
+        data += res1.data;
+      }
+
+      engine = FiltersEngine.parse(data);
+
+      writeFile(path, engine.serialize(), err => {
+        if (err) return console.error(err);
+      });
     });
   }
 };

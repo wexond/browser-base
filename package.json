@@ -34,16 +34,15 @@
     "url": "https://github.com/wexond/wexond/issues"
   },
   "scripts": {
-    "dev": "npm run download-filters && cross-env NODE_ENV='dev' node fuse.js",
-    "build": "npm run download-filters && node fuse.js",
+    "dev": "cross-env NODE_ENV='dev' node fuse.js",
+    "build": "node fuse.js",
     "start": "cross-env ENV='dev' electron .",
     "compile-win32": "npm run build && electron-builder -w -p always",
     "compile-darwin": "npm run build && electron-builder -m -p always",
     "compile-linux": "npm run build && electron-builder -l -p always",
     "lint": "tslint \"src/**/*.ts*\"",
     "lint-fix": "prettier --write \"src/**/*.ts*\" && tslint \"src/**/*.ts*\" --fix",
-    "postinstall": "electron-builder install-app-deps",
-    "download-filters": "node tools/download-filters.js"
+    "postinstall": "electron-builder install-app-deps"
   },
   "pre-commit": [
     "lint-fix"
@@ -59,7 +58,6 @@
     "@types/react": "16.8.13",
     "@types/react-dom": "16.8.4",
     "@types/styled-components": "4.1.14",
-    "axios": "0.18.0",
     "concurrently": "4.1.0",
     "cross-env": "5.2.0",
     "electron": "4.1.4",
@@ -81,6 +79,7 @@
     "file-type": "10.11.0",
     "gsap": "2.1.2",
     "icojs": "0.12.3",
+    "axios": "0.18.0",
     "leveldown": "5.0.1",
     "levelup": "4.0.1",
     "mobx": "5.9.4",
