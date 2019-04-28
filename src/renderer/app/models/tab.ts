@@ -39,9 +39,6 @@ export class Tab {
   public width: number = 0;
 
   @observable
-  public position = 0;
-
-  @observable
   public background: string = colors.blue['500'];
 
   @observable
@@ -91,7 +88,7 @@ export class Tab {
 
   @computed
   public get borderVisible() {
-    const { tabs } = this.tabGroup;
+    const tabs = this.tabGroup.tabs;
 
     const i = tabs.indexOf(this);
     const nextTab = tabs[i + 1];
@@ -118,7 +115,6 @@ export class Tab {
   }
 
   public left = 0;
-  public tempPosition = 0;
   public lastUrl = '';
   public isClosing = false;
   public ref = React.createRef<HTMLDivElement>();
@@ -130,18 +126,12 @@ export class Tab {
   public isWindow: boolean = false;
 
   constructor(
-    { url, active, index } = defaultTabOptions,
+    { url, active } = defaultTabOptions,
     tabGroupId: number,
     isWindow: boolean,
   ) {
     this.isWindow = isWindow;
     this.tabGroupId = tabGroupId;
-
-    if (index) {
-      this.position = index;
-    }
-
-    this.tempPosition = this.position;
 
     if (isWindow) return;
 
@@ -348,14 +338,8 @@ export class Tab {
     return width;
   }
 
-  public getLeft(reordering: boolean = false, calcNewLeft: boolean = false) {
+  public getLeft(calcNewLeft: boolean = false) {
     const tabs = this.tabGroup.tabs.slice();
-
-    if (reordering) {
-      tabs.sort((a, b) => a.tempPosition - b.tempPosition);
-    } else {
-      tabs.sort((a, b) => a.position - b.position);
-    }
 
     const index = tabs.indexOf(this);
 
@@ -382,7 +366,7 @@ export class Tab {
   @action
   public close() {
     const tabGroup = this.tabGroup;
-    const tabs = tabGroup.tabs.slice().sort((a, b) => a.position - b.position);
+    const { tabs } = tabGroup;
 
     const selected = tabGroup.selectedTabId === this.id;
 
@@ -395,17 +379,13 @@ export class Tab {
     const notClosingTabs = tabs.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
 
-    for (let i = index + 1; i < notClosingTabs.length; i++) {
-      notClosingTabs[i].position--;
-    }
-
     store.tabs.resetRearrangeTabsTimer();
 
     this.isClosing = true;
     if (notClosingTabs.length - 1 === index) {
       const previousTab = tabs[index - 1];
       if (previousTab) {
-        this.setLeft(previousTab.getLeft(false, true) + this.getWidth(), true);
+        this.setLeft(previousTab.getLeft(true) + this.getWidth(), true);
       }
       store.tabs.updateTabsBounds(true);
     }

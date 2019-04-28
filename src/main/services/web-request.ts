@@ -49,23 +49,7 @@ export const loadFilters = async () => {
     'https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-adblock-filters/adblock.txt',
   );*/
 
-  if (existsSync(path)) {
-    readFile(resolve(path), (err, buffer) => {
-      if (err) return console.error(err);
-
-      engine = FiltersEngine.deserialize(buffer);
-
-      /*const { networkFilters, cosmeticFilters } = parseFilters(
-        data,
-        engine.config,
-      );
-
-      engine.update({
-        newNetworkFilters: networkFilters,
-        newCosmeticFilters: cosmeticFilters,
-      });*/
-    });
-  } else {
+  const downloadFilters = () => {
     const ops = [];
 
     for (const key in lists) {
@@ -85,6 +69,30 @@ export const loadFilters = async () => {
         if (err) return console.error(err);
       });
     });
+  };
+
+  if (existsSync(path)) {
+    readFile(resolve(path), (err, buffer) => {
+      if (err) return console.error(err);
+
+      try {
+        engine = FiltersEngine.deserialize(buffer);
+      } catch (e) {
+        downloadFilters();
+      }
+
+      /*const { networkFilters, cosmeticFilters } = parseFilters(
+        data,
+        engine.config,
+      );
+
+      engine.update({
+        newNetworkFilters: networkFilters,
+        newCosmeticFilters: cosmeticFilters,
+      });*/
+    });
+  } else {
+    downloadFilters();
   }
 };
 

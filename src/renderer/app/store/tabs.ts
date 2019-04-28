@@ -74,10 +74,9 @@ export class TabsStore {
       'api-tabs-create',
       (e: any, options: chrome.tabs.CreateProperties, isNext: boolean) => {
         if (isNext) {
-          options.index =
+          const index =
             store.tabGroups.currentGroup.tabs.indexOf(this.selectedTab) + 1;
-        } else {
-          options.index = store.tabGroups.currentGroup.tabs.length - 1;
+          options.index = index;
         }
 
         this.addTab(options);
@@ -236,12 +235,9 @@ export class TabsStore {
 
   @action
   public setTabsLefts(animation: boolean) {
-    const tabs = this.list
-      .filter(
-        x => !x.isClosing && x.tabGroupId === store.tabGroups.currentGroupId,
-      )
-      .slice()
-      .sort((a, b) => a.position - b.position);
+    const tabs = this.list.filter(
+      x => !x.isClosing && x.tabGroupId === store.tabGroups.currentGroupId,
+    );
 
     const { containerWidth } = store.tabs;
 
@@ -261,18 +257,16 @@ export class TabsStore {
 
   @action
   public replaceTab(firstTab: Tab, secondTab: Tab) {
-    const position1 = firstTab.tempPosition;
-
     secondTab.setLeft(firstTab.getLeft(true), true);
 
-    firstTab.tempPosition = secondTab.tempPosition;
-    secondTab.tempPosition = position1;
+    const index = this.list.indexOf(secondTab);
+
+    this.list[this.list.indexOf(firstTab)] = secondTab;
+    this.list[index] = firstTab;
   }
 
   public getTabsToReplace(callingTab: Tab, direction: string) {
-    let tabs = this.list
-      .slice()
-      .sort((a, b) => a.tempPosition - b.tempPosition);
+    let tabs = this.list;
 
     const index = tabs.indexOf(callingTab);
 
@@ -281,7 +275,6 @@ export class TabsStore {
         const tab = tabs[i];
         if (callingTab.left <= tab.width / 2 + tab.left) {
           this.replaceTab(tabs[i + 1], tab);
-          tabs = tabs.sort((a, b) => a.tempPosition - b.tempPosition);
         } else {
           break;
         }
@@ -291,7 +284,6 @@ export class TabsStore {
         const tab = tabs[i];
         if (callingTab.left + callingTab.width >= tab.width / 2 + tab.left) {
           this.replaceTab(tabs[i - 1], tab);
-          tabs = tabs.sort((a, b) => a.tempPosition - b.tempPosition);
         } else {
           break;
         }
@@ -304,10 +296,6 @@ export class TabsStore {
     const selectedTab = this.selectedTab;
 
     this.isDragging = false;
-
-    for (const tab of this.list) {
-      tab.position = tab.tempPosition;
-    }
 
     this.setTabsLefts(true);
 
