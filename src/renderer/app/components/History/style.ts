@@ -1,9 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { centerIcon, shadows } from '~/shared/mixins';
-import { icons } from '../../constants';
-import { Button } from '~/renderer/components/Button';
-import { platform } from 'os';
+import { shadows } from '~/shared/mixins';
 
 export const Sections = styled.div`
   margin-left: 300px;

@@ -1,6 +1,6 @@
-import { ipcMain } from 'electron';
+import { ipcMain, session } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
-import { appWindow } from '.';
+import { appWindow, log } from '.';
 import { View } from './view';
 import { sendToAllExtensions } from './extensions';
 
@@ -47,6 +47,27 @@ export class ViewManager {
         if (force) this.isHidden = false;
       },
     );
+
+    ipcMain.on('clear-browsing-data', () => {
+      const ses = session.fromPartition('persist:view');
+      ses.clearCache((err: any) => {
+        if (err) log.error(err);
+      });
+
+      ses.clearStorageData({
+        storages: [
+          'appcache',
+          'cookies',
+          'filesystem',
+          'indexdb',
+          'localstorage',
+          'shadercache',
+          'websql',
+          'serviceworkers',
+          'cachestorage',
+        ],
+      });
+    });
 
     ipcMain.on(
       'browserview-destroy',

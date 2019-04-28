@@ -9,10 +9,16 @@ export const StyledNavigationDrawer = styled.div`
   background-color: rgba(255, 255, 255, 0.08);
   position: fixed;
   left: 0;
+  display: flex;
+  flex-flow: column;
 `;
 
 export const MenuItems = styled.div`
   margin-top: 24px;
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  margin-bottom: 24px;
 `;
 
 export const Header = styled.div`

@@ -9,6 +9,8 @@ import { Sections, DeletionDialog, DeletionDialogLabel } from './style';
 import { NavigationDrawer } from '../NavigationDrawer';
 import { Content, Container, Scrollable } from '../Overlay/style';
 import { SelectionDialog } from '../SelectionDialog';
+import { icons } from '../../constants';
+import { ipcRenderer } from 'electron';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -67,6 +69,12 @@ const MenuItem = observer(
   ),
 );
 
+const onClearClick = () => {
+  store.history.clear();
+
+  ipcRenderer.send('clear-browsing-data');
+};
+
 export const History = observer(() => {
   const { length } = store.history.selectedItems;
 
@@ -91,6 +99,10 @@ export const History = observer(() => {
           <MenuItem range="last-week">Last week</MenuItem>
           <MenuItem range="last-month">Last month</MenuItem>
           <MenuItem range="older">Older</MenuItem>
+          <div style={{ flex: 1 }} />
+          <NavigationDrawer.Item icon={icons.trash} onClick={onClearClick}>
+            Clear browsing data
+          </NavigationDrawer.Item>
         </NavigationDrawer>
         <HistorySections />
         <SelectionDialog

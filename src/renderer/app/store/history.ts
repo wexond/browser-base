@@ -82,6 +82,12 @@ export class HistoryStore {
     });
   }
 
+  public clear() {
+    this.items = [];
+
+    this.db.remove({}, { multi: true }, (err, num) => {});
+  }
+
   public removeItem(id: string) {
     this.items = this.items.filter(x => x._id !== id);
 
