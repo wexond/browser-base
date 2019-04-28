@@ -1,7 +1,6 @@
 import { BrowserWindow, app, ipcMain, globalShortcut } from 'electron';
 import { resolve, join } from 'path';
 import { platform } from 'os';
-import { getFileIcon } from 'extract-file-icon';
 import { windowManager, Window } from 'node-window-manager';
 import mouseEvents from 'mouse-hooks';
 
@@ -10,6 +9,7 @@ import { getPath } from '~/shared/utils/paths';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { ProcessWindow } from './models/process-window';
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants';
+import { log } from '.';
 
 const containsPoint = (bounds: any, point: any) => {
   return (
@@ -345,18 +345,20 @@ export class AppWindow extends BrowserWindow {
       ) {
         if (!this.draggedIn) {
           const title = this.draggedWindow.getTitle();
-          const icon = getFileIcon(this.draggedWindow.process.path);
+          app.getFileIcon(this.draggedWindow.process.path, (err, icon) => {
+            if (err) return log.error(err);
 
-          this.draggedWindow.lastTitle = title;
+            this.draggedWindow.lastTitle = title;
 
-          this.webContents.send('add-tab', {
-            id: this.draggedWindow.handle,
-            title,
-            icon,
+            this.webContents.send('add-tab', {
+              id: this.draggedWindow.handle,
+              title,
+              icon: icon.toPNG(),
+            });
+
+            this.draggedIn = true;
+            this.willAttachWindow = true;
           });
-
-          this.draggedIn = true;
-          this.willAttachWindow = true;
         }
       } else if (this.draggedIn && !this.detached) {
         this.webContents.send('remove-tab', this.draggedWindow.handle);

@@ -11,18 +11,19 @@ import { getPath } from '~/shared/utils/paths';
 import { Settings } from '~/renderer/app/models/settings';
 import { makeId } from '~/shared/utils/string';
 
-const log = require('electron-log');
-
-ipcMain.setMaxListeners(0);
+export const log = require('electron-log');
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
+log.transports.file.level = 'verbose';
+log.transports.file.file = resolve(app.getPath('userData'), 'log.log');
+
+ipcMain.setMaxListeners(0);
 
 export let appWindow: AppWindow;
 
 registerProtocols();
 
 app.requestSingleInstanceLock();
-
 app.on('second-instance', (e, argv) => {
   console.log(argv);
 
@@ -45,9 +46,6 @@ app.on('ready', () => {
       } as Settings),
     );
   }
-
-  log.transports.file.level = 'verbose';
-  log.transports.file.file = resolve(app.getPath('userData'), 'log.log');
 
   // Create our menu entries so that we can use macOS shortcuts
   Menu.setApplicationMenu(

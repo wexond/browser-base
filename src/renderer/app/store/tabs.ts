@@ -74,9 +74,10 @@ export class TabsStore {
       'api-tabs-create',
       (e: any, options: chrome.tabs.CreateProperties, isNext: boolean) => {
         if (isNext) {
-          options.index = this.list.indexOf(this.selectedTab) + 1;
+          options.index =
+            store.tabGroups.currentGroup.tabs.indexOf(this.selectedTab) + 1;
         } else {
-          options.index = this.list.length - 1;
+          options.index = store.tabGroups.currentGroup.tabs.length - 1;
         }
 
         this.addTab(options);

@@ -91,9 +91,7 @@ export class Tab {
 
   @computed
   public get borderVisible() {
-    const tabs = this.tabGroup.tabs
-      .slice()
-      .sort((a, b) => a.position - b.position);
+    const { tabs } = this.tabGroup;
 
     const i = tabs.indexOf(this);
     const nextTab = tabs[i + 1];
@@ -396,6 +394,10 @@ export class Tab {
 
     const notClosingTabs = tabs.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
+
+    for (let i = index + 1; i < notClosingTabs.length; i++) {
+      notClosingTabs[i].position--;
+    }
 
     store.tabs.resetRearrangeTabsTimer();
 
