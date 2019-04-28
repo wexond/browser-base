@@ -179,6 +179,10 @@ export class TabsStore {
 
   @action
   public addTab(options = defaultTabOptions, isWindow: boolean = false) {
+    if (isWindow) {
+      store.overlay.visible = false;
+    }
+
     const tab = new Tab(options, store.tabGroups.currentGroupId, isWindow);
 
     if (options.index !== undefined) {

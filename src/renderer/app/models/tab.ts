@@ -427,7 +427,10 @@ export class Tab {
         const prevTab = tabs[index - 1];
         prevTab.select();
       } else if (store.tabGroups.list.length === 1) {
-        closeWindow();
+        if (this.isWindow) {
+          store.overlay.visible = true;
+          store.overlay.isNewTab = true;
+        }
       } else if (this.tabGroup.tabs.length === 0) {
         store.overlay.visible = true;
       }
