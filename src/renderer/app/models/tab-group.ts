@@ -26,8 +26,6 @@ export class TabGroup {
     this.color = palette[Math.floor(Math.random() * palette.length)];
   }
 
-  public nextPosition = 0;
-
   @computed
   public get isSelected() {
     return store.tabGroups.currentGroupId === this.id;

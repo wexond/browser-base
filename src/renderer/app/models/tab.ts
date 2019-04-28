@@ -141,8 +141,6 @@ export class Tab {
 
     if (index) {
       this.position = index;
-    } else {
-      this.position = this.tabGroup.nextPosition++;
     }
 
     this.tempPosition = this.position;

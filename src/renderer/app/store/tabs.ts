@@ -75,6 +75,8 @@ export class TabsStore {
       (e: any, options: chrome.tabs.CreateProperties, isNext: boolean) => {
         if (isNext) {
           options.index = this.list.indexOf(this.selectedTab) + 1;
+        } else {
+          options.index = this.list.length - 1;
         }
 
         this.addTab(options);

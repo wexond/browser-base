@@ -11,6 +11,8 @@ import { getPath } from '~/shared/utils/paths';
 import { Settings } from '~/renderer/app/models/settings';
 import { makeId } from '~/shared/utils/string';
 
+const log = require('electron-log');
+
 ipcMain.setMaxListeners(0);
 
 app.setPath('userData', resolve(homedir(), '.wexond'));
@@ -18,6 +20,10 @@ app.setPath('userData', resolve(homedir(), '.wexond'));
 export let appWindow: AppWindow;
 
 registerProtocols();
+
+process.on('uncaughtException', error => {
+  log.error(error);
+});
 
 app.on('ready', () => {
   if (!existsSync(getPath('settings.json'))) {
@@ -28,6 +34,9 @@ app.on('ready', () => {
       } as Settings),
     );
   }
+
+  log.transports.file.level = 'verbose';
+  log.transports.file.file = resolve(app.getPath('userData'), 'log.log');
 
   // Create our menu entries so that we can use macOS shortcuts
   Menu.setApplicationMenu(
