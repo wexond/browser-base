@@ -6,6 +6,7 @@ import store from '~/renderer/app/store';
 import { icons } from '~/renderer/app/constants/icons';
 import { AddTab, StyledTabbar, TabsContainer } from './style';
 import { Tabs } from '../Tabs';
+import { ipcRenderer } from 'electron';
 
 const getContainer = () => store.tabs.containerRef.current;
 
@@ -16,6 +17,7 @@ const onMouseLeave = () => (store.tabs.scrollbarVisible = false);
 const onAddTabClick = () => {
   store.overlay.isNewTab = true;
   store.overlay.visible = true;
+  ipcRenderer.send('hide-window');
 };
 
 export const Tabbar = observer(() => {

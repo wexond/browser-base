@@ -102,8 +102,9 @@ export class OverlayStore {
 
     if (!val) {
       clearTimeout(this.timeout);
+
       this.timeout = setTimeout(() => {
-        ipcRenderer.send('browserview-show');
+        if (store.tabs.selectedTab) store.tabs.selectedTab.select();
       }, 200);
 
       store.suggestions.list = [];
