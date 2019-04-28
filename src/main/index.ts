@@ -21,6 +21,17 @@ export let appWindow: AppWindow;
 
 registerProtocols();
 
+app.requestSingleInstanceLock();
+
+app.on('second-instance', (e, argv) => {
+  console.log(argv);
+
+  if (appWindow) {
+    if (appWindow.isMinimized()) appWindow.restore();
+    appWindow.focus();
+  }
+});
+
 process.on('uncaughtException', error => {
   log.error(error);
 });
