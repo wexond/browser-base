@@ -300,8 +300,7 @@ export class Tab {
         ipcRenderer.send('select-window', this.id);
       } else {
         ipcRenderer.send('hide-window');
-        ipcRenderer.send('browserview-show');
-        ipcRenderer.send('browserview-select', this.id);
+        ipcRenderer.send('browserview-select', this.id, true);
 
         store.tabs.emitEvent('onActivated', {
           tabId: this.id,

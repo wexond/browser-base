@@ -39,10 +39,12 @@ export class ViewManager {
 
     ipcMain.on(
       'browserview-select',
-      (e: Electron.IpcMessageEvent, id: number) => {
+      (e: Electron.IpcMessageEvent, id: number, force: boolean) => {
         const view = this.views[id];
         this.select(id);
         view.updateNavigationState();
+
+        if (force) this.isHidden = false;
       },
     );
 
