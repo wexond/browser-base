@@ -94,12 +94,6 @@ $ npm run <command>
 Guides and the API reference are located in [`docs`](docs).
 It also contains documents describing how to use the browser, and create themes.
 
-# Authors
-
-[@sentialx](https://github.com/sentialx)
-
-[@xnerhu](https://github.com/xnerhu)
-
 <a href="https://www.patreon.com/bePatron?u=12270966">
     <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
