@@ -15,6 +15,7 @@ export class Runtime {
   public lastError: chrome.runtime.LastError; // TODO
 
   public onConnect = new ApiEvent();
+  public onMessage = new ApiEvent();
 
   constructor(_api: API, tabId: number) {
     api = _api;

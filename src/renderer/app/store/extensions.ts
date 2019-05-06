@@ -42,13 +42,23 @@ export class ExtensionsStore {
 
     for (const key in extensions) {
       const { manifest, path, id } = extensions[key];
+
       if (manifest.browser_action) {
         const {
           default_icon,
           default_title,
           default_popup,
         } = manifest.browser_action;
-        const data = fs.readFileSync(resolve(path, default_icon['32']));
+
+        let icon1 = default_icon;
+
+        if (typeof icon1 === 'object') {
+          icon1 = Object.keys(default_icon)[
+            Object.keys(default_icon).length - 1
+          ];
+        }
+
+        const data = fs.readFileSync(resolve(path, icon1));
         const icon = window.URL.createObjectURL(new Blob([data]));
         const browserAction = new BrowserAction({
           extensionId: id,
