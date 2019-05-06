@@ -1,14 +1,13 @@
 import { ipcRenderer } from 'electron';
 import { API } from '.';
+import { IpcEvent } from '..';
 
 let api: API;
 
 // https://developer.chrome.com/extensions/browserAction
 
 export class BrowserAction {
-  public onClicked = {
-    addListener: () => {},
-  };
+  public onClicked = new IpcEvent('browserAction', 'onClicked');
 
   constructor(_api: API) {
     api = _api;

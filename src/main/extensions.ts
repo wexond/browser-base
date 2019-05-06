@@ -343,6 +343,14 @@ ipcMain.on(
   },
 );
 
+ipcMain.on(
+  'send-to-all-extensions',
+  (e: IpcMessageEvent, msg: string, ...args: any[]) => {
+    sendToAllExtensions(msg, ...args);
+    appWindow.viewManager.sendToAll(msg, ...args);
+  },
+);
+
 ipcMain.on('emit-tabs-event', (e: any, name: string, ...data: any[]) => {
   appWindow.viewManager.sendToAll(`api-emit-event-tabs-${name}`, ...data);
   sendToAllExtensions(`api-emit-event-tabs-${name}`, ...data);
