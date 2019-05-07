@@ -9,6 +9,13 @@ import { API } from '.';
 let api: API;
 let currentTabId: number = null;
 
+const getSender = (id: string): chrome.runtime.MessageSender => ({
+  id,
+  url: window.location.href,
+  frameId: 0,
+  tab: { id: currentTabId } as any,
+});
+
 export class Runtime {
   public id: string;
 
@@ -23,14 +30,51 @@ export class Runtime {
     currentTabId = tabId;
   }
 
-  public connect = (arg1: string | any = null, arg2: any = null) => {
-    const sender: any = {
-      id: this.id,
-      url: window.location.href,
-      frameId: 0,
-      tab: { id: currentTabId },
-    };
+  public sendMessage = (...args: any[]) => {
+    const sender = getSender(this.id);
+    const portId = makeId(32);
 
+    let extensionId = args[0];
+    let message = args[1];
+    let options = args[2];
+    let responseCallback = args[3];
+
+    if (typeof args[0] === 'object') {
+      message = args[0];
+      extensionId = this.id;
+    }
+
+    if (typeof args[1] === 'object') {
+      options = args[1];
+    }
+
+    if (typeof args[1] === 'function') {
+      responseCallback = args[1];
+    }
+
+    if (options && options.includeTlsChannelId) {
+      sender.tlsChannelId = portId;
+    }
+
+    if (typeof responseCallback === 'function') {
+      ipcRenderer.on(
+        `api-runtime-sendMessage-response-${portId}`,
+        (e: Electron.IpcMessageEvent, res: any) => {
+          responseCallback(res);
+        },
+      );
+    }
+
+    ipcRenderer.send('api-runtime-sendMessage', {
+      extensionId,
+      portId,
+      sender,
+      message,
+    });
+  };
+
+  public connect = (arg1: string | any = null, arg2: any = null) => {
+    const sender = getSender(this.id);
     const portId = makeId(32);
 
     let name: string = null;

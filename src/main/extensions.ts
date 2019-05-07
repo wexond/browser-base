@@ -232,6 +232,19 @@ ipcMain.on(
   },
 );
 
+ipcMain.on('api-runtime-sendMessage', async (e: IpcMessageEvent, data: any) => {
+  const { extensionId } = data;
+  const { backgroundPage } = extensions[extensionId];
+
+  if (e.sender.id !== backgroundPage.webContentsId) {
+    const view = webContents.fromId(backgroundPage.webContentsId);
+
+    if (view) {
+      view.send('api-runtime-sendMessage', data, e.sender.id);
+    }
+  }
+});
+
 ipcMain.on(
   'api-port-postMessage',
   (e: IpcMessageEvent, { portId, msg }: any) => {
