@@ -193,12 +193,12 @@ ipcMain.on(
 
 ipcMain.on(
   'api-tabs-executeScript',
-  (e: IpcMessageEvent, tabId: number, details: chrome.tabs.InjectDetails) => {
+  (e: IpcMessageEvent, tabId: number, details: chrome.tabs.InjectDetails, responseId: string) => {
     const view = appWindow.viewManager.views[tabId];
 
     if (view) {
       view.webContents.executeJavaScript(details.code, false, (result: any) => {
-        view.webContents.send('api-tabs-executeScript', result);
+        e.sender.send(`api-tabs-executeScript-${responseId}`, result);
       });
     }
   },
@@ -329,7 +329,7 @@ ipcMain.on('api-alarms-operation', (e: IpcMessageEvent, data: any) => {
       scheduledTime = Date.now() + alarmInfo.delayInMinutes * 60000;
     }
 
-    const alarm: Alarm = {
+    const alarm: chrome.alarms.Alarm = {
       periodInMinutes: alarmInfo.periodInMinutes,
       scheduledTime,
       name,
