@@ -3,6 +3,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { API } from '.';
 import { IpcEvent } from '..';
+import { makeId } from '~/shared/utils/string';
 
 let api: API;
 let currentTabId: number;
@@ -122,10 +123,11 @@ export class Tabs {
         );
       }
 
-      ipcRenderer.send('api-tabs-executeScript', tabId, details);
+      const responseId = makeId(32);
+      ipcRenderer.send('api-tabs-executeScript', tabId, details, responseId);
 
       ipcRenderer.once(
-        'api-tabs-executeScript',
+        `api-tabs-executeScript-${responseId}`,
         (e: Electron.IpcMessageEvent, result: any) => {
           if (callback) {
             callback(result);
