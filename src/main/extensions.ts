@@ -191,18 +191,14 @@ ipcMain.on(
   },
 );
 
-ipcMain.on(
-  'api-tabs-executeScript',
-  (e: IpcMessageEvent, tabId: number, details: chrome.tabs.InjectDetails, responseId: string) => {
-    const view = appWindow.viewManager.views[tabId];
+ipcMain.on('api-tabs-executeScript', (e: IpcMessageEvent, data: any) => {
+  const { tabId } = data;
+  const view = appWindow.viewManager.views[tabId];
 
-    if (view) {
-      view.webContents.executeJavaScript(details.code, false, (result: any) => {
-        e.sender.send(`api-tabs-executeScript-${responseId}`, result);
-      });
-    }
-  },
-);
+  if (view) {
+    view.webContents.send('execute-script-isolated', data, e.sender.id);
+  }
+});
 
 ipcMain.on('api-runtime-reload', (e: IpcMessageEvent, extensionId: string) => {
   const { backgroundPage } = extensions[extensionId];

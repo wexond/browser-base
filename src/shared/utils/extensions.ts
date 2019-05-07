@@ -1,4 +1,4 @@
-import { ipcRenderer, webContents } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { IpcExtension } from '../models';
 import { Port, API } from '~/extensions';
 
@@ -20,7 +20,7 @@ export const getAPI = (extension: IpcExtension, tabId: number = null) => {
       const { portId, sender, message } = data;
 
       const sendResponse = (msg: any) => {
-        webContents
+        remote.webContents
           .fromId(webContentsId)
           .send(`api-runtime-sendMessage-response-${portId}`, msg);
       };

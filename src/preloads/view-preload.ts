@@ -1,10 +1,14 @@
-import { ipcRenderer, webFrame } from 'electron';
+import { ipcRenderer, webFrame, IpcMessageEvent, remote } from 'electron';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { getAPI } from '~/shared/utils/extensions';
 import { format, parse } from 'url';
 import { IpcExtension } from '~/shared/models';
 import { runInThisContext } from 'vm';
+
+const extensions: { [key: string]: IpcExtension } = ipcRenderer.sendSync(
+  'get-extensions',
+);
 
 webFrame.registerURLSchemeAsPrivileged('wexond-extension');
 
@@ -23,6 +27,33 @@ webFrame.executeJavaScript('window', false, w => {
     },
   };
 });
+
+ipcRenderer.on(
+  'execute-script-isolated',
+  (
+    e: IpcMessageEvent,
+    { details, extensionId, responseId }: any,
+    webContentsId: number,
+  ) => {
+    const worldId = getIsolatedWorldId(extensionId);
+    injectChromeApi(extensions[extensionId], worldId);
+
+    webFrame.executeJavaScriptInIsolatedWorld(
+      worldId,
+      [
+        {
+          code: details.code,
+        },
+      ],
+      false,
+      (result: any) => {
+        remote.webContents
+          .fromId(webContentsId)
+          .send(`api-tabs-executeScript-${responseId}`, result);
+      },
+    );
+  },
+);
 
 const tabId = parseInt(
   process.argv.find(x => x.startsWith('--tab-id=')).split('=')[1],
@@ -118,13 +149,7 @@ const matchesPattern = (pattern: string, url: string) => {
   return url.match(regexp);
 };
 
-const runContentScript = (
-  url: string,
-  code: string,
-  extension: IpcExtension,
-  worldId: number,
-) => {
-  const parsed = parse(url);
+const injectChromeApi = (extension: IpcExtension, worldId: number) => {
   const context = getAPI(extension, tabId);
 
   webFrame.setIsolatedWorldHumanReadableName(worldId, name);
@@ -137,9 +162,20 @@ const runContentScript = (
     ],
     false,
     (window: any) => {
+      console.log(window.document);
       window.chrome = window.wexond = window.browser = context;
     },
   );
+};
+
+const runContentScript = (
+  url: string,
+  code: string,
+  extension: IpcExtension,
+  worldId: number,
+) => {
+  const parsed = parse(url);
+  injectChromeApi(extension, worldId);
 
   webFrame.executeJavaScriptInIsolatedWorld(worldId, [
     {
@@ -236,10 +272,6 @@ const setImmediateTemp: any = setImmediate;
 
 process.once('loaded', () => {
   global.setImmediate = setImmediateTemp;
-
-  const extensions: { [key: string]: IpcExtension } = ipcRenderer.sendSync(
-    'get-extensions',
-  );
 
   Object.keys(extensions).forEach(key => {
     const extension = extensions[key];

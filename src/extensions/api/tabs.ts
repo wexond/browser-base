@@ -124,7 +124,12 @@ export class Tabs {
       }
 
       const responseId = makeId(32);
-      ipcRenderer.send('api-tabs-executeScript', tabId, details, responseId);
+      ipcRenderer.send('api-tabs-executeScript', {
+        tabId,
+        details,
+        responseId,
+        extensionId: api.runtime.id,
+      });
 
       ipcRenderer.once(
         `api-tabs-executeScript-${responseId}`,
