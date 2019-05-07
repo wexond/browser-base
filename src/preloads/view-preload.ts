@@ -162,7 +162,6 @@ const injectChromeApi = (extension: IpcExtension, worldId: number) => {
     ],
     false,
     (window: any) => {
-      console.log(window.document);
       window.chrome = window.wexond = window.browser = context;
     },
   );
