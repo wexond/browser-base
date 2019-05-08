@@ -104,7 +104,7 @@ const onStarClick = async () => {
 export const SearchBox = observer(() => {
   const suggestionsVisible = store.suggestions.list.length !== 0;
 
-  let height = 48;
+  let height = 42;
 
   for (const s of store.suggestions.list) {
     height += 48;

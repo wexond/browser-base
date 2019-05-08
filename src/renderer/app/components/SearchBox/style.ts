@@ -11,7 +11,7 @@ export const StyledSearchBox = styled.div`
   display: flex;
   flex-flow: column;
   overflow: hidden;
-  min-height: 48px;
+  min-height: 42px;
   transition: 0.2s height;
 `;
 
@@ -44,6 +44,6 @@ export const Input = styled.input`
 export const InputContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 48px;
-  min-height: 48px;
+  min-height: 42px;
+  height: 42px;
 `;
