@@ -191,12 +191,9 @@ const runContentScript = (
 
 const runStylesheet = (url: string, code: string) => {
   const wrapper = `((code) => {
-    function init() {
-      const styleElement = document.createElement('style');
-      styleElement.textContent = code;
-      document.head.append(styleElement);
-    }
-    document.addEventListener('DOMContentLoaded', init);
+    const styleElement = document.createElement('style');
+    styleElement.textContent = code;
+    document.head.append(styleElement);
   })`;
 
   const compiledWrapper = runInThisContext(wrapper, {
