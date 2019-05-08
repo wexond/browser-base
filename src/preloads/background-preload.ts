@@ -3,8 +3,6 @@ import { IpcExtension } from '~/shared/models';
 import { getAPI } from '~/shared/utils/extensions';
 import { parse } from 'url';
 
-webFrame.registerURLSchemeAsPrivileged('wexond-extension');
-
 ipcRenderer.setMaxListeners(0);
 
 declare const global: any;

@@ -1,4 +1,4 @@
-import { BrowserWindow, app, ipcMain, globalShortcut } from 'electron';
+import { BrowserWindow, app, ipcMain, globalShortcut, screen } from 'electron';
 import { resolve, join } from 'path';
 import { platform } from 'os';
 import { windowManager, Window } from 'node-window-manager';
@@ -240,9 +240,7 @@ export class AppWindow extends BrowserWindow {
 
           clearInterval(this.interval);
 
-          const sf = windowManager.getScaleFactor(
-            windowManager.getMonitorFromWindow(this.window),
-          );
+          const sf = windowManager.getScaleFactor(this.window.getMonitor());
 
           this.selectedWindow.lastBounds = bounds;
 
@@ -269,7 +267,7 @@ export class AppWindow extends BrowserWindow {
       if (this.draggedWindow && this.willAttachWindow) {
         const win = this.draggedWindow;
 
-        win.setParent(this.window);
+        win.setOwner(this.window);
 
         this.windows.push(win);
 
@@ -325,13 +323,13 @@ export class AppWindow extends BrowserWindow {
     if (
       !this.isMinimized() &&
       this.draggedWindow &&
-      this.draggedWindow.getParent().handle === 0 &&
+      this.draggedWindow.getOwner().handle === 0 &&
       !this.windows.find(x => x.handle === this.draggedWindow.handle)
     ) {
       const winBounds = this.draggedWindow.getBounds();
       const { lastBounds } = this.draggedWindow;
       const contentBounds = this.getContentArea();
-      const cursor = windowManager.getMousePoint();
+      const cursor = screen.getCursorScreenPoint();
 
       cursor.y = winBounds.y;
 
@@ -375,9 +373,7 @@ export class AppWindow extends BrowserWindow {
     bounds.y += TOOLBAR_HEIGHT;
     bounds.height -= TOOLBAR_HEIGHT;
 
-    const sf = windowManager.getScaleFactor(
-      windowManager.getMonitorFromWindow(this.window),
-    );
+    const sf = windowManager.getScaleFactor(this.window.getMonitor());
 
     bounds.x = Math.round(bounds.x * sf);
     bounds.y = Math.round(bounds.y * sf) + 1;

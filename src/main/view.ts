@@ -332,7 +332,10 @@ export class View extends BrowserView {
       },
     );
 
-    this.setAutoResize({ width: true, height: true });
+    this.setAutoResize({
+      width: true,
+      height: true,
+    });
     this.webContents.loadURL(url);
   }
 

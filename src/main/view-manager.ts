@@ -188,7 +188,10 @@ export class ViewManager {
       width,
       height: this.fullscreen ? height : height - TOOLBAR_HEIGHT,
     });
-    view.setAutoResize({ width: true, height: true });
+    view.setAutoResize({
+      width: true,
+      height: true,
+    });
   }
 
   public hideView() {

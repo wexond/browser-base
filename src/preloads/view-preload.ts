@@ -1,4 +1,4 @@
-import { ipcRenderer, webFrame, IpcMessageEvent, remote } from 'electron';
+import { ipcRenderer, webFrame, remote, IpcMessageEvent } from 'electron';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { getAPI } from '~/shared/utils/extensions';
@@ -9,8 +9,6 @@ import { runInThisContext } from 'vm';
 const extensions: { [key: string]: IpcExtension } = ipcRenderer.sendSync(
   'get-extensions',
 );
-
-webFrame.registerURLSchemeAsPrivileged('wexond-extension');
 
 webFrame.executeJavaScript('window', false, w => {
   w.chrome = {
