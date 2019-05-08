@@ -52,6 +52,10 @@ export class Runtime {
       responseCallback = args[1];
     }
 
+    if (typeof args[2] === 'function') {
+      responseCallback = args[2];
+    }
+
     if (options && options.includeTlsChannelId) {
       sender.tlsChannelId = portId;
     }
