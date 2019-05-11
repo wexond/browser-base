@@ -3,7 +3,6 @@ import * as Datastore from 'nedb';
 import { Favicon } from '../models';
 import { getPath } from '~/shared/utils/paths';
 import { requestURL } from '../utils/network';
-import { rejects } from 'assert';
 import { observable } from 'mobx';
 
 const icojs = require('icojs');
@@ -68,10 +67,8 @@ export class FaviconsStore {
           const type = fileType(data);
 
           if (type && type.ext === 'ico') {
-            data = await convertIcoToPng(data);
+            data = await readImage(await convertIcoToPng(data));
           }
-
-          data = await readImage(data);
 
           const str = `data:png;base64,${data.toString('base64')}`;
 
