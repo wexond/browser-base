@@ -77,8 +77,10 @@ const Content = observer(({ tab }: { tab: Tab }) => {
         isIcon={tab.isIconSet}
         style={{
           color: tab.isSelected
-            ? tab.background
-            : `rgba(0, 0, 0, ${transparency.text.high})`,
+            ? store.theme['tab.selected.textColor'] === 'inherit'
+              ? tab.background
+              : store.theme['tab.selected.textColor']
+            : store.theme['tab.textColor'],
         }}
       >
         {tab.title}
@@ -107,8 +109,12 @@ const Overlay = observer(({ tab }: { tab: Tab }) => {
       hovered={tab.isHovered}
       style={{
         backgroundColor: tab.isSelected
-          ? shadeBlendConvert(0.8, tab.background)
-          : 'rgba(0, 0, 0, 0.04)',
+          ? shadeBlendConvert(
+              store.theme['tab.selectedHover.backgroundOpacity'],
+              tab.background,
+              store.theme['toolbar.backgroundColor'],
+            )
+          : store.theme['tab.hover.backgroundColor'],
       }}
     />
   );
@@ -129,7 +135,11 @@ export default observer(({ tab }: { tab: Tab }) => {
         selected={tab.isSelected}
         style={{
           backgroundColor: tab.isSelected
-            ? shadeBlendConvert(0.85, tab.background)
+            ? shadeBlendConvert(
+                store.theme['tab.backgroundOpacity'],
+                tab.background,
+                store.theme['toolbar.backgroundColor'],
+              )
             : 'transparent',
         }}
       >

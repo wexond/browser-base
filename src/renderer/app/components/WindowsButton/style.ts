@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { centerIcon } from '~/shared/mixins';
+import { Theme } from '../../models/theme';
 
 interface ButtonProps {
   icon: string;
@@ -28,6 +29,7 @@ interface IconProps {
   icon: string;
   isClose?: boolean;
   isDark?: boolean;
+  theme?: Theme;
 }
 
 export const Icon = styled.div`
@@ -35,8 +37,14 @@ export const Icon = styled.div`
   height: 100%;
   transition: 0.2s filter;
   ${centerIcon(11)};
-  ${({ icon, isClose, isDark }: IconProps) => css`
-    filter: ${isDark ? 'invert(100%)' : 'none'};
+  ${({ icon, isClose, isDark, theme }: IconProps) => css`
+    filter: ${isDark
+      ? theme['overlay.windowsButtons.invert']
+        ? 'invert(100%)'
+        : 'none'
+      : theme['toolbar.icons.invert']
+      ? 'invert(100%)'
+      : 'none'};
     background-image: url(${icon});
     &:hover {
       filter: ${isClose && 'invert(100%)'};

@@ -16,6 +16,14 @@ import { makeId } from '~/shared/utils/string';
 
 let id = 1;
 
+const isColorAcceptable = (color: string) => {
+  if (store.theme['tab.allowLightBackground']) {
+    return getColorBrightness(color) > 120;
+  }
+
+  return getColorBrightness(color) > 170;
+};
+
 export class Tab {
   @observable
   public id: number = id++;
@@ -39,7 +47,7 @@ export class Tab {
   public width: number = 0;
 
   @observable
-  public background: string = colors.blue['500'];
+  public background: string = store.theme.accentColor;
 
   @observable
   public url = '';
@@ -208,10 +216,10 @@ export class Tab {
 
             if (!palette.Vibrant) return;
 
-            if (getColorBrightness(palette.Vibrant.hex) < 170) {
+            if (isColorAcceptable(palette.Vibrant.hex)) {
               this.background = palette.Vibrant.hex;
             } else {
-              this.background = colors.blue['500'];
+              this.background = store.theme.accentColor;
             }
           }
         } catch (e) {
@@ -229,11 +237,11 @@ export class Tab {
     ipcRenderer.on(
       `browserview-theme-color-updated-${this.id}`,
       (e: any, themeColor: string) => {
-        if (themeColor && getColorBrightness(themeColor) < 170) {
+        if (themeColor && isColorAcceptable(themeColor)) {
           this.background = themeColor;
           this.hasThemeColor = true;
         } else {
-          this.background = colors.blue['500'];
+          this.background = store.theme.accentColor;
           this.hasThemeColor = false;
         }
       },

@@ -3,9 +3,11 @@ import styled, { css } from 'styled-components';
 import { transparency, colors } from '~/renderer/constants';
 import { icons, TABS_PADDING } from '~/renderer/app/constants';
 import { centerIcon, body2 } from '~/shared/mixins';
+import { Theme } from '../../models/theme';
 
 interface CloseProps {
   visible: boolean;
+  theme?: Theme;
 }
 
 export const StyledClose = styled.div`
@@ -17,8 +19,12 @@ export const StyledClose = styled.div`
   transition: 0.1s opacity;
   z-index: 10;
   ${centerIcon(16)};
-  opacity: ${({ visible }: CloseProps) =>
-    visible ? transparency.icons.inactive : 0};
+  
+
+    ${({ visible, theme }: CloseProps) => css`
+      opacity: ${visible ? transparency.icons.inactive : 0};
+      filter: ${theme['toolbar.icons.invert'] ? 'invert(100%)' : 'none'};
+    `}
 
   &:hover {
     &:after {
@@ -121,13 +127,14 @@ export const StyledBorder = styled.div`
   position: absolute;
   width: 1px;
   height: 16px;
-  background-color: rgba(0, 0, 0, ${transparency.dividers});
+
   right: -1px;
   top: 50%;
   transform: translateY(-50%);
 
-  ${({ visible }: { visible: boolean }) => css`
+  ${({ visible, theme }: { visible: boolean; theme: Theme }) => css`
     visibility: ${visible ? 'visible' : 'hidden'};
+    background-color: ${theme['tab.separator.backgroundColor']};
   `};
 `;
 
@@ -140,7 +147,4 @@ export const TabContainer = styled.div`
   display: flex;
   align-items: center;
   backface-visibility: hidden;
-  ${({ selected }: TabProps) => css`
-    background-color: ${selected ? 'rgba(33, 150, 243, 0.15)' : 'transparent'};
-  `};
 `;

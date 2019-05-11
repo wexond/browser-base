@@ -16,6 +16,7 @@ import { readFileSync, writeFile } from 'fs';
 import { getPath } from '~/shared/utils/paths';
 import { Settings } from '../models/settings';
 import { DownloadsStore } from './downloads';
+import { lightTheme, darkTheme } from '~/renderer/constants/themes';
 
 export class Store {
   public history = new HistoryStore();
@@ -28,6 +29,9 @@ export class Store {
   public overlay = new OverlayStore();
   public extensions = new ExtensionsStore();
   public downloads = new DownloadsStore();
+
+  @observable
+  public theme = darkTheme;
 
   @observable
   public isFullscreen = false;

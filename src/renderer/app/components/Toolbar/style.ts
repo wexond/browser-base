@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import { platform } from 'os';
 
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
+import { Theme } from '../../models/theme';
 
 export const StyledToolbar = styled.div`
   position: relative;
@@ -9,15 +10,22 @@ export const StyledToolbar = styled.div`
   display: flex;
   flex-flow: row;
   align-items: center;
-  background-color: #fff;
+
   color: rgba(0, 0, 0, 0.8);
   width: 100%;
   height: ${TOOLBAR_HEIGHT}px;
   -webkit-app-region: drag;
   padding-right: ${platform() !== 'darwin' ? 138 : 0}px;
 
-  ${({ isHTMLFullscreen }: { isHTMLFullscreen: boolean }) => css`
+  ${({
+    isHTMLFullscreen,
+    theme,
+  }: {
+    isHTMLFullscreen: boolean;
+    theme: Theme;
+  }) => css`
     margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
+    background-color: ${theme['toolbar.backgroundColor']};
   `};
 `;
 
