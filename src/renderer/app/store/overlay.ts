@@ -64,9 +64,9 @@ export class OverlayStore {
   public onWindowKeyDown = (e: KeyboardEvent) => {
     if (!this._visible || e.keyCode !== 27) return; // Escape
 
-    if (this.currentContent === 'history') {
+    if (this.currentContent !== 'default') {
       this.currentContent = 'default';
-    } else if (this.currentContent === 'default') {
+    } else if (!this.isNewTab) {
       this.visible = false;
     }
   };
