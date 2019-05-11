@@ -67,7 +67,7 @@ export class OverlayStore {
     if (this.currentContent === 'history') {
       this.currentContent = 'default';
     } else if (this.currentContent === 'default') {
-      this._visible = false;
+      this.visible = false;
     }
   };
 
