@@ -23,6 +23,16 @@ const onRefreshClick = () => {
 };
 
 export const NavigationButtons = observer(() => {
+  const { selectedTab } = store.tabs;
+
+  let isWindow = false;
+  let loading = false;
+
+  if (selectedTab) {
+    isWindow = selectedTab.isWindow;
+    loading = selectedTab.loading;
+  }
+
   return (
     <StyledContainer isFullscreen={store.isFullscreen}>
       <ToolbarButton
@@ -39,12 +49,9 @@ export const NavigationButtons = observer(() => {
         onClick={onForwardClick}
       />
       <ToolbarButton
+        disabled={isWindow}
         size={20}
-        icon={
-          store.tabs.selectedTab && store.tabs.selectedTab.loading
-            ? icons.close
-            : icons.refresh
-        }
+        icon={loading ? icons.close : icons.refresh}
         onClick={onRefreshClick}
       />
     </StyledContainer>

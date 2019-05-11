@@ -36,6 +36,16 @@ class BrowserActions extends React.Component {
 }
 
 export const Toolbar = observer(() => {
+  const { selectedTab } = store.tabs;
+
+  let isWindow = false;
+  let blockedAds: any = '';
+
+  if (selectedTab) {
+    isWindow = selectedTab.isWindow;
+    blockedAds = selectedTab.blockedAds;
+  }
+
   return (
     <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
       <NavigationButtons />
@@ -47,21 +57,19 @@ export const Toolbar = observer(() => {
           <ToolbarButton icon={icons.download} onClick={onUpdateClick} />
         )}
         {store.extensions.browserActions.length > 0 && <Separator />}
-        <BrowserAction
-          size={18}
-          style={{ marginLeft: 0 }}
-          opacity={0.54}
-          data={{
-            badgeBackgroundColor: 'gray',
-            badgeText: store.tabs.selectedTab
-              ? store.tabs.selectedTab.blockedAds > 0
-                ? store.tabs.selectedTab.blockedAds.toString()
-                : ''
-              : '',
-            icon: icons.shield,
-            badgeTextColor: 'white',
-          }}
-        />
+        {!isWindow && (
+          <BrowserAction
+            size={18}
+            style={{ marginLeft: 0 }}
+            opacity={0.54}
+            data={{
+              badgeBackgroundColor: 'gray',
+              badgeText: blockedAds > 0 ? blockedAds.toString() : '',
+              icon: icons.shield,
+              badgeTextColor: 'white',
+            }}
+          />
+        )}
       </Buttons>
     </StyledToolbar>
   );
