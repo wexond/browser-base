@@ -35,6 +35,8 @@ export class TabsStore {
   @observable
   public scrollable = false;
 
+  public removedTabs: number = 0;
+
   public lastScrollLeft: number = 0;
   public lastMouseX: number = 0;
   public mouseStartX: number = 0;
@@ -60,6 +62,7 @@ export class TabsStore {
         this.rearrangeTabsTimer.canReset &&
         this.rearrangeTabsTimer.time === 3
       ) {
+        this.removedTabs = 0;
         this.updateTabsBounds(true);
         this.rearrangeTabsTimer.canReset = false;
       }
@@ -156,7 +159,8 @@ export class TabsStore {
   @action
   public onResize = (e: Event) => {
     if (e.isTrusted) {
-      store.tabs.updateTabsBounds(false);
+      this.removedTabs = 0;
+      this.updateTabsBounds(false);
     }
   };
 
@@ -184,6 +188,8 @@ export class TabsStore {
     if (isWindow) {
       store.overlay.visible = false;
     }
+
+    this.removedTabs = 0;
 
     const tab = new Tab(options, store.tabGroups.currentGroupId, isWindow);
 

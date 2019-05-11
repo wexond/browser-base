@@ -326,7 +326,8 @@ export class Tab {
       );
     }
 
-    const width = containerWidth / tabs.length - TABS_PADDING;
+    const width =
+      containerWidth / (tabs.length + store.tabs.removedTabs) - TABS_PADDING;
 
     if (width > 200) {
       return 200;
@@ -369,6 +370,8 @@ export class Tab {
     const { tabs } = tabGroup;
 
     const selected = tabGroup.selectedTabId === this.id;
+
+    store.tabs.removedTabs++;
 
     if (this.isWindow) {
       ipcRenderer.send('detach-window', this.id);
