@@ -244,11 +244,6 @@ export class AppWindow extends BrowserWindow {
 
           this.selectedWindow.lastBounds = bounds;
 
-          bounds.width = Math.round(bounds.width / sf);
-          bounds.height = Math.round(bounds.height / sf);
-          bounds.x = Math.round(bounds.x / sf);
-          bounds.y = Math.round(bounds.y / sf);
-
           this.setContentBounds({
             width: bounds.width,
             height: bounds.height + TOOLBAR_HEIGHT,
@@ -372,13 +367,6 @@ export class AppWindow extends BrowserWindow {
 
     bounds.y += TOOLBAR_HEIGHT;
     bounds.height -= TOOLBAR_HEIGHT;
-
-    const sf = windowManager.getScaleFactor(this.window.getMonitor());
-
-    bounds.x = Math.round(bounds.x * sf);
-    bounds.y = Math.round(bounds.y * sf) + 1;
-    bounds.width = Math.round(bounds.width * sf);
-    bounds.height = Math.round(bounds.height * sf) - 1;
 
     return bounds;
   }
