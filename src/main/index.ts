@@ -23,6 +23,9 @@ export let appWindow: AppWindow;
 
 registerProtocols();
 
+app.setAsDefaultProtocolClient('http');
+app.setAsDefaultProtocolClient('https');
+
 app.requestSingleInstanceLock();
 app.on('second-instance', (e, argv) => {
   console.log(argv);

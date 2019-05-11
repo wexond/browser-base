@@ -1,12 +1,17 @@
 {
   "appId": "org.wexond.wexond",
   "productName": "Wexond",
+
+  "nsis": {
+    "include": "static/installer.nsh"
+  },
+
   "asar": true,
   "directories": {
     "output": "dist",
     "buildResources": "static/app-icons"
   },
-  "files": ["build/**/*", "package.json", "filters"],
+  "files": ["build/**/*", "package.json"],
   "publish": "github",
   "linux": {
     "category": "Network",
