@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { centerIcon } from '~/shared/mixins';
-import { icons } from '../../constants';
+import { icons, TOOLBAR_HEIGHT } from '../../constants';
 
 export const OverlayScrollbarStyle = `
   ::-webkit-scrollbar {
@@ -19,6 +19,20 @@ export const OverlayScrollbarStyle = `
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.48);
   }
+`;
+
+export const Handle = styled.div`
+  position: absolute;
+  z-index: 9999;
+  height: ${TOOLBAR_HEIGHT}px;
+  left: 0;
+  -webkit-app-region: drag;
+  top: 0;
+  right: 0;
+
+  ${({ visible }: { visible: boolean }) => css`
+    display: ${visible ? 'block' : 'none'};
+  `};
 `;
 
 export const StyledOverlay = styled.div`
