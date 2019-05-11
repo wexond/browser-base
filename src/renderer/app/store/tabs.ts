@@ -189,6 +189,10 @@ export class TabsStore {
       store.overlay.visible = false;
     }
 
+    if (options.active) {
+      store.overlay.visible = false;
+    }
+
     this.removedTabs = 0;
 
     const tab = new Tab(options, store.tabGroups.currentGroupId, isWindow);

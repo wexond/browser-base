@@ -1,5 +1,5 @@
 import { ipcMain, app, Menu, session } from 'electron';
-import { resolve } from 'path';
+import { resolve, extname } from 'path';
 import { platform, homedir } from 'os';
 import { AppWindow } from './app-window';
 import { autoUpdater } from 'electron-updater';
@@ -26,15 +26,30 @@ registerProtocols();
 app.setAsDefaultProtocolClient('http');
 app.setAsDefaultProtocolClient('https');
 
-app.requestSingleInstanceLock();
-app.on('second-instance', (e, argv) => {
-  console.log(argv);
+const gotTheLock = app.requestSingleInstanceLock();
 
-  if (appWindow) {
-    if (appWindow.isMinimized()) appWindow.restore();
-    appWindow.focus();
-  }
-});
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', (e, argv) => {
+    if (appWindow) {
+      if (appWindow.isMinimized()) appWindow.restore();
+      appWindow.focus();
+
+      if (process.env.ENV !== 'dev') {
+        const path = argv[argv.length - 1];
+        const ext = extname(path);
+
+        if (ext === '.html') {
+          appWindow.webContents.send('api-tabs-create', {
+            url: `file:///${path}`,
+            active: true,
+          });
+        }
+      }
+    }
+  });
+}
 
 process.on('uncaughtException', error => {
   log.error(error);
