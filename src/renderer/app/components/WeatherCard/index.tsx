@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import {
-  Content,
+  Soon,
   StyledCard,
   Icon,
   Header,
@@ -67,6 +67,7 @@ export const WeatherCard = observer(() => {
           <SmallDegrees night>12°</SmallDegrees>
         </Item>
       </Items>
+      <Soon>Soon</Soon>
     </StyledCard>
   );
 });
