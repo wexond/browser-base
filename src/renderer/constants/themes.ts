@@ -18,7 +18,7 @@ export const lightTheme: Theme = {
   'overlay.dialog.backgroundColor': '#fff',
   'overlay.foreground': 'dark',
   'overlay.backgroundColor': '#fff',
-  'overlay.section.backgroundColor': 'rgba(0, 0, 0, 0.12)',
+  'overlay.separator.color': 'rgba(0, 0, 0, 0.12)',
   accentColor: colors.blue['500'],
 };
 
