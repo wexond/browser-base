@@ -37,6 +37,9 @@ export class Store {
   public isDarkMode = false;
 
   @observable
+  public isAlwaysOnTop = false;
+
+  @observable
   public isFullscreen = false;
 
   @observable

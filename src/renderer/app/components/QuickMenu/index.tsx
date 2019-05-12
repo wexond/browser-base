@@ -7,6 +7,7 @@ import { icons } from '../../constants';
 import store from '../../store';
 import { Line } from './style';
 import { darkTheme, lightTheme } from '~/renderer/constants/themes';
+import { getCurrentWindow } from '../../utils';
 
 const changeContent = (content: 'history' | 'default' | 'bookmarks') => () => {
   store.overlay.currentContent = content;
@@ -24,8 +25,12 @@ const onFindClick = () => {
 
 const onDarkClick = () => {
   store.isDarkMode = !store.isDarkMode;
-
   store.theme = store.isDarkMode ? darkTheme : lightTheme;
+};
+
+const onAlwaysClick = () => {
+  store.isAlwaysOnTop = !store.isAlwaysOnTop;
+  getCurrentWindow().setAlwaysOnTop(store.isAlwaysOnTop);
 };
 
 export const QuickMenu = observer(() => {
@@ -41,7 +46,12 @@ export const QuickMenu = observer(() => {
       }}
     >
       <Actions>
-        <Bubble invert={invert} icon={icons.window}>
+        <Bubble
+          toggled={store.isAlwaysOnTop}
+          onClick={onAlwaysClick}
+          invert={invert}
+          icon={icons.window}
+        >
           Always on top
         </Bubble>
         <Bubble
