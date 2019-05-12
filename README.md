@@ -56,6 +56,12 @@ If you have found any bugs or just want to see some new features in Wexond, feel
 
 Before running Wexond, please ensure you have [`Node.js`](https://nodejs.org/en/) installed on your machine.
 
+When running on Windows, make sure you have build tools installed. You can install them by running as **administrator**:
+
+```bash
+$ npm i -g windows-build-tools
+```
+
 Firstly, run this command to install all needed dependencies. If you have encountered any problems, please report it. I will try to help as much as I can.
 
 ```bash
@@ -80,16 +86,16 @@ $ npm run <command>
 
 #### List of available commands:
 
-| Command            | Description                                 |
-| ------------------ | ------------------------------------------- |
-| `build`            | Bundles Wexond's source in production mode. |
-| `compile-win32`    | Compiles Wexond binaries for Windows.       |
-| `compile-darwin`   | Compiles Wexond binaries for macOS.         |
-| `compile-linux`    | Compiles Wexond binaries for Linux.         |
-| `lint`             | Lints code.                                 |
-| `lint-fix`         | Fixes eslint errors if any                  |
-| `start`            | Starts Wexond.                              |
-| `dev`              | Starts Wexond in the development mode       |
+| Command          | Description                                 |
+| ---------------- | ------------------------------------------- |
+| `build`          | Bundles Wexond's source in production mode. |
+| `compile-win32`  | Compiles Wexond binaries for Windows.       |
+| `compile-darwin` | Compiles Wexond binaries for macOS.         |
+| `compile-linux`  | Compiles Wexond binaries for Linux.         |
+| `lint`           | Lints code.                                 |
+| `lint-fix`       | Fixes eslint errors if any                  |
+| `start`          | Starts Wexond.                              |
+| `dev`            | Starts Wexond in the development mode       |
 
 # Documentation
 

@@ -42,7 +42,7 @@
     "compile-linux": "npm run build && electron-builder -l -p always",
     "lint": "tslint \"src/**/*.ts*\"",
     "lint-fix": "prettier --write \"src/**/*.ts*\" && tslint \"src/**/*.ts*\" --fix",
-    "postinstall": "electron-builder install-app-deps"
+    "prepare": "electron-builder install-app-deps"
   },
   "pre-commit": [
     "lint-fix"
