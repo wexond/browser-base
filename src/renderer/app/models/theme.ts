@@ -7,8 +7,12 @@ export interface Theme {
   'tab.hover.backgroundColor': string;
   'tab.selected.textColor': string;
   'tab.textColor': string;
-  'overlay.windowsButtons.invert': boolean;
   'tab.separator.backgroundColor': string;
   'tab.allowLightBackground': boolean;
+  'overlay.windowsButtons.invert': boolean;
+  'overlay.backgroundColor': string;
+  'overlay.section.backgroundColor': string;
+  'overlay.foreground': 'light' | 'dark';
+  'overlay.dialog.backgroundColor': string;
   accentColor: string;
 }

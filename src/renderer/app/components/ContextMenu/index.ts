@@ -1,5 +1,6 @@
 import { shadows, centerIcon } from '~/shared/mixins';
 import styled, { css } from 'styled-components';
+import { Theme } from '../../models/theme';
 
 export const ContextMenu = styled.div`
   position: absolute;
@@ -9,12 +10,12 @@ export const ContextMenu = styled.div`
   padding: 8px 0;
   z-index: 9999;
   box-shadow: ${shadows(8)};
-  background-color: #303030;
   border-radius: 8px;
 
-  ${({ visible }: { visible: boolean }) => css`
+  ${({ visible, theme }: { visible: boolean; theme?: Theme }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
+    background-color: ${theme['overlay.dialog.backgroundColor']};
     margin-top: ${visible ? 0 : -20}px;
   `}
 `;
@@ -24,11 +25,25 @@ export const ContextMenuItem = styled.div`
   font-weight: 400;
   font-size: 14px;
 
-  ${({ icon, selected }: { icon?: string; selected?: boolean }) => css`
-    background-color: ${selected ? 'rgba(255, 255, 255, 0.15)' : 'none'};
+  ${({
+    icon,
+    selected,
+    theme,
+  }: {
+    icon?: string;
+    selected?: boolean;
+    theme?: Theme;
+  }) => css`
+    background-color: ${selected
+      ? theme['overlay.foreground'] === 'light'
+        ? 'rgba(255, 255, 255, 0.15)'
+        : 'rgba(0, 0, 0, 0.1)'
+      : 'none'};
 
     &:hover {
-      background-color: rgba(255, 255, 255, ${selected ? 0.15 : 0.08});
+      background-color: ${theme['overlay.foreground'] === 'light'
+        ? `rgba(255, 255, 255, ${selected ? 0.15 : 0.08})`
+        : `rgba(0, 0, 0, ${selected ? 0.1 : 0.06})`};
     }
 
     ${icon &&
@@ -36,7 +51,9 @@ export const ContextMenuItem = styled.div`
       padding-left: ${24 + 16 + 8}px;
       &:before {
         content: '';
-        filter: invert(100%);
+        filter: ${
+          theme['overlay.foreground'] === 'light' ? 'invert(100%)' : 'none'
+        };
         opacity: 0.54;
         ${centerIcon()};
         width: 16px;

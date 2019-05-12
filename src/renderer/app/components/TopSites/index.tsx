@@ -15,7 +15,6 @@ export const TopSites = observer(() => {
           key={item._id}
           maxLines={1}
           iconSize={20}
-          light
           icon={store.favicons.favicons[item.favicon]}
         >
           {item.title}

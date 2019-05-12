@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyledBubble, Title, Icon } from './style';
+import { StyledBubble, Title, Icon, Circle } from './style';
 
 export const getSize = (i: number) => {
   const width = 800;
@@ -35,14 +35,15 @@ export const Bubble = ({
       disabled={disabled}
       onClick={onClick}
     >
-      <Icon
-        invert={invert}
-        light={light}
-        style={{
-          backgroundImage: `url(${icon})`,
-          backgroundSize: `${iconSize}px`,
-        }}
-      />
+      <Circle>
+        <Icon
+          invert={invert}
+          style={{
+            backgroundImage: `url(${icon})`,
+            backgroundSize: `${iconSize}px`,
+          }}
+        />
+      </Circle>
       <Title
         style={{
           WebkitLineClamp: maxLines,

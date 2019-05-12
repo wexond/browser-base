@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components';
 import { centerIcon } from '~/shared/mixins';
 import { icons, TOOLBAR_HEIGHT } from '../../constants';
+import { Theme } from '../../models/theme';
+import { transparency } from '~/renderer/constants';
 
 export const OverlayScrollbarStyle = `
   ::-webkit-scrollbar {
@@ -36,7 +38,6 @@ export const Handle = styled.div`
 `;
 
 export const StyledOverlay = styled.div`
-  color: white;
   position: absolute;
   display: flex;
   flex-flow: column;
@@ -48,11 +49,14 @@ export const StyledOverlay = styled.div`
   z-index: 9999;
   transition: 0.2s opacity;
   backface-visibility: hidden;
-  background-color: #1c1c1c;
 
-  ${({ visible }: { visible: boolean }) => css`
+  ${({ visible, theme }: { visible: boolean; theme?: Theme }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
+    background-color: ${theme['overlay.backgroundColor']};
+    color: ${theme['overlay.foreground'] === 'light'
+      ? 'white'
+      : `rgba(0, 0, 0, ${transparency.text.high})`};
   `};
 `;
 
@@ -94,9 +98,14 @@ export const DropArrow = styled.div`
   height: 32px;
   width: 32px;
   background-image: url(${icons.down});
-  filter: invert(100%);
   border-radius: 50%;
   transition: 0.1s background-color;
+
+  ${({ theme }: { theme?: Theme }) => css`
+    filter: ${theme['overlay.foreground'] === 'light'
+      ? 'invert(100%)'
+      : 'none'};
+  `}
 `;
 
 export const Separator = styled.div`
@@ -107,11 +116,14 @@ export const Separator = styled.div`
 
 export const Section = styled.div`
   padding: 24px;
-  background-color: rgba(255, 255, 255, 0.08);
+
   margin-bottom: 24px;
   border-radius: 30px;
-  color: white;
   overflow: hidden;
+
+  ${({ theme }: { theme?: Theme }) => css`
+    background-color: ${theme['overlay.section.backgroundColor']};
+  `}
 `;
 
 export const Actions = styled.div`
@@ -139,7 +151,6 @@ export const Title = styled.div`
   font-weight: 300;
   margin-bottom: 16px;
   margin-top: 24px;
-  color: white;
   position: relative;
   display: flex;
   padding-right: 42px;

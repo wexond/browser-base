@@ -21,38 +21,43 @@ const onFindClick = () => {
 };
 
 export const QuickMenu = observer(() => {
+  const invert = store.theme['overlay.foreground'] === 'light';
   return (
     <Section onClick={preventHiding}>
       <Header>Menu</Header>
       <Actions>
-        <Bubble onClick={changeContent('history')} invert icon={icons.history}>
+        <Bubble
+          onClick={changeContent('history')}
+          invert={invert}
+          icon={icons.history}
+        >
           History
         </Bubble>
         <Bubble
           onClick={changeContent('bookmarks')}
-          invert
+          invert={invert}
           icon={icons.bookmarks}
         >
           Bookmarks
         </Bubble>
-        <Bubble disabled invert icon={icons.download}>
+        <Bubble disabled invert={invert} icon={icons.download}>
           Downloads
         </Bubble>
-        <Bubble disabled invert icon={icons.settings}>
+        <Bubble disabled invert={invert} icon={icons.settings}>
           Settings
         </Bubble>
-        <Bubble disabled invert icon={icons.extensions}>
+        <Bubble disabled invert={invert} icon={icons.extensions}>
           Extensions
         </Bubble>
         <Bubble
           disabled={!store.tabs.selectedTab}
-          invert
+          invert={invert}
           icon={icons.find}
           onClick={onFindClick}
         >
           Find
         </Bubble>
-        <Bubble disabled invert icon={icons.more}>
+        <Bubble disabled invert={invert} icon={icons.more}>
           More tools
         </Bubble>
       </Actions>

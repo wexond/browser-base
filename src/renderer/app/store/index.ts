@@ -31,7 +31,7 @@ export class Store {
   public downloads = new DownloadsStore();
 
   @observable
-  public theme = darkTheme;
+  public theme = lightTheme;
 
   @observable
   public isFullscreen = false;

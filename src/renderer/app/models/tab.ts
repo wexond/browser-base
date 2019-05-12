@@ -21,7 +21,7 @@ const isColorAcceptable = (color: string) => {
     return getColorBrightness(color) > 120;
   }
 
-  return getColorBrightness(color) > 170;
+  return getColorBrightness(color) < 170;
 };
 
 export class Tab {
