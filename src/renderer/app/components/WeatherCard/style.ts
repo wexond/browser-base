@@ -1,18 +1,24 @@
 import styled, { css } from 'styled-components';
 import { centerIcon, overline } from '~/shared/mixins';
 
+import { Theme } from '../../models/theme';
+
 export const StyledCard = styled.div`
   background-color: rgba(255, 255, 255, 0.08);
   margin-bottom: 24px;
   border-radius: 30px;
-  color: white;
   overflow: hidden;
   width: 264px;
+
+  ${({ theme }: { theme?: Theme }) => css`
+    background-color: ${theme['overlay.section.backgroundColor']};
+  `};
 `;
 
 export const Header = styled.div`
   width: 100%;
   padding: 24px;
+  color: white;
   background-image: linear-gradient(to bottom right, #64b5f6, #1e88e5);
 `;
 

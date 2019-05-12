@@ -1,16 +1,22 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { platform } from 'os';
 import { centerIcon } from '~/shared/mixins';
 import { icons } from '../../constants';
+import { Theme } from '../../models/theme';
+import { transparency } from '~/renderer/constants';
 
 export const StyledNavigationDrawer = styled.div`
   width: 300px;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.08);
+
   position: fixed;
   left: 0;
   display: flex;
   flex-flow: column;
+
+  ${({ theme }: { theme?: Theme }) => css`
+    background-color: ${theme['overlay.section.backgroundColor']};
+  `}
 `;
 
 export const MenuItems = styled.div`
@@ -40,7 +46,12 @@ export const Back = styled.div`
   width: 24px;
   opacity: 0.54;
   margin-right: 24px;
-  filter: invert(100%);
+
+  ${({ theme }: { theme?: Theme }) => css`
+    filter: ${theme['overlay.foreground'] === 'light'
+      ? 'invert(100%)'
+      : 'none'};
+  `}
 
   &:hover {
     opacity: 1;
@@ -50,16 +61,24 @@ export const Back = styled.div`
 export const Input = styled.input`
   border: none;
   outline: none;
-  color: white;
+
   width: 100%;
   padding-left: 42px;
   background-color: transparent;
   height: 100%;
   font-size: 14px;
 
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.54);
-  }
+  ${({ theme }: { theme?: Theme }) => css`
+    color: ${theme['overlay.foreground'] === 'light'
+      ? 'white'
+      : `rgba(0, 0, 0, ${transparency.text.high})`};
+
+    &::placeholder {
+      color: ${theme['overlay.foreground'] === 'light'
+        ? 'rgba(255, 255, 255, 0.54)'
+        : `rgba(0, 0, 0, ${transparency.text.medium})`};
+    }
+  `}
 `;
 
 export const Search = styled.div`
@@ -68,9 +87,14 @@ export const Search = styled.div`
   margin-top: 24px;
   height: 42px;
   border-radius: 30px;
-  background-color: rgba(255, 255, 255, 0.12);
 
   position: relative;
+
+  ${({ theme }: { theme?: Theme }) => css`
+    background-color: ${theme['overlay.foreground'] === 'light'
+      ? 'rgba(255, 255, 255, 0.12)'
+      : 'rgba(0, 0, 0, 0.04)'};
+  `}
 
   &:after {
     content: '';
@@ -82,6 +106,11 @@ export const Search = styled.div`
     height: 16px;
     ${centerIcon(16)};
     background-image: url(${icons.search});
-    filter: invert(100%);
+
+    ${({ theme }: { theme?: Theme }) => css`
+      filter: ${theme['overlay.foreground'] === 'light'
+        ? 'invert(100%)'
+        : 'none'};
+    `}
   }
 `;

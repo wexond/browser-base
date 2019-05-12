@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 import { centerIcon } from '~/shared/mixins';
 import { icons } from '../../constants';
+import { Theme } from '../../models/theme';
 
 export const Remove = styled.div`
   ${centerIcon()};
@@ -9,11 +10,16 @@ export const Remove = styled.div`
   width: 16px;
   background-image: url(${icons.close});
   opacity: 0.54;
-  filter: invert(100%);
 
   &:hover {
     opacity: 1;
   }
+
+  ${({ theme }: { theme?: Theme }) => css`
+    filter: ${theme['overlay.foreground'] === 'light'
+      ? 'invert(100%)'
+      : 'none'};
+  `};
 `;
 
 export const Favicon = styled.div`

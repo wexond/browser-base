@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { centerIcon } from '~/shared/mixins';
+import { Theme } from '~/renderer/app/models/theme';
 
 export const StyledNavigationDrawerItem = styled.div`
   padding: 0 16px;
@@ -18,12 +19,19 @@ export const StyledNavigationDrawerItem = styled.div`
     width: 2px;
     height: 16px;
     background-color: white;
-    ${({ selected }: { selected?: boolean }) => css`
+    ${({ selected, theme }: { selected?: boolean; theme?: Theme }) => css`
       opacity: ${selected ? 1 : 0};
+      background-color: ${theme['overlay.foreground'] === 'light'
+        ? 'white'
+        : 'black'};
     `};
   }
   &:hover {
-    background-color: rgba(255, 255, 255, 0.12);
+    ${({ theme }: { theme?: Theme }) => css`
+      background-color: ${theme['overlay.foreground'] === 'light'
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.04)'};
+    `};
   }
 `;
 
@@ -32,5 +40,10 @@ export const Icon = styled.div`
   width: 16px;
   ${centerIcon()};
   margin-right: 16px;
-  filter: invert(100%);
+
+  ${({ theme }: { theme?: Theme }) => css`
+    filter: ${theme['overlay.foreground'] === 'light'
+      ? 'invert(100%)'
+      : 'none'};
+  `};
 `;

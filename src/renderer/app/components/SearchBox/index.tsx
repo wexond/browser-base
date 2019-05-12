@@ -107,7 +107,7 @@ export const SearchBox = observer(() => {
   let height = 42;
 
   for (const s of store.suggestions.list) {
-    height += 48;
+    height += 42;
   }
 
   return (
