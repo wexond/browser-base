@@ -10,7 +10,6 @@ export const Bubble = ({
   children,
   icon,
   invert,
-  light,
   maxLines,
   iconSize,
   onClick,
@@ -21,7 +20,6 @@ export const Bubble = ({
   icon?: string;
   invert?: boolean;
   maxLines?: number;
-  light?: boolean;
   iconSize?: number;
   onClick?: (e?: React.MouseEvent<HTMLDivElement>) => void;
   itemsPerRow?: number;

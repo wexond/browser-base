@@ -417,14 +417,12 @@ export class Tab {
       } else if (index - 1 >= 0 && !tabs[index - 1].isClosing) {
         const prevTab = tabs[index - 1];
         prevTab.select();
-      } else if (store.tabGroups.list.length === 1) {
-        if (this.isWindow) {
-          store.overlay.visible = true;
-          store.overlay.isNewTab = true;
-        }
-      } else if (this.tabGroup.tabs.length === 0) {
-        store.overlay.visible = true;
       }
+    }
+
+    if (this.tabGroup.tabs.length === 1) {
+      store.overlay.isNewTab = true;
+      store.overlay.visible = true;
     }
 
     this.removeTimeout = setTimeout(() => {
