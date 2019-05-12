@@ -132,7 +132,6 @@ export default observer(({ tab }: { tab: Tab }) => {
       ref={tab.ref}
     >
       <TabContainer
-        selected={tab.isSelected}
         style={{
           backgroundColor: tab.isSelected
             ? shadeBlendConvert(

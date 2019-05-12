@@ -379,8 +379,6 @@ export class Tab {
 
     const selected = tabGroup.selectedTabId === this.id;
 
-    store.tabs.removedTabs++;
-
     if (this.isWindow) {
       ipcRenderer.send('detach-window', this.id);
     } else {
@@ -399,6 +397,8 @@ export class Tab {
         this.setLeft(previousTab.getLeft(true) + this.getWidth(), true);
       }
       store.tabs.updateTabsBounds(true);
+    } else {
+      store.tabs.removedTabs++;
     }
 
     this.setWidth(0, true);
