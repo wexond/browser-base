@@ -134,7 +134,7 @@ export const StyledBorder = styled.div`
 
   ${({ visible, theme }: { visible: boolean; theme: Theme }) => css`
     visibility: ${visible ? 'visible' : 'hidden'};
-    background-color: ${theme['tab.separator.backgroundColor']};
+    background-color: ${theme['toolbar.separator.color']};
   `};
 `;
 

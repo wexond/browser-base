@@ -5,6 +5,8 @@ import { preventHiding, Header } from '../Overlay';
 import { Bubble } from '../Bubble';
 import { icons } from '../../constants';
 import store from '../../store';
+import { Line } from './style';
+import { darkTheme, lightTheme } from '~/renderer/constants/themes';
 
 const changeContent = (content: 'history' | 'default' | 'bookmarks') => () => {
   store.overlay.currentContent = content;
@@ -20,11 +22,38 @@ const onFindClick = () => {
   }, 200);
 };
 
+const onDarkClick = () => {
+  store.isDarkMode = !store.isDarkMode;
+
+  store.theme = store.isDarkMode ? darkTheme : lightTheme;
+};
+
 export const QuickMenu = observer(() => {
   const invert = store.theme['overlay.foreground'] === 'light';
   return (
-    <Section onClick={preventHiding}>
-      <Header>Menu</Header>
+    <Section
+      onClick={preventHiding}
+      style={{
+        display: 'flex',
+        flexFlow: 'column',
+        alignItems: 'center',
+        padding: 16,
+      }}
+    >
+      <Actions>
+        <Bubble invert={invert} icon={icons.window}>
+          Always on top
+        </Bubble>
+        <Bubble
+          toggled={store.isDarkMode}
+          onClick={onDarkClick}
+          invert={invert}
+          icon={icons.night}
+        >
+          Dark mode
+        </Bubble>
+      </Actions>
+      <Line />
       <Actions>
         <Bubble
           onClick={changeContent('history')}
@@ -43,7 +72,7 @@ export const QuickMenu = observer(() => {
         <Bubble disabled invert={invert} icon={icons.download}>
           Downloads
         </Bubble>
-        <Bubble disabled invert={invert} icon={icons.settings}>
+        <Bubble invert={invert} icon={icons.settings}>
           Settings
         </Bubble>
         <Bubble disabled invert={invert} icon={icons.extensions}>

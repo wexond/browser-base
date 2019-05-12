@@ -47,7 +47,7 @@ export const StyledOverlay = styled.div`
   bottom: 0;
   right: 0;
   z-index: 9999;
-  transition: 0.2s opacity;
+  transition: 0.2s opacity, 0.2s background-color;
   backface-visibility: hidden;
 
   ${({ visible, theme }: { visible: boolean; theme?: Theme }) => css`
@@ -116,10 +116,10 @@ export const Separator = styled.div`
 
 export const Section = styled.div`
   padding: 24px;
-
   margin-bottom: 24px;
   border-radius: 30px;
   overflow: hidden;
+  transition: 0.2s background-color;
 
   ${({ theme }: { theme?: Theme }) => css`
     background-color: ${theme['overlay.section.backgroundColor']};
@@ -128,8 +128,6 @@ export const Section = styled.div`
 
 export const Actions = styled.div`
   display: flex;
-  margin-left: -16px;
-  margin-top: -16px;
   flex-wrap: wrap;
   justify-content: center;
 `;

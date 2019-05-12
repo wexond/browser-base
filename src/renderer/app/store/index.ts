@@ -34,6 +34,9 @@ export class Store {
   public theme = lightTheme;
 
   @observable
+  public isDarkMode = false;
+
+  @observable
   public isFullscreen = false;
 
   @observable

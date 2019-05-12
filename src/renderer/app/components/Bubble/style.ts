@@ -30,9 +30,10 @@ export const Icon = styled.div`
   height: 100%;
   margin-bottom: 16px;
   ${centerIcon(32)};
+  transition: 0.2s filter;
 
-  ${({ invert }: { invert: boolean }) => css`
-    filter: ${invert ? 'invert(100%)' : 'none'};
+  ${({ invert, toggled }: { invert: boolean; toggled?: boolean }) => css`
+    filter: ${invert || toggled ? 'invert(100%)' : 'none'};
   `}
 `;
 
@@ -44,9 +45,12 @@ export const Circle = styled.div`
   border-radius: 50%;
   margin-bottom: 16px;
   ${centerIcon(32)};
+  transition: 0.2s background-color;
 
-  ${({ theme }: { theme?: Theme }) => css`
-    background-color: ${theme['overlay.foreground'] === 'light'
+  ${({ theme, toggled }: { theme?: Theme; toggled?: boolean }) => css`
+    background-color: ${toggled
+      ? theme.accentColor
+      : theme['overlay.foreground'] === 'light'
       ? 'rgba(255, 255, 255, 0.12)'
       : 'rgba(0, 0, 0, 0.08)'};
   `}
