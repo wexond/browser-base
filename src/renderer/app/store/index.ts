@@ -55,7 +55,11 @@ export class Store {
   };
 
   @observable
-  public settings: Settings = {};
+  public settings: Settings = {
+    dialType: 'top-sites',
+    isDarkTheme: false,
+    isShieldToggled: true,
+  };
 
   public findInputRef = React.createRef<HTMLInputElement>();
 

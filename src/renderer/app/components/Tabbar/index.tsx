@@ -15,9 +15,7 @@ const onMouseEnter = () => (store.tabs.scrollbarVisible = true);
 const onMouseLeave = () => (store.tabs.scrollbarVisible = false);
 
 const onAddTabClick = () => {
-  store.overlay.isNewTab = true;
-  store.overlay.visible = true;
-  ipcRenderer.send('hide-window');
+  store.tabs.onNewTab();
 };
 
 export const Tabbar = observer(() => {

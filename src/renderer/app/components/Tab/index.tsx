@@ -16,7 +16,7 @@ import {
 } from './style';
 import { shadeBlendConvert } from '../../utils';
 import { transparency } from '~/renderer/constants';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import Ripple from '~/renderer/components/Ripple';
 
 const removeTab = (tab: Tab) => () => {
@@ -64,6 +64,81 @@ const onMouseUp = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (e.button === 1) {
     tab.close();
   }
+};
+
+const onContextMenu = (tab: Tab) => () => {
+  const { tabs } = store.tabGroups.currentGroup;
+
+  const menu = remote.Menu.buildFromTemplate([
+    {
+      label: 'New tab',
+      click: () => {
+        store.tabs.onNewTab();
+      },
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: 'Reload',
+      click: () => {
+        tab.callViewMethod('webContents.reload');
+      },
+    },
+    {
+      label: 'Duplicate',
+      click: () => {
+        store.tabs.addTab({ active: true, url: tab.url });
+      },
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: 'Close tab',
+      click: () => {
+        tab.close();
+      },
+    },
+    {
+      label: 'Close other tabs',
+      click: () => {
+        for (const t of tabs) {
+          if (t !== tab) {
+            t.close();
+          }
+        }
+      },
+    },
+    {
+      label: 'Close tabs from left',
+      click: () => {
+        for (let i = tabs.indexOf(tab) - 1; i >= 0; i--) {
+          tabs[i].close();
+        }
+      },
+    },
+    {
+      label: 'Close tabs from right',
+      click: () => {
+        for (let i = tabs.length - 1; i > tabs.indexOf(tab); i--) {
+          tabs[i].close();
+        }
+      },
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: 'Revert closed tab',
+      enabled: store.tabs.closedUrl !== '',
+      click: () => {
+        store.tabs.addTab({ active: true, url: store.tabs.closedUrl });
+      },
+    },
+  ]);
+
+  menu.popup();
 };
 
 const Content = observer(({ tab }: { tab: Tab }) => {
@@ -137,6 +212,7 @@ export default observer(({ tab }: { tab: Tab }) => {
       onMouseDown={onMouseDown(tab)}
       onMouseUp={onMouseUp(tab)}
       onMouseEnter={onMouseEnter(tab)}
+      onContextMenu={onContextMenu(tab)}
       onClick={onClick(tab)}
       onMouseLeave={onMouseLeave}
       visible={tab.tabGroupId === store.tabGroups.currentGroupId}

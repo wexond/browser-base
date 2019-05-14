@@ -377,6 +377,8 @@ export class Tab {
     const tabGroup = this.tabGroup;
     const { tabs } = tabGroup;
 
+    store.tabs.closedUrl = this.url;
+
     const selected = tabGroup.selectedTabId === this.id;
 
     if (this.isWindow) {

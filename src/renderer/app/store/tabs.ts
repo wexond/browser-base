@@ -42,6 +42,8 @@ export class TabsStore {
   public mouseStartX: number = 0;
   public tabStartX: number = 0;
 
+  public closedUrl = '';
+
   public scrollbarRef = React.createRef<HorizontalScrollbar>();
   public containerRef = React.createRef<HTMLDivElement>();
 
@@ -387,5 +389,11 @@ export class TabsStore {
 
   public emitEvent(name: string, ...data: any[]) {
     ipcRenderer.send('emit-tabs-event', name, ...data);
+  }
+
+  public onNewTab() {
+    store.overlay.isNewTab = true;
+    store.overlay.visible = true;
+    ipcRenderer.send('hide-window');
   }
 }
