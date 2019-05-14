@@ -34,9 +34,6 @@ export class Store {
   public theme = lightTheme;
 
   @observable
-  public isDarkMode = false;
-
-  @observable
   public isAlwaysOnTop = false;
 
   @observable
@@ -60,6 +57,7 @@ export class Store {
   @observable
   public settings: Settings = {
     dialType: 'top-sites',
+    isDarkTheme: false,
   };
 
   public findInputRef = React.createRef<HTMLInputElement>();
@@ -161,6 +159,8 @@ export class Store {
       ...this.settings,
       ...JSON.parse(readFileSync(getPath('settings.json'), 'utf8')),
     };
+
+    this.theme = this.settings.isDarkTheme ? darkTheme : lightTheme;
   }
 
   public saveSettings() {

@@ -24,8 +24,9 @@ const onFindClick = () => {
 };
 
 const onDarkClick = () => {
-  store.isDarkMode = !store.isDarkMode;
-  store.theme = store.isDarkMode ? darkTheme : lightTheme;
+  store.settings.isDarkTheme = !store.settings.isDarkTheme;
+  store.theme = store.settings.isDarkTheme ? darkTheme : lightTheme;
+  store.saveSettings();
 };
 
 const onAlwaysClick = () => {
@@ -55,7 +56,7 @@ export const QuickMenu = observer(() => {
           Always on top
         </Bubble>
         <Bubble
-          toggled={store.isDarkMode}
+          toggled={store.settings.isDarkTheme}
           onClick={onDarkClick}
           invert={invert}
           icon={icons.night}
