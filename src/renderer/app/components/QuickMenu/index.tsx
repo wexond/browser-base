@@ -8,6 +8,7 @@ import store from '../../store';
 import { Line } from './style';
 import { darkTheme, lightTheme } from '~/renderer/constants/themes';
 import { getCurrentWindow } from '../../utils';
+import { ipcRenderer } from 'electron';
 
 const changeContent = (content: 'history' | 'default' | 'bookmarks') => () => {
   store.overlay.currentContent = content;
@@ -27,6 +28,12 @@ const onDarkClick = () => {
   store.settings.isDarkTheme = !store.settings.isDarkTheme;
   store.theme = store.settings.isDarkTheme ? darkTheme : lightTheme;
   store.saveSettings();
+};
+
+const onShieldClick = () => {
+  store.settings.isShieldToggled = !store.settings.isShieldToggled;
+  store.saveSettings();
+  ipcRenderer.send('shield-toggle', store.settings.isShieldToggled);
 };
 
 const onAlwaysClick = () => {
@@ -63,7 +70,12 @@ export const QuickMenu = observer(() => {
         >
           Dark mode
         </Bubble>
-        <Bubble invert={invert} toggled={true} icon={icons.shield}>
+        <Bubble
+          invert={invert}
+          toggled={store.settings.isShieldToggled}
+          icon={icons.shield}
+          onClick={onShieldClick}
+        >
           Shield
         </Bubble>
       </Actions>

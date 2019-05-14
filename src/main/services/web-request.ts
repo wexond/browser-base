@@ -1,4 +1,4 @@
-import { ipcMain, session, webContents, app } from 'electron';
+import { ipcMain, session, webContents, app, IpcMessageEvent } from 'electron';
 import { makeId } from '~/shared/utils/string';
 import { AppWindow } from '../app-window';
 import { matchesPattern } from '~/shared/utils/url';
@@ -35,6 +35,7 @@ const lists: any = {
 };
 
 export let engine: FiltersEngine;
+export let isShieldToggled = false;
 
 const eventListeners: any = {};
 
@@ -95,6 +96,10 @@ export const loadFilters = async () => {
     downloadFilters();
   }
 };
+
+ipcMain.on('shield-toggle', (e: IpcMessageEvent, toggle: boolean) => {
+  isShieldToggled = toggle;
+});
 
 const getTabByWebContentsId = (window: AppWindow, id: number) => {
   for (const key in window.viewManager.views) {
@@ -283,7 +288,7 @@ export const runWebRequestService = (window: AppWindow) => {
     async (details: Electron.OnBeforeRequestDetails, callback: any) => {
       const tabId = getTabByWebContentsId(window, details.webContentsId);
 
-      if (engine) {
+      if (engine && isShieldToggled) {
         const { match, redirect } = engine.match(
           makeRequest({ type: details.resourceType, url: details.url }, parse),
         );

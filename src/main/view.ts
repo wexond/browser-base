@@ -1,7 +1,7 @@
 import { BrowserView, app, Menu, nativeImage, clipboard } from 'electron';
 import { appWindow } from '.';
 import { sendToAllExtensions } from './extensions';
-import { engine } from './services/web-request';
+import { engine, isShieldToggled } from './services/web-request';
 import { parse } from 'tldts';
 
 export class View extends BrowserView {
@@ -204,15 +204,18 @@ export class View extends BrowserView {
 
       const url = this.webContents.getURL();
 
-      const { styles, scripts } = engine.getCosmeticsFilters({
-        url,
-        ...parse(url),
-      });
+      // Adblocker cosmetic filtering
+      if (isShieldToggled) {
+        const { styles, scripts } = engine.getCosmeticsFilters({
+          url,
+          ...parse(url),
+        });
 
-      this.webContents.insertCSS(styles);
+        this.webContents.insertCSS(styles);
 
-      for (const script of scripts) {
-        this.webContents.executeJavaScript(script);
+        for (const script of scripts) {
+          this.webContents.executeJavaScript(script);
+        }
       }
 
       appWindow.webContents.send(`load-commit-${this.tabId}`, ...args);
