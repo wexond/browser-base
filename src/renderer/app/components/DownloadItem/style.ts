@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import { centerIcon } from '~/shared/mixins';
 import { icons } from '../../constants';
 import { colors } from '~/renderer/constants';
+import { Theme } from '../../models/theme';
 
 export const StyledItem = styled.div`
   height: 50px;
@@ -16,9 +17,17 @@ export const StyledItem = styled.div`
   overflow: hidden;
   transition: 0.2s background-color;
 
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
+  ${({ theme }: { theme?: Theme }) => css`
+    background-color: ${theme['overlay.foreground'] === 'light'
+      ? 'rgba(255, 255, 255, 0.12)'
+      : 'rgba(0, 0, 0, 0.06)'};
+
+    &:hover {
+      background-color: ${theme['overlay.foreground'] === 'light'
+        ? 'rgba(255, 255, 255, 0.2)'
+        : 'rgba(0, 0, 0, 0.1)'};
+    }
+  `}
 `;
 
 export const Progress = styled.div`
@@ -38,7 +47,12 @@ export const Icon = styled.div`
   margin-left: 16px;
   margin-right: 16px;
   background-image: url(${icons.page});
-  filter: invert(100%);
+
+  ${({ theme }: { theme?: Theme }) => css`
+    filter: ${theme['overlay.foreground'] === 'light'
+      ? 'invert(100%)'
+      : 'none'};
+  `}
 `;
 
 export const Name = styled.div`
