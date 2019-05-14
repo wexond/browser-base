@@ -21,6 +21,12 @@ ipcMain.setMaxListeners(0);
 
 export let appWindow: AppWindow;
 
+export let settings: Settings = {};
+
+ipcMain.on('settings', (e: any, s: Settings) => {
+  settings = { ...settings, ...s };
+});
+
 registerProtocols();
 
 // app.setAsDefaultProtocolClient('http');

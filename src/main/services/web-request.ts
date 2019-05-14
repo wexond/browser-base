@@ -5,7 +5,7 @@ import { matchesPattern } from '~/shared/utils/url';
 import { USER_AGENT } from '~/shared/constants';
 import { existsSync, readFile, writeFile, mkdirSync } from 'fs';
 import { resolve } from 'path';
-import { appWindow } from '..';
+import { appWindow, settings } from '..';
 import Axios from 'axios';
 
 import {
@@ -35,7 +35,6 @@ const lists: any = {
 };
 
 export let engine: FiltersEngine;
-export let isShieldToggled = false;
 
 const eventListeners: any = {};
 
@@ -96,10 +95,6 @@ export const loadFilters = async () => {
     downloadFilters();
   }
 };
-
-ipcMain.on('shield-toggle', (e: IpcMessageEvent, toggle: boolean) => {
-  isShieldToggled = toggle;
-});
 
 const getTabByWebContentsId = (window: AppWindow, id: number) => {
   for (const key in window.viewManager.views) {
@@ -288,7 +283,7 @@ export const runWebRequestService = (window: AppWindow) => {
     async (details: Electron.OnBeforeRequestDetails, callback: any) => {
       const tabId = getTabByWebContentsId(window, details.webContentsId);
 
-      if (engine && isShieldToggled) {
+      if (engine && settings.isShieldToggled) {
         const { match, redirect } = engine.match(
           makeRequest({ type: details.resourceType, url: details.url }, parse),
         );

@@ -162,9 +162,13 @@ export class Store {
     };
 
     this.theme = this.settings.isDarkTheme ? darkTheme : lightTheme;
+
+    ipcRenderer.send('settings', this.settings);
   }
 
   public saveSettings() {
+    ipcRenderer.send('settings', this.settings);
+
     writeFile(getPath('settings.json'), JSON.stringify(this.settings), err => {
       if (err) console.error(err);
     });
