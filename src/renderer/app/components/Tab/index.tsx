@@ -50,9 +50,19 @@ const onMouseLeave = () => {
   store.tabs.hoveredTabId = -1;
 };
 
-const onClick = (tab: Tab) => () => {
+const onClick = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (store.canToggleMenu && !tab.isWindow) {
     store.overlay.visible = true;
+  }
+
+  if (e.button === 4) {
+    tab.close();
+  }
+};
+
+const onMouseUp = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
+  if (e.button === 1) {
+    tab.close();
   }
 };
 
@@ -125,6 +135,7 @@ export default observer(({ tab }: { tab: Tab }) => {
     <StyledTab
       selected={tab.isSelected}
       onMouseDown={onMouseDown(tab)}
+      onMouseUp={onMouseUp(tab)}
       onMouseEnter={onMouseEnter(tab)}
       onClick={onClick(tab)}
       onMouseLeave={onMouseLeave}
