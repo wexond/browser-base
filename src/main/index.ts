@@ -23,8 +23,8 @@ export let appWindow: AppWindow;
 
 registerProtocols();
 
-app.setAsDefaultProtocolClient('http');
-app.setAsDefaultProtocolClient('https');
+// app.setAsDefaultProtocolClient('http');
+// app.setAsDefaultProtocolClient('https');
 
 const gotTheLock = app.requestSingleInstanceLock();
 
