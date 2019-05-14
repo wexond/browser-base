@@ -14,11 +14,13 @@ interface Props {
 }
 
 const onClick = (tabId: number) => () => {
-  ipcRenderer.send(
-    'send-to-all-extensions',
-    'api-emit-event-browserAction-onClicked',
-    store.tabs.getTabById(tabId).getApiTab(),
-  );
+  if (tabId) {
+    ipcRenderer.send(
+      'send-to-all-extensions',
+      'api-emit-event-browserAction-onClicked',
+      store.tabs.getTabById(tabId).getApiTab(),
+    );
+  }
 };
 
 const Component = observer(({ data, size, style, opacity }: Props) => {
