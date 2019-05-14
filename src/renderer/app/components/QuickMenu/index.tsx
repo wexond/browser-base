@@ -62,6 +62,9 @@ export const QuickMenu = observer(() => {
         >
           Dark mode
         </Bubble>
+        <Bubble invert={invert} toggled={true} icon={icons.shield}>
+          Shield
+        </Bubble>
       </Actions>
       <Line />
       <Actions>
@@ -96,8 +99,17 @@ export const QuickMenu = observer(() => {
         >
           Find
         </Bubble>
-        <Bubble disabled invert={invert} icon={icons.more}>
-          More tools
+      </Actions>
+
+      <Actions>
+        <Bubble disabled invert={invert} icon={icons.window}>
+          New window
+        </Bubble>
+        <Bubble disabled invert={invert} icon={icons.window}>
+          Incognito
+        </Bubble>
+        <Bubble disabled invert={invert} icon={icons.window}>
+          Tor
         </Bubble>
       </Actions>
     </Section>
