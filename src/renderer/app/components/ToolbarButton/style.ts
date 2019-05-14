@@ -9,6 +9,8 @@ export const Icon = styled.div`
   height: 100%;
   will-change: background-image;
   transition: 0.15s background-image;
+  backface-visibility: hidden;
+
   ${({
     size,
     disabled,
@@ -29,6 +31,8 @@ export const Button = styled.div`
   position: relative;
   transition: 0.2s background-color;
   width: ${TOOLBAR_BUTTON_WIDTH}px;
+  backface-visibility: hidden;
+
   ${({
     disabled,
     invert,
