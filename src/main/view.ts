@@ -72,8 +72,7 @@ export class View extends BrowserView {
             appWindow.viewManager.selected.webContents.loadURL(url);
           } else if (frameName === '_blank') {
             e.preventDefault();
-            appWindow.webContents.send(
-              'api-tabs-create',
+            appWindow.viewManager.create(
               {
                 url,
                 active: true,
@@ -83,18 +82,10 @@ export class View extends BrowserView {
           }
         } else if (disposition === 'foreground-tab') {
           e.preventDefault();
-          appWindow.webContents.send(
-            'api-tabs-create',
-            { url, active: true },
-            true,
-          );
+          appWindow.viewManager.create({ url, active: true }, true);
         } else if (disposition === 'background-tab') {
           e.preventDefault();
-          appWindow.webContents.send(
-            'api-tabs-create',
-            { url, active: false },
-            true,
-          );
+          appWindow.viewManager.create({ url, active: false }, true);
         }
       },
     );

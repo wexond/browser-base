@@ -124,14 +124,14 @@ export class ViewManager {
     return this.views.find(x => x.webContents.id === this.selectedId);
   }
 
-  public create(details: chrome.tabs.CreateProperties) {
+  public create(details: chrome.tabs.CreateProperties, isNext = false) {
     const view = new View(details.url);
     this.views.push(view);
 
     appWindow.webContents.send(
       'api-tabs-create',
       { ...details },
-      false,
+      isNext,
       view.webContents.id,
     );
 
