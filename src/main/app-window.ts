@@ -179,21 +179,6 @@ export class AppWindow extends BrowserWindow {
 
     this.interval = setInterval(this.intervalCallback, 100);
 
-    ipcMain.on('select-window', (e: any, id: number) => {
-      this.selectWindow(this.windows.find(x => x.handle === id));
-    });
-
-    ipcMain.on('detach-window', (e: any, id: number) => {
-      this.detachWindow(this.windows.find(x => x.handle === id));
-    });
-
-    ipcMain.on('hide-window', () => {
-      if (this.selectedWindow) {
-        this.selectedWindow.hide();
-        this.isWindowHidden = true;
-      }
-    });
-
     windowManager.on('window-activated', (window: Window) => {
       this.webContents.send('select-tab', window.handle);
 

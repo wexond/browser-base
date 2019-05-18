@@ -3,7 +3,6 @@ import { resolve, extname } from 'path';
 import { platform, homedir } from 'os';
 import { AppWindow } from './app-window';
 import { autoUpdater } from 'electron-updater';
-import { registerProtocols } from './protocols';
 import { runAdblockService } from './services';
 import { existsSync, writeFileSync } from 'fs';
 import { getPath } from '~/shared/utils/paths';
@@ -25,8 +24,6 @@ export let settings: Settings = {};
 ipcMain.on('settings', (e: any, s: Settings) => {
   settings = { ...settings, ...s };
 });
-
-registerProtocols();
 
 // app.setAsDefaultProtocolClient('http');
 // app.setAsDefaultProtocolClient('https');
@@ -73,43 +70,7 @@ app.on('ready', () => {
   }
 
   // Create our menu entries so that we can use macOS shortcuts
-  Menu.setApplicationMenu(
-    Menu.buildFromTemplate([
-      {
-        label: 'Edit',
-        submenu: [
-          { role: 'undo' },
-          { role: 'redo' },
-          { type: 'separator' },
-          { role: 'cut' },
-          { role: 'copy' },
-          { role: 'paste' },
-          { role: 'pasteandmatchstyle' },
-          { role: 'delete' },
-          { role: 'selectall' },
-          { role: 'quit' },
-          {
-            label: 'Reload',
-            accelerator: 'CmdOrCtrl+R',
-            click: () => {
-              if (process.env.ENV === 'dev') {
-                appWindow.webContents.reload();
-              } else {
-                appWindow.viewManager.selected.webContents.reload();
-              }
-            },
-          },
-          {
-            accelerator: 'CmdOrCtrl+F',
-            label: 'Find in page',
-            click() {
-              appWindow.webContents.send('find');
-            },
-          },
-        ],
-      },
-    ]),
-  );
+  Menu.setApplicationMenu(Menu.buildFromTemplate());
 
   session.defaultSession.setPermissionRequestHandler(
     (webContents, permission, callback) => {
@@ -131,20 +92,6 @@ app.on('ready', () => {
 
   autoUpdater.on('update-downloaded', ({ version }) => {
     appWindow.webContents.send('update-available', version);
-  });
-
-  ipcMain.on('update-install', () => {
-    autoUpdater.quitAndInstall();
-  });
-
-  ipcMain.on('update-check', () => {
-    if (process.env.ENV !== 'dev') {
-      autoUpdater.checkForUpdates();
-    }
-  });
-
-  ipcMain.on('window-focus', () => {
-    appWindow.webContents.focus();
   });
 
   const viewSession = session.fromPartition('persist:view');
