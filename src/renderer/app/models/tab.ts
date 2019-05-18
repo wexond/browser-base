@@ -10,11 +10,8 @@ import {
   defaultTabOptions,
   TAB_ANIMATION_DURATION,
 } from '~/renderer/app/constants';
-import { closeWindow, getColorBrightness } from '../utils';
-import { colors } from '~/renderer/constants';
+import { getColorBrightness } from '../utils';
 import { makeId } from '~/shared/utils/string';
-
-let id = 1;
 
 const isColorAcceptable = (color: string) => {
   if (store.theme['tab.allowLightBackground']) {
@@ -26,7 +23,7 @@ const isColorAcceptable = (color: string) => {
 
 export class Tab {
   @observable
-  public id: number = id++;
+  public id: number;
 
   @observable
   public isDragging: boolean = false;
@@ -128,29 +125,27 @@ export class Tab {
   public ref = React.createRef<HTMLDivElement>();
   public lastHistoryId: string;
   public hasThemeColor = false;
-  public webContentsId: number;
   public findRequestId: number;
   public removeTimeout: any;
   public isWindow: boolean = false;
 
   constructor(
-    { url, active } = defaultTabOptions,
+    { active } = defaultTabOptions,
+    id: number,
     tabGroupId: number,
     isWindow: boolean,
   ) {
+    this.id = id;
     this.isWindow = isWindow;
     this.tabGroupId = tabGroupId;
 
-    if (isWindow) return;
-
-    ipcRenderer.send('browserview-create', { tabId: this.id, url });
-
-    ipcRenderer.once(`browserview-created-${this.id}`, (e: any, id: number) => {
-      this.webContentsId = id;
-      if (active) {
+    if (active) {
+      requestAnimationFrame(() => {
         this.select();
-      }
-    });
+      });
+    }
+
+    if (isWindow) return;
 
     ipcRenderer.on(
       `browserview-data-updated-${this.id}`,
@@ -309,7 +304,7 @@ export class Tab {
       } else {
         ipcRenderer.send('hide-window');
         ipcRenderer.send('browserview-show');
-        ipcRenderer.send('browserview-select', this.id);
+        ipcRenderer.send('view-select', this.id);
 
         store.tabs.emitEvent('onActivated', {
           tabId: this.id,

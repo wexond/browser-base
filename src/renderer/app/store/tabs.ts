@@ -77,14 +77,19 @@ export class TabsStore {
 
     ipcRenderer.on(
       'api-tabs-create',
-      (e: any, options: chrome.tabs.CreateProperties, isNext: boolean) => {
+      (
+        e: any,
+        options: chrome.tabs.CreateProperties,
+        isNext: boolean,
+        id: number,
+      ) => {
         if (isNext) {
           const index =
             store.tabGroups.currentGroup.tabs.indexOf(this.selectedTab) + 1;
           options.index = index;
         }
 
-        this.addTab(options);
+        this.createTab(options, id);
       },
     );
 
@@ -100,8 +105,7 @@ export class TabsStore {
           tab.select();
         }
       } else {
-        tab = this.addTab({}, true);
-        tab.id = options.id;
+        tab = this.createTab({}, options.id, true);
         tab.title = options.title;
         tab.favicon = URL.createObjectURL(new Blob([options.icon]));
 
@@ -185,8 +189,11 @@ export class TabsStore {
     return this.list.find(x => x.id === id);
   }
 
-  @action
-  public addTab(options = defaultTabOptions, isWindow: boolean = false) {
+  @action public createTab(
+    options: chrome.tabs.CreateProperties,
+    id: number,
+    isWindow: boolean = false,
+  ) {
     if (isWindow) {
       store.overlay.visible = false;
     }
@@ -197,7 +204,7 @@ export class TabsStore {
 
     this.removedTabs = 0;
 
-    const tab = new Tab(options, store.tabGroups.currentGroupId, isWindow);
+    const tab = new Tab(options, id, store.tabGroups.currentGroupId, isWindow);
 
     if (options.index !== undefined) {
       this.list.splice(options.index, 0, tab);
@@ -215,8 +222,12 @@ export class TabsStore {
 
       this.scrollbarRef.current.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
     });
-
     return tab;
+  }
+
+  @action
+  public addTab(options = defaultTabOptions) {
+    ipcRenderer.send('view-create', options);
   }
 
   public removeTab(id: number) {
