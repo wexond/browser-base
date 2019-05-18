@@ -13,8 +13,7 @@ export const getViewMenu = (
       {
         label: 'Open link in new tab',
         click: () => {
-          appWindow.webContents.send(
-            'api-tabs-create',
+          appWindow.viewManager.create(
             {
               url: params.linkURL,
               active: false,
@@ -44,8 +43,7 @@ export const getViewMenu = (
       {
         label: 'Open image in new tab',
         click: () => {
-          appWindow.webContents.send(
-            'api-tabs-create',
+          appWindow.viewManager.create(
             {
               url: params.srcURL,
               active: false,
