@@ -1,7 +1,6 @@
 import { BrowserView, app, Menu, nativeImage, clipboard } from 'electron';
-import { appWindow } from '.';
-import { sendToAllExtensions } from './extensions';
-import { engine, isShieldToggled } from './services/web-request';
+import { appWindow, settings } from '.';
+import { engine } from './services';
 import { parse } from 'tldts';
 
 export class View extends BrowserView {
@@ -114,13 +113,13 @@ export class View extends BrowserView {
             role: 'copy',
           },
           {
-            role: 'pasteAndMatchStyle',
+            role: 'pasteandmatchstyle',
           },
           {
             role: 'paste',
           },
           {
-            role: 'selectAll',
+            role: 'selectall',
           },
           {
             type: 'separator',
@@ -205,7 +204,7 @@ export class View extends BrowserView {
       const url = this.webContents.getURL();
 
       // Adblocker cosmetic filtering
-      if (isShieldToggled) {
+      if (settings.isShieldToggled) {
         const { styles, scripts } = engine.getCosmeticsFilters({
           url,
           ...parse(url),
@@ -219,35 +218,6 @@ export class View extends BrowserView {
       }
 
       appWindow.webContents.send(`load-commit-${this.tabId}`, ...args);
-
-      this.emitWebNavigationEvent('onBeforeNavigate', {
-        tabId: this.tabId,
-        url: this.webContents.getURL(),
-        frameId: 0,
-        timeStamp: Date.now(),
-        processId: process.pid,
-        parentFrameId: -1,
-      });
-
-      this.emitWebNavigationEvent('onCommitted', {
-        tabId: this.tabId,
-        url,
-        sourceFrameId: 0,
-        timeStamp: Date.now(),
-        processId: process.pid,
-        frameId: 0,
-        parentFrameId: -1,
-      });
-    });
-
-    this.webContents.addListener('did-finish-load', async () => {
-      this.emitWebNavigationEvent('onCompleted', {
-        tabId: this.tabId,
-        url: this.webContents.getURL(),
-        frameId: 0,
-        timeStamp: Date.now(),
-        processId: process.pid,
-      });
     });
 
     this.webContents.addListener(
@@ -283,25 +253,8 @@ export class View extends BrowserView {
             true,
           );
         }
-
-        this.emitWebNavigationEvent('onCreatedNavigationTarget', {
-          tabId: this.tabId,
-          url,
-          sourceFrameId: 0,
-          timeStamp: Date.now(),
-        });
       },
     );
-
-    this.webContents.addListener('dom-ready', () => {
-      this.emitWebNavigationEvent('onDOMContentLoaded', {
-        tabId: this.tabId,
-        url: this.webContents.getURL(),
-        frameId: 0,
-        timeStamp: Date.now(),
-        processId: process.pid,
-      });
-    });
 
     this.webContents.addListener(
       'page-favicon-updated',
@@ -353,12 +306,6 @@ export class View extends BrowserView {
       });
     }
   }
-
-  public emitWebNavigationEvent = (name: string, ...data: any[]) => {
-    this.webContents.send(`api-emit-event-webNavigation-${name}`, ...data);
-
-    sendToAllExtensions(`api-emit-event-webNavigation-${name}`, ...data);
-  };
 
   public async getScreenshot(): Promise<string> {
     return new Promise(resolve => {

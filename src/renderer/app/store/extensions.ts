@@ -2,12 +2,8 @@ import { ipcRenderer } from 'electron';
 import { observable } from 'mobx';
 import { resolve } from 'path';
 import * as fs from 'fs';
-import { promisify } from 'util';
 
-import store from '.';
 import { BrowserAction } from '../models';
-
-const readFile = promisify(fs.readFile);
 
 export class ExtensionsStore {
   @observable
