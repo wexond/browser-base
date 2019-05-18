@@ -8,6 +8,7 @@ import { existsSync, writeFileSync } from 'fs';
 import { getPath } from '~/shared/utils/paths';
 import { Settings } from '~/renderer/app/models/settings';
 import { makeId } from '~/shared/utils/string';
+import { getMainMenu } from './menus/main';
 
 export const log = require('electron-log');
 
@@ -70,7 +71,7 @@ app.on('ready', () => {
   }
 
   // Create our menu entries so that we can use macOS shortcuts
-  Menu.setApplicationMenu(Menu.buildFromTemplate());
+  Menu.setApplicationMenu(getMainMenu(appWindow));
 
   session.defaultSession.setPermissionRequestHandler(
     (webContents, permission, callback) => {

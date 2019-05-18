@@ -1,5 +1,5 @@
 import { AppWindow } from '../app-window';
-import { clipboard, nativeImage } from 'electron';
+import { clipboard, nativeImage, Menu } from 'electron';
 
 export const getViewMenu = (
   appWindow: AppWindow,
@@ -160,5 +160,5 @@ export const getViewMenu = (
     },
   });
 
-  return menuItems;
+  return Menu.buildFromTemplate(menuItems);
 };

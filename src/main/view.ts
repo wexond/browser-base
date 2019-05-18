@@ -26,10 +26,7 @@ export class View extends BrowserView {
     this.tabId = id;
 
     this.webContents.on('context-menu', (e, params) => {
-      const menu = Menu.buildFromTemplate(
-        getViewMenu(appWindow, params, this.webContents),
-      );
-
+      const menu = getViewMenu(appWindow, params, this.webContents);
       menu.popup();
     });
 
