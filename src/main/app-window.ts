@@ -51,7 +51,6 @@ export class AppWindow extends BrowserWindow {
         plugins: true,
         nodeIntegration: true,
         contextIsolation: false,
-        experimentalFeatures: true,
       },
       icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
     });

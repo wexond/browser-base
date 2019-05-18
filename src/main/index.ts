@@ -2,13 +2,14 @@ import { ipcMain, app, Menu, session } from 'electron';
 import { resolve, extname } from 'path';
 import { platform, homedir } from 'os';
 import { AppWindow } from './app-window';
-import { autoUpdater } from 'electron-updater';
+
 import { runAdblockService } from './services';
 import { existsSync, writeFileSync } from 'fs';
 import { getPath } from '~/shared/utils/paths';
 import { Settings } from '~/renderer/app/models/settings';
 import { makeId } from '~/shared/utils/string';
 import { getMainMenu } from './menus/main';
+import { runAutoUpdaterService } from './services/auto-updater';
 
 export const log = require('electron-log');
 
@@ -19,7 +20,6 @@ log.transports.file.file = resolve(app.getPath('userData'), 'log.log');
 ipcMain.setMaxListeners(0);
 
 export let appWindow: AppWindow;
-
 export let settings: Settings = {};
 
 ipcMain.on('settings', (e: any, s: Settings) => {
@@ -70,7 +70,6 @@ app.on('ready', () => {
     );
   }
 
-  // Create our menu entries so that we can use macOS shortcuts
   Menu.setApplicationMenu(getMainMenu(appWindow));
 
   session.defaultSession.setPermissionRequestHandler(
@@ -90,10 +89,6 @@ app.on('ready', () => {
   });
 
   appWindow = new AppWindow();
-
-  autoUpdater.on('update-downloaded', ({ version }) => {
-    appWindow.webContents.send('update-available', version);
-  });
 
   const viewSession = session.fromPartition('persist:view');
 
@@ -135,6 +130,7 @@ app.on('ready', () => {
     });
   });
 
+  runAutoUpdaterService(appWindow);
   runAdblockService(viewSession);
 });
 

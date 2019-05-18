@@ -34,6 +34,8 @@ export class ExtensionsStore {
   }
 
   public load() {
+    /*
+    TODO: 
     const extensions = ipcRenderer.sendSync('get-extensions');
 
     for (const key in extensions) {
@@ -65,6 +67,6 @@ export class ExtensionsStore {
 
         this.defaultBrowserActions.push(browserAction);
       }
-    }
+    }*/
   }
 }
