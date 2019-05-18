@@ -379,7 +379,7 @@ export class Tab {
     if (this.isWindow) {
       ipcRenderer.send('detach-window', this.id);
     } else {
-      ipcRenderer.send('browserview-destroy', this.id);
+      ipcRenderer.send('view-destroy', this.id);
     }
 
     const notClosingTabs = tabs.filter(x => !x.isClosing);

@@ -59,12 +59,9 @@ export class ViewManager {
       });
     });
 
-    ipcMain.on(
-      'browserview-destroy',
-      (e: Electron.IpcMessageEvent, id: number) => {
-        this.destroy(id);
-      },
-    );
+    ipcMain.on('view-destroy', (e: Electron.IpcMessageEvent, id: number) => {
+      this.destroy(id);
+    });
 
     ipcMain.on('browserview-call', async (e: any, data: any) => {
       const view = this.views.find(x => x.webContents.id === data.tabId);
@@ -196,17 +193,14 @@ export class ViewManager {
   public destroy(id: number) {
     const view = this.views.find(x => x.webContents.id === id);
 
-    if (!view || view.isDestroyed()) {
-      this.views = this.views.filter(x => x.id !== id);
-      return;
+    this.views = this.views.filter(x => x.webContents.id !== id);
+
+    if (view) {
+      if (appWindow.getBrowserView() === view) {
+        appWindow.setBrowserView(null);
+      }
+
+      view.destroy();
     }
-
-    if (appWindow.getBrowserView() === view) {
-      appWindow.setBrowserView(null);
-    }
-
-    view.destroy();
-
-    this.views = this.views.filter(x => x.id !== id);
   }
 }
