@@ -1,6 +1,6 @@
 import { BrowserView, app, Menu, nativeImage, clipboard } from 'electron';
 import { appWindow, settings } from '.';
-import { engine } from './services';
+import { engine } from './services/adblock';
 import { parse } from 'tldts';
 import { getViewMenu } from './menus/view';
 

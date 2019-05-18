@@ -112,4 +112,35 @@ export const runAdblockService = (ses: Session) => {
       callback({ cancel: false });
     },
   );
+
+  webRequest.onHeadersReceived(
+    async (details: Electron.OnHeadersReceivedDetails, callback: any) => {
+      updateResponseHeadersWithCSP(
+        {
+          url: details.url,
+          type: details.resourceType as any,
+          tabId: details.webContentsId,
+          method: details.method,
+          statusCode: details.statusCode,
+          statusLine: details.statusLine,
+          requestId: details.id.toString(),
+          frameId: 0,
+          parentFrameId: -1,
+          timeStamp: details.timestamp,
+        },
+        engine.getCSPDirectives(
+          makeRequest(
+            {
+              sourceUrl: details.url,
+              type: details.resourceType,
+              url: details.url,
+            },
+            parse,
+          ),
+        ),
+      );
+
+      callback({ cancel: false });
+    },
+  );
 };
