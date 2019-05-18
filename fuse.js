@@ -125,5 +125,4 @@ const preload = name => {
 
 renderer('app', 4444);
 preload('view-preload');
-preload('background-preload');
 main();

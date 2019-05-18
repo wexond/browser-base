@@ -8,7 +8,7 @@ import { ViewManager } from './view-manager';
 import { getPath } from '~/shared/utils/paths';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { ProcessWindow } from './models/process-window';
-import { TOOLBAR_HEIGHT } from '~/renderer/app/constants';
+import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
 import { log } from '.';
 
 const containsPoint = (bounds: any, point: any) => {

@@ -15,11 +15,13 @@ interface Props {
 
 const onClick = (tabId: number) => () => {
   if (tabId) {
+    /*
+    TODO:
     ipcRenderer.send(
       'send-to-all-extensions',
       'api-emit-event-browserAction-onClicked',
       store.tabs.getTabById(tabId).getApiTab(),
-    );
+    );*/
   }
 };
 

@@ -30,7 +30,7 @@ const lists: any = {
 
 export let engine: FiltersEngine;
 
-export const loadFilters = async () => {
+const loadFilters = async () => {
   if (!existsSync(getPath('adblock'))) {
     mkdirSync(getPath('adblock'));
   }
@@ -86,7 +86,8 @@ export const loadFilters = async () => {
 
 export const runAdblockService = (ses: Session) => {
   const { webRequest } = ses;
-  // onBeforeRequest
+
+  loadFilters();
 
   webRequest.onBeforeRequest(
     async (details: Electron.OnBeforeRequestDetails, callback: any) => {

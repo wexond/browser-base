@@ -4,7 +4,7 @@ import { platform, homedir } from 'os';
 import { AppWindow } from './app-window';
 import { autoUpdater } from 'electron-updater';
 import { registerProtocols } from './protocols';
-import { runAdblockService, loadFilters } from './services';
+import { runAdblockService } from './services';
 import { existsSync, writeFileSync } from 'fs';
 import { getPath } from '~/shared/utils/paths';
 import { Settings } from '~/renderer/app/models/settings';
@@ -187,7 +187,6 @@ app.on('ready', () => {
     });
   });
 
-  loadFilters();
   runAdblockService(viewSession);
 });
 
