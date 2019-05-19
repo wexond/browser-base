@@ -1,9 +1,6 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 
-const tabId = parseInt(
-  process.argv.find(x => x.startsWith('--tab-id=')).split('=')[1],
-  10,
-);
+const tabId = remote.getCurrentWebContents().id;
 
 const goBack = () => {
   ipcRenderer.send('browserview-call', { tabId, scope: 'webContents.goBack' });

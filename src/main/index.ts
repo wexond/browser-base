@@ -1,11 +1,11 @@
 import { ipcMain, app, Menu, session } from 'electron';
 import { resolve, extname } from 'path';
 import { platform, homedir } from 'os';
-import { ExtensionsMain } from 'electron-extensions';
+import { extensionsMain } from 'electron-extensions';
 
 import { AppWindow } from './app-window';
 import { runAdblockService } from './services';
-import { existsSync, writeFileSync } from 'fs';
+import { existsSync, writeFileSync, promises } from 'fs';
 import { getPath } from '~/shared/utils/paths';
 import { Settings } from '~/renderer/app/models/settings';
 import { makeId } from '~/shared/utils/string';
@@ -59,7 +59,7 @@ process.on('uncaughtException', error => {
   log.error(error);
 });
 
-app.on('ready', () => {
+app.on('ready', async () => {
   if (!existsSync(getPath('settings.json'))) {
     writeFileSync(
       getPath('settings.json'),
@@ -134,7 +134,15 @@ app.on('ready', () => {
   runAutoUpdaterService(appWindow);
   runAdblockService(viewSession);
 
-  const extensions = new ExtensionsMain()
+  extensionsMain.setSession(viewSession);
+
+  const extensionsPath = getPath('extensions');
+
+  const dirs = await promises.readdir(extensionsPath);
+
+  for (const dir of dirs) {
+    extensionsMain.load(resolve(extensionsPath, dir));
+  }
 });
 
 app.on('window-all-closed', () => {
