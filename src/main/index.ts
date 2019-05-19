@@ -1,8 +1,9 @@
 import { ipcMain, app, Menu, session } from 'electron';
 import { resolve, extname } from 'path';
 import { platform, homedir } from 'os';
-import { AppWindow } from './app-window';
+import { ExtensionsMain } from 'electron-extensions';
 
+import { AppWindow } from './app-window';
 import { runAdblockService } from './services';
 import { existsSync, writeFileSync } from 'fs';
 import { getPath } from '~/shared/utils/paths';
@@ -132,6 +133,8 @@ app.on('ready', () => {
 
   runAutoUpdaterService(appWindow);
   runAdblockService(viewSession);
+
+  const extensions = new ExtensionsMain()
 });
 
 app.on('window-all-closed', () => {

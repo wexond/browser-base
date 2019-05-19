@@ -60,6 +60,7 @@ export const Title = styled.div`
   font-size: 13px;
   text-align: center;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
