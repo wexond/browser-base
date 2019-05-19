@@ -28,6 +28,16 @@ const lists: any = {
     'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
 };
 
+const objectToArray = (obj: any): any[] => {
+  const arr: any = [];
+  Object.keys(obj).forEach(k => {
+    if (obj[k]) {
+      arr.push({ name: k, value: obj[k][0] });
+    }
+  });
+  return arr;
+};
+
 export let engine: FiltersEngine;
 
 const loadFilters = async () => {
@@ -90,6 +100,7 @@ export const runAdblockService = (ses: Session) => {
   loadFilters();
 
   webRequest.onBeforeRequest(
+    { urls: ['<all_urls>'] },
     async (details: Electron.OnBeforeRequestDetails, callback: any) => {
       if (engine && settings.isShieldToggled) {
         const { match, redirect } = engine.match(
@@ -114,33 +125,36 @@ export const runAdblockService = (ses: Session) => {
   );
 
   webRequest.onHeadersReceived(
+    { urls: ['<all_urls>'] },
     async (details: Electron.OnHeadersReceivedDetails, callback: any) => {
-      updateResponseHeadersWithCSP(
-        {
-          url: details.url,
-          type: details.resourceType as any,
-          tabId: details.webContentsId,
-          method: details.method,
-          statusCode: details.statusCode,
-          statusLine: details.statusLine,
-          requestId: details.id.toString(),
-          frameId: 0,
-          parentFrameId: -1,
-          timeStamp: details.timestamp,
-        },
-        engine.getCSPDirectives(
-          makeRequest(
-            {
-              sourceUrl: details.url,
-              type: details.resourceType,
-              url: details.url,
-            },
-            parse,
+      const responseHeaders = objectToArray(
+        updateResponseHeadersWithCSP(
+          {
+            url: details.url,
+            type: details.resourceType as any,
+            tabId: details.webContentsId,
+            method: details.method,
+            statusCode: details.statusCode,
+            statusLine: details.statusLine,
+            requestId: details.id.toString(),
+            frameId: 0,
+            parentFrameId: -1,
+            timeStamp: details.timestamp,
+          },
+          engine.getCSPDirectives(
+            makeRequest(
+              {
+                sourceUrl: details.url,
+                type: details.resourceType,
+                url: details.url,
+              },
+              parse,
+            ),
           ),
         ),
       );
 
-      callback({ cancel: false });
+      callback({ cancel: false, responseHeaders });
     },
   );
 };

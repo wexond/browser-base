@@ -131,18 +131,17 @@ app.on('ready', async () => {
     });
   });
 
-  runAutoUpdaterService(appWindow);
-  runAdblockService(viewSession);
-
   extensionsMain.setSession(viewSession);
 
   const extensionsPath = getPath('extensions');
-
   const dirs = await promises.readdir(extensionsPath);
 
   for (const dir of dirs) {
     extensionsMain.load(resolve(extensionsPath, dir));
   }
+
+  runAutoUpdaterService(appWindow);
+  runAdblockService(viewSession);
 });
 
 app.on('window-all-closed', () => {
