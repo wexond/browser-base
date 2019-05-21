@@ -74,6 +74,7 @@
   "dependencies": {
     "@cliqz/adblocker": "0.9.1",
     "axios": "0.18.0",
+    "electron-extensions": "1.0.0",
     "electron-log": "3.0.5",
     "electron-updater": "4.0.6",
     "file-type": "11.0.0",
@@ -91,7 +92,6 @@
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "styled-components": "4.2.0",
-    "tldts": "4.0.6",
-    "electron-extensions": "1.0.0"
+    "tldts": "4.0.6"
   }
 }
