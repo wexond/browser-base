@@ -7,7 +7,7 @@
 
 [![Travis](https://img.shields.io/travis/com/wexond/wexond.svg?style=flat-square)](https://travis-ci.com/wexond/wexond)
 [![AppVeyor](https://img.shields.io/appveyor/ci/sentialx/wexond.svg?style=flat-square)](https://ci.appveyor.com/project/sentialx/wexond)
-[![Discord](https://img.shields.io/discord/307605794680209409.svg?style=flat-square)](https://discord.gg/yAA8DdK)
+[![Discord](https://img.shields.io/discord/307605794680209409.svg?style=flat-square)](https://discord.gg/6dU6hC)
 [![Downloads](https://img.shields.io/github/downloads/wexond/wexond/total.svg?style=flat-square)](https://github.com/wexond/wexond/releases)
 
 Wexond is an extensible and privacy-focused web browser with a totally different user experience, built on top of `Electron`, `TypeScript`, `React` and `styled-components`. It aims to be fast, private, beautiful, extensible and functional.
