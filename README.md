@@ -59,7 +59,7 @@ Before running Wexond, please ensure you have [`Node.js`](https://nodejs.org/en/
 When running on Windows, make sure you have build tools installed. You can install them by running as **administrator**:
 
 ```bash
-$ npm i -g windows-build-tools
+$ npm i -g windows-build-tools --vs2015
 ```
 
 Firstly, run this command to install all needed dependencies. If you have encountered any problems, please report it. I will try to help as much as I can.
