@@ -68,7 +68,7 @@ const getCopyPlugin = () => {
 const main = () => {
   const fuse = FuseBox.init(getConfig('server', 'main'));
 
-  const app = fuse.bundle('main').instructions(`> [main/index.ts]`);
+  const app = fuse.bundle('main').instructions(`> [flowr/index.ts]`);
 
   if (!production) {
     app.watch();
@@ -81,6 +81,8 @@ const renderer = (name, port) => {
   const cfg = getRendererConfig('electron', name);
 
   cfg.plugins.push(getWebIndexPlugin(name));
+  cfg.plugins.push(getWebIndexPlugin(('noconnection')));
+  cfg.plugins.push(getWebIndexPlugin('config'));
   cfg.plugins.push(JSONPlugin());
   cfg.plugins.push(getCopyPlugin());
   cfg.plugins.push(StyledComponentsPlugin());
