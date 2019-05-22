@@ -5,12 +5,10 @@ import { windowManager, Window } from 'node-window-manager';
 import mouseEvents from 'mouse-hooks';
 
 import { ViewManager } from './view-manager';
-import { getPath } from '~/shared/utils/paths';
+import { getPath } from '../shared/utils/paths';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { ProcessWindow } from './models/process-window';
-import { TOOLBAR_HEIGHT } from '~/renderer/app/constants';
-import { log } from '.';
-
+import { TOOLBAR_HEIGHT } from '../renderer/app/constants';
 const containsPoint = (bounds: any, point: any) => {
   return (
     point.x >= bounds.x &&
@@ -53,7 +51,7 @@ export class AppWindow extends BrowserWindow {
         contextIsolation: false,
         experimentalFeatures: true,
       },
-      icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
+      icon: resolve(app.getAppPath(), 'static/app-icons/icon-wexond.png'),
     });
 
     const windowDataPath = getPath('window-data.json');
@@ -339,7 +337,7 @@ export class AppWindow extends BrowserWindow {
         if (!this.draggedIn) {
           const title = this.draggedWindow.getTitle();
           app.getFileIcon(this.draggedWindow.process.path, (err, icon) => {
-            if (err) return log.error(err);
+            if (err) return console.error(err);
 
             this.draggedWindow.lastTitle = title;
 

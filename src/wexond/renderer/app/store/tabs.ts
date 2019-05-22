@@ -139,7 +139,7 @@ export class TabsStore {
     });
 
     ipcRenderer.on(
-      `found-in-page`,
+      'found-in-page',
       (
         e: any,
         { activeMatchOrdinal, matches, requestId }: Electron.FoundInPageResult,
@@ -278,7 +278,7 @@ export class TabsStore {
   }
 
   public getTabsToReplace(callingTab: Tab, direction: string) {
-    let tabs = this.list;
+    const tabs = this.list;
 
     const index = tabs.indexOf(callingTab);
 

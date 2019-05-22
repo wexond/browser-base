@@ -25,7 +25,7 @@ const flowrStore = new Store(FlowrDataDir, {
   },
 })
 
-export async function createWindow(): Promise<BrowserWindow> {
+export async function createFlowrWindow(): Promise<BrowserWindow> {
   const mac = await getMacAddress()
   const winBounds = flowrStore.get('windowBounds')
 
@@ -33,12 +33,11 @@ export async function createWindow(): Promise<BrowserWindow> {
 
   const kiosk = flowrStore.get('isKiosk') || false
   const url = flowrStore.get('extUrl') || defaultUrl
-
   // Create the browser window.
   const opts = {
     width: winBounds.width, // 1280,
     height: winBounds.height + 40, // 720,
-    icon: join(__dirname, './assets/icons/png/64x64.png'),
+    icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
     minWidth: 430,
     minHeight: 270,
     title: 'FlowR',
@@ -56,7 +55,7 @@ export async function createWindow(): Promise<BrowserWindow> {
   }
   // mainWindow.setAspectRatio(16/9)
   mainWindow.setMenuBarVisibility(false)
-  mainWindow.setAlwaysOnTop(true, 'floating', 0)
+  // mainWindow.setAlwaysOnTop(true, 'floating', 0)
 
   if (mac) {
     mainWindow.loadURL(url)

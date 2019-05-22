@@ -37,20 +37,14 @@ class BrowserActions extends React.Component {
 
 export const Toolbar = observer(() => {
   const { selectedTab } = store.tabs;
-  const { currentGroup } = store.tabGroups;
 
   let isWindow = false;
   let blockedAds: any = '';
-  let isFlowr = false;
 
   if (selectedTab) {
     isWindow = selectedTab.isWindow;
     blockedAds = selectedTab.blockedAds;
   }
-  if (currentGroup) {
-    isFlowr = currentGroup.name === 'flowr'
-  }
-  console.log(';;;;;;;> isHTMLFullscreen ', store.isHTMLFullscreen)
 
   return (
       <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
@@ -78,5 +72,5 @@ export const Toolbar = observer(() => {
           )}
         </Buttons>
       </StyledToolbar>
-    );
+  );
 });

@@ -53,9 +53,7 @@ export class ExtensionsStore {
         let icon1 = default_icon;
 
         if (typeof icon1 === 'object') {
-          icon1 = Object.keys(default_icon)[
-            Object.keys(default_icon).length - 1
-          ];
+          icon1 = Object.keys(default_icon)[Object.keys(default_icon).length - 1];
         }
 
         const data = fs.readFileSync(resolve(path, icon1));

@@ -1,7 +1,7 @@
 {
-  "name": "wexond",
-  "version": "2.1.0",
-  "description": "Extensible, fast and innovative web browser with material UI.",
+  "name": "flowr-pc-client",
+  "version": "0.1.0",
+  "description": "A PC client for Flowr",
   "keywords": [
     "web-browser",
     "material",
@@ -10,29 +10,8 @@
     "mobx",
     "styled-components"
   ],
-  "homepage": "https://github.com/wexond/wexond#readme",
   "main": "build/main.js",
-  "author": {
-    "name": "Eryk Rakowski",
-    "email": "sentialx@gmail.com"
-  },
-  "contributors": [
-    {
-      "name": "Eryk Rakowski",
-      "email": "sentialx@gmail.com"
-    },
-    {
-      "name": "Mikołaj Palkiewicz",
-      "email": "xnerhu@gmail.com"
-    }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wexond/wexond.git"
-  },
-  "bugs": {
-    "url": "https://github.com/wexond/wexond/issues"
-  },
+
   "scripts": {
     "dev": "cross-env NODE_ENV='dev' node fuse.js",
     "build": "node fuse.js",

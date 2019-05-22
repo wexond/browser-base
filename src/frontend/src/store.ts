@@ -1,7 +1,6 @@
 import { writeFileSync, ensureFileSync, readFileSync } from 'fs-extra'
 const path = require('path');
 
-
 export class Store {
   path: string
   data: {[key: string]: any}

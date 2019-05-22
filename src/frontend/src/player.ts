@@ -142,7 +142,16 @@ export class Player {
       let firstChunk = true
       let buf = Buffer.alloc(0)
       const isDeinterlacingEnabled = this.store.get('deinterlacing')
-      this.currentPipeline = ff.getMpegtsPipeline(url, audiostreamChannel, videoStreamChannel , currentVideoCodec, subtitleStreamChannel, isDeinterlacingEnabled, () => {this.handleConversionError(evt)}, () => {this.handleErroneousStreamError(evt)})
+      this.currentPipeline = ff.getMpegtsPipeline(
+        url,
+        audiostreamChannel,
+        videoStreamChannel,
+        currentVideoCodec,
+        subtitleStreamChannel,
+        isDeinterlacingEnabled,
+        () => this.handleConversionError(evt),
+        () => this.handleErroneousStreamError(evt))
+
       const mp4SegmentBufferer = new Writable({
         write(chunk: any, encoding: any, callback: any) {
           ready = true
@@ -196,7 +205,7 @@ export class Player {
             .push({
               index ,
               code: (stream.tags.language === '???') ? 'zzz' :stream.tags.language,
-              pid: stream.index, codec_name: stream.codec_name
+              pid: stream.index, codec_name: stream.codec_name,
             })
         }
       })
