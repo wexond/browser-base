@@ -21,6 +21,9 @@ export class TabGroup {
   @observable
   public editMode = false;
 
+  @observable
+  public maxSize: number = 4;
+
   constructor() {
     const { palette } = store.tabGroups;
     this.color = palette[Math.floor(Math.random() * palette.length)];

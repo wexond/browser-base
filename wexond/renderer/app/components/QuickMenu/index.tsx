@@ -24,6 +24,9 @@ const onFindClick = () => {
   }, 200);
 };
 
+const onSettingsClick = () => {
+  ipcRenderer.send('clear-application-data')
+};
 const onDarkClick = () => {
   store.settings.isDarkTheme = !store.settings.isDarkTheme;
   store.theme = store.settings.isDarkTheme ? darkTheme : lightTheme;
@@ -98,7 +101,10 @@ export const QuickMenu = observer(() => {
         <Bubble disabled invert={invert} icon={icons.download}>
           Downloads
         </Bubble>
-        <Bubble invert={invert} icon={icons.settings}>
+        <Bubble
+          invert={invert}
+          onClick={onSettingsClick}
+          icon={icons.settings}>
           Settings
         </Bubble>
         <Bubble disabled invert={invert} icon={icons.extensions}>

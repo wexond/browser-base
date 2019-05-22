@@ -62,6 +62,7 @@ process.on('uncaughtException', error => {
 });
 
 app.on('ready', () => {
+  debugger
   if (!existsSync(getPath('settings.json'))) {
     writeFileSync(
       getPath('settings.json'),

@@ -37,40 +37,46 @@ class BrowserActions extends React.Component {
 
 export const Toolbar = observer(() => {
   const { selectedTab } = store.tabs;
+  const { currentGroup } = store.tabGroups;
 
   let isWindow = false;
   let blockedAds: any = '';
+  let isFlowr = false;
 
   if (selectedTab) {
     isWindow = selectedTab.isWindow;
     blockedAds = selectedTab.blockedAds;
   }
+  if (currentGroup) {
+    isFlowr = currentGroup.name === 'flowr'
+  }
+  console.log(';;;;;;;> isHTMLFullscreen ', store.isHTMLFullscreen)
 
   return (
-    <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
-      <NavigationButtons />
-      <Tabbar />
-      <Find />
-      <Buttons>
-        <BrowserActions />
-        {store.updateInfo.available && (
-          <ToolbarButton icon={icons.download} onClick={onUpdateClick} />
-        )}
-        {store.extensions.browserActions.length > 0 && <Separator />}
-        {!isWindow && (
-          <BrowserAction
-            size={18}
-            style={{ marginLeft: 0 }}
-            opacity={0.54}
-            data={{
-              badgeBackgroundColor: 'gray',
-              badgeText: blockedAds > 0 ? blockedAds.toString() : '',
-              icon: icons.shield,
-              badgeTextColor: 'white',
-            }}
-          />
-        )}
-      </Buttons>
-    </StyledToolbar>
-  );
+      <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
+        <NavigationButtons />
+        <Tabbar />
+        <Find />
+        <Buttons>
+          <BrowserActions />
+          {store.updateInfo.available && (
+            <ToolbarButton icon={icons.download} onClick={onUpdateClick} />
+          )}
+          {store.extensions.browserActions.length > 0 && <Separator />}
+          {!isWindow && (
+            <BrowserAction
+              size={18}
+              style={{ marginLeft: 0 }}
+              opacity={0.54}
+              data={{
+                badgeBackgroundColor: 'gray',
+                badgeText: blockedAds > 0 ? blockedAds.toString() : '',
+                icon: icons.shield,
+                badgeTextColor: 'white',
+              }}
+            />
+          )}
+        </Buttons>
+      </StyledToolbar>
+    );
 });
