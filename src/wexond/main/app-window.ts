@@ -3,7 +3,7 @@ import { resolve, join } from 'path';
 import { platform } from 'os';
 import { windowManager, Window } from 'node-window-manager';
 import mouseEvents from 'mouse-hooks';
-
+import { map }  from 'lodash';
 import { ViewManager } from './view-manager';
 import { getPath } from '../shared/utils/paths';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
@@ -17,7 +17,9 @@ const containsPoint = (bounds: any, point: any) => {
     point.y <= bounds.y + bounds.height
   );
 };
-
+export interface WexondOptions {
+  maxTab : number
+}
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager = new ViewManager();
 
@@ -36,7 +38,7 @@ export class AppWindow extends BrowserWindow {
 
   public interval: any;
 
-  constructor() {
+  constructor(options: WexondOptions, parent?: BrowserWindow) {
     super({
       frame: process.env.ENV === 'dev' || platform() === 'darwin',
       minWidth: 400,
@@ -44,6 +46,7 @@ export class AppWindow extends BrowserWindow {
       width: 900,
       height: 700,
       show: false,
+      parent,
       titleBarStyle: 'hiddenInset',
       webPreferences: {
         plugins: true,
@@ -109,11 +112,13 @@ export class AppWindow extends BrowserWindow {
       writeFileSync(windowDataPath, JSON.stringify(windowState));
     });
 
+    const param = map(options, (value, key) => `${key}=${value}`).join('&');
+
     if (process.env.ENV === 'dev') {
       this.webContents.openDevTools({ mode: 'detach' });
-      this.loadURL('http://localhost:4444/app.html');
+      this.loadURL(`http://localhost:4444/app.html?${param}`);
     } else {
-      this.loadURL(join('file://', app.getAppPath(), 'build/app.html'));
+      this.loadURL(join('file://', app.getAppPath(), `build/app.html?${param}`));
     }
 
     this.once('ready-to-show', () => {

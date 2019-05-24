@@ -28,11 +28,11 @@ export const Tabbar = observer(() => {
       >
         <Tabs />
       </TabsContainer>
-      <AddTab
+      { !store.tabs.isMaxTab && <AddTab
         icon={icons.add}
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
-      />
+      />}
       <HorizontalScrollbar
         ref={store.tabs.scrollbarRef}
         enabled={store.tabs.scrollable}

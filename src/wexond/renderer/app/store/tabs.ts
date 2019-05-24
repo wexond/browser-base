@@ -53,7 +53,7 @@ export class TabsStore {
     interval: null as any,
   };
 
-  constructor() {
+  constructor(public readonly maxTab: number) {
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('resize', this.onResize);
@@ -185,8 +185,15 @@ export class TabsStore {
     return this.list.find(x => x.id === id);
   }
 
+  @observable
+  public isMaxTab: boolean = false
+
   @action
   public addTab(options = defaultTabOptions, isWindow: boolean = false) {
+    this.isMaxTab = this.list.length >= this.maxTab
+    if (this.isMaxTab) {
+      throw Error('max number of tab reach')
+    }
     if (isWindow) {
       store.overlay.visible = false;
     }
@@ -204,6 +211,7 @@ export class TabsStore {
     } else {
       this.list.push(tab);
     }
+    this.isMaxTab = this.list.length >= this.maxTab
 
     if (!isWindow) {
       this.emitEvent('onCreated', tab.getApiTab());
@@ -221,6 +229,7 @@ export class TabsStore {
 
   public removeTab(id: number) {
     (this.list as any).remove(this.getTabById(id));
+    this.isMaxTab = this.list.length >= this.maxTab
   }
 
   @action

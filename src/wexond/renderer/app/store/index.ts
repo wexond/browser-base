@@ -17,7 +17,9 @@ import { getPath } from '~/shared/utils/paths';
 import { Settings } from '../models/settings';
 import { DownloadsStore } from './downloads';
 import { lightTheme, darkTheme } from '~/renderer/constants/themes';
-
+export interface StoreOptions {
+  maxTab: number
+}
 export class Store {
   public history = new HistoryStore();
   public bookmarks = new BookmarksStore();
@@ -25,7 +27,7 @@ export class Store {
   public favicons = new FaviconsStore();
   public addTab = new AddTabStore();
   public tabGroups = new TabGroupsStore();
-  public tabs = new TabsStore();
+  public tabs: TabsStore;
   public overlay = new OverlayStore();
   public extensions = new ExtensionsStore();
   public downloads = new DownloadsStore();
@@ -70,7 +72,8 @@ export class Store {
     y: 0,
   };
 
-  constructor() {
+  constructor(options: StoreOptions) {
+    this.tabs = new TabsStore(options.maxTab);
     ipcRenderer.on(
       'update-navigation-state',
       (e: IpcMessageEvent, data: any) => {
@@ -175,4 +178,9 @@ export class Store {
   }
 }
 
-export default new Store();
+const param = new URLSearchParams(location.search);
+let maxTab = 20;
+if (param.has('maxTab')) {
+  maxTab = Number(param.get('maxTab'))
+}
+export default new Store({ maxTab });

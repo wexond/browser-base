@@ -65,9 +65,9 @@ app.on('ready', async () => {
     flowrWindow.webContents.focus();
   });
 
-  ipcMain.on('open-browser', () => {
+  ipcMain.on('open-browser', (event: Event, options: any) => {
     if (wexondWindow === null) {
-      wexondWindow = createWexondWindow()
+      wexondWindow = createWexondWindow(options, flowrWindow)
       wexondWindow.on('close', () => {
         console.log('---> CLOSE WexondWindow')
         wexondWindow = null;
