@@ -129,6 +129,10 @@ export class ViewManager {
     ipcMain.on('browserview-clear', () => {
       this.clear();
     });
+
+    session.fromPartition('persist:view').on('will-download', (event) => {
+      event.preventDefault()
+    })
   }
 
   public get selected() {
