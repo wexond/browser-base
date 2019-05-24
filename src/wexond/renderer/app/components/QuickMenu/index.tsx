@@ -24,8 +24,9 @@ const onFindClick = () => {
   }, 200);
 };
 
-const onSettingsClick = () => {
-  ipcRenderer.send('clear-application-data')
+const onCleanClick = () => {
+  store.history.clear();
+  ipcRenderer.send('clear-browsing-data');
 };
 const onDarkClick = () => {
   store.settings.isDarkTheme = !store.settings.isDarkTheme;
@@ -98,39 +99,14 @@ export const QuickMenu = observer(() => {
         >
           Bookmarks
         </Bubble>
-        <Bubble disabled invert={invert} icon={icons.download}>
-          Downloads
-        </Bubble>
         <Bubble
           invert={invert}
-          onClick={onSettingsClick}
-          icon={icons.settings}>
-          Settings
-        </Bubble>
-        <Bubble disabled invert={invert} icon={icons.extensions}>
-          Extensions
-        </Bubble>
-        <Bubble
-          disabled={!store.tabs.selectedTab}
-          invert={invert}
-          icon={icons.find}
-          onClick={onFindClick}
-        >
-          Find
+          onClick={onCleanClick}
+          icon={icons.clean}>
+          Clean
         </Bubble>
       </Actions>
 
-      <Actions>
-        <Bubble disabled invert={invert} icon={icons.window}>
-          New window
-        </Bubble>
-        <Bubble disabled invert={invert} icon={icons.window}>
-          Incognito
-        </Bubble>
-        <Bubble disabled invert={invert} icon={icons.window}>
-          Tor
-        </Bubble>
-      </Actions>
     </Section>
   );
 });

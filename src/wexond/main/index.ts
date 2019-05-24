@@ -13,7 +13,10 @@ import { makeId } from '../shared/utils/string';
 
 export let settings: Settings = {};
 export let appWindow: AppWindow
-
+export let log = require('electron-log');
+export function setWexondLog(logger: any) {
+  log = logger
+}
 ipcMain.on('settings', (e: any, s: Settings) => {
   settings = { ...settings, ...s };
 });

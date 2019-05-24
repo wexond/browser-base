@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { caption, centerIcon } from '~/shared/mixins';
 import { Theme } from '../../models/theme';
+import { icons } from '~/renderer/app/constants';
 
 export const StyledBubble = styled.div`
   border-radius: 16px;
@@ -62,4 +63,34 @@ export const Title = styled.div`
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+`;
+
+export const StyledClose = styled.div`
+  position: relative;
+  left: 60px;
+  height: 24px;
+  width: 24px;
+  background-image: url('${icons.close}');
+  transition: 0.1s opacity;
+  z-index: 10;
+  ${centerIcon(16)};
+
+  &:hover {
+    &:after {
+      opacity: 1;
+    }
+  }
+
+  &:after {
+    content: '';
+    border-radius: 50px;
+    background-color: rgba(0, 0, 0, 0.08);
+    transition: 0.2s opacity;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+  }
 `;

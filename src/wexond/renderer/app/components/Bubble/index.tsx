@@ -1,11 +1,18 @@
 import * as React from 'react';
-import { StyledBubble, Title, Icon, Circle } from './style';
+import { StyledBubble, Title, Icon, Circle, StyledClose } from './style';
+import { observer } from 'mobx-react';
 
 export const getSize = (i: number) => {
   const width = 800;
   return (width - 48 - (i - 1)) / i;
 };
-
+const Close = observer(({ onCloseClick }: { onCloseClick: any }) => {
+  return (
+    <StyledClose
+      onClick={onCloseClick}
+    />
+  );
+});
 export const Bubble = ({
   children,
   icon,
@@ -16,6 +23,7 @@ export const Bubble = ({
   toggled,
   itemsPerRow,
   disabled,
+  onCloseClick,
 }: {
   children?: any;
   icon?: string;
@@ -23,11 +31,13 @@ export const Bubble = ({
   maxLines?: number;
   iconSize?: number;
   onClick?: (e?: React.MouseEvent<HTMLDivElement>) => void;
+  onCloseClick?: (e?: React.MouseEvent<HTMLDivElement>) => void;
   itemsPerRow?: number;
   disabled?: boolean;
   toggled?: boolean;
 }) => {
   const width = getSize(itemsPerRow);
+
 
   return (
     <StyledBubble
@@ -35,6 +45,7 @@ export const Bubble = ({
       disabled={disabled}
       onClick={onClick}
     >
+      {onCloseClick && <Close onCloseClick={onCloseClick}/>}
       <Circle toggled={toggled}>
         <Icon
           invert={invert}

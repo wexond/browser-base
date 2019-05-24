@@ -18,6 +18,7 @@ import { shadeBlendConvert } from '../../utils';
 import { transparency } from '~/renderer/constants';
 import { ipcRenderer, remote } from 'electron';
 import Ripple from '~/renderer/components/Ripple';
+import { onTabClick } from '../../utils/dials'
 
 const removeTab = (tab: Tab) => () => {
   tab.close();
@@ -48,16 +49,6 @@ const onMouseEnter = (tab: Tab) => () => {
 
 const onMouseLeave = () => {
   store.tabs.hoveredTabId = -1;
-};
-
-const onClick = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
-  if (store.canToggleMenu && !tab.isWindow) {
-    store.overlay.visible = true;
-  }
-
-  if (e.button === 4) {
-    tab.close();
-  }
 };
 
 const onMouseUp = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
@@ -213,7 +204,7 @@ export default observer(({ tab }: { tab: Tab }) => {
       onMouseUp={onMouseUp(tab)}
       onMouseEnter={onMouseEnter(tab)}
       onContextMenu={onContextMenu(tab)}
-      onClick={onClick(tab)}
+      onClick={onTabClick(tab)}
       onMouseLeave={onMouseLeave}
       visible={tab.tabGroupId === store.tabGroups.currentGroupId}
       ref={tab.ref}

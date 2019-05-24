@@ -4,12 +4,13 @@ import { platform, homedir } from 'os';
 import { remove } from 'fs-extra'
 import { autoUpdater } from 'electron-updater';
 import { createFlowrWindow } from '../frontend'
-import { createWexondWindow } from '~/main'
+import { createWexondWindow, setWexondLog } from '~/main'
 export const log = require('electron-log');
 
 app.setPath('userData', resolve(homedir(), '.flowr-electron'));
 log.transports.file.level = 'verbose';
 log.transports.file.file = resolve(app.getPath('userData'), 'log.log');
+setWexondLog(log)
 ipcMain.setMaxListeners(0);
 let flowrWindow: BrowserWindow = null
 let wexondWindow: BrowserWindow = null
