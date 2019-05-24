@@ -1,6 +1,6 @@
 import { ipcMain, app, BrowserWindow } from 'electron';
 import { resolve, extname } from 'path';
-import { platform, homedir } from 'os';
+import { homedir } from 'os';
 import { remove } from 'fs-extra'
 import { autoUpdater } from 'electron-updater';
 import { createFlowrWindow } from '../frontend'
@@ -69,7 +69,6 @@ app.on('ready', async () => {
     if (wexondWindow === null) {
       wexondWindow = createWexondWindow(options, flowrWindow)
       wexondWindow.on('close', () => {
-        console.log('---> CLOSE WexondWindow')
         wexondWindow = null;
       })
     } else {
@@ -84,8 +83,6 @@ app.on('ready', async () => {
 });
 
 ipcMain.on('clear-application-data', async () => {
-  console.log('sloud clear ====>  ', app.getPath('userData'))
-
   await remove(app.getPath('userData'))
   app.relaunch();
   app.exit();

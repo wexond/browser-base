@@ -72,194 +72,194 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
 
   prepareFallBackForInvalidUrl()
 
-  return mainWindow
-}
+  function reconnectionAttemp() {
+    console.log('reconnectionAttemp.....')
+    if (initTimeout) {
+      clearTimeout(initTimeout)
+    }
+    if (!mainWindow) return
 
-function reconnectionAttemp() {
-  console.log('reconnectionAttemp.....')
-  if (initTimeout) {
-    clearTimeout(initTimeout)
-  }
-  if (!mainWindow) return
+    const formattedPath = buildFileUrl('noconnection.html')
+    const flowrUrl = flowrStore.get('extUrl') || buildFileUrl('config.html')
+    mainWindow.loadURL(formattedPath)
 
-  const formattedPath = buildFileUrl('noconnection.html')
-  const flowrUrl = flowrStore.get('extUrl') || buildFileUrl('config.html')
-  mainWindow.loadURL(formattedPath)
+    initTimeout = setTimeout(() => {
+      network.get_active_interface((err: Error, obj: any) => {
 
-  initTimeout = setTimeout(() => {
-    network.get_active_interface((err: Error, obj: any) => {
-
-      if (obj && obj.gateway_ip) {
-        clearTimeout(initTimeout)
-        prepareFallBackForInvalidUrl()
-        mainWindow.loadURL(flowrUrl)
-      } else {
-        reconnectionAttemp()
-      }
-    })
-  }, 60000)
-}
-
-function prepareFallBackForInvalidUrl() {
-
-  if (initTimeout) {
-    clearTimeout(initTimeout)
+        if (obj && obj.gateway_ip) {
+          clearTimeout(initTimeout)
+          prepareFallBackForInvalidUrl()
+          mainWindow.loadURL(flowrUrl)
+        } else {
+          reconnectionAttemp()
+        }
+      })
+    }, 60000)
   }
 
-  initTimeout = setTimeout(() => {
-    isLaunchedUrlCorrect = false
-    reconnectionAttemp()
-  }, 5000)
-}
+  function prepareFallBackForInvalidUrl() {
 
-function displayHiddenMenu(): void {
-  const flowrUrl = flowrStore.get('extUrl') || buildFileUrl('config.html')
-  const template: any = [
-    { label: 'Menu',
-      submenu: [
-        { label: 'Config',
-          click() {
-            const formattedPath = buildFileUrl('config.html')
-            console.log('formattedPath', formattedPath)
-            mainWindow.loadURL(formattedPath)
-            isHiddenMenuDisplayed = true
+    if (initTimeout) {
+      clearTimeout(initTimeout)
+    }
+
+    initTimeout = setTimeout(() => {
+      isLaunchedUrlCorrect = false
+      reconnectionAttemp()
+    }, 5000)
+  }
+
+  function displayHiddenMenu(): void {
+    const flowrUrl = flowrStore.get('extUrl') || buildFileUrl('config.html')
+    const template: any = [
+      { label: 'Menu',
+        submenu: [
+          { label: 'Config',
+            click() {
+              const formattedPath = buildFileUrl('config.html')
+              console.log('formattedPath', formattedPath)
+              mainWindow.loadURL(formattedPath)
+              isHiddenMenuDisplayed = true
+            },
           },
-        },
-        {
-          label: 'Flowr',
-          click() {
-            isHiddenMenuDisplayed = false
-            mainWindow.loadURL(flowrUrl)
-            prepareFallBackForInvalidUrl()
-          },
-        },
-        {
-          label: 'Hide Menu',
-          click() {
-            mainWindow.setMenuBarVisibility(false)
-            if (isHiddenMenuDisplayed) {
+          {
+            label: 'Flowr',
+            click() {
+              isHiddenMenuDisplayed = false
               mainWindow.loadURL(flowrUrl)
               prepareFallBackForInvalidUrl()
-            }
+            },
           },
-        },
-      ]},
-  ]
+          {
+            label: 'Hide Menu',
+            click() {
+              mainWindow.setMenuBarVisibility(false)
+              if (isHiddenMenuDisplayed) {
+                mainWindow.loadURL(flowrUrl)
+                prepareFallBackForInvalidUrl()
+              }
+            },
+          },
+        ]},
+    ]
 
-  const appMenu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(appMenu)
-  mainWindow.setMenuBarVisibility(true)
-}
-
-ipcMain.on('FlowrIsInitializing', () => {
-  clearTimeout(initTimeout)
-  isLaunchedUrlCorrect = true
-})
-
-ipcMain.on('getAppConfig', (evt: any) => {
-  const storedConfig =  flowrStore.get('flowrConfig')
-  const  config: any =  {
-    debugMode : isDebugMode,
-    isLaunchedUrlCorrect,
-    deinterlacing: flowrStore.get('deinterlacing'),
+    const appMenu = Menu.buildFromTemplate(template)
+    Menu.setApplicationMenu(appMenu)
+    mainWindow.setMenuBarVisibility(true)
   }
-  // no need to expose the complete config
-  if (storedConfig && storedConfig.ozoneApi) {
-    const ozoneApi = storedConfig.ozoneApi.hostProxy || ''
-    const flowrApi = (storedConfig.flowrApi && storedConfig.flowrApi.hostProxy) || ''
-    const socketApi = (storedConfig.socketApi && storedConfig.socketApi.host) || ''
-    const pushVodSocketApi = (storedConfig.pushVodSocketApi && storedConfig.pushVodSocketApi.host) || ''
-    const aneviaVodSocketApi = (storedConfig.aneviaVodSocketApi && storedConfig.aneviaVodSocketApi.host) || ''
 
-    config.appConfig = {
-      ozoneApi: {
-        hostProxy: ozoneApi,
-      },
-      flowrApi: {
-        hostProxy: flowrApi,
-      },
-      socketApi: {
-        host: socketApi,
-      },
-      pushVodSocketApi:{
-        host: pushVodSocketApi,
-      },
-      aneviaVodSocketApi:{
-        host: aneviaVodSocketApi,
-      },
+  ipcMain.on('FlowrIsInitializing', () => {
+    clearTimeout(initTimeout)
+    isLaunchedUrlCorrect = true
+  })
+
+  ipcMain.on('getAppConfig', (evt: any) => {
+    const storedConfig =  flowrStore.get('flowrConfig')
+    const  config: any =  {
+      debugMode : isDebugMode,
+      isLaunchedUrlCorrect,
+      deinterlacing: flowrStore.get('deinterlacing'),
     }
-  }
+    // no need to expose the complete config
+    if (storedConfig && storedConfig.ozoneApi) {
+      const ozoneApi = storedConfig.ozoneApi.hostProxy || ''
+      const flowrApi = (storedConfig.flowrApi && storedConfig.flowrApi.hostProxy) || ''
+      const socketApi = (storedConfig.socketApi && storedConfig.socketApi.host) || ''
+      const pushVodSocketApi = (storedConfig.pushVodSocketApi && storedConfig.pushVodSocketApi.host) || ''
+      const aneviaVodSocketApi = (storedConfig.aneviaVodSocketApi && storedConfig.aneviaVodSocketApi.host) || ''
 
-  config.extUrl = flowrStore.get('extUrl')
-  config.isKiosk = flowrStore.get('isKiosk')
-
-  evt.sender.send('receiveConfig', config)
-})
-
-ipcMain.on('getMacAddress', async(evt: any) => {
-  const usedMacAddress = await getMacAddress()
-  evt.sender.send('receiveMacAddress', usedMacAddress)
-})
-
-ipcMain.on('updateAppConfig', (evt: any, data: any) => {
-  const currentConfig = flowrStore.get('flowrConfig')
-  const newConfig =  deepExtend(currentConfig, data)
-  console.log(JSON.stringify(data))
-  flowrStore.set('flowrConfig', newConfig)
-  app.relaunch()
-  app.quit()
-})
-
-ipcMain.on('setDebugMode', (evt: any, debugMode: boolean) => {
-  const currentConfig = flowrStore.get('flowrConfig')
-  isDebugMode = debugMode
-  if (isDebugMode) {
-    mainWindow.webContents.openDevTools()
-  } else {
-    mainWindow.webContents.closeDevTools()
-  }
-})
-
-ipcMain.on('setDeinterlacingMode', (evt: any, deinterlacingMode: any) => {
-  flowrStore.set('deinterlacing', deinterlacingMode)
-})
-
-ipcMain.on('setKioskMode', (evt: any, isKiosk: boolean) => {
-  flowrStore.set('isKiosk', isKiosk)
-  app.relaunch()
-  app.quit()
-})
-
-ipcMain.on('setExtUrl', (evt: any, newExtURl: string) => {
-  console.log('set new ext url', newExtURl)
-  flowrStore.set('extUrl', newExtURl)
-  app.relaunch()
-  app.quit()
-})
-
-ipcMain.on('openConfigMode', displayHiddenMenu)
-
-function buildFileUrl(fileName: string): string {
-  let result: string
-  if (process.env.ENV === 'dev') {
-    result = `http://localhost:4444/${fileName}`;
-  } else {
-    result = join('file://', app.getAppPath(), 'build', fileName)
-  }
-  return result
-}
-
-function getMacAddress(): Promise<string> {
-  return new Promise(((resolve, reject) => {
-    network.get_active_interface((err: Error, obj: any) => {
-      if (err) {
-        throw (err)
+      config.appConfig = {
+        ozoneApi: {
+          hostProxy: ozoneApi,
+        },
+        flowrApi: {
+          hostProxy: flowrApi,
+        },
+        socketApi: {
+          host: socketApi,
+        },
+        pushVodSocketApi:{
+          host: pushVodSocketApi,
+        },
+        aneviaVodSocketApi:{
+          host: aneviaVodSocketApi,
+        },
       }
-      if (obj && obj.mac_address) {
-        resolve(obj.mac_address)
-      } else {
-        reject(Error('no Mac Address Found'))
-      }
-    })
-  }))
+    }
+
+    config.extUrl = flowrStore.get('extUrl')
+    config.isKiosk = flowrStore.get('isKiosk')
+
+    evt.sender.send('receiveConfig', config)
+  })
+
+  ipcMain.on('getMacAddress', async(evt: any) => {
+    const usedMacAddress = await getMacAddress()
+    evt.sender.send('receiveMacAddress', usedMacAddress)
+  })
+
+  ipcMain.on('updateAppConfig', (evt: any, data: any) => {
+    const currentConfig = flowrStore.get('flowrConfig')
+    const newConfig =  deepExtend(currentConfig, data)
+    console.log(JSON.stringify(data))
+    flowrStore.set('flowrConfig', newConfig)
+    app.relaunch()
+    app.quit()
+  })
+
+  ipcMain.on('setDebugMode', (evt: any, debugMode: boolean) => {
+    const currentConfig = flowrStore.get('flowrConfig')
+    isDebugMode = debugMode
+    if (isDebugMode) {
+      mainWindow.webContents.openDevTools()
+    } else {
+      mainWindow.webContents.closeDevTools()
+    }
+  })
+
+  ipcMain.on('setDeinterlacingMode', (evt: any, deinterlacingMode: any) => {
+    flowrStore.set('deinterlacing', deinterlacingMode)
+  })
+
+  ipcMain.on('setKioskMode', (evt: any, isKiosk: boolean) => {
+    flowrStore.set('isKiosk', isKiosk)
+    app.relaunch()
+    app.quit()
+  })
+
+  ipcMain.on('setExtUrl', (evt: any, newExtURl: string) => {
+    console.log('set new ext url', newExtURl)
+    flowrStore.set('extUrl', newExtURl)
+    app.relaunch()
+    app.quit()
+  })
+
+  ipcMain.on('openConfigMode', displayHiddenMenu)
+
+  function buildFileUrl(fileName: string): string {
+    let result: string
+    if (process.env.ENV === 'dev') {
+      result = `http://localhost:4444/${fileName}`;
+    } else {
+      result = join('file://', app.getAppPath(), 'build', fileName)
+    }
+    return result
+  }
+
+  function getMacAddress(): Promise<string> {
+    return new Promise(((resolve, reject) => {
+      network.get_active_interface((err: Error, obj: any) => {
+        if (err) {
+          throw (err)
+        }
+        if (obj && obj.mac_address) {
+          resolve(obj.mac_address)
+        } else {
+          reject(Error('no Mac Address Found'))
+        }
+      })
+    }))
+  }
+
+  return mainWindow
 }
