@@ -3,9 +3,15 @@ import { resolve, extname } from 'path';
 import { homedir } from 'os';
 import { remove } from 'fs-extra'
 import { autoUpdater } from 'electron-updater';
-import { createFlowrWindow } from '../frontend'
+import { createFlowrWindow, initFlowrConfig } from '../frontend'
 import { createWexondWindow, setWexondLog } from '~/main'
+import { getMigrateUserPreferences } from './migration/fromFlowrClientToFlowrPcClient'
 export const log = require('electron-log');
+debugger
+const migrateUserPreferences = getMigrateUserPreferences()
+if (migrateUserPreferences) {
+  initFlowrConfig(migrateUserPreferences)
+}
 
 app.setPath('userData', resolve(homedir(), '.flowr-electron'));
 log.transports.file.level = 'verbose';

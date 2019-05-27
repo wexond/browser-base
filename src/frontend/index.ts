@@ -1,12 +1,17 @@
 import { resolve, join } from 'path';
 import { homedir } from 'os';
 import { ipcMain, Menu, app, protocol, BrowserWindow } from 'electron';
-import { Store } from './src/store'
+import { Store, initConfigData } from './src/store'
 import { FlowrWindow } from './flowr-window'
 const network = require('network');
 const deepExtend = require('deep-extend')
 
 const FlowrDataDir = resolve(homedir(), '.flowr')
+const CONFIG_NAME = 'user-preferences.json'
+
+export function initFlowrConfig(data: object) {
+  initConfigData(join(FlowrDataDir, CONFIG_NAME), data)
+}
 
 let initTimeout: number
 
@@ -14,18 +19,19 @@ let isDebugMode: boolean
 let isHiddenMenuDisplayed = false
 let isLaunchedUrlCorrect = true
 
-const flowrStore = new Store(FlowrDataDir, {
-  // We'll call our data file 'user-preferences'
-  configName: 'user-preferences',
-  defaults: {
-    // 800x600 is the default size of our window
-    windowBounds: { width: 1280, height: 720 },
-    channelData: {},
-    isMaximized: false,
-  },
-})
-
 export async function createFlowrWindow(): Promise<BrowserWindow> {
+
+  const flowrStore = new Store(FlowrDataDir, {
+    // We'll call our data file 'user-preferences'
+    configName: CONFIG_NAME,
+    defaults: {
+      // 800x600 is the default size of our window
+      windowBounds: { width: 1280, height: 720 },
+      channelData: {},
+      isMaximized: false,
+    },
+  })
+
   const mac = await getMacAddress()
   const winBounds = flowrStore.get('windowBounds')
 

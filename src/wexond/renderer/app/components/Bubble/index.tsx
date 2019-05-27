@@ -38,7 +38,6 @@ export const Bubble = ({
 }) => {
   const width = getSize(itemsPerRow);
 
-
   return (
     <StyledBubble
       style={{ minWidth: width, maxWidth: width }}

@@ -1,12 +1,20 @@
-import { writeFileSync, ensureFileSync, readFileSync } from 'fs-extra'
+import { writeFileSync, ensureFileSync, readFileSync, existsSync } from 'fs-extra'
 const path = require('path');
+
+export function initConfigData(configPath: string, data: object) {
+  debugger
+  if (! existsSync(configPath)) {
+    ensureFileSync(configPath)
+    writeFileSync(configPath, JSON.stringify(data))
+  }
+}
 
 export class Store {
   path: string
   data: {[key: string]: any}
 
   constructor(storeDir: string, public opts: any) {
-    this.path = path.join(storeDir, `${this.opts.configName}.json`);
+    this.path = path.join(storeDir, `${this.opts.configName}`);
     this.data = parseDataFile(this.path, opts.defaults);
     ensureFileSync(this.path)
   }
