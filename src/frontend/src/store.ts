@@ -2,7 +2,6 @@ import { writeFileSync, ensureFileSync, readFileSync, existsSync } from 'fs-extr
 const path = require('path');
 
 export function initConfigData(configPath: string, data: object) {
-  debugger
   if (! existsSync(configPath)) {
     ensureFileSync(configPath)
     writeFileSync(configPath, JSON.stringify(data))

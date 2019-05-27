@@ -7,7 +7,6 @@ import { createFlowrWindow, initFlowrConfig } from '../frontend'
 import { createWexondWindow, setWexondLog } from '~/main'
 import { getMigrateUserPreferences } from './migration/fromFlowrClientToFlowrPcClient'
 export const log = require('electron-log');
-debugger
 const migrateUserPreferences = getMigrateUserPreferences()
 if (migrateUserPreferences) {
   initFlowrConfig(migrateUserPreferences)
