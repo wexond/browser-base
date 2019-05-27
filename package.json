@@ -13,7 +13,7 @@
   "main": "build/main.js",
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.taktik.be/scm/sandbox/pc-client.git"
+    "url": "git+https://github.com/taktik/wexond.git"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV='dev' node fuse.js",
