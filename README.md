@@ -32,11 +32,11 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 
 [![Backers](https://opencollective.com/wexond/tiers/backer.svg?avatarHeight=48)](https://opencollective.com/wexond)
 
+<a href="https://digital-presence.agency/"><img src="https://i.imgur.com/iNY6XA4.jpg" width="256"></a>
+
 <a href="https://www.patreon.com/bePatron?u=12270966">
     <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
-
-<a href="https://digital-presence.agency/"><img src="https://i.imgur.com/iNY6XA4.jpg" width="256"></a>
 
 # Screenshots
 
