@@ -157,6 +157,21 @@ export class Store {
           this.tabs.addTab({ url: `file:///${path}`, active: true });
         }
       }
+
+      const param = new URLSearchParams(location.search);
+      let url: string
+      if (param.has('openUrl')) {
+        url = param.get('openUrl')
+        if (url) {
+          this.tabs.addTab({ url, active: true });
+        }
+      }
+      ipcRenderer.on('open-tab', (event: Event, param: any) => {
+        console.log('----------------------------------------------jbgjfjfjffu', param)
+        if (param.openUrl) {
+          this.tabs.addTab({ url: param.openUrl, active: true });
+        }
+      });
     });
 
     this.settings = {

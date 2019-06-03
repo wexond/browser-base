@@ -78,12 +78,17 @@ app.on('ready', async () => {
       })
     } else {
       wexondWindow.moveTop()
+      wexondWindow.webContents.send('open-tab', options)
     }
   })
   ipcMain.on('close-browser', () => {
     if (wexondWindow !== null) {
       wexondWindow.close()
     }
+  })
+  ipcMain.on('open-flowr', () => {
+    wexondWindow.hide()
+    flowrWindow.moveTop()
   })
 });
 

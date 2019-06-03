@@ -230,6 +230,9 @@ export class TabsStore {
   public removeTab(id: number) {
     (this.list as any).remove(this.getTabById(id));
     this.isMaxTab = this.list.length >= this.maxTab
+    if (this.list.length < 1) {
+      ipcRenderer.send('open-flowr')
+    }
   }
 
   @action

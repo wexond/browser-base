@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
+import { ipcRenderer } from 'electron';
 
 import store from '~/renderer/app/store';
 import ToolbarButton from '~/renderer/app/components/ToolbarButton';
@@ -22,6 +23,10 @@ const onRefreshClick = () => {
   }
 };
 
+const onHomePress = () => {
+  ipcRenderer.send('open-flowr')
+}
+
 export const NavigationButtons = observer(() => {
   const { selectedTab } = store.tabs;
 
@@ -35,6 +40,12 @@ export const NavigationButtons = observer(() => {
 
   return (
     <StyledContainer isFullscreen={store.isFullscreen}>
+      <ToolbarButton
+        disabled={false}
+        size={20}
+        icon={icons.window}
+        onClick={onHomePress}
+      />
       <ToolbarButton
         disabled={!store.navigationState.canGoBack}
         size={24}

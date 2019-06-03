@@ -6,7 +6,7 @@ import { Theme } from '../../models/theme';
 
 export const StyledToolbar = styled.div`
   position: relative;
-  z-index: 100;
+  z-index: 10000;
   display: flex;
   flex-flow: row;
   align-items: center;
