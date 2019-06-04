@@ -87,7 +87,9 @@ app.on('ready', async () => {
     }
   })
   ipcMain.on('open-flowr', () => {
-    wexondWindow.hide()
+    if (wexondWindow !== null) {
+      wexondWindow.close()
+    }
     flowrWindow.moveTop()
   })
 });

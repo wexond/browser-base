@@ -54,6 +54,8 @@ const onMouseLeave = () => {
 const onMouseUp = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (e.button === 1) {
     tab.close();
+  } else {
+    store.overlay.visible = false
   }
 };
 
