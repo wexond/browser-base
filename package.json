@@ -1,6 +1,10 @@
 {
   "name": "flowr-pc-client",
   "version": "0.1.0",
+  "author": {
+    "email": "hj@taktik.com",
+    "name": "Hubert Jacquin"
+  },
   "description": "A PC client for Flowr",
   "keywords": [
     "web-browser",

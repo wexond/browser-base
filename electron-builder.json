@@ -16,7 +16,7 @@
     "category": "Network",
     "target": [
       {
-        "target": "AppImage",
+        "target": "deb",
         "arch": ["ia32", "x64"]
       }
     ]
