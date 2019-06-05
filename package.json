@@ -1,7 +1,11 @@
 {
-  "name": "wexond",
-  "version": "2.1.0",
-  "description": "Extensible, fast and innovative web browser with material UI.",
+  "name": "flowr-pc-client",
+  "version": "0.1.1",
+  "author": {
+    "email": "hj@taktik.com",
+    "name": "Hubert Jacquin"
+  },
+  "description": "A PC client for Flowr",
   "keywords": [
     "web-browser",
     "material",
@@ -10,28 +14,10 @@
     "mobx",
     "styled-components"
   ],
-  "homepage": "https://github.com/wexond/wexond#readme",
   "main": "build/main.js",
-  "author": {
-    "name": "Eryk Rakowski",
-    "email": "sentialx@gmail.com"
-  },
-  "contributors": [
-    {
-      "name": "Eryk Rakowski",
-      "email": "sentialx@gmail.com"
-    },
-    {
-      "name": "Mikołaj Palkiewicz",
-      "email": "xnerhu@gmail.com"
-    }
-  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wexond/wexond.git"
-  },
-  "bugs": {
-    "url": "https://github.com/wexond/wexond/issues"
+    "url": "git+https://github.com/taktik/wexond.git"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV='dev' node fuse.js",
@@ -50,9 +36,11 @@
   "devDependencies": {
     "@types/axios": "0.14.0",
     "@types/chrome": "0.0.83",
+    "@types/fs-extra": "^7.0.0",
     "@types/gsap": "1.20.2",
     "@types/leveldown": "4.0.0",
     "@types/levelup": "3.1.0",
+    "@types/lodash": "^4.14.132",
     "@types/nedb": "1.8.7",
     "@types/node": "12.0.0",
     "@types/react": "16.8.17",
@@ -74,22 +62,31 @@
   "dependencies": {
     "@cliqz/adblocker": "0.9.1",
     "axios": "0.18.0",
+    "deep-extend": "^0.6.0",
     "electron-log": "3.0.5",
     "electron-updater": "4.0.6",
+    "ffmpeg-static": "^2.4.0",
+    "ffprobe": "^1.1.0",
+    "ffprobe-static": "^3.0.0",
     "file-type": "11.0.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs-extra": "^8.0.1",
     "gsap": "2.1.2",
     "icojs": "0.12.3",
     "leveldown": "5.0.3",
     "levelup": "4.0.1",
+    "lodash": "^4.17.11",
     "mobx": "5.9.4",
     "mobx-react": "5.4.3",
     "mouse-hooks": "0.3.1",
     "nedb": "1.8.0",
+    "network": "^0.4.1",
     "node-vibrant": "3.2.0-alpha",
     "node-window-manager": "0.8.2",
     "pretty-bytes": "5.2.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
+    "run-parallel": "^1.1.9",
     "styled-components": "4.2.0",
     "tldts": "4.0.6"
   }

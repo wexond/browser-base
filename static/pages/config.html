@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+	.config-label {
+		display: inline-block;
+		width: 160px;
+		margin-bottom: 15px;
+	}
+
+	input[type=text]{
+		width: 300px;
+	}
+	</style>
+</head>
+<body>
+
+<h1>Settings</h1>
+<h3>Firmware Version : </h3>
+<div id="userAgent"></div>
+<hr>
+
+
+<h3>External Config</h3>
+<div class='config-label'>Url to flowr :</div> <input type="text" id="extUrl">&emsp;<span id='wrongurl' style="color: red;"> Invalid url*</span><br>
+<button id="validateURL"  onclick="validateExtUrl()">Validate</button>
+<button id="reinit"  onclick="init()">Reinit</button>
+<br>
+ <label>Activate Kiosk Mode</label> <input type="checkbox" id="activateKioskMode"  onclick='toggleKioskCheckbox()'>
+
+<div id='app-configuration'>
+<hr>
+<h3>Configuration</h3>
+	<div class='config-label'>Ozone API :</div> <input type="text" id="ozoneApi"><br>
+	<div class='config-label'>Flowr API :</div> <input type="text" id="flowrApi"><br>
+	<div class='config-label'>Socket API :</div> <input type="text" id="socketApi"><br>
+	<div class='config-label'>Push vod socket API :</div> <input type="text" id="pushVodSocketApi"><br>
+	<div class='config-label'>Anevia vod socket API :</div> <input type="text" id="aneviaVodSocketApi"><br>
+	<button id="reinit"  onclick="init()">Reinit</button>
+	<button id="validate"  onclick="validate()">Validate</button>
+</div>
+
+<hr>
+<h3>Deinterlacing</h3>
+ <label>Activate Deinterlacing</label> <input type="checkbox" id="activateDeinterlacing"  onclick='toggleDeinterlacingCheckbox()'>
+
+<hr>
+<h3>Debug</h3>
+ <label>Activate Debug Mode</label> <input type="checkbox" id="activateDebug"  onclick='toggleDebugCheckbox()'>
+
+<script>
+ 	let ipc = require('electron').ipcRenderer
+    let isDebugMode = false
+    let config= undefined
+    let isDeinterlacingActivated=false
+    let externalUrl = ""
+	let isKiosk = false
+    let isLaunchedUrlCorrect=true
+	ipc.removeAllListeners('receiveConfig')
+	ipc.send('FlowrIsInitializing')
+	ipc.on('receiveConfig', function(evt, data) {
+		config =data.appConfig
+		isDebugMode= data.debugMode
+		isDeinterlacingActivated = data.deinterlacing
+		externalUrl=data.extUrl || ""
+		isKiosk = data.isKiosk
+		isLaunchedUrlCorrect =data.isLaunchedUrlCorrect 
+		console.log("data: ",data)
+		init()
+	})
+	ipc.send("getAppConfig")
+ 	
+
+   function validate(){
+   		config.ozoneApi.hostProxy = document.getElementById("ozoneApi").value 
+		config.flowrApi.hostProxy = document.getElementById("flowrApi").value 
+		config.socketApi.host = document.getElementById("socketApi").value 
+		config.pushVodSocketApi.host = document.getElementById("pushVodSocketApi").value 
+		config.aneviaVodSocketApi.host = document.getElementById("aneviaVodSocketApi").value
+		ipc.send("updateAppConfig",config)
+   }
+   
+   function init(){
+   		document.getElementById("userAgent").innerHTML = navigator.userAgent
+   		if(config){
+	   		document.getElementById("ozoneApi").value = config.ozoneApi.hostProxy
+			document.getElementById("flowrApi").value =config.flowrApi.hostProxy
+			document.getElementById("socketApi").value = config.socketApi.host
+			document.getElementById("pushVodSocketApi").value = config.pushVodSocketApi.host
+			document.getElementById("aneviaVodSocketApi").value = config.aneviaVodSocketApi.host
+		} else {
+			document.getElementById("app-configuration").style.display="none"
+		}
+
+		document.getElementById("extUrl").value = externalUrl
+		document.getElementById("activateKioskMode").checked = isKiosk
+		document.getElementById("activateDeinterlacing").checked = isDeinterlacingActivated
+		document.getElementById("activateDebug").checked = isDebugMode
+
+		if(isLaunchedUrlCorrect){
+			document.getElementById("wrongurl").style.display="none"
+		}
+   }
+
+   function validateExtUrl(){
+   	 	externalUrl = document.getElementById("extUrl").value
+   	 	ipc.send("setExtUrl",externalUrl)
+   }
+
+   function toggleKioskCheckbox(){
+   		console.log("toggleKioskCheckbox : "+ document.getElementById("activateKioskMode").checked)//activateKioskMode	
+		ipc.send("setKioskMode",document.getElementById("activateKioskMode").checked)
+   }
+
+   function toggleDebugCheckbox(){
+		ipc.send("setDebugMode", document.getElementById("activateDebug").checked)
+   }
+
+   function toggleDeinterlacingCheckbox(){
+		ipc.send("setDeinterlacingMode", document.getElementById("activateDeinterlacing").checked)
+   }
+</script>
+</body>
+</html>

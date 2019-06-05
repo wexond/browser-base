@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+
+	</style>
+</head>
+<body>
+<h1>Could not connect and load Flowr..</h1>
+<div>This could be due to </div>
+<div>-a missing internet connection</div>
+<div>-the server could not be reached</div>
+<div>-the url is possibly erroneous</div>
+
+<div>This will reload in a few seconds...</div>
+<script>
+ 	let ipc = require('electron').ipcRenderer
+
+ 	let hiddenMenuCode='configtaktik'
+	let hiddenMenuCodeIndex=0
+	let codeClearingTimeout=undefined
+
+	function handleHiddenMenuCode(event){
+		let char =event.key
+		if(codeClearingTimeout){
+			clearTimeout(codeClearingTimeout)
+		}
+
+		codeClearingTimeout=setTimeout(function(){
+			hiddenMenuCodeIndex=0
+		},3500)
+
+		if(hiddenMenuCode[hiddenMenuCodeIndex++]!=char){
+			return hiddenMenuCodeIndex=0
+		}
+
+		if(hiddenMenuCodeIndex == hiddenMenuCode.length){
+			ipc.send("openConfigMode")
+		}
+	}
+
+
+	document.addEventListener("keydown",handleHiddenMenuCode)
+
+	//handleHiddenMenuCode(char)
+   
+</script>
+</body>
+</html>

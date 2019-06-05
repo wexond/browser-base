@@ -1,0 +1,331 @@
+{
+    "errorReportUrl": "/ozone/rest/v3/items/timestampedItem/bulkSave",
+    "ozoneApi": {
+        "host": "/ozone",
+        "endPoints": {
+            "login": "/rest/v3/authentication/login/item/device.info",
+            "view": "/view/",
+            "media": "/rest/v3/items/media/",
+            "search": "/rest/v3/items/media/search",
+            "channel": "/rest/v3/items/channel/",
+            "messages": "/rest/v3/items/message/",
+            "eshopOrder": "/rest/v3/items/eshop.order/",
+            "articles": "/rest/v3/items/article/",
+            "categories": "/rest/v3/items/article.category/",
+            "currentPrincipal": "/rest/v3/authentication/current/principal",
+            "currentSession": "/rest/v3/authentication/current/session",
+            "device": "/rest/v3/items/device.info",
+            "survey": "/rest/v3/items/survey/",
+            "surveyCategory": "/rest/v3/items/survey.category/",
+            "surveyResponse": "/rest/v3/items/survey.response/",
+            "permissions": "/rest/v3/role/{id}",
+            "reservations": "/rest/v3/items/reservation/",
+            "room": "/rest/v3/items/room",
+            "network": "/rest/v3/items/network",
+            "mediaplay": "/rest/v3/items/mediaplay/broadcast",
+            "mail": "/rest/v3/sm/template/{identifier}/{language}",
+            "currentUser": "/rest/v1/currentUser",
+            "getFavorites": "/rest/v1/getFavorites",
+            "addFavorite": "/rest/v1/addFavorite",
+            "modifyFavorite": "/rest/v1/modifyFavorite",
+            "removeFavorite": "/rest/v1/removeFavorite",
+            "device.firmware": "/rest/v3/items/device.firmware",
+            "blob": "/rest/v3/blob",
+            "frontendSettings": "/rest/v3/items/flowr.frontend.settings/",
+            "loginPage": "/login",
+            "user": "/rest/v3/user",
+            "externalvideo": "/rest/v3/items/externalvideo",
+            "flowrecording": "/rest/v3/items/flowrecording",
+            "rtsp": "/rtsp",
+            "deviceMessageBroadcast": "/rest/v3/items/device.message.event/broadcast"
+        },
+        "hostProxy": "https://develop.flowr.dev/ozone"
+    },
+    "flowrApi": {
+        "host": "/api",
+        "endPoints": {
+            "backend": {
+                "host": "/backend",
+                "endPoints": {
+                    "organization": {
+                        "get": "/organization/merged/{orgId}",
+                        "getByCode": "/organization/byCode",
+                        "gui": "/gui/{guiId}",
+                        "hierarchy": "/organization/{orgId}/hierarchy",
+                        "guiHierarchy": "/gui/{guiId}/hierarchy/{orgId}",
+                        "join": "/device/join",
+                        "getInstallationCode": "/organization/{id}/code?date={date}"
+                    },
+                    "signage": {
+                        "get": "/gui/{signageGuiId}",
+                        "guiHierarchy": "/gui/{signageGuiId}/hierarchy/{orgId}"
+                    },
+                    "emails": {
+                        "fetch": "/message",
+                        "read": "",
+                        "unread": "/message/unread"
+                    },
+                    "schedule": "/schedule/search",
+                    "notifyChannel": "/me/channel",
+                    "network": {
+                        "refresh": "/device/refreshNetwork"
+                    },
+                    "device": {
+                        "messages": "/device/message/devices",
+                        "clocksy": "/device/clocksy",
+                        "refreshToken": "/device/refreshToken/{mac}"
+                    },
+                    "mail": {
+                        "send": "/mail/template/{identifier}/{language}"
+                    }
+                }
+            },
+            "apps": {
+                "airport": "/airport/flights/{icao}",
+                "weather": "/weather/forecast",
+                "traffic": "/traffic/trafficInfo",
+                "train": "/train/departures/{stationId}",
+                "alacarte.orders": "/agent/meal/ordering/users/{userId}/orders",
+                "alacarte.order": "/agent/meal/ordering/users/{userId}/orders/{orderId}",
+                "alacarte.menu": "/agent/meal/ordering/users/{userId}/day/{date}/meal/{mealId}/menu",
+                "alacarte.basket": "/agent/meal/ordering/users/{userId}/baskets/{basketId}"
+            }
+        },
+        "hostProxy": "https://develop.flowr.dev/api"
+    },
+    "iCureApi": {
+        "host": "https://backend.svc.icure.cloud",
+        "endPoints": {
+            "patient": "/rest/v1/patient/{patientId}?ts={ts}",
+            "contact": "/rest/v1/contact/byHcPartySecretForeignKeys?ts={ts}&hcPartyId={hcPartyId}&secretFKeys={secretFKeys}",
+            "userCurrent": "/rest/v1/user/current"
+        }
+    },
+    "socketApi": {
+        "host": "wss://develop.flowr.dev/api/backend/websocket"
+    },
+    "tizen": {
+        "offline": true,
+        "signageModels": [
+            "SP", "PM", "QB", "PH", "BD", "QMHN", "SSNN", "OMNND"
+        ]
+    },
+    "brightsign": {
+        "offline": true
+    },
+    "flowrProxy": "http://localhost:8080",
+    "constants": {
+        "videoCompatibleTypes": {
+            "amino": [
+                "rtsp",
+                "hls"
+            ],
+            "aria6": [
+                "rtsp",
+                "hls"
+            ],
+            "bedside": [
+                "rtsp"
+            ],
+            "brightside": [
+                "hls"
+            ],
+            "browser": [
+                "hls"
+            ],
+            "cordova": [
+                "hls"
+            ],
+            "dune": [
+                "rtsp",
+                "hls"
+            ],
+            "philips": [
+                "hls"
+            ],
+            "samsung": [
+                "hls"
+            ],
+            "tizen": [
+                "hls"
+            ],
+            "webos": [
+                "hls"
+            ],
+            "windows": [
+                "rtsp",
+                "hls"
+            ]
+        },
+        "types": {
+            "rtsp": {
+                "value": "org.taktik.filetype.original"
+            },
+            "hls": {
+                "value": "org.taktik.filetype.video.hls/index.m3u8"
+            },
+            "mp3": {
+                "value": "org.taktik.filetype.audio.mp3"
+            },
+            "original": {
+                "value": "org.taktik.filetype.original"
+            },
+            "flowr": {
+                "value": "org.taktik.filetype.flowr.video/index.m3u8"
+            },
+            "mp4": {
+                "value": "org.taktik.filetype.video.mp4"
+            },
+            "jpg": {
+                "value": "org.taktik.filetype.image.preview.{SIZE}"
+            },
+            "png": {
+                "value": "preview.png.{SIZE}"
+            }
+        },
+        "priorities": {
+            "storage": {
+                "video": [
+                    "mp4",
+                    "original"
+                ],
+                "audio": [
+                    "mp4",
+                    "mp3",
+                    "original"
+                ],
+                "article": [
+                    "jpg",
+                    "png"
+                ],
+                "document": [
+                    "jpg",
+                    "png"
+                ],
+                "image": [
+                    "jpg",
+                    "png"
+                ]
+            },
+            "preview": {
+                "classic": {
+                    "video": [
+                        "jpg"
+                    ],
+                    "externalvideo": [
+                        "jpg"
+                    ],
+                    "audio": [
+                        "jpg"
+                    ],
+                    "document": [
+                        "jpg"
+                    ],
+                    "article": [
+                        "jpg"
+                    ],
+                    "image": [
+                        "jpg"
+                    ],
+                    "channel": [
+                        "jpg"
+                    ]
+                },
+                "transparent": {
+                    "video": [
+                        "png"
+                    ],
+                    "audio": [
+                        "png"
+                    ],
+                    "document": [
+                        "png"
+                    ],
+                    "article": [
+                        "png"
+                    ],
+                    "image": [
+                        "png"
+                    ],
+                    "channel": [
+                        "png"
+                    ]
+                }
+            },
+            "display": {
+                "video": [
+                    "flowr",
+                    "hls"
+                ],
+                "audio": [
+                    "flowr",
+                    "mp3"
+                ],
+                "document": [
+                    "jpg",
+                    "png"
+                ],
+                "article": [
+                    "jpg",
+                    "png"
+                ],
+                "image": [
+                    "jpg",
+                    "png"
+                ]
+            }
+        },
+        "sizes": [
+            250,
+            500,
+            1500
+        ],
+        "ERROR_RELOAD_TIME": 60,
+        "MAX_SAFE_INTEGER": 2199023255552,
+        "ENABLE_WEBSOCKET_PING": true,
+        "WEBSOCKET_TIMEOUT": 30000,
+        "EXTERNAL_VOD_SOURCE": "Anevia PushVOD 1",
+        "SESSION_CHECK_INTERVAL_IN_MINUTES": 30,
+        "DATA_CHECK_INTERVAL_IN_MINUTES": 60,
+        "SEND_LOG_THROTTLE_WAIT_MS": 60000,
+        "MAX_RELOAD_TIMER": 0,
+        "osd": {
+            "thumbnailSizes": [
+                {
+                    "name": "small",
+                    "width": 150,
+                    "height": 90,
+                    "top": -90,
+                    "time": {
+                        "height": 30,
+                        "fontsize": "0.5em"
+                    }
+                },
+                {
+                    "name": "medium",
+                    "width": 300,
+                    "height": 180,
+                    "top": -120,
+                    "time": {
+                        "height": 45,
+                        "fontsize": "0.75em"
+                    }
+                },
+                {
+                    "name": "large",
+                    "width": 450,
+                    "height": 270,
+                    "top": -150,
+                    "time": {
+                        "height": 60,
+                        "fontsize": "1em"
+                    }
+                }
+            ]
+        },
+        "RELOAD_DATA_THROTTLE": 30000,
+        "VORLON_URL": "https://vorlon.flowr.cloud/vorlon.autostartdisabled.js"
+    },
+    "debug": true,
+    "recordingPlaybackRtsp": false
+}

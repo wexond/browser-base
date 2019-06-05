@@ -1,6 +1,6 @@
 {
-  "appId": "org.wexond.wexond",
-  "productName": "Wexond",
+  "appId": "org.taktik.flowr.pcClient",
+  "productName": "Flowr-pc-client",
 
   "nsis": {
     "include": "static/installer.nsh"
@@ -12,12 +12,11 @@
     "buildResources": "static/app-icons"
   },
   "files": ["build/**/*", "package.json"],
-  "publish": "github",
   "linux": {
     "category": "Network",
     "target": [
       {
-        "target": "AppImage",
+        "target": "deb",
         "arch": ["ia32", "x64"]
       }
     ]
@@ -27,13 +26,5 @@
   },
   "mac": {
     "category": "public.app-category.navigation"
-  },
-  "fileAssociations": [
-    {
-      "name": "Document",
-      "description": "Wexond",
-      "role": "Viewer",
-      "ext": "html"
-    }
-  ]
+  }
 }

@@ -32,7 +32,7 @@ const getConfig = (target, name) => {
         }),
     ],
     alias: {
-      '~': '~/',
+      '~': '~/wexond',
     },
     log: {
       showBundledFiles: false,
@@ -68,7 +68,7 @@ const getCopyPlugin = () => {
 const main = () => {
   const fuse = FuseBox.init(getConfig('server', 'main'));
 
-  const app = fuse.bundle('main').instructions(`> [main/index.ts]`);
+  const app = fuse.bundle('main').instructions(`> [launcher/index.ts]`);
 
   if (!production) {
     app.watch();
@@ -81,6 +81,8 @@ const renderer = (name, port) => {
   const cfg = getRendererConfig('electron', name);
 
   cfg.plugins.push(getWebIndexPlugin(name));
+  cfg.plugins.push(getWebIndexPlugin(('noconnection')));
+  cfg.plugins.push(getWebIndexPlugin('config'));
   cfg.plugins.push(JSONPlugin());
   cfg.plugins.push(getCopyPlugin());
   cfg.plugins.push(StyledComponentsPlugin());
@@ -91,7 +93,7 @@ const renderer = (name, port) => {
     fuse.dev({ httpServer: true, port, socketURI: `ws://localhost:${port}` });
   }
 
-  const app = fuse.bundle(name).instructions(`> [renderer/${name}/index.tsx]`);
+  const app = fuse.bundle(name).instructions(`> [wexond/renderer/${name}/index.tsx]`);
 
   if (!production) {
     app.hmr({ port, socketURI: `ws://localhost:${port}` }).watch();

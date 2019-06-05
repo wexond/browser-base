@@ -1,16 +1,15 @@
 !macro customInstall
-  WriteRegStr SHCTX "SOFTWARE\RegisteredApplications" "Wexond" "Software\Clients\StartMenuInternet\Wexond\Capabilities"
-  WriteRegStr SHCTX "SOFTWARE\Clients\StartMenuInternet\Wexond\Capabilities\StartMenu" "StartMenuInternet" "Wexond"
-  WriteRegStr SHCTX "SOFTWARE\Clients\StartMenuInternet\Wexond" "" "Wexond"
-  WriteRegStr SHCTX "SOFTWARE\Clients\StartMenuInternet\Wexond\Capabilities" "ApplicationDescription" "A privacy-focused, extensible and beautiful web browser"
-  WriteRegStr SHCTX "SOFTWARE\Clients\StartMenuInternet\Wexond\Capabilities" "ApplicationName" "Wexond"
-  WriteRegDWORD SHCTX "SOFTWARE\Clients\StartMenuInternet\Wexond\InstallInfo" "IconsVisible" 1
-  WriteRegStr SHCTX "SOFTWARE\Clients\StartMenuInternet\Wexond\shell\open\command" "" "$0\Wexond.exe"
-  WriteRegStr HKCU "SOFTWARE\Classes\BraveBetaHTML\shell\open\command" "" '"$0\Wexond.exe" -- "%1"'
-  WriteRegStr SHCTX "SOFTWARE\Clients\StartMenuInternet\BraveBeta\Capabilities\URLAssociations" "http" "Wexond"
+  WriteRegStr SHCTX "SOFTWARE\RegisteredApplications" "Flowr-pc-client" "Software\Clients\StartMenuInternet\Flowr-pc-client\Capabilities"
+  WriteRegStr SHCTX "SOFTWARE\Clients\StartMenuInternet\Flowr-pc-client\Capabilities\StartMenu" "StartMenuInternet" "Flowr-pc-client"
+  WriteRegStr SHCTX "SOFTWARE\Clients\StartMenuInternet\Flowr-pc-client" "" "Flowr-pc-client"
+  WriteRegStr SHCTX "SOFTWARE\Clients\StartMenuInternet\Flowr-pc-client\Capabilities" "ApplicationDescription" "A client for FlowR"
+  WriteRegStr SHCTX "SOFTWARE\Clients\StartMenuInternet\Flowr-pc-client\Capabilities" "ApplicationName" "Flowr-pc-client"
+  WriteRegDWORD SHCTX "SOFTWARE\Clients\StartMenuInternet\Flowr-pc-client\InstallInfo" "IconsVisible" 1
+  WriteRegStr SHCTX "SOFTWARE\Clients\StartMenuInternet\Flowr-pc-client\shell\open\command" "" "$0\Flowr-pc-client.exe"
+  WriteRegStr HKCU "SOFTWARE\Classes\BraveBetaHTML\shell\open\command" "" '"$0\Flowr-pc-client.exe" -- "%1"'
 !macroend
 !macro customUnInstall
-  DeleteRegKey HKCU "SOFTWARE\Classes\Wexond"
-  DeleteRegKey SHCTX "SOFTWARE\Clients\StartMenuInternet\Wexond"
-  DeleteRegValue SHCTX "SOFTWARE\RegisteredApplications" "Wexond"
+  DeleteRegKey HKCU "SOFTWARE\Classes\Flowr-pc-client"
+  DeleteRegKey SHCTX "SOFTWARE\Clients\StartMenuInternet\Flowr-pc-client"
+  DeleteRegValue SHCTX "SOFTWARE\RegisteredApplications" "Flowr-pc-client"
 !macroend
