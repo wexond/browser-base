@@ -418,4 +418,9 @@ export class AppWindow extends BrowserWindow {
 
     this.windows = this.windows.filter(x => x.handle !== window.handle);
   }
+
+  close() {
+    this.viewManager.clear()
+    super.close()
+  }
 }

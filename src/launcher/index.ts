@@ -103,4 +103,3 @@ ipcMain.on('clear-application-data', async () => {
 app.on('window-all-closed', () => {
   app.quit();
 });
-//ipc.send('open-browser', {openUrl: 'https://google.be'})
