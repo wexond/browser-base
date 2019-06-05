@@ -3,7 +3,7 @@ import { resolve, extname } from 'path';
 import { homedir } from 'os';
 import { remove } from 'fs-extra'
 import { autoUpdater } from 'electron-updater';
-import { createFlowrWindow, initFlowrConfig } from '../frontend'
+import { createFlowrWindow, initFlowrConfig, buildBrowserWindowConfig } from '../frontend'
 import { createWexondWindow, setWexondLog } from '~/main'
 import { getMigrateUserPreferences } from './migration/fromFlowrClientToFlowrPcClient'
 export const log = require('electron-log');
@@ -72,12 +72,12 @@ app.on('ready', async () => {
 
   ipcMain.on('open-browser', (event: Event, options: any) => {
     if (wexondWindow === null) {
-      wexondWindow = createWexondWindow(options, flowrWindow)
+      wexondWindow = createWexondWindow(options, flowrWindow, buildBrowserWindowConfig({}))
       wexondWindow.on('close', () => {
         wexondWindow = null;
       })
     } else {
-      wexondWindow.moveTop()
+      // wexondWindow.moveTop()
       wexondWindow.webContents.send('open-tab', options)
     }
   })
@@ -90,7 +90,7 @@ app.on('ready', async () => {
     if (wexondWindow !== null) {
       wexondWindow.close()
     }
-    flowrWindow.moveTop()
+    // flowrWindow.moveTop()
   })
 });
 
@@ -103,3 +103,4 @@ ipcMain.on('clear-application-data', async () => {
 app.on('window-all-closed', () => {
   app.quit();
 });
+//ipc.send('open-browser', {openUrl: 'https://google.be'})

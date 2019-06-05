@@ -1,11 +1,12 @@
 import { resolve, join } from 'path';
 import { homedir } from 'os';
-import { ipcMain, Menu, app, protocol, BrowserWindow } from 'electron';
+import { ipcMain, Menu, app, protocol, BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 import { Store, initConfigData } from './src/store'
 import { FlowrWindow } from './flowr-window'
+import { extend } from 'lodash'
 const network = require('network');
 const deepExtend = require('deep-extend')
-
+import defaultBrowserWindowOptions from './defaultBrowserWindowOptions'
 const FlowrDataDir = resolve(homedir(), '.flowr')
 const CONFIG_NAME = 'user-preferences.json'
 
@@ -19,19 +20,21 @@ let isDebugMode: boolean
 let isHiddenMenuDisplayed = false
 let isLaunchedUrlCorrect = true
 
+const flowrStore = new Store(FlowrDataDir, {
+  // We'll call our data file 'user-preferences'
+  configName: CONFIG_NAME,
+  defaults: {
+    // 800x600 is the default size of our window
+    windowBounds: { width: 1280, height: 720 },
+    channelData: {},
+    isMaximized: false,
+  },
+})
+export function buildBrowserWindowConfig(options: BrowserWindowConstructorOptions): BrowserWindowConstructorOptions {
+  return extend(options, defaultBrowserWindowOptions(flowrStore))
+}
+
 export async function createFlowrWindow(): Promise<BrowserWindow> {
-
-  const flowrStore = new Store(FlowrDataDir, {
-    // We'll call our data file 'user-preferences'
-    configName: CONFIG_NAME,
-    defaults: {
-      // 800x600 is the default size of our window
-      windowBounds: { width: 1280, height: 720 },
-      channelData: {},
-      isMaximized: false,
-    },
-  })
-
   const mac = await getMacAddress()
   const winBounds = flowrStore.get('windowBounds')
 
@@ -40,19 +43,13 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
   const kiosk = flowrStore.get('isKiosk') || false
   const url = flowrStore.get('extUrl') || defaultUrl
   // Create the browser window.
-  const opts = {
-    width: winBounds.width, // 1280,
-    height: winBounds.height + 40, // 720,
+  const opts = buildBrowserWindowConfig({
     icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
-    minWidth: 430,
-    minHeight: 270,
-    title: 'FlowR',
-    kiosk,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
-  }
+  })
 
   const mainWindow = new FlowrWindow(flowrStore, opts)
 

@@ -1,9 +1,9 @@
-import { BrowserWindow, app, ipcMain, globalShortcut, screen } from 'electron';
+import { BrowserWindow, app, ipcMain, globalShortcut, screen, BrowserWindowConstructorOptions } from 'electron';
 import { resolve, join } from 'path';
 import { platform } from 'os';
 import { windowManager, Window } from 'node-window-manager';
 import mouseEvents from 'mouse-hooks';
-import { map }  from 'lodash';
+import { extend, map }  from 'lodash';
 import { ViewManager } from './view-manager';
 import { getPath } from '../shared/utils/paths';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
@@ -38,16 +38,11 @@ export class AppWindow extends BrowserWindow {
 
   public interval: any;
 
-  constructor(options: WexondOptions, parent?: BrowserWindow) {
-    super({
+  constructor(options: WexondOptions, parent?: BrowserWindow, defaultBrowserWindow: BrowserWindowConstructorOptions = {}) {
+    super(extend({
       frame: process.env.ENV === 'dev' || platform() === 'darwin',
-      minWidth: 400,
-      minHeight: 450,
-      width: 900,
-      height: 700,
       show: false,
       parent,
-      titleBarStyle: 'hiddenInset',
       webPreferences: {
         plugins: true,
         nodeIntegration: true,
@@ -55,7 +50,7 @@ export class AppWindow extends BrowserWindow {
         experimentalFeatures: true,
       },
       icon: resolve(app.getAppPath(), 'static/app-icons/icon-wexond.png'),
-    });
+    }, defaultBrowserWindow))
 
     const windowDataPath = getPath('window-data.json');
 
@@ -72,7 +67,7 @@ export class AppWindow extends BrowserWindow {
 
     // Merge bounds from the last window state to the current window options.
     if (windowState) {
-      this.setBounds({ ...windowState.bounds });
+      // this.setBounds({ ...windowState.bounds });
     }
 
     if (windowState) {

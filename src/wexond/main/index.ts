@@ -1,4 +1,4 @@
-import { ipcMain, app, Menu, session, BrowserWindow } from 'electron';
+import { ipcMain, app, Menu, session, BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 import { resolve, extname } from 'path';
 import { platform, homedir } from 'os';
 import { AppWindow, WexondOptions } from './app-window';
@@ -52,8 +52,8 @@ app.on('window-all-closed', () => {
   }
 });
 
-export function createWexondWindow(wexondOptions: WexondOptions, parentWindow?: BrowserWindow): AppWindow {
-  appWindow = new AppWindow(wexondOptions, parentWindow);
+export function createWexondWindow(wexondOptions: WexondOptions, parentWindow?: BrowserWindow, defaultBrowserWindow: BrowserWindowConstructorOptions = {}): AppWindow {
+  appWindow = new AppWindow(wexondOptions, parentWindow, defaultBrowserWindow);
   appWindow.on('close', () => {
     appWindow = null
   })
