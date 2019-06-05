@@ -5,6 +5,7 @@ import { ipcRenderer } from 'electron';
 import store from '~/renderer/app/store';
 import ToolbarButton from '~/renderer/app/components/ToolbarButton';
 import { icons } from '~/renderer/app/constants/icons';
+import { TOOLBAR_ICON_HEIGHT } from '~/renderer/app/constants/design';
 import { StyledContainer } from './style';
 
 const onBackClick = () => {
@@ -42,26 +43,26 @@ export const NavigationButtons = observer(() => {
     <StyledContainer isFullscreen={store.isFullscreen}>
       <ToolbarButton
         disabled={false}
-        size={20}
+        size={TOOLBAR_ICON_HEIGHT}
         icon={icons.window}
         onClick={onHomePress}
       />
       <ToolbarButton
         disabled={!store.navigationState.canGoBack}
-        size={24}
+        size={TOOLBAR_ICON_HEIGHT}
         icon={icons.back}
         style={{ marginLeft: 8 }}
         onClick={onBackClick}
       />
       <ToolbarButton
         disabled={!store.navigationState.canGoForward}
-        size={24}
+        size={TOOLBAR_ICON_HEIGHT}
         icon={icons.forward}
         onClick={onForwardClick}
       />
       <ToolbarButton
         disabled={isWindow}
-        size={20}
+        size={TOOLBAR_ICON_HEIGHT}
         icon={loading ? icons.close : icons.refresh}
         onClick={onRefreshClick}
       />

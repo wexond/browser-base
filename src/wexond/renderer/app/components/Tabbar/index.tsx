@@ -3,7 +3,8 @@ import * as React from 'react';
 
 import HorizontalScrollbar from '../HorizontalScrollbar';
 import store from '~/renderer/app/store';
-import { icons } from '~/renderer/app/constants/icons';
+import { icons } from '~/renderer/app/constants/icons'
+import { TOOLBAR_ICON_HEIGHT } from '~/renderer/app/constants/design';;
 import { AddTab, StyledTabbar, TabsContainer } from './style';
 import { Tabs } from '../Tabs';
 import { ipcRenderer } from 'electron';
@@ -30,6 +31,7 @@ export const Tabbar = observer(() => {
       </TabsContainer>
       { !store.tabs.isMaxTab && <AddTab
         icon={icons.add}
+        size={TOOLBAR_ICON_HEIGHT}
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
       />}

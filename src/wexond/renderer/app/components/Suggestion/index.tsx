@@ -15,6 +15,7 @@ import {
 
 interface Props {
   suggestion: Suggestion;
+  onSelect?: {(event: React.MouseEvent): void}
 }
 
 const onMouseEnter = (suggestion: Suggestion) => () => {
@@ -25,7 +26,7 @@ const onMouseLeave = (suggestion: Suggestion) => () => {
   suggestion.hovered = false;
 };
 
-export const SuggestionComponent = observer(({ suggestion }: Props) => {
+export const SuggestionComponent = observer(({ suggestion, onSelect }: Props) => {
   const { hovered } = suggestion;
   const { primaryText, secondaryText } = suggestion;
 
@@ -39,10 +40,15 @@ export const SuggestionComponent = observer(({ suggestion }: Props) => {
 
   const customFavicon = favicon !== icons.page && favicon !== icons.search;
 
+  const click = (e: any) => {
+    e.currentTarget.value = suggestion.primaryText
+    onSelect(e as any)
+  }
   return (
     <StyledSuggestion
       selected={selected}
       hovered={hovered}
+      onMouseDown={click}
       onMouseEnter={onMouseEnter(suggestion)}
       onMouseLeave={onMouseLeave(suggestion)}
     >

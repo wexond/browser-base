@@ -12,31 +12,34 @@ const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 };
 
+const selectSuggestion = (e: any /*React.KeyboardEvent<HTMLInputElement>*/) => {
+  e.preventDefault();
+
+  const text = e.currentTarget.value || e.target.textContent;
+  let url = text;
+
+  if (isURL(text) && !text.includes('://')) {
+    url = `http://${text}`;
+  } else if (!text.includes('://')) {
+    url = `https://www.google.com/search?q=${text}`;
+  }
+
+  e.currentTarget.value = url;
+
+  const tab = store.tabs.selectedTab;
+  if (!tab || store.overlay.isNewTab) {
+    store.tabs.addTab({ url, active: true });
+  } else {
+    tab.url = url;
+    tab.callViewMethod('webContents.loadURL', url);
+  }
+
+  store.overlay.visible = false;
+};
 const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.which === 13) {
     // Enter.
-    e.preventDefault();
-
-    const text = e.currentTarget.value;
-    let url = text;
-
-    if (isURL(text) && !text.includes('://')) {
-      url = `http://${text}`;
-    } else if (!text.includes('://')) {
-      url = `https://www.google.com/search?q=${text}`;
-    }
-
-    e.currentTarget.value = url;
-
-    const tab = store.tabs.selectedTab;
-    if (!tab || store.overlay.isNewTab) {
-      store.tabs.addTab({ url, active: true });
-    } else {
-      tab.url = url;
-      tab.callViewMethod('webContents.loadURL', url);
-    }
-
-    store.overlay.visible = false;
+    selectSuggestion(e);
   }
 };
 
@@ -137,7 +140,8 @@ export const SearchBox = observer(() => {
           }}
         />
       </InputContainer>
-      <Suggestions visible={suggestionsVisible} />
+      <Suggestions visible={suggestionsVisible}
+      onSelect={selectSuggestion}/>
     </StyledSearchBox>
   );
 });

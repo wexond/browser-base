@@ -7,17 +7,23 @@ import { SuggestionComponent } from '../Suggestion';
 
 interface Props {
   visible: boolean;
+  onSelect?: {(event: React.MouseEvent): void}
 }
 
 const onMouseDown = (e: React.MouseEvent) => {
-  e.stopPropagation();
+ // e.stopPropagation();
 };
 
-export const Suggestions = observer(({ visible }: Props) => {
+export const Suggestions = observer(({ visible, onSelect }: Props) => {
   return (
-    <StyledSuggestions visible={visible} onMouseDown={onMouseDown}>
+    <StyledSuggestions visible={visible}
+                       onMouseDown={onMouseDown}
+    >
       {store.suggestions.list.map(suggestion => (
-        <SuggestionComponent suggestion={suggestion} key={suggestion.id} />
+        <SuggestionComponent
+          onSelect={onSelect}
+          suggestion={suggestion}
+          key={suggestion.id} />
       ))}
     </StyledSuggestions>
   );

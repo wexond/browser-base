@@ -6,7 +6,7 @@ import { Theme } from '../../models/theme';
 import { transparency } from '~/renderer/constants';
 
 export const StyledSearchBox = styled.div`
-  margin-top: 48px;
+  margin-top: 10px;
   z-index: 2;
 
   border-radius: 23px;

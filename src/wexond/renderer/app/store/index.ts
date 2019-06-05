@@ -167,7 +167,6 @@ export class Store {
         }
       }
       ipcRenderer.on('open-tab', (event: Event, param: any) => {
-        console.log('----------------------------------------------jbgjfjfjffu', param)
         if (param.openUrl) {
           this.tabs.addTab({ url: param.openUrl, active: true });
         }

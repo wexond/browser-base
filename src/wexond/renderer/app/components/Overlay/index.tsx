@@ -56,9 +56,6 @@ export const Overlay = observer(() => {
           <Content>
             <SearchBox />
             <Dial />
-
-            <Title>Overview</Title>
-            <TabsList />
             <QuickMenu />
           </Content>
         </Scrollable>
