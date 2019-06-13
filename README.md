@@ -50,7 +50,7 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 
 # Contributing
 
-If you have found any bugs or just want to see some new features in Wexond, feel free to open an issue. I'm open to any suggestions and bug reports would be really helpful for me and appreciated very much. Wexond is in heavy development and some bugs may occur. Also, please don't hesitate to open a pull request. This is really important to me and for the further development of this project.
+If you have found any bugs or just want to see some new features in Wexond, feel free to open an issue. We're open to any suggestions and bug reports would be really helpful for us and appreciated very much. Wexond is in heavy development and some bugs may occur. Also, please don't hesitate to open a pull request. This is really important to us and for the further development of this project.
 
 ## Running
 
@@ -62,7 +62,7 @@ When running on Windows, make sure you have build tools installed. You can insta
 $ npm i -g windows-build-tools
 ```
 
-Firstly, run this command to install all needed dependencies. If you have encountered any problems, please report it. I will try to help as much as I can.
+Firstly, run this command to install all needed dependencies. If you have encountered any problems, please report it. We will try to help as much as I can.
 
 ```bash
 $ npm install
@@ -96,6 +96,8 @@ $ npm run <command>
 | `lint-fix`       | Fixes eslint errors if any                  |
 | `start`          | Starts Wexond.                              |
 | `dev`            | Starts Wexond in the development mode       |
+
+> NOTE: `compile-win32` command will produce publishing errors at the end. Just ignore them.
 
 # Documentation
 
