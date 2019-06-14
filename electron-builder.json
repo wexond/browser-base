@@ -17,7 +17,7 @@
     "target": [
       {
         "target": "deb",
-        "arch": ["ia32", "x64"]
+        "arch": ["x64"]
       }
     ]
   },
