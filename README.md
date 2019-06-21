@@ -24,6 +24,12 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 - **Packages** - Extend Wexond for your needs, by installing or developing your own packages. They can theme the browser and even add custom components to the Overlay! ([#147](https://github.com/wexond/wexond/issues/147))
 - **Organize apps in tabs** - Wexond's tabs system can also contain your native apps like in [Multrin](https://github.com/sentialx/multrin)! (currently only for Windows)
 
+# Screenshots
+
+![](https://wexond.net/img/screen.png)
+
+![](https://wexond.net/img/screen2.gif)
+
 ### Sponsors
 
 [![Sponsors](https://opencollective.com/wexond/tiers/sponsor.svg?avatarHeight=48)](https://opencollective.com/wexond)
@@ -37,12 +43,6 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 <a href="https://www.patreon.com/bePatron?u=12270966">
     <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
-
-# Screenshots
-
-![](https://wexond.net/img/screen.png)
-
-![](https://wexond.net/img/screen2.gif)
 
 # [Roadmap](https://github.com/wexond/wexond/projects)
 
