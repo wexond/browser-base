@@ -1,6 +1,5 @@
-import { windowManager, Window } from 'node-window-manager';
-import mouseEvents from 'mouse-hooks';
-import { appWindow } from '..';
+import { Window } from 'node-window-manager';
+import { AppWindow } from '../app-window';
 
 export class ProcessWindow extends Window {
   public resizable = false;
@@ -14,36 +13,35 @@ export class ProcessWindow extends Window {
   public lastBounds: any;
   public initialBounds: any;
 
-  constructor(handle: number) {
+  public parentWindow: AppWindow;
+
+  constructor(handle: any, appWindow: AppWindow) {
     super(handle);
 
-    this.toggleTransparency(true);
     this.lastBounds = this.getBounds();
     this.initialBounds = this.getBounds();
+
+    this.parentWindow = appWindow;
   }
 
   public detach() {
     this.setOwner(null);
 
-    mouseEvents.once('mouse-up', () => {
-      setTimeout(() => {
-        this.setBounds({
-          width: this.initialBounds.width,
-          height: this.initialBounds.height,
-        });
+    this.parentWindow.webContents.send('remove-tab', this.id);
 
-        appWindow.webContents.send('remove-tab', this.handle);
-      }, 50);
-    });
+    setTimeout(() => {
+      this.bringToTop();
+    }, 50);
   }
 
   public show() {
-    super.show();
     this.setOpacity(1);
+    this.toggleTransparency(false);
+    this.bringToTop();
   }
 
   public hide() {
-    super.hide();
+    this.toggleTransparency(true);
     this.setOpacity(0);
   }
 }
