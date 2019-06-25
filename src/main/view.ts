@@ -49,6 +49,7 @@ export class View extends BrowserView {
       // Adblocker cosmetic filtering
       if (engine && settings.isShieldToggled) {
         if (url === '') return;
+
         const { styles, scripts } = engine.getCosmeticsFilters({
           url,
           ...parse(url),
