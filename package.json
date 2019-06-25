@@ -86,7 +86,6 @@
     "levelup": "4.0.2",
     "mobx": "5.10.1",
     "mobx-react": "6.1.1",
-    "mouse-hooks": "0.3.1",
     "nedb": "1.8.0",
     "node-vibrant": "3.2.0-alpha",
     "node-window-manager": "1.0.3",
