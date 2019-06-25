@@ -15,7 +15,7 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 
 # Features
 
-- **Wexond Shield** - Browse the web without any ads and don't let websites to track you. Thanks to the Wexond Shield, websites can load even 2 times faster!
+- **Wexond Shield** - Browse the web without any ads and don't let websites to track you. Thanks to the Wexond Shield powered by [Cliqz adblocker](https://github.com/cliqz-oss/adblocker), websites can load even 2 times faster!
 - **Beautiful and minimalistic UI** - The address bar is hidden in Overlay to take less space, but it doesn't impact on usability in any way. It's even better! [Give it a shot](https://wexond.net)
 - **Tab groups** - Easily group tabs to groups and access them really fast.
 - **Partial support for Chrome extensions** - Install some extensions from Chrome Web Store (see [#110](https://github.com/wexond/wexond/issues/110))
