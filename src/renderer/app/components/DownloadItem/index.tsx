@@ -7,15 +7,17 @@ import { shell } from 'electron';
 
 const prettyBytes = require('pretty-bytes');
 
-const onClick = (path: string) => () => {
-  shell.openItem(path);
+const onClick = (data: DownloadItem) => () => {
+  if (data.completed) {
+    shell.openItem(data.savePath);
+  }
 };
 
 export default observer(({ data }: { data: DownloadItem }) => {
   const progress = (data.receivedBytes / data.totalBytes) * 200;
 
   return (
-    <StyledItem onClick={onClick(data.savePath)}>
+    <StyledItem onClick={onClick(data)}>
       <Progress
         style={{
           width: progress,
