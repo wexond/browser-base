@@ -14,6 +14,10 @@ import { runAutoUpdaterService } from './services/auto-updater';
 
 export const log = require('electron-log');
 
+const iohook = require('iohook');
+
+iohook.start();
+
 app.setPath('userData', resolve(homedir(), '.wexond'));
 log.transports.file.level = 'verbose';
 log.transports.file.file = resolve(app.getPath('userData'), 'log.log');
@@ -92,7 +96,7 @@ app.on('ready', async () => {
       }
     },
   );
-  
+
   viewSession.on('will-download', (event, item, webContents) => {
     const fileName = item.getFilename();
     const savePath = resolve(app.getPath('downloads'), fileName);
