@@ -73,16 +73,6 @@ app.on('ready', async () => {
 
   Menu.setApplicationMenu(getMainMenu(appWindow));
 
-  session.defaultSession.setPermissionRequestHandler(
-    (webContents, permission, callback) => {
-      if (permission === 'notifications' || permission === 'fullscreen') {
-        callback(true);
-      } else {
-        callback(false);
-      }
-    },
-  );
-
   app.on('activate', () => {
     if (appWindow === null) {
       appWindow = new AppWindow();
@@ -93,6 +83,16 @@ app.on('ready', async () => {
 
   const viewSession = session.fromPartition('persist:view');
 
+  viewSession.setPermissionRequestHandler(
+    (webContents, permission, callback) => {
+      if (permission === 'notifications' || permission === 'fullscreen') {
+        callback(true);
+      } else {
+        callback(false);
+      }
+    },
+  );
+  
   viewSession.on('will-download', (event, item, webContents) => {
     const fileName = item.getFilename();
     const savePath = resolve(app.getPath('downloads'), fileName);
