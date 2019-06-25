@@ -13,6 +13,8 @@ const autoComplete = (text: string, suggestion: string) => {
 
   const input = store.overlay.inputRef.current;
 
+  if (input.selectionStart !== input.value.length) return;
+
   if (suggestion) {
     if (suggestion.startsWith(text.replace(regex, ''))) {
       input.value = text + suggestion.replace(text.replace(regex, ''), '');
