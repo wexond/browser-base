@@ -93,6 +93,7 @@
     "pretty-bytes": "5.2.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
+    "react-windows-controls": "1.0.4",
     "styled-components": "4.3.2"
   },
   "cmake-js": {

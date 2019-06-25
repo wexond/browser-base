@@ -6,10 +6,13 @@ import { Style } from '~/renderer/app/style';
 import { Toolbar } from '../Toolbar';
 import { ipcRenderer } from 'electron';
 import { Line, StyledApp } from './style';
-import { WindowsButtons } from '../WindowsButtons';
+import { WindowsControls } from 'react-windows-controls';
 import { platform } from 'os';
 import { Overlay } from '../Overlay';
 import store from '../../store';
+import { darkTheme } from '~/renderer/constants/themes';
+import { closeWindow, minimizeWindow, maximizeWindow } from '../../utils';
+import { TOOLBAR_HEIGHT } from '../../constants';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -25,7 +28,21 @@ export const App = observer(() => {
         <Toolbar />
         <Line />
         <Overlay />
-        {platform() !== 'darwin' && <WindowsButtons />}
+        {platform() !== 'darwin' && (
+          <WindowsControls
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              zIndex: 9999,
+              height: TOOLBAR_HEIGHT,
+            }}
+            dark={store.theme !== darkTheme}
+            onClose={closeWindow}
+            onMinimize={minimizeWindow}
+            onMaximize={maximizeWindow}
+          />
+        )}
       </StyledApp>
     </ThemeProvider>
   );
