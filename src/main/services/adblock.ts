@@ -4,13 +4,7 @@ import { resolve } from 'path';
 import { appWindow, settings } from '..';
 import Axios from 'axios';
 
-import {
-  FiltersEngine,
-  makeRequest,
-  updateResponseHeadersWithCSP,
-  Request,
-} from '@cliqz/adblocker';
-import { parse } from 'tldts';
+import { FiltersEngine, Request } from '@cliqz/adblocker';
 import { getPath } from '~/shared/utils/paths';
 
 const lists: any = {
