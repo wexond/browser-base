@@ -1,6 +1,7 @@
 import { observable } from 'mobx';
 import { DownloadItem } from '../models/download-item';
 import { ipcRenderer } from 'electron';
+import store from '.';
 
 export class DownloadsStore {
   @observable
@@ -9,6 +10,14 @@ export class DownloadsStore {
   constructor() {
     ipcRenderer.on('download-started', (e: any, item: DownloadItem) => {
       this.list.push(item);
+
+      const not = new Notification(`Downloading ${item.fileName}`, {
+        body: 'Open Overlay to see the downloads.',
+      });
+
+      not.onclick = () => {
+        store.overlay.visible = true;
+      };
     });
 
     ipcRenderer.on('download-progress', (e: any, item: DownloadItem) => {
