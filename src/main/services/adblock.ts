@@ -23,16 +23,6 @@ const lists: any = {
     'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
 };
 
-const objectToArray = (obj: any): any[] => {
-  const arr: any = [];
-  Object.keys(obj).forEach(k => {
-    if (obj[k]) {
-      arr.push({ name: k, value: obj[k][0] });
-    }
-  });
-  return arr;
-};
-
 export let engine: FiltersEngine;
 
 const loadFilters = async () => {
