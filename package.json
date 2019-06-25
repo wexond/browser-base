@@ -91,7 +91,6 @@
     "pretty-bytes": "5.2.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
-    "styled-components": "4.3.2",
-    "tldts": "5.2.0"
+    "styled-components": "4.3.2"
   }
 }
