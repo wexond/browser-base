@@ -72,7 +72,7 @@
     "typescript-plugin-styled-components": "1.4.3"
   },
   "dependencies": {
-    "@cliqz/adblocker": "0.10.0",
+    "@cliqz/adblocker": "0.11.0",
     "axios": "0.19.0",
     "electron-extensions": "1.0.0",
     "electron-log": "3.0.6",
