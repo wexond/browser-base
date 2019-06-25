@@ -9,7 +9,7 @@ const prettyBytes = require('pretty-bytes');
 
 const onClick = (data: DownloadItem) => () => {
   if (data.completed) {
-    shell.openItem(data.savePath);
+    shell.openExternal(data.savePath);
   }
 };
 
