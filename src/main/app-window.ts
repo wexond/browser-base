@@ -1,4 +1,4 @@
-import { BrowserWindow, app } from 'electron';
+import { BrowserWindow, app, ipcMain } from 'electron';
 import { resolve, join } from 'path';
 import { platform } from 'os';
 import { windowManager, Window } from 'node-window-manager';
@@ -9,6 +9,7 @@ import { getPath } from '~/shared/utils/paths';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { ProcessWindow } from './models/process-window';
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
+import { runMessagingService } from './services';
 
 const iohook = require('iohook');
 
@@ -55,6 +56,8 @@ export class AppWindow extends BrowserWindow {
       },
       icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
     });
+
+    runMessagingService(this);
 
     const windowDataPath = getPath('window-data.json');
 
@@ -167,6 +170,21 @@ export class AppWindow extends BrowserWindow {
 
     const handle = this.getNativeWindowHandle().readInt32LE(0);
     this.window = new Window(handle);
+
+    ipcMain.on('select-window', (e: any, id: number) => {
+      this.selectWindow(this.windows.find(x => x.id === id));
+    });
+
+    ipcMain.on('detach-window', (e: any, id: number) => {
+      this.detachWindow(this.windows.find(x => x.id === id));
+    });
+
+    ipcMain.on('hide-window', () => {
+      if (this.selectedWindow) {
+        this.selectedWindow.hide();
+        this.isWindowHidden = true;
+      }
+    });
 
     this.on('move', updateBounds);
     this.on('resize', updateBounds);
@@ -351,10 +369,7 @@ export class AppWindow extends BrowserWindow {
     if (!window) return;
 
     if (this.selectedWindow) {
-      if (
-        window.handle === this.selectedWindow.handle &&
-        !this.isWindowHidden
-      ) {
+      if (window.id === this.selectedWindow.id && !this.isWindowHidden) {
         return;
       }
 
@@ -387,6 +402,6 @@ export class AppWindow extends BrowserWindow {
 
     window.detach();
 
-    this.windows = this.windows.filter(x => x.handle !== window.handle);
+    this.windows = this.windows.filter(x => x.id !== window.id);
   }
 }
