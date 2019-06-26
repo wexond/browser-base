@@ -57,14 +57,6 @@ export class Store {
     canGoForward: false,
   };
 
-  @observable
-  public settings: Settings = {
-    dialType: 'top-sites',
-    isDarkTheme: false,
-    isShieldToggled: true,
-    isMultrinToggled: true,
-  };
-
   public canToggleMenu = false;
 
   public mouse = {
@@ -159,10 +151,10 @@ export class Store {
       }
     });
 
-    this.settings = {
+    /*this.settings = {
       ...this.settings,
       ...JSON.parse(readFileSync(getPath('settings.json'), 'utf8')),
-    };
+    };*/
 
     this.theme = this.settings.isDarkTheme ? darkTheme : lightTheme;
 
@@ -170,11 +162,11 @@ export class Store {
   }
 
   public saveSettings() {
-    ipcRenderer.send('settings', this.settings);
+    /*ipcRenderer.send('settings', this.settings);
 
     writeFile(getPath('settings.json'), JSON.stringify(this.settings), err => {
       if (err) console.error(err);
-    });
+    });*/
   }
 }
 
