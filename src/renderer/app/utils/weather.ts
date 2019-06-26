@@ -3,15 +3,15 @@ import Axios from 'axios';
 import { WEATHER_API_KEY } from '../constants';
 import { ForecastRequest, OpenWeatherItem, ForecastItem, WeatherCondition, Forecast } from '../models';
 
-const getDate = (item: OpenWeatherItem) => {
-  return new Date(item.dt * 1000);
+const formatDescription = (str: string) => {
+  return str.substr(0, 1).toUpperCase() + str.substring(1).toLowerCase();
 }
 
 const getForWeek = (items: OpenWeatherItem[]) => {
   const list: ForecastItem[] = [];
 
   for (const item of items) {
-    const date = getDate(item);
+    const date = new Date(item.dt * 1000);
     const hours = date.getHours();
     const dateStr = date.toLocaleDateString();
     const el: ForecastItem = list.find(e => e.date.toLocaleDateString() === dateStr) || {};
@@ -26,7 +26,7 @@ const getForWeek = (items: OpenWeatherItem[]) => {
         dayTemp: temp,
         date,
         dayName: dateStr,
-        description: weather.description,
+        description: formatDescription(weather.description),
         weather: weather.main.toLowerCase() as WeatherCondition,
       });
     }
