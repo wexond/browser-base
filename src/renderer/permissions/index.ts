@@ -17,9 +17,11 @@ ipcRenderer.on('request-permission', (e: any, { url, name, details }: any) => {
   } else if (name === 'media') {
     if (details.mediaTypes.indexOf('audio') !== -1) {
       permission.textContent = 'Access your microphone';
-    } else if (details.mediaTypes.indexOf('audio') !== -1) {
+    } else if (details.mediaTypes.indexOf('video') !== -1) {
       permission.textContent = 'Access your camera';
     }
+  } else if (name === 'geolocation') {
+    permission.textContent = 'Know your location';
   }
 });
 
