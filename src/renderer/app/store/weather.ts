@@ -1,9 +1,15 @@
+import { getWeather } from '~/renderer/app/utils';
+
 export class WeatherStore {
   constructor() {
     this.load();
   }
 
-  public load() {
-    console.log('loading');
+  public async load() {
+    await getWeather({
+      city: 'opole',
+      lang: 'pl',
+      units: 'metric'
+    });
   }
 }
