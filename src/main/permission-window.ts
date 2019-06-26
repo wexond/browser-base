@@ -25,6 +25,8 @@ export class PermissionWindow extends BrowserWindow {
     } else {
       this.loadURL(join('file://', app.getAppPath(), 'build/permissions.html'));
     }
+
+    this.setParentWindow(this.appWindow);
   }
 
   public async requestPermission(
