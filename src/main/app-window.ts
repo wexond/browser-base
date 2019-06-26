@@ -16,6 +16,7 @@ export class AppWindow extends BrowserWindow {
 
   public permissionWindow = new PermissionWindow(this);
   public authWindow = new AuthWindow(this);
+  public findWindow = new FindWindow(this);
 
   constructor() {
     super({
