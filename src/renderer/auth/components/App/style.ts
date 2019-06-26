@@ -15,6 +15,7 @@ export const Title = styled.div`
 export const Subtitle = styled.div`
   font-size: 13px;
   opacity: 0.54;
+  margin-top: 8px;
 `;
 
 export const Buttons = styled.div`
