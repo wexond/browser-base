@@ -13,7 +13,7 @@ export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager = new ViewManager();
   public multrin = new Multrin(this);
 
-  public permissionWindow = new PermissionWindow();
+  public permissionWindow = new PermissionWindow(this);
 
   constructor() {
     super({
@@ -98,6 +98,10 @@ export class AppWindow extends BrowserWindow {
 
     this.once('ready-to-show', () => {
       this.show();
+    });
+
+    this.on('focus', () => {
+      this.permissionWindow.hide();
     });
 
     this.on('enter-full-screen', () => {

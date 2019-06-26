@@ -1,8 +1,10 @@
 import { BrowserWindow, app } from 'electron';
 import { join } from 'path';
+import { AppWindow } from './app-window';
+import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
 
 export class PermissionWindow extends BrowserWindow {
-  constructor() {
+  constructor(public appWindow: AppWindow) {
     super({
       frame: false,
       resizable: false,
@@ -27,6 +29,9 @@ export class PermissionWindow extends BrowserWindow {
   public requestPermission(name: string, url: string) {
     this.show();
 
+    const cBounds = this.appWindow.getContentBounds();
+
+    this.setBounds({ x: cBounds.x, y: cBounds.y + TOOLBAR_HEIGHT } as any);
     this.webContents.send('request-permission', { name, url });
   }
 }
