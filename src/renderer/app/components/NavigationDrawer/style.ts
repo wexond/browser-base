@@ -75,8 +75,8 @@ export const Input = styled.input`
 
     &::placeholder {
       color: ${theme['overlay.foreground'] === 'light'
-        ? 'rgba(255, 255, 255, 0.54)'
-        : `rgba(0, 0, 0, ${transparency.text.medium})`};
+      ? 'rgba(255, 255, 255, 0.54)'
+      : `rgba(0, 0, 0, ${transparency.text.medium})`};
     }
   `}
 `;
@@ -109,8 +109,8 @@ export const Search = styled.div`
 
     ${({ theme }: { theme?: Theme }) => css`
       filter: ${theme['overlay.foreground'] === 'light'
-        ? 'invert(100%)'
-        : 'none'};
+      ? 'invert(100%)'
+      : 'none'};
     `}
   }
 `;
