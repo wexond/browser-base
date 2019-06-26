@@ -39,6 +39,8 @@ export class AuthWindow extends BrowserWindow {
       this.webContents.send('request-auth', url);
 
       ipcMain.once('request-auth-result', (e: any, result: any) => {
+        this.hide();
+
         resolve(result);
       });
     });
