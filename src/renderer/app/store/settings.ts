@@ -2,9 +2,14 @@ import { observable } from 'mobx';
 
 export type SettingsSection =
   | 'general'
-  | 'privacy'
-  | 'paswords'
-  | 'advanced'
+  | 'appearance'
+  | 'autofill'
+  | 'search-engine'
+  | 'startup'
+  | 'language'
+  | 'weather'
+  | 'shortcuts'
+  | 'downloads'
 
 export class SettingsStore {
   @observable

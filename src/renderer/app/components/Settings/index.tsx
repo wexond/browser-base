@@ -2,10 +2,9 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import store from '../../store';
-import { Content, Container, Scrollable } from '../Overlay/style';
+import { Container, Scrollable } from '../Overlay/style';
 import { NavigationDrawer } from '../NavigationDrawer';
 import { SettingsSection } from '../../store/settings';
-import { icons } from '../../constants';
 
 const preventHiding = (e: any) => {
   e.stopPropagation();
@@ -33,11 +32,15 @@ export const Settings = observer(() => {
     >
       <Scrollable>
         <NavigationDrawer title="Settings" search>
-          <MenuItem section="advanced">All</MenuItem>
-          <div style={{ flex: 1 }} />
-          <NavigationDrawer.Item icon={icons.trash}>
-            Clear browsing data
-          </NavigationDrawer.Item>
+          <MenuItem section="general">General</MenuItem>
+          <MenuItem section="appearance">Appearance</MenuItem>
+          <MenuItem section="autofill">Autofill</MenuItem>
+          <MenuItem section="search-engine">Search engine</MenuItem>
+          <MenuItem section="startup">On startup</MenuItem>
+          <MenuItem section="language">Language</MenuItem>
+          <MenuItem section="weather">Weather</MenuItem>
+          <MenuItem section="shortcuts">Keyboard shortcuts</MenuItem>
+          <MenuItem section="downloads">Downloads</MenuItem>
         </NavigationDrawer>
       </Scrollable>
     </Container>
