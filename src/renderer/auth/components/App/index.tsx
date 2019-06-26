@@ -15,8 +15,8 @@ const sendResponse = (credentials: any) => {
   ipcRenderer.send('request-auth-result', credentials);
 };
 
-let ref1 = React.createRef<Textfield>();
-let ref2 = React.createRef<Textfield>();
+const ref1 = React.createRef<Textfield>();
+const ref2 = React.createRef<Textfield>();
 
 export const App = observer(() => {
   return (
