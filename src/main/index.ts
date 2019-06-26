@@ -87,6 +87,16 @@ app.on('ready', async () => {
 
   const viewSession = session.fromPartition('persist:view');
 
+  app.on('login', async (e, webContents, request, authInfo, callback) => {
+    e.preventDefault();
+
+    const credentials = await appWindow.authWindow.requestAuth(request.url);
+
+    if (credentials) {
+      callback(credentials.username, credentials.password);
+    }
+  });
+
   viewSession.setPermissionRequestHandler(
     async (webContents, permission, callback, details) => {
       if (permission === 'fullscreen') {

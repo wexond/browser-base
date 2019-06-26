@@ -8,12 +8,14 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { runMessagingService } from './services';
 import { PermissionWindow } from './permission-window';
 import { Multrin } from './multrin';
+import { AuthWindow } from './auth-window';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager = new ViewManager();
   public multrin = new Multrin(this);
 
   public permissionWindow = new PermissionWindow(this);
+  public authWindow = new AuthWindow(this);
 
   constructor() {
     super({
