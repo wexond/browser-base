@@ -33,12 +33,16 @@ const onDarkClick = () => {
 const onShieldClick = () => {
   store.settings.isShieldToggled = !store.settings.isShieldToggled;
   store.saveSettings();
-  ipcRenderer.send('shield-toggle', store.settings.isShieldToggled);
 };
 
 const onAlwaysClick = () => {
   store.isAlwaysOnTop = !store.isAlwaysOnTop;
   getCurrentWindow().setAlwaysOnTop(store.isAlwaysOnTop);
+};
+
+const onMultrinClick = () => {
+  store.settings.isMultrinToggled = !store.settings.isMultrinToggled;
+  store.saveSettings();
 };
 
 export const QuickMenu = observer(() => {
@@ -77,6 +81,14 @@ export const QuickMenu = observer(() => {
           onClick={onShieldClick}
         >
           Shield
+        </Bubble>
+        <Bubble
+          invert={invert}
+          toggled={store.settings.isShieldToggled}
+          icon={icons.window}
+          onClick={onMultrinClick}
+        >
+          Capture windows
         </Bubble>
       </Actions>
       <Line />
