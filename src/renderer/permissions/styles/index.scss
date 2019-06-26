@@ -25,6 +25,7 @@ body {
   font-family: Roboto;
   cursor: default;
   user-select: none;
+  width: 350px;
 }
 
 #app {
@@ -44,8 +45,23 @@ body {
   margin-top: 8px;
 }
 
+.buttons {
+  display: flex;
+  float: right;
+  margin-top: 16px;
+}
+
 .button {
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 24px;
   font-size: 13px;
+  padding: 10px 16px;
+  margin-left: 8px;
+  transition: 0.1s all;
+
+  &:hover {
+    background-color: #2196f3;
+    color: white;
+    border: 1px solid transparent;
+  }
 }
