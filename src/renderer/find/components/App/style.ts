@@ -4,21 +4,16 @@ import { icons } from '~/renderer/app/constants';
 
 export const StyledApp = styled.div`
   margin: 16px;
-  padding: 16px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   border-radius: 8px;
   background: white;
 `;
 
 export const StyledFind = styled.div`
-  height: 32px;
-  background-color: rgba(0, 0, 0, 0.08);
   border-radius: 30px;
-  margin-right: 8px;
+  height: 40px;
   -webkit-app-region: no-drag;
   align-items: center;
-  min-width: 300px;
-  width: 300px;
   overflow: hidden;
   display: flex;
 `;

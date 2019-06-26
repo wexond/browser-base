@@ -12,6 +12,6 @@ export const runMessagingService = (appWindow: AppWindow) => {
   );
 
   ipcMain.on('find-show', (e: any, tabId: number, data: any) =>
-    appWindow.findWindow.show(),
+    appWindow.findWindow.find(tabId, data),
   );
 };
