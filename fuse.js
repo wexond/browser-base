@@ -76,13 +76,10 @@ const getWebIndexPlugin = name => {
   });
 };
 
-const renderer = () => {
+const renderer = name => {
   const cfg = getRendererConfig('electron');
 
-  cfg.plugins.push(getWebIndexPlugin('app'));
-  cfg.plugins.push(getWebIndexPlugin('permissions'));
-  cfg.plugins.push(getWebIndexPlugin('auth'));
-  cfg.plugins.push(getWebIndexPlugin('find'));
+  cfg.plugins.push(getWebIndexPlugin(name));
 
   cfg.plugins.push(JSONPlugin());
   cfg.plugins.push(getCopyPlugin());
@@ -90,30 +87,23 @@ const renderer = () => {
 
   const fuse = FuseBox.init(cfg);
 
-  const app = fuse.bundle('app').instructions(`> [renderer/app/index.tsx]`);
-
-  const permissions = fuse
-    .bundle('permissions')
-    .instructions(`> [renderer/permissions/index.tsx]`);
-
-  const auth = fuse.bundle('auth').instructions(`> [renderer/auth/index.tsx]`);
-
-  const find = fuse.bundle('find').instructions(`> [renderer/find/index.tsx]`);
+  const app = fuse.bundle(name).instructions(`> [renderer/${name}/index.tsx]`);
 
   if (!production) {
-    fuse.dev({ httpServer: true });
+    if (name === 'app') {
+      fuse.dev({ httpServer: true });
 
-    app.hmr().watch();
-    permissions.watch();
-    auth.watch();
-    find.watch();
+      app.hmr().watch();
 
-    fuse.run().then(() => {
-      spawn('npm', ['start'], {
-        shell: true,
-        stdio: 'inherit',
+      fuse.run().then(() => {
+        spawn('npm', ['start'], {
+          shell: true,
+          stdio: 'inherit',
+        });
       });
-    });
+    } else {
+      app.watch();
+    }
   } else {
     fuse.run();
   }
@@ -131,6 +121,9 @@ const preload = name => {
   fuse.run();
 };
 
-renderer();
+renderer('app');
+renderer('auth');
+renderer('permissions');
+renderer('find');
 preload('view-preload');
 main();

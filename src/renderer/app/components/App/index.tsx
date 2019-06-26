@@ -36,6 +36,7 @@ export const App = observer(() => {
               top: 0,
               zIndex: 9999,
               height: TOOLBAR_HEIGHT,
+              WebkitAppRegion: 'no-drag',
             }}
             dark={
               store.overlay.visible
