@@ -35,9 +35,7 @@ export class PermissionWindow extends BrowserWindow {
     details: any,
   ): Promise<boolean> {
     return new Promise(resolve => {
-      const cBounds = this.appWindow.getContentBounds();
-      this.setBounds({ x: cBounds.x, y: cBounds.y + TOOLBAR_HEIGHT } as any);
-
+      this.rearrange();
       this.show();
 
       this.webContents.send('request-permission', { name, url, details });
@@ -47,5 +45,10 @@ export class PermissionWindow extends BrowserWindow {
         this.hide();
       });
     });
+  }
+
+  public rearrange() {
+    const cBounds = this.appWindow.getContentBounds();
+    this.setBounds({ x: cBounds.x, y: cBounds.y + TOOLBAR_HEIGHT } as any);
   }
 }

@@ -72,6 +72,7 @@ export class AppWindow extends BrowserWindow {
       }
       this.authWindow.rearrange();
       this.findWindow.rearrange();
+      this.permissionWindow.rearrange();
     });
     this.on('move', () => {
       if (!this.isMaximized()) {
@@ -79,6 +80,7 @@ export class AppWindow extends BrowserWindow {
       }
       this.authWindow.rearrange();
       this.findWindow.rearrange();
+      this.permissionWindow.rearrange();
     });
 
     const resize = () => {
