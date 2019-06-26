@@ -7,6 +7,7 @@ import { ipcRenderer } from 'electron';
 import { StyledApp, Title, Permissions, Permission, Buttons } from './style';
 import store from '../../store';
 import { Button } from '~/renderer/components/Button';
+import { colors } from '~/renderer/constants';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -51,14 +52,18 @@ export const App = observer(() => {
       <Buttons>
         <Button
           foreground="black"
-          background="rgba(0, 0, 0, 0.12)"
-          type="outlined"
+          background="rgba(0, 0, 0, 0.08)"
+          onClick={() => sendResult(true)}
+        >
+          Allow
+        </Button>
+        <Button
+          foreground="black"
+          background="rgba(0, 0, 0, 0.08)"
+          style={{ marginLeft: 8 }}
           onClick={() => sendResult(false)}
         >
           Deny
-        </Button>
-        <Button style={{ marginLeft: 8 }} onClick={() => sendResult(true)}>
-          Allow
         </Button>
       </Buttons>
       <div style={{ clear: 'both' }}></div>
