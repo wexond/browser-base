@@ -33,12 +33,7 @@ export class AuthWindow extends BrowserWindow {
     url: string,
   ): Promise<{ username: string; password: string }> {
     return new Promise(resolve => {
-      const cBounds = this.appWindow.getContentBounds();
-      this.setBounds({
-        x: Math.round(cBounds.x + cBounds.width / 2 - 250),
-        y: cBounds.y + TOOLBAR_HEIGHT,
-      } as any);
-
+      this.rearrange();
       this.show();
 
       this.webContents.send('request-auth', url);
@@ -47,5 +42,13 @@ export class AuthWindow extends BrowserWindow {
         resolve(result);
       });
     });
+  }
+
+  public rearrange() {
+    const cBounds = this.appWindow.getContentBounds();
+    this.setBounds({
+      x: Math.round(cBounds.x + cBounds.width / 2 - 250),
+      y: cBounds.y + TOOLBAR_HEIGHT,
+    } as any);
   }
 }
