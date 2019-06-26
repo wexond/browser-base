@@ -7,6 +7,7 @@ import { StyledApp, Title, Buttons, Subtitle } from './style';
 import { Button } from '~/renderer/components/Button';
 import store from '../../store';
 import { ipcRenderer } from 'electron';
+import { Textfield } from '~/renderer/components/Textfield';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -20,6 +21,14 @@ export const App = observer(() => {
       <GlobalStyle />
       <Title>Login</Title>
       <Subtitle>{store.url}</Subtitle>
+      <Textfield
+        style={{ width: '100%', marginTop: 16 }}
+        label="Username"
+      ></Textfield>
+      <Textfield
+        style={{ width: '100%', marginTop: 16 }}
+        label="Password"
+      ></Textfield>
       <Buttons>
         <Button>Login</Button>
         <Button
