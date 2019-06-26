@@ -25,6 +25,8 @@ const containsPoint = (bounds: any, point: any) => {
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager = new ViewManager();
 
+  public permissionWindow = new 
+
   public windows: ProcessWindow[] = [];
   public selectedWindow: ProcessWindow;
 
