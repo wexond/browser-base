@@ -61,6 +61,7 @@ export class Store {
     dialType: 'top-sites',
     isDarkTheme: false,
     isShieldToggled: true,
+    isMultrinToggled: true,
   };
 
   public findInputRef = React.createRef<HTMLInputElement>();

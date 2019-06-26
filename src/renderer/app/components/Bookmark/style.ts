@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 import { centerIcon } from '~/shared/mixins';
 import { icons } from '../../constants';
+import { Theme } from '../../models/theme';
 
 export const More = styled.div`
   ${centerIcon(20)};
@@ -9,7 +10,12 @@ export const More = styled.div`
   width: 24px;
   background-image: url(${icons.more});
   opacity: 0.54;
-  filter: invert(100%);
+
+  ${({ theme }: { theme: Theme }) => css`
+    filter: ${theme['overlay.foreground'] === 'light'
+      ? 'invert(100%)'
+      : 'none'};
+  `}
 
   &:hover {
     opacity: 1;
