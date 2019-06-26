@@ -1,10 +1,12 @@
 import './styles/index.scss';
 import { ipcRenderer } from 'electron';
 import { getDomain } from '~/shared/utils/url';
-import { fonts } from '../constants';
 
 const title = document.getElementById('title');
 const permission = document.getElementById('permission');
+
+const deny = document.getElementById('deny');
+const allow = document.getElementById('allow');
 
 ipcRenderer.on('request-permission', (e: any, { url, name, details }: any) => {
   const domain = getDomain(url);
@@ -15,6 +17,20 @@ ipcRenderer.on('request-permission', (e: any, { url, name, details }: any) => {
   } else if (name === 'media') {
     if (details.mediaTypes.indexOf('audio') !== -1) {
       permission.textContent = 'Access your microphone';
+    } else if (details.mediaTypes.indexOf('audio') !== -1) {
+      permission.textContent = 'Access your camera';
     }
   }
 });
+
+const sendResult = (r: boolean) => {
+  ipcRenderer.send('request-permission-result', r);
+};
+
+deny.onclick = () => {
+  sendResult(false);
+};
+
+allow.onclick = () => {
+  sendResult(true);
+};

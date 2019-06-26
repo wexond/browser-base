@@ -88,16 +88,16 @@ app.on('ready', async () => {
   const viewSession = session.fromPartition('persist:view');
 
   viewSession.setPermissionRequestHandler(
-    (webContents, permission, callback, details) => {
+    async (webContents, permission, callback, details) => {
       if (permission === 'fullscreen') {
         callback(true);
       } else {
-        appWindow.permissionWindow.requestPermission(
+        const response = await appWindow.permissionWindow.requestPermission(
           permission,
           webContents.getURL(),
           details,
         );
-        callback(false);
+        callback(response);
       }
     },
   );

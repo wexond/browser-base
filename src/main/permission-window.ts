@@ -1,4 +1,4 @@
-import { BrowserWindow, app } from 'electron';
+import { BrowserWindow, app, ipcMain } from 'electron';
 import { join } from 'path';
 import { AppWindow } from './app-window';
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
@@ -26,12 +26,23 @@ export class PermissionWindow extends BrowserWindow {
     this.loadURL(join('file://', app.getAppPath(), 'build/permissions.html'));
   }
 
-  public requestPermission(name: string, url: string, details: any) {
-    const cBounds = this.appWindow.getContentBounds();
-    this.setBounds({ x: cBounds.x, y: cBounds.y + TOOLBAR_HEIGHT } as any);
+  public async requestPermission(
+    name: string,
+    url: string,
+    details: any,
+  ): Promise<boolean> {
+    return new Promise(resolve => {
+      const cBounds = this.appWindow.getContentBounds();
+      this.setBounds({ x: cBounds.x, y: cBounds.y + TOOLBAR_HEIGHT } as any);
 
-    this.show();
+      this.show();
 
-    this.webContents.send('request-permission', { name, url, details });
+      this.webContents.send('request-permission', { name, url, details });
+
+      ipcMain.once('request-permission-result', (e: any, r: boolean) => {
+        resolve(r);
+        this.hide();
+      });
+    });
   }
 }
