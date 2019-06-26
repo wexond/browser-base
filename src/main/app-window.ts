@@ -272,11 +272,7 @@ export class AppWindow extends BrowserWindow {
         e.y = winBounds.y;
 
         contentBounds.y -= TOOLBAR_HEIGHT;
-
-        if (this.windows.length > 0) {
-          contentBounds.height = 2 * TOOLBAR_HEIGHT;
-        }
-
+        contentBounds.height = 2 * TOOLBAR_HEIGHT;
         if (
           !this.detached &&
           containsPoint(contentBounds, e) &&
