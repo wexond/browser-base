@@ -15,6 +15,9 @@ const sendResponse = (credentials: any) => {
   ipcRenderer.send('request-auth-result', credentials);
 };
 
+let ref1 = React.createRef<Textfield>();
+let ref2 = React.createRef<Textfield>();
+
 export const App = observer(() => {
   return (
     <StyledApp>
@@ -22,15 +25,26 @@ export const App = observer(() => {
       <Title>Login</Title>
       <Subtitle>{store.url}</Subtitle>
       <Textfield
+        ref={ref1}
         style={{ width: '100%', marginTop: 16 }}
         label="Username"
       ></Textfield>
       <Textfield
+        ref={ref2}
         style={{ width: '100%', marginTop: 16 }}
         label="Password"
       ></Textfield>
       <Buttons>
-        <Button>Login</Button>
+        <Button
+          onClick={() =>
+            sendResponse({
+              username: ref1.current.value,
+              password: ref2.current.value,
+            })
+          }
+        >
+          Login
+        </Button>
         <Button
           foreground="black"
           background="rgba(0, 0, 0, 0.08)"
