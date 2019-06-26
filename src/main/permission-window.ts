@@ -21,9 +21,10 @@ export class PermissionWindow extends BrowserWindow {
 
     if (process.env.ENV === 'dev') {
       this.webContents.openDevTools({ mode: 'detach' });
+      this.loadURL('http://localhost:4444/permissions.html');
+    } else {
+      this.loadURL(join('file://', app.getAppPath(), 'build/permissions.html'));
     }
-
-    this.loadURL(join('file://', app.getAppPath(), 'build/permissions.html'));
   }
 
   public async requestPermission(
