@@ -84,11 +84,11 @@ export const QuickMenu = observer(() => {
         </Bubble>
         <Bubble
           invert={invert}
-          toggled={store.settings.isShieldToggled}
-          icon={icons.window}
+          toggled={store.settings.isMultrinToggled}
+          icon={icons.multrin}
           onClick={onMultrinClick}
         >
-          Capture windows
+          Multrin
         </Bubble>
       </Actions>
       <Line />
