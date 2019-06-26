@@ -45,6 +45,8 @@ const onMultrinClick = () => {
   store.saveSettings();
 };
 
+const onSettingsClick = () => {};
+
 export const QuickMenu = observer(() => {
   const invert = store.theme['overlay.foreground'] === 'light';
   return (
@@ -110,7 +112,7 @@ export const QuickMenu = observer(() => {
         <Bubble disabled invert={invert} icon={icons.download}>
           Downloads
         </Bubble>
-        <Bubble disabled invert={invert} icon={icons.settings}>
+        <Bubble invert={invert} icon={icons.settings} onClick={onSettingsClick}>
           Settings
         </Bubble>
         <Bubble disabled invert={invert} icon={icons.extensions}>

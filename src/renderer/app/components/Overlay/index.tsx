@@ -20,6 +20,7 @@ import { Bookmarks } from '../Bookmarks';
 import { Dial } from '../Dial';
 import { QuickMenu } from '../QuickMenu';
 import { DownloadsSection } from '../DownloadsSection';
+import { Settings } from '../Settings';
 
 export const Header = ({ children, clickable }: any) => {
   return (
@@ -67,6 +68,7 @@ export const Overlay = observer(() => {
       </Container>
       <History />
       <Bookmarks />
+      <Settings />
     </StyledOverlay>
   );
 });

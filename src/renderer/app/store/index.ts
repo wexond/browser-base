@@ -14,14 +14,15 @@ import { extname } from 'path';
 import { BookmarksStore } from './bookmarks';
 import { readFileSync, writeFile } from 'fs';
 import { getPath } from '~/shared/utils/paths';
-import { Settings } from '../models/settings';
 import { DownloadsStore } from './downloads';
 import { lightTheme, darkTheme } from '~/renderer/constants/themes';
 import { WeatherStore } from './weather';
+import { SettingsStore } from './settings';
 
 export class Store {
   public history = new HistoryStore();
   public bookmarks = new BookmarksStore();
+  public settings = new SettingsStore();
   public suggestions = new SuggestionsStore();
   public favicons = new FaviconsStore();
   public addTab = new AddTabStore();
@@ -54,14 +55,6 @@ export class Store {
   public navigationState = {
     canGoBack: false,
     canGoForward: false,
-  };
-
-  @observable
-  public settings: Settings = {
-    dialType: 'top-sites',
-    isDarkTheme: false,
-    isShieldToggled: true,
-    isMultrinToggled: true,
   };
 
   public findInputRef = React.createRef<HTMLInputElement>();
