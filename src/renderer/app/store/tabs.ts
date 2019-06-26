@@ -147,6 +147,7 @@ export class TabsStore {
       (e: any, tabId: number, data: any) => {
         const tab = this.getTabById(tabId);
         if (tab) {
+          console.log(data);
           tab.findInfo = data;
         }
       },

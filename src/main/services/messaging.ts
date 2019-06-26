@@ -11,7 +11,11 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.webContents.send('update-tab-find-info', ...args),
   );
 
-  ipcMain.on('find-show', (e: any, tabId: number, data: any) =>
-    appWindow.findWindow.find(tabId, data),
+  ipcMain.on('find-show', (e: any, tabId: number, data: any) => {
+    appWindow.findWindow.find(tabId, data);
+  });
+
+  ipcMain.on('update-find-info', (e: any, tabId: number, data: any) =>
+    appWindow.findWindow.updateInfo(tabId, data),
   );
 };
