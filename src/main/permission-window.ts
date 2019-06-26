@@ -26,12 +26,12 @@ export class PermissionWindow extends BrowserWindow {
     this.loadURL(join('file://', app.getAppPath(), 'build/permissions.html'));
   }
 
-  public requestPermission(name: string, url: string) {
+  public requestPermission(name: string, url: string, details: any) {
+    const cBounds = this.appWindow.getContentBounds();
+    this.setBounds({ x: cBounds.x, y: cBounds.y + TOOLBAR_HEIGHT } as any);
+
     this.show();
 
-    const cBounds = this.appWindow.getContentBounds();
-
-    this.setBounds({ x: cBounds.x, y: cBounds.y + TOOLBAR_HEIGHT } as any);
-    this.webContents.send('request-permission', { name, url });
+    this.webContents.send('request-permission', { name, url, details });
   }
 }
