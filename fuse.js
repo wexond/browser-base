@@ -67,26 +67,21 @@ const main = () => {
   fuse.run();
 };
 
+const getWebIndexPlugin = name => {
+  return WebIndexPlugin({
+    template: `static/pages/app.html`,
+    path: production ? '.' : '/',
+    target: `${name}.html`,
+    bundles: [name],
+  });
+};
+
 const renderer = () => {
   const cfg = getRendererConfig('electron');
 
-  cfg.plugins.push(
-    WebIndexPlugin({
-      template: `static/pages/app.html`,
-      path: production ? '.' : '/',
-      target: `app.html`,
-      bundles: ['app'],
-    }),
-  );
-
-  cfg.plugins.push(
-    WebIndexPlugin({
-      template: `static/pages/app.html`,
-      path: production ? '.' : '/',
-      target: `permissions.html`,
-      bundles: ['permissions'],
-    }),
-  );
+  cfg.plugins.push(getWebIndexPlugin('app'));
+  cfg.plugins.push(getWebIndexPlugin('permissions'));
+  cfg.plugins.push(getWebIndexPlugin('auth'));
 
   cfg.plugins.push(JSONPlugin());
   cfg.plugins.push(getCopyPlugin());
@@ -100,11 +95,14 @@ const renderer = () => {
     .bundle('permissions')
     .instructions(`> [renderer/permissions/index.tsx]`);
 
+  const auth = fuse.bundle('auth').instructions(`> [renderer/auth/index.tsx]`);
+
   if (!production) {
     fuse.dev({ httpServer: true });
 
     app.hmr().watch();
     permissions.watch();
+    auth.watch();
 
     fuse.run().then(() => {
       spawn('npm', ['start'], {
