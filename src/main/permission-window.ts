@@ -8,7 +8,7 @@ export class PermissionWindow extends BrowserWindow {
     super({
       frame: false,
       resizable: false,
-      width: 300,
+      width: 400,
       height: 200,
       transparent: true,
       show: false,

@@ -1,14 +1,51 @@
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../../../shared/resources/fonts/roboto-regular.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src: url(../../../shared/resources/fonts/roboto-medium.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: url(../../../shared/resources/fonts/roboto-light.woff2) format('woff2');
+}
+
 body {
   margin: 0;
   height: 100vh;
   display: flex;
   flex-flow: column;
+  font-family: Roboto;
+  cursor: default;
+  user-select: none;
 }
 
 #app {
   margin: 16px;
+  padding: 16px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   border-radius: 8px;
   background: white;
-  flex: 1;
+}
+
+#title {
+  font-size: 16px;
+}
+
+#permission {
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.button {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 24px;
+  font-size: 13px;
 }
