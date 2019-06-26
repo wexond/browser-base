@@ -5,16 +5,17 @@ export interface ForecastRequest {
 }
 
 export interface ForecastItem {
-  name?: string;
+  date?: Date;
+  dayName?: string;
   dayTemp?: number;
   nightTemp?: number;
   description?: string;
-  weather?: string;
+  weather?: WeatherCondition;
 }
 
 export interface Forecast {
   today?: ForecastItem;
-  items?: ForecastItem[];
+  week?: ForecastItem[];
 }
 
 export type WeatherCondition = 'clear' | 'few-clouds' | 'rain' | 'showers' | 'snow' | 'storm';
