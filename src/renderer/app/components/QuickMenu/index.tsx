@@ -84,7 +84,7 @@ export const QuickMenu = observer(() => {
         </Bubble>
         <Bubble
           invert={invert}
-          toggled={store.settings.isShieldToggled}
+          toggled={store.settings.isMultrinToggled}
           icon={icons.window}
           onClick={onMultrinClick}
         >
