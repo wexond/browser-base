@@ -98,7 +98,7 @@ export const QuickMenu = observer(() => {
         <Bubble disabled invert={invert} icon={icons.download}>
           Downloads
         </Bubble>
-        <Bubble invert={invert} icon={icons.settings}>
+        <Bubble disabled invert={invert} icon={icons.settings}>
           Settings
         </Bubble>
         <Bubble disabled invert={invert} icon={icons.extensions}>
