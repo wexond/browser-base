@@ -15,7 +15,7 @@ import {
 import store from '../../store';
 import { callViewMethod } from '~/renderer/app/utils/view';
 import { icons } from '~/renderer/app/constants';
-import { remote } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -25,6 +25,7 @@ const close = () => {
   remote.getCurrentWindow().hide();
   store.visible = false;
   store.updateTabInfo();
+  ipcRenderer.send('window-focus');
 };
 
 const onInput = async () => {
