@@ -5,21 +5,22 @@ import { icons } from '../../constants';
 import { Theme } from '../../models/theme';
 
 export const Remove = styled.div`
-  ${centerIcon()};
   height: 16px;
   width: 16px;
-  background-image: url(${icons.close});
+  cursor: pointer;
   opacity: 0.54;
-
-  &:hover {
-    opacity: 1;
-  }
+  background-image: url(${icons.close});
+  ${centerIcon()};
 
   ${({ theme }: { theme?: Theme }) => css`
     filter: ${theme['overlay.foreground'] === 'light'
       ? 'invert(100%)'
       : 'none'};
   `};
+
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 export const Favicon = styled.div`
