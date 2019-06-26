@@ -126,8 +126,18 @@ export class OverlayStore {
       this.show();
       ipcRenderer.send('window-focus');
 
+      const { selectedTab } = store.tabs;
+
+      selectedTab.findInfo.visible = false;
+
+      ipcRenderer.send(
+        'update-find-info',
+        selectedTab.id,
+        selectedTab.findInfo,
+      );
+
       if (!this.isNewTab) {
-        store.tabs.selectedTab
+        selectedTab
           .callViewMethod('webContents.getURL')
           .then(async (url: string) => {
             this.searchBoxValue = url;

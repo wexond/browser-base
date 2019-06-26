@@ -26,6 +26,7 @@ export class FindWindow extends BrowserWindow {
       this.webContents.openDevTools({ mode: 'detach' });
       this.loadURL('http://localhost:4444/find.html');
     } else {
+      this.webContents.openDevTools({ mode: 'detach' });
       this.loadURL(join('file://', app.getAppPath(), 'build/find.html'));
     }
 
@@ -33,9 +34,14 @@ export class FindWindow extends BrowserWindow {
   }
 
   public find(tabId: number, data: any) {
+    data.visible = true;
     this.rearrange();
     this.show();
-    this.webContents.send('show', tabId, data);
+    this.updateInfo(tabId, data);
+  }
+
+  public updateInfo(tabId: number, data: any) {
+    this.webContents.send('update-info', tabId, data);
   }
 
   public rearrange() {

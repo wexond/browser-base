@@ -15,15 +15,17 @@ import {
 import store from '../../store';
 import { callViewMethod } from '~/renderer/app/utils/view';
 import { icons } from '~/renderer/app/constants';
-import { remote } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
 const close = () => {
   callViewMethod(store.tabId, 'webContents.stopFindInPage', 'clearSelection');
   store.occurrences = '0/0';
-  store.updateTabInfo();
   remote.getCurrentWindow().hide();
+  store.visible = false;
+  store.updateTabInfo();
+  ipcRenderer.send('window-focus');
 };
 
 const onInput = async () => {
@@ -34,11 +36,11 @@ const onInput = async () => {
   if (value === '') {
     callViewMethod(store.tabId, 'webContents.stopFindInPage', 'clearSelection');
     store.occurrences = '0/0';
-    store.updateTabInfo();
-    return;
+  } else {
+    await callViewMethod(store.tabId, 'webContents.findInPage', value);
   }
 
-  await callViewMethod(store.tabId, 'webContents.findInPage', value);
+  store.updateTabInfo();
 };
 
 const move = (forward: boolean) => async () => {
@@ -49,6 +51,8 @@ const move = (forward: boolean) => async () => {
     forward,
     findNext: true,
   });
+
+  store.updateTabInfo();
 };
 
 const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {

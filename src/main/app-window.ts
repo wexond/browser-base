@@ -71,12 +71,16 @@ export class AppWindow extends BrowserWindow {
         windowState.bounds = this.getBounds();
       }
       this.authWindow.rearrange();
+      this.findWindow.rearrange();
+      this.permissionWindow.rearrange();
     });
     this.on('move', () => {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
       }
       this.authWindow.rearrange();
+      this.findWindow.rearrange();
+      this.permissionWindow.rearrange();
     });
 
     const resize = () => {
@@ -104,10 +108,6 @@ export class AppWindow extends BrowserWindow {
 
     this.once('ready-to-show', () => {
       this.show();
-    });
-
-    this.on('focus', () => {
-      this.permissionWindow.hide();
     });
 
     this.on('enter-full-screen', () => {

@@ -53,6 +53,7 @@ export class Tab {
   public findInfo = {
     occurrences: '0/0',
     text: '',
+    visible: false,
   };
 
   @observable
@@ -281,6 +282,7 @@ export class Tab {
         ipcRenderer.send('hide-window');
         ipcRenderer.send('browserview-show');
         ipcRenderer.send('view-select', this.id);
+        ipcRenderer.send('update-find-info', this.id, this.findInfo);
 
         store.tabs.emitEvent('onActivated', {
           tabId: this.id,

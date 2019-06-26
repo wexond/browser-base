@@ -4,6 +4,7 @@ import { AppWindow } from '../app-window';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   ipcMain.on('window-focus', () => {
+    appWindow.focus();
     appWindow.webContents.focus();
   });
 
@@ -11,7 +12,11 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.webContents.send('update-tab-find-info', ...args),
   );
 
-  ipcMain.on('find-show', (e: any, tabId: number, data: any) =>
-    appWindow.findWindow.show(),
+  ipcMain.on('find-show', (e: any, tabId: number, data: any) => {
+    appWindow.findWindow.find(tabId, data);
+  });
+
+  ipcMain.on('update-find-info', (e: any, tabId: number, data: any) =>
+    appWindow.findWindow.updateInfo(tabId, data),
   );
 };
