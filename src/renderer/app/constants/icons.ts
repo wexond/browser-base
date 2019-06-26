@@ -25,7 +25,19 @@ import shield from '~/shared/resources/icons/shield.svg';
 import night from '~/shared/resources/icons/night.svg';
 import multrin from '~/shared/resources/icons/drop-window.svg';
 
-import fewClouds from '~/shared/resources/icons/weather/few-clouds.png';
+import weatherDayClear from '~/shared/resources/icons/weather/day/clear.png';
+import weatherDayFewClouds from '~/shared/resources/icons/weather/day/few-clouds.png';
+import weatherDayRain from '~/shared/resources/icons/weather/day/rain.png';
+import weatherDayShowers from '~/shared/resources/icons/weather/day/showers.png';
+import weatherDaySnow from '~/shared/resources/icons/weather/day/snow.png';
+import weatherDayStorm from '~/shared/resources/icons/weather/day/storm.png';
+
+import weatherNightClear from '~/shared/resources/icons/weather/night/clear.png';
+import weatherNightFewClouds from '~/shared/resources/icons/weather/night/few-clouds.png';
+import weatherNightRain from '~/shared/resources/icons/weather/night/rain.png';
+import weatherNightShowers from '~/shared/resources/icons/weather/night/showers.png';
+import weatherNightSnow from '~/shared/resources/icons/weather/night/snow.png';
+import weatherNightStorm from '~/shared/resources/icons/weather/night/storm.png';
 
 export const icons = {
   add,
@@ -45,7 +57,6 @@ export const icons = {
   find,
   edit,
   down,
-  fewClouds,
   arrowBack,
   star,
   starFilled,
@@ -55,4 +66,22 @@ export const icons = {
   shield,
   night,
   multrin,
+  weather: {
+    day: {
+      clear: weatherDayClear,
+      fewClouds: weatherDayFewClouds,
+      rain: weatherDayRain,
+      showers: weatherDayShowers,
+      snow: weatherDaySnow,
+      storm: weatherDayStorm,
+    },
+    night: {
+      clear: weatherNightClear,
+      fewClouds: weatherNightFewClouds,
+      rain: weatherNightRain,
+      showers: weatherNightShowers,
+      snow: weatherNightSnow,
+      storm: weatherNightStorm,
+    },
+  },
 };

@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+
+import { icons } from '../../constants';
+import store from '../../store';
 import {
-  Soon,
   StyledCard,
   Icon,
   Header,
@@ -14,16 +16,19 @@ import {
   Degrees,
   SmallDegrees,
 } from './style';
-import { icons } from '../../constants';
 
 export const WeatherCard = observer(() => {
+  if (store.weather.loading) return null;
+
+  const { city, today, week } = store.weather.data;
+
   return (
     <StyledCard>
       <Header>
         <Left>
           <div>
-            <Title>Warsaw</Title>
-            <Degrees>20°</Degrees>
+            <Title>{city}</Title>
+            <Degrees>{today.dayTemp}°</Degrees>
             <div
               style={{
                 fontSize: 16,
@@ -32,42 +37,33 @@ export const WeatherCard = observer(() => {
                 marginTop: 8,
               }}
             >
-              Few clouds
+              {today.description}
             </div>
-            <div style={{ fontSize: 16, fontWeight: 300 }}>Day</div>
+            <div style={{ fontSize: 16, fontWeight: 300 }}>{today.dayName}</div>
           </div>
           <div>
-            <Icon style={{ backgroundImage: `url(${icons.fewClouds})` }} />
+            <Icon
+              style={{
+                backgroundImage: `url(${icons.weather.day[today.weather]})`,
+              }}
+            />
           </div>
         </Left>
       </Header>
       <Items>
-        <Item>
-          <Overline>WED</Overline>
-          <SmallIcon style={{ backgroundImage: `url(${icons.fewClouds})` }} />
-          <SmallDegrees>20°</SmallDegrees>
-          <SmallDegrees night>12°</SmallDegrees>
-        </Item>
-        <Item>
-          <Overline>THU</Overline>
-          <SmallIcon style={{ backgroundImage: `url(${icons.fewClouds})` }} />
-          <SmallDegrees>20°</SmallDegrees>
-          <SmallDegrees night>12°</SmallDegrees>
-        </Item>
-        <Item>
-          <Overline>FRI</Overline>
-          <SmallIcon style={{ backgroundImage: `url(${icons.fewClouds})` }} />
-          <SmallDegrees>20°</SmallDegrees>
-          <SmallDegrees night>12°</SmallDegrees>
-        </Item>
-        <Item>
-          <Overline>SAT</Overline>
-          <SmallIcon style={{ backgroundImage: `url(${icons.fewClouds})` }} />
-          <SmallDegrees>20°</SmallDegrees>
-          <SmallDegrees night>12°</SmallDegrees>
-        </Item>
+        {week.map((item, key) => (
+          <Item key={key}>
+            <Overline>{item.dayName.toUpperCase()}</Overline>
+            <SmallIcon
+              style={{
+                backgroundImage: `url(${icons.weather.day[item.weather]})`,
+              }}
+            />
+            <SmallDegrees>{item.dayTemp}°</SmallDegrees>
+            <SmallDegrees night>{item.nightTemp}°</SmallDegrees>
+          </Item>
+        ))}
       </Items>
-      <Soon>Soon</Soon>
     </StyledCard>
   );
 });

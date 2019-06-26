@@ -1,6 +1,6 @@
 export interface ForecastRequest {
   city: string,
-  lang: string;
+  lang: forecastLangCode;
   units: 'metric' | 'imperial',
 }
 
@@ -14,11 +14,12 @@ export interface ForecastItem {
 }
 
 export interface Forecast {
+  city?: string;
   today?: ForecastItem;
   week?: ForecastItem[];
 }
 
-export type WeatherCondition = 'clear' | 'few-clouds' | 'rain' | 'showers' | 'snow' | 'storm';
+export type WeatherCondition = 'clear' | 'fewClouds' | 'rain' | 'showers' | 'snow' | 'storm';
 
 /* tslint:disable */
 export interface OpenWeatherItem {
