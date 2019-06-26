@@ -6,6 +6,7 @@ import { ProcessWindow } from './models';
 import { AppWindow } from './app-window';
 import { windowManager, Window } from 'node-window-manager';
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
+import { settings } from '.';
 
 const iohook = require('iohook');
 
@@ -140,7 +141,8 @@ export class Multrin {
       if (
         !this.appWindow.isMinimized() &&
         this.draggedWindow &&
-        !this.windows.find(x => x.id === this.draggedWindow.id)
+        !this.windows.find(x => x.id === this.draggedWindow.id) &&
+        settings.isMultrinToggled
       ) {
         const winBounds = this.draggedWindow.getBounds();
         const { lastBounds } = this.draggedWindow;
