@@ -3,13 +3,16 @@ import { join } from 'path';
 import { AppWindow } from './app-window';
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
 
-export class PermissionWindow extends BrowserWindow {
+const WIDTH = 400;
+const HEIGHT = 500;
+
+export class AuthWindow extends BrowserWindow {
   constructor(public appWindow: AppWindow) {
     super({
       frame: false,
       resizable: false,
-      width: 350,
-      height: 200,
+      width: WIDTH,
+      height: HEIGHT,
       transparent: true,
       show: false,
       webPreferences: {
@@ -21,31 +24,36 @@ export class PermissionWindow extends BrowserWindow {
 
     if (process.env.ENV === 'dev') {
       this.webContents.openDevTools({ mode: 'detach' });
-      this.loadURL('http://localhost:4444/permissions.html');
+      this.loadURL('http://localhost:4444/auth.html');
     } else {
-      this.loadURL(join('file://', app.getAppPath(), 'build/permissions.html'));
+      this.loadURL(join('file://', app.getAppPath(), 'build/auth.html'));
     }
 
     this.setParentWindow(this.appWindow);
   }
 
-  public async requestPermission(
-    name: string,
+  public requestAuth(
     url: string,
-    details: any,
-  ): Promise<boolean> {
+  ): Promise<{ username: string; password: string }> {
     return new Promise(resolve => {
-      const cBounds = this.appWindow.getContentBounds();
-      this.setBounds({ x: cBounds.x, y: cBounds.y + TOOLBAR_HEIGHT } as any);
-
+      this.rearrange();
       this.show();
 
-      this.webContents.send('request-permission', { name, url, details });
+      this.webContents.send('request-auth', url);
 
-      ipcMain.once('request-permission-result', (e: any, r: boolean) => {
-        resolve(r);
+      ipcMain.once('request-auth-result', (e: any, result: any) => {
         this.hide();
+
+        resolve(result);
       });
     });
+  }
+
+  public rearrange() {
+    const cBounds = this.appWindow.getContentBounds();
+    this.setBounds({
+      x: Math.round(cBounds.x + cBounds.width / 2 - WIDTH / 2),
+      y: cBounds.y + TOOLBAR_HEIGHT,
+    } as any);
   }
 }

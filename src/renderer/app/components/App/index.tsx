@@ -37,7 +37,11 @@ export const App = observer(() => {
               zIndex: 9999,
               height: TOOLBAR_HEIGHT,
             }}
-            dark={store.theme !== darkTheme}
+            dark={
+              store.overlay.visible
+                ? store.theme['overlay.windowsButtons.invert']
+                : store.theme['toolbar.icons.invert']
+            }
             onClose={closeWindow}
             onMinimize={minimizeWindow}
             onMaximize={maximizeWindow}
