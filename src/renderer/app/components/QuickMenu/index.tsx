@@ -9,6 +9,7 @@ import { Line } from './style';
 import { darkTheme, lightTheme } from '~/renderer/constants/themes';
 import { getCurrentWindow } from '../../utils';
 import { OverlayContent } from '../../store/overlay';
+import { ipcRenderer } from 'electron';
 
 const changeContent = (content: OverlayContent) => () => {
   store.overlay.currentContent = content;
@@ -17,11 +18,11 @@ const changeContent = (content: OverlayContent) => () => {
 const onFindClick = () => {
   store.overlay.visible = false;
 
-  store.tabs.selectedTab.findVisible = true;
-
-  setTimeout(() => {
-    store.tabs.selectedTab.findVisible = true;
-  }, 200);
+  ipcRenderer.send(
+    'find-show',
+    store.tabs.selectedTab.id,
+    store.tabs.selectedTab.findInfo,
+  );
 };
 
 const onDarkClick = () => {
