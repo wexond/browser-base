@@ -108,10 +108,6 @@ export class AppWindow extends BrowserWindow {
       this.show();
     });
 
-    this.on('focus', () => {
-      this.permissionWindow.hide();
-    });
-
     this.on('enter-full-screen', () => {
       this.webContents.send('fullscreen', true);
       this.viewManager.fixBounds();
