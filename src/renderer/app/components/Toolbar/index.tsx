@@ -10,7 +10,6 @@ import ToolbarButton from '../ToolbarButton';
 import { icons } from '../../constants';
 import { ipcRenderer } from 'electron';
 import BrowserAction from '../BrowserAction';
-import { Find } from '../Find';
 
 const onUpdateClick = () => {
   ipcRenderer.send('update-install');
@@ -50,7 +49,6 @@ export const Toolbar = observer(() => {
     <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
       <NavigationButtons />
       <Tabbar />
-      <Find />
       <Buttons>
         <BrowserActions />
         {store.updateInfo.available && (

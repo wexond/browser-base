@@ -28,7 +28,7 @@ export class View extends BrowserView {
     });
 
     this.webContents.addListener('found-in-page', (e, result) => {
-      appWindow.webContents.send('found-in-page', result);
+      appWindow.findWindow.webContents.send('found-in-page', result);
     });
 
     this.webContents.addListener('did-stop-loading', () => {

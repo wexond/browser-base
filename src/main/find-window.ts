@@ -32,9 +32,10 @@ export class FindWindow extends BrowserWindow {
     this.setParentWindow(this.appWindow);
   }
 
-  public show() {
+  public find(tabId: number, data: any) {
     this.rearrange();
-    super.show();
+    this.show();
+    this.webContents.send('show', tabId, data);
   }
 
   public rearrange() {

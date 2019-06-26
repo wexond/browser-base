@@ -9,6 +9,7 @@ import { runMessagingService } from './services';
 import { PermissionWindow } from './permission-window';
 import { Multrin } from './multrin';
 import { AuthWindow } from './auth-window';
+import { FindWindow } from './find-window';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager = new ViewManager();

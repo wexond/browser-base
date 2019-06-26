@@ -57,7 +57,13 @@ export class Store {
     canGoForward: false,
   };
 
-  public findInputRef = React.createRef<HTMLInputElement>();
+  @observable
+  public settings: Settings = {
+    dialType: 'top-sites',
+    isDarkTheme: false,
+    isShieldToggled: true,
+    isMultrinToggled: true,
+  };
 
   public canToggleMenu = false;
 
@@ -134,8 +140,9 @@ export class Store {
     );
 
     ipcRenderer.on('find', () => {
-      if (this.tabs.selectedTab) {
-        this.tabs.selectedTab.findVisible = true;
+      const tab = this.tabs.selectedTab;
+      if (tab) {
+        ipcRenderer.send('find-show', tab.id, tab.findInfo);
       }
     });
 

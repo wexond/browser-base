@@ -1,6 +1,14 @@
 import styled, { css } from 'styled-components';
 import { centerIcon } from '~/shared/mixins';
-import { icons } from '../../constants';
+import { icons } from '~/renderer/app/constants';
+
+export const StyledApp = styled.div`
+  margin: 16px;
+  padding: 16px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 8px;
+  background: white;
+`;
 
 export const StyledFind = styled.div`
   height: 32px;
@@ -12,10 +20,7 @@ export const StyledFind = styled.div`
   min-width: 300px;
   width: 300px;
   overflow: hidden;
-
-  ${({ visible }: { visible: boolean }) => css`
-    display: ${visible ? 'flex' : 'none'};
-  `}
+  display: flex;
 `;
 
 export const SearchIcon = styled.div`

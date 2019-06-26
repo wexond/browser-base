@@ -143,15 +143,11 @@ export class TabsStore {
     });
 
     ipcRenderer.on(
-      `found-in-page`,
-      (
-        e: any,
-        { activeMatchOrdinal, matches, requestId }: Electron.FoundInPageResult,
-      ) => {
-        const tab = this.list.find(x => x.findRequestId === requestId);
-
+      'update-tab-find-info',
+      (e: any, tabId: number, data: any) => {
+        const tab = this.getTabById(tabId);
         if (tab) {
-          tab.findOccurrences = `${activeMatchOrdinal}/${matches}`;
+          tab.findInfo = data;
         }
       },
     );

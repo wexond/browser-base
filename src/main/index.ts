@@ -75,8 +75,6 @@ app.on('ready', async () => {
     );
   }
 
-  Menu.setApplicationMenu(getMainMenu(appWindow));
-
   app.on('activate', () => {
     if (appWindow === null) {
       appWindow = new AppWindow();
@@ -84,6 +82,8 @@ app.on('ready', async () => {
   });
 
   appWindow = new AppWindow();
+
+  Menu.setApplicationMenu(getMainMenu(appWindow));
 
   const viewSession = session.fromPartition('persist:view');
 
