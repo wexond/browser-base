@@ -6,6 +6,9 @@ const {
   CopyPlugin,
   JSONPlugin,
   StyledComponentsPlugin,
+  SassPlugin,
+  CSSPlugin,
+  CSSResourcePlugin,
 } = require('fuse-box');
 
 const { spawn } = require('child_process');
@@ -51,7 +54,7 @@ const getRendererConfig = (target, name) => {
 const getWebIndexPlugin = name => {
   return WebIndexPlugin({
     template: `static/pages/${name}.html`,
-    path: production ? '.' : '/',
+    path: production || name !== 'app' ? '.' : '/',
     target: `${name}.html`,
     bundles: [name],
   });
@@ -94,16 +97,41 @@ const renderer = (name, port) => {
   const app = fuse.bundle(name).instructions(`> [renderer/${name}/index.tsx]`);
 
   if (!production) {
-    app.hmr({ port, socketURI: `ws://localhost:${port}` }).watch();
-
     if (name === 'app') {
+      app.hmr({ port, socketURI: `ws://localhost:${port}` }).watch();
+
       return fuse.run().then(() => {
         const child = spawn('npm', ['start'], {
           shell: true,
           stdio: 'inherit',
         });
       });
+    } else {
+      app.watch();
     }
+  }
+
+  fuse.run();
+};
+
+const dialog = name => {
+  const cfg = getRendererConfig('electron', name);
+
+  cfg.plugins.push(getWebIndexPlugin(name));
+  cfg.plugins.push(JSONPlugin());
+  cfg.plugins.push([
+    SassPlugin(),
+    CSSResourcePlugin({ dist: 'build/css-resources' }),
+    CSSPlugin(),
+  ]);
+
+  const fuse = FuseBox.init(cfg);
+  const app = fuse
+    .bundle(name)
+    .instructions(`> [renderer/${name}/index.ts] + fuse-box-css`);
+
+  if (!production) {
+    app.watch();
   }
 
   fuse.run();
@@ -124,5 +152,6 @@ const preload = name => {
 };
 
 renderer('app', 4444);
+dialog('permissions');
 preload('view-preload');
 main();
