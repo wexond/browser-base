@@ -89,9 +89,13 @@ app.on('ready', async () => {
 
   viewSession.setPermissionRequestHandler(
     (webContents, permission, callback) => {
-      if (permission === 'notifications' || permission === 'fullscreen') {
+      if (permission === 'fullscreen') {
         callback(true);
       } else {
+        appWindow.permissionWindow.requestPermission(
+          permission,
+          webContents.getURL(),
+        );
         callback(false);
       }
     },
