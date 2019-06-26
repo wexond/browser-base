@@ -47,15 +47,6 @@ const getRendererConfig = (target, name) => {
   return cfg;
 };
 
-const getWebIndexPlugin = name => {
-  return WebIndexPlugin({
-    template: `static/pages/${name}.html`,
-    path: production ? '.' : '/',
-    target: `${name}.html`,
-    bundles: [name],
-  });
-};
-
 const getCopyPlugin = () => {
   return CopyPlugin({
     files: ['*.woff2', '*.png', '*.svg'],
@@ -79,8 +70,24 @@ const main = () => {
 const renderer = () => {
   const cfg = getRendererConfig('electron');
 
-  cfg.plugins.push(getWebIndexPlugin('app'));
-  cfg.plugins.push(getWebIndexPlugin('permissions'));
+  cfg.plugins.push(
+    WebIndexPlugin({
+      template: `static/pages/app.html`,
+      path: production ? '.' : '/',
+      target: `app.html`,
+      bundles: ['app'],
+    }),
+  );
+
+  cfg.plugins.push(
+    WebIndexPlugin({
+      template: `static/pages/app.html`,
+      path: production ? '.' : '/',
+      target: `permissions.html`,
+      bundles: ['permissions'],
+    }),
+  );
+
   cfg.plugins.push(JSONPlugin());
   cfg.plugins.push(getCopyPlugin());
   cfg.plugins.push(StyledComponentsPlugin());
@@ -97,7 +104,7 @@ const renderer = () => {
     fuse.dev({ httpServer: true });
 
     app.hmr().watch();
-    permissions.hmr().watch();
+    permissions.watch();
 
     fuse.run().then(() => {
       spawn('npm', ['start'], {
