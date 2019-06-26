@@ -28,11 +28,11 @@ export const Settings = observer(() => {
       right
       onClick={preventHiding}
       visible={
-        store.overlay.currentContent === 'history' && store.overlay.visible
+        store.overlay.currentContent === 'settings' && store.overlay.visible
       }
     >
       <Scrollable>
-        <NavigationDrawer title="History" search>
+        <NavigationDrawer title="Settings" search>
           <MenuItem section="advanced">All</MenuItem>
           <div style={{ flex: 1 }} />
           <NavigationDrawer.Item icon={icons.trash}>

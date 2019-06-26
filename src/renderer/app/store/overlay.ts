@@ -26,6 +26,8 @@ const autoComplete = (text: string, suggestion: string) => {
   }
 };
 
+export type OverlayContent = 'default' | 'history' | 'bookmarks' | 'settings';
+
 export class OverlayStore {
   public scrollRef = React.createRef<HTMLDivElement>();
   public inputRef = React.createRef<HTMLInputElement>();
@@ -39,7 +41,7 @@ export class OverlayStore {
   public isNewTab = true;
 
   @observable
-  public currentContent: 'default' | 'history' | 'bookmarks' = 'default';
+  public currentContent: OverlayContent = 'default';
 
   @observable
   public dialTypeMenuVisible = false;

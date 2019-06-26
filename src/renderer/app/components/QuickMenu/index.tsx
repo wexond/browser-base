@@ -8,9 +8,9 @@ import store from '../../store';
 import { Line } from './style';
 import { darkTheme, lightTheme } from '~/renderer/constants/themes';
 import { getCurrentWindow } from '../../utils';
-import { ipcRenderer } from 'electron';
+import { OverlayContent } from '../../store/overlay';
 
-const changeContent = (content: 'history' | 'default' | 'bookmarks') => () => {
+const changeContent = (content: OverlayContent) => () => {
   store.overlay.currentContent = content;
 };
 
@@ -44,8 +44,6 @@ const onMultrinClick = () => {
   store.settings.isMultrinToggled = !store.settings.isMultrinToggled;
   store.saveSettings();
 };
-
-const onSettingsClick = () => {};
 
 export const QuickMenu = observer(() => {
   const invert = store.theme['overlay.foreground'] === 'light';
@@ -112,7 +110,11 @@ export const QuickMenu = observer(() => {
         <Bubble disabled invert={invert} icon={icons.download}>
           Downloads
         </Bubble>
-        <Bubble invert={invert} icon={icons.settings} onClick={onSettingsClick}>
+        <Bubble
+          invert={invert}
+          icon={icons.settings}
+          onClick={changeContent('settings')}
+        >
           Settings
         </Bubble>
         <Bubble disabled invert={invert} icon={icons.extensions}>
