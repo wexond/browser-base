@@ -49,9 +49,19 @@ export const App = observer(() => {
         ))}
       </Permissions>
       <Buttons>
-        <Button onClick={() => sendResult(false)}>Deny</Button>
-        <Button onClick={() => sendResult(true)}>Allow</Button>
+        <Button
+          foreground="black"
+          background="rgba(0, 0, 0, 0.12)"
+          type="outlined"
+          onClick={() => sendResult(false)}
+        >
+          Deny
+        </Button>
+        <Button style={{ marginLeft: 8 }} onClick={() => sendResult(true)}>
+          Allow
+        </Button>
       </Buttons>
+      <div style={{ clear: 'both' }}></div>
     </StyledApp>
   );
 });
