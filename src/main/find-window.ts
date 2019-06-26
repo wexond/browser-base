@@ -26,6 +26,7 @@ export class FindWindow extends BrowserWindow {
       this.webContents.openDevTools({ mode: 'detach' });
       this.loadURL('http://localhost:4444/find.html');
     } else {
+      this.webContents.openDevTools({ mode: 'detach' });
       this.loadURL(join('file://', app.getAppPath(), 'build/find.html'));
     }
 
