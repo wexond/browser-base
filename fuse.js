@@ -82,6 +82,7 @@ const renderer = () => {
   cfg.plugins.push(getWebIndexPlugin('app'));
   cfg.plugins.push(getWebIndexPlugin('permissions'));
   cfg.plugins.push(getWebIndexPlugin('auth'));
+  cfg.plugins.push(getWebIndexPlugin('find'));
 
   cfg.plugins.push(JSONPlugin());
   cfg.plugins.push(getCopyPlugin());
@@ -97,12 +98,15 @@ const renderer = () => {
 
   const auth = fuse.bundle('auth').instructions(`> [renderer/auth/index.tsx]`);
 
+  const find = fuse.bundle('find').instructions(`> [renderer/find/index.tsx]`);
+
   if (!production) {
     fuse.dev({ httpServer: true });
 
     app.hmr().watch();
     permissions.watch();
     auth.watch();
+    find.watch();
 
     fuse.run().then(() => {
       spawn('npm', ['start'], {
