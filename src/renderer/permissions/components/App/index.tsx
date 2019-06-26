@@ -7,13 +7,8 @@ import { ipcRenderer } from 'electron';
 import { StyledApp, Title, Permissions, Permission, Buttons } from './style';
 import store from '../../store';
 import { Button } from '~/renderer/components/Button';
-import { colors } from '~/renderer/constants';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
-
-window.onbeforeunload = () => {
-  ipcRenderer.send('browserview-clear');
-};
 
 const sendResult = (r: boolean) => {
   ipcRenderer.send('request-permission-result', r);
