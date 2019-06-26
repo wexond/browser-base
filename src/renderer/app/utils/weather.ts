@@ -2,10 +2,7 @@ import Axios from 'axios';
 
 import { WEATHER_API_KEY, dictionary } from '../constants';
 import { ForecastRequest, OpenWeatherItem, ForecastItem, WeatherCondition, Forecast } from '../models';
-
-const formatStr = (str: string) => {
-  return str.substr(0, 1).toUpperCase() + str.substring(1).toLowerCase();
-}
+import { capitalizeFirst } from './string';
 
 const getCondition = (str: string): WeatherCondition => {
   str = str.toLowerCase();
@@ -32,7 +29,7 @@ const getForWeek = (items: OpenWeatherItem[]) => {
         dayTemp: temp,
         date,
         dayName: dictionary.shortDays[date.getDay()],
-        description: formatStr(weather.description),
+        description: capitalizeFirst(weather.description),
         weather: getCondition(weather.main),
       });
     }
@@ -51,7 +48,7 @@ export const getWeather = async ({ city, lang, units }: ForecastRequest): Promis
   const items = getForWeek(data.list);
 
   return {
-    city: formatStr(city),
+    city: capitalizeFirst(city),
     today: items[0],
     week: items.splice(1, 4),
   }
