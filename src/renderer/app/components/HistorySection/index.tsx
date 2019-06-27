@@ -3,15 +3,15 @@ import * as React from 'react';
 import HistoryItem from '../HistoryItem';
 import { HistorySection } from '../../models';
 
-import { Item, Label } from './style';
+import { EmptySection, SectionTitle } from '../Overlay/style';
 
 export default ({ data }: { data: HistorySection }) => {
   return (
-    <Item>
-      <Label>{data.label}</Label>
+    <EmptySection>
+      <SectionTitle>{data.label}</SectionTitle>
       {data.items.map(item => (
         <HistoryItem key={item._id} data={item} />
       ))}
-    </Item>
+    </EmptySection>
   );
 };

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { centerIcon } from '~/shared/mixins';
+import { centerIcon, robotoMedium } from '~/shared/mixins';
 import { icons, TOOLBAR_HEIGHT } from '../../constants';
 import { Theme } from '../../models/theme';
 import { transparency } from '~/renderer/constants';
@@ -124,6 +124,22 @@ export const Section = styled.div`
   ${({ theme }: { theme?: Theme }) => css`
     background-color: ${theme['overlay.section.backgroundColor']};
   `}
+`;
+
+export const EmptySection = styled.div`
+  margin-top: 16px;
+  padding: 0px 0px 8px 0px;
+  overflow: hidden;
+
+  &:first-child {
+    margin-top: 48px;
+  }
+`;
+
+export const SectionTitle = styled.div`
+  font-size: 16px;
+  padding: 16px 24px;
+  ${robotoMedium()};
 `;
 
 export const Actions = styled.div`

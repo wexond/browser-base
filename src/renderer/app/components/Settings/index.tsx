@@ -2,9 +2,11 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import store from '../../store';
-import { Container, Scrollable } from '../Overlay/style';
+import { Container, Scrollable, Content } from '../Overlay/style';
 import { NavigationDrawer } from '../NavigationDrawer';
 import { SettingsSection } from '../../store/settings';
+import { Sections } from './styles';
+import { Textfield } from '~/renderer/components/Textfield';
 
 const preventHiding = (e: any) => {
   e.stopPropagation();
@@ -42,6 +44,11 @@ export const Settings = observer(() => {
           <MenuItem section="shortcuts">Keyboard shortcuts</MenuItem>
           <MenuItem section="downloads">Downloads</MenuItem>
         </NavigationDrawer>
+        <Sections>
+          <Content>
+            <Textfield label="Home page" />
+          </Content>
+        </Sections>
       </Scrollable>
     </Container>
   );
