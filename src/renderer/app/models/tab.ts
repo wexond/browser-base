@@ -180,7 +180,10 @@ export class Tab {
         try {
           this.favicon = favicon;
 
-          const fav = await store.favicons.addFavicon(favicon);
+          let fav = favicon;
+          if (favicon.startsWith('http')) {
+            fav = await store.favicons.addFavicon(favicon);
+          }
           const buf = Buffer.from(fav.split('base64,')[1], 'base64');
 
           if (!this.hasThemeColor) {
