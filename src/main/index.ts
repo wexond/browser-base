@@ -5,7 +5,7 @@ import { extensionsMain } from 'electron-extensions';
 
 import { AppWindow } from './app-window';
 import { runAdblockService } from './services';
-import { existsSync, writeFileSync, promises } from 'fs';
+import { existsSync, writeFileSync, promises, mkdirSync } from 'fs';
 import { getPath } from '~/shared/utils/paths';
 import { Settings } from '~/renderer/app/models/settings';
 import { makeId } from '~/shared/utils/string';
@@ -153,10 +153,15 @@ app.on('ready', async () => {
   extensionsMain.setSession(viewSession);
 
   const extensionsPath = getPath('extensions');
-  const dirs = await promises.readdir(extensionsPath);
 
-  for (const dir of dirs) {
-    extensionsMain.load(resolve(extensionsPath, dir));
+  if (!existsSync) {
+    mkdirSync(extensionsPath);
+  } else {
+    const dirs = await promises.readdir(extensionsPath);
+
+    for (const dir of dirs) {
+      extensionsMain.load(resolve(extensionsPath, dir));
+    }
   }
 
   runAutoUpdaterService(appWindow);
