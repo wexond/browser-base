@@ -1,38 +1,49 @@
 import styled, { css } from 'styled-components';
 
-import { TOOLBAR_BUTTON_WIDTH } from '~/renderer/app/constants';
-import { centerImage } from '~/shared/mixins';
+import { TOOLBAR_BUTTON_WIDTH, TOOLBAR_HEIGHT } from '~/renderer/app/constants';
+import { centerIcon } from '~/shared/mixins';
+import { Theme } from '../../models/theme';
 
 export const Icon = styled.div`
   width: 100%;
   height: 100%;
   will-change: background-image;
   transition: 0.15s background-image;
+  backface-visibility: hidden;
+
   ${({
     size,
     disabled,
-    icon,
     opacity,
   }: {
     size: number;
     disabled: boolean;
-    icon: string;
     opacity: number;
   }) => css`
-    ${centerImage(`${size}px`, `${size}px`)};
+    ${centerIcon(size)};
     opacity: ${disabled ? 0.25 : opacity};
-    background-image: url(${icon});
   `};
 `;
 
 export const Button = styled.div`
-  height: 100%;
+  height: ${TOOLBAR_HEIGHT}px;
   -webkit-app-region: no-drag;
   position: relative;
   transition: 0.2s background-color;
   width: ${TOOLBAR_BUTTON_WIDTH}px;
-  ${({ disabled }: { disabled: boolean }) => css`
+  backface-visibility: hidden;
+
+  ${({
+    disabled,
+    invert,
+    theme,
+  }: {
+    disabled: boolean;
+    invert: boolean;
+    theme: Theme;
+  }) => css`
     pointer-events: ${disabled ? 'none' : 'auto'};
+    filter: ${theme['toolbar.icons.invert'] ? 'invert(100%)' : 'none'};
   `};
 `;
 

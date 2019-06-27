@@ -5,25 +5,34 @@ import store from '~/renderer/app/store';
 import ToolbarButton from '~/renderer/app/components/ToolbarButton';
 import { icons } from '~/renderer/app/constants/icons';
 import { StyledContainer } from './style';
-import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 
 const onBackClick = () => {
-  callBrowserViewMethod('webContents.goBack');
+  store.tabs.selectedTab.callViewMethod('webContents.goBack');
 };
 
 const onForwardClick = () => {
-  callBrowserViewMethod('webContents.goForward');
+  store.tabs.selectedTab.callViewMethod('webContents.goForward');
 };
 
 const onRefreshClick = () => {
-  if (store.tabsStore.selectedTab && store.tabsStore.selectedTab.loading) {
-    callBrowserViewMethod('webContents.stop');
+  if (store.tabs.selectedTab && store.tabs.selectedTab.loading) {
+    store.tabs.selectedTab.callViewMethod('webContents.stop');
   } else {
-    callBrowserViewMethod('webContents.reload');
+    store.tabs.selectedTab.callViewMethod('webContents.reload');
   }
 };
 
 export const NavigationButtons = observer(() => {
+  const { selectedTab } = store.tabs;
+
+  let isWindow = false;
+  let loading = false;
+
+  if (selectedTab) {
+    isWindow = selectedTab.isWindow;
+    loading = selectedTab.loading;
+  }
+
   return (
     <StyledContainer isFullscreen={store.isFullscreen}>
       <ToolbarButton
@@ -40,12 +49,9 @@ export const NavigationButtons = observer(() => {
         onClick={onForwardClick}
       />
       <ToolbarButton
+        disabled={isWindow}
         size={20}
-        icon={
-          store.tabsStore.selectedTab && store.tabsStore.selectedTab.loading
-            ? icons.close
-            : icons.refresh
-        }
+        icon={loading ? icons.close : icons.refresh}
         onClick={onRefreshClick}
       />
     </StyledContainer>

@@ -9,7 +9,7 @@ let searchSuggestions: Suggestion[] = [];
 
 export class SuggestionsStore {
   @observable
-  public suggestions: Suggestion[] = [];
+  public list: Suggestion[] = [];
 
   @observable
   public selected = 0;
@@ -45,7 +45,7 @@ export class SuggestionsStore {
           historySuggestions.push({
             primaryText: item.url,
             secondaryText: item.title,
-            favicon: store.faviconsStore.favicons[item.favicon],
+            favicon: store.favicons.favicons[item.favicon],
             canSuggest: item.canSuggest,
           });
         } else {
@@ -67,7 +67,7 @@ export class SuggestionsStore {
         suggestions[i].id = i;
       }
 
-      this.suggestions = suggestions;
+      this.list = suggestions;
 
       if (historySuggestions.length > 0 && historySuggestions[0].canSuggest) {
         resolve(historySuggestions[0].primaryText);
@@ -94,7 +94,7 @@ export class SuggestionsStore {
           suggestions[i].id = i;
         }
 
-        this.suggestions = suggestions;
+        this.list = suggestions;
       }
     });
   }

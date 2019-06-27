@@ -1,133 +1,102 @@
-import { BrowserView, app, Menu } from 'electron';
-import { appWindow } from '.';
-import { sendToAllExtensions } from './extensions';
+import { BrowserView, app } from 'electron';
+import { appWindow, settings } from '.';
+import { engine } from './services/adblock';
+import { parse } from 'tldts';
+import { getViewMenu } from './menus/view';
 
 export class View extends BrowserView {
   public title: string = '';
   public url: string = '';
-  public tabId: number;
   public homeUrl: string;
 
-  constructor(id: number, url: string) {
+  constructor(url: string) {
     super({
       webPreferences: {
         preload: `${app.getAppPath()}/build/view-preload.js`,
         nodeIntegration: false,
-        additionalArguments: [`--tab-id=${id}`],
         contextIsolation: true,
         partition: 'persist:view',
+        plugins: true,
       },
     });
 
     this.homeUrl = url;
-    this.tabId = id;
 
     this.webContents.on('context-menu', (e, params) => {
-      const menu = Menu.buildFromTemplate([
-        {
-          id: 'inspect',
-          label: 'Inspect Element',
-          click: () => {
-            this.webContents.inspectElement(params.x, params.y);
-
-            if (this.webContents.isDevToolsOpened()) {
-              this.webContents.devToolsWebContents.focus();
-            }
-          },
-        },
-      ]);
-
+      const menu = getViewMenu(appWindow, params, this.webContents);
       menu.popup();
+    });
+
+    this.webContents.addListener('found-in-page', (e, result) => {
+      appWindow.findWindow.webContents.send('found-in-page', result);
     });
 
     this.webContents.addListener('did-stop-loading', () => {
       this.updateNavigationState();
-      appWindow.webContents.send(`view-loading-${this.tabId}`, false);
+      appWindow.webContents.send(`view-loading-${this.webContents.id}`, false);
     });
 
     this.webContents.addListener('did-start-loading', () => {
       this.updateNavigationState();
-      appWindow.webContents.send(`view-loading-${this.tabId}`, true);
+      appWindow.webContents.send(`view-loading-${this.webContents.id}`, true);
     });
 
-    this.webContents.addListener('did-start-navigation', () => {
+    this.webContents.addListener('did-start-navigation', (...args: any[]) => {
       this.updateNavigationState();
 
-      this.emitWebNavigationEvent('onBeforeNavigate', {
-        tabId: this.tabId,
-        url: this.webContents.getURL(),
-        frameId: 0,
-        timeStamp: Date.now(),
-        processId: process.pid,
-        parentFrameId: -1,
-      });
+      const url = this.webContents.getURL();
 
-      this.emitWebNavigationEvent('onCommitted', {
-        tabId: this.tabId,
-        url,
-        sourceFrameId: 0,
-        timeStamp: Date.now(),
-        processId: process.pid,
-        frameId: 0,
-        parentFrameId: -1,
-      });
-    });
+      // Adblocker cosmetic filtering
+      if (engine && settings.isShieldToggled) {
+        if (url === '') return;
 
-    this.webContents.addListener('did-finish-load', async () => {
-      this.emitWebNavigationEvent('onCompleted', {
-        tabId: this.tabId,
-        url: this.webContents.getURL(),
-        frameId: 0,
-        timeStamp: Date.now(),
-        processId: process.pid,
-      });
+        const { styles, scripts } = engine.getCosmeticsFilters({
+          url,
+          ...parse(url),
+        });
 
-      appWindow.webContents.send(
-        `new-screenshot-${this.tabId}`,
-        await this.getScreenshot(),
-      );
-    });
+        this.webContents.insertCSS(styles);
 
-    this.webContents.addListener('did-frame-finish-load', async () => {
-      appWindow.webContents.send(
-        `new-screenshot-${this.tabId}`,
-        await this.getScreenshot(),
-      );
+        for (const script of scripts) {
+          this.webContents.executeJavaScript(script);
+        }
+      }
+
+      appWindow.webContents.send(`load-commit-${this.webContents.id}`, ...args);
     });
 
     this.webContents.addListener(
       'new-window',
       (e, url, frameName, disposition) => {
-        if (disposition === 'new-window' || disposition === 'foreground-tab') {
-          appWindow.webContents.send('api-tabs-create', { url, active: true });
+        if (disposition === 'new-window') {
+          if (frameName === '_self') {
+            e.preventDefault();
+            appWindow.viewManager.selected.webContents.loadURL(url);
+          } else if (frameName === '_blank') {
+            e.preventDefault();
+            appWindow.viewManager.create(
+              {
+                url,
+                active: true,
+              },
+              true,
+            );
+          }
+        } else if (disposition === 'foreground-tab') {
+          e.preventDefault();
+          appWindow.viewManager.create({ url, active: true }, true);
         } else if (disposition === 'background-tab') {
-          appWindow.webContents.send('api-tabs-create', { url, active: false });
+          e.preventDefault();
+          appWindow.viewManager.create({ url, active: false }, true);
         }
-
-        this.emitWebNavigationEvent('onCreatedNavigationTarget', {
-          tabId: this.tabId,
-          url,
-          sourceFrameId: 0,
-          timeStamp: Date.now(),
-        });
       },
     );
-
-    this.webContents.addListener('dom-ready', () => {
-      this.emitWebNavigationEvent('onDOMContentLoaded', {
-        tabId: this.tabId,
-        url: this.webContents.getURL(),
-        frameId: 0,
-        timeStamp: Date.now(),
-        processId: process.pid,
-      });
-    });
 
     this.webContents.addListener(
       'page-favicon-updated',
       async (e, favicons) => {
         appWindow.webContents.send(
-          `browserview-favicon-updated-${this.tabId}`,
+          `browserview-favicon-updated-${this.webContents.id}`,
           favicons[0],
         );
       },
@@ -135,7 +104,7 @@ export class View extends BrowserView {
 
     this.webContents.addListener('did-change-theme-color', (e, color) => {
       appWindow.webContents.send(
-        `browserview-theme-color-updated-${this.tabId}`,
+        `browserview-theme-color-updated-${this.webContents.id}`,
         color,
       );
     });
@@ -156,26 +125,23 @@ export class View extends BrowserView {
       },
     );
 
-    this.setAutoResize({ width: true, height: true });
+    this.setAutoResize({
+      width: true,
+      height: true,
+    });
     this.webContents.loadURL(url);
   }
 
   public updateNavigationState() {
     if (this.isDestroyed()) return;
 
-    if (appWindow.viewManager.selectedId === this.tabId) {
+    if (appWindow.viewManager.selectedId === this.webContents.id) {
       appWindow.webContents.send('update-navigation-state', {
         canGoBack: this.webContents.canGoBack(),
         canGoForward: this.webContents.canGoForward(),
       });
     }
   }
-
-  public emitWebNavigationEvent = (name: string, ...data: any[]) => {
-    this.webContents.send(`api-emit-event-webNavigation-${name}`, ...data);
-
-    sendToAllExtensions(`api-emit-event-webNavigation-${name}`, ...data);
-  };
 
   public async getScreenshot(): Promise<string> {
     return new Promise(resolve => {

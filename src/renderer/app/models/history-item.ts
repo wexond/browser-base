@@ -5,5 +5,4 @@ export interface HistoryItem {
   date?: string;
   favicon?: string;
   hovered?: boolean;
-  selected?: boolean;
 }

@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 
 import store from '~/renderer/app/store';
 import { colors } from '~/renderer/constants';
@@ -22,26 +22,25 @@ export class TabGroup {
   public editMode = false;
 
   constructor() {
-    const { palette } = store.tabGroupsStore;
+    const { palette } = store.tabGroups;
     this.color = palette[Math.floor(Math.random() * palette.length)];
   }
 
-  public nextPosition = 0;
-
   @computed
   public get isSelected() {
-    return store.tabGroupsStore.currentGroupId === this.id;
+    return store.tabGroups.currentGroupId === this.id;
   }
 
   public get tabs() {
-    return store.tabsStore.tabs.filter(x => x.tabGroupId === this.id);
+    return store.tabs.list.filter(x => x.tabGroupId === this.id);
   }
 
+  @action
   public select() {
-    store.tabGroupsStore.currentGroupId = this.id;
+    store.tabGroups.currentGroupId = this.id;
 
     setTimeout(() => {
-      store.tabsStore.updateTabsBounds(false);
+      store.tabs.updateTabsBounds(false);
     }, 1);
   }
 }

@@ -1,22 +1,37 @@
 import styled, { css } from 'styled-components';
-import { body2, centerImage } from '~/shared/mixins';
+import { body2, centerIcon } from '~/shared/mixins';
 import { transparency } from '~/renderer/constants';
+import { Theme } from '../../models/theme';
 
 export const StyledSuggestion = styled.div`
   width: 100%;
-  height: 48px;
-  min-height: 48px;
+  height: 42px;
+  min-height: 42px;
   display: flex;
   position: relative;
   align-items: center;
   overflow: hidden;
 
-  ${({ selected, hovered }: { selected: boolean; hovered: boolean }) => {
+  ${({
+    selected,
+    hovered,
+    theme,
+  }: {
+    selected: boolean;
+    hovered: boolean;
+    theme?: Theme;
+  }) => {
     let backgroundColor = 'transparent';
     if (selected) {
-      backgroundColor = 'rgba(255, 255, 255, 0.06)';
+      backgroundColor =
+        theme['overlay.foreground'] === 'light'
+          ? 'rgba(255, 255, 255, 0.06)'
+          : 'rgba(0, 0, 0, 0.06)';
     } else if (hovered) {
-      backgroundColor = 'rgba(255, 255, 255, 0.03)';
+      backgroundColor =
+        theme['overlay.foreground'] === 'light'
+          ? 'rgba(255, 255, 255, 0.03)'
+          : 'rgba(0, 0, 0, 0.03)';
     }
     return css`
       background-color: ${backgroundColor};
@@ -28,7 +43,6 @@ export const PrimaryText = styled.div`
   ${body2()};
   margin-left: 16px;
   white-space: nowrap;
-  color: white;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 13px;
@@ -40,7 +54,6 @@ export const SecondaryText = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: white;
   padding-right: 16px;
   font-size: 13px;
   opacity: ${transparency.text.medium};
@@ -51,12 +64,11 @@ export const Icon = styled.div`
   width: 16px;
   min-width: 16px;
   height: 16px;
-  ${centerImage('16px', '16px')};
+  ${centerIcon()};
 `;
 
 export const Dash = styled.div`
   margin-left: 4px;
   margin-right: 4px;
-  color: white;
   opacity: ${transparency.text.medium};
 `;

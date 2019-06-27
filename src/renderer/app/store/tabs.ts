@@ -1,4 +1,4 @@
-import { observable, observe } from 'mobx';
+import { observable, observe, action } from 'mobx';
 import * as React from 'react';
 import { TweenLite } from 'gsap';
 
@@ -14,7 +14,10 @@ import {
 
 import HorizontalScrollbar from '~/renderer/app/components/HorizontalScrollbar';
 import store from '.';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
+import { extname } from 'path';
+import { getColorBrightness } from '../utils';
+import Vibrant = require('node-vibrant');
 
 export class TabsStore {
   @observable
@@ -27,15 +30,19 @@ export class TabsStore {
   public hoveredTabId: number;
 
   @observable
-  public tabs: Tab[] = [];
+  public list: Tab[] = [];
 
   @observable
   public scrollable = false;
+
+  public removedTabs: number = 0;
 
   public lastScrollLeft: number = 0;
   public lastMouseX: number = 0;
   public mouseStartX: number = 0;
   public tabStartX: number = 0;
+
+  public closedUrl = '';
 
   public scrollbarRef = React.createRef<HorizontalScrollbar>();
   public containerRef = React.createRef<HTMLDivElement>();
@@ -57,6 +64,7 @@ export class TabsStore {
         this.rearrangeTabsTimer.canReset &&
         this.rearrangeTabsTimer.time === 3
       ) {
+        this.removedTabs = 0;
         this.updateTabsBounds(true);
         this.rearrangeTabsTimer.canReset = false;
       }
@@ -69,8 +77,78 @@ export class TabsStore {
 
     ipcRenderer.on(
       'api-tabs-create',
-      (e: any, options: chrome.tabs.CreateProperties) => {
-        this.addTab(options);
+      (
+        e: any,
+        options: chrome.tabs.CreateProperties,
+        isNext: boolean,
+        id: number,
+      ) => {
+        if (isNext) {
+          const index =
+            store.tabGroups.currentGroup.tabs.indexOf(this.selectedTab) + 1;
+          options.index = index;
+        }
+
+        this.createTab(options, id);
+      },
+    );
+
+    ipcRenderer.on('add-tab', (e: any, options: any) => {
+      let tab = this.list.find(x => x.id === options.id);
+
+      if (tab) {
+        tab.isClosing = false;
+        this.updateTabsBounds(true);
+        clearTimeout(tab.removeTimeout);
+
+        if (options.active) {
+          tab.select();
+        }
+      } else {
+        tab = this.createTab({}, options.id, true);
+        tab.title = options.title;
+        tab.favicon = URL.createObjectURL(new Blob([options.icon]));
+
+        Vibrant.from(options.icon)
+          .getPalette()
+          .then(palette => {
+            if (getColorBrightness(palette.Vibrant.hex) < 170) {
+              tab.background = palette.Vibrant.hex;
+            }
+          });
+
+        tab.select();
+      }
+    });
+
+    ipcRenderer.on('remove-tab', (e: any, id: number) => {
+      const tab = this.getTabById(id);
+      if (tab) {
+        tab.close();
+      }
+    });
+
+    ipcRenderer.on('update-tab-title', (e: any, data: any) => {
+      const tab = this.getTabById(data.id);
+      if (tab) {
+        tab.title = data.title;
+      }
+    });
+
+    ipcRenderer.on('select-tab', (e: any, id: number) => {
+      const tab = this.getTabById(id);
+      if (tab) {
+        tab.select();
+      }
+    });
+
+    ipcRenderer.on(
+      'update-tab-find-info',
+      (e: any, tabId: number, data: any) => {
+        const tab = this.getTabById(tabId);
+        if (tab) {
+          tab.findInfo = data;
+        }
       },
     );
   }
@@ -80,9 +158,11 @@ export class TabsStore {
     this.rearrangeTabsTimer.canReset = true;
   }
 
+  @action
   public onResize = (e: Event) => {
     if (e.isTrusted) {
-      store.tabsStore.updateTabsBounds(false);
+      this.removedTabs = 0;
+      this.updateTabsBounds(false);
     }
   };
 
@@ -94,7 +174,7 @@ export class TabsStore {
   }
 
   public get selectedTab() {
-    return this.getTabById(store.tabGroupsStore.currentGroup.selectedTabId);
+    return this.getTabById(store.tabGroups.currentGroup.selectedTabId);
   }
 
   public get hoveredTab() {
@@ -102,14 +182,35 @@ export class TabsStore {
   }
 
   public getTabById(id: number) {
-    return this.tabs.find(x => x.id === id);
+    return this.list.find(x => x.id === id);
   }
 
-  public addTab(options = defaultTabOptions) {
-    const tab = new Tab(options, store.tabGroupsStore.currentGroupId);
-    this.tabs.push(tab);
+  @action public createTab(
+    options: chrome.tabs.CreateProperties,
+    id: number,
+    isWindow: boolean = false,
+  ) {
+    if (isWindow) {
+      store.overlay.visible = false;
+    }
 
-    this.emitEvent('onCreated', tab.getApiTab());
+    if (options.active) {
+      store.overlay.visible = false;
+    }
+
+    this.removedTabs = 0;
+
+    const tab = new Tab(options, id, store.tabGroups.currentGroupId, isWindow);
+
+    if (options.index !== undefined) {
+      this.list.splice(options.index, 0, tab);
+    } else {
+      this.list.push(tab);
+    }
+
+    if (!isWindow) {
+      this.emitEvent('onCreated', tab.getApiTab());
+    }
 
     requestAnimationFrame(() => {
       tab.setLeft(tab.getLeft(), false);
@@ -117,22 +218,28 @@ export class TabsStore {
 
       this.scrollbarRef.current.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
     });
-
     return tab;
   }
 
-  public removeTab(id: number) {
-    (this.tabs as any).remove(this.getTabById(id));
+  @action
+  public addTab(options = defaultTabOptions) {
+    ipcRenderer.send('view-create', options);
   }
 
+  public removeTab(id: number) {
+    (this.list as any).remove(this.getTabById(id));
+  }
+
+  @action
   public updateTabsBounds(animation: boolean) {
     this.setTabsWidths(animation);
     this.setTabsLefts(animation);
   }
 
+  @action
   public setTabsWidths(animation: boolean) {
-    const tabs = this.tabs.filter(
-      x => !x.isClosing && x.tabGroupId === store.tabGroupsStore.currentGroupId,
+    const tabs = this.list.filter(
+      x => !x.isClosing && x.tabGroupId === store.tabGroups.currentGroupId,
     );
 
     const containerWidth = this.containerWidth;
@@ -145,16 +252,13 @@ export class TabsStore {
     }
   }
 
+  @action
   public setTabsLefts(animation: boolean) {
-    const tabs = this.tabs
-      .filter(
-        x =>
-          !x.isClosing && x.tabGroupId === store.tabGroupsStore.currentGroupId,
-      )
-      .slice()
-      .sort((a, b) => a.position - b.position);
+    const tabs = this.list.filter(
+      x => !x.isClosing && x.tabGroupId === store.tabGroups.currentGroupId,
+    );
 
-    const { containerWidth } = store.tabsStore;
+    const { containerWidth } = store.tabs;
 
     let left = 0;
 
@@ -164,25 +268,24 @@ export class TabsStore {
       left += tab.width + TABS_PADDING;
     }
 
-    store.addTabStore.setLeft(
+    store.addTab.setLeft(
       Math.min(left, containerWidth + TABS_PADDING),
       animation,
     );
   }
 
+  @action
   public replaceTab(firstTab: Tab, secondTab: Tab) {
-    const position1 = firstTab.tempPosition;
-
     secondTab.setLeft(firstTab.getLeft(true), true);
 
-    firstTab.tempPosition = secondTab.tempPosition;
-    secondTab.tempPosition = position1;
+    const index = this.list.indexOf(secondTab);
+
+    this.list[this.list.indexOf(firstTab)] = secondTab;
+    this.list[index] = firstTab;
   }
 
   public getTabsToReplace(callingTab: Tab, direction: string) {
-    let tabs = this.tabs
-      .slice()
-      .sort((a, b) => a.tempPosition - b.tempPosition);
+    let tabs = this.list;
 
     const index = tabs.indexOf(callingTab);
 
@@ -191,7 +294,6 @@ export class TabsStore {
         const tab = tabs[i];
         if (callingTab.left <= tab.width / 2 + tab.left) {
           this.replaceTab(tabs[i + 1], tab);
-          tabs = tabs.sort((a, b) => a.tempPosition - b.tempPosition);
         } else {
           break;
         }
@@ -201,7 +303,6 @@ export class TabsStore {
         const tab = tabs[i];
         if (callingTab.left + callingTab.width >= tab.width / 2 + tab.left) {
           this.replaceTab(tabs[i - 1], tab);
-          tabs = tabs.sort((a, b) => a.tempPosition - b.tempPosition);
         } else {
           break;
         }
@@ -209,14 +310,11 @@ export class TabsStore {
     }
   }
 
+  @action
   public onMouseUp = () => {
     const selectedTab = this.selectedTab;
 
     this.isDragging = false;
-
-    for (const tab of this.tabs) {
-      tab.position = tab.tempPosition;
-    }
 
     this.setTabsLefts(true);
 
@@ -225,20 +323,16 @@ export class TabsStore {
     }
   };
 
+  @action
   public onMouseMove = (e: any) => {
-    const tabGroup = store.tabGroupsStore.currentGroup;
+    const tabGroup = store.tabGroups.currentGroup;
     if (!tabGroup) return;
 
-    const { selectedTab } = store.tabsStore;
+    const { selectedTab } = store.tabs;
 
     if (this.isDragging) {
       const container = this.containerRef;
-      const {
-        tabStartX,
-        mouseStartX,
-        lastMouseX,
-        lastScrollLeft,
-      } = store.tabsStore;
+      const { tabStartX, mouseStartX, lastMouseX, lastScrollLeft } = store.tabs;
 
       const boundingRect = container.current.getBoundingClientRect();
 
@@ -259,13 +353,10 @@ export class TabsStore {
 
       if (
         newLeft + selectedTab.width >
-        store.addTabStore.left + container.current.scrollLeft - TABS_PADDING
+        store.addTab.left + container.current.scrollLeft - TABS_PADDING
       ) {
         left =
-          store.addTabStore.left -
-          selectedTab.width +
-          lastScrollLeft -
-          TABS_PADDING;
+          store.addTab.left - selectedTab.width + lastScrollLeft - TABS_PADDING;
       }
 
       selectedTab.setLeft(left, false);
@@ -274,7 +365,7 @@ export class TabsStore {
         e.pageY > TOOLBAR_HEIGHT + 16 ||
         e.pageY < -16 ||
         e.pageX < boundingRect.left ||
-        e.pageX - boundingRect.left > store.addTabStore.left
+        e.pageX - boundingRect.left > store.addTab.left
       ) {
         // TODO: Create a new window
       }
@@ -305,5 +396,11 @@ export class TabsStore {
 
   public emitEvent(name: string, ...data: any[]) {
     ipcRenderer.send('emit-tabs-event', name, ...data);
+  }
+
+  public onNewTab() {
+    store.overlay.isNewTab = true;
+    store.overlay.visible = true;
+    ipcRenderer.send('hide-window');
   }
 }

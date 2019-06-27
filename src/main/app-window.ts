@@ -5,9 +5,19 @@ import { platform } from 'os';
 import { ViewManager } from './view-manager';
 import { getPath } from '~/shared/utils/paths';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { runMessagingService } from './services';
+import { PermissionWindow } from './permission-window';
+import { Multrin } from './multrin';
+import { AuthWindow } from './auth-window';
+import { FindWindow } from './find-window';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager = new ViewManager();
+  public multrin = new Multrin(this);
+
+  public permissionWindow = new PermissionWindow(this);
+  public authWindow = new AuthWindow(this);
+  public findWindow = new FindWindow(this);
 
   constructor() {
     super({
@@ -25,6 +35,8 @@ export class AppWindow extends BrowserWindow {
       },
       icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
     });
+
+    runMessagingService(this);
 
     const windowDataPath = getPath('window-data.json');
 
@@ -58,11 +70,17 @@ export class AppWindow extends BrowserWindow {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
       }
+      this.authWindow.rearrange();
+      this.findWindow.rearrange();
+      this.permissionWindow.rearrange();
     });
     this.on('move', () => {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
       }
+      this.authWindow.rearrange();
+      this.findWindow.rearrange();
+      this.permissionWindow.rearrange();
     });
 
     const resize = () => {
@@ -73,10 +91,6 @@ export class AppWindow extends BrowserWindow {
     this.on('maximize', resize);
     this.on('restore', resize);
     this.on('unmaximize', resize);
-
-    process.on('uncaughtException', error => {
-      console.error(error);
-    });
 
     // Save current window state to file.
     this.on('close', () => {

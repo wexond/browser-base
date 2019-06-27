@@ -1,12 +1,15 @@
 import styled, { css } from 'styled-components';
-import { transparency } from '~/renderer/constants';
+import { Theme } from '../../models/theme';
 
 export const Line = styled.div`
-  background-color: #e5e5e5;
   height: 1px;
   width: 100%;
   z-index: 2;
   position: relative;
+
+  ${({ theme }: { theme: Theme }) => css`
+    background-color: ${theme['toolbar.bottomLine.backgroundColor']};
+  `}
 `;
 
 export const Screenshot = styled.div`
@@ -14,8 +17,6 @@ export const Screenshot = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   flex: 1;
-  filter: blur(20px);
-  margin: -20px;
   position: relative;
 `;
 

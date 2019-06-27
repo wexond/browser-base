@@ -16,7 +16,7 @@ import {
 } from './style';
 import { shadeBlendConvert } from '../../utils';
 import { transparency } from '~/renderer/constants';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import Ripple from '~/renderer/components/Ripple';
 
 const removeTab = (tab: Tab) => () => {
@@ -32,29 +32,113 @@ const onMouseDown = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
 
   tab.select();
 
-  store.tabsStore.lastMouseX = 0;
-  store.tabsStore.isDragging = true;
-  store.tabsStore.mouseStartX = pageX;
-  store.tabsStore.tabStartX = tab.left;
+  store.tabs.lastMouseX = 0;
+  store.tabs.isDragging = true;
+  store.tabs.mouseStartX = pageX;
+  store.tabs.tabStartX = tab.left;
 
-  store.tabsStore.lastScrollLeft =
-    store.tabsStore.containerRef.current.scrollLeft;
+  store.tabs.lastScrollLeft = store.tabs.containerRef.current.scrollLeft;
 };
 
 const onMouseEnter = (tab: Tab) => () => {
-  if (!store.tabsStore.isDragging) {
-    store.tabsStore.hoveredTabId = tab.id;
+  if (!store.tabs.isDragging) {
+    store.tabs.hoveredTabId = tab.id;
   }
 };
 
 const onMouseLeave = () => {
-  store.tabsStore.hoveredTabId = -1;
+  store.tabs.hoveredTabId = -1;
 };
 
-const onClick = () => {
-  if (store.canToggleMenu) {
-    store.overlayStore.visible = true;
+const onClick = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
+  if (store.canToggleMenu && !tab.isWindow) {
+    store.overlay.visible = true;
   }
+
+  if (e.button === 4) {
+    tab.close();
+  }
+};
+
+const onMouseUp = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
+  if (e.button === 1) {
+    tab.close();
+  }
+};
+
+const onContextMenu = (tab: Tab) => () => {
+  const { tabs } = store.tabGroups.currentGroup;
+
+  const menu = remote.Menu.buildFromTemplate([
+    {
+      label: 'New tab',
+      click: () => {
+        store.tabs.onNewTab();
+      },
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: 'Reload',
+      click: () => {
+        tab.callViewMethod('webContents.reload');
+      },
+    },
+    {
+      label: 'Duplicate',
+      click: () => {
+        store.tabs.addTab({ active: true, url: tab.url });
+      },
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: 'Close tab',
+      click: () => {
+        tab.close();
+      },
+    },
+    {
+      label: 'Close other tabs',
+      click: () => {
+        for (const t of tabs) {
+          if (t !== tab) {
+            t.close();
+          }
+        }
+      },
+    },
+    {
+      label: 'Close tabs from left',
+      click: () => {
+        for (let i = tabs.indexOf(tab) - 1; i >= 0; i--) {
+          tabs[i].close();
+        }
+      },
+    },
+    {
+      label: 'Close tabs from right',
+      click: () => {
+        for (let i = tabs.length - 1; i > tabs.indexOf(tab); i--) {
+          tabs[i].close();
+        }
+      },
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: 'Revert closed tab',
+      enabled: store.tabs.closedUrl !== '',
+      click: () => {
+        store.tabs.addTab({ active: true, url: store.tabs.closedUrl });
+      },
+    },
+  ]);
+
+  menu.popup();
 };
 
 const Content = observer(({ tab }: { tab: Tab }) => {
@@ -78,8 +162,10 @@ const Content = observer(({ tab }: { tab: Tab }) => {
         isIcon={tab.isIconSet}
         style={{
           color: tab.isSelected
-            ? tab.background
-            : `rgba(0, 0, 0, ${transparency.text.high})`,
+            ? store.theme['tab.selected.textColor'] === 'inherit'
+              ? tab.background
+              : store.theme['tab.selected.textColor']
+            : store.theme['tab.textColor'],
         }}
       >
         {tab.title}
@@ -108,8 +194,12 @@ const Overlay = observer(({ tab }: { tab: Tab }) => {
       hovered={tab.isHovered}
       style={{
         backgroundColor: tab.isSelected
-          ? shadeBlendConvert(0.8, tab.background)
-          : 'rgba(0, 0, 0, 0.04)',
+          ? shadeBlendConvert(
+              store.theme['tab.selectedHover.backgroundOpacity'],
+              tab.background,
+              store.theme['toolbar.backgroundColor'],
+            )
+          : store.theme['tab.hover.backgroundColor'],
       }}
     />
   );
@@ -120,17 +210,22 @@ export default observer(({ tab }: { tab: Tab }) => {
     <StyledTab
       selected={tab.isSelected}
       onMouseDown={onMouseDown(tab)}
+      onMouseUp={onMouseUp(tab)}
       onMouseEnter={onMouseEnter(tab)}
-      onClick={onClick}
+      onContextMenu={onContextMenu(tab)}
+      onClick={onClick(tab)}
       onMouseLeave={onMouseLeave}
-      visible={tab.tabGroupId === store.tabGroupsStore.currentGroupId}
+      visible={tab.tabGroupId === store.tabGroups.currentGroupId}
       ref={tab.ref}
     >
       <TabContainer
-        selected={tab.isSelected}
         style={{
           backgroundColor: tab.isSelected
-            ? shadeBlendConvert(0.85, tab.background)
+            ? shadeBlendConvert(
+                store.theme['tab.backgroundOpacity'],
+                tab.background,
+                store.theme['toolbar.backgroundColor'],
+              )
             : 'transparent',
         }}
       >

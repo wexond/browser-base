@@ -7,25 +7,24 @@ const {
   JSONPlugin,
   StyledComponentsPlugin,
 } = require('fuse-box');
+
 const { spawn } = require('child_process');
 
 const production = process.env.NODE_ENV === 'dev' ? false : true;
 
-const getConfig = (target, name) => {
+const getConfig = target => {
   return {
     homeDir: 'src/',
     cache: !production,
     target,
     output: `build/$name.js`,
-    tsConfig: './tsconfig.json',
     useTypescriptCompiler: true,
     plugins: [
       EnvPlugin({ NODE_ENV: production ? 'production' : 'development' }),
       production &&
         QuantumPlugin({
-          bakeApiIntoBundle: name,
+          bakeApiIntoBundle: true,
           treeshake: true,
-          removeExportsInterop: false,
           uglify: {
             es6: true,
           },
@@ -36,7 +35,6 @@ const getConfig = (target, name) => {
     },
     log: {
       showBundledFiles: false,
-      clearTerminalOnBundle: true,
     },
   };
 };
@@ -47,15 +45,6 @@ const getRendererConfig = (target, name) => {
   });
 
   return cfg;
-};
-
-const getWebIndexPlugin = name => {
-  return WebIndexPlugin({
-    template: `static/pages/${name}.html`,
-    path: production ? '.' : '/',
-    target: `${name}.html`,
-    bundles: [name],
-  });
 };
 
 const getCopyPlugin = () => {
@@ -78,43 +67,51 @@ const main = () => {
   fuse.run();
 };
 
-const renderer = (name, port) => {
-  const cfg = getRendererConfig('electron', name);
+const getWebIndexPlugin = name => {
+  return WebIndexPlugin({
+    template: `static/pages/app.html`,
+    path: production ? '.' : '/',
+    target: `${name}.html`,
+    bundles: [name],
+  });
+};
+
+const renderer = name => {
+  const cfg = getRendererConfig('electron');
 
   cfg.plugins.push(getWebIndexPlugin(name));
+
   cfg.plugins.push(JSONPlugin());
   cfg.plugins.push(getCopyPlugin());
   cfg.plugins.push(StyledComponentsPlugin());
 
   const fuse = FuseBox.init(cfg);
 
-  if (!production) {
-    fuse.dev({ httpServer: true, port, socketURI: `ws://localhost:${port}` });
-  }
-
   const app = fuse.bundle(name).instructions(`> [renderer/${name}/index.tsx]`);
 
   if (!production) {
-    app.hmr({ port, socketURI: `ws://localhost:${port}` }).watch();
-
     if (name === 'app') {
-      return fuse.run().then(() => {
-        const child = spawn('npm', ['start'], {
+      fuse.dev({ httpServer: true });
+
+      app.hmr().watch();
+
+      fuse.run().then(() => {
+        spawn('npm', ['start'], {
           shell: true,
           stdio: 'inherit',
         });
       });
+    } else {
+      app.watch();
     }
+  } else {
+    fuse.run();
   }
-
-  fuse.run();
 };
 
 const preload = name => {
   const cfg = getRendererConfig('electron', name);
-
   const fuse = FuseBox.init(cfg);
-
   const app = fuse.bundle(name).instructions(`> [preloads/${name}.ts]`);
 
   if (!production) {
@@ -124,7 +121,9 @@ const preload = name => {
   fuse.run();
 };
 
-renderer('app', 4444);
+renderer('app');
+renderer('auth');
+renderer('permissions');
+renderer('find');
 preload('view-preload');
-preload('background-preload');
 main();

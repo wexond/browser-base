@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import * as React from 'react';
 import { ipcRenderer } from 'electron';
 import * as Vibrant from 'node-vibrant';
@@ -10,14 +10,20 @@ import {
   defaultTabOptions,
   TAB_ANIMATION_DURATION,
 } from '~/renderer/app/constants';
-import { closeWindow, getColorBrightness } from '../utils';
-import { colors } from '~/renderer/constants';
+import { getColorBrightness } from '../utils';
+import { callViewMethod } from '../utils/view';
 
-let id = 1;
+const isColorAcceptable = (color: string) => {
+  if (store.theme['tab.allowLightBackground']) {
+    return getColorBrightness(color) > 120;
+  }
+
+  return getColorBrightness(color) < 170;
+};
 
 export class Tab {
   @observable
-  public id: number = id++;
+  public id: number;
 
   @observable
   public isDragging: boolean = false;
@@ -38,39 +44,43 @@ export class Tab {
   public width: number = 0;
 
   @observable
-  public position = 0;
+  public background: string = store.theme.accentColor;
 
   @observable
-  public background: string = colors.blue['500'];
+  public url = '';
 
   @observable
-  public screenshot: string;
+  public findInfo = {
+    occurrences: '0/0',
+    text: '',
+    visible: false,
+  };
+
+  @observable
+  public blockedAds = 0;
 
   public left = 0;
-  public tempPosition = 0;
-  public url = '';
   public lastUrl = '';
   public isClosing = false;
   public ref = React.createRef<HTMLDivElement>();
   public lastHistoryId: string;
   public hasThemeColor = false;
-  public webContentsId: number;
+  public removeTimeout: any;
+  public isWindow: boolean = false;
 
   @computed
   public get isSelected() {
-    return store.tabGroupsStore.currentGroup.selectedTabId === this.id;
+    return store.tabGroups.currentGroup.selectedTabId === this.id;
   }
 
   @computed
   public get isHovered() {
-    return store.tabsStore.hoveredTabId === this.id;
+    return store.tabs.hoveredTabId === this.id;
   }
 
   @computed
   public get borderVisible() {
-    const tabs = this.tabGroup.tabs
-      .slice()
-      .sort((a, b) => a.position - b.position);
+    const tabs = this.tabGroup.tabs;
 
     const i = tabs.indexOf(this);
     const nextTab = tabs[i + 1];
@@ -88,7 +98,7 @@ export class Tab {
 
   @computed
   public get isExpanded() {
-    return this.isHovered || this.isSelected || !store.tabsStore.scrollable;
+    return this.isHovered || this.isSelected || !store.tabs.scrollable;
   }
 
   @computed
@@ -96,21 +106,23 @@ export class Tab {
     return this.favicon !== '' || this.loading;
   }
 
-  constructor({ url, active } = defaultTabOptions, tabGroupId: number) {
+  constructor(
+    { active } = defaultTabOptions,
+    id: number,
+    tabGroupId: number,
+    isWindow: boolean,
+  ) {
+    this.id = id;
+    this.isWindow = isWindow;
     this.tabGroupId = tabGroupId;
-    this.url = url;
 
-    this.position = this.tabGroup.nextPosition++;
-    this.tempPosition = this.position;
-
-    ipcRenderer.send('browserview-create', { tabId: this.id, url });
-
-    ipcRenderer.once(`browserview-created-${this.id}`, (e: any, id: number) => {
-      this.webContentsId = id;
-      if (active) {
+    if (active) {
+      requestAnimationFrame(() => {
         this.select();
-      }
-    });
+      });
+    }
+
+    if (isWindow) return;
 
     ipcRenderer.on(
       `browserview-data-updated-${this.id}`,
@@ -118,7 +130,7 @@ export class Tab {
         let updated = null;
 
         if (url !== this.url) {
-          this.lastHistoryId = await store.historyStore.addItem({
+          this.lastHistoryId = await store.history.addItem({
             title: this.title,
             url,
             favicon: this.favicon,
@@ -148,20 +160,41 @@ export class Tab {
     );
 
     ipcRenderer.on(
+      `load-commit-${this.id}`,
+      (
+        e: any,
+        event: any,
+        url: string,
+        isInPlace: boolean,
+        isMainFrame: boolean,
+      ) => {
+        if (isMainFrame) {
+          this.blockedAds = 0;
+        }
+      },
+    );
+
+    ipcRenderer.on(
       `browserview-favicon-updated-${this.id}`,
       async (e: any, favicon: string) => {
         try {
           this.favicon = favicon;
 
-          const fav = await store.faviconsStore.addFavicon(favicon);
+          let fav = favicon;
+          if (favicon.startsWith('http')) {
+            fav = await store.favicons.addFavicon(favicon);
+          }
           const buf = Buffer.from(fav.split('base64,')[1], 'base64');
 
           if (!this.hasThemeColor) {
             const palette = await Vibrant.from(buf).getPalette();
-            if (getColorBrightness(palette.Vibrant.hex) < 170) {
+
+            if (!palette.Vibrant) return;
+
+            if (isColorAcceptable(palette.Vibrant.hex)) {
               this.background = palette.Vibrant.hex;
             } else {
-              this.background = colors.blue['500'];
+              this.background = store.theme.accentColor;
             }
           }
         } catch (e) {
@@ -172,14 +205,18 @@ export class Tab {
       },
     );
 
+    ipcRenderer.on(`blocked-ad-${this.id}`, () => {
+      this.blockedAds++;
+    });
+
     ipcRenderer.on(
       `browserview-theme-color-updated-${this.id}`,
       (e: any, themeColor: string) => {
-        if (themeColor && getColorBrightness(themeColor) < 170) {
+        if (themeColor && isColorAcceptable(themeColor)) {
           this.background = themeColor;
           this.hasThemeColor = true;
         } else {
-          this.background = colors.blue['500'];
+          this.background = store.theme.accentColor;
           this.hasThemeColor = false;
         }
       },
@@ -193,14 +230,7 @@ export class Tab {
       });
     });
 
-    ipcRenderer.on(
-      `new-screenshot-${this.id}`,
-      (e: any, screenshot: string) => {
-        this.screenshot = screenshot;
-      },
-    );
-
-    const { defaultBrowserActions, browserActions } = store.extensionsStore;
+    const { defaultBrowserActions, browserActions } = store.extensions;
 
     for (const item of defaultBrowserActions) {
       const browserAction = { ...item };
@@ -209,11 +239,12 @@ export class Tab {
     }
   }
 
+  @action
   public updateData() {
     if (this.lastHistoryId) {
       const { title, url, favicon } = this;
 
-      const item = store.historyStore.getById(this.lastHistoryId);
+      const item = store.history.getById(this.lastHistoryId);
 
       if (item) {
         item.title = title;
@@ -221,7 +252,7 @@ export class Tab {
         item.favicon = favicon;
       }
 
-      store.historyStore.db.update(
+      store.history.db.update(
         {
           _id: this.lastHistoryId,
         },
@@ -237,36 +268,50 @@ export class Tab {
   }
 
   public get tabGroup() {
-    return store.tabGroupsStore.getGroupById(this.tabGroupId);
+    return store.tabGroups.getGroupById(this.tabGroupId);
   }
 
+  @action
   public select() {
     if (!this.isClosing) {
       store.canToggleMenu = this.isSelected;
 
       this.tabGroup.selectedTabId = this.id;
 
-      ipcRenderer.send('browserview-select', this.id);
+      if (this.isWindow) {
+        ipcRenderer.send('browserview-hide');
+        ipcRenderer.send('select-window', this.id);
+      } else {
+        ipcRenderer.send('hide-window');
+        ipcRenderer.send('browserview-show');
+        ipcRenderer.send('view-select', this.id);
+        ipcRenderer.send('update-find-info', this.id, this.findInfo);
 
-      store.tabsStore.emitEvent('onActivated', {
-        tabId: this.id,
-        windowId: 0,
+        store.tabs.emitEvent('onActivated', {
+          tabId: this.id,
+          windowId: 0,
+        });
+      }
+
+      requestAnimationFrame(() => {
+        store.tabs.updateTabsBounds(true);
       });
     }
   }
 
   public getWidth(containerWidth: number = null, tabs: Tab[] = null) {
     if (containerWidth === null) {
-      containerWidth = store.tabsStore.containerWidth;
+      containerWidth = store.tabs.containerWidth;
     }
 
     if (tabs === null) {
-      tabs = store.tabsStore.tabs.filter(
+      tabs = store.tabs.list.filter(
         x => x.tabGroupId === this.tabGroupId && !x.isClosing,
       );
     }
 
-    const width = containerWidth / tabs.length - TABS_PADDING;
+    const width =
+      containerWidth / (tabs.length + store.tabs.removedTabs) - TABS_PADDING;
 
     if (width > 200) {
       return 200;
@@ -278,14 +323,8 @@ export class Tab {
     return width;
   }
 
-  public getLeft(reordering: boolean = false, calcNewLeft: boolean = false) {
+  public getLeft(calcNewLeft: boolean = false) {
     const tabs = this.tabGroup.tabs.slice();
-
-    if (reordering) {
-      tabs.sort((a, b) => a.tempPosition - b.tempPosition);
-    } else {
-      tabs.sort((a, b) => a.position - b.position);
-    }
 
     const index = tabs.indexOf(this);
 
@@ -297,45 +336,51 @@ export class Tab {
     return left;
   }
 
+  @action
   public setLeft(left: number, animation: boolean) {
-    store.tabsStore.animateProperty('x', this.ref.current, left, animation);
+    store.tabs.animateProperty('x', this.ref.current, left, animation);
     this.left = left;
   }
 
+  @action
   public setWidth(width: number, animation: boolean) {
-    store.tabsStore.animateProperty(
-      'width',
-      this.ref.current,
-      width,
-      animation,
-    );
+    store.tabs.animateProperty('width', this.ref.current, width, animation);
     this.width = width;
   }
 
+  @action
   public close() {
     const tabGroup = this.tabGroup;
-    const tabs = tabGroup.tabs.slice().sort((a, b) => a.position - b.position);
+    const { tabs } = tabGroup;
+
+    store.tabs.closedUrl = this.url;
 
     const selected = tabGroup.selectedTabId === this.id;
 
-    ipcRenderer.send('browserview-destroy', this.id);
+    if (this.isWindow) {
+      ipcRenderer.send('detach-window', this.id);
+    } else {
+      ipcRenderer.send('view-destroy', this.id);
+    }
 
     const notClosingTabs = tabs.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
 
-    store.tabsStore.resetRearrangeTabsTimer();
+    store.tabs.resetRearrangeTabsTimer();
 
     this.isClosing = true;
     if (notClosingTabs.length - 1 === index) {
       const previousTab = tabs[index - 1];
       if (previousTab) {
-        this.setLeft(previousTab.getLeft(false, true) + this.getWidth(), true);
+        this.setLeft(previousTab.getLeft(true) + this.getWidth(), true);
       }
-      store.tabsStore.updateTabsBounds(true);
+      store.tabs.updateTabsBounds(true);
+    } else {
+      store.tabs.removedTabs++;
     }
 
     this.setWidth(0, true);
-    store.tabsStore.setTabsLefts(true);
+    store.tabs.setTabsLefts(true);
 
     if (selected) {
       index = tabs.indexOf(this);
@@ -343,27 +388,32 @@ export class Tab {
       if (
         index + 1 < tabs.length &&
         !tabs[index + 1].isClosing &&
-        !store.tabsStore.scrollable
+        !store.tabs.scrollable
       ) {
         const nextTab = tabs[index + 1];
         nextTab.select();
       } else if (index - 1 >= 0 && !tabs[index - 1].isClosing) {
         const prevTab = tabs[index - 1];
         prevTab.select();
-      } else if (store.tabGroupsStore.groups.length === 1) {
-        closeWindow();
-      } else if (this.tabGroup.tabs.length === 0) {
-        store.overlayStore.visible = true;
       }
     }
 
-    setTimeout(() => {
-      store.tabsStore.removeTab(this.id);
+    if (this.tabGroup.tabs.length === 1) {
+      store.overlay.isNewTab = true;
+      store.overlay.visible = true;
+    }
+
+    this.removeTimeout = setTimeout(() => {
+      store.tabs.removeTab(this.id);
     }, TAB_ANIMATION_DURATION * 1000);
   }
 
   public emitOnUpdated = (data: any) => {
-    store.tabsStore.emitEvent('onUpdated', this.id, data, this.getApiTab());
+    store.tabs.emitEvent('onUpdated', this.id, data, this.getApiTab());
+  };
+
+  callViewMethod = (scope: string, ...args: any[]): Promise<any> => {
+    return callViewMethod(this.id, scope, ...args);
   };
 
   public getApiTab(): chrome.tabs.Tab {

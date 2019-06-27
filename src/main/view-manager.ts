@@ -1,15 +1,10 @@
-import { ipcMain } from 'electron';
+import { ipcMain, session } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
-import { appWindow } from '.';
+import { appWindow, log } from '.';
 import { View } from './view';
-import { sendToAllExtensions } from './extensions';
-
-declare const global: any;
-
-global.viewsMap = {};
 
 export class ViewManager {
-  public views: { [key: number]: View } = {};
+  public views: View[] = [];
   public selectedId = 0;
   public _fullscreen = false;
 
@@ -26,35 +21,50 @@ export class ViewManager {
 
   constructor() {
     ipcMain.on(
-      'browserview-create',
-      (e: Electron.IpcMessageEvent, { tabId, url }: any) => {
-        this.create(tabId, url);
-
-        appWindow.webContents.send(
-          `browserview-created-${tabId}`,
-          this.views[tabId].id,
-        );
+      'view-create',
+      (e: Electron.IpcMessageEvent, details: chrome.tabs.CreateProperties) => {
+        this.create(details);
       },
     );
 
     ipcMain.on(
-      'browserview-select',
-      (e: Electron.IpcMessageEvent, id: number) => {
-        const view = this.views[id];
+      'view-select',
+      (e: Electron.IpcMessageEvent, id: number, force: boolean) => {
+        const view = this.views.find(x => x.webContents.id === id);
         this.select(id);
         view.updateNavigationState();
+
+        if (force) this.isHidden = false;
       },
     );
 
-    ipcMain.on(
-      'browserview-destroy',
-      (e: Electron.IpcMessageEvent, id: number) => {
-        this.destroy(id);
-      },
-    );
+    ipcMain.on('clear-browsing-data', () => {
+      const ses = session.fromPartition('persist:view');
+      ses.clearCache((err: any) => {
+        if (err) log.error(err);
+      });
+
+      ses.clearStorageData({
+        storages: [
+          'appcache',
+          'cookies',
+          'filesystem',
+          'indexdb',
+          'localstorage',
+          'shadercache',
+          'websql',
+          'serviceworkers',
+          'cachestorage',
+        ],
+      });
+    });
+
+    ipcMain.on('view-destroy', (e: Electron.IpcMessageEvent, id: number) => {
+      this.destroy(id);
+    });
 
     ipcMain.on('browserview-call', async (e: any, data: any) => {
-      const view = this.views[data.tabId];
+      const view = this.views.find(x => x.webContents.id === data.tabId);
       let scope: any = view;
 
       if (data.scope && data.scope.trim() !== '') {
@@ -87,16 +97,18 @@ export class ViewManager {
     });
 
     setInterval(() => {
-      for (const key in this.views) {
-        const view = this.views[key];
+      for (const view of this.views) {
         const title = view.webContents.getTitle();
         const url = view.webContents.getURL();
 
         if (title !== view.title) {
-          appWindow.webContents.send(`browserview-data-updated-${key}`, {
-            title,
-            url,
-          });
+          appWindow.webContents.send(
+            `browserview-data-updated-${view.webContents.id}`,
+            {
+              title,
+              url,
+            },
+          );
           view.url = url;
           view.title = title;
         }
@@ -109,13 +121,21 @@ export class ViewManager {
   }
 
   public get selected() {
-    return this.views[this.selectedId];
+    return this.views.find(x => x.webContents.id === this.selectedId);
   }
 
-  public create(tabId: number, url: string) {
-    const view = new View(tabId, url);
-    this.views[tabId] = view;
-    global.viewsMap[view.id] = tabId;
+  public create(details: chrome.tabs.CreateProperties, isNext = false) {
+    const view = new View(details.url);
+    this.views.push(view);
+
+    appWindow.webContents.send(
+      'api-tabs-create',
+      { ...details },
+      isNext,
+      view.webContents.id,
+    );
+
+    return view;
   }
 
   public clear() {
@@ -125,12 +145,12 @@ export class ViewManager {
     }
   }
 
-  public select(tabId: number) {
-    const view = this.views[tabId];
-    this.selectedId = tabId;
+  public select(id: number) {
+    const view = this.views.find(x => x.webContents.id === id);
+    this.selectedId = id;
 
     if (!view || view.isDestroyed()) {
-      this.destroy(tabId);
+      this.destroy(id);
       appWindow.setBrowserView(null);
       return;
     }
@@ -139,22 +159,11 @@ export class ViewManager {
 
     appWindow.setBrowserView(view);
 
-    const currUrl = view.webContents.getURL();
-
-    if (
-      (currUrl === '' && view.homeUrl === 'about:blank') ||
-      currUrl === 'about:blank'
-    ) {
-      appWindow.webContents.focus();
-    } else {
-      view.webContents.focus();
-    }
-
     this.fixBounds();
   }
 
   public fixBounds() {
-    const view = this.views[this.selectedId];
+    const view = this.selected;
 
     if (!view) return;
 
@@ -165,7 +174,10 @@ export class ViewManager {
       width,
       height: this.fullscreen ? height : height - TOOLBAR_HEIGHT,
     });
-    view.setAutoResize({ width: true, height: true });
+    view.setAutoResize({
+      width: true,
+      height: true,
+    });
   }
 
   public hideView() {
@@ -178,27 +190,17 @@ export class ViewManager {
     this.select(this.selectedId);
   }
 
-  public destroy(tabId: number) {
-    const view = this.views[tabId];
+  public destroy(id: number) {
+    const view = this.views.find(x => x.webContents.id === id);
 
-    if (!view || view.isDestroyed()) {
-      delete this.views[tabId];
-      return;
-    }
+    this.views = this.views.filter(x => x.webContents.id !== id);
 
-    if (appWindow.getBrowserView() === view) {
-      appWindow.setBrowserView(null);
-    }
+    if (view) {
+      if (appWindow.getBrowserView() === view) {
+        appWindow.setBrowserView(null);
+      }
 
-    view.destroy();
-
-    delete this.views[tabId];
-  }
-
-  sendToAll(name: string, ...args: any[]) {
-    for (const key in this.views) {
-      const view = this.views[key];
-      view.webContents.send(name, ...args);
+      view.destroy();
     }
   }
 }

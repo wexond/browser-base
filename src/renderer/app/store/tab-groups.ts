@@ -1,14 +1,14 @@
-import { observable, computed } from 'mobx';
-import * as React from 'react';
+import { observable, computed, action } from 'mobx';
 
 import { TabGroup } from '~/renderer/app/models';
 import store from '.';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { colors } from '~/renderer/constants';
+import { closeWindow } from '../utils';
 
 export class TabGroupsStore {
   @observable
-  public groups: TabGroup[] = [];
+  public list: TabGroup[] = [];
 
   @observable
   public _currentGroupId = 0;
@@ -17,7 +17,7 @@ export class TabGroupsStore {
 
   constructor() {
     for (const key in colors) {
-      if ((colors as any)[key]['500'] && key !== 'yellow') {
+      if ((colors as any)[key]['500'] && key !== 'yellow' && key !== 'lime') {
         this.palette.push((colors as any)[key]['500']);
       }
     }
@@ -31,21 +31,21 @@ export class TabGroupsStore {
   public set currentGroupId(id: number) {
     this._currentGroupId = id;
     const group = this.currentGroup;
-    const tab = store.tabsStore.getTabById(group.selectedTabId);
+    const tab = store.tabs.getTabById(group.selectedTabId);
 
     if (tab) {
       tab.select();
-      store.overlayStore.visible = false;
+      store.overlay.visible = false;
     } else {
-      const { current } = store.overlayStore.inputRef;
+      const { current } = store.overlay.inputRef;
       if (current) {
-        current.value = '';
+        store.overlay.searchBoxValue = '';
         current.focus();
       }
     }
 
     setTimeout(() => {
-      store.tabsStore.updateTabsBounds(false);
+      store.tabs.updateTabsBounds(false);
     });
   }
 
@@ -53,38 +53,46 @@ export class TabGroupsStore {
     return this.getGroupById(this.currentGroupId);
   }
 
+  @action
   public removeGroup(id: number) {
     const group = this.getGroupById(id);
-    const index = this.groups.indexOf(group);
+    const index = this.list.indexOf(group);
 
     for (const tab of group.tabs) {
-      store.tabsStore.removeTab(tab.id);
+      store.tabs.removeTab(tab.id);
       ipcRenderer.send('browserview-destroy', tab.id);
     }
 
     if (group.isSelected) {
-      if (this.groups.length - 1 > index + 1) {
-        this.currentGroupId = this.groups[index + 1].id;
+      if (this.list.length > index + 1) {
+        this.currentGroupId = this.list[index + 1].id;
       } else if (index - 1 >= 0) {
-        this.currentGroupId = this.groups[index - 1].id;
+        this.currentGroupId = this.list[index - 1].id;
+      } else {
+        this.currentGroupId = this.list[0].id;
       }
     }
 
-    this.groups.splice(index, 1);
+    this.list.splice(index, 1);
+
+    if (this.list.length === 0) {
+      closeWindow();
+    }
   }
 
   public getGroupById(id: number) {
-    return this.groups.find(x => x.id === id);
+    return this.list.find(x => x.id === id);
   }
 
+  @action
   public addGroup() {
     const tabGroup: TabGroup = new TabGroup();
-    this.groups.push(tabGroup);
+    this.list.push(tabGroup);
     this.currentGroupId = tabGroup.id;
 
-    const { current } = store.overlayStore.inputRef;
+    const { current } = store.overlay.inputRef;
     if (current) {
-      current.value = '';
+      store.overlay.searchBoxValue = '';
       current.focus();
     }
   }

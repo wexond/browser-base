@@ -1,6 +1,11 @@
 {
   "appId": "org.wexond.wexond",
   "productName": "Wexond",
+
+  "nsis": {
+    "include": "static/installer.nsh"
+  },
+
   "asar": true,
   "directories": {
     "output": "dist",
@@ -11,10 +16,6 @@
   "linux": {
     "category": "Network",
     "target": [
-      {
-        "target": "deb",
-        "arch": ["ia32", "x64"]
-      },
       {
         "target": "AppImage",
         "arch": ["ia32", "x64"]

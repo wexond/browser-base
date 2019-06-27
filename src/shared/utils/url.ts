@@ -17,3 +17,23 @@ export const matchesPattern = (pattern: string, url: string) => {
   );
   return url.match(regexp) != null;
 };
+
+export const getDomain = (url: string): string => {
+  let hostname = url;
+
+  if (hostname.includes('http://') || hostname.includes('https://')) {
+    hostname = hostname.split('://')[1];
+  }
+
+  if (hostname.includes('?')) {
+    hostname = hostname.split('?')[0];
+  }
+
+  if (hostname.includes('://')) {
+    hostname = `${hostname.split('://')[0]}://${hostname.split('/')[2]}`;
+  } else {
+    hostname = hostname.split('/')[0];
+  }
+
+  return hostname;
+};

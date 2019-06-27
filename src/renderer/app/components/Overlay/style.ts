@@ -1,22 +1,62 @@
 import styled, { css } from 'styled-components';
-import { body2, subtitle2, centerImage, caption } from '~/shared/mixins';
-import { colors } from '~/renderer/constants';
-import { icons } from '../../constants';
+import { centerIcon, robotoMedium } from '~/shared/mixins';
+import { icons, TOOLBAR_HEIGHT } from '../../constants';
+import { Theme } from '../../models/theme';
+import { transparency } from '~/renderer/constants';
+
+export const OverlayScrollbarStyle = `
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 3px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.48);
+  }
+`;
+
+export const Handle = styled.div`
+  position: absolute;
+  z-index: 9999;
+  height: ${TOOLBAR_HEIGHT}px;
+  left: 0;
+  -webkit-app-region: drag;
+  top: 0;
+  right: 0;
+
+  ${({ visible }: { visible: boolean }) => css`
+    display: ${visible ? 'block' : 'none'};
+  `};
+`;
 
 export const StyledOverlay = styled.div`
-  background-color: rgba(0, 0, 0, 0.9);
-  color: white;
   position: absolute;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
   left: 0;
   top: 0;
   bottom: 0;
   right: 0;
   z-index: 9999;
-  transition: 0.15s opacity;
+  transition: 0.2s opacity, 0.2s background-color;
+  backface-visibility: hidden;
 
-  ${({ visible }: { visible: boolean }) => css`
+  ${({ visible, theme }: { visible: boolean; theme?: Theme }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
+    background-color: ${theme['overlay.backgroundColor']};
+    color: ${theme['overlay.foreground'] === 'light'
+      ? 'white'
+      : `rgba(0, 0, 0, ${transparency.text.high})`};
   `};
 `;
 
@@ -44,23 +84,28 @@ export const HeaderText = styled.div`
 `;
 
 export const HeaderArrow = styled.div`
-  ${centerImage('18px', '18px')};
+  ${centerIcon()};
   margin-left: 8px;
-  height: 16px;
-  width: 16px;
+  height: 18px;
+  width: 18px;
   background-image: url(${icons.forward});
   filter: invert(100%);
 `;
 
 export const DropArrow = styled.div`
-  ${centerImage('24px', '24px')};
+  ${centerIcon(24)};
   margin-left: 8px;
   height: 32px;
   width: 32px;
   background-image: url(${icons.down});
-  filter: invert(100%);
   border-radius: 50%;
   transition: 0.1s background-color;
+
+  ${({ theme }: { theme?: Theme }) => css`
+    filter: ${theme['overlay.foreground'] === 'light'
+      ? 'invert(100%)'
+      : 'none'};
+  `}
 `;
 
 export const Separator = styled.div`
@@ -71,80 +116,47 @@ export const Separator = styled.div`
 
 export const Section = styled.div`
   padding: 24px;
-  background-color: rgba(255, 255, 255, 0.12);
   margin-bottom: 24px;
   border-radius: 30px;
-  color: white;
   overflow: hidden;
+  transition: 0.2s background-color;
+
+  ${({ theme }: { theme?: Theme }) => css`
+    background-color: ${theme['overlay.section.backgroundColor']};
+  `}
 `;
 
-export const Card = styled.div`
-  background-color: rgba(255, 255, 255, 0.12);
-  margin-bottom: 24px;
-  border-radius: 30px;
-  color: white;
-  overflow: hidden;
-  width: 50%;
-`;
-
-export const WeatherHeader = styled.div`
-  width: 100%;
-  padding: 24px;
-  background-image: linear-gradient(to bottom right, #2196f3, #64b5f6);
-  display: flex;
-`;
-
-export const WeatherTitle = styled.div`
-  font-size: 24px;
-  font-weight: 300;
-  margin-bottom: 8px;
-`;
-
-export const WeatherNumber = styled.div`
-  font-size: 96px;
-  font-weight: 300;
-  display: flex;
-`;
-
-export const WeatherSymbol = styled.div`
-  font-size: 24px;
-  font-weight: 300;
+export const EmptySection = styled.div`
   margin-top: 16px;
+  padding: 0px 0px 8px 0px;
+  overflow: hidden;
+
+  &:first-child {
+    margin-top: 48px;
+  }
 `;
 
-export const WeatherLeft = styled.div`
-  flex: 1;
+export const SectionTitle = styled.div`
+  font-size: 16px;
+  padding: 16px 24px;
+  ${robotoMedium()};
 `;
 
-export const WeatherIcon = styled.div`
-  ${centerImage('96px', '96px')};
-  width: 96px;
-  height: 96px;
-`;
-
-export const WeatherContent = styled.div`
-  padding: 24px;
-`;
-
-export const Menu = styled.div`
+export const Actions = styled.div`
   display: flex;
-  margin-left: -16px;
-  margin-top: -16px;
   flex-wrap: wrap;
   justify-content: center;
 `;
 
 export const Scrollable = styled.div`
-  position: absolute;
+  width: 100%;
+  flex: 1;
   overflow-y: scroll;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  ${OverlayScrollbarStyle};
 `;
 
 export const Title = styled.div`
@@ -153,7 +165,6 @@ export const Title = styled.div`
   font-weight: 300;
   margin-bottom: 16px;
   margin-top: 24px;
-  color: white;
   position: relative;
   display: flex;
   padding-right: 42px;
@@ -165,10 +176,26 @@ export const Title = styled.div`
   }
 `;
 
+export const Container = styled.div`
+  position: absolute;
+  transition: 0.2s transform, 0.2s opacity, 0.2s visibility;
+  will-change: transform, opacity, pointer-events;
+  backface-visibility: hidden;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+
+  ${({ visible, right }: { visible: boolean; right?: boolean }) => css`
+    transform: translateX(${visible ? 0 : right ? 32 : -32}px);
+    opacity: ${visible ? 1 : 0};
+    pointer-events: ${visible ? 'auto' : 'none'};
+  `};
+`;
+
 export const Content = styled.div`
   width: calc(100% - 64px);
   max-width: 800px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
 `;

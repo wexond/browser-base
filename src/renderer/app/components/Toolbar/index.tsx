@@ -3,8 +3,7 @@ import * as React from 'react';
 import { platform } from 'os';
 
 import store from '~/renderer/app/store';
-import { StyledToolbar, StyledBrowserActions } from './style';
-import { WindowsButtons } from '../WindowsButtons';
+import { StyledToolbar, Buttons, Separator } from './style';
 import { NavigationButtons } from '../NavigationButtons';
 import { Tabbar } from '../Tabbar';
 import ToolbarButton from '../ToolbarButton';
@@ -19,37 +18,57 @@ const onUpdateClick = () => {
 @observer
 class BrowserActions extends React.Component {
   public render() {
-    const { selectedTabId } = store.tabGroupsStore.currentGroup;
+    const { selectedTabId } = store.tabGroups.currentGroup;
 
     return (
-      <StyledBrowserActions
-        style={{ marginRight: platform() !== 'darwin' ? 138 : 0 }}
-      >
+      <>
         {selectedTabId &&
-          store.extensionsStore.browserActions.map(item => {
+          store.extensions.browserActions.map(item => {
             if (item.tabId === selectedTabId) {
               return <BrowserAction data={item} key={item.extensionId} />;
             }
             return null;
           })}
-      </StyledBrowserActions>
+      </>
     );
   }
 }
 
 export const Toolbar = observer(() => {
+  const { selectedTab } = store.tabs;
+
+  let isWindow = false;
+  let blockedAds: any = '';
+
+  if (selectedTab) {
+    isWindow = selectedTab.isWindow;
+    blockedAds = selectedTab.blockedAds;
+  }
+
   return (
     <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
       <NavigationButtons />
       <Tabbar />
-      <BrowserActions />
-      {store.updateInfo.available && (
-        <ToolbarButton
-          icon={icons.download}
-          style={{ marginRight: 16 }}
-          onClick={onUpdateClick}
-        />
-      )}
+      <Buttons>
+        <BrowserActions />
+        {store.updateInfo.available && (
+          <ToolbarButton icon={icons.download} onClick={onUpdateClick} />
+        )}
+        {store.extensions.browserActions.length > 0 && <Separator />}
+        {!isWindow && (
+          <BrowserAction
+            size={18}
+            style={{ marginLeft: 0 }}
+            opacity={0.54}
+            data={{
+              badgeBackgroundColor: 'gray',
+              badgeText: blockedAds > 0 ? blockedAds.toString() : '',
+              icon: icons.shield,
+              badgeTextColor: 'white',
+            }}
+          />
+        )}
+      </Buttons>
     </StyledToolbar>
   );
 });

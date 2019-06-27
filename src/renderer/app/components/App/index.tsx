@@ -1,15 +1,18 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
 import { Style } from '~/renderer/app/style';
 import { Toolbar } from '../Toolbar';
-import { Overlay } from '../Overlay';
 import { ipcRenderer } from 'electron';
-import { Line, Screenshot, StyledApp } from './style';
-import store from '../../store';
-import { WindowsButtons } from '../WindowsButtons';
+import { Line, StyledApp } from './style';
+import { WindowsControls } from 'react-windows-controls';
 import { platform } from 'os';
+import { Overlay } from '../Overlay';
+import store from '../../store';
+import { darkTheme } from '~/renderer/constants/themes';
+import { closeWindow, minimizeWindow, maximizeWindow } from '../../utils';
+import { TOOLBAR_HEIGHT } from '../../constants';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -19,18 +22,33 @@ window.onbeforeunload = () => {
 
 export const App = observer(() => {
   return (
-    <StyledApp>
-      <GlobalStyle />
-      <Toolbar />
-      <Line />
-      <Screenshot
-        style={{
-          backgroundImage: `url(${store.tabsStore.selectedTab &&
-            store.tabsStore.selectedTab.screenshot})`,
-        }}
-      />
-      <Overlay />
-      {platform() !== 'darwin' && <WindowsButtons />}
-    </StyledApp>
+    <ThemeProvider theme={store.theme}>
+      <StyledApp>
+        <GlobalStyle />
+        <Toolbar />
+        <Line />
+        <Overlay />
+        {platform() !== 'darwin' && (
+          <WindowsControls
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              zIndex: 9999,
+              height: TOOLBAR_HEIGHT,
+              WebkitAppRegion: 'no-drag',
+            }}
+            dark={
+              store.overlay.visible
+                ? store.theme['overlay.windowsButtons.invert']
+                : store.theme['toolbar.icons.invert']
+            }
+            onClose={closeWindow}
+            onMinimize={minimizeWindow}
+            onMaximize={maximizeWindow}
+          />
+        )}
+      </StyledApp>
+    </ThemeProvider>
   );
 });

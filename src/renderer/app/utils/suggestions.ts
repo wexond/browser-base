@@ -7,10 +7,12 @@ export const countVisitedTimes = (hItems: HistoryItem[]) => {
   const historyItems = hItems.slice();
 
   for (const historyItem of historyItems) {
-    const itemsWithUrl = historyItems.filter(x => x.url === historyItem.url);
+    const itemsWithUrl = historyItems.filter(
+      x => x.url.replace('/', '') === historyItem.url.replace('/', ''),
+    );
 
     const itemToPush = {
-      times: itemsWithUrl.length - 1,
+      times: itemsWithUrl.length,
       item: historyItem,
     };
 
@@ -46,7 +48,7 @@ export const getHistorySuggestions = (filter: string) => {
 
   const filterPart = filter.replace(regex, '');
 
-  for (const item of store.historyStore.historyItems) {
+  for (const item of store.history.items) {
     let urlPart = item.url.replace(regex, '');
 
     if (urlPart.endsWith('/')) {

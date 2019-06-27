@@ -29,7 +29,7 @@ export const SuggestionComponent = observer(({ suggestion }: Props) => {
   const { hovered } = suggestion;
   const { primaryText, secondaryText } = suggestion;
 
-  const selected = store.suggestionsStore.selected === suggestion.id;
+  const selected = store.suggestions.selected === suggestion.id;
 
   let { favicon } = suggestion;
 
@@ -50,7 +50,12 @@ export const SuggestionComponent = observer(({ suggestion }: Props) => {
         style={{
           backgroundImage: `url(${favicon})`,
           opacity: customFavicon ? 1 : transparency.icons.inactive,
-          filter: customFavicon ? 'none' : 'invert(100%)',
+          filter:
+            store.theme['overlay.foreground'] === 'light'
+              ? customFavicon
+                ? 'none'
+                : 'invert(100%)'
+              : 'none',
         }}
       />
       <PrimaryText>{primaryText}</PrimaryText>

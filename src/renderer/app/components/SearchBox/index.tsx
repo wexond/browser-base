@@ -2,10 +2,11 @@ import * as React from 'react';
 
 import store from '../../store';
 import { isURL } from '~/shared/utils/url';
-import { callBrowserViewMethod } from '~/shared/utils/browser-view';
 import { observer } from 'mobx-react';
 import { StyledSearchBox, InputContainer, SearchIcon, Input } from './style';
 import { Suggestions } from '../Suggestions';
+import { icons } from '../../constants';
+import ToolbarButton from '../ToolbarButton';
 
 const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
@@ -27,29 +28,29 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
     e.currentTarget.value = url;
 
-    const tab = store.tabsStore.selectedTab;
-    if (!tab || store.overlayStore.isNewTab) {
-      store.tabsStore.addTab({ url, active: true });
+    const tab = store.tabs.selectedTab;
+    if (!tab || store.overlay.isNewTab) {
+      store.tabs.addTab({ url, active: true });
     } else {
       tab.url = url;
-      callBrowserViewMethod('webContents.loadURL', tab.id, url);
+      tab.callViewMethod('webContents.loadURL', url);
     }
 
-    store.overlayStore.visible = false;
+    store.overlay.visible = false;
   }
 };
 
 const onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-  if (store.overlayStore.inputRef.current) {
-    store.overlayStore.inputRef.current.select();
+  if (store.overlay.inputRef.current) {
+    store.overlay.inputRef.current.select();
   }
 };
 
 const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
   const key = e.keyCode;
-  const { suggestionsStore } = store;
-  const { suggestions } = suggestionsStore;
-  const input = store.overlayStore.inputRef.current;
+  const { suggestions } = store;
+  const { list } = suggestions;
+  const input = store.overlay.inputRef.current;
 
   if (
     key !== 8 && // backspace
@@ -62,43 +63,51 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     key !== 46 && // delete
     key !== 32 // space
   ) {
-    store.overlayStore.canSuggest = true;
+    store.overlay.canSuggest = true;
   } else {
-    store.overlayStore.canSuggest = false;
+    store.overlay.canSuggest = false;
   }
 
   if (e.keyCode === 38 || e.keyCode === 40) {
     e.preventDefault();
-    if (
-      e.keyCode === 40 &&
-      suggestionsStore.selected + 1 <= suggestions.length - 1
-    ) {
-      suggestionsStore.selected++;
-    } else if (e.keyCode === 38 && suggestionsStore.selected - 1 >= 0) {
-      suggestionsStore.selected--;
+    if (e.keyCode === 40 && suggestions.selected + 1 <= list.length - 1) {
+      suggestions.selected++;
+    } else if (e.keyCode === 38 && suggestions.selected - 1 >= 0) {
+      suggestions.selected--;
     }
 
-    const suggestion = suggestions.find(
-      x => x.id === suggestionsStore.selected,
-    );
+    const suggestion = list.find(x => x.id === suggestions.selected);
 
     input.value = suggestion.primaryText;
   }
 };
 
-const onInput = () => {
-  store.overlayStore.show();
-  store.overlayStore.suggest();
-  store.overlayStore.scrollRef.current.scrollTop = 0;
+const onInput = (e: any) => {
+  store.overlay.show();
+  store.overlay.suggest();
+  store.overlay.scrollRef.current.scrollTop = 0;
+  store.overlay.searchBoxValue = e.currentTarget.value;
+};
+
+const onStarClick = async () => {
+  const { selectedTab } = store.tabs;
+
+  await store.bookmarks.addItem({
+    title: selectedTab.title,
+    url: store.overlay.inputRef.current.value,
+    parent: null,
+    type: 'item',
+    favicon: selectedTab.favicon,
+  });
 };
 
 export const SearchBox = observer(() => {
-  const suggestionsVisible = store.suggestionsStore.suggestions.length !== 0;
+  const suggestionsVisible = store.suggestions.list.length !== 0;
 
-  let height = 48;
+  let height = 42;
 
-  for (const s of store.suggestionsStore.suggestions) {
-    height += 48;
+  for (const s of store.suggestions.list) {
+    height += 42;
   }
 
   return (
@@ -112,7 +121,20 @@ export const SearchBox = observer(() => {
           onFocus={onInputFocus}
           onChange={onInput}
           onKeyDown={onKeyDown}
-          ref={store.overlayStore.inputRef}
+          ref={store.overlay.inputRef}
+        />
+        <ToolbarButton
+          invert
+          icon={store.overlay.isBookmarked ? icons.starFilled : icons.star}
+          onClick={onStarClick}
+          style={{
+            marginRight: 8,
+            display:
+              store.tabs.selectedTab &&
+              store.tabs.selectedTab.url === store.overlay.searchBoxValue
+                ? 'block'
+                : 'none',
+          }}
         />
       </InputContainer>
       <Suggestions visible={suggestionsVisible} />

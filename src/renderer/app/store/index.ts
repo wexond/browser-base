@@ -1,4 +1,6 @@
-import { observable } from 'mobx';
+import * as React from 'react';
+import { observable, computed } from 'mobx';
+
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
@@ -8,16 +10,34 @@ import { HistoryStore } from './history';
 import { FaviconsStore } from './favicons';
 import { SuggestionsStore } from './suggestions';
 import { ExtensionsStore } from './extensions';
+import { extname } from 'path';
+import { BookmarksStore } from './bookmarks';
+import { readFileSync, writeFile } from 'fs';
+import { getPath } from '~/shared/utils/paths';
+import { DownloadsStore } from './downloads';
+import { lightTheme, darkTheme } from '~/renderer/constants/themes';
+import { WeatherStore } from './weather';
+import { SettingsStore } from './settings';
 
 export class Store {
-  public historyStore = new HistoryStore();
-  public suggestionsStore = new SuggestionsStore();
-  public faviconsStore = new FaviconsStore();
-  public addTabStore = new AddTabStore();
-  public tabGroupsStore = new TabGroupsStore();
-  public tabsStore = new TabsStore();
-  public overlayStore = new OverlayStore();
-  public extensionsStore = new ExtensionsStore();
+  public history = new HistoryStore();
+  public bookmarks = new BookmarksStore();
+  public settings = new SettingsStore();
+  public suggestions = new SuggestionsStore();
+  public favicons = new FaviconsStore();
+  public addTab = new AddTabStore();
+  public tabGroups = new TabGroupsStore();
+  public tabs = new TabsStore();
+  public overlay = new OverlayStore();
+  public extensions = new ExtensionsStore();
+  public downloads = new DownloadsStore();
+  public weather = new WeatherStore();
+
+  @observable
+  public theme = lightTheme;
+
+  @observable
+  public isAlwaysOnTop = false;
 
   @observable
   public isFullscreen = false;
@@ -36,9 +56,6 @@ export class Store {
     canGoBack: false,
     canGoForward: false,
   };
-
-  @observable
-  public screenshot: any;
 
   public canToggleMenu = false;
 
@@ -78,7 +95,7 @@ export class Store {
 
         sender.send(
           'api-tabs-query',
-          this.tabsStore.tabs.map(tab => tab.getApiTab()),
+          this.tabs.list.map(tab => tab.getApiTab()),
         );
       },
     );
@@ -92,7 +109,7 @@ export class Store {
         details: chrome.browserAction.BadgeTextDetails,
       ) => {
         if (details.tabId) {
-          const browserAction = this.extensionsStore.queryBrowserAction({
+          const browserAction = this.extensions.queryBrowserAction({
             extensionId,
             tabId: details.tabId,
           })[0];
@@ -101,12 +118,11 @@ export class Store {
             browserAction.badgeText = details.text;
           }
         } else {
-          this.extensionsStore
+          this.extensions
             .queryBrowserAction({
               extensionId,
             })
             .forEach(item => {
-              console.log(item);
               item.badgeText = details.text;
             });
         }
@@ -115,7 +131,42 @@ export class Store {
       },
     );
 
+    ipcRenderer.on('find', () => {
+      const tab = this.tabs.selectedTab;
+      if (tab) {
+        ipcRenderer.send('find-show', tab.id, tab.findInfo);
+      }
+    });
+
     ipcRenderer.send('update-check');
+
+    requestAnimationFrame(() => {
+      if (remote.process.argv.length > 1 && remote.process.env.ENV !== 'dev') {
+        const path = remote.process.argv[1];
+        const ext = extname(path);
+
+        if (ext === '.html') {
+          this.tabs.addTab({ url: `file:///${path}`, active: true });
+        }
+      }
+    });
+
+    /*this.settings = {
+      ...this.settings,
+      ...JSON.parse(readFileSync(getPath('settings.json'), 'utf8')),
+    };*/
+
+    this.theme = this.settings.isDarkTheme ? darkTheme : lightTheme;
+
+    ipcRenderer.send('settings', this.settings);
+  }
+
+  public saveSettings() {
+    /*ipcRenderer.send('settings', this.settings);
+
+    writeFile(getPath('settings.json'), JSON.stringify(this.settings), err => {
+      if (err) console.error(err);
+    });*/
   }
 }
 
