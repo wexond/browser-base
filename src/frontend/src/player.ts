@@ -1,6 +1,5 @@
 import { Store } from './store'
 import { ipcMain } from 'electron';
-import { ChildProcess } from 'child_process'
 const { PassThrough, Writable } = require('stream')
 const ff = require('./ffmpeg')
 const ffprobe  = require('ffprobe')
@@ -9,7 +8,7 @@ const ffplay = require('./ffplay')
 const ffprobeTimeout = 5000000
 
 export class Player {
-  private currentPipeline?: ChildProcess
+  private currentPipeline?: any
   private segmentInterval: number
   private currentStreams?: any
 
@@ -159,8 +158,8 @@ export class Player {
           buf = Buffer.concat([buf, chunk])
           callback()
         },
-      });
-      (this.currentPipeline as any).pipe(mp4SegmentBufferer)
+      })
+      this.currentPipeline.pipe(mp4SegmentBufferer)
 
       this.segmentInterval && clearInterval(this.segmentInterval)
       this.segmentInterval = setInterval(() => {

@@ -4,10 +4,21 @@ const cp = require('child_process')
 const os = require('os')
 var parallel = require('run-parallel')
 
-const embedVlcPath = 'VLC'
+let ffplayPath
+let embedVlcPath = path.resolve(__dirname, '../extras/vlc/win/vlc/vlc.exe')
+// extras\vlc\win\VLCPortable
+if (process.platform === 'darwin') {
+    ffplayPath = path.resolve(__dirname, '../extras/ffmpeg/macos/ffplay')
+}
+else {
+    ffplayPath = path.resolve(__dirname, '../extras/ffmpeg/windows/ffplay.exe')
+}
+
+
 function playStream(url){
 	return spawn(embedVlcPath, [url, '-Idummy','--dummy-quiet'])
 }
+
 
 //not used anymore but kept in case of revert and use of local vlc
 function getVLCPath (cb) {
