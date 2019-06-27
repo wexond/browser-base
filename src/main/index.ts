@@ -102,12 +102,16 @@ app.on('ready', async () => {
       if (permission === 'fullscreen') {
         callback(true);
       } else {
-        const response = await appWindow.permissionWindow.requestPermission(
-          permission,
-          webContents.getURL(),
-          details,
-        );
-        callback(response);
+        try {
+          const response = await appWindow.permissionWindow.requestPermission(
+            permission,
+            webContents.getURL(),
+            details,
+          );
+          callback(response);
+        } catch (e) {
+          callback(false);
+        }
       }
     },
   );

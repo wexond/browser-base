@@ -34,7 +34,15 @@ export class PermissionWindow extends BrowserWindow {
     url: string,
     details: any,
   ): Promise<boolean> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
+      if (
+        name === 'unknown' ||
+        (name === 'media' && details.mediaTypes.length === 0) ||
+        name === 'midiSysex'
+      ) {
+        return reject('Unknown permission');
+      }
+
       this.rearrange();
       this.show();
 
