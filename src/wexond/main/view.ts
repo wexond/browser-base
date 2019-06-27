@@ -1,4 +1,10 @@
-import { BrowserView, app, Menu, nativeImage, clipboard } from 'electron';
+import {
+  BrowserView,
+  app,
+  Menu,
+  nativeImage,
+  clipboard,
+} from 'electron';
 import { appWindow } from '.';
 import { sendToAllExtensions } from './extensions';
 import { engine, isShieldToggled } from './services/web-request';
@@ -125,7 +131,7 @@ export class View extends BrowserView {
           {
             type: 'separator',
           },
-        ]);
+        ] as any);
       }
 
       if (!params.isEditable && params.selectionText !== '') {
@@ -161,6 +167,13 @@ export class View extends BrowserView {
             label: 'Refresh',
             click: () => {
               this.webContents.reload();
+            },
+          },
+          {
+            label: 'Close',
+            click: () => {
+              this.webContents.executeJavaScript('document.exitFullscreen()');
+              appWindow.webContents.send('remove-tab', this.tabId);
             },
           },
           {
@@ -259,6 +272,7 @@ export class View extends BrowserView {
             appWindow.viewManager.selected.webContents.loadURL(url);
           } else if (frameName === '_blank') {
             e.preventDefault();
+            this.webContents.executeJavaScript('document.exitFullscreen()');
             appWindow.webContents.send(
               'api-tabs-create',
               {

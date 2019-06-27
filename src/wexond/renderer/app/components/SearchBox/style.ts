@@ -7,7 +7,6 @@ import { transparency } from '~/renderer/constants';
 
 export const StyledSearchBox = styled.div`
   margin-top: 10px;
-  z-index: 2;
 
   border-radius: 23px;
   margin-bottom: 32px;

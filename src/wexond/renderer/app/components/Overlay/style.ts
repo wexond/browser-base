@@ -25,7 +25,6 @@ export const OverlayScrollbarStyle = `
 
 export const Handle = styled.div`
   position: absolute;
-  z-index: 9999;
   height: ${TOOLBAR_HEIGHT}px;
   left: 0;
   -webkit-app-region: drag;
@@ -46,7 +45,6 @@ export const StyledOverlay = styled.div`
   top: ${TOOLBAR_HEIGHT + 1}px;
   bottom: 0;
   right: 0;
-  z-index: 9999;
   transition: 0.2s opacity, 0.2s background-color;
   backface-visibility: hidden;
 

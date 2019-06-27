@@ -12,6 +12,10 @@ if (migrateUserPreferences) {
   initFlowrConfig(migrateUserPreferences)
 }
 
+app.commandLine.appendSwitch('widevine-cdm-path', resolve('/Applications/Google Chrome.app/Contents/Versions/74.0.3729.169/Google Chrome Framework.framework/Versions/A/Libraries/WidevineCdm/_platform_specific/mac_x64'))
+// The version of plugin can be got from `chrome://components` page in Chrome.
+app.commandLine.appendSwitch('widevine-cdm-version', '4.10.1303.2')
+
 app.setPath('userData', resolve(homedir(), '.flowr-electron'));
 log.transports.file.level = 'verbose';
 log.transports.file.file = resolve(app.getPath('userData'), 'log.log');

@@ -1,6 +1,6 @@
 {
   "name": "flowr-pc-client",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "email": "hj@taktik.com",
     "name": "Hubert Jacquin"
@@ -48,8 +48,8 @@
     "@types/styled-components": "4.1.14",
     "concurrently": "4.1.0",
     "cross-env": "5.2.0",
-    "electron": "5.0.1",
-    "electron-builder": "20.40.2",
+    "electron": "https://github.com/castlabs/electron-releases#v5.0.3-wvvmp",
+    "electron-builder": "20.43.0",
     "fuse-box": "3.7.1",
     "prettier": "1.17.0",
     "terser": "3.17.0",
