@@ -154,7 +154,7 @@ app.on('ready', async () => {
 
   const extensionsPath = getPath('extensions');
 
-  if (!existsSync) {
+  if (!existsSync(extensionsPath)) {
     mkdirSync(extensionsPath);
   } else {
     const dirs = await promises.readdir(extensionsPath);
