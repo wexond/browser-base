@@ -1,6 +1,6 @@
 {
   "name": "wexond",
-  "version": "2.2.1",
+  "version": "2.2.0",
   "description": "Extensible, fast and innovative web browser with material UI.",
   "keywords": [
     "web-browser",
@@ -72,7 +72,7 @@
     "typescript-plugin-styled-components": "1.4.3"
   },
   "dependencies": {
-    "@cliqz/adblocker": "0.9.1",
+    "@cliqz/adblocker": "0.11.0",
     "axios": "0.19.0",
     "electron-extensions": "1.0.2",
     "electron-log": "3.0.6",
@@ -93,8 +93,7 @@
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-windows-controls": "1.0.5",
-    "styled-components": "4.3.2",
-    "tldts": "5.2.0"
+    "styled-components": "4.3.2"
   },
   "cmake-js": {
     "runtime": "electron",

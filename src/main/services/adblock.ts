@@ -4,8 +4,7 @@ import { resolve } from 'path';
 import { appWindow, settings } from '..';
 import Axios from 'axios';
 
-import { FiltersEngine, makeRequest } from '@cliqz/adblocker';
-import { parse } from 'tldts';
+import { FiltersEngine, Request } from '@cliqz/adblocker';
 import { getPath } from '~/shared/utils/paths';
 
 const lists: any = {
@@ -69,7 +68,6 @@ const loadFilters = async () => {
         data,
         engine.config,
       );
-
       engine.update({
         newNetworkFilters: networkFilters,
         newCosmeticFilters: cosmeticFilters,
@@ -90,7 +88,10 @@ export const runAdblockService = (ses: Session) => {
     async (details: Electron.OnBeforeRequestDetails, callback: any) => {
       if (engine && settings.isShieldToggled) {
         const { match, redirect } = engine.match(
-          makeRequest({ type: details.resourceType, url: details.url }, parse),
+          Request.fromRawDetails({
+            type: details.resourceType as any,
+            url: details.url,
+          }),
         );
 
         if (match || redirect) {
