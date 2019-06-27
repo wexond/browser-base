@@ -10,9 +10,10 @@ import { getPath } from '~/shared/utils/paths';
 const lists: any = {
   easylist: 'https://easylist.to/easylist/easylist.txt',
   easyprivacy: 'https://easylist.to/easylist/easyprivacy.txt',
-  malwaredomains: 'http://mirror1.malwaredomains.com/files/justdomains',
-  nocoin:
-    'https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt',
+
+  'plowe-0':
+    'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=0&mimetype=plaintext',
+
   'ublock-filters':
     'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
   'ublock-badware':
@@ -21,6 +22,8 @@ const lists: any = {
     'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
   'ublock-unbreak':
     'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+  'ublock-abuse':
+    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
 };
 
 export let engine: FiltersEngine;
@@ -39,7 +42,7 @@ const loadFilters = async () => {
       ops.push(Axios.get(lists[key]));
     }
 
-    Axios.all(ops).then(res => {
+    Axios.all(ops).then(async res => {
       let data = '';
 
       for (const res1 of res) {
@@ -47,6 +50,12 @@ const loadFilters = async () => {
       }
 
       engine = FiltersEngine.parse(data);
+
+      const resources = (await Axios.get(
+        'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt',
+      )).data;
+
+      engine.updateResources(resources, `${resources.length}`);
 
       writeFile(path, engine.serialize(), err => {
         if (err) return console.error(err);
