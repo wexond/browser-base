@@ -10,6 +10,7 @@ import { darkTheme, lightTheme } from '~/renderer/constants/themes';
 import { getCurrentWindow } from '../../utils';
 import { OverlayContent } from '../../store/overlay';
 import { ipcRenderer } from 'electron';
+import { platform } from 'os';
 
 const changeContent = (content: OverlayContent) => () => {
   store.overlay.currentContent = content;
@@ -83,14 +84,14 @@ export const QuickMenu = observer(() => {
         >
           Shield
         </Bubble>
-        <Bubble
+        {platform() === 'win32' && <Bubble
           invert={invert}
           toggled={store.settings.isMultrinToggled}
           icon={icons.multrin}
           onClick={onMultrinClick}
         >
           Multrin
-        </Bubble>
+        </Bubble>}
       </Actions>
       <Line />
       <Actions>
