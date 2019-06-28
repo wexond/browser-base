@@ -11,11 +11,7 @@ os:
   - linux
   - osx
   - windows
-deploy:
-  skip_cleanup: true
-  script:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-darwin ;fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-linux ;fi
-    - if [[ "$TRAVIS_OS_NAME" == "windows" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-win32 ;fi
-  on:
-    tags: true
+script:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-darwin ;fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-linux ;fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-win32 ;fi
