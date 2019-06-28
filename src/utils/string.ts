@@ -18,3 +18,7 @@ export const replaceAll = (
   find = find.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
   return str.replace(new RegExp(find, options), replace);
 };
+
+export const capitalizeFirst = (str: string) => {
+  return str.substr(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+};

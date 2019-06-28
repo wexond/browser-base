@@ -1,6 +1,7 @@
-import { HistoryItem } from '../models';
+import { HistoryItem } from '~/interfaces';
+import { requestURL } from '~/utils';
+
 import store from '../store';
-import { requestURL } from './network';
 
 export const countVisitedTimes = (hItems: HistoryItem[]) => {
   const items: any[] = [];

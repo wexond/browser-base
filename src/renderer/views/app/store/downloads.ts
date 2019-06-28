@@ -1,6 +1,7 @@
 import { observable } from 'mobx';
-import { DownloadItem } from '../models/download-item';
 import { ipcRenderer } from 'electron';
+
+import { DownloadItem } from '~/interfaces';
 import store from '.';
 
 export class DownloadsStore {

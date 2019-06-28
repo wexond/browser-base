@@ -1,6 +1,6 @@
 import { observable, computed, action } from 'mobx';
 
-import store from '~/renderer/app/store';
+import store from '../store';
 import { colors } from '~/renderer/constants';
 
 let id = 0;

@@ -1,8 +1,9 @@
-import { observable, observe, action } from 'mobx';
+import { observable, action } from 'mobx';
 import * as React from 'react';
 import { TweenLite } from 'gsap';
+import Vibrant = require('node-vibrant');
 
-import { Tab } from '~/renderer/app/models';
+import { Tab } from '../models';
 
 import {
   TAB_ANIMATION_DURATION,
@@ -10,14 +11,12 @@ import {
   TABS_PADDING,
   TOOLBAR_HEIGHT,
   TAB_ANIMATION_EASING,
-} from '~/renderer/app/constants';
+} from '../constants';
 
 import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 import store from '.';
-import { ipcRenderer, remote } from 'electron';
-import { extname } from 'path';
-import { getColorBrightness } from '../utils';
-import Vibrant = require('node-vibrant');
+import { ipcRenderer } from 'electron';
+import { getColorBrightness } from '~/utils';
 
 export class TabsStore {
   @observable

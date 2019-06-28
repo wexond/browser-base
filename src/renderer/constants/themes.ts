@@ -1,4 +1,4 @@
-import { Theme } from '../app/models/theme';
+import { Theme } from '~/interfaces/theme';
 import { transparency } from './transparency';
 import { colors } from './colors';
 

@@ -1,8 +1,7 @@
 import * as Datastore from 'nedb';
 
-import { Favicon } from '../models';
-import { getPath } from '~/shared/utils/paths';
-import { requestURL } from '../utils/network';
+import { Favicon } from '~/interfaces';
+import { requestURL, getPath } from '~/utils';
 import { observable } from 'mobx';
 
 const icojs = require('icojs');

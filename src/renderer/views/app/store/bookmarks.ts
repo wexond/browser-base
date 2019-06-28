@@ -1,7 +1,7 @@
 import * as Datastore from 'nedb';
 import { observable, computed, action } from 'mobx';
-import { getPath } from '~/shared/utils/paths';
-import { Bookmark } from '../models/bookmark';
+import { getPath } from '~/utils/paths';
+import { Bookmark } from '~/interfaces';
 
 export class BookmarksStore {
   public db = new Datastore({

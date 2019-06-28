@@ -1,7 +1,7 @@
 import { observable } from 'mobx';
 
-import { getWeather } from '~/renderer/app/utils';
-import { Forecast } from '../models';
+import { getWeather } from '../utils';
+import { Forecast } from '~/interfaces';
 
 export class WeatherStore {
   @observable

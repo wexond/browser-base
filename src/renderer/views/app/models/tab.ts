@@ -1,17 +1,17 @@
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
 import { ipcRenderer } from 'electron';
-import * as Vibrant from 'node-vibrant';
+import Vibrant = require('node-vibrant');
 
-import store from '~/renderer/app/store';
+import store from '../store';
 import {
   TABS_PADDING,
   TOOLBAR_HEIGHT,
   defaultTabOptions,
   TAB_ANIMATION_DURATION,
-} from '~/renderer/app/constants';
-import { getColorBrightness } from '../utils';
-import { callViewMethod } from '../utils/view';
+} from '../constants';
+import { getColorBrightness } from '~/utils';
+import { callViewMethod } from '../utils';
 
 const isColorAcceptable = (color: string) => {
   if (store.theme['tab.allowLightBackground']) {
