@@ -57,6 +57,14 @@ export class Store {
     canGoForward: false,
   };
 
+  @computed
+  public get tabbarVisible() {
+    return (
+      this.tabGroups.currentGroup.tabs.length > 0 &&
+      this.overlay.currentContent === 'default'
+    );
+  }
+
   public canToggleMenu = false;
 
   public mouse = {

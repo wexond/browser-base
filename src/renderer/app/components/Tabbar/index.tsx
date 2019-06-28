@@ -20,7 +20,12 @@ const onAddTabClick = () => {
 
 export const Tabbar = observer(() => {
   return (
-    <StyledTabbar>
+    <StyledTabbar
+      style={{
+        opacity: store.tabbarVisible ? 1 : 0,
+        pointerEvents: store.tabbarVisible ? 'auto' : 'none',
+      }}
+    >
       <TabsContainer
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
