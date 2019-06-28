@@ -3,14 +3,22 @@ node_js: '12'
 sudo: enabled
 dist: trusty
 install:
-- npm ci
+  - npm ci
 cache:
   directories:
-  - "$HOME/.npm"
+    - '$HOME/.npm'
 os:
   - linux
   - osx
   - windows
+deploy:
+  skip_cleanup: true
+  script:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-darwin ;fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-linux ;fi
+    - if [[ "$TRAVIS_OS_NAME" == "windows" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-win32 ;fi
+  on:
+    tags: true
 addons:
   apt:
     sources:
@@ -24,8 +32,3 @@ addons:
       - linux-libc-dev
       - icnsutils
       - graphicsmagick
-
-script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-darwin ;fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-linux ;fi
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-win32 ;fi
