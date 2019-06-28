@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { OverlayScrollbarStyle } from '../Overlay/style';
+import { getOverlayScrollbarStyle } from '../Overlay/style';
 
 export const Downloads = styled.div`
   display: flex;
@@ -7,5 +7,5 @@ export const Downloads = styled.div`
   padding-bottom: 8px;
   overflow: auto;
 
-  ${OverlayScrollbarStyle}
+  ${(props: any) => getOverlayScrollbarStyle(props.theme)};
 `;

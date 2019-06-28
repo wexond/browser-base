@@ -4,24 +4,26 @@ import { icons, TOOLBAR_HEIGHT } from '../../constants';
 import { Theme } from '../../models/theme';
 import { transparency } from '~/renderer/constants';
 
-export const OverlayScrollbarStyle = `
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 3px;
-  }
+export const getOverlayScrollbarStyle = (theme: Theme) => {
+  return `
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 3px;
+    }
 
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
 
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.16);
-  }
+    ::-webkit-scrollbar-thumb {
+      background: ${theme['overlay.scrollbar.backgroundColor']};
+    }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.48);
-  }
-`;
+    ::-webkit-scrollbar-thumb:hover {
+      background: ${theme['overlay.scrollbar.hover.backgroundColor']};
+    }
+  `;
+};
 
 export const Handle = styled.div`
   position: absolute;
@@ -156,7 +158,7 @@ export const Scrollable = styled.div`
   flex-flow: column;
   align-items: center;
 
-  ${OverlayScrollbarStyle};
+  ${(props: any) => getOverlayScrollbarStyle(props.theme)};
 `;
 
 export const Title = styled.div`

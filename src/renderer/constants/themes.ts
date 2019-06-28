@@ -19,6 +19,8 @@ export const lightTheme: Theme = {
   'overlay.foreground': 'dark',
   'overlay.backgroundColor': '#fff',
   'overlay.separator.color': 'rgba(0, 0, 0, 0.12)',
+  'overlay.scrollbar.backgroundColor': 'rgba(0, 0, 0, 0.16)',
+  'overlay.scrollbar.hover.backgroundColor': 'rgba(0, 0, 0, 0.32)',
   accentColor: colors.blue['500'],
 };
 
@@ -39,5 +41,7 @@ export const darkTheme: Theme = {
   'overlay.dialog.backgroundColor': '#303030',
   'overlay.foreground': 'light',
   'overlay.separator.color': 'rgba(255, 255, 255, 0.12)',
+  'overlay.scrollbar.backgroundColor': 'rgba(255, 255, 255, 0.16)',
+  'overlay.scrollbar.hover.backgroundColor': 'rgba(255, 255, 255, 0.48)',
   accentColor: colors.blue['500'],
 };
