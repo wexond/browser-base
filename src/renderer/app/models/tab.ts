@@ -295,7 +295,7 @@ export class Tab {
 
       if (store.overlay.visible) {
         store.overlay.visible = false;
-        setTimeout(show, 300);
+        setTimeout(show, 200);
       } else {
         show();
       }
