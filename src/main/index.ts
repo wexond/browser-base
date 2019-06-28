@@ -7,7 +7,7 @@ import { AppWindow } from './windows/app';
 import { runAdblockService } from './services';
 import { existsSync, writeFileSync, promises, mkdirSync } from 'fs';
 import { getPath } from '~/utils/paths';
-import { Settings } from '~/interfaces';
+import { ISettings } from '~/interfaces';
 import { makeId } from '~/utils/string';
 import { getMainMenu } from './menus/main';
 import { runAutoUpdaterService } from './services/auto-updater';
@@ -25,9 +25,9 @@ log.transports.file.file = resolve(app.getPath('userData'), 'log.log');
 ipcMain.setMaxListeners(0);
 
 export let appWindow: AppWindow;
-export let settings: Settings = {};
+export let settings: ISettings = {};
 
-ipcMain.on('settings', (e: any, s: Settings) => {
+ipcMain.on('settings', (e: any, s: ISettings) => {
   settings = { ...settings, ...s };
 });
 
@@ -71,7 +71,7 @@ app.on('ready', async () => {
         dialType: 'top-sites',
         isDarkTheme: false,
         isShieldToggled: true,
-      } as Settings),
+      } as ISettings),
     );
   }
 
