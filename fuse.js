@@ -56,13 +56,9 @@ const getCopyPlugin = () => {
 };
 
 const main = () => {
-  const cfg = getConfig('server', 'main');
+  const fuse = FuseBox.init(getConfig('server', 'main'));
 
-  cfg.plugins.push(JSONPlugin());
-
-  const fuse = FuseBox.init(cfg);
-
-  const app = fuse.bundle('main').instructions(`> [main/index.ts] +axios`);
+  const app = fuse.bundle('main').instructions(`> [main/index.ts]`);
 
   if (!production) {
     app.watch();
@@ -93,9 +89,7 @@ const renderer = name => {
 
   const app = fuse
     .bundle(name)
-    .instructions(
-      `> renderer/views/${name}/index.tsx -electron -styled-components`,
-    );
+    .instructions(`> [renderer/views/${name}/index.tsx]`);
 
   if (!production) {
     if (name === 'app') {
