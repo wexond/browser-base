@@ -2,8 +2,8 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 
 import { StyledSuggestions } from './style';
-import store from '../../../app/store';
-import { SuggestionComponent } from '../../../app/components/Suggestion';
+import store from '~/renderer/views/app/store';
+import { Suggestion } from '../Suggestion';
 
 interface Props {
   visible: boolean;
@@ -17,7 +17,7 @@ export const Suggestions = observer(({ visible }: Props) => {
   return (
     <StyledSuggestions visible={visible} onMouseDown={onMouseDown}>
       {store.suggestions.list.map(suggestion => (
-        <SuggestionComponent suggestion={suggestion} key={suggestion.id} />
+        <Suggestion suggestion={suggestion} key={suggestion.id} />
       ))}
     </StyledSuggestions>
   );

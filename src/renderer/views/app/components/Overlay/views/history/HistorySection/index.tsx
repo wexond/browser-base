@@ -1,11 +1,10 @@
 import * as React from 'react';
 
 import HistoryItem from '../HistoryItem';
-import { HistorySection } from '../../models';
+import { IHistorySection } from '~/interfaces';
+import { EmptySection, SectionTitle } from '../../../style';
 
-import { EmptySection, SectionTitle } from '../Overlay/style';
-
-export default ({ data }: { data: HistorySection }) => {
+export const HistorySection = ({ data }: { data: IHistorySection }) => {
   return (
     <EmptySection>
       <SectionTitle>{data.label}</SectionTitle>

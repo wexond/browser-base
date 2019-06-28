@@ -1,10 +1,11 @@
-import styled, { css } from './node_modules/styled-components';
-import { centerIcon, robotoMedium } from './node_modules/~/shared/mixins';
-import { icons, TOOLBAR_HEIGHT } from '../../../constants
-import { Theme } from '../../models/theme';
-import { transparency } from './node_modules/~/renderer/constants';
+import styled, { css } from 'styled-components';
 
-export const getOverlayScrollbarStyle = (theme: Theme) => {
+import { TOOLBAR_HEIGHT } from '../../constants';
+import { transparency, icons } from '~/renderer/constants';
+import { centerIcon, robotoMedium } from '~/renderer/mixins';
+import { ITheme } from '~/interfaces';
+
+export const getOverlayScrollbarStyle = (theme: ITheme) => {
   return `
     ::-webkit-scrollbar {
       width: 6px;
@@ -52,7 +53,7 @@ export const StyledOverlay = styled.div`
   transition: 0.2s opacity, 0.2s background-color;
   backface-visibility: hidden;
 
-  ${({ visible, theme }: { visible: boolean; theme?: Theme }) => css`
+  ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
     background-color: ${theme['overlay.backgroundColor']};
@@ -103,7 +104,7 @@ export const DropArrow = styled.div`
   border-radius: 50%;
   transition: 0.1s background-color;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     filter: ${theme['overlay.foreground'] === 'light'
       ? 'invert(100%)'
       : 'none'};
@@ -123,7 +124,7 @@ export const Section = styled.div`
   overflow: hidden;
   transition: 0.2s background-color;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['overlay.section.backgroundColor']};
   `}
 `;

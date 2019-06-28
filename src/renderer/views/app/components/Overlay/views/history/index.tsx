@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import store from '../../../app/store';
-import HistorySection from '../HistorySection';
-import { QuickRange } from '../../../app/store/history';
-import { Button } from '~/renderer/components/Button';
-import { Sections, DeletionDialog, DeletionDialogLabel } from './style';
-import { NavigationDrawer } from '../../NavigationDrawer';
+import { Sections } from './style';
 import { Content, Container, Scrollable } from '../../style';
-import { SelectionDialog } from '../../SelectionDialog';
-import { icons } from '../../../app/constants';
 import { ipcRenderer } from 'electron';
+import store from '~/renderer/views/app/store';
+import { HistorySection } from './HistorySection';
+import { QuickRange } from '~/renderer/views/app/store/history';
+import { NavigationDrawer } from '../../components/NavigationDrawer';
+import { icons } from '~/renderer/constants';
+import { SelectionDialog } from '../../components/SelectionDialog';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import store from '../../../app/store';
-import { Container, Scrollable, Content } from '../../../app/components/Overlay/style';
-import { NavigationDrawer } from '../../NavigationDrawer';
-import { SettingsSection } from '../../../app/store/settings';
 import { Sections } from './styles';
 import { Textfield } from '~/renderer/components/Textfield';
+import { SettingsSection } from '~/renderer/views/app/store/settings';
+import { NavigationDrawer } from '../../components/NavigationDrawer';
+import store from '~/renderer/views/app/store';
+import { Container, Scrollable, Content } from '../../style';
 
 const preventHiding = (e: any) => {
   e.stopPropagation();

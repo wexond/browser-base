@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Actions } from '../../../app/components/Overlay/style';
-import store from '../../../app/store';
+
 import { Bubble } from '../Bubble';
-import { onSiteClick } from '../../../app/utils/dials';
+import { loadURL } from '~/renderer/views/app/utils';
+import { Actions } from '../../../style';
+import store from '~/renderer/views/app/store';
 
 export const TopSites = observer(() => {
   return (
@@ -11,7 +12,7 @@ export const TopSites = observer(() => {
       {store.history.topSites.map(item => (
         <Bubble
           itemsPerRow={6}
-          onClick={onSiteClick(item.url)}
+          onClick={loadURL(item.url)}
           key={item._id}
           maxLines={1}
           iconSize={20}

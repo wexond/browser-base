@@ -2,8 +2,6 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 
 import { Preloader } from '~/renderer/components/Preloader';
-import { Tab } from '~/renderer/app/models';
-import store from '~/renderer/app/store';
 import {
   StyledTab,
   StyledContent,
@@ -14,12 +12,13 @@ import {
   StyledOverlay,
   TabContainer,
 } from './style';
-import { shadeBlendConvert } from '../../../utils';
-import { transparency } from '~/renderer/constants';
-import { ipcRenderer, remote } from 'electron';
+import { shadeBlendConvert } from '~/utils';
 import Ripple from '~/renderer/components/Ripple';
+import { ITab } from '../../../models';
+import store from '../../../store';
+import { remote } from 'electron';
 
-const removeTab = (tab: Tab) => (e: React.MouseEvent) => {
+const removeTab = (tab: ITab) => (e: React.MouseEvent) => {
   e.stopPropagation();
   tab.close();
 };
@@ -28,7 +27,7 @@ const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 };
 
-const onMouseDown = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
+const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   const { pageX } = e;
 
   if (!tab.isSelected) {
@@ -45,7 +44,7 @@ const onMouseDown = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
   store.tabs.lastScrollLeft = store.tabs.containerRef.current.scrollLeft;
 };
 
-const onMouseEnter = (tab: Tab) => () => {
+const onMouseEnter = (tab: ITab) => () => {
   if (!store.tabs.isDragging) {
     store.tabs.hoveredTabId = tab.id;
   }
@@ -55,7 +54,7 @@ const onMouseLeave = () => {
   store.tabs.hoveredTabId = -1;
 };
 
-const onClick = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
+const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (store.canToggleMenu && !tab.isWindow) {
     store.overlay.visible = !store.overlay.visible;
     store.canToggleMenu = false;
@@ -66,13 +65,13 @@ const onClick = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
   }
 };
 
-const onMouseUp = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
+const onMouseUp = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (e.button === 1) {
     tab.close();
   }
 };
 
-const onContextMenu = (tab: Tab) => () => {
+const onContextMenu = (tab: ITab) => () => {
   const { tabs } = store.tabGroups.currentGroup;
 
   const menu = remote.Menu.buildFromTemplate([
@@ -147,7 +146,7 @@ const onContextMenu = (tab: Tab) => () => {
   menu.popup();
 };
 
-const Content = observer(({ tab }: { tab: Tab }) => {
+const Content = observer(({ tab }: { tab: ITab }) => {
   return (
     <StyledContent collapsed={tab.isExpanded}>
       {!tab.loading && tab.favicon !== '' && (
@@ -180,7 +179,7 @@ const Content = observer(({ tab }: { tab: Tab }) => {
   );
 });
 
-const Close = observer(({ tab }: { tab: Tab }) => {
+const Close = observer(({ tab }: { tab: ITab }) => {
   return (
     <StyledClose
       onMouseDown={onCloseMouseDown}
@@ -190,11 +189,11 @@ const Close = observer(({ tab }: { tab: Tab }) => {
   );
 });
 
-const Border = observer(({ tab }: { tab: Tab }) => {
+const Border = observer(({ tab }: { tab: ITab }) => {
   return <StyledBorder visible={tab.borderVisible} />;
 });
 
-const Overlay = observer(({ tab }: { tab: Tab }) => {
+const Overlay = observer(({ tab }: { tab: ITab }) => {
   return (
     <StyledOverlay
       hovered={tab.isHovered}
@@ -213,7 +212,7 @@ const Overlay = observer(({ tab }: { tab: Tab }) => {
   );
 });
 
-export default observer(({ tab }: { tab: Tab }) => {
+export default observer(({ tab }: { tab: ITab }) => {
   return (
     <StyledTab
       selected={tab.isSelected}

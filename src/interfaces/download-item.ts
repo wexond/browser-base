@@ -1,4 +1,4 @@
-export interface DownloadItem {
+export interface IDownloadItem {
   fileName?: string;
   receivedBytes?: number;
   totalBytes?: number;

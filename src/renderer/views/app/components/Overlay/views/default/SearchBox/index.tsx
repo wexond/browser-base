@@ -1,13 +1,13 @@
 import * as React from 'react';
-
-import store from '../../../app/store';
-import { isURL } from '~/shared/utils/url';
 import { observer } from 'mobx-react';
+
 import { StyledSearchBox, InputContainer, SearchIcon, Input } from './style';
-import { Suggestions } from '../../Suggestions';
-import { icons } from '../../../app/constants';
-import ToolbarButton from '../../../app/components/ToolbarButton';
-import { onSiteClick } from '../../../app/utils/dials';
+import { isURL } from '~/utils';
+import { loadURL } from '~/renderer/views/app/utils';
+import store from '~/renderer/views/app/store';
+import ToolbarButton from '../../../../Toolbar/ToolbarButton';
+import { Suggestions } from '../Suggestions';
+import { icons } from '~/renderer/constants';
 
 const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
@@ -29,7 +29,7 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
     e.currentTarget.value = url;
 
-    onSiteClick(url);
+    loadURL(url);
   }
 };
 

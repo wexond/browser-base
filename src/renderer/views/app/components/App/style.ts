@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
-import { Theme } from '../../models/theme';
+
+import { ITheme } from '~/interfaces';
 
 export const Line = styled.div`
   height: 1px;
@@ -7,7 +8,7 @@ export const Line = styled.div`
   z-index: 2;
   position: relative;
 
-  ${({ theme }: { theme: Theme }) => css`
+  ${({ theme }: { theme: ITheme }) => css`
     background-color: ${theme['toolbar.bottomLine.backgroundColor']};
   `}
 `;

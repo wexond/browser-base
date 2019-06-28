@@ -1,7 +1,7 @@
-import { HistoryItem } from './history-item';
+import { IHistoryItem } from './history-item';
 
-export interface HistorySection {
+export interface IHistorySection {
   label?: string;
-  items?: HistoryItem[];
+  items?: IHistoryItem[];
   date?: Date;
 }

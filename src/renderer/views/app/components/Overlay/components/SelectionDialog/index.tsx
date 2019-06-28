@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Button } from '../history/node_modules/~/renderer/components/Button';
-import { StyledSmallDialog, Title } from './style';
-import store from '../../../app/store';
 import { observer } from 'mobx-react';
+
+import { StyledSmallDialog, Title } from './style';
+import { Button } from '~/renderer/components/Button';
+import store from '~/renderer/views/app/store';
 
 type ClickEvent = (e: React.MouseEvent<HTMLDivElement>) => void;
 

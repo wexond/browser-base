@@ -1,4 +1,4 @@
-export interface Settings {
+export interface ISettings {
   dialType?: 'top-sites' | 'bookmarks';
   isDarkTheme?: boolean;
   isShieldToggled?: boolean;

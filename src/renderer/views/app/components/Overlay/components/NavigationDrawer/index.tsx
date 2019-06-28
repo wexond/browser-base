@@ -1,5 +1,5 @@
-import * as React from '~/renderer/app/components/Overlay/NavigationDrawer/node_modules/react';
-import store from '../../store';
+import * as React from 'react';
+
 import {
   StyledNavigationDrawer,
   MenuItems,
@@ -10,6 +10,7 @@ import {
   Header,
 } from './style';
 import { NavigationDrawerItem } from './NavigationDrawerItem';
+import store from '~/renderer/views/app/store';
 
 const onBack = (cb: (e?: React.MouseEvent<HTMLDivElement>) => void) => (
   e: React.MouseEvent<HTMLDivElement>,

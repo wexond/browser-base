@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import { icons } from '../../../app/constants';
-import store from '../../../app/store';
 import {
   StyledCard,
   Icon,
@@ -16,6 +14,8 @@ import {
   Degrees,
   SmallDegrees,
 } from './style';
+import store from '~/renderer/views/app/store';
+import { icons } from '~/renderer/constants';
 
 export const WeatherCard = observer(() => {
   if (store.weather.loading) return null;

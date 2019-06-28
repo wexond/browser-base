@@ -1,4 +1,4 @@
-export interface HistoryItem {
+export interface IHistoryItem {
   _id?: string;
   title?: string;
   url?: string;

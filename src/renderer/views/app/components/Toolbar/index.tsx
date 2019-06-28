@@ -1,15 +1,15 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
-import { platform } from 'os';
-
-import store from '~/renderer/app/store';
-import { StyledToolbar, Buttons, Separator } from './style';
-import { NavigationButtons } from '../NavigationButtons';
-import { Tabbar } from '../Tabbar';
-import ToolbarButton from '../ToolbarButton';
-import { icons } from '../../../constants';
 import { ipcRenderer } from 'electron';
-import BrowserAction from '../BrowserAction';
+
+import store from '../../store';
+import { Buttons, StyledToolbar } from './style';
+import { NavigationButtons } from './NavigationButtons';
+import { Tabbar } from './Tabbar';
+import ToolbarButton from './ToolbarButton';
+import { icons } from '~/renderer/constants';
+import { Separator } from '../Overlay/style';
+import { BrowserAction } from './BrowserAction';
 
 const onUpdateClick = () => {
   ipcRenderer.send('update-install');

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { shadows } from '~/shared/mixins';
+import { shadows } from '~/renderer/mixins';
 
 export const Sections = styled.div`
   margin-left: 300px;

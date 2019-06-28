@@ -1,6 +1,7 @@
-import { shadows, centerIcon } from '~/shared/mixins';
-import styled, { css } from '~/renderer/app/components/Overlay/ContextMenu/node_modules/styled-components';
-import { Theme } from '../../models/theme';
+import styled, { css } from 'styled-components';
+
+import { shadows, centerIcon } from '~/renderer/mixins';
+import { ITheme } from '~/interfaces';
 
 export const ContextMenu = styled.div`
   position: absolute;
@@ -12,7 +13,7 @@ export const ContextMenu = styled.div`
   box-shadow: ${shadows(8)};
   border-radius: 8px;
 
-  ${({ visible, theme }: { visible: boolean; theme?: Theme }) => css`
+  ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
     background-color: ${theme['overlay.dialog.backgroundColor']};
@@ -32,7 +33,7 @@ export const ContextMenuItem = styled.div`
   }: {
     icon?: string;
     selected?: boolean;
-    theme?: Theme;
+    theme?: ITheme;
   }) => css`
     background-color: ${selected
       ? theme['overlay.foreground'] === 'light'

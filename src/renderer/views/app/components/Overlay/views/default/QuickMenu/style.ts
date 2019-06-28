@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
-
-import { Theme } from '../../../app/models/theme';
+import { ITheme } from '~/interfaces';
 
 export const Line = styled.div`
   height: 4px;
@@ -10,7 +9,7 @@ export const Line = styled.div`
   margin-top: 16px;
   margin-bottom: 8px;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['overlay.separator.color']};
   `};
 `;

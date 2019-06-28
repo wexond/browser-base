@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import store from '~/renderer/app/store';
-import ToolbarButton from '~/renderer/app/components/top/ToolbarButton';
-import { icons } from '~/renderer/app/constants/icons';
 import { StyledContainer } from './style';
+import store from '../../../store';
+import ToolbarButton from '../ToolbarButton';
+import { icons } from '~/renderer/constants';
 
 const onBackClick = () => {
   store.tabs.selectedTab.callViewMethod('webContents.goBack');

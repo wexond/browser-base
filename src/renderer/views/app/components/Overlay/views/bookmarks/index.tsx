@@ -1,17 +1,16 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import store from '../../../app/store';
-import { Button } from '~/renderer/components/Button';
+import store from '~/renderer/views/app/store';
+import { IBookmark } from '~/interfaces';
 import { Sections, BookmarkSection } from './style';
-import BookmarkC from '../Bookmark';
-import { Bookmark } from '../../../app/models/bookmark';
-import { icons } from '../../../app/constants';
-import { NavigationDrawer } from '../../NavigationDrawer';
-import { ContextMenu, ContextMenuItem } from '../../ContextMenu';
 import { Content, Container, Scrollable } from '../../style';
-import { SelectionDialog } from '../../SelectionDialog';
 import { preventHiding } from '../..';
+import { NavigationDrawer } from '../../components/NavigationDrawer';
+import { SelectionDialog } from '../../components/SelectionDialog';
+import { ContextMenu, ContextMenuItem } from '../../components/ContextMenu';
+import { icons } from '~/renderer/constants';
+import { Bookmark } from './Bookmark';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -41,7 +40,7 @@ const onDeleteClick = (e: React.MouseEvent) => {
   store.bookmarks.deleteSelected();
 };
 
-const onRemoveClick = (item: Bookmark) => () => {
+const onRemoveClick = (item: IBookmark) => () => {
   store.bookmarks.removeItem(item._id);
 };
 
@@ -51,7 +50,7 @@ const BookmarksList = observer(() => {
       <Content>
         <BookmarkSection style={{ marginTop: 56 }}>
           {store.bookmarks.visibleItems.map(data => (
-            <BookmarkC data={data} key={data._id} />
+            <Bookmark data={data} key={data._id} />
           ))}
         </BookmarkSection>
       </Content>

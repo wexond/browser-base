@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
-import { centerIcon, overline } from '~/shared/mixins';
 
-import { Theme } from '../../../app/models/theme';
+import { ITheme } from '~/interfaces';
+import { centerIcon, overline } from '~/renderer/mixins';
 
 export const StyledCard = styled.div`
   background-color: rgba(255, 255, 255, 0.08);
@@ -11,7 +11,7 @@ export const StyledCard = styled.div`
   position: relative;
   width: 264px;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['overlay.section.backgroundColor']};
   `};
 `;

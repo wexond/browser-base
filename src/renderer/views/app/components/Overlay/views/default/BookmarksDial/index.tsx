@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+
 import { Actions } from '../../../style';
-import store from '../../store';
 import { Bubble } from '../Bubble';
-import { onSiteClick } from '../../utils/dials';
+import store from '~/renderer/views/app/store';
+import { loadURL } from '~/renderer/views/app/utils';
 
 export const BookmarksDial = observer(() => {
   return (
@@ -11,7 +12,7 @@ export const BookmarksDial = observer(() => {
       {store.bookmarks.list.map(item => (
         <Bubble
           itemsPerRow={6}
-          onClick={onSiteClick(item.url)}
+          onClick={loadURL(item.url)}
           key={item._id}
           maxLines={1}
           iconSize={20}

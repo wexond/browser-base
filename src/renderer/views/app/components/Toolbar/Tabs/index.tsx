@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import store from '~/renderer/app/store';
 import Tab from '../Tab';
+import store from '../../../store';
 
 export const Tabs = observer(() => {
   return (

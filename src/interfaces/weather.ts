@@ -1,31 +1,37 @@
-export interface ForecastRequest {
-  city: string,
+export interface IForecastRequest {
+  city: string;
   lang: forecastLangCode;
-  units: 'metric' | 'imperial',
+  units: 'metric' | 'imperial';
 }
 
-export interface ForecastItem {
+export interface IForecastItem {
   date?: Date;
   dayName?: string;
   dayTemp?: number;
   nightTemp?: number;
   description?: string;
-  weather?: WeatherCondition;
+  weather?: IWeatherCondition;
 }
 
-export interface Forecast {
+export interface IForecast {
   city?: string;
-  today?: ForecastItem;
-  week?: ForecastItem[];
+  today?: IForecastItem;
+  week?: IForecastItem[];
 }
 
-export type WeatherCondition = 'clear' | 'fewClouds' | 'rain' | 'showers' | 'snow' | 'storm';
+export type IWeatherCondition =
+  | 'clear'
+  | 'fewClouds'
+  | 'rain'
+  | 'showers'
+  | 'snow'
+  | 'storm';
 
 /* tslint:disable */
-export interface OpenWeatherItem {
+export interface IOpenWeatherItem {
   clouds: {
     all: number;
-  },
+  };
   dt: number;
   dt_txt: string;
   main: {
@@ -37,54 +43,54 @@ export interface OpenWeatherItem {
     temp_kf: number;
     temp_max: number;
     temp_min: number;
-  },
+  };
   sys: {
     pod: 'd' | 'n';
-  }
+  };
   weather: {
     description: string;
     icon: string;
     id: number;
-    main: WeatherCondition
-  }[],
+    main: IWeatherCondition;
+  }[];
   wind: {
     deg: number;
     speed: number;
-  }
+  };
 }
 /* tslint:enable */
 
 export type forecastLangCode =
-  'ar' |
-  'bg' |
-  'ca' |
-  'cz' |
-  'de' |
-  'el' |
-  'en' |
-  'fa' |
-  'fi' |
-  'fr' |
-  'gl' |
-  'hr' |
-  'hu' |
-  'it' |
-  'ja' |
-  'kr' |
-  'la' |
-  'lt' |
-  'mk' |
-  'nl' |
-  'pl' |
-  'pt' |
-  'ro' |
-  'ru' |
-  'se' |
-  'sk' |
-  'sl' |
-  'es' |
-  'tr' |
-  'ua' |
-  'vi' |
-  'zh_cn' |
-  'zh_tw'
+  | 'ar'
+  | 'bg'
+  | 'ca'
+  | 'cz'
+  | 'de'
+  | 'el'
+  | 'en'
+  | 'fa'
+  | 'fi'
+  | 'fr'
+  | 'gl'
+  | 'hr'
+  | 'hu'
+  | 'it'
+  | 'ja'
+  | 'kr'
+  | 'la'
+  | 'lt'
+  | 'mk'
+  | 'nl'
+  | 'pl'
+  | 'pt'
+  | 'ro'
+  | 'ru'
+  | 'se'
+  | 'sk'
+  | 'sl'
+  | 'es'
+  | 'tr'
+  | 'ua'
+  | 'vi'
+  | 'zh_cn'
+  | 'zh_tw';

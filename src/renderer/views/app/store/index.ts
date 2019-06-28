@@ -13,11 +13,11 @@ import { ExtensionsStore } from './extensions';
 import { extname } from 'path';
 import { BookmarksStore } from './bookmarks';
 import { readFileSync, writeFile } from 'fs';
-import { getPath } from '~/shared/utils/paths';
 import { DownloadsStore } from './downloads';
 import { lightTheme, darkTheme } from '~/renderer/constants/themes';
 import { WeatherStore } from './weather';
 import { SettingsStore } from './settings';
+import { getPath } from '~/utils';
 
 export class Store {
   public history = new HistoryStore();
@@ -159,10 +159,10 @@ export class Store {
       }
     });
 
-    /*this.settings = {
+    this.settings = {
       ...this.settings,
       ...JSON.parse(readFileSync(getPath('settings.json'), 'utf8')),
-    };*/
+    };
 
     this.theme = this.settings.isDarkTheme ? darkTheme : lightTheme;
 
@@ -170,11 +170,11 @@ export class Store {
   }
 
   public saveSettings() {
-    /*ipcRenderer.send('settings', this.settings);
+    ipcRenderer.send('settings', this.settings);
 
     writeFile(getPath('settings.json'), JSON.stringify(this.settings), err => {
       if (err) console.error(err);
-    });*/
+    });
   }
 }
 

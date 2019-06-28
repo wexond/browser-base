@@ -29,7 +29,7 @@ export class TabsStore {
   public hoveredTabId: number;
 
   @observable
-  public list: Tab[] = [];
+  public list: ITab[] = [];
 
   @observable
   public scrollable = false;
@@ -270,7 +270,7 @@ export class TabsStore {
   }
 
   @action
-  public replaceTab(firstTab: Tab, secondTab: Tab) {
+  public replaceTab(firstTab: ITab, secondTab: ITab) {
     secondTab.setLeft(firstTab.getLeft(true), true);
 
     const index = this.list.indexOf(secondTab);
@@ -279,7 +279,7 @@ export class TabsStore {
     this.list[index] = firstTab;
   }
 
-  public getTabsToReplace(callingTab: Tab, direction: string) {
+  public getTabsToReplace(callingTab: ITab, direction: string) {
     let tabs = this.list;
 
     const index = tabs.indexOf(callingTab);

@@ -1,11 +1,12 @@
-import * as React from '~/renderer/app/components/Overlay/views/default/TabGroups/node_modules/react';
-import { observer } from '~/renderer/app/components/Overlay/views/default/TabGroups/node_modules/mobx-react';
+import * as React from 'react';
+import { observer } from 'mobx-react';
 
 import { StyledTabGroups, AddTabGroup } from './style';
-import TabGroup from '../default/TabGroup';
-import store from '../../../app/store';
-import { Section } from '../../../app/components/Overlay/style';
-import { Header, preventHiding } from '../../../app/components/Overlay';
+import store from '~/renderer/views/app/store';
+import { Section } from '../../../style';
+import { preventHiding } from '../../..';
+import { Header } from '../../../components/NavigationDrawer/style';
+import TabGroup from '../TabGroup';
 
 const onAddClick = () => {
   store.tabGroups.addGroup();

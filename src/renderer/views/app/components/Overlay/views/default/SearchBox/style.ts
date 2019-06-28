@@ -1,9 +1,8 @@
 import styled, { css } from 'styled-components';
-import { centerIcon } from '~/shared/mixins';
-import { icons } from '../../../app/constants';
 
-import { Theme } from '../../../app/models/theme';
-import { transparency } from '~/renderer/constants';
+import { transparency, icons } from '~/renderer/constants';
+import { ITheme } from '~/interfaces';
+import { centerIcon } from '~/renderer/mixins';
 
 export const StyledSearchBox = styled.div`
   margin-top: 48px;
@@ -17,7 +16,7 @@ export const StyledSearchBox = styled.div`
   transition: 0.2s height;
   position: relative;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['overlay.section.backgroundColor']};
   `}
 `;
@@ -29,7 +28,7 @@ export const SearchIcon = styled.div`
   min-width: 18px;
   margin-left: 16px;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     filter: ${theme['overlay.foreground'] === 'light'
       ? 'invert(100%)'
       : 'none'};
@@ -48,7 +47,7 @@ export const Input = styled.input`
   margin-left: 12px;
   margin-right: 16px;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     color: ${theme['overlay.foreground'] === 'light'
       ? 'white'
       : `rgba(0, 0, 0, ${transparency.text.high})`};

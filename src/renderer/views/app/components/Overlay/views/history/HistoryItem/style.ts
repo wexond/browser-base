@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import { centerIcon } from '~/shared/mixins';
-import { icons } from '../../../app/constants';
-import { Theme } from '../../../app/models/theme';
+import { icons } from '~/renderer/constants';
+import { centerIcon } from '~/renderer/mixins';
+import { ITheme } from '~/interfaces';
 
 export const Remove = styled.div`
   height: 16px;
@@ -12,7 +12,7 @@ export const Remove = styled.div`
   background-image: url(${icons.close});
   ${centerIcon()};
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     filter: ${theme['overlay.foreground'] === 'light'
       ? 'invert(100%)'
       : 'none'};

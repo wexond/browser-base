@@ -1,4 +1,4 @@
-export interface Theme {
+export interface ITheme {
   'toolbar.backgroundColor': string;
   'toolbar.bottomLine.backgroundColor': string;
   'toolbar.icons.invert': boolean;

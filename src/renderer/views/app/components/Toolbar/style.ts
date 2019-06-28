@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 import { platform } from 'os';
 
-import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
-import { Theme } from '../../../models/theme';
+import { ITheme } from '~/interfaces';
+import { TOOLBAR_HEIGHT } from '../../constants';
 
 export const StyledToolbar = styled.div`
   position: relative;
@@ -24,7 +24,7 @@ export const StyledToolbar = styled.div`
     overlayType,
   }: {
     isHTMLFullscreen: boolean;
-    theme: Theme;
+    theme: ITheme;
     overlayType: string;
   }) => css`
     margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;

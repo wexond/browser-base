@@ -2,11 +2,11 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 
 import { StyledTabGroup, Content, Icons, Icon, Input } from './style';
-import { icons } from '../../constants';
-import { TabGroup } from '../../models';
-import store from '../../store';
+import store from '~/renderer/views/app/store';
+import { icons } from '~/renderer/constants';
+import { ITabGroup } from '~/renderer/views/app/models';
 
-const onClick = (item: TabGroup) => () => {
+const onClick = (item: ITabGroup) => () => {
   if (!item.editMode) {
     store.tabGroups.currentGroupId = item.id;
   }
@@ -17,7 +17,7 @@ const onCloseClick = (id: number) => (e: any) => {
   store.tabGroups.removeGroup(id);
 };
 
-const onEditClick = (item: TabGroup) => (e: any) => {
+const onEditClick = (item: ITabGroup) => (e: any) => {
   e.stopPropagation();
   item.editMode = !item.editMode;
 };
@@ -26,21 +26,21 @@ const onFocus = (e: any) => {
   e.currentTarget.select();
 };
 
-const onInput = (item: TabGroup) => (e: any) => {
+const onInput = (item: ITabGroup) => (e: any) => {
   item.name = e.currentTarget.value;
 };
 
-const onBlur = (item: TabGroup) => () => {
+const onBlur = (item: ITabGroup) => () => {
   item.editMode = false;
 };
 
-const onKeyPress = (item: TabGroup) => (e: any) => {
+const onKeyPress = (item: ITabGroup) => (e: any) => {
   if (e.key === 'Enter') {
     item.editMode = false;
   }
 };
 
-export default observer(({ data }: { data: TabGroup }) => {
+export const TabGroup = observer(({ data }: { data: ITabGroup }) => {
   const { name, color, id, editMode } = data;
 
   return (

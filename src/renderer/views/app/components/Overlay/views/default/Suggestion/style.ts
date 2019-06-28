@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
-import { body2, centerIcon } from '~/shared/mixins';
 import { transparency } from '~/renderer/constants';
-import { Theme } from '../../../app/models/theme';
+import { ITheme } from '~/interfaces';
+import { body2, centerIcon } from '~/renderer/mixins';
 
 export const StyledSuggestion = styled.div`
   width: 100%;
@@ -19,7 +19,7 @@ export const StyledSuggestion = styled.div`
   }: {
     selected: boolean;
     hovered: boolean;
-    theme?: Theme;
+    theme?: ITheme;
   }) => {
     let backgroundColor = 'transparent';
     if (selected) {

@@ -1,6 +1,7 @@
-import styled, { css } from '~/renderer/app/components/Overlay/NavigationDrawer/NavigationDrawerItem/node_modules/styled-components';
-import { centerIcon } from '~/shared/mixins';
-import { Theme } from '~/renderer/app/models/theme';
+import styled, { css } from 'styled-components';
+
+import { centerIcon } from '~/renderer/mixins';
+import { ITheme } from '~/interfaces';
 
 export const StyledNavigationDrawerItem = styled.div`
   padding: 0 16px;
@@ -12,6 +13,21 @@ export const StyledNavigationDrawerItem = styled.div`
   position: relative;
   cursor: pointer;
 
+  ${({ theme, selected }: { theme?: ITheme; selected?: boolean }) => css`
+    &:hover {
+      background-color: ${theme['overlay.foreground'] === 'light'
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.04)'};
+    }
+
+    &:before {
+      opacity: ${selected ? 1 : 0};
+      background-color: ${theme['overlay.foreground'] === 'light'
+        ? 'white'
+        : 'black'};
+    }
+  `};
+
   &:before {
     content: '';
     position: absolute;
@@ -19,19 +35,6 @@ export const StyledNavigationDrawerItem = styled.div`
     width: 2px;
     height: 16px;
     background-color: white;
-    ${({ selected, theme }: { selected?: boolean; theme?: Theme }) => css`
-      opacity: ${selected ? 1 : 0};
-      background-color: ${theme['overlay.foreground'] === 'light'
-        ? 'white'
-        : 'black'};
-    `};
-  }
-  &:hover {
-    ${({ theme }: { theme?: Theme }) => css`
-      background-color: ${theme['overlay.foreground'] === 'light'
-        ? 'rgba(255, 255, 255, 0.12)'
-        : 'rgba(0, 0, 0, 0.04)'};
-    `};
   }
 `;
 
@@ -41,7 +44,7 @@ export const Icon = styled.div`
   ${centerIcon()};
   margin-right: 16px;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     filter: ${theme['overlay.foreground'] === 'light'
       ? 'invert(100%)'
       : 'none'};

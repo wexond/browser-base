@@ -7,7 +7,7 @@ import { AppWindow } from './windows/app';
 import { runAdblockService } from './services';
 import { existsSync, writeFileSync, promises, mkdirSync } from 'fs';
 import { getPath } from '~/utils/paths';
-import { Settings } from '~/models/settings';
+import { Settings } from '~/interfaces';
 import { makeId } from '~/utils/string';
 import { getMainMenu } from './menus/main';
 import { runAutoUpdaterService } from './services/auto-updater';

@@ -1,4 +1,5 @@
-import * as React from '~/renderer/app/components/Overlay/NavigationDrawer/NavigationDrawerItem/node_modules/react';
+import * as React from 'react';
+
 import { StyledNavigationDrawerItem, Icon } from './style';
 
 export const NavigationDrawerItem = ({

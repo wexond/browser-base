@@ -1,9 +1,8 @@
 import styled, { css } from 'styled-components';
-import { platform } from 'os';
-import { centerIcon } from '~/shared/mixins';
-import { icons } from '../../../constants';
-import { Theme } from '../../models/theme';
-import { transparency } from '~/renderer/constants';
+
+import { transparency, icons } from '~/renderer/constants';
+import { ITheme } from '~/interfaces';
+import { centerIcon } from '~/renderer/mixins';
 
 export const StyledNavigationDrawer = styled.div`
   width: 323px;
@@ -14,7 +13,7 @@ export const StyledNavigationDrawer = styled.div`
   display: flex;
   flex-flow: column;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['overlay.section.backgroundColor']};
   `}
 `;
@@ -47,7 +46,7 @@ export const Back = styled.div`
   opacity: 0.54;
   margin-right: 24px;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     filter: ${theme['overlay.foreground'] === 'light'
       ? 'invert(100%)'
       : 'none'};
@@ -68,7 +67,7 @@ export const Input = styled.input`
   height: 100%;
   font-size: 14px;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     color: ${theme['overlay.foreground'] === 'light'
       ? 'white'
       : `rgba(0, 0, 0, ${transparency.text.high})`};
@@ -90,7 +89,7 @@ export const Search = styled.div`
 
   position: relative;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['overlay.foreground'] === 'light'
       ? 'rgba(255, 255, 255, 0.12)'
       : 'rgba(0, 0, 0, 0.04)'};
@@ -107,7 +106,7 @@ export const Search = styled.div`
     ${centerIcon(16)};
     background-image: url(${icons.search});
 
-    ${({ theme }: { theme?: Theme }) => css`
+    ${({ theme }: { theme?: ITheme }) => css`
       filter: ${theme['overlay.foreground'] === 'light'
         ? 'invert(100%)'
         : 'none'};

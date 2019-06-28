@@ -1,13 +1,12 @@
 import styled, { css } from 'styled-components';
 
-import { transparency, colors } from '~/renderer/constants';
-import { icons, TABS_PADDING } from '~/renderer/app/constants';
-import { centerIcon, body2 } from '~/shared/mixins';
-import { Theme } from '../../../models/theme';
+import { transparency, icons } from '~/renderer/constants';
+import { ITheme } from '~/interfaces';
+import { centerIcon, body2 } from '~/renderer/mixins';
 
 interface CloseProps {
   visible: boolean;
-  theme?: Theme;
+  theme?: ITheme;
 }
 
 export const StyledClose = styled.div`
@@ -133,7 +132,7 @@ export const StyledBorder = styled.div`
   top: 50%;
   transform: translateY(-50%);
 
-  ${({ visible, theme }: { visible: boolean; theme: Theme }) => css`
+  ${({ visible, theme }: { visible: boolean; theme: ITheme }) => css`
     visibility: ${visible ? 'visible' : 'hidden'};
     background-color: ${theme['toolbar.separator.color']};
   `};

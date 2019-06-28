@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
-import { shadows } from '~/shared/mixins';
-import { Theme } from '../../../app/models/theme';
+
+import { ITheme } from '~/interfaces';
+import { shadows } from '~/renderer/mixins';
 
 export const StyledSmallDialog = styled.div`
   width: fit-content;
@@ -20,7 +21,7 @@ export const StyledSmallDialog = styled.div`
   will-change: opacity;
   transition: 0.15s opacity;
 
-  ${({ visible, theme }: { visible: boolean; theme?: Theme }) => css`
+  ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
     background-color: ${theme['overlay.dialog.backgroundColor']};

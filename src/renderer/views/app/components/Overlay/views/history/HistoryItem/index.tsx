@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import store from '../../../app/store';
-import { HistoryItem } from '../../../app/models';
-import { formatTime } from '../../../app/utils';
 import { Favicon, Remove, Title, Time, Site } from './style';
-import { ListItem } from '../../../ListItem';
+import { IHistoryItem } from '~/interfaces';
+import store from '~/renderer/views/app/store';
+import { ListItem } from '../../../components/ListItem';
+import { formatTime } from '~/renderer/views/app/utils';
 
-const onClick = (item: HistoryItem) => (e: React.MouseEvent) => {
+const onClick = (item: IHistoryItem) => (e: React.MouseEvent) => {
   if (!e.ctrlKey) return;
 
   const index = store.history.selectedItems.indexOf(item._id);
@@ -26,11 +26,11 @@ const onTitleClick = (url: string) => (e: React.MouseEvent) => {
   }
 };
 
-const onRemoveClick = (item: HistoryItem) => () => {
+const onRemoveClick = (item: IHistoryItem) => () => {
   store.history.removeItem(item._id);
 };
 
-export default observer(({ data }: { data: HistoryItem }) => {
+export default observer(({ data }: { data: IHistoryItem }) => {
   const selected = store.history.selectedItems.includes(data._id);
 
   return (

@@ -1,4 +1,4 @@
-export interface Suggestion {
+export interface ISuggestion {
   primaryText: string;
   secondaryText?: string;
   id?: number;

@@ -21,7 +21,7 @@ const isColorAcceptable = (color: string) => {
   return getColorBrightness(color) < 170;
 };
 
-export class Tab {
+export class ITab {
   @observable
   public id: number;
 
@@ -315,7 +315,7 @@ export class Tab {
     }
   }
 
-  public getWidth(containerWidth: number = null, tabs: Tab[] = null) {
+  public getWidth(containerWidth: number = null, tabs: ITab[] = null) {
     if (containerWidth === null) {
       containerWidth = store.tabs.containerWidth;
     }

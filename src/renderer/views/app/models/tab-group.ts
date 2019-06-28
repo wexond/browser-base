@@ -5,7 +5,7 @@ import { colors } from '~/renderer/constants';
 
 let id = 0;
 
-export class TabGroup {
+export class ITabGroup {
   @observable
   public id: number = id++;
 

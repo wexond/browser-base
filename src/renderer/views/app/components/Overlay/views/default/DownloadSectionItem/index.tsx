@@ -1,19 +1,19 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-
-import { DownloadItem } from '../../models/download-item';
-import { StyledItem, Icon, Progress, Name, Info, Details } from './style';
 import { shell } from 'electron';
+
+import { StyledItem, Icon, Progress, Name, Info, Details } from './style';
+import { IDownloadItem } from '~/interfaces';
 
 const prettyBytes = require('pretty-bytes');
 
-const onClick = (data: DownloadItem) => () => {
+const onClick = (data: IDownloadItem) => () => {
   if (data.completed) {
     shell.openExternal(data.savePath);
   }
 };
 
-export default observer(({ data }: { data: DownloadItem }) => {
+export default observer(({ data }: { data: IDownloadItem }) => {
   const progress = (data.receivedBytes / data.totalBytes) * 200;
 
   return (

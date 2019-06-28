@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import store from '../../store';
 import { Favicon, Title, Site, More } from './style';
-import { Bookmark } from '../../models/bookmark';
-import { ListItem } from '../ListItem';
+import { IBookmark } from '~/interfaces';
+import store from '~/renderer/views/app/store';
+import { ListItem } from '../../../components/ListItem';
 
-const onClick = (item: Bookmark) => (e: React.MouseEvent) => {
+const onClick = (item: IBookmark) => (e: React.MouseEvent) => {
   if (!e.ctrlKey) return;
 
   const index = store.bookmarks.selectedItems.indexOf(item._id);
@@ -25,7 +25,7 @@ const onTitleClick = (url: string) => (e: React.MouseEvent) => {
   }
 };
 
-const onMoreClick = (data: Bookmark) => (e: any) => {
+const onMoreClick = (data: IBookmark) => (e: any) => {
   e.stopPropagation();
 
   const { left, top } = e.currentTarget.getBoundingClientRect();
@@ -36,7 +36,7 @@ const onMoreClick = (data: Bookmark) => (e: any) => {
   store.bookmarks.currentBookmark = data;
 };
 
-export default observer(({ data }: { data: Bookmark }) => {
+export const Bookmark = observer(({ data }: { data: IBookmark }) => {
   const selected = store.bookmarks.selectedItems.includes(data._id);
 
   return (

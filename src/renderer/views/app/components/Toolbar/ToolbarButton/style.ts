@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import { TOOLBAR_BUTTON_WIDTH, TOOLBAR_HEIGHT } from '~/renderer/app/constants';
-import { centerIcon } from '../../Overlay/node_modules/~/shared/mixins';
-import { Theme } from '../../../models/theme';
+import { centerIcon } from '~/renderer/mixins';
+import { TOOLBAR_HEIGHT, TOOLBAR_BUTTON_WIDTH } from '../../../constants';
+import { ITheme } from '~/interfaces';
 
 export const Icon = styled.div`
   width: 100%;
@@ -40,7 +40,7 @@ export const Button = styled.div`
   }: {
     disabled: boolean;
     invert: boolean;
-    theme: Theme;
+    theme: ITheme;
   }) => css`
     pointer-events: ${disabled ? 'none' : 'inherit'};
     -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};

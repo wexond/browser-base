@@ -1,10 +1,7 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import { Suggestion } from '../../../app/models';
-import store from '../../../app/store';
-import { icons } from '../../../app/constants';
-import { transparency } from '~/renderer/constants';
+import { transparency, icons } from '~/renderer/constants';
 import {
   StyledSuggestion,
   PrimaryText,
@@ -12,20 +9,22 @@ import {
   SecondaryText,
   Icon,
 } from './style';
+import { ISuggestion } from '~/interfaces';
+import store from '~/renderer/views/app/store';
 
 interface Props {
-  suggestion: Suggestion;
+  suggestion: ISuggestion;
 }
 
-const onMouseEnter = (suggestion: Suggestion) => () => {
+const onMouseEnter = (suggestion: ISuggestion) => () => {
   suggestion.hovered = true;
 };
 
-const onMouseLeave = (suggestion: Suggestion) => () => {
+const onMouseLeave = (suggestion: ISuggestion) => () => {
   suggestion.hovered = false;
 };
 
-export const SuggestionComponent = observer(({ suggestion }: Props) => {
+export const Suggestion = observer(({ suggestion }: Props) => {
   const { hovered } = suggestion;
   const { primaryText, secondaryText } = suggestion;
 

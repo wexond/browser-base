@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
-
-import { Theme } from '../../../app/models/theme';
+import { ITheme } from '~/interfaces';
 
 export const ListItem = styled.div`
   display: flex;
@@ -10,7 +9,7 @@ export const ListItem = styled.div`
   border-radius: 8px;
   overflow: hidden;
 
-  ${({ selected, theme }: { selected: boolean; theme?: Theme }) => css`
+  ${({ selected, theme }: { selected: boolean; theme?: ITheme }) => css`
     background-color: ${selected
       ? theme['overlay.foreground'] === 'light'
         ? 'rgba(255, 255, 255, 0.12)'
@@ -19,8 +18,8 @@ export const ListItem = styled.div`
 
     &:hover {
       background-color: ${theme['overlay.foreground'] === 'light'
-      ? `rgba(255, 255, 255, ${selected ? 0.15 : 0.08})`
-      : `rgba(0, 0, 0, ${selected ? 0.08 : 0.04})`};
+        ? `rgba(255, 255, 255, ${selected ? 0.15 : 0.08})`
+        : `rgba(0, 0, 0, ${selected ? 0.08 : 0.04})`};
     }
   `};
 `;

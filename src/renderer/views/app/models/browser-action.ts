@@ -7,7 +7,7 @@ interface Options {
   extensionId: string;
 }
 
-export class BrowserAction {
+export class IBrowserAction {
   @observable
   public icon?: string;
 

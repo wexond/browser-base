@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
-import { caption, centerIcon } from '~/shared/mixins';
-import { Theme } from '../../../app/models/theme';
+
+import { ITheme } from '~/interfaces';
+import { centerIcon } from '~/renderer/mixins';
 
 export const StyledBubble = styled.div`
   border-radius: 16px;
@@ -13,7 +14,7 @@ export const StyledBubble = styled.div`
   justify-content: center;
   overflow: hidden;
 
-  ${({ disabled, theme }: { disabled: boolean; theme: Theme }) => css`
+  ${({ disabled, theme }: { disabled: boolean; theme: ITheme }) => css`
     pointer-events: ${disabled ? 'none' : 'inherit'};
     opacity: ${disabled ? 0.54 : 1};
 
@@ -47,7 +48,7 @@ export const Circle = styled.div`
   ${centerIcon(32)};
   transition: 0.2s background-color;
 
-  ${({ theme, toggled }: { theme?: Theme; toggled?: boolean }) => css`
+  ${({ theme, toggled }: { theme?: ITheme; toggled?: boolean }) => css`
     background-color: ${toggled
       ? theme.accentColor
       : theme['overlay.foreground'] === 'light'

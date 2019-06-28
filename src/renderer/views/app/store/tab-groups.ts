@@ -8,7 +8,7 @@ import { closeWindow } from '../utils';
 
 export class TabGroupsStore {
   @observable
-  public list: TabGroup[] = [];
+  public list: ITabGroup[] = [];
 
   @observable
   public _currentGroupId = 0;
@@ -86,7 +86,7 @@ export class TabGroupsStore {
 
   @action
   public addGroup() {
-    const tabGroup: TabGroup = new TabGroup();
+    const tabGroup: ITabGroup = new TabGroup();
     this.list.push(tabGroup);
     this.currentGroupId = tabGroup.id;
 

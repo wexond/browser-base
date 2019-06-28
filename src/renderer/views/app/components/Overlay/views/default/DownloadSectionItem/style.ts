@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
-import { centerIcon } from '~/shared/mixins';
-import { icons } from '../../../app/constants';
-import { colors } from '~/renderer/constants';
-import { Theme } from '../../../app/models/theme';
+
+import { colors, icons } from '~/renderer/constants';
+import { ITheme } from '~/interfaces';
+import { centerIcon } from '~/renderer/mixins';
 
 export const StyledItem = styled.div`
   height: 50px;
@@ -17,7 +17,7 @@ export const StyledItem = styled.div`
   overflow: hidden;
   transition: 0.2s background-color;
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['overlay.foreground'] === 'light'
       ? 'rgba(255, 255, 255, 0.12)'
       : 'rgba(0, 0, 0, 0.06)'};
@@ -48,7 +48,7 @@ export const Icon = styled.div`
   margin-right: 16px;
   background-image: url(${icons.page});
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     filter: ${theme['overlay.foreground'] === 'light'
       ? 'invert(100%)'
       : 'none'};

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { Theme } from '../../models/theme';
+import { ITheme } from '~/interfaces';
 
 export const StyledBrowserAction = styled.div`
   position: relative;
@@ -10,7 +10,7 @@ export const StyledBrowserAction = styled.div`
 interface BadgeProps {
   background?: string;
   color?: string;
-  theme?: Theme;
+  theme?: ITheme;
 }
 
 export const Badge = styled.div`

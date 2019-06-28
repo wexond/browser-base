@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Section, Actions } from '../../../style';
-import { preventHiding, Header } from '../../..';
-import { Bubble } from '../Bubble';
-import { icons } from '../../../app/constants';
-import store from '../../../app/store';
-import { Line } from './style';
-import { darkTheme, lightTheme } from '~/renderer/constants/themes';
-import { getCurrentWindow } from '../../../app/utils';
-import { OverlayContent } from '../../../app/store/overlay';
 import { ipcRenderer } from 'electron';
 import { platform } from 'os';
+
+import { Section, Actions } from '../../../style';
+import { preventHiding } from '../../..';
+import { Bubble } from '../Bubble';
+import { Line } from './style';
+import { darkTheme, lightTheme } from '~/renderer/constants/themes';
+import { OverlayContent } from '~/renderer/views/app/store/overlay';
+import store from '~/renderer/views/app/store';
+import { getCurrentWindow } from '~/renderer/views/app/utils';
+import { icons } from '~/renderer/constants';
 
 const changeContent = (content: OverlayContent) => () => {
   store.overlay.currentContent = content;
@@ -84,14 +85,16 @@ export const QuickMenu = observer(() => {
         >
           Shield
         </Bubble>
-        {platform() === 'win32' && <Bubble
-          invert={invert}
-          toggled={store.settings.isMultrinToggled}
-          icon={icons.multrin}
-          onClick={onMultrinClick}
-        >
-          Multrin
-        </Bubble>}
+        {platform() === 'win32' && (
+          <Bubble
+            invert={invert}
+            toggled={store.settings.isMultrinToggled}
+            icon={icons.multrin}
+            onClick={onMultrinClick}
+          >
+            Multrin
+          </Bubble>
+        )}
       </Actions>
       <Line />
       <Actions>

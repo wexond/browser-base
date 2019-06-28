@@ -1,8 +1,8 @@
-import styled, { css } from '~/renderer/app/components/Overlay/views/default/TabGroups/node_modules/styled-components';
-import { icons } from '../../../app/constants';
-import { centerIcon } from '~/shared/mixins';
+import styled, { css } from 'styled-components';
 
-import { Theme } from '../../../app/models/theme';
+import { centerIcon } from '~/renderer/mixins';
+import { icons } from '~/renderer/constants';
+import { ITheme } from '~/interfaces';
 
 export const StyledTabGroups = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ export const AddTabGroup = styled.div`
     opacity: 1;
   }
 
-  ${({ theme }: { theme?: Theme }) => css`
+  ${({ theme }: { theme?: ITheme }) => css`
     filter: ${theme['overlay.foreground'] === 'light'
       ? 'invert(100%)'
       : 'none'};

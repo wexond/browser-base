@@ -4,8 +4,8 @@ import { observer } from 'mobx-react';
 import { Section } from '../../../style';
 import { Header, preventHiding } from '../../..';
 import { Downloads } from './style';
-import store from '../../../app/store';
 import DownloadItem from '../DownloadSectionItem';
+import store from '~/renderer/views/app/store';
 
 export const DownloadsSection = observer(() => {
   return (

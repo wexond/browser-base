@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import { centerIcon } from '~/shared/mixins';
-import { icons } from '../../constants';
-import { Theme } from '../../models/theme';
+import { centerIcon } from '~/renderer/mixins';
+import { icons } from '~/renderer/constants';
+import { ITheme } from '~/interfaces';
 
 export const More = styled.div`
   ${centerIcon(20)};
@@ -11,7 +11,7 @@ export const More = styled.div`
   background-image: url(${icons.more});
   opacity: 0.54;
 
-  ${({ theme }: { theme: Theme }) => css`
+  ${({ theme }: { theme: ITheme }) => css`
     filter: ${theme['overlay.foreground'] === 'light'
       ? 'invert(100%)'
       : 'none'};
