@@ -12,7 +12,7 @@ import {
   TAB_ANIMATION_EASING,
 } from '~/renderer/app/constants';
 
-import HorizontalScrollbar from '~/renderer/app/components/HorizontalScrollbar';
+import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 import store from '.';
 import { ipcRenderer, remote } from 'electron';
 import { extname } from 'path';

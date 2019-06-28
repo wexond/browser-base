@@ -1,8 +1,8 @@
-import styled, { css } from 'styled-components';
-import { centerIcon, robotoMedium } from '~/shared/mixins';
-import { icons, TOOLBAR_HEIGHT } from '../../constants';
+import styled, { css } from './node_modules/styled-components';
+import { centerIcon, robotoMedium } from './node_modules/~/shared/mixins';
+import { icons, TOOLBAR_HEIGHT } from '../../../constants
 import { Theme } from '../../models/theme';
-import { transparency } from '~/renderer/constants';
+import { transparency } from './node_modules/~/renderer/constants';
 
 export const getOverlayScrollbarStyle = (theme: Theme) => {
   return `

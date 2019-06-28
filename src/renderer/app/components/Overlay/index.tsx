@@ -1,5 +1,5 @@
-import { observer } from 'mobx-react';
-import * as React from 'react';
+import { observer } from '~/renderer/app/components/Overlay/node_modules/mobx-react';
+import * as React from '~/renderer/app/components/Overlay/node_modules/react';
 
 import store from '../../store';
 import {
@@ -11,16 +11,16 @@ import {
   Content,
   Container,
   Handle,
-} from './style';
-import { SearchBox } from '../SearchBox';
-import { TabGroups } from '../TabGroups';
-import { WeatherCard } from '../WeatherCard';
+} from './style
+import { SearchBox } from '../../../overlay/components/SearchBox';
+import { TabGroups } from '../../../overlay/components/TabGroups';
+import { WeatherCard } from '../../../overlay/components/WeatherCard';
 import { History } from '../History';
 import { Bookmarks } from '../Bookmarks';
-import { Dial } from '../Dial';
-import { QuickMenu } from '../QuickMenu';
-import { DownloadsSection } from '../DownloadsSection';
-import { Settings } from '../Settings';
+import { Dial } from '../default/Dial';
+import { QuickMenu } from './views/default/QuickMenuuickMenu
+import { DownloadsSection } from '../default/DownloadsSection';
+import { Settings } from '../../../overlay/components/Settings';
 
 export const Header = ({ children, clickable }: any) => {
   return (

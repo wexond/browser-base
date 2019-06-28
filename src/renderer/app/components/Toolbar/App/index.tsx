@@ -2,15 +2,15 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
-import { Style } from '~/renderer/app/style';
-import { Toolbar } from '../top/Toolbarbar';
+import { Style } from './node_modules/~/renderer/app/style';
+import { Toolbar } from '../../Toolbar';
 import { ipcRenderer } from 'electron';
 import { Line, StyledApp } from './style';
 import { WindowsControls } from 'react-windows-controls';
 import { platform } from 'os';
 import { Overlay } from '../Overlay';
 import store from '../../store';
-import { darkTheme } from '~/renderer/constants/themes';
+import { darkTheme } from './node_modules/~/renderer/constants/themes';
 import { closeWindow, minimizeWindow, maximizeWindow } from '../../utils';
 import { TOOLBAR_HEIGHT } from '../../constants';
 
