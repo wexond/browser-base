@@ -50,8 +50,14 @@ export const Toolbar = observer(() => {
       overlayType={store.overlay.currentContent}
       isHTMLFullscreen={store.isHTMLFullscreen}
     >
-      <NavigationButtons />
-      <Tabbar />
+      <div style={{ flex: 1, display: 'flex' }}>
+        <div
+          style={{ flex: 1, display: store.tabbarVisible ? 'flex' : 'none' }}
+        >
+          <NavigationButtons />
+          <Tabbar />
+        </div>
+      </div>
       <Buttons>
         <BrowserActions />
         {store.updateInfo.available && (

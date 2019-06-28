@@ -18,17 +18,8 @@ const onAddTabClick = () => {
 };
 
 export const Tabbar = observer(() => {
-  const visible =
-    store.tabGroups.currentGroup.tabs.length === 0 ||
-    store.overlay.currentContent !== 'default';
-
   return (
-    <StyledTabbar
-      style={{
-        opacity: store.tabbarVisible ? 1 : 0,
-        pointerEvents: store.tabbarVisible ? 'auto' : 'none',
-      }}
-    >
+    <StyledTabbar>
       <TabsContainer
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
@@ -37,7 +28,7 @@ export const Tabbar = observer(() => {
         <Tabs />
       </TabsContainer>
       <AddTab
-        disabled={visible}
+        disabled={!store.tabbarVisible}
         icon={icons.add}
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
