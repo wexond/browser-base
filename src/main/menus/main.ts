@@ -1,4 +1,4 @@
-import { AppWindow } from '../app-window';
+import { AppWindow } from '../windows';
 import { Menu } from 'electron';
 
 export const getMainMenu = (appWindow: AppWindow) => {

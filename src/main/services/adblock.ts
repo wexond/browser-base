@@ -5,7 +5,7 @@ import { appWindow, settings } from '..';
 import Axios from 'axios';
 
 import { FiltersEngine, Request } from '@cliqz/adblocker';
-import { getPath } from '~/shared/utils/paths';
+import { getPath } from '~/utils';
 
 const lists: any = {
   easylist: 'https://easylist.to/easylist/easylist.txt',

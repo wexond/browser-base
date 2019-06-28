@@ -1,8 +1,8 @@
-import { Theme } from '../app/models/theme';
+import { ITheme } from '~/interfaces';
 import { transparency } from './transparency';
 import { colors } from './colors';
 
-export const lightTheme: Theme = {
+export const lightTheme: ITheme = {
   'toolbar.backgroundColor': '#fff',
   'toolbar.overlay.backgroundColor': '#e8ebec',
   'toolbar.bottomLine.backgroundColor': 'rgba(0, 0, 0, 0.12)',
@@ -25,7 +25,7 @@ export const lightTheme: Theme = {
   accentColor: colors.blue['500'],
 };
 
-export const darkTheme: Theme = {
+export const darkTheme: ITheme = {
   'toolbar.backgroundColor': '#1c1c1c',
   'toolbar.overlay.backgroundColor': '#414141',
   'toolbar.bottomLine.backgroundColor': '#000',

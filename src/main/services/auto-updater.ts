@@ -1,6 +1,6 @@
 import { autoUpdater } from 'electron-updater';
 import { ipcMain } from 'electron';
-import { AppWindow } from '../app-window';
+import { AppWindow } from '../windows';
 
 export const runAutoUpdaterService = (appWindow: AppWindow) => {
   ipcMain.on('update-install', () => {

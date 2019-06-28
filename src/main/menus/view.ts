@@ -1,4 +1,4 @@
-import { AppWindow } from '../app-window';
+import { AppWindow } from '../windows';
 import { clipboard, nativeImage, Menu } from 'electron';
 
 export const getViewMenu = (
