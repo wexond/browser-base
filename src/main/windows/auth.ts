@@ -1,7 +1,7 @@
 import { BrowserWindow, app, ipcMain } from 'electron';
 import { join } from 'path';
-import { AppWindow } from './app-window';
-import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
+import { AppWindow } from '.';
+import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 
 const WIDTH = 400;
 const HEIGHT = 500;

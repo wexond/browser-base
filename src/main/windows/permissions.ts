@@ -1,9 +1,9 @@
 import { BrowserWindow, app, ipcMain } from 'electron';
 import { join } from 'path';
-import { AppWindow } from './app-window';
-import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
+import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
+import { AppWindow } from '.';
 
-export class PermissionWindow extends BrowserWindow {
+export class PermissionsWindow extends BrowserWindow {
   constructor(public appWindow: AppWindow) {
     super({
       frame: false,

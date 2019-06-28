@@ -3,12 +3,12 @@ import { resolve, extname } from 'path';
 import { platform, homedir } from 'os';
 import { extensionsMain } from 'electron-extensions';
 
-import { AppWindow } from './app';
+import { AppWindow } from './windows/app';
 import { runAdblockService } from './services';
 import { existsSync, writeFileSync, promises, mkdirSync } from 'fs';
-import { getPath } from '~/shared/utils/paths';
-import { Settings } from '~/renderer/app/models/settings';
-import { makeId } from '~/shared/utils/string';
+import { getPath } from '~/utils/paths';
+import { Settings } from '~/models/settings';
+import { makeId } from '~/utils/string';
 import { getMainMenu } from './menus/main';
 import { runAutoUpdaterService } from './services/auto-updater';
 

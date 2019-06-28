@@ -2,11 +2,11 @@ import { platform } from 'os';
 import * as fileIcon from 'extract-file-icon';
 import { ipcMain } from 'electron';
 
-import { ProcessWindow } from './models';
-import { AppWindow } from './app-window';
+import { ProcessWindow } from '../models';
+import { AppWindow } from '../windows';
 import { windowManager, Window } from 'node-window-manager';
-import { TOOLBAR_HEIGHT } from '~/renderer/app/constants/design';
-import { settings } from '.';
+import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
+import { settings } from '..';
 
 const iohook = require('iohook');
 

@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron';
 
-import { AppWindow } from '../app';
+import { AppWindow } from '../windows';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   ipcMain.on('window-focus', () => {
