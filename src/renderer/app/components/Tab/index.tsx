@@ -19,7 +19,8 @@ import { transparency } from '~/renderer/constants';
 import { ipcRenderer, remote } from 'electron';
 import Ripple from '~/renderer/components/Ripple';
 
-const removeTab = (tab: Tab) => () => {
+const removeTab = (tab: Tab) => (e: React.MouseEvent) => {
+  e.stopPropagation();
   tab.close();
 };
 
@@ -30,7 +31,11 @@ const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
 const onMouseDown = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
   const { pageX } = e;
 
-  tab.select();
+  if (!tab.isSelected) {
+    tab.select();
+  } else {
+    store.canToggleMenu = true;
+  }
 
   store.tabs.lastMouseX = 0;
   store.tabs.isDragging = true;
@@ -52,7 +57,8 @@ const onMouseLeave = () => {
 
 const onClick = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (store.canToggleMenu && !tab.isWindow) {
-    store.overlay.visible = true;
+    store.overlay.visible = !store.overlay.visible;
+    store.canToggleMenu = false;
   }
 
   if (e.button === 4) {
@@ -197,7 +203,9 @@ const Overlay = observer(({ tab }: { tab: Tab }) => {
           ? shadeBlendConvert(
               store.theme['tab.selectedHover.backgroundOpacity'],
               tab.background,
-              store.theme['toolbar.backgroundColor'],
+              store.overlay.currentContent !== 'default'
+                ? store.theme['toolbar.overlay.backgroundColor']
+                : store.theme['toolbar.backgroundColor'],
             )
           : store.theme['tab.hover.backgroundColor'],
       }}
@@ -224,7 +232,9 @@ export default observer(({ tab }: { tab: Tab }) => {
             ? shadeBlendConvert(
                 store.theme['tab.backgroundOpacity'],
                 tab.background,
-                store.theme['toolbar.backgroundColor'],
+                store.overlay.currentContent !== 'default'
+                  ? store.theme['toolbar.overlay.backgroundColor']
+                  : store.theme['toolbar.backgroundColor'],
               )
             : 'transparent',
         }}

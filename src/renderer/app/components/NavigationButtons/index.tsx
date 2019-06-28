@@ -33,6 +33,10 @@ export const NavigationButtons = observer(() => {
     loading = selectedTab.loading;
   }
 
+  const visible =
+    store.tabGroups.currentGroup.tabs.length === 0 ||
+    store.overlay.currentContent !== 'default';
+
   return (
     <StyledContainer
       style={{

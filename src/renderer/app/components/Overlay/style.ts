@@ -45,7 +45,7 @@ export const StyledOverlay = styled.div`
   flex-flow: column;
   align-items: center;
   left: 0;
-  top: 0;
+  top: ${TOOLBAR_HEIGHT}px;
   bottom: 0;
   right: 0;
   z-index: 9999;

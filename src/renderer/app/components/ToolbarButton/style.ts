@@ -27,7 +27,7 @@ export const Icon = styled.div`
 
 export const Button = styled.div`
   height: ${TOOLBAR_HEIGHT}px;
-  -webkit-app-region: no-drag;
+
   position: relative;
   transition: 0.2s background-color;
   width: ${TOOLBAR_BUTTON_WIDTH}px;
@@ -42,7 +42,8 @@ export const Button = styled.div`
     invert: boolean;
     theme: Theme;
   }) => css`
-    pointer-events: ${disabled ? 'none' : 'auto'};
+    pointer-events: ${disabled ? 'none' : 'inherit'};
+    -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
     filter: ${theme['toolbar.icons.invert'] ? 'invert(100%)' : 'none'};
   `};
 `;
