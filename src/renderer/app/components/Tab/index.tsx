@@ -19,7 +19,8 @@ import { transparency } from '~/renderer/constants';
 import { ipcRenderer, remote } from 'electron';
 import Ripple from '~/renderer/components/Ripple';
 
-const removeTab = (tab: Tab) => () => {
+const removeTab = (tab: Tab) => (e: React.MouseEvent) => {
+  e.stopPropagation();
   tab.close();
 };
 
@@ -27,10 +28,16 @@ const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 };
 
+let canToggleMenu = false;
+
 const onMouseDown = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
   const { pageX } = e;
 
-  tab.select();
+  if (!tab.isSelected) {
+    tab.select();
+  } else {
+    canToggleMenu = true;
+  }
 
   store.tabs.lastMouseX = 0;
   store.tabs.isDragging = true;
@@ -51,8 +58,9 @@ const onMouseLeave = () => {
 };
 
 const onClick = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
-  if (store.canToggleMenu && !tab.isWindow) {
+  if (canToggleMenu && !tab.isWindow) {
     store.overlay.visible = !store.overlay.visible;
+    canToggleMenu = false;
   }
 
   if (e.button === 4) {

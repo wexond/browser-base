@@ -273,24 +273,31 @@ export class Tab {
 
   @action
   public select() {
-    if (!this.isClosing && !store.canToggleMenu) {
-      store.canToggleMenu = this.isSelected;
-
+    if (!this.isClosing) {
       this.tabGroup.selectedTabId = this.id;
 
-      if (this.isWindow) {
-        ipcRenderer.send('browserview-hide');
-        ipcRenderer.send('select-window', this.id);
-      } else {
-        ipcRenderer.send('hide-window');
-        ipcRenderer.send('browserview-show');
-        ipcRenderer.send('view-select', this.id);
-        ipcRenderer.send('update-find-info', this.id, this.findInfo);
+      const show = () => {
+        if (this.isWindow) {
+          ipcRenderer.send('browserview-hide');
+          ipcRenderer.send('select-window', this.id);
+        } else {
+          ipcRenderer.send('hide-window');
+          ipcRenderer.send('browserview-show');
+          ipcRenderer.send('view-select', this.id);
+          ipcRenderer.send('update-find-info', this.id, this.findInfo);
 
-        store.tabs.emitEvent('onActivated', {
-          tabId: this.id,
-          windowId: 0,
-        });
+          store.tabs.emitEvent('onActivated', {
+            tabId: this.id,
+            windowId: 0,
+          });
+        }
+      };
+
+      if (store.overlay.visible) {
+        store.overlay.visible = false;
+        setTimeout(show, 300);
+      } else {
+        show();
       }
 
       requestAnimationFrame(() => {

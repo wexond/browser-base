@@ -128,13 +128,15 @@ export class OverlayStore {
 
       const { selectedTab } = store.tabs;
 
-      selectedTab.findInfo.visible = false;
+      if (selectedTab) {
+        selectedTab.findInfo.visible = false;
 
-      ipcRenderer.send(
-        'update-find-info',
-        selectedTab.id,
-        selectedTab.findInfo,
-      );
+        ipcRenderer.send(
+          'update-find-info',
+          selectedTab.id,
+          selectedTab.findInfo,
+        );
+      }
 
       if (!this.isNewTab) {
         selectedTab
