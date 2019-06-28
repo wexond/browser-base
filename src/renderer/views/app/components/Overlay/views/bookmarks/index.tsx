@@ -44,6 +44,11 @@ const onRemoveClick = (item: IBookmark) => () => {
   store.bookmarks.removeItem(item._id);
 };
 
+const onClick = (e: React.MouseEvent) => {
+  preventHiding(e);
+  store.bookmarks.menuVisible = false;
+};
+
 const BookmarksList = observer(() => {
   return (
     <Sections>
@@ -63,7 +68,7 @@ export const Bookmarks = observer(() => {
 
   return (
     <Container
-      onClick={preventHiding}
+      onClick={onClick}
       right
       visible={
         store.overlay.currentContent === 'bookmarks' && store.overlay.visible
