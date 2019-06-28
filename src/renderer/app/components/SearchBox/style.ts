@@ -8,7 +8,6 @@ import { transparency } from '~/renderer/constants';
 export const StyledSearchBox = styled.div`
   margin-top: 48px;
   z-index: 2;
-
   border-radius: 23px;
   margin-bottom: 32px;
   display: flex;
@@ -16,6 +15,7 @@ export const StyledSearchBox = styled.div`
   overflow: hidden;
   min-height: 42px;
   transition: 0.2s height;
+  position: relative;
 
   ${({ theme }: { theme?: Theme }) => css`
     background-color: ${theme['overlay.section.backgroundColor']};

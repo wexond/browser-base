@@ -7,6 +7,7 @@ import { StyledSearchBox, InputContainer, SearchIcon, Input } from './style';
 import { Suggestions } from '../Suggestions';
 import { icons } from '../../constants';
 import ToolbarButton from '../ToolbarButton';
+import { onSiteClick } from '../../utils/dials';
 
 const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
@@ -28,15 +29,7 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
     e.currentTarget.value = url;
 
-    const tab = store.tabs.selectedTab;
-    if (!tab || store.overlay.isNewTab) {
-      store.tabs.addTab({ url, active: true });
-    } else {
-      tab.url = url;
-      tab.callViewMethod('webContents.loadURL', url);
-    }
-
-    store.overlay.visible = false;
+    onSiteClick(url);
   }
 };
 
