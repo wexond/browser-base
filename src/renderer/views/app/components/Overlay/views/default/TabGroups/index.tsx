@@ -6,7 +6,7 @@ import store from '~/renderer/views/app/store';
 import { Section } from '../../../style';
 import { preventHiding } from '../../..';
 import { Header } from '../../../components/NavigationDrawer/style';
-import TabGroup from '../TabGroup';
+import { TabGroup } from '../TabGroup';
 
 const onAddClick = () => {
   store.tabGroups.addGroup();

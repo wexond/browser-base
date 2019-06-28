@@ -18,7 +18,6 @@ export const StyledClose = styled.div`
   transition: 0.1s opacity;
   z-index: 10;
   ${centerIcon(16)};
-  
 
     ${({ visible, theme }: CloseProps) => css`
       opacity: ${visible ? transparency.icons.inactive : 0};

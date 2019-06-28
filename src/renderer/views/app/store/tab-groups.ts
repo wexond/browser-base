@@ -1,6 +1,6 @@
 import { observable, computed, action } from 'mobx';
 
-import { TabGroup } from '../models';
+import { ITabGroup } from '../models';
 import store from '.';
 import { ipcRenderer } from 'electron';
 import { colors } from '~/renderer/constants';
@@ -86,7 +86,7 @@ export class TabGroupsStore {
 
   @action
   public addGroup() {
-    const tabGroup: ITabGroup = new TabGroup();
+    const tabGroup: ITabGroup = new ITabGroup();
     this.list.push(tabGroup);
     this.currentGroupId = tabGroup.id;
 

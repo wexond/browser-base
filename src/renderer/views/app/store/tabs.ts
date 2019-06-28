@@ -3,7 +3,7 @@ import * as React from 'react';
 import { TweenLite } from 'gsap';
 import Vibrant = require('node-vibrant');
 
-import { Tab } from '../models';
+import { ITab } from '../models';
 
 import {
   TAB_ANIMATION_DURATION,
@@ -195,7 +195,7 @@ export class TabsStore {
 
     this.removedTabs = 0;
 
-    const tab = new Tab(options, id, store.tabGroups.currentGroupId, isWindow);
+    const tab = new ITab(options, id, store.tabGroups.currentGroupId, isWindow);
 
     if (options.index !== undefined) {
       this.list.splice(options.index, 0, tab);
@@ -280,8 +280,7 @@ export class TabsStore {
   }
 
   public getTabsToReplace(callingTab: ITab, direction: string) {
-    let tabs = this.list;
-
+    const tabs = this.list;
     const index = tabs.indexOf(callingTab);
 
     if (direction === 'left') {
