@@ -273,7 +273,7 @@ export class Tab {
 
   @action
   public select() {
-    if (!this.isClosing) {
+    if (!this.isClosing && !store.canToggleMenu) {
       store.canToggleMenu = this.isSelected;
 
       this.tabGroup.selectedTabId = this.id;

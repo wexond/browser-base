@@ -52,7 +52,7 @@ const onMouseLeave = () => {
 
 const onClick = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (store.canToggleMenu && !tab.isWindow) {
-    store.overlay.visible = true;
+    store.overlay.visible = !store.overlay.visible;
   }
 
   if (e.button === 4) {
