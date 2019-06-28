@@ -33,14 +33,15 @@ export const NavigationButtons = observer(() => {
     loading = selectedTab.loading;
   }
 
+  const visible =
+    store.tabGroups.currentGroup.tabs.length === 0 ||
+    store.overlay.currentContent !== 'default';
+
   return (
     <StyledContainer
       style={{
-        opacity:
-          store.tabGroups.currentGroup.tabs.length === 0 ||
-          store.overlay.currentContent !== 'default'
-            ? 0
-            : 1,
+        opacity: visible ? 0 : 1,
+        pointerEvents: visible ? 'none' : 'auto',
       }}
       isFullscreen={store.isFullscreen}
     >
