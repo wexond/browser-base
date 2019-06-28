@@ -24,6 +24,8 @@ import up from '~/renderer/resources/icons/up.svg';
 import shield from '~/renderer/resources/icons/shield.svg';
 import night from '~/renderer/resources/icons/night.svg';
 import multrin from '~/renderer/resources/icons/drop-window.svg';
+import visible from '~/shared/resources/icons/visible.svg';
+import invisible from '~/shared/resources/icons/invisible.svg';
 
 import weatherDayClear from '~/renderer/resources/icons/weather/day/clear.png';
 import weatherDayFewClouds from '~/renderer/resources/icons/weather/day/few-clouds.png';
@@ -66,6 +68,8 @@ export const icons = {
   shield,
   night,
   multrin,
+  visible,
+  invisible,
   weather: {
     day: {
       clear: weatherDayClear,

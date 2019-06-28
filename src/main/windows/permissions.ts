@@ -20,7 +20,7 @@ export class PermissionsWindow extends BrowserWindow {
     });
 
     if (process.env.ENV === 'dev') {
-      // this.webContents.openDevTools({ mode: 'detach' });
+      this.webContents.openDevTools({ mode: 'detach' });
       this.loadURL('http://localhost:4444/permissions.html');
     } else {
       this.loadURL(join('file://', app.getAppPath(), 'build/permissions.html'));

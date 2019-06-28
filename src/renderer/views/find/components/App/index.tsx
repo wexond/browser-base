@@ -13,9 +13,9 @@ import {
   Occurrences,
 } from './style';
 import store from '../../store';
-import { callViewMethod } from '~/renderer/app/utils/view';
-import { icons } from '~/renderer/app/constants';
 import { remote, ipcRenderer } from 'electron';
+import { callViewMethod } from '~/renderer/views/app/utils/view';
+import { icons } from '~/renderer/constants';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
