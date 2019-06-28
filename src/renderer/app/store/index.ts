@@ -57,6 +57,8 @@ export class Store {
     canGoForward: false,
   };
 
+  public canToggleMenu = false;
+
   public mouse = {
     x: 0,
     y: 0,

@@ -107,11 +107,12 @@ export class Tab {
   }
 
   constructor(
-    { active } = defaultTabOptions,
+    { active, url } = defaultTabOptions,
     id: number,
     tabGroupId: number,
     isWindow: boolean,
   ) {
+    this.url = url;
     this.id = id;
     this.isWindow = isWindow;
     this.tabGroupId = tabGroupId;
@@ -152,7 +153,7 @@ export class Tab {
           this.emitOnUpdated(updated);
         }
 
-        this.title = title;
+        this.title = title === 'about:blank' ? 'New tab' : title;
         this.url = url;
 
         this.updateData();
@@ -274,6 +275,12 @@ export class Tab {
   @action
   public select() {
     if (!this.isClosing) {
+      store.overlay.isNewTab = this.url === 'about:blank';
+
+      if (store.overlay.isNewTab) {
+        store.overlay.visible = true;
+      }
+
       this.tabGroup.selectedTabId = this.id;
 
       const show = () => {
@@ -293,11 +300,13 @@ export class Tab {
         }
       };
 
-      if (store.overlay.visible) {
-        store.overlay.visible = false;
-        setTimeout(show, 200);
-      } else {
-        show();
+      if (!store.overlay.isNewTab) {
+        if (store.overlay.visible) {
+          store.overlay.visible = false;
+          setTimeout(show, 200);
+        } else {
+          show();
+        }
       }
 
       requestAnimationFrame(() => {

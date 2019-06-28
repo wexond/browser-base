@@ -194,10 +194,6 @@ export class TabsStore {
       store.overlay.visible = false;
     }
 
-    if (options.active) {
-      store.overlay.visible = false;
-    }
-
     this.removedTabs = 0;
 
     const tab = new Tab(options, id, store.tabGroups.currentGroupId, isWindow);
@@ -402,5 +398,6 @@ export class TabsStore {
     store.overlay.isNewTab = true;
     store.overlay.visible = true;
     ipcRenderer.send('hide-window');
+    store.tabs.addTab();
   }
 }

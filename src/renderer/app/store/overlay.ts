@@ -102,8 +102,6 @@ export class OverlayStore {
   }
 
   public set visible(val: boolean) {
-    if (val === this._visible) return;
-
     if (!val) {
       clearTimeout(this.timeout);
 
@@ -123,6 +121,7 @@ export class OverlayStore {
       this.isNewTab = false;
       this.currentContent = 'default';
     } else {
+      this.currentContent = 'default';
       this.show();
       ipcRenderer.send('window-focus');
 

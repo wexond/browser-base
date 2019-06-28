@@ -28,15 +28,13 @@ const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 };
 
-let canToggleMenu = false;
-
 const onMouseDown = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
   const { pageX } = e;
 
   if (!tab.isSelected) {
     tab.select();
   } else {
-    canToggleMenu = true;
+    store.canToggleMenu = true;
   }
 
   store.tabs.lastMouseX = 0;
@@ -58,9 +56,9 @@ const onMouseLeave = () => {
 };
 
 const onClick = (tab: Tab) => (e: React.MouseEvent<HTMLDivElement>) => {
-  if (canToggleMenu && !tab.isWindow) {
+  if (store.canToggleMenu && !tab.isWindow) {
     store.overlay.visible = !store.overlay.visible;
-    canToggleMenu = false;
+    store.canToggleMenu = false;
   }
 
   if (e.button === 4) {
