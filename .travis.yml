@@ -19,16 +19,3 @@ deploy:
     - if [[ "$TRAVIS_OS_NAME" == "windows" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-win32 ;fi
   on:
     tags: true
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - libc6-dev-i386
-      - gcc-4.8-multilib
-      - g++-4.8-multilib
-      - ninja-build
-      - linux-libc-dev:i386
-      - linux-libc-dev
-      - icnsutils
-      - graphicsmagick
