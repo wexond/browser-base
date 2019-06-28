@@ -6,7 +6,7 @@ import { Theme } from '../../models/theme';
 import { transparency } from '~/renderer/constants';
 
 export const StyledNavigationDrawer = styled.div`
-  width: 300px;
+  width: 323px;
   height: 100%;
 
   position: fixed;
@@ -29,7 +29,7 @@ export const MenuItems = styled.div`
 
 export const Header = styled.div`
   display: flex;
-  margin-top: ${platform() === 'darwin' ? 48 : 32}px;
+  margin-top: 32px;
   margin-left: 32px;
   align-items: center;
 `;
@@ -75,8 +75,8 @@ export const Input = styled.input`
 
     &::placeholder {
       color: ${theme['overlay.foreground'] === 'light'
-      ? 'rgba(255, 255, 255, 0.54)'
-      : `rgba(0, 0, 0, ${transparency.text.medium})`};
+        ? 'rgba(255, 255, 255, 0.54)'
+        : `rgba(0, 0, 0, ${transparency.text.medium})`};
     }
   `}
 `;
@@ -109,8 +109,8 @@ export const Search = styled.div`
 
     ${({ theme }: { theme?: Theme }) => css`
       filter: ${theme['overlay.foreground'] === 'light'
-      ? 'invert(100%)'
-      : 'none'};
+        ? 'invert(100%)'
+        : 'none'};
     `}
   }
 `;

@@ -17,5 +17,6 @@ export interface Theme {
   'overlay.separator.color': string;
   'overlay.scrollbar.backgroundColor': string;
   'overlay.scrollbar.hover.backgroundColor': string;
+  'toolbar.overlay.backgroundColor': string;
   accentColor: string;
 }

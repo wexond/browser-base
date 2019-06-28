@@ -33,23 +33,33 @@ export const NavigationButtons = observer(() => {
     loading = selectedTab.loading;
   }
 
+  const visible =
+    store.tabGroups.currentGroup.tabs.length === 0 ||
+    store.overlay.currentContent !== 'default';
+
   return (
-    <StyledContainer isFullscreen={store.isFullscreen}>
+    <StyledContainer
+      style={{
+        opacity: visible ? 0 : 1,
+        pointerEvents: visible ? 'none' : 'auto',
+      }}
+      isFullscreen={store.isFullscreen}
+    >
       <ToolbarButton
-        disabled={!store.navigationState.canGoBack}
+        disabled={!store.navigationState.canGoBack || store.overlay.visible}
         size={24}
         icon={icons.back}
         style={{ marginLeft: 8 }}
         onClick={onBackClick}
       />
       <ToolbarButton
-        disabled={!store.navigationState.canGoForward}
+        disabled={!store.navigationState.canGoForward || store.overlay.visible}
         size={24}
         icon={icons.forward}
         onClick={onForwardClick}
       />
       <ToolbarButton
-        disabled={isWindow}
+        disabled={isWindow || store.overlay.visible}
         size={20}
         icon={loading ? icons.close : icons.refresh}
         onClick={onRefreshClick}

@@ -102,7 +102,7 @@ export class OverlayStore {
   }
 
   public set visible(val: boolean) {
-    if (val === this._visible) return;
+    this.currentContent = 'default';
 
     if (!val) {
       clearTimeout(this.timeout);
@@ -121,20 +121,21 @@ export class OverlayStore {
 
       this._visible = val;
       this.isNewTab = false;
-      this.currentContent = 'default';
     } else {
       this.show();
       ipcRenderer.send('window-focus');
 
       const { selectedTab } = store.tabs;
 
-      selectedTab.findInfo.visible = false;
+      if (selectedTab) {
+        selectedTab.findInfo.visible = false;
 
-      ipcRenderer.send(
-        'update-find-info',
-        selectedTab.id,
-        selectedTab.findInfo,
-      );
+        ipcRenderer.send(
+          'update-find-info',
+          selectedTab.id,
+          selectedTab.findInfo,
+        );
+      }
 
       if (!this.isNewTab) {
         selectedTab

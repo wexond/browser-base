@@ -6,7 +6,6 @@ import store from '~/renderer/app/store';
 import { icons } from '~/renderer/app/constants/icons';
 import { AddTab, StyledTabbar, TabsContainer } from './style';
 import { Tabs } from '../Tabs';
-import { ipcRenderer } from 'electron';
 
 const getContainer = () => store.tabs.containerRef.current;
 
@@ -19,8 +18,17 @@ const onAddTabClick = () => {
 };
 
 export const Tabbar = observer(() => {
+  const visible =
+    store.tabGroups.currentGroup.tabs.length === 0 ||
+    store.overlay.currentContent !== 'default';
+
   return (
-    <StyledTabbar>
+    <StyledTabbar
+      style={{
+        opacity: visible ? 0 : 1,
+        pointerEvents: visible ? 'none' : 'auto',
+      }}
+    >
       <TabsContainer
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
@@ -29,6 +37,7 @@ export const Tabbar = observer(() => {
         <Tabs />
       </TabsContainer>
       <AddTab
+        disabled={visible}
         icon={icons.add}
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}

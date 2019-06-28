@@ -32,7 +32,7 @@ export const Header = ({ children, clickable }: any) => {
 };
 
 const onClick = () => {
-  if (store.tabGroups.currentGroup.tabs.length > 0) {
+  if (store.tabGroups.currentGroup.tabs.length > 0 && !store.overlay.isNewTab) {
     store.overlay.visible = false;
   }
   store.overlay.dialTypeMenuVisible = false;
@@ -46,7 +46,6 @@ export const preventHiding = (e: any) => {
 export const Overlay = observer(() => {
   return (
     <StyledOverlay visible={store.overlay.visible} onClick={onClick}>
-      <Handle visible={store.overlay.visible} />
       <Container
         visible={
           store.overlay.currentContent === 'default' && store.overlay.visible
