@@ -4,8 +4,7 @@ import { observer } from 'mobx-react';
 import { StyledTabGroups, AddTabGroup } from './style';
 import store from '~/renderer/views/app/store';
 import { Section } from '../../../style';
-import { preventHiding } from '../../..';
-import { Header } from '../../../components/NavigationDrawer/style';
+import { preventHiding, Header } from '../../..';
 import { TabGroup } from '../TabGroup';
 
 const onAddClick = () => {

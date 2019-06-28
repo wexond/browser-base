@@ -1,8 +1,9 @@
 import * as Datastore from 'nedb';
 import { observable, computed, action } from 'mobx';
-import { HistoryItem, HistorySection } from '../models';
-import { getPath } from '~/shared/utils/paths';
+
+import { IHistoryItem, IHistorySection } from '~/interfaces';
 import { countVisitedTimes, compareDates, getSectionLabel } from '../utils';
+import { getPath } from '~/utils';
 
 export type QuickRange =
   | 'all'
@@ -19,7 +20,7 @@ export class HistoryStore {
   });
 
   @observable
-  public items: HistoryItem[] = [];
+  public items: IHistoryItem[] = [];
 
   @observable
   public itemsLoaded = this.getDefaultLoaded();
@@ -36,7 +37,7 @@ export class HistoryStore {
   @computed
   public get topSites() {
     const top1 = countVisitedTimes(this.items);
-    const newItems: HistoryItem[] = [];
+    const newItems: IHistoryItem[] = [];
 
     for (const item of top1) {
       if (item.times > 1) {
@@ -60,7 +61,7 @@ export class HistoryStore {
   }
 
   public async load() {
-    await this.db.find({}).exec((err: any, items: HistoryItem[]) => {
+    await this.db.find({}).exec((err: any, items: IHistoryItem[]) => {
       if (err) return console.warn(err);
 
       items = items.sort(
@@ -71,9 +72,9 @@ export class HistoryStore {
     });
   }
 
-  public addItem(item: HistoryItem) {
+  public addItem(item: IHistoryItem) {
     return new Promise((resolve: (id: string) => void) => {
-      this.db.insert(item, (err: any, doc: HistoryItem) => {
+      this.db.insert(item, (err: any, doc: IHistoryItem) => {
         if (err) return console.error(err);
 
         this.items.push(doc);
@@ -98,8 +99,8 @@ export class HistoryStore {
 
   @computed
   public get sections() {
-    const list: HistorySection[] = [];
-    let section: HistorySection;
+    const list: IHistorySection[] = [];
+    let section: IHistorySection;
     let loaded = 0;
 
     for (let i = this.items.length - 1; i >= 0; i--) {

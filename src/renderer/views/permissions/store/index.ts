@@ -1,6 +1,7 @@
 import { observable } from 'mobx';
 import { ipcRenderer } from 'electron';
-import { getDomain } from '~/shared/utils/url';
+
+import { getDomain } from '~/utils';
 
 export class Store {
   @observable

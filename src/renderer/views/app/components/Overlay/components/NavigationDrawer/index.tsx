@@ -25,14 +25,12 @@ const onBack = (cb: (e?: React.MouseEvent<HTMLDivElement>) => void) => (
 export const NavigationDrawer = ({
   children,
   title,
-
   search,
   onSearchInput,
   onBackClick,
 }: {
   children?: any;
   title?: string;
-
   search?: boolean;
   onSearchInput?: (event: React.FormEvent<HTMLInputElement>) => void;
   onBackClick?: (e?: React.MouseEvent<HTMLDivElement>) => void;

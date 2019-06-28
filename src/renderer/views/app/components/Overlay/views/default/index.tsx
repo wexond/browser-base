@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { observer } from 'mobx-react';
 import { Container, Scrollable, Content, Title } from '../../style';
 

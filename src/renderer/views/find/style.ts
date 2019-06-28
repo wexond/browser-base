@@ -1,6 +1,6 @@
 import { css } from 'styled-components';
 
-import { body2 } from '~/shared/mixins';
+import { body2 } from '~/renderer/mixins';
 
 export const Style = css`
   body {
