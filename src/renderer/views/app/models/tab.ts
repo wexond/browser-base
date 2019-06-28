@@ -289,7 +289,9 @@ export class ITab {
           ipcRenderer.send('select-window', this.id);
         } else {
           ipcRenderer.send('hide-window');
-          ipcRenderer.send('browserview-show');
+          if (!store.overlay.isNewTab) {
+            ipcRenderer.send('browserview-show');
+          }
           ipcRenderer.send('view-select', this.id);
           ipcRenderer.send('update-find-info', this.id, this.findInfo);
 
@@ -300,13 +302,11 @@ export class ITab {
         }
       };
 
-      if (!store.overlay.isNewTab) {
-        if (store.overlay.visible) {
-          store.overlay.visible = false;
-          setTimeout(show, 200);
-        } else {
-          show();
-        }
+      if (store.overlay.visible && !store.overlay.isNewTab) {
+        store.overlay.visible = false;
+        setTimeout(show, 200);
+      } else {
+        show();
       }
 
       requestAnimationFrame(() => {
