@@ -1,4 +1,4 @@
-import { AppWindow } from '../app-window';
+import { AppWindow } from '../app';
 import { clipboard, nativeImage, Menu } from 'electron';
 
 export const getViewMenu = (

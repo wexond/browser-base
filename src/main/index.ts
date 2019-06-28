@@ -3,7 +3,7 @@ import { resolve, extname } from 'path';
 import { platform, homedir } from 'os';
 import { extensionsMain } from 'electron-extensions';
 
-import { AppWindow } from './app-window';
+import { AppWindow } from './app';
 import { runAdblockService } from './services';
 import { existsSync, writeFileSync, promises, mkdirSync } from 'fs';
 import { getPath } from '~/shared/utils/paths';

@@ -2,10 +2,10 @@ import { BrowserWindow, app } from 'electron';
 import { resolve, join } from 'path';
 import { platform } from 'os';
 
-import { ViewManager } from './view-manager';
+import { ViewManager } from '../view-manager';
 import { getPath } from '~/shared/utils/paths';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { runMessagingService } from './services';
+import { runMessagingService } from '../services';
 import { PermissionWindow } from './permission-window';
 import { Multrin } from './multrin';
 import { AuthWindow } from './auth-window';
