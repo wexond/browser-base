@@ -34,7 +34,12 @@ export const NavigationButtons = observer(() => {
   }
 
   return (
-    <StyledContainer isFullscreen={store.isFullscreen}>
+    <StyledContainer
+      style={{
+        opacity: store.tabGroups.currentGroup.tabs.length === 0 ? 0 : 1,
+      }}
+      isFullscreen={store.isFullscreen}
+    >
       <ToolbarButton
         disabled={!store.navigationState.canGoBack || store.overlay.visible}
         size={24}
