@@ -1,11 +1,12 @@
 import { Store } from './store'
 import { ipcMain } from 'electron';
-const { PassThrough, Writable } = require('stream')
+const { Writable } = require('stream')
 const ff = require('./ffmpeg')
 const ffprobe  = require('ffprobe')
 const ffprobeStatic  = require('ffprobe-static')
-const ffplay = require('./ffplay')
 const ffprobeTimeout = 5000000
+
+const fs = require('fs')
 
 export class Player {
   private currentPipeline?: any
@@ -68,6 +69,36 @@ export class Player {
       }
     })
 
+    ipcMain.on('typeofstream', (evt: any, url: string) => {
+      const channelData = this.store.get('channelData')
+      const stream = channelData[url]
+      if (stream) {
+        if (stream.video && stream.video.tracks && stream.video.tracks.length > 0) {
+          // is video
+          evt.sender.send('typeofstream', 'video')
+        } else if (stream.audio && stream.audio.tracks && stream.audio.tracks.length > 0) {
+          // is audio
+          evt.sender.send('typeofstream', 'audio')
+        }
+      } else {
+        ffprobe(`${url}?timeout=${ffprobeTimeout}`, { path: ffprobeStatic.path }, (err: Error, metadata: any) => {
+          if (metadata) {
+            this.currentStreams = this.processStreams(metadata.streams, url)
+            this.updateChannelData(this.currentStreams)
+            if (stream.video && stream.video.tracks && stream.video.tracks.length > 0) {
+              // is video
+              evt.sender.send('typeofstream', 'audio')
+            } else if (stream.audio && stream.audio.tracks && stream.audio.tracks.length > 0) {
+              // is audio
+              evt.sender.send('typeofstream', 'video')
+            }
+          } else {
+            console.log('ffprobe failure')
+          }
+        })
+      }
+    })
+
     ipcMain.on('openurl', (evt: any, url: string) => {
 
       const channelData = this.store.get('channelData')
@@ -80,22 +111,27 @@ export class Player {
         ffprobe(`${url}?timeout=${ffprobeTimeout}`, { path: ffprobeStatic.path }, (err: Error, metadata?: any) => {
           if (metadata) {
             const newStreamData = this.processStreams(metadata.streams, url)
-                         // callback might be received when the streams has already change, do not pay attention.
-            if (this.currentStreams.video.tracks[0].codec_name !== newStreamData.video.tracks[0].codec_name && localCurrentStream.url === this.currentStreams.url) {
-              console.log('probe play url:', url)
-              this.playUrl(newStreamData.url, newStreamData, evt)
+            // callback might be received when the streams has already change, do not pay attention.
 
-            }else {
-              console.log('-----------do not play old data')
-            }
+            if (this.currentStreams.video && this.currentStreams.video.tracks && this.currentStreams.video.tracks.length > 0) {
+              if (this.currentStreams.video.tracks[0].codec_name !== newStreamData.video.tracks[0].codec_name && localCurrentStream.url === this.currentStreams.url) {
+                console.log('probe play url:', url)
+                this.playUrl(newStreamData.url, newStreamData, evt)
 
-            if (localCurrentStream.url === this.currentStreams.url) {
-                            // we keep current subtilte and audio
-              newStreamData.subtitles.currentStream = this.currentStreams.subtitles.currentStream
-              newStreamData.audio.currentStream = this.currentStreams.audio.currentStream
+              } else {
+                console.log('-----------do not play old data')
+              }
+
+              if (localCurrentStream.url === this.currentStreams.url) {
+                // we keep current subtilte and audio
+                newStreamData.subtitles.currentStream = this.currentStreams.subtitles.currentStream
+                newStreamData.audio.currentStream = this.currentStreams.audio.currentStream
+                this.currentStreams = newStreamData
+              }
+            } else if (this.currentStreams.audio && this.currentStreams.audio.tracks) {
               this.currentStreams = newStreamData
             }
-            this.updateChannelData(localCurrentStream)
+            this.updateChannelData(this.currentStreams)
           }
         })
       } else {
@@ -108,7 +144,6 @@ export class Player {
 
           } else {
             console.log('ffprobe failure')
-            evt.sender.send('nativePlayer')
           }
         })
       }
@@ -127,52 +162,51 @@ export class Player {
 
   }
 
-  playUrl (url: string, streamToPlay: any, evt: any) {
-
+  playUrl(url: string, streamToPlay: any, evt: any) {
     console.log('----------- playUrl', url)
+
+    const conversionErrorHandler = () => {
+      this.handleConversionError(evt)
+    }
+    const erroneousStreamErrorHandler = () => {
+      this.handleErroneousStreamError(evt)
+    }
+
+    this.currentPipeline && this.currentPipeline.kill()
 
     if (streamToPlay.video.tracks.length > 0) {
       const currentVideoCodec = streamToPlay.video.tracks[0].codec_name
       const videoStreamChannel = streamToPlay.video.tracks[0].pid
       const subtitleStreamChannel = streamToPlay.subtitles.currentStream
-
       const audiostreamChannel = streamToPlay.audio.currentStream
-      this.currentPipeline && this.currentPipeline.kill()
-      let ready = false
-      let firstChunk = true
-      let buf = Buffer.alloc(0)
-      const isDeinterlacingEnabled = this.store.get('deinterlacing')
-      this.currentPipeline = ff.getMpegtsPipeline(
-        url,
-        audiostreamChannel,
-        videoStreamChannel,
-        currentVideoCodec,
-        subtitleStreamChannel,
-        isDeinterlacingEnabled,
-        () => this.handleConversionError(evt),
-        () => this.handleErroneousStreamError(evt))
+      const isDeinterlacingEnabled = this.store.get("deinterlacing")
+      this.currentPipeline = ff.getVideoMpegtsPipeline(url, audiostreamChannel, videoStreamChannel, currentVideoCodec, subtitleStreamChannel, isDeinterlacingEnabled, () => { this.handleConversionError(evt) }, () => { this.handleErroneousStreamError(evt) })
 
-      const mp4SegmentBufferer = new Writable({
-        write(chunk: any, encoding: any, callback: any) {
-          ready = true
-          buf = Buffer.concat([buf, chunk])
-          callback()
-        },
-      })
-      this.currentPipeline.pipe(mp4SegmentBufferer)
-
-      this.segmentInterval && clearInterval(this.segmentInterval)
-      this.segmentInterval = setInterval(() => {
-        if (!ready) return
-        evt.sender.send('segment', { buffer: buf, isFirst: firstChunk })
-        buf = Buffer.alloc(0)
-        firstChunk = false
-      }, 300)
+    } else if (streamToPlay.audio.tracks.length > 0) {
+      this.currentPipeline = ff.getAudioMpegtsPipeline(url, conversionErrorHandler, erroneousStreamErrorHandler)
     } else {
-      this.currentPipeline && this.currentPipeline.kill()
-      this.currentPipeline = ffplay.playStream(url)
-      evt.sender.send('nativePlayer')
+      // TODO: handle this case
     }
+
+    let ready = false
+    let firstChunk = true
+    let buf = Buffer.alloc(0)
+
+    const mpxSegmentBufferer = new Writable({
+      write(chunk: any, encoding: any, callback: any) {
+        ready = true
+        buf = Buffer.concat([buf, chunk])
+        callback()
+      }
+    })
+    this.currentPipeline.pipe(mpxSegmentBufferer)
+    this.segmentInterval && clearInterval(this.segmentInterval)
+    this.segmentInterval = setInterval(() => {
+      if (!ready) return
+        evt.sender.send('segment', { buffer: buf, isFirst: firstChunk })
+        firstChunk = false
+        buf = Buffer.alloc(0)
+    }, 300)
   }
 
   processStreams (streams: any, url: string): any {
