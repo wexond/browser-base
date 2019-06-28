@@ -22,7 +22,11 @@ export const Tabbar = observer(() => {
   return (
     <StyledTabbar
       style={{
-        opacity: store.tabGroups.currentGroup.tabs.length === 0 ? 0 : 1,
+        opacity:
+          store.tabGroups.currentGroup.tabs.length === 0 ||
+          store.overlay.currentContent !== 'default'
+            ? 0
+            : 1,
       }}
     >
       <TabsContainer
