@@ -12,7 +12,7 @@ export const BookmarksDial = observer(() => {
       {store.bookmarks.list.map(item => (
         <Bubble
           itemsPerRow={6}
-          onClick={loadURL(item.url)}
+          onClick={() => loadURL(item.url)}
           key={item._id}
           maxLines={1}
           iconSize={20}

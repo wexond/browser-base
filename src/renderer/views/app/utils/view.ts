@@ -26,7 +26,7 @@ export const callViewMethod = (
   });
 };
 
-export const loadURL = (url: string) => () => {
+export const loadURL = (url: string) => {
   const tab = store.tabs.selectedTab;
 
   if (!tab) {
