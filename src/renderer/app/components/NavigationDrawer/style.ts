@@ -29,7 +29,7 @@ export const MenuItems = styled.div`
 
 export const Header = styled.div`
   display: flex;
-  margin-top: ${platform() === 'darwin' ? 48 : 32}px;
+  margin-top: 32px;
   margin-left: 32px;
   align-items: center;
 `;
