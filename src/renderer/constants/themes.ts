@@ -4,7 +4,8 @@ import { colors } from './colors';
 
 export const lightTheme: Theme = {
   'toolbar.backgroundColor': '#fff',
-  'toolbar.bottomLine.backgroundColor': '#e5e5e5',
+  'toolbar.overlay.backgroundColor': '#f2f5f7',
+  'toolbar.bottomLine.backgroundColor': 'rgba(0, 0, 0, 0.12)',
   'toolbar.icons.invert': false,
   'toolbar.separator.color': 'rgba(0, 0, 0, 0.12)',
   'tab.backgroundOpacity': 0.85,

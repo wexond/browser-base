@@ -205,7 +205,9 @@ const Overlay = observer(({ tab }: { tab: Tab }) => {
           ? shadeBlendConvert(
               store.theme['tab.selectedHover.backgroundOpacity'],
               tab.background,
-              store.theme['toolbar.backgroundColor'],
+              store.overlay.currentContent !== 'default'
+                ? store.theme['toolbar.overlay.backgroundColor']
+                : store.theme['toolbar.backgroundColor'],
             )
           : store.theme['tab.hover.backgroundColor'],
       }}
@@ -232,7 +234,9 @@ export default observer(({ tab }: { tab: Tab }) => {
             ? shadeBlendConvert(
                 store.theme['tab.backgroundOpacity'],
                 tab.background,
-                store.theme['toolbar.backgroundColor'],
+                store.overlay.currentContent !== 'default'
+                  ? store.theme['toolbar.overlay.backgroundColor']
+                  : store.theme['toolbar.backgroundColor'],
               )
             : 'transparent',
         }}

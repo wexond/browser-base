@@ -16,16 +16,21 @@ export const StyledToolbar = styled.div`
   height: ${TOOLBAR_HEIGHT}px;
   -webkit-app-region: drag;
   padding-right: ${platform() !== 'darwin' ? 138 : 0}px;
+  transition: 0.2s background-color;
 
   ${({
     isHTMLFullscreen,
     theme,
+    overlayType,
   }: {
     isHTMLFullscreen: boolean;
     theme: Theme;
+    overlayType: string;
   }) => css`
     margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
-    background-color: ${theme['toolbar.backgroundColor']};
+    background-color: ${overlayType !== 'default'
+      ? theme['toolbar.overlay.backgroundColor']
+      : theme['toolbar.backgroundColor']};
   `};
 `;
 
