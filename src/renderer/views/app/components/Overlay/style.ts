@@ -183,3 +183,16 @@ export const Content = styled.div`
   width: calc(100% - 64px);
   max-width: 800px;
 `;
+
+export const Scrollable2 = styled(Scrollable)`
+  flex-flow: row;
+  align-items: unset;
+`;
+
+export const Sections = styled.div`
+  margin-left: ${323 + 56}px;
+  width: calc(100% - 300px);
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+`;

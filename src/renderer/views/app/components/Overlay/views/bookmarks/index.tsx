@@ -3,8 +3,8 @@ import { observer } from 'mobx-react';
 
 import store from '~/renderer/views/app/store';
 import { IBookmark } from '~/interfaces';
-import { Sections, BookmarkSection } from './style';
-import { Content, Container, Scrollable } from '../../style';
+import { BookmarkSection } from './style';
+import { Content, Container, Scrollable2, Sections } from '../../style';
 import { preventHiding } from '../..';
 import { NavigationDrawer } from '../../components/NavigationDrawer';
 import { SelectionDialog } from '../../components/SelectionDialog';
@@ -74,7 +74,7 @@ export const Bookmarks = observer(() => {
         store.overlay.currentContent === 'bookmarks' && store.overlay.visible
       }
     >
-      <Scrollable onScroll={onScroll} ref={scrollRef}>
+      <Scrollable2 onScroll={onScroll} ref={scrollRef}>
         <NavigationDrawer
           title="Bookmarks"
           search
@@ -102,7 +102,7 @@ export const Bookmarks = observer(() => {
             Remove
           </ContextMenuItem>
         </ContextMenu>
-      </Scrollable>
+      </Scrollable2>
     </Container>
   );
 });

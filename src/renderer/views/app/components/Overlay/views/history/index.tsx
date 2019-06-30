@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import { Sections } from './style';
-import { Content, Container, Scrollable } from '../../style';
+import { Content, Container, Scrollable2, Sections } from '../../style';
 import { ipcRenderer } from 'electron';
 import store from '~/renderer/views/app/store';
 import { HistorySection } from './HistorySection';
@@ -85,7 +84,7 @@ export const History = observer(() => {
         store.overlay.currentContent === 'history' && store.overlay.visible
       }
     >
-      <Scrollable onScroll={onScroll} ref={scrollRef}>
+      <Scrollable2 onScroll={onScroll} ref={scrollRef}>
         <NavigationDrawer
           title="History"
           search
@@ -110,7 +109,7 @@ export const History = observer(() => {
           onDeleteClick={onDeleteClick}
           onCancelClick={onCancelClick}
         />
-      </Scrollable>
+      </Scrollable2>
     </Container>
   );
 });
