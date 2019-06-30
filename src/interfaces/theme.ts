@@ -18,5 +18,6 @@ export interface ITheme {
   'overlay.scrollbar.backgroundColor': string;
   'overlay.scrollbar.hover.backgroundColor': string;
   'toolbar.overlay.backgroundColor': string;
+  'control.backgroundColor': string;
   accentColor: string;
 }

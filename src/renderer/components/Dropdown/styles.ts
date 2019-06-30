@@ -8,6 +8,7 @@ import {
   centerIcon,
   shadows,
 } from '~/renderer/mixins';
+import { ITheme } from '~/interfaces';
 
 export const StyledDropdown = styled.div`
   min-width: 112px;
@@ -17,13 +18,13 @@ export const StyledDropdown = styled.div`
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
   user-select: none;
-  background-color: #f5f5f5;
   cursor: pointer;
   display: flex;
   align-items: center;
   transition: 0.15s border-bottom;
 
-  ${({ activated }: { activated: boolean }) => css`
+  ${({ activated, theme }: { activated: boolean; theme: ITheme }) => css`
+    background-color: ${theme['control.backgroundColor']}
     border-bottom: ${activated
       ? '1px solid transparent'
       : '1px solid rgba(0, 0, 0, 0.42)'};
