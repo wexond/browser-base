@@ -64,9 +64,9 @@ export const DropIcon = styled.div`
   transition: 0.2s ${EASING_FUNCTION} transform;
   ${centerIcon(24)};
 
-  ${({ activated, theme }: { activated: boolean, theme: ITheme }) => css`
-    transform: ${activated ? 'rotate(180deg)' : 'rotate(0deg)'}
-               ${theme['control.icon'] === 'dark' ? 'invert(100%)' : ''};
+  ${({ activated, theme }: { activated: boolean; theme: ITheme }) => css`
+    transform: ${activated ? 'rotate(180deg)' : 'rotate(0deg)'};
+    filter: ${theme['control.icon'] === 'dark' ? 'invert(100%)' : 'unset'};
   `}
 `;
 
