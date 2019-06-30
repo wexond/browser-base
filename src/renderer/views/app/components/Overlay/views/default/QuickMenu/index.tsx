@@ -118,7 +118,6 @@ export const QuickMenu = observer(() => {
           Downloads
         </Bubble>
         <Bubble
-          disabled
           invert={invert}
           icon={icons.settings}
           onClick={changeContent('settings')}
