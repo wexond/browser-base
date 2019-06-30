@@ -24,10 +24,10 @@ export const StyledDropdown = styled.div`
   transition: 0.15s border-bottom;
 
   ${({ activated, theme }: { activated: boolean; theme: ITheme }) => css`
-    background-color: ${theme['control.backgroundColor']}
+    background-color: ${theme['control.backgroundColor']};
     border-bottom: ${activated
       ? '1px solid transparent'
-      : '1px solid rgba(0, 0, 0, 0.42)'};
+      : theme['control.border']};
   `}
 `;
 
@@ -35,6 +35,7 @@ interface LabelProps {
   activated: boolean;
   focused: boolean;
   color: string;
+  theme: ITheme;
 }
 
 export const Label = styled.div`
@@ -45,10 +46,10 @@ export const Label = styled.div`
   -webkit-font-smoothing: antialiased;
   ${centerVertical()};
 
-  ${({ activated, focused, color }: LabelProps) => css`
+  ${({ activated, focused, color, theme }: LabelProps) => css`
     font-size: ${focused ? 12 : 16}px;
     margin-top: ${focused ? -12 : 0}px;
-    color: ${activated ? color : `rgba(0, 0, 0, ${transparency.text.medium})`};
+    color: ${activated ? color : theme['control.labelColor']};
     ${focused ? robotoMedium() : robotoRegular()};
   `}
 `;
@@ -63,8 +64,9 @@ export const DropIcon = styled.div`
   transition: 0.2s ${EASING_FUNCTION} transform;
   ${centerIcon(24)};
 
-  ${({ activated }: { activated: boolean }) => css`
-    transform: ${activated ? 'rotate(180deg)' : 'rotate(0deg)'};
+  ${({ activated, theme }: { activated: boolean, theme: ITheme }) => css`
+    transform: ${activated ? 'rotate(180deg)' : 'rotate(0deg)'}
+               ${theme['control.icon'] === 'dark' ? 'invert(100%)' : ''};
   `}
 `;
 
@@ -109,8 +111,11 @@ export const Value = styled.div`
   left: 12px;
   position: absolute;
   margin-top: 6px;
-  color: rgba(0, 0, 0, ${transparency.text.high});
   ${centerVertical()};
+
+  ${({ theme }: { theme: ITheme }) => css`
+    color: ${theme['control.valueColor']};
+  `}
 `;
 
 export const DropdownItem = styled.div`
