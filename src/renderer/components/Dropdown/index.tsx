@@ -15,6 +15,7 @@ interface Props {
   color?: string;
   defaultValue?: string;
   children?: any;
+  onChange?: (newValue?: any, oldValue?: any) => void;
   style?: any;
 }
 
@@ -79,6 +80,16 @@ export class Dropdown extends React.PureComponent<Props, State> {
     return selected || defaultValue;
   }
 
+  public set value(str: string) {
+    const { onChange } = this.props;
+    const { selected } = this.state;
+
+    if (str === selected) return;
+
+    this.setState({ selected: str });
+    if (onChange) onChange(str, selected);
+  }
+
   public test() {
     const error = this.value == null;
     this.setState({
@@ -89,8 +100,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
   }
 
   public onItemClick = (label: string) => () => {
-    if (label == null) return;
-    this.setState({ selected: label });
+    this.value = label;
     this.hide();
   };
 
