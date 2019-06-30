@@ -8,7 +8,7 @@ export const Appearance = () => {
   return (
     <Section>
       <Title>Appearance</Title>
-      <Dropdown defaultValue="light">
+      <Dropdown label="Theme" defaultValue="Light">
         <DropdownItem>Light</DropdownItem>
         <DropdownItem>Dark</DropdownItem>
       </Dropdown>

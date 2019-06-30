@@ -50,14 +50,11 @@ export class Dropdown extends React.PureComponent<Props, State> {
   }
 
   public show = () => {
+    this.addListener();
     this.setState({
       activated: true,
       error: false,
       visible: true,
-    });
-
-    requestAnimationFrame(() => {
-      this.removeListener();
     });
   };
 
@@ -72,7 +69,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
   };
 
   public onWindowMouseDown = (e: MouseEvent) => {
-    e.preventDefault();
+    e.stopPropagation();
     this.hide();
   };
 
@@ -106,22 +103,32 @@ export class Dropdown extends React.PureComponent<Props, State> {
     });
   }
 
+  public onMouseDown = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   render() {
     const { label, color, children, style } = this.props;
-    const { activated, selected, error, visible } = this.state;
+    const { activated, error, visible } = this.state;
+    const value = this.value;
 
     const primaryColor = error ? ERROR_COLOR : color;
 
     return (
-      <StyledDropdown activated={activated} onClick={this.show} style={style}>
+      <StyledDropdown
+        activated={activated}
+        onClick={this.show}
+        style={style}
+        onMouseDown={this.onMouseDown}
+      >
         <Label
           color={primaryColor}
           activated={activated}
-          focused={selected != null || activated}
+          focused={value != null || activated}
         >
           {label}
         </Label>
-        <Value>{selected}</Value>
+        <Value>{value}</Value>
         <DropIcon activated={visible} />
         <Menu visible={visible}>
           {React.Children.map(children, child => {
@@ -129,6 +136,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
             return React.cloneElement(child, {
               selected: this.value === label,
               onClick: this.onItemClick(label),
+              onMouseDown: this.onMouseDown,
             });
           })}
         </Menu>
