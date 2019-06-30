@@ -34,13 +34,13 @@ export const Settings = observer(() => {
     >
       <Scrollable>
         <NavigationDrawer title="Settings" search>
-          <MenuItem section="general">General</MenuItem>
           <MenuItem section="appearance">Appearance</MenuItem>
           <MenuItem section="autofill">Autofill</MenuItem>
-          <MenuItem section="search-engine">Search engine</MenuItem>
+          <MenuItem section="addressbar">Addressbar</MenuItem>
+          <MenuItem section="privacy">Privacy and services</MenuItem>
+          <MenuItem section="permissions">Permissions</MenuItem>
           <MenuItem section="startup">On startup</MenuItem>
           <MenuItem section="language">Language</MenuItem>
-          <MenuItem section="weather">Weather</MenuItem>
           <MenuItem section="shortcuts">Keyboard shortcuts</MenuItem>
           <MenuItem section="downloads">Downloads</MenuItem>
         </NavigationDrawer>

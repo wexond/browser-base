@@ -8,19 +8,19 @@ import { darkTheme, lightTheme } from '~/renderer/constants';
 import store from '.';
 
 export type SettingsSection =
-  | 'general'
   | 'appearance'
   | 'autofill'
-  | 'search-engine'
+  | 'addressbar'
+  | 'privacy'
+  | 'permissions'
   | 'startup'
   | 'language'
-  | 'weather'
   | 'shortcuts'
   | 'downloads';
 
 export class SettingsStore {
   @observable
-  public selectedSection: SettingsSection = 'general';
+  public selectedSection: SettingsSection = 'appearance';
 
   @observable
   public object: ISettings = {
