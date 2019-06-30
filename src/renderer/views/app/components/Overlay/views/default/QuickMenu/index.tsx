@@ -28,14 +28,15 @@ const onFindClick = () => {
 };
 
 const onDarkClick = () => {
-  store.settings.isDarkTheme = !store.settings.isDarkTheme;
-  store.theme = store.settings.isDarkTheme ? darkTheme : lightTheme;
-  store.saveSettings();
+  store.settings.object.isDarkTheme = !store.settings.object.isDarkTheme;
+  store.theme = store.settings.object.isDarkTheme ? darkTheme : lightTheme;
+  store.settings.save();
 };
 
 const onShieldClick = () => {
-  store.settings.isShieldToggled = !store.settings.isShieldToggled;
-  store.saveSettings();
+  store.settings.object.isShieldToggled = !store.settings.object
+    .isShieldToggled;
+  store.settings.save();
 };
 
 const onAlwaysClick = () => {
@@ -44,8 +45,9 @@ const onAlwaysClick = () => {
 };
 
 const onMultrinClick = () => {
-  store.settings.isMultrinToggled = !store.settings.isMultrinToggled;
-  store.saveSettings();
+  store.settings.object.isMultrinToggled = !store.settings.object
+    .isMultrinToggled;
+  store.settings.save();
 };
 
 export const QuickMenu = observer(() => {
@@ -70,7 +72,7 @@ export const QuickMenu = observer(() => {
           Always on top
         </Bubble>
         <Bubble
-          toggled={store.settings.isDarkTheme}
+          toggled={store.settings.object.isDarkTheme}
           onClick={onDarkClick}
           invert={invert}
           icon={icons.night}
@@ -79,7 +81,7 @@ export const QuickMenu = observer(() => {
         </Bubble>
         <Bubble
           invert={invert}
-          toggled={store.settings.isShieldToggled}
+          toggled={store.settings.object.isShieldToggled}
           icon={icons.shield}
           onClick={onShieldClick}
         >
@@ -88,7 +90,7 @@ export const QuickMenu = observer(() => {
         {platform() === 'win32' && (
           <Bubble
             invert={invert}
-            toggled={store.settings.isMultrinToggled}
+            toggled={store.settings.object.isMultrinToggled}
             icon={icons.multrin}
             onClick={onMultrinClick}
           >

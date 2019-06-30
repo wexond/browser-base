@@ -1,4 +1,11 @@
 import { observable } from 'mobx';
+import { ipcRenderer } from 'electron';
+import { writeFile, readFileSync } from 'fs';
+
+import { ISettings } from '~/interfaces';
+import { getPath } from '~/utils';
+import { darkTheme, lightTheme } from '~/renderer/constants';
+import store from '.';
 
 export type SettingsSection =
   | 'general'
@@ -9,21 +16,36 @@ export type SettingsSection =
   | 'language'
   | 'weather'
   | 'shortcuts'
-  | 'downloads'
+  | 'downloads';
 
 export class SettingsStore {
   @observable
   public selectedSection: SettingsSection = 'general';
 
   @observable
-  public dialType: 'top-sites' | 'bookmarks' = 'top-sites';
+  public object: ISettings = {
+    dialType: 'top-sites',
+    isDarkTheme: false,
+    isShieldToggled: true,
+    isMultrinToggled: true,
+  };
 
-  @observable
-  public isDarkTheme = false;
+  public save() {
+    ipcRenderer.send('settings', this.object);
 
-  @observable
-  public isShieldToggled = true;
+    writeFile(getPath('settings.json'), JSON.stringify(this.object), err => {
+      if (err) console.error(err);
+    });
+  }
 
-  @observable
-  public isMultrinToggled = true;
+  public load() {
+    this.object = {
+      ...this.object,
+      ...JSON.parse(readFileSync(getPath('settings.json'), 'utf8')),
+    };
+
+    store.theme = this.object.isDarkTheme ? darkTheme : lightTheme;
+
+    ipcRenderer.send('settings', this.object);
+  }
 }
