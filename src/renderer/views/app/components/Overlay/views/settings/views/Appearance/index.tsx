@@ -16,11 +16,7 @@ const Theme = () => {
   const defaultValue = store.settings.object.isDarkTheme ? 'Dark' : 'Light';
 
   return (
-    <Dropdown
-      label="Theme"
-      defaultValue={defaultValue}
-      onChange={onThemeChange}
-    >
+    <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
       <DropdownItem>Light</DropdownItem>
       <DropdownItem>Dark</DropdownItem>
     </Dropdown>

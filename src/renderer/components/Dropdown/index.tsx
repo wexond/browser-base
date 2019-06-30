@@ -1,17 +1,9 @@
 import * as React from 'react';
 
-import { ERROR_COLOR, colors } from '~/renderer/constants';
-import {
-  StyledDropdown,
-  Label,
-  DropIcon,
-  Menu,
-  Indicator,
-  Value,
-} from './styles';
+import { colors } from '~/renderer/constants';
+import { StyledDropdown, DropIcon, Menu, Value } from './styles';
 
 interface Props {
-  label?: string;
   color?: string;
   defaultValue?: string;
   children?: any;
@@ -28,7 +20,6 @@ interface State {
 
 export class Dropdown extends React.PureComponent<Props, State> {
   static defaultProps: Props = {
-    label: 'Label',
     color: colors.blue['500'],
   };
 
@@ -118,11 +109,9 @@ export class Dropdown extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { label, color, children, style } = this.props;
+    const { color, children, style } = this.props;
     const { activated, error, visible } = this.state;
     const value = this.value;
-
-    const primaryColor = error ? ERROR_COLOR : color;
 
     return (
       <StyledDropdown
@@ -131,13 +120,6 @@ export class Dropdown extends React.PureComponent<Props, State> {
         style={style}
         onMouseDown={this.onMouseDown}
       >
-        <Label
-          color={primaryColor}
-          activated={activated}
-          focused={value != null || activated}
-        >
-          {label}
-        </Label>
         <Value>{value}</Value>
         <DropIcon activated={visible} />
         <Menu visible={visible}>
@@ -150,7 +132,6 @@ export class Dropdown extends React.PureComponent<Props, State> {
             });
           })}
         </Menu>
-        <Indicator activated={activated} color={primaryColor} />
       </StyledDropdown>
     );
   }
