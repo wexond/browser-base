@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import { DropArrow, Title } from '../../../style';
 import { BookmarksDial } from '../BookmarksDial';
 import { TopSites } from '../TopSites';
 import store from '~/renderer/views/app/store';
 import { ContextMenu, ContextMenuItem } from '../../../components/ContextMenu';
 import { icons } from '~/renderer/constants';
+import { Container, DropArrow, DialTitle } from './style';
 
 const changeDialType = (type: 'top-sites' | 'bookmarks') => () => {
-  store.settings.dialType = type;
-  store.saveSettings();
+  store.settings.object.dialType = type;
+  store.settings.save();
 };
 
 const onDialTitleClick = (e: any) => {
@@ -19,21 +19,23 @@ const onDialTitleClick = (e: any) => {
 };
 
 export const Dial = observer(() => {
-  const { dialType } = store.settings;
+  const { dialType } = store.settings.object;
 
   return (
     <>
       {(store.history.topSites.length > 0 ||
         store.bookmarks.list.length > 0) && (
         <>
-          <Title
-            onClick={onDialTitleClick}
-            style={{ marginBottom: 24, cursor: 'pointer' }}
-          >
-            {dialType === 'bookmarks' ? 'Bookmarks' : 'Top Sites'}
-            <DropArrow />
+          <Container>
+            <DialTitle
+              onClick={onDialTitleClick}
+              style={{ marginBottom: 24, cursor: 'pointer' }}
+            >
+              {dialType === 'bookmarks' ? 'Bookmarks' : 'Top Sites'}
+              <DropArrow />
+            </DialTitle>
             <ContextMenu
-              style={{ top: 42 }}
+              style={{ top: 42, marginLeft: 24 }}
               visible={store.overlay.dialTypeMenuVisible}
             >
               <ContextMenuItem
@@ -51,7 +53,8 @@ export const Dial = observer(() => {
                 Bookmarks
               </ContextMenuItem>
             </ContextMenu>
-          </Title>
+          </Container>
+
           {dialType === 'bookmarks' ? <BookmarksDial /> : <TopSites />}
         </>
       )}
