@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { observable, computed } from 'mobx';
 
 import { TabsStore } from './tabs';
@@ -12,17 +11,15 @@ import { SuggestionsStore } from './suggestions';
 import { ExtensionsStore } from './extensions';
 import { extname } from 'path';
 import { BookmarksStore } from './bookmarks';
-import { readFileSync, writeFile } from 'fs';
 import { DownloadsStore } from './downloads';
-import { lightTheme, darkTheme } from '~/renderer/constants/themes';
+import { lightTheme } from '~/renderer/constants/themes';
 import { WeatherStore } from './weather';
 import { SettingsStore } from './settings';
-import { getPath } from '~/utils';
 
 export class Store {
   public history = new HistoryStore();
   public bookmarks = new BookmarksStore();
-  public settings = new SettingsStore();
+  public settings = new SettingsStore(this);
   public suggestions = new SuggestionsStore();
   public favicons = new FaviconsStore();
   public addTab = new AddTabStore();

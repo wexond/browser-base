@@ -5,7 +5,7 @@ import { writeFile, readFileSync } from 'fs';
 import { ISettings } from '~/interfaces';
 import { getPath } from '~/utils';
 import { darkTheme, lightTheme } from '~/renderer/constants';
-import store from '.';
+import store, { Store } from '.';
 
 export type SettingsSection =
   | 'general'
@@ -30,6 +30,8 @@ export class SettingsStore {
     isMultrinToggled: true,
   };
 
+  constructor(private store: Store) {}
+
   public save() {
     ipcRenderer.send('settings', this.object);
 
@@ -44,7 +46,7 @@ export class SettingsStore {
       ...JSON.parse(readFileSync(getPath('settings.json'), 'utf8')),
     };
 
-    store.theme = this.object.isDarkTheme ? darkTheme : lightTheme;
+    this.store.theme = this.object.isDarkTheme ? darkTheme : lightTheme;
 
     ipcRenderer.send('settings', this.object);
   }
