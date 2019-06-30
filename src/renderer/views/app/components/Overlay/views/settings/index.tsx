@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import { Sections } from './styles';
-import { Textfield } from '~/renderer/components/Textfield';
 import { SettingsSection } from '~/renderer/views/app/store/settings';
 import { NavigationDrawer } from '../../components/NavigationDrawer';
 import store from '~/renderer/views/app/store';
-import { Container, Scrollable, Content } from '../../style';
+import { Container, Scrollable } from '../../style';
+import { Appearance } from './views';
+import { Sections } from './styles';
 
 const preventHiding = (e: any) => {
   e.stopPropagation();
@@ -24,6 +24,8 @@ const MenuItem = observer(
 );
 
 export const Settings = observer(() => {
+  const { selectedSection } = store.settings;
+
   return (
     <Container
       right
@@ -43,11 +45,10 @@ export const Settings = observer(() => {
           <MenuItem section="language">Language</MenuItem>
           <MenuItem section="shortcuts">Keyboard shortcuts</MenuItem>
           <MenuItem section="downloads">Downloads</MenuItem>
+          <MenuItem section="system">System</MenuItem>
         </NavigationDrawer>
         <Sections>
-          <Content>
-            <Textfield label="Home page" />
-          </Content>
+          {selectedSection === 'appearance' && <Appearance />}
         </Sections>
       </Scrollable>
     </Container>

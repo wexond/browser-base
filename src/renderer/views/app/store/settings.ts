@@ -16,7 +16,8 @@ export type SettingsSection =
   | 'startup'
   | 'language'
   | 'shortcuts'
-  | 'downloads';
+  | 'downloads'
+  | 'system';
 
 export class SettingsStore {
   @observable
