@@ -24,6 +24,10 @@ export const lightTheme: ITheme = {
   'overlay.scrollbar.hover.backgroundColor': 'rgba(0, 0, 0, 0.32)',
   'control.backgroundColor': 'rgba(0, 0, 0, 0.04)',
   'control.hover.backgroundColor': 'rgba(0, 0, 0, 0.06)',
+  'control.border': '1px solid rgba(0, 0, 0, 0.42)',
+  'control.labelColor': 'rgba(0, 0, 0, 0.60)',
+  'control.valueColor': '#000',
+  'control.icon': 'light',
   accentColor: colors.blue['500'],
 };
 
@@ -49,5 +53,9 @@ export const darkTheme: ITheme = {
   'overlay.scrollbar.hover.backgroundColor': 'rgba(255, 255, 255, 0.48)',
   'control.backgroundColor': 'rgba(255, 255, 255, 0.04)',
   'control.hover.backgroundColor': 'rgba(255, 255, 255, 0.06)',
+  'control.border': '1px solid rgba(255, 255, 255, 0.48)',
+  'control.labelColor': 'rgba(255, 255, 255, 0.54)',
+  'control.valueColor': '#fff',
+  'control.icon': 'dark',
   accentColor: colors.blue['500'],
 };

@@ -35,8 +35,9 @@ export const DropIcon = styled.div`
   transition: 0.2s ${EASING_FUNCTION} transform;
   ${centerIcon(24)};
 
-  ${({ activated }: { activated: boolean }) => css`
+  ${({ activated, theme }: { activated: boolean; theme: ITheme }) => css`
     transform: ${activated ? 'rotate(180deg)' : 'rotate(0deg)'};
+    filter: ${theme['control.icon'] === 'dark' ? 'invert(100%)' : 'unset'};
   `}
 `;
 
@@ -64,6 +65,10 @@ export const Value = styled.div`
   font-size: 14px;
   margin-left: 12px;
   color: rgba(0, 0, 0, ${transparency.text.high});
+
+  ${({ theme }: { theme: ITheme }) => css`
+    color: ${theme['control.valueColor']};
+  `}
 `;
 
 export const DropdownItem = styled.div`
