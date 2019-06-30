@@ -7,7 +7,6 @@ import { centerIcon } from '~/renderer/mixins';
 export const StyledNavigationDrawer = styled.div`
   width: 323px;
   height: 100%;
-
   position: fixed;
   left: 0;
   display: flex;
