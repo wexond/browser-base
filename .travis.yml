@@ -6,16 +6,26 @@ install:
   - npm ci
 cache:
   directories:
-    - '$HOME/.npm'
+  - "$HOME/.npm"
 os:
   - linux
   - osx
   - windows
-deploy:
-  skip_cleanup: true
-  script:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-darwin ;fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-linux ;fi
-    - if [[ "$TRAVIS_OS_NAME" == "windows" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-win32 ;fi
-  on:
-    tags: true
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - libc6-dev-i386
+      - gcc-4.8-multilib
+      - g++-4.8-multilib
+      - ninja-build
+      - linux-libc-dev:i386
+      - linux-libc-dev
+      - icnsutils
+      - graphicsmagick
+
+script:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-darwin ;fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-linux ;fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-win32 ;fi
