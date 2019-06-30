@@ -15,6 +15,7 @@ export class AuthWindow extends BrowserWindow {
       height: HEIGHT,
       transparent: true,
       show: false,
+      fullscreenable: false,
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
