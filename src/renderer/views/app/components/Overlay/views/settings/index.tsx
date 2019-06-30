@@ -4,9 +4,8 @@ import { observer } from 'mobx-react';
 import { SettingsSection } from '~/renderer/views/app/store/settings';
 import { NavigationDrawer } from '../../components/NavigationDrawer';
 import store from '~/renderer/views/app/store';
-import { Container, Scrollable } from '../../style';
+import { Container, Scrollable2, Sections } from '../../style';
 import { Appearance } from './views';
-import { Sections } from './styles';
 
 const preventHiding = (e: any) => {
   e.stopPropagation();
@@ -34,7 +33,7 @@ export const Settings = observer(() => {
         store.overlay.currentContent === 'settings' && store.overlay.visible
       }
     >
-      <Scrollable>
+      <Scrollable2>
         <NavigationDrawer title="Settings" search>
           <MenuItem section="appearance">Appearance</MenuItem>
           <MenuItem section="autofill">Autofill</MenuItem>
@@ -47,10 +46,10 @@ export const Settings = observer(() => {
           <MenuItem section="downloads">Downloads</MenuItem>
           <MenuItem section="system">System</MenuItem>
         </NavigationDrawer>
-        <Sections>
+        <Sections style={{ paddingTop: 32 }}>
           {selectedSection === 'appearance' && <Appearance />}
         </Sections>
-      </Scrollable>
+      </Scrollable2>
     </Container>
   );
 });
