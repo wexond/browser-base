@@ -150,12 +150,13 @@ export const Title = styled.div`
   font-size: 24px;
   margin-left: 16px;
   font-weight: 300;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   margin-top: 24px;
   position: relative;
   display: flex;
   align-items: center;
-  padding: 4px 8px;
+  padding: 6px 12px;
+  padding-right: 6px;
   border-radius: 4px;
   width: fit-content;
 `;
