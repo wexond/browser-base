@@ -7,7 +7,6 @@ export const StyledBubble = styled.div`
   border-radius: 16px;
   margin-top: 8px;
   padding: 16px 8px;
-  transition: 0.1s background-color;
   display: flex;
   flex-flow: column;
   align-items: center;
