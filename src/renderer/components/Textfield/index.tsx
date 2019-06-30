@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ERROR_COLOR } from '~/renderer/constants';
+import { ERROR_COLOR, colors } from '~/renderer/constants';
 import { StyledTextfield, Input, Label, Indicator, Icon } from './style';
 
 export type TestFunction = (str: string) => boolean;
@@ -26,7 +26,7 @@ export class Textfield extends React.PureComponent<Props, State> {
   public inputRef = React.createRef<HTMLInputElement>();
 
   static defaultProps: Props = {
-    color: '#673AB7',
+    color: colors.blue['500'],
     inputType: 'text',
   };
 

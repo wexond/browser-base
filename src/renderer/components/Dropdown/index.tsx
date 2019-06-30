@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ERROR_COLOR } from '~/renderer/constants';
+import { ERROR_COLOR, colors } from '~/renderer/constants';
 import {
   StyledDropdown,
   Label,
@@ -28,7 +28,7 @@ interface State {
 export class Dropdown extends React.PureComponent<Props, State> {
   static defaultProps: Props = {
     label: 'Label',
-    color: '#673AB7',
+    color: colors.blue['500'],
   };
 
   public state: State = {
