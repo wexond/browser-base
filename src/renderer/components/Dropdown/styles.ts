@@ -11,6 +11,7 @@ import {
 
 export const StyledDropdown = styled.div`
   min-width: 112px;
+  max-width: 256px;
   height: 48px;
   position: relative;
   border-top-right-radius: 4px;
@@ -125,7 +126,7 @@ export const DropdownItem = styled.div`
   color: #000;
   cursor: pointer;
 
-  ${({ selected }: { selected: boolean }) => css`
+  ${({ selected }: { selected?: boolean }) => css`
     background-color: ${selected ? 'rgba(0, 0, 0, 0.04)' : '#fff'};
   `}
 

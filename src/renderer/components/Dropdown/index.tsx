@@ -38,10 +38,18 @@ export class Dropdown extends React.PureComponent<Props, State> {
   };
 
   public componentWillUnmount() {
-    window.removeEventListener('click', this.onWindowClick);
+    this.removeListener();
   }
 
-  public onClick = () => {
+  public addListener() {
+    window.addEventListener('mousedown', this.onWindowMouseDown);
+  }
+
+  public removeListener() {
+    window.removeEventListener('mousedown', this.onWindowMouseDown);
+  }
+
+  public show = () => {
     this.setState({
       activated: true,
       error: false,
@@ -49,28 +57,23 @@ export class Dropdown extends React.PureComponent<Props, State> {
     });
 
     requestAnimationFrame(() => {
-      window.addEventListener('click', this.onWindowClick);
+      this.removeListener();
     });
   };
 
-  public onWindowClick = (e: MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-
+  public hide = () => {
     requestAnimationFrame(() => {
+      this.removeListener();
       this.setState({
         activated: false,
         visible: false,
       });
-
-      window.removeEventListener('click', this.onWindowClick);
     });
   };
 
-  public onItemClick = (label: string) => () => {
-    if (label == null) return;
-
-    this.setState({ selected: label });
+  public onWindowMouseDown = (e: MouseEvent) => {
+    e.preventDefault();
+    this.hide();
   };
 
   public get value() {
@@ -81,14 +84,18 @@ export class Dropdown extends React.PureComponent<Props, State> {
 
   public test() {
     const error = this.value == null;
-
     this.setState({
       activated: error,
       error,
     });
-
     return !error;
   }
+
+  public onItemClick = (label: string) => () => {
+    if (label == null) return;
+    this.setState({ selected: label });
+    this.hide();
+  };
 
   public clear() {
     this.setState({
@@ -106,11 +113,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
     const primaryColor = error ? ERROR_COLOR : color;
 
     return (
-      <StyledDropdown
-        activated={activated}
-        onClick={this.onClick}
-        style={style}
-      >
+      <StyledDropdown activated={activated} onClick={this.show} style={style}>
         <Label
           color={primaryColor}
           activated={activated}
@@ -122,7 +125,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
         <DropIcon activated={visible} />
         <Menu visible={visible}>
           {React.Children.map(children, child => {
-            const { label } = child.props;
+            const label = child.props.children;
             return React.cloneElement(child, {
               selected: this.value === label,
               onClick: this.onItemClick(label),
