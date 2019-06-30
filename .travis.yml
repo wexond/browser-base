@@ -3,7 +3,7 @@ node_js: '12'
 sudo: enabled
 dist: trusty
 install:
-- npm ci
+  - npm ci
 cache:
   directories:
   - "$HOME/.npm"

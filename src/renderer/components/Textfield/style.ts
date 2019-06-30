@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { robotoRegular, robotoMedium, centerIcon } from '~/shared/mixins';
+import { robotoRegular, robotoMedium, centerIcon } from '~/renderer/mixins';
 
 export const StyledTextfield = styled.div`
   width: 280px;

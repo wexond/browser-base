@@ -1,0 +1,18 @@
+{
+    "settings": [
+        {
+            "title": "Settings",
+            "search": "Search",
+            "general": "General",
+            "appearance": "Appearance",
+            "autofill": "Autofill",
+            "search_engine": "Search engine",
+            "on_startup": "On startup",
+            "language": "Language",
+            "weather": "Weather",
+            "keyboard_shrtcts": "Keyboard shortcuts",
+            "downloads": "Downloads",
+            "example_sentence": "Testing. This sentence is an example."
+        }
+    ]
+}

@@ -87,7 +87,9 @@ const renderer = name => {
 
   const fuse = FuseBox.init(cfg);
 
-  const app = fuse.bundle(name).instructions(`> [renderer/${name}/index.tsx]`);
+  const app = fuse
+    .bundle(name)
+    .instructions(`> [renderer/views/${name}/index.tsx]`);
 
   if (!production) {
     if (name === 'app') {

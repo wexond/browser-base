@@ -68,12 +68,12 @@ export class View extends BrowserView {
     this.webContents.addListener(
       'new-window',
       (e, url, frameName, disposition) => {
+        e.preventDefault();
+
         if (disposition === 'new-window') {
           if (frameName === '_self') {
-            e.preventDefault();
             appWindow.viewManager.selected.webContents.loadURL(url);
           } else if (frameName === '_blank') {
-            e.preventDefault();
             appWindow.viewManager.create(
               {
                 url,
@@ -83,10 +83,8 @@ export class View extends BrowserView {
             );
           }
         } else if (disposition === 'foreground-tab') {
-          e.preventDefault();
           appWindow.viewManager.create({ url, active: true }, true);
         } else if (disposition === 'background-tab') {
-          e.preventDefault();
           appWindow.viewManager.create({ url, active: false }, true);
         }
       },

@@ -1,0 +1,18 @@
+{
+    "settings": [
+        {
+            "title": "Ustawienia",
+            "search": "Szukaj",
+            "general": "Ogólne",
+            "appearance": "Wygląd",
+            "autofill": "Automatyczne wypełnianie",
+            "search_engine": "Wyszukiwarka",
+            "on_startup": "Po uruchomieniu",
+            "language": "Język",
+            "weather": "Pogoda",
+            "keyboard_shrtcts": "Skróty klawiaturowe",
+            "downloads": "Pliki do pobrania",
+            "example_sentence": "Testowanie. To zdanie jest przykładem."
+        }
+    ]
+}
