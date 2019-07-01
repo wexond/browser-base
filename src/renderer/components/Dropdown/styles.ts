@@ -35,7 +35,7 @@ export const DropIcon = styled.div`
   width: 24px;
   height: 24px;
   margin-left: auto;
-  margin-right: 4px;
+  margin-right: 2px;
   opacity: ${transparency.icons.inactive};
   background-image: url(${icons.dropDown});
   transition: 0.2s ${EASING_FUNCTION} transform;
@@ -69,7 +69,7 @@ export const Menu = styled.div`
 
 export const Value = styled.div`
   font-size: 14px;
-  margin-left: 12px;
+  margin-left: 8px;
   color: rgba(0, 0, 0, ${transparency.text.high});
 
   ${({ theme }: { theme: ITheme }) => css`
