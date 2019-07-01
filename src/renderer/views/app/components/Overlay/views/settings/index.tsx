@@ -37,7 +37,7 @@ export const Settings = observer(() => {
           <MenuItem section="downloads">Downloads</MenuItem>
           <MenuItem section="system">System</MenuItem>
         </NavigationDrawer>
-        <Sections style={{ paddingTop: 32 }}>
+        <Sections style={{ paddingTop: 48 }}>
           {selectedSection === 'appearance' && <Appearance />}
         </Sections>
       </Scrollable2>

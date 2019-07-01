@@ -51,23 +51,6 @@ const OverlayAnimations = () => {
   );
 };
 
-const FontSize = () => {
-  return (
-    <Row>
-      <Title>Font size</Title>
-      <Control>
-        <Dropdown defaultValue="Medium (Recommended)" onChange={onThemeChange}>
-          <DropdownItem>Very small</DropdownItem>
-          <DropdownItem>Small</DropdownItem>
-          <DropdownItem>Medium (Recommended)</DropdownItem>
-          <DropdownItem>Large</DropdownItem>
-          <DropdownItem>Very large</DropdownItem>
-        </Dropdown>
-      </Control>
-    </Row>
-  );
-};
-
 const OverlayBlur = () => {
   return (
     <Row>
@@ -86,7 +69,6 @@ export const Appearance = () => {
       <OverlayBlur />
       <OverlayAnimations />
       <Theme />
-      <FontSize />
     </Content>
   );
 };
