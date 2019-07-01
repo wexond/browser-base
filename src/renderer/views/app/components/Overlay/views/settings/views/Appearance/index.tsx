@@ -4,8 +4,8 @@ import store from '~/renderer/views/app/store';
 import { darkTheme, lightTheme } from '~/renderer/constants';
 import { Dropdown } from '~/renderer/components/Dropdown';
 import { DropdownItem } from '~/renderer/components/Dropdown/styles';
-import { Section, Title } from '../style';
 import Switch from '~/renderer/components/Switch';
+import { Section, Title, Row, Control } from '../style';
 
 const onThemeChange = (value: 'Light' | 'Dark') => {
   store.settings.object.isDarkTheme = value === 'Dark';
@@ -17,13 +17,19 @@ const Theme = () => {
   const defaultValue = store.settings.object.isDarkTheme ? 'Dark' : 'Light';
 
   return (
-    <>
+    <Row>
       <Title>Theme</Title>
-      <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
-        <DropdownItem>Light</DropdownItem>
-        <DropdownItem>Dark</DropdownItem>
-      </Dropdown>
-    </>
+      <Control>
+        <Dropdown
+          defaultValue={defaultValue}
+          onChange={onThemeChange}
+          style={{ width: 200 }}
+        >
+          <DropdownItem>Light</DropdownItem>
+          <DropdownItem>Dark</DropdownItem>
+        </Dropdown>
+      </Control>
+    </Row>
   );
 };
 
@@ -36,13 +42,15 @@ export const OverlayAnimations = () => {
   const { areAnimationsToggled } = store.settings.object;
 
   return (
-    <>
+    <Row>
       <Title>Overlay animations</Title>
-      <Switch
-        onChange={onAnimationsChange}
-        defaultValue={areAnimationsToggled}
-      />
-    </>
+      <Control>
+        <Switch
+          onChange={onAnimationsChange}
+          defaultValue={areAnimationsToggled}
+        />
+      </Control>
+    </Row>
   );
 };
 

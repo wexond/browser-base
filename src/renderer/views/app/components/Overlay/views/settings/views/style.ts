@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-import { robotoLight } from '~/renderer/mixins';
 import { Content } from '../../../style';
 
 export const Section = styled(Content)`
@@ -8,12 +7,19 @@ export const Section = styled(Content)`
 `
 
 export const Title = styled.div`
-  font-size: 24px;
-  padding-top: 24px;
-  padding-bottom: 16px;
-  ${robotoLight()};
+  font-size: 16px;
+`;
+
+export const Row = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
 
   &:not(:first-child) {
-    margin-top: 8px;
+    margin-top: 24px;
   }
 `;
+
+export const Control = styled.div`
+  margin-left: auto;
+`
