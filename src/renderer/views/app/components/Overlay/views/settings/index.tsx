@@ -1,15 +1,12 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
+import store from '~/renderer/views/app/store';
 import { SettingsSection } from '~/renderer/views/app/store/settings';
 import { NavigationDrawer } from '../../components/NavigationDrawer';
-import store from '~/renderer/views/app/store';
-import { Container, Scrollable2, Sections } from '../../style';
 import { Appearance } from './views';
-
-const preventHiding = (e: any) => {
-  e.stopPropagation();
-};
+import { Container } from '../..';
+import { Scrollable2, Sections } from '../../style';
 
 const MenuItem = observer(
   ({ section, children }: { section: SettingsSection; children: any }) => (
@@ -26,13 +23,7 @@ export const Settings = observer(() => {
   const { selectedSection } = store.settings;
 
   return (
-    <Container
-      right
-      onClick={preventHiding}
-      visible={
-        store.overlay.currentContent === 'settings' && store.overlay.visible
-      }
-    >
+    <Container content="settings" right>
       <Scrollable2>
         <NavigationDrawer title="Settings" search>
           <MenuItem section="appearance">Appearance</MenuItem>
