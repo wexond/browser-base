@@ -5,12 +5,12 @@ import { writeFile, readFileSync } from 'fs';
 import { ISettings } from '~/interfaces';
 import { getPath } from '~/utils';
 import { darkTheme, lightTheme } from '~/renderer/constants';
-import store, { Store } from '.';
+import { Store } from '.';
 
 export type SettingsSection =
   | 'appearance'
   | 'autofill'
-  | 'addressbar'
+  | 'search-engine'
   | 'privacy'
   | 'permissions'
   | 'startup'

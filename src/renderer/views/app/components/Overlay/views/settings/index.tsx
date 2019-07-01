@@ -28,7 +28,7 @@ export const Settings = observer(() => {
         <NavigationDrawer title="Settings" search>
           <MenuItem section="appearance">Appearance</MenuItem>
           <MenuItem section="autofill">Autofill</MenuItem>
-          <MenuItem section="addressbar">Address bar</MenuItem>
+          <MenuItem section="search-engine">Search engine</MenuItem>
           <MenuItem section="privacy">Privacy and services</MenuItem>
           <MenuItem section="permissions">Permissions</MenuItem>
           <MenuItem section="startup">On startup</MenuItem>
