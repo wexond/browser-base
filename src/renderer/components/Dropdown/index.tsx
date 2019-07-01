@@ -75,8 +75,6 @@ export class Dropdown extends React.PureComponent<Props, State> {
     const { onChange } = this.props;
     const { selected } = this.state;
 
-    if (str === selected) return;
-
     this.setState({ selected: str });
     if (onChange) onChange(str, selected);
   }
@@ -106,20 +104,23 @@ export class Dropdown extends React.PureComponent<Props, State> {
 
   public onMouseDown = (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    const { visible } = this.state;
+    if (visible) this.hide();
+    else this.show();
+  };
+
+  public onItemMouseDown = (e: React.MouseEvent) => {
+    e.stopPropagation();
   };
 
   render() {
-    const { color, children, style } = this.props;
-    const { activated, error, visible } = this.state;
+    const { children, style } = this.props;
+    const { activated, visible } = this.state;
     const value = this.value;
 
     return (
-      <StyledDropdown
-        activated={activated}
-        onClick={this.show}
-        style={style}
-        onMouseDown={this.onMouseDown}
-      >
+      <StyledDropdown style={style} onMouseDown={this.onMouseDown}>
         <Value>{value}</Value>
         <DropIcon activated={visible} />
         <Menu visible={visible}>
@@ -128,7 +129,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
             return React.cloneElement(child, {
               selected: this.value === label,
               onClick: this.onItemClick(label),
-              onMouseDown: this.onMouseDown,
+              onMouseDown: this.onItemMouseDown,
             });
           })}
         </Menu>
