@@ -1,12 +1,11 @@
 import styled, { css } from 'styled-components';
 
 import { EASING_FUNCTION, transparency, icons } from '~/renderer/constants';
-import { centerVertical, centerIcon, shadows } from '~/renderer/mixins';
+import { centerIcon, shadows } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
 
 export const StyledDropdown = styled.div`
-  min-width: 112px;
-  max-width: 200px;
+  width: 200px;
   height: 32px;
   position: relative;
   border-radius: 4px;

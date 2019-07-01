@@ -20,11 +20,7 @@ const Theme = () => {
     <Row>
       <Title>Theme</Title>
       <Control>
-        <Dropdown
-          defaultValue={defaultValue}
-          onChange={onThemeChange}
-          style={{ width: 200 }}
-        >
+        <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
           <DropdownItem>Light</DropdownItem>
           <DropdownItem>Dark</DropdownItem>
         </Dropdown>
@@ -38,7 +34,7 @@ const onAnimationsChange = (value: boolean) => {
   store.settings.save();
 };
 
-export const OverlayAnimations = () => {
+const OverlayAnimations = () => {
   const { areAnimationsToggled } = store.settings.object;
 
   return (
@@ -54,11 +50,29 @@ export const OverlayAnimations = () => {
   );
 };
 
+const FontSize = () => {
+  return (
+    <Row>
+      <Title>Font size</Title>
+      <Control>
+        <Dropdown defaultValue="Medium (Recommended)" onChange={onThemeChange}>
+          <DropdownItem>Very small</DropdownItem>
+          <DropdownItem>Small</DropdownItem>
+          <DropdownItem>Medium (Recommended)</DropdownItem>
+          <DropdownItem>Large</DropdownItem>
+          <DropdownItem>Very large</DropdownItem>
+        </Dropdown>
+      </Control>
+    </Row>
+  );
+};
+
 export const Appearance = () => {
   return (
     <Section>
       <Theme />
       <OverlayAnimations />
+      <FontSize />
     </Section>
   );
 };
