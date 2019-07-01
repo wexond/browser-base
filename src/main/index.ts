@@ -71,6 +71,7 @@ app.on('ready', async () => {
         dialType: 'top-sites',
         isDarkTheme: false,
         isShieldToggled: true,
+        areAnimationsToggled: true,
       } as ISettings),
     );
   }

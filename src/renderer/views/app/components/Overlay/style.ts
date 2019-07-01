@@ -179,9 +179,14 @@ export const Title = styled.div`
   }
 `;
 
-export const Container = styled.div`
+interface ContainerProps {
+  visible: boolean;
+  right?: boolean;
+  animations: boolean;
+}
+
+export const StyledContainer = styled.div`
   position: absolute;
-  transition: 0.2s transform, 0.2s opacity, 0.2s visibility;
   will-change: transform, opacity, pointer-events;
   backface-visibility: hidden;
   top: 0;
@@ -191,7 +196,8 @@ export const Container = styled.div`
   display: flex;
   flex-flow: column;
 
-  ${({ visible, right }: { visible: boolean; right?: boolean }) => css`
+  ${({ visible, right, animations }: ContainerProps) => css`
+    transition: ${animations ? '0.2s transform, 0.2s opacity, 0.2s visibility' : 'unset'};
     transform: translateX(${visible ? 0 : right ? 32 : -32}px);
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};

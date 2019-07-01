@@ -29,9 +29,10 @@ export class SettingsStore {
     isDarkTheme: false,
     isShieldToggled: true,
     isMultrinToggled: true,
+    areAnimationsToggled: true,
   };
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) { }
 
   public save() {
     ipcRenderer.send('settings', this.object);

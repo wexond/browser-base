@@ -5,6 +5,7 @@ import { StyledSwitch, Thumb } from './styles';
 
 interface Props {
   color?: string;
+  defaultValue?: boolean;
   onChange?: (value: boolean) => void;
 }
 
@@ -15,15 +16,17 @@ interface State {
 export default class Switch extends React.PureComponent<Props, State> {
   static defaultProps: Props = {
     color: colors.blue['500'],
+    defaultValue: false,
   };
 
   public state: State = {
-    activated: false,
+    activated: null,
   };
 
   public get value() {
+    const { defaultValue } = this.props;
     const { activated } = this.state;
-    return activated;
+    return activated || defaultValue;
   }
 
   public set value(val: boolean) {
@@ -40,7 +43,7 @@ export default class Switch extends React.PureComponent<Props, State> {
 
   render() {
     const { color } = this.props;
-    const { activated } = this.state;
+    const activated = this.value;
 
     return (
       <StyledSwitch activated={activated} color={color} onClick={this.onClick}>
