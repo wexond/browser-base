@@ -16,17 +16,10 @@ export const StyledDropdown = styled.div`
   align-items: center;
 
   ${({ activated, theme }: { activated: boolean; theme: ITheme }) => css`
-    border: 1px solid
-      ${theme['overlay.foreground'] === 'dark'
-        ? 'rgba(0, 0, 0, 0.12)'
-        : 'rgba(255, 255, 255, 0.12)'};
     background-color: ${theme['control.backgroundColor']};
 
     &:hover {
-      border: 1px solid
-        ${theme['overlay.foreground'] === 'dark'
-          ? 'rgba(0, 0, 0, 0.3)'
-          : 'rgba(255, 255, 255, 0.3)'};
+      background-color: ${theme['control.hover.backgroundColor']};
     }
   `}
 `;
