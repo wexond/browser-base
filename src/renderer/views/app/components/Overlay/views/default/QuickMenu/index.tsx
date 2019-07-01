@@ -34,8 +34,7 @@ const onDarkClick = () => {
 };
 
 const onShieldClick = () => {
-  store.settings.object.isShieldToggled = !store.settings.object
-    .isShieldToggled;
+  store.settings.object.shieldToggled = !store.settings.object.shieldToggled;
   store.settings.save();
 };
 
@@ -45,8 +44,7 @@ const onAlwaysClick = () => {
 };
 
 const onMultrinClick = () => {
-  store.settings.object.isMultrinToggled = !store.settings.object
-    .isMultrinToggled;
+  store.settings.object.multrinToggled = !store.settings.object.multrinToggled;
   store.settings.save();
 };
 

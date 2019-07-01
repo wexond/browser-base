@@ -21,7 +21,11 @@ export const Header = ({ children, clickable }: any) => {
 };
 
 const onClick = () => {
-  if (store.tabGroups.currentGroup.tabs.length > 0 && !store.overlay.isNewTab) {
+  if (
+    store.tabGroups.currentGroup.tabs.length > 0 &&
+    !store.overlay.isNewTab &&
+    store.overlay.currentContent === 'default'
+  ) {
     store.overlay.visible = false;
   }
   store.overlay.dialTypeMenuVisible = false;
@@ -49,10 +53,6 @@ interface ContainerProps {
   children?: any;
 }
 
-const onContainerClick = (e: React.MouseEvent) => {
-  e.stopPropagation();
-}
-
 export const Container = observer(
   ({ content, right, children }: ContainerProps) => {
     const { animationsToggled } = store.settings.object;
@@ -64,7 +64,6 @@ export const Container = observer(
         visible={visible}
         right={right}
         animations={animationsToggled}
-        onClick={onContainerClick}
       >
         {children}
       </StyledContainer>

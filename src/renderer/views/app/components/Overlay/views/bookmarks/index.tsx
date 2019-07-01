@@ -5,7 +5,7 @@ import store from '~/renderer/views/app/store';
 import { IBookmark } from '~/interfaces';
 import { BookmarkSection } from './style';
 import { Content, Scrollable2, Sections } from '../../style';
-import { preventHiding, Container } from '../..';
+import { Container } from '../..';
 import { NavigationDrawer } from '../../components/NavigationDrawer';
 import { SelectionDialog } from '../../components/SelectionDialog';
 import { ContextMenu, ContextMenuItem } from '../../components/ContextMenu';
