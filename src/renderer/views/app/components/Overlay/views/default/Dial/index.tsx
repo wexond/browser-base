@@ -9,8 +9,8 @@ import { ContextMenu, ContextMenuItem } from '../../../components/ContextMenu';
 import { icons } from '~/renderer/constants';
 
 const changeDialType = (type: 'top-sites' | 'bookmarks') => () => {
-  store.settings.dialType = type;
-  store.saveSettings();
+  store.settings.object.dialType = type;
+  store.settings.save();
 };
 
 const onDialTitleClick = (e: any) => {
@@ -19,7 +19,7 @@ const onDialTitleClick = (e: any) => {
 };
 
 export const Dial = observer(() => {
-  const { dialType } = store.settings;
+  const { dialType } = store.settings.object;
 
   return (
     <>
