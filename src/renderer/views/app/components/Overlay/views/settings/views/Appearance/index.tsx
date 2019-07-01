@@ -5,7 +5,8 @@ import { darkTheme, lightTheme } from '~/renderer/constants';
 import { Dropdown } from '~/renderer/components/Dropdown';
 import { DropdownItem } from '~/renderer/components/Dropdown/styles';
 import Switch from '~/renderer/components/Switch';
-import { Section, Title, Row, Control } from '../style';
+import { Title, Row, Control } from '../style';
+import { Content } from '../../../../style';
 
 const onThemeChange = (value: 'Light' | 'Dark') => {
   store.settings.object.darkTheme = value === 'Dark';
@@ -80,11 +81,11 @@ const OverlayBlur = () => {
 
 export const Appearance = () => {
   return (
-    <Section>
+    <Content>
       <OverlayBlur />
       <OverlayAnimations />
       <Theme />
       <FontSize />
-    </Section>
+    </Content>
   );
 };

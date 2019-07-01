@@ -29,7 +29,7 @@ export const Settings = observer(() => {
           <MenuItem section="appearance">Appearance</MenuItem>
           <MenuItem section="autofill">Autofill</MenuItem>
           <MenuItem section="addressbar">Address bar</MenuItem>
-          <MenuItem section="privacy">Privacy and services</MenuItem>
+          <MenuItem section="privacy">Privacy</MenuItem>
           <MenuItem section="permissions">Permissions</MenuItem>
           <MenuItem section="startup">On startup</MenuItem>
           <MenuItem section="language">Language</MenuItem>
@@ -37,7 +37,7 @@ export const Settings = observer(() => {
           <MenuItem section="downloads">Downloads</MenuItem>
           <MenuItem section="system">System</MenuItem>
         </NavigationDrawer>
-        <Sections style={{ paddingTop: 32 }}>
+        <Sections style={{ paddingTop: 48 }}>
           {selectedSection === 'appearance' && <Appearance />}
         </Sections>
       </Scrollable2>
