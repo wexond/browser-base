@@ -24,4 +24,5 @@ export interface ITheme {
   'control.icon': 'light' | 'dark';
   'switch.backgroundColor': string;
   accentColor: string;
+  animations?: boolean;
 }

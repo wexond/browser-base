@@ -7,7 +7,7 @@ export const StyledBubble = styled.div`
   border-radius: 16px;
   margin-top: 8px;
   padding: 16px 8px;
-  transition: 0.1s background-color;
+
   display: flex;
   flex-flow: column;
   align-items: center;
@@ -33,7 +33,16 @@ export const Icon = styled.div`
   ${centerIcon(32)};
   transition: 0.2s filter;
 
-  ${({ invert, toggled }: { invert: boolean; toggled?: boolean }) => css`
+  ${({
+    invert,
+    toggled,
+    theme,
+  }: {
+    invert: boolean;
+    toggled?: boolean;
+    theme?: ITheme;
+  }) => css`
+    transition: ${theme.animations ? '0.2s filter' : 'none'};
     filter: ${invert || toggled ? 'invert(100%)' : 'none'};
   `}
 `;
@@ -46,9 +55,10 @@ export const Circle = styled.div`
   border-radius: 50%;
   margin-bottom: 16px;
   ${centerIcon(32)};
-  transition: 0.2s background-color;
 
   ${({ theme, toggled }: { theme?: ITheme; toggled?: boolean }) => css`
+    transition: ${theme.animations ? '0.2s background-color' : 'none'};
+
     background-color: ${toggled
       ? theme.accentColor
       : theme['overlay.foreground'] === 'light'
