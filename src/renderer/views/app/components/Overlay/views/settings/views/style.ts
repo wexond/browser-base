@@ -1,8 +1,16 @@
 import styled from 'styled-components';
 
+import { robotoMedium, robotoLight } from '~/renderer/mixins';
+
 export const Title = styled.div`
   font-size: 14px;
-  font-weight: 500;
+  ${robotoMedium()};
+`;
+
+export const Header = styled.div`
+  margin-top: 4px;
+  font-size: 20px;
+  ${robotoLight()};
 `;
 
 export const Row = styled.div`
