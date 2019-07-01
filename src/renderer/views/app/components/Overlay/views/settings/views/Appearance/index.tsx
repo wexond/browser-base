@@ -14,12 +14,12 @@ const onThemeChange = (value: 'Light' | 'Dark') => {
   store.settings.save();
 };
 
-const Theme = () => {
+const ThemeVariant = () => {
   const defaultValue = store.settings.object.darkTheme ? 'Dark' : 'Light';
 
   return (
     <Row>
-      <Title>Theme</Title>
+      <Title>Theme variant</Title>
       <Control>
         <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
           <DropdownItem>Light</DropdownItem>
@@ -65,7 +65,7 @@ export const Appearance = () => {
       <Header>Appearance</Header>
       <OverlayBlur />
       <OverlayAnimations />
-      <Theme />
+      <ThemeVariant />
     </Content>
   );
 };
