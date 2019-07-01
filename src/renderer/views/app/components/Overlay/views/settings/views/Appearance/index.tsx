@@ -16,17 +16,19 @@ const Theme = () => {
   const defaultValue = store.settings.object.isDarkTheme ? 'Dark' : 'Light';
 
   return (
-    <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
-      <DropdownItem>Light</DropdownItem>
-      <DropdownItem>Dark</DropdownItem>
-    </Dropdown>
+    <>
+      <Title>Theme</Title>
+      <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
+        <DropdownItem>Light</DropdownItem>
+        <DropdownItem>Dark</DropdownItem>
+      </Dropdown>
+    </>
   );
 };
 
 export const Appearance = () => {
   return (
     <Section>
-      <Title>Appearance</Title>
       <Theme />
     </Section>
   );

@@ -9,6 +9,7 @@ export const Section = styled(Content)`
 
 export const Title = styled.div`
   font-size: 24px;
-  padding: 24px 0px;
+  padding-top: 24px;
+  padding-bottom: 16px;
   ${robotoLight()};
 `;
