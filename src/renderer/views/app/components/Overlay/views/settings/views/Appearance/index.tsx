@@ -70,8 +70,8 @@ const FontSize = () => {
 export const Appearance = () => {
   return (
     <Section>
-      <Theme />
       <OverlayAnimations />
+      <Theme />
       <FontSize />
     </Section>
   );

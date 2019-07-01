@@ -60,7 +60,7 @@ export const Menu = styled.div`
 `;
 
 export const Value = styled.div`
-  font-size: 14px;
+  font-size: 13px;
   margin-left: 8px;
   color: rgba(0, 0, 0, ${transparency.text.high});
 
