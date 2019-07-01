@@ -49,6 +49,10 @@ interface ContainerProps {
   children?: any;
 }
 
+const onContainerClick = (e: React.MouseEvent) => {
+  e.stopPropagation();
+}
+
 export const Container = observer(
   ({ content, right, children }: ContainerProps) => {
     const { animationsToggled } = store.settings.object;
@@ -60,6 +64,7 @@ export const Container = observer(
         visible={visible}
         right={right}
         animations={animationsToggled}
+        onClick={onContainerClick}
       >
         {children}
       </StyledContainer>
