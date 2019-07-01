@@ -27,11 +27,21 @@ const Theme = () => {
   );
 };
 
+const onAnimationsChange = (value: boolean) => {
+  store.settings.object.areAnimationsToggled = value;
+  store.settings.save();
+};
+
 export const OverlayAnimations = () => {
+  const { areAnimationsToggled } = store.settings.object;
+
   return (
     <>
       <Title>Overlay animations</Title>
-      <Switch />
+      <Switch
+        onChange={onAnimationsChange}
+        defaultValue={areAnimationsToggled}
+      />
     </>
   );
 };
