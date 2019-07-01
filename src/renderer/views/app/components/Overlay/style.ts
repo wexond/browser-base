@@ -97,22 +97,6 @@ export const HeaderArrow = styled.div`
   filter: invert(100%);
 `;
 
-export const DropArrow = styled.div`
-  ${centerIcon(24)};
-  margin-left: 8px;
-  height: 32px;
-  width: 32px;
-  background-image: url(${icons.down});
-  border-radius: 50%;
-  transition: 0.1s background-color;
-
-  ${({ theme }: { theme?: ITheme }) => css`
-    filter: ${theme['overlay.foreground'] === 'light'
-      ? 'invert(100%)'
-      : 'none'};
-  `}
-`;
-
 export const Separator = styled.div`
   background-color: rgba(0, 0, 0, 0.12);
   height: 1px;
@@ -166,19 +150,17 @@ export const Scrollable = styled.div`
 
 export const Title = styled.div`
   font-size: 24px;
-  margin-left: 24px;
+  margin-left: 16px;
   font-weight: 300;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   margin-top: 24px;
   position: relative;
   display: flex;
-  padding-right: 42px;
-
-  &:hover {
-    ${DropArrow} {
-      background-color: rgba(0, 0, 0, 0.15);
-    }
-  }
+  align-items: center;
+  padding: 6px 12px;
+  padding-right: 6px;
+  border-radius: 4px;
+  width: fit-content;
 `;
 
 interface ContainerProps {

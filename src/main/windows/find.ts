@@ -14,6 +14,7 @@ export class FindWindow extends BrowserWindow {
       width: WIDTH,
       height: HEIGHT,
       transparent: true,
+      fullscreenable: false,
       show: false,
       webPreferences: {
         nodeIntegration: true,

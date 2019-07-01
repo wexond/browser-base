@@ -12,6 +12,7 @@ export class PermissionsWindow extends BrowserWindow {
       height: 200,
       transparent: true,
       show: false,
+      fullscreenable: false,
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,

@@ -5,7 +5,7 @@ import { writeFile, readFileSync } from 'fs';
 import { ISettings } from '~/interfaces';
 import { getPath } from '~/utils';
 import { darkTheme, lightTheme } from '~/renderer/constants';
-import { Store } from '.';
+import store, { Store } from '.';
 
 export type SettingsSection =
   | 'appearance'

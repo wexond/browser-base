@@ -5,7 +5,7 @@ import { ITheme } from '~/interfaces';
 import { centerIcon } from '~/renderer/mixins';
 
 export const StyledSearchBox = styled.div`
-  margin-top: 48px;
+  margin-top: 32px;
   z-index: 2;
   border-radius: 23px;
   margin-bottom: 32px;
