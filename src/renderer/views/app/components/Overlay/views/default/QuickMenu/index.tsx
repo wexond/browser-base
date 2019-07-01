@@ -28,14 +28,13 @@ const onFindClick = () => {
 };
 
 const onDarkClick = () => {
-  store.settings.object.isDarkTheme = !store.settings.object.isDarkTheme;
-  store.theme = store.settings.object.isDarkTheme ? darkTheme : lightTheme;
+  store.settings.object.darkTheme = !store.settings.object.darkTheme;
+  store.theme = store.settings.object.darkTheme ? darkTheme : lightTheme;
   store.settings.save();
 };
 
 const onShieldClick = () => {
-  store.settings.object.isShieldToggled = !store.settings.object
-    .isShieldToggled;
+  store.settings.object.shield = !store.settings.object.shield;
   store.settings.save();
 };
 
@@ -45,8 +44,7 @@ const onAlwaysClick = () => {
 };
 
 const onMultrinClick = () => {
-  store.settings.object.isMultrinToggled = !store.settings.object
-    .isMultrinToggled;
+  store.settings.object.multrin = !store.settings.object.multrin;
   store.settings.save();
 };
 
@@ -72,7 +70,7 @@ export const QuickMenu = observer(() => {
           Always on top
         </Bubble>
         <Bubble
-          toggled={store.settings.object.isDarkTheme}
+          toggled={store.settings.object.darkTheme}
           onClick={onDarkClick}
           invert={invert}
           icon={icons.night}
@@ -81,7 +79,7 @@ export const QuickMenu = observer(() => {
         </Bubble>
         <Bubble
           invert={invert}
-          toggled={store.settings.object.isShieldToggled}
+          toggled={store.settings.object.shield}
           icon={icons.shield}
           onClick={onShieldClick}
         >
@@ -90,7 +88,7 @@ export const QuickMenu = observer(() => {
         {platform() === 'win32' && (
           <Bubble
             invert={invert}
-            toggled={store.settings.object.isMultrinToggled}
+            toggled={store.settings.object.multrin}
             icon={icons.multrin}
             onClick={onMultrinClick}
           >
@@ -118,7 +116,6 @@ export const QuickMenu = observer(() => {
           Downloads
         </Bubble>
         <Bubble
-          disabled
           invert={invert}
           icon={icons.settings}
           onClick={changeContent('settings')}

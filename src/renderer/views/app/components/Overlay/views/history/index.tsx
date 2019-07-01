@@ -1,20 +1,17 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-
-import { Content, Container, Scrollable2, Sections } from '../../style';
 import { ipcRenderer } from 'electron';
+
 import store from '~/renderer/views/app/store';
 import { HistorySection } from './HistorySection';
 import { QuickRange } from '~/renderer/views/app/store/history';
 import { NavigationDrawer } from '../../components/NavigationDrawer';
 import { icons } from '~/renderer/constants';
 import { SelectionDialog } from '../../components/SelectionDialog';
+import { Content, Scrollable2, Sections } from '../../style';
+import { Container } from '../..';
 
 const scrollRef = React.createRef<HTMLDivElement>();
-
-const preventHiding = (e: any) => {
-  e.stopPropagation();
-};
 
 const onScroll = (e: any) => {
   const scrollPos = e.target.scrollTop;
@@ -77,13 +74,7 @@ export const History = observer(() => {
   const { length } = store.history.selectedItems;
 
   return (
-    <Container
-      right
-      onClick={preventHiding}
-      visible={
-        store.overlay.currentContent === 'history' && store.overlay.visible
-      }
-    >
+    <Container content="history" right>
       <Scrollable2 onScroll={onScroll} ref={scrollRef}>
         <NavigationDrawer
           title="History"

@@ -304,7 +304,7 @@ export class ITab {
 
       if (store.overlay.visible && !store.overlay.isNewTab) {
         store.overlay.visible = false;
-        setTimeout(show, 200);
+        setTimeout(show, store.settings.object.animations ? 200 : 0);
       } else {
         show();
       }

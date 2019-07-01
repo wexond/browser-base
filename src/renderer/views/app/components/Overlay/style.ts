@@ -50,10 +50,12 @@ export const StyledOverlay = styled.div`
   bottom: 0;
   right: 0;
   z-index: 9999;
-  transition: 0.2s opacity, 0.2s background-color;
   backface-visibility: hidden;
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
+    transition: ${theme.animations
+      ? '0.2s opacity, 0.2s background-color'
+      : 'none'};
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
     background-color: ${theme['overlay.backgroundColor']};
@@ -106,10 +108,10 @@ export const Section = styled.div`
   margin-bottom: 24px;
   border-radius: 30px;
   overflow: hidden;
-  transition: 0.2s background-color;
 
   ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['overlay.section.backgroundColor']};
+    transition: ${theme.animations ? '0.2s background-color' : 'none'};
   `}
 `;
 
@@ -161,9 +163,14 @@ export const Title = styled.div`
   width: fit-content;
 `;
 
-export const Container = styled.div`
+interface ContainerProps {
+  visible: boolean;
+  right?: boolean;
+  theme?: ITheme;
+}
+
+export const StyledContainer = styled.div`
   position: absolute;
-  transition: 0.2s transform, 0.2s opacity, 0.2s visibility;
   will-change: transform, opacity, pointer-events;
   backface-visibility: hidden;
   top: 0;
@@ -173,7 +180,10 @@ export const Container = styled.div`
   display: flex;
   flex-flow: column;
 
-  ${({ visible, right }: { visible: boolean; right?: boolean }) => css`
+  ${({ visible, right, theme }: ContainerProps) => css`
+    transition: ${theme.animations
+      ? '0.2s transform, 0.2s opacity, 0.2s visibility'
+      : 'unset'};
     transform: translateX(${visible ? 0 : right ? 32 : -32}px);
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};

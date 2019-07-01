@@ -107,12 +107,16 @@ export class OverlayStore {
     if (!val) {
       clearTimeout(this.timeout);
 
-      this.timeout = setTimeout(() => {
-        if (store.tabs.selectedTab) {
-          if (store.tabs.selectedTab.isWindow) store.tabs.selectedTab.select();
-          else ipcRenderer.send('browserview-show');
-        }
-      }, 200);
+      this.timeout = setTimeout(
+        () => {
+          if (store.tabs.selectedTab) {
+            if (store.tabs.selectedTab.isWindow) {
+              store.tabs.selectedTab.select();
+            } else ipcRenderer.send('browserview-show');
+          }
+        },
+        store.settings.object.animations ? 200 : 0,
+      );
 
       store.suggestions.list = [];
       lastSuggestion = undefined;

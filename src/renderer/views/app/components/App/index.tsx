@@ -21,7 +21,9 @@ window.onbeforeunload = () => {
 
 export const App = observer(() => {
   return (
-    <ThemeProvider theme={store.theme}>
+    <ThemeProvider
+      theme={{ ...store.theme, animations: store.settings.object.animations }}
+    >
       <StyledApp>
         <GlobalStyle />
         <Toolbar />

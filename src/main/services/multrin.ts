@@ -142,7 +142,7 @@ export class Multrin {
         !this.appWindow.isMinimized() &&
         this.draggedWindow &&
         !this.windows.find(x => x.id === this.draggedWindow.id) &&
-        settings.isMultrinToggled
+        settings.multrin
       ) {
         const winBounds = this.draggedWindow.getBounds();
         const { lastBounds } = this.draggedWindow;

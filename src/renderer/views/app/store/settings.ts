@@ -8,26 +8,28 @@ import { darkTheme, lightTheme } from '~/renderer/constants';
 import store, { Store } from '.';
 
 export type SettingsSection =
-  | 'general'
   | 'appearance'
   | 'autofill'
   | 'search-engine'
+  | 'privacy'
+  | 'permissions'
   | 'startup'
   | 'language'
-  | 'weather'
   | 'shortcuts'
-  | 'downloads';
+  | 'downloads'
+  | 'system';
 
 export class SettingsStore {
   @observable
-  public selectedSection: SettingsSection = 'general';
+  public selectedSection: SettingsSection = 'appearance';
 
   @observable
   public object: ISettings = {
     dialType: 'top-sites',
-    isDarkTheme: false,
-    isShieldToggled: true,
-    isMultrinToggled: true,
+    darkTheme: false,
+    shield: true,
+    multrin: true,
+    animations: true,
   };
 
   constructor(private store: Store) {}
@@ -46,7 +48,7 @@ export class SettingsStore {
       ...JSON.parse(readFileSync(getPath('settings.json'), 'utf8')),
     };
 
-    this.store.theme = this.object.isDarkTheme ? darkTheme : lightTheme;
+    this.store.theme = this.object.darkTheme ? darkTheme : lightTheme;
 
     ipcRenderer.send('settings', this.object);
   }

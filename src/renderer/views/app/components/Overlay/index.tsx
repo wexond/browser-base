@@ -1,9 +1,15 @@
 import * as React from 'react';
+import { observer } from 'mobx-react';
 
 import store from '../../store';
-import { StyledOverlay, HeaderText, HeaderArrow } from './style';
-import { observer } from 'mobx-react';
+import { OverlayContent } from '../../store/overlay';
 import { Default, History, Bookmarks, Settings } from './views';
+import {
+  StyledOverlay,
+  HeaderText,
+  HeaderArrow,
+  StyledContainer,
+} from './style';
 
 export const Header = ({ children, clickable }: any) => {
   return (
@@ -15,7 +21,11 @@ export const Header = ({ children, clickable }: any) => {
 };
 
 const onClick = () => {
-  if (store.tabGroups.currentGroup.tabs.length > 0 && !store.overlay.isNewTab) {
+  if (
+    store.tabGroups.currentGroup.tabs.length > 0 &&
+    !store.overlay.isNewTab &&
+    store.overlay.currentContent === 'default'
+  ) {
     store.overlay.visible = false;
   }
   store.overlay.dialTypeMenuVisible = false;
@@ -36,3 +46,22 @@ export const Overlay = observer(() => {
     </StyledOverlay>
   );
 });
+
+interface ContainerProps {
+  content: OverlayContent;
+  right?: boolean;
+  children?: any;
+}
+
+export const Container = observer(
+  ({ content, right, children }: ContainerProps) => {
+    const visible =
+      store.overlay.visible && store.overlay.currentContent === content;
+
+    return (
+      <StyledContainer visible={visible} right={right}>
+        {children}
+      </StyledContainer>
+    );
+  },
+);

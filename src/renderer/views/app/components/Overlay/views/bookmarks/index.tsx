@@ -4,8 +4,8 @@ import { observer } from 'mobx-react';
 import store from '~/renderer/views/app/store';
 import { IBookmark } from '~/interfaces';
 import { BookmarkSection } from './style';
-import { Content, Container, Scrollable2, Sections } from '../../style';
-import { preventHiding } from '../..';
+import { Content, Scrollable2, Sections } from '../../style';
+import { Container } from '../..';
 import { NavigationDrawer } from '../../components/NavigationDrawer';
 import { SelectionDialog } from '../../components/SelectionDialog';
 import { ContextMenu, ContextMenuItem } from '../../components/ContextMenu';
@@ -44,11 +44,6 @@ const onRemoveClick = (item: IBookmark) => () => {
   store.bookmarks.removeItem(item._id);
 };
 
-const onClick = (e: React.MouseEvent) => {
-  preventHiding(e);
-  store.bookmarks.menuVisible = false;
-};
-
 const BookmarksList = observer(() => {
   return (
     <Sections>
@@ -67,13 +62,7 @@ export const Bookmarks = observer(() => {
   const { length } = store.bookmarks.selectedItems;
 
   return (
-    <Container
-      onClick={onClick}
-      right
-      visible={
-        store.overlay.currentContent === 'bookmarks' && store.overlay.visible
-      }
-    >
+    <Container content="bookmarks" right>
       <Scrollable2 onScroll={onScroll} ref={scrollRef}>
         <NavigationDrawer
           title="Bookmarks"

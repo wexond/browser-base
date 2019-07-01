@@ -12,9 +12,11 @@ import {
 import { NavigationDrawerItem } from './NavigationDrawerItem';
 import store from '~/renderer/views/app/store';
 
-const onBack = (cb: (e?: React.MouseEvent<HTMLDivElement>) => void) => (
-  e: React.MouseEvent<HTMLDivElement>,
+const onBack = (cb: (e?: React.MouseEvent) => void) => (
+  e: React.MouseEvent,
 ) => {
+  e.stopPropagation();
+
   if (cb) {
     cb(e);
   }
