@@ -3,4 +3,5 @@ export interface ISettings {
   isDarkTheme?: boolean;
   isShieldToggled?: boolean;
   isMultrinToggled?: boolean;
+  areAnimationsToggled?: boolean;
 }
