@@ -15,7 +15,7 @@ export const StyledDropdown = styled.div`
   display: flex;
   align-items: center;
 
-  ${({ activated, theme }: { activated: boolean; theme: ITheme }) => css`
+  ${({ theme }: { theme: ITheme }) => css`
     background-color: ${theme['control.backgroundColor']};
 
     &:hover {
