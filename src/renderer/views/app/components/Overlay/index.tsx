@@ -51,7 +51,7 @@ interface ContainerProps {
 
 export const Container = observer(
   ({ content, right, children }: ContainerProps) => {
-    const { areAnimationsToggled } = store.settings.object;
+    const { animationsToggled } = store.settings.object;
     const visible =
       store.overlay.visible && store.overlay.currentContent === content;
 
@@ -59,7 +59,7 @@ export const Container = observer(
       <StyledContainer
         visible={visible}
         right={right}
-        animations={areAnimationsToggled}
+        animations={animationsToggled}
       >
         {children}
       </StyledContainer>

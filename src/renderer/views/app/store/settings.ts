@@ -26,13 +26,13 @@ export class SettingsStore {
   @observable
   public object: ISettings = {
     dialType: 'top-sites',
-    isDarkTheme: false,
-    isShieldToggled: true,
-    isMultrinToggled: true,
-    areAnimationsToggled: true,
+    darkTheme: false,
+    shieldToggled: true,
+    multrinToggled: true,
+    animationsToggled: true,
   };
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
   public save() {
     ipcRenderer.send('settings', this.object);
@@ -48,7 +48,7 @@ export class SettingsStore {
       ...JSON.parse(readFileSync(getPath('settings.json'), 'utf8')),
     };
 
-    this.store.theme = this.object.isDarkTheme ? darkTheme : lightTheme;
+    this.store.theme = this.object.darkTheme ? darkTheme : lightTheme;
 
     ipcRenderer.send('settings', this.object);
   }

@@ -8,13 +8,13 @@ import Switch from '~/renderer/components/Switch';
 import { Section, Title, Row, Control } from '../style';
 
 const onThemeChange = (value: 'Light' | 'Dark') => {
-  store.settings.object.isDarkTheme = value === 'Dark';
+  store.settings.object.darkTheme = value === 'Dark';
   store.theme = value === 'Dark' ? darkTheme : lightTheme;
   store.settings.save();
 };
 
 const Theme = () => {
-  const defaultValue = store.settings.object.isDarkTheme ? 'Dark' : 'Light';
+  const defaultValue = store.settings.object.darkTheme ? 'Dark' : 'Light';
 
   return (
     <Row>
@@ -30,12 +30,12 @@ const Theme = () => {
 };
 
 const onAnimationsChange = (value: boolean) => {
-  store.settings.object.areAnimationsToggled = value;
+  store.settings.object.animationsToggled = value;
   store.settings.save();
 };
 
 const OverlayAnimations = () => {
-  const { areAnimationsToggled } = store.settings.object;
+  const { animationsToggled } = store.settings.object;
 
   return (
     <Row>
@@ -43,7 +43,7 @@ const OverlayAnimations = () => {
       <Control>
         <Switch
           onChange={onAnimationsChange}
-          defaultValue={areAnimationsToggled}
+          defaultValue={animationsToggled}
         />
       </Control>
     </Row>
@@ -81,10 +81,10 @@ const OverlayBlur = () => {
 export const Appearance = () => {
   return (
     <Section>
-      <Theme />
-      <OverlayAnimations />
-      <FontSize />
       <OverlayBlur />
+      <OverlayAnimations />
+      <Theme />
+      <FontSize />
     </Section>
   );
 };
