@@ -81,10 +81,10 @@ const OverlayBlur = () => {
 export const Appearance = () => {
   return (
     <Section>
+      <OverlayBlur />
       <OverlayAnimations />
       <Theme />
       <FontSize />
-      <OverlayBlur />
     </Section>
   );
 };

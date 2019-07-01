@@ -69,9 +69,9 @@ app.on('ready', async () => {
       getPath('settings.json'),
       JSON.stringify({
         dialType: 'top-sites',
-        isDarkTheme: false,
-        isShieldToggled: true,
-        areAnimationsToggled: true,
+        darkTheme: false,
+        shieldToggled: true,
+        animationsToggled: true,
       } as ISettings),
     );
   }

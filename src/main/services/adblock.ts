@@ -95,7 +95,7 @@ export const runAdblockService = (ses: Session) => {
   webRequest.onBeforeRequest(
     { urls: ['<all_urls>'] },
     async (details: Electron.OnBeforeRequestDetails, callback: any) => {
-      if (engine && settings.isShieldToggled) {
+      if (engine && settings.shieldToggled) {
         const { match, redirect } = engine.match(
           Request.fromRawDetails({
             type: details.resourceType as any,
