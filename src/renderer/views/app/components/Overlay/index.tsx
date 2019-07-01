@@ -59,7 +59,7 @@ export const Container = observer(
       <StyledContainer
         visible={visible}
         right={right}
-        animations={areAnimationsToggled}
+        animations={animationsToggled}
       >
         {children}
       </StyledContainer>

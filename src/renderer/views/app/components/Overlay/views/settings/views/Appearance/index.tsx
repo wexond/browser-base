@@ -43,7 +43,7 @@ const OverlayAnimations = () => {
       <Control>
         <Switch
           onChange={onAnimationsChange}
-          defaultValue={areAnimationsToggled}
+          defaultValue={animationsToggled}
         />
       </Control>
     </Row>
