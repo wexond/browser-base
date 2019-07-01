@@ -55,8 +55,11 @@ const onMouseLeave = () => {
 };
 
 const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
-  if (store.canToggleMenu && !tab.isWindow && !store.overlay.isNewTab) {
-    store.overlay.visible = !store.overlay.visible;
+  if (store.canToggleMenu && !tab.isWindow) {
+    if (!store.overlay.isNewTab) {
+      store.overlay.visible = !store.overlay.visible;
+    }
+
     store.canToggleMenu = false;
   }
 
