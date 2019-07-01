@@ -27,10 +27,20 @@ const Theme = () => {
   );
 };
 
+export const OverlayAnimations = () => {
+  return (
+    <>
+      <Title>Overlay animations</Title>
+      <Switch />
+    </>
+  );
+};
+
 export const Appearance = () => {
   return (
     <Section>
-      <Switch />
+      <Theme />
+      <OverlayAnimations />
     </Section>
   );
 };

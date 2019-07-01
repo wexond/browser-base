@@ -12,4 +12,8 @@ export const Title = styled.div`
   padding-top: 24px;
   padding-bottom: 16px;
   ${robotoLight()};
+
+  &:not(:first-child) {
+    margin-top: 8px;
+  }
 `;
