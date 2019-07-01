@@ -1,11 +1,5 @@
 import styled from 'styled-components';
 
-import { Content } from '../../../style';
-
-export const Section = styled(Content)`
-  padding-left: 32px;
-`;
-
 export const Title = styled.div`
   font-size: 14px;
   font-weight: 500;
