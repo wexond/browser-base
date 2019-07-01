@@ -1,8 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { ITheme } from '~/interfaces';
-import { shadows, centerVertical } from '~/renderer/mixins';
-import { EASING_FUNCTION } from '~/renderer/constants';
+import { centerVertical } from '~/renderer/mixins';
 
 interface Props {
   activated: boolean;
@@ -28,8 +27,7 @@ export const Thumb = styled.div`
   height: 16px;
   border-radius: 100%;
   position: absolute;
-  box-shadow: ${shadows(2)};
-  transition: 0.15s left ${EASING_FUNCTION};
+  transition: 0.15s left;
   ${centerVertical()};
 
   ${({ activated }: { activated: boolean }) => css`
