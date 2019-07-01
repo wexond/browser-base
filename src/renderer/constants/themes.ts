@@ -22,7 +22,7 @@ export const lightTheme: ITheme = {
   'overlay.separator.color': 'rgba(0, 0, 0, 0.12)',
   'overlay.scrollbar.backgroundColor': 'rgba(0, 0, 0, 0.16)',
   'overlay.scrollbar.hover.backgroundColor': 'rgba(0, 0, 0, 0.32)',
-  'control.backgroundColor': 'rgba(0, 0, 0, 0.04)',
+  'control.backgroundColor': '#f2f4f6',
   'control.valueColor': '#000',
   'control.icon': 'light',
   accentColor: colors.blue['500'],
