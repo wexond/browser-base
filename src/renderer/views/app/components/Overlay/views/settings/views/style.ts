@@ -4,10 +4,11 @@ import { Content } from '../../../style';
 
 export const Section = styled(Content)`
   padding-left: 32px;
-`
+`;
 
 export const Title = styled.div`
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 500;
 `;
 
 export const Row = styled.div`
@@ -22,4 +23,4 @@ export const Row = styled.div`
 
 export const Control = styled.div`
   margin-left: auto;
-`
+`;
