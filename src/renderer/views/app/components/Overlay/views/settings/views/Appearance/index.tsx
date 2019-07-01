@@ -48,22 +48,10 @@ const OverlayAnimations = () => {
   );
 };
 
-const OverlayBlur = () => {
-  return (
-    <Row>
-      <Title>Overlay blur</Title>
-      <Control>
-        <Switch />
-      </Control>
-    </Row>
-  );
-};
-
 export const Appearance = () => {
   return (
     <Content>
       <Header>Appearance</Header>
-      <OverlayBlur />
       <OverlayAnimations />
       <ThemeVariant />
     </Content>
