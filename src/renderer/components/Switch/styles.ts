@@ -19,7 +19,7 @@ export const StyledSwitch = styled.div`
   transition: 0.15s background-color;
 
   ${({ activated, color, theme }: Props) => css`
-    background-color: ${activated ? color : 'rgba(0, 0, 0, 0.16)'};
+    background-color: ${activated ? color : theme['switch.backgroundColor']};
   `}
 `;
 
@@ -32,8 +32,8 @@ export const Thumb = styled.div`
   transition: 0.15s left ${EASING_FUNCTION};
   ${centerVertical()};
 
-  ${({ activated, theme }: { activated: boolean; theme: ITheme }) => css`
-  left: ${activated ? 22 : 2}px;
-  background-color: #fff;
+  ${({ activated }: { activated: boolean }) => css`
+    left: ${activated ? 22 : 2}px;
+    background-color: #fff;
   `}
 `;

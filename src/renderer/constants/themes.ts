@@ -25,6 +25,7 @@ export const lightTheme: ITheme = {
   'control.backgroundColor': '#f2f4f6',
   'control.valueColor': '#000',
   'control.icon': 'light',
+  'switch.backgroundColor': 'rgba(0, 0, 0, 0.16)',
   accentColor: colors.blue['500'],
 };
 
@@ -51,5 +52,6 @@ export const darkTheme: ITheme = {
   'control.backgroundColor': 'rgba(255, 255, 255, 0.04)',
   'control.valueColor': '#fff',
   'control.icon': 'dark',
+  'switch.backgroundColor': 'rgba(255, 255, 255, 0.24)',
   accentColor: colors.blue['500'],
 };

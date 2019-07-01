@@ -21,5 +21,6 @@ export interface ITheme {
   'control.backgroundColor': string;
   'control.valueColor': string;
   'control.icon': 'light' | 'dark';
+  'switch.backgroundColor': string;
   accentColor: string;
 }
