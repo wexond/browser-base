@@ -7,6 +7,7 @@ import store from '~/renderer/views/app/store';
 import { ContextMenu, ContextMenuItem } from '../../../components/ContextMenu';
 import { icons } from '~/renderer/constants';
 import { Container, DropArrow, DialTitle } from './style';
+import { preventHiding } from '../../..';
 
 const changeDialType = (type: 'top-sites' | 'bookmarks') => () => {
   store.settings.object.dialType = type;
@@ -37,6 +38,7 @@ export const Dial = observer(() => {
             <ContextMenu
               style={{ top: 42, marginLeft: 24 }}
               visible={store.overlay.dialTypeMenuVisible}
+              onClick={preventHiding}
             >
               <ContextMenuItem
                 icon={icons.fire}
