@@ -27,9 +27,9 @@ export class SettingsStore {
   public object: ISettings = {
     dialType: 'top-sites',
     darkTheme: false,
-    shieldToggled: true,
-    multrinToggled: true,
-    animationsToggled: true,
+    shield: true,
+    multrin: true,
+    animations: true,
   };
 
   constructor(private store: Store) {}

@@ -31,21 +31,18 @@ const Theme = () => {
 };
 
 const onAnimationsChange = (value: boolean) => {
-  store.settings.object.animationsToggled = value;
+  store.settings.object.animations = value;
   store.settings.save();
 };
 
 const OverlayAnimations = () => {
-  const { animationsToggled } = store.settings.object;
+  const { animations } = store.settings.object;
 
   return (
     <Row>
       <Title>Overlay animations</Title>
       <Control>
-        <Switch
-          onChange={onAnimationsChange}
-          defaultValue={animationsToggled}
-        />
+        <Switch onChange={onAnimationsChange} defaultValue={animations} />
       </Control>
     </Row>
   );

@@ -1,7 +1,7 @@
 export interface ISettings {
   dialType?: 'top-sites' | 'bookmarks';
   darkTheme?: boolean;
-  shieldToggled?: boolean;
-  multrinToggled?: boolean;
-  animationsToggled?: boolean;
+  shield?: boolean;
+  multrin?: boolean;
+  animations?: boolean;
 }

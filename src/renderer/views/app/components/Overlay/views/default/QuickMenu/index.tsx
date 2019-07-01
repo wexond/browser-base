@@ -34,7 +34,7 @@ const onDarkClick = () => {
 };
 
 const onShieldClick = () => {
-  store.settings.object.shieldToggled = !store.settings.object.shieldToggled;
+  store.settings.object.shield = !store.settings.object.shield;
   store.settings.save();
 };
 
@@ -44,7 +44,7 @@ const onAlwaysClick = () => {
 };
 
 const onMultrinClick = () => {
-  store.settings.object.multrinToggled = !store.settings.object.multrinToggled;
+  store.settings.object.multrin = !store.settings.object.multrin;
   store.settings.save();
 };
 
@@ -79,7 +79,7 @@ export const QuickMenu = observer(() => {
         </Bubble>
         <Bubble
           invert={invert}
-          toggled={store.settings.object.shieldToggled}
+          toggled={store.settings.object.shield}
           icon={icons.shield}
           onClick={onShieldClick}
         >
@@ -88,7 +88,7 @@ export const QuickMenu = observer(() => {
         {platform() === 'win32' && (
           <Bubble
             invert={invert}
-            toggled={store.settings.object.multrinToggled}
+            toggled={store.settings.object.multrin}
             icon={icons.multrin}
             onClick={onMultrinClick}
           >

@@ -55,16 +55,12 @@ interface ContainerProps {
 
 export const Container = observer(
   ({ content, right, children }: ContainerProps) => {
-    const { animationsToggled } = store.settings.object;
+    const { animations } = store.settings.object;
     const visible =
       store.overlay.visible && store.overlay.currentContent === content;
 
     return (
-      <StyledContainer
-        visible={visible}
-        right={right}
-        animations={animationsToggled}
-      >
+      <StyledContainer visible={visible} right={right} animations={animations}>
         {children}
       </StyledContainer>
     );

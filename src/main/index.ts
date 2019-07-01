@@ -70,8 +70,9 @@ app.on('ready', async () => {
       JSON.stringify({
         dialType: 'top-sites',
         darkTheme: false,
-        shieldToggled: true,
-        animationsToggled: true,
+        shield: true,
+        multrin: true,
+        animations: true,
       } as ISettings),
     );
   }
