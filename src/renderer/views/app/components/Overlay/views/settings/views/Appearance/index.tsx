@@ -5,6 +5,7 @@ import { darkTheme, lightTheme } from '~/renderer/constants';
 import { Dropdown } from '~/renderer/components/Dropdown';
 import { DropdownItem } from '~/renderer/components/Dropdown/styles';
 import { Section, Title } from '../style';
+import Switch from '~/renderer/components/Switch';
 
 const onThemeChange = (value: 'Light' | 'Dark') => {
   store.settings.object.isDarkTheme = value === 'Dark';
@@ -29,7 +30,7 @@ const Theme = () => {
 export const Appearance = () => {
   return (
     <Section>
-      <Theme />
+      <Switch />
     </Section>
   );
 };
