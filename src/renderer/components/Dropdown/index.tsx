@@ -60,6 +60,11 @@ export class Dropdown extends React.PureComponent<Props, State> {
     });
   };
 
+  public toggle = () => {
+    if (this.state.visible) this.hide();
+    else this.show();
+  };
+
   public onWindowMouseDown = (e: MouseEvent) => {
     e.stopPropagation();
     this.hide();
@@ -116,7 +121,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
     return (
       <StyledDropdown
         activated={activated}
-        onClick={this.show}
+        onClick={this.toggle}
         style={style}
         onMouseDown={this.onMouseDown}
       >
