@@ -37,8 +37,7 @@ export default class Switch extends React.PureComponent<Props, State> {
   }
 
   private onClick = () => {
-    const { activated } = this.state;
-    this.value = !activated;
+    this.value = !this.value;
   };
 
   render() {
