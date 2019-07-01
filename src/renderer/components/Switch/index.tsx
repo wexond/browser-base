@@ -26,7 +26,7 @@ export default class Switch extends React.PureComponent<Props, State> {
   public get value() {
     const { defaultValue } = this.props;
     const { activated } = this.state;
-    return activated || defaultValue;
+    return activated == null ? defaultValue : activated;
   }
 
   public set value(val: boolean) {

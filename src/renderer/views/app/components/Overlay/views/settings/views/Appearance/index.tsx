@@ -67,12 +67,24 @@ const FontSize = () => {
   );
 };
 
+const OverlayBlur = () => {
+  return (
+    <Row>
+      <Title>Overlay blur</Title>
+      <Control>
+        <Switch />
+      </Control>
+    </Row>
+  );
+};
+
 export const Appearance = () => {
   return (
     <Section>
       <OverlayAnimations />
       <Theme />
       <FontSize />
+      <OverlayBlur />
     </Section>
   );
 };
