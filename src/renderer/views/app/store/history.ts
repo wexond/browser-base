@@ -34,20 +34,6 @@ export class HistoryStore {
   @observable
   public selectedItems: string[] = [];
 
-  @computed
-  public get topSites() {
-    const top1 = countVisitedTimes(this.items);
-    const newItems: IHistoryItem[] = [];
-
-    for (const item of top1) {
-      if (item.times > 1) {
-        newItems.push(item.item);
-      }
-    }
-
-    return newItems.slice(0, 12);
-  }
-
   constructor() {
     this.load();
   }
