@@ -27,7 +27,6 @@ export const Settings = observer(() => {
       <Scrollable2>
         <NavigationDrawer title="Settings" search>
           <MenuItem section="appearance">Appearance</MenuItem>
-          <MenuItem section="autofill">Autofill</MenuItem>
           <MenuItem section="search-engine">Search engine</MenuItem>
           <MenuItem section="privacy">Privacy</MenuItem>
           <MenuItem section="permissions">Permissions</MenuItem>
