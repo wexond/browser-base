@@ -53,7 +53,7 @@ const SearchEngine = () => {
 export const AddressBar = () => {
   return (
     <Content>
-      <Header>Search engine</Header>
+      <Header>Address bar</Header>
       <SuggestionsToggle />
       <SearchEngine />
     </Content>
