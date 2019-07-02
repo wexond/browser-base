@@ -24,7 +24,7 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (isURL(text) && !text.includes('://')) {
       url = `http://${text}`;
     } else if (!text.includes('://')) {
-      url = `https://www.google.com/search?q=${text}`;
+      url = store.searchEngine.url.replace('%s', text);
     }
 
     e.currentTarget.value = url;

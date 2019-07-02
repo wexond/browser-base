@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import store from '~/renderer/views/app/store';
-import { darkTheme, lightTheme } from '~/renderer/constants';
 import { Dropdown } from '~/renderer/components/Dropdown';
 import Switch from '~/renderer/components/Switch';
 import { Content } from '../../../style';
@@ -25,8 +24,9 @@ const SuggestionsToggle = () => {
 };
 
 const onSearchEngineChange = (value: string) => {
-  store.settings.object.searchEngine = store.settings.object.searchEngines.find(
-    x => x.name === value,
+  const { searchEngines } = store.settings.object;
+  store.settings.object.searchEngine = searchEngines.indexOf(
+    searchEngines.find(x => x.name === value),
   );
   store.settings.save();
 };
@@ -34,17 +34,16 @@ const onSearchEngineChange = (value: string) => {
 const SearchEngine = () => {
   const { searchEngine, searchEngines } = store.settings.object;
 
+  const se = searchEngines[searchEngine];
+
   return (
     <Row>
-      <Title>Show search and site suggestions</Title>
+      <Title>Search engine used in the address bar</Title>
       <Control>
-        <Dropdown
-          defaultValue={searchEngine.name}
-          onChange={onSearchEngineChange}
-        >
-          {searchEngines.map((engine, key)) => (
-            <Dropdown.Item>{engine.name}</Dropdown.Item>
-          )}
+        <Dropdown defaultValue={se.name} onChange={onSearchEngineChange}>
+          {searchEngines.map((item, key) => (
+            <Dropdown.Item key={key}>{item.name}</Dropdown.Item>
+          ))}
         </Dropdown>
       </Control>
     </Row>

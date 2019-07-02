@@ -1,3 +1,5 @@
+import { ISearchEngine } from './search-engine';
+
 export interface ISettings {
   darkTheme: boolean;
   shield: boolean;
@@ -5,4 +7,6 @@ export interface ISettings {
   animations: boolean;
   overlayBookmarks: boolean;
   suggestions: boolean;
+  searchEngine: number;
+  searchEngines: ISearchEngine[];
 }

@@ -117,9 +117,10 @@ export const getSearchSuggestions = (filter: string) =>
     try {
       const data = JSON.parse(
         (await requestURL(
-          `http://google.com/complete/search?client=chrome&q=${encodeURIComponent(
-            input,
-          )}`,
+          store.searchEngine.keywordsUrl.replace(
+            '%s',
+            encodeURIComponent(input),
+          ),
         )).data,
       );
 
