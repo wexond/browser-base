@@ -25,7 +25,6 @@ export class SettingsStore {
 
   @observable
   public object: ISettings = {
-    dialType: 'top-sites',
     darkTheme: false,
     shield: true,
     multrin: true,

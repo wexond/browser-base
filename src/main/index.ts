@@ -68,7 +68,6 @@ app.on('ready', async () => {
     writeFileSync(
       getPath('settings.json'),
       JSON.stringify({
-        dialType: 'top-sites',
         darkTheme: false,
         shield: true,
         multrin: true,
