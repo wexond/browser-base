@@ -4,4 +4,5 @@ export interface ISettings {
   multrin: boolean;
   animations: boolean;
   overlayBookmarks: boolean;
+  suggestions: boolean;
 }
