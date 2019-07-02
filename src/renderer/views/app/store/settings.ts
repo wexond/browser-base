@@ -5,7 +5,8 @@ import { writeFile, readFileSync } from 'fs';
 import { ISettings } from '~/interfaces';
 import { getPath } from '~/utils';
 import { darkTheme, lightTheme } from '~/renderer/constants';
-import store, { Store } from '.';
+import { Store } from '.';
+import { DEFAULT_SETTINGS } from '~/constants';
 
 export type SettingsSection =
   | 'appearance'
@@ -24,12 +25,7 @@ export class SettingsStore {
   public selectedSection: SettingsSection = 'appearance';
 
   @observable
-  public object: ISettings = {
-    darkTheme: false,
-    shield: true,
-    multrin: true,
-    animations: true,
-  };
+  public object: ISettings = DEFAULT_SETTINGS;
 
   constructor(private store: Store) {}
 

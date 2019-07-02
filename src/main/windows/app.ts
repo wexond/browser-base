@@ -3,7 +3,7 @@ import { resolve, join } from 'path';
 
 import { ViewManager } from '../view-manager';
 import { getPath } from '~/utils';
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { runMessagingService, Multrin } from '../services';
 import { PermissionsWindow, AuthWindow, FindWindow } from '.';
 
@@ -38,13 +38,11 @@ export class AppWindow extends BrowserWindow {
 
     let windowState: any = {};
 
-    if (existsSync(windowDataPath)) {
-      try {
-        // Read the last window state from file.
-        windowState = JSON.parse(readFileSync(windowDataPath, 'utf8'));
-      } catch (e) {
-        writeFileSync(windowDataPath, JSON.stringify({}));
-      }
+    try {
+      // Read the last window state from file.
+      windowState = JSON.parse(readFileSync(windowDataPath, 'utf8'));
+    } catch (e) {
+      writeFileSync(windowDataPath, JSON.stringify({}));
     }
 
     // Merge bounds from the last window state to the current window options.

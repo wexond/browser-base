@@ -29,10 +29,6 @@ const lists: any = {
 export let engine: FiltersEngine;
 
 const loadFilters = async () => {
-  if (!existsSync(getPath('adblock'))) {
-    mkdirSync(getPath('adblock'));
-  }
-
   const path = resolve(getPath('adblock/cache.dat'));
 
   const downloadFilters = () => {

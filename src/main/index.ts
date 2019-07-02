@@ -5,12 +5,13 @@ import { extensionsMain } from 'electron-extensions';
 
 import { AppWindow } from './windows/app';
 import { runAdblockService } from './services';
-import { existsSync, writeFileSync, promises, mkdirSync } from 'fs';
+import { promises } from 'fs';
 import { getPath } from '~/utils/paths';
 import { ISettings } from '~/interfaces';
 import { makeId } from '~/utils/string';
 import { getMainMenu } from './menus/main';
 import { runAutoUpdaterService } from './services/auto-updater';
+import { checkFiles } from '~/utils/files';
 
 export const log = require('electron-log');
 
@@ -64,17 +65,7 @@ process.on('uncaughtException', error => {
 });
 
 app.on('ready', async () => {
-  if (!existsSync(getPath('settings.json'))) {
-    writeFileSync(
-      getPath('settings.json'),
-      JSON.stringify({
-        darkTheme: false,
-        shield: true,
-        multrin: true,
-        animations: true,
-      } as ISettings),
-    );
-  }
+  checkFiles();
 
   app.on('activate', () => {
     if (appWindow === null) {
@@ -158,15 +149,10 @@ app.on('ready', async () => {
   extensionsMain.setSession(viewSession);
 
   const extensionsPath = getPath('extensions');
+  const dirs = await promises.readdir(extensionsPath);
 
-  if (!existsSync(extensionsPath)) {
-    mkdirSync(extensionsPath);
-  } else {
-    const dirs = await promises.readdir(extensionsPath);
-
-    for (const dir of dirs) {
-      extensionsMain.load(resolve(extensionsPath, dir));
-    }
+  for (const dir of dirs) {
+    extensionsMain.load(resolve(extensionsPath, dir));
   }
 
   runAutoUpdaterService(appWindow);
