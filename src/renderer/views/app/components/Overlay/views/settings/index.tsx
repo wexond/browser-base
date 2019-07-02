@@ -28,13 +28,13 @@ export const Settings = observer(() => {
       <Scrollable2>
         <NavigationDrawer title="Settings" search>
           <MenuItem section="appearance">Appearance</MenuItem>
+          <MenuItem section="startup">On startup</MenuItem>
           <MenuItem section="address-bar">Address bar</MenuItem>
           <MenuItem section="privacy">Privacy</MenuItem>
-          <MenuItem section="permissions">Permissions</MenuItem>
-          <MenuItem section="startup">On startup</MenuItem>
-          <MenuItem section="language">Language</MenuItem>
-          <MenuItem section="shortcuts">Keyboard shortcuts</MenuItem>
+          <MenuItem section="permissions">Site permissions</MenuItem>
           <MenuItem section="downloads">Downloads</MenuItem>
+          <MenuItem section="language">Languages</MenuItem>
+          <MenuItem section="shortcuts">Keyboard shortcuts</MenuItem>
           <MenuItem section="system">System</MenuItem>
         </NavigationDrawer>
         <Sections style={{ paddingTop: 48 }}>
