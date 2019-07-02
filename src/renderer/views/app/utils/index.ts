@@ -3,3 +3,4 @@ export * from './suggestions';
 export * from './history';
 export * from './weather';
 export * from './view';
+export * from './settings';

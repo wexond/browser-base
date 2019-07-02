@@ -11,7 +11,7 @@ import { DEFAULT_SETTINGS } from '~/constants';
 export type SettingsSection =
   | 'appearance'
   | 'autofill'
-  | 'search-engine'
+  | 'address-bar'
   | 'privacy'
   | 'permissions'
   | 'startup'

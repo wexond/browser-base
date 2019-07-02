@@ -62,6 +62,13 @@ export class Store {
     );
   }
 
+  @computed
+  public get searchEngine() {
+    return this.settings.object.searchEngines[
+      this.settings.object.searchEngine
+    ];
+  }
+
   public canToggleMenu = false;
 
   public mouse = {

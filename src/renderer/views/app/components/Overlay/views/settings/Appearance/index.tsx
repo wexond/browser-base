@@ -4,8 +4,9 @@ import store from '~/renderer/views/app/store';
 import { darkTheme, lightTheme } from '~/renderer/constants';
 import { Dropdown } from '~/renderer/components/Dropdown';
 import Switch from '~/renderer/components/Switch';
-import { Content } from '../../../../style';
+import { Content } from '../../../style';
 import { Title, Row, Control, Header } from '../style';
+import { onSwitchChange } from '~/renderer/views/app/utils';
 
 const onThemeChange = (value: 'Light' | 'Dark') => {
   store.settings.object.darkTheme = value === 'Dark';
@@ -27,11 +28,6 @@ const ThemeVariant = () => {
       </Control>
     </Row>
   );
-};
-
-const onSwitchChange = (key: string) => (value: boolean) => {
-  (store.settings.object as any)[key] = value;
-  store.settings.save();
 };
 
 const OverlayAnimations = () => {
