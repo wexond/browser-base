@@ -30,8 +30,8 @@ const ThemeVariant = () => {
   );
 };
 
-const onAnimationsChange = (value: boolean) => {
-  store.settings.object.animations = value;
+const onSwitchChange = (key: string) => (value: boolean) => {
+  (store.settings.object as any)[key] = value;
   store.settings.save();
 };
 
@@ -42,7 +42,26 @@ const OverlayAnimations = () => {
     <Row>
       <Title>Overlay animations</Title>
       <Control>
-        <Switch onChange={onAnimationsChange} defaultValue={animations} />
+        <Switch
+          onChange={onSwitchChange('animations')}
+          defaultValue={animations}
+        />
+      </Control>
+    </Row>
+  );
+};
+
+const OverlayBookmarks = () => {
+  const { overlayBookmarks } = store.settings.object;
+
+  return (
+    <Row>
+      <Title>Show bookmarks in Overlay</Title>
+      <Control>
+        <Switch
+          onChange={onSwitchChange('overlayBookmarks')}
+          defaultValue={overlayBookmarks}
+        />
       </Control>
     </Row>
   );
@@ -53,6 +72,7 @@ export const Appearance = () => {
     <Content>
       <Header>Appearance</Header>
       <OverlayAnimations />
+      <OverlayBookmarks />
       <ThemeVariant />
     </Content>
   );

@@ -1,6 +1,7 @@
 export interface ISettings {
-  darkTheme?: boolean;
-  shield?: boolean;
-  multrin?: boolean;
-  animations?: boolean;
+  darkTheme: boolean;
+  shield: boolean;
+  multrin: boolean;
+  animations: boolean;
+  overlayBookmarks: boolean;
 }

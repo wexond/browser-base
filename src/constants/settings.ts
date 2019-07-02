@@ -3,4 +3,5 @@ export const DEFAULT_SETTINGS = {
   shield: true,
   multrin: true,
   animations: true,
+  overlayBookmarks: true,
 };
