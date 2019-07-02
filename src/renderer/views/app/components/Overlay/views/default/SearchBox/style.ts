@@ -8,7 +8,7 @@ export const StyledSearchBox = styled.div`
   margin-top: 32px;
   z-index: 2;
   border-radius: 23px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   display: flex;
   flex-flow: column;
   overflow: hidden;
