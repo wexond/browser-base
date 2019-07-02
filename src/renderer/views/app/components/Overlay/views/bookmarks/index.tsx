@@ -8,7 +8,10 @@ import { Content, Scrollable2, Sections } from '../../style';
 import { Container } from '../..';
 import { NavigationDrawer } from '../../components/NavigationDrawer';
 import { SelectionDialog } from '../../components/SelectionDialog';
-import { ContextMenu, ContextMenuItem } from '../../components/ContextMenu';
+import {
+  ContextMenu,
+  ContextMenuItem,
+} from '~/renderer/components/ContextMenu';
 import { icons } from '~/renderer/constants';
 import { Bookmark } from './Bookmark';
 

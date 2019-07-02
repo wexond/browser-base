@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import { colors } from '~/renderer/constants';
-import { StyledDropdown, DropIcon, Menu, Value } from './styles';
+import { StyledDropdown, DropIcon, Value } from './styles';
+import { ContextMenu, ContextMenuItem } from '../ContextMenu';
 
 interface Props {
   color?: string;
@@ -22,6 +23,8 @@ export class Dropdown extends React.PureComponent<Props, State> {
   static defaultProps: Props = {
     color: colors.blue['500'],
   };
+
+  static Item = ContextMenuItem;
 
   public state: State = {
     activated: false,
@@ -123,16 +126,17 @@ export class Dropdown extends React.PureComponent<Props, State> {
       <StyledDropdown style={style} onMouseDown={this.onMouseDown}>
         <Value>{value}</Value>
         <DropIcon activated={visible} />
-        <Menu visible={visible}>
+        <ContextMenu style={{ top: 32, width: '100%' }} visible={visible}>
           {React.Children.map(children, child => {
             const label = child.props.children;
             return React.cloneElement(child, {
               selected: this.value === label,
               onClick: this.onItemClick(label),
               onMouseDown: this.onItemMouseDown,
+              dense: true,
             });
           })}
-        </Menu>
+        </ContextMenu>
       </StyledDropdown>
     );
   }

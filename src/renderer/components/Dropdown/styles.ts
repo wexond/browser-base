@@ -39,26 +39,6 @@ export const DropIcon = styled.div`
   `}
 `;
 
-export const Menu = styled.div`
-  width: 100%;
-  height: fit-content;
-  border-radius: 4px;
-  overflow: hidden;
-  position: absolute;
-  top: 100%;
-  z-index: 1000;
-  padding: 8px 0px;
-  background-color: #fff;
-  transition: 0.15s opacity, 0.15s margin-top ${EASING_FUNCTION};
-  box-shadow: ${shadows(3)};
-
-  ${({ visible }: { visible: boolean }) => css`
-    pointer-events: ${visible ? 'auto' : 'none'};
-    opacity: ${visible ? 1 : 0};
-    margin-top: ${visible ? 0 : -16}px;
-  `}
-`;
-
 export const Value = styled.div`
   font-size: 13px;
   margin-left: 8px;
@@ -67,27 +47,4 @@ export const Value = styled.div`
   ${({ theme }: { theme: ITheme }) => css`
     color: ${theme['control.valueColor']};
   `}
-`;
-
-export const DropdownItem = styled.div`
-  width: 100%;
-  height: 32px;
-  padding-left: 16px;
-  padding-right: 8px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  color: #000;
-  cursor: pointer;
-
-  ${({ selected }: { selected?: boolean }) => css`
-    background-color: ${selected ? 'rgba(0, 0, 0, 0.04)' : '#fff'};
-  `}
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
-  }
 `;

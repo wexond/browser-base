@@ -24,17 +24,21 @@ export const ContextMenu = styled.div`
 export const ContextMenuItem = styled.div`
   padding: 12px 24px;
   font-weight: 400;
-  font-size: 14px;
 
   ${({
     icon,
     selected,
     theme,
+    dense,
   }: {
     icon?: string;
     selected?: boolean;
     theme?: ITheme;
+    dense?: boolean;
   }) => css`
+    font-size: ${dense ? 13 : 14}px;
+    padding: ${dense ? 8 : 12}px ${dense ? 12 : 24}px;
+
     background-color: ${selected
       ? theme['overlay.foreground'] === 'light'
         ? 'rgba(255, 255, 255, 0.15)'
