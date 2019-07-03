@@ -33,6 +33,10 @@ export class Store {
         this.text = text;
         this.visible = visible;
 
+        setTimeout(() => {
+          this.findInputRef.current.focus();
+        });
+
         if (visible) {
           remote.getCurrentWindow().show();
         } else {

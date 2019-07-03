@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { createGlobalStyle } from 'styled-components';
+import { remote, ipcRenderer } from 'electron';
 
 import { Style } from '../../style';
 import {
@@ -13,9 +14,8 @@ import {
   Occurrences,
 } from './style';
 import store from '../../store';
-import { remote, ipcRenderer } from 'electron';
-import { callViewMethod } from '~/renderer/views/app/utils/view';
-import { icons } from '~/renderer/constants';
+import { callViewMethod } from '~/utils';
+import { icons } from '~/renderer/constants/icons';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { ipcRenderer } from 'electron';
 
 import { App } from './components/App';
-import { fonts } from '../../constants';
-import { ipcRenderer } from 'electron';
+import { fonts } from '../../constants/fonts';
 
 ipcRenderer.setMaxListeners(0);
 

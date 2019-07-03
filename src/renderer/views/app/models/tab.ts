@@ -10,8 +10,7 @@ import {
   defaultTabOptions,
   TAB_ANIMATION_DURATION,
 } from '../constants';
-import { getColorBrightness } from '~/utils';
-import { callViewMethod } from '../utils';
+import { getColorBrightness, callViewMethod } from '~/utils';
 
 const isColorAcceptable = (color: string) => {
   if (store.theme['tab.allowLightBackground']) {

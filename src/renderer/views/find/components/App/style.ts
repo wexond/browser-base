@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { centerIcon } from '~/renderer/mixins';
-import { icons } from '~/renderer/constants';
+import { icons } from '~/renderer/constants/icons';
 
 export const StyledApp = styled.div`
   margin: 16px;
