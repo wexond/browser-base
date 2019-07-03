@@ -9,7 +9,7 @@ export class PermissionsWindow extends BrowserWindow {
       frame: false,
       resizable: false,
       width: 350,
-      height: 200,
+      height: 175,
       transparent: true,
       show: false,
       fullscreenable: false,

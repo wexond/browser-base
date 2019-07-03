@@ -25,6 +25,8 @@ log.transports.file.file = resolve(app.getPath('userData'), 'log.log');
 
 ipcMain.setMaxListeners(0);
 
+app.commandLine.appendSwitch('--enable-transparent-visuals');
+
 export let appWindow: AppWindow;
 export let settings: ISettings = {};
 
