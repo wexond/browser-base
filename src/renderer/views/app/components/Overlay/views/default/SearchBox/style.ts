@@ -44,7 +44,7 @@ export const Input = styled.input`
   outline: none;
   color: white;
   font-size: 14px;
-  margin-left: 12px;
+  margin-left: 16px;
   margin-right: 16px;
 
   ${({ theme }: { theme?: ITheme }) => css`
