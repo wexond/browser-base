@@ -1,16 +1,16 @@
-import { ipcRenderer } from 'electron';
 import { observable } from 'mobx';
 import { resolve } from 'path';
 import * as fs from 'fs';
 
-import { BrowserAction } from '../models';
+import { IBrowserAction } from '../models';
+import { extensionsRenderer } from 'electron-extensions';
 
 export class ExtensionsStore {
   @observable
-  public browserActions: BrowserAction[] = [];
+  public browserActions: IBrowserAction[] = [];
 
   @observable
-  public defaultBrowserActions: BrowserAction[] = [];
+  public defaultBrowserActions: IBrowserAction[] = [];
 
   constructor() {
     this.load();
@@ -34,9 +34,7 @@ export class ExtensionsStore {
   }
 
   public load() {
-    /*
-    TODO: 
-    const extensions = ipcRenderer.sendSync('get-extensions');
+    const extensions = extensionsRenderer.getExtensions();
 
     for (const key in extensions) {
       const { manifest, path, id } = extensions[key];
@@ -51,14 +49,14 @@ export class ExtensionsStore {
         let icon1 = default_icon;
 
         if (typeof icon1 === 'object') {
-          icon1 = Object.keys(default_icon)[
+          icon1 = Object.values(default_icon)[
             Object.keys(default_icon).length - 1
           ];
         }
 
-        const data = fs.readFileSync(resolve(path, icon1));
+        const data = fs.readFileSync(resolve(path, icon1 as string));
         const icon = window.URL.createObjectURL(new Blob([data]));
-        const browserAction = new BrowserAction({
+        const browserAction = new IBrowserAction({
           extensionId: id,
           icon,
           title: default_title,
@@ -67,6 +65,6 @@ export class ExtensionsStore {
 
         this.defaultBrowserActions.push(browserAction);
       }
-    }*/
+    }
   }
 }

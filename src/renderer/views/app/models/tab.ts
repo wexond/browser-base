@@ -6,7 +6,6 @@ import Vibrant = require('node-vibrant');
 import store from '../store';
 import {
   TABS_PADDING,
-  TOOLBAR_HEIGHT,
   defaultTabOptions,
   TAB_ANIMATION_DURATION,
 } from '../constants';
@@ -127,8 +126,6 @@ export class ITab {
     ipcRenderer.on(
       `browserview-data-updated-${this.id}`,
       async (e: any, { title, url }: any) => {
-        let updated = null;
-
         if (url !== this.url) {
           this.lastHistoryId = await store.history.addItem({
             title: this.title,
@@ -136,20 +133,6 @@ export class ITab {
             favicon: this.favicon,
             date: new Date().toString(),
           });
-
-          updated = {
-            url,
-          };
-        }
-
-        if (title !== this.title) {
-          updated = {
-            title,
-          };
-        }
-
-        if (updated) {
-          this.emitOnUpdated(updated);
         }
 
         this.title = title === 'about:blank' ? 'New tab' : title;
@@ -224,10 +207,6 @@ export class ITab {
 
     ipcRenderer.on(`view-loading-${this.id}`, (e: any, loading: boolean) => {
       this.loading = loading;
-
-      this.emitOnUpdated({
-        status: loading ? 'loading' : 'complete',
-      });
     });
 
     const { defaultBrowserActions, browserActions } = store.extensions;
@@ -423,34 +402,7 @@ export class ITab {
     }, TAB_ANIMATION_DURATION * 1000);
   }
 
-  public emitOnUpdated = (data: any) => {
-    store.tabs.emitEvent('onUpdated', this.id, data, this.getApiTab());
-  };
-
   callViewMethod = (scope: string, ...args: any[]): Promise<any> => {
     return callViewMethod(this.id, scope, ...args);
   };
-
-  public getApiTab(): chrome.tabs.Tab {
-    const selected = this.isSelected;
-
-    return {
-      id: this.id,
-      index: this.tabGroup.tabs.indexOf(this),
-      title: this.title,
-      pinned: false,
-      favIconUrl: this.favicon,
-      url: this.url,
-      status: this.loading ? 'loading' : 'complete',
-      width: this.width,
-      height: TOOLBAR_HEIGHT,
-      active: selected,
-      highlighted: selected,
-      selected,
-      windowId: 0,
-      discarded: false,
-      incognito: false,
-      autoDiscardable: false,
-    };
-  }
 }

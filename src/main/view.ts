@@ -17,6 +17,7 @@ export class View extends BrowserView {
         contextIsolation: true,
         partition: 'persist:view',
         plugins: true,
+        additionalArguments: [`--window-id=${appWindow.id}`],
       },
     });
 
