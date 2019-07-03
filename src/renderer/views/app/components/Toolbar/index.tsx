@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ipcRenderer } from 'electron';
 
 import store from '../../store';
-import { Buttons, StyledToolbar } from './style';
+import { Buttons, StyledToolbar, Handle } from './style';
 import { NavigationButtons } from './NavigationButtons';
 import { Tabbar } from './Tabbar';
 import ToolbarButton from './ToolbarButton';
@@ -50,6 +50,7 @@ export const Toolbar = observer(() => {
       overlayType={store.overlay.currentContent}
       isHTMLFullscreen={store.isHTMLFullscreen}
     >
+      <Handle />
       <div style={{ flex: 1, display: 'flex' }}>
         <div
           style={{ flex: 1, display: store.tabbarVisible ? 'flex' : 'none' }}

@@ -13,7 +13,6 @@ export const StyledToolbar = styled.div`
   color: rgba(0, 0, 0, 0.8);
   width: 100%;
   height: ${TOOLBAR_HEIGHT}px;
-  -webkit-app-region: drag;
   padding-right: ${platform() !== 'darwin' ? 138 : 0}px;
 
   ${({
@@ -44,4 +43,13 @@ export const Separator = styled.div`
   background-color: rgba(0, 0, 0, 0.12);
   margin-left: 8px;
   margin-right: 8px;
+`;
+
+export const Handle = styled.div`
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 0px;
+  -webkit-app-region: drag;
 `;
