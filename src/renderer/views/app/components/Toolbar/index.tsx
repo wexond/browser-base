@@ -3,12 +3,11 @@ import * as React from 'react';
 import { ipcRenderer } from 'electron';
 
 import store from '../../store';
-import { Buttons, StyledToolbar, Handle } from './style';
+import { Buttons, StyledToolbar, Handle, Separator } from './style';
 import { NavigationButtons } from './NavigationButtons';
 import { Tabbar } from './Tabbar';
 import ToolbarButton from './ToolbarButton';
 import { icons } from '~/renderer/constants';
-import { Separator } from '../Overlay/style';
 import { BrowserAction } from './BrowserAction';
 
 const onUpdateClick = () => {
@@ -70,6 +69,7 @@ export const Toolbar = observer(() => {
             size={18}
             style={{ marginLeft: 0 }}
             opacity={0.54}
+            autoInvert
             data={{
               badgeBackgroundColor: 'gray',
               badgeText: blockedAds > 0 ? blockedAds.toString() : '',

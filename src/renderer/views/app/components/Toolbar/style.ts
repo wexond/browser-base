@@ -40,9 +40,12 @@ export const Buttons = styled.div`
 export const Separator = styled.div`
   height: 16px;
   width: 1px;
-  background-color: rgba(0, 0, 0, 0.12);
   margin-left: 8px;
   margin-right: 8px;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-color: ${theme['toolbar.separator.color']};
+  `};
 `;
 
 export const Handle = styled.div`

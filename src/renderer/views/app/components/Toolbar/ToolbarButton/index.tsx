@@ -16,7 +16,7 @@ interface Props {
   className?: string;
   children?: any;
   opacity?: number;
-  invert?: boolean;
+  autoInvert?: boolean;
 }
 
 @observer
@@ -24,6 +24,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
   public static defaultProps = {
     size: 20,
     opacity: transparency.icons.inactive,
+    autoInvert: true,
   };
 
   private ripple = React.createRef<Ripple>();
@@ -61,7 +62,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
       divRef,
       children,
       opacity,
-      invert,
+      autoInvert,
     } = this.props;
 
     let { style } = this.props;
@@ -74,7 +75,6 @@ export default class ToolbarButton extends React.Component<Props, {}> {
         onClick={onClick}
         className={className}
         style={style}
-        invert={invert}
         ref={(r: HTMLDivElement) => {
           this.ref = r;
           if (typeof divRef === 'function') {
@@ -88,6 +88,7 @@ export default class ToolbarButton extends React.Component<Props, {}> {
           size={size}
           disabled={disabled}
           opacity={opacity}
+          autoInvert={autoInvert}
         />
         <Circle>
           <Ripple

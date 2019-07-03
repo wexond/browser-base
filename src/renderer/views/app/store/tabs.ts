@@ -203,10 +203,6 @@ export class TabsStore {
       this.list.push(tab);
     }
 
-    if (!isWindow) {
-      this.emitEvent('onCreated', tab.getApiTab());
-    }
-
     requestAnimationFrame(() => {
       tab.setLeft(tab.getLeft(), false);
       this.updateTabsBounds(true);

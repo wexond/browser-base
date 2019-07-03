@@ -15,6 +15,7 @@ import { DownloadsStore } from './downloads';
 import { lightTheme } from '~/renderer/constants/themes';
 import { WeatherStore } from './weather';
 import { SettingsStore } from './settings';
+import { extensionsRenderer } from 'electron-extensions';
 
 export class Store {
   public history = new HistoryStore();
@@ -100,26 +101,9 @@ export class Store {
       },
     );
 
-    ipcRenderer.on(
-      'api-tabs-query',
-      (e: IpcMessageEvent, webContentsId: number) => {
-        const sender = remote.webContents.fromId(webContentsId);
-
-        sender.send(
-          'api-tabs-query',
-          this.tabs.list.map(tab => tab.getApiTab()),
-        );
-      },
-    );
-
-    ipcRenderer.on(
-      'api-browserAction-setBadgeText',
-      (
-        e: IpcMessageEvent,
-        senderId: number,
-        extensionId: string,
-        details: chrome.browserAction.BadgeTextDetails,
-      ) => {
+    extensionsRenderer.on(
+      'set-badge-text',
+      (extensionId: string, details: chrome.browserAction.BadgeTextDetails) => {
         if (details.tabId) {
           const browserAction = this.extensions.queryBrowserAction({
             extensionId,
@@ -138,8 +122,6 @@ export class Store {
               item.badgeText = details.text;
             });
         }
-        const contents = remote.webContents.fromId(senderId);
-        contents.send('api-browserAction-setBadgeText');
       },
     );
 

@@ -15,13 +15,20 @@ export const Icon = styled.div`
     size,
     disabled,
     opacity,
+    autoInvert,
+    theme,
   }: {
     size: number;
     disabled: boolean;
     opacity: number;
+    autoInvert?: boolean;
+    theme?: ITheme;
   }) => css`
     ${centerIcon(size)};
     opacity: ${disabled ? 0.25 : opacity};
+    filter: ${autoInvert && theme['toolbar.icons.invert']
+      ? 'invert(100%)'
+      : 'none'};
   `};
 `;
 
@@ -33,18 +40,9 @@ export const Button = styled.div`
   width: ${TOOLBAR_BUTTON_WIDTH}px;
   backface-visibility: hidden;
 
-  ${({
-    disabled,
-    invert,
-    theme,
-  }: {
-    disabled: boolean;
-    invert: boolean;
-    theme: ITheme;
-  }) => css`
+  ${({ disabled }: { disabled: boolean }) => css`
     pointer-events: ${disabled ? 'none' : 'inherit'};
     -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
-    filter: ${theme['toolbar.icons.invert'] ? 'invert(100%)' : 'none'};
   `};
 `;
 
@@ -58,7 +56,12 @@ export const Circle = styled.div`
   transform: translate(-50%, -50%);
   overflow: hidden;
   transition: 0.2s background-color;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.06);
-  }
+
+  ${({ theme }: { theme: ITheme }) => css`
+    &:hover {
+      background-color: ${theme['toolbar.icons.invert']
+        ? 'rgba(255, 255, 255, 0.08)'
+        : 'rgba(0, 0, 0, 0.06)'};
+    }
+  `};
 `;
