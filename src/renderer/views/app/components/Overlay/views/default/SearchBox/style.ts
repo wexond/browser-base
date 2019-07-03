@@ -24,8 +24,8 @@ export const StyledSearchBox = styled.div`
 export const SearchIcon = styled.div`
   ${centerIcon()};
   background-image: url(${icons.search});
-  height: 18px;
-  min-width: 18px;
+  height: 16px;
+  min-width: 16px;
   margin-left: 16px;
 
   ${({ theme }: { theme?: ITheme }) => css`
@@ -43,7 +43,7 @@ export const Input = styled.input`
   border: none;
   outline: none;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
   margin-left: 12px;
   margin-right: 16px;
 
