@@ -39,15 +39,15 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
   const winBounds = flowrStore.get('windowBounds')
 
   const defaultUrl = buildFileUrl('config.html')
-
   const kiosk = flowrStore.get('isKiosk') || false
   const url = flowrStore.get('extUrl') || defaultUrl
   // Create the browser window.
   const opts = buildBrowserWindowConfig({
     icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false,
       contextIsolation: false,
+      preload: buildExportPath('exportNode.js'),
     },
   })
 
@@ -245,6 +245,14 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
       result = `http://localhost:4444/${fileName}`;
     } else {
       result = join('file://', app.getAppPath(), 'build', fileName)
+    }
+    return result
+  }
+
+  function buildExportPath(fileName: string): string {
+    let result: string = resolve(app.getAppPath(), `build/${fileName}`)
+    if (process.env.ENV !== 'dev') {
+      result = join(app.getAppPath(), `/build/${fileName}`)
     }
     return result
   }

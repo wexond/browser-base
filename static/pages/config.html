@@ -49,42 +49,44 @@
  <label>Activate Debug Mode</label> <input type="checkbox" id="activateDebug"  onclick='toggleDebugCheckbox()'>
 
 <script>
- 	let ipc = require('electron').ipcRenderer
-    let isDebugMode = false
-    let config= undefined
-    let isDeinterlacingActivated=false
-    let externalUrl = ""
+	const ipc = nodeRequire('electron').ipcRenderer
+
+	let isDebugMode = false
+	let config = undefined
+	let isDeinterlacingActivated = false
+	let externalUrl = ""
 	let isKiosk = false
-    let isLaunchedUrlCorrect=true
+	let isLaunchedUrlCorrect = true
+
 	ipc.removeAllListeners('receiveConfig')
 	ipc.send('FlowrIsInitializing')
 	ipc.on('receiveConfig', function(evt, data) {
-		config =data.appConfig
-		isDebugMode= data.debugMode
+		config = data.appConfig
+		isDebugMode = data.debugMode
 		isDeinterlacingActivated = data.deinterlacing
-		externalUrl=data.extUrl || ""
+		externalUrl = data.extUrl || ""
 		isKiosk = data.isKiosk
-		isLaunchedUrlCorrect =data.isLaunchedUrlCorrect 
-		console.log("data: ",data)
+		isLaunchedUrlCorrect = data.isLaunchedUrlCorrect 
+		console.log("data: ", data)
 		init()
 	})
 	ipc.send("getAppConfig")
- 	
+	
 
-   function validate(){
-   		config.ozoneApi.hostProxy = document.getElementById("ozoneApi").value 
+	function validate(){
+		config.ozoneApi.hostProxy = document.getElementById("ozoneApi").value 
 		config.flowrApi.hostProxy = document.getElementById("flowrApi").value 
 		config.socketApi.host = document.getElementById("socketApi").value 
 		config.pushVodSocketApi.host = document.getElementById("pushVodSocketApi").value 
 		config.aneviaVodSocketApi.host = document.getElementById("aneviaVodSocketApi").value
 		ipc.send("updateAppConfig",config)
-   }
-   
-   function init(){
-   		document.getElementById("userAgent").innerHTML = navigator.userAgent
-   		if(config){
-	   		document.getElementById("ozoneApi").value = config.ozoneApi.hostProxy
-			document.getElementById("flowrApi").value =config.flowrApi.hostProxy
+	}
+
+	function init(){
+		document.getElementById("userAgent").innerHTML = navigator.userAgent
+		if (config) {
+			document.getElementById("ozoneApi").value = config.ozoneApi.hostProxy
+			document.getElementById("flowrApi").value = config.flowrApi.hostProxy
 			document.getElementById("socketApi").value = config.socketApi.host
 			document.getElementById("pushVodSocketApi").value = config.pushVodSocketApi.host
 			document.getElementById("aneviaVodSocketApi").value = config.aneviaVodSocketApi.host
@@ -97,28 +99,28 @@
 		document.getElementById("activateDeinterlacing").checked = isDeinterlacingActivated
 		document.getElementById("activateDebug").checked = isDebugMode
 
-		if(isLaunchedUrlCorrect){
-			document.getElementById("wrongurl").style.display="none"
+		if (isLaunchedUrlCorrect) {
+			document.getElementById("wrongurl").style.display = "none"
 		}
-   }
+	}
 
-   function validateExtUrl(){
-   	 	externalUrl = document.getElementById("extUrl").value
-   	 	ipc.send("setExtUrl",externalUrl)
-   }
+	function validateExtUrl(){
+		externalUrl = document.getElementById("extUrl").value
+		ipc.send("setExtUrl",externalUrl)
+	}
 
-   function toggleKioskCheckbox(){
-   		console.log("toggleKioskCheckbox : "+ document.getElementById("activateKioskMode").checked)//activateKioskMode	
+	function toggleKioskCheckbox(){
+		console.log("toggleKioskCheckbox : "+ document.getElementById("activateKioskMode").checked)//activateKioskMode	
 		ipc.send("setKioskMode",document.getElementById("activateKioskMode").checked)
-   }
+	}
 
-   function toggleDebugCheckbox(){
+	function toggleDebugCheckbox(){
 		ipc.send("setDebugMode", document.getElementById("activateDebug").checked)
-   }
+	}
 
-   function toggleDeinterlacingCheckbox(){
+	function toggleDeinterlacingCheckbox(){
 		ipc.send("setDeinterlacingMode", document.getElementById("activateDeinterlacing").checked)
-   }
+	}
 </script>
 </body>
 </html>

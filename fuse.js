@@ -125,7 +125,17 @@ const preload = name => {
   fuse.run();
 };
 
+const exportNode = () => {
+  const scriptName = 'exportNode'
+  const cfg = getRendererConfig('electron', scriptName);
+  const fuse = FuseBox.init(cfg);
+  fuse.bundle(scriptName).instructions(`> [frontend/preloads/${scriptName}.ts]`);
+  fuse.run();
+}
+
 renderer('app', 4444);
 preload('view-preload');
 preload('background-preload');
+exportNode();
+
 main();
