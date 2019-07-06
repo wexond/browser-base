@@ -12,6 +12,7 @@ import { makeId } from '~/utils/string';
 import { getMainMenu } from './menus/main';
 import { runAutoUpdaterService } from './services/auto-updater';
 import { checkFiles } from '~/utils/files';
+import { DEFAULT_SETTINGS } from '~/constants';
 
 export const log = require('electron-log');
 
@@ -28,7 +29,7 @@ ipcMain.setMaxListeners(0);
 app.commandLine.appendSwitch('--enable-transparent-visuals');
 
 export let appWindow: AppWindow;
-export let settings: ISettings = {};
+export let settings: ISettings = DEFAULT_SETTINGS;
 
 ipcMain.on('settings', (e: any, s: ISettings) => {
   settings = { ...settings, ...s };
