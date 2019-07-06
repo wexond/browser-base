@@ -4,28 +4,25 @@ import { ITheme } from '~/interfaces';
 
 export const StyledBrowserAction = styled.div`
   position: relative;
-  margin-left: 8px;
 `;
 
 interface BadgeProps {
   background?: string;
   color?: string;
-  theme?: ITheme;
 }
 
 export const Badge = styled.div`
   position: absolute;
-  padding: 0 1.5px;
-  border-radius: 4px;
+  padding: 0 3px;
+  border-radius: 8px;
 
-  bottom: 6px;
+  top: 6px;
   pointer-events: none;
   right: 6px;
   z-index: 5;
   font-size: 10px;
-  ${({ background, color, theme }: BadgeProps) => css`
+  ${({ background, color }: BadgeProps) => css`
     background-color: ${background};
     color: ${color};
-    border: 1px solid ${theme['toolbar.backgroundColor']};
   `};
 `;

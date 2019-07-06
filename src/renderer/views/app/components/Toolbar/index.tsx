@@ -7,7 +7,7 @@ import { Buttons, StyledToolbar, Handle, Separator } from './style';
 import { NavigationButtons } from './NavigationButtons';
 import { Tabbar } from './Tabbar';
 import ToolbarButton from './ToolbarButton';
-import { icons } from '~/renderer/constants';
+import { icons, colors } from '~/renderer/constants';
 import { BrowserAction } from './BrowserAction';
 
 const onUpdateClick = () => {
@@ -71,7 +71,7 @@ export const Toolbar = observer(() => {
             opacity={0.54}
             autoInvert
             data={{
-              badgeBackgroundColor: 'gray',
+              badgeBackgroundColor: colors.blue['500'],
               badgeText: blockedAds > 0 ? blockedAds.toString() : '',
               icon: icons.shield,
               badgeTextColor: 'white',
