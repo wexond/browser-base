@@ -74,7 +74,7 @@
   "dependencies": {
     "@cliqz/adblocker": "0.11.0",
     "axios": "0.19.0",
-    "electron-extensions": "1.0.2",
+    "electron-extensions": "2.0.0",
     "electron-log": "3.0.6",
     "electron-updater": "4.0.14",
     "extract-file-icon": "0.3.1",
