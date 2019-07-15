@@ -8,6 +8,7 @@ import { Appearance } from './Appearance';
 import { Container } from '../..';
 import { Scrollable2, Sections } from '../../style';
 import { AddressBar } from './AddressBar';
+import { Privacy } from './Privacy';
 
 const MenuItem = observer(
   ({ section, children }: { section: SettingsSection; children: any }) => (
@@ -40,6 +41,7 @@ export const Settings = observer(() => {
         <Sections style={{ paddingTop: 48 }}>
           {selectedSection === 'appearance' && <Appearance />}
           {selectedSection === 'address-bar' && <AddressBar />}
+          {selectedSection === 'privacy' && <Privacy />}
         </Sections>
       </Scrollable2>
     </Container>

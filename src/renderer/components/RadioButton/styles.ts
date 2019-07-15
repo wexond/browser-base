@@ -21,15 +21,13 @@ export const StyledRadioButton = styled.div`
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border-style: solid;
   box-sizing: border-box;
-  border-width: 2px;
   position: relative;
   overflow: visible;
   transition: 0.15s border-color;
 
   ${({ selected }: { selected: boolean }) => css`
-    border-color: ${selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.54)'};
+    border: 2px solid ${selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.54)'};
 
     &::before {
       background-color: ${selected ? colors.blue['500'] : '#000'};

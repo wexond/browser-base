@@ -27,6 +27,7 @@ import multrin from '~/renderer/resources/icons/drop-window.svg';
 import visible from '~/renderer/resources/icons/visible.svg';
 import invisible from '~/renderer/resources/icons/invisible.svg';
 import dropDown from '~/renderer/resources/icons/drop-down.svg';
+import check from '~/renderer/resources/icons/check.svg';
 
 import weatherDayClear from '~/renderer/resources/icons/weather/day/clear.png';
 import weatherDayFewClouds from '~/renderer/resources/icons/weather/day/few-clouds.png';
@@ -72,6 +73,7 @@ export const icons = {
   visible,
   invisible,
   dropDown,
+  check,
   weather: {
     day: {
       clear: weatherDayClear,
