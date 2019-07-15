@@ -50,7 +50,7 @@ const onRemoveClick = (item: IBookmark) => () => {
 const onNewFolderClick = () => {
   store.bookmarks.addItem({
     title: 'New folder',
-    type: 'folder',
+    isFolder: true,
     parent: null,
   });
 };
@@ -81,7 +81,10 @@ export const Bookmarks = observer(() => {
           onSearchInput={onInput}
           onBackClick={onBackClick}
         >
-          <NavigationDrawer.Item onClick={onNewFolderClick}>
+          <NavigationDrawer.Item
+            icon={icons.newFolder}
+            onClick={onNewFolderClick}
+          >
             New folder
           </NavigationDrawer.Item>
         </NavigationDrawer>

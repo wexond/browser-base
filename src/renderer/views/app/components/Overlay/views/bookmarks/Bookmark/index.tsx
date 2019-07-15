@@ -5,6 +5,7 @@ import { Favicon, Title, Site, More } from './style';
 import { IBookmark } from '~/interfaces';
 import store from '~/renderer/views/app/store';
 import { ListItem } from '../../../components/ListItem';
+import { icons } from '~/renderer/constants';
 
 const onClick = (item: IBookmark) => (e: React.MouseEvent) => {
   if (e.ctrlKey) {
@@ -19,13 +20,13 @@ const onClick = (item: IBookmark) => (e: React.MouseEvent) => {
 };
 
 const onDoubleClick = (item: IBookmark) => (e: React.MouseEvent) => {
-  if (item.type === 'folder') {
+  if (item.isFolder) {
     store.bookmarks.goToFolder(item._id);
   }
 };
 
 const onTitleClick = (item: IBookmark) => (e: React.MouseEvent) => {
-  if (!e.ctrlKey && item.type === 'item') {
+  if (!e.ctrlKey && !item.isFolder) {
     store.tabs.addTab({ url: item.url, active: true });
     store.overlay.visible = false;
   }
@@ -54,7 +55,13 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
     >
       <Favicon
         style={{
-          backgroundImage: `url(${store.favicons.favicons[data.favicon]})`,
+          backgroundImage: `url(${
+            data.isFolder ? icons.folder : store.favicons.favicons[data.favicon]
+          })`,
+          filter:
+            store.theme['overlay.foreground'] === 'light' && data.isFolder
+              ? 'invert(100%)'
+              : 'none',
         }}
       />
       <Title onClick={onTitleClick(data)}>{data.title}</Title>

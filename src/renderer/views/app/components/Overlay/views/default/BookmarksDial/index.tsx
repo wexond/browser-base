@@ -5,6 +5,7 @@ import { Actions } from '../../../style';
 import { Bubble } from '../Bubble';
 import store from '~/renderer/views/app/store';
 import { loadURL } from '~/renderer/views/app/utils';
+import { icons } from '~/renderer/constants';
 
 export const BookmarksDial = observer(() => {
   return (
@@ -16,7 +17,12 @@ export const BookmarksDial = observer(() => {
           key={item._id}
           maxLines={1}
           iconSize={20}
-          icon={store.favicons.favicons[item.favicon]}
+          invert={
+            store.theme['overlay.foreground'] === 'light' && item.isFolder
+          }
+          icon={
+            item.isFolder ? icons.folder : store.favicons.favicons[item.favicon]
+          }
         >
           {item.title}
         </Bubble>
