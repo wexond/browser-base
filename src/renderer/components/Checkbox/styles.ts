@@ -20,7 +20,6 @@ export const Container = styled.div`
 export const StyledCheckbox = styled.div`
   width: 18px;
   height: 18px;
-  margin-top: 64px;
   box-sizing: border-box;
   position: relative;
   border-radius: 3px;

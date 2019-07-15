@@ -9,7 +9,10 @@ import {
   HeaderText,
   HeaderArrow,
   StyledContainer,
+  DialogsContainer,
+  Dark,
 } from './style';
+import BrowsingDataDialog from './views/settings/Privacy/BrowsingDataDialog';
 
 export const Header = ({ children, clickable }: any) => {
   return (
@@ -43,6 +46,7 @@ export const Overlay = observer(() => {
       <History />
       <Bookmarks />
       <Settings />
+      <Dialogs />
     </StyledOverlay>
   );
 });
@@ -65,3 +69,12 @@ export const Container = observer(
     );
   },
 );
+
+export const Dialogs = observer(() => {
+  return (
+    <DialogsContainer visible={store.overlay.dialogContent != null}>
+      <Dark onClick={onClick} />
+      <BrowsingDataDialog />
+    </DialogsContainer>
+  );
+});

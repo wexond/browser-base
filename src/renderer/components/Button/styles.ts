@@ -10,6 +10,7 @@ export const StyledButton = styled.div`
   min-width: 88px;
   width: fit-content;
   height: 36px;
+  padding: 0px 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,4 +53,5 @@ export const StyledButton = styled.div`
 export const StyledLabel = styled.div`
   z-index: 1;
   font-size: 13px;
+  pointer-events: none;
 `;
