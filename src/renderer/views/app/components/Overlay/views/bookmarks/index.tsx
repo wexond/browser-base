@@ -47,6 +47,14 @@ const onRemoveClick = (item: IBookmark) => () => {
   store.bookmarks.removeItem(item._id);
 };
 
+const onNewFolderClick = () => {
+  store.bookmarks.addItem({
+    title: 'New folder',
+    type: 'folder',
+    parent: null,
+  });
+};
+
 const BookmarksList = observer(() => {
   return (
     <Sections>
@@ -72,7 +80,11 @@ export const Bookmarks = observer(() => {
           search
           onSearchInput={onInput}
           onBackClick={onBackClick}
-        />
+        >
+          <NavigationDrawer.Item onClick={onNewFolderClick}>
+            New folder
+          </NavigationDrawer.Item>
+        </NavigationDrawer>
         {store.bookmarks.visibleItems.length > 0 && <BookmarksList />}
         <SelectionDialog
           visible={length > 0}

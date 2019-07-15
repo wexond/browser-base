@@ -33,13 +33,17 @@ export class BookmarksStore {
   @observable
   public currentFolder: string = null;
 
+  @observable
+  public path: IBookmark[] = [];
+
   public currentBookmark: IBookmark;
 
   @computed
   public get visibleItems() {
     return this.list.filter(
       x =>
-        (x.url.includes(this.searched) || x.title.includes(this.searched)) &&
+        ((x.url && x.url.includes(this.searched)) ||
+          x.title.includes(this.searched)) &&
         x.parent === this.currentFolder,
     );
   }
@@ -99,5 +103,24 @@ export class BookmarksStore {
       this.removeItem(item);
     }
     this.selectedItems = [];
+  }
+
+  public goToFolder(id: string) {
+    this.currentFolder = id;
+    this.path = this.getFolderPath(id);
+  }
+
+  public getFolderPath(parent: string) {
+    const parentFolder = this.list.find(x => x._id === parent);
+    let path: IBookmark[] = [];
+
+    if (parentFolder == null) return [];
+
+    if (parentFolder.parent != null) {
+      path = path.concat(this.getFolderPath(parentFolder.parent));
+    }
+
+    path.push(parentFolder);
+    return path;
   }
 }

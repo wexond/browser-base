@@ -7,20 +7,26 @@ import store from '~/renderer/views/app/store';
 import { ListItem } from '../../../components/ListItem';
 
 const onClick = (item: IBookmark) => (e: React.MouseEvent) => {
-  if (!e.ctrlKey) return;
+  if (e.ctrlKey) {
+    const index = store.bookmarks.selectedItems.indexOf(item._id);
 
-  const index = store.bookmarks.selectedItems.indexOf(item._id);
-
-  if (index === -1) {
-    store.bookmarks.selectedItems.push(item._id);
-  } else {
-    store.bookmarks.selectedItems.splice(index, 1);
+    if (index === -1) {
+      store.bookmarks.selectedItems.push(item._id);
+    } else {
+      store.bookmarks.selectedItems.splice(index, 1);
+    }
   }
 };
 
-const onTitleClick = (url: string) => (e: React.MouseEvent) => {
-  if (!e.ctrlKey) {
-    store.tabs.addTab({ url, active: true });
+const onDoubleClick = (item: IBookmark) => (e: React.MouseEvent) => {
+  if (item.type === 'folder') {
+    store.bookmarks.goToFolder(item._id);
+  }
+};
+
+const onTitleClick = (item: IBookmark) => (e: React.MouseEvent) => {
+  if (!e.ctrlKey && item.type === 'item') {
+    store.tabs.addTab({ url: item.url, active: true });
     store.overlay.visible = false;
   }
 };
@@ -40,13 +46,18 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
   const selected = store.bookmarks.selectedItems.includes(data._id);
 
   return (
-    <ListItem key={data._id} onClick={onClick(data)} selected={selected}>
+    <ListItem
+      onDoubleClick={onDoubleClick(data)}
+      key={data._id}
+      onClick={onClick(data)}
+      selected={selected}
+    >
       <Favicon
         style={{
           backgroundImage: `url(${store.favicons.favicons[data.favicon]})`,
         }}
       />
-      <Title onClick={onTitleClick(data.url)}>{data.title}</Title>
+      <Title onClick={onTitleClick(data)}>{data.title}</Title>
       <Site>{data.url}</Site>
       <More onClick={onMoreClick(data)} />
     </ListItem>
