@@ -40,12 +40,14 @@ export class BookmarksStore {
 
   @computed
   public get visibleItems() {
-    return this.list.filter(
-      x =>
-        ((x.url && x.url.includes(this.searched)) ||
-          x.title.includes(this.searched)) &&
-        x.parent === this.currentFolder,
-    );
+    return this.list
+      .filter(
+        x =>
+          ((x.url && x.url.includes(this.searched)) ||
+            x.title.includes(this.searched)) &&
+          x.parent === this.currentFolder,
+      )
+      .sort((a, b) => a.order - b.order);
   }
 
   constructor() {
@@ -63,9 +65,6 @@ export class BookmarksStore {
   public async load() {
     await this.db.find({}).exec((err: any, items: IBookmark[]) => {
       if (err) return console.warn(err);
-
-      items = items.sort((a, b) => a.order - b.order);
-
       this.list = items;
     });
   }
