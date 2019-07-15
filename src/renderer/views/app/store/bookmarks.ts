@@ -2,6 +2,7 @@ import * as Datastore from 'nedb';
 import { observable, computed, action } from 'mobx';
 import { getPath } from '~/utils/paths';
 import { IBookmark } from '~/interfaces';
+import { promisify } from 'util';
 
 export class BookmarksStore {
   public db = new Datastore({
@@ -43,9 +44,10 @@ export class BookmarksStore {
     return this.list
       .filter(
         x =>
-          ((x.url && x.url.includes(this.searched)) ||
-            x.title.includes(this.searched)) &&
-          x.parent === this.currentFolder,
+          (this.searched !== '' &&
+            ((x.url && x.url.includes(this.searched)) ||
+              (x.title && x.title.includes(this.searched)))) ||
+          (this.searched === '' && x.parent === this.currentFolder),
       )
       .sort((a, b) => a.order - b.order);
   }
@@ -63,14 +65,40 @@ export class BookmarksStore {
   }
 
   public async load() {
-    await this.db.find({}).exec((err: any, items: IBookmark[]) => {
-      if (err) return console.warn(err);
-      this.list = items;
-    });
+    const cursor = this.db.find({});
+    const items: IBookmark[] = await promisify(cursor.exec.bind(cursor))();
+    let barFolder = items.find(x => x.static === 'main');
+    let otherFolder = items.find(x => x.static === 'other');
+
+    this.list = items;
+
+    if (!barFolder) {
+      barFolder = await this.addItem({
+        static: 'main',
+        isFolder: true,
+      });
+
+      for (const item of items) {
+        if (!item.static) {
+          await this.updateItem(item._id, { parent: barFolder._id });
+        }
+      }
+    }
+
+    if (!otherFolder) {
+      otherFolder = await this.addItem({
+        static: 'other',
+        isFolder: true,
+      });
+    }
   }
 
-  public addItem(item: IBookmark) {
-    return new Promise((resolve: (id: string) => void) => {
+  public addItem(item: IBookmark): Promise<IBookmark> {
+    return new Promise(resolve => {
+      if (item.parent === undefined) {
+        item.parent = null;
+      }
+
       const order = this.list.filter(x => x.parent === null).length;
       item.order = order;
 
@@ -78,7 +106,7 @@ export class BookmarksStore {
         if (err) return console.error(err);
 
         this.list.push(doc);
-        resolve(doc._id);
+        resolve(doc);
       });
     });
   }
@@ -88,6 +116,19 @@ export class BookmarksStore {
 
     this.db.remove({ _id: id }, err => {
       if (err) return console.warn(err);
+    });
+  }
+
+  public updateItem(id: string, change: IBookmark) {
+    return new Promise(resolve => {
+      const index = this.list.indexOf(this.list.find(x => x._id === id));
+      this.list[index] = { ...this.list[index], ...change };
+
+      this.db.update({ _id: id }, { $set: change }, {}, (err: any) => {
+        if (err) return console.error(err);
+
+        resolve();
+      });
     });
   }
 

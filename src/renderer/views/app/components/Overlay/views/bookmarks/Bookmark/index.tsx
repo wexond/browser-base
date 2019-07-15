@@ -48,6 +48,16 @@ const onMoreClick = (data: IBookmark) => (e: any) => {
 export const Bookmark = observer(({ data }: { data: IBookmark }) => {
   const selected = store.bookmarks.selectedItems.includes(data._id);
 
+  let title = data.title;
+
+  if (data.static === 'main') {
+    title = 'Bookmarks bar';
+  } else if (data.static === 'mobile') {
+    title = 'Mobile bookmarks';
+  } else if (data.static === 'other') {
+    title = 'Other bookmarks';
+  }
+
   return (
     <ListItem
       onDoubleClick={onDoubleClick(data)}
@@ -66,7 +76,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
               : 'none',
         }}
       />
-      <Title onClick={onTitleClick(data)}>{data.title}</Title>
+      <Title onClick={onTitleClick(data)}>{title}</Title>
       <Site>{data.url}</Site>
       <More onClick={onMoreClick(data)} />
     </ListItem>
