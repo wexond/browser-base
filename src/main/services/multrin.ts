@@ -1,14 +1,13 @@
 import { platform } from 'os';
 import * as fileIcon from 'extract-file-icon';
 import { ipcMain } from 'electron';
+import mouseHooks from 'mouse-hooks';
 
 import { ProcessWindow } from '../models';
 import { AppWindow } from '../windows';
 import { windowManager, Window } from 'node-window-manager';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 import { settings } from '..';
-
-const iohook = require('iohook');
 
 const containsPoint = (bounds: any, point: any) => {
   return (
@@ -79,7 +78,7 @@ export class Multrin {
       this.appWindow.webContents.send('select-tab', window.id);
     });
 
-    iohook.on('mousedown', () => {
+    mouseHooks.on('mouse-down', () => {
       if (this.appWindow.isMinimized()) return;
 
       setTimeout(() => {
@@ -94,7 +93,7 @@ export class Multrin {
       }, 50);
     });
 
-    iohook.on('mousedrag', async (e: any) => {
+    mouseHooks.on('mouse-move', async (e: any) => {
       if (
         this.draggedWindow &&
         this.selectedWindow &&
@@ -113,7 +112,7 @@ export class Multrin {
           this.detachWindow(this.selectedWindow);
           this.detached = true;
 
-          iohook.once('mouseup', () => {
+          mouseHooks.once('mouse-up', () => {
             setTimeout(() => {
               win.setBounds({
                 width: win.initialBounds.width,
@@ -181,7 +180,7 @@ export class Multrin {
       }
     });
 
-    iohook.on('mouseup', async () => {
+    mouseHooks.on('mouse-up', async () => {
       this.isMoving = false;
 
       if (this.isUpdatingContentBounds) {
