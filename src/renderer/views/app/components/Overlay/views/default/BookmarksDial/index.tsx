@@ -10,7 +10,7 @@ import { icons } from '~/renderer/constants';
 export const BookmarksDial = observer(() => {
   return (
     <Actions>
-      {store.bookmarks.list.map(item => (
+      {store.bookmarks.barItems.map(item => (
         <Bubble
           itemsPerRow={6}
           onClick={() => loadURL(item.url)}

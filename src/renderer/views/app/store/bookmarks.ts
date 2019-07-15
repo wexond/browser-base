@@ -62,7 +62,7 @@ export class BookmarksStore {
   @computed
   public get barItems() {
     return this.list.filter(x => {
-      const item = this.list.find(x => x.id === id);
+      const item = this.list.find(x => x.id === x._id);
       if (!item) return;
 
       if (item.parent === _bookmarksBar) return true;
