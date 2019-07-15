@@ -6,4 +6,5 @@ export interface IBookmark {
   hovered?: boolean;
   type?: 'item' | 'folder';
   parent?: string;
+  order?: number;
 }

@@ -64,12 +64,17 @@ export class BookmarksStore {
     await this.db.find({}).exec((err: any, items: IBookmark[]) => {
       if (err) return console.warn(err);
 
+      items = items.sort((a, b) => a.order - b.order);
+
       this.list = items;
     });
   }
 
   public addItem(item: IBookmark) {
     return new Promise((resolve: (id: string) => void) => {
+      const order = this.list.filter(x => x.parent === null).length;
+      item.order = order;
+
       this.db.insert(item, (err: any, doc: IBookmark) => {
         if (err) return console.error(err);
 
