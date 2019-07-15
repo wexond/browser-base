@@ -1,7 +1,7 @@
 import * as Datastore from 'nedb';
 import { observable, computed, action } from 'mobx';
 import { getPath } from '~/utils/paths';
-import { Bookmark } from '~/interfaces';
+import { IBookmark } from '~/interfaces';
 
 export class BookmarksStore {
   public db = new Datastore({
@@ -10,7 +10,7 @@ export class BookmarksStore {
   });
 
   @observable
-  public list: Bookmark[] = [];
+  public list: IBookmark[] = [];
 
   @observable
   public itemsLoaded = this.getDefaultLoaded();
@@ -30,12 +30,17 @@ export class BookmarksStore {
   @observable
   public menuVisible = false;
 
-  public currentBookmark: Bookmark;
+  @observable
+  public currentFolder: string = null;
+
+  public currentBookmark: IBookmark;
 
   @computed
   public get visibleItems() {
     return this.list.filter(
-      x => x.url.includes(this.searched) || x.title.includes(this.searched),
+      x =>
+        (x.url.includes(this.searched) || x.title.includes(this.searched)) &&
+        x.parent === this.currentFolder,
     );
   }
 
@@ -52,16 +57,16 @@ export class BookmarksStore {
   }
 
   public async load() {
-    await this.db.find({}).exec((err: any, items: Bookmark[]) => {
+    await this.db.find({}).exec((err: any, items: IBookmark[]) => {
       if (err) return console.warn(err);
 
       this.list = items;
     });
   }
 
-  public addItem(item: Bookmark) {
+  public addItem(item: IBookmark) {
     return new Promise((resolve: (id: string) => void) => {
-      this.db.insert(item, (err: any, doc: Bookmark) => {
+      this.db.insert(item, (err: any, doc: IBookmark) => {
         if (err) return console.error(err);
 
         this.list.push(doc);
