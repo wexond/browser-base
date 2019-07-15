@@ -39,6 +39,8 @@ export class BookmarksStore {
 
   public currentBookmark: IBookmark;
 
+  private _bookmarksBar: string;
+
   @computed
   public get visibleItems() {
     return this.list
@@ -50,6 +52,22 @@ export class BookmarksStore {
           (this.searched === '' && x.parent === this.currentFolder),
       )
       .sort((a, b) => a.order - b.order);
+  }
+
+  @computed
+  public get folders() {
+    return this.filter(x => x.isFolder);
+  }
+
+  @computed
+  public get barItems() {
+    return this.list.filter(x => {
+      const item = this.list.find(x => x.id === id);
+      if (!item) return;
+
+      if (item.parent === _bookmarksBar) return true;
+      return isBarItem(item.parent);
+    });
   }
 
   constructor() {
@@ -69,6 +87,7 @@ export class BookmarksStore {
     const items: IBookmark[] = await promisify(cursor.exec.bind(cursor))();
     let barFolder = items.find(x => x.static === 'main');
     let otherFolder = items.find(x => x.static === 'other');
+    let mobileFolder = items.find(x => x.static === 'mobile');
 
     this.list = items;
 
@@ -91,12 +110,26 @@ export class BookmarksStore {
         isFolder: true,
       });
     }
+
+    if (!mobileFolder) {
+      mobileFolder = await this.addItem({
+        static: 'mobile',
+        isFolder: true,
+      });
+    }
+
+    this._bookmarksBar = barFolder._id;
+    this.currentFolder = barFolder._id;
   }
 
   public addItem(item: IBookmark): Promise<IBookmark> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       if (item.parent === undefined) {
         item.parent = null;
+      }
+
+      if (item.parent === null && !item.static) {
+        return reject('Parent bookmark should be specified');
       }
 
       const order = this.list.filter(x => x.parent === null).length;

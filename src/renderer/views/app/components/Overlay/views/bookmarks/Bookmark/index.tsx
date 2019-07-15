@@ -78,7 +78,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
       />
       <Title onClick={onTitleClick(data)}>{title}</Title>
       <Site>{data.url}</Site>
-      <More onClick={onMoreClick(data)} />
+      {!data.static && <More onClick={onMoreClick(data)} />}
     </ListItem>
   );
 });
