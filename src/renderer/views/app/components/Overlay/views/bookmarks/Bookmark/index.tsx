@@ -8,14 +8,16 @@ import { ListItem } from '../../../components/ListItem';
 import { icons } from '~/renderer/constants';
 
 const onClick = (item: IBookmark) => (e: React.MouseEvent) => {
-  if (e.ctrlKey) {
-    const index = store.bookmarks.selectedItems.indexOf(item._id);
+  const index = store.bookmarks.selectedItems.indexOf(item._id);
 
-    if (index === -1) {
+  if (index === -1) {
+    if (e.ctrlKey) {
       store.bookmarks.selectedItems.push(item._id);
     } else {
-      store.bookmarks.selectedItems.splice(index, 1);
+      (store.bookmarks.selectedItems as any).replace([item._id]);
     }
+  } else {
+    store.bookmarks.selectedItems.splice(index, 1);
   }
 };
 
