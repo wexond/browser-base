@@ -11,7 +11,6 @@ export const StyledSearchBox = styled.div`
   margin-bottom: 16px;
   display: flex;
   flex-flow: column;
-  overflow: hidden;
   min-height: 42px;
   transition: 0.2s height;
   position: relative;

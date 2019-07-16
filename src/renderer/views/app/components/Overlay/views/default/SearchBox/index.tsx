@@ -8,6 +8,7 @@ import store from '~/renderer/views/app/store';
 import ToolbarButton from '../../../../Toolbar/ToolbarButton';
 import { Suggestions } from '../Suggestions';
 import { icons } from '~/renderer/constants';
+import AddBookmarkDialog from '../AddBookmarkDialog';
 
 const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
@@ -89,13 +90,17 @@ const onInput = (e: any) => {
 const onStarClick = async () => {
   const { selectedTab } = store.tabs;
 
-  await store.bookmarks.addItem({
-    title: selectedTab.title,
-    url: store.overlay.inputRef.current.value,
-    parent: null,
-    type: 'item',
-    favicon: selectedTab.favicon,
-  });
+  if (!store.overlay.isBookmarked) {
+    await store.bookmarks.addItem({
+      title: selectedTab.title,
+      url: store.overlay.inputRef.current.value,
+      parent: null,
+      type: 'item',
+      favicon: selectedTab.favicon,
+    });
+  }
+
+  store.addBookmark.visible = true;
 };
 
 export const SearchBox = observer(() => {
@@ -134,6 +139,7 @@ export const SearchBox = observer(() => {
           }}
         />
       </InputContainer>
+      <AddBookmarkDialog />
       <Suggestions visible={suggestionsVisible} />
     </StyledSearchBox>
   );

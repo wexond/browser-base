@@ -123,7 +123,11 @@ export class Dropdown extends React.PureComponent<Props, State> {
     const value = this.value;
 
     return (
-      <StyledDropdown style={style} onMouseDown={this.onMouseDown}>
+      <StyledDropdown
+        className="dropdown"
+        onMouseDown={this.onMouseDown}
+        style={style}
+      >
         <Value>{value}</Value>
         <DropIcon activated={visible} />
         <ContextMenu style={{ top: 32, width: '100%' }} visible={visible}>

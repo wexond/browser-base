@@ -83,8 +83,12 @@ export class OverlayStore {
   @computed
   public get isBookmarked() {
     if (!store.tabs.selectedTab) return false;
+    return this.bookmark != null;
+  }
 
-    return !!store.bookmarks.list.find(
+  @computed
+  public get bookmark() {
+    return store.bookmarks.list.find(
       x => x.url === store.tabs.selectedTab.url,
     );
   }

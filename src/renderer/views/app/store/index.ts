@@ -15,6 +15,7 @@ import { DownloadsStore } from './downloads';
 import { lightTheme } from '~/renderer/constants/themes';
 import { WeatherStore } from './weather';
 import { SettingsStore } from './settings';
+import { AddBookmarkStore } from './add-bookmark';
 // import { extensionsRenderer } from 'electron-extensions';
 
 export class Store {
@@ -30,6 +31,7 @@ export class Store {
   public extensions = new ExtensionsStore();
   public downloads = new DownloadsStore();
   public weather = new WeatherStore();
+  public addBookmark = new AddBookmarkStore();
 
   @observable
   public theme = lightTheme;
