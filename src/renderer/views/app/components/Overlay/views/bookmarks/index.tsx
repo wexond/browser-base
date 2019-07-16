@@ -57,7 +57,11 @@ const onNewFolderClick = () => {
 };
 
 const onPathItemClick = (item: IBookmark) => () => {
-  store.bookmarks.currentFolder = item._id;
+  if (item) {
+    store.bookmarks.currentFolder = item._id;
+  } else {
+    store.bookmarks.currentFolder = null;
+  }
 };
 
 const BookmarksList = observer(() => {
@@ -65,6 +69,9 @@ const BookmarksList = observer(() => {
     <Sections>
       <Content>
         <PathView>
+          <PathItem onClick={onPathItemClick(null)} key={null}>
+            Home
+          </PathItem>
           {store.bookmarks.path.map(item => (
             <PathItem onClick={onPathItemClick(item)} key={item._id}>
               {getBookmarkTitle(item)}
