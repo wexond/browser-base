@@ -48,7 +48,8 @@ export class BookmarksStore {
               (x.title && x.title.includes(this.searched)))) ||
           (this.searched === '' && x.parent === this.currentFolder),
       )
-      .sort((a, b) => a.order - b.order);
+      .slice()
+      .sort((a, b) => b.order - a.order);
   }
 
   @computed
@@ -149,11 +150,27 @@ export class BookmarksStore {
   }
 
   public removeItem(id: string) {
+    const item = this.list.find(x => x._id === id);
     this.list = this.list.filter(x => x._id !== id);
 
     this.db.remove({ _id: id }, err => {
       if (err) return console.warn(err);
     });
+
+    if (item.isFolder) {
+      this.list = this.list.filter(x => x.parent !== id);
+      const removed = this.list.filter(x => x.parent === id);
+
+      this.db.remove({ parent: id }, { multi: true }, err => {
+        if (err) return console.warn(err);
+      });
+
+      for (const i of removed) {
+        if (i.isFolder) {
+          this.removeItem(i._id);
+        }
+      }
+    }
   }
 
   public updateItem(id: string, change: IBookmark) {
