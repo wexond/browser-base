@@ -55,6 +55,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
       key={data._id}
       onClick={onClick(data)}
       selected={selected}
+      style={{ borderRadius: 0 }}
     >
       <Favicon
         style={{
