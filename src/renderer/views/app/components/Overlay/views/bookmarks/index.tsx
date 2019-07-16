@@ -109,7 +109,7 @@ export const Bookmarks = observer(() => {
         </NavigationDrawer>
         <BookmarksList />
         <SelectionDialog
-          visible={length > 0}
+          visible={length > 1}
           amount={length}
           onDeleteClick={onDeleteClick}
           onCancelClick={onCancelClick}
