@@ -35,6 +35,7 @@ export const Title = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   margin-right: 16px;
+  width: fit-content;
 
   &:hover {
     cursor: pointer;

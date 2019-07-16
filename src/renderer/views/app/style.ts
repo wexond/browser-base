@@ -1,6 +1,7 @@
 import { css } from 'styled-components';
 
 import { body2 } from '~/renderer/mixins';
+import { ITheme } from '~/interfaces';
 
 export const Style = css`
   body {

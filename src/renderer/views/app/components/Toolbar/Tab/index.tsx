@@ -28,7 +28,9 @@ const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
 };
 
 const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
-  const { pageX } = e;
+  const { pageX, button } = e;
+
+  if (button !== 0) return;
 
   if (!tab.isSelected) {
     tab.select();
@@ -227,6 +229,7 @@ export default observer(({ tab }: { tab: ITab }) => {
       onMouseLeave={onMouseLeave}
       visible={tab.tabGroupId === store.tabGroups.currentGroupId}
       ref={tab.ref}
+      title={tab.title}
     >
       <TabContainer
         style={{

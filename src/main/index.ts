@@ -16,10 +16,6 @@ import { DEFAULT_SETTINGS } from '~/constants';
 
 export const log = require('electron-log');
 
-const iohook = require('iohook');
-
-iohook.start();
-
 app.setPath('userData', resolve(homedir(), '.wexond'));
 log.transports.file.level = 'verbose';
 log.transports.file.file = resolve(app.getPath('userData'), 'log.log');

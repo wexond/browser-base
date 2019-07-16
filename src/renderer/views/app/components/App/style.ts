@@ -13,14 +13,6 @@ export const Line = styled.div`
   `}
 `;
 
-export const Screenshot = styled.div`
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  flex: 1;
-  position: relative;
-`;
-
 export const StyledApp = styled.div`
   display: flex;
   flex-flow: column;
