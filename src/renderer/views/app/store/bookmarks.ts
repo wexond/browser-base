@@ -34,9 +34,6 @@ export class BookmarksStore {
   @observable
   public currentFolder: string = null;
 
-  @observable
-  public path: IBookmark[] = [];
-
   public currentBookmark: IBookmark;
 
   private _bookmarksBar: string;
@@ -55,19 +52,26 @@ export class BookmarksStore {
   }
 
   @computed
+  public get path() {
+    return this.getFolderPath(this.currentFolder);
+  }
+
+  @computed
   public get folders() {
-    return this.filter(x => x.isFolder);
+    return this.list.filter(x => x.isFolder);
   }
 
   @computed
   public get barItems() {
-    return this.list.filter(x => {
-      const item = this.list.find(x => x.id === x._id);
-      if (!item) return;
+    return this.list.filter(x => this.isBarItem(x._id));
+  }
 
-      if (item.parent === _bookmarksBar) return true;
-      return isBarItem(item.parent);
-    });
+  private isBarItem(id: string): boolean {
+    const item = this.list.find(x => x._id === id);
+    if (!item) return false;
+
+    if (item.parent === this._bookmarksBar) return true;
+    return this.isBarItem(item.parent);
   }
 
   constructor() {
@@ -183,12 +187,7 @@ export class BookmarksStore {
     this.selectedItems = [];
   }
 
-  public goToFolder(id: string) {
-    this.currentFolder = id;
-    this.path = this.getFolderPath(id);
-  }
-
-  public getFolderPath(parent: string) {
+  private getFolderPath(parent: string) {
     const parentFolder = this.list.find(x => x._id === parent);
     let path: IBookmark[] = [];
 

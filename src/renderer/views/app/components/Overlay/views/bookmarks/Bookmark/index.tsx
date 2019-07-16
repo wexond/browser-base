@@ -6,6 +6,7 @@ import { IBookmark } from '~/interfaces';
 import store from '~/renderer/views/app/store';
 import { ListItem } from '../../../components/ListItem';
 import { icons } from '~/renderer/constants';
+import { getBookmarkTitle } from '~/renderer/views/app/utils/bookmarks';
 
 const onClick = (item: IBookmark) => (e: React.MouseEvent) => {
   const index = store.bookmarks.selectedItems.indexOf(item._id);
@@ -23,7 +24,7 @@ const onClick = (item: IBookmark) => (e: React.MouseEvent) => {
 
 const onDoubleClick = (item: IBookmark) => (e: React.MouseEvent) => {
   if (item.isFolder) {
-    store.bookmarks.goToFolder(item._id);
+    store.bookmarks.currentFolder = item._id;
   }
 };
 
@@ -48,16 +49,6 @@ const onMoreClick = (data: IBookmark) => (e: any) => {
 export const Bookmark = observer(({ data }: { data: IBookmark }) => {
   const selected = store.bookmarks.selectedItems.includes(data._id);
 
-  let title = data.title;
-
-  if (data.static === 'main') {
-    title = 'Bookmarks bar';
-  } else if (data.static === 'mobile') {
-    title = 'Mobile bookmarks';
-  } else if (data.static === 'other') {
-    title = 'Other bookmarks';
-  }
-
   return (
     <ListItem
       onDoubleClick={onDoubleClick(data)}
@@ -76,7 +67,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
               : 'none',
         }}
       />
-      <Title onClick={onTitleClick(data)}>{title}</Title>
+      <Title onClick={onTitleClick(data)}>{getBookmarkTitle(data)}</Title>
       <Site>{data.url}</Site>
       {!data.static && <More onClick={onMoreClick(data)} />}
     </ListItem>

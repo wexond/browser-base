@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 
 import store from '~/renderer/views/app/store';
 import { IBookmark } from '~/interfaces';
-import { BookmarkSection } from './style';
+import { BookmarkSection, PathItem, PathView } from './style';
 import { Content, Scrollable2, Sections } from '../../style';
 import { Container } from '../..';
 import { NavigationDrawer } from '../../components/NavigationDrawer';
@@ -14,6 +14,7 @@ import {
 } from '~/renderer/components/ContextMenu';
 import { icons } from '~/renderer/constants';
 import { Bookmark } from './Bookmark';
+import { getBookmarkTitle } from '~/renderer/views/app/utils/bookmarks';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -51,15 +52,26 @@ const onNewFolderClick = () => {
   store.bookmarks.addItem({
     title: 'New folder',
     isFolder: true,
-    parent: null,
+    parent: store.bookmarks.currentFolder,
   });
+};
+
+const onPathItemClick = (item: IBookmark) => () => {
+  store.bookmarks.currentFolder = item._id;
 };
 
 const BookmarksList = observer(() => {
   return (
     <Sections>
       <Content>
-        <BookmarkSection style={{ marginTop: 56 }}>
+        <PathView>
+          {store.bookmarks.path.map(item => (
+            <PathItem onClick={onPathItemClick(item)} key={item._id}>
+              {getBookmarkTitle(item)}
+            </PathItem>
+          ))}
+        </PathView>
+        <BookmarkSection>
           {store.bookmarks.visibleItems.map(data => (
             <Bookmark data={data} key={data._id} />
           ))}
@@ -88,7 +100,7 @@ export const Bookmarks = observer(() => {
             New folder
           </NavigationDrawer.Item>
         </NavigationDrawer>
-        {store.bookmarks.visibleItems.length > 0 && <BookmarksList />}
+        <BookmarksList />
         <SelectionDialog
           visible={length > 0}
           amount={length}
