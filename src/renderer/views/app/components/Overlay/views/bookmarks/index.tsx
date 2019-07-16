@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 
 import store from '~/renderer/views/app/store';
 import { IBookmark } from '~/interfaces';
-import { BookmarkSection } from './style';
+import { BookmarkSection, PathItem, PathView } from './style';
 import { Content, Scrollable2, Sections } from '../../style';
 import { Container } from '../..';
 import { NavigationDrawer } from '../../components/NavigationDrawer';
@@ -14,6 +14,7 @@ import {
 } from '~/renderer/components/ContextMenu';
 import { icons } from '~/renderer/constants';
 import { Bookmark } from './Bookmark';
+import { getBookmarkTitle } from '~/renderer/views/app/utils/bookmarks';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -47,11 +48,37 @@ const onRemoveClick = (item: IBookmark) => () => {
   store.bookmarks.removeItem(item._id);
 };
 
+const onNewFolderClick = () => {
+  store.bookmarks.addItem({
+    title: 'New folder',
+    isFolder: true,
+    parent: store.bookmarks.currentFolder,
+  });
+};
+
+const onPathItemClick = (item: IBookmark) => () => {
+  if (item) {
+    store.bookmarks.currentFolder = item._id;
+  } else {
+    store.bookmarks.currentFolder = null;
+  }
+};
+
 const BookmarksList = observer(() => {
   return (
     <Sections>
       <Content>
-        <BookmarkSection style={{ marginTop: 56 }}>
+        <PathView>
+          <PathItem onClick={onPathItemClick(null)} key={null}>
+            Home
+          </PathItem>
+          {store.bookmarks.path.map(item => (
+            <PathItem onClick={onPathItemClick(item)} key={item._id}>
+              {getBookmarkTitle(item)}
+            </PathItem>
+          ))}
+        </PathView>
+        <BookmarkSection>
           {store.bookmarks.visibleItems.map(data => (
             <Bookmark data={data} key={data._id} />
           ))}
@@ -72,10 +99,17 @@ export const Bookmarks = observer(() => {
           search
           onSearchInput={onInput}
           onBackClick={onBackClick}
-        />
-        {store.bookmarks.visibleItems.length > 0 && <BookmarksList />}
+        >
+          <NavigationDrawer.Item
+            icon={icons.newFolder}
+            onClick={onNewFolderClick}
+          >
+            New folder
+          </NavigationDrawer.Item>
+        </NavigationDrawer>
+        <BookmarksList />
         <SelectionDialog
-          visible={length > 0}
+          visible={length > 1}
           amount={length}
           onDeleteClick={onDeleteClick}
           onCancelClick={onCancelClick}

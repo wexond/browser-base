@@ -4,6 +4,8 @@ export interface IBookmark {
   url?: string;
   favicon?: string;
   hovered?: boolean;
-  type?: 'item' | 'folder';
+  isFolder?: boolean;
   parent?: string;
+  order?: number;
+  static?: 'mobile' | 'main' | 'other';
 }
