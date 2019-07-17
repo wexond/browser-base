@@ -9,7 +9,6 @@ import { Title, Row, Control, Header } from '../style';
 import { onSwitchChange } from '~/renderer/views/app/utils';
 
 const onThemeChange = (value: 'Light' | 'Dark') => {
-  console.log(value);
   store.settings.object.darkTheme = value === 'Dark';
   store.theme = value === 'Dark' ? darkTheme : lightTheme;
   store.settings.save();

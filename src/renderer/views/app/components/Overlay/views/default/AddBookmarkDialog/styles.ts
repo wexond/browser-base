@@ -22,7 +22,7 @@ export const StyledDialog = styled.div`
   `}
 
   & .textfield, .dropdown {
-    width: 100%;
+    width: 232px;
     margin-left: auto;
   }
 `;
@@ -43,7 +43,6 @@ export const Row = styled.div`
 
 export const Label = styled.div`
   font-size: 14px;
-  margin-right: 16px;
 `;
 
 export const Buttons = styled.div`
