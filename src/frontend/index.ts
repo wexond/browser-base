@@ -47,6 +47,7 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: false,
+      partition: 'persist:view', // needed to display webcame image
       preload: buildExportPath('exportNode.js'),
     },
   })
