@@ -42,7 +42,7 @@ export const DropIcon = styled.div`
 export const Value = styled.div`
   font-size: 13px;
   margin-left: 8px;
-  color: rgba(0, 0, 0, ${transparency.text.high});
+  pointer-events: none;
 
   ${({ theme }: { theme: ITheme }) => css`
     color: ${theme['control.valueColor']};

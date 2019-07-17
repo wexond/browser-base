@@ -9,6 +9,7 @@ import { Title, Row, Control, Header } from '../style';
 import { onSwitchChange } from '~/renderer/views/app/utils';
 
 const onThemeChange = (value: 'Light' | 'Dark') => {
+  console.log(value);
   store.settings.object.darkTheme = value === 'Dark';
   store.theme = value === 'Dark' ? darkTheme : lightTheme;
   store.settings.save();
@@ -22,8 +23,8 @@ const ThemeVariant = () => {
       <Title>Theme variant</Title>
       <Control>
         <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
-          <Dropdown.Item>Light</Dropdown.Item>
-          <Dropdown.Item>Dark</Dropdown.Item>
+          <Dropdown.Item value="Light">Light</Dropdown.Item>
+          <Dropdown.Item value="Dark">Dark</Dropdown.Item>
         </Dropdown>
       </Control>
     </Row>

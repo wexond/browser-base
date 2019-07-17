@@ -8,6 +8,7 @@ import store from '~/renderer/views/app/store';
 import ToolbarButton from '../../../../Toolbar/ToolbarButton';
 import { Suggestions } from '../Suggestions';
 import { icons } from '~/renderer/constants';
+import AddBookmarkDialog from '../AddBookmarkDialog';
 
 const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
@@ -86,16 +87,25 @@ const onInput = (e: any) => {
   store.overlay.searchBoxValue = e.currentTarget.value;
 };
 
-const onStarClick = async () => {
+const onStarClick = async (e: React.MouseEvent) => {
+  e.stopPropagation();
+
+  if (store.addBookmark.visible) {
+    return store.addBookmark.hide();
+  }
+
   const { selectedTab } = store.tabs;
 
-  await store.bookmarks.addItem({
-    title: selectedTab.title,
-    url: store.overlay.inputRef.current.value,
-    parent: null,
-    type: 'item',
-    favicon: selectedTab.favicon,
-  });
+  if (!store.overlay.isBookmarked) {
+    await store.bookmarks.addItem({
+      title: selectedTab.title,
+      url: store.overlay.inputRef.current.value,
+      parent: store.bookmarks.folders.find(r => r.static === 'main')._id,
+      favicon: selectedTab.favicon,
+    });
+  }
+
+  store.addBookmark.show();
 };
 
 export const SearchBox = observer(() => {
@@ -124,6 +134,7 @@ export const SearchBox = observer(() => {
           invert
           icon={store.overlay.isBookmarked ? icons.starFilled : icons.star}
           onClick={onStarClick}
+          onMouseDown={e => e.stopPropagation()}
           style={{
             marginRight: 8,
             display:
@@ -134,6 +145,7 @@ export const SearchBox = observer(() => {
           }}
         />
       </InputContainer>
+      <AddBookmarkDialog />
       <Suggestions visible={suggestionsVisible} />
     </StyledSearchBox>
   );

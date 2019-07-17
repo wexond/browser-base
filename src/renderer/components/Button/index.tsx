@@ -21,6 +21,7 @@ export const Button = ({
   style,
 }: Props) => (
   <StyledButton
+    className="button"
     background={background}
     foreground={foreground}
     type={type}

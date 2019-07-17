@@ -112,7 +112,11 @@ export class Textfield extends React.PureComponent<Props, State> {
     const primaryColor = error ? ERROR_COLOR : color;
 
     return (
-      <StyledTextfield onClick={this.onClick} style={style}>
+      <StyledTextfield
+        className="textfield"
+        onClick={this.onClick}
+        style={style}
+      >
         <Input
           ref={this.inputRef}
           type={inputType}

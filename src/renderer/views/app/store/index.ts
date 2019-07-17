@@ -15,7 +15,8 @@ import { DownloadsStore } from './downloads';
 import { lightTheme } from '~/renderer/constants/themes';
 import { WeatherStore } from './weather';
 import { SettingsStore } from './settings';
-import { extensionsRenderer } from 'electron-extensions';
+import { AddBookmarkStore } from './add-bookmark';
+// import { extensionsRenderer } from 'electron-extensions';
 
 export class Store {
   public history = new HistoryStore();
@@ -30,6 +31,7 @@ export class Store {
   public extensions = new ExtensionsStore();
   public downloads = new DownloadsStore();
   public weather = new WeatherStore();
+  public addBookmark = new AddBookmarkStore();
 
   @observable
   public theme = lightTheme;
@@ -101,7 +103,7 @@ export class Store {
       },
     );
 
-    extensionsRenderer.on(
+    /*extensionsRenderer.on(
       'set-badge-text',
       (extensionId: string, details: chrome.browserAction.BadgeTextDetails) => {
         if (details.tabId) {
@@ -123,7 +125,7 @@ export class Store {
             });
         }
       },
-    );
+    );*/
 
     ipcRenderer.on('find', () => {
       const tab = this.tabs.selectedTab;

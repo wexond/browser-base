@@ -3,7 +3,7 @@ import { resolve } from 'path';
 import * as fs from 'fs';
 
 import { IBrowserAction } from '../models';
-import { extensionsRenderer } from 'electron-extensions';
+// import { extensionsRenderer } from 'electron-extensions';
 
 export class ExtensionsStore {
   @observable
@@ -34,7 +34,7 @@ export class ExtensionsStore {
   }
 
   public load() {
-    const extensions = extensionsRenderer.getExtensions();
+/*    const extensions = extensionsRenderer.getExtensions();
 
     for (const key in extensions) {
       const { manifest, path, id } = extensions[key];
@@ -65,6 +65,6 @@ export class ExtensionsStore {
 
         this.defaultBrowserActions.push(browserAction);
       }
-    }
+    }*/
   }
 }

@@ -1,7 +1,7 @@
 import { ipcMain, app, Menu, session } from 'electron';
 import { resolve, extname } from 'path';
 import { platform, homedir } from 'os';
-import { ExtensibleSession } from 'electron-extensions';
+// import { ExtensibleSession } from 'electron-extensions';
 
 import { AppWindow } from './windows/app';
 import { runAdblockService } from './services';
@@ -145,21 +145,22 @@ app.on('ready', async () => {
     });
   });
 
-  const extensions = new ExtensibleSession(viewSession);
-  extensions.addWindow(appWindow);
-
-  const extensionsPath = getPath('extensions');
-  const dirs = await promises.readdir(extensionsPath);
-
-  for (const dir of dirs) {
-    const extension = await extensions.loadExtension(
-      resolve(extensionsPath, dir),
-    );
-    extension.backgroundPage.webContents.openDevTools();
-  }
+  /* const extensions = new ExtensibleSession(viewSession);
+   extensions.addWindow(appWindow);
+ 
+   const extensionsPath = getPath('extensions');
+   const dirs = await promises.readdir(extensionsPath);
+ 
+   for (const dir of dirs) {
+     const extension = await extensions.loadExtension(
+       resolve(extensionsPath, dir),
+     );
+     extension.backgroundPage.webContents.openDevTools();
+   }
+ 
+   runAdblockService(viewSession);*/
 
   runAutoUpdaterService(appWindow);
-  runAdblockService(viewSession);
 });
 
 app.on('window-all-closed', () => {
