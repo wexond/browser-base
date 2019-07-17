@@ -18,6 +18,7 @@ export class View extends BrowserView {
         partition: 'persist:view',
         plugins: true,
         additionalArguments: [`--window-id=${appWindow.id}`],
+        nativeWindowOpen: true,
       },
     });
 
@@ -77,7 +78,6 @@ export class View extends BrowserView {
         additionalFeatures,
         referrer,
       ) => {
-        console.log(additionalFeatures, options);
         if (disposition === 'new-window') {
           if (frameName === '_self') {
             e.preventDefault();

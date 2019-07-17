@@ -59,13 +59,19 @@ export default observer(() => {
         </Dropdown>
       </Row>
       <Buttons>
-        <Button onClick={onDone}>DONE</Button>
+        <Button onClick={onDone}>Done</Button>
         <Button
           onClick={onRemove}
-          type="outlined"
-          foreground={colors.blue['500']}
+          background={
+            store.theme['overlay.foreground'] === 'light'
+              ? 'rgba(255, 255, 255, 0.08)'
+              : 'rgba(0, 0, 0, 0.08)'
+          }
+          foreground={
+            store.theme['overlay.foreground'] === 'light' ? 'white' : 'black'
+          }
         >
-          REMOVE
+          Remove
         </Button>
       </Buttons>
     </StyledDialog>

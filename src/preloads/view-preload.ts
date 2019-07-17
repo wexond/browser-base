@@ -1,4 +1,4 @@
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer, remote, webFrame } from 'electron';
 
 const tabId = remote.getCurrentWebContents().id;
 
@@ -20,6 +20,8 @@ window.addEventListener('mouseup', e => {
     goForward();
   }
 });
+
+webFrame.executeJavaScript('window', false, (w: any) => {});
 
 let beginningScrollLeft: number = null;
 let beginningScrollRight: number = null;
