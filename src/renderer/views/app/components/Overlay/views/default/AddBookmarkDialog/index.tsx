@@ -12,13 +12,22 @@ const onMouseDown = (e: React.MouseEvent) => {
   e.stopPropagation();
 };
 
+const onDone = () => {
+  store.addBookmark.hide();
+};
+
+const onRemove = () => {
+  store.bookmarks.removeItem(store.overlay.bookmark._id);
+  store.addBookmark.hide();
+};
+
 export default observer(() => {
   return (
     <StyledDialog visible={store.addBookmark.visible} onMouseDown={onMouseDown}>
       <Title>Add bookmark</Title>
       <Row>
         <Label>Name</Label>
-        <Input className="textfield" />
+        <Input ref={store.addBookmark.titleRef} className="textfield" />
       </Row>
       <Row>
         <Label>Folder</Label>
@@ -29,8 +38,12 @@ export default observer(() => {
         </Dropdown>
       </Row>
       <Buttons>
-        <Button>DONE</Button>
-        <Button type="outlined" foreground={colors.blue['500']}>
+        <Button onClick={onDone}>DONE</Button>
+        <Button
+          onClick={onRemove}
+          type="outlined"
+          foreground={colors.blue['500']}
+        >
           REMOVE
         </Button>
       </Buttons>

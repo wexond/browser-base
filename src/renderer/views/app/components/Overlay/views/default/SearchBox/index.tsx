@@ -95,12 +95,12 @@ const onStarClick = async () => {
       title: selectedTab.title,
       url: store.overlay.inputRef.current.value,
       parent: null,
-      type: 'item',
+      static: 'main',
       favicon: selectedTab.favicon,
     });
   }
 
-  store.addBookmark.visible = true;
+  store.addBookmark.show();
 };
 
 export const SearchBox = observer(() => {

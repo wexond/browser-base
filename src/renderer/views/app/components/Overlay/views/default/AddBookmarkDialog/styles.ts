@@ -12,7 +12,7 @@ export const StyledDialog = styled.div`
   right: 8px;
   padding: 16px 16px 0px;
   box-shadow: ${shadows(3)};
-  
+
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
@@ -20,6 +20,7 @@ export const StyledDialog = styled.div`
 
   & .textfield, .dropdown {
     width: 100%;
+    margin-left: auto;
   }
 `;
 
