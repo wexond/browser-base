@@ -10,6 +10,7 @@ import {
   Header,
 } from './style';
 import { NavigationDrawerItem } from './NavigationDrawerItem';
+import { translate } from '~/renderer/app/utils/translate';
 
 const onBack = (cb: (e?: React.MouseEvent<HTMLDivElement>) => void) => (
   e: React.MouseEvent<HTMLDivElement>,
@@ -44,7 +45,7 @@ export const NavigationDrawer = ({
       </Header>
       {search && (
         <Search>
-          <Input placeholder="Search" onInput={onSearchInput} />
+          <Input placeholder={translate('Search')} onInput={onSearchInput} />
         </Search>
       )}
       <MenuItems>{children}</MenuItems>

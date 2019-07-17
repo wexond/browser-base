@@ -1,0 +1,63 @@
+{
+  "Always on top": {
+    "message": "Toujours devant"
+  },
+  "Dark mode": {
+    "message": "Mode sombre"
+  },
+  "Last week": {
+    "message": "Semaine dernière"
+  },
+  "Top Sites": {
+    "message": "Meilleurs sites"
+  },
+  "All": {
+    "message": "Tout"
+  },
+  "Bookmarks": {
+    "message": "Signets"
+  },
+  "Clean": {
+    "message": "Nettoyer"
+  },
+  "Clear browsing data": {
+    "message": "Effacer les données de navigation"
+  },
+  "Color": {
+    "description": "couleur.",
+    "message": "couleur"
+  },
+  "copy": {
+    "message": "copier"
+  },
+  "cut": {
+    "message": "couper"
+  },
+  "History": {
+    "message": "Historique"
+  },
+  "Last month": {
+    "message": "Mois dernier"
+  },
+  "Older": {
+    "message": "Plus vieux"
+  },
+  "past": {
+    "message": "coller"
+  },
+  "Search": {
+    "message": "Recherche"
+  },
+  "Search or type in URL": {
+    "message": "Rechercher ou entrée une adresse web"
+  },
+  "Shield": {
+    "message": "Pub blocker"
+  },
+  "Today": {
+    "message": "Aujourd'hui"
+  },
+  "Yesterday": {
+    "message": "Hier"
+  }
+}

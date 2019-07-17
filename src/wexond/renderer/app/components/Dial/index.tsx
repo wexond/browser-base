@@ -6,6 +6,7 @@ import { ContextMenu, ContextMenuItem } from '../ContextMenu';
 import { DropArrow, Title } from '../Overlay/style';
 import { BookmarksDial } from '../BookmarksDial';
 import { TopSites } from '../TopSites';
+import { translate } from '~/renderer/app/utils/translate';
 
 const changeDialType = (type: 'top-sites' | 'bookmarks') => () => {
   store.settings.dialType = type;
@@ -29,7 +30,7 @@ export const Dial = observer(() => {
             onClick={onDialTitleClick}
             style={{ marginBottom: 24, cursor: 'pointer' }}
           >
-            {dialType === 'bookmarks' ? 'Bookmarks' : 'Top Sites'}
+            {translate(dialType === 'bookmarks' ? 'Bookmarks' : 'Top Sites')}
             <DropArrow />
             <ContextMenu
               style={{ top: 42 }}
@@ -40,14 +41,14 @@ export const Dial = observer(() => {
                 selected={dialType === 'top-sites'}
                 onClick={changeDialType('top-sites')}
               >
-                Top Sites
+                {translate('Top Sites')}
               </ContextMenuItem>
               <ContextMenuItem
                 icon={icons.bookmarks}
                 selected={dialType === 'bookmarks'}
                 onClick={changeDialType('bookmarks')}
               >
-                Bookmarks
+                {translate('Bookmarks')}
               </ContextMenuItem>
             </ContextMenu>
           </Title>

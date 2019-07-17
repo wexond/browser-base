@@ -11,6 +11,7 @@ import { Content, Container, Scrollable } from '../Overlay/style';
 import { SelectionDialog } from '../SelectionDialog';
 import { icons } from '../../constants';
 import { ipcRenderer } from 'electron';
+import { translate } from '~/renderer/app/utils/translate';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -88,20 +89,20 @@ export const History = observer(() => {
     >
       <Scrollable onScroll={onScroll} ref={scrollRef}>
         <NavigationDrawer
-          title="History"
+          title={translate('History')}
           search
           onSearchInput={onInput}
           onBackClick={onBackClick}
         >
-          <MenuItem range="all">All</MenuItem>
-          <MenuItem range="today">Today</MenuItem>
-          <MenuItem range="yesterday">Yesterday</MenuItem>
-          <MenuItem range="last-week">Last week</MenuItem>
-          <MenuItem range="last-month">Last month</MenuItem>
-          <MenuItem range="older">Older</MenuItem>
+          <MenuItem range="all">{translate('All')}</MenuItem>
+          <MenuItem range="today">{translate('Today')}</MenuItem>
+          <MenuItem range="yesterday">{translate('Yesterday')}</MenuItem>
+          <MenuItem range="last-week">{translate('Last week')}</MenuItem>
+          <MenuItem range="last-month">{translate('Last month')}</MenuItem>
+          <MenuItem range="older">{translate('Older')}</MenuItem>
           <div style={{ flex: 1 }} />
           <NavigationDrawer.Item icon={icons.trash} onClick={onClearClick}>
-            Clear browsing data
+            {translate('Clear browsing data')}
           </NavigationDrawer.Item>
         </NavigationDrawer>
         <HistorySections />
