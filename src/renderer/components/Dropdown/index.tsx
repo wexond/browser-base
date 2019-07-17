@@ -4,6 +4,30 @@ import { colors } from '~/renderer/constants';
 import { StyledDropdown, DropIcon, Value } from './styles';
 import { ContextMenu, ContextMenuItem } from '../ContextMenu';
 
+const Item = ({
+  selected,
+  value,
+  onClick,
+  onMouseDown,
+  children,
+}: {
+  selected: boolean;
+  value: any;
+  onClick: (e: React.MouseEvent) => void;
+  onMouseDown: (e: React.MouseEvent) => void;
+  children?: any;
+}) => {
+  return (
+    <ContextMenuItem
+      selected={selected}
+      onClick={onClick}
+      onMouseDown={onMouseDown}
+    >
+      {children}
+    </ContextMenuItem>
+  );
+};
+
 interface Props {
   color?: string;
   defaultValue?: string;
@@ -24,7 +48,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
     color: colors.blue['500'],
   };
 
-  static Item = ContextMenuItem;
+  static Item = Item;
 
   public state: State = {
     activated: false,
@@ -91,8 +115,8 @@ export class Dropdown extends React.PureComponent<Props, State> {
     return !error;
   }
 
-  public onItemClick = (label: string) => () => {
-    this.value = label;
+  public onItemClick = (value: string) => () => {
+    this.value = value;
     this.hide();
   };
 
@@ -132,10 +156,10 @@ export class Dropdown extends React.PureComponent<Props, State> {
         <DropIcon activated={visible} />
         <ContextMenu style={{ top: 32, width: '100%' }} visible={visible}>
           {React.Children.map(children, child => {
-            const label = child.props.children;
+            const itemValue = child.props.value;
             return React.cloneElement(child, {
-              selected: this.value === label,
-              onClick: this.onItemClick(label),
+              selected: this.value === itemValue,
+              onClick: this.onItemClick(itemValue),
               onMouseDown: this.onItemMouseDown,
               dense: true,
             });
