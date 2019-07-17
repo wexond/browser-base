@@ -59,13 +59,13 @@ export default observer(() => {
         </Dropdown>
       </Row>
       <Buttons>
-        <Button onClick={onDone}>DONE</Button>
+        <Button onClick={onDone}>Done</Button>
         <Button
           onClick={onRemove}
           type="outlined"
           foreground={colors.blue['500']}
         >
-          REMOVE
+          Remove
         </Button>
       </Buttons>
     </StyledDialog>
