@@ -52,4 +52,5 @@ export const StyledButton = styled.div`
 export const StyledLabel = styled.div`
   z-index: 1;
   font-size: 13px;
+  pointer-events: none;
 `;
