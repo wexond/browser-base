@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 import { shadows, robotoRegular } from '~/renderer/mixins';
 import { EASING_FUNCTION } from '~/renderer/constants';
+import { ITheme } from '~/interfaces';
 
 export const StyledDialog = styled.div`
   width: 288px;
@@ -15,10 +16,11 @@ export const StyledDialog = styled.div`
   box-shadow: ${shadows(3)};
   transition: 0.15s opacity, 0.15s margin-top ${EASING_FUNCTION};
 
-  ${({ visible }: { visible: boolean }) => css`
+  ${({ visible, theme }: { visible: boolean, theme: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
     margin-top: ${visible ? 0 : -16}px;
+    background-color: ${theme['overlay.dialog.backgroundColor']};
   `}
 
   & .textfield, .dropdown {
@@ -29,9 +31,12 @@ export const StyledDialog = styled.div`
 
 export const Title = styled.div`
   font-size: 16px;
-  color: #000;
   padding-bottom: 4px;
   ${robotoRegular()};
+
+  ${({ theme }: { theme: ITheme }) => css`
+    color: ${theme['overlay.foreground'] === 'light' ? '#fff' : '#000'};
+  `}
 `;
 
 export const Row = styled.div`

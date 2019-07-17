@@ -17,6 +17,7 @@ export const Input = styled.input`
 
   ${({ theme }: { theme: ITheme }) => css`
     background-color: ${theme['control.backgroundColor']};
+    color: ${theme['control.valueColor']};
 
     &:hover {
       background-color: ${theme['control.hover.backgroundColor']};
