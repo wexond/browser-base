@@ -17,8 +17,10 @@ const onDone = () => {
   store.addBookmark.hide();
 };
 
-const onChange = (value: any) => {
-  store.overlay.bookmark.parent = value;
+const onChange = (parent: string) => {
+  store.bookmarks.updateItem(store.overlay.bookmark._id, {
+    parent,
+  });
 };
 
 const onRemove = () => {
@@ -26,15 +28,25 @@ const onRemove = () => {
   store.addBookmark.hide();
 };
 
-export default observer(() => {
-  console.log(store.bookmarks.folders);
+const onBlur = () => {
+  const input = store.addBookmark.titleRef.current;
 
+  store.bookmarks.updateItem(store.overlay.bookmark._id, {
+    title: input.value,
+  });
+};
+
+export default observer(() => {
   return (
     <StyledDialog visible={store.addBookmark.visible} onMouseDown={onMouseDown}>
       <Title>Add bookmark</Title>
       <Row>
         <Label>Name</Label>
-        <Input ref={store.addBookmark.titleRef} className="textfield" />
+        <Input
+          className="textfield"
+          ref={store.addBookmark.titleRef}
+          onBlur={onBlur}
+        />
       </Row>
       <Row>
         <Label>Folder</Label>
