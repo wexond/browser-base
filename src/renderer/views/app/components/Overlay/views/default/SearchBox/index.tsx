@@ -94,8 +94,7 @@ const onStarClick = async () => {
     await store.bookmarks.addItem({
       title: selectedTab.title,
       url: store.overlay.inputRef.current.value,
-      parent: null,
-      static: 'main',
+      parent: store.bookmarks.folders.find(r => r.static === 'main')._id,
       favicon: selectedTab.favicon,
     });
   }
