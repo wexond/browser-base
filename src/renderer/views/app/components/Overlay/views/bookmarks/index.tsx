@@ -65,6 +65,8 @@ const onPathItemClick = (item: IBookmark) => () => {
 };
 
 const BookmarksList = observer(() => {
+  const items = store.bookmarks.visibleItems;
+
   return (
     <Sections>
       <Content>
@@ -78,11 +80,13 @@ const BookmarksList = observer(() => {
             </PathItem>
           ))}
         </PathView>
-        <BookmarkSection>
-          {store.bookmarks.visibleItems.map(data => (
-            <Bookmark data={data} key={data._id} />
-          ))}
-        </BookmarkSection>
+        {!!items.length && (
+          <BookmarkSection>
+            {items.map(data => (
+              <Bookmark data={data} key={data._id} />
+            ))}
+          </BookmarkSection>
+        )}
       </Content>
     </Sections>
   );
