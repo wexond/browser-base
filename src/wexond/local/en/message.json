@@ -1,18 +1,9 @@
 {
-  "Always on top": {
-    "message": "Always on top"
-  },
-  "Dark mode": {
-    "message": "Dark mode"
-  },
-  "Last week": {
-    "message": "Last week"
-  },
-  "Top Sites": {
-    "message": "Top Sites"
-  },
   "All": {
     "message": "All"
+  },
+  "Always on top": {
+    "message": "Always on top"
   },
   "Bookmarks": {
     "message": "Bookmarks"
@@ -25,13 +16,10 @@
   },
   "Color": {
     "description": "Color",
-    "message": "color"
+    "message": "Color"
   },
-  "copy": {
-    "message": "copy"
-  },
-  "cut": {
-    "message": "cut"
+  "Dark mode": {
+    "message": "Dark mode"
   },
   "History": {
     "message": "History"
@@ -39,11 +27,11 @@
   "Last month": {
     "message": "Last month"
   },
+  "Last week": {
+    "message": "Last week"
+  },
   "Older": {
     "message": "Older"
-  },
-  "past": {
-    "message": "past"
   },
   "Search": {
     "message": "Search"
@@ -52,12 +40,24 @@
     "message": "Search or type in URL"
   },
   "Shield": {
-    "message": "No pub"
+    "message": "Ad blocker"
   },
   "Today": {
     "message": "Today"
   },
+  "Top Sites": {
+    "message": "Top Sites"
+  },
   "Yesterday": {
     "message": "Yesterday"
+  },
+  "copy": {
+    "message": "copy"
+  },
+  "cut": {
+    "message": "cut"
+  },
+  "paste": {
+    "message": "paste"
   }
 }

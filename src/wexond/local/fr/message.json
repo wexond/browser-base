@@ -1,18 +1,9 @@
 {
-  "Always on top": {
-    "message": "Toujours devant"
-  },
-  "Dark mode": {
-    "message": "Mode sombre"
-  },
-  "Last week": {
-    "message": "Semaine dernière"
-  },
-  "Top Sites": {
-    "message": "Meilleurs sites"
-  },
   "All": {
     "message": "Tout"
+  },
+  "Always on top": {
+    "message": "Toujours devant"
   },
   "Bookmarks": {
     "message": "Signets"
@@ -25,13 +16,10 @@
   },
   "Color": {
     "description": "couleur.",
-    "message": "couleur"
+    "message": "Couleur"
   },
-  "copy": {
-    "message": "copier"
-  },
-  "cut": {
-    "message": "couper"
+  "Dark mode": {
+    "message": "Mode sombre"
   },
   "History": {
     "message": "Historique"
@@ -39,11 +27,11 @@
   "Last month": {
     "message": "Mois dernier"
   },
+  "Last week": {
+    "message": "Semaine dernière"
+  },
   "Older": {
     "message": "Plus vieux"
-  },
-  "past": {
-    "message": "coller"
   },
   "Search": {
     "message": "Recherche"
@@ -52,12 +40,24 @@
     "message": "Rechercher ou entrée une adresse web"
   },
   "Shield": {
-    "message": "Pub blocker"
+    "message": "Ad blocker"
   },
   "Today": {
     "message": "Aujourd'hui"
   },
+  "Top Sites": {
+    "message": "Meilleurs sites"
+  },
   "Yesterday": {
     "message": "Hier"
+  },
+  "copy": {
+    "message": "copier"
+  },
+  "cut": {
+    "message": "couper"
+  },
+  "paste": {
+    "message": "coller"
   }
 }
