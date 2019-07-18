@@ -2,9 +2,16 @@ import { Store } from './store'
 import { ipcMain } from 'electron';
 const { Writable } = require('stream')
 const ff = require('./ffmpeg')
+const os = require('os')
 const ffprobe  = require('ffprobe')
 const ffprobeStatic  = require('ffprobe-static')
 const ffprobeTimeout = 5000000
+
+// TODO move this code in ffprobe-static
+let ffprobePath = ffprobeStatic.path
+if (os.platform() === 'linux') {
+  ffprobePath = ffprobePath.replace('app.asar', 'app.asar.unpacked')
+}
 
 const fs = require('fs')
 
@@ -81,7 +88,7 @@ export class Player {
           evt.sender.send('typeofstream', 'audio')
         }
       } else {
-        ffprobe(`${url}?timeout=${ffprobeTimeout}`, { path: ffprobeStatic.path }, (err: Error, metadata: any) => {
+        ffprobe(`${url}?timeout=${ffprobeTimeout}`, { path: ffprobePath }, (err: Error, metadata: any) => {
           if (metadata) {
             this.currentStreams = this.processStreams(metadata.streams, url)
             this.updateChannelData(this.currentStreams)
@@ -108,7 +115,7 @@ export class Player {
         this.currentStreams = localCurrentStream = channelData[url]
         this.playUrl(url, this.currentStreams, evt)
 
-        ffprobe(`${url}?timeout=${ffprobeTimeout}`, { path: ffprobeStatic.path }, (err: Error, metadata?: any) => {
+        ffprobe(`${url}?timeout=${ffprobeTimeout}`, { path: ffprobePath }, (err: Error, metadata?: any) => {
           if (metadata) {
             const newStreamData = this.processStreams(metadata.streams, url)
             // callback might be received when the streams has already change, do not pay attention.
@@ -135,7 +142,7 @@ export class Player {
           }
         })
       } else {
-        ffprobe(`${url}?timeout=${ffprobeTimeout}`, { path: ffprobeStatic.path }, (err: Error, metadata: any) => {
+        ffprobe(`${url}?timeout=${ffprobeTimeout}`, { path: ffprobePath }, (err: Error, metadata: any) => {
 
           if (metadata) {
             this.currentStreams = this.processStreams(metadata.streams, url)

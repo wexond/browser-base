@@ -1,7 +1,13 @@
 const ffmpeg = require('fluent-ffmpeg')
 const ffmpegStatic  = require ('ffmpeg-static')
+const os = require('os')
 
-ffmpeg.setFfmpegPath(ffmpegStatic.path)
+// TODO move this code in ffprobe-static
+let ffmpegPath = ffmpegStatic.path
+if( os.platform() === 'linux') {
+    ffmpegPath = ffmpegPath.replace('app.asar', 'app.asar.unpacked')
+}
+ffmpeg.setFfmpegPath(ffmpegPath)
 
 
 function mapstreams(videoStream,audioStream,subtitleStream){

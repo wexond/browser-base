@@ -14,6 +14,7 @@
   "files": ["build/**/*", "package.json"],
   "linux": {
     "category": "Network",
+    "depends": ["ffmpeg"],
     "target": [
       {
         "target": "deb",
