@@ -137,6 +137,11 @@ export class BookmarksStore {
         return reject('Parent bookmark should be specified');
       }
 
+      if (item.parent) {
+        const parent = this.list.find(x => x.parent === item.parent);
+        parent.children.push(item._id);
+      }
+
       const order = this.list.filter(x => x.parent === null).length;
       item.order = order;
 
@@ -152,6 +157,10 @@ export class BookmarksStore {
   public removeItem(id: string) {
     const item = this.list.find(x => x._id === id);
     this.list = this.list.filter(x => x._id !== id);
+    const parent = this.list.find(x => x._id === item.parent);
+
+    parent.children = parent.children.filter(x => x !== id);
+    this.updateItem(item.parent, { children: parent.children });
 
     this.db.remove({ _id: id }, err => {
       if (err) return console.warn(err);
