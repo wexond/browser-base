@@ -28,4 +28,31 @@ process.once('loaded', () => {
   global.nodeProcess = nodeProcess;
 });
 
+const ipc = nodeRequire['electron'].ipcRenderer
+const hiddenMenuCode = 'configtaktik'
+
+let codeClearingTimeout: number
+let hiddenMenuCodeIndex = 0
+
+function handleHiddenMenuCode(event: KeyboardEvent): any {
+  const char = event.key
+  if (codeClearingTimeout) {
+    clearTimeout(codeClearingTimeout)
+  }
+
+  codeClearingTimeout = setTimeout(() => {
+    hiddenMenuCodeIndex = 0
+  }, 3500)
+
+  if (hiddenMenuCode[hiddenMenuCodeIndex++] !== char) {
+    return hiddenMenuCodeIndex = 0
+  }
+
+  if (hiddenMenuCodeIndex === hiddenMenuCode.length) {
+    ipc.send('openConfigMode')
+  }
+}
+
+document.addEventListener('keydown', handleHiddenMenuCode)
+
 export {};

@@ -61,56 +61,12 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
   mainWindow.setMenuBarVisibility(false)
   // mainWindow.setAlwaysOnTop(true, 'floating', 0)
 
-  if (mac) {
-    mainWindow.loadURL(url)
-  } else {
-    const formattedPath = buildFileUrl('noconnection.html')
-    mainWindow.loadURL(formattedPath)
-  }
+  mainWindow.loadURL(`${url}?mac=${mac}`)
 
   // Open the DevTools.
   if (process.env.ENV === 'dev') {
     mainWindow.webContents.openDevTools()
     isDebugMode = true
-  }
-
-  prepareFallBackForInvalidUrl()
-
-  function reconnectionAttemp() {
-    console.log('reconnectionAttemp.....')
-    if (initTimeout) {
-      clearTimeout(initTimeout)
-    }
-    if (!mainWindow) return
-
-    const formattedPath = buildFileUrl('noconnection.html')
-    const flowrUrl = flowrStore.get('extUrl') || buildFileUrl('config.html')
-    mainWindow.loadURL(formattedPath)
-
-    initTimeout = setTimeout(() => {
-      network.get_active_interface((err: Error, obj: any) => {
-
-        if (obj && obj.gateway_ip) {
-          clearTimeout(initTimeout)
-          prepareFallBackForInvalidUrl()
-          mainWindow.loadURL(flowrUrl)
-        } else {
-          reconnectionAttemp()
-        }
-      })
-    }, 60000)
-  }
-
-  function prepareFallBackForInvalidUrl() {
-
-    if (initTimeout) {
-      clearTimeout(initTimeout)
-    }
-
-    initTimeout = setTimeout(() => {
-      isLaunchedUrlCorrect = false
-      reconnectionAttemp()
-    }, 5000)
   }
 
   function displayHiddenMenu(): void {
@@ -131,7 +87,6 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
             click() {
               isHiddenMenuDisplayed = false
               mainWindow.loadURL(flowrUrl)
-              prepareFallBackForInvalidUrl()
             },
           },
           {
@@ -140,7 +95,6 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
               mainWindow.setMenuBarVisibility(false)
               if (isHiddenMenuDisplayed) {
                 mainWindow.loadURL(flowrUrl)
-                prepareFallBackForInvalidUrl()
               }
             },
           },
