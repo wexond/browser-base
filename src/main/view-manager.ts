@@ -98,19 +98,14 @@ export class ViewManager {
 
     setInterval(() => {
       for (const view of this.views) {
-        const title = view.webContents.getTitle();
         const url = view.webContents.getURL();
 
-        if (title !== view.title) {
+        if (url !== view.url) {
           appWindow.webContents.send(
-            `browserview-data-updated-${view.webContents.id}`,
-            {
-              title,
-              url,
-            },
+            `view-url-updated-${view.webContents.id}`,
+            url,
           );
           view.url = url;
-          view.title = title;
         }
       }
     }, 200);

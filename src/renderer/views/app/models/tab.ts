@@ -124,9 +124,9 @@ export class ITab {
     if (isWindow) return;
 
     ipcRenderer.on(
-      `browserview-data-updated-${this.id}`,
-      async (e: any, { title, url }: any) => {
-        if (url !== this.url) {
+      `view-url-updated-${this.id}`,
+      async (e: any, url: string) => {
+        if (url && url !== this.url) {
           this.lastHistoryId = await store.history.addItem({
             title: this.title,
             url,
@@ -135,12 +135,15 @@ export class ITab {
           });
         }
 
-        this.title = title === 'about:blank' ? 'New tab' : title;
         this.url = url;
-
         this.updateData();
       },
     );
+
+    ipcRenderer.on(`view-title-updated-${this.id}`, (e: any, title: string) => {
+      this.title = title === 'about:blank' ? 'New tab' : title;
+      this.updateData();
+    });
 
     ipcRenderer.on(
       `load-commit-${this.id}`,

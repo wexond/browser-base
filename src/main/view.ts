@@ -33,6 +33,13 @@ export class View extends BrowserView {
       appWindow.findWindow.webContents.send('found-in-page', result);
     });
 
+    this.webContents.addListener('page-title-updated', (e, title) => {
+      appWindow.webContents.send(
+        `view-title-updated-${this.webContents.id}`,
+        title,
+      );
+    });
+
     this.webContents.addListener('did-stop-loading', () => {
       this.updateNavigationState();
       appWindow.webContents.send(`view-loading-${this.webContents.id}`, false);
