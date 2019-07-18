@@ -81,7 +81,6 @@ const renderer = (name, port) => {
   const cfg = getRendererConfig('electron', name);
 
   cfg.plugins.push(getWebIndexPlugin(name));
-  cfg.plugins.push(getWebIndexPlugin(('noconnection')));
   cfg.plugins.push(getWebIndexPlugin('config'));
   cfg.plugins.push(JSONPlugin());
   cfg.plugins.push(getCopyPlugin());

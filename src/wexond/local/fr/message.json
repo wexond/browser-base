@@ -1,0 +1,63 @@
+{
+  "All": {
+    "message": "Tout"
+  },
+  "Always on top": {
+    "message": "Toujours devant"
+  },
+  "Bookmarks": {
+    "message": "Signets"
+  },
+  "Clean": {
+    "message": "Nettoyer"
+  },
+  "Clear browsing data": {
+    "message": "Effacer les données de navigation"
+  },
+  "Color": {
+    "description": "couleur.",
+    "message": "Couleur"
+  },
+  "Dark mode": {
+    "message": "Mode sombre"
+  },
+  "History": {
+    "message": "Historique"
+  },
+  "Last month": {
+    "message": "Mois dernier"
+  },
+  "Last week": {
+    "message": "Semaine dernière"
+  },
+  "Older": {
+    "message": "Plus vieux"
+  },
+  "Search": {
+    "message": "Recherche"
+  },
+  "Search or type in URL": {
+    "message": "Rechercher ou entrée une adresse web"
+  },
+  "Shield": {
+    "message": "Ad blocker"
+  },
+  "Today": {
+    "message": "Aujourd'hui"
+  },
+  "Top Sites": {
+    "message": "Meilleurs sites"
+  },
+  "Yesterday": {
+    "message": "Hier"
+  },
+  "copy": {
+    "message": "copier"
+  },
+  "cut": {
+    "message": "couper"
+  },
+  "paste": {
+    "message": "coller"
+  }
+}

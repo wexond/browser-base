@@ -1,4 +1,5 @@
-import { daysList, monthsList } from '~/renderer/constants';
+import { translate } from '~/renderer/app/utils/translate';
+import * as moment from 'moment';
 
 export const compareDates = (first: Date, second: Date) => {
   return (
@@ -19,15 +20,13 @@ export const getSectionLabel = (date: Date) => {
     date.getMonth() === current.getMonth()
   ) {
     if (current.getDate() === date.getDate()) {
-      prefix = 'Today - ';
+      prefix = `${translate('Today')} - `;
     } else if (current.getDate() - 1 === date.getDate()) {
-      prefix = 'Yesterday - ';
+      prefix = `${translate('Yesterday')} - `;
     }
   }
 
-  return `${prefix}${daysList[date.getDay()]}, ${
-    monthsList[date.getMonth()]
-  } ${date.getDate()}, ${date.getFullYear()}`;
+  return `${prefix}${moment(date).format('LLLL')}`;
 };
 
 export const formatTime = (date: Date) => {

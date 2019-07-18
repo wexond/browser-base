@@ -7,6 +7,7 @@ import { icons } from '../../constants';
 import store from '../../store';
 import { Line } from './style';
 import { darkTheme, lightTheme } from '~/renderer/constants/themes';
+import { translate } from '~/renderer/app/utils/translate';
 import { getCurrentWindow } from '../../utils';
 import { ipcRenderer } from 'electron';
 
@@ -64,7 +65,7 @@ export const QuickMenu = observer(() => {
           invert={invert}
           icon={icons.window}
         >
-          Always on top
+          {translate('Always on top')}
         </Bubble>
         <Bubble
           toggled={store.settings.isDarkTheme}
@@ -72,7 +73,7 @@ export const QuickMenu = observer(() => {
           invert={invert}
           icon={icons.night}
         >
-          Dark mode
+          {translate('Dark mode')}
         </Bubble>
         <Bubble
           invert={invert}
@@ -80,7 +81,7 @@ export const QuickMenu = observer(() => {
           icon={icons.shield}
           onClick={onShieldClick}
         >
-          Shield
+          {translate('Shield')}
         </Bubble>
       </Actions>
       <Line />
@@ -90,20 +91,20 @@ export const QuickMenu = observer(() => {
           invert={invert}
           icon={icons.history}
         >
-          History
+          {translate('History')}
         </Bubble>
         <Bubble
           onClick={changeContent('bookmarks')}
           invert={invert}
           icon={icons.bookmarks}
         >
-          Bookmarks
+          {translate('Bookmarks')}
         </Bubble>
         <Bubble
           invert={invert}
           onClick={onCleanClick}
           icon={icons.clean}>
-          Clean
+          {translate('Clean')}
         </Bubble>
       </Actions>
 

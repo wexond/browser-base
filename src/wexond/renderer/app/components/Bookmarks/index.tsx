@@ -12,6 +12,7 @@ import { ContextMenu, ContextMenuItem } from '../ContextMenu';
 import { Content, Container, Scrollable } from '../Overlay/style';
 import { SelectionDialog } from '../SelectionDialog';
 import { preventHiding } from '../Overlay';
+import { translate } from '~/renderer/app/utils/translate';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -72,7 +73,7 @@ export const Bookmarks = observer(() => {
     >
       <Scrollable onScroll={onScroll} ref={scrollRef}>
         <NavigationDrawer
-          title="Bookmarks"
+          title={translate('Bookmarks')}
           search
           onSearchInput={onInput}
           onBackClick={onBackClick}

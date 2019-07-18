@@ -1,0 +1,63 @@
+{
+  "All": {
+    "message": "All"
+  },
+  "Always on top": {
+    "message": "Always on top"
+  },
+  "Bookmarks": {
+    "message": "Bookmarks"
+  },
+  "Clean": {
+    "message": "Clean"
+  },
+  "Clear browsing data": {
+    "message": "Clear browsing data"
+  },
+  "Color": {
+    "description": "Color",
+    "message": "Color"
+  },
+  "Dark mode": {
+    "message": "Dark mode"
+  },
+  "History": {
+    "message": "History"
+  },
+  "Last month": {
+    "message": "Last month"
+  },
+  "Last week": {
+    "message": "Last week"
+  },
+  "Older": {
+    "message": "Older"
+  },
+  "Search": {
+    "message": "Search"
+  },
+  "Search or type in URL": {
+    "message": "Search or type in URL"
+  },
+  "Shield": {
+    "message": "Ad blocker"
+  },
+  "Today": {
+    "message": "Today"
+  },
+  "Top Sites": {
+    "message": "Top Sites"
+  },
+  "Yesterday": {
+    "message": "Yesterday"
+  },
+  "copy": {
+    "message": "copy"
+  },
+  "cut": {
+    "message": "cut"
+  },
+  "paste": {
+    "message": "paste"
+  }
+}

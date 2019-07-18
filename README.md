@@ -58,3 +58,10 @@ $ npm run <command>
 | `lint-fix`       | Fixes eslint errors if any                           |
 | `start`          | Starts Flowr-pc-client.                              |
 | `dev`            | Starts Flowr-pc-client in the development mode       |
+
+
+#### Translation
+
+The browser is available in English (default) and French. 
+Translation are located in `src/wexdond/local`.
+We used [i18n-manager](https://github.com/gilmarsquinelato/i18n-manager) to edit local directory.
