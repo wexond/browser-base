@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { StyledBrowserAction, Badge } from './style';
 import ToolbarButton from '../ToolbarButton';
 import { IBrowserAction } from '../../../models';
-// import { extensionsRenderer } from 'electron-extensions';
+import { extensionsRenderer } from 'electron-extensions';
 
 interface Props {
   data: IBrowserAction;
@@ -14,9 +14,9 @@ interface Props {
 }
 
 const onClick = (extensionId: string, tabId: number) => () => {
-  /*if (tabId) {
+  if (tabId) {
     extensionsRenderer.browserAction.onClicked(extensionId, tabId);
-  }*/
+  }
 };
 
 export const BrowserAction = observer(
