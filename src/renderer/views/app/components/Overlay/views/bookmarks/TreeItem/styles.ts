@@ -19,7 +19,7 @@ export const StyledTreeItem = styled.div`
 export const DropIcon = styled.div`
   min-width: 36px;
   min-height: 36px;
-  margin: 0px 8px;
+  margin: 0px 6px;
   background-image: url(${icons.dropDown});
   border-radius: 100%;
   ${centerIcon(20)};
