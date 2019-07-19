@@ -30,12 +30,14 @@ export const NavigationDrawer = ({
   search,
   onSearchInput,
   onBackClick,
+  style,
 }: {
   children?: any;
   title?: string;
   search?: boolean;
   onSearchInput?: (event: React.FormEvent<HTMLInputElement>) => void;
   onBackClick?: (e?: React.MouseEvent<HTMLDivElement>) => void;
+  style?: any;
 }) => {
   return (
     <StyledNavigationDrawer>
@@ -48,7 +50,7 @@ export const NavigationDrawer = ({
           <Input placeholder="Search" onInput={onSearchInput} />
         </Search>
       )}
-      <MenuItems>{children}</MenuItems>
+      <MenuItems style={style}>{children}</MenuItems>
     </StyledNavigationDrawer>
   );
 };

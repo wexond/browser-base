@@ -38,13 +38,14 @@ const TreeItem = observer(
           <FolderIcon />
           <Label>{getBookmarkTitle(data)}</Label>
         </StyledTreeItem>
-        {children.map(id => (
-          <TreeItem
-            key={id}
-            data={store.bookmarks.folders.find(r => r._id === id)}
-            depth={depth + 1}
-          />
-        ))}
+        {data.expanded &&
+          children.map(id => (
+            <TreeItem
+              key={id}
+              data={store.bookmarks.folders.find(r => r._id === id)}
+              depth={depth + 1}
+            />
+          ))}
       </>
     );
   },
