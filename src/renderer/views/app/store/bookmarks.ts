@@ -36,6 +36,7 @@ export class BookmarksStore {
 
   public currentBookmark: IBookmark;
 
+  @observable
   private _bookmarksBar: string;
 
   @computed
