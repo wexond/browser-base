@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 import { transparency, icons } from '~/renderer/constants';
 import { ITheme } from '~/interfaces';
-import { centerIcon } from '~/renderer/mixins';
+import { centerIcon, noButtons } from '~/renderer/mixins';
 
 export const StyledNavigationDrawer = styled.div`
   width: 323px;
@@ -18,11 +18,13 @@ export const StyledNavigationDrawer = styled.div`
 `;
 
 export const MenuItems = styled.div`
-  margin-top: 24px;
   display: flex;
   flex-flow: column;
   flex: 1;
-  margin-bottom: 24px;
+  margin-top: 24px;
+  padding-bottom: 24px;
+  overflow: hidden auto;
+  ${noButtons('6px', 'rgba(0, 0, 0, 0.04)', 'rgba(0, 0, 0, 0.12)')};
 `;
 
 export const Header = styled.div`
@@ -73,8 +75,8 @@ export const Input = styled.input`
 
     &::placeholder {
       color: ${theme['overlay.foreground'] === 'light'
-        ? 'rgba(255, 255, 255, 0.54)'
-        : `rgba(0, 0, 0, ${transparency.text.medium})`};
+      ? 'rgba(255, 255, 255, 0.54)'
+      : `rgba(0, 0, 0, ${transparency.text.medium})`};
     }
   `}
 `;
@@ -107,8 +109,8 @@ export const Search = styled.div`
 
     ${({ theme }: { theme?: ITheme }) => css`
       filter: ${theme['overlay.foreground'] === 'light'
-        ? 'invert(100%)'
-        : 'none'};
+      ? 'invert(100%)'
+      : 'none'};
     `}
   }
 `;

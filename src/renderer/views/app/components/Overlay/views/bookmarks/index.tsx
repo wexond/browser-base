@@ -3,8 +3,6 @@ import { observer } from 'mobx-react';
 
 import store from '~/renderer/views/app/store';
 import { IBookmark } from '~/interfaces';
-import { BookmarkSection, PathItem, PathView } from './style';
-import { Content, Scrollable2, Sections } from '../../style';
 import { Container } from '../..';
 import { NavigationDrawer } from '../../components/NavigationDrawer';
 import { SelectionDialog } from '../../components/SelectionDialog';
@@ -15,6 +13,9 @@ import {
 import { icons } from '~/renderer/constants';
 import { Bookmark } from './Bookmark';
 import { getBookmarkTitle } from '~/renderer/views/app/utils/bookmarks';
+import Tree from './Tree';
+import { BookmarkSection, PathItem, PathView } from './style';
+import { Content, Scrollable2, Sections } from '../../style';
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -53,6 +54,7 @@ const onNewFolderClick = () => {
     title: 'New folder',
     isFolder: true,
     parent: store.bookmarks.currentFolder,
+    children: [],
   });
 };
 
@@ -110,6 +112,7 @@ export const Bookmarks = observer(() => {
           >
             New folder
           </NavigationDrawer.Item>
+          <Tree />
         </NavigationDrawer>
         <BookmarksList />
         <SelectionDialog
