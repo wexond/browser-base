@@ -143,12 +143,14 @@ export class BookmarksStore {
 
       item.order = this.list.filter(x => x.parent === null).length;
 
-      this.db.insert(item, (err: any, doc: IBookmark) => {
+      this.db.insert(item, async (err: any, doc: IBookmark) => {
         if (err) return console.error(err);
 
         if (item.parent) {
           const parent = this.list.find(x => x._id === item.parent);
-          parent.children.push(doc._id);
+          await this.updateItem(parent._id, {
+            children: [...parent.children, doc._id],
+          });
         }
 
         this.list.push(doc);
