@@ -8,38 +8,11 @@ import { StyledTreeView } from './styles';
 export default observer(() => {
   return (
     <StyledTreeView>
-      <TreeItem
-        data={{
-          name: 'First',
-          children: [
-            {
-              name: 'First.1',
-              children: [{ name: 'First.1.1', children: [] }],
-            },
-            {
-              name: 'First.2',
-              children: [],
-            },
-          ],
-        }}
-      />
-      <TreeItem
-        data={{
-          name: 'Second',
-          children: [
-            {
-              name: 'Second.1',
-              children: [],
-            },
-          ],
-        }}
-      />
-      <TreeItem
-        data={{
-          name: 'Third',
-          children: [],
-        }}
-      />
+      {store.bookmarks.list
+        .filter(e => !e.parent)
+        .map(item => (
+          <TreeItem key={item._id} data={item} depth={0} />
+        ))}
     </StyledTreeView>
   );
 });

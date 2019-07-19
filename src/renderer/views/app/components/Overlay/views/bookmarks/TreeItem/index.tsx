@@ -1,22 +1,26 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+
+import { IBookmark } from '~/interfaces';
+import store from '~/renderer/views/app/store';
+import { getBookmarkTitle } from '~/renderer/views/app/utils/bookmarks';
 import { StyledTreeItem, DropIcon, FolderIcon, Label } from './styles';
 
-const onClick = (item: any) => () => {
-  // store.pages.current.location.path = item.path;
+const onClick = (item: IBookmark) => () => {
+  store.bookmarks.currentFolder = item._id;
 };
 
-const onDropClick = (item: any) => (e: React.MouseEvent) => {
+const onDropClick = (item: IBookmark) => (e: React.MouseEvent) => {
   e.stopPropagation();
 
-  /*if (item.children.length) {
-    item.selected = !item.selected;
-  }*/
+  if (item.children.length) {
+    item.expanded = !item.expanded;
+  }
 };
 
 const TreeItem = observer(
-  ({ depth, data }: { depth?: number; data: any /*TreeItem*/ }) => {
-    depth = depth || 0;
+  ({ depth, data }: { depth: number; data: IBookmark }) => {
+    const children = data.children || [];
 
     return (
       <React.Fragment>
@@ -25,17 +29,20 @@ const TreeItem = observer(
           style={{ paddingLeft: depth * 30 }}
         >
           <DropIcon
-            visible={data.children.length !== 0}
-            selected={data.selected}
+            visible={children.length !== 0}
+            expanded={data.expanded}
             onClick={onDropClick(data)}
           />
           <FolderIcon />
-          <Label>{data.name}</Label>
+          <Label>{getBookmarkTitle(data)}</Label>
         </StyledTreeItem>
-        {data.selected &&
-          data.children.map((item: any) => (
-            <TreeItem key={item._id} data={item} depth={depth + 1} />
-          ))}
+        {children.map(id => (
+          <TreeItem
+            key={id}
+            data={store.bookmarks.folders.find(r => r._id === id)}
+            depth={depth + 1}
+          />
+        ))}
       </React.Fragment>
     );
   },

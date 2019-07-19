@@ -24,9 +24,9 @@ export const DropIcon = styled.div`
   border-radius: 100%;
   ${centerIcon(20)};
 
-  ${({ visible, selected }: { visible: boolean; selected: boolean }) => css`
+  ${({ visible, expanded }: { visible: boolean; expanded: boolean }) => css`
     opacity: ${visible ? transparency.icons.inactive : 0};
-    transform: ${selected ? 'rotate(-90deg)' : 'rotate(0deg)'};
+    transform: ${expanded ? 'rotate(-90deg)' : 'rotate(0deg)'};
   `}
 `;
 
