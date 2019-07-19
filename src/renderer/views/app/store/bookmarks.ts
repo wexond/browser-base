@@ -137,16 +137,19 @@ export class BookmarksStore {
         return reject('Parent bookmark should be specified');
       }
 
-      if (item.parent) {
-        const parent = this.list.find(x => x.parent === item.parent);
-        parent.children.push(item._id);
+      if (item.isFolder) {
+        item.children = item.children || [];
       }
 
-      const order = this.list.filter(x => x.parent === null).length;
-      item.order = order;
+      item.order = this.list.filter(x => x.parent === null).length;
 
       this.db.insert(item, (err: any, doc: IBookmark) => {
         if (err) return console.error(err);
+
+        if (item.parent) {
+          const parent = this.list.find(x => x._id === item.parent);
+          parent.children.push(doc._id);
+        }
 
         this.list.push(doc);
         resolve(doc);

@@ -9,7 +9,7 @@ export default observer(() => {
   return (
     <StyledTreeView>
       {store.bookmarks.list
-        .filter(e => !e.parent)
+        .filter(r => r.parent == null)
         .map(item => (
           <TreeItem key={item._id} data={item} depth={0} />
         ))}

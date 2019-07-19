@@ -20,10 +20,12 @@ const onDropClick = (item: IBookmark) => (e: React.MouseEvent) => {
 
 const TreeItem = observer(
   ({ depth, data }: { depth: number; data: IBookmark }) => {
+    if (!data) return null;
+
     const children = data.children || [];
 
     return (
-      <React.Fragment>
+      <>
         <StyledTreeItem
           onClick={onClick(data)}
           style={{ paddingLeft: depth * 30 }}
@@ -43,7 +45,7 @@ const TreeItem = observer(
             depth={depth + 1}
           />
         ))}
-      </React.Fragment>
+      </>
     );
   },
 );

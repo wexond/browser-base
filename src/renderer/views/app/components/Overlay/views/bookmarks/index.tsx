@@ -54,6 +54,7 @@ const onNewFolderClick = () => {
     title: 'New folder',
     isFolder: true,
     parent: store.bookmarks.currentFolder,
+    children: [],
   });
 };
 
