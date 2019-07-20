@@ -10,6 +10,7 @@ const Item = ({
   onClick,
   onMouseDown,
   children,
+  dense,
 }: {
   selected?: boolean;
   value?: any;
@@ -17,12 +18,14 @@ const Item = ({
   onMouseDown?: (e: React.MouseEvent) => void;
   children?: any;
   isDefault?: boolean;
+  dense?: boolean;
 }) => {
   return (
     <ContextMenuItem
       selected={selected}
       onClick={onClick}
       onMouseDown={onMouseDown}
+      dense={dense}
     >
       {children}
     </ContextMenuItem>
