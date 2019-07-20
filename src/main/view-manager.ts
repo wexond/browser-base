@@ -1,4 +1,4 @@
-import { ipcMain, session } from 'electron';
+import { ipcMain, session, IpcMainEvent } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 import { appWindow, log } from '.';
 import { View } from './view';
@@ -20,23 +20,17 @@ export class ViewManager {
   }
 
   constructor() {
-    ipcMain.on(
-      'view-create',
-      (e: Electron.IpcMessageEvent, details: chrome.tabs.CreateProperties) => {
-        this.create(details);
-      },
-    );
+    ipcMain.on('view-create', (e, details: chrome.tabs.CreateProperties) => {
+      this.create(details);
+    });
 
-    ipcMain.on(
-      'view-select',
-      (e: Electron.IpcMessageEvent, id: number, force: boolean) => {
-        const view = this.views.find(x => x.webContents.id === id);
-        this.select(id);
-        view.updateNavigationState();
+    ipcMain.on('view-select', (e, id: number, force: boolean) => {
+      const view = this.views.find(x => x.webContents.id === id);
+      this.select(id);
+      view.updateNavigationState();
 
-        if (force) this.isHidden = false;
-      },
-    );
+      if (force) this.isHidden = false;
+    });
 
     ipcMain.on('clear-browsing-data', () => {
       const ses = session.fromPartition('persist:view');
@@ -59,7 +53,7 @@ export class ViewManager {
       });
     });
 
-    ipcMain.on('view-destroy', (e: Electron.IpcMessageEvent, id: number) => {
+    ipcMain.on('view-destroy', (e, id: number) => {
       this.destroy(id);
     });
 
@@ -172,6 +166,8 @@ export class ViewManager {
     view.setAutoResize({
       width: true,
       height: true,
+      horizontal: true,
+      vertical: true,
     });
   }
 

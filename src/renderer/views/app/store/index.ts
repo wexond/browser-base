@@ -3,7 +3,7 @@ import { observable, computed } from 'mobx';
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
-import { ipcRenderer, IpcMessageEvent, remote } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { OverlayStore } from './overlay';
 import { HistoryStore } from './history';
 import { FaviconsStore } from './favicons';
@@ -16,7 +16,7 @@ import { lightTheme } from '~/renderer/constants/themes';
 import { WeatherStore } from './weather';
 import { SettingsStore } from './settings';
 import { AddBookmarkStore } from './add-bookmark';
-// import { extensionsRenderer } from 'electron-extensions';
+import { extensionsRenderer } from 'electron-extensions';
 
 export class Store {
   public history = new HistoryStore();
@@ -80,12 +80,9 @@ export class Store {
   };
 
   constructor() {
-    ipcRenderer.on(
-      'update-navigation-state',
-      (e: IpcMessageEvent, data: any) => {
-        this.navigationState = data;
-      },
-    );
+    ipcRenderer.on('update-navigation-state', (e, data: any) => {
+      this.navigationState = data;
+    });
 
     ipcRenderer.on('fullscreen', (e: any, fullscreen: boolean) => {
       this.isFullscreen = fullscreen;
@@ -95,15 +92,12 @@ export class Store {
       this.isHTMLFullscreen = fullscreen;
     });
 
-    ipcRenderer.on(
-      'update-available',
-      (e: IpcMessageEvent, version: string) => {
-        this.updateInfo.version = version;
-        this.updateInfo.available = true;
-      },
-    );
+    ipcRenderer.on('update-available', (e, version: string) => {
+      this.updateInfo.version = version;
+      this.updateInfo.available = true;
+    });
 
-    /*extensionsRenderer.on(
+    extensionsRenderer.on(
       'set-badge-text',
       (extensionId: string, details: chrome.browserAction.BadgeTextDetails) => {
         if (details.tabId) {
@@ -125,7 +119,7 @@ export class Store {
             });
         }
       },
-    );*/
+    );
 
     ipcRenderer.on('find', () => {
       const tab = this.tabs.selectedTab;

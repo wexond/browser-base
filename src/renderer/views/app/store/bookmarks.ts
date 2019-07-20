@@ -36,6 +36,7 @@ export class BookmarksStore {
 
   public currentBookmark: IBookmark;
 
+  @observable
   private _bookmarksBar: string;
 
   @computed
@@ -137,11 +138,21 @@ export class BookmarksStore {
         return reject('Parent bookmark should be specified');
       }
 
-      const order = this.list.filter(x => x.parent === null).length;
-      item.order = order;
+      if (item.isFolder) {
+        item.children = item.children || [];
+      }
 
-      this.db.insert(item, (err: any, doc: IBookmark) => {
+      item.order = this.list.filter(x => x.parent === null).length;
+
+      this.db.insert(item, async (err: any, doc: IBookmark) => {
         if (err) return console.error(err);
+
+        if (item.parent) {
+          const parent = this.list.find(x => x._id === item.parent);
+          await this.updateItem(parent._id, {
+            children: [...parent.children, doc._id],
+          });
+        }
 
         this.list.push(doc);
         resolve(doc);
@@ -152,6 +163,10 @@ export class BookmarksStore {
   public removeItem(id: string) {
     const item = this.list.find(x => x._id === id);
     this.list = this.list.filter(x => x._id !== id);
+    const parent = this.list.find(x => x._id === item.parent);
+
+    parent.children = parent.children.filter(x => x !== id);
+    this.updateItem(item.parent, { children: parent.children });
 
     this.db.remove({ _id: id }, err => {
       if (err) return console.warn(err);
