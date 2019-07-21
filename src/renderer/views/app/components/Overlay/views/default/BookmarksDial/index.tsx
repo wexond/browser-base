@@ -10,23 +10,29 @@ import { icons } from '~/renderer/constants';
 export const BookmarksDial = observer(() => {
   return (
     <Actions>
-      {store.bookmarks.barItems.map(item => (
-        <Bubble
-          itemsPerRow={6}
-          onClick={() => loadURL(item.url)}
-          key={item._id}
-          maxLines={1}
-          iconSize={20}
-          invert={
-            store.theme['overlay.foreground'] === 'light' && item.isFolder
-          }
-          icon={
-            item.isFolder ? icons.folder : store.favicons.favicons[item.favicon]
-          }
-        >
-          {item.title}
-        </Bubble>
-      ))}
+      {store.bookmarks.barItems.map(item => {
+        if (item.parent === store.bookmarks.dialCurrentFolder) {
+          return (
+            <Bubble
+              itemsPerRow={6}
+              onClick={() => loadURL(item.url)}
+              key={item._id}
+              maxLines={1}
+              iconSize={20}
+              invert={
+                store.theme['overlay.foreground'] === 'light' && item.isFolder
+              }
+              icon={
+                item.isFolder
+                  ? icons.folder
+                  : store.favicons.favicons[item.favicon]
+              }
+            >
+              {item.title}
+            </Bubble>
+          );
+        }
+      })}
     </Actions>
   );
 });

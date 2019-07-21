@@ -34,10 +34,13 @@ export class BookmarksStore {
   @observable
   public currentFolder: string = null;
 
-  public currentBookmark: IBookmark;
+  @observable
+  public dialCurrentFolder: string = null;
 
   @observable
   private _bookmarksBar: string;
+
+  public currentBookmark: IBookmark;
 
   @computed
   public get visibleItems() {
@@ -50,7 +53,7 @@ export class BookmarksStore {
           (this.searched === '' && x.parent === this.currentFolder),
       )
       .slice()
-      .sort((a, b) => b.order - a.order);
+      .sort((a, b) => a.order - b.order);
   }
 
   @computed
@@ -126,6 +129,7 @@ export class BookmarksStore {
 
     this._bookmarksBar = barFolder._id;
     this.currentFolder = barFolder._id;
+    this.dialCurrentFolder = barFolder._id;
   }
 
   public addItem(item: IBookmark): Promise<IBookmark> {
