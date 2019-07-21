@@ -1,4 +1,5 @@
 import { ipcRenderer, remote, webFrame } from 'electron';
+import { getFormInputs } from './utils/form-fill';
 
 const tabId = remote.getCurrentWebContents().id;
 
@@ -92,28 +93,6 @@ const dev = (e: any) => {
   button.value = 'Sign in';
 }
 
-const isVisible = (element: HTMLElement) => {
-  return element.offsetHeight !== 0;
-}
-
-const inputFilters = {
-  type: /text|email|password/i,
-  name: /login|username|email|password/i,
-}
-
-const getFormInputs = (form: HTMLFormElement) => {
-  const id = form.getAttribute('id');
-  const inside: HTMLInputElement[] = Array.from(form.querySelectorAll('input'));
-  const outside: HTMLInputElement[] = id != null ? Array.from(document.querySelectorAll(`input[form=${id}]`)) : [];
-  return [...inside, ...outside];
-}
-
-const testInput = (input: HTMLInputElement) => {
-  const type = input.getAttribute('type');
-  const name = input.getAttribute('name');
-  return isVisible(input) && inputFilters.type.test(type) && inputFilters.name.test(name);
-}
-
 window.addEventListener('load', () => {
   const forms = document.querySelectorAll('form');
 
@@ -129,11 +108,9 @@ const onFormSubmit = (e: Event) => {
   const inputs = getFormInputs(form);
 
   for (const input of inputs) {
-    if (testInput(input)) {
-      const type = input.getAttribute('type');
-      const name = input.getAttribute('name').toLowerCase();
+    const type = input.getAttribute('type');
+    const name = input.getAttribute('name').toLowerCase();
 
-      console.log(type, name, input.value);
-    }
+    console.log(type, name, input.value);
   }
 }
