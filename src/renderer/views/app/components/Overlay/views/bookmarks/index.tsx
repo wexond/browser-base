@@ -12,10 +12,18 @@ import {
 } from '~/renderer/components/ContextMenu';
 import { icons } from '~/renderer/constants';
 import { Bookmark } from './Bookmark';
-import { getBookmarkTitle } from '~/renderer/views/app/utils/bookmarks';
+import {
+  getBookmarkTitle,
+  addImported,
+} from '~/renderer/views/app/utils/bookmarks';
 import Tree from './Tree';
 import { BookmarkSection, PathItem, PathView } from './style';
 import { Content, Scrollable2, Sections } from '../../style';
+import { remote } from 'electron';
+import { promises } from 'fs';
+import { promisify } from 'util';
+
+const parse = promisify(require('bookmarks-parser'));
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -66,6 +74,27 @@ const onPathItemClick = (item: IBookmark) => () => {
   }
 };
 
+const onImportClick = () => {
+  remote.dialog.showOpenDialog(
+    {
+      filters: [
+        { name: 'HTML file', extensions: ['html'] },
+        { name: 'Mozilla Firefox bookmarks', extensions: ['jsonlz4'] },
+      ],
+    },
+    async (filePaths: string[]) => {
+      if (filePaths) {
+        const file = await promises.readFile(filePaths[0], 'utf8');
+        const res = await parse(file);
+
+        addImported(res.bookmarks);
+      }
+    },
+  );
+};
+
+const onExportClick = () => {};
+
 const BookmarksList = observer(() => {
   const items = store.bookmarks.visibleItems;
 
@@ -106,13 +135,20 @@ export const Bookmarks = observer(() => {
           onSearchInput={onInput}
           onBackClick={onBackClick}
         >
+          <Tree />
+          <div style={{ flex: 1 }} />
           <NavigationDrawer.Item
             icon={icons.newFolder}
             onClick={onNewFolderClick}
           >
             New folder
           </NavigationDrawer.Item>
-          <Tree />
+          <NavigationDrawer.Item icon={icons.download} onClick={onImportClick}>
+            Import
+          </NavigationDrawer.Item>
+          <NavigationDrawer.Item icon={icons.save} onClick={onNewFolderClick}>
+            Export
+          </NavigationDrawer.Item>
         </NavigationDrawer>
         <BookmarksList />
         <SelectionDialog

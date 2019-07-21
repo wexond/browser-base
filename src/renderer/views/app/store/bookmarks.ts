@@ -34,10 +34,13 @@ export class BookmarksStore {
   @observable
   public currentFolder: string = null;
 
-  public currentBookmark: IBookmark;
+  @observable
+  public dialCurrentFolder: string = null;
 
   @observable
   private _bookmarksBar: string;
+
+  public currentBookmark: IBookmark;
 
   @computed
   public get visibleItems() {
@@ -50,7 +53,9 @@ export class BookmarksStore {
           (this.searched === '' && x.parent === this.currentFolder),
       )
       .slice()
-      .sort((a, b) => b.order - a.order);
+      .sort((a, b) => {
+        return a.order - b.order;
+      });
   }
 
   @computed
@@ -65,15 +70,12 @@ export class BookmarksStore {
 
   @computed
   public get barItems() {
-    return this.list.filter(x => this.isBarItem(x._id));
-  }
-
-  private isBarItem(id: string): boolean {
-    const item = this.list.find(x => x._id === id);
-    if (!item) return false;
-
-    if (item.parent === this._bookmarksBar) return true;
-    return this.isBarItem(item.parent);
+    return this.list
+      .filter(x => x.parent === this.dialCurrentFolder)
+      .slice()
+      .sort((a, b) => {
+        return a.order - b.order;
+      });
   }
 
   constructor() {
@@ -126,6 +128,7 @@ export class BookmarksStore {
 
     this._bookmarksBar = barFolder._id;
     this.currentFolder = barFolder._id;
+    this.dialCurrentFolder = barFolder._id;
   }
 
   public addItem(item: IBookmark): Promise<IBookmark> {
@@ -142,7 +145,9 @@ export class BookmarksStore {
         item.children = item.children || [];
       }
 
-      item.order = this.list.filter(x => x.parent === null).length;
+      if (item.order === undefined) {
+        item.order = this.list.filter(x => x.parent === null).length;
+      }
 
       this.db.insert(item, async (err: any, doc: IBookmark) => {
         if (err) return console.error(err);

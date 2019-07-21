@@ -21,7 +21,11 @@ export const BookmarksDial = observer(() => {
             store.theme['overlay.foreground'] === 'light' && item.isFolder
           }
           icon={
-            item.isFolder ? icons.folder : store.favicons.favicons[item.favicon]
+            item.isFolder
+              ? icons.folder
+              : item.favicon.startsWith('data:image')
+              ? item.favicon
+              : store.favicons.favicons[item.favicon]
           }
         >
           {item.title}
