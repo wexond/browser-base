@@ -12,12 +12,16 @@ import {
 } from '~/renderer/components/ContextMenu';
 import { icons } from '~/renderer/constants';
 import { Bookmark } from './Bookmark';
-import { getBookmarkTitle } from '~/renderer/views/app/utils/bookmarks';
+import {
+  getBookmarkTitle,
+  addImported,
+} from '~/renderer/views/app/utils/bookmarks';
 import Tree from './Tree';
 import { BookmarkSection, PathItem, PathView } from './style';
 import { Content, Scrollable2, Sections } from '../../style';
 import { remote } from 'electron';
 import { promises } from 'fs';
+import { promisify } from 'util';
 
 const parse = promisify(require('bookmarks-parser'));
 
@@ -70,27 +74,20 @@ const onPathItemClick = (item: IBookmark) => () => {
   }
 };
 
-const addImported = (arr: any[], parent: string = null) => {
-  for (const item of arr) {
-    store.bookmarks.addItem({
-      isFolder: item.type === 'directory',
-      title: item.title,
-      url: item.url,
-    });
-  }
-};
-
 const onImportClick = () => {
-  const filePaths = remote.dialog.showOpenDialog(
+  remote.dialog.showOpenDialog(
     {
-      filters: [{ name: 'HTML file', extensions: ['html'] }],
+      filters: [
+        { name: 'HTML file', extensions: ['html'] },
+        { name: 'Mozilla Firefox bookmarks', extensions: ['jsonlz4'] },
+      ],
     },
     async filePaths => {
       if (filePaths) {
         const file = await promises.readFile(filePaths[0], 'utf8');
         const res = await parse(file);
 
-        console.log(res);
+        addImported(res.bookmarks);
       }
     },
   );
@@ -146,10 +143,7 @@ export const Bookmarks = observer(() => {
           >
             New folder
           </NavigationDrawer.Item>
-          <NavigationDrawer.Item
-            icon={icons.download}
-            onClick={onNewFolderClick}
-          >
+          <NavigationDrawer.Item icon={icons.download} onClick={onImportClick}>
             Import
           </NavigationDrawer.Item>
           <NavigationDrawer.Item icon={icons.save} onClick={onNewFolderClick}>
