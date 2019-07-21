@@ -70,15 +70,12 @@ export class BookmarksStore {
 
   @computed
   public get barItems() {
-    return this.list.filter(x => this.isBarItem(x._id));
-  }
-
-  private isBarItem(id: string): boolean {
-    const item = this.list.find(x => x._id === id);
-    if (!item) return false;
-
-    if (item.parent === this._bookmarksBar) return true;
-    return this.isBarItem(item.parent);
+    return this.list
+      .filter(x => x.parent === this.dialCurrentFolder)
+      .slice()
+      .sort((a, b) => {
+        return a.order - b.order;
+      });
   }
 
   constructor() {
