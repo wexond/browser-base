@@ -1,5 +1,6 @@
 import { ipcRenderer, remote, webFrame } from 'electron';
-import { getFormInputs } from './utils';
+import { getFormInputs, insertData } from './utils';
+import { TEST_DATA } from './constants/test';
 
 const tabId = remote.getCurrentWebContents().id;
 
@@ -88,7 +89,7 @@ ipcRenderer.on('scroll-touch-end', () => {
 const dev = (e: any) => {
   e.preventDefault();
   e.stopPropagation();
-  const button = document.querySelector('input[type=submit]') as HTMLButtonElement;
+  const button = document.querySelector('input[type=button]') as HTMLButtonElement;
   button.removeAttribute('disabled');
   button.value = 'Sign in';
 }
@@ -99,11 +100,15 @@ window.addEventListener('load', () => {
   forms.forEach(form => {
     form.addEventListener('submit', onFormSubmit)
   })
+
+  const button = document.querySelector('input[type=button]') as HTMLButtonElement;
+
+  button.addEventListener('click', (e: Event) => {
+    onFormSubmit({ ...e, target: document.getElementsByTagName('form')[0] });
+  });
 });
 
 const onFormSubmit = (e: Event) => {
-  dev(e);
-
   const form = e.target as HTMLFormElement;
   const inputs = getFormInputs(form);
 
@@ -111,6 +116,12 @@ const onFormSubmit = (e: Event) => {
     const type = input.getAttribute('type');
     const name = input.getAttribute('name').toLowerCase();
 
-    console.log(type, name, input.value);
+    insertData(input, TEST_DATA[0]);
   }
+}
+
+window.onload = () => {
+  requestAnimationFrame(() => {
+    document.body.style.backgroundColor = '#fff';
+  })
 }
