@@ -148,7 +148,9 @@ export class BookmarksStore {
         item.children = item.children || [];
       }
 
-      item.order = this.list.filter(x => x.parent === null).length;
+      if (item.order === undefined) {
+        item.order = this.list.filter(x => x.parent === null).length;
+      }
 
       this.db.insert(item, async (err: any, doc: IBookmark) => {
         if (err) return console.error(err);

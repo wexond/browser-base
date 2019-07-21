@@ -98,8 +98,6 @@ const onExportClick = () => {};
 const BookmarksList = observer(() => {
   const items = store.bookmarks.visibleItems;
 
-  console.log(items);
-
   return (
     <Sections>
       <Content>

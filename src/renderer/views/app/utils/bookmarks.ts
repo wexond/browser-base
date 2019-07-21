@@ -46,7 +46,7 @@ export const addImported = async (arr: any[], parent: IBookmark = null) => {
       parent: parent && parent._id,
       children: [],
       favicon: item.icon,
-      order: order++,
+      order,
     });
 
     if (parent) {
@@ -56,5 +56,7 @@ export const addImported = async (arr: any[], parent: IBookmark = null) => {
     if (bookmark.isFolder) {
       addImported(item.children, bookmark);
     }
+
+    order++;
   }
 };
