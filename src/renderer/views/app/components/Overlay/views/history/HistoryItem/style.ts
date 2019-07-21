@@ -46,6 +46,9 @@ export const Title = styled.div`
 export const Site = styled.div`
   flex: 2;
   opacity: 0.54;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const Time = styled.div`

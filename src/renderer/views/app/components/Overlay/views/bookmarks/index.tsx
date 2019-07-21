@@ -77,10 +77,7 @@ const onPathItemClick = (item: IBookmark) => () => {
 const onImportClick = () => {
   remote.dialog.showOpenDialog(
     {
-      filters: [
-        { name: 'HTML file', extensions: ['html'] },
-        { name: 'Mozilla Firefox bookmarks', extensions: ['jsonlz4'] },
-      ],
+      filters: [{ name: 'Bookmark file', extensions: ['html', 'jsonlz4'] }],
     },
     async (filePaths: string[]) => {
       if (filePaths) {
