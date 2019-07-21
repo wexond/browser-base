@@ -1,5 +1,5 @@
 import { ipcRenderer, remote, webFrame } from 'electron';
-import { getFormInputs } from './utils/form-fill';
+import { getFormInputs } from './utils';
 
 const tabId = remote.getCurrentWebContents().id;
 
