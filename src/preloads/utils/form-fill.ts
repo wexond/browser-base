@@ -1,35 +1,40 @@
 import { searchElements, isVisible } from './dom';
-import { formInputFilters } from '../constants';
+import { formFieldFilters } from '../constants';
 import { IFormFillData } from '~/interfaces';
 
-export const getFormInputs = (form: HTMLFormElement) => {
+export type FormField = HTMLInputElement | HTMLSelectElement;
+
+export const getFormFields = (form: HTMLFormElement) => {
   const formId = form.getAttribute('id');
-  const inside = searchElements(form, 'input') as HTMLInputElement[];
+  const inside = searchElements(form, 'input');
   const outside = formId != null ? searchElements(document, `input[form=${formId}]`) : [];
 
-  return filterFormInputs(...inside, ...outside);
+  return filterFormFields(...inside, ...outside);
 }
 
-export const filterFormInputs = (...inputs: HTMLElement[] | HTMLInputElement[]) => {
-  return inputs.filter(input => {
-    const type = input.getAttribute('type');
-    const name = input.getAttribute('name');
+export const filterFormFields = (...inputs: HTMLElement[]) => {
+  return inputs.filter(el => {
+    const type = el.getAttribute('type');
+    const name = el.getAttribute('name');
 
-    return isVisible(input) && formInputFilters.type.test(type) && formInputFilters.name.test(name);
-  }) as HTMLInputElement[];
+    return isVisible(el) && formFieldFilters.type.test(type) && formFieldFilters.name.test(name);
+  }) as FormField[];
 }
 
-export const insertData = (input: HTMLInputElement, data: IFormFillData) => {
-  const { fields } = data;
-  const name = input.getAttribute('name').toLowerCase().trim();
-  const value = getData(name, data);
+export const insertFieldValue = (el: FormField, data: IFormFillData) => {
+  const autoComplete = el.getAttribute('autocomplete');
 
-  if (value) {
-    input.value = value;
+  if (autoComplete !== 'off') {
+    const name = el.getAttribute('name');
+    const value = getFieldValue(name, data);
+
+    if (value) {
+      el.value = value;
+    }
   }
 }
 
-const getData = (name: string, data: IFormFillData) => {
+const getFieldValue = (name: string, data: IFormFillData) => {
   const { fields } = data;
   const fullName = (fields.name || '').split(' ');
 
