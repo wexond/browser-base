@@ -66,6 +66,10 @@ const onPathItemClick = (item: IBookmark) => () => {
   }
 };
 
+const onImportClick = () => {};
+
+const onExportClick = () => {};
+
 const BookmarksList = observer(() => {
   const items = store.bookmarks.visibleItems;
 
@@ -106,13 +110,23 @@ export const Bookmarks = observer(() => {
           onSearchInput={onInput}
           onBackClick={onBackClick}
         >
+          <Tree />
+          <div style={{ flex: 1 }} />
           <NavigationDrawer.Item
             icon={icons.newFolder}
             onClick={onNewFolderClick}
           >
             New folder
           </NavigationDrawer.Item>
-          <Tree />
+          <NavigationDrawer.Item
+            icon={icons.download}
+            onClick={onNewFolderClick}
+          >
+            Import
+          </NavigationDrawer.Item>
+          <NavigationDrawer.Item icon={icons.save} onClick={onNewFolderClick}>
+            Export
+          </NavigationDrawer.Item>
         </NavigationDrawer>
         <BookmarksList />
         <SelectionDialog
