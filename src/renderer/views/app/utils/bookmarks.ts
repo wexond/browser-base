@@ -23,8 +23,17 @@ export const addImported = async (arr: any[], parent: IBookmark = null) => {
 
   for (const item of arr) {
     if (item.ns_root) {
+      let folder: IBookmark = null;
       if (item.ns_root === 'toolbar') {
-        const folder = store.bookmarks.list.find(x => x.static === 'main');
+        folder = store.bookmarks.list.find(x => x.static === 'main');
+        addImported(item.children, folder);
+      } else if (item.ns_root === 'menu') {
+        folder = store.bookmarks.list.find(x => x.static === 'mobile');
+      } else if (item.ns_root === 'unsorted') {
+        folder = store.bookmarks.list.find(x => x.static === 'other');
+      }
+
+      if (folder) {
         addImported(item.children, folder);
       }
 
