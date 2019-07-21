@@ -60,7 +60,11 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
       <Favicon
         style={{
           backgroundImage: `url(${
-            data.isFolder ? icons.folder : store.favicons.favicons[data.favicon]
+            data.isFolder
+              ? icons.folder
+              : data.favicon.startsWith('data:image')
+              ? data.favicon
+              : store.favicons.favicons[data.favicon]
           })`,
           filter:
             store.theme['overlay.foreground'] === 'light' && data.isFolder

@@ -19,6 +19,8 @@ export const getBookmarkTitle = (item: IBookmark) => {
 };
 
 export const addImported = async (arr: any[], parent: IBookmark = null) => {
+  let order = 0;
+
   for (const item of arr) {
     if (item.ns_root) {
       if (item.ns_root === 'toolbar') {
@@ -36,6 +38,7 @@ export const addImported = async (arr: any[], parent: IBookmark = null) => {
       parent: parent && parent._id,
       children: [],
       favicon: item.icon,
+      order: order++,
     });
 
     if (parent) {
