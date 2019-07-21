@@ -86,6 +86,17 @@ ipcRenderer.on('scroll-touch-end', () => {
   resetCounters();
 });
 
+<<<<<<< HEAD
+=======
+const dev = (e: any) => {
+  e.preventDefault();
+  e.stopPropagation();
+  const button = document.querySelector('input[type=submit]') as HTMLButtonElement;
+  button.removeAttribute('disabled');
+  button.value = 'Sign in';
+}
+
+>>>>>>> refactor: form fill
 window.addEventListener('load', () => {
   const forms = document.querySelectorAll('form');
 
@@ -114,6 +125,7 @@ const onFieldFocus = (e: FocusEvent) => {
   const el = e.target as HTMLInputElement;
   const rects = el.getBoundingClientRect();
 
+<<<<<<< HEAD
   ipcRenderer.send('form-fill-show', {
     top: Math.floor(rects.top),
     left: Math.floor(rects.left),
@@ -122,4 +134,12 @@ const onFieldFocus = (e: FocusEvent) => {
 
 const onFieldBlur = (e: FocusEvent) => {
   //ipcRenderer.send('form-fill-hide');
+=======
+  for (const input of inputs) {
+    const type = input.getAttribute('type');
+    const name = input.getAttribute('name').toLowerCase();
+
+    console.log(type, name, input.value);
+  }
+>>>>>>> refactor: form fill
 }
