@@ -12,5 +12,5 @@ export interface IFormFillData {
     phone?: string;
     email?: string;
     country?: string;
-  }
+  };
 }
