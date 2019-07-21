@@ -1,16 +1,16 @@
-export interface FormFillData {
+export interface IFormFillData {
   _id?: string;
   type: 'password' | 'address';
-  fields?: FormFillPassword | FormFillAddress;
+  fields?: IFormFillPassword | IFormFillAddress;
 }
 
-export interface FormFillPassword {
+export interface IFormFillPassword {
   username?: string;
   password?: string;
   url?: string;
 }
 
-export interface FormFillAddress {
+export interface IFormFillAddress {
   name?: string;
   address?: string;
   postCode?: string;
