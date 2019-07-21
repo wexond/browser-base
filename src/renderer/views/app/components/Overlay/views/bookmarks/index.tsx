@@ -16,6 +16,10 @@ import { getBookmarkTitle } from '~/renderer/views/app/utils/bookmarks';
 import Tree from './Tree';
 import { BookmarkSection, PathItem, PathView } from './style';
 import { Content, Scrollable2, Sections } from '../../style';
+import { remote } from 'electron';
+import { promises } from 'fs';
+
+const parse = promisify(require('bookmarks-parser'));
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -66,7 +70,31 @@ const onPathItemClick = (item: IBookmark) => () => {
   }
 };
 
-const onImportClick = () => {};
+const addImported = (arr: any[], parent: string = null) => {
+  for (const item of arr) {
+    store.bookmarks.addItem({
+      isFolder: item.type === 'directory',
+      title: item.title,
+      url: item.url,
+    });
+  }
+};
+
+const onImportClick = () => {
+  const filePaths = remote.dialog.showOpenDialog(
+    {
+      filters: [{ name: 'HTML file', extensions: ['html'] }],
+    },
+    async filePaths => {
+      if (filePaths) {
+        const file = await promises.readFile(filePaths[0], 'utf8');
+        const res = await parse(file);
+
+        console.log(res);
+      }
+    },
+  );
+};
 
 const onExportClick = () => {};
 
