@@ -1,5 +1,5 @@
 import { ipcRenderer, remote, webFrame } from 'electron';
-import { getFormInputs, insertData } from './utils';
+import { getFormFields, insertFieldValue } from './utils';
 import { TEST_DATA } from './constants/test';
 
 const tabId = remote.getCurrentWebContents().id;
@@ -110,13 +110,10 @@ window.addEventListener('load', () => {
 
 const onFormSubmit = (e: Event) => {
   const form = e.target as HTMLFormElement;
-  const inputs = getFormInputs(form);
+  const inputs = getFormFields(form);
 
   for (const input of inputs) {
-    const type = input.getAttribute('type');
-    const name = input.getAttribute('name').toLowerCase();
-
-    insertData(input, TEST_DATA[0]);
+    insertFieldValue(input, TEST_DATA[0]);
   }
 }
 
