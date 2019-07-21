@@ -88,9 +88,7 @@ export class OverlayStore {
 
   @computed
   public get bookmark() {
-    return store.bookmarks.list.find(
-      x => x.url === store.tabs.selectedTab.url,
-    );
+    return store.bookmarks.list.find(x => x.url === store.tabs.selectedTab.url);
   }
 
   public async show() {
@@ -100,6 +98,7 @@ export class OverlayStore {
       this.scrollRef.current.scrollTop = 0;
     }
 
+    ipcRenderer.send('permission-dialog-hide');
     ipcRenderer.send('browserview-hide');
 
     this._visible = true;
