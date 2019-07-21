@@ -25,6 +25,8 @@ export const BookmarksDial = observer(() => {
               icon={
                 item.isFolder
                   ? icons.folder
+                  : item.favicon.startsWith('data:image')
+                  ? item.favicon
                   : store.favicons.favicons[item.favicon]
               }
             >

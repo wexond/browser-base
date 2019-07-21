@@ -53,7 +53,9 @@ export class BookmarksStore {
           (this.searched === '' && x.parent === this.currentFolder),
       )
       .slice()
-      .sort((a, b) => a.order - b.order);
+      .sort((a, b) => {
+        return a.order - b.order;
+      });
   }
 
   @computed

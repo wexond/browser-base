@@ -82,7 +82,7 @@ const onImportClick = () => {
         { name: 'Mozilla Firefox bookmarks', extensions: ['jsonlz4'] },
       ],
     },
-    async filePaths => {
+    async (filePaths: string[]) => {
       if (filePaths) {
         const file = await promises.readFile(filePaths[0], 'utf8');
         const res = await parse(file);
@@ -97,6 +97,8 @@ const onExportClick = () => {};
 
 const BookmarksList = observer(() => {
   const items = store.bookmarks.visibleItems;
+
+  console.log(items);
 
   return (
     <Sections>
