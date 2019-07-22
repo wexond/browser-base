@@ -1,11 +1,11 @@
 import { observable } from 'mobx';
 
 import { getWeather } from '../utils';
-import { Forecast } from '~/interfaces';
+import { IForecast } from '~/interfaces';
 
 export class WeatherStore {
   @observable
-  public data: Forecast = {};
+  public data: IForecast = {};
 
   @observable
   public loading = true;

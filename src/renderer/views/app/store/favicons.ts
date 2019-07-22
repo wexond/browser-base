@@ -1,8 +1,7 @@
-import * as Datastore from 'nedb';
-
-import { Favicon } from '~/interfaces';
-import { requestURL, getPath } from '~/utils';
+import { IFavicon } from '~/interfaces';
+import { requestURL } from '~/utils';
 import { observable } from 'mobx';
+import { Database } from '../models/database';
 
 const icojs = require('icojs');
 const fileType = require('file-type');
@@ -28,10 +27,7 @@ const readImage = (buffer: Buffer) => {
 };
 
 export class FaviconsStore {
-  public db = new Datastore({
-    filename: getPath('storage/favicons.db'),
-    autoload: true,
-  });
+  public db = new Database<IFavicon>('favicons');
 
   @observable
   public favicons: { [key: string]: string } = {};
@@ -41,15 +37,6 @@ export class FaviconsStore {
   constructor() {
     this.load();
   }
-
-  public getFavicons = (query: Favicon = {}) => {
-    return new Promise((resolve: (favicons: Favicon[]) => void, reject) => {
-      this.db.find(query, (err: any, docs: Favicon[]) => {
-        if (err) return reject(err);
-        resolve(docs);
-      });
-    });
-  };
 
   public addFavicon = async (url: string) => {
     return new Promise(async (resolve: (a: any) => void, reject: any) => {
@@ -89,16 +76,12 @@ export class FaviconsStore {
   };
 
   public async load() {
-    await this.db.find({}, (err: any, docs: Favicon[]) => {
-      if (err) return console.warn(err);
+    (await this.db.get({})).forEach(favicon => {
+      const { data } = favicon;
 
-      docs.forEach(favicon => {
-        const { data } = favicon;
-
-        if (this.favicons[favicon.url] == null) {
-          this.favicons[favicon.url] = data;
-        }
-      });
+      if (this.favicons[favicon.url] == null) {
+        this.favicons[favicon.url] = data;
+      }
     });
   }
 }
