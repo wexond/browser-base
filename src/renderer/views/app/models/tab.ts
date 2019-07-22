@@ -239,11 +239,9 @@ export class ITab {
           _id: this.lastHistoryId,
         },
         {
-          $set: {
-            title,
-            url,
-            favicon,
-          },
+          title,
+          url,
+          favicon,
         },
       );
     }

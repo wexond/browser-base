@@ -56,6 +56,8 @@ export class HistoryStore {
 
   public async addItem(item: IHistoryItem) {
     const doc = await this.db.insert(item);
+    item._id = doc._id;
+    this.items.push(item);
     return doc._id;
   }
 

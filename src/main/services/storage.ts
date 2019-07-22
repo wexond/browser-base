@@ -27,7 +27,6 @@ export const runStorageService = () => {
   ipcMain.on('storage-get', (e, id: string, scope: string, query: any) => {
     databases[scope].find(query, (err: any, docs: any) => {
       if (err) return console.error(err);
-      console.log(docs);
       e.sender.send(id, docs);
     });
   });
