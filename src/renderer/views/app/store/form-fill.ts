@@ -1,8 +1,11 @@
+import { ipcRenderer } from 'electron';
+import { observable } from 'mobx';
 import * as Datastore from 'nedb';
-import { observable, computed } from 'mobx';
 import { promisify } from 'util';
+
+import { IBookmark, IFormFillData, IFormFillItem } from '~/interfaces';
 import { getPath } from '~/utils/paths';
-import { IBookmark, IFormFillData } from '~/interfaces';
+import { getAutoCompleteValue } from '~/utils/auto-complete';
 
 export class FormFillStore {
   public db = new Datastore({
@@ -11,16 +14,33 @@ export class FormFillStore {
   });
 
   @observable
-  public list: IBookmark[] = [];
+  public list: IFormFillData[] = [
+    {
+      _id: 'a',
+      type: 'address',
+      fields: {
+        name: 'Big Skrrt Krzak',
+        address: 'Krzakowska 21',
+        postCode: '18-07',
+        city: 'Krzakowo',
+        country: 'pl',
+        phone: '123 456 789',
+        email: 'bigkrzak@wexond.net',
+      },
+    },
+  ];
 
   constructor() {
-    this.load();
-  }
+    ipcRenderer.on('autocomplete-request-items', (e: any, name: string) => {
+      const items: IFormFillItem[] = this.list.map(item => {
+        const val = getAutoCompleteValue(name, item);
+        return val && {
+          _id: item._id,
+          text: val,
+        };
+      }).filter(r => r);
 
-  public async load() {
-    const cursor = this.db.find({});
-    const items: IFormFillData[] = await promisify(cursor.exec.bind(cursor))();
-
-    this.list = items;
+      ipcRenderer.send('autocomplete-request-items', items);
+    });
   }
 }

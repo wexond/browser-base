@@ -45,10 +45,8 @@ export class FormFillWindow extends BrowserWindow {
     const cBounds = this.appWindow.getContentBounds();
 
     this.setBounds({
-      x: Math.round(cBounds.x + this.inputRect.x) - 8,
+      x: cBounds.x + this.inputRect.x - 8,
       y: cBounds.y + this.inputRect.y + this.inputRect.height + TOOLBAR_HEIGHT - MARGIN + 2,
     } as any);
-
-    // this.setBounds(this.inputPos as any);
   }
 }

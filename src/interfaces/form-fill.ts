@@ -14,3 +14,9 @@ export interface IFormFillData {
     country?: string;
   }
 }
+
+export interface IFormFillItem {
+  _id?: string;
+  text?: string;
+  subtext?: string;
+}
