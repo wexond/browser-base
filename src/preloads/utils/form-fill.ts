@@ -6,19 +6,22 @@ export type FormField = HTMLInputElement | HTMLSelectElement;
 
 export const getFormFields = (form: HTMLFormElement) => {
   const formId = form.getAttribute('id');
-  const inside = searchElements(form, 'input');
-  const outside = formId != null ? searchElements(document, `input[form=${formId}]`) : [];
+  const inside = searchElements(form, 'input, select');
+  const outside = formId != null ? searchElements(document, `input[form=${formId}], select[form=${formId}]`) : [];
 
   return filterFormFields(...inside, ...outside);
 }
 
 export const filterFormFields = (...inputs: HTMLElement[]) => {
-  return inputs.filter(el => {
-    const type = el.getAttribute('type');
-    const name = el.getAttribute('name');
+  return inputs.filter(el => validateField(el)) as FormField[];
+}
 
-    return isVisible(el) && formFieldFilters.type.test(type) && formFieldFilters.name.test(name);
-  }) as FormField[];
+export const validateField = (el: HTMLElement) => {
+  const { name, type } = formFieldFilters;
+  const nameValid = name.test(el.getAttribute('name'));
+  const typeValid = type.test(el.getAttribute('type')) || el instanceof HTMLSelectElement;
+
+  return isVisible(el) && nameValid && typeValid;
 }
 
 export const insertFieldValue = (el: FormField, data: IFormFillData) => {
