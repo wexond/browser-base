@@ -47,7 +47,7 @@ export class HistoryStore {
   }
 
   public async load() {
-    await this.db.find({}).exec((err: any, items: IHistoryItem[]) => {
+    this.db.find({}).exec((err: any, items: IHistoryItem[]) => {
       if (err) return console.warn(err);
 
       items = items.sort(

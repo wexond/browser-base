@@ -65,13 +65,19 @@ export class SettingsStore extends EventEmitter {
   }
 
   public async load() {
-    this.object = {
-      ...this.object,
-      ...JSON.parse(await promises.readFile(getPath('settings.json'), 'utf8')),
-    };
+    try {
+      const file = await promises.readFile(getPath('settings.json'), 'utf8');
 
-    this.store.theme = this.object.darkTheme ? darkTheme : lightTheme;
+      this.object = {
+        ...this.object,
+        ...JSON.parse(file),
+      };
 
-    ipcRenderer.send('settings', this.object);
+      this.store.theme = this.object.darkTheme ? darkTheme : lightTheme;
+
+      ipcRenderer.send('settings', this.object);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }

@@ -88,8 +88,7 @@ export class BookmarksStore {
   }
 
   public async load() {
-    const cursor = this.db.find({});
-    const items: IBookmark[] = await promisify(cursor.exec.bind(cursor))();
+    const items: IBookmark[] = await promisify(this.db.find.bind(this.db))({});
 
     let barFolder = items.find(x => x.static === 'main');
     let otherFolder = items.find(x => x.static === 'other');
