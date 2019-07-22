@@ -11,7 +11,7 @@ export class Database<T> {
     return new Promise(resolve => {
       const id = makeId(32);
 
-      ipcRenderer.send(`storage-${operation}`, this.scope, id, ...args);
+      ipcRenderer.send(`storage-${operation}`, id, this.scope, ...args);
 
       ipcRenderer.once(id, (e, res: any) => {
         resolve(res);
