@@ -15,6 +15,7 @@ export const runStorageService = () => {
     favicons: createDatabase('favicons'),
     bookmarks: createDatabase('bookmarks'),
     history: createDatabase('history'),
+    formfill: createDatabase('formfill'),
   };
 
   ipcMain.on('storage-insert', (e, id: string, scope: string, item: any) => {
