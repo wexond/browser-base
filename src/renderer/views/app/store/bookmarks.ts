@@ -88,43 +88,49 @@ export class BookmarksStore {
   }
 
   public async load() {
-    const items: IBookmark[] = await promisify(this.db.find.bind(this.db))({});
+    try {
+      const items: IBookmark[] = await promisify(this.db.find.bind(this.db))(
+        {},
+      );
 
-    let barFolder = items.find(x => x.static === 'main');
-    let otherFolder = items.find(x => x.static === 'other');
-    let mobileFolder = items.find(x => x.static === 'mobile');
+      let barFolder = items.find(x => x.static === 'main');
+      let otherFolder = items.find(x => x.static === 'other');
+      let mobileFolder = items.find(x => x.static === 'mobile');
 
-    this.list = items;
+      this.list = items;
 
-    if (!barFolder) {
-      barFolder = await this.addItem({
-        static: 'main',
-        isFolder: true,
-      });
+      if (!barFolder) {
+        barFolder = await this.addItem({
+          static: 'main',
+          isFolder: true,
+        });
 
-      for (const item of items) {
-        if (!item.static) {
-          await this.updateItem(item._id, { parent: barFolder._id });
+        for (const item of items) {
+          if (!item.static) {
+            await this.updateItem(item._id, { parent: barFolder._id });
+          }
         }
       }
-    }
 
-    if (!otherFolder) {
-      otherFolder = await this.addItem({
-        static: 'other',
-        isFolder: true,
-      });
-    }
+      if (!otherFolder) {
+        otherFolder = await this.addItem({
+          static: 'other',
+          isFolder: true,
+        });
+      }
 
-    if (!mobileFolder) {
-      mobileFolder = await this.addItem({
-        static: 'mobile',
-        isFolder: true,
-      });
-    }
+      if (!mobileFolder) {
+        mobileFolder = await this.addItem({
+          static: 'mobile',
+          isFolder: true,
+        });
+      }
 
-    this.currentFolder = barFolder._id;
-    this.dialCurrentFolder = barFolder._id;
+      this.currentFolder = barFolder._id;
+      this.dialCurrentFolder = barFolder._id;
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   public addItem(item: IBookmark): Promise<IBookmark> {
