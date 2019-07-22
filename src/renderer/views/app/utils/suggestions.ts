@@ -1,9 +1,9 @@
-import { HistoryItem } from '~/interfaces';
+import { IHistoryItem } from '~/interfaces';
 import { requestURL } from '~/utils';
 
 import store from '../store';
 
-export const countVisitedTimes = (hItems: HistoryItem[]) => {
+export const countVisitedTimes = (hItems: IHistoryItem[]) => {
   const items: any[] = [];
   const historyItems = hItems.slice();
 
@@ -29,7 +29,7 @@ export const countVisitedTimes = (hItems: HistoryItem[]) => {
   return items.sort((a, b) => b.times - a.times);
 };
 
-interface HistorySuggestion extends HistoryItem {
+interface HistorySuggestion extends IHistoryItem {
   canSuggest?: boolean;
   isSearch?: boolean;
 }

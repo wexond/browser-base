@@ -35,7 +35,6 @@ export const Title = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   margin-right: 16px;
-  width: fit-content;
 
   &:hover {
     cursor: pointer;
@@ -46,4 +45,7 @@ export const Title = styled.div`
 export const Site = styled.div`
   flex: 2;
   opacity: 0.54;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;

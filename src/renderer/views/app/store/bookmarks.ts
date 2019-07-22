@@ -34,10 +34,10 @@ export class BookmarksStore {
   @observable
   public currentFolder: string = null;
 
-  public currentBookmark: IBookmark;
-
   @observable
-  private _bookmarksBar: string;
+  public dialCurrentFolder: string = null;
+
+  public currentBookmark: IBookmark;
 
   @computed
   public get visibleItems() {
@@ -50,7 +50,9 @@ export class BookmarksStore {
           (this.searched === '' && x.parent === this.currentFolder),
       )
       .slice()
-      .sort((a, b) => b.order - a.order);
+      .sort((a, b) => {
+        return a.order - b.order;
+      });
   }
 
   @computed
@@ -65,15 +67,12 @@ export class BookmarksStore {
 
   @computed
   public get barItems() {
-    return this.list.filter(x => this.isBarItem(x._id));
-  }
-
-  private isBarItem(id: string): boolean {
-    const item = this.list.find(x => x._id === id);
-    if (!item) return false;
-
-    if (item.parent === this._bookmarksBar) return true;
-    return this.isBarItem(item.parent);
+    return this.list
+      .filter(x => x.parent === this.dialCurrentFolder)
+      .slice()
+      .sort((a, b) => {
+        return a.order - b.order;
+      });
   }
 
   constructor() {
@@ -89,43 +88,49 @@ export class BookmarksStore {
   }
 
   public async load() {
-    const cursor = this.db.find({});
-    const items: IBookmark[] = await promisify(cursor.exec.bind(cursor))();
-    let barFolder = items.find(x => x.static === 'main');
-    let otherFolder = items.find(x => x.static === 'other');
-    let mobileFolder = items.find(x => x.static === 'mobile');
+    try {
+      const items: IBookmark[] = await promisify(this.db.find.bind(this.db))(
+        {},
+      );
 
-    this.list = items;
+      let barFolder = items.find(x => x.static === 'main');
+      let otherFolder = items.find(x => x.static === 'other');
+      let mobileFolder = items.find(x => x.static === 'mobile');
 
-    if (!barFolder) {
-      barFolder = await this.addItem({
-        static: 'main',
-        isFolder: true,
-      });
+      this.list = items;
 
-      for (const item of items) {
-        if (!item.static) {
-          await this.updateItem(item._id, { parent: barFolder._id });
+      if (!barFolder) {
+        barFolder = await this.addItem({
+          static: 'main',
+          isFolder: true,
+        });
+
+        for (const item of items) {
+          if (!item.static) {
+            await this.updateItem(item._id, { parent: barFolder._id });
+          }
         }
       }
-    }
 
-    if (!otherFolder) {
-      otherFolder = await this.addItem({
-        static: 'other',
-        isFolder: true,
-      });
-    }
+      if (!otherFolder) {
+        otherFolder = await this.addItem({
+          static: 'other',
+          isFolder: true,
+        });
+      }
 
-    if (!mobileFolder) {
-      mobileFolder = await this.addItem({
-        static: 'mobile',
-        isFolder: true,
-      });
-    }
+      if (!mobileFolder) {
+        mobileFolder = await this.addItem({
+          static: 'mobile',
+          isFolder: true,
+        });
+      }
 
-    this._bookmarksBar = barFolder._id;
-    this.currentFolder = barFolder._id;
+      this.currentFolder = barFolder._id;
+      this.dialCurrentFolder = barFolder._id;
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   public addItem(item: IBookmark): Promise<IBookmark> {
@@ -142,7 +147,9 @@ export class BookmarksStore {
         item.children = item.children || [];
       }
 
-      item.order = this.list.filter(x => x.parent === null).length;
+      if (item.order === undefined) {
+        item.order = this.list.filter(x => x.parent === null).length;
+      }
 
       this.db.insert(item, async (err: any, doc: IBookmark) => {
         if (err) return console.error(err);

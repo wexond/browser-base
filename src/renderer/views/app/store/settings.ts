@@ -1,12 +1,13 @@
 import { observable } from 'mobx';
 import { ipcRenderer } from 'electron';
-import { writeFile, readFileSync } from 'fs';
+import { promises } from 'fs';
 
 import { ISettings } from '~/interfaces';
-import { getPath } from '~/utils';
+import { getPath, makeId } from '~/utils';
 import { darkTheme, lightTheme } from '~/renderer/constants';
 import { Store } from '.';
 import { DEFAULT_SETTINGS } from '~/constants';
+import { EventEmitter } from 'events';
 
 export type SettingsSection =
   | 'appearance'
@@ -20,31 +21,63 @@ export type SettingsSection =
   | 'downloads'
   | 'system';
 
-export class SettingsStore {
+export class SettingsStore extends EventEmitter {
   @observable
   public selectedSection: SettingsSection = 'appearance';
 
   @observable
   public object: ISettings = DEFAULT_SETTINGS;
 
-  constructor(private store: Store) {}
+  private queue: any[] = [];
 
-  public save() {
-    ipcRenderer.send('settings', this.object);
-
-    writeFile(getPath('settings.json'), JSON.stringify(this.object), err => {
-      if (err) console.error(err);
-    });
+  constructor(private store: Store) {
+    super();
+    this.load();
   }
 
-  public load() {
-    this.object = {
-      ...this.object,
-      ...JSON.parse(readFileSync(getPath('settings.json'), 'utf8')),
+  public async save() {
+    ipcRenderer.send('settings', this.object);
+
+    const id = makeId(32);
+
+    this.queue.push(id);
+
+    const exec = async () => {
+      try {
+        await promises.writeFile(
+          getPath('settings.json'),
+          JSON.stringify(this.object),
+        );
+        this.queue.splice(0, 1);
+        this.emit(`queue-${this.queue[0]}`);
+      } catch (e) {
+        console.error(e);
+      }
     };
 
-    this.store.theme = this.object.darkTheme ? darkTheme : lightTheme;
+    if (this.queue.length === 1) {
+      exec();
+    } else {
+      this.once(`queue-${id}`, () => {
+        exec();
+      });
+    }
+  }
 
-    ipcRenderer.send('settings', this.object);
+  public async load() {
+    try {
+      const file = await promises.readFile(getPath('settings.json'), 'utf8');
+
+      this.object = {
+        ...this.object,
+        ...JSON.parse(file),
+      };
+
+      this.store.theme = this.object.darkTheme ? darkTheme : lightTheme;
+
+      ipcRenderer.send('settings', this.object);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }

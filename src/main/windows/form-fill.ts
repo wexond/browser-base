@@ -29,7 +29,6 @@ export class FormFillWindow extends BrowserWindow {
       this.loadURL(join('file://', app.getAppPath(), 'build/form-fill.html'));
     }
 
-
     this.setParentWindow(this.appWindow);
   }
 

@@ -82,6 +82,10 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
       const { scrollWidth, offsetWidth, scrollLeft } = this.container;
 
       this.setState(({ thumbWidth }) => {
+        if (Number.isNaN(thumbWidth)) {
+          return { thumbLeft: 0, thumbWidth: 0, visible: false };
+        }
+
         return {
           thumbLeft: (scrollLeft / scrollWidth) * offsetWidth,
           thumbWidth: offsetWidth ** 2 / scrollWidth,

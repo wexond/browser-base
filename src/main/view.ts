@@ -145,6 +145,8 @@ export class View extends BrowserView {
     this.setAutoResize({
       width: true,
       height: true,
+      horizontal: true,
+      vertical: true,
     });
     this.webContents.loadURL(url);
   }

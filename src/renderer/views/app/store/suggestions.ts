@@ -4,13 +4,13 @@ import { getHistorySuggestions, getSearchSuggestions } from '../utils';
 import store from '.';
 import { icons } from '~/renderer/constants';
 import { isURL } from '~/utils';
-import { Suggestion } from '~/interfaces';
+import { ISuggestion } from '~/interfaces';
 
-let searchSuggestions: Suggestion[] = [];
+let searchSuggestions: ISuggestion[] = [];
 
 export class SuggestionsStore {
   @observable
-  public list: Suggestion[] = [];
+  public list: ISuggestion[] = [];
 
   @observable
   public selected = 0;
@@ -23,7 +23,7 @@ export class SuggestionsStore {
       const filter = input.value.substring(0, input.selectionStart);
       const history = getHistorySuggestions(filter);
 
-      const historySuggestions: Suggestion[] = [];
+      const historySuggestions: ISuggestion[] = [];
 
       if ((!history[0] || !history[0].canSuggest) && filter.trim() !== '') {
         historySuggestions.unshift({
@@ -59,7 +59,7 @@ export class SuggestionsStore {
         }
       }
 
-      let suggestions: Suggestion[] =
+      let suggestions: ISuggestion[] =
         input.value === ''
           ? []
           : historySuggestions.concat(searchSuggestions).slice(0, 6);

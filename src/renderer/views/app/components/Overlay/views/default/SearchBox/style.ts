@@ -10,6 +10,7 @@ export const StyledSearchBox = styled.div`
   border-radius: 23px;
   margin-bottom: 16px;
   display: flex;
+  overflow: hidden;
   flex-flow: column;
   min-height: 42px;
   transition: 0.2s height;
