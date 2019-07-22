@@ -2,7 +2,7 @@ import { BrowserWindow, app } from 'electron';
 import { join } from 'path';
 import { AppWindow } from '.';
 
-const WIDTH = 400;
+const WIDTH = 192;
 const HEIGHT = 112;
 
 export class FormFillWindow extends BrowserWindow {
@@ -28,6 +28,7 @@ export class FormFillWindow extends BrowserWindow {
     } else {
       this.loadURL(join('file://', app.getAppPath(), 'build/form-fill.html'));
     }
+
 
     this.setParentWindow(this.appWindow);
   }
