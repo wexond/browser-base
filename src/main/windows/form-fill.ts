@@ -2,8 +2,8 @@ import { BrowserWindow, app } from 'electron';
 import { join } from 'path';
 import { AppWindow } from '.';
 
-const WIDTH = 192;
-const HEIGHT = 112;
+const WIDTH = 208;
+const HEIGHT = 128;
 
 export class FormFillWindow extends BrowserWindow {
   constructor(public appWindow: AppWindow) {
