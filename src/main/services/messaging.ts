@@ -24,11 +24,10 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.findWindow.updateInfo(tabId, data),
   );
 
-  ipcMain.on('form-fill-show', (e: any, rect: any, nameAttr: string) => {
-    appWindow.webContents.send('autocomplete-request-items', nameAttr);
+  ipcMain.on('form-fill-show', (e: any, rect: any, name: string) => {
+    appWindow.webContents.send('autocomplete-request-items', name);
     appWindow.formFillWindow.inputRect = rect;
     appWindow.formFillWindow.rearrange();
-    appWindow.formFillWindow.showInactive();
   });
 
   ipcMain.on('form-fill-hide', (e: any, pos: any) => {
@@ -37,5 +36,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
 
   ipcMain.on('autocomplete-request-items', (e: any, data: any) => {
     appWindow.formFillWindow.webContents.send('autocomplete-get-items', data);
+    if (data.length) {
+      appWindow.formFillWindow.showInactive();
+    }
   })
 };
