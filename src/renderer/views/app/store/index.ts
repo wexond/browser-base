@@ -140,8 +140,6 @@ export class Store {
         }
       }
     });
-
-    this.settings.load();
   }
 }
 
