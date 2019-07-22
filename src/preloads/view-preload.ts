@@ -115,11 +115,13 @@ const onFieldFocus = (e: FocusEvent) => {
   const rects = el.getBoundingClientRect();
 
   ipcRenderer.send('form-fill-show', {
-    top: Math.floor(rects.top),
-    left: Math.floor(rects.left),
+    width: rects.width,
+    height: rects.height,
+    x: Math.floor(rects.left),
+    y: Math.floor(rects.top),
   });
 }
 
-const onFieldBlur = (e: FocusEvent) => {
-  //ipcRenderer.send('form-fill-hide');
+const onFieldBlur = () => {
+  ipcRenderer.send('form-fill-hide');
 }

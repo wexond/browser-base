@@ -65,17 +65,21 @@ export class AppWindow extends BrowserWindow {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
       }
+
       this.authWindow.rearrange();
       this.findWindow.rearrange();
       this.permissionWindow.rearrange();
+      this.formFillWindow.rearrange();
     });
     this.on('move', () => {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
       }
+
       this.authWindow.rearrange();
       this.findWindow.rearrange();
       this.permissionWindow.rearrange();
+      this.formFillWindow.rearrange();
     });
 
     const resize = () => {

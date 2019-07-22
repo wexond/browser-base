@@ -1,11 +1,20 @@
 import { BrowserWindow, app } from 'electron';
 import { join } from 'path';
 import { AppWindow } from '.';
+import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants';
 
 const WIDTH = 208;
 const HEIGHT = 128;
+const MARGIN = 8;
 
 export class FormFillWindow extends BrowserWindow {
+  public inputRect = {
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+  }
+
   constructor(public appWindow: AppWindow) {
     super({
       frame: false,
@@ -32,10 +41,14 @@ export class FormFillWindow extends BrowserWindow {
     this.setParentWindow(this.appWindow);
   }
 
-  public rearrange(pos: any) {
+  public rearrange() {
+    const cBounds = this.appWindow.getContentBounds();
+
     this.setBounds({
-      x: pos.left,
-      y: pos.top,
+      x: Math.round(cBounds.x + this.inputRect.x) - 8,
+      y: cBounds.y + this.inputRect.y + this.inputRect.height + TOOLBAR_HEIGHT - MARGIN + 2,
     } as any);
+
+    // this.setBounds(this.inputPos as any);
   }
 }

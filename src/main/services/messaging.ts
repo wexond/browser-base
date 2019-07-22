@@ -24,8 +24,9 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.findWindow.updateInfo(tabId, data),
   );
 
-  ipcMain.on('form-fill-show', (e: any, pos: any) => {
-    appWindow.formFillWindow.rearrange(pos);
+  ipcMain.on('form-fill-show', (e: any, rect: any) => {
+    appWindow.formFillWindow.inputRect = rect;
+    appWindow.formFillWindow.rearrange();
     appWindow.formFillWindow.showInactive();
   });
 
