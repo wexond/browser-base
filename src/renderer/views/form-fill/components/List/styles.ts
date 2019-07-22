@@ -1,26 +1,34 @@
 import styled from 'styled-components';
 
-import { robotoRegular } from '~/renderer/mixins';
+import { robotoRegular, noButtons } from '~/renderer/mixins';
 
 export const StyledList = styled.div`
   width: 100%;
-  height: 100%;
+  max-height: calc(100vh - 16px);
   padding: 8px 0px;
-  -webkit-app-region: no-drag;
+  overflow: hidden auto;
+  ${noButtons()};
 `;
 
-export const Item = styled.div`
+export const StyledItem = styled.div`
   width: 100%;
   height: 32px;
   display: flex;
   align-items: center;
-  padding: 0px 12px;
-  font-size: 14px;
   cursor: pointer;
-  color: #000;
-  ${robotoRegular()};
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.04);
   }
+`;
+
+export const Label = styled.div`
+  padding: 0px 12px;
+  font-size: 14px;
+  pointer-events: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: #000;
+  ${robotoRegular()};
 `;

@@ -37,6 +37,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
   ipcMain.on('autocomplete-request-items', (e: any, data: any) => {
     appWindow.formFillWindow.webContents.send('autocomplete-get-items', data);
     if (data.length) {
+      appWindow.formFillWindow.resize(data.length);
       appWindow.formFillWindow.showInactive();
     }
   })

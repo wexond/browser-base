@@ -123,5 +123,5 @@ const onFieldFocus = (e: FocusEvent) => {
 }
 
 const onFieldBlur = () => {
-  ipcRenderer.send('form-fill-hide');
+  //ipcRenderer.send('form-fill-hide');
 }

@@ -17,6 +17,5 @@ export interface IFormFillData {
 
 export interface IFormFillItem {
   _id?: string;
-  text?: string;
-  subtext?: string;
+  label?: string;
 }

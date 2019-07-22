@@ -6,6 +6,7 @@ import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants';
 const WIDTH = 208;
 const HEIGHT = 128;
 const MARGIN = 8;
+const ITEM_HEIGHT = 32;
 
 export class FormFillWindow extends BrowserWindow {
   public inputRect = {
@@ -48,5 +49,10 @@ export class FormFillWindow extends BrowserWindow {
       x: cBounds.x + this.inputRect.x - 8,
       y: cBounds.y + this.inputRect.y + this.inputRect.height + TOOLBAR_HEIGHT - MARGIN + 2,
     } as any);
+  }
+
+  public resize(itemsLength: number) {
+    itemsLength = itemsLength > 4 ? 4 : itemsLength;
+    this.setSize(WIDTH, itemsLength * ITEM_HEIGHT + MARGIN * 2);
   }
 }
