@@ -1,14 +1,10 @@
-import * as Datastore from 'nedb';
 import { observable, computed, action } from 'mobx';
-import { getPath } from '~/utils/paths';
 import { IBookmark } from '~/interfaces';
 import { promisify } from 'util';
+import { Database } from '../models/database';
 
 export class BookmarksStore {
-  public db = new Datastore({
-    filename: getPath('storage/bookmarks.db'),
-    autoload: true,
-  });
+  public db = new Database<IBookmark>('bookmarks');
 
   @observable
   public list: IBookmark[] = [];
@@ -89,9 +85,7 @@ export class BookmarksStore {
 
   public async load() {
     try {
-      const items: IBookmark[] = await promisify(this.db.find.bind(this.db))(
-        {},
-      );
+      const items = await this.db.get({});
 
       let barFolder = items.find(x => x.static === 'main');
       let otherFolder = items.find(x => x.static === 'other');
@@ -133,38 +127,35 @@ export class BookmarksStore {
     }
   }
 
-  public addItem(item: IBookmark): Promise<IBookmark> {
-    return new Promise((resolve, reject) => {
-      if (item.parent === undefined) {
-        item.parent = null;
-      }
+  public async addItem(item: IBookmark): Promise<IBookmark> {
+    if (item.parent === undefined) {
+      item.parent = null;
+    }
 
-      if (item.parent === null && !item.static) {
-        return reject('Parent bookmark should be specified');
-      }
+    if (item.parent === null && !item.static) {
+      throw new Error('Parent bookmark should be specified');
+    }
 
-      if (item.isFolder) {
-        item.children = item.children || [];
-      }
+    if (item.isFolder) {
+      item.children = item.children || [];
+    }
 
-      if (item.order === undefined) {
-        item.order = this.list.filter(x => x.parent === null).length;
-      }
+    if (item.order === undefined) {
+      item.order = this.list.filter(x => x.parent === null).length;
+    }
 
-      this.db.insert(item, async (err: any, doc: IBookmark) => {
-        if (err) return console.error(err);
+    const doc = await this.db.insert(item);
 
-        if (item.parent) {
-          const parent = this.list.find(x => x._id === item.parent);
-          await this.updateItem(parent._id, {
-            children: [...parent.children, doc._id],
-          });
-        }
-
-        this.list.push(doc);
-        resolve(doc);
+    if (item.parent) {
+      const parent = this.list.find(x => x._id === item.parent);
+      await this.updateItem(parent._id, {
+        children: [...parent.children, doc._id],
       });
-    });
+    }
+
+    this.list.push(doc);
+
+    return doc;
   }
 
   public removeItem(id: string) {
@@ -175,17 +166,13 @@ export class BookmarksStore {
     parent.children = parent.children.filter(x => x !== id);
     this.updateItem(item.parent, { children: parent.children });
 
-    this.db.remove({ _id: id }, err => {
-      if (err) return console.warn(err);
-    });
+    this.db.remove({ _id: id });
 
     if (item.isFolder) {
       this.list = this.list.filter(x => x.parent !== id);
       const removed = this.list.filter(x => x.parent === id);
 
-      this.db.remove({ parent: id }, { multi: true }, err => {
-        if (err) return console.warn(err);
-      });
+      this.db.remove({ parent: id }, true);
 
       for (const i of removed) {
         if (i.isFolder) {
@@ -195,17 +182,11 @@ export class BookmarksStore {
     }
   }
 
-  public updateItem(id: string, change: IBookmark) {
-    return new Promise(resolve => {
-      const index = this.list.indexOf(this.list.find(x => x._id === id));
-      this.list[index] = { ...this.list[index], ...change };
+  public async updateItem(id: string, change: IBookmark) {
+    const index = this.list.indexOf(this.list.find(x => x._id === id));
+    this.list[index] = { ...this.list[index], ...change };
 
-      this.db.update({ _id: id }, { $set: change }, {}, (err: any) => {
-        if (err) return console.error(err);
-
-        resolve();
-      });
-    });
+    await this.db.update({ _id: id }, change);
   }
 
   @action
