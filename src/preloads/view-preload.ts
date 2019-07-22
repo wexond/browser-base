@@ -1,6 +1,6 @@
 import { ipcRenderer, remote, webFrame } from 'electron';
-import { getFormFields, insertFieldValue } from './utils';
-import { TEST_DATA } from './constants/test';
+import { getFormFields } from './utils';
+import { formFieldFilters } from './constants';
 
 const tabId = remote.getCurrentWebContents().id;
 
@@ -86,39 +86,40 @@ ipcRenderer.on('scroll-touch-end', () => {
   resetCounters();
 });
 
-const dev = (e: any) => {
-  e.preventDefault();
-  e.stopPropagation();
-  const button = document.querySelector('input[type=button]') as HTMLButtonElement;
-  button.removeAttribute('disabled');
-  button.value = 'Sign in';
-}
-
 window.addEventListener('load', () => {
   const forms = document.querySelectorAll('form');
 
   forms.forEach(form => {
+    const fields = getFormFields(form);
+
+    for (const field of fields) {
+      const { menu } = formFieldFilters;
+      const nameValid = menu.test(field.getAttribute('name'));
+
+      if (field instanceof HTMLInputElement && nameValid) {
+        field.addEventListener('focus', onFieldFocus);
+        field.addEventListener('blur', onFieldBlur);
+      }
+    }
+
     form.addEventListener('submit', onFormSubmit)
   })
-
-  const button = document.querySelector('input[type=button]') as HTMLButtonElement;
-
-  button.addEventListener('click', (e: Event) => {
-    onFormSubmit({ ...e, target: document.getElementsByTagName('form')[0] });
-  });
-});
+})
 
 const onFormSubmit = (e: Event) => {
-  const form = e.target as HTMLFormElement;
-  const inputs = getFormFields(form);
-
-  for (const input of inputs) {
-    insertFieldValue(input, TEST_DATA[0]);
-  }
+  console.log('submit');
 }
 
-window.onload = () => {
-  requestAnimationFrame(() => {
-    document.body.style.backgroundColor = '#fff';
-  })
+const onFieldFocus = (e: FocusEvent) => {
+  const el = e.target as HTMLInputElement;
+  const rects = el.getBoundingClientRect();
+
+  ipcRenderer.send('form-fill-show', {
+    top: Math.floor(rects.top),
+    left: Math.floor(rects.left),
+  });
+}
+
+const onFieldBlur = (e: FocusEvent) => {
+  //ipcRenderer.send('form-fill-hide');
 }

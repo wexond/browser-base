@@ -16,11 +16,20 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.findWindow.find(tabId, data);
   });
 
-  ipcMain.on('permission-dialog-hide', e => {
+  ipcMain.on('permission-dialog-hide', (e: any) => {
     appWindow.permissionWindow.hide();
   });
 
   ipcMain.on('update-find-info', (e: any, tabId: number, data: any) =>
     appWindow.findWindow.updateInfo(tabId, data),
   );
+
+  ipcMain.on('form-fill-show', (e: any, pos: any) => {
+    appWindow.formFillWindow.rearrange(pos);
+    appWindow.formFillWindow.showInactive();
+  });
+
+  ipcMain.on('form-fill-hide', (e: any, pos: any) => {
+    appWindow.formFillWindow.hide();
+  });
 };

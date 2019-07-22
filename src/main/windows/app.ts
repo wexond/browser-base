@@ -1,11 +1,11 @@
 import { BrowserWindow, app } from 'electron';
+import { readFileSync, writeFileSync } from 'fs';
 import { resolve, join } from 'path';
 
 import { ViewManager } from '../view-manager';
 import { getPath } from '~/utils';
-import { readFileSync, writeFileSync } from 'fs';
 import { runMessagingService, Multrin } from '../services';
-import { PermissionsWindow, AuthWindow, FindWindow } from '.';
+import { PermissionsWindow, AuthWindow, FindWindow, FormFillWindow } from '.';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager = new ViewManager();
@@ -14,6 +14,7 @@ export class AppWindow extends BrowserWindow {
   public permissionWindow = new PermissionsWindow(this);
   public authWindow = new AuthWindow(this);
   public findWindow = new FindWindow(this);
+  public formFillWindow = new FormFillWindow(this);
 
   constructor() {
     super({

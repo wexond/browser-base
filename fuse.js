@@ -127,5 +127,6 @@ renderer('app');
 renderer('auth');
 renderer('permissions');
 renderer('find');
+renderer('form-fill');
 preload('view-preload');
 main();
