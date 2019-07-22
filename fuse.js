@@ -105,6 +105,7 @@ const renderer = name => {
       });
     } else {
       app.watch();
+      fuse.run();
     }
   } else {
     fuse.run();
