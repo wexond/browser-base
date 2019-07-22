@@ -3,20 +3,20 @@ import * as Datastore from 'nedb';
 import { getPath } from '~/utils';
 import { ipcMain } from 'electron';
 
-const createDatabase = (name: string) => {
-  return new Datastore({
-    filename: getPath(`storage/${name}.db`),
-    autoload: true,
-  });
-};
-
-const databases: { [key: string]: Datastore } = {
-  favicons: createDatabase('favicons'),
-  bookmarks: createDatabase('bookmarks'),
-  history: createDatabase('history'),
-};
-
 export const runStorageService = () => {
+  const createDatabase = (name: string) => {
+    return new Datastore({
+      filename: getPath(`storage/${name}.db`),
+      autoload: true,
+    });
+  };
+
+  const databases: { [key: string]: Datastore } = {
+    favicons: createDatabase('favicons'),
+    bookmarks: createDatabase('bookmarks'),
+    history: createDatabase('history'),
+  };
+
   ipcMain.on('storage-insert', (e, id: string, scope: string, item: any) => {
     databases[scope].insert(item, (err: any, doc: any) => {
       if (err) return console.error(err);
@@ -27,6 +27,7 @@ export const runStorageService = () => {
   ipcMain.on('storage-get', (e, id: string, scope: string, query: any) => {
     databases[scope].find(query, (err: any, docs: any) => {
       if (err) return console.error(err);
+      console.log(docs);
       e.sender.send(id, docs);
     });
   });
