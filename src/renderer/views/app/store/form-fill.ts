@@ -1,17 +1,12 @@
 import { ipcRenderer } from 'electron';
 import { observable } from 'mobx';
-import * as Datastore from 'nedb';
-import { promisify } from 'util';
 
-import { IBookmark, IFormFillData, IFormFillItem } from '~/interfaces';
-import { getPath } from '~/utils/paths';
+import { IFormFillData, IFormFillItem } from '~/interfaces';
 import { getAutoCompleteValue } from '~/utils/auto-complete';
+import { Database } from '../models/database';
 
 export class FormFillStore {
-  public db = new Datastore({
-    filename: getPath('storage/form-fill.db'),
-    autoload: true,
-  });
+  public db = new Database<IFormFillData>('formfill');
 
   @observable
   public list: IFormFillData[] = [

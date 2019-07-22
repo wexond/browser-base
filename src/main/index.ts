@@ -14,6 +14,7 @@ import { runAutoUpdaterService } from './services/auto-updater';
 import { checkFiles } from '~/utils/files';
 import { DEFAULT_SETTINGS } from '~/constants';
 import { windowManager } from 'node-window-manager';
+import { runStorageService } from './services/storage';
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
 
@@ -162,7 +163,7 @@ app.on('ready', async () => {
   }
 
   runAdblockService(viewSession);
-
+  runStorageService();
   runAutoUpdaterService(appWindow);
 });
 
