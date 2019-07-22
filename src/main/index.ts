@@ -13,6 +13,7 @@ import { getMainMenu } from './menus/main';
 import { runAutoUpdaterService } from './services/auto-updater';
 import { checkFiles } from '~/utils/files';
 import { DEFAULT_SETTINGS } from '~/constants';
+import { windowManager } from 'node-window-manager';
 
 export const log = require('electron-log');
 

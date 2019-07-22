@@ -37,9 +37,6 @@ export class BookmarksStore {
   @observable
   public dialCurrentFolder: string = null;
 
-  @observable
-  private _bookmarksBar: string;
-
   public currentBookmark: IBookmark;
 
   @computed
@@ -93,6 +90,7 @@ export class BookmarksStore {
   public async load() {
     const cursor = this.db.find({});
     const items: IBookmark[] = await promisify(cursor.exec.bind(cursor))();
+
     let barFolder = items.find(x => x.static === 'main');
     let otherFolder = items.find(x => x.static === 'other');
     let mobileFolder = items.find(x => x.static === 'mobile');
@@ -126,7 +124,6 @@ export class BookmarksStore {
       });
     }
 
-    this._bookmarksBar = barFolder._id;
     this.currentFolder = barFolder._id;
     this.dialCurrentFolder = barFolder._id;
   }

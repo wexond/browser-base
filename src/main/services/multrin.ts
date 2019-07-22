@@ -67,6 +67,12 @@ export class Multrin {
     this.appWindow.on('resize', updateBounds);
 
     this.appWindow.on('close', () => {
+      windowManager.removeAllListeners('window-activated');
+      mouseHooks.removeAllListeners('mouse-down');
+      mouseHooks.removeAllListeners('mouse-move');
+      mouseHooks.removeAllListeners('mouse-up');
+      clearInterval(this.interval);
+
       for (const window of this.windows) {
         this.detachWindow(window);
       }
