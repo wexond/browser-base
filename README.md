@@ -16,7 +16,7 @@ Flowr PC Client is an Flowr client for PC, Mac or Linux. Thers is an embedded pr
 
 ## Running
 
-Before running Flowr-pc-client, please ensure you have [`Node.js`](https://nodejs.org/en/) installed on your machine.
+Before running flowr-desktop, please ensure you have [`Node.js`](https://nodejs.org/en/) installed on your machine.
 
 When running on Windows, make sure you have build tools installed. You can install them by running as **administrator**:
 
@@ -30,7 +30,7 @@ Firstly, run this command to install all needed dependencies. If you have encoun
 $ npm install
 ```
 
-The given command below will run Flowr-pc-client in the development mode.
+The given command below will run flowr-desktop in the development mode.
 
 ```bash
 $ npm run dev
@@ -50,14 +50,14 @@ $ npm run <command>
 
 | Command          | Description                                 |
 | ---------------- | ------------------------------------------- |
-| `build`          | Bundles Flowr-pc-client's source in production mode. |
-| `compile-win32`  | Compiles Flowr-pc-client binaries for Windows.       |
-| `compile-darwin` | Compiles Flowr-pc-client binaries for macOS.         |
-| `compile-linux`  | Compiles Flowr-pc-client binaries for Linux.         |
+| `build`          | Bundles flowr-desktop's source in production mode. |
+| `compile-win32`  | Compiles flowr-desktop binaries for Windows.       |
+| `compile-darwin` | Compiles flowr-desktop binaries for macOS.         |
+| `compile-linux`  | Compiles flowr-desktop binaries for Linux.         |
 | `lint`           | Lints code.                                          |
 | `lint-fix`       | Fixes eslint errors if any                           |
-| `start`          | Starts Flowr-pc-client.                              |
-| `dev`            | Starts Flowr-pc-client in the development mode       |
+| `start`          | Starts flowr-desktop.                              |
+| `dev`            | Starts flowr-desktop in the development mode       |
 
 
 #### Translation

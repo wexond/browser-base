@@ -1,6 +1,6 @@
 {
   "appId": "org.taktik.flowr.pcClient",
-  "productName": "Flowr-pc-client",
+  "productName": "flowr-desktop",
 
   "nsis": {
     "include": "static/installer.nsh"
