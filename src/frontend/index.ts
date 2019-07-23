@@ -4,6 +4,7 @@ import { ipcMain, Menu, app, protocol, BrowserWindow, BrowserWindowConstructorOp
 import { Store, initConfigData } from './src/store'
 import { FlowrWindow } from './flowr-window'
 import { extend } from 'lodash'
+import { URL } from 'url'
 const network = require('network');
 const deepExtend = require('deep-extend')
 import defaultBrowserWindowOptions from './defaultBrowserWindowOptions'
@@ -40,7 +41,7 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
 
   const defaultUrl = buildFileUrl('config.html')
   const kiosk = flowrStore.get('isKiosk') || false
-  const url = flowrStore.get('extUrl') || defaultUrl
+  const url = new URL(flowrStore.get('extUrl') || defaultUrl)
   // Create the browser window.
   const opts = buildBrowserWindowConfig({
     icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
@@ -61,7 +62,8 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
   mainWindow.setMenuBarVisibility(false)
   // mainWindow.setAlwaysOnTop(true, 'floating', 0)
 
-  mainWindow.loadURL(`${url}?mac=${mac}`)
+  url.searchParams.set('mac', mac)
+  mainWindow.loadURL(url.href)
 
   // Open the DevTools.
   if (process.env.ENV === 'dev') {
