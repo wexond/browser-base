@@ -1,6 +1,6 @@
 import { IFormFillData } from '~/interfaces';
 
-export const getAutoCompleteValue = (name: string, data: IFormFillData) => {
+export const getFormFillValue = (name: string, data: IFormFillData) => {
   const { fields } = data;
   const fullName = (fields.name || '').split(' ');
 
@@ -40,4 +40,10 @@ export const getAutoCompleteValue = (name: string, data: IFormFillData) => {
   }
 
   return null;
+}
+
+export const getFormFillSubValue = (name: string, data: IFormFillData) => {
+  console.log(name, data);
+
+  return '';
 }

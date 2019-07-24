@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import { observable } from 'mobx';
 
 import { IFormFillData, IFormFillItem } from '~/interfaces';
-import { getAutoCompleteValue } from '~/utils/auto-complete';
+import { getFormFillValue, getFormFillSubValue } from '~/utils/form-fill';
 import { Database } from '../models/database';
 
 export class FormFillStore {
@@ -80,11 +80,13 @@ export class FormFillStore {
   constructor() {
     ipcRenderer.on('autocomplete-request-items', (e: any, name: string) => {
       const items = this.list.map(item => {
-        const val = getAutoCompleteValue(name, item);
+        const text = getFormFillValue(name, item);
+        const subtext = getFormFillSubValue(name, item);
 
-        return val && {
+        return text && {
           _id: item._id,
-          text: val,
+          text,
+          subtext,
         } as IFormFillItem;
       }).filter(r => r);
 

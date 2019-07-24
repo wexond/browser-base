@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { robotoRegular, noButtons } from '~/renderer/mixins';
+import { transparency } from '~/renderer/constants';
 
 export const StyledList = styled.div`
   width: 100%;
@@ -22,7 +23,7 @@ export const StyledItem = styled.div`
   }
 `;
 
-export const Label = styled.div`
+export const Text = styled.div`
   padding: 0px 12px;
   font-size: 14px;
   pointer-events: none;
@@ -31,4 +32,9 @@ export const Label = styled.div`
   overflow: hidden;
   color: #000;
   ${robotoRegular()};
+`;
+
+export const SubText = styled(Text)`
+  font-size: 13px;
+  color: rgba(0, 0, 0, ${transparency.text.medium});
 `;

@@ -1,7 +1,7 @@
 import { searchElements, isVisible } from './dom';
 import { formFieldFilters } from '../constants';
 import { IFormFillData } from '~/interfaces';
-import { getAutoCompleteValue } from '~/utils/auto-complete';
+import { getFormFillValue } from '~/utils/form-fill';
 
 export type FormField = HTMLInputElement | HTMLSelectElement;
 
@@ -30,7 +30,7 @@ export const insertFieldValue = (el: FormField, data: IFormFillData) => {
 
   if (autoComplete !== 'off') {
     const name = el.getAttribute('name');
-    const value = getAutoCompleteValue(name, data);
+    const value = getFormFillValue(name, data);
 
     if (value) {
       el.value = value;

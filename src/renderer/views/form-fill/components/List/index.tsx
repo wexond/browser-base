@@ -3,12 +3,13 @@ import { observer } from 'mobx-react';
 
 import store from '../../store';
 import { IFormFillItem } from '~/interfaces';
-import { StyledList, StyledItem, Label } from './styles';
+import { StyledList, StyledItem, Text, SubText } from './styles';
 
 const Item = observer(({ data }: { data: IFormFillItem }) => {
   return (
     <StyledItem>
-      <Label>{data.text}</Label>
+      <Text>{data.text}</Text>
+      <SubText>{data.subtext}</SubText>
     </StyledItem>
   );
 });
