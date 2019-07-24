@@ -42,6 +42,16 @@ export const getMainMenu = (appWindow: AppWindow) => {
             appWindow.viewManager.create(defaultTabOptions);
           },
         },
+        {
+          accelerator: 'CmdOrCtrl+W',
+          label: 'Close tab',
+          click() {
+            appWindow.webContents.send(
+              'remove-tab',
+              appWindow.viewManager.selectedId,
+            );
+          },
+        },
       ],
     },
   ]);
