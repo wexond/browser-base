@@ -49,6 +49,17 @@ export class StorageService {
     });
   }
 
+  public findOne<T>(data: IFindOperation): Promise<T> {
+    const { scope, query } = data;
+
+    return new Promise((resolve, reject) => {
+      this.databases[scope].findOne(query, (err: any, doc: any) => {
+        if (err) reject(err);
+        resolve(doc);
+      });
+    });
+  }
+
   public insert<T>(data: IInsertOperation): Promise<T> {
     const { scope, item } = data;
 

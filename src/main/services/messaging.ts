@@ -1,7 +1,8 @@
 import { ipcMain } from 'electron';
 
+import { IFormFillItem } from '~/interfaces';
 import { AppWindow } from '../windows';
-import { IFormFillItem, IFormFillData } from '~/interfaces';
+import { getFormFillMenuItems } from '../utils';
 import storage from './storage';
 
 export const runMessagingService = (appWindow: AppWindow) => {
@@ -27,39 +28,30 @@ export const runMessagingService = (appWindow: AppWindow) => {
   );
 
   ipcMain.on('form-fill-show', async (e: any, rect: any, name: string) => {
-    const items = await storage.find<IFormFillData>({
-      scope: 'formfill',
-      query: {},
-    });
-
-    appWindow.formFillWindow.inputRect = rect;
-    appWindow.formFillWindow.rearrange();
-  });
-
-  /*
-  ipcMain.on('form-fill-show', (e: any, rect: any, name: string) => {
-    appWindow.webContents.send('autocomplete-request-items', name);
-    appWindow.formFillWindow.inputRect = rect;
-    appWindow.formFillWindow.rearrange();
-  });
-
-  ipcMain.on('form-fill-hide', (e: any, pos: any) => {
-    appWindow.formFillWindow.hide();
-  });
-
-  ipcMain.on('autocomplete-request-items', (e: any, items: IFormFillItem[]) => {
-    appWindow.formFillWindow.webContents.send('autocomplete-get-items', items);
+    const items = await getFormFillMenuItems(name);
 
     if (items.length) {
+      appWindow.formFillWindow.webContents.send('autocomplete-get-items', items);
+      appWindow.formFillWindow.inputRect = rect;
+
       appWindow.formFillWindow.resize(items.length, items.find(r => r.subtext) != null);
+      appWindow.formFillWindow.rearrange();
       appWindow.formFillWindow.showInactive();
     } else {
       appWindow.formFillWindow.hide();
     }
-  })
+  });
 
-  ipcMain.on('form-fill-update', (e: any, id: string, persistent = false) => {
-    const data = id && formFillItems.find(r => r._id === id);
-    appWindow.viewManager.selected.webContents.send('form-fill-update', data, persistent);
-  })*/
+  ipcMain.on('form-fill-hide', () => {
+    appWindow.formFillWindow.hide();
+  });
+
+  ipcMain.on('form-fill-update', async (e: any, _id: string, persistent = false) => {
+    const item = _id && await storage.findOne<IFormFillItem>({
+      scope: 'formfill',
+      query: { _id },
+    });
+
+    appWindow.viewManager.selected.webContents.send('form-fill-update', item, persistent);
+  })
 };

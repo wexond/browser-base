@@ -15,6 +15,8 @@ export class AutoComplete {
     ipcRenderer.on('form-fill-update', (e: any, data: IFormFillData, persistent: boolean) => {
       if (!this.currentForm) return;
 
+      console.log(data);
+
       if (!this.currentForm.changed || data) {
         this.currentForm.insertData(data);
       } else {
