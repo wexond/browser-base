@@ -1,8 +1,6 @@
 import { ipcRenderer, remote, webFrame } from 'electron';
 
-import { getFormFields, FormField, insertFieldValue } from './utils';
-import { formFieldFilters } from './constants';
-import { IFormFillData } from '~/interfaces';
+import AutoComplete from './models/auto-complete';
 
 const tabId = remote.getCurrentWebContents().id;
 
@@ -88,54 +86,4 @@ ipcRenderer.on('scroll-touch-end', () => {
   resetCounters();
 });
 
-let formFields: FormField[] = [];
-let inserted = false;
-
-window.addEventListener('load', () => {
-  const forms = document.querySelectorAll('form');
-
-  forms.forEach(form => {
-    const fields = getFormFields(form);
-
-    for (const field of fields) {
-      const { menu } = formFieldFilters;
-      const isNameValid = menu.test(field.getAttribute('name'));
-
-      if (field instanceof HTMLInputElement && isNameValid) {
-        field.addEventListener('focus', (e: FocusEvent) => {
-          const el = e.target as HTMLInputElement;
-          const rects = el.getBoundingClientRect();
-
-          ipcRenderer.send('form-fill-show', {
-            width: rects.width,
-            height: rects.height,
-            x: Math.floor(rects.left),
-            y: Math.floor(rects.top),
-          }, el.getAttribute('name'));
-
-          formFields = fields;
-        });
-
-        field.addEventListener('blur', () => {
-          ipcRenderer.send('form-fill-hide')
-        });
-      }
-    }
-
-    form.addEventListener('submit', onFormSubmit)
-  })
-})
-
-const onFormSubmit = (e: Event) => {
-  console.log('submit');
-}
-
-ipcRenderer.on('form-fill-set', (e: any, data: IFormFillData) => {
-  for (const field of formFields) {
-    if (data != null) {
-      insertFieldValue(field, data);
-    } else if (!inserted) {
-      //field.value = '';
-    }
-  }
-});
+window.addEventListener('load', AutoComplete.loadForms);
