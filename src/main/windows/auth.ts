@@ -1,36 +1,19 @@
-import { BrowserWindow, app, ipcMain } from 'electron';
-import { join } from 'path';
+import { ipcMain } from 'electron';
 import { AppWindow } from '.';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
+import { PopupWindow } from './popup';
 
 const WIDTH = 400;
 const HEIGHT = 500;
 
-export class AuthWindow extends BrowserWindow {
+export class AuthWindow extends PopupWindow {
   constructor(public appWindow: AppWindow) {
-    super({
-      frame: false,
-      resizable: false,
-      width: WIDTH,
+    super(appWindow, 'auth');
+
+    this.setBounds({
       height: HEIGHT,
-      transparent: true,
-      show: false,
-      fullscreenable: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-      },
-      skipTaskbar: true,
-    });
-
-    if (process.env.ENV === 'dev') {
-      // this.webContents.openDevTools({ mode: 'detach' });
-      this.loadURL('http://localhost:4444/auth.html');
-    } else {
-      this.loadURL(join('file://', app.getAppPath(), 'build/auth.html'));
-    }
-
-    this.setParentWindow(this.appWindow);
+      width: WIDTH,
+    } as any);
   }
 
   public requestAuth(

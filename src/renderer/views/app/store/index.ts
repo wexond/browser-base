@@ -80,7 +80,7 @@ export class Store {
     y: 0,
   };
 
-  public windowId = getCurrentWindow().id;
+  public windowId = getCurrentWindow().webContents.id;
 
   constructor() {
     ipcRenderer.on('update-navigation-state', (e, data: any) => {
