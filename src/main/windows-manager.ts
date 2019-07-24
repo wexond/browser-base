@@ -6,6 +6,7 @@ import { getMainMenu } from './menus/main';
 import { SessionsManager } from './sessions-manager';
 import { runAutoUpdaterService } from './services';
 import { checkFiles } from '~/utils/files';
+import { Settings } from './models/settings';
 
 export class WindowsManager {
   public list: AppWindow[] = [];
@@ -13,6 +14,8 @@ export class WindowsManager {
   public currentWindow: AppWindow;
 
   public sessionsManager: SessionsManager;
+
+  public settings = new Settings();
 
   constructor() {
     const gotTheLock = app.requestSingleInstanceLock();

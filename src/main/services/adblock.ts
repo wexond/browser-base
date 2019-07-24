@@ -1,12 +1,11 @@
 import { Session } from 'electron';
-import { existsSync, readFile, writeFile, mkdirSync } from 'fs';
+import { existsSync, readFile, writeFile } from 'fs';
 import { resolve } from 'path';
 import { windowsManager } from '..';
 import Axios from 'axios';
 
 import { FiltersEngine, Request } from '@cliqz/adblocker';
 import { getPath } from '~/utils';
-import { settings } from './settings';
 
 const lists: any = {
   easylist: 'https://easylist.to/easylist/easylist.txt',
@@ -92,7 +91,7 @@ export const runAdblockService = (ses: Session) => {
   webRequest.onBeforeRequest(
     { urls: ['<all_urls>'] },
     async (details: Electron.OnBeforeRequestDetails, callback: any) => {
-      if (engine && settings.shield) {
+      if (engine && windowsManager.settings.object.shield) {
         const { match, redirect } = engine.match(
           Request.fromRawDetails({
             type: details.resourceType as any,
