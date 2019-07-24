@@ -141,6 +141,20 @@ export class TabsStore {
       }
     });
 
+    ipcRenderer.on('select-next-tab', () => {
+      const { tabs } = store.tabGroups.currentGroup;
+      const i = tabs.indexOf(this.selectedTab);
+      const nextTab = tabs[i + 1];
+
+      if (!nextTab) {
+        if (tabs[0]) {
+          tabs[0].select();
+        }
+      } else {
+        nextTab.select();
+      }
+    });
+
     ipcRenderer.on(
       'update-tab-find-info',
       (e: any, tabId: number, data: any) => {

@@ -59,6 +59,13 @@ export const getMainMenu = (appWindow: AppWindow) => {
             appWindow.webContents.send('revert-closed-tab');
           },
         },
+        {
+          accelerator: 'CmdOrCtrl+Tab',
+          label: 'Select next tab',
+          click() {
+            appWindow.webContents.send('select-next-tab');
+          },
+        },
       ],
     },
   ]);
