@@ -93,7 +93,7 @@ export class StorageService {
 
   public run() {
     for (const key in this.databases) {
-      this.databases[key] = this.createDatabase(key);
+      this.databases[key] = this.createDatabase(key.toLowerCase());
     }
   }
 

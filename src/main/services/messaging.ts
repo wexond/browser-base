@@ -26,8 +26,11 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.findWindow.updateInfo(tabId, data),
   );
 
-  ipcMain.on('form-fill-show', (e: any, rect: any, name: string) => {
-    //const items = storage.databases.formfill.find({}, (docs) => );
+  ipcMain.on('form-fill-show', async (e: any, rect: any, name: string) => {
+    const items = await storage.find<IFormFillData>({
+      scope: 'formfill',
+      query: {},
+    });
 
     appWindow.formFillWindow.inputRect = rect;
     appWindow.formFillWindow.rearrange();
