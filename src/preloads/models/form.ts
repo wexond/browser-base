@@ -9,6 +9,10 @@ import AutoComplete from './auto-complete';
 export type FormField = HTMLInputElement | HTMLSelectElement;
 
 export class Form {
+  public changed = false;
+
+  public data: IFormFillData;
+
   constructor(public ref: HTMLFormElement) {
     this.load();
   }
@@ -20,7 +24,6 @@ export class Form {
 
       if (field instanceof HTMLInputElement && isNameValid) {
         field.addEventListener('focus', this.onFieldFocus);
-        field.addEventListener('blur', this.onFieldBlur);
       }
     }
   }
@@ -42,16 +45,16 @@ export class Form {
   }
 
   public insertData(data: IFormFillData) {
-    if (data == null) return; // TODO
-
     for (const field of this.fields) {
       const autoComplete = this.ref.getAttribute('autocomplete');
 
       if (autoComplete !== 'off') {
-        const name = field.getAttribute('name');
-        const value = getFormFillValue(name, data);
-
-        field.value = value || '';
+        if (data) {
+          const value = getFormFillValue(field.getAttribute('name'), data);
+          field.value = value || '';
+        } else {
+          field.value = '';
+        }
       }
     }
   }
@@ -65,6 +68,7 @@ export class Form {
     const rects = field.getBoundingClientRect();
 
     AutoComplete.currentForm = this;
+    AutoComplete.visible = true;
 
     ipcRenderer.send('form-fill-show', {
       width: rects.width,
@@ -72,9 +76,5 @@ export class Form {
       x: Math.floor(rects.left),
       y: Math.floor(rects.top),
     }, field.getAttribute('name'));
-  }
-
-  public onFieldBlur = () => {
-    ipcRenderer.send('form-fill-hide');
   }
 }

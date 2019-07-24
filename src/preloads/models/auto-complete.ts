@@ -9,10 +9,21 @@ export class AutoComplete {
 
   public currentForm: Form;
 
+  public visible = false;
+
   constructor() {
-    ipcRenderer.on('form-fill-set', (e: any, data: IFormFillData) => {
-      if (this.currentForm != null) {
+    ipcRenderer.on('form-fill-update', (e: any, data: IFormFillData, persistent: boolean) => {
+      if (!this.currentForm) return;
+
+      if (!this.currentForm.changed || data) {
         this.currentForm.insertData(data);
+      } else {
+        this.currentForm.insertData(this.currentForm.data);
+      }
+
+      if (persistent) {
+        this.currentForm.data = data;
+        this.currentForm.changed = true;
       }
     });
   }
@@ -21,6 +32,17 @@ export class AutoComplete {
     const forms = <HTMLFormElement[]>searchElements(document, 'form');
 
     this.forms = forms.map(el => new Form(el));
+  }
+
+  public onWindowMouseDown = () => {
+    this.hide();
+  }
+
+  public hide() {
+    if (this.visible) {
+      this.visible = false;
+      ipcRenderer.send('form-fill-hide');
+    }
   }
 }
 

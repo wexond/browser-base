@@ -6,18 +6,24 @@ import store from '../../store';
 import { IFormFillItem } from '~/interfaces';
 import { StyledList, StyledItem, Text, SubText } from './styles';
 
+const onClick = (data: IFormFillItem) => () => {
+  ipcRenderer.send('form-fill-update', data._id, true);
+  ipcRenderer.send('form-fill-hide');
+};
+
 const onMouseEnter = (data: IFormFillItem) => () => {
-  ipcRenderer.send('form-fill-set', data._id);
+  ipcRenderer.send('form-fill-update', data._id);
 };
 
 const onMouseLeave = () => {
-  ipcRenderer.send('form-fill-set');
+  ipcRenderer.send('form-fill-update');
 };
 
 const Item = observer(({ data }: { data: IFormFillItem }) => {
   return (
     <StyledItem
       subtext={!!data.subtext}
+      onClick={onClick(data)}
       onMouseEnter={onMouseEnter(data)}
       onMouseLeave={onMouseLeave}
     >

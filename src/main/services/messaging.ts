@@ -114,8 +114,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
     }
   })
 
-  ipcMain.on('form-fill-set', (e: any, id: string) => {
+  ipcMain.on('form-fill-update', (e: any, id: string, persistent = false) => {
     const data = id && formFillItems.find(r => r._id === id);
-    appWindow.viewManager.selected.webContents.send('form-fill-set', data);
+    appWindow.viewManager.selected.webContents.send('form-fill-update', data, persistent);
   })
 };

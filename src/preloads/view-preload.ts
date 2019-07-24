@@ -87,3 +87,4 @@ ipcRenderer.on('scroll-touch-end', () => {
 });
 
 window.addEventListener('load', AutoComplete.loadForms);
+window.addEventListener('mousedown', AutoComplete.onWindowMouseDown);
