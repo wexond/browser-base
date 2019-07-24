@@ -121,6 +121,12 @@ export class Store {
       },
     );
 
+    ipcRenderer.on('toggle-overlay', () => {
+      if (!this.overlay.isNewTab) {
+        this.overlay.visible = !this.overlay.visible;
+      }
+    });
+
     ipcRenderer.on('find', () => {
       const tab = this.tabs.selectedTab;
       if (tab) {

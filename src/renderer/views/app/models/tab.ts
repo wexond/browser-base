@@ -4,11 +4,7 @@ import { ipcRenderer } from 'electron';
 import Vibrant = require('node-vibrant');
 
 import store from '../store';
-import {
-  TABS_PADDING,
-  defaultTabOptions,
-  TAB_ANIMATION_DURATION,
-} from '../constants';
+import { TABS_PADDING, TAB_ANIMATION_DURATION } from '../constants';
 import { getColorBrightness, callViewMethod } from '~/utils';
 
 const isColorAcceptable = (color: string) => {
@@ -105,7 +101,7 @@ export class ITab {
   }
 
   constructor(
-    { active, url } = defaultTabOptions,
+    { active, url }: chrome.tabs.CreateProperties,
     id: number,
     tabGroupId: number,
     isWindow: boolean,

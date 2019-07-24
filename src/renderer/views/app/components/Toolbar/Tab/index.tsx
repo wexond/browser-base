@@ -143,7 +143,7 @@ const onContextMenu = (tab: ITab) => () => {
       label: 'Revert closed tab',
       enabled: store.tabs.closedUrl !== '',
       click: () => {
-        store.tabs.addTab({ active: true, url: store.tabs.closedUrl });
+        store.tabs.revertClosed();
       },
     },
   ]);

@@ -7,7 +7,6 @@ import { ITab } from '../models';
 
 import {
   TAB_ANIMATION_DURATION,
-  defaultTabOptions,
   TABS_PADDING,
   TOOLBAR_HEIGHT,
   TAB_ANIMATION_EASING,
@@ -17,6 +16,7 @@ import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 import store from '.';
 import { ipcRenderer } from 'electron';
 import { getColorBrightness } from '~/utils';
+import { defaultTabOptions } from '~/constants/tabs';
 
 export class TabsStore {
   @observable
@@ -141,6 +141,20 @@ export class TabsStore {
       }
     });
 
+    ipcRenderer.on('select-next-tab', () => {
+      const { tabs } = store.tabGroups.currentGroup;
+      const i = tabs.indexOf(this.selectedTab);
+      const nextTab = tabs[i + 1];
+
+      if (!nextTab) {
+        if (tabs[0]) {
+          tabs[0].select();
+        }
+      } else {
+        nextTab.select();
+      }
+    });
+
     ipcRenderer.on(
       'update-tab-find-info',
       (e: any, tabId: number, data: any) => {
@@ -150,6 +164,10 @@ export class TabsStore {
         }
       },
     );
+
+    ipcRenderer.on('revert-closed-tab', () => {
+      this.revertClosed();
+    });
   }
 
   public resetRearrangeTabsTimer() {
@@ -368,6 +386,10 @@ export class TabsStore {
       this.lastMouseX = e.pageX;
     }
   };
+
+  public revertClosed() {
+    this.addTab({ active: true, url: this.closedUrl });
+  }
 
   public animateProperty(
     property: string,
