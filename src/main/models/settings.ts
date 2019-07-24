@@ -7,6 +7,7 @@ import { promises } from 'fs';
 
 import { getPath, makeId } from '~/utils';
 import { EventEmitter } from 'events';
+import { windowsManager } from '..';
 
 export class Settings extends EventEmitter {
   public object = DEFAULT_SETTINGS;
@@ -20,6 +21,13 @@ export class Settings extends EventEmitter {
 
     ipcMain.on('save-settings', (e: any, s: ISettings) => {
       this.object = { ...this.object, ...s };
+
+      for (const window of windowsManager.list) {
+        if (window.webContents.id !== e.sender.id) {
+          window.webContents.send('get-settings', this.object);
+        }
+      }
+
       this.addToQueue();
     });
 
@@ -55,11 +63,11 @@ export class Settings extends EventEmitter {
 
   private async save() {
     try {
-      console.log(getPath('settings.json'));
       await promises.writeFile(
         getPath('settings.json'),
         JSON.stringify(this.object),
       );
+
       if (this.queue.length >= 3) {
         for (let i = this.queue.length - 1; i > 0; i--) {
           this.removeAllListeners(this.queue[i]);

@@ -3,6 +3,8 @@ import { ipcRenderer } from 'electron';
 
 import { ISettings } from '~/interfaces';
 import { DEFAULT_SETTINGS } from '~/constants';
+import { darkTheme, lightTheme } from '~/renderer/constants';
+import store from '.';
 
 export type SettingsSection =
   | 'appearance'
@@ -26,6 +28,7 @@ export class SettingsStore {
   constructor() {
     ipcRenderer.on('get-settings', (e, settings: ISettings) => {
       this.object = { ...this.object, ...settings };
+      store.theme = this.object.darkTheme ? darkTheme : lightTheme;
     });
 
     ipcRenderer.send('get-settings');
