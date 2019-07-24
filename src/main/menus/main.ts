@@ -15,7 +15,7 @@ export const getMainMenu = (appWindow: AppWindow) => {
         { role: 'pasteandmatchstyle' },
         { role: 'delete' },
         { role: 'selectall' },
-        { role: 'quit' },
+        { role: 'quit', accelerator: 'CmdOrCtrl+Shift+Q' },
         {
           label: 'Reload',
           accelerator: 'CmdOrCtrl+R',
@@ -25,6 +25,13 @@ export const getMainMenu = (appWindow: AppWindow) => {
             } else {
               appWindow.viewManager.selected.webContents.reload();
             }
+          },
+        },
+        {
+          accelerator: 'CmdOrCtrl+F',
+          label: 'Find in page',
+          click() {
+            appWindow.webContents.send('find');
           },
         },
         {
