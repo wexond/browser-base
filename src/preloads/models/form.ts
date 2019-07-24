@@ -78,7 +78,12 @@ export class Form {
   }
 
   public onFormSubmit = () => {
-    ipcRenderer.send('credentials-show', this.usernameField.value, this.passwordField.value);
+    const username = this.usernameField.value;
+    const password = this.passwordField.value;
+
+    if (username.length) {
+      ipcRenderer.send('credentials-show', username, password);
+    }
   }
 
   public onFieldFocus = (e: FocusEvent) => {
