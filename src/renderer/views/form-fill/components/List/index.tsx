@@ -7,7 +7,7 @@ import { StyledList, StyledItem, Text, SubText } from './styles';
 
 const Item = observer(({ data }: { data: IFormFillItem }) => {
   return (
-    <StyledItem>
+    <StyledItem subtext={!!data.subtext}>
       <Text>{data.text}</Text>
       <SubText>{data.subtext}</SubText>
     </StyledItem>

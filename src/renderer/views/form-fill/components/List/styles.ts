@@ -1,22 +1,26 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { robotoRegular, noButtons } from '~/renderer/mixins';
 import { transparency } from '~/renderer/constants';
 
 export const StyledList = styled.div`
   width: 100%;
-  max-height: calc(100vh - 16px);
+  height: 100%;
   padding: 8px 0px;
-  overflow: hidden auto;
+  overflow: hidden;
   ${noButtons()};
 `;
 
 export const StyledItem = styled.div`
   width: 100%;
-  height: 32px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   cursor: pointer;
+
+  ${({ subtext }: { subtext: boolean }) => css`
+    height: ${subtext ? 56 : 32}px;
+  `}
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.04);
@@ -35,6 +39,7 @@ export const Text = styled.div`
 `;
 
 export const SubText = styled(Text)`
+  margin-top: 4px;
   font-size: 13px;
   color: rgba(0, 0, 0, ${transparency.text.medium});
 `;

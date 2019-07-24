@@ -5,5 +5,6 @@ export const StyledApp = styled.div`
   border-radius: 4px;
   background-color: white;
   margin: 8px;
+  overflow: hidden;
   -webkit-app-region: no-drag;
 `;
