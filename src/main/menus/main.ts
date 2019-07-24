@@ -21,11 +21,7 @@ export const getMainMenu = (appWindow: AppWindow) => {
           label: 'Reload',
           accelerator: 'CmdOrCtrl+R',
           click: () => {
-            if (process.env.ENV === 'dev') {
-              appWindow.webContents.reload();
-            } else {
-              appWindow.viewManager.selected.webContents.reload();
-            }
+            appWindow.viewManager.selected.webContents.reload();
           },
         },
         {
@@ -64,6 +60,13 @@ export const getMainMenu = (appWindow: AppWindow) => {
           label: 'Select next tab',
           click() {
             appWindow.webContents.send('select-next-tab');
+          },
+        },
+        {
+          accelerator: 'Ctrl+Space',
+          label: 'Toggle Overlay',
+          click() {
+            appWindow.webContents.send('toggle-overlay');
           },
         },
       ],

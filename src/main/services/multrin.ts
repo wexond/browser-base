@@ -85,7 +85,10 @@ export class Multrin {
     });
 
     mouseHooks.on('mouse-down', () => {
-      if (this.appWindow.isMinimized()) return;
+      if (this.appWindow.isMinimized() || this.appWindow.isFocused()) {
+        this.draggedWindow = null;
+        return;
+      }
 
       setTimeout(() => {
         if (this.appWindow.isFocused()) {
@@ -100,11 +103,12 @@ export class Multrin {
     });
 
     mouseHooks.on('mouse-move', async (e: any) => {
+      if (this.appWindow.isFocused()) return;
+
       if (
         this.draggedWindow &&
         this.selectedWindow &&
-        this.draggedWindow.id === this.selectedWindow.id &&
-        !this.appWindow.isFocused()
+        this.draggedWindow.id === this.selectedWindow.id
       ) {
         const bounds = this.selectedWindow.getBounds();
         const { lastBounds } = this.selectedWindow;
