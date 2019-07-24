@@ -1,9 +1,9 @@
 import { BrowserView, app } from 'electron';
-import { settings } from '.';
 import { engine } from './services/adblock';
 import { parse } from 'tldts-experimental';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
+import { settings } from './services/settings';
 
 export class View extends BrowserView {
   public title: string = '';
