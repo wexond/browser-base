@@ -1,6 +1,6 @@
 import { IFormFillData } from '~/interfaces';
 
-const getItemKey = (name: string) => {
+const getKey = (name: string) => {
   try {
     switch (name) {
       case 'username':
@@ -50,7 +50,7 @@ export const getFormFillValue = (name: string, data: IFormFillData) => {
       case 'mname':  // middle name
         return fullName.length >= 3 && fullName[fullName.length - 2];
       default:
-        return fields[getItemKey(name)];
+        return fields[getKey(name)];
     }
   } catch (error) {
 
@@ -60,7 +60,7 @@ export const getFormFillValue = (name: string, data: IFormFillData) => {
 }
 
 export const getFormFillSubValue = (name: string, data: IFormFillData) => {
-  const key = getItemKey(name);
+  const key = getKey(name);
   const { fields } = data;
 
   for (const itemKey in fields) {

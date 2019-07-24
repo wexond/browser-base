@@ -24,6 +24,7 @@ export class Form {
 
       if (field instanceof HTMLInputElement && isNameValid) {
         field.addEventListener('focus', this.onFieldFocus);
+        field.addEventListener('input', this.onFieldInput);
       }
     }
   }
@@ -75,6 +76,10 @@ export class Form {
       height: rects.height,
       x: Math.floor(rects.left),
       y: Math.floor(rects.top),
-    }, field.getAttribute('name'));
+    }, field.getAttribute('name'), field.value);
+  }
+
+  public onFieldInput = () => {
+    AutoComplete.hide();
   }
 }

@@ -27,8 +27,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.findWindow.updateInfo(tabId, data),
   );
 
-  ipcMain.on('form-fill-show', async (e: any, rect: any, name: string) => {
-    const items = await getFormFillMenuItems(name);
+  ipcMain.on('form-fill-show', async (e: any, rect: any, name: string, value: string) => {
+    const items = await getFormFillMenuItems(name, value);
 
     if (items.length) {
       appWindow.formFillWindow.webContents.send('autocomplete-get-items', items);
