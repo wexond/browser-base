@@ -39,9 +39,13 @@ const getKey = (name: string) => {
   return null;
 }
 
-export const getFormFillValue = (name: string, data: IFormFillData) => {
+export const getFormFillValue = (name: string, data: IFormFillData, hidePassword = false) => {
   const { fields } = data;
   const fullName = (fields.name || '').split(' ');
+
+  if (name === 'password' && hidePassword) {
+    return fields.username || fields.email;
+  }
 
   try {
     switch (name) {
@@ -63,12 +67,16 @@ export const getFormFillSubValue = (name: string, data: IFormFillData) => {
   const key = getKey(name);
   const { fields } = data;
 
-  for (const itemKey in fields) {
-    const val: string = (fields as any)[itemKey];
+  if (data.type === 'address') {
+    for (const itemKey in fields) {
+      const val: string = (fields as any)[itemKey];
 
-    if (key !== itemKey && val != null) {
-      return val;
+      if (key !== itemKey && val != null) {
+        return val;
+      }
     }
+  } else {
+    return fields.password ? '•'.repeat(fields.password.length) : '';
   }
 
   return null;

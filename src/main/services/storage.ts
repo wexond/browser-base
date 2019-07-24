@@ -2,7 +2,7 @@ import { ipcMain } from 'electron';
 import * as Datastore from 'nedb';
 
 import { getPath } from '~/utils';
-import { IFindOperation, IInsertOperation, IRemoveOperation, IUpdateOperation } from '~/interfaces';
+import { IFindOperation, IInsertOperation, IRemoveOperation, IUpdateOperation, IFormFillData } from '~/interfaces';
 
 interface Databases {
   [key: string]: Datastore;
