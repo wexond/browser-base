@@ -98,8 +98,8 @@ export class OverlayStore {
       this.scrollRef.current.scrollTop = 0;
     }
 
-    ipcRenderer.send('permission-dialog-hide');
-    ipcRenderer.send('browserview-hide');
+    ipcRenderer.send(`permission-dialog-hide-${store.windowId}`);
+    ipcRenderer.send(`browserview-hide-${store.windowId}`);
 
     this._visible = true;
   }
@@ -115,7 +115,7 @@ export class OverlayStore {
           if (store.tabs.selectedTab) {
             if (store.tabs.selectedTab.isWindow) {
               store.tabs.selectedTab.select();
-            } else ipcRenderer.send('browserview-show');
+            } else ipcRenderer.send(`browserview-show-${store.windowId}`);
           }
         },
         store.settings.object.animations ? 200 : 0,
@@ -130,7 +130,7 @@ export class OverlayStore {
       this.isNewTab = false;
     } else {
       this.show();
-      ipcRenderer.send('window-focus');
+      ipcRenderer.send(`window-focus-${store.windowId}`);
 
       const { selectedTab } = store.tabs;
 
@@ -138,7 +138,7 @@ export class OverlayStore {
         selectedTab.findInfo.visible = false;
 
         ipcRenderer.send(
-          'update-find-info',
+          `update-find-info-${store.windowId}`,
           selectedTab.id,
           selectedTab.findInfo,
         );

@@ -21,7 +21,7 @@ const onFindClick = () => {
   store.overlay.visible = false;
 
   ipcRenderer.send(
-    'find-show',
+    `find-show-${store.windowId}`,
     store.tabs.selectedTab.id,
     store.tabs.selectedTab.findInfo,
   );
