@@ -22,7 +22,7 @@ import { getCurrentWindow } from '../utils';
 export class Store {
   public history = new HistoryStore();
   public bookmarks = new BookmarksStore();
-  public settings = new SettingsStore(this);
+  public settings = new SettingsStore();
   public suggestions = new SuggestionsStore();
   public favicons = new FaviconsStore();
   public addTab = new AddTabStore();

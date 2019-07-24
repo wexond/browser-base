@@ -37,7 +37,7 @@ export default observer(({ data }: { data: IHistoryItem }) => {
     <ListItem key={data._id} onClick={onClick(data)} selected={selected}>
       <Favicon
         style={{
-          backgroundImage: `url(${store.favicons.favicons[data.favicon]})`,
+          backgroundImage: `url(${store.favicons.favicons.get(data.favicon)})`,
         }}
       />
       <Title onClick={onTitleClick(data.url)}>{data.title}</Title>

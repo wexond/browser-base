@@ -64,7 +64,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
               ? icons.folder
               : data.favicon.startsWith('data:image')
               ? data.favicon
-              : store.favicons.favicons[data.favicon]
+              : store.favicons.favicons.get(data.favicon)
           })`,
           filter:
             store.theme['overlay.foreground'] === 'light' && data.isFolder
