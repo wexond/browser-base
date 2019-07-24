@@ -1,5 +1,6 @@
 import { AppWindow } from '../windows';
 import { Menu } from 'electron';
+import { defaultTabOptions } from '~/constants/tabs';
 
 export const getMainMenu = (appWindow: AppWindow) => {
   return Menu.buildFromTemplate([
@@ -35,10 +36,10 @@ export const getMainMenu = (appWindow: AppWindow) => {
           },
         },
         {
-          accelerator: 'CmdOrCtrl+F',
-          label: 'Find in page',
+          accelerator: 'CmdOrCtrl+T',
+          label: 'New tab',
           click() {
-            appWindow.webContents.send('find');
+            appWindow.viewManager.create(defaultTabOptions);
           },
         },
       ],

@@ -7,7 +7,6 @@ import { ITab } from '../models';
 
 import {
   TAB_ANIMATION_DURATION,
-  defaultTabOptions,
   TABS_PADDING,
   TOOLBAR_HEIGHT,
   TAB_ANIMATION_EASING,
@@ -17,6 +16,7 @@ import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 import store from '.';
 import { ipcRenderer } from 'electron';
 import { getColorBrightness } from '~/utils';
+import { defaultTabOptions } from '~/constants/tabs';
 
 export class TabsStore {
   @observable
