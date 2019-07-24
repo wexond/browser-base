@@ -7,7 +7,7 @@ import { ProcessWindow } from '../models';
 import { AppWindow } from '../windows';
 import { windowManager, Window } from 'node-window-manager';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
-import { settings } from '..';
+import { windowsManager } from '..';
 
 const containsPoint = (bounds: any, point: any) => {
   return (
@@ -151,7 +151,7 @@ export class Multrin {
         !this.appWindow.isMinimized() &&
         this.draggedWindow &&
         !this.windows.find(x => x.id === this.draggedWindow.id) &&
-        settings.multrin
+        windowsManager.settings.object.multrin
       ) {
         const winBounds = this.draggedWindow.getBounds();
         const { lastBounds } = this.draggedWindow;
