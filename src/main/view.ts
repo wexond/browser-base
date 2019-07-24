@@ -1,9 +1,9 @@
 import { BrowserView, app } from 'electron';
-import { settings } from '.';
 import { engine } from './services/adblock';
 import { parse } from 'tldts-experimental';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
+import { windowsManager } from '.';
 
 export class View extends BrowserView {
   public title: string = '';
@@ -60,7 +60,7 @@ export class View extends BrowserView {
       const url = this.webContents.getURL();
 
       // Adblocker cosmetic filtering
-      if (engine && settings.shield) {
+      if (engine && windowsManager.settings.object.shield) {
         if (url === '') return;
 
         const { styles, scripts } = engine.getCosmeticsFilters({
