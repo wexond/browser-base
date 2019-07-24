@@ -78,10 +78,11 @@ export class Form {
   }
 
   public onFormSubmit = () => {
+    const { fields } = this.data;
     const username = this.usernameField.value;
     const password = this.passwordField.value;
 
-    if (username.length) {
+    if (username.length && fields.username !== username) {
       ipcRenderer.send('credentials-show', username, password);
     }
   }
