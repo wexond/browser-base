@@ -1,6 +1,5 @@
-import { ipcMain, session } from 'electron';
+import { ipcMain } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
-import { log } from '.';
 import { View } from './view';
 import { AppWindow } from './windows';
 
@@ -21,11 +20,15 @@ export class ViewManager {
   }
 
   constructor(public window: AppWindow) {
-    ipcMain.on('view-create', (e, details: chrome.tabs.CreateProperties) => {
-      this.create(details);
-    });
+    const { id } = window.webContents;
+    ipcMain.on(
+      `view-create-${id}`,
+      (e, details: chrome.tabs.CreateProperties) => {
+        this.create(details);
+      },
+    );
 
-    ipcMain.on('view-select', (e, id: number, force: boolean) => {
+    ipcMain.on(`view-select-${id}`, (e, id: number, force: boolean) => {
       const view = this.views.find(x => x.webContents.id === id);
       this.select(id);
       view.updateNavigationState();
@@ -33,32 +36,11 @@ export class ViewManager {
       if (force) this.isHidden = false;
     });
 
-    ipcMain.on('clear-browsing-data', () => {
-      const ses = session.fromPartition('persist:view');
-      ses.clearCache((err: any) => {
-        if (err) log.error(err);
-      });
-
-      ses.clearStorageData({
-        storages: [
-          'appcache',
-          'cookies',
-          'filesystem',
-          'indexdb',
-          'localstorage',
-          'shadercache',
-          'websql',
-          'serviceworkers',
-          'cachestorage',
-        ],
-      });
-    });
-
-    ipcMain.on('view-destroy', (e, id: number) => {
+    ipcMain.on(`view-destroy-${id}`, (e, id: number) => {
       this.destroy(id);
     });
 
-    ipcMain.on('browserview-call', async (e: any, data: any) => {
+    ipcMain.on(`browserview-call-${id}`, async (e: any, data: any) => {
       const view = this.views.find(x => x.webContents.id === data.tabId);
       let scope: any = view;
 
@@ -83,11 +65,11 @@ export class ViewManager {
       }
     });
 
-    ipcMain.on('browserview-hide', () => {
+    ipcMain.on(`browserview-hide-${id}`, () => {
       this.hideView();
     });
 
-    ipcMain.on('browserview-show', () => {
+    ipcMain.on(`browserview-show-${id}`, () => {
       this.showView();
     });
 
@@ -105,7 +87,7 @@ export class ViewManager {
       }
     }, 200);
 
-    ipcMain.on('browserview-clear', () => {
+    ipcMain.on(`browserview-clear-${id}`, () => {
       this.clear();
     });
   }

@@ -1,4 +1,4 @@
-import { session, app } from 'electron';
+import { session, app, ipcMain } from 'electron';
 import { ExtensibleSession } from 'electron-extensions';
 import { getPath, makeId } from '~/utils';
 import { promises } from 'fs';
@@ -22,7 +22,9 @@ export class SessionsManager {
           callback(true);
         } else {
           try {
-            const window = windowsManager.findWindowByBrowserView(webContents);
+            const window = windowsManager.findWindowByBrowserView(
+              webContents.id,
+            );
             const response = await window.permissionWindow.requestPermission(
               permission,
               webContents.getURL(),
@@ -40,7 +42,7 @@ export class SessionsManager {
       const fileName = item.getFilename();
       const savePath = resolve(app.getPath('downloads'), fileName);
       const id = makeId(32);
-      const window = windowsManager.findWindowByBrowserView(webContents);
+      const window = windowsManager.findWindowByBrowserView(webContents.id);
 
       item.setSavePath(savePath);
 
@@ -72,6 +74,26 @@ export class SessionsManager {
         } else {
           console.log(`Download failed: ${state}`);
         }
+      });
+    });
+
+    ipcMain.on('clear-browsing-data', () => {
+      this.view.clearCache((err: any) => {
+        if (err) console.error(err);
+      });
+
+      this.view.clearStorageData({
+        storages: [
+          'appcache',
+          'cookies',
+          'filesystem',
+          'indexdb',
+          'localstorage',
+          'shadercache',
+          'websql',
+          'serviceworkers',
+          'cachestorage',
+        ],
       });
     });
 
