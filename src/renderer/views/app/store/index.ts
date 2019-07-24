@@ -17,6 +17,7 @@ import { WeatherStore } from './weather';
 import { SettingsStore } from './settings';
 import { AddBookmarkStore } from './add-bookmark';
 import { extensionsRenderer } from 'electron-extensions';
+import { getCurrentWindow } from '../utils';
 
 export class Store {
   public history = new HistoryStore();
@@ -79,6 +80,8 @@ export class Store {
     y: 0,
   };
 
+  public windowId = getCurrentWindow().webContents.id;
+
   constructor() {
     ipcRenderer.on('update-navigation-state', (e, data: any) => {
       this.navigationState = data;
@@ -130,7 +133,7 @@ export class Store {
     ipcRenderer.on('find', () => {
       const tab = this.tabs.selectedTab;
       if (tab) {
-        ipcRenderer.send('find-show', tab.id, tab.findInfo);
+        ipcRenderer.send(`find-show-${this.windowId}`, tab.id, tab.findInfo);
       }
     });
 

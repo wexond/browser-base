@@ -16,7 +16,7 @@ const ref1 = React.createRef<Textfield>();
 const ref2 = React.createRef<PasswordInput>();
 
 const sendResponse = (credentials: any) => {
-  ipcRenderer.send('request-auth-result', credentials);
+  ipcRenderer.send(`request-auth-result-${store.windowId}`, credentials);
 };
 
 const onClick = () => {

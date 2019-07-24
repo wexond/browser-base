@@ -16,7 +16,7 @@ import { TOOLBAR_HEIGHT } from '../../constants';
 const GlobalStyle = createGlobalStyle`${Style}`;
 
 window.onbeforeunload = () => {
-  ipcRenderer.send('browserview-clear');
+  ipcRenderer.send(`browserview-clear-${store.windowId}`);
 };
 
 export const App = observer(() => {

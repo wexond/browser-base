@@ -2,19 +2,24 @@ import * as React from 'react';
 
 import { observable } from 'mobx';
 import { ipcRenderer, remote } from 'electron';
+import { getCurrentWindow } from '../../app/utils/windows';
 
 export class Store {
-  public tabId: number;
-
-  public findInputRef = React.createRef<HTMLInputElement>();
-
   @observable
   public occurrences: string = '0/0';
 
   @observable
   public text: string = '';
 
+  public tabId: number;
+
+  public findInputRef = React.createRef<HTMLInputElement>();
+
   public visible = false;
+
+  public windowId: number = ipcRenderer.sendSync(
+    `get-window-id-${getCurrentWindow().id}`,
+  );
 
   constructor() {
     ipcRenderer.on(
@@ -49,7 +54,7 @@ export class Store {
   }
 
   updateTabInfo() {
-    ipcRenderer.send('update-tab-find-info', this.tabId, {
+    ipcRenderer.send(`update-tab-find-info-${this.windowId}`, this.tabId, {
       occurrences: this.occurrences,
       text: this.text,
       visible: this.visible,

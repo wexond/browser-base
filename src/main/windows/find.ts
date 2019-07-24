@@ -1,36 +1,18 @@
-import { BrowserWindow, app } from 'electron';
-import { join } from 'path';
 import { AppWindow } from '.';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
+import { PopupWindow } from './popup';
 
 const WIDTH = 400;
 const HEIGHT = 64;
 
-export class FindWindow extends BrowserWindow {
+export class FindWindow extends PopupWindow {
   constructor(public appWindow: AppWindow) {
-    super({
-      frame: false,
-      resizable: false,
-      width: WIDTH,
+    super(appWindow, 'find');
+
+    this.setBounds({
       height: HEIGHT,
-      transparent: true,
-      fullscreenable: false,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-      },
-      skipTaskbar: true,
-    });
-
-    if (process.env.ENV === 'dev') {
-      // this.webContents.openDevTools({ mode: 'detach' });
-      this.loadURL('http://localhost:4444/find.html');
-    } else {
-      this.loadURL(join('file://', app.getAppPath(), 'build/find.html'));
-    }
-
-    this.setParentWindow(this.appWindow);
+      width: WIDTH,
+    } as any);
   }
 
   public find(tabId: number, data: any) {

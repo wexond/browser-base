@@ -232,7 +232,7 @@ export class TabsStore {
 
   @action
   public addTab(options = defaultTabOptions) {
-    ipcRenderer.send('view-create', options);
+    ipcRenderer.send(`view-create-${store.windowId}`, options);
   }
 
   public removeTab(id: number) {
@@ -406,14 +406,10 @@ export class TabsStore {
     }
   }
 
-  public emitEvent(name: string, ...data: any[]) {
-    ipcRenderer.send('emit-tabs-event', name, ...data);
-  }
-
   public onNewTab() {
     store.overlay.isNewTab = true;
     store.overlay.visible = true;
-    ipcRenderer.send('hide-window');
+    ipcRenderer.send(`hide-window-${store.windowId}`);
     store.tabs.addTab();
   }
 }

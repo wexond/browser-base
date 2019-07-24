@@ -260,24 +260,23 @@ export class ITab {
 
       this.tabGroup.selectedTabId = this.id;
 
-      ipcRenderer.send('permission-dialog-hide');
+      ipcRenderer.send(`permission-dialog-hide-${store.windowId}`);
 
       const show = () => {
         if (this.isWindow) {
-          ipcRenderer.send('browserview-hide');
-          ipcRenderer.send('select-window', this.id);
+          ipcRenderer.send(`browserview-hide-${store.windowId}`);
+          ipcRenderer.send(`select-window-${store.windowId}`, this.id);
         } else {
-          ipcRenderer.send('hide-window');
+          ipcRenderer.send(`hide-window-${store.windowId}`);
           if (!store.overlay.isNewTab) {
-            ipcRenderer.send('browserview-show');
+            ipcRenderer.send(`browserview-show-${store.windowId}`);
           }
-          ipcRenderer.send('view-select', this.id);
-          ipcRenderer.send('update-find-info', this.id, this.findInfo);
-
-          store.tabs.emitEvent('onActivated', {
-            tabId: this.id,
-            windowId: 0,
-          });
+          ipcRenderer.send(`view-select-${store.windowId}`, this.id);
+          ipcRenderer.send(
+            `update-find-info-${store.windowId}`,
+            this.id,
+            this.findInfo,
+          );
         }
       };
 
@@ -353,9 +352,9 @@ export class ITab {
     const selected = tabGroup.selectedTabId === this.id;
 
     if (this.isWindow) {
-      ipcRenderer.send('detach-window', this.id);
+      ipcRenderer.send(`detach-window-${store.windowId}`, this.id);
     } else {
-      ipcRenderer.send('view-destroy', this.id);
+      ipcRenderer.send(`view-destroy-${store.windowId}`, this.id);
     }
 
     const notClosingTabs = tabs.filter(x => !x.isClosing);
@@ -404,6 +403,6 @@ export class ITab {
   }
 
   callViewMethod = (scope: string, ...args: any[]): Promise<any> => {
-    return callViewMethod(this.id, scope, ...args);
+    return callViewMethod(store.windowId, this.id, scope, ...args);
   };
 }

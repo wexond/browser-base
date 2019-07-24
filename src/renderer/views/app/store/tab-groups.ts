@@ -60,7 +60,7 @@ export class TabGroupsStore {
 
     for (const tab of group.tabs) {
       store.tabs.removeTab(tab.id);
-      ipcRenderer.send('browserview-destroy', tab.id);
+      ipcRenderer.send(`browserview-destroy-${store.windowId}`, tab.id);
     }
 
     if (group.isSelected) {

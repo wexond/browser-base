@@ -1,33 +1,19 @@
-import { BrowserWindow, app, ipcMain } from 'electron';
-import { join } from 'path';
+import { ipcMain } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 import { AppWindow } from '.';
+import { PopupWindow } from './popup';
 
-export class PermissionsWindow extends BrowserWindow {
+const HEIGHT = 175;
+const WIDTH = 350;
+
+export class PermissionsWindow extends PopupWindow {
   constructor(public appWindow: AppWindow) {
-    super({
-      frame: false,
-      resizable: false,
-      width: 350,
-      height: 175,
-      transparent: true,
-      show: false,
-      fullscreenable: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-      },
-      skipTaskbar: true,
-    });
+    super(appWindow, 'permissions');
 
-    if (process.env.ENV === 'dev') {
-      // this.webContents.openDevTools({ mode: 'detach' });
-      this.loadURL('http://localhost:4444/permissions.html');
-    } else {
-      this.loadURL(join('file://', app.getAppPath(), 'build/permissions.html'));
-    }
-
-    this.setParentWindow(this.appWindow);
+    this.setBounds({
+      height: HEIGHT,
+      width: WIDTH,
+    } as any);
   }
 
   public async requestPermission(

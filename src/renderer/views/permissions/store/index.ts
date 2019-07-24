@@ -2,6 +2,7 @@ import { observable } from 'mobx';
 import { ipcRenderer } from 'electron';
 
 import { getDomain } from '~/utils';
+import { getCurrentWindow } from '../../app/utils/windows';
 
 export class Store {
   @observable
@@ -9,6 +10,10 @@ export class Store {
 
   @observable
   public domain: string;
+
+  public windowId: number = ipcRenderer.sendSync(
+    `get-window-id-${getCurrentWindow().id}`,
+  );
 
   constructor() {
     ipcRenderer.on(
