@@ -1,7 +1,6 @@
 import { observable, computed, action } from 'mobx';
 import { IBookmark } from '~/interfaces';
-import { promisify } from 'util';
-import { Database } from '../models/database';
+import { Database } from '~/models/database';
 
 export class BookmarksStore {
   public db = new Database<IBookmark>('bookmarks');

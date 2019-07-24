@@ -1,7 +1,7 @@
 import { IFavicon } from '~/interfaces';
 import { requestURL } from '~/utils';
 import { observable } from 'mobx';
-import { Database } from '../models/database';
+import { Database } from '~/models/database';
 
 const icojs = require('icojs');
 const fileType = require('file-type');
