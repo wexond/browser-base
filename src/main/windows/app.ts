@@ -5,7 +5,7 @@ import { resolve, join } from 'path';
 import { ViewManager } from '../view-manager';
 import { getPath } from '~/utils';
 import { runMessagingService, Multrin } from '../services';
-import { PermissionsWindow, AuthWindow, FindWindow, FormFillWindow } from '.';
+import { PermissionsWindow, AuthWindow, FindWindow, FormFillWindow, CredentialsWindow } from '.';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager = new ViewManager();
@@ -15,6 +15,7 @@ export class AppWindow extends BrowserWindow {
   public authWindow = new AuthWindow(this);
   public findWindow = new FindWindow(this);
   public formFillWindow = new FormFillWindow(this);
+  public credentialsWindow = new CredentialsWindow(this);
 
   constructor() {
     super({
@@ -70,7 +71,9 @@ export class AppWindow extends BrowserWindow {
       this.findWindow.rearrange();
       this.permissionWindow.rearrange();
       this.formFillWindow.rearrange();
+      this.credentialsWindow.rearrange();
     });
+
     this.on('move', () => {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
@@ -80,6 +83,7 @@ export class AppWindow extends BrowserWindow {
       this.findWindow.rearrange();
       this.permissionWindow.rearrange();
       this.formFillWindow.rearrange();
+      this.credentialsWindow.rearrange();
     });
 
     const resize = () => {

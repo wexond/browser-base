@@ -3,3 +3,4 @@ export * from './auth';
 export * from './find';
 export * from './permissions';
 export * from './form-fill';
+export * from './credentials';
