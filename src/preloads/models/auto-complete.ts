@@ -15,15 +15,10 @@ export class AutoComplete {
     ipcRenderer.on('form-fill-update', (e: any, data: IFormFillData, persistent: boolean) => {
       if (!this.currentForm) return;
 
-      if (!this.currentForm.changed || data) {
-        this.currentForm.insertData(data);
-      } else {
-        this.currentForm.insertData(this.currentForm.data);
-      }
+      this.currentForm.insertData(data, persistent);
 
-      if (persistent) {
+      if (data && persistent) {
         this.currentForm.data = data;
-        this.currentForm.changed = true;
       }
     });
   }

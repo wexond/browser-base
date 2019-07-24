@@ -9,9 +9,11 @@ import AutoComplete from './auto-complete';
 export type FormField = HTMLInputElement | HTMLSelectElement;
 
 export class Form {
-  public changed = false;
-
   public data: IFormFillData;
+
+  public changedFields: FormField[] = [];
+
+  public tempFields: FormField[] = [];
 
   constructor(public ref: HTMLFormElement) {
     this.load();
@@ -47,19 +49,42 @@ export class Form {
     return isVisible(field) && isNameValid && isTypeValid;
   }
 
-  public insertData(data: IFormFillData) {
+  public insertData(data: IFormFillData, persistent = false) {
     for (const field of this.fields) {
       const autoComplete = this.ref.getAttribute('autocomplete');
 
       if (autoComplete !== 'off') {
-        if (data) {
-          const value = getFormFillValue(field.getAttribute('name'), data);
+        const changed = this.changedFields.indexOf(field) !== -1;
+        const temp = this.tempFields.indexOf(field) !== -1;
+        const value = data ? getFormFillValue(field.getAttribute('name'), data) : '';
+
+        if (!field.value.length || !changed) {
           field.value = value || '';
-        } else {
-          field.value = '';
+
+          if (!temp) {
+            this.tempFields.push(field);
+          }
+        }
+
+        if (value && persistent && !changed) {
+          this.changedFields.push(field);
         }
       }
     }
+
+    if (!data && !persistent) {
+      this.clearTemp();
+    }
+  }
+
+  private clearTemp() {
+    for (const field of this.tempFields) {
+      if (this.changedFields.indexOf(field) === -1) {
+        field.value = '';
+      }
+    }
+
+    this.tempFields = [];
   }
 
   public get usernameField() {
@@ -101,7 +126,16 @@ export class Form {
     }, field.getAttribute('name'), field.value);
   }
 
-  public onFieldInput = () => {
+  public onFieldInput = (e: KeyboardEvent) => {
     AutoComplete.hide();
+
+    const target = e.target as HTMLInputElement;
+    const index = this.changedFields.indexOf(target);
+
+    if (index === -1) {
+      this.changedFields.push(target);
+    } else if (!target.value.length) {
+      this.changedFields.splice(index, 1);
+    }
   }
 }
