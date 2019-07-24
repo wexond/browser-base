@@ -49,6 +49,16 @@ export const getMainMenu = (appWindow: AppWindow) => {
           },
         },
         {
+          accelerator: 'CmdOrCtrl+F4',
+          label: 'Close tab',
+          click() {
+            appWindow.webContents.send(
+              'remove-tab',
+              appWindow.viewManager.selectedId,
+            );
+          },
+        },
+        {
           accelerator: 'CmdOrCtrl+Shift+T',
           label: 'Revert closed tab',
           click() {
@@ -94,6 +104,13 @@ export const getMainMenu = (appWindow: AppWindow) => {
             if (selected) {
               selected.webContents.goForward();
             }
+          },
+        },
+        {
+          accelerator: 'Ctrl+Shift+W',
+          label: 'Close current window',
+          click() {
+            appWindow.close();
           },
         },
       ],
