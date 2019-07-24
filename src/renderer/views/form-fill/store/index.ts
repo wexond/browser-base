@@ -1,14 +1,14 @@
 import { ipcRenderer } from 'electron';
 import { observable } from 'mobx';
 
-import { IFormFillItem } from '~/interfaces';
+import { IFormFillMenuItem } from '~/interfaces';
 export class Store {
   @observable
-  public items: IFormFillItem[] = [];
+  public items: IFormFillMenuItem[] = [];
 
   constructor() {
     ipcRenderer.on(
-      'autocomplete-get-items',
+      'formfill-get-items',
       (e: any, items: any) => {
         this.items = items;
       },

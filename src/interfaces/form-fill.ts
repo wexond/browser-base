@@ -1,10 +1,10 @@
 export interface IFormFillData {
   _id?: string;
   type: 'password' | 'address';
+  url?: string;
   fields?: {
     username?: string;
     password?: string;
-    url?: string;
     name?: string;
     address?: string;
     postCode?: string;
@@ -15,7 +15,7 @@ export interface IFormFillData {
   }
 }
 
-export interface IFormFillItem {
+export interface IFormFillMenuItem {
   _id?: string;
   text?: string;
   subtext?: string;

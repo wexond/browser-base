@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron';
 
-import { IFormFillItem } from '~/interfaces';
+import { IFormFillMenuItem } from '~/interfaces';
 import { AppWindow } from '../windows';
 import { getFormFillMenuItems } from '../utils';
 import storage from './storage';
@@ -31,7 +31,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     const items = await getFormFillMenuItems(name, value);
 
     if (items.length) {
-      appWindow.formFillWindow.webContents.send('autocomplete-get-items', items);
+      appWindow.formFillWindow.webContents.send('formfill-get-items', items);
       appWindow.formFillWindow.inputRect = rect;
 
       appWindow.formFillWindow.resize(items.length, items.find(r => r.subtext) != null);
@@ -47,7 +47,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
   });
 
   ipcMain.on('form-fill-update', async (e: any, _id: string, persistent = false) => {
-    const item = _id && await storage.findOne<IFormFillItem>({
+    const item = _id && await storage.findOne<IFormFillMenuItem>({
       scope: 'formfill',
       query: { _id },
     });

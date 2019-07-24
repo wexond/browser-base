@@ -3,15 +3,15 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import store from '../../store';
-import { IFormFillItem } from '~/interfaces';
+import { IFormFillMenuItem } from '~/interfaces';
 import { StyledList, StyledItem, Text, SubText } from './styles';
 
-const onClick = (data: IFormFillItem) => () => {
+const onClick = (data: IFormFillMenuItem) => () => {
   ipcRenderer.send('form-fill-update', data._id, true);
   ipcRenderer.send('form-fill-hide');
 };
 
-const onMouseEnter = (data: IFormFillItem) => () => {
+const onMouseEnter = (data: IFormFillMenuItem) => () => {
   ipcRenderer.send('form-fill-update', data._id);
 };
 
@@ -19,7 +19,7 @@ const onMouseLeave = () => {
   ipcRenderer.send('form-fill-update');
 };
 
-const Item = observer(({ data }: { data: IFormFillItem }) => {
+const Item = observer(({ data }: { data: IFormFillMenuItem }) => {
   return (
     <StyledItem
       subtext={!!data.subtext}
