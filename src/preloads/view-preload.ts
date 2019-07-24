@@ -1,6 +1,8 @@
 import { ipcRenderer, remote, webFrame } from 'electron';
-import { getFormFields } from './utils';
+
+import { getFormFields, FormField, insertFieldValue } from './utils';
 import { formFieldFilters } from './constants';
+import { IFormFillData } from '~/interfaces';
 
 const tabId = remote.getCurrentWebContents().id;
 
@@ -86,6 +88,9 @@ ipcRenderer.on('scroll-touch-end', () => {
   resetCounters();
 });
 
+let formFields: FormField[] = [];
+let inserted = false;
+
 window.addEventListener('load', () => {
   const forms = document.querySelectorAll('form');
 
@@ -94,11 +99,26 @@ window.addEventListener('load', () => {
 
     for (const field of fields) {
       const { menu } = formFieldFilters;
-      const nameValid = menu.test(field.getAttribute('name'));
+      const isNameValid = menu.test(field.getAttribute('name'));
 
-      if (field instanceof HTMLInputElement && nameValid) {
-        field.addEventListener('focus', onFieldFocus);
-        field.addEventListener('blur', onFieldBlur);
+      if (field instanceof HTMLInputElement && isNameValid) {
+        field.addEventListener('focus', (e: FocusEvent) => {
+          const el = e.target as HTMLInputElement;
+          const rects = el.getBoundingClientRect();
+
+          ipcRenderer.send('form-fill-show', {
+            width: rects.width,
+            height: rects.height,
+            x: Math.floor(rects.left),
+            y: Math.floor(rects.top),
+          }, el.getAttribute('name'));
+
+          formFields = fields;
+        });
+
+        field.addEventListener('blur', () => {
+          ipcRenderer.send('form-fill-hide')
+        });
       }
     }
 
@@ -110,18 +130,12 @@ const onFormSubmit = (e: Event) => {
   console.log('submit');
 }
 
-const onFieldFocus = (e: FocusEvent) => {
-  const el = e.target as HTMLInputElement;
-  const rects = el.getBoundingClientRect();
-
-  ipcRenderer.send('form-fill-show', {
-    width: rects.width,
-    height: rects.height,
-    x: Math.floor(rects.left),
-    y: Math.floor(rects.top),
-  }, el.getAttribute('name'));
-}
-
-const onFieldBlur = () => {
-  //ipcRenderer.send('form-fill-hide');
-}
+ipcRenderer.on('form-fill-set', (e: any, data: IFormFillData) => {
+  for (const field of formFields) {
+    if (data != null) {
+      insertFieldValue(field, data);
+    } else if (!inserted) {
+      //field.value = '';
+    }
+  }
+});

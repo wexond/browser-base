@@ -10,19 +10,15 @@ export const getFormFields = (form: HTMLFormElement) => {
   const inside = searchElements(form, 'input, select');
   const outside = formId != null ? searchElements(document, `input[form=${formId}], select[form=${formId}]`) : [];
 
-  return filterFormFields(...inside, ...outside);
-}
-
-export const filterFormFields = (...inputs: HTMLElement[]) => {
-  return inputs.filter(el => validateField(el)) as FormField[];
+  return [...inside, ...outside].filter(el => validateField(el)) as FormField[];
 }
 
 export const validateField = (el: HTMLElement) => {
   const { name, type } = formFieldFilters;
-  const nameValid = name.test(el.getAttribute('name'));
-  const typeValid = type.test(el.getAttribute('type')) || el instanceof HTMLSelectElement;
+  const isNameValid = name.test(el.getAttribute('name'));
+  const isTypeValid = type.test(el.getAttribute('type')) || el instanceof HTMLSelectElement;
 
-  return isVisible(el) && nameValid && typeValid;
+  return isVisible(el) && isNameValid && isTypeValid;
 }
 
 export const insertFieldValue = (el: FormField, data: IFormFillData) => {
@@ -32,8 +28,6 @@ export const insertFieldValue = (el: FormField, data: IFormFillData) => {
     const name = el.getAttribute('name');
     const value = getFormFillValue(name, data);
 
-    if (value) {
-      el.value = value;
-    }
+    el.value = value || '';
   }
 }

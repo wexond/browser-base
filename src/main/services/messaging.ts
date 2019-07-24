@@ -1,7 +1,75 @@
 import { ipcMain } from 'electron';
 
 import { AppWindow } from '../windows';
-import { IFormFillItem } from '~/interfaces';
+import { IFormFillItem, IFormFillData } from '~/interfaces';
+
+let formFillItems: IFormFillData[] = [
+  {
+    _id: 'a',
+    type: 'address',
+    fields: {
+      name: 'Big Skrrt Krzak',
+      address: 'Krzakowska 21',
+      postCode: '18-07',
+      city: 'Krzakowo',
+      country: 'pl',
+      phone: '123 456 789',
+      email: 'bigkrzak@wexond.net',
+    },
+  },
+  {
+    _id: 'b',
+    type: 'address',
+    fields: {
+      name: 'Janush Kowalski',
+      address: 'Sandalowa 12',
+      postCode: '155-17',
+      city: 'Gdańsk',
+      country: 'pl',
+      phone: '400 500 600',
+      email: 'janushkowalski@wexond.net',
+    },
+  },
+  {
+    _id: 'c',
+    type: 'address',
+    fields: {
+      name: 'Jan Smith',
+      address: 'Zimna -5',
+      postCode: '1000-18',
+      city: 'New York',
+      country: 'us',
+      phone: '100 200 300',
+      email: 'jansmith@wexond.net',
+    },
+  },
+  {
+    _id: 'd',
+    type: 'address',
+    fields: {
+      name: 'Random Person',
+      address: 'Ciekawa 11',
+      postCode: '0000-11',
+      city: 'Warszawa',
+      country: 'pl',
+      phone: '101 202 303',
+      email: 'randomperson@wexond.net',
+    },
+  },
+  {
+    _id: 'e',
+    type: 'address',
+    fields: {
+      name: 'Unexpected Wind',
+      address: 'Wiatrowa 9',
+      postCode: '1234-56',
+      city: 'Elopo',
+      country: 'pl',
+      phone: '555 111 777',
+      email: 'unexpectedperson@wexond.net',
+    },
+  },
+]; // hard-coded temporarily
 
 export const runMessagingService = (appWindow: AppWindow) => {
   ipcMain.on('window-focus', () => {
@@ -44,5 +112,10 @@ export const runMessagingService = (appWindow: AppWindow) => {
     } else {
       appWindow.formFillWindow.hide();
     }
+  })
+
+  ipcMain.on('form-fill-set', (e: any, id: string) => {
+    const data = id && formFillItems.find(r => r._id === id);
+    appWindow.viewManager.selected.webContents.send('form-fill-set', data);
   })
 };
