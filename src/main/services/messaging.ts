@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron';
 
 import { AppWindow } from '../windows';
+import { IFormFillItem } from '~/interfaces';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   ipcMain.on('window-focus', () => {
@@ -34,10 +35,11 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.formFillWindow.hide();
   });
 
-  ipcMain.on('autocomplete-request-items', (e: any, data: any) => {
-    appWindow.formFillWindow.webContents.send('autocomplete-get-items', data);
-    if (data.length) {
-      appWindow.formFillWindow.resize(data.length);
+  ipcMain.on('autocomplete-request-items', (e: any, items: IFormFillItem[]) => {
+    appWindow.formFillWindow.webContents.send('autocomplete-get-items', items);
+
+    if (items.length) {
+      appWindow.formFillWindow.resize(items.length, items.find(r => r.subtext) != null);
       appWindow.formFillWindow.showInactive();
     }
   })
