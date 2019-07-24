@@ -41,6 +41,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
     if (items.length) {
       appWindow.formFillWindow.resize(items.length, items.find(r => r.subtext) != null);
       appWindow.formFillWindow.showInactive();
+    } else {
+      appWindow.formFillWindow.hide();
     }
   })
 };
