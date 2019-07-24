@@ -129,5 +129,6 @@ renderer('auth');
 renderer('permissions');
 renderer('find');
 renderer('form-fill');
+renderer('credentials');
 preload('view-preload');
 main();
