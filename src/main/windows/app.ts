@@ -23,7 +23,7 @@ export class AppWindow extends BrowserWindow {
       minHeight: 450,
       width: 900,
       height: 700,
-      show: false,
+      show: true,
       titleBarStyle: 'hiddenInset',
       webPreferences: {
         plugins: true,
@@ -100,10 +100,6 @@ export class AppWindow extends BrowserWindow {
     } else {
       this.loadURL(join('file://', app.getAppPath(), 'build/app.html'));
     }
-
-    this.once('ready-to-show', () => {
-      this.show();
-    });
 
     this.on('enter-full-screen', () => {
       this.webContents.send('fullscreen', true);

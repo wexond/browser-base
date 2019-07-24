@@ -1,5 +1,5 @@
 import { AppWindow } from './windows';
-import { app, Menu } from 'electron';
+import { app, Menu, ipcMain } from 'electron';
 import { isAbsolute, extname } from 'path';
 import { existsSync } from 'fs';
 import { getMainMenu } from './menus/main';
@@ -51,6 +51,10 @@ export class WindowsManager {
       if (credentials) {
         callback(credentials.username, credentials.password);
       }
+    });
+
+    ipcMain.on('create-window', () => {
+      this.createWindow();
     });
 
     this.onReady();

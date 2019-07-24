@@ -48,6 +48,10 @@ const onMultrinClick = () => {
   store.settings.save();
 };
 
+const onNewWindowClick = () => {
+  ipcRenderer.send('create-window');
+};
+
 export const QuickMenu = observer(() => {
   const invert = store.theme['overlay.foreground'] === 'light';
   return (
@@ -136,7 +140,7 @@ export const QuickMenu = observer(() => {
       </Actions>
 
       <Actions>
-        <Bubble disabled invert={invert} icon={icons.window}>
+        <Bubble onClick={onNewWindowClick} invert={invert} icon={icons.window}>
           New window
         </Bubble>
         <Bubble disabled invert={invert} icon={icons.window}>
