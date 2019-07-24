@@ -69,6 +69,13 @@ export const getMainMenu = (appWindow: AppWindow) => {
             appWindow.webContents.send('toggle-overlay');
           },
         },
+        {
+          accelerator: 'CmdOrCtrl+L',
+          label: 'Toggle Overlay',
+          click() {
+            appWindow.webContents.send('toggle-overlay');
+          },
+        },
       ],
     },
   ]);
