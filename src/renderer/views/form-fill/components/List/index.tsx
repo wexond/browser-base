@@ -8,7 +8,7 @@ import { StyledList, StyledItem, Label } from './styles';
 const Item = observer(({ data }: { data: IFormFillItem }) => {
   return (
     <StyledItem>
-      <Label>{data.label}</Label>
+      <Label>{data.text}</Label>
     </StyledItem>
   );
 });

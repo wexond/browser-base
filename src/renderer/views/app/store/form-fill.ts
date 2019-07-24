@@ -84,7 +84,7 @@ export class FormFillStore {
 
         return val && {
           _id: item._id,
-          label: val,
+          text: val,
         } as IFormFillItem;
       }).filter(r => r);
 

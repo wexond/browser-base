@@ -2,7 +2,6 @@ import { ipcRenderer } from 'electron';
 import { observable } from 'mobx';
 
 import { IFormFillItem } from '~/interfaces';
-
 export class Store {
   @observable
   public items: IFormFillItem[] = [];
