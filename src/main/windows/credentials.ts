@@ -1,4 +1,4 @@
-import { BrowserWindow, app, ipcMain } from 'electron';
+import { BrowserWindow, app } from 'electron';
 import { join } from 'path';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 import { AppWindow } from '.';
@@ -9,7 +9,7 @@ export class CredentialsWindow extends BrowserWindow {
       frame: false,
       resizable: false,
       width: 350,
-      height: 175,
+      height: 271,
       transparent: true,
       show: false,
       fullscreenable: false,
@@ -21,7 +21,7 @@ export class CredentialsWindow extends BrowserWindow {
     });
 
     if (process.env.ENV === 'dev') {
-      // this.webContents.openDevTools({ mode: 'detach' });
+      this.webContents.openDevTools({ mode: 'detach' });
       this.loadURL('http://localhost:4444/credentials.html');
     } else {
       this.loadURL(join('file://', app.getAppPath(), 'build/credentials.html'));

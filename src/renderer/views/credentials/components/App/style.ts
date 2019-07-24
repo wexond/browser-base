@@ -12,13 +12,12 @@ export const Title = styled.div`
   font-size: 16px;
 `;
 
-export const Permissions = styled.div`
-  margin-top: 8px;
-`;
+export const Container = styled.div`
+  padding: 8px 0px;
 
-export const Permission = styled.div`
-  font-size: 13px;
-  margin-top: 8px;
+  & .textfield {
+    margin-top: 12px;
+  }
 `;
 
 export const Buttons = styled.div`

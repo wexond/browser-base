@@ -27,6 +27,8 @@ export class Form {
         field.addEventListener('input', this.onFieldInput);
       }
     }
+
+    this.ref.addEventListener('submit', this.onFormSubmit)
   }
 
   public get fields() {
@@ -60,8 +62,23 @@ export class Form {
     }
   }
 
+  public get usernameField() {
+    return this.fields.find(r => {
+      const name = r.getAttribute('name');
+      return name === 'username' || name === 'login' || 'email';
+    });
+  }
+
+  public get passwordField() {
+    return this.fields.find(r => {
+      const typeAttr = r.getAttribute('type');
+      const name = r.getAttribute('name');
+      return typeAttr === 'password' && name === 'password';
+    });
+  }
+
   public onFormSubmit = () => {
-    // TODO
+    ipcRenderer.send('credentials-show', this.usernameField.value, this.passwordField.value);
   }
 
   public onFieldFocus = (e: FocusEvent) => {

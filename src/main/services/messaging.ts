@@ -54,4 +54,9 @@ export const runMessagingService = (appWindow: AppWindow) => {
 
     appWindow.viewManager.selected.webContents.send('form-fill-update', item, persistent);
   })
+
+  ipcMain.on('credentials-show', (e: any, username: string, password: string) => {
+    appWindow.credentialsWindow.webContents.send('credentials-update', username, password);
+    appWindow.credentialsWindow.show();
+  })
 };
