@@ -1,6 +1,6 @@
 import * as Datastore from 'nedb';
 
-import { Favicon } from '~/interfaces';
+import { IFavicon } from '~/interfaces';
 import { requestURL, getPath } from '~/utils';
 import { observable } from 'mobx';
 
@@ -34,17 +34,17 @@ export class FaviconsStore {
   });
 
   @observable
-  public favicons: { [key: string]: string } = {};
+  public favicons: Map<string, string> = new Map();
 
-  public faviconsBuffers: { [key: string]: Buffer } = {};
+  public faviconsBuffers: Map<string, Buffer> = new Map();
 
   constructor() {
     this.load();
   }
 
-  public getFavicons = (query: Favicon = {}) => {
-    return new Promise((resolve: (favicons: Favicon[]) => void, reject) => {
-      this.db.find(query, (err: any, docs: Favicon[]) => {
+  public getFavicons = (query: IFavicon = {}) => {
+    return new Promise((resolve: (favicons: IFavicon[]) => void, reject) => {
+      this.db.find(query, (err: any, docs: IFavicon[]) => {
         if (err) return reject(err);
         resolve(docs);
       });
@@ -53,7 +53,7 @@ export class FaviconsStore {
 
   public addFavicon = async (url: string) => {
     return new Promise(async (resolve: (a: any) => void, reject: any) => {
-      if (!this.favicons[url]) {
+      if (!this.favicons.get(url)) {
         try {
           const res = await requestURL(url);
 
@@ -76,27 +76,27 @@ export class FaviconsStore {
             data: str,
           });
 
-          this.favicons[url] = str;
+          this.favicons.set(url, str);
 
           resolve(str);
         } catch (e) {
           reject(e);
         }
       } else {
-        resolve(this.favicons[url]);
+        resolve(this.favicons.get(url));
       }
     });
   };
 
   public async load() {
-    await this.db.find({}, (err: any, docs: Favicon[]) => {
+    await this.db.find({}, (err: any, docs: IFavicon[]) => {
       if (err) return console.warn(err);
 
       docs.forEach(favicon => {
         const { data } = favicon;
 
-        if (this.favicons[favicon.url] == null) {
-          this.favicons[favicon.url] = data;
+        if (this.favicons.get(favicon.url) == null) {
+          this.favicons.set(favicon.url, data);
         }
       });
     });
