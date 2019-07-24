@@ -1,6 +1,6 @@
 export interface IFormFillData {
   _id?: string;
-  type: 'password' | 'address';
+  type?: 'password' | 'address';
   url?: string;
   fields?: {
     username?: string;
