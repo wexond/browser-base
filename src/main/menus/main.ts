@@ -52,6 +52,13 @@ export const getMainMenu = (appWindow: AppWindow) => {
             );
           },
         },
+        {
+          accelerator: 'CmdOrCtrl+Shift+T',
+          label: 'Revert closed tab',
+          click() {
+            appWindow.webContents.send('revert-closed-tab');
+          },
+        },
       ],
     },
   ]);

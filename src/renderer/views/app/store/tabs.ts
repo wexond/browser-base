@@ -150,6 +150,10 @@ export class TabsStore {
         }
       },
     );
+
+    ipcRenderer.on('revert-closed-tab', () => {
+      this.revertClosed();
+    });
   }
 
   public resetRearrangeTabsTimer() {
@@ -368,6 +372,10 @@ export class TabsStore {
       this.lastMouseX = e.pageX;
     }
   };
+
+  public revertClosed() {
+    this.addTab({ active: true, url: this.closedUrl });
+  }
 
   public animateProperty(
     property: string,
