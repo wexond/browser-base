@@ -59,4 +59,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.credentialsWindow.webContents.send('credentials-update', username, password);
     appWindow.credentialsWindow.show();
   })
+
+  ipcMain.on('credentials-hide', () => {
+    appWindow.credentialsWindow.hide();
+  })
 };

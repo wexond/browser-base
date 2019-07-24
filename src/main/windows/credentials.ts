@@ -3,13 +3,16 @@ import { join } from 'path';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 import { AppWindow } from '.';
 
+const WIDTH = 350;
+const HEIGHT = 271;
+
 export class CredentialsWindow extends BrowserWindow {
   constructor(public appWindow: AppWindow) {
     super({
       frame: false,
       resizable: false,
-      width: 350,
-      height: 271,
+      width: WIDTH,
+      height: HEIGHT,
       transparent: true,
       show: false,
       fullscreenable: false,
@@ -32,6 +35,9 @@ export class CredentialsWindow extends BrowserWindow {
 
   public rearrange() {
     const cBounds = this.appWindow.getContentBounds();
-    this.setBounds({ x: cBounds.x, y: cBounds.y + TOOLBAR_HEIGHT } as any);
+    this.setBounds({
+      x: Math.round(cBounds.x + cBounds.width - WIDTH),
+      y: cBounds.y + TOOLBAR_HEIGHT,
+    } as any);
   }
 }
