@@ -10,7 +10,7 @@ import { Suggestions } from '../Suggestions';
 import { icons } from '~/renderer/constants';
 import AddBookmarkDialog from '../AddBookmarkDialog';
 
-const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+const onClick = async (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 };
 
@@ -87,7 +87,7 @@ const onInput = (e: any) => {
   store.overlay.searchBoxValue = e.currentTarget.value;
 };
 
-const onStarClick = async (e: React.MouseEvent) => {
+const onStarClick = async (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 
   if (store.addBookmark.visible) {
@@ -131,7 +131,6 @@ export const SearchBox = observer(() => {
           ref={store.overlay.inputRef}
         />
         <ToolbarButton
-          invert
           icon={store.overlay.isBookmarked ? icons.starFilled : icons.star}
           onClick={onStarClick}
           onMouseDown={e => e.stopPropagation()}
