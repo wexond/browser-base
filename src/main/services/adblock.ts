@@ -1,7 +1,7 @@
 import { Session } from 'electron';
 import { existsSync, readFile, writeFile, mkdirSync } from 'fs';
 import { resolve } from 'path';
-import { settings } from '..';
+import { settings, windowsManager } from '..';
 import Axios from 'axios';
 
 import { FiltersEngine, Request } from '@cliqz/adblocker';
