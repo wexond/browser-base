@@ -4,7 +4,7 @@ import { observable, computed, action } from 'mobx';
 import { IHistoryItem, IHistorySection } from '~/interfaces';
 import { countVisitedTimes, compareDates, getSectionLabel } from '../utils';
 import { getPath } from '~/utils';
-import { Database } from '../models/database';
+import { Database } from '~/models/database';
 
 export type QuickRange =
   | 'all'
