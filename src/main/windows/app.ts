@@ -6,16 +6,17 @@ import { getPath } from '~/utils';
 import { readFileSync, writeFileSync } from 'fs';
 import { runMessagingService, Multrin } from '../services';
 import { PermissionsWindow, AuthWindow, FindWindow } from '.';
+import { WindowsManager } from '../windows-manager';
 
 export class AppWindow extends BrowserWindow {
-  public viewManager: ViewManager = new ViewManager();
+  public viewManager: ViewManager = new ViewManager(this);
   public multrin = new Multrin(this);
 
   public permissionWindow = new PermissionsWindow(this);
   public authWindow = new AuthWindow(this);
   public findWindow = new FindWindow(this);
 
-  constructor() {
+  constructor(public windowsManager: WindowsManager) {
     super({
       frame: false,
       minWidth: 400,
@@ -131,6 +132,10 @@ export class AppWindow extends BrowserWindow {
     this.on('scroll-touch-end', () => {
       this.viewManager.selected.webContents.send('scroll-touch-end');
       this.webContents.send('scroll-touch-end');
+    });
+
+    this.on('focus', () => {
+      windowsManager.currentWindow = this;
     });
   }
 }

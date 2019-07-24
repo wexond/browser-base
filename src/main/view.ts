@@ -1,15 +1,16 @@
 import { BrowserView, app } from 'electron';
-import { appWindow, settings } from '.';
+import { settings } from '.';
 import { engine } from './services/adblock';
 import { parse } from 'tldts';
 import { getViewMenu } from './menus/view';
+import { AppWindow } from './windows';
 
 export class View extends BrowserView {
   public title: string = '';
   public url: string = '';
   public homeUrl: string;
 
-  constructor(url: string) {
+  constructor(public window: AppWindow, url: string) {
     super({
       webPreferences: {
         preload: `${app.getAppPath()}/build/view-preload.js`,
@@ -17,7 +18,7 @@ export class View extends BrowserView {
         contextIsolation: true,
         partition: 'persist:view',
         plugins: true,
-        additionalArguments: [`--window-id=${appWindow.id}`],
+        additionalArguments: [`--window-id=${window.id}`],
         nativeWindowOpen: true,
       },
     });
@@ -25,16 +26,16 @@ export class View extends BrowserView {
     this.homeUrl = url;
 
     this.webContents.on('context-menu', (e, params) => {
-      const menu = getViewMenu(appWindow, params, this.webContents);
+      const menu = getViewMenu(this.window, params, this.webContents);
       menu.popup();
     });
 
     this.webContents.addListener('found-in-page', (e, result) => {
-      appWindow.findWindow.webContents.send('found-in-page', result);
+      this.window.findWindow.webContents.send('found-in-page', result);
     });
 
     this.webContents.addListener('page-title-updated', (e, title) => {
-      appWindow.webContents.send(
+      this.window.webContents.send(
         `view-title-updated-${this.webContents.id}`,
         title,
       );
@@ -42,12 +43,15 @@ export class View extends BrowserView {
 
     this.webContents.addListener('did-stop-loading', () => {
       this.updateNavigationState();
-      appWindow.webContents.send(`view-loading-${this.webContents.id}`, false);
+      this.window.webContents.send(
+        `view-loading-${this.webContents.id}`,
+        false,
+      );
     });
 
     this.webContents.addListener('did-start-loading', () => {
       this.updateNavigationState();
-      appWindow.webContents.send(`view-loading-${this.webContents.id}`, true);
+      this.window.webContents.send(`view-loading-${this.webContents.id}`, true);
     });
 
     this.webContents.addListener('did-start-navigation', (...args: any[]) => {
@@ -71,7 +75,10 @@ export class View extends BrowserView {
         }
       }
 
-      appWindow.webContents.send(`load-commit-${this.webContents.id}`, ...args);
+      this.window.webContents.send(
+        `load-commit-${this.webContents.id}`,
+        ...args,
+      );
     });
 
     this.webContents.addListener(
@@ -88,10 +95,10 @@ export class View extends BrowserView {
         if (disposition === 'new-window') {
           if (frameName === '_self') {
             e.preventDefault();
-            appWindow.viewManager.selected.webContents.loadURL(url);
+            this.window.viewManager.selected.webContents.loadURL(url);
           } else if (frameName === '_blank') {
             e.preventDefault();
-            appWindow.viewManager.create(
+            this.window.viewManager.create(
               {
                 url,
                 active: true,
@@ -101,10 +108,10 @@ export class View extends BrowserView {
           }
         } else if (disposition === 'foreground-tab') {
           e.preventDefault();
-          appWindow.viewManager.create({ url, active: true }, true);
+          this.window.viewManager.create({ url, active: true }, true);
         } else if (disposition === 'background-tab') {
           e.preventDefault();
-          appWindow.viewManager.create({ url, active: false }, true);
+          this.window.viewManager.create({ url, active: false }, true);
         }
       },
     );
@@ -112,7 +119,7 @@ export class View extends BrowserView {
     this.webContents.addListener(
       'page-favicon-updated',
       async (e, favicons) => {
-        appWindow.webContents.send(
+        this.window.webContents.send(
           `browserview-favicon-updated-${this.webContents.id}`,
           favicons[0],
         );
@@ -120,7 +127,7 @@ export class View extends BrowserView {
     );
 
     this.webContents.addListener('did-change-theme-color', (e, color) => {
-      appWindow.webContents.send(
+      this.window.webContents.send(
         `browserview-theme-color-updated-${this.webContents.id}`,
         color,
       );
@@ -154,8 +161,8 @@ export class View extends BrowserView {
   public updateNavigationState() {
     if (this.isDestroyed()) return;
 
-    if (appWindow.viewManager.selectedId === this.webContents.id) {
-      appWindow.webContents.send('update-navigation-state', {
+    if (this.window.viewManager.selectedId === this.webContents.id) {
+      this.window.webContents.send('update-navigation-state', {
         canGoBack: this.webContents.canGoBack(),
         canGoForward: this.webContents.canGoForward(),
       });

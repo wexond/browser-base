@@ -1,7 +1,8 @@
 import { ipcMain, session } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
-import { appWindow, log } from '.';
+import { log } from '.';
 import { View } from './view';
+import { AppWindow } from './windows';
 
 export class ViewManager {
   public views: View[] = [];
@@ -19,7 +20,7 @@ export class ViewManager {
     this.fixBounds();
   }
 
-  constructor() {
+  constructor(public window: AppWindow) {
     ipcMain.on('view-create', (e, details: chrome.tabs.CreateProperties) => {
       this.create(details);
     });
@@ -75,7 +76,7 @@ export class ViewManager {
       }
 
       if (data.callId) {
-        appWindow.webContents.send(
+        this.window.webContents.send(
           `browserview-call-result-${data.callId}`,
           result,
         );
@@ -95,7 +96,7 @@ export class ViewManager {
         const url = view.webContents.getURL();
 
         if (url !== view.url) {
-          appWindow.webContents.send(
+          this.window.webContents.send(
             `view-url-updated-${view.webContents.id}`,
             url,
           );
@@ -114,10 +115,10 @@ export class ViewManager {
   }
 
   public create(details: chrome.tabs.CreateProperties, isNext = false) {
-    const view = new View(details.url);
+    const view = new View(this.window, details.url);
     this.views.push(view);
 
-    appWindow.webContents.send(
+    this.window.webContents.send(
       'api-tabs-create',
       { ...details },
       isNext,
@@ -128,7 +129,7 @@ export class ViewManager {
   }
 
   public clear() {
-    appWindow.setBrowserView(null);
+    this.window.setBrowserView(null);
     for (const key in this.views) {
       this.destroy(parseInt(key, 10));
     }
@@ -140,13 +141,13 @@ export class ViewManager {
 
     if (!view || view.isDestroyed()) {
       this.destroy(id);
-      appWindow.setBrowserView(null);
+      this.window.setBrowserView(null);
       return;
     }
 
     if (this.isHidden) return;
 
-    appWindow.setBrowserView(view);
+    this.window.setBrowserView(view);
 
     this.fixBounds();
   }
@@ -156,7 +157,7 @@ export class ViewManager {
 
     if (!view) return;
 
-    const { width, height } = appWindow.getContentBounds();
+    const { width, height } = this.window.getContentBounds();
     view.setBounds({
       x: 0,
       y: this.fullscreen ? 0 : TOOLBAR_HEIGHT + 1,
@@ -173,7 +174,7 @@ export class ViewManager {
 
   public hideView() {
     this.isHidden = true;
-    appWindow.setBrowserView(null);
+    this.window.setBrowserView(null);
   }
 
   public showView() {
@@ -187,8 +188,8 @@ export class ViewManager {
     this.views = this.views.filter(x => x.webContents.id !== id);
 
     if (view) {
-      if (appWindow.getBrowserView() === view) {
-        appWindow.setBrowserView(null);
+      if (this.window.getBrowserView() === view) {
+        this.window.setBrowserView(null);
       }
 
       view.destroy();

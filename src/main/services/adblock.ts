@@ -1,7 +1,7 @@
 import { Session } from 'electron';
 import { existsSync, readFile, writeFile, mkdirSync } from 'fs';
 import { resolve } from 'path';
-import { appWindow, settings } from '..';
+import { settings } from '..';
 import Axios from 'axios';
 
 import { FiltersEngine, Request } from '@cliqz/adblocker';
@@ -100,7 +100,11 @@ export const runAdblockService = (ses: Session) => {
         );
 
         if (match || redirect) {
-          appWindow.webContents.send(`blocked-ad-${details.webContentsId}`);
+          setTimeout(() =>
+            windowsManager
+              .findWindowByBrowserView(details.webContentsId)
+              .webContents.send(`blocked-ad-${details.webContentsId}`),
+          );
 
           if (redirect) {
             callback({ redirectURL: redirect });

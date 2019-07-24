@@ -17,6 +17,7 @@ import { WeatherStore } from './weather';
 import { SettingsStore } from './settings';
 import { AddBookmarkStore } from './add-bookmark';
 import { extensionsRenderer } from 'electron-extensions';
+import { getCurrentWindow } from '../utils';
 
 export class Store {
   public history = new HistoryStore();
@@ -78,6 +79,8 @@ export class Store {
     x: 0,
     y: 0,
   };
+
+  public windowId = getCurrentWindow().id;
 
   constructor() {
     ipcRenderer.on('update-navigation-state', (e, data: any) => {

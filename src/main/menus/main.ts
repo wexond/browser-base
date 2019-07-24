@@ -1,8 +1,8 @@
-import { AppWindow } from '../windows';
 import { Menu } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
+import { WindowsManager } from '../windows-manager';
 
-export const getMainMenu = (appWindow: AppWindow) => {
+export const getMainMenu = (windowsManager: WindowsManager) => {
   return Menu.buildFromTemplate([
     {
       label: 'Edit',
@@ -21,30 +21,30 @@ export const getMainMenu = (appWindow: AppWindow) => {
           label: 'Reload',
           accelerator: 'CmdOrCtrl+R',
           click: () => {
-            appWindow.viewManager.selected.webContents.reload();
+            windowsManager.currentWindow.viewManager.selected.webContents.reload();
           },
         },
         {
           accelerator: 'CmdOrCtrl+F',
           label: 'Find in page',
           click() {
-            appWindow.webContents.send('find');
+            windowsManager.currentWindow.webContents.send('find');
           },
         },
         {
           accelerator: 'CmdOrCtrl+T',
           label: 'New tab',
           click() {
-            appWindow.viewManager.create(defaultTabOptions);
+            windowsManager.currentWindow.viewManager.create(defaultTabOptions);
           },
         },
         {
           accelerator: 'CmdOrCtrl+W',
           label: 'Close tab',
           click() {
-            appWindow.webContents.send(
+            windowsManager.currentWindow.webContents.send(
               'remove-tab',
-              appWindow.viewManager.selectedId,
+              windowsManager.currentWindow.viewManager.selectedId,
             );
           },
         },
@@ -52,9 +52,9 @@ export const getMainMenu = (appWindow: AppWindow) => {
           accelerator: 'CmdOrCtrl+F4',
           label: 'Close tab',
           click() {
-            appWindow.webContents.send(
+            windowsManager.currentWindow.webContents.send(
               'remove-tab',
-              appWindow.viewManager.selectedId,
+              windowsManager.currentWindow.viewManager.selectedId,
             );
           },
         },
@@ -62,49 +62,49 @@ export const getMainMenu = (appWindow: AppWindow) => {
           accelerator: 'CmdOrCtrl+Shift+T',
           label: 'Revert closed tab',
           click() {
-            appWindow.webContents.send('revert-closed-tab');
+            windowsManager.currentWindow.webContents.send('revert-closed-tab');
           },
         },
         {
           accelerator: 'CmdOrCtrl+Tab',
           label: 'Select next tab',
           click() {
-            appWindow.webContents.send('select-next-tab');
+            windowsManager.currentWindow.webContents.send('select-next-tab');
           },
         },
         {
           accelerator: 'Ctrl+Space',
           label: 'Toggle Overlay',
           click() {
-            appWindow.webContents.send('toggle-overlay');
+            windowsManager.currentWindow.webContents.send('toggle-overlay');
           },
         },
         {
           accelerator: 'CmdOrCtrl+L',
           label: 'Toggle Overlay',
           click() {
-            appWindow.webContents.send('toggle-overlay');
+            windowsManager.currentWindow.webContents.send('toggle-overlay');
           },
         },
         {
           accelerator: 'Alt+F',
           label: 'Toggle Overlay',
           click() {
-            appWindow.webContents.send('toggle-overlay');
+            windowsManager.currentWindow.webContents.send('toggle-overlay');
           },
         },
         {
           accelerator: 'Alt+E',
           label: 'Toggle Overlay',
           click() {
-            appWindow.webContents.send('toggle-overlay');
+            windowsManager.currentWindow.webContents.send('toggle-overlay');
           },
         },
         {
           accelerator: 'CmdOrCtrl+Left',
           label: 'Go back',
           click() {
-            const { selected } = appWindow.viewManager;
+            const { selected } = windowsManager.currentWindow.viewManager;
             if (selected) {
               selected.webContents.goBack();
             }
@@ -114,7 +114,7 @@ export const getMainMenu = (appWindow: AppWindow) => {
           accelerator: 'CmdOrCtrl+Right',
           label: 'Go forward',
           click() {
-            const { selected } = appWindow.viewManager;
+            const { selected } = windowsManager.currentWindow.viewManager;
             if (selected) {
               selected.webContents.goForward();
             }
@@ -124,7 +124,7 @@ export const getMainMenu = (appWindow: AppWindow) => {
           accelerator: 'Ctrl+Shift+W',
           label: 'Close current window',
           click() {
-            appWindow.close();
+            windowsManager.currentWindow.close();
           },
         },
       ],
