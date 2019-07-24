@@ -61,10 +61,10 @@ export class WindowsManager {
 
     checkFiles();
 
+    this.sessionsManager = new SessionsManager(this);
+
     Menu.setApplicationMenu(getMainMenu(this));
     this.createWindow();
-
-    this.sessionsManager = new SessionsManager(this);
 
     runAutoUpdaterService(this);
 

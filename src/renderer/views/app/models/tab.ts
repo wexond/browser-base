@@ -277,11 +277,6 @@ export class ITab {
             this.id,
             this.findInfo,
           );
-
-          store.tabs.emitEvent('onActivated', {
-            tabId: this.id,
-            windowId: 0,
-          });
         }
       };
 
