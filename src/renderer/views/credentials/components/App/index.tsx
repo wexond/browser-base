@@ -12,6 +12,14 @@ import { StyledApp, Title, Buttons, Container } from './style';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
+const onSave = () => {
+  const username = store.usernameRef.current.value.trim();
+  const password = store.passwordRef.current.value.trim();
+
+  ipcRenderer.send('credentials-save', username, password);
+  ipcRenderer.send('credentials-hide');
+};
+
 const onClose = () => {
   ipcRenderer.send('credentials-hide');
 };
@@ -26,7 +34,11 @@ export const App = observer(() => {
         <PasswordInput ref={store.passwordRef} />
       </Container>
       <Buttons>
-        <Button foreground="black" background="rgba(0, 0, 0, 0.08)">
+        <Button
+          onClick={onSave}
+          foreground="black"
+          background="rgba(0, 0, 0, 0.08)"
+        >
           Save
         </Button>
         <Button

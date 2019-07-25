@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron';
+import { parse } from 'url';
 
-import { IFormFillMenuItem } from '~/interfaces';
+import { IFormFillMenuItem, IFormFillData } from '~/interfaces';
 import { AppWindow } from '../windows';
 import { getFormFillMenuItems } from '../utils';
 import storage from './storage';
@@ -62,5 +63,39 @@ export const runMessagingService = (appWindow: AppWindow) => {
 
   ipcMain.on('credentials-hide', () => {
     appWindow.credentialsWindow.hide();
+  })
+
+  ipcMain.on('credentials-save', async (e: any, username: string, password: string) => {
+    const url = appWindow.viewManager.selected.webContents.getURL();
+    const { hostname } = parse(url);
+
+    const updated = await storage.update({
+      scope: 'formfill',
+      query: {
+        type: 'password',
+        url: hostname,
+        'fields.username': username,
+      },
+      value: {
+        $set: {
+          'fields.username': username,
+          'fields.password': password,
+        },
+      },
+    })
+
+    if (updated === 0) {
+      await storage.insert<IFormFillData>({
+        scope: 'formfill',
+        item: {
+          type: 'password',
+          url: hostname,
+          fields: {
+            username,
+            password,
+          },
+        },
+      })
+    }
   })
 };
