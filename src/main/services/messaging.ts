@@ -56,8 +56,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.viewManager.selected.webContents.send('form-fill-update', item, persistent);
   })
 
-  ipcMain.on('credentials-show', (e: any, username: string, password: string) => {
-    appWindow.credentialsWindow.webContents.send('credentials-update', username, password);
+  ipcMain.on('credentials-show', (e: any, username: string, password: string, update: boolean) => {
+    appWindow.credentialsWindow.webContents.send('credentials-update', username, password, update);
     appWindow.credentialsWindow.show();
   })
 
@@ -65,26 +65,11 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.credentialsWindow.hide();
   })
 
-  ipcMain.on('credentials-save', async (e: any, username: string, password: string) => {
+  ipcMain.on('credentials-save', async (e: any, username: string, password: string, update: boolean, oldUsername: string) => {
     const url = appWindow.viewManager.selected.webContents.getURL();
     const { hostname } = parse(url);
 
-    const updated = await storage.update({
-      scope: 'formfill',
-      query: {
-        type: 'password',
-        url: hostname,
-        'fields.username': username,
-      },
-      value: {
-        $set: {
-          'fields.username': username,
-          'fields.password': password,
-        },
-      },
-    })
-
-    if (updated === 0) {
+    if (!update) {
       await storage.insert<IFormFillData>({
         scope: 'formfill',
         item: {
@@ -94,6 +79,19 @@ export const runMessagingService = (appWindow: AppWindow) => {
             username,
             password,
           },
+        },
+      });
+    } else {
+      await storage.update({
+        scope: 'formfill',
+        query: {
+          type: 'password',
+          url: hostname,
+          'fields.username': oldUsername,
+        },
+        value: {
+          'fields.username': username,
+          'fields.password': password,
         },
       })
     }

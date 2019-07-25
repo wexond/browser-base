@@ -16,7 +16,13 @@ const onSave = () => {
   const username = store.usernameRef.current.value.trim();
   const password = store.passwordRef.current.value.trim();
 
-  ipcRenderer.send('credentials-save', username, password);
+  ipcRenderer.send(
+    'credentials-save',
+    username,
+    password,
+    store.update,
+    store.oldUsername,
+  );
   ipcRenderer.send('credentials-hide');
 };
 
@@ -28,7 +34,7 @@ export const App = observer(() => {
   return (
     <StyledApp>
       <GlobalStyle />
-      <Title>Save password?</Title>
+      <Title>{store.update ? 'Update' : 'Save'} password?</Title>
       <Container>
         <Textfield ref={store.usernameRef} label="Username" />
         <PasswordInput ref={store.passwordRef} />

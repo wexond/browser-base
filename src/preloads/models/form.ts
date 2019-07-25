@@ -106,9 +106,12 @@ export class Form {
     const username = this.usernameField.value;
     const password = this.passwordField.value;
 
-    if (username.length && (!this.data || this.data.fields.username !== username)) {
-      ipcRenderer.send('credentials-show', username, password);
-    }
+    const sameUsername = this.data && username === this.data.fields.username;
+    const samePassword = this.data && password === this.data.fields.password;
+
+    if (!username.length || sameUsername && samePassword) return;
+
+    ipcRenderer.send('credentials-show', username, password, !samePassword);
   }
 
   public onFieldFocus = (e: FocusEvent) => {
