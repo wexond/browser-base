@@ -14,6 +14,10 @@ const onUpdateClick = () => {
   ipcRenderer.send('update-install');
 };
 
+const onKeyClick = () => {
+  ipcRenderer.send('credentials-show');
+};
+
 @observer
 class BrowserActions extends React.Component {
   public render() {
@@ -61,7 +65,9 @@ export const Toolbar = observer(() => {
         </div>
       </div>
       <Buttons>
-        {hasCredentials && <ToolbarButton icon={icons.key} size={16} />}
+        {hasCredentials && (
+          <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
+        )}
         <BrowserActions />
         {store.updateInfo.available && (
           <ToolbarButton icon={icons.download} onClick={onUpdateClick} />
