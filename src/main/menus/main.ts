@@ -127,6 +127,13 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
             windowsManager.currentWindow.close();
           },
         },
+        {
+          accelerator: 'Ctrl+N',
+          label: 'New window',
+          click() {
+            windowsManager.createWindow();
+          },
+        },
       ],
     },
   ]);
