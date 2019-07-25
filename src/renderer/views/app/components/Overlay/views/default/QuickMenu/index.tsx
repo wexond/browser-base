@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { ipcRenderer } from 'electron';
 import { platform } from 'os';
 
@@ -21,7 +21,7 @@ const onFindClick = () => {
   store.overlay.visible = false;
 
   ipcRenderer.send(
-    'find-show',
+    `find-show-${store.windowId}`,
     store.tabs.selectedTab.id,
     store.tabs.selectedTab.findInfo,
   );
@@ -46,6 +46,10 @@ const onAlwaysClick = () => {
 const onMultrinClick = () => {
   store.settings.object.multrin = !store.settings.object.multrin;
   store.settings.save();
+};
+
+const onNewWindowClick = () => {
+  ipcRenderer.send('create-window');
 };
 
 export const QuickMenu = observer(() => {
@@ -136,7 +140,7 @@ export const QuickMenu = observer(() => {
       </Actions>
 
       <Actions>
-        <Bubble disabled invert={invert} icon={icons.window}>
+        <Bubble onClick={onNewWindowClick} invert={invert} icon={icons.window}>
           New window
         </Bubble>
         <Bubble disabled invert={invert} icon={icons.window}>

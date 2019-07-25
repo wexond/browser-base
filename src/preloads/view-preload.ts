@@ -3,13 +3,23 @@ import { ipcRenderer, remote, webFrame } from 'electron';
 import AutoComplete from './models/auto-complete';
 
 const tabId = remote.getCurrentWebContents().id;
+const arg = process.argv.find(x => x.startsWith('--window-id='));
+
+let windowId: number = null;
+
+if (arg) {
+  windowId = parseInt(arg.split('--window-id=')[1], 10);
+}
 
 const goBack = () => {
-  ipcRenderer.send('browserview-call', { tabId, scope: 'webContents.goBack' });
+  ipcRenderer.send(`browserview-call-${windowId}`, {
+    tabId,
+    scope: 'webContents.goBack',
+  });
 };
 
 const goForward = () => {
-  ipcRenderer.send('browserview-call', {
+  ipcRenderer.send(`browserview-call-${windowId}`, {
     tabId,
     scope: 'webContents.goForward',
   });
@@ -23,7 +33,7 @@ window.addEventListener('mouseup', e => {
   }
 });
 
-webFrame.executeJavaScript('window', false, (w: any) => { });
+webFrame.executeJavaScript('window', false, (w: any) => {});
 
 let beginningScrollLeft: number = null;
 let beginningScrollRight: number = null;

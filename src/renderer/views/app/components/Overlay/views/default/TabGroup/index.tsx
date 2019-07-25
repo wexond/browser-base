@@ -1,4 +1,4 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { StyledTabGroup, Content, Icons, Icon, Input } from './style';

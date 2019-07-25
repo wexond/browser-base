@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 import { Favicon, Remove, Title, Time, Site } from './style';
 import { IHistoryItem } from '~/interfaces';
@@ -37,7 +37,7 @@ export default observer(({ data }: { data: IHistoryItem }) => {
     <ListItem key={data._id} onClick={onClick(data)} selected={selected}>
       <Favicon
         style={{
-          backgroundImage: `url(${store.favicons.favicons[data.favicon]})`,
+          backgroundImage: `url(${store.favicons.favicons.get(data.favicon)})`,
         }}
       />
       <Title onClick={onTitleClick(data.url)}>{data.title}</Title>

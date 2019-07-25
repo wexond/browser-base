@@ -1,4 +1,4 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { WindowsControls } from 'react-windows-controls';
@@ -16,7 +16,7 @@ import { TOOLBAR_HEIGHT } from '../../constants';
 const GlobalStyle = createGlobalStyle`${Style}`;
 
 window.onbeforeunload = () => {
-  ipcRenderer.send('browserview-clear');
+  ipcRenderer.send(`browserview-clear-${store.windowId}`);
 };
 
 export const App = observer(() => {

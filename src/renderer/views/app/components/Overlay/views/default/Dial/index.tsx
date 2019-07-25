@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 import { BookmarksDial } from '../BookmarksDial';
 import store from '~/renderer/views/app/store';

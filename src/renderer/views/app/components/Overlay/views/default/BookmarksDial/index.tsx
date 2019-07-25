@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 import { Actions } from '../../../style';
 import { Bubble } from '../Bubble';
@@ -25,7 +25,7 @@ export const BookmarksDial = observer(() => {
               ? icons.folder
               : item.favicon.startsWith('data:image')
               ? item.favicon
-              : store.favicons.favicons[item.favicon]
+              : store.favicons.favicons.get(item.favicon)
           }
         >
           {item.title}

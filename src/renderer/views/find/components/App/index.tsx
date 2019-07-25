@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { createGlobalStyle } from 'styled-components';
 import { remote, ipcRenderer } from 'electron';
 
@@ -20,12 +20,17 @@ import { icons } from '~/renderer/constants/icons';
 const GlobalStyle = createGlobalStyle`${Style}`;
 
 const close = () => {
-  callViewMethod(store.tabId, 'webContents.stopFindInPage', 'clearSelection');
+  callViewMethod(
+    store.windowId,
+    store.tabId,
+    'webContents.stopFindInPage',
+    'clearSelection',
+  );
   store.occurrences = '0/0';
   remote.getCurrentWindow().hide();
   store.visible = false;
   store.updateTabInfo();
-  ipcRenderer.send('window-focus');
+  ipcRenderer.send(`window-focus-${store.windowId}`);
 };
 
 const onInput = async () => {
@@ -34,10 +39,20 @@ const onInput = async () => {
   store.text = value;
 
   if (value === '') {
-    callViewMethod(store.tabId, 'webContents.stopFindInPage', 'clearSelection');
+    callViewMethod(
+      store.windowId,
+      store.tabId,
+      'webContents.stopFindInPage',
+      'clearSelection',
+    );
     store.occurrences = '0/0';
   } else {
-    await callViewMethod(store.tabId, 'webContents.findInPage', value);
+    await callViewMethod(
+      store.windowId,
+      store.tabId,
+      'webContents.findInPage',
+      value,
+    );
   }
 
   store.updateTabInfo();
@@ -47,10 +62,16 @@ const move = (forward: boolean) => async () => {
   const { value } = store.findInputRef.current;
   if (value === '') return;
 
-  await callViewMethod(store.tabId, 'webContents.findInPage', value, {
-    forward,
-    findNext: true,
-  });
+  await callViewMethod(
+    store.windowId,
+    store.tabId,
+    'webContents.findInPage',
+    value,
+    {
+      forward,
+      findNext: true,
+    },
+  );
 
   store.updateTabInfo();
 };

@@ -7,7 +7,7 @@ import { ProcessWindow } from '../models';
 import { AppWindow } from '../windows';
 import { windowManager, Window } from 'node-window-manager';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
-import { settings } from '..';
+import { windowsManager } from '..';
 
 const containsPoint = (bounds: any, point: any) => {
   return (
@@ -48,15 +48,17 @@ export class Multrin {
       }
     };
 
-    ipcMain.on('select-window', (e: any, id: number) => {
+    const { id } = this.appWindow.webContents;
+
+    ipcMain.on(`select-window-${id}`, (e: any, id: number) => {
       this.selectWindow(this.windows.find(x => x.id === id));
     });
 
-    ipcMain.on('detach-window', (e: any, id: number) => {
+    ipcMain.on(`detach-window-${id}`, (e: any, id: number) => {
       this.detachWindow(this.windows.find(x => x.id === id));
     });
 
-    ipcMain.on('hide-window', () => {
+    ipcMain.on(`hide-window-${id}`, () => {
       if (this.selectedWindow) {
         this.selectedWindow.hide();
         this.isWindowHidden = true;
@@ -85,7 +87,10 @@ export class Multrin {
     });
 
     mouseHooks.on('mouse-down', () => {
-      if (this.appWindow.isMinimized()) return;
+      if (this.appWindow.isMinimized() || this.appWindow.isFocused()) {
+        this.draggedWindow = null;
+        return;
+      }
 
       setTimeout(() => {
         if (this.appWindow.isFocused()) {
@@ -100,11 +105,12 @@ export class Multrin {
     });
 
     mouseHooks.on('mouse-move', async (e: any) => {
+      if (this.appWindow.isFocused()) return;
+
       if (
         this.draggedWindow &&
         this.selectedWindow &&
-        this.draggedWindow.id === this.selectedWindow.id &&
-        !this.appWindow.isFocused()
+        this.draggedWindow.id === this.selectedWindow.id
       ) {
         const bounds = this.selectedWindow.getBounds();
         const { lastBounds } = this.selectedWindow;
@@ -147,7 +153,7 @@ export class Multrin {
         !this.appWindow.isMinimized() &&
         this.draggedWindow &&
         !this.windows.find(x => x.id === this.draggedWindow.id) &&
-        settings.multrin
+        windowsManager.settings.object.multrin
       ) {
         const winBounds = this.draggedWindow.getBounds();
         const { lastBounds } = this.draggedWindow;

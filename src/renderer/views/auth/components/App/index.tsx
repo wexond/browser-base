@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { createGlobalStyle } from 'styled-components';
 
 import { Style } from '../../style';
@@ -16,7 +16,7 @@ const ref1 = React.createRef<Textfield>();
 const ref2 = React.createRef<PasswordInput>();
 
 const sendResponse = (credentials: any) => {
-  ipcRenderer.send('request-auth-result', credentials);
+  ipcRenderer.send(`request-auth-result-${store.windowId}`, credentials);
 };
 
 const onClick = () => {

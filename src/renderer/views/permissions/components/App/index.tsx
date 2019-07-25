@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { createGlobalStyle } from 'styled-components';
 
 import { Style } from '../../style';
@@ -11,7 +11,7 @@ import { Button } from '~/renderer/components/Button';
 const GlobalStyle = createGlobalStyle`${Style}`;
 
 const sendResult = (r: boolean) => {
-  ipcRenderer.send('request-permission-result', r);
+  ipcRenderer.send(`request-permission-result-${store.windowId}`, r);
 };
 
 const getText = (permission: string) => {

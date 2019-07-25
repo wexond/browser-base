@@ -1,4 +1,4 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import { ipcRenderer } from 'electron';
 
@@ -6,7 +6,7 @@ import store from '../../store';
 import { Buttons, StyledToolbar, Handle, Separator } from './style';
 import { NavigationButtons } from './NavigationButtons';
 import { Tabbar } from './Tabbar';
-import ToolbarButton from './ToolbarButton';
+import { ToolbarButton } from './ToolbarButton';
 import { icons, colors } from '~/renderer/constants';
 import { BrowserAction } from './BrowserAction';
 
@@ -23,19 +23,21 @@ class BrowserActions extends React.Component {
   public render() {
     const { selectedTabId } = store.tabGroups.currentGroup;
 
-    return (
-      <>
-        {selectedTabId &&
-          store.extensions.browserActions.map(item => {
-            if (item.tabId === selectedTabId) {
-              return <BrowserAction data={item} key={item.extensionId} />;
-            }
-            return null;
-          })}
-      </>
-    );
-  }
-}
+const BrowserActions = observer(() => {
+  const { selectedTabId } = store.tabGroups.currentGroup;
+
+  return (
+    <>
+      {selectedTabId &&
+        store.extensions.browserActions.map(item => {
+          if (item.tabId === selectedTabId) {
+            return <BrowserAction data={item} key={item.extensionId} />;
+          }
+          return null;
+        })}
+    </>
+  );
+});
 
 export const Toolbar = observer(() => {
   const { selectedTab } = store.tabs;

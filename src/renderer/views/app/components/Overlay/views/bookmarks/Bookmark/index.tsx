@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 import { Favicon, Title, Site, More } from './style';
 import { IBookmark } from '~/interfaces';
@@ -64,7 +64,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
               ? icons.folder
               : data.favicon.startsWith('data:image')
               ? data.favicon
-              : store.favicons.favicons[data.favicon]
+              : store.favicons.favicons.get(data.favicon)
           })`,
           filter:
             store.theme['overlay.foreground'] === 'light' && data.isFolder

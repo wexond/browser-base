@@ -18,11 +18,12 @@ import { SettingsStore } from './settings';
 import { AddBookmarkStore } from './add-bookmark';
 import { extensionsRenderer } from 'electron-extensions';
 import { FormFillStore } from './form-fill';
+import { getCurrentWindow } from '../utils';
 
 export class Store {
   public history = new HistoryStore();
   public bookmarks = new BookmarksStore();
-  public settings = new SettingsStore(this);
+  public settings = new SettingsStore();
   public suggestions = new SuggestionsStore();
   public favicons = new FaviconsStore();
   public addTab = new AddTabStore();
@@ -79,6 +80,8 @@ export class Store {
     y: 0,
   };
 
+  public windowId = getCurrentWindow().webContents.id;
+
   constructor() {
     ipcRenderer.on('update-navigation-state', (e, data: any) => {
       this.navigationState = data;
@@ -121,10 +124,16 @@ export class Store {
       },
     );
 
+    ipcRenderer.on('toggle-overlay', () => {
+      if (!this.overlay.isNewTab) {
+        this.overlay.visible = !this.overlay.visible;
+      }
+    });
+
     ipcRenderer.on('find', () => {
       const tab = this.tabs.selectedTab;
       if (tab) {
-        ipcRenderer.send('find-show', tab.id, tab.findInfo);
+        ipcRenderer.send(`find-show-${this.windowId}`, tab.id, tab.findInfo);
       }
     });
 

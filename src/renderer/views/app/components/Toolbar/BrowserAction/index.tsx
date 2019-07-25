@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { StyledBrowserAction, Badge } from './style';
-import ToolbarButton from '../ToolbarButton';
+import { ToolbarButton } from '../ToolbarButton';
 import { IBrowserAction } from '../../../models';
 import { extensionsRenderer } from 'electron-extensions';
 

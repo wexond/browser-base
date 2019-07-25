@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { Section } from '../../../style';
 import { Header, preventHiding } from '../../..';
 import { Downloads } from './style';

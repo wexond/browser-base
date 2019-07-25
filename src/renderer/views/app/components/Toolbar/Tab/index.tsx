@@ -1,4 +1,4 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { Preloader } from '~/renderer/components/Preloader';
@@ -143,7 +143,7 @@ const onContextMenu = (tab: ITab) => () => {
       label: 'Revert closed tab',
       enabled: store.tabs.closedUrl !== '',
       click: () => {
-        store.tabs.addTab({ active: true, url: store.tabs.closedUrl });
+        store.tabs.revertClosed();
       },
     },
   ]);

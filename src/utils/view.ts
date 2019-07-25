@@ -3,13 +3,14 @@ import { ipcRenderer } from 'electron';
 import { makeId } from '.';
 
 export const callViewMethod = (
+  windowId: number,
   id: number,
   scope: string,
   ...args: any[]
 ): Promise<any> => {
   return new Promise(resolve => {
     const callId = makeId(32);
-    ipcRenderer.send('browserview-call', {
+    ipcRenderer.send(`browserview-call-${windowId}`, {
       args,
       scope,
       tabId: id,

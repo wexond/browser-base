@@ -1,8 +1,8 @@
 import { autoUpdater } from 'electron-updater';
 import { ipcMain } from 'electron';
-import { AppWindow } from '../windows';
+import { WindowsManager } from '../windows-manager';
 
-export const runAutoUpdaterService = (appWindow: AppWindow) => {
+export const runAutoUpdaterService = (windowsManager: WindowsManager) => {
   ipcMain.on('update-install', () => {
     autoUpdater.quitAndInstall();
   });
@@ -14,6 +14,8 @@ export const runAutoUpdaterService = (appWindow: AppWindow) => {
   });
 
   autoUpdater.on('update-downloaded', ({ version }) => {
-    appWindow.webContents.send('update-available', version);
+    for (const window of windowsManager.list) {
+      window.webContents.send('update-available', version);
+    }
   });
 };
