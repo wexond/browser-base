@@ -40,14 +40,14 @@ export class View extends BrowserView {
       );
     });
 
-    this.webContents.addListener('did-stop-loading', () => {
-      this.updateNavigationState();
-      appWindow.webContents.send(`view-loading-${this.webContents.id}`, false);
-    });
-
     this.webContents.addListener('did-start-loading', () => {
       this.updateNavigationState();
       appWindow.webContents.send(`view-loading-${this.webContents.id}`, true);
+    });
+
+    this.webContents.addListener('did-stop-loading', () => {
+      this.updateNavigationState();
+      appWindow.webContents.send(`view-loading-${this.webContents.id}`, false);
     });
 
     this.webContents.addListener('did-start-navigation', (...args: any[]) => {

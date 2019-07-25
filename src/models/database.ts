@@ -6,7 +6,7 @@ export class Database<T> {
   constructor(public scope: string) { }
 
   private async performOperation(
-    operation: 'get' | 'update' | 'insert' | 'remove',
+    operation: 'get' | 'get-one' | 'update' | 'insert' | 'remove',
     data: any,
   ): Promise<any> {
     return new Promise(resolve => {
@@ -26,6 +26,10 @@ export class Database<T> {
 
   public async get(query: T): Promise<T[]> {
     return await this.performOperation('get', { query });
+  }
+
+  public async getOne(query: T): Promise<T[]> {
+    return await this.performOperation('get-one', { query });
   }
 
   public async update(query: T, newValue: T, multi = false): Promise<number> {

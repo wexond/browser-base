@@ -22,6 +22,11 @@ export class StorageService {
       e.sender.send(id, docs);
     });
 
+    ipcMain.on('storage-get-one', async (e, id: string, data: IFindOperation) => {
+      const doc = await this.findOne(data);
+      e.sender.send(id, doc);
+    });
+
     ipcMain.on('storage-insert', async (e, id: string, data: IInsertOperation) => {
       const doc = await this.insert(data);
       e.sender.send(id, doc);

@@ -38,10 +38,12 @@ export const Toolbar = observer(() => {
 
   let isWindow = false;
   let blockedAds: any = '';
+  let hasCredentials = false;
 
   if (selectedTab) {
     isWindow = selectedTab.isWindow;
     blockedAds = selectedTab.blockedAds;
+    hasCredentials = selectedTab.hasCredentials;
   }
 
   return (
@@ -59,6 +61,7 @@ export const Toolbar = observer(() => {
         </div>
       </div>
       <Buttons>
+        {hasCredentials && <ToolbarButton icon={icons.key} size={16} />}
         <BrowserActions />
         {store.updateInfo.available && (
           <ToolbarButton icon={icons.download} onClick={onUpdateClick} />

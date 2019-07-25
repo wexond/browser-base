@@ -33,6 +33,7 @@ export class Store {
   public downloads = new DownloadsStore();
   public weather = new WeatherStore();
   public addBookmark = new AddBookmarkStore();
+  public formFill = new FormFillStore();
 
   @observable
   public theme = lightTheme;
