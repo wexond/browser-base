@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 import { StyledTabGroups, AddTabGroup } from './style';
 import store from '~/renderer/views/app/store';

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 import { StyledSearchBox, InputContainer, SearchIcon, Input } from './style';
 import { isURL } from '~/utils';
 import { loadURL } from '~/renderer/views/app/utils';
 import store from '~/renderer/views/app/store';
-import ToolbarButton from '../../../../Toolbar/ToolbarButton';
+import { ToolbarButton } from '../../../../Toolbar/ToolbarButton';
 import { Suggestions } from '../Suggestions';
 import { icons } from '~/renderer/constants';
 import AddBookmarkDialog from '../AddBookmarkDialog';

@@ -1,4 +1,4 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { AddTab, StyledTabbar, TabsContainer } from './style';
@@ -32,12 +32,6 @@ export const Tabbar = observer(() => {
         icon={icons.add}
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
-      />
-      <HorizontalScrollbar
-        ref={store.tabs.scrollbarRef}
-        enabled={store.tabs.scrollable}
-        visible={store.tabs.scrollbarVisible}
-        getContainer={getContainer}
       />
     </StyledTabbar>
   );

@@ -1,9 +1,9 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { StyledContainer } from './style';
 import store from '../../../store';
-import ToolbarButton from '../ToolbarButton';
+import { ToolbarButton } from '../ToolbarButton';
 import { icons } from '~/renderer/constants';
 
 const onBackClick = () => {
