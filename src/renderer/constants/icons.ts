@@ -30,6 +30,7 @@ import dropDown from '~/renderer/resources/icons/drop-down.svg';
 import folder from '~/renderer/resources/icons/folder.svg';
 import newFolder from '~/renderer/resources/icons/new-folder.svg';
 import save from '~/renderer/resources/icons/save.svg';
+import key from '~/renderer/resources/icons/key.svg';
 
 import weatherDayClear from '~/renderer/resources/icons/weather/day/clear.png';
 import weatherDayFewClouds from '~/renderer/resources/icons/weather/day/few-clouds.png';
@@ -78,6 +79,7 @@ export const icons = {
   folder,
   newFolder,
   save,
+  key,
   weather: {
     day: {
       clear: weatherDayClear,

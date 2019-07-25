@@ -1,11 +1,11 @@
 import { BrowserWindow, app } from 'electron';
+import { readFileSync, writeFileSync } from 'fs';
 import { resolve, join } from 'path';
 
 import { ViewManager } from '../view-manager';
 import { getPath } from '~/utils';
-import { readFileSync, writeFileSync } from 'fs';
 import { runMessagingService, Multrin } from '../services';
-import { PermissionsWindow, AuthWindow, FindWindow } from '.';
+import { PermissionsWindow, AuthWindow, FindWindow, FormFillWindow, CredentialsWindow } from '.';
 import { WindowsManager } from '../windows-manager';
 
 export class AppWindow extends BrowserWindow {
@@ -15,6 +15,8 @@ export class AppWindow extends BrowserWindow {
   public permissionWindow = new PermissionsWindow(this);
   public authWindow = new AuthWindow(this);
   public findWindow = new FindWindow(this);
+  public formFillWindow = new FormFillWindow(this);
+  public credentialsWindow = new CredentialsWindow(this);
 
   constructor(public windowsManager: WindowsManager) {
     super({
@@ -65,17 +67,24 @@ export class AppWindow extends BrowserWindow {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
       }
+
       this.authWindow.rearrange();
       this.findWindow.rearrange();
       this.permissionWindow.rearrange();
+      this.formFillWindow.rearrange();
+      this.credentialsWindow.rearrange();
     });
+
     this.on('move', () => {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
       }
+
       this.authWindow.rearrange();
       this.findWindow.rearrange();
       this.permissionWindow.rearrange();
+      this.formFillWindow.rearrange();
+      this.credentialsWindow.rearrange();
     });
 
     const resize = () => {

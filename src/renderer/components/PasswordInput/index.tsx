@@ -23,6 +23,10 @@ export class PasswordInput extends React.PureComponent<Props, State> {
     this.setState({ visible: !visible });
   };
 
+  public set value(str: string) {
+    this.ref.current.value = str;
+  }
+
   public get value() {
     return this.ref.current.value;
   }

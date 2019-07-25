@@ -14,6 +14,15 @@ const onUpdateClick = () => {
   ipcRenderer.send('update-install');
 };
 
+const onKeyClick = () => {
+  ipcRenderer.send('credentials-show');
+};
+
+@observer
+class BrowserActions extends React.Component {
+  public render() {
+    const { selectedTabId } = store.tabGroups.currentGroup;
+
 const BrowserActions = observer(() => {
   const { selectedTabId } = store.tabGroups.currentGroup;
 
@@ -35,10 +44,12 @@ export const Toolbar = observer(() => {
 
   let isWindow = false;
   let blockedAds: any = '';
+  let hasCredentials = false;
 
   if (selectedTab) {
     isWindow = selectedTab.isWindow;
     blockedAds = selectedTab.blockedAds;
+    hasCredentials = selectedTab.hasCredentials;
   }
 
   return (
@@ -56,6 +67,9 @@ export const Toolbar = observer(() => {
         </div>
       </div>
       <Buttons>
+        {hasCredentials && (
+          <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
+        )}
         <BrowserActions />
         {store.updateInfo.available && (
           <ToolbarButton icon={icons.download} onClick={onUpdateClick} />

@@ -42,6 +42,10 @@ export class Textfield extends React.PureComponent<Props, State> {
 
   public set value(str: string) {
     this.inputRef.current.value = str;
+
+    this.setState({
+      activated: !!str.length,
+    });
   }
 
   onClick = () => {

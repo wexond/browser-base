@@ -1,6 +1,7 @@
+import { ipcRenderer } from 'electron';
+import { parse } from 'url';
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
-import { ipcRenderer } from 'electron';
 import Vibrant = require('node-vibrant');
 
 import store from '../store';
@@ -20,25 +21,25 @@ export class ITab {
   public id: number;
 
   @observable
-  public isDragging: boolean = false;
+  public isDragging = false;
 
   @observable
   public title: string = 'New tab';
 
   @observable
-  public loading: boolean = false;
+  public loading = false;
 
   @observable
-  public favicon: string = '';
+  public favicon = '';
 
   @observable
   public tabGroupId: number;
 
   @observable
-  public width: number = 0;
+  public width = 0;
 
   @observable
-  public background: string = store.theme.accentColor;
+  public background = store.theme.accentColor;
 
   @observable
   public url = '';
@@ -52,6 +53,9 @@ export class ITab {
 
   @observable
   public blockedAds = 0;
+
+  @observable
+  public hasCredentials = false;
 
   public left = 0;
   public lastUrl = '';
@@ -133,6 +137,7 @@ export class ITab {
 
         this.url = url;
         this.updateData();
+        this.updateCredentials();
       },
     );
 
@@ -235,11 +240,9 @@ export class ITab {
           _id: this.lastHistoryId,
         },
         {
-          $set: {
-            title,
-            url,
-            favicon,
-          },
+          title,
+          url,
+          favicon,
         },
       );
     }
@@ -405,4 +408,11 @@ export class ITab {
   callViewMethod = (scope: string, ...args: any[]): Promise<any> => {
     return callViewMethod(store.windowId, this.id, scope, ...args);
   };
+
+  public async updateCredentials() {
+    const { hostname } = parse(this.url);
+    const item = await store.formFill.db.getOne({ url: hostname });
+
+    this.hasCredentials = item != null;
+  }
 }

@@ -1,8 +1,7 @@
-import * as Datastore from 'nedb';
-
 import { IFavicon } from '~/interfaces';
-import { requestURL, getPath } from '~/utils';
+import { requestURL } from '~/utils';
 import { observable } from 'mobx';
+import { Database } from '~/models/database';
 
 const icojs = require('icojs');
 const fileType = require('file-type');
@@ -28,32 +27,20 @@ const readImage = (buffer: Buffer) => {
 };
 
 export class FaviconsStore {
-  public db = new Datastore({
-    filename: getPath('storage/favicons.db'),
-    autoload: true,
-  });
+  public db = new Database<IFavicon>('favicons');
 
   @observable
-  public favicons: Map<string, string> = new Map();
+  public favicons: { [key: string]: string } = {};
 
-  public faviconsBuffers: Map<string, Buffer> = new Map();
+  public faviconsBuffers: { [key: string]: Buffer } = {};
 
   constructor() {
     this.load();
   }
 
-  public getFavicons = (query: IFavicon = {}) => {
-    return new Promise((resolve: (favicons: IFavicon[]) => void, reject) => {
-      this.db.find(query, (err: any, docs: IFavicon[]) => {
-        if (err) return reject(err);
-        resolve(docs);
-      });
-    });
-  };
-
   public addFavicon = async (url: string) => {
     return new Promise(async (resolve: (a: any) => void, reject: any) => {
-      if (!this.favicons.get(url)) {
+      if (!this.favicons[url]) {
         try {
           const res = await requestURL(url);
 
@@ -76,29 +63,25 @@ export class FaviconsStore {
             data: str,
           });
 
-          this.favicons.set(url, str);
+          this.favicons[url] = str;
 
           resolve(str);
         } catch (e) {
           reject(e);
         }
       } else {
-        resolve(this.favicons.get(url));
+        resolve(this.favicons[url]);
       }
     });
   };
 
   public async load() {
-    await this.db.find({}, (err: any, docs: IFavicon[]) => {
-      if (err) return console.warn(err);
+    (await this.db.get({})).forEach(favicon => {
+      const { data } = favicon;
 
-      docs.forEach(favicon => {
-        const { data } = favicon;
-
-        if (this.favicons.get(favicon.url) == null) {
-          this.favicons.set(favicon.url, data);
-        }
-      });
+      if (this.favicons[favicon.url] == null) {
+        this.favicons[favicon.url] = data;
+      }
     });
   }
 }

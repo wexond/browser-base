@@ -4,6 +4,7 @@ import { observable, computed, action } from 'mobx';
 import { IHistoryItem, IHistorySection } from '~/interfaces';
 import { countVisitedTimes, compareDates, getSectionLabel } from '../utils';
 import { getPath } from '~/utils';
+import { Database } from '~/models/database';
 
 export type QuickRange =
   | 'all'
@@ -14,10 +15,7 @@ export type QuickRange =
   | 'older';
 
 export class HistoryStore {
-  public db = new Datastore({
-    filename: getPath('storage/history.db'),
-    autoload: true,
-  });
+  public db = new Database<IHistoryItem>('history');
 
   @observable
   public items: IHistoryItem[] = [];
@@ -47,40 +45,30 @@ export class HistoryStore {
   }
 
   public async load() {
-    this.db.find({}).exec((err: any, items: IHistoryItem[]) => {
-      if (err) return console.warn(err);
+    const items = await this.db.get({});
 
-      items = items.sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-      );
+    items.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    );
 
-      this.items = items;
-    });
+    this.items = items;
   }
 
-  public addItem(item: IHistoryItem) {
-    return new Promise((resolve: (id: string) => void) => {
-      this.db.insert(item, (err: any, doc: IHistoryItem) => {
-        if (err) return console.error(err);
-
-        this.items.push(doc);
-        resolve(doc._id);
-      });
-    });
+  public async addItem(item: IHistoryItem) {
+    const doc = await this.db.insert(item);
+    item._id = doc._id;
+    this.items.push(item);
+    return doc._id;
   }
 
   public clear() {
     this.items = [];
-
-    this.db.remove({}, { multi: true }, (err, num) => {});
+    this.db.remove({}, true);
   }
 
   public removeItem(id: string) {
     this.items = this.items.filter(x => x._id !== id);
-
-    this.db.remove({ _id: id }, err => {
-      if (err) return console.warn(err);
-    });
+    this.db.remove({ _id: id });
   }
 
   @computed

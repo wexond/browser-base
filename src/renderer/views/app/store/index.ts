@@ -17,6 +17,7 @@ import { WeatherStore } from './weather';
 import { SettingsStore } from './settings';
 import { AddBookmarkStore } from './add-bookmark';
 import { extensionsRenderer } from 'electron-extensions';
+import { FormFillStore } from './form-fill';
 import { getCurrentWindow } from '../utils';
 
 export class Store {
@@ -33,6 +34,7 @@ export class Store {
   public downloads = new DownloadsStore();
   public weather = new WeatherStore();
   public addBookmark = new AddBookmarkStore();
+  public formFill = new FormFillStore();
 
   @observable
   public theme = lightTheme;
@@ -68,9 +70,7 @@ export class Store {
 
   @computed
   public get searchEngine() {
-    return this.settings.object.searchEngines[
-      this.settings.object.searchEngine
-    ];
+    return this.settings.object.searchEngines[this.settings.object.searchEngine];
   }
 
   public canToggleMenu = false;
