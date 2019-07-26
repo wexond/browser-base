@@ -3,7 +3,7 @@ import { parse } from 'url';
 import storage from '../services/storage';
 import { IFormFillData, IFormFillMenuItem } from '~/interfaces';
 import { getFormFillValue, getFormFillSubValue } from '~/utils/form-fill';
-import { appWindow } from '../';
+import { windowsManager } from '..';
 
 const getType = (name: string) => {
   return (name === 'username' || name === 'login' || name === 'password') ? 'password' : 'address';
@@ -11,7 +11,7 @@ const getType = (name: string) => {
 
 export const getFormFillMenuItems = async (name: string, value: string) => {
   const dataType = getType(name);
-  const url = appWindow.viewManager.selected.webContents.getURL();
+  const url = windowsManager.currentWindow.viewManager.selected.webContents.getURL();
   const { hostname } = parse(url);
 
   const items = await storage.find<IFormFillData>({
