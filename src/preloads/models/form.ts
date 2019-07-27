@@ -111,7 +111,11 @@ export class Form {
 
     if (!username.length || sameUsername && samePassword) return;
 
-    ipcRenderer.send('credentials-show', username, password, !samePassword);
+    ipcRenderer.send('credentials-show', {
+      username,
+      password,
+      content: samePassword ? 'update' : 'save',
+    });
   }
 
   public onFieldFocus = (e: FocusEvent) => {

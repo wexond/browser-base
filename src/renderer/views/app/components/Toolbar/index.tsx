@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import { ipcRenderer } from 'electron';
+import { parse } from 'url';
 
 import store from '../../store';
 import { Buttons, StyledToolbar, Handle, Separator } from './style';
@@ -14,8 +15,18 @@ const onUpdateClick = () => {
   ipcRenderer.send('update-install');
 };
 
-const onKeyClick = () => {
-  ipcRenderer.send('credentials-show');
+const onKeyClick = async () => {
+  const { hostname } = parse(store.tabs.selectedTab.url);
+
+  const list = (await store.formFill.db.get({
+    type: 'password',
+    url: hostname,
+  })).filter(r => r.fields.username);
+
+  ipcRenderer.send('credentials-show', {
+    content: 'list',
+    list,
+  });
 };
 
 const BrowserActions = observer(() => {

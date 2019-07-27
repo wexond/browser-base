@@ -58,8 +58,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.viewManager.selected.webContents.send('form-fill-update', item, persistent);
   })
 
-  ipcMain.on('credentials-show', (e: any, username: string, password: string, update: boolean) => {
-    appWindow.credentialsWindow.webContents.send('credentials-update', username, password, update);
+  ipcMain.on('credentials-show', (e: any, data: any) => {
+    appWindow.credentialsWindow.webContents.send('credentials-update', data);
     appWindow.credentialsWindow.show();
   })
 
@@ -67,7 +67,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.credentialsWindow.hide();
   })
 
-  ipcMain.on('credentials-save', async (e: any, username: string, password: string, update: boolean, oldUsername: string) => {
+  ipcMain.on('credentials-save', async (e: any, data: any) => {
+    const { username, password, update, oldUsername } = data;
     const url = appWindow.viewManager.selected.webContents.getURL();
     const { hostname } = parse(url);
 
