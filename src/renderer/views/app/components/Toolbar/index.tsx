@@ -18,11 +18,6 @@ const onKeyClick = () => {
   ipcRenderer.send('credentials-show');
 };
 
-@observer
-class BrowserActions extends React.Component {
-  public render() {
-    const { selectedTabId } = store.tabGroups.currentGroup;
-
 const BrowserActions = observer(() => {
   const { selectedTabId } = store.tabGroups.currentGroup;
 

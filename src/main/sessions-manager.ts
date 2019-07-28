@@ -5,6 +5,7 @@ import { promises } from 'fs';
 import { resolve } from 'path';
 import { WindowsManager } from './windows-manager';
 import { runAdblockService } from './services';
+import storage from './services/storage';
 
 export class SessionsManager {
   public view = session.fromPartition('persist:view');
@@ -99,6 +100,7 @@ export class SessionsManager {
 
     runAdblockService(this.view);
     runAdblockService(this.viewIncognito);
+    storage.run();
   }
 
   public async loadExtensions() {
