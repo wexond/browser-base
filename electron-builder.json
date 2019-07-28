@@ -19,11 +19,34 @@
       {
         "target": "AppImage",
         "arch": ["ia32", "x64"]
+      },
+      {
+        "target": "snap",
+        "arch": ["ia32", "x64"]
+      },
+      {
+        "target": "deb",
+        "arch": ["ia32", "x64"]
       }
     ]
   },
   "win": {
-    "target": ["zip", "nsis"]
+    "target": [
+      {
+        "target": "nsis",
+        "arch": [
+          "x64",
+          "ia32"
+        ]
+      },
+      {
+        "target": "zip",
+        "arch": [
+          "x64",
+          "ia32"
+        ]
+      }
+    ],
   },
   "mac": {
     "category": "public.app-category.navigation"
