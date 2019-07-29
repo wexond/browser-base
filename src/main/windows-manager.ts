@@ -90,7 +90,7 @@ export class WindowsManager {
 
   public findWindowByBrowserView(webContentsId: number) {
     return this.list.find(
-      x => !!x.viewManager.views.find(y => y.id === webContentsId),
+      x => !!x.viewManager.views.find(y => y.webContents.id === webContentsId),
     );
   }
 }
