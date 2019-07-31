@@ -40,10 +40,12 @@ const Fields = observer(() => {
 });
 
 export const App = observer(() => {
-  let title = 'Saved passwords for this site';
+  let title = '';
 
-  if (store.content !== 'list') {
-    title = `${store.content === 'save' ? 'Save' : 'Update'} password?`;
+  if (store.content === 'list') {
+    title = store.list.length ? 'Saved passwords for this site' : 'No passwords saved for this site';
+  } else {
+    title = store.content === 'save' ? 'Save password?' : 'Update password?';
   }
 
   return (

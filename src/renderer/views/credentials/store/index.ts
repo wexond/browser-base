@@ -37,6 +37,11 @@ export class Store {
       },
     );
   }
+
+  public remove(id: string) {
+    this.list = this.list.filter(r => r._id !== id);
+    ipcRenderer.send('credentials-remove', id);
+  }
 }
 
 export default new Store();
