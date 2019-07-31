@@ -1,13 +1,12 @@
-import { BrowserWindow, app } from 'electron';
-import { join } from 'path';
 import { AppWindow } from '.';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants';
+import { PopupWindow } from './popup';
 
 const WIDTH = 208;
 const HEIGHT = 128;
 const MARGIN = 8;
 
-export class FormFillWindow extends BrowserWindow {
+export class FormFillWindow extends PopupWindow {
   public inputRect = {
     width: 0,
     height: 0,
@@ -16,29 +15,12 @@ export class FormFillWindow extends BrowserWindow {
   }
 
   constructor(public appWindow: AppWindow) {
-    super({
-      frame: false,
-      resizable: false,
-      width: WIDTH,
+    super(appWindow, 'credentials', true);
+
+    this.setBounds({
       height: HEIGHT,
-      transparent: true,
-      fullscreenable: false,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-      },
-      skipTaskbar: true,
-    });
-
-    if (process.env.ENV === 'dev') {
-      this.webContents.openDevTools({ mode: 'detach' });
-      this.loadURL('http://localhost:4444/form-fill.html');
-    } else {
-      this.loadURL(join('file://', app.getAppPath(), 'build/form-fill.html'));
-    }
-
-    this.setParentWindow(this.appWindow);
+      width: WIDTH,
+    } as any);
   }
 
   public rearrange() {
