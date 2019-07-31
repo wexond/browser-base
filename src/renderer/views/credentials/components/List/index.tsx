@@ -1,9 +1,14 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
+import { ipcRenderer } from 'electron';
 
 import store from '../../store';
 import { IFormFillData } from '~/interfaces';
 import { StyledItem, Username, Password, DeleteIcon } from './styles';
+
+const onDelete = (data: IFormFillData) => () => {
+  ipcRenderer.send('credentials-remove', data._id);
+}
 
 const Item = ({ data }: { data: IFormFillData }) => {
   const { username, password } = data.fields;
@@ -16,7 +21,7 @@ const Item = ({ data }: { data: IFormFillData }) => {
       <Password>
         {'•'.repeat(password.length)}
       </Password>
-      <DeleteIcon />
+      <DeleteIcon onClick={onDelete(data)} />
     </StyledItem>
   )
 }

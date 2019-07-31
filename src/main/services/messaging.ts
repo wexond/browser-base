@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { ipcMain, ipcRenderer } from 'electron';
 import { parse } from 'url';
 
 import { IFormFillMenuItem, IFormFillData } from '~/interfaces';
@@ -98,5 +98,14 @@ export const runMessagingService = (appWindow: AppWindow) => {
         },
       })
     }
-  })
+  });
+
+  ipcMain.on('credentials-remove', (e: any, id: string) => {
+    storage.remove({
+      scope: 'formfill',
+      query: {
+        _id: id,
+      },
+    });
+  });
 };
