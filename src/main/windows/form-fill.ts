@@ -15,7 +15,7 @@ export class FormFillWindow extends PopupWindow {
   }
 
   constructor(public appWindow: AppWindow) {
-    super(appWindow, 'credentials', true);
+    super(appWindow, 'form-fill');
 
     this.setBounds({
       height: HEIGHT,

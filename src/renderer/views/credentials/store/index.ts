@@ -25,6 +25,8 @@ export class Store {
       (e: any, data: any) => {
         const { username, password, content, list } = data;
 
+        console.log(data);
+
         if (content !== 'list') {
           this.usernameRef.current.value = username;
           this.passwordRef.current.value = password;

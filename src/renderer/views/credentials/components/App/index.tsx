@@ -33,10 +33,10 @@ const onClose = () => {
 };
 
 const Fields = observer(() => {
-  return <>
+  return <div style={{ display: store.content !== 'list' ? 'block' : 'none' }}>
     <Textfield ref={store.usernameRef} label="Username" />
     <PasswordInput ref={store.passwordRef} />
-  </>;
+  </div>;
 });
 
 export const App = observer(() => {
@@ -53,7 +53,8 @@ export const App = observer(() => {
       <GlobalStyle />
       <Title>{title}</Title>
       <Container>
-        {store.content === 'list' ? <List /> : <Fields />}
+        <Fields />
+        <List />
       </Container>
       <Buttons>
         {store.content !== 'list' && <Button
