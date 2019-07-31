@@ -60,6 +60,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
 
   ipcMain.on('credentials-show', (e: any, data: any) => {
     appWindow.credentialsWindow.webContents.send('credentials-update', data);
+    appWindow.credentialsWindow.rearrange();
     appWindow.credentialsWindow.show();
   })
 
