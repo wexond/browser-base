@@ -7,6 +7,8 @@ import store from '../../store';
 import { Textfield } from '~/renderer/components/Textfield';
 import { PasswordInput } from '~/renderer/components/PasswordInput';
 import { Button } from '~/renderer/components/Button';
+import List from '../List';
+import { colors } from '~/renderer/constants';
 import { Style } from '../../style';
 import { StyledApp, Title, Buttons, Container } from './style';
 
@@ -16,42 +18,66 @@ const onSave = () => {
   const username = store.usernameRef.current.value.trim();
   const password = store.passwordRef.current.value.trim();
 
-  ipcRenderer.send(
-    'credentials-save',
+  ipcRenderer.send('credentials-hide');
+
+  ipcRenderer.send('credentials-save', {
     username,
     password,
-    store.update,
-    store.oldUsername,
-  );
-  ipcRenderer.send('credentials-hide');
+    update: store.content === 'update',
+    oldUsername: store.oldUsername,
+  });
 };
 
 const onClose = () => {
   ipcRenderer.send('credentials-hide');
 };
 
+const Fields = observer(() => {
+  return <div style={{ display: store.content !== 'list' ? 'block' : 'none' }}>
+    <Textfield ref={store.usernameRef} label="Username" />
+    <PasswordInput ref={store.passwordRef} />
+  </div>;
+});
+
 export const App = observer(() => {
+  let title = '';
+
+  if (store.content === 'list') {
+    title = store.list.length ? 'Saved passwords for this site' : 'No passwords saved for this site';
+  } else {
+    title = store.content === 'save' ? 'Save password?' : 'Update password?';
+  }
+
   return (
     <StyledApp>
       <GlobalStyle />
-      <Title>{store.update ? 'Update' : 'Save'} password?</Title>
+      <Title>{title}</Title>
       <Container>
-        <Textfield ref={store.usernameRef} label="Username" />
-        <PasswordInput ref={store.passwordRef} />
+        <Fields />
+        <List />
       </Container>
       <Buttons>
-        <Button
+        {store.content !== 'list' && <Button
           onClick={onSave}
           foreground="black"
           background="rgba(0, 0, 0, 0.08)"
+          style={{ marginLeft: 'auto' }}
         >
           Save
-        </Button>
+        </Button>}
+        {store.content === 'list' && <Button
+          foreground={colors.blue['500']}
+          background="transparent"
+          style={{ marginRight: 'auto', padding: '0px 12px' }}
+          onClick={onClose}
+        >
+          Manage passwords
+        </Button>}
         <Button
           foreground="black"
           background="rgba(0, 0, 0, 0.08)"
-          style={{ marginLeft: 8 }}
           onClick={onClose}
+          style={{ marginLeft: 8 }}
         >
           Close
         </Button>

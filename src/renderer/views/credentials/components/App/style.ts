@@ -21,6 +21,7 @@ export const Container = styled.div`
 `;
 
 export const Buttons = styled.div`
+  width: 100%;
   display: flex;
   margin-top: 16px;
   float: right;
