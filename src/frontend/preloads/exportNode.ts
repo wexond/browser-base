@@ -3,6 +3,8 @@ declare global {
     interface Global {
       nodeRequire: any
       nodeProcess: any
+      process: Process // ensure compatibility with flow < 5.2.6
+      ipc: any // ensure compatibility with flow < 5.2.6
     }
   }
 }
@@ -15,20 +17,7 @@ const nodeRequire: {[key: string]: any} = {
 };
 const nodeProcess = process;
 
-process.once('loaded', () => {
-  global.nodeRequire = (moduleName: string): any => {
-    const requiredModule = nodeRequire[moduleName]
-
-    if (!requiredModule) {
-      throw Error(`Cannot find module ${moduleName}. It must be explicitely exported from the client.`)
-    }
-
-    return requiredModule
-  }
-  global.nodeProcess = nodeProcess;
-});
-
-const ipc = nodeRequire['electron'].ipcRenderer
+const ipcRenderer = nodeRequire['electron'].ipcRenderer
 const hiddenMenuCode = 'configtaktik'
 
 let codeClearingTimeout: number
@@ -49,10 +38,24 @@ function handleHiddenMenuCode(event: KeyboardEvent): any {
   }
 
   if (hiddenMenuCodeIndex === hiddenMenuCode.length) {
-    ipc.send('openConfigMode')
+    ipcRenderer.send('openConfigMode')
   }
 }
 
 document.addEventListener('keydown', handleHiddenMenuCode)
+process.once('loaded', () => {
+  global.nodeRequire = (moduleName: string): any => {
+    const requiredModule = nodeRequire[moduleName]
+
+    if (!requiredModule) {
+      throw Error(`Cannot find module ${moduleName}. It must be explicitely exported from the client.`)
+    }
+
+    return requiredModule
+  }
+  global.nodeProcess = nodeProcess;
+  global.process = nodeProcess; // ensure compatibility with flow < 5.2.6
+  global.ipc = ipcRenderer // ensure compatibility with flow < 5.2.6
+});
 
 export {};
