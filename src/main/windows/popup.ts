@@ -15,6 +15,7 @@ export class PopupWindow extends BrowserWindow {
         contextIsolation: false,
       },
       skipTaskbar: true,
+      backgroundColor: '#00ffffff',
     });
 
     if (process.env.ENV === 'dev') {

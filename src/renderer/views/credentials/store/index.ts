@@ -4,10 +4,14 @@ import { observable } from 'mobx';
 
 import { Textfield } from '~/renderer/components/Textfield';
 import { PasswordInput } from '~/renderer/components/PasswordInput';
+import { IFormFillData } from '~/interfaces';
 
 export class Store {
   @observable
-  public update = false;
+  public content: 'save' | 'update' | 'list';
+
+  @observable
+  public list: IFormFillData[] = [];
 
   public usernameRef = React.createRef<Textfield>();
 
@@ -18,14 +22,27 @@ export class Store {
   constructor() {
     ipcRenderer.on(
       'credentials-update',
-      (e: any, username: string, password: string, update: boolean) => {
-        this.usernameRef.current.value = username;
-        this.passwordRef.current.value = password;
+      (e: any, data: any) => {
+        const { username, password, content, list } = data;
 
-        this.update = update;
-        this.oldUsername = username;
+        console.log(data);
+
+        if (content !== 'list') {
+          this.usernameRef.current.value = username;
+          this.passwordRef.current.value = password;
+          this.oldUsername = username;
+        } else {
+          this.list = list;
+        }
+
+        this.content = content;
       },
     );
+  }
+
+  public remove(id: string) {
+    this.list = this.list.filter(r => r._id !== id);
+    ipcRenderer.send('credentials-remove', id);
   }
 }
 
