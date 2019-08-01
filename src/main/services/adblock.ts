@@ -100,17 +100,17 @@ export const runAdblockService = (ses: Session) => {
         );
 
         if (match || redirect) {
-          setTimeout(() =>
-            windowsManager
-              .findWindowByBrowserView(details.webContentsId)
-              .webContents.send(`blocked-ad-${details.webContentsId}`),
-          );
-
           if (redirect) {
             callback({ redirectURL: redirect });
           } else {
             callback({ cancel: true });
           }
+
+          setTimeout(() => {
+            for (const window of windowsManager.list) {
+              window.webContents.send(`blocked-ad-${details.webContentsId}`);
+            }
+          });
 
           return;
         }
