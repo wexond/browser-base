@@ -68,7 +68,7 @@ export class View extends BrowserView {
           ...parse(url),
         });
 
-        this.webContents.insertCSS(styles);
+        this.webContents.insertCSS(styles, { cssOrigin: 'user' });
 
         for (const script of scripts) {
           this.webContents.executeJavaScript(script);
