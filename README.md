@@ -3,9 +3,9 @@
 </p>
 
 <div align="center">
-  <h1>Flowr PC Client</h1>
+  <h1>Flowr Desktop</h1>
 
-Flowr PC Client is an Flowr client for PC, Mac or Linux. Thers is an embedded privacy-focused web browser with a totally different user experience, built on top of `Electron`, `TypeScript`, `React` and `styled-components`. It aims to be fast, private, beautiful, extensible and functional.
+Flowr Desktop is an Flowr client for PC, Mac or Linux. It also is an embedded privacy-focused web browser.
 
 </div>
 
