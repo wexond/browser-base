@@ -20,7 +20,17 @@ const config = {
       },
       {
         test: /\.tsx|ts$/,
-        use: ['cache-loader', 'ts-loader'],
+        use: [
+          'cache-loader',
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+              experimentalWatchApi: true,
+            },
+          },
+        ],
+
         include: INCLUDE,
       },
     ],
@@ -45,7 +55,6 @@ const config = {
     'node-window-manager',
     'node-vibrant',
     'leveldown',
-    'electron-extensions',
   ],
 };
 

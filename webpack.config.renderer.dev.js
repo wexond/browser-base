@@ -1,15 +1,12 @@
 const webpack = require('webpack');
-const { execSync } = require('child_process');
 const getConfig = require('./webpack.config.base');
-const { join, resolve } = require('path');
+const { join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const PORT = 4444;
 
 const output = {
   publicPath: `http://localhost:${PORT}/`,
-  hotUpdateChunkFilename: 'hot/hot-update.js',
-  hotUpdateMainFilename: 'hot/hot-update.json',
 };
 
 const config = {
@@ -46,7 +43,6 @@ const appConfig = getConfig(config, {
       'icojs',
       'file-type',
       'electron-extensions',
-      'react-hot-loader',
     ],
   },
 
@@ -71,6 +67,12 @@ const appConfig = getConfig(config, {
       filename: 'app.html',
     }),
   ],
+
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
+  },
 });
 
 module.exports = [appConfig];
