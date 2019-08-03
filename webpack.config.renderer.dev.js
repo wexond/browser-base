@@ -13,7 +13,7 @@ const config = {
   devtool: 'eval-source-map',
   plugins: [new webpack.HotModuleReplacementPlugin()],
   output,
-  mode: 'production',
+  mode: 'development',
   target: 'electron-renderer',
 
   devServer: {
@@ -67,12 +67,6 @@ const appConfig = getConfig(config, {
       filename: 'app.html',
     }),
   ],
-
-  resolve: {
-    alias: {
-      'react-dom': '@hot-loader/react-dom',
-    },
-  },
 });
 
 module.exports = [appConfig];
