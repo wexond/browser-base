@@ -25,11 +25,14 @@ export class AuthWindow extends PopupWindow {
 
       this.webContents.send('request-auth', url);
 
-      ipcMain.once('request-auth-result', (e: any, result: any) => {
-        this.hide();
+      ipcMain.once(
+        `request-auth-result-${this.appWindow.webContents.id}`,
+        (e: any, result: any) => {
+          this.hide();
 
-        resolve(result);
-      });
+          resolve(result);
+        },
+      );
     });
   }
 
