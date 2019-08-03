@@ -1,4 +1,4 @@
-import { Menu } from 'electron';
+import { Menu, BrowserWindow } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { WindowsManager } from '../windows-manager';
 
@@ -132,6 +132,13 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           label: 'New window',
           click() {
             windowsManager.createWindow();
+          },
+        },
+        {
+          accelerator: 'Ctrl+Shift+F12',
+          label: 'Toggle developer tools (window)',
+          click() {
+            BrowserWindow.getFocusedWindow().webContents.openDevTools();
           },
         },
       ],

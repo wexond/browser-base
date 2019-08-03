@@ -12,10 +12,10 @@ export class FormFillWindow extends PopupWindow {
     height: 0,
     x: 0,
     y: 0,
-  }
+  };
 
   constructor(public appWindow: AppWindow) {
-    super(appWindow, 'form-fill', true);
+    super(appWindow, 'form-fill');
 
     this.setBounds({
       height: HEIGHT,
@@ -28,7 +28,13 @@ export class FormFillWindow extends PopupWindow {
 
     this.setBounds({
       x: cBounds.x + this.inputRect.x - 8,
-      y: cBounds.y + this.inputRect.y + this.inputRect.height + TOOLBAR_HEIGHT - MARGIN + 2,
+      y:
+        cBounds.y +
+        this.inputRect.y +
+        this.inputRect.height +
+        TOOLBAR_HEIGHT -
+        MARGIN +
+        2,
     } as any);
   }
 
