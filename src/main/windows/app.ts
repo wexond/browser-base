@@ -5,7 +5,13 @@ import { resolve, join } from 'path';
 import { ViewManager } from '../view-manager';
 import { getPath } from '~/utils';
 import { runMessagingService, Multrin } from '../services';
-import { PermissionsWindow, AuthWindow, FindWindow, FormFillWindow, CredentialsWindow } from '.';
+import {
+  PermissionsWindow,
+  AuthWindow,
+  FindWindow,
+  FormFillWindow,
+  CredentialsWindow,
+} from '.';
 import { WindowsManager } from '../windows-manager';
 
 export class AppWindow extends BrowserWindow {
@@ -102,6 +108,8 @@ export class AppWindow extends BrowserWindow {
       windowState.fullscreen = this.isFullScreen();
       writeFileSync(windowDataPath, JSON.stringify(windowState));
     });
+
+    this.webContents.openDevTools({ mode: 'detach' });
 
     if (process.env.ENV === 'dev') {
       this.webContents.openDevTools({ mode: 'detach' });

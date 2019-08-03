@@ -90,7 +90,7 @@ export const runAdblockService = (ses: Session) => {
 
   webRequest.onBeforeRequest(
     { urls: ['<all_urls>'] },
-    async (details: Electron.OnBeforeRequestListenerDetails, callback: any) => {
+    async (details: Electron.OnBeforeRequestDetails, callback: any) => {
       if (engine && windowsManager.settings.object.shield) {
         const { match, redirect } = engine.match(
           Request.fromRawDetails({
@@ -106,11 +106,9 @@ export const runAdblockService = (ses: Session) => {
             callback({ cancel: true });
           }
 
-          setTimeout(() => {
-            for (const window of windowsManager.list) {
-              window.webContents.send(`blocked-ad-${details.webContentsId}`);
-            }
-          });
+          for (const window of windowsManager.list) {
+            window.webContents.send(`blocked-ad-${details.webContentsId}`);
+          }
 
           return;
         }
