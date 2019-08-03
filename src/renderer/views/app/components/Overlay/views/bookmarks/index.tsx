@@ -1,5 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
+import { remote } from 'electron';
+import { promises } from 'fs';
+import parse from 'node-bookmarks-parser';
 
 import store from '~/renderer/views/app/store';
 import { IBookmark } from '~/interfaces';
@@ -19,11 +22,6 @@ import {
 import Tree from './Tree';
 import { BookmarkSection, PathItem, PathView } from './style';
 import { Content, Scrollable2, Sections } from '../../style';
-import { remote } from 'electron';
-import { promises } from 'fs';
-import { promisify } from 'util';
-
-const parse = promisify(require('bookmarks-parser'));
 
 const scrollRef = React.createRef<HTMLDivElement>();
 
@@ -81,10 +79,14 @@ const onImportClick = () => {
     },
     async (filePaths: string[]) => {
       if (filePaths) {
-        const file = await promises.readFile(filePaths[0], 'utf8');
-        const res = await parse(file);
+        try {
+          const file = await promises.readFile(filePaths[0], 'utf8');
+          const res = parse(file);
 
-        addImported(res.bookmarks);
+          addImported(res);
+        } catch (err) {
+          console.error(err);
+        }
       }
     },
   );
