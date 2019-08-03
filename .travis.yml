@@ -2,11 +2,18 @@ language: node_js
 node_js: '12'
 sudo: enabled
 dist: trusty
+env:
+  global:
+    - ELECTRON_CACHE=$HOME/.cache/electron
+    - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 install:
   - npm ci
 cache:
   directories:
-  - "$HOME/.npm"
+    - node_modules
+    - $HOME/.cache/electron
+    - $HOME/.cache/electron-builder
+    - $HOME/.npm/_prebuilds
 os:
   - linux
   - osx
@@ -17,8 +24,8 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - libc6-dev-i386
-      - gcc-4.8-multilib
-      - g++-4.8-multilib
+      - gcc-multilib
+      - g++-multilib
       - ninja-build
       - linux-libc-dev:i386
       - linux-libc-dev
@@ -26,6 +33,4 @@ addons:
       - graphicsmagick
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-darwin ;fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-linux ;fi
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]] && [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run compile-win32 ;fi
+  - npm run build-ci
