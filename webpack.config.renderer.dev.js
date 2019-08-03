@@ -43,6 +43,7 @@ const appConfig = getConfig(config, {
       'icojs',
       'file-type',
       'electron-extensions',
+      'react-hot-loader',
     ],
   },
 

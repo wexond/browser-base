@@ -2,7 +2,6 @@ const { resolve } = require('path');
 const merge = require('webpack-merge');
 
 const INCLUDE = resolve(__dirname, 'src');
-const EXCLUDE = /node_modules/;
 
 const config = {
   output: {
@@ -55,6 +54,7 @@ const config = {
     'node-window-manager',
     'node-vibrant',
     'leveldown',
+    'electron-extensions',
   ],
 };
 
