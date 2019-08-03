@@ -1,4 +1,5 @@
 const { resolve } = require('path');
+const merge = require('webpack-merge');
 
 const INCLUDE = resolve(__dirname, 'src');
 const EXCLUDE = /node_modules/;
@@ -38,6 +39,18 @@ const config = {
       '~': INCLUDE,
     },
   },
+
+  externals: {
+    'extract-file-icon': 'require("extract-file-icon")',
+    'mouse-hooks': 'require("mouse-hooks")',
+    'node-window-manager': 'require("node-window-manager")',
+    'node-vibrant': 'require("node-vibrant")',
+    leveldown: 'require("leveldown")',
+  },
 };
 
-module.exports = config;
+function getConfig(...cfg) {
+  return merge(config, ...cfg);
+}
+
+module.exports = getConfig;

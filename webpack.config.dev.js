@@ -1,6 +1,5 @@
 const webpack = require('webpack');
-const { spawn } = require('child_process');
-const baseConfig = require('./webpack.config.base');
+const getConfig = require('./webpack.config.base');
 const { join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -12,51 +11,31 @@ const output = {
   hotUpdateMainFilename: 'hot/hot-update.json',
 };
 
-const config = Object.assign({}, baseConfig, {
+const config = {
   devtool: 'eval-source-map',
 
   plugins: [new webpack.HotModuleReplacementPlugin()],
-});
 
-config.output = Object.assign(output, baseConfig.output);
-
-const mainConfig = {
-  target: 'electron-main',
-
-  watch: true,
-
-  entry: {
-    main: './src/main',
-  },
-
-  plugins: [
-    {
-      apply: compiler => {
-        compiler.hooks.afterEmit.tap('AfterEmitPlugin', compilation => {
-          spawn('npm', ['start'], {
-            shell: true,
-            env: process.env,
-            stdio: 'inherit',
-          })
-            .on('close', code => process.exit(code))
-            .on('error', spawnError => console.error(spawnError));
-        });
-      },
-    },
-  ],
+  output,
 };
 
-const appConfig = {
+const appConfig = getConfig(config, {
   target: 'electron-renderer',
 
   entry: {
     app: ['react-hot-loader/patch', './src/renderer/views/app'],
+    vendor: [
+      'react',
+      'react-dom',
+      'mobx',
+      'mobx-react-lite',
+      'styled-components',
+    ],
   },
 
   devServer: {
     contentBase: join(__dirname, 'dist'),
     port: PORT,
-    stats: 'errors-only',
     hot: true,
     inline: true,
     historyApiFallback: {
@@ -65,16 +44,27 @@ const appConfig = {
     },
   },
 
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          name: 'vendor',
+          test: 'vendor',
+          enforce: true,
+        },
+      },
+    },
+    runtimeChunk: true,
+  },
+
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Wexond',
       template: 'static/pages/app.html',
+      filename: 'app.html',
     }),
   ],
-};
+});
 
-function getConfig(cfg) {
-  return Object.assign({}, config, cfg);
-}
-
-module.exports = [getConfig(mainConfig), getConfig(appConfig)];
+module.exports = [appConfig];

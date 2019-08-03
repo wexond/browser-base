@@ -11,7 +11,7 @@
     "styled-components"
   ],
   "homepage": "https://github.com/wexond/wexond#readme",
-  "main": "build/main.js",
+  "main": "build/main.bundle.js",
   "author": {
     "name": "Eryk Rakowski",
     "email": "sentialx@gmail.com"
@@ -34,7 +34,7 @@
     "url": "https://github.com/wexond/wexond/issues"
   },
   "scripts": {
-    "dev": "webpack-dev-server --config webpack.config.dev.js --mode development",
+    "dev": "concurrently \"webpack-dev-server --config webpack.config.dev.js --mode development\" \"webpack --mode development\"",
     "build": "node fuse.js",
     "start": "cross-env ENV='dev' electron .",
     "compile-win32": "npm run build && electron-builder -w -p always",
@@ -59,7 +59,7 @@
     "@types/react": "16.8.24",
     "@types/react-dom": "16.8.5",
     "@types/styled-components": "4.1.18",
-    "concurrently": "4.1.1",
+    "concurrently": "^4.1.1",
     "cross-env": "5.2.0",
     "electron": "7.0.0-beta.1",
     "electron-builder": "21.2.0",
@@ -78,7 +78,8 @@
     "url-loader": "^2.1.0",
     "webpack": "4.39.1",
     "webpack-cli": "3.3.6",
-    "webpack-dev-server": "^3.7.2"
+    "webpack-dev-server": "^3.7.2",
+    "webpack-merge": "^4.2.1"
   },
   "dependencies": {
     "@cliqz/adblocker": "0.12.0",
