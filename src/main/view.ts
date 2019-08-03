@@ -68,7 +68,7 @@ export class View extends BrowserView {
           ...parse(url),
         });
 
-        this.webContents.insertCSS(styles, { cssOrigin: 'user' });
+        (this.webContents.insertCSS as any)(styles, { cssOrigin: 'user' });
 
         for (const script of scripts) {
           this.webContents.executeJavaScript(script);
@@ -167,13 +167,5 @@ export class View extends BrowserView {
         canGoForward: this.webContents.canGoForward(),
       });
     }
-  }
-
-  public async getScreenshot(): Promise<string> {
-    return new Promise(resolve => {
-      this.webContents.capturePage(img => {
-        resolve(img.toDataURL());
-      });
-    });
   }
 }
