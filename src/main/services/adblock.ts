@@ -90,7 +90,7 @@ export const runAdblockService = (ses: Session) => {
 
   webRequest.onBeforeRequest(
     { urls: ['<all_urls>'] },
-    async (details: Electron.OnBeforeRequestDetails, callback: any) => {
+    async (details: Electron.OnBeforeRequestListenerDetails, callback: any) => {
       if (engine && windowsManager.settings.object.shield) {
         const { match, redirect } = engine.match(
           Request.fromRawDetails({
