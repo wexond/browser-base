@@ -45,6 +45,7 @@ const config = {
     'node-window-manager',
     'node-vibrant',
     'leveldown',
+    'electron-extensions',
   ],
 };
 

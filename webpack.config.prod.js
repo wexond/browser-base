@@ -1,26 +1,13 @@
 const getConfig = require('./webpack.config.base');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const appConfig = getConfig({
-  target: 'electron-renderer',
-
-  devtool: 'source-map',
+const mainConfig = getConfig({
+  target: 'electron-main',
 
   mode: 'production',
 
-  output,
-
   entry: {
-    app: ['./src/renderer/views/app'],
+    main: './src/main',
   },
-
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: 'Wexond',
-      template: 'static/pages/app.html',
-      filename: 'app.html',
-    }),
-  ],
 });
 
-module.exports = [appConfig];
+module.exports = [mainConfig];

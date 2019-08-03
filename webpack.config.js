@@ -1,12 +1,12 @@
-const webpack = require('webpack');
 const getConfig = require('./webpack.config.base');
-const { join } = require('path');
 const { spawn } = require('child_process');
 
 let electronProcess;
 
 const mainConfig = getConfig({
   target: 'electron-main',
+
+  mode: 'development',
 
   watch: true,
 
