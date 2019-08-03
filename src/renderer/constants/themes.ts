@@ -4,7 +4,7 @@ import { colors } from './colors';
 
 export const lightTheme: ITheme = {
   'toolbar.backgroundColor': '#fff',
-  'toolbar.overlay.backgroundColor': '#e8ebec',
+  'toolbar.overlay.backgroundColor': 'rgba(0, 0, 0, 0.1)',
   'toolbar.bottomLine.backgroundColor': 'rgba(0, 0, 0, 0.12)',
   'toolbar.icons.invert': false,
   'toolbar.separator.color': 'rgba(0, 0, 0, 0.12)',
@@ -15,7 +15,7 @@ export const lightTheme: ITheme = {
   'tab.textColor': `rgba(0, 0, 0, ${transparency.text.high})`,
   'tab.allowLightBackground': false,
   'overlay.windowsButtons.invert': false,
-  'overlay.section.backgroundColor': '#ECEFF1',
+  'overlay.section.backgroundColor': 'rgba(0, 0, 0, 0.06)',
   'overlay.dialog.backgroundColor': '#fff',
   'overlay.foreground': 'dark',
   'overlay.backgroundColor': '#fff',

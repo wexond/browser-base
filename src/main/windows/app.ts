@@ -109,7 +109,7 @@ export class AppWindow extends BrowserWindow {
       writeFileSync(windowDataPath, JSON.stringify(windowState));
     });
 
-    this.webContents.openDevTools({ mode: 'detach' });
+    // this.webContents.openDevTools({ mode: 'detach' });
 
     if (process.env.ENV === 'dev') {
       this.webContents.openDevTools({ mode: 'detach' });
