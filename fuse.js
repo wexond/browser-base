@@ -23,6 +23,7 @@ const getConfig = target => {
       EnvPlugin({ NODE_ENV: production ? 'production' : 'development' }),
       production &&
         QuantumPlugin({
+          target,
           bakeApiIntoBundle: true,
           treeshake: true,
           uglify: {
@@ -56,9 +57,19 @@ const getCopyPlugin = () => {
 };
 
 const main = () => {
-  const fuse = FuseBox.init(getConfig('server', 'main'));
+  const cfg = getConfig('electron');
 
-  const app = fuse.bundle('main').instructions(`> [main/index.ts]`);
+  cfg.plugins.push(JSONPlugin());
+
+  const fuse = FuseBox.init(cfg);
+
+  let instructions = `> [main/index.ts]`;
+
+  if (production) {
+    instructions = `> main/index.ts -electron-extensions -electron -node-window-manager -mouse-hooks -extract-file-icon -electron-updater`;
+  }
+
+  const app = fuse.bundle('main').instructions(instructions);
 
   if (!production) {
     app.watch();
@@ -87,9 +98,13 @@ const renderer = name => {
 
   const fuse = FuseBox.init(cfg);
 
-  const app = fuse
-    .bundle(name)
-    .instructions(`> [renderer/views/${name}/index.tsx]`);
+  let instructions = `> [renderer/views/${name}/index.tsx]`;
+
+  if (production) {
+    instructions = `> renderer/views/${name}/index.tsx -node-vibrant -electron -electron-extensions -styled-components -node-bookmarks-parser`;
+  }
+
+  const app = fuse.bundle(name).instructions(instructions);
 
   if (!production) {
     if (name === 'app') {

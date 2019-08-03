@@ -1,3 +1,5 @@
+import parse from 'node-bookmarks-parser';
+
 import { IBookmark } from '~/interfaces';
 import store from '../store';
 
@@ -18,18 +20,21 @@ export const getBookmarkTitle = (item: IBookmark) => {
   return '';
 };
 
-export const addImported = async (arr: any[], parent: IBookmark = null) => {
+export const addImported = async (
+  arr: ReturnType<typeof parse>,
+  parent: IBookmark = null,
+) => {
   let order = 0;
 
   for (const item of arr) {
-    if (item.ns_root) {
+    if (item.nsRoot) {
       let folder: IBookmark = null;
 
-      if (item.ns_root === 'toolbar') {
+      if (item.nsRoot === 'toolbar') {
         folder = store.bookmarks.list.find(x => x.static === 'main');
-      } else if (item.ns_root === 'menu') {
+      } else if (item.nsRoot === 'menu') {
         folder = store.bookmarks.list.find(x => x.static === 'mobile');
-      } else if (item.ns_root === 'unsorted') {
+      } else if (item.nsRoot === 'unsorted') {
         folder = store.bookmarks.list.find(x => x.static === 'other');
       }
 
