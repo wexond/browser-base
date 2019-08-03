@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
+import { hot } from 'react-hot-loader/root';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { WindowsControls } from 'react-windows-controls';
 
@@ -19,7 +20,7 @@ window.onbeforeunload = () => {
   ipcRenderer.send(`browserview-clear-${store.windowId}`);
 };
 
-export const App = observer(() => {
+const App = observer(() => {
   return (
     <ThemeProvider
       theme={{ ...store.theme, animations: store.settings.object.animations }}
@@ -55,3 +56,5 @@ export const App = observer(() => {
     </ThemeProvider>
   );
 });
+
+export default hot(App);
