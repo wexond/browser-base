@@ -8,6 +8,7 @@ const config = {
   output: {
     path: resolve(__dirname, 'build'),
     filename: '[name].bundle.js',
+    libraryTarget: 'commonjs2',
   },
 
   module: {
@@ -15,14 +16,12 @@ const config = {
       {
         test: /\.(png|gif|jpg|woff2|ttf|svg)$/,
         include: INCLUDE,
-        exclude: EXCLUDE,
         use: ['url-loader'],
       },
       {
-        test: /\.(tsx|ts)$/,
+        test: /\.tsx|ts$/,
+        use: ['cache-loader', 'ts-loader'],
         include: INCLUDE,
-        exclude: EXCLUDE,
-        use: ['ts-loader'],
       },
     ],
   },
@@ -40,13 +39,13 @@ const config = {
     },
   },
 
-  externals: {
-    'extract-file-icon': 'require("extract-file-icon")',
-    'mouse-hooks': 'require("mouse-hooks")',
-    'node-window-manager': 'require("node-window-manager")',
-    'node-vibrant': 'require("node-vibrant")',
-    leveldown: 'require("leveldown")',
-  },
+  externals: [
+    'extract-file-icon',
+    'mouse-hooks',
+    'node-window-manager',
+    'node-vibrant',
+    'leveldown',
+  ],
 };
 
 function getConfig(...cfg) {

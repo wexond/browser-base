@@ -1,46 +1,26 @@
-const webpack = require('webpack');
-const baseConfig = require('./webpack.config.base');
+const getConfig = require('./webpack.config.base');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const config = Object.assign({}, baseConfig, {
+const appConfig = getConfig({
+  target: 'electron-renderer',
+
   devtool: 'source-map',
 
+  mode: 'production',
+
+  output,
+
+  entry: {
+    app: ['./src/renderer/views/app'],
+  },
+
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production'),
+    new HtmlWebpackPlugin({
+      title: 'Wexond',
+      template: 'static/pages/app.html',
+      filename: 'app.html',
     }),
   ],
 });
 
-const appConfig = {
-  target: 'electron-renderer',
-
-  entry: {
-    app: ['./src/app'],
-  },
-};
-
-const newTabConfig = {
-  target: 'web',
-
-  entry: {
-    newtab: ['./src/newtab'],
-  },
-};
-
-const testFieldConfig = {
-  target: 'web',
-
-  entry: {
-    testField: ['./src/test-field'],
-  },
-};
-
-function getConfig(cfg) {
-  return Object.assign({}, config, cfg);
-}
-
-module.exports = [
-  getConfig(appConfig),
-  getConfig(newTabConfig),
-  getConfig(testFieldConfig),
-];
+module.exports = [appConfig];

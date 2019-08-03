@@ -1,6 +1,7 @@
 const webpack = require('webpack');
+const { execSync } = require('child_process');
 const getConfig = require('./webpack.config.base');
-const { join } = require('path');
+const { join, resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const PORT = 4444;
@@ -13,25 +14,10 @@ const output = {
 
 const config = {
   devtool: 'eval-source-map',
-
   plugins: [new webpack.HotModuleReplacementPlugin()],
-
   output,
-};
-
-const appConfig = getConfig(config, {
+  mode: 'production',
   target: 'electron-renderer',
-
-  entry: {
-    app: ['react-hot-loader/patch', './src/renderer/views/app'],
-    vendor: [
-      'react',
-      'react-dom',
-      'mobx',
-      'mobx-react-lite',
-      'styled-components',
-    ],
-  },
 
   devServer: {
     contentBase: join(__dirname, 'dist'),
@@ -42,6 +28,26 @@ const appConfig = getConfig(config, {
       verbose: true,
       disableDotRule: false,
     },
+  },
+};
+
+const appConfig = getConfig(config, {
+  entry: {
+    app: ['react-hot-loader/patch', './src/renderer/views/app'],
+    vendor: [
+      'react',
+      'react-dom',
+      'mobx',
+      'mobx-react-lite',
+      'styled-components',
+      'gsap',
+      'pretty-bytes',
+      'node-bookmarks-parser',
+      'icojs',
+      'file-type',
+      'electron-extensions',
+      'react-hot-loader',
+    ],
   },
 
   optimization: {
