@@ -35,7 +35,6 @@ export class SettingsStore {
   }
 
   public async save() {
-    console.log(JSON.stringify(this.object));
     ipcRenderer.send('save-settings', JSON.stringify(this.object));
   }
 }

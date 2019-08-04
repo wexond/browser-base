@@ -137,7 +137,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
 
   private getLabel(value: any) {
     const { children } = this.props;
-    const item = children.find(({ props }: any) => props.value === value);
+    const item = children.find(({ props }: any) => props.children === value);
     if (item) return item.props.children;
   }
 
