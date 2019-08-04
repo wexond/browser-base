@@ -1,10 +1,15 @@
 const { resolve } = require('path');
 const merge = require('webpack-merge');
-const webpack = require('webpack');
 
 const INCLUDE = resolve(__dirname, 'src');
 
+const dev = process.env.ENV === 'dev';
+
 const config = {
+  mode: dev ? 'development' : 'production',
+
+  devtool: dev ? 'eval' : 'source-map',
+
   output: {
     path: resolve(__dirname, 'build'),
     filename: '[name].bundle.js',
@@ -55,6 +60,7 @@ const config = {
     'node-window-manager',
     'node-vibrant',
     'leveldown',
+    'electron-extensions',
   ],
 };
 
@@ -62,4 +68,4 @@ function getConfig(...cfg) {
   return merge(config, ...cfg);
 }
 
-module.exports = getConfig;
+module.exports = { getConfig, dev };

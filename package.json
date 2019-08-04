@@ -34,10 +34,8 @@
     "url": "https://github.com/wexond/wexond/issues"
   },
   "scripts": {
-    "dev": "concurrently \"webpack-dev-server --config webpack.config.renderer.dev.js\" \"webpack\"",
-    "build": "concurrently \"webpack --config webpack.config.renderer.prod.js\" \"webpack --config webpack.config.prod.js\"",
-    "build-dll": "webpack --config webpack.config.vendor.js --mode production",
-    "build-dll-dev": "webpack --config webpack.config.vendor.js --mode development",
+    "dev": "concurrently \"cross-env ENV='dev' webpack-dev-server --config webpack.config.renderer.js\" \" cross-env ENV='dev' webpack\"",
+    "build": "concurrently \"webpack --config webpack.config.renderer.js\" \"webpack\"",
     "start": "cross-env ENV='dev' electron .",
     "compile-win32": "npm run build && electron-builder -w -p always",
     "compile-darwin": "npm run build && electron-builder -m -p always",
@@ -72,6 +70,7 @@
     "file-type": "12.1.0",
     "fuse-box": "3.7.1",
     "gsap": "2.1.3",
+    "hard-source-webpack-plugin": "^0.13.1",
     "html-webpack-plugin": "^3.2.0",
     "icojs": "0.13.1",
     "mobx": "5.13.0",
