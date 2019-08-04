@@ -33,7 +33,6 @@ const onSearchEngineChange = (value: string) => {
 
 const SearchEngine = () => {
   const { searchEngine, searchEngines } = store.settings.object;
-
   const se = searchEngines[searchEngine];
 
   return (

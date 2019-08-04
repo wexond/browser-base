@@ -19,8 +19,8 @@ export class Settings extends EventEmitter {
   constructor() {
     super();
 
-    ipcMain.on('save-settings', (e: any, s: ISettings) => {
-      this.object = { ...this.object, ...s };
+    ipcMain.on('save-settings', (e: any, s: string) => {
+      this.object = { ...this.object, ...JSON.parse(s) };
 
       for (const window of windowsManager.list) {
         if (window.webContents.id !== e.sender.id) {
