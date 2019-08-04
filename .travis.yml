@@ -33,4 +33,4 @@ addons:
       - graphicsmagick
 
 script:
-  - npm run build-ci
+  - npm run compile
