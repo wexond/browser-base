@@ -12,7 +12,7 @@ const darkreaderPath = resolve(
   '../build/extensions/wexond-darkreader',
 );
 
-mkdirp('../build/extensions/wexond-darkreader', async err => {
+mkdirp(darkreaderPath, async err => {
   if (err) return console.error(err);
 
   if (!existsSync(resolve(darkreaderPath, 'manifest.json'))) {
