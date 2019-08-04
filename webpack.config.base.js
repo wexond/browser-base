@@ -1,5 +1,6 @@
 const { resolve } = require('path');
 const merge = require('webpack-merge');
+const webpack = require('webpack');
 
 const INCLUDE = resolve(__dirname, 'src');
 
@@ -42,7 +43,7 @@ const config = {
 
   resolve: {
     modules: ['node_modules'],
-    extensions: ['.js', '.tsx', '.ts', '.json'],
+    extensions: ['.js', '.jsx', '.tsx', '.ts', '.json'],
     alias: {
       '~': INCLUDE,
     },
@@ -54,7 +55,6 @@ const config = {
     'node-window-manager',
     'node-vibrant',
     'leveldown',
-    'electron-extensions',
   ],
 };
 

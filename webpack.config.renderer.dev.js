@@ -1,7 +1,11 @@
 const webpack = require('webpack');
 const getConfig = require('./webpack.config.base');
 const { join } = require('path');
+const { execSync } = require('child_process');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+
+execSync('npm run build-dll-dev');
 
 const PORT = 4444;
 
@@ -31,41 +35,36 @@ const config = {
 const appConfig = getConfig(config, {
   entry: {
     app: ['react-hot-loader/patch', './src/renderer/views/app'],
-    vendor: [
-      'react',
-      'react-dom',
-      'mobx',
-      'mobx-react-lite',
-      'styled-components',
-      'gsap',
-      'pretty-bytes',
-      'node-bookmarks-parser',
-      'icojs',
-      'file-type',
-      'electron-extensions',
-      'react-hot-loader',
-    ],
   },
 
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          chunks: 'initial',
-          name: 'vendor',
-          test: 'vendor',
-          enforce: true,
-        },
-      },
-    },
-    runtimeChunk: true,
-  },
+  externals: [
+    'react',
+    'react-dom',
+    'mobx',
+    'mobx-react-lite',
+    'styled-components',
+    'gsap',
+    'pretty-bytes',
+    'node-bookmarks-parser',
+    'icojs',
+    'file-type',
+    'electron-extensions',
+    'react-hot-loader',
+  ],
 
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Wexond',
       template: 'static/pages/app.html',
       filename: 'app.html',
+    }),
+    new webpack.DllReferencePlugin({
+      context: './build',
+      manifest: require('./build/vendor.json'),
+      sourceType: 'var',
+    }),
+    new AddAssetHtmlPlugin({
+      filepath: require.resolve('./build/vendor.bundle.js'),
     }),
   ],
 });

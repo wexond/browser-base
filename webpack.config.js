@@ -17,9 +17,8 @@ const mainConfig = getConfig({
   plugins: [
     {
       apply: compiler => {
-        compiler.hooks.afterEmit.tap('AfterEmitPlugin', compilation => {
+        compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
           if (electronProcess) {
-            electronProcess.disconnect();
             electronProcess.kill();
           }
 
@@ -30,8 +29,6 @@ const mainConfig = getConfig({
           })
             .on('close', code => process.exit(code))
             .on('error', spawnError => console.error(spawnError));
-
-          electronProcess.unref();
         });
       },
     },
