@@ -19,7 +19,7 @@ export class Settings extends EventEmitter {
   constructor() {
     super();
 
-    ipcMain.on('save-settings', (e: any, s: string) => {
+    ipcMain.on('save-settings', (e, s: string) => {
       this.object = { ...this.object, ...JSON.parse(s) };
 
       for (const window of windowsManager.list) {
@@ -34,10 +34,10 @@ export class Settings extends EventEmitter {
     ipcMain.on('get-settings', e => {
       if (!this.loaded) {
         this.once('load', () => {
-          e.sender.send('get-settings', this.object);
+          e.returnValue = this.object;
         });
       } else {
-        e.sender.send('get-settings', this.object);
+        e.returnValue = this.object;
       }
     });
 
@@ -58,6 +58,7 @@ export class Settings extends EventEmitter {
       this.emit('load');
     } catch (e) {
       console.error(e);
+      this.emit('load');
     }
   }
 

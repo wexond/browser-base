@@ -23,7 +23,7 @@ import { getCurrentWindow } from '../utils';
 export class Store {
   public history = new HistoryStore();
   public bookmarks = new BookmarksStore();
-  public settings = new SettingsStore();
+  public settings = new SettingsStore(this);
   public suggestions = new SuggestionsStore();
   public favicons = new FaviconsStore();
   public addTab = new AddTabStore();
@@ -70,7 +70,9 @@ export class Store {
 
   @computed
   public get searchEngine() {
-    return this.settings.object.searchEngines[this.settings.object.searchEngine];
+    return this.settings.object.searchEngines[
+      this.settings.object.searchEngine
+    ];
   }
 
   public canToggleMenu = false;
