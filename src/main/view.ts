@@ -13,7 +13,7 @@ export class View extends BrowserView {
   constructor(public window: AppWindow, url: string) {
     super({
       webPreferences: {
-        preload: `${app.getAppPath()}/build/view-preload.js`,
+        preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
         nodeIntegration: false,
         contextIsolation: true,
         partition: 'persist:view',

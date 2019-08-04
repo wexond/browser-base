@@ -15,6 +15,18 @@ const mainConfig = getConfig({
   plugins: [],
 });
 
+const preloadConfig = getConfig({
+  target: 'electron-renderer',
+
+  watch: dev,
+
+  entry: {
+    'view-preload': './src/preloads/view-preload',
+  },
+
+  plugins: [],
+});
+
 if (dev) {
   mainConfig.plugins.push({
     apply: compiler => {
@@ -35,4 +47,4 @@ if (dev) {
   });
 }
 
-module.exports = [mainConfig];
+module.exports = [mainConfig, preloadConfig];

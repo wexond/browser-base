@@ -10,7 +10,7 @@ const getHtml = name => {
   return new HtmlWebpackPlugin({
     title: 'Wexond',
     template: 'static/pages/app.html',
-    filename: `name.html`,
+    filename: `${name}.html`,
     chunks: ['vendor', name],
   });
 };
