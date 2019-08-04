@@ -2,28 +2,28 @@ import Axios from 'axios';
 
 import { WEATHER_API_KEY, dictionary } from '../constants';
 import {
-  ForecastRequest,
-  OpenWeatherItem,
-  ForecastItem,
-  WeatherCondition,
-  Forecast,
+  IForecastRequest,
+  IOpenWeatherItem,
+  IForecastItem,
+  IWeatherCondition,
+  IForecast,
 } from '~/interfaces';
 import { capitalizeFirst } from '~/utils';
 
-const getCondition = (str: string): WeatherCondition => {
+const getCondition = (str: string): IWeatherCondition => {
   str = str.toLowerCase();
   if (str === 'few-clouds' || str === 'clouds') return 'fewClouds';
-  return str as WeatherCondition;
+  return str as IWeatherCondition;
 };
 
-const getForWeek = (items: OpenWeatherItem[]) => {
-  const list: ForecastItem[] = [];
+const getForWeek = (items: IOpenWeatherItem[]) => {
+  const list: IForecastItem[] = [];
 
   for (const item of items) {
     const date = new Date(item.dt * 1000);
     const hours = date.getHours();
     const dateStr = date.toLocaleDateString();
-    const el: ForecastItem = list.find(
+    const el: IForecastItem = list.find(
       e => e.date.toLocaleDateString() === dateStr,
     );
 
@@ -54,7 +54,7 @@ export const getWeather = async ({
   city,
   lang,
   units,
-}: ForecastRequest): Promise<Forecast> => {
+}: IForecastRequest): Promise<IForecast> => {
   const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${WEATHER_API_KEY}&lang=${lang}&units=${units}`;
   const { data } = await Axios.get(url);
   const items = getForWeek(data.list);

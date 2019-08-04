@@ -1,15 +1,15 @@
 import { observable } from 'mobx';
 import { ipcRenderer } from 'electron';
 
-import { DownloadItem } from '~/interfaces';
+import { IDownloadItem } from '~/interfaces';
 import store from '.';
 
 export class DownloadsStore {
   @observable
-  public list: DownloadItem[] = [];
+  public list: IDownloadItem[] = [];
 
   constructor() {
-    ipcRenderer.on('download-started', (e: any, item: DownloadItem) => {
+    ipcRenderer.on('download-started', (e: any, item: IDownloadItem) => {
       this.list.push(item);
 
       const not = new Notification(`Downloading ${item.fileName}`, {
@@ -21,7 +21,7 @@ export class DownloadsStore {
       };
     });
 
-    ipcRenderer.on('download-progress', (e: any, item: DownloadItem) => {
+    ipcRenderer.on('download-progress', (e: any, item: IDownloadItem) => {
       const i = this.list.find(x => x.id === item.id);
       i.receivedBytes = item.receivedBytes;
     });

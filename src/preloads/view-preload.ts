@@ -33,8 +33,6 @@ window.addEventListener('mouseup', e => {
   }
 });
 
-webFrame.executeJavaScript('window', false, (w: any) => {});
-
 let beginningScrollLeft: number = null;
 let beginningScrollRight: number = null;
 let horizontalMouseMove = 0;

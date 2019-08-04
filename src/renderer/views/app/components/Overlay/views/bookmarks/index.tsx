@@ -72,24 +72,22 @@ const onPathItemClick = (item: IBookmark) => () => {
   }
 };
 
-const onImportClick = () => {
-  remote.dialog.showOpenDialog(
+const onImportClick = async () => {
+  const dialogRes = await remote.dialog.showOpenDialog(
+    remote.getCurrentWindow(),
     {
       filters: [{ name: 'Bookmark file', extensions: ['html', 'jsonlz4'] }],
     },
-    async (filePaths: string[]) => {
-      if (filePaths) {
-        try {
-          const file = await promises.readFile(filePaths[0], 'utf8');
-          const res = parse(file);
-
-          addImported(res);
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    },
   );
+
+  try {
+    const file = await promises.readFile(dialogRes.filePaths[0], 'utf8');
+    const res = parse(file);
+
+    addImported(res);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const onExportClick = () => {};

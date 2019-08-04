@@ -79,8 +79,8 @@ export class SessionsManager {
     });
 
     ipcMain.on('clear-browsing-data', () => {
-      this.view.clearCache((err: any) => {
-        if (err) console.error(err);
+      this.view.clearCache().catch(err => {
+        console.error(err);
       });
 
       this.view.clearStorageData({
