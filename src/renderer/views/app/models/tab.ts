@@ -174,14 +174,18 @@ export class ITab {
           const buf = Buffer.from(fav.split('base64,')[1], 'base64');
 
           if (!this.hasThemeColor) {
-            const palette = await Vibrant.from(buf).getPalette();
+            try {
+              const palette = await Vibrant.from(buf).getPalette();
 
-            if (!palette.Vibrant) return;
+              if (!palette.Vibrant) return;
 
-            if (isColorAcceptable(palette.Vibrant.hex)) {
-              this.background = palette.Vibrant.hex;
-            } else {
-              this.background = store.theme.accentColor;
+              if (isColorAcceptable(palette.Vibrant.hex)) {
+                this.background = palette.Vibrant.hex;
+              } else {
+                this.background = store.theme.accentColor;
+              }
+            } catch (e) {
+              console.error(e);
             }
           }
         } catch (e) {
