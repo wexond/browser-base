@@ -33,6 +33,27 @@ if (dev) {
 const appConfig = getConfig(config, {
   entry: {
     app: ['./src/renderer/views/app'],
+    vendor: [
+      'react',
+      'react-dom',
+      'mobx',
+      'mobx-react-lite',
+      'styled-components',
+    ],
+  },
+
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          name: 'vendor',
+          test: 'vendor',
+          enforce: true,
+        },
+      },
+    },
+    runtimeChunk: true,
   },
 
   plugins: [
