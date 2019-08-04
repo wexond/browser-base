@@ -1,17 +1,3 @@
-import weatherDayClear from '~/renderer/resources/icons/weather/day/clear.png';
-import weatherDayFewClouds from '~/renderer/resources/icons/weather/day/few-clouds.png';
-import weatherDayRain from '~/renderer/resources/icons/weather/day/rain.png';
-import weatherDayShowers from '~/renderer/resources/icons/weather/day/showers.png';
-import weatherDaySnow from '~/renderer/resources/icons/weather/day/snow.png';
-import weatherDayStorm from '~/renderer/resources/icons/weather/day/storm.png';
-
-import weatherNightClear from '~/renderer/resources/icons/weather/night/clear.png';
-import weatherNightFewClouds from '~/renderer/resources/icons/weather/night/few-clouds.png';
-import weatherNightRain from '~/renderer/resources/icons/weather/night/rain.png';
-import weatherNightShowers from '~/renderer/resources/icons/weather/night/showers.png';
-import weatherNightSnow from '~/renderer/resources/icons/weather/night/snow.png';
-import weatherNightStorm from '~/renderer/resources/icons/weather/night/storm.png';
-
 export const icons = {
   add: require('~/renderer/resources/icons/add.svg'),
   back: require('~/renderer/resources/icons/back.svg'),
@@ -48,20 +34,20 @@ export const icons = {
   key: require('~/renderer/resources/icons/key.svg'),
   weather: {
     day: {
-      clear: require('~/renderer/resources/icons/back.svg'),
-      fewClouds: require('~/renderer/resources/icons/back.svg'),
-      rain: require('~/renderer/resources/icons/back.svg'),
-      showers: require('~/renderer/resources/icons/back.svg'),
-      snow: require('~/renderer/resources/icons/back.svg'),
-      storm: require('~/renderer/resources/icons/back.svg'),
+      clear: require('~/renderer/resources/icons/weather/day/clear.png'),
+      fewClouds: require('~/renderer/resources/icons/weather/day/few-clouds.png'),
+      rain: require('~/renderer/resources/icons/weather/day/rain.png'),
+      showers: require('~/renderer/resources/icons/weather/day/showers.png'),
+      snow: require('~/renderer/resources/icons/weather/day/snow.png'),
+      storm: require('~/renderer/resources/icons/weather/day/storm.png'),
     },
     night: {
-      clear: require('~/renderer/resources/icons/back.svg'),
-      fewClouds: require('~/renderer/resources/icons/back.svg'),
-      rain: require('~/renderer/resources/icons/back.svg'),
-      showers: require('~/renderer/resources/icons/back.svg'),
-      snow: require('~/renderer/resources/icons/back.svg'),
-      storm: require('~/renderer/resources/icons/back.svg'),
+      clear: require('~/renderer/resources/icons/weather/night/clear.png'),
+      fewClouds: require('~/renderer/resources/icons/weather/night/few-clouds.png'),
+      rain: require('~/renderer/resources/icons/weather/night/rain.png'),
+      showers: require('~/renderer/resources/icons/weather/night/showers.png'),
+      snow: require('~/renderer/resources/icons/weather/night/snow.png'),
+      storm: require('~/renderer/resources/icons/weather/night/storm.png'),
     },
   },
 };
