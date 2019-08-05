@@ -82,7 +82,10 @@ export class Store {
     y: 0,
   };
 
-  public windowId = getCurrentWindow().webContents.id;
+  windowId = getCurrentWindow().webContents.id;
+
+  @observable
+  isIncognito = ipcRenderer.sendSync(`is-incognito-${this.windowId}`);
 
   constructor() {
     ipcRenderer.on('update-navigation-state', (e, data: any) => {

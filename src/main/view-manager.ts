@@ -19,7 +19,7 @@ export class ViewManager {
     this.fixBounds();
   }
 
-  constructor(public window: AppWindow) {
+  constructor(public window: AppWindow, public incognito: boolean) {
     const { id } = window.webContents;
     ipcMain.on(
       `view-create-${id}`,
@@ -97,7 +97,7 @@ export class ViewManager {
   }
 
   public create(details: chrome.tabs.CreateProperties, isNext = false) {
-    const view = new View(this.window, details.url);
+    const view = new View(this.window, details.url, this.incognito);
     this.views.push(view);
 
     this.window.webContents.send(

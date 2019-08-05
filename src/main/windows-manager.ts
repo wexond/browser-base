@@ -56,8 +56,8 @@ export class WindowsManager {
       }
     });
 
-    ipcMain.on('create-window', () => {
-      this.createWindow();
+    ipcMain.on('create-window', (e, incognito = false) => {
+      this.createWindow(incognito);
     });
 
     this.onReady();
@@ -82,10 +82,18 @@ export class WindowsManager {
     });
   }
 
-  public createWindow() {
-    const window = new AppWindow(this);
+  public createWindow(incognito = false) {
+    const window = new AppWindow(this, incognito);
     this.list.push(window);
-    this.sessionsManager.extensions.addWindow(window);
+
+    if (incognito) {
+      this.sessionsManager.extensionsIncognito.addWindow(window);
+      if (!this.sessionsManager.incognitoExtensionsLoaded) {
+        this.sessionsManager.loadExtensions('incognito');
+      }
+    } else {
+      this.sessionsManager.extensions.addWindow(window);
+    }
   }
 
   public findWindowByBrowserView(webContentsId: number) {

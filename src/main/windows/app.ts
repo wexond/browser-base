@@ -15,7 +15,7 @@ import {
 import { WindowsManager } from '../windows-manager';
 
 export class AppWindow extends BrowserWindow {
-  public viewManager: ViewManager = new ViewManager(this);
+  public viewManager: ViewManager;
   public multrin = new Multrin(this);
 
   public permissionWindow = new PermissionsWindow(this);
@@ -24,7 +24,10 @@ export class AppWindow extends BrowserWindow {
   public formFillWindow = new FormFillWindow(this);
   public credentialsWindow = new CredentialsWindow(this);
 
-  constructor(public windowsManager: WindowsManager) {
+  constructor(
+    public windowsManager: WindowsManager,
+    public incognito: boolean,
+  ) {
     super({
       frame: false,
       minWidth: 400,
@@ -40,6 +43,8 @@ export class AppWindow extends BrowserWindow {
       },
       icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
     });
+
+    this.viewManager = new ViewManager(this, incognito);
 
     runMessagingService(this);
 
@@ -107,6 +112,16 @@ export class AppWindow extends BrowserWindow {
       windowState.maximized = this.isMaximized();
       windowState.fullscreen = this.isFullScreen();
       writeFileSync(windowDataPath, JSON.stringify(windowState));
+
+      if (
+        incognito &&
+        windowsManager.list.filter(x => x.incognito).length === 1
+      ) {
+        windowsManager.sessionsManager.clearCache('incognito');
+        windowsManager.sessionsManager.unloadIncognitoExtensions();
+      }
+
+      windowsManager.list = windowsManager.list.filter(x => x.id !== this.id);
     });
 
     // this.webContents.openDevTools({ mode: 'detach' });

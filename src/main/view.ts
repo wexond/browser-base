@@ -10,13 +10,13 @@ export class View extends BrowserView {
   public url: string = '';
   public homeUrl: string;
 
-  constructor(public window: AppWindow, url: string) {
+  constructor(public window: AppWindow, url: string, incognito: boolean) {
     super({
       webPreferences: {
         preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
         nodeIntegration: false,
         contextIsolation: true,
-        partition: 'persist:view',
+        partition: incognito ? 'view_incognito' : 'persist:view',
         plugins: true,
         additionalArguments: [`--window-id=${window.id}`],
         nativeWindowOpen: true,
