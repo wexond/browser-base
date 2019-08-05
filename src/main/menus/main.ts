@@ -121,21 +121,28 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           },
         },
         {
-          accelerator: 'Ctrl+Shift+W',
+          accelerator: 'CmdOrCtrl+Shift+W',
           label: 'Close current window',
           click() {
             windowsManager.currentWindow.close();
           },
         },
         {
-          accelerator: 'Ctrl+N',
+          accelerator: 'CmdOrCtrl+N',
           label: 'New window',
           click() {
             windowsManager.createWindow();
           },
         },
         {
-          accelerator: 'Ctrl+Shift+F12',
+          accelerator: 'CmdOrCtrl+Shift+N',
+          label: 'New incognito window',
+          click() {
+            windowsManager.createWindow(true);
+          },
+        },
+        {
+          accelerator: 'CmdOrCtrl+Shift+F12',
           label: 'Toggle developer tools (window)',
           click() {
             BrowserWindow.getFocusedWindow().webContents.openDevTools();
