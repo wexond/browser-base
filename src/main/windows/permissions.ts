@@ -36,7 +36,7 @@ export class PermissionsWindow extends PopupWindow {
       this.webContents.send('request-permission', { name, url, details });
 
       ipcMain.once(
-        `request-permission-result-${this.appWindow.webContents.id}`,
+        `request-permission-result-${this.appWindow.id}`,
         (e, r: boolean) => {
           resolve(r);
           this.hide();

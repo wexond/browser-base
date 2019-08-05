@@ -29,10 +29,6 @@ if (dev) {
     port: PORT,
     hot: true,
     inline: true,
-    historyApiFallback: {
-      verbose: true,
-      disableDotRule: false,
-    },
   };
 
   config.output.publicPath = `http://localhost:${PORT}/`;
