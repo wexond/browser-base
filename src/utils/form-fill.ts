@@ -32,7 +32,7 @@ const getKey = (name: string) => {
       case 'mobile':
         return 'phone';
     }
-  } catch (err) {}
+  } catch (err) { }
 
   return null;
 };
@@ -58,7 +58,7 @@ export const getFormFillValue = (
       default:
         return fields[getKey(name)];
     }
-  } catch (error) {}
+  } catch (error) { }
 
   return null;
 };
@@ -76,7 +76,7 @@ export const getFormFillSubValue = (name: string, data: IFormFillData) => {
       }
     }
   } else {
-    return fields.password ? '•'.repeat(fields.password.length) : '';
+    return '•'.repeat(fields.passLength);
   }
 
   return null;

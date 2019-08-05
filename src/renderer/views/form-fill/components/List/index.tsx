@@ -7,16 +7,16 @@ import { IFormFillMenuItem } from '~/interfaces';
 import { StyledList, StyledItem, Text, SubText } from './styles';
 
 const onClick = (data: IFormFillMenuItem) => () => {
-  ipcRenderer.send('form-fill-update', data._id, true);
-  ipcRenderer.send('form-fill-hide');
+  ipcRenderer.send(`form-fill-update-${store.windowId}`, data._id, true);
+  ipcRenderer.send(`form-fill-hide-${store.windowId}`);
 };
 
 const onMouseEnter = (data: IFormFillMenuItem) => () => {
-  ipcRenderer.send('form-fill-update', data._id);
+  ipcRenderer.send(`form-fill-update-${store.windowId}`, data._id);
 };
 
 const onMouseLeave = () => {
-  ipcRenderer.send('form-fill-update');
+  ipcRenderer.send(`form-fill-update-${store.windowId}`);
 };
 
 const Item = observer(({ data }: { data: IFormFillMenuItem }) => {

@@ -4,6 +4,7 @@ export interface IFormFillData {
   url?: string;
   fields?: {
     username?: string;
+    passLength?: number;
     password?: string;
     name?: string;
     address?: string;

@@ -39,6 +39,7 @@
     "@types/chrome": "0.0.87",
     "@types/file-type": "^10.9.1",
     "@types/gsap": "1.20.2",
+    "@types/keytar": "^4.4.0",
     "@types/nedb": "1.8.8",
     "@types/node": "12.6.9",
     "@types/pretty-bytes": "^5.2.0",
@@ -86,10 +87,11 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "electron-extensions": "2.0.2",
     "extract-file-icon": "0.3.1",
+    "keytar": "^5.0.0-beta.0",
     "mouse-hooks": "0.4.1",
     "node-vibrant": "3.2.0-alpha",
-    "node-window-manager": "1.0.4",
-    "electron-extensions": "2.0.2"
+    "node-window-manager": "1.0.4"
   }
 }
