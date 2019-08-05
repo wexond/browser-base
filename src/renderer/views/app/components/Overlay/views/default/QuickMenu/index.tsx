@@ -154,9 +154,6 @@ export const QuickMenu = observer(() => {
         >
           Incognito
         </Bubble>
-        <Bubble disabled invert={invert} icon={icons.window}>
-          Tor
-        </Bubble>
       </Actions>
     </Section>
   );
