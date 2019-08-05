@@ -18,9 +18,8 @@ export class Form {
   public ref: HTMLFormElement;
 
   public constructor(ref: HTMLFormElement) {
-    this.load();
-
     this.ref = ref;
+    this.load();
   }
 
   public load() {
