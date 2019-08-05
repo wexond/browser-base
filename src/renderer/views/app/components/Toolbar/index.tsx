@@ -73,14 +73,14 @@ export const Toolbar = observer(() => {
         </div>
       </div>
       <Buttons>
-        {hasCredentials && (
-          <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
-        )}
         <BrowserActions />
         {store.updateInfo.available && (
           <ToolbarButton icon={icons.download} onClick={onUpdateClick} />
         )}
         {store.extensions.browserActions.length > 0 && <Separator />}
+        {hasCredentials && (
+          <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
+        )}
         {!isWindow && (
           <BrowserAction
             size={18}
@@ -94,6 +94,12 @@ export const Toolbar = observer(() => {
               badgeTextColor: 'white',
             }}
           />
+        )}
+        {store.isIncognito && (
+          <>
+            <Separator />
+            <ToolbarButton icon={icons.incognito} size={18} />
+          </>
         )}
       </Buttons>
     </StyledToolbar>

@@ -14,11 +14,11 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.webContents.focus();
   });
 
-  ipcMain.on(`update-tab-find-info-${id}`, (e: any, ...args: any[]) =>
+  ipcMain.on(`update-tab-find-info-${id}`, (e, ...args: any[]) =>
     appWindow.webContents.send('update-tab-find-info', ...args),
   );
 
-  ipcMain.on(`find-show-${id}`, (e: any, tabId: number, data: any) => {
+  ipcMain.on(`find-show-${id}`, (e, tabId: number, data: any) => {
     appWindow.findWindow.find(tabId, data);
   });
 
@@ -26,49 +26,65 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.permissionWindow.hide();
   });
 
-  ipcMain.on(`update-find-info-${id}`, (e: any, tabId: number, data: any) =>
+  ipcMain.on(`update-find-info-${id}`, (e, tabId: number, data: any) =>
     appWindow.findWindow.updateInfo(tabId, data),
   );
 
-  ipcMain.on('form-fill-show', async (e: any, rect: any, name: string, value: string) => {
-    const items = await getFormFillMenuItems(name, value);
-
-    if (items.length) {
-      appWindow.formFillWindow.webContents.send('formfill-get-items', items);
-      appWindow.formFillWindow.inputRect = rect;
-
-      appWindow.formFillWindow.resize(items.length, items.find(r => r.subtext) != null);
-      appWindow.formFillWindow.rearrange();
-      appWindow.formFillWindow.showInactive();
-    } else {
-      appWindow.formFillWindow.hide();
-    }
+  ipcMain.on(`is-incognito-${id}`, e => {
+    e.returnValue = appWindow.incognito;
   });
+
+  ipcMain.on(
+    'form-fill-show',
+    async (e, rect: any, name: string, value: string) => {
+      const items = await getFormFillMenuItems(name, value);
+
+      if (items.length) {
+        appWindow.formFillWindow.webContents.send('formfill-get-items', items);
+        appWindow.formFillWindow.inputRect = rect;
+
+        appWindow.formFillWindow.resize(
+          items.length,
+          items.find(r => r.subtext) != null,
+        );
+        appWindow.formFillWindow.rearrange();
+        appWindow.formFillWindow.showInactive();
+      } else {
+        appWindow.formFillWindow.hide();
+      }
+    },
+  );
 
   ipcMain.on('form-fill-hide', () => {
     appWindow.formFillWindow.hide();
   });
 
-  ipcMain.on('form-fill-update', async (e: any, _id: string, persistent = false) => {
-    const item = _id && await storage.findOne<IFormFillMenuItem>({
-      scope: 'formfill',
-      query: { _id },
-    });
+  ipcMain.on('form-fill-update', async (e, _id: string, persistent = false) => {
+    const item =
+      _id &&
+      (await storage.findOne<IFormFillMenuItem>({
+        scope: 'formfill',
+        query: { _id },
+      }));
 
-    appWindow.viewManager.selected.webContents.send('form-fill-update', item, persistent);
-  })
+    appWindow.viewManager.selected.webContents.send(
+      'form-fill-update',
+      item,
+      persistent,
+    );
+  });
 
-  ipcMain.on('credentials-show', (e: any, data: any) => {
+  ipcMain.on('credentials-show', (e, data: any) => {
     appWindow.credentialsWindow.webContents.send('credentials-update', data);
     appWindow.credentialsWindow.rearrange();
     appWindow.credentialsWindow.show();
-  })
+  });
 
   ipcMain.on('credentials-hide', () => {
     appWindow.credentialsWindow.hide();
-  })
+  });
 
-  ipcMain.on('credentials-save', async (e: any, data: any) => {
+  ipcMain.on('credentials-save', async (e, data: any) => {
     const { username, password, update, oldUsername } = data;
     const url = appWindow.viewManager.selected.webContents.getURL();
     const { hostname } = parse(url);
@@ -97,11 +113,11 @@ export const runMessagingService = (appWindow: AppWindow) => {
           'fields.username': username,
           'fields.password': password,
         },
-      })
+      });
     }
   });
 
-  ipcMain.on('credentials-remove', (e: any, id: string) => {
+  ipcMain.on('credentials-remove', (e, id: string) => {
     storage.remove({
       scope: 'formfill',
       query: {

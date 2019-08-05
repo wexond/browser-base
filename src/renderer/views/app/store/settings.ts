@@ -27,11 +27,22 @@ export class SettingsStore {
 
   constructor(public store: Store) {
     const obj = ipcRenderer.sendSync('get-settings');
-    this.object = { ...this.object, ...obj };
-    store.theme = this.object.darkTheme ? darkTheme : lightTheme;
+    this.updateSettings(obj);
+
+    ipcRenderer.on('update-settings', (e, settings: ISettings) => {
+      this.updateSettings(settings);
+    });
   }
 
-  public async save() {
-    ipcRenderer.send('save-settings', JSON.stringify(this.object));
+  updateSettings(newSettings: ISettings) {
+    this.object = { ...this.object, ...newSettings };
+    this.store.theme = this.object.darkTheme ? darkTheme : lightTheme;
+  }
+
+  async save() {
+    ipcRenderer.send('save-settings', {
+      settings: JSON.stringify(this.object),
+      incognito: this.store.isIncognito,
+    });
   }
 }
