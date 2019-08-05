@@ -10,13 +10,14 @@
 [![Downloads](https://img.shields.io/github/downloads/wexond/wexond/total.svg?style=flat-square)](https://github.com/wexond/wexond/releases)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwexond%2Fwexond.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwexond%2Fwexond?ref=badge_shield)
 
-Wexond is an extensible and privacy-focused web browser with a totally different user experience, built on top of `Electron`, `TypeScript`, `React` and `styled-components`. It aims to be fast, private, beautiful, extensible and functional.
+Wexond is an extensible and privacy-focused web browser with a totally different user experience, built on top of `Electron` and `React`. It aims to be fast, private, beautiful, extensible and functional.
 
 </div>
 
 # Features
 
 - **Wexond Shield** - Browse the web without any ads and don't let websites to track you. Thanks to the Wexond Shield powered by [Cliqz adblocker](https://github.com/cliqz-oss/adblocker), websites can load even 2 times faster!
+- **Built-in dark mode** - Wexond has a built-in dark theme, but it also changes white websites to dark with just a one click in Overlay. No eyestrain at night anymore!
 - **Beautiful and minimalistic UI** - The address bar is hidden in Overlay to take less space, but it doesn't impact on usability in any way. It's even better! [Give it a shot](https://wexond.net)
 - **Tab groups** - Easily group tabs to groups and access them really fast.
 - **Partial support for Chrome extensions** - Install some extensions from Chrome Web Store (see [#110](https://github.com/wexond/wexond/issues/110))
@@ -36,19 +37,19 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 
 # Contributing
 
-If you have found any bugs or just want to see some new features in Wexond, feel free to open an issue. We're open to any suggestions and bug reports would be really helpful for us and appreciated very much. Wexond is in heavy development and some bugs may occur. Also, please don't hesitate to open a pull request. This is really important to us and for the further development of this project.
+If you have found any bugs or just want to see some new features in Wexond, feel free to open an issue. We're open to any suggestions. Bug reports would be really helpful for us and appreciated very much. Wexond is in heavy development and some bugs may occur. Also, please don't hesitate to open a pull request. This is really important to us and for the further development of this project.
 
 ## Running
 
-Before running Wexond, please ensure you have [`Node.js`](https://nodejs.org/en/) installed on your machine.
+Before running Wexond, please ensure you have **latest** [`Node.js`](https://nodejs.org/en/) installed on your machine.
 
-When running on Windows, make sure you have build tools installed. You can install them by running as **administrator**:
+When running on Windows, make sure you have build tools installed. You can install them by running this command as **administrator**:
 
 ```bash
 $ npm i -g windows-build-tools
 ```
 
-Firstly, run this command to install all needed dependencies. If you have encountered any problems, please report it. We will try to help as much as I can.
+Firstly, run this command to install all needed dependencies. If you have encountered any problems, please report it.
 
 ```bash
 $ npm install
@@ -60,37 +61,11 @@ The given command below will run Wexond in the development mode.
 $ npm run dev
 ```
 
-## Other commands
-
-You can also run other commands, for other tasks like building the app or linting the code, by using the commands described below.
-
-### Usage:
-
-```bash
-$ npm run <command>
-```
-
-#### List of available commands:
-
-| Command          | Description                                 |
-| ---------------- | ------------------------------------------- |
-| `build`          | Bundles Wexond's source in production mode. |
-| `compile-win32`  | Compiles Wexond binaries for Windows.       |
-| `compile-darwin` | Compiles Wexond binaries for macOS.         |
-| `compile-linux`  | Compiles Wexond binaries for Linux.         |
-| `lint`           | Lints code.                                 |
-| `lint-fix`       | Fixes eslint errors if any                  |
-| `start`          | Starts Wexond.                              |
-| `dev`            | Starts Wexond in the development mode       |
-
-> NOTE: `compile-win32` command will produce publishing errors at the end. Just ignore them.
-
 # Documentation
 
 > At this moment there are no docs, however this may change in the future, see ([#147](https://github.com/wexond/wexond/issues/147)).
 
-Guides and the API reference are located in [`docs`](docs).
-It also contains documents describing how to use the browser, and create themes.
+Guides and the API reference ~~are~~ will be located in [`docs`](docs) directory.
 
 ### Sponsors
 
@@ -101,7 +76,6 @@ It also contains documents describing how to use the browser, and create themes.
 [![Backers](https://opencollective.com/wexond/tiers/backer.svg?avatarHeight=48)](https://opencollective.com/wexond)
 
 <a href="https://digital-presence.agency/"><img src="https://i.imgur.com/iNY6XA4.jpg" width="256"></a>
-
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwexond%2Fwexond.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwexond%2Fwexond?ref=badge_large)

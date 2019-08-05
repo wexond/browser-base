@@ -28,6 +28,15 @@ export class Settings extends EventEmitter {
         }
       }
 
+      windowsManager.sessionsManager.extensions.extensions[
+        'wexond-darkreader'
+      ].backgroundPage.webContents.send('api-runtime-sendMessage', {
+        message: {
+          name: 'toggle',
+          toggle: this.object.darkTheme,
+        },
+      });
+
       this.addToQueue();
     });
 

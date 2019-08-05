@@ -111,5 +111,11 @@ export class SessionsManager {
       this.extensions.loadExtension(resolve(extensionsPath, dir));
       this.extensionsIncognito.loadExtension(resolve(extensionsPath, dir));
     }
+
+    const extension = await this.extensions.loadExtension(
+      resolve(__dirname, 'extensions/wexond-darkreader'),
+    );
+
+    extension.backgroundPage.webContents.openDevTools();
   }
 }
