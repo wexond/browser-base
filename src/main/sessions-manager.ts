@@ -8,14 +8,16 @@ import { runAdblockService } from './services';
 import storage from './services/storage';
 
 export class SessionsManager {
-  public view = session.fromPartition('persist:view');
-  public viewIncognito = session.fromPartition('view_incognito');
+  view = session.fromPartition('persist:view');
+  viewIncognito = session.fromPartition('view_incognito');
 
-  public extensions = new ExtensibleSession(this.view);
-  public extensionsIncognito = new ExtensibleSession(this.viewIncognito);
+  extensions = new ExtensibleSession(this.view);
+  extensionsIncognito = new ExtensibleSession(this.viewIncognito);
+
+  incognitoExtensionsLoaded = false;
 
   constructor(public windowsManager: WindowsManager) {
-    this.loadExtensions();
+    this.loadExtensions('normal');
 
     this.clearCache('incognito');
 
@@ -112,19 +114,28 @@ export class SessionsManager {
     });
   }
 
-  public async loadExtensions() {
+  unloadIncognitoExtensions() {
+    /*
+    TODO(sentialx): unload incognito extensions
+    this.incognitoExtensionsLoaded = false;
+    */
+  }
+
+  async loadExtensions(session: 'normal' | 'incognito') {
+    const context =
+      session === 'incognito' ? this.extensionsIncognito : this.extensions;
+
     const extensionsPath = getPath('extensions');
     const dirs = await promises.readdir(extensionsPath);
 
     for (const dir of dirs) {
-      this.extensions.loadExtension(resolve(extensionsPath, dir));
-      this.extensionsIncognito.loadExtension(resolve(extensionsPath, dir));
+      context.loadExtension(resolve(extensionsPath, dir));
     }
 
-    const extension = await this.extensions.loadExtension(
-      resolve(__dirname, 'extensions/wexond-darkreader'),
-    );
+    context.loadExtension(resolve(__dirname, 'extensions/wexond-darkreader'));
 
-    extension.backgroundPage.webContents.openDevTools();
+    if (session === 'incognito') {
+      this.incognitoExtensionsLoaded = true;
+    }
   }
 }

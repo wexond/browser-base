@@ -118,6 +118,7 @@ export class AppWindow extends BrowserWindow {
         windowsManager.list.filter(x => x.incognito).length === 1
       ) {
         windowsManager.sessionsManager.clearCache('incognito');
+        windowsManager.sessionsManager.unloadIncognitoExtensions();
       }
 
       windowsManager.list = windowsManager.list.filter(x => x.id !== this.id);
