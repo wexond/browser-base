@@ -23,7 +23,7 @@ export class Settings extends EventEmitter {
 
       for (const window of windowsManager.list) {
         if (window.webContents.id !== e.sender.id) {
-          window.webContents.send('get-settings', this.object);
+          window.webContents.send('update-settings', this.object);
         }
       }
 
