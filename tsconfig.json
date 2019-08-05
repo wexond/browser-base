@@ -13,7 +13,6 @@
     "allowJs": true,
     "sourceMap": true,
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
     "lib": ["dom", "esnext"],
     "experimentalDecorators": true,
 
