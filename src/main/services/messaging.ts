@@ -34,7 +34,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     e.returnValue = appWindow.incognito;
   });
 
-  ipcMain.on('form-fill-show', async (e, rect, name, value) => {
+  ipcMain.on(`form-fill-show-${id}`, async (e, rect, name, value) => {
     const items = await getFormFillMenuItems(name, value);
 
     if (items.length) {
@@ -52,11 +52,11 @@ export const runMessagingService = (appWindow: AppWindow) => {
     }
   });
 
-  ipcMain.on('form-fill-hide', () => {
+  ipcMain.on(`form-fill-hide-${id}`, () => {
     appWindow.formFillWindow.hide();
   });
 
-  ipcMain.on('form-fill-update', async (e, _id: string, persistent = false) => {
+  ipcMain.on(`form-fill-update-${id}`, async (e, _id: string, persistent = false) => {
     const item =
       _id &&
       (await storage.findOne<IFormFillMenuItem>({
@@ -71,17 +71,17 @@ export const runMessagingService = (appWindow: AppWindow) => {
     );
   });
 
-  ipcMain.on('credentials-show', (e, data) => {
+  ipcMain.on(`credentials-show-${id}`, (e, data) => {
     appWindow.credentialsWindow.webContents.send('credentials-update', data);
     appWindow.credentialsWindow.rearrange();
     appWindow.credentialsWindow.show();
   });
 
-  ipcMain.on('credentials-hide', () => {
+  ipcMain.on(`credentials-hide-${id}`, () => {
     appWindow.credentialsWindow.hide();
   });
 
-  ipcMain.on('credentials-save', async (e, data) => {
+  ipcMain.on(`credentials-save-${id}`, async (e, data) => {
     const { username, password, update, oldUsername } = data;
     const url = appWindow.viewManager.selected.webContents.getURL();
     const { hostname } = parse(url);
@@ -114,7 +114,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     }
   });
 
-  ipcMain.on('credentials-remove', (e, id: string) => {
+  ipcMain.on(`credentials-remove-${id}`, (e, id: string) => {
     storage.remove({
       scope: 'formfill',
       query: {
