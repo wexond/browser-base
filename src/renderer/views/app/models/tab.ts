@@ -126,7 +126,7 @@ export class ITab {
     ipcRenderer.on(
       `view-url-updated-${this.id}`,
       async (e: any, url: string) => {
-        if (url && url !== this.url) {
+        if (url && url !== this.url && !store.isIncognito) {
           this.lastHistoryId = await store.history.addItem({
             title: this.title,
             url,
@@ -228,7 +228,7 @@ export class ITab {
 
   @action
   public updateData() {
-    if (this.lastHistoryId) {
+    if (this.lastHistoryId && !store.isIncognito) {
       const { title, url, favicon } = this;
 
       const item = store.history.getById(this.lastHistoryId);
