@@ -32,6 +32,9 @@ export class SettingsStore {
   }
 
   public async save() {
-    ipcRenderer.send('save-settings', JSON.stringify(this.object));
+    ipcRenderer.send('save-settings', {
+      settings: JSON.stringify(this.object),
+      incognito: this.store.isIncognito,
+    });
   }
 }

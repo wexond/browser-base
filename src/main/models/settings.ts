@@ -1,6 +1,5 @@
 import { ipcMain } from 'electron';
 
-import { ISettings } from '~/interfaces';
 import { DEFAULT_SETTINGS } from '~/constants';
 
 import { promises } from 'fs';
@@ -19,8 +18,8 @@ export class Settings extends EventEmitter {
   constructor() {
     super();
 
-    ipcMain.on('save-settings', (e, s: string) => {
-      this.object = { ...this.object, ...JSON.parse(s) };
+    ipcMain.on('save-settings', (e, { settings, incognito }: any) => {
+      this.object = { ...this.object, ...JSON.parse(settings) };
 
       for (const window of windowsManager.list) {
         if (window.webContents.id !== e.sender.id) {
@@ -28,14 +27,19 @@ export class Settings extends EventEmitter {
         }
       }
 
-      windowsManager.sessionsManager.extensions.extensions[
-        'wexond-darkreader'
-      ].backgroundPage.webContents.send('api-runtime-sendMessage', {
-        message: {
-          name: 'toggle',
-          toggle: this.object.darkTheme,
+      const context = incognito
+        ? windowsManager.sessionsManager.extensionsIncognito
+        : windowsManager.sessionsManager.extensions;
+
+      context.extensions['wexond-darkreader'].backgroundPage.webContents.send(
+        'api-runtime-sendMessage',
+        {
+          message: {
+            name: 'toggle',
+            toggle: this.object.darkTheme,
+          },
         },
-      });
+      );
 
       this.addToQueue();
     });
