@@ -1,6 +1,7 @@
 import { BrowserView, app } from 'electron';
 import { engine } from './services/adblock';
 import { parse } from 'tldts-experimental';
+import { parse as parseUrl } from 'url';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
 import { windowsManager } from '.';
@@ -168,14 +169,17 @@ export class View extends BrowserView {
   public async updateCredentials() {
     if (this.isDestroyed()) return;
 
-    const { hostname } = parse(this.url);
     const item = await storage.findOne<any>({
       scope: 'formfill',
       query: {
-        url: hostname
+        url: this.hostname
       },
     });
 
     this.window.webContents.send(`has-credentials-${this.webContents.id}`, item != null);
+  }
+
+  public get hostname() {
+    return parseUrl(this.url).hostname;
   }
 }
