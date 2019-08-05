@@ -47,7 +47,7 @@ const getForWeek = (items: IOpenWeatherItem[]) => {
     }
   }
 
-  return list.sort((a, b) => <any>a.date - <any>b.date);
+  return list.sort((a, b) => a.date.getTime() - b.date.getTime());
 };
 
 export const getWeather = async ({
