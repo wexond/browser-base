@@ -27,7 +27,7 @@ export class ViewManager {
     this.window = window;
     this.incognito = incognito;
 
-    const { id } = window.webContents;
+    const { id } = window;
     ipcMain.on(
       `view-create-${id}`,
       (e, details: chrome.tabs.CreateProperties) => {
