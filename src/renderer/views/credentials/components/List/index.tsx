@@ -7,28 +7,26 @@ import { StyledItem, Username, Password, DeleteIcon } from './styles';
 
 const onDelete = (data: IFormFillData) => () => {
   store.remove(data._id);
-}
+};
 
 const Item = ({ data }: { data: IFormFillData }) => {
   const { username, password } = data.fields;
 
   return (
     <StyledItem>
-      <Username>
-        {username}
-      </Username>
-      <Password>
-        {'•'.repeat(password.length)}
-      </Password>
+      <Username>{username}</Username>
+      <Password>{'•'.repeat(password.length)}</Password>
       <DeleteIcon onClick={onDelete(data)} />
     </StyledItem>
-  )
-}
+  );
+};
 
 export default observer(() => {
-  return <div style={{ display: store.content === 'list' ? 'block' : 'none' }}>
-    {store.list.map(data => (
-      <Item key={data._id} data={data} />
-    ))}
-  </div>;
+  return (
+    <div style={{ display: store.content === 'list' ? 'block' : 'none' }}>
+      {store.list.map(data => (
+        <Item key={data._id} data={data} />
+      ))}
+    </div>
+  );
 });

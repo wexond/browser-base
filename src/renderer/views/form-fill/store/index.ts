@@ -7,12 +7,9 @@ export class Store {
   public items: IFormFillMenuItem[] = [];
 
   constructor() {
-    ipcRenderer.on(
-      'formfill-get-items',
-      (e: any, items: any) => {
-        this.items = items;
-      },
-    );
+    ipcRenderer.on('formfill-get-items', (e: any, items: any) => {
+      this.items = items;
+    });
   }
 }
 

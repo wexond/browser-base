@@ -15,7 +15,7 @@ export class AddBookmarkStore {
     requestAnimationFrame(() => {
       window.removeEventListener('mousedown', this.onWindowMouseDown);
       window.addEventListener('mousedown', this.onWindowMouseDown);
-    })
+    });
   }
 
   public show() {
@@ -32,5 +32,5 @@ export class AddBookmarkStore {
 
   public onWindowMouseDown = () => {
     this.visible = false;
-  }
+  };
 }

@@ -3,7 +3,7 @@ import { ipcRenderer } from 'electron';
 import { makeId } from '~/utils';
 
 export class Database<T> {
-  constructor(public scope: string) { }
+  constructor(public scope: string) {}
 
   private async performOperation(
     operation: 'get' | 'get-one' | 'update' | 'insert' | 'remove',
@@ -12,7 +12,10 @@ export class Database<T> {
     return new Promise(resolve => {
       const id = makeId(32);
 
-      ipcRenderer.send(`storage-${operation}`, id, { scope: this.scope, ...data });
+      ipcRenderer.send(`storage-${operation}`, id, {
+        scope: this.scope,
+        ...data,
+      });
 
       ipcRenderer.once(id, (e, res: any) => {
         resolve(res);
@@ -33,7 +36,11 @@ export class Database<T> {
   }
 
   public async update(query: T, newValue: T, multi = false): Promise<number> {
-    return await this.performOperation('update', { query, value: newValue, multi });
+    return await this.performOperation('update', {
+      query,
+      value: newValue,
+      multi,
+    });
   }
 
   public async remove(query: T, multi = false): Promise<T> {

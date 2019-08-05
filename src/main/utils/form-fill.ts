@@ -6,8 +6,10 @@ import { getFormFillValue, getFormFillSubValue } from '~/utils/form-fill';
 import { windowsManager } from '..';
 
 const getType = (name: string) => {
-  return (name === 'username' || name === 'login' || name === 'password') ? 'password' : 'address';
-}
+  return name === 'username' || name === 'login' || name === 'password'
+    ? 'password'
+    : 'address';
+};
 
 export const getFormFillMenuItems = async (name: string, value: string) => {
   const dataType = getType(name);
@@ -21,22 +23,27 @@ export const getFormFillMenuItems = async (name: string, value: string) => {
     },
   });
 
-  return items.map(item => {
-    const text = getFormFillValue(name, item, true);
-    const subtext = getFormFillSubValue(name, item);
+  return items
+    .map(item => {
+      const text = getFormFillValue(name, item, true);
+      const subtext = getFormFillSubValue(name, item);
 
-    if (dataType === 'password' && item.url !== hostname) {
+      if (dataType === 'password' && item.url !== hostname) {
+        return null;
+      }
+
+      if (
+        text &&
+        (name !== 'password' ? text.startsWith(value) : !value.length)
+      ) {
+        return {
+          _id: item._id,
+          text,
+          subtext,
+        } as IFormFillMenuItem;
+      }
+
       return null;
-    }
-
-    if (text && (name !== 'password' ? text.startsWith(value) : !value.length)) {
-      return {
-        _id: item._id,
-        text,
-        subtext,
-      } as IFormFillMenuItem;
-    }
-
-    return null;
-  }).filter(r => r);
-}
+    })
+    .filter(r => r);
+};

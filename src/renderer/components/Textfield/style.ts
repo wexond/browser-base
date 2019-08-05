@@ -1,6 +1,12 @@
 import styled, { css } from 'styled-components';
 
-import { robotoRegular, centerVertical, robotoMedium, centerIcon, coloredCursor } from '~/renderer/mixins';
+import {
+  robotoRegular,
+  centerVertical,
+  robotoMedium,
+  centerIcon,
+  coloredCursor,
+} from '~/renderer/mixins';
 import { transparency, EASING_FUNCTION } from '~/renderer/constants';
 
 export const StyledTextfield = styled.div`
@@ -42,7 +48,8 @@ export const Input = styled.input`
   &::placeholder {
     text-shadow: 0px 0px 0px rgba(0, 0, 0, ${transparency.text.medium});
   }
-  &[type=number]::-webkit-inner-spin-button, &[type=number]::-webkit-outer-spin-button {
+  &[type='number']::-webkit-inner-spin-button,
+  &[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
   }
 `;
@@ -79,7 +86,7 @@ export const Indicator = styled.div`
   position: absolute;
   transition: 0.2s width ${EASING_FUNCTION};
 
-  ${({ focused, color }: { focused: boolean, color: string }) => css`
+  ${({ focused, color }: { focused: boolean; color: string }) => css`
     width: ${focused ? 100 : 0}%;
     background-color: ${color};
   `}
