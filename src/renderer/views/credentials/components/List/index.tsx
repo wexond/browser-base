@@ -6,16 +6,16 @@ import { IFormFillData } from '~/interfaces';
 import { StyledItem, Username, Password, DeleteIcon } from './styles';
 
 const onDelete = (data: IFormFillData) => () => {
-  store.remove(data._id);
+  store.remove(data);
 };
 
 const Item = ({ data }: { data: IFormFillData }) => {
-  const { username, password } = data.fields;
+  const { username, passLength } = data.fields;
 
   return (
     <StyledItem>
       <Username>{username}</Username>
-      <Password>{'•'.repeat(password.length)}</Password>
+      <Password>{'•'.repeat(passLength)}</Password>
       <DeleteIcon onClick={onDelete(data)} />
     </StyledItem>
   );

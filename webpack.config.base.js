@@ -63,6 +63,7 @@ const config = {
     'node-vibrant',
     'leveldown',
     'electron-extensions',
+    'keytar',
   ],
 };
 

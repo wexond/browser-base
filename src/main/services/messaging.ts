@@ -1,7 +1,8 @@
 import { ipcMain } from 'electron';
 import { parse } from 'url';
+import { setPassword, deletePassword, getPassword } from 'keytar';
 
-import { IFormFillMenuItem, IFormFillData } from '~/interfaces';
+import { IFormFillData } from '~/interfaces';
 import { AppWindow } from '../windows';
 import { getFormFillMenuItems } from '../utils';
 import storage from './storage';
@@ -35,10 +36,10 @@ export const runMessagingService = (appWindow: AppWindow) => {
   });
 
   ipcMain.on(`form-fill-show-${id}`, async (e, rect, name, value) => {
-    const items = await getFormFillMenuItems(name, value);
+    let items = await getFormFillMenuItems(name, value);
 
     if (items.length) {
-      appWindow.formFillWindow.webContents.send('formfill-get-items', items);
+      appWindow.formFillWindow.webContents.send(`formfill-get-items`, items);
       appWindow.formFillWindow.inputRect = rect;
 
       appWindow.formFillWindow.resize(
@@ -59,15 +60,21 @@ export const runMessagingService = (appWindow: AppWindow) => {
   ipcMain.on(
     `form-fill-update-${id}`,
     async (e, _id: string, persistent = false) => {
-      const item =
-        _id &&
-        (await storage.findOne<IFormFillMenuItem>({
+      const url = appWindow.viewManager.selected.webContents.getURL();
+      const { hostname } = parse(url);
+
+      let item = _id && (
+        await storage.findOne<IFormFillData>({
           scope: 'formfill',
           query: { _id },
         }));
 
+      if (item && item.type === 'password') {
+        item.fields.password = await getPassword('wexond', `${hostname}-${item.fields.username}`);
+      }
+
       appWindow.viewManager.selected.webContents.send(
-        'form-fill-update',
+        `form-fill-update-${id}`,
         item,
         persistent,
       );
@@ -97,7 +104,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
           url: hostname,
           fields: {
             username,
-            password,
+            passLength: password.length,
           },
         },
       });
@@ -108,21 +115,29 @@ export const runMessagingService = (appWindow: AppWindow) => {
           type: 'password',
           url: hostname,
           'fields.username': oldUsername,
+          'fields.passLength': password.length,
         },
         value: {
           'fields.username': username,
-          'fields.password': password,
         },
       });
     }
+
+    await setPassword('wexond', `${hostname}-${username}`, password);
   });
 
-  ipcMain.on(`credentials-remove-${id}`, (e, id: string) => {
-    storage.remove({
+  ipcMain.on(`credentials-remove-${id}`, async (e, data: IFormFillData) => {
+    const { _id, fields } = data;
+    const url = appWindow.viewManager.selected.webContents.getURL();
+    const { hostname } = parse(url);
+
+    await storage.remove({
       scope: 'formfill',
       query: {
-        _id: id,
+        _id,
       },
     });
+
+    await deletePassword('wexond', `${hostname}-${fields.username}`);
   });
 };

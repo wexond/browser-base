@@ -5,6 +5,7 @@ import { observable } from 'mobx';
 import { Textfield } from '~/renderer/components/Textfield';
 import { PasswordInput } from '~/renderer/components/PasswordInput';
 import { IFormFillData } from '~/interfaces';
+import { getCurrentWindow } from '../../app/utils/windows';
 
 export class Store {
   @observable
@@ -19,11 +20,13 @@ export class Store {
 
   public oldUsername: string;
 
+  public windowId: number = ipcRenderer.sendSync(
+    `get-window-id-${getCurrentWindow().id}`,
+  );
+
   public constructor() {
     ipcRenderer.on('credentials-update', (e, data) => {
       const { username, password, content, list } = data;
-
-      console.log(data);
 
       if (content !== 'list') {
         this.usernameRef.current.value = username;
@@ -37,9 +40,9 @@ export class Store {
     });
   }
 
-  public remove(id: string) {
-    this.list = this.list.filter(r => r._id !== id);
-    ipcRenderer.send('credentials-remove', id);
+  public remove(data: IFormFillData) {
+    this.list = this.list.filter(r => r._id !== data._id);
+    ipcRenderer.send(`credentials-remove-${this.windowId}`, data);
   }
 }
 

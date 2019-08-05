@@ -18,9 +18,9 @@ const onSave = () => {
   const username = store.usernameRef.current.value.trim();
   const password = store.passwordRef.current.value.trim();
 
-  ipcRenderer.send('credentials-hide');
+  ipcRenderer.send(`credentials-hide-${store.windowId}`);
 
-  ipcRenderer.send('credentials-save', {
+  ipcRenderer.send(`credentials-save-${store.windowId}`, {
     username,
     password,
     update: store.content === 'update',
@@ -29,7 +29,7 @@ const onSave = () => {
 };
 
 const onClose = () => {
-  ipcRenderer.send('credentials-hide');
+  ipcRenderer.send(`credentials-hide-${store.windowId}`);
 };
 
 const Fields = observer(() => {
