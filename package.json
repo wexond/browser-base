@@ -28,14 +28,11 @@
     "compile-darwin": "npm run build && electron-builder -m -p always",
     "compile-linux": "npm run build && electron-builder -l -p always",
     "compile": "node scripts/compile.js",
-    "lint": "tslint \"src/**/*.ts*\"",
-    "lint-fix": "prettier --write \"src/**/*.ts*\" && tslint \"src/**/*.ts*\" --fix",
+    "lint": "eslint \"src/**/*.ts*\" \"src/**/*.tsx*\"",
+    "lint-fix": "npm run lint -- --fix",
     "postinstall": "electron-builder install-app-deps",
     "extensions": "node scripts/extensions.js"
   },
-  "pre-commit": [
-    "lint-fix"
-  ],
   "devDependencies": {
     "@cliqz/adblocker": "0.12.0",
     "@types/axios": "0.14.0",
