@@ -5,6 +5,7 @@ import { isVisible, searchElements } from '../utils';
 import { getFormFillValue } from '~/utils/form-fill';
 import { IFormFillData } from '~/interfaces';
 import AutoComplete from './auto-complete';
+import { windowId } from '../view-preload';
 
 export type FormField = HTMLInputElement | HTMLSelectElement;
 
@@ -18,9 +19,8 @@ export class Form {
   public ref: HTMLFormElement;
 
   public constructor(ref: HTMLFormElement) {
-    this.load();
-
     this.ref = ref;
+    this.load();
   }
 
   public load() {
@@ -122,7 +122,7 @@ export class Form {
 
     if (!username.length || (sameUsername && samePassword)) return;
 
-    ipcRenderer.send('credentials-show', {
+    ipcRenderer.send(`credentials-show-${windowId}`, {
       username,
       password,
       content: samePassword ? 'update' : 'save',
@@ -137,7 +137,7 @@ export class Form {
     AutoComplete.visible = true;
 
     ipcRenderer.send(
-      'form-fill-show',
+      `form-fill-show-${windowId}`,
       {
         width: rects.width,
         height: rects.height,

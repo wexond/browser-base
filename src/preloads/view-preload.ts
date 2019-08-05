@@ -5,7 +5,7 @@ import AutoComplete from './models/auto-complete';
 const tabId = remote.getCurrentWebContents().id;
 const arg = process.argv.find(x => x.startsWith('--window-id='));
 
-let windowId: number = null;
+export let windowId: number = null;
 
 if (arg) {
   windowId = parseInt(arg.split('--window-id=')[1], 10);
