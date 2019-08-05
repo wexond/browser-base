@@ -30,15 +30,15 @@ export class HistoryStore {
   @observable
   public selectedItems: string[] = [];
 
-  constructor() {
+  public constructor() {
     this.load();
   }
 
-  public resetLoadedItems() {
+  public resetLoadedItems(): void {
     this.itemsLoaded = this.getDefaultLoaded();
   }
 
-  public getById(id: string) {
+  public getById(id: string): IHistoryItem {
     return this.items.find(x => x._id === id);
   }
 

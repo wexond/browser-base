@@ -3,7 +3,9 @@ import { join } from 'path';
 import { AppWindow } from '.';
 
 export class PopupWindow extends BrowserWindow {
-  constructor(public appWindow: AppWindow, name: string, devtools = false) {
+  protected appWindow: AppWindow;
+
+  public constructor(appWindow: AppWindow, name: string, devtools = false) {
     super({
       frame: false,
       resizable: false,
@@ -17,6 +19,8 @@ export class PopupWindow extends BrowserWindow {
       skipTaskbar: true,
       backgroundColor: '#00ffffff',
     });
+
+    this.appWindow = appWindow;
 
     if (process.env.ENV === 'dev') {
       if (devtools) {

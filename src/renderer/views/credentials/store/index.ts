@@ -19,25 +19,22 @@ export class Store {
 
   public oldUsername: string;
 
-  constructor() {
-    ipcRenderer.on(
-      'credentials-update',
-      (e: any, data: any) => {
-        const { username, password, content, list } = data;
+  public constructor() {
+    ipcRenderer.on('credentials-update', (e, data) => {
+      const { username, password, content, list } = data;
 
-        console.log(data);
+      console.log(data);
 
-        if (content !== 'list') {
-          this.usernameRef.current.value = username;
-          this.passwordRef.current.value = password;
-          this.oldUsername = username;
-        } else {
-          this.list = list;
-        }
+      if (content !== 'list') {
+        this.usernameRef.current.value = username;
+        this.passwordRef.current.value = password;
+        this.oldUsername = username;
+      } else {
+        this.list = list;
+      }
 
-        this.content = content;
-      },
-    );
+      this.content = content;
+    });
   }
 
   public remove(id: string) {

@@ -8,8 +8,9 @@ import { AppWindow } from '../windows';
 import { windowManager, Window } from 'node-window-manager';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 import { windowsManager } from '..';
+import { IRectangle, IPoint } from '~/interfaces';
 
-const containsPoint = (bounds: any, point: any) => {
+const containsPoint = (bounds: IRectangle, point: IPoint) => {
   return (
     point.x >= bounds.x &&
     point.y >= bounds.y &&
@@ -33,7 +34,11 @@ export class Multrin {
 
   public interval: any;
 
-  constructor(public appWindow: AppWindow) {
+  private appWindow: AppWindow;
+
+  public constructor(appWindow: AppWindow) {
+    this.appWindow = appWindow;
+
     if (platform() === 'win32') {
       this.activateWindowCapturing();
     }
@@ -50,11 +55,11 @@ export class Multrin {
 
     const { id } = this.appWindow.webContents;
 
-    ipcMain.on(`select-window-${id}`, (e: any, id: number) => {
+    ipcMain.on(`select-window-${id}`, (e, id: number) => {
       this.selectWindow(this.windows.find(x => x.id === id));
     });
 
-    ipcMain.on(`detach-window-${id}`, (e: any, id: number) => {
+    ipcMain.on(`detach-window-${id}`, (e, id: number) => {
       this.detachWindow(this.windows.find(x => x.id === id));
     });
 
@@ -104,7 +109,7 @@ export class Multrin {
       }, 50);
     });
 
-    mouseHooks.on('mouse-move', async (e: any) => {
+    mouseHooks.on('mouse-move', async e => {
       if (this.appWindow.isFocused()) return;
 
       if (
@@ -142,7 +147,7 @@ export class Multrin {
             height: bounds.height + TOOLBAR_HEIGHT,
             x: bounds.x,
             y: bounds.y - TOOLBAR_HEIGHT,
-          } as any);
+          });
 
           this.isMoving = false;
         }
@@ -222,7 +227,7 @@ export class Multrin {
     });
   }
 
-  intervalCallback = () => {
+  private intervalCallback = () => {
     if (!this.appWindow.isMinimized()) {
       for (const window of this.windows) {
         const title = window.getTitle();
@@ -242,7 +247,7 @@ export class Multrin {
     }
   };
 
-  getContentArea() {
+  public getContentArea() {
     const bounds = this.appWindow.getContentBounds();
 
     bounds.y += TOOLBAR_HEIGHT;
@@ -251,7 +256,7 @@ export class Multrin {
     return bounds;
   }
 
-  selectWindow(window: ProcessWindow) {
+  public selectWindow(window: ProcessWindow) {
     if (!window) return;
 
     if (this.selectedWindow) {
@@ -270,7 +275,7 @@ export class Multrin {
     this.resizeWindow(window);
   }
 
-  resizeWindow(window: ProcessWindow) {
+  public resizeWindow(window: ProcessWindow) {
     if (!window || this.appWindow.isMinimized()) return;
 
     const newBounds = this.getContentArea();
@@ -279,7 +284,7 @@ export class Multrin {
     window.lastBounds = newBounds;
   }
 
-  detachWindow(window: ProcessWindow) {
+  public detachWindow(window: ProcessWindow) {
     if (!window) return;
 
     if (this.selectedWindow === window) {

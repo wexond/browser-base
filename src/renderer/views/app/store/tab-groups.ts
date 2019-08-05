@@ -15,7 +15,7 @@ export class TabGroupsStore {
 
   public palette: string[] = [];
 
-  constructor() {
+  public constructor() {
     for (const key in colors) {
       if ((colors as any)[key]['500'] && key !== 'yellow' && key !== 'lime') {
         this.palette.push((colors as any)[key]['500']);

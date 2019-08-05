@@ -8,15 +8,19 @@ import { runAdblockService } from './services';
 import storage from './services/storage';
 
 export class SessionsManager {
-  view = session.fromPartition('persist:view');
-  viewIncognito = session.fromPartition('view_incognito');
+  public view = session.fromPartition('persist:view');
+  public viewIncognito = session.fromPartition('view_incognito');
 
-  extensions = new ExtensibleSession(this.view);
-  extensionsIncognito = new ExtensibleSession(this.viewIncognito);
+  public extensions = new ExtensibleSession(this.view);
+  public extensionsIncognito = new ExtensibleSession(this.viewIncognito);
 
-  incognitoExtensionsLoaded = false;
+  public incognitoExtensionsLoaded = false;
 
-  constructor(public windowsManager: WindowsManager) {
+  private windowsManager: WindowsManager;
+
+  public constructor(windowsManager: WindowsManager) {
+    this.windowsManager = windowsManager;
+
     this.loadExtensions('normal');
 
     this.clearCache('incognito');
@@ -92,7 +96,7 @@ export class SessionsManager {
     storage.run();
   }
 
-  clearCache(session: 'normal' | 'incognito') {
+  public clearCache(session: 'normal' | 'incognito') {
     const ses = session === 'incognito' ? this.viewIncognito : this.view;
 
     ses.clearCache().catch(err => {
@@ -114,14 +118,14 @@ export class SessionsManager {
     });
   }
 
-  unloadIncognitoExtensions() {
+  public unloadIncognitoExtensions() {
     /*
     TODO(sentialx): unload incognito extensions
     this.incognitoExtensionsLoaded = false;
     */
   }
 
-  async loadExtensions(session: 'normal' | 'incognito') {
+  public async loadExtensions(session: 'normal' | 'incognito') {
     const context =
       session === 'incognito' ? this.extensionsIncognito : this.extensions;
 

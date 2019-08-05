@@ -82,21 +82,21 @@ export class Store {
     y: 0,
   };
 
-  windowId = getCurrentWindow().webContents.id;
+  public windowId = getCurrentWindow().webContents.id;
 
   @observable
-  isIncognito = ipcRenderer.sendSync(`is-incognito-${this.windowId}`);
+  public isIncognito = ipcRenderer.sendSync(`is-incognito-${this.windowId}`);
 
-  constructor() {
-    ipcRenderer.on('update-navigation-state', (e, data: any) => {
+  public constructor() {
+    ipcRenderer.on('update-navigation-state', (e, data) => {
       this.navigationState = data;
     });
 
-    ipcRenderer.on('fullscreen', (e: any, fullscreen: boolean) => {
+    ipcRenderer.on('fullscreen', (e, fullscreen: boolean) => {
       this.isFullscreen = fullscreen;
     });
 
-    ipcRenderer.on('html-fullscreen', (e: any, fullscreen: boolean) => {
+    ipcRenderer.on('html-fullscreen', (e, fullscreen: boolean) => {
       this.isHTMLFullscreen = fullscreen;
     });
 

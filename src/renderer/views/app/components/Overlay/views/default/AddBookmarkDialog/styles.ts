@@ -16,7 +16,7 @@ export const StyledDialog = styled.div`
   box-shadow: ${shadows(3)};
   transition: 0.15s opacity, 0.15s margin-top ${EASING_FUNCTION};
 
-  ${({ visible, theme }: { visible: boolean, theme: ITheme }) => css`
+  ${({ visible, theme }: { visible: boolean; theme: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
     margin-top: ${visible ? 0 : -16}px;

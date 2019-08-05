@@ -25,7 +25,11 @@ export class SettingsStore {
   @observable
   public object: ISettings = DEFAULT_SETTINGS;
 
-  constructor(public store: Store) {
+  public store: Store;
+
+  public constructor(store: Store) {
+    this.store = store;
+
     const obj = ipcRenderer.sendSync('get-settings');
     this.updateSettings(obj);
 
@@ -34,12 +38,12 @@ export class SettingsStore {
     });
   }
 
-  updateSettings(newSettings: ISettings) {
+  public updateSettings(newSettings: ISettings) {
     this.object = { ...this.object, ...newSettings };
     this.store.theme = this.object.darkTheme ? darkTheme : lightTheme;
   }
 
-  async save() {
+  public async save() {
     ipcRenderer.send('save-settings', {
       settings: JSON.stringify(this.object),
       incognito: this.store.isIncognito,

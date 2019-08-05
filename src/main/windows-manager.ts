@@ -17,7 +17,7 @@ export class WindowsManager {
 
   public settings = new Settings();
 
-  constructor() {
+  public constructor() {
     const gotTheLock = app.requestSingleInstanceLock();
 
     if (!gotTheLock) {

@@ -6,7 +6,6 @@ import { Dropdown } from '~/renderer/components/Dropdown';
 import { Input } from '~/renderer/components/Input';
 import { getBookmarkTitle } from '~/renderer/views/app/utils/bookmarks';
 import { Button } from '~/renderer/components/Button';
-import { colors } from '~/renderer/constants';
 import { StyledDialog, Title, Row, Label, Buttons } from './styles';
 
 const onMouseDown = (e: React.MouseEvent) => {
@@ -52,7 +51,7 @@ export default observer(() => {
         <Label>Folder</Label>
         <Dropdown ref={store.addBookmark.dropdownRef} onChange={onChange}>
           {store.bookmarks.folders.map(item => (
-            <Dropdown.Item key={item._id} value={item._id}>
+            <Dropdown.Item key={item._id}>
               {getBookmarkTitle(item)}
             </Dropdown.Item>
           ))}

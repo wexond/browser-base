@@ -17,11 +17,8 @@ export const callViewMethod = (
       callId,
     });
 
-    ipcRenderer.once(
-      `browserview-call-result-${callId}`,
-      (e: any, result: any) => {
-        resolve(result);
-      },
-    );
+    ipcRenderer.once(`browserview-call-result-${callId}`, (e, result) => {
+      resolve(result);
+    });
   });
 };

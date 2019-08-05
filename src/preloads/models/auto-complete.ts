@@ -11,27 +11,30 @@ export class AutoComplete {
 
   public visible = false;
 
-  constructor() {
-    ipcRenderer.on('form-fill-update', (e: any, data: IFormFillData, persistent: boolean) => {
-      if (!this.currentForm) return;
+  public constructor() {
+    ipcRenderer.on(
+      'form-fill-update',
+      (e, data: IFormFillData, persistent: boolean) => {
+        if (!this.currentForm) return;
 
-      this.currentForm.insertData(data, persistent);
+        this.currentForm.insertData(data, persistent);
 
-      if (data && persistent) {
-        this.currentForm.data = data;
-      }
-    });
+        if (data && persistent) {
+          this.currentForm.data = data;
+        }
+      },
+    );
   }
 
   public loadForms = () => {
-    const forms = <HTMLFormElement[]>searchElements(document, 'form');
+    const forms = searchElements(document, 'form') as HTMLFormElement[];
 
     this.forms = forms.map(el => new Form(el));
-  }
+  };
 
   public onWindowMouseDown = () => {
     this.hide();
-  }
+  };
 
   public hide() {
     if (this.visible) {

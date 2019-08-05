@@ -33,17 +33,21 @@ const onClose = () => {
 };
 
 const Fields = observer(() => {
-  return <div style={{ display: store.content !== 'list' ? 'block' : 'none' }}>
-    <Textfield ref={store.usernameRef} label="Username" />
-    <PasswordInput ref={store.passwordRef} />
-  </div>;
+  return (
+    <div style={{ display: store.content !== 'list' ? 'block' : 'none' }}>
+      <Textfield ref={store.usernameRef} label="Username" />
+      <PasswordInput ref={store.passwordRef} />
+    </div>
+  );
 });
 
 export const App = observer(() => {
   let title = '';
 
   if (store.content === 'list') {
-    title = store.list.length ? 'Saved passwords for this site' : 'No passwords saved for this site';
+    title = store.list.length
+      ? 'Saved passwords for this site'
+      : 'No passwords saved for this site';
   } else {
     title = store.content === 'save' ? 'Save password?' : 'Update password?';
   }
@@ -57,22 +61,26 @@ export const App = observer(() => {
         <List />
       </Container>
       <Buttons>
-        {store.content !== 'list' && <Button
-          onClick={onSave}
-          foreground="black"
-          background="rgba(0, 0, 0, 0.08)"
-          style={{ marginLeft: 'auto' }}
-        >
-          Save
-        </Button>}
-        {store.content === 'list' && <Button
-          foreground={colors.blue['500']}
-          background="transparent"
-          style={{ marginRight: 'auto', padding: '0px 12px' }}
-          onClick={onClose}
-        >
-          Manage passwords
-        </Button>}
+        {store.content !== 'list' && (
+          <Button
+            onClick={onSave}
+            foreground="black"
+            background="rgba(0, 0, 0, 0.08)"
+            style={{ marginLeft: 'auto' }}
+          >
+            Save
+          </Button>
+        )}
+        {store.content === 'list' && (
+          <Button
+            foreground={colors.blue['500']}
+            background="transparent"
+            style={{ marginRight: 'auto', padding: '0px 12px' }}
+            onClick={onClose}
+          >
+            Manage passwords
+          </Button>
+        )}
         <Button
           foreground="black"
           background="rgba(0, 0, 0, 0.08)"

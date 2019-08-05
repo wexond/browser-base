@@ -10,6 +10,10 @@ export class ViewManager {
 
   public isHidden = false;
 
+  private window: AppWindow;
+
+  public incognito: boolean;
+
   public get fullscreen() {
     return this._fullscreen;
   }
@@ -19,7 +23,10 @@ export class ViewManager {
     this.fixBounds();
   }
 
-  constructor(public window: AppWindow, public incognito: boolean) {
+  public constructor(window: AppWindow, incognito: boolean) {
+    this.window = window;
+    this.incognito = incognito;
+
     const { id } = window.webContents;
     ipcMain.on(
       `view-create-${id}`,
@@ -40,7 +47,7 @@ export class ViewManager {
       this.destroy(id);
     });
 
-    ipcMain.on(`browserview-call-${id}`, async (e: any, data: any) => {
+    ipcMain.on(`browserview-call-${id}`, async (e, data) => {
       const view = this.views.find(x => x.webContents.id === data.tabId);
       let scope: any = view;
 

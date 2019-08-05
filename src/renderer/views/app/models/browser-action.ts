@@ -30,7 +30,7 @@ export class IBrowserAction {
 
   public extensionId?: string;
 
-  constructor(options: Options) {
+  public constructor(options: Options) {
     const { icon, title, extensionId, popup } = options;
     this.icon = icon;
     this.title = title;

@@ -12,7 +12,7 @@ export interface IFormFillData {
     phone?: string;
     email?: string;
     country?: string;
-  }
+  };
 }
 
 export interface IFormFillMenuItem {

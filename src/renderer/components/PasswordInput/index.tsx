@@ -39,7 +39,7 @@ export class PasswordInput extends React.PureComponent<Props, State> {
     this.ref.current.clear();
   }
 
-  render() {
+  public render() {
     const { style } = this.props;
     const { visible } = this.state;
 

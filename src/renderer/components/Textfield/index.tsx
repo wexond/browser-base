@@ -9,7 +9,7 @@ interface Props {
   color?: string;
   label?: string;
   placeholder?: string;
-  icon?: any;
+  icon?: string;
   onIconClick?: (target: Textfield) => void;
   inputType?: 'text' | 'email' | 'password' | 'number';
   style?: any;
@@ -25,7 +25,7 @@ interface State {
 export class Textfield extends React.PureComponent<Props, State> {
   public inputRef = React.createRef<HTMLInputElement>();
 
-  static defaultProps: Props = {
+  private static defaultProps: Props = {
     color: colors.blue['500'],
     inputType: 'text',
   };
@@ -48,7 +48,7 @@ export class Textfield extends React.PureComponent<Props, State> {
     });
   }
 
-  onClick = () => {
+  private onClick = () => {
     this.inputRef.current.focus();
   };
 
@@ -66,7 +66,7 @@ export class Textfield extends React.PureComponent<Props, State> {
     });
   };
 
-  public onIconClick = (e: React.SyntheticEvent<any>) => {
+  public onIconClick = (e: React.SyntheticEvent<HTMLDivElement>) => {
     e.stopPropagation();
     e.preventDefault();
 
@@ -106,7 +106,7 @@ export class Textfield extends React.PureComponent<Props, State> {
     });
   }
 
-  render() {
+  public render() {
     const { color, label, placeholder, icon, inputType, style } = this.props;
     const { activated, focused, error } = this.state;
 

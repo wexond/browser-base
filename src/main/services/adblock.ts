@@ -4,10 +4,10 @@ import { resolve } from 'path';
 import { windowsManager } from '..';
 import Axios from 'axios';
 
-import { FiltersEngine, Request } from '@cliqz/adblocker';
+import { FiltersEngine, Request, RequestType } from '@cliqz/adblocker';
 import { getPath } from '~/utils';
 
-const lists: any = {
+const lists: { [key: string]: string } = {
   easylist: 'https://easylist.to/easylist/easylist.txt',
   easyprivacy: 'https://easylist.to/easylist/easyprivacy.txt',
 
@@ -90,18 +90,18 @@ export const runAdblockService = (ses: Session) => {
 
   webRequest.onBeforeRequest(
     { urls: ['<all_urls>'] },
-    async (details: Electron.OnBeforeRequestListenerDetails, callback: any) => {
+    async (details: Electron.OnBeforeRequestDetails, callback) => {
       if (engine && windowsManager.settings.object.shield) {
         const { match, redirect } = engine.match(
           Request.fromRawDetails({
-            type: details.resourceType as any,
+            type: details.resourceType as RequestType,
             url: details.url,
           }),
         );
 
         if (match || redirect) {
           if (redirect) {
-            callback({ redirectURL: redirect });
+            callback({ redirectURL: redirect.dataUrl });
           } else {
             callback({ cancel: true });
           }

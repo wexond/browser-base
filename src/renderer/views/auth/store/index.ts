@@ -10,8 +10,8 @@ export class Store {
     `get-window-id-${getCurrentWindow().id}`,
   );
 
-  constructor() {
-    ipcRenderer.on('request-auth', (e: any, url: string) => {
+  public constructor() {
+    ipcRenderer.on('request-auth', (e, url) => {
       this.url = url;
     });
   }

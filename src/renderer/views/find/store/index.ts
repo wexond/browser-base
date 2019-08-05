@@ -21,10 +21,10 @@ export class Store {
     `get-window-id-${getCurrentWindow().id}`,
   );
 
-  constructor() {
+  public constructor() {
     ipcRenderer.on(
       'found-in-page',
-      (e: any, { activeMatchOrdinal, matches }: Electron.FoundInPageResult) => {
+      (e, { activeMatchOrdinal, matches }: Electron.FoundInPageResult) => {
         this.occurrences = `${activeMatchOrdinal}/${matches}`;
         this.updateTabInfo();
       },
@@ -32,7 +32,7 @@ export class Store {
 
     ipcRenderer.on(
       'update-info',
-      (e: any, tabId: number, { text, occurrences, visible }: any) => {
+      (e, tabId: number, { text, occurrences, visible }) => {
         this.tabId = tabId;
         this.occurrences = occurrences;
         this.text = text;
@@ -53,7 +53,7 @@ export class Store {
     );
   }
 
-  updateTabInfo() {
+  public updateTabInfo() {
     ipcRenderer.send(`update-tab-find-info-${this.windowId}`, this.tabId, {
       occurrences: this.occurrences,
       text: this.text,

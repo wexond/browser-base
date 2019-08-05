@@ -49,7 +49,7 @@ export const Toolbar = observer(() => {
   const { selectedTab } = store.tabs;
 
   let isWindow = false;
-  let blockedAds: any = '';
+  let blockedAds = 0;
   let hasCredentials = false;
 
   if (selectedTab) {

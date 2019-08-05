@@ -2,9 +2,8 @@ import { IFavicon } from '~/interfaces';
 import { requestURL } from '~/utils';
 import { observable } from 'mobx';
 import { Database } from '~/models/database';
-
-const icojs = require('icojs');
-const fileType = require('file-type');
+import * as fileType from 'file-type';
+import icojs = require('icojs');
 
 const convertIcoToPng = (icoData: Buffer) => {
   return new Promise((resolve: (b: Buffer) => void) => {
@@ -34,12 +33,12 @@ export class FaviconsStore {
 
   public faviconsBuffers: Map<string, Buffer> = new Map();
 
-  constructor() {
+  public constructor() {
     this.load();
   }
 
-  public addFavicon = async (url: string) => {
-    return new Promise(async (resolve: (a: any) => void, reject: any) => {
+  public addFavicon = async (url: string): Promise<string> => {
+    return new Promise(async (resolve, reject) => {
       if (!this.favicons.get(url)) {
         try {
           const res = await requestURL(url);

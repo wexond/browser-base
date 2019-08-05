@@ -4,8 +4,7 @@ import { shell } from 'electron';
 
 import { StyledItem, Icon, Progress, Name, Info, Details } from './style';
 import { IDownloadItem } from '~/interfaces';
-
-const prettyBytes = require('pretty-bytes');
+import * as prettyBytes from 'pretty-bytes';
 
 const onClick = (data: IDownloadItem) => () => {
   if (data.completed) {

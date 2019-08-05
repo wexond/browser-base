@@ -1,123 +1,125 @@
 // https://stackoverflow.com/a/13542669
-export const shadeBlendConvert = function (
-  this: any,
-  p: any,
-  from: any,
-  to: any = null,
-) {
-  if (
-    typeof p !== 'number' ||
-    p < -1 ||
-    p > 1 ||
-    typeof from !== 'string' ||
-    (from[0] !== 'r' && from[0] !== '#') ||
-    (to && typeof to !== 'string')
-  ) {
-    return null;
-  } // ErrorCheck
-  if (!(this as any).sbcRip) {
-    this.sbcRip = (d: any) => {
-      const l = d.length;
-      const RGB: any = {};
-
-      if (l > 9) {
-        d = d.split(',');
-        if (d.length < 3 || d.length > 4) return null; // ErrorCheck
-        (RGB[0] = i(d[0].split('(')[1])),
-          (RGB[1] = i(d[1])),
-          (RGB[2] = i(d[2])),
-          (RGB[3] = d[3] ? parseFloat(d[3]) : -1);
-      } else {
-        if (l === 8 || l === 6 || l < 4) return null; // ErrorCheck
-        if (l < 6) {
-          d = `#${d[1]}${d[1]}${d[2]}${d[2]}${d[3]}${d[3]}${
-            l > 4 ? `${d[4]}${d[4]}` : ''
-          }`;
-        } // 3 or 4 digit
-        (d = i(d.slice(1), 16)),
-          (RGB[0] = (d >> 16) & 255),
-          (RGB[1] = (d >> 8) & 255),
-          (RGB[2] = d & 255),
-          (RGB[3] = -1);
-        if (l === 9 || l === 5) {
-          (RGB[3] = r((RGB[2] / 255) * 10000) / 10000),
-            (RGB[2] = RGB[1]),
-            (RGB[1] = RGB[0]),
-            (RGB[0] = (d >> 24) & 255);
-        }
-      }
-      return RGB;
-    };
-  }
+const pSBCr = (r: any, g: any, b: any, a: any, d: any) => {
   const i = parseInt;
-  const r = Math.round;
-  let h = from.length > 9;
-  h =
-    typeof to === 'string'
-      ? to.length > 9
-        ? true
-        : to === 'c'
-        ? !h
-        : false
-      : h;
-  const b = p < 0;
-  p = b ? p * -1 : p;
-  to = to && to !== 'c' ? to : b ? '#000000' : '#FFFFFF';
-  const f = this.sbcRip(from);
-  const t = this.sbcRip(to);
-  if (!f || !t) return null; // ErrorCheck
-  if (h) {
-    return `rgb${f[3] > -1 || t[3] > -1 ? 'a(' : '('}${r(
-      (t[0] - f[0]) * p + f[0],
-    )},${r((t[1] - f[1]) * p + f[1])},${r((t[2] - f[2]) * p + f[2])}${
-      f[3] < 0 && t[3] < 0
-        ? ')'
-        : `,${
-            f[3] > -1 && t[3] > -1
-              ? r(((t[3] - f[3]) * p + f[3]) * 10000) / 10000
-              : t[3] < 0
-              ? f[3]
-              : t[3]
-          })`
-    }`;
+  const m = Math.round;
+  let n = d.length,
+    x: any = {};
+  if (n > 9) {
+    ([r, g, b, a] = d = d.split(',')), (n = d.length);
+    if (n < 3 || n > 4) return null;
+    (x.r = i(r[3] == 'a' ? r.slice(5) : r.slice(4))),
+      (x.g = i(g)),
+      (x.b = i(b)),
+      (x.a = a ? parseFloat(a) : -1);
+  } else {
+    if (n == 8 || n == 6 || n < 4) return null;
+    if (n < 6)
+      d =
+        '#' +
+        d[1] +
+        d[1] +
+        d[2] +
+        d[2] +
+        d[3] +
+        d[3] +
+        (n > 4 ? d[4] + d[4] : '');
+    d = i(d.slice(1), 16);
+    if (n == 9 || n == 5)
+      (x.r = (d >> 24) & 255),
+        (x.g = (d >> 16) & 255),
+        (x.b = (d >> 8) & 255),
+        (x.a = m((d & 255) / 0.255) / 1000);
+    else (x.r = d >> 16), (x.g = (d >> 8) & 255), (x.b = d & 255), (x.a = -1);
   }
-
-  return `#${(
-    0x100000000 +
-    r((t[0] - f[0]) * p + f[0]) * 0x1000000 +
-    r((t[1] - f[1]) * p + f[1]) * 0x10000 +
-    r((t[2] - f[2]) * p + f[2]) * 0x100 +
-    (f[3] > -1 && t[3] > -1
-      ? r(((t[3] - f[3]) * p + f[3]) * 255)
-      : t[3] > -1
-      ? r(t[3] * 255)
-      : f[3] > -1
-      ? r(f[3] * 255)
-      : 255)
-  )
-    .toString(16)
-    .slice(1, f[3] > -1 || t[3] > -1 ? undefined : -2)}`;
+  return x;
 };
 
-export const getColorBrightness = (color: any) => {
-  let r;
+export const shadeBlendConvert = (p: any, c0: any, c1: any, l?: any) => {
+  let r: any,
+    g: any,
+    b: any,
+    P: any,
+    f: any,
+    t: any,
+    h: any,
+    m = Math.round,
+    a: any = typeof c1 == 'string';
+  if (
+    typeof p != 'number' ||
+    p < -1 ||
+    p > 1 ||
+    typeof c0 != 'string' ||
+    (c0[0] != 'r' && c0[0] != '#') ||
+    (c1 && !a)
+  )
+    return null;
+  (h = c0.length > 9),
+    (h = a ? (c1.length > 9 ? true : c1 == 'c' ? !h : false) : h),
+    (f = pSBCr(r, g, b, a, c0)),
+    (P = p < 0),
+    (t =
+      c1 && c1 != 'c'
+        ? pSBCr(r, g, b, a, c1)
+        : P
+        ? { r: 0, g: 0, b: 0, a: -1 }
+        : { r: 255, g: 255, b: 255, a: -1 }),
+    (p = P ? p * -1 : p),
+    (P = 1 - p);
+  if (!f || !t) return null;
+  if (l)
+    (r = m(P * f.r + p * t.r)),
+      (g = m(P * f.g + p * t.g)),
+      (b = m(P * f.b + p * t.b));
+  else
+    (r = m((P * f.r ** 2 + p * t.r ** 2) ** 0.5)),
+      (g = m((P * f.g ** 2 + p * t.g ** 2) ** 0.5)),
+      (b = m((P * f.b ** 2 + p * t.b ** 2) ** 0.5));
+  (a = f.a),
+    (t = t.a),
+    (f = a >= 0 || t >= 0),
+    (a = f ? (a < 0 ? t : t < 0 ? a : a * P + t * p) : 0);
+  if (h)
+    return (
+      'rgb' +
+      (f ? 'a(' : '(') +
+      r +
+      ',' +
+      g +
+      ',' +
+      b +
+      (f ? ',' + m(a * 1000) / 1000 : '') +
+      ')'
+    );
+  else
+    return (
+      '#' +
+      (4294967296 + r * 16777216 + g * 65536 + b * 256 + (f ? m(a * 255) : 0))
+        .toString(16)
+        .slice(1, f ? undefined : -2)
+    );
+};
+
+export const getColorBrightness = (color: string) => {
+  let r: number;
   let g;
   let b;
 
   if (color.match(/^rgb/)) {
-    color = color.match(
+    const match = color.match(
       /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/,
     );
 
-    r = color[1];
-    g = color[2];
-    b = color[3];
+    r = parseInt(match[1]);
+    g = parseInt(match[2]);
+    b = parseInt(match[3]);
   } else {
-    color = +`0x${color.slice(1).replace(color.length < 5 && /./g, '$&$&')}`;
+    const num = +`0x${color
+      .slice(1)
+      .replace(color.length < 5 && /./g, '$&$&')}`;
 
-    r = color >> 16;
-    g = (color >> 8) & 255;
-    b = color & 255;
+    r = num >> 16;
+    g = (num >> 8) & 255;
+    b = num & 255;
   }
 
   return Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));

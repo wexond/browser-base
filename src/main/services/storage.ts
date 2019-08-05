@@ -2,7 +2,12 @@ import { ipcMain } from 'electron';
 import * as Datastore from 'nedb';
 
 import { getPath } from '~/utils';
-import { IFindOperation, IInsertOperation, IRemoveOperation, IUpdateOperation, IFormFillData } from '~/interfaces';
+import {
+  IFindOperation,
+  IInsertOperation,
+  IRemoveOperation,
+  IUpdateOperation,
+} from '~/interfaces';
 
 interface Databases {
   [key: string]: Datastore;
@@ -16,31 +21,43 @@ export class StorageService {
     formfill: null,
   };
 
-  constructor() {
+  public constructor() {
     ipcMain.on('storage-get', async (e, id: string, data: IFindOperation) => {
       const docs = await this.find(data);
       e.sender.send(id, docs);
     });
 
-    ipcMain.on('storage-get-one', async (e, id: string, data: IFindOperation) => {
-      const doc = await this.findOne(data);
-      e.sender.send(id, doc);
-    });
+    ipcMain.on(
+      'storage-get-one',
+      async (e, id: string, data: IFindOperation) => {
+        const doc = await this.findOne(data);
+        e.sender.send(id, doc);
+      },
+    );
 
-    ipcMain.on('storage-insert', async (e, id: string, data: IInsertOperation) => {
-      const doc = await this.insert(data);
-      e.sender.send(id, doc);
-    });
+    ipcMain.on(
+      'storage-insert',
+      async (e, id: string, data: IInsertOperation) => {
+        const doc = await this.insert(data);
+        e.sender.send(id, doc);
+      },
+    );
 
-    ipcMain.on('storage-remove', async (e, id: string, data: IRemoveOperation) => {
-      const numRemoved = await this.remove(data);
-      e.sender.send(id, numRemoved);
-    });
+    ipcMain.on(
+      'storage-remove',
+      async (e, id: string, data: IRemoveOperation) => {
+        const numRemoved = await this.remove(data);
+        e.sender.send(id, numRemoved);
+      },
+    );
 
-    ipcMain.on('storage-update', async (e, id: string, data: IUpdateOperation) => {
-      const numReplaced = await this.update(data);
-      e.sender.send(id, numReplaced);
-    });
+    ipcMain.on(
+      'storage-update',
+      async (e, id: string, data: IUpdateOperation) => {
+        const numReplaced = await this.update(data);
+        e.sender.send(id, numReplaced);
+      },
+    );
   }
 
   public find<T>(data: IFindOperation): Promise<T[]> {
@@ -118,7 +135,7 @@ export class StorageService {
       filename: getPath(`storage/${name}.db`),
       autoload: true,
     });
-  }
+  };
 }
 
 export default new StorageService();

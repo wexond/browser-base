@@ -104,7 +104,7 @@ export class ITab {
     return this.favicon !== '' || this.loading;
   }
 
-  constructor(
+  public constructor(
     { active, url }: chrome.tabs.CreateProperties,
     id: number,
     tabGroupId: number,
@@ -123,38 +123,29 @@ export class ITab {
 
     if (isWindow) return;
 
-    ipcRenderer.on(
-      `view-url-updated-${this.id}`,
-      async (e: any, url: string) => {
-        if (url && url !== this.url && !store.isIncognito) {
-          this.lastHistoryId = await store.history.addItem({
-            title: this.title,
-            url,
-            favicon: this.favicon,
-            date: new Date().toString(),
-          });
-        }
+    ipcRenderer.on(`view-url-updated-${this.id}`, async (e, url: string) => {
+      if (url && url !== this.url && !store.isIncognito) {
+        this.lastHistoryId = await store.history.addItem({
+          title: this.title,
+          url,
+          favicon: this.favicon,
+          date: new Date().toString(),
+        });
+      }
 
-        this.url = url;
-        this.updateData();
-        this.updateCredentials();
-      },
-    );
+      this.url = url;
+      this.updateData();
+      this.updateCredentials();
+    });
 
-    ipcRenderer.on(`view-title-updated-${this.id}`, (e: any, title: string) => {
+    ipcRenderer.on(`view-title-updated-${this.id}`, (e, title: string) => {
       this.title = title === 'about:blank' ? 'New tab' : title;
       this.updateData();
     });
 
     ipcRenderer.on(
       `load-commit-${this.id}`,
-      (
-        e: any,
-        event: any,
-        url: string,
-        isInPlace: boolean,
-        isMainFrame: boolean,
-      ) => {
+      (e, event, url: string, isInPlace: boolean, isMainFrame: boolean) => {
         if (isMainFrame) {
           this.blockedAds = 0;
         }
@@ -163,7 +154,7 @@ export class ITab {
 
     ipcRenderer.on(
       `browserview-favicon-updated-${this.id}`,
-      async (e: any, favicon: string) => {
+      async (e, favicon: string) => {
         try {
           this.favicon = favicon;
 
@@ -202,7 +193,7 @@ export class ITab {
 
     ipcRenderer.on(
       `browserview-theme-color-updated-${this.id}`,
-      (e: any, themeColor: string) => {
+      (e, themeColor: string) => {
         if (themeColor && isColorAcceptable(themeColor)) {
           this.background = themeColor;
           this.hasThemeColor = true;
@@ -213,7 +204,7 @@ export class ITab {
       },
     );
 
-    ipcRenderer.on(`view-loading-${this.id}`, (e: any, loading: boolean) => {
+    ipcRenderer.on(`view-loading-${this.id}`, (e, loading: boolean) => {
       this.loading = loading;
     });
 
@@ -409,7 +400,7 @@ export class ITab {
     }, TAB_ANIMATION_DURATION * 1000);
   }
 
-  callViewMethod = (scope: string, ...args: any[]): Promise<any> => {
+  public callViewMethod = (scope: string, ...args: any[]): Promise<any> => {
     return callViewMethod(store.windowId, this.id, scope, ...args);
   };
 

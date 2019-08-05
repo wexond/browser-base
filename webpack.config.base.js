@@ -1,5 +1,7 @@
+/* eslint-disable */
 const { resolve } = require('path');
 const merge = require('webpack-merge');
+/* eslint-enable */
 
 const INCLUDE = resolve(__dirname, 'src');
 
@@ -30,8 +32,8 @@ const config = {
           {
             loader: 'ts-loader',
             options: {
-              transpileOnly: true,
               experimentalWatchApi: true,
+              transpileOnly: true,
             },
           },
         ],

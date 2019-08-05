@@ -22,7 +22,7 @@ const onClick = (item: IBookmark) => (e: React.MouseEvent) => {
   }
 };
 
-const onDoubleClick = (item: IBookmark) => (e: React.MouseEvent) => {
+const onDoubleClick = (item: IBookmark) => () => {
   if (item.isFolder) {
     store.bookmarks.currentFolder = item._id;
   }
