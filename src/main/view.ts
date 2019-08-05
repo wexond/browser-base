@@ -16,7 +16,7 @@ export class View extends BrowserView {
         preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
         nodeIntegration: false,
         contextIsolation: true,
-        partition: incognito ? 'incognito' : 'persist:view',
+        partition: incognito ? 'view_incognito' : 'persist:view',
         plugins: true,
         additionalArguments: [`--window-id=${window.id}`],
         nativeWindowOpen: true,

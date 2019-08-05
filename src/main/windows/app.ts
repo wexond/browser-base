@@ -24,7 +24,10 @@ export class AppWindow extends BrowserWindow {
   public formFillWindow = new FormFillWindow(this);
   public credentialsWindow = new CredentialsWindow(this);
 
-  constructor(public windowsManager: WindowsManager, incognito: boolean) {
+  constructor(
+    public windowsManager: WindowsManager,
+    public incognito: boolean,
+  ) {
     super({
       frame: false,
       minWidth: 400,
@@ -109,6 +112,15 @@ export class AppWindow extends BrowserWindow {
       windowState.maximized = this.isMaximized();
       windowState.fullscreen = this.isFullScreen();
       writeFileSync(windowDataPath, JSON.stringify(windowState));
+
+      if (
+        incognito &&
+        windowsManager.list.filter(x => x.incognito).length === 1
+      ) {
+        windowsManager.sessionsManager.clearCache('incognito');
+      }
+
+      windowsManager.list = windowsManager.list.filter(x => x.id !== this.id);
     });
 
     // this.webContents.openDevTools({ mode: 'detach' });

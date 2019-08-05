@@ -9,13 +9,15 @@ import storage from './services/storage';
 
 export class SessionsManager {
   public view = session.fromPartition('persist:view');
-  public viewIncognito = session.fromPartition('persist:view_incognito');
+  public viewIncognito = session.fromPartition('view_incognito');
 
   public extensions = new ExtensibleSession(this.view);
   public extensionsIncognito = new ExtensibleSession(this.viewIncognito);
 
   constructor(public windowsManager: WindowsManager) {
     this.loadExtensions();
+
+    this.clearCache('incognito');
 
     this.view.setPermissionRequestHandler(
       async (webContents, permission, callback, details) => {
@@ -79,28 +81,35 @@ export class SessionsManager {
     });
 
     ipcMain.on('clear-browsing-data', () => {
-      this.view.clearCache().catch(err => {
-        console.error(err);
-      });
-
-      this.view.clearStorageData({
-        storages: [
-          'appcache',
-          'cookies',
-          'filesystem',
-          'indexdb',
-          'localstorage',
-          'shadercache',
-          'websql',
-          'serviceworkers',
-          'cachestorage',
-        ],
-      });
+      this.clearCache('normal');
+      this.clearCache('incognito');
     });
 
     runAdblockService(this.view);
     runAdblockService(this.viewIncognito);
     storage.run();
+  }
+
+  clearCache(session: 'normal' | 'incognito') {
+    const ses = session === 'incognito' ? this.viewIncognito : this.view;
+
+    ses.clearCache().catch(err => {
+      console.error(err);
+    });
+
+    ses.clearStorageData({
+      storages: [
+        'appcache',
+        'cookies',
+        'filesystem',
+        'indexdb',
+        'localstorage',
+        'shadercache',
+        'websql',
+        'serviceworkers',
+        'cachestorage',
+      ],
+    });
   }
 
   public async loadExtensions() {
