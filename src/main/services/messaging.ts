@@ -56,20 +56,23 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.formFillWindow.hide();
   });
 
-  ipcMain.on(`form-fill-update-${id}`, async (e, _id: string, persistent = false) => {
-    const item =
-      _id &&
-      (await storage.findOne<IFormFillMenuItem>({
-        scope: 'formfill',
-        query: { _id },
-      }));
+  ipcMain.on(
+    `form-fill-update-${id}`,
+    async (e, _id: string, persistent = false) => {
+      const item =
+        _id &&
+        (await storage.findOne<IFormFillMenuItem>({
+          scope: 'formfill',
+          query: { _id },
+        }));
 
-    appWindow.viewManager.selected.webContents.send(
-      'form-fill-update',
-      item,
-      persistent,
-    );
-  });
+      appWindow.viewManager.selected.webContents.send(
+        'form-fill-update',
+        item,
+        persistent,
+      );
+    },
+  );
 
   ipcMain.on(`credentials-show-${id}`, (e, data) => {
     appWindow.credentialsWindow.webContents.send('credentials-update', data);
