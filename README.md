@@ -63,9 +63,7 @@ $ npm run dev
 
 # Documentation
 
-> At this moment there are no docs, however this may change in the future, see ([#147](https://github.com/wexond/wexond/issues/147)).
-
-Guides and the API reference ~~are~~ will be located in [`docs`](docs) directory.
+Guides and the API reference are located in [`docs`](docs) directory.
 
 ### Sponsors
 
@@ -78,4 +76,5 @@ Guides and the API reference ~~are~~ will be located in [`docs`](docs) directory
 <a href="https://digital-presence.agency/"><img src="https://i.imgur.com/iNY6XA4.jpg" width="256"></a>
 
 ## License
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwexond%2Fwexond.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwexond%2Fwexond?ref=badge_large)
