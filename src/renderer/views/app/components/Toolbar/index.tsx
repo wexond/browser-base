@@ -23,7 +23,7 @@ const onKeyClick = async () => {
     url: hostname,
   })).filter(r => r.fields.username);
 
-  ipcRenderer.send('credentials-show', {
+  ipcRenderer.send(`credentials-show-${store.windowId}`, {
     content: 'list',
     list,
   });

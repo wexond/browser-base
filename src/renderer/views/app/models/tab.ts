@@ -407,7 +407,6 @@ export class ITab {
   public async updateCredentials() {
     const { hostname } = parse(this.url);
     const item = await store.formFill.db.getOne({ url: hostname });
-
     this.hasCredentials = item != null;
   }
 }
