@@ -19,9 +19,10 @@ assignees: ''
 **Screenshots**
 <!-- If applicable, add screenshots to help explain your problem. -->
 
-**Desktop (please complete the following information):**
- - OS: 
- - Wexond Version: 
+**Details:**
+ - Operating System: 
+ - Wexond version: 
+ - Last known working Wexond version: 
 
 **Additional context**
 <!-- Add any other context about the problem here. -->
