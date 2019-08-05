@@ -27,18 +27,21 @@ export class Settings extends EventEmitter {
         }
       }
 
-      const context = incognito
-        ? windowsManager.sessionsManager.extensionsIncognito
-        : windowsManager.sessionsManager.extensions;
+      const contexts = [
+        windowsManager.sessionsManager.extensionsIncognito,
+        windowsManager.sessionsManager.extensions,
+      ];
 
-      context.extensions['wexond-darkreader'].backgroundPage.webContents.send(
-        'api-runtime-sendMessage',
-        {
-          message: {
-            name: 'toggle',
-            toggle: this.object.darkTheme,
+      contexts.forEach(e =>
+        e.extensions['wexond-darkreader'].backgroundPage.webContents.send(
+          'api-runtime-sendMessage',
+          {
+            message: {
+              name: 'toggle',
+              toggle: this.object.darkTheme,
+            },
           },
-        },
+        ),
       );
 
       this.addToQueue();
