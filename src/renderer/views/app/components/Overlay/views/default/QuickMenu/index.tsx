@@ -147,7 +147,11 @@ export const QuickMenu = observer(() => {
         <Bubble onClick={onNewWindowClick} invert={invert} icon={icons.window}>
           New window
         </Bubble>
-        <Bubble onClick={onIncognitoClick} invert={invert} icon={icons.window}>
+        <Bubble
+          onClick={onIncognitoClick}
+          invert={invert}
+          icon={icons.incognito}
+        >
           Incognito
         </Bubble>
         <Bubble disabled invert={invert} icon={icons.window}>
