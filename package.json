@@ -12,20 +12,7 @@
   ],
   "homepage": "https://github.com/wexond/wexond#readme",
   "main": "build/main.bundle.js",
-  "author": {
-    "name": "Eryk Rakowski",
-    "email": "sentialx@gmail.com"
-  },
-  "contributors": [
-    {
-      "name": "Eryk Rakowski",
-      "email": "sentialx@gmail.com"
-    },
-    {
-      "name": "Mikołaj Palkiewicz",
-      "email": "xnerhu@gmail.com"
-    }
-  ],
+  "author": "Eryk Rakowski <sentialx@gmail.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wexond/wexond.git"
