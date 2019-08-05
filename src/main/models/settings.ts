@@ -32,17 +32,19 @@ export class Settings extends EventEmitter {
         windowsManager.sessionsManager.extensions,
       ];
 
-      contexts.forEach(e =>
-        e.extensions['wexond-darkreader'].backgroundPage.webContents.send(
-          'api-runtime-sendMessage',
-          {
-            message: {
-              name: 'toggle',
-              toggle: this.object.darkTheme,
+      contexts.forEach(e => {
+        if (e.extensions['wexond-darkreader']) {
+          e.extensions['wexond-darkreader'].backgroundPage.webContents.send(
+            'api-runtime-sendMessage',
+            {
+              message: {
+                name: 'toggle',
+                toggle: this.object.darkTheme,
+              },
             },
-          },
-        ),
-      );
+          );
+        }
+      });
 
       this.addToQueue();
     });
