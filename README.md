@@ -65,7 +65,7 @@ $ npm run dev
 
 > At this moment there are no docs, however this may change in the future, see ([#147](https://github.com/wexond/wexond/issues/147)).
 
-Guides and the API reference ~~are~~~ will be located in [`docs`](docs) directory.
+Guides and the API reference ~~are~~ will be located in [`docs`](docs) directory.
 
 ### Sponsors
 
