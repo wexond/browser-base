@@ -34,7 +34,7 @@ const pSBCr = (r: any, g: any, b: any, a: any, d: any) => {
   return x;
 };
 
-export const shadeBlendConvert = (p: any, c0: any, c1: any, l: any) => {
+export const shadeBlendConvert = (p: any, c0: any, c1: any, l?: any) => {
   let r: any,
     g: any,
     b: any,

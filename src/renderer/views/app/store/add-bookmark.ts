@@ -11,7 +11,7 @@ export class AddBookmarkStore {
 
   public dropdownRef = React.createRef<Dropdown>();
 
-  constructor() {
+  public constructor() {
     requestAnimationFrame(() => {
       window.removeEventListener('mousedown', this.onWindowMouseDown);
       window.addEventListener('mousedown', this.onWindowMouseDown);

@@ -15,39 +15,42 @@ export class Settings extends EventEmitter {
 
   private loaded = false;
 
-  constructor() {
+  public constructor() {
     super();
 
-    ipcMain.on('save-settings', (e, { settings, incognito }: any) => {
-      this.object = { ...this.object, ...JSON.parse(settings) };
+    ipcMain.on(
+      'save-settings',
+      (e, { settings }: { settings: string; incognito: boolean }) => {
+        this.object = { ...this.object, ...JSON.parse(settings) };
 
-      for (const window of windowsManager.list) {
-        if (window.webContents.id !== e.sender.id) {
-          window.webContents.send('update-settings', this.object);
+        for (const window of windowsManager.list) {
+          if (window.webContents.id !== e.sender.id) {
+            window.webContents.send('update-settings', this.object);
+          }
         }
-      }
 
-      const contexts = [
-        windowsManager.sessionsManager.extensionsIncognito,
-        windowsManager.sessionsManager.extensions,
-      ];
+        const contexts = [
+          windowsManager.sessionsManager.extensionsIncognito,
+          windowsManager.sessionsManager.extensions,
+        ];
 
-      contexts.forEach(e => {
-        if (e.extensions['wexond-darkreader']) {
-          e.extensions['wexond-darkreader'].backgroundPage.webContents.send(
-            'api-runtime-sendMessage',
-            {
-              message: {
-                name: 'toggle',
-                toggle: this.object.darkTheme,
+        contexts.forEach(e => {
+          if (e.extensions['wexond-darkreader']) {
+            e.extensions['wexond-darkreader'].backgroundPage.webContents.send(
+              'api-runtime-sendMessage',
+              {
+                message: {
+                  name: 'toggle',
+                  toggle: this.object.darkTheme,
+                },
               },
-            },
-          );
-        }
-      });
+            );
+          }
+        });
 
-      this.addToQueue();
-    });
+        this.addToQueue();
+      },
+    );
 
     ipcMain.on('get-settings', e => {
       if (!this.loaded) {

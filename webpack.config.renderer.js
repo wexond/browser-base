@@ -1,8 +1,10 @@
+/* eslint-disable */
 const webpack = require('webpack');
 const { getConfig, dev } = require('./webpack.config.base');
 const { join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+/* eslint-enable */
 
 const PORT = 4444;
 

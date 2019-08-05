@@ -105,7 +105,7 @@ export const Icon = styled.div`
   ${centerVertical()};
   ${centerIcon(24)};
 
-  ${({ src }: { src: any }) => css`
+  ${({ src }: { src: string }) => css`
     background-image: url(${src});
   `}
 

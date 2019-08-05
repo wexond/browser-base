@@ -1,5 +1,6 @@
 import { Window } from 'node-window-manager';
 import { AppWindow } from '../windows';
+import { IRectangle } from '~/interfaces';
 
 export class ProcessWindow extends Window {
   public resizable = false;
@@ -10,12 +11,12 @@ export class ProcessWindow extends Window {
 
   public opacity: number;
 
-  public lastBounds: any;
-  public initialBounds: any;
+  public lastBounds: IRectangle;
+  public initialBounds: IRectangle;
 
   public parentWindow: AppWindow;
 
-  constructor(handle: any, appWindow: AppWindow) {
+  public constructor(handle: number, appWindow: AppWindow) {
     super(handle);
 
     this.lastBounds = this.getBounds();

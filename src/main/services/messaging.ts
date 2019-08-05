@@ -1,4 +1,4 @@
-import { ipcMain, ipcRenderer } from 'electron';
+import { ipcMain } from 'electron';
 import { parse } from 'url';
 
 import { IFormFillMenuItem, IFormFillData } from '~/interfaces';
@@ -14,19 +14,19 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.webContents.focus();
   });
 
-  ipcMain.on(`update-tab-find-info-${id}`, (e, ...args: any[]) =>
+  ipcMain.on(`update-tab-find-info-${id}`, (e, ...args) =>
     appWindow.webContents.send('update-tab-find-info', ...args),
   );
 
-  ipcMain.on(`find-show-${id}`, (e, tabId: number, data: any) => {
+  ipcMain.on(`find-show-${id}`, (e, tabId, data) => {
     appWindow.findWindow.find(tabId, data);
   });
 
-  ipcMain.on(`permission-dialog-hide-${id}`, e => {
+  ipcMain.on(`permission-dialog-hide-${id}`, () => {
     appWindow.permissionWindow.hide();
   });
 
-  ipcMain.on(`update-find-info-${id}`, (e, tabId: number, data: any) =>
+  ipcMain.on(`update-find-info-${id}`, (e, tabId, data) =>
     appWindow.findWindow.updateInfo(tabId, data),
   );
 
@@ -34,26 +34,23 @@ export const runMessagingService = (appWindow: AppWindow) => {
     e.returnValue = appWindow.incognito;
   });
 
-  ipcMain.on(
-    'form-fill-show',
-    async (e, rect: any, name: string, value: string) => {
-      const items = await getFormFillMenuItems(name, value);
+  ipcMain.on('form-fill-show', async (e, rect, name, value) => {
+    const items = await getFormFillMenuItems(name, value);
 
-      if (items.length) {
-        appWindow.formFillWindow.webContents.send('formfill-get-items', items);
-        appWindow.formFillWindow.inputRect = rect;
+    if (items.length) {
+      appWindow.formFillWindow.webContents.send('formfill-get-items', items);
+      appWindow.formFillWindow.inputRect = rect;
 
-        appWindow.formFillWindow.resize(
-          items.length,
-          items.find(r => r.subtext) != null,
-        );
-        appWindow.formFillWindow.rearrange();
-        appWindow.formFillWindow.showInactive();
-      } else {
-        appWindow.formFillWindow.hide();
-      }
-    },
-  );
+      appWindow.formFillWindow.resize(
+        items.length,
+        items.find(r => r.subtext) != null,
+      );
+      appWindow.formFillWindow.rearrange();
+      appWindow.formFillWindow.showInactive();
+    } else {
+      appWindow.formFillWindow.hide();
+    }
+  });
 
   ipcMain.on('form-fill-hide', () => {
     appWindow.formFillWindow.hide();
@@ -74,7 +71,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     );
   });
 
-  ipcMain.on('credentials-show', (e, data: any) => {
+  ipcMain.on('credentials-show', (e, data) => {
     appWindow.credentialsWindow.webContents.send('credentials-update', data);
     appWindow.credentialsWindow.rearrange();
     appWindow.credentialsWindow.show();
@@ -84,7 +81,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.credentialsWindow.hide();
   });
 
-  ipcMain.on('credentials-save', async (e, data: any) => {
+  ipcMain.on('credentials-save', async (e, data) => {
     const { username, password, update, oldUsername } = data;
     const url = appWindow.viewManager.selected.webContents.getURL();
     const { hostname } = parse(url);

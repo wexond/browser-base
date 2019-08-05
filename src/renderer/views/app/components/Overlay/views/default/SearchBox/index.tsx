@@ -34,7 +34,7 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
   }
 };
 
-const onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+const onInputFocus = () => {
   if (store.overlay.inputRef.current) {
     store.overlay.inputRef.current.select();
   }

@@ -9,3 +9,4 @@ export * from './theme';
 export * from './weather';
 export * from './form-fill';
 export * from './storage';
+export * from './bounds';

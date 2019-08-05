@@ -15,8 +15,12 @@ export class Form {
 
   public tempFields: FormField[] = [];
 
-  constructor(public ref: HTMLFormElement) {
+  public ref: HTMLFormElement;
+
+  public constructor(ref: HTMLFormElement) {
     this.load();
+
+    this.ref = ref;
   }
 
   public load() {
@@ -35,10 +39,11 @@ export class Form {
 
   public get fields() {
     const id = this.ref.getAttribute('id');
-    const inside = <FormField[]>searchElements(this.ref, 'input, select');
-    const outside = <FormField[]>(
-      searchElements(document, `input[form=${id}], select[form=${id}]`)
-    );
+    const inside = searchElements(this.ref, 'input, select') as FormField[];
+    const outside = searchElements(
+      document,
+      `input[form=${id}], select[form=${id}]`,
+    ) as FormField[];
 
     return [...inside, ...outside].filter(el => this.validateField(el));
   }

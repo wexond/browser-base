@@ -24,26 +24,28 @@ export const getFormFillMenuItems = async (name: string, value: string) => {
   });
 
   return items
-    .map(item => {
-      const text = getFormFillValue(name, item, true);
-      const subtext = getFormFillSubValue(name, item);
+    .map(
+      (item): IFormFillMenuItem => {
+        const text = getFormFillValue(name, item, true);
+        const subtext = getFormFillSubValue(name, item);
 
-      if (dataType === 'password' && item.url !== hostname) {
+        if (dataType === 'password' && item.url !== hostname) {
+          return null;
+        }
+
+        if (
+          text &&
+          (name !== 'password' ? text.startsWith(value) : !value.length)
+        ) {
+          return {
+            _id: item._id,
+            text,
+            subtext,
+          };
+        }
+
         return null;
-      }
-
-      if (
-        text &&
-        (name !== 'password' ? text.startsWith(value) : !value.length)
-      ) {
-        return {
-          _id: item._id,
-          text,
-          subtext,
-        } as IFormFillMenuItem;
-      }
-
-      return null;
-    })
+      },
+    )
     .filter(r => r);
 };

@@ -21,7 +21,7 @@ export class ITabGroup {
   @observable
   public editMode = false;
 
-  constructor() {
+  public constructor() {
     const { palette } = store.tabGroups;
     this.color = palette[Math.floor(Math.random() * palette.length)];
   }

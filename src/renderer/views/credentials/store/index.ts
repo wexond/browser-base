@@ -19,8 +19,8 @@ export class Store {
 
   public oldUsername: string;
 
-  constructor() {
-    ipcRenderer.on('credentials-update', (e: any, data: any) => {
+  public constructor() {
+    ipcRenderer.on('credentials-update', (e, data) => {
       const { username, password, content, list } = data;
 
       console.log(data);

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { remote } from 'electron';
 import { promises } from 'fs';
-import parse from 'node-bookmarks-parser';
+import * as parse from 'node-bookmarks-parser';
 
 import store from '~/renderer/views/app/store';
 import { IBookmark } from '~/interfaces';
@@ -43,11 +43,11 @@ const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
   store.bookmarks.search(e.currentTarget.value);
 };
 
-const onCancelClick = (e: React.MouseEvent) => {
+const onCancelClick = () => {
   store.bookmarks.selectedItems = [];
 };
 
-const onDeleteClick = (e: React.MouseEvent) => {
+const onDeleteClick = () => {
   store.bookmarks.deleteSelected();
 };
 
@@ -89,8 +89,6 @@ const onImportClick = async () => {
     console.error(err);
   }
 };
-
-const onExportClick = () => {};
 
 const BookmarksList = observer(() => {
   const items = store.bookmarks.visibleItems;

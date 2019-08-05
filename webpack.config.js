@@ -1,5 +1,7 @@
+/* eslint-disable */
 const { getConfig, dev } = require('./webpack.config.base');
 const { spawn } = require('child_process');
+/* eslint-enable */
 
 let electronProcess;
 

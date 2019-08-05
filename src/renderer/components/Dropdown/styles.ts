@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { EASING_FUNCTION, transparency, icons } from '~/renderer/constants';
-import { centerIcon, shadows } from '~/renderer/mixins';
+import { centerIcon } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
 
 export const StyledDropdown = styled.div`

@@ -14,7 +14,7 @@ interface State {
 }
 
 export default class Switch extends React.PureComponent<Props, State> {
-  static defaultProps: Props = {
+  private static defaultProps: Props = {
     color: colors.blue['500'],
     defaultValue: false,
   };
@@ -40,7 +40,7 @@ export default class Switch extends React.PureComponent<Props, State> {
     this.value = !this.value;
   };
 
-  render() {
+  public render() {
     const { color } = this.props;
     const activated = this.value;
 

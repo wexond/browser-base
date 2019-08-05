@@ -5,9 +5,6 @@ import { AddTab, StyledTabbar, TabsContainer } from './style';
 import { Tabs } from '../Tabs';
 import store from '../../../store';
 import { icons } from '~/renderer/constants';
-import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
-
-const getContainer = () => store.tabs.containerRef.current;
 
 const onMouseEnter = () => (store.tabs.scrollbarVisible = true);
 

@@ -15,26 +15,23 @@ export class Store {
     `get-window-id-${getCurrentWindow().id}`,
   );
 
-  constructor() {
-    ipcRenderer.on(
-      'request-permission',
-      (e: any, { url, name, details }: any) => {
-        this.domain = getDomain(url);
-        this.permissions = [];
+  public constructor() {
+    ipcRenderer.on('request-permission', (e, { url, name, details }) => {
+      this.domain = getDomain(url);
+      this.permissions = [];
 
-        if (name === 'notifications' || name === 'geolocation') {
-          this.permissions.push(name);
-        } else if (name === 'media') {
-          if (details.mediaTypes.includes('audio')) {
-            this.permissions.push('microphone');
-          }
-
-          if (details.mediaTypes.includes('video')) {
-            this.permissions.push('camera');
-          }
+      if (name === 'notifications' || name === 'geolocation') {
+        this.permissions.push(name);
+      } else if (name === 'media') {
+        if (details.mediaTypes.includes('audio')) {
+          this.permissions.push('microphone');
         }
-      },
-    );
+
+        if (details.mediaTypes.includes('video')) {
+          this.permissions.push('camera');
+        }
+      }
+    });
   }
 }
 

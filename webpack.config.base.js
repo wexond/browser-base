@@ -1,5 +1,7 @@
+/* eslint-disable */
 const { resolve } = require('path');
 const merge = require('webpack-merge');
+/* eslint-enable */
 
 const INCLUDE = resolve(__dirname, 'src');
 

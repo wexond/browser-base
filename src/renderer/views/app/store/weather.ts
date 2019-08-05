@@ -10,7 +10,7 @@ export class WeatherStore {
   @observable
   public loading = true;
 
-  constructor() {
+  public constructor() {
     this.load();
   }
 

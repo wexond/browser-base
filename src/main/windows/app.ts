@@ -24,10 +24,11 @@ export class AppWindow extends BrowserWindow {
   public formFillWindow = new FormFillWindow(this);
   public credentialsWindow = new CredentialsWindow(this);
 
-  constructor(
-    public windowsManager: WindowsManager,
-    public incognito: boolean,
-  ) {
+  public incognito: boolean;
+
+  private windowsManager: WindowsManager;
+
+  public constructor(windowsManager: WindowsManager, incognito: boolean) {
     super({
       frame: false,
       minWidth: 400,
@@ -43,6 +44,9 @@ export class AppWindow extends BrowserWindow {
       },
       icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
     });
+
+    this.incognito = incognito;
+    this.windowsManager = windowsManager;
 
     this.viewManager = new ViewManager(this, incognito);
 

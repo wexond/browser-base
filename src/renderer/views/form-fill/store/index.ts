@@ -6,8 +6,8 @@ export class Store {
   @observable
   public items: IFormFillMenuItem[] = [];
 
-  constructor() {
-    ipcRenderer.on('formfill-get-items', (e: any, items: any) => {
+  public constructor() {
+    ipcRenderer.on('formfill-get-items', (e, items) => {
       this.items = items;
     });
   }

@@ -61,7 +61,7 @@ export class OverlayStore {
     this.inputRef.current.value = val;
   }
 
-  constructor() {
+  public constructor() {
     window.addEventListener('keydown', this.onWindowKeyDown);
   }
 
@@ -74,11 +74,6 @@ export class OverlayStore {
       this.visible = false;
     }
   };
-
-  @computed
-  public get visible() {
-    return this._visible;
-  }
 
   @computed
   public get isBookmarked() {
@@ -102,6 +97,11 @@ export class OverlayStore {
     ipcRenderer.send(`browserview-hide-${store.windowId}`);
 
     this._visible = true;
+  }
+
+  @computed
+  public get visible() {
+    return this._visible;
   }
 
   public set visible(val: boolean) {

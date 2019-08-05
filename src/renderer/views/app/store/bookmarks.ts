@@ -70,7 +70,7 @@ export class BookmarksStore {
       });
   }
 
-  constructor() {
+  public constructor() {
     this.load();
   }
 

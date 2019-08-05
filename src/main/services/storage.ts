@@ -7,7 +7,6 @@ import {
   IInsertOperation,
   IRemoveOperation,
   IUpdateOperation,
-  IFormFillData,
 } from '~/interfaces';
 
 interface Databases {
@@ -22,7 +21,7 @@ export class StorageService {
     formfill: null,
   };
 
-  constructor() {
+  public constructor() {
     ipcMain.on('storage-get', async (e, id: string, data: IFindOperation) => {
       const docs = await this.find(data);
       e.sender.send(id, docs);

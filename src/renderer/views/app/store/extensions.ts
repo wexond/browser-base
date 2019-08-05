@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/camelcase: 0 */
+
 import { observable } from 'mobx';
 import { resolve } from 'path';
 import * as fs from 'fs';
@@ -12,7 +14,7 @@ export class ExtensionsStore {
   @observable
   public defaultBrowserActions: IBrowserAction[] = [];
 
-  constructor() {
+  public constructor() {
     this.load();
   }
 

@@ -6,7 +6,7 @@ const WIDTH = 400;
 const HEIGHT = 64;
 
 export class FindWindow extends PopupWindow {
-  constructor(public appWindow: AppWindow) {
+  public constructor(appWindow: AppWindow) {
     super(appWindow, 'find');
 
     this.setBounds({

@@ -6,14 +6,12 @@ import { ContextMenu, ContextMenuItem } from '../ContextMenu';
 
 const Item = ({
   selected,
-  value,
   onClick,
   onMouseDown,
   children,
   dense,
 }: {
   selected?: boolean;
-  value?: any;
   onClick?: (e: React.MouseEvent) => void;
   onMouseDown?: (e: React.MouseEvent) => void;
   children?: any;
@@ -47,22 +45,22 @@ interface State {
 }
 
 export class Dropdown extends React.PureComponent<Props, State> {
-  static defaultProps: Props = {
+  private static defaultProps: Props = {
     color: colors.blue['500'],
   };
 
-  static Item = Item;
+  public static Item = Item;
 
   public state: State = {
     visible: false,
   };
 
-  componentDidMount() {
+  public componentDidMount() {
     const { defaultValue } = this.props;
     this.value = defaultValue;
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     this.removeListener();
   }
 
@@ -141,7 +139,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
     if (item) return item.props.children;
   }
 
-  render() {
+  public render() {
     const { children, style } = this.props;
     const { selectedLabel, visible } = this.state;
 

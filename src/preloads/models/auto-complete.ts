@@ -11,10 +11,10 @@ export class AutoComplete {
 
   public visible = false;
 
-  constructor() {
+  public constructor() {
     ipcRenderer.on(
       'form-fill-update',
-      (e: any, data: IFormFillData, persistent: boolean) => {
+      (e, data: IFormFillData, persistent: boolean) => {
         if (!this.currentForm) return;
 
         this.currentForm.insertData(data, persistent);
@@ -27,7 +27,7 @@ export class AutoComplete {
   }
 
   public loadForms = () => {
-    const forms = <HTMLFormElement[]>searchElements(document, 'form');
+    const forms = searchElements(document, 'form') as HTMLFormElement[];
 
     this.forms = forms.map(el => new Form(el));
   };

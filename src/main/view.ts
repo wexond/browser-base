@@ -10,7 +10,9 @@ export class View extends BrowserView {
   public url: string = '';
   public homeUrl: string;
 
-  constructor(public window: AppWindow, url: string, incognito: boolean) {
+  private window: AppWindow;
+
+  public constructor(window: AppWindow, url: string, incognito: boolean) {
     super({
       webPreferences: {
         preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
@@ -23,6 +25,7 @@ export class View extends BrowserView {
       },
     });
 
+    this.window = window;
     this.homeUrl = url;
 
     this.webContents.on('context-menu', (e, params) => {
@@ -54,7 +57,7 @@ export class View extends BrowserView {
       this.window.webContents.send(`view-loading-${this.webContents.id}`, true);
     });
 
-    this.webContents.addListener('did-start-navigation', (...args: any[]) => {
+    this.webContents.addListener('did-start-navigation', (...args) => {
       this.updateNavigationState();
 
       const url = this.webContents.getURL();
@@ -83,15 +86,7 @@ export class View extends BrowserView {
 
     this.webContents.addListener(
       'new-window',
-      (
-        e,
-        url,
-        frameName,
-        disposition,
-        options,
-        additionalFeatures,
-        referrer,
-      ) => {
+      (e, url, frameName, disposition) => {
         if (disposition === 'new-window') {
           if (frameName === '_self') {
             e.preventDefault();
@@ -133,7 +128,7 @@ export class View extends BrowserView {
       );
     });
 
-    (this.webContents as any).addListener(
+    this.webContents.addListener(
       'certificate-error',
       (
         event: Electron.Event,
