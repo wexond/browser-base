@@ -7,7 +7,7 @@ import { getFormFillMenuItems } from '../utils';
 import storage from './storage';
 
 export const runMessagingService = (appWindow: AppWindow) => {
-  const { id } = appWindow.webContents;
+  const { id } = appWindow;
 
   ipcMain.on(`window-focus-${id}`, () => {
     appWindow.focus();

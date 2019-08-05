@@ -32,7 +32,7 @@ export class PopupWindow extends BrowserWindow {
     }
 
     ipcMain.on(`get-window-id-${this.id}`, e => {
-      e.returnValue = this.appWindow.webContents.id;
+      e.returnValue = this.appWindow.id;
     });
 
     this.setParentWindow(this.appWindow);

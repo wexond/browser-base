@@ -82,7 +82,7 @@ export class Store {
     y: 0,
   };
 
-  public windowId = getCurrentWindow().webContents.id;
+  public windowId = getCurrentWindow().id;
 
   @observable
   public isIncognito = ipcRenderer.sendSync(`is-incognito-${this.windowId}`);
