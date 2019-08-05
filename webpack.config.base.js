@@ -23,7 +23,7 @@ const config = {
       {
         test: /\.(png|gif|jpg|woff2|ttf|svg)$/,
         include: INCLUDE,
-        use: ['url-loader'],
+        use: ['file-loader'],
       },
       {
         test: /\.tsx|ts$/,
