@@ -93,7 +93,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
 
   ipcMain.on(`credentials-save-${id}`, async (e, data) => {
     const { username, password, update, oldUsername } = data;
-    const url = appWindow.viewManager.selected.webContents.getURL();
+    const view = appWindow.viewManager.selected;
+    const url = view.webContents.getURL();
     const { hostname } = parse(url);
 
     if (!update) {
@@ -124,11 +125,13 @@ export const runMessagingService = (appWindow: AppWindow) => {
     }
 
     await setPassword('wexond', `${hostname}-${username}`, password);
+    view.webContents.send(`has-credentials-${view.id}`, true);
   });
 
   ipcMain.on(`credentials-remove-${id}`, async (e, data: IFormFillData) => {
     const { _id, fields } = data;
-    const url = appWindow.viewManager.selected.webContents.getURL();
+    const view = appWindow.viewManager.selected;
+    const url = view.webContents.getURL();
     const { hostname } = parse(url);
 
     await storage.remove({

@@ -89,7 +89,9 @@ export class ViewManager {
             `view-url-updated-${view.webContents.id}`,
             url,
           );
+
           view.url = url;
+          view.updateCredentials();
         }
       }
     }, 200);

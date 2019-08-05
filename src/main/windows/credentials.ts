@@ -7,7 +7,7 @@ const HEIGHT = 271;
 
 export class CredentialsWindow extends PopupWindow {
   public constructor(appWindow: AppWindow) {
-    super(appWindow, 'credentials', true);
+    super(appWindow, 'credentials');
 
     this.setBounds({
       height: HEIGHT,

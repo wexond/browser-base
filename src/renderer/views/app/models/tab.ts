@@ -135,7 +135,6 @@ export class ITab {
 
       this.url = url;
       this.updateData();
-      this.updateCredentials();
     });
 
     ipcRenderer.on(`view-title-updated-${this.id}`, (e, title: string) => {
@@ -206,6 +205,10 @@ export class ITab {
 
     ipcRenderer.on(`view-loading-${this.id}`, (e, loading: boolean) => {
       this.loading = loading;
+    });
+
+    ipcRenderer.on(`has-credentials-${this.id}`, (e, found: boolean) => {
+      this.hasCredentials = found;
     });
 
     const { defaultBrowserActions, browserActions } = store.extensions;
@@ -403,10 +406,4 @@ export class ITab {
   public callViewMethod = (scope: string, ...args: any[]): Promise<any> => {
     return callViewMethod(store.windowId, this.id, scope, ...args);
   };
-
-  public async updateCredentials() {
-    const { hostname } = parse(this.url);
-    const item = await store.formFill.db.getOne({ url: hostname });
-    this.hasCredentials = item != null;
-  }
 }

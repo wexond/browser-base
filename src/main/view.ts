@@ -4,6 +4,7 @@ import { parse } from 'tldts-experimental';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
 import { windowsManager } from '.';
+import storage from './services/storage';
 
 export class View extends BrowserView {
   public title: string = '';
@@ -162,5 +163,19 @@ export class View extends BrowserView {
         canGoForward: this.webContents.canGoForward(),
       });
     }
+  }
+
+  public async updateCredentials() {
+    if (this.isDestroyed()) return;
+
+    const { hostname } = parse(this.url);
+    const item = await storage.findOne<any>({
+      scope: 'formfill',
+      query: {
+        url: hostname
+      },
+    });
+
+    this.window.webContents.send(`has-credentials-${this.webContents.id}`, item != null);
   }
 }
