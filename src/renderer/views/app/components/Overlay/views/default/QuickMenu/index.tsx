@@ -52,6 +52,10 @@ const onNewWindowClick = () => {
   ipcRenderer.send('create-window');
 };
 
+const onIncognitoClick = () => {
+  ipcRenderer.send('create-window', true);
+};
+
 export const QuickMenu = observer(() => {
   const invert = store.theme['overlay.foreground'] === 'light';
   return (
@@ -143,7 +147,7 @@ export const QuickMenu = observer(() => {
         <Bubble onClick={onNewWindowClick} invert={invert} icon={icons.window}>
           New window
         </Bubble>
-        <Bubble disabled invert={invert} icon={icons.window}>
+        <Bubble onClick={onIncognitoClick} invert={invert} icon={icons.window}>
           Incognito
         </Bubble>
         <Bubble disabled invert={invert} icon={icons.window}>
