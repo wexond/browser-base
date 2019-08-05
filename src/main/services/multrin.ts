@@ -53,7 +53,7 @@ export class Multrin {
       }
     };
 
-    const { id } = this.appWindow.webContents;
+    const { id } = this.appWindow;
 
     ipcMain.on(`select-window-${id}`, (e, id: number) => {
       this.selectWindow(this.windows.find(x => x.id === id));
