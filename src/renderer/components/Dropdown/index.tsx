@@ -1,34 +1,20 @@
 import * as React from 'react';
 
-import { colors } from '~/renderer/constants';
-import { StyledDropdown, DropIcon, Value } from './styles';
-import { ContextMenu, ContextMenuItem } from '../ContextMenu';
+import { ContextMenu, ContextMenuItem, ContextMenuItemProps } from '../ContextMenu';
+import { StyledDropdown, Label, DropIcon } from './styles'
 
-const Item = ({
-  selected,
-  onClick,
-  onMouseDown,
-  children,
-  dense,
-}: {
-  selected?: boolean;
-  onClick?: (e: React.MouseEvent) => void;
-  onMouseDown?: (e: React.MouseEvent) => void;
+interface ItemProps extends ContextMenuItemProps {
+  value: string;
   children?: any;
-  isDefault?: boolean;
-  dense?: boolean;
-}) => {
+}
+
+const Item = (props: ItemProps) => {
   return (
-    <ContextMenuItem
-      selected={selected}
-      onClick={onClick}
-      onMouseDown={onMouseDown}
-      dense={dense}
-    >
-      {children}
+    <ContextMenuItem {...props}>
+      {props.children}
     </ContextMenuItem>
   );
-};
+}
 
 interface Props {
   color?: string;
@@ -39,124 +25,87 @@ interface Props {
 }
 
 interface State {
-  visible: boolean;
-  selectedValue?: any;
-  selectedLabel?: string;
+  expanded: boolean;
+  label?: string;
+  value?: string;
 }
 
 export class Dropdown extends React.PureComponent<Props, State> {
-  private static defaultProps: Props = {
-    color: colors.blue['500'],
-  };
-
   public static Item = Item;
 
   public state: State = {
-    visible: false,
-  };
+    expanded: false,
+  }
 
-  public componentDidMount() {
+  componentDidMount() {
     const { defaultValue } = this.props;
-    this.value = defaultValue;
-  }
 
-  public componentWillUnmount() {
-    this.removeListener();
-  }
-
-  public addListener() {
-    window.addEventListener('mousedown', this.onWindowMouseDown);
-  }
-
-  public removeListener() {
-    window.removeEventListener('mousedown', this.onWindowMouseDown);
-  }
-
-  public show = () => {
-    this.addListener();
-    this.setState({ visible: true });
-  };
-
-  public hide = () => {
-    requestAnimationFrame(() => {
-      this.removeListener();
-      this.setState({ visible: false });
-    });
-  };
-
-  public onWindowMouseDown = (e: MouseEvent) => {
-    e.stopPropagation();
-    this.hide();
-  };
-
-  public get value() {
-    const { selectedValue } = this.state;
-    return selectedValue;
-  }
-
-  public set value(value: any) {
-    if (value) {
-      const { onChange } = this.props;
-      const { selectedValue } = this.state;
-
-      this.setState({
-        selectedValue,
-        selectedLabel: this.getLabel(value),
-      });
-
-      if (onChange) onChange(value, selectedValue);
+    if (defaultValue != null) {
+      this.setValue(defaultValue, false);
     }
   }
 
-  public onItemClick = (value: any) => () => {
-    this.value = value;
-    this.hide();
-  };
+  public setValue(value: string, emitEvent = true) {
+    const { onChange, children } = this.props;
+    const oldValue = this.state.value;
+    const el = children.find((r: any) => r.props.value === value);
 
-  public clear() {
-    this.setState({
-      visible: false,
-      selectedValue: null,
-      selectedLabel: null,
-    });
+    if (el) {
+      this.setState({
+        value,
+        label: el.props.children
+      });
+
+      if (emitEvent && onChange) {
+        onChange(value, oldValue);
+      }
+    }
   }
 
-  public onMouseDown = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  private toggleMenu(val: boolean) {
+    this.setState({ expanded: val });
 
-    const { visible } = this.state;
-    if (visible) this.hide();
-    else this.show();
-  };
-
-  public onItemMouseDown = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
-  private getLabel(value: any) {
-    const { children } = this.props;
-    const item = children.find(({ props }: any) => props.children === value);
-    if (item) return item.props.children;
+    requestAnimationFrame(() => {
+      if (val) {
+        window.addEventListener('mousedown', this.onWindowMouseDown);
+      } else {
+        window.removeEventListener('mousedown', this.onWindowMouseDown);
+      }
+    })
   }
 
-  public render() {
+  private onItemClick = (value: string) => () => {
+    this.setValue(value);
+    this.toggleMenu(false);
+  }
+
+  private onItemMouseDown = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  }
+
+  private onMouseDown = () => {
+    this.toggleMenu(true);
+  }
+
+  public onWindowMouseDown = () => {
+    this.toggleMenu(false);
+  };
+
+  render() {
     const { children, style } = this.props;
-    const { selectedLabel, visible } = this.state;
+    const { expanded, label, value } = this.state;
 
     return (
-      <StyledDropdown
-        className="dropdown"
-        onMouseDown={this.onMouseDown}
-        style={style}
-      >
-        <Value>{selectedLabel}</Value>
-        <DropIcon activated={visible} />
-        <ContextMenu style={{ top: 32, width: '100%' }} visible={visible}>
+      <StyledDropdown onMouseDown={this.onMouseDown} style={style}>
+        <Label>{label}</Label>
+        <DropIcon expanded={expanded} />
+        <ContextMenu style={{ top: 32, width: '100%' }} visible={expanded}>
           {React.Children.map(children, child => {
-            const itemValue = child.props.value;
+            const { props } = child;
+  
             return React.cloneElement(child, {
-              selected: this.value === itemValue,
-              onClick: this.onItemClick(itemValue),
+              selected: value === props.value,
+              onClick: this.onItemClick(props.value),
               onMouseDown: this.onItemMouseDown,
               dense: true,
             });
@@ -165,4 +114,4 @@ export class Dropdown extends React.PureComponent<Props, State> {
       </StyledDropdown>
     );
   }
-}
+};

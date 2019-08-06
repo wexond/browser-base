@@ -21,44 +21,46 @@ export const ContextMenu = styled.div`
   `}
 `;
 
+export interface ContextMenuItemProps {
+  icon?: string;
+  selected?: boolean;
+  theme?: ITheme;
+  dense?: boolean;
+}
+
 export const ContextMenuItem = styled.div`
   padding: 12px 24px;
   font-weight: 400;
 
   ${({
-    icon,
-    selected,
-    theme,
-    dense,
-  }: {
-    icon?: string;
-    selected?: boolean;
-    theme?: ITheme;
-    dense?: boolean;
-  }) => css`
+  icon,
+  selected,
+  theme,
+  dense,
+}: ContextMenuItemProps) => css`
     font-size: ${dense ? 13 : 14}px;
     padding: ${dense ? 8 : 12}px ${dense ? 12 : 24}px;
 
     background-color: ${selected
-      ? theme['overlay.foreground'] === 'light'
-        ? 'rgba(255, 255, 255, 0.15)'
-        : 'rgba(0, 0, 0, 0.1)'
-      : 'none'};
+    ? theme['overlay.foreground'] === 'light'
+      ? 'rgba(255, 255, 255, 0.15)'
+      : 'rgba(0, 0, 0, 0.1)'
+    : 'none'};
 
     &:hover {
       background-color: ${theme['overlay.foreground'] === 'light'
-        ? `rgba(255, 255, 255, ${selected ? 0.15 : 0.08})`
-        : `rgba(0, 0, 0, ${selected ? 0.1 : 0.06})`};
+    ? `rgba(255, 255, 255, ${selected ? 0.15 : 0.08})`
+    : `rgba(0, 0, 0, ${selected ? 0.1 : 0.06})`};
     }
 
     ${icon &&
-      `
+  `
       padding-left: ${24 + 16 + 8}px;
       &:before {
         content: '';
         filter: ${
-          theme['overlay.foreground'] === 'light' ? 'invert(100%)' : 'none'
-        };
+  theme['overlay.foreground'] === 'light' ? 'invert(100%)' : 'none'
+  };
         opacity: 0.54;
         ${centerIcon()};
         width: 16px;
