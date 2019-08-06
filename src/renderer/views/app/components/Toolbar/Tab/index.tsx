@@ -219,7 +219,11 @@ export default observer(({ tab }: { tab: ITab }) => {
             : shadeBlendConvert(
                 store.theme['tab.backgroundOpacity'],
                 tab.background,
+<<<<<<< HEAD
                 '#eee', //TODO(sentialx): Theme
+=======
+                '#eee',
+>>>>>>> feat: add toolbar under the tab bar
               ),
         }}
       >
