@@ -42,6 +42,10 @@ export const DropIcon = styled.div`
   margin-left: auto;
   margin-right: 16px;
   ${centerIcon('contain')};
+
+  ${({ expanded }: { expanded: boolean }) => css`
+    transform: ${expanded ? 'rotate(180deg)' : 'rotate(0deg)'};
+  `}
 `;
 
 export const Container = styled.div`

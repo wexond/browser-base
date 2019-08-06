@@ -19,7 +19,8 @@ export class Item extends React.PureComponent<Props, State> {
   }
 
   private onClick = () => {
-    this.setState({ expanded: true });
+    const { expanded } = this.state;
+    this.setState({ expanded: !expanded });
   }
 
   render() {
@@ -31,7 +32,7 @@ export class Item extends React.PureComponent<Props, State> {
         <Header onClick={this.onClick}>
           <Icon icon={icon} />
           <Label>{label}</Label>
-          <DropIcon />
+          <DropIcon expanded={expanded} />
         </Header>
         <Container expanded={expanded}>
           {children}
