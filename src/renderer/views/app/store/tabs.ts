@@ -204,10 +204,6 @@ export class TabsStore {
     id: number,
     isWindow: boolean = false,
   ) {
-    if (isWindow) {
-      store.overlay.visible = false;
-    }
-
     this.removedTabs = 0;
 
     const tab = new ITab(options, id, store.tabGroups.currentGroupId, isWindow);
