@@ -10,7 +10,7 @@ import { Content } from '../../../style';
 import { Header } from '../style';
 
 const onEditClick = () => {
-  
+  store.overlay.dialogContent = 'edit-address';
 }
 
 const onRemoveClick = () => {
@@ -28,7 +28,7 @@ const Menu = observer(() => {
 
   return (
     <ContextMenu style={style} visible={store.autoFill.menuVisible}>
-      {item.type === 'address' && <ContextMenuItem
+      {item && item.type === 'address' && <ContextMenuItem
         icon={icons.edit}
         onClick={onEditClick}
       >

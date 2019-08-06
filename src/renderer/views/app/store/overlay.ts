@@ -52,7 +52,7 @@ export class OverlayStore {
   private timeout: any;
 
   @observable
-  public dialogContent: 'privacy' = null;
+  public dialogContent: 'privacy' | 'edit-address' = null;
 
   @computed
   public get searchBoxValue() {

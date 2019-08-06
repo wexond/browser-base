@@ -44,6 +44,14 @@ export const Title = styled.div`
 
 export const Content = styled.div`
   padding: 8px 16px 0px 16px;
+
+  & .textfield {
+    width: 100%;
+  }
+
+  & > .textfield:not(:first-child) {
+    margin-top: 24px;
+  }
 `;
 
 export const Buttons = styled.div`
