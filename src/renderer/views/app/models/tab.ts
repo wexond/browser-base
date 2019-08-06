@@ -56,6 +56,9 @@ export class ITab {
   @observable
   public hasCredentials = false;
 
+  @observable
+  public addressBarText = '';
+
   public left = 0;
   public lastUrl = '';
   public isClosing = false;
@@ -115,7 +118,7 @@ export class ITab {
       }
 
       if (!store.inputFocused) {
-        store.inputText = url;
+        this.addressBarText = url;
       }
 
       this.url = url;

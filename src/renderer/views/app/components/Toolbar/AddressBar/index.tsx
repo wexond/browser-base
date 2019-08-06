@@ -26,7 +26,10 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 };
 
 const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  store.inputText = e.currentTarget.value;
+  const { selectedTab } = store.tabs;
+  if (selectedTab) {
+    selectedTab.addressBarText = e.currentTarget.value;
+  }
 };
 
 const onFocus = () => {
@@ -42,13 +45,15 @@ const onBlur = () => {
 };
 
 export const AddressBar = observer(() => {
+  const { selectedTab } = store.tabs;
+
   return (
     <Center>
       <StyledAddressBar
         placeholder="Search in Google or type an URL"
         onChange={onChange}
         onKeyPress={onKeyPress}
-        value={store.inputText}
+        value={selectedTab ? selectedTab.addressBarText : ''}
         onBlur={onBlur}
         onFocus={onFocus}
         ref={store.inputRef}
