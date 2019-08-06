@@ -8,19 +8,19 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const PORT = 4444;
 
-const getHtml = name => {
+const getHtml = (scope, name) => {
   return new HtmlWebpackPlugin({
     title: 'Wexond',
     template: 'static/pages/app.html',
     filename: `${name}.html`,
-    chunks: ['vendor', name],
+    chunks: [`vendor.${scope}`, name],
   });
 };
 
-const applyEntries = (config, entries) => {
+const applyEntries = (scope, config, entries) => {
   for (const entry of entries) {
     config.entry[entry] = [`./src/renderer/views/${entry}`];
-    config.plugins.push(getHtml(entry));
+    config.plugins.push(getHtml(scope, entry));
 
     if (dev) {
       config.entry[entry].unshift('react-hot-loader/patch');
@@ -28,40 +28,43 @@ const applyEntries = (config, entries) => {
   }
 };
 
-const config = {
-  plugins: [new HardSourceWebpackPlugin()],
+const getBaseConfig = name => {
+  const config = {
+    plugins: [new HardSourceWebpackPlugin()],
 
-  output: {},
+    output: {},
+    entry: {},
 
-  entry: {
-    vendor: [
-      'react',
-      'react-dom',
-      'mobx',
-      'mobx-react-lite',
-      'styled-components',
-    ],
-  },
-
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          chunks: 'initial',
-          name: 'vendor',
-          test: 'vendor',
-          enforce: true,
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          vendor: {
+            chunks: 'initial',
+            name: `vendor.${name}`,
+            test: `vendor.${name}`,
+            enforce: true,
+          },
         },
       },
     },
-  },
+  };
+
+  config.entry[`vendor.${name}`] = [
+    'react',
+    'react-dom',
+    'mobx',
+    'mobx-react-lite',
+    'styled-components',
+  ];
+
+  if (dev) {
+    config.plugins.push(new webpack.HotModuleReplacementPlugin());
+  }
+
+  return config;
 };
 
-if (dev) {
-  config.plugins.push(new webpack.HotModuleReplacementPlugin());
-}
-
-const appConfig = getConfig(config, {
+const appConfig = getConfig(getBaseConfig('app'), {
   target: 'electron-renderer',
 
   devServer: {
@@ -72,7 +75,7 @@ const appConfig = getConfig(config, {
   },
 });
 
-const webConfig = getConfig(config, {
+const webConfig = getConfig(getBaseConfig('web'), {
   target: 'web',
 
   output: {
@@ -80,7 +83,7 @@ const webConfig = getConfig(config, {
   },
 });
 
-applyEntries(appConfig, [
+applyEntries('app', appConfig, [
   'app',
   'permissions',
   'auth',
@@ -89,6 +92,6 @@ applyEntries(appConfig, [
   'find',
 ]);
 
-applyEntries(webConfig, ['settings']);
+applyEntries('web', webConfig, ['settings']);
 
 module.exports = [appConfig, webConfig];
