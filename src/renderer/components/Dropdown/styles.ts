@@ -23,6 +23,16 @@ export const StyledDropdown = styled.div`
   `}
 `;
 
+export const Label = styled.div`
+  font-size: 13px;
+  margin-left: 8px;
+  pointer-events: none;
+
+  ${({ theme }: { theme: ITheme }) => css`
+    color: ${theme['control.valueColor']};
+  `}
+`;
+
 export const DropIcon = styled.div`
   width: 24px;
   height: 24px;
@@ -33,18 +43,8 @@ export const DropIcon = styled.div`
   transition: 0.2s ${EASING_FUNCTION} transform;
   ${centerIcon(24)};
 
-  ${({ activated, theme }: { activated: boolean; theme?: ITheme }) => css`
-    transform: ${activated ? 'rotate(180deg)' : 'rotate(0deg)'};
+  ${({ expanded, theme }: { expanded: boolean; theme?: ITheme }) => css`
+    transform: ${expanded ? 'rotate(180deg)' : 'rotate(0deg)'};
     filter: ${theme['control.icon'] === 'dark' ? 'invert(100%)' : 'unset'};
-  `}
-`;
-
-export const Value = styled.div`
-  font-size: 13px;
-  margin-left: 8px;
-  pointer-events: none;
-
-  ${({ theme }: { theme: ITheme }) => css`
-    color: ${theme['control.valueColor']};
   `}
 `;

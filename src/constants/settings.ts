@@ -13,4 +13,7 @@ export const DEFAULT_SETTINGS = {
     },
   ],
   searchEngine: 0,
+  startupBehavior: {
+    type: 'continue',
+  },
 };

@@ -4,11 +4,15 @@ import { observer } from 'mobx-react-lite';
 import store from '../../store';
 import { OverlayContent } from '../../store/overlay';
 import { Default, History, Bookmarks, Settings } from './views';
+import BrowsingDataDialog from './views/settings/Privacy/BrowsingDataDialog';
+import AddressDialog from './views/settings/Autofill/AddressDialog';
 import {
   StyledOverlay,
   HeaderText,
   HeaderArrow,
   StyledContainer,
+  DialogsContainer,
+  Dark,
 } from './style';
 
 export const Header = ({ children, clickable }: any) => {
@@ -28,8 +32,10 @@ const onClick = () => {
   ) {
     store.overlay.visible = false;
   }
+
   store.overlay.dialTypeMenuVisible = false;
   store.bookmarks.menuVisible = false;
+  store.autoFill.menuVisible = false;
 };
 
 export const preventHiding = (e: any) => {
@@ -44,6 +50,7 @@ export const Overlay = observer(() => {
       <History />
       <Bookmarks />
       <Settings />
+      <Dialogs />
     </StyledOverlay>
   );
 });
@@ -66,3 +73,13 @@ export const Container = observer(
     );
   },
 );
+
+export const Dialogs = observer(() => {
+  return (
+    <DialogsContainer visible={store.overlay.dialogContent != null}>
+      <Dark onClick={onClick} />
+      <BrowsingDataDialog />
+      <AddressDialog />
+    </DialogsContainer>
+  );
+});

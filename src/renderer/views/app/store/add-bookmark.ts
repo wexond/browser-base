@@ -22,7 +22,7 @@ export class AddBookmarkStore {
     const bookmark = store.overlay.bookmark;
 
     this.titleRef.current.value = bookmark.title;
-    this.dropdownRef.current.value = bookmark.parent;
+    this.dropdownRef.current.setValue(bookmark.parent, false);
     this.visible = true;
   }
 

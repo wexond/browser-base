@@ -8,6 +8,8 @@ import { Appearance } from './Appearance';
 import { Container } from '../..';
 import { Scrollable2, Sections } from '../../style';
 import { AddressBar } from './AddressBar';
+import { Privacy } from './Privacy';
+import { Autofill } from './Autofill';
 
 const MenuItem = observer(
   ({ section, children }: { section: SettingsSection; children: any }) => (
@@ -28,6 +30,7 @@ export const Settings = observer(() => {
       <Scrollable2>
         <NavigationDrawer title="Settings" search>
           <MenuItem section="appearance">Appearance</MenuItem>
+          <MenuItem section="autofill">Autofill</MenuItem>
           <MenuItem section="startup">On startup</MenuItem>
           <MenuItem section="address-bar">Address bar</MenuItem>
           <MenuItem section="privacy">Privacy</MenuItem>
@@ -39,7 +42,9 @@ export const Settings = observer(() => {
         </NavigationDrawer>
         <Sections style={{ paddingTop: 48 }}>
           {selectedSection === 'appearance' && <Appearance />}
+          {selectedSection === 'autofill' && <Autofill />}
           {selectedSection === 'address-bar' && <AddressBar />}
+          {selectedSection === 'privacy' && <Privacy />}
         </Sections>
       </Scrollable2>
     </Container>

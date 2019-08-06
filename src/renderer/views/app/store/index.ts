@@ -17,8 +17,9 @@ import { WeatherStore } from './weather';
 import { SettingsStore } from './settings';
 import { AddBookmarkStore } from './add-bookmark';
 import { extensionsRenderer } from 'electron-extensions';
-import { FormFillStore } from './form-fill';
+import { AutoFillStore } from './autofill';
 import { getCurrentWindow } from '../utils';
+import { EditAddressStore } from './edit-address';
 
 export class Store {
   public history = new HistoryStore();
@@ -34,7 +35,8 @@ export class Store {
   public downloads = new DownloadsStore();
   public weather = new WeatherStore();
   public addBookmark = new AddBookmarkStore();
-  public formFill = new FormFillStore();
+  public autoFill = new AutoFillStore();
+  public editAddress = new EditAddressStore();
 
   @observable
   public theme = lightTheme;

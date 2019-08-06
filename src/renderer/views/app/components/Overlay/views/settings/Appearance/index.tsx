@@ -5,25 +5,27 @@ import { darkTheme, lightTheme } from '~/renderer/constants';
 import { Dropdown } from '~/renderer/components/Dropdown';
 import Switch from '~/renderer/components/Switch';
 import { Content } from '../../../style';
-import { Title, Row, Control, Header } from '../style';
 import { onSwitchChange } from '~/renderer/views/app/utils';
+import { Title, Row, Control, Header } from '../style';
 
-const onThemeChange = (value: 'Light' | 'Dark') => {
-  store.settings.object.darkTheme = value === 'Dark';
-  store.theme = value === 'Dark' ? darkTheme : lightTheme;
+const onThemeChange = (value: 'light' | 'dark') => {
+  const dark = value === 'dark';
+
+  store.settings.object.darkTheme = dark;
+  store.theme = dark ? darkTheme : lightTheme;
   store.settings.save();
 };
 
 const ThemeVariant = () => {
-  const defaultValue = store.settings.object.darkTheme ? 'Dark' : 'Light';
+  const defaultValue = store.settings.object.darkTheme ? 'dark' : 'light';
 
   return (
     <Row>
       <Title>Theme variant</Title>
       <Control>
-        <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
-          <Dropdown.Item>Light</Dropdown.Item>
-          <Dropdown.Item>Dark</Dropdown.Item>
+      <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
+          <Dropdown.Item value='light'>Light</Dropdown.Item>
+          <Dropdown.Item value='dark'>Dark</Dropdown.Item>
         </Dropdown>
       </Control>
     </Row>

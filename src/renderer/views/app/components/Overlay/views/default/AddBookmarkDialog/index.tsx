@@ -51,7 +51,7 @@ export default observer(() => {
         <Label>Folder</Label>
         <Dropdown ref={store.addBookmark.dropdownRef} onChange={onChange}>
           {store.bookmarks.folders.map(item => (
-            <Dropdown.Item key={item._id}>
+            <Dropdown.Item key={item._id} value={item._id}>
               {getBookmarkTitle(item)}
             </Dropdown.Item>
           ))}

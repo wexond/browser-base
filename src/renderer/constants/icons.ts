@@ -33,6 +33,7 @@ export const icons = {
   save: require('~/renderer/resources/icons/save.svg'),
   key: require('~/renderer/resources/icons/key.svg'),
   incognito: require('~/renderer/resources/icons/incognito.svg'),
+  location: require('~/renderer/resources/icons/location.svg'),
   weather: {
     day: {
       clear: require('~/renderer/resources/icons/weather/day/clear.png'),

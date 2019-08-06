@@ -97,17 +97,20 @@ export const runMessagingService = (appWindow: AppWindow) => {
     const hostname = view.hostname;
 
     if (!update) {
-      await storage.insert<IFormFillData>({
+      const item = await storage.insert<IFormFillData>({
         scope: 'formfill',
         item: {
           type: 'password',
           url: hostname,
+          favicon: appWindow.viewManager.selected.favicon,
           fields: {
             username,
             passLength: password.length,
           },
         },
       });
+
+      appWindow.webContents.send('credentials-insert', item);
     } else {
       await storage.update({
         scope: 'formfill',
@@ -121,6 +124,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
           'fields.username': username,
         },
       });
+
+      appWindow.webContents.send('credentials-update', { ...data, hostname });
     }
 
     await setPassword('wexond', `${hostname}-${username}`, password);
@@ -140,5 +145,6 @@ export const runMessagingService = (appWindow: AppWindow) => {
     });
 
     await deletePassword('wexond', `${view.hostname}-${fields.username}`);
+    appWindow.webContents.send('credentials-remove', _id);
   });
 };
