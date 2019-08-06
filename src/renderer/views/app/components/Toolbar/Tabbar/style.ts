@@ -14,7 +14,7 @@ export const StyledTabbar = styled.div`
 `;
 
 export const TabsContainer = styled.div`
-  height: calc(100% - 4px);
+  height: calc(100% - 6px);
   flex: 1;
   margin-right: ${TOOLBAR_BUTTON_WIDTH + 48}px;
   position: relative;
@@ -28,8 +28,8 @@ export const TabsContainer = styled.div`
 export const AddTab = styled(ToolbarButton)`
   position: absolute;
   left: 0;
-  top: 4px;
-  height: calc(100% - 4px);
+  top: 6px;
+  height: calc(100% - 6px);
 `;
 
 export const Handle = styled.div`

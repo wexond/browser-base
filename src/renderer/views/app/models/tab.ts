@@ -8,6 +8,7 @@ import {
   TABS_PADDING,
   TAB_ANIMATION_DURATION,
   TAB_DEFAULT_BACKGROUND,
+  TAB_MAX_WIDTH,
 } from '../constants';
 import { callViewMethod } from '~/utils';
 import { NEWTAB_URL } from '~/constants/tabs';
@@ -291,8 +292,8 @@ export class ITab {
     const width =
       containerWidth / (tabs.length + store.tabs.removedTabs) - TABS_PADDING;
 
-    if (width > 200) {
-      return 200;
+    if (width > TAB_MAX_WIDTH) {
+      return TAB_MAX_WIDTH;
     }
     if (width < 72) {
       return 72;
