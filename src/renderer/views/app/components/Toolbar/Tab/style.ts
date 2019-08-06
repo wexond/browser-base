@@ -90,7 +90,7 @@ export const StyledTitle = styled.div`
   margin-left: 8px;
 
   ${({ isIcon }: TitleProps) => css`
-    margin-left: ${!isIcon ? 0 : 8}px;
+    margin-left: ${!isIcon ? 2 : 8}px;
   `};
 `;
 
