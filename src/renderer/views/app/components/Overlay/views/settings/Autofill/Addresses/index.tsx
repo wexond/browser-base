@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import store from '~/renderer/views/app/store';
 import { icons } from '~/renderer/constants';
 import { IFormFillData } from '~/interfaces';
-import { Section } from '../Section';
+import { Section, onMoreClick } from '../Section';
 import { More } from '../Passwords/styles';
 import { StyledItem } from './styles';
 
@@ -12,7 +12,7 @@ const Item = ({ data }: { data: IFormFillData }) => {
   return (
     <StyledItem>
       {data.fields.address}
-      <More style={{ marginLeft: 'auto' }} />
+      <More onClick={onMoreClick(data)} style={{ marginLeft: 'auto' }} />
     </StyledItem>
   );
 }

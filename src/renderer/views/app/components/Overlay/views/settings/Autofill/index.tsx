@@ -9,32 +9,48 @@ import { Addresses } from './Addresses';
 import { Content } from '../../../style';
 import { Header } from '../style';
 
+const onEditClick = () => {
+  
+}
+
 const onRemoveClick = () => {
   const item = store.autoFill.selectedItem;
-
   store.autoFill.removeItem(item);
 }
 
-export const Autofill = observer(() => {
+const Menu = observer(() => {
+  const item = store.autoFill.selectedItem;
+
+  const style = {
+    top: store.autoFill.menuTop,
+    left: store.autoFill.menuLeft - 130,
+  }
+
+  return (
+    <ContextMenu style={style} visible={store.autoFill.menuVisible}>
+      {item.type === 'address' && <ContextMenuItem
+        icon={icons.edit}
+        onClick={onEditClick}
+      >
+        Edit
+      </ContextMenuItem>}
+      <ContextMenuItem
+        icon={icons.trash}
+        onClick={onRemoveClick}
+      >
+        Remove
+      </ContextMenuItem>
+    </ContextMenu>
+  );
+});
+
+export const Autofill = () => {
   return (
     <Content>
       <Header style={{ paddingBottom: 12 }}>Autofill</Header>
       <Passwords />
       <Addresses />
-      <ContextMenu
-          style={{
-            top: store.autoFill.menuTop,
-            left: store.autoFill.menuLeft - 130,
-          }}
-          visible={store.autoFill.menuVisible}
-        >
-          <ContextMenuItem
-            icon={icons.trash}
-            onClick={onRemoveClick}
-          >
-            Remove
-          </ContextMenuItem>
-        </ContextMenu>
+      <Menu />
     </Content>
   );
-});
+};

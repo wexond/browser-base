@@ -5,7 +5,7 @@ import { getPassword } from 'keytar';
 import store from '~/renderer/views/app/store';
 import { icons } from '~/renderer/constants';
 import { IFormFillData } from '~/interfaces';
-import { Section } from '../Section';
+import { Section, onMoreClick } from '../Section';
 import { Container, HeaderLabel, Wrapper, Icon, Label, PasswordIcon, More } from './styles';
 
 const passwords: Map<string, string> = new Map();
@@ -21,17 +21,6 @@ const getUserPassword = async (data: IFormFillData) => {
 
   passwords.set(account, realPassword);
   return realPassword;
-}
-
-const onMoreClick = (data: IFormFillData) => (e: React.MouseEvent) => {
-  e.stopPropagation();
-
-  const { left, top } = e.currentTarget.getBoundingClientRect();
-  
-  store.autoFill.selectedItem = data;
-  store.autoFill.menuTop = top;
-  store.autoFill.menuLeft = left;
-  store.autoFill.menuVisible = true;
 }
 
 const Item = ({ data }: { data: IFormFillData }) => {

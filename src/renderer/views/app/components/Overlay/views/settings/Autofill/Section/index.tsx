@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { IFormFillData } from '~/interfaces';
+import store from '~/renderer/views/app/store';
 import { StyledSection, Header, Icon, Label, DropIcon, Container } from './styles';
 
 interface Props {
@@ -7,6 +9,17 @@ interface Props {
   icon: any;
   children?: any;
   style?: any;
+}
+
+export const onMoreClick = (data: IFormFillData) => (e: React.MouseEvent) => {
+  e.stopPropagation();
+
+  const { left, top } = e.currentTarget.getBoundingClientRect();
+  
+  store.autoFill.selectedItem = data;
+  store.autoFill.menuTop = top;
+  store.autoFill.menuLeft = left;
+  store.autoFill.menuVisible = true;
 }
 
 export const Section = (props: Props) => {
