@@ -29,6 +29,7 @@ export const StyledToolbar = styled.div`
 export const Buttons = styled.div`
   display: flex;
   align-items: center;
+  margin-right: 2px;
 `;
 
 export const Separator = styled.div`
