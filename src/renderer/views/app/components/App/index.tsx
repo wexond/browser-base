@@ -6,9 +6,9 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Style } from '../../style';
 import { ipcRenderer } from 'electron';
 import { Line, StyledApp } from './style';
-import { Overlay } from '../Overlay';
 import store from '../../store';
 import { Tabbar } from '../Toolbar/Tabbar';
+import { Toolbar } from '../Toolbar';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -25,8 +25,9 @@ const App = observer(() => {
         style={{ backgroundColor: store.theme['overlay.backgroundColor'] }}
       >
         <Tabbar />
+        <Toolbar />
+        <Line />
         <GlobalStyle />
-        <Overlay />
       </StyledApp>
     </ThemeProvider>
   );

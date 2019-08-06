@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { platform } from 'os';
 
 import { ITheme } from '~/interfaces';
-import { TABBAR_HEIGHT } from '../../constants';
+import { TOOLBAR_HEIGHT } from '../../constants';
 
 export const StyledToolbar = styled.div`
   position: relative;
@@ -12,7 +12,7 @@ export const StyledToolbar = styled.div`
   align-items: center;
   color: rgba(0, 0, 0, 0.8);
   width: 100%;
-  height: ${TABBAR_HEIGHT}px;
+  height: ${TOOLBAR_HEIGHT}px;
   padding-right: ${platform() !== 'darwin' ? 138 : 0}px;
 
   ${({
@@ -25,7 +25,7 @@ export const StyledToolbar = styled.div`
     overlayType: string;
   }) => css`
     transition: ${theme.animations ? '0.2s background-color' : 'none'};
-    margin-top: ${isHTMLFullscreen ? -TABBAR_HEIGHT : 0}px;
+    margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
     background-color: ${overlayType !== 'default'
       ? theme['toolbar.overlay.backgroundColor']
       : theme['toolbar.backgroundColor']};

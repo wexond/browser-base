@@ -8,12 +8,10 @@ import {
   StyledIcon,
   StyledTitle,
   StyledClose,
-  StyledBorder,
   StyledOverlay,
   TabContainer,
 } from './style';
 import { shadeBlendConvert } from '~/utils';
-import Ripple from '~/renderer/components/Ripple';
 import { ITab } from '../../../models';
 import store from '../../../store';
 import { remote } from 'electron';
@@ -222,9 +220,6 @@ export default observer(({ tab }: { tab: ITab }) => {
                 store.theme['tab.backgroundOpacity'],
                 tab.background,
                 '#eee',
-                // store.overlay.currentContent !== 'default'
-                // ? store.theme['toolbar.overlay.backgroundColor']
-                // : store.theme['toolbar.backgroundColor'],
               ),
         }}
       >
