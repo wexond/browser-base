@@ -10,7 +10,6 @@ import {
   TAB_DEFAULT_BACKGROUND,
 } from '../constants';
 import { callViewMethod } from '~/utils';
-import { NEWTAB_URL } from '~/constants/tabs';
 
 const isColorAcceptable = (color: string) => {
   return true;
