@@ -80,8 +80,6 @@ const webConfig = getConfig(config, {
   },
 });
 
-console.log(webConfig);
-
 applyEntries(appConfig, [
   'app',
   'permissions',

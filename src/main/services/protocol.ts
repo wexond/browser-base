@@ -17,29 +17,45 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 export const registerProtocol = (session: Electron.Session) => {
-  session.protocol.registerFileProtocol(
-    'wexond',
-    (request, callback: any) => {
-      const parsed = parse(request.url);
+  if (process.env.ENV === 'dev') {
+    session.protocol.registerHttpProtocol(
+      'wexond',
+      (request, callback: any) => {
+        const parsed = parse(request.url);
 
-      const basePath = join(__dirname, 'build');
+        const baseUrl = 'http://localhost:4444/';
 
-      if (parsed.path) {
-        return callback({ path: join(basePath, parsed.path) });
-      }
+        if (parsed.path === '/') {
+          return callback({
+            url: `${baseUrl}${parsed.hostname}.html`,
+          });
+        }
 
-      if (parsed.path === '/') {
-        return callback({
-          path: join(basePath, parsed.hostname + '.html'),
-        });
-      }
+        callback({ url: `${baseUrl}${parsed.path}` });
+      },
+      error => {
+        if (error) console.error(error);
+      },
+    );
+  } else {
+    session.protocol.registerFileProtocol(
+      'wexond',
+      (request, callback: any) => {
+        const parsed = parse(request.url);
 
-      return callback({
-        path: join(basePath, parsed.path),
-      });
-    },
-    error => {
-      if (error) console.error('Failed to register protocol');
-    },
-  );
+        const basePath = join(__dirname, 'build');
+
+        if (parsed.path === '/') {
+          return callback({
+            path: join(basePath, `${parsed.hostname}.html`),
+          });
+        }
+
+        callback({ path: join(basePath, parsed.path) });
+      },
+      error => {
+        if (error) console.error(error);
+      },
+    );
+  }
 };
