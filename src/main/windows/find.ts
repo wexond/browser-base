@@ -1,5 +1,5 @@
 import { AppWindow } from '.';
-import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
+import { TABBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 import { PopupWindow } from './popup';
 
 const WIDTH = 400;
@@ -30,7 +30,7 @@ export class FindWindow extends PopupWindow {
     const cBounds = this.appWindow.getContentBounds();
     this.setBounds({
       x: Math.round(cBounds.x + cBounds.width - WIDTH),
-      y: cBounds.y + TOOLBAR_HEIGHT,
+      y: cBounds.y + TABBAR_HEIGHT,
     } as any);
   }
 }

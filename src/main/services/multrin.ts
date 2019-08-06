@@ -6,7 +6,7 @@ import mouseHooks from 'mouse-hooks';
 import { ProcessWindow } from '../models';
 import { AppWindow } from '../windows';
 import { windowManager, Window } from 'node-window-manager';
-import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
+import { TABBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 import { windowsManager } from '..';
 import { IRectangle, IPoint } from '~/interfaces';
 
@@ -144,9 +144,9 @@ export class Multrin {
 
           this.appWindow.setContentBounds({
             width: bounds.width,
-            height: bounds.height + TOOLBAR_HEIGHT,
+            height: bounds.height + TABBAR_HEIGHT,
             x: bounds.x,
-            y: bounds.y - TOOLBAR_HEIGHT,
+            y: bounds.y - TABBAR_HEIGHT,
           });
 
           this.isMoving = false;
@@ -166,8 +166,8 @@ export class Multrin {
 
         e.y = winBounds.y;
 
-        contentBounds.y -= TOOLBAR_HEIGHT;
-        contentBounds.height = 2 * TOOLBAR_HEIGHT;
+        contentBounds.y -= TABBAR_HEIGHT;
+        contentBounds.height = 2 * TABBAR_HEIGHT;
         if (
           !this.detached &&
           containsPoint(contentBounds, e) &&
@@ -250,8 +250,8 @@ export class Multrin {
   public getContentArea() {
     const bounds = this.appWindow.getContentBounds();
 
-    bounds.y += TOOLBAR_HEIGHT;
-    bounds.height -= TOOLBAR_HEIGHT;
+    bounds.y += TABBAR_HEIGHT;
+    bounds.height -= TABBAR_HEIGHT;
 
     return bounds;
   }

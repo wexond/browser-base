@@ -15,10 +15,6 @@ export class DownloadsStore {
       const not = new Notification(`Downloading ${item.fileName}`, {
         body: 'Open Overlay to see the downloads.',
       });
-
-      not.onclick = () => {
-        store.overlay.visible = true;
-      };
     });
 
     ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {

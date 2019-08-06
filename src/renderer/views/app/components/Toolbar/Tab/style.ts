@@ -54,7 +54,6 @@ export const StyledTab = styled.div`
   height: 100%;
   width: 0;
   left: 0;
-  align-items: center;
   will-change: width;
   -webkit-app-region: no-drag;
 
@@ -139,9 +138,10 @@ export const StyledBorder = styled.div`
 
 export const TabContainer = styled.div`
   position: relative;
-  border-radius: 6px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
   width: 100%;
-  height: calc(100% - 4px);
+  height: 100%;
   overflow: hidden;
   display: flex;
   align-items: center;

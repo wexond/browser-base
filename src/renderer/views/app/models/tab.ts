@@ -1,11 +1,14 @@
 import { ipcRenderer } from 'electron';
-import { parse } from 'url';
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
 import Vibrant = require('node-vibrant');
 
 import store from '../store';
-import { TABS_PADDING, TAB_ANIMATION_DURATION } from '../constants';
+import {
+  TABS_PADDING,
+  TAB_ANIMATION_DURATION,
+  TAB_DEFAULT_BACKGROUND,
+} from '../constants';
 import { getColorBrightness, callViewMethod } from '~/utils';
 
 const isColorAcceptable = (color: string) => {
@@ -39,7 +42,7 @@ export class ITab {
   public width = 0;
 
   @observable
-  public background = store.theme.accentColor;
+  public background = TAB_DEFAULT_BACKGROUND;
 
   @observable
   public url = '';
@@ -74,24 +77,6 @@ export class ITab {
   @computed
   public get isHovered() {
     return store.tabs.hoveredTabId === this.id;
-  }
-
-  @computed
-  public get borderVisible() {
-    const tabs = this.tabGroup.tabs;
-
-    const i = tabs.indexOf(this);
-    const nextTab = tabs[i + 1];
-
-    if (
-      (nextTab && (nextTab.isHovered || nextTab.isSelected)) ||
-      this.isSelected ||
-      this.isHovered
-    ) {
-      return false;
-    }
-
-    return true;
   }
 
   @computed
@@ -172,7 +157,7 @@ export class ITab {
               if (isColorAcceptable(palette.Vibrant.hex)) {
                 this.background = palette.Vibrant.hex;
               } else {
-                this.background = store.theme.accentColor;
+                this.background = TAB_DEFAULT_BACKGROUND;
               }
             } catch (e) {
               console.error(e);
@@ -197,7 +182,7 @@ export class ITab {
           this.background = themeColor;
           this.hasThemeColor = true;
         } else {
-          this.background = store.theme.accentColor;
+          this.background = TAB_DEFAULT_BACKGROUND;
           this.hasThemeColor = false;
         }
       },
@@ -253,39 +238,22 @@ export class ITab {
   @action
   public select() {
     if (!this.isClosing) {
-      store.overlay.isNewTab = this.url === 'about:blank';
-
-      if (store.overlay.isNewTab) {
-        store.overlay.visible = true;
-      }
-
       this.tabGroup.selectedTabId = this.id;
 
       ipcRenderer.send(`permission-dialog-hide-${store.windowId}`);
 
-      const show = () => {
-        if (this.isWindow) {
-          ipcRenderer.send(`browserview-hide-${store.windowId}`);
-          ipcRenderer.send(`select-window-${store.windowId}`, this.id);
-        } else {
-          ipcRenderer.send(`hide-window-${store.windowId}`);
-          if (!store.overlay.isNewTab) {
-            ipcRenderer.send(`browserview-show-${store.windowId}`);
-          }
-          ipcRenderer.send(`view-select-${store.windowId}`, this.id);
-          ipcRenderer.send(
-            `update-find-info-${store.windowId}`,
-            this.id,
-            this.findInfo,
-          );
-        }
-      };
-
-      if (store.overlay.visible && !store.overlay.isNewTab) {
-        store.overlay.visible = false;
-        setTimeout(show, store.settings.object.animations ? 200 : 0);
+      if (this.isWindow) {
+        ipcRenderer.send(`browserview-hide-${store.windowId}`);
+        ipcRenderer.send(`select-window-${store.windowId}`, this.id);
       } else {
-        show();
+        ipcRenderer.send(`hide-window-${store.windowId}`);
+        ipcRenderer.send(`browserview-show-${store.windowId}`);
+        ipcRenderer.send(`view-select-${store.windowId}`, this.id);
+        ipcRenderer.send(
+          `update-find-info-${store.windowId}`,
+          this.id,
+          this.findInfo,
+        );
       }
 
       requestAnimationFrame(() => {
@@ -391,11 +359,6 @@ export class ITab {
         const prevTab = tabs[index - 1];
         prevTab.select();
       }
-    }
-
-    if (this.tabGroup.tabs.length === 1) {
-      store.overlay.isNewTab = true;
-      store.overlay.visible = true;
     }
 
     this.removeTimeout = setTimeout(() => {

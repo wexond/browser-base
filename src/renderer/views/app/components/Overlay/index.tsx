@@ -26,7 +26,6 @@ export const Header = ({ children, clickable }: any) => {
 const onClick = () => {
   if (
     store.tabGroups.currentGroup.tabs.length > 0 &&
-    !store.overlay.isNewTab &&
     store.overlay.currentContent === 'default'
   ) {
     store.overlay.visible = false;
