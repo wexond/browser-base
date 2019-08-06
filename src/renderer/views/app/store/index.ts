@@ -54,9 +54,6 @@ export class Store {
   };
 
   @observable
-  public inputText = '';
-
-  @observable
   public inputFocused = false;
 
   public inputRef = React.createRef<HTMLInputElement>();
