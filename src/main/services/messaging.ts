@@ -102,6 +102,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
         item: {
           type: 'password',
           url: hostname,
+          favicon: appWindow.viewManager.selected.favicon,
           fields: {
             username,
             passLength: password.length,

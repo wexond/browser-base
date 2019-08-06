@@ -15,13 +15,9 @@ const onUpdateClick = () => {
   ipcRenderer.send('update-install');
 };
 
-const onKeyClick = async () => {
+const onKeyClick = () => {
   const { hostname } = parse(store.tabs.selectedTab.url);
-
-  const list = (await store.formFill.db.get({
-    type: 'password',
-    url: hostname,
-  })).filter(r => r.fields.username);
+  const list = store.autoFill.credentials.filter(r => r.url === hostname && r.fields.username);
 
   ipcRenderer.send(`credentials-show-${store.windowId}`, {
     content: 'list',

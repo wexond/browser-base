@@ -8,9 +8,10 @@ import { windowsManager } from '.';
 import storage from './services/storage';
 
 export class View extends BrowserView {
-  public title: string = '';
-  public url: string = '';
+  public title = '';
+  public url = '';
   public homeUrl: string;
+  public favicon = '';
 
   private window: AppWindow;
 
@@ -116,9 +117,11 @@ export class View extends BrowserView {
     this.webContents.addListener(
       'page-favicon-updated',
       async (e, favicons) => {
+        this.favicon = favicons[0];
+
         this.window.webContents.send(
           `browserview-favicon-updated-${this.webContents.id}`,
-          favicons[0],
+          this.favicon,
         );
       },
     );
