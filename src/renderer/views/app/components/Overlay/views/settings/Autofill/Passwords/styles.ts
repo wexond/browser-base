@@ -42,6 +42,7 @@ export const PasswordIcon = styled.div`
   margin-right: 12px;
   opacity: ${transparency.icons.inactive};
   cursor: pointer;
+  transition: 0.15s background-image;
   ${centerIcon('contain')};
 
   ${({ toggled }: { toggled: boolean }) => css`
