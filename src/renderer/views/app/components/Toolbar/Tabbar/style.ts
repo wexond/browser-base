@@ -16,7 +16,7 @@ export const StyledTabbar = styled.div`
 export const TabsContainer = styled.div`
   height: calc(100% - 4px);
   flex: 1;
-  margin-right: ${TOOLBAR_BUTTON_WIDTH + 32}px;
+  margin-right: ${TOOLBAR_BUTTON_WIDTH + 48}px;
   position: relative;
   overflow: hidden;
   white-space: nowrap;
