@@ -2,10 +2,9 @@ import * as React from 'react';
 
 import { Dropdown } from '~/renderer/components/Dropdown';
 import Switch from '~/renderer/components/Switch';
-import { Content } from '../../../app/components/Overlay/style';
-import { Title, Row, Control, Header } from '../../style';
-import { onSwitchChange } from '~/renderer/views/app/utils';
+import { Title, Row, Control, Header, Content } from '../../style';
 import { store } from '../../store';
+import { onSwitchChange } from '../../utils';
 
 const onThemeChange = (value: 'Light' | 'Dark') => {
   store.settings.darkTheme = value === 'Dark';

@@ -3,11 +3,11 @@ import styled, { css } from 'styled-components';
 
 import { EASING_FUNCTION } from '~/renderer/constants';
 import { robotoRegular, robotoMedium } from '~/renderer/mixins';
-import { Button } from '../../../../../settings/components/Privacy/BrowsingDataDialog/node_modules/~/renderer/components/Button';
-import store from '../../../../../settings/components/Privacy/BrowsingDataDialog/node_modules/~/renderer/views/app/store';
+import { Button } from '~/renderer/components/Button';
+import { store } from '../../store';
 
 const onHideClick = () => {
-  store.overlay.dialogContent = null;
+  store.dialogContent = null;
 };
 
 export const CloseButton = () => {

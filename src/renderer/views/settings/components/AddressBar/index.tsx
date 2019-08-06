@@ -4,8 +4,8 @@ import { Dropdown } from '~/renderer/components/Dropdown';
 import Switch from '~/renderer/components/Switch';
 import { Content } from '../../../app/components/Overlay/style';
 import { Title, Row, Control, Header } from '../../style';
-import { onSwitchChange } from '~/renderer/views/app/utils';
 import { store } from '../../store';
+import { onSwitchChange } from '../../utils';
 
 const SuggestionsToggle = () => {
   const { suggestions } = store.settings;

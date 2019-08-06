@@ -39,25 +39,6 @@ export const Title = styled.div`
   font-weight: 300;
 `;
 
-export const Back = styled.div`
-  ${centerIcon()};
-  background-image: url(${icons.arrowBack});
-  height: 24px;
-  width: 24px;
-  opacity: 0.54;
-  margin-right: 24px;
-
-  ${({ theme }: { theme?: ITheme }) => css`
-    filter: ${theme['overlay.foreground'] === 'light'
-      ? 'invert(100%)'
-      : 'none'};
-  `}
-
-  &:hover {
-    opacity: 1;
-  }
-`;
-
 export const Input = styled.input`
   border: none;
   outline: none;

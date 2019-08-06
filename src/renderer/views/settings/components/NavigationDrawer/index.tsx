@@ -6,30 +6,15 @@ import {
   Search,
   Input,
   Title,
-  Back,
   Header,
 } from './style';
 import { NavigationDrawerItem } from './NavigationDrawerItem';
-import store from '~/renderer/views/app/store';
-
-const onBack = (cb: (e?: React.MouseEvent) => void) => (
-  e: React.MouseEvent,
-) => {
-  e.stopPropagation();
-
-  if (cb) {
-    cb(e);
-  }
-
-  store.overlay.currentContent = 'default';
-};
 
 export const NavigationDrawer = ({
   children,
   title,
   search,
   onSearchInput,
-  onBackClick,
   style,
 }: {
   children?: any;
@@ -42,7 +27,6 @@ export const NavigationDrawer = ({
   return (
     <StyledNavigationDrawer>
       <Header>
-        <Back onClick={onBack(onBackClick)} />
         <Title>{title}</Title>
       </Header>
       {search && (

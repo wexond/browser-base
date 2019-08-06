@@ -28,57 +28,51 @@ const applyEntries = (config, entries) => {
   }
 };
 
-const getBaseConfig = port => {
-  const config = {
-    plugins: [new HardSourceWebpackPlugin()],
+const config = {
+  plugins: [new HardSourceWebpackPlugin()],
 
-    output: {},
+  output: {},
 
-    entry: {
-      vendor: [
-        'react',
-        'react-dom',
-        'mobx',
-        'mobx-react-lite',
-        'styled-components',
-      ],
-    },
+  entry: {
+    vendor: [
+      'react',
+      'react-dom',
+      'mobx',
+      'mobx-react-lite',
+      'styled-components',
+    ],
+  },
 
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          vendor: {
-            chunks: 'initial',
-            name: 'vendor',
-            test: 'vendor',
-            enforce: true,
-          },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          name: 'vendor',
+          test: 'vendor',
+          enforce: true,
         },
       },
     },
-  };
-
-  if (dev) {
-    config.devServer = {
-      contentBase: join(__dirname, 'dist'),
-      port,
-      hot: true,
-      inline: true,
-    };
-
-    config.output.publicPath = `http://localhost:${port}/`;
-
-    config.plugins.push(new webpack.HotModuleReplacementPlugin());
-  }
-
-  return config;
+  },
 };
 
-const appConfig = getConfig(getBaseConfig(4444), {
+if (dev) {
+  config.plugins.push(new webpack.HotModuleReplacementPlugin());
+}
+
+const appConfig = getConfig(config, {
   target: 'electron-renderer',
+
+  devServer: {
+    contentBase: join(__dirname, 'build'),
+    port,
+    hot: true,
+    inline: true,
+  },
 });
 
-const webConfig = getConfig(getBaseConfig(8080), {
+const webConfig = getConfig(config, {
   target: 'web',
 });
 
