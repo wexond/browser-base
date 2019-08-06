@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 
 import { ITheme } from '~/interfaces';
 import { TOOLBAR_HEIGHT } from '../../constants';
-import { colors } from '~/renderer/constants';
 
 export const StyledToolbar = styled.div`
   position: relative;
@@ -17,17 +16,13 @@ export const StyledToolbar = styled.div`
   ${({
     isHTMLFullscreen,
     theme,
-    overlayType,
   }: {
     isHTMLFullscreen: boolean;
     theme: ITheme;
-    overlayType: string;
   }) => css`
     transition: ${theme.animations ? '0.2s background-color' : 'none'};
     margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
-    background-color: ${overlayType !== 'default'
-      ? theme['toolbar.overlay.backgroundColor']
-      : theme['toolbar.backgroundColor']};
+    background-color: ${theme['toolbar.backgroundColor']};
   `};
 `;
 
