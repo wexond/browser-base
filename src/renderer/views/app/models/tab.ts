@@ -114,6 +114,10 @@ export class ITab {
         });
       }
 
+      if (!store.inputFocused) {
+        store.inputText = url;
+      }
+
       this.url = url;
       this.updateData();
     });
