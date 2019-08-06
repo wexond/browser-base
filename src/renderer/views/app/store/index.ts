@@ -4,18 +4,14 @@ import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
 import { ipcRenderer, remote } from 'electron';
-import { OverlayStore } from './overlay';
 import { HistoryStore } from './history';
 import { FaviconsStore } from './favicons';
-import { SuggestionsStore } from './suggestions';
 import { ExtensionsStore } from './extensions';
 import { extname } from 'path';
 import { BookmarksStore } from './bookmarks';
 import { DownloadsStore } from './downloads';
 import { lightTheme } from '~/renderer/constants/themes';
-import { WeatherStore } from './weather';
 import { SettingsStore } from './settings';
-import { AddBookmarkStore } from './add-bookmark';
 import { extensionsRenderer } from 'electron-extensions';
 import { FormFillStore } from './form-fill';
 import { getCurrentWindow } from '../utils';
@@ -24,16 +20,12 @@ export class Store {
   public history = new HistoryStore();
   public bookmarks = new BookmarksStore();
   public settings = new SettingsStore(this);
-  public suggestions = new SuggestionsStore();
   public favicons = new FaviconsStore();
   public addTab = new AddTabStore();
   public tabGroups = new TabGroupsStore();
   public tabs = new TabsStore();
-  public overlay = new OverlayStore();
   public extensions = new ExtensionsStore();
   public downloads = new DownloadsStore();
-  public weather = new WeatherStore();
-  public addBookmark = new AddBookmarkStore();
   public formFill = new FormFillStore();
 
   @observable
