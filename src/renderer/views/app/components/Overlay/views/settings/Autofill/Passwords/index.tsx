@@ -9,11 +9,19 @@ import { Item } from '../Item';
 import { Container, HeaderLabel, Wrapper, Icon, Label, PasswordIcon, More } from './styles';
 
 const List = ({ data }: { data: IFormFillData }) => {
-  const { url, fields } = data;
+  const { url, favicon, fields } = data;
+  const [ realPassword, setRealPassword ] = React.useState<string>(null);
+
+  const password = realPassword || '•'.repeat(fields.passLength);
+
+  const onIconClick = async () => {
+    const pass = !realPassword && (await getPassword('wexond', `${url}-${fields.username}`));
+    setRealPassword(pass);
+  }
 
   return <>
     <Wrapper>
-      <Icon icon='https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/F_icon.svg/1024px-F_icon.svg.png' />
+      <Icon icon={store.favicons.favicons.get(favicon)} />
       <Label style={{ marginLeft: 12 }}>
         {url}
       </Label>
@@ -22,8 +30,8 @@ const List = ({ data }: { data: IFormFillData }) => {
       <Label>{fields.username}</Label>
     </Wrapper>
     <Wrapper>
-      <Label>rwar</Label>
-      <PasswordIcon toggled={false} />
+      <Label>{password}</Label>
+      <PasswordIcon toggled={!!realPassword} onClick={onIconClick} />
       <More />
     </Wrapper>
   </>

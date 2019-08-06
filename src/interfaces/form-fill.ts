@@ -2,6 +2,7 @@ export interface IFormFillData {
   _id?: string;
   type?: 'password' | 'address';
   url?: string;
+  favicon?: string;
   fields?: {
     username?: string;
     passLength?: number;
