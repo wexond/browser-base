@@ -36,20 +36,20 @@ export const NavigationButtons = observer(() => {
   return (
     <StyledContainer>
       <ToolbarButton
-        disabled={!store.navigationState.canGoBack || store.overlay.visible}
+        disabled={!store.navigationState.canGoBack}
         size={24}
         icon={icons.back}
         style={{ marginLeft: 2 }}
         onClick={onBackClick}
       />
       <ToolbarButton
-        disabled={!store.navigationState.canGoForward || store.overlay.visible}
+        disabled={!store.navigationState.canGoForward}
         size={24}
         icon={icons.forward}
         onClick={onForwardClick}
       />
       <ToolbarButton
-        disabled={isWindow || store.overlay.visible}
+        disabled={isWindow}
         size={20}
         icon={loading ? icons.close : icons.refresh}
         onClick={onRefreshClick}

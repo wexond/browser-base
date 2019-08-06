@@ -59,10 +59,7 @@ export const Toolbar = observer(() => {
   }
 
   return (
-    <StyledToolbar
-      overlayType={store.overlay.currentContent}
-      isHTMLFullscreen={store.isHTMLFullscreen}
-    >
+    <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
       <NavigationButtons />
       <AddressBar />
       <Buttons>
