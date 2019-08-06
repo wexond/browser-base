@@ -118,15 +118,20 @@ export class ITab {
       }
 
       if (!store.inputFocused) {
-        this.addressBarText = url;
+        let text = url;
+        if (url.startsWith('wexond://newtab')) {
+          text = '';
+        }
+        this.addressBarText = text;
       }
 
       this.url = url;
+
       this.updateData();
     });
 
     ipcRenderer.on(`view-title-updated-${this.id}`, (e, title: string) => {
-      this.title = title === 'about:blank' ? 'New tab' : title;
+      this.title = title;
       this.updateData();
     });
 
