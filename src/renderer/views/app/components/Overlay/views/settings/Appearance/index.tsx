@@ -8,9 +8,11 @@ import { Content } from '../../../style';
 import { Title, Row, Control, Header } from '../style';
 import { onSwitchChange } from '~/renderer/views/app/utils';
 
-const onThemeChange = (value: 'Light' | 'Dark') => {
-  store.settings.object.darkTheme = value === 'Dark';
-  store.theme = value === 'Dark' ? darkTheme : lightTheme;
+const onThemeChange = (value: 'light' | 'dark') => {
+  const dark = value === 'dark';
+
+  store.settings.object.darkTheme =dark;
+  store.theme = dark ? darkTheme : lightTheme;
   store.settings.save();
 };
 

@@ -35,15 +35,6 @@ const onBlur = () => {
   });
 };
 
-/*        <Dropdown ref={store.addBookmark.dropdownRef} onChange={onChange}>
-          {store.bookmarks.folders.map(item => (
-            <Dropdown.Item key={item._id}>
-              {getBookmarkTitle(item)}
-            </Dropdown.Item>
-          ))}
-        </Dropdown>
-        */
-
 export default observer(() => {
   return (
     <StyledDialog visible={store.addBookmark.visible} onMouseDown={onMouseDown}>
@@ -58,7 +49,13 @@ export default observer(() => {
       </Row>
       <Row>
         <Label>Folder</Label>
-
+        <Dropdown ref={store.addBookmark.dropdownRef} onChange={onChange}>
+          {store.bookmarks.folders.map(item => (
+            <Dropdown.Item key={item._id} value={item._id}>
+              {getBookmarkTitle(item)}
+            </Dropdown.Item>
+          ))}
+        </Dropdown>
       </Row>
       <Buttons>
         <Button onClick={onDone}>Done</Button>
