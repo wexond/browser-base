@@ -7,6 +7,8 @@ const arg = process.argv.find(x => x.startsWith('--window-id='));
 
 export let windowId: number = null;
 
+// TODO(sentialx): Save settings `message` event
+
 if (arg) {
   windowId = parseInt(arg.split('--window-id=')[1], 10);
 }

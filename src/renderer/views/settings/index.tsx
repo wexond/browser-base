@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
-import store from '~/renderer/views/app/store';
-import { SettingsSection } from '~/renderer/views/app/store/settings';
-import { NavigationDrawer } from '../../components/NavigationDrawer';
-import { Appearance } from './Appearance';
-import { Container } from '../..';
-import { Scrollable2, Sections } from '../../style';
-import { AddressBar } from './AddressBar';
-import { Privacy } from './Privacy';
+import { SettingsSection } from './store';
+import { NavigationDrawer } from '../app/components/Overlay/components/NavigationDrawer';
+import { Appearance } from './components/Appearance';
+import { Container } from '../app/components/Overlay';
+import { Scrollable2, Sections } from '../app/components/Overlay/style';
+import { AddressBar } from './components/AddressBar';
+import { Privacy } from './components/Privacy';
+import { store } from './store';
 
 const MenuItem = observer(
   ({ section, children }: { section: SettingsSection; children: any }) => (
     <NavigationDrawer.Item
-      onClick={() => (store.settings.selectedSection = section)}
-      selected={store.settings.selectedSection === section}
+      onClick={() => (store.selectedSection = section)}
+      selected={store.selectedSection === section}
     >
       {children}
     </NavigationDrawer.Item>
@@ -22,7 +22,7 @@ const MenuItem = observer(
 );
 
 export const Settings = observer(() => {
-  const { selectedSection } = store.settings;
+  const { selectedSection } = store;
 
   return (
     <Container content="settings" right>

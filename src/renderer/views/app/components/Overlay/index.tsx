@@ -12,7 +12,7 @@ import {
   DialogsContainer,
   Dark,
 } from './style';
-import BrowsingDataDialog from './views/settings/Privacy/BrowsingDataDialog';
+import BrowsingDataDialog from '../../../settings/components/Privacy/BrowsingDataDialog';
 
 export const Header = ({ children, clickable }: any) => {
   return (

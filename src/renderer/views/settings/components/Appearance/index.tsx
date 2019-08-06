@@ -1,21 +1,19 @@
 import * as React from 'react';
 
-import store from '~/renderer/views/app/store';
-import { darkTheme, lightTheme } from '~/renderer/constants';
 import { Dropdown } from '~/renderer/components/Dropdown';
 import Switch from '~/renderer/components/Switch';
-import { Content } from '../../../style';
-import { Title, Row, Control, Header } from '../style';
+import { Content } from '../../../app/components/Overlay/style';
+import { Title, Row, Control, Header } from '../../style';
 import { onSwitchChange } from '~/renderer/views/app/utils';
+import { store } from '../../store';
 
 const onThemeChange = (value: 'Light' | 'Dark') => {
-  store.settings.object.darkTheme = value === 'Dark';
-  store.theme = value === 'Dark' ? darkTheme : lightTheme;
-  store.settings.save();
+  store.settings.darkTheme = value === 'Dark';
+  store.save();
 };
 
 const ThemeVariant = () => {
-  const defaultValue = store.settings.object.darkTheme ? 'Dark' : 'Light';
+  const defaultValue = store.settings.darkTheme ? 'Dark' : 'Light';
 
   return (
     <Row>
@@ -31,7 +29,7 @@ const ThemeVariant = () => {
 };
 
 const OverlayAnimations = () => {
-  const { animations } = store.settings.object;
+  const { animations } = store.settings;
 
   return (
     <Row>
@@ -47,7 +45,7 @@ const OverlayAnimations = () => {
 };
 
 const OverlayBookmarks = () => {
-  const { overlayBookmarks } = store.settings.object;
+  const { overlayBookmarks } = store.settings;
 
   return (
     <Row>

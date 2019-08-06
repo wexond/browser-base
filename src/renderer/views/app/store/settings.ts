@@ -6,22 +6,7 @@ import { DEFAULT_SETTINGS } from '~/constants';
 import { darkTheme, lightTheme } from '~/renderer/constants';
 import { Store } from '.';
 
-export type SettingsSection =
-  | 'appearance'
-  | 'autofill'
-  | 'address-bar'
-  | 'privacy'
-  | 'permissions'
-  | 'startup'
-  | 'language'
-  | 'shortcuts'
-  | 'downloads'
-  | 'system';
-
 export class SettingsStore {
-  @observable
-  public selectedSection: SettingsSection = 'appearance';
-
   @observable
   public object: ISettings = DEFAULT_SETTINGS;
 

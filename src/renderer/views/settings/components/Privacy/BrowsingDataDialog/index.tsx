@@ -7,16 +7,13 @@ import {
   Content,
   Buttons,
   CloseButton,
-} from '../../../../components/Dialog';
+} from '../../../../app/components/Overlay/components/Dialog';
 import { Button } from '~/renderer/components/Button';
-import store from '~/renderer/views/app/store';
+import { store } from '../../../store';
 
 export default observer(() => {
   return (
-    <Dialog
-      visible={store.overlay.dialogContent === 'privacy'}
-      style={{ width: 344 }}
-    >
+    <Dialog visible={store.dialogContent === 'privacy'} style={{ width: 344 }}>
       <Title>Clear browsing data</Title>
       <Content></Content>
       <Buttons>

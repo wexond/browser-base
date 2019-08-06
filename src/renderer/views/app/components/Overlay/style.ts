@@ -1,7 +1,10 @@
 import styled, { css } from 'styled-components';
 
 import { TABBAR_HEIGHT } from '../../constants';
-import { transparency, icons } from '~/renderer/constants';
+import {
+  transparency,
+  icons,
+} from '../../../settings/components/Appearance/node_modules/~/renderer/constants';
 import { centerIcon, robotoMedium } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
 
