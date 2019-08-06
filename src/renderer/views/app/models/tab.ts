@@ -9,7 +9,7 @@ import {
   TAB_ANIMATION_DURATION,
   TAB_DEFAULT_BACKGROUND,
 } from '../constants';
-import { getColorBrightness, callViewMethod } from '~/utils';
+import { callViewMethod } from '~/utils';
 
 const isColorAcceptable = (color: string) => {
   return true;
