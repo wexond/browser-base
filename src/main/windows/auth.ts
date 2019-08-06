@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron';
 import { AppWindow } from '.';
-import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
+import { TABBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 import { PopupWindow } from './popup';
 
 const WIDTH = 400;
@@ -37,7 +37,7 @@ export class AuthWindow extends PopupWindow {
     const cBounds = this.appWindow.getContentBounds();
     this.setBounds({
       x: Math.round(cBounds.x + cBounds.width / 2 - WIDTH / 2),
-      y: cBounds.y + TOOLBAR_HEIGHT,
+      y: cBounds.y + TABBAR_HEIGHT,
     } as any);
   }
 }

@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
+import { TABBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 import { AppWindow } from '.';
 import { PopupWindow } from './popup';
 
@@ -47,6 +47,6 @@ export class PermissionsWindow extends PopupWindow {
 
   public rearrange() {
     const cBounds = this.appWindow.getContentBounds();
-    this.setBounds({ x: cBounds.x, y: cBounds.y + TOOLBAR_HEIGHT } as any);
+    this.setBounds({ x: cBounds.x, y: cBounds.y + TABBAR_HEIGHT } as any);
   }
 }

@@ -61,14 +61,6 @@ export class Store {
   };
 
   @computed
-  public get tabbarVisible() {
-    return (
-      this.tabGroups.currentGroup.tabs.length > 0 &&
-      this.overlay.currentContent === 'default'
-    );
-  }
-
-  @computed
   public get searchEngine() {
     return this.settings.object.searchEngines[
       this.settings.object.searchEngine
@@ -128,12 +120,6 @@ export class Store {
         }
       },
     );
-
-    ipcRenderer.on('toggle-overlay', () => {
-      if (!this.overlay.isNewTab) {
-        this.overlay.visible = !this.overlay.visible;
-      }
-    });
 
     ipcRenderer.on('find', () => {
       const tab = this.tabs.selectedTab;

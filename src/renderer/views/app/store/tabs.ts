@@ -8,7 +8,7 @@ import { ITab } from '../models';
 import {
   TAB_ANIMATION_DURATION,
   TABS_PADDING,
-  TOOLBAR_HEIGHT,
+  TABBAR_HEIGHT,
   TAB_ANIMATION_EASING,
 } from '../constants';
 
@@ -275,7 +275,7 @@ export class TabsStore {
     }
 
     store.addTab.setLeft(
-      Math.min(left, containerWidth + TABS_PADDING),
+      Math.min(left + TABS_PADDING, containerWidth + TABS_PADDING),
       animation,
     );
   }
@@ -367,7 +367,7 @@ export class TabsStore {
       selectedTab.setLeft(left, false);
 
       if (
-        e.pageY > TOOLBAR_HEIGHT + 16 ||
+        e.pageY > TABBAR_HEIGHT + 16 ||
         e.pageY < -16 ||
         e.pageX < boundingRect.left ||
         e.pageX - boundingRect.left > store.addTab.left
@@ -404,8 +404,6 @@ export class TabsStore {
   }
 
   public onNewTab() {
-    store.overlay.isNewTab = true;
-    store.overlay.visible = true;
     ipcRenderer.send(`hide-window-${store.windowId}`);
     store.tabs.addTab();
   }
