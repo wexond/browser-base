@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { transparency } from '~/renderer/constants';
 
-export const StyledList = styled.div`
+export const StyledItem = styled.div`
   width: 100%;
   height: 48px;
   display: flex;

@@ -5,10 +5,10 @@ import { getPassword } from 'keytar';
 import store from '~/renderer/views/app/store';
 import { icons } from '~/renderer/constants';
 import { IFormFillData } from '~/interfaces';
-import { Item } from '../Item';
+import { Section } from '../Section';
 import { Container, HeaderLabel, Wrapper, Icon, Label, PasswordIcon, More } from './styles';
 
-let passwords: Map<string, string> = new Map();
+const passwords: Map<string, string> = new Map();
 
 const getUserPassword = async (data: IFormFillData) => {
   const { url, fields } = data;
@@ -34,7 +34,7 @@ const onMoreClick = (data: IFormFillData) => (e: React.MouseEvent) => {
   store.autoFill.menuVisible = true;
 }
 
-const List = ({ data }: { data: IFormFillData }) => {
+const Item = ({ data }: { data: IFormFillData }) => {
   const { url, favicon, fields } = data;
   const [ realPassword, setRealPassword ] = React.useState<string>(null);
 
@@ -65,15 +65,15 @@ const List = ({ data }: { data: IFormFillData }) => {
 
 export const Passwords = observer(() => {
   return (
-    <Item label='Passwords' icon={icons.key}>
+    <Section label='Passwords' icon={icons.key}>
       <Container>
         <HeaderLabel>Website</HeaderLabel>
         <HeaderLabel>Username</HeaderLabel>
         <HeaderLabel>Password</HeaderLabel>
         {store.autoFill.credentials.map(item => (
-          <List key={item._id} data={item} />
+          <Item key={item._id} data={item} />
         ))}
       </Container>
-    </Item>
+    </Section>
   );
 });

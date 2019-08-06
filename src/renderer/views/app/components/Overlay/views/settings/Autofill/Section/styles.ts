@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { centerIcon } from '~/renderer/mixins';
 import { icons, transparency } from '~/renderer/constants';
 
-export const StyledItem = styled.div`
+export const StyledSection = styled.div`
   width: 100%;
   background-color: rgba(0, 0, 0, 0.04);
   border-radius: 4px;

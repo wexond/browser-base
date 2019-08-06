@@ -4,16 +4,16 @@ import { observer } from 'mobx-react-lite';
 import store from '~/renderer/views/app/store';
 import { icons } from '~/renderer/constants';
 import { IFormFillData } from '~/interfaces';
-import { Item } from '../Item';
+import { Section } from '../Section';
 import { More } from '../Passwords/styles';
-import { StyledList } from './styles';
+import { StyledItem } from './styles';
 
-const List = ({ data }: { data: IFormFillData }) => {
+const Item = ({ data }: { data: IFormFillData }) => {
   return (
-    <StyledList>
+    <StyledItem>
       {data.fields.address}
       <More style={{ marginLeft: 'auto' }} />
-    </StyledList>
+    </StyledItem>
   );
 }
 
@@ -24,10 +24,10 @@ export const Addresses = observer(() => {
   };
 
   return (
-    <Item label='Addresses' icon={icons.location} style={style}>
+    <Section label='Addresses' icon={icons.location} style={style}>
       {store.autoFill.addresses.map(item => (
-        <List key={item._id} data={item} />
+        <Item key={item._id} data={item} />
       ))}
-    </Item>
+    </Section>
   );
 });
