@@ -8,7 +8,6 @@ export const loadURL = (url: string) => {
   } else {
     tab.url = url;
     tab.callViewMethod('webContents.loadURL', url);
+    tab.callViewMethod('webContents.focus');
   }
-
-  store.overlay.visible = false;
 };
