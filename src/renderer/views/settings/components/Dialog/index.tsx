@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import { EASING_FUNCTION } from '~/renderer/constants';
 import { robotoRegular, robotoMedium } from '~/renderer/mixins';
 import { Button } from '~/renderer/components/Button';
-import { store } from '../../store';
+import store from '../../store';
 
 const onHideClick = () => {
   store.dialogContent = null;

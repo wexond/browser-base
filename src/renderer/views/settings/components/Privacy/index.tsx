@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import { Content } from '../../../app/components/Overlay/style';
-import { Header } from '../../style';
+import { Header } from '../App/style';
 import { Button } from '~/renderer/components/Button';
 import { colors } from '~/renderer/constants';
-import { store } from '../../store';
+import store from '../../store';
 
 const onClearBrowsingData = () => {
   store.dialogContent = 'privacy';

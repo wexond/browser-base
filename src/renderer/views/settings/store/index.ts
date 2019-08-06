@@ -1,6 +1,7 @@
 import { observable } from 'mobx';
 import { DEFAULT_SETTINGS } from '~/constants';
-import { ISettings } from '~/interfaces';
+import { ISettings, ITheme } from '~/interfaces';
+import { lightTheme } from '~/renderer/constants';
 
 export type SettingsSection =
   | 'appearance'
@@ -24,6 +25,9 @@ export class Store {
   @observable
   public settings: ISettings = DEFAULT_SETTINGS;
 
+  @observable
+  public theme: ITheme = lightTheme;
+
   public constructor() {}
 
   public save() {
@@ -37,4 +41,4 @@ export class Store {
   }
 }
 
-export const store = new Store();
+export default new Store();

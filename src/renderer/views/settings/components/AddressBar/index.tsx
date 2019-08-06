@@ -3,8 +3,8 @@ import * as React from 'react';
 import { Dropdown } from '~/renderer/components/Dropdown';
 import Switch from '~/renderer/components/Switch';
 import { Content } from '../../../app/components/Overlay/style';
-import { Title, Row, Control, Header } from '../../style';
-import { store } from '../../store';
+import { Title, Row, Control, Header } from '../App/style';
+import store from '../../store';
 import { onSwitchChange } from '../../utils';
 
 const SuggestionsToggle = () => {

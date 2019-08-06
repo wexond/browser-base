@@ -66,7 +66,7 @@ const appConfig = getConfig(config, {
 
   devServer: {
     contentBase: join(__dirname, 'build'),
-    port,
+    port: PORT,
     hot: true,
     inline: true,
   },
@@ -74,7 +74,13 @@ const appConfig = getConfig(config, {
 
 const webConfig = getConfig(config, {
   target: 'web',
+
+  output: {
+    libraryTarget: 'var',
+  },
 });
+
+console.log(webConfig);
 
 applyEntries(appConfig, [
   'app',
