@@ -82,7 +82,7 @@ interface TitleProps {
 
 export const StyledTitle = styled.div`
   ${body2()};
-  font-size: 13px;
+  font-size: 12px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

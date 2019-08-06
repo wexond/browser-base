@@ -33,7 +33,7 @@ export const Icon = styled.div`
 `;
 
 export const Button = styled.div`
-  height: ${TABBAR_HEIGHT}px;
+  height: ${TOOLBAR_BUTTON_WIDTH}px;
   position: relative;
   transition: 0.2s background-color;
   width: ${TOOLBAR_BUTTON_WIDTH}px;
@@ -46,9 +46,9 @@ export const Button = styled.div`
 `;
 
 export const Circle = styled.div`
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
   position: absolute;
   top: 50%;
   left: 50%;
