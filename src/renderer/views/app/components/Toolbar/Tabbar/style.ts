@@ -10,14 +10,13 @@ export const StyledTabbar = styled.div`
   overflow: hidden;
   background-color: #eee;
   transition: 0.3s opacity, 0.3s transform;
-  margin-right: 32px;
   display: flex;
 `;
 
 export const TabsContainer = styled.div`
   height: calc(100% - 4px);
   flex: 1;
-  margin-right: ${TOOLBAR_BUTTON_WIDTH}px;
+  margin-right: ${TOOLBAR_BUTTON_WIDTH + 32}px;
   position: relative;
   overflow: hidden;
   white-space: nowrap;
