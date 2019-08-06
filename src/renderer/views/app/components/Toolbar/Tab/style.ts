@@ -90,7 +90,7 @@ export const StyledTitle = styled.div`
   margin-left: 8px;
 
   ${({ isIcon }: TitleProps) => css`
-    margin-left: ${!isIcon ? 0 : 12}px;
+    margin-left: ${!isIcon ? 0 : 8}px;
   `};
 `;
 
@@ -115,24 +115,9 @@ export const StyledContent = styled.div`
   z-index: 2;
   align-items: center;
   display: flex;
-  margin-left: 12px;
+  margin-left: 8px;
   ${({ collapsed }: ContentProps) => css`
     max-width: calc(100% - ${24 + (collapsed ? 24 : 0)}px);
-  `};
-`;
-
-export const StyledBorder = styled.div`
-  position: absolute;
-  width: 1px;
-  height: 16px;
-
-  right: -1px;
-  top: 50%;
-  transform: translateY(-50%);
-
-  ${({ visible, theme }: { visible: boolean; theme: ITheme }) => css`
-    visibility: ${visible ? 'visible' : 'hidden'};
-    background-color: ${theme['toolbar.separator.color']};
   `};
 `;
 
