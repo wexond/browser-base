@@ -10,6 +10,7 @@ import {
   TAB_DEFAULT_BACKGROUND,
 } from '../constants';
 import { callViewMethod } from '~/utils';
+import { NEWTAB_URL } from '~/constants/tabs';
 
 const isColorAcceptable = (color: string) => {
   return true;
@@ -124,7 +125,7 @@ export class ITab {
 
       if (!store.inputFocused) {
         let text = url;
-        if (url.startsWith('wexond://newtab')) {
+        if (this.isNewTab) {
           text = '';
         }
         this.addressBarText = text;
