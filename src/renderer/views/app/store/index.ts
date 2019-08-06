@@ -1,4 +1,5 @@
 import { observable, computed } from 'mobx';
+import * as React from 'react';
 
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
@@ -51,6 +52,14 @@ export class Store {
     canGoBack: false,
     canGoForward: false,
   };
+
+  @observable
+  public inputText = '';
+
+  @observable
+  public inputFocused = false;
+
+  public inputRef = React.createRef<HTMLInputElement>();
 
   @computed
   public get searchEngine() {
