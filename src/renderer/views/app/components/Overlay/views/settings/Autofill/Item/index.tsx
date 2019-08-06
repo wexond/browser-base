@@ -1,10 +1,12 @@
 import * as React from 'react';
 
-import {  StyledItem, Header, Label, DropIcon, Icon } from './styles';
+import {  StyledItem, Header, Label, DropIcon, Icon, Container } from './styles';
 
 interface Props {
   label: string;
   icon: any;
+  children?: any;
+  style?: any;
 }
 
 interface State {
@@ -13,20 +15,27 @@ interface State {
 
 export class Item extends React.PureComponent<Props, State> {
   public state: State = {
-    expanded: false,
+    expanded: true,
+  }
+
+  private onClick = () => {
+    this.setState({ expanded: true });
   }
 
   render() {
-    const {  label, icon } = this.props;
+    const { label, icon, children, style } = this.props;
     const { expanded } = this.state;
 
     return (
-      <StyledItem>
-        <Header>
+      <StyledItem style={style}>
+        <Header onClick={this.onClick}>
           <Icon icon={icon} />
           <Label>{label}</Label>
           <DropIcon />
         </Header>
+        <Container expanded={expanded}>
+          {children}
+        </Container>
       </StyledItem>
     );
   }

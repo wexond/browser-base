@@ -43,3 +43,14 @@ export const DropIcon = styled.div`
   margin-right: 16px;
   ${centerIcon('contain')};
 `;
+
+export const Container = styled.div`
+  width: 100%;
+  display: flex;
+  padding: 16px;
+  padding-top: 0px;
+
+  ${({ expanded }: { expanded: boolean }) => css`
+    display: ${expanded ? 'block' : 'none'};
+  `};
+`;
