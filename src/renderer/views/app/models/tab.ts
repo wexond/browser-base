@@ -123,7 +123,7 @@ export class ITab {
       }
 
       if (!store.inputFocused) {
-        store.inputText = url;
+        this.addressBarText = url;
       }
 
       this.url = url;
