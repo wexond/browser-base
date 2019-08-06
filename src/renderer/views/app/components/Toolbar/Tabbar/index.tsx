@@ -9,6 +9,9 @@ import { WindowsControls } from 'react-windows-controls';
 import { platform } from 'os';
 import { TABBAR_HEIGHT } from '../../../constants';
 import { closeWindow, minimizeWindow, maximizeWindow } from '../../../utils';
+import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
+
+const getContainer = () => store.tabs.containerRef.current;
 
 const onMouseEnter = () => (store.tabs.scrollbarVisible = true);
 
@@ -33,6 +36,13 @@ export const Tabbar = observer(() => {
         icon={icons.add}
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
+      />
+
+      <HorizontalScrollbar
+        ref={store.tabs.scrollbarRef}
+        enabled={store.tabs.scrollable}
+        visible={store.tabs.scrollbarVisible}
+        getContainer={getContainer}
       />
 
       {platform() !== 'darwin' && (
