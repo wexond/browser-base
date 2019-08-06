@@ -5,13 +5,13 @@ import { darkTheme, lightTheme } from '~/renderer/constants';
 import { Dropdown } from '~/renderer/components/Dropdown';
 import Switch from '~/renderer/components/Switch';
 import { Content } from '../../../style';
-import { Title, Row, Control, Header } from '../style';
 import { onSwitchChange } from '~/renderer/views/app/utils';
+import { Title, Row, Control, Header } from '../style';
 
 const onThemeChange = (value: 'light' | 'dark') => {
   const dark = value === 'dark';
 
-  store.settings.object.darkTheme =dark;
+  store.settings.object.darkTheme = dark;
   store.theme = dark ? darkTheme : lightTheme;
   store.settings.save();
 };
