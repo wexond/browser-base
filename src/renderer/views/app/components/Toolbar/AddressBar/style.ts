@@ -16,7 +16,7 @@ export const StyledAddressBar = styled.input`
   background-color: rgba(0, 0, 0, 0.03);
   border: none;
   width: 100%;
-  height: 28px;
+  height: 26px;
   max-width: 1200px;
   border-radius: 4px;
   overflow: hidden;

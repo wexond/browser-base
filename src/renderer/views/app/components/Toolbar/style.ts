@@ -12,10 +12,6 @@ export const StyledToolbar = styled.div`
   color: rgba(0, 0, 0, 0.8);
   width: 100%;
   height: ${TOOLBAR_HEIGHT}px;
-<<<<<<< HEAD
-=======
-  padding-right: ${platform() !== 'darwin' ? 138 : 0}px;
->>>>>>> feat: add toolbar under the tab bar
 
   ${({
     isHTMLFullscreen,
@@ -26,13 +22,7 @@ export const StyledToolbar = styled.div`
   }) => css`
     transition: ${theme.animations ? '0.2s background-color' : 'none'};
     margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
-<<<<<<< HEAD
     background-color: ${theme['toolbar.backgroundColor']};
-=======
-    background-color: ${overlayType !== 'default'
-      ? theme['toolbar.overlay.backgroundColor']
-      : theme['toolbar.backgroundColor']};
->>>>>>> feat: add toolbar under the tab bar
   `};
 `;
 
