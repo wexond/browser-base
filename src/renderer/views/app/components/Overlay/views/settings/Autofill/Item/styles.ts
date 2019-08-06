@@ -9,7 +9,7 @@ export const StyledItem = styled.div`
   margin-top: 12px;
 `;
 
-export const ItemHeader = styled.div`
+export const Header = styled.div`
   width: 100%;
   height: 48px;
   display: flex;
@@ -17,7 +17,7 @@ export const ItemHeader = styled.div`
   cursor: pointer;
 `;
 
-export const ItemIcon = styled.div`
+export const Icon = styled.div`
   width: 18px;
   height: 18px;
   opacity: ${transparency.icons.inactive};
@@ -29,7 +29,7 @@ export const ItemIcon = styled.div`
   `};
 `;
 
-export const ItemLabel = styled.div`
+export const Label = styled.div`
   margin-left: 16px;
   font-size: 14px;
 `;
