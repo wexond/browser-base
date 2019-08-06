@@ -25,12 +25,33 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
   }
 };
 
+const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  store.inputText = e.currentTarget.value;
+};
+
+const onFocus = () => {
+  store.inputFocused = true;
+  requestAnimationFrame(() => {
+    store.inputRef.current.select();
+  });
+};
+
+const onBlur = () => {
+  store.inputFocused = false;
+  store.inputRef.current.setSelectionRange(0, 0);
+};
+
 export const AddressBar = observer(() => {
   return (
     <Center>
       <StyledAddressBar
         placeholder="Search in Google or type an URL"
+        onChange={onChange}
         onKeyPress={onKeyPress}
+        value={store.inputText}
+        onBlur={onBlur}
+        onFocus={onFocus}
+        ref={store.inputRef}
       />
     </Center>
   );

@@ -123,11 +123,7 @@ export class ITab {
       }
 
       if (!store.inputFocused) {
-        let text = url;
-        if (this.isNewTab) {
-          text = '';
-        }
-        this.addressBarText = text;
+        store.inputText = url;
       }
 
       this.url = url;
