@@ -31,8 +31,10 @@ const onClick = () => {
   ) {
     store.overlay.visible = false;
   }
+
   store.overlay.dialTypeMenuVisible = false;
   store.bookmarks.menuVisible = false;
+  store.autoFill.menuVisible = false;
 };
 
 export const preventHiding = (e: any) => {

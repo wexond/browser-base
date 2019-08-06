@@ -23,6 +23,17 @@ const getUserPassword = async (data: IFormFillData) => {
   return realPassword;
 }
 
+const onMoreClick = (data: IFormFillData) => (e: React.MouseEvent) => {
+  e.stopPropagation();
+
+  const { left, top } = e.currentTarget.getBoundingClientRect();
+  
+  store.autoFill.selectedItem = data;
+  store.autoFill.menuTop = top;
+  store.autoFill.menuLeft = left - 130;
+  store.autoFill.menuVisible = true;
+}
+
 const List = ({ data }: { data: IFormFillData }) => {
   const { url, favicon, fields } = data;
   const [ realPassword, setRealPassword ] = React.useState<string>(null);
@@ -47,7 +58,7 @@ const List = ({ data }: { data: IFormFillData }) => {
     <Wrapper>
       <Label>{password}</Label>
       <PasswordIcon toggled={!!realPassword} onClick={onIconClick} />
-      <More />
+      <More onClick={onMoreClick(data)} />
     </Wrapper>
   </>
 }
