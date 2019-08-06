@@ -1,5 +1,8 @@
 import { ipcMain } from 'electron';
-import { TABBAR_HEIGHT } from '~/renderer/views/app/constants/design';
+import {
+  TABBAR_HEIGHT,
+  TOOLBAR_HEIGHT,
+} from '~/renderer/views/app/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
 
@@ -151,9 +154,11 @@ export class ViewManager {
     const { width, height } = this.window.getContentBounds();
     view.setBounds({
       x: 0,
-      y: this.fullscreen ? 0 : TABBAR_HEIGHT + 1,
+      y: this.fullscreen ? 0 : TABBAR_HEIGHT + TOOLBAR_HEIGHT + 1,
       width,
-      height: this.fullscreen ? height : height - TABBAR_HEIGHT,
+      height: this.fullscreen
+        ? height
+        : height - TABBAR_HEIGHT - TOOLBAR_HEIGHT,
     });
     view.setAutoResize({
       width: true,
