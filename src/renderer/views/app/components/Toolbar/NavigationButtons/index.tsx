@@ -34,12 +34,12 @@ export const NavigationButtons = observer(() => {
   }
 
   return (
-    <StyledContainer isFullscreen={store.isFullscreen}>
+    <StyledContainer>
       <ToolbarButton
         disabled={!store.navigationState.canGoBack || store.overlay.visible}
         size={24}
         icon={icons.back}
-        style={{ marginLeft: 8 }}
+        style={{ marginLeft: 2 }}
         onClick={onBackClick}
       />
       <ToolbarButton

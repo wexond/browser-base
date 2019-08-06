@@ -275,7 +275,7 @@ export class TabsStore {
     }
 
     store.addTab.setLeft(
-      Math.min(left + TABS_PADDING, containerWidth + TABS_PADDING),
+      Math.min(left + 2 * TABS_PADDING, containerWidth + 2 * TABS_PADDING),
       animation,
     );
   }
