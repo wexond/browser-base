@@ -17,6 +17,7 @@ import Ripple from '~/renderer/components/Ripple';
 import { ITab } from '../../../models';
 import store from '../../../store';
 import { remote } from 'electron';
+import { TAB_DEFAULT_BACKGROUND } from '../../../constants';
 
 const removeTab = (tab: ITab) => (e: React.MouseEvent) => {
   e.stopPropagation();
@@ -57,14 +58,6 @@ const onMouseLeave = () => {
 };
 
 const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
-  if (store.canToggleMenu && !tab.isWindow) {
-    if (!store.overlay.isNewTab) {
-      store.overlay.visible = !store.overlay.visible;
-    }
-
-    store.canToggleMenu = false;
-  }
-
   if (e.button === 4) {
     tab.close();
   }
@@ -162,7 +155,9 @@ const Content = observer(({ tab }: { tab: ITab }) => {
       )}
       {tab.loading && (
         <Preloader
-          color={tab.background}
+          color={
+            tab.background === TAB_DEFAULT_BACKGROUND ? 'black' : tab.background
+          }
           thickness={6}
           size={16}
           style={{ minWidth: 16 }}
@@ -172,9 +167,7 @@ const Content = observer(({ tab }: { tab: ITab }) => {
         isIcon={tab.isIconSet}
         style={{
           color: tab.isSelected
-            ? store.theme['tab.selected.textColor'] === 'inherit'
-              ? tab.background
-              : store.theme['tab.selected.textColor']
+            ? store.theme['tab.selected.textColor']
             : store.theme['tab.textColor'],
         }}
       >
@@ -194,23 +187,13 @@ const Close = observer(({ tab }: { tab: ITab }) => {
   );
 });
 
-const Border = observer(({ tab }: { tab: ITab }) => {
-  return <StyledBorder visible={tab.borderVisible} />;
-});
-
 const Overlay = observer(({ tab }: { tab: ITab }) => {
   return (
     <StyledOverlay
       hovered={tab.isHovered}
       style={{
         backgroundColor: tab.isSelected
-          ? shadeBlendConvert(
-              store.theme['tab.selectedHover.backgroundOpacity'],
-              tab.background,
-              store.overlay.currentContent !== 'default'
-                ? store.theme['toolbar.overlay.backgroundColor']
-                : store.theme['toolbar.backgroundColor'],
-            )
+          ? '#fff'
           : store.theme['tab.hover.backgroundColor'],
       }}
     />
@@ -234,28 +217,22 @@ export default observer(({ tab }: { tab: ITab }) => {
       <TabContainer
         style={{
           backgroundColor: tab.isSelected
-            ? shadeBlendConvert(
+            ? 'white'
+            : shadeBlendConvert(
                 store.theme['tab.backgroundOpacity'],
                 tab.background,
-                store.overlay.currentContent !== 'default'
-                  ? store.theme['toolbar.overlay.backgroundColor']
-                  : store.theme['toolbar.backgroundColor'],
-              )
-            : 'transparent',
+                '#eee',
+                // store.overlay.currentContent !== 'default'
+                // ? store.theme['toolbar.overlay.backgroundColor']
+                // : store.theme['toolbar.backgroundColor'],
+              ),
         }}
       >
         <Content tab={tab} />
         <Close tab={tab} />
 
         <Overlay tab={tab} />
-        <Ripple
-          rippleTime={0.6}
-          opacity={0.15}
-          color={tab.background}
-          style={{ zIndex: 9 }}
-        />
       </TabContainer>
-      <Border tab={tab} />
     </StyledTab>
   );
 });

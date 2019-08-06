@@ -35,10 +35,7 @@ export class OverlayStore {
   public canSuggest = false;
 
   @observable
-  private _visible = true;
-
-  @observable
-  public isNewTab = true;
+  private _visible = false;
 
   @observable
   public currentContent: OverlayContent = 'default';
@@ -70,8 +67,6 @@ export class OverlayStore {
 
     if (this.currentContent !== 'default') {
       this.currentContent = 'default';
-    } else if (!this.isNewTab) {
-      this.visible = false;
     }
   };
 
@@ -127,7 +122,6 @@ export class OverlayStore {
       this.inputRef.current.value = '';
 
       this._visible = val;
-      this.isNewTab = false;
     } else {
       this.show();
       ipcRenderer.send(`window-focus-${store.windowId}`);
@@ -144,22 +138,13 @@ export class OverlayStore {
         );
       }
 
-      if (!this.isNewTab) {
-        selectedTab
-          .callViewMethod('webContents.getURL')
-          .then(async (url: string) => {
-            this.searchBoxValue = url;
-            this.inputRef.current.focus();
-            this.inputRef.current.select();
-          });
-      } else {
-        this.inputRef.current.value = '';
-
-        setTimeout(() => {
+      selectedTab
+        .callViewMethod('webContents.getURL')
+        .then(async (url: string) => {
+          this.searchBoxValue = url;
           this.inputRef.current.focus();
           this.inputRef.current.select();
         });
-      }
 
       this._visible = val;
     }

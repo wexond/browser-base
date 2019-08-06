@@ -4,9 +4,8 @@ import { ipcRenderer } from 'electron';
 import { parse } from 'url';
 
 import store from '../../store';
-import { Buttons, StyledToolbar, Handle, Separator } from './style';
+import { Buttons, StyledToolbar, Separator } from './style';
 import { NavigationButtons } from './NavigationButtons';
-import { Tabbar } from './Tabbar';
 import { ToolbarButton } from './ToolbarButton';
 import { icons, colors } from '~/renderer/constants';
 import { BrowserAction } from './BrowserAction';
@@ -63,15 +62,7 @@ export const Toolbar = observer(() => {
       overlayType={store.overlay.currentContent}
       isHTMLFullscreen={store.isHTMLFullscreen}
     >
-      <Handle />
-      <div style={{ flex: 1, display: 'flex' }}>
-        <div
-          style={{ flex: 1, display: store.tabbarVisible ? 'flex' : 'none' }}
-        >
-          <NavigationButtons />
-          <Tabbar />
-        </div>
-      </div>
+      <NavigationButtons />
       <Buttons>
         <BrowserActions />
         {store.updateInfo.available && (

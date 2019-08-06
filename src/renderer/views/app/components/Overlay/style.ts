@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { TOOLBAR_HEIGHT } from '../../constants';
+import { TABBAR_HEIGHT } from '../../constants';
 import { transparency, icons } from '~/renderer/constants';
 import { centerIcon, robotoMedium } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
@@ -29,7 +29,7 @@ export const getOverlayScrollbarStyle = (theme: ITheme) => {
 export const Handle = styled.div`
   position: absolute;
   z-index: 9999;
-  height: ${TOOLBAR_HEIGHT}px;
+  height: ${TABBAR_HEIGHT}px;
   left: 0;
   -webkit-app-region: drag;
   top: 0;
@@ -46,7 +46,7 @@ export const StyledOverlay = styled.div`
   flex-flow: column;
   align-items: center;
   left: 0;
-  top: ${TOOLBAR_HEIGHT}px;
+  top: ${TABBAR_HEIGHT}px;
   bottom: 0;
   right: 0;
   z-index: 9999;

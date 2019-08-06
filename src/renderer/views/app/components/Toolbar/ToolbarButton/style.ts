@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { centerIcon } from '~/renderer/mixins';
-import { TOOLBAR_HEIGHT, TOOLBAR_BUTTON_WIDTH } from '../../../constants';
+import { TABBAR_HEIGHT, TOOLBAR_BUTTON_WIDTH } from '../../../constants';
 import { ITheme } from '~/interfaces';
 
 export const Icon = styled.div`
@@ -33,8 +33,7 @@ export const Icon = styled.div`
 `;
 
 export const Button = styled.div`
-  height: ${TOOLBAR_HEIGHT}px;
-
+  height: ${TABBAR_HEIGHT}px;
   position: relative;
   transition: 0.2s background-color;
   width: ${TOOLBAR_BUTTON_WIDTH}px;
