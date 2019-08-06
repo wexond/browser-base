@@ -8,6 +8,21 @@ import { IFormFillData } from '~/interfaces';
 import { Item } from '../Item';
 import { Container, HeaderLabel, Wrapper, Icon, Label, PasswordIcon, More } from './styles';
 
+let passwords: Map<string, string> = new Map();
+
+const getUserPassword = async (data: IFormFillData) => {
+  const { url, fields } = data;
+  const account = `${url}-${fields.username}`;
+  const password = passwords.get(account);
+
+  if (password) return password;
+
+  const realPassword = await getPassword('wexond', account);
+
+  passwords.set(account, realPassword);
+  return realPassword;
+}
+
 const List = ({ data }: { data: IFormFillData }) => {
   const { url, favicon, fields } = data;
   const [ realPassword, setRealPassword ] = React.useState<string>(null);
@@ -15,7 +30,7 @@ const List = ({ data }: { data: IFormFillData }) => {
   const password = realPassword || '•'.repeat(fields.passLength);
 
   const onIconClick = async () => {
-    const pass = !realPassword && (await getPassword('wexond', `${url}-${fields.username}`));
+    const pass = !realPassword && (await getUserPassword(data));
     setRealPassword(pass);
   }
 
