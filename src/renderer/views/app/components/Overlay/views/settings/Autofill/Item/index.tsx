@@ -15,7 +15,7 @@ interface State {
 
 export class Item extends React.PureComponent<Props, State> {
   public state: State = {
-    expanded: true,
+    expanded: false,
   }
 
   private onClick = () => {
@@ -28,13 +28,13 @@ export class Item extends React.PureComponent<Props, State> {
     const { expanded } = this.state;
 
     return (
-      <StyledItem style={style}>
+      <StyledItem>
         <Header onClick={this.onClick}>
           <Icon icon={icon} />
           <Label>{label}</Label>
           <DropIcon expanded={expanded} />
         </Header>
-        <Container expanded={expanded}>
+        <Container expanded={expanded} style={style}>
           {children}
         </Container>
       </StyledItem>

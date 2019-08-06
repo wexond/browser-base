@@ -30,7 +30,7 @@ const onMoreClick = (data: IFormFillData) => (e: React.MouseEvent) => {
   
   store.autoFill.selectedItem = data;
   store.autoFill.menuTop = top;
-  store.autoFill.menuLeft = left - 130;
+  store.autoFill.menuLeft = left;
   store.autoFill.menuVisible = true;
 }
 
