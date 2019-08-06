@@ -6,7 +6,7 @@ export const StyledItem = styled.div`
   width: 100%;
   background-color: rgba(0, 0, 0, 0.04);
   border-radius: 4px;
-  margin-top: 24px;
+  margin-top: 12px;
 `;
 
 export const ItemHeader = styled.div`

@@ -20,7 +20,7 @@ const Item = ({label, icon}: {label: string, icon: any}) => {
 export const Autofill = () => {
   return (
     <Content>
-      <Header>Autofill</Header>
+      <Header style={{ paddingBottom: 12 }}>Autofill</Header>
       <Item label='Passwords' icon={icons.key}></Item>
       <Item label='Addresses' icon={icons.location}></Item>
     </Content>
