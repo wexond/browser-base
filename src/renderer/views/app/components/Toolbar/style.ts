@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
-import { platform } from 'os';
 
 import { ITheme } from '~/interfaces';
 import { TOOLBAR_HEIGHT } from '../../constants';
+import { colors } from '~/renderer/constants';
 
 export const StyledToolbar = styled.div`
   position: relative;
@@ -13,7 +13,6 @@ export const StyledToolbar = styled.div`
   color: rgba(0, 0, 0, 0.8);
   width: 100%;
   height: ${TOOLBAR_HEIGHT}px;
-  padding-right: ${platform() !== 'darwin' ? 138 : 0}px;
 
   ${({
     isHTMLFullscreen,

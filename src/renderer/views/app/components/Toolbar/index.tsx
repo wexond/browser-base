@@ -9,6 +9,7 @@ import { NavigationButtons } from './NavigationButtons';
 import { ToolbarButton } from './ToolbarButton';
 import { icons, colors } from '~/renderer/constants';
 import { BrowserAction } from './BrowserAction';
+import { AddressBar } from './AddressBar';
 
 const onUpdateClick = () => {
   ipcRenderer.send('update-install');
@@ -63,6 +64,7 @@ export const Toolbar = observer(() => {
       isHTMLFullscreen={store.isHTMLFullscreen}
     >
       <NavigationButtons />
+      <AddressBar />
       <Buttons>
         <BrowserActions />
         {store.updateInfo.available && (

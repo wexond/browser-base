@@ -12,11 +12,7 @@ import {
 import { getColorBrightness, callViewMethod } from '~/utils';
 
 const isColorAcceptable = (color: string) => {
-  if (store.theme['tab.allowLightBackground']) {
-    return getColorBrightness(color) > 120;
-  }
-
-  return getColorBrightness(color) < 170;
+  return true;
 };
 
 export class ITab {
