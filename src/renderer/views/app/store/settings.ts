@@ -40,7 +40,10 @@ export class SettingsStore {
 
   public updateSettings(newSettings: ISettings) {
     this.object = { ...this.object, ...newSettings };
-    this.store.theme = this.object.darkTheme ? darkTheme : lightTheme;
+
+    requestAnimationFrame(() => {
+      this.store.theme = this.object.darkTheme ? darkTheme : lightTheme;
+    });
   }
 
   public async save() {
