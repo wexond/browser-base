@@ -12,33 +12,41 @@ const darkreaderPath = resolve(
   '../build/extensions/wexond-darkreader',
 );
 
-mkdirp(darkreaderPath, async err => {
-  if (err) return console.error(err);
+try {
+  mkdirp(darkreaderPath, async err => {
+    if (err) return console.error(err);
+  
+    if (!existsSync(resolve(darkreaderPath, 'manifest.json'))) {
+      console.log('Fetching wexond darkreader releases...');
+      const res = await axios({
+        url: 'https://api.github.com/repos/wexond/darkreader/releases',
+        method: 'GET',
+        responseType: 'json',
+      });
+  
+      const asset = res.data[0].assets.find(x => x.name === 'build.zip')
+        .browser_download_url;
+  
+      console.log('Downloading build.zip...');
+      const res2 = await axios({
+        url: asset,
+        method: 'GET',
+        responseType: 'stream',
+      });
+  
+      const zipPath = resolve(__dirname, '../build/extensions/build.zip');
+      const stream = createWriteStream(zipPath);
+  
+      res2.data.pipe(stream);
+  
+      stream.on('close', async () => {
+        await extract(zipPath, { dir: darkreaderPath });
+        unlinkSync(zipPath);
+      });
+    }
+  });
+} catch (e) {
+  console.error(e);
+  process.exit(-1);
+}
 
-  if (!existsSync(resolve(darkreaderPath, 'manifest.json'))) {
-    const res = await axios({
-      url: 'https://api.github.com/repos/wexond/darkreader/releases',
-      method: 'GET',
-      responseType: 'json',
-    });
-
-    const asset = res.data[0].assets.find(x => x.name === 'build.zip')
-      .browser_download_url;
-
-    const res2 = await axios({
-      url: asset,
-      method: 'GET',
-      responseType: 'stream',
-    });
-
-    const zipPath = resolve(__dirname, '../build/extensions/build.zip');
-    const stream = createWriteStream(zipPath);
-
-    res2.data.pipe(stream);
-
-    stream.on('close', async () => {
-      await extract(zipPath, { dir: darkreaderPath });
-      unlinkSync(zipPath);
-    });
-  }
-});
