@@ -96,7 +96,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
     const { expanded, label, value } = this.state;
 
     return (
-      <StyledDropdown onMouseDown={this.onMouseDown} style={style}>
+      <StyledDropdown className='dropdown' onMouseDown={this.onMouseDown} style={style}>
         <Label>{label}</Label>
         <DropIcon expanded={expanded} />
         <ContextMenu style={{ top: 32, width: '100%' }} visible={expanded}>
