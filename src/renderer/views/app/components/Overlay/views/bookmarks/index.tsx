@@ -141,9 +141,6 @@ export const Bookmarks = observer(() => {
           <NavigationDrawer.Item icon={icons.download} onClick={onImportClick}>
             Import
           </NavigationDrawer.Item>
-          <NavigationDrawer.Item icon={icons.save} onClick={onNewFolderClick}>
-            Export
-          </NavigationDrawer.Item>
         </NavigationDrawer>
         <BookmarksList />
         <SelectionDialog
