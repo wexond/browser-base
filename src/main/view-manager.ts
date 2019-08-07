@@ -158,9 +158,7 @@ export class ViewManager {
     view.setAutoResize({
       width: true,
       height: true,
-      horizontal: true,
-      vertical: true,
-    });
+    } as any);
   }
 
   public hideView() {
