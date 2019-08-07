@@ -34,6 +34,8 @@ export const icons = {
   key: require('~/renderer/resources/icons/key.svg'),
   incognito: require('~/renderer/resources/icons/incognito.svg'),
   location: require('~/renderer/resources/icons/location.svg'),
+  autofill: require('~/renderer/resources/icons/autofill.svg'),
+  palette: require('~/renderer/resources/icons/palette.svg'),
   weather: {
     day: {
       clear: require('~/renderer/resources/icons/weather/day/clear.png'),
