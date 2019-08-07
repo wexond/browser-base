@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { parse } from 'url';
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
@@ -140,6 +140,10 @@ export class ITab {
     ipcRenderer.on(`view-title-updated-${this.id}`, (e, title: string) => {
       this.title = title === 'about:blank' ? 'New tab' : title;
       this.updateData();
+
+      if (this.isSelected) {
+        this.updateWindowTitle();
+      }
     });
 
     ipcRenderer.on(
@@ -220,6 +224,10 @@ export class ITab {
     }
   }
 
+  public updateWindowTitle() {
+    remote.getCurrentWindow().setTitle(`${this.title} - Wexond`);
+  }
+
   @action
   public updateData() {
     if (this.lastHistoryId && !store.isIncognito) {
@@ -262,6 +270,8 @@ export class ITab {
       this.tabGroup.selectedTabId = this.id;
 
       ipcRenderer.send(`permission-dialog-hide-${store.windowId}`);
+
+      this.updateWindowTitle();
 
       const show = () => {
         if (this.isWindow) {
