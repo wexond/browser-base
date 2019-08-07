@@ -148,7 +148,6 @@ export class BookmarksStore {
 
     if (item.parent) {
       const parent = this.list.find(x => x._id === item.parent);
-      console.log(parent.children, typeof parent.children);
       await this.updateItem(parent._id, {
         children: [...parent.children, doc._id],
       });
