@@ -78,7 +78,7 @@ export class Settings extends EventEmitter {
 
       this.emit('load');
     } catch (e) {
-      console.error(e);
+      this.loaded = true;
       this.emit('load');
     }
   }
