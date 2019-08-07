@@ -30,7 +30,7 @@ export class AppWindow extends BrowserWindow {
 
   public constructor(windowsManager: WindowsManager, incognito: boolean) {
     super({
-      frame: false,
+      frame: true,
       minWidth: 400,
       minHeight: 450,
       width: 900,
