@@ -87,9 +87,9 @@ export class Multrin {
 
     this.interval = setInterval(this.intervalCallback, 100);
 
-    windowManager.on('window-activated', (window: Window) => {
+    /*windowManager.on('window-activated', (window: Window) => {
       this.appWindow.webContents.send('select-tab', window.id);
-    });
+    });*/
 
     mouseHooks.on('mouse-down', () => {
       if (this.appWindow.isMinimized() || this.appWindow.isFocused()) {
