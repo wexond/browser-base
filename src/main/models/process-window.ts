@@ -32,6 +32,7 @@ export class ProcessWindow extends Window {
 
     setTimeout(() => {
       this.bringToTop();
+      this.show();
     }, 50);
   }
 
