@@ -62,7 +62,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
     }
   }
 
-  private toggleMenu(val: boolean) {
+  public toggleMenu(val: boolean) {
     this.setState({ expanded: val });
 
     requestAnimationFrame(() => {
@@ -83,8 +83,11 @@ export class Dropdown extends React.PureComponent<Props, State> {
     e.stopPropagation();
   }
 
-  private onMouseDown = () => {
-    this.toggleMenu(true);
+  private onMouseDown = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    const { expanded } = this.state;
+    this.toggleMenu(!expanded);
   }
 
   public onWindowMouseDown = () => {
