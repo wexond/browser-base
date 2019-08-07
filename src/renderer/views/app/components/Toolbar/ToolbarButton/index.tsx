@@ -22,6 +22,7 @@ export const ToolbarButton = observer(
   ({
     icon,
     onClick,
+    onMouseDown,
     size,
     disabled,
     className,
@@ -36,6 +37,7 @@ export const ToolbarButton = observer(
     return (
       <Button
         onClick={onClick}
+        onMouseDown={onMouseDown}
         className={className}
         style={style}
         ref={(r: HTMLDivElement) => {

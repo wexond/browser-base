@@ -10,6 +10,8 @@ import { StyledDialog, Title, Row, Label, Buttons } from './styles';
 
 const onMouseDown = (e: React.MouseEvent) => {
   e.stopPropagation();
+
+  store.addBookmark.dropdownRef.current.toggleMenu(false);
 };
 
 const onDone = () => {

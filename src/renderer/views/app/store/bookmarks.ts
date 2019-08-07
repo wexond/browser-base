@@ -145,6 +145,7 @@ export class BookmarksStore {
 
     const doc = await this.db.insert(item);
 
+
     if (item.parent) {
       const parent = this.list.find(x => x._id === item.parent);
       await this.updateItem(parent._id, {
