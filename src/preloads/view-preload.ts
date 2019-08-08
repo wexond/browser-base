@@ -99,29 +99,51 @@ ipcRenderer.on('scroll-touch-end', () => {
 window.addEventListener('load', AutoComplete.loadForms);
 window.addEventListener('mousedown', AutoComplete.onWindowMouseDown);
 
+const emitCallback = (data: any) => {
+  ipcRenderer.once(data.id, (e, res) => {
+    window.postMessage({
+      id: data.id,
+      result: res,
+      type: 'result',
+    }, '*');
+  });
+}
+
 if (window.location.protocol === 'wexond:') {
   window.addEventListener('message', ({ data }) => {
-    switch (data.type) {
-      case 'result': return;
-      case 'storage': {
-        ipcRenderer.send(`storage-${data.operation}`, data.id, {
-          scope: data.scope,
-          ...data.data,
-        });
-        break;
-      }
-      case 'credentials': {
-        ipcRenderer.send('credentials-get-password', data.id, data.data);
-        break;
-      }
-    }
+    if (data.type === 'storage') {
+      ipcRenderer.send(`storage-${data.operation}`, data.id, {
+        scope: data.scope,
+        ...data.data,
+      });
 
-    ipcRenderer.once(data.id, (e, res) => {
-      window.postMessage({
-        id: data.id,
-        result: res,
-        type: 'result',
-      }, '*');
-    });
+      emitCallback(data);
+    } else if (data.type === 'credentials-get-password') {
+      ipcRenderer.send('credentials-get-password', data.id, data.data);
+      emitCallback(data);
+    }
+  });
+
+  ipcRenderer.on('credentials-insert', (e, data) => {
+    console.log(data);
+
+    window.postMessage({
+      type: 'credentials-insert',
+      data,
+    }, '*');
+  });
+
+  ipcRenderer.on('credentials-update', (e, data) => {
+    window.postMessage({
+      type: 'credentials-update',
+      data,
+    }, '*');
+  });
+
+  ipcRenderer.on('credentials-remove', (e, data) => {
+    window.postMessage({
+      type: 'credentials-remove',
+      data,
+    }, '*');
   });
 }

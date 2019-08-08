@@ -14,7 +14,7 @@ export const getUserPassword = (data: IFormFillData): Promise<string> => {
     const id = makeId(32);
 
     window.postMessage({
-      type: 'credentials',
+      type: 'credentials-get-password',
       data: account,
       id,
     }, '*');

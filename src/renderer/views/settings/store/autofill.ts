@@ -27,20 +27,22 @@ export class AutoFillStore {
   public constructor() {
     this.load();
 
-    // TODO(xnerhu): preload messages
-    /*ipcRenderer.on('credentials-insert', (e, data) => {
-      this.credentials.push(data);
+    window.addEventListener('message', ({ data }) => {
+      if (data.type === 'credentials-insert') {
+        this.credentials.push(data.data);
+      } else if (data.type === 'credentials-update') {
+        const { _id, username, passLength } = data.data;
+        const item = this.credentials.find(r => r._id === _id);
+
+        item.fields = {
+          username,
+          passLength,
+        };
+      } else if (data.type === 'credentials-remove') {
+        const { _id } = data.data;
+        this.credentials = this.credentials.filter(r => r._id !== _id);
+      }
     });
-
-    ipcRenderer.on('credentials-update', (e, data) => {
-      const { _id, username, passLength } = data;
-      const item = this.credentials.find(r => r._id === _id);
-
-      item.fields = {
-        username,
-        passLength,
-      };
-    });*/
   }
 
   @action

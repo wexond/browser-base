@@ -112,7 +112,11 @@ export class ViewManager {
   }
 
   public get selected() {
-    return this.views.find(x => x.webContents.id === this.selectedId);
+    return this.views.find(r => r.webContents.id === this.selectedId);
+  }
+
+  public get settingsView() {
+    return this.views.find(r => r.webContents.getURL().startsWith("wexond://settings"));
   }
 
   public create(details: chrome.tabs.CreateProperties, isNext = false) {

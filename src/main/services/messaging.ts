@@ -116,7 +116,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
         },
       });
 
-      appWindow.webContents.send('credentials-insert', item);
+      appWindow.viewManager.settingsView.webContents.send('credentials-insert', item);
     } else {
       await storage.update({
         scope: 'formfill',
@@ -131,7 +131,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
         },
       });
 
-      appWindow.webContents.send('credentials-update', { ...data, hostname });
+      appWindow.viewManager.settingsView.webContents.send('credentials-update', { ...data, hostname });
     }
 
     await setPassword('wexond', `${hostname}-${username}`, password);
@@ -151,7 +151,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
     });
 
     await deletePassword('wexond', `${view.hostname}-${fields.username}`);
-    appWindow.webContents.send('credentials-remove', _id);
+
+    appWindow.viewManager.settingsView.webContents.send('credentials-remove', _id);
   });
 
   ipcMain.on('credentials-get-password', async (e, id: string, account: string) => {
