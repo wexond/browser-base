@@ -11,10 +11,7 @@ export const StyledNavigationDrawer = styled.div`
   left: 0;
   display: flex;
   flex-flow: column;
-
-  ${({ theme }: { theme?: ITheme }) => css`
-    background-color: ${theme['overlay.section.backgroundColor']};
-  `}
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
 `;
 
 export const MenuItems = styled.div`

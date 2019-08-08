@@ -3,9 +3,7 @@ import { observer } from 'mobx-react-lite';
 
 import store from '../../store';
 import { OverlayContent } from '../../store/overlay';
-import { Default, History, Bookmarks, Settings } from './views';
-import BrowsingDataDialog from './views/settings/Privacy/BrowsingDataDialog';
-import AddressDialog from './views/settings/Autofill/AddressDialog';
+import { Default, History, Bookmarks } from './views';
 import {
   StyledOverlay,
   HeaderText,
@@ -49,7 +47,6 @@ export const Overlay = observer(() => {
       <Default />
       <History />
       <Bookmarks />
-      <Settings />
       <Dialogs />
     </StyledOverlay>
   );
@@ -78,8 +75,6 @@ export const Dialogs = observer(() => {
   return (
     <DialogsContainer visible={store.overlay.dialogContent != null}>
       <Dark onClick={onClick} />
-      <BrowsingDataDialog />
-      <AddressDialog />
     </DialogsContainer>
   );
 });
