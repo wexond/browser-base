@@ -68,6 +68,7 @@ const appConfig = getConfig(getBaseConfig('app'), {
     port: PORT,
     hot: true,
     inline: true,
+    disableHostCheck: true
   },
 });
 

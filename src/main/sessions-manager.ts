@@ -140,7 +140,7 @@ export class SessionsManager {
       context.loadExtension(resolve(extensionsPath, dir));
     }
 
-    // TODO (sentialx): fix dark reader giving an 
+    // TODO (sentialx): fix dark reader from crashing wexond
     // context.loadExtension(resolve(__dirname, 'extensions/wexond-darkreader'));
 
     if (session === 'incognito') {
