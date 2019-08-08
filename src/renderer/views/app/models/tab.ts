@@ -70,6 +70,9 @@ export class ITab {
   @observable
   public hasCredentials = false;
 
+  @observable
+  public customColor = false;
+
   public left = 0;
   public lastUrl = '';
   public isClosing = false;
@@ -189,8 +192,10 @@ export class ITab {
 
               if (isColorAcceptable(palette.Vibrant.hex)) {
                 this.background = palette.Vibrant.hex;
+                this.customColor = true;
               } else {
                 this.background = store.theme.accentColor;
+                this.customColor = false;
               }
             } catch (e) {
               console.error(e);
@@ -214,9 +219,11 @@ export class ITab {
         if (themeColor && isColorAcceptable(themeColor)) {
           this.background = themeColor;
           this.hasThemeColor = true;
+          this.customColor = true;
         } else {
           this.background = store.theme.accentColor;
           this.hasThemeColor = false;
+          this.customColor = false;
         }
       },
     );

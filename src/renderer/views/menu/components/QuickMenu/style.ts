@@ -51,7 +51,7 @@ export const MenuItem = styled.div`
         height: 100%;
         opacity: 0.54;
         ${centerIcon(20)};
-        background-image: url(${icons.forward});
+        background-image: url(${icons.arrowRight});
       }
     `};
 
@@ -85,7 +85,7 @@ export const Icon = styled.div`
   width: 20px;
   height: 20px;
   ${centerIcon()};
-  opacity: 0.54;
+  opacity: 0.8;
 
   ${({ icon }: { icon?: string }) => css`
     background-image: url(${icon});

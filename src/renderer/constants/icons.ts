@@ -38,6 +38,7 @@ export const icons = {
   palette: require('~/renderer/resources/icons/palette.svg'),
   mute: require('~/renderer/resources/icons/mute.svg'),
   power: require('~/renderer/resources/icons/power.svg'),
+  arrowRight: require('~/renderer/resources/icons/arrow-right.svg'),
   print: require('~/renderer/resources/icons/print.svg'),
   tab: require('~/renderer/resources/icons/tab.svg'),
   weather: {
