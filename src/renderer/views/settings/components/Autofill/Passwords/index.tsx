@@ -5,6 +5,7 @@ import store from '../../../store';
 import { icons } from '~/renderer/constants';
 import { IFormFillData } from '~/interfaces';
 import { Section, onMoreClick } from '../Section';
+import { getUserPassword } from '~/preloads/utils/autofill';
 import {
   Container,
   HeaderLabel,
@@ -14,23 +15,6 @@ import {
   PasswordIcon,
   More,
 } from './styles';
-
-const passwords: Map<string, string> = new Map();
-
-const getUserPassword = async (data: IFormFillData) => {
-  const { url, fields } = data;
-  const account = `${url}-${fields.username}`;
-  const password = passwords.get(account);
-
-  if (password) return password;
-
-  // TODO(xnerhu): node-keytar in web
-  // const realPassword = await getPassword('wexond', account);
-
-  // passwords.set(account, realPassword);
-  // return realPassword;
-  return '';
-};
 
 const Item = ({ data }: { data: IFormFillData }) => {
   const { url, favicon, fields } = data;

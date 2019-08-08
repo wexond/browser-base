@@ -153,4 +153,9 @@ export const runMessagingService = (appWindow: AppWindow) => {
     await deletePassword('wexond', `${view.hostname}-${fields.username}`);
     appWindow.webContents.send('credentials-remove', _id);
   });
+
+  ipcMain.on('credentials-get-password', async (e, id: string, account: string) => {
+    const password = await getPassword('wexond', account);
+    e.sender.send(id, password);
+  });
 };
