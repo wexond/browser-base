@@ -1,11 +1,16 @@
 import { AppWindow } from '.';
-import { BrowserView, app } from 'electron';
+import { BrowserView, app, ipcMain } from 'electron';
 import { join } from 'path';
+import { MENU_WIDTH } from '~/renderer/constants';
 
-const WIDTH = 350;
-const HEIGHT = 700;
+const WIDTH = MENU_WIDTH;
+const HEIGHT = 550;
 
 export class MenuWindow extends BrowserView {
+  public appWindow: AppWindow;
+
+  public visible = false;
+
   public constructor(appWindow: AppWindow) {
     super({
       webPreferences: {
@@ -14,27 +19,60 @@ export class MenuWindow extends BrowserView {
       },
     });
 
-    setImmediate(() => {
-      const cBounds = appWindow.getContentBounds();
+    this.appWindow = appWindow;
 
-      this.setBounds({
-        height: HEIGHT,
-        width: WIDTH,
-        x: cBounds.width - WIDTH,
-        y: 32,
-      } as any);
+    appWindow.addBrowserView(this);
+
+    this.hide();
+
+    ipcMain.on(`hide-${this.webContents.id}`, () => {
+      this.hide();
     });
-
-    this.setAutoResize({ horizontal: true, vertical: true } as any);
 
     if (process.env.ENV === 'dev') {
       this.webContents.loadURL(`http://localhost:4444/menu.html`);
+      this.webContents.openDevTools({ mode: 'detach' });
     } else {
       this.webContents.loadURL(
         join('file://', app.getAppPath(), `build/menu.html`),
       );
     }
+  }
 
-    this.webContents.openDevTools({ mode: 'detach' });
+  public toggle() {
+    if (!this.visible) this.show();
+    else this.hide();
+  }
+
+  public show() {
+    const cBounds = this.appWindow.getContentBounds();
+
+    this.setBounds({
+      height: HEIGHT,
+      width: WIDTH,
+      x: cBounds.width - WIDTH,
+      y: 32,
+    } as any);
+
+    this.appWindow.removeBrowserView(this);
+    this.appWindow.addBrowserView(this);
+
+    this.webContents.send('visible', true);
+    this.webContents.focus();
+
+    this.visible = true;
+  }
+
+  public hide() {
+    this.setBounds({
+      height: HEIGHT,
+      width: WIDTH,
+      x: 0,
+      y: -HEIGHT + 1,
+    });
+
+    this.webContents.send('visible', false);
+
+    this.visible = false;
   }
 }

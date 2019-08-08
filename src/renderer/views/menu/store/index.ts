@@ -1,5 +1,4 @@
-import { ipcRenderer } from 'electron';
-import { getCurrentWindow } from '../../app/utils/windows';
+import { ipcRenderer, remote } from 'electron';
 import { observable } from 'mobx';
 import { lightTheme } from '~/renderer/constants';
 
@@ -7,7 +6,24 @@ export class Store {
   @observable
   public theme = lightTheme;
 
-  public constructor() {}
+  @observable
+  public visible = true;
+
+  public id = remote.getCurrentWebContents().id;
+
+  public constructor() {
+    ipcRenderer.on('visible', (e, flag) => {
+      this.visible = flag;
+    });
+
+    setTimeout(() => {
+      this.visible = false;
+    });
+
+    window.addEventListener('blur', () => {
+      ipcRenderer.send(`hide-${this.id}`);
+    });
+  }
 }
 
 export default new Store();

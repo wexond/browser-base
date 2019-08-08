@@ -141,18 +141,20 @@ export class ViewManager {
   }
 
   public select(id: number) {
+    const selectedView = this.views.find(x => x.webContents.id === id);
     const view = this.views.find(x => x.webContents.id === id);
     this.selectedId = id;
 
     if (!view || view.isDestroyed()) {
       this.destroy(id);
-      this.window.setBrowserView(null);
+      this.window.removeBrowserView(view);
       return;
     }
 
     if (this.isHidden) return;
 
-    this.window.setBrowserView(view);
+    this.window.removeBrowserView(selectedView);
+    this.window.addBrowserView(view);
 
     this.fixBounds();
   }

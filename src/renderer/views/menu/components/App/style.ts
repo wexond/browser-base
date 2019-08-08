@@ -1,12 +1,18 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledApp = styled.div`
-  margin: 16px;
+  margin: 8px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   border-radius: 8px;
   overflow: hidden;
   position: relative;
   background-color: #f5f5f5;
+  transition: 0.1s opacity, 0.2s margin-top;
+
+  ${({ visible }: { visible: boolean }) => css`
+    opacity: ${visible ? 1 : 0};
+    margin-top: ${visible ? 0 : 5}px;
+  `}
 `;
 
 export const Title = styled.div`

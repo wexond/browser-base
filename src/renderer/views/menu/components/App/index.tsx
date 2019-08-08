@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`${Style}`;
 export const App = observer(() => {
   return (
     <ThemeProvider theme={store.theme}>
-      <StyledApp>
+      <StyledApp visible={store.visible}>
         <QuickMenu />
         <GlobalStyle />
       </StyledApp>

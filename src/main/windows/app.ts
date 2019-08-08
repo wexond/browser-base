@@ -79,7 +79,15 @@ export class AppWindow extends BrowserWindow {
       }
     }
 
-    this.addBrowserView(this.menuWindow);
+    const moveAndResize = () => {
+      this.menuWindow.hide();
+
+      this.authWindow.rearrange();
+      this.findWindow.rearrange();
+      this.permissionWindow.rearrange();
+      this.formFillWindow.rearrange();
+      this.credentialsWindow.rearrange();
+    };
 
     // Update window bounds on resize and on move when window is not maximized.
     this.on('resize', () => {
@@ -87,11 +95,11 @@ export class AppWindow extends BrowserWindow {
         windowState.bounds = this.getBounds();
       }
 
-      this.authWindow.rearrange();
-      this.findWindow.rearrange();
-      this.permissionWindow.rearrange();
-      this.formFillWindow.rearrange();
-      this.credentialsWindow.rearrange();
+      moveAndResize();
+    });
+
+    this.on('blur', () => {
+      this.menuWindow.hide();
     });
 
     this.on('move', () => {
@@ -99,11 +107,7 @@ export class AppWindow extends BrowserWindow {
         windowState.bounds = this.getBounds();
       }
 
-      this.authWindow.rearrange();
-      this.findWindow.rearrange();
-      this.permissionWindow.rearrange();
-      this.formFillWindow.rearrange();
-      this.credentialsWindow.rearrange();
+      moveAndResize();
     });
 
     const resize = () => {

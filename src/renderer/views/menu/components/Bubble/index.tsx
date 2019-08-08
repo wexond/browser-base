@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { StyledBubble, Title, Icon, Circle } from './style';
+import { MENU_WIDTH } from '~/renderer/constants';
 
 export const getSize = (i: number) => {
-  const width = 350;
+  const width = MENU_WIDTH;
   return (width - 48 - (i - 1)) / i;
 };
 

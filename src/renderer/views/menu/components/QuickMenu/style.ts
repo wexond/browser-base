@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { ITheme } from '~/interfaces';
-import { centerIcon, caption, getLetterSpacing } from '~/renderer/mixins';
+import { centerIcon, getLetterSpacing } from '~/renderer/mixins';
 import { icons } from '~/renderer/constants';
 
 export const Line = styled.div`
