@@ -9,7 +9,6 @@ import { Toolbar } from '../Toolbar';
 import { ipcRenderer } from 'electron';
 import { Line, StyledApp } from './style';
 import { platform } from 'os';
-import { Overlay } from '../Overlay';
 import store from '../../store';
 import { closeWindow, minimizeWindow, maximizeWindow } from '../../utils';
 import { TOOLBAR_HEIGHT } from '../../constants';
@@ -31,27 +30,6 @@ const App = observer(() => {
         <GlobalStyle />
         <Toolbar />
         <Line />
-        <Overlay />
-        {platform() !== 'darwin' && (
-          <WindowsControls
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: 0,
-              zIndex: 9999,
-              height: TOOLBAR_HEIGHT,
-              WebkitAppRegion: 'no-drag',
-            }}
-            dark={
-              store.overlay.visible
-                ? store.theme['overlay.windowsButtons.invert']
-                : store.theme['toolbar.icons.invert']
-            }
-            onClose={closeWindow}
-            onMinimize={minimizeWindow}
-            onMaximize={maximizeWindow}
-          />
-        )}
       </StyledApp>
     </ThemeProvider>
   );

@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import { Dropdown } from '~/renderer/components/Dropdown';
 import Switch from '~/renderer/components/Switch';
-import { Content } from '../../../app/components/Overlay/style';
-import { Title, Row, Control, Header } from '../App/style';
+import { Title, Row, Control, Header, Content } from '../App/style';
 import store from '../../store';
 import { onSwitchChange } from '../../utils';
 

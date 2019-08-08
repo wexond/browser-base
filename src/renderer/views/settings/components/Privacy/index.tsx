@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import { Content } from '../../../app/components/Overlay/style';
-import { Header } from '../App/style';
+import { Header, Content } from '../App/style';
 import { Button } from '~/renderer/components/Button';
 import { colors } from '~/renderer/constants';
 import store from '../../store';

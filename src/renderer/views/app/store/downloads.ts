@@ -2,7 +2,6 @@ import { observable } from 'mobx';
 import { ipcRenderer } from 'electron';
 
 import { IDownloadItem } from '~/interfaces';
-import store from '.';
 
 export class DownloadsStore {
   @observable
@@ -17,7 +16,8 @@ export class DownloadsStore {
       });
 
       not.onclick = () => {
-        store.overlay.visible = true;
+        // TODO(sentialx): downloads notification
+        // store.overlay.visible = true;
       };
     });
 

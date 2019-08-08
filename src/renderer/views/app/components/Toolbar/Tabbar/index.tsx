@@ -25,7 +25,6 @@ export const Tabbar = observer(() => {
         <Tabs />
       </TabsContainer>
       <AddTab
-        disabled={!store.tabbarVisible}
         icon={icons.add}
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}

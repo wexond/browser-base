@@ -9,6 +9,4 @@ export const loadURL = (url: string) => {
     tab.url = url;
     tab.callViewMethod('webContents.loadURL', url);
   }
-
-  store.overlay.visible = false;
 };
