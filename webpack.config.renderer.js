@@ -8,81 +8,86 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const PORT = 4444;
 
-const getHtml = name => {
+const getHtml = (scope, name) => {
   return new HtmlWebpackPlugin({
     title: 'Wexond',
     template: 'static/pages/app.html',
     filename: `${name}.html`,
-    chunks: ['vendor', name],
+    chunks: [`vendor.${scope}`, name],
   });
 };
 
-const config = {
-  target: 'electron-renderer',
-  plugins: [],
-  output: {},
+const applyEntries = (scope, config, entries) => {
+  for (const entry of entries) {
+    config.entry[entry] = [`./src/renderer/views/${entry}`];
+    config.plugins.push(getHtml(scope, entry));
+
+    if (dev) {
+      config.entry[entry].unshift('react-hot-loader/patch');
+    }
+  }
 };
 
-if (dev) {
-  config.devServer = {
-    contentBase: join(__dirname, 'dist'),
-    port: PORT,
-    hot: true,
-    inline: true,
-  };
+const getBaseConfig = name => {
+  const config = {
+    plugins: [new HardSourceWebpackPlugin()],
 
-  config.output.publicPath = `http://localhost:${PORT}/`;
-}
+    output: {},
+    entry: {},
 
-const appConfig = getConfig(config, {
-  entry: {
-    app: ['./src/renderer/views/app'],
-    permissions: ['./src/renderer/views/permissions'],
-    auth: ['./src/renderer/views/auth'],
-    'form-fill': ['./src/renderer/views/form-fill'],
-    credentials: ['./src/renderer/views/credentials'],
-    find: ['./src/renderer/views/find'],
-
-    vendor: [
-      'react',
-      'react-dom',
-      'mobx',
-      'mobx-react-lite',
-      'styled-components',
-    ],
-  },
-
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          chunks: 'initial',
-          name: 'vendor',
-          test: 'vendor',
-          enforce: true,
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          vendor: {
+            chunks: 'initial',
+            name: `vendor.${name}`,
+            test: `vendor.${name}`,
+            enforce: true,
+          },
         },
       },
     },
-  },
+  };
 
-  plugins: [
-    getHtml('app'),
-    getHtml('permissions'),
-    getHtml('auth'),
-    getHtml('find'),
-    getHtml('credentials'),
-    getHtml('form-fill'),
-    new HardSourceWebpackPlugin(),
-  ],
+  config.entry[`vendor.${name}`] = [
+    'react',
+    'react-dom',
+    'mobx',
+    'mobx-react-lite',
+    'styled-components',
+  ];
+
+  return config;
+};
+
+const appConfig = getConfig(getBaseConfig('app'), {
+  target: 'electron-renderer',
+
+  devServer: {
+    contentBase: join(__dirname, 'build'),
+    port: PORT,
+    hot: true,
+    inline: true,
+  },
 });
 
-if (dev) {
-  appConfig.entry.app.unshift('react-hot-loader/patch');
-  appConfig.entry.auth.unshift('react-hot-loader/patch');
-  appConfig.entry.permissions.unshift('react-hot-loader/patch');
-  appConfig.entry.find.unshift('react-hot-loader/patch');
-  appConfig.entry.credentials.unshift('react-hot-loader/patch');
-  appConfig.entry['form-fill'].unshift('react-hot-loader/patch');
-}
+const webConfig = getConfig(getBaseConfig('web'), {
+  target: 'web',
 
-module.exports = [appConfig];
+  output: {
+    libraryTarget: 'var',
+  },
+});
+
+applyEntries('app', appConfig, [
+  'app',
+  'permissions',
+  'auth',
+  'form-fill',
+  'credentials',
+  'find',
+]);
+
+// applyEntries('web', webConfig, ['settings']);
+
+module.exports = [appConfig, webConfig];
