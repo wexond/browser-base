@@ -2,8 +2,8 @@ import { AppWindow } from '.';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 import { PopupWindow } from './popup';
 
-const WIDTH = 500;
-const HEIGHT = 500;
+const WIDTH = 350;
+const HEIGHT = 700;
 
 export class MenuWindow extends PopupWindow {
   public constructor(appWindow: AppWindow) {

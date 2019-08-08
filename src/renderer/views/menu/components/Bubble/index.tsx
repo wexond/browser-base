@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyledBubble, Title, Icon, Circle } from './style';
 
 export const getSize = (i: number) => {
-  const width = 800;
+  const width = 350;
   return (width - 48 - (i - 1)) / i;
 };
 
@@ -58,6 +58,6 @@ export const Bubble = ({
 
 Bubble.defaultProps = {
   maxLines: 2,
-  iconSize: 24,
-  itemsPerRow: 7,
+  iconSize: 20,
+  itemsPerRow: 4,
 };

@@ -3,7 +3,17 @@ import { observer } from 'mobx-react-lite';
 import { platform } from 'os';
 
 import { Bubble } from '../Bubble';
-import { Line, Actions } from './style';
+import {
+  Actions,
+  Line,
+  MenuItem,
+  MenuItems,
+  Background,
+  Content,
+  Icon,
+  MenuItemTitle,
+  Shortcut,
+} from './style';
 import { icons } from '~/renderer/constants';
 
 const changeContent = () => () => {
@@ -51,96 +61,108 @@ const onIncognitoClick = () => {
 
 export const QuickMenu = observer(() => {
   // const invert = store.theme['overlay.foreground'] === 'light';
-  const invert = false;
+  const invert = true;
 
   return (
     <div
       style={{
         display: 'flex',
         flexFlow: 'column',
-        alignItems: 'center',
-        padding: 16,
       }}
     >
-      <Actions>
-        <Bubble
-          // toggled={store.isAlwaysOnTop}
-          toggled={false}
-          onClick={onAlwaysClick}
-          invert={invert}
-          icon={icons.window}
-        >
-          Always on top
-        </Bubble>
-        <Bubble
-          // toggled={store.settings.object.darkTheme}
-          toggled={false}
-          onClick={onDarkClick}
-          invert={invert}
-          icon={icons.night}
-        >
-          Dark mode
-        </Bubble>
-        <Bubble
-          invert={invert}
-          // toggled={store.settings.object.shield}
-          toggled={false}
-          icon={icons.shield}
-          onClick={onShieldClick}
-        >
-          Shield
-        </Bubble>
-        {platform() === 'win32' && (
+      <Background></Background>
+      <Content>
+        <Actions>
+          <Bubble
+            // toggled={store.isAlwaysOnTop}
+            toggled={false}
+            onClick={onAlwaysClick}
+            invert={invert}
+            icon={icons.window}
+          >
+            Top Most
+          </Bubble>
+          <Bubble
+            // toggled={store.settings.object.darkTheme}
+            toggled={false}
+            onClick={onDarkClick}
+            invert={invert}
+            icon={icons.night}
+          >
+            Dark
+          </Bubble>
           <Bubble
             invert={invert}
-            // toggled={store.settings.object.multrin}
+            // toggled={store.settings.object.shield}
             toggled={false}
-            icon={icons.multrin}
-            onClick={onMultrinClick}
+            icon={icons.shield}
+            onClick={onShieldClick}
           >
-            Multrin
+            Shield
           </Bubble>
-        )}
-      </Actions>
-      <Line />
-      <Actions>
-        <Bubble invert={invert} icon={icons.history}>
-          History
-        </Bubble>
-        <Bubble invert={invert} icon={icons.bookmarks}>
-          Bookmarks
-        </Bubble>
-        <Bubble disabled invert={invert} icon={icons.download}>
-          Downloads
-        </Bubble>
-        <Bubble invert={invert} icon={icons.settings}>
-          Settings
-        </Bubble>
-        <Bubble disabled invert={invert} icon={icons.extensions}>
-          Extensions
-        </Bubble>
-        <Bubble
-          // disabled={!store.tabs.selectedTab}
-          invert={invert}
-          icon={icons.find}
-          onClick={onFindClick}
-        >
-          Find
-        </Bubble>
-      </Actions>
-
-      <Actions>
-        <Bubble onClick={onNewWindowClick} invert={invert} icon={icons.window}>
-          New window
-        </Bubble>
-        <Bubble
-          onClick={onIncognitoClick}
-          invert={invert}
-          icon={icons.incognito}
-        >
-          Incognito
-        </Bubble>
-      </Actions>
+          {platform() === 'win32' && (
+            <Bubble
+              invert={invert}
+              // toggled={store.settings.object.multrin}
+              toggled={false}
+              icon={icons.multrin}
+              onClick={onMultrinClick}
+            >
+              Multrin
+            </Bubble>
+          )}
+        </Actions>
+        <MenuItems>
+          <MenuItem>
+            <Icon icon={icons.window} />
+            <MenuItemTitle>New tab</MenuItemTitle>
+            <Shortcut>Ctrl+T</Shortcut>
+          </MenuItem>
+          <MenuItem>
+            <Icon icon={icons.window} />
+            <MenuItemTitle>New window</MenuItemTitle>
+            <Shortcut>Ctrl+N</Shortcut>
+          </MenuItem>
+          <MenuItem>
+            <Icon icon={icons.incognito} />
+            <MenuItemTitle>New incognito window</MenuItemTitle>
+            <Shortcut>Ctrl+Shift+N</Shortcut>
+          </MenuItem>
+          <Line />
+          <MenuItem arrow>
+            <Icon icon={icons.history} />
+            <MenuItemTitle>History</MenuItemTitle>
+          </MenuItem>
+          <MenuItem arrow>
+            <Icon icon={icons.bookmarks} />
+            <MenuItemTitle>Bookmarks</MenuItemTitle>
+          </MenuItem>
+          <MenuItem>
+            <Icon icon={icons.download} />
+            <MenuItemTitle>Downloads</MenuItemTitle>
+          </MenuItem>
+          <Line />
+          <MenuItem>
+            <Icon icon={icons.settings} />
+            <MenuItemTitle>Settings</MenuItemTitle>
+          </MenuItem>
+          <MenuItem>
+            <Icon icon={icons.extensions} />
+            <MenuItemTitle>Extensions</MenuItemTitle>
+          </MenuItem>
+          <Line />
+          <MenuItem>
+            <Icon icon={icons.find} />
+            <MenuItemTitle>Find in page</MenuItemTitle>
+            <Shortcut>Ctrl+F</Shortcut>
+          </MenuItem>
+          <MenuItem>
+            <Icon icon={icons.page} />
+            <MenuItemTitle>Print</MenuItemTitle>
+            <Shortcut>Ctrl+P</Shortcut>
+          </MenuItem>
+        </MenuItems>
+      </Content>
     </div>
   );
 });
