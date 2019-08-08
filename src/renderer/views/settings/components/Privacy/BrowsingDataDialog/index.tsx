@@ -1,22 +1,13 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
-import {
-  Dialog,
-  Title,
-  Content,
-  Buttons,
-  CloseButton,
-} from '../../../../components/Dialog';
+import { Dialog, Title, Content, Buttons, CloseButton } from '../../Dialog';
 import { Button } from '~/renderer/components/Button';
-import store from '~/renderer/views/app/store';
+import store from '../../../store';
 
 export default observer(() => {
   return (
-    <Dialog
-      visible={store.overlay.dialogContent === 'privacy'}
-      style={{ width: 344 }}
-    >
+    <Dialog visible={store.dialogContent === 'privacy'} style={{ width: 344 }}>
       <Title>Clear browsing data</Title>
       <Content></Content>
       <Buttons>

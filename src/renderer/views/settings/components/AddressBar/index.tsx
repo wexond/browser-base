@@ -1,14 +1,14 @@
 import * as React from 'react';
 
-import store from '~/renderer/views/app/store';
 import { Dropdown } from '~/renderer/components/Dropdown';
 import Switch from '~/renderer/components/Switch';
-import { Content } from '../../../style';
-import { Title, Row, Control, Header } from '../style';
-import { onSwitchChange } from '~/renderer/views/app/utils';
+import { Content } from '../../../app/components/Overlay/style';
+import { Title, Row, Control, Header } from '../App/style';
+import store from '../../store';
+import { onSwitchChange } from '../../utils';
 
 const SuggestionsToggle = () => {
-  const { suggestions } = store.settings.object;
+  const { suggestions } = store.settings;
 
   return (
     <Row>
@@ -24,13 +24,11 @@ const SuggestionsToggle = () => {
 };
 
 const onSearchEngineChange = (value: string) => {
-  const { searchEngines } = store.settings.object;
-
-  store.settings.object.searchEngine = searchEngines.indexOf(
+  const { searchEngines } = store.settings;
+  store.settings.searchEngine = searchEngines.indexOf(
     searchEngines.find(x => x.name === value),
   );
-
-  store.settings.save();
+  store.save();
 };
 
 const SearchEngine = () => {

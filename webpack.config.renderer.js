@@ -88,6 +88,6 @@ applyEntries('app', appConfig, [
   'find',
 ]);
 
-// applyEntries('web', webConfig, ['settings']);
+applyEntries('web', webConfig, ['settings']);
 
 module.exports = [appConfig, webConfig];

@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import { Content } from '../../../style';
-import { Header } from '../style';
+import { Content } from '../../../app/components/Overlay/style';
+import { Header } from '../App/style';
 import { Button } from '~/renderer/components/Button';
 import { colors } from '~/renderer/constants';
-import store from '~/renderer/views/app/store';
+import store from '../../store';
 
 const onClearBrowsingData = () => {
-  store.overlay.dialogContent = 'privacy';
+  store.dialogContent = 'privacy';
 };
 
 export const Privacy = () => {

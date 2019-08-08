@@ -1,18 +1,20 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
-import store from '~/renderer/views/app/store';
-import { SettingsSection } from '~/renderer/views/app/store/settings';
-import { NavigationDrawer } from '../../components/NavigationDrawer';
-import { Appearance } from './Appearance';
-import { Container } from '../..';
-import { Scrollable2, Sections } from '../../style';
-import { AddressBar } from './AddressBar';
-import { Privacy } from './Privacy';
-import { Autofill } from './Autofill';
+import { SettingsSection } from '../../store';
+import { Appearance } from '../Appearance';
+import { AddressBar } from '../AddressBar';
+import { Privacy } from '../Privacy';
+import store from '../../store';
+import { NavigationDrawer } from '../NavigationDrawer';
+import { Sections, Container } from './style';
+import { Style } from '../../style';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { Autofill } from '../Autofill';
 import { icons } from '~/renderer/constants';
 import { OnStartup } from './Startup';
 
+const GlobalStyle = createGlobalStyle`${Style}`;
 const MenuItem = observer(
   ({
     section,
@@ -24,8 +26,8 @@ const MenuItem = observer(
     icon?: string;
   }) => (
     <NavigationDrawer.Item
-      onClick={() => (store.settings.selectedSection = section)}
-      selected={store.settings.selectedSection === section}
+      onClick={() => (store.selectedSection = section)}
+      selected={store.selectedSection === section}
       icon={icon}
     >
       {children}
@@ -33,12 +35,13 @@ const MenuItem = observer(
   ),
 );
 
-export const Settings = observer(() => {
-  const { selectedSection } = store.settings;
+export default observer(() => {
+  const { selectedSection } = store;
 
   return (
-    <Container content="settings" right>
-      <Scrollable2>
+    <ThemeProvider theme={store.theme}>
+      <Container>
+        <GlobalStyle />
         <NavigationDrawer title="Settings" search>
           <MenuItem icon={icons.palette} section="appearance">
             Appearance
@@ -66,7 +69,7 @@ export const Settings = observer(() => {
           {selectedSection === 'startup' && <OnStartup />}
           {selectedSection === 'privacy' && <Privacy />}
         </Sections>
-      </Scrollable2>
-    </Container>
+      </Container>
+    </ThemeProvider>
   );
 });

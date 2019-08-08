@@ -1,8 +1,15 @@
 import * as React from 'react';
 
 import { IFormFillData } from '~/interfaces';
-import store from '~/renderer/views/app/store';
-import { StyledSection, Header, Icon, Label, DropIcon, Container } from './styles';
+import store from '../../../store';
+import {
+  StyledSection,
+  Header,
+  Icon,
+  Label,
+  DropIcon,
+  Container,
+} from './styles';
 
 interface Props {
   label: string;
@@ -15,20 +22,20 @@ export const onMoreClick = (data: IFormFillData) => (e: React.MouseEvent) => {
   e.stopPropagation();
 
   const { left, top } = e.currentTarget.getBoundingClientRect();
-  
+
   store.autoFill.selectedItem = data;
   store.autoFill.menuTop = top;
   store.autoFill.menuLeft = left;
   store.autoFill.menuVisible = true;
-}
+};
 
 export const Section = (props: Props) => {
   const { label, icon, children, style } = props;
-  const [ expanded, setExpanded ] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(false);
 
   const onClick = () => {
     setExpanded(!expanded);
-  }
+  };
 
   return (
     <StyledSection>
@@ -42,4 +49,4 @@ export const Section = (props: Props) => {
       </Container>
     </StyledSection>
   );
-}
+};

@@ -2,14 +2,6 @@ import styled from 'styled-components';
 
 import { robotoMedium, robotoLight } from '~/renderer/mixins';
 
-export const Sections = styled.div`
-  width: calc(100% - 300px);
-  margin-left: 300px;
-  display: flex;
-  align-items: center;
-  flex-flow: column;
-`;
-
 export const Title = styled.div`
   font-size: 14px;
   ${robotoMedium()};
@@ -31,4 +23,21 @@ export const Row = styled.div`
 
 export const Control = styled.div`
   margin-left: auto;
+`;
+
+export const Sections = styled.div`
+  margin-left: ${323 + 56}px;
+  width: calc(100% - 300px);
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+`;
+
+export const Container = styled.div`
+  display: flex;
+`;
+
+export const Content = styled.div`
+  width: calc(100% - 64px);
+  max-width: 800px;
 `;
