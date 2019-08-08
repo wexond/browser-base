@@ -79,6 +79,8 @@ export class AppWindow extends BrowserWindow {
       }
     }
 
+    this.addBrowserView(this.menuWindow);
+
     // Update window bounds on resize and on move when window is not maximized.
     this.on('resize', () => {
       if (!this.isMaximized()) {

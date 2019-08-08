@@ -1,25 +1,40 @@
 import { AppWindow } from '.';
-import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
-import { PopupWindow } from './popup';
+import { BrowserView, app } from 'electron';
+import { join } from 'path';
 
 const WIDTH = 350;
 const HEIGHT = 700;
 
-export class MenuWindow extends PopupWindow {
+export class MenuWindow extends BrowserView {
   public constructor(appWindow: AppWindow) {
-    super(appWindow, 'menu');
+    super({
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+      },
+    });
 
-    this.setBounds({
-      height: HEIGHT,
-      width: WIDTH,
-    } as any);
-  }
+    setImmediate(() => {
+      const cBounds = appWindow.getContentBounds();
 
-  public rearrange() {
-    const cBounds = this.appWindow.getContentBounds();
-    this.setBounds({
-      x: Math.round(cBounds.x + cBounds.width - WIDTH),
-      y: cBounds.y + TOOLBAR_HEIGHT,
-    } as any);
+      this.setBounds({
+        height: HEIGHT,
+        width: WIDTH,
+        x: cBounds.width - WIDTH,
+        y: 32,
+      } as any);
+    });
+
+    this.setAutoResize({ horizontal: true, vertical: true } as any);
+
+    if (process.env.ENV === 'dev') {
+      this.webContents.loadURL(`http://localhost:4444/menu.html`);
+    } else {
+      this.webContents.loadURL(
+        join('file://', app.getAppPath(), `build/menu.html`),
+      );
+    }
+
+    this.webContents.openDevTools({ mode: 'detach' });
   }
 }

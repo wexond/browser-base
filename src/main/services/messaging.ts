@@ -23,10 +23,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.findWindow.find(tabId, data);
   });
 
-  ipcMain.on(`menu-show-${id}`, e => {
-    appWindow.menuWindow.rearrange();
-    appWindow.menuWindow.show();
-  });
+  ipcMain.on(`menu-show-${id}`, e => {});
 
   ipcMain.on(`permission-dialog-hide-${id}`, () => {
     appWindow.permissionWindow.hide();
