@@ -23,6 +23,11 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.findWindow.find(tabId, data);
   });
 
+  ipcMain.on(`menu-show-${id}`, e => {
+    appWindow.menuWindow.rearrange();
+    appWindow.menuWindow.show();
+  });
+
   ipcMain.on(`permission-dialog-hide-${id}`, () => {
     appWindow.permissionWindow.hide();
   });
@@ -63,14 +68,18 @@ export const runMessagingService = (appWindow: AppWindow) => {
       const url = appWindow.viewManager.selected.webContents.getURL();
       const { hostname } = parse(url);
 
-      let item = _id && (
-        await storage.findOne<IFormFillData>({
+      let item =
+        _id &&
+        (await storage.findOne<IFormFillData>({
           scope: 'formfill',
           query: { _id },
         }));
 
       if (item && item.type === 'password') {
-        item.fields.password = await getPassword('wexond', `${hostname}-${item.fields.username}`);
+        item.fields.password = await getPassword(
+          'wexond',
+          `${hostname}-${item.fields.username}`,
+        );
       }
 
       appWindow.viewManager.selected.webContents.send(

@@ -17,12 +17,18 @@ const onUpdateClick = () => {
 
 const onKeyClick = () => {
   const { hostname } = parse(store.tabs.selectedTab.url);
-  const list = store.autoFill.credentials.filter(r => r.url === hostname && r.fields.username);
+  const list = store.autoFill.credentials.filter(
+    r => r.url === hostname && r.fields.username,
+  );
 
   ipcRenderer.send(`credentials-show-${store.windowId}`, {
     content: 'list',
     list,
   });
+};
+
+const onMenuClick = () => {
+  ipcRenderer.send(`menu-show-${store.windowId}`);
 };
 
 const BrowserActions = observer(() => {
@@ -97,6 +103,7 @@ export const Toolbar = observer(() => {
             <ToolbarButton icon={icons.incognito} size={18} />
           </>
         )}
+        <ToolbarButton onClick={onMenuClick} icon={icons.more} size={18} />
       </Buttons>
     </StyledToolbar>
   );

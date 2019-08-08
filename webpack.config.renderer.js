@@ -86,6 +86,7 @@ applyEntries('app', appConfig, [
   'form-fill',
   'credentials',
   'find',
+  'menu',
 ]);
 
 applyEntries('web', webConfig, ['settings']);
