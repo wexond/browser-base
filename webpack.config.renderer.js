@@ -32,8 +32,6 @@ if (dev) {
   };
 
   config.output.publicPath = `http://localhost:${PORT}/`;
-
-  config.plugins.push(new webpack.HotModuleReplacementPlugin());
 }
 
 const appConfig = getConfig(config, {

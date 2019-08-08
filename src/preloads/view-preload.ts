@@ -98,3 +98,19 @@ ipcRenderer.on('scroll-touch-end', () => {
 
 window.addEventListener('load', AutoComplete.loadForms);
 window.addEventListener('mousedown', AutoComplete.onWindowMouseDown);
+
+if (window.location.protocol === 'wexond:') {
+
+  window.addEventListener('message', ({ data }) => {
+    if (data.type === 'storage') {
+      ipcRenderer.send(`storage-${data.operation}`, data.id, {
+        scope: data.scope,
+        ...data.data,
+      });
+
+      ipcRenderer.once(data.id, (e, res) => {
+        window.postMessage({ id: data.id, result: res }, '*');
+      });
+    }
+  })
+}
