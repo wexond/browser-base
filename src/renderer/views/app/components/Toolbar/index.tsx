@@ -98,7 +98,7 @@ export const Toolbar = observer(() => {
             <ToolbarButton icon={icons.incognito} size={18} />
           </>
         )}
-        <ToolbarButton onClick={onMenuClick} icon={icons.more} size={18} />
+        <ToolbarButton onMouseDown={onMenuClick} icon={icons.more} size={18} />
       </Buttons>
       {platform() !== 'darwin' && (
         <WindowsControls
