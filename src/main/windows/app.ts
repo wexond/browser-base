@@ -80,8 +80,6 @@ export class AppWindow extends BrowserWindow {
     }
 
     const moveAndResize = () => {
-      this.menuWindow.hide();
-
       this.authWindow.rearrange();
       this.findWindow.rearrange();
       this.permissionWindow.rearrange();
@@ -94,6 +92,8 @@ export class AppWindow extends BrowserWindow {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
       }
+
+      this.menuWindow.hide();
 
       moveAndResize();
     });
