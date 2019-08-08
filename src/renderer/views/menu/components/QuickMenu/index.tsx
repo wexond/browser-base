@@ -114,7 +114,7 @@ export const QuickMenu = observer(() => {
         </Actions>
         <MenuItems>
           <MenuItem>
-            <Icon icon={icons.window} />
+            <Icon icon={icons.tab} />
             <MenuItemTitle>New tab</MenuItemTitle>
             <Shortcut>Ctrl+T</Shortcut>
           </MenuItem>
@@ -157,7 +157,7 @@ export const QuickMenu = observer(() => {
             <Shortcut>Ctrl+F</Shortcut>
           </MenuItem>
           <MenuItem>
-            <Icon icon={icons.page} />
+            <Icon icon={icons.print} />
             <MenuItemTitle>Print</MenuItemTitle>
             <Shortcut>Ctrl+P</Shortcut>
           </MenuItem>
