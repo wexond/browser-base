@@ -193,9 +193,7 @@ export class ViewManager {
     this.views = this.views.filter(x => x.webContents.id !== id);
 
     if (view) {
-      if (this.window.getBrowserView() === view) {
-        this.window.setBrowserView(null);
-      }
+      this.window.removeBrowserView(view);
 
       view.destroy();
     }
