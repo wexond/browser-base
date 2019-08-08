@@ -108,7 +108,11 @@ if (window.location.protocol === 'wexond:') {
       });
 
       ipcRenderer.once(data.id, (e, res) => {
-        window.postMessage({ id: data.id, result: res }, '*');
+        window.postMessage({
+          id: data.id,
+          result: res,
+          type: 'storage-result',
+        }, '*');
       });
     }
   });

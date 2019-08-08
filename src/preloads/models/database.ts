@@ -1,4 +1,4 @@
-import { makeId } from '~/utils';
+import { makeId } from '~/utils/string';
 
 interface IAction<T> {
   item?: Partial<T>;
@@ -20,7 +20,7 @@ export class PreloadDatabase<T> {
   ): Promise<any> {
     return new Promise(resolve => {
       const id = makeId(32);
-      
+
       window.postMessage({
         type: 'storage',
         scope: this.scope,
@@ -31,7 +31,8 @@ export class PreloadDatabase<T> {
 
       window.addEventListener('message', (e) => {
         const { data } = e;
-        if (data.id === id) {
+
+        if (data.type === 'storage-result' && data.id === id) {
           resolve(data.result);
         }
       });
