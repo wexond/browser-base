@@ -8,8 +8,7 @@
 [![Travis](https://img.shields.io/travis/com/wexond/desktop.svg?style=flat-square)](https://travis-ci.com/wexond/desktop)
 [![Downloads](https://img.shields.io/github/downloads/wexond/desktop/total.svg?style=flat-square)](https://github.com/wexond/desktop/releases)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwexond%2Fwexond.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwexond%2Fwexond?ref=badge_shield)
-
-[![Discord](https://discordapp.com/api/guilds/307605794680209409/widget.png?style=banner2)](https://discord.gg/P7Vn4VX)
+[![Discord](https://discordapp.com/api/guilds/307605794680209409/widget.png?style=shield)](https://discord.gg/P7Vn4VX)
 
 Wexond is an extensible and privacy-focused web browser with a totally different user experience, built on top of `Electron` and `React`. It aims to be fast, private, beautiful, extensible and functional.
 
