@@ -77,7 +77,7 @@ export const Toolbar = observer(() => {
         {hasCredentials && (
           <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
         )}
-        {!isWindow && (
+        {!isWindow && store.options.object.shield == true && (
           <BrowserAction
             size={18}
             style={{ marginLeft: 0 }}
