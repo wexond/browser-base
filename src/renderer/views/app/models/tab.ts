@@ -5,8 +5,9 @@ import * as React from 'react';
 import Vibrant = require('node-vibrant');
 
 import store from '../store';
-import { TABS_PADDING, TAB_ANIMATION_DURATION } from '../constants';
+import { TABS_PADDING, TAB_ANIMATION_DURATION, TAB_MIN_WIDTH, TAB_MAX_WIDTH, TAB_PINNED_WIDTH } from '../constants';
 import { getColorBrightness, callViewMethod } from '~/utils';
+import console = require('console');
 
 const isColorAcceptable = (color: string) => {
   if (store.theme['tab.allowLightBackground']) {
@@ -22,6 +23,9 @@ export class ITab {
 
   @observable
   public isDragging = false;
+
+  @observable
+  public isPinned = false;
 
   @observable
   public title: string = 'New tab';
@@ -105,7 +109,7 @@ export class ITab {
   }
 
   public constructor(
-    { active, url }: chrome.tabs.CreateProperties,
+    { active, url, pinned }: chrome.tabs.CreateProperties,
     id: number,
     tabGroupId: number,
     isWindow: boolean,
@@ -114,6 +118,7 @@ export class ITab {
     this.id = id;
     this.isWindow = isWindow;
     this.tabGroupId = tabGroupId;
+    this.isPinned = pinned;
 
     if (active) {
       requestAnimationFrame(() => {
@@ -206,6 +211,11 @@ export class ITab {
         }
       },
     );
+
+    ipcRenderer .on(`tab-pinned-${this.id}`, (e, isPinned: boolean) => {
+      console.log('tab pinned! ' + this.id);
+      this.isPinned = isPinned;
+    });
 
     ipcRenderer.on(`view-loading-${this.id}`, (e, loading: boolean) => {
       this.loading = loading;
@@ -309,6 +319,8 @@ export class ITab {
       containerWidth = store.tabs.containerWidth;
     }
 
+    if (this.isPinned) return TAB_PINNED_WIDTH;
+    
     if (tabs === null) {
       tabs = store.tabs.list.filter(
         x => x.tabGroupId === this.tabGroupId && !x.isClosing,
@@ -318,11 +330,11 @@ export class ITab {
     const width =
       containerWidth / (tabs.length + store.tabs.removedTabs) - TABS_PADDING;
 
-    if (width > 200) {
-      return 200;
+    if (width > TAB_MAX_WIDTH) {
+      return TAB_MAX_WIDTH;
     }
-    if (width < 72) {
-      return 72;
+    if (width < TAB_MIN_WIDTH) {
+      return TAB_MIN_WIDTH;
     }
 
     return width;

@@ -1,6 +1,7 @@
 import { observable, computed, action } from 'mobx';
 import { IBookmark } from '~/interfaces';
 import { Database } from '~/models/database';
+import store from '.';
 
 export class BookmarksStore {
   public db = new Database<IBookmark>('bookmarks');
@@ -88,6 +89,7 @@ export class BookmarksStore {
 
       let barFolder = items.find(x => x.static === 'main');
       let otherFolder = items.find(x => x.static === 'other');
+      let pinnedFolder = items.find(x => x.static === 'pinned');
       let mobileFolder = items.find(x => x.static === 'mobile');
 
       this.list = items;
@@ -112,6 +114,13 @@ export class BookmarksStore {
         });
       }
 
+      if (!pinnedFolder) {
+        pinnedFolder = await this.addItem({
+          static: 'pinned',
+          isFolder: true,
+        });
+      }
+
       if (!mobileFolder) {
         mobileFolder = await this.addItem({
           static: 'mobile',
@@ -121,6 +130,7 @@ export class BookmarksStore {
 
       this.currentFolder = barFolder._id;
       this.dialCurrentFolder = barFolder._id;
+      store.tabGroups.addPinnedTabsToCurrentGroup();
     } catch (e) {
       console.error(e);
     }

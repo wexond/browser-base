@@ -34,7 +34,7 @@ export class ViewManager {
         this.create(details);
       },
     );
-
+    
     ipcMain.on(`view-select-${id}`, (e, id: number, force: boolean) => {
       const view = this.views.find(x => x.webContents.id === id);
       this.select(id);

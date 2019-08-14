@@ -8,6 +8,6 @@ export interface IBookmark {
   parent?: string;
   order?: number;
   expanded?: boolean;
-  static?: 'mobile' | 'main' | 'other';
+  static?: 'mobile' | 'main' | 'other' | 'pinned';
   children?: string[];
 }
