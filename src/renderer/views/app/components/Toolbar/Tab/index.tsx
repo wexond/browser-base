@@ -102,6 +102,12 @@ const onContextMenu = (tab: ITab) => () => {
       },
     },
     {
+      label: tab.isPinned ? 'Unpin tab' : 'Pin tab',
+      click: () => {
+        tab.isPinned ? store.tabs.unpinTab(tab) : store.tabs.pinTab(tab);
+      },
+    },
+    {
       type: 'separator',
     },
     {
@@ -153,7 +159,7 @@ const onContextMenu = (tab: ITab) => () => {
 
 const Content = observer(({ tab }: { tab: ITab }) => {
   return (
-    <StyledContent collapsed={tab.isExpanded}>
+    <StyledContent collapsed={tab.isExpanded} pinned={tab.isPinned}>
       {!tab.loading && tab.favicon !== '' && (
         <StyledIcon
           isIconSet={tab.favicon !== ''}
@@ -168,18 +174,20 @@ const Content = observer(({ tab }: { tab: ITab }) => {
           style={{ minWidth: 16 }}
         />
       )}
-      <StyledTitle
-        isIcon={tab.isIconSet}
-        style={{
-          color: tab.isSelected
-            ? store.theme['tab.selected.textColor'] === 'inherit'
-              ? tab.background
-              : store.theme['tab.selected.textColor']
-            : store.theme['tab.textColor'],
-        }}
-      >
-        {tab.title}
-      </StyledTitle>
+      {!tab.isPinned && (
+        <StyledTitle
+          isIcon={tab.isIconSet}
+          style={{
+            color: tab.isSelected
+              ? store.theme['tab.selected.textColor'] === 'inherit'
+                ? tab.background
+                : store.theme['tab.selected.textColor']
+              : store.theme['tab.textColor'],
+          }}
+        >
+          {tab.title}
+        </StyledTitle>
+      )}
     </StyledContent>
   );
 });
@@ -189,7 +197,7 @@ const Close = observer(({ tab }: { tab: ITab }) => {
     <StyledClose
       onMouseDown={onCloseMouseDown}
       onClick={removeTab(tab)}
-      visible={tab.isExpanded}
+      visible={tab.isExpanded && !tab.isPinned}
     />
   );
 });
@@ -232,6 +240,7 @@ export default observer(({ tab }: { tab: ITab }) => {
       title={tab.title}
     >
       <TabContainer
+        pinned={tab.isPinned}
         style={{
           backgroundColor: tab.isSelected
             ? shadeBlendConvert(

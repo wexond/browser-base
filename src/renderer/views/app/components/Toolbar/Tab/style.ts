@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { transparency, icons } from '~/renderer/constants';
 import { ITheme } from '~/interfaces';
 import { centerIcon, body2 } from '~/renderer/mixins';
+import { TAB_PINNED_WIDTH } from '../../../constants';
 
 interface CloseProps {
   visible: boolean;
@@ -21,6 +22,7 @@ export const StyledClose = styled.div`
 
     ${({ visible, theme }: CloseProps) => css`
       opacity: ${visible ? transparency.icons.inactive : 0};
+      display: ${visible ? 'block' : 'none'};
       filter: ${theme['toolbar.icons.invert'] ? 'invert(100%)' : 'none'};
     `}
 
@@ -108,6 +110,7 @@ export const StyledIcon = styled.div`
 
 interface ContentProps {
   collapsed: boolean;
+  pinned: boolean;
 }
 
 export const StyledContent = styled.div`
@@ -117,8 +120,8 @@ export const StyledContent = styled.div`
   align-items: center;
   display: flex;
   margin-left: 12px;
-  ${({ collapsed }: ContentProps) => css`
-    max-width: calc(100% - ${24 + (collapsed ? 24 : 0)}px);
+  ${({ collapsed, pinned }: ContentProps) => css`
+    max-width: calc(100% - ${(pinned ? 0 : collapsed ? 48 : 24)}px);
   `};
 `;
 
@@ -137,6 +140,10 @@ export const StyledBorder = styled.div`
   `};
 `;
 
+interface TabContainerProps{
+  pinned: boolean;
+}
+
 export const TabContainer = styled.div`
   position: relative;
   border-radius: 6px;
@@ -146,4 +153,7 @@ export const TabContainer = styled.div`
   display: flex;
   align-items: center;
   backface-visibility: hidden;
+  ${({ pinned }: TabContainerProps) => css`
+    max-width: ${pinned ? `${TAB_PINNED_WIDTH}px` : '100%'};
+`};
 `;

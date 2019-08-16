@@ -26,6 +26,7 @@ export interface ContextMenuItemProps {
   selected?: boolean;
   theme?: ITheme;
   dense?: boolean;
+  visible?: boolean;
 }
 
 export const ContextMenuItem = styled.div`
@@ -37,10 +38,11 @@ export const ContextMenuItem = styled.div`
   selected,
   theme,
   dense,
+  visible,
 }: ContextMenuItemProps) => css`
     font-size: ${dense ? 13 : 14}px;
     padding: ${dense ? 8 : 12}px ${dense ? 12 : 24}px;
-
+    display: ${visible === undefined || visible ? 'block' : 'none'};
     background-color: ${selected
     ? theme['overlay.foreground'] === 'light'
       ? 'rgba(255, 255, 255, 0.15)'
