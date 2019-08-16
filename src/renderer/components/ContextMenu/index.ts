@@ -42,7 +42,7 @@ export const ContextMenuItem = styled.div`
 }: ContextMenuItemProps) => css`
     font-size: ${dense ? 13 : 14}px;
     padding: ${dense ? 8 : 12}px ${dense ? 12 : 24}px;
-    display: ${visible === null || visible ? 'block' : 'none'};
+    display: ${visible === undefined || visible ? 'block' : 'none'};
     background-color: ${selected
     ? theme['overlay.foreground'] === 'light'
       ? 'rgba(255, 255, 255, 0.15)'
