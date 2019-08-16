@@ -55,6 +55,16 @@ const onRemoveClick = (item: IBookmark) => () => {
   store.bookmarks.removeItem(item._id);
 };
 
+const onUnpinClick = (item: IBookmark) => () => {
+  const tab = store.tabs.list.find(x => x.url === item.url && x.isPinned);
+  if (tab){
+    store.tabs.unpinTab(tab);
+  }
+  else{
+    store.bookmarks.removeItem(item._id);
+  }
+};
+
 const onNewFolderClick = () => {
   store.bookmarks.addItem({
     title: 'New folder',
@@ -159,8 +169,15 @@ export const Bookmarks = observer(() => {
           <ContextMenuItem
             onClick={onRemoveClick(store.bookmarks.currentBookmark)}
             icon={icons.trash}
+            visible={store.bookmarks.path.length <= 0 || store.bookmarks.path[0].static !== 'pinned'}
           >
             Remove
+          </ContextMenuItem>
+          <ContextMenuItem
+            onClick={onUnpinClick(store.bookmarks.currentBookmark)}
+            visible={store.bookmarks.path.length > 0 && store.bookmarks.path[0].static === 'pinned'}
+          >
+            Unpin
           </ContextMenuItem>
         </ContextMenu>
       </Scrollable2>

@@ -1,6 +1,6 @@
 # Extensions
 
-Wexond has partial support for Chrome extensions (see #110).
+Wexond has partial support for Chrome extensions (see [#110](https://github.com/wexond/desktop/issues/110)).
 
 # Installing an extension
 

@@ -10,6 +10,7 @@ import {
   TABS_PADDING,
   TOOLBAR_HEIGHT,
   TAB_ANIMATION_EASING,
+  TAB_MAX_WIDTH,
 } from '../constants';
 
 import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
@@ -234,6 +235,34 @@ export class TabsStore {
 
   public removeTab(id: number) {
     (this.list as any).remove(this.getTabById(id));
+  }
+
+  @action
+  public pinTab(tab : ITab){
+    tab.isPinned = true;
+    store.bookmarks.addItem({
+      url: tab.url,
+      isFolder: false,
+      title: tab.title,
+      parent: store.bookmarks.folders.find(r => r.static === 'pinned')._id,
+      favicon: tab.favicon
+    });
+      requestAnimationFrame(() => {
+      tab.setLeft(0, false);
+      this.getTabsToReplace(tab, 'left');
+      this.updateTabsBounds(true);
+    });
+  }
+
+  @action
+  public unpinTab(tab : ITab){
+    tab.isPinned = false;
+    store.bookmarks.removeItem(store.bookmarks.list.find(x => x.url === tab.url)._id);
+    requestAnimationFrame(() => {
+      tab.setLeft(Math.max.apply(Math, this.list.map(function(item){return item.left})) + TAB_MAX_WIDTH, false);
+      this.getTabsToReplace(tab, 'right');
+      this.updateTabsBounds(true);
+    });
   }
 
   @action
