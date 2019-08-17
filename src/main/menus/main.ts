@@ -64,6 +64,14 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           },
         },
         {
+          label: 'Reload',
+          visible: false,
+          accelerator: 'F5',
+          click: () => {
+            windowsManager.currentWindow.viewManager.selected.webContents.reload();
+          },
+        },
+        {
           accelerator: 'CmdOrCtrl+F',
           label: 'Find in page',
           visible: false,
