@@ -1,4 +1,4 @@
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer, remote, webContents } from 'electron';
 import { parse } from 'url';
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
@@ -26,6 +26,9 @@ export class ITab {
 
   @observable
   public isPinned = false;
+
+  @observable
+  public isMuted = false;
 
   @observable
   public title: string = 'New tab';
@@ -212,8 +215,7 @@ export class ITab {
       },
     );
 
-    ipcRenderer .on(`tab-pinned-${this.id}`, (e, isPinned: boolean) => {
-      console.log('tab pinned! ' + this.id);
+    ipcRenderer.on(`tab-pinned-${this.id}`, (e, isPinned: boolean) => {
       this.isPinned = isPinned;
     });
 

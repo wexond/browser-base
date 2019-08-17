@@ -17,6 +17,7 @@ import Ripple from '~/renderer/components/Ripple';
 import { ITab } from '../../../models';
 import store from '../../../store';
 import { remote } from 'electron';
+import { icons } from '~/renderer/constants';
 
 const removeTab = (tab: ITab) => (e: React.MouseEvent) => {
   e.stopPropagation();
@@ -108,6 +109,12 @@ const onContextMenu = (tab: ITab) => () => {
       },
     },
     {
+      label: tab.isMuted ? 'Unmute tab' : 'Mute tab',
+      click: () => {
+        tab.isMuted ? store.tabs.unmuteTab(tab) : store.tabs.muteTab(tab);
+      },
+    },
+    {
       type: 'separator',
     },
     {
@@ -164,6 +171,19 @@ const Content = observer(({ tab }: { tab: ITab }) => {
         <StyledIcon
           isIconSet={tab.favicon !== ''}
           style={{ backgroundImage: `url(${tab.favicon})` }}
+        >
+        {tab.isMuted && !tab.loading && tab.isPinned && (
+          <StyledIcon
+            isIconSet={tab.isMuted}
+            style={{ backgroundImage: `url(${icons.mute})` }}
+          />
+        )}
+        </StyledIcon>
+      )}
+      {tab.isMuted && !tab.loading && !tab.isPinned && (
+        <StyledIcon
+          isIconSet={tab.isMuted}
+          style={{ backgroundImage: `url(${icons.mute})` }}
         />
       )}
       {tab.loading && (

@@ -1,5 +1,6 @@
 import { AppWindow } from '../windows';
 import { clipboard, nativeImage, Menu } from 'electron';
+import { isURL } from '~/utils';
 
 export const getViewMenu = (
   appWindow: AppWindow,
@@ -112,6 +113,24 @@ export const getViewMenu = (
         role: 'copy',
       },
     ]);
+
+    const trimmedText = params.selectionText.trim();
+
+    if (isURL(trimmedText)){
+      menuItems = menuItems.concat([
+        {
+          label: 'Go to ' + trimmedText,
+          click: () => {
+            appWindow.viewManager.create(
+              {
+                url: trimmedText.includes('://') ? trimmedText : `http://${trimmedText}`,
+                active: true,
+              },
+              true,
+            );
+          },
+        }]);
+    }
   }
 
   if (

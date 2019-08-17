@@ -80,6 +80,16 @@ export class ViewManager {
       this.showView();
     });
 
+    ipcMain.on(`mute-view-${id}`, (e, tabId: number) => {
+      const view = this.views.find(x => x.webContents.id === tabId);
+      view.webContents.setAudioMuted(true);
+    });
+
+    ipcMain.on(`unmute-view-${id}`, (e, tabId: number) => {
+      const view = this.views.find(x => x.webContents.id === tabId);
+      view.webContents.setAudioMuted(false);
+    });
+
     setInterval(() => {
       for (const view of this.views) {
         const url = view.webContents.getURL();
