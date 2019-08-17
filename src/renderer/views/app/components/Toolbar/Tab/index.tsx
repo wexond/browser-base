@@ -17,6 +17,7 @@ import Ripple from '~/renderer/components/Ripple';
 import { ITab } from '../../../models';
 import store from '../../../store';
 import { remote } from 'electron';
+import { icons } from '~/renderer/constants';
 
 const removeTab = (tab: ITab) => (e: React.MouseEvent) => {
   e.stopPropagation();
@@ -170,6 +171,19 @@ const Content = observer(({ tab }: { tab: ITab }) => {
         <StyledIcon
           isIconSet={tab.favicon !== ''}
           style={{ backgroundImage: `url(${tab.favicon})` }}
+        >
+        {tab.isMuted && !tab.loading && tab.isPinned && (
+          <StyledIcon
+            isIconSet={tab.isMuted}
+            style={{ backgroundImage: `url(${icons.mute})` }}
+          />
+        )}
+        </StyledIcon>
+      )}
+      {tab.isMuted && !tab.loading && !tab.isPinned && (
+        <StyledIcon
+          isIconSet={tab.isMuted}
+          style={{ backgroundImage: `url(${icons.mute})` }}
         />
       )}
       {tab.loading && (
