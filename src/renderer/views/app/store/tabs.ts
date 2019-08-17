@@ -266,6 +266,18 @@ export class TabsStore {
   }
 
   @action
+  public muteTab(tab: ITab){
+    ipcRenderer.send(`mute-view-${store.windowId}`, tab.id);
+    tab.isMuted = true;
+  }
+
+  @action
+  public unmuteTab(tab: ITab){
+    ipcRenderer.send(`unmute-view-${store.windowId}`, tab.id);
+    tab.isMuted = false;
+  }
+
+  @action
   public updateTabsBounds(animation: boolean) {
     this.setTabsWidths(animation);
     this.setTabsLefts(animation);

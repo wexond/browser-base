@@ -108,6 +108,12 @@ const onContextMenu = (tab: ITab) => () => {
       },
     },
     {
+      label: tab.isMuted ? 'Unmute tab' : 'Mute tab',
+      click: () => {
+        tab.isMuted ? store.tabs.unmuteTab(tab) : store.tabs.muteTab(tab);
+      },
+    },
+    {
       type: 'separator',
     },
     {
