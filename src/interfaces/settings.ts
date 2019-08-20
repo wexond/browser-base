@@ -6,7 +6,6 @@ export interface ISearchEngine {
 
 export interface IStartupBehavior {
   type: 'continue' | 'urls' | 'empty';
-  urls?: string[];
 }
 
 export interface ISettings {

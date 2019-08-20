@@ -11,6 +11,7 @@ import { AddressBar } from './AddressBar';
 import { Privacy } from './Privacy';
 import { Autofill } from './Autofill';
 import { icons } from '~/renderer/constants';
+import { OnStartup } from './startup';
 
 const MenuItem = observer(
   ({
@@ -45,7 +46,7 @@ export const Settings = observer(() => {
           <MenuItem icon={icons.autofill} section="autofill">
             Autofill
           </MenuItem>
-          {/* <MenuItem section="startup">On startup</MenuItem> */}
+          <MenuItem icon={icons.power} section="startup">On startup</MenuItem>
           <MenuItem icon={icons.search} section="address-bar">
             Address bar
           </MenuItem>
@@ -60,6 +61,7 @@ export const Settings = observer(() => {
           {selectedSection === 'appearance' && <Appearance />}
           {selectedSection === 'autofill' && <Autofill />}
           {selectedSection === 'address-bar' && <AddressBar />}
+          {selectedSection === 'startup' && <OnStartup />}
           {selectedSection === 'privacy' && <Privacy />}
         </Sections>
       </Scrollable2>

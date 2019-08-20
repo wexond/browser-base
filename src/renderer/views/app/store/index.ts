@@ -20,6 +20,7 @@ import { extensionsRenderer } from 'electron-extensions';
 import { AutoFillStore } from './autofill';
 import { getCurrentWindow } from '../utils';
 import { EditAddressStore } from './edit-address';
+import { StartupTabsStore } from './startup-tabs';
 
 export class Store {
   public history = new HistoryStore();
@@ -37,6 +38,7 @@ export class Store {
   public addBookmark = new AddBookmarkStore();
   public autoFill = new AutoFillStore();
   public editAddress = new EditAddressStore();
+  public startupTabs = new StartupTabsStore();
 
   @observable
   public theme = lightTheme;

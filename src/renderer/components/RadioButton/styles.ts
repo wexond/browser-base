@@ -17,51 +17,87 @@ export const Container = styled.div`
   }
 `;
 
-export const StyledRadioButton = styled.div`
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  box-sizing: border-box;
-  position: relative;
-  overflow: visible;
-  transition: 0.15s border-color;
 
-  ${({ selected }: { selected: boolean }) => css`
-    border: 2px solid ${selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.54)'};
-
-    &::before {
-      background-color: ${selected ? colors.blue['500'] : '#000'};
-    }
-  `}
+export const Circle = styled.div`
+  background: ${selected => selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.54)'};
+  width: 0;
+  height: 0;
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease-in, height 0.2s ease-in;
+  pointer-events: none;
+  z-index: 1;
 
   &::before {
     content: "";
-    width: 0px;
-    height: 0px;
-    border-radius: 100%;
-    display: block;
-    position: absolute;
-    pointer-events: none;
     opacity: 0;
-    transition: 0.1s width ${EASING_FUNCTION}, 0.1s height ${EASING_FUNCTION}, 0.15s opacity, 0.15s background-color;
-    ${centerBoth()};
+    width: calc(20px - 4px);
+    position: absolute;
+    height: calc(20px - 4px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid
+    ${selected => selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.54)'};
+    border-radius: 100%;
   }
 `;
 
-export const Circle = styled.div`
-  border-radius: 100%;
-  box-sizing: border-box;
-  background-color: ${colors.blue['500']};
-  position: absolute;
-  pointer-events: none;
-  transition: 0.15s width ${EASING_FUNCTION}, 0.15s height ${EASING_FUNCTION};
-  ${centerBoth()};
+export const Root = styled.div`
+  margin: 5px;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  position: relative;
+  label {
+    margin-left: 25px;
+  }
+  &::before {
+    content: "";
+    border-radius: 100%;
+    border: 1px solid #DDD
+    background: #FAFAFA;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    box-sizing: border-box;
+    pointer-events: none;
+    z-index: 0;
+  }
+`;
 
-  ${({ selected }: { selected: boolean }) => css`
-    width: ${selected ? 9 : 0}px;
-    height: ${selected ? 9 : 0}px;
-  `}
-`
+
+export const Radio = styled.input`
+opacity: 0;
+z-index: 2;
+position: absolute;
+top: 0;
+width: 100%;
+height: 100%;
+margin: 0;
+cursor: pointer;
+
+&:focus {
+  outline: none;
+}
+
+&:checked {
+  & ~ ${Circle} {
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    transition: width 0.2s ease-out, height 0.2s ease-out;
+
+    &::before {
+      opacity: 1;
+      transition: opacity 1s ease;
+    }
+  }
+}
+`;
 
 export const Label = styled.div`
   font-size: 14px;

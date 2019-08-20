@@ -14,10 +14,6 @@ export const getBookmarkTitle = (item: IBookmark) => {
     return 'Mobile bookmarks';
   }
 
-  if (item.static === 'pinned') {
-    return 'Pinned tabs';
-  }
-
   if (item.static === 'other') {
     return 'Other bookmarks';
   }

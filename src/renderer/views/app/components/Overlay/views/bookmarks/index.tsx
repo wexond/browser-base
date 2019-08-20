@@ -169,15 +169,8 @@ export const Bookmarks = observer(() => {
           <ContextMenuItem
             onClick={onRemoveClick(store.bookmarks.currentBookmark)}
             icon={icons.trash}
-            visible={store.bookmarks.path.length <= 0 || store.bookmarks.path[0].static !== 'pinned'}
           >
             Remove
-          </ContextMenuItem>
-          <ContextMenuItem
-            onClick={onUnpinClick(store.bookmarks.currentBookmark)}
-            visible={store.bookmarks.path.length > 0 && store.bookmarks.path[0].static === 'pinned'}
-          >
-            Unpin
           </ContextMenuItem>
         </ContextMenu>
       </Scrollable2>
