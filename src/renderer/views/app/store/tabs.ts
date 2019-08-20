@@ -16,10 +16,13 @@ import {
 import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 import store from '.';
 import { ipcRenderer } from 'electron';
-import { getColorBrightness } from '~/utils';
+import { getColorBrightness, prefixHttp } from '~/utils';
 import { defaultTabOptions } from '~/constants/tabs';
+import { Database } from '~/models/database';
+import { IStartupTab } from '~/interfaces/startup-tab';
 
 export class TabsStore {
+
   @observable
   public isDragging: boolean = false;
 
@@ -166,6 +169,7 @@ export class TabsStore {
     ipcRenderer.on('revert-closed-tab', () => {
       this.revertClosed();
     });
+
   }
 
   public resetRearrangeTabsTimer() {
@@ -240,14 +244,8 @@ export class TabsStore {
   @action
   public pinTab(tab : ITab){
     tab.isPinned = true;
-    store.bookmarks.addItem({
-      url: tab.url,
-      isFolder: false,
-      title: tab.title,
-      parent: store.bookmarks.folders.find(r => r.static === 'pinned')._id,
-      favicon: tab.favicon
-    });
-      requestAnimationFrame(() => {
+    store.startupTabs.updateStartupTabItem(tab);
+    requestAnimationFrame(() => {
       tab.setLeft(0, false);
       this.getTabsToReplace(tab, 'left');
       this.updateTabsBounds(true);
@@ -257,7 +255,7 @@ export class TabsStore {
   @action
   public unpinTab(tab : ITab){
     tab.isPinned = false;
-    store.bookmarks.removeItem(store.bookmarks.list.find(x => x.url === tab.url)._id);
+    store.startupTabs.updateStartupTabItem(tab);
     requestAnimationFrame(() => {
       tab.setLeft(Math.max.apply(Math, this.list.map(function(item){return item.left})) + TAB_MAX_WIDTH, false);
       this.getTabsToReplace(tab, 'right');

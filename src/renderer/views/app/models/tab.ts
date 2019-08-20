@@ -139,6 +139,16 @@ export class ITab {
           favicon: this.favicon,
           date: new Date().toString(),
         });
+
+        await store.startupTabs.addStartupTabItem({
+          id: this.id,
+          windowId: store.windowId,
+          url: this.url,
+          pinned: this.isPinned,
+          title: this.title,
+          favicon: this.favicon,
+          isUserDefined: false
+        });
       }
 
       this.url = url;
@@ -375,6 +385,8 @@ export class ITab {
     store.tabs.closedUrl = this.url;
 
     const selected = tabGroup.selectedTabId === this.id;
+
+    store.startupTabs.removeStartupTabItem(this.id, store.windowId);
 
     if (this.isWindow) {
       ipcRenderer.send(`detach-window-${store.windowId}`, this.id);

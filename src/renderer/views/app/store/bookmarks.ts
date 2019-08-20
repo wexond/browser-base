@@ -85,13 +85,18 @@ export class BookmarksStore {
 
   public async load() {
     try {
-      const items = await this.db.get({});
+      let items = await this.db.get({});
 
       let barFolder = items.find(x => x.static === 'main');
       let otherFolder = items.find(x => x.static === 'other');
-      let pinnedFolder = items.find(x => x.static === 'pinned');
       let mobileFolder = items.find(x => x.static === 'mobile');
-
+      let pinnedFolder = items.find(x => x.static === 'pinned');
+      if (pinnedFolder){
+        // Remove pinned items from bookmarks. This is moved to IStartupTab's
+        this.db.remove({parent: pinnedFolder._id});
+        this.db.remove({static: 'pinned'});
+        items = items.filter(x => x.parent == pinnedFolder._id || x.static === 'pinned');
+      }
       this.list = items;
 
       if (!barFolder) {
@@ -114,13 +119,6 @@ export class BookmarksStore {
         });
       }
 
-      if (!pinnedFolder) {
-        pinnedFolder = await this.addItem({
-          static: 'pinned',
-          isFolder: true,
-        });
-      }
-
       if (!mobileFolder) {
         mobileFolder = await this.addItem({
           static: 'mobile',
@@ -130,7 +128,6 @@ export class BookmarksStore {
 
       this.currentFolder = barFolder._id;
       this.dialCurrentFolder = barFolder._id;
-      store.tabGroups.addPinnedTabsToCurrentGroup();
     } catch (e) {
       console.error(e);
     }

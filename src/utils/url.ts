@@ -37,3 +37,8 @@ export const getDomain = (url: string): string => {
 
   return hostname;
 };
+
+export const prefixHttp = (url: string): string => {
+  url = url.trim();
+  return url.includes('://') ? url : `http://${url}`;
+}

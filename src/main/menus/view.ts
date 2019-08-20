@@ -1,6 +1,6 @@
 import { AppWindow } from '../windows';
 import { clipboard, nativeImage, Menu } from 'electron';
-import { isURL } from '~/utils';
+import { isURL, prefixHttp } from '~/utils';
 
 export const getViewMenu = (
   appWindow: AppWindow,
@@ -93,13 +93,13 @@ export const getViewMenu = (
         role: 'copy',
       },
       {
-        role: 'pasteandmatchstyle',
+        role: 'pasteAndMatchStyle',
       },
       {
         role: 'paste',
       },
       {
-        role: 'selectall',
+        role: 'selectAll',
       },
       {
         type: 'separator',
@@ -123,7 +123,7 @@ export const getViewMenu = (
           click: () => {
             appWindow.viewManager.create(
               {
-                url: trimmedText.includes('://') ? trimmedText : `http://${trimmedText}`,
+                url: prefixHttp(trimmedText),
                 active: true,
               },
               true,

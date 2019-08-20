@@ -96,18 +96,4 @@ export class TabGroupsStore {
       current.focus();
     }
   }
-
-  @action
-  public addPinnedTabsToCurrentGroup(){
-    const pinnedFolder = store.bookmarks.list.find(x => x.static === 'pinned');
-    if (pinnedFolder && pinnedFolder.children){
-      Array.prototype.forEach.call(pinnedFolder.children, (element: string) => {
-        const bookmark = store.bookmarks.list.find(x => x._id == element);
-        store.tabs.addTab({
-          url: bookmark.url,
-          pinned: true
-        })
-      });
-    }
-  }
 }

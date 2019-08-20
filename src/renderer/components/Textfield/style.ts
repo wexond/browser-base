@@ -9,8 +9,13 @@ import {
 } from '~/renderer/mixins';
 import { transparency, EASING_FUNCTION } from '~/renderer/constants';
 
+interface StyledTextfieldProps {
+  width?: number;
+}
 export const StyledTextfield = styled.div`
-  width: 280px;
+${({ width}: StyledTextfieldProps) => css`
+  width: ${width === undefined ? 280 : width}px;
+`}
   position: relative;
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
