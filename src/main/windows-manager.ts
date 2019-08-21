@@ -1,5 +1,5 @@
 import { AppWindow } from './windows';
-import { app, Menu, ipcMain } from 'electron';
+import { app, Menu, ipcMain, ipcRenderer } from 'electron';
 import { isAbsolute, extname } from 'path';
 import { existsSync } from 'fs';
 import { getMainMenu } from './menus/main';
@@ -7,6 +7,7 @@ import { SessionsManager } from './sessions-manager';
 import { runAutoUpdaterService } from './services';
 import { checkFiles } from '~/utils/files';
 import { Settings } from './models/settings';
+import { isURL, prefixHttp } from '~/utils';
 
 export class WindowsManager {
   public list: AppWindow[] = [];
@@ -40,6 +41,13 @@ export class WindowsManager {
           }
           return;
         }
+        else if (isURL(path)){
+          this.currentWindow.viewManager.create({
+            url: prefixHttp(path),
+            active: true
+        });
+        return;
+      }
 
         this.createWindow();
       });

@@ -5,8 +5,8 @@ import Vibrant = require('node-vibrant');
 
 import { ITab } from '../models';
 import store from '.';
-import { ipcRenderer } from 'electron';
-import { prefixHttp } from '~/utils';
+import { ipcRenderer, remote } from 'electron';
+import { prefixHttp, isURL } from '~/utils';
 import { defaultTabOptions } from '~/constants/tabs';
 import { Database } from '~/models/database';
 import { IStartupTab } from '~/interfaces/startup-tab';
@@ -36,25 +36,43 @@ export class StartupTabsStore {
       tabsToLoad = await this.db.get({pinned: true});
     }
 
-    // If we tabs saved, load them
+    let args = remote.process.argv;
+    let needsNewTabPage: Boolean = false;
+    // If we have tabs saved, load them
     if (tabsToLoad && tabsToLoad.length > 0) {
       this.clearStartupTabs(true, false);
 
+      let i = 0;
       for (let tab in tabsToLoad.sort((x,y) => x.pinned && y.pinned ? x.order - y.order : x.pinned ? -1 : y.pinned ? 1 : x.order - y.order)){
         this.addTab({
           url: prefixHttp(tabsToLoad[tab].url),
           pinned: tabsToLoad[tab].pinned,
-          active: true
+          active: (i === tabsToLoad.length - 1) && !(args.length > 1 && isURL(args[args.length - 1]))
         });
+        i++;
       }
 
       // If we only load up pinned tabs, add a new tab page 
       if (tabsToLoad.filter(x => !x.pinned).length == 0){
-        this.addTab();
+        needsNewTabPage = true;
       }
     }
     else {
       // No tabs saved. Just load a new tab page.
+      needsNewTabPage = true;
+    }
+
+    //load up command line args. If there are any, we don't need a new tab page.
+    
+    if (args.length > 1 && isURL(args[args.length - 1])){
+      this.addTab({
+        url: prefixHttp(args[args.length - 1]),
+        active: true
+      }); 
+      needsNewTabPage = false;
+    }
+
+    if (needsNewTabPage){
       this.addTab();
     }
   }
