@@ -77,7 +77,7 @@ export class Player {
     })
 
     ipcMain.on('typeofstream', (evt: any, url: string) => {
-      const sendTypeOfStream = (stream :any) => {
+      const sendTypeOfStream = (stream: any) => {
         if (stream.video && stream.video.tracks && stream.video.tracks.length > 0) {
           // is video
           evt.sender.send('typeofstream', 'video')
