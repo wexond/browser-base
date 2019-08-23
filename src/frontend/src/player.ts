@@ -77,9 +77,7 @@ export class Player {
     })
 
     ipcMain.on('typeofstream', (evt: any, url: string) => {
-      const channelData = this.store.get('channelData')
-      const stream = channelData[url]
-      if (stream) {
+      const sendTypeOfStream = (stream: any) => {
         if (stream.video && stream.video.tracks && stream.video.tracks.length > 0) {
           // is video
           evt.sender.send('typeofstream', 'video')
@@ -87,18 +85,17 @@ export class Player {
           // is audio
           evt.sender.send('typeofstream', 'audio')
         }
+      }
+      const channelData = this.store.get('channelData')
+      const stream = channelData[url]
+      if (stream) {
+        sendTypeOfStream(stream)
       } else {
         ffprobe(`${url}?timeout=${ffprobeTimeout}`, { path: ffprobePath }, (err: Error, metadata: any) => {
           if (metadata) {
             this.currentStreams = this.processStreams(metadata.streams, url)
             this.updateChannelData(this.currentStreams)
-            if (stream.video && stream.video.tracks && stream.video.tracks.length > 0) {
-              // is video
-              evt.sender.send('typeofstream', 'audio')
-            } else if (stream.audio && stream.audio.tracks && stream.audio.tracks.length > 0) {
-              // is audio
-              evt.sender.send('typeofstream', 'video')
-            }
+            sendTypeOfStream(this.currentStreams)
           } else {
             console.log('ffprobe failure')
           }
