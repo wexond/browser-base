@@ -1,6 +1,6 @@
 {
   "name": "flowr-desktop",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "author": {
     "email": "hj@taktik.com",
     "name": "Hubert Jacquin"
@@ -22,13 +22,17 @@
   "scripts": {
     "dev": "cross-env NODE_ENV='dev' node fuse.js",
     "build": "node fuse.js",
+    "setup": "npm install && npm run install-app-deps && npm run install-widevine && npm run copy-header && npm run build",
     "start": "cross-env ENV='dev' electron .",
-    "compile-win32": "npm run build && electron-builder -w -p always",
-    "compile-darwin": "npm run build && electron-builder -m -p always",
-    "compile-linux": "npm run build && electron-builder -l -p always",
+    "compile-win32": "electron-builder -w",
+    "compile-darwin": "electron-builder -m",
+    "compile-linux": "electron-builder -l",
     "lint": "tslint \"src/**/*.ts*\"",
     "lint-fix": "prettier --write \"src/**/*.ts*\" && tslint \"src/**/*.ts*\" --fix",
-    "postinstall": "electron-builder install-app-deps"
+    "install-app-deps": "electron-builder install-app-deps",
+    "install-widevine": "npm install castlabs/electron-releases#v5.0.3-wvvmp --no-save",
+    "copy-header": "cp -r $HOME/.electron-gyp/5.0.3 $HOME/.electron-gyp/5.0.3-wvvmp",
+    "copy-header-win": "cp -r %HOME%/.electron-gyp/5.0.3 %HOME%/.electron-gyp/5.0.3-wvvmp"
   },
   "pre-commit": [
     "lint-fix"
@@ -48,7 +52,7 @@
     "@types/styled-components": "4.1.14",
     "concurrently": "4.1.0",
     "cross-env": "5.2.0",
-    "electron": "https://github.com/castlabs/electron-releases#v5.0.3-wvvmp",
+    "electron": "5.0.3",
     "electron-builder": "20.43.0",
     "fuse-box": "3.7.1",
     "prettier": "1.17.0",
@@ -83,7 +87,7 @@
     "nedb": "1.8.0",
     "network": "^0.4.1",
     "node-vibrant": "3.2.0-alpha",
-    "node-window-manager": "0.8.2",
+    "node-window-manager": "1.1.0",
     "pretty-bytes": "5.2.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
