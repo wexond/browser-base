@@ -27,7 +27,7 @@ $ npm i -g windows-build-tools
 Firstly, run this command to install all needed dependencies. If you have encountered any problems, please report it. I will try to help as much as I can.
 
 ```bash
-$ npm install
+$ npm run setup
 ```
 
 The given command below will run flowr-desktop in the development mode.
@@ -50,6 +50,7 @@ $ npm run <command>
 
 | Command          | Description                                 |
 | ---------------- | ------------------------------------------- |
+| `setup`          | install dependency and configure compilation tools. |
 | `build`          | Bundles flowr-desktop's source in production mode. |
 | `compile-win32`  | Compiles flowr-desktop binaries for Windows.       |
 | `compile-darwin` | Compiles flowr-desktop binaries for macOS.         |
@@ -65,3 +66,10 @@ $ npm run <command>
 The browser is available in English (default) and French. 
 Translation are located in `src/wexdond/local`.
 We used [i18n-manager](https://github.com/gilmarsquinelato/i18n-manager) to edit local directory.
+
+
+## Build and publish
+
+Two script are available to help build and publish
+`./script/build help`
+`./script/maven help`
