@@ -15,11 +15,12 @@ export function initFlowrConfig(data: object) {
   initConfigData(join(FlowrDataDir, CONFIG_NAME), data)
 }
 
-let initTimeout: number
+const RELOAD_INTERVAL = 120000 // 2min
 
 let isDebugMode: boolean
 let isHiddenMenuDisplayed = false
 let isLaunchedUrlCorrect = true
+let reloadTimeout: number | undefined
 
 const flowrStore = new Store(FlowrDataDir, {
   // We'll call our data file 'user-preferences'
@@ -64,6 +65,7 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
 
   url.searchParams.set('mac', mac)
   mainWindow.loadURL(url.href)
+  reloadTimeout = setInterval(reload, RELOAD_INTERVAL)
 
   // Open the DevTools.
   if (process.env.ENV === 'dev') {
@@ -109,7 +111,7 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
   }
 
   ipcMain.on('FlowrIsInitializing', () => {
-    clearTimeout(initTimeout)
+    clearInterval(reloadTimeout)
     isLaunchedUrlCorrect = true
   })
 
@@ -227,6 +229,12 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
         }
       })
     }))
+  }
+
+  function reload() {
+    if (mainWindow) {
+      mainWindow.reload()
+    }
   }
 
   return mainWindow
