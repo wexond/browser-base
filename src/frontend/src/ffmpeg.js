@@ -4,9 +4,10 @@ const os = require('os')
 
 // TODO move this code in ffprobe-static
 let ffmpegPath = ffmpegStatic.path
-if( os.platform() === 'linux') {
-    ffmpegPath = ffmpegPath.replace('app.asar', 'app.asar.unpacked')
-}
+console.log('------------> FFMPEG PATH FOUND', ffmpegStatic.path)
+ffmpegPath = ffmpegPath.replace('app.asar', 'app.asar.unpacked')
+
+console.log('------------> FFMPEG PATH TRAN', ffmpegPath)
 ffmpeg.setFfmpegPath(ffmpegPath)
 
 

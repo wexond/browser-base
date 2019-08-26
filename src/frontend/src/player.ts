@@ -9,9 +9,9 @@ const ffprobeTimeout = 5000000
 
 // TODO move this code in ffprobe-static
 let ffprobePath = ffprobeStatic.path
-if (os.platform() === 'linux') {
-  ffprobePath = ffprobePath.replace('app.asar', 'app.asar.unpacked')
-}
+console.log('------------> FFPROB PATH FOUD', ffprobeStatic.path)
+ffprobePath = ffprobePath.replace('app.asar', 'app.asar.unpacked')
+console.log('------------> FFPROB PATH TRAN', ffprobePath)
 
 const fs = require('fs')
 
