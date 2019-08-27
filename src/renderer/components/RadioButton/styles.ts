@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { colors, EASING_FUNCTION, transparency, } from '~/renderer/constants';
+import { colors, EASING_FUNCTION, transparency } from '~/renderer/constants';
 import { centerBoth, robotoRegular } from '~/renderer/mixins';
 
 export const Container = styled.div`
@@ -17,23 +17,29 @@ export const Container = styled.div`
   }
 `;
 
-
 export const Circle = styled.div`
-  background: ${selected => selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.54)'};
-  width: 0;
-  height: 0;
   border-radius: 100%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  transition: width 0.2s ease-in, height 0.2s ease-in;
+  transition: width 0.1s ease-in, height 0.1s ease-in;
   pointer-events: none;
   z-index: 1;
 
+  ${({ selected }: { selected: boolean }) => css`
+    width: ${selected ? `calc(100% - 8px)` : 0};
+    height: ${selected ? `calc(100% - 8px)` : 0};
+    background: ${selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.54)'};
+
+    &::before {
+      opacity: ${selected ? 1 : 0};
+      transition: ${selected ? `opacity 0.5s ease` : 'none'};
+    }
+  `}
+
   &::before {
-    content: "";
-    opacity: 0;
+    content: '';
     width: calc(20px - 4px);
     position: absolute;
     height: calc(20px - 4px);
@@ -41,7 +47,7 @@ export const Circle = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     border: 1px solid
-    ${selected => selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.54)'};
+      ${selected => (selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.54)')};
     border-radius: 100%;
   }
 `;
@@ -56,10 +62,10 @@ export const Root = styled.div`
     margin-left: 25px;
   }
   &::before {
-    content: "";
+    content: '';
     border-radius: 100%;
-    border: 1px solid #DDD
-    background: #FAFAFA;
+    border: 1px solid #ddd;
+    background: #fafafa;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -70,33 +76,27 @@ export const Root = styled.div`
   }
 `;
 
-
 export const Radio = styled.input`
-opacity: 0;
-z-index: 2;
-position: absolute;
-top: 0;
-width: 100%;
-height: 100%;
-margin: 0;
-cursor: pointer;
+  opacity: 0;
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
 
-&:focus {
-  outline: none;
-}
+  &:focus {
+    outline: none;
+  }
 
-&:checked {
-  & ~ ${Circle} {
-    width: calc(100% - 8px);
-    height: calc(100% - 8px);
-    transition: width 0.2s ease-out, height 0.2s ease-out;
-
-    &::before {
-      opacity: 1;
-      transition: opacity 1s ease;
+  &:checked {
+    & ~ ${Circle} {
+      width: ;
+      height: calc(100% - 8px);
+      transition: width 0.2s ease-out, height 0.2s ease-out;
     }
   }
-}
 `;
 
 export const Label = styled.div`

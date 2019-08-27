@@ -8,7 +8,7 @@ import { Textfield } from '~/renderer/components/Textfield';
 import { RadioButton } from '~/renderer/components/RadioButton';
 import { Button } from '~/renderer/components/Button';
 import { IStartupTab } from '~/interfaces/startup-tab';
-import { icons } from '~/renderer/constants';
+import { icons, colors } from '~/renderer/constants';
 
 interface Props {
   initialValue: 'continue' | 'urls' | 'empty';
@@ -35,11 +35,12 @@ class StartupControl extends React.PureComponent<Props, State> {
   public set selectedItem(val: 'continue' | 'urls' | 'empty') {
     store.settings.object.startupBehavior.type = val;
     store.settings.save();
+
     if (val === 'empty') {
       store.startupTabs.clearStartupTabs(false, true);
       this.setState({ value: val, customURLs: [] });
     } else if (val === 'urls') {
-      let defaultItems: IStartupTab[] = this.props.initialURLS || [];
+      const defaultItems: IStartupTab[] = this.props.initialURLS || [];
       store.startupTabs.addStartupDefaultTabItems(defaultItems);
       this.setState({ value: val, customURLs: defaultItems });
     } else if (val === 'continue') {
@@ -50,6 +51,10 @@ class StartupControl extends React.PureComponent<Props, State> {
   }
 
   private onStartupOptionsChanged = (value: 'continue' | 'urls' | 'empty') => {
+    this.selectedItem = value;
+  };
+
+  private select = (value: 'continue' | 'url' | 'empty') => () => {
     this.selectedItem = value;
   };
 
@@ -67,7 +72,7 @@ class StartupControl extends React.PureComponent<Props, State> {
   };
 
   private onUpdateItemURL = (index: number, value: string) => {
-    let newURLs = [...this.state.customURLs];
+    const newURLs = [...this.state.customURLs];
     newURLs[index].url = value;
 
     this.setState({
@@ -78,7 +83,7 @@ class StartupControl extends React.PureComponent<Props, State> {
   };
 
   private onDeleteItemClick = (index: number) => {
-    let newURLs = [...this.state.customURLs].filter((item, j) => j !== index);
+    const newURLs = [...this.state.customURLs].filter((item, j) => j !== index);
     this.setState({
       value: 'urls',
       customURLs: newURLs,
@@ -91,69 +96,57 @@ class StartupControl extends React.PureComponent<Props, State> {
   };
 
   public render() {
+    const titleStyle = {
+      marginLeft: 8,
+    };
+
+    const rowStyle = {
+      cursor: 'pointer',
+    };
+
     return (
       <Content>
         <Header>On Startup</Header>
         <Content>
-          <Row>
-            <Title>Open the New Tab page</Title>
-            <Control>
-              <RadioButton
-                name={this.radioName}
-                value="empty"
-                selected={this.state.value === 'empty'}
-                onSelect={this.onStartupOptionsChanged}
-              />
-            </Control>
+          <Row style={rowStyle} onClick={this.select('empty')}>
+            <RadioButton selected={this.state.value === 'empty'} />
+            <Title style={titleStyle}>Open the New Tab page</Title>
           </Row>
-          <Row>
-            <Title>Continue where you left off</Title>
-            <Control>
-              <RadioButton
-                name={this.radioName}
-                value="continue"
-                selected={this.state.value === 'continue'}
-                onSelect={this.onStartupOptionsChanged}
-              />
-            </Control>
+          <Row style={rowStyle} onClick={this.select('continue')}>
+            <RadioButton selected={this.state.value === 'continue'} />
+            <Title style={titleStyle}>Continue where you left off</Title>
           </Row>
-          <Row>
-            <Title>Open specific pages</Title>
-            <Control>
-              <RadioButton
-                name={this.radioName}
-                value="urls"
-                selected={this.state.value === 'urls'}
-                onSelect={this.onStartupOptionsChanged}
-              />
-            </Control>
+          <Row style={rowStyle} onClick={this.select('urls')}>
+            <RadioButton selected={this.state.value === 'urls'} />
+            <Title style={titleStyle}>Open specific pages</Title>
           </Row>
           {this.state.value === 'urls' && (
-            <div>
+            <div style={{ marginLeft: 36 }}>
               <div>
                 {this.state.customURLs.map((item, index) => (
                   <Row key={index}>
-                    <Control>
-                      <Textfield
-                        width={350}
-                        placeholder={item.url}
-                        onChange={value => this.onUpdateItemURL(index, value)}
-                        icon={icons.close}
-                        onIconClick={target => this.onDeleteItemClick(index)}
-                        delay={500}
-                      />
-                    </Control>
+                    <Textfield
+                      width={350}
+                      placeholder={item.url}
+                      onChange={value => this.onUpdateItemURL(index, value)}
+                      icon={icons.close}
+                      onIconClick={target => this.onDeleteItemClick(index)}
+                      delay={500}
+                      style={{ marginBottom: 8 }}
+                    />
                   </Row>
                 ))}
               </div>
 
               <Row>
-                <Control>
-                  <Button
-                    children="Add a new page"
-                    onClick={this.onAddNewPageClick}
-                  />
-                </Control>
+                <Button
+                  type="outlined"
+                  foreground={colors.blue['500']}
+                  background={colors.blue['500']}
+                  onClick={this.onAddNewPageClick}
+                >
+                  Add a new page
+                </Button>
               </Row>
             </div>
           )}
