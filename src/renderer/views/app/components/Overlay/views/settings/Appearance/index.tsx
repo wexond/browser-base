@@ -23,9 +23,9 @@ const ThemeVariant = () => {
     <Row>
       <Title>Theme variant</Title>
       <Control>
-      <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
-          <Dropdown.Item value='light'>Light</Dropdown.Item>
-          <Dropdown.Item value='dark'>Dark</Dropdown.Item>
+        <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
+          <Dropdown.Item value="light">Light</Dropdown.Item>
+          <Dropdown.Item value="dark">Dark</Dropdown.Item>
         </Dropdown>
       </Control>
     </Row>

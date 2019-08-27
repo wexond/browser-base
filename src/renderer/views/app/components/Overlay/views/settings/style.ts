@@ -17,6 +17,7 @@ export const Title = styled.div`
 
 export const Header = styled.div`
   margin-top: 4px;
+  margin-bottom: 16px;
   font-size: 20px;
   ${robotoLight()};
 `;
@@ -25,10 +26,7 @@ export const Row = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-
-  &:not(:first-child) {
-    margin-top: 24px;
-  }
+  min-height: 48px;
 `;
 
 export const Control = styled.div`
