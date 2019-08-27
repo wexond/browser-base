@@ -115,6 +115,18 @@ export class StartupTabsStore {
       });
   }
 
+  public async updateStartupTabItem(tab: ITab) {
+    this.addStartupTabItem({
+      id: tab.id,
+      windowId: store.windowId,
+      url: tab.url,
+      pinned: tab.isPinned,
+      title: tab.title,
+      favicon: tab.favicon,
+      isUserDefined: false,
+    });
+  }
+
   public removeStartupTabItem(tabId: number, windowId: number) {
     const itemToDelete = this.list.find(
       x => x.id === tabId && x.windowId === windowId,

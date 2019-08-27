@@ -248,38 +248,40 @@ export class ITab {
 
   @action
   public async updateData() {
-    if (this.lastHistoryId && !store.isIncognito) {
-      const { title, url, favicon } = this;
+    if (!store.isIncognito) {
+      await store.startupTabs.addStartupTabItem({
+        id: this.id,
+        windowId: store.windowId,
+        url: this.url,
+        favicon: this.favicon,
+        pinned: this.isPinned,
+        title: this.title,
+        isUserDefined: false,
+      });
 
-      const item = store.history.getById(this.lastHistoryId);
+      if (this.lastHistoryId) {
+        const { title, url, favicon } = this;
 
-      if (item) {
-        item.title = title;
-        item.url = url;
-        item.favicon = favicon;
+        const item = store.history.getById(this.lastHistoryId);
+
+        if (item) {
+          item.title = title;
+          item.url = url;
+          item.favicon = favicon;
+        }
+
+        store.history.db.update(
+          {
+            _id: this.lastHistoryId,
+          },
+          {
+            title,
+            url,
+            favicon,
+          },
+        );
       }
-
-      store.history.db.update(
-        {
-          _id: this.lastHistoryId,
-        },
-        {
-          title,
-          url,
-          favicon,
-        },
-      );
     }
-
-    await store.startupTabs.addStartupTabItem({
-      id: this.id,
-      windowId: store.windowId,
-      url: this.url,
-      pinned: this.isPinned,
-      title: this.title,
-      favicon: this.favicon,
-      isUserDefined: false,
-    });
   }
 
   public get tabGroup() {
