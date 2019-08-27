@@ -90,13 +90,7 @@ export class BookmarksStore {
       let barFolder = items.find(x => x.static === 'main');
       let otherFolder = items.find(x => x.static === 'other');
       let mobileFolder = items.find(x => x.static === 'mobile');
-      let pinnedFolder = items.find(x => x.static === 'pinned');
-      if (pinnedFolder){
-        // Remove pinned items from bookmarks. This is moved to IStartupTab's
-        this.db.remove({parent: pinnedFolder._id});
-        this.db.remove({static: 'pinned'});
-        items = items.filter(x => x.parent == pinnedFolder._id || x.static === 'pinned');
-      }
+
       this.list = items;
 
       if (!barFolder) {
@@ -151,7 +145,6 @@ export class BookmarksStore {
     }
 
     const doc = await this.db.insert(item);
-
 
     if (item.parent) {
       const parent = this.list.find(x => x._id === item.parent);

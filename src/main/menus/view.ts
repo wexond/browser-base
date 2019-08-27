@@ -116,7 +116,7 @@ export const getViewMenu = (
 
     const trimmedText = params.selectionText.trim();
 
-    if (isURL(trimmedText)){
+    if (isURL(trimmedText)) {
       menuItems = menuItems.concat([
         {
           label: 'Go to ' + trimmedText,
@@ -129,7 +129,8 @@ export const getViewMenu = (
               true,
             );
           },
-        }]);
+        },
+      ]);
     }
   }
 

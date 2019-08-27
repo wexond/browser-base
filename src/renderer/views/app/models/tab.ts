@@ -5,7 +5,13 @@ import * as React from 'react';
 import Vibrant = require('node-vibrant');
 
 import store from '../store';
-import { TABS_PADDING, TAB_ANIMATION_DURATION, TAB_MIN_WIDTH, TAB_MAX_WIDTH, TAB_PINNED_WIDTH } from '../constants';
+import {
+  TABS_PADDING,
+  TAB_ANIMATION_DURATION,
+  TAB_MIN_WIDTH,
+  TAB_MAX_WIDTH,
+  TAB_PINNED_WIDTH,
+} from '../constants';
 import { getColorBrightness, callViewMethod } from '~/utils';
 import console = require('console');
 
@@ -139,16 +145,6 @@ export class ITab {
           favicon: this.favicon,
           date: new Date().toString(),
         });
-
-        await store.startupTabs.addStartupTabItem({
-          id: this.id,
-          windowId: store.windowId,
-          url: this.url,
-          pinned: this.isPinned,
-          title: this.title,
-          favicon: this.favicon,
-          isUserDefined: false
-        });
       }
 
       this.url = url;
@@ -251,7 +247,7 @@ export class ITab {
   }
 
   @action
-  public updateData() {
+  public async updateData() {
     if (this.lastHistoryId && !store.isIncognito) {
       const { title, url, favicon } = this;
 
@@ -274,6 +270,16 @@ export class ITab {
         },
       );
     }
+
+    await store.startupTabs.addStartupTabItem({
+      id: this.id,
+      windowId: store.windowId,
+      url: this.url,
+      pinned: this.isPinned,
+      title: this.title,
+      favicon: this.favicon,
+      isUserDefined: false,
+    });
   }
 
   public get tabGroup() {
@@ -332,7 +338,7 @@ export class ITab {
     }
 
     if (this.isPinned) return TAB_PINNED_WIDTH;
-    
+
     if (tabs === null) {
       tabs = store.tabs.list.filter(
         x => x.tabGroupId === this.tabGroupId && !x.isClosing,
