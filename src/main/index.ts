@@ -3,6 +3,8 @@ import { resolve } from 'path';
 import { homedir } from 'os';
 import { WindowsManager } from './windows-manager';
 
+require('v8-compile-cache');
+
 app.setName('Wexond');
 
 (process.env as any)['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
