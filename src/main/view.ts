@@ -18,7 +18,6 @@ export class View extends BrowserView {
   public constructor(window: AppWindow, url: string, incognito: boolean) {
     super({
       webPreferences: {
-        preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
         nodeIntegration: false,
         contextIsolation: true,
         partition: incognito ? 'view_incognito' : 'persist:view',

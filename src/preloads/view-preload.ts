@@ -1,9 +1,11 @@
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer, remote, webFrame } from 'electron';
 
 import AutoComplete from './models/auto-complete';
 
 const tabId = remote.getCurrentWebContents().id;
 const arg = process.argv.find(x => x.startsWith('--window-id='));
+
+console.log('aha');
 
 export let windowId: number = null;
 

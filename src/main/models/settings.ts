@@ -29,24 +29,7 @@ export class Settings extends EventEmitter {
           }
         }
 
-        const contexts = [
-          windowsManager.sessionsManager.extensionsIncognito,
-          windowsManager.sessionsManager.extensions,
-        ];
-
-        contexts.forEach(e => {
-          if (e.extensions['wexond-darkreader']) {
-            e.extensions['wexond-darkreader'].backgroundPage.webContents.send(
-              'api-runtime-sendMessage',
-              {
-                message: {
-                  name: 'toggle',
-                  toggle: this.object.darkTheme,
-                },
-              },
-            );
-          }
-        });
+        this.updateDarkReader();
 
         this.addToQueue();
       },
@@ -55,15 +38,38 @@ export class Settings extends EventEmitter {
     ipcMain.on('get-settings', e => {
       if (!this.loaded) {
         this.once('load', () => {
+          this.updateDarkReader();
           e.returnValue = this.object;
         });
       } else {
+        this.updateDarkReader();
         e.returnValue = this.object;
       }
     });
 
     this.load();
   }
+
+  private updateDarkReader = () => {
+    const contexts = [
+      windowsManager.sessionsManager.extensionsIncognito,
+      windowsManager.sessionsManager.extensions,
+    ];
+
+    contexts.forEach(e => {
+      if (e.extensions['wexond-darkreader']) {
+        e.extensions['wexond-darkreader'].backgroundPage.webContents.send(
+          'api-runtime-sendMessage',
+          {
+            message: {
+              name: 'toggle',
+              toggle: this.object.darkTheme,
+            },
+          },
+        );
+      }
+    });
+  };
 
   private async load() {
     try {

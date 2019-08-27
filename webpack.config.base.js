@@ -64,6 +64,7 @@ const config = {
     'leveldown',
     'electron-extensions',
     'keytar',
+    '@cliqz/adblocker-electron',
   ],
 };
 

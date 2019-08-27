@@ -25,6 +25,11 @@ export class SessionsManager {
 
     this.clearCache('incognito');
 
+    this.viewIncognito.setPreloads([
+      `${app.getAppPath()}/build/view-preload.bundle.js`,
+    ]);
+    this.view.setPreloads([`${app.getAppPath()}/build/view-preload.bundle.js`]);
+
     this.view.setPermissionRequestHandler(
       async (webContents, permission, callback, details) => {
         if (permission === 'fullscreen') {
@@ -91,7 +96,7 @@ export class SessionsManager {
       this.clearCache('incognito');
     });
 
-    runAdblockService(this.view);
+    // runAdblockService(this.view);
     runAdblockService(this.viewIncognito);
     storage.run();
   }
