@@ -121,7 +121,7 @@ export const StyledContent = styled.div`
   display: flex;
   margin-left: 12px;
   ${({ collapsed, pinned }: ContentProps) => css`
-    max-width: calc(100% - ${(pinned ? 0 : collapsed ? 48 : 24)}px);
+    max-width: calc(100% - ${pinned ? 0 : collapsed ? 48 : 24}px);
   `};
 `;
 
@@ -140,7 +140,7 @@ export const StyledBorder = styled.div`
   `};
 `;
 
-interface TabContainerProps{
+interface TabContainerProps {
   pinned: boolean;
 }
 
@@ -155,5 +155,5 @@ export const TabContainer = styled.div`
   backface-visibility: hidden;
   ${({ pinned }: TabContainerProps) => css`
     max-width: ${pinned ? `${TAB_PINNED_WIDTH}px` : '100%'};
-`};
+  `};
 `;

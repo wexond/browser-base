@@ -171,21 +171,9 @@ const Content = observer(({ tab }: { tab: ITab }) => {
         <StyledIcon
           isIconSet={tab.favicon !== ''}
           style={{ backgroundImage: `url(${tab.favicon})` }}
-        >
-        {tab.isMuted && !tab.loading && tab.isPinned && (
-          <StyledIcon
-            isIconSet={tab.isMuted}
-            style={{ backgroundImage: `url(${icons.mute})` }}
-          />
-        )}
-        </StyledIcon>
+        ></StyledIcon>
       )}
-      {tab.isMuted && !tab.loading && !tab.isPinned && (
-        <StyledIcon
-          isIconSet={tab.isMuted}
-          style={{ backgroundImage: `url(${icons.mute})` }}
-        />
-      )}
+
       {tab.loading && (
         <Preloader
           color={tab.background}
@@ -274,6 +262,21 @@ export default observer(({ tab }: { tab: ITab }) => {
         }}
       >
         <Content tab={tab} />
+        {tab.isMuted && !tab.loading && !tab.isPinned && (
+          <StyledIcon
+            isIconSet={tab.isMuted}
+            style={{
+              backgroundImage: `url(${icons.mute})`,
+              position: 'absolute',
+              right: 32,
+              zIndex: 9999,
+              filter: store.theme['toolbar.icons.invert']
+                ? 'invert(100%)'
+                : 'none',
+              opacity: 0.54,
+            }}
+          />
+        )}
         <Close tab={tab} />
 
         <Overlay tab={tab} />
