@@ -18,6 +18,7 @@ export class View extends BrowserView {
   public constructor(window: AppWindow, url: string, incognito: boolean) {
     super({
       webPreferences: {
+        preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
         nodeIntegration: false,
         contextIsolation: true,
         partition: incognito ? 'view_incognito' : 'persist:view',
@@ -174,11 +175,14 @@ export class View extends BrowserView {
     const item = await storage.findOne<any>({
       scope: 'formfill',
       query: {
-        url: this.hostname
+        url: this.hostname,
       },
     });
 
-    this.window.webContents.send(`has-credentials-${this.webContents.id}`, item != null);
+    this.window.webContents.send(
+      `has-credentials-${this.webContents.id}`,
+      item != null,
+    );
   }
 
   public get hostname() {
