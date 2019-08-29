@@ -34,7 +34,6 @@
     "extensions": "node scripts/extensions.js"
   },
   "devDependencies": {
-    "@cliqz/adblocker-electron": "^1.0.1",
     "@types/axios": "0.14.0",
     "@types/chrome": "0.0.88",
     "@types/file-type": "^10.9.1",
@@ -81,7 +80,7 @@
     "styled-components": "4.3.2",
     "tldts-experimental": "5.3.2",
     "ts-loader": "^6.0.4",
-    "typescript": "3.5.3",
+    "typescript": "3.6.2",
     "webpack": "4.39.3",
     "webpack-cli": "3.3.7",
     "webpack-dev-server": "^3.8.0",
@@ -94,6 +93,7 @@
     "mouse-hooks": "0.4.1",
     "node-fetch": "^2.6.0",
     "node-vibrant": "3.2.0-alpha",
-    "node-window-manager": "1.1.0"
+    "node-window-manager": "1.1.0",
+    "@cliqz/adblocker-electron": "^1.0.1"
   }
 }
