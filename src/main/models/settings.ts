@@ -74,13 +74,21 @@ export class Settings extends EventEmitter {
   private async load() {
     try {
       const file = await promises.readFile(getPath('settings.json'), 'utf8');
+      const json = JSON.parse(file);
+
+      if (!json.version) {
+        // Migrate from 3.0.0 to 3.1.0
+        json.searchEngines = [];
+      }
 
       this.object = {
         ...this.object,
-        ...JSON.parse(file),
+        ...json,
       };
 
       this.loaded = true;
+
+      this.save();
 
       this.emit('load');
     } catch (e) {

@@ -74,29 +74,31 @@ export class SuggestionsStore {
         resolve(historySuggestions[0].primaryText);
       }
 
-      const searchData = await getSearchSuggestions(filter);
+      try {
+        const searchData = await getSearchSuggestions(filter);
 
-      if (input.value.substring(0, input.selectionStart) === filter) {
-        searchSuggestions = [];
-        for (const item of searchData) {
-          searchSuggestions.push({
-            primaryText: item,
-            favicon: icons.search,
-            isSearch: true,
-          });
+        if (input.value.substring(0, input.selectionStart) === filter) {
+          searchSuggestions = [];
+          for (const item of searchData) {
+            searchSuggestions.push({
+              primaryText: item,
+              favicon: icons.search,
+              isSearch: true,
+            });
+          }
+
+          suggestions =
+            input.value === ''
+              ? []
+              : historySuggestions.concat(searchSuggestions).slice(0, 6);
+
+          for (let i = 0; i < suggestions.length; i++) {
+            suggestions[i].id = i;
+          }
+
+          this.list = suggestions;
         }
-
-        suggestions =
-          input.value === ''
-            ? []
-            : historySuggestions.concat(searchSuggestions).slice(0, 6);
-
-        for (let i = 0; i < suggestions.length; i++) {
-          suggestions[i].id = i;
-        }
-
-        this.list = suggestions;
-      }
+      } catch (e) {}
     });
   }
 }

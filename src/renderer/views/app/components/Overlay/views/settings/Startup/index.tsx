@@ -21,8 +21,6 @@ interface State {
 }
 
 class StartupControl extends React.PureComponent<Props, State> {
-  private radioName = 'startupRadioButtons';
-
   public state: State = {
     value: this.props.initialValue,
     customURLs: this.props.initialURLS,
@@ -50,11 +48,7 @@ class StartupControl extends React.PureComponent<Props, State> {
     }
   }
 
-  private onStartupOptionsChanged = (value: 'continue' | 'urls' | 'empty') => {
-    this.selectedItem = value;
-  };
-
-  private select = (value: 'continue' | 'url' | 'empty') => () => {
+  private select = (value: 'continue' | 'urls' | 'empty') => () => {
     this.selectedItem = value;
   };
 

@@ -32,18 +32,19 @@ const onSearchEngineChange = (value: string) => {
 
   store.settings.save();
 };
-  
+
 const SearchEngine = () => {
-  const { searchEngine, searchEngines } = store.settings.object;
-  const se = searchEngines[searchEngine];
+  const se = store.searchEngine;
 
   return (
     <Row>
       <Title>Search engine used in the address bar</Title>
       <Control>
-      <Dropdown defaultValue={se.name} onChange={onSearchEngineChange}>
-          {Object.values(searchEngines).map((item, key) => (
-            <Dropdown.Item key={key} value={item.name}>{item.name}</Dropdown.Item>
+        <Dropdown defaultValue={se.name} onChange={onSearchEngineChange}>
+          {Object.values(store.searchEngines).map((item, key) => (
+            <Dropdown.Item key={key} value={item.name}>
+              {item.name}
+            </Dropdown.Item>
           ))}
         </Dropdown>
       </Control>

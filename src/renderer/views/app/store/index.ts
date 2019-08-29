@@ -21,6 +21,8 @@ import { AutoFillStore } from './autofill';
 import { getCurrentWindow } from '../utils';
 import { EditAddressStore } from './edit-address';
 import { StartupTabsStore } from './startup-tabs';
+import { ISearchEngine } from '~/interfaces';
+import { DEFAULT_SEARCH_ENGINES } from '~/constants';
 
 export class Store {
   public history = new HistoryStore();
@@ -53,6 +55,9 @@ export class Store {
   public isHTMLFullscreen = false;
 
   @observable
+  public searchEngines: ISearchEngine[] = DEFAULT_SEARCH_ENGINES;
+
+  @observable
   public updateInfo = {
     available: false,
     version: '',
@@ -74,9 +79,7 @@ export class Store {
 
   @computed
   public get searchEngine() {
-    return this.settings.object.searchEngines[
-      this.settings.object.searchEngine
-    ];
+    return this.searchEngines[this.settings.object.searchEngine];
   }
 
   public canToggleMenu = false;

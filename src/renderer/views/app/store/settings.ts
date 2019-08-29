@@ -2,7 +2,7 @@ import { observable } from 'mobx';
 import { ipcRenderer } from 'electron';
 
 import { ISettings } from '~/interfaces';
-import { DEFAULT_SETTINGS } from '~/constants';
+import { DEFAULT_SETTINGS, DEFAULT_SEARCH_ENGINES } from '~/constants';
 import { darkTheme, lightTheme } from '~/renderer/constants';
 import { Store } from '.';
 
@@ -40,6 +40,10 @@ export class SettingsStore {
 
   public updateSettings(newSettings: ISettings) {
     this.object = { ...this.object, ...newSettings };
+
+    this.store.searchEngines = DEFAULT_SEARCH_ENGINES.concat(
+      newSettings.searchEngines,
+    );
 
     requestAnimationFrame(() => {
       this.store.theme = this.object.darkTheme ? darkTheme : lightTheme;

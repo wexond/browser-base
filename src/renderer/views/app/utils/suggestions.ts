@@ -115,6 +115,9 @@ export const getSearchSuggestions = (filter: string) =>
     }
 
     try {
+      if (store.searchEngine.keywordsUrl === '')
+        return reject(new Error('No search engine keyword URL specified'));
+
       const data = JSON.parse(
         (await requestURL(
           store.searchEngine.keywordsUrl.replace(

@@ -18,4 +18,5 @@ export interface ISettings {
   searchEngine: number;
   searchEngines: ISearchEngine[];
   startupBehavior: IStartupBehavior;
+  version: string;
 }
