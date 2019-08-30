@@ -28,7 +28,7 @@ export class SessionsManager {
     registerProtocol(this.viewIncognito);
 
     this.clearCache('incognito');
-    
+
     this.view.setPermissionRequestHandler(
       async (webContents, permission, callback, details) => {
         if (permission === 'fullscreen') {
@@ -140,8 +140,7 @@ export class SessionsManager {
       context.loadExtension(resolve(extensionsPath, dir));
     }
 
-    // TODO (sentialx): fix dark reader from crashing wexond
-    // context.loadExtension(resolve(__dirname, 'extensions/wexond-darkreader'));
+    context.loadExtension(resolve(__dirname, 'extensions/wexond-darkreader'));
 
     if (session === 'incognito') {
       this.incognitoExtensionsLoaded = true;

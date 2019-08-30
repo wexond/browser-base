@@ -1,5 +1,4 @@
-import { ipcRenderer, remote, webContents } from 'electron';
-import { parse } from 'url';
+import { ipcRenderer, remote } from 'electron';
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
 import Vibrant = require('node-vibrant');
@@ -13,7 +12,6 @@ import {
   TAB_PINNED_WIDTH,
 } from '../constants';
 import { getColorBrightness, callViewMethod } from '~/utils';
-import console = require('console');
 
 const isColorAcceptable = (color: string) => {
   if (store.theme['tab.allowLightBackground']) {

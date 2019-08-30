@@ -1,6 +1,6 @@
 import { ipcMain, app } from 'electron';
 import { resolve } from 'path';
-import { homedir } from 'os';
+import { homedir, platform } from 'os';
 import { WindowsManager } from './windows-manager';
 
 require('v8-compile-cache');
@@ -22,10 +22,8 @@ process.on('uncaughtException', error => {
   console.error(error);
 });
 
-/*
 app.on('window-all-closed', () => {
   if (platform() !== 'darwin') {
     app.quit();
   }
 });
-*/
