@@ -65,8 +65,8 @@ export const MenuItemTitle = styled.div`
 `;
 
 export const MenuItems = styled.div`
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
   flex: 1;
   overflow: hidden;
   background-color: white;

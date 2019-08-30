@@ -1,6 +1,5 @@
 import { observable, action } from 'mobx';
 
-import { ITab } from '../models';
 import store from '.';
 import { ipcRenderer, remote } from 'electron';
 import { prefixHttp, isURL } from '~/utils';
@@ -100,28 +99,6 @@ export class StartupTabsStore {
       const doc = await this.db.insert(item);
       this.list.push(doc);
     }
-  }
-
-  public async addStartupDefaultTabItems(items: IStartupTab[]) {
-    this.db.remove({ isUserDefined: true }, true);
-    this.list = this.list.filter(x => !x.isUserDefined);
-    items
-      .filter(x => x.url !== undefined && x.url.length > 1)
-      .forEach(async x => {
-        this.list.push(await this.db.insert(x));
-      });
-  }
-
-  public async updateStartupTabItem(tab: ITab) {
-    this.addStartupTabItem({
-      id: tab.id,
-      windowId: store.windowId,
-      url: tab.url,
-      pinned: tab.isPinned,
-      title: tab.title,
-      favicon: tab.favicon,
-      isUserDefined: false,
-    });
   }
 
   public removeStartupTabItem(tabId: number, windowId: number) {
