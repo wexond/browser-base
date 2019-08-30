@@ -109,6 +109,7 @@ export const Toolbar = observer(() => {
           onClose={closeWindow}
           onMinimize={minimizeWindow}
           onMaximize={maximizeWindow}
+          dark={store.settings.object.darkTheme}
         />
       )}
     </StyledToolbar>
