@@ -21,9 +21,11 @@ export class Store {
     });
 
     window.addEventListener('blur', () => {
-      setTimeout(() => {
-        ipcRenderer.send(`hide-${this.id}`);
-      });
+      if (this.visible) {
+        setTimeout(() => {
+          ipcRenderer.send(`hide-${this.id}`);
+        });
+      }
     });
   }
 }

@@ -98,10 +98,6 @@ export class AppWindow extends BrowserWindow {
       moveAndResize();
     });
 
-    this.on('blur', () => {
-      this.menuWindow.hide();
-    });
-
     this.on('move', () => {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
