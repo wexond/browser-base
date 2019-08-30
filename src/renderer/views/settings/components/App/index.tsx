@@ -12,7 +12,7 @@ import { Style } from '../../style';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Autofill } from '../Autofill';
 import { icons } from '~/renderer/constants';
-import { OnStartup } from './Startup';
+import { OnStartup } from '../Startup';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 const MenuItem = observer(
@@ -38,7 +38,7 @@ const MenuItem = observer(
 const onClick = () => {
   // TODO (xnerhu): store.bookmarks.menuVisible = false;
   store.autoFill.menuVisible = false;
-}
+};
 
 export default observer(() => {
   const { selectedSection } = store;

@@ -3,6 +3,7 @@ import { DEFAULT_SETTINGS } from '~/constants';
 import { ISettings, ITheme } from '~/interfaces';
 import { lightTheme } from '~/renderer/constants';
 import { AutoFillStore } from './autofill';
+import { StartupTabsStore } from './startup-tabs';
 
 export type SettingsSection =
   | 'appearance'
@@ -18,6 +19,7 @@ export type SettingsSection =
 
 export class Store {
   public autoFill = new AutoFillStore();
+  public startupTabs = new StartupTabsStore();
 
   @observable
   public dialogContent: 'privacy' | 'edit-address' = null;

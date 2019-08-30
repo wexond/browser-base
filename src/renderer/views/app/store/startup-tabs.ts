@@ -1,7 +1,4 @@
 import { observable, action } from 'mobx';
-import * as React from 'react';
-import { TweenLite } from 'gsap';
-import Vibrant = require('node-vibrant');
 
 import { ITab } from '../models';
 import store from '.';
@@ -14,7 +11,7 @@ import { IStartupTab } from '~/interfaces/startup-tab';
 export class StartupTabsStore {
   public db = new Database<IStartupTab>('startupTabs');
 
-  public isLoaded: boolean = false;
+  public isLoaded = false;
 
   @observable
   public list: IStartupTab[] = [];
@@ -34,14 +31,14 @@ export class StartupTabsStore {
       tabsToLoad = await this.db.get({ pinned: true });
     }
 
-    let args = remote.process.argv;
+    const args = remote.process.argv;
     let needsNewTabPage = false;
     // If we have tabs saved, load them
     if (tabsToLoad && tabsToLoad.length > 0) {
       this.clearStartupTabs(true, false);
 
       let i = 0;
-      for (let tab in tabsToLoad.sort((x, y) =>
+      for (const tab in tabsToLoad.sort((x, y) =>
         x.pinned && y.pinned
           ? x.order - y.order
           : x.pinned

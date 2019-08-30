@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
-import store from '~/renderer/views/app/store';
-import { Content } from '../../../style';
-import { Title, Row, Control, Header } from '../style';
+import { Title, Row, Control, Header, Content } from '../App/style';
 import { Textfield } from '~/renderer/components/Textfield';
 import { RadioButton } from '~/renderer/components/RadioButton';
 import { Button } from '~/renderer/components/Button';
 import { IStartupTab } from '~/interfaces/startup-tab';
 import { icons, colors } from '~/renderer/constants';
+import store from '../../store';
 
 interface Props {
   initialValue: 'continue' | 'urls' | 'empty';
@@ -31,8 +30,8 @@ class StartupControl extends React.PureComponent<Props, State> {
   }
 
   public set selectedItem(val: 'continue' | 'urls' | 'empty') {
-    store.settings.object.startupBehavior.type = val;
-    store.settings.save();
+    store.settings.startupBehavior.type = val;
+    store.save();
 
     if (val === 'empty') {
       store.startupTabs.clearStartupTabs(false, true);
@@ -42,8 +41,7 @@ class StartupControl extends React.PureComponent<Props, State> {
       store.startupTabs.addStartupDefaultTabItems(defaultItems);
       this.setState({ value: val, customURLs: defaultItems });
     } else if (val === 'continue') {
-      store.startupTabs.clearStartupTabs(true, true);
-      store.tabs.list.forEach(x => store.startupTabs.updateStartupTabItem(x));
+      store.startupTabs.clearUserDefined();
       this.setState({ value: val, customURLs: [] });
     }
   }
@@ -151,7 +149,7 @@ class StartupControl extends React.PureComponent<Props, State> {
 }
 
 export const OnStartup = observer(() => {
-  const { type } = store.settings.object.startupBehavior;
+  const { type } = store.settings.startupBehavior;
   const startupTabList = store.startupTabs.list.filter(x => x.isUserDefined);
   return <StartupControl initialValue={type} initialURLS={startupTabList} />;
 });
