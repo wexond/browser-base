@@ -182,11 +182,7 @@ const Content = observer(({ tab }: { tab: ITab }) => {
         <StyledTitle
           isIcon={tab.isIconSet}
           style={{
-            color: tab.isSelected
-              ? store.theme['tab.selected.textColor'] === 'inherit'
-                ? tab.background
-                : store.theme['tab.selected.textColor']
-              : store.theme['tab.textColor'],
+            color: store.theme['tab.textColor'],
           }}
         >
           {tab.title}

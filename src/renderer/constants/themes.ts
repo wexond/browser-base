@@ -12,7 +12,7 @@ export const lightTheme: ITheme = {
   'tab.selectedHover.backgroundOpacity': 0.65,
   'tab.hover.backgroundColor': 'rgba(0, 0, 0, 0.04)',
   'tab.selected.textColor': 'inherit',
-  'tab.textColor': `rgba(0, 0, 0, ${transparency.text.high})`,
+  'tab.textColor': `#000`,
   'tab.allowLightBackground': false,
   'overlay.windowsButtons.invert': false,
   'overlay.section.backgroundColor': 'rgba(0, 0, 0, 0.06)',
