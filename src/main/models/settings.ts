@@ -93,6 +93,10 @@ export class Settings extends EventEmitter {
         json.searchEngines = [];
       }
 
+      if (json.overlayBookmarks !== undefined) {
+        delete json.overlayBookmarks;
+      }
+
       this.object = {
         ...this.object,
         ...json,

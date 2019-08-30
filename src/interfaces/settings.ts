@@ -13,7 +13,7 @@ export interface ISettings {
   shield: boolean;
   multrin: boolean;
   animations: boolean;
-  overlayBookmarks: boolean;
+  bookmarksBar: boolean;
   suggestions: boolean;
   searchEngine: number;
   searchEngines: ISearchEngine[];

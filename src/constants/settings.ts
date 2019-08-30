@@ -7,7 +7,7 @@ export const DEFAULT_SETTINGS: ISettings = {
   shield: true,
   multrin: true,
   animations: true,
-  overlayBookmarks: true,
+  bookmarksBar: false,
   suggestions: true,
   searchEngines: [],
   searchEngine: 0,

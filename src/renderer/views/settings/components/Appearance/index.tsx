@@ -28,12 +28,12 @@ const ThemeVariant = () => {
   );
 };
 
-const OverlayAnimations = () => {
+const MenuAnimations = () => {
   const { animations } = store.settings;
 
   return (
     <Row>
-      <Title>Overlay animations</Title>
+      <Title>Menu animations</Title>
       <Control>
         <Switch
           onChange={onSwitchChange('animations')}
@@ -44,16 +44,16 @@ const OverlayAnimations = () => {
   );
 };
 
-const OverlayBookmarks = () => {
-  const { overlayBookmarks } = store.settings;
+const BookmarksBar = () => {
+  const { bookmarksBar } = store.settings;
 
   return (
     <Row>
-      <Title>Show bookmarks in Overlay</Title>
+      <Title>Show bookmarks bar</Title>
       <Control>
         <Switch
-          onChange={onSwitchChange('overlayBookmarks')}
-          defaultValue={overlayBookmarks}
+          onChange={onSwitchChange('bookmarksBar')}
+          defaultValue={bookmarksBar}
         />
       </Control>
     </Row>
@@ -64,8 +64,8 @@ export const Appearance = () => {
   return (
     <Content>
       <Header>Appearance</Header>
-      <OverlayAnimations />
-      <OverlayBookmarks />
+      <MenuAnimations />
+      <BookmarksBar />
       <ThemeVariant />
     </Content>
   );
