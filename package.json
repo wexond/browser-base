@@ -34,6 +34,10 @@
     "extensions": "node scripts/extensions.js"
   },
   "devDependencies": {
+<<<<<<< HEAD
+=======
+    "@cliqz/adblocker": "1.0.1",
+>>>>>>> chore: upgrade dependencies
     "@types/axios": "0.14.0",
     "@types/chrome": "0.0.88",
     "@types/file-type": "^10.9.1",
