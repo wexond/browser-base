@@ -243,7 +243,7 @@ export default observer(({ tab }: { tab: ITab }) => {
                 store.theme['toolbar.backgroundColor'],
               )
             : shadeBlendConvert(
-                0.9,
+                0.95,
                 tab.customColor ? tab.background : 'rgba(0, 0, 0, 0.7)',
                 store.theme['toolbar.backgroundColor'],
               ),

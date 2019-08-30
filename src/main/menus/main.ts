@@ -166,7 +166,9 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           visible: false,
           click() {
             setTimeout(() => {
-              webContents.getFocusedWebContents().openDevTools();
+              webContents
+                .getFocusedWebContents()
+                .openDevTools({ mode: 'detach' });
             });
           },
         },
