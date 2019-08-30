@@ -1,7 +1,11 @@
 import * as React from 'react';
 
-import { ContextMenu, ContextMenuItem, ContextMenuItemProps } from '../ContextMenu';
-import { StyledDropdown, Label, DropIcon } from './styles'
+import {
+  ContextMenu,
+  ContextMenuItem,
+  ContextMenuItemProps,
+} from '../ContextMenu';
+import { StyledDropdown, Label, DropIcon } from './styles';
 
 interface ItemProps extends ContextMenuItemProps {
   value: string;
@@ -9,12 +13,8 @@ interface ItemProps extends ContextMenuItemProps {
 }
 
 const Item = (props: ItemProps) => {
-  return (
-    <ContextMenuItem {...props}>
-      {props.children}
-    </ContextMenuItem>
-  );
-}
+  return <ContextMenuItem {...props}>{props.children}</ContextMenuItem>;
+};
 
 interface Props {
   color?: string;
@@ -35,13 +35,19 @@ export class Dropdown extends React.PureComponent<Props, State> {
 
   public state: State = {
     expanded: false,
-  }
+  };
 
   componentDidMount() {
     const { defaultValue } = this.props;
 
     if (defaultValue != null) {
       this.setValue(defaultValue, false);
+    }
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.defaultValue !== prevProps) {
+      this.setValue(this.props.defaultValue, false);
     }
   }
 
@@ -53,7 +59,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
     if (el) {
       this.setState({
         value,
-        label: el.props.children
+        label: el.props.children,
       });
 
       if (emitEvent && onChange) {
@@ -71,24 +77,24 @@ export class Dropdown extends React.PureComponent<Props, State> {
       } else {
         window.removeEventListener('mousedown', this.onWindowMouseDown);
       }
-    })
+    });
   }
 
   private onItemClick = (value: string) => () => {
     this.setValue(value);
     this.toggleMenu(false);
-  }
+  };
 
   private onItemMouseDown = (e: React.MouseEvent) => {
     e.stopPropagation();
-  }
+  };
 
   private onMouseDown = (e: React.MouseEvent) => {
     e.stopPropagation();
 
     const { expanded } = this.state;
     this.toggleMenu(!expanded);
-  }
+  };
 
   public onWindowMouseDown = () => {
     this.toggleMenu(false);
@@ -99,13 +105,17 @@ export class Dropdown extends React.PureComponent<Props, State> {
     const { expanded, label, value } = this.state;
 
     return (
-      <StyledDropdown className='dropdown' onMouseDown={this.onMouseDown} style={style}>
+      <StyledDropdown
+        className="dropdown"
+        onMouseDown={this.onMouseDown}
+        style={style}
+      >
         <Label>{label}</Label>
         <DropIcon expanded={expanded} />
         <ContextMenu style={{ top: 32, width: '100%' }} visible={expanded}>
           {React.Children.map(children, child => {
             const { props } = child;
-  
+
             return React.cloneElement(child, {
               selected: value === props.value,
               onClick: this.onItemClick(props.value),
@@ -117,4 +127,4 @@ export class Dropdown extends React.PureComponent<Props, State> {
       </StyledDropdown>
     );
   }
-};
+}

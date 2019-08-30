@@ -5,6 +5,7 @@ import Switch from '~/renderer/components/Switch';
 import { Title, Row, Control, Header, Content } from '../App/style';
 import store from '../../store';
 import { onSwitchChange } from '../../utils';
+import { observer } from 'mobx-react-lite';
 
 const onThemeChange = (value: 'light' | 'dark') => {
   const dark = value === 'dark';
@@ -12,7 +13,7 @@ const onThemeChange = (value: 'light' | 'dark') => {
   store.save();
 };
 
-const ThemeVariant = () => {
+const ThemeVariant = observer(() => {
   const defaultValue = store.settings.darkTheme ? 'dark' : 'light';
 
   return (
@@ -26,9 +27,9 @@ const ThemeVariant = () => {
       </Control>
     </Row>
   );
-};
+});
 
-const MenuAnimations = () => {
+const MenuAnimations = observer(() => {
   const { animations } = store.settings;
 
   return (
@@ -42,9 +43,9 @@ const MenuAnimations = () => {
       </Control>
     </Row>
   );
-};
+});
 
-const BookmarksBar = () => {
+const BookmarksBar = observer(() => {
   const { bookmarksBar } = store.settings;
 
   return (
@@ -58,9 +59,9 @@ const BookmarksBar = () => {
       </Control>
     </Row>
   );
-};
+});
 
-export const Appearance = () => {
+export const Appearance = observer(() => {
   return (
     <Content>
       <Header>Appearance</Header>
@@ -69,4 +70,4 @@ export const Appearance = () => {
       <ThemeVariant />
     </Content>
   );
-};
+});
