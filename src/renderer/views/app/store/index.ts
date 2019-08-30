@@ -13,6 +13,7 @@ import { extensionsRenderer } from 'electron-extensions';
 import { getCurrentWindow } from '../utils';
 import { ISearchEngine } from '~/interfaces';
 import { DEFAULT_SEARCH_ENGINES } from '~/constants';
+import { StartupTabsStore } from './startup-tabs';
 
 export class Store {
   public settings = new SettingsStore(this);
@@ -21,6 +22,7 @@ export class Store {
   public tabGroups = new TabGroupsStore();
   public tabs = new TabsStore();
   public extensions = new ExtensionsStore();
+  public startupTabs = new StartupTabsStore();
 
   @observable
   public theme = lightTheme;
