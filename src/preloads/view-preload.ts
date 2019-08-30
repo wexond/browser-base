@@ -97,8 +97,8 @@ ipcRenderer.on('scroll-touch-end', () => {
 window.addEventListener('load', AutoComplete.loadForms);
 window.addEventListener('mousedown', AutoComplete.onWindowMouseDown);
 
-const emitCallback = (data: any) => {
-  ipcRenderer.once(data.id, (e, res) => {
+const emitCallback = (msg: string, data: any) => {
+  ipcRenderer.once(msg, (e, res) => {
     window.postMessage(
       {
         id: data.id,
@@ -118,10 +118,15 @@ if (window.location.protocol === 'wexond:') {
         ...data.data,
       });
 
-      emitCallback(data);
+      emitCallback(data.id, data);
     } else if (data.type === 'credentials-get-password') {
       ipcRenderer.send('credentials-get-password', data.id, data.data);
-      emitCallback(data);
+      emitCallback(data.id, data);
+    } else if (data.type === 'save-settings') {
+      ipcRenderer.send('save-settings', { settings: data.data });
+    } else if (data.type === 'get-settings') {
+      ipcRenderer.send('get-settings');
+      emitCallback('get-settings', data);
     }
   });
 

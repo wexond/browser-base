@@ -1,9 +1,10 @@
-import { observable } from 'mobx';
-import { DEFAULT_SETTINGS } from '~/constants';
-import { ISettings, ITheme } from '~/interfaces';
+import { observable, computed } from 'mobx';
+import { DEFAULT_SETTINGS, DEFAULT_SEARCH_ENGINES } from '~/constants';
+import { ISettings, ITheme, ISearchEngine } from '~/interfaces';
 import { lightTheme } from '~/renderer/constants';
 import { AutoFillStore } from './autofill';
 import { StartupTabsStore } from './startup-tabs';
+import { makeId } from '~/utils/string';
 
 export type SettingsSection =
   | 'appearance'
@@ -33,14 +34,40 @@ export class Store {
   @observable
   public theme: ITheme = lightTheme;
 
+  @observable
+  public searchEngines: ISearchEngine[] = DEFAULT_SEARCH_ENGINES;
+
+  @computed
+  public get searchEngine() {
+    return this.searchEngines[this.settings.searchEngine];
+  }
+
   public constructor() {
-    // TODO(sentialx): settings loading
+    const id = makeId(32);
+
+    window.addEventListener('message', ({ data }) => {
+      if (data.type === 'result' && data.id === id) {
+        this.settings = { ...this.settings, ...data.result };
+
+        this.searchEngines = DEFAULT_SEARCH_ENGINES.concat(
+          data.result.searchEngines,
+        );
+      }
+    });
+
+    window.postMessage(
+      {
+        type: 'get-settings',
+        id,
+      },
+      '*',
+    );
   }
 
   public save() {
     window.postMessage(
       {
-        name: 'save-settings',
+        type: 'save-settings',
         data: JSON.stringify(this.settings),
       },
       '*',

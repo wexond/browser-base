@@ -35,7 +35,7 @@ export class Settings extends EventEmitter {
       },
     );
 
-    ipcMain.on('get-settings', e => {
+    ipcMain.on('get-settings-sync', e => {
       if (!this.loaded) {
         this.once('load', () => {
           this.updateDarkReader();
@@ -44,6 +44,18 @@ export class Settings extends EventEmitter {
       } else {
         this.updateDarkReader();
         e.returnValue = this.object;
+      }
+    });
+
+    ipcMain.on('get-settings', e => {
+      if (!this.loaded) {
+        this.once('load', () => {
+          this.updateDarkReader();
+          e.sender.send('get-settings', this.object);
+        });
+      } else {
+        this.updateDarkReader();
+        e.sender.send('get-settings', this.object);
       }
     });
 

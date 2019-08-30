@@ -21,15 +21,18 @@ export class PreloadDatabase<T> {
     return new Promise(resolve => {
       const id = makeId(32);
 
-      window.postMessage({
-        type: 'storage',
-        scope: this.scope,
-        operation,
-        data,
-        id,
-      }, '*');
+      window.postMessage(
+        {
+          type: 'storage',
+          scope: this.scope,
+          operation,
+          data,
+          id,
+        },
+        '*',
+      );
 
-      window.addEventListener('message', (e) => {
+      window.addEventListener('message', e => {
         const { data } = e;
 
         if (data.type === 'result' && data.id === id) {

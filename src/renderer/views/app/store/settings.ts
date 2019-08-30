@@ -30,7 +30,7 @@ export class SettingsStore {
   public constructor(store: Store) {
     this.store = store;
 
-    const obj = ipcRenderer.sendSync('get-settings');
+    const obj = ipcRenderer.sendSync('get-settings-sync');
     this.updateSettings(obj);
 
     ipcRenderer.on('update-settings', (e, settings: ISettings) => {
