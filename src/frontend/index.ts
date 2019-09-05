@@ -38,7 +38,6 @@ export function buildBrowserWindowConfig(options: BrowserWindowConstructorOption
 
 export async function createFlowrWindow(): Promise<BrowserWindow> {
   const mac = await getMacAddress()
-  const winBounds = flowrStore.get('windowBounds')
 
   const defaultUrl = buildFileUrl('config.html')
   const kiosk = flowrStore.get('isKiosk') || false
@@ -55,6 +54,12 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
   })
 
   const mainWindow = new FlowrWindow(flowrStore, opts)
+
+  if (kiosk) {
+    // No menu is kiosk mode
+    const appMenu = Menu.buildFromTemplate([])
+    Menu.setApplicationMenu(appMenu)
+  }
 
   if (flowrStore.get('isMaximized')) {
     mainWindow.maximize()

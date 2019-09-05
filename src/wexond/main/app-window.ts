@@ -18,6 +18,8 @@ const containsPoint = (bounds: any, point: any) => {
   );
 };
 export interface WexondOptions {
+  clearBrowsingDataAtClose: boolean,
+  openUrl: string
   maxTab : number
 }
 export class AppWindow extends BrowserWindow {

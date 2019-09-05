@@ -17,6 +17,7 @@ GenerateImage ()
   platform=$1
    options=($@)
    unset options[0]
+   npm run build
    npm_config_platform=${platform} node node_modules/electron/install.js
    npm run compile-${platform} -- ${options[@]}
 }
