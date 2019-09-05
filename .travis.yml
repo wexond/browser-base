@@ -27,5 +27,5 @@ addons:
 script:
   - npm run setup
   - npm run lint
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then npm run compile-darwin --publish never;fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then npm run compile-darwin -- --publish never;fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] ; then npm run compile-linux ;fi
