@@ -16,7 +16,7 @@ import HorizontalScrollbar from '~/renderer/app/components/HorizontalScrollbar';
 import store from '.';
 import { ipcRenderer, remote } from 'electron';
 import { extname } from 'path';
-import { getColorBrightness } from '../utils';
+import { backToFlowr, getColorBrightness } from '../utils';
 import Vibrant = require('node-vibrant');
 
 export class TabsStore {
@@ -231,7 +231,7 @@ export class TabsStore {
     (this.list as any).remove(this.getTabById(id));
     this.isMaxTab = this.list.length >= this.maxTab
     if (this.list.length < 1) {
-      ipcRenderer.send('open-flowr')
+      backToFlowr()
     }
   }
 

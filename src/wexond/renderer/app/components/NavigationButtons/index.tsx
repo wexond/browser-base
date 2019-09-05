@@ -7,6 +7,7 @@ import ToolbarButton from '~/renderer/app/components/ToolbarButton';
 import { icons } from '~/renderer/app/constants/icons';
 import { TOOLBAR_ICON_HEIGHT } from '~/renderer/app/constants/design';
 import { StyledContainer } from './style';
+import { backToFlowr } from '~/renderer/app/utils';
 
 const onBackClick = () => {
   store.tabs.selectedTab.callViewMethod('webContents.goBack');
@@ -25,7 +26,7 @@ const onRefreshClick = () => {
 };
 
 const onHomePress = () => {
-  ipcRenderer.send('open-flowr')
+  backToFlowr()
 }
 
 export const NavigationButtons = observer(() => {
