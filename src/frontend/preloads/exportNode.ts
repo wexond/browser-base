@@ -14,8 +14,8 @@ const nodeRequire: {[key: string]: any} = {
   fs: require('fs'),
   os: require('os'),
   path: require('path'),
-};
-const nodeProcess = process;
+}
+const nodeProcess = process
 
 const ipcRenderer = nodeRequire['electron'].ipcRenderer
 const hiddenMenuCode = 'configtaktik'
@@ -53,9 +53,9 @@ process.once('loaded', () => {
 
     return requiredModule
   }
-  global.nodeProcess = nodeProcess;
-  global.process = nodeProcess; // ensure compatibility with flow < 5.2.6
+  global.nodeProcess = nodeProcess
+  global.process = nodeProcess // ensure compatibility with flow < 5.2.6
   global.ipc = ipcRenderer // ensure compatibility with flow < 5.2.6
-});
+})
 
-export {};
+export {}

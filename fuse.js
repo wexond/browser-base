@@ -6,6 +6,9 @@ const {
   CopyPlugin,
   JSONPlugin,
   StyledComponentsPlugin,
+  SassPlugin,
+  CSSResourcePlugin,
+  CSSPlugin,
 } = require('fuse-box');
 
 const { spawn } = require('child_process');
@@ -68,7 +71,7 @@ const getCopyPlugin = () => {
 const main = () => {
   const fuse = FuseBox.init(getConfig('server', 'main'));
 
-  const app = fuse.bundle('main').instructions(`> [launcher/index.ts]`);
+  const app = fuse.bundle('main').instructions('> [launcher/index.ts]');
 
   if (!production) {
     app.watch();
@@ -115,7 +118,7 @@ const preload = name => {
 
   const fuse = FuseBox.init(cfg);
 
-  const app = fuse.bundle(name).instructions(`> [preloads/${name}.ts]`);
+  const app = fuse.bundle(name).instructions(`> [preloads/${name}.ts] + fuse-box-css`);
 
   if (!production) {
     app.watch();
@@ -124,17 +127,68 @@ const preload = name => {
   fuse.run();
 };
 
-const exportNode = () => {
-  const scriptName = 'exportNode'
-  const cfg = getRendererConfig('electron', scriptName);
-  const fuse = FuseBox.init(cfg);
-  fuse.bundle(scriptName).instructions(`> [frontend/preloads/${scriptName}.ts]`);
-  fuse.run();
+const bundlePhoneApp = () => {
+  const cfg = getRendererConfig('electron', 'phone')
+  cfg.plugins.push(getWebIndexPlugin('phone'))
+  cfg.plugins.push(JSONPlugin())
+  cfg.plugins.push(getCopyPlugin())
+  cfg.plugins.push(CSSPlugin())
+  cfg.plugins.push(SassPlugin())
+  cfg.plugins.push(CSSResourcePlugin({ dist: "dist/css-resources" }))
+
+  const fuse = FuseBox.init(cfg)
+  const app = fuse.bundle('phone').instructions('> [phone/views/index.tsx] + fuse-box-css')
+
+  if (!production) {
+    const port = 4445
+    fuse.dev({ httpServer: false, port, socketURI: `ws://localhost:${port}` })
+    app.hmr({ port, socketURI: `ws://localhost:${port}`, reload: true }).watch()
+  }
+
+  fuse.run()
 }
 
-renderer('app', 4444);
-preload('view-preload');
-preload('background-preload');
-exportNode();
+const phonePreload = () => {
+  const cfg = {
+    sourceMaps: !production,
+    homeDir: 'src/',
+    cache: !production,
+    target: 'electron',
+    output: 'build/phonePreload.js',
+    useTypescriptCompiler: true,
+    plugins: [
+      production &&
+        QuantumPlugin({
+          bakeApiIntoBundle: 'phonePreload',
+          treeshake: true,
+          removeExportsInterop: false,
+          uglify: {
+            es6: true,
+          },
+        }),
+    ],
+    log: {
+      showBundledFiles: false,
+    }
+  }
+  const fuse = FuseBox.init(cfg)
+  fuse.bundle('phonePreload').instructions('> [phone/preloads/phonePreload.ts]')
+  fuse.run()
+}
 
-main();
+const exportNode = () => {
+  const scriptName = 'exportNode'
+  const cfg = getRendererConfig('electron', scriptName)
+  const fuse = FuseBox.init(cfg)
+  fuse.bundle(scriptName).instructions(`> [frontend/preloads/${scriptName}.ts]`)
+  fuse.run()
+}
+
+renderer('app', 4444)
+bundlePhoneApp()
+phonePreload()
+preload('view-preload')
+preload('background-preload')
+exportNode()
+
+main()

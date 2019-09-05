@@ -14,8 +14,10 @@
     "ter-arrow-parens": false,
     "no-parameter-reassignment": false,
     "object-shorthand-properties-first": false,
-    "semicolon": false,
+    "semicolon": [true, "never"],
     "align": false,
-    "no-this-assignment": false
+    "no-this-assignment": false,
+    "no-unused-variable": true,
+    "no-unused-expression": true
   }
 }

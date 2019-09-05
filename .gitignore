@@ -9,3 +9,4 @@ filters
 .tmp
 .idea
 .vscode
+.editorconfig

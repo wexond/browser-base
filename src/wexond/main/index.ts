@@ -12,7 +12,7 @@ import { Settings } from '../renderer/app/models/settings';
 import { makeId } from '../shared/utils/string';
 
 export let settings: Settings = {};
-export let appWindow: AppWindow
+export let appWindow: AppWindow | null
 export let log = require('electron-log');
 export function setWexondLog(logger: any) {
   log = logger
@@ -24,9 +24,11 @@ ipcMain.on('settings', (e: any, s: Settings) => {
 registerProtocols();
 
 app.on('ready', () => {
-  if (!existsSync(getPath('settings.json'))) {
+  const settingsPath = getPath('settings.json')
+
+  if (settingsPath && !existsSync(settingsPath)) {
     writeFileSync(
-      getPath('settings.json'),
+      settingsPath,
       JSON.stringify({
         dialType: 'top-sites',
         isDarkTheme: false,
@@ -35,15 +37,19 @@ app.on('ready', () => {
     );
   }
 
-  session.defaultSession.setPermissionRequestHandler(
-    (webContents, permission, callback) => {
-      if (permission === 'notifications' || permission === 'fullscreen') {
-        callback(true);
-      } else {
-        callback(false);
-      }
-    },
-  );
+  const defaultSession = session.defaultSession
+
+  if (defaultSession) {
+    defaultSession.setPermissionRequestHandler(
+      (webContents, permission, callback) => {
+        if (permission === 'notifications' || permission === 'fullscreen') {
+          callback(true);
+        } else {
+          callback(false);
+        }
+      },
+    );
+  }
 });
 
 app.on('window-all-closed', () => {

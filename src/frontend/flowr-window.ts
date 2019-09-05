@@ -1,4 +1,4 @@
-import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
+import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
 import { Store } from './src/store'
 import { Player } from './src/player'
 
@@ -7,8 +7,12 @@ export class FlowrWindow extends BrowserWindow {
   private resizeTimeout?: number
   private player: Player
 
+  get phoneServerUrl(): string | undefined {
+    return this.store.get('phoneServer')
+  }
+
   constructor(private store: Store, options?: BrowserWindowConstructorOptions) {
-    super(options);
+    super(options)
     this.player = new Player(this.store)
 
     this.on('close', () => {

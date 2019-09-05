@@ -20,7 +20,7 @@
     "url": "git+https://github.com/taktik/wexond.git"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV='dev' node fuse.js",
+    "dev": "cross-env NODE_ENV='dev' node fuse.js --inspect=3001",
     "build": "node fuse.js",
     "setup": "npm install && npm run install-app-deps && npm run install-widevine && npm run copy-header && npm run build",
     "setup-win": "npm install && npm run install-app-deps && npm run install-widevine && npm run copy-header-win && npm run build",
@@ -28,7 +28,7 @@
     "compile-win32": "electron-builder -w",
     "compile-darwin": "electron-builder -m",
     "compile-linux": "electron-builder -l",
-    "lint": "tslint \"src/**/*.ts*\"",
+    "lint": "tslint \"src/**/*.ts*\" --exclude \"src/wexond/**/*.ts*\" --project tsconfig.json",
     "lint-fix": "prettier --write \"src/**/*.ts*\" && tslint \"src/**/*.ts*\" --fix",
     "install-app-deps": "electron-builder install-app-deps",
     "install-widevine": "npm install castlabs/electron-releases#v5.0.3-wvvmp --no-save",
@@ -66,6 +66,9 @@
   },
   "dependencies": {
     "@cliqz/adblocker": "0.9.1",
+    "@fortawesome/fontawesome-svg-core": "1.2.21",
+    "@fortawesome/free-solid-svg-icons": "5.10.1",
+    "@fortawesome/react-fontawesome": "0.1.4",
     "axios": "0.18.0",
     "deep-extend": "^0.6.0",
     "electron-log": "3.0.5",
@@ -94,6 +97,7 @@
     "react-dom": "16.8.6",
     "run-parallel": "^1.1.9",
     "styled-components": "4.2.0",
-    "tldts": "4.0.6"
+    "tldts": "4.0.6",
+    "typescript-state-machine": "^0.9.4"
   }
 }

@@ -1,19 +1,14 @@
 import { Store } from './store'
-import { ipcMain } from 'electron';
+import { ipcMain } from 'electron'
 const { Writable } = require('stream')
 const ff = require('./ffmpeg')
-const os = require('os')
 const ffprobe  = require('ffprobe')
 const ffprobeStatic  = require('ffprobe-static')
 const ffprobeTimeout = 5000000
 
 // TODO move this code in ffprobe-static
 let ffprobePath = ffprobeStatic.path
-console.log('------------> FFPROB PATH FOUD', ffprobeStatic.path)
 ffprobePath = ffprobePath.replace('app.asar', 'app.asar.unpacked')
-console.log('------------> FFPROB PATH TRAN', ffprobePath)
-
-const fs = require('fs')
 
 export class Player {
   private currentPipeline?: any
@@ -33,18 +28,18 @@ export class Player {
   private initListener () {
 
     ipcMain.on('closestream', (evt: any) => {
-      this.currentPipeline && this.currentPipeline.kill()
+      this.currentPipeline ? this.currentPipeline.kill() : void
       evt.sender.send('streamclosed')
-      this.segmentInterval && clearInterval(this.segmentInterval)
+      clearInterval(this.segmentInterval)
     })
 
     ipcMain.on('pausestream', (evt: any) => {
-      this.currentPipeline && this.currentPipeline.kill('SIGSTOP')
+      this.currentPipeline ? this.currentPipeline.kill('SIGSTOP') : void
       evt.sender.send('streampaused')
     })
 
     ipcMain.on('resumestream', (evt: any) => {
-      this.currentPipeline && this.currentPipeline.kill('SIGCONT')
+      this.currentPipeline ? this.currentPipeline.kill('SIGCONT') : void
       evt.sender.send('streamresumed')
 
     })
@@ -176,14 +171,16 @@ export class Player {
       this.handleErroneousStreamError(evt)
     }
 
-    this.currentPipeline && this.currentPipeline.kill()
+    if (this.currentPipeline) {
+      this.currentPipeline.kill()
+    }
 
     if (streamToPlay.video.tracks.length > 0) {
       const currentVideoCodec = streamToPlay.video.tracks[0].codec_name
       const videoStreamChannel = streamToPlay.video.tracks[0].pid
       const subtitleStreamChannel = streamToPlay.subtitles.currentStream
       const audiostreamChannel = streamToPlay.audio.currentStream
-      const isDeinterlacingEnabled = this.store.get("deinterlacing")
+      const isDeinterlacingEnabled = this.store.get('deinterlacing')
       this.currentPipeline = ff.getVideoMpegtsPipeline(url, audiostreamChannel, videoStreamChannel, currentVideoCodec, subtitleStreamChannel, isDeinterlacingEnabled, () => { this.handleConversionError(evt) }, () => { this.handleErroneousStreamError(evt) })
 
     } else if (streamToPlay.audio.tracks.length > 0) {
@@ -201,15 +198,15 @@ export class Player {
         ready = true
         buf = Buffer.concat([buf, chunk])
         callback()
-      }
+      },
     })
     this.currentPipeline.pipe(mpxSegmentBufferer)
-    this.segmentInterval && clearInterval(this.segmentInterval)
+    clearInterval(this.segmentInterval)
     this.segmentInterval = setInterval(() => {
       if (!ready) return
-        evt.sender.send('segment', { buffer: buf, isFirst: firstChunk })
-        firstChunk = false
-        buf = Buffer.alloc(0)
+      evt.sender.send('segment', { buffer: buf, isFirst: firstChunk })
+      firstChunk = false
+      buf = Buffer.alloc(0)
     }, 300)
   }
 
@@ -267,7 +264,9 @@ export class Player {
   }
 
   close() {
-    this.currentPipeline && this.currentPipeline.kill()
-    this.segmentInterval && clearInterval(this.segmentInterval)
+    if (this.currentPipeline) {
+      this.currentPipeline.kill()
+    }
+    clearInterval(this.segmentInterval)
   }
 }

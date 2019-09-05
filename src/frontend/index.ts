@@ -1,11 +1,11 @@
-import { resolve, join } from 'path';
-import { homedir } from 'os';
-import { ipcMain, Menu, app, protocol, BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
+import { resolve, join } from 'path'
+import { homedir } from 'os'
+import { ipcMain, Menu, app, BrowserWindowConstructorOptions } from 'electron'
 import { Store, initConfigData } from './src/store'
 import { FlowrWindow } from './flowr-window'
 import { extend } from 'lodash'
 import { URL } from 'url'
-const network = require('network');
+const network = require('network')
 const deepExtend = require('deep-extend')
 import defaultBrowserWindowOptions from './defaultBrowserWindowOptions'
 const FlowrDataDir = resolve(homedir(), '.flowr')
@@ -36,7 +36,7 @@ export function buildBrowserWindowConfig(options: BrowserWindowConstructorOption
   return extend(options, defaultBrowserWindowOptions(flowrStore))
 }
 
-export async function createFlowrWindow(): Promise<BrowserWindow> {
+export async function createFlowrWindow(): Promise<FlowrWindow> {
   const mac = await getMacAddress()
 
   const defaultUrl = buildFileUrl('config.html')
@@ -175,7 +175,6 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
   })
 
   ipcMain.on('setDebugMode', (evt: any, debugMode: boolean) => {
-    const currentConfig = flowrStore.get('flowrConfig')
     isDebugMode = debugMode
     if (isDebugMode) {
       mainWindow.webContents.openDevTools()
@@ -206,7 +205,7 @@ export async function createFlowrWindow(): Promise<BrowserWindow> {
   function buildFileUrl(fileName: string): string {
     let result: string
     if (process.env.ENV === 'dev') {
-      result = `http://localhost:4444/${fileName}`;
+      result = `http://localhost:4444/${fileName}`
     } else {
       result = join('file://', app.getAppPath(), 'build', fileName)
     }

@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/taktik/flowr-desktop.svg?branch=base)](https://travis-ci.com/taktik/flowr-desktop)
 <p align="center">
   <img src="static/app-icons/icon.png" width="256">
 </p>
@@ -60,6 +61,26 @@ $ npm run <command>
 | `start`          | Starts flowr-desktop.                              |
 | `dev`            | Starts flowr-desktop in the development mode       |
 
+#### Known issues
+
+##### compile-darwin
+
+```
+$ spctl --assess --type execute --verbose --ignore-cache --no-cache /Users/loris/Documents/taktik/flowr-pc-client/dist/mac/flowr-desktop.app
+/Users/loris/Documents/taktik/flowr-pc-client/dist/mac/flowr-desktop.app: rejected
+```
+
+This error is caused by the signing mechanism for OSX applications. To temporarily disable it run:
+
+```bash
+$ sudo spctl --master-disable
+```
+
+You should re-enable it afterwards with:
+
+```bash
+$ sudo spctl --master-enable
+```
 
 #### Translation
 
