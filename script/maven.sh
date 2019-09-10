@@ -13,8 +13,8 @@ Help () {
 
 PubilshDebianPackage ()
 {
-  echo curl -u $MV_USER:$MV_PASS -X POST -H 'Content-Type: multipart/form-data' --data-binary '@'$2 https://apt.taktik.be/repository/apt/
-       curl -u $MV_USER:$MV_PASS -X POST -H 'Content-Type: multipart/form-data' --data-binary '@'$2 https://apt.taktik.be/repository/apt/
+  echo Uploading $2 to https://apt.taktik.be/repository/apt/
+  curl -u $MV_USER:$MV_PASS -X POST -H 'Content-Type: multipart/form-data' --data-binary '@'$2 https://apt.taktik.be/repository/apt/
 }
 
 Run()
