@@ -1,0 +1,19 @@
+h1{
+    color: white;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-weight: medium;
+    font-size: 60px;
+    width: 100%;
+    text-align: center;
+    margin: 0 0 24px;
+}
+
+p{
+    color: white;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size: 24px;
+    width: 80%;
+    text-align: center;
+    margin: 0 10%;
+}

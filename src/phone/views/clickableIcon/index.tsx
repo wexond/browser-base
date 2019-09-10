@@ -8,9 +8,7 @@ interface ClickableIconProps extends Props {
 export class ClickableIcon extends React.Component<ClickableIconProps> {
   render() {
     return (
-      <span className={this.props.className} onClick={this.props.onClick}>
-        <FontAwesomeIcon {...this.props}  />
-      </span>
+        <FontAwesomeIcon { ...this.props }  />
     )
   }
 }

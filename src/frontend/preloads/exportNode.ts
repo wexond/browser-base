@@ -42,7 +42,7 @@ function handleHiddenMenuCode(event: KeyboardEvent): any {
   }
 }
 
-document.addEventListener('keydown', handleHiddenMenuCode)
+window.addEventListener('keydown', handleHiddenMenuCode, true)
 process.once('loaded', () => {
   global.nodeRequire = (moduleName: string): any => {
     const requiredModule = nodeRequire[moduleName]

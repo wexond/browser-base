@@ -2,8 +2,8 @@ import { fsm } from 'typescript-state-machine'
 import StateMachineImpl = fsm.StateMachineImpl
 import State = fsm.State
 import CheckStateIs = fsm.CheckStateIs
-import { CallStateMachine, CallState, OFF_HOOK_STATE, IDLE_STATE as CALL_IDLE_STATE } from './callStateMachine'
-import { RegisterStateMachine, RegisterState, REGISTERED_STATE, UNREGISTERED_STATE, CLIENT_NOT_RUNNING_STATE, IDLE_STATE as REGISTER_IDLE_STATE } from './registerStateMachine'
+import { CallStateMachine, CallState, OFF_HOOK_STATE, IDLE_STATE as CALL_IDLE_STATE, CLIENT_NOT_RUNNING_STATE } from './callStateMachine'
+import { RegisterStateMachine, RegisterState, REGISTERED_STATE, UNREGISTERED_STATE, IDLE_STATE as REGISTER_IDLE_STATE } from './registerStateMachine'
 
 enum ServerReference {
   SM01 = 'SM-01',
@@ -16,21 +16,21 @@ enum ServerReference {
   SM08 = 'SM-08',
   SM09 = 'SM-09',
   SM10 = 'SM-10', // unregistered
-  SM11 = 'SM-11',
+  SM11 = 'SM-11', // registered -1 (broken state ?)
   SM12 = 'SM-12',
   SM13 = 'SM-13',
-  SM14 = 'SM-14',
-  SM15 = 'SM-15',
+  SM14 = 'SM-14', // init sent
+  SM15 = 'SM-15', // unregister sent
   SM16 = 'SM-16',
-  SM17 = 'SM-17',
-  SM18 = 'SM-18',
+  SM17 = 'SM-17', // status change
+  SM18 = 'SM-18', // incoming call
   SM19 = 'SM-19',
   SM20 = 'SM-20',
 }
 
 interface ServerMessage {
   reference: ServerReference,
-  refrence?: ServerReference,
+  refrence?: ServerReference, // typo in received messages
   status?: string,
   message?: string
   action?: string,
@@ -68,6 +68,9 @@ const CONNECTION_TRANSITIONS = {
   [ConnectionStatesNames.CONNECTED]: [DISCONNECTED_STATE],
 }
 
+/**
+ * Handles the connection to the websocket server and the communications
+ */
 export class Dispatcher extends StateMachineImpl<ConnectionState> {
   private _url: string
   private _websocket: WebSocket | undefined
@@ -75,9 +78,9 @@ export class Dispatcher extends StateMachineImpl<ConnectionState> {
   private _callStateMachine: CallStateMachine | undefined
   private _connectionTimeout: number | undefined
 
-  private updateStatuses() {
+  private onConnect() {
+    this.resetConnectionTimeout()
     this.updateStatus()
-    this.updateRegisterStatus()
   }
 
   private updateStatus() {
@@ -115,10 +118,16 @@ export class Dispatcher extends StateMachineImpl<ConnectionState> {
     }
   }
 
+  private set callingNumber(caller: string) {
+    if (this._callStateMachine) {
+      this._callStateMachine.callingNumber = caller
+    }
+  }
+
   constructor(phoneServer: string | null) {
     super(CONNECTION_STATES, CONNECTION_TRANSITIONS, DISCONNECTED_STATE)
     this.onEnterState(DISCONNECTED_STATE, this.connect.bind(this))
-    this.onEnterState(CONNECTED_STATE, this.updateStatuses.bind(this))
+    this.onEnterState(CONNECTED_STATE, this.onConnect.bind(this))
     this.onAnyTransition((from, to) => console.log(`Connection transitioned from ${from.label} to ${to.label}`))
 
     this._url = phoneServer || 'ws://127.0.0.1:8001'
@@ -126,7 +135,7 @@ export class Dispatcher extends StateMachineImpl<ConnectionState> {
 
   private onMessage(event: MessageEvent) {
     const message = JSON.parse(event.data) as ServerMessage
-    const reference = message.reference || message.refrence
+    const reference = message.reference || message.refrence // typo in received messages
 
     switch (reference) {
       case ServerReference.SM01:
@@ -143,7 +152,15 @@ export class Dispatcher extends StateMachineImpl<ConnectionState> {
         this.registerState = UNREGISTERED_STATE
         break
       case ServerReference.SM12:
-        this.registerState = CLIENT_NOT_RUNNING_STATE
+        this.callState = CLIENT_NOT_RUNNING_STATE
+        break
+      case ServerReference.SM15:
+        this.updateRegisterStatus()
+        break
+      case ServerReference.SM16:
+        if (message.caller) {
+          this.callingNumber = message.caller
+        }
         break
       case ServerReference.SM17:
         if (message.to) {
@@ -178,11 +195,15 @@ export class Dispatcher extends StateMachineImpl<ConnectionState> {
     this.setState(DISCONNECTED_STATE)
   }
 
-  private connect() {
+  private resetConnectionTimeout() {
     if (this._connectionTimeout) {
       clearTimeout(this._connectionTimeout)
       this._connectionTimeout = undefined
     }
+  }
+
+  private connect() {
+    this.resetConnectionTimeout()
     this.disconnect()
 
     if (this._url) {
@@ -212,6 +233,7 @@ export class Dispatcher extends StateMachineImpl<ConnectionState> {
     this._registerStateMachine = registerStateMachine
     this._callStateMachine = callStateMachine
     this._registerStateMachine.onLeaveState(REGISTERED_STATE, this._callStateMachine.terminate.bind(this._callStateMachine))
+    this._callStateMachine.onEnterState(OFF_HOOK_STATE, this.updateRegisterStatus.bind(this))
     this.connect()
   }
 

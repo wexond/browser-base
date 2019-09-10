@@ -19,6 +19,8 @@ const StyledPhone = styled(Phone)`
   display: flex;
   justify-content: center;
   align-items: center;
+  top: 0;
+  left: 0;
 `
 const styleElement = document.createElement('style')
 

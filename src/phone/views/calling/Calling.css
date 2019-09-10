@@ -1,0 +1,34 @@
+.calling-container {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 48px 1fr 1fr 1fr;
+    box-sizing: border-box;
+}
+
+.calling-container > div {
+    place-self: center;
+}
+
+.title{
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-size: 24px;
+    font-weight: normal;
+    color: white;
+    text-align: center;
+    margin: 12px 0;
+}
+
+.buttonSpan{
+    width: 100%;
+    display:block;
+    color: white;
+    margin-top: 12px;
+    font-size: 16px;
+}
+
+.disabled {
+    opacity: 0.42;
+}

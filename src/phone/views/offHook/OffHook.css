@@ -1,0 +1,81 @@
+.offHook-container {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 12px 12px 12px 48px;
+    box-sizing: border-box;
+}
+
+.right, .left{
+    flex-grow: 1;
+    height: 100%;
+    padding-top: 36px;
+    box-sizing:border-box;
+}
+
+.right{
+    width: 50%;
+    margin-left: 12px;
+}
+
+.left{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+    padding-bottom: 4px;
+    padding-top: 48px;
+    margin-right: 12px;
+}
+
+.input-container{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 8px 8px 0 0;
+    padding: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.42);
+}
+
+.input-container:focus-within{
+    background: rgba(0,0,0,0.24);
+}
+
+.number{
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-size: 36px;
+    font-weight: normal;
+    place-self: center;
+    margin: 0;
+    background: transparent;
+    box-sizing: border-box;
+    width: calc(100% - 48px);
+    border: none;
+    color: white;
+}
+
+.number:focus {
+    outline: 0;
+}
+
+.input-icon {
+    color: white;
+    width: 36px;
+}
+.buttonSpan {
+    color: white;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-weight: medium;
+    font-size: 18px;
+    letter-spacing: 0.4;
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin-top: 12px;
+}

@@ -95,6 +95,14 @@ export class PhoneWindow extends BrowserWindow {
     ipcMain.on('phone-show', this.show.bind(this))
     ipcMain.on('phone-hide', this.hide.bind(this))
     ipcMain.on('register-props', this.updateRegisterProps.bind(this))
+    ipcMain.on('phone-mute', this.mute.bind(this))
+    ipcMain.on('setDebugMode', (evt: any, debugMode: boolean) => {
+      if (debugMode) {
+        this.webContents.openDevTools()
+      } else {
+        this.webContents.closeDevTools()
+      }
+    })
   }
 
   updateRegisterProps(e: Event, registerProps: RegisterProps) {
@@ -109,5 +117,10 @@ export class PhoneWindow extends BrowserWindow {
 
   changeLanguage(lang: string): void {
     this.webContents.send('change-language', lang)
+  }
+
+  mute(e: Event, mute: boolean) {
+    this.webContents.setAudioMuted(mute)
+    this.webContents.send('mute-changed', this.webContents.isAudioMuted())
   }
 }

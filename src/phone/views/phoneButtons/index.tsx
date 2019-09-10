@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const StyledPhone = styled.div`
-  color: white;
-  width: 75px;
-  height: 75px;
+  color: rgba(255,255,255,0.8);
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  background-color: red;
+  background-color: #FF4437;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,7 +17,7 @@ const StyledHangupPhone = styled(StyledPhone)`
   background-color: red;
 `
 const StyledIcon = styled(FontAwesomeIcon)`
-  width: 50px;
+  width: 36px;
 `
 
 interface HangupPhoneProps {
@@ -35,7 +35,7 @@ export class HangupPhoneIcon extends React.Component<HangupPhoneProps> {
 }
 
 const StyledAnswerPhone = styled(StyledPhone)`
-  background-color: green;
+  background-color: #56DE6F;
 `
 
 interface AnswerPhoneProps {

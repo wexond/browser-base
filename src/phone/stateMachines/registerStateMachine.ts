@@ -6,7 +6,6 @@ import { Dispatcher } from './dispatcher'
 
 enum RegisterStatesNames {
   IDLE = 'IDLE',
-  CLIENT_NOT_RUNNING = 'CLIENT_NOT_RUNNING',
   UNREGISTERED = 'UNREGISTERED',
   REGISTERED = 'REGISTERED',
 }
@@ -18,34 +17,29 @@ export class RegisterState extends State {
 }
 
 export const IDLE_STATE = new RegisterState(RegisterStatesNames.IDLE)
-export const CLIENT_NOT_RUNNING_STATE = new RegisterState(RegisterStatesNames.CLIENT_NOT_RUNNING)
 export const UNREGISTERED_STATE = new RegisterState(RegisterStatesNames.UNREGISTERED)
 export const REGISTERED_STATE = new RegisterState(RegisterStatesNames.REGISTERED)
 
 const STATUS_TO_STATE: {[key: string]: RegisterState} = {
-  'SIP client not running': CLIENT_NOT_RUNNING_STATE,
   unregistered: UNREGISTERED_STATE,
   registered: REGISTERED_STATE,
 }
 
-const CONNECTION_STATES = [
+const REGISTER_STATES = [
   IDLE_STATE,
-  CLIENT_NOT_RUNNING_STATE,
   UNREGISTERED_STATE,
   REGISTERED_STATE,
 ]
 
 const CONNECTION_TRANSITIONS = {
-  [RegisterStatesNames.IDLE]: [CLIENT_NOT_RUNNING_STATE, REGISTERED_STATE, UNREGISTERED_STATE],
-  [RegisterStatesNames.CLIENT_NOT_RUNNING]: [REGISTERED_STATE, UNREGISTERED_STATE, IDLE_STATE],
-  [RegisterStatesNames.UNREGISTERED]: [REGISTERED_STATE, CLIENT_NOT_RUNNING_STATE, IDLE_STATE],
-  [RegisterStatesNames.REGISTERED]: [UNREGISTERED_STATE, CLIENT_NOT_RUNNING_STATE, IDLE_STATE],
+  [RegisterStatesNames.IDLE]: [REGISTERED_STATE, UNREGISTERED_STATE],
+  [RegisterStatesNames.UNREGISTERED]: [REGISTERED_STATE, IDLE_STATE],
+  [RegisterStatesNames.REGISTERED]: [UNREGISTERED_STATE, IDLE_STATE],
 }
 
 export class RegisterStateMachine extends StateMachineImpl<RegisterState> {
   private _dispatcher: Dispatcher
   private _registerProps: RegisterProps | null = null
-  private _initTimeout: number | undefined
   private _registerTimeout: number | undefined
 
   static getStateFromStatus(status: string) {
@@ -68,31 +62,13 @@ export class RegisterStateMachine extends StateMachineImpl<RegisterState> {
   }
 
   constructor(dispatcher: Dispatcher, registerProps: RegisterProps | null) {
-    super(CONNECTION_STATES, CONNECTION_TRANSITIONS, IDLE_STATE)
-    this.onEnterState(CLIENT_NOT_RUNNING_STATE, this.attemptToInit.bind(this))
-    this.onLeaveState(CLIENT_NOT_RUNNING_STATE, this.clearInitAttemps.bind(this))
+    super(REGISTER_STATES, CONNECTION_TRANSITIONS, IDLE_STATE)
     this.onEnterState(UNREGISTERED_STATE, this.attemptToRegister.bind(this))
     this.onLeaveState(UNREGISTERED_STATE, this.clearRegisterAttempts.bind(this))
     this.onAnyTransition((from, to) => console.log(`Register transitioned from ${from.label} to ${to.label}`))
 
     this._dispatcher = dispatcher
     this.registerProps = registerProps
-  }
-
-  private attemptToInit() {
-    this.init()
-    this._initTimeout = setTimeout(this.attemptToInit.bind(this), 5000)
-  }
-
-  private clearInitAttemps() {
-    if (this._initTimeout) {
-      clearTimeout(this._initTimeout)
-      this._initTimeout = undefined
-    }
-  }
-
-  private init() {
-    this.send('init')
   }
 
   private attemptToRegister() {
@@ -118,6 +94,7 @@ export class RegisterStateMachine extends StateMachineImpl<RegisterState> {
   private unregister() {
     this.send('unregister')
   }
+
   private send(action: string, payload: {[key: string]: string} = {}) {
     this._dispatcher.send(action, payload)
   }

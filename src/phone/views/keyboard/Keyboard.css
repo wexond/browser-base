@@ -1,0 +1,34 @@
+.keyboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  height: 100%;
+}
+
+.key {
+  display:inline-flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  place-self: center;
+}
+
+.key span {
+  display: block;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: medium;
+  line-height: 0;
+}
+
+.label {
+  font-size: 16px;
+  color: white;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-weight: regular;
+}

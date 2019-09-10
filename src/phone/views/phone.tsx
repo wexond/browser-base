@@ -31,6 +31,8 @@ type PhoneAppState = {
   mode?: WindowModes,
   waiting: boolean,
   lang?: string,
+  isMute: boolean,
+  callingNumber: string,
 }
 
 export type RegisterProps = {
@@ -40,9 +42,10 @@ export type RegisterProps = {
 
 const UpperRightIcon = styled(ClickableIcon)`
   position: fixed;
-  top: 5px;
-  right: 5px;
-  width: 50px;
+  top: 12px;
+  left: 12px;
+  width: 24px;
+  color: white;
 `
 
 export class Phone extends React.Component<PhoneProps, PhoneAppState> {
@@ -51,6 +54,10 @@ export class Phone extends React.Component<PhoneProps, PhoneAppState> {
   private callStateMachineListeners: TransitionListener[] = []
   private _ipc: IpcRenderer = window.ipcRenderer
   private _translator: Translator = new Translator()
+
+  private ipcSend(message: string, payload: {[key: string]: any} = {}): () => void {
+    return () => this._ipc.send(message, payload)
+  }
 
   constructor(props: PhoneProps) {
     super(props)
@@ -61,29 +68,18 @@ export class Phone extends React.Component<PhoneProps, PhoneAppState> {
     this._ipc.on('window-mode-changed', this.windowModeChanged.bind(this))
     this._ipc.on('register-props', this.receivedRegisterProps.bind(this))
     this._ipc.on('change-language', (e: Event, lang: string) => this.setState({ lang }))
+    this._ipc.on('mute-changed', this.muteStatusChanged.bind(this))
 
     this.registerStateMachine.onEnterState(REGISTERED_STATE, this.listenToCallStateMachine.bind(this))
     this.registerStateMachine.onLeaveState(REGISTERED_STATE, this.unlistenToCallStateMachine.bind(this))
 
     this._translator.addKeys('fr', fr)
 
-    this.state = { callState: null, waiting: false, lang: props.lang }
+    this.state = { callState: null, waiting: false, lang: props.lang, isMute: false, callingNumber: this.callStateMachine.callingNumber }
   }
 
-  maximize() {
-    this._ipc.send('phone-maximize')
-  }
-
-  reduce() {
-    this._ipc.send('phone-reduce')
-  }
-
-  show() {
-    this._ipc.send('phone-show')
-  }
-
-  hide() {
-    this._ipc.send('phone-hide')
+  muteStatusChanged(e: Event, isMute: boolean) {
+    this.setState({ isMute })
   }
 
   windowModeChanged(e: Event, mode: WindowModes) {
@@ -96,14 +92,14 @@ export class Phone extends React.Component<PhoneProps, PhoneAppState> {
   }
 
   stateChanged(from: CallState, to: CallState) {
-    this.setState({ callState: to })
+    this.setState({ callState: to, callingNumber: this.callStateMachine.callingNumber })
   }
 
   listenToCallStateMachine() {
     if (!this.callStateMachineListeners.length) {
       this.callStateMachineListeners = [
         this.callStateMachine.onAnyTransition(this.stateChanged.bind(this)),
-        this.callStateMachine.onEnterState(INCOMING_STATE, this.show.bind(this)),
+        this.callStateMachine.onEnterState(INCOMING_STATE, this.ipcSend('phone-show')),
       ]
     }
     this.setState({ callState: this.callStateMachine.state })
@@ -132,9 +128,22 @@ export class Phone extends React.Component<PhoneProps, PhoneAppState> {
   render() {
     return (
       <div className={this.props.className}>
-        <MainView translator={this._translator} lang={this.state.lang} callState={this.state.callState} waiting={this.state.waiting} call={this.call.bind(this)} answer={this.answer.bind(this)} hangup={this.hangup.bind(this)} />
-        <UpperRightIcon onClick={this.hide.bind(this)} icon="window-close" />
+        <MainView
+            translator={this._translator}
+            lang={this.state.lang}
+            callState={this.state.callState}
+            waiting={this.state.waiting}
+            call={this.call.bind(this)}
+            answer={this.answer.bind(this)}
+            hangup={this.hangup.bind(this)}
+            mute={this.ipcSend('phone-mute')}
+            callingNumber={this.state.callingNumber}/>
+        <UpperRightIcon onClick={this.ipcSend('phone-hide')} icon="times" />
       </div>
     )
+  }
+
+  componentWillUnmount() {
+    this.unlistenToCallStateMachine()
   }
 }

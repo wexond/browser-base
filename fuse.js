@@ -6,7 +6,6 @@ const {
   CopyPlugin,
   JSONPlugin,
   StyledComponentsPlugin,
-  SassPlugin,
   CSSResourcePlugin,
   CSSPlugin,
 } = require('fuse-box');
@@ -133,7 +132,6 @@ const bundlePhoneApp = () => {
   cfg.plugins.push(JSONPlugin())
   cfg.plugins.push(getCopyPlugin())
   cfg.plugins.push(CSSPlugin())
-  cfg.plugins.push(SassPlugin())
   cfg.plugins.push(CSSResourcePlugin({ dist: "dist/css-resources" }))
 
   const fuse = FuseBox.init(cfg)

@@ -1,0 +1,12 @@
+.disabled {
+    opacity: 0.42;
+}
+
+.phoneNumber{
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-size: 48px;
+    font-weight: normal;
+    place-self: center;
+    margin: 0;
+    width: 100%;
+}
