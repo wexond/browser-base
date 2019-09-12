@@ -3,9 +3,11 @@ import { AnswerPhoneIcon } from '../phoneButtons'
 import styled from 'styled-components'
 import { throttle } from '../../helper/throttle'
 import { Translator } from '../../../translator/translator'
-import './OffHook.css'
 import { Keyboard } from '../keyboard'
 import { ClickableIcon } from '../clickableIcon'
+
+import './OffHook.css'
+import { RemoteCodes } from '../../remote'
 
 type CallFunction = (callNumber: string) => void
 
@@ -29,11 +31,18 @@ export class OffHook extends React.Component<OffHookProps, OffHookState> {
   constructor(props: OffHookProps) {
     super(props)
     this.state = { callNumber: '' }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
   }
 
-  private onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.keyCode === 13) {
+  private onKeyDown(e: KeyboardEvent) {
+    if (e.keyCode === 13 || e.code === RemoteCodes.ANSWER_KEY) {
       this.call()
+    } else if (/[0-9]/.test(e.key.toString())) {
+      this.addNumber(e.key.toString())
+    } else if (e.key === 'Backspace' || e.code === RemoteCodes.BACK) {
+      this.removeNumber()
     }
   }
 
@@ -63,7 +72,7 @@ export class OffHook extends React.Component<OffHookProps, OffHookState> {
           <div>
             <label className="label">Number</label>
             <div className="input-container">
-              <input id="callNumber" className="number" type="string" value={this.state.callNumber} onChange={this.handleChange.bind(this)} onKeyDown={this.onKeyDown.bind(this)} />
+              <input id="callNumber" className="number" type="string" value={this.state.callNumber} onChange={this.handleChange} onKeyDown={e => e.preventDefault()} autoFocus />
               <StyledIcon className="input-icon" icon="backspace" onClick={this.removeNumber.bind(this)} />
             </div>
           </div>
@@ -74,5 +83,13 @@ export class OffHook extends React.Component<OffHookProps, OffHookState> {
         </div>
       </div>
     )
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown)
   }
 }

@@ -2,7 +2,6 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faPhone,
   faPhoneSlash,
-  faPhoneAlt,
   faCompressArrowsAlt,
   faExpandArrowsAlt,
   faLongArrowAltLeft,
@@ -14,12 +13,12 @@ import {
   faHashtag,
   faAsterisk,
   faBackspace,
+  faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
   faPhone,
   faPhoneSlash,
-  faPhoneAlt,
   faCompressArrowsAlt,
   faExpandArrowsAlt,
   faLongArrowAltLeft,
@@ -31,4 +30,5 @@ library.add(
   faHashtag,
   faAsterisk,
   faBackspace,
+  faCircleNotch,
 )

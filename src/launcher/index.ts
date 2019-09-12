@@ -7,15 +7,13 @@ import { createFlowrWindow, initFlowrConfig, buildBrowserWindowConfig } from '..
 import { createWexondWindow, setWexondLog } from '~/main'
 import { getMigrateUserPreferences } from './migration/fromFlowrClientToFlowrPcClient'
 import { PhoneWindow } from '../phone/phoneWindow'
-import { RegisterProps } from '../phone/views/phone'
 import { FlowrWindow } from 'src/frontend/flowr-window'
+import { OpenPhoneProps, createPhoneWindow } from '../phone'
 export const log = require('electron-log')
 const migrateUserPreferences = getMigrateUserPreferences()
 if (migrateUserPreferences) {
   initFlowrConfig(migrateUserPreferences)
 }
-
-type OpenPhoneProps = { registerProps: RegisterProps, show?: boolean, lang?: string }
 
 app.commandLine.appendSwitch('widevine-cdm-path', resolve('/Applications/Google Chrome.app/Contents/Versions/74.0.3729.169/Google Chrome Framework.framework/Versions/A/Libraries/WidevineCdm/_platform_specific/mac_x64'))
 // The version of plugin can be got from `chrome://components` page in Chrome.
@@ -107,13 +105,8 @@ app.on('ready', async () => {
     }
 
     if (phoneWindow === null) {
-      phoneWindow = new PhoneWindow(flowrWindow, flowrWindow.phoneServerUrl, openPhoneProps.registerProps, openPhoneProps.lang)
-      phoneWindow.on('show', mute)
-      phoneWindow.on('hide', unmute)
-      phoneWindow.on('close', () => {
-        unmute()
-        phoneWindow = null
-      })
+      phoneWindow = createPhoneWindow(openPhoneProps, flowrWindow, wexondWindow)
+      phoneWindow.on('close', () => phoneWindow = null)
     }
     if (openPhoneProps.registerProps) {
       phoneWindow.registerProps = openPhoneProps.registerProps
@@ -151,35 +144,5 @@ async function initFlowr() {
 function changeLanguage(e: Event, lang: string) {
   if (phoneWindow) {
     phoneWindow.changeLanguage(lang)
-  }
-}
-
-function mute() {
-  if (flowrWindow) {
-    muteWindow(flowrWindow)
-  }
-  if (wexondWindow) {
-    muteWindow(wexondWindow)
-  }
-}
-
-function unmute() {
-  if (flowrWindow) {
-    unmuteWindow(flowrWindow)
-  }
-  if (wexondWindow) {
-    unmuteWindow(wexondWindow)
-  }
-}
-
-function muteWindow(windowToMute: BrowserWindow) {
-  if (!windowToMute.webContents.isAudioMuted) {
-    windowToMute.webContents.setAudioMuted(true)
-  }
-}
-
-function unmuteWindow(windowToMute: BrowserWindow) {
-  if (windowToMute.webContents.isAudioMuted) {
-    windowToMute.webContents.setAudioMuted(false)
   }
 }

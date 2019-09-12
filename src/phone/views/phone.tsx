@@ -125,6 +125,11 @@ export class Phone extends React.Component<PhoneProps, PhoneAppState> {
     this.callStateMachine.terminate()
   }
 
+  hide() {
+    this.hangup()
+    this.ipcSend('phone-hide')()
+  }
+
   render() {
     return (
       <div className={this.props.className}>
@@ -138,7 +143,7 @@ export class Phone extends React.Component<PhoneProps, PhoneAppState> {
             hangup={this.hangup.bind(this)}
             mute={this.ipcSend('phone-mute')}
             callingNumber={this.state.callingNumber}/>
-        <UpperRightIcon onClick={this.ipcSend('phone-hide')} icon="times" />
+        <UpperRightIcon onClick={this.hide.bind(this)} icon="times" />
       </div>
     )
   }

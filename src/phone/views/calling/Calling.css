@@ -12,7 +12,7 @@
     place-self: center;
 }
 
-.title{
+.title {
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
     font-size: 24px;
     font-weight: normal;
@@ -21,7 +21,7 @@
     margin: 12px 0;
 }
 
-.buttonSpan{
+.buttonSpan {
     width: 100%;
     display:block;
     color: white;

@@ -108,13 +108,25 @@ export class Dispatcher extends StateMachineImpl<ConnectionState> {
 
   private set registerState(state: RegisterState) {
     if (this._registerStateMachine) {
-      this._registerStateMachine.setState(state)
+      try {
+        this._registerStateMachine.setState(state)
+      } catch (e) {
+        console.error('Error changing register state machine\'s state:', e)
+        this.updateStatus()
+        this.updateRegisterStatus()
+      }
     }
   }
 
   private set callState(state: CallState) {
     if (this._callStateMachine) {
-      this._callStateMachine.setState(state)
+      try {
+        this._callStateMachine.setState(state)
+      } catch (e) {
+        console.error('Error changing call state machine\'s state:', e)
+        this.updateStatus()
+        this.updateRegisterStatus()
+      }
     }
   }
 

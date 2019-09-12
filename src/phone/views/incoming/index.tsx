@@ -2,6 +2,7 @@ import * as React from 'react'
 import { FlexRowSpaceEvenly } from '../flex'
 import { AnswerPhoneIcon, HangupPhoneIcon } from '../phoneButtons'
 import './Incoming.css'
+import { RemoteCodes } from '../../remote'
 
 interface IncomingProps {
   answer: () => void
@@ -9,6 +10,18 @@ interface IncomingProps {
 }
 
 export class Incoming extends React.Component<IncomingProps> {
+  private onKeyDown(e: KeyboardEvent) {
+    if (e.keyCode === 13 || e.code === RemoteCodes.ANSWER_KEY || e.code === RemoteCodes.ANSWER_GESTURE) {
+      this.props.answer()
+    } else if (e.code === RemoteCodes.HANGUP_KEY || e.code === RemoteCodes.HANGUP_GESTURE) {
+      this.props.hangup()
+    }
+  }
+
+  constructor(props: IncomingProps) {
+    super(props)
+    this.onKeyDown = this.onKeyDown.bind(this)
+  }
   render() {
     return (
       <div className="incoming-call-container">
@@ -26,5 +39,13 @@ export class Incoming extends React.Component<IncomingProps> {
         </FlexRowSpaceEvenly>
       </div>
     )
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown)
   }
 }

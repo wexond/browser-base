@@ -20,11 +20,11 @@
     "url": "git+https://github.com/taktik/wexond.git"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV='dev' node fuse.js --inspect=3001",
+    "dev": "cross-env NODE_ENV='dev' node fuse.js",
     "build": "node fuse.js",
     "setup": "npm install && npm run install-app-deps && npm run install-widevine && npm run copy-header && npm run build",
     "setup-win": "npm install && npm run install-app-deps && npm run install-widevine && npm run copy-header-win && npm run build",
-    "start": "cross-env ENV='dev' electron .",
+    "start": "cross-env ENV='dev' electron . --inspect=3001",
     "compile-win32": "electron-builder -w",
     "compile-darwin": "electron-builder -m",
     "compile-linux": "electron-builder -l",
