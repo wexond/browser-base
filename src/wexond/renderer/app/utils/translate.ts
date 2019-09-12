@@ -1,6 +1,6 @@
 import * as moment from 'moment'
 import { local } from '~/local'
-import { Translator } from 'src/translator/translator'
+import { Translator } from '../../../../translator/translator'
 const defaultLanguage = 'en'
 const param = new URLSearchParams(location.search)
 let UILanguage = defaultLanguage

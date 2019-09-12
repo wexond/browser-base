@@ -146,9 +146,11 @@ export class ViewManager {
   }
 
   public clear() {
-    appWindow.setBrowserView(null);
+    if (appWindow) {
+      appWindow.setBrowserView(null)
+    }
     for (const key in this.views) {
-      this.destroy(parseInt(key, 10));
+      this.destroy(parseInt(key, 10))
     }
   }
 
