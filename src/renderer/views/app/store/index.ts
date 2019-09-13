@@ -11,8 +11,6 @@ import { lightTheme } from '~/renderer/constants/themes';
 import { SettingsStore } from './settings';
 import { extensionsRenderer } from 'electron-extensions';
 import { getCurrentWindow } from '../utils';
-import { ISearchEngine } from '~/interfaces';
-import { DEFAULT_SEARCH_ENGINES } from '~/constants';
 import { StartupTabsStore } from './startup-tabs';
 
 export class Store {

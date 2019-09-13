@@ -12,6 +12,8 @@ export class SearchWindow extends BrowserView {
 
   public height = HEIGHT;
 
+  private timeout: any;
+
   public constructor(appWindow: AppWindow) {
     super({
       webPreferences: {
@@ -65,6 +67,8 @@ export class SearchWindow extends BrowserView {
   public show() {
     const cBounds = this.appWindow.getContentBounds();
 
+    clearTimeout(this.timeout);
+
     this.setBounds({
       height: this.height,
       width: WIDTH,
@@ -89,7 +93,7 @@ export class SearchWindow extends BrowserView {
   public hide() {
     this.webContents.send('visible', false);
 
-    setTimeout(() => {
+    this.timeout = setTimeout(() => {
       this.setBounds({
         height: HEIGHT,
         width: WIDTH,
