@@ -3,9 +3,8 @@ import { observer } from 'mobx-react-lite';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
 import { Style } from '../../style';
-import { StyledApp, Input } from './style';
+import { StyledApp, Input, SearchIcon } from './style';
 import store from '../../store';
-import { loadURL } from '~/renderer/views/app/utils/view';
 import { callViewMethod, isURL } from '~/utils';
 import { ipcRenderer } from 'electron';
 
@@ -47,6 +46,7 @@ export const App = observer(() => {
     <ThemeProvider theme={store.theme}>
       <StyledApp visible={store.visible}>
         <GlobalStyle />
+        <SearchIcon />
         <Input
           onFocus={onFocus}
           ref={store.inputRef}

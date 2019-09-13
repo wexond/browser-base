@@ -2,7 +2,7 @@ import { AppWindow } from '.';
 import { BrowserView, app, ipcMain } from 'electron';
 import { join } from 'path';
 
-const WIDTH = 1024;
+const WIDTH = 800;
 const HEIGHT = 56;
 
 export class SearchWindow extends BrowserView {

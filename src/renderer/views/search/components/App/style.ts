@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components';
+import { centerIcon } from '~/renderer/mixins';
+import { icons } from '~/renderer/constants';
 
 export const StyledApp = styled.div`
   margin: 8px;
@@ -8,6 +10,8 @@ export const StyledApp = styled.div`
   position: relative;
   background-color: #fff;
   transition: 0.3s opacity, 0.2s margin-top;
+  display: flex;
+  align-items: center;
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
@@ -37,6 +41,17 @@ export const Input = styled.input`
   width: 100%;
   height: 100%;
   font-size: 16px;
+  font-weight: 300;
+  font-family: Roboto;
   padding-left: 12px;
   height: 42px;
+`;
+
+export const SearchIcon = styled.div`
+  width: 18px;
+  height: 18px;
+  ${centerIcon()};
+  background-image: url(${icons.search});
+  margin-left: 14px;
+  opacity: 0.54;
 `;
