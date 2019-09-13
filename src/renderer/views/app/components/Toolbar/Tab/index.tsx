@@ -16,7 +16,7 @@ import { shadeBlendConvert } from '~/utils';
 import Ripple from '~/renderer/components/Ripple';
 import { ITab } from '../../../models';
 import store from '../../../store';
-import { remote } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 import { icons } from '~/renderer/constants';
 
 const removeTab = (tab: ITab) => (e: React.MouseEvent) => {
@@ -60,6 +60,7 @@ const onMouseLeave = () => {
 const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (store.canToggleMenu && !tab.isWindow) {
     store.canToggleMenu = false;
+    ipcRenderer.send(`search-show-${store.windowId}`);
   }
 
   if (e.button === 4) {

@@ -14,6 +14,7 @@ import {
 } from '.';
 import { WindowsManager } from '../windows-manager';
 import { MenuWindow } from './menu';
+import { SearchWindow } from './search';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
@@ -25,6 +26,7 @@ export class AppWindow extends BrowserWindow {
   public formFillWindow = new FormFillWindow(this);
   public credentialsWindow = new CredentialsWindow(this);
   public menuWindow = new MenuWindow(this);
+  public searchWindow = new SearchWindow(this);
 
   public incognito: boolean;
 

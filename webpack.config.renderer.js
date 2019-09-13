@@ -88,6 +88,7 @@ applyEntries('app', appConfig, [
   'credentials',
   'find',
   'menu',
+  'search',
 ]);
 
 applyEntries('web', webConfig, ['settings']);

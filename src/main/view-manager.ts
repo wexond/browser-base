@@ -34,7 +34,7 @@ export class ViewManager {
         this.create(details);
       },
     );
-    
+
     ipcMain.on(`view-select-${id}`, (e, id: number, force: boolean) => {
       const view = this.views.find(x => x.webContents.id === id);
       this.select(id);
@@ -116,7 +116,9 @@ export class ViewManager {
   }
 
   public get settingsView() {
-    return this.views.find(r => r.webContents.getURL().startsWith("wexond://settings"));
+    return this.views.find(r =>
+      r.webContents.getURL().startsWith('wexond://settings'),
+    );
   }
 
   public create(details: chrome.tabs.CreateProperties, isNext = false) {
@@ -152,6 +154,9 @@ export class ViewManager {
     }
 
     if (this.isHidden) return;
+
+    this.window.searchWindow.hide();
+    this.window.menuWindow.hide();
 
     this.window.removeBrowserView(selectedView);
     this.window.addBrowserView(view);
