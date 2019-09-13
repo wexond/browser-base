@@ -87,10 +87,10 @@ const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
 export const App = observer(() => {
   const suggestionsVisible = store.suggestions.list.length !== 0;
 
-  let height = 42;
+  let height = 0;
 
   for (const s of store.suggestions.list) {
-    height += 42;
+    height += 38;
   }
 
   ipcRenderer.send(`height-${store.id}`, height);

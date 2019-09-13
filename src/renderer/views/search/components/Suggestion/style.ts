@@ -5,8 +5,8 @@ import { body2, centerIcon } from '~/renderer/mixins';
 
 export const StyledSuggestion = styled.div`
   width: 100%;
-  height: 42px;
-  min-height: 42px;
+  height: 38px;
+  min-height: 38px;
   display: flex;
   position: relative;
   align-items: center;
