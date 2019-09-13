@@ -9,9 +9,7 @@ export const StyledApp = styled.div`
   overflow: hidden;
   position: relative;
   background-color: #fff;
-  transition: 0.3s opacity, 0.2s margin-top;
-  display: flex;
-  align-items: center;
+  transition: 0.2s opacity, 0.2s margin-top;
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};
@@ -43,7 +41,7 @@ export const Input = styled.input`
   font-size: 16px;
   font-weight: 300;
   font-family: Roboto;
-  padding-left: 12px;
+  padding-left: 14px;
   height: 42px;
 `;
 
@@ -52,6 +50,11 @@ export const SearchIcon = styled.div`
   height: 18px;
   ${centerIcon()};
   background-image: url(${icons.search});
-  margin-left: 14px;
+  margin-left: 16px;
   opacity: 0.54;
+`;
+
+export const SearchBox = styled.div`
+  display: flex;
+  align-items: center;
 `;

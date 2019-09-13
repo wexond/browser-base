@@ -1,14 +1,19 @@
 import { observable } from 'mobx';
 
-import { getHistorySuggestions, getSearchSuggestions } from '../utils';
-import store from '.';
-import { icons } from '~/renderer/constants';
+import {
+  getHistorySuggestions,
+  getSearchSuggestions,
+} from '../utils/suggestions';
+import { icons } from '~/renderer/constants/icons';
 import { isURL } from '~/utils';
 import { ISuggestion } from '~/interfaces';
+import { Store } from '.';
 
 let searchSuggestions: ISuggestion[] = [];
 
 export class SuggestionsStore {
+  private store: Store;
+
   @observable
   public list: ISuggestion[] = [];
 
@@ -17,6 +22,10 @@ export class SuggestionsStore {
 
   @observable
   public height = 0;
+
+  constructor(store: Store) {
+    this.store = store;
+  }
 
   public load(input: HTMLInputElement): Promise<string> {
     return new Promise(async resolve => {
@@ -46,7 +55,7 @@ export class SuggestionsStore {
           historySuggestions.push({
             primaryText: item.url,
             secondaryText: item.title,
-            favicon: store.favicons.favicons.get(item.favicon),
+            favicon: '', // TODO: this.store.favicons.favicons.get(item.favicon),
             canSuggest: item.canSuggest,
           });
         } else {

@@ -37,9 +37,6 @@ export class Store {
   public isHTMLFullscreen = false;
 
   @observable
-  public searchEngines: ISearchEngine[] = DEFAULT_SEARCH_ENGINES;
-
-  @observable
   public updateInfo = {
     available: false,
     version: '',
@@ -50,11 +47,6 @@ export class Store {
     canGoBack: false,
     canGoForward: false,
   };
-
-  @computed
-  public get searchEngine() {
-    return this.searchEngines[this.settings.object.searchEngine];
-  }
 
   public canToggleMenu = false;
 

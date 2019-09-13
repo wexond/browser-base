@@ -10,6 +10,8 @@ export class SearchWindow extends BrowserView {
 
   public visible = false;
 
+  public height = HEIGHT;
+
   public constructor(appWindow: AppWindow) {
     super({
       webPreferences: {
@@ -28,6 +30,10 @@ export class SearchWindow extends BrowserView {
       this.hide();
     });
 
+    ipcMain.on(`height-${this.webContents.id}`, (e, height) => {
+      appWindow.searchWindow.setHeight(height);
+    });
+
     if (process.env.ENV === 'dev') {
       this.webContents.loadURL(`http://localhost:4444/search.html`);
       this.webContents.openDevTools({ mode: 'detach' });
@@ -43,11 +49,24 @@ export class SearchWindow extends BrowserView {
     else this.hide();
   }
 
+  public setHeight(height: number) {
+    const cBounds = this.appWindow.getContentBounds();
+
+    this.height = HEIGHT + height;
+
+    this.setBounds({
+      height: this.height,
+      width: WIDTH,
+      x: Math.round(cBounds.width / 2 - WIDTH / 2),
+      y: 48,
+    } as any);
+  }
+
   public show() {
     const cBounds = this.appWindow.getContentBounds();
 
     this.setBounds({
-      height: HEIGHT,
+      height: this.height,
       width: WIDTH,
       x: Math.round(cBounds.width / 2 - WIDTH / 2),
       y: 48,
@@ -68,14 +87,16 @@ export class SearchWindow extends BrowserView {
   }
 
   public hide() {
-    this.setBounds({
-      height: HEIGHT,
-      width: WIDTH,
-      x: 0,
-      y: -HEIGHT + 1,
-    });
-
     this.webContents.send('visible', false);
+
+    setTimeout(() => {
+      this.setBounds({
+        height: HEIGHT,
+        width: WIDTH,
+        x: 0,
+        y: -HEIGHT + 1,
+      });
+    }, 300);
 
     this.visible = false;
   }
