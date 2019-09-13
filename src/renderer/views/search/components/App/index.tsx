@@ -7,6 +7,7 @@ import { StyledApp, Input } from './style';
 import store from '../../store';
 import { loadURL } from '~/renderer/views/app/utils/view';
 import { callViewMethod, isURL } from '~/utils';
+import { ipcRenderer } from 'electron';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -28,7 +29,17 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.currentTarget.value = url;
 
     callViewMethod(1, store.tabId, 'webContents.loadURL', url);
+
+    setTimeout(() => {
+      ipcRenderer.send(`hide-${store.id}`);
+    });
   }
+};
+
+const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+  requestAnimationFrame(() => {
+    store.inputRef.current.select();
+  });
 };
 
 export const App = observer(() => {
@@ -37,6 +48,8 @@ export const App = observer(() => {
       <StyledApp visible={store.visible}>
         <GlobalStyle />
         <Input
+          onFocus={onFocus}
+          ref={store.inputRef}
           onKeyPress={onKeyPress}
           placeholder="Search or type in an URL"
         ></Input>

@@ -1,10 +1,9 @@
 import { AppWindow } from '.';
 import { BrowserView, app, ipcMain } from 'electron';
 import { join } from 'path';
-import { MENU_WIDTH } from '~/renderer/constants';
 
-const WIDTH = 700;
-const HEIGHT = 48;
+const WIDTH = 1024;
+const HEIGHT = 56;
 
 export class SearchWindow extends BrowserView {
   public appWindow: AppWindow;
@@ -50,18 +49,19 @@ export class SearchWindow extends BrowserView {
     this.setBounds({
       height: HEIGHT,
       width: WIDTH,
-      x: cBounds.width / 2 - WIDTH / 2,
+      x: Math.round(cBounds.width / 2 - WIDTH / 2),
       y: 48,
     } as any);
 
     this.appWindow.removeBrowserView(this);
     this.appWindow.addBrowserView(this);
 
-    this.webContents.send(
-      'visible',
-      true,
-      this.appWindow.viewManager.selectedId,
-    );
+    const selected = this.appWindow.viewManager.selected;
+
+    this.webContents.send('visible', true, {
+      id: this.appWindow.viewManager.selectedId,
+      url: selected.webContents.getURL(),
+    });
     this.webContents.focus();
 
     this.visible = true;

@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 export const StyledApp = styled.div`
   margin: 8px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   position: relative;
   background-color: #fff;
@@ -36,7 +36,7 @@ export const Input = styled.input`
   border: none;
   width: 100%;
   height: 100%;
-  font-size: 14px;
+  font-size: 16px;
   padding-left: 12px;
-  height: 38px;
+  height: 42px;
 `;

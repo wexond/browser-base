@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { ipcRenderer, remote } from 'electron';
 import { observable } from 'mobx';
 import { lightTheme } from '~/renderer/constants';
@@ -11,12 +13,16 @@ export class Store {
 
   public id = remote.getCurrentWebContents().id;
 
+  public inputRef = React.createRef<HTMLInputElement>();
+
   public tabId = 1;
 
   public constructor() {
-    ipcRenderer.on('visible', (e, flag, tabId) => {
+    ipcRenderer.on('visible', (e, flag, tab) => {
       this.visible = flag;
-      this.tabId = tabId;
+      this.tabId = tab.id;
+      this.inputRef.current.value = tab.url;
+      this.inputRef.current.focus();
     });
 
     setTimeout(() => {
