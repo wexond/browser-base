@@ -24,7 +24,7 @@ export class SessionsManager {
     this.loadExtensions('normal');
 
     this.clearCache('incognito');
-    
+
     this.view.setPermissionRequestHandler(
       async (webContents, permission, callback, details) => {
         if (permission === 'fullscreen') {
@@ -46,6 +46,15 @@ export class SessionsManager {
         }
       },
     );
+
+    this.view.webRequest.onHeadersReceived((details, callback) => {
+      callback({
+        responseHeaders: {
+          ...details.responseHeaders,
+          'Content-Security-Policy': ["default-src 'none'"],
+        },
+      });
+    });
 
     this.view.on('will-download', (event, item, webContents) => {
       const fileName = item.getFilename();
