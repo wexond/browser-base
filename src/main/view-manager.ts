@@ -143,7 +143,7 @@ export class ViewManager {
   }
 
   public select(id: number) {
-    const selectedView = this.views.find(x => x.webContents.id === id);
+    const selected = this.selected;
     const view = this.views.find(x => x.webContents.id === id);
     this.selectedId = id;
 
@@ -158,7 +158,7 @@ export class ViewManager {
     this.window.searchWindow.hide();
     this.window.menuWindow.hide();
 
-    this.window.removeBrowserView(selectedView);
+    this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);
 
     this.fixBounds();

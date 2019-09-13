@@ -11,9 +11,12 @@ export class Store {
 
   public id = remote.getCurrentWebContents().id;
 
+  public tabId = 1;
+
   public constructor() {
-    ipcRenderer.on('visible', (e, flag) => {
+    ipcRenderer.on('visible', (e, flag, tabId) => {
       this.visible = flag;
+      this.tabId = tabId;
     });
 
     setTimeout(() => {

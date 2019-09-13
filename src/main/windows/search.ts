@@ -25,8 +25,6 @@ export class SearchWindow extends BrowserView {
 
     this.hide();
 
-    this.setBackgroundColor('#00000000');
-
     ipcMain.on(`hide-${this.webContents.id}`, () => {
       this.hide();
     });
@@ -59,7 +57,11 @@ export class SearchWindow extends BrowserView {
     this.appWindow.removeBrowserView(this);
     this.appWindow.addBrowserView(this);
 
-    this.webContents.send('visible', true);
+    this.webContents.send(
+      'visible',
+      true,
+      this.appWindow.viewManager.selectedId,
+    );
     this.webContents.focus();
 
     this.visible = true;
