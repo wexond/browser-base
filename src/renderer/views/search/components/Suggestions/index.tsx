@@ -15,11 +15,7 @@ const onMouseDown = (e: React.MouseEvent) => {
 
 export const Suggestions = observer(({ visible }: Props) => {
   return (
-    <StyledSuggestions
-      visible={visible}
-      // TODO: visible={visible && store.settings.object.suggestions}
-      onMouseDown={onMouseDown}
-    >
+    <StyledSuggestions visible={visible} onMouseDown={onMouseDown}>
       {store.suggestions.list.length > 0 && <Subheading>Search</Subheading>}
       {store.suggestions.list.map(suggestion => (
         <Suggestion suggestion={suggestion} key={suggestion.id} />
