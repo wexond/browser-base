@@ -17,6 +17,12 @@ export const lightTheme: ITheme = {
   'control.valueColor': '#000',
   'control.lightIcon': false,
   'switch.backgroundColor': 'rgba(0, 0, 0, 0.16)',
+  'menu.backgroundColor': '#fff',
+  'menu.separator.color': 'rgba(0, 0, 0, 0.12)',
+  'menu.header.background':
+    'linear-gradient(to bottom right, #00b0ff, #3d5afe)',
+  'menu.textColor': '#000',
+  'menu.lightForeground': false,
   accentColor: colors.blue['500'],
   backgroundColor: '#fff',
 };
@@ -37,6 +43,12 @@ export const darkTheme: ITheme = {
   'control.valueColor': '#fff',
   'control.lightIcon': true,
   'switch.backgroundColor': 'rgba(255, 255, 255, 0.24)',
+  'menu.backgroundColor': '#1c1c1c',
+  'menu.separator.color': 'rgba(255, 255, 255, 0.12)',
+  'menu.header.background':
+    'linear-gradient(to bottom right, #00b0ff, #3d5afe)',
+  'menu.textColor': '#fff',
+  'menu.lightForeground': true,
   backgroundColor: '#1c1c1c',
   accentColor: colors.blue['500'],
 };

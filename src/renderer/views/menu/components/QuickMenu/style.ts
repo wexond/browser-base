@@ -10,7 +10,7 @@ export const Line = styled.div`
   margin-bottom: 4px;
 
   ${({ theme }: { theme?: ITheme }) => css`
-    background-color: ${theme['overlay.separator.color']};
+    background-color: ${theme['menu.separator.color']};
   `};
 `;
 
@@ -20,7 +20,9 @@ export const Background = styled.div`
   position: absolute;
   left: 0;
   top: 0;
-  background-image: linear-gradient(to bottom right, #00b0ff, #3d5afe);
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-image: ${theme['menu.header.background']};
+  `};
 `;
 
 export const Actions = styled.div`
@@ -56,7 +58,11 @@ export const MenuItem = styled.div`
     `};
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.03);
+    ${({ theme }: { theme?: ITheme }) => css`
+      background-color: ${theme['menu.lightForeground']
+        ? 'rgba(255, 255, 255, 0.06)'
+        : 'rgba(0, 0, 0, 0.03)'};
+    `};
   }
 `;
 
@@ -69,9 +75,13 @@ export const MenuItems = styled.div`
   border-top-right-radius: 15px;
   flex: 1;
   overflow: hidden;
-  background-color: white;
   padding-top: 8px;
   padding-bottom: 8px;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-color: ${theme['menu.backgroundColor']};
+    color: ${theme['menu.textColor']};
+  `};
 `;
 
 export const Content = styled.div`
@@ -87,8 +97,9 @@ export const Icon = styled.div`
   ${centerIcon()};
   opacity: 0.8;
 
-  ${({ icon }: { icon?: string }) => css`
+  ${({ icon, theme }: { icon?: string; theme?: ITheme }) => css`
     background-image: url(${icon});
+    filter: ${theme['menu.lightForeground'] ? 'invert(100%)' : 'none'};
   `};
 `;
 

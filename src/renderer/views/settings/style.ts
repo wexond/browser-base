@@ -11,6 +11,7 @@ export const Style = css`
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    background-color: #fff;
     ${body2()}
   }
 

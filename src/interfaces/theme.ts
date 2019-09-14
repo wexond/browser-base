@@ -17,6 +17,12 @@ export interface ITheme {
   'control.lightIcon': boolean;
   'switch.backgroundColor': string;
 
+  'menu.separator.color': string;
+  'menu.backgroundColor': string;
+  'menu.header.background': string;
+  'menu.textColor': string;
+  'menu.lightForeground': boolean;
+
   backgroundColor: string;
   accentColor: string;
 }

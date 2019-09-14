@@ -1,14 +1,20 @@
 import { ipcRenderer, remote } from 'electron';
 import { observable } from 'mobx';
-import { lightTheme } from '~/renderer/constants';
+import { getTheme } from '~/utils/themes';
+import { ISettings } from '~/interfaces';
+import { DEFAULT_SETTINGS } from '~/constants';
 
 export class Store {
   @observable
-  public theme = lightTheme;
+  public theme = getTheme('wexond-light');
+
+  @observable
+  public settings: ISettings = DEFAULT_SETTINGS;
 
   @observable
   public visible = true;
 
+  @observable
   public id = remote.getCurrentWebContents().id;
 
   public constructor() {
@@ -26,6 +32,27 @@ export class Store {
           ipcRenderer.send(`hide-${this.id}`);
         });
       }
+    });
+
+    const obj = ipcRenderer.sendSync('get-settings-sync');
+    this.updateSettings(obj);
+
+    ipcRenderer.on('update-settings', (e, settings: ISettings) => {
+      this.updateSettings(settings);
+    });
+  }
+
+  public updateSettings(newSettings: ISettings) {
+    this.settings = { ...this.settings, ...newSettings };
+
+    requestAnimationFrame(() => {
+      this.theme = getTheme(this.settings.theme);
+    });
+  }
+
+  public async save() {
+    ipcRenderer.send('save-settings', {
+      settings: JSON.stringify(this.settings),
     });
   }
 }
