@@ -71,7 +71,7 @@ export class SuggestionsStore {
       let suggestions: ISuggestion[] =
         input.value === ''
           ? []
-          : historySuggestions.concat(searchSuggestions).slice(0, 6);
+          : historySuggestions.concat(searchSuggestions).slice(0, 5);
 
       for (let i = 0; i < suggestions.length; i++) {
         suggestions[i].id = i;
@@ -99,7 +99,7 @@ export class SuggestionsStore {
           suggestions =
             input.value === ''
               ? []
-              : historySuggestions.concat(searchSuggestions).slice(0, 6);
+              : historySuggestions.concat(searchSuggestions).slice(0, 5);
 
           for (let i = 0; i < suggestions.length; i++) {
             suggestions[i].id = i;
@@ -107,7 +107,9 @@ export class SuggestionsStore {
 
           this.list = suggestions;
         }
-      } catch (e) {}
+      } catch (e) {
+        console.error(e);
+      }
     });
   }
 }

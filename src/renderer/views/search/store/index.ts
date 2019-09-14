@@ -62,14 +62,13 @@ export class Store {
           tab.title.indexOf(this.inputText) !== -1 ||
           tab.url.indexOf(this.inputText) !== -1,
       )
-      .map(tab => {
-        return {
-          primaryText: tab.url,
-          secondaryText: tab.title,
-          id: id++,
-          favicon: tab.favicon,
-        };
-      });
+      .map(tab => ({
+        primaryText: tab.url,
+        secondaryText: tab.title,
+        id: id++,
+        favicon: tab.favicon,
+      }))
+      .slice(0, 3);
   }
 
   @computed
