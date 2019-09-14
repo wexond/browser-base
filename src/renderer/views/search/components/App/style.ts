@@ -41,7 +41,7 @@ export const Input = styled.input`
   font-size: 16px;
   font-weight: 300;
   font-family: Roboto;
-  padding-left: 14px;
+  padding-left: 16px;
   height: 42px;
 `;
 

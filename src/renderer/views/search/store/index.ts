@@ -94,6 +94,7 @@ export class Store {
       if (flag) {
         this.loadHistory();
         this.loadFavicons();
+        this.tabs = [];
         this.suggestions.list = [];
         this.tabId = tab.id;
         this.inputRef.current.value = tab.url;
