@@ -15,7 +15,7 @@ import {
 
 import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 import store from '.';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, ipcMain } from 'electron';
 import { getColorBrightness, prefixHttp } from '~/utils';
 import { defaultTabOptions } from '~/constants/tabs';
 import { Database } from '~/models/database';
@@ -167,6 +167,18 @@ export class TabsStore {
 
     ipcRenderer.on('revert-closed-tab', () => {
       this.revertClosed();
+    });
+
+    ipcRenderer.on('get-search-tabs', () => {
+      ipcRenderer.send(
+        'get-search-tabs',
+        this.list.map(tab => ({
+          favicon: tab.favicon,
+          url: tab.url,
+          title: tab.title,
+          id: tab.id,
+        })),
+      );
     });
   }
 

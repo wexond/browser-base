@@ -85,6 +85,13 @@ export class SearchWindow extends BrowserView {
       id: this.appWindow.viewManager.selectedId,
       url: selected.webContents.getURL(),
     });
+
+    this.appWindow.webContents.send('get-search-tabs');
+
+    ipcMain.once('get-search-tabs', (e, tabs) => {
+      this.webContents.send('search-tabs', tabs);
+    });
+
     this.webContents.focus();
 
     this.visible = true;

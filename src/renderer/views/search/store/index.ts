@@ -4,11 +4,23 @@ import { ipcRenderer, remote } from 'electron';
 import { observable, computed } from 'mobx';
 import { lightTheme } from '~/renderer/constants';
 import { DEFAULT_SEARCH_ENGINES } from '~/constants';
-import { ISearchEngine, IHistoryItem, IFavicon } from '~/interfaces';
+import {
+  ISearchEngine,
+  IHistoryItem,
+  IFavicon,
+  ISuggestion,
+} from '~/interfaces';
 import { Database } from '~/models/database';
 import { SuggestionsStore } from './suggestions';
 
 let lastSuggestion: string;
+
+interface ISearchTab {
+  id?: number;
+  title?: string;
+  url?: string;
+  favicon?: string;
+}
 
 export class Store {
   public suggestions = new SuggestionsStore(this);
@@ -27,6 +39,38 @@ export class Store {
 
   @observable
   public favicons: Map<string, string> = new Map();
+
+  @observable
+  public tabs: ISearchTab[] = [];
+
+  @observable
+  public inputText = '';
+
+  @computed
+  public get searchedTabs(): ISuggestion[] {
+    const lastItem = this.suggestions.list[this.suggestions.list.length - 1];
+
+    let id = 0;
+
+    if (lastItem) {
+      id = lastItem.id + 1;
+    }
+
+    return this.tabs
+      .filter(
+        tab =>
+          tab.title.indexOf(this.inputText) !== -1 ||
+          tab.url.indexOf(this.inputText) !== -1,
+      )
+      .map(tab => {
+        return {
+          primaryText: tab.url,
+          secondaryText: tab.title,
+          id: id++,
+          favicon: tab.favicon,
+        };
+      });
+  }
 
   @computed
   public get searchEngine() {
@@ -56,6 +100,10 @@ export class Store {
         this.inputRef.current.value = tab.url;
         this.inputRef.current.focus();
       }
+    });
+
+    ipcRenderer.on('search-tabs', (e, tabs) => {
+      this.tabs = tabs;
     });
 
     this.loadHistory();

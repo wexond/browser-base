@@ -60,19 +60,28 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
   if (e.keyCode === 38 || e.keyCode === 40) {
     e.preventDefault();
-    if (e.keyCode === 40 && suggestions.selected + 1 <= list.length - 1) {
+    if (
+      e.keyCode === 40 &&
+      suggestions.selected + 1 <= list.length - 1 + store.searchedTabs.length
+    ) {
       suggestions.selected++;
     } else if (e.keyCode === 38 && suggestions.selected - 1 >= 0) {
       suggestions.selected--;
     }
 
-    const suggestion = list.find(x => x.id === suggestions.selected);
+    let suggestion = list.find(x => x.id === suggestions.selected);
+
+    if (!suggestion) {
+      suggestion = store.searchedTabs.find(x => x.id === suggestions.selected);
+    }
 
     input.value = suggestion.primaryText;
   }
 };
 
 const onInput = (e: any) => {
+  store.inputText = e.currentTarget.value;
+
   // TODO: if (store.settings.object.suggestions) {
   store.suggest();
   // }
@@ -93,7 +102,15 @@ export const App = observer(() => {
     height += 38;
   }
 
+  for (const s of store.searchedTabs) {
+    height += 38;
+  }
+
   if (store.suggestions.list.length > 0) {
+    height += 30;
+  }
+
+  if (store.searchedTabs.length > 0) {
     height += 30;
   }
 
