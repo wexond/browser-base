@@ -86,7 +86,7 @@ export const getHistorySuggestions = (filter: string) => {
 
   let visitedTimes = countVisitedTimes(urlMatchedItems)
     .filter(Boolean)
-    .slice(0, 5);
+    .slice(0, 6);
 
   historyItems = [];
 
@@ -96,13 +96,13 @@ export const getHistorySuggestions = (filter: string) => {
 
   visitedTimes = countVisitedTimes(titleMatchedItems)
     .filter(Boolean)
-    .slice(0, 5);
+    .slice(0, 6);
 
   for (const item of visitedTimes) {
     historyItems.push(item.item);
   }
 
-  return historyItems.slice(0, 5);
+  return historyItems.slice(0, 6);
 };
 
 export const getSearchSuggestions = (filter: string) =>
@@ -136,7 +136,7 @@ export const getSearchSuggestions = (filter: string) =>
       }
 
       // Sort suggestions array by length.
-      suggestions = suggestions.sort((a, b) => a.length - b.length).slice(0, 5);
+      suggestions = suggestions.sort((a, b) => a.length - b.length).slice(0, 6);
 
       resolve(suggestions);
     } catch (e) {

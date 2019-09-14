@@ -7,3 +7,11 @@ export const StyledSuggestions = styled.div`
     display: ${visible ? 'block' : 'none'};
   `};
 `;
+
+export const Subheading = styled.div`
+  font-size: 12px;
+  padding: 8px;
+  padding-left: 16px;
+  background-color: #fafafa;
+  color: rgba(0, 0, 0, 0.54);
+`;

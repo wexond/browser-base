@@ -93,6 +93,10 @@ export const App = observer(() => {
     height += 38;
   }
 
+  if (store.suggestions.list.length > 0) {
+    height += 30;
+  }
+
   ipcRenderer.send(`height-${store.id}`, height);
 
   return (

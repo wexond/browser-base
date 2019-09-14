@@ -8,7 +8,7 @@ export const StyledApp = styled.div`
   border-radius: 6px;
   overflow: hidden;
   position: relative;
-  background-color: #fff;
+  background-color: #fdfdfd;
   transition: 0.15s opacity, 0.15s margin-top;
 
   ${({ visible }: { visible: boolean }) => css`
@@ -57,4 +57,5 @@ export const SearchIcon = styled.div`
 export const SearchBox = styled.div`
   display: flex;
   align-items: center;
+  background-color: #fff;
 `;
