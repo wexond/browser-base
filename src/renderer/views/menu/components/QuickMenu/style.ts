@@ -54,6 +54,9 @@ export const MenuItem = styled.div`
         opacity: 0.54;
         ${centerIcon(20)};
         background-image: url(${icons.arrowRight});
+        ${({ theme }: { theme?: ITheme }) => css`
+          filter: ${theme['menu.lightForeground'] ? 'invert(100%)' : 'none'};
+        `};
       }
     `};
 

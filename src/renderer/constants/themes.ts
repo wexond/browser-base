@@ -43,7 +43,7 @@ export const darkTheme: ITheme = {
   'control.valueColor': '#fff',
   'control.lightIcon': true,
   'switch.backgroundColor': 'rgba(255, 255, 255, 0.24)',
-  'menu.backgroundColor': '#1c1c1c',
+  'menu.backgroundColor': '#424242',
   'menu.separator.color': 'rgba(255, 255, 255, 0.12)',
   'menu.header.background':
     'linear-gradient(to bottom right, #00b0ff, #3d5afe)',
