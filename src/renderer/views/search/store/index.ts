@@ -115,9 +115,7 @@ export class Store {
 
     window.addEventListener('blur', () => {
       if (this.visible) {
-        setTimeout(() => {
-          ipcRenderer.send(`hide-${this.id}`);
-        });
+        ipcRenderer.send(`hide-${this.id}`);
       }
     });
   }

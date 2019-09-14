@@ -155,7 +155,6 @@ export class ViewManager {
 
     if (this.isHidden) return;
 
-    this.window.searchWindow.hide();
     this.window.menuWindow.hide();
 
     this.window.removeBrowserView(selected);
