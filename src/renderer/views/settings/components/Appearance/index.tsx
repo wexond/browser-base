@@ -7,22 +7,21 @@ import store from '../../store';
 import { onSwitchChange } from '../../utils';
 import { observer } from 'mobx-react-lite';
 
-const onThemeChange = (value: 'light' | 'dark') => {
-  const dark = value === 'dark';
-  store.settings.darkTheme = dark;
+const onThemeChange = (value: string) => {
+  store.settings.theme = value;
   store.save();
 };
 
 const ThemeVariant = observer(() => {
-  const defaultValue = store.settings.darkTheme ? 'dark' : 'light';
+  const defaultValue = store.settings.theme;
 
   return (
     <Row>
       <Title>Theme variant</Title>
       <Control>
         <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
-          <Dropdown.Item value="light">Light</Dropdown.Item>
-          <Dropdown.Item value="dark">Dark</Dropdown.Item>
+          <Dropdown.Item value="wexond-light">Light</Dropdown.Item>
+          <Dropdown.Item value="wexond-dark">Dark</Dropdown.Item>
         </Dropdown>
       </Control>
     </Row>

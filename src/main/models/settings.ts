@@ -75,7 +75,7 @@ export class Settings extends EventEmitter {
           {
             message: {
               name: 'toggle',
-              toggle: this.object.darkTheme,
+              toggle: this.object.darkContents,
             },
           },
         );
@@ -95,6 +95,10 @@ export class Settings extends EventEmitter {
 
       if (json.overlayBookmarks !== undefined) {
         delete json.overlayBookmarks;
+      }
+
+      if (json.darkTheme !== undefined) {
+        delete json.darkTheme;
       }
 
       this.object = {

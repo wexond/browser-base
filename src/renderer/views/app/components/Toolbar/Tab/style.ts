@@ -23,7 +23,7 @@ export const StyledClose = styled.div`
     ${({ visible, theme }: CloseProps) => css`
       opacity: ${visible ? transparency.icons.inactive : 0};
       display: ${visible ? 'block' : 'none'};
-      filter: ${theme['toolbar.icons.invert'] ? 'invert(100%)' : 'none'};
+      filter: ${theme['toolbar.lightForeground'] ? 'invert(100%)' : 'none'};
     `}
 
   &:hover {
@@ -73,9 +73,8 @@ export const StyledOverlay = styled.div`
   right: 0;
   bottom: 0;
   transition: 0.1s opacity;
-  background-color: rgba(0, 0, 0, 0.04);
   ${({ hovered }: { hovered: boolean }) => css`
-    opacity: ${hovered ? 1 : 0};
+    opacity: ${hovered ? 0.08 : 0};
   `};
 `;
 

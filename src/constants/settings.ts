@@ -3,7 +3,8 @@ import { ISettings } from '~/interfaces';
 const pkg = require('../../package.json');
 
 export const DEFAULT_SETTINGS: ISettings = {
-  darkTheme: false,
+  theme: 'wexond-light',
+  darkContents: false,
   shield: true,
   multrin: true,
   animations: true,

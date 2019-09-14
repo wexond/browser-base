@@ -9,7 +9,7 @@ export interface IStartupBehavior {
 }
 
 export interface ISettings {
-  darkTheme: boolean;
+  theme: string;
   shield: boolean;
   multrin: boolean;
   animations: boolean;
@@ -19,4 +19,5 @@ export interface ISettings {
   searchEngines: ISearchEngine[];
   startupBehavior: IStartupBehavior;
   version: string;
+  darkContents: boolean;
 }

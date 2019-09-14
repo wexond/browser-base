@@ -183,7 +183,9 @@ const Content = observer(({ tab }: { tab: ITab }) => {
         <StyledTitle
           isIcon={tab.isIconSet}
           style={{
-            color: store.theme['tab.textColor'],
+            color: tab.isSelected
+              ? store.theme['tab.selected.textColor']
+              : store.theme['tab.textColor'],
           }}
         >
           {tab.title}
@@ -204,23 +206,28 @@ const Close = observer(({ tab }: { tab: ITab }) => {
 });
 
 const Overlay = observer(({ tab }: { tab: ITab }) => {
+  const defaultHoverColor = store.theme['toolbar.lightForeground']
+    ? 'rgba(255, 255, 255, 0.5)'
+    : 'rgba(0, 0, 0, 0.5)';
+
   return (
     <StyledOverlay
       hovered={tab.isHovered}
       style={{
-        backgroundColor: tab.isSelected
-          ? shadeBlendConvert(
-              store.theme['tab.selectedHover.backgroundOpacity'],
-              tab.background,
-              store.theme['toolbar.backgroundColor'],
-            )
-          : store.theme['tab.hover.backgroundColor'],
+        backgroundColor:
+          tab.isSelected || tab.customColor
+            ? tab.background
+            : defaultHoverColor,
       }}
     />
   );
 });
 
 export default observer(({ tab }: { tab: ITab }) => {
+  const defaultColor = store.theme['toolbar.lightForeground']
+    ? 'rgba(255, 255, 255, 0.3)'
+    : 'rgba(0, 0, 0, 0.25)';
+
   return (
     <StyledTab
       selected={tab.isSelected}
@@ -245,7 +252,7 @@ export default observer(({ tab }: { tab: ITab }) => {
               )
             : shadeBlendConvert(
                 0.9,
-                tab.customColor ? tab.background : 'rgba(0, 0, 0, 0.25)',
+                tab.customColor ? tab.background : defaultColor,
                 store.theme['toolbar.backgroundColor'],
               ),
         }}
@@ -259,7 +266,7 @@ export default observer(({ tab }: { tab: ITab }) => {
               position: 'absolute',
               right: 32,
               zIndex: 9999,
-              filter: store.theme['toolbar.icons.invert']
+              filter: store.theme['toolbar.lightForeground']
                 ? 'invert(100%)'
                 : 'none',
               opacity: 0.54,

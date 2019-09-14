@@ -20,9 +20,7 @@ const App = observer(() => {
     <ThemeProvider
       theme={{ ...store.theme, animations: store.settings.object.animations }}
     >
-      <StyledApp
-        style={{ backgroundColor: store.theme['overlay.backgroundColor'] }}
-      >
+      <StyledApp style={{ backgroundColor: store.theme.backgroundColor }}>
         <GlobalStyle />
         <Toolbar />
         <Line />

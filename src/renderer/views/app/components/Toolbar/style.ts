@@ -20,7 +20,6 @@ export const StyledToolbar = styled.div`
     isHTMLFullscreen: boolean;
     theme: ITheme;
   }) => css`
-    transition: ${theme.animations ? '0.2s background-color' : 'none'};
     margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
     background-color: ${theme['toolbar.backgroundColor']};
   `};
