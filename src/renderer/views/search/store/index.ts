@@ -2,16 +2,17 @@ import * as React from 'react';
 
 import { ipcRenderer, remote } from 'electron';
 import { observable, computed } from 'mobx';
-import { lightTheme } from '~/renderer/constants';
-import { DEFAULT_SEARCH_ENGINES } from '~/constants';
+import { DEFAULT_SEARCH_ENGINES, DEFAULT_SETTINGS } from '~/constants';
 import {
   ISearchEngine,
   IHistoryItem,
   IFavicon,
   ISuggestion,
+  ISettings,
 } from '~/interfaces';
 import { Database } from '~/models/database';
 import { SuggestionsStore } from './suggestions';
+import { getTheme } from '~/utils/themes';
 
 let lastSuggestion: string;
 
@@ -24,9 +25,6 @@ interface ISearchTab {
 
 export class Store {
   public suggestions = new SuggestionsStore(this);
-
-  @observable
-  public theme = lightTheme;
 
   @observable
   public visible = true;
@@ -45,6 +43,12 @@ export class Store {
 
   @observable
   public inputText = '';
+
+  @observable
+  public theme = getTheme('wexond-light');
+
+  @observable
+  public settings: ISettings = DEFAULT_SETTINGS;
 
   @computed
   public get searchedTabs(): ISuggestion[] {
@@ -117,6 +121,21 @@ export class Store {
       if (this.visible) {
         ipcRenderer.send(`hide-${this.id}`);
       }
+    });
+
+    const obj = ipcRenderer.sendSync('get-settings-sync');
+    this.updateSettings(obj);
+
+    ipcRenderer.on('update-settings', (e, settings: ISettings) => {
+      this.updateSettings(settings);
+    });
+  }
+
+  public updateSettings(newSettings: ISettings) {
+    this.settings = { ...this.settings, ...newSettings };
+
+    requestAnimationFrame(() => {
+      this.theme = getTheme(this.settings.theme);
     });
   }
 

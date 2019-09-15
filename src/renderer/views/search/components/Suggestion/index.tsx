@@ -49,6 +49,11 @@ export const Suggestion = observer(({ suggestion }: Props) => {
         style={{
           backgroundImage: `url(${favicon})`,
           opacity: customFavicon ? 1 : transparency.icons.inactive,
+          filter: !customFavicon
+            ? store.theme['searchBox.suggestions.lightForeground']
+              ? 'invert(100%)'
+              : 'none'
+            : 'none',
         }}
       />
       <PrimaryText>{primaryText}</PrimaryText>

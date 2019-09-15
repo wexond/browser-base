@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { centerIcon } from '~/renderer/mixins';
 import { icons } from '~/renderer/constants';
+import { ITheme } from '~/interfaces';
 
 export const StyledApp = styled.div`
   margin: 8px;
@@ -8,7 +9,6 @@ export const StyledApp = styled.div`
   border-radius: 6px;
   overflow: hidden;
   position: relative;
-  background-color: #fdfdfd;
   transition: 0.15s opacity, 0.15s margin-top;
 
   ${({ visible }: { visible: boolean }) => css`
@@ -43,6 +43,17 @@ export const Input = styled.input`
   font-family: Roboto;
   padding-left: 16px;
   height: 42px;
+  background-color: transparent;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    color: ${theme['searchBox.input.textColor']};
+
+    &::placeholder {
+      color: ${theme['searchBox.input.lightForeground']
+        ? 'rgba(255, 255, 255, 0.54)'
+        : 'rgba(0, 0, 0, 0.54)'};
+    }
+  `}
 `;
 
 export const SearchIcon = styled.div`
@@ -52,10 +63,19 @@ export const SearchIcon = styled.div`
   background-image: url(${icons.search});
   margin-left: 16px;
   opacity: 0.54;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    filter: ${theme['searchBox.input.lightForeground']
+      ? 'invert(100%)'
+      : 'none'};
+  `}
 `;
 
 export const SearchBox = styled.div`
   display: flex;
   align-items: center;
-  background-color: #fff;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-color: ${theme['searchBox.input.backgroundColor']};
+  `}
 `;
