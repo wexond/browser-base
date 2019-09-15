@@ -7,7 +7,7 @@ export const StyledApp = styled.div`
   overflow: hidden;
   position: relative;
   background-color: #f5f5f5;
-  transition: 0.3s opacity, 0.2s margin-top;
+  transition: 0.2s opacity, 0.2s margin-top;
 
   ${({ visible }: { visible: boolean }) => css`
     opacity: ${visible ? 1 : 0};

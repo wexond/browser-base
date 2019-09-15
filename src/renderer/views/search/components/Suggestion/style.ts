@@ -22,15 +22,13 @@ export const StyledSuggestion = styled.div`
   }) => {
     let backgroundColor = 'transparent';
     if (selected) {
-      backgroundColor =
-        theme['overlay.foreground'] === 'light'
-          ? 'rgba(255, 255, 255, 0.06)'
-          : 'rgba(0, 0, 0, 0.06)';
+      backgroundColor = theme['searchBox.suggestions.lightForeground']
+        ? 'rgba(255, 255, 255, 0.06)'
+        : 'rgba(0, 0, 0, 0.06)';
     } else if (hovered) {
-      backgroundColor =
-        theme['overlay.foreground'] === 'light'
-          ? 'rgba(255, 255, 255, 0.03)'
-          : 'rgba(0, 0, 0, 0.03)';
+      backgroundColor = theme['searchBox.suggestions.lightForeground']
+        ? 'rgba(255, 255, 255, 0.03)'
+        : 'rgba(0, 0, 0, 0.03)';
     }
     return css`
       background-color: ${backgroundColor};
