@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react-lite';
-import { hot } from 'react-hot-loader/root';
 import * as React from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { WindowsControls } from 'react-windows-controls';
@@ -57,4 +56,4 @@ const App = observer(() => {
   );
 });
 
-export default hot(App);
+export default App;

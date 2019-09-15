@@ -226,8 +226,9 @@ export class TabsStore {
     requestAnimationFrame(() => {
       tab.setLeft(tab.getLeft(), false);
       this.updateTabsBounds(true);
-
-      this.scrollbarRef.current.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
+      if (this.scrollbarRef && this.scrollbarRef.current) {
+        this.scrollbarRef.current.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
+      }
     });
     return tab;
   }
@@ -242,7 +243,7 @@ export class TabsStore {
   }
 
   @action
-  public pinTab(tab : ITab){
+  public pinTab(tab: ITab) {
     tab.isPinned = true;
     store.startupTabs.updateStartupTabItem(tab);
     requestAnimationFrame(() => {

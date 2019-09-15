@@ -28,7 +28,7 @@ export class WindowsManager {
         const path = argv[argv.length - 1];
 
         if (isAbsolute(path) && existsSync(path)) {
-          if (process.env.ENV !== 'dev') {
+          if (process.env.ENV !== 'development') {
             const path = argv[argv.length - 1];
             const ext = extname(path);
 
@@ -80,7 +80,9 @@ export class WindowsManager {
     Menu.setApplicationMenu(getMainMenu(this));
     this.createWindow();
 
-    runAutoUpdaterService(this);
+    if (process.env.NODE_ENV !== 'development') {
+      runAutoUpdaterService(this);
+    }
 
     app.on('activate', () => {
       if (this.list.filter(x => x !== null).length === 0) {

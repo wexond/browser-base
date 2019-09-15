@@ -130,13 +130,13 @@ export class AppWindow extends BrowserWindow {
     });
 
     // this.webContents.openDevTools({ mode: 'detach' });
-
-    if (process.env.ENV === 'dev') {
-      this.webContents.openDevTools({ mode: 'detach' });
-      this.loadURL('http://localhost:4444/app.html');
-    } else {
-      this.loadURL(join('file://', app.getAppPath(), 'build/app.html'));
-    }
+    this.loadURL('http://localhost:4444');
+    // if (process.env.ENV === 'development') {
+    //   this.webContents.openDevTools({ mode: 'detach' });
+    //   this.loadURL('http://localhost:4444');
+    // } else {
+    //   this.loadURL(join('file://', app.getAppPath(), 'build/index.html'));
+    // }
 
     this.on('enter-full-screen', () => {
       this.webContents.send('fullscreen', true);

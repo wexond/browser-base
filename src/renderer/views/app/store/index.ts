@@ -152,10 +152,12 @@ export class Store {
     ipcRenderer.send('update-check');
 
     requestAnimationFrame(() => {
-      if (remote.process.argv.length > 1 && remote.process.env.ENV !== 'dev') {
+      if (
+        remote.process.argv.length > 1 &&
+        remote.process.env.ENV !== 'development'
+      ) {
         const path = remote.process.argv[1];
         const ext = extname(path);
-
         if (ext === '.html') {
           this.tabs.addTab({ url: `file:///${path}`, active: true });
         }

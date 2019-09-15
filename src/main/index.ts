@@ -13,6 +13,10 @@ app.setPath('userData', resolve(homedir(), '.wexond'));
 
 export const windowsManager = new WindowsManager();
 
+const debug = require('electron-debug');
+ 
+debug();
+
 // app.setAsDefaultProtocolClient('http');
 // app.setAsDefaultProtocolClient('https');
 

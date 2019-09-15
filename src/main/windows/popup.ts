@@ -22,9 +22,9 @@ export class PopupWindow extends BrowserWindow {
 
     this.appWindow = appWindow;
 
-    if (process.env.ENV === 'dev') {
+    if (process.env.ENV === 'dvelopment') {
       if (devtools) {
-        this.webContents.openDevTools({ mode: 'detach' });
+        //this.webContents.openDevTools({ mode: 'detach' });
       }
       this.loadURL(`http://localhost:4444/${name}.html`);
     } else {
