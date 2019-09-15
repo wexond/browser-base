@@ -57,7 +57,7 @@ export const Circle = styled.div`
     transition: ${theme.animations ? '0.2s background-color' : 'none'};
 
     background-color: ${toggled
-      ? theme.accentColor
+      ? 'rgba(0, 0, 0, 0.12)'
       : 'rgba(255, 255, 255, 0.12)'};
   `}
 `;

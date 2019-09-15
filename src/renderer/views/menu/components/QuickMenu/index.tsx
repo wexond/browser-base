@@ -15,6 +15,7 @@ import {
   Shortcut,
 } from './style';
 import { icons } from '~/renderer/constants';
+import store from '../../store';
 
 const changeContent = () => () => {
   // store.overlay.currentContent = content;
@@ -31,9 +32,8 @@ const onFindClick = () => {
 };
 
 const onDarkClick = () => {
-  // store.settings.object.darkTheme = !store.settings.object.darkTheme;
-  // store.theme = store.settings.object.darkTheme ? darkTheme : lightTheme;
-  // store.settings.save();
+  store.settings.darkContents = !store.settings.darkContents;
+  store.save();
 };
 
 const onShieldClick = () => {
@@ -83,8 +83,7 @@ export const QuickMenu = observer(() => {
             Top Most
           </Bubble>
           <Bubble
-            // toggled={store.settings.object.darkTheme}
-            toggled={false}
+            toggled={store.settings.darkContents}
             onClick={onDarkClick}
             invert={invert}
             icon={icons.night}

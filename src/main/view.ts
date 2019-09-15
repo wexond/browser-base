@@ -25,6 +25,7 @@ export class View extends BrowserView {
         plugins: true,
         additionalArguments: [`--window-id=${window.id}`],
         nativeWindowOpen: true,
+        javascript: true,
       },
     });
 
