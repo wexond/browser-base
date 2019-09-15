@@ -102,20 +102,22 @@ export const App = observer(() => {
 
   let height = 0;
 
-  for (const s of store.suggestions.list) {
-    height += 38;
-  }
+  if (suggestionsVisible) {
+    for (const s of store.suggestions.list) {
+      height += 38;
+    }
 
-  for (const s of store.searchedTabs) {
-    height += 38;
-  }
+    for (const s of store.searchedTabs) {
+      height += 38;
+    }
 
-  if (store.suggestions.list.length > 0) {
-    height += 30;
-  }
+    if (store.suggestions.list.length > 0) {
+      height += 30;
+    }
 
-  if (store.searchedTabs.length > 0) {
-    height += 30;
+    if (store.searchedTabs.length > 0) {
+      height += 30;
+    }
   }
 
   ipcRenderer.send(`height-${store.id}`, height);
