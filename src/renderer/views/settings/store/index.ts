@@ -49,6 +49,10 @@ export class Store {
       if (data.type === 'result' && data.id === id) {
         this.settings = { ...this.settings, ...data.result };
 
+        delete this.settings.darkContents;
+        delete this.settings.multrin;
+        delete this.settings.shield;
+
         this.searchEngines = DEFAULT_SEARCH_ENGINES.concat(
           data.result.searchEngines,
         );
