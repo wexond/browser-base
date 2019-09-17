@@ -88,6 +88,8 @@ export class AppWindow extends BrowserWindow {
       this.permissionWindow.rearrange();
       this.formFillWindow.rearrange();
       this.credentialsWindow.rearrange();
+
+      this.menuWindow.hide();
     };
 
     // Update window bounds on resize and on move when window is not maximized.
@@ -95,8 +97,6 @@ export class AppWindow extends BrowserWindow {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
       }
-
-      this.menuWindow.hide();
 
       moveAndResize();
     });
