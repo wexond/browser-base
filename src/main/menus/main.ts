@@ -108,34 +108,34 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         },
         {
           accelerator: 'Ctrl+Space',
-          label: 'Toggle Overlay',
+          label: 'Toggle Search',
           visible: false,
           click() {
-            windowsManager.currentWindow.webContents.send('toggle-overlay');
+            windowsManager.currentWindow.searchWindow.show();
           },
         },
         {
           accelerator: 'CmdOrCtrl+L',
-          label: 'Toggle Overlay',
+          label: 'Toggle menu',
           visible: false,
           click() {
-            windowsManager.currentWindow.webContents.send('toggle-overlay');
+            windowsManager.currentWindow.menuWindow.show();
           },
         },
         {
           accelerator: 'Alt+F',
-          label: 'Toggle Overlay',
+          label: 'Toggle Search',
           visible: false,
           click() {
-            windowsManager.currentWindow.webContents.send('toggle-overlay');
+            windowsManager.currentWindow.searchWindow.show();
           },
         },
         {
           accelerator: 'Alt+E',
-          label: 'Toggle Overlay',
+          label: 'Toggle menu',
           visible: false,
           click() {
-            windowsManager.currentWindow.webContents.send('toggle-overlay');
+            windowsManager.currentWindow.menuWindow.show();
           },
         },
         {
