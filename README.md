@@ -23,7 +23,7 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 - **Tab groups** - Easily group tabs to groups and access them really fast.
 - **Partial support for Chrome extensions** - Install some extensions from Chrome Web Store (see [#110](https://github.com/wexond/wexond/issues/110))
 - **Overlay** - It contains everything you will need. Search box, bookmarks, menu, your custom components and much more!
-- **Packages** - Extend Wexond for your needs, by installing or developing your own packages. They can theme the browser and even add custom components to the Overlay! ([#147](https://github.com/wexond/wexond/issues/147))
+- **Packages** - Extend Wexond for your needs, by installing or developing your own packages. They can theme the browser and even add custom components to the Overlay! ([#147](https://github.com/wexond/wexond/issues/147)) (WIP)
 - **Organize apps in tabs** - Wexond's tabs system can also contain your native apps like in [Multrin](https://github.com/sentialx/multrin)! (currently only for Windows)
 
 # Screenshots
@@ -33,8 +33,6 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 ![](https://wexond.net/img/screen2.gif)
 
 # [Roadmap](https://github.com/wexond/wexond/projects)
-
-# [Supported Chrome APIs](https://github.com/wexond/wexond/issues/110)
 
 # Contributing
 
