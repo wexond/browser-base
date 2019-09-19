@@ -9,6 +9,9 @@ import { getPath } from '~/utils';
 
 export let engine: ElectronBlocker;
 
+const id = '';
+const id2 = '';
+
 const loadFilters = async () => {
   const path = resolve(getPath('adblock/cache.dat'));
 
@@ -59,7 +62,32 @@ export const runAdblockService = (ses: Session) => {
 
   loadFilters().then(() => {
     engine.enableBlockingInSession(ses);
+
+    const item = Array.from(
+      ses.webRequest.listeners.get('onBeforeRequest'),
+    ).pop();
+
+    const item2 = Array.from(
+      ses.webRequest.listeners.get('onHeadersReceived'),
+    ).pop();
+
+    if (item && item2) {
+      ses.id1 = item[1];
+      ses.id2 = item2[1];
+    }
+
     engine.on('request-blocked', emitBlockedEvent);
     engine.on('request-redirected', emitBlockedEvent);
   });
+};
+
+export const stopAdblockService = (ses: Session) => {
+  try {
+    if (engine) {
+      engine.disableBlockingInSession(ses);
+    }
+  } catch (e) {
+    ses.webRequest.removeListener('onBeforeRequest', ses.id1.id);
+    ses.webRequest.removeListener('onHeadersReceived', ses.id1.id);
+  }
 };

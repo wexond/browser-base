@@ -37,8 +37,8 @@ const onDarkClick = () => {
 };
 
 const onShieldClick = () => {
-  // store.settings.object.shield = !store.settings.object.shield;
-  // store.settings.save();
+  store.settings.shield = !store.settings.shield;
+  store.save();
 };
 
 const onAlwaysClick = () => {
@@ -92,8 +92,7 @@ export const QuickMenu = observer(() => {
           </Bubble>
           <Bubble
             invert={invert}
-            // toggled={store.settings.object.shield}
-            toggled={false}
+            toggled={store.settings.shield}
             icon={icons.shield}
             onClick={onShieldClick}
           >

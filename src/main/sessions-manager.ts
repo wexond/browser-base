@@ -51,15 +51,6 @@ export class SessionsManager {
       },
     );
 
-    this.view.webRequest.onHeadersReceived((details, callback) => {
-      callback({
-        responseHeaders: {
-          ...details.responseHeaders,
-          'Content-Security-Policy': ["default-src 'none'"],
-        },
-      });
-    });
-
     this.view.on('will-download', (event, item, webContents) => {
       const fileName = item.getFilename();
       const savePath = resolve(app.getPath('downloads'), fileName);
@@ -104,8 +95,6 @@ export class SessionsManager {
       this.clearCache('incognito');
     });
 
-    runAdblockService(this.view);
-    runAdblockService(this.viewIncognito);
     storage.run();
   }
 

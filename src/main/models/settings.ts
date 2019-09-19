@@ -7,6 +7,11 @@ import { promises } from 'fs';
 import { getPath, makeId } from '~/utils';
 import { EventEmitter } from 'events';
 import { windowsManager } from '..';
+import {
+  engine,
+  runAdblockService,
+  stopAdblockService,
+} from '../services/adblock';
 
 export class Settings extends EventEmitter {
   public object = DEFAULT_SETTINGS;
@@ -34,7 +39,7 @@ export class Settings extends EventEmitter {
           }
         }
 
-        this.updateDarkReader();
+        this.update();
 
         this.addToQueue();
       },
@@ -43,11 +48,11 @@ export class Settings extends EventEmitter {
     ipcMain.on('get-settings-sync', e => {
       if (!this.loaded) {
         this.once('load', () => {
-          this.updateDarkReader();
+          this.update();
           e.returnValue = this.object;
         });
       } else {
-        this.updateDarkReader();
+        this.update();
         e.returnValue = this.object;
       }
     });
@@ -55,11 +60,11 @@ export class Settings extends EventEmitter {
     ipcMain.on('get-settings', e => {
       if (!this.loaded) {
         this.once('load', () => {
-          this.updateDarkReader();
+          this.update();
           e.sender.send('get-settings', this.object);
         });
       } else {
-        this.updateDarkReader();
+        this.update();
         e.sender.send('get-settings', this.object);
       }
     });
@@ -67,11 +72,8 @@ export class Settings extends EventEmitter {
     this.load();
   }
 
-  private updateDarkReader = () => {
-    const contexts = [
-      windowsManager.sessionsManager.extensionsIncognito,
-      windowsManager.sessionsManager.extensions,
-    ];
+  private update = () => {
+    const contexts = [windowsManager.sessionsManager.extensions];
 
     contexts.forEach(e => {
       if (e.extensions['wexond-darkreader']) {
@@ -85,8 +87,16 @@ export class Settings extends EventEmitter {
           },
         );
       }
+
+      if (this.object.shield) {
+        runAdblockService(e.session);
+      } else {
+        stopAdblockService(e.session);
+      }
     });
   };
+
+  private updateDarkReader = () => {};
 
   private async load() {
     try {
