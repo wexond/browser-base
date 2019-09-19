@@ -16,7 +16,7 @@ import { shadeBlendConvert } from '~/utils';
 import Ripple from '~/renderer/components/Ripple';
 import { ITab } from '../../../models';
 import store from '../../../store';
-import { remote } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 import { icons } from '~/renderer/constants';
 
 const removeTab = (tab: ITab) => (e: React.MouseEvent) => {
@@ -59,11 +59,8 @@ const onMouseLeave = () => {
 
 const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (store.canToggleMenu && !tab.isWindow) {
-    if (!store.overlay.isNewTab) {
-      store.overlay.visible = !store.overlay.visible;
-    }
-
     store.canToggleMenu = false;
+    ipcRenderer.send(`search-show-${store.windowId}`);
   }
 
   if (e.button === 4) {
@@ -187,9 +184,7 @@ const Content = observer(({ tab }: { tab: ITab }) => {
           isIcon={tab.isIconSet}
           style={{
             color: tab.isSelected
-              ? store.theme['tab.selected.textColor'] === 'inherit'
-                ? tab.background
-                : store.theme['tab.selected.textColor']
+              ? store.theme['tab.selected.textColor']
               : store.theme['tab.textColor'],
           }}
         >
@@ -210,30 +205,29 @@ const Close = observer(({ tab }: { tab: ITab }) => {
   );
 });
 
-const Border = observer(({ tab }: { tab: ITab }) => {
-  return <StyledBorder visible={tab.borderVisible} />;
-});
-
 const Overlay = observer(({ tab }: { tab: ITab }) => {
+  const defaultHoverColor = store.theme['toolbar.lightForeground']
+    ? 'rgba(255, 255, 255, 0.5)'
+    : 'rgba(0, 0, 0, 0.5)';
+
   return (
     <StyledOverlay
       hovered={tab.isHovered}
       style={{
-        backgroundColor: tab.isSelected
-          ? shadeBlendConvert(
-              store.theme['tab.selectedHover.backgroundOpacity'],
-              tab.background,
-              store.overlay.currentContent !== 'default'
-                ? store.theme['toolbar.overlay.backgroundColor']
-                : store.theme['toolbar.backgroundColor'],
-            )
-          : store.theme['tab.hover.backgroundColor'],
+        backgroundColor:
+          tab.isSelected || tab.customColor
+            ? tab.background
+            : defaultHoverColor,
       }}
     />
   );
 });
 
 export default observer(({ tab }: { tab: ITab }) => {
+  const defaultColor = store.theme['toolbar.lightForeground']
+    ? 'rgba(255, 255, 255, 0.3)'
+    : 'rgba(0, 0, 0, 0.25)';
+
   return (
     <StyledTab
       selected={tab.isSelected}
@@ -254,11 +248,13 @@ export default observer(({ tab }: { tab: ITab }) => {
             ? shadeBlendConvert(
                 store.theme['tab.backgroundOpacity'],
                 tab.background,
-                store.overlay.currentContent !== 'default'
-                  ? store.theme['toolbar.overlay.backgroundColor']
-                  : store.theme['toolbar.backgroundColor'],
+                store.theme['toolbar.backgroundColor'],
               )
-            : 'transparent',
+            : shadeBlendConvert(
+                0.9,
+                tab.customColor ? tab.background : defaultColor,
+                store.theme['toolbar.backgroundColor'],
+              ),
         }}
       >
         <Content tab={tab} />
@@ -270,7 +266,7 @@ export default observer(({ tab }: { tab: ITab }) => {
               position: 'absolute',
               right: 32,
               zIndex: 9999,
-              filter: store.theme['toolbar.icons.invert']
+              filter: store.theme['toolbar.lightForeground']
                 ? 'invert(100%)'
                 : 'none',
               opacity: 0.54,
@@ -287,7 +283,6 @@ export default observer(({ tab }: { tab: ITab }) => {
           style={{ zIndex: 9 }}
         />
       </TabContainer>
-      <Border tab={tab} />
     </StyledTab>
   );
 });

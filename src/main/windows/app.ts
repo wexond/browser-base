@@ -13,6 +13,8 @@ import {
   CredentialsWindow,
 } from '.';
 import { WindowsManager } from '../windows-manager';
+import { MenuWindow } from './menu';
+import { SearchWindow } from './search';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
@@ -23,6 +25,8 @@ export class AppWindow extends BrowserWindow {
   public findWindow = new FindWindow(this);
   public formFillWindow = new FormFillWindow(this);
   public credentialsWindow = new CredentialsWindow(this);
+  public menuWindow = new MenuWindow(this);
+  public searchWindow = new SearchWindow(this);
 
   public incognito: boolean;
 
@@ -78,17 +82,23 @@ export class AppWindow extends BrowserWindow {
       }
     }
 
+    const moveAndResize = () => {
+      this.authWindow.rearrange();
+      this.findWindow.rearrange();
+      this.permissionWindow.rearrange();
+      this.formFillWindow.rearrange();
+      this.credentialsWindow.rearrange();
+
+      this.menuWindow.hide();
+    };
+
     // Update window bounds on resize and on move when window is not maximized.
     this.on('resize', () => {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
       }
 
-      this.authWindow.rearrange();
-      this.findWindow.rearrange();
-      this.permissionWindow.rearrange();
-      this.formFillWindow.rearrange();
-      this.credentialsWindow.rearrange();
+      moveAndResize();
     });
 
     this.on('move', () => {
@@ -96,11 +106,7 @@ export class AppWindow extends BrowserWindow {
         windowState.bounds = this.getBounds();
       }
 
-      this.authWindow.rearrange();
-      this.findWindow.rearrange();
-      this.permissionWindow.rearrange();
-      this.formFillWindow.rearrange();
-      this.credentialsWindow.rearrange();
+      moveAndResize();
     });
 
     const resize = () => {

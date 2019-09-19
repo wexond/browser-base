@@ -1,11 +1,9 @@
-import { ipcRenderer, remote, webFrame } from 'electron';
+import { ipcRenderer, remote, ipcMain } from 'electron';
 
 import AutoComplete from './models/auto-complete';
 
 const tabId = remote.getCurrentWebContents().id;
 const arg = process.argv.find(x => x.startsWith('--window-id='));
-
-console.log('aha');
 
 export let windowId: number = null;
 
@@ -98,3 +96,69 @@ ipcRenderer.on('scroll-touch-end', () => {
 
 window.addEventListener('load', AutoComplete.loadForms);
 window.addEventListener('mousedown', AutoComplete.onWindowMouseDown);
+
+const emitCallback = (msg: string, data: any) => {
+  ipcRenderer.once(msg, (e, res) => {
+    window.postMessage(
+      {
+        id: data.id,
+        result: res,
+        type: 'result',
+      },
+      '*',
+    );
+  });
+};
+
+if (window.location.protocol === 'wexond:') {
+  window.addEventListener('message', ({ data }) => {
+    if (data.type === 'storage') {
+      ipcRenderer.send(`storage-${data.operation}`, data.id, {
+        scope: data.scope,
+        ...data.data,
+      });
+
+      emitCallback(data.id, data);
+    } else if (data.type === 'credentials-get-password') {
+      ipcRenderer.send('credentials-get-password', data.id, data.data);
+      emitCallback(data.id, data);
+    } else if (data.type === 'save-settings') {
+      ipcRenderer.send('save-settings', { settings: data.data });
+    } else if (data.type === 'get-settings') {
+      ipcRenderer.send('get-settings');
+      emitCallback('get-settings', data);
+    }
+  });
+
+  ipcRenderer.on('credentials-insert', (e, data) => {
+    console.log(data);
+
+    window.postMessage(
+      {
+        type: 'credentials-insert',
+        data,
+      },
+      '*',
+    );
+  });
+
+  ipcRenderer.on('credentials-update', (e, data) => {
+    window.postMessage(
+      {
+        type: 'credentials-update',
+        data,
+      },
+      '*',
+    );
+  });
+
+  ipcRenderer.on('credentials-remove', (e, data) => {
+    window.postMessage(
+      {
+        type: 'credentials-remove',
+        data,
+      },
+      '*',
+    );
+  });
+}

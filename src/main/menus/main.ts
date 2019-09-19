@@ -1,4 +1,4 @@
-import { Menu, BrowserWindow } from 'electron';
+import { Menu, webContents } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { WindowsManager } from '../windows-manager';
 
@@ -108,34 +108,34 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         },
         {
           accelerator: 'Ctrl+Space',
-          label: 'Toggle Overlay',
+          label: 'Toggle Search',
           visible: false,
           click() {
-            windowsManager.currentWindow.webContents.send('toggle-overlay');
+            windowsManager.currentWindow.searchWindow.show();
           },
         },
         {
           accelerator: 'CmdOrCtrl+L',
-          label: 'Toggle Overlay',
+          label: 'Toggle menu',
           visible: false,
           click() {
-            windowsManager.currentWindow.webContents.send('toggle-overlay');
+            windowsManager.currentWindow.menuWindow.show();
           },
         },
         {
           accelerator: 'Alt+F',
-          label: 'Toggle Overlay',
+          label: 'Toggle Search',
           visible: false,
           click() {
-            windowsManager.currentWindow.webContents.send('toggle-overlay');
+            windowsManager.currentWindow.searchWindow.show();
           },
         },
         {
           accelerator: 'Alt+E',
-          label: 'Toggle Overlay',
+          label: 'Toggle menu',
           visible: false,
           click() {
-            windowsManager.currentWindow.webContents.send('toggle-overlay');
+            windowsManager.currentWindow.menuWindow.show();
           },
         },
         {
@@ -165,7 +165,31 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           label: 'Toggle developer tools (window)',
           visible: false,
           click() {
-            BrowserWindow.getFocusedWindow().webContents.openDevTools();
+            setTimeout(() => {
+              webContents
+                .getFocusedWebContents()
+                .openDevTools({ mode: 'detach' });
+            });
+          },
+        },
+        {
+          accelerator: 'F12',
+          label: 'Toggle developer tools (contents)',
+          visible: false,
+          click() {
+            setTimeout(() => {
+              windowsManager.currentWindow.viewManager.selected.webContents.openDevTools();
+            });
+          },
+        },
+        {
+          accelerator: 'Ctrl+Shift+I',
+          label: 'Toggle developer tools (contents)',
+          visible: false,
+          click() {
+            setTimeout(() => {
+              windowsManager.currentWindow.viewManager.selected.webContents.openDevTools();
+            });
           },
         },
       ],

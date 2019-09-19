@@ -19,11 +19,12 @@ export class AddBookmarkStore {
   }
 
   public show() {
-    const bookmark = store.overlay.bookmark;
+    // TODO(xnerhu): bookmarks dialog
+    /*const bookmark = store.overlay.bookmark;
 
     this.titleRef.current.value = bookmark.title;
     this.dropdownRef.current.setValue(bookmark.parent, false);
-    this.visible = true;
+    this.visible = true;*/
   }
 
   public hide() {

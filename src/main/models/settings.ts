@@ -26,6 +26,11 @@ export class Settings extends EventEmitter {
         for (const window of windowsManager.list) {
           if (window.webContents.id !== e.sender.id) {
             window.webContents.send('update-settings', this.object);
+            window.searchWindow.webContents.send(
+              'update-settings',
+              this.object,
+            );
+            window.menuWindow.webContents.send('update-settings', this.object);
           }
         }
 
@@ -35,7 +40,7 @@ export class Settings extends EventEmitter {
       },
     );
 
-    ipcMain.on('get-settings', e => {
+    ipcMain.on('get-settings-sync', e => {
       if (!this.loaded) {
         this.once('load', () => {
           this.updateDarkReader();
@@ -44,6 +49,18 @@ export class Settings extends EventEmitter {
       } else {
         this.updateDarkReader();
         e.returnValue = this.object;
+      }
+    });
+
+    ipcMain.on('get-settings', e => {
+      if (!this.loaded) {
+        this.once('load', () => {
+          this.updateDarkReader();
+          e.sender.send('get-settings', this.object);
+        });
+      } else {
+        this.updateDarkReader();
+        e.sender.send('get-settings', this.object);
       }
     });
 
@@ -63,7 +80,7 @@ export class Settings extends EventEmitter {
           {
             message: {
               name: 'toggle',
-              toggle: this.object.darkTheme,
+              toggle: this.object.darkContents,
             },
           },
         );
@@ -79,6 +96,14 @@ export class Settings extends EventEmitter {
       if (!json.version) {
         // Migrate from 3.0.0 to 3.1.0
         json.searchEngines = [];
+      }
+
+      if (json.overlayBookmarks !== undefined) {
+        delete json.overlayBookmarks;
+      }
+
+      if (json.darkTheme !== undefined) {
+        delete json.darkTheme;
       }
 
       this.object = {

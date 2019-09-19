@@ -9,14 +9,15 @@ export interface IStartupBehavior {
 }
 
 export interface ISettings {
-  darkTheme: boolean;
+  theme: string;
   shield: boolean;
   multrin: boolean;
   animations: boolean;
-  overlayBookmarks: boolean;
+  bookmarksBar: boolean;
   suggestions: boolean;
   searchEngine: number;
   searchEngines: ISearchEngine[];
   startupBehavior: IStartupBehavior;
   version: string;
+  darkContents: boolean;
 }

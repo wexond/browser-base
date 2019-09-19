@@ -6,6 +6,7 @@ import { resolve } from 'path';
 import { WindowsManager } from './windows-manager';
 import { runAdblockService } from './services';
 import storage from './services/storage';
+import { registerProtocol } from './models/protocol';
 
 export class SessionsManager {
   public view = session.fromPartition('persist:view');
@@ -22,6 +23,9 @@ export class SessionsManager {
     this.windowsManager = windowsManager;
 
     this.loadExtensions('normal');
+
+    registerProtocol(this.view);
+    registerProtocol(this.viewIncognito);
 
     this.clearCache('incognito');
 

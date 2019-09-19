@@ -30,14 +30,15 @@ export default class Switch extends React.PureComponent<Props, State> {
   }
 
   public set value(val: boolean) {
-    const { onChange } = this.props;
-
     this.setState({ activated: val });
-    if (onChange) onChange(val);
   }
 
   private onClick = () => {
+    const { onChange } = this.props;
+
     this.value = !this.value;
+
+    if (onChange) onChange(this.value);
   };
 
   public render() {

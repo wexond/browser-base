@@ -1,5 +1,4 @@
-import { ipcRenderer, remote, webContents } from 'electron';
-import { parse } from 'url';
+import { ipcRenderer, remote } from 'electron';
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
 import Vibrant = require('node-vibrant');
@@ -13,7 +12,6 @@ import {
   TAB_PINNED_WIDTH,
 } from '../constants';
 import { getColorBrightness, callViewMethod } from '~/utils';
-import console = require('console');
 
 const isColorAcceptable = (color: string) => {
   if (store.theme['tab.allowLightBackground']) {
@@ -37,7 +35,7 @@ export class ITab {
   public isMuted = false;
 
   @observable
-  public title: string = 'New tab';
+  public title = 'New tab';
 
   @observable
   public loading = false;
@@ -70,6 +68,9 @@ export class ITab {
   @observable
   public hasCredentials = false;
 
+  @observable
+  public customColor = false;
+
   public left = 0;
   public lastUrl = '';
   public isClosing = false;
@@ -77,7 +78,7 @@ export class ITab {
   public lastHistoryId: string;
   public hasThemeColor = false;
   public removeTimeout: any;
-  public isWindow: boolean = false;
+  public isWindow = false;
 
   @computed
   public get isSelected() {
@@ -137,23 +138,25 @@ export class ITab {
 
     if (isWindow) return;
 
+    // TODO(sentialx): save history
+
     ipcRenderer.on(`view-url-updated-${this.id}`, async (e, url: string) => {
       if (url && url !== this.url && !store.isIncognito) {
-        this.lastHistoryId = await store.history.addItem({
+        /*this.lastHistoryId = await store.history.addItem({
           title: this.title,
           url,
           favicon: this.favicon,
           date: new Date().toString(),
-        });
+        });*/
       }
 
       this.url = url;
-      this.updateData();
+      // this.updateData();
     });
 
     ipcRenderer.on(`view-title-updated-${this.id}`, (e, title: string) => {
       this.title = title === 'about:blank' ? 'New tab' : title;
-      this.updateData();
+      // this.updateData();
 
       if (this.isSelected) {
         this.updateWindowTitle();
@@ -189,8 +192,10 @@ export class ITab {
 
               if (isColorAcceptable(palette.Vibrant.hex)) {
                 this.background = palette.Vibrant.hex;
+                this.customColor = true;
               } else {
                 this.background = store.theme.accentColor;
+                this.customColor = false;
               }
             } catch (e) {
               console.error(e);
@@ -200,7 +205,7 @@ export class ITab {
           this.favicon = '';
           console.error(e);
         }
-        this.updateData();
+        // this.updateData();
       },
     );
 
@@ -214,9 +219,11 @@ export class ITab {
         if (themeColor && isColorAcceptable(themeColor)) {
           this.background = themeColor;
           this.hasThemeColor = true;
+          this.customColor = true;
         } else {
           this.background = store.theme.accentColor;
           this.hasThemeColor = false;
+          this.customColor = false;
         }
       },
     );
@@ -246,6 +253,7 @@ export class ITab {
     remote.getCurrentWindow().setTitle(`${this.title} - Wexond`);
   }
 
+  /*
   @action
   public async updateData() {
     if (!store.isIncognito) {
@@ -282,7 +290,7 @@ export class ITab {
         );
       }
     }
-  }
+  }*/
 
   public get tabGroup() {
     return store.tabGroups.getGroupById(this.tabGroupId);
@@ -291,41 +299,24 @@ export class ITab {
   @action
   public select() {
     if (!this.isClosing) {
-      store.overlay.isNewTab = this.url === 'about:blank';
-
-      if (store.overlay.isNewTab) {
-        store.overlay.visible = true;
-      }
-
       this.tabGroup.selectedTabId = this.id;
 
       ipcRenderer.send(`permission-dialog-hide-${store.windowId}`);
 
       this.updateWindowTitle();
 
-      const show = () => {
-        if (this.isWindow) {
-          ipcRenderer.send(`browserview-hide-${store.windowId}`);
-          ipcRenderer.send(`select-window-${store.windowId}`, this.id);
-        } else {
-          ipcRenderer.send(`hide-window-${store.windowId}`);
-          if (!store.overlay.isNewTab) {
-            ipcRenderer.send(`browserview-show-${store.windowId}`);
-          }
-          ipcRenderer.send(`view-select-${store.windowId}`, this.id);
-          ipcRenderer.send(
-            `update-find-info-${store.windowId}`,
-            this.id,
-            this.findInfo,
-          );
-        }
-      };
-
-      if (store.overlay.visible && !store.overlay.isNewTab) {
-        store.overlay.visible = false;
-        setTimeout(show, store.settings.object.animations ? 200 : 0);
+      if (this.isWindow) {
+        ipcRenderer.send(`browserview-hide-${store.windowId}`);
+        ipcRenderer.send(`select-window-${store.windowId}`, this.id);
       } else {
-        show();
+        ipcRenderer.send(`hide-window-${store.windowId}`);
+        ipcRenderer.send(`browserview-show-${store.windowId}`);
+        ipcRenderer.send(`view-select-${store.windowId}`, this.id);
+        ipcRenderer.send(
+          `update-find-info-${store.windowId}`,
+          this.id,
+          this.findInfo,
+        );
       }
 
       requestAnimationFrame(() => {
@@ -360,7 +351,7 @@ export class ITab {
     return width;
   }
 
-  public getLeft(calcNewLeft: boolean = false) {
+  public getLeft(calcNewLeft = false) {
     const tabs = this.tabGroup.tabs.slice();
 
     const index = tabs.indexOf(this);
@@ -435,11 +426,6 @@ export class ITab {
         const prevTab = tabs[index - 1];
         prevTab.select();
       }
-    }
-
-    if (this.tabGroup.tabs.length === 1) {
-      store.overlay.isNewTab = true;
-      store.overlay.visible = true;
     }
 
     this.removeTimeout = setTimeout(() => {

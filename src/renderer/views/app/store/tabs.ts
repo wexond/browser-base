@@ -15,19 +15,18 @@ import {
 
 import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 import store from '.';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, ipcMain } from 'electron';
 import { getColorBrightness, prefixHttp } from '~/utils';
 import { defaultTabOptions } from '~/constants/tabs';
 import { Database } from '~/models/database';
 import { IStartupTab } from '~/interfaces/startup-tab';
 
 export class TabsStore {
+  @observable
+  public isDragging = false;
 
   @observable
-  public isDragging: boolean = false;
-
-  @observable
-  public scrollbarVisible: boolean = false;
+  public scrollbarVisible = false;
 
   @observable
   public hoveredTabId: number;
@@ -38,12 +37,12 @@ export class TabsStore {
   @observable
   public scrollable = false;
 
-  public removedTabs: number = 0;
+  public removedTabs = 0;
 
-  public lastScrollLeft: number = 0;
-  public lastMouseX: number = 0;
-  public mouseStartX: number = 0;
-  public tabStartX: number = 0;
+  public lastScrollLeft = 0;
+  public lastMouseX = 0;
+  public mouseStartX = 0;
+  public tabStartX = 0;
 
   public closedUrl = '';
 
@@ -170,6 +169,17 @@ export class TabsStore {
       this.revertClosed();
     });
 
+    ipcRenderer.on('get-search-tabs', () => {
+      ipcRenderer.send(
+        'get-search-tabs',
+        this.list.map(tab => ({
+          favicon: tab.favicon,
+          url: tab.url,
+          title: tab.title,
+          id: tab.id,
+        })),
+      );
+    });
   }
 
   public resetRearrangeTabsTimer() {
@@ -207,12 +217,8 @@ export class TabsStore {
   @action public createTab(
     options: chrome.tabs.CreateProperties,
     id: number,
-    isWindow: boolean = false,
+    isWindow = false,
   ) {
-    if (isWindow) {
-      store.overlay.visible = false;
-    }
-
     this.removedTabs = 0;
 
     const tab = new ITab(options, id, store.tabGroups.currentGroupId, isWindow);
@@ -242,7 +248,7 @@ export class TabsStore {
   }
 
   @action
-  public pinTab(tab : ITab){
+  public pinTab(tab: ITab) {
     tab.isPinned = true;
     store.startupTabs.updateStartupTabItem(tab);
     requestAnimationFrame(() => {
@@ -253,24 +259,32 @@ export class TabsStore {
   }
 
   @action
-  public unpinTab(tab : ITab){
+  public unpinTab(tab: ITab) {
     tab.isPinned = false;
     store.startupTabs.updateStartupTabItem(tab);
     requestAnimationFrame(() => {
-      tab.setLeft(Math.max.apply(Math, this.list.map(function(item){return item.left})) + TAB_MAX_WIDTH, false);
+      tab.setLeft(
+        Math.max.apply(
+          Math,
+          this.list.map(function(item) {
+            return item.left;
+          }),
+        ) + TAB_MAX_WIDTH,
+        false,
+      );
       this.getTabsToReplace(tab, 'right');
       this.updateTabsBounds(true);
     });
   }
 
   @action
-  public muteTab(tab: ITab){
+  public muteTab(tab: ITab) {
     ipcRenderer.send(`mute-view-${store.windowId}`, tab.id);
     tab.isMuted = true;
   }
 
   @action
-  public unmuteTab(tab: ITab){
+  public unmuteTab(tab: ITab) {
     ipcRenderer.send(`unmute-view-${store.windowId}`, tab.id);
     tab.isMuted = false;
   }
@@ -443,8 +457,6 @@ export class TabsStore {
   }
 
   public onNewTab() {
-    store.overlay.isNewTab = true;
-    store.overlay.visible = true;
     ipcRenderer.send(`hide-window-${store.windowId}`);
     store.tabs.addTab();
   }

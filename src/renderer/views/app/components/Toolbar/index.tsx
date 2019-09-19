@@ -10,6 +10,10 @@ import { Tabbar } from './Tabbar';
 import { ToolbarButton } from './ToolbarButton';
 import { icons, colors } from '~/renderer/constants';
 import { BrowserAction } from './BrowserAction';
+import { platform } from 'os';
+import { TOOLBAR_HEIGHT } from '../../constants';
+import { closeWindow, minimizeWindow, maximizeWindow } from '../../utils';
+import { WindowsControls } from 'react-windows-controls';
 
 const onUpdateClick = () => {
   ipcRenderer.send('update-install');
@@ -17,12 +21,18 @@ const onUpdateClick = () => {
 
 const onKeyClick = () => {
   const { hostname } = parse(store.tabs.selectedTab.url);
-  const list = store.autoFill.credentials.filter(r => r.url === hostname && r.fields.username);
+  const list = store.autoFill.credentials.filter(
+    r => r.url === hostname && r.fields.username,
+  );
 
   ipcRenderer.send(`credentials-show-${store.windowId}`, {
     content: 'list',
     list,
   });
+};
+
+const onMenuClick = () => {
+  ipcRenderer.send(`menu-show-${store.windowId}`);
 };
 
 const BrowserActions = observer(() => {
@@ -55,19 +65,10 @@ export const Toolbar = observer(() => {
   }
 
   return (
-    <StyledToolbar
-      overlayType={store.overlay.currentContent}
-      isHTMLFullscreen={store.isHTMLFullscreen}
-    >
+    <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
       <Handle />
-      <div style={{ flex: 1, display: 'flex' }}>
-        <div
-          style={{ flex: 1, display: store.tabbarVisible ? 'flex' : 'none' }}
-        >
-          <NavigationButtons />
-          <Tabbar />
-        </div>
-      </div>
+      <NavigationButtons />
+      <Tabbar />
       <Buttons>
         <BrowserActions />
         {store.updateInfo.available && (
@@ -97,7 +98,20 @@ export const Toolbar = observer(() => {
             <ToolbarButton icon={icons.incognito} size={18} />
           </>
         )}
+        <ToolbarButton onMouseDown={onMenuClick} icon={icons.more} size={18} />
       </Buttons>
+      {platform() !== 'darwin' && (
+        <WindowsControls
+          style={{
+            height: TOOLBAR_HEIGHT,
+            WebkitAppRegion: 'no-drag',
+          }}
+          onClose={closeWindow}
+          onMinimize={minimizeWindow}
+          onMaximize={maximizeWindow}
+          dark={store.theme['toolbar.lightForeground']}
+        />
+      )}
     </StyledToolbar>
   );
 });

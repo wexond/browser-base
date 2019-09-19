@@ -3,8 +3,8 @@ import { ipcRenderer } from 'electron';
 
 import { ISettings } from '~/interfaces';
 import { DEFAULT_SETTINGS, DEFAULT_SEARCH_ENGINES } from '~/constants';
-import { darkTheme, lightTheme } from '~/renderer/constants';
 import { Store } from '.';
+import { getTheme } from '~/utils/themes';
 
 export type SettingsSection =
   | 'appearance'
@@ -30,7 +30,7 @@ export class SettingsStore {
   public constructor(store: Store) {
     this.store = store;
 
-    const obj = ipcRenderer.sendSync('get-settings');
+    const obj = ipcRenderer.sendSync('get-settings-sync');
     this.updateSettings(obj);
 
     ipcRenderer.on('update-settings', (e, settings: ISettings) => {
@@ -41,12 +41,12 @@ export class SettingsStore {
   public updateSettings(newSettings: ISettings) {
     this.object = { ...this.object, ...newSettings };
 
-    this.store.searchEngines = DEFAULT_SEARCH_ENGINES.concat(
+    /*TODO: this.store.searchEngines = DEFAULT_SEARCH_ENGINES.concat(
       newSettings.searchEngines,
-    );
+    );*/
 
     requestAnimationFrame(() => {
-      this.store.theme = this.object.darkTheme ? darkTheme : lightTheme;
+      this.store.theme = getTheme(this.object.theme);
     });
   }
 

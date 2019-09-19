@@ -34,7 +34,7 @@ export class ViewManager {
         this.create(details);
       },
     );
-    
+
     ipcMain.on(`view-select-${id}`, (e, id: number, force: boolean) => {
       const view = this.views.find(x => x.webContents.id === id);
       this.select(id);
@@ -112,7 +112,13 @@ export class ViewManager {
   }
 
   public get selected() {
-    return this.views.find(x => x.webContents.id === this.selectedId);
+    return this.views.find(r => r.webContents.id === this.selectedId);
+  }
+
+  public get settingsView() {
+    return this.views.find(r =>
+      r.webContents.getURL().startsWith('wexond://settings'),
+    );
   }
 
   public create(details: chrome.tabs.CreateProperties, isNext = false) {
@@ -137,18 +143,22 @@ export class ViewManager {
   }
 
   public select(id: number) {
+    const selected = this.selected;
     const view = this.views.find(x => x.webContents.id === id);
     this.selectedId = id;
 
     if (!view || view.isDestroyed()) {
       this.destroy(id);
-      this.window.setBrowserView(null);
+      this.window.removeBrowserView(view);
       return;
     }
 
     if (this.isHidden) return;
 
-    this.window.setBrowserView(view);
+    this.window.menuWindow.hide();
+
+    this.window.removeBrowserView(selected);
+    this.window.addBrowserView(view);
 
     this.fixBounds();
   }
@@ -187,9 +197,7 @@ export class ViewManager {
     this.views = this.views.filter(x => x.webContents.id !== id);
 
     if (view) {
-      if (this.window.getBrowserView() === view) {
-        this.window.setBrowserView(null);
-      }
+      this.window.removeBrowserView(view);
 
       view.destroy();
     }

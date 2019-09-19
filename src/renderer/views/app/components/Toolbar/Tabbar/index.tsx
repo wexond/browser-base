@@ -5,6 +5,9 @@ import { AddTab, StyledTabbar, TabsContainer } from './style';
 import { Tabs } from '../Tabs';
 import store from '../../../store';
 import { icons } from '~/renderer/constants';
+import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
+
+const getContainer = () => store.tabs.containerRef.current;
 
 const onMouseEnter = () => (store.tabs.scrollbarVisible = true);
 
@@ -25,10 +28,15 @@ export const Tabbar = observer(() => {
         <Tabs />
       </TabsContainer>
       <AddTab
-        disabled={!store.tabbarVisible}
         icon={icons.add}
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
+      />
+      <HorizontalScrollbar
+        ref={store.tabs.scrollbarRef}
+        enabled={store.tabs.scrollable}
+        visible={store.tabs.scrollbarVisible}
+        getContainer={getContainer}
       />
     </StyledTabbar>
   );

@@ -1,49 +1,29 @@
-import { observable, computed } from 'mobx';
+import { observable } from 'mobx';
 
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
 import { ipcRenderer, remote } from 'electron';
-import { OverlayStore } from './overlay';
-import { HistoryStore } from './history';
 import { FaviconsStore } from './favicons';
-import { SuggestionsStore } from './suggestions';
 import { ExtensionsStore } from './extensions';
 import { extname } from 'path';
-import { BookmarksStore } from './bookmarks';
-import { DownloadsStore } from './downloads';
-import { lightTheme } from '~/renderer/constants/themes';
-import { WeatherStore } from './weather';
 import { SettingsStore } from './settings';
-import { AddBookmarkStore } from './add-bookmark';
 import { extensionsRenderer } from 'electron-extensions';
-import { AutoFillStore } from './autofill';
 import { getCurrentWindow } from '../utils';
-import { EditAddressStore } from './edit-address';
 import { StartupTabsStore } from './startup-tabs';
-import { ISearchEngine } from '~/interfaces';
-import { DEFAULT_SEARCH_ENGINES } from '~/constants';
+import { getTheme } from '~/utils/themes';
 
 export class Store {
-  public history = new HistoryStore();
-  public bookmarks = new BookmarksStore();
   public settings = new SettingsStore(this);
-  public suggestions = new SuggestionsStore();
   public favicons = new FaviconsStore();
   public addTab = new AddTabStore();
   public tabGroups = new TabGroupsStore();
   public tabs = new TabsStore();
-  public overlay = new OverlayStore();
   public extensions = new ExtensionsStore();
-  public downloads = new DownloadsStore();
-  public weather = new WeatherStore();
-  public addBookmark = new AddBookmarkStore();
-  public autoFill = new AutoFillStore();
-  public editAddress = new EditAddressStore();
   public startupTabs = new StartupTabsStore();
 
   @observable
-  public theme = lightTheme;
+  public theme = getTheme('wexond-light');
 
   @observable
   public isAlwaysOnTop = false;
@@ -53,9 +33,6 @@ export class Store {
 
   @observable
   public isHTMLFullscreen = false;
-
-  @observable
-  public searchEngines: ISearchEngine[] = DEFAULT_SEARCH_ENGINES;
 
   @observable
   public updateInfo = {
@@ -68,19 +45,6 @@ export class Store {
     canGoBack: false,
     canGoForward: false,
   };
-
-  @computed
-  public get tabbarVisible() {
-    return (
-      this.tabGroups.currentGroup.tabs.length > 0 &&
-      this.overlay.currentContent === 'default'
-    );
-  }
-
-  @computed
-  public get searchEngine() {
-    return this.searchEngines[this.settings.object.searchEngine];
-  }
 
   public canToggleMenu = false;
 
@@ -136,12 +100,6 @@ export class Store {
       },
     );
 
-    ipcRenderer.on('toggle-overlay', () => {
-      if (!this.overlay.isNewTab) {
-        this.overlay.visible = !this.overlay.visible;
-      }
-    });
-
     ipcRenderer.on('find', () => {
       const tab = this.tabs.selectedTab;
       if (tab) {
@@ -151,16 +109,14 @@ export class Store {
 
     ipcRenderer.send('update-check');
 
-    requestAnimationFrame(() => {
-      if (remote.process.argv.length > 1 && remote.process.env.ENV !== 'dev') {
-        const path = remote.process.argv[1];
-        const ext = extname(path);
+    if (remote.process.argv.length > 1 && remote.process.env.ENV !== 'dev') {
+      const path = remote.process.argv[1];
+      const ext = extname(path);
 
-        if (ext === '.html') {
-          this.tabs.addTab({ url: `file:///${path}`, active: true });
-        }
+      if (ext === '.html') {
+        this.tabs.addTab({ url: `file:///${path}`, active: true });
       }
-    });
+    }
   }
 }
 

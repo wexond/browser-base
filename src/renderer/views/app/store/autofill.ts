@@ -25,7 +25,7 @@ export class AutoFillStore {
   @observable
   public selectedItem: IFormFillData;
 
-  constructor() {
+  public constructor() {
     this.load();
 
     ipcRenderer.on('credentials-insert', (e, data) => {
@@ -38,7 +38,7 @@ export class AutoFillStore {
 
       item.fields = {
         username,
-        passLength
+        passLength,
       };
     });
   }

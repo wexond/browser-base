@@ -26,7 +26,7 @@ export const Icon = styled.div`
   }) => css`
     ${centerIcon(size)};
     opacity: ${disabled ? 0.25 : opacity};
-    filter: ${autoInvert && theme['toolbar.icons.invert']
+    filter: ${autoInvert && theme['toolbar.lightForeground']
       ? 'invert(100%)'
       : 'none'};
   `};
@@ -59,7 +59,7 @@ export const Circle = styled.div`
 
   ${({ theme }: { theme: ITheme }) => css`
     &:hover {
-      background-color: ${theme['toolbar.icons.invert']
+      background-color: ${theme['toolbar.lightForeground']
         ? 'rgba(255, 255, 255, 0.08)'
         : 'rgba(0, 0, 0, 0.06)'};
     }
