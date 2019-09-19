@@ -1,10 +1,10 @@
 import { observable, computed } from 'mobx';
 import { DEFAULT_SETTINGS, DEFAULT_SEARCH_ENGINES } from '~/constants';
 import { ISettings, ITheme, ISearchEngine } from '~/interfaces';
-import { lightTheme } from '~/renderer/constants';
 import { AutoFillStore } from './autofill';
 import { StartupTabsStore } from './startup-tabs';
 import { makeId } from '~/utils/string';
+import { getTheme } from '~/utils/themes';
 
 export type SettingsSection =
   | 'appearance'
@@ -32,7 +32,7 @@ export class Store {
   public settings: ISettings = DEFAULT_SETTINGS;
 
   @observable
-  public theme: ITheme = lightTheme;
+  public theme: ITheme = getTheme('wexond-light');
 
   @observable
   public searchEngines: ISearchEngine[] = DEFAULT_SEARCH_ENGINES;
@@ -56,6 +56,8 @@ export class Store {
         this.searchEngines = DEFAULT_SEARCH_ENGINES.concat(
           data.result.searchEngines,
         );
+
+        this.theme = getTheme(this.settings.theme);
       }
     });
 

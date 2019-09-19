@@ -1,6 +1,7 @@
 import { css } from 'styled-components';
 
 import { body2 } from '~/renderer/mixins';
+import { ITheme } from '~/interfaces';
 
 export const Style = css`
   body {
@@ -11,8 +12,11 @@ export const Style = css`
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background-color: #fff;
     ${body2()}
+    ${({ theme }: { theme?: ITheme }) => css`
+      background-color: ${theme['pages.backgroundColor']};
+      color: ${theme['pages.textColor']};
+    `};
   }
 
   * {

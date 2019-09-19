@@ -1,12 +1,18 @@
 import styled, { css } from 'styled-components';
 import { centerIcon } from '~/renderer/mixins';
 import { icons, transparency } from '~/renderer/constants';
+import { ITheme } from '~/interfaces';
 
 export const StyledSection = styled.div`
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.04);
   border-radius: 4px;
   margin-top: 12px;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-color: ${theme['pages.lightForeground']
+      ? 'rgba(255, 255, 255, 0.04)'
+      : 'rgba(0, 0, 0, 0.04)'};
+  `};
 `;
 
 export const Header = styled.div`
@@ -24,8 +30,9 @@ export const Icon = styled.div`
   margin-left: 16px;
   ${centerIcon('contain')};
 
-  ${({ icon }: { icon: string }) => css`
+  ${({ icon, theme }: { icon: string; theme?: ITheme }) => css`
     background-image: url(${icon});
+    filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};
   `};
 `;
 
@@ -43,8 +50,9 @@ export const DropIcon = styled.div`
   margin-right: 16px;
   ${centerIcon('contain')};
 
-  ${({ expanded }: { expanded: boolean }) => css`
+  ${({ expanded, theme }: { expanded: boolean; theme?: ITheme }) => css`
     transform: ${expanded ? 'rotate(180deg)' : 'rotate(0deg)'};
+    filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};
   `}
 `;
 

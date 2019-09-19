@@ -10,7 +10,7 @@ export const Line = styled.div`
   margin-bottom: 4px;
 
   ${({ theme }: { theme?: ITheme }) => css`
-    background-color: ${theme['menu.separator.color']};
+    background-color: ${theme['dialog.separator.color']};
   `};
 `;
 
@@ -55,14 +55,14 @@ export const MenuItem = styled.div`
         ${centerIcon(20)};
         background-image: url(${icons.arrowRight});
         ${({ theme }: { theme?: ITheme }) => css`
-          filter: ${theme['menu.lightForeground'] ? 'invert(100%)' : 'none'};
+          filter: ${theme['dialog.lightForeground'] ? 'invert(100%)' : 'none'};
         `};
       }
     `};
 
   &:hover {
     ${({ theme }: { theme?: ITheme }) => css`
-      background-color: ${theme['menu.lightForeground']
+      background-color: ${theme['dialog.lightForeground']
         ? 'rgba(255, 255, 255, 0.06)'
         : 'rgba(0, 0, 0, 0.03)'};
     `};
@@ -82,8 +82,8 @@ export const MenuItems = styled.div`
   padding-bottom: 8px;
 
   ${({ theme }: { theme?: ITheme }) => css`
-    background-color: ${theme['menu.backgroundColor']};
-    color: ${theme['menu.textColor']};
+    background-color: ${theme['dialog.backgroundColor']};
+    color: ${theme['dialog.textColor']};
   `};
 `;
 
@@ -102,7 +102,7 @@ export const Icon = styled.div`
 
   ${({ icon, theme }: { icon?: string; theme?: ITheme }) => css`
     background-image: url(${icon});
-    filter: ${theme['menu.lightForeground'] ? 'invert(100%)' : 'none'};
+    filter: ${theme['dialog.lightForeground'] ? 'invert(100%)' : 'none'};
   `};
 `;
 

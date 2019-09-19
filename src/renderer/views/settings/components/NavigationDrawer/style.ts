@@ -5,13 +5,20 @@ import { ITheme } from '~/interfaces';
 import { centerIcon, noButtons } from '~/renderer/mixins';
 
 export const StyledNavigationDrawer = styled.div`
-  width: 323px;
+  width: 320px;
   height: 100%;
   position: fixed;
   left: 0;
   display: flex;
   flex-flow: column;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    border-right: 1px solid
+      ${theme['pages.lightForeground']
+        ? 'rgba(255, 255, 255, 0.12)'
+        : `rgba(0, 0, 0, 0.12)`};
+  `}
 `;
 
 export const MenuItems = styled.div`
@@ -47,12 +54,12 @@ export const Input = styled.input`
   font-size: 14px;
 
   ${({ theme }: { theme?: ITheme }) => css`
-    color: ${theme['overlay.foreground'] === 'light'
+    color: ${theme['pages.lightForeground']
       ? 'white'
       : `rgba(0, 0, 0, ${transparency.text.high})`};
 
     &::placeholder {
-      color: ${theme['overlay.foreground'] === 'light'
+      color: ${theme['pages.lightForeground']
         ? 'rgba(255, 255, 255, 0.54)'
         : `rgba(0, 0, 0, ${transparency.text.medium})`};
     }
@@ -69,7 +76,7 @@ export const Search = styled.div`
   position: relative;
 
   ${({ theme }: { theme?: ITheme }) => css`
-    background-color: ${theme['overlay.foreground'] === 'light'
+    background-color: ${theme['pages.lightForeground']
       ? 'rgba(255, 255, 255, 0.12)'
       : 'rgba(0, 0, 0, 0.04)'};
   `}
@@ -86,9 +93,7 @@ export const Search = styled.div`
     background-image: url(${icons.search});
 
     ${({ theme }: { theme?: ITheme }) => css`
-      filter: ${theme['overlay.foreground'] === 'light'
-        ? 'invert(100%)'
-        : 'none'};
+      filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};
     `}
   }
 `;

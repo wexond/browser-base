@@ -17,16 +17,14 @@ export const StyledNavigationDrawerItem = styled.div`
 
   ${({ theme, selected }: { theme?: ITheme; selected?: boolean }) => css`
     &:hover {
-      background-color: ${theme['overlay.foreground'] === 'light'
+      background-color: ${theme['pages.lightForeground']
         ? 'rgba(255, 255, 255, 0.06)'
         : 'rgba(0, 0, 0, 0.04)'};
     }
 
     &:before {
       opacity: ${selected ? 1 : 0};
-      background-color: ${theme['overlay.foreground'] === 'light'
-        ? 'white'
-        : 'black'};
+      background-color: ${theme['pages.lightForeground'] ? 'white' : 'black'};
     }
   `};
 
@@ -48,8 +46,6 @@ export const Icon = styled.div`
   ${centerIcon(20)};
 
   ${({ theme }: { theme?: ITheme }) => css`
-    filter: ${theme['overlay.foreground'] === 'light'
-      ? 'invert(100%)'
-      : 'none'};
+    filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};
   `};
 `;

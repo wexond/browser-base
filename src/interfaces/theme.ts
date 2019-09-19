@@ -17,11 +17,12 @@ export interface ITheme {
   'control.lightIcon': boolean;
   'switch.backgroundColor': string;
 
-  'menu.separator.color': string;
-  'menu.backgroundColor': string;
+  'dialog.separator.color': string;
+  'dialog.backgroundColor': string;
+  'dialog.textColor': string;
+  'dialog.lightForeground': boolean;
+
   'menu.header.background': string;
-  'menu.textColor': string;
-  'menu.lightForeground': boolean;
 
   'searchBox.input.textColor': string;
   'searchBox.input.lightForeground': boolean;
@@ -33,6 +34,12 @@ export interface ITheme {
   'searchBox.suggestions.textColor': string;
   'searchBox.suggestions.backgroundColor': string;
   'searchBox.suggestions.lightForeground': boolean;
+
+  'pages.backgroundColor': string;
+  'pages.lightForeground': boolean;
+  'pages.textColor': string;
+
+  'dropdown.backgroundColor': string;
 
   backgroundColor: string;
   accentColor: string;

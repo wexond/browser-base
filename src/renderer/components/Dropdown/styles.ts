@@ -45,6 +45,6 @@ export const DropIcon = styled.div`
 
   ${({ expanded, theme }: { expanded: boolean; theme?: ITheme }) => css`
     transform: ${expanded ? 'rotate(180deg)' : 'rotate(0deg)'};
-    filter: ${theme['control.icon'] === 'dark' ? 'invert(100%)' : 'unset'};
+    filter: ${theme['control.lightIcon'] ? 'invert(100%)' : 'unset'};
   `}
 `;

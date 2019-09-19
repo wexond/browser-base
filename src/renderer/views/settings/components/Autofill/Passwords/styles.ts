@@ -17,7 +17,7 @@ export const Label = styled.div`
 `;
 
 export const HeaderLabel = styled(Label)`
-  color: rgba(0, 0, 0, ${transparency.text.medium});
+  opacity: 0.54;
 `;
 
 export const Wrapper = styled.div`

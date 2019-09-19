@@ -16,7 +16,7 @@ export const ContextMenu = styled.div`
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
-    background-color: ${theme['overlay.dialog.backgroundColor']};
+    background-color: ${theme['dropdown.backgroundColor']};
     margin-top: ${visible ? 0 : -20}px;
   `}
 `;
@@ -33,36 +33,28 @@ export const ContextMenuItem = styled.div`
   padding: 12px 24px;
   font-weight: 400;
 
-  ${({
-  icon,
-  selected,
-  theme,
-  dense,
-  visible,
-}: ContextMenuItemProps) => css`
+  ${({ icon, selected, theme, dense, visible }: ContextMenuItemProps) => css`
     font-size: ${dense ? 13 : 14}px;
     padding: ${dense ? 8 : 12}px ${dense ? 12 : 24}px;
     display: ${visible === undefined || visible ? 'block' : 'none'};
     background-color: ${selected
-    ? theme['overlay.foreground'] === 'light'
-      ? 'rgba(255, 255, 255, 0.15)'
-      : 'rgba(0, 0, 0, 0.1)'
-    : 'none'};
+      ? theme['control.lightIcon']
+        ? 'rgba(255, 255, 255, 0.15)'
+        : 'rgba(0, 0, 0, 0.1)'
+      : 'none'};
 
     &:hover {
-      background-color: ${theme['overlay.foreground'] === 'light'
-    ? `rgba(255, 255, 255, ${selected ? 0.15 : 0.08})`
-    : `rgba(0, 0, 0, ${selected ? 0.1 : 0.06})`};
+      background-color: ${theme['control.lightIcon']
+        ? `rgba(255, 255, 255, ${selected ? 0.15 : 0.08})`
+        : `rgba(0, 0, 0, ${selected ? 0.1 : 0.06})`};
     }
 
     ${icon &&
-  `
+      `
       padding-left: ${24 + 16 + 8}px;
       &:before {
         content: '';
-        filter: ${
-  theme['overlay.foreground'] === 'light' ? 'invert(100%)' : 'none'
-  };
+        filter: ${theme['control.lightIcon'] ? 'invert(100%)' : 'none'};
         opacity: 0.54;
         ${centerIcon()};
         width: 16px;
