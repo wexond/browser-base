@@ -172,6 +172,26 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
             });
           },
         },
+        {
+          accelerator: 'F12',
+          label: 'Toggle developer tools (contents)',
+          visible: false,
+          click() {
+            setTimeout(() => {
+              windowsManager.currentWindow.viewManager.selected.webContents.openDevTools();
+            });
+          },
+        },
+        {
+          accelerator: 'Ctrl+Shift+I',
+          label: 'Toggle developer tools (contents)',
+          visible: false,
+          click() {
+            setTimeout(() => {
+              windowsManager.currentWindow.viewManager.selected.webContents.openDevTools();
+            });
+          },
+        },
       ],
     },
     { role: 'editMenu' },
