@@ -38,7 +38,7 @@ export class SearchWindow extends BrowserView {
 
     if (process.env.ENV === 'dev') {
       this.webContents.loadURL(`http://localhost:4444/search.html`);
-      this.webContents.openDevTools({ mode: 'detach' });
+      // this.webContents.openDevTools({ mode: 'detach' });
     } else {
       this.webContents.loadURL(
         join('file://', app.getAppPath(), `build/search.html`),

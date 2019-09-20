@@ -6,12 +6,8 @@ import { promises } from 'fs';
 
 import { getPath, makeId } from '~/utils';
 import { EventEmitter } from 'events';
-import { windowsManager } from '..';
-import {
-  engine,
-  runAdblockService,
-  stopAdblockService,
-} from '../services/adblock';
+import { runAdblockService, stopAdblockService } from '../services/adblock';
+import { WindowsManager } from '../windows-manager';
 
 export class Settings extends EventEmitter {
   public object = DEFAULT_SETTINGS;
@@ -20,8 +16,12 @@ export class Settings extends EventEmitter {
 
   private loaded = false;
 
-  public constructor() {
+  private windowsManager: WindowsManager;
+
+  public constructor(windowsManager: WindowsManager) {
     super();
+
+    this.windowsManager = windowsManager;
 
     ipcMain.on(
       'save-settings',
@@ -73,7 +73,10 @@ export class Settings extends EventEmitter {
   }
 
   private update = () => {
-    const contexts = [windowsManager.sessionsManager.extensions];
+    const contexts = [
+      this.windowsManager.sessionsManager.extensions,
+      this.windowsManager.sessionsManager.extensionsIncognito,
+    ];
 
     contexts.forEach(e => {
       if (e.extensions['wexond-darkreader']) {
@@ -95,8 +98,6 @@ export class Settings extends EventEmitter {
       }
     });
   };
-
-  private updateDarkReader = () => {};
 
   private async load() {
     try {

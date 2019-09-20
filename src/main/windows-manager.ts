@@ -17,7 +17,7 @@ export class WindowsManager {
 
   public sessionsManager: SessionsManager;
 
-  public settings = new Settings();
+  public settings = new Settings(this);
 
   public constructor() {
     const gotTheLock = app.requestSingleInstanceLock();

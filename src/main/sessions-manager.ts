@@ -4,7 +4,6 @@ import { getPath, makeId } from '~/utils';
 import { promises } from 'fs';
 import { resolve } from 'path';
 import { WindowsManager } from './windows-manager';
-import { runAdblockService } from './services';
 import storage from './services/storage';
 import { registerProtocol } from './models/protocol';
 
