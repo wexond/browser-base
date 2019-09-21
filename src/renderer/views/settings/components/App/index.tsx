@@ -35,17 +35,12 @@ const MenuItem = observer(
   ),
 );
 
-const onClick = () => {
-  // TODO (xnerhu): store.bookmarks.menuVisible = false;
-  store.autoFill.menuVisible = false;
-};
-
 export default observer(() => {
   const { selectedSection } = store;
 
   return (
     <ThemeProvider theme={store.theme}>
-      <Container onClick={onClick}>
+      <Container>
         <GlobalStyle />
         <NavigationDrawer title="Settings" search>
           <MenuItem icon={icons.palette} section="appearance">
