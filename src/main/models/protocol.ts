@@ -31,7 +31,11 @@ export const registerProtocol = (session: Electron.Session) => {
           });
         }
 
-        callback({ url: `${baseUrl}${parsed.path}` });
+        if (parsed.path.indexOf('electron.asar') !== -1) {
+          callback({ url: parsed.path, method: 'GET' });
+        } else {
+          callback({ url: `${baseUrl}${parsed.path}`, method: 'GET' });
+        }
       },
       error => {
         if (error) console.error(error);

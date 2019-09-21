@@ -6,6 +6,7 @@ import { IHistoryItem } from '~/interfaces';
 import { ListItem } from '~/renderer/components/ListItem';
 import { formatTime } from '../../utils';
 import store from '../../store';
+import { icons } from '~/renderer/constants';
 
 const onClick = (item: IHistoryItem) => (e: React.MouseEvent) => {
   if (!e.ctrlKey) return;
@@ -32,11 +33,22 @@ const onRemoveClick = (item: IHistoryItem) => () => {
 export default observer(({ data }: { data: IHistoryItem }) => {
   const selected = store.selectedItems.includes(data._id);
 
+  let { favicon } = data;
+  let customFavicon = false;
+
+  if (favicon == null || favicon.trim() === '') {
+    favicon = icons.page;
+  } else {
+    // TODO: favicon = store.favicons.get(data.favicon);
+    customFavicon = true;
+  }
+
   return (
     <ListItem key={data._id} onClick={onClick(data)} selected={selected}>
       <Favicon
         style={{
-          backgroundImage: `url(${store.favicons.get(data.favicon)})`,
+          backgroundImage: `url(${favicon})`,
+          opacity: customFavicon ? 1 : 0.54,
         }}
       />
       <Title onClick={onTitleClick(data.url)}>{data.title}</Title>
