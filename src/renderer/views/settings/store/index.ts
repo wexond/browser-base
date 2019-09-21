@@ -31,8 +31,10 @@ export class Store {
   @observable
   public settings: ISettings = DEFAULT_SETTINGS;
 
-  @observable
-  public theme: ITheme = getTheme('wexond-light');
+  @computed
+  public get theme() {
+    return getTheme(this.settings.theme);
+  }
 
   @observable
   public searchEngines: ISearchEngine[] = DEFAULT_SEARCH_ENGINES;
@@ -56,8 +58,6 @@ export class Store {
         this.searchEngines = DEFAULT_SEARCH_ENGINES.concat(
           data.result.searchEngines,
         );
-
-        this.theme = getTheme(this.settings.theme);
       }
     });
 

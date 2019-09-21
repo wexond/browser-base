@@ -44,8 +44,10 @@ export class Store {
   @observable
   public inputText = '';
 
-  @observable
-  public theme = getTheme('wexond-light');
+  @computed
+  public get theme() {
+    return getTheme(this.settings.theme);
+  }
 
   @observable
   public settings: ISettings = DEFAULT_SETTINGS;
@@ -133,10 +135,6 @@ export class Store {
 
   public updateSettings(newSettings: ISettings) {
     this.settings = { ...this.settings, ...newSettings };
-
-    requestAnimationFrame(() => {
-      this.theme = getTheme(this.settings.theme);
-    });
   }
 
   public async loadFavicons() {

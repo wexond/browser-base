@@ -131,8 +131,6 @@ if (window.location.protocol === 'wexond:') {
   });
 
   ipcRenderer.on('credentials-insert', (e, data) => {
-    console.log(data);
-
     window.postMessage(
       {
         type: 'credentials-insert',

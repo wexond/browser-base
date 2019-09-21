@@ -26,7 +26,12 @@ export class SearchWindow extends BrowserView {
 
     appWindow.addBrowserView(this);
 
-    this.hide();
+    this.setBounds({
+      height: HEIGHT,
+      width: WIDTH,
+      x: 0,
+      y: -HEIGHT + 1,
+    });
 
     ipcMain.on(`hide-${this.webContents.id}`, () => {
       this.hide();
@@ -56,12 +61,14 @@ export class SearchWindow extends BrowserView {
 
     this.height = HEIGHT + height;
 
-    this.setBounds({
-      height: this.height,
-      width: WIDTH,
-      x: Math.round(cBounds.width / 2 - WIDTH / 2),
-      y: 48,
-    } as any);
+    if (this.visible) {
+      this.setBounds({
+        height: this.height,
+        width: WIDTH,
+        x: Math.round(cBounds.width / 2 - WIDTH / 2),
+        y: 48,
+      } as any);
+    }
   }
 
   public show() {
