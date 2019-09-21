@@ -12,10 +12,12 @@ import { extensionsRenderer } from 'electron-extensions';
 import { getCurrentWindow } from '../utils';
 import { StartupTabsStore } from './startup-tabs';
 import { getTheme } from '~/utils/themes';
+import { HistoryStore } from './history';
 
 export class Store {
   public settings = new SettingsStore(this);
   public favicons = new FaviconsStore();
+  public history = new HistoryStore();
   public addTab = new AddTabStore();
   public tabGroups = new TabGroupsStore();
   public tabs = new TabsStore();

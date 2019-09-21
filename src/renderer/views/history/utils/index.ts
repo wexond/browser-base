@@ -1,4 +1,4 @@
-import { daysList, monthsList } from '~/renderer/constants';
+import { daysList, monthsList } from '~/renderer/constants/dictionary';
 
 export const compareDates = (first: Date, second: Date) => {
   return (

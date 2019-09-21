@@ -138,25 +138,23 @@ export class ITab {
 
     if (isWindow) return;
 
-    // TODO(sentialx): save history
-
     ipcRenderer.on(`view-url-updated-${this.id}`, async (e, url: string) => {
       if (url && url !== this.url && !store.isIncognito) {
-        /*this.lastHistoryId = await store.history.addItem({
+        this.lastHistoryId = await store.history.addItem({
           title: this.title,
           url,
           favicon: this.favicon,
           date: new Date().toString(),
-        });*/
+        });
       }
 
       this.url = url;
-      // this.updateData();
+      this.updateData();
     });
 
     ipcRenderer.on(`view-title-updated-${this.id}`, (e, title: string) => {
       this.title = title === 'about:blank' ? 'New tab' : title;
-      // this.updateData();
+      this.updateData();
 
       if (this.isSelected) {
         this.updateWindowTitle();
@@ -205,7 +203,7 @@ export class ITab {
           this.favicon = '';
           console.error(e);
         }
-        // this.updateData();
+        this.updateData();
       },
     );
 
@@ -253,7 +251,6 @@ export class ITab {
     remote.getCurrentWindow().setTitle(`${this.title} - Wexond`);
   }
 
-  /*
   @action
   public async updateData() {
     if (!store.isIncognito) {
@@ -290,7 +287,7 @@ export class ITab {
         );
       }
     }
-  }*/
+  }
 
   public get tabGroup() {
     return store.tabGroups.getGroupById(this.tabGroupId);

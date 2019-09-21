@@ -6,7 +6,7 @@ import { Appearance } from '../Appearance';
 import { AddressBar } from '../AddressBar';
 import { Privacy } from '../Privacy';
 import store from '../../store';
-import { NavigationDrawer } from '../NavigationDrawer';
+import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
 import { Sections, Container } from './style';
 import { Style } from '../../style';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
@@ -35,17 +35,12 @@ const MenuItem = observer(
   ),
 );
 
-const onClick = () => {
-  // TODO (xnerhu): store.bookmarks.menuVisible = false;
-  store.autoFill.menuVisible = false;
-};
-
 export default observer(() => {
   const { selectedSection } = store;
 
   return (
     <ThemeProvider theme={store.theme}>
-      <Container onClick={onClick}>
+      <Container>
         <GlobalStyle />
         <NavigationDrawer title="Settings" search>
           <MenuItem icon={icons.palette} section="appearance">
