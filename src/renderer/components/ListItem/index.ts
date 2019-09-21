@@ -6,7 +6,6 @@ export const ListItem = styled.div`
   align-items: center;
   padding: 0 24px;
   height: 48px;
-  border-radius: 8px;
   overflow: hidden;
   ${({ selected, theme }: { selected: boolean; theme?: ITheme }) => css`
     background-color: ${selected

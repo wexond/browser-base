@@ -35,9 +35,11 @@ export const Sections = styled.div`
 
 export const Container = styled.div`
   display: flex;
+  overflow: auto;
 `;
 
 export const Content = styled.div`
   width: calc(100% - 64px);
   max-width: 800px;
+  height: 100vh;
 `;

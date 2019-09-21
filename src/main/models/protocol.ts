@@ -31,7 +31,7 @@ export const registerProtocol = (session: Electron.Session) => {
           });
         }
 
-        if (parsed.path.indexOf('electron.asar') !== -1) {
+        if (parsed.path.indexOf('node_modules') !== -1) {
           callback({ url: parsed.path, method: 'GET' });
         } else {
           callback({ url: `${baseUrl}${parsed.path}`, method: 'GET' });

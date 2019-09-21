@@ -9,7 +9,7 @@ import store from '../../store';
 import { icons } from '~/renderer/constants';
 
 const onClick = (item: IHistoryItem) => (e: React.MouseEvent) => {
-  if (!e.ctrlKey) return;
+  if (!e.ctrlKey && !e.metaKey) return;
 
   const index = store.selectedItems.indexOf(item._id);
 

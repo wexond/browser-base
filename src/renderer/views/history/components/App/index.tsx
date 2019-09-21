@@ -75,8 +75,8 @@ export default observer(() => {
         <HistorySections />
         <SelectionDialog
           theme={store.theme}
-          visible={length > 0}
-          amount={length}
+          visible={store.selectedItems.length > 0}
+          amount={store.selectedItems.length}
           onDeleteClick={onDeleteClick}
           onCancelClick={onCancelClick}
         />
