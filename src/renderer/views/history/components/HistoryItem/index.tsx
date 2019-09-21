@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Favicon, Remove, Title, Time, Site } from './style';
 import { IHistoryItem } from '~/interfaces';
 import { ListItem } from '~/renderer/components/ListItem';
-import { formatTime } from '~/renderer/views/app/utils';
+import { formatTime } from '../../utils';
 import store from '../../store';
 
 const onClick = (item: IHistoryItem) => (e: React.MouseEvent) => {

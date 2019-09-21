@@ -6,7 +6,7 @@ import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
 import { Container, Sections, Content } from './style';
 import { Style } from '../../style';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { icons } from '~/renderer/constants';
+import { icons } from '~/renderer/constants/icons';
 import { SelectionDialog } from '~/renderer/components/SelectionDialog';
 import { HistorySection } from '../HistorySection';
 
@@ -74,6 +74,7 @@ export default observer(() => {
         </NavigationDrawer>
         <HistorySections />
         <SelectionDialog
+          theme={store.theme}
           visible={length > 0}
           amount={length}
           onDeleteClick={onDeleteClick}

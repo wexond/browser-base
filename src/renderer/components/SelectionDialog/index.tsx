@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 
 import { StyledSmallDialog, Title } from './style';
 import { Button } from '~/renderer/components/Button';
-import store from '~/renderer/views/app/store';
+import { ITheme } from '~/interfaces';
 
 type ClickEvent = (e: React.MouseEvent<HTMLDivElement>) => void;
 
@@ -13,11 +13,13 @@ export const SelectionDialog = observer(
     visible,
     onDeleteClick,
     onCancelClick,
+    theme,
   }: {
     amount: number;
     visible: boolean;
     onDeleteClick: ClickEvent;
     onCancelClick: ClickEvent;
+    theme?: ITheme;
   }) => {
     return (
       <StyledSmallDialog visible={visible}>
@@ -27,11 +29,11 @@ export const SelectionDialog = observer(
         </Button>
         <Button
           background={
-            store.theme['dialog.lightForeground']
+            theme['dialog.lightForeground']
               ? 'rgba(255, 255, 255, 0.08)'
               : 'rgba(0, 0, 0, 0.08)'
           }
-          foreground={store.theme['dialog.lightForeground'] ? 'white' : 'black'}
+          foreground={theme['dialog.lightForeground'] ? 'white' : 'black'}
           style={{ marginLeft: 8 }}
           onClick={onCancelClick}
         >

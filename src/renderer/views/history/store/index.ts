@@ -4,7 +4,7 @@ import { ISettings, ITheme, IHistoryItem, IHistorySection } from '~/interfaces';
 import { makeId } from '~/utils/string';
 import { getTheme } from '~/utils/themes';
 import { PreloadDatabase } from '~/preloads/models/database';
-import { compareDates, getSectionLabel } from '../../app/utils/history';
+import { getSectionLabel, compareDates } from '../utils';
 
 export type QuickRange =
   | 'all'

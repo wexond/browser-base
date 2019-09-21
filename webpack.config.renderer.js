@@ -91,6 +91,6 @@ applyEntries('app', appConfig, [
   'search',
 ]);
 
-applyEntries('web', webConfig, ['settings']);
+applyEntries('web', webConfig, ['settings', 'history']);
 
 module.exports = [appConfig, webConfig];
