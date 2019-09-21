@@ -49,6 +49,10 @@ export default observer(({ data }: { data: IHistoryItem }) => {
         style={{
           backgroundImage: `url(${favicon})`,
           opacity: customFavicon ? 1 : 0.54,
+          filter:
+            !customFavicon && store.theme['pages.lightForeground']
+              ? 'invert(100%)'
+              : 'none',
         }}
       />
       <Title onClick={onTitleClick(data.url)}>{data.title}</Title>
