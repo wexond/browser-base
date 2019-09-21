@@ -39,7 +39,7 @@ export default observer(({ data }: { data: IHistoryItem }) => {
   if (favicon == null || favicon.trim() === '') {
     favicon = icons.page;
   } else {
-    // TODO: favicon = store.favicons.get(data.favicon);
+    favicon = store.favicons.get(data.favicon);
     customFavicon = true;
   }
 

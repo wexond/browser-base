@@ -1,6 +1,12 @@
 import { observable, computed, action } from 'mobx';
 import { DEFAULT_SETTINGS } from '~/constants';
-import { ISettings, ITheme, IHistoryItem, IHistorySection } from '~/interfaces';
+import {
+  ISettings,
+  ITheme,
+  IHistoryItem,
+  IHistorySection,
+  IFavicon,
+} from '~/interfaces';
 import { makeId } from '~/utils/string';
 import { getTheme } from '~/utils/themes';
 import { PreloadDatabase } from '~/preloads/models/database';
@@ -36,7 +42,11 @@ export class Store {
   @observable
   public selectedItems: string[] = [];
 
+  @observable
+  public favicons: Map<string, string> = new Map();
+
   public db = new PreloadDatabase<IHistoryItem>('history');
+  public faviconsDb = new PreloadDatabase<IFavicon>('favicons');
 
   public constructor() {
     const id = makeId(32);
@@ -57,6 +67,7 @@ export class Store {
     );
 
     this.load();
+    this.loadFavicons();
   }
 
   public resetLoadedItems(): void {
@@ -75,6 +86,16 @@ export class Store {
     );
 
     this.items = items;
+  }
+
+  public async loadFavicons() {
+    (await this.faviconsDb.get({})).forEach(favicon => {
+      const { data } = favicon;
+
+      if (this.favicons.get(favicon.url) == null) {
+        this.favicons.set(favicon.url, data);
+      }
+    });
   }
 
   public async addItem(item: IHistoryItem) {
