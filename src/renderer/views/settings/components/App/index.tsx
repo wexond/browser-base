@@ -6,7 +6,7 @@ import { Appearance } from '../Appearance';
 import { AddressBar } from '../AddressBar';
 import { Privacy } from '../Privacy';
 import store from '../../store';
-import { NavigationDrawer } from '../NavigationDrawer';
+import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
 import { Sections, Container } from './style';
 import { Style } from '../../style';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';

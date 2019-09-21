@@ -1,43 +1,56 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
-import store from '../../store';
-import { NavigationDrawer } from '../NavigationDrawer';
-import { Container } from './style';
+import store, { QuickRange } from '../../store';
+import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
+import { Container, Sections, Content } from './style';
 import { Style } from '../../style';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { icons } from '~/renderer/constants';
 import { SelectionDialog } from '~/renderer/components/SelectionDialog';
+import { HistorySection } from '../HistorySection';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
 const RangeItem = observer(
   ({ range, children }: { range: QuickRange; children: any }) => (
     <NavigationDrawer.Item
-      onClick={() => (store.history.selectedRange = range)}
-      selected={store.history.selectedRange === range}
+      onClick={() => (store.selectedRange = range)}
+      selected={store.selectedRange === range}
     >
       {children}
     </NavigationDrawer.Item>
   ),
 );
 
+const HistorySections = observer(() => {
+  return (
+    <Sections>
+      <Content>
+        {store.sections.map(data => (
+          <HistorySection data={data} key={data.date.getTime()} />
+        ))}
+      </Content>
+    </Sections>
+  );
+});
+
 const onDeleteClick = (e: React.MouseEvent) => {
   e.stopPropagation();
-  store.history.deleteSelected();
+  store.deleteSelected();
 };
 
 const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  store.history.search(e.currentTarget.value);
+  store.search(e.currentTarget.value);
 };
 
 const onCancelClick = (e: React.MouseEvent) => {
   e.stopPropagation();
-  store.history.selectedItems = [];
+  store.selectedItems = [];
 };
 
 const onClearClick = () => {
-  store.history.clear();
+  store.clear();
 
   // TODO: ipcRenderer.send('clear-browsing-data');
 };
