@@ -139,21 +139,12 @@ export class ITab {
     if (isWindow) return;
 
     ipcRenderer.on(`view-url-updated-${this.id}`, async (e, url: string) => {
-      if (url && url !== this.url && !store.isIncognito) {
-        this.lastHistoryId = await store.history.addItem({
-          title: this.title,
-          url,
-          favicon: this.favicon,
-          date: new Date().toString(),
-        });
-      }
-
       this.url = url;
       this.updateData();
     });
 
     ipcRenderer.on(`view-title-updated-${this.id}`, (e, title: string) => {
-      this.title = title === 'about:blank' ? 'New tab' : title;
+      this.title = title;
       this.updateData();
 
       if (this.isSelected) {
@@ -163,9 +154,24 @@ export class ITab {
 
     ipcRenderer.on(
       `load-commit-${this.id}`,
-      (e, event, url: string, isInPlace: boolean, isMainFrame: boolean) => {
+      async (
+        e,
+        event,
+        url: string,
+        isInPlace: boolean,
+        isMainFrame: boolean,
+      ) => {
         if (isMainFrame) {
           this.blockedAds = 0;
+
+          if (url !== this.url && !store.isIncognito) {
+            this.lastHistoryId = await store.history.addItem({
+              title: this.title,
+              url,
+              favicon: '',
+              date: new Date().toString(),
+            });
+          }
         }
       },
     );
