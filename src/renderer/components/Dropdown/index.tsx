@@ -46,7 +46,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (this.props.defaultValue !== prevProps) {
+    if (this.props.defaultValue !== prevProps.defaultValue) {
       this.setValue(this.props.defaultValue, false);
     }
   }

@@ -23,7 +23,7 @@ const SuggestionsToggle = () => {
 };
 
 const onSearchEngineChange = (value: string) => {
-  const { searchEngines } = store.settings;
+  const { searchEngines } = store;
   store.settings.searchEngine = searchEngines.indexOf(
     searchEngines.find(x => x.name === value),
   );

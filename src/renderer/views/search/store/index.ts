@@ -30,9 +30,6 @@ export class Store {
   public visible = true;
 
   @observable
-  public searchEngines: ISearchEngine[] = DEFAULT_SEARCH_ENGINES;
-
-  @observable
   public history: IHistoryItem[] = [];
 
   @observable
@@ -44,13 +41,18 @@ export class Store {
   @observable
   public inputText = '';
 
+  @observable
+  public settings: ISettings = DEFAULT_SETTINGS;
+
   @computed
   public get theme() {
     return getTheme(this.settings.theme);
   }
 
-  @observable
-  public settings: ISettings = DEFAULT_SETTINGS;
+  @computed
+  public get searchEngines() {
+    return DEFAULT_SEARCH_ENGINES.concat(this.settings.searchEngines);
+  }
 
   @computed
   public get searchedTabs(): ISuggestion[] {
@@ -79,7 +81,7 @@ export class Store {
 
   @computed
   public get searchEngine() {
-    return this.searchEngines[0];
+    return this.searchEngines[this.settings.searchEngine];
   }
 
   public canSuggest = false;
