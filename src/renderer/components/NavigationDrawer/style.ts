@@ -5,9 +5,8 @@ import { ITheme } from '~/interfaces';
 import { centerIcon, noButtons } from '~/renderer/mixins';
 
 export const StyledNavigationDrawer = styled.div`
-  width: 320px;
+  min-width: 320px;
   height: 100%;
-  position: fixed;
   left: 0;
   display: flex;
   flex-flow: column;

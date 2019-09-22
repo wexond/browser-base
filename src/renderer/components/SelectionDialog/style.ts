@@ -7,8 +7,7 @@ export const StyledSmallDialog = styled.div`
   height: 68px;
   position: absolute;
   top: 16px;
-  right: 0;
-  left: 870px;
+  right: 16px;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -17,11 +16,7 @@ export const StyledSmallDialog = styled.div`
   box-shadow: ${shadows(8)};
   will-change: opacity;
   transition: 0.15s opacity;
-
-  @media all and (max-width: 1243px) {
-    left: auto;
-    right: 74px;
-  }
+  z-index: 999;
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};

@@ -23,30 +23,35 @@ const RangeItem = observer(
   ),
 );
 
-const HistorySections = observer(() => {
-  return (
-    <Sections>
-      <Content>
-        {store.sections.map(data => (
-          <HistorySection data={data} key={data.date.getTime()} />
-        ))}
-      </Content>
-    </Sections>
-  );
-});
+const onCancelClick = (e: React.MouseEvent) => {
+  e.stopPropagation();
+  store.selectedItems = [];
+};
 
 const onDeleteClick = (e: React.MouseEvent) => {
   e.stopPropagation();
   store.deleteSelected();
 };
 
+const HistorySections = observer(() => {
+  return (
+    <Sections>
+      {store.sections.map(data => (
+        <HistorySection data={data} key={data.date.getTime()} />
+      ))}
+      <SelectionDialog
+        theme={store.theme}
+        visible={store.selectedItems.length > 0}
+        amount={store.selectedItems.length}
+        onDeleteClick={onDeleteClick}
+        onCancelClick={onCancelClick}
+      />
+    </Sections>
+  );
+});
+
 const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
   store.search(e.currentTarget.value);
-};
-
-const onCancelClick = (e: React.MouseEvent) => {
-  e.stopPropagation();
-  store.selectedItems = [];
 };
 
 const onClearClick = () => {
@@ -72,14 +77,9 @@ export default observer(() => {
             Clear browsing data
           </NavigationDrawer.Item>
         </NavigationDrawer>
-        <HistorySections />
-        <SelectionDialog
-          theme={store.theme}
-          visible={store.selectedItems.length > 0}
-          amount={store.selectedItems.length}
-          onDeleteClick={onDeleteClick}
-          onCancelClick={onCancelClick}
-        />
+        <Content>
+          <HistorySections />
+        </Content>
       </Container>
     </ThemeProvider>
   );

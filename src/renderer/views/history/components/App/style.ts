@@ -26,20 +26,25 @@ export const Control = styled.div`
 `;
 
 export const Sections = styled.div`
-  margin-left: ${323 + 56}px;
-  width: calc(100% - 300px);
+  position: relative;
   display: flex;
   flex-flow: column;
   flex: 1;
+  margin-left: 64px;
+  margin-right: 64px;
+  max-width: 1024px;
+  margin-bottom: 32px;
 `;
 
 export const Container = styled.div`
   display: flex;
   overflow: auto;
+  height: 100vh;
+  overflow: hidden;
 `;
 
 export const Content = styled.div`
-  width: calc(100% - 64px);
-  max-width: 800px;
   height: 100vh;
+  flex: 1;
+  overflow: auto;
 `;
