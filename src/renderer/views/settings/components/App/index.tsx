@@ -7,12 +7,12 @@ import { AddressBar } from '../AddressBar';
 import { Privacy } from '../Privacy';
 import store from '../../store';
 import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
-import { Sections, Container } from './style';
 import { Style } from '../../style';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Autofill } from '../Autofill';
 import { icons } from '~/renderer/constants';
 import { OnStartup } from '../Startup';
+import { Content, LeftContent, Container } from '~/renderer/components/Pages';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 const MenuItem = observer(
@@ -62,13 +62,15 @@ export default observer(() => {
           {/* <MenuItem section="shortcuts">Keyboard shortcuts</MenuItem> */}
           {/* <MenuItem section="system">System</MenuItem> */}
         </NavigationDrawer>
-        <Sections style={{ paddingTop: 48 }}>
-          {selectedSection === 'appearance' && <Appearance />}
-          {selectedSection === 'autofill' && <Autofill />}
-          {selectedSection === 'address-bar' && <AddressBar />}
-          {selectedSection === 'startup' && <OnStartup />}
-          {selectedSection === 'privacy' && <Privacy />}
-        </Sections>
+        <Content>
+          <LeftContent>
+            {selectedSection === 'appearance' && <Appearance />}
+            {selectedSection === 'autofill' && <Autofill />}
+            {selectedSection === 'address-bar' && <AddressBar />}
+            {selectedSection === 'startup' && <OnStartup />}
+            {selectedSection === 'privacy' && <Privacy />}
+          </LeftContent>
+        </Content>
       </Container>
     </ThemeProvider>
   );

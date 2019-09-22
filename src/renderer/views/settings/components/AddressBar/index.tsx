@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Dropdown } from '~/renderer/components/Dropdown';
 import Switch from '~/renderer/components/Switch';
-import { Title, Row, Control, Header, Content } from '../App/style';
+import { Title, Row, Control, Header } from '../App/style';
 import store from '../../store';
 import { onSwitchChange } from '../../utils';
 
@@ -51,10 +51,10 @@ const SearchEngine = () => {
 
 export const AddressBar = () => {
   return (
-    <Content>
+    <>
       <Header>Address bar</Header>
       <SuggestionsToggle />
       <SearchEngine />
-    </Content>
+    </>
   );
 };

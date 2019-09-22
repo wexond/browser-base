@@ -8,7 +8,7 @@ export const EmptySection = styled.div`
   border-radius: 8px;
 
   &:first-child {
-    margin-top: 32px;
+    margin-top: 0;
   }
 
   ${({ theme }: { theme?: ITheme }) => css`

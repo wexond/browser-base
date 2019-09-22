@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Header, Content } from '../App/style';
+import { Header } from '../App/style';
 import { Button } from '~/renderer/components/Button';
 import { colors } from '~/renderer/constants';
 import store from '../../store';
@@ -11,7 +11,7 @@ const onClearBrowsingData = () => {
 
 export const Privacy = () => {
   return (
-    <Content>
+    <>
       <Header>Privacy</Header>
       <Button
         type="outlined"
@@ -20,6 +20,6 @@ export const Privacy = () => {
       >
         Clear browsing data
       </Button>
-    </Content>
+    </>
   );
 };

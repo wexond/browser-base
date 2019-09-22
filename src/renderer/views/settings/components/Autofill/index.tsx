@@ -9,7 +9,7 @@ import {
 import { icons } from '~/renderer/constants';
 import { Passwords } from './Passwords';
 import { Addresses } from './Addresses';
-import { Content, Header } from '../App/style';
+import { Header } from '../App/style';
 
 const onEditClick = () => {
   store.dialogContent = 'edit-address';
@@ -44,11 +44,11 @@ const Menu = observer(() => {
 
 export const Autofill = () => {
   return (
-    <Content>
+    <>
       <Header style={{ paddingBottom: 12 }}>Autofill</Header>
       <Passwords />
       <Addresses />
       <Menu />
-    </Content>
+    </>
   );
 };

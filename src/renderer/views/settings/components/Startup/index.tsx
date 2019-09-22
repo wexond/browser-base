@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
-import { Title, Row, Control, Header, Content } from '../App/style';
+import { Title, Row, Header } from '../App/style';
 import { Textfield } from '~/renderer/components/Textfield';
 import { RadioButton } from '~/renderer/components/RadioButton';
 import { Button } from '~/renderer/components/Button';
@@ -97,53 +97,51 @@ class StartupControl extends React.PureComponent<Props, State> {
     };
 
     return (
-      <Content>
+      <>
         <Header>On Startup</Header>
-        <Content>
-          <Row style={rowStyle} onClick={this.select('empty')}>
-            <RadioButton selected={this.state.value === 'empty'} />
-            <Title style={titleStyle}>Open the New Tab page</Title>
-          </Row>
-          <Row style={rowStyle} onClick={this.select('continue')}>
-            <RadioButton selected={this.state.value === 'continue'} />
-            <Title style={titleStyle}>Continue where you left off</Title>
-          </Row>
-          <Row style={rowStyle} onClick={this.select('urls')}>
-            <RadioButton selected={this.state.value === 'urls'} />
-            <Title style={titleStyle}>Open specific pages</Title>
-          </Row>
-          {this.state.value === 'urls' && (
-            <div style={{ marginLeft: 36 }}>
-              <div>
-                {this.state.customURLs.map((item, index) => (
-                  <Row key={index}>
-                    <Textfield
-                      width={350}
-                      placeholder={item.url}
-                      onChange={value => this.onUpdateItemURL(index, value)}
-                      icon={icons.close}
-                      onIconClick={target => this.onDeleteItemClick(index)}
-                      delay={500}
-                      style={{ marginBottom: 8 }}
-                    />
-                  </Row>
-                ))}
-              </div>
-
-              <Row>
-                <Button
-                  type="outlined"
-                  foreground={colors.blue['500']}
-                  background={colors.blue['500']}
-                  onClick={this.onAddNewPageClick}
-                >
-                  Add a new page
-                </Button>
-              </Row>
+        <Row style={rowStyle} onClick={this.select('empty')}>
+          <RadioButton selected={this.state.value === 'empty'} />
+          <Title style={titleStyle}>Open the New Tab page</Title>
+        </Row>
+        <Row style={rowStyle} onClick={this.select('continue')}>
+          <RadioButton selected={this.state.value === 'continue'} />
+          <Title style={titleStyle}>Continue where you left off</Title>
+        </Row>
+        <Row style={rowStyle} onClick={this.select('urls')}>
+          <RadioButton selected={this.state.value === 'urls'} />
+          <Title style={titleStyle}>Open specific pages</Title>
+        </Row>
+        {this.state.value === 'urls' && (
+          <div style={{ marginLeft: 36 }}>
+            <div>
+              {this.state.customURLs.map((item, index) => (
+                <Row key={index}>
+                  <Textfield
+                    width={350}
+                    placeholder={item.url}
+                    onChange={value => this.onUpdateItemURL(index, value)}
+                    icon={icons.close}
+                    onIconClick={target => this.onDeleteItemClick(index)}
+                    delay={500}
+                    style={{ marginBottom: 8 }}
+                  />
+                </Row>
+              ))}
             </div>
-          )}
-        </Content>
-      </Content>
+
+            <Row>
+              <Button
+                type="outlined"
+                foreground={colors.blue['500']}
+                background={colors.blue['500']}
+                onClick={this.onAddNewPageClick}
+              >
+                Add a new page
+              </Button>
+            </Row>
+          </div>
+        )}
+      </>
     );
   }
 }

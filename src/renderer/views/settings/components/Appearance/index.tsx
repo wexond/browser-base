@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Dropdown } from '~/renderer/components/Dropdown';
 import Switch from '~/renderer/components/Switch';
-import { Title, Row, Control, Header, Content } from '../App/style';
+import { Title, Row, Control, Header } from '../App/style';
 import store from '../../store';
 import { onSwitchChange } from '../../utils';
 import { observer } from 'mobx-react-lite';
@@ -62,11 +62,11 @@ const BookmarksBar = observer(() => {
 
 export const Appearance = observer(() => {
   return (
-    <Content>
+    <>
       <Header>Appearance</Header>
       <MenuAnimations />
       <BookmarksBar />
       <ThemeVariant />
-    </Content>
+    </>
   );
 });
