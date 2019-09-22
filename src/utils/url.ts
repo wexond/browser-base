@@ -41,4 +41,4 @@ export const getDomain = (url: string): string => {
 export const prefixHttp = (url: string): string => {
   url = url.trim();
   return url.includes('://') ? url : `http://${url}`;
-}
+};

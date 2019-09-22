@@ -4,19 +4,25 @@ import { ITheme } from '~/interfaces';
 
 export const StyledSmallDialog = styled.div`
   width: fit-content;
-  height: 68px;
-  position: absolute;
+  position: fixed;
   top: 16px;
-  right: 16px;
+  left: ${1024 + 320 + 64 - 16}px;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
   align-items: center;
-  padding: 0px 16px;
+  padding: 12px;
   box-shadow: ${shadows(8)};
   will-change: opacity;
+  transform: translateX(-100%);
   transition: 0.15s opacity;
   z-index: 999;
+
+  @media all and (max-width: ${1024 + 320 + 64 + 64 + 16}px) {
+    left: auto;
+    transform: translateX(0);
+    right: ${64 + 16 + 16}px;
+  }
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};

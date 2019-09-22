@@ -36,9 +36,6 @@ const onDeleteClick = (e: React.MouseEvent) => {
 const HistorySections = observer(() => {
   return (
     <LeftContent>
-      {store.sections.map(data => (
-        <HistorySection data={data} key={data.date.getTime()} />
-      ))}
       <SelectionDialog
         theme={store.theme}
         visible={store.selectedItems.length > 0}
@@ -46,6 +43,9 @@ const HistorySections = observer(() => {
         onDeleteClick={onDeleteClick}
         onCancelClick={onCancelClick}
       />
+      {store.sections.map(data => (
+        <HistorySection data={data} key={data.date.getTime()} />
+      ))}
     </LeftContent>
   );
 });
