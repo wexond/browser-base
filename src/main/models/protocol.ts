@@ -23,7 +23,7 @@ export const registerProtocol = (session: Electron.Session) => {
       (request, callback: any) => {
         const parsed = parse(request.url);
 
-        const baseUrl = 'http://localhost:4444/';
+        const baseUrl = 'http://localhost:4445/';
 
         if (parsed.path === '/') {
           return callback({

@@ -3,10 +3,10 @@ const { getConfig, applyEntries, getBaseConfig } = require('./webpack.config.bas
 const { join } = require('path');
 /* eslint-enable */
 
-const PORT = 4444;
+const PORT = 4445;
 
-const appConfig = getConfig(getBaseConfig('app'), {
-  target: 'electron-renderer',
+const webConfig = getConfig(getBaseConfig('web'), {
+  target: 'web',
 
   devServer: {
     contentBase: join(__dirname, 'build'),
@@ -15,17 +15,12 @@ const appConfig = getConfig(getBaseConfig('app'), {
     inline: true,
     disableHostCheck: true,
   },
+
+  output: {
+    libraryTarget: 'var',
+  },
 });
 
-applyEntries('app', appConfig, [
-  'app',
-  'permissions',
-  'auth',
-  'form-fill',
-  'credentials',
-  'find',
-  'menu',
-  'search',
-]);
+applyEntries('web', webConfig, ['settings', 'history']);
 
-module.exports = appConfig;
+module.exports = webConfig;
