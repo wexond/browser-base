@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-import { robotoMedium, robotoLight } from '~/renderer/mixins';
+import { robotoMedium, robotoLight, centerIcon } from '~/renderer/mixins';
+import { icons } from '~/renderer/constants';
 
 export const Title = styled.div`
   font-size: 14px;
@@ -23,4 +24,17 @@ export const Row = styled.div`
 
 export const Control = styled.div`
   margin-left: auto;
+`;
+
+export const MenuButton = styled.div`
+  ${centerIcon(20)};
+  width: 32px;
+  height: 32px;
+  background-image: url(${icons.menu});
+  margin-left: 12px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
 `;

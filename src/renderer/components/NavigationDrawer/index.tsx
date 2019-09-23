@@ -16,6 +16,7 @@ export const NavigationDrawer = ({
   search,
   onSearchInput,
   style,
+  dense,
 }: {
   children?: any;
   title?: string;
@@ -23,18 +24,21 @@ export const NavigationDrawer = ({
   onSearchInput?: (event: React.FormEvent<HTMLInputElement>) => void;
   onBackClick?: (e?: React.MouseEvent<HTMLDivElement>) => void;
   style?: any;
+  dense?: boolean;
 }) => {
   return (
-    <StyledNavigationDrawer>
-      <Header>
-        <Title>{title}</Title>
-      </Header>
+    <StyledNavigationDrawer style={style} dense={dense}>
+      {title !== '' && (
+        <Header>
+          <Title>{title}</Title>
+        </Header>
+      )}
       {search && (
         <Search>
           <Input placeholder="Search" onInput={onSearchInput} />
         </Search>
       )}
-      <MenuItems style={style}>{children}</MenuItems>
+      <MenuItems dense={dense}>{children}</MenuItems>
     </StyledNavigationDrawer>
   );
 };

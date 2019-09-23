@@ -5,18 +5,22 @@ import { ITheme } from '~/interfaces';
 import { centerIcon, noButtons } from '~/renderer/mixins';
 
 export const StyledNavigationDrawer = styled.div`
-  min-width: 320px;
   height: 100%;
   left: 0;
   display: flex;
   flex-flow: column;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
 
-  ${({ theme }: { theme?: ITheme }) => css`
+  ${({ theme, dense }: { theme?: ITheme; dense?: boolean }) => css`
     border-right: 1px solid
       ${theme['pages.lightForeground']
         ? 'rgba(255, 255, 255, 0.12)'
         : `rgba(0, 0, 0, 0.12)`};
+
+    padding: ${dense ? 0 : '0 32px'};
+
+    min-width: ${dense ? 56 : 320}px;
+    width: ${dense ? 56 : 320}px;
   `}
 `;
 
@@ -33,7 +37,6 @@ export const MenuItems = styled.div`
 export const Header = styled.div`
   display: flex;
   margin-top: 32px;
-  margin-left: 32px;
   align-items: center;
 `;
 
@@ -66,8 +69,6 @@ export const Input = styled.input`
 `;
 
 export const Search = styled.div`
-  margin-left: 32px;
-  margin-right: 32px;
   margin-top: 24px;
   height: 42px;
   border-radius: 30px;

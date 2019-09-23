@@ -6,8 +6,6 @@ import { transparency } from '~/renderer/constants';
 
 export const StyledNavigationDrawerItem = styled.div`
   padding: 4px 16px;
-  margin-left: 32px;
-  margin-right: 32px;
   display: flex;
   height: 40px;
   border-radius: 4px;
@@ -41,6 +39,7 @@ export const StyledNavigationDrawerItem = styled.div`
 export const Icon = styled.div`
   height: 24px;
   width: 24px;
+  min-width: 24px;
   opacity: ${transparency.icons.inactive};
   margin-right: 16px;
   ${centerIcon(20)};

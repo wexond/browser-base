@@ -13,6 +13,7 @@ import { Autofill } from '../Autofill';
 import { icons } from '~/renderer/constants';
 import { OnStartup } from '../Startup';
 import { Content, LeftContent, Container } from '~/renderer/components/Pages';
+import { MenuButton } from './style';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 const MenuItem = observer(
@@ -42,7 +43,33 @@ export default observer(() => {
     <ThemeProvider theme={store.theme}>
       <Container>
         <GlobalStyle />
-        <NavigationDrawer title="Settings" search>
+        <NavigationDrawer
+          style={{ backgroundColor: '#f0f0f0', borderRight: 'none' }}
+          dense
+          title=""
+        >
+          <MenuButton />
+          <NavigationDrawer.Item selected icon={icons.settings}>
+            Settings
+          </NavigationDrawer.Item>
+          <NavigationDrawer.Item icon={icons.history}>
+            History
+          </NavigationDrawer.Item>
+          <NavigationDrawer.Item icon={icons.bookmarks}>
+            Bookmarks
+          </NavigationDrawer.Item>
+          <NavigationDrawer.Item icon={icons.download}>
+            Downloads
+          </NavigationDrawer.Item>
+          <NavigationDrawer.Item icon={icons.extensions}>
+            Extensions
+          </NavigationDrawer.Item>
+        </NavigationDrawer>
+        <NavigationDrawer
+          style={{ backgroundColor: '#fafafa', borderRight: 'none' }}
+          title="Settings"
+          search
+        >
           <MenuItem icon={icons.palette} section="appearance">
             Appearance
           </MenuItem>

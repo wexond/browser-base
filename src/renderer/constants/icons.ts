@@ -41,6 +41,7 @@ export const icons = {
   arrowRight: require('~/renderer/resources/icons/arrow-right.svg'),
   print: require('~/renderer/resources/icons/print.svg'),
   tab: require('~/renderer/resources/icons/tab.svg'),
+  menu: require('~/renderer/resources/icons/menu.svg'),
   weather: {
     day: {
       clear: require('~/renderer/resources/icons/weather/day/clear.png'),
