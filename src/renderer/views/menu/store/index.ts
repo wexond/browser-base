@@ -12,7 +12,7 @@ export class Store {
   public settings: ISettings = DEFAULT_SETTINGS;
 
   @observable
-  public visible = true;
+  public visible = false;
 
   @observable
   public id = remote.getCurrentWebContents().id;
@@ -20,10 +20,6 @@ export class Store {
   public constructor() {
     ipcRenderer.on('visible', (e, flag) => {
       this.visible = flag;
-    });
-
-    setTimeout(() => {
-      this.visible = false;
     });
 
     window.addEventListener('blur', () => {

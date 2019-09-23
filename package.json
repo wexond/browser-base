@@ -79,7 +79,7 @@
     "react-windows-controls": "1.1.1",
     "styled-components": "^5.0.0-beta.8",
     "tldts-experimental": "5.4.1",
-    "ts-loader": "^6.1.0",
+    "ts-loader": "^6.1.2",
     "typescript": "3.6.3",
     "v8-compile-cache": "^2.1.0",
     "webpack": "4.40.2",

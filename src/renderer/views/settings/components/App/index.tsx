@@ -63,7 +63,7 @@ export default observer(() => {
           {/* <MenuItem section="system">System</MenuItem> */}
         </NavigationDrawer>
         <Content>
-          <LeftContent>
+          <LeftContent style={{ maxWidth: 800 }}>
             {selectedSection === 'appearance' && <Appearance />}
             {selectedSection === 'autofill' && <Autofill />}
             {selectedSection === 'address-bar' && <AddressBar />}

@@ -12,6 +12,15 @@ import { Container, Content, LeftContent } from '~/renderer/components/Pages';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
+const onScroll = (e: any) => {
+  const scrollPos = e.target.scrollTop;
+  const scrollMax = e.target.scrollHeight - e.target.clientHeight - 256;
+
+  if (scrollPos >= scrollMax) {
+    store.itemsLoaded += store.getDefaultLoaded();
+  }
+};
+
 const RangeItem = observer(
   ({ range, children }: { range: QuickRange; children: any }) => (
     <NavigationDrawer.Item
@@ -77,7 +86,7 @@ export default observer(() => {
             Clear browsing data
           </NavigationDrawer.Item>
         </NavigationDrawer>
-        <Content>
+        <Content onScroll={onScroll}>
           <HistorySections />
         </Content>
       </Container>
