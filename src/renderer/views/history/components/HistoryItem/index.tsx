@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
-import { Favicon, Remove, Title, Time, Site } from './style';
+import { Favicon, Remove, Title, Time, Site, TitleContainer } from './style';
 import { IHistoryItem } from '~/interfaces';
 import { ListItem } from '~/renderer/components/ListItem';
 import { formatTime } from '../../utils';
@@ -9,8 +9,6 @@ import store from '../../store';
 import { icons } from '~/renderer/constants';
 
 const onClick = (item: IHistoryItem) => (e: React.MouseEvent) => {
-  if (!e.ctrlKey && !e.metaKey) return;
-
   const index = store.selectedItems.indexOf(item._id);
 
   if (index === -1) {
@@ -55,7 +53,11 @@ export default observer(({ data }: { data: IHistoryItem }) => {
               : 'none',
         }}
       />
-      <Title onClick={onTitleClick(data.url)}>{data.title}</Title>
+      <TitleContainer>
+        <Title href={data.url} target="_blank">
+          {data.title}
+        </Title>
+      </TitleContainer>
       <Site>{data.url.split('/')[2]}</Site>
       <Time>{formatTime(new Date(data.date))}</Time>
       <Remove onClick={onRemoveClick(data)} />

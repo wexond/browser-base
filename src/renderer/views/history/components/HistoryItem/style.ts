@@ -26,16 +26,23 @@ export const Favicon = styled.div`
   margin-right: 24px;
 `;
 
-export const Title = styled.div`
-  flex: 2;
+export const Title = styled.a`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-right: 16px;
+  width: fit-content;
+  text-decoration: none;
+  color: inherit;
+
   &:hover {
     cursor: pointer;
     text-decoration: underline;
   }
+`;
+
+export const TitleContainer = styled.div`
+  flex: 2;
+  margin-right: 16px;
 `;
 
 export const Site = styled.div`
