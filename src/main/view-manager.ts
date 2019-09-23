@@ -155,10 +155,11 @@ export class ViewManager {
 
     if (this.isHidden) return;
 
-    this.window.menuWindow.hide();
-
     this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);
+
+    this.window.menuWindow.hide();
+    this.window.searchWindow.hide();
 
     this.fixBounds();
   }

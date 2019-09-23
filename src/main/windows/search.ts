@@ -107,6 +107,11 @@ export class SearchWindow extends BrowserView {
   public hide() {
     this.webContents.send('visible', false);
 
+    this.appWindow.removeBrowserView(this);
+    this.appWindow.addBrowserView(this);
+
+    clearTimeout(this.timeout);
+
     this.timeout = setTimeout(() => {
       this.setBounds({
         height: HEIGHT,
