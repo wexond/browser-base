@@ -18,7 +18,7 @@ const styledComponentsTransformer = createStyledComponentsTransformer({
 const config = {
   mode: dev ? 'development' : 'production',
 
-  devtool: dev ? 'eval-source-map' : 'source-map',
+  devtool: dev ? 'eval-source-map' : 'none',
 
   output: {
     path: resolve(__dirname, 'build'),
