@@ -54,11 +54,13 @@ function _appendCmdWithoutSubtitle(ffmpegCmd,videoStream,inputvideoCodec,audioSt
     return newCmd
 }
 
-function _appendCmdWithSubtitle(ffmpegCmd,videoStream,audioStream,subtitleStream){
+function _appendCmdWithSubtitle(ffmpegCmd,videoStream,audioStream,subtitleStream,isDeinterlacingEnabled){
 
 //     ffmpegCmd.complexFilter('[0:v][0:'+subtitleStream+']overlay[v]" -map "[v]"')
 
 //     .outputOptions('-preset ultrafast')
+    const yadif = isDeinterlacingEnabled ? '[0:v]yadif;' : ''
+    // TODO: how to add yadif to -filter_complex ? Currently, we don't find a way to do interlacing + subtitles
     return ffmpegCmd.outputOptions(['-filter_complex [0:v][0:'+subtitleStream+']overlay[v]','-map [v]','-map 0:'+audioStream+'?'])
     // ffmpegCmd.outputOptions(['-filter_complex "[0:v][0:'+subtitleStream+']overlay[v]" -map "[v]"',' -map 0:'+audioStream])
 }
@@ -72,22 +74,22 @@ function getVideoMpegtsPipeline(input, audioStream,videoStream, inputvideoCodec,
 
     if (subtitleStream && subtitleStream>-1){
         console.log('-------- _appendCmdWithSubtitle')
-        ffmpegCmd= _appendCmdWithSubtitle(ffmpegCmd,videoStream,audioStream,subtitleStream)
+        ffmpegCmd= _appendCmdWithSubtitle(ffmpegCmd,videoStream,audioStream,subtitleStream,isDeinterlacingEnabled || process.platform === 'darwin')
     } else {
         console.log('-------- _appendCmdWithoutSubtitle')
        ffmpegCmd = _appendCmdWithoutSubtitle(ffmpegCmd,videoStream,inputvideoCodec,audioStream)
     }
 
-    if(isDeinterlacingEnabled){
+    if (isDeinterlacingEnabled && !(subtitleStream && subtitleStream>-1)) {
         console.log(" force deinterlacing")
         ffmpegCmd.videoCodec( 'libx264')
         ffmpegCmd.videoFilters('yadif') 
     }
 
-    if (process.platform === 'darwin') {
+    if (process.platform === 'darwin' && !(subtitleStream && subtitleStream>-1)) {
          ffmpegCmd.videoFilters('yadif') //entrelacement
         console.log("is MAC, no need to flush packets")
-    }  else {
+    }  else if (process.platform !== 'darwin') {
         ffmpegCmd.outputOptions('-flush_packets -1')
     }
 
