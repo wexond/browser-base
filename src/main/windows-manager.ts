@@ -78,17 +78,19 @@ export class WindowsManager {
     await app.whenReady();
 
     checkFiles();
+    registerProtocol(session.defaultSession);
 
     storage.run();
 
-    registerProtocol(session.defaultSession);
-
     this.sessionsManager = new SessionsManager(this);
 
-    Menu.setApplicationMenu(getMainMenu(this));
     this.createWindow();
 
+    console.timeEnd('Main start');
+
     runAutoUpdaterService(this);
+
+    Menu.setApplicationMenu(getMainMenu(this));
 
     app.on('activate', () => {
       if (this.list.filter(x => x !== null).length === 0) {

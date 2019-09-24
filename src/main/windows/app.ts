@@ -20,11 +20,12 @@ export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
   public multrin = new Multrin(this);
 
-  public permissionWindow = new PermissionsWindow(this);
-  public authWindow = new AuthWindow(this);
-  public findWindow = new FindWindow(this);
-  public formFillWindow = new FormFillWindow(this);
-  public credentialsWindow = new CredentialsWindow(this);
+  // TODO:
+  // public permissionWindow = new PermissionsWindow(this);
+  // public authWindow = new AuthWindow(this);
+  // public findWindow = new FindWindow(this);
+  // public formFillWindow = new FormFillWindow(this);
+  // public credentialsWindow = new CredentialsWindow(this);
   public menuWindow = new MenuWindow(this);
   public searchWindow = new SearchWindow(this);
 
@@ -39,7 +40,7 @@ export class AppWindow extends BrowserWindow {
       minHeight: 450,
       width: 900,
       height: 700,
-      show: true,
+      show: false,
       titleBarStyle: 'hiddenInset',
       webPreferences: {
         plugins: true,
@@ -175,6 +176,10 @@ export class AppWindow extends BrowserWindow {
 
     this.on('focus', () => {
       windowsManager.currentWindow = this;
+    });
+
+    this.on('ready-to-show', () => {
+      this.show();
     });
   }
 }

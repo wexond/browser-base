@@ -16,6 +16,7 @@ import {
 } from './style';
 import { icons } from '~/renderer/constants';
 import store from '../../store';
+import { ipcRenderer } from 'electron';
 
 const changeContent = () => () => {
   // store.overlay.currentContent = content;
@@ -52,11 +53,11 @@ const onMultrinClick = () => {
 };
 
 const onNewWindowClick = () => {
-  // ipcRenderer.send('create-window');
+  ipcRenderer.send('create-window');
 };
 
 const onIncognitoClick = () => {
-  // ipcRenderer.send('create-window', true);
+  ipcRenderer.send('create-window', true);
 };
 
 export const QuickMenu = observer(() => {
@@ -116,12 +117,12 @@ export const QuickMenu = observer(() => {
             <MenuItemTitle>New tab</MenuItemTitle>
             <Shortcut>Ctrl+T</Shortcut>
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={onNewWindowClick}>
             <Icon icon={icons.window} />
             <MenuItemTitle>New window</MenuItemTitle>
             <Shortcut>Ctrl+N</Shortcut>
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={onIncognitoClick}>
             <Icon icon={icons.incognito} />
             <MenuItemTitle>New incognito window</MenuItemTitle>
             <Shortcut>Ctrl+Shift+N</Shortcut>

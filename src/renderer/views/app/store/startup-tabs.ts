@@ -17,7 +17,7 @@ export class StartupTabsStore {
 
   public async load() {
     if (this.isLoaded) return;
-    if (store === undefined || store.windowId > 1) return;
+    if (store === undefined) return;
     this.isLoaded = true;
     let tabsToLoad: IStartupTab[] = [];
     if (store.settings.object.startupBehavior.type === 'continue') {
