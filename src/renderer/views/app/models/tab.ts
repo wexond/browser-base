@@ -38,7 +38,7 @@ export class ITab {
   public title = 'New tab';
 
   @observable
-  public loading = false;
+  public loading = true;
 
   @observable
   public favicon = '';
