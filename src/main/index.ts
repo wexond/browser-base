@@ -26,6 +26,9 @@ process.on('uncaughtException', error => {
 
 app.on('window-all-closed', () => {
   if (platform() !== 'darwin') {
+    for (const w of windowsManager.list) {
+      w.viewManager.clear();
+    }
     app.quit();
   }
 });

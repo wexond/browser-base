@@ -23,7 +23,10 @@ export class View extends BrowserView {
         contextIsolation: true,
         partition: incognito ? 'view_incognito' : 'persist:view',
         plugins: true,
-        additionalArguments: [`--window-id=${window.id}`],
+        additionalArguments: [
+          `--window-id=${window.id}`,
+          `--blacklist=["wexond://"]`,
+        ],
         nativeWindowOpen: true,
         webSecurity: true,
         javascript: true,

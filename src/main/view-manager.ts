@@ -137,8 +137,8 @@ export class ViewManager {
 
   public clear() {
     this.window.setBrowserView(null);
-    for (const key in this.views) {
-      this.destroy(parseInt(key, 10));
+    for (const view of this.views) {
+      view.destroy();
     }
   }
 
@@ -199,7 +199,6 @@ export class ViewManager {
 
     if (view) {
       this.window.removeBrowserView(view);
-
       view.destroy();
     }
   }

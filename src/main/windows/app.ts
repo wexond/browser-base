@@ -28,7 +28,6 @@ export class AppWindow extends BrowserWindow {
   // public credentialsWindow = new CredentialsWindow(this);
   public menuWindow = new MenuWindow(this);
   public searchWindow = new SearchWindow(this);
-
   public incognito: boolean;
 
   private windowsManager: WindowsManager;
