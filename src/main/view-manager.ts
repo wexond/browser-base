@@ -9,10 +9,10 @@ export class ViewManager {
   public _fullscreen = false;
 
   public isHidden = false;
-
-  private window: AppWindow;
-
   public incognito: boolean;
+
+  private interval: any;
+  private window: AppWindow;
 
   public get fullscreen() {
     return this._fullscreen;
@@ -90,8 +90,10 @@ export class ViewManager {
       view.webContents.setAudioMuted(false);
     });
 
-    setInterval(() => {
+    this.interval = setInterval(() => {
       for (const view of this.views) {
+        if (view.isDestroyed()) return;
+
         const url = view.webContents.getURL();
 
         if (url !== view.url) {
@@ -136,6 +138,7 @@ export class ViewManager {
   }
 
   public clear() {
+    clearInterval(this.interval);
     this.window.setBrowserView(null);
     for (const view of this.views) {
       view.destroy();

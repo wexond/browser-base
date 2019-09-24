@@ -123,6 +123,11 @@ export class AppWindow extends BrowserWindow {
       windowState.maximized = this.isMaximized();
       windowState.fullscreen = this.isFullScreen();
       writeFileSync(windowDataPath, JSON.stringify(windowState));
+      this.menuWindow.destroy();
+      this.menuWindow = null;
+      this.searchWindow.destroy();
+      this.searchWindow = null;
+      this.viewManager.clear();
 
       if (
         incognito &&
