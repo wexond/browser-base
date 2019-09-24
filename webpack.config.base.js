@@ -10,7 +10,10 @@ const INCLUDE = resolve(__dirname, 'src');
 
 const dev = process.env.ENV === 'dev';
 
-const styledComponentsTransformer = createStyledComponentsTransformer({ minify: true, displayName: dev });
+const styledComponentsTransformer = createStyledComponentsTransformer({
+  minify: true,
+  displayName: dev,
+});
 
 const config = {
   mode: dev ? 'development' : 'production',
@@ -48,6 +51,17 @@ const config = {
 
         include: INCLUDE,
       },
+      {
+        test: /\.node$/,
+        loader: 'native-ext-loader',
+        options: {
+          rewritePath: resolve(__dirname, 'build'),
+        },
+      },
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' },
+      },
     ],
   },
 
@@ -63,17 +77,6 @@ const config = {
       '~': INCLUDE,
     },
   },
-
-  externals: [
-    'extract-file-icon',
-    'mouse-hooks',
-    'node-window-manager',
-    'node-vibrant',
-    'leveldown',
-    'electron-extensions',
-    'keytar',
-    '@cliqz/adblocker-electron',
-  ],
 };
 
 function getConfig(...cfg) {

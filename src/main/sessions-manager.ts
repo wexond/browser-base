@@ -4,15 +4,25 @@ import { getPath, makeId } from '~/utils';
 import { promises } from 'fs';
 import { resolve } from 'path';
 import { WindowsManager } from './windows-manager';
-import storage from './services/storage';
 import { registerProtocol } from './models/protocol';
+
+const extensibleSessionOptions = {
+  backgroundPreloadPath: resolve(__dirname, 'extensions-background-preload.js'),
+  contentPreloadPath: resolve(__dirname, 'extensions-content-preload.js'),
+};
 
 export class SessionsManager {
   public view = session.fromPartition('persist:view');
   public viewIncognito = session.fromPartition('view_incognito');
 
-  public extensions = new ExtensibleSession(this.view);
-  public extensionsIncognito = new ExtensibleSession(this.viewIncognito);
+  public extensions = new ExtensibleSession(
+    this.view,
+    extensibleSessionOptions,
+  );
+  public extensionsIncognito = new ExtensibleSession(
+    this.viewIncognito,
+    extensibleSessionOptions,
+  );
 
   public incognitoExtensionsLoaded = false;
 
@@ -93,8 +103,6 @@ export class SessionsManager {
       this.clearCache('normal');
       this.clearCache('incognito');
     });
-
-    storage.run();
   }
 
   public clearCache(session: 'normal' | 'incognito') {

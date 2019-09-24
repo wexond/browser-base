@@ -31,8 +31,6 @@ export class FaviconsStore {
   @observable
   public favicons: Map<string, string> = new Map();
 
-  public faviconsBuffers: Map<string, Buffer> = new Map();
-
   public constructor() {
     this.load();
   }

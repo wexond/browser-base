@@ -7,8 +7,9 @@ import { SessionsManager } from './sessions-manager';
 import { runAutoUpdaterService } from './services';
 import { checkFiles } from '~/utils/files';
 import { Settings } from './models/settings';
-import { isURL, prefixHttp } from '~/utils';
+import { isURL, prefixHttp, requestURL } from '~/utils';
 import { registerProtocol } from './models/protocol';
+import storage from './services/storage';
 
 export class WindowsManager {
   public list: AppWindow[] = [];
@@ -18,6 +19,8 @@ export class WindowsManager {
   public sessionsManager: SessionsManager;
 
   public settings = new Settings(this);
+
+  public favicons: Map<string, string> = new Map();
 
   public constructor() {
     const gotTheLock = app.requestSingleInstanceLock();
@@ -75,6 +78,8 @@ export class WindowsManager {
     await app.whenReady();
 
     checkFiles();
+
+    storage.run();
 
     registerProtocol(session.defaultSession);
 

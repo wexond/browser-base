@@ -1,6 +1,7 @@
 /* eslint-disable */
 const { getConfig, dev } = require('./webpack.config.base');
 const { spawn } = require('child_process');
+const CopyPlugin = require('copy-webpack-plugin');
 /* eslint-enable */
 
 let electronProcess;
@@ -14,7 +15,28 @@ const mainConfig = getConfig({
     main: './src/main',
   },
 
-  plugins: [],
+  plugins: [
+    new CopyPlugin([
+      {
+        from: 'node_modules/@cliqz/adblocker-electron/dist/cjs/preload.js',
+        to: 'preload.js',
+      },
+      {
+        from:
+          'node_modules/electron-extensions/build/background-preload.bundle.js',
+        to: 'extensions-background-preload.js',
+      },
+      {
+        from:
+          'node_modules/electron-extensions/build/content-preload.bundle.js',
+        to: 'extensions-content-preload.js',
+      },
+      {
+        from: 'node_modules/mouse-hooks/mouse.js',
+        to: 'mouse.js',
+      },
+    ]),
+  ],
 });
 
 const preloadConfig = getConfig({
