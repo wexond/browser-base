@@ -3,11 +3,14 @@ const { resolve, join } = require('path');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default;
 /* eslint-enable */
 
 const INCLUDE = resolve(__dirname, 'src');
 
 const dev = process.env.ENV === 'dev';
+
+const styledComponentsTransformer = createStyledComponentsTransformer({ minify: true, displayName: dev });
 
 const config = {
   mode: dev ? 'development' : 'production',
@@ -36,6 +39,9 @@ const config = {
             options: {
               experimentalWatchApi: true,
               transpileOnly: true,
+              getCustomTransformers: () => ({
+                before: [styledComponentsTransformer],
+              }),
             },
           },
         ],
