@@ -45,7 +45,7 @@ const onDeleteClick = (e: React.MouseEvent) => {
 
 const HistorySections = observer(() => {
   return (
-    <LeftContent>
+    <LeftContent style={{ margin: '32px 64px' }}>
       <SelectionDialog
         theme={store.theme}
         visible={store.selectedItems.length > 0}
