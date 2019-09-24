@@ -86,6 +86,7 @@ app.on('ready', async () => {
       // wexondWindow.moveTop()
       wexondWindow.webContents.send('open-tab', options)
     }
+    wexondWindow.webContents.focus()
   })
   ipcMain.on('close-browser', () => {
     if (wexondWindow !== null) {
