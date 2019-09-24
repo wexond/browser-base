@@ -22,7 +22,7 @@ export class Store {
   public tabGroups = new TabGroupsStore();
   public tabs = new TabsStore();
   public extensions = new ExtensionsStore();
-  public startupTabs = new StartupTabsStore();
+  public startupTabs = new StartupTabsStore(this);
 
   @observable
   public theme = getTheme('wexond-light');
@@ -110,15 +110,6 @@ export class Store {
     });
 
     ipcRenderer.send('update-check');
-
-    if (remote.process.argv.length > 1 && remote.process.env.ENV !== 'dev') {
-      const path = remote.process.argv[1];
-      const ext = extname(path);
-
-      if (ext === '.html') {
-        this.tabs.addTab({ url: `file:///${path}`, active: true });
-      }
-    }
   }
 }
 

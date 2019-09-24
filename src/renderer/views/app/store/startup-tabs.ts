@@ -1,11 +1,13 @@
 import { observable, action } from 'mobx';
 
-import store from '.';
+import { Store } from '.';
 import { ipcRenderer, remote } from 'electron';
 import { prefixHttp, isURL } from '~/utils';
 import { defaultTabOptions } from '~/constants/tabs';
 import { Database } from '~/models/database';
 import { IStartupTab } from '~/interfaces/startup-tab';
+import { extname } from 'path';
+import { existsSync } from 'fs';
 
 export class StartupTabsStore {
   public db = new Database<IStartupTab>('startupTabs');
@@ -15,14 +17,20 @@ export class StartupTabsStore {
   @observable
   public list: IStartupTab[] = [];
 
+  private store: Store;
+
+  public constructor(store: Store) {
+    this.store = store;
+    this.load();
+  }
+
   public async load() {
     if (this.isLoaded) return;
-    if (store === undefined) return;
     this.isLoaded = true;
     let tabsToLoad: IStartupTab[] = [];
-    if (store.settings.object.startupBehavior.type === 'continue') {
+    if (this.store.settings.object.startupBehavior.type === 'continue') {
       tabsToLoad = await this.db.get({});
-    } else if (store.settings.object.startupBehavior.type === 'urls') {
+    } else if (this.store.settings.object.startupBehavior.type === 'urls') {
       tabsToLoad = await this.db.get({});
       tabsToLoad = tabsToLoad.filter(x => x.isUserDefined || x.pinned);
       this.list = tabsToLoad.filter(x => x.isUserDefined);
@@ -67,12 +75,20 @@ export class StartupTabsStore {
 
     //load up command line args. If there are any, we don't need a new tab page.
 
-    if (args.length > 1 && isURL(args[args.length - 1])) {
-      this.addTab({
-        url: prefixHttp(args[args.length - 1]),
-        active: true,
-      });
-      needsNewTabPage = false;
+    if (args.length > 1) {
+      const path = remote.process.argv[1];
+      const ext = extname(path);
+
+      if (existsSync(path) && ext === '.html') {
+        this.addTab({ url: `file:///${path}`, active: true });
+        needsNewTabPage = false;
+      } else if (isURL(path)) {
+        this.addTab({
+          url: prefixHttp(path),
+          active: true,
+        });
+        needsNewTabPage = false;
+      }
     }
 
     if (needsNewTabPage) {
@@ -82,7 +98,7 @@ export class StartupTabsStore {
 
   @action
   public addTab(options = defaultTabOptions) {
-    ipcRenderer.send(`view-create-${store.windowId}`, options);
+    ipcRenderer.send(`view-create-${this.store.windowId}`, options);
   }
 
   public async addStartupTabItem(item: IStartupTab) {

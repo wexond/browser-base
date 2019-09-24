@@ -37,7 +37,7 @@ export class WindowsManager {
             const ext = extname(path);
 
             if (ext === '.html') {
-              this.currentWindow.webContents.send('api-tabs-create', {
+              this.currentWindow.viewManager.create({
                 url: `file:///${path}`,
                 active: true,
               });
