@@ -38,6 +38,8 @@ export interface ITheme {
   'pages.backgroundColor': string;
   'pages.lightForeground': boolean;
   'pages.textColor': string;
+  'pages.navigationDrawer1.backgroundColor': string;
+  'pages.navigationDrawer2.backgroundColor': string;
 
   'dropdown.backgroundColor': string;
 

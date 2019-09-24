@@ -9,18 +9,24 @@ export const StyledNavigationDrawer = styled.div`
   left: 0;
   display: flex;
   flex-flow: column;
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  transition: 0.2s width;
 
-  ${({ theme, dense }: { theme?: ITheme; dense?: boolean }) => css`
-    border-right: 1px solid
-      ${theme['pages.lightForeground']
-        ? 'rgba(255, 255, 255, 0.12)'
-        : `rgba(0, 0, 0, 0.12)`};
-
+  ${({
+    theme,
+    dense,
+    toggled,
+  }: {
+    theme?: ITheme;
+    dense?: boolean;
+    toggled?: boolean;
+  }) => css`
     padding: ${dense ? 0 : '0 32px'};
 
-    min-width: ${dense ? 56 : 320}px;
-    width: ${dense ? 56 : 320}px;
+    width: ${dense ? (toggled ? 175 : 56) : 320}px;
+
+    background-color: ${dense
+      ? theme['pages.navigationDrawer1.backgroundColor']
+      : theme['pages.navigationDrawer2.backgroundColor']};
   `}
 `;
 
@@ -96,4 +102,23 @@ export const Search = styled.div`
       filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};
     `}
   }
+`;
+
+export const MenuButton = styled.div`
+  ${centerIcon(20)};
+  width: 32px;
+  height: 32px;
+  background-image: url(${icons.menu});
+  margin-left: 12px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};
+  `}
 `;

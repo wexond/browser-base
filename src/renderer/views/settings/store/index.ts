@@ -23,6 +23,9 @@ export class Store {
   public startupTabs = new StartupTabsStore();
 
   @observable
+  public menuToggled = false;
+
+  @observable
   public dialogContent: 'privacy' | 'edit-address' = null;
 
   @observable

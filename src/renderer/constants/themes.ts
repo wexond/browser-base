@@ -35,6 +35,8 @@ export const lightTheme: ITheme = {
   'pages.lightForeground': false,
   'pages.textColor': '#000',
   'dropdown.backgroundColor': '#fff',
+  'pages.navigationDrawer1.backgroundColor': '#f5f5f5',
+  'pages.navigationDrawer2.backgroundColor': '#fafafa',
   accentColor: colors.blue['500'],
   backgroundColor: '#fff',
 };
@@ -73,6 +75,8 @@ export const darkTheme: ITheme = {
   'pages.lightForeground': true,
   'pages.textColor': '#fff',
   'dropdown.backgroundColor': '#424242',
+  'pages.navigationDrawer1.backgroundColor': 'rgba(255, 255, 255, 0.1)',
+  'pages.navigationDrawer2.backgroundColor': 'rgba(255, 255, 255, 0.05)',
   backgroundColor: '#1c1c1c',
   accentColor: colors.blue['500'],
 };

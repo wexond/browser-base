@@ -9,6 +9,7 @@ import { icons } from '~/renderer/constants/icons';
 import { SelectionDialog } from '~/renderer/components/SelectionDialog';
 import { HistorySection } from '../HistorySection';
 import { Container, Content, LeftContent } from '~/renderer/components/Pages';
+import { GlobalNavigationDrawer } from '~/renderer/components/GlobalNavigationDrawer';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -74,6 +75,7 @@ export default observer(() => {
     <ThemeProvider theme={store.theme}>
       <Container>
         <GlobalStyle />
+        <GlobalNavigationDrawer></GlobalNavigationDrawer>
         <NavigationDrawer title="History" search onSearchInput={onInput}>
           <RangeItem range="all">All</RangeItem>
           <RangeItem range="today">Today</RangeItem>
