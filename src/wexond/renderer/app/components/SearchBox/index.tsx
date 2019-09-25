@@ -7,6 +7,7 @@ import { StyledSearchBox, InputContainer, SearchIcon, Input } from './style';
 import { Suggestions } from '../Suggestions';
 import { icons } from '../../constants';
 import ToolbarButton from '../ToolbarButton';
+import { translate } from '~/renderer/app/utils/translate';
 
 const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
@@ -119,7 +120,7 @@ export const SearchBox = observer(() => {
         <SearchIcon />
         <Input
           autoFocus
-          placeholder="Search or type in URL"
+          placeholder={translate('Search or type in URL')}
           onKeyPress={onKeyPress}
           onFocus={onInputFocus}
           onChange={onInput}
