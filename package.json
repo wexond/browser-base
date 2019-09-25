@@ -94,7 +94,9 @@
     "webpack-dev-server": "^3.8.1",
     "webpack-merge": "^4.2.2",
     "worker-loader": "^2.0.0",
-    "node-vibrant": "3.2.0-alpha",
     "mouse-hooks": "0.4.1"
+  },
+  "dependencies": {
+    "node-vibrant": "3.2.0-alpha"
   }
 }

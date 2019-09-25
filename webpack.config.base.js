@@ -77,6 +77,8 @@ const config = {
       '~': INCLUDE,
     },
   },
+
+  externals: ['node-vibrant'],
 };
 
 function getConfig(...cfg) {
