@@ -1,5 +1,3 @@
-import Axios from 'axios';
-
 import { WEATHER_API_KEY, dictionary } from '../constants';
 import {
   IForecastRequest,
@@ -8,7 +6,7 @@ import {
   IWeatherCondition,
   IForecast,
 } from '~/interfaces';
-import { capitalizeFirst } from '~/utils';
+import { capitalizeFirst, requestURL } from '~/utils';
 
 const getCondition = (str: string): IWeatherCondition => {
   str = str.toLowerCase();
@@ -56,7 +54,7 @@ export const getWeather = async ({
   units,
 }: IForecastRequest): Promise<IForecast> => {
   const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${WEATHER_API_KEY}&lang=${lang}&units=${units}`;
-  const { data } = await Axios.get(url);
+  const data = JSON.parse((await requestURL(url)).data);
   const items = getForWeek(data.list);
 
   return {

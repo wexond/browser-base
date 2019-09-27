@@ -1,13 +1,11 @@
 import { observable, action, computed } from 'mobx';
 import * as React from 'react';
-import { TweenLite } from 'gsap';
 
 import { ITab } from '../models';
 
 import {
   TAB_ANIMATION_DURATION,
   TABS_PADDING,
-  TAB_ANIMATION_EASING,
   TAB_MAX_WIDTH,
 } from '../constants';
 
@@ -17,6 +15,7 @@ import { ipcRenderer } from 'electron';
 import { getColorBrightness } from '~/utils';
 import { defaultTabOptions } from '~/constants/tabs';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { TweenLite } from 'gsap';
 
 export class TabsStore {
   @observable
@@ -445,9 +444,10 @@ export class TabsStore {
   ) {
     if (obj) {
       const props: any = {
-        ease: animation ? TAB_ANIMATION_EASING : null,
+        ease: 'power2',
       };
       props[property] = value;
+
       TweenLite.to(obj, animation ? TAB_ANIMATION_DURATION : 0, props);
     }
   }
