@@ -102,7 +102,7 @@ const applyEntries = (scope, config, entries) => {
 
 const getBaseConfig = name => {
   const config = {
-    plugins: [new HardSourceWebpackPlugin(), new ForkTsCheckerWebpackPlugin()],
+    plugins: [new HardSourceWebpackPlugin()],
 
     output: {},
     entry: {},
@@ -120,6 +120,10 @@ const getBaseConfig = name => {
       },
     },
   };
+
+  if (dev) {
+    config.push(new ForkTsCheckerWebpackPlugin());
+  }
 
   config.entry[`vendor.${name}`] = [
     'react',

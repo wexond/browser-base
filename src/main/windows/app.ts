@@ -39,7 +39,6 @@ export class AppWindow extends BrowserWindow {
       minHeight: 450,
       width: 900,
       height: 700,
-      show: false,
       titleBarStyle: 'hiddenInset',
       webPreferences: {
         plugins: true,
@@ -180,10 +179,6 @@ export class AppWindow extends BrowserWindow {
 
     this.on('focus', () => {
       windowsManager.currentWindow = this;
-    });
-
-    this.on('ready-to-show', () => {
-      this.show();
     });
   }
 }
