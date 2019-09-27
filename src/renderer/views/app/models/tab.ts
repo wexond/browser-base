@@ -10,7 +10,7 @@ import {
   TAB_MAX_WIDTH,
   TAB_PINNED_WIDTH,
 } from '../constants';
-import { getColorBrightness, callViewMethod, getVibrantColor } from '~/utils';
+import { getColorBrightness, callViewMethod } from '~/utils';
 
 const isColorAcceptable = (color: string) => {
   if (store.theme['tab.allowLightBackground']) {

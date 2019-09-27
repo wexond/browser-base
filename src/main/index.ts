@@ -1,9 +1,9 @@
+require('v8-compile-cache');
+
 import { ipcMain, app } from 'electron';
 import { resolve } from 'path';
 import { homedir, platform } from 'os';
 import { WindowsManager } from './windows-manager';
-
-require('v8-compile-cache');
 
 app.setName('Wexond');
 

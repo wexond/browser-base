@@ -1,7 +1,7 @@
 import { AppWindow } from '.';
 import { BrowserView, app, ipcMain } from 'electron';
 import { join } from 'path';
-import { MENU_WIDTH } from '~/renderer/constants';
+import { MENU_WIDTH } from '~/constants/design';
 
 const WIDTH = MENU_WIDTH;
 const HEIGHT = 550;

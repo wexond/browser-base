@@ -89,7 +89,6 @@
     "react-hot-loader": "4.12.14",
     "react-windows-controls": "1.1.1",
     "styled-components": "^5.0.0-beta.8",
-    "tldts-experimental": "5.5.0",
     "ts-loader": "^6.1.2",
     "typescript": "3.6.3",
     "typescript-plugin-styled-components": "^1.4.3",

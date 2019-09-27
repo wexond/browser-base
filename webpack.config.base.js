@@ -74,6 +74,8 @@ const config = {
       '~': INCLUDE,
     },
   },
+
+  plugins: [],
 };
 
 if (!dev) {
@@ -127,7 +129,7 @@ const getBaseConfig = name => {
   };
 
   if (dev) {
-    config.push(new ForkTsCheckerWebpackPlugin());
+    config.plugins.push(new ForkTsCheckerWebpackPlugin());
   }
 
   config.entry[`vendor.${name}`] = [

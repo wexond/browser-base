@@ -1,7 +1,7 @@
 import { observable, computed, action } from 'mobx';
 
 import { ITabGroup } from '../models';
-import store from '.';
+import { Store } from '.';
 import { ipcRenderer } from 'electron';
 import { colors } from '~/renderer/constants';
 import { closeWindow } from '../utils';
@@ -15,12 +15,18 @@ export class TabGroupsStore {
 
   public palette: string[] = [];
 
-  public constructor() {
+  private store: Store;
+
+  public constructor(store: Store) {
+    this.store = store;
+
     for (const key in colors) {
       if ((colors as any)[key]['500'] && key !== 'yellow' && key !== 'lime') {
         this.palette.push((colors as any)[key]['500']);
       }
     }
+
+    this.addGroup();
   }
 
   @computed
@@ -31,14 +37,14 @@ export class TabGroupsStore {
   public set currentGroupId(id: number) {
     this._currentGroupId = id;
     const group = this.currentGroup;
-    const tab = store.tabs.getTabById(group.selectedTabId);
+    const tab = this.store.tabs.getTabById(group.selectedTabId);
 
     if (tab) {
       tab.select();
     }
 
     setTimeout(() => {
-      store.tabs.updateTabsBounds(false);
+      this.store.tabs.updateTabsBounds(false);
     });
   }
 
@@ -52,8 +58,8 @@ export class TabGroupsStore {
     const index = this.list.indexOf(group);
 
     for (const tab of group.tabs) {
-      store.tabs.removeTab(tab.id);
-      ipcRenderer.send(`browserview-destroy-${store.windowId}`, tab.id);
+      this.store.tabs.removeTab(tab.id);
+      ipcRenderer.send(`browserview-destroy-${this.store.windowId}`, tab.id);
     }
 
     if (group.isSelected) {
@@ -79,7 +85,7 @@ export class TabGroupsStore {
 
   @action
   public addGroup() {
-    const tabGroup: ITabGroup = new ITabGroup();
+    const tabGroup = new ITabGroup(this.store, this);
     this.list.push(tabGroup);
     this.currentGroupId = tabGroup.id;
   }

@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import * as React from 'react';
 import { TweenLite } from 'gsap';
 
@@ -7,18 +7,16 @@ import { ITab } from '../models';
 import {
   TAB_ANIMATION_DURATION,
   TABS_PADDING,
-  TOOLBAR_HEIGHT,
   TAB_ANIMATION_EASING,
   TAB_MAX_WIDTH,
 } from '../constants';
 
 import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 import store from '.';
-import { ipcRenderer, ipcMain } from 'electron';
-import { getColorBrightness, prefixHttp, getVibrantColor } from '~/utils';
+import { ipcRenderer } from 'electron';
+import { getColorBrightness } from '~/utils';
 import { defaultTabOptions } from '~/constants/tabs';
-import { Database } from '~/models/database';
-import { IStartupTab } from '~/interfaces/startup-tab';
+import { TOOLBAR_HEIGHT } from '~/constants/design';
 
 export class TabsStore {
   @observable
@@ -53,6 +51,16 @@ export class TabsStore {
     time: 0,
     interval: null as any,
   };
+
+  @computed
+  public get selectedTab() {
+    return this.getTabById(store.tabGroups.currentGroup.selectedTabId);
+  }
+
+  @computed
+  public get hoveredTab() {
+    return this.getTabById(this.hoveredTabId);
+  }
 
   public constructor() {
     window.addEventListener('mouseup', this.onMouseUp);
@@ -111,11 +119,11 @@ export class TabsStore {
         tab.favicon = URL.createObjectURL(new Blob([options.icon]));
         tab.select();
 
-        const color = await getVibrantColor(options.icon);
+        /*const color = await getVibrantColor(options.icon);
 
         if (getColorBrightness(color) < 170) {
           tab.background = color;
-        }
+        }*/
       }
     });
 
@@ -196,14 +204,6 @@ export class TabsStore {
       return this.containerRef.current.offsetWidth;
     }
     return 0;
-  }
-
-  public get selectedTab() {
-    return this.getTabById(store.tabGroups.currentGroup.selectedTabId);
-  }
-
-  public get hoveredTab() {
-    return this.getTabById(this.hoveredTabId);
   }
 
   public getTabById(id: number) {

@@ -1,11 +1,10 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import { ExtensionsStore } from './extensions';
-import { extname } from 'path';
 import { SettingsStore } from './settings';
 import { extensionsRenderer } from 'electron-extensions';
 import { getCurrentWindow } from '../utils';
@@ -17,13 +16,15 @@ export class Store {
   public settings = new SettingsStore(this);
   public history = new HistoryStore();
   public addTab = new AddTabStore();
-  public tabGroups = new TabGroupsStore();
   public tabs = new TabsStore();
   public extensions = new ExtensionsStore();
   public startupTabs = new StartupTabsStore(this);
+  public tabGroups = new TabGroupsStore(this);
 
-  @observable
-  public theme = getTheme('wexond-light');
+  @computed
+  public get theme() {
+    return getTheme(this.settings.object.theme);
+  }
 
   @observable
   public isAlwaysOnTop = false;

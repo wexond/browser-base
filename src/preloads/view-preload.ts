@@ -126,7 +126,7 @@ if (window.location.protocol === 'wexond:') {
       ipcRenderer.send('save-settings', { settings: data.data });
     } else if (data.type === 'get-settings') {
       ipcRenderer.send('get-settings');
-      emitCallback('get-settings', data);
+      emitCallback('update-settings', data);
     }
   });
 

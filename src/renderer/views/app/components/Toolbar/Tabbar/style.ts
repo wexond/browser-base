@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { ToolbarButton } from '../ToolbarButton';
-import { TOOLBAR_BUTTON_WIDTH } from '../../../constants';
+import { TOOLBAR_BUTTON_WIDTH } from '~/constants/design';
 
 export const StyledTabbar = styled.div`
   height: 100%;

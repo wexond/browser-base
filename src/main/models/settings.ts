@@ -61,11 +61,11 @@ export class Settings extends EventEmitter {
       if (!this.loaded) {
         this.once('load', () => {
           this.update();
-          e.sender.send('get-settings', this.object);
+          e.sender.send('update-settings', this.object);
         });
       } else {
         this.update();
-        e.sender.send('get-settings', this.object);
+        e.sender.send('update-settings', this.object);
       }
     });
 

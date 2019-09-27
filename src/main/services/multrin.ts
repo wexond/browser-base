@@ -6,7 +6,7 @@ import mouseHooks from 'mouse-hooks';
 import { ProcessWindow } from '../models';
 import { AppWindow } from '../windows';
 import { windowManager, Window } from 'node-window-manager';
-import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
+import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { windowsManager } from '..';
 import { IRectangle, IPoint } from '~/interfaces';
 

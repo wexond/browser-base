@@ -1,7 +1,6 @@
 import { observable, computed, action } from 'mobx';
 import { IBookmark } from '~/interfaces';
 import { Database } from '~/models/database';
-import store from '.';
 
 export class BookmarksStore {
   public db = new Database<IBookmark>('bookmarks');
@@ -19,10 +18,10 @@ export class BookmarksStore {
   public selectedItems: string[] = [];
 
   @observable
-  public menuLeft: number = 0;
+  public menuLeft = 0;
 
   @observable
-  public menuTop: number = 0;
+  public menuTop = 0;
 
   @observable
   public menuVisible = false;
@@ -85,7 +84,7 @@ export class BookmarksStore {
 
   public async load() {
     try {
-      let items = await this.db.get({});
+      const items = await this.db.get({});
 
       let barFolder = items.find(x => x.static === 'main');
       let otherFolder = items.find(x => x.static === 'other');

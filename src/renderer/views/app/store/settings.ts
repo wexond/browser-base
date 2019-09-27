@@ -1,8 +1,8 @@
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 import { ipcRenderer } from 'electron';
 
 import { ISettings } from '~/interfaces';
-import { DEFAULT_SETTINGS, DEFAULT_SEARCH_ENGINES } from '~/constants';
+import { DEFAULT_SETTINGS } from '~/constants';
 import { Store } from '.';
 import { getTheme } from '~/utils/themes';
 
@@ -38,16 +38,9 @@ export class SettingsStore {
     });
   }
 
+  @action
   public updateSettings(newSettings: ISettings) {
     this.object = { ...this.object, ...newSettings };
-
-    /*TODO: this.store.searchEngines = DEFAULT_SEARCH_ENGINES.concat(
-      newSettings.searchEngines,
-    );*/
-
-    requestAnimationFrame(() => {
-      this.store.theme = getTheme(this.object.theme);
-    });
   }
 
   public async save() {

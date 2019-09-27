@@ -1,4 +1,4 @@
-import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
+import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { AppWindow } from '.';
 import { PopupWindow } from './popup';
 

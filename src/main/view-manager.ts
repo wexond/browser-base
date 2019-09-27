@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
+import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
 

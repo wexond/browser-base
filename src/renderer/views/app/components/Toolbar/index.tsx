@@ -11,7 +11,7 @@ import { ToolbarButton } from './ToolbarButton';
 import { icons, colors } from '~/renderer/constants';
 import { BrowserAction } from './BrowserAction';
 import { platform } from 'os';
-import { TOOLBAR_HEIGHT } from '../../constants';
+import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { closeWindow, minimizeWindow, maximizeWindow } from '../../utils';
 import { WindowsControls } from 'react-windows-controls';
 

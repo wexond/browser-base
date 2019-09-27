@@ -1,6 +1,4 @@
 import { BrowserView, app } from 'electron';
-import { engine } from './services/adblock';
-import { parse } from 'tldts-experimental';
 import { parse as parseUrl } from 'url';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
@@ -69,24 +67,6 @@ export class View extends BrowserView {
 
     this.webContents.addListener('did-start-navigation', (...args) => {
       this.updateNavigationState();
-
-      const url = this.webContents.getURL();
-
-      // Adblocker cosmetic filtering
-      if (engine && windowsManager.settings.object.shield) {
-        if (url === '') return;
-
-        const { styles, scripts } = engine.getCosmeticsFilters({
-          url,
-          ...parse(url),
-        });
-
-        (this.webContents.insertCSS as any)(styles, { cssOrigin: 'user' });
-
-        for (const script of scripts) {
-          this.webContents.executeJavaScript(script);
-        }
-      }
 
       this.window.webContents.send(
         `load-commit-${this.webContents.id}`,

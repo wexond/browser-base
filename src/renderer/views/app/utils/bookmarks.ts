@@ -1,4 +1,4 @@
-import parse from 'node-bookmarks-parser';
+import parse = require('node-bookmarks-parser');
 
 import { IBookmark } from '~/interfaces';
 import store from '../store';

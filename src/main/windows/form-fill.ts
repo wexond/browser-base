@@ -1,5 +1,5 @@
 import { AppWindow } from '.';
-import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants';
+import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { PopupWindow } from './popup';
 
 const WIDTH = 208;

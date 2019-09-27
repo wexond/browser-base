@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { centerIcon } from '~/renderer/mixins';
-import { TOOLBAR_HEIGHT, TOOLBAR_BUTTON_WIDTH } from '../../../constants';
+import { TOOLBAR_HEIGHT, TOOLBAR_BUTTON_WIDTH } from '~/constants/design';
 import { ITheme } from '~/interfaces';
 
 export const Icon = styled.div`
