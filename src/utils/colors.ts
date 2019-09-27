@@ -1,3 +1,5 @@
+import { promisify } from 'util';
+
 // https://stackoverflow.com/a/13542669
 export const shadeBlendConvert = function(
   this: any,
@@ -123,4 +125,18 @@ export const getColorBrightness = (color: string) => {
   }
 
   return Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
+};
+
+const componentToHex = (c: number) => {
+  const hex = c.toString(16);
+  return hex.length == 1 ? '0' + hex : hex;
+};
+
+export const rgbToHex = (rgba: number[]) => {
+  return (
+    '#' +
+    componentToHex(Math.round(rgba[0])) +
+    componentToHex(Math.round(rgba[1])) +
+    componentToHex(Math.round(rgba[2]))
+  );
 };

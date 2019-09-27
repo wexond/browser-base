@@ -1,7 +1,6 @@
 import { ipcRenderer, remote } from 'electron';
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
-import Vibrant = require('node-vibrant');
 
 import store from '../store';
 import {
@@ -11,7 +10,7 @@ import {
   TAB_MAX_WIDTH,
   TAB_PINNED_WIDTH,
 } from '../constants';
-import { getColorBrightness, callViewMethod } from '~/utils';
+import { getColorBrightness, callViewMethod, getVibrantColor } from '~/utils';
 
 const isColorAcceptable = (color: string) => {
   if (store.theme['tab.allowLightBackground']) {
@@ -176,42 +175,20 @@ export class ITab {
       },
     );
 
-    ipcRenderer.on(
-      `browserview-favicon-updated-${this.id}`,
-      async (e, favicon: string) => {
-        try {
-          this.favicon = favicon;
+    ipcRenderer.on(`update-tab-favicon-${this.id}`, (e, favicon) => {
+      this.favicon = favicon;
+      this.updateData();
+    });
 
-          let fav = favicon;
-          if (favicon.startsWith('http')) {
-            fav = await store.favicons.addFavicon(favicon);
-          }
-          const buf = Buffer.from(fav.split('base64,')[1], 'base64');
-
-          if (!this.hasThemeColor) {
-            try {
-              const palette = await Vibrant.from(buf).getPalette();
-
-              if (!palette.Vibrant) return;
-
-              if (isColorAcceptable(palette.Vibrant.hex)) {
-                this.background = palette.Vibrant.hex;
-                this.customColor = true;
-              } else {
-                this.background = store.theme.accentColor;
-                this.customColor = false;
-              }
-            } catch (e) {
-              console.error(e);
-            }
-          }
-        } catch (e) {
-          this.favicon = '';
-          console.error(e);
-        }
-        this.updateData();
-      },
-    );
+    ipcRenderer.on(`update-tab-color-${this.id}`, (e, color) => {
+      if (isColorAcceptable(color)) {
+        this.background = color;
+        this.customColor = true;
+      } else {
+        this.background = store.theme.accentColor;
+        this.customColor = false;
+      }
+    });
 
     ipcRenderer.on(`blocked-ad-${this.id}`, () => {
       this.blockedAds++;

@@ -6,6 +6,8 @@ import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
 import { windowsManager } from '.';
 import storage from './services/storage';
+import Vibrant = require('node-vibrant');
+import { rgbToHex } from '~/utils';
 
 export class View extends BrowserView {
   public title = '';
@@ -124,8 +126,33 @@ export class View extends BrowserView {
       async (e, favicons) => {
         this.favicon = favicons[0];
 
+        try {
+          let fav = this.favicon;
+
+          if (fav.startsWith('http')) {
+            fav = await windowsManager.addFavicon(fav);
+          }
+          const buf = Buffer.from(fav.split('base64,')[1], 'base64');
+
+          try {
+            const palette = await Vibrant.from(buf).getPalette();
+
+            if (!palette.Vibrant) return;
+
+            this.window.webContents.send(
+              `update-tab-color-${this.webContents.id}`,
+              rgbToHex(palette.Vibrant._rgb),
+            );
+          } catch (e) {
+            console.error(e);
+          }
+        } catch (e) {
+          this.favicon = '';
+          console.error(e);
+        }
+
         this.window.webContents.send(
-          `browserview-favicon-updated-${this.webContents.id}`,
+          `update-tab-favicon-${this.webContents.id}`,
           this.favicon,
         );
       },

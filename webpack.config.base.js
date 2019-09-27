@@ -4,6 +4,7 @@ const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default;
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 /* eslint-enable */
 
 const INCLUDE = resolve(__dirname, 'src');
@@ -58,10 +59,6 @@ const config = {
           rewritePath: resolve(__dirname, 'build'),
         },
       },
-      {
-        test: /\.worker\.js$/,
-        use: { loader: 'worker-loader' },
-      },
     ],
   },
 
@@ -77,8 +74,6 @@ const config = {
       '~': INCLUDE,
     },
   },
-
-  externals: ['node-vibrant'],
 };
 
 function getConfig(...cfg) {
@@ -107,7 +102,7 @@ const applyEntries = (scope, config, entries) => {
 
 const getBaseConfig = name => {
   const config = {
-    plugins: [new HardSourceWebpackPlugin()],
+    plugins: [new HardSourceWebpackPlugin(), new ForkTsCheckerWebpackPlugin()],
 
     output: {},
     entry: {},

@@ -4,7 +4,6 @@ import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
 import { ipcRenderer, remote } from 'electron';
-import { FaviconsStore } from './favicons';
 import { ExtensionsStore } from './extensions';
 import { extname } from 'path';
 import { SettingsStore } from './settings';
@@ -16,7 +15,6 @@ import { HistoryStore } from './history';
 
 export class Store {
   public settings = new SettingsStore(this);
-  public favicons = new FaviconsStore();
   public history = new HistoryStore();
   public addTab = new AddTabStore();
   public tabGroups = new TabGroupsStore();

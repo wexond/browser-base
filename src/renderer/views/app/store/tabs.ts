@@ -1,7 +1,6 @@
 import { observable, action } from 'mobx';
 import * as React from 'react';
 import { TweenLite } from 'gsap';
-import Vibrant = require('node-vibrant');
 
 import { ITab } from '../models';
 
@@ -16,7 +15,7 @@ import {
 import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 import store from '.';
 import { ipcRenderer, ipcMain } from 'electron';
-import { getColorBrightness, prefixHttp } from '~/utils';
+import { getColorBrightness, prefixHttp, getVibrantColor } from '~/utils';
 import { defaultTabOptions } from '~/constants/tabs';
 import { Database } from '~/models/database';
 import { IStartupTab } from '~/interfaces/startup-tab';
@@ -95,7 +94,7 @@ export class TabsStore {
       },
     );
 
-    ipcRenderer.on('add-tab', (e, options) => {
+    ipcRenderer.on('add-tab', async (e, options) => {
       let tab = this.list.find(x => x.id === options.id);
 
       if (tab) {
@@ -110,16 +109,13 @@ export class TabsStore {
         tab = this.createTab({}, options.id, true);
         tab.title = options.title;
         tab.favicon = URL.createObjectURL(new Blob([options.icon]));
-
-        Vibrant.from(options.icon)
-          .getPalette()
-          .then(palette => {
-            if (getColorBrightness(palette.Vibrant.hex) < 170) {
-              tab.background = palette.Vibrant.hex;
-            }
-          });
-
         tab.select();
+
+        const color = await getVibrantColor(options.icon);
+
+        if (getColorBrightness(color) < 170) {
+          tab.background = color;
+        }
       }
     });
 
