@@ -163,6 +163,7 @@ export class ViewManager {
 
     this.window.menuDialog.hide();
     this.window.searchDialog.hide();
+    this.window.findDialog.hide();
 
     this.fixBounds();
   }

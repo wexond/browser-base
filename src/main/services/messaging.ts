@@ -20,7 +20,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
   );
 
   ipcMain.on(`find-show-${id}`, (e, tabId, data) => {
-    appWindow.findWindow.find(tabId, data);
+    appWindow.findDialog.find(tabId, data);
   });
 
   ipcMain.on(`menu-show-${id}`, e => {
@@ -36,7 +36,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
   });
 
   ipcMain.on(`update-find-info-${id}`, (e, tabId, data) =>
-    appWindow.findWindow.updateInfo(tabId, data),
+    appWindow.findDialog.updateInfo(tabId, data),
   );
 
   ipcMain.on(`is-incognito-${id}`, e => {

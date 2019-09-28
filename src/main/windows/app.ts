@@ -5,16 +5,8 @@ import { resolve, join } from 'path';
 import { ViewManager } from '../view-manager';
 import { getPath } from '~/utils';
 import { runMessagingService, Multrin } from '../services';
-import {
-  PermissionsWindow,
-  AuthWindow,
-  FindWindow,
-  FormFillWindow,
-  CredentialsWindow,
-} from '.';
 import { WindowsManager } from '../windows-manager';
-import { MenuDialog } from '../dialogs/menu';
-import { SearchDialog } from '../dialogs/search';
+import { MenuDialog, SearchDialog, FindDialog } from '../dialogs';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
@@ -23,11 +15,12 @@ export class AppWindow extends BrowserWindow {
   // TODO:
   // public permissionWindow = new PermissionsWindow(this);
   // public authWindow = new AuthWindow(this);
-  // public findWindow = new FindWindow(this);
   // public formFillWindow = new FormFillWindow(this);
   // public credentialsWindow = new CredentialsWindow(this);
+
   public menuDialog = new MenuDialog(this);
   public searchDialog = new SearchDialog(this);
+  public findDialog = new FindDialog(this);
   public incognito: boolean;
 
   private windowsManager: WindowsManager;
@@ -83,11 +76,11 @@ export class AppWindow extends BrowserWindow {
 
     const moveAndResize = () => {
       this.authWindow.rearrange();
-      this.findWindow.rearrange();
       this.permissionWindow.rearrange();
       this.formFillWindow.rearrange();
       this.credentialsWindow.rearrange();
 
+      this.findDialog.rearrange();
       this.menuDialog.hide();
     };
 

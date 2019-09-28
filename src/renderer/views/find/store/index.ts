@@ -2,14 +2,13 @@ import * as React from 'react';
 
 import { observable } from 'mobx';
 import { ipcRenderer, remote } from 'electron';
-import { getCurrentWindow } from '../../app/utils/windows';
 
 export class Store {
   @observable
-  public occurrences: string = '0/0';
+  public occurrences = '0/0';
 
   @observable
-  public text: string = '';
+  public text = '';
 
   public tabId: number;
 
@@ -17,9 +16,9 @@ export class Store {
 
   public visible = false;
 
-  public windowId: number = ipcRenderer.sendSync(
-    `get-window-id-${getCurrentWindow().id}`,
-  );
+  public windowId = remote.getCurrentWindow().id;
+
+  public id = remote.getCurrentWebContents().id;
 
   public constructor() {
     ipcRenderer.on(
@@ -42,15 +41,19 @@ export class Store {
           this.findInputRef.current.focus();
         });
 
-        if (visible) {
-          remote.getCurrentWindow().show();
+        if (!visible) {
+          this.hide();
         } else {
-          remote.getCurrentWindow().hide();
+          ipcRenderer.send(`show-${this.id}`);
         }
 
         this.updateTabInfo();
       },
     );
+  }
+
+  public hide() {
+    ipcRenderer.send(`hide-${this.id}`);
   }
 
   public updateTabInfo() {

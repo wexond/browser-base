@@ -66,7 +66,7 @@ export class Dialog extends BrowserView {
     }
   }
 
-  public rearrange(rect: IRectangle) {
+  public rearrange(rect: IRectangle = {}) {
     this.bounds = {
       height: rect.height || this.bounds.height,
       width: rect.width || this.bounds.width,
@@ -84,7 +84,7 @@ export class Dialog extends BrowserView {
     else this.hide();
   }
 
-  public show(rect: IRectangle) {
+  public show(rect: IRectangle = {}) {
     this.visible = true;
 
     clearTimeout(this.timeout);
