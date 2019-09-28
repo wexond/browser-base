@@ -6,7 +6,7 @@ import { AddTabStore } from './add-tab';
 import { ipcRenderer } from 'electron';
 import { ExtensionsStore } from './extensions';
 import { SettingsStore } from './settings';
-import { extensionsRenderer } from '@electron-extensions/renderer';
+import { extensionsRenderer } from 'electron-extensions/renderer';
 import { getCurrentWindow } from '../utils/windows';
 import { StartupTabsStore } from './startup-tabs';
 import { getTheme } from '~/utils/themes';

@@ -4,7 +4,7 @@ import { observable } from 'mobx';
 import { resolve } from 'path';
 
 import { IBrowserAction } from '../models';
-import { extensionsRenderer } from '@electron-extensions/renderer';
+import { extensionsRenderer } from 'electron-extensions/renderer';
 import { promises } from 'fs';
 
 export class ExtensionsStore {

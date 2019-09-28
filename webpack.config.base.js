@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default;
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const FontminPlugin = require('fontmin-webpack')
 /* eslint-enable */
 
 const INCLUDE = resolve(__dirname, 'src');

@@ -2,6 +2,7 @@
 const { getConfig, dev } = require('./webpack.config.base');
 const { spawn } = require('child_process');
 const CopyPlugin = require('copy-webpack-plugin');
+let terser = require('terser');
 /* eslint-enable */
 
 let electronProcess;
@@ -20,15 +21,16 @@ const mainConfig = getConfig({
       {
         from: 'node_modules/@cliqz/adblocker-electron/dist/cjs/preload.js',
         to: 'preload.js',
+        transform: (fileContent, path) => {
+          return terser.minify(fileContent.toString()).code.toString();
+        },
       },
       {
-        from:
-          'node_modules/@electron-extensions/background-preload/build/index.js',
+        from: require.resolve('electron-extensions/background-preload'),
         to: 'extensions-background-preload.js',
       },
       {
-        from:
-          'node_modules/@electron-extensions/content-preload/build/index.js',
+        from: require.resolve('electron-extensions/content-preload'),
         to: 'extensions-content-preload.js',
       },
       {

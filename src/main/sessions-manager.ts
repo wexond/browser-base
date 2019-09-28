@@ -1,5 +1,5 @@
 import { session, app, ipcMain } from 'electron';
-import { ExtensibleSession } from '@electron-extensions/main';
+import { ExtensibleSession } from 'electron-extensions/main';
 import { getPath, makeId } from '~/utils';
 import { promises } from 'fs';
 import { resolve } from 'path';
