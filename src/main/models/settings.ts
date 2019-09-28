@@ -31,11 +31,11 @@ export class Settings extends EventEmitter {
         for (const window of windowsManager.list) {
           if (window.webContents.id !== e.sender.id) {
             window.webContents.send('update-settings', this.object);
-            window.searchWindow.webContents.send(
+            window.searchDialog.webContents.send(
               'update-settings',
               this.object,
             );
-            window.menuWindow.webContents.send('update-settings', this.object);
+            window.menuDialog.webContents.send('update-settings', this.object);
           }
         }
 

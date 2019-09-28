@@ -13,8 +13,8 @@ import {
   CredentialsWindow,
 } from '.';
 import { WindowsManager } from '../windows-manager';
-import { MenuWindow } from './menu';
-import { SearchWindow } from './search';
+import { MenuDialog } from '../dialogs/menu';
+import { SearchDialog } from '../dialogs/search';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
@@ -26,8 +26,8 @@ export class AppWindow extends BrowserWindow {
   // public findWindow = new FindWindow(this);
   // public formFillWindow = new FormFillWindow(this);
   // public credentialsWindow = new CredentialsWindow(this);
-  public menuWindow = new MenuWindow(this);
-  public searchWindow = new SearchWindow(this);
+  public menuDialog = new MenuDialog(this);
+  public searchDialog = new SearchDialog(this);
   public incognito: boolean;
 
   private windowsManager: WindowsManager;
@@ -88,7 +88,7 @@ export class AppWindow extends BrowserWindow {
       this.formFillWindow.rearrange();
       this.credentialsWindow.rearrange();
 
-      this.menuWindow.hide();
+      this.menuDialog.hide();
     };
 
     // Update window bounds on resize and on move when window is not maximized.
@@ -117,15 +117,17 @@ export class AppWindow extends BrowserWindow {
     this.on('restore', resize);
     this.on('unmaximize', resize);
 
-    // Save current window state to file.
     this.on('close', () => {
+      // Save current window state to file.
+
       windowState.maximized = this.isMaximized();
       windowState.fullscreen = this.isFullScreen();
       writeFileSync(windowDataPath, JSON.stringify(windowState));
-      this.menuWindow.destroy();
-      this.menuWindow = null;
-      this.searchWindow.destroy();
-      this.searchWindow = null;
+
+      this.menuDialog.destroy();
+      this.menuDialog = null;
+      this.searchDialog.destroy();
+      this.searchDialog = null;
       this.viewManager.clear();
 
       if (

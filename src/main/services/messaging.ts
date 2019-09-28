@@ -24,11 +24,11 @@ export const runMessagingService = (appWindow: AppWindow) => {
   });
 
   ipcMain.on(`menu-show-${id}`, e => {
-    appWindow.menuWindow.toggle();
+    appWindow.menuDialog.toggle();
   });
 
   ipcMain.on(`search-show-${id}`, e => {
-    appWindow.searchWindow.toggle();
+    appWindow.searchDialog.toggle();
   });
 
   ipcMain.on(`permission-dialog-hide-${id}`, () => {
