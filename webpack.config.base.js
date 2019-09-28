@@ -54,9 +54,9 @@ const config = {
       },
       {
         test: /\.node$/,
-        loader: 'native-ext-loader',
+        loader: 'awesome-node-loader',
         options: {
-          rewritePath: resolve(__dirname, 'build'),
+          name: '[contenthash].[ext]',
         },
       },
     ],
