@@ -1,5 +1,3 @@
-require('v8-compile-cache');
-
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
