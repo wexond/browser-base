@@ -2,10 +2,10 @@
 
 import { observable } from 'mobx';
 import { resolve } from 'path';
-import * as fs from 'fs';
 
 import { IBrowserAction } from '../models';
 import { extensionsRenderer } from '@electron-extensions/renderer';
+import { promises } from 'fs';
 
 export class ExtensionsStore {
   @observable
@@ -35,7 +35,7 @@ export class ExtensionsStore {
     });
   }
 
-  public load() {
+  public async load() {
     const extensions = extensionsRenderer.getExtensions();
 
     for (const key in extensions) {
@@ -56,7 +56,7 @@ export class ExtensionsStore {
           ];
         }
 
-        const data = fs.readFileSync(resolve(path, icon1 as string));
+        const data = await promises.readFile(resolve(path, icon1 as string));
         const icon = window.URL.createObjectURL(new Blob([data]));
         const browserAction = new IBrowserAction({
           extensionId: id,

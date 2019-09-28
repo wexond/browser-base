@@ -4,7 +4,6 @@ import { ipcRenderer } from 'electron';
 import { ISettings } from '~/interfaces';
 import { DEFAULT_SETTINGS } from '~/constants';
 import { Store } from '.';
-import { getTheme } from '~/utils/themes';
 
 export type SettingsSection =
   | 'appearance'
