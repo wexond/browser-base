@@ -1,6 +1,6 @@
 import { observable, computed, action } from 'mobx';
 
-import { colors } from '~/renderer/constants';
+import { LIGHT_BLUE_500 } from '~/renderer/constants';
 import { Store } from '../store';
 import { TabGroupsStore } from '../store/tab-groups';
 
@@ -17,7 +17,7 @@ export class ITabGroup {
   public selectedTabId: number;
 
   @observable
-  public color: string = colors.lightBlue['500'];
+  public color: string = LIGHT_BLUE_500;
 
   @observable
   public editMode = false;

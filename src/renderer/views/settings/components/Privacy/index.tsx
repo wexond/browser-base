@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import { Header } from '../App/style';
 import { Button } from '~/renderer/components/Button';
-import { colors } from '~/renderer/constants';
 import store from '../../store';
+import { BLUE_500 } from '~/renderer/constants';
 
 const onClearBrowsingData = () => {
   store.dialogContent = 'privacy';
@@ -15,7 +15,7 @@ export const Privacy = () => {
       <Header>Privacy</Header>
       <Button
         type="outlined"
-        foreground={colors.blue['500']}
+        foreground={BLUE_500}
         onClick={onClearBrowsingData}
       >
         Clear browsing data

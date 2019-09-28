@@ -180,14 +180,7 @@ const Content = observer(({ tab }: { tab: ITab }) => {
         />
       )}
       {!tab.isPinned && (
-        <StyledTitle
-          isIcon={tab.isIconSet}
-          style={{
-            color: tab.isSelected
-              ? store.theme['tab.selected.textColor']
-              : store.theme['tab.textColor'],
-          }}
-        >
+        <StyledTitle isIcon={tab.isIconSet} selected={tab.isSelected}>
           {tab.title}
         </StyledTitle>
       )}

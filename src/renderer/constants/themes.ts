@@ -1,5 +1,5 @@
 import { ITheme } from '~/interfaces';
-import { colors } from './colors';
+import { BLUE_500 } from './colors';
 
 export const lightTheme: ITheme = {
   'toolbar.backgroundColor': '#fff',
@@ -37,7 +37,7 @@ export const lightTheme: ITheme = {
   'dropdown.backgroundColor': '#fff',
   'pages.navigationDrawer1.backgroundColor': '#f5f5f5',
   'pages.navigationDrawer2.backgroundColor': '#fafafa',
-  accentColor: colors.blue['500'],
+  accentColor: BLUE_500,
   backgroundColor: '#fff',
 };
 
@@ -78,5 +78,5 @@ export const darkTheme: ITheme = {
   'pages.navigationDrawer1.backgroundColor': 'rgba(255, 255, 255, 0.1)',
   'pages.navigationDrawer2.backgroundColor': 'rgba(255, 255, 255, 0.05)',
   backgroundColor: '#1c1c1c',
-  accentColor: colors.blue['500'],
+  accentColor: BLUE_500,
 };

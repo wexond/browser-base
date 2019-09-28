@@ -5,7 +5,7 @@ import { resolve } from 'path';
 import * as fs from 'fs';
 
 import { IBrowserAction } from '../models';
-import { extensionsRenderer } from 'electron-extensions';
+import { extensionsRenderer } from '@electron-extensions/renderer';
 
 export class ExtensionsStore {
   @observable

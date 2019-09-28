@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { icons, colors, EASING_FUNCTION } from '~/renderer/constants';
+import { icons, EASING_FUNCTION, BLUE_500 } from '~/renderer/constants';
 import { centerIcon, centerBoth } from '~/renderer/mixins';
 
 export const Container = styled.div`
@@ -28,16 +28,16 @@ export const StyledCheckbox = styled.div`
   transition: 0.15s background-color, 0.15s border-color;
 
   ${({ toggled }: { toggled: boolean }) => css`
-    background-color: ${toggled ? colors.blue['500'] : 'transparent'};
-    border-color: ${toggled ? colors.blue['500'] : 'rgba(0, 0, 0, 0.54)'};
+    background-color: ${toggled ? BLUE_500 : 'transparent'};
+    border-color: ${toggled ? BLUE_500 : 'rgba(0, 0, 0, 0.54)'};
 
     &::before {
-      background-color: ${toggled ? colors.blue['500'] : '#000'};
+      background-color: ${toggled ? BLUE_500 : '#000'};
     }
   `}
 
   &::before {
-    content: "";
+    content: '';
     width: 0px;
     height: 0px;
     border-radius: 100%;
@@ -45,7 +45,8 @@ export const StyledCheckbox = styled.div`
     position: absolute;
     pointer-events: none;
     opacity: 0;
-    transition: 0.1s width ${EASING_FUNCTION}, 0.1s height ${EASING_FUNCTION}, 0.15s opacity, 0.15s background-color;
+    transition: 0.1s width ${EASING_FUNCTION}, 0.1s height ${EASING_FUNCTION},
+      0.15s opacity, 0.15s background-color;
     ${centerBoth()};
   }
 `;
@@ -63,6 +64,6 @@ export const Icon = styled.div`
   ${centerIcon(22)};
 
   ${({ toggled }: { toggled: boolean }) => css`
-    clip-path: ${toggled ? 'inset(0 0 0 0)' : 'inset(100% 50% 0 50%)'}
+    clip-path: ${toggled ? 'inset(0 0 0 0)' : 'inset(100% 50% 0 50%)'};
   `};
 `;

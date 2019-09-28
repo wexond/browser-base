@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
-import { colors, EASING_FUNCTION, transparency } from '~/renderer/constants';
-import { centerBoth, robotoRegular } from '~/renderer/mixins';
+import {  transparency, BLUE_500 } from '~/renderer/constants';
+import {  robotoRegular } from '~/renderer/mixins';
 
 export const Container = styled.div`
   height: 40px;
@@ -30,7 +30,7 @@ export const Circle = styled.div`
   ${({ selected }: { selected: boolean }) => css`
     width: ${selected ? `calc(100% - 8px)` : 0};
     height: ${selected ? `calc(100% - 8px)` : 0};
-    background: ${selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.54)'};
+    background: ${selected ? BLUE_500 : 'rgba(0, 0, 0, 0.54)'};
 
     &::before {
       opacity: ${selected ? 1 : 0};
@@ -47,7 +47,7 @@ export const Circle = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     border: 1px solid
-      ${selected => (selected ? colors.blue['500'] : 'rgba(0, 0, 0, 0.54)')};
+      ${selected => (selected ? BLUE_500 : 'rgba(0, 0, 0, 0.54)')};
     border-radius: 100%;
   }
 `;

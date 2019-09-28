@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { colors } from '~/renderer/constants';
 import { StyledSwitch, Thumb } from './styles';
+import { BLUE_500 } from '~/renderer/constants';
 
 interface Props {
   color?: string;
@@ -15,7 +15,7 @@ interface State {
 
 export default class Switch extends React.PureComponent<Props, State> {
   private static defaultProps: Props = {
-    color: colors.blue['500'],
+    color: BLUE_500,
     defaultValue: false,
   };
 

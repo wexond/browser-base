@@ -6,7 +6,7 @@ import { Textfield } from '~/renderer/components/Textfield';
 import { RadioButton } from '~/renderer/components/RadioButton';
 import { Button } from '~/renderer/components/Button';
 import { IStartupTab } from '~/interfaces/startup-tab';
-import { icons, colors } from '~/renderer/constants';
+import { icons, BLUE_500 } from '~/renderer/constants';
 import store from '../../store';
 
 interface Props {
@@ -132,8 +132,8 @@ class StartupControl extends React.PureComponent<Props, State> {
             <Row>
               <Button
                 type="outlined"
-                foreground={colors.blue['500']}
-                background={colors.blue['500']}
+                foreground={BLUE_500}
+                background={BLUE_500}
                 onClick={this.onAddNewPageClick}
               >
                 Add a new page

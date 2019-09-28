@@ -23,12 +23,12 @@ const mainConfig = getConfig({
       },
       {
         from:
-          'node_modules/electron-extensions/build/background-preload.bundle.js',
+          'node_modules/@electron-extensions/background-preload/build/index.js',
         to: 'extensions-background-preload.js',
       },
       {
         from:
-          'node_modules/electron-extensions/build/content-preload.bundle.js',
+          'node_modules/@electron-extensions/content-preload/build/index.js',
         to: 'extensions-content-preload.js',
       },
       {

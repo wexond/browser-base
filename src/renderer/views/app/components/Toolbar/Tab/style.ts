@@ -80,6 +80,8 @@ export const StyledOverlay = styled.div`
 
 interface TitleProps {
   isIcon: boolean;
+  selected: boolean;
+  theme?: ITheme;
 }
 
 export const StyledTitle = styled.div`
@@ -91,8 +93,11 @@ export const StyledTitle = styled.div`
   transition: 0.2s margin-left;
   margin-left: 8px;
 
-  ${({ isIcon }: TitleProps) => css`
+  ${({ isIcon, selected, theme }: TitleProps) => css`
     margin-left: ${!isIcon ? 0 : 12}px;
+    color: ${selected
+      ? theme['tab.selected.textColor']
+      : theme['tab.textColor']};
   `};
 `;
 

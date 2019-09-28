@@ -1,7 +1,7 @@
 export const noButtons = (
-  width: string = '6px',
-  color: string = 'rgba(0, 0, 0, 0.38)',
-  hoverColor: string = 'rgba(0, 0, 0, 0.54)',
+  width = '6px',
+  color = 'rgba(0, 0, 0, 0.38)',
+  hoverColor = 'rgba(0, 0, 0, 0.54)',
 ) => `
     &::-webkit-scrollbar {
       width: ${width};

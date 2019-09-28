@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { colors } from '~/renderer/constants';
+import { BLUE_500 } from '~/renderer/constants';
 import { Path, StyledPreloader } from './style';
 
 export interface Props {
@@ -33,5 +33,5 @@ export const Preloader = ({ style, color, size, thickness }: Props) => {
 Preloader.defaultProps = {
   thickness: 4,
   size: 48,
-  color: colors.blue['500'],
+  color: BLUE_500,
 };

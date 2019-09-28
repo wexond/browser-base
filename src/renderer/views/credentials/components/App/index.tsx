@@ -8,7 +8,7 @@ import { Textfield } from '~/renderer/components/Textfield';
 import { PasswordInput } from '~/renderer/components/PasswordInput';
 import { Button } from '~/renderer/components/Button';
 import List from '../List';
-import { colors } from '~/renderer/constants';
+import { BLUE_500 } from '~/renderer/constants';
 import { Style } from '../../style';
 import { StyledApp, Title, Buttons, Container } from './style';
 
@@ -73,7 +73,7 @@ export const App = observer(() => {
         )}
         {store.content === 'list' && (
           <Button
-            foreground={colors.blue['500']}
+            foreground={BLUE_500}
             background="transparent"
             style={{ marginRight: 'auto', padding: '0px 12px' }}
             onClick={onClose}

@@ -8,11 +8,15 @@ import { Buttons, StyledToolbar, Handle, Separator } from './style';
 import { NavigationButtons } from './NavigationButtons';
 import { Tabbar } from './Tabbar';
 import { ToolbarButton } from './ToolbarButton';
-import { icons, colors } from '~/renderer/constants';
+import { icons, BLUE_500 } from '~/renderer/constants';
 import { BrowserAction } from './BrowserAction';
 import { platform } from 'os';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
-import { closeWindow, minimizeWindow, maximizeWindow } from '../../utils';
+import {
+  closeWindow,
+  minimizeWindow,
+  maximizeWindow,
+} from '../../utils/windows';
 import { WindowsControls } from 'react-windows-controls';
 
 const onUpdateClick = () => {
@@ -85,7 +89,7 @@ export const Toolbar = observer(() => {
             opacity={0.54}
             autoInvert
             data={{
-              badgeBackgroundColor: colors.blue['500'],
+              badgeBackgroundColor: BLUE_500,
               badgeText: blockedAds > 0 ? blockedAds.toString() : '',
               icon: icons.shield,
               badgeTextColor: 'white',
