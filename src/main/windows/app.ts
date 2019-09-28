@@ -7,13 +7,13 @@ import { getPath } from '~/utils';
 import { runMessagingService, Multrin } from '../services';
 import { WindowsManager } from '../windows-manager';
 import { MenuDialog, SearchDialog, FindDialog } from '../dialogs';
+import { PermissionsDialog } from '../dialogs/permissions';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
   public multrin = new Multrin(this);
 
   // TODO:
-  // public permissionWindow = new PermissionsWindow(this);
   // public authWindow = new AuthWindow(this);
   // public formFillWindow = new FormFillWindow(this);
   // public credentialsWindow = new CredentialsWindow(this);
@@ -21,6 +21,7 @@ export class AppWindow extends BrowserWindow {
   public menuDialog = new MenuDialog(this);
   public searchDialog = new SearchDialog(this);
   public findDialog = new FindDialog(this);
+  public permissionsDialog = new PermissionsDialog(this);
   public incognito: boolean;
 
   private windowsManager: WindowsManager;
@@ -76,12 +77,12 @@ export class AppWindow extends BrowserWindow {
 
     const moveAndResize = () => {
       this.authWindow.rearrange();
-      this.permissionWindow.rearrange();
       this.formFillWindow.rearrange();
       this.credentialsWindow.rearrange();
 
       this.findDialog.rearrange();
       this.menuDialog.hide();
+      this.permissionsDialog.rearrange();
     };
 
     // Update window bounds on resize and on move when window is not maximized.

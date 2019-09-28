@@ -19,7 +19,7 @@ export class SearchDialog extends Dialog {
 
     ipcMain.on(`height-${this.webContents.id}`, (e, height) => {
       const { width } = this.appWindow.getContentBounds();
-      this.rearrange({
+      super.rearrange({
         height: HEIGHT + height,
         x: Math.round(width / 2 - WIDTH / 2),
       });
@@ -31,12 +31,13 @@ export class SearchDialog extends Dialog {
     else this.hide();
   }
 
-  public show() {
+  public rearrange() {
     const { width } = this.appWindow.getContentBounds();
+    super.rearrange({ x: Math.round(width / 2 - WIDTH / 2) });
+  }
 
-    super.show({
-      x: Math.round(width / 2 - WIDTH / 2),
-    });
+  public show() {
+    super.show();
 
     const selected = this.appWindow.viewManager.selected;
 

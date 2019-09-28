@@ -47,7 +47,7 @@ export class SessionsManager {
             const window = windowsManager.findWindowByBrowserView(
               webContents.id,
             );
-            const response = await window.permissionWindow.requestPermission(
+            const response = await window.permissionsDialog.requestPermission(
               permission,
               webContents.getURL(),
               details,

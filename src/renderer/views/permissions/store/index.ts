@@ -11,9 +11,7 @@ export class Store {
   @observable
   public domain: string;
 
-  public windowId: number = ipcRenderer.sendSync(
-    `get-window-id-${getCurrentWindow().id}`,
-  );
+  public windowId = getCurrentWindow().id;
 
   public constructor() {
     ipcRenderer.on('request-permission', (e, { url, name, details }) => {

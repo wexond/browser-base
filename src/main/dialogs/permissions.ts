@@ -1,19 +1,22 @@
 import { ipcMain } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
-import { AppWindow } from '.';
-import { PopupWindow } from './popup';
+import { AppWindow } from '../windows';
+import { Dialog } from '.';
 
 const HEIGHT = 175;
 const WIDTH = 350;
 
-export class PermissionsWindow extends PopupWindow {
+export class PermissionsDialog extends Dialog {
   public constructor(appWindow: AppWindow) {
-    super(appWindow, 'permissions');
-
-    this.setBounds({
-      height: HEIGHT,
-      width: WIDTH,
-    } as any);
+    super(appWindow, {
+      name: 'permissions',
+      bounds: {
+        height: HEIGHT,
+        width: WIDTH,
+        y: TOOLBAR_HEIGHT,
+        x: 0,
+      },
+    });
   }
 
   public async requestPermission(
@@ -30,7 +33,6 @@ export class PermissionsWindow extends PopupWindow {
         return reject('Unknown permission');
       }
 
-      this.rearrange();
       this.show();
 
       this.webContents.send('request-permission', { name, url, details });
@@ -43,10 +45,5 @@ export class PermissionsWindow extends PopupWindow {
         },
       );
     });
-  }
-
-  public rearrange() {
-    const cBounds = this.appWindow.getContentBounds();
-    this.setBounds({ x: cBounds.x, y: cBounds.y + TOOLBAR_HEIGHT } as any);
   }
 }

@@ -32,7 +32,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
   });
 
   ipcMain.on(`permission-dialog-hide-${id}`, () => {
-    appWindow.permissionWindow.hide();
+    appWindow.permissionsDialog.hide();
   });
 
   ipcMain.on(`update-find-info-${id}`, (e, tabId, data) =>

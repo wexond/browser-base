@@ -19,9 +19,13 @@ export class MenuDialog extends Dialog {
     });
   }
 
-  public show() {
+  public rearrange() {
     const { width } = this.appWindow.getContentBounds();
-    super.show({ x: width - WIDTH });
+    super.rearrange({ x: width - WIDTH });
+  }
+
+  public show() {
+    super.show();
     this.webContents.send('visible', true);
   }
 

@@ -15,7 +15,6 @@ export class FindDialog extends Dialog {
         height: HEIGHT,
         y: TOOLBAR_HEIGHT,
       },
-      devtools: true,
     });
 
     ipcMain.on(`show-${this.webContents.id}`, () => {
@@ -24,8 +23,7 @@ export class FindDialog extends Dialog {
   }
 
   public show() {
-    const { width } = this.appWindow.getContentBounds();
-    super.show({ x: width - WIDTH });
+    super.show();
   }
 
   public find(tabId: number, data: any) {
