@@ -11,6 +11,7 @@ import { getCurrentWindow } from '../utils/windows';
 import { StartupTabsStore } from './startup-tabs';
 import { getTheme } from '~/utils/themes';
 import { HistoryStore } from './history';
+import { AutoFillStore } from './autofill';
 
 export class Store {
   public settings = new SettingsStore(this);
@@ -20,6 +21,7 @@ export class Store {
   public extensions = new ExtensionsStore();
   public startupTabs = new StartupTabsStore(this);
   public tabGroups = new TabGroupsStore(this);
+  public autoFill = new AutoFillStore();
 
   @computed
   public get theme() {
