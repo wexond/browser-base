@@ -1,14 +1,11 @@
 import { observable } from 'mobx';
-import { ipcRenderer } from 'electron';
-import { getCurrentWindow } from '../../app/utils/windows';
+import { ipcRenderer, remote } from 'electron';
 
 export class Store {
   @observable
   public url: string;
 
-  public windowId: number = ipcRenderer.sendSync(
-    `get-window-id-${getCurrentWindow().id}`,
-  );
+  public windowId: number = remote.getCurrentWindow().id;
 
   public constructor() {
     ipcRenderer.on('request-auth', (e, url) => {

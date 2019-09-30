@@ -75,7 +75,7 @@
     "mkdirp": "^0.5.1",
     "mobx": "5.13.0",
     "mobx-react-lite": "1.4.1",
-    "mouse-hooks": "0.4.1",
+    "mouse-hooks": "^0.4.1",
     "nedb": "1.8.0",
     "node-bookmarks-parser": "^2.0.0",
     "node-fetch": "^2.6.0",

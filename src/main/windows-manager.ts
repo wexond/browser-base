@@ -83,7 +83,7 @@ export class WindowsManager {
       e.preventDefault();
 
       const window = this.findWindowByBrowserView(webContents.id);
-      const credentials = await window.authWindow.requestAuth(request.url);
+      const credentials = await window.authDialog.requestAuth(request.url);
 
       if (credentials) {
         callback(credentials.username, credentials.password);

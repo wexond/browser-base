@@ -1,26 +1,27 @@
 import { ipcMain } from 'electron';
-import { AppWindow } from '.';
+import { AppWindow } from '../windows';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
-import { PopupWindow } from './popup';
+import { Dialog } from '.';
 
 const WIDTH = 400;
 const HEIGHT = 500;
 
-export class AuthWindow extends PopupWindow {
+export class AuthDialog extends Dialog {
   public constructor(appWindow: AppWindow) {
-    super(appWindow, 'auth');
-
-    this.setBounds({
-      height: HEIGHT,
-      width: WIDTH,
-    } as any);
+    super(appWindow, {
+      name: 'auth',
+      bounds: {
+        width: WIDTH,
+        height: HEIGHT,
+        y: TOOLBAR_HEIGHT,
+      },
+    });
   }
 
   public requestAuth(
     url: string,
   ): Promise<{ username: string; password: string }> {
     return new Promise(resolve => {
-      this.rearrange();
       this.show();
 
       this.webContents.send('request-auth', url);
@@ -34,10 +35,11 @@ export class AuthWindow extends PopupWindow {
   }
 
   public rearrange() {
-    const cBounds = this.appWindow.getContentBounds();
-    this.setBounds({
-      x: Math.round(cBounds.x + cBounds.width / 2 - WIDTH / 2),
-      y: cBounds.y + TOOLBAR_HEIGHT,
-    } as any);
+    const { width } = this.appWindow.getContentBounds();
+
+    super.rearrange({
+      x: Math.round(width / 2 - WIDTH / 2),
+      y: TOOLBAR_HEIGHT,
+    });
   }
 }

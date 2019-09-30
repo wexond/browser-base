@@ -5,7 +5,6 @@ import { AppWindow } from './windows';
 import { windowsManager } from '.';
 import storage from './services/storage';
 import Vibrant = require('node-vibrant');
-import { rgbToHex } from '~/utils';
 
 export class View extends BrowserView {
   public title = '';
@@ -121,7 +120,7 @@ export class View extends BrowserView {
 
             this.window.webContents.send(
               `update-tab-color-${this.webContents.id}`,
-              rgbToHex(palette.Vibrant._rgb),
+              palette.Vibrant.getHex(),
             );
           } catch (e) {
             console.error(e);
