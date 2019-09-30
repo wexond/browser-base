@@ -153,7 +153,7 @@ export class WindowsManager {
   }
 
   public addFavicon = async (url: string): Promise<string> => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async resolve => {
       if (!this.favicons.get(url)) {
         try {
           const res = await requestURL(url);
@@ -184,7 +184,7 @@ export class WindowsManager {
 
           resolve(str);
         } catch (e) {
-          reject(e);
+          throw e;
         }
       } else {
         resolve(this.favicons.get(url));

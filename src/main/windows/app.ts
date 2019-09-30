@@ -124,9 +124,21 @@ export class AppWindow extends BrowserWindow {
       writeFileSync(windowDataPath, JSON.stringify(windowState));
 
       this.menuDialog.destroy();
-      this.menuDialog = null;
       this.searchDialog.destroy();
+      this.authDialog.destroy();
+      this.findDialog.destroy();
+      this.formFillDialog.destroy();
+      this.credentialsDialog.destroy();
+      this.permissionsDialog.destroy();
+
+      this.menuDialog = null;
       this.searchDialog = null;
+      this.authDialog = null;
+      this.findDialog = null;
+      this.formFillDialog = null;
+      this.credentialsDialog = null;
+      this.permissionsDialog = null;
+
       this.viewManager.clear();
 
       if (
