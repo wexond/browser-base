@@ -162,6 +162,7 @@ export class ITab {
       ) => {
         if (isMainFrame) {
           this.background = store.theme.accentColor;
+          this.customColor = false;
           this.favicon = '';
           this.blockedAds = 0;
 

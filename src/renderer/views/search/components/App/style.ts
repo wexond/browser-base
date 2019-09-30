@@ -12,7 +12,7 @@ export const StyledApp = styled.div`
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
-    margin-top: ${visible ? 2 : 8}px;
+    margin-top: ${visible ? 2 : 6}px;
     box-shadow: 0 0 0 2px
         ${theme['searchBox.input.lightForeground'] ? BLUE_500 : BLUE_300},
       ${shadows(4)};
