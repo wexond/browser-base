@@ -73,7 +73,7 @@ export default class Ripple extends React.Component<IProps, IState> {
 
   public fadeOut = () => {
     this.setState({
-      rippleOpacity: 0,
+      rippleOpacity: 0.00000001,
       opacityTransition: true,
     });
   };
