@@ -12,22 +12,22 @@ import {
   FindDialog,
   PermissionsDialog,
   AuthDialog,
+  FormFillDialog,
+  CredentialsDialog,
 } from '../dialogs';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
   public multrin = new Multrin(this);
 
-  // TODO:
-  //
-  // public formFillWindow = new FormFillWindow(this);
-  // public credentialsWindow = new CredentialsWindow(this);
-
   public menuDialog = new MenuDialog(this);
   public searchDialog = new SearchDialog(this);
   public findDialog = new FindDialog(this);
   public permissionsDialog = new PermissionsDialog(this);
   public authDialog = new AuthDialog(this);
+  public formFillDialog = new FormFillDialog(this);
+  public credentialsDialog = new CredentialsDialog(this);
+
   public incognito: boolean;
 
   private windowsManager: WindowsManager;
@@ -82,9 +82,8 @@ export class AppWindow extends BrowserWindow {
     }
 
     const moveAndResize = () => {
-      this.formFillWindow.rearrange();
-      this.credentialsWindow.rearrange();
-
+      this.formFillDialog.rearrange();
+      this.credentialsDialog.rearrange();
       this.authDialog.rearrange();
       this.findDialog.rearrange();
       this.menuDialog.hide();

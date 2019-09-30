@@ -80,21 +80,21 @@ export class Dialog extends BrowserView {
   }
 
   public toggle() {
-    if (!this.visible) this.show(this.bounds);
+    if (!this.visible) this.show();
     else this.hide();
   }
 
-  public show(rect: IRectangle = {}) {
+  public show(focus = true) {
     this.visible = true;
 
     clearTimeout(this.timeout);
 
-    this.rearrange(rect);
+    this.rearrange();
 
     this.appWindow.removeBrowserView(this);
     this.appWindow.addBrowserView(this);
 
-    this.webContents.focus();
+    if (focus) this.webContents.focus();
   }
 
   private _hide() {

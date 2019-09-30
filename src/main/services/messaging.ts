@@ -47,22 +47,22 @@ export const runMessagingService = (appWindow: AppWindow) => {
     const items = await getFormFillMenuItems(name, value);
 
     if (items.length) {
-      appWindow.formFillWindow.webContents.send(`formfill-get-items`, items);
-      appWindow.formFillWindow.inputRect = rect;
+      appWindow.formFillDialog.webContents.send(`formfill-get-items`, items);
+      appWindow.formFillDialog.inputRect = rect;
 
-      appWindow.formFillWindow.resize(
+      appWindow.formFillDialog.resize(
         items.length,
         items.find(r => r.subtext) != null,
       );
-      appWindow.formFillWindow.rearrange();
-      appWindow.formFillWindow.showInactive();
+      appWindow.formFillDialog.rearrange();
+      appWindow.formFillDialog.show(false);
     } else {
-      appWindow.formFillWindow.hide();
+      appWindow.formFillDialog.hide();
     }
   });
 
   ipcMain.on(`form-fill-hide-${id}`, () => {
-    appWindow.formFillWindow.hide();
+    appWindow.formFillDialog.hide();
   });
 
   ipcMain.on(
@@ -94,13 +94,13 @@ export const runMessagingService = (appWindow: AppWindow) => {
   );
 
   ipcMain.on(`credentials-show-${id}`, (e, data) => {
-    appWindow.credentialsWindow.webContents.send('credentials-update', data);
-    appWindow.credentialsWindow.rearrange();
-    appWindow.credentialsWindow.show();
+    appWindow.credentialsDialog.webContents.send('credentials-update', data);
+    appWindow.credentialsDialog.rearrange();
+    appWindow.credentialsDialog.show();
   });
 
   ipcMain.on(`credentials-hide-${id}`, () => {
-    appWindow.credentialsWindow.hide();
+    appWindow.credentialsDialog.hide();
   });
 
   ipcMain.on(`credentials-save-${id}`, async (e, data) => {
