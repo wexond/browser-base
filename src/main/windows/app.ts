@@ -81,20 +81,20 @@ export class AppWindow extends BrowserWindow {
       }
     }
 
-    const moveAndResize = () => {
-      this.formFillDialog.rearrange();
-      this.credentialsDialog.rearrange();
-      this.authDialog.rearrange();
-      this.findDialog.rearrange();
-      this.menuDialog.hide();
-      this.permissionsDialog.rearrange();
-    };
+    const moveAndResize = () => {};
 
     // Update window bounds on resize and on move when window is not maximized.
     this.on('resize', () => {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
       }
+
+      this.formFillDialog.rearrange();
+      this.credentialsDialog.rearrange();
+      this.authDialog.rearrange();
+      this.findDialog.rearrange();
+      this.menuDialog.hide();
+      this.permissionsDialog.rearrange();
 
       moveAndResize();
     });
