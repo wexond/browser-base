@@ -5,29 +5,29 @@ import { resolve, join } from 'path';
 import { ViewManager } from '../view-manager';
 import { getPath } from '~/utils';
 import { runMessagingService, Multrin } from '../services';
-import {
-  PermissionsWindow,
-  AuthWindow,
-  FindWindow,
-  FormFillWindow,
-  CredentialsWindow,
-} from '.';
 import { WindowsManager } from '../windows-manager';
-import { MenuWindow } from './menu';
-import { SearchWindow } from './search';
+import {
+  MenuDialog,
+  SearchDialog,
+  FindDialog,
+  PermissionsDialog,
+  AuthDialog,
+  FormFillDialog,
+  CredentialsDialog,
+} from '../dialogs';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
   public multrin = new Multrin(this);
 
-  // TODO:
-  // public permissionWindow = new PermissionsWindow(this);
-  // public authWindow = new AuthWindow(this);
-  // public findWindow = new FindWindow(this);
-  // public formFillWindow = new FormFillWindow(this);
-  // public credentialsWindow = new CredentialsWindow(this);
-  public menuWindow = new MenuWindow(this);
-  public searchWindow = new SearchWindow(this);
+  public menuDialog = new MenuDialog(this);
+  public searchDialog = new SearchDialog(this);
+  public findDialog = new FindDialog(this);
+  public permissionsDialog = new PermissionsDialog(this);
+  public authDialog = new AuthDialog(this);
+  public formFillDialog = new FormFillDialog(this);
+  public credentialsDialog = new CredentialsDialog(this);
+
   public incognito: boolean;
 
   private windowsManager: WindowsManager;
@@ -82,13 +82,12 @@ export class AppWindow extends BrowserWindow {
     }
 
     const moveAndResize = () => {
-      this.authWindow.rearrange();
-      this.findWindow.rearrange();
-      this.permissionWindow.rearrange();
-      this.formFillWindow.rearrange();
-      this.credentialsWindow.rearrange();
-
-      this.menuWindow.hide();
+      this.formFillDialog.rearrange();
+      this.credentialsDialog.rearrange();
+      this.authDialog.rearrange();
+      this.findDialog.rearrange();
+      this.menuDialog.hide();
+      this.permissionsDialog.rearrange();
     };
 
     // Update window bounds on resize and on move when window is not maximized.
@@ -117,15 +116,17 @@ export class AppWindow extends BrowserWindow {
     this.on('restore', resize);
     this.on('unmaximize', resize);
 
-    // Save current window state to file.
     this.on('close', () => {
+      // Save current window state to file.
+
       windowState.maximized = this.isMaximized();
       windowState.fullscreen = this.isFullScreen();
       writeFileSync(windowDataPath, JSON.stringify(windowState));
-      this.menuWindow.destroy();
-      this.menuWindow = null;
-      this.searchWindow.destroy();
-      this.searchWindow = null;
+
+      this.menuDialog.destroy();
+      this.menuDialog = null;
+      this.searchDialog.destroy();
+      this.searchDialog = null;
       this.viewManager.clear();
 
       if (

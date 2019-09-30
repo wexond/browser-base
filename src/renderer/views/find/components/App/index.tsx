@@ -27,7 +27,7 @@ const close = () => {
     'clearSelection',
   );
   store.occurrences = '0/0';
-  remote.getCurrentWindow().hide();
+  store.hide();
   store.visible = false;
   store.updateTabInfo();
   ipcRenderer.send(`window-focus-${store.windowId}`);

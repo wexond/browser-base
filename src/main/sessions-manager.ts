@@ -47,7 +47,7 @@ export class SessionsManager {
             const window = windowsManager.findWindowByBrowserView(
               webContents.id,
             );
-            const response = await window.permissionWindow.requestPermission(
+            const response = await window.permissionsDialog.requestPermission(
               permission,
               webContents.getURL(),
               details,
@@ -142,10 +142,10 @@ export class SessionsManager {
     const dirs = await promises.readdir(extensionsPath);
 
     for (const dir of dirs) {
-      context.loadExtension(resolve(extensionsPath, dir));
+      // context.loadExtension(resolve(extensionsPath, dir));
     }
 
-    context.loadExtension(resolve(__dirname, 'extensions/wexond-darkreader'));
+    // context.loadExtension(resolve(__dirname, 'extensions/wexond-darkreader'));
 
     if (session === 'incognito') {
       this.incognitoExtensionsLoaded = true;

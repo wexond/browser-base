@@ -111,7 +111,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           label: 'Toggle Search',
           visible: false,
           click() {
-            windowsManager.currentWindow.searchWindow.show();
+            windowsManager.currentWindow.searchDialog.show();
           },
         },
         {
@@ -119,7 +119,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           label: 'Toggle menu',
           visible: false,
           click() {
-            windowsManager.currentWindow.menuWindow.show();
+            windowsManager.currentWindow.menuDialog.show();
           },
         },
         {
@@ -127,7 +127,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           label: 'Toggle Search',
           visible: false,
           click() {
-            windowsManager.currentWindow.searchWindow.show();
+            windowsManager.currentWindow.searchDialog.show();
           },
         },
         {
@@ -135,7 +135,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           label: 'Toggle menu',
           visible: false,
           click() {
-            windowsManager.currentWindow.menuWindow.show();
+            windowsManager.currentWindow.menuDialog.show();
           },
         },
         {

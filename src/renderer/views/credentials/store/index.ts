@@ -20,9 +20,7 @@ export class Store {
 
   public oldUsername: string;
 
-  public windowId: number = ipcRenderer.sendSync(
-    `get-window-id-${getCurrentWindow().id}`,
-  );
+  public windowId: number = getCurrentWindow().id;
 
   public constructor() {
     ipcRenderer.on('credentials-update', (e, data) => {

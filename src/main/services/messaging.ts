@@ -20,23 +20,23 @@ export const runMessagingService = (appWindow: AppWindow) => {
   );
 
   ipcMain.on(`find-show-${id}`, (e, tabId, data) => {
-    appWindow.findWindow.find(tabId, data);
+    appWindow.findDialog.find(tabId, data);
   });
 
   ipcMain.on(`menu-show-${id}`, e => {
-    appWindow.menuWindow.toggle();
+    appWindow.menuDialog.toggle();
   });
 
   ipcMain.on(`search-show-${id}`, e => {
-    appWindow.searchWindow.toggle();
+    appWindow.searchDialog.toggle();
   });
 
   ipcMain.on(`permission-dialog-hide-${id}`, () => {
-    appWindow.permissionWindow.hide();
+    appWindow.permissionsDialog.hide();
   });
 
   ipcMain.on(`update-find-info-${id}`, (e, tabId, data) =>
-    appWindow.findWindow.updateInfo(tabId, data),
+    appWindow.findDialog.updateInfo(tabId, data),
   );
 
   ipcMain.on(`is-incognito-${id}`, e => {
@@ -47,22 +47,22 @@ export const runMessagingService = (appWindow: AppWindow) => {
     const items = await getFormFillMenuItems(name, value);
 
     if (items.length) {
-      appWindow.formFillWindow.webContents.send(`formfill-get-items`, items);
-      appWindow.formFillWindow.inputRect = rect;
+      appWindow.formFillDialog.webContents.send(`formfill-get-items`, items);
+      appWindow.formFillDialog.inputRect = rect;
 
-      appWindow.formFillWindow.resize(
+      appWindow.formFillDialog.resize(
         items.length,
         items.find(r => r.subtext) != null,
       );
-      appWindow.formFillWindow.rearrange();
-      appWindow.formFillWindow.showInactive();
+      appWindow.formFillDialog.rearrange();
+      appWindow.formFillDialog.show(false);
     } else {
-      appWindow.formFillWindow.hide();
+      appWindow.formFillDialog.hide();
     }
   });
 
   ipcMain.on(`form-fill-hide-${id}`, () => {
-    appWindow.formFillWindow.hide();
+    appWindow.formFillDialog.hide();
   });
 
   ipcMain.on(
@@ -94,13 +94,13 @@ export const runMessagingService = (appWindow: AppWindow) => {
   );
 
   ipcMain.on(`credentials-show-${id}`, (e, data) => {
-    appWindow.credentialsWindow.webContents.send('credentials-update', data);
-    appWindow.credentialsWindow.rearrange();
-    appWindow.credentialsWindow.show();
+    appWindow.credentialsDialog.webContents.send('credentials-update', data);
+    appWindow.credentialsDialog.rearrange();
+    appWindow.credentialsDialog.show();
   });
 
   ipcMain.on(`credentials-hide-${id}`, () => {
-    appWindow.credentialsWindow.hide();
+    appWindow.credentialsDialog.hide();
   });
 
   ipcMain.on(`credentials-save-${id}`, async (e, data) => {
