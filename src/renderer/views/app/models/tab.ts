@@ -161,6 +161,7 @@ export class ITab {
         isMainFrame: boolean,
       ) => {
         if (isMainFrame) {
+          this.favicon = '';
           this.blockedAds = 0;
 
           if (url !== this.url && !store.isIncognito) {
