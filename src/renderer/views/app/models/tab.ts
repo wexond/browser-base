@@ -161,6 +161,7 @@ export class ITab {
         isMainFrame: boolean,
       ) => {
         if (isMainFrame) {
+          this.background = store.theme.accentColor;
           this.favicon = '';
           this.blockedAds = 0;
 
