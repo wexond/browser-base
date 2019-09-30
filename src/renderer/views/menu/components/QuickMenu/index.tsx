@@ -17,6 +17,7 @@ import {
 import { icons } from '~/renderer/constants';
 import store from '../../store';
 import { ipcRenderer } from 'electron';
+import { NEWTAB_URL } from '~/constants/tabs';
 
 const changeContent = () => () => {
   // store.overlay.currentContent = content;
@@ -60,8 +61,12 @@ const onIncognitoClick = () => {
   ipcRenderer.send('create-window', true);
 };
 
+const addTab = (url: string) => () => {
+  ipcRenderer.send(`view-create-${store.windowId}`, { url, active: true });
+  store.hide();
+};
+
 export const QuickMenu = observer(() => {
-  // const invert = store.theme['overlay.foreground'] === 'light';
   const invert = true;
 
   return (
@@ -112,7 +117,7 @@ export const QuickMenu = observer(() => {
           )}
         </Actions>
         <MenuItems>
-          <MenuItem>
+          <MenuItem onClick={addTab(NEWTAB_URL)}>
             <Icon icon={icons.tab} />
             <MenuItemTitle>New tab</MenuItemTitle>
             <Shortcut>Ctrl+T</Shortcut>
@@ -128,24 +133,24 @@ export const QuickMenu = observer(() => {
             <Shortcut>Ctrl+Shift+N</Shortcut>
           </MenuItem>
           <Line />
-          <MenuItem arrow>
+          <MenuItem onClick={addTab('wexond://history')} arrow>
             <Icon icon={icons.history} />
             <MenuItemTitle>History</MenuItemTitle>
           </MenuItem>
-          <MenuItem arrow>
+          <MenuItem onClick={addTab('wexond://bookmarks')} arrow>
             <Icon icon={icons.bookmarks} />
             <MenuItemTitle>Bookmarks</MenuItemTitle>
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={addTab('wexond://downloads')}>
             <Icon icon={icons.download} />
             <MenuItemTitle>Downloads</MenuItemTitle>
           </MenuItem>
           <Line />
-          <MenuItem>
+          <MenuItem onClick={addTab('wexond://settings')}>
             <Icon icon={icons.settings} />
             <MenuItemTitle>Settings</MenuItemTitle>
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={addTab('wexond://extensions')}>
             <Icon icon={icons.extensions} />
             <MenuItemTitle>Extensions</MenuItemTitle>
           </MenuItem>

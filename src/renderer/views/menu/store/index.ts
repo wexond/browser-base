@@ -17,6 +17,9 @@ export class Store {
   @observable
   public id = remote.getCurrentWebContents().id;
 
+  @observable
+  public windowId = remote.getCurrentWindow().id;
+
   public constructor() {
     ipcRenderer.on('visible', (e, flag) => {
       this.visible = flag;
@@ -25,7 +28,7 @@ export class Store {
     window.addEventListener('blur', () => {
       if (this.visible) {
         setTimeout(() => {
-          ipcRenderer.send(`hide-${this.id}`);
+          this.hide();
         });
       }
     });
@@ -36,6 +39,10 @@ export class Store {
     ipcRenderer.on('update-settings', (e, settings: ISettings) => {
       this.updateSettings(settings);
     });
+  }
+
+  public hide() {
+    ipcRenderer.send(`hide-${this.id}`);
   }
 
   public updateSettings(newSettings: ISettings) {
