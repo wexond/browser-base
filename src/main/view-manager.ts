@@ -154,6 +154,7 @@ export class ViewManager {
 
     this.window.menuDialog.hide();
     this.window.findDialog.hide();
+
     this.window.searchDialog.bringToTop();
 
     this.fixBounds();

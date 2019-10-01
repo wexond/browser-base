@@ -27,7 +27,7 @@ export class Store {
   public suggestions = new SuggestionsStore(this);
 
   @observable
-  public visible = true;
+  public visible = false;
 
   @observable
   public history: IHistoryItem[] = [];
@@ -116,10 +116,6 @@ export class Store {
 
     this.loadHistory();
     this.loadFavicons();
-
-    setTimeout(() => {
-      this.visible = false;
-    });
 
     window.addEventListener('blur', () => {
       if (this.visible) {

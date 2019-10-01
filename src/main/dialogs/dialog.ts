@@ -90,8 +90,8 @@ export class Dialog extends BrowserView {
 
     clearTimeout(this.timeout);
 
-    this.rearrange();
     this.bringToTop();
+    this.rearrange();
 
     if (focus) this.webContents.focus();
   }
