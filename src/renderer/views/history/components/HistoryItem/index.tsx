@@ -24,7 +24,8 @@ const onTitleClick = (url: string) => (e: React.MouseEvent) => {
   }
 };
 
-const onRemoveClick = (item: IHistoryItem) => () => {
+const onRemoveClick = (item: IHistoryItem) => (e: React.MouseEvent) => {
+  e.stopPropagation();
   store.removeItem(item._id);
 };
 

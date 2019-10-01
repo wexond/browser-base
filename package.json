@@ -81,7 +81,6 @@
     "node-fetch": "^2.6.0",
     "node-vibrant": "^3.2.0-alpha",
     "node-window-manager": "1.1.0",
-    "preact": "^10.0.0-rc.3",
     "prettier": "1.18.2",
     "pretty-bytes": "5.3.0",
     "react": "16.10.1",
