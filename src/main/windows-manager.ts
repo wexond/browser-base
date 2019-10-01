@@ -97,14 +97,7 @@ export class WindowsManager {
     this.onReady();
   }
 
-  private async onReady() {
-    await app.whenReady();
-
-    checkFiles();
-    registerProtocol(session.defaultSession);
-
-    storage.run();
-
+  private async loadFavicons() {
     (await storage.find<IFavicon>({ scope: 'favicons', query: {} })).forEach(
       favicon => {
         const { data } = favicon;
@@ -114,6 +107,16 @@ export class WindowsManager {
         }
       },
     );
+  }
+
+  private async onReady() {
+    await app.whenReady();
+
+    checkFiles();
+    registerProtocol(session.defaultSession);
+
+    storage.run();
+    this.loadFavicons();
 
     this.sessionsManager = new SessionsManager(this);
 
