@@ -22,10 +22,12 @@ export type QuickRange =
 
 export class Store {
   @observable
-  public settings: ISettings = DEFAULT_SETTINGS;
+  public settings: ISettings = (window as any).settings;
 
-  @observable
-  public theme: ITheme = getTheme('wexond-light');
+  @computed
+  public get theme() {
+    return getTheme(this.settings.theme);
+  }
 
   @observable
   public items: IHistoryItem[] = [];
@@ -49,25 +51,16 @@ export class Store {
   public faviconsDb = new PreloadDatabase<IFavicon>('favicons');
 
   public constructor() {
-    const id = makeId(32);
-
-    window.addEventListener('message', ({ data }) => {
-      if (data.type === 'result' && data.id === id) {
-        this.settings = { ...this.settings, ...data.result };
-        this.theme = getTheme(this.settings.theme);
-      }
-    });
-
-    window.postMessage(
-      {
-        type: 'get-settings',
-        id,
-      },
-      '*',
-    );
-
     this.load();
     this.loadFavicons();
+
+    window.addEventListener('resize', () => {
+      const loaded = this.getDefaultLoaded();
+
+      if (loaded > this.itemsLoaded) {
+        this.itemsLoaded = loaded;
+      }
+    });
   }
 
   public resetLoadedItems(): void {
@@ -214,7 +207,7 @@ export class Store {
   }
 
   public getDefaultLoaded() {
-    return Math.floor(window.innerHeight / 56);
+    return Math.floor(window.innerHeight / 48);
   }
 
   @action

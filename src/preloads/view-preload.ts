@@ -1,4 +1,4 @@
-import { ipcRenderer, remote, ipcMain } from 'electron';
+import { ipcRenderer, remote, ipcMain, webFrame } from 'electron';
 
 import AutoComplete from './models/auto-complete';
 
@@ -111,6 +111,10 @@ const emitCallback = (msg: string, data: any) => {
 };
 
 if (window.location.protocol === 'wexond:') {
+  webFrame.executeJavaScript('window', false, (w: any) => {
+    w.settings = ipcRenderer.sendSync('get-settings-sync');
+  });
+
   window.addEventListener('message', ({ data }) => {
     if (data.type === 'storage') {
       ipcRenderer.send(`storage-${data.operation}`, data.id, {
@@ -124,9 +128,6 @@ if (window.location.protocol === 'wexond:') {
       emitCallback(data.id, data);
     } else if (data.type === 'save-settings') {
       ipcRenderer.send('save-settings', { settings: data.data });
-    } else if (data.type === 'get-settings') {
-      ipcRenderer.send('get-settings');
-      emitCallback('update-settings', data);
     }
   });
 
