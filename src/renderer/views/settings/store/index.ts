@@ -47,33 +47,11 @@ export class Store {
     return this.searchEngines[this.settings.searchEngine];
   }
 
-  public constructor() {
-    const id = makeId(32);
-
-    window.addEventListener('message', ({ data }) => {
-      if (data.type === 'result' && data.id === id) {
-        this.settings = { ...this.settings, ...data.result };
-
-        delete this.settings.darkContents;
-        delete this.settings.multrin;
-        delete this.settings.shield;
-
-        this.searchEngines = DEFAULT_SEARCH_ENGINES.concat(
-          data.result.searchEngines,
-        );
-      }
-    });
-
-    window.postMessage(
-      {
-        type: 'get-settings',
-        id,
-      },
-      '*',
-    );
-  }
-
   public save() {
+    delete this.settings.darkContents;
+    delete this.settings.multrin;
+    delete this.settings.shield;
+
     window.postMessage(
       {
         type: 'save-settings',
