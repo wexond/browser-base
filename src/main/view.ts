@@ -13,6 +13,7 @@ export class View extends BrowserView {
   public favicon = '';
   public selected = false;
 
+  private lastHistoryId: string;
   private window: AppWindow;
 
   public constructor(window: AppWindow, url: string, incognito: boolean) {
@@ -56,7 +57,12 @@ export class View extends BrowserView {
       );
     });
 
-    this.webContents.addListener('did-navigate', (e, url) => {
+    this.webContents.addListener('did-navigate', async (e, url) => {
+      this.window.webContents.send(
+        `view-did-navigate-${this.webContents.id}`,
+        url,
+      );
+
       this.updateURL(url);
     });
 
@@ -77,7 +83,7 @@ export class View extends BrowserView {
       this.window.webContents.send(`view-loading-${this.webContents.id}`, true);
     });
 
-    this.webContents.addListener('did-start-navigation', (...args) => {
+    this.webContents.addListener('did-start-navigation', async (...args) => {
       this.updateNavigationState();
 
       this.favicon = '';

@@ -1,4 +1,4 @@
-import { ipcRenderer, remote, ipcMain, webFrame } from 'electron';
+import { ipcRenderer, remote, webFrame } from 'electron';
 
 import AutoComplete from './models/auto-complete';
 
@@ -24,14 +24,6 @@ const goForward = () => {
     scope: 'webContents.goForward',
   });
 };
-
-window.addEventListener('mouseup', e => {
-  if (e.button === 3) {
-    goBack();
-  } else if (e.button === 4) {
-    goForward();
-  }
-});
 
 let beginningScrollLeft: number = null;
 let beginningScrollRight: number = null;

@@ -146,10 +146,12 @@ export class ITab {
     ipcRenderer.on(`view-title-updated-${this.id}`, (e, title: string) => {
       this.title = title;
       this.updateData();
+    });
 
-      if (this.isSelected) {
-        this.updateWindowTitle();
-      }
+    ipcRenderer.on(`view-did-navigate-${this.id}`, async (e, url: string) => {
+      this.background = store.theme.accentColor;
+      this.customColor = false;
+      this.favicon = '';
     });
 
     ipcRenderer.on(
@@ -162,12 +164,13 @@ export class ITab {
         isMainFrame: boolean,
       ) => {
         if (isMainFrame) {
-          this.background = store.theme.accentColor;
-          this.customColor = false;
-          this.favicon = '';
           this.blockedAds = 0;
 
-          if (url !== this.url && !store.isIncognito) {
+          if (
+            url !== this.url &&
+            !url.startsWith('wexond://') &&
+            !store.isIncognito
+          ) {
             this.lastHistoryId = await store.history.addItem({
               title: this.title,
               url,
@@ -234,10 +237,6 @@ export class ITab {
     }
   }
 
-  public updateWindowTitle() {
-    remote.getCurrentWindow();
-  }
-
   @action
   public async updateData() {
     if (!store.isIncognito) {
@@ -253,14 +252,6 @@ export class ITab {
 
       if (this.lastHistoryId) {
         const { title, url, favicon } = this;
-
-        const item = store.history.getById(this.lastHistoryId);
-
-        if (item) {
-          item.title = title;
-          item.url = url;
-          item.favicon = favicon;
-        }
 
         store.history.db.update(
           {
@@ -286,8 +277,6 @@ export class ITab {
       this.tabGroup.selectedTabId = this.id;
 
       ipcRenderer.send(`permission-dialog-hide-${store.windowId}`);
-
-      this.updateWindowTitle();
 
       if (this.isWindow) {
         ipcRenderer.send(`browserview-hide-${store.windowId}`);
