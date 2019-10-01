@@ -28,8 +28,6 @@ export const Favicon = styled.div`
 
 export const Title = styled.a`
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   width: fit-content;
   text-decoration: none;
   color: inherit;
@@ -43,6 +41,8 @@ export const Title = styled.a`
 export const TitleContainer = styled.div`
   flex: 2;
   margin-right: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const Site = styled.div`

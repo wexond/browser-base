@@ -20,7 +20,7 @@ export type QuickRange =
 
 export class Store {
   @observable
-  public settings: ISettings = (window as any).settings;
+  public settings: ISettings = { ...(window as any).settings };
 
   @computed
   public get theme(): ITheme {
