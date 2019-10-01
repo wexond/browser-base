@@ -2,6 +2,7 @@ import { ipcMain } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
+import { NEWTAB_URL } from '~/constants/tabs';
 
 export class ViewManager {
   public views: View[] = [];
@@ -162,8 +163,11 @@ export class ViewManager {
     this.window.addBrowserView(view);
 
     this.window.menuDialog.hide();
-    this.window.searchDialog.hide();
     this.window.findDialog.hide();
+
+    if (!view.webContents.getURL().startsWith(NEWTAB_URL)) {
+      this.window.searchDialog.hide();
+    }
 
     this.fixBounds();
   }

@@ -67,6 +67,8 @@ export class View extends BrowserView {
     this.webContents.addListener('did-start-navigation', (...args) => {
       this.updateNavigationState();
 
+      this.favicon = '';
+
       this.window.webContents.send(
         `load-commit-${this.webContents.id}`,
         ...args,

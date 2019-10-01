@@ -7,6 +7,7 @@ interface IOptions {
   devtools?: boolean;
   bounds?: IRectangle;
   hideTimeout?: number;
+  customHide?: boolean;
 }
 
 interface IRectangle {

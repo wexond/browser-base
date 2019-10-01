@@ -11,6 +11,7 @@ import {
   TAB_PINNED_WIDTH,
 } from '../constants';
 import { getColorBrightness, callViewMethod } from '~/utils';
+import { NEWTAB_URL } from '~/constants/tabs';
 
 const isColorAcceptable = (color: string) => {
   if (store.theme['tab.allowLightBackground']) {
@@ -300,6 +301,10 @@ export class ITab {
           this.id,
           this.findInfo,
         );
+
+        if (this.url.startsWith(NEWTAB_URL)) {
+          ipcRenderer.send(`search-show-${store.windowId}`);
+        }
       }
 
       requestAnimationFrame(() => {
