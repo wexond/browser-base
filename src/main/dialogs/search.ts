@@ -6,6 +6,8 @@ const WIDTH = 800;
 const HEIGHT = 56;
 
 export class SearchDialog extends Dialog {
+  private queueShow = false;
+
   public constructor(appWindow: AppWindow) {
     super(appWindow, {
       name: 'search',
@@ -24,6 +26,10 @@ export class SearchDialog extends Dialog {
         x: Math.round(width / 2 - WIDTH / 2),
       });
     });
+
+    ipcMain.on(`can-show-${this.webContents.id}`, () => {
+      if (this.queueShow) this.show();
+    });
   }
 
   public toggle() {
@@ -38,6 +44,8 @@ export class SearchDialog extends Dialog {
 
   public show() {
     super.show();
+
+    this.queueShow = true;
 
     const selected = this.appWindow.viewManager.selected;
 
@@ -55,6 +63,7 @@ export class SearchDialog extends Dialog {
 
   public hide() {
     super.hide();
+    this.queueShow = false;
     this.webContents.send('visible', false);
   }
 }

@@ -123,8 +123,9 @@ export class Store {
       }
     });
 
-    const obj = ipcRenderer.sendSync('get-settings-sync');
-    this.updateSettings(obj);
+    ipcRenderer.send(`can-show-${this.id}`);
+
+    ipcRenderer.send('get-settings');
 
     ipcRenderer.on('update-settings', (e, settings: ISettings) => {
       this.updateSettings(settings);
