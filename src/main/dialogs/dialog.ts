@@ -91,9 +91,7 @@ export class Dialog extends BrowserView {
     clearTimeout(this.timeout);
 
     this.rearrange();
-
-    this.appWindow.removeBrowserView(this);
-    this.appWindow.addBrowserView(this);
+    this.bringToTop();
 
     if (focus) this.webContents.focus();
   }
@@ -108,8 +106,7 @@ export class Dialog extends BrowserView {
   }
 
   public hide() {
-    this.appWindow.removeBrowserView(this);
-    this.appWindow.addBrowserView(this);
+    this.bringToTop();
 
     clearTimeout(this.timeout);
 
@@ -120,5 +117,10 @@ export class Dialog extends BrowserView {
     }
 
     this.visible = false;
+  }
+
+  public bringToTop() {
+    this.appWindow.removeBrowserView(this);
+    this.appWindow.addBrowserView(this);
   }
 }

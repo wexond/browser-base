@@ -164,10 +164,7 @@ export class ViewManager {
 
     this.window.menuDialog.hide();
     this.window.findDialog.hide();
-
-    if (!view.webContents.getURL().startsWith(NEWTAB_URL)) {
-      this.window.searchDialog.hide();
-    }
+    this.window.searchDialog.bringToTop();
 
     this.fixBounds();
   }
