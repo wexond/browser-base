@@ -235,7 +235,7 @@ export class ITab {
   }
 
   public updateWindowTitle() {
-    remote.getCurrentWindow().setTitle(`${this.title} - Wexond`);
+    remote.getCurrentWindow();
   }
 
   @action

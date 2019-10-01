@@ -56,5 +56,5 @@ export const Site = styled.div`
 export const Time = styled.div`
   opacity: 0.54;
   margin-left: 16px;
-  margin-right: 24px;
+  margin-right: 32px;
 `;

@@ -91,24 +91,6 @@ export class ViewManager {
       view.webContents.setAudioMuted(false);
     });
 
-    this.interval = setInterval(() => {
-      for (const view of this.views) {
-        if (view.isDestroyed()) return;
-
-        const url = view.webContents.getURL();
-
-        if (url !== view.url) {
-          this.window.webContents.send(
-            `view-url-updated-${view.webContents.id}`,
-            url,
-          );
-
-          view.url = url;
-          view.updateCredentials();
-        }
-      }
-    }, 200);
-
     ipcMain.on(`browserview-clear-${id}`, () => {
       this.clear();
     });
@@ -154,10 +136,18 @@ export class ViewManager {
     if (!view || view.isDestroyed()) {
       this.destroy(id);
       this.window.removeBrowserView(view);
+
       return;
     }
 
     if (this.isHidden) return;
+
+    view.selected = true;
+    view.updateWindowTitle();
+
+    if (selected) {
+      selected.selected = false;
+    }
 
     this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);

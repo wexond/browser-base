@@ -11,6 +11,7 @@ export class View extends BrowserView {
   public url = '';
   public homeUrl: string;
   public favicon = '';
+  public selected = false;
 
   private window: AppWindow;
 
@@ -45,10 +46,22 @@ export class View extends BrowserView {
     });
 
     this.webContents.addListener('page-title-updated', (e, title) => {
+      this.title = title;
+
+      this.updateWindowTitle();
+
       this.window.webContents.send(
         `view-title-updated-${this.webContents.id}`,
         title,
       );
+    });
+
+    this.webContents.addListener('did-navigate', (e, url) => {
+      this.updateURL(url);
+    });
+
+    this.webContents.addListener('did-navigate-in-page', (e, url) => {
+      this.updateURL(url);
     });
 
     this.webContents.addListener('did-stop-loading', () => {
@@ -194,6 +207,21 @@ export class View extends BrowserView {
       `has-credentials-${this.webContents.id}`,
       item != null,
     );
+  }
+
+  public updateURL = (url: string) => {
+    this.url = url;
+
+    this.window.webContents.send(
+      `view-url-updated-${this.webContents.id}`,
+      url,
+    );
+
+    this.updateCredentials();
+  };
+
+  public updateWindowTitle() {
+    if (this.selected) this.window.setTitle(`${this.title} - Wexond`);
   }
 
   public get hostname() {
