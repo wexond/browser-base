@@ -50,7 +50,7 @@ const loadFilters = async () => {
   }
 };
 
-export const runAdblockService = (ses: Session) => {
+export const runAdblockService = (ses: any) => {
   if (!ses.webRequest.listeners || ses.id1) return;
 
   ses.id1 = '';
@@ -64,11 +64,11 @@ export const runAdblockService = (ses: Session) => {
   loadFilters().then(() => {
     engine.enableBlockingInSession(ses);
 
-    const item = Array.from(
+    const item: any = Array.from(
       ses.webRequest.listeners.get('onBeforeRequest'),
     ).pop();
 
-    const item2 = Array.from(
+    const item2: any = Array.from(
       ses.webRequest.listeners.get('onHeadersReceived'),
     ).pop();
 
@@ -82,7 +82,7 @@ export const runAdblockService = (ses: Session) => {
   });
 };
 
-export const stopAdblockService = (ses: Session) => {
+export const stopAdblockService = (ses: any) => {
   if (!ses.webRequest.listeners) return;
   try {
     if (engine) {
