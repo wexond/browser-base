@@ -1,13 +1,11 @@
 import { observable, computed, action } from 'mobx';
-import { DEFAULT_SETTINGS } from '~/constants';
 import {
   ISettings,
-  ITheme,
   IHistoryItem,
   IHistorySection,
   IFavicon,
+  ITheme,
 } from '~/interfaces';
-import { makeId } from '~/utils/string';
 import { getTheme } from '~/utils/themes';
 import { PreloadDatabase } from '~/preloads/models/database';
 import { getSectionLabel, compareDates } from '../utils';
@@ -25,7 +23,7 @@ export class Store {
   public settings: ISettings = (window as any).settings;
 
   @computed
-  public get theme() {
+  public get theme(): ITheme {
     return getTheme(this.settings.theme);
   }
 

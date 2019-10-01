@@ -1,5 +1,5 @@
 import { observable, computed } from 'mobx';
-import { DEFAULT_SETTINGS, DEFAULT_SEARCH_ENGINES } from '~/constants';
+import { DEFAULT_SEARCH_ENGINES } from '~/constants';
 import { ISettings, ITheme, ISearchEngine } from '~/interfaces';
 import { AutoFillStore } from './autofill';
 import { StartupTabsStore } from './startup-tabs';
@@ -32,10 +32,10 @@ export class Store {
   public selectedSection: SettingsSection = 'appearance';
 
   @observable
-  public settings: ISettings = DEFAULT_SETTINGS;
+  public settings: ISettings = (window as any).settings;
 
   @computed
-  public get theme() {
+  public get theme(): ITheme {
     return getTheme(this.settings.theme);
   }
 
