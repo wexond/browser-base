@@ -12,11 +12,6 @@ import { icons, BLUE_500 } from '~/renderer/constants';
 import { BrowserAction } from './BrowserAction';
 import { platform } from 'os';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
-import {
-  closeWindow,
-  minimizeWindow,
-  maximizeWindow,
-} from '../../utils/windows';
 import { WindowsControls } from 'react-windows-controls';
 
 const onUpdateClick = () => {
@@ -54,6 +49,14 @@ const BrowserActions = observer(() => {
     </>
   );
 });
+
+const onCloseClick = () => ipcRenderer.send(`window-close-${store.windowId}`);
+
+const onMaximizeClick = () =>
+  ipcRenderer.send(`window-toggle-maximize-${store.windowId}`);
+
+const onMinimizeClick = () =>
+  ipcRenderer.send(`window-minimize-${store.windowId}`);
 
 export const Toolbar = observer(() => {
   const { selectedTab } = store.tabs;
@@ -110,9 +113,9 @@ export const Toolbar = observer(() => {
             height: TOOLBAR_HEIGHT,
             WebkitAppRegion: 'no-drag',
           }}
-          onClose={closeWindow}
-          onMinimize={minimizeWindow}
-          onMaximize={maximizeWindow}
+          onClose={onCloseClick}
+          onMinimize={onMinimizeClick}
+          onMaximize={onMaximizeClick}
           dark={store.theme['toolbar.lightForeground']}
         />
       )}

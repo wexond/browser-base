@@ -80,7 +80,7 @@ export class TabsStore {
     }, 1000);
 
     ipcRenderer.on('tabs-resize', () => {
-      this.updateTabsBounds(false);
+      this.updateTabsBounds(true);
     });
 
     ipcRenderer.on(

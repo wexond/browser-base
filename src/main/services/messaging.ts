@@ -15,6 +15,22 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.webContents.focus();
   });
 
+  ipcMain.on(`window-toggle-maximize-${id}`, () => {
+    if (appWindow.isMaximized()) {
+      appWindow.unmaximize();
+    } else {
+      appWindow.maximize();
+    }
+  });
+
+  ipcMain.on(`window-minimize-${id}`, () => {
+    appWindow.minimize();
+  });
+
+  ipcMain.on(`window-close-${id}`, () => {
+    appWindow.close();
+  });
+
   ipcMain.on(`update-tab-find-info-${id}`, (e, ...args) =>
     appWindow.webContents.send('update-tab-find-info', ...args),
   );
