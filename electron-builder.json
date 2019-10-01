@@ -1,28 +1,36 @@
 {
   "appId": "org.wexond.wexond",
   "productName": "Wexond",
-
   "nsis": {
     "include": "static/installer.nsh"
   },
-
   "asar": true,
   "directories": {
     "output": "dist",
     "buildResources": "static/app-icons"
   },
-  "files": ["build/**/*", "package.json"],
+  "files": [
+    "build/**/*",
+    "package.json",
+    "static/**/*"
+  ],
   "publish": "github",
   "linux": {
     "category": "Network",
     "target": [
       {
         "target": "AppImage",
-        "arch": ["ia32", "x64"]
+        "arch": [
+          "ia32",
+          "x64"
+        ]
       },
       {
         "target": "deb",
-        "arch": ["ia32", "x64"]
+        "arch": [
+          "ia32",
+          "x64"
+        ]
       }
     ]
   },
@@ -30,11 +38,17 @@
     "target": [
       {
         "target": "nsis",
-        "arch": ["x64", "ia32"]
+        "arch": [
+          "x64",
+          "ia32"
+        ]
       },
       {
         "target": "zip",
-        "arch": ["x64", "ia32"]
+        "arch": [
+          "x64",
+          "ia32"
+        ]
       }
     ]
   },
