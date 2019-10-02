@@ -112,6 +112,10 @@ export class AppWindow extends BrowserWindow {
         this.viewManager.fixBounds();
       });
 
+      setTimeout(() => {
+        this.webContents.send('tabs-resize');
+      }, 500);
+
       this.webContents.send('tabs-resize');
     };
 

@@ -126,6 +126,11 @@ export class View extends BrowserView {
       async (e, favicons) => {
         this.favicon = favicons[0];
 
+        this.window.webContents.send(
+          `update-tab-favicon-${this.webContents.id}`,
+          this.favicon,
+        );
+
         try {
           let fav = this.favicon;
 
@@ -150,11 +155,6 @@ export class View extends BrowserView {
           this.favicon = '';
           console.error(e);
         }
-
-        this.window.webContents.send(
-          `update-tab-favicon-${this.webContents.id}`,
-          this.favicon,
-        );
       },
     );
 

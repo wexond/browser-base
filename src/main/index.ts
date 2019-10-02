@@ -16,8 +16,6 @@ export const windowsManager = new WindowsManager();
 // app.setAsDefaultProtocolClient('http');
 // app.setAsDefaultProtocolClient('https');
 
-console.time('Main start');
-
 process.on('uncaughtException', error => {
   console.error(error);
 });

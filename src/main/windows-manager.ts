@@ -14,24 +14,8 @@ import { IFavicon } from '~/interfaces';
 import fileType = require('file-type');
 import icojs = require('icojs');
 
-const convertIcoToPng = (icoData: Buffer) => {
-  return new Promise((resolve: (b: Buffer) => void) => {
-    icojs.parse(icoData, 'image/png').then((images: any) => {
-      resolve(images[0].buffer);
-    });
-  });
-};
-
-const readImage = (buffer: Buffer) => {
-  return new Promise((resolve: (b: Buffer) => void) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      resolve(Buffer.from(reader.result as any));
-    };
-
-    reader.readAsArrayBuffer(new Blob([buffer]));
-  });
+const convertIcoToPng = async (icoData: Buffer): Promise<ArrayBuffer> => {
+  return (await icojs.parse(icoData, 'image/png'))[0].buffer;
 };
 
 export class WindowsManager {
@@ -122,8 +106,6 @@ export class WindowsManager {
 
     this.createWindow();
 
-    console.timeEnd('Main start');
-
     runAutoUpdaterService(this);
 
     Menu.setApplicationMenu(getMainMenu(this));
@@ -170,10 +152,10 @@ export class WindowsManager {
           const type = fileType(data);
 
           if (type && type.ext === 'ico') {
-            data = await readImage(await convertIcoToPng(data));
+            data = Buffer.from(new Uint8Array(await convertIcoToPng(data)));
           }
 
-          const str = `data:png;base64,${data.toString('base64')}`;
+          const str = `data:${type.ext};base64,${data.toString('base64')}`;
 
           storage.insert({
             scope: 'favicons',
