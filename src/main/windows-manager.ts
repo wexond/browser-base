@@ -155,7 +155,9 @@ export class WindowsManager {
             data = Buffer.from(new Uint8Array(await convertIcoToPng(data)));
           }
 
-          const str = `data:${type.ext};base64,${data.toString('base64')}`;
+          const str = `data:${fileType(data).ext};base64,${data.toString(
+            'base64',
+          )}`;
 
           storage.insert({
             scope: 'favicons',
