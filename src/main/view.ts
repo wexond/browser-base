@@ -216,6 +216,8 @@ export class View extends BrowserView {
   }
 
   public updateURL = (url: string) => {
+    if (this.url === url) return;
+
     this.url = url;
 
     this.window.webContents.send(

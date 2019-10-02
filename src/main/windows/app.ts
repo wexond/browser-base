@@ -108,7 +108,10 @@ export class AppWindow extends BrowserWindow {
     });
 
     const resize = () => {
-      this.viewManager.fixBounds();
+      setTimeout(() => {
+        this.viewManager.fixBounds();
+      });
+
       this.webContents.send('tabs-resize');
     };
 
@@ -117,8 +120,7 @@ export class AppWindow extends BrowserWindow {
     this.on('unmaximize', resize);
 
     this.on('close', () => {
-      // Save current window state to file.
-
+      // Save current window state to a file.
       windowState.maximized = this.isMaximized();
       windowState.fullscreen = this.isFullScreen();
       writeFileSync(windowDataPath, JSON.stringify(windowState));
