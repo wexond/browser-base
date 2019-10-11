@@ -101,8 +101,6 @@ export class Store {
       this.visible = flag;
 
       if (flag) {
-        this.loadHistory();
-        this.loadFavicons();
         this.tabs = [];
         this.suggestions.list = [];
         this.tabId = tab.id;

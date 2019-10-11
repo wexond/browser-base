@@ -92,9 +92,9 @@ const onInput = (e: any) => {
 };
 
 const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-  requestAnimationFrame(() => {
+  setTimeout(() => {
     store.inputRef.current.select();
-  });
+  }, 10);
 };
 
 export const App = observer(() => {
