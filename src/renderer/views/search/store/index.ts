@@ -13,6 +13,7 @@ import {
 import { Database } from '~/models/database';
 import { SuggestionsStore } from './suggestions';
 import { getTheme } from '~/utils/themes';
+import { NEWTAB_URL } from '~/constants/tabs';
 
 let lastSuggestion: string;
 
@@ -105,7 +106,12 @@ export class Store {
         this.tabs = [];
         this.suggestions.list = [];
         this.tabId = tab.id;
-        this.inputRef.current.value = tab.url;
+        if (tab.url.startsWith(NEWTAB_URL)) {
+          this.inputRef.current.value = '';
+        } else {
+          this.inputRef.current.value = tab.url;
+        }
+
         this.inputRef.current.focus();
       }
     });
