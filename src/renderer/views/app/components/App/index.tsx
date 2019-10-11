@@ -5,15 +5,10 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
 import { Style } from '../../style';
 import { Toolbar } from '../Toolbar';
-import { ipcRenderer } from 'electron';
 import { Line, StyledApp } from './style';
 import store from '../../store';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
-
-window.onbeforeunload = () => {
-  ipcRenderer.send(`browserview-clear-${store.windowId}`);
-};
 
 const App = observer(() => {
   return (

@@ -13,7 +13,6 @@ export class View extends BrowserView {
   public favicon = '';
   public selected = false;
 
-  private lastHistoryId: string;
   private window: AppWindow;
 
   public constructor(window: AppWindow, url: string, incognito: boolean) {

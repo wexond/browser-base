@@ -152,6 +152,19 @@ export class ITab {
       this.background = store.theme.accentColor;
       this.customColor = false;
       this.favicon = '';
+
+      if (
+        url !== this.url &&
+        !url.startsWith('wexond://') &&
+        !store.isIncognito
+      ) {
+        this.lastHistoryId = await store.history.addItem({
+          title: this.title,
+          url,
+          favicon: '',
+          date: new Date().toString(),
+        });
+      }
     });
 
     ipcRenderer.on(
@@ -165,19 +178,6 @@ export class ITab {
       ) => {
         if (isMainFrame) {
           this.blockedAds = 0;
-
-          if (
-            url !== this.url &&
-            !url.startsWith('wexond://') &&
-            !store.isIncognito
-          ) {
-            this.lastHistoryId = await store.history.addItem({
-              title: this.title,
-              url,
-              favicon: '',
-              date: new Date().toString(),
-            });
-          }
         }
       },
     );
