@@ -18,6 +18,7 @@ export const NavigationDrawer = ({
   style,
   dense,
   toggled,
+  translucent,
 }: {
   children?: any;
   title?: string;
@@ -27,9 +28,15 @@ export const NavigationDrawer = ({
   style?: any;
   dense?: boolean;
   toggled?: boolean;
+  translucent?: boolean;
 }) => {
   return (
-    <StyledNavigationDrawer toggled={toggled} style={style} dense={dense}>
+    <StyledNavigationDrawer
+      translucent={translucent}
+      toggled={toggled}
+      style={style}
+      dense={dense}
+    >
       {title !== '' && (
         <Header>
           <Title>{title}</Title>

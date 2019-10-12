@@ -46,6 +46,7 @@ export const icons = {
   week: require('~/renderer/resources/icons/week.svg'),
   all: require('~/renderer/resources/icons/all.svg'),
   calendar: require('~/renderer/resources/icons/calendar.svg'),
+  dashboard: require('~/renderer/resources/icons/dashboard.svg'),
   weather: {
     day: {
       clear: require('~/renderer/resources/icons/weather/day/clear.png'),

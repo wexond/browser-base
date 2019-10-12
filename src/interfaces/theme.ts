@@ -40,6 +40,7 @@ export interface ITheme {
   'pages.textColor': string;
   'pages.navigationDrawer1.backgroundColor': string;
   'pages.navigationDrawer2.backgroundColor': string;
+  'pages.navigationDrawer.translucent.backgroundColor': string;
 
   'dropdown.backgroundColor': string;
 

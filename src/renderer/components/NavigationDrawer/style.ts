@@ -15,16 +15,22 @@ export const StyledNavigationDrawer = styled.div`
     theme,
     dense,
     toggled,
+    translucent,
   }: {
     theme?: ITheme;
     dense?: boolean;
     toggled?: boolean;
+    translucent?: boolean;
   }) => css`
     padding: ${dense ? 0 : '0 32px'};
 
     width: ${dense ? (toggled ? 175 : 56) : 320}px;
 
-    background-color: ${dense
+    position: ${translucent ? 'absolute' : 'relative'};
+
+    background-color: ${translucent
+      ? theme['pages.navigationDrawer.translucent.backgroundColor']
+      : dense
       ? theme['pages.navigationDrawer1.backgroundColor']
       : theme['pages.navigationDrawer2.backgroundColor']};
   `}

@@ -24,12 +24,24 @@ const MenuItem = observer(
   ),
 );
 
-export const GlobalNavigationDrawer = () => {
+export const GlobalNavigationDrawer = ({
+  translucent,
+}: {
+  translucent: boolean;
+}) => {
   const [toggled, setToggled] = React.useState(false);
 
   return (
-    <NavigationDrawer toggled={toggled} dense title="">
+    <NavigationDrawer
+      translucent={translucent}
+      toggled={toggled}
+      dense
+      title=""
+    >
       <MenuButton onClick={() => setToggled(!toggled)} />
+      <MenuItem name="newtab" icon={icons.dashboard}>
+        Home
+      </MenuItem>
       <MenuItem name="settings" icon={icons.settings}>
         Settings
       </MenuItem>
