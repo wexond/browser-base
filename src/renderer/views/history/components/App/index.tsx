@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
+import { hot } from 'react-hot-loader/root';
 
 import store, { QuickRange } from '../../store';
 import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
@@ -79,37 +80,39 @@ const onClearClick = () => {
   // TODO: ipcRenderer.send('clear-browsing-data');
 };
 
-export default observer(() => {
-  return (
-    <ThemeProvider theme={store.theme}>
-      <Container>
-        <GlobalStyle />
-        <GlobalNavigationDrawer></GlobalNavigationDrawer>
-        <NavigationDrawer title="History" search onSearchInput={onInput}>
-          <RangeItem icon={icons.all} range="all">
-            All
-          </RangeItem>
-          <RangeItem icon={icons.today} range="today">
-            Today
-          </RangeItem>
-          <RangeItem icon={icons.history} range="yesterday">
-            Yesterday
-          </RangeItem>
-          <RangeItem icon={icons.week} range="last-week">
-            Last week
-          </RangeItem>
-          <RangeItem icon={icons.calendar} range="older">
-            Older
-          </RangeItem>
-          <div style={{ flex: 1 }} />
-          <NavigationDrawer.Item icon={icons.trash} onClick={onClearClick}>
-            Clear browsing data
-          </NavigationDrawer.Item>
-        </NavigationDrawer>
-        <Content onScroll={onScroll}>
-          <HistorySections />
-        </Content>
-      </Container>
-    </ThemeProvider>
-  );
-});
+export default hot(
+  observer(() => {
+    return (
+      <ThemeProvider theme={store.theme}>
+        <Container>
+          <GlobalStyle />
+          <GlobalNavigationDrawer></GlobalNavigationDrawer>
+          <NavigationDrawer title="History" search onSearchInput={onInput}>
+            <RangeItem icon={icons.all} range="all">
+              All
+            </RangeItem>
+            <RangeItem icon={icons.today} range="today">
+              Today
+            </RangeItem>
+            <RangeItem icon={icons.history} range="yesterday">
+              Yesterday
+            </RangeItem>
+            <RangeItem icon={icons.week} range="last-week">
+              Last week
+            </RangeItem>
+            <RangeItem icon={icons.calendar} range="older">
+              Older
+            </RangeItem>
+            <div style={{ flex: 1 }} />
+            <NavigationDrawer.Item icon={icons.trash} onClick={onClearClick}>
+              Clear browsing data
+            </NavigationDrawer.Item>
+          </NavigationDrawer>
+          <Content onScroll={onScroll}>
+            <HistorySections />
+          </Content>
+        </Container>
+      </ThemeProvider>
+    );
+  }),
+);

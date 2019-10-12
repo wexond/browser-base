@@ -17,8 +17,6 @@ export const NavigationDrawer = ({
   onSearchInput,
   style,
   dense,
-  toggled,
-  translucent,
 }: {
   children?: any;
   title?: string;
@@ -27,16 +25,9 @@ export const NavigationDrawer = ({
   onBackClick?: (e?: React.MouseEvent<HTMLDivElement>) => void;
   style?: any;
   dense?: boolean;
-  toggled?: boolean;
-  translucent?: boolean;
 }) => {
   return (
-    <StyledNavigationDrawer
-      translucent={translucent}
-      toggled={toggled}
-      style={style}
-      dense={dense}
-    >
+    <StyledNavigationDrawer style={style} dense={dense}>
       {title !== '' && (
         <Header>
           <Title>{title}</Title>

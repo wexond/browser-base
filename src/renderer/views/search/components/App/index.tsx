@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { hot } from 'react-hot-loader/root';
 
 import { Style } from '../../style';
 import { StyledApp, Input, SearchIcon, SearchBox } from './style';
@@ -97,48 +98,50 @@ const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   }, 10);
 };
 
-export const App = observer(() => {
-  const suggestionsVisible = store.suggestions.list.length !== 0;
+export const App = hot(
+  observer(() => {
+    const suggestionsVisible = store.suggestions.list.length !== 0;
 
-  let height = 0;
+    let height = 0;
 
-  if (suggestionsVisible) {
-    for (const s of store.suggestions.list) {
-      height += 38;
+    if (suggestionsVisible) {
+      for (const s of store.suggestions.list) {
+        height += 38;
+      }
+
+      for (const s of store.searchedTabs) {
+        height += 38;
+      }
+
+      if (store.suggestions.list.length > 0) {
+        height += 30;
+      }
+
+      if (store.searchedTabs.length > 0) {
+        height += 30;
+      }
     }
 
-    for (const s of store.searchedTabs) {
-      height += 38;
-    }
+    ipcRenderer.send(`height-${store.id}`, height);
 
-    if (store.suggestions.list.length > 0) {
-      height += 30;
-    }
-
-    if (store.searchedTabs.length > 0) {
-      height += 30;
-    }
-  }
-
-  ipcRenderer.send(`height-${store.id}`, height);
-
-  return (
-    <ThemeProvider theme={store.theme}>
-      <StyledApp visible={store.visible}>
-        <GlobalStyle />
-        <SearchBox>
-          <SearchIcon />
-          <Input
-            onKeyDown={onKeyDown}
-            onChange={onInput}
-            onFocus={onFocus}
-            ref={store.inputRef}
-            onKeyPress={onKeyPress}
-            placeholder="Search or type in an URL"
-          ></Input>
-        </SearchBox>
-        <Suggestions visible={suggestionsVisible}></Suggestions>
-      </StyledApp>
-    </ThemeProvider>
-  );
-});
+    return (
+      <ThemeProvider theme={store.theme}>
+        <StyledApp visible={store.visible}>
+          <GlobalStyle />
+          <SearchBox>
+            <SearchIcon />
+            <Input
+              onKeyDown={onKeyDown}
+              onChange={onInput}
+              onFocus={onFocus}
+              ref={store.inputRef}
+              onKeyPress={onKeyPress}
+              placeholder="Search or type in an URL"
+            ></Input>
+          </SearchBox>
+          <Suggestions visible={suggestionsVisible}></Suggestions>
+        </StyledApp>
+      </ThemeProvider>
+    );
+  }),
+);

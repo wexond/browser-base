@@ -37,7 +37,6 @@ export const lightTheme: ITheme = {
   'dropdown.backgroundColor': '#fff',
   'pages.navigationDrawer1.backgroundColor': '#f5f5f5',
   'pages.navigationDrawer2.backgroundColor': '#fafafa',
-  'pages.navigationDrawer.translucent.backgroundColor': 'rgba(0, 0, 0, 0.2)',
 
   accentColor: BLUE_500,
   backgroundColor: '#fff',
@@ -45,7 +44,7 @@ export const lightTheme: ITheme = {
 
 export const darkTheme: ITheme = {
   'toolbar.backgroundColor': '#1c1c1c',
-  'toolbar.bottomLine.backgroundColor': '#000',
+  'toolbar.bottomLine.backgroundColor': 'rgba(255, 255, 255, 0.08)',
   'toolbar.lightForeground': true,
   'toolbar.separator.color': 'rgba(255, 255, 255, 0.12)',
   'tab.backgroundOpacity': 0.6,
@@ -79,8 +78,6 @@ export const darkTheme: ITheme = {
   'dropdown.backgroundColor': '#424242',
   'pages.navigationDrawer1.backgroundColor': 'rgba(255, 255, 255, 0.1)',
   'pages.navigationDrawer2.backgroundColor': 'rgba(255, 255, 255, 0.05)',
-  'pages.navigationDrawer.translucent.backgroundColor':
-    'rgba(255, 255, 255, 0.05)',
 
   backgroundColor: '#1c1c1c',
   accentColor: BLUE_500,

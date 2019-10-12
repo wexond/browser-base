@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { NavigationDrawer } from '../NavigationDrawer';
-import { MenuButton } from '../NavigationDrawer/style';
 import { observer } from 'mobx-react-lite';
 import { icons } from '~/renderer/constants';
 
@@ -24,21 +23,9 @@ const MenuItem = observer(
   ),
 );
 
-export const GlobalNavigationDrawer = ({
-  translucent,
-}: {
-  translucent: boolean;
-}) => {
-  const [toggled, setToggled] = React.useState(false);
-
+export const GlobalNavigationDrawer = () => {
   return (
-    <NavigationDrawer
-      translucent={translucent}
-      toggled={toggled}
-      dense
-      title=""
-    >
-      <MenuButton onClick={() => setToggled(!toggled)} />
+    <NavigationDrawer dense title="">
       <MenuItem name="newtab" icon={icons.dashboard}>
         Home
       </MenuItem>

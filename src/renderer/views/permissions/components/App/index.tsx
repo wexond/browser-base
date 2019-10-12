@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { createGlobalStyle } from 'styled-components';
+import { hot } from 'react-hot-loader/root';
 
 import { Style } from '../../style';
 import { ipcRenderer } from 'electron';
@@ -34,34 +35,36 @@ const getText = (permission: string) => {
   return '';
 };
 
-export const App = observer(() => {
-  return (
-    <StyledApp>
-      <GlobalStyle />
-      <Title>{store.domain} wants to:</Title>
-      <Permissions>
-        {store.permissions.map(item => (
-          <Permission key={item}>{getText(item)}</Permission>
-        ))}
-      </Permissions>
-      <Buttons>
-        <Button
-          foreground="black"
-          background="rgba(0, 0, 0, 0.08)"
-          onClick={() => sendResult(true)}
-        >
-          Allow
-        </Button>
-        <Button
-          foreground="black"
-          background="rgba(0, 0, 0, 0.08)"
-          style={{ marginLeft: 8 }}
-          onClick={() => sendResult(false)}
-        >
-          Deny
-        </Button>
-      </Buttons>
-      <div style={{ clear: 'both' }}></div>
-    </StyledApp>
-  );
-});
+export const App = hot(
+  observer(() => {
+    return (
+      <StyledApp>
+        <GlobalStyle />
+        <Title>{store.domain} wants to:</Title>
+        <Permissions>
+          {store.permissions.map(item => (
+            <Permission key={item}>{getText(item)}</Permission>
+          ))}
+        </Permissions>
+        <Buttons>
+          <Button
+            foreground="black"
+            background="rgba(0, 0, 0, 0.08)"
+            onClick={() => sendResult(true)}
+          >
+            Allow
+          </Button>
+          <Button
+            foreground="black"
+            background="rgba(0, 0, 0, 0.08)"
+            style={{ marginLeft: 8 }}
+            onClick={() => sendResult(false)}
+          >
+            Deny
+          </Button>
+        </Buttons>
+        <div style={{ clear: 'both' }}></div>
+      </StyledApp>
+    );
+  }),
+);
