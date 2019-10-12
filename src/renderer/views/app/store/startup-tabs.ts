@@ -21,7 +21,6 @@ export class StartupTabsStore {
 
   public constructor(store: Store) {
     this.store = store;
-    this.load();
   }
 
   public async load() {

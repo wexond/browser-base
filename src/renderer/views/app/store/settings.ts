@@ -29,11 +29,17 @@ export class SettingsStore {
   public constructor(store: Store) {
     this.store = store;
 
-    const obj = ipcRenderer.sendSync('get-settings-sync');
-    this.updateSettings(obj);
+    let firstTime = false;
+
+    ipcRenderer.send('get-settings');
 
     ipcRenderer.on('update-settings', (e, settings: ISettings) => {
       this.updateSettings(settings);
+
+      if (!firstTime) {
+        store.startupTabs.load();
+        firstTime = true;
+      }
     });
   }
 

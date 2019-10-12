@@ -12,7 +12,6 @@ import {
 import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 import store from '.';
 import { ipcRenderer } from 'electron';
-import { getColorBrightness } from '~/utils';
 import { defaultTabOptions } from '~/constants/tabs';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { TweenLite } from 'gsap';
