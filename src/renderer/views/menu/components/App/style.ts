@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { ITheme } from '~/interfaces';
 
 export const StyledApp = styled.div`
   margin: 8px;
@@ -6,12 +7,12 @@ export const StyledApp = styled.div`
   border-radius: 8px;
   overflow: hidden;
   position: relative;
-  background-color: #f5f5f5;
   transition: 0.2s opacity, 0.2s margin-top;
 
-  ${({ visible }: { visible: boolean }) => css`
+  ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
     margin-top: ${visible ? 0 : 7}px;
+    background-color: ${theme['dialog.backgroundColor']};
   `}
 `;
 
