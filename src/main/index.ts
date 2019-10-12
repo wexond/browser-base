@@ -1,6 +1,5 @@
 import { ipcMain, app } from 'electron';
-import { resolve } from 'path';
-import { homedir, platform } from 'os';
+import { platform } from 'os';
 import { WindowsManager } from './windows-manager';
 
 app.setName('Wexond');
@@ -9,12 +8,10 @@ app.setName('Wexond');
 app.commandLine.appendSwitch('--enable-transparent-visuals');
 ipcMain.setMaxListeners(0);
 
-app.setPath('userData', resolve(homedir(), '.wexond'));
-
-export const windowsManager = new WindowsManager();
-
 // app.setAsDefaultProtocolClient('http');
 // app.setAsDefaultProtocolClient('https');
+
+export const windowsManager = new WindowsManager();
 
 process.on('uncaughtException', error => {
   console.error(error);

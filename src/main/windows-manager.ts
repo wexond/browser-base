@@ -97,6 +97,7 @@ export class WindowsManager {
     await app.whenReady();
 
     checkFiles();
+
     registerProtocol(session.defaultSession);
 
     storage.run();
