@@ -72,7 +72,7 @@ export const darkTheme: ITheme = {
   'searchBox.suggestions.backgroundColor': '#424242',
   'searchBox.suggestions.lightForeground': true,
   'searchBox.suggestions.textColor': '#fff',
-  'pages.backgroundColor': '#212121',
+  'pages.backgroundColor': '#1c1c1c',
   'pages.lightForeground': true,
   'pages.textColor': '#fff',
   'dropdown.backgroundColor': '#424242',

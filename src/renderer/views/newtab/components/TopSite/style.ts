@@ -5,7 +5,7 @@ import { icons } from '~/renderer/constants';
 import { ItemBase } from '../TopSites/style';
 
 export const Item = styled(ItemBase)`
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(25, 25, 25, 0.7);
   box-shadow: ${shadows(4)};
   transition: 0.2s box-shadow, 0.2s background-color;
   cursor: pointer;
@@ -16,8 +16,8 @@ export const Item = styled(ItemBase)`
   overflow: hidden;
 
   &:hover {
-    box-shadow: ${shadows(6)};
-    background-color: rgba(0, 0, 0, 0.6);
+    box-shadow: ${shadows(8)};
+    background-color: rgba(0, 0, 0, 0.65);
   }
 `;
 
@@ -53,6 +53,6 @@ export const Title = styled.div`
   text-align: center;
   white-space: nowrap;
   max-width: calc(100% - 16px);
-  margin-top: 12px;
-  margin-bottom: -12px;
+  margin-top: 20px;
+  margin-bottom: -8px;
 `;
