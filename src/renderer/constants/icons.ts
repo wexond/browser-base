@@ -42,6 +42,10 @@ export const icons = {
   print: require('~/renderer/resources/icons/print.svg'),
   tab: require('~/renderer/resources/icons/tab.svg'),
   menu: require('~/renderer/resources/icons/menu.svg'),
+  today: require('~/renderer/resources/icons/today.svg'),
+  week: require('~/renderer/resources/icons/week.svg'),
+  all: require('~/renderer/resources/icons/all.svg'),
+  calendar: require('~/renderer/resources/icons/calendar.svg'),
   weather: {
     day: {
       clear: require('~/renderer/resources/icons/weather/day/clear.png'),

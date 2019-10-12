@@ -23,10 +23,19 @@ const onScroll = (e: any) => {
 };
 
 const RangeItem = observer(
-  ({ range, children }: { range: QuickRange; children: any }) => (
+  ({
+    range,
+    children,
+    icon,
+  }: {
+    range: QuickRange;
+    children: any;
+    icon: string;
+  }) => (
     <NavigationDrawer.Item
       onClick={() => (store.selectedRange = range)}
       selected={store.selectedRange === range}
+      icon={icon}
     >
       {children}
     </NavigationDrawer.Item>
@@ -77,12 +86,21 @@ export default observer(() => {
         <GlobalStyle />
         <GlobalNavigationDrawer></GlobalNavigationDrawer>
         <NavigationDrawer title="History" search onSearchInput={onInput}>
-          <RangeItem range="all">All</RangeItem>
-          <RangeItem range="today">Today</RangeItem>
-          <RangeItem range="yesterday">Yesterday</RangeItem>
-          <RangeItem range="last-week">Last week</RangeItem>
-          <RangeItem range="last-month">Last month</RangeItem>
-          <RangeItem range="older">Older</RangeItem>
+          <RangeItem icon={icons.all} range="all">
+            All
+          </RangeItem>
+          <RangeItem icon={icons.today} range="today">
+            Today
+          </RangeItem>
+          <RangeItem icon={icons.history} range="yesterday">
+            Yesterday
+          </RangeItem>
+          <RangeItem icon={icons.week} range="last-week">
+            Last week
+          </RangeItem>
+          <RangeItem icon={icons.calendar} range="older">
+            Older
+          </RangeItem>
           <div style={{ flex: 1 }} />
           <NavigationDrawer.Item icon={icons.trash} onClick={onClearClick}>
             Clear browsing data
