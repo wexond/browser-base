@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { centerIcon } from '~/renderer/mixins';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -19,6 +20,7 @@ export const Wrapper = styled.div`
     bottom: 0;
     right: 0;
     z-index: 2;
+    background-attachment: fixed;
     background-image: radial-gradient(
         rgba(0, 0, 0, 0) 0%,
         rgba(0, 0, 0, 0.5) 100%
@@ -36,4 +38,39 @@ export const Content = styled.div`
   max-width: 1366px;
   position: relative;
   z-index: 3;
+`;
+
+export const Menu = styled.div`
+  position: absolute;
+  left: 0;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  margin-left: 16px;
+`;
+
+export const IconItem = styled.div`
+  width: 40px;
+  height: 40px;
+  ${centerIcon(20)};
+  margin-top: 8px;
+  filter: invert(100%);
+  opacity: 0.54;
+  z-index: 3;
+  cursor: pointer;
+  border-radius: 4px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:hover {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+
+  ${({ icon }: { icon?: string }) => css`
+    background-image: url(${icon});
+  `};
 `;

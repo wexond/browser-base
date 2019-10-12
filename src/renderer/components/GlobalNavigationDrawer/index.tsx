@@ -26,9 +26,6 @@ const MenuItem = observer(
 export const GlobalNavigationDrawer = () => {
   return (
     <NavigationDrawer dense title="">
-      <MenuItem name="newtab" icon={icons.dashboard}>
-        Home
-      </MenuItem>
       <MenuItem name="settings" icon={icons.settings}>
         Settings
       </MenuItem>
