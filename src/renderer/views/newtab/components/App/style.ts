@@ -8,6 +8,7 @@ export const Wrapper = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
   height: 300px;
   overflow: hidden;
   position: relative;
@@ -67,7 +68,7 @@ export const IconItem = styled.div`
 
   &:hover {
     opacity: 1;
-    background-color: rgba(0, 0, 0, 0.06);
+    background-color: rgba(255, 255, 255, 0.15);
   }
 
   ${({ icon }: { icon?: string }) => css`
