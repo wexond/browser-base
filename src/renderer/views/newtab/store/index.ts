@@ -19,6 +19,9 @@ export class Store {
   @observable
   public items: IHistoryItem[] = [];
 
+  @observable
+  public image = '';
+
   @computed
   public get topSites(): IHistoryItem[] {
     const top1 = countVisitedTimes(this.items);
@@ -37,6 +40,18 @@ export class Store {
   public constructor() {
     this.loadFavicons();
     this.load();
+
+    const image = new Image();
+    const src = 'https://picsum.photos/1920/1080';
+
+    image.onload = () => {
+      this.image = src;
+    };
+    image.src = src;
+
+    if (image.complete) {
+      this.image = src;
+    }
   }
 
   public async loadFavicons() {

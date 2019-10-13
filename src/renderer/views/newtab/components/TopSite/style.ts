@@ -5,7 +5,7 @@ import { icons } from '~/renderer/constants';
 import { ItemBase } from '../TopSites/style';
 
 export const Item = styled(ItemBase)`
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: #212121;
   box-shadow: ${shadows(4)};
   transition: 0.2s box-shadow, 0.2s background-color;
   cursor: pointer;
@@ -17,7 +17,7 @@ export const Item = styled(ItemBase)`
 
   &:hover {
     box-shadow: ${shadows(8)};
-    background-color: rgba(25, 25, 25, 0.65);
+    background-color: rgba(50, 50, 50, 1);
   }
 `;
 

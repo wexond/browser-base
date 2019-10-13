@@ -1,17 +1,32 @@
 import styled, { css } from 'styled-components';
 import { centerIcon } from '~/renderer/mixins';
 
-export const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  background-image: url(https://i.ytimg.com/vi/lbnMmJQ7XpE/maxresdefault.jpg);
+export const Image = styled.div`
+  position: absolute;
+  z-index: 1;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.5s opacity, 1s transform;
+
+  ${({ src }: { src?: string }) => css`
+    opacity: ${src === '' ? 0 : 1};
+    transform: ${src === '' ? 'scale(1.05)' : 'scale(1)'};
+    background-image: url(${src});
+  `};
+`;
+
+export const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
   height: 300px;
   overflow: hidden;
   position: relative;
+  background: #f5f5f5;
 
   &:before {
     content: '';
