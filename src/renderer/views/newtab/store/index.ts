@@ -46,13 +46,16 @@ export class Store {
   public constructor() {
     this.loadFavicons();
     this.load();
-    this.loadNews();
 
     const image = new Image();
     const src = 'https://picsum.photos/1920/1080';
 
     image.onload = () => {
       this.image = src;
+
+      setTimeout(() => {
+        this.loadNews();
+      });
     };
     image.src = src;
 
@@ -63,7 +66,7 @@ export class Store {
 
   public async loadNews() {
     const { data } = await requestURL(
-      `https://newsapi.org/v2/everything?q=a&pageSize=50&language=en&apiKey=${NEWS_API_KEY}`,
+      `https://newsapi.org/v2/everything?q=a&pageSize=10&language=en&apiKey=${NEWS_API_KEY}`,
     );
 
     const json = JSON.parse(data);

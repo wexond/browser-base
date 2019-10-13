@@ -1,22 +1,28 @@
 import styled, { css } from 'styled-components';
 import { centerIcon, overline, maxLines } from '~/renderer/mixins';
 
-export const StyledNewsItem = styled.div`
-  background-color: #424242;
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-`;
-
 export const Image = styled.div`
-  background-size: cover;
-  background-position: center;
   transition: 0.5s opacity;
+  position: relative;
+  overflow: hidden;
 
   ${({ src, fullSize }: { src?: string; fullSize?: boolean }) => css`
     opacity: ${src === '' ? 0 : 1};
-    background-image: url(${src});
+
     height: ${fullSize ? 100 : 50}%;
+
+    &:before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      background-size: cover;
+      background-position: center;
+      background-image: url(${src});
+      transition: 0.2s transform;
+    }
 
     ${fullSize &&
       css`
@@ -32,6 +38,24 @@ export const Image = styled.div`
         }
       `}
   `};
+`;
+
+export const StyledNewsItem = styled.a`
+  background-color: #424242;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    & ${Image} {
+      &:before {
+        transform: scale(1.1);
+      }
+    }
+  }
 `;
 
 export const Title = styled.div`
