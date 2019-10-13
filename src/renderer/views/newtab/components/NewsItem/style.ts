@@ -53,8 +53,9 @@ export const StyledNewsItem = styled.a`
       background-image: ${fullSize
         ? 'linear-gradient(to left, transparent, #000)'
         : 'linear-gradient(transparent, #000)'};
+      opacity: ${fullSize ? 0.75 : 0.85};
     `};
-    opacity: 0.85;
+
     position: absolute;
     bottom: 0;
     left: 0;

@@ -50,7 +50,9 @@ export const Icon = styled.div`
     width: ${add ? 32 : 24}px;
     background-image: url(${add ? icons.add : icon});
     opacity: ${add || custom ? 0.54 : 1};
-    filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};
+    filter: ${custom && theme['pages.lightForeground']
+      ? 'invert(100%)'
+      : 'none'};
   `}
 `;
 

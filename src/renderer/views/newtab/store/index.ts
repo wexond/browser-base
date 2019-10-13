@@ -66,7 +66,7 @@ export class Store {
 
   public async loadNews() {
     const { data } = await requestURL(
-      `https://newsapi.org/v2/everything?q=a&pageSize=20&language=en&apiKey=${NEWS_API_KEY}`,
+      `https://newsapi.org/v2/everything?q=a&pageSize=100&language=en&apiKey=${NEWS_API_KEY}`,
     );
 
     const json = JSON.parse(data);
