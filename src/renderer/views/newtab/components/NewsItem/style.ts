@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { centerIcon, overline, maxLines } from '~/renderer/mixins';
+import { centerIcon, overline, maxLines, shadows } from '~/renderer/mixins';
 
 export const Image = styled.div`
   transition: 0.5s opacity;
@@ -12,7 +12,6 @@ export const Image = styled.div`
 
   ${({ src }: { src?: string }) => css`
     opacity: ${src === '' ? 0 : 1};
-
     background-image: url(${src});
   `};
 `;
@@ -71,6 +70,7 @@ export const Title = styled.div`
   ${maxLines(3)};
   font-size: 20px;
   line-height: 1.75rem;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
 `;
 
 export const Footer = styled.div`

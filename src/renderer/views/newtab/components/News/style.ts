@@ -7,6 +7,6 @@ export const StyledNews = styled.div`
   grid-template-columns: 300px 300px 300px 300px;
   grid-auto-rows: 128px;
   grid-gap: 16px;
-  margin-top: 24px;
-  margin-bottom: 24px;
+  margin-top: 32px;
+  margin-bottom: 32px;
 `;
