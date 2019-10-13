@@ -6,6 +6,12 @@ export const StyledTopSites = styled.div`
   justify-content: center;
   grid-template-columns: repeat(8, auto);
   grid-gap: 6px;
+  margin-top: 128px;
+  margin-bottom: 128px;
+
+  @media only screen and (max-width: 1200px) {
+    grid-template-columns: repeat(4, auto);
+  }
 `;
 
 export const ItemBase = styled.div`

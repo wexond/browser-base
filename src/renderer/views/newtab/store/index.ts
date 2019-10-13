@@ -3,6 +3,9 @@ import { ISettings, IFavicon, ITheme, IHistoryItem } from '~/interfaces';
 import { getTheme } from '~/utils/themes';
 import { PreloadDatabase } from '~/preloads/models/database';
 import { countVisitedTimes } from '~/utils/history';
+import { NEWS_API_KEY } from '../../app/constants';
+import { requestURL } from '~/utils/network';
+import { INewsItem } from '~/interfaces/news-item';
 
 export class Store {
   @observable
@@ -18,6 +21,9 @@ export class Store {
 
   @observable
   public items: IHistoryItem[] = [];
+
+  @observable
+  public news: INewsItem[] = [];
 
   @observable
   public image = '';
@@ -40,6 +46,7 @@ export class Store {
   public constructor() {
     this.loadFavicons();
     this.load();
+    this.loadNews();
 
     const image = new Image();
     const src = 'https://picsum.photos/1920/1080';
@@ -52,6 +59,16 @@ export class Store {
     if (image.complete) {
       this.image = src;
     }
+  }
+
+  public async loadNews() {
+    const { data } = await requestURL(
+      `https://newsapi.org/v2/everything?q=a&pageSize=50&language=en&apiKey=${NEWS_API_KEY}`,
+    );
+
+    const json = JSON.parse(data);
+
+    this.news = json.articles;
   }
 
   public async loadFavicons() {

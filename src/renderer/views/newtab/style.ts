@@ -11,7 +11,7 @@ export const Style = css`
     padding: 0;
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
     ${body2()}
     ${({ theme }: { theme?: ITheme }) => css`
       background-color: ${theme['pages.backgroundColor']};

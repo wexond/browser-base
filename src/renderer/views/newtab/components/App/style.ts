@@ -23,7 +23,6 @@ export const Image = styled.div`
 export const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  height: 300px;
   overflow: hidden;
   position: relative;
   background: #f5f5f5;
@@ -48,7 +47,6 @@ export const Wrapper = styled.div`
 export const Content = styled.div`
   display: flex;
   flex-flow: column;
-  align-items: center;
   width: calc(100% - 64px);
   margin: 0 auto;
   max-width: 1366px;

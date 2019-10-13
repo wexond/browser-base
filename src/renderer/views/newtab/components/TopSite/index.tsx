@@ -6,6 +6,12 @@ import { IHistoryItem } from '~/interfaces';
 import { icons } from '~/renderer/constants';
 import store from '../../store';
 
+const onClick = (url: string) => () => {
+  if (url !== '' && url != null) {
+    window.location.href = url;
+  }
+};
+
 export const TopSite = observer(({ item }: { item?: IHistoryItem }) => {
   const { title, favicon, url } = item || {};
 
@@ -18,7 +24,7 @@ export const TopSite = observer(({ item }: { item?: IHistoryItem }) => {
   }
 
   return (
-    <Item>
+    <Item onClick={onClick(url)}>
       <Icon custom={custom} icon={fav} add={item == null}></Icon>
       {title && <Title>{title}</Title>}
     </Item>

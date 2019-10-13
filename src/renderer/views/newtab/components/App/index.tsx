@@ -8,6 +8,7 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Wrapper, Content, IconItem, Menu, Image } from './style';
 import { TopSites } from '../TopSites';
 import { icons } from '~/renderer/constants';
+import { News } from '../News';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -22,6 +23,11 @@ export default hot(
         <GlobalStyle />
         <Wrapper>
           <Image src={store.image}></Image>
+
+          <Content>
+            <TopSites></TopSites>
+          </Content>
+
           <Menu>
             <IconItem
               title="Settings"
@@ -49,10 +55,10 @@ export default hot(
               onClick={onIconClick('extensions')}
             ></IconItem>
           </Menu>
-          <Content>
-            <TopSites></TopSites>
-          </Content>
         </Wrapper>
+        <Content>
+          <News></News>
+        </Content>
       </ThemeProvider>
     );
   }),
