@@ -8,7 +8,7 @@ export const Img = styled.div`
   background-size: cover;
   background-position: center;
   height: 100%;
-  transition: 0.5s opacity;
+  transition: 0.5s opacity, 0.2s transform;
   will-change: opacity;
 
   ${({ src }: { src: string }) => css`
