@@ -27,7 +27,7 @@ export const News = observer(() => {
         ) {
           width = 2;
           fullSizeNextRow = false;
-        } else if (key % 10 === 0 && column === 3) {
+        } else if (key % 5 === 0 && column === 3) {
           fullSizeNextRow = true;
         }
 

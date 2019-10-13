@@ -34,15 +34,16 @@ export const NewsItem = observer(
 
     return (
       <StyledNewsItem
+        fullSize={fullSize}
         style={{
           gridArea: `${row} / ${column + 1} / span ${height} / span ${width}`,
         }}
       >
-        <Image fullSize={fullSize} src={item.urlToImage}></Image>
+        <Image src={item.urlToImage}></Image>
         <Info fullSize={fullSize}>
           <Title fullSize={fullSize}>{item.title}</Title>
-          {!fullSize && <Description>{item.description}</Description>}
-
+          <Description>{item.description}</Description>
+          {fullSize && <Fill />}
           <Footer>
             <SourceIcon
               src={`https://www.google.com/s2/favicons?domain=${item.source.name}`}

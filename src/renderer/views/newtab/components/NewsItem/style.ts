@@ -5,43 +5,19 @@ export const Image = styled.div`
   transition: 0.5s opacity;
   position: relative;
   overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  transition: 0.2s transform;
 
-  ${({ src, fullSize }: { src?: string; fullSize?: boolean }) => css`
+  ${({ src }: { src?: string }) => css`
     opacity: ${src === '' ? 0 : 1};
 
-    height: ${fullSize ? 100 : 50}%;
-
-    &:before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      top: 0;
-      background-size: cover;
-      background-position: center;
-      background-image: url(${src});
-      transition: 0.2s transform;
-    }
-
-    ${fullSize &&
-      css`
-        &:after {
-          content: '';
-          background: linear-gradient(transparent, #000000);
-          opacity: 0.75;
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 200px;
-        }
-      `}
+    background-image: url(${src});
   `};
 `;
 
 export const StyledNewsItem = styled.a`
-  background-color: #424242;
   border-radius: 6px;
   overflow: hidden;
   position: relative;
@@ -49,12 +25,43 @@ export const StyledNewsItem = styled.a`
   text-decoration: none;
   cursor: pointer;
 
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: black;
+    opacity: 0;
+    z-index: 2;
+    transition: 0.2s opacity;
+  }
+
   &:hover {
     & ${Image} {
-      &:before {
-        transform: scale(1.1);
-      }
+      transform: scale(1.1);
     }
+
+    &:before {
+      opacity: 0.3;
+    }
+  }
+
+  &:after {
+    content: '';
+    ${({ fullSize }: { fullSize?: boolean }) => css`
+      background: linear-gradient(
+        ${fullSize ? 'to left, ' : ''}transparent,
+        #000000
+      );
+    `};
+    opacity: 0.85;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
   }
 `;
 
@@ -62,11 +69,8 @@ export const Title = styled.div`
   font-weight: 500;
   line-height: 1.75rem;
   ${maxLines(3)};
-
-  ${({ fullSize }: { fullSize?: boolean }) => css`
-    font-size: ${fullSize ? 32 : 20}px;
-    line-height: ${fullSize ? 2.75 : 1.75}rem;
-  `};
+  font-size: 20px;
+  line-height: 1.75rem;
 `;
 
 export const Footer = styled.div`
@@ -75,7 +79,7 @@ export const Footer = styled.div`
 `;
 
 export const Fill = styled.div`
-  flex: 1;
+  flex: 2;
 `;
 
 export const Source = styled.div`
@@ -94,15 +98,16 @@ export const SourceIcon = styled.div`
 `;
 
 export const Info = styled.div`
-  bottom: 0;
-  padding: 16px;
+  padding: 24px;
   z-index: 2;
   display: flex;
   flex-flow: column;
+  position: absolute;
+  max-width: 350px;
+  bottom: 0;
 
   ${({ fullSize }: { fullSize?: boolean }) => css`
-    position: ${fullSize ? 'absolute' : 'relative'};
-    height: ${fullSize ? 'auto' : '50%'};
+    top: ${fullSize ? 0 : 'auto'};
   `};
 `;
 
@@ -116,18 +121,8 @@ export const Overline = styled.div`
 export const Description = styled.div`
   overflow: hidden;
   margin-top: 8px;
-  line-height: 1.6rem;
-  flex: 1;
+  line-height: 1.5rem;
   position: relative;
-
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    margin: 0 -20px;
-    width: calc(100% + 40px);
-    height: 60px;
-    box-shadow: inset 0 -20px 30px 0 #424242;
-  }
+  ${maxLines(4)};
+  opacity: 0.8;
 `;
