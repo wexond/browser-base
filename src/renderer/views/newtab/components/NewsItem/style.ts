@@ -1,16 +1,17 @@
 import styled, { css } from 'styled-components';
 import { centerIcon, overline, maxLines, shadows } from '~/renderer/mixins';
 
-export const Image = styled.div`
+export const Img = styled.div`
   transition: 0.5s opacity;
   position: relative;
   overflow: hidden;
   background-size: cover;
   background-position: center;
   height: 100%;
-  transition: 0.2s transform;
+  transition: 0.5s opacity;
+  will-change: opacity;
 
-  ${({ src }: { src?: string }) => css`
+  ${({ src }: { src: string }) => css`
     opacity: ${src === '' ? 0 : 1};
     background-image: url(${src});
   `};
@@ -23,6 +24,17 @@ export const StyledNewsItem = styled.a`
   color: white;
   text-decoration: none;
   cursor: pointer;
+  animation: fadein 0.3s;
+  will-change: opacity;
+
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
   &:before {
     content: '';
@@ -38,7 +50,7 @@ export const StyledNewsItem = styled.a`
   }
 
   &:hover {
-    & ${Image} {
+    & ${Img} {
       transform: scale(1.1);
     }
 

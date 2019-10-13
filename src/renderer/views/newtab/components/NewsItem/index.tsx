@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 
 import {
   StyledNewsItem,
-  Image,
+  Img,
   Info,
   Title,
   Footer,
@@ -28,6 +28,20 @@ export const NewsItem = observer(
     width: number;
     height: number;
   }) => {
+    const [img, setImg] = React.useState('');
+
+    const image = new Image();
+    const src = item.urlToImage;
+
+    image.onload = () => {
+      setImg(src);
+    };
+    image.src = src;
+
+    if (image.complete) {
+      this.image = src;
+    }
+
     const fullSize = width === 2;
 
     return (
@@ -37,7 +51,7 @@ export const NewsItem = observer(
           gridArea: `${row} / ${column + 1} / span ${height} / span ${width}`,
         }}
       >
-        <Image src={item.urlToImage}></Image>
+        <Img src={img}></Img>
         <Info fullSize={fullSize}>
           <Title fullSize={fullSize}>{item.title}</Title>
           <Description>{item.description}</Description>
