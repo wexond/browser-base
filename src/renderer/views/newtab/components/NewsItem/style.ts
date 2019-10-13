@@ -50,10 +50,9 @@ export const StyledNewsItem = styled.a`
   &:after {
     content: '';
     ${({ fullSize }: { fullSize?: boolean }) => css`
-      background: linear-gradient(
-        ${fullSize ? 'to left, ' : ''}transparent,
-        #000000
-      );
+      background-image: ${fullSize
+        ? 'linear-gradient(to left, transparent, #000)'
+        : 'linear-gradient(transparent, #000)'};
     `};
     opacity: 0.85;
     position: absolute;

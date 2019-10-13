@@ -3,9 +3,9 @@ import styled, { css } from 'styled-components';
 import { centerIcon, shadows } from '~/renderer/mixins';
 import { icons } from '~/renderer/constants';
 import { ItemBase } from '../TopSites/style';
+import { ITheme } from '~/interfaces';
 
 export const Item = styled(ItemBase)`
-  background-color: #212121;
   box-shadow: ${shadows(4)};
   transition: 0.2s box-shadow, 0.2s background-color;
   cursor: pointer;
@@ -15,10 +15,16 @@ export const Item = styled(ItemBase)`
   justify-content: center;
   overflow: hidden;
 
-  &:hover {
-    box-shadow: ${shadows(8)};
-    background-color: rgba(50, 50, 50, 1);
-  }
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-color: ${theme['pages.lightForeground'] ? '#212121' : '#fafafa'};
+
+    &:hover {
+      box-shadow: ${shadows(8)};
+      background-color: ${theme['pages.lightForeground']
+        ? 'rgb(50, 50, 50)'
+        : '#f0f0f0'};
+    }
+  `};
 `;
 
 export const AddItem = styled(Item)`
@@ -33,16 +39,18 @@ export const Icon = styled.div`
     add,
     icon,
     custom,
+    theme,
   }: {
     add?: boolean;
     icon?: string;
     custom?: boolean;
+    theme?: ITheme;
   }) => css`
     height: ${add ? 32 : 24}px;
     width: ${add ? 32 : 24}px;
     background-image: url(${add ? icons.add : icon});
     opacity: ${add || custom ? 0.54 : 1};
-    filter: ${custom ? 'invert(100%)' : 'none'};
+    filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};
   `}
 `;
 
