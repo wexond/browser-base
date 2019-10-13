@@ -11,7 +11,7 @@ export const Image = styled.div`
   top: 0;
   right: 0;
   bottom: 0;
-  transition: 0.5s opacity, 1s transform;
+  transition: 0.3s opacity, 1s transform;
 
   ${({ src }: { src?: string }) => css`
     opacity: ${src === '' ? 0 : 1};

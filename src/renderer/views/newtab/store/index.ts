@@ -50,30 +50,50 @@ export class Store {
     this.loadFavicons();
     this.load();
 
-    const image = new Image();
-    const src = 'https://picsum.photos/1920/1080';
+    let loaded = true;
 
-    image.onload = () => {
-      this.image = src;
+    const interval = setInterval(async () => {
+      if (document.body.scrollHeight > document.body.clientHeight)
+        return clearInterval(interval);
 
-      let loaded = true;
+      if (loaded) {
+        loaded = false;
+        await this.loadNews();
+        loaded = true;
+      }
+    }, 200);
 
-      const interval = setInterval(async () => {
-        if (document.body.scrollHeight > document.body.clientHeight)
-          return clearInterval(interval);
+    let url = 'https://picsum.photos/1920/1080';
+    let isNewUrl = true;
+    const dateString = localStorage.getItem('imageDate');
 
-        if (loaded) {
-          loaded = false;
-          await this.loadNews();
-          loaded = true;
-        }
-      }, 200);
-    };
-    image.src = src;
+    if (dateString) {
+      const date = new Date(dateString);
+      const date2 = new Date();
+      const diffTime = Math.floor(
+        (date2.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
+      );
+      const newUrl = localStorage.getItem('imageURL');
 
-    if (image.complete) {
-      this.image = src;
+      if (diffTime < 1 && newUrl) {
+        url = newUrl;
+        isNewUrl = false;
+      }
     }
+
+    fetch(url)
+      .then(response => Promise.all([response.url, response.blob()]))
+      .then(([resource, blob]) => {
+        this.image = URL.createObjectURL(blob);
+
+        return resource;
+      })
+      .then(imgUrl => {
+        if (isNewUrl) {
+          localStorage.setItem('imageURL', imgUrl);
+          localStorage.setItem('imageDate', new Date().toString());
+        }
+      });
 
     window.onscroll = () => {
       this.updateNews();
