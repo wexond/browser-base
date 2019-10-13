@@ -123,6 +123,6 @@ export const Description = styled.div`
   margin-top: 8px;
   line-height: 1.5rem;
   position: relative;
-  ${maxLines(4)};
+  ${maxLines(3)};
   opacity: 0.8;
 `;

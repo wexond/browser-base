@@ -10,10 +10,8 @@ import {
   SourceIcon,
   Source,
   Fill,
-  Overline,
   Description,
 } from './style';
-import store from '../../store';
 import { INewsItem } from '~/interfaces/news-item';
 
 export const NewsItem = observer(

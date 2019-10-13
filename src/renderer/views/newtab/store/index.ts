@@ -28,6 +28,9 @@ export class Store {
   @observable
   public image = '';
 
+  private page = 1;
+  private loaded = true;
+
   @computed
   public get topSites(): IHistoryItem[] {
     const top1 = countVisitedTimes(this.items);
@@ -53,25 +56,55 @@ export class Store {
     image.onload = () => {
       this.image = src;
 
-      setTimeout(() => {
-        this.loadNews();
-      });
+      let loaded = true;
+
+      const interval = setInterval(async () => {
+        if (document.body.scrollHeight > document.body.clientHeight)
+          return clearInterval(interval);
+
+        if (loaded) {
+          loaded = false;
+          await this.loadNews();
+          loaded = true;
+        }
+      }, 200);
     };
     image.src = src;
 
     if (image.complete) {
       this.image = src;
     }
+
+    window.onscroll = () => {
+      this.updateNews();
+    };
+
+    window.onresize = () => {
+      this.updateNews();
+    };
+  }
+
+  public async updateNews() {
+    const scrollPos = window.scrollY;
+    const scrollMax =
+      document.body.scrollHeight - document.body.clientHeight - 768;
+
+    if (scrollPos >= scrollMax && this.loaded && this.page !== 10) {
+      this.page++;
+      this.loaded = false;
+      await this.loadNews();
+      this.loaded = true;
+    }
   }
 
   public async loadNews() {
     const { data } = await requestURL(
-      `https://newsapi.org/v2/everything?q=a&pageSize=100&language=en&apiKey=${NEWS_API_KEY}`,
+      `https://newsapi.org/v2/everything?q=a&pageSize=10&page=${this.page}&language=en&apiKey=${NEWS_API_KEY}`,
     );
 
     const json = JSON.parse(data);
 
-    this.news = json.articles;
+    this.news = this.news.concat(json.articles);
   }
 
   public async loadFavicons() {
