@@ -88,3 +88,10 @@ export const IconItem = styled.div`
     background-image: url(${icon});
   `};
 `;
+
+export const Refresh = styled(IconItem)`
+  position: absolute;
+  top: 32px;
+  right: 32px;
+  margin-top: 0;
+`;

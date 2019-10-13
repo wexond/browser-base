@@ -5,7 +5,7 @@ import { hot } from 'react-hot-loader/root';
 import store from '../../store';
 import { Style } from '../../style';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { Wrapper, Content, IconItem, Menu, Image } from './style';
+import { Wrapper, Content, IconItem, Menu, Image, Refresh } from './style';
 import { TopSites } from '../TopSites';
 import { icons } from '~/renderer/constants';
 import { News } from '../News';
@@ -14,6 +14,14 @@ const GlobalStyle = createGlobalStyle`${Style}`;
 
 const onIconClick = (name: string) => () => {
   window.location.href = `wexond://${name}`;
+};
+
+const onRefreshClick = () => {
+  store.image = '';
+  setTimeout(() => {
+    localStorage.setItem('imageDate', '');
+    store.loadImage();
+  }, 50);
 };
 
 export default hot(
@@ -55,6 +63,8 @@ export default hot(
               onClick={onIconClick('extensions')}
             ></IconItem>
           </Menu>
+
+          <Refresh icon={icons.refresh} onClick={onRefreshClick}></Refresh>
         </Wrapper>
         <Content>
           <News></News>

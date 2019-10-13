@@ -83,7 +83,6 @@ export const Fill = styled.div`
 `;
 
 export const Source = styled.div`
-  margin-left: 8px;
   opacity: 0.54;
   font-size: 12px;
 `;

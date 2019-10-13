@@ -49,6 +49,7 @@ export class Store {
   public constructor() {
     this.loadFavicons();
     this.load();
+    this.loadImage();
 
     let loaded = true;
 
@@ -63,11 +64,21 @@ export class Store {
       }
     }, 200);
 
+    window.onscroll = () => {
+      this.updateNews();
+    };
+
+    window.onresize = () => {
+      this.updateNews();
+    };
+  }
+
+  public async loadImage() {
     let url = 'https://picsum.photos/1920/1080';
     let isNewUrl = true;
     const dateString = localStorage.getItem('imageDate');
 
-    if (dateString) {
+    if (dateString && dateString !== '') {
       const date = new Date(dateString);
       const date2 = new Date();
       const diffTime = Math.floor(
@@ -94,14 +105,6 @@ export class Store {
           localStorage.setItem('imageDate', new Date().toString());
         }
       });
-
-    window.onscroll = () => {
-      this.updateNews();
-    };
-
-    window.onresize = () => {
-      this.updateNews();
-    };
   }
 
   public async updateNews() {

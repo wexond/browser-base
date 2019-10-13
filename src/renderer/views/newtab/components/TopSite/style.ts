@@ -16,7 +16,9 @@ export const Item = styled(ItemBase)`
   overflow: hidden;
 
   ${({ theme }: { theme?: ITheme }) => css`
-    background-color: ${theme['pages.lightForeground'] ? '#212121' : '#fafafa'};
+    background-color: ${theme['pages.lightForeground']
+      ? 'rgba(25, 25, 25, 0.7)'
+      : 'rgba(255, 255, 255, 0.7)'};
 
     &:hover {
       box-shadow: ${shadows(8)};

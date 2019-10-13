@@ -43,9 +43,6 @@ export const NewsItem = observer(
           <Description>{item.description}</Description>
           {fullSize && <Fill />}
           <Footer>
-            <SourceIcon
-              src={`https://www.google.com/s2/favicons?domain=${item.source.name}`}
-            ></SourceIcon>
             <Source>{item.source.name}</Source>
           </Footer>
         </Info>
