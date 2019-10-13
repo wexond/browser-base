@@ -2,6 +2,7 @@ import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { createGlobalStyle } from 'styled-components';
+import { hot } from 'react-hot-loader/root';
 
 import { Style } from '../../style';
 import { Button } from '~/renderer/components/Button';
@@ -28,34 +29,36 @@ const onClick = () => {
   }
 };
 
-export const App = observer(() => {
-  return (
-    <StyledApp>
-      <GlobalStyle />
-      <Title>Login</Title>
-      <Subtitle>{store.url}</Subtitle>
-      <Textfield
-        ref={ref1}
-        test={str => str.trim().length !== 0}
-        style={{ width: '100%', marginTop: 16 }}
-        label="Username"
-      ></Textfield>
-      <PasswordInput
-        ref={ref2}
-        style={{ width: '100%', marginTop: 16 }}
-      ></PasswordInput>
-      <Buttons>
-        <Button onClick={onClick}>Login</Button>
-        <Button
-          foreground="black"
-          background="rgba(0, 0, 0, 0.08)"
-          style={{ marginLeft: 8 }}
-          onClick={() => sendResponse(null)}
-        >
-          Cancel
-        </Button>
-      </Buttons>
-      <div style={{ clear: 'both' }}></div>
-    </StyledApp>
-  );
-});
+export const App = hot(
+  observer(() => {
+    return (
+      <StyledApp>
+        <GlobalStyle />
+        <Title>Login</Title>
+        <Subtitle>{store.url}</Subtitle>
+        <Textfield
+          ref={ref1}
+          test={str => str.trim().length !== 0}
+          style={{ width: '100%', marginTop: 16 }}
+          label="Username"
+        ></Textfield>
+        <PasswordInput
+          ref={ref2}
+          style={{ width: '100%', marginTop: 16 }}
+        ></PasswordInput>
+        <Buttons>
+          <Button onClick={onClick}>Login</Button>
+          <Button
+            foreground="black"
+            background="rgba(0, 0, 0, 0.08)"
+            style={{ marginLeft: 8 }}
+            onClick={() => sendResponse(null)}
+          >
+            Cancel
+          </Button>
+        </Buttons>
+        <div style={{ clear: 'both' }}></div>
+      </StyledApp>
+    );
+  }),
+);

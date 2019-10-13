@@ -2,32 +2,7 @@ import { IHistoryItem } from '~/interfaces';
 import { requestURL } from '~/utils';
 
 import store from '../store';
-
-export const countVisitedTimes = (hItems: IHistoryItem[]) => {
-  const items: any[] = [];
-  const historyItems = hItems.slice();
-
-  for (const historyItem of historyItems) {
-    const itemsWithUrl = historyItems.filter(
-      x => x.url.replace('/', '') === historyItem.url.replace('/', ''),
-    );
-
-    const itemToPush = {
-      times: itemsWithUrl.length,
-      item: historyItem,
-    };
-
-    for (const item of itemsWithUrl) {
-      if (item !== historyItem) {
-        historyItems.splice(historyItems.indexOf(item), 1);
-      }
-    }
-
-    items.push(itemToPush);
-  }
-
-  return items.sort((a, b) => b.times - a.times);
-};
+import { countVisitedTimes } from '~/utils/history';
 
 interface HistorySuggestion extends IHistoryItem {
   canSuggest?: boolean;

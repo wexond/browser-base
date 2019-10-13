@@ -101,6 +101,4 @@ export const maxLines = (count: number, lineHeight?: number) => `
   display: -webkit-box;
   -webkit-line-clamp: ${count};
   -webkit-box-orient: vertical;
-  line-height: ${(lineHeight && `${lineHeight}px`) || 'unset'};
-  max-height: ${(lineHeight && `${lineHeight * 2}px`) || 'unset'};
 `;

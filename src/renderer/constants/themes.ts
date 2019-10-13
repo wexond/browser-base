@@ -37,13 +37,14 @@ export const lightTheme: ITheme = {
   'dropdown.backgroundColor': '#fff',
   'pages.navigationDrawer1.backgroundColor': '#f5f5f5',
   'pages.navigationDrawer2.backgroundColor': '#fafafa',
+
   accentColor: BLUE_500,
   backgroundColor: '#fff',
 };
 
 export const darkTheme: ITheme = {
   'toolbar.backgroundColor': '#1c1c1c',
-  'toolbar.bottomLine.backgroundColor': '#000',
+  'toolbar.bottomLine.backgroundColor': 'rgba(255, 255, 255, 0.08)',
   'toolbar.lightForeground': true,
   'toolbar.separator.color': 'rgba(255, 255, 255, 0.12)',
   'tab.backgroundOpacity': 0.6,
@@ -71,12 +72,13 @@ export const darkTheme: ITheme = {
   'searchBox.suggestions.backgroundColor': '#424242',
   'searchBox.suggestions.lightForeground': true,
   'searchBox.suggestions.textColor': '#fff',
-  'pages.backgroundColor': '#212121',
+  'pages.backgroundColor': '#1c1c1c',
   'pages.lightForeground': true,
   'pages.textColor': '#fff',
   'dropdown.backgroundColor': '#424242',
   'pages.navigationDrawer1.backgroundColor': 'rgba(255, 255, 255, 0.1)',
   'pages.navigationDrawer2.backgroundColor': 'rgba(255, 255, 255, 0.05)',
+
   backgroundColor: '#1c1c1c',
   accentColor: BLUE_500,
 };

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { NavigationDrawer } from '../NavigationDrawer';
-import { MenuButton } from '../NavigationDrawer/style';
 import { observer } from 'mobx-react-lite';
 import { icons } from '~/renderer/constants';
 
@@ -25,11 +24,8 @@ const MenuItem = observer(
 );
 
 export const GlobalNavigationDrawer = () => {
-  const [toggled, setToggled] = React.useState(false);
-
   return (
-    <NavigationDrawer toggled={toggled} dense title="">
-      <MenuButton onClick={() => setToggled(!toggled)} />
+    <NavigationDrawer dense title="">
       <MenuItem name="settings" icon={icons.settings}>
         Settings
       </MenuItem>

@@ -11,18 +11,10 @@ export const StyledNavigationDrawer = styled.div`
   flex-flow: column;
   transition: 0.2s width;
 
-  ${({
-    theme,
-    dense,
-    toggled,
-  }: {
-    theme?: ITheme;
-    dense?: boolean;
-    toggled?: boolean;
-  }) => css`
+  ${({ theme, dense }: { theme?: ITheme; dense?: boolean }) => css`
     padding: ${dense ? 0 : '0 32px'};
 
-    width: ${dense ? (toggled ? 175 : 56) : 320}px;
+    width: ${dense ? 56 : 320}px;
 
     background-color: ${dense
       ? theme['pages.navigationDrawer1.backgroundColor']
@@ -102,23 +94,4 @@ export const Search = styled.div`
       filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};
     `}
   }
-`;
-
-export const MenuButton = styled.div`
-  ${centerIcon(20)};
-  width: 32px;
-  height: 32px;
-  background-image: url(${icons.menu});
-  margin-left: 12px;
-  margin-bottom: 16px;
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.06);
-  }
-
-  ${({ theme }: { theme?: ITheme }) => css`
-    filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};
-  `}
 `;
