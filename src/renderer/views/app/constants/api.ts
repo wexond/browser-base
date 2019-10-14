@@ -1,2 +1,1 @@
 export const WEATHER_API_KEY = '979e1265d1057789445790a1cda05186';
-export const NEWS_API_KEY = '15d94e45e54b40a0b6797fdb6dfe3f44';

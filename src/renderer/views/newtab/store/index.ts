@@ -3,7 +3,6 @@ import { ISettings, IFavicon, ITheme, IHistoryItem } from '~/interfaces';
 import { getTheme } from '~/utils/themes';
 import { PreloadDatabase } from '~/preloads/models/database';
 import { countVisitedTimes } from '~/utils/history';
-import { NEWS_API_KEY } from '../../app/constants';
 import { requestURL } from '~/utils/network';
 import { INewsItem } from '~/interfaces/news-item';
 
@@ -134,10 +133,7 @@ export class Store {
 
   public async loadNews() {
     try {
-      const { data } = await requestURL(
-        `https://newsapi.org/v2/everything?q=a&pageSize=10&page=${this.page}&language=en&apiKey=${NEWS_API_KEY}`,
-      );
-
+      const { data } = await requestURL('http://80.211.255.51:7000/news'); // ?lang=
       const json = JSON.parse(data);
 
       if (json.articles) {
