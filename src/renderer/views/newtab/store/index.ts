@@ -135,7 +135,7 @@ export class Store {
   public async loadNews() {
     try {
       const { data } = await requestURL(
-        `https://newsapi.org/v2/everything?q=a&pageSize=10&page=${this.page}&language=en&apiKey=${NEWS_API_KEY}`,
+        `https://newsapi.org/v2/top-headlines?pageSize=10&page=${this.page}&country=us&apiKey=${NEWS_API_KEY}`,
       );
 
       const json = JSON.parse(data);

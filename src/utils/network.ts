@@ -6,8 +6,8 @@ interface Data extends http.IncomingMessage {
   data: string;
 }
 
-export const requestURL = (url: string) =>
-  new Promise((resolve: (data: Data) => void, reject) => {
+export const requestURL = (url: string): Promise<Data> =>
+  new Promise((resolve, reject) => {
     const options = parse(url);
 
     let { request } = http;
@@ -27,6 +27,10 @@ export const requestURL = (url: string) =>
       res.on('end', () => {
         const d: any = { ...res, data };
         resolve(d);
+      });
+
+      res.on('error', e => {
+        reject(e);
       });
     });
 
