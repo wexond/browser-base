@@ -21,9 +21,10 @@
     "url": "https://github.com/wexond/wexond/issues"
   },
   "scripts": {
-    "dev": "npm run extensions && concurrently \"cross-env ENV='dev' webpack-dev-server --config webpack.config.renderer.js\" \" cross-env ENV='dev' webpack\" \"cross-env ENV='dev' webpack-dev-server --config webpack.config.web.js\"",
+    "dev": "cross-env START=1 npm run watch",
     "build": "npm run extensions && concurrently \"webpack --config webpack.config.renderer.js\" \"webpack\" \"webpack --config webpack.config.web.js\"",
     "start": "cross-env ENV='dev' electron .",
+    "watch": "npm run extensions && concurrently \"cross-env ENV='dev' webpack-dev-server --config webpack.config.renderer.js\" \" cross-env ENV='dev' webpack\" \"cross-env ENV='dev' webpack-dev-server --config webpack.config.web.js\"",
     "compile-win32": "npm run build && electron-builder -w -p always",
     "compile-darwin": "npm run build && electron-builder -m -p always",
     "compile-linux": "npm run build && electron-builder -l -p always",

@@ -53,7 +53,7 @@ const preloadConfig = getConfig({
   plugins: [],
 });
 
-/*if (dev) {
+if (process.env.START === '1') {
   mainConfig.plugins.push({
     apply: compiler => {
       compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
@@ -72,5 +72,5 @@ const preloadConfig = getConfig({
     },
   });
 }
-*/
+
 module.exports = [mainConfig, preloadConfig];
