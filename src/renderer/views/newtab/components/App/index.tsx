@@ -28,47 +28,49 @@ export default hot(
   observer(() => {
     return (
       <ThemeProvider theme={store.theme}>
-        <GlobalStyle />
-        <Wrapper>
-          <Image src={store.image}></Image>
+        <div>
+          <GlobalStyle />
+          <Wrapper>
+            <Image src={store.image}></Image>
 
+            <Content>
+              <TopSites></TopSites>
+            </Content>
+
+            <Menu>
+              <IconItem
+                title="Settings"
+                icon={icons.settings}
+                onClick={onIconClick('settings')}
+              ></IconItem>
+              <IconItem
+                title="History"
+                icon={icons.history}
+                onClick={onIconClick('history')}
+              ></IconItem>
+              <IconItem
+                title="Bookmarks"
+                icon={icons.bookmarks}
+                onClick={onIconClick('bookmarks')}
+              ></IconItem>
+              <IconItem
+                title="Downloads"
+                icon={icons.download}
+                onClick={onIconClick('downloads')}
+              ></IconItem>
+              <IconItem
+                title="Extensions"
+                icon={icons.extensions}
+                onClick={onIconClick('extensions')}
+              ></IconItem>
+            </Menu>
+
+            <Refresh icon={icons.refresh} onClick={onRefreshClick}></Refresh>
+          </Wrapper>
           <Content>
-            <TopSites></TopSites>
+            <News></News>
           </Content>
-
-          <Menu>
-            <IconItem
-              title="Settings"
-              icon={icons.settings}
-              onClick={onIconClick('settings')}
-            ></IconItem>
-            <IconItem
-              title="History"
-              icon={icons.history}
-              onClick={onIconClick('history')}
-            ></IconItem>
-            <IconItem
-              title="Bookmarks"
-              icon={icons.bookmarks}
-              onClick={onIconClick('bookmarks')}
-            ></IconItem>
-            <IconItem
-              title="Downloads"
-              icon={icons.download}
-              onClick={onIconClick('downloads')}
-            ></IconItem>
-            <IconItem
-              title="Extensions"
-              icon={icons.extensions}
-              onClick={onIconClick('extensions')}
-            ></IconItem>
-          </Menu>
-
-          <Refresh icon={icons.refresh} onClick={onRefreshClick}></Refresh>
-        </Wrapper>
-        <Content>
-          <News></News>
-        </Content>
+        </div>
       </ThemeProvider>
     );
   }),
