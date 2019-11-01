@@ -125,7 +125,7 @@ export const App = hot(
     ipcRenderer.send(`height-${store.id}`, height);
 
     return (
-      <ThemeProvider theme={store.theme}>
+      <ThemeProvider theme={{ ...store.theme }}>
         <StyledApp visible={store.visible}>
           <GlobalStyle />
           <SearchBox>

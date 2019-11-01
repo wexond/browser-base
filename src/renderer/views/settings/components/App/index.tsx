@@ -42,7 +42,7 @@ export default hot(
     const { selectedSection } = store;
 
     return (
-      <ThemeProvider theme={store.theme}>
+      <ThemeProvider theme={{ ...store.theme }}>
         <Container>
           <GlobalStyle />
           <GlobalNavigationDrawer></GlobalNavigationDrawer>

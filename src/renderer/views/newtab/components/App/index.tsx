@@ -27,7 +27,7 @@ const onRefreshClick = () => {
 export default hot(
   observer(() => {
     return (
-      <ThemeProvider theme={store.theme}>
+      <ThemeProvider theme={{ ...store.theme }}>
         <div>
           <GlobalStyle />
           <Wrapper>

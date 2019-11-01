@@ -83,7 +83,7 @@ const onClearClick = () => {
 export default hot(
   observer(() => {
     return (
-      <ThemeProvider theme={store.theme}>
+      <ThemeProvider theme={{ ...store.theme }}>
         <Container>
           <GlobalStyle />
           <GlobalNavigationDrawer></GlobalNavigationDrawer>
