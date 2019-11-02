@@ -103,9 +103,10 @@ const emitCallback = (msg: string, data: any) => {
 };
 
 if (window.location.protocol === 'wexond:') {
-  webFrame.executeJavaScript('window', false, (w: any) => {
+  (async function() {
+    const w = await webFrame.executeJavaScript('window');
     w.settings = ipcRenderer.sendSync('get-settings-sync');
-  });
+  })();
 
   window.addEventListener('message', ({ data }) => {
     if (data.type === 'storage') {

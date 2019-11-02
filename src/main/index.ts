@@ -2,7 +2,7 @@ import { ipcMain, app } from 'electron';
 import { platform } from 'os';
 import { WindowsManager } from './windows-manager';
 
-app.setName('Wexond');
+app.name = 'Wexond';
 
 (process.env as any)['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
 app.commandLine.appendSwitch('--enable-transparent-visuals');

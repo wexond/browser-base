@@ -37,7 +37,6 @@ const config = {
       {
         test: /\.tsx|ts$/,
         use: [
-          'cache-loader',
           {
             loader: 'ts-loader',
             options: {

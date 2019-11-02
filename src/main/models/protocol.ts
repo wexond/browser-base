@@ -31,11 +31,7 @@ export const registerProtocol = (session: Electron.Session) => {
           });
         }
 
-        if (parsed.path.indexOf('node_modules') !== -1) {
-          callback({ url: parsed.path, method: 'GET' });
-        } else {
-          callback({ url: `${baseUrl}${parsed.path}`, method: 'GET' });
-        }
+        callback({ url: `${baseUrl}${parsed.path}` });
       },
       error => {
         if (error) console.error(error);

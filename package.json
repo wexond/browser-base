@@ -39,8 +39,8 @@
     "@types/chrome": "0.0.91",
     "@types/gsap": "1.20.2",
     "@types/nedb": "1.8.9",
-    "@types/node": "12.12.3",
-    "@types/node-fetch": "^2.5.2",
+    "@types/node": "12.12.5",
+    "@types/node-fetch": "^2.5.3",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.3",
     "@types/styled-components": "4.1.20",
@@ -52,7 +52,7 @@
     "concurrently": "^5.0.0",
     "copy-webpack-plugin": "^5.0.4",
     "cross-env": "6.0.3",
-    "electron": "^7.0.0",
+    "electron": "^7.0.1",
     "electron-builder": "22.1.0",
     "electron-extensions": "^4.0.2",
     "electron-rebuild": "^1.8.6",
@@ -93,7 +93,7 @@
     "typescript-plugin-styled-components": "^1.4.3",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.10",
-    "webpack-dev-server": "^3.8.2",
+    "webpack-dev-server": "^3.9.0",
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {}
