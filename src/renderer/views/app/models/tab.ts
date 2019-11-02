@@ -276,8 +276,6 @@ export class ITab {
     if (!this.isClosing) {
       this.tabGroup.selectedTabId = this.id;
 
-      ipcRenderer.send(`permission-dialog-hide-${store.windowId}`);
-
       if (this.isWindow) {
         ipcRenderer.send(`browserview-hide-${store.windowId}`);
         ipcRenderer.send(`select-window-${store.windowId}`, this.id);

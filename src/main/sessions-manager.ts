@@ -40,13 +40,14 @@ export class SessionsManager {
 
     this.view.setPermissionRequestHandler(
       async (webContents, permission, callback, details) => {
+        const window = windowsManager.findWindowByBrowserView(webContents.id);
+
+        if (webContents.id !== window.viewManager.selectedId) return;
+
         if (permission === 'fullscreen') {
           callback(true);
         } else {
           try {
-            const window = windowsManager.findWindowByBrowserView(
-              webContents.id,
-            );
             const response = await window.permissionsDialog.requestPermission(
               permission,
               webContents.getURL(),

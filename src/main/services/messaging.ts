@@ -47,10 +47,6 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.searchDialog.toggle();
   });
 
-  ipcMain.on(`permission-dialog-hide-${id}`, () => {
-    appWindow.permissionsDialog.hide();
-  });
-
   ipcMain.on(`update-find-info-${id}`, (e, tabId, data) =>
     appWindow.findDialog.updateInfo(tabId, data),
   );

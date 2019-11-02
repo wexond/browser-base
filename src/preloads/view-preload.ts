@@ -102,20 +102,20 @@ const emitCallback = (msg: string, data: any) => {
   });
 };
 
-window.addEventListener('DOMContentLoaded', () => {
-  if (window.location.hostname === 'settings') document.title = 'Settings';
-  else if (window.location.hostname === 'history') document.title = 'History';
-  else if (window.location.hostname === 'bookmarks')
-    document.title = 'Bookmarks';
-  else if (window.location.hostname === 'extensions')
-    document.title = 'Extensions';
-});
-
 if (window.location.protocol === 'wexond:') {
   (async function() {
     const w = await webFrame.executeJavaScript('window');
     w.settings = ipcRenderer.sendSync('get-settings-sync');
   })();
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.location.hostname === 'settings') document.title = 'Settings';
+    else if (window.location.hostname === 'history') document.title = 'History';
+    else if (window.location.hostname === 'bookmarks')
+      document.title = 'Bookmarks';
+    else if (window.location.hostname === 'extensions')
+      document.title = 'Extensions';
+  });
 
   window.addEventListener('message', ({ data }) => {
     if (data.type === 'storage') {
