@@ -178,7 +178,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           visible: false,
           click() {
             setTimeout(() => {
-              windowsManager.currentWindow.viewManager.selected.webContents.openDevTools();
+              windowsManager.currentWindow.viewManager.selected.webContents.toggleDevTools();
             });
           },
         },
@@ -188,7 +188,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           visible: false,
           click() {
             setTimeout(() => {
-              windowsManager.currentWindow.viewManager.selected.webContents.openDevTools();
+              windowsManager.currentWindow.viewManager.selected.webContents.toggleDevTools();
             });
           },
         },
