@@ -20,6 +20,7 @@ export class StorageService {
     history: null,
     formfill: null,
     startupTabs: null,
+    permissions: null,
   };
 
   public constructor() {

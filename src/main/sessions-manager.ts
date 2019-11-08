@@ -5,6 +5,8 @@ import { promises } from 'fs';
 import { resolve } from 'path';
 import { WindowsManager } from './windows-manager';
 import { registerProtocol } from './models/protocol';
+import storage from './services/storage';
+import { parse } from 'url';
 
 const extensibleSessionOptions = {
   backgroundPreloadPath: resolve(__dirname, 'extensions-background-preload.js'),
@@ -48,12 +50,39 @@ export class SessionsManager {
           callback(true);
         } else {
           try {
-            const response = await window.permissionsDialog.requestPermission(
-              permission,
-              webContents.getURL(),
-              details,
-            );
-            callback(response);
+            const { hostname } = parse(details.requestingUrl);
+            const perm: any = await storage.findOne({
+              scope: 'permissions',
+              query: {
+                url: hostname,
+                permission,
+                mediaTypes: JSON.stringify(details.mediaTypes),
+              },
+            });
+
+            console.log(JSON.stringify(details.mediaTypes));
+
+            if (!perm) {
+              const response = await window.permissionsDialog.requestPermission(
+                permission,
+                webContents.getURL(),
+                details,
+              );
+
+              callback(response);
+
+              await storage.insert({
+                scope: 'permissions',
+                item: {
+                  url: hostname,
+                  permission,
+                  type: response ? 1 : 2,
+                  mediaTypes: JSON.stringify(details.mediaTypes),
+                },
+              });
+            } else {
+              callback(perm.type === 1);
+            }
           } catch (e) {
             callback(false);
           }
