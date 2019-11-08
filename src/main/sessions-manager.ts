@@ -56,11 +56,9 @@ export class SessionsManager {
               query: {
                 url: hostname,
                 permission,
-                mediaTypes: JSON.stringify(details.mediaTypes),
+                mediaTypes: JSON.stringify(details.mediaTypes) || '',
               },
             });
-
-            console.log(JSON.stringify(details.mediaTypes));
 
             if (!perm) {
               const response = await window.permissionsDialog.requestPermission(
@@ -77,7 +75,7 @@ export class SessionsManager {
                   url: hostname,
                   permission,
                   type: response ? 1 : 2,
-                  mediaTypes: JSON.stringify(details.mediaTypes),
+                  mediaTypes: JSON.stringify(details.mediaTypes) || '',
                 },
               });
             } else {
