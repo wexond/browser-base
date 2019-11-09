@@ -1,6 +1,7 @@
 import { ipcRenderer, remote, webFrame } from 'electron';
 
 import AutoComplete from './models/auto-complete';
+import { getTheme } from '~/utils/themes';
 
 const tabId = remote.getCurrentWebContents().id;
 const arg = process.argv.find(x => x.startsWith('--window-id='));
@@ -111,6 +112,7 @@ if (
     w.settings = ipcRenderer.sendSync('get-settings-sync');
 
     if (window.location.pathname === '//network-error') {
+      w.theme = getTheme(w.settings.theme);
       w.errorDetails = await ipcRenderer.invoke(`get-error-details-${tabId}`);
     }
   })();

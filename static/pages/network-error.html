@@ -3,21 +3,68 @@
 
 <head>
   <meta charset="UTF-8" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    .main {
+      margin: 0 auto;
+      margin-top: 256px;
+      width: calc(100% - 32px);
+      max-width: 512px;
+    }
+
+    #main-title {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    #main-error-code {
+      font-size: 12px;
+    }
+
+    #main-description {
+      margin-bottom: 16px;
+    }
+  </style>
 </head>
 
 <body>
   <div class="main">
-    <div id="main-title">
-
-    </div>
+    <div id="main-title"></div>
     <div id="main-description"></div>
     <div id="main-error-code"></div>
   </div>
 
   <script>
-    const errorCodeEl = document.getElementById('main-error-code');
+    if (window.theme['pages.lightForeground']) {
+      document.body.style.color = 'rgba(255, 255, 255, 0.54)';
+    }
 
-    errorCodeEl.textContent = window.errorDetails.errorDescription;
+    document.body.style.backgroundColor = window.theme['pages.backgroundColor'];
+
+    const { errorDescription, errorCode, validatedURL } = window.errorDetails;
+
+    const errorCodeEl = document.getElementById('main-error-code');
+    const titleEl = document.getElementById('main-title');
+    const descriptionEl = document.getElementById('main-description');
+
+    errorCodeEl.textContent = errorDescription;
+
+    function getInfo() {
+      if (errorCode === -105) {
+        return ['This site can’t be reached', `<b>${validatedURL}</b>'s server IP address could not be found.`];
+      }
+    }
+
+    const [title, description] = getInfo();
+    titleEl.textContent = title;
+    descriptionEl.innerHTML = description;
   </script>
 </body>
 
