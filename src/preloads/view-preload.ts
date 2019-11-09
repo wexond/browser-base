@@ -111,9 +111,9 @@ if (
     const w = await webFrame.executeJavaScript('window');
     w.settings = ipcRenderer.sendSync('get-settings-sync');
 
-    if (window.location.pathname === '//network-error') {
+    if (window.location.pathname.startsWith('//network-error')) {
       w.theme = getTheme(w.settings.theme);
-      w.errorDetails = await ipcRenderer.invoke(`get-error-details-${tabId}`);
+      w.errorURL = await ipcRenderer.invoke(`get-error-url-${tabId}`);
     }
   })();
 }

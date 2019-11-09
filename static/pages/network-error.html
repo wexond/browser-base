@@ -30,6 +30,11 @@
 
     #main-description {
       margin-bottom: 16px;
+      line-height: 1.5rem;
+    }
+
+    ul {
+      margin-top: 0;
     }
   </style>
 </head>
@@ -48,23 +53,48 @@
 
     document.body.style.backgroundColor = window.theme['pages.backgroundColor'];
 
-    const { errorDescription, errorCode, validatedURL } = window.errorDetails;
+    const url = window.errorURL;
 
     const errorCodeEl = document.getElementById('main-error-code');
     const titleEl = document.getElementById('main-title');
     const descriptionEl = document.getElementById('main-description');
 
-    errorCodeEl.textContent = errorDescription;
-
-    function getInfo() {
-      if (errorCode === -105) {
-        return ['This site can’t be reached', `<b>${validatedURL}</b>'s server IP address could not be found.`];
-      }
+    if (window.location.href.split('/').length === 4) {
+      errorCode = window.location.href.split('/')[3];
     }
 
-    const [title, description] = getInfo();
+    const info = {
+      '-105': {
+        title: 'This site can’t be reached',
+        description: `<b>${url}</b>’s server IP address could not be found.`,
+        code: 'ERR_NAME_NOT_RESOLVED'
+      },
+      '-10': {
+        title: 'This site can’t be reached',
+        description: `The webpage at <b>${url}</b> might be temporarily down or it may have moved permanently to a new web address.`,
+        code: 'ERR_ACCESS_DENIED'
+      },
+      '-106': {
+        title: 'No internet',
+        description: `Try: <ul><li>Checking the network cables, modem, and router</li><li>Reconnecting to Wi-Fi</li></ul>`,
+        code: 'ERR_INTERNET_DISCONNECTED'
+      },
+      '-108': {
+        title: 'This site can’t be reached',
+        description: `The webpage at <b>${url}</b> might be temporarily down or it may have moved permanently to a new web address.`,
+        code: 'ERR_ADDRESS_INVALID'
+      },
+      '-109': {
+        title: 'This site can’t be reached',
+        description: `<b>${url}</b> is unreachable.`,
+        code: 'ERR_ADDRESS_UNREACHABLE'
+      },
+    }
+
+    const { title, description, code } = info[errorCode];
     titleEl.textContent = title;
     descriptionEl.innerHTML = description;
+    errorCodeEl.textContent = code;
   </script>
 </body>
 

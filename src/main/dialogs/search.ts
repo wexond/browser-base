@@ -53,9 +53,7 @@ export class SearchDialog extends Dialog {
 
     this.webContents.send('visible', true, {
       id: this.appWindow.viewManager.selectedId,
-      url: url.startsWith('wexond-error')
-        ? selected.errorDetails.validatedURL
-        : url,
+      url: url.startsWith('wexond-error') ? selected.errorURL : url,
     });
 
     this.appWindow.webContents.send('get-search-tabs');

@@ -13,11 +13,7 @@ export class View extends BrowserView {
   public favicon = '';
   public selected = false;
 
-  public errorDetails = {
-    validatedURL: '',
-    errorCode: 0,
-    errorDescription: '',
-  };
+  public errorURL = '';
 
   private window: AppWindow;
 
@@ -42,8 +38,8 @@ export class View extends BrowserView {
     this.window = window;
     this.homeUrl = url;
 
-    ipcMain.handle(`get-error-details-${this.webContents.id}`, async e => {
-      return this.errorDetails;
+    ipcMain.handle(`get-error-url-${this.webContents.id}`, async e => {
+      return this.errorURL;
     });
 
     this.webContents.on('context-menu', (e, params) => {
@@ -134,13 +130,9 @@ export class View extends BrowserView {
       'did-fail-load',
       (e, errorCode, errorDescription, validatedURL, isMainFrame) => {
         if (isMainFrame) {
-          this.errorDetails = {
-            errorCode,
-            errorDescription,
-            validatedURL,
-          };
+          this.errorURL = validatedURL;
 
-          this.webContents.loadURL('wexond-error://network-error');
+          this.webContents.loadURL(`wexond-error://network-error/${errorCode}`);
         }
       },
     );
