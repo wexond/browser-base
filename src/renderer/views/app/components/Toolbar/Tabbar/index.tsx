@@ -9,9 +9,20 @@ import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 
 const getContainer = () => store.tabs.containerRef.current;
 
-const onMouseEnter = () => (store.tabs.scrollbarVisible = true);
+let timeout: any;
 
-const onMouseLeave = () => (store.tabs.scrollbarVisible = false);
+const onMouseEnter = () => {
+  store.tabs.scrollbarVisible = true;
+  clearTimeout(timeout);
+};
+
+const onTabsMouseLeave = () => {
+  store.tabs.scrollbarVisible = false;
+  timeout = setTimeout(() => {
+    store.tabs.removedTabs = 0;
+    store.tabs.updateTabsBounds(true);
+  }, 300);
+};
 
 const onAddTabClick = () => {
   store.tabs.onNewTab();
@@ -22,7 +33,7 @@ export const Tabbar = observer(() => {
     <StyledTabbar>
       <TabsContainer
         onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
+        onMouseLeave={onTabsMouseLeave}
         ref={store.tabs.containerRef}
       >
         <Tabs />

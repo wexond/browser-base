@@ -71,8 +71,6 @@ export class TabsStore {
         this.rearrangeTabsTimer.canReset &&
         this.rearrangeTabsTimer.time === 3
       ) {
-        this.removedTabs = 0;
-        this.updateTabsBounds(true);
         this.rearrangeTabsTimer.canReset = false;
       }
       this.rearrangeTabsTimer.time++;
