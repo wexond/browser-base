@@ -14,6 +14,7 @@ import {
   AuthDialog,
   FormFillDialog,
   CredentialsDialog,
+  PreviewDialog,
 } from '../dialogs';
 
 export class AppWindow extends BrowserWindow {
@@ -27,6 +28,7 @@ export class AppWindow extends BrowserWindow {
   public authDialog = new AuthDialog(this);
   public formFillDialog = new FormFillDialog(this);
   public credentialsDialog = new CredentialsDialog(this);
+  public previewDialog = new PreviewDialog(this);
 
   public incognito: boolean;
 
@@ -136,6 +138,7 @@ export class AppWindow extends BrowserWindow {
       this.formFillDialog.destroy();
       this.credentialsDialog.destroy();
       this.permissionsDialog.destroy();
+      this.previewDialog.destroy();
 
       this.menuDialog = null;
       this.searchDialog = null;
@@ -144,6 +147,7 @@ export class AppWindow extends BrowserWindow {
       this.formFillDialog = null;
       this.credentialsDialog = null;
       this.permissionsDialog = null;
+      this.previewDialog = null;
 
       this.viewManager.clear();
 

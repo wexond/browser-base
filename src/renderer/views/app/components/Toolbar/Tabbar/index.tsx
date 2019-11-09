@@ -6,6 +6,7 @@ import { Tabs } from '../Tabs';
 import store from '../../../store';
 import { icons } from '~/renderer/constants';
 import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
+import { ipcRenderer } from 'electron';
 
 const getContainer = () => store.tabs.containerRef.current;
 
@@ -16,12 +17,13 @@ const onMouseEnter = () => {
   clearTimeout(timeout);
 };
 
-const onTabsMouseLeave = () => {
+const onTabsMouseLeave = (e: React.MouseEvent) => {
   store.tabs.scrollbarVisible = false;
   timeout = setTimeout(() => {
     store.tabs.removedTabs = 0;
     store.tabs.updateTabsBounds(true);
   }, 300);
+  ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
 };
 
 const onAddTabClick = () => {

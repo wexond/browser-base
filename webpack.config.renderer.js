@@ -26,6 +26,7 @@ applyEntries('app', appConfig, [
   'find',
   'menu',
   'search',
+  'preview',
 ]);
 
 module.exports = appConfig;
