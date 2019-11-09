@@ -18,6 +18,7 @@ export class PreviewDialog extends Dialog {
         height: HEIGHT,
         y: 40,
       },
+      hideTimeout: 300,
     });
   }
 
