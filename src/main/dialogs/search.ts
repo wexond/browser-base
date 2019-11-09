@@ -8,8 +8,6 @@ const HEIGHT = 56;
 export class SearchDialog extends Dialog {
   private queueShow = false;
 
-  private appWindow: AppWindow;
-
   public constructor(appWindow: AppWindow) {
     super(appWindow, {
       name: 'search',
@@ -20,8 +18,6 @@ export class SearchDialog extends Dialog {
       },
       hideTimeout: 300,
     });
-
-    this.appWindow = appWindow;
 
     ipcMain.on(`height-${this.webContents.id}`, (e, height) => {
       const { width } = this.appWindow.getContentBounds();

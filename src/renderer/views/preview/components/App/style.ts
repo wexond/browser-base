@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { ITheme } from '~/interfaces';
 import { maxLines } from '~/renderer/mixins';
+import { TAB_MAX_WIDTH } from '~/renderer/views/app/constants/tabs';
 
 export const StyledApp = styled.div`
   margin: 8px;
@@ -8,9 +9,10 @@ export const StyledApp = styled.div`
   border-radius: 6px;
   overflow: hidden;
   position: relative;
-  transition: 0.2s opacity, 0.2s margin-top;
+  transition: 0.2s opacity, 0.2s margin-top, 0.1s margin-left;
   padding: 16px;
   font-size: 13px;
+  max-width: ${TAB_MAX_WIDTH}px;
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};

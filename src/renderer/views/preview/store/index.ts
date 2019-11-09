@@ -29,6 +29,9 @@ export class Store {
   @observable
   public url = '';
 
+  @observable
+  public x = 0;
+
   @computed
   public get domain() {
     return parse(this.url).hostname;
@@ -40,6 +43,7 @@ export class Store {
       if (tab) {
         this.title = tab.title;
         this.url = tab.url;
+        this.x = tab.x;
       }
     });
 

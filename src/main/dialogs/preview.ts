@@ -10,28 +10,22 @@ export class PreviewDialog extends Dialog {
   public visible = false;
   public tab: { id?: number; x?: number } = {};
 
-  private appWindow: AppWindow;
-
   constructor(appWindow: AppWindow) {
     super(appWindow, {
       name: 'preview',
       bounds: {
-        width: TAB_MAX_WIDTH + 16,
+        width: appWindow.getBounds().width,
         height: HEIGHT,
         y: 40,
       },
       hideTimeout: 300,
     });
-
-    this.appWindow = appWindow;
   }
 
   public show() {
     if (this.appWindow.searchDialog.visible) {
       return;
     }
-
-    this.bounds.x = Math.round(this.tab.x - 8);
 
     super.show();
 
@@ -46,6 +40,7 @@ export class PreviewDialog extends Dialog {
       id: tab.id,
       url: url.startsWith('wexond-error') ? tab.errorURL : url,
       title,
+      x: Math.round(this.tab.x - 8),
     });
   }
 

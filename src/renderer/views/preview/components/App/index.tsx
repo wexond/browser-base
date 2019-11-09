@@ -13,7 +13,7 @@ export const App = hot(
   observer(() => {
     return (
       <ThemeProvider theme={{ ...store.theme }}>
-        <StyledApp visible={store.visible}>
+        <StyledApp style={{ marginLeft: 8 + store.x }} visible={store.visible}>
           <Title>{store.title}</Title>
           <Domain>{store.domain}</Domain>
           <GlobalStyle />
