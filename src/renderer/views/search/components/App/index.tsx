@@ -136,7 +136,7 @@ export const App = hot(
               onFocus={onFocus}
               ref={store.inputRef}
               onKeyPress={onKeyPress}
-              placeholder="Search or type in an URL"
+              placeholder="Search or type in a URL"
             ></Input>
           </SearchBox>
           <Suggestions visible={suggestionsVisible}></Suggestions>

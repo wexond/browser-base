@@ -1,4 +1,4 @@
-import { BrowserView, app } from 'electron';
+import { BrowserView, app, ipcMain } from 'electron';
 import { parse as parseUrl } from 'url';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
@@ -12,6 +12,8 @@ export class View extends BrowserView {
   public homeUrl: string;
   public favicon = '';
   public selected = false;
+
+  public errorURL = '';
 
   private window: AppWindow;
 
@@ -35,6 +37,10 @@ export class View extends BrowserView {
 
     this.window = window;
     this.homeUrl = url;
+
+    ipcMain.handle(`get-error-url-${this.webContents.id}`, async e => {
+      return this.errorURL;
+    });
 
     this.webContents.on('context-menu', (e, params) => {
       const menu = getViewMenu(this.window, params, this.webContents);
@@ -116,6 +122,17 @@ export class View extends BrowserView {
         } else if (disposition === 'background-tab') {
           e.preventDefault();
           this.window.viewManager.create({ url, active: false }, true);
+        }
+      },
+    );
+
+    this.webContents.addListener(
+      'did-fail-load',
+      (e, errorCode, errorDescription, validatedURL, isMainFrame) => {
+        if (isMainFrame) {
+          this.errorURL = validatedURL;
+
+          this.webContents.loadURL(`wexond-error://network-error/${errorCode}`);
         }
       },
     );
