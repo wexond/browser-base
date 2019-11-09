@@ -12,7 +12,7 @@ export const TopSites = observer(() => {
         <TopSite key={item._id} item={item} />
       ))}
       {store.topSites.length < 8 && <TopSite />}
-      {Array(8 - (store.topSites.length + 1))
+      {Array(8 - Math.min(8, store.topSites.length + 1))
         .fill(1)
         .map((v, i) => (
           <Placeholder key={i} />
