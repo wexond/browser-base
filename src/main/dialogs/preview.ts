@@ -1,7 +1,6 @@
 import { AppWindow } from '../windows';
 import { MENU_WIDTH } from '~/constants/design';
 import { Dialog } from '.';
-import { TAB_MAX_WIDTH } from '~/renderer/views/app/constants/tabs';
 
 const WIDTH = MENU_WIDTH;
 const HEIGHT = 128;

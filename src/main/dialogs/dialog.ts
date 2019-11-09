@@ -106,8 +106,6 @@ export class Dialog extends BrowserView {
   }
 
   public hide() {
-    this.bringToTop();
-
     clearTimeout(this.timeout);
 
     if (this.hideTimeout) {

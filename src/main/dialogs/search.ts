@@ -43,9 +43,9 @@ export class SearchDialog extends Dialog {
   }
 
   public show() {
-    super.show();
-
     this.appWindow.previewDialog.hide();
+
+    super.show();
 
     this.queueShow = true;
 
