@@ -51,9 +51,11 @@ const onMouseEnter = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
     store.tabs.hoveredTabId = tab.id;
   }
 
+  const x = e.currentTarget.getBoundingClientRect().left;
+
   ipcRenderer.send(`show-tab-preview-${store.windowId}`, {
     id: tab.id,
-    x: e.currentTarget.getBoundingClientRect().left,
+    x,
   });
 };
 

@@ -17,7 +17,7 @@ const onMouseEnter = () => {
   clearTimeout(timeout);
 };
 
-const onTabsMouseLeave = () => {
+const onTabsMouseLeave = (e: React.MouseEvent) => {
   store.tabs.scrollbarVisible = false;
   timeout = setTimeout(() => {
     store.tabs.removedTabs = 0;

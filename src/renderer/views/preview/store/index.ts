@@ -27,14 +27,6 @@ export class Store {
       this.visible = flag;
     });
 
-    window.addEventListener('blur', () => {
-      if (this.visible) {
-        setTimeout(() => {
-          this.hide();
-        });
-      }
-    });
-
     ipcRenderer.send('get-settings');
 
     ipcRenderer.on('update-settings', (e, settings: ISettings) => {

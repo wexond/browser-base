@@ -28,7 +28,7 @@ export class PreviewDialog extends Dialog {
   }
 
   public show() {
-    this.bounds.x = this.tab.x - 8;
+    this.bounds.x = Math.round(this.tab.x - 8);
 
     super.show();
 
