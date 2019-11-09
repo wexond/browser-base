@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+</head>
+
+<body>
+  <div class="main">
+    <div id="main-title">
+
+    </div>
+    <div id="main-description"></div>
+    <div id="main-error-code"></div>
+  </div>
+
+  <script>
+    const errorCodeEl = document.getElementById('main-error-code');
+
+    errorCodeEl.textContent = window.errorDetails.errorDescription;
+  </script>
+</body>
+
+</html>

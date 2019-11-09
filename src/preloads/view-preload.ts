@@ -102,12 +102,21 @@ const emitCallback = (msg: string, data: any) => {
   });
 };
 
-if (window.location.protocol === 'wexond:') {
+if (
+  window.location.protocol === 'wexond:' ||
+  window.location.protocol === 'wexond-error:'
+) {
   (async function() {
     const w = await webFrame.executeJavaScript('window');
     w.settings = ipcRenderer.sendSync('get-settings-sync');
-  })();
 
+    if (window.location.pathname === '//network-error') {
+      w.errorDetails = await ipcRenderer.invoke(`get-error-details-${tabId}`);
+    }
+  })();
+}
+
+if (window.location.protocol === 'wexond:') {
   window.addEventListener('DOMContentLoaded', () => {
     if (window.location.hostname === 'settings') document.title = 'Settings';
     else if (window.location.hostname === 'history') document.title = 'History';
