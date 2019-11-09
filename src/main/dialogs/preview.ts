@@ -48,8 +48,8 @@ export class PreviewDialog extends Dialog {
     });
   }
 
-  public hide() {
-    super.hide();
+  public hide(bringToTop = true) {
+    super.hide(bringToTop);
     this.webContents.send('visible', false);
   }
 }

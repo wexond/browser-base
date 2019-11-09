@@ -53,7 +53,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
   });
 
   ipcMain.on(`hide-tab-preview-${id}`, (e, tab) => {
-    appWindow.previewDialog.hide();
+    appWindow.previewDialog.hide(appWindow.previewDialog.visible);
   });
 
   ipcMain.on(`update-find-info-${id}`, (e, tabId, data) =>
