@@ -8,7 +8,6 @@ import {
   StyledIcon,
   StyledTitle,
   StyledClose,
-  StyledBorder,
   StyledOverlay,
   TabContainer,
 } from './style';
@@ -47,10 +46,15 @@ const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   store.tabs.lastScrollLeft = store.tabs.containerRef.current.scrollLeft;
 };
 
-const onMouseEnter = (tab: ITab) => () => {
+const onMouseEnter = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (!store.tabs.isDragging) {
     store.tabs.hoveredTabId = tab.id;
   }
+
+  ipcRenderer.send(`show-tab-preview-${store.windowId}`, {
+    id: tab.id,
+    x: e.currentTarget.getBoundingClientRect().left,
+  });
 };
 
 const onMouseLeave = () => {

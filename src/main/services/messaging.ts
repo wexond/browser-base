@@ -47,6 +47,15 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.searchDialog.toggle();
   });
 
+  ipcMain.on(`show-tab-preview-${id}`, (e, tab) => {
+    appWindow.previewDialog.tab = tab;
+    appWindow.previewDialog.show();
+  });
+
+  ipcMain.on(`hide-tab-preview-${id}`, (e, tab) => {
+    appWindow.previewDialog.hide();
+  });
+
   ipcMain.on(`update-find-info-${id}`, (e, tabId, data) =>
     appWindow.findDialog.updateInfo(tabId, data),
   );
