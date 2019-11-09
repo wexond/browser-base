@@ -28,7 +28,7 @@ export const StyledApp = styled.div`
     background-color: ${theme['dialog.backgroundColor']};
     color: ${theme['dialog.textColor']};
     transition: 0.2s opacity,
-      0.2s margin-top ${xTransition ? ', 0.1s margin-left' : ''};
+      0.2s margin-top ${xTransition ? ', 0.08s margin-left' : ''};
   `}
 `;
 
