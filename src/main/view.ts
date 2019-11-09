@@ -13,7 +13,7 @@ export class View extends BrowserView {
   public favicon = '';
   public selected = false;
 
-  private errorDetails = {
+  public errorDetails = {
     validatedURL: '',
     errorCode: 0,
     errorDescription: '',
