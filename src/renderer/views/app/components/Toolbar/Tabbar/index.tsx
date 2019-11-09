@@ -24,6 +24,7 @@ const onTabsMouseLeave = (e: React.MouseEvent) => {
     store.tabs.updateTabsBounds(true);
   }, 300);
   ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
+  store.tabs.canShowPreview = true;
 };
 
 const onAddTabClick = () => {

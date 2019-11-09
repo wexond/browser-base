@@ -360,6 +360,8 @@ export class ITab {
     const { tabs } = tabGroup;
 
     store.tabs.closedUrl = this.url;
+    store.tabs.canShowPreview = false;
+    ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
 
     const selected = tabGroup.selectedTabId === this.id;
 

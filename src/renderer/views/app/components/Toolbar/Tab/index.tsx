@@ -53,10 +53,12 @@ const onMouseEnter = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
 
   const x = e.currentTarget.getBoundingClientRect().left;
 
-  ipcRenderer.send(`show-tab-preview-${store.windowId}`, {
-    id: tab.id,
-    x,
-  });
+  if (store.tabs.canShowPreview) {
+    ipcRenderer.send(`show-tab-preview-${store.windowId}`, {
+      id: tab.id,
+      x,
+    });
+  }
 };
 
 const onMouseLeave = () => {

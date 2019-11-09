@@ -41,6 +41,8 @@ export class TabsStore {
 
   public closedUrl = '';
 
+  public canShowPreview = true;
+
   public scrollbarRef = React.createRef<HorizontalScrollbar>();
   public containerRef = React.createRef<HTMLDivElement>();
 
