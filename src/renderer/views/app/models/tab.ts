@@ -156,6 +156,7 @@ export class ITab {
       if (
         url !== this.url &&
         !url.startsWith('wexond://') &&
+        !url.startsWith('wexond-error://') &&
         !store.isIncognito
       ) {
         this.lastHistoryId = await store.history.addItem({
@@ -164,6 +165,8 @@ export class ITab {
           favicon: '',
           date: new Date().toString(),
         });
+      } else {
+        this.lastHistoryId = '';
       }
     });
 
