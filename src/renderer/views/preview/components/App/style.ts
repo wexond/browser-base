@@ -9,7 +9,6 @@ export const StyledApp = styled.div`
   border-radius: 6px;
   overflow: hidden;
   position: relative;
-
   padding: 16px;
   font-size: 13px;
   max-width: ${TAB_MAX_WIDTH}px;
@@ -36,10 +35,11 @@ export const Title = styled.div`
   font-weight: 500;
   line-height: 1.3rem;
   ${maxLines(2)};
+  opacity: 0.87;
 `;
 
 export const Domain = styled.div`
-  opacity: 0.54;
+  opacity: 0.7;
   font-weight: 300;
   line-height: 1.3rem;
 `;

@@ -36,6 +36,10 @@ export class Settings extends EventEmitter {
               this.object,
             );
             window.menuDialog.webContents.send('update-settings', this.object);
+            window.previewDialog.webContents.send(
+              'update-settings',
+              this.object,
+            );
           }
         }
 
