@@ -9,16 +9,26 @@ export const StyledApp = styled.div`
   border-radius: 6px;
   overflow: hidden;
   position: relative;
-  transition: 0.2s opacity, 0.2s margin-top, 0.1s margin-left;
+
   padding: 16px;
   font-size: 13px;
   max-width: ${TAB_MAX_WIDTH}px;
 
-  ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
+  ${({
+    visible,
+    theme,
+    xTransition,
+  }: {
+    visible: boolean;
+    theme?: ITheme;
+    xTransition: boolean;
+  }) => css`
     opacity: ${visible ? 1 : 0};
     margin-top: ${visible ? 0 : 7}px;
     background-color: ${theme['dialog.backgroundColor']};
     color: ${theme['dialog.textColor']};
+    transition: 0.2s opacity,
+      0.2s margin-top ${xTransition ? ', 0.1s margin-left' : ''};
   `}
 `;
 

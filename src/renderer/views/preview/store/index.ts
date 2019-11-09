@@ -32,6 +32,12 @@ export class Store {
   @observable
   public x = 0;
 
+  @observable
+  public xTransition = false;
+
+  private timeout: any;
+  private timeout1: any;
+
   @computed
   public get domain() {
     return parse(this.url).hostname;
@@ -39,7 +45,21 @@ export class Store {
 
   public constructor() {
     ipcRenderer.on('visible', (e, flag, tab) => {
+      clearTimeout(this.timeout);
+      clearTimeout(this.timeout1);
+
       this.visible = flag;
+
+      if (flag) {
+        this.timeout1 = setTimeout(() => {
+          this.xTransition = true;
+        }, 100);
+      } else if (!flag) {
+        this.timeout = setTimeout(() => {
+          this.xTransition = false;
+        }, 100);
+      }
+
       if (tab) {
         this.title = tab.title;
         this.url = tab.url;
