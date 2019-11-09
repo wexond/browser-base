@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { ITheme } from '~/interfaces';
+import { maxLines } from '~/renderer/mixins';
 
 export const StyledApp = styled.div`
   margin: 8px;
@@ -21,12 +22,14 @@ export const StyledApp = styled.div`
 
 export const Title = styled.div`
   font-weight: 500;
+  line-height: 1.3rem;
+  ${maxLines(2)};
 `;
 
 export const Domain = styled.div`
   opacity: 0.54;
   font-weight: 300;
-  margin-top: 2px;
+  line-height: 1.3rem;
 `;
 
 export const Subtitle = styled.div`
