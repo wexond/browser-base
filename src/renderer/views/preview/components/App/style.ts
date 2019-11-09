@@ -10,7 +10,7 @@ export const StyledApp = styled.div`
   position: relative;
   transition: 0.2s opacity, 0.2s margin-top;
   padding: 16px;
-  font-size: 14px;
+  font-size: 13px;
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};

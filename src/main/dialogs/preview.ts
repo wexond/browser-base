@@ -10,6 +10,8 @@ export class PreviewDialog extends Dialog {
   public visible = false;
   public tab: { id?: number; x?: number } = {};
 
+  private appWindow: AppWindow;
+
   constructor(appWindow: AppWindow) {
     super(appWindow, {
       name: 'preview',
@@ -20,9 +22,15 @@ export class PreviewDialog extends Dialog {
       },
       hideTimeout: 300,
     });
+
+    this.appWindow = appWindow;
   }
 
   public show() {
+    if (this.appWindow.searchDialog.visible) {
+      return;
+    }
+
     this.bounds.x = Math.round(this.tab.x - 8);
 
     super.show();
