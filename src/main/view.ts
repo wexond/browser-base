@@ -35,11 +35,9 @@ export class View extends BrowserView {
       },
     });
 
-    this.webContents.setUserAgent(
-      this.webContents.userAgent
-        .replace(/Wexond\\?.([^\s]+)/g, '')
-        .replace(/Electron\\?.([^\s]+)/g, ''),
-    );
+    this.webContents.userAgent = this.webContents.userAgent
+      .replace(/Wexond\\?.([^\s]+)/g, '')
+      .replace(/Electron\\?.([^\s]+)/g, '');
 
     this.window = window;
     this.homeUrl = url;
