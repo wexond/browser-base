@@ -9,6 +9,7 @@ export const StyledApp = styled.div`
   position: relative;
   transition: 0.2s opacity, 0.2s margin-top;
   padding: 16px;
+  font-size: 14px;
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
@@ -19,7 +20,13 @@ export const StyledApp = styled.div`
 `;
 
 export const Title = styled.div`
-  font-size: 16px;
+  font-weight: 500;
+`;
+
+export const Domain = styled.div`
+  opacity: 0.54;
+  font-weight: 300;
+  margin-top: 2px;
 `;
 
 export const Subtitle = styled.div`

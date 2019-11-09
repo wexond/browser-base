@@ -19,6 +19,7 @@ export class PreviewDialog extends Dialog {
         y: 40,
       },
       hideTimeout: 300,
+      devtools: true,
     });
   }
 

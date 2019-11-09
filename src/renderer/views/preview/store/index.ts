@@ -3,6 +3,7 @@ import { observable, computed } from 'mobx';
 import { getTheme } from '~/utils/themes';
 import { ISettings } from '~/interfaces';
 import { DEFAULT_SETTINGS } from '~/constants';
+import { parse } from 'url';
 
 export class Store {
   @observable
@@ -22,9 +23,24 @@ export class Store {
   @observable
   public windowId = remote.getCurrentWindow().id;
 
+  @observable
+  public title = '';
+
+  @observable
+  public url = '';
+
+  @computed
+  public get domain() {
+    return parse(this.url).hostname;
+  }
+
   public constructor() {
-    ipcRenderer.on('visible', (e, flag) => {
+    ipcRenderer.on('visible', (e, flag, tab) => {
       this.visible = flag;
+      if (tab) {
+        this.title = tab.title;
+        this.url = tab.url;
+      }
     });
 
     ipcRenderer.send('get-settings');
