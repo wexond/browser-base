@@ -22,6 +22,11 @@ export class PreviewDialog extends Dialog {
     });
   }
 
+  public rearrange() {
+    const { width } = this.appWindow.getContentBounds();
+    super.rearrange({ width });
+  }
+
   public show() {
     if (this.appWindow.searchDialog.visible) {
       return;
