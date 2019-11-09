@@ -78,15 +78,20 @@
     const pageUnresolvedIcon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABIAQMAAABvIyEEAAAABlBMVEUAAABTU1OoaSf/AAAAAXRSTlMAQObYZgAAAENJREFUeF7tzbEJACEQRNGBLeAasBCza2lLEGx0CxFGG9hBMDDxRy/72O9FMnIFapGylsu1fgoBdkXfUHLrQgdfrlJN1BdYBjQQm3UAAAAASUVORK5CYII=';
 
     const info = {
-      '-105': {
-        title: 'This site can’t be reached',
-        description: `<b>${url}</b>’s server IP address could not be found.`,
-        code: 'ERR_NAME_NOT_RESOLVED',
+      '-6': {
+        title: 'Your file was not found',
+        description: `It may have been moved or deleted.`,
+        code: 'ERR_FILE_NOT_FOUND',
       },
       '-10': {
         title: 'This site can’t be reached',
         description: `The webpage at <b>${url}</b> might be temporarily down or it may have moved permanently to a new web address.`,
         code: 'ERR_ACCESS_DENIED',
+      },
+      '-105': {
+        title: 'This site can’t be reached',
+        description: `<b>${url}</b>’s server IP address could not be found.`,
+        code: 'ERR_NAME_NOT_RESOLVED',
       },
       '-106': {
         title: 'No internet',
@@ -102,6 +107,16 @@
         title: 'This site can’t be reached',
         description: `<b>${url}</b> is unreachable.`,
         code: 'ERR_ADDRESS_UNREACHABLE',
+      },
+      '-300': {
+        title: 'This site can’t be reached',
+        description: `The webpage at <b>${url}</b> might be temporarily down or it may have moved permanently to a new web address.`,
+        code: 'ERR_INVALID_URL',
+      },
+      '-379': {
+        title: 'This site can’t be reached',
+        description: `The webpage at <b>${url}</b> might be temporarily down or it may have moved permanently to a new web address.`,
+        code: 'ERR_HTTP_RESPONSE_CODE_FAILURE',
       },
     }
 
