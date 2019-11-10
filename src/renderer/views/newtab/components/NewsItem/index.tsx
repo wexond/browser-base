@@ -28,6 +28,7 @@ export const NewsItem = observer(
     width: number;
     height: number;
   }) => {
+    // eslint-disable-next-line prefer-const
     let [img, setImg] = React.useState('');
 
     const image = new Image();

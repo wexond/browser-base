@@ -58,7 +58,7 @@ export const darkTheme: ITheme = {
   'control.valueColor': '#fff',
   'control.lightIcon': true,
   'switch.backgroundColor': 'rgba(255, 255, 255, 0.24)',
-  'dialog.backgroundColor': '#424242',
+  'dialog.backgroundColor': '#333333',
   'dialog.separator.color': 'rgba(255, 255, 255, 0.12)',
   'menu.header.background':
     'linear-gradient(to bottom right, #00b0ff, #3d5afe)',
