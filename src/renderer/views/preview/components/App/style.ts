@@ -9,7 +9,7 @@ export const StyledApp = styled.div`
   border-radius: 6px;
   overflow: hidden;
   position: relative;
-  padding: 16px;
+  padding: 12px;
   font-size: 13px;
   max-width: ${TAB_MAX_WIDTH}px;
 
