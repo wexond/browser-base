@@ -11,6 +11,9 @@ import {
 } from './style';
 import { ISuggestion } from '~/interfaces';
 import store from '../../store';
+import { remote, ipcRenderer } from 'electron';
+import { callViewMethod } from '~/utils/view';
+import { isURL } from '~/utils/url';
 
 interface Props {
   suggestion: ISuggestion;
@@ -22,6 +25,27 @@ const onMouseEnter = (suggestion: ISuggestion) => () => {
 
 const onMouseLeave = (suggestion: ISuggestion) => () => {
   suggestion.hovered = false;
+};
+
+const onClick = (suggestion: ISuggestion) => () => {
+  let url = suggestion.primaryText;
+
+  if (isURL(url) && !url.includes('://')) {
+    url = `http://${url}`;
+  } else if (!url.includes('://')) {
+    url = store.searchEngine.url.replace('%s', url);
+  }
+
+  callViewMethod(
+    remote.getCurrentWindow().id,
+    store.tabId,
+    'webContents.loadURL',
+    url,
+  );
+
+  setTimeout(() => {
+    ipcRenderer.send(`hide-${store.id}`);
+  });
 };
 
 export const Suggestion = observer(({ suggestion }: Props) => {
@@ -42,6 +66,7 @@ export const Suggestion = observer(({ suggestion }: Props) => {
     <StyledSuggestion
       selected={selected}
       hovered={hovered}
+      onClick={onClick(suggestion)}
       onMouseEnter={onMouseEnter(suggestion)}
       onMouseLeave={onMouseLeave(suggestion)}
     >
