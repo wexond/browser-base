@@ -14,7 +14,7 @@ export class MenuDialog extends Dialog {
       bounds: {
         width: MENU_WIDTH,
         height: HEIGHT,
-        y: 32,
+        y: 36,
       },
     });
   }
