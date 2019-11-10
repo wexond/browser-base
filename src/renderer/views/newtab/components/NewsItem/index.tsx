@@ -28,7 +28,7 @@ export const NewsItem = observer(
     width: number;
     height: number;
   }) => {
-    const [img, setImg] = React.useState('');
+    let [img, setImg] = React.useState('');
 
     const image = new Image();
     const src = item.urlToImage;
@@ -39,7 +39,7 @@ export const NewsItem = observer(
     image.src = src;
 
     if (image.complete) {
-      setImg(src);
+      img = src;
     }
 
     const fullSize = width === 2;
