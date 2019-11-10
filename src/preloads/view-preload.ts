@@ -126,6 +126,9 @@ if (window.location.protocol === 'wexond:') {
       document.title = 'Bookmarks';
     else if (window.location.hostname === 'extensions')
       document.title = 'Extensions';
+    else if (window.location.hostname === 'newtab') {
+      document.title = 'New tab';
+    }
   });
 
   window.addEventListener('message', ({ data }) => {

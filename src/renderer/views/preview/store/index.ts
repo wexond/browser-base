@@ -57,7 +57,7 @@ export class Store {
       } else if (!flag) {
         this.timeout = setTimeout(() => {
           this.xTransition = false;
-        }, 20);
+        }, 100);
       }
 
       if (tab) {
