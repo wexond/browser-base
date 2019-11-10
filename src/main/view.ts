@@ -4,7 +4,7 @@ import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
 import { windowsManager } from '.';
 import storage from './services/storage';
-import Vibrant from 'node-vibrant';
+import * as Vibrant from 'node-vibrant';
 
 export class View extends BrowserView {
   public title = '';
