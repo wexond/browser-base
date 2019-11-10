@@ -27,7 +27,7 @@ export class View extends BrowserView {
         plugins: true,
         additionalArguments: [
           `--window-id=${window.id}`,
-          `--blacklist=["wexond://"]`,
+          `--blacklist=["wexond://", "wexond-error://"]`,
         ],
         nativeWindowOpen: true,
         webSecurity: true,
