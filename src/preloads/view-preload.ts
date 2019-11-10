@@ -26,6 +26,16 @@ const goForward = () => {
   });
 };
 
+window.addEventListener('mouseup', e => {
+  if (e.button === 3) {
+    e.preventDefault();
+    goBack();
+  } else if (e.button === 4) {
+    e.preventDefault();
+    goForward();
+  }
+});
+
 let beginningScrollLeft: number = null;
 let beginningScrollRight: number = null;
 let horizontalMouseMove = 0;
