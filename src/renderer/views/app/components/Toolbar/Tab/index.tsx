@@ -30,6 +30,8 @@ const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
 const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   const { pageX, button } = e;
 
+  ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
+
   if (button !== 0) return;
 
   if (!tab.isSelected) {
@@ -53,7 +55,7 @@ const onMouseEnter = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
 
   const x = e.currentTarget.getBoundingClientRect().left;
 
-  if (store.tabs.canShowPreview) {
+  if (store.tabs.canShowPreview && !store.tabs.isDragging) {
     ipcRenderer.send(`show-tab-preview-${store.windowId}`, {
       id: tab.id,
       x,
