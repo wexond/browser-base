@@ -36,6 +36,23 @@ export const StyledNewsItem = styled.a`
     }
   }
 
+  &:after {
+    content: '';
+
+    ${({ fullSize }: { fullSize?: boolean }) => css`
+      background-image: ${fullSize
+        ? 'linear-gradient(to left, transparent, #000)'
+        : 'linear-gradient(transparent, #000)'};
+      opacity: ${fullSize ? 0.75 : 0.85};
+    `};
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+  }
+
   &:before {
     content: '';
     position: absolute;
@@ -57,22 +74,6 @@ export const StyledNewsItem = styled.a`
     &:before {
       opacity: 0.3;
     }
-  }
-
-  &:after {
-    content: '';
-    ${({ fullSize }: { fullSize?: boolean }) => css`
-      background-image: ${fullSize
-        ? 'linear-gradient(to left, transparent, #000)'
-        : 'linear-gradient(transparent, #000)'};
-      opacity: ${fullSize ? 0.75 : 0.85};
-    `};
-
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
   }
 `;
 

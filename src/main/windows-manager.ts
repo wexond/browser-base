@@ -11,8 +11,8 @@ import { isURL, prefixHttp, requestURL } from '~/utils';
 import { registerProtocol } from './models/protocol';
 import storage from './services/storage';
 import { IFavicon } from '~/interfaces';
-import fileType = require('file-type');
-import icojs = require('icojs');
+import * as fileType from 'file-type';
+import * as icojs from 'icojs';
 
 const convertIcoToPng = async (icoData: Buffer): Promise<ArrayBuffer> => {
   return (await icojs.parse(icoData, 'image/png'))[0].buffer;

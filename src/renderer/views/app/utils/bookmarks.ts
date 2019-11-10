@@ -1,4 +1,4 @@
-import parse = require('node-bookmarks-parser');
+import * as parse from 'node-bookmarks-parser';
 
 import { IBookmark } from '~/interfaces';
 import store from '../store';
@@ -25,6 +25,8 @@ export const addImported = async (
   arr: ReturnType<typeof parse>,
   parent: IBookmark = null,
 ) => {
+  /*
+  TODO:
   let order = 0;
 
   for (const item of arr) {
@@ -65,5 +67,5 @@ export const addImported = async (
     }
 
     order++;
-  }
+  }*/
 };

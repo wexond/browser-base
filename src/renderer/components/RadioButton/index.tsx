@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
-import { Container, Radio, Label, Root, Circle } from './styles';
-import { colors } from '~/renderer/constants';
+import { Container, Radio, Root, Circle } from './styles';
 
 interface Props {
   selected: boolean;

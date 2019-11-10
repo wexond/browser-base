@@ -258,9 +258,8 @@ export class TabsStore {
     store.startupTabs.updateStartupTabItem(tab);
     requestAnimationFrame(() => {
       tab.setLeft(
-        Math.max.apply(
-          Math,
-          this.list.map(function(item) {
+        Math.max(
+          ...this.list.map(function(item) {
             return item.left;
           }),
         ) + TAB_MAX_WIDTH,

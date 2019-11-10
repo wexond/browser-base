@@ -5,12 +5,14 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
+    "skipLibCheck": true,
     "module": "commonjs",
     "target": "es6",
     "jsx": "react",
     "allowJs": true,
     "sourceMap": true,
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "lib": [
       "dom",
       "esnext"

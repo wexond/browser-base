@@ -8,6 +8,7 @@ import { Database } from '~/models/database';
 import { IStartupTab } from '~/interfaces/startup-tab';
 import { extname } from 'path';
 import { existsSync } from 'fs';
+import { ITab } from '../models';
 
 export class StartupTabsStore {
   public db = new Database<IStartupTab>('startupTabs');
@@ -126,6 +127,18 @@ export class StartupTabsStore {
       );
       this.db.remove(itemToDelete);
     }
+  }
+
+  public async updateStartupTabItem(tab: ITab) {
+    this.addStartupTabItem({
+      id: tab.id,
+      windowId: this.store.windowId,
+      url: tab.url,
+      pinned: tab.isPinned,
+      title: tab.title,
+      favicon: tab.favicon,
+      isUserDefined: false,
+    });
   }
 
   public clearStartupTabs(removePinned: boolean, removeUserDefined: boolean) {

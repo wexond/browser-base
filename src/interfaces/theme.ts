@@ -45,4 +45,6 @@ export interface ITheme {
 
   backgroundColor: string;
   accentColor: string;
+
+  animations?: boolean;
 }

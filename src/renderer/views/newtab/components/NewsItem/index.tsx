@@ -39,7 +39,7 @@ export const NewsItem = observer(
     image.src = src;
 
     if (image.complete) {
-      this.image = src;
+      setImg(src);
     }
 
     const fullSize = width === 2;
@@ -53,7 +53,7 @@ export const NewsItem = observer(
       >
         <Img src={img}></Img>
         <Info fullSize={fullSize}>
-          <Title fullSize={fullSize}>{item.title}</Title>
+          <Title>{item.title}</Title>
           <Description>{item.description}</Description>
           {fullSize && <Fill />}
           <Footer>

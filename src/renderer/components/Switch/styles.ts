@@ -33,7 +33,7 @@ export const StyledSwitch = styled.div`
 
     &:hover {
       &:after {
-        background-color: ${!activated && theme['overlay.foreground'] === 'dark'
+        background-color: ${!activated && theme['pages.lightForeground']
           ? 'rgba(0, 0, 0, 0.06)'
           : 'rgba(255, 255, 255, 0.12)'};
       }

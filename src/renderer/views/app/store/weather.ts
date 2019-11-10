@@ -1,7 +1,7 @@
 import { observable } from 'mobx';
 
-import { getWeather } from '../utils';
 import { IForecast } from '~/interfaces';
+import { getWeather } from '../utils/weather';
 
 export class WeatherStore {
   @observable
