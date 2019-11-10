@@ -304,11 +304,11 @@ export class ITab {
   }
 
   public getWidth(containerWidth: number = null, tabs: ITab[] = null) {
+    if (this.isPinned) return TAB_PINNED_WIDTH;
+
     if (containerWidth === null) {
       containerWidth = store.tabs.containerWidth;
     }
-
-    if (this.isPinned) return TAB_PINNED_WIDTH;
 
     if (tabs === null) {
       tabs = store.tabs.list.filter(
@@ -316,8 +316,12 @@ export class ITab {
       );
     }
 
+    const pinnedTabs = tabs.filter(x => x.isPinned).length;
+
     const width =
-      containerWidth / (tabs.length + store.tabs.removedTabs) - TABS_PADDING;
+      (containerWidth - pinnedTabs * (TAB_PINNED_WIDTH + TABS_PADDING)) /
+        (tabs.length - pinnedTabs + store.tabs.removedTabs) -
+      TABS_PADDING;
 
     if (width > TAB_MAX_WIDTH) {
       return TAB_MAX_WIDTH;
@@ -336,7 +340,7 @@ export class ITab {
 
     let left = 0;
     for (let i = 0; i < index; i++) {
-      left += (calcNewLeft ? this.getWidth() : tabs[i].width) + TABS_PADDING;
+      left += (calcNewLeft ? tabs[i].getWidth() : tabs[i].width) + TABS_PADDING;
     }
 
     return left;
@@ -382,7 +386,7 @@ export class ITab {
     if (notClosingTabs.length - 1 === index) {
       const previousTab = tabs[index - 1];
       if (previousTab) {
-        this.setLeft(previousTab.getLeft(true) + this.getWidth(), true);
+        this.setLeft(previousTab.getLeft(true) + previousTab.getWidth(), true);
       }
       store.tabs.updateTabsBounds(true);
     } else {

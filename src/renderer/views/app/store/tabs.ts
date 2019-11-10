@@ -343,7 +343,10 @@ export class TabsStore {
     if (direction === 'left') {
       for (let i = index - 1; i >= 0; i--) {
         const tab = tabs[i];
-        if (callingTab.left <= tab.width / 2 + tab.left) {
+        if (
+          callingTab.left <= tab.width / 2 + tab.left &&
+          (!callingTab.isPinned || (callingTab.isPinned && tab.isPinned))
+        ) {
           this.replaceTab(tabs[i + 1], tab);
         } else {
           break;
@@ -352,7 +355,10 @@ export class TabsStore {
     } else if (direction === 'right') {
       for (let i = index + 1; i < tabs.length; i++) {
         const tab = tabs[i];
-        if (callingTab.left + callingTab.width >= tab.width / 2 + tab.left) {
+        if (
+          callingTab.left + callingTab.width >= tab.width / 2 + tab.left &&
+          (!callingTab.isPinned || (callingTab.isPinned && tab.isPinned))
+        ) {
           this.replaceTab(tabs[i - 1], tab);
         } else {
           break;
