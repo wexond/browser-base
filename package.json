@@ -1,6 +1,6 @@
 {
   "name": "wexond",
-  "version": "4.0.0-alpha.3",
+  "version": "4.0.0-nightly.1",
   "description": "Extensible, fast and innovative web browser with material UI.",
   "keywords": [
     "web-browser",
@@ -10,15 +10,15 @@
     "mobx",
     "styled-components"
   ],
-  "homepage": "https://github.com/wexond/wexond#readme",
+  "homepage": "https://github.com/wexond/wexond-nightly#readme",
   "main": "build/main.bundle.js",
   "author": "Eryk Rakowski <sentialx@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wexond/wexond.git"
+    "url": "git+https://github.com/wexond/wexond-nightly.git"
   },
   "bugs": {
-    "url": "https://github.com/wexond/wexond/issues"
+    "url": "https://github.com/wexond/wexond-nightly/issues"
   },
   "scripts": {
     "dev": "cross-env START=1 npm run watch",
