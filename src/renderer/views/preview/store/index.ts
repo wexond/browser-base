@@ -48,7 +48,9 @@ export class Store {
       clearTimeout(this.timeout);
       clearTimeout(this.timeout1);
 
-      this.visible = flag;
+      if (!flag) {
+        this.visible = flag;
+      }
 
       if (flag) {
         this.timeout1 = setTimeout(() => {
@@ -64,6 +66,10 @@ export class Store {
         this.title = tab.title;
         this.url = tab.url;
         this.x = tab.x;
+
+        if (flag && this.title !== '' && this.url !== '') {
+          this.visible = flag;
+        }
       }
     });
 
