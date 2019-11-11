@@ -10,15 +10,15 @@
     "mobx",
     "styled-components"
   ],
-  "homepage": "https://github.com/wexond/wexond-nightly#readme",
+  "homepage": "https://github.com/wexond/desktop-nightly#readme",
   "main": "build/main.bundle.js",
   "author": "Eryk Rakowski <sentialx@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wexond/wexond-nightly.git"
+    "url": "git+https://github.com/wexond/desktop-nightly.git"
   },
   "bugs": {
-    "url": "https://github.com/wexond/wexond-nightly/issues"
+    "url": "https://github.com/wexond/desktop-nightly/issues"
   },
   "scripts": {
     "dev": "cross-env START=1 npm run watch",
