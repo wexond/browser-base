@@ -23,9 +23,6 @@ export class Store {
   public constructor() {
     ipcRenderer.on('visible', (e, flag) => {
       this.visible = flag;
-      if (flag) {
-        window.focus();
-      }
     });
 
     window.addEventListener('blur', () => {
