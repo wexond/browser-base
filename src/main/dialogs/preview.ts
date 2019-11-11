@@ -9,6 +9,8 @@ export class PreviewDialog extends Dialog {
   public visible = false;
   public tab: { id?: number; x?: number } = {};
 
+  private timeout1: any;
+
   constructor(appWindow: AppWindow) {
     super(appWindow, {
       name: 'preview',
@@ -27,11 +29,10 @@ export class PreviewDialog extends Dialog {
   }
 
   public show() {
-    if (this.appWindow.searchDialog.visible) {
-      return;
-    }
+    clearTimeout(this.timeout1);
+    this.appWindow.searchDialog.rearrangePreview(true);
 
-    super.show();
+    super.show(false);
 
     const tab = this.appWindow.viewManager.views.find(
       x => x.webContents.id === this.tab.id,
@@ -49,6 +50,11 @@ export class PreviewDialog extends Dialog {
   }
 
   public hide(bringToTop = true) {
+    clearTimeout(this.timeout1);
+    this.timeout1 = setTimeout(() => {
+      this.appWindow.searchDialog.rearrangePreview(false);
+    }, 210);
+
     super.hide(bringToTop);
     this.webContents.send('visible', false);
   }
