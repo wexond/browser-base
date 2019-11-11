@@ -89,9 +89,14 @@ export const stopAdblockService = (ses: any) => {
       engine.disableBlockingInSession(ses);
     }
   } catch (e) {
-    ses.webRequest.removeListener('onBeforeRequest', ses.id1.id);
-    ses.webRequest.removeListener('onHeadersReceived', ses.id2.id);
-    delete ses.id1;
-    delete ses.id2;
+    if (ses.id1) {
+      ses.webRequest.removeListener('onBeforeRequest', ses.id1.id);
+      delete ses.id1;
+    }
+
+    if (ses.id2) {
+      ses.webRequest.removeListener('onHeadersReceived', ses.id2.id);
+      delete ses.id2;
+    }
   }
 };
