@@ -40,7 +40,16 @@ export class Store {
 
   @computed
   public get domain() {
-    return parse(this.url).hostname;
+    const parsed = parse(this.url);
+    if (this.url.startsWith('wexond://')) {
+      return parsed.protocol + '//' + parsed.hostname;
+    }
+
+    if (parsed.protocol === 'file:') {
+      return 'local or shared file';
+    }
+
+    return parsed.hostname;
   }
 
   public constructor() {
