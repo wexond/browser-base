@@ -1,6 +1,6 @@
 {
-  "appId": "org.wexond.wexond",
-  "productName": "Wexond",
+  "appId": "org.wexond.wexond-nightly",
+  "productName": "Wexond Nightly",
   "nsis": {
     "include": "static/installer.nsh"
   },
@@ -58,7 +58,7 @@
   "fileAssociations": [
     {
       "name": "Document",
-      "description": "Wexond",
+      "description": "Wexond Nightly",
       "role": "Viewer",
       "ext": "html"
     }
