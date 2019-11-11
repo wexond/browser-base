@@ -54,7 +54,7 @@
     "cross-env": "6.0.3",
     "electron": "^7.1.1",
     "electron-builder": "22.1.0",
-    "electron-extensions": "^4.0.5",
+    "electron-extensions": "^4.0.6",
     "electron-rebuild": "^1.8.6",
     "electron-updater": "4.2.0",
     "eslint": "^6.6.0",
