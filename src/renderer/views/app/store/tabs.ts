@@ -9,7 +9,6 @@ import {
   TAB_MAX_WIDTH,
 } from '../constants';
 
-import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 import store from '.';
 import { ipcRenderer } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
@@ -21,16 +20,10 @@ export class TabsStore {
   public isDragging = false;
 
   @observable
-  public scrollbarVisible = false;
-
-  @observable
   public hoveredTabId: number;
 
   @observable
   public list: ITab[] = [];
-
-  @observable
-  public scrollable = false;
 
   public removedTabs = 0;
 
@@ -39,18 +32,16 @@ export class TabsStore {
   public mouseStartX = 0;
   public tabStartX = 0;
 
+  private scrollTimeout: any;
+
+  public scrollingToEnd = false;
+  public scrollable = false;
+
   public closedUrl = '';
 
   public canShowPreview = true;
 
-  public scrollbarRef = React.createRef<HorizontalScrollbar>();
   public containerRef = React.createRef<HTMLDivElement>();
-
-  private rearrangeTabsTimer = {
-    canReset: false,
-    time: 0,
-    interval: null as any,
-  };
 
   @computed
   public get selectedTab() {
@@ -66,17 +57,6 @@ export class TabsStore {
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('resize', this.onResize);
-
-    this.rearrangeTabsTimer.interval = setInterval(() => {
-      // Set widths and positions for tabs 3 seconds after a tab was closed
-      if (
-        this.rearrangeTabsTimer.canReset &&
-        this.rearrangeTabsTimer.time === 3
-      ) {
-        this.rearrangeTabsTimer.canReset = false;
-      }
-      this.rearrangeTabsTimer.time++;
-    }, 1000);
 
     ipcRenderer.on('tabs-resize', () => {
       this.updateTabsBounds(true);
@@ -117,7 +97,9 @@ export class TabsStore {
         tab.favicon = URL.createObjectURL(new Blob([options.icon]));
         tab.select();
 
-        /*const color = await getVibrantColor(options.icon);
+        /*
+        TODO:
+        const color = await getVibrantColor(options.icon);
 
         if (getColorBrightness(color) < 170) {
           tab.background = color;
@@ -184,11 +166,6 @@ export class TabsStore {
     });
   }
 
-  public resetRearrangeTabsTimer() {
-    this.rearrangeTabsTimer.time = 0;
-    this.rearrangeTabsTimer.canReset = true;
-  }
-
   @action
   public onResize = (e: Event) => {
     if (e.isTrusted) {
@@ -227,10 +204,31 @@ export class TabsStore {
       tab.setLeft(tab.getLeft(), false);
       this.updateTabsBounds(true);
 
-      this.scrollbarRef.current.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
+      this.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
     });
     return tab;
   }
+
+  public scrollToEnd = (milliseconds: number) => {
+    if (!this.scrollable) return;
+
+    const frame = () => {
+      if (!this.scrollingToEnd) return;
+      this.containerRef.current.scrollLeft = this.containerRef.current.scrollWidth;
+      requestAnimationFrame(frame);
+    };
+
+    if (!this.scrollingToEnd) {
+      this.scrollingToEnd = true;
+      frame();
+    }
+
+    clearTimeout(this.scrollTimeout);
+
+    this.scrollTimeout = setTimeout(() => {
+      this.scrollingToEnd = false;
+    }, milliseconds);
+  };
 
   @action
   public addTab(options = defaultTabOptions) {

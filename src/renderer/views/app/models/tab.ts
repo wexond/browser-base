@@ -1,4 +1,4 @@
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
 
@@ -379,8 +379,6 @@ export class ITab {
 
     const notClosingTabs = tabs.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
-
-    store.tabs.resetRearrangeTabsTimer();
 
     this.isClosing = true;
     if (notClosingTabs.length - 1 === index) {

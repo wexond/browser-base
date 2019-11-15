@@ -13,6 +13,16 @@ export const StyledToolbar = styled.div`
   width: 100%;
   height: ${TOOLBAR_HEIGHT}px;
 
+  &:before {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 0px;
+    -webkit-app-region: drag;
+    content: '';
+  }
+
   ${({
     isHTMLFullscreen,
     theme,
@@ -39,13 +49,4 @@ export const Separator = styled.div`
   ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['toolbar.separator.color']};
   `};
-`;
-
-export const Handle = styled.div`
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  right: 3px;
-  bottom: 0px;
-  -webkit-app-region: drag;
 `;

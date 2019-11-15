@@ -5,20 +5,15 @@ import { AddTab, StyledTabbar, TabsContainer } from './style';
 import { Tabs } from '../Tabs';
 import store from '../../../store';
 import { icons } from '~/renderer/constants';
-import HorizontalScrollbar from '~/renderer/components/HorizontalScrollbar';
 import { ipcRenderer } from 'electron';
-
-const getContainer = () => store.tabs.containerRef.current;
 
 let timeout: any;
 
 const onMouseEnter = () => {
-  store.tabs.scrollbarVisible = true;
   clearTimeout(timeout);
 };
 
-const onTabsMouseLeave = (e: React.MouseEvent) => {
-  store.tabs.scrollbarVisible = false;
+const onTabsMouseLeave = () => {
   timeout = setTimeout(() => {
     store.tabs.removedTabs = 0;
     store.tabs.updateTabsBounds(true);
@@ -31,12 +26,27 @@ const onAddTabClick = () => {
   store.tabs.onNewTab();
 };
 
+const onWheel = (e: any) => {
+  if (!store.tabs.containerRef) return;
+
+  const { deltaX, deltaY } = e;
+  const { scrollLeft } = store.tabs.containerRef.current;
+
+  const delta = Math.abs(deltaX) >= Math.abs(deltaY) ? deltaX : -deltaY;
+  const target = delta / 2;
+
+  store.tabs.scrollingToEnd = false;
+
+  store.tabs.containerRef.current.scrollLeft = scrollLeft + target;
+};
+
 export const Tabbar = observer(() => {
   return (
     <StyledTabbar>
       <TabsContainer
         onMouseEnter={onMouseEnter}
         onMouseLeave={onTabsMouseLeave}
+        onWheel={onWheel}
         ref={store.tabs.containerRef}
       >
         <Tabs />
@@ -45,12 +55,6 @@ export const Tabbar = observer(() => {
         icon={icons.add}
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
-      />
-      <HorizontalScrollbar
-        ref={store.tabs.scrollbarRef}
-        enabled={store.tabs.scrollable}
-        visible={store.tabs.scrollbarVisible}
-        getContainer={getContainer}
       />
     </StyledTabbar>
   );
