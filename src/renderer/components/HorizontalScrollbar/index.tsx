@@ -28,9 +28,9 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
   };
 
   private container: HTMLDivElement;
-  private isScrollingToEnd: boolean = false;
+  private isScrollingToEnd = false;
   private scrollTimeout: any;
-  private unmounted: boolean = false;
+  private unmounted = false;
 
   public componentDidMount() {
     this.container = this.props.getContainer();
@@ -94,20 +94,6 @@ export default class HorizontalScrollbar extends React.Component<Props, State> {
 
       requestAnimationFrame(this.resizeScrollbar);
     }
-  };
-
-  public onWheel = (e: any) => {
-    if (!this.container) return;
-
-    const { deltaX, deltaY } = e;
-    const { scrollLeft } = this.container;
-
-    const delta = Math.abs(deltaX) >= Math.abs(deltaY) ? deltaX : -deltaY;
-    const target = delta / 2;
-
-    this.isScrollingToEnd = false;
-
-    this.container.scrollLeft = scrollLeft + target;
   };
 
   public onMouseUp = () => {
