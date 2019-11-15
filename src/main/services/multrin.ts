@@ -40,7 +40,7 @@ export class Multrin {
     this.appWindow = appWindow;
 
     if (platform() === 'win32') {
-      // this.activateWindowCapturing();
+      this.activateWindowCapturing();
     }
   }
 
