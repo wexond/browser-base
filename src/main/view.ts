@@ -251,7 +251,13 @@ export class View extends BrowserView {
   };
 
   public updateWindowTitle() {
-    if (this.selected) this.window.setTitle(`${this.title} - Wexond`);
+    if (this.selected) {
+      if (this.title.trim() !== '') {
+        this.window.setTitle(`${this.title} - ${app.name}`);
+      } else {
+        this.window.setTitle(`${app.name}`);
+      }
+    }
   }
 
   public get hostname() {
