@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default;
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 /* eslint-enable */
 
 const INCLUDE = resolve(__dirname, 'src');
@@ -74,7 +75,9 @@ const config = {
     },
   },
 
-  plugins: [],
+  plugins: [
+    // new BundleAnalyzerPlugin()
+  ],
 };
 
 function getConfig(...cfg) {
