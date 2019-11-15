@@ -1,4 +1,3 @@
-import { Session } from 'electron';
 import { existsSync, promises as fs } from 'fs';
 import { resolve } from 'path';
 import fetch from 'node-fetch';

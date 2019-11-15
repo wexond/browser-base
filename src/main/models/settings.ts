@@ -43,38 +43,34 @@ export class Settings extends EventEmitter {
           }
         }
 
-        this.update();
-
         this.addToQueue();
       },
     );
 
-    ipcMain.on('get-settings-sync', e => {
-      if (!this.loaded) {
-        this.once('load', () => {
-          this.update();
-          e.returnValue = this.object;
-        });
-      } else {
-        this.update();
-        e.returnValue = this.object;
-      }
+    ipcMain.on('get-settings-sync', async e => {
+      await this.onLoad();
+      e.returnValue = this.object;
     });
 
-    ipcMain.on('get-settings', e => {
-      if (!this.loaded) {
-        this.once('load', () => {
-          this.update();
-          e.sender.send('update-settings', this.object);
-        });
-      } else {
-        this.update();
-        e.sender.send('update-settings', this.object);
-      }
+    ipcMain.on('get-settings', async e => {
+      await this.onLoad();
+      e.sender.send('update-settings', this.object);
     });
 
     this.load();
   }
+
+  private onLoad = async (): Promise<void> => {
+    return new Promise(resolve => {
+      if (!this.loaded) {
+        this.once('load', () => {
+          resolve();
+        });
+      } else {
+        resolve();
+      }
+    });
+  };
 
   private update = () => {
     const contexts = [
@@ -128,7 +124,9 @@ export class Settings extends EventEmitter {
 
       this.loaded = true;
 
-      this.save();
+      this.update();
+
+      this.addToQueue();
 
       this.emit('load');
     } catch (e) {
@@ -165,6 +163,8 @@ export class Settings extends EventEmitter {
     const id = makeId(32);
 
     this.queue.push(id);
+
+    this.update();
 
     if (this.queue.length === 1) {
       this.save();

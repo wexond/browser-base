@@ -1,4 +1,4 @@
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
 

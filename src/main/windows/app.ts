@@ -4,7 +4,7 @@ import { resolve, join } from 'path';
 
 import { ViewManager } from '../view-manager';
 import { getPath } from '~/utils';
-import { runMessagingService, Multrin } from '../services';
+import { runMessagingService } from '../services';
 import { WindowsManager } from '../windows-manager';
 import {
   MenuDialog,
@@ -19,7 +19,7 @@ import {
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
-  public multrin = new Multrin(this);
+  // public multrin = new Multrin(this);
 
   public menuDialog = new MenuDialog(this);
   public searchDialog = new SearchDialog(this);

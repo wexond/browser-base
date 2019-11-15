@@ -2,7 +2,6 @@ import { ipcMain } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
-import { NEWTAB_URL } from '~/constants/tabs';
 
 export class ViewManager {
   public views: View[] = [];
