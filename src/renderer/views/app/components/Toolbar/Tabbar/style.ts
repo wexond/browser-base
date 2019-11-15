@@ -1,7 +1,8 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { ToolbarButton } from '../ToolbarButton';
 import { TOOLBAR_BUTTON_WIDTH } from '~/constants/design';
+import { ITheme } from '~/interfaces';
 
 export const StyledTabbar = styled.div`
   height: 100%;
@@ -19,9 +20,32 @@ export const TabsContainer = styled.div`
   width: calc(100% - ${TOOLBAR_BUTTON_WIDTH}px);
   position: relative;
   overflow: hidden;
+  overflow-x: overlay;
   white-space: nowrap;
   display: flex;
   align-items: center;
+
+  &::-webkit-scrollbar {
+    height: 3px;
+    -webkit-app-region: no-drag;
+    background-color: transparent;
+  }
+
+  &:hover {
+    ${({ theme }: { theme?: ITheme }) => css`
+      &::-webkit-scrollbar-thumb {
+        background-color: ${theme['toolbar.lightForeground']
+          ? 'rgba(255, 255, 255, 0.2)'
+          : 'rgba(0, 0, 0, 0.2)'};
+
+        &:hover {
+          background-color: ${theme['toolbar.lightForeground']
+            ? 'rgba(255, 255, 255, 0.3)'
+            : 'rgba(0, 0, 0, 0.3)'};
+        }
+      }
+    `};
+  }
 `;
 
 export const AddTab = styled(ToolbarButton)`

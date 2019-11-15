@@ -4,7 +4,7 @@ import { ipcRenderer } from 'electron';
 import { parse } from 'url';
 
 import store from '../../store';
-import { Buttons, StyledToolbar, Handle, Separator } from './style';
+import { Buttons, StyledToolbar, Separator } from './style';
 import { NavigationButtons } from './NavigationButtons';
 import { Tabbar } from './Tabbar';
 import { ToolbarButton } from './ToolbarButton';
@@ -58,7 +58,7 @@ const onMaximizeClick = () =>
 const onMinimizeClick = () =>
   ipcRenderer.send(`window-minimize-${store.windowId}`);
 
-export const Toolbar = observer(() => {
+const RightButtons = observer(() => {
   const { selectedTab } = store.tabs;
 
   let isWindow = false;
@@ -72,41 +72,46 @@ export const Toolbar = observer(() => {
   }
 
   return (
+    <Buttons>
+      <BrowserActions />
+      {store.updateInfo.available && (
+        <ToolbarButton icon={icons.download} onClick={onUpdateClick} />
+      )}
+      {store.extensions.browserActions.length > 0 && <Separator />}
+      {hasCredentials && (
+        <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
+      )}
+      {!isWindow && store.settings.object.shield == true && (
+        <BrowserAction
+          size={18}
+          style={{ marginLeft: 0 }}
+          opacity={0.54}
+          autoInvert
+          data={{
+            badgeBackgroundColor: BLUE_500,
+            badgeText: blockedAds > 0 ? blockedAds.toString() : '',
+            icon: icons.shield,
+            badgeTextColor: 'white',
+          }}
+        />
+      )}
+      {store.isIncognito && (
+        <>
+          <Separator />
+          <ToolbarButton icon={icons.incognito} size={18} />
+        </>
+      )}
+      <ToolbarButton onMouseDown={onMenuClick} icon={icons.more} size={18} />
+    </Buttons>
+  );
+});
+
+export const Toolbar = observer(() => {
+  return (
     <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
-      <Handle />
       <NavigationButtons />
       <Tabbar />
-      <Buttons>
-        <BrowserActions />
-        {store.updateInfo.available && (
-          <ToolbarButton icon={icons.download} onClick={onUpdateClick} />
-        )}
-        {store.extensions.browserActions.length > 0 && <Separator />}
-        {hasCredentials && (
-          <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
-        )}
-        {!isWindow && store.settings.object.shield == true && (
-          <BrowserAction
-            size={18}
-            style={{ marginLeft: 0 }}
-            opacity={0.54}
-            autoInvert
-            data={{
-              badgeBackgroundColor: BLUE_500,
-              badgeText: blockedAds > 0 ? blockedAds.toString() : '',
-              icon: icons.shield,
-              badgeTextColor: 'white',
-            }}
-          />
-        )}
-        {store.isIncognito && (
-          <>
-            <Separator />
-            <ToolbarButton icon={icons.incognito} size={18} />
-          </>
-        )}
-        <ToolbarButton onMouseDown={onMenuClick} icon={icons.more} size={18} />
-      </Buttons>
+      <RightButtons />
       {platform() !== 'darwin' && (
         <WindowsControls
           style={{

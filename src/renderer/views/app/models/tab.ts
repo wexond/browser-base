@@ -380,8 +380,6 @@ export class ITab {
     const notClosingTabs = tabs.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
 
-    store.tabs.resetRearrangeTabsTimer();
-
     this.isClosing = true;
     if (notClosingTabs.length - 1 === index) {
       const previousTab = tabs[index - 1];
