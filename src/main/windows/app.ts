@@ -97,6 +97,7 @@ export class AppWindow extends BrowserWindow {
       this.findDialog.rearrange();
       this.menuDialog.hide();
       this.permissionsDialog.rearrange();
+      this.searchDialog.rearrange();
 
       moveAndResize();
     });
