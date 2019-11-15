@@ -125,9 +125,7 @@ export class Settings extends EventEmitter {
       this.loaded = true;
 
       this.update();
-
       this.addToQueue();
-
       this.emit('load');
     } catch (e) {
       this.loaded = true;

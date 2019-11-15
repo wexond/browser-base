@@ -34,6 +34,7 @@ export class WindowsManager {
 
     if (!gotTheLock) {
       app.quit();
+      return;
     } else {
       app.on('second-instance', async (e, argv) => {
         const path = argv[argv.length - 1];
