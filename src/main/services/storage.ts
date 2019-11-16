@@ -82,7 +82,7 @@ export class StorageService {
     });
 
     ipcMain.on('history-remove', (e, ids: string[]) => {
-      this.history.filter(x => ids.indexOf(x._id) === -1);
+      this.history = this.history.filter(x => ids.indexOf(x._id) === -1);
       ids.forEach(x => this.remove({ scope: 'history', query: { _id: x } }));
     });
 
