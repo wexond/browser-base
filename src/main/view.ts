@@ -17,6 +17,8 @@ export class View extends BrowserView {
 
   private window: AppWindow;
 
+  public bounds: any;
+
   public constructor(window: AppWindow, url: string, incognito: boolean) {
     super({
       webPreferences: {

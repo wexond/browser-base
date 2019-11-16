@@ -11,7 +11,6 @@ export class ViewManager {
   public isHidden = false;
   public incognito: boolean;
 
-  private interval: any;
   private window: AppWindow;
 
   public get fullscreen() {
@@ -107,6 +106,12 @@ export class ViewManager {
 
   public create(details: chrome.tabs.CreateProperties, isNext = false) {
     const view = new View(this.window, details.url, this.incognito);
+
+    view.setAutoResize({
+      width: true,
+      height: true,
+    } as any);
+
     this.views.push(view);
 
     this.window.webContents.send(
@@ -120,7 +125,6 @@ export class ViewManager {
   }
 
   public clear() {
-    clearInterval(this.interval);
     this.window.setBrowserView(null);
     for (const view of this.views) {
       view.destroy();
@@ -148,16 +152,7 @@ export class ViewManager {
       selected.selected = false;
     }
 
-    this.window.removeBrowserView(selected);
-    this.window.addBrowserView(view);
-
-    this.window.menuDialog.hide();
-    this.window.findDialog.hide();
-    this.window.permissionsDialog.hide();
-
-    this.window.searchDialog.bringToTop();
-
-    this.window.previewDialog.hide();
+    this.window.setBrowserView(view);
 
     this.fixBounds();
   }
@@ -168,16 +163,18 @@ export class ViewManager {
     if (!view) return;
 
     const { width, height } = this.window.getContentBounds();
-    view.setBounds({
+
+    const newBounds = {
       x: 0,
       y: this.fullscreen ? 0 : TOOLBAR_HEIGHT + 1,
       width,
       height: this.fullscreen ? height : height - TOOLBAR_HEIGHT,
-    });
-    view.setAutoResize({
-      width: true,
-      height: true,
-    } as any);
+    };
+
+    if (newBounds !== view.bounds) {
+      view.setBounds(newBounds);
+      view.bounds = newBounds;
+    }
   }
 
   public hideView() {

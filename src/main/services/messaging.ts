@@ -35,6 +35,12 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.webContents.send('update-tab-find-info', ...args),
   );
 
+  ipcMain.on(`update-find-info-${id}`, (e, tabId, data) => {
+    if (appWindow.findDialog.visible) {
+      appWindow.findDialog.updateInfo(tabId, data);
+    }
+  });
+
   ipcMain.on(`find-show-${id}`, (e, tabId, data) => {
     appWindow.findDialog.find(tabId, data);
   });
@@ -55,10 +61,6 @@ export const runMessagingService = (appWindow: AppWindow) => {
   ipcMain.on(`hide-tab-preview-${id}`, (e, tab) => {
     appWindow.previewDialog.hide(appWindow.previewDialog.visible);
   });
-
-  ipcMain.on(`update-find-info-${id}`, (e, tabId, data) =>
-    appWindow.findDialog.updateInfo(tabId, data),
-  );
 
   ipcMain.on(`is-incognito-${id}`, e => {
     e.returnValue = appWindow.incognito;
