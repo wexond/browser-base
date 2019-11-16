@@ -7,7 +7,6 @@ import {
   Info,
   Title,
   Footer,
-  SourceIcon,
   Source,
   Fill,
   Description,

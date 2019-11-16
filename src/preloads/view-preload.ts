@@ -124,6 +124,13 @@ if (
     if (window.location.pathname.startsWith('//network-error')) {
       w.theme = getTheme(w.settings.theme);
       w.errorURL = await ipcRenderer.invoke(`get-error-url-${tabId}`);
+    } else if (window.location.hostname.startsWith('history')) {
+      w.getHistory = async () => {
+        return await ipcRenderer.invoke(`history-get`);
+      };
+      w.removeHistory = (ids: string[]) => {
+        ipcRenderer.send(`history-remove`, ids);
+      };
     }
   })();
 }

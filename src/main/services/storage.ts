@@ -7,6 +7,8 @@ import {
   IInsertOperation,
   IRemoveOperation,
   IUpdateOperation,
+  IHistoryItem,
+  IVisitedItem,
 } from '~/interfaces';
 
 interface Databases {
@@ -22,6 +24,10 @@ export class StorageService {
     startupTabs: null,
     permissions: null,
   };
+
+  public history: IHistoryItem[] = [];
+
+  public historyVisited: IVisitedItem[] = [];
 
   public constructor() {
     ipcMain.on('storage-get', async (e, id: string, data: IFindOperation) => {
@@ -60,6 +66,15 @@ export class StorageService {
         e.sender.send(id, numReplaced);
       },
     );
+
+    ipcMain.handle('history-get', e => {
+      return this.history;
+    });
+
+    ipcMain.on('history-remove', (e, ids: string[]) => {
+      this.history.filter(x => ids.indexOf(x._id) === -1);
+      ids.forEach(x => this.remove({ scope: 'history', query: { _id: x } }));
+    });
   }
 
   public find<T>(data: IFindOperation): Promise<T[]> {
@@ -126,10 +141,29 @@ export class StorageService {
     });
   }
 
-  public run() {
+  public async run() {
     for (const key in this.databases) {
       this.databases[key] = this.createDatabase(key.toLowerCase());
     }
+
+    const items: IHistoryItem[] = await this.find({
+      scope: 'history',
+      query: {},
+    });
+
+    items.sort((a, b) => {
+      let aDate = a.date;
+      let bDate = b.date;
+
+      if (typeof aDate === 'string') {
+        aDate = new Date(a.date).getTime();
+        bDate = new Date(b.date).getTime();
+      }
+
+      return aDate - bDate;
+    });
+
+    this.history = items;
   }
 
   private createDatabase = (name: string) => {
