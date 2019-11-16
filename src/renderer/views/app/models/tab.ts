@@ -75,7 +75,7 @@ export class ITab {
   public lastUrl = '';
   public isClosing = false;
   public ref = React.createRef<HTMLDivElement>();
-  public lastHistoryId: string;
+
   public hasThemeColor = false;
   public removeTimeout: any;
   public isWindow = false;
@@ -152,22 +152,6 @@ export class ITab {
       this.background = store.theme.accentColor;
       this.customColor = false;
       this.favicon = '';
-
-      if (
-        url !== this.url &&
-        !url.startsWith('wexond://') &&
-        !url.startsWith('wexond-error://') &&
-        !store.isIncognito
-      ) {
-        this.lastHistoryId = await store.history.addItem({
-          title: this.title,
-          url,
-          favicon: '',
-          date: new Date().getTime(),
-        });
-      } else {
-        this.lastHistoryId = '';
-      }
     });
 
     ipcRenderer.on(
@@ -252,21 +236,6 @@ export class ITab {
         title: this.title,
         isUserDefined: false,
       });
-
-      if (this.lastHistoryId) {
-        const { title, url, favicon } = this;
-
-        store.history.db.update(
-          {
-            _id: this.lastHistoryId,
-          },
-          {
-            title,
-            url,
-            favicon,
-          },
-        );
-      }
     }
   }
 
