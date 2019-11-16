@@ -25,7 +25,6 @@ export const Wrapper = styled.div`
   align-items: center;
   overflow: hidden;
   position: relative;
-  background: #f5f5f5;
 
   &:before {
     content: '';

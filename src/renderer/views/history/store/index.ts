@@ -45,7 +45,6 @@ export class Store {
   @observable
   public favicons: Map<string, string> = new Map();
 
-  public db = new PreloadDatabase<IHistoryItem>('history');
   public faviconsDb = new PreloadDatabase<IFavicon>('favicons');
 
   public constructor() {
@@ -70,13 +69,7 @@ export class Store {
   }
 
   public async load() {
-    const items = await this.db.get({});
-
-    items.sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-    );
-
-    this.items = items;
+    this.items = await (window as any).getHistory();
   }
 
   public async loadFavicons() {
@@ -89,21 +82,14 @@ export class Store {
     });
   }
 
-  public async addItem(item: IHistoryItem) {
-    const doc = await this.db.insert(item);
-    item._id = doc._id;
-    this.items.push(item);
-    return doc._id;
-  }
-
   public clear() {
     this.items = [];
-    this.db.remove({}, true);
+    (window as any).removeHistory(this.items.map(x => x._id));
   }
 
-  public removeItem(id: string) {
-    this.items = this.items.filter(x => x._id !== id);
-    this.db.remove({ _id: id });
+  public removeItems(id: string[]) {
+    this.items = this.items.filter(x => id.indexOf(x._id) === -1);
+    (window as any).removeHistory(id);
   }
 
   @computed
@@ -210,9 +196,7 @@ export class Store {
 
   @action
   public deleteSelected() {
-    for (const item of this.selectedItems) {
-      this.removeItem(item);
-    }
+    this.removeItems(this.selectedItems);
     this.selectedItems = [];
   }
 }

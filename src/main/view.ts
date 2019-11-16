@@ -2,9 +2,9 @@ import { BrowserView, app, ipcMain } from 'electron';
 import { parse as parseUrl } from 'url';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
-import { windowsManager } from '.';
 import storage from './services/storage';
 import * as Vibrant from 'node-vibrant';
+import { IHistoryItem } from '~/interfaces';
 
 export class View extends BrowserView {
   public title = '';
@@ -12,12 +12,15 @@ export class View extends BrowserView {
   public homeUrl: string;
   public favicon = '';
   public selected = false;
+  public incognito = false;
 
   public errorURL = '';
 
   private window: AppWindow;
 
   public bounds: any;
+
+  public lastHistoryId: string;
 
   public constructor(window: AppWindow, url: string, incognito: boolean) {
     super({
@@ -36,6 +39,8 @@ export class View extends BrowserView {
         javascript: true,
       },
     });
+
+    this.incognito = incognito;
 
     // USER-AGENT:
     this.webContents.userAgent = this.webContents.userAgent
@@ -63,6 +68,7 @@ export class View extends BrowserView {
       this.title = title;
 
       this.updateWindowTitle();
+      this.updateData();
 
       this.window.webContents.send(
         `view-title-updated-${this.webContents.id}`,
@@ -76,12 +82,24 @@ export class View extends BrowserView {
         url,
       );
 
+      await this.addHistoryItem(url);
       this.updateURL(url);
     });
 
-    this.webContents.addListener('did-navigate-in-page', (e, url) => {
-      this.updateURL(url);
-    });
+    this.webContents.addListener(
+      'did-navigate-in-page',
+      async (e, url, isMainFrame) => {
+        if (isMainFrame) {
+          this.window.webContents.send(
+            `view-did-navigate-${this.webContents.id}`,
+            url,
+          );
+
+          await this.addHistoryItem(url, true);
+          this.updateURL(url);
+        }
+      },
+    );
 
     this.webContents.addListener('did-stop-loading', () => {
       this.updateNavigationState();
@@ -155,11 +173,13 @@ export class View extends BrowserView {
           this.favicon,
         );
 
+        this.updateData();
+
         try {
           let fav = this.favicon;
 
           if (fav.startsWith('http')) {
-            fav = await windowsManager.addFavicon(fav);
+            fav = await storage.addFavicon(fav);
           }
           const buf = Buffer.from(fav.split('base64,')[1], 'base64');
 
@@ -239,6 +259,35 @@ export class View extends BrowserView {
     );
   }
 
+  public async addHistoryItem(url: string, inPage = false) {
+    if (
+      url !== this.url &&
+      !url.startsWith('wexond://') &&
+      !url.startsWith('wexond-error://') &&
+      !this.incognito
+    ) {
+      const historyItem: IHistoryItem = {
+        title: this.title,
+        url,
+        favicon: this.favicon,
+        date: new Date().getTime(),
+      };
+
+      this.lastHistoryId = (
+        await storage.insert<IHistoryItem>({
+          scope: 'history',
+          item: historyItem,
+        })
+      )._id;
+
+      historyItem._id = this.lastHistoryId;
+
+      storage.history.push(historyItem);
+    } else if (!inPage) {
+      this.lastHistoryId = '';
+    }
+  }
+
   public updateURL = (url: string) => {
     if (this.url === url) return;
 
@@ -249,8 +298,38 @@ export class View extends BrowserView {
       url,
     );
 
+    this.updateData();
     this.updateCredentials();
   };
+
+  public async updateData() {
+    if (!this.incognito) {
+      if (this.lastHistoryId) {
+        const { title, url, favicon } = this;
+
+        storage.update({
+          scope: 'history',
+          query: {
+            _id: this.lastHistoryId,
+          },
+          value: {
+            title,
+            url,
+            favicon,
+          },
+          multi: false,
+        });
+
+        const item = storage.history.find(x => x._id === this.lastHistoryId);
+
+        if (item) {
+          item.title = title;
+          item.url = url;
+          item.favicon = favicon;
+        }
+      }
+    }
+  }
 
   public updateWindowTitle() {
     if (this.selected) {
