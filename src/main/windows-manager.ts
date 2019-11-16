@@ -102,15 +102,13 @@ export class WindowsManager {
     registerProtocol(session.defaultSession);
 
     storage.run();
-    this.loadFavicons();
 
     this.sessionsManager = new SessionsManager(this);
 
     this.createWindow();
-
-    runAutoUpdaterService(this);
-
     Menu.setApplicationMenu(getMainMenu(this));
+    this.loadFavicons();
+    runAutoUpdaterService(this);
 
     app.on('activate', () => {
       if (this.list.filter(x => x !== null).length === 0) {

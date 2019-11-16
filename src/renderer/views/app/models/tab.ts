@@ -163,7 +163,7 @@ export class ITab {
           title: this.title,
           url,
           favicon: '',
-          date: new Date().toString(),
+          date: new Date().getTime(),
         });
       } else {
         this.lastHistoryId = '';
