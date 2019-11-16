@@ -66,7 +66,7 @@ export const getHistorySuggestions = (filter: string) => {
   historyItems = [];
 
   for (const item of visitedTimes) {
-    historyItems.push(item.item);
+    historyItems.push(item);
   }
 
   visitedTimes = countVisitedTimes(titleMatchedItems)
@@ -74,7 +74,7 @@ export const getHistorySuggestions = (filter: string) => {
     .slice(0, 6);
 
   for (const item of visitedTimes) {
-    historyItems.push(item.item);
+    historyItems.push(item);
   }
 
   return historyItems.slice(0, 6);
@@ -94,12 +94,14 @@ export const getSearchSuggestions = (filter: string) =>
         return reject(new Error('No search engine keyword URL specified'));
 
       const data = JSON.parse(
-        (await requestURL(
-          store.searchEngine.keywordsUrl.replace(
-            '%s',
-            encodeURIComponent(input),
-          ),
-        )).data,
+        (
+          await requestURL(
+            store.searchEngine.keywordsUrl.replace(
+              '%s',
+              encodeURIComponent(input),
+            ),
+          )
+        ).data,
       );
 
       let suggestions: string[] = [];

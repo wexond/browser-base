@@ -1,7 +1,9 @@
 import { ipcMain } from 'electron';
 import * as Datastore from 'nedb';
+import * as fileType from 'file-type';
+import * as icojs from 'icojs';
 
-import { getPath } from '~/utils';
+import { getPath, requestURL } from '~/utils';
 import {
   IFindOperation,
   IInsertOperation,
@@ -9,11 +11,17 @@ import {
   IUpdateOperation,
   IHistoryItem,
   IVisitedItem,
+  IFavicon,
 } from '~/interfaces';
+import { countVisitedTimes } from '~/utils/history';
 
 interface Databases {
   [key: string]: Datastore;
 }
+
+const convertIcoToPng = async (icoData: Buffer): Promise<ArrayBuffer> => {
+  return (await icojs.parse(icoData, 'image/png'))[0].buffer;
+};
 
 export class StorageService {
   public databases: Databases = {
@@ -28,6 +36,8 @@ export class StorageService {
   public history: IHistoryItem[] = [];
 
   public historyVisited: IVisitedItem[] = [];
+
+  public favicons: Map<string, string> = new Map();
 
   public constructor() {
     ipcMain.on('storage-get', async (e, id: string, data: IFindOperation) => {
@@ -74,6 +84,10 @@ export class StorageService {
     ipcMain.on('history-remove', (e, ids: string[]) => {
       this.history.filter(x => ids.indexOf(x._id) === -1);
       ids.forEach(x => this.remove({ scope: 'history', query: { _id: x } }));
+    });
+
+    ipcMain.handle('topsites-get', (e, count) => {
+      return this.historyVisited.slice(0, count);
     });
   }
 
@@ -146,6 +160,16 @@ export class StorageService {
       this.databases[key] = this.createDatabase(key.toLowerCase());
     }
 
+    (await this.find<IFavicon>({ scope: 'favicons', query: {} })).forEach(
+      favicon => {
+        const { data } = favicon;
+
+        if (this.favicons.get(favicon.url) == null) {
+          this.favicons.set(favicon.url, data);
+        }
+      },
+    );
+
     const items: IHistoryItem[] = await this.find({
       scope: 'history',
       query: {},
@@ -164,12 +188,61 @@ export class StorageService {
     });
 
     this.history = items;
+
+    this.historyVisited = countVisitedTimes(items);
+
+    this.historyVisited = this.historyVisited.map(x => ({
+      ...x,
+      favicon: this.favicons.get(x.favicon),
+    }));
   }
 
   private createDatabase = (name: string) => {
     return new Datastore({
       filename: getPath(`storage/${name}.db`),
       autoload: true,
+    });
+  };
+
+  public addFavicon = async (url: string): Promise<string> => {
+    return new Promise(async resolve => {
+      if (!this.favicons.get(url)) {
+        try {
+          const res = await requestURL(url);
+
+          if (res.statusCode === 404) {
+            throw new Error('404 favicon not found');
+          }
+
+          let data = Buffer.from(res.data, 'binary');
+
+          const type = fileType(data);
+
+          if (type && type.ext === 'ico') {
+            data = Buffer.from(new Uint8Array(await convertIcoToPng(data)));
+          }
+
+          const str = `data:${fileType(data).ext};base64,${data.toString(
+            'base64',
+          )}`;
+
+          this.insert({
+            scope: 'favicons',
+            item: {
+              url,
+              data: str,
+            },
+          });
+
+          this.favicons.set(url, str);
+
+          resolve(str);
+        } catch (e) {
+          throw e;
+        }
+      } else {
+        resolve(this.favicons.get(url));
+      }
     });
   };
 }

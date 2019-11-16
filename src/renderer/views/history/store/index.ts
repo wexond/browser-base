@@ -196,9 +196,7 @@ export class Store {
 
   @action
   public deleteSelected() {
-    for (const item of this.selectedItems) {
-      this.removeItem(item);
-    }
+    this.removeItems(this.selectedItems);
     this.selectedItems = [];
   }
 }

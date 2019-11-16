@@ -131,6 +131,10 @@ if (
       w.removeHistory = (ids: string[]) => {
         ipcRenderer.send(`history-remove`, ids);
       };
+    } else if (window.location.hostname.startsWith('newtab')) {
+      w.getTopSites = async (count: number) => {
+        return await ipcRenderer.invoke(`topsites-get`, count);
+      };
     }
   })();
 }
