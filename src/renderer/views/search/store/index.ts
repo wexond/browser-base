@@ -3,14 +3,7 @@ import * as React from 'react';
 import { ipcRenderer, remote } from 'electron';
 import { observable, computed } from 'mobx';
 import { DEFAULT_SEARCH_ENGINES, DEFAULT_SETTINGS } from '~/constants';
-import {
-  ISearchEngine,
-  IHistoryItem,
-  IFavicon,
-  ISuggestion,
-  ISettings,
-} from '~/interfaces';
-import { Database } from '~/models/database';
+import { ISuggestion, ISettings, IVisitedItem } from '~/interfaces';
 import { SuggestionsStore } from './suggestions';
 import { getTheme } from '~/utils/themes';
 import { NEWTAB_URL } from '~/constants/tabs';
@@ -31,10 +24,7 @@ export class Store {
   public visible = false;
 
   @observable
-  public history: IHistoryItem[] = [];
-
-  @observable
-  public favicons: Map<string, string> = new Map();
+  public visitedItems: IVisitedItem[] = [];
 
   @observable
   public tabs: ISearchTab[] = [];
@@ -87,9 +77,6 @@ export class Store {
 
   public canSuggest = false;
 
-  public historyDb = new Database<IHistoryItem>('history');
-  public faviconsDb = new Database<IFavicon>('favicons');
-
   public id = remote.getCurrentWebContents().id;
 
   public inputRef = React.createRef<HTMLInputElement>();
@@ -119,7 +106,6 @@ export class Store {
     });
 
     this.loadHistory();
-    this.loadFavicons();
 
     window.addEventListener('blur', () => {
       if (this.visible) {
@@ -140,24 +126,8 @@ export class Store {
     this.settings = { ...this.settings, ...newSettings };
   }
 
-  public async loadFavicons() {
-    (await this.faviconsDb.get({})).forEach(favicon => {
-      const { data } = favicon;
-
-      if (this.favicons.get(favicon.url) == null) {
-        this.favicons.set(favicon.url, data);
-      }
-    });
-  }
-
   public async loadHistory() {
-    const items = await this.historyDb.get({});
-
-    items.sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-    );
-
-    this.history = items;
+    this.visitedItems = await ipcRenderer.invoke('topsites-get');
   }
 
   public suggest() {

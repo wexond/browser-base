@@ -24,7 +24,7 @@ export const getHistorySuggestions = (filter: string) => {
 
   const filterPart = filter.replace(regex, '');
 
-  for (const item of store.history) {
+  for (const item of store.visitedItems) {
     let urlPart = item.url.replace(regex, '');
 
     if (urlPart.endsWith('/')) {
@@ -59,9 +59,7 @@ export const getHistorySuggestions = (filter: string) => {
     }
   }
 
-  let visitedTimes = countVisitedTimes(urlMatchedItems)
-    .filter(Boolean)
-    .slice(0, 6);
+  let visitedTimes = urlMatchedItems.slice(0, 6);
 
   historyItems = [];
 
@@ -69,9 +67,7 @@ export const getHistorySuggestions = (filter: string) => {
     historyItems.push(item);
   }
 
-  visitedTimes = countVisitedTimes(titleMatchedItems)
-    .filter(Boolean)
-    .slice(0, 6);
+  visitedTimes = titleMatchedItems.slice(0, 6);
 
   for (const item of visitedTimes) {
     historyItems.push(item);
