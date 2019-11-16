@@ -6,3 +6,7 @@ export interface IHistoryItem {
   favicon?: string;
   hovered?: boolean;
 }
+
+export interface IVisitedItem extends IHistoryItem {
+  times: number;
+}

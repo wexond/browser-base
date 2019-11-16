@@ -1,7 +1,7 @@
-import { IHistoryItem } from '~/interfaces';
+import { IHistoryItem, IVisitedItem } from '~/interfaces';
 
-export const countVisitedTimes = (hItems: IHistoryItem[]) => {
-  const items: any[] = [];
+export const countVisitedTimes = (hItems: IHistoryItem[]): IVisitedItem[] => {
+  const items: IVisitedItem[] = [];
   const historyItems = hItems.slice();
 
   for (const historyItem of historyItems) {
@@ -11,15 +11,20 @@ export const countVisitedTimes = (hItems: IHistoryItem[]) => {
 
     const itemToPush = {
       times: itemsWithUrl.length,
-      item: historyItem,
+      ...historyItem,
     };
 
     if (
       !items.find(
-        x =>
-          x.item.url.replace(/\//g, '') === historyItem.url.replace(/\//g, ''),
+        x => x.url.replace(/\//g, '') === historyItem.url.replace(/\//g, ''),
       )
     ) {
+      if (itemToPush.favicon === '') {
+        const item = itemsWithUrl.find(x => x.favicon !== '');
+        if (item) {
+          itemToPush.favicon = item.favicon;
+        }
+      }
       items.push(itemToPush);
     }
   }

@@ -7,16 +7,9 @@ import { SessionsManager } from './sessions-manager';
 import { runAutoUpdaterService } from './services';
 import { checkFiles } from '~/utils/files';
 import { Settings } from './models/settings';
-import { isURL, prefixHttp, requestURL } from '~/utils';
+import { isURL, prefixHttp } from '~/utils';
 import { registerProtocol } from './models/protocol';
 import storage from './services/storage';
-import { IFavicon } from '~/interfaces';
-import * as fileType from 'file-type';
-import * as icojs from 'icojs';
-
-const convertIcoToPng = async (icoData: Buffer): Promise<ArrayBuffer> => {
-  return (await icojs.parse(icoData, 'image/png'))[0].buffer;
-};
 
 export class WindowsManager {
   public list: AppWindow[] = [];
@@ -26,8 +19,6 @@ export class WindowsManager {
   public sessionsManager: SessionsManager;
 
   public settings = new Settings(this);
-
-  public favicons: Map<string, string> = new Map();
 
   public constructor() {
     const gotTheLock = app.requestSingleInstanceLock();
@@ -82,18 +73,6 @@ export class WindowsManager {
     this.onReady();
   }
 
-  private async loadFavicons() {
-    (await storage.find<IFavicon>({ scope: 'favicons', query: {} })).forEach(
-      favicon => {
-        const { data } = favicon;
-
-        if (this.favicons.get(favicon.url) == null) {
-          this.favicons.set(favicon.url, data);
-        }
-      },
-    );
-  }
-
   private async onReady() {
     await app.whenReady();
 
@@ -107,7 +86,6 @@ export class WindowsManager {
 
     this.createWindow();
     Menu.setApplicationMenu(getMainMenu(this));
-    this.loadFavicons();
     runAutoUpdaterService(this);
 
     app.on('activate', () => {
@@ -134,46 +112,4 @@ export class WindowsManager {
   public findWindowByBrowserView(webContentsId: number) {
     return this.list.find(x => !!x.viewManager.views.get(webContentsId));
   }
-
-  public addFavicon = async (url: string): Promise<string> => {
-    return new Promise(async resolve => {
-      if (!this.favicons.get(url)) {
-        try {
-          const res = await requestURL(url);
-
-          if (res.statusCode === 404) {
-            throw new Error('404 favicon not found');
-          }
-
-          let data = Buffer.from(res.data, 'binary');
-
-          const type = fileType(data);
-
-          if (type && type.ext === 'ico') {
-            data = Buffer.from(new Uint8Array(await convertIcoToPng(data)));
-          }
-
-          const str = `data:${fileType(data).ext};base64,${data.toString(
-            'base64',
-          )}`;
-
-          storage.insert({
-            scope: 'favicons',
-            item: {
-              url,
-              data: str,
-            },
-          });
-
-          this.favicons.set(url, str);
-
-          resolve(str);
-        } catch (e) {
-          throw e;
-        }
-      } else {
-        resolve(this.favicons.get(url));
-      }
-    });
-  };
 }

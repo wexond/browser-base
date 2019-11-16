@@ -1,8 +1,6 @@
 import { observable, computed } from 'mobx';
-import { ISettings, IFavicon, ITheme, IHistoryItem } from '~/interfaces';
+import { ISettings, ITheme, IVisitedItem } from '~/interfaces';
 import { getTheme } from '~/utils/themes';
-import { PreloadDatabase } from '~/preloads/models/database';
-import { countVisitedTimes } from '~/utils/history';
 import { requestURL } from '~/utils/network';
 import { INewsItem } from '~/interfaces/news-item';
 
@@ -16,12 +14,6 @@ export class Store {
   }
 
   @observable
-  public favicons: Map<string, string> = new Map();
-
-  @observable
-  public items: IHistoryItem[] = [];
-
-  @observable
   public news: INewsItem[] = [];
 
   @observable
@@ -30,45 +22,13 @@ export class Store {
   private page = 1;
   private loaded = true;
 
-  @computed
-  public get topSites(): IHistoryItem[] {
-    const top1 = countVisitedTimes(this.items);
-    const newItems: IHistoryItem[] = [];
-
-    for (const item of top1) {
-      newItems.push(item.item);
-    }
-
-    return newItems.slice(0, 8);
-  }
-
-  public faviconsDb = new PreloadDatabase<IFavicon>('favicons');
-  public historyDb = new PreloadDatabase<IHistoryItem>('history');
+  @observable
+  public topSites: IVisitedItem[] = [];
 
   public constructor() {
-    this.loadFavicons();
-    this.load();
     this.loadImage();
-
-    let loaded = true;
-
-    const interval = setInterval(async () => {
-      if (document.body.scrollHeight > document.body.clientHeight) {
-        clearInterval(interval);
-        return;
-      }
-
-      if (loaded) {
-        loaded = false;
-        try {
-          await this.loadNews();
-        } catch (e) {
-          clearInterval(interval);
-          console.error(e);
-        }
-        loaded = true;
-      }
-    }, 200);
+    this.loadTopSites();
+    this.loadNews();
 
     window.onscroll = () => {
       this.updateNews();
@@ -146,24 +106,8 @@ export class Store {
     }
   }
 
-  public async loadFavicons() {
-    (await this.faviconsDb.get({})).forEach(favicon => {
-      const { data } = favicon;
-
-      if (this.favicons.get(favicon.url) == null) {
-        this.favicons.set(favicon.url, data);
-      }
-    });
-  }
-
-  public async load() {
-    const items = await this.historyDb.get({});
-
-    items.sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-    );
-
-    this.items = items;
+  public async loadTopSites() {
+    this.topSites = await (window as any).getTopSites(8);
   }
 }
 

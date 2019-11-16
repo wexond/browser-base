@@ -55,7 +55,7 @@ export class SuggestionsStore {
           historySuggestions.push({
             primaryText: item.url,
             secondaryText: item.title,
-            favicon: this.store.favicons.get(item.favicon),
+            favicon: item.favicon,
             canSuggest: item.canSuggest,
           });
         } else {

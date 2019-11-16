@@ -26,7 +26,7 @@ const onTitleClick = (url: string) => (e: React.MouseEvent) => {
 
 const onRemoveClick = (item: IHistoryItem) => (e: React.MouseEvent) => {
   e.stopPropagation();
-  store.removeItem(item._id);
+  store.removeItems([item._id]);
 };
 
 export default observer(({ data }: { data: IHistoryItem }) => {
