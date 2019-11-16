@@ -94,12 +94,14 @@ export const getSearchSuggestions = (filter: string) =>
         return reject(new Error('No search engine keyword URL specified'));
 
       const data = JSON.parse(
-        (await requestURL(
-          store.searchEngine.keywordsUrl.replace(
-            '%s',
-            encodeURIComponent(input),
-          ),
-        )).data,
+        (
+          await requestURL(
+            store.searchEngine.keywordsUrl.replace(
+              '%s',
+              encodeURIComponent(input),
+            ),
+          )
+        ).data,
       );
 
       let suggestions: string[] = [];

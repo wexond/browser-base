@@ -34,9 +34,7 @@ export class PreviewDialog extends Dialog {
 
     super.show(false);
 
-    const tab = this.appWindow.viewManager.views.find(
-      x => x.webContents.id === this.tab.id,
-    );
+    const tab = this.appWindow.viewManager.views.get(this.tab.id);
 
     const url = tab.webContents.getURL();
     const title = tab.webContents.getTitle();

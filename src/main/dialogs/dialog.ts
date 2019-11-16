@@ -50,7 +50,9 @@ export class Dialog extends BrowserView {
     this.hideTimeout = hideTimeout;
     this.name = name;
 
-    appWindow.addBrowserView(this);
+    setTimeout(() => {
+      appWindow.addBrowserView(this);
+    });
 
     this._hide();
 

@@ -132,9 +132,7 @@ export class WindowsManager {
   }
 
   public findWindowByBrowserView(webContentsId: number) {
-    return this.list.find(
-      x => !!x.viewManager.views.find(y => y.webContents.id === webContentsId),
-    );
+    return this.list.find(x => !!x.viewManager.views.get(webContentsId));
   }
 
   public addFavicon = async (url: string): Promise<string> => {

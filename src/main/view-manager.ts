@@ -4,7 +4,7 @@ import { View } from './view';
 import { AppWindow } from './windows';
 
 export class ViewManager {
-  public views: View[] = [];
+  public views = new Map<number, View>();
   public selectedId = 0;
   public _fullscreen = false;
 
@@ -35,7 +35,7 @@ export class ViewManager {
     );
 
     ipcMain.on(`view-select-${id}`, (e, id: number, force: boolean) => {
-      const view = this.views.find(x => x.webContents.id === id);
+      const view = this.views.get(id);
       this.select(id);
       view.updateNavigationState();
 
@@ -47,7 +47,7 @@ export class ViewManager {
     });
 
     ipcMain.on(`browserview-call-${id}`, async (e, data) => {
-      const view = this.views.find(x => x.webContents.id === data.tabId);
+      const view = this.views.get(data.tabId);
       let scope: any = view;
 
       if (data.scope && data.scope.trim() !== '') {
@@ -80,12 +80,12 @@ export class ViewManager {
     });
 
     ipcMain.on(`mute-view-${id}`, (e, tabId: number) => {
-      const view = this.views.find(x => x.webContents.id === tabId);
+      const view = this.views.get(tabId);
       view.webContents.setAudioMuted(true);
     });
 
     ipcMain.on(`unmute-view-${id}`, (e, tabId: number) => {
-      const view = this.views.find(x => x.webContents.id === tabId);
+      const view = this.views.get(tabId);
       view.webContents.setAudioMuted(false);
     });
 
@@ -95,11 +95,11 @@ export class ViewManager {
   }
 
   public get selected() {
-    return this.views.find(r => r.webContents.id === this.selectedId);
+    return this.views.get(this.selectedId);
   }
 
   public get settingsView() {
-    return this.views.find(r =>
+    return Object.values(this.views).find(r =>
       r.webContents.getURL().startsWith('wexond://settings'),
     );
   }
@@ -112,7 +112,7 @@ export class ViewManager {
       height: true,
     } as any);
 
-    this.views.push(view);
+    this.views.set(view.webContents.id, view);
 
     this.window.webContents.send(
       'api-tabs-create',
@@ -126,22 +126,13 @@ export class ViewManager {
 
   public clear() {
     this.window.setBrowserView(null);
-    for (const view of this.views) {
-      view.destroy();
-    }
+    Object.values(this.views).forEach(x => x.destroy());
   }
 
   public select(id: number) {
     const selected = this.selected;
-    const view = this.views.find(x => x.webContents.id === id);
+    const view = this.views.get(id);
     this.selectedId = id;
-
-    if (!view || view.isDestroyed()) {
-      this.destroy(id);
-      this.window.removeBrowserView(view);
-
-      return;
-    }
 
     if (this.isHidden) return;
 
@@ -188,9 +179,8 @@ export class ViewManager {
   }
 
   public destroy(id: number) {
-    const view = this.views.find(x => x.webContents.id === id);
-
-    this.views = this.views.filter(x => x.webContents.id !== id);
+    const view = this.views.get(id);
+    this.views.delete(id);
 
     if (view) {
       this.window.removeBrowserView(view);
