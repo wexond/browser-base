@@ -159,7 +159,7 @@ export class View extends BrowserView {
           let fav = this.favicon;
 
           if (fav.startsWith('http')) {
-            fav = await windowsManager.addFavicon(fav);
+            fav = await storage.addFavicon(fav);
           }
           const buf = Buffer.from(fav.split('base64,')[1], 'base64');
 
