@@ -28,26 +28,7 @@ export class Store {
   public constructor() {
     this.loadImage();
     this.loadTopSites();
-
-    let loaded = true;
-
-    const interval = setInterval(async () => {
-      if (document.body.scrollHeight > document.body.clientHeight) {
-        clearInterval(interval);
-        return;
-      }
-
-      if (loaded) {
-        loaded = false;
-        try {
-          await this.loadNews();
-        } catch (e) {
-          clearInterval(interval);
-          console.error(e);
-        }
-        loaded = true;
-      }
-    }, 200);
+    this.loadNews();
 
     window.onscroll = () => {
       this.updateNews();

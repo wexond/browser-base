@@ -7,7 +7,7 @@ import { SessionsManager } from './sessions-manager';
 import { runAutoUpdaterService } from './services';
 import { checkFiles } from '~/utils/files';
 import { Settings } from './models/settings';
-import { isURL, prefixHttp, requestURL } from '~/utils';
+import { isURL, prefixHttp } from '~/utils';
 import { registerProtocol } from './models/protocol';
 import storage from './services/storage';
 

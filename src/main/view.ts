@@ -2,7 +2,6 @@ import { BrowserView, app, ipcMain } from 'electron';
 import { parse as parseUrl } from 'url';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
-import { windowsManager } from '.';
 import storage from './services/storage';
 import * as Vibrant from 'node-vibrant';
 
