@@ -55,7 +55,7 @@ export const NewsItem = observer(
         <Img src={img}></Img>
         <Info fullSize={fullSize}>
           <Title>{item.title}</Title>
-          <Description>{item.description}</Description>
+          {fullSize && <Description>{item.description}</Description>}
           {fullSize && <Fill />}
           <Footer>
             <Source>{item.source.name}</Source>
