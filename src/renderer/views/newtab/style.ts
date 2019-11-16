@@ -16,6 +16,10 @@ export const Style = css`
       background-color: ${theme['pages.backgroundColor']};
       color: ${theme['pages.textColor']};
     `};
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   * {
