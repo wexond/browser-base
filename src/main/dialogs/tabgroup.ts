@@ -16,7 +16,6 @@ export class TabGroupDialog extends Dialog {
         height: HEIGHT,
         y: TOOLBAR_HEIGHT,
       },
-      devtools: true,
     });
   }
 
