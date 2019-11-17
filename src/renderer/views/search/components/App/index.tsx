@@ -6,7 +6,7 @@ import { hot } from 'react-hot-loader/root';
 import { Style } from '../../style';
 import { StyledApp, Input, SearchIcon, SearchBox } from './style';
 import store from '../../store';
-import { callViewMethod, isURL } from '~/utils';
+import { callViewMethod } from '~/utils';
 import { ipcRenderer, remote } from 'electron';
 import { Suggestions } from '../Suggestions';
 
@@ -134,7 +134,7 @@ export const App = hot(
             <SearchIcon />
             <Input
               onKeyDown={onKeyDown}
-              onChange={onInput}
+              onInput={onInput}
               onFocus={onFocus}
               ref={store.inputRef}
               onKeyPress={onKeyPress}
