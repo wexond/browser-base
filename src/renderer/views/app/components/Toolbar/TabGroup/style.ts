@@ -17,7 +17,6 @@ export const Line = styled.div`
 `;
 
 export const Placeholder = styled.div`
-  padding: 6px;
   border-radius: 6px;
   -webkit-app-region: no-drag;
   overflow: hidden;
@@ -25,6 +24,10 @@ export const Placeholder = styled.div`
   transition: 0.2s width;
   color: black;
   font-size: 11px;
+
+  ${({ hasName }: { hasName: boolean }) => css`
+    padding: ${hasName ? 4 : 6}px;
+  `};
 
   &:after {
     content: '';

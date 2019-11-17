@@ -45,6 +45,12 @@ export class Store {
   public hide() {
     ipcRenderer.send(`hide-${this.id}`);
   }
+
+  public async save() {
+    ipcRenderer.send('save-settings', {
+      settings: JSON.stringify(this.settings),
+    });
+  }
 }
 
 export default new Store();

@@ -21,6 +21,7 @@ export const TabGroup = observer(({ tabGroup }: { tabGroup: ITabGroup }) => {
         <Placeholder
           onClick={onPlaceholderClick(tabGroup)}
           ref={tabGroup.placeholderRef}
+          hasName={tabGroup.name !== ''}
           style={{
             backgroundColor: tabGroup.color,
           }}
