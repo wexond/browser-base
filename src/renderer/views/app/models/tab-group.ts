@@ -20,9 +20,7 @@ export class ITabGroup {
   @observable
   public editMode = false;
 
-  @observable
   public width = 0;
-
   public left = 8;
 
   public isNew = true;
@@ -32,6 +30,7 @@ export class ITabGroup {
 
   public ref = React.createRef<HTMLDivElement>();
   public placeholderRef = React.createRef<HTMLDivElement>();
+  public lineRef = React.createRef<HTMLDivElement>();
 
   public constructor(store: Store, tabGroupsStore: TabGroupsStore) {
     this.store = store;
@@ -49,5 +48,16 @@ export class ITabGroup {
   public setLeft(left: number, animation: boolean) {
     this.store.tabs.animateProperty('x', this.ref.current, left, animation);
     this.left = left;
+  }
+
+  @action
+  public setWidth(width: number, animation: boolean) {
+    this.store.tabs.animateProperty(
+      'width',
+      this.lineRef.current,
+      width,
+      animation,
+    );
+    this.width = width;
   }
 }

@@ -15,9 +15,9 @@ export const TabGroup = observer(({ tabGroup }: { tabGroup: ITabGroup }) => {
           }}
         ></Placeholder>
         <Line
+          ref={tabGroup.lineRef}
           style={{
             backgroundColor: tabGroup.color,
-            width: tabGroup.width,
           }}
         />
       </StyledTabGroup>

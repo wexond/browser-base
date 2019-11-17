@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import * as React from 'react';
 
-import { ITab } from '../models';
+import { ITab, ITabGroup } from '../models';
 
 import {
   TAB_ANIMATION_DURATION,
@@ -323,10 +323,11 @@ export class TabsStore {
     let currentGroup: number;
 
     for (const tab of tabs) {
+      const group = tab.tabGroup;
       if (tab.tabGroupId !== currentGroup) {
-        if (tab.tabGroup) {
-          tab.tabGroup.setLeft(left + 8, animation && !tab.tabGroup.isNew);
-          tab.tabGroup.isNew = false;
+        if (group) {
+          group.setLeft(left + 8, animation && !tab.tabGroup.isNew);
+          group.isNew = false;
         }
 
         left += tab.marginLeft;
@@ -343,21 +344,29 @@ export class TabsStore {
     const tabs = this.list.filter(x => !x.isClosing);
 
     const containerWidth = this.containerWidth;
-    let currentGroup: number;
+    let currentGroup: ITabGroup;
 
     for (const tab of tabs) {
       const width = tab.getWidth(containerWidth, tabs);
       tab.setWidth(width, animation);
+      const group = tab.tabGroup;
 
-      if (tab.tabGroup) {
-        if (tab.tabGroupId !== currentGroup) {
-          tab.tabGroup.width = tab.marginLeft - 8 - TABS_PADDING;
-          currentGroup = tab.tabGroupId;
+      if (group) {
+        if (group !== currentGroup) {
+          if (currentGroup) {
+            currentGroup.setWidth(currentGroup.width, animation);
+          }
+          group.width = tab.marginLeft - 8 - TABS_PADDING;
+          currentGroup = group;
         }
-        tab.tabGroup.width += width + TABS_PADDING;
+        group.width = group.width + width + TABS_PADDING;
       }
 
       this.scrollable = width === 72;
+    }
+
+    if (currentGroup) {
+      currentGroup.setWidth(currentGroup.width, animation);
     }
   }
 
