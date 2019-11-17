@@ -24,9 +24,6 @@ export class Store {
   @observable
   public windowId = remote.getCurrentWindow().id;
 
-  @observable
-  public text = '';
-
   public inputRef = React.createRef<Textfield>();
 
   public tabGroupId: number;
@@ -36,9 +33,10 @@ export class Store {
       this.visible = flag;
 
       if (flag) {
-        this.text = tabGroup.name;
         this.tabGroupId = tabGroup.id;
         this.inputRef.current.inputRef.current.focus();
+        this.inputRef.current.inputRef.current.value = tabGroup.name;
+        this.inputRef.current.inputRef.current.select();
       }
     });
 

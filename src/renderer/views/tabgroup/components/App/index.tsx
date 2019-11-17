@@ -12,9 +12,8 @@ import { ipcRenderer } from 'electron';
 const GlobalStyle = createGlobalStyle`${Style}`;
 
 const onChange = (e: any) => {
-  store.text = store.inputRef.current.value;
   ipcRenderer.send(`edit-tabgroup-${store.windowId}`, {
-    name: store.text,
+    name: store.inputRef.current.value,
     id: store.tabGroupId,
   });
 };
@@ -28,7 +27,6 @@ export const App = hot(
           <Textfield
             placeholder="Name"
             style={{ width: '100%' }}
-            value={store.text}
             onChange={onChange}
             ref={store.inputRef}
           />

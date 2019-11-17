@@ -2,7 +2,7 @@ import { AppWindow } from '../windows';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { Dialog } from '.';
 
-const WIDTH = 200;
+const WIDTH = 250;
 const HEIGHT = 200;
 
 export class TabGroupDialog extends Dialog {
@@ -16,12 +16,11 @@ export class TabGroupDialog extends Dialog {
         height: HEIGHT,
         y: TOOLBAR_HEIGHT,
       },
-      devtools: true,
     });
   }
 
   public rearrange() {
-    super.rearrange({ x: this.bounds.x });
+    super.rearrange({ x: this.bounds.x - 20 });
   }
 
   public hide() {
