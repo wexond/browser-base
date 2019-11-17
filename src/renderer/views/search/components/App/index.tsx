@@ -20,9 +20,11 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const text = e.currentTarget.value;
     let url = text;
 
-    if (isURL(text) && !text.includes('://')) {
+    const suggestion = store.suggestions.selectedSuggestion;
+
+    if (suggestion && !suggestion.isSearch) {
       url = `http://${text}`;
-    } else if (!text.includes('://')) {
+    } else {
       url = store.searchEngine.url.replace('%s', text);
     }
 

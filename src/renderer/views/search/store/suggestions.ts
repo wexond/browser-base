@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 
 import {
   getHistorySuggestions,
@@ -22,6 +22,11 @@ export class SuggestionsStore {
 
   @observable
   public height = 0;
+
+  @computed
+  public get selectedSuggestion() {
+    return this.list.find(x => x.id === this.selected);
+  }
 
   constructor(store: Store) {
     this.store = store;
@@ -57,6 +62,7 @@ export class SuggestionsStore {
             primaryText: item.url,
             favicon: icons.search,
             canSuggest: item.canSuggest,
+            isSearch: true,
           });
         }
       }
