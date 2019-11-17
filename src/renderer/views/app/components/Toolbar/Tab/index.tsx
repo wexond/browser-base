@@ -87,7 +87,7 @@ const onMouseUp = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
 const onContextMenu = (tab: ITab) => () => {
   const menu = remote.Menu.buildFromTemplate([
     {
-      label: 'New tab to right',
+      label: 'New tab to the right',
       click: () => {
         store.tabs.onNewTab();
       },

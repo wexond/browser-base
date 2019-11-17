@@ -25,7 +25,6 @@ import {
   AMBER_500,
   ORANGE_500,
   DEEP_ORANGE_500,
-  BLUE_GRAY_500,
 } from '~/renderer/constants';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
