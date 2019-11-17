@@ -9,11 +9,11 @@ export const StyledTabGroup = styled.div`
 `;
 
 export const Line = styled.div`
-  height: 1px;
-  bottom: 0;
+  height: 2px;
   left: 0;
+  bottom: 0;
   position: absolute;
-  border-radius: 2px;
+  border-radius: 4px;
 `;
 
 export const Placeholder = styled.div`

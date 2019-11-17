@@ -253,6 +253,7 @@ export default observer(({ tab }: { tab: ITab }) => {
       ref={tab.ref}
     >
       <TabContainer
+        tabGroup={!!tab.tabGroup}
         pinned={tab.isPinned}
         style={{
           backgroundColor: tab.isSelected
