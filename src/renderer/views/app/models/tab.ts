@@ -321,6 +321,8 @@ export class ITab {
   }
 
   public removeFromGroup() {
+    if (!this.tabGroup) return;
+
     if (this.tabGroup.tabs.length === 1) {
       store.tabGroups.list = store.tabGroups.list.filter(
         x => x.id !== this.tabGroupId,
@@ -348,6 +350,8 @@ export class ITab {
     store.tabs.closedUrl = this.url;
     store.tabs.canShowPreview = false;
     ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
+
+    this.removeFromGroup();
 
     const selected = store.tabs.selectedTabId === this.id;
 
