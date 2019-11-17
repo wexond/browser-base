@@ -173,9 +173,7 @@ export class SessionsManager {
       context.loadExtension(resolve(extensionsPath, dir));
     }
 
-    await context.loadExtension(
-      resolve(__dirname, 'extensions/wexond-darkreader'),
-    );
+    context.loadExtension(resolve(__dirname, 'extensions/wexond-darkreader'));
 
     if (session === 'incognito') {
       this.incognitoExtensionsLoaded = true;

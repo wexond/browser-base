@@ -30,7 +30,6 @@ export class ViewManager {
     ipcMain.handle(
       `view-create-${id}`,
       (e, details: chrome.tabs.CreateProperties) => {
-        console.log(details);
         return this.create(details, false, false).webContents.id;
       },
     );

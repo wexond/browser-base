@@ -49,11 +49,13 @@ export class Settings extends EventEmitter {
 
     ipcMain.on('get-settings-sync', async e => {
       await this.onLoad();
+      this.update();
       e.returnValue = this.object;
     });
 
     ipcMain.on('get-settings', async e => {
       await this.onLoad();
+      this.update();
       e.sender.send('update-settings', this.object);
     });
 
@@ -72,7 +74,7 @@ export class Settings extends EventEmitter {
     });
   };
 
-  private update = () => {
+  public update = () => {
     const contexts = [
       this.windowsManager.sessionsManager.extensions,
       this.windowsManager.sessionsManager.extensionsIncognito,
@@ -124,13 +126,14 @@ export class Settings extends EventEmitter {
 
       this.loaded = true;
 
-      this.update();
       this.addToQueue();
       this.emit('load');
     } catch (e) {
       this.loaded = true;
       this.emit('load');
     }
+
+    this.update();
   }
 
   private async save() {
