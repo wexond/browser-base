@@ -343,10 +343,19 @@ export class TabsStore {
     const tabs = this.list.filter(x => !x.isClosing);
 
     const containerWidth = this.containerWidth;
+    let currentGroup: number;
 
     for (const tab of tabs) {
       const width = tab.getWidth(containerWidth, tabs);
       tab.setWidth(width, animation);
+
+      if (tab.tabGroup) {
+        if (tab.tabGroupId !== currentGroup) {
+          tab.tabGroup.width = 0;
+          currentGroup = tab.tabGroupId;
+        }
+        tab.tabGroup.width += width + TABS_PADDING;
+      }
 
       this.scrollable = width === 72;
     }
@@ -392,18 +401,13 @@ export class TabsStore {
 
     const { tabGroup } = callingTab;
     if (tabGroup) {
-      const tabGroupTabs = tabGroup.tabs;
-      const lastTab = tabGroupTabs[tabGroupTabs.length - 1];
-
-      let lastTabLeft = lastTab.left;
-
-      if (lastTab === callingTab) lastTabLeft = store.tabs.tabStartX;
-
       if (
         callingTab.left < tabGroup.left ||
-        callingTab.left + callingTab.width >= lastTabLeft + lastTab.width + 20
+        callingTab.left + callingTab.width >=
+          tabGroup.left + tabGroup.width + 20
       ) {
         callingTab.removeFromGroup();
+        return;
       }
     }
 

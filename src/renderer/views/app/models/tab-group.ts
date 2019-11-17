@@ -20,6 +20,7 @@ export class ITabGroup {
   @observable
   public editMode = false;
 
+  public width = 0;
   public left = 8;
 
   public isNew = true;

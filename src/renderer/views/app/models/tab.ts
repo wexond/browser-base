@@ -310,8 +310,6 @@ export class ITab {
 
     if (calcNewLeft) store.tabs.calculateTabMargins();
 
-    let currentGroup: number;
-
     for (let i = 0; i < index; i++) {
       left +=
         (calcNewLeft ? tabs[i].getWidth() : tabs[i].width) +
