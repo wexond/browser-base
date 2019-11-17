@@ -303,10 +303,9 @@ export class TabsStore {
 
       if (tab.tabGroupId !== currentGroup) {
         if (tab.tabGroup) {
-          tab.marginLeft =
-            tab.tabGroup.placeholderRef.current.offsetWidth + 16 + TABS_PADDING;
+          tab.marginLeft = tab.tabGroup.placeholderRef.current.offsetWidth + 16;
         } else {
-          tab.marginLeft = 8;
+          tab.marginLeft = 6;
         }
 
         currentGroup = tab.tabGroupId;
