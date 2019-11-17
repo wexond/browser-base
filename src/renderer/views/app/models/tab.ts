@@ -263,10 +263,6 @@ export class ITab {
           ipcRenderer.send(`search-show-${store.windowId}`);
         }
       }
-
-      requestAnimationFrame(() => {
-        store.tabs.updateTabsBounds(true);
-      });
     }
   }
 
