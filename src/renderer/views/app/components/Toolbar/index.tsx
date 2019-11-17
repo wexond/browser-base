@@ -35,7 +35,7 @@ const onMenuClick = () => {
 };
 
 const BrowserActions = observer(() => {
-  const { selectedTabId } = store.tabGroups.currentGroup;
+  const { selectedTabId } = store.tabs;
 
   return (
     <>

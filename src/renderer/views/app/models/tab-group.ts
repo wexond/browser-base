@@ -14,13 +14,13 @@ export class ITabGroup {
   public name = 'New group';
 
   @observable
-  public selectedTabId: number;
-
-  @observable
   public color: string = LIGHT_BLUE_500;
 
   @observable
   public editMode = false;
+
+  @observable
+  public left = 8;
 
   private store: Store;
   private tabGroups: TabGroupsStore;
@@ -33,21 +33,7 @@ export class ITabGroup {
     this.color = palette[Math.floor(Math.random() * palette.length)];
   }
 
-  @computed
-  public get isSelected() {
-    return this.tabGroups.currentGroupId === this.id;
-  }
-
   public get tabs() {
     return this.store.tabs.list.filter(x => x.tabGroupId === this.id);
-  }
-
-  @action
-  public select() {
-    this.store.tabGroups.currentGroupId = this.id;
-
-    setTimeout(() => {
-      this.store.tabs.updateTabsBounds(false);
-    }, 1);
   }
 }

@@ -59,10 +59,10 @@ export const StyledTab = styled.div`
   align-items: center;
   will-change: width;
   -webkit-app-region: no-drag;
+  display: flex;
 
   ${({ selected, visible }: TabProps) => css`
     z-index: ${selected ? 2 : 1};
-    display: ${visible ? 'flex' : 'none'};
   `};
 `;
 

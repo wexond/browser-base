@@ -85,13 +85,19 @@ const onMouseUp = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
 };
 
 const onContextMenu = (tab: ITab) => () => {
-  const { tabs } = store.tabGroups.currentGroup;
-
   const menu = remote.Menu.buildFromTemplate([
     {
-      label: 'New tab',
+      label: 'New tab to right',
       click: () => {
         store.tabs.onNewTab();
+      },
+    },
+    {
+      label: 'Add to a new group',
+      click: () => {
+        const tabGroup = store.tabGroups.addGroup();
+        tab.tabGroupId = tabGroup.id;
+        store.tabs.updateTabsBounds(true);
       },
     },
     {
@@ -133,7 +139,7 @@ const onContextMenu = (tab: ITab) => () => {
     {
       label: 'Close other tabs',
       click: () => {
-        for (const t of tabs) {
+        for (const t of store.tabs.list) {
           if (t !== tab) {
             t.close();
           }
@@ -143,16 +149,20 @@ const onContextMenu = (tab: ITab) => () => {
     {
       label: 'Close tabs from left',
       click: () => {
-        for (let i = tabs.indexOf(tab) - 1; i >= 0; i--) {
-          tabs[i].close();
+        for (let i = store.tabs.list.indexOf(tab) - 1; i >= 0; i--) {
+          store.tabs.list[i].close();
         }
       },
     },
     {
       label: 'Close tabs from right',
       click: () => {
-        for (let i = tabs.length - 1; i > tabs.indexOf(tab); i--) {
-          tabs[i].close();
+        for (
+          let i = store.tabs.list.length - 1;
+          i > store.tabs.list.indexOf(tab);
+          i--
+        ) {
+          store.tabs.list[i].close();
         }
       },
     },
@@ -240,7 +250,6 @@ export default observer(({ tab }: { tab: ITab }) => {
       onContextMenu={onContextMenu(tab)}
       onClick={onClick(tab)}
       onMouseLeave={onMouseLeave}
-      visible={tab.tabGroupId === store.tabGroups.currentGroupId}
       ref={tab.ref}
     >
       <TabContainer

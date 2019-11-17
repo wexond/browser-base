@@ -25,6 +25,9 @@ export class TabsStore {
   @observable
   public list: ITab[] = [];
 
+  @observable
+  public selectedTabId: number;
+
   public removedTabs = 0;
 
   public lastScrollLeft = 0;
@@ -45,7 +48,7 @@ export class TabsStore {
 
   @computed
   public get selectedTab() {
-    return this.getTabById(store.tabGroups.currentGroup.selectedTabId);
+    return this.getTabById(this.selectedTabId);
   }
 
   @computed
@@ -71,8 +74,7 @@ export class TabsStore {
         id: number,
       ) => {
         if (isNext) {
-          const index =
-            store.tabGroups.currentGroup.tabs.indexOf(this.selectedTab) + 1;
+          const index = this.list.indexOf(this.selectedTab) + 1;
           options.index = index;
         }
 
@@ -129,13 +131,12 @@ export class TabsStore {
     });
 
     ipcRenderer.on('select-next-tab', () => {
-      const { tabs } = store.tabGroups.currentGroup;
-      const i = tabs.indexOf(this.selectedTab);
-      const nextTab = tabs[i + 1];
+      const i = this.list.indexOf(this.selectedTab);
+      const nextTab = this.list[i + 1];
 
       if (!nextTab) {
-        if (tabs[0]) {
-          tabs[0].select();
+        if (this.list[0]) {
+          this.list[0].select();
         }
       } else {
         nextTab.select();
@@ -192,7 +193,7 @@ export class TabsStore {
   ) {
     this.removedTabs = 0;
 
-    const tab = new ITab(options, id, store.tabGroups.currentGroupId, isWindow);
+    const tab = new ITab(options, id, isWindow);
 
     if (options.index !== undefined) {
       this.list.splice(options.index, 0, tab);
@@ -288,9 +289,7 @@ export class TabsStore {
 
   @action
   public setTabsWidths(animation: boolean) {
-    const tabs = this.list.filter(
-      x => !x.isClosing && x.tabGroupId === store.tabGroups.currentGroupId,
-    );
+    const tabs = this.list.filter(x => !x.isClosing);
 
     const containerWidth = this.containerWidth;
 
@@ -304,15 +303,25 @@ export class TabsStore {
 
   @action
   public setTabsLefts(animation: boolean) {
-    const tabs = this.list.filter(
-      x => !x.isClosing && x.tabGroupId === store.tabGroups.currentGroupId,
-    );
+    const tabs = this.list.filter(x => !x.isClosing);
 
     const { containerWidth } = store.tabs;
 
     let left = 0;
+    let currentGroup: number;
 
     for (const tab of tabs) {
+      if (tab.tabGroupId !== currentGroup) {
+        if (tab.tabGroup) {
+          tab.tabGroup.left = left + 8;
+          left += 14 + 16 + TABS_PADDING;
+        } else {
+          left += 8;
+        }
+
+        currentGroup = tab.tabGroupId;
+      }
+
       tab.setLeft(left, animation);
 
       left += tab.width + TABS_PADDING;
@@ -380,10 +389,7 @@ export class TabsStore {
 
   @action
   public onMouseMove = (e: any) => {
-    const tabGroup = store.tabGroups.currentGroup;
-    if (!tabGroup) return;
-
-    const { selectedTab } = store.tabs;
+    const { selectedTab } = this;
 
     if (this.isDragging) {
       const container = this.containerRef;

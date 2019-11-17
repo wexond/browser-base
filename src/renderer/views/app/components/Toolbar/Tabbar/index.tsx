@@ -6,6 +6,7 @@ import { Tabs } from '../Tabs';
 import store from '../../../store';
 import { icons } from '~/renderer/constants';
 import { ipcRenderer } from 'electron';
+import { TabGroup } from '../TabGroup';
 
 let timeout: any;
 
@@ -40,6 +41,16 @@ const onWheel = (e: any) => {
   store.tabs.containerRef.current.scrollLeft = scrollLeft + target;
 };
 
+export const TabGroups = observer(() => {
+  return (
+    <React.Fragment>
+      {store.tabGroups.list.map(item => (
+        <TabGroup key={item.id} tabGroup={item}></TabGroup>
+      ))}
+    </React.Fragment>
+  );
+});
+
 export const Tabbar = observer(() => {
   return (
     <StyledTabbar>
@@ -49,6 +60,7 @@ export const Tabbar = observer(() => {
         onWheel={onWheel}
         ref={store.tabs.containerRef}
       >
+        <TabGroups />
         <Tabs />
       </TabsContainer>
       <AddTab

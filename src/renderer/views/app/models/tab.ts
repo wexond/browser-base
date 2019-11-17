@@ -82,7 +82,7 @@ export class ITab {
 
   @computed
   public get isSelected() {
-    return store.tabGroups.currentGroup.selectedTabId === this.id;
+    return store.tabs.selectedTabId === this.id;
   }
 
   @computed
@@ -121,13 +121,11 @@ export class ITab {
   public constructor(
     { active, url, pinned }: chrome.tabs.CreateProperties,
     id: number,
-    tabGroupId: number,
     isWindow: boolean,
   ) {
     this.url = url;
     this.id = id;
     this.isWindow = isWindow;
-    this.tabGroupId = tabGroupId;
     this.isPinned = pinned;
 
     if (active) {
@@ -246,7 +244,7 @@ export class ITab {
   @action
   public select() {
     if (!this.isClosing) {
-      this.tabGroup.selectedTabId = this.id;
+      store.tabs.selectedTabId = this.id;
 
       if (this.isWindow) {
         ipcRenderer.send(`browserview-hide-${store.windowId}`);
@@ -301,12 +299,24 @@ export class ITab {
   }
 
   public getLeft(calcNewLeft = false) {
-    const tabs = this.tabGroup.tabs.slice();
+    const tabs = store.tabs.list.slice();
 
     const index = tabs.indexOf(this);
 
     let left = 0;
+    let currentGroup: number;
+
     for (let i = 0; i < index; i++) {
+      if (tabs[i].tabGroupId !== currentGroup) {
+        if (tabs[i].tabGroup) {
+          tabs[i].tabGroup.left = left + 8;
+          left += 14 + 16;
+        } else {
+          left += 8;
+        }
+        currentGroup = tabs[i].tabGroupId;
+      }
+
       left += (calcNewLeft ? tabs[i].getWidth() : tabs[i].width) + TABS_PADDING;
     }
 
@@ -327,14 +337,11 @@ export class ITab {
 
   @action
   public close() {
-    const tabGroup = this.tabGroup;
-    const { tabs } = tabGroup;
-
     store.tabs.closedUrl = this.url;
     store.tabs.canShowPreview = false;
     ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
 
-    const selected = tabGroup.selectedTabId === this.id;
+    const selected = store.tabs.selectedTabId === this.id;
 
     store.startupTabs.removeStartupTabItem(this.id, store.windowId);
 
@@ -344,12 +351,12 @@ export class ITab {
       ipcRenderer.send(`view-destroy-${store.windowId}`, this.id);
     }
 
-    const notClosingTabs = tabs.filter(x => !x.isClosing);
+    const notClosingTabs = store.tabs.list.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
 
     this.isClosing = true;
     if (notClosingTabs.length - 1 === index) {
-      const previousTab = tabs[index - 1];
+      const previousTab = store.tabs.list[index - 1];
       if (previousTab) {
         this.setLeft(previousTab.getLeft(true) + previousTab.getWidth(), true);
       }
@@ -362,17 +369,17 @@ export class ITab {
     store.tabs.setTabsLefts(true);
 
     if (selected) {
-      index = tabs.indexOf(this);
+      index = store.tabs.list.indexOf(this);
 
       if (
-        index + 1 < tabs.length &&
-        !tabs[index + 1].isClosing &&
+        index + 1 < store.tabs.list.length &&
+        !store.tabs.list[index + 1].isClosing &&
         !store.tabs.scrollable
       ) {
-        const nextTab = tabs[index + 1];
+        const nextTab = store.tabs.list[index + 1];
         nextTab.select();
-      } else if (index - 1 >= 0 && !tabs[index - 1].isClosing) {
-        const prevTab = tabs[index - 1];
+      } else if (index - 1 >= 0 && !store.tabs.list[index - 1].isClosing) {
+        const prevTab = store.tabs.list[index - 1];
         prevTab.select();
       }
     }
