@@ -3,7 +3,7 @@ import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { Dialog } from '.';
 
 const WIDTH = 250;
-const HEIGHT = 200;
+const HEIGHT = 150;
 
 export class TabGroupDialog extends Dialog {
   public visible = false;
