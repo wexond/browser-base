@@ -1,4 +1,5 @@
-import { observable, computed, action } from 'mobx';
+import * as React from 'react';
+import { observable, action } from 'mobx';
 
 import { LIGHT_BLUE_500 } from '~/renderer/constants';
 import { Store } from '../store';
@@ -14,16 +15,22 @@ export class ITabGroup {
   public name = 'New group';
 
   @observable
-  public selectedTabId: number;
-
-  @observable
   public color: string = LIGHT_BLUE_500;
 
   @observable
   public editMode = false;
 
+  public width = 0;
+  public left = 8;
+
+  public isNew = true;
+
   private store: Store;
   private tabGroups: TabGroupsStore;
+
+  public ref = React.createRef<HTMLDivElement>();
+  public placeholderRef = React.createRef<HTMLDivElement>();
+  public lineRef = React.createRef<HTMLDivElement>();
 
   public constructor(store: Store, tabGroupsStore: TabGroupsStore) {
     this.store = store;
@@ -33,21 +40,24 @@ export class ITabGroup {
     this.color = palette[Math.floor(Math.random() * palette.length)];
   }
 
-  @computed
-  public get isSelected() {
-    return this.tabGroups.currentGroupId === this.id;
-  }
-
   public get tabs() {
     return this.store.tabs.list.filter(x => x.tabGroupId === this.id);
   }
 
   @action
-  public select() {
-    this.store.tabGroups.currentGroupId = this.id;
+  public setLeft(left: number, animation: boolean) {
+    this.store.tabs.animateProperty('x', this.ref.current, left, animation);
+    this.left = left;
+  }
 
-    setTimeout(() => {
-      this.store.tabs.updateTabsBounds(false);
-    }, 1);
+  @action
+  public setWidth(width: number, animation: boolean) {
+    this.store.tabs.animateProperty(
+      'width',
+      this.lineRef.current,
+      width,
+      animation,
+    );
+    this.width = width;
   }
 }

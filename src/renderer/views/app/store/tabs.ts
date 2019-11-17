@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import * as React from 'react';
 
-import { ITab } from '../models';
+import { ITab, ITabGroup } from '../models';
 
 import {
   TAB_ANIMATION_DURATION,
@@ -12,7 +12,7 @@ import {
 import store from '.';
 import { ipcRenderer } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
-import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { TOOLBAR_HEIGHT, TOOLBAR_BUTTON_WIDTH } from '~/constants/design';
 import { TweenLite } from 'gsap';
 
 export class TabsStore {
@@ -24,6 +24,9 @@ export class TabsStore {
 
   @observable
   public list: ITab[] = [];
+
+  @observable
+  public selectedTabId: number;
 
   public removedTabs = 0;
 
@@ -43,9 +46,11 @@ export class TabsStore {
 
   public containerRef = React.createRef<HTMLDivElement>();
 
+  public leftMargins = 0;
+
   @computed
   public get selectedTab() {
-    return this.getTabById(store.tabGroups.currentGroup.selectedTabId);
+    return this.getTabById(this.selectedTabId);
   }
 
   @computed
@@ -71,8 +76,7 @@ export class TabsStore {
         id: number,
       ) => {
         if (isNext) {
-          const index =
-            store.tabGroups.currentGroup.tabs.indexOf(this.selectedTab) + 1;
+          const index = this.list.indexOf(this.selectedTab) + 1;
           options.index = index;
         }
 
@@ -129,13 +133,12 @@ export class TabsStore {
     });
 
     ipcRenderer.on('select-next-tab', () => {
-      const { tabs } = store.tabGroups.currentGroup;
-      const i = tabs.indexOf(this.selectedTab);
-      const nextTab = tabs[i + 1];
+      const i = this.list.indexOf(this.selectedTab);
+      const nextTab = this.list[i + 1];
 
       if (!nextTab) {
-        if (tabs[0]) {
-          tabs[0].select();
+        if (this.list[0]) {
+          this.list[0].select();
         }
       } else {
         nextTab.select();
@@ -192,7 +195,7 @@ export class TabsStore {
   ) {
     this.removedTabs = 0;
 
-    const tab = new ITab(options, id, store.tabGroups.currentGroupId, isWindow);
+    const tab = new ITab(options, id, isWindow);
 
     if (options.index !== undefined) {
       this.list.splice(options.index, 0, tab);
@@ -282,38 +285,105 @@ export class TabsStore {
 
   @action
   public updateTabsBounds(animation: boolean) {
+    this.calculateTabMargins();
     this.setTabsWidths(animation);
+    this.setTabGroupsLefts(animation);
     this.setTabsLefts(animation);
+  }
+
+  public calculateTabMargins() {
+    const tabs = this.list.filter(x => !x.isClosing);
+
+    let currentGroup: number;
+
+    this.leftMargins = 0;
+
+    for (const tab of tabs) {
+      tab.marginLeft = 0;
+
+      if (tab.tabGroupId !== currentGroup) {
+        if (tab.tabGroup) {
+          tab.marginLeft =
+            tab.tabGroup.placeholderRef.current.offsetWidth + 16 + TABS_PADDING;
+        } else {
+          tab.marginLeft = 8;
+        }
+
+        currentGroup = tab.tabGroupId;
+      }
+
+      this.leftMargins += tab.marginLeft;
+    }
+  }
+
+  public setTabGroupsLefts(animation: boolean) {
+    const tabs = this.list.filter(x => !x.isClosing);
+
+    let left = 0;
+    let currentGroup: number;
+
+    for (const tab of tabs) {
+      const group = tab.tabGroup;
+      if (tab.tabGroupId !== currentGroup) {
+        if (group) {
+          group.setLeft(left + 8, animation && !tab.tabGroup.isNew);
+          group.isNew = false;
+        }
+
+        left += tab.marginLeft;
+
+        currentGroup = tab.tabGroupId;
+      }
+
+      left += tab.width + TABS_PADDING;
+    }
   }
 
   @action
   public setTabsWidths(animation: boolean) {
-    const tabs = this.list.filter(
-      x => !x.isClosing && x.tabGroupId === store.tabGroups.currentGroupId,
-    );
+    const tabs = this.list.filter(x => !x.isClosing);
 
     const containerWidth = this.containerWidth;
+    let currentGroup: ITabGroup;
 
     for (const tab of tabs) {
       const width = tab.getWidth(containerWidth, tabs);
       tab.setWidth(width, animation);
+      const group = tab.tabGroup;
+
+      if (group) {
+        if (group !== currentGroup) {
+          if (currentGroup) {
+            currentGroup.setWidth(currentGroup.width, animation);
+          }
+          group.width = tab.marginLeft - 8 - TABS_PADDING;
+          currentGroup = group;
+        }
+        group.width = group.width + width + TABS_PADDING;
+      }
 
       this.scrollable = width === 72;
+    }
+
+    if (currentGroup) {
+      currentGroup.setWidth(currentGroup.width, animation);
     }
   }
 
   @action
   public setTabsLefts(animation: boolean) {
-    const tabs = this.list.filter(
-      x => !x.isClosing && x.tabGroupId === store.tabGroups.currentGroupId,
-    );
+    const tabs = this.list.filter(x => !x.isClosing);
 
     const { containerWidth } = store.tabs;
 
     let left = 0;
 
     for (const tab of tabs) {
-      tab.setLeft(left, animation);
+      left += tab.marginLeft;
+
+      if (!tab.isDragging) {
+        tab.setLeft(left, animation);
+      }
 
       left += tab.width + TABS_PADDING;
     }
@@ -326,25 +396,52 @@ export class TabsStore {
 
   @action
   public replaceTab(firstTab: ITab, secondTab: ITab) {
-    secondTab.setLeft(firstTab.getLeft(true), true);
-
     const index = this.list.indexOf(secondTab);
 
     this.list[this.list.indexOf(firstTab)] = secondTab;
     this.list[index] = firstTab;
+
+    this.updateTabsBounds(true);
   }
 
   public getTabsToReplace(callingTab: ITab, direction: string) {
     const tabs = this.list;
     const index = tabs.indexOf(callingTab);
 
+    const { tabGroup } = callingTab;
+    if (tabGroup) {
+      if (
+        callingTab.left < tabGroup.left ||
+        callingTab.left + callingTab.width >=
+          tabGroup.left + tabGroup.width + 20
+      ) {
+        callingTab.removeFromGroup();
+        return;
+      }
+    }
+
     if (direction === 'left') {
       for (let i = index - 1; i >= 0; i--) {
         const tab = tabs[i];
-        if (
-          callingTab.left <= tab.width / 2 + tab.left &&
-          (!callingTab.isPinned || (callingTab.isPinned && tab.isPinned))
-        ) {
+
+        if (callingTab.isPinned && callingTab.isPinned && tab.isPinned) break;
+
+        const { tabGroup } = tab;
+
+        if (tabGroup) {
+          const tabGroupTabs = tab.tabGroup.tabs;
+          const lastTab = tabGroupTabs[tabGroupTabs.length - 1];
+
+          if (
+            callingTab.tabGroupId !== tab.tabGroupId &&
+            callingTab.left <= lastTab.left + lastTab.width * 0.75
+          ) {
+            callingTab.tabGroupId = tab.tabGroupId;
+            this.updateTabsBounds(true);
+          }
+        }
+
+        if (callingTab.left <= tab.width / 2 + tab.left) {
           this.replaceTab(tabs[i + 1], tab);
         } else {
           break;
@@ -353,10 +450,25 @@ export class TabsStore {
     } else if (direction === 'right') {
       for (let i = index + 1; i < tabs.length; i++) {
         const tab = tabs[i];
-        if (
-          callingTab.left + callingTab.width >= tab.width / 2 + tab.left &&
-          (!callingTab.isPinned || (callingTab.isPinned && tab.isPinned))
-        ) {
+
+        if (callingTab.isPinned && callingTab.isPinned && tab.isPinned) break;
+
+        const { tabGroup } = tab;
+
+        if (tabGroup) {
+          const tabGroupTabs = tab.tabGroup.tabs;
+          const firstTab = tabGroupTabs[0];
+
+          if (
+            callingTab.tabGroupId !== tab.tabGroupId &&
+            callingTab.left + callingTab.width >= firstTab.left
+          ) {
+            callingTab.tabGroupId = tab.tabGroupId;
+            this.updateTabsBounds(true);
+          }
+        }
+
+        if (callingTab.left + callingTab.width >= tab.width / 2 + tab.left) {
           this.replaceTab(tabs[i - 1], tab);
         } else {
           break;
@@ -371,19 +483,16 @@ export class TabsStore {
 
     this.isDragging = false;
 
-    this.setTabsLefts(true);
-
     if (selectedTab) {
       selectedTab.isDragging = false;
     }
+
+    this.updateTabsBounds(true);
   };
 
   @action
   public onMouseMove = (e: any) => {
-    const tabGroup = store.tabGroups.currentGroup;
-    if (!tabGroup) return;
-
-    const { selectedTab } = store.tabs;
+    const { selectedTab } = this;
 
     if (this.isDragging) {
       const container = this.containerRef;
@@ -408,10 +517,17 @@ export class TabsStore {
 
       if (
         newLeft + selectedTab.width >
-        store.addTab.left + container.current.scrollLeft - TABS_PADDING
+        container.current.scrollLeft +
+          container.current.offsetWidth -
+          TABS_PADDING +
+          20
       ) {
         left =
-          store.addTab.left - selectedTab.width + lastScrollLeft - TABS_PADDING;
+          container.current.scrollLeft +
+          container.current.offsetWidth -
+          selectedTab.width -
+          TABS_PADDING +
+          20;
       }
 
       selectedTab.setLeft(left, false);

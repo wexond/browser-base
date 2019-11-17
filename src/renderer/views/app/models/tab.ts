@@ -80,9 +80,11 @@ export class ITab {
   public removeTimeout: any;
   public isWindow = false;
 
+  public marginLeft = 0;
+
   @computed
   public get isSelected() {
-    return store.tabGroups.currentGroup.selectedTabId === this.id;
+    return store.tabs.selectedTabId === this.id;
   }
 
   @computed
@@ -121,13 +123,11 @@ export class ITab {
   public constructor(
     { active, url, pinned }: chrome.tabs.CreateProperties,
     id: number,
-    tabGroupId: number,
     isWindow: boolean,
   ) {
     this.url = url;
     this.id = id;
     this.isWindow = isWindow;
-    this.tabGroupId = tabGroupId;
     this.isPinned = pinned;
 
     if (active) {
@@ -246,7 +246,7 @@ export class ITab {
   @action
   public select() {
     if (!this.isClosing) {
-      this.tabGroup.selectedTabId = this.id;
+      store.tabs.selectedTabId = this.id;
 
       if (this.isWindow) {
         ipcRenderer.send(`browserview-hide-${store.windowId}`);
@@ -278,17 +278,18 @@ export class ITab {
     }
 
     if (tabs === null) {
-      tabs = store.tabs.list.filter(
-        x => x.tabGroupId === this.tabGroupId && !x.isClosing,
-      );
+      tabs = store.tabs.list.filter(x => !x.isClosing);
     }
 
     const pinnedTabs = tabs.filter(x => x.isPinned).length;
 
+    const realTabsLength = tabs.length - pinnedTabs + store.tabs.removedTabs;
+
     const width =
       (containerWidth - pinnedTabs * (TAB_PINNED_WIDTH + TABS_PADDING)) /
-        (tabs.length - pinnedTabs + store.tabs.removedTabs) -
-      TABS_PADDING;
+        realTabsLength -
+      TABS_PADDING -
+      store.tabs.leftMargins / realTabsLength;
 
     if (width > TAB_MAX_WIDTH) {
       return TAB_MAX_WIDTH;
@@ -301,16 +302,35 @@ export class ITab {
   }
 
   public getLeft(calcNewLeft = false) {
-    const tabs = this.tabGroup.tabs.slice();
+    const tabs = store.tabs.list.filter(x => !x.isClosing).slice();
 
     const index = tabs.indexOf(this);
 
     let left = 0;
+
+    if (calcNewLeft) store.tabs.calculateTabMargins();
+
     for (let i = 0; i < index; i++) {
-      left += (calcNewLeft ? tabs[i].getWidth() : tabs[i].width) + TABS_PADDING;
+      left +=
+        (calcNewLeft ? tabs[i].getWidth() : tabs[i].width) +
+        TABS_PADDING +
+        tabs[i].marginLeft;
     }
 
-    return left;
+    return left + this.marginLeft;
+  }
+
+  public removeFromGroup() {
+    if (!this.tabGroup) return;
+
+    if (this.tabGroup.tabs.length === 1) {
+      store.tabGroups.list = store.tabGroups.list.filter(
+        x => x.id !== this.tabGroupId,
+      );
+    }
+
+    this.tabGroupId = undefined;
+    store.tabs.updateTabsBounds(true);
   }
 
   @action
@@ -327,14 +347,13 @@ export class ITab {
 
   @action
   public close() {
-    const tabGroup = this.tabGroup;
-    const { tabs } = tabGroup;
-
     store.tabs.closedUrl = this.url;
     store.tabs.canShowPreview = false;
     ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
 
-    const selected = tabGroup.selectedTabId === this.id;
+    this.removeFromGroup();
+
+    const selected = store.tabs.selectedTabId === this.id;
 
     store.startupTabs.removeStartupTabItem(this.id, store.windowId);
 
@@ -344,14 +363,14 @@ export class ITab {
       ipcRenderer.send(`view-destroy-${store.windowId}`, this.id);
     }
 
-    const notClosingTabs = tabs.filter(x => !x.isClosing);
+    const notClosingTabs = store.tabs.list.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
 
     this.isClosing = true;
     if (notClosingTabs.length - 1 === index) {
-      const previousTab = tabs[index - 1];
+      const previousTab = store.tabs.list[index - 1];
       if (previousTab) {
-        this.setLeft(previousTab.getLeft(true) + previousTab.getWidth(), true);
+        this.setLeft(previousTab.getLeft(true) + this.getWidth(), true);
       }
       store.tabs.updateTabsBounds(true);
     } else {
@@ -362,17 +381,17 @@ export class ITab {
     store.tabs.setTabsLefts(true);
 
     if (selected) {
-      index = tabs.indexOf(this);
+      index = store.tabs.list.indexOf(this);
 
       if (
-        index + 1 < tabs.length &&
-        !tabs[index + 1].isClosing &&
+        index + 1 < store.tabs.list.length &&
+        !store.tabs.list[index + 1].isClosing &&
         !store.tabs.scrollable
       ) {
-        const nextTab = tabs[index + 1];
+        const nextTab = store.tabs.list[index + 1];
         nextTab.select();
-      } else if (index - 1 >= 0 && !tabs[index - 1].isClosing) {
-        const prevTab = tabs[index - 1];
+      } else if (index - 1 >= 0 && !store.tabs.list[index - 1].isClosing) {
+        const prevTab = store.tabs.list[index - 1];
         prevTab.select();
       }
     }
