@@ -287,6 +287,7 @@ export class TabsStore {
   public updateTabsBounds(animation: boolean) {
     this.calculateTabMargins();
     this.setTabsWidths(animation);
+    this.setTabGroupsLefts(animation);
     this.setTabsLefts(animation);
   }
 
@@ -314,6 +315,28 @@ export class TabsStore {
     }
   }
 
+  public setTabGroupsLefts(animation: boolean) {
+    const tabs = this.list.filter(x => !x.isClosing);
+
+    let left = 0;
+    let currentGroup: number;
+
+    for (const tab of tabs) {
+      if (tab.tabGroupId !== currentGroup) {
+        if (tab.tabGroup) {
+          tab.tabGroup.setLeft(left + 8, animation && !tab.tabGroup.isNew);
+          tab.tabGroup.isNew = false;
+        }
+
+        left += tab.marginLeft;
+
+        currentGroup = tab.tabGroupId;
+      }
+
+      left += tab.width + TABS_PADDING;
+    }
+  }
+
   @action
   public setTabsWidths(animation: boolean) {
     const tabs = this.list.filter(x => !x.isClosing);
@@ -335,21 +358,13 @@ export class TabsStore {
     const { containerWidth } = store.tabs;
 
     let left = 0;
-    let currentGroup: number;
 
     for (const tab of tabs) {
-      if (tab.tabGroupId !== currentGroup) {
-        if (tab.tabGroup) {
-          tab.tabGroup.setLeft(left + 8, animation && !tab.tabGroup.isNew);
-          tab.tabGroup.isNew = false;
-        }
+      left += tab.marginLeft;
 
-        left += tab.marginLeft;
-
-        currentGroup = tab.tabGroupId;
+      if (!tab.isDragging) {
+        tab.setLeft(left, animation);
       }
-
-      tab.setLeft(left, animation);
 
       left += tab.width + TABS_PADDING;
     }
@@ -362,12 +377,12 @@ export class TabsStore {
 
   @action
   public replaceTab(firstTab: ITab, secondTab: ITab) {
-    secondTab.setLeft(firstTab.getLeft(true), true);
-
     const index = this.list.indexOf(secondTab);
 
     this.list[this.list.indexOf(firstTab)] = secondTab;
     this.list[index] = firstTab;
+
+    this.updateTabsBounds(true);
   }
 
   public getTabsToReplace(callingTab: ITab, direction: string) {
@@ -407,12 +422,11 @@ export class TabsStore {
 
     this.isDragging = false;
 
-    this.calculateTabMargins();
-    this.setTabsLefts(true);
-
     if (selectedTab) {
       selectedTab.isDragging = false;
     }
+
+    this.updateTabsBounds(true);
   };
 
   @action
