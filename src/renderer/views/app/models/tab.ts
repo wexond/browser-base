@@ -351,8 +351,6 @@ export class ITab {
     store.tabs.canShowPreview = false;
     ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
 
-    this.removeFromGroup();
-
     const selected = store.tabs.selectedTabId === this.id;
 
     store.startupTabs.removeStartupTabItem(this.id, store.windowId);
@@ -376,6 +374,8 @@ export class ITab {
     } else {
       store.tabs.removedTabs++;
     }
+
+    this.removeFromGroup();
 
     this.setWidth(0, true);
     store.tabs.setTabsLefts(true);
