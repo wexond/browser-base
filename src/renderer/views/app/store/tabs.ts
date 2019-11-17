@@ -46,6 +46,8 @@ export class TabsStore {
 
   public containerRef = React.createRef<HTMLDivElement>();
 
+  public leftMargins = 0;
+
   @computed
   public get selectedTab() {
     return this.getTabById(this.selectedTabId);
@@ -283,8 +285,33 @@ export class TabsStore {
 
   @action
   public updateTabsBounds(animation: boolean) {
+    this.calculateTabMargins();
     this.setTabsWidths(animation);
     this.setTabsLefts(animation);
+  }
+
+  public calculateTabMargins() {
+    const tabs = this.list.filter(x => !x.isClosing);
+
+    let currentGroup: number;
+
+    this.leftMargins = 0;
+
+    for (const tab of tabs) {
+      tab.marginLeft = 0;
+
+      if (tab.tabGroupId !== currentGroup) {
+        if (tab.tabGroup) {
+          tab.marginLeft = 14 + 16 + TABS_PADDING;
+        } else {
+          tab.marginLeft = 8;
+        }
+
+        currentGroup = tab.tabGroupId;
+      }
+
+      this.leftMargins += tab.marginLeft;
+    }
   }
 
   @action
@@ -314,10 +341,9 @@ export class TabsStore {
       if (tab.tabGroupId !== currentGroup) {
         if (tab.tabGroup) {
           tab.tabGroup.left = left + 8;
-          left += 14 + 16 + TABS_PADDING;
-        } else {
-          left += 8;
         }
+
+        left += tab.marginLeft;
 
         currentGroup = tab.tabGroupId;
       }
@@ -380,6 +406,7 @@ export class TabsStore {
 
     this.isDragging = false;
 
+    this.calculateTabMargins();
     this.setTabsLefts(true);
 
     if (selectedTab) {

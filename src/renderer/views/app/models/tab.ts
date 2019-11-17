@@ -80,6 +80,8 @@ export class ITab {
   public removeTimeout: any;
   public isWindow = false;
 
+  public marginLeft = 0;
+
   @computed
   public get isSelected() {
     return store.tabs.selectedTabId === this.id;
@@ -276,17 +278,18 @@ export class ITab {
     }
 
     if (tabs === null) {
-      tabs = store.tabs.list.filter(
-        x => x.tabGroupId === this.tabGroupId && !x.isClosing,
-      );
+      tabs = store.tabs.list.filter(x => !x.isClosing);
     }
 
     const pinnedTabs = tabs.filter(x => x.isPinned).length;
 
+    const realTabsLength = tabs.length - pinnedTabs + store.tabs.removedTabs;
+
     const width =
       (containerWidth - pinnedTabs * (TAB_PINNED_WIDTH + TABS_PADDING)) /
-        (tabs.length - pinnedTabs + store.tabs.removedTabs) -
-      TABS_PADDING;
+        realTabsLength -
+      TABS_PADDING -
+      store.tabs.leftMargins / realTabsLength;
 
     if (width > TAB_MAX_WIDTH) {
       return TAB_MAX_WIDTH;
@@ -299,28 +302,24 @@ export class ITab {
   }
 
   public getLeft(calcNewLeft = false) {
-    const tabs = store.tabs.list.slice();
+    const tabs = store.tabs.list.filter(x => !x.isClosing).slice();
 
     const index = tabs.indexOf(this);
 
     let left = 0;
+
+    if (calcNewLeft) store.tabs.calculateTabMargins();
+
     let currentGroup: number;
 
     for (let i = 0; i < index; i++) {
-      if (tabs[i].tabGroupId !== currentGroup) {
-        if (tabs[i].tabGroup) {
-          tabs[i].tabGroup.left = left + 8;
-          left += 14 + 16;
-        } else {
-          left += 8;
-        }
-        currentGroup = tabs[i].tabGroupId;
-      }
-
-      left += (calcNewLeft ? tabs[i].getWidth() : tabs[i].width) + TABS_PADDING;
+      left +=
+        (calcNewLeft ? tabs[i].getWidth() : tabs[i].width) +
+        TABS_PADDING +
+        tabs[i].marginLeft;
     }
 
-    return left;
+    return left + this.marginLeft;
   }
 
   @action
@@ -358,7 +357,7 @@ export class ITab {
     if (notClosingTabs.length - 1 === index) {
       const previousTab = store.tabs.list[index - 1];
       if (previousTab) {
-        this.setLeft(previousTab.getLeft(true) + previousTab.getWidth(), true);
+        this.setLeft(previousTab.getLeft(true) + this.getWidth(), true);
       }
       store.tabs.updateTabsBounds(true);
     } else {
