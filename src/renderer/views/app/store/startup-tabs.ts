@@ -54,7 +54,7 @@ export class StartupTabsStore {
           ? 1
           : x.order - y.order,
       )) {
-        this.addTab({
+        this.store.tabs.addTab({
           url: prefixHttp(tabsToLoad[tab].url),
           pinned: tabsToLoad[tab].pinned,
           active:
@@ -80,10 +80,10 @@ export class StartupTabsStore {
       const ext = extname(path);
 
       if (existsSync(path) && ext === '.html') {
-        this.addTab({ url: `file:///${path}`, active: true });
+        this.store.tabs.addTab({ url: `file:///${path}`, active: true });
         needsNewTabPage = false;
       } else if (isURL(path)) {
-        this.addTab({
+        this.store.tabs.addTab({
           url: prefixHttp(path),
           active: true,
         });
@@ -92,13 +92,8 @@ export class StartupTabsStore {
     }
 
     if (needsNewTabPage) {
-      this.addTab();
+      this.store.tabs.addTab();
     }
-  }
-
-  @action
-  public addTab(options = defaultTabOptions) {
-    ipcRenderer.send(`view-create-${this.store.windowId}`, options);
   }
 
   public async addStartupTabItem(item: IStartupTab) {

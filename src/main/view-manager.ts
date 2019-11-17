@@ -27,10 +27,11 @@ export class ViewManager {
     this.incognito = incognito;
 
     const { id } = window;
-    ipcMain.on(
+    ipcMain.handle(
       `view-create-${id}`,
       (e, details: chrome.tabs.CreateProperties) => {
-        this.create(details);
+        console.log(details);
+        return this.create(details, false, false).webContents.id;
       },
     );
 
@@ -104,7 +105,11 @@ export class ViewManager {
     );
   }
 
-  public create(details: chrome.tabs.CreateProperties, isNext = false) {
+  public create(
+    details: chrome.tabs.CreateProperties,
+    isNext = false,
+    sendMessage = true,
+  ) {
     const view = new View(this.window, details.url, this.incognito);
 
     view.setAutoResize({
@@ -114,12 +119,14 @@ export class ViewManager {
 
     this.views.set(view.webContents.id, view);
 
-    this.window.webContents.send(
-      'api-tabs-create',
-      { ...details },
-      isNext,
-      view.webContents.id,
-    );
+    if (sendMessage) {
+      this.window.webContents.send(
+        'api-tabs-create',
+        { ...details },
+        isNext,
+        view.webContents.id,
+      );
+    }
 
     return view;
   }

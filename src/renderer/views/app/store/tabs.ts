@@ -12,7 +12,7 @@ import {
 import store from '.';
 import { ipcRenderer } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
-import { TOOLBAR_HEIGHT, TOOLBAR_BUTTON_WIDTH } from '~/constants/design';
+import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { TweenLite } from 'gsap';
 
 export class TabsStore {
@@ -192,10 +192,13 @@ export class TabsStore {
     options: chrome.tabs.CreateProperties,
     id: number,
     isWindow = false,
+    tabGroupId: number = undefined,
   ) {
     this.removedTabs = 0;
 
     const tab = new ITab(options, id, isWindow);
+
+    tab.tabGroupId = tabGroupId;
 
     if (options.index !== undefined) {
       this.list.splice(options.index, 0, tab);
@@ -234,8 +237,19 @@ export class TabsStore {
   };
 
   @action
-  public addTab(options = defaultTabOptions) {
-    ipcRenderer.send(`view-create-${store.windowId}`, options);
+  public async addTab(
+    options = defaultTabOptions,
+    tabGroupId: number = undefined,
+  ) {
+    ipcRenderer.send(`hide-window-${store.windowId}`);
+
+    const opts = { ...defaultTabOptions, ...options };
+
+    const id: number = await ipcRenderer.invoke(
+      `view-create-${store.windowId}`,
+      opts,
+    );
+    return this.createTab(opts, id, false, tabGroupId);
   }
 
   public removeTab(id: number) {
@@ -567,10 +581,5 @@ export class TabsStore {
 
       TweenLite.to(obj, animation ? TAB_ANIMATION_DURATION : 0, props);
     }
-  }
-
-  public onNewTab() {
-    ipcRenderer.send(`hide-window-${store.windowId}`);
-    store.tabs.addTab();
   }
 }

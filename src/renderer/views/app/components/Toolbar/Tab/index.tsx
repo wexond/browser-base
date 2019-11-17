@@ -89,7 +89,12 @@ const onContextMenu = (tab: ITab) => () => {
     {
       label: 'New tab to the right',
       click: () => {
-        store.tabs.onNewTab();
+        store.tabs.addTab(
+          {
+            index: store.tabs.list.indexOf(store.tabs.selectedTab) + 1,
+          },
+          tab.tabGroupId,
+        );
       },
     },
     {
@@ -101,10 +106,18 @@ const onContextMenu = (tab: ITab) => () => {
       },
     },
     {
+      label: 'Remove from group',
+      visible: !!tab.tabGroup,
+      click: () => {
+        tab.removeFromGroup();
+      },
+    },
+    {
       type: 'separator',
     },
     {
       label: 'Reload',
+      accelerator: 'CmdOrCtrl+R',
       click: () => {
         tab.callViewMethod('webContents.reload');
       },
@@ -132,6 +145,7 @@ const onContextMenu = (tab: ITab) => () => {
     },
     {
       label: 'Close tab',
+      accelerator: 'CmdOrCtrl+W',
       click: () => {
         tab.close();
       },
@@ -147,7 +161,7 @@ const onContextMenu = (tab: ITab) => () => {
       },
     },
     {
-      label: 'Close tabs from left',
+      label: 'Close tabs to the left',
       click: () => {
         for (let i = store.tabs.list.indexOf(tab) - 1; i >= 0; i--) {
           store.tabs.list[i].close();
@@ -155,7 +169,7 @@ const onContextMenu = (tab: ITab) => () => {
       },
     },
     {
-      label: 'Close tabs from right',
+      label: 'Close tabs to the right',
       click: () => {
         for (
           let i = store.tabs.list.length - 1;

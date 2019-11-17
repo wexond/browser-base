@@ -24,7 +24,7 @@ const onTabsMouseLeave = () => {
 };
 
 const onAddTabClick = () => {
-  store.tabs.onNewTab();
+  store.tabs.addTab();
 };
 
 const onWheel = (e: any) => {
