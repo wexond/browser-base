@@ -62,6 +62,14 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.previewDialog.hide(appWindow.previewDialog.visible);
   });
 
+  ipcMain.on(`show-tabgroup-dialog-${id}`, (e, tabGroup) => {
+    appWindow.tabGroupDialog.edit(tabGroup);
+  });
+
+  ipcMain.on(`edit-tabgroup-${id}`, (e, tabGroup) => {
+    appWindow.webContents.send(`edit-tabgroup`, tabGroup);
+  });
+
   ipcMain.on(`is-incognito-${id}`, e => {
     e.returnValue = appWindow.incognito;
   });

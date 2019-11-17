@@ -27,6 +27,7 @@ applyEntries('app', appConfig, [
   'menu',
   'search',
   'preview',
+  'tabgroup',
 ]);
 
 module.exports = appConfig;

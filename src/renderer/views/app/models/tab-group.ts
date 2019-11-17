@@ -12,7 +12,7 @@ export class ITabGroup {
   public id: number = id++;
 
   @observable
-  public name = 'New group';
+  public name = '';
 
   @observable
   public color: string = LIGHT_BLUE_500;

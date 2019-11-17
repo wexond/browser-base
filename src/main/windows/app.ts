@@ -16,6 +16,7 @@ import {
   CredentialsDialog,
   PreviewDialog,
 } from '../dialogs';
+import { TabGroupDialog } from '../dialogs/tabgroup';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
@@ -23,6 +24,7 @@ export class AppWindow extends BrowserWindow {
 
   public menuDialog = new MenuDialog(this);
   public searchDialog = new SearchDialog(this);
+  public tabGroupDialog = new TabGroupDialog(this);
   public findDialog = new FindDialog(this);
   public permissionsDialog = new PermissionsDialog(this);
   public authDialog = new AuthDialog(this);
@@ -98,6 +100,7 @@ export class AppWindow extends BrowserWindow {
       this.menuDialog.hide();
       this.permissionsDialog.rearrange();
       this.searchDialog.rearrange();
+      this.tabGroupDialog.rearrange();
 
       moveAndResize();
     });
@@ -140,6 +143,7 @@ export class AppWindow extends BrowserWindow {
       this.credentialsDialog.destroy();
       this.permissionsDialog.destroy();
       this.previewDialog.destroy();
+      this.tabGroupDialog.destroy();
 
       this.menuDialog = null;
       this.searchDialog = null;
@@ -149,6 +153,7 @@ export class AppWindow extends BrowserWindow {
       this.credentialsDialog = null;
       this.permissionsDialog = null;
       this.previewDialog = null;
+      this.tabGroupDialog = null;
 
       this.viewManager.clear();
 
