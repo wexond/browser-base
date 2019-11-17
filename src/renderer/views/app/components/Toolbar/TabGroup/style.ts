@@ -26,7 +26,7 @@ export const Placeholder = styled.div`
   font-size: 11px;
 
   ${({ hasName }: { hasName: boolean }) => css`
-    padding: ${hasName ? 4 : 6}px;
+    padding: ${hasName ? 4 : 7}px;
   `};
 
   &:after {
