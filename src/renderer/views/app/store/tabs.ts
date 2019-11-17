@@ -302,9 +302,9 @@ export class TabsStore {
       tab.marginLeft = 0;
 
       if (tab.tabGroupId !== currentGroup) {
-        if (tab.tabGroup && tab.tabGroup.ref) {
+        if (tab.tabGroup) {
           tab.marginLeft =
-            tab.tabGroup.ref.current.offsetWidth + 16 + TABS_PADDING;
+            tab.tabGroup.placeholderRef.current.offsetWidth + 16 + TABS_PADDING;
         } else {
           tab.marginLeft = 8;
         }
@@ -351,7 +351,7 @@ export class TabsStore {
 
       if (tab.tabGroup) {
         if (tab.tabGroupId !== currentGroup) {
-          tab.tabGroup.width = 0;
+          tab.tabGroup.width = tab.marginLeft - 8 - TABS_PADDING;
           currentGroup = tab.tabGroupId;
         }
         tab.tabGroup.width += width + TABS_PADDING;

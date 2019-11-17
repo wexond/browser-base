@@ -152,7 +152,7 @@ export const TabContainer = styled.div`
   position: relative;
   border-radius: 6px;
   width: 100%;
-  height: calc(100% - 4px);
+  height: calc(100% - 6px);
   overflow: hidden;
   display: flex;
   align-items: center;
