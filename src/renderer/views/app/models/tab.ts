@@ -322,6 +322,17 @@ export class ITab {
     return left + this.marginLeft;
   }
 
+  public removeFromGroup() {
+    if (this.tabGroup.tabs.length === 1) {
+      store.tabGroups.list = store.tabGroups.list.filter(
+        x => x.id !== this.tabGroupId,
+      );
+    }
+
+    this.tabGroupId = undefined;
+    store.tabs.updateTabsBounds(true);
+  }
+
   @action
   public setLeft(left: number, animation: boolean) {
     store.tabs.animateProperty('x', this.ref.current, left, animation);

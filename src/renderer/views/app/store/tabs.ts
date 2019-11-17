@@ -12,7 +12,7 @@ import {
 import store from '.';
 import { ipcRenderer } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
-import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { TOOLBAR_HEIGHT, TOOLBAR_BUTTON_WIDTH } from '~/constants/design';
 import { TweenLite } from 'gsap';
 
 export class TabsStore {
@@ -302,8 +302,9 @@ export class TabsStore {
       tab.marginLeft = 0;
 
       if (tab.tabGroupId !== currentGroup) {
-        if (tab.tabGroup) {
-          tab.marginLeft = 14 + 16 + TABS_PADDING;
+        if (tab.tabGroup && tab.tabGroup.ref) {
+          tab.marginLeft =
+            tab.tabGroup.ref.current.offsetWidth + 16 + TABS_PADDING;
         } else {
           tab.marginLeft = 8;
         }
@@ -389,13 +390,45 @@ export class TabsStore {
     const tabs = this.list;
     const index = tabs.indexOf(callingTab);
 
+    const { tabGroup } = callingTab;
+    if (tabGroup) {
+      const tabGroupTabs = tabGroup.tabs;
+      const lastTab = tabGroupTabs[tabGroupTabs.length - 1];
+
+      let lastTabLeft = lastTab.left;
+
+      if (lastTab === callingTab) lastTabLeft = store.tabs.tabStartX;
+
+      if (
+        callingTab.left < tabGroup.left ||
+        callingTab.left + callingTab.width >= lastTabLeft + lastTab.width + 20
+      ) {
+        callingTab.removeFromGroup();
+      }
+    }
+
     if (direction === 'left') {
       for (let i = index - 1; i >= 0; i--) {
         const tab = tabs[i];
-        if (
-          callingTab.left <= tab.width / 2 + tab.left &&
-          (!callingTab.isPinned || (callingTab.isPinned && tab.isPinned))
-        ) {
+
+        if (callingTab.isPinned && callingTab.isPinned && tab.isPinned) break;
+
+        const { tabGroup } = tab;
+
+        if (tabGroup) {
+          const tabGroupTabs = tab.tabGroup.tabs;
+          const lastTab = tabGroupTabs[tabGroupTabs.length - 1];
+
+          if (
+            callingTab.tabGroupId !== tab.tabGroupId &&
+            callingTab.left <= lastTab.left + lastTab.width * 0.75
+          ) {
+            callingTab.tabGroupId = tab.tabGroupId;
+            this.updateTabsBounds(true);
+          }
+        }
+
+        if (callingTab.left <= tab.width / 2 + tab.left) {
           this.replaceTab(tabs[i + 1], tab);
         } else {
           break;
@@ -404,10 +437,25 @@ export class TabsStore {
     } else if (direction === 'right') {
       for (let i = index + 1; i < tabs.length; i++) {
         const tab = tabs[i];
-        if (
-          callingTab.left + callingTab.width >= tab.width / 2 + tab.left &&
-          (!callingTab.isPinned || (callingTab.isPinned && tab.isPinned))
-        ) {
+
+        if (callingTab.isPinned && callingTab.isPinned && tab.isPinned) break;
+
+        const { tabGroup } = tab;
+
+        if (tabGroup) {
+          const tabGroupTabs = tab.tabGroup.tabs;
+          const firstTab = tabGroupTabs[0];
+
+          if (
+            callingTab.tabGroupId !== tab.tabGroupId &&
+            callingTab.left + callingTab.width >= firstTab.left
+          ) {
+            callingTab.tabGroupId = tab.tabGroupId;
+            this.updateTabsBounds(true);
+          }
+        }
+
+        if (callingTab.left + callingTab.width >= tab.width / 2 + tab.left) {
           this.replaceTab(tabs[i - 1], tab);
         } else {
           break;
@@ -456,10 +504,17 @@ export class TabsStore {
 
       if (
         newLeft + selectedTab.width >
-        store.addTab.left + container.current.scrollLeft - TABS_PADDING
+        container.current.scrollLeft +
+          container.current.offsetWidth -
+          TABS_PADDING +
+          20
       ) {
         left =
-          store.addTab.left - selectedTab.width + lastScrollLeft - TABS_PADDING;
+          container.current.scrollLeft +
+          container.current.offsetWidth -
+          selectedTab.width -
+          TABS_PADDING +
+          20;
       }
 
       selectedTab.setLeft(left, false);
