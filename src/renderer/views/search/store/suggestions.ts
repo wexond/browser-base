@@ -35,12 +35,6 @@ export class SuggestionsStore {
       const historySuggestions: ISuggestion[] = [];
 
       if ((!history[0] || !history[0].canSuggest) && filter.trim() !== '') {
-        historySuggestions.unshift({
-          primaryText: filter,
-          secondaryText: `search in ${this.store.searchEngine.name}`,
-          favicon: icons.search,
-          isSearch: true,
-        });
         if (isURL(filter)) {
           historySuggestions.unshift({
             primaryText: filter,
@@ -66,6 +60,13 @@ export class SuggestionsStore {
           });
         }
       }
+
+      historySuggestions.splice(1, 0, {
+        primaryText: filter,
+        secondaryText: `search in ${this.store.searchEngine.name}`,
+        favicon: icons.search,
+        isSearch: true,
+      });
 
       let suggestions: ISuggestion[] =
         input.value === ''
