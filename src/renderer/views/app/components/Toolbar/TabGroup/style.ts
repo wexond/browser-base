@@ -19,4 +19,25 @@ export const Line = styled.div`
 export const Placeholder = styled.div`
   padding: 7px;
   border-radius: 16px;
+  -webkit-app-region: no-drag;
+  overflow: hidden;
+  position: relative;
+
+  &:after {
+    content: '';
+    transition: 0.1s opacity;
+    opacity: 0;
+    background-color: white;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0%;
+  }
+
+  &:hover {
+    &:after {
+      opacity: 0.3;
+    }
+  }
 `;
