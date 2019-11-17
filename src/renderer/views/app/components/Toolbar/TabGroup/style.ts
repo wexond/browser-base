@@ -17,11 +17,14 @@ export const Line = styled.div`
 `;
 
 export const Placeholder = styled.div`
-  padding: 7px;
-  border-radius: 16px;
+  padding: 6px;
+  border-radius: 6px;
   -webkit-app-region: no-drag;
   overflow: hidden;
   position: relative;
+  transition: 0.2s width;
+  color: black;
+  font-size: 11px;
 
   &:after {
     content: '';
@@ -37,7 +40,7 @@ export const Placeholder = styled.div`
 
   &:hover {
     &:after {
-      opacity: 0.3;
+      opacity: 0.2;
     }
   }
 `;

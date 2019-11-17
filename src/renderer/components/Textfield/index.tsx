@@ -28,7 +28,7 @@ interface State {
 
 export class Textfield extends React.PureComponent<Props, State> {
   public inputRef = React.createRef<HTMLInputElement>();
-  private timer : number;
+  private timer: number;
 
   private static defaultProps: Props = {
     color: BLUE_500,
@@ -41,7 +41,7 @@ export class Textfield extends React.PureComponent<Props, State> {
     activated: false,
     focused: false,
     error: false,
-    value: undefined
+    value: undefined,
   };
 
   public get value() {
@@ -106,11 +106,9 @@ export class Textfield extends React.PureComponent<Props, State> {
     const { onChange } = this.props;
 
     this.setState({ error: false });
-    this.timer = setTimeout(()=>{
-      if (onChange){
-        onChange(this.inputRef.current.value);
-      }
-    }, this.props.delay);
+    if (onChange) {
+      onChange(this.inputRef.current.value);
+    }
   };
 
   public clear() {
@@ -124,7 +122,15 @@ export class Textfield extends React.PureComponent<Props, State> {
   }
 
   public render() {
-    const { color, label, placeholder, icon, inputType, style, width } = this.props;
+    const {
+      color,
+      label,
+      placeholder,
+      icon,
+      inputType,
+      style,
+      width,
+    } = this.props;
     const { activated, focused, error, value } = this.state;
 
     const hasLabel = label != null && label !== '';

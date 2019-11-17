@@ -8,13 +8,16 @@ export const StyledApp = styled.div`
   overflow: hidden;
   position: relative;
   transition: 0.2s opacity, 0.2s margin-top;
+  padding: 16px;
+  background-color: white;
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
     margin-top: ${visible ? 0 : 7}px;
-    background-color: ${theme['dialog.backgroundColor']};
   `}
 `;
+
+// background-color: ${theme['dialog.backgroundColor']};
 
 export const Title = styled.div`
   font-size: 16px;

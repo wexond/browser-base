@@ -16,21 +16,22 @@ export class TabGroupDialog extends Dialog {
         height: HEIGHT,
         y: TOOLBAR_HEIGHT,
       },
+      devtools: true,
     });
   }
 
   public rearrange() {
-    const { width } = this.appWindow.getContentBounds();
-    super.rearrange({ x: width - WIDTH });
-  }
-
-  public show() {
-    super.show();
-    this.webContents.send('visible', true);
+    super.rearrange({ x: this.bounds.x });
   }
 
   public hide() {
     super.hide();
     this.webContents.send('visible', false);
+  }
+
+  public edit(tabGroup: any) {
+    this.bounds.x = tabGroup.x;
+    super.show();
+    this.webContents.send('visible', true, tabGroup);
   }
 }

@@ -3,6 +3,8 @@ import { observable, computed } from 'mobx';
 import { getTheme } from '~/utils/themes';
 import { ISettings } from '~/interfaces';
 import { DEFAULT_SETTINGS } from '~/constants';
+import * as React from 'react';
+import { Textfield } from '~/renderer/components/Textfield';
 
 export class Store {
   @observable
@@ -22,9 +24,22 @@ export class Store {
   @observable
   public windowId = remote.getCurrentWindow().id;
 
+  @observable
+  public text = '';
+
+  public inputRef = React.createRef<Textfield>();
+
+  public tabGroupId: number;
+
   public constructor() {
-    ipcRenderer.on('visible', (e, flag) => {
+    ipcRenderer.on('visible', (e, flag, tabGroup) => {
       this.visible = flag;
+
+      if (flag) {
+        this.text = tabGroup.name;
+        this.tabGroupId = tabGroup.id;
+        this.inputRef.current.inputRef.current.focus();
+      }
     });
 
     window.addEventListener('blur', () => {

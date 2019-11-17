@@ -13,9 +13,9 @@ interface StyledTextfieldProps {
   width?: number;
 }
 export const StyledTextfield = styled.div`
-${({ width}: StyledTextfieldProps) => css`
-  width: ${width === undefined ? 280 : width}px;
-`}
+  ${({ width }: StyledTextfieldProps) => css`
+    width: ${width === undefined ? 280 : width}px;
+  `}
   position: relative;
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
