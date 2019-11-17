@@ -7,9 +7,9 @@ import { StyledTabGroup } from './style';
 export const TabGroup = observer(({ tabGroup }: { tabGroup: ITabGroup }) => {
   return (
     <StyledTabGroup
+      ref={tabGroup.ref}
       style={{
         backgroundColor: tabGroup.color,
-        transform: `translateX(${tabGroup.left}px)`,
       }}
     ></StyledTabGroup>
   );

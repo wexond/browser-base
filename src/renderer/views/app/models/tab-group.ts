@@ -1,4 +1,5 @@
-import { observable, computed, action } from 'mobx';
+import * as React from 'react';
+import { observable, action } from 'mobx';
 
 import { LIGHT_BLUE_500 } from '~/renderer/constants';
 import { Store } from '../store';
@@ -19,11 +20,14 @@ export class ITabGroup {
   @observable
   public editMode = false;
 
-  @observable
   public left = 8;
+
+  public isNew = true;
 
   private store: Store;
   private tabGroups: TabGroupsStore;
+
+  public ref = React.createRef<HTMLDivElement>();
 
   public constructor(store: Store, tabGroupsStore: TabGroupsStore) {
     this.store = store;
@@ -35,5 +39,11 @@ export class ITabGroup {
 
   public get tabs() {
     return this.store.tabs.list.filter(x => x.tabGroupId === this.id);
+  }
+
+  @action
+  public setLeft(left: number, animation: boolean) {
+    this.store.tabs.animateProperty('x', this.ref.current, left, animation);
+    this.left = left;
   }
 }

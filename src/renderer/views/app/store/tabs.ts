@@ -340,7 +340,8 @@ export class TabsStore {
     for (const tab of tabs) {
       if (tab.tabGroupId !== currentGroup) {
         if (tab.tabGroup) {
-          tab.tabGroup.left = left + 8;
+          tab.tabGroup.setLeft(left + 8, animation && !tab.tabGroup.isNew);
+          tab.tabGroup.isNew = false;
         }
 
         left += tab.marginLeft;
