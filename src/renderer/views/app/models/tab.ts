@@ -379,6 +379,7 @@ export class ITab {
 
     this.setWidth(0, true);
     store.tabs.setTabsLefts(true);
+    store.tabs.setTabGroupsLefts(true);
 
     if (selected) {
       index = store.tabs.list.indexOf(this);
