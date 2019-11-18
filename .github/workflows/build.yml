@@ -8,18 +8,22 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, windows-2016, ubuntu-latest]
+        os: [macos-latest, windows-latest, ubuntu-latest]
 
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v1
 
-      - name: Install Node.js, NPM and Yarn
+      - name: Install Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 12
 
-      - name: Build/release Electron app
+      - name: Install Windows Build Tools
+        if: matrix.os == 'windows-latest'
+        run: npm install --global windows-build-tools
+
+      - name: Build the app
         uses: samuelmeuli/action-electron-builder@v1
         with:
           github_token: ${{ secrets.github_token }}
