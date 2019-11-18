@@ -40,7 +40,7 @@ export class SuggestionsStore {
       const historySuggestions: ISuggestion[] = [];
 
       if ((!history[0] || !history[0].canSuggest) && filter.trim() !== '') {
-        if (isURL(filter)) {
+        if (isURL(filter) || filter.indexOf('://') !== -1) {
           historySuggestions.unshift({
             primaryText: filter,
             secondaryText: 'open website',

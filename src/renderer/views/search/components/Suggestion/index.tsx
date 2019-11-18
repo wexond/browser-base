@@ -13,7 +13,6 @@ import { ISuggestion } from '~/interfaces';
 import store from '../../store';
 import { remote, ipcRenderer } from 'electron';
 import { callViewMethod } from '~/utils/view';
-import { isURL } from '~/utils/url';
 
 interface Props {
   suggestion: ISuggestion;
@@ -30,9 +29,9 @@ const onMouseLeave = (suggestion: ISuggestion) => () => {
 const onClick = (suggestion: ISuggestion) => () => {
   let url = suggestion.primaryText;
 
-  if (isURL(url) && !url.includes('://')) {
+  if (!suggestion.isSearch) {
     url = `http://${url}`;
-  } else if (!url.includes('://')) {
+  } else {
     url = store.searchEngine.url.replace('%s', url);
   }
 

@@ -62,7 +62,7 @@ const onIncognitoClick = () => {
 };
 
 const addTab = (url: string) => () => {
-  ipcRenderer.send(`view-create-${store.windowId}`, { url, active: true });
+  ipcRenderer.send(`add-tab-${store.windowId}`, { url, active: true });
   store.hide();
 };
 

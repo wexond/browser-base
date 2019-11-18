@@ -27,12 +27,13 @@ export class ViewManager {
     this.incognito = incognito;
 
     const { id } = window;
-    ipcMain.handle(
-      `view-create-${id}`,
-      (e, details: chrome.tabs.CreateProperties) => {
-        return this.create(details, false, false).webContents.id;
-      },
-    );
+    ipcMain.handle(`view-create-${id}`, (e, details) => {
+      return this.create(details, false, false).webContents.id;
+    });
+
+    ipcMain.on(`add-tab-${id}`, (e, details) => {
+      this.create(details);
+    });
 
     ipcMain.on(`view-select-${id}`, (e, id: number, force: boolean) => {
       const view = this.views.get(id);
