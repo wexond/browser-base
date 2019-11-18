@@ -1,0 +1,30 @@
+name: Build/release
+
+on: push
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Build the app
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+
+          mac_certs: ${{ secrets.mac_certs }}
+          mac_certs_password: ${{ secrets.mac_certs_password }}
+
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
