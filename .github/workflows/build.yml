@@ -15,11 +15,11 @@ jobs:
         uses: actions/checkout@v1
         
       - name: Set Visual Studio version
-        if: matrix.platform == 'windows-latest'
+        if: matrix.os == 'windows-latest'
         run: npm config set msvs_version 2017
         
       - name: Installs dependencies on Ubuntu
-        if: matrix.platform == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install libsecret-1-dev
 
       - name: Install Node.js, NPM and Yarn
