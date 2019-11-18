@@ -8,16 +8,18 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-10.14, windows-2019, ubuntu-18.04]
+        os: [macos-latest, windows-latest, ubuntu-latest]
 
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v1
         
       - name: Set Visual Studio version
+        if: matrix.platform == 'windows-latest'
         run: npm config set msvs_version 2017
         
       - name: Installs dependencies on Ubuntu
+        if: matrix.platform == 'ubuntu-latest'
         run: sudo apt-get install libsecret-1-dev
 
       - name: Install Node.js, NPM and Yarn
