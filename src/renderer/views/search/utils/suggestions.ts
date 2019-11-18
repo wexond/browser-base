@@ -2,7 +2,6 @@ import { IHistoryItem } from '~/interfaces';
 import { requestURL } from '~/utils';
 
 import store from '../store';
-import { countVisitedTimes } from '~/utils/history';
 
 interface HistorySuggestion extends IHistoryItem {
   canSuggest?: boolean;
@@ -43,7 +42,7 @@ export const getHistorySuggestions = (filter: string) => {
         .replace(/\+/g, ' ')
         .replace(/%20/g, ' ');
       if (
-        query.startsWith(filterPart) &&
+        query.startsWith(filter) &&
         urlMatchedItems.filter(x => x.url === query).length === 0
       ) {
         itemToPush.url = query;
