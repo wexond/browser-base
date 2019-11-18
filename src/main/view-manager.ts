@@ -116,6 +116,10 @@ export class ViewManager {
       height: true,
     } as any);
 
+    view.webContents.once('destroyed', () => {
+      this.destroy(view.webContents.id);
+    });
+
     this.views.set(view.webContents.id, view);
 
     if (sendMessage) {
@@ -139,6 +143,10 @@ export class ViewManager {
     const selected = this.selected;
     const view = this.views.get(id);
     this.selectedId = id;
+
+    if (!view) {
+      return;
+    }
 
     if (this.isHidden) return;
 
