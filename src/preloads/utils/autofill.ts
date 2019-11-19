@@ -13,13 +13,16 @@ export const getUserPassword = (data: IFormFillData): Promise<string> => {
 
     const id = makeId(32);
 
-    window.postMessage({
-      type: 'credentials-get-password',
-      data: account,
-      id,
-    }, '*');
+    window.postMessage(
+      {
+        type: 'credentials-get-password',
+        data: account,
+        id,
+      },
+      '*',
+    );
 
-    window.addEventListener('message', (e) => {
+    window.addEventListener('message', e => {
       const { data } = e;
 
       if (data.type === 'result' && data.id === id) {
@@ -28,4 +31,4 @@ export const getUserPassword = (data: IFormFillData): Promise<string> => {
       }
     });
   });
-}
+};

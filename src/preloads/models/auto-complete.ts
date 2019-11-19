@@ -26,7 +26,7 @@ export class AutoComplete {
           }
         },
       );
-    });;
+    });
   }
 
   public loadForms = () => {
