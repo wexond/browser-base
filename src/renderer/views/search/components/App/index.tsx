@@ -22,10 +22,12 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
     const suggestion = store.suggestions.selectedSuggestion;
 
-    if (suggestion && !suggestion.isSearch) {
-      url = `http://${text}`;
-    } else {
-      url = store.searchEngine.url.replace('%s', text);
+    if (suggestion) {
+      if (suggestion.isSearch) {
+        url = store.searchEngine.url.replace('%s', text);
+      } else if (text.indexOf('://') === -1) {
+        url = `http://${text}`;
+      }
     }
 
     e.currentTarget.value = url;

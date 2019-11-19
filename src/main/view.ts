@@ -28,6 +28,8 @@ export class View extends BrowserView {
         preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
         nodeIntegration: false,
         contextIsolation: true,
+        sandbox: true,
+        enableRemoteModule: false,
         partition: incognito ? 'view_incognito' : 'persist:view',
         plugins: true,
         additionalArguments: [

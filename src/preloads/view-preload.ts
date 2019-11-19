@@ -1,9 +1,9 @@
-import { ipcRenderer, remote, webFrame } from 'electron';
+import { ipcRenderer, webFrame } from 'electron';
 
 import AutoComplete from './models/auto-complete';
 import { getTheme } from '~/utils/themes';
 
-const tabId = remote.getCurrentWebContents().id;
+const tabId = ipcRenderer.sendSync('get-webcontents-id');
 const arg = process.argv.find(x => x.startsWith('--window-id='));
 
 export let windowId: number = null;

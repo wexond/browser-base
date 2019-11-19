@@ -29,10 +29,10 @@ const onMouseLeave = (suggestion: ISuggestion) => () => {
 const onClick = (suggestion: ISuggestion) => () => {
   let url = suggestion.primaryText;
 
-  if (!suggestion.isSearch) {
-    url = `http://${url}`;
-  } else {
+  if (suggestion.isSearch) {
     url = store.searchEngine.url.replace('%s', url);
+  } else if (url.indexOf('://') === -1) {
+    url = `http://${url}`;
   }
 
   callViewMethod(

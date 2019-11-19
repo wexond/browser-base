@@ -22,3 +22,7 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
+ipcMain.on('get-webcontents-id', e => {
+  e.returnValue = e.sender.id;
+});
