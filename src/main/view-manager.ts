@@ -44,7 +44,7 @@ export class ViewManager {
     });
 
     ipcMain.on(`view-destroy-${id}`, (e, id: number) => {
-      this.destroy(id);
+      this.views.delete(id);
     });
 
     ipcMain.on(`browserview-call-${id}`, async (e, data) => {
@@ -141,22 +141,18 @@ export class ViewManager {
   }
 
   public select(id: number) {
-    const selected = this.selected;
+    const { selected } = this;
     const view = this.views.get(id);
-    this.selectedId = id;
 
     if (!view) {
       return;
     }
 
+    this.selectedId = id;
+
     if (this.isHidden) return;
 
-    view.selected = true;
     view.updateWindowTitle();
-
-    if (selected) {
-      selected.selected = false;
-    }
 
     this.window.setBrowserView(view);
 
@@ -195,10 +191,8 @@ export class ViewManager {
 
   public destroy(id: number) {
     const view = this.views.get(id);
-    this.views.delete(id);
 
-    if (view) {
-      this.window.removeBrowserView(view);
+    if (view && !view.isDestroyed()) {
       view.destroy();
     }
   }

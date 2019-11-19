@@ -11,7 +11,6 @@ export class View extends BrowserView {
   public url = '';
   public homeUrl: string;
   public favicon = '';
-  public selected = false;
   public incognito = false;
 
   public errorURL = '';
@@ -48,7 +47,7 @@ export class View extends BrowserView {
     this.webContents.userAgent = this.webContents.userAgent
       .replace(/ Wexond\\?.([^\s]+)/g, '')
       .replace(/ Electron\\?.([^\s]+)/g, '')
-      .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/78.0.3904.87');
+      .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/78.0.3904.97');
 
     this.window = window;
     this.homeUrl = url;
@@ -170,11 +169,6 @@ export class View extends BrowserView {
       async (e, favicons) => {
         this.favicon = favicons[0];
 
-        this.window.webContents.send(
-          `update-tab-favicon-${this.webContents.id}`,
-          this.favicon,
-        );
-
         this.updateData();
 
         try {
@@ -183,6 +177,12 @@ export class View extends BrowserView {
           if (fav.startsWith('http')) {
             fav = await storage.addFavicon(fav);
           }
+
+          this.window.webContents.send(
+            `update-tab-favicon-${this.webContents.id}`,
+            fav,
+          );
+
           const buf = Buffer.from(fav.split('base64,')[1], 'base64');
 
           try {
@@ -334,7 +334,7 @@ export class View extends BrowserView {
   }
 
   public updateWindowTitle() {
-    if (this.selected) {
+    if (this.window.viewManager.selectedId === this.webContents.id) {
       if (this.title.trim() !== '') {
         this.window.setTitle(`${this.title} - ${app.name}`);
       } else {
