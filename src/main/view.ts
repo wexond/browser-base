@@ -29,6 +29,7 @@ export class View extends BrowserView {
         nodeIntegration: false,
         contextIsolation: true,
         sandbox: true,
+        enableRemoteModule: false,
         partition: incognito ? 'view_incognito' : 'persist:view',
         plugins: true,
         additionalArguments: [
