@@ -44,7 +44,7 @@ export class ViewManager {
     });
 
     ipcMain.on(`view-destroy-${id}`, (e, id: number) => {
-      this.views.delete(id);
+      this.destroy(id);
     });
 
     ipcMain.on(`browserview-call-${id}`, async (e, data) => {
@@ -111,6 +111,7 @@ export class ViewManager {
     sendMessage = true,
   ) {
     const view = new View(this.window, details.url, this.incognito);
+    const { id } = view.webContents;
 
     view.setAutoResize({
       width: true,
@@ -118,7 +119,7 @@ export class ViewManager {
     } as any);
 
     view.webContents.once('destroyed', () => {
-      this.destroy(view.webContents.id);
+      this.views.delete(id);
     });
 
     this.views.set(view.webContents.id, view);
@@ -144,10 +145,6 @@ export class ViewManager {
     const { selected } = this;
     const view = this.views.get(id);
 
-    if (selected) {
-      this.window.removeBrowserView(selected);
-    }
-
     if (!view) {
       return;
     }
@@ -158,6 +155,7 @@ export class ViewManager {
 
     view.updateWindowTitle();
 
+    this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);
 
     this.window.searchDialog.hideVisually();
@@ -165,6 +163,7 @@ export class ViewManager {
     this.window.previewDialog.hideVisually();
     this.window.tabGroupDialog.hideVisually();
 
+    // Also fixes switching tabs with Ctrl + Tab
     view.webContents.focus();
 
     this.fixBounds();
