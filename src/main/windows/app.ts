@@ -136,6 +136,8 @@ export class AppWindow extends BrowserWindow {
       windowState.fullscreen = this.isFullScreen();
       writeFileSync(windowDataPath, JSON.stringify(windowState));
 
+      this.setBrowserView(null);
+
       this.menuDialog.destroy();
       this.searchDialog.destroy();
       this.authDialog.destroy();

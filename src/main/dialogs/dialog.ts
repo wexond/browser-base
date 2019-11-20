@@ -1,7 +1,6 @@
 import { BrowserView, app, ipcMain } from 'electron';
 import { join } from 'path';
 import { AppWindow } from '../windows';
-import { platform } from 'os';
 
 interface IOptions {
   name: string;
