@@ -144,6 +144,10 @@ export class ViewManager {
     const { selected } = this;
     const view = this.views.get(id);
 
+    if (selected) {
+      this.window.removeBrowserView(selected);
+    }
+
     if (!view) {
       return;
     }
@@ -153,10 +157,6 @@ export class ViewManager {
     if (this.isHidden) return;
 
     view.updateWindowTitle();
-
-    if (selected) {
-      this.window.removeBrowserView(selected);
-    }
 
     this.window.addBrowserView(view);
 
@@ -204,6 +204,7 @@ export class ViewManager {
     const view = this.views.get(id);
 
     if (view && !view.isDestroyed()) {
+      this.window.removeBrowserView(view);
       view.destroy();
     }
   }
