@@ -91,6 +91,8 @@ export class Dialog extends BrowserView {
   }
 
   public show(focus = true) {
+    if (this.visible) return;
+
     this.visible = true;
 
     clearTimeout(this.timeout);
@@ -108,6 +110,10 @@ export class Dialog extends BrowserView {
     this.rearrange();
   }
 
+  public hideVisually() {
+    this.webContents.send('visible', false);
+  }
+
   private _hide() {
     this.setBounds({
       height: this.bounds.height,
@@ -117,10 +123,12 @@ export class Dialog extends BrowserView {
     });
   }
 
-  public hide(bringToTop = true) {
+  public hide(bringToTop = false) {
     if (bringToTop) {
-      // this.bringToTop();
+      this.bringToTop();
     }
+
+    if (!this.visible) return;
 
     clearTimeout(this.timeout);
 
@@ -131,6 +139,8 @@ export class Dialog extends BrowserView {
     }
 
     this.visible = false;
+
+    this.hideVisually();
   }
 
   public bringToTop() {

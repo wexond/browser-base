@@ -54,6 +54,5 @@ export class PreviewDialog extends Dialog {
     }, 210);
 
     super.hide(bringToTop);
-    this.webContents.send('visible', false);
   }
 }

@@ -154,7 +154,16 @@ export class ViewManager {
 
     view.updateWindowTitle();
 
-    this.window.setBrowserView(view);
+    if (selected) {
+      this.window.removeBrowserView(selected);
+    }
+
+    this.window.addBrowserView(view);
+
+    this.window.searchDialog.hideVisually();
+    this.window.menuDialog.hideVisually();
+    this.window.previewDialog.hideVisually();
+    this.window.tabGroupDialog.hideVisually();
 
     this.fixBounds();
   }

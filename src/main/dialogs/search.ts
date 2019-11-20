@@ -87,6 +87,5 @@ export class SearchDialog extends Dialog {
   public hide() {
     super.hide();
     this.queueShow = false;
-    this.webContents.send('visible', false);
   }
 }

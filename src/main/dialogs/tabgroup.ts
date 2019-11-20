@@ -23,11 +23,6 @@ export class TabGroupDialog extends Dialog {
     super.rearrange({ x: this.bounds.x - 20 });
   }
 
-  public hide() {
-    super.hide();
-    this.webContents.send('visible', false);
-  }
-
   public edit(tabGroup: any) {
     this.bounds.x = Math.round(tabGroup.x);
     super.show();

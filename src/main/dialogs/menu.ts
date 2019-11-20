@@ -28,9 +28,4 @@ export class MenuDialog extends Dialog {
     super.show();
     this.webContents.send('visible', true);
   }
-
-  public hide() {
-    super.hide();
-    this.webContents.send('visible', false);
-  }
 }
