@@ -97,15 +97,8 @@ export class Dialog extends BrowserView {
 
     clearTimeout(this.timeout);
 
-    if (platform() === 'darwin') {
-      setTimeout(() => {
-        this.bringToTop();
-        if (focus) this.webContents.focus();
-      });
-    } else {
-      this.bringToTop();
-      if (focus) this.webContents.focus();
-    }
+    this.bringToTop();
+    if (focus) this.webContents.focus();
 
     this.rearrange();
   }
