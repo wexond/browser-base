@@ -165,6 +165,8 @@ export class ViewManager {
     this.window.previewDialog.hideVisually();
     this.window.tabGroupDialog.hideVisually();
 
+    view.webContents.focus();
+
     this.fixBounds();
   }
 
