@@ -12,6 +12,7 @@ import {
 } from '../constants';
 import { getColorBrightness, callViewMethod } from '~/utils';
 import { NEWTAB_URL } from '~/constants/tabs';
+import { closeWindow } from '../utils/windows';
 
 const isColorAcceptable = (color: string) => {
   if (store.theme['tab.allowLightBackground']) {
@@ -359,6 +360,10 @@ export class ITab {
 
     const notClosingTabs = store.tabs.list.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
+
+    if (notClosingTabs.length === 1) {
+      closeWindow();
+    }
 
     this.isClosing = true;
     if (notClosingTabs.length - 1 === index) {
