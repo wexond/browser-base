@@ -1,7 +1,7 @@
 import { AppWindow } from '../windows';
 import { Dialog } from '.';
 
-const WIDTH = 400;
+const WIDTH = 350;
 const HEIGHT = 550;
 
 export class DownloadsDialog extends Dialog {
@@ -15,6 +15,7 @@ export class DownloadsDialog extends Dialog {
         height: HEIGHT,
         y: 36,
       },
+      devtools: true,
     });
   }
 
