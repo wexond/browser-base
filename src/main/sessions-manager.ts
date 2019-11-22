@@ -97,9 +97,9 @@ export class SessionsManager {
       },
     );
 
-    this.view.on('will-download', async (event, item, webContents) => {
+    this.view.on('will-download', (event, item, webContents) => {
       const downloadsPath = app.getPath('downloads');
-      let fileName = item.getFilename();
+      const fileName = item.getFilename();
       let savePath = resolve(downloadsPath, fileName);
       const id = makeId(32);
       const window = windowsManager.findWindowByBrowserView(webContents.id);
@@ -108,15 +108,14 @@ export class SessionsManager {
 
       while (existsSync(savePath)) {
         const { name, ext } = parse(fileName);
-        fileName = `${name} (${i})${ext}`;
-        savePath = resolve(downloadsPath, fileName);
+        savePath = resolve(downloadsPath, `${name} (${i})${ext}`);
         i++;
       }
 
       item.savePath = savePath;
 
       window.downloadsDialog.webContents.send('download-started', {
-        fileName,
+        fileName: basename(savePath),
         receivedBytes: 0,
         totalBytes: item.getTotalBytes(),
         savePath,

@@ -13,6 +13,17 @@ import {
 } from './style';
 import { IDownloadItem } from '~/interfaces';
 import prettyBytes = require('pretty-bytes');
+import { shell } from 'electron';
+
+const onClick = (item: IDownloadItem) => () => {
+  if (item.completed) {
+    shell.openItem(item.savePath);
+  }
+};
+
+const onMoreClick = (item: IDownloadItem) => (e: React.MouseEvent) => {
+  e.stopPropagation();
+};
 
 export const DownloadItem = observer(({ item }: { item: IDownloadItem }) => {
   let received = prettyBytes(item.receivedBytes);
@@ -25,7 +36,7 @@ export const DownloadItem = observer(({ item }: { item: IDownloadItem }) => {
   }
 
   return (
-    <StyledDownloadItem>
+    <StyledDownloadItem onClick={onClick(item)}>
       <Icon></Icon>
       <Info>
         <Title>{item.fileName}</Title>
@@ -43,7 +54,7 @@ export const DownloadItem = observer(({ item }: { item: IDownloadItem }) => {
         )}
       </Info>
       <Separator></Separator>
-      <MoreButton></MoreButton>
+      <MoreButton onClick={onMoreClick(item)}></MoreButton>
     </StyledDownloadItem>
   );
 });

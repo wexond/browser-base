@@ -74,7 +74,7 @@ const RightButtons = observer(() => {
   return (
     <Buttons>
       <BrowserActions />
-      <ToolbarButton icon={icons.download} onClick={onDownloadsClick} />
+      <ToolbarButton icon={icons.download} onMouseDown={onDownloadsClick} />
       {store.extensions.browserActions.length > 0 && <Separator />}
       {hasCredentials && (
         <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
