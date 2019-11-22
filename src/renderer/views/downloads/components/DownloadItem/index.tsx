@@ -14,8 +14,6 @@ import {
 import { IDownloadItem } from '~/interfaces';
 import prettyBytes = require('pretty-bytes');
 
-const ITEM_WIDTH = 350 - 32 - 32;
-
 export const DownloadItem = observer(({ item }: { item: IDownloadItem }) => {
   let received = prettyBytes(item.receivedBytes);
   const total = prettyBytes(item.totalBytes);
@@ -31,14 +29,18 @@ export const DownloadItem = observer(({ item }: { item: IDownloadItem }) => {
       <Icon></Icon>
       <Info>
         <Title>{item.fileName}</Title>
-        <SecondaryText>{`${received}/${total}`}</SecondaryText>
-        <ProgressBackground>
-          <Progress
-            style={{
-              width: (item.receivedBytes / item.totalBytes) * ITEM_WIDTH,
-            }}
-          ></Progress>
-        </ProgressBackground>
+        {!item.completed && (
+          <>
+            <ProgressBackground>
+              <Progress
+                style={{
+                  width: `calc((${item.receivedBytes} / ${item.totalBytes}) * 100%)`,
+                }}
+              ></Progress>
+            </ProgressBackground>
+            <SecondaryText>{`${received}/${total}`}</SecondaryText>
+          </>
+        )}
       </Info>
       <Separator></Separator>
       <MoreButton></MoreButton>

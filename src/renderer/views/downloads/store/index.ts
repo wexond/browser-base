@@ -23,10 +23,7 @@ export class Store {
   public windowId = remote.getCurrentWindow().id;
 
   @observable
-  public downloads: IDownloadItem[] = [
-    { fileName: 'Test file', totalBytes: 20, receivedBytes: 10, id: 'a' },
-    { fileName: 'Test file', totalBytes: 20, receivedBytes: 10, id: 'b' },
-  ];
+  public downloads: IDownloadItem[] = [];
 
   public constructor() {
     ipcRenderer.on('visible', (e, flag) => {
@@ -45,6 +42,20 @@ export class Store {
 
     ipcRenderer.on('update-settings', (e, settings: ISettings) => {
       this.settings = { ...this.settings, ...settings };
+    });
+
+    ipcRenderer.on('download-started', (e, item) => {
+      this.downloads.push(item);
+    });
+
+    ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {
+      const i = this.downloads.find(x => x.id === item.id);
+      i.receivedBytes = item.receivedBytes;
+    });
+
+    ipcRenderer.on('download-completed', (e, id: string) => {
+      const i = this.downloads.find(x => x.id === id);
+      i.completed = true;
     });
   }
 

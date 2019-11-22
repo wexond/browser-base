@@ -26,8 +26,8 @@ export const Title = styled.div``;
 
 export const SecondaryText = styled.div`
   opacity: 0.54;
-  font-size: 12px;
-  line-height: 1.3rem;
+  font-size: 11px;
+  margin-top: 4px;
 `;
 
 export const Progress = styled.div`
@@ -37,7 +37,7 @@ export const Progress = styled.div`
 `;
 
 export const ProgressBackground = styled.div`
-  height: 6px;
+  height: 5px;
   background-color: rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   overflow: hidden;

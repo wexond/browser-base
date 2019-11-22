@@ -96,7 +96,7 @@ export class SessionsManager {
 
       item.setSavePath(savePath);
 
-      window.webContents.send('download-started', {
+      window.downloadsDialog.webContents.send('download-started', {
         fileName,
         receivedBytes: 0,
         totalBytes: item.getTotalBytes(),
@@ -111,7 +111,7 @@ export class SessionsManager {
           if (item.isPaused()) {
             console.log('Download is paused');
           } else {
-            window.webContents.send('download-progress', {
+            window.downloadsDialog.webContents.send('download-progress', {
               id,
               receivedBytes: item.getReceivedBytes(),
             });
@@ -120,7 +120,7 @@ export class SessionsManager {
       });
       item.once('done', (event, state) => {
         if (state === 'completed') {
-          window.webContents.send('download-completed', id);
+          window.downloadsDialog.webContents.send('download-completed', id);
         } else {
           console.log(`Download failed: ${state}`);
         }

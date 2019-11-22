@@ -9,6 +9,7 @@ export const StyledApp = styled.div`
   position: relative;
   transition: 0.2s opacity, 0.2s margin-top;
   padding: 8px;
+  font-size: 13px;
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
@@ -16,20 +17,4 @@ export const StyledApp = styled.div`
     background-color: ${theme['dialog.backgroundColor']};
     color: ${theme['dialog.lightForeground'] ? 'white' : 'black'};
   `}
-`;
-
-export const Title = styled.div`
-  font-size: 16px;
-`;
-
-export const Subtitle = styled.div`
-  font-size: 13px;
-  opacity: 0.54;
-  margin-top: 8px;
-`;
-
-export const Buttons = styled.div`
-  display: flex;
-  margin-top: 16px;
-  float: right;
 `;
