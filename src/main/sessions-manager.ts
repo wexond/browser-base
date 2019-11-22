@@ -1,17 +1,26 @@
 import { session, app, ipcMain } from 'electron';
 import { ExtensibleSession } from 'electron-extensions/main';
 import { getPath, makeId } from '~/utils';
-import { promises } from 'fs';
-import { resolve } from 'path';
+import { promises, access, existsSync } from 'fs';
+import { resolve, basename, parse, extname } from 'path';
 import { WindowsManager } from './windows-manager';
 import { registerProtocol } from './models/protocol';
 import storage from './services/storage';
-import { parse } from 'url';
+import * as url from 'url';
+import { F_OK } from 'constants';
 
 const extensibleSessionOptions = {
   backgroundPreloadPath: resolve(__dirname, 'extensions-background-preload.js'),
   contentPreloadPath: resolve(__dirname, 'extensions-content-preload.js'),
 };
+
+function fileExists(path: string) {
+  return new Promise(resolve => {
+    access(path, F_OK, error => {
+      resolve(!error);
+    });
+  });
+}
 
 export class SessionsManager {
   public view = session.fromPartition('persist:view');
@@ -50,7 +59,7 @@ export class SessionsManager {
           callback(true);
         } else {
           try {
-            const { hostname } = parse(details.requestingUrl);
+            const { hostname } = url.parse(details.requestingUrl);
             const perm: any = await storage.findOne({
               scope: 'permissions',
               query: {
@@ -88,13 +97,23 @@ export class SessionsManager {
       },
     );
 
-    this.view.on('will-download', (event, item, webContents) => {
-      const fileName = item.getFilename();
-      const savePath = resolve(app.getPath('downloads'), fileName);
+    this.view.on('will-download', async (event, item, webContents) => {
+      const downloadsPath = app.getPath('downloads');
+      let fileName = item.getFilename();
+      let savePath = resolve(downloadsPath, fileName);
       const id = makeId(32);
       const window = windowsManager.findWindowByBrowserView(webContents.id);
 
-      item.setSavePath(savePath);
+      let i = 1;
+
+      while (existsSync(savePath)) {
+        const { name, ext } = parse(fileName);
+        fileName = `${name} (${i})${ext}`;
+        savePath = resolve(downloadsPath, fileName);
+        i++;
+      }
+
+      item.savePath = savePath;
 
       window.downloadsDialog.webContents.send('download-started', {
         fileName,
