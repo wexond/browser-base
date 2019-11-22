@@ -6,6 +6,7 @@ app.name = 'Wexond';
 
 (process.env as any)['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
 app.commandLine.appendSwitch('--enable-transparent-visuals');
+app.commandLine.appendSwitch('--enable-parallel-downloading');
 ipcMain.setMaxListeners(0);
 
 // app.setAsDefaultProtocolClient('http');
