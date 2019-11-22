@@ -3,7 +3,7 @@ import { BLUE_500, icons } from '~/renderer/constants';
 import { centerIcon } from '~/renderer/mixins';
 
 export const StyledDownloadItem = styled.div`
-  height: 72px;
+  height: 64px;
   background-color: rgba(255, 255, 255, 0.04);
   border-radius: 8px;
   display: flex;
@@ -33,13 +33,13 @@ export const SecondaryText = styled.div`
 export const Progress = styled.div`
   height: 100%;
   background-color: ${BLUE_500};
-  border-radius: 8px;
+  border-radius: 16px;
 `;
 
 export const ProgressBackground = styled.div`
   height: 5px;
   background-color: rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
+  border-radius: 16px;
   overflow: hidden;
   margin-top: 4px;
   flex: 1;
