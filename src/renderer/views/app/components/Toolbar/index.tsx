@@ -14,8 +14,8 @@ import { platform } from 'os';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { WindowsControls } from 'react-windows-controls';
 
-const onUpdateClick = () => {
-  ipcRenderer.send('update-install');
+const onDownloadsClick = () => {
+  ipcRenderer.send(`show-downloads-dialog-${store.windowId}`);
 };
 
 const onKeyClick = () => {
@@ -74,9 +74,7 @@ const RightButtons = observer(() => {
   return (
     <Buttons>
       <BrowserActions />
-      {store.updateInfo.available && (
-        <ToolbarButton icon={icons.download} onClick={onUpdateClick} />
-      )}
+      <ToolbarButton icon={icons.download} onMouseDown={onDownloadsClick} />
       {store.extensions.browserActions.length > 0 && <Separator />}
       {hasCredentials && (
         <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
