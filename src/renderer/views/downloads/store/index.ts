@@ -25,6 +25,7 @@ export class Store {
   @observable
   public downloads: IDownloadItem[] = [
     { fileName: 'Test file', totalBytes: 20, receivedBytes: 10, id: 'a' },
+    { fileName: 'Test file', totalBytes: 20, receivedBytes: 10, id: 'b' },
   ];
 
   public constructor() {
