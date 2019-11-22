@@ -1,21 +1,21 @@
 import { AppWindow } from '../windows';
-import { MENU_WIDTH } from '~/constants/design';
 import { Dialog } from '.';
 
-const WIDTH = MENU_WIDTH;
+const WIDTH = 350;
 const HEIGHT = 550;
 
-export class MenuDialog extends Dialog {
+export class DownloadsDialog extends Dialog {
   public visible = false;
 
   constructor(appWindow: AppWindow) {
     super(appWindow, {
-      name: 'menu',
+      name: 'downloads',
       bounds: {
         width: WIDTH,
         height: HEIGHT,
         y: 36,
       },
+      devtools: true,
     });
   }
 

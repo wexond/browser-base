@@ -7,3 +7,5 @@ export * from './permissions';
 export * from './form-fill';
 export * from './credentials';
 export * from './preview';
+export * from './downloads';
+export * from './tabgroup';

@@ -15,8 +15,9 @@ import {
   FormFillDialog,
   CredentialsDialog,
   PreviewDialog,
+  TabGroupDialog,
+  DownloadsDialog,
 } from '../dialogs';
-import { TabGroupDialog } from '../dialogs/tabgroup';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
@@ -31,6 +32,7 @@ export class AppWindow extends BrowserWindow {
   public formFillDialog = new FormFillDialog(this);
   public credentialsDialog = new CredentialsDialog(this);
   public previewDialog = new PreviewDialog(this);
+  public downloadsDialog = new DownloadsDialog(this);
 
   public incognito: boolean;
 
@@ -138,6 +140,7 @@ export class AppWindow extends BrowserWindow {
 
       this.setBrowserView(null);
 
+      // TODO: make a cleaner way to destroy dialogs
       this.menuDialog.destroy();
       this.searchDialog.destroy();
       this.authDialog.destroy();
@@ -147,6 +150,7 @@ export class AppWindow extends BrowserWindow {
       this.permissionsDialog.destroy();
       this.previewDialog.destroy();
       this.tabGroupDialog.destroy();
+      this.downloadsDialog.destroy();
 
       this.menuDialog = null;
       this.searchDialog = null;
@@ -157,6 +161,7 @@ export class AppWindow extends BrowserWindow {
       this.permissionsDialog = null;
       this.previewDialog = null;
       this.tabGroupDialog = null;
+      this.downloadsDialog = null;
 
       this.viewManager.clear();
 
