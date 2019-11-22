@@ -63,7 +63,7 @@
     "eslint-plugin-react": "^7.16.0",
     "extract-file-icon": "0.3.2",
     "extract-zip": "^1.6.7",
-    "file-loader": "^4.3.0",
+    "file-loader": "^4.2.0",
     "file-type": "12.4.0",
     "fork-ts-checker-webpack-plugin": "^3.1.0",
     "gsap": "^3.0.1",
