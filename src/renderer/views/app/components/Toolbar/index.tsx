@@ -64,12 +64,10 @@ const onMinimizeClick = () =>
 const RightButtons = observer(() => {
   const { selectedTab } = store.tabs;
 
-  let isWindow = false;
   let blockedAds = 0;
   let hasCredentials = false;
 
   if (selectedTab) {
-    isWindow = selectedTab.isWindow;
     blockedAds = selectedTab.blockedAds;
     hasCredentials = selectedTab.hasCredentials;
   }
@@ -81,7 +79,7 @@ const RightButtons = observer(() => {
       {hasCredentials && (
         <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
       )}
-      {!isWindow && store.settings.object.shield == true && (
+      {store.settings.object.shield == true && (
         <ToolbarButton
           size={18}
           badge={blockedAds > 0}

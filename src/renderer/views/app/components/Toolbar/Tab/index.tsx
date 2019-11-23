@@ -68,7 +68,7 @@ const onMouseLeave = () => {
 };
 
 const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
-  if (store.canToggleMenu && !tab.isWindow) {
+  if (store.canToggleMenu) {
     store.canToggleMenu = false;
     ipcRenderer.send(`search-show-${store.windowId}`);
   }

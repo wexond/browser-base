@@ -8,7 +8,6 @@ export class ViewManager {
   public selectedId = 0;
   public _fullscreen = false;
 
-  public isHidden = false;
   public incognito: boolean;
 
   private window: AppWindow;
@@ -35,12 +34,10 @@ export class ViewManager {
       this.create(details);
     });
 
-    ipcMain.on(`view-select-${id}`, (e, id: number, force: boolean) => {
+    ipcMain.on(`view-select-${id}`, (e, id: number) => {
       const view = this.views.get(id);
       this.select(id);
       view.updateNavigationState();
-
-      if (force) this.isHidden = false;
     });
 
     ipcMain.on(`view-destroy-${id}`, (e, id: number) => {
@@ -70,14 +67,6 @@ export class ViewManager {
           result,
         );
       }
-    });
-
-    ipcMain.on(`browserview-hide-${id}`, () => {
-      this.hideView();
-    });
-
-    ipcMain.on(`browserview-show-${id}`, () => {
-      this.showView();
     });
 
     ipcMain.on(`mute-view-${id}`, (e, tabId: number) => {
@@ -151,8 +140,6 @@ export class ViewManager {
 
     this.selectedId = id;
 
-    if (this.isHidden) return;
-
     view.updateWindowTitle();
 
     this.window.removeBrowserView(selected);
@@ -187,16 +174,6 @@ export class ViewManager {
       view.setBounds(newBounds);
       view.bounds = newBounds;
     }
-  }
-
-  public hideView() {
-    this.isHidden = true;
-    this.window.setBrowserView(null);
-  }
-
-  public showView() {
-    this.isHidden = false;
-    this.select(this.selectedId);
   }
 
   public destroy(id: number) {

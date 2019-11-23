@@ -60,5 +60,5 @@ export const Bubble = ({
 Bubble.defaultProps = {
   maxLines: 2,
   iconSize: 20,
-  itemsPerRow: 4,
+  itemsPerRow: 3.5,
 };

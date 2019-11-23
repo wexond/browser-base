@@ -79,7 +79,6 @@ export class ITab {
 
   public hasThemeColor = false;
   public removeTimeout: any;
-  public isWindow = false;
 
   public marginLeft = 0;
 
@@ -124,11 +123,9 @@ export class ITab {
   public constructor(
     { active, url, pinned }: chrome.tabs.CreateProperties,
     id: number,
-    isWindow: boolean,
   ) {
     this.url = url;
     this.id = id;
-    this.isWindow = isWindow;
     this.isPinned = pinned;
 
     if (active) {
@@ -136,8 +133,6 @@ export class ITab {
         this.select();
       });
     }
-
-    if (isWindow) return;
 
     ipcRenderer.on(`view-url-updated-${this.id}`, async (e, url: string) => {
       this.url = url;
@@ -249,20 +244,14 @@ export class ITab {
     if (!this.isClosing) {
       store.tabs.selectedTabId = this.id;
 
-      if (this.isWindow) {
-        ipcRenderer.send(`browserview-hide-${store.windowId}`);
-        ipcRenderer.send(`select-window-${store.windowId}`, this.id);
-      } else {
-        ipcRenderer.send(`hide-window-${store.windowId}`);
-        ipcRenderer.send(`browserview-show-${store.windowId}`);
-        ipcRenderer.send(`view-select-${store.windowId}`, this.id);
-        ipcRenderer.send(`update-find-info-${store.windowId}`, this.id, {
-          ...this.findInfo,
-        });
+      ipcRenderer.send(`browserview-show-${store.windowId}`);
+      ipcRenderer.send(`view-select-${store.windowId}`, this.id);
+      ipcRenderer.send(`update-find-info-${store.windowId}`, this.id, {
+        ...this.findInfo,
+      });
 
-        if (this.url.startsWith(NEWTAB_URL)) {
-          ipcRenderer.send(`search-show-${store.windowId}`);
-        }
+      if (this.url.startsWith(NEWTAB_URL)) {
+        ipcRenderer.send(`search-show-${store.windowId}`);
       }
     }
   }
@@ -352,11 +341,7 @@ export class ITab {
 
     store.startupTabs.removeStartupTabItem(this.id, store.windowId);
 
-    if (this.isWindow) {
-      ipcRenderer.send(`detach-window-${store.windowId}`, this.id);
-    } else {
-      ipcRenderer.send(`view-destroy-${store.windowId}`, this.id);
-    }
+    ipcRenderer.send(`view-destroy-${store.windowId}`, this.id);
 
     const notClosingTabs = store.tabs.list.filter(x => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
