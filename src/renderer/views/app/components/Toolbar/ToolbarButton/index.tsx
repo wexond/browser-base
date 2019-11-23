@@ -2,7 +2,8 @@ import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { transparency } from '~/renderer/constants/transparency';
-import { Button, Icon, Circle } from './style';
+import { Button, Icon, Circle, Badge } from './style';
+import { BLUE_500 } from '~/renderer/constants';
 
 interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
@@ -16,6 +17,12 @@ interface Props {
   children?: any;
   opacity?: number;
   autoInvert?: boolean;
+  badgeBackground?: string;
+  badge?: boolean;
+  badgeTextColor?: string;
+  badgeText?: string;
+  badgeTop?: number;
+  badgeRight?: number;
 }
 
 export const ToolbarButton = observer(
@@ -31,6 +38,12 @@ export const ToolbarButton = observer(
     opacity,
     autoInvert,
     style,
+    badgeText,
+    badgeBackground,
+    badge,
+    badgeTextColor,
+    badgeTop,
+    badgeRight,
   }: Props) => {
     style = { ...style };
 
@@ -55,6 +68,16 @@ export const ToolbarButton = observer(
           autoInvert={autoInvert}
         />
         <Circle></Circle>
+        {badge && (
+          <Badge
+            right={badgeRight}
+            top={badgeTop}
+            background={badgeBackground}
+            color={badgeTextColor}
+          >
+            {badgeText}
+          </Badge>
+        )}
         {children}
       </Button>
     );
@@ -65,4 +88,8 @@ export const ToolbarButton = observer(
   size: 20,
   opacity: transparency.icons.inactive,
   autoInvert: true,
+  badgeBackground: BLUE_500,
+  badgeTextColor: 'white',
+  badgeTop: 6,
+  badgeRight: 4,
 };

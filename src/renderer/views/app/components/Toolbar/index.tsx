@@ -8,7 +8,7 @@ import { Buttons, StyledToolbar, Separator } from './style';
 import { NavigationButtons } from './NavigationButtons';
 import { Tabbar } from './Tabbar';
 import { ToolbarButton } from './ToolbarButton';
-import { icons, BLUE_500 } from '~/renderer/constants';
+import { icons } from '~/renderer/constants';
 import { BrowserAction } from './BrowserAction';
 import { platform } from 'os';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
@@ -74,31 +74,28 @@ const RightButtons = observer(() => {
   return (
     <Buttons>
       <BrowserActions />
-      <ToolbarButton icon={icons.download} onMouseDown={onDownloadsClick} />
       {store.extensions.browserActions.length > 0 && <Separator />}
       {hasCredentials && (
         <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
       )}
       {!isWindow && store.settings.object.shield == true && (
-        <BrowserAction
+        <ToolbarButton
           size={18}
-          style={{ marginLeft: 0 }}
-          opacity={0.54}
-          autoInvert
-          data={{
-            badgeBackgroundColor: BLUE_500,
-            badgeText: blockedAds > 0 ? blockedAds.toString() : '',
-            icon: icons.shield,
-            badgeTextColor: 'white',
-          }}
-        />
+          badge={blockedAds > 0}
+          badgeText={blockedAds.toString()}
+          icon={icons.shield}
+        ></ToolbarButton>
       )}
-      {store.isIncognito && (
-        <>
-          <Separator />
-          <ToolbarButton icon={icons.incognito} size={18} />
-        </>
-      )}
+      <ToolbarButton
+        size={18}
+        badge
+        onMouseDown={onDownloadsClick}
+        icon={icons.download}
+        badgeTop={8}
+        badgeRight={8}
+      ></ToolbarButton>
+      <Separator />
+      {store.isIncognito && <ToolbarButton icon={icons.incognito} size={18} />}
       <ToolbarButton onMouseDown={onMenuClick} icon={icons.more} size={18} />
     </Buttons>
   );

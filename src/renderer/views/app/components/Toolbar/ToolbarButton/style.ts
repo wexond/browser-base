@@ -65,3 +65,26 @@ export const Circle = styled.div`
     }
   `};
 `;
+
+interface BadgeProps {
+  background: string;
+  color: string;
+  right: number;
+  top: number;
+}
+
+export const Badge = styled.div`
+  position: absolute;
+  padding: 1px 3px;
+  border-radius: 8px;
+  min-height: 6px;
+  pointer-events: none;
+  z-index: 5;
+  font-size: 8px;
+  ${({ background, color, top, right }: BadgeProps) => css`
+    background-color: ${background};
+    color: ${color};
+    right: ${right}px;
+    top: ${top}px;
+  `};
+`;
