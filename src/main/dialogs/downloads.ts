@@ -17,7 +17,6 @@ export class DownloadsDialog extends Dialog {
         height: 0,
         y: 36,
       },
-      devtools: true,
     });
 
     ipcMain.on(`height-${this.webContents.id}`, (e, height) => {
