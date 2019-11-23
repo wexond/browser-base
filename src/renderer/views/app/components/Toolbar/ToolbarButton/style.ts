@@ -88,3 +88,15 @@ export const Badge = styled.div`
     top: ${top}px;
   `};
 `;
+
+export const PreloaderBg = styled.div`
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+`;

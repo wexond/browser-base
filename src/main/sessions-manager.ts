@@ -124,6 +124,7 @@ export class SessionsManager {
       };
 
       window.downloadsDialog.webContents.send('download-started', downloadItem);
+      window.webContents.send('download-started', downloadItem);
 
       item.on('updated', (event, state) => {
         if (state === 'interrupted') {

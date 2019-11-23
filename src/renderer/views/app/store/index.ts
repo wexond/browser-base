@@ -56,6 +56,23 @@ export class Store {
   @observable
   public downloads: IDownloadItem[] = [];
 
+  @computed
+  public get downloadProgress() {
+    const downloading = this.downloads.filter(x => !x.completed);
+
+    if (downloading.length === 0) return 0;
+
+    const { totalBytes } = this.downloads.reduce((prev, cur) => ({
+      totalBytes: prev.totalBytes + cur.totalBytes,
+    }));
+
+    const { receivedBytes } = this.downloads.reduce((prev, cur) => ({
+      receivedBytes: prev.receivedBytes + cur.receivedBytes,
+    }));
+
+    return receivedBytes / totalBytes;
+  }
+
   public canToggleMenu = false;
 
   public mouse = {
@@ -100,6 +117,11 @@ export class Store {
       (e, id: string, downloadNotification: boolean) => {
         const i = this.downloads.find(x => x.id === id);
         i.completed = true;
+
+        if (this.downloads.filter(x => !x.completed).length === 0) {
+          this.downloads = [];
+        }
+
         if (downloadNotification) {
           this.downloadNotification = true;
         }

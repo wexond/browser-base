@@ -2,8 +2,9 @@ import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { transparency } from '~/renderer/constants/transparency';
-import { Button, Icon, Circle, Badge } from './style';
+import { Button, Icon, Circle, Badge, PreloaderBg } from './style';
 import { BLUE_500 } from '~/renderer/constants';
+import { Preloader } from '~/renderer/components/Preloader';
 
 interface Props {
   onClick?: (e?: React.SyntheticEvent<HTMLDivElement>) => void;
@@ -23,6 +24,8 @@ interface Props {
   badgeText?: string;
   badgeTop?: number;
   badgeRight?: number;
+  preloader?: boolean;
+  value?: number;
 }
 
 export const ToolbarButton = observer(
@@ -44,6 +47,8 @@ export const ToolbarButton = observer(
     badgeTextColor,
     badgeTop,
     badgeRight,
+    value,
+    preloader,
   }: Props) => {
     style = { ...style };
 
@@ -77,6 +82,23 @@ export const ToolbarButton = observer(
           >
             {badgeText}
           </Badge>
+        )}
+        {preloader && value > 0 && (
+          <>
+            <PreloaderBg></PreloaderBg>
+            <Preloader
+              style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                transform: `translate(-50%, -50%)`,
+                pointerEvents: 'none',
+              }}
+              thickness={3}
+              size={36}
+              value={value}
+            />
+          </>
         )}
         {children}
       </Button>

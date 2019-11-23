@@ -13,6 +13,7 @@ import { BrowserAction } from './BrowserAction';
 import { platform } from 'os';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { WindowsControls } from 'react-windows-controls';
+import { Preloader } from '~/renderer/components/Preloader';
 
 const onDownloadsClick = () => {
   store.downloadNotification = false;
@@ -87,13 +88,16 @@ const RightButtons = observer(() => {
           icon={icons.shield}
         ></ToolbarButton>
       )}
+
       <ToolbarButton
         size={18}
         badge={store.downloadNotification}
         onMouseDown={onDownloadsClick}
         icon={icons.download}
-        badgeTop={8}
-        badgeRight={8}
+        badgeTop={9}
+        badgeRight={9}
+        preloader
+        value={store.downloadProgress}
       ></ToolbarButton>
       <Separator />
       {store.isIncognito && <ToolbarButton icon={icons.incognito} size={18} />}
