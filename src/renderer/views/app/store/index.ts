@@ -12,6 +12,7 @@ import { StartupTabsStore } from './startup-tabs';
 import { getTheme } from '~/utils/themes';
 import { HistoryStore } from './history';
 import { AutoFillStore } from './autofill';
+import { IDownloadItem } from '~/interfaces';
 
 export class Store {
   public settings = new SettingsStore(this);
@@ -49,6 +50,12 @@ export class Store {
     canGoForward: false,
   };
 
+  @observable
+  public downloadNotification = false;
+
+  @observable
+  public downloads: IDownloadItem[] = [];
+
   public canToggleMenu = false;
 
   public mouse = {
@@ -78,6 +85,26 @@ export class Store {
       this.updateInfo.version = version;
       this.updateInfo.available = true;
     });
+
+    ipcRenderer.on('download-started', (e, item) => {
+      this.downloads.push(item);
+    });
+
+    ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {
+      const i = this.downloads.find(x => x.id === item.id);
+      i.receivedBytes = item.receivedBytes;
+    });
+
+    ipcRenderer.on(
+      'download-completed',
+      (e, id: string, downloadNotification: boolean) => {
+        const i = this.downloads.find(x => x.id === id);
+        i.completed = true;
+        if (downloadNotification) {
+          this.downloadNotification = true;
+        }
+      },
+    );
 
     extensionsRenderer.on(
       'set-badge-text',

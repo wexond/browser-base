@@ -8,6 +8,7 @@ import { registerProtocol } from './models/protocol';
 import storage from './services/storage';
 import * as url from 'url';
 import { F_OK } from 'constants';
+import { IDownloadItem } from '~/interfaces';
 
 const extensibleSessionOptions = {
   backgroundPreloadPath: resolve(__dirname, 'extensions-background-preload.js'),
@@ -114,13 +115,15 @@ export class SessionsManager {
 
       item.savePath = savePath;
 
-      window.downloadsDialog.webContents.send('download-started', {
+      const downloadItem: IDownloadItem = {
         fileName: basename(savePath),
         receivedBytes: 0,
         totalBytes: item.getTotalBytes(),
         savePath,
         id,
-      });
+      };
+
+      window.downloadsDialog.webContents.send('download-started', downloadItem);
 
       item.on('updated', (event, state) => {
         if (state === 'interrupted') {
@@ -129,16 +132,24 @@ export class SessionsManager {
           if (item.isPaused()) {
             console.log('Download is paused');
           } else {
-            window.downloadsDialog.webContents.send('download-progress', {
+            const data = {
               id,
               receivedBytes: item.getReceivedBytes(),
-            });
+            };
+
+            window.downloadsDialog.webContents.send('download-progress', data);
+            window.webContents.send('download-progress', data);
           }
         }
       });
       item.once('done', (event, state) => {
         if (state === 'completed') {
           window.downloadsDialog.webContents.send('download-completed', id);
+          window.webContents.send(
+            'download-completed',
+            id,
+            !window.downloadsDialog.visible,
+          );
         } else {
           console.log(`Download failed: ${state}`);
         }

@@ -88,7 +88,7 @@ const RightButtons = observer(() => {
       )}
       <ToolbarButton
         size={18}
-        badge
+        badge={store.downloadNotification}
         onMouseDown={onDownloadsClick}
         icon={icons.download}
         badgeTop={8}
