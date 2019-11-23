@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { platform } from 'os';
 
 import { Bubble } from '../Bubble';
 import {
@@ -89,7 +88,7 @@ export const QuickMenu = observer(() => {
             invert={invert}
             icon={icons.night}
           >
-            Dark
+            Dark Mode
           </Bubble>
           <Bubble
             invert={invert}
