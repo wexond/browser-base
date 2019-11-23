@@ -15,7 +15,7 @@ export class DownloadsDialog extends Dialog {
       bounds: {
         width: WIDTH,
         height: 0,
-        y: 36,
+        y: 34,
       },
     });
 
@@ -28,7 +28,7 @@ export class DownloadsDialog extends Dialog {
   public rearrange() {
     const { width, height } = this.appWindow.getContentBounds();
 
-    const maxHeight = height - 36 - 16;
+    const maxHeight = height - 34 - 16;
 
     super.rearrange({
       x: width - WIDTH,

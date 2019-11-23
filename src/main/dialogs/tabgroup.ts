@@ -14,7 +14,7 @@ export class TabGroupDialog extends Dialog {
       bounds: {
         width: WIDTH,
         height: HEIGHT,
-        y: TOOLBAR_HEIGHT,
+        y: TOOLBAR_HEIGHT - 3,
       },
     });
   }
