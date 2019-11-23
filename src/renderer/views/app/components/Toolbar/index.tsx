@@ -15,6 +15,7 @@ import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { WindowsControls } from 'react-windows-controls';
 
 const onDownloadsClick = () => {
+  store.downloadNotification = false;
   ipcRenderer.send(`show-downloads-dialog-${store.windowId}`);
 };
 
