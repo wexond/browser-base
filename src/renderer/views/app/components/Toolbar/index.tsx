@@ -89,16 +89,18 @@ const RightButtons = observer(() => {
         ></ToolbarButton>
       )}
 
-      <ToolbarButton
-        size={18}
-        badge={store.downloadNotification}
-        onMouseDown={onDownloadsClick}
-        icon={icons.download}
-        badgeTop={9}
-        badgeRight={9}
-        preloader
-        value={store.downloadProgress}
-      ></ToolbarButton>
+      {store.downloadsButtonVisible && (
+        <ToolbarButton
+          size={18}
+          badge={store.downloadNotification}
+          onMouseDown={onDownloadsClick}
+          icon={icons.download}
+          badgeTop={9}
+          badgeRight={9}
+          preloader
+          value={store.downloadProgress}
+        ></ToolbarButton>
+      )}
       <Separator />
       {store.isIncognito && <ToolbarButton icon={icons.incognito} size={18} />}
       <ToolbarButton onMouseDown={onMenuClick} icon={icons.more} size={18} />

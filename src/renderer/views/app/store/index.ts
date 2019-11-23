@@ -51,6 +51,9 @@ export class Store {
   };
 
   @observable
+  public downloadsButtonVisible = false;
+
+  @observable
   public downloadNotification = false;
 
   @observable
@@ -105,6 +108,7 @@ export class Store {
 
     ipcRenderer.on('download-started', (e, item) => {
       this.downloads.push(item);
+      this.downloadsButtonVisible = true;
     });
 
     ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {
