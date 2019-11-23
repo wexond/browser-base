@@ -40,6 +40,10 @@ export class Settings extends EventEmitter {
               'update-settings',
               this.object,
             );
+            window.downloadsDialog.webContents.send(
+              'update-settings',
+              this.object,
+            );
           }
         }
 

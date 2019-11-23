@@ -68,7 +68,7 @@ const onMouseLeave = () => {
 };
 
 const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
-  if (store.canToggleMenu && !tab.isWindow) {
+  if (store.canToggleMenu) {
     store.canToggleMenu = false;
     ipcRenderer.send(`search-show-${store.windowId}`);
   }
@@ -210,6 +210,7 @@ const Content = observer(({ tab }: { tab: ITab }) => {
           color={tab.background}
           thickness={6}
           size={16}
+          indeterminate
           style={{ minWidth: 16 }}
         />
       )}

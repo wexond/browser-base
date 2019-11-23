@@ -8,12 +8,21 @@ export interface Props {
   color?: string;
   thickness?: number;
   size?: number;
+  indeterminate?: boolean;
+  value?: number;
 }
 
-export const Preloader = ({ style, color, size, thickness }: Props) => {
+export const Preloader = ({
+  style,
+  color,
+  size,
+  thickness,
+  value,
+  indeterminate,
+}: Props) => {
   return (
     <div style={style}>
-      <StyledPreloader size={size}>
+      <StyledPreloader indeterminate={indeterminate} size={size}>
         <svg viewBox="25 25 50 50">
           <Path
             cx="50"
@@ -23,6 +32,8 @@ export const Preloader = ({ style, color, size, thickness }: Props) => {
             strokeMiterlimit="10"
             color={color}
             thickness={thickness}
+            indeterminate={indeterminate}
+            value={value}
           />
         </svg>
       </StyledPreloader>

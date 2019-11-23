@@ -84,54 +84,6 @@ export class TabsStore {
       },
     );
 
-    ipcRenderer.on('add-tab', async (e, options) => {
-      let tab = this.list.find(x => x.id === options.id);
-
-      if (tab) {
-        tab.isClosing = false;
-        this.updateTabsBounds(true);
-        clearTimeout(tab.removeTimeout);
-
-        if (options.active) {
-          tab.select();
-        }
-      } else {
-        tab = this.createTab({}, options.id, true);
-        tab.title = options.title;
-        tab.favicon = URL.createObjectURL(new Blob([options.icon]));
-        tab.select();
-
-        /*
-        TODO:
-        const color = await getVibrantColor(options.icon);
-
-        if (getColorBrightness(color) < 170) {
-          tab.background = color;
-        }*/
-      }
-    });
-
-    ipcRenderer.on('remove-tab', (e, id: number) => {
-      const tab = this.getTabById(id);
-      if (tab) {
-        tab.close();
-      }
-    });
-
-    ipcRenderer.on('update-tab-title', (e, data) => {
-      const tab = this.getTabById(data.id);
-      if (tab) {
-        tab.title = data.title;
-      }
-    });
-
-    ipcRenderer.on('select-tab', (e, id: number) => {
-      const tab = this.getTabById(id);
-      if (tab) {
-        tab.select();
-      }
-    });
-
     ipcRenderer.on('select-next-tab', () => {
       const i = this.list.indexOf(this.selectedTab);
       const nextTab = this.list[i + 1];
@@ -191,12 +143,11 @@ export class TabsStore {
   @action public createTab(
     options: chrome.tabs.CreateProperties,
     id: number,
-    isWindow = false,
     tabGroupId: number = undefined,
   ) {
     this.removedTabs = 0;
 
-    const tab = new ITab(options, id, isWindow);
+    const tab = new ITab(options, id);
 
     tab.tabGroupId = tabGroupId;
 
@@ -249,7 +200,7 @@ export class TabsStore {
       `view-create-${store.windowId}`,
       opts,
     );
-    return this.createTab(opts, id, false, tabGroupId);
+    return this.createTab(opts, id, tabGroupId);
   }
 
   public removeTab(id: number) {

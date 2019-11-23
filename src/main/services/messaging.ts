@@ -66,7 +66,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.tabGroupDialog.edit(tabGroup);
   });
 
-  ipcMain.on(`show-downloads-dialog-${id}`, e => {
+  ipcMain.on(`show-downloads-dialog-${id}`, (e, left) => {
+    appWindow.downloadsDialog.left = left;
     appWindow.downloadsDialog.show();
   });
 

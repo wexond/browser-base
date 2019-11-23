@@ -11,7 +11,7 @@ export const StyledApp = styled.div`
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
-    margin-top: ${visible ? 0 : 7}px;
+    margin-top: ${visible ? 3 : 10}px;
     background-color: ${theme['dialog.backgroundColor']};
   `}
 `;

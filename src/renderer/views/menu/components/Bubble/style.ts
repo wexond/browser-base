@@ -26,7 +26,7 @@ export const StyledBubble = styled.div`
 export const Icon = styled.div`
   width: 100%;
   height: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   ${centerIcon(24)};
   transition: 0.2s filter;
 
@@ -63,7 +63,7 @@ export const Circle = styled.div`
 `;
 
 export const Title = styled.div`
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
   overflow: hidden;
   max-width: 100%;

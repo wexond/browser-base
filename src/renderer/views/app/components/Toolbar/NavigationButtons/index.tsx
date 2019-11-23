@@ -25,11 +25,9 @@ const onRefreshClick = () => {
 export const NavigationButtons = observer(() => {
   const { selectedTab } = store.tabs;
 
-  let isWindow = false;
   let loading = false;
 
   if (selectedTab) {
-    isWindow = selectedTab.isWindow;
     loading = selectedTab.loading;
   }
 
@@ -49,7 +47,6 @@ export const NavigationButtons = observer(() => {
         onClick={onForwardClick}
       />
       <ToolbarButton
-        disabled={isWindow}
         size={20}
         icon={loading ? icons.close : icons.refresh}
         onClick={onRefreshClick}
