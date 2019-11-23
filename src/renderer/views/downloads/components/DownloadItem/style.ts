@@ -21,7 +21,7 @@ export const StyledDownloadItem = styled.div`
 
     &:hover {
       background-color: ${theme['dialog.lightForeground']
-        ? `rgba(255, 255, 255, 0.05)`
+        ? `rgba(255, 255, 255, 0.06)`
         : `rgba(0, 0, 0, 0.04)`};
     }
   `}
