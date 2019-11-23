@@ -48,11 +48,6 @@ const onAlwaysClick = () => {
   // getCurrentWindow().setAlwaysOnTop(store.isAlwaysOnTop);
 };
 
-const onMultrinClick = () => {
-  // store.settings.object.multrin = !store.settings.object.multrin;
-  // store.settings.save();
-};
-
 const onNewWindowClick = () => {
   ipcRenderer.send('create-window');
 };
@@ -104,17 +99,6 @@ export const QuickMenu = observer(() => {
           >
             Shield
           </Bubble>
-          {platform() === 'win32' && (
-            <Bubble
-              invert={invert}
-              // toggled={store.settings.object.multrin}
-              toggled={false}
-              icon={icons.multrin}
-              onClick={onMultrinClick}
-            >
-              Multrin
-            </Bubble>
-          )}
         </Actions>
         <MenuItems>
           <MenuItem onClick={addTab(NEWTAB_URL)}>
