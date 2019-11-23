@@ -12,25 +12,25 @@ export const StyledApp = styled.div`
   font-size: 13px;
   max-height: 512px;
 
-  &::-webkit-scrollbar {
-    width: 6px;
-    -webkit-app-region: no-drag;
-    background-color: transparent;
-  }
+
 
   
     ${({ theme, visible }: { theme?: ITheme; visible: boolean }) => css`
-      &:hover {
-        &::-webkit-scrollbar-thumb {
-          background-color: ${theme['dialog.lightForeground']
-            ? 'rgba(255, 255, 255, 0.2)'
-            : 'rgba(0, 0, 0, 0.2)'};
+      &::-webkit-scrollbar {
+        width: 6px;
+        -webkit-app-region: no-drag;
+        background-color: transparent;
+      }
 
-          &:hover {
-            background-color: ${theme['dialog.lightForeground']
-              ? 'rgba(255, 255, 255, 0.3)'
-              : 'rgba(0, 0, 0, 0.3)'};
-          }
+      &::-webkit-scrollbar-thumb {
+        background-color: ${theme['dialog.lightForeground']
+          ? 'rgba(255, 255, 255, 0.2)'
+          : 'rgba(0, 0, 0, 0.2)'};
+
+        &:hover {
+          background-color: ${theme['dialog.lightForeground']
+            ? 'rgba(255, 255, 255, 0.3)'
+            : 'rgba(0, 0, 0, 0.3)'};
         }
       }
 
