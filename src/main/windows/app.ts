@@ -21,7 +21,6 @@ import {
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
-  // public multrin = new Multrin(this);
 
   public menuDialog = new MenuDialog(this);
   public searchDialog = new SearchDialog(this);
@@ -88,8 +87,6 @@ export class AppWindow extends BrowserWindow {
       }
     }
 
-    const moveAndResize = () => {};
-
     // Update window bounds on resize and on move when window is not maximized.
     this.on('resize', () => {
       if (!this.isMaximized()) {
@@ -104,16 +101,12 @@ export class AppWindow extends BrowserWindow {
       this.permissionsDialog.rearrange();
       this.searchDialog.rearrange();
       this.tabGroupDialog.rearrange();
-
-      moveAndResize();
     });
 
     this.on('move', () => {
       if (!this.isMaximized()) {
         windowState.bounds = this.getBounds();
       }
-
-      moveAndResize();
     });
 
     const resize = () => {
