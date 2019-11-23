@@ -210,6 +210,7 @@ const Content = observer(({ tab }: { tab: ITab }) => {
           color={tab.background}
           thickness={6}
           size={16}
+          indeterminate
           style={{ minWidth: 16 }}
         />
       )}

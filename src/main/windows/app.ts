@@ -101,6 +101,7 @@ export class AppWindow extends BrowserWindow {
       this.permissionsDialog.rearrange();
       this.searchDialog.rearrange();
       this.tabGroupDialog.rearrange();
+      this.downloadsDialog.rearrange();
     });
 
     this.on('move', () => {

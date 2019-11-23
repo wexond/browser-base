@@ -1,6 +1,7 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { BLUE_500, icons } from '~/renderer/constants';
 import { centerIcon } from '~/renderer/mixins';
+import { ITheme } from '~/interfaces';
 
 export const StyledDownloadItem = styled.div`
   height: 64px;
@@ -13,9 +14,17 @@ export const StyledDownloadItem = styled.div`
   margin-top: 8px;
   transition: 0.1s background-color, 0.1s border;
 
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.06);
-  }
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-color: ${theme['dialog.lightForeground']
+      ? `rgba(255, 255, 255, 0.04)`
+      : `rgba(0, 0, 0, 0.02)`};
+
+    &:hover {
+      background-color: ${theme['dialog.lightForeground']
+        ? `rgba(255, 255, 255, 0.05)`
+        : `rgba(0, 0, 0, 0.04)`};
+    }
+  `}
 
   &:first-child {
     margin-top: 0;
@@ -43,6 +52,12 @@ export const ProgressBackground = styled.div`
   overflow: hidden;
   margin-top: 4px;
   flex: 1;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-color: ${theme['dialog.lightForeground']
+      ? `rgba(255, 255, 255, 0.12)`
+      : `rgba(0, 0, 0, 0.12)`};
+  `}
 `;
 
 export const Info = styled.div`
@@ -58,9 +73,12 @@ export const Icon = styled.div`
   ${centerIcon()};
   background-image: url(${icons.page});
   margin-right: 16px;
-  filter: invert(100%);
   opacity: 0.54;
   margin-left: 16px;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    filter: ${theme['dialog.lightForeground'] ? 'invert(100%)' : ''};
+  `}
 `;
 
 export const MoreButton = styled.div`
@@ -68,11 +86,15 @@ export const MoreButton = styled.div`
   height: 36px;
   ${centerIcon(20)};
   background-image: url(${icons.more});
-  filter: invert(100%);
+
   opacity: 0.54;
   margin-right: 8px;
   border-radius: 6px;
   transition: 0.1s background-color;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    filter: ${theme['dialog.lightForeground'] ? 'invert(100%)' : ''};
+  `}
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.06);
@@ -84,5 +106,11 @@ export const Separator = styled.div`
   width: 1px;
   margin-left: 16px;
   margin-right: 8px;
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: rgba(0, 0, 0, 0.12);
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-color: ${theme['dialog.lightForeground']
+      ? 'rgba(255, 255, 255, 0.12)'
+      : 'rgba(0, 0, 0, 0.12)'};
+  `}
 `;

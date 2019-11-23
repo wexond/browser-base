@@ -8,14 +8,17 @@ import { Buttons, StyledToolbar, Separator } from './style';
 import { NavigationButtons } from './NavigationButtons';
 import { Tabbar } from './Tabbar';
 import { ToolbarButton } from './ToolbarButton';
-import { icons, BLUE_500 } from '~/renderer/constants';
+import { icons } from '~/renderer/constants';
 import { BrowserAction } from './BrowserAction';
 import { platform } from 'os';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { WindowsControls } from 'react-windows-controls';
+import { Preloader } from '~/renderer/components/Preloader';
 
-const onDownloadsClick = () => {
-  ipcRenderer.send(`show-downloads-dialog-${store.windowId}`);
+const onDownloadsClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  store.downloadNotification = false;
+  const { left, width } = e.currentTarget.getBoundingClientRect();
+  ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, left + width / 2);
 };
 
 const onKeyClick = () => {
@@ -72,31 +75,33 @@ const RightButtons = observer(() => {
   return (
     <Buttons>
       <BrowserActions />
-      <ToolbarButton icon={icons.download} onMouseDown={onDownloadsClick} />
       {store.extensions.browserActions.length > 0 && <Separator />}
       {hasCredentials && (
         <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
       )}
       {store.settings.object.shield == true && (
-        <BrowserAction
+        <ToolbarButton
           size={18}
-          style={{ marginLeft: 0 }}
-          opacity={0.54}
-          autoInvert
-          data={{
-            badgeBackgroundColor: BLUE_500,
-            badgeText: blockedAds > 0 ? blockedAds.toString() : '',
-            icon: icons.shield,
-            badgeTextColor: 'white',
-          }}
-        />
+          badge={blockedAds > 0}
+          badgeText={blockedAds.toString()}
+          icon={icons.shield}
+        ></ToolbarButton>
       )}
-      {store.isIncognito && (
-        <>
-          <Separator />
-          <ToolbarButton icon={icons.incognito} size={18} />
-        </>
+
+      {store.downloadsButtonVisible && (
+        <ToolbarButton
+          size={18}
+          badge={store.downloadNotification}
+          onMouseDown={onDownloadsClick}
+          icon={icons.download}
+          badgeTop={9}
+          badgeRight={9}
+          preloader
+          value={store.downloadProgress}
+        ></ToolbarButton>
       )}
+      <Separator />
+      {store.isIncognito && <ToolbarButton icon={icons.incognito} size={18} />}
       <ToolbarButton onMouseDown={onMenuClick} icon={icons.more} size={18} />
     </Buttons>
   );

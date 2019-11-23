@@ -12,6 +12,7 @@ import { StartupTabsStore } from './startup-tabs';
 import { getTheme } from '~/utils/themes';
 import { HistoryStore } from './history';
 import { AutoFillStore } from './autofill';
+import { IDownloadItem } from '~/interfaces';
 
 export class Store {
   public settings = new SettingsStore(this);
@@ -49,6 +50,32 @@ export class Store {
     canGoForward: false,
   };
 
+  @observable
+  public downloadsButtonVisible = false;
+
+  @observable
+  public downloadNotification = false;
+
+  @observable
+  public downloads: IDownloadItem[] = [];
+
+  @computed
+  public get downloadProgress() {
+    const downloading = this.downloads.filter(x => !x.completed);
+
+    if (downloading.length === 0) return 0;
+
+    const { totalBytes } = this.downloads.reduce((prev, cur) => ({
+      totalBytes: prev.totalBytes + cur.totalBytes,
+    }));
+
+    const { receivedBytes } = this.downloads.reduce((prev, cur) => ({
+      receivedBytes: prev.receivedBytes + cur.receivedBytes,
+    }));
+
+    return receivedBytes / totalBytes;
+  }
+
   public canToggleMenu = false;
 
   public mouse = {
@@ -78,6 +105,32 @@ export class Store {
       this.updateInfo.version = version;
       this.updateInfo.available = true;
     });
+
+    ipcRenderer.on('download-started', (e, item) => {
+      this.downloads.push(item);
+      this.downloadsButtonVisible = true;
+    });
+
+    ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {
+      const i = this.downloads.find(x => x.id === item.id);
+      i.receivedBytes = item.receivedBytes;
+    });
+
+    ipcRenderer.on(
+      'download-completed',
+      (e, id: string, downloadNotification: boolean) => {
+        const i = this.downloads.find(x => x.id === id);
+        i.completed = true;
+
+        if (this.downloads.filter(x => !x.completed).length === 0) {
+          this.downloads = [];
+        }
+
+        if (downloadNotification) {
+          this.downloadNotification = true;
+        }
+      },
+    );
 
     extensionsRenderer.on(
       'set-badge-text',

@@ -25,6 +25,9 @@ export class Store {
   @observable
   public downloads: IDownloadItem[] = [];
 
+  @observable
+  public maxHeight = 0;
+
   public constructor() {
     ipcRenderer.on('visible', (e, flag) => {
       this.visible = flag;
@@ -56,6 +59,10 @@ export class Store {
     ipcRenderer.on('download-completed', (e, id: string) => {
       const i = this.downloads.find(x => x.id === id);
       i.completed = true;
+    });
+
+    ipcRenderer.on('max-height', (e, height) => {
+      this.maxHeight = height;
     });
   }
 
