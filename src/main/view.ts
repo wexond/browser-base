@@ -3,7 +3,7 @@ import { parse as parseUrl } from 'url';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
 import storage from './services/storage';
-import * as Vibrant from 'node-vibrant';
+import Vibrant = require('node-vibrant');
 import { IHistoryItem } from '~/interfaces';
 
 export class View extends BrowserView {
