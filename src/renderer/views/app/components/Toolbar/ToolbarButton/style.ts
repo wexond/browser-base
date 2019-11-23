@@ -92,11 +92,18 @@ export const Badge = styled.div`
 export const PreloaderBg = styled.div`
   width: 32px;
   height: 32px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
+
   pointer-events: none;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
+
+  ${({ theme }: { theme: ITheme }) => css`
+    border: 3px solid
+      ${theme['toolbar.lightForeground']
+        ? 'rgba(255, 255, 255, 0.1)'
+        : 'rgba(0, 0, 0, 0.06)'};
+  `};
 `;

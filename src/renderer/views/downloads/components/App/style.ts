@@ -31,7 +31,7 @@ export const StyledApp = styled.div`
     }
 
     opacity: ${visible ? 1 : 0};
-    margin-top: ${visible ? 0 : 7}px;
+    margin-top: ${visible ? 3 : 7}px;
     background-color: ${theme['dialog.backgroundColor']};
     color: ${theme['dialog.lightForeground'] ? 'white' : 'black'};
   `};
