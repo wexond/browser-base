@@ -15,9 +15,10 @@ import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { WindowsControls } from 'react-windows-controls';
 import { Preloader } from '~/renderer/components/Preloader';
 
-const onDownloadsClick = () => {
+const onDownloadsClick = (e: React.MouseEvent<HTMLDivElement>) => {
   store.downloadNotification = false;
-  ipcRenderer.send(`show-downloads-dialog-${store.windowId}`);
+  const { left, width } = e.currentTarget.getBoundingClientRect();
+  ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, left + width / 2);
 };
 
 const onKeyClick = () => {

@@ -9,6 +9,8 @@ export class DownloadsDialog extends Dialog {
 
   private height = 0;
 
+  public left = 0;
+
   constructor(appWindow: AppWindow) {
     super(appWindow, {
       name: 'downloads',
@@ -31,7 +33,7 @@ export class DownloadsDialog extends Dialog {
     const maxHeight = height - 34 - 16;
 
     super.rearrange({
-      x: width - WIDTH,
+      x: Math.min(this.left - WIDTH / 2, width - WIDTH),
       height: Math.min(height, this.height + 16),
     });
 
