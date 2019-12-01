@@ -33,7 +33,9 @@ export const registerProtocol = (session: Electron.Session) => {
     },
   );
 
-  if (process.env.ENV === 'dev') {
+  if (process.env.NODE_ENV === 'development') {
+    /*
+    Currently not working due to https://github.com/electron/electron/issues/20932
     session.protocol.registerHttpProtocol(
       'wexond',
       (request, callback: any) => {
@@ -52,7 +54,7 @@ export const registerProtocol = (session: Electron.Session) => {
       error => {
         if (error) console.error(error);
       },
-    );
+    );*/
   } else {
     session.protocol.registerFileProtocol(
       'wexond',

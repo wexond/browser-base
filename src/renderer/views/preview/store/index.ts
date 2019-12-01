@@ -4,6 +4,7 @@ import { getTheme } from '~/utils/themes';
 import { ISettings } from '~/interfaces';
 import { DEFAULT_SETTINGS } from '~/constants';
 import { parse } from 'url';
+import { WEBUI_BASE_URL } from '~/constants/files';
 
 export class Store {
   @observable
@@ -41,7 +42,7 @@ export class Store {
   @computed
   public get domain() {
     const parsed = parse(this.url);
-    if (this.url.startsWith('wexond://')) {
+    if (this.url.startsWith(WEBUI_BASE_URL)) {
       return parsed.protocol + '//' + parsed.hostname;
     }
 

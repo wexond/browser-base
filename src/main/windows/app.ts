@@ -172,7 +172,7 @@ export class AppWindow extends BrowserWindow {
 
     // this.webContents.openDevTools({ mode: 'detach' });
 
-    if (process.env.ENV === 'dev') {
+    if (process.env.NODE_ENV === 'development') {
       this.webContents.openDevTools({ mode: 'detach' });
       this.loadURL('http://localhost:4444/app.html');
     } else {

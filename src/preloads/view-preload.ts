@@ -2,6 +2,7 @@ import { ipcRenderer, webFrame } from 'electron';
 
 import AutoComplete from './models/auto-complete';
 import { getTheme } from '~/utils/themes';
+import { WEBUI_PROTOCOL, WEBUI_BASE_URL } from '~/constants/files';
 
 const tabId = ipcRenderer.sendSync('get-webcontents-id');
 const arg = process.argv.find(x => x.startsWith('--window-id='));
@@ -113,8 +114,10 @@ const emitCallback = (msg: string, data: any) => {
   });
 };
 
+const hostname = window.location.href.substr(WEBUI_BASE_URL.length);
+
 if (
-  window.location.protocol === 'wexond:' ||
+  window.location.href.startsWith(WEBUI_BASE_URL) ||
   window.location.protocol === 'wexond-error:'
 ) {
   (async function() {
@@ -124,14 +127,14 @@ if (
     if (window.location.pathname.startsWith('//network-error')) {
       w.theme = getTheme(w.settings.theme);
       w.errorURL = await ipcRenderer.invoke(`get-error-url-${tabId}`);
-    } else if (window.location.hostname.startsWith('history')) {
+    } else if (hostname.startsWith('history')) {
       w.getHistory = async () => {
         return await ipcRenderer.invoke(`history-get`);
       };
       w.removeHistory = (ids: string[]) => {
         ipcRenderer.send(`history-remove`, ids);
       };
-    } else if (window.location.hostname.startsWith('newtab')) {
+    } else if (hostname.startsWith('newtab')) {
       w.getTopSites = async (count: number) => {
         return await ipcRenderer.invoke(`topsites-get`, count);
       };
@@ -139,15 +142,13 @@ if (
   })();
 }
 
-if (window.location.protocol === 'wexond:') {
+if (window.location.href.startsWith(WEBUI_BASE_URL)) {
   window.addEventListener('DOMContentLoaded', () => {
-    if (window.location.hostname === 'settings') document.title = 'Settings';
-    else if (window.location.hostname === 'history') document.title = 'History';
-    else if (window.location.hostname === 'bookmarks')
-      document.title = 'Bookmarks';
-    else if (window.location.hostname === 'extensions')
-      document.title = 'Extensions';
-    else if (window.location.hostname === 'newtab') {
+    if (hostname === 'settings') document.title = 'Settings';
+    else if (hostname === 'history') document.title = 'History';
+    else if (hostname === 'bookmarks') document.title = 'Bookmarks';
+    else if (hostname === 'extensions') document.title = 'Extensions';
+    else if (hostname === 'newtab') {
       document.title = 'New tab';
     }
   });

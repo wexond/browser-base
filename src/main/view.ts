@@ -5,6 +5,7 @@ import { AppWindow } from './windows';
 import storage from './services/storage';
 import Vibrant = require('node-vibrant');
 import { IHistoryItem } from '~/interfaces';
+import { WEBUI_BASE_URL } from '~/constants/files';
 
 export class View extends BrowserView {
   public title = '';
@@ -33,7 +34,7 @@ export class View extends BrowserView {
         plugins: true,
         additionalArguments: [
           `--window-id=${window.id}`,
-          `--blacklist=["wexond://", "wexond-error://"]`,
+          `--blacklist=["${WEBUI_BASE_URL}", "wexond-error://"]`,
         ],
         nativeWindowOpen: true,
         webSecurity: true,
@@ -264,7 +265,7 @@ export class View extends BrowserView {
   public async addHistoryItem(url: string, inPage = false) {
     if (
       url !== this.url &&
-      !url.startsWith('wexond://') &&
+      !url.startsWith(WEBUI_BASE_URL) &&
       !url.startsWith('wexond-error://') &&
       !this.incognito
     ) {

@@ -9,11 +9,12 @@ import { Wrapper, Content, IconItem, Menu, Image, Refresh } from './style';
 import { TopSites } from '../TopSites';
 import { icons } from '~/renderer/constants';
 import { News } from '../News';
+import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
 const onIconClick = (name: string) => () => {
-  window.location.href = `wexond://${name}`;
+  window.location.href = `${WEBUI_BASE_URL}${name}${WEBUI_URL_SUFFIX}`;
 };
 
 const onRefreshClick = () => {
