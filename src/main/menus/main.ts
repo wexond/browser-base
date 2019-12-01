@@ -1,6 +1,7 @@
 import { Menu, webContents } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { WindowsManager } from '../windows-manager';
+import { viewSource, saveAs } from './common-actions';
 
 export const getMainMenu = (windowsManager: WindowsManager) => {
   return Menu.buildFromTemplate([
@@ -190,6 +191,20 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
             setTimeout(() => {
               windowsManager.currentWindow.viewManager.selected.webContents.toggleDevTools();
             });
+          },
+        },
+        {
+          label: 'View page source',
+          accelerator: 'CmdOrCtrl+U',
+          click: () => {
+            viewSource();
+          },
+        },
+        {
+          label: 'Save as',
+          accelerator: 'CmdOrCtrl+S',
+          click: () => {
+            saveAs();
           },
         },
       ],

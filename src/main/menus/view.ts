@@ -1,7 +1,7 @@
 import { AppWindow } from '../windows';
-import { clipboard, nativeImage, Menu, dialog, BrowserWindow } from 'electron';
+import { clipboard, nativeImage, Menu } from 'electron';
 import { isURL, prefixHttp } from '~/utils';
-import { extname } from 'path';
+import { saveAs, viewSource } from './common-actions';
 
 export const getViewMenu = (
   appWindow: AppWindow,
@@ -178,22 +178,7 @@ export const getViewMenu = (
         label: 'Save as...',
         accelerator: 'CmdOrCtrl+S',
         click: async () => {
-          const { canceled, filePath } = await dialog.showSaveDialog({
-            defaultPath: webContents.getTitle(),
-            filters: [
-              { name: 'Webpage, Complete', extensions: ['html', 'htm'] },
-              { name: 'Webpage, HTML Only', extensions: ['htm', 'html'] },
-            ],
-          });
-
-          if (canceled) return;
-
-          const ext = extname(filePath);
-
-          webContents.savePage(
-            filePath,
-            ext === '.htm' ? 'HTMLOnly' : 'HTMLComplete',
-          );
+          saveAs();
         },
       },
       {
@@ -203,13 +188,7 @@ export const getViewMenu = (
         label: 'View page source',
         accelerator: 'CmdOrCtrl+U',
         click: () => {
-          appWindow.viewManager.create(
-            {
-              url: `view-source:${webContents.getURL()}`,
-              active: true,
-            },
-            true,
-          );
+          viewSource();
         },
       },
     ]);
