@@ -86,27 +86,36 @@ export const getViewMenu = (
     menuItems = menuItems.concat([
       {
         role: 'undo',
+        accelerator: 'CmdOrCtrl+Z',
       },
       {
         role: 'redo',
+        accelerator: 'CmdOrCtrl+Shift+Z',
       },
       {
         type: 'separator',
       },
       {
         role: 'cut',
+        accelerator: 'CmdOrCtrl+X',
       },
       {
         role: 'copy',
+        accelerator: 'CmdOrCtrl+C',
       },
       {
         role: 'pasteAndMatchStyle',
+        accelerator: 'CmdOrCtrl+V',
+        label: 'Paste',
       },
       {
         role: 'paste',
+        accelerator: 'CmdOrCtrl+Shift+V',
+        label: 'Paste as plain text',
       },
       {
         role: 'selectAll',
+        accelerator: 'CmdOrCtrl+A',
       },
       {
         type: 'separator',
@@ -118,9 +127,15 @@ export const getViewMenu = (
     menuItems = menuItems.concat([
       {
         role: 'copy',
+        accelerator: 'CmdOrCtrl+C',
+      },
+      {
+        type: 'separator',
       },
     ]);
+  }
 
+  if (params.selectionText !== '') {
     const trimmedText = params.selectionText.trim();
 
     if (isURL(trimmedText)) {
@@ -136,6 +151,9 @@ export const getViewMenu = (
               true,
             );
           },
+        },
+        {
+          type: 'separator',
         },
       ]);
     }
