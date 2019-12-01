@@ -192,11 +192,26 @@ export const getViewMenu = (
           );
         },
       },
+      {
+        type: 'separator',
+      },
+      {
+        label: 'View page source',
+        click: () => {
+          appWindow.viewManager.create(
+            {
+              url: `view-source:${webContents.getURL()}`,
+              active: true,
+            },
+            true,
+          );
+        }
+      }
     ]);
   }
 
   menuItems.push({
-    label: 'Inspect Element',
+    label: 'Inspect',
     click: () => {
       webContents.inspectElement(params.x, params.y);
 
