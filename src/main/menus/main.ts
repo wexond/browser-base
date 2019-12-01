@@ -1,7 +1,7 @@
 import { Menu, webContents } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { WindowsManager } from '../windows-manager';
-import { viewSource, saveAs } from './common-actions';
+import { viewSource, saveAs, printPage } from './common-actions';
 
 export const getMainMenu = (windowsManager: WindowsManager) => {
   return Menu.buildFromTemplate([
@@ -205,6 +205,13 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           accelerator: 'CmdOrCtrl+S',
           click: () => {
             saveAs();
+          },
+        },
+        {
+          label: 'Print',
+          accelerator: 'CmdOrCtrl+P',
+          click: () => {
+            printPage();
           },
         },
       ],

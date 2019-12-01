@@ -31,3 +31,8 @@ export const viewSource = async () => {
     true,
   );
 };
+
+export const printPage = () => {
+  const wc = windowsManager.currentWindow.viewManager.selected.webContents;
+  wc.print();
+};

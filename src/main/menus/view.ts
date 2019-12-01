@@ -1,7 +1,7 @@
 import { AppWindow } from '../windows';
 import { clipboard, nativeImage, Menu } from 'electron';
 import { isURL, prefixHttp } from '~/utils';
-import { saveAs, viewSource } from './common-actions';
+import { saveAs, viewSource, printPage } from './common-actions';
 
 export const getViewMenu = (
   appWindow: AppWindow,
@@ -197,6 +197,13 @@ export const getViewMenu = (
         accelerator: 'CmdOrCtrl+S',
         click: async () => {
           saveAs();
+        },
+      },
+      {
+        label: 'Print',
+        accelerator: 'CmdOrCtrl+P',
+        click: async () => {
+          printPage();
         },
       },
       {
