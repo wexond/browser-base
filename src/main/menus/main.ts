@@ -139,7 +139,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           },
         },
         {
-          accelerator: 'CmdOrCtrl+Left',
+          accelerator: 'Alt+Left',
           label: 'Go back',
           visible: false,
           click() {
@@ -150,7 +150,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           },
         },
         {
-          accelerator: 'CmdOrCtrl+Right',
+          accelerator: 'Alt+Right',
           label: 'Go forward',
           visible: false,
           click() {

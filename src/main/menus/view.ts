@@ -150,6 +150,7 @@ export const getViewMenu = (
     menuItems = menuItems.concat([
       {
         label: 'Go back',
+        accelerator: 'Alt+Left',
         enabled: webContents.canGoBack(),
         click: () => {
           webContents.goBack();
@@ -157,13 +158,15 @@ export const getViewMenu = (
       },
       {
         label: 'Go forward',
+        accelerator: 'Alt+Right',
         enabled: webContents.canGoForward(),
         click: () => {
           webContents.goForward();
         },
       },
       {
-        label: 'Refresh',
+        label: 'Reload',
+        accelerator: 'CmdOrCtrl+R',
         click: () => {
           webContents.reload();
         },
@@ -173,6 +176,7 @@ export const getViewMenu = (
       },
       {
         label: 'Save as...',
+        accelerator: 'CmdOrCtrl+S',
         click: async () => {
           const { canceled, filePath } = await dialog.showSaveDialog({
             defaultPath: webContents.getTitle(),
@@ -197,6 +201,7 @@ export const getViewMenu = (
       },
       {
         label: 'View page source',
+        accelerator: 'CmdOrCtrl+U',
         click: () => {
           appWindow.viewManager.create(
             {
@@ -205,13 +210,14 @@ export const getViewMenu = (
             },
             true,
           );
-        }
-      }
+        },
+      },
     ]);
   }
 
   menuItems.push({
     label: 'Inspect',
+    accelerator: 'CmdOrCtrl+Shift+I',
     click: () => {
       webContents.inspectElement(params.x, params.y);
 
