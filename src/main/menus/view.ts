@@ -70,6 +70,12 @@ export const getViewMenu = (
         },
       },
       {
+        label: 'Save image as...',
+        click: () => {
+          appWindow.viewManager.selected.webContents.downloadURL(params.srcURL);
+        },
+      },
+      {
         type: 'separator',
       },
     ]);
