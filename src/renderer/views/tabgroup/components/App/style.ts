@@ -14,10 +14,9 @@ export const StyledApp = styled.div`
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
     margin-top: ${visible ? 3 : 10}px;
+    background-color: ${theme['dialog.backgroundColor']};
   `}
 `;
-
-// background-color: ${theme['dialog.backgroundColor']};
 
 export const Title = styled.div`
   font-size: 16px;

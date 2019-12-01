@@ -50,6 +50,7 @@ export const App = hot(
         <StyledApp visible={store.visible}>
           <GlobalStyle />
           <Textfield
+            dark={store.theme['dialog.lightForeground']}
             placeholder="Name"
             style={{ width: '100%' }}
             onChange={onChange}

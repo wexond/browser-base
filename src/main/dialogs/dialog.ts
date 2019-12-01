@@ -59,7 +59,7 @@ export class Dialog extends BrowserView {
       this.hide();
     });
 
-    if (process.env.ENV === 'dev') {
+    if (process.env.NODE_ENV === 'development') {
       this.webContents.loadURL(`http://localhost:4444/${name}.html`);
       if (devtools) {
         this.webContents.openDevTools({ mode: 'detach' });

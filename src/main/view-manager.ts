@@ -2,6 +2,7 @@ import { ipcMain } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
+import { WEBUI_BASE_URL } from '~/constants/files';
 
 export class ViewManager {
   public views = new Map<number, View>();
@@ -90,7 +91,7 @@ export class ViewManager {
 
   public get settingsView() {
     return Object.values(this.views).find(r =>
-      r.webContents.getURL().startsWith('wexond://settings'),
+      r.webContents.getURL().startsWith(`${WEBUI_BASE_URL}settings`),
     );
   }
 

@@ -11,16 +11,17 @@ import { transparency, EASING_FUNCTION } from '~/renderer/constants';
 
 interface StyledTextfieldProps {
   width?: number;
+  dark: boolean;
 }
 export const StyledTextfield = styled.div`
-  ${({ width }: StyledTextfieldProps) => css`
+  ${({ width, dark }: StyledTextfieldProps) => css`
     width: ${width === undefined ? 280 : width}px;
+    background-color: ${dark ? 'rgba(255, 255, 255, 0.06)' : '#f5f5f5'};
   `}
   position: relative;
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
   overflow: hidden;
-  background-color: #f5f5f5;
   cursor: text;
   user-select: none;
 `;
@@ -29,30 +30,37 @@ interface InputProps {
   color: string;
   hasLabel: boolean;
   hasIcon: boolean;
+  dark: boolean;
 }
 
 export const Input = styled.input`
   width: 100%;
   height: 48px;
   font-size: 16px;
-  color: #000;
   padding-left: 12px;
   border: none;
   outline: none;
   background-color: transparent;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+
   user-select: auto;
   ${robotoRegular()};
 
-  ${({ color, hasLabel, hasIcon }: InputProps) => css`
+  ${({ color, hasLabel, hasIcon, dark }: InputProps) => css`
     padding-top: ${hasLabel ? 12 : 0}px;
     padding-right: ${hasIcon ? 48 : 12}px;
     ${coloredCursor(color)};
+    border-bottom: 1px solid
+      ${dark ? `rgba(255, 255, 255, 0.12)` : `rgba(0, 0, 0, 0.42)`};
+    color: ${dark ? '#fff' : '#000'};
+
+    &::placeholder {
+      text-shadow: 0px 0px 0px
+        ${dark
+          ? `rgba(255, 255, 255, ${transparency.text.medium})`
+          : `rgba(0, 0, 0, ${transparency.text.medium})`};
+    }
   `}
 
-  &::placeholder {
-    text-shadow: 0px 0px 0px rgba(0, 0, 0, ${transparency.text.medium});
-  }
   &[type='number']::-webkit-inner-spin-button,
   &[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;

@@ -17,6 +17,7 @@ interface Props {
   width?: number;
   onChange?: (value: string) => void;
   delay?: number;
+  dark?: boolean;
 }
 
 interface State {
@@ -130,6 +131,7 @@ export class Textfield extends React.PureComponent<Props, State> {
       inputType,
       style,
       width,
+      dark,
     } = this.props;
     const { activated, focused, error, value } = this.state;
 
@@ -143,9 +145,11 @@ export class Textfield extends React.PureComponent<Props, State> {
         className="textfield"
         onClick={this.onClick}
         style={style}
+        dark={dark}
         width={width || Textfield.defaultProps.width}
       >
         <Input
+          dark={dark}
           ref={this.inputRef}
           type={inputType || Textfield.defaultProps.inputType}
           color={primaryColor}
