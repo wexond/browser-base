@@ -1,6 +1,7 @@
 import { AppWindow } from '../windows';
-import { clipboard, nativeImage, Menu } from 'electron';
+import { clipboard, nativeImage, Menu, dialog, BrowserWindow } from 'electron';
 import { isURL, prefixHttp } from '~/utils';
+import { extname } from 'path';
 
 export const getViewMenu = (
   appWindow: AppWindow,
@@ -72,7 +73,7 @@ export const getViewMenu = (
       {
         label: 'Save image as...',
         click: () => {
-          appWindow.viewManager.selected.webContents.downloadURL(params.srcURL);
+          webContents.downloadURL(params.srcURL);
         },
       },
       {
@@ -169,6 +170,27 @@ export const getViewMenu = (
       },
       {
         type: 'separator',
+      },
+      {
+        label: 'Save as...',
+        click: async () => {
+          const { canceled, filePath } = await dialog.showSaveDialog({
+            defaultPath: webContents.getTitle(),
+            filters: [
+              { name: 'Webpage, Complete', extensions: ['html', 'htm'] },
+              { name: 'Webpage, HTML Only', extensions: ['htm', 'html'] },
+            ],
+          });
+
+          if (canceled) return;
+
+          const ext = extname(filePath);
+
+          webContents.savePage(
+            filePath,
+            ext === '.htm' ? 'HTMLOnly' : 'HTMLComplete',
+          );
+        },
       },
     ]);
   }
