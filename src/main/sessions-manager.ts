@@ -9,6 +9,7 @@ import storage from './services/storage';
 import * as url from 'url';
 import { F_OK } from 'constants';
 import { IDownloadItem } from '~/interfaces';
+import { extractCrx } from '~/utils/extract-crx';
 
 const extensibleSessionOptions = {
   backgroundPreloadPath: resolve(__dirname, 'extensions-background-preload.js'),
@@ -151,6 +152,15 @@ export class SessionsManager {
             id,
             !window.downloadsDialog.visible,
           );
+
+          if (extname(fileName) === '.crx') {
+            const extensionsPath = getPath('extensions');
+            const path = resolve(extensionsPath, makeId(32));
+
+            extractCrx(savePath, path);
+
+            this.extensions.loadExtension(resolve(extensionsPath, path));
+          }
         } else {
           console.log(`Download failed: ${state}`);
         }

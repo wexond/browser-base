@@ -1,7 +1,7 @@
 export const injectChromeWebstoreInstallButton = () => {
   const baseUrl =
     'https://clients2.google.com/service/update2/crx?response=redirect&acceptformat=crx2,crx3&prodversion=%VERSION&x=id%3D%ID%26installsource%3Dondemand%26uc';
-  const ibText = 'Install';
+  const ibText = 'Add to Wexond';
   const ibTemplate =
     '<div role="button" class="dd-Va g-c-wb g-eg-ua-Uc-c-za g-c-Oc-td-jb-oa g-c" aria-label="' +
     ibText +
