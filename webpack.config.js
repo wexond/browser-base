@@ -26,11 +26,11 @@ const mainConfig = getConfig({
         },
       },
       {
-        from: 'node_modules/electron-extensions/background-preload',
+        from: 'node_modules/electron-extensions/background-preload.js',
         to: 'extensions-background-preload.js',
       },
       {
-        from: 'node_modules/electron-extensions/content-preload',
+        from: 'node_modules/electron-extensions/content-preload.js',
         to: 'extensions-content-preload.js',
       },
       {
