@@ -41,17 +41,15 @@ export const Input = styled.input`
   border: none;
   outline: none;
   background-color: transparent;
-
   user-select: auto;
   ${robotoRegular()};
 
   ${({ color, hasLabel, hasIcon, dark }: InputProps) => css`
     padding-top: ${hasLabel ? 12 : 0}px;
     padding-right: ${hasIcon ? 48 : 12}px;
-    ${coloredCursor(color)};
+    ${coloredCursor(color, dark ? 255 : 0)};
     border-bottom: 1px solid
       ${dark ? `rgba(255, 255, 255, 0.12)` : `rgba(0, 0, 0, 0.42)`};
-    color: ${dark ? '#fff' : '#000'};
 
     &::placeholder {
       text-shadow: 0px 0px 0px

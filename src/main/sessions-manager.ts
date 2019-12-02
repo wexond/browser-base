@@ -9,6 +9,7 @@ import storage from './services/storage';
 import * as url from 'url';
 import { F_OK } from 'constants';
 import { IDownloadItem } from '~/interfaces';
+import { extractCrx } from '~/utils/extract-crx';
 
 const extensibleSessionOptions = {
   backgroundPreloadPath: resolve(__dirname, 'extensions-background-preload.js'),
@@ -143,7 +144,7 @@ export class SessionsManager {
           }
         }
       });
-      item.once('done', (event, state) => {
+      item.once('done', async (event, state) => {
         if (state === 'completed') {
           window.downloadsDialog.webContents.send('download-completed', id);
           window.webContents.send(
@@ -151,6 +152,21 @@ export class SessionsManager {
             id,
             !window.downloadsDialog.visible,
           );
+
+          if (extname(fileName) === '.crx') {
+            const extensionsPath = getPath('extensions');
+            const path = resolve(extensionsPath, makeId(32));
+
+            await extractCrx(savePath, path);
+
+            const extension = {
+              ...(await this.extensions.loadExtension(path)),
+            };
+
+            delete extension.backgroundPage;
+
+            window.webContents.send('load-browserAction', extension);
+          }
         } else {
           console.log(`Download failed: ${state}`);
         }

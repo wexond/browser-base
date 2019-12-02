@@ -14,16 +14,17 @@ export const Item = styled(ItemBase)`
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  backdrop-filter: blur(5px);
 
   ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['pages.lightForeground']
-      ? 'rgba(25, 25, 25, 0.7)'
-      : 'rgba(255, 255, 255, 0.7)'};
+      ? 'rgba(0, 0, 0, 0.4)'
+      : 'rgba(255, 255, 255, 0.4)'};
 
     &:hover {
       box-shadow: ${shadows(8)};
       background-color: ${theme['pages.lightForeground']
-        ? 'rgb(50, 50, 50)'
+        ? 'rgb(25, 25, 25)'
         : '#f0f0f0'};
     }
   `};

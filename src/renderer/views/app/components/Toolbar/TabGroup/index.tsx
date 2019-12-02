@@ -19,7 +19,7 @@ export const TabGroup = observer(({ tabGroup }: { tabGroup: ITabGroup }) => {
     <>
       <StyledTabGroup ref={tabGroup.ref}>
         <Placeholder
-          onClick={onPlaceholderClick(tabGroup)}
+          onMouseDown={onPlaceholderClick(tabGroup)}
           ref={tabGroup.placeholderRef}
           hasName={tabGroup.name !== ''}
           style={{

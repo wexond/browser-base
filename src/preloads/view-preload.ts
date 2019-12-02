@@ -2,7 +2,8 @@ import { ipcRenderer, webFrame } from 'electron';
 
 import AutoComplete from './models/auto-complete';
 import { getTheme } from '~/utils/themes';
-import { WEBUI_PROTOCOL, WEBUI_BASE_URL } from '~/constants/files';
+import { WEBUI_BASE_URL } from '~/constants/files';
+import { injectChromeWebstoreInstallButton } from './chrome-webstore';
 
 const tabId = ipcRenderer.sendSync('get-webcontents-id');
 const arg = process.argv.find(x => x.startsWith('--window-id='));
@@ -115,6 +116,10 @@ const emitCallback = (msg: string, data: any) => {
 };
 
 const hostname = window.location.href.substr(WEBUI_BASE_URL.length);
+
+if (window.location.host === 'chrome.google.com') {
+  injectChromeWebstoreInstallButton();
+}
 
 if (
   window.location.href.startsWith(WEBUI_BASE_URL) ||

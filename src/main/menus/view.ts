@@ -1,7 +1,7 @@
 import { AppWindow } from '../windows';
-import { clipboard, nativeImage, Menu, dialog, BrowserWindow } from 'electron';
+import { clipboard, nativeImage, Menu } from 'electron';
 import { isURL, prefixHttp } from '~/utils';
-import { extname } from 'path';
+import { saveAs, viewSource, printPage } from './common-actions';
 
 export const getViewMenu = (
   appWindow: AppWindow,
@@ -86,27 +86,36 @@ export const getViewMenu = (
     menuItems = menuItems.concat([
       {
         role: 'undo',
+        accelerator: 'CmdOrCtrl+Z',
       },
       {
         role: 'redo',
+        accelerator: 'CmdOrCtrl+Shift+Z',
       },
       {
         type: 'separator',
       },
       {
         role: 'cut',
+        accelerator: 'CmdOrCtrl+X',
       },
       {
         role: 'copy',
+        accelerator: 'CmdOrCtrl+C',
       },
       {
         role: 'pasteAndMatchStyle',
+        accelerator: 'CmdOrCtrl+V',
+        label: 'Paste',
       },
       {
         role: 'paste',
+        accelerator: 'CmdOrCtrl+Shift+V',
+        label: 'Paste as plain text',
       },
       {
         role: 'selectAll',
+        accelerator: 'CmdOrCtrl+A',
       },
       {
         type: 'separator',
@@ -118,9 +127,15 @@ export const getViewMenu = (
     menuItems = menuItems.concat([
       {
         role: 'copy',
+        accelerator: 'CmdOrCtrl+C',
+      },
+      {
+        type: 'separator',
       },
     ]);
+  }
 
+  if (params.selectionText !== '') {
     const trimmedText = params.selectionText.trim();
 
     if (isURL(trimmedText)) {
@@ -137,6 +152,9 @@ export const getViewMenu = (
             );
           },
         },
+        {
+          type: 'separator',
+        },
       ]);
     }
   }
@@ -150,6 +168,7 @@ export const getViewMenu = (
     menuItems = menuItems.concat([
       {
         label: 'Go back',
+        accelerator: 'Alt+Left',
         enabled: webContents.canGoBack(),
         click: () => {
           webContents.goBack();
@@ -157,13 +176,15 @@ export const getViewMenu = (
       },
       {
         label: 'Go forward',
+        accelerator: 'Alt+Right',
         enabled: webContents.canGoForward(),
         click: () => {
           webContents.goForward();
         },
       },
       {
-        label: 'Refresh',
+        label: 'Reload',
+        accelerator: 'CmdOrCtrl+R',
         click: () => {
           webContents.reload();
         },
@@ -173,30 +194,34 @@ export const getViewMenu = (
       },
       {
         label: 'Save as...',
+        accelerator: 'CmdOrCtrl+S',
         click: async () => {
-          const { canceled, filePath } = await dialog.showSaveDialog({
-            defaultPath: webContents.getTitle(),
-            filters: [
-              { name: 'Webpage, Complete', extensions: ['html', 'htm'] },
-              { name: 'Webpage, HTML Only', extensions: ['htm', 'html'] },
-            ],
-          });
-
-          if (canceled) return;
-
-          const ext = extname(filePath);
-
-          webContents.savePage(
-            filePath,
-            ext === '.htm' ? 'HTMLOnly' : 'HTMLComplete',
-          );
+          saveAs();
+        },
+      },
+      {
+        label: 'Print',
+        accelerator: 'CmdOrCtrl+P',
+        click: async () => {
+          printPage();
+        },
+      },
+      {
+        type: 'separator',
+      },
+      {
+        label: 'View page source',
+        accelerator: 'CmdOrCtrl+U',
+        click: () => {
+          viewSource();
         },
       },
     ]);
   }
 
   menuItems.push({
-    label: 'Inspect Element',
+    label: 'Inspect',
+    accelerator: 'CmdOrCtrl+Shift+I',
     click: () => {
       webContents.inspectElement(params.x, params.y);
 

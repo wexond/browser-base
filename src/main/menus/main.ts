@@ -1,6 +1,7 @@
 import { Menu, webContents } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { WindowsManager } from '../windows-manager';
+import { viewSource, saveAs, printPage } from './common-actions';
 
 export const getMainMenu = (windowsManager: WindowsManager) => {
   return Menu.buildFromTemplate([
@@ -108,7 +109,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         },
         {
           accelerator: 'Ctrl+Space',
-          label: 'Toggle Search',
+          label: 'Toggle search',
           visible: false,
           click() {
             windowsManager.currentWindow.searchDialog.show();
@@ -116,18 +117,18 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         },
         {
           accelerator: 'CmdOrCtrl+L',
-          label: 'Toggle menu',
+          label: 'Toggle search',
           visible: false,
           click() {
-            windowsManager.currentWindow.menuDialog.show();
+            windowsManager.currentWindow.searchDialog.show();
           },
         },
         {
           accelerator: 'Alt+F',
-          label: 'Toggle Search',
+          label: 'Toggle menu',
           visible: false,
           click() {
-            windowsManager.currentWindow.searchDialog.show();
+            windowsManager.currentWindow.menuDialog.show();
           },
         },
         {
@@ -139,7 +140,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           },
         },
         {
-          accelerator: 'CmdOrCtrl+Left',
+          accelerator: 'Alt+Left',
           label: 'Go back',
           visible: false,
           click() {
@@ -150,7 +151,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           },
         },
         {
-          accelerator: 'CmdOrCtrl+Right',
+          accelerator: 'Alt+Right',
           label: 'Go forward',
           visible: false,
           click() {
@@ -190,6 +191,27 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
             setTimeout(() => {
               windowsManager.currentWindow.viewManager.selected.webContents.toggleDevTools();
             });
+          },
+        },
+        {
+          label: 'View page source',
+          accelerator: 'CmdOrCtrl+U',
+          click: () => {
+            viewSource();
+          },
+        },
+        {
+          label: 'Save as',
+          accelerator: 'CmdOrCtrl+S',
+          click: () => {
+            saveAs();
+          },
+        },
+        {
+          label: 'Print',
+          accelerator: 'CmdOrCtrl+P',
+          click: () => {
+            printPage();
           },
         },
       ],

@@ -97,6 +97,13 @@ export class TabsStore {
       }
     });
 
+    ipcRenderer.on('remove-tab', (e, id: number) => {
+      const tab = this.getTabById(id);
+      if (tab) {
+        tab.close();
+      }
+    });
+
     ipcRenderer.on('update-tab-find-info', (e, tabId: number, data) => {
       const tab = this.getTabById(tabId);
       if (tab) {
