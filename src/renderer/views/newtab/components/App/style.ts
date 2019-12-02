@@ -66,13 +66,12 @@ export const Menu = styled.div`
 export const IconItem = styled.div`
   width: 40px;
   height: 40px;
-  ${centerIcon(20)};
   margin-top: 8px;
-  filter: invert(100%);
   opacity: 0.54;
   z-index: 3;
   cursor: pointer;
   border-radius: 4px;
+  position: relative;
 
   &:first-child {
     margin-top: 0;
@@ -81,10 +80,21 @@ export const IconItem = styled.div`
   &:hover {
     opacity: 1;
     background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(2.5px);
   }
 
   ${({ icon }: { icon?: string }) => css`
-    background-image: url(${icon});
+    &:after {
+      position: absolute;
+      content: '';
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      ${centerIcon(20)};
+      background-image: url(${icon});
+      filter: invert(100%);
+    }
   `};
 `;
 
