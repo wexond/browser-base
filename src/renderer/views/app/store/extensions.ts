@@ -6,6 +6,9 @@ import { resolve } from 'path';
 import { IBrowserAction } from '../models';
 import { extensionsRenderer } from 'electron-extensions/renderer';
 import { promises } from 'fs';
+import { IpcExtension } from 'electron-extensions/models/ipc-extension';
+import { ipcRenderer } from 'electron';
+import store from '.';
 
 export class ExtensionsStore {
   @observable
@@ -16,6 +19,10 @@ export class ExtensionsStore {
 
   public constructor() {
     this.load();
+
+    ipcRenderer.on('load-browserAction', (e, extension) => {
+      this.loadExtension(extension);
+    });
   }
 
   public queryBrowserAction(query: any) {
@@ -35,38 +42,48 @@ export class ExtensionsStore {
     });
   }
 
+  public async loadExtension(extension: IpcExtension) {
+    const { manifest, path, id } = extension;
+
+    if (manifest.browser_action) {
+      const {
+        default_icon,
+        default_title,
+        default_popup,
+      } = manifest.browser_action;
+
+      let icon1 = default_icon;
+
+      if (typeof icon1 === 'object') {
+        icon1 = Object.values(default_icon)[
+          Object.keys(default_icon).length - 1
+        ];
+      }
+
+      const data = await promises.readFile(resolve(path, icon1 as string));
+      const icon = window.URL.createObjectURL(new Blob([data]));
+      const browserAction = new IBrowserAction({
+        extensionId: id,
+        icon,
+        title: default_title,
+        popup: default_popup,
+      });
+
+      this.defaultBrowserActions.push(browserAction);
+
+      for (const tab of store.tabs.list) {
+        const tabBrowserAction = { ...browserAction };
+        tabBrowserAction.tabId = tab.id;
+        this.browserActions.push(tabBrowserAction);
+      }
+    }
+  }
+
   public async load() {
     const extensions = extensionsRenderer.getExtensions();
 
     for (const key in extensions) {
-      const { manifest, path, id } = extensions[key];
-
-      if (manifest.browser_action) {
-        const {
-          default_icon,
-          default_title,
-          default_popup,
-        } = manifest.browser_action;
-
-        let icon1 = default_icon;
-
-        if (typeof icon1 === 'object') {
-          icon1 = Object.values(default_icon)[
-            Object.keys(default_icon).length - 1
-          ];
-        }
-
-        const data = await promises.readFile(resolve(path, icon1 as string));
-        const icon = window.URL.createObjectURL(new Blob([data]));
-        const browserAction = new IBrowserAction({
-          extensionId: id,
-          icon,
-          title: default_title,
-          popup: default_popup,
-        });
-
-        this.defaultBrowserActions.push(browserAction);
-      }
+      this.loadExtension(extensions[key]);
     }
   }
 }

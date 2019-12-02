@@ -144,7 +144,7 @@ export class SessionsManager {
           }
         }
       });
-      item.once('done', (event, state) => {
+      item.once('done', async (event, state) => {
         if (state === 'completed') {
           window.downloadsDialog.webContents.send('download-completed', id);
           window.webContents.send(
@@ -157,9 +157,15 @@ export class SessionsManager {
             const extensionsPath = getPath('extensions');
             const path = resolve(extensionsPath, makeId(32));
 
-            extractCrx(savePath, path);
+            await extractCrx(savePath, path);
 
-            this.extensions.loadExtension(resolve(extensionsPath, path));
+            const extension = {
+              ...(await this.extensions.loadExtension(path)),
+            };
+
+            delete extension.backgroundPage;
+
+            window.webContents.send('load-browserAction', extension);
           }
         } else {
           console.log(`Download failed: ${state}`);
