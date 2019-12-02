@@ -51,10 +51,6 @@ const preloadConfig = getConfig({
   },
 
   plugins: [],
-
-  output: {
-    libraryTarget: 'var',
-  },
 });
 
 if (process.env.START === '1') {

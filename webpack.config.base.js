@@ -25,7 +25,6 @@ const config = {
   output: {
     path: resolve(__dirname, 'build'),
     filename: '[name].bundle.js',
-    libraryTarget: 'commonjs2',
   },
 
   module: {
@@ -33,7 +32,14 @@ const config = {
       {
         test: /\.(png|gif|jpg|woff2|ttf|svg)$/,
         include: INCLUDE,
-        use: ['file-loader'],
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              esModule: false,
+            },
+          },
+        ],
       },
       {
         test: /\.tsx|ts$/,

@@ -15,10 +15,6 @@ const webConfig = getConfig(getBaseConfig('web'), {
     inline: true,
     disableHostCheck: true,
   },
-
-  output: {
-    libraryTarget: 'var',
-  },
 });
 
 applyEntries('web', webConfig, ['settings', 'history', 'newtab']);
