@@ -33,10 +33,6 @@ const mainConfig = getConfig({
         from: 'node_modules/electron-extensions/content-preload.js',
         to: 'extensions-content-preload.js',
       },
-      {
-        from: 'node_modules/mouse-hooks/mouse.js',
-        to: 'mouse.js',
-      },
     ]),
   ],
 });
@@ -51,10 +47,6 @@ const preloadConfig = getConfig({
   },
 
   plugins: [],
-
-  output: {
-    libraryTarget: 'var',
-  },
 });
 
 if (process.env.START === '1') {

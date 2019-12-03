@@ -39,16 +39,6 @@ export class SuggestionsStore {
 
       const historySuggestions: ISuggestion[] = [];
 
-      if ((!history[0] || !history[0].canSuggest) && filter.trim() !== '') {
-        if (isURL(filter) || filter.indexOf('://') !== -1) {
-          historySuggestions.unshift({
-            primaryText: filter,
-            secondaryText: 'open website',
-            favicon: icons.page,
-          });
-        }
-      }
-
       for (const item of history) {
         if (!item.isSearch) {
           historySuggestions.push({
@@ -67,7 +57,21 @@ export class SuggestionsStore {
         }
       }
 
-      historySuggestions.splice(1, 0, {
+      let idx = 1;
+
+      if ((!history[0] || !history[0].canSuggest) && filter.trim() !== '') {
+        if (isURL(filter) || filter.indexOf('://') !== -1) {
+          historySuggestions.unshift({
+            primaryText: filter,
+            secondaryText: 'open website',
+            favicon: icons.page,
+          });
+        } else {
+          idx = 0;
+        }
+      }
+
+      historySuggestions.splice(idx, 0, {
         primaryText: filter,
         secondaryText: `search in ${this.store.searchEngine.name}`,
         favicon: icons.search,

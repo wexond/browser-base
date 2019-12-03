@@ -31,6 +31,10 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.close();
   });
 
+  ipcMain.on(`window-fix-dragging-${id}`, () => {
+    appWindow.fixDragging();
+  });
+
   ipcMain.on(`update-tab-find-info-${id}`, (e, ...args) =>
     appWindow.webContents.send('update-tab-find-info', ...args),
   );
