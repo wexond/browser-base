@@ -1,28 +1,21 @@
 import { session, app, ipcMain } from 'electron';
 import { ExtensibleSession } from 'electron-extensions/main';
 import { getPath, makeId } from '~/utils';
-import { promises, access, existsSync } from 'fs';
+import { promises, existsSync } from 'fs';
 import { resolve, basename, parse, extname } from 'path';
 import { WindowsManager } from './windows-manager';
 import { registerProtocol } from './models/protocol';
 import storage from './services/storage';
 import * as url from 'url';
-import { F_OK } from 'constants';
 import { IDownloadItem } from '~/interfaces';
-import { extractCrx } from '~/utils/extract-crx';
+import { parseCrx } from '~/utils/crx';
+import { pathExists } from '~/utils/files';
+import { extractZip } from '~/utils/zip';
 
 const extensibleSessionOptions = {
   backgroundPreloadPath: resolve(__dirname, 'extensions-background-preload.js'),
   contentPreloadPath: resolve(__dirname, 'extensions-content-preload.js'),
 };
-
-function fileExists(path: string) {
-  return new Promise(resolve => {
-    access(path, F_OK, error => {
-      resolve(!error);
-    });
-  });
-}
 
 export class SessionsManager {
   public view = session.fromPartition('persist:view');
@@ -154,10 +147,22 @@ export class SessionsManager {
           );
 
           if (extname(fileName) === '.crx') {
-            const extensionsPath = getPath('extensions');
-            const path = resolve(extensionsPath, makeId(32));
+            const crxBuf = await promises.readFile(savePath);
+            const crxInfo = parseCrx(crxBuf);
 
-            await extractCrx(savePath, path);
+            if (!crxInfo.id) {
+              crxInfo.id = makeId(32);
+            }
+
+            const extensionsPath = getPath('extensions');
+            const path = resolve(extensionsPath, crxInfo.id);
+
+            if (await pathExists(path)) {
+              console.log('Extension is already installed');
+              return;
+            }
+
+            await extractZip(crxInfo.zip, path);
 
             const extension = {
               ...(await this.extensions.loadExtension(path)),

@@ -1,6 +1,6 @@
 import { DIRECTORIES, FILES } from '~/constants/files';
 import { getPath } from '.';
-import { mkdirSync, existsSync, writeFileSync } from 'fs';
+import { mkdirSync, existsSync, writeFileSync, stat } from 'fs';
 
 export const checkFiles = () => {
   for (const dir of DIRECTORIES) {
@@ -17,5 +17,13 @@ export const checkFiles = () => {
     if (!existsSync(path)) {
       writeFileSync(path, JSON.stringify(defaultContent));
     }
+  });
+};
+
+export const pathExists = (path: string) => {
+  return new Promise(resolve => {
+    stat(path, error => {
+      resolve(!error);
+    });
   });
 };
