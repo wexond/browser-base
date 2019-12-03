@@ -170,8 +170,7 @@ export const parseCrx = (buf: Buffer) => {
       getBinaryString(buf, 16, 16 + publicKeyLength),
       'binary',
     );
-  } else {
-    // view[4] === 3
+  } else if (buf[4] === 3) {
     // CRX3 - https://cs.chromium.org/chromium/src/components/crx_file/crx3.proto
     const crx3HeaderLength = calcLength(buf[8], buf[9], buf[10], buf[11]);
     // 12 = Magic number (4), CRX format version (4), header length (4)
