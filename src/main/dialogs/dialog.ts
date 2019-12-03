@@ -140,6 +140,8 @@ export class Dialog extends BrowserView {
     this.visible = false;
 
     this.hideVisually();
+
+    this.appWindow.fixDragging();
   }
 
   public bringToTop() {

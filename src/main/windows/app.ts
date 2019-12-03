@@ -212,4 +212,14 @@ export class AppWindow extends BrowserWindow {
       windowsManager.currentWindow = this;
     });
   }
+
+  public fixDragging() {
+    if (process.platform === 'darwin') {
+      const bounds = this.getBounds();
+      this.setBounds({
+        height: bounds.height + 1,
+      });
+      this.setBounds(bounds);
+    }
+  }
 }

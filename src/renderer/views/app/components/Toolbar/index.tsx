@@ -13,7 +13,6 @@ import { BrowserAction } from './BrowserAction';
 import { platform } from 'os';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { WindowsControls } from 'react-windows-controls';
-import { Preloader } from '~/renderer/components/Preloader';
 
 const onDownloadsClick = (e: React.MouseEvent<HTMLDivElement>) => {
   store.downloadNotification = false;
@@ -54,6 +53,10 @@ const BrowserActions = observer(() => {
 });
 
 const onCloseClick = () => ipcRenderer.send(`window-close-${store.windowId}`);
+
+const onMouseEnter = () => {
+  ipcRenderer.send(`window-fix-dragging-${store.windowId}`);
+};
 
 const onMaximizeClick = () =>
   ipcRenderer.send(`window-toggle-maximize-${store.windowId}`);
@@ -109,7 +112,10 @@ const RightButtons = observer(() => {
 
 export const Toolbar = observer(() => {
   return (
-    <StyledToolbar isHTMLFullscreen={store.isHTMLFullscreen}>
+    <StyledToolbar
+      onMouseEnter={onMouseEnter}
+      isHTMLFullscreen={store.isHTMLFullscreen}
+    >
       <NavigationButtons />
       <Tabbar />
       <RightButtons />
