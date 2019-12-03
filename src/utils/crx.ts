@@ -191,5 +191,5 @@ export const parseCrx = (buf: Buffer) => {
   // 16 = Magic number (4), CRX format version (4), lengths (2x4)
   zipStartOffset = 16 + publicKeyLength + signatureLength;
 
-  return { zip: buf.slice(zipStartOffset, buf.length), id: crxId };
+  return { zip: buf.slice(zipStartOffset, buf.length), id: crxId, publicKey };
 };

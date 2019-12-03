@@ -156,6 +156,7 @@ export class SessionsManager {
 
             const extensionsPath = getPath('extensions');
             const path = resolve(extensionsPath, crxInfo.id);
+            const manifestPath = resolve(path, 'manifest.json');
 
             if (await pathExists(path)) {
               console.log('Extension is already installed');
@@ -167,6 +168,19 @@ export class SessionsManager {
             const extension = {
               ...(await this.extensions.loadExtension(path)),
             };
+
+            if (crxInfo.publicKey) {
+              const manifest = JSON.parse(
+                await promises.readFile(manifestPath, 'utf8'),
+              );
+
+              manifest.key = crxInfo.publicKey.toString('base64');
+
+              await promises.writeFile(
+                manifestPath,
+                JSON.stringify(manifest, null, 2),
+              );
+            }
 
             delete extension.backgroundPage;
 
