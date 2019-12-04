@@ -43,7 +43,7 @@ export const MenuItem = styled.div`
   align-items: center;
   display: flex;
   position: relative;
-  padding: 0 12px;
+  padding: 0 16px;
   font-size: 12px;
   letter-spacing: ${getLetterSpacing(12, 0.1)}rem;
 
@@ -53,7 +53,7 @@ export const MenuItem = styled.div`
       &:after {
         content: '';
         position: absolute;
-        right: 4px;
+        right: 8px;
         width: 24px;
         height: 100%;
         opacity: 0.54;
@@ -99,7 +99,7 @@ export const Content = styled.div`
 `;
 
 export const Icon = styled.div`
-  margin-right: 12px;
+  margin-right: 16px;
   width: 20px;
   height: 20px;
   ${centerIcon()};
@@ -117,5 +117,4 @@ export const RightControl = styled.div`
 
 export const Shortcut = styled(RightControl)`
   opacity: 0.54;
-  margin-right: 16px;
 `;
