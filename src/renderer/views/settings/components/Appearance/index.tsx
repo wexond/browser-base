@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Dropdown } from '~/renderer/components/Dropdown';
-import Switch from '~/renderer/components/Switch';
+import { Switch } from '~/renderer/components/Switch';
 import { Title, Row, Control, Header } from '../App/style';
 import store from '../../store';
 import { onSwitchChange } from '../../utils';
@@ -32,13 +32,10 @@ const MenuAnimations = observer(() => {
   const { animations } = store.settings;
 
   return (
-    <Row>
+    <Row onClick={onSwitchChange('animations')}>
       <Title>Menu animations</Title>
       <Control>
-        <Switch
-          onChange={onSwitchChange('animations')}
-          defaultValue={animations}
-        />
+        <Switch value={animations} />
       </Control>
     </Row>
   );
@@ -48,13 +45,10 @@ const BookmarksBar = observer(() => {
   const { bookmarksBar } = store.settings;
 
   return (
-    <Row>
+    <Row onClick={onSwitchChange('bookmarksBar')}>
       <Title>Show bookmarks bar</Title>
       <Control>
-        <Switch
-          onChange={onSwitchChange('bookmarksBar')}
-          defaultValue={bookmarksBar}
-        />
+        <Switch value={bookmarksBar} />
       </Control>
     </Row>
   );
