@@ -15,7 +15,7 @@ export const Line = styled.div`
 `;
 
 export const Background = styled.div`
-  height: 250px;
+  height: 50%;
   width: 100%;
   position: absolute;
   left: 0;
@@ -30,7 +30,12 @@ export const Actions = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   color: white;
-  padding-bottom: 8px;
+  padding-bottom: 12px;
+  padding-top: 4px;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    color: ${theme['menu.header.lightForeground'] ? 'white' : 'black'};
+  `};
 `;
 
 export const MenuItem = styled.div`
@@ -38,7 +43,7 @@ export const MenuItem = styled.div`
   align-items: center;
   display: flex;
   position: relative;
-  padding: 0 16px;
+  padding: 0 12px;
   font-size: 12px;
   letter-spacing: ${getLetterSpacing(12, 0.1)}rem;
 
@@ -74,8 +79,8 @@ export const MenuItemTitle = styled.div`
 `;
 
 export const MenuItems = styled.div`
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
   flex: 1;
   overflow: hidden;
   padding-top: 8px;
@@ -94,7 +99,7 @@ export const Content = styled.div`
 `;
 
 export const Icon = styled.div`
-  margin-right: 16px;
+  margin-right: 12px;
   width: 20px;
   height: 20px;
   ${centerIcon()};
@@ -106,7 +111,11 @@ export const Icon = styled.div`
   `};
 `;
 
-export const Shortcut = styled.div`
+export const RightControl = styled.div`
+  margin-right: 16px;
+`;
+
+export const Shortcut = styled(RightControl)`
   opacity: 0.54;
   margin-right: 16px;
 `;

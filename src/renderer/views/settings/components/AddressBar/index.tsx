@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Dropdown } from '~/renderer/components/Dropdown';
-import Switch from '~/renderer/components/Switch';
+import { Switch } from '~/renderer/components/Switch';
 import { Title, Row, Control, Header } from '../App/style';
 import store from '../../store';
 import { onSwitchChange } from '../../utils';
@@ -10,13 +10,10 @@ const SuggestionsToggle = () => {
   const { suggestions } = store.settings;
 
   return (
-    <Row>
+    <Row onClick={onSwitchChange('suggestions')}>
       <Title>Show search and site suggestions</Title>
       <Control>
-        <Switch
-          onChange={onSwitchChange('suggestions')}
-          defaultValue={suggestions}
-        />
+        <Switch value={suggestions} />
       </Control>
     </Row>
   );

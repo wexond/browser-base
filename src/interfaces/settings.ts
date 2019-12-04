@@ -18,6 +18,7 @@ export interface ISettings {
   searchEngine: number;
   searchEngines: ISearchEngine[];
   startupBehavior: IStartupBehavior;
+  warnOnQuit: boolean;
   version: string;
   darkContents: boolean;
 }

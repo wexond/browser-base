@@ -1,4 +1,4 @@
-import { BrowserWindow, app } from 'electron';
+import { BrowserWindow, app, dialog } from 'electron';
 import { readFileSync, writeFileSync } from 'fs';
 import { resolve, join } from 'path';
 
@@ -18,6 +18,7 @@ import {
   TabGroupDialog,
   DownloadsDialog,
 } from '../dialogs';
+import { ISettings } from '~/interfaces';
 
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
@@ -65,6 +66,7 @@ export class AppWindow extends BrowserWindow {
     const windowDataPath = getPath('window-data.json');
 
     let windowState: any = {};
+    const settings: ISettings = this.windowsManager.settings.object;
 
     try {
       // Read the last window state from file.
@@ -126,7 +128,25 @@ export class AppWindow extends BrowserWindow {
     this.on('restore', resize);
     this.on('unmaximize', resize);
 
-    this.on('close', () => {
+    this.on('close', (event: Electron.Event) => {
+      if (settings.warnOnQuit && this.viewManager.views.size > 1) {
+        const answer = dialog.showMessageBoxSync(null, {
+          type: 'question',
+          title: `Quit ${app.name}?`,
+          message: `Quit ${app.name}?`,
+          detail:
+            `Are you sure you want to exit ${app.name}?\n` +
+            `You have opened ${this.viewManager.views.size} tabs.\n` +
+            `To configure this, please go to settings.`,
+          buttons: ['Close', 'Cancel'],
+        });
+
+        if (answer === 1) {
+          event.preventDefault();
+          return;
+        }
+      }
+
       // Save current window state to a file.
       windowState.maximized = this.isMaximized();
       windowState.fullscreen = this.isFullScreen();

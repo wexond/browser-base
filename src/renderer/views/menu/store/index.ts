@@ -22,6 +22,9 @@ export class Store {
   @observable
   public windowId = remote.getCurrentWindow().id;
 
+  @observable
+  public alwaysOnTop = false;
+
   public constructor() {
     ipcRenderer.on('visible', (e, flag) => {
       this.visible = flag;
