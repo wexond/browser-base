@@ -125,7 +125,7 @@ if (
   window.location.href.startsWith(WEBUI_BASE_URL) ||
   window.location.protocol === 'wexond-error:'
 ) {
-  (async function() {
+  (async function () {
     const w = await webFrame.executeJavaScript('window');
     w.settings = ipcRenderer.sendSync('get-settings-sync');
 
@@ -148,7 +148,6 @@ if (
 }
 
 if (window.location.href.startsWith(WEBUI_BASE_URL)) {
-  console.log('aha');
   window.addEventListener('DOMContentLoaded', () => {
     if (hostname.startsWith('settings')) document.title = 'Settings';
     else if (hostname.startsWith('history')) document.title = 'History';
