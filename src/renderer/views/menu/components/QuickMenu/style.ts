@@ -14,30 +14,6 @@ export const Line = styled.div`
   `};
 `;
 
-export const Background = styled.div`
-  height: 50%;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  ${({ theme }: { theme?: ITheme }) => css`
-    background-image: ${theme['menu.header.background']};
-  `};
-`;
-
-export const Actions = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  color: white;
-  padding-bottom: 12px;
-  padding-top: 4px;
-
-  ${({ theme }: { theme?: ITheme }) => css`
-    color: ${theme['menu.header.lightForeground'] ? 'white' : 'black'};
-  `};
-`;
-
 export const MenuItem = styled.div`
   height: 36px;
   align-items: center;
