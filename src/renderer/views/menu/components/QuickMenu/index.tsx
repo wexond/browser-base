@@ -3,20 +3,20 @@ import { observer } from 'mobx-react-lite';
 
 import { Bubble } from '../Bubble';
 import {
-  Actions,
   Line,
   MenuItem,
   MenuItems,
-  Background,
   Content,
   Icon,
   MenuItemTitle,
   Shortcut,
+  RightControl,
 } from './style';
 import { icons } from '~/renderer/constants';
 import store from '../../store';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
+import { Switch } from '~/renderer/components/Switch';
 
 const changeContent = () => () => {
   // store.overlay.currentContent = content;
@@ -43,8 +43,8 @@ const onShieldClick = () => {
 };
 
 const onAlwaysClick = () => {
-  // store.isAlwaysOnTop = !store.isAlwaysOnTop;
-  // getCurrentWindow().setAlwaysOnTop(store.isAlwaysOnTop);
+  store.alwaysOnTop = !store.alwaysOnTop;
+  remote.getCurrentWindow().setAlwaysOnTop(store.alwaysOnTop);
 };
 
 const onNewWindowClick = () => {
@@ -64,8 +64,6 @@ const goToWebUIPage = (name: string) => () => {
 };
 
 export const QuickMenu = observer(() => {
-  const invert = store.theme['menu.header.lightForeground'];
-
   return (
     <div
       style={{
@@ -73,36 +71,23 @@ export const QuickMenu = observer(() => {
         flexFlow: 'column',
       }}
     >
-      <Background></Background>
       <Content>
-        <Actions>
-          <Bubble
-            // toggled={store.isAlwaysOnTop}
-            toggled={false}
-            onClick={onAlwaysClick}
-            invert={invert}
-            icon={icons.window}
-          >
-            Top Most
-          </Bubble>
-          <Bubble
-            toggled={store.settings.darkContents}
-            onClick={onDarkClick}
-            invert={invert}
-            icon={icons.night}
-          >
-            Dark Mode
-          </Bubble>
-          <Bubble
-            invert={invert}
-            toggled={store.settings.shield}
-            icon={icons.shield}
-            onClick={onShieldClick}
-          >
-            Shield
-          </Bubble>
-        </Actions>
         <MenuItems>
+          <MenuItem onClick={onDarkClick}>
+            <Icon icon={icons.night} />
+            <MenuItemTitle>Night mode</MenuItemTitle>
+            <RightControl>
+              <Switch value={store.settings.darkContents}></Switch>
+            </RightControl>
+          </MenuItem>
+          <MenuItem onClick={onAlwaysClick}>
+            <Icon icon={icons.topMost} />
+            <MenuItemTitle>Always on top</MenuItemTitle>
+            <RightControl>
+              <Switch value={store.alwaysOnTop}></Switch>
+            </RightControl>
+          </MenuItem>
+          <Line />
           <MenuItem onClick={goToWebUIPage('newtab')}>
             <Icon icon={icons.tab} />
             <MenuItemTitle>New tab</MenuItemTitle>
