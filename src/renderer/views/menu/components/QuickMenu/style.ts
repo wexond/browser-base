@@ -112,7 +112,7 @@ export const Icon = styled.div`
 `;
 
 export const RightControl = styled.div`
-  margin-right: 16px;
+  margin-right: 20px;
 `;
 
 export const Shortcut = styled(RightControl)`
