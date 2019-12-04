@@ -106,7 +106,6 @@ export const QuickMenu = observer(() => {
           <MenuItem onClick={goToWebUIPage('history')} arrow>
             <Icon icon={icons.history} />
             <MenuItemTitle>History</MenuItemTitle>
-            <Shortcut>Ctrl+T</Shortcut>
           </MenuItem>
           <MenuItem onClick={goToWebUIPage('bookmarks')} arrow>
             <Icon icon={icons.bookmarks} />
