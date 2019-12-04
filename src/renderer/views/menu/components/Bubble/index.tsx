@@ -46,13 +46,6 @@ export const Bubble = ({
           }}
         />
       </Circle>
-      <Title
-        style={{
-          WebkitLineClamp: maxLines,
-        }}
-      >
-        {children}
-      </Title>
     </StyledBubble>
   );
 };
@@ -60,5 +53,5 @@ export const Bubble = ({
 Bubble.defaultProps = {
   maxLines: 2,
   iconSize: 20,
-  itemsPerRow: 3.5,
+  itemsPerRow: 3,
 };

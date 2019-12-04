@@ -15,7 +15,7 @@ export const Line = styled.div`
 `;
 
 export const Background = styled.div`
-  height: 250px;
+  height: 50%;
   width: 100%;
   position: absolute;
   left: 0;
@@ -30,7 +30,12 @@ export const Actions = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   color: white;
-  padding-bottom: 8px;
+  padding-bottom: 16px;
+  padding-top: 8px;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    color: ${theme['menu.header.lightForeground'] ? 'white' : 'black'};
+  `};
 `;
 
 export const MenuItem = styled.div`
@@ -74,8 +79,8 @@ export const MenuItemTitle = styled.div`
 `;
 
 export const MenuItems = styled.div`
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
   flex: 1;
   overflow: hidden;
   padding-top: 8px;

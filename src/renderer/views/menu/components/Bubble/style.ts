@@ -26,7 +26,6 @@ export const StyledBubble = styled.div`
 export const Icon = styled.div`
   width: 100%;
   height: 100%;
-  margin-bottom: 8px;
   ${centerIcon(24)};
   transition: 0.2s filter;
 
@@ -41,24 +40,22 @@ export const Icon = styled.div`
   }) => css`
     transition: ${theme.animations ? '0.2s filter' : 'none'};
     filter: ${invert || toggled ? 'invert(100%)' : 'none'};
+    opacity: ${toggled ? 1 : 0.54};
   `}
 `;
 
 export const Circle = styled.div`
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   overflow: hidden;
   background-color: #212121;
   border-radius: 50%;
-  margin-bottom: 16px;
   ${centerIcon(32)};
 
   ${({ theme, toggled }: { theme?: ITheme; toggled?: boolean }) => css`
     transition: ${theme.animations ? '0.2s background-color' : 'none'};
 
-    background-color: ${toggled
-      ? 'rgba(0, 0, 0, 0.12)'
-      : 'rgba(255, 255, 255, 0.12)'};
+    background-color: ${toggled ? theme.accentColor : 'rgba(0, 0, 0, 0.06)'};
   `}
 `;
 
@@ -69,4 +66,5 @@ export const Title = styled.div`
   max-width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
+  margin-top: 16px;
 `;

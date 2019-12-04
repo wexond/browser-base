@@ -23,6 +23,7 @@ export interface ITheme {
   'dialog.lightForeground': boolean;
 
   'menu.header.background': string;
+  'menu.header.lightForeground': string;
 
   'searchBox.input.textColor': string;
   'searchBox.input.lightForeground': boolean;

@@ -64,7 +64,7 @@ const goToWebUIPage = (name: string) => () => {
 };
 
 export const QuickMenu = observer(() => {
-  const invert = true;
+  const invert = store.theme['menu.header.lightForeground'];
 
   return (
     <div
