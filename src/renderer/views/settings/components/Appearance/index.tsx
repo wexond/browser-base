@@ -32,13 +32,10 @@ const WarnQuit = observer(() => {
   const { warnOnQuit } = store.settings;
 
   return (
-    <Row>
+    <Row onClick={onSwitchChange('warnOnQuit')}>
       <Title>Show warning dialog when closing multiple tabs</Title>
       <Control>
-        <Switch
-          onChange={onSwitchChange('warnOnQuit')}
-          defaultValue={warnOnQuit}
-        />
+        <Switch value={warnOnQuit} />
       </Control>
     </Row>
   );
