@@ -47,6 +47,12 @@ export class Store {
     return this.searchEngines[this.settings.searchEngine];
   }
 
+  constructor() {
+    (window as any).updateSettings = (settings: ISettings) => {
+      this.settings = { ...this.settings, ...settings };
+    };
+  }
+
   public save() {
     delete this.settings.darkContents;
     delete this.settings.multrin;

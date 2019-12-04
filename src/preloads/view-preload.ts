@@ -125,7 +125,7 @@ if (
   window.location.href.startsWith(WEBUI_BASE_URL) ||
   window.location.protocol === 'wexond-error:'
 ) {
-  (async function () {
+  (async function() {
     const w = await webFrame.executeJavaScript('window');
     w.settings = ipcRenderer.sendSync('get-settings-sync');
 
@@ -171,6 +171,13 @@ if (window.location.href.startsWith(WEBUI_BASE_URL)) {
       emitCallback(data.id, data);
     } else if (data.type === 'save-settings') {
       ipcRenderer.send('save-settings', { settings: data.data });
+    }
+  });
+
+  ipcRenderer.on('update-settings', async (e, data) => {
+    const w = await webFrame.executeJavaScript('window');
+    if (w.updateSettings) {
+      w.updateSettings(data);
     }
   });
 

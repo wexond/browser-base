@@ -8,6 +8,7 @@ import { getPath, makeId } from '~/utils';
 import { EventEmitter } from 'events';
 import { runAdblockService, stopAdblockService } from '../services/adblock';
 import { WindowsManager } from '../windows-manager';
+import { WEBUI_BASE_URL } from '~/constants/files';
 
 export class Settings extends EventEmitter {
   public object = DEFAULT_SETTINGS;
@@ -82,6 +83,12 @@ export class Settings extends EventEmitter {
       window.previewDialog.webContents.send('update-settings', this.object);
       window.tabGroupDialog.webContents.send('update-settings', this.object);
       window.downloadsDialog.webContents.send('update-settings', this.object);
+
+      window.viewManager.views.forEach(v => {
+        if (v.webContents.getURL().startsWith(WEBUI_BASE_URL)) {
+          v.webContents.send('update-settings', this.object);
+        }
+      });
     }
 
     contexts.forEach(e => {
