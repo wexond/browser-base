@@ -13,6 +13,7 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Autofill } from '../Autofill';
 import { icons } from '~/renderer/constants';
 import { OnStartup } from '../Startup';
+import { OnQuit } from '../Quit';
 import { Content, LeftContent, Container } from '~/renderer/components/Pages';
 import { GlobalNavigationDrawer } from '~/renderer/components/GlobalNavigationDrawer';
 
@@ -56,6 +57,9 @@ export default hot(
             <MenuItem icon={icons.power} section="startup">
               On startup
             </MenuItem>
+            <MenuItem icon={icons.close} section="quit">
+              On quit
+            </MenuItem>
             <MenuItem icon={icons.search} section="address-bar">
               Address bar
             </MenuItem>
@@ -72,6 +76,7 @@ export default hot(
               {selectedSection === 'autofill' && <Autofill />}
               {selectedSection === 'address-bar' && <AddressBar />}
               {selectedSection === 'startup' && <OnStartup />}
+              {selectedSection === 'quit' && <OnQuit />}
               {selectedSection === 'privacy' && <Privacy />}
             </LeftContent>
           </Content>

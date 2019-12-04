@@ -15,6 +15,9 @@ export const DEFAULT_SETTINGS: ISettings = {
   startupBehavior: {
     type: 'continue',
   },
+  quitBehavior: {
+    type: 'multiple',
+  },
   version: pkg.version,
 };
 
