@@ -66,7 +66,6 @@ export class AppWindow extends BrowserWindow {
     const windowDataPath = getPath('window-data.json');
 
     let windowState: any = {};
-    const settings: ISettings = this.windowsManager.settings.object;
 
     try {
       // Read the last window state from file.
@@ -129,6 +128,8 @@ export class AppWindow extends BrowserWindow {
     this.on('unmaximize', resize);
 
     this.on('close', (event: Electron.Event) => {
+      const { object: settings } = this.windowsManager.settings;
+
       if (settings.warnOnQuit && this.viewManager.views.size > 1) {
         const answer = dialog.showMessageBoxSync(null, {
           type: 'question',
