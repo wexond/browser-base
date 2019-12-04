@@ -135,10 +135,7 @@ export class AppWindow extends BrowserWindow {
           type: 'question',
           title: `Quit ${app.name}?`,
           message: `Quit ${app.name}?`,
-          detail:
-            `Are you sure you want to exit ${app.name}?\n` +
-            `You have opened ${this.viewManager.views.size} tabs.\n` +
-            `To configure this, please go to settings.`,
+          detail: `You have opened ${this.viewManager.views.size} tabs.`,
           buttons: ['Close', 'Cancel'],
         });
 
