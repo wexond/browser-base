@@ -105,7 +105,7 @@ const RightButtons = observer(() => {
       )}
       <Separator />
       {store.isIncognito && <ToolbarButton icon={icons.incognito} size={18} />}
-      <ToolbarButton onMouseDown={onMenuClick} icon={icons.more} size={18} />
+      <ToolbarButton onMouseDown={onMenuClick} icon={icons.menu} size={18} />
     </Buttons>
   );
 });
@@ -124,6 +124,7 @@ export const Toolbar = observer(() => {
           style={{
             height: TOOLBAR_HEIGHT,
             WebkitAppRegion: 'no-drag',
+            marginLeft: 8,
           }}
           onClose={onCloseClick}
           onMinimize={onMinimizeClick}
