@@ -1,5 +1,5 @@
 import { ITheme } from '~/interfaces';
-import { BLUE_500 } from './colors';
+import { BLUE_500, BLUE_300 } from './colors';
 
 export const lightTheme: ITheme = {
   'toolbar.backgroundColor': '#fff',
@@ -20,7 +20,8 @@ export const lightTheme: ITheme = {
   'dialog.backgroundColor': '#fff',
   'dialog.separator.color': 'rgba(0, 0, 0, 0.12)',
   'menu.header.background':
-    'linear-gradient(to bottom right, #00b0ff, #3d5afe)',
+    'linear-gradient(to bottom right, #fafafa, #fafafa)',
+  'menu.header.lightForeground': false,
   'dialog.textColor': '#000',
   'dialog.lightForeground': false,
   'searchBox.subHeading.backgroundColor': '#fafafa',
@@ -61,7 +62,8 @@ export const darkTheme: ITheme = {
   'dialog.backgroundColor': '#333333',
   'dialog.separator.color': 'rgba(255, 255, 255, 0.12)',
   'menu.header.background':
-    'linear-gradient(to bottom right, #00b0ff, #3d5afe)',
+    'linear-gradient(to bottom right, #262626, #262626)',
+  'menu.header.lightForeground': true,
   'dialog.textColor': '#fff',
   'dialog.lightForeground': true,
   'searchBox.subHeading.backgroundColor': 'rgba(0, 0, 0, 0.12)',

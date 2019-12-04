@@ -7,6 +7,7 @@ interface Props {
   activated: boolean;
   color: string;
   theme: ITheme;
+  clickable: boolean;
 }
 
 export const StyledSwitch = styled.div`
@@ -14,7 +15,7 @@ export const StyledSwitch = styled.div`
   height: 20px;
   border-radius: 32px;
   position: relative;
-  cursor: pointer;
+
   overflow: hidden;
   transition: 0.15s background-color;
 
@@ -28,8 +29,9 @@ export const StyledSwitch = styled.div`
     z-index: 2;
   }
 
-  ${({ activated, color, theme }: Props) => css`
+  ${({ activated, color, theme, clickable }: Props) => css`
     background-color: ${activated ? color : theme['switch.backgroundColor']};
+    cursor: ${clickable ? 'pointer' : 'default'};
 
     &:hover {
       &:after {
@@ -42,8 +44,8 @@ export const StyledSwitch = styled.div`
 `;
 
 export const Thumb = styled.div`
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border-radius: 100%;
   position: absolute;
   z-index: 3;
@@ -51,7 +53,7 @@ export const Thumb = styled.div`
   ${centerVertical()};
 
   ${({ activated }: { activated: boolean }) => css`
-    left: ${activated ? 22 : 2}px;
+    left: ${activated ? 22 : 4}px;
     background-color: #fff;
   `}
 `;
