@@ -148,12 +148,13 @@ if (
 }
 
 if (window.location.href.startsWith(WEBUI_BASE_URL)) {
+  console.log('aha');
   window.addEventListener('DOMContentLoaded', () => {
-    if (hostname === 'settings') document.title = 'Settings';
-    else if (hostname === 'history') document.title = 'History';
-    else if (hostname === 'bookmarks') document.title = 'Bookmarks';
-    else if (hostname === 'extensions') document.title = 'Extensions';
-    else if (hostname === 'newtab') {
+    if (hostname.startsWith('settings')) document.title = 'Settings';
+    else if (hostname.startsWith('history')) document.title = 'History';
+    else if (hostname.startsWith('bookmarks')) document.title = 'Bookmarks';
+    else if (hostname.startsWith('extensions')) document.title = 'Extensions';
+    else if (hostname.startsWith('newtab')) {
       document.title = 'New tab';
     }
   });
