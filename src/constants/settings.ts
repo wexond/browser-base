@@ -15,6 +15,7 @@ export const DEFAULT_SETTINGS: ISettings = {
   startupBehavior: {
     type: 'continue',
   },
+  warnOnQuit: true,
   version: pkg.version,
 };
 
