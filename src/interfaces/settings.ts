@@ -8,10 +8,6 @@ export interface IStartupBehavior {
   type: 'continue' | 'urls' | 'empty';
 }
 
-export interface IQuitBehaviour {
-  type: 'none' | 'multiple' | 'always';
-}
-
 export interface ISettings {
   theme: string;
   shield: boolean;
@@ -22,7 +18,7 @@ export interface ISettings {
   searchEngine: number;
   searchEngines: ISearchEngine[];
   startupBehavior: IStartupBehavior;
-  quitBehavior: IQuitBehaviour;
+  warnOnQuit: boolean;
   version: string;
   darkContents: boolean;
 }

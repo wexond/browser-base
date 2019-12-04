@@ -129,19 +129,15 @@ export class AppWindow extends BrowserWindow {
     this.on('unmaximize', resize);
 
     this.on('close', (event: Electron.Event) => {
-      if (
-        (settings.quitBehavior.type === 'multiple' &&
-          this.viewManager.views.size > 1) ||
-        settings.quitBehavior.type === 'always'
-      ) {
+      if (settings.warnOnQuit && this.viewManager.views.size > 1) {
         const answer = dialog.showMessageBoxSync(null, {
           type: 'question',
           title: `Quit ${app.name}?`,
           message: `Quit ${app.name}?`,
-          detail: `
-          Are you sure you want to exit ${app.name}?\n
-          You have opened ${this.viewManager.views.size} tabs.\n
-          To configure this, please go to settings.`,
+          detail:
+            `Are you sure you want to exit ${app.name}?\n` +
+            `You have opened ${this.viewManager.views.size} tabs.\n` +
+            `To configure this, please go to settings.`,
           buttons: ['Close', 'Cancel'],
         });
 

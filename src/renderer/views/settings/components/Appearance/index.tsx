@@ -28,6 +28,22 @@ const ThemeVariant = observer(() => {
   );
 });
 
+const WarnQuit = observer(() => {
+  const { warnOnQuit } = store.settings;
+
+  return (
+    <Row>
+      <Title>Show warning dialog when closing multiple tabs</Title>
+      <Control>
+        <Switch
+          onChange={onSwitchChange('warnOnQuit')}
+          defaultValue={warnOnQuit}
+        />
+      </Control>
+    </Row>
+  );
+});
+
 const MenuAnimations = observer(() => {
   const { animations } = store.settings;
 
@@ -66,6 +82,7 @@ export const Appearance = observer(() => {
       <Header>Appearance</Header>
       <MenuAnimations />
       <BookmarksBar />
+      <WarnQuit />
       <ThemeVariant />
     </>
   );

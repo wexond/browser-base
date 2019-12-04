@@ -13,7 +13,6 @@ export type SettingsSection =
   | 'privacy'
   | 'permissions'
   | 'startup'
-  | 'quit'
   | 'language'
   | 'shortcuts'
   | 'downloads'
