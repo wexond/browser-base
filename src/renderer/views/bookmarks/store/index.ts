@@ -45,8 +45,12 @@ export class Store {
       .filter(
         x =>
           (this.searched !== '' &&
-            ((x.url && x.url.includes(this.searched)) ||
-              (x.title && x.title.includes(this.searched)))) ||
+            ((x.url &&
+              x.url.toLowerCase().includes(this.searched.toLowerCase())) ||
+              (x.title &&
+                x.title
+                  .toLowerCase()
+                  .includes(this.searched.toLowerCase())))) ||
           (this.searched === '' && x.parent === this.currentFolder),
       )
       .slice()
