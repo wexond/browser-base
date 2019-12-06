@@ -43,6 +43,7 @@ const onDeleteClick = () => {
 
 const onRemoveClick = (item: IBookmark) => () => {
   store.removeItem(item._id);
+  store.menuVisible = false;
 };
 
 const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -68,8 +69,11 @@ const onPathItemClick = (item: IBookmark) => () => {
 
 const onImportClick = async () => {
   const res = await ipcRenderer.invoke('import-bookmarks');
-  console.log(res);
   addImported(res);
+};
+
+const onContextMenuMouseDown = (e: React.MouseEvent) => {
+  e.stopPropagation();
 };
 
 const BookmarksList = observer(() => {
@@ -79,8 +83,8 @@ const BookmarksList = observer(() => {
     <LeftContent>
       <SelectionDialog
         theme={store.theme}
-        visible={length > 1}
-        amount={length}
+        visible={store.selectedItems.length > 1}
+        amount={store.selectedItems.length}
         onDeleteClick={onDeleteClick}
         onCancelClick={onCancelClick}
       />
@@ -129,6 +133,7 @@ export default hot(
             </NavigationDrawer.Item>
           </NavigationDrawer>
           <ContextMenu
+            onMouseDown={onContextMenuMouseDown}
             style={{
               top: store.menuTop,
               left: store.menuLeft - 130,

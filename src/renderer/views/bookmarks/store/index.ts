@@ -80,6 +80,10 @@ export class Store {
         this.itemsLoaded = loaded;
       }
     });
+
+    window.addEventListener('mousedown', () => {
+      this.menuVisible = false;
+    });
   }
 
   @computed
