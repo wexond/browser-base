@@ -18,15 +18,13 @@ const onClick = (item: IHistoryItem) => (e: React.MouseEvent) => {
   }
 };
 
-const onTitleClick = (url: string) => (e: React.MouseEvent) => {
-  if (!e.ctrlKey) {
-    // TODO: open url in new tab
-  }
-};
-
 const onRemoveClick = (item: IHistoryItem) => (e: React.MouseEvent) => {
   e.stopPropagation();
   store.removeItems([item._id]);
+};
+
+const onTitleClick = (e: React.MouseEvent) => {
+  e.stopPropagation();
 };
 
 export default observer(({ data }: { data: IHistoryItem }) => {
@@ -55,7 +53,7 @@ export default observer(({ data }: { data: IHistoryItem }) => {
         }}
       />
       <TitleContainer>
-        <Title href={data.url} target="_blank">
+        <Title onClick={onTitleClick} href={data.url} target="_blank">
           {data.title}
         </Title>
       </TitleContainer>

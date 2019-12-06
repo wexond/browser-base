@@ -35,6 +35,10 @@ const onMoreClick = (data: IBookmark) => (e: any) => {
   store.currentBookmark = data;
 };
 
+const onTitleClick = (data: IBookmark) => (e: React.MouseEvent) => {
+  if (!data.isFolder) e.stopPropagation();
+};
+
 export const Bookmark = observer(({ data }: { data: IBookmark }) => {
   const selected = store.selectedItems.includes(data._id);
 
@@ -74,7 +78,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
               : 'none',
         }}
       />
-      <Title href={data.url} target="_blank">
+      <Title onClick={onTitleClick(data)} href={data.url} target="_blank">
         {getBookmarkTitle(data)}
       </Title>
       <Site>{data.url}</Site>
