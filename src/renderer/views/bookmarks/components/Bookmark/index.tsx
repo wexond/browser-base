@@ -12,11 +12,7 @@ const onClick = (item: IBookmark) => (e: React.MouseEvent) => {
   const index = store.selectedItems.indexOf(item._id);
 
   if (index === -1) {
-    if (e.ctrlKey) {
-      store.selectedItems.push(item._id);
-    } else {
-      (store.selectedItems as any).replace([item._id]);
-    }
+    store.selectedItems.push(item._id);
   } else {
     store.selectedItems.splice(index, 1);
   }
