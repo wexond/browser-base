@@ -1,4 +1,4 @@
-import { observable, computed, action } from 'mobx';
+import { observable, computed, action, toJS } from 'mobx';
 import { ISettings, IFavicon, ITheme, IBookmark } from '~/interfaces';
 import { getTheme } from '~/utils/themes';
 import { PreloadDatabase } from '~/preloads/models/database';
@@ -205,10 +205,11 @@ export class Store {
   }
 
   public async updateItem(id: string, change: IBookmark) {
+    const jsChange = toJS(change, { recurseEverything: true });
     const index = this.list.indexOf(this.list.find(x => x._id === id));
-    this.list[index] = { ...this.list[index], ...change };
+    this.list[index] = { ...this.list[index], ...jsChange };
 
-    await this.db.update({ _id: id }, change);
+    await this.db.update({ _id: id }, jsChange);
   }
 
   @action
