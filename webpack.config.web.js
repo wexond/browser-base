@@ -17,6 +17,6 @@ const webConfig = getConfig(getBaseConfig('web'), {
   },
 });
 
-applyEntries('web', webConfig, ['settings', 'history', 'newtab']);
+applyEntries('web', webConfig, ['settings', 'history', 'newtab', 'bookmarks']);
 
 module.exports = webConfig;
