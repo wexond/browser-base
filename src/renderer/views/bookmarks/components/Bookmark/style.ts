@@ -26,7 +26,7 @@ export const Favicon = styled.div`
 `;
 
 export const Title = styled.a`
-  flex: 3;
+  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -44,7 +44,7 @@ export const Title = styled.a`
 `;
 
 export const Site = styled.div`
-  flex: 2;
+  flex: 1;
   opacity: 0.54;
   white-space: nowrap;
   overflow: hidden;
