@@ -128,6 +128,12 @@ if (
   (async function() {
     const w = await webFrame.executeJavaScript('window');
     w.settings = ipcRenderer.sendSync('get-settings-sync');
+    w.require = (id: string) => {
+      if (id === 'electron') {
+        return { ipcRenderer };
+      }
+      return undefined;
+    };
 
     if (window.location.pathname.startsWith('//network-error')) {
       w.theme = getTheme(w.settings.theme);

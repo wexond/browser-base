@@ -1,7 +1,8 @@
-import { ipcMain } from 'electron';
+import { ipcMain, dialog } from 'electron';
 import * as Datastore from 'nedb';
 import * as fileType from 'file-type';
 import * as icojs from 'icojs';
+import parse = require('node-bookmarks-parser');
 
 import { getPath, requestURL } from '~/utils';
 import {
@@ -14,6 +15,8 @@ import {
   IFavicon,
 } from '~/interfaces';
 import { countVisitedTimes } from '~/utils/history';
+import { windowsManager } from '..';
+import { promises } from 'fs';
 
 interface Databases {
   [key: string]: Datastore;
@@ -76,6 +79,10 @@ export class StorageService {
         e.sender.send(id, numReplaced);
       },
     );
+
+    ipcMain.handle('import-bookmarks', async () => {
+      return await this.importBookmarks();
+    });
 
     ipcMain.handle('history-get', e => {
       return this.history;
@@ -244,6 +251,24 @@ export class StorageService {
         resolve(this.favicons.get(url));
       }
     });
+  };
+
+  public importBookmarks = async () => {
+    const dialogRes = await dialog.showOpenDialog(
+      windowsManager.currentWindow,
+      {
+        filters: [{ name: 'Bookmark file', extensions: ['html'] }],
+      },
+    );
+
+    try {
+      const file = await promises.readFile(dialogRes.filePaths[0], 'utf8');
+      return parse(file);
+    } catch (err) {
+      console.error(err);
+    }
+
+    return [];
   };
 }
 
