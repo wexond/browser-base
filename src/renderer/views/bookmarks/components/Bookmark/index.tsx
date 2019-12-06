@@ -24,12 +24,6 @@ const onDoubleClick = (item: IBookmark) => () => {
   }
 };
 
-const onTitleClick = (item: IBookmark) => (e: React.MouseEvent) => {
-  if (!e.ctrlKey && !item.isFolder) {
-    // TODO: open bookmark in new tab
-  }
-};
-
 const onMoreClick = (data: IBookmark) => (e: any) => {
   e.stopPropagation();
 
@@ -80,7 +74,9 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
               : 'none',
         }}
       />
-      <Title onClick={onTitleClick(data)}>{getBookmarkTitle(data)}</Title>
+      <Title href={data.url} target="_blank">
+        {getBookmarkTitle(data)}
+      </Title>
       <Site>{data.url}</Site>
       {!data.static && <More onClick={onMoreClick(data)} />}
     </ListItem>

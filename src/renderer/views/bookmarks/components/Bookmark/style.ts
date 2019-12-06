@@ -25,12 +25,18 @@ export const Favicon = styled.div`
   margin-right: 24px;
 `;
 
-export const Title = styled.div`
+export const Title = styled.a`
   flex: 3;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-right: 16px;
+  text-decoration: none;
+
+  ${({ theme }: { theme: ITheme }) => css`
+    color: ${theme['pages.lightForeground'] ? '#fff' : '#000'};
+  `}
+
   &:hover {
     cursor: pointer;
     text-decoration: underline;
