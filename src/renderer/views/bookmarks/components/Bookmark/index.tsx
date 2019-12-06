@@ -49,9 +49,11 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
   const selected = store.selectedItems.includes(data._id);
 
   let favicon = data.favicon;
+  let customFavicon = false;
 
   if (data.isFolder) {
     favicon = icons.folder;
+    customFavicon = true;
   } else {
     if (favicon) {
       if (favicon.startsWith('data:image')) {
@@ -61,6 +63,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
       }
     } else {
       favicon = icons.page;
+      customFavicon = true;
     }
   }
 
@@ -76,7 +79,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
         style={{
           backgroundImage: `url(${favicon})`,
           filter:
-            store.theme['pages.lightForeground'] && data.isFolder
+            store.theme['pages.lightForeground'] && customFavicon
               ? 'invert(100%)'
               : 'none',
         }}
