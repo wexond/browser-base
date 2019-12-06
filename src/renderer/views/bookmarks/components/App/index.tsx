@@ -16,10 +16,11 @@ import {
   ContextMenu,
   ContextMenuItem,
 } from '~/renderer/components/ContextMenu';
-import { getBookmarkTitle } from '../../utils';
+import { getBookmarkTitle, addImported } from '../../utils';
 import { EmptySection } from '../BookmarksSection/style';
 import Tree from '../Tree';
 import { Bookmark } from '../Bookmark';
+import { ipcRenderer } from 'electron';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -66,21 +67,9 @@ const onPathItemClick = (item: IBookmark) => () => {
 };
 
 const onImportClick = async () => {
-  const dialogRes = await remote.dialog.showOpenDialog(
-    remote.getCurrentWindow(),
-    {
-      filters: [{ name: 'Bookmark file', extensions: ['html'] }],
-    },
-  );
-
-  try {
-    const file = await promises.readFile(dialogRes.filePaths[0], 'utf8');
-    const res = parse(file);
-
-    addImported(res);
-  } catch (err) {
-    console.error(err);
-  }
+  const res = await ipcRenderer.invoke('import-bookmarks');
+  console.log(res);
+  addImported(res);
 };
 
 const BookmarksList = observer(() => {

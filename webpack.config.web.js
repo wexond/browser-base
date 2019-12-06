@@ -15,6 +15,8 @@ const webConfig = getConfig(getBaseConfig('web'), {
     inline: true,
     disableHostCheck: true,
   },
+
+  externals: { electron: 'require("electron")' },
 });
 
 applyEntries('web', webConfig, ['settings', 'history', 'newtab', 'bookmarks']);
