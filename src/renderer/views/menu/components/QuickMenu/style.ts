@@ -29,7 +29,7 @@ export const MenuItem = styled.div`
       &:after {
         content: '';
         position: absolute;
-        right: 8px;
+        right: 4px;
         width: 24px;
         height: 100%;
         opacity: 0.54;
@@ -88,7 +88,7 @@ export const Icon = styled.div`
 `;
 
 export const RightControl = styled.div`
-  margin-right: 22px;
+  margin-right: 18px;
 `;
 
 export const Shortcut = styled(RightControl)`
