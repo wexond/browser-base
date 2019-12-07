@@ -372,6 +372,9 @@ export class TabsStore {
     this.list[this.list.indexOf(firstTab)] = secondTab;
     this.list[index] = firstTab;
 
+    firstTab.updateData();
+    secondTab.updateData();
+
     this.updateTabsBounds(true);
   }
 
