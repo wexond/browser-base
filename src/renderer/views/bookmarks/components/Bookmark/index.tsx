@@ -11,16 +11,23 @@ import { getBookmarkTitle } from '../../utils';
 const onClick = (item: IBookmark) => (e: React.MouseEvent) => {
   const index = store.selectedItems.indexOf(item._id);
 
-  if (index === -1) {
-    store.selectedItems.push(item._id);
+  if (e.ctrlKey) {
+    if (index === -1) {
+      store.selectedItems.push(item._id);
+    } else {
+      store.selectedItems.splice(index, 1);
+    }
   } else {
-    store.selectedItems.splice(index, 1);
+    store.selectedItems = [item._id];
   }
 };
 
 const onDoubleClick = (item: IBookmark) => () => {
   if (item.isFolder) {
     store.currentFolder = item._id;
+  } else {
+    const win = window.open(item.url, '_blank');
+    win.focus();
   }
 };
 
@@ -33,10 +40,6 @@ const onMoreClick = (data: IBookmark) => (e: any) => {
   store.menuLeft = left;
   store.menuTop = top;
   store.currentBookmark = data;
-};
-
-const onTitleClick = (data: IBookmark) => (e: React.MouseEvent) => {
-  if (!data.isFolder) e.stopPropagation();
 };
 
 export const Bookmark = observer(({ data }: { data: IBookmark }) => {
@@ -78,9 +81,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
               : 'none',
         }}
       />
-      <Title onClick={onTitleClick(data)} href={data.url} target="_blank">
-        {getBookmarkTitle(data)}
-      </Title>
+      <Title>{getBookmarkTitle(data)}</Title>
       <Site>{data.url}</Site>
       {!data.static && <More onClick={onMoreClick(data)} />}
     </ListItem>
