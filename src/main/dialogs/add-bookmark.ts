@@ -17,7 +17,6 @@ export class AddBookmarkDialog extends Dialog {
         height: 228,
         y: 34,
       },
-      devtools: true,
     });
   }
 
