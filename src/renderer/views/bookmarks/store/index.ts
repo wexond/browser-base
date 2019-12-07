@@ -104,7 +104,7 @@ export class Store {
   }
 
   public async load() {
-    const items = await ipcRenderer.invoke('bookmarks-get');
+    const items: IBookmark[] = await ipcRenderer.invoke('bookmarks-get');
     this.list = items.map(x => ({ ...x }));
     this.currentFolder = this.list.find(x => x.static === 'main')._id;
   }

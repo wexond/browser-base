@@ -205,9 +205,9 @@ export class StorageService {
       this.databases[key] = this.createDatabase(key.toLowerCase());
     }
 
-    this.loadFavicons();
-    this.loadHistory();
     this.loadBookmarks();
+    await this.loadFavicons();
+    this.loadHistory();
   }
 
   private async loadFavicons() {
