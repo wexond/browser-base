@@ -4,7 +4,6 @@ import { getTheme } from '~/utils/themes';
 import { ISettings, IBookmark } from '~/interfaces';
 import { DEFAULT_SETTINGS } from '~/constants';
 import * as React from 'react';
-import { Dropdown } from '~/renderer/components/Dropdown';
 
 export class Store {
   @observable
@@ -29,16 +28,27 @@ export class Store {
 
   public titleRef = React.createRef<HTMLInputElement>();
 
-  public dropdownRef = React.createRef<Dropdown>();
+  public bookmark: IBookmark;
 
   public constructor() {
-    ipcRenderer.on('visible', (e, flag) => {
+    ipcRenderer.on('visible', (e, flag, data) => {
       this.visible = flag;
+
+      if (flag) {
+        const { bookmark, title } = data;
+        this.bookmark = bookmark;
+        if (this.titleRef.current) {
+          this.titleRef.current.value = title;
+          this.titleRef.current.focus();
+          this.titleRef.current.select();
+        }
+      }
     });
 
     window.addEventListener('blur', () => {
       if (this.visible) {
         setTimeout(() => {
+          this.visible = false;
           this.hide();
         });
       }

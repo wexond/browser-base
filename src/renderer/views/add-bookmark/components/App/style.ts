@@ -10,10 +10,11 @@ export const StyledApp = styled.div`
   overflow: hidden;
   position: relative;
   transition: 0.2s opacity, 0.2s margin-top;
+  padding: 16px;
 
   & .textfield,
   .dropdown {
-    width: 232px;
+    width: 255px;
     margin-left: auto;
   }
 
@@ -21,6 +22,7 @@ export const StyledApp = styled.div`
     opacity: ${visible ? 1 : 0};
     margin-top: ${visible ? 3 : 10}px;
     background-color: ${theme['dialog.backgroundColor']};
+    color: ${theme['dialog.lightForeground'] ? '#fff' : '#000'};
   `}
 `;
 
@@ -32,11 +34,8 @@ export const Subtitle = styled.div`
 
 export const Title = styled.div`
   font-size: 16px;
-  padding-bottom: 4px;
+  margin-bottom: 16px;
   ${robotoRegular()};
-  ${({ theme }: { theme: ITheme }) => css`
-    color: ${theme['dialog.lightForeground'] ? '#fff' : '#000'};
-  `}
 `;
 
 export const Row = styled.div`
@@ -47,7 +46,7 @@ export const Row = styled.div`
 `;
 
 export const Label = styled.div`
-  font-size: 14px;
+  font-size: 12px;
 `;
 
 export const Buttons = styled.div`
@@ -55,8 +54,7 @@ export const Buttons = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin-top: 8px;
-  margin-bottom: 12px;
+  margin-top: 16px;
   & .button:not(:last-child) {
     margin-right: 8px;
   }

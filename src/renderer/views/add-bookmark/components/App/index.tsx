@@ -6,9 +6,7 @@ import { hot } from 'react-hot-loader/root';
 import { Style } from '../../style';
 import { StyledApp, Title, Row, Label, Buttons } from './style';
 import store from '../../store';
-import { Input } from '~/renderer/components/Input';
-import { Dropdown } from '~/renderer/components/Dropdown';
-import { getBookmarkTitle } from '~/renderer/views/bookmarks/utils';
+import { Input, Dropdown } from '~/renderer/components/Input';
 import { Button } from '~/renderer/components/Button';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
@@ -51,17 +49,20 @@ export const App = hot(
           <Title>Bookmark added</Title>
           <Row>
             <Label>Name</Label>
-            <Input className="textfield" ref={store.titleRef} onBlur={onBlur} />
+            <Input
+              tabIndex={0}
+              className="textfield"
+              ref={store.titleRef}
+              onBlur={onBlur}
+            />
           </Row>
           <Row>
             <Label>Folder</Label>
-            <Dropdown ref={store.dropdownRef} onChange={onChange}>
-              {store.folders.map(item => (
-                <Dropdown.Item key={item._id} value={item._id}>
-                  {getBookmarkTitle(item)}
-                </Dropdown.Item>
-              ))}
-            </Dropdown>
+            <Dropdown
+              dark={store.theme['dialog.lightForeground']}
+              tabIndex={1}
+              className="dropdown"
+            ></Dropdown>
           </Row>
           <Buttons>
             <Button onClick={onDone}>Done</Button>
