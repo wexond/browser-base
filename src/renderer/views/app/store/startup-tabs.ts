@@ -28,7 +28,7 @@ export class StartupTabsStore {
     this.isLoaded = true;
     let tabsToLoad: IStartupTab[] = [];
     if (this.store.settings.object.startupBehavior.type === 'continue') {
-      tabsToLoad = await this.db.get({});
+      tabsToLoad = await this.db.get({ windowId: this.store.windowId });
     } else if (this.store.settings.object.startupBehavior.type === 'urls') {
       tabsToLoad = await this.db.get({});
       tabsToLoad = tabsToLoad.filter(x => x.isUserDefined || x.pinned);
