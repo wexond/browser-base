@@ -13,7 +13,7 @@ const onClick = (item: IBookmark) => () => {
 const onDropClick = (item: IBookmark) => (e: React.MouseEvent) => {
   e.stopPropagation();
 
-  if (item.children.length) {
+  if (item.children.length > 0) {
     item.expanded = !item.expanded;
   }
 };
@@ -24,6 +24,10 @@ const TreeItem = observer(
 
     const children = data.children || [];
 
+    const c = children
+      .map(x => store.list.find(y => x === y._id))
+      .filter(x => x && x.isFolder);
+
     return (
       <>
         <StyledTreeItem
@@ -31,7 +35,7 @@ const TreeItem = observer(
           style={{ paddingLeft: depth * 30 }}
         >
           <DropIcon
-            visible={children.length !== 0}
+            visible={c.length !== 0}
             expanded={data.expanded}
             onClick={onDropClick(data)}
           />
@@ -39,12 +43,8 @@ const TreeItem = observer(
           <Label>{getBookmarkTitle(data)}</Label>
         </StyledTreeItem>
         {data.expanded &&
-          children.map(id => (
-            <TreeItem
-              key={id}
-              data={store.folders.find(r => r._id === id)}
-              depth={depth + 1}
-            />
+          c.map(item => (
+            <TreeItem key={item._id} data={item} depth={depth + 1} />
           ))}
       </>
     );

@@ -104,7 +104,8 @@ export class Store {
   }
 
   public async load() {
-    this.list = await ipcRenderer.invoke('bookmarks-get');
+    const items = await ipcRenderer.invoke('bookmarks-get');
+    this.list = items.map(x => ({ ...x }));
     this.currentFolder = this.list.find(x => x.static === 'main')._id;
   }
 
@@ -119,7 +120,13 @@ export class Store {
   }
 
   public removeItems(ids: string[]) {
+    for (const id of ids) {
+      const item = this.list.find(x => x._id === id);
+      const parent = this.list.find(x => x._id === item.parent);
+      parent.children = parent.children.filter(x => x !== id);
+    }
     this.list = this.list.filter(x => !ids.includes(x._id));
+
     ipcRenderer.send(
       'bookmarks-remove',
       toJS(ids, { recurseEverything: true }),
@@ -128,7 +135,8 @@ export class Store {
 
   public async addItem(item: IBookmark) {
     const i = await ipcRenderer.invoke('bookmarks-add', item);
-    this.list.push(i);
+    this.list.push({ ...i });
+    this.list.find(x => x._id === i.parent).children.push(i._id);
     return i;
   }
 

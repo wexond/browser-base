@@ -10,10 +10,11 @@ export const DEFAULT_SETTINGS: ISettings = {
   animations: true,
   bookmarksBar: false,
   suggestions: true,
+  themeAuto: true,
   searchEngines: [],
   searchEngine: 0,
   startupBehavior: {
-    type: 'continue',
+    type: 'empty',
   },
   warnOnQuit: true,
   version: pkg.version,
