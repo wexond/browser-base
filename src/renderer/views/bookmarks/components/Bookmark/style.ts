@@ -8,6 +8,7 @@ export const More = styled.div`
   ${centerIcon(20)};
   height: 24px;
   width: 24px;
+  cursor: pointer;
   background-image: url(${icons.more});
   opacity: 0.54;
   ${({ theme }: { theme: ITheme }) => css`

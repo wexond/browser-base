@@ -31,6 +31,7 @@ const TreeItem = observer(
     return (
       <>
         <StyledTreeItem
+          selected={store.currentFolder === data._id}
           onClick={onClick(data)}
           style={{ paddingLeft: depth * 30 }}
         >
