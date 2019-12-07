@@ -13,7 +13,9 @@ const GlobalStyle = createGlobalStyle`${Style}`;
 export const App = hot(
   observer(() => {
     return (
-      <ThemeProvider theme={{ ...store.theme }}>
+      <ThemeProvider
+        theme={{ ...store.theme, dark: store.theme['dialog.lightForeground'] }}
+      >
         <StyledApp visible={store.visible}>
           <QuickMenu />
           <GlobalStyle />
