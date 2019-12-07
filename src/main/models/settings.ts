@@ -83,6 +83,7 @@ export class Settings extends EventEmitter {
       window.previewDialog.webContents.send('update-settings', this.object);
       window.tabGroupDialog.webContents.send('update-settings', this.object);
       window.downloadsDialog.webContents.send('update-settings', this.object);
+      window.addBookmarkDialog.webContents.send('update-settings', this.object);
 
       window.viewManager.views.forEach(v => {
         if (v.webContents.getURL().startsWith(WEBUI_BASE_URL)) {

@@ -59,7 +59,7 @@ export const App = hot(
       <ThemeProvider theme={{ ...store.theme }}>
         <StyledApp visible={store.visible}>
           <GlobalStyle />
-          <Title>Bookmark added</Title>
+          <Title>{store.dialogTitle}</Title>
           <Row>
             <Label>Name</Label>
             <Input
@@ -75,7 +75,7 @@ export const App = hot(
               dark={store.theme['dialog.lightForeground']}
               tabIndex={1}
               className="dropdown"
-              onClick={onDropdownClick}
+              onMouseDown={onDropdownClick}
             >
               {store.currentFolder && getBookmarkTitle(store.currentFolder)}
             </Dropdown>

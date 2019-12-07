@@ -26,6 +26,9 @@ export class Store {
   @observable
   public folders: IBookmark[] = [];
 
+  @observable
+  public dialogTitle = '';
+
   public titleRef = React.createRef<HTMLInputElement>();
 
   public bookmark: IBookmark;
@@ -54,6 +57,9 @@ export class Store {
             url,
             parent: this.folders[0]._id,
           });
+          this.dialogTitle = 'Bookmark added';
+        } else {
+          this.dialogTitle = 'Edit bookmark';
         }
 
         if (this.titleRef.current) {
