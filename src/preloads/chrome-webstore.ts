@@ -33,6 +33,15 @@ export const injectChromeWebstoreInstallButton = () => {
     });
   });
 
+  document.addEventListener('DOMNodeInserted', (event: any) => {
+    setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      Array.from(document.getElementsByClassName('a-na-d-K-ea')).forEach(el => {
+        el.parentNode.removeChild(el);
+      });
+    }, 10);
+  });
+
   function installPlugin(
     id: string,
     version = navigator.userAgent.match(/(?<=Chrom(e|ium)\/)\d+\.\d+/)[0],
@@ -45,7 +54,7 @@ export const injectChromeWebstoreInstallButton = () => {
   function InstallButton(
     this: any,
     wrapper: any,
-    id = document.URL.match(/(?<=\/)(\w+)(\?hl=.*|$)/)[1],
+    id = document.URL.match(/(?<=\/)(\w+)(\?|$)/)[1],
   ) {
     if (wrapper == null) return;
     wrapper.innerHTML += ibTemplate;

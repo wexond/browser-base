@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import {  transparency, BLUE_500 } from '~/renderer/constants';
-import {  robotoRegular } from '~/renderer/mixins';
+import { transparency, BLUE_500 } from '~/renderer/constants';
+import { robotoRegular } from '~/renderer/mixins';
+import { ITheme } from '~/interfaces';
 
 export const Container = styled.div`
   height: 40px;
@@ -27,29 +28,29 @@ export const Circle = styled.div`
   pointer-events: none;
   z-index: 1;
 
-  ${({ selected }: { selected: boolean }) => css`
+  ${({ selected, theme }: { selected: boolean; theme?: ITheme }) => css`
     width: ${selected ? `calc(100% - 8px)` : 0};
     height: ${selected ? `calc(100% - 8px)` : 0};
     background: ${selected ? BLUE_500 : 'rgba(0, 0, 0, 0.54)'};
 
     &::before {
-      opacity: ${selected ? 1 : 0};
       transition: ${selected ? `opacity 0.5s ease` : 'none'};
+      content: '';
+      width: calc(20px - 6px);
+      position: absolute;
+      height: calc(20px - 6px);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 2px solid
+        ${selected
+          ? BLUE_500
+          : theme.dark
+          ? 'rgba(255, 255, 255, 0.54)'
+          : 'rgba(0, 0, 0, 0.54)'};
+      border-radius: 100%;
     }
   `}
-
-  &::before {
-    content: '';
-    width: calc(20px - 4px);
-    position: absolute;
-    height: calc(20px - 4px);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 1px solid
-      ${selected => (selected ? BLUE_500 : 'rgba(0, 0, 0, 0.54)')};
-    border-radius: 100%;
-  }
 `;
 
 export const Root = styled.div`
@@ -64,8 +65,6 @@ export const Root = styled.div`
   &::before {
     content: '';
     border-radius: 100%;
-    border: 1px solid #ddd;
-    background: #fafafa;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -92,7 +91,6 @@ export const Radio = styled.input`
 
   &:checked {
     & ~ ${Circle} {
-      width: ;
       height: calc(100% - 8px);
       transition: width 0.2s ease-out, height 0.2s ease-out;
     }

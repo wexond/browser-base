@@ -22,9 +22,6 @@ export interface ITheme {
   'dialog.textColor': string;
   'dialog.lightForeground': boolean;
 
-  'menu.header.background': string;
-  'menu.header.lightForeground': string;
-
   'searchBox.input.textColor': string;
   'searchBox.input.lightForeground': boolean;
   'searchBox.input.backgroundColor': string;
@@ -48,4 +45,6 @@ export interface ITheme {
   accentColor: string;
 
   animations?: boolean;
+
+  dark?: boolean;
 }

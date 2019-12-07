@@ -48,6 +48,10 @@ export class Store {
   public faviconsDb = new PreloadDatabase<IFavicon>('favicons');
 
   public constructor() {
+    (window as any).updateSettings = (settings: ISettings) => {
+      this.settings = { ...this.settings, ...settings };
+    };
+
     this.load();
     this.loadFavicons();
 

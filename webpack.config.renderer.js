@@ -29,6 +29,7 @@ applyEntries('app', appConfig, [
   'preview',
   'tabgroup',
   'downloads',
+  'add-bookmark',
 ]);
 
 module.exports = appConfig;

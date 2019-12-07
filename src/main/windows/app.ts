@@ -17,6 +17,7 @@ import {
   PreviewDialog,
   TabGroupDialog,
   DownloadsDialog,
+  AddBookmarkDialog,
 } from '../dialogs';
 import { ISettings } from '~/interfaces';
 
@@ -33,6 +34,7 @@ export class AppWindow extends BrowserWindow {
   public credentialsDialog = new CredentialsDialog(this);
   public previewDialog = new PreviewDialog(this);
   public downloadsDialog = new DownloadsDialog(this);
+  public addBookmarkDialog = new AddBookmarkDialog(this);
 
   public incognito: boolean;
 
@@ -66,7 +68,6 @@ export class AppWindow extends BrowserWindow {
     const windowDataPath = getPath('window-data.json');
 
     let windowState: any = {};
-    const settings: ISettings = this.windowsManager.settings.object;
 
     try {
       // Read the last window state from file.
@@ -104,6 +105,7 @@ export class AppWindow extends BrowserWindow {
       this.searchDialog.rearrange();
       this.tabGroupDialog.rearrange();
       this.downloadsDialog.rearrange();
+      this.addBookmarkDialog.rearrange();
     });
 
     this.on('move', () => {
@@ -129,15 +131,14 @@ export class AppWindow extends BrowserWindow {
     this.on('unmaximize', resize);
 
     this.on('close', (event: Electron.Event) => {
+      const { object: settings } = this.windowsManager.settings;
+
       if (settings.warnOnQuit && this.viewManager.views.size > 1) {
         const answer = dialog.showMessageBoxSync(null, {
           type: 'question',
           title: `Quit ${app.name}?`,
           message: `Quit ${app.name}?`,
-          detail:
-            `Are you sure you want to exit ${app.name}?\n` +
-            `You have opened ${this.viewManager.views.size} tabs.\n` +
-            `To configure this, please go to settings.`,
+          detail: `You have opened ${this.viewManager.views.size} tabs.`,
           buttons: ['Close', 'Cancel'],
         });
 
@@ -165,6 +166,7 @@ export class AppWindow extends BrowserWindow {
       this.previewDialog.destroy();
       this.tabGroupDialog.destroy();
       this.downloadsDialog.destroy();
+      this.addBookmarkDialog.destroy();
 
       this.menuDialog = null;
       this.searchDialog = null;
@@ -176,6 +178,7 @@ export class AppWindow extends BrowserWindow {
       this.previewDialog = null;
       this.tabGroupDialog = null;
       this.downloadsDialog = null;
+      this.addBookmarkDialog = null;
 
       this.viewManager.clear();
 

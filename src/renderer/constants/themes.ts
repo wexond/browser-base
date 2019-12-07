@@ -19,9 +19,6 @@ export const lightTheme: ITheme = {
   'switch.backgroundColor': 'rgba(0, 0, 0, 0.16)',
   'dialog.backgroundColor': '#fff',
   'dialog.separator.color': 'rgba(0, 0, 0, 0.12)',
-  'menu.header.background':
-    'linear-gradient(to bottom right, #fafafa, #fafafa)',
-  'menu.header.lightForeground': false,
   'dialog.textColor': '#000',
   'dialog.lightForeground': false,
   'searchBox.subHeading.backgroundColor': '#fafafa',
@@ -61,9 +58,6 @@ export const darkTheme: ITheme = {
   'switch.backgroundColor': 'rgba(255, 255, 255, 0.24)',
   'dialog.backgroundColor': '#333333',
   'dialog.separator.color': 'rgba(255, 255, 255, 0.12)',
-  'menu.header.background':
-    'linear-gradient(to bottom right, #262626, #262626)',
-  'menu.header.lightForeground': true,
   'dialog.textColor': '#fff',
   'dialog.lightForeground': true,
   'searchBox.subHeading.backgroundColor': 'rgba(0, 0, 0, 0.12)',

@@ -7,15 +7,15 @@ interface StyledButtonProps {
 }
 
 export const StyledButton = styled.div`
-  min-width: 88px;
+  min-width: 80px;
   width: fit-content;
-  height: 36px;
+  height: 32px;
   padding: 0px 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 30px;
+  border-radius: 4px;
   position: relative;
   cursor: pointer;
 
@@ -52,6 +52,6 @@ export const StyledButton = styled.div`
 
 export const StyledLabel = styled.div`
   z-index: 1;
-  font-size: 13px;
+  font-size: 12px;
   pointer-events: none;
 `;

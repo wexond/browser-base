@@ -108,7 +108,7 @@ export const ToolbarButton = observer(
 
 (ToolbarButton as any).defaultProps = {
   size: 20,
-  opacity: transparency.icons.inactive,
+  opacity: transparency.icons.active,
   autoInvert: true,
   badgeBackground: BLUE_500,
   badgeTextColor: 'white',

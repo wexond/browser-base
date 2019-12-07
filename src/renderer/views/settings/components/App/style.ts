@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-import { robotoMedium, robotoLight, centerIcon } from '~/renderer/mixins';
-import { icons } from '~/renderer/constants';
+import { robotoMedium, robotoLight } from '~/renderer/mixins';
+import { ITheme } from '~/interfaces';
 
 export const Title = styled.div`
   font-size: 14px;
@@ -20,6 +20,18 @@ export const Row = styled.div`
   display: flex;
   align-items: center;
   min-height: 48px;
+
+  cursor: pointer;
+  &:last-of-type {
+    border: none;
+  }
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    border-bottom: 1px solid
+      ${theme['pages.lightForeground']
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.12)'};
+  `}
 `;
 
 export const Control = styled.div`

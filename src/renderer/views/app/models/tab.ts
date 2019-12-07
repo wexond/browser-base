@@ -231,6 +231,7 @@ export class ITab {
         pinned: this.isPinned,
         title: this.title,
         isUserDefined: false,
+        order: store.tabs.list.indexOf(this),
       });
     }
   }

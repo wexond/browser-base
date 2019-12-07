@@ -1,4 +1,4 @@
-import * as parse from 'node-bookmarks-parser';
+import parse from 'node-bookmarks-parser';
 
 import { IBookmark } from '~/interfaces';
 import store from '../store';
@@ -25,8 +25,6 @@ export const addImported = async (
   arr: ReturnType<typeof parse>,
   parent: IBookmark = null,
 ) => {
-  /*
-  TODO:
   let order = 0;
 
   for (const item of arr) {
@@ -34,11 +32,11 @@ export const addImported = async (
       let folder: IBookmark = null;
 
       if (item.nsRoot === 'toolbar') {
-        folder = store.bookmarks.list.find(x => x.static === 'main');
+        folder = store.list.find(x => x.static === 'main');
       } else if (item.nsRoot === 'menu') {
-        folder = store.bookmarks.list.find(x => x.static === 'mobile');
+        folder = store.list.find(x => x.static === 'mobile');
       } else if (item.nsRoot === 'unsorted') {
-        folder = store.bookmarks.list.find(x => x.static === 'other');
+        folder = store.list.find(x => x.static === 'other');
       }
 
       if (folder) {
@@ -48,7 +46,7 @@ export const addImported = async (
       return;
     }
 
-    const bookmark = await store.bookmarks.addItem({
+    const bookmark = await store.addItem({
       isFolder: item.type === 'folder',
       title: item.title,
       url: item.url,
@@ -67,5 +65,5 @@ export const addImported = async (
     }
 
     order++;
-  }*/
+  }
 };

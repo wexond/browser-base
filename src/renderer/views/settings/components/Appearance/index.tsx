@@ -8,7 +8,13 @@ import { onSwitchChange } from '../../utils';
 import { observer } from 'mobx-react-lite';
 
 const onThemeChange = (value: string) => {
-  store.settings.theme = value;
+  if (value === 'auto') {
+    store.settings.themeAuto = true;
+  } else {
+    store.settings.themeAuto = false;
+    store.settings.theme = value;
+  }
+
   store.save();
 };
 
@@ -19,7 +25,11 @@ const ThemeVariant = observer(() => {
     <Row>
       <Title>Theme variant</Title>
       <Control>
-        <Dropdown defaultValue={defaultValue} onChange={onThemeChange}>
+        <Dropdown
+          defaultValue={store.settings.themeAuto ? 'auto' : defaultValue}
+          onChange={onThemeChange}
+        >
+          <Dropdown.Item value="auto">Auto</Dropdown.Item>
           <Dropdown.Item value="wexond-light">Light</Dropdown.Item>
           <Dropdown.Item value="wexond-dark">Dark</Dropdown.Item>
         </Dropdown>
@@ -32,13 +42,10 @@ const WarnQuit = observer(() => {
   const { warnOnQuit } = store.settings;
 
   return (
-    <Row>
+    <Row onClick={onSwitchChange('warnOnQuit')}>
       <Title>Show warning dialog when closing multiple tabs</Title>
       <Control>
-        <Switch
-          onChange={onSwitchChange('warnOnQuit')}
-          defaultValue={warnOnQuit}
-        />
+        <Switch value={warnOnQuit} />
       </Control>
     </Row>
   );

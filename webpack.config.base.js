@@ -123,8 +123,7 @@ const getBaseConfig = name => {
           vendor: {
             chunks: 'initial',
             name: `vendor.${name}`,
-            test: `vendor.${name}`,
-            enforce: true,
+            minChunks: 2,
           },
         },
       },
@@ -134,14 +133,6 @@ const getBaseConfig = name => {
   if (dev) {
     config.plugins.push(new ForkTsCheckerWebpackPlugin());
   }
-
-  config.entry[`vendor.${name}`] = [
-    'react',
-    'react-dom',
-    'mobx',
-    'mobx-react-lite',
-    'styled-components',
-  ];
 
   return config;
 };

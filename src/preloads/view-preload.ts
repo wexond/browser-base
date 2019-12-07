@@ -128,6 +128,12 @@ if (
   (async function() {
     const w = await webFrame.executeJavaScript('window');
     w.settings = ipcRenderer.sendSync('get-settings-sync');
+    w.require = (id: string) => {
+      if (id === 'electron') {
+        return { ipcRenderer };
+      }
+      return undefined;
+    };
 
     if (window.location.pathname.startsWith('//network-error')) {
       w.theme = getTheme(w.settings.theme);
@@ -149,11 +155,11 @@ if (
 
 if (window.location.href.startsWith(WEBUI_BASE_URL)) {
   window.addEventListener('DOMContentLoaded', () => {
-    if (hostname === 'settings') document.title = 'Settings';
-    else if (hostname === 'history') document.title = 'History';
-    else if (hostname === 'bookmarks') document.title = 'Bookmarks';
-    else if (hostname === 'extensions') document.title = 'Extensions';
-    else if (hostname === 'newtab') {
+    if (hostname.startsWith('settings')) document.title = 'Settings';
+    else if (hostname.startsWith('history')) document.title = 'History';
+    else if (hostname.startsWith('bookmarks')) document.title = 'Bookmarks';
+    else if (hostname.startsWith('extensions')) document.title = 'Extensions';
+    else if (hostname.startsWith('newtab')) {
       document.title = 'New tab';
     }
   });
@@ -171,6 +177,13 @@ if (window.location.href.startsWith(WEBUI_BASE_URL)) {
       emitCallback(data.id, data);
     } else if (data.type === 'save-settings') {
       ipcRenderer.send('save-settings', { settings: data.data });
+    }
+  });
+
+  ipcRenderer.on('update-settings', async (e, data) => {
+    const w = await webFrame.executeJavaScript('window');
+    if (w.updateSettings) {
+      w.updateSettings(data);
     }
   });
 

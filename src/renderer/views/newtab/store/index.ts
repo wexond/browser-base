@@ -26,6 +26,10 @@ export class Store {
   public topSites: IVisitedItem[] = [];
 
   public constructor() {
+    (window as any).updateSettings = (settings: ISettings) => {
+      this.settings = { ...this.settings, ...settings };
+    };
+
     this.loadImage();
     this.loadTopSites();
     this.loadNews();

@@ -11,8 +11,8 @@ interface Props {
 }
 
 export const StyledSwitch = styled.div`
-  width: 40px;
-  height: 20px;
+  width: 36px;
+  height: 18px;
   border-radius: 32px;
   position: relative;
 
@@ -35,7 +35,7 @@ export const StyledSwitch = styled.div`
 
     &:hover {
       &:after {
-        background-color: ${!activated && theme['pages.lightForeground']
+        background-color: ${!activated && theme.dark
           ? 'rgba(0, 0, 0, 0.06)'
           : 'rgba(255, 255, 255, 0.12)'};
       }
@@ -53,7 +53,7 @@ export const Thumb = styled.div`
   ${centerVertical()};
 
   ${({ activated }: { activated: boolean }) => css`
-    left: ${activated ? 22 : 4}px;
+    left: ${activated ? 20 : 2}px;
     background-color: #fff;
   `}
 `;

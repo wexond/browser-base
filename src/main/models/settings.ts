@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { ipcMain, nativeTheme } from 'electron';
 
 import { DEFAULT_SETTINGS } from '~/constants';
 
@@ -8,6 +8,7 @@ import { getPath, makeId } from '~/utils';
 import { EventEmitter } from 'events';
 import { runAdblockService, stopAdblockService } from '../services/adblock';
 import { WindowsManager } from '../windows-manager';
+import { WEBUI_BASE_URL } from '~/constants/files';
 
 export class Settings extends EventEmitter {
   public object = DEFAULT_SETTINGS;
@@ -28,29 +29,6 @@ export class Settings extends EventEmitter {
       (e, { settings }: { settings: string; incognito: boolean }) => {
         this.object = { ...this.object, ...JSON.parse(settings) };
 
-        for (const window of windowsManager.list) {
-          if (window.webContents.id !== e.sender.id) {
-            window.webContents.send('update-settings', this.object);
-            window.searchDialog.webContents.send(
-              'update-settings',
-              this.object,
-            );
-            window.menuDialog.webContents.send('update-settings', this.object);
-            window.previewDialog.webContents.send(
-              'update-settings',
-              this.object,
-            );
-            window.tabGroupDialog.webContents.send(
-              'update-settings',
-              this.object,
-            );
-            window.downloadsDialog.webContents.send(
-              'update-settings',
-              this.object,
-            );
-          }
-        }
-
         this.addToQueue();
       },
     );
@@ -65,6 +43,10 @@ export class Settings extends EventEmitter {
       await this.onLoad();
       this.update();
       e.sender.send('update-settings', this.object);
+    });
+
+    nativeTheme.on('updated', () => {
+      this.update();
     });
 
     this.load();
@@ -87,6 +69,28 @@ export class Settings extends EventEmitter {
       this.windowsManager.sessionsManager.extensions,
       this.windowsManager.sessionsManager.extensionsIncognito,
     ];
+
+    if (this.object.themeAuto) {
+      this.object.theme = nativeTheme.shouldUseDarkColors
+        ? 'wexond-dark'
+        : 'wexond-light';
+    }
+
+    for (const window of this.windowsManager.list) {
+      window.webContents.send('update-settings', this.object);
+      window.searchDialog.webContents.send('update-settings', this.object);
+      window.menuDialog.webContents.send('update-settings', this.object);
+      window.previewDialog.webContents.send('update-settings', this.object);
+      window.tabGroupDialog.webContents.send('update-settings', this.object);
+      window.downloadsDialog.webContents.send('update-settings', this.object);
+      window.addBookmarkDialog.webContents.send('update-settings', this.object);
+
+      window.viewManager.views.forEach(v => {
+        if (v.webContents.getURL().startsWith(WEBUI_BASE_URL)) {
+          v.webContents.send('update-settings', this.object);
+        }
+      });
+    }
 
     contexts.forEach(e => {
       if (e.extensions['wexond-darkreader']) {
@@ -117,6 +121,10 @@ export class Settings extends EventEmitter {
       if (!json.version) {
         // Migrate from 3.0.0 to 3.1.0
         json.searchEngines = [];
+      }
+
+      if (json.themeAuto === undefined) {
+        json.themeAuto = true;
       }
 
       if (json.overlayBookmarks !== undefined) {
