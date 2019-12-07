@@ -119,7 +119,10 @@ export class Store {
 
   public removeItems(ids: string[]) {
     this.list = this.list.filter(x => !ids.includes(x._id));
-    ipcRenderer.send('bookmarks-remove', ids);
+    ipcRenderer.send(
+      'bookmarks-remove',
+      toJS(ids, { recurseEverything: true }),
+    );
   }
 
   public async addItem(item: IBookmark) {

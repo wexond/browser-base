@@ -14,6 +14,7 @@ export const Control = css`
   display: flex;
   align-items: center;
   padding: 0px 8px;
+  font-size: 12px;
 
   &:focus {
     box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.54);

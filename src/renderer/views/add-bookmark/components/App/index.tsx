@@ -8,6 +8,8 @@ import { StyledApp, Title, Row, Label, Buttons } from './style';
 import store from '../../store';
 import { Input, Dropdown } from '~/renderer/components/Input';
 import { Button } from '~/renderer/components/Button';
+import { ipcRenderer, remote } from 'electron';
+import { getBookmarkTitle } from '~/renderer/views/bookmarks/utils';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -15,29 +17,40 @@ const onDone = () => {
   store.hide();
 };
 
-const onChange = (parent: string) => {
+const updateBookmark = () => {
   if (!store.bookmark) return;
+  ipcRenderer.send('bookmarks-update', store.bookmark._id, store.bookmark);
+};
 
-  store.updateItem(store.bookmark._id, {
-    parent,
-  });
+const onChange = () => {
+  store.bookmark.title = store.titleRef.current.value;
+  updateBookmark();
+};
+
+const onDropdownClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const { left, top, height } = e.currentTarget.getBoundingClientRect();
+  const menu = remote.Menu.buildFromTemplate([
+    ...store.folders.map(folder => ({
+      label: getBookmarkTitle(folder),
+      click: () => {
+        store.currentFolder = folder;
+        store.bookmark.parent = folder._id;
+        updateBookmark();
+      },
+    })),
+  ]);
+
+  const { x, y } = remote.BrowserView.fromWebContents(
+    remote.getCurrentWebContents(),
+  ).getBounds();
+
+  menu.popup({ x: x + left, y: y + top + height });
 };
 
 const onRemove = () => {
   if (!store.bookmark) return;
-
-  store.removeItem(store.bookmark._id);
+  ipcRenderer.send('bookmarks-remove', [store.bookmark._id]);
   store.hide();
-};
-
-const onBlur = () => {
-  if (!store.bookmark) return;
-
-  const input = store.titleRef.current;
-
-  store.updateItem(store.bookmark._id, {
-    title: input.value,
-  });
 };
 
 export const App = hot(
@@ -53,7 +66,7 @@ export const App = hot(
               tabIndex={0}
               className="textfield"
               ref={store.titleRef}
-              onBlur={onBlur}
+              onChange={onChange}
             />
           </Row>
           <Row>
@@ -62,7 +75,10 @@ export const App = hot(
               dark={store.theme['dialog.lightForeground']}
               tabIndex={1}
               className="dropdown"
-            ></Dropdown>
+              onClick={onDropdownClick}
+            >
+              {store.currentFolder && getBookmarkTitle(store.currentFolder)}
+            </Dropdown>
           </Row>
           <Buttons>
             <Button onClick={onDone}>Done</Button>

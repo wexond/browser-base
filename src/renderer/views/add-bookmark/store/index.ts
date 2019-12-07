@@ -30,13 +30,32 @@ export class Store {
 
   public bookmark: IBookmark;
 
+  @observable
+  public currentFolder: IBookmark;
+
   public constructor() {
-    ipcRenderer.on('visible', (e, flag, data) => {
+    (async () => {
+      this.folders = await ipcRenderer.invoke('bookmarks-get-folders');
+      this.currentFolder = this.folders.find(x => x.static === 'main');
+    })();
+
+    ipcRenderer.on('visible', async (e, flag, data) => {
       this.visible = flag;
 
       if (flag) {
-        const { bookmark, title } = data;
+        const { bookmark, title, url } = data;
+
         this.bookmark = bookmark;
+        this.folders = await ipcRenderer.invoke('bookmarks-get-folders');
+
+        if (!this.bookmark) {
+          this.bookmark = await ipcRenderer.invoke('bookmarks-add', {
+            title,
+            url,
+            parent: this.folders[0]._id,
+          });
+        }
+
         if (this.titleRef.current) {
           this.titleRef.current.value = title;
           this.titleRef.current.focus();

@@ -92,12 +92,15 @@ export class StorageService {
     });
 
     ipcMain.on('bookmarks-remove', (e, ids: string[]) => {
-      this.bookmarks = this.bookmarks.filter(x => ids.indexOf(x._id) === -1);
       ids.forEach(x => this.removeBookmark(x));
     });
 
     ipcMain.handle('bookmarks-add', async (e, item) => {
       return await this.addBookmark(item);
+    });
+
+    ipcMain.handle('bookmarks-get-folders', async e => {
+      return this.bookmarks.filter(x => x.isFolder);
     });
 
     ipcMain.on('bookmarks-update', async (e, id, change) => {
@@ -273,6 +276,9 @@ export class StorageService {
 
   public removeBookmark(id: string) {
     const item = this.bookmarks.find(x => x._id === id);
+
+    if (!item) return;
+
     this.bookmarks = this.bookmarks.filter(x => x._id !== id);
     const parent = this.bookmarks.find(x => x._id === item.parent);
 
