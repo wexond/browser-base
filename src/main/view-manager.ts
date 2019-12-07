@@ -142,12 +142,12 @@ export class ViewManager {
     this.selectedId = id;
 
     view.updateWindowTitle();
+    view.updateBookmark();
 
     this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);
 
     this.window.searchDialog.hideVisually();
-    this.window.menuDialog.hideVisually();
     this.window.previewDialog.hideVisually();
     this.window.tabGroupDialog.hideVisually();
 

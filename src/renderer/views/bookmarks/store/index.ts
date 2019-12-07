@@ -2,6 +2,7 @@ import { observable, computed, action, toJS } from 'mobx';
 import { ISettings, IFavicon, ITheme, IBookmark } from '~/interfaces';
 import { getTheme } from '~/utils/themes';
 import { PreloadDatabase } from '~/preloads/models/database';
+import { ipcRenderer } from 'electron';
 
 export class Store {
   @observable
@@ -63,8 +64,6 @@ export class Store {
 
   public faviconsDb = new PreloadDatabase<IFavicon>('favicons');
 
-  public db = new PreloadDatabase<IBookmark>('bookmarks');
-
   public constructor() {
     (window as any).updateSettings = (settings: ISettings) => {
       this.settings = { ...this.settings, ...settings };
@@ -105,46 +104,8 @@ export class Store {
   }
 
   public async load() {
-    try {
-      const items = await this.db.get({});
-
-      let barFolder = items.find(x => x.static === 'main');
-      let otherFolder = items.find(x => x.static === 'other');
-      let mobileFolder = items.find(x => x.static === 'mobile');
-
-      this.list = items;
-
-      if (!barFolder) {
-        barFolder = await this.addItem({
-          static: 'main',
-          isFolder: true,
-        });
-
-        for (const item of items) {
-          if (!item.static) {
-            await this.updateItem(item._id, { parent: barFolder._id });
-          }
-        }
-      }
-
-      if (!otherFolder) {
-        otherFolder = await this.addItem({
-          static: 'other',
-          isFolder: true,
-        });
-      }
-
-      if (!mobileFolder) {
-        mobileFolder = await this.addItem({
-          static: 'mobile',
-          isFolder: true,
-        });
-      }
-
-      this.currentFolder = barFolder._id;
-    } catch (e) {
-      console.error(e);
-    }
+    this.list = await ipcRenderer.invoke('bookmarks-get');
+    this.currentFolder = this.list.find(x => x.static === 'main')._id;
   }
 
   public async loadFavicons() {
@@ -157,67 +118,28 @@ export class Store {
     });
   }
 
-  public async addItem(item: IBookmark): Promise<IBookmark> {
-    if (item.parent === undefined) {
-      item.parent = null;
-    }
-
-    if (item.parent === null && !item.static) {
-      throw new Error('Parent bookmark should be specified');
-    }
-
-    if (item.isFolder) {
-      item.children = item.children || [];
-    }
-
-    if (item.order === undefined) {
-      item.order = this.list.filter(x => x.parent === null).length;
-    }
-
-    const doc = await this.db.insert(item);
-
-    if (item.parent) {
-      const parent = this.list.find(x => x._id === item.parent);
-      await this.updateItem(parent._id, {
-        children: [...parent.children, doc._id],
-      });
-    }
-
-    this.list.push(doc);
-
-    return doc;
+  public removeItems(ids: string[]) {
+    this.list = this.list.filter(x => !ids.includes(x._id));
+    ipcRenderer.send(
+      'bookmarks-remove',
+      toJS(ids, { recurseEverything: true }),
+    );
   }
 
-  public removeItem(id: string) {
-    const item = this.list.find(x => x._id === id);
-    this.list = this.list.filter(x => x._id !== id);
-    const parent = this.list.find(x => x._id === item.parent);
-
-    parent.children = parent.children.filter(x => x !== id);
-    this.updateItem(item.parent, { children: parent.children });
-
-    this.db.remove({ _id: id });
-
-    if (item.isFolder) {
-      this.list = this.list.filter(x => x.parent !== id);
-      const removed = this.list.filter(x => x.parent === id);
-
-      this.db.remove({ parent: id }, true);
-
-      for (const i of removed) {
-        if (i.isFolder) {
-          this.removeItem(i._id);
-        }
-      }
-    }
+  public async addItem(item: IBookmark) {
+    const i = await ipcRenderer.invoke('bookmarks-add', item);
+    this.list.push(i);
+    return i;
   }
 
   public async updateItem(id: string, change: IBookmark) {
-    const jsChange = toJS(change, { recurseEverything: true });
     const index = this.list.indexOf(this.list.find(x => x._id === id));
-    this.list[index] = { ...this.list[index], ...jsChange };
-
-    await this.db.update({ _id: id }, jsChange);
+    this.list[index] = { ...this.list[index], ...change };
+    ipcRenderer.send(
+      'bookmarks-update',
+      id,
+      toJS(change, { recurseEverything: true }),
+    );
   }
 
   @action
@@ -232,9 +154,7 @@ export class Store {
 
   @action
   public deleteSelected() {
-    for (const item of this.selectedItems) {
-      this.removeItem(item);
-    }
+    this.removeItems(this.selectedItems);
     this.selectedItems = [];
   }
 

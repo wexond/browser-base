@@ -17,6 +17,7 @@ import {
   PreviewDialog,
   TabGroupDialog,
   DownloadsDialog,
+  AddBookmarkDialog,
 } from '../dialogs';
 import { ISettings } from '~/interfaces';
 
@@ -33,6 +34,7 @@ export class AppWindow extends BrowserWindow {
   public credentialsDialog = new CredentialsDialog(this);
   public previewDialog = new PreviewDialog(this);
   public downloadsDialog = new DownloadsDialog(this);
+  public addBookmarkDialog = new AddBookmarkDialog(this);
 
   public incognito: boolean;
 
@@ -103,6 +105,7 @@ export class AppWindow extends BrowserWindow {
       this.searchDialog.rearrange();
       this.tabGroupDialog.rearrange();
       this.downloadsDialog.rearrange();
+      this.addBookmarkDialog.rearrange();
     });
 
     this.on('move', () => {
@@ -163,6 +166,7 @@ export class AppWindow extends BrowserWindow {
       this.previewDialog.destroy();
       this.tabGroupDialog.destroy();
       this.downloadsDialog.destroy();
+      this.addBookmarkDialog.destroy();
 
       this.menuDialog = null;
       this.searchDialog = null;
@@ -174,6 +178,7 @@ export class AppWindow extends BrowserWindow {
       this.previewDialog = null;
       this.tabGroupDialog = null;
       this.downloadsDialog = null;
+      this.addBookmarkDialog = null;
 
       this.viewManager.clear();
 
