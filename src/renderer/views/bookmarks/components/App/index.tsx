@@ -42,7 +42,7 @@ const onDeleteClick = () => {
 };
 
 const onRemoveClick = (item: IBookmark) => () => {
-  store.removeItem(item._id);
+  store.removeItems([item._id]);
   store.menuVisible = false;
 };
 

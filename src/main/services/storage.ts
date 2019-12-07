@@ -13,6 +13,7 @@ import {
   IHistoryItem,
   IVisitedItem,
   IFavicon,
+  IBookmark,
 } from '~/interfaces';
 import { countVisitedTimes } from '~/utils/history';
 import { windowsManager } from '..';
@@ -37,6 +38,8 @@ export class StorageService {
   };
 
   public history: IHistoryItem[] = [];
+
+  public bookmarks: IBookmark[] = [];
 
   public historyVisited: IVisitedItem[] = [];
 
@@ -82,6 +85,23 @@ export class StorageService {
 
     ipcMain.handle('import-bookmarks', async () => {
       return await this.importBookmarks();
+    });
+
+    ipcMain.handle('bookmarks-get', e => {
+      return this.bookmarks;
+    });
+
+    ipcMain.on('bookmarks-remove', (e, ids: string[]) => {
+      this.bookmarks = this.bookmarks.filter(x => ids.indexOf(x._id) === -1);
+      ids.forEach(x => this.removeBookmark(x));
+    });
+
+    ipcMain.handle('bookmarks-add', async (e, item) => {
+      return await this.addBookmark(item);
+    });
+
+    ipcMain.on('bookmarks-update', async (e, id, change) => {
+      await this.updateBookmark(id, change);
     });
 
     ipcMain.handle('history-get', e => {
@@ -167,6 +187,12 @@ export class StorageService {
       this.databases[key] = this.createDatabase(key.toLowerCase());
     }
 
+    this.loadFavicons();
+    this.loadHistory();
+    this.loadBookmarks();
+  }
+
+  private async loadFavicons() {
     (await this.find<IFavicon>({ scope: 'favicons', query: {} })).forEach(
       favicon => {
         const { data } = favicon;
@@ -176,7 +202,9 @@ export class StorageService {
         }
       },
     );
+  }
 
+  private async loadHistory() {
     const items: IHistoryItem[] = await this.find({
       scope: 'history',
       query: {},
@@ -202,6 +230,113 @@ export class StorageService {
       ...x,
       favicon: this.favicons.get(x.favicon),
     }));
+  }
+
+  private async loadBookmarks() {
+    const items = await this.find<IBookmark>({ scope: 'bookmarks', query: {} });
+
+    items.sort((a, b) => a.order - b.order);
+
+    let barFolder = items.find(x => x.static === 'main');
+    let otherFolder = items.find(x => x.static === 'other');
+    let mobileFolder = items.find(x => x.static === 'mobile');
+
+    this.bookmarks = items;
+
+    if (!barFolder) {
+      barFolder = await this.addBookmark({
+        static: 'main',
+        isFolder: true,
+      });
+
+      for (const item of items) {
+        if (!item.static) {
+          await this.updateBookmark(item._id, { parent: barFolder._id });
+        }
+      }
+    }
+
+    if (!otherFolder) {
+      otherFolder = await this.addBookmark({
+        static: 'other',
+        isFolder: true,
+      });
+    }
+
+    if (!mobileFolder) {
+      mobileFolder = await this.addBookmark({
+        static: 'mobile',
+        isFolder: true,
+      });
+    }
+  }
+
+  public removeBookmark(id: string) {
+    const item = this.bookmarks.find(x => x._id === id);
+    this.bookmarks = this.bookmarks.filter(x => x._id !== id);
+    const parent = this.bookmarks.find(x => x._id === item.parent);
+
+    parent.children = parent.children.filter(x => x !== id);
+    this.updateBookmark(item.parent, { children: parent.children });
+
+    this.remove({ scope: 'bookmarks', query: { _id: id } });
+
+    if (item.isFolder) {
+      this.bookmarks = this.bookmarks.filter(x => x.parent !== id);
+      const removed = this.bookmarks.filter(x => x.parent === id);
+
+      this.remove({ scope: 'bookmarks', query: { parent: id }, multi: true });
+
+      for (const i of removed) {
+        if (i.isFolder) {
+          this.removeBookmark(i._id);
+        }
+      }
+    }
+  }
+
+  public async updateBookmark(id: string, change: IBookmark) {
+    const index = this.bookmarks.indexOf(
+      this.bookmarks.find(x => x._id === id),
+    );
+    this.bookmarks[index] = { ...this.bookmarks[index], ...change };
+
+    await this.update({
+      scope: 'bookmarks',
+      query: { _id: id },
+      value: change,
+    });
+  }
+
+  public async addBookmark(item: IBookmark): Promise<IBookmark> {
+    if (item.parent === undefined) {
+      item.parent = null;
+    }
+
+    if (item.parent === null && !item.static) {
+      throw new Error('Parent bookmark should be specified');
+    }
+
+    if (item.isFolder) {
+      item.children = item.children || [];
+    }
+
+    if (item.order === undefined) {
+      item.order = this.bookmarks.filter(x => x.parent === null).length;
+    }
+
+    const doc = await this.insert<IBookmark>({ item, scope: 'bookmarks' });
+
+    if (item.parent) {
+      const parent = this.bookmarks.find(x => x._id === item.parent);
+      await this.updateBookmark(parent._id, {
+        children: [...parent.children, doc._id],
+      });
+    }
+
+    this.bookmarks.push(doc);
+
+    return doc;
   }
 
   private createDatabase = (name: string) => {
