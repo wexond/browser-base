@@ -11,7 +11,7 @@ export const StyledSmallDialog = styled.div`
   overflow: hidden;
   display: flex;
   align-items: center;
-  padding: 12px;
+  padding: 12px 12px 12px 16px;
   box-shadow: ${shadows(8)};
   will-change: opacity;
   transform: translateX(-100%);
@@ -32,5 +32,6 @@ export const StyledSmallDialog = styled.div`
 `;
 
 export const Title = styled.div`
-  font-size: 14px;
+  font-size: 12px;
+  margin-right: 4px;
 `;
