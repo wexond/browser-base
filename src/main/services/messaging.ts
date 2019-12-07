@@ -75,6 +75,11 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.downloadsDialog.show();
   });
 
+  ipcMain.on(`show-add-bookmark-dialog-${id}`, (e, left) => {
+    appWindow.addBookmarkDialog.left = left;
+    appWindow.addBookmarkDialog.show();
+  });
+
   ipcMain.on(`edit-tabgroup-${id}`, (e, tabGroup) => {
     appWindow.webContents.send(`edit-tabgroup`, tabGroup);
   });

@@ -147,7 +147,6 @@ export class ViewManager {
     this.window.addBrowserView(view);
 
     this.window.searchDialog.hideVisually();
-    this.window.menuDialog.hideVisually();
     this.window.previewDialog.hideVisually();
     this.window.tabGroupDialog.hideVisually();
 

@@ -28,7 +28,7 @@ export class AddBookmarkDialog extends Dialog {
     });
   }
 
-  public showDialog() {
+  public show() {
     super.show();
     const view = windowsManager.currentWindow.viewManager.selected;
 
