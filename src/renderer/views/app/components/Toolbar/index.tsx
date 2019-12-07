@@ -87,7 +87,11 @@ const RightButtons = observer(() => {
     <Buttons>
       <BrowserActions />
       {store.extensions.browserActions.length > 0 && <Separator />}
-      <ToolbarButton icon={icons.star} size={18} onMouseDown={onStarClick} />
+      <ToolbarButton
+        icon={store.isBookmarked ? icons.starFilled : icons.star}
+        size={18}
+        onMouseDown={onStarClick}
+      />
       {hasCredentials && (
         <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
       )}

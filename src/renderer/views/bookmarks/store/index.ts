@@ -105,6 +105,7 @@ export class Store {
 
   public async load() {
     this.list = await ipcRenderer.invoke('bookmarks-get');
+    this.currentFolder = this.list.find(x => x.static === 'main')._id;
   }
 
   public async loadFavicons() {

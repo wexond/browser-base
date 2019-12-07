@@ -4,7 +4,7 @@ import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
 import storage from './services/storage';
 import Vibrant = require('node-vibrant');
-import { IHistoryItem } from '~/interfaces';
+import { IHistoryItem, IBookmark } from '~/interfaces';
 import { WEBUI_BASE_URL } from '~/constants/files';
 
 export class View extends BrowserView {
@@ -21,6 +21,8 @@ export class View extends BrowserView {
   public bounds: any;
 
   public lastHistoryId: string;
+
+  public bookmark: IBookmark;
 
   public constructor(window: AppWindow, url: string, incognito: boolean) {
     super({
@@ -303,7 +305,15 @@ export class View extends BrowserView {
 
     this.updateData();
     this.updateCredentials();
+    this.updateBookmark();
   };
+
+  public updateBookmark() {
+    this.bookmark = storage.bookmarks.find(
+      x => x.url === this.webContents.getURL(),
+    );
+    this.window.webContents.send('is-bookmarked', !!this.bookmark);
+  }
 
   public async updateData() {
     if (!this.incognito) {

@@ -89,9 +89,6 @@ const BookmarksList = observer(() => {
         onCancelClick={onCancelClick}
       />
       <PathView>
-        <PathItem onClick={onPathItemClick(null)} key={null}>
-          Home
-        </PathItem>
         {store.path.map(item => (
           <PathItem onClick={onPathItemClick(item)} key={item._id}>
             {getBookmarkTitle(item)}

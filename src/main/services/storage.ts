@@ -84,7 +84,13 @@ export class StorageService {
     );
 
     ipcMain.handle('import-bookmarks', async () => {
-      return await this.importBookmarks();
+      const b = await this.importBookmarks();
+
+      windowsManager.list.forEach(x => {
+        x.viewManager.selected.updateBookmark();
+      });
+
+      return b;
     });
 
     ipcMain.handle('bookmarks-get', e => {
@@ -93,10 +99,19 @@ export class StorageService {
 
     ipcMain.on('bookmarks-remove', (e, ids: string[]) => {
       ids.forEach(x => this.removeBookmark(x));
+      windowsManager.list.forEach(x => {
+        x.viewManager.selected.updateBookmark();
+      });
     });
 
     ipcMain.handle('bookmarks-add', async (e, item) => {
-      return await this.addBookmark(item);
+      const b = await this.addBookmark(item);
+
+      windowsManager.list.forEach(x => {
+        x.viewManager.selected.updateBookmark();
+      });
+
+      return b;
     });
 
     ipcMain.handle('bookmarks-get-folders', async e => {

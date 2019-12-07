@@ -142,6 +142,7 @@ export class ViewManager {
     this.selectedId = id;
 
     view.updateWindowTitle();
+    view.updateBookmark();
 
     this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);

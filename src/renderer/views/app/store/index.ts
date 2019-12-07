@@ -59,6 +59,9 @@ export class Store {
   @observable
   public downloads: IDownloadItem[] = [];
 
+  @observable
+  public isBookmarked = false;
+
   @computed
   public get downloadProgress() {
     const downloading = this.downloads.filter(x => !x.completed);
@@ -114,6 +117,10 @@ export class Store {
     ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {
       const i = this.downloads.find(x => x.id === item.id);
       i.receivedBytes = item.receivedBytes;
+    });
+
+    ipcRenderer.on('is-bookmarked', (e, flag) => {
+      this.isBookmarked = flag;
     });
 
     ipcRenderer.on(
