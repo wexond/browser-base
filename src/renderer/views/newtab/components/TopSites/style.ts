@@ -15,7 +15,7 @@ export const StyledTopSites = styled.div`
 `;
 
 export const ItemBase = styled.div`
-  border-radius: 8px;
+  border-radius: 6px;
   width: 120px;
   height: 90px;
 `;

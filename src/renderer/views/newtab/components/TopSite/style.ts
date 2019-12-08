@@ -6,7 +6,6 @@ import { ItemBase } from '../TopSites/style';
 import { ITheme } from '~/interfaces';
 
 export const Item = styled(ItemBase)`
-  box-shadow: ${shadows(4)};
   transition: 0.2s box-shadow, 0.2s background-color;
   cursor: pointer;
   display: flex;
@@ -14,18 +13,18 @@ export const Item = styled(ItemBase)`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px);
 
   ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['pages.lightForeground']
-      ? 'rgba(0, 0, 0, 0.4)'
+      ? 'rgba(0, 0, 0, 0.3)'
       : 'rgba(255, 255, 255, 0.4)'};
 
     &:hover {
       box-shadow: ${shadows(8)};
       background-color: ${theme['pages.lightForeground']
-        ? 'rgb(25, 25, 25)'
-        : '#f0f0f0'};
+      ? 'rgba(0, 0, 0, 0.4)'
+      : 'rgba(255, 255, 255, 0.5)'};
     }
   `};
 `;
@@ -39,23 +38,23 @@ export const Icon = styled.div`
   ${centerIcon()};
 
   ${({
-    add,
-    icon,
-    custom,
-    theme,
-  }: {
-    add?: boolean;
-    icon?: string;
-    custom?: boolean;
-    theme?: ITheme;
-  }) => css`
+  add,
+  icon,
+  custom,
+  theme,
+}: {
+  add?: boolean;
+  icon?: string;
+  custom?: boolean;
+  theme?: ITheme;
+}) => css`
     height: ${add ? 32 : 24}px;
     width: ${add ? 32 : 24}px;
     background-image: url(${add ? icons.add : icon});
     opacity: ${add || custom ? 0.54 : 1};
     filter: ${custom && theme['pages.lightForeground']
-      ? 'invert(100%)'
-      : 'none'};
+    ? 'invert(100%)'
+    : 'none'};
   `}
 `;
 
@@ -68,4 +67,5 @@ export const Title = styled.div`
   max-width: calc(100% - 16px);
   margin-top: 20px;
   margin-bottom: -8px;
+  opacity: 0.87;
 `;
