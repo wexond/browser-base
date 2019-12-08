@@ -17,20 +17,18 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 
 # Features
 
-- **Wexond Shield** - Browse the web without any ads and don't let websites to track you. Thanks to the Wexond Shield powered by [Cliqz adblocker](https://github.com/cliqz-oss/adblocker), websites can load even 2 times faster!
+- **Wexond Shield** - Browse the web without any ads and don't let websites to track you. Thanks to the Wexond Shield, websites can load even 2 times faster!
 - **Built-in dark mode** - Wexond has a built-in dark theme, but it also changes white websites to dark with just a one click in Overlay. No eyestrain at night anymore!
-- **Beautiful and minimalistic UI** - The address bar is hidden in Overlay to take less space, but it doesn't impact on usability in any way. It's even better! [Give it a shot](https://wexond.net)
+- **Beautiful and minimalistic UI** - The address bar is hidden to take less space, but it doesn't impact on usability in any way. It's even better! [Give it a shot](https://wexond.net)
 - **Tab groups** - Easily group tabs to groups and access them really fast.
-- **Partial support for Chrome extensions** - Install some extensions from Chrome Web Store (see [#110](https://github.com/wexond/wexond/issues/110))
-- **Overlay** - It contains everything you will need. Search box, bookmarks, menu, your custom components and much more!
-- **Packages** - Extend Wexond for your needs, by installing or developing your own packages. They can theme the browser and even add custom components to the Overlay! ([#147](https://github.com/wexond/wexond/issues/147)) (WIP)
-- **Organize apps in tabs** - Wexond's tabs system can also contain your native apps like in [Multrin](https://github.com/sentialx/multrin)! (currently only for Windows)
+- **Partial support for Chrome extensions** - Install some extensions from Chrome Web Store* (see [#110](https://github.com/wexond/wexond/issues/110))
+- **Packages** - Extend Wexond for your needs, by installing or developing your own packages* ([#147](https://github.com/wexond/wexond/issues/147)) (WIP)
 
 # Screenshots
 
-![](https://wexond.net/img/screen.png)
+![image](https://user-images.githubusercontent.com/11065386/70392294-ed20b800-19de-11ea-942b-216e9916f07c.png)
 
-![](https://wexond.net/img/screen2.gif)
+![image](https://user-images.githubusercontent.com/11065386/70392310-180b0c00-19df-11ea-98de-ba96aece86c4.png)
 
 # [Roadmap](https://github.com/wexond/wexond/projects)
 
