@@ -11,7 +11,7 @@ export const ContextMenu = styled.div`
   padding: 8px 0;
   z-index: 9999;
   box-shadow: ${shadows(8)};
-  border-radius: 8px;
+  border-radius: 4px;
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};
