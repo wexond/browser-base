@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 import { transparency, icons } from '~/renderer/constants';
 import { centerIcon } from '~/renderer/mixins';
+import { ITheme } from '~/interfaces';
 
 export const Container = styled.div`
   width: 100%;
@@ -45,8 +46,9 @@ export const PasswordIcon = styled.div`
   transition: 0.15s background-image;
   ${centerIcon('contain')};
 
-  ${({ toggled }: { toggled: boolean }) => css`
+  ${({ toggled, theme }: { toggled: boolean; theme: ITheme }) => css`
     background-image: url(${toggled ? icons.invisible : icons.visible});
+    filter: ${theme.dark ? 'invert(100%)' : 'none'};
   `};
 `;
 
@@ -57,4 +59,8 @@ export const More = styled.div`
   background-image: url(${icons.more});
   cursor: pointer;
   ${centerIcon(20)};
+
+  ${({ theme }: { theme: ITheme }) => css`
+    filter: ${theme.dark ? 'invert(100%)' : 'none'};
+  `};
 `;

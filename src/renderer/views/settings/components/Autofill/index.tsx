@@ -20,16 +20,25 @@ const onRemoveClick = () => {
   store.autoFill.removeItem(item);
 };
 
+const onMouseDown = (e: React.MouseEvent) => {
+  e.stopPropagation();
+};
+
 const Menu = observer(() => {
   const item = store.autoFill.selectedItem;
 
-  const style = {
+  const style: any = {
     top: store.autoFill.menuTop,
     left: store.autoFill.menuLeft - 130,
+    position: 'fixed',
   };
 
   return (
-    <ContextMenu style={style} visible={store.autoFill.menuVisible}>
+    <ContextMenu
+      onMouseDown={onMouseDown}
+      style={style}
+      visible={store.autoFill.menuVisible}
+    >
       {item && item.type === 'address' && (
         <ContextMenuItem icon={icons.edit} onClick={onEditClick}>
           Edit

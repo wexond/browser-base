@@ -81,8 +81,8 @@ export const Appearance = observer(() => {
   return (
     <>
       <Header>Appearance</Header>
-      <MenuAnimations />
-      <BookmarksBar />
+      {/* <MenuAnimations /> */}
+      {/* <BookmarksBar /> */}
       <WarnQuit />
       <ThemeVariant />
     </>

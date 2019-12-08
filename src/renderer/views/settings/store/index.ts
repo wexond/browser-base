@@ -51,6 +51,10 @@ export class Store {
     (window as any).updateSettings = (settings: ISettings) => {
       this.settings = { ...this.settings, ...settings };
     };
+
+    window.onmousedown = () => {
+      this.autoFill.menuVisible = false;
+    };
   }
 
   public save() {
