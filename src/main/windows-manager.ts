@@ -85,6 +85,7 @@ export class WindowsManager {
     this.sessionsManager = new SessionsManager(this);
 
     this.createWindow();
+
     Menu.setApplicationMenu(getMainMenu(this));
     runAutoUpdaterService(this);
 

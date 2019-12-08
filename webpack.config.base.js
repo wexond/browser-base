@@ -112,7 +112,7 @@ const applyEntries = (scope, config, entries) => {
 
 const getBaseConfig = name => {
   const config = {
-    plugins: [new HardSourceWebpackPlugin()],
+    plugins: [],
 
     output: {},
     entry: {},
@@ -132,6 +132,7 @@ const getBaseConfig = name => {
 
   if (dev) {
     config.plugins.push(new ForkTsCheckerWebpackPlugin());
+    config.plugins.push(new HardSourceWebpackPlugin());
   }
 
   return config;

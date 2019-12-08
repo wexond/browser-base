@@ -1,5 +1,5 @@
 import { BrowserWindow, app, dialog } from 'electron';
-import { readFileSync, writeFileSync } from 'fs';
+import { writeFileSync, promises } from 'fs';
 import { resolve, join } from 'path';
 
 import { ViewManager } from '../view-manager';
@@ -69,26 +69,30 @@ export class AppWindow extends BrowserWindow {
 
     let windowState: any = {};
 
-    try {
-      // Read the last window state from file.
-      windowState = JSON.parse(readFileSync(windowDataPath, 'utf8'));
-    } catch (e) {
-      writeFileSync(windowDataPath, JSON.stringify({}));
-    }
-
-    // Merge bounds from the last window state to the current window options.
-    if (windowState) {
-      this.setBounds({ ...windowState.bounds });
-    }
-
-    if (windowState) {
-      if (windowState.maximized) {
-        this.maximize();
+    (async () => {
+      try {
+        // Read the last window state from file.
+        windowState = JSON.parse(
+          await promises.readFile(windowDataPath, 'utf8'),
+        );
+      } catch (e) {
+        await promises.writeFile(windowDataPath, JSON.stringify({}));
       }
-      if (windowState.fullscreen) {
-        this.setFullScreen(true);
+
+      // Merge bounds from the last window state to the current window options.
+      if (windowState) {
+        this.setBounds({ ...windowState.bounds });
       }
-    }
+
+      if (windowState) {
+        if (windowState.maximized) {
+          this.maximize();
+        }
+        if (windowState.fullscreen) {
+          this.setFullScreen(true);
+        }
+      }
+    })();
 
     // Update window bounds on resize and on move when window is not maximized.
     this.on('resize', () => {
