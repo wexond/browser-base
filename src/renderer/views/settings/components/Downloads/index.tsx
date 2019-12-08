@@ -1,28 +1,38 @@
 import * as React from 'react';
 
 import { Switch } from '~/renderer/components/Switch';
-import { Title, Row, Control, Header } from '../App/style';
+import { Title, Row, Control, Header, SecondaryText } from '../App/style';
 import store from '../../store';
 import { onSwitchChange } from '../../utils';
 import { Button } from '~/renderer/components/Button';
+import { ipcRenderer } from 'electron';
+import { observer } from 'mobx-react-lite';
 
 const AskToggle = () => {
-  const { suggestions } = store.settings;
+  const { downloadsDialog } = store.settings;
 
   return (
-    <Row onClick={onSwitchChange('suggestions')}>
-      <Title>Show search and site suggestions</Title>
+    <Row onClick={onSwitchChange('downloadsDialog')}>
+      <Title>Ask where to save each file before downloading</Title>
       <Control>
-        <Switch value={suggestions} />
+        <Switch value={downloadsDialog} />
       </Control>
     </Row>
   );
 };
 
-const Location = () => {
+const onChangeClick = () => {
+  ipcRenderer.send('downloads-path-change');
+};
+
+const Location = observer(() => {
   return (
     <Row>
-      <Title>Location</Title>
+      <div>
+        <Title>Location</Title>
+        <SecondaryText>{store.settings.downloadsPath}</SecondaryText>
+      </div>
+
       <Control>
         <Button
           background={
@@ -30,6 +40,7 @@ const Location = () => {
               ? 'rgba(255, 255, 255, 0.08)'
               : 'rgba(0, 0, 0, 0.08)'
           }
+          onClick={onChangeClick}
           foreground={store.theme['dialog.lightForeground'] ? 'white' : 'black'}
         >
           Change
@@ -37,7 +48,7 @@ const Location = () => {
       </Control>
     </Row>
   );
-};
+});
 
 export const Downloads = () => {
   return (

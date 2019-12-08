@@ -1,4 +1,5 @@
 import { ISettings } from '~/interfaces';
+import { remote, app } from 'electron';
 
 const pkg = require('../../package.json');
 
@@ -18,6 +19,12 @@ export const DEFAULT_SETTINGS: ISettings = {
   },
   warnOnQuit: true,
   version: pkg.version,
+  downloadsDialog: false,
+  downloadsPath: remote
+    ? remote.app.getPath('downloads')
+    : app
+    ? app.getPath('downloads')
+    : '',
 };
 
 export const DEFAULT_SEARCH_ENGINES = [

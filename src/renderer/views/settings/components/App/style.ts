@@ -37,3 +37,10 @@ export const Row = styled.div`
 export const Control = styled.div`
   margin-left: auto;
 `;
+
+export const SecondaryText = styled.div`
+  opacity: 0.54;
+  font-weight: 400;
+  margin-top: 4px;
+  font-size: 12px;
+`;
