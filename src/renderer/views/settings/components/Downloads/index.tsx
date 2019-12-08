@@ -8,7 +8,7 @@ import { Button } from '~/renderer/components/Button';
 import { ipcRenderer } from 'electron';
 import { observer } from 'mobx-react-lite';
 
-const AskToggle = () => {
+const AskToggle = observer(() => {
   const { downloadsDialog } = store.settings;
 
   return (
@@ -19,7 +19,7 @@ const AskToggle = () => {
       </Control>
     </Row>
   );
-};
+});
 
 const onChangeClick = () => {
   ipcRenderer.send('downloads-path-change');

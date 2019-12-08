@@ -94,27 +94,29 @@ export class SessionsManager {
     );
 
     this.view.on('will-download', (event, item, webContents) => {
-      const downloadsPath = app.getPath('downloads');
       const fileName = item.getFilename();
-      let savePath = resolve(downloadsPath, fileName);
       const id = makeId(32);
       const window = windowsManager.findWindowByBrowserView(webContents.id);
 
-      let i = 1;
+      if (!windowsManager.settings.object.downloadsDialog) {
+        const downloadsPath = windowsManager.settings.object.downloadsPath;
+        let i = 1;
+        let savePath = resolve(downloadsPath, fileName);
 
-      while (existsSync(savePath)) {
-        const { name, ext } = parse(fileName);
-        savePath = resolve(downloadsPath, `${name} (${i})${ext}`);
-        i++;
+        while (existsSync(savePath)) {
+          const { name, ext } = parse(fileName);
+          savePath = resolve(downloadsPath, `${name} (${i})${ext}`);
+          i++;
+        }
+
+        item.savePath = savePath;
       }
 
-      item.savePath = savePath;
-
       const downloadItem: IDownloadItem = {
-        fileName: basename(savePath),
+        fileName: basename(item.savePath),
         receivedBytes: 0,
         totalBytes: item.getTotalBytes(),
-        savePath,
+        savePath: item.savePath,
         id,
       };
 
@@ -148,7 +150,7 @@ export class SessionsManager {
           );
 
           if (extname(fileName) === '.crx') {
-            const crxBuf = await promises.readFile(savePath);
+            const crxBuf = await promises.readFile(item.savePath);
             const crxInfo = parseCrx(crxBuf);
 
             if (!crxInfo.id) {
@@ -236,7 +238,9 @@ export class SessionsManager {
     const dirs = await promises.readdir(extensionsPath);
 
     for (const dir of dirs) {
-      const extension = await context.loadExtension(resolve(extensionsPath, dir));
+      const extension = await context.loadExtension(
+        resolve(extensionsPath, dir),
+      );
       for (const windowWc of context.webContents) {
         windowWc.send('load-browserAction', extension);
       }
