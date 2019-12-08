@@ -17,6 +17,7 @@ const extensibleSessionOptions = {
   contentPreloadPath: resolve(__dirname, 'extensions-content-preload.js'),
 };
 
+// TODO: move windows list to the corresponding sessions
 export class SessionsManager {
   public view = session.fromPartition('persist:view');
   public viewIncognito = session.fromPartition('view_incognito');
@@ -235,7 +236,10 @@ export class SessionsManager {
     const dirs = await promises.readdir(extensionsPath);
 
     for (const dir of dirs) {
-      context.loadExtension(resolve(extensionsPath, dir));
+      const extension = await context.loadExtension(resolve(extensionsPath, dir));
+      for (const windowWc of context.webContents) {
+        windowWc.send('load-browserAction', extension);
+      }
     }
 
     context.loadExtension(resolve(__dirname, 'extensions/wexond-darkreader'));
