@@ -16,7 +16,7 @@ import {
   More,
 } from './styles';
 
-const Item = ({ data }: { data: IFormFillData }) => {
+const Item = observer(({ data }: { data: IFormFillData }) => {
   const { url, favicon, fields } = data;
   const [realPassword, setRealPassword] = React.useState<string>(null);
 
@@ -45,7 +45,7 @@ const Item = ({ data }: { data: IFormFillData }) => {
       </Wrapper>
     </>
   );
-};
+});
 
 export const Passwords = observer(() => {
   return (

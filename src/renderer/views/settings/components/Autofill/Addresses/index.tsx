@@ -8,14 +8,14 @@ import { Section, onMoreClick } from '../Section';
 import { More } from '../Passwords/styles';
 import { StyledItem } from './styles';
 
-const Item = ({ data }: { data: IFormFillData }) => {
+const Item = observer(({ data }: { data: IFormFillData }) => {
   return (
     <StyledItem>
       {data.fields.address}
       <More onClick={onMoreClick(data)} style={{ marginLeft: 'auto' }} />
     </StyledItem>
   );
-};
+});
 
 export const Addresses = observer(() => {
   const style = {

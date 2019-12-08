@@ -22,4 +22,6 @@ export interface ISettings {
   warnOnQuit: boolean;
   version: string;
   darkContents: boolean;
+  downloadsDialog: boolean;
+  downloadsPath: string;
 }

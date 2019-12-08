@@ -15,6 +15,7 @@ import { icons } from '~/renderer/constants';
 import { OnStartup } from '../Startup';
 import { Content, LeftContent, Container } from '~/renderer/components/Pages';
 import { GlobalNavigationDrawer } from '~/renderer/components/GlobalNavigationDrawer';
+import { Downloads } from '../Downloads';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 const MenuItem = observer(
@@ -27,14 +28,14 @@ const MenuItem = observer(
     children: any;
     icon?: string;
   }) => (
-      <NavigationDrawer.Item
-        onClick={() => (store.selectedSection = section)}
-        selected={store.selectedSection === section}
-        icon={icon}
-      >
-        {children}
-      </NavigationDrawer.Item>
-    ),
+    <NavigationDrawer.Item
+      onClick={() => (store.selectedSection = section)}
+      selected={store.selectedSection === section}
+      icon={icon}
+    >
+      {children}
+    </NavigationDrawer.Item>
+  ),
 );
 
 export default hot(
@@ -42,7 +43,9 @@ export default hot(
     const { selectedSection } = store;
 
     return (
-      <ThemeProvider theme={{ ...store.theme, dark: store.theme['pages.lightForeground'] }}>
+      <ThemeProvider
+        theme={{ ...store.theme, dark: store.theme['pages.lightForeground'] }}
+      >
         <Container>
           <GlobalStyle />
           <GlobalNavigationDrawer></GlobalNavigationDrawer>
@@ -59,9 +62,12 @@ export default hot(
             <MenuItem icon={icons.search} section="address-bar">
               Address bar
             </MenuItem>
+            <MenuItem icon={icons.download} section="downloads">
+              Downloads
+            </MenuItem>
             {/* <MenuItem section="privacy">Privacy</MenuItem> */}
             {/* <MenuItem section="permissions">Site permissions</MenuItem> */}
-            {/* <MenuItem section="downloads">Downloads</MenuItem> */}
+
             {/* <MenuItem section="language">Languages</MenuItem> */}
             {/* <MenuItem section="shortcuts">Keyboard shortcuts</MenuItem> */}
             {/* <MenuItem section="system">System</MenuItem> */}
@@ -73,6 +79,7 @@ export default hot(
               {selectedSection === 'address-bar' && <AddressBar />}
               {selectedSection === 'startup' && <OnStartup />}
               {selectedSection === 'privacy' && <Privacy />}
+              {selectedSection === 'downloads' && <Downloads />}
             </LeftContent>
           </Content>
         </Container>

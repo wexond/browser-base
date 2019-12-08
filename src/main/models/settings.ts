@@ -1,4 +1,4 @@
-import { ipcMain, nativeTheme } from 'electron';
+import { ipcMain, nativeTheme, dialog } from 'electron';
 
 import { DEFAULT_SETTINGS } from '~/constants';
 
@@ -43,6 +43,19 @@ export class Settings extends EventEmitter {
       await this.onLoad();
       this.update();
       e.sender.send('update-settings', this.object);
+    });
+
+    ipcMain.on('downloads-path-change', async () => {
+      const { canceled, filePaths } = await dialog.showOpenDialog({
+        defaultPath: this.object.downloadsPath,
+        properties: ['openDirectory'],
+      });
+
+      if (canceled) return;
+
+      this.object.downloadsPath = filePaths[0];
+
+      this.addToQueue();
     });
 
     nativeTheme.on('updated', () => {
