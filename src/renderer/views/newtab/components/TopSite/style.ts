@@ -14,6 +14,8 @@ export const Item = styled(ItemBase)`
   justify-content: center;
   overflow: hidden;
   backdrop-filter: blur(8px);
+  position: relative;
+  z-index: 1;
 
   ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['pages.lightForeground']
@@ -23,8 +25,8 @@ export const Item = styled(ItemBase)`
     &:hover {
       box-shadow: ${shadows(8)};
       background-color: ${theme['pages.lightForeground']
-      ? 'rgba(0, 0, 0, 0.4)'
-      : 'rgba(255, 255, 255, 0.5)'};
+        ? 'rgba(0, 0, 0, 0.4)'
+        : 'rgba(255, 255, 255, 0.5)'};
     }
   `};
 `;
@@ -36,25 +38,39 @@ export const AddItem = styled(Item)`
 
 export const Icon = styled.div`
   ${centerIcon()};
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    right: -4px;
+    bottom: -4px;
+    opacity: 0.3;
+    background-color: white;
+    z-index: -1;
+    border-radius: 50%;
+  }
 
   ${({
-  add,
-  icon,
-  custom,
-  theme,
-}: {
-  add?: boolean;
-  icon?: string;
-  custom?: boolean;
-  theme?: ITheme;
-}) => css`
+    add,
+    icon,
+    custom,
+    theme,
+  }: {
+    add?: boolean;
+    icon?: string;
+    custom?: boolean;
+    theme?: ITheme;
+  }) => css`
     height: ${add ? 32 : 24}px;
     width: ${add ? 32 : 24}px;
     background-image: url(${add ? icons.add : icon});
     opacity: ${add || custom ? 0.54 : 1};
     filter: ${custom && theme['pages.lightForeground']
-    ? 'invert(100%)'
-    : 'none'};
+      ? 'invert(100%)'
+      : 'none'};
   `}
 `;
 
