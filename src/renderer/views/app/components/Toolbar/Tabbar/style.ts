@@ -26,12 +26,14 @@ export const TabsContainer = styled.div`
   align-items: center;
 
   &::-webkit-scrollbar {
-    height: 3px;
+    height: 0px;
+    display: none;
     -webkit-app-region: no-drag;
     background-color: transparent;
+    opacity: 0;
   }
 
-  &:hover {
+  /* &:hover {
     ${({ theme }: { theme?: ITheme }) => css`
       &::-webkit-scrollbar-thumb {
         background-color: ${theme['toolbar.lightForeground']
@@ -45,7 +47,7 @@ export const TabsContainer = styled.div`
         }
       }
     `};
-  }
+  } */
 `;
 
 export const AddTab = styled(ToolbarButton)`
