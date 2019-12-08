@@ -5,8 +5,9 @@ import { Switch } from '~/renderer/components/Switch';
 import { Title, Row, Control, Header } from '../App/style';
 import store from '../../store';
 import { onSwitchChange } from '../../utils';
+import { observer } from 'mobx-react-lite';
 
-const SuggestionsToggle = () => {
+const SuggestionsToggle = observer(() => {
   const { suggestions } = store.settings;
 
   return (
@@ -17,7 +18,7 @@ const SuggestionsToggle = () => {
       </Control>
     </Row>
   );
-};
+});
 
 const onSearchEngineChange = (value: string) => {
   const { searchEngines } = store;
@@ -27,7 +28,7 @@ const onSearchEngineChange = (value: string) => {
   store.save();
 };
 
-const SearchEngine = () => {
+const SearchEngine = observer(() => {
   const se = store.searchEngine;
 
   return (
@@ -44,9 +45,9 @@ const SearchEngine = () => {
       </Control>
     </Row>
   );
-};
+});
 
-export const AddressBar = () => {
+export const AddressBar = observer(() => {
   return (
     <>
       <Header>Address bar</Header>
@@ -54,4 +55,4 @@ export const AddressBar = () => {
       <SearchEngine />
     </>
   );
-};
+});
