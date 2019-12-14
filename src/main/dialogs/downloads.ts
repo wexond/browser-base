@@ -33,8 +33,8 @@ export class DownloadsDialog extends Dialog {
     const maxHeight = height - 34 - 16;
 
     super.rearrange({
-      x: Math.min(this.left - WIDTH / 2, width - WIDTH),
-      height: Math.min(height, this.height + 16),
+      x: Math.round(Math.min(this.left - WIDTH / 2, width - WIDTH)),
+      height: Math.round(Math.min(height, this.height + 16)),
     });
 
     this.webContents.send(`max-height`, Math.min(maxHeight, this.height));

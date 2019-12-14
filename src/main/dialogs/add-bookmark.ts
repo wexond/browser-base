@@ -24,7 +24,7 @@ export class AddBookmarkDialog extends Dialog {
     const { width } = this.appWindow.getContentBounds();
 
     super.rearrange({
-      x: Math.min(this.left - WIDTH / 2, width - WIDTH),
+      x: Math.round(Math.min(this.left - WIDTH / 2, width - WIDTH)),
     });
   }
 

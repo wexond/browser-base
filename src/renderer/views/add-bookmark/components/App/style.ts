@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { robotoRegular } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
 
-export const StyledApp = styled.div`
+export const StyledApp = styled.div<{ theme?: ITheme; visible: boolean }>`
   margin: 8px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   border-radius: 6px;
@@ -18,7 +18,7 @@ export const StyledApp = styled.div`
     margin-left: auto;
   }
 
-  ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
+  ${({ visible, theme }) => css`
     opacity: ${visible ? 1 : 0};
     margin-top: ${visible ? 3 : 10}px;
     background-color: ${theme['dialog.backgroundColor']};
