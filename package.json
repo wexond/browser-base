@@ -82,7 +82,7 @@
     "nedb": "1.8.0",
     "node-bookmarks-parser": "^2.0.0",
     "node-fetch": "^2.6.0",
-    "node-vibrant": "^3.2.0-alpha",
+    "node-vibrant": "^3.1.5",
     "prettier": "1.19.1",
     "pretty-bytes": "5.3.0",
     "react": "16.12.0",
