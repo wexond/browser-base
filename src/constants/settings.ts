@@ -44,6 +44,11 @@ export const DEFAULT_SEARCH_ENGINES = [
     keywordsUrl: '',
   },
   {
+    name: 'Ekoru',
+    url: 'https://www.ekoru.org/?ext=wexond&q=%s',
+    keywordsUrl: 'http://ac.ekoru.org/?ext=wexond&q=%s',
+  },
+  {
     name: 'Ecosia',
     url: 'https://www.ecosia.org/search?q=%s',
     keywordsUrl: '',
