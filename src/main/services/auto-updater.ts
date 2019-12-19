@@ -8,9 +8,7 @@ export const runAutoUpdaterService = (windowsManager: WindowsManager) => {
   });
 
   ipcMain.on('update-check', () => {
-    if (process.env.NODE_ENV !== 'development') {
-      autoUpdater.checkForUpdates();
-    }
+    autoUpdater.checkForUpdates();
   });
 
   autoUpdater.on('update-downloaded', ({ version }) => {
