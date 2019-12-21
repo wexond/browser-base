@@ -44,7 +44,8 @@ const onMoreClick = (data: IBookmark) => (e: any) => {
 
 const onContextMenu = (data: IBookmark) => (e: any) => {
   e.preventDefault();
-  e.stopPropagation();
+
+  onClick(data)(e);
 
   const { pageX, pageY } = e;
 
