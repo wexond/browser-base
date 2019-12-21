@@ -38,7 +38,7 @@ export class SessionsManager {
   public constructor(windowsManager: WindowsManager) {
     this.windowsManager = windowsManager;
 
-    // this.loadExtensions('normal');
+    this.loadExtensions('normal');
 
     registerProtocol(this.view);
     registerProtocol(this.viewIncognito);
