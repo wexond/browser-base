@@ -132,10 +132,7 @@ export default hot(
             >
               Import
             </NavigationDrawer.Item>
-            <NavigationDrawer.Item
-              icon={icons.download}
-              onClick={onExportClick}
-            >
+            <NavigationDrawer.Item icon={icons.save} onClick={onExportClick}>
               Export
             </NavigationDrawer.Item>
           </NavigationDrawer>
