@@ -45,7 +45,7 @@ export class ViewManager {
       this.destroy(id);
     });
 
-    ipcMain.on(`browserview-call-${id}`, async (e, data) => {
+    ipcMain.handle(`browserview-call-${id}`, async (e, data) => {
       const view = this.views.get(data.tabId);
       let scope: any = view;
 
@@ -56,18 +56,13 @@ export class ViewManager {
         }
       }
 
-      let result = scope.apply(view.webContents, data.args);
+      const result = scope.apply(view.webContents, data.args);
 
       if (result instanceof Promise) {
-        result = await result;
+        return await result;
       }
 
-      if (data.callId) {
-        this.window.webContents.send(
-          `browserview-call-result-${data.callId}`,
-          result,
-        );
-      }
+      return result;
     });
 
     ipcMain.on(`mute-view-${id}`, (e, tabId: number) => {
@@ -102,11 +97,6 @@ export class ViewManager {
   ) {
     const view = new View(this.window, details.url, this.incognito);
     const { id } = view.webContents;
-
-    view.setAutoResize({
-      width: true,
-      height: true,
-    } as any);
 
     view.webContents.once('destroyed', () => {
       this.views.delete(id);

@@ -461,7 +461,7 @@ export class StorageService {
       if (!bookmark.isFolder && bookmark.url) {
         title = encodeTitle(bookmark.title);
         const href = encodeHref(bookmark.url);
-        const icon = bookmark.favicon;
+        let icon = bookmark.favicon;
 
         if (!icon.startsWith('data:')) {
           icon = this.favicons.get(icon);

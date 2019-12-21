@@ -15,14 +15,14 @@ if (arg) {
 }
 
 const goBack = () => {
-  ipcRenderer.send(`browserview-call-${windowId}`, {
+  ipcRenderer.invoke(`browserview-call-${windowId}`, {
     tabId,
     scope: 'webContents.goBack',
   });
 };
 
 const goForward = () => {
-  ipcRenderer.send(`browserview-call-${windowId}`, {
+  ipcRenderer.invoke(`browserview-call-${windowId}`, {
     tabId,
     scope: 'webContents.goForward',
   });

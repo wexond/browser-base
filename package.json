@@ -35,7 +35,7 @@
     "extensions": "node scripts/extensions.js"
   },
   "devDependencies": {
-    "@cliqz/adblocker-electron": "^1.4.1",
+    "@cliqz/adblocker-electron": "1.4.1",
     "@types/chrome": "0.0.91",
     "@types/crypto-js": "^3.1.43",
     "@types/extract-zip": "^1.6.2",

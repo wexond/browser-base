@@ -119,9 +119,9 @@ export class Settings extends EventEmitter {
       }
 
       if (this.object.shield) {
-        runAdblockService(e.session);
+        // runAdblockService(e.session);
       } else {
-        stopAdblockService(e.session);
+        // stopAdblockService(e.session);
       }
     });
   };
