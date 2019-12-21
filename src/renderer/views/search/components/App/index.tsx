@@ -6,7 +6,7 @@ import { hot } from 'react-hot-loader/root';
 import { Style } from '../../style';
 import { StyledApp, Input, SearchIcon, SearchBox } from './style';
 import store from '../../store';
-import { callViewMethod } from '~/utils';
+import { callViewMethod } from '~/utils/view';
 import { ipcRenderer, remote } from 'electron';
 import { Suggestions } from '../Suggestions';
 
