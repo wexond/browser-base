@@ -6,3 +6,4 @@ dist
 .DS_Store
 .fusebox
 filters
+package-lock.json
