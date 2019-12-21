@@ -27,6 +27,20 @@ const convertIcoToPng = async (icoData: Buffer): Promise<ArrayBuffer> => {
   return (await icojs.parse(icoData, 'image/png'))[0].buffer;
 };
 
+const encodeHref = (str: string) => {
+  return (str || '').replace(/"/g, '&quot;');
+};
+
+const encodeTitle = (str: string) => {
+  return (str || '')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+};
+
+const indentLength = 4;
+const indentType = ' ';
+
 export class StorageService {
   public databases: Databases = {
     favicons: null,
@@ -428,6 +442,44 @@ export class StorageService {
     return [];
   };
 
+  private createBookmarkArray = (
+    parentFolderId: string = null,
+    first = true,
+    depth = 1,
+  ): string[] => {
+    let payload: string[] = [];
+    let title;
+    const bookmarks = this.bookmarks.filter(x => x.parent === parentFolderId);
+    const indentFirst = indentType.repeat(depth * indentLength);
+    const indentNext = !first
+      ? indentFirst
+      : indentType.repeat((depth + 1) * indentLength);
+
+    if (first) payload.push(`${indentFirst}<DL><p>`);
+
+    for (const bookmark of bookmarks) {
+      if (!bookmark.isFolder && bookmark.url) {
+        title = encodeTitle(bookmark.title);
+        const href = encodeHref(bookmark.url);
+        payload.push(
+          `${indentNext}<DT><A HREF="${href}" ICON="${this.favicons.get(
+            bookmark.favicon,
+          )}">${title}</A>`,
+        );
+      } else if (bookmark.isFolder) {
+        title = encodeTitle(bookmark.title);
+        payload.push(`${indentNext}<DT><H3>${title}</H3>`);
+        payload = payload.concat(
+          this.createBookmarkArray(bookmark._id, true, depth + 1),
+        );
+      }
+    }
+
+    if (first) payload.push(`${indentFirst}</DL><p>`);
+
+    return payload;
+  };
+
   public exportBookmarks = async () => {
     const { filePath, canceled } = await dialog.showSaveDialog({
       filters: [{ name: 'Bookmark file', extensions: ['html'] }],
@@ -435,62 +487,14 @@ export class StorageService {
 
     if (canceled) return;
 
-    const encodeHref = (str: string) => {
-      return (str || '').replace(/"/g, '&quot;');
-    };
-
-    const encodeTitle = (str: string) => {
-      return (str || '')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    };
-
-    const indentLength = 4;
-    const indentType = ' ';
-
-    const createBookmarkArray = (
-      parentFolderId: string = null,
-      first = true,
-      depth = 1,
-    ): string[] => {
-      let payload: string[] = [];
-      let title;
-      const bookmarks = this.bookmarks.filter(x => x.parent === parentFolderId);
-      const indentFirst = indentType.repeat(depth * indentLength);
-      const indentNext = !first
-        ? indentFirst
-        : indentType.repeat((depth + 1) * indentLength);
-
-      if (first) payload.push(`${indentFirst}<DL><p>`);
-
-      for (const bookmark of bookmarks) {
-        if (!bookmark.isFolder && bookmark.url) {
-          title = encodeTitle(bookmark.title);
-          const href = encodeHref(bookmark.url);
-          payload.push(`${indentNext}<DT><A HREF="${href}">${title}</A>`);
-        } else if (bookmark.isFolder) {
-          title = encodeTitle(bookmark.title);
-          payload.push(`${indentNext}<DT><H3>${title}</H3>`);
-          payload = payload.concat(
-            createBookmarkArray(bookmark._id, true, depth + 1),
-          );
-        }
-      }
-
-      if (first) payload.push(`${indentFirst}</DL><p>`);
-
-      return payload;
-    };
-
     const breakTag = process.platform === 'win32' ? '\r\n' : '\n';
     const documentTitle = 'Bookmarks';
 
-    const bar = createBookmarkArray(
+    const bar = this.createBookmarkArray(
       this.bookmarks.find(x => x.static === 'main')._id,
     );
 
-    const other = createBookmarkArray(
+    const other = this.createBookmarkArray(
       this.bookmarks.find(x => x.static === 'other')._id,
       false,
     );

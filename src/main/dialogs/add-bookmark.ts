@@ -36,6 +36,7 @@ export class AddBookmarkDialog extends Dialog {
       url: view.webContents.getURL(),
       title: view.webContents.getTitle(),
       bookmark: view.bookmark,
+      favicon: view.favicon,
     });
   }
 }
