@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { parse } from 'url';
 
 import store from '../../store';
@@ -72,6 +72,22 @@ const onMaximizeClick = () =>
 const onMinimizeClick = () =>
   ipcRenderer.send(`window-minimize-${store.windowId}`);
 
+const onShieldContextMenu = (e: React.MouseEvent) => {
+  const menu = remote.Menu.buildFromTemplate([
+    {
+      checked: store.settings.object.shield,
+      label: 'Enabled',
+      type: 'checkbox',
+      click: () => {
+        store.settings.object.shield = !store.settings.object.shield;
+        store.settings.save();
+      },
+    },
+  ]);
+
+  menu.popup();
+};
+
 const RightButtons = observer(() => {
   const { selectedTab } = store.tabs;
 
@@ -95,15 +111,16 @@ const RightButtons = observer(() => {
       {hasCredentials && (
         <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
       )}
-      {store.settings.object.shield == true && (
-        <ToolbarButton
-          size={16}
-          badge={blockedAds > 0}
-          badgeText={blockedAds.toString()}
-          icon={icons.shield}
-        ></ToolbarButton>
-      )}
-
+      (
+      <ToolbarButton
+        size={16}
+        badge={blockedAds > 0}
+        badgeText={blockedAds.toString()}
+        icon={icons.shield}
+        opacity={store.settings.object.shield ? 0.87 : 0.54}
+        onContextMenu={onShieldContextMenu}
+      ></ToolbarButton>
+      )
       {store.downloadsButtonVisible && (
         <ToolbarButton
           size={18}

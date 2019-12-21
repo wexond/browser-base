@@ -64,15 +64,17 @@ export const runAdblockService = (ses: any) => {
   loadFilters().then(() => {
     // engine.enableBlockingInSession(ses);
 
-    ses.headersReceivedId = ses.webRequest.onHeadersReceived(
+    ses.headersReceivedId = ses.webRequest.addListener(
+      'onHeadersReceived',
       { urls: ['<all_urls>'] },
       engine.onHeadersReceived,
-    );
+    ).id;
 
-    ses.beforeRequestId = ses.webRequest.onBeforeRequest(
+    ses.beforeRequestId = ses.webRequest.addListener(
+      'onBeforeRequest',
       { urls: ['<all_urls>'] },
       engine.onBeforeRequest,
-    );
+    ).id;
 
     ipcMain.on('get-cosmetic-filters', engine.onGetCosmeticFilters);
     ipcMain.on(
