@@ -42,6 +42,18 @@ const onMoreClick = (data: IBookmark) => (e: any) => {
   store.currentBookmark = data;
 };
 
+const onContextMenu = (data: IBookmark) => (e: any) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const { pageX, pageY } = e;
+
+  store.menuVisible = true;
+  store.menuLeft = pageX;
+  store.menuTop = pageY;
+  store.currentBookmark = data;
+};
+
 export const Bookmark = observer(({ data }: { data: IBookmark }) => {
   const selected = store.selectedItems.includes(data._id);
 
@@ -66,6 +78,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
 
   return (
     <ListItem
+      onContextMenu={onContextMenu(data)}
       onDoubleClick={onDoubleClick(data)}
       key={data._id}
       onClick={onClick(data)}
