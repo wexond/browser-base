@@ -45,26 +45,6 @@ export class ViewManager {
       this.destroy(id);
     });
 
-    ipcMain.handle(`browserview-call-${id}`, async (e, data) => {
-      const view = this.views.get(data.tabId);
-      let scope: any = view;
-
-      if (data.scope && data.scope.trim() !== '') {
-        const scopes = data.scope.split('.');
-        for (const s of scopes) {
-          scope = scope[s];
-        }
-      }
-
-      const result = scope.apply(view.webContents, data.args);
-
-      if (result instanceof Promise) {
-        return await result;
-      }
-
-      return result;
-    });
-
     ipcMain.on(`mute-view-${id}`, (e, tabId: number) => {
       const view = this.views.get(tabId);
       view.webContents.setAudioMuted(true);

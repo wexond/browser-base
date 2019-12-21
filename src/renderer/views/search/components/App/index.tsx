@@ -7,7 +7,7 @@ import { Style } from '../../style';
 import { StyledApp, Input, SearchIcon, SearchBox } from './style';
 import store from '../../store';
 import { callViewMethod } from '~/utils/view';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import { Suggestions } from '../Suggestions';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
@@ -32,12 +32,7 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
     e.currentTarget.value = url;
 
-    callViewMethod(
-      remote.getCurrentWindow().id,
-      store.tabId,
-      'webContents.loadURL',
-      url,
-    );
+    callViewMethod(store.tabId, 'loadURL', url);
 
     setTimeout(() => {
       ipcRenderer.send(`hide-${store.id}`);

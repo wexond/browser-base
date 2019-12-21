@@ -11,7 +11,7 @@ import {
 } from './style';
 import { ISuggestion } from '~/interfaces';
 import store from '../../store';
-import { remote, ipcRenderer } from 'electron';
+import { ipcRenderer } from 'electron';
 import { callViewMethod } from '~/utils/view';
 
 interface Props {
@@ -35,12 +35,7 @@ const onClick = (suggestion: ISuggestion) => () => {
     url = `http://${url}`;
   }
 
-  callViewMethod(
-    remote.getCurrentWindow().id,
-    store.tabId,
-    'webContents.loadURL',
-    url,
-  );
+  callViewMethod(store.tabId, 'loadURL', url);
 
   setTimeout(() => {
     ipcRenderer.send(`hide-${store.id}`);

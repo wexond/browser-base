@@ -7,18 +7,18 @@ import { ToolbarButton } from '../ToolbarButton';
 import { icons } from '~/renderer/constants';
 
 const onBackClick = () => {
-  store.tabs.selectedTab.callViewMethod('webContents.goBack');
+  store.tabs.selectedTab.callViewMethod('goBack');
 };
 
 const onForwardClick = () => {
-  store.tabs.selectedTab.callViewMethod('webContents.goForward');
+  store.tabs.selectedTab.callViewMethod('goForward');
 };
 
 const onRefreshClick = () => {
   if (store.tabs.selectedTab && store.tabs.selectedTab.loading) {
-    store.tabs.selectedTab.callViewMethod('webContents.stop');
+    store.tabs.selectedTab.callViewMethod('stop');
   } else {
-    store.tabs.selectedTab.callViewMethod('webContents.reload');
+    store.tabs.selectedTab.callViewMethod('reload');
   }
 };
 

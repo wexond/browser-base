@@ -78,11 +78,6 @@ export class Settings extends EventEmitter {
   };
 
   public update = () => {
-    const contexts = [
-      this.windowsManager.sessionsManager.extensions,
-      this.windowsManager.sessionsManager.extensionsIncognito,
-    ];
-
     if (this.object.themeAuto) {
       this.object.theme = nativeTheme.shouldUseDarkColors
         ? 'wexond-dark'
@@ -104,6 +99,11 @@ export class Settings extends EventEmitter {
         }
       });
     }
+
+    const contexts = [
+      this.windowsManager.sessionsManager.extensions,
+      this.windowsManager.sessionsManager.extensionsIncognito,
+    ];
 
     contexts.forEach(e => {
       if (e.extensions['wexond-darkreader']) {
