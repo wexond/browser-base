@@ -114,7 +114,7 @@ const RightButtons = observer(() => {
       (
       <ToolbarButton
         size={16}
-        badge={blockedAds > 0}
+        badge={store.settings.object.shield && blockedAds > 0}
         badgeText={blockedAds.toString()}
         icon={icons.shield}
         opacity={store.settings.object.shield ? 0.87 : 0.54}

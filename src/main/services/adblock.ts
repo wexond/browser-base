@@ -99,9 +99,5 @@ export const stopAdblockService = (ses: any) => {
     ses.webRequest.removeListener('onHeadersReceived', ses.headersReceivedId);
   }
 
-  if (engine.config.loadCosmeticFilters === true) {
-    ses.setPreloads(
-      ses.getPreloads().filter((p: string) => p !== PRELOAD_PATH),
-    );
-  }
+  ses.setPreloads(ses.getPreloads().filter((p: string) => p !== PRELOAD_PATH));
 };
