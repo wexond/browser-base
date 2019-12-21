@@ -53,7 +53,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
     customFavicon = true;
   } else {
     if (favicon) {
-      if (favicon.startsWith('data:image')) {
+      if (favicon.startsWith('data:')) {
         favicon = data.favicon;
       } else {
         favicon = store.favicons.get(data.favicon);
