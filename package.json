@@ -92,7 +92,7 @@
     "styled-components": "^5.0.0-rc.1",
     "terser": "^4.4.3",
     "ts-loader": "^6.2.1",
-    "typescript": "3.7.4",
+    "typescript": "^3.7.4",
     "typescript-plugin-styled-components": "^1.4.3",
     "webpack": "4.41.4",
     "webpack-bundle-analyzer": "^3.6.0",

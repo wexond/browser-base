@@ -163,7 +163,12 @@ export class Textfield extends React.PureComponent<Props, State> {
           value={value}
         />
         {hasLabel && (
-          <Label activated={activated} focused={focused} color={primaryColor}>
+          <Label
+            dark={dark}
+            activated={activated}
+            focused={focused}
+            color={primaryColor}
+          >
             {label}
           </Label>
         )}

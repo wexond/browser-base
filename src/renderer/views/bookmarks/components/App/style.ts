@@ -1,4 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { shadows } from '~/renderer/mixins';
+import { ITheme } from '~/interfaces';
 
 export const PathView = styled.div`
   margin-top: 48px;
@@ -26,4 +28,35 @@ export const PathItem = styled.div`
       margin-left: 0;
     }
   }
+`;
+
+export const Dialog = styled.div`
+  position: fixed;
+  width: 512px;
+  padding: 16px;
+  left: 50%;
+  top: 50%;
+  border-radius: 6px;
+  z-index: 999;
+  box-shadow: ${shadows(8)};
+  transition: 0.2s opacity;
+  transform: translate(-50%, -50%);
+
+  ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
+    opacity: ${visible ? 1 : 0};
+    pointer-events: ${visible ? 'auto' : 'none'};
+    background-color: ${theme['dialog.backgroundColor']};
+    color: ${theme['dialog.lightForeground'] ? 'white' : 'black'};
+  `}
+`;
+
+export const DialogTitle = styled.div`
+  font-size: 16px;
+  margin-bottom: 16px;
+`;
+
+export const DialogButtons = styled.div`
+  float: right;
+  display: flex;
+  margin-top: 24px;
 `;

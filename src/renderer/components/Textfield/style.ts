@@ -35,7 +35,7 @@ interface InputProps {
 
 export const Input = styled.input`
   width: 100%;
-  height: 48px;
+  height: 55px;
   font-size: 16px;
   padding-left: 12px;
   border: none;
@@ -69,6 +69,7 @@ interface LabelProps {
   activated: boolean;
   focused: boolean;
   color: string;
+  dark: boolean;
 }
 
 export const Label = styled.div`
@@ -79,10 +80,14 @@ export const Label = styled.div`
   -webkit-font-smoothing: antialiased;
   ${centerVertical()};
 
-  ${({ activated, focused, color }: LabelProps) => css`
+  ${({ activated, focused, color, dark }: LabelProps) => css`
     font-size: ${activated ? 12 : 16}px;
     margin-top: ${activated ? -12 : 0}px;
-    color: ${focused ? color : `rgba(0, 0, 0, ${transparency.text.medium})`};
+    color: ${focused
+      ? color
+      : dark
+      ? `rgba(255, 255, 255, ${transparency.text.medium})`
+      : `rgba(0, 0, 0, ${transparency.text.medium})`};
     ${activated ? robotoMedium() : robotoRegular()};
   `}
 `;

@@ -3,6 +3,8 @@ import { ISettings, IFavicon, ITheme, IBookmark } from '~/interfaces';
 import { getTheme } from '~/utils/themes';
 import { PreloadDatabase } from '~/preloads/models/database';
 import { ipcRenderer } from 'electron';
+import * as React from 'react';
+import { Textfield } from '~/renderer/components/Textfield';
 
 export class Store {
   @observable
@@ -40,6 +42,43 @@ export class Store {
   @observable
   public currentFolder: string = null;
 
+  @observable
+  private _dialogVisible = false;
+
+  @computed
+  public get dialogVisible() {
+    return this._dialogVisible;
+  }
+
+  public set dialogVisible(value: boolean) {
+    if (!value) {
+      this.nameInputRef.current.inputRef.current.value = '';
+    }
+
+    this.menuVisible = false;
+
+    this._dialogVisible = value;
+  }
+
+  public showDialog(content: 'edit' | 'new-folder' | 'rename-folder') {
+    this.dialogContent = content;
+    this.dialogVisible = true;
+
+    if (content === 'edit' || content === 'rename-folder') {
+      this.nameInputRef.current.inputRef.current.value = this.currentBookmark.title;
+
+      if (content === 'edit') {
+        this.urlInputRef.current.inputRef.current.value = this.currentBookmark.url;
+      }
+    }
+
+    this.nameInputRef.current.inputRef.current.focus();
+    this.nameInputRef.current.inputRef.current.select();
+  }
+
+  @observable
+  public dialogContent: 'edit' | 'new-folder' | 'rename-folder' = 'new-folder';
+
   @computed
   public get visibleItems() {
     return this.list
@@ -60,9 +99,14 @@ export class Store {
       });
   }
 
+  @observable
   public currentBookmark: IBookmark;
 
   public faviconsDb = new PreloadDatabase<IFavicon>('favicons');
+
+  public nameInputRef = React.createRef<Textfield>();
+
+  public urlInputRef = React.createRef<Textfield>();
 
   public constructor() {
     (window as any).updateSettings = (settings: ISettings) => {
