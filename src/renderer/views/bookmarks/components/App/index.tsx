@@ -192,7 +192,7 @@ export default hot(
             onMouseDown={onContextMenuMouseDown}
             style={{
               top: store.menuTop,
-              left: store.menuLeft - 130,
+              left: store.menuLeft,
             }}
             visible={store.menuVisible}
           >
