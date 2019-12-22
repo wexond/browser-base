@@ -45,13 +45,6 @@ export class SessionsManager {
 
     this.clearCache('incognito');
 
-    this.view.webRequest.onBeforeRequest(
-      { urls: ['<all_urls>'] },
-      (details, callback) => {
-        callback({ cancel: false });
-      },
-    );
-
     this.view.setPermissionRequestHandler(
       async (webContents, permission, callback, details) => {
         const window = windowsManager.findWindowByBrowserView(webContents.id);
