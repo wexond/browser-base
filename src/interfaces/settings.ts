@@ -2,6 +2,7 @@ export interface ISearchEngine {
   name: string;
   url: string;
   keywordsUrl: string;
+  icon: string;
 }
 
 export interface IStartupBehavior {

@@ -4,11 +4,12 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 
 import { Style } from '../../style';
-import { StyledApp, Input, SearchIcon, SearchBox } from './style';
+import { StyledApp, Input, CurrentIcon, SearchBox } from './style';
 import store from '../../store';
 import { callViewMethod } from '~/utils/view';
 import { ipcRenderer } from 'electron';
 import { Suggestions } from '../Suggestions';
+import { icons } from '~/renderer/constants';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -123,12 +124,37 @@ export const App = hot(
 
     ipcRenderer.send(`height-${store.id}`, height);
 
+    const suggestion = store.suggestions.selectedSuggestion;
+    let favicon = icons.search;
+    let customIcon = true;
+
+    if (suggestion && suggestionsVisible) {
+      favicon = suggestion.favicon;
+      customIcon = false;
+
+      if (suggestion.isSearch) {
+        favicon = store.searchEngine.icon;
+      } else if (favicon == null || favicon.trim() === '') {
+        favicon = icons.page;
+        customIcon = true;
+      }
+    }
+
     return (
       <ThemeProvider theme={{ ...store.theme }}>
         <StyledApp visible={store.visible}>
           <GlobalStyle />
           <SearchBox>
-            <SearchIcon />
+            <CurrentIcon
+              style={{
+                backgroundImage: `url(${favicon})`,
+                filter:
+                  customIcon && store.theme['dialog.lightForeground']
+                    ? 'invert(100%)'
+                    : 'none',
+                opacity: customIcon ? 0.54 : 1,
+              }}
+            ></CurrentIcon>
             <Input
               onKeyDown={onKeyDown}
               onInput={onInput}
