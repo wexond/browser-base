@@ -71,7 +71,7 @@ export const runAdblockService = async (ses: any) => {
     ses.headersReceivedId = ses.webRequest.addListener(
       'onHeadersReceived',
       { urls: ['<all_urls>'] },
-      engine.onHeadersReceived,
+      (engine as any).onHeadersReceived,
     ).id;
   }
 
@@ -79,15 +79,15 @@ export const runAdblockService = async (ses: any) => {
     ses.beforeRequestId = ses.webRequest.addListener(
       'onBeforeRequest',
       { urls: ['<all_urls>'] },
-      engine.onBeforeRequest,
+      (engine as any).onBeforeRequest,
     ).id;
   }
 
   if (!adblockRunning) {
-    ipcMain.on('get-cosmetic-filters', engine.onGetCosmeticFilters);
+    ipcMain.on('get-cosmetic-filters', (engine as any).onGetCosmeticFilters);
     ipcMain.on(
       'is-mutation-observer-enabled',
-      engine.onIsMutationObserverEnabled,
+      (engine as any).onIsMutationObserverEnabled,
     );
     ses.setPreloads(ses.getPreloads().concat([PRELOAD_PATH]));
 
