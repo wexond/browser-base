@@ -52,8 +52,13 @@ export class Store {
     });
 
     ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {
-      const i = this.downloads.find(x => x.id === item.id);
-      i.receivedBytes = item.receivedBytes;
+      const index = this.downloads.indexOf(
+        this.downloads.find(x => x.id === item.id),
+      );
+      this.downloads[index] = {
+        ...this.downloads[index],
+        ...item,
+      };
     });
 
     ipcRenderer.on('download-completed', (e, id: string) => {

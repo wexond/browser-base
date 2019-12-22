@@ -1,5 +1,5 @@
 import { AppWindow } from '../windows';
-import { clipboard, nativeImage, Menu } from 'electron';
+import { clipboard, nativeImage, Menu, session } from 'electron';
 import { isURL, prefixHttp } from '~/utils';
 import { saveAs, viewSource, printPage } from './common-actions';
 
@@ -73,7 +73,7 @@ export const getViewMenu = (
       {
         label: 'Save image as...',
         click: () => {
-          webContents.downloadURL(params.srcURL);
+          appWindow.webContents.downloadURL(params.srcURL);
         },
       },
       {
