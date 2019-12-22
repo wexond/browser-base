@@ -5,7 +5,7 @@ import { StyledTextfield, Input, Label, Indicator, Icon } from './style';
 
 export type TestFunction = (str: string) => boolean;
 
-interface Props {
+export interface TextFieldProps {
   color?: string;
   label?: string;
   placeholder?: string;
@@ -27,11 +27,11 @@ interface State {
   value: string;
 }
 
-export class Textfield extends React.PureComponent<Props, State> {
+export class Textfield extends React.PureComponent<TextFieldProps, State> {
   public inputRef = React.createRef<HTMLInputElement>();
   private timer: number;
 
-  private static defaultProps: Props = {
+  private static defaultProps: TextFieldProps = {
     color: BLUE_500,
     inputType: 'text',
     width: 280,
@@ -172,7 +172,7 @@ export class Textfield extends React.PureComponent<Props, State> {
             {label}
           </Label>
         )}
-        {hasIcon && <Icon src={icon} onClick={this.onIconClick} />}
+        {hasIcon && <Icon dark={dark} src={icon} onClick={this.onIconClick} />}
         <Indicator focused={focused} color={primaryColor} />
       </StyledTextfield>
     );

@@ -121,8 +121,9 @@ export const Icon = styled.div`
   ${centerVertical()};
   ${centerIcon(24)};
 
-  ${({ src }: { src: string }) => css`
+  ${({ src, dark }: { src: string; dark: boolean }) => css`
     background-image: url(${src});
+    filter: ${dark ? 'invert(100%)' : 'none'};
   `}
 
   &:hover {

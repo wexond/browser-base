@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 
 import { Style } from '../../style';
@@ -32,33 +32,45 @@ const onClick = () => {
 export const App = hot(
   observer(() => {
     return (
-      <StyledApp>
-        <GlobalStyle />
-        <Title>Login</Title>
-        <Subtitle>{store.url}</Subtitle>
-        <Textfield
-          ref={ref1}
-          test={str => str.trim().length !== 0}
-          style={{ width: '100%', marginTop: 16 }}
-          label="Username"
-        ></Textfield>
-        <PasswordInput
-          ref={ref2}
-          style={{ width: '100%', marginTop: 16 }}
-        ></PasswordInput>
-        <Buttons>
-          <Button onClick={onClick}>Login</Button>
-          <Button
-            foreground="black"
-            background="rgba(0, 0, 0, 0.08)"
-            style={{ marginLeft: 8 }}
-            onClick={() => sendResponse(null)}
-          >
-            Cancel
-          </Button>
-        </Buttons>
-        <div style={{ clear: 'both' }}></div>
-      </StyledApp>
+      <ThemeProvider
+        theme={{ ...store.theme, dark: store.theme['dialog.lightForeground'] }}
+      >
+        <StyledApp>
+          <GlobalStyle />
+          <Title>Login</Title>
+          <Subtitle>{store.url}</Subtitle>
+          <Textfield
+            dark={store.theme['dialog.lightForeground']}
+            ref={ref1}
+            test={str => str.trim().length !== 0}
+            style={{ width: '100%', marginTop: 24 }}
+            label="Username"
+          ></Textfield>
+          <PasswordInput
+            dark={store.theme['dialog.lightForeground']}
+            ref={ref2}
+            style={{ width: '100%', marginTop: 16 }}
+          ></PasswordInput>
+          <Buttons>
+            <Button onClick={onClick}>Login</Button>
+            <Button
+              background={
+                store.theme['dialog.lightForeground']
+                  ? 'rgba(255, 255, 255, 0.08)'
+                  : 'rgba(0, 0, 0, 0.08)'
+              }
+              foreground={
+                store.theme['dialog.lightForeground'] ? 'white' : 'black'
+              }
+              style={{ marginLeft: 8 }}
+              onClick={() => sendResponse(null)}
+            >
+              Cancel
+            </Button>
+          </Buttons>
+          <div style={{ clear: 'both' }}></div>
+        </StyledApp>
+      </ThemeProvider>
     );
   }),
 );

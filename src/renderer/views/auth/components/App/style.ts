@@ -1,11 +1,18 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { ITheme } from '~/interfaces';
 
 export const StyledApp = styled.div`
-  margin: 16px;
+  margin: 8px;
   padding: 16px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  border-radius: 8px;
-  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-color: ${theme['dialog.backgroundColor']};
+    color: ${theme['dialog.lightForeground'] ? 'white' : 'black'};
+  `}
 `;
 
 export const Title = styled.div`
@@ -20,6 +27,6 @@ export const Subtitle = styled.div`
 
 export const Buttons = styled.div`
   display: flex;
-  margin-top: 16px;
+  margin-top: 24px;
   float: right;
 `;
