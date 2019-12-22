@@ -111,7 +111,7 @@ const RightButtons = observer(() => {
       {hasCredentials && (
         <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
       )}
-      (
+
       <ToolbarButton
         size={16}
         badge={store.settings.object.shield && blockedAds > 0}
@@ -120,7 +120,7 @@ const RightButtons = observer(() => {
         opacity={store.settings.object.shield ? 0.87 : 0.54}
         onContextMenu={onShieldContextMenu}
       ></ToolbarButton>
-      )
+
       {store.downloadsButtonVisible && (
         <ToolbarButton
           size={18}
