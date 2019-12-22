@@ -43,10 +43,10 @@ export const Icon = styled.div`
   &:before {
     content: '';
     position: absolute;
-    left: -4px;
-    top: -4px;
-    right: -4px;
-    bottom: -4px;
+    left: -6px;
+    top: -6px;
+    right: -6px;
+    bottom: -6px;
     opacity: 0.3;
     background-color: white;
     z-index: -1;
@@ -71,6 +71,13 @@ export const Icon = styled.div`
     filter: ${custom && theme['pages.lightForeground']
       ? 'invert(100%)'
       : 'none'};
+
+    &:before {
+      left: ${add ? -4 : -6}px;
+      top: ${add ? -4 : -6}px;
+      right: ${add ? -4 : -6}px;
+      bottom: ${add ? -4 : -6}px;
+    }
   `}
 `;
 
