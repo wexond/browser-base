@@ -49,12 +49,6 @@ export class Dialog extends BrowserView {
     this.hideTimeout = hideTimeout;
     this.name = name;
 
-    setTimeout(() => {
-      appWindow.addBrowserView(this);
-    }, 500);
-
-    this._hide();
-
     ipcMain.on(`hide-${this.webContents.id}`, () => {
       this.hide();
     });

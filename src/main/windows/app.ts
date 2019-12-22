@@ -24,17 +24,19 @@ import { ISettings } from '~/interfaces';
 export class AppWindow extends BrowserWindow {
   public viewManager: ViewManager;
 
-  public menuDialog = new MenuDialog(this);
   public searchDialog = new SearchDialog(this);
-  public tabGroupDialog = new TabGroupDialog(this);
-  public findDialog = new FindDialog(this);
-  public permissionsDialog = new PermissionsDialog(this);
-  public authDialog = new AuthDialog(this);
-  public formFillDialog = new FormFillDialog(this);
-  public credentialsDialog = new CredentialsDialog(this);
   public previewDialog = new PreviewDialog(this);
-  public downloadsDialog = new DownloadsDialog(this);
-  public addBookmarkDialog = new AddBookmarkDialog(this);
+
+  public tabGroupDialog: TabGroupDialog;
+  public menuDialog: MenuDialog;
+  public findDialog: FindDialog;
+  public downloadsDialog: DownloadsDialog;
+  public addBookmarkDialog: AddBookmarkDialog;
+
+  public permissionsDialog: PermissionsDialog;
+  public authDialog: AuthDialog;
+  public formFillDialog: FormFillDialog;
+  public credentialsDialog: CredentialsDialog;
 
   public incognito: boolean;
 
@@ -56,10 +58,24 @@ export class AppWindow extends BrowserWindow {
         javascript: true,
       },
       icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
+      show: false,
     });
 
     this.incognito = incognito;
     this.windowsManager = windowsManager;
+
+    this.webContents.once('dom-ready', () => {
+      this.tabGroupDialog = new TabGroupDialog(this);
+      this.menuDialog = new MenuDialog(this);
+      this.findDialog = new FindDialog(this);
+      this.downloadsDialog = new DownloadsDialog(this);
+      this.addBookmarkDialog = new AddBookmarkDialog(this);
+
+      this.permissionsDialog = new PermissionsDialog(this);
+      this.authDialog = new AuthDialog(this);
+      this.formFillDialog = new FormFillDialog(this);
+      this.credentialsDialog = new CredentialsDialog(this);
+    });
 
     this.viewManager = new ViewManager(this, incognito);
 
@@ -93,6 +109,8 @@ export class AppWindow extends BrowserWindow {
         }
       }
     })();
+
+    this.show();
 
     // Update window bounds on resize and on move when window is not maximized.
     this.on('resize', () => {
