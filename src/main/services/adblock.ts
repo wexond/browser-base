@@ -52,30 +52,38 @@ const loadFilters = async () => {
   }
 };
 
-export const runAdblockService = (ses: any) => {
+const emitBlockedEvent = (request: Request) => {
+  for (const window of windowsManager.list) {
+    window.webContents.send(`blocked-ad-${request.tabId}`);
+  }
+};
+
+let adblockRunning = false;
+
+export const runAdblockService = async (ses: any) => {
   if (!ses.webRequest.addListener) return;
 
-  const emitBlockedEvent = (request: Request) => {
-    for (const window of windowsManager.list) {
-      window.webContents.send(`blocked-ad-${request.tabId}`);
-    }
-  };
+  if (!engine) {
+    await loadFilters();
+  }
 
-  loadFilters().then(() => {
-    // engine.enableBlockingInSession(ses);
-
+  if (!ses.headersReceivedId) {
     ses.headersReceivedId = ses.webRequest.addListener(
       'onHeadersReceived',
       { urls: ['<all_urls>'] },
       engine.onHeadersReceived,
     ).id;
+  }
 
+  if (!ses.beforeRequestId) {
     ses.beforeRequestId = ses.webRequest.addListener(
       'onBeforeRequest',
       { urls: ['<all_urls>'] },
       engine.onBeforeRequest,
     ).id;
+  }
 
+  if (!adblockRunning) {
     ipcMain.on('get-cosmetic-filters', engine.onGetCosmeticFilters);
     ipcMain.on(
       'is-mutation-observer-enabled',
@@ -85,7 +93,9 @@ export const runAdblockService = (ses: any) => {
 
     engine.on('request-blocked', emitBlockedEvent);
     engine.on('request-redirected', emitBlockedEvent);
-  });
+
+    adblockRunning = true;
+  }
 };
 
 export const stopAdblockService = (ses: any) => {
@@ -93,11 +103,15 @@ export const stopAdblockService = (ses: any) => {
 
   if (ses.beforeRequestId) {
     ses.webRequest.removeListener('onBeforeRequest', ses.beforeRequestId);
+    ses.beforeRequestId = null;
   }
 
   if (ses.headersReceivedId) {
     ses.webRequest.removeListener('onHeadersReceived', ses.headersReceivedId);
+    ses.headersReceivedId = null;
   }
 
   ses.setPreloads(ses.getPreloads().filter((p: string) => p !== PRELOAD_PATH));
+
+  adblockRunning = false;
 };

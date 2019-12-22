@@ -2451,10 +2451,10 @@ electron-updater@4.2.0:
     pako "^1.0.10"
     semver "^6.3.0"
 
-electron@8.0.0-beta.5:
-  version "8.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-8.0.0-beta.5.tgz#9065907c1cc1e7804d77a073c83a14a4f6752b7c"
-  integrity sha512-+/61ONgb85cgHh4aghpaRQ7m6cbJm5dX0QqrH4g+6My94swwffn0HY6QWNQ43NsrYHUOsFy9ou9AP2KomOvL6w==
+electron@8.0.0-beta.3:
+  version "8.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-8.0.0-beta.3.tgz#3ac77d99e32352c47f2ea187f6daf086859c6c36"
+  integrity sha512-MvzV3ApP5b+xGJXMPLaQkNSkggd0OixqRJvR1NvR/j4ZvvsEvL4K+ytT0PugvvOC7odgmsh2bmj0JCJZEg64eA==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
