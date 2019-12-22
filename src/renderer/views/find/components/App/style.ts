@@ -2,12 +2,18 @@ import styled, { css } from 'styled-components';
 
 import { centerIcon } from '~/renderer/mixins';
 import { icons } from '~/renderer/constants/icons';
+import { ITheme } from '~/interfaces';
 
 export const StyledApp = styled.div`
-  margin: 16px;
+  margin: 8px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   border-radius: 6px;
   background: white;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-color: ${theme['dialog.backgroundColor']};
+    color: ${theme['dialog.lightForeground'] ? 'white' : 'black'};
+  `}
 `;
 
 export const StyledFind = styled.div`
@@ -26,6 +32,10 @@ export const SearchIcon = styled.div`
   margin-left: 12px;
   opacity: 0.54;
   background-image: url(${icons.search});
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    filter: ${theme['dialog.lightForeground'] ? 'invert(100%)' : 'none'};
+  `}
 `;
 
 export const Input = styled.input`
@@ -37,12 +47,22 @@ export const Input = styled.input`
   outline: none;
   background: transparent;
   margin-left: 8px;
+  color: inherit;
 `;
 
 export const Button = styled.div`
-  ${({ size, icon }: { size: number; icon: string }) => css`
+  ${({
+    size,
+    icon,
+    theme,
+  }: {
+    size: number;
+    icon: string;
+    theme?: ITheme;
+  }) => css`
     ${centerIcon(size)};
     background-image: url(${icon});
+    filter: ${theme['dialog.lightForeground'] ? 'invert(100%)' : 'none'};
   `}
 
   width: 24px;

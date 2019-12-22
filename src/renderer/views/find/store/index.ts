@@ -1,9 +1,20 @@
 import * as React from 'react';
 
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { ipcRenderer, remote } from 'electron';
+import { ISettings } from '~/interfaces';
+import { DEFAULT_SETTINGS } from '~/constants';
+import { getTheme } from '~/utils/themes';
 
 export class Store {
+  @observable
+  public settings: ISettings = DEFAULT_SETTINGS;
+
+  @computed
+  public get theme() {
+    return getTheme(this.settings.theme);
+  }
+
   @observable
   public occurrences = '0/0';
 
@@ -50,6 +61,12 @@ export class Store {
         this.updateTabInfo();
       },
     );
+
+    ipcRenderer.send('get-settings');
+
+    ipcRenderer.on('update-settings', (e, settings: ISettings) => {
+      this.settings = { ...this.settings, ...settings };
+    });
   }
 
   public hide() {

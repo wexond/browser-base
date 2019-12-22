@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { ipcRenderer } from 'electron';
 
 import { Style } from '../../style';
@@ -69,25 +69,29 @@ const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
 export const App = observer(() => {
   return (
-    <StyledApp>
-      <GlobalStyle />
-      <StyledFind onKeyUp={onKeyUp}>
-        <SearchIcon style={{ filter: 'none' }} />
-        <Input
-          autoFocus
-          value={store.text}
-          onKeyPress={onKeyPress}
-          onChange={onInput}
-          ref={store.findInputRef}
-          placeholder="Find in page"
-        />
-        <Occurrences>{store.occurrences}</Occurrences>
-        <Buttons>
-          <Button onClick={move(false)} icon={icons.up} size={20} />
-          <Button onClick={move(true)} icon={icons.down} size={20} />
-          <Button onClick={close} icon={icons.close} size={16} />
-        </Buttons>
-      </StyledFind>
-    </StyledApp>
+    <ThemeProvider
+      theme={{ ...store.theme, dark: store.theme['dialog.lightForeground'] }}
+    >
+      <StyledApp>
+        <GlobalStyle />
+        <StyledFind onKeyUp={onKeyUp}>
+          <SearchIcon />
+          <Input
+            autoFocus
+            value={store.text}
+            onKeyPress={onKeyPress}
+            onChange={onInput}
+            ref={store.findInputRef}
+            placeholder="Find in page"
+          />
+          <Occurrences>{store.occurrences}</Occurrences>
+          <Buttons>
+            <Button onClick={move(false)} icon={icons.up} size={20} />
+            <Button onClick={move(true)} icon={icons.down} size={20} />
+            <Button onClick={close} icon={icons.close} size={16} />
+          </Buttons>
+        </StyledFind>
+      </StyledApp>
+    </ThemeProvider>
   );
 });

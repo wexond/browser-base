@@ -43,7 +43,7 @@ export const App = hot(
             dark={store.theme['dialog.lightForeground']}
             ref={ref1}
             test={str => str.trim().length !== 0}
-            style={{ width: '100%', marginTop: 24 }}
+            style={{ width: '100%', marginTop: 16 }}
             label="Username"
           ></Textfield>
           <PasswordInput
