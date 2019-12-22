@@ -30,7 +30,7 @@ export class PreviewDialog extends Dialog {
 
   public show() {
     clearTimeout(this.timeout1);
-    this.appWindow.searchDialog.rearrangePreview(true);
+    this.appWindow.dialogs.searchDialog.rearrangePreview(true);
 
     super.show(false);
 
@@ -50,7 +50,7 @@ export class PreviewDialog extends Dialog {
   public hide(bringToTop = true) {
     clearTimeout(this.timeout1);
     this.timeout1 = setTimeout(() => {
-      this.appWindow.searchDialog.rearrangePreview(false);
+      this.appWindow.dialogs.searchDialog.rearrangePreview(false);
     }, 210);
 
     super.hide(bringToTop);

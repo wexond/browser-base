@@ -63,7 +63,7 @@ export class SearchDialog extends Dialog {
   }
 
   public show() {
-    this.appWindow.previewDialog.hide(false);
+    this.appWindow.dialogs.previewDialog.hide(false);
 
     super.show();
 

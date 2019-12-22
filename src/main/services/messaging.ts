@@ -40,44 +40,46 @@ export const runMessagingService = (appWindow: AppWindow) => {
   );
 
   ipcMain.on(`update-find-info-${id}`, (e, tabId, data) => {
-    if (appWindow.findDialog.visible) {
-      appWindow.findDialog.updateInfo(tabId, data);
+    if (appWindow.dialogs.findDialog.visible) {
+      appWindow.dialogs.findDialog.updateInfo(tabId, data);
     }
   });
 
   ipcMain.on(`find-show-${id}`, (e, tabId, data) => {
-    appWindow.findDialog.find(tabId, data);
+    appWindow.dialogs.findDialog.find(tabId, data);
   });
 
   ipcMain.on(`menu-show-${id}`, e => {
-    appWindow.menuDialog.toggle();
+    appWindow.dialogs.menuDialog.toggle();
   });
 
   ipcMain.on(`search-show-${id}`, e => {
-    appWindow.searchDialog.toggle();
+    appWindow.dialogs.searchDialog.toggle();
   });
 
   ipcMain.on(`show-tab-preview-${id}`, (e, tab) => {
-    appWindow.previewDialog.tab = tab;
-    appWindow.previewDialog.show();
+    appWindow.dialogs.previewDialog.tab = tab;
+    appWindow.dialogs.previewDialog.show();
   });
 
   ipcMain.on(`hide-tab-preview-${id}`, (e, tab) => {
-    appWindow.previewDialog.hide(appWindow.previewDialog.visible);
+    appWindow.dialogs.previewDialog.hide(
+      appWindow.dialogs.previewDialog.visible,
+    );
   });
 
   ipcMain.on(`show-tabgroup-dialog-${id}`, (e, tabGroup) => {
-    appWindow.tabGroupDialog.edit(tabGroup);
+    appWindow.dialogs.tabGroupDialog.edit(tabGroup);
   });
 
   ipcMain.on(`show-downloads-dialog-${id}`, (e, left) => {
-    appWindow.downloadsDialog.left = left;
-    appWindow.downloadsDialog.show();
+    appWindow.dialogs.downloadsDialog.left = left;
+    appWindow.dialogs.downloadsDialog.show();
   });
 
   ipcMain.on(`show-add-bookmark-dialog-${id}`, (e, left) => {
-    appWindow.addBookmarkDialog.left = left;
-    appWindow.addBookmarkDialog.show();
+    appWindow.dialogs.addBookmarkDialog.left = left;
+    appWindow.dialogs.addBookmarkDialog.show();
   });
 
   ipcMain.on(`edit-tabgroup-${id}`, (e, tabGroup) => {
@@ -92,22 +94,25 @@ export const runMessagingService = (appWindow: AppWindow) => {
     const items = await getFormFillMenuItems(name, value);
 
     if (items.length) {
-      appWindow.formFillDialog.webContents.send(`formfill-get-items`, items);
-      appWindow.formFillDialog.inputRect = rect;
+      appWindow.dialogs.formFillDialog.webContents.send(
+        `formfill-get-items`,
+        items,
+      );
+      appWindow.dialogs.formFillDialog.inputRect = rect;
 
-      appWindow.formFillDialog.resize(
+      appWindow.dialogs.formFillDialog.resize(
         items.length,
         items.find(r => r.subtext) != null,
       );
-      appWindow.formFillDialog.rearrange();
-      appWindow.formFillDialog.show(false);
+      appWindow.dialogs.formFillDialog.rearrange();
+      appWindow.dialogs.formFillDialog.show(false);
     } else {
-      appWindow.formFillDialog.hide();
+      appWindow.dialogs.formFillDialog.hide();
     }
   });
 
   ipcMain.on(`form-fill-hide-${id}`, () => {
-    appWindow.formFillDialog.hide();
+    appWindow.dialogs.formFillDialog.hide();
   });
 
   ipcMain.on(
@@ -139,13 +144,16 @@ export const runMessagingService = (appWindow: AppWindow) => {
   );
 
   ipcMain.on(`credentials-show-${id}`, (e, data) => {
-    appWindow.credentialsDialog.webContents.send('credentials-update', data);
-    appWindow.credentialsDialog.rearrange();
-    appWindow.credentialsDialog.show();
+    appWindow.dialogs.credentialsDialog.webContents.send(
+      'credentials-update',
+      data,
+    );
+    appWindow.dialogs.credentialsDialog.rearrange();
+    appWindow.dialogs.credentialsDialog.show();
   });
 
   ipcMain.on(`credentials-hide-${id}`, () => {
-    appWindow.credentialsDialog.hide();
+    appWindow.dialogs.credentialsDialog.hide();
   });
 
   ipcMain.on(`credentials-save-${id}`, async (e, data) => {

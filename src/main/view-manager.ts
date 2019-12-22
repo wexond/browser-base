@@ -117,9 +117,9 @@ export class ViewManager {
     this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);
 
-    this.window.searchDialog.hideVisually();
-    this.window.previewDialog.hideVisually();
-    this.window.tabGroupDialog.hideVisually();
+    this.window.dialogs.searchDialog.hideVisually();
+    this.window.dialogs.previewDialog.hideVisually();
+    this.window.dialogs.tabGroupDialog.hideVisually();
 
     // Also fixes switching tabs with Ctrl + Tab
     view.webContents.focus();

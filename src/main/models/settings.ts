@@ -86,12 +86,10 @@ export class Settings extends EventEmitter {
 
     for (const window of this.windowsManager.list) {
       window.webContents.send('update-settings', this.object);
-      window.searchDialog.webContents.send('update-settings', this.object);
-      window.menuDialog.webContents.send('update-settings', this.object);
-      window.previewDialog.webContents.send('update-settings', this.object);
-      window.tabGroupDialog.webContents.send('update-settings', this.object);
-      window.downloadsDialog.webContents.send('update-settings', this.object);
-      window.addBookmarkDialog.webContents.send('update-settings', this.object);
+
+      Object.values(window.dialogs).forEach(dialog => {
+        dialog.webContents.send('update-settings', this.object);
+      });
 
       window.viewManager.views.forEach(v => {
         if (v.webContents.getURL().startsWith(WEBUI_BASE_URL)) {

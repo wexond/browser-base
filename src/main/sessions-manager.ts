@@ -66,7 +66,7 @@ export class SessionsManager {
             });
 
             if (!perm) {
-              const response = await window.permissionsDialog.requestPermission(
+              const response = await window.dialogs.permissionsDialog.requestPermission(
                 permission,
                 webContents.getURL(),
                 details,
@@ -126,7 +126,10 @@ export class SessionsManager {
 
       const downloadItem = getDownloadItem(item, id);
 
-      window.downloadsDialog.webContents.send('download-started', downloadItem);
+      window.dialogs.downloadsDialog.webContents.send(
+        'download-started',
+        downloadItem,
+      );
       window.webContents.send('download-started', downloadItem);
 
       item.on('updated', (event, state) => {
@@ -140,16 +143,22 @@ export class SessionsManager {
 
         const data = getDownloadItem(item, id);
 
-        window.downloadsDialog.webContents.send('download-progress', data);
+        window.dialogs.downloadsDialog.webContents.send(
+          'download-progress',
+          data,
+        );
         window.webContents.send('download-progress', data);
       });
       item.once('done', async (event, state) => {
         if (state === 'completed') {
-          window.downloadsDialog.webContents.send('download-completed', id);
+          window.dialogs.downloadsDialog.webContents.send(
+            'download-completed',
+            id,
+          );
           window.webContents.send(
             'download-completed',
             id,
-            !window.downloadsDialog.visible,
+            !window.dialogs.downloadsDialog.visible,
           );
 
           if (extname(fileName) === '.crx') {
@@ -206,7 +215,10 @@ export class SessionsManager {
 
       const downloadItem = getDownloadItem(item, id);
 
-      window.downloadsDialog.webContents.send('download-started', downloadItem);
+      window.dialogs.downloadsDialog.webContents.send(
+        'download-started',
+        downloadItem,
+      );
       window.webContents.send('download-started', downloadItem);
 
       item.on('updated', (event, state) => {
@@ -220,16 +232,22 @@ export class SessionsManager {
 
         const data = getDownloadItem(item, id);
 
-        window.downloadsDialog.webContents.send('download-progress', data);
+        window.dialogs.downloadsDialog.webContents.send(
+          'download-progress',
+          data,
+        );
         window.webContents.send('download-progress', data);
       });
       item.once('done', async (event, state) => {
         if (state === 'completed') {
-          window.downloadsDialog.webContents.send('download-completed', id);
+          window.dialogs.downloadsDialog.webContents.send(
+            'download-completed',
+            id,
+          );
           window.webContents.send(
             'download-completed',
             id,
-            !window.downloadsDialog.visible,
+            !window.dialogs.downloadsDialog.visible,
           );
         } else {
           console.log(`Download failed: ${state}`);
