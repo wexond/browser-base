@@ -2,6 +2,7 @@ import { ipcMain, app, webContents } from 'electron';
 import { platform } from 'os';
 import { WindowsManager } from './windows-manager';
 
+app.allowRendererProcessReuse = true;
 app.name = 'Wexond';
 
 (process.env as any)['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
