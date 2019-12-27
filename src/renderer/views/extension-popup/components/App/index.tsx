@@ -7,7 +7,7 @@ import { Style } from '../../style';
 import { StyledApp } from './style';
 import store from '../../store';
 import { resolve } from 'path';
-import { remote } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -33,8 +33,14 @@ export const App = hot(
 
       store.webviewRef.current.addEventListener('ipc-message', e => {
         if (e.channel === 'webview-size') {
-          store.webviewWidth = e.args[0] === 0 ? 200 : e.args[0];
+          store.webviewWidth = store.webviewWidth < 10 ? 200 : e.args[0];
           store.webviewHeight = e.args[1];
+
+          ipcRenderer.send(
+            `bounds-${store.id}`,
+            store.webviewWidth + 16,
+            store.webviewHeight + 16,
+          );
 
           store.visible = true;
 
@@ -50,11 +56,11 @@ export const App = hot(
     });
 
     return (
-      <StyledApp style={{ maxHeight: store.maxHeight }} visible={store.visible}>
+      <StyledApp visible={store.visible}>
         <GlobalStyle />
         <div
           style={{
-            width: store.webviewWidth < 10 ? 200 : store.webviewWidth,
+            width: store.webviewWidth,
             height: store.webviewHeight,
           }}
         >

@@ -26,6 +26,7 @@ export class Store {
         const { url } = data;
         this.url = url;
       } else {
+        this.visible = false;
         this.hide();
       }
     });
@@ -35,13 +36,15 @@ export class Store {
     });
   }
 
+  public get id() {
+    return ipcRenderer.sendSync('get-webcontents-id');
+  }
+
   public hide() {
-    this.visible = false;
     this.url = null;
     this.webviewHeight = 0;
     this.webviewWidth = 0;
-    const id = ipcRenderer.sendSync('get-webcontents-id');
-    ipcRenderer.send(`hide-${id}`);
+    ipcRenderer.send(`hide-${this.id}`);
   }
 }
 

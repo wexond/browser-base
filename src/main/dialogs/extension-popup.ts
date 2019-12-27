@@ -2,8 +2,6 @@ import { AppWindow } from '../windows';
 import { Dialog } from '.';
 import { ipcMain } from 'electron';
 
-const WIDTH = 350;
-
 export class ExtensionPopup extends Dialog {
   public visible = false;
 
@@ -11,13 +9,15 @@ export class ExtensionPopup extends Dialog {
 
   public left = 0;
 
+  private width = 512;
+
   public url = '';
 
   constructor(appWindow: AppWindow) {
     super(appWindow, {
       name: 'extension-popup',
       bounds: {
-        width: WIDTH,
+        width: 512,
         height: 512,
         y: 34,
       },
@@ -27,8 +27,9 @@ export class ExtensionPopup extends Dialog {
       },
     });
 
-    ipcMain.on(`height-${this.webContents.id}`, (e, height) => {
+    ipcMain.on(`bounds-${this.webContents.id}`, (e, width, height) => {
       this.height = height;
+      this.width = width;
       this.rearrange();
     });
 
@@ -40,14 +41,11 @@ export class ExtensionPopup extends Dialog {
   public rearrange() {
     const { width, height } = this.appWindow.getContentBounds();
 
-    const maxHeight = height - 34 - 16;
-
     super.rearrange({
-      x: Math.round(Math.min(this.left - WIDTH / 2, width - WIDTH)),
-      height: Math.round(Math.min(height, this.height + 16)),
+      x: Math.round(Math.min(this.left - this.width / 2, width - this.width)),
+      height: Math.round(Math.min(1024, this.height)),
+      width: Math.round(Math.min(1024, this.width)),
     });
-
-    this.webContents.send(`max-height`, Math.min(maxHeight, this.height));
   }
 
   public show() {
