@@ -19,6 +19,7 @@ import {
   DownloadsDialog,
   AddBookmarkDialog,
   Dialog,
+  ExtensionPopup,
 } from '../dialogs';
 
 interface IDialogs {
@@ -35,6 +36,7 @@ interface IDialogs {
   authDialog?: AuthDialog;
   formFillDialog?: FormFillDialog;
   credentialsDialog?: CredentialsDialog;
+  extensionPopup?: ExtensionPopup;
 
   [key: string]: Dialog;
 }
@@ -85,6 +87,7 @@ export class AppWindow extends BrowserWindow {
       this.dialogs.authDialog = new AuthDialog(this);
       this.dialogs.formFillDialog = new FormFillDialog(this);
       this.dialogs.credentialsDialog = new CredentialsDialog(this);
+      this.dialogs.extensionPopup = new ExtensionPopup(this);
     });
 
     this.viewManager = new ViewManager(this, incognito);
