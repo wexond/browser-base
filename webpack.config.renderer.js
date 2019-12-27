@@ -1,5 +1,9 @@
 /* eslint-disable */
-const { getConfig, applyEntries, getBaseConfig } = require('./webpack.config.base');
+const {
+  getConfig,
+  applyEntries,
+  getBaseConfig,
+} = require('./webpack.config.base');
 const { join } = require('path');
 /* eslint-enable */
 
@@ -30,6 +34,7 @@ applyEntries('app', appConfig, [
   'tabgroup',
   'downloads',
   'add-bookmark',
+  'extension-popup',
 ]);
 
 module.exports = appConfig;
