@@ -31,6 +31,10 @@ const onClick = (data: IBrowserAction) => (
   );
 };
 
+const onMouseDown = (data: IBrowserAction) => (e: any) => {
+  ipcRenderer.send(`hide-extension-popup-${store.windowId}`);
+};
+
 export const BrowserAction = observer(({ data }: Props) => {
   const {
     icon,
@@ -44,6 +48,7 @@ export const BrowserAction = observer(({ data }: Props) => {
   return (
     <ToolbarButton
       onClick={onClick(data)}
+      onMouseDown={onMouseDown(data)}
       opacity={1}
       autoInvert={false}
       size={16}

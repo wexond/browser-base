@@ -83,6 +83,10 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.extensionPopup.show();
   });
 
+  ipcMain.on(`hide-extension-popup-${id}`, e => {
+    appWindow.dialogs.extensionPopup.hide();
+  });
+
   ipcMain.on(`show-add-bookmark-dialog-${id}`, (e, left) => {
     appWindow.dialogs.addBookmarkDialog.left = left;
     appWindow.dialogs.addBookmarkDialog.show();

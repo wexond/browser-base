@@ -16,12 +16,35 @@ export const App = hot(
     React.useEffect(() => {
       if (!store.webviewRef.current) return;
 
+      store.webviewRef.current
+        .getWebContents()
+        .addListener('context-menu', e => {
+          const menu = remote.Menu.buildFromTemplate([
+            {
+              label: 'Inspect element',
+              click: () => {
+                store.webviewRef.current.openDevTools();
+              },
+            },
+          ]);
+
+          menu.popup();
+        });
+
       store.webviewRef.current.addEventListener('ipc-message', e => {
         if (e.channel === 'webview-size') {
-          store.webviewWidth = e.args[0];
+          store.webviewWidth = e.args[0] === 0 ? 200 : e.args[0];
           store.webviewHeight = e.args[1];
 
           store.visible = true;
+
+          store.webviewRef.current.focus();
+        } else if (e.channel === 'webview-blur') {
+          if (store.visible && !store.webviewRef.current.isDevToolsOpened()) {
+            setTimeout(() => {
+              store.hide();
+            });
+          }
         }
       });
     });
@@ -29,13 +52,18 @@ export const App = hot(
     return (
       <StyledApp style={{ maxHeight: store.maxHeight }} visible={store.visible}>
         <GlobalStyle />
-        <div style={{ width: store.webviewWidth, height: store.webviewHeight }}>
+        <div
+          style={{
+            width: store.webviewWidth < 10 ? 200 : store.webviewWidth,
+            height: store.webviewHeight,
+          }}
+        >
           {store.url && (
             <webview
               style={{ width: '100%', height: '100%' }}
               partition="persist:electron-extension-1"
-              src={store.url}
               ref={store.webviewRef}
+              src={store.url}
               preload={`${resolve(
                 remote.app.getAppPath(),
                 'build',

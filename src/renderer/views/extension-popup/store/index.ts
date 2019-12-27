@@ -26,15 +26,7 @@ export class Store {
         const { url } = data;
         this.url = url;
       } else {
-        this.visible = false;
-      }
-    });
-
-    window.addEventListener('blur', () => {
-      if (this.visible) {
-        setTimeout(() => {
-          this.hide();
-        });
+        this.hide();
       }
     });
 
@@ -44,10 +36,11 @@ export class Store {
   }
 
   public hide() {
+    this.visible = false;
     this.url = null;
+    this.webviewHeight = 0;
+    this.webviewWidth = 0;
     const id = ipcRenderer.sendSync('get-webcontents-id');
-    this.webviewWidth = 20;
-    this.webviewHeight = 20;
     ipcRenderer.send(`hide-${id}`);
   }
 }
