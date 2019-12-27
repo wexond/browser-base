@@ -301,6 +301,7 @@ export class SessionsManager {
       const extension = await context.loadExtension(
         resolve(extensionsPath, dir),
       );
+      // extension.backgroundPage.webContents.openDevTools();
       for (const windowWc of context.webContents) {
         windowWc.send('load-browserAction', extension);
       }
