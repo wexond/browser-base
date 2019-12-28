@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { ToolbarButton } from '../ToolbarButton';
 import { IBrowserAction } from '../../../models';
 import { extensionsRenderer } from 'electron-extensions/renderer';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import store from '../../../store';
 import { format } from 'url';
 
@@ -31,6 +31,19 @@ const onClick = (data: IBrowserAction) => (
   );
 };
 
+const onContextMenu = (id: string) => () => {
+  const menu = remote.Menu.buildFromTemplate([
+    {
+      label: 'Inspect background page',
+      click: () => {
+        ipcRenderer.invoke(`inspect-extension`, store.isIncognito, id);
+      },
+    },
+  ]);
+
+  menu.popup();
+};
+
 const onMouseDown = (data: IBrowserAction) => (e: any) => {
   ipcRenderer.send(`hide-extension-popup-${store.windowId}`);
 };
@@ -49,6 +62,7 @@ export const BrowserAction = observer(({ data }: Props) => {
     <ToolbarButton
       onClick={onClick(data)}
       onMouseDown={onMouseDown(data)}
+      onContextMenu={onContextMenu(data.extensionId)}
       opacity={1}
       autoInvert={false}
       size={16}

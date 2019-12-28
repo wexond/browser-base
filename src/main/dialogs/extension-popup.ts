@@ -21,7 +21,7 @@ export class ExtensionPopup extends Dialog {
         height: 512,
         y: 34,
       },
-      devtools: true,
+      devtools: false,
       webPreferences: {
         webviewTag: true,
       },

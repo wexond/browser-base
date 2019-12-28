@@ -45,6 +45,11 @@ export class SessionsManager {
 
     this.clearCache('incognito');
 
+    ipcMain.handle(`inspect-extension`, (e, incognito, id) => {
+      const context = incognito ? this.extensionsIncognito : this.extensions;
+      context.extensions[id].backgroundPage.webContents.openDevTools();
+    });
+
     this.view.setPermissionRequestHandler(
       async (webContents, permission, callback, details) => {
         const window = windowsManager.findWindowByBrowserView(webContents.id);

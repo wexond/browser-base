@@ -63,7 +63,7 @@ const BrowserActions = observer(() => {
 const onCloseClick = () => ipcRenderer.send(`window-close-${store.windowId}`);
 
 const onMouseEnter = () => {
-  ipcRenderer.send(`window-fix-dragging-${store.windowId}`);
+  // ipcRenderer.send(`window-fix-dragging-${store.windowId}`);
 };
 
 const onMaximizeClick = () =>
