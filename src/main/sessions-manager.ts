@@ -301,13 +301,13 @@ export class SessionsManager {
       const extension = await context.loadExtension(
         resolve(extensionsPath, dir),
       );
-      extension.backgroundPage.webContents.openDevTools();
+      // extension.backgroundPage.webContents.openDevTools();
       for (const windowWc of context.webContents) {
         windowWc.send('load-browserAction', extension);
       }
     }
 
-    // context.loadExtension(resolve(__dirname, 'extensions/wexond-darkreader'));
+    context.loadExtension(resolve(__dirname, 'extensions/wexond-darkreader'));
 
     if (session === 'incognito') {
       this.incognitoExtensionsLoaded = true;
