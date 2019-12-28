@@ -1,35 +1,94 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { remote, ipcRenderer } from 'electron';
+import { resolve } from 'path';
 
-import { App } from './components/App';
-import { fonts } from '../../constants';
-import { ipcRenderer } from 'electron';
+const getWebContentsId = () => ipcRenderer.sendSync('get-webcontents-id');
 
-ipcRenderer.setMaxListeners(0);
+const app = document.getElementById('app');
+const container = document.getElementById('container');
 
-const styleElement = document.createElement('style');
+let webview: Electron.WebviewTag;
+let visible = false;
 
-styleElement.textContent = `
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  src: url(${fonts.robotoRegular}) format('woff2');
-}
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 500;
-  src: url(${fonts.robotoMedium}) format('woff2');
-}
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 300;
-  src: url(${fonts.robotoLight}) format('woff2');
-}
-`;
+const removeWebview = () => {
+  if (webview) {
+    container.removeChild(webview);
+    container.style.width = 0 + 'px';
+    container.style.height = 0 + 'px';
+  }
+};
 
-document.head.appendChild(styleElement);
+const hide = () => {
+  if (!visible || !webview) return;
+  ipcRenderer.send(`hide-${getWebContentsId()}`);
+};
 
-ReactDOM.render(<App />, document.getElementById('app'));
+const show = () => {
+  app.classList.add('visible');
+  visible = true;
+};
+
+const createWebview = (url: string) => {
+  webview = document.createElement('webview');
+
+  webview.setAttribute('partition', 'persist:electron-extension-1');
+  webview.setAttribute('src', url);
+  webview.setAttribute(
+    'preload',
+    `file:///${resolve(
+      remote.app.getAppPath(),
+      'build',
+      'extensions-popup-preload.js',
+    )}`,
+  );
+
+  webview.style.width = '100%';
+  webview.style.height = '100%';
+
+  webview.addEventListener('dom-ready', () => {
+    webview.getWebContents().addListener('context-menu', (e, params) => {
+      const menu = remote.Menu.buildFromTemplate([
+        {
+          label: 'Inspect element',
+          click: () => {
+            webview.inspectElement(params.x, params.y);
+          },
+        },
+      ]);
+
+      menu.popup();
+    });
+  });
+
+  webview.addEventListener('ipc-message', e => {
+    if (e.channel === 'webview-size') {
+      const [width, height] = e.args;
+      container.style.width = (width < 10 ? 200 : width) + 'px';
+      container.style.height = height + 'px';
+
+      ipcRenderer.send(`bounds-${getWebContentsId()}`, width + 16, height + 16);
+
+      show();
+
+      webview.focus();
+    } else if (e.channel === 'webview-blur') {
+      if (visible && !webview.isDevToolsOpened()) {
+        setTimeout(() => {
+          hide();
+        });
+      }
+    }
+  });
+
+  container.appendChild(webview);
+};
+
+ipcRenderer.on('visible', (e, flag, data) => {
+  if (flag) {
+    const { url } = data;
+    createWebview(url);
+  } else {
+    visible = false;
+    app.classList.remove('visible');
+    removeWebview();
+  }
+});

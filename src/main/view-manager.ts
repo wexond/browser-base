@@ -3,6 +3,7 @@ import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
 import { WEBUI_BASE_URL } from '~/constants/files';
+import { windowsManager } from '.';
 
 export class ViewManager {
   public views = new Map<number, View>();
@@ -120,6 +121,12 @@ export class ViewManager {
     this.window.dialogs.searchDialog.hideVisually();
     this.window.dialogs.previewDialog.hideVisually();
     this.window.dialogs.tabGroupDialog.hideVisually();
+
+    if (this.incognito) {
+      windowsManager.sessionsManager.extensionsIncognito.activeTab = id;
+    } else {
+      windowsManager.sessionsManager.extensions.activeTab = id;
+    }
 
     // Also fixes switching tabs with Ctrl + Tab
     view.webContents.focus();
