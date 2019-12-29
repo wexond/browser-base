@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/camelcase: 0 */
 
 import { observable } from 'mobx';
-import { resolve } from 'path';
+import { join } from 'path';
 
 import { IBrowserAction } from '../models';
 import { extensionsRenderer } from 'electron-extensions/renderer';
@@ -60,7 +60,7 @@ export class ExtensionsStore {
         ];
       }
 
-      const data = await promises.readFile(resolve(path, icon1 as string));
+      const data = await promises.readFile(join(path, icon1 as string));
       const icon = window.URL.createObjectURL(new Blob([data]));
       const browserAction = new IBrowserAction({
         extensionId: id,
