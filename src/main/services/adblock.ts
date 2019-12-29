@@ -72,6 +72,7 @@ export const runAdblockService = async (ses: any) => {
       'onHeadersReceived',
       { urls: ['<all_urls>'] },
       (engine as any).onHeadersReceived,
+      { order: 0 },
     ).id;
   }
 
@@ -80,6 +81,7 @@ export const runAdblockService = async (ses: any) => {
       'onBeforeRequest',
       { urls: ['<all_urls>'] },
       (engine as any).onBeforeRequest,
+      { order: 0 },
     ).id;
   }
 

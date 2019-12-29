@@ -87,7 +87,7 @@ export class ViewManager {
 
     if (sendMessage) {
       this.window.webContents.send(
-        'api-tabs-create',
+        'create-tab',
         { ...details },
         isNext,
         view.webContents.id,

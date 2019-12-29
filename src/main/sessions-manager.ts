@@ -38,6 +38,11 @@ export class SessionsManager {
   public constructor(windowsManager: WindowsManager) {
     this.windowsManager = windowsManager;
 
+    // TODO(sentialx): handle api.tabs.create
+    this.extensions.on('create-tab', (details, callback) => {
+      console.log(details);
+    });
+
     this.loadExtensions('normal');
 
     registerProtocol(this.view);
