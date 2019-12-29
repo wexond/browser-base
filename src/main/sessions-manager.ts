@@ -308,12 +308,17 @@ export class SessionsManager {
     const dirs = await promises.readdir(extensionsPath);
 
     for (const dir of dirs) {
-      const extension = await context.loadExtension(
-        resolve(extensionsPath, dir),
-      );
-      // extension.backgroundPage.webContents.openDevTools();
-      for (const windowWc of context.webContents) {
-        windowWc.send('load-browserAction', extension);
+      try {
+        const extension = await context.loadExtension(
+          resolve(extensionsPath, dir),
+        );
+
+        // extension.backgroundPage.webContents.openDevTools();
+        for (const windowWc of context.webContents) {
+          windowWc.send('load-browserAction', extension);
+        }
+      } catch (e) {
+        console.error(e);
       }
     }
 
