@@ -92,3 +92,12 @@ ipcRenderer.on('visible', (e, flag, data) => {
     removeWebview();
   }
 });
+
+ipcRenderer.on('inspect', () => {
+  console.log('aha');
+  if (webview) {
+    webview.addEventListener('dom-ready', () => {
+      webview.openDevTools();
+    });
+  }
+});

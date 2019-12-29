@@ -83,6 +83,13 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.extensionPopup.show();
   });
 
+  ipcMain.on(`inspect-extension-popup-${id}`, (e, left, url) => {
+    appWindow.dialogs.extensionPopup.left = left;
+    appWindow.dialogs.extensionPopup.url = url;
+    appWindow.dialogs.extensionPopup.show();
+    appWindow.dialogs.extensionPopup.webContents.send('inspect');
+  });
+
   ipcMain.on(`hide-extension-popup-${id}`, e => {
     appWindow.dialogs.extensionPopup.hide();
   });

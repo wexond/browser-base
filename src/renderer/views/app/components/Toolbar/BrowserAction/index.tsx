@@ -31,12 +31,36 @@ const onClick = (data: IBrowserAction) => (
   );
 };
 
-const onContextMenu = (id: string) => () => {
+const onContextMenu = (data: IBrowserAction) => (
+  e: React.MouseEvent<HTMLDivElement>,
+) => {
+  const { target } = e;
   const menu = remote.Menu.buildFromTemplate([
+    {
+      label: 'Inspect popup',
+      click: () => {
+        const { left, width } = target.getBoundingClientRect();
+
+        ipcRenderer.send(
+          `inspect-extension-popup-${store.windowId}`,
+          left + width / 2,
+          format({
+            protocol: 'electron-extension',
+            slashes: true,
+            hostname: data.extensionId,
+            pathname: data.popup,
+          }),
+        );
+      },
+    },
     {
       label: 'Inspect background page',
       click: () => {
-        ipcRenderer.invoke(`inspect-extension`, store.isIncognito, id);
+        ipcRenderer.invoke(
+          `inspect-extension`,
+          store.isIncognito,
+          data.extensionId,
+        );
       },
     },
   ]);
@@ -49,20 +73,13 @@ const onMouseDown = (data: IBrowserAction) => (e: any) => {
 };
 
 export const BrowserAction = observer(({ data }: Props) => {
-  const {
-    icon,
-    badgeText,
-    badgeBackgroundColor,
-    badgeTextColor,
-    tabId,
-    extensionId,
-  } = data;
+  const { icon, badgeText, badgeBackgroundColor, badgeTextColor } = data;
 
   return (
     <ToolbarButton
       onClick={onClick(data)}
       onMouseDown={onMouseDown(data)}
-      onContextMenu={onContextMenu(data.extensionId)}
+      onContextMenu={onContextMenu(data)}
       opacity={1}
       autoInvert={false}
       size={16}
