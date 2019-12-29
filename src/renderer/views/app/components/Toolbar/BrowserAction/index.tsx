@@ -22,7 +22,7 @@ const onClick = (data: IBrowserAction) => (
   const { left, width } = e.currentTarget.getBoundingClientRect();
   ipcRenderer.send(
     `show-extension-popup-${store.windowId}`,
-    left + width / 2,
+    left + width,
     format({
       protocol: EXTENSIONS_PROTOCOL,
       slashes: true,
