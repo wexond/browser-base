@@ -23,6 +23,7 @@ const hide = () => {
 };
 
 const show = () => {
+  if (visible) return;
   app.classList.add('visible');
   visible = true;
 };
@@ -94,7 +95,6 @@ ipcRenderer.on('visible', (e, flag, data) => {
 });
 
 ipcRenderer.on('inspect', () => {
-  console.log('aha');
   if (webview) {
     webview.addEventListener('dom-ready', () => {
       webview.openDevTools();

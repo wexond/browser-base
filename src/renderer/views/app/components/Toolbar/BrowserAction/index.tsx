@@ -6,6 +6,7 @@ import { extensionsRenderer } from 'electron-extensions/renderer';
 import { ipcRenderer, remote } from 'electron';
 import store from '../../../store';
 import { format } from 'url';
+import { EXTENSIONS_PROTOCOL } from '~/constants';
 
 interface Props {
   data: IBrowserAction;
@@ -23,7 +24,7 @@ const onClick = (data: IBrowserAction) => (
     `show-extension-popup-${store.windowId}`,
     left + width / 2,
     format({
-      protocol: 'electron-extension',
+      protocol: EXTENSIONS_PROTOCOL,
       slashes: true,
       hostname: data.extensionId,
       pathname: data.popup,
@@ -45,7 +46,7 @@ const onContextMenu = (data: IBrowserAction) => (
           `inspect-extension-popup-${store.windowId}`,
           left + width / 2,
           format({
-            protocol: 'electron-extension',
+            protocol: EXTENSIONS_PROTOCOL,
             slashes: true,
             hostname: data.extensionId,
             pathname: data.popup,
