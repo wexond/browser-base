@@ -21,7 +21,7 @@ export class ExtensionPopup extends Dialog {
         height: 512,
         y: 34,
       },
-      devtools: true,
+      devtools: false,
       webPreferences: {
         webviewTag: true,
       },
@@ -42,7 +42,7 @@ export class ExtensionPopup extends Dialog {
   }
 
   public rearrange() {
-    const { width, height } = this.appWindow.getContentBounds();
+    const { width } = this.appWindow.getContentBounds();
 
     super.rearrange({
       x: Math.round(Math.min(this.left - this.width + 6, width - this.width)),

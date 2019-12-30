@@ -11,10 +11,11 @@ import { IDownloadItem } from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
+import { WEBUI_PROTOCOL } from '~/constants/files';
 
 const extensibleSessionOptions = {
-  backgroundPreloadPath: resolve(__dirname, 'extensions-background-preload.js'),
-  contentPreloadPath: resolve(__dirname, 'extensions-content-preload.js'),
+  preloadPath: resolve(__dirname, 'extensions-preload.js'),
+  blacklist: [`${WEBUI_PROTOCOL}://*/*`, 'wexond-error://*/*'],
 };
 
 // TODO: move windows list to the corresponding sessions
@@ -23,11 +24,11 @@ export class SessionsManager {
   public viewIncognito = session.fromPartition('view_incognito');
 
   public extensions = new ExtensibleSession(
-    this.view,
+    'persist:view',
     extensibleSessionOptions,
   );
   public extensionsIncognito = new ExtensibleSession(
-    this.viewIncognito,
+    'view_incognito',
     extensibleSessionOptions,
   );
 

@@ -27,16 +27,8 @@ const mainConfig = getConfig({
           },
         },
         {
-          from: 'node_modules/electron-extensions/background-preload.js',
-          to: 'extensions-background-preload.js',
-        },
-        {
-          from: 'node_modules/electron-extensions/popup-preload.js',
-          to: 'extensions-popup-preload.js',
-        },
-        {
-          from: 'node_modules/electron-extensions/content-preload.js',
-          to: 'extensions-content-preload.js',
+          from: 'node_modules/electron-extensions/preload.js',
+          to: 'extensions-preload.js',
         },
       ],
       { copyUnmodified: true },
@@ -51,6 +43,7 @@ const preloadConfig = getConfig({
 
   entry: {
     'view-preload': './src/preloads/view-preload',
+    'popup-preload': './src/preloads/popup-preload',
   },
 
   plugins: [],

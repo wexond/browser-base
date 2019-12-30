@@ -34,10 +34,6 @@ export class View extends BrowserView {
         enableRemoteModule: false,
         partition: incognito ? 'view_incognito' : 'persist:view',
         plugins: true,
-        additionalArguments: [
-          `--window-id=${window.id}`,
-          `--blacklist=["${WEBUI_BASE_URL}", "wexond-error://"]`,
-        ],
         nativeWindowOpen: true,
         webSecurity: true,
         javascript: true,

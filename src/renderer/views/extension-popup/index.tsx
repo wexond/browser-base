@@ -31,14 +31,14 @@ const show = () => {
 const createWebview = (url: string) => {
   webview = document.createElement('webview');
 
-  webview.setAttribute('partition', 'persist:electron-extension-1');
+  webview.setAttribute('partition', 'persist:view');
   webview.setAttribute('src', url);
   webview.setAttribute(
     'preload',
     `file:///${resolve(
       remote.app.getAppPath(),
       'build',
-      'extensions-popup-preload.js',
+      'popup-preload.bundle.js',
     )}`,
   );
 
