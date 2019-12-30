@@ -139,9 +139,13 @@ export class Store {
       },
     );
 
-    extensionsRenderer.on(
+    ipcRenderer.on(
       'set-badge-text',
-      (extensionId: string, details: chrome.browserAction.BadgeTextDetails) => {
+      (
+        e,
+        extensionId: string,
+        details: chrome.browserAction.BadgeTextDetails,
+      ) => {
         if (details.tabId) {
           const browserAction = this.extensions.queryBrowserAction({
             extensionId,

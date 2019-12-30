@@ -23,12 +23,7 @@ const onClick = (data: IBrowserAction) => (
   ipcRenderer.send(
     `show-extension-popup-${store.windowId}`,
     left + width,
-    format({
-      protocol: EXTENSIONS_PROTOCOL,
-      slashes: true,
-      hostname: data.extensionId,
-      pathname: data.popup,
-    }),
+    data.popup,
   );
 };
 

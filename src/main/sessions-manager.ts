@@ -1,4 +1,4 @@
-import { session, ipcMain } from 'electron';
+import { session, ipcMain, BrowserWindow } from 'electron';
 import { ExtensibleSession } from 'electron-extensions/main';
 import { getPath, makeId } from '~/utils';
 import { promises, existsSync } from 'fs';
@@ -11,11 +11,12 @@ import { IDownloadItem } from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
-import { WEBUI_PROTOCOL } from '~/constants/files';
+import { WEBUI_BASE_URL } from '~/constants/files';
+import { AppWindow } from './windows';
 
 const extensibleSessionOptions = {
   preloadPath: resolve(__dirname, 'extensions-preload.js'),
-  blacklist: [`${WEBUI_PROTOCOL}://*/*`, 'wexond-error://*/*'],
+  blacklist: [`${WEBUI_BASE_URL}*`, 'wexond-error://*', 'chrome-extension://*'],
 };
 
 // TODO: move windows list to the corresponding sessions
@@ -41,7 +42,13 @@ export class SessionsManager {
 
     // TODO(sentialx): handle api.tabs.create
     this.extensions.on('create-tab', (details, callback) => {
-      console.log(details);
+      console.log(details.windowId);
+
+      const view = windowsManager.list
+        .find(x => x.id === details.windowId)
+        .viewManager.create(details, false, true);
+
+      callback(view.webContents.id);
     });
 
     this.loadExtensions('normal');
@@ -315,8 +322,8 @@ export class SessionsManager {
         );
 
         // extension.backgroundPage.webContents.openDevTools();
-        for (const windowWc of context.webContents) {
-          windowWc.send('load-browserAction', extension);
+        for (const window of context.windows) {
+          window.webContents.send('load-browserAction', extension);
         }
       } catch (e) {
         console.error(e);

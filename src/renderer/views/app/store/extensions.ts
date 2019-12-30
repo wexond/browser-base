@@ -43,14 +43,10 @@ export class ExtensionsStore {
   }
 
   public async loadExtension(extension: IpcExtension) {
-    const { manifest, path, id } = extension;
+    const { manifest, path, id, popupPage } = extension;
 
     if (manifest.browser_action) {
-      const {
-        default_icon,
-        default_title,
-        default_popup,
-      } = manifest.browser_action;
+      const { default_icon, default_title } = manifest.browser_action;
 
       let icon1 = default_icon;
 
@@ -66,7 +62,7 @@ export class ExtensionsStore {
         extensionId: id,
         icon,
         title: default_title,
-        popup: default_popup,
+        popup: popupPage,
       });
 
       this.defaultBrowserActions.push(browserAction);
