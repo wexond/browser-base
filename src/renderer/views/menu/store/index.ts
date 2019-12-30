@@ -17,12 +17,6 @@ export class Store {
   public visible = false;
 
   @observable
-  public id = remote.getCurrentWebContents().id;
-
-  @observable
-  public windowId = remote.getCurrentWindow().id;
-
-  @observable
   public alwaysOnTop = false;
 
   public constructor() {
@@ -43,6 +37,14 @@ export class Store {
     ipcRenderer.on('update-settings', (e, settings: ISettings) => {
       this.settings = { ...this.settings, ...settings };
     });
+  }
+
+  public get id() {
+    return remote.getCurrentWebContents().id;
+  }
+
+  public get windowId() {
+    return remote.getCurrentWindow().id;
   }
 
   public hide() {

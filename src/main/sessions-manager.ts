@@ -1,4 +1,4 @@
-import { session, ipcMain, BrowserWindow } from 'electron';
+import { session, ipcMain } from 'electron';
 import { ExtensibleSession } from 'electron-extensions/main';
 import { getPath, makeId } from '~/utils';
 import { promises, existsSync } from 'fs';
@@ -12,7 +12,6 @@ import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
 import { WEBUI_BASE_URL } from '~/constants/files';
-import { AppWindow } from './windows';
 
 const extensibleSessionOptions = {
   preloadPath: resolve(__dirname, 'extensions-preload.js'),
@@ -24,14 +23,14 @@ export class SessionsManager {
   public view = session.fromPartition('persist:view');
   public viewIncognito = session.fromPartition('view_incognito');
 
-  public extensions = new ExtensibleSession(
-    'persist:view',
-    extensibleSessionOptions,
-  );
-  public extensionsIncognito = new ExtensibleSession(
-    'view_incognito',
-    extensibleSessionOptions,
-  );
+  public extensions = new ExtensibleSession({
+    ...extensibleSessionOptions,
+    partition: 'persist:view',
+  });
+  public extensionsIncognito = new ExtensibleSession({
+    ...extensibleSessionOptions,
+    partition: 'view_incognito',
+  });
 
   public incognitoExtensionsLoaded = false;
 
@@ -40,10 +39,7 @@ export class SessionsManager {
   public constructor(windowsManager: WindowsManager) {
     this.windowsManager = windowsManager;
 
-    // TODO(sentialx): handle api.tabs.create
     this.extensions.on('create-tab', (details, callback) => {
-      console.log(details.windowId);
-
       const view = windowsManager.list
         .find(x => x.id === details.windowId)
         .viewManager.create(details, false, true);
@@ -330,7 +326,11 @@ export class SessionsManager {
       }
     }
 
-    context.loadExtension(resolve(__dirname, 'extensions/wexond-darkreader'));
+    (
+      await context.loadExtension(
+        resolve(__dirname, 'extensions/wexond-darkreader'),
+      )
+    ).backgroundPage.webContents.openDevTools();
 
     if (session === 'incognito') {
       this.incognitoExtensionsLoaded = true;
