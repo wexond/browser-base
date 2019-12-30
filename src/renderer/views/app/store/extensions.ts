@@ -45,6 +45,8 @@ export class ExtensionsStore {
   public async loadExtension(extension: IpcExtension) {
     const { manifest, path, id, popupPage } = extension;
 
+    if (this.defaultBrowserActions.find(x => x.extensionId === id)) return;
+
     if (manifest.browser_action) {
       const { default_icon, default_title } = manifest.browser_action;
 
