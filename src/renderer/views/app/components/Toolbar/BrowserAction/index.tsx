@@ -35,7 +35,7 @@ const onContextMenu = (data: IBrowserAction) => (
     {
       label: 'Inspect popup',
       click: () => {
-        const { left, width } = target.getBoundingClientRect();
+        const { left, width } = (target as any).getBoundingClientRect();
 
         ipcRenderer.send(
           `inspect-extension-popup-${store.windowId}`,
