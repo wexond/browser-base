@@ -112,7 +112,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           label: 'Toggle search',
           visible: false,
           click() {
-            windowsManager.currentWindow.searchDialog.show();
+            windowsManager.currentWindow.dialogs.searchDialog.show();
           },
         },
         {
@@ -120,7 +120,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           label: 'Toggle search',
           visible: false,
           click() {
-            windowsManager.currentWindow.searchDialog.show();
+            windowsManager.currentWindow.dialogs.searchDialog.show();
           },
         },
         {
