@@ -20,7 +20,7 @@ export class SearchDialog extends Dialog {
         y: 48,
       },
       hideTimeout: 300,
-      devtools: false,
+      devtools: true,
     });
 
     ipcMain.on(`height-${this.webContents.id}`, (e, height) => {

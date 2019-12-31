@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import { observable, computed } from 'mobx';
-import { DEFAULT_SEARCH_ENGINES, DEFAULT_SETTINGS } from '~/constants';
-import { ISuggestion, ISettings, IVisitedItem } from '~/interfaces';
+import { DEFAULT_SEARCH_ENGINES } from '~/constants';
+import { ISuggestion, IVisitedItem } from '~/interfaces';
 import { SuggestionsStore } from './suggestions';
-import { getTheme } from '~/utils/themes';
 import { NEWTAB_URL } from '~/constants/tabs';
+import { DialogStore } from '~/models/dialog-store';
 
 let lastSuggestion: string;
 
@@ -17,11 +17,8 @@ interface ISearchTab {
   favicon?: string;
 }
 
-export class Store {
+export class Store extends DialogStore {
   public suggestions = new SuggestionsStore(this);
-
-  @observable
-  public visible = false;
 
   @observable
   public visitedItems: IVisitedItem[] = [];
@@ -31,14 +28,6 @@ export class Store {
 
   @observable
   public inputText = '';
-
-  @observable
-  public settings: ISettings = DEFAULT_SETTINGS;
-
-  @computed
-  public get theme() {
-    return getTheme(this.settings.theme);
-  }
 
   @computed
   public get searchEngines() {
@@ -77,13 +66,13 @@ export class Store {
 
   public canSuggest = false;
 
-  public id = remote.getCurrentWebContents().id;
-
   public inputRef = React.createRef<HTMLInputElement>();
 
   public tabId = 1;
 
   public constructor() {
+    super();
+
     ipcRenderer.on('visible', (e, flag, tab) => {
       this.visible = flag;
 
@@ -107,23 +96,7 @@ export class Store {
 
     this.loadHistory();
 
-    window.addEventListener('blur', () => {
-      if (this.visible) {
-        ipcRenderer.send(`hide-${this.id}`);
-      }
-    });
-
     ipcRenderer.send(`can-show-${this.id}`);
-
-    ipcRenderer.send('get-settings');
-
-    ipcRenderer.on('update-settings', (e, settings: ISettings) => {
-      this.updateSettings(settings);
-    });
-  }
-
-  public updateSettings(newSettings: ISettings) {
-    this.settings = { ...this.settings, ...newSettings };
   }
 
   public async loadHistory() {

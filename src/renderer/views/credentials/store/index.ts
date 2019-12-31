@@ -5,9 +5,9 @@ import { observable } from 'mobx';
 import { Textfield } from '~/renderer/components/Textfield';
 import { PasswordInput } from '~/renderer/components/PasswordInput';
 import { IFormFillData } from '~/interfaces';
-import { getCurrentWindow } from '../../app/utils/windows';
+import { DialogStore } from '~/models/dialog-store';
 
-export class Store {
+export class Store extends DialogStore {
   @observable
   public content: 'save' | 'update' | 'list';
 
@@ -20,9 +20,9 @@ export class Store {
 
   public oldUsername: string;
 
-  public windowId: number = getCurrentWindow().id;
-
   public constructor() {
+    super({ hideOnBlur: false });
+
     ipcRenderer.on('credentials-update', (e, data) => {
       const { username, password, content, list } = data;
 

@@ -1,20 +1,10 @@
 import * as React from 'react';
 
-import { observable, computed } from 'mobx';
-import { ipcRenderer, remote } from 'electron';
-import { ISettings } from '~/interfaces';
-import { DEFAULT_SETTINGS } from '~/constants';
-import { getTheme } from '~/utils/themes';
+import { observable } from 'mobx';
+import { ipcRenderer } from 'electron';
+import { DialogStore } from '~/models/dialog-store';
 
-export class Store {
-  @observable
-  public settings: ISettings = DEFAULT_SETTINGS;
-
-  @computed
-  public get theme() {
-    return getTheme(this.settings.theme);
-  }
-
+export class Store extends DialogStore {
   @observable
   public occurrences = '0/0';
 
@@ -25,13 +15,9 @@ export class Store {
 
   public findInputRef = React.createRef<HTMLInputElement>();
 
-  public visible = false;
-
-  public windowId = remote.getCurrentWindow().id;
-
-  public id = remote.getCurrentWebContents().id;
-
   public constructor() {
+    super({ hideOnBlur: false });
+
     ipcRenderer.on(
       'found-in-page',
       (e, { activeMatchOrdinal, matches }: Electron.FoundInPageResult) => {
@@ -61,16 +47,6 @@ export class Store {
         this.updateTabInfo();
       },
     );
-
-    ipcRenderer.send('get-settings');
-
-    ipcRenderer.on('update-settings', (e, settings: ISettings) => {
-      this.settings = { ...this.settings, ...settings };
-    });
-  }
-
-  public hide() {
-    ipcRenderer.send(`hide-${this.id}`);
   }
 
   public updateTabInfo() {

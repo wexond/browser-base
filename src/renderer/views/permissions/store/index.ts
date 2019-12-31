@@ -1,30 +1,19 @@
-import { observable, computed } from 'mobx';
+import { observable } from 'mobx';
 import { ipcRenderer } from 'electron';
 
 import { getDomain } from '~/utils';
-import { getCurrentWindow } from '../../app/utils/windows';
-import { ISettings } from '~/interfaces';
-import { DEFAULT_SETTINGS } from '~/constants';
-import { getTheme } from '~/utils/themes';
+import { DialogStore } from '~/models/dialog-store';
 
-export class Store {
-  @observable
-  public settings: ISettings = DEFAULT_SETTINGS;
-
-  @computed
-  public get theme() {
-    return getTheme(this.settings.theme);
-  }
-
+export class Store extends DialogStore {
   @observable
   public permissions: string[] = [];
 
   @observable
   public domain: string;
 
-  public windowId = getCurrentWindow().id;
-
   public constructor() {
+    super();
+
     ipcRenderer.on('request-permission', (e, { url, name, details }) => {
       this.domain = getDomain(url);
       this.permissions = [];
@@ -40,12 +29,6 @@ export class Store {
           this.permissions.push('camera');
         }
       }
-    });
-
-    ipcRenderer.send('get-settings');
-
-    ipcRenderer.on('update-settings', (e, settings: ISettings) => {
-      this.settings = { ...this.settings, ...settings };
     });
   }
 }

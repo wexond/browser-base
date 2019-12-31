@@ -1,27 +1,9 @@
-import { ipcRenderer, remote } from 'electron';
-import { observable, computed } from 'mobx';
-import { getTheme } from '~/utils/themes';
-import { ISettings, IDownloadItem } from '~/interfaces';
-import { DEFAULT_SETTINGS } from '~/constants';
+import { ipcRenderer } from 'electron';
+import { observable } from 'mobx';
+import { IDownloadItem } from '~/interfaces';
+import { DialogStore } from '~/models/dialog-store';
 
-export class Store {
-  @observable
-  public settings: ISettings = DEFAULT_SETTINGS;
-
-  @computed
-  public get theme() {
-    return getTheme(this.settings.theme);
-  }
-
-  @observable
-  public visible = false;
-
-  @observable
-  public id = remote.getCurrentWebContents().id;
-
-  @observable
-  public windowId = remote.getCurrentWindow().id;
-
+export class Store extends DialogStore {
   @observable
   public downloads: IDownloadItem[] = [];
 
@@ -29,22 +11,10 @@ export class Store {
   public maxHeight = 0;
 
   public constructor() {
+    super();
+
     ipcRenderer.on('visible', (e, flag) => {
       this.visible = flag;
-    });
-
-    window.addEventListener('blur', () => {
-      if (this.visible) {
-        setTimeout(() => {
-          this.hide();
-        });
-      }
-    });
-
-    ipcRenderer.send('get-settings');
-
-    ipcRenderer.on('update-settings', (e, settings: ISettings) => {
-      this.settings = { ...this.settings, ...settings };
     });
 
     ipcRenderer.on('download-started', (e, item) => {
@@ -69,10 +39,6 @@ export class Store {
     ipcRenderer.on('max-height', (e, height) => {
       this.maxHeight = height;
     });
-  }
-
-  public hide() {
-    ipcRenderer.send(`hide-${this.id}`);
   }
 }
 

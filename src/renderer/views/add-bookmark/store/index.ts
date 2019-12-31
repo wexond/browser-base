@@ -1,28 +1,10 @@
-import { ipcRenderer, remote } from 'electron';
-import { observable, computed } from 'mobx';
-import { getTheme } from '~/utils/themes';
-import { ISettings, IBookmark } from '~/interfaces';
-import { DEFAULT_SETTINGS } from '~/constants';
+import { ipcRenderer } from 'electron';
+import { observable } from 'mobx';
+import { IBookmark } from '~/interfaces';
 import * as React from 'react';
+import { DialogStore } from '~/models/dialog-store';
 
-export class Store {
-  @observable
-  public settings: ISettings = DEFAULT_SETTINGS;
-
-  @computed
-  public get theme() {
-    return getTheme(this.settings.theme);
-  }
-
-  @observable
-  public visible = false;
-
-  @observable
-  public id = remote.getCurrentWebContents().id;
-
-  @observable
-  public windowId = remote.getCurrentWindow().id;
-
+export class Store extends DialogStore {
   @observable
   public folders: IBookmark[] = [];
 
@@ -37,6 +19,8 @@ export class Store {
   public currentFolder: IBookmark;
 
   public constructor() {
+    super();
+
     (async () => {
       this.folders = await ipcRenderer.invoke('bookmarks-get-folders');
       this.currentFolder = this.folders.find(x => x.static === 'main');
@@ -70,25 +54,6 @@ export class Store {
         }
       }
     });
-
-    window.addEventListener('blur', () => {
-      if (this.visible) {
-        setTimeout(() => {
-          this.visible = false;
-          this.hide();
-        });
-      }
-    });
-
-    ipcRenderer.send('get-settings');
-
-    ipcRenderer.on('update-settings', (e, settings: ISettings) => {
-      this.settings = { ...this.settings, ...settings };
-    });
-  }
-
-  public hide() {
-    ipcRenderer.send(`hide-${this.id}`);
   }
 }
 

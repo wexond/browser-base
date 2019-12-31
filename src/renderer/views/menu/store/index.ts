@@ -1,54 +1,16 @@
-import { ipcRenderer, remote } from 'electron';
-import { observable, computed } from 'mobx';
-import { getTheme } from '~/utils/themes';
-import { ISettings } from '~/interfaces';
-import { DEFAULT_SETTINGS } from '~/constants';
+import { ipcRenderer } from 'electron';
+import { observable } from 'mobx';
+import { DialogStore } from '~/models/dialog-store';
 
-export class Store {
-  @observable
-  public settings: ISettings = DEFAULT_SETTINGS;
-
-  @computed
-  public get theme() {
-    return getTheme(this.settings.theme);
-  }
-
-  @observable
-  public visible = false;
-
+export class Store extends DialogStore {
   @observable
   public alwaysOnTop = false;
 
   public constructor() {
+    super();
     ipcRenderer.on('visible', (e, flag) => {
       this.visible = flag;
     });
-
-    window.addEventListener('blur', () => {
-      if (this.visible) {
-        setTimeout(() => {
-          this.hide();
-        });
-      }
-    });
-
-    ipcRenderer.send('get-settings');
-
-    ipcRenderer.on('update-settings', (e, settings: ISettings) => {
-      this.settings = { ...this.settings, ...settings };
-    });
-  }
-
-  public get id() {
-    return remote.getCurrentWebContents().id;
-  }
-
-  public get windowId() {
-    return remote.getCurrentWindow().id;
-  }
-
-  public hide() {
-    ipcRenderer.send(`hide-${this.id}`);
   }
 
   public async save() {
