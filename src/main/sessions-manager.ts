@@ -47,6 +47,12 @@ export class SessionsManager {
       callback(view.webContents.id);
     });
 
+    this.extensions.on('set-badge-text', (extensionId, details) => {
+      windowsManager.list.forEach(w => {
+        w.webContents.send('set-badge-text', extensionId, details);
+      });
+    });
+
     this.loadExtensions('normal');
 
     registerProtocol(this.view);
