@@ -332,11 +332,9 @@ export class SessionsManager {
       }
     }
 
-    (
-      await context.loadExtension(
-        resolve(__dirname, 'extensions/wexond-darkreader'),
-      )
-    ).backgroundPage.webContents.openDevTools();
+    await context.loadExtension(
+      resolve(__dirname, 'extensions/wexond-darkreader'),
+    );
 
     if (session === 'incognito') {
       this.incognitoExtensionsLoaded = true;
