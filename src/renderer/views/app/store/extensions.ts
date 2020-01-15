@@ -59,6 +59,9 @@ export class ExtensionsStore {
       }
 
       const data = await promises.readFile(join(path, icon1 as string));
+
+      if (this.defaultBrowserActions.find(x => x.extensionId === id)) return;
+
       const icon = window.URL.createObjectURL(new Blob([data]));
       const browserAction = new IBrowserAction({
         extensionId: id,
