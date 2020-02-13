@@ -9,6 +9,19 @@ const onClearBrowsingData = () => {
   store.dialogContent = 'privacy';
 };
 
+const DoNotTrack = observer(() => {
+  const { doNotTrack } = store.settings;
+
+  return (
+    <Row onClick={onSwitchChange('doNotTrack')}>
+      <Title>Send Do Not Track request</Title>
+      <Control>
+        <Switch value={doNotTrack} />
+      </Control>
+    </Row>
+  );
+});
+
 export const Privacy = () => {
   return (
     <>
