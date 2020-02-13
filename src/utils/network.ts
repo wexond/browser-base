@@ -33,6 +33,11 @@ export const requestURL = (url: string): Promise<Data> =>
         reject(e);
       });
     });
+	
+	if (settings.doNotTrack){
+       req.setHeader('DNT', '1');
+    }
+	
 
     req.on('error', e => {
       reject(e);
