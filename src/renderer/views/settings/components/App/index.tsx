@@ -65,7 +65,9 @@ export default hot(
             <MenuItem icon={icons.download} section="downloads">
               Downloads
             </MenuItem>
-            {/* <MenuItem section="privacy">Privacy</MenuItem> */}
+            <MenuItem section="privacy">
+			Privacy
+			</MenuItem>
             {/* <MenuItem section="permissions">Site permissions</MenuItem> */}
 
             {/* <MenuItem section="language">Languages</MenuItem> */}
