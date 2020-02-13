@@ -15,6 +15,9 @@ export const requestURL = (url: string): Promise<Data> =>
     if (options.protocol === 'https:') {
       request = https.request;
     }
+	if (settings.asksBeforeRedirect){
+		options.redirect = 'manual';
+	}	
 
     const req = request(options, res => {
       let data = '';
@@ -33,11 +36,10 @@ export const requestURL = (url: string): Promise<Data> =>
         reject(e);
       });
     });
-	
+		
 	if (settings.doNotTrack){
        req.setHeader('DNT', '1');
-    }
-	
+    }	
 
     req.on('error', e => {
       reject(e);
