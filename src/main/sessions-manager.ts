@@ -1,4 +1,4 @@
-import { session, ipcMain } from 'electron';
+import { session, ipcMain, app } from 'electron';
 import { ExtensibleSession } from 'electron-extensions/main';
 import { getPath, makeId } from '~/utils';
 import { promises, existsSync } from 'fs';
@@ -54,6 +54,11 @@ export class SessionsManager {
     });
 
     this.loadExtensions('normal');
+
+    this.view.setPreloads([
+      ...this.view.getPreloads(),
+      `${app.getAppPath()}/build/extensions-preload.bundle.js`,
+    ]);
 
     registerProtocol(this.view);
     registerProtocol(this.viewIncognito);
@@ -311,8 +316,7 @@ export class SessionsManager {
   }
 
   public async loadExtensions(session: 'normal' | 'incognito') {
-    const context =
-      session === 'incognito' ? this.extensionsIncognito : this.extensions;
+    const context = session === 'incognito' ? this.viewIncognito : this.view;
 
     const extensionsPath = getPath('extensions');
     const dirs = await promises.readdir(extensionsPath);
@@ -323,18 +327,20 @@ export class SessionsManager {
           resolve(extensionsPath, dir),
         );
 
+        console.log(extension);
+
         // extension.backgroundPage.webContents.openDevTools();
-        for (const window of context.windows) {
+        /*for (const window of context.windows) {
           window.webContents.send('load-browserAction', extension);
-        }
+        }*/
       } catch (e) {
         console.error(e);
       }
     }
 
-    await context.loadExtension(
+    /*await context.loadExtension(
       resolve(__dirname, 'extensions/wexond-darkreader'),
-    );
+    );*/
 
     if (session === 'incognito') {
       this.incognitoExtensionsLoaded = true;

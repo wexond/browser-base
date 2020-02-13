@@ -2468,10 +2468,10 @@ electron-updater@4.2.0:
     pako "^1.0.10"
     semver "^6.3.0"
 
-electron@8.0.0-beta.6:
-  version "8.0.0-beta.6"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-8.0.0-beta.6.tgz#8c212fa4b9b3ae61254b955b946c64eb5f9f4024"
-  integrity sha512-TTTqHdMh/TlmWRnA3Wj+EM0+IQHtH0EiPzyo7czVch0JN2Rj6oIBItdo0xa2C9ZxSLn7CGPRzn/BE30wzReIpA==
+electron@^9.0.0-beta.1:
+  version "9.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-9.0.0-beta.1.tgz#6cce5876a42a9ec140862b85fb799f717550a6ec"
+  integrity sha512-OUqCC/aGYjFb2cA2ta1eBcjBW9yembcwtOQ9jKu75Lk3zTIVPavKLQxkC0LDy1FqTL9/Et8VtBI86EDvnFm3xw==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
