@@ -18,6 +18,7 @@ export const DEFAULT_SETTINGS: ISettings = {
     type: 'empty',
   },
   warnOnQuit: true,
+  doNotTrack: false,
   version: pkg.version,
   downloadsDialog: false,
   downloadsPath: remote
