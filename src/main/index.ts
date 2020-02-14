@@ -1,3 +1,5 @@
+import 'source-map-support/register';
+
 import { ipcMain, app, webContents } from 'electron';
 import { platform } from 'os';
 import { WindowsManager } from './windows-manager';
