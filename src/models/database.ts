@@ -20,18 +20,12 @@ export class Database<T> {
     operation: 'get' | 'get-one' | 'update' | 'insert' | 'remove',
     data: IAction<T>,
   ): Promise<any> {
-    return new Promise(resolve => {
-      const id = makeId(32);
-
-      ipcRenderer.send(`storage-${operation}`, id, {
-        scope: this.scope,
-        ...data,
-      });
-
-      ipcRenderer.once(id, (e, res) => {
-        resolve(res);
-      });
+    const res = await ipcRenderer.invoke(`storage-${operation}`, {
+      scope: this.scope,
+      ...data,
     });
+
+    return res;
   }
 
   public async insert(item: T): Promise<T> {
