@@ -1,6 +1,6 @@
 import { ipcMain, dialog } from 'electron';
 import * as Datastore from 'nedb';
-import * as fileType from 'file-type';
+import { fromBuffer } from 'file-type';
 import * as icojs from 'icojs';
 import parse = require('node-bookmarks-parser');
 
@@ -399,15 +399,15 @@ export class StorageService {
 
           let data = Buffer.from(res.data, 'binary');
 
-          const type = fileType(data);
+          const type = await fromBuffer(data);
 
           if (type && type.ext === 'ico') {
             data = Buffer.from(new Uint8Array(await convertIcoToPng(data)));
           }
 
-          const str = `data:${fileType(data).ext};base64,${data.toString(
-            'base64',
-          )}`;
+          const str = `data:${
+            (await fromBuffer(data)).ext
+          };base64,${data.toString('base64')}`;
 
           this.insert({
             scope: 'favicons',

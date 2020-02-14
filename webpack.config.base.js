@@ -85,6 +85,10 @@ const config = {
   plugins: [
     // new BundleAnalyzerPlugin()
   ],
+
+  externals: {
+    keytar: `require('keytar')`,
+  },
 };
 
 function getConfig(...cfg) {
