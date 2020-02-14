@@ -22,7 +22,7 @@ export class ExtensionsStore {
     this.load();
 
     ipcRenderer.on('load-browserAction', (e, extension) => {
-      this.loadExtension(extension);
+      this.loadExtension(extension.id);
     });
   }
 
