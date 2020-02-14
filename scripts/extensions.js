@@ -1,5 +1,4 @@
-const { existsSync, createWriteStream, unlinkSync } = require('fs');
-const mkdirp = require('mkdirp');
+const { existsSync, createWriteStream, unlinkSync, mkdir } = require('fs');
 const axios = require('axios');
 const { promisify } = require('util');
 const extractZip = require('extract-zip');
@@ -12,7 +11,7 @@ const darkreaderPath = resolve(
   '../build/extensions/wexond-darkreader',
 );
 
-mkdirp(darkreaderPath, async err => {
+mkdir(darkreaderPath, { recursive: true }, async err => {
   if (err) return console.error(err);
 
   if (!existsSync(resolve(darkreaderPath, 'manifest.json'))) {

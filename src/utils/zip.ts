@@ -1,10 +1,6 @@
 import { loadAsync } from 'jszip';
 import { join, dirname } from 'path';
-import * as mkdirp from 'mkdirp';
-import { promisify } from 'util';
 import { promises } from 'fs';
-
-const mkdir = promisify(mkdirp);
 
 export const extractZip = async (zipBuf: Buffer, destination: string) => {
   const zip = await loadAsync(zipBuf);
@@ -17,7 +13,8 @@ export const extractZip = async (zipBuf: Buffer, destination: string) => {
       const directory = (isFile && dirname(fullPath)) || fullPath;
       const content = zip.files[filename].async('nodebuffer');
 
-      return mkdir(directory)
+      return promises
+        .mkdir(directory, { recursive: true })
         .then(async () => {
           return isFile ? await content : false;
         })
