@@ -123,9 +123,9 @@ export class ViewManager {
     this.window.dialogs.tabGroupDialog.hideVisually();
 
     if (this.incognito) {
-      windowsManager.sessionsManager.extensionsIncognito.activeTab = id;
+      windowsManager.sessionsManager.viewIncognito.activeTab = id;
     } else {
-      windowsManager.sessionsManager.extensions.activeTab = id;
+      windowsManager.sessionsManager.view.activeTab = id;
     }
 
     // Also fixes switching tabs with Ctrl + Tab

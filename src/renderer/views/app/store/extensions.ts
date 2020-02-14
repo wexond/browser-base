@@ -1,14 +1,15 @@
 /* eslint @typescript-eslint/camelcase: 0 */
 
 import { observable } from 'mobx';
-import { join } from 'path';
+import { join, resolve } from 'path';
 
 import { IBrowserAction } from '../models';
-import { extensionsRenderer } from 'electron-extensions/renderer';
 import { promises } from 'fs';
-import { IpcExtension } from 'electron-extensions/models/ipc-extension';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import store from '.';
+import { getPath } from '~/utils';
+import { EXTENSIONS_PROTOCOL } from '~/constants';
+import { format } from 'url';
 
 export class ExtensionsStore {
   @observable
@@ -42,10 +43,15 @@ export class ExtensionsStore {
     });
   }
 
-  public async loadExtension(extension: IpcExtension) {
-    const { manifest, path, id, popupPage } = extension;
+  public async loadExtension(extensionId: string) {
+    const path = getPath('extensions', extensionId);
+    const manifestPath = resolve(path, 'manifest.json');
+    const manifest: chrome.runtime.Manifest = JSON.parse(
+      await promises.readFile(manifestPath, 'utf8'),
+    );
 
-    if (this.defaultBrowserActions.find(x => x.extensionId === id)) return;
+    if (this.defaultBrowserActions.find(x => x.extensionId === extensionId))
+      return;
 
     if (manifest.browser_action) {
       const { default_icon, default_title } = manifest.browser_action;
@@ -60,14 +66,22 @@ export class ExtensionsStore {
 
       const data = await promises.readFile(join(path, icon1 as string));
 
-      if (this.defaultBrowserActions.find(x => x.extensionId === id)) return;
+      if (this.defaultBrowserActions.find(x => x.extensionId === extensionId))
+        return;
 
       const icon = window.URL.createObjectURL(new Blob([data]));
       const browserAction = new IBrowserAction({
-        extensionId: id,
+        extensionId: extensionId,
         icon,
         title: default_title,
-        popup: popupPage,
+        popup: manifest?.browser_action?.default_popup
+          ? format({
+              protocol: EXTENSIONS_PROTOCOL,
+              slashes: true,
+              hostname: extensionId,
+              pathname: manifest.browser_action.default_popup,
+            })
+          : null,
       });
 
       this.defaultBrowserActions.push(browserAction);
@@ -81,10 +95,10 @@ export class ExtensionsStore {
   }
 
   public async load() {
-    const extensions = extensionsRenderer.getExtensions();
+    const extensions = remote.session
+      .fromPartition('persist:view')
+      .getAllExtensions();
 
-    for (const key in extensions) {
-      this.loadExtension(extensions[key]);
-    }
+    extensions.forEach(x => this.loadExtension(x.id));
   }
 }

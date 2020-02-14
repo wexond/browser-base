@@ -99,11 +99,13 @@ export class Settings extends EventEmitter {
     }
 
     const contexts = [
-      this.windowsManager.sessionsManager.extensions,
-      this.windowsManager.sessionsManager.extensionsIncognito,
+      this.windowsManager.sessionsManager.view,
+      this.windowsManager.sessionsManager.viewIncognito,
     ];
 
     contexts.forEach(e => {
+      /*
+      // TODO:
       if (e.extensions['wexond-darkreader']) {
         e.extensions['wexond-darkreader'].backgroundPage.webContents.send(
           'api-runtime-sendMessage',
@@ -115,11 +117,12 @@ export class Settings extends EventEmitter {
           },
         );
       }
+      */
 
       if (this.object.shield) {
-        runAdblockService(e.session);
+        runAdblockService(e);
       } else {
-        stopAdblockService(e.session);
+        stopAdblockService(e);
       }
     });
   };

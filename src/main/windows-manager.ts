@@ -103,12 +103,9 @@ export class WindowsManager {
     this.list.push(window);
 
     if (incognito) {
-      this.sessionsManager.extensionsIncognito.addWindow(window);
       if (!this.sessionsManager.incognitoExtensionsLoaded) {
         this.sessionsManager.loadExtensions('incognito');
       }
-    } else {
-      this.sessionsManager.extensions.addWindow(window);
     }
   }
 

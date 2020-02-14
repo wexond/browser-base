@@ -1,5 +1,4 @@
 import { session, ipcMain, app } from 'electron';
-import { ExtensibleSession } from 'electron-extensions/main';
 import { getPath, makeId } from '~/utils';
 import { promises, existsSync } from 'fs';
 import { resolve, basename, parse, extname } from 'path';
@@ -11,11 +10,35 @@ import { IDownloadItem } from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
-import { WEBUI_BASE_URL } from '~/constants/files';
+import {
+  runExtensionsMessagingService,
+} from './services/extensions-messaging';
 
-const extensibleSessionOptions = {
-  preloadPath: resolve(__dirname, 'extensions-preload.js'),
-  blacklist: [`${WEBUI_BASE_URL}*`, 'wexond-error://*', 'chrome-extension://*'],
+const loadI18n = async (path: string) => {
+  const manifestPath = resolve(path, 'manifest.json');
+  const manifest: chrome.runtime.Manifest = JSON.parse(
+    await promises.readFile(manifestPath, 'utf8'),
+  );
+
+  if (typeof manifest.default_locale === 'string') {
+    const defaultLocalePath = resolve(
+      path,
+      '_locales',
+      manifest.default_locale,
+    );
+
+    if (!existsSync(defaultLocalePath)) return;
+
+    const messagesPath = resolve(defaultLocalePath, 'messages.json');
+    const stats = await promises.stat(messagesPath);
+
+    if (!existsSync(messagesPath) || stats.isDirectory()) return;
+
+    const data = await promises.readFile(messagesPath, 'utf8');
+    const locale = JSON.parse(data);
+
+    return locale;
+  }
 };
 
 // TODO: move windows list to the corresponding sessions
@@ -23,35 +46,14 @@ export class SessionsManager {
   public view = session.fromPartition('persist:view');
   public viewIncognito = session.fromPartition('view_incognito');
 
-  public extensions = new ExtensibleSession({
-    ...extensibleSessionOptions,
-    partition: 'persist:view',
-  });
-  public extensionsIncognito = new ExtensibleSession({
-    ...extensibleSessionOptions,
-    partition: 'view_incognito',
-  });
-
   public incognitoExtensionsLoaded = false;
 
   private windowsManager: WindowsManager;
 
+  public locales: Map<string, any> = new Map();
+
   public constructor(windowsManager: WindowsManager) {
     this.windowsManager = windowsManager;
-
-    this.extensions.on('create-tab', (details, callback) => {
-      const view = windowsManager.list
-        .find(x => x.id === details.windowId)
-        .viewManager.create(details, false, true);
-
-      callback(view.webContents.id);
-    });
-
-    this.extensions.on('set-badge-text', (extensionId, details) => {
-      windowsManager.list.forEach(w => {
-        w.webContents.send('set-badge-text', extensionId, details);
-      });
-    });
 
     this.loadExtensions('normal');
 
@@ -60,15 +62,41 @@ export class SessionsManager {
       `${app.getAppPath()}/build/extensions-preload.bundle.js`,
     ]);
 
+    this.view.cookiesChangedTargets = new Map();
+    this.viewIncognito.cookiesChangedTargets = new Map();
+
     registerProtocol(this.view);
     registerProtocol(this.viewIncognito);
 
+    runExtensionsMessagingService();
+
+    this.view.cookies.on(
+      'changed',
+      (e: any, cookie: Electron.Cookie, cause: string) => {
+        this.view.cookiesChangedTargets.forEach(value => {
+          value.send(`api-emit-event-cookies-onChanged`, cookie, cause);
+        });
+      },
+    );
+
+    this.viewIncognito.cookies.on(
+      'changed',
+      (e: any, cookie: Electron.Cookie, cause: string) => {
+        this.viewIncognito.cookiesChangedTargets.forEach(value => {
+          value.send(`api-emit-event-cookies-onChanged`, cookie, cause);
+        });
+      },
+    );
+
     this.clearCache('incognito');
 
+    /*
+    // TODO:
     ipcMain.handle(`inspect-extension`, (e, incognito, id) => {
       const context = incognito ? this.extensionsIncognito : this.extensions;
       context.extensions[id].backgroundPage.webContents.openDevTools();
     });
+    */
 
     this.view.setPermissionRequestHandler(
       async (webContents, permission, callback, details) => {
@@ -206,7 +234,7 @@ export class SessionsManager {
             await extractZip(crxInfo.zip, path);
 
             const extension = {
-              ...(await this.extensions.loadExtension(path)),
+              ...(await this.view.loadExtension(path)),
             };
 
             if (crxInfo.publicKey) {
@@ -221,8 +249,6 @@ export class SessionsManager {
                 JSON.stringify(manifest, null, 2),
               );
             }
-
-            delete extension.backgroundPage;
 
             window.webContents.send('load-browserAction', extension);
           }
@@ -323,16 +349,14 @@ export class SessionsManager {
 
     for (const dir of dirs) {
       try {
-        const extension = await context.loadExtension(
-          resolve(extensionsPath, dir),
-        );
+        const path = resolve(extensionsPath, dir);
+        const extension = await context.loadExtension(path);
 
-        console.log(extension);
+        this.locales.set(extension.id, await loadI18n(path));
 
-        // extension.backgroundPage.webContents.openDevTools();
-        /*for (const window of context.windows) {
+        for (const window of this.windowsManager.list) {
           window.webContents.send('load-browserAction', extension);
-        }*/
+        }
       } catch (e) {
         console.error(e);
       }
@@ -346,4 +370,21 @@ export class SessionsManager {
       this.incognitoExtensionsLoaded = true;
     }
   }
+
+  public onCreateTab = async (details: chrome.tabs.CreateProperties) => {
+    const view = this.windowsManager.list
+      .find(x => x.id === details.windowId)
+      .viewManager.create(details, false, true);
+
+    return view.webContents.id;
+  };
+
+  public onSetBadgeText = (
+    extensionId: string,
+    details: chrome.browserAction.BadgeTextDetails,
+  ) => {
+    this.windowsManager.list.forEach(w => {
+      w.webContents.send('set-badge-text', extensionId, details);
+    });
+  };
 }

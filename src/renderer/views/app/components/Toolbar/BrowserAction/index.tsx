@@ -2,7 +2,6 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { ToolbarButton } from '../ToolbarButton';
 import { IBrowserAction } from '../../../models';
-import { extensionsRenderer } from 'electron-extensions/renderer';
 import { ipcRenderer, remote } from 'electron';
 import store from '../../../store';
 import { format } from 'url';
@@ -16,7 +15,8 @@ const onClick = (data: IBrowserAction) => (
   e: React.MouseEvent<HTMLDivElement>,
 ) => {
   if (data.tabId) {
-    extensionsRenderer.browserAction.onClicked(data.extensionId, data.tabId);
+    // TODO:
+    //extensionsRenderer.browserAction.onClicked(data.extensionId, data.tabId);
   }
 
   const { left, width } = e.currentTarget.getBoundingClientRect();
