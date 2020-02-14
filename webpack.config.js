@@ -20,7 +20,8 @@ const mainConfig = getConfig({
     new CopyPlugin(
       [
         {
-          from: 'node_modules/@cliqz/adblocker-electron/dist/preload.cjs.js',
+          from:
+            'node_modules/@cliqz/adblocker-electron-preload/dist/preload.cjs.js',
           to: 'preload.js',
           transform: (fileContent, path) => {
             return terser.minify(fileContent.toString()).code.toString();
