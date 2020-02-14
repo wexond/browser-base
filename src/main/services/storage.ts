@@ -388,45 +388,39 @@ export class StorageService {
   };
 
   public addFavicon = async (url: string): Promise<string> => {
-    return new Promise(async resolve => {
-      if (!this.favicons.get(url)) {
-        try {
-          const res = await requestURL(url);
+    if (!this.favicons.get(url)) {
+      const res = await requestURL(url);
 
-          if (res.statusCode === 404) {
-            throw new Error('404 favicon not found');
-          }
-
-          let data = Buffer.from(res.data, 'binary');
-
-          const type = await fromBuffer(data);
-
-          if (type && type.ext === 'ico') {
-            data = Buffer.from(new Uint8Array(await convertIcoToPng(data)));
-          }
-
-          const str = `data:${
-            (await fromBuffer(data)).ext
-          };base64,${data.toString('base64')}`;
-
-          this.insert({
-            scope: 'favicons',
-            item: {
-              url,
-              data: str,
-            },
-          });
-
-          this.favicons.set(url, str);
-
-          resolve(str);
-        } catch (e) {
-          throw e;
-        }
-      } else {
-        resolve(this.favicons.get(url));
+      if (res.statusCode === 404) {
+        throw new Error('404 favicon not found');
       }
-    });
+
+      let data = Buffer.from(res.data, 'binary');
+
+      const type = await fromBuffer(data);
+
+      if (type && type.ext === 'ico') {
+        data = Buffer.from(new Uint8Array(await convertIcoToPng(data)));
+      }
+
+      const str = `data:${(await fromBuffer(data)).ext};base64,${data.toString(
+        'base64',
+      )}`;
+
+      this.insert({
+        scope: 'favicons',
+        item: {
+          url,
+          data: str,
+        },
+      });
+
+      this.favicons.set(url, str);
+
+      return str;
+    } else {
+      return this.favicons.get(url);
+    }
   };
 
   public importBookmarks = async () => {
