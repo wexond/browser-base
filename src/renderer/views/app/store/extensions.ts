@@ -21,8 +21,8 @@ export class ExtensionsStore {
   public constructor() {
     this.load();
 
-    ipcRenderer.on('load-browserAction', (e, extension) => {
-      this.loadExtension(extension.id);
+    ipcRenderer.on('load-browserAction', (e, extensionId, path) => {
+      this.loadExtension(extensionId, path);
     });
   }
 
@@ -43,8 +43,7 @@ export class ExtensionsStore {
     });
   }
 
-  public async loadExtension(extensionId: string) {
-    const path = getPath('extensions', extensionId);
+  public async loadExtension(extensionId: string, path: string) {
     const manifestPath = resolve(path, 'manifest.json');
     const manifest: chrome.runtime.Manifest = JSON.parse(
       await promises.readFile(manifestPath, 'utf8'),
@@ -99,6 +98,12 @@ export class ExtensionsStore {
       .fromPartition('persist:view')
       .getAllExtensions();
 
-    extensions.forEach(x => this.loadExtension(x.id));
+    console.log(extensions);
+
+    const extensionsPaths = ipcRenderer.sendSync('get-extensions-paths');
+
+    extensions.forEach(x =>
+      this.loadExtension(x.id, extensionsPaths.get(x.id)),
+    );
   }
 }

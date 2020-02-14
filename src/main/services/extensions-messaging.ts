@@ -44,6 +44,14 @@ export const runExtensionsMessagingService = () => {
     e.returnValue = windowsManager.sessionsManager.locales.get(id);
   });
 
+  ipcMain.on('get-extensions-paths', e => {
+    e.returnValue = windowsManager.sessionsManager.extensionsPaths;
+  });
+
+  ipcMain.on('get-extension-path', (e, id) => {
+    e.returnValue = windowsManager.sessionsManager.extensionsPaths.get(id);
+  });
+
   ipcMain.handle(`api-tabs-query`, e => {
     const tabs = getAllWebContentsInSession(e.sender.session).map(x => ({
       ...webContentsToTab(x),
@@ -117,6 +125,9 @@ export const runExtensionsMessagingService = () => {
 
   ipcMain.on(`api-addListener`, (e, data) => {
     if (data.scope === 'cookies' && data.name === 'onChanged') {
+      console.log('');
+      console.log(e.sender.session);
+      console.log('');
       e.sender.session.cookiesChangedTargets.set(data.id, e.sender);
     }
   });

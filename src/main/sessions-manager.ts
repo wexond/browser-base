@@ -10,9 +10,7 @@ import { IDownloadItem } from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
-import {
-  runExtensionsMessagingService,
-} from './services/extensions-messaging';
+import { runExtensionsMessagingService } from './services/extensions-messaging';
 
 const loadI18n = async (path: string) => {
   const manifestPath = resolve(path, 'manifest.json');
@@ -51,6 +49,8 @@ export class SessionsManager {
   private windowsManager: WindowsManager;
 
   public locales: Map<string, any> = new Map();
+
+  public extensionsPaths: Map<string, string> = new Map();
 
   public constructor(windowsManager: WindowsManager) {
     this.windowsManager = windowsManager;
@@ -233,9 +233,13 @@ export class SessionsManager {
 
             await extractZip(crxInfo.zip, path);
 
-            const extension = {
-              ...(await this.view.loadExtension(path)),
-            };
+            const extension = await this.view.loadExtension(path);
+
+            console.log('');
+            console.log(extension.id, crxInfo.id);
+            console.log('');
+
+            this.extensionsPaths.set(extension.id, path);
 
             if (crxInfo.publicKey) {
               const manifest = JSON.parse(
@@ -250,7 +254,7 @@ export class SessionsManager {
               );
             }
 
-            window.webContents.send('load-browserAction', extension);
+            window.webContents.send('load-browserAction', extension.id, path);
           }
         } else {
           console.log(`Download failed: ${state}`);
@@ -352,10 +356,16 @@ export class SessionsManager {
         const path = resolve(extensionsPath, dir);
         const extension = await context.loadExtension(path);
 
+        console.log('');
+        console.log(extension.id, dir);
+        console.log('');
+
+        this.extensionsPaths.set(extension.id, path);
+
         this.locales.set(extension.id, await loadI18n(path));
 
         for (const window of this.windowsManager.list) {
-          window.webContents.send('load-browserAction', extension);
+          window.webContents.send('load-browserAction', extension.id, path);
         }
       } catch (e) {
         console.error(e);
