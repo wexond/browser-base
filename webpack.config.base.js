@@ -91,6 +91,11 @@ const config = {
   },
 };
 
+if (dev) {
+  config.plugins.push(new ForkTsCheckerWebpackPlugin());
+  config.plugins.push(new HardSourceWebpackPlugin());
+}
+
 function getConfig(...cfg) {
   return merge(config, ...cfg);
 }
@@ -134,11 +139,6 @@ const getBaseConfig = name => {
       },
     },
   };
-
-  if (dev) {
-    config.plugins.push(new ForkTsCheckerWebpackPlugin());
-    config.plugins.push(new HardSourceWebpackPlugin());
-  }
 
   return config;
 };

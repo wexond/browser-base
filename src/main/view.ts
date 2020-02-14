@@ -119,6 +119,8 @@ export class View extends BrowserView {
 
       this.favicon = '';
 
+      console.log(...args);
+
       this.window.webContents.send(
         `load-commit-${this.webContents.id}`,
         ...args,
