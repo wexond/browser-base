@@ -1,6 +1,5 @@
 import { ipcRenderer } from 'electron';
-
-import { makeId } from '~/utils';
+import { toJS } from 'mobx';
 
 interface IAction<T> {
   item?: Partial<T>;
@@ -22,7 +21,7 @@ export class Database<T> {
   ): Promise<any> {
     const res = await ipcRenderer.invoke(`storage-${operation}`, {
       scope: this.scope,
-      ...data,
+      ...toJS(data, { recurseEverything: true }),
     });
 
     return res;
