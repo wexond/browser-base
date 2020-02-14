@@ -3,7 +3,8 @@ const { resolve, join } = require('path');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default;
+const createStyledComponentsTransformer = require('typescript-plugin-styled-components')
+  .default;
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 /* eslint-enable */
@@ -58,13 +59,13 @@ const config = {
 
         include: INCLUDE,
       },
-      {
+      /*{
         test: /\.node$/,
         loader: 'awesome-node-loader',
         options: {
           name: '[contenthash].[ext]',
         },
-      },
+      },*/
     ],
   },
 
