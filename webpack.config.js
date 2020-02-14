@@ -29,10 +29,6 @@ const mainConfig = getConfig({
             return terser.minify(fileContent.toString()).code.toString();
           },
         },
-        {
-          from: 'node_modules/electron-extensions/preload.js',
-          to: 'extensions-preload.js',
-        },
       ],
       { copyUnmodified: true },
     ),

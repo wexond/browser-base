@@ -125,9 +125,6 @@ export const runExtensionsMessagingService = () => {
 
   ipcMain.on(`api-addListener`, (e, data) => {
     if (data.scope === 'cookies' && data.name === 'onChanged') {
-      console.log('');
-      console.log(e.sender.session);
-      console.log('');
       e.sender.session.cookiesChangedTargets.set(data.id, e.sender);
     }
   });
