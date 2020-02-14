@@ -46,6 +46,7 @@ export const NewsItem = observer(
 
     return (
       <StyledNewsItem
+        href={item.url}
         fullSize={fullSize}
         style={{
           gridArea: `${row} / ${column + 1} / span ${height} / span ${width}`,
