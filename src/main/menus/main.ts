@@ -75,9 +75,9 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         {
           accelerator: 'CmdOrCtrl+F',
           label: 'Find in page',
-          visible: false,
+          visible: true,
           click() {
-            windowsManager.currentWindow.webContents.send('find');
+            windowsManager.currentWindow.dialogs.findDialog.show();
           },
         },
         {
