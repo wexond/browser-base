@@ -16,19 +16,20 @@ import store from '../../store';
 import { ipcRenderer, remote } from 'electron';
 import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 import { Switch } from '~/renderer/components/Switch';
+import { windowsManager } from '~/main';
 
 const changeContent = () => () => {
   // store.overlay.currentContent = content;
 };
 
-const onFindClick = () => {
-  /*store.overlay.visible = false;
+const onFindClick = () => { 
+  ipcRenderer.send(`find`, null);
+  store.hide();
+};
 
-  ipcRenderer.send(
-    `find-show-${store.windowId}`,
-    store.tabs.selectedTab.id,
-    store.tabs.selectedTab.findInfo,
-  );*/
+const onPrintClick = () =>{
+  ipcRenderer.send(`print`, null);
+  store.hide();
 };
 
 const onDarkClick = () => {
@@ -125,12 +126,12 @@ export const QuickMenu = observer(() => {
             <MenuItemTitle>Extensions</MenuItemTitle>
           </MenuItem>
           <Line />
-          <MenuItem>
+          <MenuItem onClick={onFindClick}>
             <Icon icon={icons.find} />
             <MenuItemTitle>Find in page</MenuItemTitle>
             <Shortcut>Ctrl+F</Shortcut>
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={onPrintClick}>
             <Icon icon={icons.print} />
             <MenuItemTitle>Print</MenuItemTitle>
             <Shortcut>Ctrl+P</Shortcut>
