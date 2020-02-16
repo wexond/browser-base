@@ -34,7 +34,15 @@ export class ViewManager {
 
     ipcMain.on(`add-tab-${id}`, (e, details) => {
       this.create(details);
-    });
+    });	
+	
+	ipcMain.on(`print`, (e, details) => {	  
+      this.selected.webContents.print();
+	});
+	
+	ipcMain.on(`find`, (e, details) => {	  
+      this.window.dialogs.findDialog.show();
+	});
 
     ipcMain.on(`view-select-${id}`, (e, id: number) => {
       const view = this.views.get(id);
