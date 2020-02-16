@@ -25,6 +25,4 @@ export interface ISettings {
   darkContents: boolean;
   downloadsDialog: boolean;
   downloadsPath: string;
-  doNotTrack: boolean;  
-  asksBeforeRedirect: boolean;
 }
