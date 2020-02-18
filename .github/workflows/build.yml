@@ -19,6 +19,10 @@ jobs:
         with:
           node-version: 12
 
+      - name: Install required build toolchain
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install gcc-multilib g++-multilib
+
       - name: Build the app
         uses: samuelmeuli/action-electron-builder@v1
         with:
