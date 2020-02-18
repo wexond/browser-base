@@ -21,7 +21,7 @@ jobs:
 
       - name: Install required build toolchain
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install gcc-multilib g++-multilib
+        run: sudo apt-get install gcc-7-multilib g++-7-multilib
 
       - name: Build the app
         uses: samuelmeuli/action-electron-builder@v1
