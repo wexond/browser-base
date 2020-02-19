@@ -325,7 +325,10 @@ export class SessionsManager {
 
         // extension.backgroundPage.webContents.openDevTools();
         for (const window of context.windows) {
-          window.webContents.send('load-browserAction', extension);
+          window.webContents.send('load-browserAction', {
+            ...extension,
+            backgroundPage: undefined,
+          });
         }
       } catch (e) {
         console.error(e);
