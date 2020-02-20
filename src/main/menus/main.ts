@@ -270,7 +270,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
     { role: 'editMenu' },
   ];
 
-  for (let i = 1; i <= 9; i++) {
+  for (let i = 1; i <= 8; i++) {
     template[0].submenu.push({
       accelerator: `CmdOrCtrl+${i}`,
       label: 'Select tab index',
@@ -283,6 +283,15 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
       },
     });
   }
+
+  template[0].submenu.push({
+    accelerator: `CmdOrCtrl+9`,
+    label: 'Select last tab',
+    visible: false,
+    click() {
+      windowsManager.currentWindow.webContents.send('select-last-tab');
+    },
+  });
 
   return Menu.buildFromTemplate(template);
 };

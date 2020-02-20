@@ -99,7 +99,11 @@ export class TabsStore {
 
     ipcRenderer.on('select-tab-index', (e, i) => {
       const tab = this.list[i];
+      if (tab) tab.select();
+    });
 
+    ipcRenderer.on('select-last-tab', () => {
+      const tab = this.list[this.list.length - 1];
       if (tab) tab.select();
     });
 
