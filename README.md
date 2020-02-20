@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://wexond.net"><img src="static/app-icons/icon.png" width="256"></a>
+  <a href="https://wexond.net"><img src="static/icons/icon.png" width="256"></a>
 </p>
 
 <div align="center">
