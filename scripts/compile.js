@@ -1,5 +1,6 @@
 const { spawn } = require('child_process');
 const { platform } = require('os');
+const package = require('../package.json');
 
 const os = platform();
 
