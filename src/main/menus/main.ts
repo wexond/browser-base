@@ -69,6 +69,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           role: 'quit',
           accelerator: 'CmdOrCtrl+Shift+Q',
         },
+
         ...createShortcutMenuItem(['CmdOrCtrl+F4'], 'Close tab', () => {
           windowsManager.currentWindow.webContents.send(
             'remove-tab',
