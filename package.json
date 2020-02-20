@@ -58,7 +58,7 @@
     "crypto-js": "^4.0.0",
     "electron": "^9.0.0-beta.2",
     "electron-builder": "21.2.0",
-    "electron-extensions": "^6.0.3",
+    "electron-extensions": "6.0.3",
     "electron-updater": "4.2.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",

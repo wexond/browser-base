@@ -501,10 +501,10 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/react@16.9.20":
-  version "16.9.20"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.20.tgz#e83285766340fb1a7fafe7e5c4708c53832e3641"
-  integrity sha512-jRrWBr25zzEVNa4QbESKLPluvrZ3W6Odfwrfe2F5vzbrDuNvlpnHa/xbZcXg8RH5D4CE181J5VxrRrLvzRH+5A==
+"@types/react@16.9.21":
+  version "16.9.21"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.21.tgz#99e274e2ecfab6bb93920e918341daa3198b348d"
+  integrity sha512-xpmenCMeBwJRct8vmIfczlgdOXWIWASoOM857kxKfHlVQvDltRh7IFRVfGws79iO2jkNPXOeWREyKoClzhBaQA==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -2339,10 +2339,10 @@ electron-builder@21.2.0:
     update-notifier "^3.0.1"
     yargs "^13.3.0"
 
-electron-extensions@^6.0.2:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/electron-extensions/-/electron-extensions-6.0.2.tgz#488e6e4c3a2c54155718bb9243cf8b09cb1eb0bf"
-  integrity sha512-RA31hhJwdI92TARarY59mtY+atPVVEwpPh+h0XWq/Xw1XPgCt8/aUwnEwDBSXQg+G7WWEjqub0G4igTRXqE2BQ==
+electron-extensions@6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/electron-extensions/-/electron-extensions-6.0.3.tgz#ad2d2301dd82f2d8f3a4487248f10f81367c4aec"
+  integrity sha512-WPlf2wPcjR/QgJF5E/ZwtHDtlqVM8+wEM1YIJlHTo2pC7PxnKV7Zxj4dsBxpUZDphQi2tpjs/Q5F7Y4CdhIY7w==
   dependencies:
     file-type "^14.1.2"
 
