@@ -10,6 +10,9 @@
 | Open a new incognito window | Ctrl + Shift + N             |
 | Open a new tab              | Ctrl + T                     |
 | Select next tab             | Ctrl + Tab                   |
+| Select previous tab         | Ctrl + Shift + Tab           |
+| Select specific tab         | Ctrl + 1 to Ctrl + 8         |
+| Select the rightmost tab    | Ctrl + 9                     |
 | Go back                     | Alt + Left Arrow             |
 | Go forward                  | Alt + Right Arrow            |
 | Close selected tab          | Ctrl + W or Ctrl + F4        |
@@ -18,10 +21,13 @@
 
 ### Shortcuts for Wexond functions
 
-| Action                   | Shortcut                       |
-| ------------------------ | ------------------------------ |
-| Open Overlay             | Alt + F or Alt + E or Ctrl + L |
-| Open find in page dialog | Ctrl + F                       |
+| Action                                  | Shortcut                  |
+| --------------------------------------- | ------------------------- |
+| Open the menu                           | Alt + F or Alt + E        |
+| Focus the address bar                   | Ctrl + L or Alt + D or F6 |
+| Open find in page dialog                | Ctrl + F                  |
+| Open the Bookmarks Manager in a new tab | Ctrl + Shift + O          |
+| Open the History page in a new tab      | Ctrl + H                  |
 
 ### Shortcuts regarding websites
 
