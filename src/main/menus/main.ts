@@ -108,8 +108,26 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           },
         },
         {
-          accelerator: 'CmdOrCtrl+Shift+Tab',
+          accelerator: 'CmdOrCtrl+PageDown',
           label: 'Select next tab',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.webContents.send('select-next-tab');
+          },
+        },
+        {
+          accelerator: 'CmdOrCtrl+Shift+Tab',
+          label: 'Select previous tab',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.webContents.send(
+              'select-previous-tab',
+            );
+          },
+        },
+        {
+          accelerator: 'CmdOrCtrl+PageUp',
+          label: 'Select previous tab',
           visible: false,
           click() {
             windowsManager.currentWindow.webContents.send(
