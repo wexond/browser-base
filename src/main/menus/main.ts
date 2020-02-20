@@ -2,9 +2,10 @@ import { Menu, webContents } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { WindowsManager } from '../windows-manager';
 import { viewSource, saveAs, printPage } from './common-actions';
+import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 
 export const getMainMenu = (windowsManager: WindowsManager) => {
-  return Menu.buildFromTemplate([
+  const template: any = [
     {
       label: 'File',
       submenu: [
@@ -55,6 +56,28 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         {
           role: 'quit',
           accelerator: 'CmdOrCtrl+Shift+Q',
+        },
+        {
+          accelerator: 'CmdOrCtrl+H',
+          label: 'History',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.viewManager.create({
+              url: `${WEBUI_BASE_URL}history${WEBUI_URL_SUFFIX}`,
+              active: true,
+            });
+          },
+        },
+        {
+          accelerator: 'CmdOrCtrl+Shift+O',
+          label: 'Bookmarks',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.viewManager.create({
+              url: `${WEBUI_BASE_URL}bookmarks${WEBUI_URL_SUFFIX}`,
+              active: true,
+            });
+          },
         },
         {
           label: 'Reload',
@@ -108,6 +131,34 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           },
         },
         {
+          accelerator: 'CmdOrCtrl+PageDown',
+          label: 'Select next tab',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.webContents.send('select-next-tab');
+          },
+        },
+        {
+          accelerator: 'CmdOrCtrl+Shift+Tab',
+          label: 'Select previous tab',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.webContents.send(
+              'select-previous-tab',
+            );
+          },
+        },
+        {
+          accelerator: 'CmdOrCtrl+PageUp',
+          label: 'Select previous tab',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.webContents.send(
+              'select-previous-tab',
+            );
+          },
+        },
+        {
           accelerator: 'Ctrl+Space',
           label: 'Toggle search',
           visible: false,
@@ -117,6 +168,22 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         },
         {
           accelerator: 'CmdOrCtrl+L',
+          label: 'Toggle search',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.dialogs.searchDialog.show();
+          },
+        },
+        {
+          accelerator: 'Alt+D',
+          label: 'Toggle search',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.dialogs.searchDialog.show();
+          },
+        },
+        {
+          accelerator: 'F6',
           label: 'Toggle search',
           visible: false,
           click() {
@@ -217,5 +284,30 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
       ],
     },
     { role: 'editMenu' },
-  ]);
+  ];
+
+  for (let i = 1; i <= 8; i++) {
+    template[0].submenu.push({
+      accelerator: `CmdOrCtrl+${i}`,
+      label: 'Select tab index',
+      visible: false,
+      click() {
+        windowsManager.currentWindow.webContents.send(
+          'select-tab-index',
+          i - 1,
+        );
+      },
+    });
+  }
+
+  template[0].submenu.push({
+    accelerator: `CmdOrCtrl+9`,
+    label: 'Select last tab',
+    visible: false,
+    click() {
+      windowsManager.currentWindow.webContents.send('select-last-tab');
+    },
+  });
+
+  return Menu.buildFromTemplate(template);
 };
