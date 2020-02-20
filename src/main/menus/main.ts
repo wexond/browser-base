@@ -2,6 +2,7 @@ import { Menu, webContents } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { WindowsManager } from '../windows-manager';
 import { viewSource, saveAs, printPage } from './common-actions';
+import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 
 export const getMainMenu = (windowsManager: WindowsManager) => {
   const template: any = [
@@ -55,6 +56,28 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         {
           role: 'quit',
           accelerator: 'CmdOrCtrl+Shift+Q',
+        },
+        {
+          accelerator: 'CmdOrCtrl+H',
+          label: 'History',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.viewManager.create({
+              url: `${WEBUI_BASE_URL}history${WEBUI_URL_SUFFIX}`,
+              active: true,
+            });
+          },
+        },
+        {
+          accelerator: 'CmdOrCtrl+Shift+O',
+          label: 'Bookmarks',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.viewManager.create({
+              url: `${WEBUI_BASE_URL}bookmarks${WEBUI_URL_SUFFIX}`,
+              active: true,
+            });
+          },
         },
         {
           label: 'Reload',
