@@ -5,6 +5,8 @@ const electronBuilder = require('../electron-builder.json');
 const { promises } = require('fs');
 const { resolve } = require('path');
 
+const isNightly = package.version.indexOf('nightly') !== -1;
+
 const os = platform();
 
 const npm = os === 'win32' ? 'npm.cmd' : 'npm';
@@ -27,7 +29,7 @@ const runScript = script =>
   } catch (e) {}
 
   try {
-    if (package.version.indexOf('nightly') !== -1) {
+    if (isNightly) {
       await promises.copyFile(
         resolve(__dirname, '../package.json'),
         resolve(__dirname, '../temp-package.json'),
@@ -72,15 +74,21 @@ const runScript = script =>
     console.error(e);
   }
 
-  await promises.unlink(resolve(__dirname, '../package.json'));
-  await promises.unlink(resolve(__dirname, '../electron-builder.json'));
+  if (isNightly) {
+    try {
+      await promises.unlink(resolve(__dirname, '../package.json'));
+      await promises.unlink(resolve(__dirname, '../electron-builder.json'));
 
-  await promises.rename(
-    resolve(__dirname, '../temp-package.json'),
-    resolve(__dirname, '../package.json'),
-  );
-  await promises.rename(
-    resolve(__dirname, '../temp-electron-builder.json'),
-    resolve(__dirname, '../electron-builder.json'),
-  );
+      await promises.rename(
+        resolve(__dirname, '../temp-package.json'),
+        resolve(__dirname, '../package.json'),
+      );
+      await promises.rename(
+        resolve(__dirname, '../temp-electron-builder.json'),
+        resolve(__dirname, '../electron-builder.json'),
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  }
 })();
