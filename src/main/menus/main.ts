@@ -69,6 +69,12 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           role: 'quit',
           accelerator: 'CmdOrCtrl+Shift+Q',
         },
+        ...createShortcutMenuItem(['CmdOrCtrl+F4'], 'Close tab', () => {
+          windowsManager.currentWindow.webContents.send(
+            'remove-tab',
+            windowsManager.currentWindow.viewManager.selectedId,
+          );
+        }),
         ...createShortcutMenuItem(['CmdOrCtrl+H'], 'History', () => {
           windowsManager.currentWindow.viewManager.create({
             url: `${WEBUI_BASE_URL}history${WEBUI_URL_SUFFIX}`,
