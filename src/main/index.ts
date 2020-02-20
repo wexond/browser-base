@@ -3,7 +3,7 @@ import { platform } from 'os';
 import { WindowsManager } from './windows-manager';
 
 app.allowRendererProcessReuse = true;
-app.name = 'Wexond';
+app.name = app.name === 'wexond-nightly' ? 'Wexond Nightly' : 'Wexond';
 
 (process.env as any)['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
 app.commandLine.appendSwitch('--enable-transparent-visuals');

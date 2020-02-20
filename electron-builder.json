@@ -7,7 +7,7 @@
   "asar": true,
   "directories": {
     "output": "dist",
-    "buildResources": "static/app-icons"
+    "buildResources": "static/icons"
   },
   "files": ["build/**/*", "package.json", "static/**/*"],
   "publish": "github",
