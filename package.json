@@ -1,6 +1,6 @@
 {
   "name": "wexond",
-  "version": "4.0.0-beta.3",
+  "version": "4.0.0-nightly.21",
   "description": "Extensible, fast and innovative web browser with material UI.",
   "keywords": [
     "web-browser",
@@ -22,6 +22,7 @@
   },
   "scripts": {
     "dev": "cross-env START=1 npm run watch",
+    "ci-build": "node scripts/ci-build.js && npm run build",
     "build": "npm run extensions && concurrently \"webpack --config webpack.config.renderer.js\" \"webpack\" \"webpack --config webpack.config.web.js\"",
     "start": "cross-env NODE_ENV='dev' electron .",
     "watch": "npm run extensions && concurrently \"cross-env ENV='dev' webpack-dev-server --config webpack.config.renderer.js\" \" cross-env ENV='dev' webpack\" \"cross-env ENV='dev' webpack-dev-server --config webpack.config.web.js\"",
