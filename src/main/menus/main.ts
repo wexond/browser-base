@@ -175,6 +175,22 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           },
         },
         {
+          accelerator: 'Alt+D',
+          label: 'Toggle search',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.dialogs.searchDialog.show();
+          },
+        },
+        {
+          accelerator: 'F6',
+          label: 'Toggle search',
+          visible: false,
+          click() {
+            windowsManager.currentWindow.dialogs.searchDialog.show();
+          },
+        },
+        {
           accelerator: 'Alt+F',
           label: 'Toggle menu',
           visible: false,
