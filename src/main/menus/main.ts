@@ -4,7 +4,7 @@ import { WindowsManager } from '../windows-manager';
 import { viewSource, saveAs, printPage } from './common-actions';
 
 export const getMainMenu = (windowsManager: WindowsManager) => {
-  return Menu.buildFromTemplate([
+  const template: any = [
     {
       label: 'File',
       submenu: [
@@ -245,5 +245,21 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
       ],
     },
     { role: 'editMenu' },
-  ]);
+  ];
+
+  for (let i = 1; i <= 9; i++) {
+    template[0].submenu.push({
+      accelerator: `CmdOrCtrl+${i}`,
+      label: 'Select tab index',
+      visible: false,
+      click() {
+        windowsManager.currentWindow.webContents.send(
+          'select-tab-index',
+          i - 1,
+        );
+      },
+    });
+  }
+
+  return Menu.buildFromTemplate(template);
 };

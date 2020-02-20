@@ -97,6 +97,12 @@ export class TabsStore {
       }
     });
 
+    ipcRenderer.on('select-tab-index', (e, i) => {
+      const tab = this.list[i];
+
+      if (tab) tab.select();
+    });
+
     ipcRenderer.on('select-previous-tab', () => {
       const i = this.list.indexOf(this.selectedTab);
       const prevTab = this.list[i - 1];
