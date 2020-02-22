@@ -1,9 +1,10 @@
-import { ipcMain } from 'electron';
+import { ipcMain, dialog } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { windowsManager } from '.';
+import { existsSync, promises as fs } from 'fs';
 
 export class ViewManager {
   public views = new Map<number, View>();
@@ -35,6 +36,26 @@ export class ViewManager {
     ipcMain.on(`add-tab-${id}`, (e, details) => {
       this.create(details);
     });
+	
+	ipcMain.on('Print', (e, details) => {
+      this.views.get(this.selectedId).webContents.print();
+    });
+	
+	ipcMain.on('PrintPdf', (e, details) => {
+		const  filePath = dialog.showSaveDialogSync({
+	  defaultPath: this.views.get(this.selectedId).webContents.getTitle(),	
+      filters: [{ name: 'Portable Document Format', extensions: ['pdf'] }],
+    });
+	
+	this.views.get(this.selectedId).webContents.printToPDF({}).then(data => {
+    fs.writeFile(filePath, data, (error) => {
+		if (error) throw error 
+		console.log('Write PDF successfully.');
+	});
+    }).catch(error => {
+		console.log(error);
+	});
+	});
 
     ipcMain.on(`view-select-${id}`, (e, id: number) => {
       const view = this.views.get(id);
