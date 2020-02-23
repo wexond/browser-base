@@ -18,13 +18,3 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-
-      - name: Build the app
-        uses: samuelmeuli/action-electron-builder@v1
-        with:
-          github_token: ${{ secrets.token }}
-
-          mac_certs: ${{ secrets.mac_certs }}
-          mac_certs_password: ${{ secrets.mac_certs_password }}
-
-          release: true
