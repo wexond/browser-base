@@ -31,7 +31,7 @@ ipcMain.on('get-webcontents-id', e => {
 
 ipcMain.handle(
   `web-contents-call`,
-  async (e, { webContentsId, method, args }) => {
+  async (e, { webContentsId, method, args = [] }) => {
     const wc = webContents.fromId(webContentsId);
     const result = (wc as any)[method](...args);
 
