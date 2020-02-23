@@ -52,13 +52,12 @@ export class View extends BrowserView {
     this.window = window;
     this.homeUrl = url;
 
-    const { object: settings } = windowsManager.settings;
-    if (settings.doNotTrack) {
-      this.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
+    this.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
+      const { object: settings } = windowsManager.settings;
+      if (settings.doNotTrack)
         details.requestHeaders['DNT'] = '1'
-        callback({ requestHeaders: details.requestHeaders })
-      });
-    }
+      callback({ requestHeaders: details.requestHeaders })
+    });
 
     ipcMain.handle(`get-error-url-${this.webContents.id}`, async e => {
       return this.errorURL;
