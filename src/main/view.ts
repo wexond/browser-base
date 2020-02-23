@@ -210,6 +210,20 @@ export class View extends BrowserView {
       );
     });
 
+    this.webContents.addListener('zoom-changed', (e, zoomDirection) => {
+      var newZoomFactor = this.webContents.zoomFactor + (zoomDirection === 'in' ? .2 : -.2);
+      if (newZoomFactor <= 5 && newZoomFactor >= .20) {
+        this.webContents.zoomFactor = newZoomFactor;
+        this.window.webContents.send(
+          `browserview-zoom-updated-${this.webContents.id}`,
+          this.webContents.zoomFactor,
+        );
+      }
+      else {
+        e.preventDefault();
+      }
+    });
+
     this.webContents.addListener(
       'certificate-error',
       (
