@@ -26,10 +26,10 @@ jobs:
 
       - name: Build the app
         run: yarn ci-build
-        with:
-          github_token: ${{ secrets.token }}
+        env:
+          GH_TOKEN: ${{ secrets.token }}
 
-          mac_certs: ${{ secrets.mac_certs }}
-          mac_certs_password: ${{ secrets.mac_certs_password }}
+          MAC_CERTS: ${{ secrets.mac_certs }}
+          MAC_CERTS_PASSWORD: ${{ secrets.mac_certs_password }}
 
-          release: true
+          RELEASE: true
