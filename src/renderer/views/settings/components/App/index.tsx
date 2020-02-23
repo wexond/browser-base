@@ -28,14 +28,14 @@ const MenuItem = observer(
     children: any;
     icon?: string;
   }) => (
-    <NavigationDrawer.Item
-      onClick={() => (store.selectedSection = section)}
-      selected={store.selectedSection === section}
-      icon={icon}
-    >
-      {children}
-    </NavigationDrawer.Item>
-  ),
+      <NavigationDrawer.Item
+        onClick={() => (store.selectedSection = section)}
+        selected={store.selectedSection === section}
+        icon={icon}
+      >
+        {children}
+      </NavigationDrawer.Item>
+    ),
 );
 
 export default hot(
@@ -65,7 +65,9 @@ export default hot(
             <MenuItem icon={icons.download} section="downloads">
               Downloads
             </MenuItem>
-            {/* <MenuItem section="privacy">Privacy</MenuItem> */}
+            <MenuItem icon={icons.shield} section="privacy">
+              Privacy
+            </MenuItem>
             {/* <MenuItem section="permissions">Site permissions</MenuItem> */}
 
             {/* <MenuItem section="language">Languages</MenuItem> */}

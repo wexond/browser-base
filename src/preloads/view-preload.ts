@@ -121,13 +121,14 @@ if (window.location.host === 'chrome.google.com') {
   injectChromeWebstoreInstallButton();
 }
 
+const settings = ipcRenderer.sendSync('get-settings-sync');
 if (
   window.location.href.startsWith(WEBUI_BASE_URL) ||
   window.location.protocol === 'wexond-error:'
 ) {
-  (async function() {
+  (async function () {
     const w = await webFrame.executeJavaScript('window');
-    w.settings = ipcRenderer.sendSync('get-settings-sync');
+    w.settings = settings;
     w.require = (id: string) => {
       if (id === 'electron') {
         return { ipcRenderer };
@@ -151,6 +152,13 @@ if (
       };
     }
   })();
+} else {
+  (async function () {
+    if (settings.doNotTrack) {
+      const w = await webFrame.executeJavaScript('window');
+      Object.defineProperty(w.navigator, 'doNotTrack', { value: 1 })
+    }
+  })()
 }
 
 if (window.location.href.startsWith(WEBUI_BASE_URL)) {
