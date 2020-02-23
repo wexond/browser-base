@@ -18,3 +18,18 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        env:
+          ADBLOCK: true
+
+      - name: Build the app
+        run: yarn ci-build
+        with:
+          github_token: ${{ secrets.token }}
+
+          mac_certs: ${{ secrets.mac_certs }}
+          mac_certs_password: ${{ secrets.mac_certs_password }}
+
+          release: true
