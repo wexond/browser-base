@@ -41,12 +41,6 @@ export class ViewManager {
       this.views.get(this.selectedId).webContents.print();
     });
 	
-	ipcMain.on('PrintPdf', (e, details) => {
-		const  filePath = dialog.showSaveDialogSync({
-	  defaultPath: this.views.get(this.selectedId).webContents.getTitle(),	
-      filters: [{ name: 'Portable Document Format', extensions: ['pdf'] }],
-    });
-	
 	this.views.get(this.selectedId).webContents.printToPDF({}).then(data => {
     fs.writeFile(filePath, data, (error) => {
 		if (error) throw error 
