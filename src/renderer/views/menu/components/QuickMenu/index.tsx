@@ -41,11 +41,6 @@ const onPrintClick = () => {
   store.hide();
 };
 
-const onPrintPdfClick = () => {
-  ipcRenderer.send('PrintPdf', null);
-  store.hide();
-};
-
 const onShieldClick = () => {
   store.settings.shield = !store.settings.shield;
   store.save();
@@ -144,11 +139,7 @@ export const QuickMenu = observer(() => {
             <Icon icon={icons.print} />
             <MenuItemTitle>Print</MenuItemTitle>
             <Shortcut>Ctrl+P</Shortcut>
-          </MenuItem>
-		  <MenuItem onClick={onPrintPdfClick}>
-            <Icon icon={icons.print} />
-            <MenuItemTitle>Print As PDF</MenuItemTitle>
-          </MenuItem>
+          </MenuItem>		  
         </MenuItems>
       </Content>
     </div>
