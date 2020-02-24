@@ -40,16 +40,6 @@ export class ViewManager {
 	ipcMain.on('Print', (e, details) => {
       this.views.get(this.selectedId).webContents.print();
     });
-	
-	this.views.get(this.selectedId).webContents.printToPDF({}).then(data => {
-    fs.writeFile(filePath, data, (error) => {
-		if (error) throw error 
-		console.log('Write PDF successfully.');
-	});
-    }).catch(error => {
-		console.log(error);
-	});
-	});
 
     ipcMain.on(`view-select-${id}`, (e, id: number) => {
       const view = this.views.get(id);
