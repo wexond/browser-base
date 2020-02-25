@@ -98,6 +98,6 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "keytar": "^5.3.0"
+    "keytar": "5.4.0"
   }
 }
