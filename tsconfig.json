@@ -7,26 +7,18 @@
     "alwaysStrict": true,
     "skipLibCheck": true,
     "module": "commonjs",
-    "target": "es6",
+    "target": "es2016",
     "jsx": "react",
     "allowJs": true,
     "sourceMap": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "lib": ["dom", "esnext"],
     "experimentalDecorators": true,
     "baseUrl": "./",
     "paths": {
-      "~/*": [
-        "./src/*"
-      ]
+      "~/*": ["./src/*"]
     }
   },
-  "include": [
-    "./src/**/*.ts",
-    "./src/**/*.tsx"
-  ]
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"]
 }
