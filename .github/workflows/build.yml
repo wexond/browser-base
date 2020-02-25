@@ -17,7 +17,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 13
 
       - name: Install required build toolchain
         if: matrix.os == 'ubuntu-latest'
