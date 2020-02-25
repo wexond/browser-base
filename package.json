@@ -99,6 +99,6 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "keytar": "^5.2.0"
+    "keytar": "https://github.com/atom/node-keytar"
   }
 }
