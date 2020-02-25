@@ -56,9 +56,9 @@
     "copy-webpack-plugin": "^5.1.1",
     "cross-env": "7.0.0",
     "crypto-js": "^4.0.0",
-    "electron": "8.0.1",
+    "electron": "^9.0.0-beta.2",
     "electron-builder": "21.2.0",
-    "electron-extensions": "^6.0.3",
+    "electron-extensions": "6.0.3",
     "electron-updater": "4.2.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
@@ -85,6 +85,7 @@
     "react-dom": "16.12.0",
     "react-hot-loader": "4.12.19",
     "react-windows-controls": "1.1.1",
+    "source-map-support": "^0.5.16",
     "styled-components": "^5.0.1",
     "terser": "^4.6.3",
     "ts-loader": "^6.2.1",
@@ -97,6 +98,6 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "keytar": "^5.2.0"
+    "keytar": "5.4.0"
   }
 }

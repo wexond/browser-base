@@ -12,12 +12,16 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 13
+
+      - name: Install required build toolchain
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install gcc-multilib g++-multilib
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
