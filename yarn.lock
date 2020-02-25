@@ -4195,9 +4195,10 @@ jszip@^3.2.2:
     readable-stream "~2.3.6"
     set-immediate-shim "~1.0.1"
 
-"keytar@https://github.com/atom/node-keytar":
+keytar@^5.3.0:
   version "5.3.0"
-  resolved "https://github.com/atom/node-keytar#edbc3a49d1decab2bd1e0e6372fa2b5bed1844de"
+  resolved "https://registry.yarnpkg.com/keytar/-/keytar-5.3.0.tgz#40f1158f93c9110178e748b70129f89ba90d3468"
+  integrity sha512-/gGxnCGF4jjQgws8DNxsbPamXCf4X29U2B2M2ceEcfBCHfSVfcrZ130CSqhbJ1/ETa/TzUCyUCCNjQtpIWkKgg==
   dependencies:
     nan "2.14.0"
     prebuild-install "5.3.3"
