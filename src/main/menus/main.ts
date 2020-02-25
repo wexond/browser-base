@@ -2,9 +2,22 @@ import { Menu, webContents } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { WindowsManager } from '../windows-manager';
 import { viewSource, saveAs, printPage } from './common-actions';
+import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
+
+const createShortcutMenuItem = (
+  shortcuts: string[],
+  label: string,
+  action: (shortcutIndex?: number) => void,
+) =>
+  shortcuts.map((shortcut, key) => ({
+    accelerator: shortcut,
+    label,
+    visible: false,
+    click: () => action(key),
+  }));
 
 export const getMainMenu = (windowsManager: WindowsManager) => {
-  return Menu.buildFromTemplate([
+  const template: any = [
     {
       label: 'File',
       submenu: [
@@ -56,143 +69,102 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           role: 'quit',
           accelerator: 'CmdOrCtrl+Shift+Q',
         },
-        {
-          label: 'Reload',
-          visible: false,
-          accelerator: 'CmdOrCtrl+R',
-          click: () => {
-            windowsManager.currentWindow.viewManager.selected.webContents.reload();
-          },
-        },
-        {
-          label: 'Reload',
-          visible: false,
-          accelerator: 'F5',
-          click: () => {
-            windowsManager.currentWindow.viewManager.selected.webContents.reload();
-          },
-        },
-        {
-          accelerator: 'CmdOrCtrl+F',
-          label: 'Find in page',
-          visible: false,
-          click() {
-            windowsManager.currentWindow.webContents.send('find');
-          },
-        },
-        {
-          accelerator: 'CmdOrCtrl+F4',
-          label: 'Close tab',
-          visible: false,
-          click() {
-            windowsManager.currentWindow.webContents.send(
-              'remove-tab',
-              windowsManager.currentWindow.viewManager.selectedId,
-            );
-          },
-        },
-        {
-          accelerator: 'CmdOrCtrl+Shift+T',
-          label: 'Revert closed tab',
-          visible: false,
-          click() {
+
+        ...createShortcutMenuItem(['CmdOrCtrl+F4'], 'Close tab', () => {
+          windowsManager.currentWindow.webContents.send(
+            'remove-tab',
+            windowsManager.currentWindow.viewManager.selectedId,
+          );
+        }),
+        ...createShortcutMenuItem(['CmdOrCtrl+H'], 'History', () => {
+          windowsManager.currentWindow.viewManager.create({
+            url: `${WEBUI_BASE_URL}history${WEBUI_URL_SUFFIX}`,
+            active: true,
+          });
+        }),
+        ...createShortcutMenuItem(['CmdOrCtrl+Shift+O'], 'Bookmarks', () => {
+          windowsManager.currentWindow.viewManager.create({
+            url: `${WEBUI_BASE_URL}bookmarks${WEBUI_URL_SUFFIX}`,
+            active: true,
+          });
+        }),
+        ...createShortcutMenuItem(['CmdOrCtrl+R', 'F5'], 'Reload', () => {
+          windowsManager.currentWindow.viewManager.selected.webContents.reload();
+        }),
+        ...createShortcutMenuItem(['CmdOrCtrl+F'], 'Find in page', () => {
+          windowsManager.currentWindow.webContents.send('find');
+        }),
+        ...createShortcutMenuItem(['CmdOrCtrl+F4'], 'Close tab', () => {
+          windowsManager.currentWindow.webContents.send(
+            'remove-tab',
+            windowsManager.currentWindow.viewManager.selectedId,
+          );
+        }),
+        ...createShortcutMenuItem(
+          ['CmdOrCtrl+Shift+T'],
+          'Revert closed tab',
+          () => {
             windowsManager.currentWindow.webContents.send('revert-closed-tab');
           },
-        },
-        {
-          accelerator: 'CmdOrCtrl+Tab',
-          label: 'Select next tab',
-          visible: false,
-          click() {
+        ),
+        ...createShortcutMenuItem(
+          ['CmdOrCtrl+Tab', 'CmdOrCtrl+PageDown'],
+          'Select next tab',
+          () => {
             windowsManager.currentWindow.webContents.send('select-next-tab');
           },
-        },
-        {
-          accelerator: 'Ctrl+Space',
-          label: 'Toggle search',
-          visible: false,
-          click() {
+        ),
+        ...createShortcutMenuItem(
+          ['CmdOrCtrl+Shift+Tab', 'CmdOrCtrl+PageUp'],
+          'Select previous tab',
+          () => {
+            windowsManager.currentWindow.webContents.send(
+              'select-previous-tab',
+            );
+          },
+        ),
+        ...createShortcutMenuItem(
+          ['Ctrl+Space', 'CmdOrCtrl+L', 'Alt+D', 'F6'],
+          'Toggle search',
+          () => {
             windowsManager.currentWindow.dialogs.searchDialog.show();
           },
-        },
-        {
-          accelerator: 'CmdOrCtrl+L',
-          label: 'Toggle search',
-          visible: false,
-          click() {
-            windowsManager.currentWindow.dialogs.searchDialog.show();
-          },
-        },
-        {
-          accelerator: 'Alt+F',
-          label: 'Toggle menu',
-          visible: false,
-          click() {
-            windowsManager.currentWindow.dialogs.menuDialog.show();
-          },
-        },
-        {
-          accelerator: 'Alt+E',
-          label: 'Toggle menu',
-          visible: false,
-          click() {
-            windowsManager.currentWindow.dialogs.menuDialog.show();
-          },
-        },
-        {
-          accelerator: 'Alt+Left',
-          label: 'Go back',
-          visible: false,
-          click() {
-            const { selected } = windowsManager.currentWindow.viewManager;
-            if (selected) {
-              selected.webContents.goBack();
-            }
-          },
-        },
-        {
-          accelerator: 'Alt+Right',
-          label: 'Go forward',
-          visible: false,
-          click() {
-            const { selected } = windowsManager.currentWindow.viewManager;
-            if (selected) {
-              selected.webContents.goForward();
-            }
-          },
-        },
-        {
-          accelerator: 'CmdOrCtrl+Shift+F12',
-          label: 'Toggle developer tools (window)',
-          visible: false,
-          click() {
+        ),
+        ...createShortcutMenuItem(['Alt+F', 'Alt+E'], 'Toggle menu', () => {
+          windowsManager.currentWindow.dialogs.menuDialog.show();
+        }),
+        ...createShortcutMenuItem(['Alt+Left'], 'Go back', () => {
+          const { selected } = windowsManager.currentWindow.viewManager;
+          if (selected) {
+            selected.webContents.goBack();
+          }
+        }),
+        ...createShortcutMenuItem(['Alt+Right'], 'Go forward', () => {
+          const { selected } = windowsManager.currentWindow.viewManager;
+          if (selected) {
+            selected.webContents.goForward();
+          }
+        }),
+        ...createShortcutMenuItem(
+          ['CmdOrCtrl+Shift+F12'],
+          'Toggle developer tools (window)',
+          () => {
             setTimeout(() => {
               webContents
                 .getFocusedWebContents()
                 .openDevTools({ mode: 'detach' });
             });
           },
-        },
-        {
-          accelerator: 'F12',
-          label: 'Toggle developer tools (contents)',
-          visible: false,
-          click() {
+        ),
+        ...createShortcutMenuItem(
+          ['F12', 'Ctrl+Shift+I'],
+          'Toggle developer tools (contents)',
+          () => {
             setTimeout(() => {
               windowsManager.currentWindow.viewManager.selected.webContents.toggleDevTools();
             });
           },
-        },
-        {
-          accelerator: 'Ctrl+Shift+I',
-          label: 'Toggle developer tools (contents)',
-          visible: false,
-          click() {
-            setTimeout(() => {
-              windowsManager.currentWindow.viewManager.selected.webContents.toggleDevTools();
-            });
-          },
-        },
+        ),
         {
           label: 'View page source',
           accelerator: 'CmdOrCtrl+U',
@@ -217,5 +189,23 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
       ],
     },
     { role: 'editMenu' },
-  ]);
+  ];
+
+  template[0].submenu = template[0].submenu.concat(
+    createShortcutMenuItem(
+      Array.from({ length: 8 }, (v, k) => k + 1).map(i => `CmdOrCtrl+${i}`),
+      'Select tab index',
+      i => {
+        windowsManager.currentWindow.webContents.send('select-tab-index', i);
+      },
+    ),
+  );
+
+  template[0].submenu = template[0].submenu.concat(
+    createShortcutMenuItem(['CmdOrCtrl+9'], 'Select last tab', () => {
+      windowsManager.currentWindow.webContents.send('select-last-tab');
+    }),
+  );
+
+  return Menu.buildFromTemplate(template);
 };
