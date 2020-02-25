@@ -2498,7 +2498,7 @@ electron-updater@4.2.2:
     pako "^1.0.11"
     semver "^7.1.3"
 
-electron@^9.0.0-beta.2:
+electron@9.0.0-beta.2:
   version "9.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/electron/-/electron-9.0.0-beta.2.tgz#cf7cfae435c1f54991f740d2c9d627f18fe007b0"
   integrity sha512-WkRkUh5gE5B+b9XdTDvC67VvG118J0+wURcBpcXlBZJ9k+oqn0qcX+D3NG1WitXjcrAdV18cx5taUOat8zxAeA==
