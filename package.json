@@ -1,6 +1,6 @@
 {
   "name": "wexond",
-  "version": "4.0.0-nightly.22",
+  "version": "4.0.0-nightly.23",
   "description": "Extensible, fast and innovative web browser with material UI.",
   "keywords": [
     "web-browser",
@@ -22,17 +22,16 @@
   },
   "scripts": {
     "dev": "cross-env START=1 npm run watch",
-    "bundle": "npm run extensions && concurrently \"webpack --config webpack.config.renderer.js\" \"webpack\" \"webpack --config webpack.config.web.js\"",
-    "build": "node scripts/ci-build.js && npm run bundle",
+    "build": "npm run extensions && concurrently \"webpack --config webpack.config.renderer.js\" \"webpack\" \"webpack --config webpack.config.web.js\"",
+    "ci-build": "node scripts/ci-build.js",
     "start": "cross-env NODE_ENV='dev' electron .",
     "watch": "npm run extensions && concurrently \"cross-env ENV='dev' webpack-dev-server --config webpack.config.renderer.js\" \" cross-env ENV='dev' webpack\" \"cross-env ENV='dev' webpack-dev-server --config webpack.config.web.js\"",
-    "compile-win32": "npm run bundle && electron-builder -w -p always",
-    "compile-darwin": "npm run bundle && electron-builder -m -p always",
-    "compile-linux": "npm run bundle && electron-builder -l -p always",
-    "compile": "node scripts/compile.js",
+    "compile-win32": "npm run build && electron-builder -w",
+    "compile-darwin": "npm run build && electron-builder -m",
+    "compile-linux": "npm run build && electron-builder -l",
     "lint": "eslint \"src/**/*.ts*\" \"src/**/*.tsx*\"",
     "lint-fix": "npm run lint -- --fix",
-    "postinstall": "electron-builder install-app-deps",
+    "rebuild": "electron-builder install-app-deps",
     "extensions": "node scripts/extensions.js"
   },
   "devDependencies": {
@@ -86,6 +85,7 @@
     "react-dom": "16.12.0",
     "react-hot-loader": "4.12.19",
     "react-windows-controls": "1.1.1",
+    "source-map-support": "^0.5.16",
     "styled-components": "^5.0.1",
     "terser": "^4.6.4",
     "ts-loader": "^6.2.1",
@@ -98,6 +98,6 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "keytar": "^5.2.0"
+    "keytar": "5.4.0"
   }
 }

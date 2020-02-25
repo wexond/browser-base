@@ -12,10 +12,15 @@ import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
 import { WEBUI_BASE_URL } from '~/constants/files';
+import { EXTENSIONS_PROTOCOL } from '~/constants';
 
 const extensibleSessionOptions = {
   preloadPath: resolve(__dirname, 'extensions-preload.js'),
-  blacklist: [`${WEBUI_BASE_URL}*`, 'wexond-error://*', 'chrome-extension://*'],
+  blacklist: [
+    `${WEBUI_BASE_URL}*`,
+    'wexond-error://*',
+    `${EXTENSIONS_PROTOCOL}://*`,
+  ],
 };
 
 // TODO: move windows list to the corresponding sessions
@@ -325,7 +330,10 @@ export class SessionsManager {
 
         // extension.backgroundPage.webContents.openDevTools();
         for (const window of context.windows) {
-          window.webContents.send('load-browserAction', extension);
+          window.webContents.send('load-browserAction', {
+            ...extension,
+            backgroundPage: undefined,
+          });
         }
       } catch (e) {
         console.error(e);

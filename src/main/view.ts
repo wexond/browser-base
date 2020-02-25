@@ -114,7 +114,7 @@ export class View extends BrowserView {
       this.window.webContents.send(`view-loading-${this.webContents.id}`, true);
     });
 
-    this.webContents.addListener('did-start-navigation', async (...args) => {
+    this.webContents.addListener('did-start-navigation', async (e, ...args) => {
       this.updateNavigationState();
 
       this.favicon = '';

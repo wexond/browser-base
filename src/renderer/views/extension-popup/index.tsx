@@ -46,18 +46,20 @@ const createWebview = (url: string) => {
   webview.style.height = '100%';
 
   webview.addEventListener('dom-ready', () => {
-    webview.getWebContents().addListener('context-menu', (e, params) => {
-      const menu = remote.Menu.buildFromTemplate([
-        {
-          label: 'Inspect element',
-          click: () => {
-            webview.inspectElement(params.x, params.y);
+    remote.webContents
+      .fromId(webview.getWebContentsId())
+      .addListener('context-menu', (e, params) => {
+        const menu = remote.Menu.buildFromTemplate([
+          {
+            label: 'Inspect element',
+            click: () => {
+              webview.inspectElement(params.x, params.y);
+            },
           },
-        },
-      ]);
+        ]);
 
-      menu.popup();
-    });
+        menu.popup();
+      });
   });
 
   webview.addEventListener('ipc-message', e => {

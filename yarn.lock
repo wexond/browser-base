@@ -2450,7 +2450,7 @@ electron-builder@22.3.2:
     update-notifier "^4.0.0"
     yargs "^15.1.0"
 
-electron-extensions@^6.0.3:
+electron-extensions@6.0.3:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/electron-extensions/-/electron-extensions-6.0.3.tgz#ad2d2301dd82f2d8f3a4487248f10f81367c4aec"
   integrity sha512-WPlf2wPcjR/QgJF5E/ZwtHDtlqVM8+wEM1YIJlHTo2pC7PxnKV7Zxj4dsBxpUZDphQi2tpjs/Q5F7Y4CdhIY7w==
@@ -2498,10 +2498,10 @@ electron-updater@4.2.2:
     pako "^1.0.11"
     semver "^7.1.3"
 
-electron@8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-8.0.1.tgz#7f5070a1625f423cddcece25a1eb9e6d2f1339fb"
-  integrity sha512-kLZAQkbrAFNjQVpcHJUnjRYQNafuuWKnsdxzag5do1ewMqN0J4Pi/hPE27+5/1YAFMcbvCrPqhWIpcMsi8mKXQ==
+electron@^9.0.0-beta.2:
+  version "9.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-9.0.0-beta.2.tgz#cf7cfae435c1f54991f740d2c9d627f18fe007b0"
+  integrity sha512-WkRkUh5gE5B+b9XdTDvC67VvG118J0+wURcBpcXlBZJ9k+oqn0qcX+D3NG1WitXjcrAdV18cx5taUOat8zxAeA==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -4343,10 +4343,10 @@ jszip@^3.2.2:
     readable-stream "~2.3.6"
     set-immediate-shim "~1.0.1"
 
-keytar@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/keytar/-/keytar-5.2.0.tgz#7543190be98e2a751466096ce3ca1b1a4b8f39fe"
-  integrity sha512-vsIX6n2BgTwzbKOSPIiJ8YduwHlPEE/G5dkmZWXaQK9qiGZMQyhxlFA4O6vrvM5fsXTMgUOrODYAqgpfNSRLDw==
+keytar@5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/keytar/-/keytar-5.4.0.tgz#71d8209e7dd2fe99008c243791350a6bd6ceab67"
+  integrity sha512-Ta0RtUmkq7un177SPgXKQ7FGfGDV4xvsV0cGNiWVEzash5U0wyOsXpwfrK2+Oq+hHvsvsbzIZUUuJPimm3avFw==
   dependencies:
     nan "2.14.0"
     prebuild-install "5.3.3"
