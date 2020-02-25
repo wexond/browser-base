@@ -22,17 +22,16 @@
   },
   "scripts": {
     "dev": "cross-env START=1 npm run watch",
-    "bundle": "npm run extensions && concurrently \"webpack --config webpack.config.renderer.js\" \"webpack\" \"webpack --config webpack.config.web.js\"",
-    "build": "node scripts/ci-build.js && npm run bundle",
+    "build": "npm run extensions && concurrently \"webpack --config webpack.config.renderer.js\" \"webpack\" \"webpack --config webpack.config.web.js\"",
+    "ci-build": "node scripts/ci-build.js",
     "start": "cross-env NODE_ENV='dev' electron .",
     "watch": "npm run extensions && concurrently \"cross-env ENV='dev' webpack-dev-server --config webpack.config.renderer.js\" \" cross-env ENV='dev' webpack\" \"cross-env ENV='dev' webpack-dev-server --config webpack.config.web.js\"",
-    "compile-win32": "npm run bundle && electron-builder -w -p always",
-    "compile-darwin": "npm run bundle && electron-builder -m -p always",
-    "compile-linux": "npm run bundle && electron-builder -l -p always",
-    "compile": "node scripts/compile.js",
+    "compile-win32": "npm run build && electron-builder -w",
+    "compile-darwin": "npm run build && electron-builder -m",
+    "compile-linux": "npm run build && electron-builder -l",
     "lint": "eslint \"src/**/*.ts*\" \"src/**/*.tsx*\"",
     "lint-fix": "npm run lint -- --fix",
-    "postinstall": "electron-builder install-app-deps",
+    "rebuild": "electron-builder install-app-deps",
     "extensions": "node scripts/extensions.js"
   },
   "devDependencies": {

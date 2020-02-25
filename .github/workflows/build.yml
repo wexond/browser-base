@@ -1,6 +1,6 @@
 name: Build
 
-on: push
+on: [push, pull_request]
 
 jobs:
   release:
@@ -23,12 +23,17 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install gcc-multilib g++-multilib
 
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        env:
+          ADBLOCK: true
+
       - name: Build the app
-        uses: samuelmeuli/action-electron-builder@v1
-        with:
-          github_token: ${{ secrets.token }}
+        run: yarn ci-build
+        env:
+          GH_TOKEN: ${{ secrets.token }}
 
-          mac_certs: ${{ secrets.mac_certs }}
-          mac_certs_password: ${{ secrets.mac_certs_password }}
+          MAC_CERTS: ${{ secrets.mac_certs }}
+          MAC_CERTS_PASSWORD: ${{ secrets.mac_certs_password }}
 
-          release: true
+          RELEASE: true
