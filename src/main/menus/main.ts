@@ -5,7 +5,7 @@ import { viewSource, saveAs, printPage } from './common-actions';
 import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 import { AppWindow } from '../windows';
 
-const createShortcutMenuItem = (
+const createMenuItem = (
   shortcuts: string[],
   action: (
     window: AppWindow,
@@ -48,28 +48,28 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
     {
       label: 'File',
       submenu: [
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+N'],
           () => {
             windowsManager.createWindow();
           },
           'New window',
         ),
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+Shift+N'],
           () => {
             windowsManager.createWindow(true);
           },
           'New incognito window',
         ),
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+T'],
           window => {
             window.viewManager.create(defaultTabOptions);
           },
           'New tab',
         ),
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+Shift+T'],
           window => {
             window.webContents.send('revert-closed-tab');
@@ -79,14 +79,14 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         {
           type: 'separator',
         },
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+Shift+W'],
           window => {
             window.close();
           },
           'Close window',
         ),
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+W', 'CmdOrCtrl+F4'],
           window => {
             window.webContents.send(
@@ -99,7 +99,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         {
           type: 'separator',
         },
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+S'],
           () => {
             saveAs();
@@ -109,7 +109,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         {
           type: 'separator',
         },
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+P'],
           () => {
             printPage();
@@ -120,15 +120,12 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         // Hidden items
 
         // Focus address bar
-        ...createShortcutMenuItem(
-          ['Ctrl+Space', 'CmdOrCtrl+L', 'Alt+D', 'F6'],
-          () => {
-            windowsManager.currentWindow.dialogs.searchDialog.show();
-          },
-        ),
+        ...createMenuItem(['Ctrl+Space', 'CmdOrCtrl+L', 'Alt+D', 'F6'], () => {
+          windowsManager.currentWindow.dialogs.searchDialog.show();
+        }),
 
         // Toggle menu
-        ...createShortcutMenuItem(['Alt+F', 'Alt+E'], () => {
+        ...createMenuItem(['Alt+F', 'Alt+E'], () => {
           windowsManager.currentWindow.dialogs.menuDialog.show();
         }),
       ],
@@ -155,7 +152,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
             ]
           : [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }]),
         { type: 'separator' },
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+F'],
           () => {
             windowsManager.currentWindow.webContents.send('find');
@@ -167,14 +164,14 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
     {
       label: 'View',
       submenu: [
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+R', 'F5'],
           () => {
             windowsManager.currentWindow.viewManager.selected.webContents.reload();
           },
           'Reload',
         ),
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+Shift+R', 'Shift+F5'],
           () => {
             windowsManager.currentWindow.viewManager.selected.webContents.reloadIgnoringCache();
@@ -187,7 +184,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
       label: 'History',
       submenu: [
         // TODO: Homepage - Ctrl+Shift+H
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['Alt+Left'],
           () => {
             const { selected } = windowsManager.currentWindow.viewManager;
@@ -197,7 +194,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           },
           'Go back',
         ),
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['Alt+Right'],
           () => {
             const { selected } = windowsManager.currentWindow.viewManager;
@@ -212,7 +209,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         // { type: 'separator' }
         // TODO: list last visited
         { type: 'separator' },
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+H'],
           () => {
             windowsManager.currentWindow.viewManager.create({
@@ -227,7 +224,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
     {
       label: 'Bookmarks',
       submenu: [
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+Shift+O'],
           () => {
             windowsManager.currentWindow.viewManager.create({
@@ -237,7 +234,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           },
           'Manage bookmarks',
         ),
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+D'],
           () => {
             windowsManager.currentWindow.webContents.send(
@@ -256,14 +253,14 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         {
           label: 'Developer',
           submenu: [
-            ...createShortcutMenuItem(
+            ...createMenuItem(
               ['CmdOrCtrl+U'],
               () => {
                 viewSource();
               },
               'View source',
             ),
-            ...createShortcutMenuItem(
+            ...createMenuItem(
               ['F12', 'Ctrl+Shift+I'],
               () => {
                 setTimeout(() => {
@@ -274,7 +271,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
             ),
 
             // Developer tools (current webContents) (dev)
-            ...createShortcutMenuItem(['CmdOrCtrl+Shift+F12'], () => {
+            ...createMenuItem(['CmdOrCtrl+Shift+F12'], () => {
               setTimeout(() => {
                 webContents
                   .getFocusedWebContents()
@@ -288,14 +285,14 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
     {
       label: 'Tab',
       submenu: [
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+Tab', 'CmdOrCtrl+PageDown'],
           () => {
             windowsManager.currentWindow.webContents.send('select-next-tab');
           },
           'Select next tab',
         ),
-        ...createShortcutMenuItem(
+        ...createMenuItem(
           ['CmdOrCtrl+Shift+Tab', 'CmdOrCtrl+PageUp'],
           () => {
             windowsManager.currentWindow.webContents.send(
@@ -335,7 +332,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
 
   // Ctrl+1 - Ctrl+8
   template[0].submenu = template[0].submenu.concat(
-    createShortcutMenuItem(
+    createMenuItem(
       Array.from({ length: 8 }, (v, k) => k + 1).map(i => `CmdOrCtrl+${i}`),
       (window, menuItem, i) => {
         windowsManager.currentWindow.webContents.send('select-tab-index', i);
@@ -345,7 +342,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
 
   // Ctrl+9
   template[0].submenu = template[0].submenu.concat(
-    createShortcutMenuItem(['CmdOrCtrl+9'], () => {
+    createMenuItem(['CmdOrCtrl+9'], () => {
       windowsManager.currentWindow.webContents.send('select-last-tab');
     }),
   );
