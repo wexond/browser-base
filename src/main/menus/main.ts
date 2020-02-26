@@ -227,7 +227,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
       label: 'Bookmarks',
       submenu: [
         ...createMenuItem(
-          ['CmdOrCtrl+Shift+O'],
+          isMac ? ['Cmd+Option+B'] : ['CmdOrCtrl+Shift+O'],
           () => {
             windowsManager.currentWindow.viewManager.create({
               url: `${WEBUI_BASE_URL}bookmarks${WEBUI_URL_SUFFIX}`,
@@ -263,7 +263,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
               'View source',
             ),
             ...createMenuItem(
-              ['F12', 'Ctrl+Shift+I'],
+              ['CmdOrCtrl+Shift+I', 'CmdOrCtrl+Shift+J', 'F12'],
               () => {
                 setTimeout(() => {
                   windowsManager.currentWindow.viewManager.selected.webContents.toggleDevTools();
@@ -288,14 +288,14 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
       label: 'Tab',
       submenu: [
         ...createMenuItem(
-          ['CmdOrCtrl+Tab', 'CmdOrCtrl+PageDown'],
+          isMac ? ['Cmd+Option+Right'] : ['Ctrl+Tab', 'Ctrl+PageDown'],
           () => {
             windowsManager.currentWindow.webContents.send('select-next-tab');
           },
           'Select next tab',
         ),
         ...createMenuItem(
-          ['CmdOrCtrl+Shift+Tab', 'CmdOrCtrl+PageUp'],
+          isMac ? ['Cmd+Option+Left'] : ['Ctrl+Shift+Tab', 'Ctrl+PageUp'],
           () => {
             windowsManager.currentWindow.webContents.send(
               'select-previous-tab',
