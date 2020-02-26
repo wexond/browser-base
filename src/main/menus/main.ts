@@ -1,223 +1,350 @@
-import { Menu, webContents } from 'electron';
+import { Menu, webContents, app, BrowserWindow, MenuItem } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { WindowsManager } from '../windows-manager';
 import { viewSource, saveAs, printPage } from './common-actions';
 import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
+import { AppWindow } from '../windows';
 
-const createShortcutMenuItem = (
+const isMac = process.platform === 'darwin';
+
+const createMenuItem = (
   shortcuts: string[],
-  label: string,
-  action: (shortcutIndex?: number) => void,
-) =>
-  shortcuts.map((shortcut, key) => ({
+  action: (
+    window: AppWindow,
+    menuItem: MenuItem,
+    shortcutIndex: number,
+  ) => void,
+  label: string = null,
+) => {
+  const result: any = shortcuts.map((shortcut, key) => ({
     accelerator: shortcut,
-    label,
-    visible: false,
-    click: () => action(key),
+    visible: label != null && key === 0,
+    label: label != null && key === 0 ? label : '',
+    click: (menuItem: MenuItem, browserWindow: BrowserWindow) =>
+      action(browserWindow as AppWindow, menuItem, key),
   }));
+
+  return result;
+};
 
 export const getMainMenu = (windowsManager: WindowsManager) => {
   const template: any = [
+    ...(isMac
+      ? [
+          {
+            label: app.name,
+            submenu: [
+              { role: 'about' },
+              { type: 'separator' },
+              { role: 'services' },
+              { type: 'separator' },
+              { role: 'hide' },
+              { role: 'hideothers' },
+              { role: 'unhide' },
+              { type: 'separator' },
+              { role: 'quit' },
+            ],
+          },
+        ]
+      : []),
     {
       label: 'File',
       submenu: [
-        {
-          accelerator: 'CmdOrCtrl+T',
-          label: 'New tab',
-          click() {
-            windowsManager.currentWindow.viewManager.create(defaultTabOptions);
-          },
-        },
-        {
-          accelerator: 'CmdOrCtrl+N',
-          label: 'New window',
-          click() {
+        ...createMenuItem(
+          ['CmdOrCtrl+N'],
+          () => {
             windowsManager.createWindow();
           },
-        },
-        {
-          accelerator: 'CmdOrCtrl+Shift+N',
-          label: 'New incognito window',
-          click() {
+          'New window',
+        ),
+        ...createMenuItem(
+          ['CmdOrCtrl+Shift+N'],
+          () => {
             windowsManager.createWindow(true);
           },
-        },
+          'New incognito window',
+        ),
+        ...createMenuItem(
+          ['CmdOrCtrl+T'],
+          window => {
+            window.viewManager.create(defaultTabOptions);
+          },
+          'New tab',
+        ),
+        ...createMenuItem(
+          ['CmdOrCtrl+Shift+T'],
+          window => {
+            window.webContents.send('revert-closed-tab');
+          },
+          'Revert closed tab',
+        ),
         {
           type: 'separator',
         },
-        {
-          accelerator: 'CmdOrCtrl+W',
-          label: 'Close tab',
-          click() {
-            windowsManager.currentWindow.webContents.send(
+        ...createMenuItem(
+          ['CmdOrCtrl+Shift+W'],
+          window => {
+            window.close();
+          },
+          'Close window',
+        ),
+        ...createMenuItem(
+          ['CmdOrCtrl+W', 'CmdOrCtrl+F4'],
+          window => {
+            window.webContents.send(
               'remove-tab',
-              windowsManager.currentWindow.viewManager.selectedId,
+              window.viewManager.selectedId,
             );
           },
-        },
-        {
-          accelerator: 'CmdOrCtrl+Shift+W',
-          label: 'Close current window',
-          click() {
-            windowsManager.currentWindow.close();
-          },
-        },
+          'Close tab',
+        ),
         {
           type: 'separator',
         },
+        ...createMenuItem(
+          ['CmdOrCtrl+S'],
+          () => {
+            saveAs();
+          },
+          'Save webpage as...',
+        ),
         {
-          role: 'quit',
-          accelerator: 'CmdOrCtrl+Shift+Q',
+          type: 'separator',
         },
-        ...createShortcutMenuItem(
+        ...createMenuItem(
+          ['CmdOrCtrl+P'],
+          () => {
+            printPage();
+          },
+          'Print',
+        ),
+
+        // Hidden items
+
+        // Focus address bar
+        ...createMenuItem(['Ctrl+Space', 'CmdOrCtrl+L', 'Alt+D', 'F6'], () => {
+          windowsManager.currentWindow.dialogs.searchDialog.show();
+        }),
+
+        // Toggle menu
+        ...createMenuItem(['Alt+F', 'Alt+E'], () => {
+          windowsManager.currentWindow.dialogs.menuDialog.show();
+        }),
+      ],
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        ...(isMac
+          ? [
+              { role: 'pasteAndMatchStyle' },
+              { role: 'delete' },
+              { role: 'selectAll' },
+              { type: 'separator' },
+              {
+                label: 'Speech',
+                submenu: [{ role: 'startspeaking' }, { role: 'stopspeaking' }],
+              },
+            ]
+          : [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }]),
+        { type: 'separator' },
+        ...createMenuItem(
+          ['CmdOrCtrl+F'],
+          () => {
+            windowsManager.currentWindow.webContents.send('find');
+          },
+          'Find in page',
+        ),
+      ],
+    },
+    {
+      label: 'View',
+      submenu: [
+        ...createMenuItem(
+          ['CmdOrCtrl+R', 'F5'],
+          () => {
+            windowsManager.currentWindow.viewManager.selected.webContents.reload();
+          },
+          'Reload',
+        ),
+        ...createMenuItem(
+          ['CmdOrCtrl+Shift+R', 'Shift+F5'],
+          () => {
+            windowsManager.currentWindow.viewManager.selected.webContents.reloadIgnoringCache();
+          },
+          'Reload ignoring cache',
+        ),
+      ],
+    },
+    {
+      label: 'History',
+      submenu: [
+        // TODO: Homepage - Ctrl+Shift+H
+        ...createMenuItem(
+          isMac ? ['Cmd+[', 'Cmd+Left'] : ['Alt+Left'],
+          () => {
+            const { selected } = windowsManager.currentWindow.viewManager;
+            if (selected) {
+              selected.webContents.goBack();
+            }
+          },
+          'Go back',
+        ),
+        ...createMenuItem(
+          isMac ? ['Cmd+]', 'Cmd+Right'] : ['Alt+Right'],
+          () => {
+            const { selected } = windowsManager.currentWindow.viewManager;
+            if (selected) {
+              selected.webContents.goForward();
+            }
+          },
+          'Go forward',
+        ),
+        // { type: 'separator' }
+        // TODO: list last closed tabs
+        // { type: 'separator' }
+        // TODO: list last visited
+        { type: 'separator' },
+        ...createMenuItem(
+          isMac ? ['Cmd+Y'] : ['Ctrl+H'],
+          () => {
+            windowsManager.currentWindow.viewManager.create({
+              url: `${WEBUI_BASE_URL}history${WEBUI_URL_SUFFIX}`,
+              active: true,
+            });
+          },
+          'Manage history',
+        ),
+      ],
+    },
+    {
+      label: 'Bookmarks',
+      submenu: [
+        ...createMenuItem(
+          isMac ? ['Cmd+Option+B'] : ['CmdOrCtrl+Shift+O'],
+          () => {
+            windowsManager.currentWindow.viewManager.create({
+              url: `${WEBUI_BASE_URL}bookmarks${WEBUI_URL_SUFFIX}`,
+              active: true,
+            });
+          },
+          'Manage bookmarks',
+        ),
+        ...createMenuItem(
           ['CmdOrCtrl+D'],
-          'Add this website to bookmarks',
           () => {
             windowsManager.currentWindow.webContents.send(
               'show-add-bookmark-dialog',
             );
           },
+          'Add this website to bookmarks',
         ),
-        ...createShortcutMenuItem(
-          ['CmdOrCtrl+Shift+R', 'Shift+F5'],
-          'Reload ignoring cache',
-          () => {
-            windowsManager.currentWindow.viewManager.selected.webContents.reload();
-          },
-        ),
-        ...createShortcutMenuItem(['CmdOrCtrl+F4'], 'Close tab', () => {
-          windowsManager.currentWindow.webContents.send(
-            'remove-tab',
-            windowsManager.currentWindow.viewManager.selectedId,
-          );
-        }),
-        ...createShortcutMenuItem(['CmdOrCtrl+H'], 'History', () => {
-          windowsManager.currentWindow.viewManager.create({
-            url: `${WEBUI_BASE_URL}history${WEBUI_URL_SUFFIX}`,
-            active: true,
-          });
-        }),
-        ...createShortcutMenuItem(['CmdOrCtrl+Shift+O'], 'Bookmarks', () => {
-          windowsManager.currentWindow.viewManager.create({
-            url: `${WEBUI_BASE_URL}bookmarks${WEBUI_URL_SUFFIX}`,
-            active: true,
-          });
-        }),
-        ...createShortcutMenuItem(['CmdOrCtrl+R', 'F5'], 'Reload', () => {
-          windowsManager.currentWindow.viewManager.selected.webContents.reload();
-        }),
-        ...createShortcutMenuItem(['CmdOrCtrl+F'], 'Find in page', () => {
-          windowsManager.currentWindow.webContents.send('find');
-        }),
-        ...createShortcutMenuItem(['CmdOrCtrl+F4'], 'Close tab', () => {
-          windowsManager.currentWindow.webContents.send(
-            'remove-tab',
-            windowsManager.currentWindow.viewManager.selectedId,
-          );
-        }),
-        ...createShortcutMenuItem(
-          ['CmdOrCtrl+Shift+T'],
-          'Revert closed tab',
-          () => {
-            windowsManager.currentWindow.webContents.send('revert-closed-tab');
-          },
-        ),
-        ...createShortcutMenuItem(
-          ['CmdOrCtrl+Tab', 'CmdOrCtrl+PageDown'],
-          'Select next tab',
+        // { type: 'separator' }
+        // TODO: list bookmarks
+      ],
+    },
+    {
+      label: 'Tools',
+      submenu: [
+        {
+          label: 'Developer',
+          submenu: [
+            ...createMenuItem(
+              ['CmdOrCtrl+U'],
+              () => {
+                viewSource();
+              },
+              'View source',
+            ),
+            ...createMenuItem(
+              ['CmdOrCtrl+Shift+I', 'CmdOrCtrl+Shift+J', 'F12'],
+              () => {
+                setTimeout(() => {
+                  windowsManager.currentWindow.viewManager.selected.webContents.toggleDevTools();
+                });
+              },
+              'Developer tools...',
+            ),
+
+            // Developer tools (current webContents) (dev)
+            ...createMenuItem(['CmdOrCtrl+Shift+F12'], () => {
+              setTimeout(() => {
+                webContents
+                  .getFocusedWebContents()
+                  .openDevTools({ mode: 'detach' });
+              });
+            }),
+          ],
+        },
+      ],
+    },
+    {
+      label: 'Tab',
+      submenu: [
+        ...createMenuItem(
+          isMac ? ['Cmd+Option+Right'] : ['Ctrl+Tab', 'Ctrl+PageDown'],
           () => {
             windowsManager.currentWindow.webContents.send('select-next-tab');
           },
+          'Select next tab',
         ),
-        ...createShortcutMenuItem(
-          ['CmdOrCtrl+Shift+Tab', 'CmdOrCtrl+PageUp'],
-          'Select previous tab',
+        ...createMenuItem(
+          isMac ? ['Cmd+Option+Left'] : ['Ctrl+Shift+Tab', 'Ctrl+PageUp'],
           () => {
             windowsManager.currentWindow.webContents.send(
               'select-previous-tab',
             );
           },
+          'Select previous tab',
         ),
-        ...createShortcutMenuItem(
-          ['Ctrl+Space', 'CmdOrCtrl+L', 'Alt+D', 'F6'],
-          'Toggle search',
-          () => {
-            windowsManager.currentWindow.dialogs.searchDialog.show();
-          },
-        ),
-        ...createShortcutMenuItem(['Alt+F', 'Alt+E'], 'Toggle menu', () => {
-          windowsManager.currentWindow.dialogs.menuDialog.show();
-        }),
-        ...createShortcutMenuItem(['Alt+Left'], 'Go back', () => {
-          const { selected } = windowsManager.currentWindow.viewManager;
-          if (selected) {
-            selected.webContents.goBack();
-          }
-        }),
-        ...createShortcutMenuItem(['Alt+Right'], 'Go forward', () => {
-          const { selected } = windowsManager.currentWindow.viewManager;
-          if (selected) {
-            selected.webContents.goForward();
-          }
-        }),
-        ...createShortcutMenuItem(
-          ['CmdOrCtrl+Shift+F12'],
-          'Toggle developer tools (window)',
-          () => {
-            setTimeout(() => {
-              webContents
-                .getFocusedWebContents()
-                .openDevTools({ mode: 'detach' });
-            });
-          },
-        ),
-        ...createShortcutMenuItem(
-          ['F12', 'Ctrl+Shift+I'],
-          'Toggle developer tools (contents)',
-          () => {
-            setTimeout(() => {
-              windowsManager.currentWindow.viewManager.selected.webContents.toggleDevTools();
-            });
-          },
-        ),
+      ],
+    },
+    {
+      label: 'Window',
+      submenu: [
+        { role: 'minimize' },
+        { role: 'zoom' },
+        ...(isMac
+          ? [
+              { type: 'separator' },
+              { role: 'front' },
+              { type: 'separator' },
+              { role: 'window' },
+            ]
+          : [{ role: 'close' }]),
+        { type: 'separator' },
         {
-          label: 'View page source',
-          accelerator: 'CmdOrCtrl+U',
-          click: () => {
-            viewSource();
-          },
-        },
-        {
-          label: 'Save as',
-          accelerator: 'CmdOrCtrl+S',
-          click: () => {
-            saveAs();
-          },
-        },
-        {
-          label: 'Print',
-          accelerator: 'CmdOrCtrl+P',
-          click: () => {
-            printPage();
+          label: 'Always on top',
+          type: 'checkbox',
+          checked: false,
+          click(menuItem: MenuItem, browserWindow: BrowserWindow) {
+            browserWindow.setAlwaysOnTop(!browserWindow.isAlwaysOnTop());
+            menuItem.checked = browserWindow.isAlwaysOnTop();
           },
         },
       ],
     },
-    { role: 'editMenu' },
   ];
 
+  // Ctrl+1 - Ctrl+8
   template[0].submenu = template[0].submenu.concat(
-    createShortcutMenuItem(
+    createMenuItem(
       Array.from({ length: 8 }, (v, k) => k + 1).map(i => `CmdOrCtrl+${i}`),
-      'Select tab index',
-      i => {
+      (window, menuItem, i) => {
         windowsManager.currentWindow.webContents.send('select-tab-index', i);
       },
     ),
   );
 
+  // Ctrl+9
   template[0].submenu = template[0].submenu.concat(
-    createShortcutMenuItem(['CmdOrCtrl+9'], 'Select last tab', () => {
+    createMenuItem(['CmdOrCtrl+9'], () => {
       windowsManager.currentWindow.webContents.send('select-last-tab');
     }),
   );

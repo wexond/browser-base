@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { observable } from 'mobx';
 import { DialogStore } from '~/models/dialog-store';
 
@@ -10,6 +10,7 @@ export class Store extends DialogStore {
     super();
     ipcRenderer.on('visible', (e, flag) => {
       this.visible = flag;
+      this.alwaysOnTop = remote.getCurrentWindow().isAlwaysOnTop();
     });
   }
 
