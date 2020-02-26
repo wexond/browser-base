@@ -70,6 +70,15 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           accelerator: 'CmdOrCtrl+Shift+Q',
         },
         ...createShortcutMenuItem(
+          ['CmdOrCtrl+D'],
+          'Add this website to bookmarks',
+          () => {
+            windowsManager.currentWindow.webContents.send(
+              'show-add-bookmark-dialog',
+            );
+          },
+        ),
+        ...createShortcutMenuItem(
           ['CmdOrCtrl+Shift+R', 'Shift+F5'],
           'Reload ignoring cache',
           () => {
