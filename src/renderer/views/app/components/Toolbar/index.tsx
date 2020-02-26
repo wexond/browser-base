@@ -32,12 +32,22 @@ const onKeyClick = () => {
   });
 };
 
-const onStarClick = (e: React.MouseEvent<HTMLDivElement>) => {
-  const { left, width } = e.currentTarget.getBoundingClientRect();
+let starRef: HTMLDivElement = null;
+
+const showAddBookmarkDialog = () => {
+  const { left, width } = starRef.getBoundingClientRect();
   ipcRenderer.send(
     `show-add-bookmark-dialog-${store.windowId}`,
     left + width / 2,
   );
+};
+
+ipcRenderer.on('show-add-bookmark-dialog', () => {
+  showAddBookmarkDialog();
+});
+
+const onStarClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  showAddBookmarkDialog();
 };
 
 const onMenuClick = () => {
@@ -104,6 +114,7 @@ const RightButtons = observer(() => {
       <BrowserActions />
       {store.extensions.browserActions.length > 0 && <Separator />}
       <ToolbarButton
+        divRef={r => (starRef = r)}
         icon={store.isBookmarked ? icons.starFilled : icons.star}
         size={18}
         onMouseDown={onStarClick}
