@@ -69,7 +69,13 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           role: 'quit',
           accelerator: 'CmdOrCtrl+Shift+Q',
         },
-
+        ...createShortcutMenuItem(
+          ['CmdOrCtrl+Shift+R', 'Shift+F5'],
+          'Reload ignoring cache',
+          () => {
+            windowsManager.currentWindow.viewManager.selected.webContents.reload();
+          },
+        ),
         ...createShortcutMenuItem(['CmdOrCtrl+F4'], 'Close tab', () => {
           windowsManager.currentWindow.webContents.send(
             'remove-tab',
