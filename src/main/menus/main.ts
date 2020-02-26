@@ -5,6 +5,8 @@ import { viewSource, saveAs, printPage } from './common-actions';
 import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 import { AppWindow } from '../windows';
 
+const isMac = process.platform === 'darwin';
+
 const createMenuItem = (
   shortcuts: string[],
   action: (
@@ -27,7 +29,7 @@ const createMenuItem = (
 
 export const getMainMenu = (windowsManager: WindowsManager) => {
   const template: any = [
-    ...(process.platform === 'darwin'
+    ...(isMac
       ? [
           {
             label: app.name,
@@ -139,7 +141,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         { role: 'cut' },
         { role: 'copy' },
         { role: 'paste' },
-        ...(process.platform === 'darwin'
+        ...(isMac
           ? [
               { role: 'pasteAndMatchStyle' },
               { role: 'delete' },
@@ -185,7 +187,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
       submenu: [
         // TODO: Homepage - Ctrl+Shift+H
         ...createMenuItem(
-          ['Alt+Left'],
+          isMac ? ['Cmd+[', 'Cmd+Left'] : ['Alt+Left'],
           () => {
             const { selected } = windowsManager.currentWindow.viewManager;
             if (selected) {
@@ -195,7 +197,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
           'Go back',
         ),
         ...createMenuItem(
-          ['Alt+Right'],
+          isMac ? ['Cmd+]', 'Cmd+Right'] : ['Alt+Right'],
           () => {
             const { selected } = windowsManager.currentWindow.viewManager;
             if (selected) {
@@ -210,7 +212,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         // TODO: list last visited
         { type: 'separator' },
         ...createMenuItem(
-          ['CmdOrCtrl+H'],
+          isMac ? ['Cmd+Y'] : ['Ctrl+H'],
           () => {
             windowsManager.currentWindow.viewManager.create({
               url: `${WEBUI_BASE_URL}history${WEBUI_URL_SUFFIX}`,
@@ -308,7 +310,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
       submenu: [
         { role: 'minimize' },
         { role: 'zoom' },
-        ...(process.platform === 'darwin'
+        ...(isMac
           ? [
               { type: 'separator' },
               { role: 'front' },
