@@ -115,34 +115,34 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cliqz/adblocker-content@^1.9.1":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-content/-/adblocker-content-1.9.1.tgz#ccbd1d9d8c7603ea10b2840ffa456bf03c2c25d6"
-  integrity sha512-FDjDxa+rFqkF7oxagn1m0khino8PoLQL8mMw5kVcH9QArCaECsCq6NfA/7xzB09Y7FHFLsE0+0lg8LY2qYVJ1g==
+"@cliqz/adblocker-content@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-content/-/adblocker-content-1.9.2.tgz#64d15cb2accb2445d5256b469f6fa31c1207b00c"
+  integrity sha512-18NHuhJVAnRfBLB5X2RFXdOWcrdODl/dTE1DDTRcFioM2cCvNR7oeZlaZ7oYtp5lpqmFBySzuhGy394IEXk4YA==
 
-"@cliqz/adblocker-electron-preload@^1.9.1":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-electron-preload/-/adblocker-electron-preload-1.9.1.tgz#6bab95d2caaac0072495b5d6cbdb75a09c38dee1"
-  integrity sha512-Mli7RIL3uIacIAW7X08tUqKz7/IGyteAdOmQsyJnwnRg+WfJ3YvvkVSlT/aNr5AQzZGv9PBikqGFfymr5D1eJw==
+"@cliqz/adblocker-electron-preload@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-electron-preload/-/adblocker-electron-preload-1.9.2.tgz#f73e901328f9ed48531e3301d7d25ece8b31e3aa"
+  integrity sha512-gi8TL6PqG8DcYTHr9uF9eoWYvOSWUWgqVrnAq5OctMyBU5+/wbl/TZkR/FApOghXf8a8IacN5P+gIdYt5z9nNg==
   dependencies:
-    "@cliqz/adblocker-content" "^1.9.1"
+    "@cliqz/adblocker-content" "^1.9.2"
 
-"@cliqz/adblocker-electron@1.9.1":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-electron/-/adblocker-electron-1.9.1.tgz#12fac64b1f1fc12465c7181ae01ab48bdf946d60"
-  integrity sha512-DhgQ+n51OBKL55ph+Q0Ft5YGDxurDrm1a5ocANbw16IBfS3PG/LMKSVX/o45DaWUtUy+WZFtz8TAfDinIeMbEg==
+"@cliqz/adblocker-electron@1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-electron/-/adblocker-electron-1.9.2.tgz#6c472974509bcf3caa3c43a8397e4bb5f7f66ac1"
+  integrity sha512-z+L5B985EMTwTAMXMrS96apBhmZYuWDVl3VrqPotdZ3utE8yYVMajQgF3Bsg+KEL3LiaxslShSNXhpc7eylnGQ==
   dependencies:
-    "@cliqz/adblocker" "^1.9.1"
-    "@cliqz/adblocker-electron-preload" "^1.9.1"
+    "@cliqz/adblocker" "^1.9.2"
+    "@cliqz/adblocker-electron-preload" "^1.9.2"
     tldts-experimental "^5.6.3"
 
-"@cliqz/adblocker@^1.9.1":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@cliqz/adblocker/-/adblocker-1.9.1.tgz#b755e263b459a1158ecebeb82d60e26f4c6bca80"
-  integrity sha512-ADb8tZml20Nozt7AJNvHcjI5Q8NsbPuidV1HLiUvTSIvVF0968qvJIpOhHOlEG++qC5K+bMXNkCiGamttGyD7A==
+"@cliqz/adblocker@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@cliqz/adblocker/-/adblocker-1.9.2.tgz#7038b7d08eb610956b91f645be733b602c4d277d"
+  integrity sha512-B3JE4F6LQ8qDAgWlN3a2NW1MgBjvHCCzX1aCglm/k20iAa1Yw89Mcbu/LJL4FqgUe4jaYUwb+Siya1ZK+Z7Kfg==
   dependencies:
     "@remusao/smaz" "^1.7.1"
-    "@types/chrome" "^0.0.96"
+    "@types/chrome" "^0.0.97"
     "@types/firefox-webext-browser" "^70.0.1"
     tldts-experimental "^5.6.3"
 
@@ -340,17 +340,10 @@
   resolved "https://registry.yarnpkg.com/@tokenizer/token/-/token-0.1.1.tgz#f0d92c12f87079ddfd1b29f614758b9696bc29e3"
   integrity sha512-XO6INPbZCxdprl+9qa/AAbFFOMzzwqYxpjPgLICrMD6C2FCw6qfJOPcBk6JqqPLSaZ/Qx87qn4rpPmPMwaAK6w==
 
-"@types/chrome@0.0.97":
+"@types/chrome@0.0.97", "@types/chrome@^0.0.97":
   version "0.0.97"
   resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.97.tgz#aa0e5965a0662906cd57c632e34fe6d1462963f0"
   integrity sha512-buJsiNcs2X/Pb22ZNShMOUuDgV6o5AH6U9bGpc0diTZfWYOVOzcA2LKfBL+Sbxp4K4VvT0rA3zsEcui24vQofg==
-  dependencies:
-    "@types/filesystem" "*"
-
-"@types/chrome@^0.0.96":
-  version "0.0.96"
-  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.96.tgz#afdd11564bffcb1623ea83a85ccff25f5a99b073"
-  integrity sha512-0b5H9CoFnBe1yGrC/wVS+zYFR8M8iaIPcR11BeHJvqDiP344DW6F/5sEBIGFyKl++CWVcvhx+7JQVUIjGWSN5w==
   dependencies:
     "@types/filesystem" "*"
 
@@ -460,10 +453,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.7.1.tgz#238eb34a66431b71d2aaddeaa7db166f25971a0d"
   integrity sha512-Zq8gcQGmn4txQEJeiXo/KiLpon8TzAl0kmKH4zdWctPj05nWwp1ClMdAVEloqrQKfaC48PNLdgN/aVaLqUrluA==
 
-"@types/node@13.7.5":
-  version "13.7.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.7.5.tgz#2da244d764666f85154274cac94a1cb5b88dcb8d"
-  integrity sha512-PfSBCTQhAQg6QBP4UhXgrZ/wQ3pjfwBr4sA7Aul+pC9XwGgm9ezrJF7OiC/I4Kf+7VPu/5ThKngAruqxyctZfA==
+"@types/node@13.7.6":
+  version "13.7.6"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.7.6.tgz#cb734a7c191472ae6a2b3a502b4dfffcea974113"
+  integrity sha512-eyK7MWD0R1HqVTp+PtwRgFeIsemzuj4gBFSQxfPHY5iMjS7474e5wq+VFgTcdpyHeNxyKSaetYAjdMLJlKoWqA==
 
 "@types/node@^10.11.7":
   version "10.17.15"
@@ -2391,10 +2384,10 @@ electron-updater@4.2.2:
     pako "^1.0.11"
     semver "^7.1.3"
 
-electron@9.0.0-beta.2:
-  version "9.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-9.0.0-beta.2.tgz#cf7cfae435c1f54991f740d2c9d627f18fe007b0"
-  integrity sha512-WkRkUh5gE5B+b9XdTDvC67VvG118J0+wURcBpcXlBZJ9k+oqn0qcX+D3NG1WitXjcrAdV18cx5taUOat8zxAeA==
+electron@9.0.0-beta.3:
+  version "9.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-9.0.0-beta.3.tgz#7a825a58d4561c71a21f96cc900cf9da761aa484"
+  integrity sha512-se2XiC3sc6o8EUL/uE7bOknW7/gh37mQ+7uX8idugfYyK1oCISfr5CqtVXOMNTwMtx0opdFQ1HFC+W2ckNiPXg==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -3069,10 +3062,10 @@ for-in@^1.0.2:
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
   integrity sha1-gQaNKVqBQuwKxybG4iAMMPttXoA=
 
-fork-ts-checker-webpack-plugin@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-4.0.4.tgz#ba1be68d63dcf509f6d1b08fb8e19efb6d7e8a96"
-  integrity sha512-6IEqHH6s+tv5sho5d3dn7dfcnbjKHwfqL74kRfpAP2e8MCHuMh5ixtYrbdfPO4Zat3S5gwULOoVArjK3HMwNdA==
+fork-ts-checker-webpack-plugin@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-4.0.5.tgz#1982b464cb8a44d224940a95a0d075c8bbd700bf"
+  integrity sha512-7juf7VGQ4GD7beQI2vsHlWME4H7cabXn4+zYzvWTOYQUjn3L+3tWQe8j9KnVOpdCf+1PoSvYMRT2A2kltfGLtQ==
   dependencies:
     babel-code-frame "^6.22.0"
     chalk "^2.4.1"
