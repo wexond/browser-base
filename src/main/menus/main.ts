@@ -19,6 +19,14 @@ const createShortcutMenuItem = (
 export const getMainMenu = (windowsManager: WindowsManager) => {
   const template: any = [
     {
+      submenu: [
+        {
+          role: 'quit',
+          accelerator: 'CmdOrCtrl+Shift+Q',
+        },
+      ],
+    },
+    {
       label: 'File',
       submenu: [
         {
@@ -65,19 +73,6 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         {
           type: 'separator',
         },
-        {
-          role: 'quit',
-          accelerator: 'CmdOrCtrl+Shift+Q',
-        },
-        ...createShortcutMenuItem(
-          ['CmdOrCtrl+D'],
-          'Add this website to bookmarks',
-          () => {
-            windowsManager.currentWindow.webContents.send(
-              'show-add-bookmark-dialog',
-            );
-          },
-        ),
         ...createShortcutMenuItem(
           ['CmdOrCtrl+Shift+R', 'Shift+F5'],
           'Reload ignoring cache',
@@ -90,18 +85,6 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
             'remove-tab',
             windowsManager.currentWindow.viewManager.selectedId,
           );
-        }),
-        ...createShortcutMenuItem(['CmdOrCtrl+H'], 'History', () => {
-          windowsManager.currentWindow.viewManager.create({
-            url: `${WEBUI_BASE_URL}history${WEBUI_URL_SUFFIX}`,
-            active: true,
-          });
-        }),
-        ...createShortcutMenuItem(['CmdOrCtrl+Shift+O'], 'Bookmarks', () => {
-          windowsManager.currentWindow.viewManager.create({
-            url: `${WEBUI_BASE_URL}bookmarks${WEBUI_URL_SUFFIX}`,
-            active: true,
-          });
         }),
         ...createShortcutMenuItem(['CmdOrCtrl+R', 'F5'], 'Reload', () => {
           windowsManager.currentWindow.viewManager.selected.webContents.reload();
@@ -148,18 +131,6 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         ...createShortcutMenuItem(['Alt+F', 'Alt+E'], 'Toggle menu', () => {
           windowsManager.currentWindow.dialogs.menuDialog.show();
         }),
-        ...createShortcutMenuItem(['Alt+Left'], 'Go back', () => {
-          const { selected } = windowsManager.currentWindow.viewManager;
-          if (selected) {
-            selected.webContents.goBack();
-          }
-        }),
-        ...createShortcutMenuItem(['Alt+Right'], 'Go forward', () => {
-          const { selected } = windowsManager.currentWindow.viewManager;
-          if (selected) {
-            selected.webContents.goForward();
-          }
-        }),
         ...createShortcutMenuItem(
           ['CmdOrCtrl+Shift+F12'],
           'Toggle developer tools (window)',
@@ -204,6 +175,57 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
       ],
     },
     { role: 'editMenu' },
+    {
+      label: 'View',
+      submenu: [],
+    },
+    {
+      label: 'History',
+      submenu: [
+        ...createShortcutMenuItem(['CmdOrCtrl+H'], 'Manage history', () => {
+          windowsManager.currentWindow.viewManager.create({
+            url: `${WEBUI_BASE_URL}history${WEBUI_URL_SUFFIX}`,
+            active: true,
+          });
+        }),
+        ...createShortcutMenuItem(['Alt+Left'], 'Go back', () => {
+          const { selected } = windowsManager.currentWindow.viewManager;
+          if (selected) {
+            selected.webContents.goBack();
+          }
+        }),
+        ...createShortcutMenuItem(['Alt+Right'], 'Go forward', () => {
+          const { selected } = windowsManager.currentWindow.viewManager;
+          if (selected) {
+            selected.webContents.goForward();
+          }
+        }),
+      ],
+    },
+    {
+      label: 'Bookmarks',
+      submenu: [
+        ...createShortcutMenuItem(
+          ['CmdOrCtrl+D'],
+          'Add this website to bookmarks',
+          () => {
+            windowsManager.currentWindow.webContents.send(
+              'show-add-bookmark-dialog',
+            );
+          },
+        ),
+        ...createShortcutMenuItem(
+          ['CmdOrCtrl+Shift+O'],
+          'Manage bookmarks',
+          () => {
+            windowsManager.currentWindow.viewManager.create({
+              url: `${WEBUI_BASE_URL}bookmarks${WEBUI_URL_SUFFIX}`,
+              active: true,
+            });
+          },
+        ),
+      ],
+    },
   ];
 
   template[0].submenu = template[0].submenu.concat(
