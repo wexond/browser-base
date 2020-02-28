@@ -1,47 +1,46 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-  <meta charset="UTF-8" />
+    <style>
+      body {
+        user-select: none;
+        cursor: default;
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
 
-  <style>
-    body {
-      user-select: none;
-      cursor: default;
-      margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-    }
+      * {
+        box-sizing: border-box;
+      }
 
-    * {
-      box-sizing: border-box;
-    }
+      .app {
+        margin: 8px;
+        margin-top: 3px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        overflow: hidden;
+        position: relative;
+        transition: 0.35s opacity cubic-bezier(0.1, 0.9, 0.2, 1),
+          0.35s transform cubic-bezier(0.1, 0.9, 0.2, 1);
+        background-color: white;
+        width: fit-content;
+        opacity: 0;
+      }
 
-    .app {
-      margin: 8px;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-      overflow: hidden;
-      position: relative;
-      transition: 0.2s opacity, 0.2s margin-top;
-      background-color: white;
-      width: fit-content;
-      opacity: 0;
-      margin-top: 3px;
-    }
+      .visible {
+        opacity: 1;
+        transform: translateY(10px);
+      }
+    </style>
+  </head>
 
-    .visible {
-      opacity: 1;
-      margin-top: 10px;
-    }
-  </style>
-</head>
-
-<body>
-  <div id="app" class="app">
-    <div id="container"></div>
-  </div>
-</body>
-
+  <body>
+    <div id="app" class="app">
+      <div id="container"></div>
+    </div>
+  </body>
 </html>
