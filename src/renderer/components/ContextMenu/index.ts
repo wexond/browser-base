@@ -33,7 +33,7 @@ export const ContextMenu = styled.div`
       : 'none'};
     opacity: ${visible ? 1 : 0};
     transform: translate3d(0px, ${visible ? 0 : -10}px, 0px);
-    pointer-events: ${visible ? 'auto' : 'none'};
+    pointer-events: ${visible ? 'inherit' : 'none'};
     background-color: ${translucent
       ? theme['dropdown.backgroundColor.translucent']
       : theme['dropdown.backgroundColor']};
@@ -80,7 +80,7 @@ export const ContextMenuItem = styled.div`
     iconSize,
     disabled,
   }: ContextMenuItemProps) => css`
-    pointer-events: ${disabled ? 'none' : 'auto'};
+    pointer-events: ${disabled ? 'none' : 'inherit'};
     opacity: ${disabled ? 0.38 : 1};
     font-size: ${dense ? 13 : 14}px;
     padding: ${dense ? 8 : 12}px ${dense ? 12 : 20}px;

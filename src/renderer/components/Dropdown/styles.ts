@@ -6,6 +6,7 @@ import { ITheme } from '~/interfaces';
 
 export const StyledDropdown = styled.div`
   height: 32px;
+  min-width: 200px;
   position: relative;
   border-radius: 4px;
   user-select: none;

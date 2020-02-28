@@ -36,7 +36,6 @@ export const Row = styled.div`
 
 export const Control = styled.div`
   margin-left: auto;
-  width: 200px;
 `;
 
 export const SecondaryText = styled.div`
