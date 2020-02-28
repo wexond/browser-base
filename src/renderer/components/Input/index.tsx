@@ -5,7 +5,6 @@ import { centerIcon } from '~/renderer/mixins';
 import { icons } from '~/renderer/constants';
 
 export const Control = css`
-  width: 200px;
   height: 32px;
   position: relative;
   border: none;
