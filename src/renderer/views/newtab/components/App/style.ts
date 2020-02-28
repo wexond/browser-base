@@ -53,26 +53,34 @@ export const Content = styled.div`
   z-index: 3;
 `;
 
-export const Menu = styled.div`
+export const RightBar = styled.div`
   position: absolute;
-  bottom: 32px;
   display: flex;
-  width: 100%;
+  right: 32px;
+  flex-flow: column;
+  height: 100%;
+  padding-top: 32px;
+`;
+
+export const Menu = styled.div`
+  display: flex;
+  flex-flow: column;
+  height: 100%;
   justify-content: center;
 `;
 
 export const IconItem = styled.div`
   width: 34px;
   height: 34px;
-  margin-left: 16px;
-  opacity: 0.54;
+  margin-top: 8px;
+  opacity: 0.8;
   z-index: 3;
   cursor: pointer;
   border-radius: 4px;
   position: relative;
 
   &:first-child {
-    margin-left: 0;
+    margin-top: 0;
   }
 
   &:hover {

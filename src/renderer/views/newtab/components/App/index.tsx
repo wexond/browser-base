@@ -5,7 +5,7 @@ import { hot } from 'react-hot-loader/root';
 import store from '../../store';
 import { Style } from '../../style';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { Wrapper, Content, IconItem, Menu, Image, Refresh } from './style';
+import { Wrapper, Content, IconItem, Menu, Image, RightBar } from './style';
 import { TopSites } from '../TopSites';
 import { icons } from '~/renderer/constants';
 import { News } from '../News';
@@ -38,35 +38,41 @@ export default hot(
               <TopSites></TopSites>
             </Content>
 
-            <Menu>
+            <RightBar>
               <IconItem
-                title="Settings"
-                icon={icons.settings}
-                onClick={onIconClick('settings')}
+                title="Dashboard settings"
+                icon={icons.tune}
+                onClick={onRefreshClick}
               ></IconItem>
-              <IconItem
-                title="History"
-                icon={icons.history}
-                onClick={onIconClick('history')}
-              ></IconItem>
-              <IconItem
-                title="Bookmarks"
-                icon={icons.bookmarks}
-                onClick={onIconClick('bookmarks')}
-              ></IconItem>
-              <IconItem
-                title="Downloads"
-                icon={icons.download}
-                onClick={onIconClick('downloads')}
-              ></IconItem>
-              <IconItem
-                title="Extensions"
-                icon={icons.extensions}
-                onClick={onIconClick('extensions')}
-              ></IconItem>
-            </Menu>
 
-            <Refresh icon={icons.tune} onClick={onRefreshClick}></Refresh>
+              <Menu>
+                <IconItem
+                  title="Settings"
+                  icon={icons.settings}
+                  onClick={onIconClick('settings')}
+                ></IconItem>
+                <IconItem
+                  title="History"
+                  icon={icons.history}
+                  onClick={onIconClick('history')}
+                ></IconItem>
+                <IconItem
+                  title="Bookmarks"
+                  icon={icons.bookmarks}
+                  onClick={onIconClick('bookmarks')}
+                ></IconItem>
+                <IconItem
+                  title="Downloads"
+                  icon={icons.download}
+                  onClick={onIconClick('downloads')}
+                ></IconItem>
+                <IconItem
+                  title="Extensions"
+                  icon={icons.extensions}
+                  onClick={onIconClick('extensions')}
+                ></IconItem>
+              </Menu>
+            </RightBar>
           </Wrapper>
           <Content>
             <News></News>
