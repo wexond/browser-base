@@ -4,8 +4,6 @@ import { shadows, centerIcon } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
 import { DIALOG_EASING } from '~/renderer/constants';
 
-const EASING = 'cubic-bezier(0.1, 0.9, 0.2, 1)';
-
 export const ContextMenu = styled.div`
   position: absolute;
   backface-visibility: hidden;
