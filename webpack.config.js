@@ -1,6 +1,6 @@
 /* eslint-disable */
 const { getConfig, dev } = require('./webpack.config.base');
-const { spawn } = require('child_process');
+const { spawn, execSync } = require('child_process');
 const CopyPlugin = require('copy-webpack-plugin');
 let terser = require('terser');
 /* eslint-enable */
@@ -57,16 +57,20 @@ if (process.env.START === '1') {
     apply: compiler => {
       compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
         if (electronProcess) {
-          electronProcess.kill();
+          if (process.platform === 'win32') {
+            execSync(`taskkill /pid ${electronProcess.pid} /f /t`);
+          } else {
+            electronProcess.kill();
+          }
+
+          electronProcess = null;
         }
 
         electronProcess = spawn('npm', ['start'], {
           shell: true,
           env: process.env,
           stdio: 'inherit',
-        })
-          .on('close', code => process.exit(code))
-          .on('error', spawnError => console.error(spawnError));
+        });
       });
     },
   });

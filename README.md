@@ -21,8 +21,8 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 - **Built-in dark mode** - Wexond has a built-in dark theme, but it also changes white websites to dark with just a one click in Overlay. No eyestrain at night anymore!
 - **Beautiful and minimalistic UI** - The address bar is hidden to take less space, but it doesn't impact on usability in any way. It's even better! [Give it a shot](https://wexond.net)
 - **Tab groups** - Easily group tabs to groups and access them really fast.
-- **Partial support for Chrome extensions** - Install some extensions from Chrome Web Store* (see [#110](https://github.com/wexond/wexond/issues/110))
-- **Packages** - Extend Wexond for your needs, by installing or developing your own packages* ([#147](https://github.com/wexond/wexond/issues/147)) (WIP)
+- **Partial support for Chrome extensions** - Install some extensions from Chrome Web Store\* (see [#110](https://github.com/wexond/wexond/issues/110))
+- **Packages** - Extend Wexond for your needs, by installing or developing your own packages\* ([#147](https://github.com/wexond/wexond/issues/147)) (WIP)
 
 # Screenshots
 
@@ -50,6 +50,12 @@ Firstly, run this command to install all needed dependencies. If you have encoun
 
 ```bash
 $ npm install
+```
+
+After a successful installation, the native modules need to be rebuilt using Electron headers. To do this, run:
+
+```bash
+$ npm run rebuild
 ```
 
 The given command below will run Wexond in the development mode.
