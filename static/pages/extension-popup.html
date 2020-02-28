@@ -24,16 +24,17 @@
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
         overflow: hidden;
         position: relative;
-        transition: 0.35s opacity cubic-bezier(0.1, 0.9, 0.2, 1),
+        transition: 0.35s opacity,
           0.35s transform cubic-bezier(0.1, 0.9, 0.2, 1);
         background-color: white;
         width: fit-content;
+        transform: translateY(-10px);
         opacity: 0;
       }
 
       .visible {
         opacity: 1;
-        transform: translateY(10px);
+        transform: translateY(0);
       }
     </style>
   </head>

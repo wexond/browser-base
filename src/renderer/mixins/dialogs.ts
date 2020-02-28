@@ -2,7 +2,7 @@ import { DIALOG_EASING } from '../constants';
 import { ITheme } from '~/interfaces';
 import styled, { css } from 'styled-components';
 
-export const DIALOG_TRANSITION = `0.35s opacity ${DIALOG_EASING}, 0.35s transform ${DIALOG_EASING}`;
+export const DIALOG_TRANSITION = `0.2s opacity, 0.35s transform ${DIALOG_EASING}`;
 
 export const DialogStyle = styled.div`
   margin: 8px;
