@@ -39,6 +39,10 @@ ipcMain.on('get-webcontents-id', e => {
   e.returnValue = e.sender.id;
 });
 
+ipcMain.on('get-window-id', e => {
+  e.returnValue = (e.sender as any).getOwnerBrowserWindow().id;
+});
+
 ipcMain.handle(
   `web-contents-call`,
   async (e, { webContentsId, method, args }) => {
