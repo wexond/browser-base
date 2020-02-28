@@ -5,8 +5,8 @@ import { ITheme } from '~/interfaces';
 import { DialogStyle } from '~/renderer/mixins/dialogs';
 
 export const StyledApp = styled(DialogStyle)`
-  ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
-    transform: translateY(${visible ? 0 : -5}px);
+  margin-top: 10px;
+  ${({ theme }: { theme?: ITheme }) => css`
     box-shadow: 0 0 0 2px
         ${theme['searchBox.input.lightForeground'] ? BLUE_500 : BLUE_300},
       ${shadows(4)};
