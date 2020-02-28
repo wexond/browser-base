@@ -113,34 +113,3 @@ export const Refresh = styled(IconItem)`
   right: 32px;
   margin-top: 0;
 `;
-
-export const PreferencesSubTitle = styled(ContextMenuRow)`
-  margin-top: 16px;
-  margin-bottom: 12px;
-`;
-
-export const PreferencesTitle = styled.div`
-  height: 32px;
-  font-size: 16px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-`;
-
-export const Back = styled(IconItem)`
-  margin: 0 8px 0 12px;
-  width: 24px;
-  height: 24px;
-
-  ${({ theme }: { theme?: ITheme }) => css`
-    &:after {
-      filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};
-    }
-
-    &:hover {
-      background-color: ${theme['pages.lightForeground']
-        ? 'rgba(255, 255, 255, 0.2)'
-        : 'rgba(0, 0, 0, 0.3)'};
-    }
-  `}
-`;

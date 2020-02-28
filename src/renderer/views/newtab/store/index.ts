@@ -23,6 +23,9 @@ export class Store {
   public imageVisible = true;
 
   @observable
+  public changeImageDaily = true;
+
+  @observable
   public topSitesVisible = true;
 
   @observable
