@@ -66,7 +66,7 @@ export default hot(
               ></IconItem>
             </Menu>
 
-            <Refresh icon={icons.refresh} onClick={onRefreshClick}></Refresh>
+            <Refresh icon={icons.tune} onClick={onRefreshClick}></Refresh>
           </Wrapper>
           <Content>
             <News></News>

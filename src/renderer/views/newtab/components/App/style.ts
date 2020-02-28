@@ -55,18 +55,16 @@ export const Content = styled.div`
 
 export const Menu = styled.div`
   position: absolute;
-  left: 0;
-  height: 100%;
+  bottom: 32px;
   display: flex;
-  flex-flow: column;
+  width: 100%;
   justify-content: center;
-  margin-left: 16px;
 `;
 
 export const IconItem = styled.div`
-  width: 40px;
-  height: 40px;
-  margin-top: 8px;
+  width: 34px;
+  height: 34px;
+  margin-left: 16px;
   opacity: 0.54;
   z-index: 3;
   cursor: pointer;
@@ -74,12 +72,12 @@ export const IconItem = styled.div`
   position: relative;
 
   &:first-child {
-    margin-top: 0;
+    margin-left: 0;
   }
 
   &:hover {
     opacity: 1;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(2.5px);
   }
 
