@@ -17,6 +17,21 @@ export const Img = styled.div`
   `};
 `;
 
+export const Fill = styled.div`
+  flex: 2;
+  display: none;
+`;
+
+export const Description = styled.div`
+  overflow: hidden;
+  margin-top: 8px;
+  display: none;
+  line-height: 1.5rem;
+  position: relative;
+  ${maxLines(3)};
+  opacity: 0.8;
+`;
+
 export const StyledNewsItem = styled.a`
   border-radius: 6px;
   overflow: hidden;
@@ -26,6 +41,23 @@ export const StyledNewsItem = styled.a`
   cursor: pointer;
   animation: fadein 0.3s;
   will-change: opacity;
+
+  &:nth-child(16n + 10) {
+    grid-column: 1 / 3;
+
+    &:after {
+      background-image: linear-gradient(to left, transparent, #000);
+      opacity: 0.75;
+    }
+
+    & ${Description} {
+      display: -webkit-box;
+    }
+
+    & ${Fill} {
+      display: block;
+    }
+  }
 
   @keyframes fadein {
     from {
@@ -38,14 +70,8 @@ export const StyledNewsItem = styled.a`
 
   &:after {
     content: '';
-
-    ${({ fullSize }: { fullSize?: boolean }) => css`
-      background-image: ${fullSize
-        ? 'linear-gradient(to left, transparent, #000)'
-        : 'linear-gradient(transparent, #000)'};
-      opacity: ${fullSize ? 0.75 : 0.85};
-    `};
-
+    background-image: linear-gradient(transparent, #000);
+    opacity: 0.85;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -91,10 +117,6 @@ export const Footer = styled.div`
   margin-top: 16px;
 `;
 
-export const Fill = styled.div`
-  flex: 2;
-`;
-
 export const Source = styled.div`
   opacity: 0.54;
   font-size: 12px;
@@ -128,13 +150,4 @@ export const Overline = styled.div`
   opacity: 0.54;
   margin-bottom: 8px;
   font-size: 10px;
-`;
-
-export const Description = styled.div`
-  overflow: hidden;
-  margin-top: 8px;
-  line-height: 1.5rem;
-  position: relative;
-  ${maxLines(3)};
-  opacity: 0.8;
 `;
