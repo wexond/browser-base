@@ -1,21 +1,9 @@
 import styled, { css } from 'styled-components';
 import { ITheme } from '~/interfaces';
+import { DialogStyle } from '~/renderer/mixins/dialogs';
 
-export const StyledApp = styled.div`
-  margin: 8px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-  transition: 0.2s opacity, 0.2s margin-top;
+export const StyledApp = styled(DialogStyle)`
   padding: 16px;
-  background-color: white;
-
-  ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
-    opacity: ${visible ? 1 : 0};
-    margin-top: ${visible ? 3 : 10}px;
-    background-color: ${theme['dialog.backgroundColor']};
-  `}
 `;
 
 export const Title = styled.div`
