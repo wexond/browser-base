@@ -2,32 +2,17 @@ import styled, { css } from 'styled-components';
 import { ITheme } from '~/interfaces';
 import { maxLines } from '~/renderer/mixins';
 import { TAB_MAX_WIDTH } from '~/renderer/views/app/constants/tabs';
+import { DIALOG_TRANSITION, DialogStyle } from '~/renderer/mixins/dialogs';
 
-export const StyledApp = styled.div`
-  margin: 8px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
+export const StyledApp = styled(DialogStyle)`
   padding: 12px;
   font-size: 13px;
   max-width: ${TAB_MAX_WIDTH}px;
+  margin-top: 0;
 
-  ${({
-    visible,
-    theme,
-    xTransition,
-  }: {
-    visible: boolean;
-    theme?: ITheme;
-    xTransition: boolean;
-  }) => css`
-    opacity: ${visible ? 1 : 0};
-    margin-top: ${visible ? 0 : 7}px;
-    background-color: ${theme['dialog.backgroundColor']};
+  ${({ theme, xTransition }: { theme?: ITheme; xTransition: boolean }) => css`
     color: ${theme['dialog.textColor']};
-    transition: 0.2s opacity,
-      0.2s margin-top ${xTransition ? ', 0.08s margin-left' : ''};
+    transition: ${DIALOG_TRANSITION} ${xTransition ? ', 0.08s margin-left' : ''};
   `}
 `;
 

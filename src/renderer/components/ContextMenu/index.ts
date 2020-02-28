@@ -2,8 +2,7 @@ import styled, { css } from 'styled-components';
 
 import { shadows, centerIcon } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
-
-const EASING = 'cubic-bezier(0.1, 0.9, 0.2, 1)';
+import { DIALOG_EASING } from '~/renderer/constants';
 
 export const ContextMenu = styled.div`
   position: absolute;
@@ -29,7 +28,7 @@ export const ContextMenu = styled.div`
   }) => css`
     padding: ${dense ? 4 : 8}px 0;
     transition: ${visible
-      ? `0.35s opacity ${EASING}, 0.35s transform ${EASING}`
+      ? `0.35s opacity ${DIALOG_EASING}, 0.35s transform ${DIALOG_EASING}`
       : 'none'};
     opacity: ${visible ? 1 : 0};
     transform: translate3d(0px, ${visible ? 0 : -10}px, 0px);
