@@ -5,7 +5,6 @@ import { centerIcon } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
 
 export const StyledDropdown = styled.div`
-  width: 200px;
   height: 32px;
   position: relative;
   border-radius: 4px;

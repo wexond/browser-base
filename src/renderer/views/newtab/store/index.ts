@@ -19,6 +19,47 @@ export class Store {
   @observable
   public image = '';
 
+  @observable
+  public imageVisible = true;
+
+  @observable
+  public topSitesVisible = true;
+
+  @observable
+  public quickMenuVisible = true;
+
+  @observable
+  public overflowVisible = false;
+
+  @observable
+  private _preferencesContent: 'main' | 'custom' = 'main';
+
+  public set preferencesContent(value: 'main' | 'custom') {
+    this._preferencesContent = value;
+    this.overflowVisible = false;
+  }
+
+  @computed
+  public get preferencesContent() {
+    return this._preferencesContent;
+  }
+
+  @observable
+  private _dashboardSettingsVisible = false;
+
+  public set dashboardSettingsVisible(value: boolean) {
+    this._dashboardSettingsVisible = value;
+
+    if (!value) {
+      this.preferencesContent = 'main';
+    }
+  }
+
+  @computed
+  public get dashboardSettingsVisible() {
+    return this._dashboardSettingsVisible;
+  }
+
   private page = 1;
   private loaded = true;
 
