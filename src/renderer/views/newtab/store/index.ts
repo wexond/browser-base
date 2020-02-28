@@ -20,7 +20,17 @@ export class Store {
   public image = '';
 
   @observable
-  public imageVisible = true;
+  private _imageVisible = true;
+
+  public set imageVisible(value: boolean) {
+    this._imageVisible = value;
+    if (value && this.image == '') this.loadImage();
+  }
+
+  @computed
+  public get imageVisible() {
+    return this._imageVisible;
+  }
 
   @observable
   public changeImageDaily = true;
@@ -74,7 +84,10 @@ export class Store {
       this.settings = { ...this.settings, ...settings };
     };
 
-    this.loadImage();
+    if (this.imageVisible) {
+      this.loadImage();
+    }
+
     this.loadTopSites();
     this.loadNews();
 
@@ -88,22 +101,28 @@ export class Store {
   }
 
   public async loadImage() {
-    let url = 'https://picsum.photos/1920/1080';
+    let url = localStorage.getItem('imageURL');
     let isNewUrl = true;
-    const dateString = localStorage.getItem('imageDate');
 
-    if (dateString && dateString !== '') {
-      const date = new Date(dateString);
-      const date2 = new Date();
-      const diffTime = Math.floor(
-        (date2.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
-      );
-      const newUrl = localStorage.getItem('imageURL');
+    if (this.changeImageDaily) {
+      const dateString = localStorage.getItem('imageDate');
 
-      if (diffTime < 1 && newUrl) {
-        url = newUrl;
-        isNewUrl = false;
+      if (dateString && dateString !== '') {
+        const date = new Date(dateString);
+        const date2 = new Date();
+        const diffTime = Math.floor(
+          (date2.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
+        );
+
+        if (diffTime > 1) {
+          url = '';
+          isNewUrl = false;
+        }
       }
+    }
+
+    if (!url || url == '') {
+      url = 'https://picsum.photos/1920/1080';
     }
 
     fetch(url)
