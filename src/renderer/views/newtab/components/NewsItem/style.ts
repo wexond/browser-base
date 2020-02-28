@@ -25,10 +25,10 @@ export const Fill = styled.div`
 export const Description = styled.div`
   overflow: hidden;
   margin-top: 8px;
-  display: none;
   line-height: 1.5rem;
   position: relative;
   ${maxLines(3)};
+  display: none;
   opacity: 0.8;
 `;
 
@@ -42,7 +42,7 @@ export const StyledNewsItem = styled.a`
   animation: fadein 0.3s;
   will-change: opacity;
 
-  &:nth-child(16n + 10) {
+  &:nth-child(16n - 15) {
     grid-column: 1 / 3;
 
     &:after {
