@@ -20,6 +20,7 @@ export const Back = styled(IconItem)`
   margin: 0 8px 0 12px;
   width: 24px;
   height: 24px;
+  filter: none;
 
   ${({ theme }: { theme?: ITheme }) => css`
     &:after {
@@ -29,7 +30,8 @@ export const Back = styled(IconItem)`
     &:hover {
       background-color: ${theme['pages.lightForeground']
         ? 'rgba(255, 255, 255, 0.2)'
-        : 'rgba(0, 0, 0, 0.3)'};
+        : 'rgba(0, 0, 0, 0.1)'};
+      backdrop-filter: none;
     }
   `}
 `;

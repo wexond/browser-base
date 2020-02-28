@@ -44,48 +44,52 @@ export default hot(
           <Preferences />
 
           <Wrapper>
-            <Image src={store.image}></Image>
-
-            <Content>
-              <TopSites></TopSites>
-            </Content>
+            <Image src={store.imageVisible ? store.image : ''}></Image>
+            <Content>{store.topSitesVisible && <TopSites></TopSites>}</Content>
 
             <RightBar>
               <IconItem
+                imageSet={store.imageVisible}
                 title="Dashboard settings"
                 icon={icons.tune}
                 onMouseDown={e => e.stopPropagation()}
                 onClick={onTuneClick}
               ></IconItem>
-
+            </RightBar>
+            {store.quickMenuVisible && (
               <Menu>
                 <IconItem
+                  imageSet={store.imageVisible}
                   title="Settings"
                   icon={icons.settings}
                   onClick={onIconClick('settings')}
                 ></IconItem>
                 <IconItem
+                  imageSet={store.imageVisible}
                   title="History"
                   icon={icons.history}
                   onClick={onIconClick('history')}
                 ></IconItem>
                 <IconItem
+                  imageSet={store.imageVisible}
                   title="Bookmarks"
                   icon={icons.bookmarks}
                   onClick={onIconClick('bookmarks')}
                 ></IconItem>
                 <IconItem
+                  imageSet={store.imageVisible}
                   title="Downloads"
                   icon={icons.download}
                   onClick={onIconClick('downloads')}
                 ></IconItem>
                 <IconItem
+                  imageSet={store.imageVisible}
                   title="Extensions"
                   icon={icons.extensions}
                   onClick={onIconClick('extensions')}
                 ></IconItem>
               </Menu>
-            </RightBar>
+            )}
           </Wrapper>
           <Content>
             <News></News>

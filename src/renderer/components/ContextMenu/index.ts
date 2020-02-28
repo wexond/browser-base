@@ -63,6 +63,7 @@ export interface ContextMenuItemProps {
   dense?: boolean;
   visible?: boolean;
   iconSize?: number;
+  disabled?: boolean;
 }
 
 export const ContextMenuItem = styled.div`
@@ -77,7 +78,10 @@ export const ContextMenuItem = styled.div`
     dense,
     visible,
     iconSize,
+    disabled,
   }: ContextMenuItemProps) => css`
+    pointer-events: ${disabled ? 'none' : 'auto'};
+    opacity: ${disabled ? 0.38 : 1};
     font-size: ${dense ? 13 : 14}px;
     padding: ${dense ? 8 : 12}px ${dense ? 12 : 20}px;
     align-items: center;

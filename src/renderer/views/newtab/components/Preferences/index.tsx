@@ -7,7 +7,6 @@ import {
   ContextMenu,
   ContextMenuItem,
   ContextMenuSeparator,
-  ContextMenuRow,
 } from '~/renderer/components/ContextMenu';
 import { Switch } from '~/renderer/components/Switch';
 import { Dropdown } from '~/renderer/components/Dropdown';
@@ -24,9 +23,18 @@ const onCustomClick = () => {
 };
 
 export const SwitchItem = observer(
-  ({ children, name }: { children: any; name: string }) => {
+  ({
+    children,
+    name,
+    disabled,
+  }: {
+    children: any;
+    name: string;
+    disabled?: boolean;
+  }) => {
     return (
       <ContextMenuItem
+        disabled={disabled}
         onClick={() => ((store as any)[name] = !(store as any)[name])}
       >
         <div style={{ flex: 1 }}>{children}</div>
@@ -105,14 +113,14 @@ export const Preferences = observer(() => {
           </Title>
           <ContextMenuSeparator></ContextMenuSeparator>
           <SwitchItem name="imageVisible">Show image</SwitchItem>
-          {store.imageVisible && (
-            <>
-              <SwitchItem name="changeImageDaily">
-                Change the image daily
-              </SwitchItem>
-              <ContextMenuItem>Choose image...</ContextMenuItem>
-            </>
-          )}
+          <SwitchItem disabled={!store.imageVisible} name="changeImageDaily">
+            Change the image daily
+          </SwitchItem>
+          <ContextMenuItem
+            disabled={!store.imageVisible || store.changeImageDaily}
+          >
+            Choose image...
+          </ContextMenuItem>
           <ContextMenuSeparator></ContextMenuSeparator>
           <SwitchItem name="topSitesVisible">Show top sites</SwitchItem>
           <SwitchItem name="quickMenuVisible">Show quick menu</SwitchItem>

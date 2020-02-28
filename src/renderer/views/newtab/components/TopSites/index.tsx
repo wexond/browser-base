@@ -15,7 +15,7 @@ export const TopSites = observer(() => {
       {Array(8 - Math.min(8, store.topSites.length + 1))
         .fill(1)
         .map((v, i) => (
-          <Placeholder key={i} />
+          <Placeholder imageSet={store.imageVisible} key={i} />
         ))}
     </StyledTopSites>
   );
