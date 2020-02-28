@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 import { shadows, centerIcon } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
+import { DIALOG_EASING } from '~/renderer/constants';
 
 export const ContextMenu = styled.div`
   position: absolute;
@@ -13,7 +14,21 @@ export const ContextMenu = styled.div`
   box-shadow: ${shadows(8)};
   border-radius: 4px;
 
-  ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
+  ${({
+    visible,
+    theme,
+    dense,
+    translucent,
+  }: {
+    visible: boolean;
+    theme?: ITheme;
+    dense?: boolean;
+    translucent?: boolean;
+  }) => css`
+    padding: ${dense ? 4 : 8}px 0;
+    transition: ${visible
+      ? `0.35s opacity ${DIALOG_EASING}, 0.35s transform ${DIALOG_EASING}`
+      : 'none'};
     opacity: ${visible ? 1 : 0};
     pointer-events: ${visible ? 'auto' : 'none'};
     background-color: ${theme['dropdown.backgroundColor']};
