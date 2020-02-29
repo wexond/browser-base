@@ -62,6 +62,10 @@ const goToWebUIPage = (name: string) => () => {
   store.hide();
 };
 
+const onUpdateClick = () => {
+  ipcRenderer.send('install-update');
+};
+
 export const QuickMenu = observer(() => {
   return (
     <div
@@ -72,6 +76,15 @@ export const QuickMenu = observer(() => {
     >
       <Content>
         <MenuItems>
+          {store.updateAvailable && (
+            <>
+              <MenuItem onClick={onUpdateClick}>
+                <Icon icon={icons.fire}></Icon>
+                <MenuItemTitle>Update {remote.app.name}</MenuItemTitle>
+              </MenuItem>
+              <Line />
+            </>
+          )}
           <MenuItem onClick={onDarkClick}>
             <Icon icon={icons.night} />
             <MenuItemTitle>Night mode</MenuItemTitle>

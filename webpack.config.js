@@ -57,13 +57,15 @@ if (process.env.START === '1') {
     apply: compiler => {
       compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
         if (electronProcess) {
-          if (process.platform === 'win32') {
-            execSync(`taskkill /pid ${electronProcess.pid} /f /t`);
-          } else {
-            electronProcess.kill();
-          }
+          try {
+            if (process.platform === 'win32') {
+              execSync(`taskkill /pid ${electronProcess.pid} /f /t`);
+            } else {
+              electronProcess.kill();
+            }
 
-          electronProcess = null;
+            electronProcess = null;
+          } catch (e) {}
         }
 
         electronProcess = spawn('npm', ['start'], {
