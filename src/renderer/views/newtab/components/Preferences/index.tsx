@@ -22,6 +22,10 @@ const onCustomClick = () => {
   store.preferencesContent = 'custom';
 };
 
+const onNewsVisibilityChange = (value: any) => {
+  store.newsBehavior = value;
+};
+
 export const SwitchItem = observer(
   ({
     children,
@@ -127,9 +131,10 @@ export const Preferences = observer(() => {
           <ContextMenuSeparator></ContextMenuSeparator>
           <SubTitle>News visibility:</SubTitle>
           <Dropdown
-            defaultValue="on-scroll"
+            defaultValue={store.newsBehavior}
             onMouseDown={() => (store.overflowVisible = true)}
             style={{ margin: '0 20px 8px' }}
+            onChange={onNewsVisibilityChange}
           >
             <Dropdown.Item value="always-visible">Always visible</Dropdown.Item>
             <Dropdown.Item value="hidden">Hidden</Dropdown.Item>
