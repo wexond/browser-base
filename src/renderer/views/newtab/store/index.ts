@@ -4,6 +4,9 @@ import { getTheme } from '~/utils/themes';
 import { requestURL } from '~/utils/network';
 import { INewsItem } from '~/interfaces/news-item';
 
+type NewsBehavior = 'on-scroll' | 'always-visible' | 'hidden';
+export type Preset = 'focused' | 'inspirational' | 'informational' | 'custom';
+
 export class Store {
   @observable
   public settings: ISettings = { ...(window as any).settings };
@@ -17,14 +20,14 @@ export class Store {
   public news: INewsItem[] = [];
 
   @observable
-  private _newsBehavior = 'on-scroll';
+  private _newsBehavior: NewsBehavior = 'on-scroll';
 
   @computed
   public get newsBehavior() {
     return this._newsBehavior;
   }
 
-  public set newsBehavior(value: string) {
+  public set newsBehavior(value: NewsBehavior) {
     this._newsBehavior = value;
 
     if (value === 'always-visible') {
@@ -94,6 +97,40 @@ export class Store {
     return this._dashboardSettingsVisible;
   }
 
+  @observable
+  private _preset: Preset = 'inspirational';
+
+  @computed
+  public get preset() {
+    return this._preset;
+  }
+
+  public set preset(value: Preset) {
+    this._preset = value;
+
+    if (['focused', 'informational', 'inspirational'].includes(value)) {
+      this.quickMenuVisible = true;
+      this.topSitesVisible = true;
+      this.changeImageDaily = true;
+    }
+
+    if (['focused', 'inspirational'].includes(value)) {
+      this.newsBehavior = 'on-scroll';
+    }
+
+    if (['informational', 'inspirational'].includes(value)) {
+      this.imageVisible = true;
+    }
+
+    if (value === 'focused') {
+      this.imageVisible = false;
+    } else if (value === 'informational') {
+      this.newsBehavior = 'always-visible';
+    }
+
+    localStorage.setItem('preset', value);
+  }
+
   private page = 1;
   private loaded = true;
 
@@ -105,20 +142,24 @@ export class Store {
       this.settings = { ...this.settings, ...settings };
     };
 
-    [
-      'changeImageDaily',
-      'quickMenuVisible',
-      'topSitesVisible',
-      'imageVisible',
-    ].forEach(
-      x =>
-        ((this as any)[x] =
-          localStorage.getItem(x) == null
-            ? (this as any)[x]
-            : JSON.parse(localStorage.getItem(x))),
-    );
+    this.preset = localStorage.getItem('preset') as Preset;
 
-    this.newsBehavior = localStorage.getItem('newsBehavior');
+    if (this.preset === 'custom') {
+      [
+        'changeImageDaily',
+        'quickMenuVisible',
+        'topSitesVisible',
+        'imageVisible',
+      ].forEach(
+        x =>
+          ((this as any)[x] =
+            localStorage.getItem(x) == null
+              ? (this as any)[x]
+              : JSON.parse(localStorage.getItem(x))),
+      );
+
+      this.newsBehavior = localStorage.getItem('newsBehavior') as NewsBehavior;
+    }
 
     if (this.imageVisible) {
       this.loadImage();

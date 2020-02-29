@@ -11,7 +11,7 @@ import {
 import { Switch } from '~/renderer/components/Switch';
 import { Dropdown } from '~/renderer/components/Dropdown';
 
-import store from '../../store';
+import store, { Preset } from '../../store';
 import { icons } from '~/renderer/constants';
 
 const onBackClick = () => {
@@ -20,6 +20,7 @@ const onBackClick = () => {
 
 const onCustomClick = () => {
   store.preferencesContent = 'custom';
+  store.preset = 'custom';
 };
 
 const onNewsVisibilityChange = (value: any) => {
@@ -30,6 +31,10 @@ const onNewsVisibilityChange = (value: any) => {
 const onSwitchClick = (name: string) => () => {
   (store as any)[name] = !(store as any)[name];
   localStorage.setItem(name, (store as any)[name].toString());
+};
+
+const onPresetClick = (name: Preset) => () => {
+  store.preset = name;
 };
 
 export const SwitchItem = observer(
@@ -84,16 +89,32 @@ export const Preferences = observer(() => {
 
           <ContextMenuSeparator></ContextMenuSeparator>
 
-          <ContextMenuItem iconSize={28} icon={icons.window}>
+          <ContextMenuItem
+            onClick={onPresetClick('focused')}
+            selected={store.preset === 'focused'}
+            iconSize={28}
+            icon={icons.window}
+          >
             Focused
           </ContextMenuItem>
-          <ContextMenuItem iconSize={28} icon={icons.window}>
+          <ContextMenuItem
+            onClick={onPresetClick('inspirational')}
+            selected={store.preset === 'inspirational'}
+            iconSize={28}
+            icon={icons.window}
+          >
             Inspirational
           </ContextMenuItem>
-          <ContextMenuItem iconSize={28} icon={icons.window}>
+          <ContextMenuItem
+            onClick={onPresetClick('informational')}
+            selected={store.preset === 'informational'}
+            iconSize={28}
+            icon={icons.window}
+          >
             Informational
           </ContextMenuItem>
           <ContextMenuItem
+            selected={store.preset === 'custom'}
             onClick={onCustomClick}
             iconSize={28}
             icon={icons.window}
