@@ -341,7 +341,7 @@ export class ITab {
 
     const selected = store.tabs.selectedTabId === this.id;
 
-    store.startupTabs.removeStartupTabItem(this.id, store.windowId);
+    store.startupTabs.removeStartupTabItem(this.id);
 
     ipcRenderer.send(`view-destroy-${store.windowId}`, this.id);
 
