@@ -17,7 +17,20 @@ export class Store {
   public news: INewsItem[] = [];
 
   @observable
-  public newsBehavior: 'always-visible' | 'on-scroll' | 'hidden' = 'on-scroll';
+  private _newsBehavior = 'on-scroll';
+
+  @computed
+  public get newsBehavior() {
+    return this._newsBehavior;
+  }
+
+  public set newsBehavior(value: string) {
+    this._newsBehavior = value;
+
+    if (value === 'always-visible') {
+      this.loadNews();
+    }
+  }
 
   @computed
   public get fullSizeImage() {
@@ -92,15 +105,26 @@ export class Store {
       this.settings = { ...this.settings, ...settings };
     };
 
+    [
+      'changeImageDaily',
+      'quickMenuVisible',
+      'topSitesVisible',
+      'imageVisible',
+    ].forEach(
+      x =>
+        ((this as any)[x] =
+          localStorage.getItem(x) == null
+            ? (this as any)[x]
+            : JSON.parse(localStorage.getItem(x))),
+    );
+
+    this.newsBehavior = localStorage.getItem('newsBehavior');
+
     if (this.imageVisible) {
       this.loadImage();
     }
 
     this.loadTopSites();
-
-    if (this.newsBehavior === 'always-visible') {
-      this.loadNews();
-    }
 
     window.onscroll = () => {
       this.updateNews();

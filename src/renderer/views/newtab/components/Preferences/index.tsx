@@ -24,6 +24,12 @@ const onCustomClick = () => {
 
 const onNewsVisibilityChange = (value: any) => {
   store.newsBehavior = value;
+  localStorage.setItem('newsBehavior', value);
+};
+
+const onSwitchClick = (name: string) => () => {
+  (store as any)[name] = !(store as any)[name];
+  localStorage.setItem(name, (store as any)[name].toString());
 };
 
 export const SwitchItem = observer(
@@ -37,10 +43,7 @@ export const SwitchItem = observer(
     disabled?: boolean;
   }) => {
     return (
-      <ContextMenuItem
-        disabled={disabled}
-        onClick={() => ((store as any)[name] = !(store as any)[name])}
-      >
+      <ContextMenuItem disabled={disabled} onClick={onSwitchClick(name)}>
         <div style={{ flex: 1 }}>{children}</div>
         <Switch value={(store as any)[name]}></Switch>
       </ContextMenuItem>
