@@ -146,7 +146,14 @@ const RightButtons = observer(() => {
       )}
       <Separator />
       {store.isIncognito && <ToolbarButton icon={icons.incognito} size={18} />}
-      <ToolbarButton onMouseDown={onMenuClick} icon={icons.more} size={18} />
+      <ToolbarButton
+        badge={store.updateAvailable}
+        badgeRight={10}
+        badgeTop={8}
+        onMouseDown={onMenuClick}
+        icon={icons.more}
+        size={18}
+      />
     </Buttons>
   );
 });

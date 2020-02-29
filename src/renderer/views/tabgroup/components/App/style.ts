@@ -3,6 +3,7 @@ import { ITheme } from '~/interfaces';
 import { DialogStyle } from '~/renderer/mixins/dialogs';
 
 export const StyledApp = styled(DialogStyle)`
+  margin-top: 10px;
   padding: 16px;
 `;
 
