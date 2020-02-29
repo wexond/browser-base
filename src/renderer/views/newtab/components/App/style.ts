@@ -44,6 +44,10 @@ export const Wrapper = styled.div`
   align-items: center;
   position: relative;
   overflow: hidden;
+
+  ${({ fullSize }: { fullSize: boolean }) => css`
+    height: ${fullSize ? '100vh' : 'auto'};
+  `};
 `;
 
 export const Content = styled.div`

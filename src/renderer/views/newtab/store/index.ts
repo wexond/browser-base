@@ -17,6 +17,14 @@ export class Store {
   public news: INewsItem[] = [];
 
   @observable
+  public newsBehavior: 'always-visible' | 'on-scroll' | 'hidden' = 'on-scroll';
+
+  @computed
+  public get fullSizeImage() {
+    return this.newsBehavior === 'on-scroll' || this.newsBehavior === 'hidden';
+  }
+
+  @observable
   public image = '';
 
   @observable
@@ -89,7 +97,10 @@ export class Store {
     }
 
     this.loadTopSites();
-    this.loadNews();
+
+    if (this.newsBehavior === 'always-visible') {
+      this.loadNews();
+    }
 
     window.onscroll = () => {
       this.updateNews();

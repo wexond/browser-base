@@ -43,7 +43,7 @@ export default hot(
 
           <Preferences />
 
-          <Wrapper>
+          <Wrapper fullSize={store.fullSizeImage}>
             <Image src={store.imageVisible ? store.image : ''}></Image>
             <Content>{store.topSitesVisible && <TopSites></TopSites>}</Content>
 
@@ -91,9 +91,11 @@ export default hot(
               </Menu>
             )}
           </Wrapper>
-          <Content>
-            <News></News>
-          </Content>
+          {store.newsBehavior !== 'hidden' && (
+            <Content>
+              <News></News>
+            </Content>
+          )}
         </div>
       </ThemeProvider>
     );
