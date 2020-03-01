@@ -106,7 +106,7 @@ window.chrome = {
   storage: {},
 } as any;
 
-process.on('document-start', () => {
+(process as any).on('document-start', () => {
   const tabs = {
     onCreated: new IpcEvent('tabs', 'onCreated'),
     onUpdated: new IpcEvent('tabs', 'onUpdated'),
@@ -219,7 +219,7 @@ process.on('document-start', () => {
   };
 
   chrome.tabs = Object.assign(chrome.tabs, tabs);
-  chrome.storage.sync = chrome.storage.local;
+  (chrome.storage as any).sync = chrome.storage.local;
 
   console.log(chrome);
 });

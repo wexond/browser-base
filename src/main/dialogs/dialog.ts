@@ -43,6 +43,7 @@ export class Dialog extends BrowserView {
         nodeIntegration: true,
         contextIsolation: false,
         affinity: 'dialog',
+        enableRemoteModule: true,
         ...webPreferences,
       },
     });

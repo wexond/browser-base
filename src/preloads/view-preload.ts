@@ -213,5 +213,3 @@ if (window.location.href.startsWith(WEBUI_BASE_URL)) {
     );
   });
 }
-
-console.log('aha');
