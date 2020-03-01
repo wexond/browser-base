@@ -43,17 +43,12 @@ export class ExtensionsStore {
     });
   }
 
-  public async loadExtension(extensionId: string, path: string) {
-    const manifestPath = resolve(path, 'manifest.json');
-    const manifest: chrome.runtime.Manifest = JSON.parse(
-      await promises.readFile(manifestPath, 'utf8'),
-    );
-
-    if (this.defaultBrowserActions.find(x => x.extensionId === extensionId))
+  public async loadExtension(extension: Electron.Extension) {
+    if (this.defaultBrowserActions.find(x => x.extensionId === extension.id))
       return;
 
-    if (manifest.browser_action) {
-      const { default_icon, default_title } = manifest.browser_action;
+    if (extension.manifest.browser_action) {
+      const { default_icon, default_title } = extension.manifest.browser_action;
 
       let icon1 = default_icon;
 
@@ -63,22 +58,24 @@ export class ExtensionsStore {
         ];
       }
 
-      const data = await promises.readFile(join(path, icon1 as string));
+      const data = await promises.readFile(
+        join(extension.path, icon1 as string),
+      );
 
-      if (this.defaultBrowserActions.find(x => x.extensionId === extensionId))
+      if (this.defaultBrowserActions.find(x => x.extensionId === extension.id))
         return;
 
       const icon = window.URL.createObjectURL(new Blob([data]));
       const browserAction = new IBrowserAction({
-        extensionId: extensionId,
+        extensionId: extension.id,
         icon,
         title: default_title,
-        popup: manifest?.browser_action?.default_popup
+        popup: extension.manifest?.browser_action?.default_popup
           ? format({
               protocol: EXTENSIONS_PROTOCOL,
               slashes: true,
-              hostname: extensionId,
-              pathname: manifest.browser_action.default_popup,
+              hostname: extension.id,
+              pathname: extension.manifest.browser_action.default_popup,
             })
           : null,
       });
@@ -98,12 +95,6 @@ export class ExtensionsStore {
       .fromPartition('persist:view')
       .getAllExtensions();
 
-    console.log(extensions);
-
-    const extensionsPaths = ipcRenderer.sendSync('get-extensions-paths');
-
-    extensions.forEach(x =>
-      this.loadExtension(x.id, extensionsPaths.get(x.id)),
-    );
+    extensions.forEach(x => this.loadExtension(x));
   }
 }

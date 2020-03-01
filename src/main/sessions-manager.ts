@@ -21,8 +21,6 @@ export class SessionsManager {
 
   private windowsManager: WindowsManager;
 
-  public extensionsPaths: Map<string, string> = new Map();
-
   public constructor(windowsManager: WindowsManager) {
     this.windowsManager = windowsManager;
 
@@ -206,12 +204,6 @@ export class SessionsManager {
 
             const extension = await this.view.loadExtension(path);
 
-            console.log('');
-            console.log(extension.id, crxInfo.id);
-            console.log('');
-
-            this.extensionsPaths.set(extension.id, path);
-
             if (crxInfo.publicKey) {
               const manifest = JSON.parse(
                 await promises.readFile(manifestPath, 'utf8'),
@@ -225,7 +217,7 @@ export class SessionsManager {
               );
             }
 
-            window.webContents.send('load-browserAction', extension.id, path);
+            window.webContents.send('load-browserAction', extension);
           }
         } else {
           console.log(`Download failed: ${state}`);
@@ -327,10 +319,8 @@ export class SessionsManager {
         const path = resolve(extensionsPath, dir);
         const extension = await context.loadExtension(path);
 
-        this.extensionsPaths.set(extension.id, path);
-
         for (const window of this.windowsManager.list) {
-          window.webContents.send('load-browserAction', extension.id, path);
+          window.webContents.send('load-browserAction', extension);
         }
       } catch (e) {
         console.error(e);

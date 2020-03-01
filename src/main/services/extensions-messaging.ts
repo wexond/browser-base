@@ -40,14 +40,6 @@ export const getAllWebContentsInSession = (ses: Electron.Session) => {
 export const runExtensionsMessagingService = () => {
   const extensionsPath = getPath('extensions');
 
-  ipcMain.on('get-extensions-paths', e => {
-    e.returnValue = windowsManager.sessionsManager.extensionsPaths;
-  });
-
-  ipcMain.on('get-extension-path', (e, id) => {
-    e.returnValue = windowsManager.sessionsManager.extensionsPaths.get(id);
-  });
-
   ipcMain.handle(`api-tabs-query`, e => {
     const tabs = getAllWebContentsInSession(e.sender.session).map(x => ({
       ...webContentsToTab(x),
