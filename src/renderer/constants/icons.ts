@@ -49,6 +49,7 @@ export const icons = {
   dashboard: require('~/renderer/resources/icons/dashboard.svg'),
   check: require('~/renderer/resources/icons/check.svg'),
   topMost: require('~/renderer/resources/icons/top-most.svg'),
+  tune: require('~/renderer/resources/icons/tune.svg'),
   weather: {
     day: {
       clear: require('~/renderer/resources/icons/weather/day/clear.png'),

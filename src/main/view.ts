@@ -46,7 +46,9 @@ export class View extends BrowserView {
     this.webContents.userAgent = this.webContents.userAgent
       .replace(/ Wexond\\?.([^\s]+)/g, '')
       .replace(/ Electron\\?.([^\s]+)/g, '')
-      .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/79.0.3945.88');
+      .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/80.0.3987.122');
+
+    (this.webContents as any).windowId = window.id;
 
     this.window = window;
     this.homeUrl = url;

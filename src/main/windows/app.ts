@@ -21,6 +21,7 @@ import {
   Dialog,
   ExtensionPopup,
 } from '../dialogs';
+import { isNightly } from '..';
 
 interface IDialogs {
   searchDialog?: SearchDialog;
@@ -70,7 +71,10 @@ export class AppWindow extends BrowserWindow {
         affinity: 'browser',
         enableRemoteModule: true,
       },
-      icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
+      icon: resolve(
+        app.getAppPath(),
+        `static/${isNightly ? 'nightly-icons' : 'icons'}/icon.png`,
+      ),
       show: false,
     });
 

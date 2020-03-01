@@ -1,13 +1,12 @@
 /* eslint @typescript-eslint/camelcase: 0 */
 
 import { observable } from 'mobx';
-import { join, resolve } from 'path';
+import { join } from 'path';
 
 import { IBrowserAction } from '../models';
 import { promises } from 'fs';
 import { ipcRenderer, remote } from 'electron';
 import store from '.';
-import { getPath } from '~/utils';
 import { EXTENSIONS_PROTOCOL } from '~/constants';
 import { format } from 'url';
 
@@ -21,8 +20,9 @@ export class ExtensionsStore {
   public constructor() {
     this.load();
 
-    ipcRenderer.on('load-browserAction', (e, extensionId, path) => {
-      this.loadExtension(extensionId, path);
+    ipcRenderer.on('load-browserAction', (e, extension) => {
+      this.loadExtension(extension);
+      store.tabs.updateTabsBounds(true);
     });
   }
 
@@ -87,6 +87,7 @@ export class ExtensionsStore {
         tabBrowserAction.tabId = tab.id;
         this.browserActions.push(tabBrowserAction);
       }
+      store.tabs.updateTabsBounds(true);
     }
   }
 

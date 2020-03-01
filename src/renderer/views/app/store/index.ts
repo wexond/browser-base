@@ -38,10 +38,7 @@ export class Store {
   public isHTMLFullscreen = false;
 
   @observable
-  public updateInfo = {
-    available: false,
-    version: '',
-  };
+  public updateAvailable = false;
 
   @observable
   public navigationState = {
@@ -103,9 +100,8 @@ export class Store {
       this.isHTMLFullscreen = fullscreen;
     });
 
-    ipcRenderer.on('update-available', (e, version: string) => {
-      this.updateInfo.version = version;
-      this.updateInfo.available = true;
+    ipcRenderer.on('update-available', () => {
+      this.updateAvailable = true;
     });
 
     ipcRenderer.on('download-started', (e, item) => {

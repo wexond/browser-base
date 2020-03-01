@@ -97,6 +97,29 @@ export class TabsStore {
       }
     });
 
+    ipcRenderer.on('select-tab-index', (e, i) => {
+      const tab = this.list[i];
+      if (tab) tab.select();
+    });
+
+    ipcRenderer.on('select-last-tab', () => {
+      const tab = this.list[this.list.length - 1];
+      if (tab) tab.select();
+    });
+
+    ipcRenderer.on('select-previous-tab', () => {
+      const i = this.list.indexOf(this.selectedTab);
+      const prevTab = this.list[i - 1];
+
+      if (!prevTab) {
+        if (this.list[this.list.length - 1]) {
+          this.list[this.list.length - 1].select();
+        }
+      } else {
+        prevTab.select();
+      }
+    });
+
     ipcRenderer.on('remove-tab', (e, id: number) => {
       const tab = this.getTabById(id);
       if (tab) {
@@ -173,6 +196,28 @@ export class TabsStore {
     return tab;
   }
 
+  @action public createTabs(
+    options: chrome.tabs.CreateProperties[],
+    ids: number[],
+  ) {
+    this.removedTabs = 0;
+
+    const tabs = options.map((option, i) => {
+      const tab = new ITab(option, ids[i]);
+      this.list.push(tab);
+      return tab;
+    });
+
+    requestAnimationFrame(() => {
+      this.updateTabsBounds(false);
+      if (!this.scrollable) {
+        this.containerRef.current.scrollLeft = this.containerRef.current.scrollWidth;
+      }
+    });
+
+    return tabs;
+  }
+
   public scrollToEnd = (milliseconds: number) => {
     if (!this.scrollable) return;
 
@@ -210,6 +255,17 @@ export class TabsStore {
     return this.createTab(opts, id, tabGroupId);
   }
 
+  @action
+  public async addTabs(options: chrome.tabs.CreateProperties[]) {
+    ipcRenderer.send(`hide-window-${store.windowId}`);
+
+    const ids = await ipcRenderer.invoke(
+      `views-create-${store.windowId}`,
+      options,
+    );
+    return this.createTabs(options, ids);
+  }
+
   public removeTab(id: number) {
     (this.list as any).remove(this.getTabById(id));
   }
@@ -232,7 +288,7 @@ export class TabsStore {
     requestAnimationFrame(() => {
       tab.setLeft(
         Math.max(
-          ...this.list.map(function (item) {
+          ...this.list.map(function(item) {
             return item.left;
           }),
         ) + TAB_MAX_WIDTH,
@@ -387,7 +443,7 @@ export class TabsStore {
       if (
         callingTab.left < tabGroup.left ||
         callingTab.left + callingTab.width >=
-        tabGroup.left + tabGroup.width + 20
+          tabGroup.left + tabGroup.width + 20
       ) {
         callingTab.removeFromGroup();
         return;
@@ -492,9 +548,9 @@ export class TabsStore {
       if (
         newLeft + selectedTab.width >
         container.current.scrollLeft +
-        container.current.offsetWidth -
-        TABS_PADDING +
-        20
+          container.current.offsetWidth -
+          TABS_PADDING +
+          20
       ) {
         left =
           container.current.scrollLeft +
