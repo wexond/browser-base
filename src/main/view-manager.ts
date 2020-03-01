@@ -32,6 +32,12 @@ export class ViewManager {
       return this.create(details, false, false).webContents.id;
     });
 
+    ipcMain.handle(`views-create-${id}`, (e, options) => {
+      return options.map((option: any) => {
+        return this.create(option, false, false).webContents.id;
+      });
+    });
+
     ipcMain.on(`add-tab-${id}`, (e, details) => {
       this.create(details);
     });

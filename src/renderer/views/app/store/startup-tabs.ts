@@ -53,25 +53,25 @@ export class StartupTabsStore {
     if (tabsToLoad && tabsToLoad.length > 0) {
       this.clearStartupTabs(true, false);
 
-      let i = 0;
-      for (const tab in tabsToLoad.sort((x, y) =>
-        x.pinned && y.pinned
-          ? x.order - y.order
-          : x.pinned
-          ? -1
-          : y.pinned
-          ? 1
-          : x.order - y.order,
-      )) {
-        this.store.tabs.addTab({
-          url: prefixHttp(tabsToLoad[tab].url),
-          pinned: tabsToLoad[tab].pinned,
-          active:
-            i === tabsToLoad.length - 1 &&
-            !(args.length > 1 && isURL(args[args.length - 1])),
-        });
-        i++;
-      }
+      this.store.tabs.addTabs(
+        tabsToLoad
+          .sort((x, y) =>
+            x.pinned && y.pinned
+              ? x.order - y.order
+              : x.pinned
+              ? -1
+              : y.pinned
+              ? 1
+              : x.order - y.order,
+          )
+          .map((tab, i) => ({
+            url: prefixHttp(tab.url),
+            pinned: tab.pinned,
+            active:
+              i === tabsToLoad.length - 1 &&
+              !(args.length > 1 && isURL(args[args.length - 1])),
+          })),
+      );
 
       // If we only load up pinned tabs, add a new tab page
       if (tabsToLoad.filter(x => !x.pinned).length == 0) {

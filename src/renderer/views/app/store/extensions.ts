@@ -22,6 +22,7 @@ export class ExtensionsStore {
 
     ipcRenderer.on('load-browserAction', (e, extension) => {
       this.loadExtension(extension);
+      store.tabs.updateTabsBounds(true);
     });
   }
 
@@ -77,6 +78,7 @@ export class ExtensionsStore {
         tabBrowserAction.tabId = tab.id;
         this.browserActions.push(tabBrowserAction);
       }
+      store.tabs.updateTabsBounds(true);
     }
   }
 

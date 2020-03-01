@@ -40,7 +40,7 @@ ipcMain.on('get-webcontents-id', e => {
 });
 
 ipcMain.on('get-window-id', e => {
-  e.returnValue = (e.sender as any).getOwnerBrowserWindow().id;
+  e.returnValue = (e.sender as any).windowId;
 });
 
 ipcMain.handle(

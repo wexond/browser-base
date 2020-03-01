@@ -136,6 +136,7 @@ export class Settings extends EventEmitter {
       }
 
       if (typeof json.version === 'string') {
+        // Migrate from 3.1.0
         storage.remove({ scope: 'startupTabs', query: {}, multi: true });
       }
 
