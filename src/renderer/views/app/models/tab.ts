@@ -229,7 +229,7 @@ export class ITab {
         windowId: store.windowId,
         url: this.url,
         favicon: this.favicon,
-        pinned: this.isPinned,
+        pinned: !!this.isPinned,
         title: this.title,
         isUserDefined: false,
         order: store.tabs.list.indexOf(this),

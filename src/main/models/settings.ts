@@ -9,6 +9,7 @@ import { EventEmitter } from 'events';
 import { runAdblockService, stopAdblockService } from '../services/adblock';
 import { WindowsManager } from '../windows-manager';
 import { WEBUI_BASE_URL } from '~/constants/files';
+import storage from '../services/storage';
 
 export class Settings extends EventEmitter {
   public object = DEFAULT_SETTINGS;
@@ -134,6 +135,10 @@ export class Settings extends EventEmitter {
         json.searchEngines = [];
       }
 
+      if (typeof json.version === 'string') {
+        storage.remove({ scope: 'startupTabs', query: {}, multi: true });
+      }
+
       if (json.themeAuto === undefined) {
         json.themeAuto = true;
       }
@@ -149,6 +154,7 @@ export class Settings extends EventEmitter {
       this.object = {
         ...this.object,
         ...json,
+        version: DEFAULT_SETTINGS.version,
       };
 
       this.loaded = true;
@@ -167,7 +173,7 @@ export class Settings extends EventEmitter {
     try {
       await promises.writeFile(
         getPath('settings.json'),
-        JSON.stringify(this.object),
+        JSON.stringify({ ...this.object, version: DEFAULT_SETTINGS.version }),
       );
 
       if (this.queue.length >= 3) {
