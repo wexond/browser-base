@@ -40,10 +40,6 @@ export const getAllWebContentsInSession = (ses: Electron.Session) => {
 export const runExtensionsMessagingService = () => {
   const extensionsPath = getPath('extensions');
 
-  ipcMain.on('api-get-locale', (e, id) => {
-    e.returnValue = windowsManager.sessionsManager.locales.get(id);
-  });
-
   ipcMain.on('get-extensions-paths', e => {
     e.returnValue = windowsManager.sessionsManager.extensionsPaths;
   });

@@ -12,33 +12,6 @@ import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
 import { runExtensionsMessagingService } from './services/extensions-messaging';
 
-const loadI18n = async (path: string) => {
-  const manifestPath = resolve(path, 'manifest.json');
-  const manifest: chrome.runtime.Manifest = JSON.parse(
-    await promises.readFile(manifestPath, 'utf8'),
-  );
-
-  if (typeof manifest.default_locale === 'string') {
-    const defaultLocalePath = resolve(
-      path,
-      '_locales',
-      manifest.default_locale,
-    );
-
-    if (!existsSync(defaultLocalePath)) return;
-
-    const messagesPath = resolve(defaultLocalePath, 'messages.json');
-    const stats = await promises.stat(messagesPath);
-
-    if (!existsSync(messagesPath) || stats.isDirectory()) return;
-
-    const data = await promises.readFile(messagesPath, 'utf8');
-    const locale = JSON.parse(data);
-
-    return locale;
-  }
-};
-
 // TODO: move windows list to the corresponding sessions
 export class SessionsManager {
   public view = session.fromPartition('persist:view');
@@ -47,8 +20,6 @@ export class SessionsManager {
   public incognitoExtensionsLoaded = false;
 
   private windowsManager: WindowsManager;
-
-  public locales: Map<string, any> = new Map();
 
   public extensionsPaths: Map<string, string> = new Map();
 
@@ -356,13 +327,7 @@ export class SessionsManager {
         const path = resolve(extensionsPath, dir);
         const extension = await context.loadExtension(path);
 
-        console.log('');
-        console.log(extension.id, dir);
-        console.log('');
-
         this.extensionsPaths.set(extension.id, path);
-
-        this.locales.set(extension.id, await loadI18n(path));
 
         for (const window of this.windowsManager.list) {
           window.webContents.send('load-browserAction', extension.id, path);
