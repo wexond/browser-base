@@ -25,7 +25,9 @@ export const Control = css`
   `}
 `;
 
-export const Input = styled.input`
+export const Input = styled.input.attrs(() => ({
+  spellCheck: false,
+}))`
   ${Control}
 `;
 
