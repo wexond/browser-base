@@ -16,7 +16,7 @@ const INCLUDE = resolve(__dirname, 'src');
 const dev = process.env.ENV === 'dev';
 const prebuild = process.env.PREBUILD === '1';
 
-const NPM_CHUNKS_PATH = 'build/npm-chunks.json';
+const CHUNKS_ENTRIES_MAP_PATH = 'chunks-entries-map.json';
 
 const styledComponentsTransformer = createStyledComponentsTransformer({
   minify: true,
@@ -124,10 +124,10 @@ function getConfig(...cfg) {
   return merge(config, ...cfg);
 }
 
-const npm =
-  prebuild || !existsSync(NPM_CHUNKS_PATH)
+const chunksEntriesMap =
+  prebuild || !existsSync(CHUNKS_ENTRIES_MAP_PATH)
     ? {}
-    : JSON.parse(readFileSync(NPM_CHUNKS_PATH, 'utf8'));
+    : JSON.parse(readFileSync(CHUNKS_ENTRIES_MAP_PATH, 'utf8'));
 
 const getHtml = (scope, name, entries = []) => {
   return new HtmlWebpackPlugin({
@@ -137,7 +137,7 @@ const getHtml = (scope, name, entries = []) => {
     excludeChunks: entries
       .filter(x => x !== name)
       .concat(
-        Object.entries(npm)
+        Object.entries(chunksEntriesMap)
           .filter(x => x[0].indexOf(scope) === -1 || !x[1].includes(name))
           .map(x => x[0]),
       ),
@@ -164,7 +164,18 @@ const getBaseConfig = name => {
     plugins: [
       {
         apply: compiler => {
-          compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {});
+          compiler.hooks.afterOptimizeChunkAssets.tap(
+            'AfterOptimizeChunkAssets',
+            chunks => {
+              for (const chunk of chunks) {
+                if (chunk.name.indexOf('~') !== -1) {
+                  chunksEntriesMap[chunk.name] = chunk.name
+                    .split('.')[0]
+                    .split('~');
+                }
+              }
+            },
+          );
         },
       },
     ],
@@ -195,8 +206,10 @@ const getBaseConfig = name => {
 
               const bundleName = `npm.${packageName}.${name}`;
 
-              npm[bundleName] = Array.from(module._chunks).map(x => x.name);
-              writeFileSync(NPM_CHUNKS_PATH, JSON.stringify(npm));
+              chunksEntriesMap[bundleName] = Array.from(module._chunks).map(
+                x => x.name,
+              );
+              writeFileSync(CHUNKS_ENTRIES_MAP_PATH, JSON.stringify(npm));
 
               return bundleName;
             },
