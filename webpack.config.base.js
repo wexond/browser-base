@@ -1,5 +1,6 @@
 /* eslint-disable */
 const { resolve, join } = require('path');
+const { writeFileSync, readFileSync, existsSync } = require('fs');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
@@ -13,6 +14,9 @@ const TerserPlugin = require('terser-webpack-plugin');
 const INCLUDE = resolve(__dirname, 'src');
 
 const dev = process.env.ENV === 'dev';
+const prebuild = process.env.PREBUILD === '1';
+
+const NPM_CHUNKS_PATH = 'build/npm-chunks.json';
 
 const styledComponentsTransformer = createStyledComponentsTransformer({
   minify: true,
@@ -92,21 +96,22 @@ const config = {
   },
 
   optimization: {
-    minimizer: !dev
-      ? [
-          new TerserPlugin({
-            extractComments: true,
-            terserOptions: {
-              ecma: 8,
-              output: {
-                comments: false,
+    minimizer:
+      !dev && !prebuild
+        ? [
+            new TerserPlugin({
+              extractComments: true,
+              terserOptions: {
+                ecma: 8,
+                output: {
+                  comments: false,
+                },
               },
-            },
-            parallel: true,
-            cache: true,
-          }),
-        ]
-      : [],
+              parallel: true,
+              cache: true,
+            }),
+          ]
+        : [],
   },
 };
 
@@ -119,19 +124,32 @@ function getConfig(...cfg) {
   return merge(config, ...cfg);
 }
 
-const getHtml = (scope, name) => {
+const npm =
+  prebuild || !existsSync(NPM_CHUNKS_PATH)
+    ? {}
+    : JSON.parse(readFileSync(NPM_CHUNKS_PATH, 'utf8'));
+
+const getHtml = (scope, name, entries = []) => {
   return new HtmlWebpackPlugin({
     title: 'Wexond',
     template: 'static/pages/app.html',
     filename: `${name}.html`,
-    chunks: [`runtime`, `vendor.${scope}`, name],
+    excludeChunks: entries
+      .filter(x => x !== name)
+      .concat(
+        Object.entries(npm)
+          .filter(x => x[0].indexOf(scope) === -1 || !x[1].includes(name))
+          .map(x => x[0]),
+      ),
   });
 };
 
 const applyEntries = (scope, config, entries) => {
   for (const entry of entries) {
     config.entry[entry] = [`./src/renderer/views/${entry}`];
-    config.plugins.push(getHtml(scope, entry));
+    if (!prebuild) {
+      config.plugins.push(getHtml(scope, entry, entries));
+    }
 
     if (dev) {
       config.entry[entry].unshift('react-hot-loader/patch');
@@ -139,31 +157,49 @@ const applyEntries = (scope, config, entries) => {
   }
 };
 
+let printed = false;
+
 const getBaseConfig = name => {
   const config = {
-    plugins: [],
+    plugins: [
+      {
+        apply: compiler => {
+          compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {});
+        },
+      },
+    ],
 
     output: {},
-    entry: {
-      vendor: [
-        'styled-components',
-        'react-hot-loader',
-        'react',
-        'react-dom',
-        'mobx',
-        'mobx-react-lite',
-      ],
-    },
+
+    entry: {},
 
     optimization: {
-      runtimeChunk: 'single',
+      runtimeChunk: {
+        name: `runtime.${name}`,
+      },
       splitChunks: {
         cacheGroups: {
-          vendor: {
+          commons: {
             chunks: 'all',
-            name: `vendor.${name}`,
-            test: 'vendor',
-            enforce: true,
+            maxInitialRequests: Infinity,
+            minSize: 0,
+            test: /[\\/]node_modules[\\/]/,
+            name(module) {
+              if (!printed) {
+                printed = true;
+              }
+
+              const packageName = module.context.match(
+                /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+              )[1];
+
+              const bundleName = `npm.${packageName}.${name}`;
+
+              npm[bundleName] = Array.from(module._chunks).map(x => x.name);
+              writeFileSync(NPM_CHUNKS_PATH, JSON.stringify(npm));
+
+              return bundleName;
+            },
           },
         },
       },
