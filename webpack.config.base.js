@@ -7,6 +7,7 @@ const createStyledComponentsTransformer = require('typescript-plugin-styled-comp
   .default;
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const TerserPlugin = require('terser-webpack-plugin');
 /* eslint-enable */
 
 const INCLUDE = resolve(__dirname, 'src');
@@ -88,6 +89,24 @@ const config = {
 
   externals: {
     keytar: `require('keytar')`,
+  },
+
+  optimization: {
+    minimizer: !dev
+      ? [
+          new TerserPlugin({
+            extractComments: true,
+            terserOptions: {
+              ecma: 8,
+              output: {
+                comments: false,
+              },
+            },
+            parallel: true,
+            cache: true,
+          }),
+        ]
+      : [],
   },
 };
 
