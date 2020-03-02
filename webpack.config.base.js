@@ -105,7 +105,7 @@ const getHtml = (scope, name) => {
     title: 'Wexond',
     template: 'static/pages/app.html',
     filename: `${name}.html`,
-    chunks: [`vendor.${scope}`, name],
+    chunks: [`runtime`, `vendor.${scope}`, name],
   });
 };
 
@@ -125,15 +125,26 @@ const getBaseConfig = name => {
     plugins: [],
 
     output: {},
-    entry: {},
+    entry: {
+      vendor: [
+        'styled-components',
+        'react-hot-loader',
+        'react',
+        'react-dom',
+        'mobx',
+        'mobx-react-lite',
+      ],
+    },
 
     optimization: {
+      runtimeChunk: 'single',
       splitChunks: {
         cacheGroups: {
           vendor: {
-            chunks: 'initial',
+            chunks: 'all',
             name: `vendor.${name}`,
-            minChunks: 2,
+            test: 'vendor',
+            enforce: true,
           },
         },
       },
