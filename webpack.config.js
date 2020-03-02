@@ -10,7 +10,7 @@ let electronProcess;
 const mainConfig = getConfig({
   target: 'electron-main',
 
-  devtool: 'inline-source-map',
+  devtool: dev ? 'inline-source-map' : 'none',
 
   watch: dev,
 
