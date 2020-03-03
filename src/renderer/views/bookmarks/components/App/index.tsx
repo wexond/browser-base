@@ -35,6 +35,7 @@ import {
   ICON_DOWNLOAD,
   ICON_NEW_FOLDER,
 } from '~/renderer/constants';
+import parse from 'node-bookmarks-parser';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -85,7 +86,7 @@ const onPathItemClick = (item: IBookmark) => () => {
 };
 
 const onImportClick = async () => {
-  const res = await ipcRenderer.invoke('import-bookmarks');
+  const res = parse(await ipcRenderer.invoke('import-bookmarks'));
   addImported(res);
 };
 

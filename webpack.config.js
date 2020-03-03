@@ -2,6 +2,8 @@
 const { getConfig, dev } = require('./webpack.config.base');
 const { spawn, execSync } = require('child_process');
 const CopyPlugin = require('copy-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
 let terser = require('terser');
 /* eslint-enable */
 
@@ -19,6 +21,7 @@ const mainConfig = getConfig({
   },
 
   plugins: [
+    // new BundleAnalyzerPlugin(),
     new CopyPlugin(
       [
         {
