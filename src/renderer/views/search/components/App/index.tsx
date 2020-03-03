@@ -146,7 +146,7 @@ export const App = hot(
 
     return (
       <ThemeProvider theme={{ ...store.theme }}>
-        <StyledApp visible={store.visible}>
+        <StyledApp hideTransition visible={store.visible}>
           <GlobalStyle />
           <SearchBox>
             <CurrentIcon

@@ -42,7 +42,6 @@ export class Dialog extends BrowserView {
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
-        affinity: 'dialog',
         ...webPreferences,
       },
     });
@@ -93,35 +92,19 @@ export class Dialog extends BrowserView {
 
     clearTimeout(this.timeout);
 
-    this.bringToTop();
-
-    if (process.platform === 'darwin') {
-      setTimeout(() => {
-        if (focus) this.webContents.focus();
-      });
-    } else {
-      if (focus) this.webContents.focus();
-    }
-
+    this.appWindow.addBrowserView(this);
     this.rearrange();
+
+    if (focus) this.webContents.focus();
   }
 
   public hideVisually() {
     this.webContents.send('visible', false);
   }
 
-  private _hide() {
-    this.setBounds({
-      height: this.bounds.height,
-      width: 1,
-      x: 0,
-      y: -this.bounds.height + 1,
-    });
-  }
-
   public hide(bringToTop = false) {
     if (bringToTop) {
-      this.bringToTop();
+      // this.bringToTop();
     }
 
     if (!this.visible) return;
@@ -129,16 +112,19 @@ export class Dialog extends BrowserView {
     clearTimeout(this.timeout);
 
     if (this.hideTimeout) {
-      this.timeout = setTimeout(() => this._hide(), this.hideTimeout);
+      this.timeout = setTimeout(
+        () => this.appWindow.removeBrowserView(this),
+        this.hideTimeout,
+      );
     } else {
-      this._hide();
+      this.appWindow.removeBrowserView(this);
     }
 
     this.visible = false;
 
     this.hideVisually();
 
-    this.appWindow.fixDragging();
+    // this.appWindow.fixDragging();
   }
 
   public bringToTop() {

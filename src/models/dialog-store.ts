@@ -20,6 +20,7 @@ export class DialogStore {
     if (hideOnBlur) {
       window.addEventListener('blur', () => {
         if (this.visible) {
+          this.visible = false;
           setTimeout(() => {
             this.hide();
           });
