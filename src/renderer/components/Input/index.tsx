@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 import { ITheme } from '~/interfaces';
 import { centerIcon } from '~/renderer/mixins';
-import { icons } from '~/renderer/constants';
+import { ICON_DROPDOWN } from '~/renderer/constants/icons';
 
 export const Control = css`
   height: 32px;
@@ -41,7 +41,7 @@ export const Dropdown = styled.div`
     height: 20px;
     width: 20px;
     ${centerIcon()};
-    background-image: url(${icons.dropDown});
+    background-image: url(${ICON_DROPDOWN});
 
     ${({ dark }: { dark: boolean }) => css`
       filter: ${dark ? 'invert(100%)' : 'none'};

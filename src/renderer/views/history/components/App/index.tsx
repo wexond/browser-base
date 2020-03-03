@@ -6,11 +6,18 @@ import store, { QuickRange } from '../../store';
 import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
 import { Style } from '../../style';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { icons } from '~/renderer/constants/icons';
 import { SelectionDialog } from '~/renderer/components/SelectionDialog';
 import { HistorySection } from '../HistorySection';
 import { Container, Content, LeftContent } from '~/renderer/components/Pages';
 import { GlobalNavigationDrawer } from '~/renderer/components/GlobalNavigationDrawer';
+import {
+  ICON_HISTORY,
+  ICON_ALL,
+  ICON_TODAY,
+  ICON_WEEK,
+  ICON_CALENDAR,
+  ICON_TRASH,
+} from '~/renderer/constants';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -88,23 +95,23 @@ export default hot(
           <GlobalStyle />
           <GlobalNavigationDrawer></GlobalNavigationDrawer>
           <NavigationDrawer title="History" search onSearchInput={onInput}>
-            <RangeItem icon={icons.all} range="all">
+            <RangeItem icon={ICON_ALL} range="all">
               All
             </RangeItem>
-            <RangeItem icon={icons.today} range="today">
+            <RangeItem icon={ICON_TODAY} range="today">
               Today
             </RangeItem>
-            <RangeItem icon={icons.history} range="yesterday">
+            <RangeItem icon={ICON_HISTORY} range="yesterday">
               Yesterday
             </RangeItem>
-            <RangeItem icon={icons.week} range="last-week">
+            <RangeItem icon={ICON_WEEK} range="last-week">
               Last week
             </RangeItem>
-            <RangeItem icon={icons.calendar} range="older">
+            <RangeItem icon={ICON_CALENDAR} range="older">
               Older
             </RangeItem>
             <div style={{ flex: 1 }} />
-            <NavigationDrawer.Item icon={icons.trash} onClick={onClearClick}>
+            <NavigationDrawer.Item icon={ICON_TRASH} onClick={onClearClick}>
               Clear browsing data
             </NavigationDrawer.Item>
           </NavigationDrawer>

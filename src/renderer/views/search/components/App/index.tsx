@@ -9,7 +9,7 @@ import store from '../../store';
 import { callViewMethod } from '~/utils/view';
 import { ipcRenderer } from 'electron';
 import { Suggestions } from '../Suggestions';
-import { icons } from '~/renderer/constants';
+import { ICON_SEARCH, ICON_PAGE } from '~/renderer/constants';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -125,7 +125,7 @@ export const App = hot(
     ipcRenderer.send(`height-${store.id}`, height);
 
     const suggestion = store.suggestions.selectedSuggestion;
-    let favicon = icons.search;
+    let favicon = ICON_SEARCH;
     let customIcon = true;
 
     if (suggestion && suggestionsVisible) {
@@ -137,9 +137,9 @@ export const App = hot(
       } else if (
         favicon == null ||
         favicon.trim() === '' ||
-        favicon === icons.page
+        favicon === ICON_PAGE
       ) {
-        favicon = icons.page;
+        favicon = ICON_PAGE;
         customIcon = true;
       }
     }

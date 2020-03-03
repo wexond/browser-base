@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { transparency, icons } from '~/renderer/constants';
+import { transparency, ICON_CLOSE } from '~/renderer/constants';
 import { ITheme } from '~/interfaces';
 import { centerIcon, body2 } from '~/renderer/mixins';
 import { TAB_PINNED_WIDTH } from '../../../constants';
@@ -15,7 +15,7 @@ export const StyledClose = styled.div`
   right: 6px;
   height: 24px;
   width: 24px;
-  background-image: url('${icons.close}');
+  background-image: url('${ICON_CLOSE}');
   transition: 0.1s opacity;
   z-index: 10;
   ${centerIcon(16)};

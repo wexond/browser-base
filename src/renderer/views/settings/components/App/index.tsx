@@ -11,11 +11,17 @@ import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
 import { Style } from '../../style';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Autofill } from '../Autofill';
-import { icons } from '~/renderer/constants';
 import { OnStartup } from '../Startup';
 import { Content, LeftContent, Container } from '~/renderer/components/Pages';
 import { GlobalNavigationDrawer } from '~/renderer/components/GlobalNavigationDrawer';
 import { Downloads } from '../Downloads';
+import {
+  ICON_PALETTE,
+  ICON_AUTOFILL,
+  ICON_POWER,
+  ICON_SEARCH,
+  ICON_DOWNLOAD,
+} from '~/renderer/constants';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 const MenuItem = observer(
@@ -50,19 +56,19 @@ export default hot(
           <GlobalStyle />
           <GlobalNavigationDrawer></GlobalNavigationDrawer>
           <NavigationDrawer title="Settings" search>
-            <MenuItem icon={icons.palette} section="appearance">
+            <MenuItem icon={ICON_PALETTE} section="appearance">
               Appearance
             </MenuItem>
-            <MenuItem icon={icons.autofill} section="autofill">
+            <MenuItem icon={ICON_AUTOFILL} section="autofill">
               Autofill
             </MenuItem>
-            <MenuItem icon={icons.power} section="startup">
+            <MenuItem icon={ICON_POWER} section="startup">
               On startup
             </MenuItem>
-            <MenuItem icon={icons.search} section="address-bar">
+            <MenuItem icon={ICON_SEARCH} section="address-bar">
               Address bar
             </MenuItem>
-            <MenuItem icon={icons.download} section="downloads">
+            <MenuItem icon={ICON_DOWNLOAD} section="downloads">
               Downloads
             </MenuItem>
             {/* <MenuItem section="privacy">Privacy</MenuItem> */}

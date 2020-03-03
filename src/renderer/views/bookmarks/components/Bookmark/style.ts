@@ -1,15 +1,15 @@
 import styled, { css } from 'styled-components';
 
 import { centerIcon } from '~/renderer/mixins';
-import { icons } from '~/renderer/constants';
 import { ITheme } from '~/interfaces';
+import { ICON_MORE } from '~/renderer/constants/icons';
 
 export const More = styled.div`
   ${centerIcon(20)};
   height: 24px;
   width: 24px;
   cursor: pointer;
-  background-image: url(${icons.more});
+  background-image: url(${ICON_MORE});
   opacity: 0.54;
   ${({ theme }: { theme: ITheme }) => css`
     filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};
