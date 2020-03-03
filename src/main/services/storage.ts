@@ -2,7 +2,6 @@ import { ipcMain, dialog } from 'electron';
 import * as Datastore from 'nedb';
 import { fromBuffer } from 'file-type';
 import * as icojs from 'icojs';
-import parse = require('node-bookmarks-parser');
 
 import { getPath, requestURL } from '~/utils';
 import {
@@ -81,13 +80,18 @@ export class StorageService {
     });
 
     ipcMain.handle('import-bookmarks', async () => {
-      const b = await this.importBookmarks();
-
-      windowsManager.list.forEach(x => {
-        x.viewManager.selected.updateBookmark();
+      const dialogRes = await dialog.showOpenDialog({
+        filters: [{ name: 'Bookmark file', extensions: ['html'] }],
       });
 
-      return b;
+      try {
+        const file = await promises.readFile(dialogRes.filePaths[0], 'utf8');
+        return file;
+      } catch (err) {
+        console.error(err);
+      }
+
+      return [];
     });
 
     ipcMain.handle('export-bookmarks', async () => {
@@ -404,21 +408,6 @@ export class StorageService {
     } else {
       return this.favicons.get(url);
     }
-  };
-
-  public importBookmarks = async () => {
-    const dialogRes = await dialog.showOpenDialog({
-      filters: [{ name: 'Bookmark file', extensions: ['html'] }],
-    });
-
-    try {
-      const file = await promises.readFile(dialogRes.filePaths[0], 'utf8');
-      return parse(file);
-    } catch (err) {
-      console.error(err);
-    }
-
-    return [];
   };
 
   private createBookmarkArray = (

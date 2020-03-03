@@ -7,7 +7,6 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const createStyledComponentsTransformer = require('typescript-plugin-styled-components')
   .default;
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const TerserPlugin = require('terser-webpack-plugin');
 /* eslint-enable */
 
@@ -98,9 +97,7 @@ const config = {
     },
   },
 
-  plugins: [
-    // new BundleAnalyzerPlugin()
-  ],
+  plugins: [],
 
   externals: {
     keytar: `require('keytar')`,
