@@ -86,14 +86,14 @@ export class Dialog extends BrowserView {
   }
 
   public show(focus = true) {
+    clearTimeout(this.timeout);
+
     if (this.visible) {
       if (focus) this.webContents.focus();
       return;
     }
 
     this.visible = true;
-
-    clearTimeout(this.timeout);
 
     this.appWindow.addBrowserView(this);
     this.rearrange();
@@ -105,7 +105,7 @@ export class Dialog extends BrowserView {
     this.webContents.send('visible', false);
   }
 
-  public hide(bringToTop = false) {
+  public hide(bringToTop = false, cb: () => void = null) {
     if (bringToTop) {
       this.bringToTop();
     }
@@ -114,18 +114,19 @@ export class Dialog extends BrowserView {
 
     clearTimeout(this.timeout);
 
+    this.hideVisually();
+
     if (this.hideTimeout) {
-      this.timeout = setTimeout(
-        () => this.appWindow.removeBrowserView(this),
-        this.hideTimeout,
-      );
+      this.timeout = setTimeout(() => {
+        this.appWindow.removeBrowserView(this);
+        if (cb) cb();
+      }, this.hideTimeout);
     } else {
       this.appWindow.removeBrowserView(this);
+      if (cb) cb();
     }
 
     this.visible = false;
-
-    this.hideVisually();
 
     // this.appWindow.fixDragging();
   }

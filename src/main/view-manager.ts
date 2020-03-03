@@ -122,6 +122,12 @@ export class ViewManager {
     view.updateWindowTitle();
     view.updateBookmark();
 
+    if (this.incognito) {
+      windowsManager.sessionsManager.extensionsIncognito.activeTab = id;
+    } else {
+      windowsManager.sessionsManager.extensions.activeTab = id;
+    }
+
     this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);
 
@@ -129,23 +135,14 @@ export class ViewManager {
       this.window.dialogs.previewDialog.hide(true);
     }
 
-    if (this.incognito) {
-      windowsManager.sessionsManager.extensionsIncognito.activeTab = id;
-    } else {
-      windowsManager.sessionsManager.extensions.activeTab = id;
-    }
-
     // Also fixes switching tabs with Ctrl + Tab
     view.webContents.focus();
 
-    if (this.window.dialogs.searchDialog.visible) {
-      this.window.dialogs.searchDialog.bringToTop();
-    }
-
     if (view.webContents.getURL().startsWith(NEWTAB_URL)) {
+      this.window.dialogs.searchDialog.bringToTop();
       this.window.dialogs.searchDialog.show();
     } else if (this.window.dialogs.searchDialog.visible) {
-      this.window.dialogs.searchDialog.hide();
+      this.window.dialogs.searchDialog.hide(true);
     }
 
     this.fixBounds();

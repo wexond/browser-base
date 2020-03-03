@@ -13,6 +13,7 @@ export class Store extends DialogStore {
     super();
     ipcRenderer.on('visible', async (e, flag) => {
       this.visible = flag;
+
       if (flag) {
         if (remote.getCurrentWindow()) {
           this.alwaysOnTop = remote.getCurrentWindow().isAlwaysOnTop();

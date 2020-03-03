@@ -92,8 +92,8 @@ export class SearchDialog extends Dialog {
     });
   }
 
-  public hide() {
-    super.hide();
+  public hide(bringToTop = false, cb: () => void = null) {
+    super.hide(bringToTop, cb);
     this.queueShow = false;
   }
 }
