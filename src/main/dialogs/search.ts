@@ -40,9 +40,11 @@ export class SearchDialog extends Dialog {
     });
 
     ipcMain.handle(`is-newtab-${this.webContents.id}`, () => {
-      return appWindow.viewManager.selected.webContents
-        .getURL()
-        .startsWith(NEWTAB_URL);
+      return appWindow.viewManager.selected
+        ? appWindow.viewManager.selected.webContents
+            .getURL()
+            .startsWith(NEWTAB_URL)
+        : false;
     });
   }
 
