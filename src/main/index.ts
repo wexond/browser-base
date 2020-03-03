@@ -1,4 +1,6 @@
-import 'source-map-support/register';
+if (process.env.NODE_ENV === 'development') {
+  require('source-map-support').install();
+}
 
 import { ipcMain, app, webContents } from 'electron';
 import { platform } from 'os';
