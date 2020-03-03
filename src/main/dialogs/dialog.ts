@@ -86,7 +86,10 @@ export class Dialog extends BrowserView {
   }
 
   public show(focus = true) {
-    if (this.visible) return;
+    if (this.visible) {
+      if (focus) this.webContents.focus();
+      return;
+    }
 
     this.visible = true;
 
