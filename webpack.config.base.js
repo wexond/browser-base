@@ -13,10 +13,21 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 const INCLUDE = resolve(__dirname, 'src');
 
-const dev = process.env.ENV === 'dev';
-const prebuild = process.env.PREBUILD === '1';
+const dev = process.env.DEV === '1';
+let prebuild = process.env.PREBUILD === '1';
+
+if (dev) prebuild = false;
 
 const CHUNKS_ENTRIES_MAP_PATH = 'chunks-entries-map.json';
+
+if (!dev && !prebuild && !existsSync(CHUNKS_ENTRIES_MAP_PATH)) {
+  throw new Error('Chunks to entries map file does not exist.');
+}
+
+const chunksEntriesMap =
+  prebuild || dev
+    ? {}
+    : JSON.parse(readFileSync(CHUNKS_ENTRIES_MAP_PATH, 'utf8'));
 
 const styledComponentsTransformer = createStyledComponentsTransformer({
   minify: true,
@@ -99,18 +110,18 @@ const config = {
     minimizer:
       !dev && !prebuild
         ? [
-          new TerserPlugin({
-            extractComments: true,
-            terserOptions: {
-              ecma: 8,
-              output: {
-                comments: false,
+            new TerserPlugin({
+              extractComments: true,
+              terserOptions: {
+                ecma: 8,
+                output: {
+                  comments: false,
+                },
               },
-            },
-            parallel: true,
-            cache: true,
-          }),
-        ]
+              parallel: true,
+              cache: true,
+            }),
+          ]
         : [],
   },
 };
@@ -124,23 +135,22 @@ function getConfig(...cfg) {
   return merge(config, ...cfg);
 }
 
-const chunksEntriesMap =
-  prebuild || !existsSync(CHUNKS_ENTRIES_MAP_PATH)
-    ? {}
-    : JSON.parse(readFileSync(CHUNKS_ENTRIES_MAP_PATH, 'utf8'));
-
 const getHtml = (scope, name, entries = []) => {
+  let excludeChunks = entries.filter(x => x !== name);
+
+  if (!dev) {
+    excludeChunks = excludeChunks.concat(
+      Object.entries(chunksEntriesMap)
+        .filter(x => !x[1].includes(name))
+        .map(x => x[0]),
+    );
+  }
+
   return new HtmlWebpackPlugin({
     title: 'Wexond',
     template: 'static/pages/app.html',
     filename: `${name}.html`,
-    excludeChunks: entries
-      .filter(x => x !== name)
-      .concat(
-        Object.entries(chunksEntriesMap)
-          .filter(x => !x[1].includes(name))
-          .map(x => x[0]),
-      ),
+    excludeChunks,
   });
 };
 
@@ -157,8 +167,6 @@ const applyEntries = (scope, config, entries) => {
   }
 };
 
-let printed = false;
-
 const getBaseConfig = name => {
   const config = {
     plugins: [],
@@ -171,39 +179,61 @@ const getBaseConfig = name => {
       runtimeChunk: {
         name: `runtime.${name}`,
       },
-      splitChunks: {
-        chunks: 'all',
-        maxInitialRequests: Infinity,
-        minSize: 0,
-        cacheGroups: {
-          commons: {
-            test: /[\\/]node_modules[\\/]/,
-            name(module) {
-              if (!printed) {
-                printed = true;
-              }
+    },
+  };
 
-              const packageName = module.context.match(
-                /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
-              )[1];
+  if (dev) {
+    config.entry.vendor = [
+      'styled-components',
+      'react-hot-loader',
+      'react',
+      'react-dom',
+      'mobx',
+      'mobx-react-lite',
+    ];
 
-              const bundleName = `npm.${packageName}.${name}`;
+    config.optimization.splitChunks = {
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          name: `vendor.${name}`,
+          test: 'vendor',
+          enforce: true,
+        },
+      },
+    };
+  } else {
+    config.optimization.splitChunks = {
+      chunks: 'all',
+      maxInitialRequests: Infinity,
+      minSize: 0,
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name(module) {
+            const packageName = module.context.match(
+              /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+            )[1];
 
-              chunksEntriesMap[bundleName] = Array.from(module._chunks).map(
-                x => x.name,
-              );
+            const bundleName = `npm.${packageName}.${name}`;
+
+            chunksEntriesMap[bundleName] = Array.from(module._chunks).map(
+              x => x.name,
+            );
+
+            if (prebuild) {
               writeFileSync(
                 CHUNKS_ENTRIES_MAP_PATH,
                 JSON.stringify(chunksEntriesMap),
               );
+            }
 
-              return bundleName;
-            },
+            return bundleName;
           },
         },
       },
-    },
-  };
+    };
+  }
 
   if (prebuild) {
     config.plugins.push({
