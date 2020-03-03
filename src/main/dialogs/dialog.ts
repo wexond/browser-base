@@ -107,7 +107,7 @@ export class Dialog extends BrowserView {
 
   public hide(bringToTop = false) {
     if (bringToTop) {
-      // this.bringToTop();
+      this.bringToTop();
     }
 
     if (!this.visible) return;

@@ -125,8 +125,9 @@ export class ViewManager {
     this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);
 
-    // this.window.dialogs.previewDialog.bringToTop();
-    this.window.dialogs.previewDialog.hideVisually();
+    if (this.window.dialogs.previewDialog.visible) {
+      this.window.dialogs.previewDialog.hide(true);
+    }
 
     if (this.incognito) {
       windowsManager.sessionsManager.extensionsIncognito.activeTab = id;
@@ -143,8 +144,8 @@ export class ViewManager {
 
     if (view.webContents.getURL().startsWith(NEWTAB_URL)) {
       this.window.dialogs.searchDialog.show();
-    } else {
-      this.window.dialogs.searchDialog.hideVisually();
+    } else if (this.window.dialogs.searchDialog.visible) {
+      this.window.dialogs.searchDialog.hide();
     }
 
     this.fixBounds();
