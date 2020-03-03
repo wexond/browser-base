@@ -207,7 +207,7 @@ export class AppWindow extends BrowserWindow {
       windowsManager.list = windowsManager.list.filter(x => x.id !== this.id);
     });
 
-    // this.webContents.openDevTools({ mode: 'detach' });
+    this.webContents.openDevTools({ mode: 'detach' });
 
     if (process.env.NODE_ENV === 'development') {
       this.webContents.openDevTools({ mode: 'detach' });

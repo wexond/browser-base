@@ -99,18 +99,18 @@ const config = {
     minimizer:
       !dev && !prebuild
         ? [
-            new TerserPlugin({
-              extractComments: true,
-              terserOptions: {
-                ecma: 8,
-                output: {
-                  comments: false,
-                },
+          new TerserPlugin({
+            extractComments: true,
+            terserOptions: {
+              ecma: 8,
+              output: {
+                comments: false,
               },
-              parallel: true,
-              cache: true,
-            }),
-          ]
+            },
+            parallel: true,
+            cache: true,
+          }),
+        ]
         : [],
   },
 };
@@ -138,7 +138,7 @@ const getHtml = (scope, name, entries = []) => {
       .filter(x => x !== name)
       .concat(
         Object.entries(chunksEntriesMap)
-          .filter(x => x[0].indexOf(scope) === -1 || !x[1].includes(name))
+          .filter(x => !x[1].includes(name))
           .map(x => x[0]),
       ),
   });
@@ -161,24 +161,7 @@ let printed = false;
 
 const getBaseConfig = name => {
   const config = {
-    plugins: [
-      {
-        apply: compiler => {
-          compiler.hooks.afterOptimizeChunkAssets.tap(
-            'AfterOptimizeChunkAssets',
-            chunks => {
-              for (const chunk of chunks) {
-                if (chunk.name.indexOf('~') !== -1) {
-                  chunksEntriesMap[chunk.name] = chunk.name
-                    .split('.')[0]
-                    .split('~');
-                }
-              }
-            },
-          );
-        },
-      },
-    ],
+    plugins: [],
 
     output: {},
 
@@ -189,11 +172,11 @@ const getBaseConfig = name => {
         name: `runtime.${name}`,
       },
       splitChunks: {
+        chunks: 'all',
+        maxInitialRequests: Infinity,
+        minSize: 0,
         cacheGroups: {
           commons: {
-            chunks: 'all',
-            maxInitialRequests: Infinity,
-            minSize: 0,
             test: /[\\/]node_modules[\\/]/,
             name(module) {
               if (!printed) {
@@ -209,7 +192,10 @@ const getBaseConfig = name => {
               chunksEntriesMap[bundleName] = Array.from(module._chunks).map(
                 x => x.name,
               );
-              writeFileSync(CHUNKS_ENTRIES_MAP_PATH, JSON.stringify(npm));
+              writeFileSync(
+                CHUNKS_ENTRIES_MAP_PATH,
+                JSON.stringify(chunksEntriesMap),
+              );
 
               return bundleName;
             },
@@ -218,6 +204,32 @@ const getBaseConfig = name => {
       },
     },
   };
+
+  if (prebuild) {
+    config.plugins.push({
+      apply: compiler => {
+        compiler.hooks.compilation.tap('Compilation', compilation => {
+          compilation.hooks.afterOptimizeChunkAssets.tap(
+            'AfterOptimizeChunkAssets',
+            chunks => {
+              for (const chunk of chunks) {
+                if (chunk.name.indexOf('~') !== -1) {
+                  chunksEntriesMap[chunk.name] = chunk.name
+                    .split('.')[0]
+                    .split('~');
+                }
+              }
+
+              writeFileSync(
+                CHUNKS_ENTRIES_MAP_PATH,
+                JSON.stringify(chunksEntriesMap),
+              );
+            },
+          );
+        });
+      },
+    });
+  }
 
   return config;
 };
