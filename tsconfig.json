@@ -7,7 +7,7 @@
     "alwaysStrict": true,
     "skipLibCheck": true,
     "module": "None",
-    "target": "es2016",
+    "target": "es2017",
     "jsx": "react",
     "allowJs": true,
     "sourceMap": true,
