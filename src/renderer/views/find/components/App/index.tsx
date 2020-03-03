@@ -15,7 +15,7 @@ import {
 } from './style';
 import store from '../../store';
 import { callViewMethod } from '~/utils/view';
-import { icons } from '~/renderer/constants/icons';
+import { ICON_UP, ICON_DOWN, ICON_CLOSE } from '~/renderer/constants/icons';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -86,9 +86,9 @@ export const App = observer(() => {
           />
           <Occurrences>{store.occurrences}</Occurrences>
           <Buttons>
-            <Button onClick={move(false)} icon={icons.up} size={20} />
-            <Button onClick={move(true)} icon={icons.down} size={20} />
-            <Button onClick={close} icon={icons.close} size={16} />
+            <Button onClick={move(false)} icon={ICON_UP} size={20} />
+            <Button onClick={move(true)} icon={ICON_DOWN} size={20} />
+            <Button onClick={close} icon={ICON_CLOSE} size={16} />
           </Buttons>
         </StyledFind>
       </StyledApp>

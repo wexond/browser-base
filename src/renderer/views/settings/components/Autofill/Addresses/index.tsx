@@ -2,11 +2,11 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
 import store from '../../../store';
-import { icons } from '~/renderer/constants';
 import { IFormFillData } from '~/interfaces';
 import { Section, onMoreClick } from '../Section';
 import { More } from '../Passwords/styles';
 import { StyledItem } from './styles';
+import { ICON_LOCATION } from '~/renderer/constants';
 
 const Item = observer(({ data }: { data: IFormFillData }) => {
   return (
@@ -24,7 +24,7 @@ export const Addresses = observer(() => {
   };
 
   return (
-    <Section label="Addresses" icon={icons.location} style={style}>
+    <Section label="Addresses" icon={ICON_LOCATION} style={style}>
       {store.autoFill.addresses.map(item => (
         <Item key={item._id} data={item} />
       ))}

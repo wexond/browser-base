@@ -7,10 +7,17 @@ import { Style } from '../../style';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Wrapper, Content, IconItem, Menu, Image, RightBar } from './style';
 import { TopSites } from '../TopSites';
-import { icons } from '~/renderer/constants';
 import { News } from '../News';
 import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 import { Preferences } from '../Preferences';
+import {
+  ICON_TUNE,
+  ICON_SETTINGS,
+  ICON_HISTORY,
+  ICON_BOOKMARKS,
+  ICON_DOWNLOAD,
+  ICON_EXTENSIONS,
+} from '~/renderer/constants/icons';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -51,7 +58,7 @@ export default hot(
               <IconItem
                 imageSet={store.imageVisible}
                 title="Dashboard settings"
-                icon={icons.tune}
+                icon={ICON_TUNE}
                 onMouseDown={e => e.stopPropagation()}
                 onClick={onTuneClick}
               ></IconItem>
@@ -61,31 +68,31 @@ export default hot(
                 <IconItem
                   imageSet={store.imageVisible}
                   title="Settings"
-                  icon={icons.settings}
+                  icon={ICON_SETTINGS}
                   onClick={onIconClick('settings')}
                 ></IconItem>
                 <IconItem
                   imageSet={store.imageVisible}
                   title="History"
-                  icon={icons.history}
+                  icon={ICON_HISTORY}
                   onClick={onIconClick('history')}
                 ></IconItem>
                 <IconItem
                   imageSet={store.imageVisible}
                   title="Bookmarks"
-                  icon={icons.bookmarks}
+                  icon={ICON_BOOKMARKS}
                   onClick={onIconClick('bookmarks')}
                 ></IconItem>
                 <IconItem
                   imageSet={store.imageVisible}
                   title="Downloads"
-                  icon={icons.download}
+                  icon={ICON_DOWNLOAD}
                   onClick={onIconClick('downloads')}
                 ></IconItem>
                 <IconItem
                   imageSet={store.imageVisible}
                   title="Extensions"
-                  icon={icons.extensions}
+                  icon={ICON_EXTENSIONS}
                   onClick={onIconClick('extensions')}
                 ></IconItem>
               </Menu>

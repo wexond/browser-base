@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
-import { transparency, icons } from '~/renderer/constants';
+import { transparency, ICON_PAGE, ICON_SEARCH } from '~/renderer/constants';
 import {
   StyledSuggestion,
   PrimaryText,
@@ -51,10 +51,10 @@ export const Suggestion = observer(({ suggestion }: Props) => {
   let { favicon } = suggestion;
 
   if (favicon == null || favicon.trim() === '') {
-    favicon = icons.page;
+    favicon = ICON_PAGE;
   }
 
-  const customFavicon = favicon !== icons.page && favicon !== icons.search;
+  const customFavicon = favicon !== ICON_PAGE && favicon !== ICON_SEARCH;
 
   return (
     <StyledSuggestion

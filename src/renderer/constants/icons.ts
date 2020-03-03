@@ -1,71 +1,65 @@
-export const icons = {
-  add: require('~/renderer/resources/icons/add.svg'),
-  back: require('~/renderer/resources/icons/back.svg'),
-  forward: require('~/renderer/resources/icons/forward.svg'),
-  close: require('~/renderer/resources/icons/close.svg'),
-  refresh: require('~/renderer/resources/icons/refresh.svg'),
-  search: require('~/renderer/resources/icons/search.svg'),
-  page: require('~/renderer/resources/icons/page.svg'),
-  download: require('~/renderer/resources/icons/download.svg'),
-  history: require('~/renderer/resources/icons/history.svg'),
-  bookmarks: require('~/renderer/resources/icons/bookmarks.svg'),
-  settings: require('~/renderer/resources/icons/settings.svg'),
-  extensions: require('~/renderer/resources/icons/extensions.svg'),
-  window: require('~/renderer/resources/icons/window.svg'),
-  more: require('~/renderer/resources/icons/more.svg'),
-  find: require('~/renderer/resources/icons/find.svg'),
-  edit: require('~/renderer/resources/icons/edit.svg'),
-  down: require('~/renderer/resources/icons/down.svg'),
-  arrowBack: require('~/renderer/resources/icons/arrow-back.svg'),
-  star: require('~/renderer/resources/icons/star.svg'),
-  starFilled: require('~/renderer/resources/icons/star-filled.svg'),
-  fire: require('~/renderer/resources/icons/fire.svg'),
-  trash: require('~/renderer/resources/icons/delete.svg'),
-  up: require('~/renderer/resources/icons/up.svg'),
-  shield: require('~/renderer/resources/icons/shield.svg'),
-  night: require('~/renderer/resources/icons/night.svg'),
-  multrin: require('~/renderer/resources/icons/drop-window.svg'),
-  visible: require('~/renderer/resources/icons/visible.svg'),
-  invisible: require('~/renderer/resources/icons/invisible.svg'),
-  dropDown: require('~/renderer/resources/icons/drop-down.svg'),
-  folder: require('~/renderer/resources/icons/folder.svg'),
-  newFolder: require('~/renderer/resources/icons/new-folder.svg'),
-  save: require('~/renderer/resources/icons/save.svg'),
-  key: require('~/renderer/resources/icons/key.svg'),
-  incognito: require('~/renderer/resources/icons/incognito.svg'),
-  location: require('~/renderer/resources/icons/location.svg'),
-  autofill: require('~/renderer/resources/icons/autofill.svg'),
-  palette: require('~/renderer/resources/icons/palette.svg'),
-  mute: require('~/renderer/resources/icons/mute.svg'),
-  power: require('~/renderer/resources/icons/power.svg'),
-  arrowRight: require('~/renderer/resources/icons/arrow-right.svg'),
-  print: require('~/renderer/resources/icons/print.svg'),
-  tab: require('~/renderer/resources/icons/tab.svg'),
-  menu: require('~/renderer/resources/icons/menu.svg'),
-  today: require('~/renderer/resources/icons/today.svg'),
-  week: require('~/renderer/resources/icons/week.svg'),
-  all: require('~/renderer/resources/icons/all.svg'),
-  calendar: require('~/renderer/resources/icons/calendar.svg'),
-  dashboard: require('~/renderer/resources/icons/dashboard.svg'),
-  check: require('~/renderer/resources/icons/check.svg'),
-  topMost: require('~/renderer/resources/icons/top-most.svg'),
-  tune: require('~/renderer/resources/icons/tune.svg'),
-  weather: {
-    day: {
-      clear: require('~/renderer/resources/icons/weather/day/clear.png'),
-      fewClouds: require('~/renderer/resources/icons/weather/day/few-clouds.png'),
-      rain: require('~/renderer/resources/icons/weather/day/rain.png'),
-      showers: require('~/renderer/resources/icons/weather/day/showers.png'),
-      snow: require('~/renderer/resources/icons/weather/day/snow.png'),
-      storm: require('~/renderer/resources/icons/weather/day/storm.png'),
-    },
-    night: {
-      clear: require('~/renderer/resources/icons/weather/night/clear.png'),
-      fewClouds: require('~/renderer/resources/icons/weather/night/few-clouds.png'),
-      rain: require('~/renderer/resources/icons/weather/night/rain.png'),
-      showers: require('~/renderer/resources/icons/weather/night/showers.png'),
-      snow: require('~/renderer/resources/icons/weather/night/snow.png'),
-      storm: require('~/renderer/resources/icons/weather/night/storm.png'),
-    },
-  },
-};
+export const ICON_ADD = require('~/renderer/resources/icons/add.svg');
+export const ICON_BACK = require('~/renderer/resources/icons/back.svg');
+export const ICON_FORWARD = require('~/renderer/resources/icons/forward.svg');
+export const ICON_CLOSE = require('~/renderer/resources/icons/close.svg');
+export const ICON_REFRESH = require('~/renderer/resources/icons/refresh.svg');
+export const ICON_SEARCH = require('~/renderer/resources/icons/search.svg');
+export const ICON_PAGE = require('~/renderer/resources/icons/page.svg');
+export const ICON_DOWNLOAD = require('~/renderer/resources/icons/download.svg');
+export const ICON_HISTORY = require('~/renderer/resources/icons/history.svg');
+export const ICON_BOOKMARKS = require('~/renderer/resources/icons/bookmarks.svg');
+export const ICON_SETTINGS = require('~/renderer/resources/icons/settings.svg');
+export const ICON_EXTENSIONS = require('~/renderer/resources/icons/extensions.svg');
+export const ICON_WINDOW = require('~/renderer/resources/icons/window.svg');
+export const ICON_MORE = require('~/renderer/resources/icons/more.svg');
+export const ICON_FIND = require('~/renderer/resources/icons/find.svg');
+export const ICON_EDIT = require('~/renderer/resources/icons/edit.svg');
+export const ICON_DOWN = require('~/renderer/resources/icons/down.svg');
+export const ICON_ARROWBACK = require('~/renderer/resources/icons/arrow-back.svg');
+export const ICON_STAR = require('~/renderer/resources/icons/star.svg');
+export const ICON_STAR_FILLED = require('~/renderer/resources/icons/star-filled.svg');
+export const ICON_FIRE = require('~/renderer/resources/icons/fire.svg');
+export const ICON_TRASH = require('~/renderer/resources/icons/delete.svg');
+export const ICON_UP = require('~/renderer/resources/icons/up.svg');
+export const ICON_SHIELD = require('~/renderer/resources/icons/shield.svg');
+export const ICON_NIGHT = require('~/renderer/resources/icons/night.svg');
+export const ICON_MULTRIN = require('~/renderer/resources/icons/drop-window.svg');
+export const ICON_VISIBLE = require('~/renderer/resources/icons/visible.svg');
+export const ICON_INVISIBLE = require('~/renderer/resources/icons/invisible.svg');
+export const ICON_DROPDOWN = require('~/renderer/resources/icons/drop-down.svg');
+export const ICON_FOLDER = require('~/renderer/resources/icons/folder.svg');
+export const ICON_NEW_FOLDER = require('~/renderer/resources/icons/new-folder.svg');
+export const ICON_SAVE = require('~/renderer/resources/icons/save.svg');
+export const ICON_KEY = require('~/renderer/resources/icons/key.svg');
+export const ICON_INCOGNITO = require('~/renderer/resources/icons/incognito.svg');
+export const ICON_LOCATION = require('~/renderer/resources/icons/location.svg');
+export const ICON_AUTOFILL = require('~/renderer/resources/icons/autofill.svg');
+export const ICON_PALETTE = require('~/renderer/resources/icons/palette.svg');
+export const ICON_MUTE = require('~/renderer/resources/icons/mute.svg');
+export const ICON_POWER = require('~/renderer/resources/icons/power.svg');
+export const ICON_ARROW_RIGHT = require('~/renderer/resources/icons/arrow-right.svg');
+export const ICON_PRINT = require('~/renderer/resources/icons/print.svg');
+export const ICON_TAB = require('~/renderer/resources/icons/tab.svg');
+export const ICON_MENU = require('~/renderer/resources/icons/menu.svg');
+export const ICON_TODAY = require('~/renderer/resources/icons/today.svg');
+export const ICON_WEEK = require('~/renderer/resources/icons/week.svg');
+export const ICON_ALL = require('~/renderer/resources/icons/all.svg');
+export const ICON_CALENDAR = require('~/renderer/resources/icons/calendar.svg');
+export const ICON_DASHBOARD = require('~/renderer/resources/icons/dashboard.svg');
+export const ICON_CHECK = require('~/renderer/resources/icons/check.svg');
+export const ICON_TOPMOST = require('~/renderer/resources/icons/top-most.svg');
+export const ICON_TUNE = require('~/renderer/resources/icons/tune.svg');
+
+export const ICON_WEATHER_DAY_CLEAR = require('~/renderer/resources/icons/weather/day/clear.png');
+export const ICON_WEATHER_DAY_FEW_CLOUDS = require('~/renderer/resources/icons/weather/day/few-clouds.png');
+export const ICON_WEATHER_DAY_RAIN = require('~/renderer/resources/icons/weather/day/rain.png');
+export const ICON_WEATHER_DAY_SHOWERS = require('~/renderer/resources/icons/weather/day/showers.png');
+export const ICON_WEATHER_DAY_SNOW = require('~/renderer/resources/icons/weather/day/snow.png');
+export const ICON_WEATHER_DAY_STORM = require('~/renderer/resources/icons/weather/day/storm.png');
+
+export const ICON_WEATHER_NIGHT_CLEAR = require('~/renderer/resources/icons/weather/night/clear.png');
+export const ICON_WEATHER_NIGHT_FEW_CLOUDS = require('~/renderer/resources/icons/weather/night/few-clouds.png');
+export const ICON_WEATHER_NIGHT_RAIN = require('~/renderer/resources/icons/weather/night/rain.png');
+export const ICON_WEATHER_NIGHT_SHOWERS = require('~/renderer/resources/icons/weather/night/showers.png');
+export const ICON_WEATHER_NIGHT_SNOW = require('~/renderer/resources/icons/weather/night/snow.png');
+export const ICON_WEATHER_NIGHT_STORM = require('~/renderer/resources/icons/weather/night/storm.png');

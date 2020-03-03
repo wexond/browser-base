@@ -6,7 +6,6 @@ import store from '../../store';
 import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
 import { Style } from '../../style';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { icons } from '~/renderer/constants/icons';
 import { SelectionDialog } from '~/renderer/components/SelectionDialog';
 import { Container, Content, LeftContent } from '~/renderer/components/Pages';
 import { GlobalNavigationDrawer } from '~/renderer/components/GlobalNavigationDrawer';
@@ -29,6 +28,13 @@ import { Bookmark } from '../Bookmark';
 import { ipcRenderer } from 'electron';
 import { Textfield } from '~/renderer/components/Textfield';
 import { Button } from '~/renderer/components/Button';
+import {
+  ICON_EDIT,
+  ICON_TRASH,
+  ICON_SAVE,
+  ICON_DOWNLOAD,
+  ICON_NEW_FOLDER,
+} from '~/renderer/constants';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
@@ -173,18 +179,15 @@ export default hot(
             <Tree />
             <div style={{ flex: 1 }} />
             <NavigationDrawer.Item
-              icon={icons.newFolder}
+              icon={ICON_NEW_FOLDER}
               onClick={onNewFolderClick}
             >
               New folder
             </NavigationDrawer.Item>
-            <NavigationDrawer.Item
-              icon={icons.download}
-              onClick={onImportClick}
-            >
+            <NavigationDrawer.Item icon={ICON_DOWNLOAD} onClick={onImportClick}>
               Import
             </NavigationDrawer.Item>
-            <NavigationDrawer.Item icon={icons.save} onClick={onExportClick}>
+            <NavigationDrawer.Item icon={ICON_SAVE} onClick={onExportClick}>
               Export
             </NavigationDrawer.Item>
           </NavigationDrawer>
@@ -197,18 +200,18 @@ export default hot(
             visible={store.menuVisible}
           >
             {store.currentBookmark && !store.currentBookmark.isFolder && (
-              <ContextMenuItem onClick={onEditClick} icon={icons.edit}>
+              <ContextMenuItem onClick={onEditClick} icon={ICON_EDIT}>
                 Edit
               </ContextMenuItem>
             )}
             {store.currentBookmark && store.currentBookmark.isFolder && (
-              <ContextMenuItem onClick={onRenameClick} icon={icons.edit}>
+              <ContextMenuItem onClick={onRenameClick} icon={ICON_EDIT}>
                 Rename
               </ContextMenuItem>
             )}
             <ContextMenuItem
               onClick={onRemoveClick(store.currentBookmark)}
-              icon={icons.trash}
+              icon={ICON_TRASH}
             >
               Delete
             </ContextMenuItem>

@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 
-import { icons, EASING_FUNCTION, BLUE_500 } from '~/renderer/constants';
+import { EASING_FUNCTION, BLUE_500 } from '~/renderer/constants';
+import { ICON_CHECK } from '~/renderer/constants/icons';
 import { centerIcon, centerBoth } from '~/renderer/mixins';
 
 export const Container = styled.div`
@@ -57,7 +58,7 @@ export const Icon = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  background-image: url(${icons.check});
+  background-image: url(${ICON_CHECK});
   transition: 0.3s clip-path ${EASING_FUNCTION};
   -webkit-font-smoothing: antialiased;
   filter: invert(100%);

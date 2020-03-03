@@ -6,7 +6,7 @@ import { IHistoryItem } from '~/interfaces';
 import { ListItem } from '~/renderer/components/ListItem';
 import { formatTime } from '../../utils';
 import store from '../../store';
-import { icons } from '~/renderer/constants';
+import { ICON_PAGE } from '~/renderer/constants/icons';
 
 const onClick = (item: IHistoryItem) => (e: React.MouseEvent) => {
   const index = store.selectedItems.indexOf(item._id);
@@ -34,7 +34,7 @@ export default observer(({ data }: { data: IHistoryItem }) => {
   let customFavicon = false;
 
   if (favicon == null || favicon.trim() === '') {
-    favicon = icons.page;
+    favicon = ICON_PAGE;
   } else {
     favicon = store.favicons.get(data.favicon);
     customFavicon = true;

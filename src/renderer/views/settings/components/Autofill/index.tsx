@@ -6,10 +6,10 @@ import {
   ContextMenu,
   ContextMenuItem,
 } from '~/renderer/components/ContextMenu';
-import { icons } from '~/renderer/constants';
 import { Passwords } from './Passwords';
 import { Addresses } from './Addresses';
 import { Header } from '../App/style';
+import { ICON_EDIT, ICON_TRASH } from '~/renderer/constants';
 
 const onEditClick = () => {
   store.dialogContent = 'edit-address';
@@ -40,11 +40,11 @@ const Menu = observer(() => {
       visible={store.autoFill.menuVisible}
     >
       {item && item.type === 'address' && (
-        <ContextMenuItem icon={icons.edit} onClick={onEditClick}>
+        <ContextMenuItem icon={ICON_EDIT} onClick={onEditClick}>
           Edit
         </ContextMenuItem>
       )}
-      <ContextMenuItem icon={icons.trash} onClick={onRemoveClick}>
+      <ContextMenuItem icon={ICON_TRASH} onClick={onRemoveClick}>
         Remove
       </ContextMenuItem>
     </ContextMenu>
