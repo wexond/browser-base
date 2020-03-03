@@ -21,7 +21,7 @@ const mainConfig = getConfig({
   },
 
   plugins: [
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
     new CopyPlugin(
       [
         {
