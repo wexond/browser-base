@@ -19,7 +19,12 @@ const removeWebview = () => {
 
 const hide = () => {
   if (!visible || !webview) return;
-  ipcRenderer.send(`hide-${getWebContentsId()}`);
+  visible = false;
+  app.classList.remove('visible');
+  removeWebview();
+  setTimeout(() => {
+    ipcRenderer.send(`hide-${getWebContentsId()}`);
+  });
 };
 
 const show = () => {
@@ -75,9 +80,7 @@ const createWebview = (url: string) => {
       webview.focus();
     } else if (e.channel === 'webview-blur') {
       if (visible && !webview.isDevToolsOpened()) {
-        setTimeout(() => {
-          hide();
-        });
+        hide();
       }
     }
   });
@@ -91,8 +94,6 @@ ipcRenderer.on('visible', (e, flag, data) => {
     createWebview(url);
   } else {
     visible = false;
-    app.classList.remove('visible');
-    removeWebview();
   }
 });
 
