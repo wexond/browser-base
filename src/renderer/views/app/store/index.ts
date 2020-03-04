@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, toJS } from 'mobx';
 
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
@@ -165,7 +165,11 @@ export class Store {
     ipcRenderer.on('find', () => {
       const tab = this.tabs.selectedTab;
       if (tab) {
-        ipcRenderer.send(`find-show-${this.windowId}`, tab.id, tab.findInfo);
+        ipcRenderer.send(
+          `find-show-${this.windowId}`,
+          tab.id,
+          toJS(tab.findInfo, { recurseEverything: true }),
+        );
       }
     });
 
