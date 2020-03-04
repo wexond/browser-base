@@ -30,13 +30,12 @@ const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
 const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   const { pageX, button } = e;
 
-  ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
-
   if (button !== 0) return;
 
   if (!tab.isSelected) {
     tab.select();
   } else {
+    ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
     store.canToggleMenu = true;
   }
 

@@ -42,7 +42,6 @@ export class Dialog extends BrowserView {
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
-        affinity: 'dialog',
         ...webPreferences,
       },
     });
@@ -53,7 +52,7 @@ export class Dialog extends BrowserView {
     this.name = name;
 
     ipcMain.on(`hide-${this.webContents.id}`, () => {
-      this.hide();
+      this.hide(false, false);
     });
 
     if (process.env.NODE_ENV === 'development') {
@@ -83,43 +82,29 @@ export class Dialog extends BrowserView {
 
   public toggle() {
     if (!this.visible) this.show();
-    else this.hide();
   }
 
   public show(focus = true) {
-    if (this.visible) return;
+    clearTimeout(this.timeout);
+
+    if (this.visible) {
+      if (focus) this.webContents.focus();
+      return;
+    }
 
     this.visible = true;
 
-    clearTimeout(this.timeout);
-
-    this.bringToTop();
-
-    if (process.platform === 'darwin') {
-      setTimeout(() => {
-        if (focus) this.webContents.focus();
-      });
-    } else {
-      if (focus) this.webContents.focus();
-    }
-
+    this.appWindow.addBrowserView(this);
     this.rearrange();
+
+    if (focus) this.webContents.focus();
   }
 
   public hideVisually() {
     this.webContents.send('visible', false);
   }
 
-  private _hide() {
-    this.setBounds({
-      height: this.bounds.height,
-      width: 1,
-      x: 0,
-      y: -this.bounds.height + 1,
-    });
-  }
-
-  public hide(bringToTop = false) {
+  public hide(bringToTop = false, hideVisually = true) {
     if (bringToTop) {
       this.bringToTop();
     }
@@ -128,17 +113,19 @@ export class Dialog extends BrowserView {
 
     clearTimeout(this.timeout);
 
+    if (hideVisually) this.hideVisually();
+
     if (this.hideTimeout) {
-      this.timeout = setTimeout(() => this._hide(), this.hideTimeout);
+      this.timeout = setTimeout(() => {
+        this.appWindow.removeBrowserView(this);
+      }, this.hideTimeout);
     } else {
-      this._hide();
+      this.appWindow.removeBrowserView(this);
     }
 
     this.visible = false;
 
-    this.hideVisually();
-
-    this.appWindow.fixDragging();
+    // this.appWindow.fixDragging();
   }
 
   public bringToTop() {

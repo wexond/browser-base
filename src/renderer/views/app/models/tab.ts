@@ -251,10 +251,6 @@ export class ITab {
       ipcRenderer.send(`update-find-info-${store.windowId}`, this.id, {
         ...this.findInfo,
       });
-
-      if (this.url.startsWith(NEWTAB_URL)) {
-        ipcRenderer.send(`search-show-${store.windowId}`);
-      }
     }
   }
 

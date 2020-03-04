@@ -13,8 +13,14 @@ export class Store extends DialogStore {
     super();
     ipcRenderer.on('visible', async (e, flag) => {
       this.visible = flag;
-      this.alwaysOnTop = remote.getCurrentWindow().isAlwaysOnTop();
-      this.updateAvailable = await ipcRenderer.invoke('is-update-available');
+
+      if (flag) {
+        if (remote.getCurrentWindow()) {
+          this.alwaysOnTop = remote.getCurrentWindow().isAlwaysOnTop();
+        }
+
+        this.updateAvailable = await ipcRenderer.invoke('is-update-available');
+      }
     });
 
     ipcRenderer.on('update-available', () => {
