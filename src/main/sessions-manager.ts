@@ -123,7 +123,7 @@ export class SessionsManager {
       id: string,
     ): IDownloadItem => ({
       fileName: basename(item.savePath),
-      receivedBytes: 0,
+      receivedBytes: item.getReceivedBytes(),
       totalBytes: item.getTotalBytes(),
       savePath: item.savePath,
       id,

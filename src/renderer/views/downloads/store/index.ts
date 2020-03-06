@@ -25,6 +25,7 @@ export class Store extends DialogStore {
       const index = this.downloads.indexOf(
         this.downloads.find(x => x.id === item.id),
       );
+
       this.downloads[index] = {
         ...this.downloads[index],
         ...item,
