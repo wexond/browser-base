@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { ITheme } from '~/interfaces';
 
+// TODO(sentialx): extend DialogStyle
 export const StyledApp = styled.div`
   margin: 8px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
