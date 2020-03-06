@@ -137,8 +137,11 @@ export class ViewManager {
     if (view.webContents.getURL().startsWith(NEWTAB_URL) || view.isNewTab) {
       this.window.dialogs.searchDialog.bringToTop();
       this.window.dialogs.searchDialog.show();
-    } else if (this.window.dialogs.searchDialog.visible) {
-      this.window.dialogs.searchDialog.hide(true);
+    } else {
+      this.window.dialogs.previewDialog.hide(true);
+      if (this.window.dialogs.searchDialog.visible) {
+        this.window.dialogs.searchDialog.hide(true);
+      }
     }
 
     this.fixBounds();
