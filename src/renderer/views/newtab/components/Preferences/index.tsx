@@ -79,6 +79,8 @@ export const Preferences = observer(() => {
             transition: '0.3s opacity, 0.3s transform',
             top: 0,
             left: 0,
+            pointerEvents:
+              store.preferencesContent === 'main' ? 'inherit' : 'none',
             transform:
               store.preferencesContent === 'main'
                 ? 'none'
@@ -127,6 +129,8 @@ export const Preferences = observer(() => {
             minWidth: 275,
             position: 'relative',
             opacity: store.preferencesContent === 'custom' ? 1 : 0,
+            pointerEvents:
+              store.preferencesContent === 'custom' ? 'inherit' : 'none',
             transition: '0.3s max-height, 0.3s transform, 0.3s opacity',
             maxHeight: store.preferencesContent === 'custom' ? 390 : 200,
             transform:
