@@ -134,7 +134,7 @@ export class ViewManager {
     // Also fixes switching tabs with Ctrl + Tab
     view.webContents.focus();
 
-    if (view.webContents.getURL().startsWith(NEWTAB_URL)) {
+    if (view.webContents.getURL().startsWith(NEWTAB_URL) || view.isNewTab) {
       this.window.dialogs.searchDialog.bringToTop();
       this.window.dialogs.searchDialog.show();
     } else if (this.window.dialogs.searchDialog.visible) {

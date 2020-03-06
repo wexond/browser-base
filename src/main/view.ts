@@ -11,6 +11,7 @@ import { NEWTAB_URL } from '~/constants/tabs';
 export class View extends BrowserView {
   public title = '';
   public url = '';
+  public isNewTab = false;
   public homeUrl: string;
   public favicon = '';
   public incognito = false;
@@ -234,6 +235,8 @@ export class View extends BrowserView {
       height: true,
     } as any);
 
+    if (url.startsWith(NEWTAB_URL)) this.isNewTab = true;
+
     this.webContents.loadURL(url);
   }
 
@@ -303,7 +306,9 @@ export class View extends BrowserView {
       url,
     );
 
-    if (url.startsWith(NEWTAB_URL)) {
+    this.isNewTab = url.startsWith(NEWTAB_URL);
+
+    if (this.isNewTab) {
       this.window.dialogs.searchDialog.show();
     } else {
       this.window.dialogs.searchDialog.hide();
