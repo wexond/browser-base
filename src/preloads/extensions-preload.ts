@@ -244,5 +244,8 @@ const changeBrowserActionInfo = async (
   };
 
   chrome.tabs = Object.assign(chrome.tabs, tabs);
-  (chrome.storage as any).sync = chrome.storage.local;
+
+  if (chrome.storage) {
+    chrome.storage.sync = chrome.storage.local;
+  }
 });
