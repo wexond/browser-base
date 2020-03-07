@@ -4,6 +4,7 @@ import { View } from './view';
 import { AppWindow } from './windows';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { windowsManager } from '.';
+import { NEWTAB_URL } from '~/constants/tabs';
 
 export class ViewManager {
   public views = new Map<number, View>();
@@ -121,21 +122,27 @@ export class ViewManager {
     view.updateWindowTitle();
     view.updateBookmark();
 
-    this.window.removeBrowserView(selected);
-    this.window.addBrowserView(view);
-
-    this.window.dialogs.searchDialog.hideVisually();
-    this.window.dialogs.previewDialog.hideVisually();
-    this.window.dialogs.tabGroupDialog.hideVisually();
-
     if (this.incognito) {
       windowsManager.sessionsManager.viewIncognito.activeTab = id;
     } else {
       windowsManager.sessionsManager.view.activeTab = id;
     }
 
+    this.window.removeBrowserView(selected);
+    this.window.addBrowserView(view);
+
     // Also fixes switching tabs with Ctrl + Tab
     view.webContents.focus();
+
+    if (view.webContents.getURL().startsWith(NEWTAB_URL) || view.isNewTab) {
+      this.window.dialogs.searchDialog.bringToTop();
+      this.window.dialogs.searchDialog.show();
+    } else {
+      if (this.window.dialogs.searchDialog.visible) {
+        this.window.dialogs.searchDialog.hide(true);
+      }
+      this.window.dialogs.previewDialog.hide(true);
+    }
 
     this.fixBounds();
   }

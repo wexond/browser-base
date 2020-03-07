@@ -12,7 +12,7 @@ import { Switch } from '~/renderer/components/Switch';
 import { Dropdown } from '~/renderer/components/Dropdown';
 
 import store, { Preset } from '../../store';
-import { icons } from '~/renderer/constants';
+import { ICON_WINDOW, ICON_BACK } from '~/renderer/constants';
 
 const onBackClick = () => {
   store.preferencesContent = 'main';
@@ -79,6 +79,8 @@ export const Preferences = observer(() => {
             transition: '0.3s opacity, 0.3s transform',
             top: 0,
             left: 0,
+            pointerEvents:
+              store.preferencesContent === 'main' ? 'inherit' : 'none',
             transform:
               store.preferencesContent === 'main'
                 ? 'none'
@@ -93,7 +95,7 @@ export const Preferences = observer(() => {
             onClick={onPresetClick('focused')}
             selected={store.preset === 'focused'}
             iconSize={28}
-            icon={icons.window}
+            icon={ICON_WINDOW}
           >
             Focused
           </ContextMenuItem>
@@ -101,7 +103,7 @@ export const Preferences = observer(() => {
             onClick={onPresetClick('inspirational')}
             selected={store.preset === 'inspirational'}
             iconSize={28}
-            icon={icons.window}
+            icon={ICON_WINDOW}
           >
             Inspirational
           </ContextMenuItem>
@@ -109,7 +111,7 @@ export const Preferences = observer(() => {
             onClick={onPresetClick('informational')}
             selected={store.preset === 'informational'}
             iconSize={28}
-            icon={icons.window}
+            icon={ICON_WINDOW}
           >
             Informational
           </ContextMenuItem>
@@ -117,7 +119,7 @@ export const Preferences = observer(() => {
             selected={store.preset === 'custom'}
             onClick={onCustomClick}
             iconSize={28}
-            icon={icons.window}
+            icon={ICON_WINDOW}
           >
             Custom
           </ContextMenuItem>
@@ -127,6 +129,8 @@ export const Preferences = observer(() => {
             minWidth: 275,
             position: 'relative',
             opacity: store.preferencesContent === 'custom' ? 1 : 0,
+            pointerEvents:
+              store.preferencesContent === 'custom' ? 'inherit' : 'none',
             transition: '0.3s max-height, 0.3s transform, 0.3s opacity',
             maxHeight: store.preferencesContent === 'custom' ? 390 : 200,
             transform:
@@ -136,7 +140,7 @@ export const Preferences = observer(() => {
           }}
         >
           <Title>
-            <Back onClick={onBackClick} icon={icons.back}></Back>
+            <Back onClick={onBackClick} icon={ICON_BACK}></Back>
             Custom
           </Title>
           <ContextMenuSeparator></ContextMenuSeparator>

@@ -19,11 +19,7 @@ export class DialogStore {
   public constructor({ hideOnBlur } = { hideOnBlur: true }) {
     if (hideOnBlur) {
       window.addEventListener('blur', () => {
-        if (this.visible) {
-          setTimeout(() => {
-            this.hide();
-          });
-        }
+        this.hide();
       });
     }
 
@@ -43,6 +39,11 @@ export class DialogStore {
   }
 
   public hide() {
-    ipcRenderer.send(`hide-${this.id}`);
+    if (this.visible) {
+      this.visible = false;
+      setTimeout(() => {
+        ipcRenderer.send(`hide-${this.id}`);
+      }, 10);
+    }
   }
 }

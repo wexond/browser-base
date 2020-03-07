@@ -29,7 +29,9 @@ export const Buttons = styled.div`
   float: right;
 `;
 
-export const Input = styled.input`
+export const Input = styled.input.attrs(() => ({
+  spellCheck: false,
+}))`
   outline: none;
   border: none;
   width: 100%;

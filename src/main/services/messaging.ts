@@ -54,7 +54,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
   });
 
   ipcMain.on(`search-show-${id}`, e => {
-    appWindow.dialogs.searchDialog.toggle();
+    appWindow.dialogs.searchDialog.show();
   });
 
   ipcMain.on(`show-tab-preview-${id}`, (e, tab) => {

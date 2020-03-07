@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite';
 
 import { Item, Icon, Title } from './style';
 import { IHistoryItem } from '~/interfaces';
-import { icons } from '~/renderer/constants';
 import store from '../../store';
+import { ICON_PAGE } from '~/renderer/constants';
 
 const onClick = (url: string) => () => {
   if (url !== '' && url != null) {
@@ -16,7 +16,7 @@ export const TopSite = observer(({ item }: { item?: IHistoryItem }) => {
   const { title, favicon, url } = item || {};
   const custom = favicon === '' || favicon == null;
 
-  let fav = icons.page;
+  let fav = ICON_PAGE;
 
   if (!custom) {
     fav = favicon;

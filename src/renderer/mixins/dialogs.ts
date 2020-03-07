@@ -11,9 +11,17 @@ export const DialogStyle = styled.div`
   border-radius: 6px;
   overflow: hidden;
   position: relative;
-  transition: ${DIALOG_TRANSITION};
 
-  ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
+  ${({
+  visible,
+  theme,
+  hideTransition,
+}: {
+  visible: boolean;
+  theme?: ITheme;
+  hideTransition?: boolean;
+}) => css`
+    transition: ${!visible && !hideTransition ? 'none' : DIALOG_TRANSITION};
     opacity: ${visible ? 1 : 0};
     transform: translateY(${visible ? 0 : -10}px);
     background-color: ${theme['dialog.backgroundColor']};

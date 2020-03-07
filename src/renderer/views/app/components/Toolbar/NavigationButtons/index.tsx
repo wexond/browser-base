@@ -4,7 +4,12 @@ import * as React from 'react';
 import { StyledContainer } from './style';
 import store from '../../../store';
 import { ToolbarButton } from '../ToolbarButton';
-import { icons } from '~/renderer/constants';
+import {
+  ICON_CLOSE,
+  ICON_FORWARD,
+  ICON_BACK,
+  ICON_REFRESH,
+} from '~/renderer/constants/icons';
 
 const onBackClick = () => {
   store.tabs.selectedTab.callViewMethod('goBack');
@@ -36,19 +41,19 @@ export const NavigationButtons = observer(() => {
       <ToolbarButton
         disabled={!store.navigationState.canGoBack}
         size={20}
-        icon={icons.back}
+        icon={ICON_BACK}
         style={{ marginLeft: 4 }}
         onClick={onBackClick}
       />
       <ToolbarButton
         disabled={!store.navigationState.canGoForward}
         size={20}
-        icon={icons.forward}
+        icon={ICON_FORWARD}
         onClick={onForwardClick}
       />
       <ToolbarButton
         size={20}
-        icon={loading ? icons.close : icons.refresh}
+        icon={loading ? ICON_CLOSE : ICON_REFRESH}
         onClick={onRefreshClick}
       />
     </StyledContainer>

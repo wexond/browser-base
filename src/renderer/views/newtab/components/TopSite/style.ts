@@ -1,9 +1,9 @@
 import styled, { css } from 'styled-components';
 
 import { centerIcon, shadows } from '~/renderer/mixins';
-import { icons } from '~/renderer/constants';
 import { ItemBase } from '../TopSites/style';
 import { ITheme } from '~/interfaces';
+import { ICON_ADD } from '~/renderer/constants';
 
 const getBgColor = (imageSet: boolean, dark: boolean, hover: boolean) => {
   if (imageSet) {
@@ -53,7 +53,7 @@ export const Item = styled(ItemBase)`
 
 export const AddItem = styled(Item)`
   ${centerIcon(36)};
-  background-image: url(${icons.add});
+  background-image: url(${ICON_ADD});
 `;
 
 export const Icon = styled.div`
@@ -75,7 +75,7 @@ export const Icon = styled.div`
   }) => css`
     height: ${add ? 32 : 24}px;
     width: ${add ? 32 : 24}px;
-    background-image: url(${add ? icons.add : icon});
+    background-image: url(${add ? ICON_ADD : icon});
     opacity: ${add || custom ? 0.54 : 1};
     filter: ${theme['pages.lightForeground'] && custom
       ? 'invert(100%)'

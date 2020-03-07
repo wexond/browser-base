@@ -4,10 +4,10 @@ import {
   getHistorySuggestions,
   getSearchSuggestions,
 } from '../utils/suggestions';
-import { icons } from '~/renderer/constants/icons';
 import { isURL } from '~/utils';
 import { ISuggestion } from '~/interfaces';
 import { Store } from '.';
+import { ICON_SEARCH, ICON_PAGE } from '~/renderer/constants';
 
 let searchSuggestions: ISuggestion[] = [];
 
@@ -50,7 +50,7 @@ export class SuggestionsStore {
         } else {
           historySuggestions.push({
             primaryText: item.url,
-            favicon: icons.search,
+            favicon: ICON_SEARCH,
             canSuggest: item.canSuggest,
             isSearch: true,
           });
@@ -64,7 +64,7 @@ export class SuggestionsStore {
           historySuggestions.unshift({
             primaryText: filter,
             secondaryText: 'open website',
-            favicon: icons.page,
+            favicon: ICON_PAGE,
           });
         } else {
           idx = 0;
@@ -74,7 +74,7 @@ export class SuggestionsStore {
       historySuggestions.splice(idx, 0, {
         primaryText: filter,
         secondaryText: `search in ${this.store.searchEngine.name}`,
-        favicon: icons.search,
+        favicon: ICON_SEARCH,
         isSearch: true,
       });
 
@@ -101,7 +101,7 @@ export class SuggestionsStore {
           for (const item of searchData) {
             searchSuggestions.push({
               primaryText: item,
-              favicon: icons.search,
+              favicon: ICON_SEARCH,
               isSearch: true,
             });
           }
