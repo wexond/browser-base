@@ -24,23 +24,6 @@ export class ExtensionsStore {
     });
   }
 
-  public queryBrowserAction(query: any) {
-    const readProperty = (obj: any, prop: string) => obj[prop];
-
-    return this.browserActions.filter(item => {
-      for (const key in query) {
-        const itemProp = readProperty(item, key);
-        const queryInfoProp = readProperty(query, key);
-
-        if (itemProp == null || queryInfoProp !== itemProp) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-  }
-
   public addBrowserActionToTab(tabId: number, browserAction: IBrowserAction) {
     const tabBrowserAction: IBrowserAction = Object.assign(
       Object.create(Object.getPrototypeOf(browserAction)),

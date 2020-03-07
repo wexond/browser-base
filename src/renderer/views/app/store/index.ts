@@ -3,7 +3,7 @@ import { observable, computed, toJS } from 'mobx';
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { ExtensionsStore } from './extensions';
 import { SettingsStore } from './settings';
 import { getCurrentWindow } from '../utils/windows';
@@ -12,6 +12,7 @@ import { getTheme } from '~/utils/themes';
 import { HistoryStore } from './history';
 import { AutoFillStore } from './autofill';
 import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
+import { IBrowserAction } from '../models';
 
 export class Store {
   public settings = new SettingsStore(this);
@@ -136,14 +137,21 @@ export class Store {
 
     ipcRenderer.on(
       'set-browserAction-info',
-      (e, extensionId, action: BrowserActionChangeType, details) => {
-        let query: any = { extensionId };
-
-        if (details.tabId) {
-          query = { ...query, tabId: details.tabId };
+      async (e, extensionId, action: BrowserActionChangeType, details) => {
+        if (
+          this.extensions.defaultBrowserActions.filter(
+            x => x.extensionId === extensionId,
+          ).length === 0
+        ) {
+          const extensions = remote.session
+            .fromPartition('persist:view')
+            .getAllExtensions();
+          await this.extensions.loadExtension(
+            extensions.find(x => x.id === extensionId),
+          );
         }
 
-        this.extensions.queryBrowserAction(query).forEach(item => {
+        const handler = (item: IBrowserAction) => {
           if (action === 'setBadgeText') {
             item.badgeText = details.text;
           } else if (action === 'setPopup') {
@@ -151,7 +159,22 @@ export class Store {
           } else if (action === 'setTitle') {
             item.title = details.title;
           }
-        });
+        };
+
+        if (details.tabId) {
+          this.extensions.browserActions
+            .filter(
+              x => x.extensionId === extensionId && x.tabId === details.tabId,
+            )
+            .forEach(handler);
+        } else {
+          this.extensions.defaultBrowserActions
+            .filter(x => x.extensionId === extensionId)
+            .forEach(handler);
+          this.extensions.browserActions
+            .filter(x => x.extensionId === extensionId)
+            .forEach(handler);
+        }
       },
     );
 

@@ -4,8 +4,6 @@ import { ToolbarButton } from '../ToolbarButton';
 import { IBrowserAction } from '../../../models';
 import { ipcRenderer, remote } from 'electron';
 import store from '../../../store';
-import { format } from 'url';
-import { EXTENSIONS_PROTOCOL } from '~/constants';
 
 interface Props {
   data: IBrowserAction;

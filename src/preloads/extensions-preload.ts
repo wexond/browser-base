@@ -190,6 +190,10 @@ const changeBrowserActionInfo = async (
     };
   });
 
+  chrome.notifications = {
+    onClicked: new IpcEvent('notifications', 'onClicked'),
+  };
+
   chrome.permissions = {
     onAdded: new IpcEvent('permissions', 'onAdded'),
     getAll: () => {},

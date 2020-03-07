@@ -19,13 +19,12 @@ export class SessionsManager {
   public viewIncognito = session.fromPartition('view_incognito');
 
   public incognitoExtensionsLoaded = false;
+  public extensionsLoaded = false;
 
   private windowsManager: WindowsManager;
 
   public constructor(windowsManager: WindowsManager) {
     this.windowsManager = windowsManager;
-
-    this.loadExtensions('normal');
 
     this.view.setPreloads([
       ...this.view.getPreloads(),
@@ -60,6 +59,8 @@ export class SessionsManager {
     );
 
     this.clearCache('incognito');
+
+    this.loadExtensions();
 
     /*
     // TODO:
@@ -313,6 +314,8 @@ export class SessionsManager {
   public async loadExtensions() {
     const context = this.view;
 
+    if (this.extensionsLoaded) return;
+
     const extensionsPath = getPath('extensions');
     const dirs = await promises.readdir(extensionsPath);
 
@@ -336,6 +339,8 @@ export class SessionsManager {
     /*if (session === 'incognito') {
       this.incognitoExtensionsLoaded = true;
     }*/
+
+    this.extensionsLoaded = true;
   }
 
   public onCreateTab = async (details: chrome.tabs.CreateProperties) => {
