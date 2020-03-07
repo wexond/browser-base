@@ -9,6 +9,7 @@ import { Preloader } from '~/renderer/components/Preloader';
 interface Props {
   onClick?: (e?: React.MouseEvent<HTMLDivElement>) => void;
   onMouseDown?: (e?: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseUp?: (e?: React.MouseEvent<HTMLDivElement>) => void;
   onContextMenu?: (e?: React.MouseEvent<HTMLDivElement>) => void;
   size?: number;
   style?: any;
@@ -51,6 +52,7 @@ export const ToolbarButton = observer(
     value,
     preloader,
     onContextMenu,
+    onMouseUp,
   }: Props) => {
     style = { ...style };
 
@@ -59,6 +61,7 @@ export const ToolbarButton = observer(
         onClick={onClick}
         onContextMenu={onContextMenu}
         onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
         className={className}
         style={style}
         ref={(r: HTMLDivElement) => {

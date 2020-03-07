@@ -17,18 +17,20 @@ const removeWebview = () => {
   }
 };
 
-const hide = () => {
-  if (!visible || !webview) return;
-  visible = false;
+const _hide = () => {
   app.classList.remove('visible');
   removeWebview();
+};
+
+const hide = () => {
+  visible = false;
+  _hide();
   setTimeout(() => {
     ipcRenderer.send(`hide-${getWebContentsId()}`);
   });
 };
 
 const show = () => {
-  if (visible) return;
   app.classList.add('visible');
   visible = true;
 };
@@ -94,6 +96,7 @@ ipcRenderer.on('visible', (e, flag, data) => {
     createWebview(url);
   } else {
     visible = false;
+    hide();
   }
 });
 
