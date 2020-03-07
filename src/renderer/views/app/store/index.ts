@@ -190,6 +190,7 @@ export class Store {
     });
 
     ipcRenderer.send('update-check');
+    ipcRenderer.send('load-extensions');
   }
 }
 

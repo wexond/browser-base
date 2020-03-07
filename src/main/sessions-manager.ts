@@ -60,7 +60,9 @@ export class SessionsManager {
 
     this.clearCache('incognito');
 
-    this.loadExtensions();
+    ipcMain.on('load-extensions', () => {
+      this.loadExtensions();
+    });
 
     /*
     // TODO:
