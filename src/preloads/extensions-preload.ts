@@ -9,6 +9,8 @@ const callCookiesMethod = async (
 };
 
 (process as any).on('document-start', () => {
+  if (Object.keys(chrome).length === 0) return;
+
   const tabs = {
     onCreated: new IpcEvent('tabs', 'onCreated'),
     onUpdated: new IpcEvent('tabs', 'onUpdated'),
@@ -104,6 +106,7 @@ const callCookiesMethod = async (
     onClicked: new IpcEvent('contextMenus', 'onClicked'),
     create: () => {},
     removeAll: () => {},
+    remove: () => {},
   };
 
   chrome.windows = {
@@ -195,6 +198,4 @@ const callCookiesMethod = async (
 
   chrome.tabs = Object.assign(chrome.tabs, tabs);
   (chrome.storage as any).sync = chrome.storage.local;
-
-  console.log(chrome);
 });

@@ -47,8 +47,6 @@ export class ExtensionsStore {
     if (this.defaultBrowserActions.find(x => x.extensionId === extension.id))
       return;
 
-    console.log(extension);
-
     if (extension.manifest.browser_action) {
       const { default_icon, default_title } = extension.manifest.browser_action;
 
