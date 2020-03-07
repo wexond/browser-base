@@ -41,6 +41,15 @@ export class ExtensionsStore {
     });
   }
 
+  public addBrowserActionToTab(tabId: number, browserAction: IBrowserAction) {
+    const tabBrowserAction: IBrowserAction = Object.assign(
+      Object.create(Object.getPrototypeOf(browserAction)),
+      browserAction,
+    );
+    tabBrowserAction.tabId = tabId;
+    this.browserActions.push(tabBrowserAction);
+  }
+
   public async loadExtension(extension: Electron.Extension) {
     if (this.defaultBrowserActions.find(x => x.extensionId === extension.id))
       return;
@@ -74,12 +83,7 @@ export class ExtensionsStore {
       this.defaultBrowserActions.push(browserAction);
 
       for (const tab of store.tabs.list) {
-        const tabBrowserAction: IBrowserAction = Object.assign(
-          Object.create(Object.getPrototypeOf(browserAction)),
-          browserAction,
-        );
-        tabBrowserAction.tabId = tab.id;
-        this.browserActions.push(tabBrowserAction);
+        this.addBrowserActionToTab(tab.id, browserAction);
       }
       store.tabs.updateTabsBounds(true);
     }
