@@ -11,6 +11,32 @@ const callCookiesMethod = async (
   return await ipcRenderer.invoke(`api-cookies-${method}`, details);
 };
 
+const queryTabs = async (queryInfo: any): Promise<chrome.tabs.Tab[]> => {
+  const readProperty = (obj: any, prop: string) => obj[prop];
+  const data: chrome.tabs.Tab[] = await ipcRenderer.invoke(`api-tabs-query`);
+
+  return data.filter(tab => {
+    for (const key in queryInfo) {
+      const tabProp = readProperty(tab, key);
+      const queryInfoProp = readProperty(queryInfo, key);
+
+      if (key === 'url' && queryInfoProp === '<all_urls>') {
+        return true;
+      }
+
+      if (tabProp == null || queryInfoProp !== tabProp) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+};
+
+const getTab = async (tabId: number) => {
+  return (await queryTabs({ id: tabId }))[0];
+};
+
 const changeBrowserActionInfo = async (
   extensionId: string,
   action: BrowserActionChangeType,
@@ -33,45 +59,41 @@ const changeBrowserActionInfo = async (
     onActivated: new IpcEvent('tabs', 'onActivated'),
     onRemoved: new IpcEvent('tabs', 'onRemoved'),
 
-    get: (tabId: number, callback: (tab: chrome.tabs.Tab) => void) => {
-      tabs.query({}, tabs => {
-        callback(tabs.find(x => x.id === tabId));
-      });
+    get: async (tabId: number, callback: (tab: chrome.tabs.Tab) => void) => {
+      if (callback) {
+        callback(await getTab(tabId));
+      }
     },
 
-    getCurrent: (callback: (tab: chrome.tabs.Tab) => void) => {
-      tabs.get(ipcRenderer.sendSync('get-webcontents-id'), tab => {
-        callback(tab);
-      });
+    getCurrent: async (callback: (tab: chrome.tabs.Tab) => void) => {
+      if (callback) {
+        callback(await getTab(ipcRenderer.sendSync('get-webcontents-id')));
+      }
+    },
+
+    getSelected: async (...args: any[]) => {
+      let query: any = { active: true };
+      let cb = args[1];
+      if (typeof args[0] === 'number') {
+        query = { ...query, windowId: args[0] };
+      } else {
+        cb = args[0];
+      }
+
+      const tabs = await queryTabs(query);
+
+      if (cb) cb(tabs[0]);
     },
 
     query: async (
       queryInfo: any,
       callback: (tabs: chrome.tabs.Tab[]) => void,
     ) => {
-      const readProperty = (obj: any, prop: string) => obj[prop];
-      const data: chrome.tabs.Tab[] = await ipcRenderer.invoke(
-        `api-tabs-query`,
-      );
+      const tabs = await queryTabs(queryInfo);
 
-      callback(
-        data.filter(tab => {
-          for (const key in queryInfo) {
-            const tabProp = readProperty(tab, key);
-            const queryInfoProp = readProperty(queryInfo, key);
-
-            if (key === 'url' && queryInfoProp === '<all_urls>') {
-              return true;
-            }
-
-            if (tabProp == null || queryInfoProp !== tabProp) {
-              return false;
-            }
-          }
-
-          return true;
-        }),
-      );
+      if (callback) {
+        callback(tabs);
+      }
     },
 
     detectLanguage: (tabId: number, callback: (language: string) => void) => {
@@ -157,6 +179,11 @@ const changeBrowserActionInfo = async (
 
   BROWSER_ACTION_METHODS.forEach(method => {
     chrome.browserAction[method] = async (details: any, cb: any) => {
+      if (details.imageData) {
+        return;
+        // TODO(sentialx): convert to buffer
+        details.imageData.data = Buffer.from(details.imageData.data);
+      }
       await changeBrowserActionInfo(chrome.runtime.id, method, details);
       if (cb) cb();
     };
