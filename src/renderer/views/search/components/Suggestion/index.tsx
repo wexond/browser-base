@@ -37,9 +37,7 @@ const onClick = (suggestion: ISuggestion) => () => {
 
   callViewMethod(store.tabId, 'loadURL', url);
 
-  setTimeout(() => {
-    ipcRenderer.send(`hide-${store.id}`);
-  });
+  store.hide();
 };
 
 export const Suggestion = observer(({ suggestion }: Props) => {
