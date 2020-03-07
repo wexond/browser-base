@@ -3,6 +3,7 @@ import { windowsManager } from '..';
 import { promises } from 'fs';
 import { resolve } from 'path';
 import { getPath } from '~/utils/paths';
+import { SessionsManager } from '../sessions-manager';
 
 declare global {
   namespace Electron {
@@ -37,11 +38,15 @@ export const getAllWebContentsInSession = (ses: Electron.Session) => {
   return webContents.getAllWebContents().filter(x => x.session === ses);
 };
 
-export const runExtensionsMessagingService = () => {
+export const runExtensionsMessagingService = (
+  sessionsManager: SessionsManager,
+) => {
   const extensionsPath = getPath('extensions');
 
+  const session = sessionsManager.view;
+
   ipcMain.handle(`api-tabs-query`, e => {
-    const tabs = getAllWebContentsInSession(e.sender.session).map(x => ({
+    const tabs = getAllWebContentsInSession(session).map(x => ({
       ...webContentsToTab(x),
       lastFocusedWindow: true,
       currentWindow: true,
@@ -61,7 +66,7 @@ export const runExtensionsMessagingService = () => {
       if (data.windowId) {
         realWindowId = data.windowId;
       } else if (type === 'backgroundPage') {
-        bw = e.sender.session.lastFocusedWindow;
+        bw = session.lastFocusedWindow;
       } else if (type === 'browserView' || type === 'webview') {
         bw = (e.sender as any).getOwnerBrowserWindow();
       }
@@ -113,36 +118,36 @@ export const runExtensionsMessagingService = () => {
 
   ipcMain.on(`api-addListener`, (e, data) => {
     if (data.scope === 'cookies' && data.name === 'onChanged') {
-      e.sender.session.cookiesChangedTargets.set(data.id, e.sender);
+      session.cookiesChangedTargets.set(data.id, e.sender);
     }
   });
 
   ipcMain.on(`api-removeListener`, (e, data) => {
     if (data.scope === 'cookies' && data.name === 'onChanged') {
-      e.sender.session.cookiesChangedTargets.delete(data.id);
+      session.cookiesChangedTargets.delete(data.id);
     }
   });
 
   ipcMain.handle(`api-cookies-getAll`, async (e, details) => {
-    return await e.sender.session.cookies.get(details);
+    return await session.cookies.get(details);
   });
 
   ipcMain.handle(`api-cookies-remove`, async (e, details) => {
-    const cookie = (await e.sender.session.cookies.get(details))[0];
+    const cookie = (await session.cookies.get(details))[0];
 
     if (!cookie) {
       return null;
     }
 
-    await e.sender.session.cookies.remove(details.url, details.name);
+    await session.cookies.remove(details.url, details.name);
 
     return cookie;
   });
 
   ipcMain.handle(`api-cookies-set`, async (e, details) => {
-    await e.sender.session.cookies.set(details);
+    await session.cookies.set(details);
 
-    const cookie = (await e.sender.session.cookies.get(details))[0];
+    const cookie = (await session.cookies.get(details))[0];
 
     if (!cookie) {
       return null;

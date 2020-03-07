@@ -37,7 +37,7 @@ export class SessionsManager {
     registerProtocol(this.view);
     registerProtocol(this.viewIncognito);
 
-    runExtensionsMessagingService();
+    runExtensionsMessagingService(this);
 
     this.view.cookies.on(
       'changed',
