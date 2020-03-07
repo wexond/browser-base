@@ -1,6 +1,8 @@
 import { ipcRenderer } from 'electron';
 import { IpcEvent } from './models/ipc-event';
 
+declare const chrome: any;
+
 const callCookiesMethod = async (
   method: 'getAll' | 'remove' | 'set',
   details: any,
@@ -18,18 +20,21 @@ const callCookiesMethod = async (
     onRemoved: new IpcEvent('tabs', 'onRemoved'),
 
     get: (tabId: number, callback: (tab: chrome.tabs.Tab) => void) => {
-      chrome.tabs.query({}, tabs => {
+      tabs.query({}, tabs => {
         callback(tabs.find(x => x.id === tabId));
       });
     },
 
     getCurrent: (callback: (tab: chrome.tabs.Tab) => void) => {
-      chrome.tabs.get(ipcRenderer.sendSync('get-webcontents-id'), tab => {
+      tabs.get(ipcRenderer.sendSync('get-webcontents-id'), tab => {
         callback(tab);
       });
     },
 
-    query: async (queryInfo: any, callback: (tabs: any[]) => void) => {
+    query: async (
+      queryInfo: any,
+      callback: (tabs: chrome.tabs.Tab[]) => void,
+    ) => {
       const readProperty = (obj: any, prop: string) => obj[prop];
       const data: chrome.tabs.Tab[] = await ipcRenderer.invoke(
         `api-tabs-query`,
@@ -77,7 +82,7 @@ const callCookiesMethod = async (
       };
 
       if (typeof args[0] === 'object') {
-        chrome.tabs.getCurrent(tab => {
+        tabs.getCurrent(tab => {
           insertCSS(tab.id, args[0], args[1]);
         });
       } else if (typeof args[0] === 'number') {
@@ -194,6 +199,14 @@ const callCookiesMethod = async (
       'webNavigation',
       'onHistoryStateUpdated',
     ), // TODO
+  };
+
+  chrome.extension.isAllowedFileSchemeAccess = (cb: any) => {
+    if (cb) cb(false);
+  };
+
+  chrome.extension.isAllowedIncognitoAccess = (cb: any) => {
+    if (cb) cb(false);
   };
 
   chrome.tabs = Object.assign(chrome.tabs, tabs);
