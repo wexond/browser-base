@@ -11,6 +11,7 @@ import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
 import { runExtensionsMessagingService } from './services/extensions-messaging';
+import { hookWebContentsEvents } from './services/web-navigation';
 
 // TODO: move windows list to the corresponding sessions
 export class SessionsManager {
@@ -39,19 +40,20 @@ export class SessionsManager {
 
     runExtensionsMessagingService(this);
 
+    app.on('web-contents-created', (e, webContents) => {
+      if (
+        webContents.getType() !== 'browserView' ||
+        webContents.session !== this.view
+      )
+        return;
+
+      hookWebContentsEvents(this.view, webContents);
+    });
+
     this.view.cookies.on(
       'changed',
       (e: any, cookie: Electron.Cookie, cause: string) => {
         this.view.cookiesChangedTargets.forEach(value => {
-          value.send(`api-emit-event-cookies-onChanged`, cookie, cause);
-        });
-      },
-    );
-
-    this.viewIncognito.cookies.on(
-      'changed',
-      (e: any, cookie: Electron.Cookie, cause: string) => {
-        this.viewIncognito.cookiesChangedTargets.forEach(value => {
           value.send(`api-emit-event-cookies-onChanged`, cookie, cause);
         });
       },

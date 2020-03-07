@@ -15,6 +15,7 @@ export class IpcEvent {
   }
 
   public emit = (e: any, ...args: any[]) => {
+    console.log(...args);
     this.callbacks.forEach(callback => {
       callback(...args);
     });
