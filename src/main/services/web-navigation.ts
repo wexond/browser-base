@@ -10,7 +10,6 @@ export const hookWebContentsEvents = (
     webContents.getAllWebContents().forEach(wc => {
       // TODO(sentialx): type backgroundPage
       if (wc.getType() === 'remote') {
-        console.log(channel, args);
         wc.send(channel, ...args);
       }
     });
