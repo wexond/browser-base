@@ -189,6 +189,11 @@ const changeBrowserActionInfo = async (
     };
   });
 
+  chrome.permissions = {
+    onAdded: new IpcEvent('permissions', 'onAdded'),
+    getAll: () => {},
+  };
+
   chrome.cookies = {
     onChanged: new IpcEvent('cookies', 'onChanged'),
 
