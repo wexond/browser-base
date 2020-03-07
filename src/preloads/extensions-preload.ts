@@ -152,6 +152,7 @@ const changeBrowserActionInfo = async (
 
   chrome.windows = {
     get: () => {},
+    getAll: () => {},
     onFocusChanged: new IpcEvent('windows', 'onFocusChanged'),
   };
 

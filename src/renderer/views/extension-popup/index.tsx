@@ -35,7 +35,7 @@ const show = () => {
   visible = true;
 };
 
-const createWebview = (url: string) => {
+const createWebview = (url: string, inspect: boolean) => {
   webview = document.createElement('webview');
 
   webview.setAttribute('partition', 'persist:view');
@@ -67,6 +67,10 @@ const createWebview = (url: string) => {
 
         menu.popup();
       });
+
+    if (inspect) {
+      webview.openDevTools();
+    }
   });
 
   webview.addEventListener('ipc-message', e => {
@@ -92,18 +96,10 @@ const createWebview = (url: string) => {
 
 ipcRenderer.on('visible', (e, flag, data) => {
   if (flag) {
-    const { url } = data;
-    createWebview(url);
+    const { url, inspect } = data;
+    createWebview(url, inspect);
   } else {
     visible = false;
     hide();
-  }
-});
-
-ipcRenderer.on('inspect', () => {
-  if (webview) {
-    webview.addEventListener('dom-ready', () => {
-      webview.openDevTools();
-    });
   }
 });

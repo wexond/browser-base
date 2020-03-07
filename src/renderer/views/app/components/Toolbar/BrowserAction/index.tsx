@@ -38,14 +38,10 @@ const onContextMenu = (data: IBrowserAction) => (
         const { left, width } = (target as any).getBoundingClientRect();
 
         ipcRenderer.send(
-          `inspect-extension-popup-${store.windowId}`,
-          left + width / 2,
-          format({
-            protocol: EXTENSIONS_PROTOCOL,
-            slashes: true,
-            hostname: data.extensionId,
-            pathname: data.popup,
-          }),
+          `show-extension-popup-${store.windowId}`,
+          left + width,
+          data.popup,
+          true,
         );
       },
     },

@@ -51,8 +51,8 @@ export class ExtensionPopup extends Dialog {
     });
   }
 
-  public show() {
+  public show(inspect = false) {
     super.show();
-    this.webContents.send('visible', true, { url: this.url });
+    this.webContents.send('visible', true, { url: this.url, inspect });
   }
 }
