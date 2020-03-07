@@ -138,10 +138,10 @@ export class ViewManager {
       this.window.dialogs.searchDialog.bringToTop();
       this.window.dialogs.searchDialog.show();
     } else {
-      this.window.dialogs.previewDialog.hide(true);
       if (this.window.dialogs.searchDialog.visible) {
         this.window.dialogs.searchDialog.hide(true);
       }
+      this.window.dialogs.previewDialog.hide(true);
     }
 
     this.fixBounds();
