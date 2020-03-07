@@ -8,104 +8,6 @@ const callCookiesMethod = async (
   return await ipcRenderer.invoke(`api-cookies-${method}`, details);
 };
 
-window.chrome = {
-  contextMenus: {
-    onClicked: new IpcEvent('contextMenus', 'onClicked'),
-    create: () => {},
-    removeAll: () => {},
-  },
-
-  windows: {
-    get: () => {},
-    onFocusChanged: new IpcEvent('windows', 'onFocusChanged'),
-  },
-
-  privacy: {
-    network: {
-      networkPredictionEnabled: {
-        set: () => {},
-        clear: () => {},
-      },
-      webRTCMultipleRoutesEnabled: {},
-      webRTCNonProxiedUdpEnabled: {},
-      webRTCIPHandlingPolicy: {},
-    },
-    websites: {
-      hyperlinkAuditingEnabled: {
-        set: () => {},
-        clear: () => {},
-      },
-    },
-  },
-
-  browserAction: {
-    onClicked: new IpcEvent('browserAction', 'onClicked'),
-
-    setIcon: (details: any, cb: any) => {
-      if (cb) cb();
-    },
-
-    setBadgeBackgroundColor: (details: any, cb: any) => {
-      if (cb) cb();
-    },
-
-    setBadgeText: async (details: any, cb: any) => {
-      await ipcRenderer.invoke(
-        `api-browserAction-setBadgeText`,
-        chrome.runtime.id,
-        details,
-      );
-
-      if (cb) {
-        cb();
-      }
-    },
-  },
-
-  cookies: {
-    onChanged: new IpcEvent('cookies', 'onChanged'),
-
-    get: async (details: any, callback: any) => {
-      if (callback) callback((await callCookiesMethod('getAll', details))[0]);
-    },
-
-    getAll: async (details: any, callback: any) => {
-      if (callback) callback(await callCookiesMethod('getAll', details));
-    },
-
-    set: async (details: any, callback: any) => {
-      if (callback) callback(await callCookiesMethod('set', details));
-    },
-
-    remove: async (details: any, callback: any) => {
-      if (callback) callback(await callCookiesMethod('remove', details));
-    },
-  },
-
-  webNavigation: {
-    onBeforeNavigate: new IpcEvent('webNavigation', 'onBeforeNavigate'),
-    onCommitted: new IpcEvent('webNavigation', 'onCommitted'),
-    onDOMContentLoaded: new IpcEvent('webNavigation', 'onDOMContentLoaded'),
-    onCompleted: new IpcEvent('webNavigation', 'onCompleted'),
-    onCreatedNavigationTarget: new IpcEvent(
-      'webNavigation',
-      'onCreatedNavigationTarget',
-    ),
-    onReferenceFragmentUpdated: new IpcEvent(
-      'webNavigation',
-      'onReferenceFragmentUpdated',
-    ), // TODO
-    onTabReplaced: new IpcEvent('webNavigation', 'onTabReplaced'), // TODO
-    onHistoryStateUpdated: new IpcEvent(
-      'webNavigation',
-      'onHistoryStateUpdated',
-    ), // TODO
-  },
-
-  tabs: {},
-  storage: {},
-} as any;
-
 (process as any).on('document-start', () => {
   const tabs = {
     onCreated: new IpcEvent('tabs', 'onCreated'),
@@ -149,26 +51,6 @@ window.chrome = {
           return true;
         }),
       );
-    },
-
-    setZoom: (tabId: number, zoomFactor: number, callback: () => void) => {
-      ipcRenderer.send(`api-tabs-setZoom`, tabId, zoomFactor);
-
-      ipcRenderer.once('api-tabs-setZoom', () => {
-        if (callback) {
-          callback();
-        }
-      });
-    },
-
-    getZoom: (tabId: number, callback: (zoomFactor: number) => void) => {
-      ipcRenderer.send(`api-tabs-getZoom`, tabId);
-
-      ipcRenderer.once('api-tabs-getZoom', (e, zoomFactor: number) => {
-        if (callback) {
-          callback(zoomFactor);
-        }
-      });
     },
 
     detectLanguage: (tabId: number, callback: (language: string) => void) => {
@@ -216,6 +98,99 @@ window.chrome = {
     },
 
     update: () => {},
+  };
+
+  chrome.contextMenus = {
+    onClicked: new IpcEvent('contextMenus', 'onClicked'),
+    create: () => {},
+    removeAll: () => {},
+  };
+
+  chrome.windows = {
+    get: () => {},
+    onFocusChanged: new IpcEvent('windows', 'onFocusChanged'),
+  };
+
+  chrome.privacy = {
+    network: {
+      networkPredictionEnabled: {
+        set: () => {},
+        clear: () => {},
+      },
+      webRTCMultipleRoutesEnabled: {},
+      webRTCNonProxiedUdpEnabled: {},
+      webRTCIPHandlingPolicy: {},
+    },
+    websites: {
+      hyperlinkAuditingEnabled: {
+        set: () => {},
+        clear: () => {},
+      },
+    },
+  };
+
+  chrome.browserAction = {
+    onClicked: new IpcEvent('browserAction', 'onClicked'),
+
+    setIcon: (details: any, cb: any) => {
+      if (cb) cb();
+    },
+
+    setBadgeBackgroundColor: (details: any, cb: any) => {
+      if (cb) cb();
+    },
+
+    setBadgeText: async (details: any, cb: any) => {
+      await ipcRenderer.invoke(
+        `api-browserAction-setBadgeText`,
+        chrome.runtime.id,
+        details,
+      );
+
+      if (cb) {
+        cb();
+      }
+    },
+  };
+
+  chrome.cookies = {
+    onChanged: new IpcEvent('cookies', 'onChanged'),
+
+    get: async (details: any, callback: any) => {
+      if (callback) callback((await callCookiesMethod('getAll', details))[0]);
+    },
+
+    getAll: async (details: any, callback: any) => {
+      if (callback) callback(await callCookiesMethod('getAll', details));
+    },
+
+    set: async (details: any, callback: any) => {
+      if (callback) callback(await callCookiesMethod('set', details));
+    },
+
+    remove: async (details: any, callback: any) => {
+      if (callback) callback(await callCookiesMethod('remove', details));
+    },
+  };
+
+  chrome.webNavigation = {
+    onBeforeNavigate: new IpcEvent('webNavigation', 'onBeforeNavigate'),
+    onCommitted: new IpcEvent('webNavigation', 'onCommitted'),
+    onDOMContentLoaded: new IpcEvent('webNavigation', 'onDOMContentLoaded'),
+    onCompleted: new IpcEvent('webNavigation', 'onCompleted'),
+    onCreatedNavigationTarget: new IpcEvent(
+      'webNavigation',
+      'onCreatedNavigationTarget',
+    ),
+    onReferenceFragmentUpdated: new IpcEvent(
+      'webNavigation',
+      'onReferenceFragmentUpdated',
+    ), // TODO
+    onTabReplaced: new IpcEvent('webNavigation', 'onTabReplaced'), // TODO
+    onHistoryStateUpdated: new IpcEvent(
+      'webNavigation',
+      'onHistoryStateUpdated',
+    ), // TODO
   };
 
   chrome.tabs = Object.assign(chrome.tabs, tabs);
