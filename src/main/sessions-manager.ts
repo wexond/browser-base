@@ -310,8 +310,8 @@ export class SessionsManager {
     */
   }
 
-  public async loadExtensions(session: 'normal' | 'incognito') {
-    const context = session === 'incognito' ? this.viewIncognito : this.view;
+  public async loadExtensions() {
+    const context = this.view;
 
     const extensionsPath = getPath('extensions');
     const dirs = await promises.readdir(extensionsPath);
@@ -333,9 +333,9 @@ export class SessionsManager {
       resolve(__dirname, 'extensions/wexond-darkreader'),
     );*/
 
-    if (session === 'incognito') {
+    /*if (session === 'incognito') {
       this.incognitoExtensionsLoaded = true;
-    }
+    }*/
   }
 
   public onCreateTab = async (details: chrome.tabs.CreateProperties) => {
