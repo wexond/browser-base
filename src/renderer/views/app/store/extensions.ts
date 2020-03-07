@@ -7,8 +7,6 @@ import { IBrowserAction } from '../models';
 import { promises } from 'fs';
 import { ipcRenderer, remote } from 'electron';
 import store from '.';
-import { EXTENSIONS_PROTOCOL } from '~/constants';
-import { format } from 'url';
 
 export class ExtensionsStore {
   @observable
@@ -70,20 +68,16 @@ export class ExtensionsStore {
         extensionId: extension.id,
         icon,
         title: default_title,
-        popup: extension.manifest?.browser_action?.default_popup
-          ? format({
-              protocol: EXTENSIONS_PROTOCOL,
-              slashes: true,
-              hostname: extension.id,
-              pathname: extension.manifest.browser_action.default_popup,
-            })
-          : null,
+        popup: extension.manifest?.browser_action?.default_popup,
       });
 
       this.defaultBrowserActions.push(browserAction);
 
       for (const tab of store.tabs.list) {
-        const tabBrowserAction = { ...browserAction };
+        const tabBrowserAction: IBrowserAction = Object.assign(
+          Object.create(Object.getPrototypeOf(browserAction)),
+          browserAction,
+        );
         tabBrowserAction.tabId = tab.id;
         this.browserActions.push(tabBrowserAction);
       }

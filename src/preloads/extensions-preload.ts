@@ -1,5 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { IpcEvent } from './models/ipc-event';
+import { BrowserActionChangeType, BROWSER_ACTION_METHODS } from '~/interfaces';
 
 declare const chrome: any;
 
@@ -8,6 +9,19 @@ const callCookiesMethod = async (
   details: any,
 ) => {
   return await ipcRenderer.invoke(`api-cookies-${method}`, details);
+};
+
+const changeBrowserActionInfo = async (
+  extensionId: string,
+  action: BrowserActionChangeType,
+  details: any,
+) => {
+  return await ipcRenderer.invoke(
+    `api-browserAction-change-info`,
+    extensionId,
+    action,
+    details,
+  );
 };
 
 (process as any).on('document-start', () => {
@@ -139,27 +153,14 @@ const callCookiesMethod = async (
 
   chrome.browserAction = {
     onClicked: new IpcEvent('browserAction', 'onClicked'),
-
-    setIcon: (details: any, cb: any) => {
-      if (cb) cb();
-    },
-
-    setBadgeBackgroundColor: (details: any, cb: any) => {
-      if (cb) cb();
-    },
-
-    setBadgeText: async (details: any, cb: any) => {
-      await ipcRenderer.invoke(
-        `api-browserAction-setBadgeText`,
-        chrome.runtime.id,
-        details,
-      );
-
-      if (cb) {
-        cb();
-      }
-    },
   };
+
+  BROWSER_ACTION_METHODS.forEach(method => {
+    chrome.browserAction[method] = async (details: any, cb: any) => {
+      await changeBrowserActionInfo(chrome.runtime.id, method, details);
+      if (cb) cb();
+    };
+  });
 
   chrome.cookies = {
     onChanged: new IpcEvent('cookies', 'onChanged'),

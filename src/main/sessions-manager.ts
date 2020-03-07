@@ -6,7 +6,7 @@ import { WindowsManager } from './windows-manager';
 import { registerProtocol } from './models/protocol';
 import storage from './services/storage';
 import * as url from 'url';
-import { IDownloadItem } from '~/interfaces';
+import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
@@ -346,12 +346,18 @@ export class SessionsManager {
     return view.webContents.id;
   };
 
-  public onSetBadgeText = (
+  public onBrowserActionUpdate = (
     extensionId: string,
-    details: chrome.browserAction.BadgeTextDetails,
+    action: BrowserActionChangeType,
+    details: any,
   ) => {
     this.windowsManager.list.forEach(w => {
-      w.webContents.send('set-badge-text', extensionId, details);
+      w.webContents.send(
+        'set-browserAction-info',
+        extensionId,
+        action,
+        details,
+      );
     });
   };
 }

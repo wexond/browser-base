@@ -106,13 +106,13 @@ export const runExtensionsMessagingService = (
   );
 
   ipcMain.handle(
-    `api-browserAction-setBadgeText`,
-    (
-      e,
-      extensionId: string,
-      details: chrome.browserAction.BadgeTextDetails,
-    ) => {
-      windowsManager.sessionsManager.onSetBadgeText(extensionId, details);
+    `api-browserAction-change-info`,
+    (e, extensionId, action, details) => {
+      windowsManager.sessionsManager.onBrowserActionUpdate(
+        extensionId,
+        action,
+        details,
+      );
     },
   );
 

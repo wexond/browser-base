@@ -11,7 +11,7 @@ import { StartupTabsStore } from './startup-tabs';
 import { getTheme } from '~/utils/themes';
 import { HistoryStore } from './history';
 import { AutoFillStore } from './autofill';
-import { IDownloadItem } from '~/interfaces';
+import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 
 export class Store {
   public settings = new SettingsStore(this);
@@ -135,30 +135,23 @@ export class Store {
     );
 
     ipcRenderer.on(
-      'set-badge-text',
-      (
-        e,
-        extensionId: string,
-        details: chrome.browserAction.BadgeTextDetails,
-      ) => {
-        if (details.tabId) {
-          const browserAction = this.extensions.queryBrowserAction({
-            extensionId,
-            tabId: details.tabId,
-          })[0];
+      'set-browserAction-info',
+      (e, extensionId, action: BrowserActionChangeType, details) => {
+        let query: any = { extensionId };
 
-          if (browserAction) {
-            browserAction.badgeText = details.text;
-          }
-        } else {
-          this.extensions
-            .queryBrowserAction({
-              extensionId,
-            })
-            .forEach(item => {
-              item.badgeText = details.text;
-            });
+        if (details.tabId) {
+          query = { ...query, tabId: details.tabId };
         }
+
+        this.extensions.queryBrowserAction(query).forEach(item => {
+          if (action === 'setBadgeText') {
+            item.badgeText = details.text;
+          } else if (action === 'setPopup') {
+            item.popup = details.popup;
+          } else if (action === 'setTitle') {
+            item.title = details.title;
+          }
+        });
       },
     );
 
