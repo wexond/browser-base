@@ -1,7 +1,9 @@
 /* eslint-disable */
 const { getConfig, dev } = require('./webpack.config.base');
-const { spawn } = require('child_process');
+const { spawn, execSync } = require('child_process');
 const CopyPlugin = require('copy-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
 let terser = require('terser');
 /* eslint-enable */
 
@@ -10,6 +12,8 @@ let electronProcess;
 const mainConfig = getConfig({
   target: 'electron-main',
 
+  devtool: dev ? 'inline-source-map' : 'none',
+
   watch: dev,
 
   entry: {
@@ -17,6 +21,7 @@ const mainConfig = getConfig({
   },
 
   plugins: [
+    // new BundleAnalyzerPlugin(),
     new CopyPlugin(
       [
         {
@@ -55,16 +60,22 @@ if (process.env.START === '1') {
     apply: compiler => {
       compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
         if (electronProcess) {
-          electronProcess.kill();
+          try {
+            if (process.platform === 'win32') {
+              execSync(`taskkill /pid ${electronProcess.pid} /f /t`);
+            } else {
+              electronProcess.kill();
+            }
+
+            electronProcess = null;
+          } catch (e) {}
         }
 
         electronProcess = spawn('npm', ['start'], {
           shell: true,
           env: process.env,
           stdio: 'inherit',
-        })
-          .on('close', code => process.exit(code))
-          .on('error', spawnError => console.error(spawnError));
+        });
       });
     },
   });

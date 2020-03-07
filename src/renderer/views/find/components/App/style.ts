@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
 import { centerIcon } from '~/renderer/mixins';
-import { icons } from '~/renderer/constants/icons';
 import { ITheme } from '~/interfaces';
+import { ICON_SEARCH } from '~/renderer/constants';
 
 export const StyledApp = styled.div`
   margin: 8px;
@@ -31,7 +31,7 @@ export const SearchIcon = styled.div`
   ${centerIcon()};
   margin-left: 12px;
   opacity: 0.54;
-  background-image: url(${icons.search});
+  background-image: url(${ICON_SEARCH});
 
   ${({ theme }: { theme?: ITheme }) => css`
     filter: ${theme['dialog.lightForeground'] ? 'invert(100%)' : 'none'};

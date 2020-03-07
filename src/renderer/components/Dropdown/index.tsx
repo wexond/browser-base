@@ -21,6 +21,7 @@ interface Props {
   children?: any;
   defaultValue?: any;
   onChange?: (newValue?: any, oldValue?: any) => void;
+  onMouseDown?: (e: React.MouseEvent) => void;
   style?: any;
 }
 
@@ -92,6 +93,8 @@ export class Dropdown extends React.PureComponent<Props, State> {
   private onMouseDown = (e: React.MouseEvent) => {
     e.stopPropagation();
 
+    if (this.props.onMouseDown) this.props.onMouseDown(e);
+
     const { expanded } = this.state;
     this.toggleMenu(!expanded);
   };
@@ -112,7 +115,11 @@ export class Dropdown extends React.PureComponent<Props, State> {
       >
         <Label>{label}</Label>
         <DropIcon expanded={expanded} />
-        <ContextMenu style={{ top: 32, width: '100%' }} visible={expanded}>
+        <ContextMenu
+          dense
+          style={{ top: 32, width: '100%' }}
+          visible={expanded}
+        >
           {React.Children.map(children, child => {
             const { props } = child;
 

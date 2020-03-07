@@ -6,7 +6,7 @@ import { Textfield } from '~/renderer/components/Textfield';
 import { RadioButton } from '~/renderer/components/RadioButton';
 import { Button } from '~/renderer/components/Button';
 import { IStartupTab } from '~/interfaces/startup-tab';
-import { icons, BLUE_500 } from '~/renderer/constants';
+import { BLUE_500, ICON_CLOSE } from '~/renderer/constants';
 import store from '../../store';
 
 interface Props {
@@ -120,7 +120,7 @@ class StartupControl extends React.PureComponent<Props, State> {
                   width={350}
                   placeholder={item.url}
                   onChange={value => this.onUpdateItemURL(index, value)}
-                  icon={icons.close}
+                  icon={ICON_CLOSE}
                   onIconClick={target => this.onDeleteItemClick(index)}
                   delay={500}
                   style={{ marginBottom: 8 }}

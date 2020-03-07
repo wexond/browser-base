@@ -1,15 +1,15 @@
 import styled, { css } from 'styled-components';
 
-import { icons } from '~/renderer/constants';
 import { centerIcon } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
+import { ICON_CLOSE } from '~/renderer/constants/icons';
 
 export const Remove = styled.div`
   height: 16px;
   width: 16px;
   cursor: pointer;
   opacity: 0.54;
-  background-image: url(${icons.close});
+  background-image: url(${ICON_CLOSE});
   ${centerIcon()};
   ${({ theme }: { theme?: ITheme }) => css`
     filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};

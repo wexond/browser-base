@@ -6,10 +6,12 @@ import storage from './services/storage';
 import Vibrant = require('node-vibrant');
 import { IHistoryItem, IBookmark } from '~/interfaces';
 import { WEBUI_BASE_URL } from '~/constants/files';
+import { NEWTAB_URL } from '~/constants/tabs';
 
 export class View extends BrowserView {
   public title = '';
   public url = '';
+  public isNewTab = false;
   public homeUrl: string;
   public favicon = '';
   public incognito = false;
@@ -46,7 +48,9 @@ export class View extends BrowserView {
     this.webContents.userAgent = this.webContents.userAgent
       .replace(/ Wexond\\?.([^\s]+)/g, '')
       .replace(/ Electron\\?.([^\s]+)/g, '')
-      .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/79.0.3945.88');
+      .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/80.0.3987.122');
+
+    (this.webContents as any).windowId = window.id;
 
     this.window = window;
     this.homeUrl = url;
@@ -114,7 +118,7 @@ export class View extends BrowserView {
       this.window.webContents.send(`view-loading-${this.webContents.id}`, true);
     });
 
-    this.webContents.addListener('did-start-navigation', async (...args) => {
+    this.webContents.addListener('did-start-navigation', async (e, ...args) => {
       this.updateNavigationState();
 
       this.favicon = '';
@@ -244,6 +248,9 @@ export class View extends BrowserView {
       width: true,
       height: true,
     } as any);
+
+    if (url.startsWith(NEWTAB_URL)) this.isNewTab = true;
+
     this.webContents.loadURL(url);
   }
 
@@ -312,6 +319,14 @@ export class View extends BrowserView {
       `view-url-updated-${this.webContents.id}`,
       url,
     );
+
+    this.isNewTab = url.startsWith(NEWTAB_URL);
+
+    if (this.isNewTab) {
+      this.window.dialogs.searchDialog.show();
+    } else {
+      this.window.dialogs.searchDialog.hide();
+    }
 
     this.updateData();
     this.updateCredentials();

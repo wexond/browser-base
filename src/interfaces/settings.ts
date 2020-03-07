@@ -21,7 +21,7 @@ export interface ISettings {
   searchEngines: ISearchEngine[];
   startupBehavior: IStartupBehavior;
   warnOnQuit: boolean;
-  version: string;
+  version: number;
   darkContents: boolean;
   downloadsDialog: boolean;
   downloadsPath: string;

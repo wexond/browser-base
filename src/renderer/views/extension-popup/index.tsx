@@ -17,13 +17,20 @@ const removeWebview = () => {
   }
 };
 
+const _hide = () => {
+  app.classList.remove('visible');
+  removeWebview();
+};
+
 const hide = () => {
-  if (!visible || !webview) return;
-  ipcRenderer.send(`hide-${getWebContentsId()}`);
+  visible = false;
+  _hide();
+  setTimeout(() => {
+    ipcRenderer.send(`hide-${getWebContentsId()}`);
+  });
 };
 
 const show = () => {
-  if (visible) return;
   app.classList.add('visible');
   visible = true;
 };
@@ -46,18 +53,20 @@ const createWebview = (url: string) => {
   webview.style.height = '100%';
 
   webview.addEventListener('dom-ready', () => {
-    webview.getWebContents().addListener('context-menu', (e, params) => {
-      const menu = remote.Menu.buildFromTemplate([
-        {
-          label: 'Inspect element',
-          click: () => {
-            webview.inspectElement(params.x, params.y);
+    remote.webContents
+      .fromId(webview.getWebContentsId())
+      .addListener('context-menu', (e, params) => {
+        const menu = remote.Menu.buildFromTemplate([
+          {
+            label: 'Inspect element',
+            click: () => {
+              webview.inspectElement(params.x, params.y);
+            },
           },
-        },
-      ]);
+        ]);
 
-      menu.popup();
-    });
+        menu.popup();
+      });
   });
 
   webview.addEventListener('ipc-message', e => {
@@ -73,9 +82,7 @@ const createWebview = (url: string) => {
       webview.focus();
     } else if (e.channel === 'webview-blur') {
       if (visible && !webview.isDevToolsOpened()) {
-        setTimeout(() => {
-          hide();
-        });
+        hide();
       }
     }
   });
@@ -89,8 +96,7 @@ ipcRenderer.on('visible', (e, flag, data) => {
     createWebview(url);
   } else {
     visible = false;
-    app.classList.remove('visible');
-    removeWebview();
+    hide();
   }
 });
 

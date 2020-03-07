@@ -1,6 +1,7 @@
 import { AppWindow } from '../windows';
 import { ipcMain } from 'electron';
 import { Dialog } from '.';
+import { NEWTAB_URL } from '~/constants/tabs';
 
 const WIDTH = 800;
 const HEIGHT = 56;
@@ -37,6 +38,14 @@ export class SearchDialog extends Dialog {
     ipcMain.on(`can-show-${this.webContents.id}`, () => {
       if (this.queueShow) this.show();
     });
+
+    ipcMain.handle(`is-newtab-${this.webContents.id}`, () => {
+      return appWindow.viewManager.selected
+        ? appWindow.viewManager.selected.webContents
+            .getURL()
+            .startsWith(NEWTAB_URL)
+        : false;
+    });
   }
 
   public toggle() {
@@ -63,7 +72,9 @@ export class SearchDialog extends Dialog {
   }
 
   public show() {
-    this.appWindow.dialogs.previewDialog.hide(false);
+    if (this.appWindow.dialogs.previewDialog.visible) {
+      this.appWindow.dialogs.previewDialog.hide(true);
+    }
 
     super.show();
 
@@ -85,8 +96,8 @@ export class SearchDialog extends Dialog {
     });
   }
 
-  public hide() {
-    super.hide();
+  public hide(bringToTop = false) {
+    super.hide(bringToTop);
     this.queueShow = false;
   }
 }

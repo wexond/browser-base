@@ -229,7 +229,7 @@ export class ITab {
         windowId: store.windowId,
         url: this.url,
         favicon: this.favicon,
-        pinned: this.isPinned,
+        pinned: !!this.isPinned,
         title: this.title,
         isUserDefined: false,
         order: store.tabs.list.indexOf(this),
@@ -251,10 +251,6 @@ export class ITab {
       ipcRenderer.send(`update-find-info-${store.windowId}`, this.id, {
         ...this.findInfo,
       });
-
-      if (this.url.startsWith(NEWTAB_URL)) {
-        ipcRenderer.send(`search-show-${store.windowId}`);
-      }
     }
   }
 
@@ -341,7 +337,7 @@ export class ITab {
 
     const selected = store.tabs.selectedTabId === this.id;
 
-    store.startupTabs.removeStartupTabItem(this.id, store.windowId);
+    store.startupTabs.removeStartupTabItem(this.id);
 
     ipcRenderer.send(`view-destroy-${store.windowId}`, this.id);
 

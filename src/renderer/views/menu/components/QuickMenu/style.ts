@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { ITheme } from '~/interfaces';
 import { centerIcon, getLetterSpacing } from '~/renderer/mixins';
-import { icons } from '~/renderer/constants';
+import { ICON_ARROW_RIGHT } from '~/renderer/constants/icons';
 
 export const Line = styled.div`
   height: 1px;
@@ -34,7 +34,7 @@ export const MenuItem = styled.div`
         height: 100%;
         opacity: 0.54;
         ${centerIcon(20)};
-        background-image: url(${icons.arrowRight});
+        background-image: url(${ICON_ARROW_RIGHT});
         ${({ theme }: { theme?: ITheme }) => css`
           filter: ${theme['dialog.lightForeground'] ? 'invert(100%)' : 'none'};
         `};
