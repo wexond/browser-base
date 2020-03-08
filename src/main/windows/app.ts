@@ -69,6 +69,7 @@ export class AppWindow extends BrowserWindow {
         contextIsolation: false,
         javascript: true,
         affinity: 'browser',
+        enableRemoteModule: true,
       },
       icon: resolve(
         app.getAppPath(),

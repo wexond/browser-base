@@ -32,10 +32,6 @@ const mainConfig = getConfig({
             return terser.minify(fileContent.toString()).code.toString();
           },
         },
-        {
-          from: 'node_modules/electron-extensions/preload.js',
-          to: 'extensions-preload.js',
-        },
       ],
       { copyUnmodified: true },
     ),
@@ -45,11 +41,14 @@ const mainConfig = getConfig({
 const preloadConfig = getConfig({
   target: 'electron-renderer',
 
+  devtool: 'none',
+
   watch: dev,
 
   entry: {
     'view-preload': './src/preloads/view-preload',
     'popup-preload': './src/preloads/popup-preload',
+    'extensions-preload': './src/preloads/extensions-preload',
   },
 
   plugins: [],

@@ -1,5 +1,4 @@
-import { session, ipcMain } from 'electron';
-import { ExtensibleSession } from 'electron-extensions/main';
+import { session, ipcMain, app } from 'electron';
 import { getPath, makeId } from '~/utils';
 import { promises, existsSync } from 'fs';
 import { resolve, basename, parse, extname } from 'path';
@@ -7,20 +6,29 @@ import { WindowsManager } from './windows-manager';
 import { registerProtocol } from './models/protocol';
 import storage from './services/storage';
 import * as url from 'url';
-import { IDownloadItem } from '~/interfaces';
+import {
+  IDownloadItem,
+  BrowserActionChangeType,
+  Electron10Extension,
+} from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
-import { WEBUI_BASE_URL } from '~/constants/files';
-import { EXTENSIONS_PROTOCOL } from '~/constants';
+import { runExtensionsMessagingService } from './services/extensions-messaging';
+import { hookWebContentsEvents } from './services/web-navigation';
 
-const extensibleSessionOptions = {
-  preloadPath: resolve(__dirname, 'extensions-preload.js'),
-  blacklist: [
-    `${WEBUI_BASE_URL}*`,
-    'wexond-error://*',
-    `${EXTENSIONS_PROTOCOL}://*`,
-  ],
+// TODO(sentialx): remove this after upgrading to Electron 10:
+const getElectron10Extension = async (
+  session: Electron.Session,
+  path: string,
+) => {
+  return {
+    ...(await session.loadExtension(path)),
+    path,
+    manifest: JSON.parse(
+      await promises.readFile(resolve(path, 'manifest.json'), 'utf8'),
+    ),
+  };
 };
 
 // TODO: move windows list to the corresponding sessions
@@ -28,47 +36,65 @@ export class SessionsManager {
   public view = session.fromPartition('persist:view');
   public viewIncognito = session.fromPartition('view_incognito');
 
-  public extensions = new ExtensibleSession({
-    ...extensibleSessionOptions,
-    partition: 'persist:view',
-  });
-  public extensionsIncognito = new ExtensibleSession({
-    ...extensibleSessionOptions,
-    partition: 'view_incognito',
-  });
-
   public incognitoExtensionsLoaded = false;
+  public extensionsLoaded = false;
+
+  public extensions: Electron10Extension[] = [];
 
   private windowsManager: WindowsManager;
 
   public constructor(windowsManager: WindowsManager) {
     this.windowsManager = windowsManager;
 
-    this.extensions.on('create-tab', (details, callback) => {
-      const view = windowsManager.list
-        .find(x => x.id === details.windowId)
-        .viewManager.create(details, false, true);
+    this.view.setPreloads([
+      ...this.view.getPreloads(),
+      `${app.getAppPath()}/build/extensions-preload.bundle.js`,
+    ]);
 
-      callback(view.webContents.id);
-    });
-
-    this.extensions.on('set-badge-text', (extensionId, details) => {
-      windowsManager.list.forEach(w => {
-        w.webContents.send('set-badge-text', extensionId, details);
-      });
-    });
-
-    this.loadExtensions('normal');
+    this.view.cookiesChangedTargets = new Map();
+    this.viewIncognito.cookiesChangedTargets = new Map();
 
     registerProtocol(this.view);
     registerProtocol(this.viewIncognito);
 
+    runExtensionsMessagingService(this);
+
+    app.on('web-contents-created', (e, webContents) => {
+      if (
+        webContents.getType() !== 'browserView' ||
+        webContents.session !== this.view
+      )
+        return;
+
+      hookWebContentsEvents(this.view, webContents);
+    });
+
+    this.view.cookies.on(
+      'changed',
+      (e: any, cookie: Electron.Cookie, cause: string) => {
+        this.view.cookiesChangedTargets.forEach(value => {
+          value.send(`api-emit-event-cookies-onChanged`, cookie, cause);
+        });
+      },
+    );
+
     this.clearCache('incognito');
 
+    ipcMain.on('load-extensions', () => {
+      this.loadExtensions();
+    });
+
+    ipcMain.handle('get-extensions', () => {
+      return this.extensions;
+    });
+
+    /*
+    // TODO:
     ipcMain.handle(`inspect-extension`, (e, incognito, id) => {
       const context = incognito ? this.extensionsIncognito : this.extensions;
       context.extensions[id].backgroundPage.webContents.openDevTools();
     });
+    */
 
     this.view.setPermissionRequestHandler(
       async (webContents, permission, callback, details) => {
@@ -205,9 +231,7 @@ export class SessionsManager {
 
             await extractZip(crxInfo.zip, path);
 
-            const extension = {
-              ...(await this.extensions.loadExtension(path)),
-            };
+            const extension = await getElectron10Extension(this.view, path);
 
             if (crxInfo.publicKey) {
               const manifest = JSON.parse(
@@ -221,8 +245,6 @@ export class SessionsManager {
                 JSON.stringify(manifest, null, 2),
               );
             }
-
-            delete extension.backgroundPage;
 
             window.webContents.send('load-browserAction', extension);
           }
@@ -315,25 +337,25 @@ export class SessionsManager {
     */
   }
 
-  public async loadExtensions(session: 'normal' | 'incognito') {
-    const context =
-      session === 'incognito' ? this.extensionsIncognito : this.extensions;
+  public async loadExtensions() {
+    const context = this.view;
+
+    if (this.extensionsLoaded) return;
 
     const extensionsPath = getPath('extensions');
     const dirs = await promises.readdir(extensionsPath);
 
     for (const dir of dirs) {
       try {
-        const extension = await context.loadExtension(
-          resolve(extensionsPath, dir),
-        );
+        const path = resolve(extensionsPath, dir);
+        // TODO(sentialx): after upgrading to Electron 10:
+        // const extension = await context.loadExtension(path);
+        const extension = await getElectron10Extension(context, path);
 
-        // extension.backgroundPage.webContents.openDevTools();
-        for (const window of context.windows) {
-          window.webContents.send('load-browserAction', {
-            ...extension,
-            backgroundPage: undefined,
-          });
+        this.extensions.push(extension);
+
+        for (const window of this.windowsManager.list) {
+          window.webContents.send('load-browserAction', extension);
         }
       } catch (e) {
         console.error(e);
@@ -344,8 +366,33 @@ export class SessionsManager {
       resolve(__dirname, 'extensions/wexond-darkreader'),
     );*/
 
-    if (session === 'incognito') {
+    /*if (session === 'incognito') {
       this.incognitoExtensionsLoaded = true;
-    }
+    }*/
+
+    this.extensionsLoaded = true;
   }
+
+  public onCreateTab = async (details: chrome.tabs.CreateProperties) => {
+    const view = this.windowsManager.list
+      .find(x => x.id === details.windowId)
+      .viewManager.create(details, false, true);
+
+    return view.webContents.id;
+  };
+
+  public onBrowserActionUpdate = (
+    extensionId: string,
+    action: BrowserActionChangeType,
+    details: any,
+  ) => {
+    this.windowsManager.list.forEach(w => {
+      w.webContents.send(
+        'set-browserAction-info',
+        extensionId,
+        action,
+        details,
+      );
+    });
+  };
 }

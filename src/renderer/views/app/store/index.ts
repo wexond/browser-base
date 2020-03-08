@@ -3,7 +3,7 @@ import { observable, computed, toJS } from 'mobx';
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { ExtensionsStore } from './extensions';
 import { SettingsStore } from './settings';
 import { getCurrentWindow } from '../utils/windows';
@@ -11,7 +11,8 @@ import { StartupTabsStore } from './startup-tabs';
 import { getTheme } from '~/utils/themes';
 import { HistoryStore } from './history';
 import { AutoFillStore } from './autofill';
-import { IDownloadItem } from '~/interfaces';
+import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
+import { IBrowserAction } from '../models';
 
 export class Store {
   public settings = new SettingsStore(this);
@@ -135,29 +136,39 @@ export class Store {
     );
 
     ipcRenderer.on(
-      'set-badge-text',
-      (
-        e,
-        extensionId: string,
-        details: chrome.browserAction.BadgeTextDetails,
-      ) => {
-        if (details.tabId) {
-          const browserAction = this.extensions.queryBrowserAction({
-            extensionId,
-            tabId: details.tabId,
-          })[0];
+      'set-browserAction-info',
+      async (e, extensionId, action: BrowserActionChangeType, details) => {
+        if (
+          this.extensions.defaultBrowserActions.filter(
+            x => x.extensionId === extensionId,
+          ).length === 0
+        ) {
+          this.extensions.load();
+        }
 
-          if (browserAction) {
-            browserAction.badgeText = details.text;
+        const handler = (item: IBrowserAction) => {
+          if (action === 'setBadgeText') {
+            item.badgeText = details.text;
+          } else if (action === 'setPopup') {
+            item.popup = details.popup;
+          } else if (action === 'setTitle') {
+            item.title = details.title;
           }
+        };
+
+        if (details.tabId) {
+          this.extensions.browserActions
+            .filter(
+              x => x.extensionId === extensionId && x.tabId === details.tabId,
+            )
+            .forEach(handler);
         } else {
-          this.extensions
-            .queryBrowserAction({
-              extensionId,
-            })
-            .forEach(item => {
-              item.badgeText = details.text;
-            });
+          this.extensions.defaultBrowserActions
+            .filter(x => x.extensionId === extensionId)
+            .forEach(handler);
+          this.extensions.browserActions
+            .filter(x => x.extensionId === extensionId)
+            .forEach(handler);
         }
       },
     );
@@ -174,6 +185,7 @@ export class Store {
     });
 
     ipcRenderer.send('update-check');
+    ipcRenderer.send('load-extensions');
   }
 }
 

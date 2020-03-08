@@ -212,12 +212,10 @@ export class ITab {
       this.hasCredentials = found;
     });
 
-    const { defaultBrowserActions, browserActions } = store.extensions;
+    const { defaultBrowserActions } = store.extensions;
 
     for (const item of defaultBrowserActions) {
-      const browserAction = { ...item };
-      browserAction.tabId = this.id;
-      browserActions.push(browserAction);
+      store.extensions.addBrowserActionToTab(this.id, item);
     }
   }
 

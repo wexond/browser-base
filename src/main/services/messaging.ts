@@ -77,17 +77,10 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.downloadsDialog.show();
   });
 
-  ipcMain.on(`show-extension-popup-${id}`, (e, left, url) => {
+  ipcMain.on(`show-extension-popup-${id}`, (e, left, url, inspect) => {
     appWindow.dialogs.extensionPopup.left = left;
     appWindow.dialogs.extensionPopup.url = url;
-    appWindow.dialogs.extensionPopup.show();
-  });
-
-  ipcMain.on(`inspect-extension-popup-${id}`, (e, left, url) => {
-    appWindow.dialogs.extensionPopup.left = left;
-    appWindow.dialogs.extensionPopup.url = url;
-    appWindow.dialogs.extensionPopup.show();
-    appWindow.dialogs.extensionPopup.webContents.send('inspect');
+    appWindow.dialogs.extensionPopup.show(inspect);
   });
 
   ipcMain.on(`hide-extension-popup-${id}`, e => {
