@@ -191,7 +191,9 @@ export class AppWindow extends BrowserWindow {
       this.setBrowserView(null);
 
       Object.keys(this.dialogs).forEach(key => {
-        this.dialogs[key].destroy();
+        if (this.dialogs[key]) {
+          this.dialogs[key].destroy();
+        }
         this.dialogs[key] = null;
       });
 

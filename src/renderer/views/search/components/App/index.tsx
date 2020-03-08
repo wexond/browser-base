@@ -35,9 +35,7 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
     callViewMethod(store.tabId, 'loadURL', url);
 
-    setTimeout(() => {
-      ipcRenderer.send(`hide-${store.id}`);
-    });
+    store.hide();
   }
 };
 
