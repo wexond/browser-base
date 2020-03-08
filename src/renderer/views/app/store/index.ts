@@ -143,12 +143,7 @@ export class Store {
             x => x.extensionId === extensionId,
           ).length === 0
         ) {
-          const extensions = remote.session
-            .fromPartition('persist:view')
-            .getAllExtensions();
-          await this.extensions.loadExtension(
-            extensions.find(x => x.id === extensionId),
-          );
+          this.extensions.load();
         }
 
         const handler = (item: IBrowserAction) => {

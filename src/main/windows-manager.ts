@@ -104,7 +104,7 @@ export class WindowsManager {
 
     if (incognito) {
       if (!this.sessionsManager.incognitoExtensionsLoaded) {
-        this.sessionsManager.loadExtensions('incognito');
+        this.sessionsManager.loadExtensions();
       }
     }
   }

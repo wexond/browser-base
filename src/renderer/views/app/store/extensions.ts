@@ -5,8 +5,9 @@ import { join } from 'path';
 
 import { IBrowserAction } from '../models';
 import { promises } from 'fs';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import store from '.';
+import { Electron10Extension } from '~/interfaces';
 
 export class ExtensionsStore {
   @observable
@@ -33,7 +34,7 @@ export class ExtensionsStore {
     this.browserActions.push(tabBrowserAction);
   }
 
-  public async loadExtension(extension: Electron.Extension) {
+  public async loadExtension(extension: Electron10Extension) {
     if (this.defaultBrowserActions.find(x => x.extensionId === extension.id))
       return;
 
@@ -73,9 +74,9 @@ export class ExtensionsStore {
   }
 
   public async load() {
-    const extensions = remote.session
-      .fromPartition('persist:view')
-      .getAllExtensions();
+    const extensions: Electron10Extension[] = await ipcRenderer.invoke(
+      'get-extensions',
+    );
 
     extensions.forEach(x => this.loadExtension(x));
   }
