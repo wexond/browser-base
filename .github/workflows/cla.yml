@@ -14,7 +14,7 @@ jobs:
       # Alpha Release
       uses: cla-assistant/github-action@v1.2.0-alpha
       env: 
-        GITHUB_TOKEN: ${{ secrets.token }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with: 
         path-to-signatures: 'signatures/version1/cla.json'
         path-To-cladocument: 'https://github.com/wexond/desktop/blob/master/cla.md'
