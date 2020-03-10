@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { ipcMain, dialog } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
@@ -41,6 +41,10 @@ export class ViewManager {
 
     ipcMain.on(`add-tab-${id}`, (e, details) => {
       this.create(details);
+    });
+	
+	ipcMain.on('Print', (e, details) => {
+      this.views.get(this.selectedId).webContents.print();
     });
 
     ipcMain.on(`view-select-${id}`, (e, id: number) => {

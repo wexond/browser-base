@@ -50,6 +50,11 @@ const onDarkClick = () => {
   store.save();
 };
 
+const onPrintClick = () => {
+  ipcRenderer.send('Print', null);
+  store.hide();
+};
+
 const onShieldClick = () => {
   store.settings.shield = !store.settings.shield;
   store.save();
@@ -157,11 +162,11 @@ export const QuickMenu = observer(() => {
             <MenuItemTitle>Find in page</MenuItemTitle>
             <Shortcut>Ctrl+F</Shortcut>
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={onPrintClick}>
             <Icon icon={ICON_PRINT} />
             <MenuItemTitle>Print</MenuItemTitle>
             <Shortcut>Ctrl+P</Shortcut>
-          </MenuItem>
+          </MenuItem>		  
         </MenuItems>
       </Content>
     </div>
