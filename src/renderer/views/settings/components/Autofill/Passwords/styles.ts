@@ -1,6 +1,11 @@
 import styled, { css } from 'styled-components';
 
-import { transparency, icons } from '~/renderer/constants';
+import {
+  transparency,
+  ICON_INVISIBLE,
+  ICON_VISIBLE,
+  ICON_MORE,
+} from '~/renderer/constants';
 import { centerIcon } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
 
@@ -47,7 +52,7 @@ export const PasswordIcon = styled.div`
   ${centerIcon('contain')};
 
   ${({ toggled, theme }: { toggled: boolean; theme: ITheme }) => css`
-    background-image: url(${toggled ? icons.invisible : icons.visible});
+    background-image: url(${toggled ? ICON_INVISIBLE : ICON_VISIBLE});
     filter: ${theme.dark ? 'invert(100%)' : 'none'};
   `};
 `;
@@ -56,7 +61,7 @@ export const More = styled.div`
   width: 24px;
   height: 24px;
   opacity: ${transparency.icons.inactive};
-  background-image: url(${icons.more});
+  background-image: url(${ICON_MORE});
   cursor: pointer;
   ${centerIcon(20)};
 

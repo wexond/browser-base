@@ -21,6 +21,7 @@ import {
   Dialog,
   ExtensionPopup,
 } from '../dialogs';
+import { isNightly } from '..';
 
 interface IDialogs {
   searchDialog?: SearchDialog;
@@ -68,8 +69,12 @@ export class AppWindow extends BrowserWindow {
         contextIsolation: false,
         javascript: true,
         affinity: 'browser',
+        enableRemoteModule: true,
       },
-      icon: resolve(app.getAppPath(), 'static/app-icons/icon.png'),
+      icon: resolve(
+        app.getAppPath(),
+        `static/${isNightly ? 'nightly-icons' : 'icons'}/icon.png`,
+      ),
       show: false,
     });
 
@@ -186,8 +191,10 @@ export class AppWindow extends BrowserWindow {
       this.setBrowserView(null);
 
       Object.keys(this.dialogs).forEach(key => {
+        if (this.dialogs[key]) {
+          this.dialogs[key].destroy();
+        }
         this.dialogs[key] = null;
-        this.dialogs[key].destroy();
       });
 
       this.viewManager.clear();

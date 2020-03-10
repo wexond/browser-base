@@ -64,15 +64,15 @@ const getInput = name => {
       );
     }
 
-    const release = getInput('release') === 'true' && getEnv('GH_TOKEN');
+    const release = getEnv('release') === 'true' && getEnv('GH_TOKEN');
     const platform = getPlatform();
 
     if (platform === 'mac') {
       setEnv('CSC_LINK', getEnv('mac_certs'));
-      setEnv('CSC_KEY_PASSWORD', getInput('mac_certs_password'));
+      setEnv('CSC_KEY_PASSWORD', getEnv('mac_certs_password'));
     } else if (platform === 'windows') {
-      setEnv('CSC_LINK', getInput('windows_certs'));
-      setEnv('CSC_KEY_PASSWORD', getInput('windows_certs_password'));
+      setEnv('CSC_LINK', getEnv('windows_certs'));
+      setEnv('CSC_KEY_PASSWORD', getEnv('windows_certs_password'));
     }
 
     run('yarn run build');

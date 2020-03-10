@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { transparency, icons } from '~/renderer/constants';
+import { transparency, ICON_SEARCH } from '~/renderer/constants';
 import { ITheme } from '~/interfaces';
 import { centerIcon, noButtons } from '~/renderer/mixins';
 
@@ -88,7 +88,7 @@ export const Search = styled.div`
     width: 16px;
     height: 16px;
     ${centerIcon(16)};
-    background-image: url(${icons.search});
+    background-image: url(${ICON_SEARCH});
 
     ${({ theme }: { theme?: ITheme }) => css`
       filter: ${theme['pages.lightForeground'] ? 'invert(100%)' : 'none'};

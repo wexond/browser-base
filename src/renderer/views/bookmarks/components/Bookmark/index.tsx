@@ -4,9 +4,9 @@ import { observer } from 'mobx-react-lite';
 import { Favicon, Title, Site, More } from './style';
 import { IBookmark } from '~/interfaces';
 import store from '../../store';
-import { icons } from '~/renderer/constants';
 import { ListItem } from '~/renderer/components/ListItem';
 import { getBookmarkTitle } from '../../utils';
+import { ICON_PAGE, ICON_FOLDER } from '~/renderer/constants/icons';
 
 const onClick = (item: IBookmark) => (e: React.MouseEvent) => {
   const index = store.selectedItems.indexOf(item._id);
@@ -62,7 +62,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
   let customFavicon = false;
 
   if (data.isFolder) {
-    favicon = icons.folder;
+    favicon = ICON_FOLDER;
     customFavicon = true;
   } else {
     if (favicon) {
@@ -72,7 +72,7 @@ export const Bookmark = observer(({ data }: { data: IBookmark }) => {
         favicon = store.favicons.get(data.favicon);
       }
     } else {
-      favicon = icons.page;
+      favicon = ICON_PAGE;
       customFavicon = true;
     }
   }

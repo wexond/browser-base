@@ -54,7 +54,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
   });
 
   ipcMain.on(`search-show-${id}`, e => {
-    appWindow.dialogs.searchDialog.toggle();
+    appWindow.dialogs.searchDialog.show();
   });
 
   ipcMain.on(`show-tab-preview-${id}`, (e, tab) => {
@@ -77,21 +77,16 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.downloadsDialog.show();
   });
 
-  ipcMain.on(`show-extension-popup-${id}`, (e, left, url) => {
+  ipcMain.on(`show-extension-popup-${id}`, (e, left, url, inspect) => {
     appWindow.dialogs.extensionPopup.left = left;
     appWindow.dialogs.extensionPopup.url = url;
-    appWindow.dialogs.extensionPopup.show();
-  });
-
-  ipcMain.on(`inspect-extension-popup-${id}`, (e, left, url) => {
-    appWindow.dialogs.extensionPopup.left = left;
-    appWindow.dialogs.extensionPopup.url = url;
-    appWindow.dialogs.extensionPopup.show();
-    appWindow.dialogs.extensionPopup.webContents.send('inspect');
+    appWindow.dialogs.extensionPopup.show(inspect);
   });
 
   ipcMain.on(`hide-extension-popup-${id}`, e => {
-    appWindow.dialogs.extensionPopup.hide();
+    if (appWindow.dialogs.extensionPopup.visible) {
+      appWindow.dialogs.extensionPopup.hideVisually();
+    }
   });
 
   ipcMain.on(`show-add-bookmark-dialog-${id}`, (e, left) => {

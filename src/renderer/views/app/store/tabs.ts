@@ -196,6 +196,28 @@ export class TabsStore {
     return tab;
   }
 
+  @action public createTabs(
+    options: chrome.tabs.CreateProperties[],
+    ids: number[],
+  ) {
+    this.removedTabs = 0;
+
+    const tabs = options.map((option, i) => {
+      const tab = new ITab(option, ids[i]);
+      this.list.push(tab);
+      return tab;
+    });
+
+    requestAnimationFrame(() => {
+      this.updateTabsBounds(false);
+      if (!this.scrollable) {
+        this.containerRef.current.scrollLeft = this.containerRef.current.scrollWidth;
+      }
+    });
+
+    return tabs;
+  }
+
   public scrollToEnd = (milliseconds: number) => {
     if (!this.scrollable) return;
 
@@ -231,6 +253,17 @@ export class TabsStore {
       opts,
     );
     return this.createTab(opts, id, tabGroupId);
+  }
+
+  @action
+  public async addTabs(options: chrome.tabs.CreateProperties[]) {
+    ipcRenderer.send(`hide-window-${store.windowId}`);
+
+    const ids = await ipcRenderer.invoke(
+      `views-create-${store.windowId}`,
+      options,
+    );
+    return this.createTabs(options, ids);
   }
 
   public removeTab(id: number) {

@@ -4,6 +4,9 @@ import { getTheme } from '~/utils/themes';
 import { requestURL } from '~/utils/network';
 import { INewsItem } from '~/interfaces/news-item';
 
+type NewsBehavior = 'on-scroll' | 'always-visible' | 'hidden';
+export type Preset = 'focused' | 'inspirational' | 'informational' | 'custom';
+
 export class Store {
   @observable
   public settings: ISettings = { ...(window as any).settings };
@@ -17,7 +20,116 @@ export class Store {
   public news: INewsItem[] = [];
 
   @observable
+  private _newsBehavior: NewsBehavior = 'on-scroll';
+
+  @computed
+  public get newsBehavior() {
+    return this._newsBehavior;
+  }
+
+  public set newsBehavior(value: NewsBehavior) {
+    this._newsBehavior = value;
+
+    if (value === 'always-visible') {
+      this.loadNews();
+    }
+  }
+
+  @computed
+  public get fullSizeImage() {
+    return this.newsBehavior === 'on-scroll' || this.newsBehavior === 'hidden';
+  }
+
+  @observable
   public image = '';
+
+  @observable
+  private _imageVisible = true;
+
+  public set imageVisible(value: boolean) {
+    this._imageVisible = value;
+    if (value && this.image == '') this.loadImage();
+  }
+
+  @computed
+  public get imageVisible() {
+    return this._imageVisible;
+  }
+
+  @observable
+  public changeImageDaily = true;
+
+  @observable
+  public topSitesVisible = true;
+
+  @observable
+  public quickMenuVisible = true;
+
+  @observable
+  public overflowVisible = false;
+
+  @observable
+  private _preferencesContent: 'main' | 'custom' = 'main';
+
+  public set preferencesContent(value: 'main' | 'custom') {
+    this._preferencesContent = value;
+    this.overflowVisible = false;
+  }
+
+  @computed
+  public get preferencesContent() {
+    return this._preferencesContent;
+  }
+
+  @observable
+  private _dashboardSettingsVisible = false;
+
+  public set dashboardSettingsVisible(value: boolean) {
+    this._dashboardSettingsVisible = value;
+
+    if (!value) {
+      this.preferencesContent = 'main';
+    }
+  }
+
+  @computed
+  public get dashboardSettingsVisible() {
+    return this._dashboardSettingsVisible;
+  }
+
+  @observable
+  private _preset: Preset = 'inspirational';
+
+  @computed
+  public get preset() {
+    return this._preset;
+  }
+
+  public set preset(value: Preset) {
+    this._preset = value;
+
+    if (['focused', 'informational', 'inspirational'].includes(value)) {
+      this.quickMenuVisible = true;
+      this.topSitesVisible = true;
+      this.changeImageDaily = true;
+    }
+
+    if (['focused', 'inspirational'].includes(value)) {
+      this.newsBehavior = 'on-scroll';
+    }
+
+    if (['informational', 'inspirational'].includes(value)) {
+      this.imageVisible = true;
+    }
+
+    if (value === 'focused') {
+      this.imageVisible = false;
+    } else if (value === 'informational') {
+      this.newsBehavior = 'always-visible';
+    }
+
+    localStorage.setItem('preset', value);
+  }
 
   private page = 1;
   private loaded = true;
@@ -30,9 +142,30 @@ export class Store {
       this.settings = { ...this.settings, ...settings };
     };
 
-    this.loadImage();
+    this.preset = localStorage.getItem('preset') as Preset;
+
+    if (this.preset === 'custom') {
+      [
+        'changeImageDaily',
+        'quickMenuVisible',
+        'topSitesVisible',
+        'imageVisible',
+      ].forEach(
+        x =>
+          ((this as any)[x] =
+            localStorage.getItem(x) == null
+              ? (this as any)[x]
+              : JSON.parse(localStorage.getItem(x))),
+      );
+
+      this.newsBehavior = localStorage.getItem('newsBehavior') as NewsBehavior;
+    }
+
+    if (this.imageVisible) {
+      this.loadImage();
+    }
+
     this.loadTopSites();
-    this.loadNews();
 
     window.onscroll = () => {
       this.updateNews();
@@ -44,22 +177,28 @@ export class Store {
   }
 
   public async loadImage() {
-    let url = 'https://picsum.photos/1920/1080';
+    let url = localStorage.getItem('imageURL');
     let isNewUrl = true;
-    const dateString = localStorage.getItem('imageDate');
 
-    if (dateString && dateString !== '') {
-      const date = new Date(dateString);
-      const date2 = new Date();
-      const diffTime = Math.floor(
-        (date2.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
-      );
-      const newUrl = localStorage.getItem('imageURL');
+    if (this.changeImageDaily) {
+      const dateString = localStorage.getItem('imageDate');
 
-      if (diffTime < 1 && newUrl) {
-        url = newUrl;
-        isNewUrl = false;
+      if (dateString && dateString !== '') {
+        const date = new Date(dateString);
+        const date2 = new Date();
+        const diffTime = Math.floor(
+          (date2.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
+        );
+
+        if (diffTime > 1) {
+          url = '';
+          isNewUrl = false;
+        }
       }
+    }
+
+    if (!url || url == '') {
+      url = 'https://picsum.photos/1920/1080';
     }
 
     fetch(url)

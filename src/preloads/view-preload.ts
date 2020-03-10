@@ -6,13 +6,8 @@ import { WEBUI_BASE_URL } from '~/constants/files';
 import { injectChromeWebstoreInstallButton } from './chrome-webstore';
 
 const tabId = ipcRenderer.sendSync('get-webcontents-id');
-const arg = process.argv.find(x => x.startsWith('--window-id='));
 
-export let windowId: number = null;
-
-if (arg) {
-  windowId = parseInt(arg.split('--window-id=')[1], 10);
-}
+export const windowId: number = ipcRenderer.sendSync('get-window-id');
 
 const goBack = () => {
   ipcRenderer.invoke(`web-contents-call`, {
@@ -102,17 +97,15 @@ ipcRenderer.on('scroll-touch-end', () => {
 window.addEventListener('load', AutoComplete.loadForms);
 window.addEventListener('mousedown', AutoComplete.onWindowMouseDown);
 
-const emitCallback = (msg: string, data: any) => {
-  ipcRenderer.once(msg, (e, res) => {
-    window.postMessage(
-      {
-        id: data.id,
-        result: res,
-        type: 'result',
-      },
-      '*',
-    );
-  });
+const postMsg = (data: any, res: any) => {
+  window.postMessage(
+    {
+      id: data.id,
+      result: res,
+      type: 'result',
+    },
+    '*',
+  );
 };
 
 const hostname = window.location.href.substr(WEBUI_BASE_URL.length);
@@ -172,17 +165,20 @@ if (window.location.href.startsWith(WEBUI_BASE_URL)) {
     }
   });
 
-  window.addEventListener('message', ({ data }) => {
+  window.addEventListener('message', async ({ data }) => {
     if (data.type === 'storage') {
-      ipcRenderer.send(`storage-${data.operation}`, data.id, {
+      const res = await ipcRenderer.invoke(`storage-${data.operation}`, {
         scope: data.scope,
         ...data.data,
       });
 
-      emitCallback(data.id, data);
+      postMsg(data, res);
     } else if (data.type === 'credentials-get-password') {
-      ipcRenderer.send('credentials-get-password', data.id, data.data);
-      emitCallback(data.id, data);
+      const res = await ipcRenderer.invoke(
+        'credentials-get-password',
+        data.data,
+      );
+      postMsg(data, res);
     } else if (data.type === 'save-settings') {
       ipcRenderer.send('save-settings', { settings: data.data });
     }

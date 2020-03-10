@@ -40,6 +40,8 @@ export interface ITheme {
   'pages.navigationDrawer2.backgroundColor': string;
 
   'dropdown.backgroundColor': string;
+  'dropdown.backgroundColor.translucent': string;
+  'dropdown.separator.color': string;
 
   backgroundColor: string;
   accentColor: string;

@@ -71,12 +71,22 @@ export class Store extends DialogStore {
   public tabId = 1;
 
   public constructor() {
-    super();
+    super({
+      hideOnBlur: false,
+    });
 
-    ipcRenderer.on('visible', (e, flag, tab) => {
-      this.visible = flag;
+    window.addEventListener('blur', async () => {
+      if (this.visible && !(await ipcRenderer.invoke(`is-newtab-${this.id}`))) {
+        this.visible = false;
+        setTimeout(() => {
+          this.hide();
+        });
+      }
+    });
 
+    ipcRenderer.on('visible', async (e, flag, tab) => {
       if (flag) {
+        this.visible = flag;
         this.tabs = [];
         this.suggestions.list = [];
         this.tabId = tab.id;
@@ -87,6 +97,8 @@ export class Store extends DialogStore {
         }
 
         this.inputRef.current.focus();
+      } else if (!(await ipcRenderer.invoke(`is-newtab-${this.id}`))) {
+        this.visible = flag;
       }
     });
 

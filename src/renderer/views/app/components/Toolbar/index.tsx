@@ -8,11 +8,19 @@ import { Buttons, StyledToolbar, Separator } from './style';
 import { NavigationButtons } from './NavigationButtons';
 import { Tabbar } from './Tabbar';
 import { ToolbarButton } from './ToolbarButton';
-import { icons } from '~/renderer/constants';
 import { BrowserAction } from './BrowserAction';
 import { platform } from 'os';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { WindowsControls } from 'react-windows-controls';
+import {
+  ICON_STAR,
+  ICON_STAR_FILLED,
+  ICON_KEY,
+  ICON_SHIELD,
+  ICON_DOWNLOAD,
+  ICON_INCOGNITO,
+  ICON_MORE,
+} from '~/renderer/constants/icons';
 
 const onDownloadsClick = (e: React.MouseEvent<HTMLDivElement>) => {
   store.downloadNotification = false;
@@ -32,12 +40,22 @@ const onKeyClick = () => {
   });
 };
 
-const onStarClick = (e: React.MouseEvent<HTMLDivElement>) => {
-  const { left, width } = e.currentTarget.getBoundingClientRect();
+let starRef: HTMLDivElement = null;
+
+const showAddBookmarkDialog = () => {
+  const { left, width } = starRef.getBoundingClientRect();
   ipcRenderer.send(
     `show-add-bookmark-dialog-${store.windowId}`,
     left + width / 2,
   );
+};
+
+ipcRenderer.on('show-add-bookmark-dialog', () => {
+  showAddBookmarkDialog();
+});
+
+const onStarClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  showAddBookmarkDialog();
 };
 
 const onMenuClick = () => {
@@ -104,19 +122,20 @@ const RightButtons = observer(() => {
       <BrowserActions />
       {store.extensions.browserActions.length > 0 && <Separator />}
       <ToolbarButton
-        icon={store.isBookmarked ? icons.starFilled : icons.star}
+        divRef={r => (starRef = r)}
+        icon={store.isBookmarked ? ICON_STAR_FILLED : ICON_STAR}
         size={18}
         onMouseDown={onStarClick}
       />
       {hasCredentials && (
-        <ToolbarButton icon={icons.key} size={16} onClick={onKeyClick} />
+        <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
       )}
 
       <ToolbarButton
         size={16}
         badge={store.settings.object.shield && blockedAds > 0}
         badgeText={blockedAds.toString()}
-        icon={icons.shield}
+        icon={ICON_SHIELD}
         opacity={store.settings.object.shield ? 0.87 : 0.54}
         onContextMenu={onShieldContextMenu}
       ></ToolbarButton>
@@ -126,7 +145,7 @@ const RightButtons = observer(() => {
           size={18}
           badge={store.downloadNotification}
           onMouseDown={onDownloadsClick}
-          icon={icons.download}
+          icon={ICON_DOWNLOAD}
           badgeTop={9}
           badgeRight={9}
           preloader
@@ -134,8 +153,15 @@ const RightButtons = observer(() => {
         ></ToolbarButton>
       )}
       <Separator />
-      {store.isIncognito && <ToolbarButton icon={icons.incognito} size={18} />}
-      <ToolbarButton onMouseDown={onMenuClick} icon={icons.more} size={18} />
+      {store.isIncognito && <ToolbarButton icon={ICON_INCOGNITO} size={18} />}
+      <ToolbarButton
+        badge={store.updateAvailable}
+        badgeRight={10}
+        badgeTop={8}
+        onMouseDown={onMenuClick}
+        icon={ICON_MORE}
+        size={18}
+      />
     </Buttons>
   );
 });

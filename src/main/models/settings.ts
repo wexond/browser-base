@@ -9,6 +9,7 @@ import { EventEmitter } from 'events';
 import { runAdblockService, stopAdblockService } from '../services/adblock';
 import { WindowsManager } from '../windows-manager';
 import { WEBUI_BASE_URL } from '~/constants/files';
+import storage from '../services/storage';
 
 export class Settings extends EventEmitter {
   public object = DEFAULT_SETTINGS;
@@ -99,11 +100,13 @@ export class Settings extends EventEmitter {
     }
 
     const contexts = [
-      this.windowsManager.sessionsManager.extensions,
-      this.windowsManager.sessionsManager.extensionsIncognito,
+      this.windowsManager.sessionsManager.view,
+      this.windowsManager.sessionsManager.viewIncognito,
     ];
 
     contexts.forEach(e => {
+      /*
+      // TODO:
       if (e.extensions['wexond-darkreader']) {
         e.extensions['wexond-darkreader'].backgroundPage.webContents.send(
           'api-runtime-sendMessage',
@@ -115,11 +118,12 @@ export class Settings extends EventEmitter {
           },
         );
       }
+      */
 
       if (this.object.shield) {
-        runAdblockService(e.session);
+        runAdblockService(e);
       } else {
-        stopAdblockService(e.session);
+        stopAdblockService(e);
       }
     });
   };
@@ -132,6 +136,11 @@ export class Settings extends EventEmitter {
       if (!json.version) {
         // Migrate from 3.0.0 to 3.1.0
         json.searchEngines = [];
+      }
+
+      if (typeof json.version === 'string') {
+        // Migrate from 3.1.0
+        storage.remove({ scope: 'startupTabs', query: {}, multi: true });
       }
 
       if (json.themeAuto === undefined) {
@@ -149,6 +158,7 @@ export class Settings extends EventEmitter {
       this.object = {
         ...this.object,
         ...json,
+        version: DEFAULT_SETTINGS.version,
       };
 
       this.loaded = true;
@@ -167,7 +177,7 @@ export class Settings extends EventEmitter {
     try {
       await promises.writeFile(
         getPath('settings.json'),
-        JSON.stringify(this.object),
+        JSON.stringify({ ...this.object, version: DEFAULT_SETTINGS.version }),
       );
 
       if (this.queue.length >= 3) {

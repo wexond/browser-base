@@ -1,9 +1,10 @@
-import { ipcMain } from 'electron';
+import { ipcMain, dialog } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { windowsManager } from '.';
+import { NEWTAB_URL } from '~/constants/tabs';
 
 export class ViewManager {
   public views = new Map<number, View>();
@@ -32,8 +33,18 @@ export class ViewManager {
       return this.create(details, false, false).webContents.id;
     });
 
+    ipcMain.handle(`views-create-${id}`, (e, options) => {
+      return options.map((option: any) => {
+        return this.create(option, false, false).webContents.id;
+      });
+    });
+
     ipcMain.on(`add-tab-${id}`, (e, details) => {
       this.create(details);
+    });
+	
+	ipcMain.on('Print', (e, details) => {
+      this.views.get(this.selectedId).webContents.print();
     });
 
     ipcMain.on(`view-select-${id}`, (e, id: number) => {
@@ -115,21 +126,27 @@ export class ViewManager {
     view.updateWindowTitle();
     view.updateBookmark();
 
+    if (this.incognito) {
+      windowsManager.sessionsManager.viewIncognito.activeTab = id;
+    } else {
+      windowsManager.sessionsManager.view.activeTab = id;
+    }
+
     this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);
 
-    this.window.dialogs.searchDialog.hideVisually();
-    this.window.dialogs.previewDialog.hideVisually();
-    this.window.dialogs.tabGroupDialog.hideVisually();
-
-    if (this.incognito) {
-      windowsManager.sessionsManager.extensionsIncognito.activeTab = id;
-    } else {
-      windowsManager.sessionsManager.extensions.activeTab = id;
-    }
-
     // Also fixes switching tabs with Ctrl + Tab
     view.webContents.focus();
+
+    if (view.webContents.getURL().startsWith(NEWTAB_URL) || view.isNewTab) {
+      this.window.dialogs.searchDialog.bringToTop();
+      this.window.dialogs.searchDialog.show();
+    } else {
+      if (this.window.dialogs.searchDialog.visible) {
+        this.window.dialogs.searchDialog.hide(true);
+      }
+      this.window.dialogs.previewDialog.hide(true);
+    }
 
     this.fixBounds();
   }
