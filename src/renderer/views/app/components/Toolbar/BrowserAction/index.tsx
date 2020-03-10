@@ -2,11 +2,8 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { ToolbarButton } from '../ToolbarButton';
 import { IBrowserAction } from '../../../models';
-import { extensionsRenderer } from 'electron-extensions/renderer';
 import { ipcRenderer, remote } from 'electron';
 import store from '../../../store';
-import { format } from 'url';
-import { EXTENSIONS_PROTOCOL } from '~/constants';
 
 interface Props {
   data: IBrowserAction;
@@ -16,7 +13,8 @@ const onClick = (data: IBrowserAction) => (
   e: React.MouseEvent<HTMLDivElement>,
 ) => {
   if (data.tabId) {
-    extensionsRenderer.browserAction.onClicked(data.extensionId, data.tabId);
+    // TODO:
+    //extensionsRenderer.browserAction.onClicked(data.extensionId, data.tabId);
   }
 
   const { left, width } = e.currentTarget.getBoundingClientRect();
@@ -38,14 +36,10 @@ const onContextMenu = (data: IBrowserAction) => (
         const { left, width } = (target as any).getBoundingClientRect();
 
         ipcRenderer.send(
-          `inspect-extension-popup-${store.windowId}`,
-          left + width / 2,
-          format({
-            protocol: EXTENSIONS_PROTOCOL,
-            slashes: true,
-            hostname: data.extensionId,
-            pathname: data.popup,
-          }),
+          `show-extension-popup-${store.windowId}`,
+          left + width,
+          data.popup,
+          true,
         );
       },
     },

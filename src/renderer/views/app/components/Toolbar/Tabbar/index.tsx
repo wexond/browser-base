@@ -4,9 +4,9 @@ import * as React from 'react';
 import { AddTab, StyledTabbar, TabsContainer } from './style';
 import { Tabs } from '../Tabs';
 import store from '../../../store';
-import { icons } from '~/renderer/constants';
 import { ipcRenderer } from 'electron';
 import { TabGroup } from '../TabGroup';
+import { ICON_ADD } from '~/renderer/constants/icons';
 
 let timeout: any;
 
@@ -64,7 +64,7 @@ export const Tabbar = observer(() => {
         <Tabs />
       </TabsContainer>
       <AddTab
-        icon={icons.add}
+        icon={ICON_ADD}
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
       />

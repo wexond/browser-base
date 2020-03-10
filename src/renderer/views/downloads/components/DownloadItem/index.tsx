@@ -17,7 +17,7 @@ import { shell } from 'electron';
 
 const onClick = (item: IDownloadItem) => () => {
   if (item.completed) {
-    shell.openItem(item.savePath);
+    shell.openPath(item.savePath);
   }
 };
 

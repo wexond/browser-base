@@ -2,7 +2,6 @@ import { ipcMain, dialog } from 'electron';
 import * as Datastore from 'nedb';
 import { fromBuffer } from 'file-type';
 import * as icojs from 'icojs';
-import parse = require('node-bookmarks-parser');
 
 import { getPath, requestURL } from '~/utils';
 import {
@@ -60,51 +59,39 @@ export class StorageService {
   public favicons: Map<string, string> = new Map();
 
   public constructor() {
-    ipcMain.on('storage-get', async (e, id: string, data: IFindOperation) => {
-      const docs = await this.find(data);
-      e.sender.send(id, docs);
+    ipcMain.handle('storage-get', async (e, data: IFindOperation) => {
+      return await this.find(data);
     });
 
-    ipcMain.on(
-      'storage-get-one',
-      async (e, id: string, data: IFindOperation) => {
-        const doc = await this.findOne(data);
-        e.sender.send(id, doc);
-      },
-    );
+    ipcMain.handle('storage-get-one', async (e, data: IFindOperation) => {
+      return await this.findOne(data);
+    });
 
-    ipcMain.on(
-      'storage-insert',
-      async (e, id: string, data: IInsertOperation) => {
-        const doc = await this.insert(data);
-        e.sender.send(id, doc);
-      },
-    );
+    ipcMain.handle('storage-insert', async (e, data: IInsertOperation) => {
+      return await this.insert(data);
+    });
 
-    ipcMain.on(
-      'storage-remove',
-      async (e, id: string, data: IRemoveOperation) => {
-        const numRemoved = await this.remove(data);
-        e.sender.send(id, numRemoved);
-      },
-    );
+    ipcMain.handle('storage-remove', async (e, data: IRemoveOperation) => {
+      return await this.remove(data);
+    });
 
-    ipcMain.on(
-      'storage-update',
-      async (e, id: string, data: IUpdateOperation) => {
-        const numReplaced = await this.update(data);
-        e.sender.send(id, numReplaced);
-      },
-    );
+    ipcMain.handle('storage-update', async (e, data: IUpdateOperation) => {
+      return await this.update(data);
+    });
 
     ipcMain.handle('import-bookmarks', async () => {
-      const b = await this.importBookmarks();
-
-      windowsManager.list.forEach(x => {
-        x.viewManager.selected.updateBookmark();
+      const dialogRes = await dialog.showOpenDialog({
+        filters: [{ name: 'Bookmark file', extensions: ['html'] }],
       });
 
-      return b;
+      try {
+        const file = await promises.readFile(dialogRes.filePaths[0], 'utf8');
+        return file;
+      } catch (err) {
+        console.error(err);
+      }
+
+      return [];
     });
 
     ipcMain.handle('export-bookmarks', async () => {
@@ -388,60 +375,39 @@ export class StorageService {
   };
 
   public addFavicon = async (url: string): Promise<string> => {
-    return new Promise(async resolve => {
-      if (!this.favicons.get(url)) {
-        try {
-          const res = await requestURL(url);
+    if (!this.favicons.get(url)) {
+      const res = await requestURL(url);
 
-          if (res.statusCode === 404) {
-            throw new Error('404 favicon not found');
-          }
-
-          let data = Buffer.from(res.data, 'binary');
-
-          const type = await fromBuffer(data);
-
-          if (type && type.ext === 'ico') {
-            data = Buffer.from(new Uint8Array(await convertIcoToPng(data)));
-          }
-
-          const str = `data:${
-            (await fromBuffer(data)).ext
-          };base64,${data.toString('base64')}`;
-
-          this.insert({
-            scope: 'favicons',
-            item: {
-              url,
-              data: str,
-            },
-          });
-
-          this.favicons.set(url, str);
-
-          resolve(str);
-        } catch (e) {
-          throw e;
-        }
-      } else {
-        resolve(this.favicons.get(url));
+      if (res.statusCode === 404) {
+        throw new Error('404 favicon not found');
       }
-    });
-  };
 
-  public importBookmarks = async () => {
-    const dialogRes = await dialog.showOpenDialog({
-      filters: [{ name: 'Bookmark file', extensions: ['html'] }],
-    });
+      let data = Buffer.from(res.data, 'binary');
 
-    try {
-      const file = await promises.readFile(dialogRes.filePaths[0], 'utf8');
-      return parse(file);
-    } catch (err) {
-      console.error(err);
+      const type = await fromBuffer(data);
+
+      if (type && type.ext === 'ico') {
+        data = Buffer.from(new Uint8Array(await convertIcoToPng(data)));
+      }
+
+      const str = `data:${(await fromBuffer(data)).ext};base64,${data.toString(
+        'base64',
+      )}`;
+
+      this.insert({
+        scope: 'favicons',
+        item: {
+          url,
+          data: str,
+        },
+      });
+
+      this.favicons.set(url, str);
+
+      return str;
+    } else {
+      return this.favicons.get(url);
     }
-
-    return [];
   };
 
   private createBookmarkArray = (

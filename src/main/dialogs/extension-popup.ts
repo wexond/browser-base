@@ -19,7 +19,7 @@ export class ExtensionPopup extends Dialog {
       bounds: {
         width: 512,
         height: 512,
-        y: 34,
+        y: 30,
       },
       devtools: false,
       webPreferences: {
@@ -51,8 +51,8 @@ export class ExtensionPopup extends Dialog {
     });
   }
 
-  public show() {
+  public show(inspect = false) {
     super.show();
-    this.webContents.send('visible', true, { url: this.url });
+    this.webContents.send('visible', true, { url: this.url, inspect });
   }
 }
