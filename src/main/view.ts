@@ -8,6 +8,7 @@ import { IHistoryItem, IBookmark } from '~/interfaces';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { windowsManager } from '.';
 import { NEWTAB_URL } from '~/constants/tabs';
+import { ZOOM_FACTOR_MIN, ZOOM_FACTOR_MAX, ZOOM_FACTOR_INCREMENT } from '~/constants/web-contents';
 
 export class View extends BrowserView {
   public title = '';
@@ -221,6 +222,22 @@ export class View extends BrowserView {
         `browserview-theme-color-updated-${this.webContents.id}`,
         color,
       );
+    });
+
+    this.webContents.addListener('zoom-changed', (e, zoomDirection) => {
+      var newZoomFactor = this.webContents.zoomFactor +
+        (zoomDirection === 'in' ? ZOOM_FACTOR_INCREMENT : -ZOOM_FACTOR_INCREMENT);
+
+      if (newZoomFactor <= ZOOM_FACTOR_MAX && newZoomFactor >= ZOOM_FACTOR_MIN) {
+        this.webContents.zoomFactor = newZoomFactor;
+        this.window.webContents.send(
+          `browserview-zoom-updated-${this.webContents.id}`,
+          this.webContents.zoomFactor,
+        );
+      }
+      else {
+        e.preventDefault();
+      }
     });
 
     this.webContents.addListener(
