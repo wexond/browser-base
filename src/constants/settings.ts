@@ -15,7 +15,7 @@ export const DEFAULT_SETTINGS: ISettings = {
   startupBehavior: {
     type: 'empty',
   },
-  warnOnQuit: true,
+  warnOnQuit: false,
   version: 1,
   downloadsDialog: false,
   downloadsPath: remote
