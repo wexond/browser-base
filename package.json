@@ -1,6 +1,6 @@
 {
   "name": "wexond",
-  "version": "4.0.0-nightly.34",
+  "version": "4.0.0-nightly.35",
   "sideEffects": false,
   "description": "Extensible, fast and innovative web browser with material UI.",
   "keywords": [
