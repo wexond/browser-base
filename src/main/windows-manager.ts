@@ -80,13 +80,11 @@ export class WindowsManager {
 
     checkFiles();
 
-    registerProtocol(session.defaultSession);
-
     storage.run();
 
-    this.sessionsManager = new SessionsManager(this);
-
     this.createWindow();
+
+    this.sessionsManager = new SessionsManager(this);
 
     Menu.setApplicationMenu(getMainMenu(this));
     runAutoUpdaterService(this);
