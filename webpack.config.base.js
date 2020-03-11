@@ -29,7 +29,7 @@ const chunksEntriesMap =
     : JSON.parse(readFileSync(CHUNKS_ENTRIES_MAP_PATH, 'utf8'));
 
 const styledComponentsTransformer = createStyledComponentsTransformer({
-  minify: dev,
+  minify: !dev,
   displayName: dev,
 });
 
