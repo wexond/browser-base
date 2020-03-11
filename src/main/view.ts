@@ -7,6 +7,7 @@ import Vibrant = require('node-vibrant');
 import { IHistoryItem, IBookmark } from '~/interfaces';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { NEWTAB_URL } from '~/constants/tabs';
+import { ZOOM_FACTOR_MIN, ZOOM_FACTOR_MAX, ZOOM_FACTOR_INCREMENT } from '~/constants/web-contents';
 
 export class View extends BrowserView {
   public title = '';
@@ -215,8 +216,10 @@ export class View extends BrowserView {
     });
 
     this.webContents.addListener('zoom-changed', (e, zoomDirection) => {
-      var newZoomFactor = this.webContents.zoomFactor + (zoomDirection === 'in' ? .2 : -.2);
-      if (newZoomFactor <= 5 && newZoomFactor >= .20) {
+      var newZoomFactor = this.webContents.zoomFactor +
+        (zoomDirection === 'in' ? ZOOM_FACTOR_INCREMENT : -ZOOM_FACTOR_INCREMENT);
+
+      if (newZoomFactor <= ZOOM_FACTOR_MAX && newZoomFactor >= ZOOM_FACTOR_MIN) {
         this.webContents.zoomFactor = newZoomFactor;
         this.window.webContents.send(
           `browserview-zoom-updated-${this.webContents.id}`,
