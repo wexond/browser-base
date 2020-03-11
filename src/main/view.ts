@@ -167,7 +167,8 @@ export class View extends BrowserView {
     this.webContents.addListener(
       'did-fail-load',
       (e, errorCode, errorDescription, validatedURL, isMainFrame) => {
-        if (isMainFrame) {
+        //ignore -3 (ABORTED) - An operation was aborted (due to user action).
+        if (isMainFrame && errorCode !== -3) {
           this.errorURL = validatedURL;
 
           this.webContents.loadURL(`wexond-error://network-error/${errorCode}`);
