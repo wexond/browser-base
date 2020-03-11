@@ -6,6 +6,7 @@ import storage from './services/storage';
 import Vibrant = require('node-vibrant');
 import { IHistoryItem, IBookmark } from '~/interfaces';
 import { WEBUI_BASE_URL } from '~/constants/files';
+import { windowsManager } from '.';
 import { NEWTAB_URL } from '~/constants/tabs';
 
 export class View extends BrowserView {
@@ -54,6 +55,13 @@ export class View extends BrowserView {
 
     this.window = window;
     this.homeUrl = url;
+
+    this.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
+      const { object: settings } = windowsManager.settings;
+      if (settings.doNotTrack)
+        details.requestHeaders['DNT'] = '1'
+      callback({ requestHeaders: details.requestHeaders })
+    });
 
     ipcMain.handle(`get-error-url-${this.webContents.id}`, async e => {
       return this.errorURL;
