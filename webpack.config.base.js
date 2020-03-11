@@ -29,7 +29,7 @@ const chunksEntriesMap =
     : JSON.parse(readFileSync(CHUNKS_ENTRIES_MAP_PATH, 'utf8'));
 
 const styledComponentsTransformer = createStyledComponentsTransformer({
-  minify: true,
+  minify: !dev,
   displayName: dev,
 });
 
@@ -63,8 +63,8 @@ const config = {
           {
             loader: 'ts-loader',
             options: {
-              experimentalWatchApi: true,
-              transpileOnly: true,
+              experimentalWatchApi: dev,
+              transpileOnly: dev,
               getCustomTransformers: () => ({
                 before: [styledComponentsTransformer],
               }),
