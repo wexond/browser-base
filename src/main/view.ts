@@ -6,7 +6,9 @@ import storage from './services/storage';
 import Vibrant = require('node-vibrant');
 import { IHistoryItem, IBookmark } from '~/interfaces';
 import { WEBUI_BASE_URL } from '~/constants/files';
+import { windowsManager } from '.';
 import { NEWTAB_URL } from '~/constants/tabs';
+import { ZOOM_FACTOR_MIN, ZOOM_FACTOR_MAX, ZOOM_FACTOR_INCREMENT } from '~/constants/web-contents';
 
 export class View extends BrowserView {
   public title = '';
@@ -54,6 +56,13 @@ export class View extends BrowserView {
 
     this.window = window;
     this.homeUrl = url;
+
+    this.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
+      const { object: settings } = windowsManager.settings;
+      if (settings.doNotTrack)
+        details.requestHeaders['DNT'] = '1'
+      callback({ requestHeaders: details.requestHeaders })
+    });
 
     ipcMain.handle(`get-error-url-${this.webContents.id}`, async e => {
       return this.errorURL;
@@ -159,7 +168,8 @@ export class View extends BrowserView {
     this.webContents.addListener(
       'did-fail-load',
       (e, errorCode, errorDescription, validatedURL, isMainFrame) => {
-        if (isMainFrame) {
+        //ignore -3 (ABORTED) - An operation was aborted (due to user action).
+        if (isMainFrame && errorCode !== -3) {
           this.errorURL = validatedURL;
 
           this.webContents.loadURL(`wexond-error://network-error/${errorCode}`);
@@ -212,6 +222,22 @@ export class View extends BrowserView {
         `browserview-theme-color-updated-${this.webContents.id}`,
         color,
       );
+    });
+
+    this.webContents.addListener('zoom-changed', (e, zoomDirection) => {
+      var newZoomFactor = this.webContents.zoomFactor +
+        (zoomDirection === 'in' ? ZOOM_FACTOR_INCREMENT : -ZOOM_FACTOR_INCREMENT);
+
+      if (newZoomFactor <= ZOOM_FACTOR_MAX && newZoomFactor >= ZOOM_FACTOR_MIN) {
+        this.webContents.zoomFactor = newZoomFactor;
+        this.window.webContents.send(
+          `browserview-zoom-updated-${this.webContents.id}`,
+          this.webContents.zoomFactor,
+        );
+      }
+      else {
+        e.preventDefault();
+      }
     });
 
     this.webContents.addListener(

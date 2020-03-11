@@ -1,0 +1,20 @@
+{
+  "signedContributors": [
+    {
+      "name": "manfromarce",
+      "id": 45036600,
+      "comment_id": 597326840,
+      "created_at": "2020-03-10T21:28:38Z",
+      "repoId": 88184556,
+      "pullRequestNo": 397
+    },
+    {
+      "name": "Fyers",
+      "id": 26491227,
+      "comment_id": 597618197,
+      "created_at": "2020-03-11T13:01:44Z",
+      "repoId": 88184556,
+      "pullRequestNo": 400
+    }
+  ]
+}

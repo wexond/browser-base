@@ -18,12 +18,15 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 # Features
 
 - **Wexond Shield** - Browse the web without any ads and don't let websites to track you. Thanks to the Wexond Shield, websites can load even 2 times faster!
-- **Chromium without any Google services** - Wexond uses Electron which is based on only some of the Chromium components which don't have any Google services built-in.
-- **Built-in dark mode** - Wexond has a built-in dark theme, but it also changes white websites to dark with just a one click in Overlay. No eyestrain at night anymore!
-- **Beautiful and minimalistic UI** - The address bar is hidden to take less space, but it doesn't impact on usability in any way. It's even better! [Give it a shot](https://wexond.net)
-- **Tab groups** - Easily group tabs to groups and access them really fast.
-- **Partial support for Chrome extensions** - Install some extensions from Chrome Web Store\* (see [#110](https://github.com/wexond/wexond/issues/110))
-- **Packages** - Extend Wexond for your needs, by installing or developing your own packages\* ([#147](https://github.com/wexond/wexond/issues/147)) (WIP)
+- **Chromium without Google services and low resources usage** - Since Wexond uses Electron under the hood which is based on only several and the most important Chromium components, it's not bloated with redundant Google tracking services and others.
+- **Built-in dark mode** - Wexond has a built-in dark theme, but it also changes white websites to dark with just a one click. No eyestrain at night anymore!
+- **Beautiful and minimalistic UI** - The address bar is hidden to take less vertical screen space, but it doesn't impact on usability in any way. It's even better! [Give it a shot](https://github.com/wexond/desktop/releases)
+- **Fast and fluent UI** - The animations are really smooth and their timings are perfectly balanced.
+- **Highly customizable new tab page** - Customize almost an every aspect of the new tab page!
+- **Tab groups** - Easily group tabs, so it's hard to get lost.
+- **Scrollable tabs**
+- **Partial support for Chrome extensions** - Install some extensions directly from Chrome Web Store\* (see [#110](https://github.com/wexond/wexond/issues/110)) (WIP)
+- **Packages** - Extend Wexond for your needs, by installing or developing your own packages and themes\* ([#147](https://github.com/wexond/wexond/issues/147)) (WIP)
 
 # Screenshots
 
@@ -80,3 +83,10 @@ Guides and the API reference are located in [`docs`](docs) directory.
 ## License
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwexond%2Fwexond.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwexond%2Fwexond?ref=badge_large)
+
+# FAQ
+
+## Why Electron?
+
+Wexond has been hated by many people for using Electron by saying things like it's a web browser inside a web browser.
+It's somewhat true, but technically it doesn't matter (also please keep in mind that browsers like Firefox also have the UI built with web technologies). It doesn't make the browser any slower or heavier, it's rather the opposite based on Wexond resources usage compared to Chrome. Choosing Electron was the best option to build the browser. We can build the UI however we want and make the customization even better. We don't have enough resources to build Chromium for weeks and edit almost 25 million lines of code and search for weeks for example the code responsible for changing button icons. Instead we chose Electron which uses only several Chromium components required to properly display the external content without any of the Google services, which makes the browser much lighter. Despite using only some part of Chromium, it doesn't really affect on the browser functionalities. We can implement all of the Chromium features except the Google services.
