@@ -20,6 +20,6 @@ jobs:
         path-To-cladocument: 'https://github.com/wexond/desktop/blob/master/cla.md'
         # branch should not be protected
         branch: 'master'
-        whitelist: bot*
+        whitelist: sentialx,bot*
         empty-commit-flag: false
         blockchain-storage-flag: false
