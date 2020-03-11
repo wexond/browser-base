@@ -42,8 +42,8 @@ export class ViewManager {
     ipcMain.on(`add-tab-${id}`, (e, details) => {
       this.create(details);
     });
-	
-	ipcMain.on('Print', (e, details) => {
+
+    ipcMain.on('Print', (e, details) => {
       this.views.get(this.selectedId).webContents.print();
     });
 

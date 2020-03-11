@@ -13,14 +13,14 @@ export const DialogStyle = styled.div`
   position: relative;
 
   ${({
-  visible,
-  theme,
-  hideTransition,
-}: {
-  visible: boolean;
-  theme?: ITheme;
-  hideTransition?: boolean;
-}) => css`
+    visible,
+    theme,
+    hideTransition,
+  }: {
+    visible: boolean;
+    theme?: ITheme;
+    hideTransition?: boolean;
+  }) => css`
     transition: ${!visible && !hideTransition ? 'none' : DIALOG_TRANSITION};
     opacity: ${visible ? 1 : 0};
     transform: translateY(${visible ? 0 : -10}px);

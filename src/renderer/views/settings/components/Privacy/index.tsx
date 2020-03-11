@@ -17,7 +17,9 @@ const DoNotTrackToggle = observer(() => {
 
   return (
     <Row onClick={onSwitchChange('doNotTrack')}>
-      <Title>Send a "Do Not Track" request with your browsing traffic</Title>
+      <Title>
+        Send a &quot;Do Not Track&quot; request with your browsing traffic
+      </Title>
       <Control>
         <Switch value={doNotTrack} />
       </Control>

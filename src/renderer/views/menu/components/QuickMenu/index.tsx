@@ -166,7 +166,7 @@ export const QuickMenu = observer(() => {
             <Icon icon={ICON_PRINT} />
             <MenuItemTitle>Print</MenuItemTitle>
             <Shortcut>Ctrl+P</Shortcut>
-          </MenuItem>		  
+          </MenuItem>
         </MenuItems>
       </Content>
     </div>

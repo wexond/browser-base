@@ -21,6 +21,7 @@ import {
   ICON_POWER,
   ICON_SEARCH,
   ICON_DOWNLOAD,
+  ICON_SHIELD,
 } from '~/renderer/constants';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
@@ -34,14 +35,14 @@ const MenuItem = observer(
     children: any;
     icon?: string;
   }) => (
-      <NavigationDrawer.Item
-        onClick={() => (store.selectedSection = section)}
-        selected={store.selectedSection === section}
-        icon={icon}
-      >
-        {children}
-      </NavigationDrawer.Item>
-    ),
+    <NavigationDrawer.Item
+      onClick={() => (store.selectedSection = section)}
+      selected={store.selectedSection === section}
+      icon={icon}
+    >
+      {children}
+    </NavigationDrawer.Item>
+  ),
 );
 
 export default hot(
@@ -71,7 +72,7 @@ export default hot(
             <MenuItem icon={ICON_DOWNLOAD} section="downloads">
               Downloads
             </MenuItem>
-            <MenuItem icon={icons.shield} section="privacy">
+            <MenuItem icon={ICON_SHIELD} section="privacy">
               Privacy
             </MenuItem>
             {/* <MenuItem section="permissions">Site permissions</MenuItem> */}

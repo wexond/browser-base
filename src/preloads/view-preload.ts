@@ -119,7 +119,7 @@ if (
   window.location.href.startsWith(WEBUI_BASE_URL) ||
   window.location.protocol === 'wexond-error:'
 ) {
-  (async function () {
+  (async function() {
     const w = await webFrame.executeJavaScript('window');
     w.settings = settings;
     w.require = (id: string) => {
@@ -146,12 +146,12 @@ if (
     }
   })();
 } else {
-  (async function () {
+  (async function() {
     if (settings.doNotTrack) {
       const w = await webFrame.executeJavaScript('window');
-      Object.defineProperty(w.navigator, 'doNotTrack', { value: 1 })
+      Object.defineProperty(w.navigator, 'doNotTrack', { value: 1 });
     }
-  })()
+  })();
 }
 
 if (window.location.href.startsWith(WEBUI_BASE_URL)) {

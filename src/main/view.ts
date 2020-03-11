@@ -8,7 +8,11 @@ import { IHistoryItem, IBookmark } from '~/interfaces';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { windowsManager } from '.';
 import { NEWTAB_URL } from '~/constants/tabs';
-import { ZOOM_FACTOR_MIN, ZOOM_FACTOR_MAX, ZOOM_FACTOR_INCREMENT } from '~/constants/web-contents';
+import {
+  ZOOM_FACTOR_MIN,
+  ZOOM_FACTOR_MAX,
+  ZOOM_FACTOR_INCREMENT,
+} from '~/constants/web-contents';
 
 export class View extends BrowserView {
   public title = '';
@@ -57,12 +61,13 @@ export class View extends BrowserView {
     this.window = window;
     this.homeUrl = url;
 
-    this.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
-      const { object: settings } = windowsManager.settings;
-      if (settings.doNotTrack)
-        details.requestHeaders['DNT'] = '1'
-      callback({ requestHeaders: details.requestHeaders })
-    });
+    this.webContents.session.webRequest.onBeforeSendHeaders(
+      (details, callback) => {
+        const { object: settings } = windowsManager.settings;
+        if (settings.doNotTrack) details.requestHeaders['DNT'] = '1';
+        callback({ requestHeaders: details.requestHeaders });
+      },
+    );
 
     ipcMain.handle(`get-error-url-${this.webContents.id}`, async e => {
       return this.errorURL;
@@ -225,17 +230,22 @@ export class View extends BrowserView {
     });
 
     this.webContents.addListener('zoom-changed', (e, zoomDirection) => {
-      var newZoomFactor = this.webContents.zoomFactor +
-        (zoomDirection === 'in' ? ZOOM_FACTOR_INCREMENT : -ZOOM_FACTOR_INCREMENT);
+      const newZoomFactor =
+        this.webContents.zoomFactor +
+        (zoomDirection === 'in'
+          ? ZOOM_FACTOR_INCREMENT
+          : -ZOOM_FACTOR_INCREMENT);
 
-      if (newZoomFactor <= ZOOM_FACTOR_MAX && newZoomFactor >= ZOOM_FACTOR_MIN) {
+      if (
+        newZoomFactor <= ZOOM_FACTOR_MAX &&
+        newZoomFactor >= ZOOM_FACTOR_MIN
+      ) {
         this.webContents.zoomFactor = newZoomFactor;
         this.window.webContents.send(
           `browserview-zoom-updated-${this.webContents.id}`,
           this.webContents.zoomFactor,
         );
-      }
-      else {
+      } else {
         e.preventDefault();
       }
     });

@@ -21,8 +21,8 @@ export const DEFAULT_SETTINGS: ISettings = {
   downloadsPath: remote
     ? remote.app.getPath('downloads')
     : app
-      ? app.getPath('downloads')
-      : '',
+    ? app.getPath('downloads')
+    : '',
   doNotTrack: true,
 };
 
