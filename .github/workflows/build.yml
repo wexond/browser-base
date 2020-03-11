@@ -19,9 +19,9 @@ jobs:
         with:
           node-version: 13
 
-      - name: Install required build toolchain
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install gcc-multilib g++-multilib
+      # - name: Install required build toolchain
+        # if: matrix.os == 'ubuntu-latest'
+        # run: sudo apt-get install gcc-multilib g++-multilib
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
