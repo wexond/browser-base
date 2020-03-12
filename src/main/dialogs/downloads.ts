@@ -13,7 +13,7 @@ export class DownloadsDialog extends Dialog {
 
   constructor(appWindow: AppWindow) {
     super(appWindow, {
-      name: 'downloads',
+      name: 'downloads-dialog',
       bounds: {
         width: WIDTH,
         height: 0,
