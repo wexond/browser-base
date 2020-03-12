@@ -148,6 +148,12 @@ export class ViewManager {
       this.window.dialogs.previewDialog.hide(true);
     }
 
+    if (id === this.window.dialogs.findDialog.tabId) {
+      this.window.dialogs.findDialog.show();
+    } else {
+      this.window.dialogs.findDialog.hide();
+    }
+
     this.fixBounds();
   }
 

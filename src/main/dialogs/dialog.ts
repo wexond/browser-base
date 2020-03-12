@@ -54,6 +54,7 @@ export class Dialog extends BrowserView {
 
     ipcMain.on(`hide-${this.webContents.id}`, () => {
       this.hide(false, false);
+      this.onHide();
     });
 
     if (process.env.NODE_ENV === 'development') {
@@ -85,6 +86,8 @@ export class Dialog extends BrowserView {
     if (!this.visible) this.show();
   }
 
+  public onHide() {}
+
   public show(focus = true) {
     clearTimeout(this.timeout);
 
@@ -106,13 +109,13 @@ export class Dialog extends BrowserView {
   }
 
   public hide(bringToTop = false, hideVisually = true) {
-    if (bringToTop) {
-      this.bringToTop();
-    }
-
     if (hideVisually) this.hideVisually();
 
     if (!this.visible) return;
+
+    if (bringToTop) {
+      this.bringToTop();
+    }
 
     clearTimeout(this.timeout);
 

@@ -7,6 +7,8 @@ const WIDTH = 400;
 const HEIGHT = 64;
 
 export class FindDialog extends Dialog {
+  public tabId = -1;
+
   public constructor(appWindow: AppWindow) {
     super(appWindow, {
       name: 'find',
@@ -22,6 +24,10 @@ export class FindDialog extends Dialog {
     });
   }
 
+  public onHide() {
+    this.tabId = -1;
+  }
+
   public show() {
     super.show();
   }
@@ -33,6 +39,7 @@ export class FindDialog extends Dialog {
   }
 
   public updateInfo(tabId: number, data: any) {
+    this.tabId = tabId;
     this.webContents.send('update-info', tabId, data);
   }
 

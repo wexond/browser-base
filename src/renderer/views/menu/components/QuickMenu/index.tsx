@@ -31,13 +31,9 @@ import {
   ICON_PRINT,
 } from '~/renderer/constants/icons';
 
-const changeContent = () => () => {
-  // store.overlay.currentContent = content;
-};
-
 const onFindClick = () => {
-  /*store.overlay.visible = false;
-
+  /*
+  // TODO(sentialx): get selected tab
   ipcRenderer.send(
     `find-show-${store.windowId}`,
     store.tabs.selectedTab.id,
@@ -53,11 +49,6 @@ const onDarkClick = () => {
 const onPrintClick = () => {
   ipcRenderer.send('Print', null);
   store.hide();
-};
-
-const onShieldClick = () => {
-  store.settings.shield = !store.settings.shield;
-  store.save();
 };
 
 const onAlwaysClick = () => {
