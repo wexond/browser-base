@@ -21,7 +21,7 @@ const SuggestionsToggle = observer(() => {
 });
 
 const onSearchEngineChange = (value: string) => {
-  const { searchEngines } = store;
+  const { searchEngines } = store.settings;
   store.settings.searchEngine = searchEngines.indexOf(
     searchEngines.find(x => x.name === value),
   );
@@ -36,7 +36,7 @@ const SearchEngine = observer(() => {
       <Title>Search engine used in the address bar</Title>
       <Control>
         <Dropdown defaultValue={se.name} onChange={onSearchEngineChange}>
-          {Object.values(store.searchEngines).map((item, key) => (
+          {Object.values(store.settings.searchEngines).map((item, key) => (
             <Dropdown.Item key={key} value={item.name}>
               {item.name}
             </Dropdown.Item>

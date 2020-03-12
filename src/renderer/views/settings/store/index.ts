@@ -1,9 +1,7 @@
 import { observable, computed } from 'mobx';
-import { DEFAULT_SEARCH_ENGINES } from '~/constants';
-import { ISettings, ITheme, ISearchEngine } from '~/interfaces';
+import { ISettings, ITheme } from '~/interfaces';
 import { AutoFillStore } from './autofill';
 import { StartupTabsStore } from './startup-tabs';
-import { makeId } from '~/utils/string';
 import { getTheme } from '~/utils/themes';
 
 export type SettingsSection =
@@ -39,12 +37,9 @@ export class Store {
     return getTheme(this.settings.theme);
   }
 
-  @observable
-  public searchEngines: ISearchEngine[] = DEFAULT_SEARCH_ENGINES;
-
   @computed
   public get searchEngine() {
-    return this.searchEngines[this.settings.searchEngine];
+    return this.settings.searchEngines[this.settings.searchEngine];
   }
 
   constructor() {
