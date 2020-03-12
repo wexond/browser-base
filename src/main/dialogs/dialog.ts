@@ -55,7 +55,7 @@ export class Dialog extends BrowserView {
 
     ipcMain.on(`hide-${this.webContents.id}`, () => {
       this.hide(false, false);
-      this.onHide();
+      this.tabId = -1;
     });
 
     if (process.env.NODE_ENV === 'development') {
@@ -85,10 +85,6 @@ export class Dialog extends BrowserView {
 
   public toggle() {
     if (!this.visible) this.show();
-  }
-
-  public onHide() {
-    this.tabId = -1;
   }
 
   public show(focus = true) {

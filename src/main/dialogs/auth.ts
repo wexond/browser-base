@@ -29,6 +29,7 @@ export class AuthDialog extends Dialog {
       this.webContents.send('request-auth', url);
 
       ipcMain.once(`request-auth-result-${this.appWindow.id}`, (e, result) => {
+        this.tabId = -1;
         this.hide();
         resolve(result);
       });
