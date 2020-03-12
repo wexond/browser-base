@@ -33,6 +33,7 @@ export class Dialog extends BrowserView {
   private timeout: any;
   private hideTimeout: number;
   private name: string;
+  public tabId = -1;
 
   public constructor(
     appWindow: AppWindow,
@@ -86,7 +87,9 @@ export class Dialog extends BrowserView {
     if (!this.visible) this.show();
   }
 
-  public onHide() {}
+  public onHide() {
+    this.tabId = -1;
+  }
 
   public show(focus = true) {
     clearTimeout(this.timeout);

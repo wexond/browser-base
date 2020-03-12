@@ -20,9 +20,11 @@ export class AuthDialog extends Dialog {
 
   public requestAuth(
     url: string,
+    tabId: number,
   ): Promise<{ username: string; password: string }> {
     return new Promise(resolve => {
       this.show();
+      this.tabId = tabId;
 
       this.webContents.send('request-auth', url);
 

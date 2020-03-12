@@ -148,11 +148,19 @@ export class ViewManager {
       this.window.dialogs.previewDialog.hide(true);
     }
 
-    if (id === this.window.dialogs.findDialog.tabId) {
-      this.window.dialogs.findDialog.show();
-    } else {
-      this.window.dialogs.findDialog.hide();
-    }
+    [
+      'findDialog',
+      'authDialog',
+      'permissionsDialog',
+      'formFillDialog',
+      'credentialsDialog',
+    ].forEach(dialog => {
+      if (id === this.window.dialogs[dialog].tabId) {
+        this.window.dialogs[dialog].show();
+      } else {
+        this.window.dialogs[dialog].hide();
+      }
+    });
 
     this.fixBounds();
   }

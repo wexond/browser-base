@@ -7,8 +7,6 @@ const WIDTH = 400;
 const HEIGHT = 64;
 
 export class FindDialog extends Dialog {
-  public tabId = -1;
-
   public constructor(appWindow: AppWindow) {
     super(appWindow, {
       name: 'find',
@@ -22,10 +20,6 @@ export class FindDialog extends Dialog {
     ipcMain.on(`show-${this.webContents.id}`, () => {
       this.show();
     });
-  }
-
-  public onHide() {
-    this.tabId = -1;
   }
 
   public show() {
