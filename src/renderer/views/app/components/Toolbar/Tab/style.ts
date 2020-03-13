@@ -151,17 +151,17 @@ interface TabContainerProps {
 
 export const TabContainer = styled.div`
   position: relative;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
   width: 100%;
-  height: calc(100% - 4px);
+  height: calc(100% - 6px);
   overflow: hidden;
   display: flex;
   align-items: center;
   backface-visibility: hidden;
   ${({ pinned, tabGroup }: TabContainerProps) => css`
     max-width: ${pinned ? `${TAB_PINNED_WIDTH}px` : '100%'};
-    border-bottom-left-radius: ${tabGroup ? 0 : 6}px;
-    border-bottom-right-radius: ${tabGroup ? 0 : 6}px;
+    border-bottom-left-radius: ${tabGroup ? 0 : 4}px;
+    border-bottom-right-radius: ${tabGroup ? 0 : 4}px;
   `};
 `;

@@ -39,6 +39,7 @@ export const Button = styled.div`
   transition: 0.2s background-color;
   width: ${TOOLBAR_BUTTON_WIDTH}px;
   backface-visibility: hidden;
+  margin-right: 2px;
 
   ${({ disabled }: { disabled: boolean }) => css`
     pointer-events: ${disabled ? 'none' : 'inherit'};
@@ -49,7 +50,7 @@ export const Button = styled.div`
 export const Circle = styled.div`
   border-radius: 4px;
   width: 38px;
-  height: 32px;
+  height: 34px;
   position: absolute;
   top: 50%;
   left: 50%;

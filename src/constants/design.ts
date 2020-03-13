@@ -9,4 +9,4 @@ export const MENU_WIDTH = 330;
 // Dialogs
 export const DIALOG_MIN_HEIGHT = 130;
 export const DIALOG_MARGIN = 16;
-export const DIALOG_TOP = 32;
+export const DIALOG_TOP = 33;
