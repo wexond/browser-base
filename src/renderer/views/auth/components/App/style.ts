@@ -6,7 +6,7 @@ import {
 } from '~/renderer/mixins/dialogs';
 
 export const StyledApp = styled.div`
-  margin: 8px;
+  margin: 16px;
   padding: 16px;
   box-shadow: ${DIALOG_BOX_SHADOW};
   border-radius: ${DIALOG_BORDER_RADIUS}px;

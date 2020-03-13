@@ -10,6 +10,7 @@ import {
 
 export const StyledApp = styled.div`
   margin: 16px;
+  margin-top: 3px;
   box-shadow: ${DIALOG_BOX_SHADOW};
   border-radius: ${DIALOG_BORDER_RADIUS}px;
   background: white;
