@@ -33,6 +33,7 @@ export class Dialog extends BrowserView {
   private timeout: any;
   private hideTimeout: number;
   private name: string;
+  public tabId = -1;
 
   public constructor(
     appWindow: AppWindow,
@@ -54,6 +55,7 @@ export class Dialog extends BrowserView {
 
     ipcMain.on(`hide-${this.webContents.id}`, () => {
       this.hide(false, false);
+      this.tabId = -1;
     });
 
     if (process.env.NODE_ENV === 'development') {
@@ -106,13 +108,13 @@ export class Dialog extends BrowserView {
   }
 
   public hide(bringToTop = false, hideVisually = true) {
-    if (bringToTop) {
-      this.bringToTop();
-    }
-
     if (hideVisually) this.hideVisually();
 
     if (!this.visible) return;
+
+    if (bringToTop) {
+      this.bringToTop();
+    }
 
     clearTimeout(this.timeout);
 

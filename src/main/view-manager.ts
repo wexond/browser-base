@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from 'electron';
+import { ipcMain } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
@@ -148,6 +148,20 @@ export class ViewManager {
     }
 
     this.window.dialogs.previewDialog.hide(true);
+
+    [
+      'findDialog',
+      'authDialog',
+      'permissionsDialog',
+      'formFillDialog',
+      'credentialsDialog',
+    ].forEach(dialog => {
+      if (id === this.window.dialogs[dialog].tabId) {
+        this.window.dialogs[dialog].show();
+      } else {
+        this.window.dialogs[dialog].hide();
+      }
+    });
 
     this.fixBounds();
   }
