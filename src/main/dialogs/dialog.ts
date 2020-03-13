@@ -58,7 +58,7 @@ export class Dialog extends BrowserView {
     this.hideTimeout = hideTimeout;
     this.name = name;
 
-    ipcMain.on(`hide-${this.webContents.id}`, (e, showId) => {
+    ipcMain.on(`hide-${this.webContents.id}`, () => {
       this.hide(false, false);
       this.tabId = -1;
     });
@@ -101,7 +101,7 @@ export class Dialog extends BrowserView {
     if (!this.visible) this.show();
   }
 
-  public show(focus = true) {
+  public show(focus = true, waitForLoad = true) {
     return new Promise(resolve => {
       clearTimeout(this.timeout);
 
@@ -127,7 +127,7 @@ export class Dialog extends BrowserView {
         resolve();
       };
 
-      if (!this.loaded) {
+      if (!this.loaded && waitForLoad) {
         this.showCallback = callback;
         return;
       }

@@ -73,7 +73,7 @@ export class SearchDialog extends Dialog {
       this.appWindow.dialogs.previewDialog.hide(true);
     }
 
-    await super.show();
+    super.show(true, false);
 
     this.queueShow = true;
 

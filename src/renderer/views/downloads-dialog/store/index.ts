@@ -13,10 +13,6 @@ export class Store extends DialogStore {
   public constructor() {
     super();
 
-    ipcRenderer.on('visible', (e, flag) => {
-      this.visible = flag;
-    });
-
     ipcRenderer.on('download-started', (e, item) => {
       this.downloads.push(item);
     });
@@ -40,6 +36,10 @@ export class Store extends DialogStore {
     ipcRenderer.on('max-height', (e, height) => {
       this.maxHeight = height;
     });
+  }
+
+  public onVisibilityChange(visible: boolean) {
+    this.visible = visible;
   }
 }
 

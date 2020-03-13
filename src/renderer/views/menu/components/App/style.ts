@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { DialogStyle } from '~/renderer/mixins/dialogs';
 
 export const StyledApp = styled(DialogStyle)``;
