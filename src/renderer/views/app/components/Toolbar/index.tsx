@@ -24,8 +24,8 @@ import {
 
 const onDownloadsClick = (e: React.MouseEvent<HTMLDivElement>) => {
   store.downloadNotification = false;
-  const { left, width } = e.currentTarget.getBoundingClientRect();
-  ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, left + width / 2);
+  const { right } = e.currentTarget.getBoundingClientRect();
+  ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, right);
 };
 
 const onKeyClick = () => {
