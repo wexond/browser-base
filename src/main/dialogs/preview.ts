@@ -17,7 +17,7 @@ export class PreviewDialog extends Dialog {
       bounds: {
         width: appWindow.getBounds().width,
         height: HEIGHT,
-        y: 35,
+        y: 34,
       },
       hideTimeout: 200,
     });
