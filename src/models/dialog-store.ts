@@ -19,11 +19,16 @@ export class DialogStore {
   public firstTime = false;
 
   public constructor(
-    { hideOnBlur, visibilityWrapper } = {
+    options: {
+      hideOnBlur?: boolean;
+      visibilityWrapper?: boolean;
+    } = {},
+  ) {
+    const { visibilityWrapper, hideOnBlur } = {
       hideOnBlur: true,
       visibilityWrapper: true,
-    },
-  ) {
+      ...options,
+    };
     if (visibilityWrapper) {
       ipcRenderer.on('visible', async (e, flag, ...args) => {
         if (!this.firstTime) {
