@@ -1,6 +1,7 @@
 import { BrowserView, app, ipcMain } from 'electron';
 import { join } from 'path';
 import { AppWindow } from '../windows';
+import { makeId } from '~/utils';
 
 interface IOptions {
   name: string;
@@ -33,6 +34,7 @@ export class Dialog extends BrowserView {
   private timeout: any;
   private hideTimeout: number;
   private name: string;
+
   public tabId = -1;
 
   public constructor(
@@ -53,7 +55,7 @@ export class Dialog extends BrowserView {
     this.hideTimeout = hideTimeout;
     this.name = name;
 
-    ipcMain.on(`hide-${this.webContents.id}`, () => {
+    ipcMain.on(`hide-${this.webContents.id}`, (e, showId) => {
       this.hide(false, false);
       this.tabId = -1;
     });
@@ -90,16 +92,16 @@ export class Dialog extends BrowserView {
   public show(focus = true) {
     clearTimeout(this.timeout);
 
-    if (this.visible) {
-      if (focus) this.webContents.focus();
-      return;
-    }
-
     this.appWindow.webContents.send(
       'dialog-visibility-change',
       this.name,
       true,
     );
+
+    if (this.visible) {
+      if (focus) this.webContents.focus();
+      return;
+    }
 
     this.visible = true;
 
@@ -116,6 +118,12 @@ export class Dialog extends BrowserView {
   public hide(bringToTop = false, hideVisually = true) {
     if (hideVisually) this.hideVisually();
 
+    this.appWindow.webContents.send(
+      'dialog-visibility-change',
+      this.name,
+      false,
+    );
+
     if (!this.visible) return;
 
     if (bringToTop) {
@@ -123,12 +131,6 @@ export class Dialog extends BrowserView {
     }
 
     clearTimeout(this.timeout);
-
-    this.appWindow.webContents.send(
-      'dialog-visibility-change',
-      this.name,
-      false,
-    );
 
     if (this.hideTimeout) {
       this.timeout = setTimeout(() => {

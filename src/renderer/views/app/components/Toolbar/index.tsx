@@ -21,11 +21,14 @@ import {
   ICON_INCOGNITO,
   ICON_MORE,
 } from '~/renderer/constants/icons';
+import { isDialogVisible } from '../../utils/dialogs';
 
-const onDownloadsClick = (e: React.MouseEvent<HTMLDivElement>) => {
-  store.downloadNotification = false;
+const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
   const { right } = e.currentTarget.getBoundingClientRect();
-  ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, right);
+  if (!(await isDialogVisible('downloadsDialog'))) {
+    store.downloadNotification = false;
+    ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, right);
+  }
 };
 
 const onKeyClick = () => {
@@ -43,14 +46,19 @@ const onKeyClick = () => {
 let starRef: HTMLDivElement = null;
 let menuRef: HTMLDivElement = null;
 
-const showAddBookmarkDialog = () => {
-  const { right } = starRef.getBoundingClientRect();
-  ipcRenderer.send(`show-add-bookmark-dialog-${store.windowId}`, right);
+const showAddBookmarkDialog = async () => {
+  if (!(await isDialogVisible('addBookmarkDialog'))) {
+    const { right } = starRef.getBoundingClientRect();
+    ipcRenderer.send(`show-add-bookmark-dialog-${store.windowId}`, right);
+  }
 };
 
-const showMenuDialog = () => {
-  const { right } = menuRef.getBoundingClientRect();
-  ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right);
+const showMenuDialog = async () => {
+  console.log(await isDialogVisible('menuDialog'));
+  if (!(await isDialogVisible('menuDialog'))) {
+    const { right } = menuRef.getBoundingClientRect();
+    ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right);
+  }
 };
 
 ipcRenderer.on('show-add-bookmark-dialog', () => {
@@ -65,7 +73,7 @@ const onStarClick = (e: React.MouseEvent<HTMLDivElement>) => {
   showAddBookmarkDialog();
 };
 
-const onMenuClick = () => {
+const onMenuClick = async () => {
   showMenuDialog();
 };
 

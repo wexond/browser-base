@@ -52,6 +52,8 @@ export class IBrowserAction {
 
   public extensionId?: string;
 
+  public wasOpened = false;
+
   public constructor(options: Options) {
     const { icon, title, extensionId, popup } = options;
     this.icon = icon;

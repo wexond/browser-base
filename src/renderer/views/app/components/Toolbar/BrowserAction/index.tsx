@@ -19,6 +19,8 @@ const showPopup = (data: IBrowserAction, right: number, devtools: boolean) => {
   );
 };
 
+let canOpenPopup = true;
+
 const onClick = (data: IBrowserAction) => (
   e: React.MouseEvent<HTMLDivElement>,
 ) => {
@@ -27,8 +29,10 @@ const onClick = (data: IBrowserAction) => (
     //extensionsRenderer.browserAction.onClicked(data.extensionId, data.tabId);
   }
 
-  const { right } = e.currentTarget.getBoundingClientRect();
-  showPopup(data, right, false);
+  if (canOpenPopup) {
+    const { right } = e.currentTarget.getBoundingClientRect();
+    showPopup(data, right, false);
+  }
 };
 
 const onContextMenu = (data: IBrowserAction) => (
@@ -58,7 +62,10 @@ const onContextMenu = (data: IBrowserAction) => (
   menu.popup();
 };
 
-const onMouseDown = (data: IBrowserAction) => (e: any) => {
+const onMouseDown = (data: IBrowserAction) => async (e: any) => {
+  canOpenPopup =
+    !store.dialogsVisibility['extension-popup'] ||
+    data.extensionId !== store.extensions.currentlyToggledPopup;
   ipcRenderer.send(`hide-extension-popup-${store.windowId}`);
 };
 

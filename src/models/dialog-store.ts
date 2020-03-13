@@ -43,7 +43,7 @@ export class DialogStore {
       this.visible = false;
       setTimeout(() => {
         ipcRenderer.send(`hide-${this.id}`);
-      }, 10);
+      });
     }
   }
 }
