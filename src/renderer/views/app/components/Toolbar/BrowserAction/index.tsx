@@ -72,6 +72,7 @@ export const BrowserAction = observer(({ data }: Props) => {
       opacity={1}
       autoInvert={false}
       size={16}
+      toggled={store.dialogsVisibility['extension-popup']}
       icon={icon}
       badge={badgeText.trim() !== ''}
       badgeBackground={badgeBackgroundColor}

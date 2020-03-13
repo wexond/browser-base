@@ -54,6 +54,10 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.menuDialog.show();
   });
 
+  ipcMain.handle(`is-dialog-visible-${id}`, (e, dialog) => {
+    return appWindow.dialogs[dialog].visible;
+  });
+
   ipcMain.on(`search-show-${id}`, e => {
     appWindow.dialogs.searchDialog.show();
   });

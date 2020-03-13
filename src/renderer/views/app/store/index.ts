@@ -3,7 +3,7 @@ import { observable, computed, toJS } from 'mobx';
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import { ExtensionsStore } from './extensions';
 import { SettingsStore } from './settings';
 import { getCurrentWindow } from '../utils/windows';
@@ -58,6 +58,14 @@ export class Store {
 
   @observable
   public isBookmarked = false;
+
+  @observable
+  public dialogsVisibility: { [key: string]: boolean } = {
+    menu: false,
+    'add-bookmark': false,
+    'extension-popup': false,
+    'downloads-dialog': false,
+  };
 
   @computed
   public get downloadProgress() {
@@ -182,6 +190,10 @@ export class Store {
           toJS(tab.findInfo, { recurseEverything: true }),
         );
       }
+    });
+
+    ipcRenderer.on('dialog-visibility-change', (e, name, state) => {
+      this.dialogsVisibility[name] = state;
     });
 
     ipcRenderer.send('update-check');

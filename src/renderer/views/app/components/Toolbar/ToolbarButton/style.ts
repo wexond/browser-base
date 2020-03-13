@@ -57,12 +57,21 @@ export const Circle = styled.div`
   overflow: hidden;
   transition: 0.2s background-color;
 
-  ${({ theme }: { theme: ITheme }) => css`
-    &:hover {
-      background-color: ${theme['toolbar.lightForeground']
-        ? 'rgba(255, 255, 255, 0.08)'
-        : 'rgba(0, 0, 0, 0.06)'};
-    }
+  ${({ theme, toggled }: { theme: ITheme; toggled: boolean }) => css`
+    background-color: ${toggled
+      ? theme['toolbar.lightForeground']
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.1)'
+      : 'none'};
+
+    ${!toggled &&
+      css`
+        &:hover {
+          background-color: ${theme['toolbar.lightForeground']
+            ? 'rgba(255, 255, 255, 0.08)'
+            : 'rgba(0, 0, 0, 0.06)'};
+        }
+      `};
   `};
 `;
 

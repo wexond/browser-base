@@ -130,6 +130,7 @@ const RightButtons = observer(() => {
       {store.extensions.browserActions.length > 0 && <Separator />}
       <ToolbarButton
         divRef={r => (starRef = r)}
+        toggled={store.dialogsVisibility['add-bookmark']}
         icon={store.isBookmarked ? ICON_STAR_FILLED : ICON_STAR}
         size={18}
         onMouseDown={onStarClick}
@@ -152,6 +153,7 @@ const RightButtons = observer(() => {
           size={18}
           badge={store.downloadNotification}
           onMouseDown={onDownloadsClick}
+          toggled={store.dialogsVisibility['downloads-dialog']}
           icon={ICON_DOWNLOAD}
           badgeTop={9}
           badgeRight={9}
@@ -163,6 +165,7 @@ const RightButtons = observer(() => {
       {store.isIncognito && <ToolbarButton icon={ICON_INCOGNITO} size={18} />}
       <ToolbarButton
         divRef={r => (menuRef = r)}
+        toggled={store.dialogsVisibility['menu']}
         badge={store.updateAvailable}
         badgeRight={10}
         badgeTop={8}

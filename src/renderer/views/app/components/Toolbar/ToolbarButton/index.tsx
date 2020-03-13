@@ -28,6 +28,7 @@ interface Props {
   badgeRight?: number;
   preloader?: boolean;
   value?: number;
+  toggled?: boolean;
 }
 
 export const ToolbarButton = observer(
@@ -53,6 +54,7 @@ export const ToolbarButton = observer(
     preloader,
     onContextMenu,
     onMouseUp,
+    toggled,
   }: Props) => {
     style = { ...style };
 
@@ -78,7 +80,7 @@ export const ToolbarButton = observer(
           opacity={opacity}
           autoInvert={autoInvert}
         />
-        <Circle></Circle>
+        <Circle toggled={toggled}></Circle>
         {badge && (
           <Badge
             right={badgeRight}

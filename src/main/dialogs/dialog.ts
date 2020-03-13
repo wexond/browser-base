@@ -95,6 +95,12 @@ export class Dialog extends BrowserView {
       return;
     }
 
+    this.appWindow.webContents.send(
+      'dialog-visibility-change',
+      this.name,
+      true,
+    );
+
     this.visible = true;
 
     this.appWindow.addBrowserView(this);
@@ -117,6 +123,12 @@ export class Dialog extends BrowserView {
     }
 
     clearTimeout(this.timeout);
+
+    this.appWindow.webContents.send(
+      'dialog-visibility-change',
+      this.name,
+      false,
+    );
 
     if (this.hideTimeout) {
       this.timeout = setTimeout(() => {
