@@ -33,6 +33,7 @@ export class FindDialog extends Dialog {
   }
 
   public updateInfo(tabId: number, data: any) {
+    this.tabId = tabId;
     this.webContents.send('update-info', tabId, data);
   }
 

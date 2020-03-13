@@ -121,6 +121,7 @@ export class SessionsManager {
                 permission,
                 webContents.getURL(),
                 details,
+                webContents.id,
               );
 
               callback(response);
