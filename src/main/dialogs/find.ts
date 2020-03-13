@@ -1,5 +1,5 @@
 import { AppWindow } from '../windows';
-import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { TOOLBAR_HEIGHT, DIALOG_MIN_HEIGHT } from '~/constants/design';
 import { Dialog } from '.';
 import { ipcMain } from 'electron';
 
@@ -24,6 +24,12 @@ export class FindDialog extends Dialog {
 
   public show() {
     super.show();
+  }
+
+  public rearrangePreview(toggle: boolean) {
+    super.rearrange({
+      height: toggle ? DIALOG_MIN_HEIGHT : HEIGHT,
+    });
   }
 
   public find(tabId: number, data: any) {

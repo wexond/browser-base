@@ -28,9 +28,14 @@ export class PreviewDialog extends Dialog {
     super.rearrange({ width });
   }
 
+  public rearrangeDialogs(toggle: boolean) {
+    this.appWindow.dialogs.searchDialog.rearrangePreview(toggle);
+    this.appWindow.dialogs.findDialog.rearrangePreview(toggle);
+  }
+
   public show() {
     clearTimeout(this.timeout1);
-    this.appWindow.dialogs.searchDialog.rearrangePreview(true);
+    this.rearrangeDialogs(true);
 
     super.show(false);
 
@@ -50,7 +55,7 @@ export class PreviewDialog extends Dialog {
   public hide(bringToTop = true) {
     clearTimeout(this.timeout1);
     this.timeout1 = setTimeout(() => {
-      this.appWindow.dialogs.searchDialog.rearrangePreview(false);
+      this.rearrangeDialogs(false);
     }, 210);
 
     super.hide(bringToTop);
