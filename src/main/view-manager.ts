@@ -139,15 +139,15 @@ export class ViewManager {
     view.webContents.focus();
 
     if (view.webContents.getURL().startsWith(NEWTAB_URL) || view.isNewTab) {
-      this.window.dialogs.previewDialog.hide(true);
       this.window.dialogs.searchDialog.bringToTop();
       this.window.dialogs.searchDialog.show();
     } else {
       if (this.window.dialogs.searchDialog.visible) {
         this.window.dialogs.searchDialog.hide(true);
       }
-      this.window.dialogs.previewDialog.hide(true);
     }
+
+    this.window.dialogs.previewDialog.hide(true);
 
     this.fixBounds();
   }

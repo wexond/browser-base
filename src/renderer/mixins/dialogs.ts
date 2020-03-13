@@ -1,13 +1,15 @@
-import { DIALOG_EASING } from '../constants';
 import { ITheme } from '~/interfaces';
 import styled, { css } from 'styled-components';
 
-export const DIALOG_TRANSITION = `0.2s opacity, 0.35s transform ${DIALOG_EASING}`;
+export const DIALOG_TRANSITION = `0.2s opacity`;
+
+export const DIALOG_BOX_SHADOW =
+  '0 12px 16px rgba(0, 0, 0, 0.12), 0 8px 10px rgba(0, 0, 0, 0.16)';
 
 export const DialogStyle = styled.div`
-  margin: 8px;
+  margin: 16px;
   margin-top: 3px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  box-shadow: ${DIALOG_BOX_SHADOW};
   border-radius: 6px;
   overflow: hidden;
   position: relative;
@@ -23,7 +25,6 @@ export const DialogStyle = styled.div`
   }) => css`
     transition: ${!visible && !hideTransition ? 'none' : DIALOG_TRANSITION};
     opacity: ${visible ? 1 : 0};
-    transform: translateY(${visible ? 0 : -10}px);
     background-color: ${theme['dialog.backgroundColor']};
   `}
 `;

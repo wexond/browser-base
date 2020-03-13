@@ -3,8 +3,8 @@ import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { Dialog } from '.';
 import { ipcMain } from 'electron';
 
-const WIDTH = 400;
-const HEIGHT = 64;
+const WIDTH = 416;
+const HEIGHT = 70;
 
 export class FindDialog extends Dialog {
   public constructor(appWindow: AppWindow) {
@@ -13,7 +13,7 @@ export class FindDialog extends Dialog {
       bounds: {
         width: WIDTH,
         height: HEIGHT,
-        y: TOOLBAR_HEIGHT,
+        y: TOOLBAR_HEIGHT + 8,
       },
     });
 

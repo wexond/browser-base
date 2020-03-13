@@ -34,7 +34,7 @@ export class DownloadsDialog extends Dialog {
 
     super.rearrange({
       x: Math.round(Math.min(this.left - WIDTH / 2, width - WIDTH)),
-      height: Math.round(Math.min(height, this.height + 16)),
+      height: Math.round(Math.min(height, this.height + 28)),
     });
 
     this.webContents.send(`max-height`, Math.min(maxHeight, this.height));

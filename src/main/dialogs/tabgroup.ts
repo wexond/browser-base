@@ -2,8 +2,8 @@ import { AppWindow } from '../windows';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { Dialog } from '.';
 
-const WIDTH = 250;
-const HEIGHT = 150;
+const WIDTH = 266;
+const HEIGHT = 180;
 
 export class TabGroupDialog extends Dialog {
   public visible = false;

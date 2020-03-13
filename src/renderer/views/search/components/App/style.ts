@@ -1,16 +1,12 @@
 import styled, { css } from 'styled-components';
-import { centerIcon, shadows } from '~/renderer/mixins';
-import { BLUE_500, BLUE_300 } from '~/renderer/constants';
+import { centerIcon } from '~/renderer/mixins';
+import { BLUE_300 } from '~/renderer/constants';
 import { ITheme } from '~/interfaces';
-import { DialogStyle } from '~/renderer/mixins/dialogs';
+import { DialogStyle, DIALOG_BOX_SHADOW } from '~/renderer/mixins/dialogs';
 
 export const StyledApp = styled(DialogStyle)`
   margin-top: 10px;
-  ${({ theme }: { theme?: ITheme }) => css`
-    box-shadow: 0 0 0 2px
-        ${theme['searchBox.input.lightForeground'] ? BLUE_500 : BLUE_300},
-      ${shadows(4)};
-  `}
+  box-shadow: 0 0 0 3px ${BLUE_300}, ${DIALOG_BOX_SHADOW};
 `;
 
 export const Title = styled.div`

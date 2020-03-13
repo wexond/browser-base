@@ -2,7 +2,7 @@ import { AppWindow } from '../windows';
 import { Dialog } from '.';
 import { windowsManager } from '..';
 
-const WIDTH = 350;
+const WIDTH = 366;
 
 export class AddBookmarkDialog extends Dialog {
   public visible = false;
@@ -14,7 +14,7 @@ export class AddBookmarkDialog extends Dialog {
       name: 'add-bookmark',
       bounds: {
         width: WIDTH,
-        height: 228,
+        height: 240,
         y: 34,
       },
     });

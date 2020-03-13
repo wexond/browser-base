@@ -3,8 +3,8 @@ import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { AppWindow } from '../windows';
 import { Dialog } from '.';
 
-const HEIGHT = 175;
-const WIDTH = 350;
+const HEIGHT = 165;
+const WIDTH = 366;
 
 export class PermissionsDialog extends Dialog {
   public constructor(appWindow: AppWindow) {
