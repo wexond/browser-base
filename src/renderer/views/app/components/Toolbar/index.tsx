@@ -54,7 +54,6 @@ const showAddBookmarkDialog = async () => {
 };
 
 const showMenuDialog = async () => {
-  console.log(await isDialogVisible('menuDialog'));
   if (!(await isDialogVisible('menuDialog'))) {
     const { right } = menuRef.getBoundingClientRect();
     ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right);

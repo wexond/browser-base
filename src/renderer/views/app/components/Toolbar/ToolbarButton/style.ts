@@ -32,21 +32,6 @@ export const Icon = styled.div`
   `};
 `;
 
-export const Button = styled.div`
-  height: ${TOOLBAR_HEIGHT}px;
-
-  position: relative;
-  transition: 0.2s background-color;
-  width: ${TOOLBAR_BUTTON_WIDTH}px;
-  backface-visibility: hidden;
-  margin-right: 2px;
-
-  ${({ disabled }: { disabled: boolean }) => css`
-    pointer-events: ${disabled ? 'none' : 'inherit'};
-    -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
-  `};
-`;
-
 export const Circle = styled.div`
   border-radius: 4px;
   width: 38px;
@@ -73,6 +58,29 @@ export const Circle = styled.div`
             : 'rgba(0, 0, 0, 0.06)'};
         }
       `};
+  `};
+`;
+
+export const Button = styled.div`
+  height: ${TOOLBAR_HEIGHT}px;
+
+  position: relative;
+  transition: 0.2s background-color;
+  width: ${TOOLBAR_BUTTON_WIDTH}px;
+  backface-visibility: hidden;
+  margin-right: 2px;
+
+  ${({ disabled, theme }: { disabled: boolean; theme: ITheme }) => css`
+    pointer-events: ${disabled ? 'none' : 'inherit'};
+    -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
+
+    &:active {
+      & ${Circle} {
+        background-color: ${theme['toolbar.lightForeground']
+          ? 'rgba(255, 255, 255, 0.12)'
+          : 'rgba(0, 0, 0, 0.1)'};
+      }
+    }
   `};
 `;
 
