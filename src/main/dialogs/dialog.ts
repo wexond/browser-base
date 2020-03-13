@@ -37,6 +37,9 @@ export class Dialog extends BrowserView {
 
   public tabId = -1;
 
+  private loaded = false;
+  private showCallback: any = null;
+
   public constructor(
     appWindow: AppWindow,
     { bounds, name, devtools, hideTimeout, webPreferences }: IOptions,
@@ -58,6 +61,15 @@ export class Dialog extends BrowserView {
     ipcMain.on(`hide-${this.webContents.id}`, (e, showId) => {
       this.hide(false, false);
       this.tabId = -1;
+    });
+
+    this.webContents.once('dom-ready', () => {
+      this.loaded = true;
+
+      if (this.showCallback) {
+        this.showCallback();
+        this.showCallback = null;
+      }
     });
 
     if (process.env.NODE_ENV === 'development') {
@@ -90,25 +102,38 @@ export class Dialog extends BrowserView {
   }
 
   public show(focus = true) {
-    clearTimeout(this.timeout);
+    return new Promise(resolve => {
+      clearTimeout(this.timeout);
 
-    this.appWindow.webContents.send(
-      'dialog-visibility-change',
-      this.name,
-      true,
-    );
+      this.appWindow.webContents.send(
+        'dialog-visibility-change',
+        this.name,
+        true,
+      );
 
-    if (this.visible) {
-      if (focus) this.webContents.focus();
-      return;
-    }
+      const callback = () => {
+        if (this.visible) {
+          if (focus) this.webContents.focus();
+          return;
+        }
 
-    this.visible = true;
+        this.visible = true;
 
-    this.appWindow.addBrowserView(this);
-    this.rearrange();
+        this.appWindow.addBrowserView(this);
+        this.rearrange();
 
-    if (focus) this.webContents.focus();
+        if (focus) this.webContents.focus();
+
+        resolve();
+      };
+
+      if (!this.loaded) {
+        this.showCallback = callback;
+        return;
+      }
+
+      callback();
+    });
   }
 
   public hideVisually() {

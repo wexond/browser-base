@@ -33,11 +33,11 @@ export class PreviewDialog extends Dialog {
     this.appWindow.dialogs.findDialog.rearrangePreview(toggle);
   }
 
-  public show() {
+  public async show() {
     clearTimeout(this.timeout1);
     this.rearrangeDialogs(true);
 
-    super.show(false);
+    await super.show(false);
 
     const tab = this.appWindow.viewManager.views.get(this.tab.id);
 

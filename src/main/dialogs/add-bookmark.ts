@@ -27,8 +27,8 @@ export class AddBookmarkDialog extends Dialog {
     });
   }
 
-  public show() {
-    super.show();
+  public async show() {
+    await super.show();
     const view = windowsManager.currentWindow.viewManager.selected;
 
     this.webContents.send('visible', true, {

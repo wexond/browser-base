@@ -25,8 +25,8 @@ export class MenuDialog extends Dialog {
     super.rearrange({ x: this.left - WIDTH + DIALOG_MARGIN });
   }
 
-  public show() {
-    super.show();
+  public async show() {
+    await super.show();
     this.webContents.send('visible', true);
   }
 }

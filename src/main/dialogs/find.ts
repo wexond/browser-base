@@ -22,10 +22,6 @@ export class FindDialog extends Dialog {
     });
   }
 
-  public show() {
-    super.show();
-  }
-
   public rearrangePreview(toggle: boolean) {
     super.rearrange({
       height: toggle ? DIALOG_MIN_HEIGHT : HEIGHT,

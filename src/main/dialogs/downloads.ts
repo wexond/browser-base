@@ -41,8 +41,8 @@ export class DownloadsDialog extends Dialog {
     this.webContents.send(`max-height`, Math.min(maxHeight, this.height));
   }
 
-  public show() {
-    super.show();
+  public async show() {
+    await super.show();
     this.webContents.send('visible', true);
   }
 }

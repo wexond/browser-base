@@ -50,8 +50,8 @@ export class ExtensionPopup extends Dialog {
     });
   }
 
-  public show(inspect = false) {
-    super.show();
+  public async show(inspect = false) {
+    await super.show();
     this.webContents.send('visible', true, { url: this.url, inspect });
   }
 }
