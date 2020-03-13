@@ -259,6 +259,14 @@ export class TabsStore {
   public async addTabs(options: chrome.tabs.CreateProperties[]) {
     ipcRenderer.send(`hide-window-${store.windowId}`);
 
+    for (let i = 0; i < options.length; i++) {
+      if (i === options.length - 1) {
+        options[i].active = true;
+      } else {
+        options[i].active = false;
+      }
+    }
+
     const ids = await ipcRenderer.invoke(
       `views-create-${store.windowId}`,
       options,
