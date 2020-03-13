@@ -1,6 +1,7 @@
 import { AppWindow } from '../windows';
 import { Dialog } from '.';
 import { ipcMain } from 'electron';
+import { DIALOG_MARGIN } from '~/constants/design';
 
 const WIDTH = 350;
 
@@ -28,12 +29,12 @@ export class DownloadsDialog extends Dialog {
   }
 
   public rearrange() {
-    const { width, height } = this.appWindow.getContentBounds();
+    const { height } = this.appWindow.getContentBounds();
 
     const maxHeight = height - 34 - 16;
 
     super.rearrange({
-      x: Math.round(Math.min(this.left - WIDTH / 2, width - WIDTH)),
+      x: Math.round(this.left - WIDTH + DIALOG_MARGIN),
       height: Math.round(Math.min(height, this.height + 28)),
     });
 

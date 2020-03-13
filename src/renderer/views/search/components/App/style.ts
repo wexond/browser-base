@@ -6,6 +6,7 @@ import { DialogStyle, DIALOG_BOX_SHADOW } from '~/renderer/mixins/dialogs';
 
 export const StyledApp = styled(DialogStyle)`
   margin-top: 10px;
+  border-radius: 6px;
   box-shadow: 0 0 0 3px ${BLUE_300}, ${DIALOG_BOX_SHADOW};
 `;
 

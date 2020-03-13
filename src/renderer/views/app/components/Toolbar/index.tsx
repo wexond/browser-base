@@ -41,17 +41,24 @@ const onKeyClick = () => {
 };
 
 let starRef: HTMLDivElement = null;
+let menuRef: HTMLDivElement = null;
 
 const showAddBookmarkDialog = () => {
-  const { left, width } = starRef.getBoundingClientRect();
-  ipcRenderer.send(
-    `show-add-bookmark-dialog-${store.windowId}`,
-    left + width / 2,
-  );
+  const { right } = starRef.getBoundingClientRect();
+  ipcRenderer.send(`show-add-bookmark-dialog-${store.windowId}`, right);
+};
+
+const showMenuDialog = () => {
+  const { right } = menuRef.getBoundingClientRect();
+  ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right);
 };
 
 ipcRenderer.on('show-add-bookmark-dialog', () => {
   showAddBookmarkDialog();
+});
+
+ipcRenderer.on('show-menu-dialog', () => {
+  showMenuDialog();
 });
 
 const onStarClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -59,7 +66,7 @@ const onStarClick = (e: React.MouseEvent<HTMLDivElement>) => {
 };
 
 const onMenuClick = () => {
-  ipcRenderer.send(`menu-show-${store.windowId}`);
+  showMenuDialog();
 };
 
 const BrowserActions = observer(() => {
@@ -155,6 +162,7 @@ const RightButtons = observer(() => {
       <Separator />
       {store.isIncognito && <ToolbarButton icon={ICON_INCOGNITO} size={18} />}
       <ToolbarButton
+        divRef={r => (menuRef = r)}
         badge={store.updateAvailable}
         badgeRight={10}
         badgeTop={8}

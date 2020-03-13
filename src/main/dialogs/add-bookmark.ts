@@ -1,6 +1,7 @@
 import { AppWindow } from '../windows';
 import { Dialog } from '.';
 import { windowsManager } from '..';
+import { DIALOG_MARGIN } from '~/constants/design';
 
 const WIDTH = 366;
 
@@ -21,10 +22,8 @@ export class AddBookmarkDialog extends Dialog {
   }
 
   public rearrange() {
-    const { width } = this.appWindow.getContentBounds();
-
     super.rearrange({
-      x: Math.round(Math.min(this.left - WIDTH / 2, width - WIDTH)),
+      x: Math.round(this.left - WIDTH + DIALOG_MARGIN),
     });
   }
 

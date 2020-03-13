@@ -9,6 +9,15 @@ interface Props {
   data: IBrowserAction;
 }
 
+const showPopup = (popup: string, right: number, devtools: boolean) => {
+  ipcRenderer.send(
+    `show-extension-popup-${store.windowId}`,
+    right,
+    popup,
+    devtools,
+  );
+};
+
 const onClick = (data: IBrowserAction) => (
   e: React.MouseEvent<HTMLDivElement>,
 ) => {
@@ -17,12 +26,8 @@ const onClick = (data: IBrowserAction) => (
     //extensionsRenderer.browserAction.onClicked(data.extensionId, data.tabId);
   }
 
-  const { left, width } = e.currentTarget.getBoundingClientRect();
-  ipcRenderer.send(
-    `show-extension-popup-${store.windowId}`,
-    left + width,
-    data.popup,
-  );
+  const { right } = e.currentTarget.getBoundingClientRect();
+  showPopup(data.popup, right, false);
 };
 
 const onContextMenu = (data: IBrowserAction) => (
@@ -33,14 +38,8 @@ const onContextMenu = (data: IBrowserAction) => (
     {
       label: 'Inspect popup',
       click: () => {
-        const { left, width } = (target as any).getBoundingClientRect();
-
-        ipcRenderer.send(
-          `show-extension-popup-${store.windowId}`,
-          left + width,
-          data.popup,
-          true,
-        );
+        const { right } = (target as any).getBoundingClientRect();
+        showPopup(data.popup, right, true);
       },
     },
     {

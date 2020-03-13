@@ -1,5 +1,5 @@
 import { AppWindow } from '../windows';
-import { MENU_WIDTH } from '~/constants/design';
+import { MENU_WIDTH, DIALOG_MARGIN } from '~/constants/design';
 import { Dialog } from '.';
 
 const WIDTH = MENU_WIDTH;
@@ -7,6 +7,7 @@ const HEIGHT = 550;
 
 export class MenuDialog extends Dialog {
   public visible = false;
+  public left = 0;
 
   constructor(appWindow: AppWindow) {
     super(appWindow, {
@@ -21,8 +22,7 @@ export class MenuDialog extends Dialog {
   }
 
   public rearrange() {
-    const { width } = this.appWindow.getContentBounds();
-    super.rearrange({ x: width - WIDTH });
+    super.rearrange({ x: this.left - WIDTH + DIALOG_MARGIN });
   }
 
   public show() {
