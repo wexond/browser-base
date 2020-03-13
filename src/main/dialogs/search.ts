@@ -4,7 +4,7 @@ import { Dialog } from '.';
 import { NEWTAB_URL } from '~/constants/tabs';
 
 const WIDTH = 800;
-const HEIGHT = 56;
+const HEIGHT = 80;
 
 export class SearchDialog extends Dialog {
   private queueShow = false;
@@ -28,11 +28,11 @@ export class SearchDialog extends Dialog {
       const { width } = this.appWindow.getContentBounds();
       super.rearrange({
         height: this.isPreviewVisible
-          ? Math.max(120, 56 + height)
-          : 56 + height,
+          ? Math.max(120, HEIGHT + height)
+          : HEIGHT + height,
         x: Math.round(width / 2 - WIDTH / 2),
       });
-      this.lastHeight = 56 + height;
+      this.lastHeight = HEIGHT + height;
     });
 
     ipcMain.on(`can-show-${this.webContents.id}`, () => {

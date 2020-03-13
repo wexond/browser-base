@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from 'electron';
+import { ipcMain } from 'electron';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
@@ -145,8 +145,9 @@ export class ViewManager {
       if (this.window.dialogs.searchDialog.visible) {
         this.window.dialogs.searchDialog.hide(true);
       }
-      this.window.dialogs.previewDialog.hide(true);
     }
+
+    this.window.dialogs.previewDialog.hide(true);
 
     [
       'findDialog',

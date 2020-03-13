@@ -79,7 +79,7 @@ const createWebview = (url: string, inspect: boolean) => {
       container.style.width = (width < 10 ? 200 : width) + 'px';
       container.style.height = height + 'px';
 
-      ipcRenderer.send(`bounds-${getWebContentsId()}`, width + 16, height + 16);
+      ipcRenderer.send(`bounds-${getWebContentsId()}`, width + 32, height + 40);
 
       show();
 

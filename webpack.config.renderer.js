@@ -48,7 +48,7 @@ applyEntries('app', appConfig, [
   'search',
   'preview',
   'tabgroup',
-  'downloads',
+  'downloads-dialog',
   'add-bookmark',
 ]);
 

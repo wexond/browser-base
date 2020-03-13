@@ -3,10 +3,11 @@ import styled, { css } from 'styled-components';
 import { centerIcon } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
 import { ICON_SEARCH } from '~/renderer/constants';
+import { DIALOG_BOX_SHADOW } from '~/renderer/mixins/dialogs';
 
 export const StyledApp = styled.div`
-  margin: 8px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  margin: 16px;
+  box-shadow: ${DIALOG_BOX_SHADOW};
   border-radius: 6px;
   background: white;
 
