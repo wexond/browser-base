@@ -45,7 +45,7 @@ export class ExtensionPopup extends Dialog {
     const { width } = this.appWindow.getContentBounds();
 
     super.rearrange({
-      x: Math.round(Math.min(this.left - this.width + 12, width - this.width)),
+      x: Math.round(Math.min(this.left - this.width + 14, width - this.width)),
       height: Math.round(Math.min(1024, this.height)),
       width: Math.round(Math.min(1024, this.width)),
     });
