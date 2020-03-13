@@ -14,7 +14,7 @@ export const App = hot(
     return (
       <ThemeProvider theme={{ ...store.theme }}>
         <StyledApp
-          style={{ marginLeft: 8 + store.x }}
+          style={{ transform: `translateX(${store.x}px)` }}
           xTransition={store.xTransition}
           visible={store.visible}
         >

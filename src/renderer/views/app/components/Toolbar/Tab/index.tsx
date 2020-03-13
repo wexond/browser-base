@@ -52,7 +52,7 @@ const onMouseEnter = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
     store.tabs.hoveredTabId = tab.id;
   }
 
-  const x = e.currentTarget.getBoundingClientRect().left;
+  const x = tab.ref.current.getBoundingClientRect().left + 8;
 
   if (store.tabs.canShowPreview && !store.tabs.isDragging) {
     ipcRenderer.send(`show-tab-preview-${store.windowId}`, {

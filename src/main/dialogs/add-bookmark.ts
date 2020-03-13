@@ -1,7 +1,7 @@
 import { AppWindow } from '../windows';
 import { Dialog } from '.';
 import { windowsManager } from '..';
-import { DIALOG_MARGIN } from '~/constants/design';
+import { DIALOG_MARGIN, DIALOG_TOP } from '~/constants/design';
 
 const WIDTH = 366;
 
@@ -16,7 +16,7 @@ export class AddBookmarkDialog extends Dialog {
       bounds: {
         width: WIDTH,
         height: 240,
-        y: 34,
+        y: DIALOG_TOP,
       },
     });
   }

@@ -1,7 +1,7 @@
 import { AppWindow } from '../windows';
 import { Dialog } from '.';
 import { ipcMain } from 'electron';
-import { DIALOG_MARGIN } from '~/constants/design';
+import { DIALOG_MARGIN, DIALOG_TOP } from '~/constants/design';
 
 export class ExtensionPopup extends Dialog {
   public visible = false;
@@ -20,7 +20,7 @@ export class ExtensionPopup extends Dialog {
       bounds: {
         width: 512,
         height: 512,
-        y: 34,
+        y: DIALOG_TOP,
       },
       devtools: false,
       webPreferences: {

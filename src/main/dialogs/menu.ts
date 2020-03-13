@@ -1,5 +1,5 @@
 import { AppWindow } from '../windows';
-import { MENU_WIDTH, DIALOG_MARGIN } from '~/constants/design';
+import { MENU_WIDTH, DIALOG_MARGIN, DIALOG_TOP } from '~/constants/design';
 import { Dialog } from '.';
 
 const WIDTH = MENU_WIDTH;
@@ -15,7 +15,7 @@ export class MenuDialog extends Dialog {
       bounds: {
         width: WIDTH,
         height: HEIGHT,
-        y: 34,
+        y: DIALOG_TOP,
       },
       devtools: false,
     });
