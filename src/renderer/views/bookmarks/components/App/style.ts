@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { shadows } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
+import { DIALOG_BORDER_RADIUS } from '~/renderer/mixins/dialogs';
 
 export const PathView = styled.div`
   margin-top: 48px;
@@ -36,7 +37,7 @@ export const Dialog = styled.div`
   padding: 16px;
   left: 50%;
   top: 50%;
-  border-radius: 6px;
+  border-radius: ${DIALOG_BORDER_RADIUS}px;
   z-index: 999;
   box-shadow: ${shadows(8)};
   transition: 0.2s opacity;
