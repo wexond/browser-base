@@ -37,7 +37,7 @@ export class PreviewDialog extends Dialog {
     clearTimeout(this.timeout1);
     this.rearrangeDialogs(true);
 
-    await super.show(false);
+    super.show(false);
 
     const tab = this.appWindow.viewManager.views.get(this.tab.id);
 
