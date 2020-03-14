@@ -1,6 +1,6 @@
 import { ipcMain, nativeTheme, dialog } from 'electron';
 
-import { DEFAULT_SETTINGS } from '~/constants';
+import { DEFAULT_SETTINGS, DEFAULT_SEARCH_ENGINES } from '~/constants';
 
 import { promises } from 'fs';
 
@@ -133,14 +133,13 @@ export class Settings extends EventEmitter {
       const file = await promises.readFile(getPath('settings.json'), 'utf8');
       const json = JSON.parse(file);
 
-      if (!json.version) {
-        // Migrate from 3.0.0 to 3.1.0
-        json.searchEngines = [];
-      }
-
       if (typeof json.version === 'string') {
         // Migrate from 3.1.0
         storage.remove({ scope: 'startupTabs', query: {}, multi: true });
+      }
+
+      if (typeof json.version === 'string' || json.version === 1) {
+        json.searchEngines = DEFAULT_SEARCH_ENGINES;
       }
 
       if (json.themeAuto === undefined) {

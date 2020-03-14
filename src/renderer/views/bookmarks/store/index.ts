@@ -52,7 +52,7 @@ export class Store {
 
   public set dialogVisible(value: boolean) {
     if (!value) {
-      this.nameInputRef.current.inputRef.current.value = '';
+      this.nameInputRef.current.value = '';
     }
 
     this.menuVisible = false;
@@ -65,10 +65,10 @@ export class Store {
     this.dialogVisible = true;
 
     if (content === 'edit' || content === 'rename-folder') {
-      this.nameInputRef.current.inputRef.current.value = this.currentBookmark.title;
+      this.nameInputRef.current.value = this.currentBookmark.title;
 
       if (content === 'edit') {
-        this.urlInputRef.current.inputRef.current.value = this.currentBookmark.url;
+        this.urlInputRef.current.value = this.currentBookmark.url;
       }
     }
 

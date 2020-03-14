@@ -1,10 +1,10 @@
 import { observable, computed } from 'mobx';
-import { DEFAULT_SEARCH_ENGINES } from '~/constants';
+import * as React from 'react';
 import { ISettings, ITheme, ISearchEngine } from '~/interfaces';
 import { AutoFillStore } from './autofill';
 import { StartupTabsStore } from './startup-tabs';
-import { makeId } from '~/utils/string';
 import { getTheme } from '~/utils/themes';
+import { Textfield } from '~/renderer/components/Textfield';
 
 export type SettingsSection =
   | 'appearance'
@@ -16,17 +16,53 @@ export type SettingsSection =
   | 'language'
   | 'shortcuts'
   | 'downloads'
-  | 'system';
+  | 'system'
+  | 'search-engines';
 
 export class Store {
   public autoFill = new AutoFillStore();
   public startupTabs = new StartupTabsStore();
 
-  @observable
-  public menuToggled = false;
+  public menuRef = React.createRef<HTMLDivElement>();
+
+  public dialogRef = React.createRef<HTMLDivElement>();
+
+  public searchEngineInputRef = React.createRef<Textfield>();
+  public searchEngineKeywordInputRef = React.createRef<Textfield>();
+  public searchEngineUrlInputRef = React.createRef<Textfield>();
 
   @observable
-  public dialogContent: 'privacy' | 'edit-address' = null;
+  public menuInfo = {
+    left: 0,
+    top: 0,
+  };
+
+  @observable
+  private _menuVisible = false;
+
+  @computed
+  public get menuVisible() {
+    return this._menuVisible;
+  }
+
+  public set menuVisible(value: boolean) {
+    this._menuVisible = value;
+
+    if (value) {
+      this.menuRef.current.focus();
+    }
+  }
+
+  @observable
+  public dialogVisible = false;
+
+  @observable
+  public dialogContent:
+    | 'edit-search-engine'
+    | 'add-search-engine'
+    | 'edit-address'
+    | 'edit-password'
+    | 'privacy' = null;
 
   @observable
   public selectedSection: SettingsSection = 'appearance';
@@ -34,17 +70,17 @@ export class Store {
   @observable
   public settings: ISettings = { ...(window as any).settings };
 
+  @observable
+  public editedSearchEngine: ISearchEngine;
+
   @computed
   public get theme(): ITheme {
     return getTheme(this.settings.theme);
   }
 
-  @observable
-  public searchEngines: ISearchEngine[] = DEFAULT_SEARCH_ENGINES;
-
   @computed
   public get searchEngine() {
-    return this.searchEngines[this.settings.searchEngine];
+    return this.settings.searchEngines[this.settings.searchEngine];
   }
 
   constructor() {
