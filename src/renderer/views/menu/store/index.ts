@@ -11,21 +11,22 @@ export class Store extends DialogStore {
 
   public constructor() {
     super();
-    ipcRenderer.on('visible', async (e, flag) => {
-      this.visible = flag;
-
-      if (flag) {
-        if (remote.getCurrentWindow()) {
-          this.alwaysOnTop = remote.getCurrentWindow().isAlwaysOnTop();
-        }
-
-        this.updateAvailable = await ipcRenderer.invoke('is-update-available');
-      }
-    });
 
     ipcRenderer.on('update-available', () => {
       this.updateAvailable = true;
     });
+  }
+
+  public async onVisibilityChange(visible: boolean) {
+    this.visible = visible;
+
+    if (visible) {
+      if (remote.getCurrentWindow()) {
+        this.alwaysOnTop = remote.getCurrentWindow().isAlwaysOnTop();
+      }
+
+      this.updateAvailable = await ipcRenderer.invoke('is-update-available');
+    }
   }
 
   public async save() {

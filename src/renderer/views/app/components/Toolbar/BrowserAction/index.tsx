@@ -9,6 +9,18 @@ interface Props {
   data: IBrowserAction;
 }
 
+const showPopup = (data: IBrowserAction, right: number, devtools: boolean) => {
+  store.extensions.currentlyToggledPopup = data.extensionId;
+  ipcRenderer.send(
+    `show-extension-popup-${store.windowId}`,
+    right,
+    data.popup,
+    devtools,
+  );
+};
+
+let canOpenPopup = true;
+
 const onClick = (data: IBrowserAction) => (
   e: React.MouseEvent<HTMLDivElement>,
 ) => {
@@ -17,12 +29,10 @@ const onClick = (data: IBrowserAction) => (
     //extensionsRenderer.browserAction.onClicked(data.extensionId, data.tabId);
   }
 
-  const { left, width } = e.currentTarget.getBoundingClientRect();
-  ipcRenderer.send(
-    `show-extension-popup-${store.windowId}`,
-    left + width,
-    data.popup,
-  );
+  if (canOpenPopup) {
+    const { right } = e.currentTarget.getBoundingClientRect();
+    showPopup(data, right, false);
+  }
 };
 
 const onContextMenu = (data: IBrowserAction) => (
@@ -33,14 +43,8 @@ const onContextMenu = (data: IBrowserAction) => (
     {
       label: 'Inspect popup',
       click: () => {
-        const { left, width } = (target as any).getBoundingClientRect();
-
-        ipcRenderer.send(
-          `show-extension-popup-${store.windowId}`,
-          left + width,
-          data.popup,
-          true,
-        );
+        const { right } = (target as any).getBoundingClientRect();
+        showPopup(data, right, true);
       },
     },
     {
@@ -58,12 +62,21 @@ const onContextMenu = (data: IBrowserAction) => (
   menu.popup();
 };
 
-const onMouseDown = (data: IBrowserAction) => (e: any) => {
+const onMouseDown = (data: IBrowserAction) => async (e: any) => {
+  canOpenPopup =
+    !store.dialogsVisibility['extension-popup'] ||
+    data.extensionId !== store.extensions.currentlyToggledPopup;
   ipcRenderer.send(`hide-extension-popup-${store.windowId}`);
 };
 
 export const BrowserAction = observer(({ data }: Props) => {
-  const { icon, badgeText, badgeBackgroundColor, badgeTextColor } = data;
+  const {
+    icon,
+    badgeText,
+    badgeBackgroundColor,
+    badgeTextColor,
+    extensionId,
+  } = data;
 
   return (
     <ToolbarButton
@@ -73,6 +86,10 @@ export const BrowserAction = observer(({ data }: Props) => {
       opacity={1}
       autoInvert={false}
       size={16}
+      toggled={
+        store.dialogsVisibility['extension-popup'] &&
+        store.extensions.currentlyToggledPopup === extensionId
+      }
       icon={icon}
       badge={badgeText.trim() !== ''}
       badgeBackground={badgeBackgroundColor}

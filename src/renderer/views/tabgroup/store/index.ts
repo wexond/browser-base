@@ -8,19 +8,15 @@ export class Store extends DialogStore {
 
   public tabGroupId: number;
 
-  public constructor() {
-    super();
+  public onVisibilityChange(visible: boolean, tabGroup: any) {
+    this.visible = visible;
 
-    ipcRenderer.on('visible', (e, flag, tabGroup) => {
-      this.visible = flag;
-
-      if (flag) {
-        this.tabGroupId = tabGroup.id;
-        this.inputRef.current.inputRef.current.focus();
-        this.inputRef.current.inputRef.current.value = tabGroup.name;
-        this.inputRef.current.inputRef.current.select();
-      }
-    });
+    if (visible) {
+      this.tabGroupId = tabGroup.id;
+      this.inputRef.current.inputRef.current.focus();
+      this.inputRef.current.inputRef.current.value = tabGroup.name;
+      this.inputRef.current.inputRef.current.select();
+    }
   }
 }
 

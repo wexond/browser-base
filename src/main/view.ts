@@ -344,10 +344,12 @@ export class View extends BrowserView {
 
     this.isNewTab = url.startsWith(NEWTAB_URL);
 
-    if (this.isNewTab) {
-      this.window.dialogs.searchDialog.show();
-    } else {
-      this.window.dialogs.searchDialog.hide();
+    if (this.webContents.id === this.window.viewManager.selectedId) {
+      if (this.isNewTab) {
+        this.window.dialogs.searchDialog.show();
+      } else {
+        this.window.dialogs.searchDialog.hide();
+      }
     }
 
     this.updateData();

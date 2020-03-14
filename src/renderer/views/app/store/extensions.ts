@@ -16,6 +16,9 @@ export class ExtensionsStore {
   @observable
   public defaultBrowserActions: IBrowserAction[] = [];
 
+  @observable
+  public currentlyToggledPopup = '';
+
   public constructor() {
     this.load();
 

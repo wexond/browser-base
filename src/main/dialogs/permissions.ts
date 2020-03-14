@@ -3,8 +3,8 @@ import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { AppWindow } from '../windows';
 import { Dialog } from '.';
 
-const HEIGHT = 175;
-const WIDTH = 350;
+const HEIGHT = 165;
+const WIDTH = 366;
 
 export class PermissionsDialog extends Dialog {
   public constructor(appWindow: AppWindow) {
@@ -23,6 +23,7 @@ export class PermissionsDialog extends Dialog {
     name: string,
     url: string,
     details: any,
+    tabId: number,
   ): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (
@@ -33,6 +34,8 @@ export class PermissionsDialog extends Dialog {
         return reject('Unknown permission');
       }
 
+      this.tabId = tabId;
+
       this.show();
 
       this.webContents.send('request-permission', { name, url, details });
@@ -41,6 +44,7 @@ export class PermissionsDialog extends Dialog {
         `request-permission-result-${this.appWindow.id}`,
         (e, r: boolean) => {
           resolve(r);
+          this.tabId = -1;
           this.hide();
         },
       );

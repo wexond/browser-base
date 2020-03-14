@@ -2,9 +2,10 @@ import { AppWindow } from '../windows';
 import { ipcMain } from 'electron';
 import { Dialog } from '.';
 import { NEWTAB_URL } from '~/constants/tabs';
+import { DIALOG_MIN_HEIGHT } from '~/constants/design';
 
 const WIDTH = 800;
-const HEIGHT = 56;
+const HEIGHT = 80;
 
 export class SearchDialog extends Dialog {
   private queueShow = false;
@@ -28,11 +29,11 @@ export class SearchDialog extends Dialog {
       const { width } = this.appWindow.getContentBounds();
       super.rearrange({
         height: this.isPreviewVisible
-          ? Math.max(120, 56 + height)
-          : 56 + height,
+          ? Math.max(DIALOG_MIN_HEIGHT, HEIGHT + height)
+          : HEIGHT + height,
         x: Math.round(width / 2 - WIDTH / 2),
       });
-      this.lastHeight = 56 + height;
+      this.lastHeight = HEIGHT + height;
     });
 
     ipcMain.on(`can-show-${this.webContents.id}`, () => {
@@ -60,23 +61,19 @@ export class SearchDialog extends Dialog {
 
   public rearrangePreview(toggle: boolean) {
     this.isPreviewVisible = toggle;
-    if (toggle) {
-      super.rearrange({
-        height: Math.max(120, this.bounds.height),
-      });
-    } else {
-      super.rearrange({
-        height: this.lastHeight,
-      });
-    }
+    super.rearrange({
+      height: toggle
+        ? Math.max(DIALOG_MIN_HEIGHT, this.bounds.height)
+        : this.lastHeight,
+    });
   }
 
-  public show() {
+  public async show() {
     if (this.appWindow.dialogs.previewDialog.visible) {
       this.appWindow.dialogs.previewDialog.hide(true);
     }
 
-    super.show();
+    super.show(true, false);
 
     this.queueShow = true;
 

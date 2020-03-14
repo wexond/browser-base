@@ -53,6 +53,8 @@ export class StartupTabsStore {
     if (tabsToLoad && tabsToLoad.length > 0) {
       this.clearStartupTabs(true, false);
 
+      console.log(tabsToLoad);
+
       this.store.tabs.addTabs(
         tabsToLoad
           .sort((x, y) =>

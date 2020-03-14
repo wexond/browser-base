@@ -10,7 +10,7 @@ export const StyledTabbar = styled.div`
   position: relative;
   overflow: hidden;
   transition: 0.3s opacity, 0.3s transform;
-  margin-left: 8px;
+  margin-left: 2px;
   margin-right: 32px;
   display: flex;
 `;

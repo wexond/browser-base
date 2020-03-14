@@ -32,24 +32,10 @@ export const Icon = styled.div`
   `};
 `;
 
-export const Button = styled.div`
-  height: ${TOOLBAR_HEIGHT}px;
-
-  position: relative;
-  transition: 0.2s background-color;
-  width: ${TOOLBAR_BUTTON_WIDTH}px;
-  backface-visibility: hidden;
-
-  ${({ disabled }: { disabled: boolean }) => css`
-    pointer-events: ${disabled ? 'none' : 'inherit'};
-    -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
-  `};
-`;
-
 export const Circle = styled.div`
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  border-radius: 4px;
+  width: 38px;
+  height: 34px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -57,11 +43,43 @@ export const Circle = styled.div`
   overflow: hidden;
   transition: 0.2s background-color;
 
-  ${({ theme }: { theme: ITheme }) => css`
-    &:hover {
-      background-color: ${theme['toolbar.lightForeground']
-        ? 'rgba(255, 255, 255, 0.08)'
-        : 'rgba(0, 0, 0, 0.06)'};
+  ${({ theme, toggled }: { theme: ITheme; toggled: boolean }) => css`
+    background-color: ${toggled
+      ? theme['toolbar.lightForeground']
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.1)'
+      : 'none'};
+
+    ${!toggled &&
+      css`
+        &:hover {
+          background-color: ${theme['toolbar.lightForeground']
+            ? 'rgba(255, 255, 255, 0.08)'
+            : 'rgba(0, 0, 0, 0.06)'};
+        }
+      `};
+  `};
+`;
+
+export const Button = styled.div`
+  height: ${TOOLBAR_HEIGHT}px;
+
+  position: relative;
+  transition: 0.2s background-color;
+  width: ${TOOLBAR_BUTTON_WIDTH}px;
+  backface-visibility: hidden;
+  margin-right: 2px;
+
+  ${({ disabled, theme }: { disabled: boolean; theme: ITheme }) => css`
+    pointer-events: ${disabled ? 'none' : 'inherit'};
+    -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
+
+    &:active {
+      & ${Circle} {
+        background-color: ${theme['toolbar.lightForeground']
+          ? 'rgba(255, 255, 255, 0.12)'
+          : 'rgba(0, 0, 0, 0.1)'};
+      }
     }
   `};
 `;

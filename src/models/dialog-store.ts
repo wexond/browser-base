@@ -16,7 +16,40 @@ export class DialogStore {
   @observable
   public visible = false;
 
-  public constructor({ hideOnBlur } = { hideOnBlur: true }) {
+  public firstTime = false;
+
+  public constructor(
+    options: {
+      hideOnBlur?: boolean;
+      visibilityWrapper?: boolean;
+    } = {},
+  ) {
+    const { visibilityWrapper, hideOnBlur } = {
+      hideOnBlur: true,
+      visibilityWrapper: true,
+      ...options,
+    };
+    if (visibilityWrapper) {
+      ipcRenderer.on('visible', async (e, flag, ...args) => {
+        if (!this.firstTime) {
+          requestAnimationFrame(() => {
+            this.visible = true;
+
+            setTimeout(() => {
+              this.visible = false;
+
+              setTimeout(() => {
+                this.onVisibilityChange(flag, ...args);
+              }, 20);
+            }, 20);
+          });
+          this.firstTime = true;
+        } else {
+          this.onVisibilityChange(flag, ...args);
+        }
+      });
+    }
+
     if (hideOnBlur) {
       window.addEventListener('blur', () => {
         this.hide();
@@ -38,12 +71,14 @@ export class DialogStore {
     return remote.getCurrentWindow().id;
   }
 
+  public onVisibilityChange(visible: boolean, ...args: any[]) {}
+
   public hide() {
     if (this.visible) {
       this.visible = false;
       setTimeout(() => {
         ipcRenderer.send(`hide-${this.id}`);
-      }, 10);
+      });
     }
   }
 }

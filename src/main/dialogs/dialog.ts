@@ -1,6 +1,7 @@
 import { BrowserView, app, ipcMain } from 'electron';
 import { join } from 'path';
 import { AppWindow } from '../windows';
+import { makeId } from '~/utils';
 
 interface IOptions {
   name: string;
@@ -34,6 +35,11 @@ export class Dialog extends BrowserView {
   private hideTimeout: number;
   private name: string;
 
+  public tabId = -1;
+
+  private loaded = false;
+  private showCallback: any = null;
+
   public constructor(
     appWindow: AppWindow,
     { bounds, name, devtools, hideTimeout, webPreferences }: IOptions,
@@ -54,6 +60,16 @@ export class Dialog extends BrowserView {
 
     ipcMain.on(`hide-${this.webContents.id}`, () => {
       this.hide(false, false);
+      this.tabId = -1;
+    });
+
+    this.webContents.once('dom-ready', () => {
+      this.loaded = true;
+
+      if (this.showCallback) {
+        this.showCallback();
+        this.showCallback = null;
+      }
     });
 
     if (process.env.NODE_ENV === 'development') {
@@ -85,20 +101,39 @@ export class Dialog extends BrowserView {
     if (!this.visible) this.show();
   }
 
-  public show(focus = true) {
-    clearTimeout(this.timeout);
+  public show(focus = true, waitForLoad = true) {
+    return new Promise(resolve => {
+      clearTimeout(this.timeout);
 
-    if (this.visible) {
-      if (focus) this.webContents.focus();
-      return;
-    }
+      this.appWindow.webContents.send(
+        'dialog-visibility-change',
+        this.name,
+        true,
+      );
 
-    this.visible = true;
+      const callback = () => {
+        if (this.visible) {
+          if (focus) this.webContents.focus();
+          return;
+        }
 
-    this.appWindow.addBrowserView(this);
-    this.rearrange();
+        this.visible = true;
 
-    if (focus) this.webContents.focus();
+        this.appWindow.addBrowserView(this);
+        this.rearrange();
+
+        if (focus) this.webContents.focus();
+
+        resolve();
+      };
+
+      if (!this.loaded && waitForLoad) {
+        this.showCallback = callback;
+        return;
+      }
+
+      callback();
+    });
   }
 
   public hideVisually() {
@@ -106,13 +141,19 @@ export class Dialog extends BrowserView {
   }
 
   public hide(bringToTop = false, hideVisually = true) {
+    if (hideVisually) this.hideVisually();
+
+    this.appWindow.webContents.send(
+      'dialog-visibility-change',
+      this.name,
+      false,
+    );
+
+    if (!this.visible) return;
+
     if (bringToTop) {
       this.bringToTop();
     }
-
-    if (hideVisually) this.hideVisually();
-
-    if (!this.visible) return;
 
     clearTimeout(this.timeout);
 

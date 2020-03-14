@@ -1,6 +1,7 @@
 import { AppWindow } from '../windows';
 import { Dialog } from '.';
 import { ipcMain } from 'electron';
+import { DIALOG_MARGIN, DIALOG_TOP } from '~/constants/design';
 
 const WIDTH = 350;
 
@@ -17,7 +18,7 @@ export class DownloadsDialog extends Dialog {
       bounds: {
         width: WIDTH,
         height: 0,
-        y: 34,
+        y: DIALOG_TOP,
       },
     });
 
@@ -28,20 +29,20 @@ export class DownloadsDialog extends Dialog {
   }
 
   public rearrange() {
-    const { width, height } = this.appWindow.getContentBounds();
+    const { height } = this.appWindow.getContentBounds();
 
-    const maxHeight = height - 34 - 16;
+    const maxHeight = height - DIALOG_TOP - 16;
 
     super.rearrange({
-      x: Math.round(Math.min(this.left - WIDTH / 2, width - WIDTH)),
-      height: Math.round(Math.min(height, this.height + 16)),
+      x: Math.round(this.left - WIDTH + DIALOG_MARGIN),
+      height: Math.round(Math.min(height, this.height + 28)),
     });
 
     this.webContents.send(`max-height`, Math.min(maxHeight, this.height));
   }
 
-  public show() {
-    super.show();
+  public async show() {
+    await super.show();
     this.webContents.send('visible', true);
   }
 }

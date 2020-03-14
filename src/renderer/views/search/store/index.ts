@@ -68,6 +68,7 @@ export class Store extends DialogStore {
   public constructor() {
     super({
       hideOnBlur: false,
+      visibilityWrapper: false,
     });
 
     window.addEventListener('blur', async () => {

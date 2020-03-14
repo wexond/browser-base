@@ -5,14 +5,15 @@ import { TAB_MAX_WIDTH } from '~/renderer/views/app/constants/tabs';
 import { DIALOG_TRANSITION, DialogStyle } from '~/renderer/mixins/dialogs';
 
 export const StyledApp = styled(DialogStyle)`
+  margin: 0;
   padding: 12px;
   font-size: 13px;
   max-width: ${TAB_MAX_WIDTH}px;
-  margin-top: 0;
+  margin-top: 3px;
 
   ${({ theme, xTransition }: { theme?: ITheme; xTransition: boolean }) => css`
     color: ${theme['dialog.textColor']};
-    transition: ${DIALOG_TRANSITION} ${xTransition ? ', 0.08s margin-left' : ''};
+    transition: ${DIALOG_TRANSITION} ${xTransition ? ', 0.08s transform' : ''};
   `}
 `;
 

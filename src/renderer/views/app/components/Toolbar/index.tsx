@@ -21,11 +21,14 @@ import {
   ICON_INCOGNITO,
   ICON_MORE,
 } from '~/renderer/constants/icons';
+import { isDialogVisible } from '../../utils/dialogs';
 
-const onDownloadsClick = (e: React.MouseEvent<HTMLDivElement>) => {
-  store.downloadNotification = false;
-  const { left, width } = e.currentTarget.getBoundingClientRect();
-  ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, left + width / 2);
+const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
+  const { right } = e.currentTarget.getBoundingClientRect();
+  if (!(await isDialogVisible('downloadsDialog'))) {
+    store.downloadNotification = false;
+    ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, right);
+  }
 };
 
 const onKeyClick = () => {
@@ -41,25 +44,36 @@ const onKeyClick = () => {
 };
 
 let starRef: HTMLDivElement = null;
+let menuRef: HTMLDivElement = null;
 
-const showAddBookmarkDialog = () => {
-  const { left, width } = starRef.getBoundingClientRect();
-  ipcRenderer.send(
-    `show-add-bookmark-dialog-${store.windowId}`,
-    left + width / 2,
-  );
+const showAddBookmarkDialog = async () => {
+  if (!(await isDialogVisible('addBookmarkDialog'))) {
+    const { right } = starRef.getBoundingClientRect();
+    ipcRenderer.send(`show-add-bookmark-dialog-${store.windowId}`, right);
+  }
+};
+
+const showMenuDialog = async () => {
+  if (!(await isDialogVisible('menuDialog'))) {
+    const { right } = menuRef.getBoundingClientRect();
+    ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right);
+  }
 };
 
 ipcRenderer.on('show-add-bookmark-dialog', () => {
   showAddBookmarkDialog();
 });
 
+ipcRenderer.on('show-menu-dialog', () => {
+  showMenuDialog();
+});
+
 const onStarClick = (e: React.MouseEvent<HTMLDivElement>) => {
   showAddBookmarkDialog();
 };
 
-const onMenuClick = () => {
-  ipcRenderer.send(`menu-show-${store.windowId}`);
+const onMenuClick = async () => {
+  showMenuDialog();
 };
 
 const BrowserActions = observer(() => {
@@ -123,6 +137,7 @@ const RightButtons = observer(() => {
       {store.extensions.browserActions.length > 0 && <Separator />}
       <ToolbarButton
         divRef={r => (starRef = r)}
+        toggled={store.dialogsVisibility['add-bookmark']}
         icon={store.isBookmarked ? ICON_STAR_FILLED : ICON_STAR}
         size={18}
         onMouseDown={onStarClick}
@@ -145,6 +160,7 @@ const RightButtons = observer(() => {
           size={18}
           badge={store.downloadNotification}
           onMouseDown={onDownloadsClick}
+          toggled={store.dialogsVisibility['downloads-dialog']}
           icon={ICON_DOWNLOAD}
           badgeTop={9}
           badgeRight={9}
@@ -155,6 +171,8 @@ const RightButtons = observer(() => {
       <Separator />
       {store.isIncognito && <ToolbarButton icon={ICON_INCOGNITO} size={18} />}
       <ToolbarButton
+        divRef={r => (menuRef = r)}
+        toggled={store.dialogsVisibility['menu']}
         badge={store.updateAvailable}
         badgeRight={10}
         badgeTop={8}
