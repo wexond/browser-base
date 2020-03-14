@@ -57,7 +57,12 @@ export class Store {
   public dialogVisible = false;
 
   @observable
-  public dialogContent: 'edit-search-engine' | 'add-search-engine' = null;
+  public dialogContent:
+    | 'edit-search-engine'
+    | 'add-search-engine'
+    | 'edit-address'
+    | 'edit-password'
+    | 'privacy' = null;
 
   @observable
   public selectedSection: SettingsSection = 'appearance';
