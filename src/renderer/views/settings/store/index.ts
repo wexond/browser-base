@@ -1,8 +1,10 @@
 import { observable, computed } from 'mobx';
-import { ISettings, ITheme } from '~/interfaces';
+import * as React from 'react';
+import { ISettings, ITheme, ISearchEngine } from '~/interfaces';
 import { AutoFillStore } from './autofill';
 import { StartupTabsStore } from './startup-tabs';
 import { getTheme } from '~/utils/themes';
+import { Textfield } from '~/renderer/components/Textfield';
 
 export type SettingsSection =
   | 'appearance'
@@ -14,23 +16,57 @@ export type SettingsSection =
   | 'language'
   | 'shortcuts'
   | 'downloads'
-  | 'system';
+  | 'system'
+  | 'search-engines';
 
 export class Store {
   public autoFill = new AutoFillStore();
   public startupTabs = new StartupTabsStore();
 
-  @observable
-  public menuToggled = false;
+  public menuRef = React.createRef<HTMLDivElement>();
+
+  public dialogRef = React.createRef<HTMLDivElement>();
+
+  public searchEngineInputRef = React.createRef<Textfield>();
+  public searchEngineKeywordInputRef = React.createRef<Textfield>();
+  public searchEngineUrlInputRef = React.createRef<Textfield>();
 
   @observable
-  public dialogContent: 'privacy' | 'edit-address' = null;
+  public menuInfo = {
+    left: 0,
+    top: 0,
+  };
+
+  @observable
+  private _menuVisible = false;
+
+  @computed
+  public get menuVisible() {
+    return this._menuVisible;
+  }
+
+  public set menuVisible(value: boolean) {
+    this._menuVisible = value;
+
+    if (value) {
+      this.menuRef.current.focus();
+    }
+  }
+
+  @observable
+  public dialogVisible = false;
+
+  @observable
+  public dialogContent: 'edit-search-engine' | 'add-search-engine' = null;
 
   @observable
   public selectedSection: SettingsSection = 'appearance';
 
   @observable
   public settings: ISettings = { ...(window as any).settings };
+
+  @observable
+  public editedSearchEngine: ISearchEngine;
 
   @computed
   public get theme(): ITheme {

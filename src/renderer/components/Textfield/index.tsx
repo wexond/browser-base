@@ -87,26 +87,11 @@ export class Textfield extends React.PureComponent<TextFieldProps, State> {
     }
   };
 
-  public test(fn?: TestFunction) {
-    const { test } = this.props;
-    if (fn == null && test == null) return true;
-
-    const correct = fn != null ? fn(this.value) : test(this.value);
-
-    this.setState({
-      error: !correct,
-      focused: !correct,
-      activated: this.value.length !== 0 || !correct,
-    });
-
-    return correct;
-  }
-
   public onInput = () => {
     clearTimeout(this.timer);
     const { onChange } = this.props;
 
-    this.setState({ error: false });
+    this.setState({ error: false, value: this.inputRef.current.value });
     if (onChange) {
       onChange(this.inputRef.current.value);
     }

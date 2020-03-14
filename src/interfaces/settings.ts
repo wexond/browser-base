@@ -1,8 +1,9 @@
 export interface ISearchEngine {
-  name: string;
-  url: string;
-  keywordsUrl: string;
-  icon: string;
+  name?: string;
+  url?: string;
+  keywordsUrl?: string;
+  keyword?: string;
+  icon?: string;
 }
 
 export interface IStartupBehavior {

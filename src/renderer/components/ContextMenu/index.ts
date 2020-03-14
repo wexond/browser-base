@@ -5,6 +5,7 @@ import { ITheme } from '~/interfaces';
 import { DIALOG_EASING } from '~/renderer/constants';
 
 export const ContextMenu = styled.div`
+  outline: none;
   position: absolute;
   backface-visibility: hidden;
   transform: translateZ(0) scale(1, 1);
@@ -18,15 +19,15 @@ export const ContextMenu = styled.div`
   ${({
     visible,
     theme,
-    dense,
+    bigger,
     translucent,
   }: {
     visible: boolean;
     theme?: ITheme;
-    dense?: boolean;
+    bigger?: boolean;
     translucent?: boolean;
   }) => css`
-    padding: ${dense ? 4 : 8}px 0;
+    padding: ${bigger ? 8 : 4}px 0;
     transition: ${visible
       ? `0.35s opacity ${DIALOG_EASING}, 0.35s transform ${DIALOG_EASING}`
       : 'none'};
@@ -43,9 +44,9 @@ export const ContextMenuSeparator = styled.div`
   height: 1px;
   width: 100%;
 
-  ${({ theme, dense }: { theme?: ITheme; dense?: boolean }) => css`
+  ${({ theme, bigger }: { theme?: ITheme; bigger?: boolean }) => css`
     background-color: ${theme['dropdown.separator.color']};
-    margin: ${dense ? 4 : 8}px 0px;
+    margin: ${bigger ? 8 : 4}px 0px;
   `}
 `;
 
@@ -59,7 +60,7 @@ export interface ContextMenuItemProps {
   icon?: string;
   selected?: boolean;
   theme?: ITheme;
-  dense?: boolean;
+  bigger?: boolean;
   visible?: boolean;
   iconSize?: number;
   disabled?: boolean;
@@ -74,15 +75,15 @@ export const ContextMenuItem = styled.div`
     icon,
     selected,
     theme,
-    dense,
+    bigger,
     visible,
     iconSize,
     disabled,
   }: ContextMenuItemProps) => css`
     pointer-events: ${disabled ? 'none' : 'inherit'};
     opacity: ${disabled ? 0.38 : 1};
-    font-size: ${dense ? 13 : 14}px;
-    padding: ${dense ? 8 : 12}px ${dense ? 12 : 20}px;
+    font-size: ${bigger ? 14 : 13}px;
+    padding: ${bigger ? 12 : 10}px ${bigger ? 20 : 12}px;
     align-items: center;
     display: ${visible === undefined || visible ? 'flex' : 'none'};
     background-color: ${selected
@@ -118,5 +119,5 @@ export const ContextMenuItem = styled.div`
 `;
 
 ContextMenuItem.defaultProps = {
-  iconSize: 16,
+  iconSize: 18,
 };

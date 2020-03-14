@@ -4,9 +4,9 @@ import { Switch } from '~/renderer/components/Switch';
 import { Title, Row, Control, Header, SecondaryText } from '../App/style';
 import store from '../../store';
 import { onSwitchChange } from '../../utils';
-import { Button } from '~/renderer/components/Button';
 import { ipcRenderer } from 'electron';
 import { observer } from 'mobx-react-lite';
+import { NormalButton } from '../App';
 
 const AskToggle = observer(() => {
   const { downloadsDialog } = store.settings;
@@ -34,17 +34,7 @@ const Location = observer(() => {
       </div>
 
       <Control>
-        <Button
-          background={
-            store.theme['dialog.lightForeground']
-              ? 'rgba(255, 255, 255, 0.08)'
-              : 'rgba(0, 0, 0, 0.08)'
-          }
-          onClick={onChangeClick}
-          foreground={store.theme['dialog.lightForeground'] ? 'white' : 'black'}
-        >
-          Change
-        </Button>
+        <NormalButton onClick={onChangeClick}>Change</NormalButton>
       </Control>
     </Row>
   );
