@@ -48,7 +48,7 @@ export const SwitchItem = observer(
     disabled?: boolean;
   }) => {
     return (
-      <ContextMenuItem disabled={disabled} onClick={onSwitchClick(name)}>
+      <ContextMenuItem bigger disabled={disabled} onClick={onSwitchClick(name)}>
         <div style={{ flex: 1 }}>{children}</div>
         <Switch value={(store as any)[name]}></Switch>
       </ContextMenuItem>
@@ -60,6 +60,7 @@ export const Preferences = observer(() => {
   return (
     <ContextMenu
       translucent
+      bigger
       style={{ right: 32, top: 68, width: 275 }}
       visible={store.dashboardSettingsVisible}
       onMouseDown={e => e.stopPropagation()}
@@ -89,9 +90,10 @@ export const Preferences = observer(() => {
         >
           <Title style={{ marginLeft: 20 }}>Page layout</Title>
 
-          <ContextMenuSeparator></ContextMenuSeparator>
+          <ContextMenuSeparator bigger></ContextMenuSeparator>
 
           <ContextMenuItem
+            bigger
             onClick={onPresetClick('focused')}
             selected={store.preset === 'focused'}
             iconSize={28}
@@ -100,6 +102,7 @@ export const Preferences = observer(() => {
             Focused
           </ContextMenuItem>
           <ContextMenuItem
+            bigger
             onClick={onPresetClick('inspirational')}
             selected={store.preset === 'inspirational'}
             iconSize={28}
@@ -108,6 +111,7 @@ export const Preferences = observer(() => {
             Inspirational
           </ContextMenuItem>
           <ContextMenuItem
+            bigger
             onClick={onPresetClick('informational')}
             selected={store.preset === 'informational'}
             iconSize={28}
@@ -116,6 +120,7 @@ export const Preferences = observer(() => {
             Informational
           </ContextMenuItem>
           <ContextMenuItem
+            bigger
             selected={store.preset === 'custom'}
             onClick={onCustomClick}
             iconSize={28}
@@ -143,20 +148,21 @@ export const Preferences = observer(() => {
             <Back onClick={onBackClick} icon={ICON_BACK}></Back>
             Custom
           </Title>
-          <ContextMenuSeparator></ContextMenuSeparator>
+          <ContextMenuSeparator bigger></ContextMenuSeparator>
           <SwitchItem name="imageVisible">Show image</SwitchItem>
           <SwitchItem disabled={!store.imageVisible} name="changeImageDaily">
             Change the image daily
           </SwitchItem>
           <ContextMenuItem
+            bigger
             disabled={!store.imageVisible || store.changeImageDaily}
           >
             Choose image...
           </ContextMenuItem>
-          <ContextMenuSeparator></ContextMenuSeparator>
+          <ContextMenuSeparator bigger></ContextMenuSeparator>
           <SwitchItem name="topSitesVisible">Show top sites</SwitchItem>
           <SwitchItem name="quickMenuVisible">Show quick menu</SwitchItem>
-          <ContextMenuSeparator></ContextMenuSeparator>
+          <ContextMenuSeparator bigger></ContextMenuSeparator>
           <SubTitle>News visibility:</SubTitle>
           <Dropdown
             defaultValue={store.newsBehavior}

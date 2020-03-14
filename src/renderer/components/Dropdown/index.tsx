@@ -115,11 +115,7 @@ export class Dropdown extends React.PureComponent<Props, State> {
       >
         <Label>{label}</Label>
         <DropIcon expanded={expanded} />
-        <ContextMenu
-          dense
-          style={{ top: 32, width: '100%' }}
-          visible={expanded}
-        >
+        <ContextMenu style={{ top: 32, width: '100%' }} visible={expanded}>
           {React.Children.map(children, child => {
             const { props } = child;
 
@@ -127,7 +123,6 @@ export class Dropdown extends React.PureComponent<Props, State> {
               selected: value === props.value,
               onClick: this.onItemClick(props.value),
               onMouseDown: this.onItemMouseDown,
-              dense: true,
             });
           })}
         </ContextMenu>

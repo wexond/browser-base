@@ -30,11 +30,6 @@ export class Store extends DialogStore {
   public inputText = '';
 
   @computed
-  public get searchEngines() {
-    return DEFAULT_SEARCH_ENGINES.concat(this.settings.searchEngines);
-  }
-
-  @computed
   public get searchedTabs(): ISuggestion[] {
     const lastItem = this.suggestions.list[this.suggestions.list.length - 1];
 
@@ -61,7 +56,7 @@ export class Store extends DialogStore {
 
   @computed
   public get searchEngine() {
-    return this.searchEngines[this.settings.searchEngine];
+    return this.settings.searchEngines[this.settings.searchEngine];
   }
 
   public canSuggest = false;

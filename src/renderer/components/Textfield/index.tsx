@@ -106,7 +106,7 @@ export class Textfield extends React.PureComponent<TextFieldProps, State> {
     clearTimeout(this.timer);
     const { onChange } = this.props;
 
-    this.setState({ error: false });
+    this.setState({ error: false, value: this.inputRef.current.value });
     if (onChange) {
       onChange(this.inputRef.current.value);
     }
