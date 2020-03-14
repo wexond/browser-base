@@ -73,10 +73,7 @@ export class Store extends DialogStore {
 
     window.addEventListener('blur', async () => {
       if (this.visible && !(await ipcRenderer.invoke(`is-newtab-${this.id}`))) {
-        this.visible = false;
-        setTimeout(() => {
-          this.hide();
-        });
+        this.hide();
       }
     });
 
