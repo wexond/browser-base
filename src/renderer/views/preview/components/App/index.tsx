@@ -14,7 +14,7 @@ export const App = hot(
     return (
       <ThemeProvider theme={{ ...store.theme }}>
         <StyledApp
-          style={{ transform: `translateX(${store.x}px)` }}
+          style={{ transform: `translate3d(${store.x}px, 0, 0)` }}
           xTransition={store.xTransition}
           visible={store.visible}
         >
