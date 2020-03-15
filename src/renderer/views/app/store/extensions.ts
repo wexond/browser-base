@@ -22,9 +22,11 @@ export class ExtensionsStore {
   public constructor() {
     this.load();
 
-    ipcRenderer.on('load-browserAction', (e, extension) => {
-      this.loadExtension(extension);
-      store.tabs.updateTabsBounds(true);
+    ipcRenderer.on('load-browserAction', async (e, extension) => {
+      await this.loadExtension(extension);
+      requestAnimationFrame(() => {
+        store.tabs.updateTabsBounds(false);
+      });
     });
   }
 
@@ -72,7 +74,6 @@ export class ExtensionsStore {
       for (const tab of store.tabs.list) {
         this.addBrowserActionToTab(tab.id, browserAction);
       }
-      store.tabs.updateTabsBounds(true);
     }
   }
 
@@ -81,6 +82,10 @@ export class ExtensionsStore {
       'get-extensions',
     );
 
-    extensions.forEach(x => this.loadExtension(x));
+    await Promise.all(extensions.map(x => this.loadExtension(x)));
+
+    requestAnimationFrame(() => {
+      store.tabs.updateTabsBounds(false);
+    });
   }
 }

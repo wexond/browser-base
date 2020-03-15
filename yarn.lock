@@ -349,6 +349,11 @@
   resolved "https://registry.yarnpkg.com/@tokenizer/token/-/token-0.1.1.tgz#f0d92c12f87079ddfd1b29f614758b9696bc29e3"
   integrity sha512-XO6INPbZCxdprl+9qa/AAbFFOMzzwqYxpjPgLICrMD6C2FCw6qfJOPcBk6JqqPLSaZ/Qx87qn4rpPmPMwaAK6w==
 
+"@types/animejs@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@types/animejs/-/animejs-3.1.0.tgz#9fa31e5fcf3a0304aa097a2a357e03630d820ab1"
+  integrity sha512-OOOQ11ylW8GeFY85yM3HrprR5wZl1R1KsxrxNLMpE9l24zs+4yXAu4WsDESWcCAf5+PxvPNsLV9W/PB3J+XGMQ==
+
 "@types/chrome@0.0.100":
   version "0.0.100"
   resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.100.tgz#78caca66784ccd636fc15f497366b6a2987b5606"
@@ -806,6 +811,11 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
+
+animejs@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/animejs/-/animejs-3.1.0.tgz#748a90fc1d4bef3efed64508af9a6a82babf5c47"
+  integrity sha512-BjnCroPPQPEAngT0M89pz9TBcOGgOFLnVoq3+jV2upl4rn60k57/AXvESTnuILsNgOEjGuhMEOMp7IlQzk40kA==
 
 ansi-align@^3.0.0:
   version "3.0.0"
@@ -3467,11 +3477,6 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.3.tgz#4a12ff1b60376ef09862c2093edd908328be8423"
   integrity sha512-a30VEBm4PEdx1dRB7MFK7BejejvCvBronbLjht+sHuGYj8PHs7M/5Z+rt5lw551vZ7yfTCj4Vuyy3mSJytDWRQ==
-
-gsap@^3.2.4:
-  version "3.2.4"
-  resolved "https://registry.yarnpkg.com/gsap/-/gsap-3.2.4.tgz#60c1e3e91a0b3b0ce2161da73b105ae495b13425"
-  integrity sha512-ssWh9xKV4COyOVFl4OdJmO5CIsUPaL5Fetw08dyBeAU8ZKS7jzlMgwtUOseXL8lvXq6amNNzD7/MdOLgeFWEIQ==
 
 gzip-size@^5.0.0:
   version "5.1.1"

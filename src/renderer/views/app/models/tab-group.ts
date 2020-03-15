@@ -4,6 +4,7 @@ import { observable, action } from 'mobx';
 import { LIGHT_BLUE_500 } from '~/renderer/constants';
 import { Store } from '../store';
 import { TabGroupsStore } from '../store/tab-groups';
+import { animateTab } from '../utils/tabs';
 
 let id = 0;
 
@@ -46,18 +47,13 @@ export class ITabGroup {
 
   @action
   public setLeft(left: number, animation: boolean) {
-    this.store.tabs.animateProperty('x', this.ref.current, left, animation);
+    animateTab('translateX', left, this.ref.current, animation);
     this.left = left;
   }
 
   @action
   public setWidth(width: number, animation: boolean) {
-    this.store.tabs.animateProperty(
-      'width',
-      this.lineRef.current,
-      width,
-      animation,
-    );
+    animateTab('width', width, this.lineRef.current, animation);
     this.width = width;
   }
 }
