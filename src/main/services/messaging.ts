@@ -35,9 +35,9 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.fixDragging();
   });
 
-  ipcMain.on(`update-tab-find-info-${id}`, (e, ...args) =>
-    appWindow.webContents.send('update-tab-find-info', ...args),
-  );
+  ipcMain.on(`update-tab-find-info-${id}`, (e, tabId, info) => {
+    appWindow.viewManager.views.get(tabId).emitEvent('find-info-updated', info);
+  });
 
   ipcMain.on(`update-find-info-${id}`, (e, tabId, data) => {
     if (appWindow.dialogs.findDialog.visible) {

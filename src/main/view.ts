@@ -13,6 +13,7 @@ import {
   ZOOM_FACTOR_MAX,
   ZOOM_FACTOR_INCREMENT,
 } from '~/constants/web-contents';
+import { TabEvent } from '~/interfaces/tabs';
 
 export class View extends BrowserView {
   public title = '';
@@ -88,17 +89,11 @@ export class View extends BrowserView {
       this.updateWindowTitle();
       this.updateData();
 
-      this.window.webContents.send(
-        `view-title-updated-${this.webContents.id}`,
-        title,
-      );
+      this.emitEvent('title-updated', title);
     });
 
     this.webContents.addListener('did-navigate', async (e, url) => {
-      this.window.webContents.send(
-        `view-did-navigate-${this.webContents.id}`,
-        url,
-      );
+      this.emitEvent('did-navigate', url);
 
       await this.addHistoryItem(url);
       this.updateURL(url);
@@ -108,10 +103,7 @@ export class View extends BrowserView {
       'did-navigate-in-page',
       async (e, url, isMainFrame) => {
         if (isMainFrame) {
-          this.window.webContents.send(
-            `view-did-navigate-${this.webContents.id}`,
-            url,
-          );
+          this.emitEvent('did-navigate', url);
 
           await this.addHistoryItem(url, true);
           this.updateURL(url);
@@ -121,15 +113,12 @@ export class View extends BrowserView {
 
     this.webContents.addListener('did-stop-loading', () => {
       this.updateNavigationState();
-      this.window.webContents.send(
-        `view-loading-${this.webContents.id}`,
-        false,
-      );
+      this.emitEvent('loading', false);
     });
 
     this.webContents.addListener('did-start-loading', () => {
       this.updateNavigationState();
-      this.window.webContents.send(`view-loading-${this.webContents.id}`, true);
+      this.emitEvent('loading', true);
     });
 
     this.webContents.addListener('did-start-navigation', async (e, ...args) => {
@@ -137,10 +126,7 @@ export class View extends BrowserView {
 
       this.favicon = '';
 
-      this.window.webContents.send(
-        `load-commit-${this.webContents.id}`,
-        ...args,
-      );
+      this.emitEvent('load-commit', ...args);
     });
 
     this.webContents.addListener(
@@ -196,10 +182,7 @@ export class View extends BrowserView {
             fav = await storage.addFavicon(fav);
           }
 
-          this.window.webContents.send(
-            `update-tab-favicon-${this.webContents.id}`,
-            fav,
-          );
+          this.emitEvent('favicon-updated', fav);
 
           const buf = Buffer.from(fav.split('base64,')[1], 'base64');
 
@@ -208,10 +191,7 @@ export class View extends BrowserView {
 
             if (!palette.Vibrant) return;
 
-            this.window.webContents.send(
-              `update-tab-color-${this.webContents.id}`,
-              palette.Vibrant.getHex(),
-            );
+            this.emitEvent('color-updated', palette.Vibrant.getHex());
           } catch (e) {
             console.error(e);
           }
@@ -223,10 +203,7 @@ export class View extends BrowserView {
     );
 
     this.webContents.addListener('did-change-theme-color', (e, color) => {
-      this.window.webContents.send(
-        `browserview-theme-color-updated-${this.webContents.id}`,
-        color,
-      );
+      this.emitEvent('theme-color-updated', color);
     });
 
     this.webContents.addListener('zoom-changed', (e, zoomDirection) => {
@@ -241,10 +218,7 @@ export class View extends BrowserView {
         newZoomFactor >= ZOOM_FACTOR_MIN
       ) {
         this.webContents.zoomFactor = newZoomFactor;
-        this.window.webContents.send(
-          `browserview-zoom-updated-${this.webContents.id}`,
-          this.webContents.zoomFactor,
-        );
+        this.emitEvent('zoom-updated', this.webContents.zoomFactor);
       } else {
         e.preventDefault();
       }
@@ -297,10 +271,7 @@ export class View extends BrowserView {
       },
     });
 
-    this.window.webContents.send(
-      `has-credentials-${this.webContents.id}`,
-      item != null,
-    );
+    this.emitEvent('credentials', item != null);
   }
 
   public async addHistoryItem(url: string, inPage = false) {
@@ -337,10 +308,7 @@ export class View extends BrowserView {
 
     this.url = url;
 
-    this.window.webContents.send(
-      `view-url-updated-${this.webContents.id}`,
-      url,
-    );
+    this.emitEvent('url-updated', url);
 
     this.isNewTab = url.startsWith(NEWTAB_URL);
 
@@ -405,5 +373,9 @@ export class View extends BrowserView {
 
   public get hostname() {
     return parseUrl(this.url).hostname;
+  }
+
+  public emitEvent(event: TabEvent, ...args: any[]) {
+    this.window.webContents.send('tab-event', event, this.webContents.id, args);
   }
 }

@@ -17,14 +17,6 @@ import { closeWindow } from '../utils/windows';
 import { callViewMethod } from '~/utils/view';
 import { animateTab } from '../utils/tabs';
 
-const isColorAcceptable = (color: string) => {
-  if (store.theme['tab.allowLightBackground']) {
-    return getColorBrightness(color) > 120;
-  }
-
-  return getColorBrightness(color) < 170;
-};
-
 export class ITab {
   @observable
   public id: number;
@@ -135,79 +127,6 @@ export class ITab {
         this.select();
       });
     }
-
-    ipcRenderer.on(`view-url-updated-${this.id}`, async (e, url: string) => {
-      this.url = url;
-      this.updateData();
-    });
-
-    ipcRenderer.on(`view-title-updated-${this.id}`, (e, title: string) => {
-      this.title = title;
-      this.updateData();
-    });
-
-    ipcRenderer.on(`view-did-navigate-${this.id}`, async (e, url: string) => {
-      this.background = store.theme.accentColor;
-      this.customColor = false;
-      this.favicon = '';
-    });
-
-    ipcRenderer.on(
-      `load-commit-${this.id}`,
-      async (
-        e,
-        event,
-        url: string,
-        isInPlace: boolean,
-        isMainFrame: boolean,
-      ) => {
-        if (isMainFrame) {
-          this.blockedAds = 0;
-        }
-      },
-    );
-
-    ipcRenderer.on(`update-tab-favicon-${this.id}`, (e, favicon) => {
-      this.favicon = favicon;
-      this.updateData();
-    });
-
-    ipcRenderer.on(`update-tab-color-${this.id}`, (e, color) => {
-      if (isColorAcceptable(color)) {
-        this.background = color;
-        this.customColor = true;
-      } else {
-        this.background = store.theme.accentColor;
-        this.customColor = false;
-      }
-    });
-
-    ipcRenderer.on(
-      `browserview-theme-color-updated-${this.id}`,
-      (e, themeColor: string) => {
-        if (themeColor && isColorAcceptable(themeColor)) {
-          this.background = themeColor;
-          this.hasThemeColor = true;
-          this.customColor = true;
-        } else {
-          this.background = store.theme.accentColor;
-          this.hasThemeColor = false;
-          this.customColor = false;
-        }
-      },
-    );
-
-    ipcRenderer.on(`tab-pinned-${this.id}`, (e, isPinned: boolean) => {
-      this.isPinned = isPinned;
-    });
-
-    ipcRenderer.on(`view-loading-${this.id}`, (e, loading: boolean) => {
-      this.loading = loading;
-    });
-
-    ipcRenderer.on(`has-credentials-${this.id}`, (e, found: boolean) => {
-      this.hasCredentials = found;
-    });
 
     const { defaultBrowserActions } = store.extensions;
 

@@ -22,6 +22,7 @@ import {
   ExtensionPopup,
 } from '../dialogs';
 import { isNightly } from '..';
+import { TabEvent } from '~/interfaces/tabs';
 
 interface IDialogs {
   searchDialog?: SearchDialog;

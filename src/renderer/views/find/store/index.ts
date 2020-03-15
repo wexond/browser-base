@@ -16,7 +16,11 @@ export class Store extends DialogStore {
   public findInputRef = React.createRef<HTMLInputElement>();
 
   public constructor() {
-    super({ hideOnBlur: false });
+    super({ hideOnBlur: false, visibilityWrapper: false });
+
+    ipcRenderer.on('visible', (e, flag) => {
+      this.visible = flag;
+    });
 
     ipcRenderer.on(
       'found-in-page',

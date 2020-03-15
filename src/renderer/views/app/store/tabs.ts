@@ -13,6 +13,16 @@ import store from '.';
 import { ipcRenderer } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { TabEvent } from '~/interfaces/tabs';
+import { getColorBrightness } from '~/utils/colors';
+
+const isColorAcceptable = (color: string) => {
+  if (store.theme['tab.allowLightBackground']) {
+    return getColorBrightness(color) > 120;
+  }
+
+  return getColorBrightness(color) < 170;
+};
 
 export class TabsStore {
   @observable
@@ -121,17 +131,75 @@ export class TabsStore {
       this.getTabById(id)?.close();
     });
 
-    ipcRenderer.on(`blocked-ad`, (e, tabId) => {
+    ipcRenderer.on('tab-event', (e, event: TabEvent, tabId, args) => {
       const tab = this.getTabById(tabId);
-      if (tab) {
-        tab.blockedAds++;
-      }
-    });
 
-    ipcRenderer.on('update-tab-find-info', (e, tabId: number, data) => {
-      const tab = this.getTabById(tabId);
       if (tab) {
-        tab.findInfo = data;
+        if (event === 'blocked-ad') {
+          tab.blockedAds++;
+        } else if (event === 'find-info-updated') {
+          const [info] = args;
+          tab.findInfo = info;
+        } else if (
+          event === 'url-updated' ||
+          event === 'title-updated' ||
+          event === 'favicon-updated'
+        ) {
+          if (event === 'url-updated') {
+            const [url] = args;
+            tab.url = url;
+          } else if (event === 'title-updated') {
+            const [title] = args;
+            tab.title = title;
+          } else if (event === 'favicon-updated') {
+            const [favicon] = args;
+            tab.favicon = favicon;
+          }
+
+          tab.updateData();
+        } else if (event === 'color-updated') {
+          const [color] = args;
+          if (isColorAcceptable(color)) {
+            tab.background = color;
+            tab.customColor = true;
+          } else {
+            tab.background = store.theme.accentColor;
+            tab.customColor = false;
+          }
+        } else if (event === 'theme-color-updated') {
+          const [color] = args;
+          if (color && isColorAcceptable(color)) {
+            tab.background = color;
+            tab.hasThemeColor = true;
+            tab.customColor = true;
+          } else {
+            tab.background = store.theme.accentColor;
+            tab.hasThemeColor = false;
+            tab.customColor = false;
+          }
+        } else if (event === 'load-commit') {
+          const [, , isMainFrame] = args;
+          if (isMainFrame) {
+            tab.blockedAds = 0;
+          }
+        } else if (event === 'did-navigate') {
+          tab.background = store.theme.accentColor;
+          tab.customColor = false;
+          tab.favicon = '';
+        } else if (
+          event === 'loading' ||
+          event === 'pinned' ||
+          event === 'credentials'
+        ) {
+          const [state] = args;
+          if (event === 'loading') {
+            tab.loading = state;
+          } else if (event === 'pinned') {
+            tab.isPinned = state;
+          } else if (event === 'credentials') {
+            tab.hasCredentials = state;
+          }
+        }
       }
     });
 

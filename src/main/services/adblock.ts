@@ -1,15 +1,12 @@
 import { existsSync, promises as fs } from 'fs';
-import { resolve, join } from 'path';
+import { resolve } from 'path';
 import fetch from 'node-fetch';
 
 import { windowsManager } from '..';
 import { ElectronBlocker, Request } from '@cliqz/adblocker-electron';
 import { getPath } from '~/utils';
-import { ipcMain } from 'electron';
 
 export let engine: ElectronBlocker;
-
-const PRELOAD_PATH = join(__dirname, './preload.js');
 
 const loadFilters = async () => {
   const path = resolve(getPath('adblock/cache.dat'));
@@ -54,7 +51,7 @@ const loadFilters = async () => {
 
 const emitBlockedEvent = (request: Request) => {
   for (const window of windowsManager.list) {
-    window.webContents.send(`blocked-ad`, request.tabId);
+    window.viewManager.views.get(request.tabId).emitEvent('blocked-ad');
   }
 };
 
