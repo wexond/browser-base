@@ -20,7 +20,10 @@ export class ITabGroup {
   @observable
   public editMode = false;
 
+  @observable
   public width = 0;
+
+  @observable
   public left = 8;
 
   public isNew = true;
@@ -46,18 +49,11 @@ export class ITabGroup {
 
   @action
   public setLeft(left: number, animation: boolean) {
-    this.store.tabs.animateProperty('x', this.ref.current, left, animation);
     this.left = left;
   }
 
   @action
   public setWidth(width: number, animation: boolean) {
-    this.store.tabs.animateProperty(
-      'width',
-      this.lineRef.current,
-      width,
-      animation,
-    );
     this.width = width;
   }
 }

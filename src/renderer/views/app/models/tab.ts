@@ -52,6 +52,9 @@ export class ITab {
   public width = 0;
 
   @observable
+  public left = 0;
+
+  @observable
   public background = store.theme.accentColor;
 
   @observable
@@ -73,7 +76,6 @@ export class ITab {
   @observable
   public customColor = false;
 
-  public left = 0;
   public lastUrl = '';
   public isClosing = false;
   public ref = React.createRef<HTMLDivElement>();
@@ -317,13 +319,11 @@ export class ITab {
 
   @action
   public setLeft(left: number, animation: boolean) {
-    store.tabs.animateProperty('x', this.ref.current, left, animation);
     this.left = left;
   }
 
   @action
   public setWidth(width: number, animation: boolean) {
-    store.tabs.animateProperty('width', this.ref.current, width, animation);
     this.width = width;
   }
 

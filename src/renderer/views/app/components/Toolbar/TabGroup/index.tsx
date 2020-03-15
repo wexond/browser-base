@@ -17,7 +17,13 @@ const onPlaceholderClick = (tabGroup: ITabGroup) => () => {
 export const TabGroup = observer(({ tabGroup }: { tabGroup: ITabGroup }) => {
   return (
     <>
-      <StyledTabGroup ref={tabGroup.ref}>
+      <StyledTabGroup
+        style={{
+          transform: `translate3d(${tabGroup.left}px, 0, 0)`,
+          width: tabGroup.width,
+        }}
+        ref={tabGroup.ref}
+      >
         <Placeholder
           onMouseDown={onPlaceholderClick(tabGroup)}
           ref={tabGroup.placeholderRef}

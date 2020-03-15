@@ -13,7 +13,6 @@ import store from '.';
 import { ipcRenderer } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
-import { TweenLite } from 'gsap';
 
 export class TabsStore {
   @observable
@@ -590,21 +589,5 @@ export class TabsStore {
 
   public revertClosed() {
     this.addTab({ active: true, url: this.closedUrl });
-  }
-
-  public animateProperty(
-    property: string,
-    obj: any,
-    value: number,
-    animation: boolean,
-  ) {
-    if (obj) {
-      const props: any = {
-        ease: 'power2',
-      };
-      props[property] = value;
-
-      TweenLite.to(obj, animation ? TAB_ANIMATION_DURATION : 0, props);
-    }
   }
 }
