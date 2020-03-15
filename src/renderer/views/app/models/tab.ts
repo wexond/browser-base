@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
+import anime from 'animejs';
 
 import store from '../store';
 import {
@@ -14,6 +15,7 @@ import { getColorBrightness } from '~/utils';
 import { NEWTAB_URL } from '~/constants/tabs';
 import { closeWindow } from '../utils/windows';
 import { callViewMethod } from '~/utils/view';
+import { animateTab } from '../utils/tabs';
 
 const isColorAcceptable = (color: string) => {
   if (store.theme['tab.allowLightBackground']) {
@@ -48,10 +50,7 @@ export class ITab {
   @observable
   public tabGroupId: number;
 
-  @observable
   public width = 0;
-
-  @observable
   public left = 0;
 
   @observable
@@ -319,11 +318,13 @@ export class ITab {
 
   @action
   public setLeft(left: number, animation: boolean) {
+    animateTab('translateX', left, this.ref.current, animation);
     this.left = left;
   }
 
   @action
   public setWidth(width: number, animation: boolean) {
+    animateTab('width', width, this.ref.current, animation);
     this.width = width;
   }
 
@@ -381,7 +382,7 @@ export class ITab {
 
     this.removeTimeout = setTimeout(() => {
       store.tabs.removeTab(this.id);
-    }, TAB_ANIMATION_DURATION * 1000);
+    }, TAB_ANIMATION_DURATION);
   }
 
   public callViewMethod = (scope: string, ...args: any[]): Promise<any> => {

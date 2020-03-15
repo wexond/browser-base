@@ -189,8 +189,7 @@ export class TabsStore {
     requestAnimationFrame(() => {
       tab.setLeft(tab.getLeft(), false);
       this.updateTabsBounds(true);
-
-      this.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
+      this.scrollToEnd(TAB_ANIMATION_DURATION);
     });
     return tab;
   }
@@ -326,6 +325,7 @@ export class TabsStore {
     this.setTabsLefts(animation);
   }
 
+  @action
   public calculateTabMargins() {
     const tabs = this.list.filter(x => !x.isClosing);
 
@@ -350,6 +350,7 @@ export class TabsStore {
     }
   }
 
+  @action
   public setTabGroupsLefts(animation: boolean) {
     const tabs = this.list.filter(x => !x.isClosing);
 

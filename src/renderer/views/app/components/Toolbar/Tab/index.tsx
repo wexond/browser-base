@@ -264,10 +264,6 @@ export default observer(({ tab }: { tab: ITab }) => {
       onContextMenu={onContextMenu(tab)}
       onClick={onClick(tab)}
       onMouseLeave={onMouseLeave}
-      style={{
-        transform: `translate3d(${tab.left}px, 0, 0)`,
-        width: tab.width,
-      }}
       ref={tab.ref}
     >
       <TabContainer

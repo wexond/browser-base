@@ -64,7 +64,6 @@ export const Tabbar = observer(() => {
         <Tabs />
       </TabsContainer>
       <AddTab
-        style={{ transform: `translate3d(${store.addTab.left}px, 0, 0)` }}
         icon={ICON_ADD}
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
