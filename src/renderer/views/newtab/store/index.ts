@@ -178,7 +178,7 @@ export class Store {
 
   public async loadImage() {
     let url = localStorage.getItem('imageURL');
-    let isNewUrl = true;
+    let isNewUrl = false;
 
     if (this.changeImageDaily) {
       const dateString = localStorage.getItem('imageDate');
@@ -192,7 +192,7 @@ export class Store {
 
         if (diffTime > 1) {
           url = '';
-          isNewUrl = false;
+          isNewUrl = true;
         }
       }
     }
