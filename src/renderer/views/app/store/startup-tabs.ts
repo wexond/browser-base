@@ -8,6 +8,7 @@ import { IStartupTab } from '~/interfaces/startup-tab';
 import { extname } from 'path';
 import { existsSync } from 'fs';
 import { ITab } from '../models';
+import { defaultTabOptions } from '~/constants/tabs';
 
 export class StartupTabsStore {
   public db = new Database<IStartupTab>('startupTabs');
@@ -53,8 +54,6 @@ export class StartupTabsStore {
     if (tabsToLoad && tabsToLoad.length > 0) {
       this.clearStartupTabs(true, false);
 
-      console.log(tabsToLoad);
-
       this.store.tabs.addTabs(
         tabsToLoad
           .sort((x, y) =>
@@ -91,19 +90,21 @@ export class StartupTabsStore {
       const ext = extname(path);
 
       if (existsSync(path) && ext === '.html') {
-        this.store.tabs.addTab({ url: `file:///${path}`, active: true });
+        this.store.tabs.addTabs([{ url: `file:///${path}`, active: true }]);
         needsNewTabPage = false;
       } else if (isURL(path)) {
-        this.store.tabs.addTab({
-          url: prefixHttp(path),
-          active: true,
-        });
+        this.store.tabs.addTabs([
+          {
+            url: prefixHttp(path),
+            active: true,
+          },
+        ]);
         needsNewTabPage = false;
       }
     }
 
     if (needsNewTabPage) {
-      this.store.tabs.addTab();
+      this.store.tabs.addTabs([defaultTabOptions]);
     }
   }
 

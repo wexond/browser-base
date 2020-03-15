@@ -13,7 +13,6 @@ import store from '.';
 import { ipcRenderer } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
-import { TweenLite } from 'gsap';
 
 export class TabsStore {
   @observable
@@ -190,8 +189,7 @@ export class TabsStore {
     requestAnimationFrame(() => {
       tab.setLeft(tab.getLeft(), false);
       this.updateTabsBounds(true);
-
-      this.scrollToEnd(TAB_ANIMATION_DURATION * 1000);
+      this.scrollToEnd(TAB_ANIMATION_DURATION);
     });
     return tab;
   }
@@ -210,7 +208,7 @@ export class TabsStore {
 
     requestAnimationFrame(() => {
       this.updateTabsBounds(false);
-      if (!this.scrollable) {
+      if (this.scrollable) {
         this.containerRef.current.scrollLeft = this.containerRef.current.scrollWidth;
       }
     });
@@ -327,6 +325,7 @@ export class TabsStore {
     this.setTabsLefts(animation);
   }
 
+  @action
   public calculateTabMargins() {
     const tabs = this.list.filter(x => !x.isClosing);
 
@@ -351,6 +350,7 @@ export class TabsStore {
     }
   }
 
+  @action
   public setTabGroupsLefts(animation: boolean) {
     const tabs = this.list.filter(x => !x.isClosing);
 
@@ -590,21 +590,5 @@ export class TabsStore {
 
   public revertClosed() {
     this.addTab({ active: true, url: this.closedUrl });
-  }
-
-  public animateProperty(
-    property: string,
-    obj: any,
-    value: number,
-    animation: boolean,
-  ) {
-    if (obj) {
-      const props: any = {
-        ease: 'power2',
-      };
-      props[property] = value;
-
-      TweenLite.to(obj, animation ? TAB_ANIMATION_DURATION : 0, props);
-    }
   }
 }
