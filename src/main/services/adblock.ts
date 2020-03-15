@@ -54,14 +54,20 @@ const loadFilters = async () => {
 
 const emitBlockedEvent = (request: Request) => {
   for (const window of windowsManager.list) {
-    window.webContents.send(`blocked-ad-${request.tabId}`);
+    window.webContents.send(`blocked-ad`, request.tabId);
   }
 };
+
+let adblockRunning = false;
 
 export const runAdblockService = async (ses: any) => {
   if (!engine) {
     await loadFilters();
   }
+
+  if (adblockRunning) return;
+
+  adblockRunning = true;
 
   engine.enableBlockingInSession(ses);
 
@@ -70,7 +76,10 @@ export const runAdblockService = async (ses: any) => {
 };
 
 export const stopAdblockService = (ses: any) => {
+  if (!adblockRunning) return;
+
   if (engine) {
     engine.disableBlockingInSession(ses);
+    adblockRunning = false;
   }
 };

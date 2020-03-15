@@ -182,10 +182,6 @@ export class ITab {
       }
     });
 
-    ipcRenderer.on(`blocked-ad-${this.id}`, () => {
-      this.blockedAds++;
-    });
-
     ipcRenderer.on(
       `browserview-theme-color-updated-${this.id}`,
       (e, themeColor: string) => {

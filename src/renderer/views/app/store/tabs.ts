@@ -97,13 +97,11 @@ export class TabsStore {
     });
 
     ipcRenderer.on('select-tab-index', (e, i) => {
-      const tab = this.list[i];
-      if (tab) tab.select();
+      this.list[i]?.select();
     });
 
     ipcRenderer.on('select-last-tab', () => {
-      const tab = this.list[this.list.length - 1];
-      if (tab) tab.select();
+      this.list[this.list.length - 1]?.select();
     });
 
     ipcRenderer.on('select-previous-tab', () => {
@@ -120,9 +118,13 @@ export class TabsStore {
     });
 
     ipcRenderer.on('remove-tab', (e, id: number) => {
-      const tab = this.getTabById(id);
+      this.getTabById(id)?.close();
+    });
+
+    ipcRenderer.on(`blocked-ad`, (e, tabId) => {
+      const tab = this.getTabById(tabId);
       if (tab) {
-        tab.close();
+        tab.blockedAds++;
       }
     });
 
