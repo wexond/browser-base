@@ -208,7 +208,7 @@ export class TabsStore {
 
     requestAnimationFrame(() => {
       this.updateTabsBounds(false);
-      if (!this.scrollable) {
+      if (this.scrollable) {
         this.containerRef.current.scrollLeft = this.containerRef.current.scrollWidth;
       }
     });
