@@ -1,7 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
-import anime from 'animejs';
 
 import store from '../store';
 import {
@@ -11,8 +10,6 @@ import {
   TAB_MAX_WIDTH,
   TAB_PINNED_WIDTH,
 } from '../constants';
-import { getColorBrightness } from '~/utils';
-import { NEWTAB_URL } from '~/constants/tabs';
 import { closeWindow } from '../utils/windows';
 import { callViewMethod } from '~/utils/view';
 import { animateTab } from '../utils/tabs';
