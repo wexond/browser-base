@@ -123,15 +123,6 @@ export class ViewManager {
 
     this.selectedId = id;
 
-    view.updateWindowTitle();
-    view.updateBookmark();
-
-    if (this.incognito) {
-      windowsManager.sessionsManager.viewIncognito.activeTab = id;
-    } else {
-      windowsManager.sessionsManager.view.activeTab = id;
-    }
-
     this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);
 
@@ -153,6 +144,15 @@ export class ViewManager {
         this.window.dialogs[dialog].hide();
       }
     });
+
+    view.updateWindowTitle();
+    view.updateBookmark();
+
+    if (this.incognito) {
+      windowsManager.sessionsManager.viewIncognito.activeTab = id;
+    } else {
+      windowsManager.sessionsManager.view.activeTab = id;
+    }
 
     this.fixBounds();
   }

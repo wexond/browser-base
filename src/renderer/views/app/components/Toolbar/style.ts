@@ -15,6 +15,7 @@ export const StyledToolbar = styled.div`
 
   ${({ theme }: { theme: ITheme }) => css`
     background-color: ${theme['toolbar.backgroundColor']};
+    border-bottom: 1px solid ${theme['toolbar.bottomLine.backgroundColor']};
   `};
 `;
 

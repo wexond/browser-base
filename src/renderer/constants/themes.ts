@@ -2,7 +2,7 @@ import { ITheme } from '~/interfaces';
 import { BLUE_500 } from './colors';
 
 export const lightTheme: ITheme = {
-  'titlebar.backgroundColor': '#E0E0E0',
+  'titlebar.backgroundColor': '#d7d7d7',
   'addressbar.backgroundColor': '#fff',
   'toolbar.backgroundColor': '#f6f6f6',
   'toolbar.bottomLine.backgroundColor': 'rgba(0, 0, 0, 0.12)',
