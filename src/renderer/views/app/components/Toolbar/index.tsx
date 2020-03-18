@@ -18,17 +18,12 @@ import {
   ICON_MORE,
 } from '~/renderer/constants/icons';
 import { isDialogVisible } from '../../utils/dialogs';
-import { DIALOG_BUTTON_OFFSET_Y } from '~/constants/design';
 
 const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
-  const { right, top } = e.currentTarget.getBoundingClientRect();
+  const { right, bottom } = e.currentTarget.getBoundingClientRect();
   if (!(await isDialogVisible('downloadsDialog'))) {
     store.downloadNotification = false;
-    ipcRenderer.send(
-      `show-downloads-dialog-${store.windowId}`,
-      right,
-      top + DIALOG_BUTTON_OFFSET_Y,
-    );
+    ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, right, bottom);
   }
 };
 
@@ -49,23 +44,19 @@ let menuRef: HTMLDivElement = null;
 
 const showAddBookmarkDialog = async () => {
   if (!(await isDialogVisible('addBookmarkDialog'))) {
-    const { right, top } = starRef.getBoundingClientRect();
+    const { right, bottom } = starRef.getBoundingClientRect();
     ipcRenderer.send(
       `show-add-bookmark-dialog-${store.windowId}`,
       right,
-      top + DIALOG_BUTTON_OFFSET_Y,
+      bottom,
     );
   }
 };
 
 const showMenuDialog = async () => {
   if (!(await isDialogVisible('menuDialog'))) {
-    const { right, top } = menuRef.getBoundingClientRect();
-    ipcRenderer.send(
-      `show-menu-dialog-${store.windowId}`,
-      right,
-      top + DIALOG_BUTTON_OFFSET_Y,
-    );
+    const { right, bottom } = menuRef.getBoundingClientRect();
+    ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right, bottom);
   }
 };
 

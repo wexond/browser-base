@@ -2,9 +2,8 @@ import styled, { css } from 'styled-components';
 
 import { centerIcon } from '~/renderer/mixins';
 import {
-  TOOLBAR_HEIGHT,
   TOOLBAR_BUTTON_WIDTH,
-  TOOLBAR_BUTTON_HOVER_HEIGHT,
+  TOOLBAR_BUTTON_HEIGHT,
 } from '~/constants/design';
 import { ITheme } from '~/interfaces';
 
@@ -36,18 +35,33 @@ export const Icon = styled.div`
   `};
 `;
 
-export const Circle = styled.div`
+export const Button = styled.div`
+  height: ${TOOLBAR_BUTTON_HEIGHT}px;
+  width: ${TOOLBAR_BUTTON_WIDTH}px;
   border-radius: 4px;
-  width: 38px;
-  height: ${TOOLBAR_BUTTON_HOVER_HEIGHT}px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  overflow: hidden;
+  position: relative;
   transition: 0.2s background-color;
+  backface-visibility: hidden;
+  margin-right: 2px;
 
-  ${({ theme, toggled }: { theme: ITheme; toggled: boolean }) => css`
+  ${({
+    theme,
+    toggled,
+    disabled,
+  }: {
+    theme: ITheme;
+    toggled: boolean;
+    disabled: boolean;
+  }) => css`
+    pointer-events: ${disabled ? 'none' : 'inherit'};
+    -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
+
+    &:active {
+      background-color: ${theme['toolbar.lightForeground']
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.1)'};
+    }
+
     background-color: ${toggled
       ? theme['toolbar.lightForeground']
         ? 'rgba(255, 255, 255, 0.12)'
@@ -62,29 +76,6 @@ export const Circle = styled.div`
             : 'rgba(0, 0, 0, 0.06)'};
         }
       `};
-  `};
-`;
-
-export const Button = styled.div`
-  height: ${TOOLBAR_HEIGHT}px;
-
-  position: relative;
-  transition: 0.2s background-color;
-  width: ${TOOLBAR_BUTTON_WIDTH}px;
-  backface-visibility: hidden;
-  margin-right: 2px;
-
-  ${({ disabled, theme }: { disabled: boolean; theme: ITheme }) => css`
-    pointer-events: ${disabled ? 'none' : 'inherit'};
-    -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
-
-    &:active {
-      & ${Circle} {
-        background-color: ${theme['toolbar.lightForeground']
-          ? 'rgba(255, 255, 255, 0.12)'
-          : 'rgba(0, 0, 0, 0.1)'};
-      }
-    }
   `};
 `;
 

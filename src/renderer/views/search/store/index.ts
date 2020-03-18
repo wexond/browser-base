@@ -65,34 +65,7 @@ export class Store extends DialogStore {
   public tabId = 1;
 
   public constructor() {
-    super({
-      hideOnBlur: false,
-      visibilityWrapper: false,
-    });
-
-    window.addEventListener('blur', async () => {
-      if (this.visible) {
-        this.hide();
-      }
-    });
-
-    ipcRenderer.on('visible', async (e, flag, tab) => {
-      if (flag) {
-        this.visible = flag;
-        this.tabs = [];
-        this.suggestions.list = [];
-        this.tabId = tab.id;
-        if (tab.url.startsWith(NEWTAB_URL)) {
-          this.inputRef.current.value = '';
-        } else {
-          this.inputRef.current.value = tab.url;
-        }
-
-        this.inputRef.current.focus();
-      } else if (!(await ipcRenderer.invoke(`is-newtab-${this.id}`))) {
-        this.visible = flag;
-      }
-    });
+    super();
 
     ipcRenderer.on('search-tabs', (e, tabs) => {
       this.tabs = tabs;
@@ -101,6 +74,18 @@ export class Store extends DialogStore {
     this.loadHistory();
 
     ipcRenderer.send(`can-show-${this.id}`);
+  }
+
+  public onVisibilityChange(visible: boolean, tab: any) {
+    this.visible = visible;
+
+    if (visible) {
+      this.tabs = [];
+      this.suggestions.list = [];
+      this.tabId = tab.id;
+      this.inputRef.current.value = tab.url;
+      this.inputRef.current.focus();
+    }
   }
 
   public async loadHistory() {

@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { transparency } from '~/renderer/constants/transparency';
-import { Button, Icon, Circle, Badge, PreloaderBg } from './style';
+import { Button, Icon, Badge, PreloaderBg } from './style';
 import { BLUE_500 } from '~/renderer/constants';
 import { Preloader } from '~/renderer/components/Preloader';
 
@@ -66,6 +66,7 @@ export const ToolbarButton = observer(
         onMouseUp={onMouseUp}
         className={className}
         style={style}
+        toggled={toggled}
         ref={(r: HTMLDivElement) => {
           if (typeof divRef === 'function') {
             divRef(r);
@@ -80,7 +81,6 @@ export const ToolbarButton = observer(
           opacity={opacity}
           autoInvert={autoInvert}
         />
-        <Circle toggled={toggled}></Circle>
         {badge && (
           <Badge
             right={badgeRight}

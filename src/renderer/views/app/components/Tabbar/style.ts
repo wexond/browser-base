@@ -1,7 +1,12 @@
 import styled, { css } from 'styled-components';
 
 import { ToolbarButton } from '../ToolbarButton';
-import { TOOLBAR_BUTTON_WIDTH } from '~/constants/design';
+import {
+  TOOLBAR_BUTTON_WIDTH,
+  ADD_TAB_BUTTON_WIDTH,
+  ADD_TAB_BUTTON_HEIGHT,
+  TAB_MARGIN_TOP,
+} from '~/constants/design';
 import { ITheme } from '~/interfaces';
 
 export const StyledTabbar = styled.div`
@@ -22,8 +27,6 @@ export const TabsContainer = styled.div`
   overflow: hidden;
   overflow-x: overlay;
   white-space: nowrap;
-  display: flex;
-  align-items: center;
 
   &::-webkit-scrollbar {
     height: 0px;
@@ -53,5 +56,7 @@ export const TabsContainer = styled.div`
 export const AddTab = styled(ToolbarButton)`
   position: absolute;
   left: 0;
-  top: 0;
+  margin-top: ${TAB_MARGIN_TOP + 2}px;
+  width: ${ADD_TAB_BUTTON_WIDTH}px;
+  height: ${ADD_TAB_BUTTON_HEIGHT}px;
 `;
