@@ -31,12 +31,14 @@ export const Addressbar = styled.div`
   border-radius: 4px;
   margin: 0 7px;
 
-  &:hover {
-    border: 1px solid rgba(0, 0, 0, 0.12);
-  }
-
   ${({ theme }: { theme: ITheme }) => css`
     background-color: ${theme['addressbar.backgroundColor']};
+
+    &:hover {
+      border: ${theme['toolbar.lightForeground']
+        ? '1px solid rgba(255, 255, 255, 0.12)'
+        : '1px solid rgba(0, 0, 0, 0.12)'};
+    }
   `};
 `;
 

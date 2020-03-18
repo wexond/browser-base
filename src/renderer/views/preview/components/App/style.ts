@@ -12,7 +12,7 @@ export const StyledApp = styled(DialogStyle)`
 
   ${({ theme, xTransition }: { theme?: ITheme; xTransition: boolean }) => css`
     color: ${theme['dialog.textColor']};
-    transition: ${DIALOG_TRANSITION} ${xTransition ? ', 0.08s transform' : ''};
+    transition: 0.15s opacity ${xTransition ? ', 0.08s transform' : ''};
   `}
 `;
 

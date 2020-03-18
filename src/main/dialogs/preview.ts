@@ -23,7 +23,7 @@ export class PreviewDialog extends Dialog {
         height: HEIGHT,
         y: TITLEBAR_HEIGHT,
       },
-      hideTimeout: 100,
+      hideTimeout: 150,
     });
   }
 
