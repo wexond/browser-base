@@ -1,10 +1,9 @@
-import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { VIEW_Y_OFFSET, DIALOG_MARGIN_TOP } from '~/constants/design';
 import { Dialog } from './dialog';
 import { AppWindow } from '../windows';
 
 const WIDTH = 208;
 const HEIGHT = 128;
-const MARGIN = 8;
 
 export class FormFillDialog extends Dialog {
   public inputRect = {
@@ -27,7 +26,12 @@ export class FormFillDialog extends Dialog {
   public rearrange() {
     super.rearrange({
       x: this.inputRect.x - 8,
-      y: this.inputRect.y + this.inputRect.height + TOOLBAR_HEIGHT - MARGIN + 2,
+      y:
+        this.inputRect.y +
+        this.inputRect.height +
+        VIEW_Y_OFFSET -
+        DIALOG_MARGIN_TOP +
+        2,
     });
   }
 
@@ -35,7 +39,7 @@ export class FormFillDialog extends Dialog {
     const itemHeight = hasSubtext ? 56 : 32;
     super.rearrange({
       width: WIDTH,
-      height: count * itemHeight + MARGIN * 2 + 16,
+      height: count * itemHeight + DIALOG_MARGIN_TOP * 2 + 16,
     });
   }
 }

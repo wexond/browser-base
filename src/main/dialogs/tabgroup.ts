@@ -1,5 +1,5 @@
 import { AppWindow } from '../windows';
-import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { TITLEBAR_HEIGHT, DIALOG_MARGIN_TOP } from '~/constants/design';
 import { Dialog } from '.';
 
 const WIDTH = 266;
@@ -14,7 +14,7 @@ export class TabGroupDialog extends Dialog {
       bounds: {
         width: WIDTH,
         height: HEIGHT,
-        y: TOOLBAR_HEIGHT - 3,
+        y: TITLEBAR_HEIGHT - DIALOG_MARGIN_TOP,
       },
     });
   }

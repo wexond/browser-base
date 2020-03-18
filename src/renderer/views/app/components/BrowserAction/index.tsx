@@ -4,16 +4,23 @@ import { ToolbarButton } from '../ToolbarButton';
 import { IBrowserAction } from '../../models';
 import { ipcRenderer, remote } from 'electron';
 import store from '../../store';
+import { DIALOG_BUTTON_OFFSET_Y } from '~/constants/design';
 
 interface Props {
   data: IBrowserAction;
 }
 
-const showPopup = (data: IBrowserAction, right: number, devtools: boolean) => {
+const showPopup = (
+  data: IBrowserAction,
+  left: number,
+  top: number,
+  devtools: boolean,
+) => {
   store.extensions.currentlyToggledPopup = data.extensionId;
   ipcRenderer.send(
     `show-extension-popup-${store.windowId}`,
-    right,
+    left,
+    top + DIALOG_BUTTON_OFFSET_Y,
     data.popup,
     devtools,
   );
@@ -30,8 +37,8 @@ const onClick = (data: IBrowserAction) => (
   }
 
   if (canOpenPopup) {
-    const { right } = e.currentTarget.getBoundingClientRect();
-    showPopup(data, right, false);
+    const { right, top } = e.currentTarget.getBoundingClientRect();
+    showPopup(data, right, top, false);
   }
 };
 
@@ -43,8 +50,8 @@ const onContextMenu = (data: IBrowserAction) => (
     {
       label: 'Inspect popup',
       click: () => {
-        const { right } = (target as any).getBoundingClientRect();
-        showPopup(data, right, true);
+        const { right, top } = (target as any).getBoundingClientRect();
+        showPopup(data, right, top, true);
       },
     },
     {

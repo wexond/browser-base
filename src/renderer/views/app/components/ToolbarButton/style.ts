@@ -1,7 +1,11 @@
 import styled, { css } from 'styled-components';
 
 import { centerIcon } from '~/renderer/mixins';
-import { TOOLBAR_HEIGHT, TOOLBAR_BUTTON_WIDTH } from '~/constants/design';
+import {
+  TOOLBAR_HEIGHT,
+  TOOLBAR_BUTTON_WIDTH,
+  TOOLBAR_BUTTON_HOVER_HEIGHT,
+} from '~/constants/design';
 import { ITheme } from '~/interfaces';
 
 export const Icon = styled.div`
@@ -35,7 +39,7 @@ export const Icon = styled.div`
 export const Circle = styled.div`
   border-radius: 4px;
   width: 38px;
-  height: 32px;
+  height: ${TOOLBAR_BUTTON_HOVER_HEIGHT}px;
   position: absolute;
   top: 50%;
   left: 50%;

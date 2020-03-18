@@ -78,13 +78,15 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.tabGroupDialog.edit(tabGroup);
   });
 
-  ipcMain.on(`show-downloads-dialog-${id}`, (e, left) => {
+  ipcMain.on(`show-downloads-dialog-${id}`, (e, left, top) => {
     appWindow.dialogs.downloadsDialog.left = left;
+    appWindow.dialogs.downloadsDialog.top = top;
     appWindow.dialogs.downloadsDialog.show();
   });
 
-  ipcMain.on(`show-extension-popup-${id}`, (e, left, url, inspect) => {
+  ipcMain.on(`show-extension-popup-${id}`, (e, left, top, url, inspect) => {
     appWindow.dialogs.extensionPopup.left = left;
+    appWindow.dialogs.extensionPopup.top = top;
     appWindow.dialogs.extensionPopup.url = url;
     appWindow.dialogs.extensionPopup.show(inspect);
   });

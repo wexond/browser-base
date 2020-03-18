@@ -1,6 +1,10 @@
 import { ipcMain } from 'electron';
 import { AppWindow } from '../windows';
-import { TOOLBAR_HEIGHT } from '~/constants/design';
+import {
+  TOOLBAR_HEIGHT,
+  VIEW_Y_OFFSET,
+  DIALOG_MARGIN_TOP,
+} from '~/constants/design';
 import { Dialog } from '.';
 
 const WIDTH = 400;
@@ -13,7 +17,7 @@ export class AuthDialog extends Dialog {
       bounds: {
         width: WIDTH,
         height: HEIGHT,
-        y: TOOLBAR_HEIGHT,
+        y: VIEW_Y_OFFSET - DIALOG_MARGIN_TOP - 8,
       },
     });
   }

@@ -1,4 +1,4 @@
-import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { VIEW_Y_OFFSET } from '~/constants/design';
 import { AppWindow } from '../windows';
 import { Dialog } from '.';
 
@@ -12,7 +12,7 @@ export class CredentialsDialog extends Dialog {
       bounds: {
         height: HEIGHT,
         width: WIDTH,
-        y: TOOLBAR_HEIGHT,
+        y: VIEW_Y_OFFSET,
       },
     });
   }
