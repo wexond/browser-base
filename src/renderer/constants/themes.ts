@@ -1,8 +1,10 @@
 import { ITheme } from '~/interfaces';
-import { BLUE_500, BLUE_300 } from './colors';
+import { BLUE_500 } from './colors';
 
 export const lightTheme: ITheme = {
-  'toolbar.backgroundColor': '#fff',
+  'titlebar.backgroundColor': '#E0E0E0',
+  'addressbar.backgroundColor': '#fff',
+  'toolbar.backgroundColor': '#f6f6f6',
   'toolbar.bottomLine.backgroundColor': 'rgba(0, 0, 0, 0.12)',
   'toolbar.lightForeground': false,
   'toolbar.separator.color': 'rgba(0, 0, 0, 0.12)',
@@ -44,6 +46,7 @@ export const lightTheme: ITheme = {
 
 export const darkTheme: ITheme = {
   'titlebar.backgroundColor': '#1c1c1c',
+  'addressbar.backgroundColor': 'rgba(0, 0, 0, 0.18)',
   'toolbar.backgroundColor': '#2e2e2e',
   'toolbar.bottomLine.backgroundColor': 'rgba(255, 255, 255, 0.08)',
   'toolbar.lightForeground': true,

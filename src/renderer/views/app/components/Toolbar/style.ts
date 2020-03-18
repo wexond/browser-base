@@ -31,6 +31,10 @@ export const Addressbar = styled.div`
   border-radius: 4px;
   margin-left: 6px;
   margin-right: 8px;
+
+  ${({ theme }: { theme: ITheme }) => css`
+    background-color: ${theme['addressbar.backgroundColor']};
+  `};
 `;
 
 export const Separator = styled.div`

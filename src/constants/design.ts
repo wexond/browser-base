@@ -1,5 +1,5 @@
 export const TAB_MARGIN_TOP = 4;
-export const TAB_HEIGHT = 34;
+export const TAB_HEIGHT = 32;
 
 // Toolbar
 export const TOOLBAR_HEIGHT = 42;

@@ -233,11 +233,11 @@ const Close = observer(({ tab }: { tab: ITab }) => {
 export default observer(({ tab }: { tab: ITab }) => {
   const defaultColor = store.theme['toolbar.lightForeground']
     ? 'rgba(255, 255, 255, 0.05)'
-    : 'rgba(0, 0, 0, 0.25)';
+    : 'rgba(0, 0, 0, 0.05)';
 
   const defaultHoverColor = store.theme['toolbar.lightForeground']
     ? 'rgba(255, 255, 255, 0.08)'
-    : 'rgba(0, 0, 0, 0.5)';
+    : 'rgba(0, 0, 0, 0.08)';
 
   return (
     <StyledTab

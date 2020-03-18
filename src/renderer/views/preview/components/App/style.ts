@@ -10,8 +10,6 @@ export const StyledApp = styled(DialogStyle)`
   font-size: 13px;
   max-width: ${TAB_MAX_WIDTH}px;
   margin-top: 3px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
 
   ${({ theme, xTransition }: { theme?: ITheme; xTransition: boolean }) => css`
     color: ${theme['dialog.textColor']};
