@@ -8,6 +8,9 @@ export interface ITheme {
   'toolbar.lightForeground': boolean;
   'toolbar.separator.color': string;
 
+  'tab.textColor': string;
+  'tab.selected.textColor': string;
+
   'control.backgroundColor': string;
   'control.hover.backgroundColor': string;
   'control.valueColor': string;

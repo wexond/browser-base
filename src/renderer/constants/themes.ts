@@ -2,12 +2,14 @@ import { ITheme } from '~/interfaces';
 import { BLUE_500 } from './colors';
 
 export const lightTheme: ITheme = {
-  'titlebar.backgroundColor': '#d7d7d7',
+  'titlebar.backgroundColor': '#E0E0E0',
   'addressbar.backgroundColor': '#fff',
-  'toolbar.backgroundColor': '#f6f6f6',
+  'toolbar.backgroundColor': '#f6f5f5',
   'toolbar.bottomLine.backgroundColor': 'rgba(0, 0, 0, 0.12)',
   'toolbar.lightForeground': false,
   'toolbar.separator.color': 'rgba(0, 0, 0, 0.12)',
+  'tab.selected.textColor': '#000',
+  'tab.textColor': `rgba(0, 0, 0, 0.7)`,
   'control.backgroundColor': 'rgba(0, 0, 0, 0.08)',
   'control.hover.backgroundColor': 'rgba(0, 0, 0, 0.1)',
   'control.valueColor': '#000',
@@ -45,6 +47,8 @@ export const darkTheme: ITheme = {
   'toolbar.bottomLine.backgroundColor': 'rgba(255, 255, 255, 0.08)',
   'toolbar.lightForeground': true,
   'toolbar.separator.color': 'rgba(255, 255, 255, 0.12)',
+  'tab.selected.textColor': '#fff',
+  'tab.textColor': 'rgba(255, 255, 255, 0.54)',
   'control.backgroundColor': 'rgba(255, 255, 255, 0.1)',
   'control.hover.backgroundColor': 'rgba(255, 255, 255, 0.12)',
   'control.valueColor': '#fff',
