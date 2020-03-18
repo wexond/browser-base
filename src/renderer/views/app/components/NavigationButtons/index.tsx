@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { StyledContainer } from './style';
-import store from '../../../store';
+import store from '../../store';
 import { ToolbarButton } from '../ToolbarButton';
 import {
   ICON_CLOSE,
@@ -42,7 +42,7 @@ export const NavigationButtons = observer(() => {
         disabled={!store.navigationState.canGoBack}
         size={20}
         icon={ICON_BACK}
-        style={{ marginLeft: 4 }}
+        style={{ marginLeft: 6 }}
         onClick={onBackClick}
       />
       <ToolbarButton

@@ -1,4 +1,6 @@
 export interface ITheme {
+  'titlebar.backgroundColor': string;
+
   'toolbar.backgroundColor': string;
   'toolbar.bottomLine.backgroundColor': string;
   'toolbar.lightForeground': boolean;

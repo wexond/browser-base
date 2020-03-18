@@ -49,8 +49,9 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.findDialog.find(tabId, data);
   });
 
-  ipcMain.on(`show-menu-dialog-${id}`, (e, left) => {
+  ipcMain.on(`show-menu-dialog-${id}`, (e, left, top) => {
     appWindow.dialogs.menuDialog.left = left;
+    appWindow.dialogs.menuDialog.top = top;
     appWindow.dialogs.menuDialog.show();
   });
 
@@ -94,8 +95,9 @@ export const runMessagingService = (appWindow: AppWindow) => {
     }
   });
 
-  ipcMain.on(`show-add-bookmark-dialog-${id}`, (e, left) => {
+  ipcMain.on(`show-add-bookmark-dialog-${id}`, (e, left, top) => {
     appWindow.dialogs.addBookmarkDialog.left = left;
+    appWindow.dialogs.addBookmarkDialog.top = top;
     appWindow.dialogs.addBookmarkDialog.show();
   });
 

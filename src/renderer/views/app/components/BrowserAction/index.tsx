@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { ToolbarButton } from '../ToolbarButton';
-import { IBrowserAction } from '../../../models';
+import { IBrowserAction } from '../../models';
 import { ipcRenderer, remote } from 'electron';
-import store from '../../../store';
+import store from '../../store';
 
 interface Props {
   data: IBrowserAction;

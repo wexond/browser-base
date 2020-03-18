@@ -84,24 +84,6 @@ export class ITab {
   }
 
   @computed
-  public get borderVisible() {
-    const tabs = this.tabGroup.tabs;
-
-    const i = tabs.indexOf(this);
-    const nextTab = tabs[i + 1];
-
-    if (
-      (nextTab && (nextTab.isHovered || nextTab.isSelected)) ||
-      this.isSelected ||
-      this.isHovered
-    ) {
-      return false;
-    }
-
-    return true;
-  }
-
-  @computed
   public get isExpanded() {
     return this.isHovered || this.isSelected || !store.tabs.scrollable;
   }

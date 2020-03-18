@@ -13,8 +13,8 @@ import {
 } from './style';
 import { shadeBlendConvert } from '~/utils';
 import Ripple from '~/renderer/components/Ripple';
-import { ITab } from '../../../models';
-import store from '../../../store';
+import { ITab } from '../../models';
+import store from '../../store';
 import { remote, ipcRenderer } from 'electron';
 import { ICON_MUTE } from '~/renderer/constants/icons';
 
@@ -240,12 +240,9 @@ const Overlay = observer(({ tab }: { tab: ITab }) => {
 
   return (
     <StyledOverlay
-      hovered={tab.isHovered}
+      hovered={tab.isHovered && !tab.isSelected}
       style={{
-        backgroundColor:
-          tab.isSelected || tab.customColor
-            ? tab.background
-            : defaultHoverColor,
+        backgroundColor: defaultHoverColor,
       }}
     />
   );
@@ -253,7 +250,7 @@ const Overlay = observer(({ tab }: { tab: ITab }) => {
 
 export default observer(({ tab }: { tab: ITab }) => {
   const defaultColor = store.theme['toolbar.lightForeground']
-    ? 'rgba(255, 255, 255, 0.3)'
+    ? 'rgba(255, 255, 255, 0.05)'
     : 'rgba(0, 0, 0, 0.25)';
 
   return (
@@ -272,16 +269,8 @@ export default observer(({ tab }: { tab: ITab }) => {
         pinned={tab.isPinned}
         style={{
           backgroundColor: tab.isSelected
-            ? shadeBlendConvert(
-                store.theme['tab.backgroundOpacity'],
-                tab.background,
-                store.theme['toolbar.backgroundColor'],
-              )
-            : shadeBlendConvert(
-                0.9,
-                tab.customColor ? tab.background : defaultColor,
-                store.theme['toolbar.backgroundColor'],
-              ),
+            ? store.theme['toolbar.backgroundColor']
+            : defaultColor,
         }}
       >
         <Content tab={tab} />
@@ -303,12 +292,6 @@ export default observer(({ tab }: { tab: ITab }) => {
         <Close tab={tab} />
 
         <Overlay tab={tab} />
-        <Ripple
-          rippleTime={0.6}
-          opacity={0.15}
-          color={tab.background}
-          style={{ zIndex: 9 }}
-        />
       </TabContainer>
     </StyledTab>
   );

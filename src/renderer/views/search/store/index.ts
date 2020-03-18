@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { ipcRenderer } from 'electron';
 import { observable, computed } from 'mobx';
-import { DEFAULT_SEARCH_ENGINES } from '~/constants';
 import { ISuggestion, IVisitedItem } from '~/interfaces';
 import { SuggestionsStore } from './suggestions';
 import { NEWTAB_URL } from '~/constants/tabs';
@@ -72,7 +71,7 @@ export class Store extends DialogStore {
     });
 
     window.addEventListener('blur', async () => {
-      if (this.visible && !(await ipcRenderer.invoke(`is-newtab-${this.id}`))) {
+      if (this.visible) {
         this.hide();
       }
     });

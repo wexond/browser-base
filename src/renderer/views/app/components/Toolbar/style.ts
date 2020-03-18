@@ -7,30 +7,13 @@ export const StyledToolbar = styled.div`
   position: relative;
   z-index: 100;
   display: flex;
-  flex-flow: row;
   align-items: center;
+  flex-flow: row;
   color: rgba(0, 0, 0, 0.8);
   width: 100%;
   height: ${TOOLBAR_HEIGHT}px;
 
-  &:before {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    right: 3px;
-    bottom: 0px;
-    -webkit-app-region: drag;
-    content: '';
-  }
-
-  ${({
-    isHTMLFullscreen,
-    theme,
-  }: {
-    isHTMLFullscreen: boolean;
-    theme: ITheme;
-  }) => css`
-    margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
+  ${({ theme }: { theme: ITheme }) => css`
     background-color: ${theme['toolbar.backgroundColor']};
   `};
 `;
@@ -38,6 +21,16 @@ export const StyledToolbar = styled.div`
 export const Buttons = styled.div`
   display: flex;
   align-items: center;
+  margin-right: 4px;
+`;
+
+export const Addressbar = styled.div`
+  height: 30px;
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.18);
+  border-radius: 4px;
+  margin-left: 6px;
+  margin-right: 8px;
 `;
 
 export const Separator = styled.div`

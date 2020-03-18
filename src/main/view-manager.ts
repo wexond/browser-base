@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { VIEW_Y_OFFSET } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
 import { WEBUI_BASE_URL } from '~/constants/files';
@@ -138,15 +138,6 @@ export class ViewManager {
     // Also fixes switching tabs with Ctrl + Tab
     view.webContents.focus();
 
-    if (view.webContents.getURL().startsWith(NEWTAB_URL) || view.isNewTab) {
-      this.window.dialogs.searchDialog.bringToTop();
-      this.window.dialogs.searchDialog.show();
-    } else {
-      if (this.window.dialogs.searchDialog.visible) {
-        this.window.dialogs.searchDialog.hide(true);
-      }
-    }
-
     this.window.dialogs.previewDialog.hide(true);
 
     [
@@ -175,9 +166,9 @@ export class ViewManager {
 
     const newBounds = {
       x: 0,
-      y: this.fullscreen ? 0 : TOOLBAR_HEIGHT + 1,
+      y: this.fullscreen ? 0 : VIEW_Y_OFFSET,
       width,
-      height: this.fullscreen ? height : height - TOOLBAR_HEIGHT,
+      height: this.fullscreen ? height : height - VIEW_Y_OFFSET,
     };
 
     if (newBounds !== view.bounds) {

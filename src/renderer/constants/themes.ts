@@ -43,7 +43,8 @@ export const lightTheme: ITheme = {
 };
 
 export const darkTheme: ITheme = {
-  'toolbar.backgroundColor': '#1c1c1c',
+  'titlebar.backgroundColor': '#1c1c1c',
+  'toolbar.backgroundColor': '#2e2e2e',
   'toolbar.bottomLine.backgroundColor': 'rgba(255, 255, 255, 0.08)',
   'toolbar.lightForeground': true,
   'toolbar.separator.color': 'rgba(255, 255, 255, 0.12)',
@@ -58,7 +59,7 @@ export const darkTheme: ITheme = {
   'control.valueColor': '#fff',
   'control.lightIcon': true,
   'switch.backgroundColor': 'rgba(255, 255, 255, 0.24)',
-  'dialog.backgroundColor': '#333333',
+  'dialog.backgroundColor': '#383838',
   'dialog.separator.color': 'rgba(255, 255, 255, 0.12)',
   'dialog.textColor': '#fff',
   'dialog.lightForeground': true,

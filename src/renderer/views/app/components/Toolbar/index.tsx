@@ -4,14 +4,10 @@ import { ipcRenderer, remote } from 'electron';
 import { parse } from 'url';
 
 import store from '../../store';
-import { Buttons, StyledToolbar, Separator } from './style';
-import { NavigationButtons } from './NavigationButtons';
-import { Tabbar } from './Tabbar';
-import { ToolbarButton } from './ToolbarButton';
-import { BrowserAction } from './BrowserAction';
-import { platform } from 'os';
-import { TOOLBAR_HEIGHT } from '~/constants/design';
-import { WindowsControls } from 'react-windows-controls';
+import { Buttons, StyledToolbar, Separator, Addressbar } from './style';
+import { NavigationButtons } from '../NavigationButtons';
+import { ToolbarButton } from '../ToolbarButton';
+import { BrowserAction } from '../BrowserAction';
 import {
   ICON_STAR,
   ICON_STAR_FILLED,
@@ -22,6 +18,7 @@ import {
   ICON_MORE,
 } from '~/renderer/constants/icons';
 import { isDialogVisible } from '../../utils/dialogs';
+import { TOOLBAR_HEIGHT } from '~/constants/design';
 
 const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
   const { right } = e.currentTarget.getBoundingClientRect();
@@ -46,17 +43,27 @@ const onKeyClick = () => {
 let starRef: HTMLDivElement = null;
 let menuRef: HTMLDivElement = null;
 
+const DIALOG_BUTTON_OFFSET_Y = 32 + (TOOLBAR_HEIGHT - 32) / 2;
+
 const showAddBookmarkDialog = async () => {
   if (!(await isDialogVisible('addBookmarkDialog'))) {
-    const { right } = starRef.getBoundingClientRect();
-    ipcRenderer.send(`show-add-bookmark-dialog-${store.windowId}`, right);
+    const { right, top } = starRef.getBoundingClientRect();
+    ipcRenderer.send(
+      `show-add-bookmark-dialog-${store.windowId}`,
+      right,
+      top + DIALOG_BUTTON_OFFSET_Y,
+    );
   }
 };
 
 const showMenuDialog = async () => {
   if (!(await isDialogVisible('menuDialog'))) {
-    const { right } = menuRef.getBoundingClientRect();
-    ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right);
+    const { right, top } = menuRef.getBoundingClientRect();
+    ipcRenderer.send(
+      `show-menu-dialog-${store.windowId}`,
+      right,
+      top + DIALOG_BUTTON_OFFSET_Y,
+    );
   }
 };
 
@@ -91,18 +98,6 @@ const BrowserActions = observer(() => {
     </>
   );
 });
-
-const onCloseClick = () => ipcRenderer.send(`window-close-${store.windowId}`);
-
-const onMouseEnter = () => {
-  // ipcRenderer.send(`window-fix-dragging-${store.windowId}`);
-};
-
-const onMaximizeClick = () =>
-  ipcRenderer.send(`window-toggle-maximize-${store.windowId}`);
-
-const onMinimizeClick = () =>
-  ipcRenderer.send(`window-minimize-${store.windowId}`);
 
 const onShieldContextMenu = (e: React.MouseEvent) => {
   const menu = remote.Menu.buildFromTemplate([
@@ -186,26 +181,10 @@ const RightButtons = observer(() => {
 
 export const Toolbar = observer(() => {
   return (
-    <StyledToolbar
-      onMouseEnter={onMouseEnter}
-      isHTMLFullscreen={store.isHTMLFullscreen}
-    >
+    <StyledToolbar>
       <NavigationButtons />
-      <Tabbar />
+      <Addressbar />
       <RightButtons />
-      {platform() !== 'darwin' && (
-        <WindowsControls
-          style={{
-            height: TOOLBAR_HEIGHT,
-            WebkitAppRegion: 'no-drag',
-            marginLeft: 8,
-          }}
-          onClose={onCloseClick}
-          onMinimize={onMinimizeClick}
-          onMaximize={onMaximizeClick}
-          dark={store.theme['toolbar.lightForeground']}
-        />
-      )}
     </StyledToolbar>
   );
 });
