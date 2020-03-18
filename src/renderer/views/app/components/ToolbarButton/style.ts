@@ -42,7 +42,7 @@ export const Button = styled.div`
   position: relative;
   transition: 0.2s background-color;
   backface-visibility: hidden;
-  margin-right: 2px;
+  margin: 0 1px;
 
   ${({
     theme,

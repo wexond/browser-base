@@ -15,9 +15,10 @@ export const StyledTitlebar = styled.div`
 
   &:before {
     position: absolute;
-    top: 3px;
-    left: 3px;
-    right: 3px;
+    z-index: 0;
+    top: 4px;
+    left: 4px;
+    right: 4px;
     bottom: 0px;
     -webkit-app-region: drag;
     content: '';

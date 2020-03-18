@@ -28,10 +28,12 @@ export const Buttons = styled.div`
 export const Addressbar = styled.div`
   height: 30px;
   flex: 1;
-  background-color: rgba(0, 0, 0, 0.18);
   border-radius: 4px;
-  margin-left: 6px;
-  margin-right: 8px;
+  margin: 0 7px;
+
+  &:hover {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
 
   ${({ theme }: { theme: ITheme }) => css`
     background-color: ${theme['addressbar.backgroundColor']};

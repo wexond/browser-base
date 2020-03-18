@@ -21,9 +21,9 @@ export class PreviewDialog extends Dialog {
       bounds: {
         width: appWindow.getBounds().width,
         height: HEIGHT,
-        y: TITLEBAR_HEIGHT - DIALOG_MARGIN_TOP,
+        y: TITLEBAR_HEIGHT,
       },
-      hideTimeout: 200,
+      hideTimeout: 100,
     });
   }
 
