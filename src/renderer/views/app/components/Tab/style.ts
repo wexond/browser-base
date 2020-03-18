@@ -66,18 +66,6 @@ export const StyledTab = styled.div`
   `};
 `;
 
-export const StyledOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: 0.1s opacity;
-  ${({ hovered }: { hovered: boolean }) => css`
-    opacity: ${hovered ? 0.08 : 0};
-  `};
-`;
-
 interface TitleProps {
   isIcon: boolean;
   selected: boolean;
@@ -129,24 +117,8 @@ export const StyledContent = styled.div`
   `};
 `;
 
-export const StyledBorder = styled.div`
-  position: absolute;
-  width: 1px;
-  height: 16px;
-
-  right: -1px;
-  top: 50%;
-  transform: translateY(-50%);
-
-  ${({ visible, theme }: { visible: boolean; theme: ITheme }) => css`
-    visibility: ${visible ? 'visible' : 'hidden'};
-    background-color: ${theme['toolbar.separator.color']};
-  `};
-`;
-
 interface TabContainerProps {
   pinned: boolean;
-  tabGroup: boolean;
 }
 
 export const TabContainer = styled.div`
@@ -160,7 +132,9 @@ export const TabContainer = styled.div`
   overflow: hidden;
   display: flex;
   backface-visibility: hidden;
-  ${({ pinned, tabGroup }: TabContainerProps) => css`
+  transition: 0.1s background-color;
+
+  ${({ pinned }: TabContainerProps) => css`
     max-width: ${pinned ? `${TAB_PINNED_WIDTH}px` : '100%'};
   `};
 `;

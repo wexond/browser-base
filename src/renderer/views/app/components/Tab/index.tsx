@@ -11,8 +11,6 @@ import {
   StyledOverlay,
   TabContainer,
 } from './style';
-import { shadeBlendConvert } from '~/utils';
-import Ripple from '~/renderer/components/Ripple';
 import { ITab } from '../../models';
 import store from '../../store';
 import { remote, ipcRenderer } from 'electron';
@@ -207,7 +205,7 @@ const Content = observer(({ tab }: { tab: ITab }) => {
 
       {tab.loading && (
         <Preloader
-          color={tab.background}
+          color={store.theme.accentColor}
           thickness={6}
           size={16}
           indeterminate
@@ -233,25 +231,14 @@ const Close = observer(({ tab }: { tab: ITab }) => {
   );
 });
 
-const Overlay = observer(({ tab }: { tab: ITab }) => {
-  const defaultHoverColor = store.theme['toolbar.lightForeground']
-    ? 'rgba(255, 255, 255, 0.5)'
-    : 'rgba(0, 0, 0, 0.5)';
-
-  return (
-    <StyledOverlay
-      hovered={tab.isHovered && !tab.isSelected}
-      style={{
-        backgroundColor: defaultHoverColor,
-      }}
-    />
-  );
-});
-
 export default observer(({ tab }: { tab: ITab }) => {
   const defaultColor = store.theme['toolbar.lightForeground']
     ? 'rgba(255, 255, 255, 0.05)'
     : 'rgba(0, 0, 0, 0.25)';
+
+  const defaultHoverColor = store.theme['toolbar.lightForeground']
+    ? 'rgba(255, 255, 255, 0.08)'
+    : 'rgba(0, 0, 0, 0.5)';
 
   return (
     <StyledTab
@@ -265,11 +252,12 @@ export default observer(({ tab }: { tab: ITab }) => {
       ref={tab.ref}
     >
       <TabContainer
-        tabGroup={!!tab.tabGroup}
         pinned={tab.isPinned}
         style={{
           backgroundColor: tab.isSelected
             ? store.theme['toolbar.backgroundColor']
+            : tab.isHovered
+            ? defaultHoverColor
             : defaultColor,
         }}
       >
@@ -290,8 +278,6 @@ export default observer(({ tab }: { tab: ITab }) => {
           />
         )}
         <Close tab={tab} />
-
-        <Overlay tab={tab} />
       </TabContainer>
     </StyledTab>
   );

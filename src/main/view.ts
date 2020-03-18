@@ -3,7 +3,6 @@ import { parse as parseUrl } from 'url';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
 import storage from './services/storage';
-import Vibrant = require('node-vibrant');
 import { IHistoryItem, IBookmark } from '~/interfaces';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { windowsManager } from '.';
@@ -183,28 +182,12 @@ export class View extends BrowserView {
           }
 
           this.emitEvent('favicon-updated', fav);
-
-          const buf = Buffer.from(fav.split('base64,')[1], 'base64');
-
-          try {
-            const palette = await Vibrant.from(buf).getPalette();
-
-            if (!palette.Vibrant) return;
-
-            this.emitEvent('color-updated', palette.Vibrant.getHex());
-          } catch (e) {
-            console.error(e);
-          }
         } catch (e) {
           this.favicon = '';
           console.error(e);
         }
       },
     );
-
-    this.webContents.addListener('did-change-theme-color', (e, color) => {
-      this.emitEvent('theme-color-updated', color);
-    });
 
     this.webContents.addListener('zoom-changed', (e, zoomDirection) => {
       const newZoomFactor =

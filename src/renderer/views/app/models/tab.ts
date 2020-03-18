@@ -43,9 +43,6 @@ export class ITab {
   public left = 0;
 
   @observable
-  public background = store.theme.accentColor;
-
-  @observable
   public url = '';
 
   @observable
@@ -61,14 +58,10 @@ export class ITab {
   @observable
   public hasCredentials = false;
 
-  @observable
-  public customColor = false;
-
   public lastUrl = '';
   public isClosing = false;
   public ref = React.createRef<HTMLDivElement>();
 
-  public hasThemeColor = false;
   public removeTimeout: any;
 
   public marginLeft = 0;
