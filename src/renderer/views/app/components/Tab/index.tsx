@@ -8,7 +8,6 @@ import {
   StyledIcon,
   StyledTitle,
   StyledClose,
-  StyledOverlay,
   TabContainer,
 } from './style';
 import { ITab } from '../../models';
@@ -28,22 +27,22 @@ const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
 const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   const { pageX, button } = e;
 
-  ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
+  if (button === 0) {
+    if (!tab.isSelected) {
+      tab.select();
+    } else {
+      store.canToggleMenu = true;
+    }
 
-  if (button !== 0) return;
+    store.tabs.lastMouseX = 0;
+    store.tabs.isDragging = true;
+    store.tabs.mouseStartX = pageX;
+    store.tabs.tabStartX = tab.left;
 
-  if (!tab.isSelected) {
-    tab.select();
-  } else {
-    store.canToggleMenu = true;
+    store.tabs.lastScrollLeft = store.tabs.containerRef.current.scrollLeft;
   }
 
-  store.tabs.lastMouseX = 0;
-  store.tabs.isDragging = true;
-  store.tabs.mouseStartX = pageX;
-  store.tabs.tabStartX = tab.left;
-
-  store.tabs.lastScrollLeft = store.tabs.containerRef.current.scrollLeft;
+  ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
 };
 
 const onMouseEnter = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {

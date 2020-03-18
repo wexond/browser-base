@@ -1,7 +1,6 @@
 import { AppWindow } from '../windows';
 import { ipcMain } from 'electron';
 import { Dialog } from '.';
-import { NEWTAB_URL } from '~/constants/tabs';
 import { DIALOG_MIN_HEIGHT } from '~/constants/design';
 
 const WIDTH = 800;
@@ -38,14 +37,6 @@ export class SearchDialog extends Dialog {
 
     ipcMain.on(`can-show-${this.webContents.id}`, () => {
       if (this.queueShow) this.show();
-    });
-
-    ipcMain.handle(`is-newtab-${this.webContents.id}`, () => {
-      return appWindow.viewManager.selected
-        ? appWindow.viewManager.selected.webContents
-            .getURL()
-            .startsWith(NEWTAB_URL)
-        : false;
     });
   }
 

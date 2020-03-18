@@ -143,13 +143,13 @@ export class Dialog extends BrowserView {
   public hide(bringToTop = false, hideVisually = true) {
     if (hideVisually) this.hideVisually();
 
+    if (!this.visible) return;
+
     this.appWindow.webContents.send(
       'dialog-visibility-change',
       this.name,
       false,
     );
-
-    if (!this.visible) return;
 
     if (bringToTop) {
       this.bringToTop();
