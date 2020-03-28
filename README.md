@@ -42,7 +42,7 @@ If you have found any bugs or just want to see some new features in Wexond, feel
 
 ## Running
 
-Before running Wexond, please ensure you have **latest** [`Node.js`](https://nodejs.org/en/) installed on your machine.
+Before running Wexond, please ensure you have **latest** [`Node.js`](https://nodejs.org/en/) and [`Yarn`](https://classic.yarnpkg.com/en/docs/install/#windows-stable) installed on your machine.
 
 When running on Windows, make sure you have build tools installed. You can install them by running this command as **administrator**:
 
@@ -53,7 +53,7 @@ $ npm i -g windows-build-tools
 Firstly, run this command to install all needed dependencies. If you have encountered any problems, please report it.
 
 ```bash
-$ npm install
+$ yarn
 ```
 
 After a successful installation, the native modules need to be rebuilt using Electron headers. To do this, run:
