@@ -195,7 +195,7 @@ const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
 const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.key === 'Escape' || e.key === 'Enter') {
     store.addressbarEditing = false;
-    store.addressbarValue = null;
+    store.tabs.selectedTab.addressbarValue = null;
   }
 
   if (e.key === 'Escape') {
@@ -216,13 +216,13 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       url = store.settings.searchEngine.url.replace('%s', value);
     }
 
-    store.addressbarValue = url;
+    store.tabs.selectedTab.addressbarValue = url;
     callViewMethod(store.tabs.selectedTabId, 'loadURL', url);
   }
 };
 
 const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  store.addressbarValue = e.currentTarget.value;
+  store.tabs.selectedTab.addressbarValue = e.currentTarget.value;
 };
 
 const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {

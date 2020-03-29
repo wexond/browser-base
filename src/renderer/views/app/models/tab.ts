@@ -39,6 +39,9 @@ export class ITab {
   @observable
   public tabGroupId: number;
 
+  @observable
+  public addressbarValue: string = null;
+
   public width = 0;
   public left = 0;
 

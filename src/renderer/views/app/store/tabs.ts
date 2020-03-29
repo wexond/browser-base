@@ -141,7 +141,7 @@ export class TabsStore {
             tab.url = url;
 
             if (tab.id === this.selectedTabId && !store.addressbarEditing) {
-              store.addressbarValue = null;
+              this.selectedTab.addressbarValue = null;
             }
           } else if (event === 'title-updated') {
             const [title] = args;

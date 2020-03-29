@@ -36,19 +36,13 @@ export class Store {
   @observable
   public addressbarEditing = false;
 
-  @observable
-  private _addressbarValue: string = null;
-
-  public set addressbarValue(value: string) {
-    this._addressbarValue = value;
-  }
-
   @computed
   public get addressbarValue() {
-    if (this._addressbarValue != null) return this._addressbarValue;
+    if (this.tabs.selectedTab?.addressbarValue != null)
+      return this.tabs.selectedTab?.addressbarValue;
     else if (
       this.tabs.selectedTab &&
-      !this.tabs.selectedTab.url.startsWith(NEWTAB_URL)
+      !this.tabs.selectedTab?.url?.startsWith(NEWTAB_URL)
     )
       return this.tabs.selectedTab.url;
     return '';
