@@ -28,6 +28,7 @@ import {
 import { isDialogVisible } from '../../utils/dialogs';
 import { isURL } from '~/utils';
 import { callViewMethod } from '~/utils/view';
+import { BLUE_500 } from '~/renderer/constants/colors';
 
 const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
   const { right, bottom } = e.currentTarget.getBoundingClientRect();
@@ -263,7 +264,12 @@ export const Toolbar = observer(() => {
           visible={store.addressbarTextVisible && store.addressbarValue !== ''}
         >
           {store.addressbarUrlSegments.map((item, key) => (
-            <div key={key} style={{ opacity: item.grayOut ? 0.54 : 1 }}>
+            <div
+              key={key}
+              style={{
+                opacity: item.grayOut ? 0.54 : 1,
+              }}
+            >
               {item.value}
             </div>
           ))}

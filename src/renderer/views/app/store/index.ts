@@ -39,13 +39,12 @@ export class Store {
 
   @computed
   public get addressbarValue() {
-    if (this.tabs.selectedTab?.addressbarValue != null)
-      return this.tabs.selectedTab?.addressbarValue;
-    else if (
-      this.tabs.selectedTab &&
-      !this.tabs.selectedTab?.url?.startsWith(NEWTAB_URL)
-    )
-      return this.tabs.selectedTab.url;
+    const tab = this.tabs.selectedTab;
+    if (tab?.addressbarValue != null) return tab?.addressbarValue;
+    else if (tab && !tab?.url?.startsWith(NEWTAB_URL))
+      return tab.url[tab.url.length - 1] === '/'
+        ? tab.url.slice(0, -1)
+        : tab.url;
     return '';
   }
 
@@ -59,7 +58,7 @@ export class Store {
 
     const url = this.addressbarValue;
 
-    const whitelistedProtocols = ['https', 'http', 'ftp'];
+    const whitelistedProtocols = ['https', 'http', 'ftp', 'wexond'];
 
     for (let i = 0; i < url.length; i++) {
       const protocol = whitelistedProtocols.find(
@@ -67,12 +66,7 @@ export class Store {
       );
       if (url[i] === '/' && protocol && !protocolCaptured) {
         segments.push({
-          value: protocol,
-          grayOut: protocol !== 'https',
-        });
-
-        segments.push({
-          value: '://',
+          value: `${protocol}://`,
           grayOut: true,
         });
 
@@ -92,14 +86,15 @@ export class Store {
         hostnameCaptured = true;
         capturedText = url[i];
         grayOutCaptured = true;
-      } else if (i === url.length - 1) {
+      } else {
         capturedText += url[i];
+      }
+
+      if (i === url.length - 1) {
         segments.push({
           value: capturedText,
           grayOut: grayOutCaptured,
         });
-      } else {
-        capturedText += url[i];
       }
     }
 

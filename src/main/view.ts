@@ -287,11 +287,11 @@ export class View extends BrowserView {
   }
 
   public updateURL = (url: string) => {
+    this.emitEvent('url-updated', url);
+
     if (this.url === url) return;
 
     this.url = url;
-
-    this.emitEvent('url-updated', url);
 
     this.isNewTab = url.startsWith(NEWTAB_URL);
 
