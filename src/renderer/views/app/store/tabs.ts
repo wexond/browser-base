@@ -139,6 +139,10 @@ export class TabsStore {
           if (event === 'url-updated') {
             const [url] = args;
             tab.url = url;
+
+            if (tab.id === this.selectedTabId && !store.addressbarEditing) {
+              store.addressbarValue = null;
+            }
           } else if (event === 'title-updated') {
             const [title] = args;
             tab.title = title;

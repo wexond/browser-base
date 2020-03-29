@@ -13,6 +13,7 @@ import { HistoryStore } from './history';
 import { AutoFillStore } from './autofill';
 import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 import { IBrowserAction } from '../models';
+import { NEWTAB_URL } from '~/constants/tabs';
 
 export class Store {
   public settings = new SettingsStore(this);
@@ -27,6 +28,30 @@ export class Store {
   @computed
   public get theme() {
     return getTheme(this.settings.object.theme);
+  }
+
+  @observable
+  public addressbarTextVisible = true;
+
+  @observable
+  public addressbarEditing = false;
+
+  @observable
+  private _addressbarValue: string = null;
+
+  public set addressbarValue(value: string) {
+    this._addressbarValue = value;
+  }
+
+  @computed
+  public get addressbarValue() {
+    if (this._addressbarValue != null) return this._addressbarValue;
+    else if (
+      this.tabs.selectedTab &&
+      !this.tabs.selectedTab.url.startsWith(NEWTAB_URL)
+    )
+      return this.tabs.selectedTab.url;
+    return '';
   }
 
   @observable

@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { ipcRenderer } from 'electron';
 
 import { ISettings } from '~/interfaces';
@@ -41,6 +41,11 @@ export class SettingsStore {
         firstTime = true;
       }
     });
+  }
+
+  @computed
+  public get searchEngine() {
+    return this.object.searchEngines[this.object.searchEngine];
   }
 
   @action

@@ -2,6 +2,8 @@ import styled, { css } from 'styled-components';
 
 import { ITheme } from '~/interfaces';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { robotoRegular, body2 } from '~/renderer/mixins';
+import { BLUE_300 } from '~/renderer/constants';
 
 export const StyledToolbar = styled.div`
   position: relative;
@@ -30,15 +32,74 @@ export const Addressbar = styled.div`
   flex: 1;
   border-radius: 4px;
   margin: 0 7px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 8px;
+  padding-top: 1px;
+  font-size: 15px;
 
-  ${({ theme }: { theme: ITheme }) => css`
+  ${({ theme, focus }: { theme: ITheme; focus: boolean }) => css`
     background-color: ${theme['addressbar.backgroundColor']};
+    border: 1px solid ${focus ? `${BLUE_300} !important` : 'transparent'};
+    color: ${theme['addressbar.textColor']};
+    box-shadow: ${focus ? `0 0 0 1px ${BLUE_300}` : `none`};
 
     &:hover {
       border: ${theme['toolbar.lightForeground']
         ? '1px solid rgba(255, 255, 255, 0.12)'
         : '1px solid rgba(0, 0, 0, 0.12)'};
     }
+  `};
+`;
+
+export const AddressbarInputContainer = styled.div`
+  flex: 1;
+  height: 100%;
+`;
+
+export const AddressbarText = styled.div`
+  pointer-events: none;
+  position: absolute;
+  flex: 1;
+  color: inherit;
+  ${body2()};
+  font-size: 14px;
+  ${({ visible }: { visible: boolean; theme: ITheme }) => css`
+    display: ${visible ? 'block' : 'none'};
+  `};
+`;
+
+export const AddressbarInput = styled.input`
+  outline: none;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: black;
+  ${body2()};
+  font-size: 14px;
+
+  ${({ visible, theme }: { visible: boolean; theme: ITheme }) => css`
+    color: ${visible ? 'inherit' : 'transparent'};
+
+    &::placeholder {
+      color: ${theme['searchBox.input.lightForeground']
+        ? 'rgba(255, 255, 255, 0.54)'
+        : 'rgba(0, 0, 0, 0.54)'};
+    }
+
+    ${theme['searchBox.input.lightForeground'] &&
+      css`
+        ::selection {
+          background: rgba(145, 185, 230, 0.99);
+          color: black;
+          height: 100px;
+        }
+      `}
   `};
 `;
 

@@ -4,7 +4,15 @@ import { ipcRenderer, remote } from 'electron';
 import { parse } from 'url';
 
 import store from '../../store';
-import { Buttons, StyledToolbar, Separator, Addressbar } from './style';
+import {
+  Buttons,
+  StyledToolbar,
+  Separator,
+  Addressbar,
+  AddressbarText,
+  AddressbarInput,
+  AddressbarInputContainer,
+} from './style';
 import { NavigationButtons } from '../NavigationButtons';
 import { ToolbarButton } from '../ToolbarButton';
 import { BrowserAction } from '../BrowserAction';
@@ -18,6 +26,8 @@ import {
   ICON_MORE,
 } from '~/renderer/constants/icons';
 import { isDialogVisible } from '../../utils/dialogs';
+import { isURL } from '~/utils';
+import { callViewMethod } from '~/utils/view';
 
 const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
   const { right, bottom } = e.currentTarget.getBoundingClientRect();
@@ -172,11 +182,83 @@ const RightButtons = observer(() => {
   );
 });
 
+const onMouseDown = () => {
+  store.addressbarTextVisible = false;
+  store.addressbarEditing = true;
+};
+
+const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+  store.addressbarTextVisible = false;
+  e.currentTarget.select();
+};
+
+const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  if (e.key === 'Escape' || e.key === 'Enter') {
+    store.addressbarEditing = false;
+    store.addressbarValue = null;
+  }
+
+  if (e.key === 'Escape') {
+    const target = e.currentTarget;
+    requestAnimationFrame(() => {
+      target.select();
+    });
+  }
+
+  if (e.key === 'Enter') {
+    e.currentTarget.blur();
+    const { value } = e.currentTarget;
+    let url = value;
+
+    if (isURL(value)) {
+      url = value.indexOf('://') === -1 ? `http://${value}` : value;
+    } else {
+      url = store.settings.searchEngine.url.replace('%s', value);
+    }
+
+    store.addressbarValue = url;
+    callViewMethod(store.tabs.selectedTabId, 'loadURL', url);
+  }
+};
+
+const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  store.addressbarValue = e.currentTarget.value;
+};
+
+const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  e.currentTarget.blur();
+  window.getSelection().removeAllRanges();
+  store.addressbarTextVisible = true;
+  store.addressbarEditing = false;
+};
+
 export const Toolbar = observer(() => {
   return (
     <StyledToolbar>
       <NavigationButtons />
-      <Addressbar />
+      <Addressbar focus={store.addressbarEditing}>
+        <AddressbarInputContainer>
+          <AddressbarInput
+            spellCheck={false}
+            onKeyDown={onKeyDown}
+            onMouseDown={onMouseDown}
+            onBlur={onBlur}
+            onFocus={onFocus}
+            onChange={onChange}
+            placeholder="Search or type in a URL"
+            visible={
+              !store.addressbarTextVisible || store.addressbarValue === ''
+            }
+            value={store.addressbarValue}
+          ></AddressbarInput>
+        </AddressbarInputContainer>
+
+        <AddressbarText
+          visible={store.addressbarTextVisible && store.addressbarValue !== ''}
+        >
+          {store.addressbarValue}
+        </AddressbarText>
+      </Addressbar>
       <RightButtons />
     </StyledToolbar>
   );

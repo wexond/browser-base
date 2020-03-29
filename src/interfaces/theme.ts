@@ -2,6 +2,7 @@ export interface ITheme {
   'titlebar.backgroundColor': string;
 
   'addressbar.backgroundColor': string;
+  'addressbar.textColor': string;
 
   'toolbar.backgroundColor': string;
   'toolbar.bottomLine.backgroundColor': string;
