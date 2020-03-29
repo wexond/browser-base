@@ -66,7 +66,7 @@ export const AddressbarText = styled.div`
   ${body2()};
   font-size: 14px;
   ${({ visible }: { visible: boolean; theme: ITheme }) => css`
-    display: ${visible ? 'block' : 'none'};
+    display: ${visible ? 'flex' : 'none'};
   `};
 `;
 

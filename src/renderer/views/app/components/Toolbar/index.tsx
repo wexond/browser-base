@@ -189,7 +189,12 @@ const onMouseDown = () => {
 
 const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   store.addressbarTextVisible = false;
-  e.currentTarget.select();
+};
+
+const onMouseUp = (e: React.MouseEvent<HTMLInputElement>) => {
+  if (e.currentTarget.selectionEnd - e.currentTarget.selectionStart === 0) {
+    e.currentTarget.select();
+  }
 };
 
 const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -244,6 +249,7 @@ export const Toolbar = observer(() => {
             onMouseDown={onMouseDown}
             onBlur={onBlur}
             onFocus={onFocus}
+            onMouseUp={onMouseUp}
             onChange={onChange}
             placeholder="Search or type in a URL"
             visible={
@@ -256,7 +262,11 @@ export const Toolbar = observer(() => {
         <AddressbarText
           visible={store.addressbarTextVisible && store.addressbarValue !== ''}
         >
-          {store.addressbarValue}
+          {store.addressbarUrlSegments.map((item, key) => (
+            <div key={key} style={{ opacity: item.grayOut ? 0.54 : 1 }}>
+              {item.value}
+            </div>
+          ))}
         </AddressbarText>
       </Addressbar>
       <RightButtons />

@@ -14,6 +14,7 @@ import { AutoFillStore } from './autofill';
 import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 import { IBrowserAction } from '../models';
 import { NEWTAB_URL } from '~/constants/tabs';
+import { IURLSegment } from '~/interfaces/urls';
 
 export class Store {
   public settings = new SettingsStore(this);
@@ -46,6 +47,63 @@ export class Store {
     )
       return this.tabs.selectedTab.url;
     return '';
+  }
+
+  @computed
+  public get addressbarUrlSegments() {
+    let capturedText = '';
+    let grayOutCaptured = false;
+    let hostnameCaptured = false;
+    let protocolCaptured = false;
+    const segments: IURLSegment[] = [];
+
+    const url = this.addressbarValue;
+
+    const whitelistedProtocols = ['https', 'http', 'ftp'];
+
+    for (let i = 0; i < url.length; i++) {
+      const protocol = whitelistedProtocols.find(
+        x => `${x}:/` === capturedText,
+      );
+      if (url[i] === '/' && protocol && !protocolCaptured) {
+        segments.push({
+          value: protocol,
+          grayOut: protocol !== 'https',
+        });
+
+        segments.push({
+          value: '://',
+          grayOut: true,
+        });
+
+        protocolCaptured = true;
+        capturedText = '';
+      } else if (
+        url[i] === '/' &&
+        !hostnameCaptured &&
+        (protocolCaptured ||
+          !whitelistedProtocols.find(x => `${x}:` === capturedText))
+      ) {
+        segments.push({
+          value: capturedText,
+          grayOut: false,
+        });
+
+        hostnameCaptured = true;
+        capturedText = url[i];
+        grayOutCaptured = true;
+      } else if (i === url.length - 1) {
+        capturedText += url[i];
+        segments.push({
+          value: capturedText,
+          grayOut: grayOutCaptured,
+        });
+      } else {
+        capturedText += url[i];
+      }
+    }
+
+    return segments;
   }
 
   @observable
