@@ -38,6 +38,7 @@ export const Addressbar = styled.div`
   padding-left: 8px;
   padding-top: 1px;
   font-size: 15px;
+  overflow: hidden;
 
   ${({ theme, focus }: { theme: ITheme; focus: boolean }) => css`
     background-color: ${theme['addressbar.backgroundColor']};
@@ -63,6 +64,9 @@ export const AddressbarText = styled.div`
   position: absolute;
   flex: 1;
   color: inherit;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
   ${body2()};
   font-size: 14px;
   ${({ visible }: { visible: boolean; theme: ITheme }) => css`

@@ -28,8 +28,6 @@ import {
 import { isDialogVisible } from '../../utils/dialogs';
 import { isURL } from '~/utils';
 import { callViewMethod } from '~/utils/view';
-import { BLUE_500 } from '~/renderer/constants/colors';
-import { VIEW_Y_OFFSET } from '~/constants/design';
 
 const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
   const { right, bottom } = e.currentTarget.getBoundingClientRect();
@@ -124,27 +122,15 @@ const RightButtons = observer(() => {
   const { selectedTab } = store.tabs;
 
   let blockedAds = 0;
-  let hasCredentials = false;
 
   if (selectedTab) {
     blockedAds = selectedTab.blockedAds;
-    hasCredentials = selectedTab.hasCredentials;
   }
 
   return (
     <Buttons>
       <BrowserActions />
       {store.extensions.browserActions.length > 0 && <Separator />}
-      <ToolbarButton
-        divRef={r => (starRef = r)}
-        toggled={store.dialogsVisibility['add-bookmark']}
-        icon={store.isBookmarked ? ICON_STAR_FILLED : ICON_STAR}
-        size={18}
-        onMouseDown={onStarClick}
-      />
-      {hasCredentials && (
-        <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
-      )}
 
       <ToolbarButton
         size={16}
@@ -264,6 +250,14 @@ const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
 };
 
 export const Toolbar = observer(() => {
+  const { selectedTab } = store.tabs;
+
+  let hasCredentials = false;
+
+  if (selectedTab) {
+    hasCredentials = selectedTab.hasCredentials;
+  }
+
   return (
     <StyledToolbar>
       <NavigationButtons />
@@ -300,6 +294,17 @@ export const Toolbar = observer(() => {
             </div>
           ))}
         </AddressbarText>
+        {hasCredentials && (
+          <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
+        )}
+        <ToolbarButton
+          divRef={r => (starRef = r)}
+          toggled={store.dialogsVisibility['add-bookmark']}
+          icon={store.isBookmarked ? ICON_STAR_FILLED : ICON_STAR}
+          size={18}
+          dense
+          onMouseDown={onStarClick}
+        />
       </Addressbar>
       <RightButtons />
     </StyledToolbar>

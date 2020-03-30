@@ -36,9 +36,7 @@ export const Icon = styled.div`
 `;
 
 export const Button = styled.div`
-  height: ${TOOLBAR_BUTTON_HEIGHT}px;
-  width: ${TOOLBAR_BUTTON_WIDTH}px;
-  border-radius: 4px;
+  border-radius: 2px;
   position: relative;
   transition: 0.2s background-color;
   backface-visibility: hidden;
@@ -48,11 +46,16 @@ export const Button = styled.div`
     theme,
     toggled,
     disabled,
+    dense,
   }: {
     theme: ITheme;
     toggled: boolean;
     disabled: boolean;
+    dense: boolean;
   }) => css`
+    border-radius: ${dense ? 2 : 4}px;
+    height: ${dense ? 26 : TOOLBAR_BUTTON_HEIGHT}px;
+    width: ${dense ? 34 : TOOLBAR_BUTTON_WIDTH}px;
     pointer-events: ${disabled ? 'none' : 'inherit'};
     -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
 

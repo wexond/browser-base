@@ -29,6 +29,7 @@ interface Props {
   preloader?: boolean;
   value?: number;
   toggled?: boolean;
+  dense?: boolean;
 }
 
 export const ToolbarButton = observer(
@@ -55,6 +56,7 @@ export const ToolbarButton = observer(
     onContextMenu,
     onMouseUp,
     toggled,
+    dense,
   }: Props) => {
     style = { ...style };
 
@@ -67,6 +69,7 @@ export const ToolbarButton = observer(
         className={className}
         style={style}
         toggled={toggled}
+        dense={dense}
         ref={(r: HTMLDivElement) => {
           if (typeof divRef === 'function') {
             divRef(r);
