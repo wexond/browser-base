@@ -20,7 +20,7 @@ export class SearchDialog extends Dialog {
   public data = {
     text: '',
     x: 0,
-    width: 0,
+    width: 200,
   };
 
   public constructor(appWindow: AppWindow) {
@@ -84,18 +84,16 @@ export class SearchDialog extends Dialog {
 
     this.queueShow = true;
 
-    const selected = this.appWindow.viewManager.selected;
-
     this.webContents.send('visible', true, {
       id: this.appWindow.viewManager.selectedId,
       ...this.data,
     });
 
-    this.appWindow.webContents.send('get-search-tabs');
-
     ipcMain.once('get-search-tabs', (e, tabs) => {
       this.webContents.send('search-tabs', tabs);
     });
+
+    this.appWindow.webContents.send('get-search-tabs');
   }
 
   public hide(bringToTop = false) {

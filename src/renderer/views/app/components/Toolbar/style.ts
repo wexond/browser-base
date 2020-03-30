@@ -96,12 +96,12 @@ export const AddressbarInput = styled.input`
     color: ${visible ? 'inherit' : 'transparent'};
 
     &::placeholder {
-      color: ${theme['searchBox.input.lightForeground']
+      color: ${theme['searchBox.lightForeground']
         ? 'rgba(255, 255, 255, 0.54)'
         : 'rgba(0, 0, 0, 0.54)'};
     }
 
-    ${theme['searchBox.input.lightForeground'] &&
+    ${theme['searchBox.lightForeground'] &&
       css`
         ::selection {
           background: rgba(145, 185, 230, 0.99);

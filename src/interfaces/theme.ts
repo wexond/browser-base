@@ -23,16 +23,8 @@ export interface ITheme {
   'dialog.textColor': string;
   'dialog.lightForeground': boolean;
 
-  'searchBox.input.textColor': string;
-  'searchBox.input.lightForeground': boolean;
-  'searchBox.input.backgroundColor': string;
-
-  'searchBox.subHeading.backgroundColor': string;
-  'searchBox.subHeading.textColor': string;
-
-  'searchBox.suggestions.textColor': string;
-  'searchBox.suggestions.backgroundColor': string;
-  'searchBox.suggestions.lightForeground': boolean;
+  'searchBox.backgroundColor': string;
+  'searchBox.lightForeground': boolean;
 
   'pages.backgroundColor': string;
   'pages.lightForeground': boolean;

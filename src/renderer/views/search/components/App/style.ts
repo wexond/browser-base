@@ -1,13 +1,19 @@
 import styled, { css } from 'styled-components';
 import { centerIcon, body2 } from '~/renderer/mixins';
-import { BLUE_300 } from '~/renderer/constants';
 import { ITheme } from '~/interfaces';
-import { DialogStyle, DIALOG_BOX_SHADOW } from '~/renderer/mixins/dialogs';
+import { DialogStyle } from '~/renderer/mixins/dialogs';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 
 export const StyledApp = styled(DialogStyle)`
   transition: 0.08s opacity;
   padding-bottom: 4px;
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-color: ${theme['searchBox.backgroundColor']};
+    color: ${theme['searchBox.lightForeground']
+      ? 'rgba(255, 255, 255, 0.87)'
+      : 'black'};
+  `}
 `;
 
 export const Title = styled.div`
@@ -38,12 +44,11 @@ export const Input = styled.input.attrs(() => ({
   padding-right: 8px;
   padding-top: 1px;
   background-color: transparent;
+  color: inherit;
 
   ${({ theme }: { theme?: ITheme }) => css`
-    color: ${theme['searchBox.input.textColor']};
-
     &::placeholder {
-      color: ${theme['searchBox.input.lightForeground']
+      color: ${theme['searchBox.lightForeground']
         ? 'rgba(255, 255, 255, 0.54)'
         : 'rgba(0, 0, 0, 0.54)'};
     }
@@ -62,8 +67,4 @@ export const SearchBox = styled.div`
   display: flex;
   align-items: center;
   height: ${TOOLBAR_HEIGHT}px;
-
-  ${({ theme }: { theme?: ITheme }) => css`
-    background-color: ${theme['searchBox.input.backgroundColor']};
-  `}
 `;

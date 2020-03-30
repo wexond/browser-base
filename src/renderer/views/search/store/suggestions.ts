@@ -11,6 +11,8 @@ import { ICON_SEARCH, ICON_PAGE } from '~/renderer/constants';
 
 let searchSuggestions: ISuggestion[] = [];
 
+const MAX_SUGGESTIONS_COUNT = 8;
+
 export class SuggestionsStore {
   private store: Store;
 
@@ -42,8 +44,8 @@ export class SuggestionsStore {
       for (const item of history) {
         if (!item.isSearch) {
           historySuggestions.push({
-            primaryText: item.url,
-            secondaryText: item.title,
+            primaryText: item.title,
+            secondaryText: item.url,
             favicon: item.favicon,
             canSuggest: item.canSuggest,
           });
@@ -81,7 +83,9 @@ export class SuggestionsStore {
       let suggestions: ISuggestion[] =
         input.value === ''
           ? []
-          : historySuggestions.concat(searchSuggestions).slice(0, 5);
+          : historySuggestions
+              .concat(searchSuggestions)
+              .slice(0, MAX_SUGGESTIONS_COUNT);
 
       for (let i = 0; i < suggestions.length; i++) {
         suggestions[i].id = i;
@@ -90,7 +94,7 @@ export class SuggestionsStore {
       this.list = suggestions;
 
       if (historySuggestions.length > 0 && historySuggestions[0].canSuggest) {
-        resolve(historySuggestions[0].primaryText);
+        resolve(historySuggestions[0].secondaryText);
       }
 
       try {
@@ -109,7 +113,9 @@ export class SuggestionsStore {
           suggestions =
             input.value === ''
               ? []
-              : historySuggestions.concat(searchSuggestions).slice(0, 5);
+              : historySuggestions
+                  .concat(searchSuggestions)
+                  .slice(0, MAX_SUGGESTIONS_COUNT);
 
           for (let i = 0; i < suggestions.length; i++) {
             suggestions[i].id = i;

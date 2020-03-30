@@ -22,11 +22,11 @@ export const StyledSuggestion = styled.div`
   }) => {
     let backgroundColor = 'transparent';
     if (selected) {
-      backgroundColor = theme['searchBox.suggestions.lightForeground']
+      backgroundColor = theme['searchBox.lightForeground']
         ? 'rgba(255, 255, 255, 0.06)'
         : 'rgba(0, 0, 0, 0.06)';
     } else if (hovered) {
-      backgroundColor = theme['searchBox.suggestions.lightForeground']
+      backgroundColor = theme['searchBox.lightForeground']
         ? 'rgba(255, 255, 255, 0.03)'
         : 'rgba(0, 0, 0, 0.03)';
     }
@@ -52,6 +52,7 @@ export const SecondaryText = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   padding-right: 16px;
+  flex: 1;
   font-size: 13px;
   opacity: ${transparency.text.medium};
 `;
