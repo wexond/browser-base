@@ -1,4 +1,5 @@
 import { observable, computed, toJS } from 'mobx';
+import * as React from 'react';
 
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
@@ -30,6 +31,8 @@ export class Store {
   public get theme() {
     return getTheme(this.settings.object.theme);
   }
+
+  public inputRef = React.createRef<HTMLInputElement>();
 
   @observable
   public addressbarTextVisible = true;

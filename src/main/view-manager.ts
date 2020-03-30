@@ -47,9 +47,9 @@ export class ViewManager {
       this.views.get(this.selectedId).webContents.print();
     });
 
-    ipcMain.on(`view-select-${id}`, (e, id: number) => {
+    ipcMain.handle(`view-select-${id}`, (e, id: number, focus: boolean) => {
       const view = this.views.get(id);
-      this.select(id);
+      this.select(id, focus);
       view.updateNavigationState();
     });
 
@@ -113,7 +113,7 @@ export class ViewManager {
     Object.values(this.views).forEach(x => x.destroy());
   }
 
-  public select(id: number) {
+  public select(id: number, focus = true) {
     const { selected } = this;
     const view = this.views.get(id);
 
@@ -126,8 +126,12 @@ export class ViewManager {
     this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);
 
-    // Also fixes switching tabs with Ctrl + Tab
-    view.webContents.focus();
+    if (focus) {
+      // Also fixes switching tabs with Ctrl + Tab
+      view.webContents.focus();
+    } else {
+      this.window.webContents.focus();
+    }
 
     this.window.dialogs.previewDialog.hide(true);
 

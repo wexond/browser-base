@@ -29,6 +29,7 @@ import { isDialogVisible } from '../../utils/dialogs';
 import { isURL } from '~/utils';
 import { callViewMethod } from '~/utils/view';
 import { BLUE_500 } from '~/renderer/constants/colors';
+import { VIEW_Y_OFFSET } from '~/constants/design';
 
 const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
   const { right, bottom } = e.currentTarget.getBoundingClientRect();
@@ -183,19 +184,38 @@ const RightButtons = observer(() => {
   );
 });
 
-const onMouseDown = () => {
+let mouseUpped = false;
+
+const onMouseDown = (e: React.MouseEvent<HTMLInputElement>) => {
   store.addressbarTextVisible = false;
   store.addressbarEditing = true;
 };
 
 const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   store.addressbarTextVisible = false;
+  store.addressbarEditing = true;
+
+  if (store.tabs.selectedTab) {
+    store.tabs.selectedTab.addressbarFocused = true;
+  }
 };
 
 const onMouseUp = (e: React.MouseEvent<HTMLInputElement>) => {
-  if (e.currentTarget.selectionEnd - e.currentTarget.selectionStart === 0) {
+  if (
+    e.currentTarget.selectionEnd - e.currentTarget.selectionStart === 0 &&
+    !mouseUpped
+  ) {
     e.currentTarget.select();
   }
+
+  if (store.tabs.selectedTab) {
+    store.tabs.selectedTab.addressbarSelectionRange = [
+      e.currentTarget.selectionStart,
+      e.currentTarget.selectionEnd,
+    ];
+  }
+
+  mouseUpped = true;
 };
 
 const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -236,6 +256,11 @@ const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
   window.getSelection().removeAllRanges();
   store.addressbarTextVisible = true;
   store.addressbarEditing = false;
+  mouseUpped = false;
+
+  if (store.tabs.selectedTab) {
+    store.tabs.selectedTab.addressbarFocused = false;
+  }
 };
 
 export const Toolbar = observer(() => {
@@ -245,6 +270,7 @@ export const Toolbar = observer(() => {
       <Addressbar focus={store.addressbarEditing}>
         <AddressbarInputContainer>
           <AddressbarInput
+            ref={store.inputRef}
             spellCheck={false}
             onKeyDown={onKeyDown}
             onMouseDown={onMouseDown}
