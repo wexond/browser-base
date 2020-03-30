@@ -126,7 +126,7 @@ export class Store extends DialogStore {
       text: this.inputRef.current.value,
       selectionStart: this.inputRef.current.selectionStart,
       selectionEnd: this.inputRef.current.selectionEnd,
-      focus: data?.focus,
+      ...data,
     });
 
     this.timeout = setTimeout(() => {

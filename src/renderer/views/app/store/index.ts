@@ -288,6 +288,17 @@ export class Store {
             remote.getCurrentWebContents().focus();
             this.inputRef.current.focus();
           }
+
+          console.log(data);
+
+          if (data.escape) {
+            this.addressbarEditing = false;
+            this.tabs.selectedTab.addressbarValue = null;
+
+            requestAnimationFrame(() => {
+              this.inputRef.current.select();
+            });
+          }
         }
       }
     });

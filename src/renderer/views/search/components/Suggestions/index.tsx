@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
-import { StyledSuggestions, Subheading } from './style';
+import { StyledSuggestions } from './style';
 import store from '../../store';
 import { Suggestion } from '../Suggestion';
 

@@ -40,14 +40,15 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 };
 
 const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  const key = e.keyCode;
   const { suggestions } = store;
   const { list } = suggestions;
   const input = store.inputRef.current;
 
-  store.canSuggest = store.getCanSuggest(key);
+  store.canSuggest = store.getCanSuggest(e.keyCode);
 
-  if (e.keyCode === 38 || e.keyCode === 40) {
+  if (e.key === 'Escape') {
+    store.hide({ focus: true, escape: true });
+  } else if (e.keyCode === 38 || e.keyCode === 40) {
     e.preventDefault();
     if (
       e.keyCode === 40 &&
@@ -91,18 +92,6 @@ export const App = hot(
     if (suggestionsVisible) {
       for (const s of store.suggestions.list) {
         height += 38;
-      }
-
-      for (const s of store.searchedTabs) {
-        height += 38;
-      }
-
-      if (store.suggestions.list.length > 0) {
-        height += 30;
-      }
-
-      if (store.searchedTabs.length > 0) {
-        height += 30;
       }
     }
 
