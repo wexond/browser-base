@@ -1,7 +1,7 @@
 import { AppWindow } from '../windows';
 import { Dialog } from '.';
 import { ipcMain } from 'electron';
-import { DIALOG_MARGIN, DIALOG_TOP } from '~/constants/design';
+import { DIALOG_MARGIN, DIALOG_MARGIN_TOP } from '~/constants/design';
 
 export class ExtensionPopup extends Dialog {
   public visible = false;
@@ -9,6 +9,7 @@ export class ExtensionPopup extends Dialog {
   private height = 512;
 
   public left = 0;
+  public top = 0;
 
   private width = 512;
 
@@ -20,7 +21,6 @@ export class ExtensionPopup extends Dialog {
       bounds: {
         width: 512,
         height: 512,
-        y: DIALOG_TOP,
       },
       devtools: false,
       webPreferences: {
@@ -45,6 +45,7 @@ export class ExtensionPopup extends Dialog {
   public rearrange() {
     super.rearrange({
       x: Math.round(this.left - this.width + DIALOG_MARGIN),
+      y: Math.round(this.top - DIALOG_MARGIN_TOP),
       height: Math.round(Math.min(1024, this.height)),
       width: Math.round(Math.min(1024, this.width)),
     });

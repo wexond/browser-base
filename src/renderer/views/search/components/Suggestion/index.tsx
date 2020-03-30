@@ -27,7 +27,9 @@ const onMouseLeave = (suggestion: ISuggestion) => () => {
 };
 
 const onClick = (suggestion: ISuggestion) => () => {
-  let url = suggestion.primaryText;
+  let url = suggestion.isSearch
+    ? suggestion.primaryText
+    : suggestion.secondaryText;
 
   if (suggestion.isSearch) {
     url = store.searchEngine.url.replace('%s', url);
@@ -67,7 +69,7 @@ export const Suggestion = observer(({ suggestion }: Props) => {
           backgroundImage: `url(${favicon})`,
           opacity: customFavicon ? 1 : transparency.icons.inactive,
           filter: !customFavicon
-            ? store.theme['searchBox.suggestions.lightForeground']
+            ? store.theme['searchBox.lightForeground']
               ? 'invert(100%)'
               : 'none'
             : 'none',

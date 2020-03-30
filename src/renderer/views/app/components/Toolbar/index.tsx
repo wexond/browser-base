@@ -4,14 +4,18 @@ import { ipcRenderer, remote } from 'electron';
 import { parse } from 'url';
 
 import store from '../../store';
-import { Buttons, StyledToolbar, Separator } from './style';
-import { NavigationButtons } from './NavigationButtons';
-import { Tabbar } from './Tabbar';
-import { ToolbarButton } from './ToolbarButton';
-import { BrowserAction } from './BrowserAction';
-import { platform } from 'os';
-import { TOOLBAR_HEIGHT } from '~/constants/design';
-import { WindowsControls } from 'react-windows-controls';
+import {
+  Buttons,
+  StyledToolbar,
+  Separator,
+  Addressbar,
+  AddressbarText,
+  AddressbarInput,
+  AddressbarInputContainer,
+} from './style';
+import { NavigationButtons } from '../NavigationButtons';
+import { ToolbarButton } from '../ToolbarButton';
+import { BrowserAction } from '../BrowserAction';
 import {
   ICON_STAR,
   ICON_STAR_FILLED,
@@ -20,14 +24,18 @@ import {
   ICON_DOWNLOAD,
   ICON_INCOGNITO,
   ICON_MORE,
+  ICON_SEARCH,
+  ICON_DASHBOARD,
 } from '~/renderer/constants/icons';
 import { isDialogVisible } from '../../utils/dialogs';
+import { isURL } from '~/utils';
+import { callViewMethod } from '~/utils/view';
 
 const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
-  const { right } = e.currentTarget.getBoundingClientRect();
+  const { right, bottom } = e.currentTarget.getBoundingClientRect();
   if (!(await isDialogVisible('downloadsDialog'))) {
     store.downloadNotification = false;
-    ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, right);
+    ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, right, bottom);
   }
 };
 
@@ -48,15 +56,19 @@ let menuRef: HTMLDivElement = null;
 
 const showAddBookmarkDialog = async () => {
   if (!(await isDialogVisible('addBookmarkDialog'))) {
-    const { right } = starRef.getBoundingClientRect();
-    ipcRenderer.send(`show-add-bookmark-dialog-${store.windowId}`, right);
+    const { right, bottom } = starRef.getBoundingClientRect();
+    ipcRenderer.send(
+      `show-add-bookmark-dialog-${store.windowId}`,
+      right,
+      bottom,
+    );
   }
 };
 
 const showMenuDialog = async () => {
   if (!(await isDialogVisible('menuDialog'))) {
-    const { right } = menuRef.getBoundingClientRect();
-    ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right);
+    const { right, bottom } = menuRef.getBoundingClientRect();
+    ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right, bottom);
   }
 };
 
@@ -92,18 +104,6 @@ const BrowserActions = observer(() => {
   );
 });
 
-const onCloseClick = () => ipcRenderer.send(`window-close-${store.windowId}`);
-
-const onMouseEnter = () => {
-  // ipcRenderer.send(`window-fix-dragging-${store.windowId}`);
-};
-
-const onMaximizeClick = () =>
-  ipcRenderer.send(`window-toggle-maximize-${store.windowId}`);
-
-const onMinimizeClick = () =>
-  ipcRenderer.send(`window-minimize-${store.windowId}`);
-
 const onShieldContextMenu = (e: React.MouseEvent) => {
   const menu = remote.Menu.buildFromTemplate([
     {
@@ -124,27 +124,15 @@ const RightButtons = observer(() => {
   const { selectedTab } = store.tabs;
 
   let blockedAds = 0;
-  let hasCredentials = false;
 
   if (selectedTab) {
     blockedAds = selectedTab.blockedAds;
-    hasCredentials = selectedTab.hasCredentials;
   }
 
   return (
     <Buttons>
       <BrowserActions />
       {store.extensions.browserActions.length > 0 && <Separator />}
-      <ToolbarButton
-        divRef={r => (starRef = r)}
-        toggled={store.dialogsVisibility['add-bookmark']}
-        icon={store.isBookmarked ? ICON_STAR_FILLED : ICON_STAR}
-        size={18}
-        onMouseDown={onStarClick}
-      />
-      {hasCredentials && (
-        <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
-      )}
 
       <ToolbarButton
         size={16}
@@ -184,28 +172,165 @@ const RightButtons = observer(() => {
   );
 });
 
+let mouseUpped = false;
+
+const onMouseDown = (e: React.MouseEvent<HTMLInputElement>) => {
+  store.addressbarTextVisible = false;
+  store.addressbarEditing = true;
+};
+
+const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+  store.addressbarTextVisible = false;
+  store.addressbarEditing = true;
+
+  if (store.tabs.selectedTab) {
+    store.tabs.selectedTab.addressbarFocused = true;
+  }
+};
+
+const onSelect = (e: React.MouseEvent<HTMLInputElement>) => {
+  if (store.tabs.selectedTab) {
+    store.tabs.selectedTab.addressbarSelectionRange = [
+      e.currentTarget.selectionStart,
+      e.currentTarget.selectionEnd,
+    ];
+  }
+};
+
+const onMouseUp = (e: React.MouseEvent<HTMLInputElement>) => {
+  if (window.getSelection().toString().length === 0 && !mouseUpped) {
+    e.currentTarget.select();
+  }
+
+  mouseUpped = true;
+};
+
+const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  if (e.key === 'Escape' || e.key === 'Enter') {
+    store.addressbarEditing = false;
+    store.tabs.selectedTab.addressbarValue = null;
+  }
+
+  if (e.key === 'Escape') {
+    const target = e.currentTarget;
+    requestAnimationFrame(() => {
+      target.select();
+    });
+  }
+
+  if (e.key === 'Enter') {
+    e.currentTarget.blur();
+    const { value } = e.currentTarget;
+    let url = value;
+
+    if (isURL(value)) {
+      url = value.indexOf('://') === -1 ? `http://${value}` : value;
+    } else {
+      url = store.settings.searchEngine.url.replace('%s', value);
+    }
+
+    store.tabs.selectedTab.addressbarValue = url;
+    callViewMethod(store.tabs.selectedTabId, 'loadURL', url);
+  }
+};
+
+const addressbarRef = React.createRef<HTMLDivElement>();
+
+const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  store.tabs.selectedTab.addressbarValue = e.currentTarget.value;
+
+  const { left, width } = addressbarRef.current.getBoundingClientRect();
+
+  if (e.currentTarget.value.trim() !== '') {
+    ipcRenderer.send(`search-show-${store.windowId}`, {
+      text: e.currentTarget.value,
+      cursorPos: e.currentTarget.selectionStart,
+      x: left,
+      width: width,
+    });
+  }
+};
+
+const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  e.currentTarget.blur();
+  window.getSelection().removeAllRanges();
+  store.addressbarTextVisible = true;
+  store.addressbarEditing = false;
+  mouseUpped = false;
+
+  if (store.tabs.selectedTab) {
+    store.tabs.selectedTab.addressbarFocused = false;
+  }
+};
+
 export const Toolbar = observer(() => {
+  const { selectedTab } = store.tabs;
+
+  let hasCredentials = false;
+
+  if (selectedTab) {
+    hasCredentials = selectedTab.hasCredentials;
+  }
+
   return (
-    <StyledToolbar
-      onMouseEnter={onMouseEnter}
-      isHTMLFullscreen={store.isHTMLFullscreen}
-    >
+    <StyledToolbar>
       <NavigationButtons />
-      <Tabbar />
-      <RightButtons />
-      {platform() !== 'darwin' && (
-        <WindowsControls
-          style={{
-            height: TOOLBAR_HEIGHT,
-            WebkitAppRegion: 'no-drag',
-            marginLeft: 8,
-          }}
-          onClose={onCloseClick}
-          onMinimize={onMinimizeClick}
-          onMaximize={onMaximizeClick}
-          dark={store.theme['toolbar.lightForeground']}
+      <Addressbar ref={addressbarRef} focus={store.addressbarEditing}>
+        <ToolbarButton
+          toggled={false}
+          icon={ICON_SEARCH}
+          size={16}
+          dense
+          iconStyle={{ transform: 'scale(-1,1)' }}
         />
-      )}
+        <AddressbarInputContainer>
+          <AddressbarInput
+            ref={store.inputRef}
+            spellCheck={false}
+            onKeyDown={onKeyDown}
+            onMouseDown={onMouseDown}
+            onSelect={onSelect}
+            onBlur={onBlur}
+            onFocus={onFocus}
+            onMouseUp={onMouseUp}
+            onChange={onChange}
+            placeholder="Search or type in a URL"
+            visible={
+              !store.addressbarTextVisible || store.addressbarValue === ''
+            }
+            value={store.addressbarValue}
+          ></AddressbarInput>
+          <AddressbarText
+            visible={
+              store.addressbarTextVisible && store.addressbarValue !== ''
+            }
+          >
+            {store.addressbarUrlSegments.map((item, key) => (
+              <div
+                key={key}
+                style={{
+                  opacity: item.grayOut ? 0.54 : 1,
+                }}
+              >
+                {item.value}
+              </div>
+            ))}
+          </AddressbarText>
+        </AddressbarInputContainer>
+
+        {hasCredentials && (
+          <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
+        )}
+        <ToolbarButton
+          divRef={r => (starRef = r)}
+          toggled={store.dialogsVisibility['add-bookmark']}
+          icon={store.isBookmarked ? ICON_STAR_FILLED : ICON_STAR}
+          size={18}
+          dense
+          onMouseDown={onStarClick}
+        />
+      </Addressbar>
+      <RightButtons />
     </StyledToolbar>
   );
 });

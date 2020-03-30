@@ -4,8 +4,9 @@ import * as React from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
 import { Style } from '../../style';
+import { StyledApp } from './style';
+import { Titlebar } from '../Titlebar';
 import { Toolbar } from '../Toolbar';
-import { Line, StyledApp } from './style';
 import store from '../../store';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
@@ -17,8 +18,8 @@ const App = observer(() => {
     >
       <StyledApp>
         <GlobalStyle />
-        <Toolbar />
-        <Line />
+        <Titlebar />
+        <Toolbar></Toolbar>
       </StyledApp>
     </ThemeProvider>
   );

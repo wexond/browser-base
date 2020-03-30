@@ -13,6 +13,7 @@ import {
 import { closeWindow } from '../utils/windows';
 import { callViewMethod } from '~/utils/view';
 import { animateTab } from '../utils/tabs';
+import { NEWTAB_URL } from '~/constants/tabs';
 
 export class ITab {
   @observable
@@ -39,11 +40,14 @@ export class ITab {
   @observable
   public tabGroupId: number;
 
+  @observable
+  public addressbarValue: string = null;
+
+  public addressbarFocused = false;
+  public addressbarSelectionRange = [0, 0];
+
   public width = 0;
   public left = 0;
-
-  @observable
-  public background = store.theme.accentColor;
 
   @observable
   public url = '';
@@ -61,14 +65,10 @@ export class ITab {
   @observable
   public hasCredentials = false;
 
-  @observable
-  public customColor = false;
-
   public lastUrl = '';
   public isClosing = false;
   public ref = React.createRef<HTMLDivElement>();
 
-  public hasThemeColor = false;
   public removeTimeout: any;
 
   public marginLeft = 0;
@@ -81,24 +81,6 @@ export class ITab {
   @computed
   public get isHovered() {
     return store.tabs.hoveredTabId === this.id;
-  }
-
-  @computed
-  public get borderVisible() {
-    const tabs = this.tabGroup.tabs;
-
-    const i = tabs.indexOf(this);
-    const nextTab = tabs[i + 1];
-
-    if (
-      (nextTab && (nextTab.isHovered || nextTab.isSelected)) ||
-      this.isSelected ||
-      this.isHovered
-    ) {
-      return false;
-    }
-
-    return true;
   }
 
   @computed
@@ -118,6 +100,10 @@ export class ITab {
     this.url = url;
     this.id = id;
     this.isPinned = pinned;
+
+    if (NEWTAB_URL.startsWith(url)) {
+      this.addressbarFocused = true;
+    }
 
     if (active) {
       requestAnimationFrame(() => {
@@ -153,15 +139,30 @@ export class ITab {
   }
 
   @action
-  public select() {
+  public async select() {
     if (!this.isClosing) {
       store.tabs.selectedTabId = this.id;
 
       ipcRenderer.send(`browserview-show-${store.windowId}`);
-      ipcRenderer.send(`view-select-${store.windowId}`, this.id);
       ipcRenderer.send(`update-find-info-${store.windowId}`, this.id, {
         ...this.findInfo,
       });
+
+      const focused = this.addressbarFocused;
+
+      await ipcRenderer.invoke(
+        `view-select-${store.windowId}`,
+        this.id,
+        !this.addressbarFocused,
+      );
+
+      if (focused) {
+        store.inputRef.current.focus();
+        store.inputRef.current.setSelectionRange(
+          this.addressbarSelectionRange[0],
+          this.addressbarSelectionRange[1],
+        );
+      }
     }
   }
 

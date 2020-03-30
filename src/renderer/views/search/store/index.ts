@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { ipcRenderer } from 'electron';
 import { observable, computed } from 'mobx';
-import { DEFAULT_SEARCH_ENGINES } from '~/constants';
 import { ISuggestion, IVisitedItem } from '~/interfaces';
 import { SuggestionsStore } from './suggestions';
 import { NEWTAB_URL } from '~/constants/tabs';
@@ -28,6 +27,8 @@ export class Store extends DialogStore {
 
   @observable
   public inputText = '';
+
+  private timeout: any = null;
 
   @computed
   public get searchedTabs(): ISuggestion[] {
@@ -67,31 +68,28 @@ export class Store extends DialogStore {
 
   public constructor() {
     super({
-      hideOnBlur: false,
       visibilityWrapper: false,
     });
 
-    window.addEventListener('blur', async () => {
-      if (this.visible && !(await ipcRenderer.invoke(`is-newtab-${this.id}`))) {
-        this.hide();
-      }
-    });
+    ipcRenderer.on('visible', (e, visible, data) => {
+      this.visible = visible;
 
-    ipcRenderer.on('visible', async (e, flag, tab) => {
-      if (flag) {
-        this.visible = flag;
+      if (visible) {
+        clearTimeout(this.timeout);
+
         this.tabs = [];
         this.suggestions.list = [];
-        this.tabId = tab.id;
-        if (tab.url.startsWith(NEWTAB_URL)) {
-          this.inputRef.current.value = '';
-        } else {
-          this.inputRef.current.value = tab.url;
-        }
+        this.tabId = data.id;
 
+        this.canSuggest = this.inputText.length <= data.text.length;
+
+        this.inputRef.current.value = data.text;
         this.inputRef.current.focus();
-      } else if (!(await ipcRenderer.invoke(`is-newtab-${this.id}`))) {
-        this.visible = flag;
+
+        this.inputRef.current.setSelectionRange(data.cursorPos, data.cursorPos);
+
+        const event = new Event('input', { bubbles: true });
+        this.inputRef.current.dispatchEvent(event);
       }
     });
 
@@ -102,6 +100,40 @@ export class Store extends DialogStore {
     this.loadHistory();
 
     ipcRenderer.send(`can-show-${this.id}`);
+  }
+
+  public getCanSuggest(key: number) {
+    if (
+      key !== 8 && // backspace
+      key !== 13 && // enter
+      key !== 17 && // ctrl
+      key !== 18 && // alt
+      key !== 16 && // shift
+      key !== 9 && // tab
+      key !== 20 && // capslock
+      key !== 46 && // delete
+      key !== 32 // space
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public onHide(data: any = null) {
+    ipcRenderer.send(`addressbar-update-input-${this.id}`, {
+      id: this.tabId,
+      text: this.inputRef.current.value,
+      selectionStart: this.inputRef.current.selectionStart,
+      selectionEnd: this.inputRef.current.selectionEnd,
+      ...data,
+    });
+
+    this.timeout = setTimeout(() => {
+      this.tabs = [];
+      this.inputRef.current.value = '';
+      this.suggestions.list = [];
+    }, 200);
   }
 
   public async loadHistory() {

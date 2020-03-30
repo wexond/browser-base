@@ -1,9 +1,10 @@
 import { observable, computed, toJS } from 'mobx';
+import * as React from 'react';
 
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { ExtensionsStore } from './extensions';
 import { SettingsStore } from './settings';
 import { getCurrentWindow } from '../utils/windows';
@@ -13,6 +14,8 @@ import { HistoryStore } from './history';
 import { AutoFillStore } from './autofill';
 import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 import { IBrowserAction } from '../models';
+import { NEWTAB_URL } from '~/constants/tabs';
+import { IURLSegment } from '~/interfaces/urls';
 
 export class Store {
   public settings = new SettingsStore(this);
@@ -27,6 +30,78 @@ export class Store {
   @computed
   public get theme() {
     return getTheme(this.settings.object.theme);
+  }
+
+  public inputRef = React.createRef<HTMLInputElement>();
+
+  @observable
+  public addressbarTextVisible = true;
+
+  @observable
+  public addressbarEditing = false;
+
+  @computed
+  public get addressbarValue() {
+    const tab = this.tabs.selectedTab;
+    if (tab?.addressbarValue != null) return tab?.addressbarValue;
+    else if (tab && !tab?.url?.startsWith(NEWTAB_URL))
+      return tab.url[tab.url.length - 1] === '/'
+        ? tab.url.slice(0, -1)
+        : tab.url;
+    return '';
+  }
+
+  @computed
+  public get addressbarUrlSegments() {
+    let capturedText = '';
+    let grayOutCaptured = false;
+    let hostnameCaptured = false;
+    let protocolCaptured = false;
+    const segments: IURLSegment[] = [];
+
+    const url = this.addressbarValue;
+
+    const whitelistedProtocols = ['https', 'http', 'ftp', 'wexond'];
+
+    for (let i = 0; i < url.length; i++) {
+      const protocol = whitelistedProtocols.find(
+        x => `${x}:/` === capturedText,
+      );
+      if (url[i] === '/' && protocol && !protocolCaptured) {
+        segments.push({
+          value: `${protocol}://`,
+          grayOut: true,
+        });
+
+        protocolCaptured = true;
+        capturedText = '';
+      } else if (
+        url[i] === '/' &&
+        !hostnameCaptured &&
+        (protocolCaptured ||
+          !whitelistedProtocols.find(x => `${x}:` === capturedText))
+      ) {
+        segments.push({
+          value: capturedText,
+          grayOut: false,
+        });
+
+        hostnameCaptured = true;
+        capturedText = url[i];
+        grayOutCaptured = true;
+      } else {
+        capturedText += url[i];
+      }
+
+      if (i === url.length - 1) {
+        segments.push({
+          value: capturedText,
+          grayOut: grayOutCaptured,
+        });
+      }
+    }
+
+    return segments;
   }
 
   @observable
@@ -83,8 +158,6 @@ export class Store {
 
     return receivedBytes / totalBytes;
   }
-
-  public canToggleMenu = false;
 
   public mouse = {
     x: 0,
@@ -194,6 +267,40 @@ export class Store {
 
     ipcRenderer.on('dialog-visibility-change', (e, name, state) => {
       this.dialogsVisibility[name] = state;
+    });
+
+    ipcRenderer.on(`addressbar-update-input`, (e, data) => {
+      const tab = this.tabs.getTabById(data.id);
+
+      if (tab) {
+        tab.addressbarValue = data.text;
+        tab.addressbarSelectionRange = [data.selectionStart, data.selectionEnd];
+        tab.addressbarFocused = true;
+
+        if (tab.isSelected) {
+          this.inputRef.current.value = data.text;
+          this.inputRef.current.setSelectionRange(
+            data.selectionStart,
+            data.selectionEnd,
+          );
+
+          if (data.focus) {
+            remote.getCurrentWebContents().focus();
+            this.inputRef.current.focus();
+          }
+
+          console.log(data);
+
+          if (data.escape) {
+            this.addressbarEditing = false;
+            this.tabs.selectedTab.addressbarValue = null;
+
+            requestAnimationFrame(() => {
+              this.inputRef.current.select();
+            });
+          }
+        }
+      }
     });
 
     ipcRenderer.send('update-check');

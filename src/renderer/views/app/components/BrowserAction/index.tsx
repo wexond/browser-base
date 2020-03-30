@@ -1,19 +1,25 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { ToolbarButton } from '../ToolbarButton';
-import { IBrowserAction } from '../../../models';
+import { IBrowserAction } from '../../models';
 import { ipcRenderer, remote } from 'electron';
-import store from '../../../store';
+import store from '../../store';
 
 interface Props {
   data: IBrowserAction;
 }
 
-const showPopup = (data: IBrowserAction, right: number, devtools: boolean) => {
+const showPopup = (
+  data: IBrowserAction,
+  left: number,
+  top: number,
+  devtools: boolean,
+) => {
   store.extensions.currentlyToggledPopup = data.extensionId;
   ipcRenderer.send(
     `show-extension-popup-${store.windowId}`,
-    right,
+    left,
+    top,
     data.popup,
     devtools,
   );
@@ -30,8 +36,8 @@ const onClick = (data: IBrowserAction) => (
   }
 
   if (canOpenPopup) {
-    const { right } = e.currentTarget.getBoundingClientRect();
-    showPopup(data, right, false);
+    const { right, bottom } = e.currentTarget.getBoundingClientRect();
+    showPopup(data, right, bottom, false);
   }
 };
 
@@ -43,8 +49,8 @@ const onContextMenu = (data: IBrowserAction) => (
     {
       label: 'Inspect popup',
       click: () => {
-        const { right } = (target as any).getBoundingClientRect();
-        showPopup(data, right, true);
+        const { right, bottom } = (target as any).getBoundingClientRect();
+        showPopup(data, right, bottom, true);
       },
     },
     {

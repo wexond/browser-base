@@ -73,12 +73,15 @@ export class DialogStore {
 
   public onVisibilityChange(visible: boolean, ...args: any[]) {}
 
-  public hide() {
+  public hide(data: any = null) {
     if (this.visible) {
       this.visible = false;
+      this.onHide(data);
       setTimeout(() => {
         ipcRenderer.send(`hide-${this.id}`);
       });
     }
   }
+
+  public onHide(data: any = null) {}
 }

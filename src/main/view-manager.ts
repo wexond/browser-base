@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { VIEW_Y_OFFSET } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
 import { WEBUI_BASE_URL } from '~/constants/files';
@@ -47,9 +47,9 @@ export class ViewManager {
       this.views.get(this.selectedId).webContents.print();
     });
 
-    ipcMain.on(`view-select-${id}`, (e, id: number) => {
+    ipcMain.handle(`view-select-${id}`, (e, id: number, focus: boolean) => {
       const view = this.views.get(id);
-      this.select(id);
+      this.select(id, focus);
       view.updateNavigationState();
     });
 
@@ -113,7 +113,7 @@ export class ViewManager {
     Object.values(this.views).forEach(x => x.destroy());
   }
 
-  public select(id: number) {
+  public select(id: number, focus = true) {
     const { selected } = this;
     const view = this.views.get(id);
 
@@ -123,28 +123,14 @@ export class ViewManager {
 
     this.selectedId = id;
 
-    view.updateWindowTitle();
-    view.updateBookmark();
-
-    if (this.incognito) {
-      windowsManager.sessionsManager.viewIncognito.activeTab = id;
-    } else {
-      windowsManager.sessionsManager.view.activeTab = id;
-    }
-
     this.window.removeBrowserView(selected);
     this.window.addBrowserView(view);
 
-    // Also fixes switching tabs with Ctrl + Tab
-    view.webContents.focus();
-
-    if (view.webContents.getURL().startsWith(NEWTAB_URL) || view.isNewTab) {
-      this.window.dialogs.searchDialog.bringToTop();
-      this.window.dialogs.searchDialog.show();
+    if (focus) {
+      // Also fixes switching tabs with Ctrl + Tab
+      view.webContents.focus();
     } else {
-      if (this.window.dialogs.searchDialog.visible) {
-        this.window.dialogs.searchDialog.hide(true);
-      }
+      this.window.webContents.focus();
     }
 
     this.window.dialogs.previewDialog.hide(true);
@@ -163,6 +149,15 @@ export class ViewManager {
       }
     });
 
+    view.updateWindowTitle();
+    view.updateBookmark();
+
+    if (this.incognito) {
+      windowsManager.sessionsManager.viewIncognito.activeTab = id;
+    } else {
+      windowsManager.sessionsManager.view.activeTab = id;
+    }
+
     this.fixBounds();
   }
 
@@ -175,9 +170,9 @@ export class ViewManager {
 
     const newBounds = {
       x: 0,
-      y: this.fullscreen ? 0 : TOOLBAR_HEIGHT + 1,
+      y: this.fullscreen ? 0 : VIEW_Y_OFFSET,
       width,
-      height: this.fullscreen ? height : height - TOOLBAR_HEIGHT,
+      height: this.fullscreen ? height : height - VIEW_Y_OFFSET,
     };
 
     if (newBounds !== view.bounds) {

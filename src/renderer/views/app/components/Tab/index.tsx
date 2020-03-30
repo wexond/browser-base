@@ -8,13 +8,10 @@ import {
   StyledIcon,
   StyledTitle,
   StyledClose,
-  StyledOverlay,
   TabContainer,
 } from './style';
-import { shadeBlendConvert } from '~/utils';
-import Ripple from '~/renderer/components/Ripple';
-import { ITab } from '../../../models';
-import store from '../../../store';
+import { ITab } from '../../models';
+import store from '../../store';
 import { remote, ipcRenderer } from 'electron';
 import { ICON_MUTE } from '~/renderer/constants/icons';
 
@@ -30,22 +27,20 @@ const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
 const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   const { pageX, button } = e;
 
-  ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
+  if (button === 0) {
+    if (!tab.isSelected) {
+      tab.select();
+    }
 
-  if (button !== 0) return;
+    store.tabs.lastMouseX = 0;
+    store.tabs.isDragging = true;
+    store.tabs.mouseStartX = pageX;
+    store.tabs.tabStartX = tab.left;
 
-  if (!tab.isSelected) {
-    tab.select();
-  } else {
-    store.canToggleMenu = true;
+    store.tabs.lastScrollLeft = store.tabs.containerRef.current.scrollLeft;
   }
 
-  store.tabs.lastMouseX = 0;
-  store.tabs.isDragging = true;
-  store.tabs.mouseStartX = pageX;
-  store.tabs.tabStartX = tab.left;
-
-  store.tabs.lastScrollLeft = store.tabs.containerRef.current.scrollLeft;
+  ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
 };
 
 const onMouseEnter = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
@@ -68,11 +63,6 @@ const onMouseLeave = () => {
 };
 
 const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
-  if (store.canToggleMenu) {
-    store.canToggleMenu = false;
-    ipcRenderer.send(`search-show-${store.windowId}`);
-  }
-
   if (e.button === 4) {
     tab.close();
   }
@@ -207,7 +197,7 @@ const Content = observer(({ tab }: { tab: ITab }) => {
 
       {tab.loading && (
         <Preloader
-          color={tab.background}
+          color={store.theme.accentColor}
           thickness={6}
           size={16}
           indeterminate
@@ -233,28 +223,14 @@ const Close = observer(({ tab }: { tab: ITab }) => {
   );
 });
 
-const Overlay = observer(({ tab }: { tab: ITab }) => {
-  const defaultHoverColor = store.theme['toolbar.lightForeground']
-    ? 'rgba(255, 255, 255, 0.5)'
-    : 'rgba(0, 0, 0, 0.5)';
-
-  return (
-    <StyledOverlay
-      hovered={tab.isHovered}
-      style={{
-        backgroundColor:
-          tab.isSelected || tab.customColor
-            ? tab.background
-            : defaultHoverColor,
-      }}
-    />
-  );
-});
-
 export default observer(({ tab }: { tab: ITab }) => {
   const defaultColor = store.theme['toolbar.lightForeground']
-    ? 'rgba(255, 255, 255, 0.3)'
-    : 'rgba(0, 0, 0, 0.25)';
+    ? 'rgba(255, 255, 255, 0.03)'
+    : 'rgba(255, 255, 255, 0.3)';
+
+  const defaultHoverColor = store.theme['toolbar.lightForeground']
+    ? 'rgba(255, 255, 255, 0.06)'
+    : 'rgba(255, 255, 255, 0.5)';
 
   return (
     <StyledTab
@@ -268,20 +244,13 @@ export default observer(({ tab }: { tab: ITab }) => {
       ref={tab.ref}
     >
       <TabContainer
-        tabGroup={!!tab.tabGroup}
         pinned={tab.isPinned}
         style={{
           backgroundColor: tab.isSelected
-            ? shadeBlendConvert(
-                store.theme['tab.backgroundOpacity'],
-                tab.background,
-                store.theme['toolbar.backgroundColor'],
-              )
-            : shadeBlendConvert(
-                0.9,
-                tab.customColor ? tab.background : defaultColor,
-                store.theme['toolbar.backgroundColor'],
-              ),
+            ? store.theme['toolbar.backgroundColor']
+            : tab.isHovered
+            ? defaultHoverColor
+            : defaultColor,
         }}
       >
         <Content tab={tab} />
@@ -301,14 +270,6 @@ export default observer(({ tab }: { tab: ITab }) => {
           />
         )}
         <Close tab={tab} />
-
-        <Overlay tab={tab} />
-        <Ripple
-          rippleTime={0.6}
-          opacity={0.15}
-          color={tab.background}
-          style={{ zIndex: 9 }}
-        />
       </TabContainer>
     </StyledTab>
   );

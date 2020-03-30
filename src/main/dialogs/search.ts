@@ -1,8 +1,12 @@
 import { AppWindow } from '../windows';
 import { ipcMain } from 'electron';
 import { Dialog } from '.';
-import { NEWTAB_URL } from '~/constants/tabs';
-import { DIALOG_MIN_HEIGHT } from '~/constants/design';
+import {
+  DIALOG_MIN_HEIGHT,
+  DIALOG_MARGIN_TOP,
+  TITLEBAR_HEIGHT,
+  DIALOG_MARGIN,
+} from '~/constants/design';
 
 const WIDTH = 800;
 const HEIGHT = 80;
@@ -13,6 +17,12 @@ export class SearchDialog extends Dialog {
   private lastHeight = 0;
   private isPreviewVisible = false;
 
+  public data = {
+    text: '',
+    x: 0,
+    width: 200,
+  };
+
   public constructor(appWindow: AppWindow) {
     super(appWindow, {
       name: 'search',
@@ -21,31 +31,25 @@ export class SearchDialog extends Dialog {
         height: HEIGHT,
         y: 48,
       },
-      hideTimeout: 300,
+      hideTimeout: 200,
       devtools: false,
     });
 
     ipcMain.on(`height-${this.webContents.id}`, (e, height) => {
-      const { width } = this.appWindow.getContentBounds();
       super.rearrange({
         height: this.isPreviewVisible
           ? Math.max(DIALOG_MIN_HEIGHT, HEIGHT + height)
           : HEIGHT + height,
-        x: Math.round(width / 2 - WIDTH / 2),
       });
       this.lastHeight = HEIGHT + height;
     });
 
-    ipcMain.on(`can-show-${this.webContents.id}`, () => {
-      if (this.queueShow) this.show();
+    ipcMain.on(`addressbar-update-input-${this.webContents.id}`, (e, data) => {
+      this.appWindow.webContents.send('addressbar-update-input', data);
     });
 
-    ipcMain.handle(`is-newtab-${this.webContents.id}`, () => {
-      return appWindow.viewManager.selected
-        ? appWindow.viewManager.selected.webContents
-            .getURL()
-            .startsWith(NEWTAB_URL)
-        : false;
+    ipcMain.on(`can-show-${this.webContents.id}`, () => {
+      if (this.queueShow) this.show();
     });
   }
 
@@ -55,8 +59,11 @@ export class SearchDialog extends Dialog {
   }
 
   public rearrange() {
-    const { width } = this.appWindow.getContentBounds();
-    super.rearrange({ x: Math.round(width / 2 - WIDTH / 2) });
+    super.rearrange({
+      x: Math.round(this.data.x - DIALOG_MARGIN),
+      y: TITLEBAR_HEIGHT - DIALOG_MARGIN_TOP,
+      width: Math.round(this.data.width + 2 * DIALOG_MARGIN),
+    });
   }
 
   public rearrangePreview(toggle: boolean) {
@@ -77,20 +84,16 @@ export class SearchDialog extends Dialog {
 
     this.queueShow = true;
 
-    const selected = this.appWindow.viewManager.selected;
-
-    const url = selected.webContents.getURL();
-
     this.webContents.send('visible', true, {
       id: this.appWindow.viewManager.selectedId,
-      url: url.startsWith('wexond-error') ? selected.errorURL : url,
+      ...this.data,
     });
-
-    this.appWindow.webContents.send('get-search-tabs');
 
     ipcMain.once('get-search-tabs', (e, tabs) => {
       this.webContents.send('search-tabs', tabs);
     });
+
+    this.appWindow.webContents.send('get-search-tabs');
   }
 
   public hide(bringToTop = false) {

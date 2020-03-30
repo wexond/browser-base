@@ -14,15 +14,6 @@ import { ipcRenderer } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { TabEvent } from '~/interfaces/tabs';
-import { getColorBrightness } from '~/utils/colors';
-
-const isColorAcceptable = (color: string) => {
-  if (store.theme['tab.allowLightBackground']) {
-    return getColorBrightness(color) > 120;
-  }
-
-  return getColorBrightness(color) < 170;
-};
 
 export class TabsStore {
   @observable
@@ -148,6 +139,10 @@ export class TabsStore {
           if (event === 'url-updated') {
             const [url] = args;
             tab.url = url;
+
+            if (tab.id === this.selectedTabId && !store.addressbarEditing) {
+              this.selectedTab.addressbarValue = null;
+            }
           } else if (event === 'title-updated') {
             const [title] = args;
             tab.title = title;
@@ -157,34 +152,12 @@ export class TabsStore {
           }
 
           tab.updateData();
-        } else if (event === 'color-updated') {
-          const [color] = args;
-          if (isColorAcceptable(color)) {
-            tab.background = color;
-            tab.customColor = true;
-          } else {
-            tab.background = store.theme.accentColor;
-            tab.customColor = false;
-          }
-        } else if (event === 'theme-color-updated') {
-          const [color] = args;
-          if (color && isColorAcceptable(color)) {
-            tab.background = color;
-            tab.hasThemeColor = true;
-            tab.customColor = true;
-          } else {
-            tab.background = store.theme.accentColor;
-            tab.hasThemeColor = false;
-            tab.customColor = false;
-          }
         } else if (event === 'load-commit') {
           const [, , isMainFrame] = args;
           if (isMainFrame) {
             tab.blockedAds = 0;
           }
         } else if (event === 'did-navigate') {
-          tab.background = store.theme.accentColor;
-          tab.customColor = false;
           tab.favicon = '';
         } else if (
           event === 'loading' ||
@@ -612,7 +585,6 @@ export class TabsStore {
         return;
       }
 
-      store.canToggleMenu = false;
       selectedTab.isDragging = true;
 
       const newLeft =

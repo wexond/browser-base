@@ -1,5 +1,5 @@
 import { AppWindow } from '../windows';
-import { TOOLBAR_HEIGHT, DIALOG_MIN_HEIGHT } from '~/constants/design';
+import { DIALOG_MIN_HEIGHT, VIEW_Y_OFFSET } from '~/constants/design';
 import { Dialog } from '.';
 import { ipcMain } from 'electron';
 
@@ -13,7 +13,7 @@ export class FindDialog extends Dialog {
       bounds: {
         width: WIDTH,
         height: HEIGHT,
-        y: TOOLBAR_HEIGHT + 8,
+        y: VIEW_Y_OFFSET,
       },
     });
 

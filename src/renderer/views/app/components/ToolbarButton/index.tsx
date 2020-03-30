@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { transparency } from '~/renderer/constants/transparency';
-import { Button, Icon, Circle, Badge, PreloaderBg } from './style';
+import { Button, Icon, Badge, PreloaderBg } from './style';
 import { BLUE_500 } from '~/renderer/constants';
 import { Preloader } from '~/renderer/components/Preloader';
 
@@ -29,6 +29,8 @@ interface Props {
   preloader?: boolean;
   value?: number;
   toggled?: boolean;
+  dense?: boolean;
+  iconStyle?: any;
 }
 
 export const ToolbarButton = observer(
@@ -55,6 +57,8 @@ export const ToolbarButton = observer(
     onContextMenu,
     onMouseUp,
     toggled,
+    dense,
+    iconStyle,
   }: Props) => {
     style = { ...style };
 
@@ -66,6 +70,8 @@ export const ToolbarButton = observer(
         onMouseUp={onMouseUp}
         className={className}
         style={style}
+        toggled={toggled}
+        dense={dense}
         ref={(r: HTMLDivElement) => {
           if (typeof divRef === 'function') {
             divRef(r);
@@ -74,13 +80,13 @@ export const ToolbarButton = observer(
         disabled={disabled}
       >
         <Icon
-          style={{ backgroundImage: `url(${icon})` }}
+          style={{ backgroundImage: `url(${icon})`, ...iconStyle }}
           size={size}
+          dense={dense}
           disabled={disabled}
           opacity={opacity}
           autoInvert={autoInvert}
         />
-        <Circle toggled={toggled}></Circle>
         {badge && (
           <Badge
             right={badgeRight}

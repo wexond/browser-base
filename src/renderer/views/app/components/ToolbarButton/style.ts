@@ -1,7 +1,10 @@
 import styled, { css } from 'styled-components';
 
 import { centerIcon } from '~/renderer/mixins';
-import { TOOLBAR_HEIGHT, TOOLBAR_BUTTON_WIDTH } from '~/constants/design';
+import {
+  TOOLBAR_BUTTON_WIDTH,
+  TOOLBAR_BUTTON_HEIGHT,
+} from '~/constants/design';
 import { ITheme } from '~/interfaces';
 
 export const Icon = styled.div`
@@ -17,13 +20,16 @@ export const Icon = styled.div`
     opacity,
     autoInvert,
     theme,
+    dense,
   }: {
     size: number;
     disabled: boolean;
     opacity: number;
     autoInvert?: boolean;
+    dense?: boolean;
     theme?: ITheme;
   }) => css`
+    margin-top: ${dense ? 0 : -1}px;
     ${centerIcon(size)};
     opacity: ${disabled ? 0.25 : opacity};
     filter: ${autoInvert && theme['toolbar.lightForeground']
@@ -32,18 +38,36 @@ export const Icon = styled.div`
   `};
 `;
 
-export const Circle = styled.div`
-  border-radius: 4px;
-  width: 38px;
-  height: 34px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  overflow: hidden;
+export const Button = styled.div`
+  border-radius: 2px;
+  position: relative;
   transition: 0.2s background-color;
+  backface-visibility: hidden;
+  margin: 0 1px;
 
-  ${({ theme, toggled }: { theme: ITheme; toggled: boolean }) => css`
+  ${({
+    theme,
+    toggled,
+    disabled,
+    dense,
+  }: {
+    theme: ITheme;
+    toggled: boolean;
+    disabled: boolean;
+    dense: boolean;
+  }) => css`
+    border-radius: ${dense ? 2 : 4}px;
+    height: ${dense ? 26 : TOOLBAR_BUTTON_HEIGHT}px;
+    width: ${dense ? 34 : TOOLBAR_BUTTON_WIDTH}px;
+    pointer-events: ${disabled ? 'none' : 'inherit'};
+    -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
+
+    &:active {
+      background-color: ${theme['toolbar.lightForeground']
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.1)'};
+    }
+
     background-color: ${toggled
       ? theme['toolbar.lightForeground']
         ? 'rgba(255, 255, 255, 0.12)'
@@ -58,29 +82,6 @@ export const Circle = styled.div`
             : 'rgba(0, 0, 0, 0.06)'};
         }
       `};
-  `};
-`;
-
-export const Button = styled.div`
-  height: ${TOOLBAR_HEIGHT}px;
-
-  position: relative;
-  transition: 0.2s background-color;
-  width: ${TOOLBAR_BUTTON_WIDTH}px;
-  backface-visibility: hidden;
-  margin-right: 2px;
-
-  ${({ disabled, theme }: { disabled: boolean; theme: ITheme }) => css`
-    pointer-events: ${disabled ? 'none' : 'inherit'};
-    -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
-
-    &:active {
-      & ${Circle} {
-        background-color: ${theme['toolbar.lightForeground']
-          ? 'rgba(255, 255, 255, 0.12)'
-          : 'rgba(0, 0, 0, 0.1)'};
-      }
-    }
   `};
 `;
 

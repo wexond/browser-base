@@ -3,8 +3,6 @@ export type TabEvent =
   | 'url-updated'
   | 'title-updated'
   | 'favicon-updated'
-  | 'color-updated'
-  | 'theme-color-updated'
   | 'did-navigate'
   | 'loading'
   | 'pinned'

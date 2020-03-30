@@ -1,9 +1,13 @@
 import { AppWindow } from '../windows';
-import { MENU_WIDTH } from '~/constants/design';
+import {
+  MENU_WIDTH,
+  TITLEBAR_HEIGHT,
+  DIALOG_MARGIN_TOP,
+} from '~/constants/design';
 import { Dialog } from '.';
 
 const WIDTH = MENU_WIDTH;
-const HEIGHT = 128;
+const HEIGHT = 256;
 
 export class PreviewDialog extends Dialog {
   public visible = false;
@@ -17,9 +21,9 @@ export class PreviewDialog extends Dialog {
       bounds: {
         width: appWindow.getBounds().width,
         height: HEIGHT,
-        y: 34,
+        y: TITLEBAR_HEIGHT,
       },
-      hideTimeout: 200,
+      hideTimeout: 150,
     });
   }
 

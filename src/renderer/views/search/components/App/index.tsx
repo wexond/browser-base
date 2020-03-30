@@ -40,28 +40,15 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 };
 
 const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  const key = e.keyCode;
   const { suggestions } = store;
   const { list } = suggestions;
   const input = store.inputRef.current;
 
-  if (
-    key !== 8 && // backspace
-    key !== 13 && // enter
-    key !== 17 && // ctrl
-    key !== 18 && // alt
-    key !== 16 && // shift
-    key !== 9 && // tab
-    key !== 20 && // capslock
-    key !== 46 && // delete
-    key !== 32 // space
-  ) {
-    store.canSuggest = true;
-  } else {
-    store.canSuggest = false;
-  }
+  store.canSuggest = store.getCanSuggest(e.keyCode);
 
-  if (e.keyCode === 38 || e.keyCode === 40) {
+  if (e.key === 'Escape') {
+    store.hide({ focus: true, escape: true });
+  } else if (e.keyCode === 38 || e.keyCode === 40) {
     e.preventDefault();
     if (
       e.keyCode === 40 &&
@@ -78,22 +65,22 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       suggestion = store.searchedTabs.find(x => x.id === suggestions.selected);
     }
 
-    input.value = suggestion.primaryText;
+    input.value = suggestion.isSearch
+      ? suggestion.primaryText
+      : suggestion.secondaryText;
   }
 };
 
 const onInput = (e: any) => {
   store.inputText = e.currentTarget.value;
 
+  if (e.currentTarget.value.trim() === '') {
+    store.hide({ focus: true });
+  }
+
   // TODO: if (store.settings.object.suggestions) {
   store.suggest();
   // }
-};
-
-const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-  setTimeout(() => {
-    store.inputRef.current.select();
-  }, 10);
 };
 
 export const App = hot(
@@ -105,18 +92,6 @@ export const App = hot(
     if (suggestionsVisible) {
       for (const s of store.suggestions.list) {
         height += 38;
-      }
-
-      for (const s of store.searchedTabs) {
-        height += 38;
-      }
-
-      if (store.suggestions.list.length > 0) {
-        height += 30;
-      }
-
-      if (store.searchedTabs.length > 0) {
-        height += 30;
       }
     }
 
@@ -144,7 +119,7 @@ export const App = hot(
 
     return (
       <ThemeProvider theme={{ ...store.theme }}>
-        <StyledApp hideTransition visible={store.visible}>
+        <StyledApp visible={store.visible}>
           <GlobalStyle />
           <SearchBox>
             <CurrentIcon
@@ -160,7 +135,6 @@ export const App = hot(
             <Input
               onKeyDown={onKeyDown}
               onInput={onInput}
-              onFocus={onFocus}
               ref={store.inputRef}
               onKeyPress={onKeyPress}
               placeholder="Search or type in a URL"

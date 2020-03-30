@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { AddTab, StyledTabbar, TabsContainer } from './style';
 import { Tabs } from '../Tabs';
-import store from '../../../store';
+import store from '../../store';
 import { ipcRenderer } from 'electron';
 import { TabGroup } from '../TabGroup';
 import { ICON_ADD } from '~/renderer/constants/icons';
