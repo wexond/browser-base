@@ -159,8 +159,6 @@ export class Store {
     return receivedBytes / totalBytes;
   }
 
-  public canToggleMenu = false;
-
   public mouse = {
     x: 0,
     y: 0,

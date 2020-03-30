@@ -24,9 +24,6 @@ export class ExtensionsStore {
 
     ipcRenderer.on('load-browserAction', async (e, extension) => {
       await this.loadExtension(extension);
-      requestAnimationFrame(() => {
-        store.tabs.updateTabsBounds(false);
-      });
     });
   }
 
@@ -83,9 +80,5 @@ export class ExtensionsStore {
     );
 
     await Promise.all(extensions.map(x => this.loadExtension(x)));
-
-    requestAnimationFrame(() => {
-      store.tabs.updateTabsBounds(false);
-    });
   }
 }

@@ -585,7 +585,6 @@ export class TabsStore {
         return;
       }
 
-      store.canToggleMenu = false;
       selectedTab.isDragging = true;
 
       const newLeft =

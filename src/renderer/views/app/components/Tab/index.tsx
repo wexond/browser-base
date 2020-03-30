@@ -30,8 +30,6 @@ const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (button === 0) {
     if (!tab.isSelected) {
       tab.select();
-    } else {
-      store.canToggleMenu = true;
     }
 
     store.tabs.lastMouseX = 0;
@@ -65,11 +63,6 @@ const onMouseLeave = () => {
 };
 
 const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
-  if (store.canToggleMenu) {
-    store.canToggleMenu = false;
-    ipcRenderer.send(`search-show-${store.windowId}`);
-  }
-
   if (e.button === 4) {
     tab.close();
   }
