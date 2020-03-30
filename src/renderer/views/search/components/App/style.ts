@@ -1,13 +1,13 @@
 import styled, { css } from 'styled-components';
-import { centerIcon } from '~/renderer/mixins';
+import { centerIcon, body2 } from '~/renderer/mixins';
 import { BLUE_300 } from '~/renderer/constants';
 import { ITheme } from '~/interfaces';
 import { DialogStyle, DIALOG_BOX_SHADOW } from '~/renderer/mixins/dialogs';
+import { TOOLBAR_HEIGHT } from '~/constants/design';
 
 export const StyledApp = styled(DialogStyle)`
-  margin-top: 10px;
-  border-radius: 6px;
-  box-shadow: 0 0 0 3px ${BLUE_300}, ${DIALOG_BOX_SHADOW};
+  transition: 0.08s opacity;
+  padding-bottom: 4px;
 `;
 
 export const Title = styled.div`
@@ -33,12 +33,10 @@ export const Input = styled.input.attrs(() => ({
   border: none;
   width: 100%;
   height: 100%;
-  font-size: 16px;
-  font-weight: 300;
-  font-family: Roboto;
-  padding-left: 16px;
+  ${body2()};
+  padding-left: 12px;
   padding-right: 8px;
-  height: 42px;
+  padding-top: 1px;
   background-color: transparent;
 
   ${({ theme }: { theme?: ITheme }) => css`
@@ -53,15 +51,17 @@ export const Input = styled.input.attrs(() => ({
 `;
 
 export const CurrentIcon = styled.div`
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
   ${centerIcon()};
-  margin-left: 16px;
+  margin-left: 11px;
 `;
 
 export const SearchBox = styled.div`
   display: flex;
   align-items: center;
+  height: ${TOOLBAR_HEIGHT}px;
 
   ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['searchBox.input.backgroundColor']};

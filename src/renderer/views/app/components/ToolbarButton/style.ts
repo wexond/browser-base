@@ -20,13 +20,16 @@ export const Icon = styled.div`
     opacity,
     autoInvert,
     theme,
+    dense,
   }: {
     size: number;
     disabled: boolean;
     opacity: number;
     autoInvert?: boolean;
+    dense?: boolean;
     theme?: ITheme;
   }) => css`
+    margin-top: ${dense ? 0 : -1}px;
     ${centerIcon(size)};
     opacity: ${disabled ? 0.25 : opacity};
     filter: ${autoInvert && theme['toolbar.lightForeground']

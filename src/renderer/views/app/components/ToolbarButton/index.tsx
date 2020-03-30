@@ -30,6 +30,7 @@ interface Props {
   value?: number;
   toggled?: boolean;
   dense?: boolean;
+  iconStyle?: any;
 }
 
 export const ToolbarButton = observer(
@@ -57,6 +58,7 @@ export const ToolbarButton = observer(
     onMouseUp,
     toggled,
     dense,
+    iconStyle,
   }: Props) => {
     style = { ...style };
 
@@ -78,8 +80,9 @@ export const ToolbarButton = observer(
         disabled={disabled}
       >
         <Icon
-          style={{ backgroundImage: `url(${icon})` }}
+          style={{ backgroundImage: `url(${icon})`, ...iconStyle }}
           size={size}
+          dense={dense}
           disabled={disabled}
           opacity={opacity}
           autoInvert={autoInvert}

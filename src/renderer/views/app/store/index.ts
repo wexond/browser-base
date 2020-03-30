@@ -4,7 +4,7 @@ import * as React from 'react';
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { ExtensionsStore } from './extensions';
 import { SettingsStore } from './settings';
 import { getCurrentWindow } from '../utils/windows';
@@ -267,6 +267,29 @@ export class Store {
 
     ipcRenderer.on('dialog-visibility-change', (e, name, state) => {
       this.dialogsVisibility[name] = state;
+    });
+
+    ipcRenderer.on(`addressbar-update-input`, (e, data) => {
+      const tab = this.tabs.getTabById(data.id);
+
+      if (tab) {
+        tab.addressbarValue = data.text;
+        tab.addressbarSelectionRange = [data.selectionStart, data.selectionEnd];
+        tab.addressbarFocused = true;
+
+        if (tab.isSelected) {
+          this.inputRef.current.value = data.text;
+          this.inputRef.current.setSelectionRange(
+            data.selectionStart,
+            data.selectionEnd,
+          );
+
+          if (data.focus) {
+            remote.getCurrentWebContents().focus();
+            this.inputRef.current.focus();
+          }
+        }
+      }
     });
 
     ipcRenderer.send('update-check');

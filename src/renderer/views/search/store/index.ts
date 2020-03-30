@@ -28,6 +28,8 @@ export class Store extends DialogStore {
   @observable
   public inputText = '';
 
+  private timeout: any = null;
+
   @computed
   public get searchedTabs(): ISuggestion[] {
     const lastItem = this.suggestions.list[this.suggestions.list.length - 1];
@@ -65,7 +67,31 @@ export class Store extends DialogStore {
   public tabId = 1;
 
   public constructor() {
-    super();
+    super({
+      visibilityWrapper: false,
+    });
+
+    ipcRenderer.on('visible', (e, visible, data) => {
+      this.visible = visible;
+
+      if (visible) {
+        clearTimeout(this.timeout);
+
+        this.tabs = [];
+        this.suggestions.list = [];
+        this.tabId = data.id;
+
+        this.canSuggest = this.inputText.length <= data.text.length;
+
+        this.inputRef.current.value = data.text;
+        this.inputRef.current.focus();
+
+        this.inputRef.current.setSelectionRange(data.cursorPos, data.cursorPos);
+
+        const event = new Event('input', { bubbles: true });
+        this.inputRef.current.dispatchEvent(event);
+      }
+    });
 
     ipcRenderer.on('search-tabs', (e, tabs) => {
       this.tabs = tabs;
@@ -76,16 +102,38 @@ export class Store extends DialogStore {
     ipcRenderer.send(`can-show-${this.id}`);
   }
 
-  public onVisibilityChange(visible: boolean, tab: any) {
-    this.visible = visible;
-
-    if (visible) {
-      this.tabs = [];
-      this.suggestions.list = [];
-      this.tabId = tab.id;
-      this.inputRef.current.value = tab.url;
-      this.inputRef.current.focus();
+  public getCanSuggest(key: number) {
+    if (
+      key !== 8 && // backspace
+      key !== 13 && // enter
+      key !== 17 && // ctrl
+      key !== 18 && // alt
+      key !== 16 && // shift
+      key !== 9 && // tab
+      key !== 20 && // capslock
+      key !== 46 && // delete
+      key !== 32 // space
+    ) {
+      return true;
     }
+
+    return false;
+  }
+
+  public onHide(data: any = null) {
+    ipcRenderer.send(`addressbar-update-input-${this.id}`, {
+      id: this.tabId,
+      text: this.inputRef.current.value,
+      selectionStart: this.inputRef.current.selectionStart,
+      selectionEnd: this.inputRef.current.selectionEnd,
+      focus: data?.focus,
+    });
+
+    this.timeout = setTimeout(() => {
+      this.tabs = [];
+      this.inputRef.current.value = '';
+      this.suggestions.list = [];
+    }, 200);
   }
 
   public async loadHistory() {

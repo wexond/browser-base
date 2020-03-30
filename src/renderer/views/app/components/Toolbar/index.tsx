@@ -24,6 +24,8 @@ import {
   ICON_DOWNLOAD,
   ICON_INCOGNITO,
   ICON_MORE,
+  ICON_SEARCH,
+  ICON_DASHBOARD,
 } from '~/renderer/constants/icons';
 import { isDialogVisible } from '../../utils/dialogs';
 import { isURL } from '~/utils';
@@ -186,19 +188,18 @@ const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   }
 };
 
-const onMouseUp = (e: React.MouseEvent<HTMLInputElement>) => {
-  if (
-    e.currentTarget.selectionEnd - e.currentTarget.selectionStart === 0 &&
-    !mouseUpped
-  ) {
-    e.currentTarget.select();
-  }
-
+const onSelect = (e: React.MouseEvent<HTMLInputElement>) => {
   if (store.tabs.selectedTab) {
     store.tabs.selectedTab.addressbarSelectionRange = [
       e.currentTarget.selectionStart,
       e.currentTarget.selectionEnd,
     ];
+  }
+};
+
+const onMouseUp = (e: React.MouseEvent<HTMLInputElement>) => {
+  if (window.getSelection().toString().length === 0 && !mouseUpped) {
+    e.currentTarget.select();
   }
 
   mouseUpped = true;
@@ -233,8 +234,21 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
   }
 };
 
+const addressbarRef = React.createRef<HTMLDivElement>();
+
 const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   store.tabs.selectedTab.addressbarValue = e.currentTarget.value;
+
+  const { left, width } = addressbarRef.current.getBoundingClientRect();
+
+  if (e.currentTarget.value.trim() !== '') {
+    ipcRenderer.send(`search-show-${store.windowId}`, {
+      text: e.currentTarget.value,
+      cursorPos: e.currentTarget.selectionStart,
+      x: left,
+      width: width,
+    });
+  }
 };
 
 const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -261,13 +275,21 @@ export const Toolbar = observer(() => {
   return (
     <StyledToolbar>
       <NavigationButtons />
-      <Addressbar focus={store.addressbarEditing}>
+      <Addressbar ref={addressbarRef} focus={store.addressbarEditing}>
+        <ToolbarButton
+          toggled={false}
+          icon={ICON_SEARCH}
+          size={16}
+          dense
+          iconStyle={{ transform: 'scale(-1,1)' }}
+        />
         <AddressbarInputContainer>
           <AddressbarInput
             ref={store.inputRef}
             spellCheck={false}
             onKeyDown={onKeyDown}
             onMouseDown={onMouseDown}
+            onSelect={onSelect}
             onBlur={onBlur}
             onFocus={onFocus}
             onMouseUp={onMouseUp}
@@ -278,22 +300,24 @@ export const Toolbar = observer(() => {
             }
             value={store.addressbarValue}
           ></AddressbarInput>
+          <AddressbarText
+            visible={
+              store.addressbarTextVisible && store.addressbarValue !== ''
+            }
+          >
+            {store.addressbarUrlSegments.map((item, key) => (
+              <div
+                key={key}
+                style={{
+                  opacity: item.grayOut ? 0.54 : 1,
+                }}
+              >
+                {item.value}
+              </div>
+            ))}
+          </AddressbarText>
         </AddressbarInputContainer>
 
-        <AddressbarText
-          visible={store.addressbarTextVisible && store.addressbarValue !== ''}
-        >
-          {store.addressbarUrlSegments.map((item, key) => (
-            <div
-              key={key}
-              style={{
-                opacity: item.grayOut ? 0.54 : 1,
-              }}
-            >
-              {item.value}
-            </div>
-          ))}
-        </AddressbarText>
         {hasCredentials && (
           <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
         )}

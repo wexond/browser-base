@@ -35,7 +35,6 @@ export const Addressbar = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  padding-left: 8px;
   padding-top: 1px;
   font-size: 15px;
   overflow: hidden;
@@ -44,7 +43,9 @@ export const Addressbar = styled.div`
     background-color: ${theme['addressbar.backgroundColor']};
     border: 1px solid ${focus ? `${BLUE_300} !important` : 'transparent'};
     color: ${theme['addressbar.textColor']};
-    box-shadow: ${focus ? `0 0 0 1px ${BLUE_300}` : `none`};
+    box-shadow: ${focus
+      ? `0 0 0 1px ${BLUE_300}`
+      : `0px 0px 5px 0px rgba(0,0,0,0.1)`};
 
     &:hover {
       border: ${theme['toolbar.lightForeground']
@@ -56,12 +57,16 @@ export const Addressbar = styled.div`
 
 export const AddressbarInputContainer = styled.div`
   flex: 1;
+  position: relative;
   height: 100%;
+  margin-left: 2px;
 `;
 
 export const AddressbarText = styled.div`
   pointer-events: none;
   position: absolute;
+  top: 50%;
+  transform: translateY(calc(-50%));
   flex: 1;
   color: inherit;
   flex-wrap: nowrap;

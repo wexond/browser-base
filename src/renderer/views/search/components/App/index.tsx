@@ -45,21 +45,7 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
   const { list } = suggestions;
   const input = store.inputRef.current;
 
-  if (
-    key !== 8 && // backspace
-    key !== 13 && // enter
-    key !== 17 && // ctrl
-    key !== 18 && // alt
-    key !== 16 && // shift
-    key !== 9 && // tab
-    key !== 20 && // capslock
-    key !== 46 && // delete
-    key !== 32 // space
-  ) {
-    store.canSuggest = true;
-  } else {
-    store.canSuggest = false;
-  }
+  store.canSuggest = store.getCanSuggest(key);
 
   if (e.keyCode === 38 || e.keyCode === 40) {
     e.preventDefault();
@@ -85,15 +71,13 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 const onInput = (e: any) => {
   store.inputText = e.currentTarget.value;
 
+  if (e.currentTarget.value.trim() === '') {
+    store.hide({ focus: true });
+  }
+
   // TODO: if (store.settings.object.suggestions) {
   store.suggest();
   // }
-};
-
-const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-  setTimeout(() => {
-    store.inputRef.current.select();
-  }, 10);
 };
 
 export const App = hot(
@@ -144,7 +128,7 @@ export const App = hot(
 
     return (
       <ThemeProvider theme={{ ...store.theme }}>
-        <StyledApp hideTransition visible={store.visible}>
+        <StyledApp visible={store.visible}>
           <GlobalStyle />
           <SearchBox>
             <CurrentIcon
@@ -160,7 +144,6 @@ export const App = hot(
             <Input
               onKeyDown={onKeyDown}
               onInput={onInput}
-              onFocus={onFocus}
               ref={store.inputRef}
               onKeyPress={onKeyPress}
               placeholder="Search or type in a URL"
