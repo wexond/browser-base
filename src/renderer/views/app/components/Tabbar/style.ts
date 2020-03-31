@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { platform } from 'os';
 
 import { ToolbarButton } from '../ToolbarButton';
 import {
@@ -16,6 +17,9 @@ export const StyledTabbar = styled.div`
   margin-left: 4px;
   margin-right: 32px;
   display: flex;
+  ${({ isFullscreen }: { isFullscreen: boolean }) => css`
+    margin-left: ${platform() === 'darwin' && !isFullscreen ? 78 : 0}px;
+  `};
 `;
 
 /* &:hover {
