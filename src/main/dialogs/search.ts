@@ -31,7 +31,7 @@ export class SearchDialog extends Dialog {
         height: HEIGHT,
         y: 48,
       },
-      hideTimeout: 200,
+
       devtools: false,
     });
 
@@ -41,6 +41,7 @@ export class SearchDialog extends Dialog {
           ? Math.max(DIALOG_MIN_HEIGHT, HEIGHT + height)
           : HEIGHT + height,
       });
+
       this.lastHeight = HEIGHT + height;
     });
 

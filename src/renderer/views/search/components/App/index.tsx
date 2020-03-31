@@ -95,7 +95,9 @@ export const App = hot(
       }
     }
 
-    ipcRenderer.send(`height-${store.id}`, height);
+    requestAnimationFrame(() => {
+      ipcRenderer.send(`height-${store.id}`, height);
+    });
 
     const suggestion = store.suggestions.selectedSuggestion;
     let favicon = ICON_SEARCH;
@@ -119,7 +121,7 @@ export const App = hot(
 
     return (
       <ThemeProvider theme={{ ...store.theme }}>
-        <StyledApp visible={store.visible}>
+        <StyledApp visible={true}>
           <GlobalStyle />
           <SearchBox>
             <CurrentIcon
