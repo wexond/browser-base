@@ -37,7 +37,7 @@ export const NavigationButtons = observer(() => {
   }
 
   return (
-    <StyledContainer isFullscreen={store.isFullscreen}>
+    <StyledContainer>
       <ToolbarButton
         disabled={!store.navigationState.canGoBack}
         size={20}
