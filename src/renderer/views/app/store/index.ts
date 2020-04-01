@@ -38,6 +38,9 @@ export class Store {
   public addressbarTextVisible = true;
 
   @observable
+  public addressbarFocused = false;
+
+  @observable
   public addressbarEditing = false;
 
   @computed
@@ -272,10 +275,11 @@ export class Store {
     ipcRenderer.on(`addressbar-update-input`, (e, data) => {
       const tab = this.tabs.getTabById(data.id);
 
+      this.addressbarEditing = false;
+
       if (tab) {
         tab.addressbarValue = data.text;
         tab.addressbarSelectionRange = [data.selectionStart, data.selectionEnd];
-        tab.addressbarFocused = true;
 
         if (tab.isSelected) {
           this.inputRef.current.value = data.text;
@@ -289,10 +293,8 @@ export class Store {
             this.inputRef.current.focus();
           }
 
-          console.log(data);
-
           if (data.escape) {
-            this.addressbarEditing = false;
+            this.addressbarFocused = false;
             this.tabs.selectedTab.addressbarValue = null;
 
             requestAnimationFrame(() => {

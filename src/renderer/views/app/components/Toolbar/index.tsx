@@ -176,12 +176,12 @@ let mouseUpped = false;
 
 const onMouseDown = (e: React.MouseEvent<HTMLInputElement>) => {
   store.addressbarTextVisible = false;
-  store.addressbarEditing = true;
+  store.addressbarFocused = true;
 };
 
 const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   store.addressbarTextVisible = false;
-  store.addressbarEditing = true;
+  store.addressbarFocused = true;
 
   if (store.tabs.selectedTab) {
     store.tabs.selectedTab.addressbarFocused = true;
@@ -207,7 +207,6 @@ const onMouseUp = (e: React.MouseEvent<HTMLInputElement>) => {
 
 const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.key === 'Escape' || e.key === 'Enter') {
-    store.addressbarEditing = false;
     store.tabs.selectedTab.addressbarValue = null;
   }
 
@@ -219,6 +218,7 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
   }
 
   if (e.key === 'Enter') {
+    store.addressbarFocused = false;
     e.currentTarget.blur();
     const { value } = e.currentTarget;
     let url = value;
@@ -248,6 +248,7 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       x: left,
       width: width,
     });
+    store.addressbarEditing = true;
   }
 };
 
@@ -255,7 +256,7 @@ const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
   e.currentTarget.blur();
   window.getSelection().removeAllRanges();
   store.addressbarTextVisible = true;
-  store.addressbarEditing = false;
+  store.addressbarFocused = false;
   mouseUpped = false;
 
   if (store.tabs.selectedTab) {
@@ -275,7 +276,7 @@ export const Toolbar = observer(() => {
   return (
     <StyledToolbar>
       <NavigationButtons />
-      <Addressbar ref={addressbarRef} focus={store.addressbarEditing}>
+      <Addressbar ref={addressbarRef} focus={store.addressbarFocused}>
         <ToolbarButton
           toggled={false}
           icon={ICON_SEARCH}

@@ -27,6 +27,10 @@ const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
 const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   const { pageX, button } = e;
 
+  if (store.addressbarEditing) {
+    store.inputRef.current.focus();
+  }
+
   if (button === 0) {
     if (!tab.isSelected) {
       tab.select();
