@@ -73,6 +73,14 @@ export class View extends BrowserView {
       return this.errorURL;
     });
 
+    window.on('app-command', (e, command) => {
+      if (command === 'browser-backward' && this.webContents.canGoBack()) {
+        this.webContents.goBack();
+      } else if (command === 'browser-forward' && this.webContents.canGoForward()) {
+        this.webContents.goForward();
+      }
+    });
+
     this.webContents.on('context-menu', (e, params) => {
       const menu = getViewMenu(this.window, params, this.webContents);
       menu.popup();
