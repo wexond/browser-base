@@ -225,11 +225,11 @@ const Close = observer(({ tab }: { tab: ITab }) => {
 
 export default observer(({ tab }: { tab: ITab }) => {
   const defaultColor = store.theme['toolbar.lightForeground']
-    ? 'rgba(255, 255, 255, 0.03)'
+    ? 'rgba(255, 255, 255, 0.04)'
     : 'rgba(255, 255, 255, 0.3)';
 
   const defaultHoverColor = store.theme['toolbar.lightForeground']
-    ? 'rgba(255, 255, 255, 0.06)'
+    ? 'rgba(255, 255, 255, 0.08)'
     : 'rgba(255, 255, 255, 0.5)';
 
   return (
