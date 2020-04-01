@@ -223,14 +223,16 @@ export class View extends BrowserView {
       },
     );
 
-    this.setAutoResize({
-      width: true,
-      height: true,
-    } as any);
-
     if (url.startsWith(NEWTAB_URL)) this.isNewTab = true;
 
     this.webContents.loadURL(url);
+
+    this.setAutoResize({
+      width: true,
+      height: true,
+      horizontal: false,
+      vertical: false,
+    });
   }
 
   public updateNavigationState() {
