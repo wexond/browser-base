@@ -28,8 +28,6 @@ export class Store extends DialogStore {
   @observable
   public inputText = '';
 
-  private timeout: any = null;
-
   @computed
   public get searchedTabs(): ISuggestion[] {
     const lastItem = this.suggestions.list[this.suggestions.list.length - 1];
@@ -75,8 +73,6 @@ export class Store extends DialogStore {
       this.visible = visible;
 
       if (visible) {
-        clearTimeout(this.timeout);
-
         this.tabs = [];
         this.suggestions.list = [];
         this.tabId = data.id;
@@ -129,11 +125,9 @@ export class Store extends DialogStore {
       ...data,
     });
 
-    this.timeout = setTimeout(() => {
-      this.tabs = [];
-      this.inputRef.current.value = '';
-      this.suggestions.list = [];
-    }, 200);
+    this.tabs = [];
+    this.inputRef.current.value = '';
+    this.suggestions.list = [];
   }
 
   public async loadHistory() {
