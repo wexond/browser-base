@@ -65,9 +65,7 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       suggestion = store.searchedTabs.find(x => x.id === suggestions.selected);
     }
 
-    input.value = suggestion.isSearch
-      ? suggestion.primaryText
-      : suggestion.secondaryText;
+    input.value = suggestion.isSearch ? suggestion.primaryText : suggestion.url;
   }
 };
 

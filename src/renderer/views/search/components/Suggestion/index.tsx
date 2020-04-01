@@ -8,6 +8,7 @@ import {
   Dash,
   SecondaryText,
   Icon,
+  Url,
 } from './style';
 import { ISuggestion } from '~/interfaces';
 import store from '../../store';
@@ -27,9 +28,7 @@ const onMouseLeave = (suggestion: ISuggestion) => () => {
 };
 
 const onClick = (suggestion: ISuggestion) => () => {
-  let url = suggestion.isSearch
-    ? suggestion.primaryText
-    : suggestion.secondaryText;
+  let url = suggestion.isSearch ? suggestion.primaryText : suggestion.url;
 
   if (suggestion.isSearch) {
     url = store.searchEngine.url.replace('%s', url);
@@ -44,7 +43,7 @@ const onClick = (suggestion: ISuggestion) => () => {
 
 export const Suggestion = observer(({ suggestion }: Props) => {
   const { hovered } = suggestion;
-  const { primaryText, secondaryText } = suggestion;
+  const { primaryText, secondaryText, url } = suggestion;
 
   const selected = store.suggestions.selected === suggestion.id;
 
@@ -75,9 +74,9 @@ export const Suggestion = observer(({ suggestion }: Props) => {
             : 'none',
         }}
       />
-      <PrimaryText>{primaryText}</PrimaryText>
-      {primaryText != null && secondaryText != null && <Dash>&mdash;</Dash>}
-      <SecondaryText>{secondaryText}</SecondaryText>
+      {primaryText && <PrimaryText>{primaryText}</PrimaryText>}
+      {primaryText && (secondaryText || url) && <Dash>&mdash;</Dash>}
+      {url ? <Url>{url}</Url> : <SecondaryText>{secondaryText}</SecondaryText>}
     </StyledSuggestion>
   );
 });

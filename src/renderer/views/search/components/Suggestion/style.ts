@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { transparency } from '~/renderer/constants';
+import { transparency, BLUE_300, BLUE_500 } from '~/renderer/constants';
 import { ITheme } from '~/interfaces';
 import { body2, centerIcon } from '~/renderer/mixins';
 
@@ -36,24 +36,30 @@ export const StyledSuggestion = styled.div`
   }};
 `;
 
-export const PrimaryText = styled.div`
+export const SuggestionText = styled.div`
   ${body2()};
-  margin-left: 12px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 13px;
+`;
+
+export const PrimaryText = styled(SuggestionText)`
   opacity: ${transparency.text.high};
 `;
 
-export const SecondaryText = styled.div`
-  ${body2()};
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+export const RightText = styled(SuggestionText)`
   padding-right: 16px;
   flex: 1;
-  font-size: 13px;
+`;
+
+export const Url = styled(RightText)`
+  ${({ theme }: { theme?: ITheme }) => css`
+    color: ${theme['searchBox.lightForeground'] ? BLUE_300 : '#3297FD'};
+  `}
+`;
+
+export const SecondaryText = styled(RightText)`
   opacity: ${transparency.text.medium};
 `;
 
@@ -62,6 +68,7 @@ export const Icon = styled.div`
   width: 16px;
   min-width: 16px;
   height: 16px;
+  margin-right: 12px;
   ${centerIcon()};
 `;
 

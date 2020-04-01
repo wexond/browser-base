@@ -45,7 +45,7 @@ export class SuggestionsStore {
         if (!item.isSearch) {
           historySuggestions.push({
             primaryText: item.title,
-            secondaryText: item.url,
+            url: item.url,
             favicon: item.favicon,
             canSuggest: item.canSuggest,
           });
@@ -64,8 +64,7 @@ export class SuggestionsStore {
       if ((!history[0] || !history[0].canSuggest) && filter.trim() !== '') {
         if (isURL(filter) || filter.indexOf('://') !== -1) {
           historySuggestions.unshift({
-            primaryText: filter,
-            secondaryText: 'open website',
+            url: filter,
             favicon: ICON_PAGE,
           });
         } else {
@@ -75,7 +74,7 @@ export class SuggestionsStore {
 
       historySuggestions.splice(idx, 0, {
         primaryText: filter,
-        secondaryText: `search in ${this.store.searchEngine.name}`,
+        secondaryText: `${this.store.searchEngine.name} Search`,
         favicon: ICON_SEARCH,
         isSearch: true,
       });
@@ -94,7 +93,7 @@ export class SuggestionsStore {
       this.list = suggestions;
 
       if (historySuggestions.length > 0 && historySuggestions[0].canSuggest) {
-        resolve(historySuggestions[0].secondaryText);
+        resolve(historySuggestions[0].url);
       }
 
       try {
