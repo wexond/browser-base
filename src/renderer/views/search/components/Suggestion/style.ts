@@ -41,7 +41,6 @@ export const SuggestionText = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 13px;
 `;
 
 export const PrimaryText = styled(SuggestionText)`
