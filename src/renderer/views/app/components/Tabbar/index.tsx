@@ -53,7 +53,7 @@ export const TabGroups = observer(() => {
 
 export const Tabbar = observer(() => {
   return (
-    <StyledTabbar>
+    <StyledTabbar isFullscreen={store.isFullscreen}>
       <TabsContainer
         onMouseEnter={onMouseEnter}
         onMouseLeave={onTabsMouseLeave}
