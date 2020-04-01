@@ -14,11 +14,10 @@ export const StyledTabbar = styled.div`
   width: 100%;
   position: relative;
   overflow: hidden;
-  margin-left: 4px;
   margin-right: 32px;
   display: flex;
   ${({ isFullscreen }: { isFullscreen: boolean }) => css`
-    margin-left: ${platform() === 'darwin' && !isFullscreen ? 78 : 0}px;
+    margin-left: ${platform() === 'darwin' && !isFullscreen ? 78 : 4}px;
   `};
 `;
 
