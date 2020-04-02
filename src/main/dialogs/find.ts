@@ -28,15 +28,12 @@ export class FindDialog extends Dialog {
     });
   }
 
-  public find(tabId: number, data: any) {
-    data.visible = true;
-    this.show();
-    this.updateInfo(tabId, data);
-  }
+  public async show() {
+    super.show();
 
-  public updateInfo(tabId: number, data: any) {
-    this.tabId = tabId;
-    this.webContents.send('update-info', tabId, data);
+    const tabId = this.appWindow.viewManager.selectedId;
+    this.tabIds.push(tabId);
+    this.webContents.send('visible', true, tabId);
   }
 
   public rearrange() {

@@ -142,8 +142,9 @@ export class ViewManager {
       'formFillDialog',
       'credentialsDialog',
     ].forEach(dialog => {
-      if (id === this.window.dialogs[dialog].tabId) {
+      if (this.window.dialogs[dialog].tabIds.includes(id)) {
         this.window.dialogs[dialog].show();
+        this.window.dialogs[dialog].bringToTop();
       } else {
         this.window.dialogs[dialog].hide();
       }
