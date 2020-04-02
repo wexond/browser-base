@@ -60,6 +60,7 @@ export const AddressbarInputContainer = styled.div`
   position: relative;
   height: 100%;
   margin-left: 2px;
+  overflow: hidden;
 `;
 
 export const AddressbarText = styled.div`
