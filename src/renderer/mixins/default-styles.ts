@@ -27,9 +27,13 @@ export const UIStyle = createGlobalStyle`
 
 export const WebUIStyle = createGlobalStyle`
   ${baseStyle};
-
-  ${({ theme }: { theme?: ITheme }) => css`
-    background-color: ${theme['pages.backgroundColor']};
-    color: ${theme['pages.textColor']};
-  `};
+  
+  body {
+    overflow-y: auto;
+    font-family: system-ui, sans-serif;
+    ${({ theme }: { theme?: ITheme }) => css`
+      background-color: ${theme['pages.backgroundColor']};
+      color: ${theme['pages.textColor']};
+    `};
+  }
 `;
