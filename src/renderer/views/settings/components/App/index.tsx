@@ -10,7 +10,7 @@ import store from '../../store';
 import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
 import { Button } from '~/renderer/components/Button';
 import { Style } from '../../style';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { Autofill } from '../Autofill';
 import { OnStartup } from '../Startup';
 import { Content, LeftContent, Container } from '~/renderer/components/Pages';
@@ -36,6 +36,7 @@ import {
   DialogButtons,
 } from '~/renderer/views/bookmarks/components/App/style';
 import { Textfield } from '~/renderer/components/Textfield';
+import { WebUIStyle } from '~/renderer/mixins/default-styles';
 
 export const NormalButton = ({
   children,
@@ -59,7 +60,6 @@ export const NormalButton = ({
   );
 };
 
-const GlobalStyle = createGlobalStyle`${Style}`;
 const MenuItem = observer(
   ({
     section,
@@ -161,7 +161,7 @@ export default hot(
           onMouseDown={e => (store.dialogVisible = false)}
           darken={store.dialogVisible}
         >
-          <GlobalStyle />
+          <WebUIStyle />
           <GlobalNavigationDrawer></GlobalNavigationDrawer>
           <ContextMenu
             tabIndex={1}

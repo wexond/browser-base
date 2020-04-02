@@ -1,4 +1,5 @@
 import { css, createGlobalStyle } from 'styled-components';
+import { ITheme } from '~/interfaces';
 
 export const baseStyle = css`
   body {
@@ -26,4 +27,9 @@ export const UIStyle = createGlobalStyle`
 
 export const WebUIStyle = createGlobalStyle`
   ${baseStyle};
+
+  ${({ theme }: { theme?: ITheme }) => css`
+    background-color: ${theme['pages.backgroundColor']};
+    color: ${theme['pages.textColor']};
+  `};
 `;

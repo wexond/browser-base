@@ -4,8 +4,7 @@ import { hot } from 'react-hot-loader/root';
 
 import store from '../../store';
 import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
-import { Style } from '../../style';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { SelectionDialog } from '~/renderer/components/SelectionDialog';
 import { Container, Content, LeftContent } from '~/renderer/components/Pages';
 import { GlobalNavigationDrawer } from '~/renderer/components/GlobalNavigationDrawer';
@@ -36,8 +35,7 @@ import {
   ICON_NEW_FOLDER,
 } from '~/renderer/constants';
 import parse from 'node-bookmarks-parser';
-
-const GlobalStyle = createGlobalStyle`${Style}`;
+import { WebUIStyle } from '~/renderer/mixins/default-styles';
 
 const onScroll = (e: any) => {
   const scrollPos = e.target.scrollTop;
@@ -174,7 +172,7 @@ export default hot(
           onMouseDown={onContainerMouseDown}
           darken={store.dialogVisible}
         >
-          <GlobalStyle />
+          <WebUIStyle />
           <GlobalNavigationDrawer></GlobalNavigationDrawer>
           <NavigationDrawer title="Bookmarks" search onSearchInput={onInput}>
             <Tree />
