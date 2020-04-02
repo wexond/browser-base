@@ -75,7 +75,7 @@ export const Suggestion = observer(({ suggestion }: Props) => {
         }}
       />
       {primaryText && <PrimaryText>{primaryText}</PrimaryText>}
-      {primaryText && (secondaryText || url) && <Dash>&mdash;</Dash>}
+      {primaryText && (secondaryText || url) && <Dash>&ndash;</Dash>}
       {url ? <Url>{url}</Url> : <SecondaryText>{secondaryText}</SecondaryText>}
     </StyledSuggestion>
   );
