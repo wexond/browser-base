@@ -17,6 +17,7 @@ import {
 import { countVisitedTimes } from '~/utils/history';
 import { windowsManager } from '..';
 import { promises } from 'fs';
+import { Queue } from '~/utils/queue';
 
 interface Databases {
   [key: string]: Datastore;
