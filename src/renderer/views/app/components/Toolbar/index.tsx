@@ -156,14 +156,13 @@ const RightButtons = observer(() => {
           value={store.downloadProgress}
         ></ToolbarButton>
       )}
-      <Separator />
       {store.isIncognito && <ToolbarButton icon={ICON_INCOGNITO} size={18} />}
       <ToolbarButton
         divRef={r => (menuRef = r)}
         toggled={store.dialogsVisibility['menu']}
         badge={store.updateAvailable}
         badgeRight={10}
-        badgeTop={8}
+        badgeTop={6}
         onMouseDown={onMenuClick}
         icon={ICON_MORE}
         size={18}
