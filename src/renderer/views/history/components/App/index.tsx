@@ -50,12 +50,12 @@ const RangeItem = observer(
   ),
 );
 
-const onCancelClick = (e: React.MouseEvent) => {
+const onCancelClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
   store.selectedItems = [];
 };
 
-const onDeleteClick = (e: React.MouseEvent) => {
+const onDeleteClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
   store.deleteSelected();
 };
@@ -70,7 +70,7 @@ const HistorySections = observer(() => {
         onDeleteClick={onDeleteClick}
         onCancelClick={onCancelClick}
       />
-      {store.sections.map(data => (
+      {store.sections.map((data) => (
         <HistorySection data={data} key={data.date.getTime()} />
       ))}
     </LeftContent>
