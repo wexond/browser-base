@@ -7,7 +7,7 @@ export class Store extends DialogStore {
   public url: string;
 
   public constructor() {
-    super({ hideOnBlur: false });
+    super({ hideOnBlur: false, visibilityWrapper: false });
 
     ipcRenderer.on('request-auth', (e, url) => {
       this.url = url;

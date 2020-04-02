@@ -28,12 +28,12 @@ export class AuthDialog extends Dialog {
   ): Promise<{ username: string; password: string }> {
     return new Promise(resolve => {
       this.show();
-      this.tabId = tabId;
+      this.tabIds.push(tabId);
 
       this.webContents.send('request-auth', url);
 
       ipcMain.once(`request-auth-result-${this.appWindow.id}`, (e, result) => {
-        this.tabId = -1;
+        this.tabIds = this.tabIds.filter(x => x !== tabId);
         this.hide();
         resolve(result);
       });
