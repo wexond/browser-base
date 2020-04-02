@@ -105,21 +105,6 @@ export class Settings extends EventEmitter {
     ];
 
     contexts.forEach(e => {
-      /*
-      // TODO:
-      if (e.extensions['wexond-darkreader']) {
-        e.extensions['wexond-darkreader'].backgroundPage.webContents.send(
-          'api-runtime-sendMessage',
-          {
-            message: {
-              name: 'toggle',
-              toggle: this.object.darkContents,
-            },
-          },
-        );
-      }
-      */
-
       if (this.object.shield) {
         runAdblockService(e);
       } else {
