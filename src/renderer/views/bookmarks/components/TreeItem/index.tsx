@@ -10,7 +10,9 @@ const onClick = (item: IBookmark) => () => {
   store.currentFolder = item._id;
 };
 
-const onDropClick = (item: IBookmark) => (e: React.MouseEvent) => {
+const onDropClick = (item: IBookmark) => (
+  e: React.MouseEvent<HTMLDivElement>,
+) => {
   e.stopPropagation();
 
   if (item.children.length > 0) {
@@ -25,8 +27,8 @@ const TreeItem = observer(
     const children = data.children || [];
 
     const c = children
-      .map(x => store.list.find(y => x === y._id))
-      .filter(x => x && x.isFolder);
+      .map((x) => store.list.find((y) => x === y._id))
+      .filter((x) => x && x.isFolder);
 
     return (
       <>
@@ -44,7 +46,7 @@ const TreeItem = observer(
           <Label>{getBookmarkTitle(data)}</Label>
         </StyledTreeItem>
         {data.expanded &&
-          c.map(item => (
+          c.map((item) => (
             <TreeItem key={item._id} data={item} depth={depth + 1} />
           ))}
       </>

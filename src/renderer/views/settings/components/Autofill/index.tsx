@@ -20,7 +20,7 @@ const onRemoveClick = () => {
   store.autoFill.removeItem(item);
 };
 
-const onMouseDown = (e: React.MouseEvent) => {
+const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 };
 

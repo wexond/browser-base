@@ -21,7 +21,9 @@ const onClick = (item: IDownloadItem) => () => {
   }
 };
 
-const onMoreClick = (item: IDownloadItem) => (e: React.MouseEvent) => {
+const onMoreClick = (item: IDownloadItem) => (
+  e: React.MouseEvent<HTMLDivElement>,
+) => {
   e.stopPropagation();
 };
 
