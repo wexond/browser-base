@@ -13,6 +13,7 @@ import {
   ZOOM_FACTOR_INCREMENT,
 } from '~/constants/web-contents';
 import { TabEvent } from '~/interfaces/tabs';
+import { Queue } from '~/utils/queue';
 
 export class View extends BrowserView {
   public title = '';
@@ -31,6 +32,8 @@ export class View extends BrowserView {
   public lastHistoryId: string;
 
   public bookmark: IBookmark;
+
+  private historyQueue = new Queue();
 
   public constructor(window: AppWindow, url: string, incognito: boolean) {
     super({
@@ -273,18 +276,22 @@ export class View extends BrowserView {
         date: new Date().getTime(),
       };
 
-      this.lastHistoryId = (
-        await storage.insert<IHistoryItem>({
-          scope: 'history',
-          item: historyItem,
-        })
-      )._id;
+      await this.historyQueue.enqueue(async () => {
+        this.lastHistoryId = (
+          await storage.insert<IHistoryItem>({
+            scope: 'history',
+            item: historyItem,
+          })
+        )._id;
 
-      historyItem._id = this.lastHistoryId;
+        historyItem._id = this.lastHistoryId;
 
-      storage.history.push(historyItem);
+        storage.history.push(historyItem);
+      });
     } else if (!inPage) {
-      this.lastHistoryId = '';
+      await this.historyQueue.enqueue(async () => {
+        this.lastHistoryId = '';
+      });
     }
   }
 
@@ -311,29 +318,32 @@ export class View extends BrowserView {
 
   public async updateData() {
     if (!this.incognito) {
-      if (this.lastHistoryId) {
+      const id = this.lastHistoryId;
+      if (id) {
         const { title, url, favicon } = this;
 
-        storage.update({
-          scope: 'history',
-          query: {
-            _id: this.lastHistoryId,
-          },
-          value: {
-            title,
-            url,
-            favicon,
-          },
-          multi: false,
+        this.historyQueue.enqueue(async () => {
+          await storage.update({
+            scope: 'history',
+            query: {
+              _id: id,
+            },
+            value: {
+              title,
+              url,
+              favicon,
+            },
+            multi: false,
+          });
+
+          const item = storage.history.find(x => x._id === id);
+
+          if (item) {
+            item.title = title;
+            item.url = url;
+            item.favicon = favicon;
+          }
         });
-
-        const item = storage.history.find(x => x._id === this.lastHistoryId);
-
-        if (item) {
-          item.title = title;
-          item.url = url;
-          item.favicon = favicon;
-        }
       }
     }
   }
