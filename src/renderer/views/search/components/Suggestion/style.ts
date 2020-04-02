@@ -37,10 +37,10 @@ export const StyledSuggestion = styled.div`
 `;
 
 export const SuggestionText = styled.div`
-  ${body2()};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 14px;
 `;
 
 export const PrimaryText = styled(SuggestionText)`

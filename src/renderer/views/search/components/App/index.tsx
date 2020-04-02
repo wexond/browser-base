@@ -1,17 +1,15 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 
-import { Style } from '../../style';
 import { StyledApp, Input, CurrentIcon, SearchBox } from './style';
 import store from '../../store';
 import { callViewMethod } from '~/utils/view';
 import { ipcRenderer } from 'electron';
 import { Suggestions } from '../Suggestions';
 import { ICON_SEARCH, ICON_PAGE } from '~/renderer/constants';
-
-const GlobalStyle = createGlobalStyle`${Style}`;
+import { UIStyle } from '~/renderer/mixins/default-styles';
 
 const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.which === 13) {
@@ -120,7 +118,7 @@ export const App = hot(
     return (
       <ThemeProvider theme={{ ...store.theme }}>
         <StyledApp visible={true}>
-          <GlobalStyle />
+          <UIStyle />
           <SearchBox>
             <CurrentIcon
               style={{

@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 import { transparency, ICON_CLOSE } from '~/renderer/constants';
 import { ITheme } from '~/interfaces';
-import { centerIcon, body2 } from '~/renderer/mixins';
+import { centerIcon } from '~/renderer/mixins';
 import { TAB_PINNED_WIDTH } from '../../constants';
 import { TAB_HEIGHT, TAB_MARGIN_TOP } from '~/constants/design';
 
@@ -58,7 +58,6 @@ interface TitleProps {
 }
 
 export const StyledTitle = styled.div`
-  ${body2()};
   font-size: 12px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -66,7 +65,6 @@ export const StyledTitle = styled.div`
   transition: 0.2s margin-left;
   margin-left: 8px;
   min-width: 0;
-  font-weight: 300;
   flex: 1;
 
   ${({ isIcon, selected, theme }: TitleProps) => css`

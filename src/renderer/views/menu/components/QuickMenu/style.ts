@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { ITheme } from '~/interfaces';
-import { centerIcon, getLetterSpacing } from '~/renderer/mixins';
+import { centerIcon } from '~/renderer/mixins';
 import { ICON_ARROW_RIGHT } from '~/renderer/constants/icons';
 
 export const Line = styled.div`
@@ -21,7 +21,6 @@ export const MenuItem = styled.div`
   position: relative;
   padding: 0 12px;
   font-size: 12px;
-  letter-spacing: ${getLetterSpacing(12, 0.1)}rem;
 
   ${({ arrow }: { arrow?: boolean }) =>
     arrow &&

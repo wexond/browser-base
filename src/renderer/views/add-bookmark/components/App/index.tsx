@@ -1,17 +1,15 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 
-import { Style } from '../../style';
 import { StyledApp, Title, Row, Label, Buttons } from './style';
 import store from '../../store';
 import { Input, Dropdown } from '~/renderer/components/Input';
 import { Button } from '~/renderer/components/Button';
 import { ipcRenderer, remote } from 'electron';
 import { getBookmarkTitle } from '~/renderer/views/bookmarks/utils';
-
-const GlobalStyle = createGlobalStyle`${Style}`;
+import { UIStyle } from '~/renderer/mixins/default-styles';
 
 const onDone = () => {
   store.hide();
@@ -58,7 +56,7 @@ export const App = hot(
     return (
       <ThemeProvider theme={{ ...store.theme }}>
         <StyledApp visible={store.visible}>
-          <GlobalStyle />
+          <UIStyle />
           <Title>{store.dialogTitle}</Title>
           <Row>
             <Label>Name</Label>
