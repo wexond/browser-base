@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 
-import { Style } from '../../style';
 import {
   StyledApp,
   StyledFind,
@@ -15,8 +14,7 @@ import {
 import store from '../../store';
 import { callViewMethod } from '~/utils/view';
 import { ICON_UP, ICON_DOWN, ICON_CLOSE } from '~/renderer/constants/icons';
-
-const GlobalStyle = createGlobalStyle`${Style}`;
+import { UIStyle } from '~/renderer/mixins/default-styles';
 
 const onInput = async () => {
   const { value } = store.findInputRef.current;
@@ -59,7 +57,7 @@ export const App = observer(() => {
       theme={{ ...store.theme, dark: store.theme['dialog.lightForeground'] }}
     >
       <StyledApp>
-        <GlobalStyle />
+        <UIStyle />
         <StyledFind onKeyUp={onKeyUp}>
           <SearchIcon />
           <Input
