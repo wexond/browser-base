@@ -53,13 +53,6 @@ export class ITab {
   public url = '';
 
   @observable
-  public findInfo = {
-    occurrences: '0/0',
-    text: '',
-    visible: false,
-  };
-
-  @observable
   public blockedAds = 0;
 
   @observable
@@ -144,9 +137,6 @@ export class ITab {
       store.tabs.selectedTabId = this.id;
 
       ipcRenderer.send(`browserview-show-${store.windowId}`);
-      ipcRenderer.send(`update-find-info-${store.windowId}`, this.id, {
-        ...this.findInfo,
-      });
 
       const focused = this.addressbarFocused;
 

@@ -128,9 +128,6 @@ export class TabsStore {
       if (tab) {
         if (event === 'blocked-ad') {
           tab.blockedAds++;
-        } else if (event === 'find-info-updated') {
-          const [info] = args;
-          tab.findInfo = info;
         } else if (
           event === 'url-updated' ||
           event === 'title-updated' ||

@@ -1,64 +1,67 @@
 import * as React from 'react';
 
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { ipcRenderer } from 'electron';
 import { DialogStore } from '~/models/dialog-store';
+import { callViewMethod } from '~/utils/view';
+
+interface IFindInfo {
+  occurrences: string;
+  text: string;
+}
 
 export class Store extends DialogStore {
   @observable
-  public occurrences = '0/0';
+  public tabId = -1;
 
   @observable
-  public text = '';
-
-  public tabId: number;
+  public tabsFindInfo = new Map<number, IFindInfo>();
 
   public findInputRef = React.createRef<HTMLInputElement>();
+
+  @computed
+  public get findInfo() {
+    const findInfo = this.tabsFindInfo.get(this.tabId);
+
+    if (findInfo) {
+      return findInfo;
+    }
+
+    return {
+      occurrences: '0/0',
+      text: '',
+    };
+  }
 
   public constructor() {
     super({ hideOnBlur: false, visibilityWrapper: false });
 
-    ipcRenderer.on('visible', (e, flag) => {
+    ipcRenderer.on('visible', (e, flag, tabId) => {
       this.visible = flag;
+
+      if (flag && tabId) {
+        if (!this.tabsFindInfo.get(tabId)) {
+          this.tabsFindInfo.set(tabId, {
+            occurrences: '0/0',
+            text: '',
+          });
+        }
+        this.tabId = tabId;
+      }
     });
 
     ipcRenderer.on(
       'found-in-page',
       (e, { activeMatchOrdinal, matches }: Electron.FoundInPageResult) => {
-        this.occurrences = `${activeMatchOrdinal}/${matches}`;
-        this.updateTabInfo();
-      },
-    );
-
-    ipcRenderer.on(
-      'update-info',
-      (e, tabId: number, { text, occurrences, visible }) => {
-        this.tabId = tabId;
-        this.occurrences = occurrences;
-        this.text = text;
-        this.visible = visible;
-
-        setTimeout(() => {
-          this.findInputRef.current.focus();
-        });
-
-        if (!visible) {
-          this.hide();
-        } else {
-          ipcRenderer.send(`show-${this.id}`);
-        }
-
-        this.updateTabInfo();
+        this.findInfo.occurrences = `${activeMatchOrdinal}/${matches}`;
       },
     );
   }
 
-  public updateTabInfo() {
-    ipcRenderer.send(`update-tab-find-info-${this.windowId}`, this.tabId, {
-      occurrences: this.occurrences,
-      text: this.text,
-      visible: this.visible,
-    });
+  public onHide() {
+    callViewMethod(this.tabId, 'stopFindInPage', 'clearSelection');
+    this.tabsFindInfo.delete(this.tabId);
+    ipcRenderer.send(`window-focus-${this.windowId}`);
   }
 }
 

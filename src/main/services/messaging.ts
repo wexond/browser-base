@@ -35,18 +35,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.fixDragging();
   });
 
-  ipcMain.on(`update-tab-find-info-${id}`, (e, tabId, info) => {
-    appWindow.viewManager.views.get(tabId).emitEvent('find-info-updated', info);
-  });
-
-  ipcMain.on(`update-find-info-${id}`, (e, tabId, data) => {
-    if (appWindow.dialogs.findDialog.visible) {
-      appWindow.dialogs.findDialog.updateInfo(tabId, data);
-    }
-  });
-
-  ipcMain.on(`find-show-${id}`, (e, tabId, data) => {
-    appWindow.dialogs.findDialog.find(tabId, data);
+  ipcMain.on(`find-show-${id}`, () => {
+    appWindow.dialogs.findDialog.show();
   });
 
   ipcMain.on(`show-menu-dialog-${id}`, (e, left, top) => {

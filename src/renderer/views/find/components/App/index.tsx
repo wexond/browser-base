@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { ipcRenderer } from 'electron';
 
 import { Style } from '../../style';
 import {
@@ -19,28 +18,17 @@ import { ICON_UP, ICON_DOWN, ICON_CLOSE } from '~/renderer/constants/icons';
 
 const GlobalStyle = createGlobalStyle`${Style}`;
 
-const close = () => {
-  callViewMethod(store.tabId, 'stopFindInPage', 'clearSelection');
-  store.occurrences = '0/0';
-  store.hide();
-  store.visible = false;
-  store.updateTabInfo();
-  ipcRenderer.send(`window-focus-${store.windowId}`);
-};
-
 const onInput = async () => {
   const { value } = store.findInputRef.current;
 
-  store.text = value;
+  store.findInfo.text = value;
 
   if (value === '') {
     callViewMethod(store.tabId, 'stopFindInPage', 'clearSelection');
-    store.occurrences = '0/0';
+    store.findInfo.occurrences = '0/0';
   } else {
     await callViewMethod(store.tabId, 'findInPage', value);
   }
-
-  store.updateTabInfo();
 };
 
 const move = (forward: boolean) => async () => {
@@ -51,8 +39,6 @@ const move = (forward: boolean) => async () => {
     forward,
     findNext: true,
   });
-
-  store.updateTabInfo();
 };
 
 const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -63,7 +49,7 @@ const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
 const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.key === 'Escape') {
-    close();
+    store.hide();
   }
 };
 
@@ -78,17 +64,17 @@ export const App = observer(() => {
           <SearchIcon />
           <Input
             autoFocus
-            value={store.text}
+            value={store.findInfo.text}
             onKeyPress={onKeyPress}
             onChange={onInput}
             ref={store.findInputRef}
             placeholder="Find in page"
           />
-          <Occurrences>{store.occurrences}</Occurrences>
+          <Occurrences>{store.findInfo.occurrences}</Occurrences>
           <Buttons>
             <Button onClick={move(false)} icon={ICON_UP} size={20} />
             <Button onClick={move(true)} icon={ICON_DOWN} size={20} />
-            <Button onClick={close} icon={ICON_CLOSE} size={16} />
+            <Button onClick={() => store.hide()} icon={ICON_CLOSE} size={16} />
           </Buttons>
         </StyledFind>
       </StyledApp>

@@ -260,11 +260,7 @@ export class Store {
     ipcRenderer.on('find', () => {
       const tab = this.tabs.selectedTab;
       if (tab) {
-        ipcRenderer.send(
-          `find-show-${this.windowId}`,
-          tab.id,
-          toJS(tab.findInfo, { recurseEverything: true }),
-        );
+        ipcRenderer.send(`find-show-${this.windowId}`, tab.id);
       }
     });
 
