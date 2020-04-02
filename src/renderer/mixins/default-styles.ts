@@ -1,5 +1,6 @@
 import { css, createGlobalStyle } from 'styled-components';
 import { ITheme } from '~/interfaces';
+import { body2 } from './typography';
 
 export const baseStyle = css`
   body {
@@ -30,7 +31,7 @@ export const WebUIStyle = createGlobalStyle`
   
   body {
     overflow-y: auto;
-    font-family: system-ui, sans-serif;
+    ${body2()};
     ${({ theme }: { theme?: ITheme }) => css`
       background-color: ${theme['pages.backgroundColor']};
       color: ${theme['pages.textColor']};
