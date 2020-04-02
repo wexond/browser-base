@@ -35,7 +35,7 @@ export class Dialog extends BrowserView {
   private hideTimeout: number;
   private name: string;
 
-  public tabId = -1;
+  public tabIds: number[] = [];
 
   private loaded = false;
   private showCallback: any = null;
@@ -60,7 +60,9 @@ export class Dialog extends BrowserView {
 
     ipcMain.on(`hide-${this.webContents.id}`, () => {
       this.hide(false, false);
-      this.tabId = -1;
+      this.tabIds = this.tabIds.filter(
+        x => x !== appWindow.viewManager.selectedId,
+      );
     });
 
     this.webContents.once('dom-ready', () => {

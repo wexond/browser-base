@@ -34,7 +34,7 @@ export class PermissionsDialog extends Dialog {
         return reject('Unknown permission');
       }
 
-      this.tabId = tabId;
+      this.tabIds.push(tabId);
 
       this.show();
 
@@ -44,7 +44,7 @@ export class PermissionsDialog extends Dialog {
         `request-permission-result-${this.appWindow.id}`,
         (e, r: boolean) => {
           resolve(r);
-          this.tabId = -1;
+          this.tabIds = this.tabIds.filter(x => x !== tabId);
           this.hide();
         },
       );
