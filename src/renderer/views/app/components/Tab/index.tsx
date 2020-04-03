@@ -15,7 +15,7 @@ import store from '../../store';
 import { remote, ipcRenderer } from 'electron';
 import { ICON_MUTE } from '~/renderer/constants/icons';
 
-const removeTab = (tab: ITab) => (e: React.MouseEvent) => {
+const removeTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
   tab.close();
 };

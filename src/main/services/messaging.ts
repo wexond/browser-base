@@ -5,30 +5,30 @@ import { setPassword, deletePassword, getPassword } from 'keytar';
 import { IFormFillData } from '~/interfaces';
 import { AppWindow } from '../windows';
 import { getFormFillMenuItems } from '../utils';
-import storage from './storage';
+import { Application } from '../application';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
 
   ipcMain.on(`window-focus-${id}`, () => {
-    appWindow.focus();
+    appWindow.win.focus();
     appWindow.webContents.focus();
   });
 
   ipcMain.on(`window-toggle-maximize-${id}`, () => {
-    if (appWindow.isMaximized()) {
-      appWindow.unmaximize();
+    if (appWindow.win.isMaximized()) {
+      appWindow.win.unmaximize();
     } else {
-      appWindow.maximize();
+      appWindow.win.maximize();
     }
   });
 
   ipcMain.on(`window-minimize-${id}`, () => {
-    appWindow.minimize();
+    appWindow.win.minimize();
   });
 
   ipcMain.on(`window-close-${id}`, () => {
-    appWindow.close();
+    appWindow.win.close();
   });
 
   ipcMain.on(`window-fix-dragging-${id}`, () => {
@@ -82,7 +82,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.extensionPopup.show(inspect);
   });
 
-  ipcMain.on(`hide-extension-popup-${id}`, e => {
+  ipcMain.on(`hide-extension-popup-${id}`, (e) => {
     if (appWindow.dialogs.extensionPopup.visible) {
       appWindow.dialogs.extensionPopup.hideVisually();
     }
@@ -95,26 +95,24 @@ export const runMessagingService = (appWindow: AppWindow) => {
   });
 
   ipcMain.on(`edit-tabgroup-${id}`, (e, tabGroup) => {
-    appWindow.webContents.send(`edit-tabgroup`, tabGroup);
+    appWindow.send(`edit-tabgroup`, tabGroup);
   });
 
-  ipcMain.on(`is-incognito-${id}`, e => {
+  ipcMain.on(`is-incognito-${id}`, (e) => {
     e.returnValue = appWindow.incognito;
   });
-
+  /*
+  TODO:
   ipcMain.on(`form-fill-show-${id}`, async (e, rect, name, value) => {
     const items = await getFormFillMenuItems(name, value);
 
     if (items.length) {
-      appWindow.dialogs.formFillDialog.webContents.send(
-        `formfill-get-items`,
-        items,
-      );
+      appWindow.dialogs.formFillDialog.send(`formfill-get-items`, items);
       appWindow.dialogs.formFillDialog.inputRect = rect;
 
       appWindow.dialogs.formFillDialog.resize(
         items.length,
-        items.find(r => r.subtext) != null,
+        items.find((r) => r.subtext) != null,
       );
       appWindow.dialogs.formFillDialog.rearrange();
       appWindow.dialogs.formFillDialog.show(false);
@@ -130,12 +128,12 @@ export const runMessagingService = (appWindow: AppWindow) => {
   ipcMain.on(
     `form-fill-update-${id}`,
     async (e, _id: string, persistent = false) => {
-      const url = appWindow.viewManager.selected.webContents.getURL();
+      const url = appWindow.viewManager.selected.url;
       const { hostname } = parse(url);
 
       const item =
         _id &&
-        (await storage.findOne<IFormFillData>({
+        (await Application.instance.storage.findOne<IFormFillData>({
           scope: 'formfill',
           query: { _id },
         }));
@@ -147,7 +145,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
         );
       }
 
-      appWindow.viewManager.selected.webContents.send(
+      appWindow.viewManager.selected.send(
         `form-fill-update-${id}`,
         item,
         persistent,
@@ -156,10 +154,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
   );
 
   ipcMain.on(`credentials-show-${id}`, (e, data) => {
-    appWindow.dialogs.credentialsDialog.webContents.send(
-      'credentials-update',
-      data,
-    );
+    appWindow.dialogs.credentialsDialog.send('credentials-update', data);
     appWindow.dialogs.credentialsDialog.rearrange();
     appWindow.dialogs.credentialsDialog.show();
   });
@@ -174,7 +169,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     const hostname = view.hostname;
 
     if (!update) {
-      const item = await storage.insert<IFormFillData>({
+      const item = await Application.instance.storage.insert<IFormFillData>({
         scope: 'formfill',
         item: {
           type: 'password',
@@ -192,7 +187,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
         item,
       );
     } else {
-      await storage.update({
+      await Application.instance.storage.update({
         scope: 'formfill',
         query: {
           type: 'password',
@@ -213,14 +208,14 @@ export const runMessagingService = (appWindow: AppWindow) => {
 
     await setPassword('wexond', `${hostname}-${username}`, password);
 
-    appWindow.webContents.send(`has-credentials-${view.webContents.id}`, true);
+    appWindow.send(`has-credentials-${view.id}`, true);
   });
 
   ipcMain.on(`credentials-remove-${id}`, async (e, data: IFormFillData) => {
     const { _id, fields } = data;
     const view = appWindow.viewManager.selected;
 
-    await storage.remove({
+    await Application.instance.storage.remove({
       scope: 'formfill',
       query: {
         _id,
@@ -241,5 +236,5 @@ export const runMessagingService = (appWindow: AppWindow) => {
       const password = await getPassword('wexond', account);
       e.sender.send(id, password);
     },
-  );
+  );*/
 };

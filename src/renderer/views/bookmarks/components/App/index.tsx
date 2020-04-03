@@ -92,7 +92,7 @@ const onExportClick = async () => {
   ipcRenderer.invoke('export-bookmarks');
 };
 
-const onContextMenuMouseDown = (e: React.MouseEvent) => {
+const onContextMenuMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 };
 
@@ -100,7 +100,7 @@ const onContainerMouseDown = () => {
   store.dialogVisible = false;
 };
 
-const onDialogMouseDown = (e: React.MouseEvent) => {
+const onDialogMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 };
 
@@ -139,7 +139,7 @@ const BookmarksList = observer(() => {
         onCancelClick={onCancelClick}
       />
       <PathView>
-        {store.path.map(item => (
+        {store.path.map((item) => (
           <PathItem onClick={onPathItemClick(item)} key={item._id}>
             {getBookmarkTitle(item)}
           </PathItem>
@@ -147,7 +147,7 @@ const BookmarksList = observer(() => {
       </PathView>
       {!!items.length && (
         <EmptySection>
-          {items.map(data => (
+          {items.map((data) => (
             <Bookmark data={data} key={data._id} />
           ))}
         </EmptySection>

@@ -7,7 +7,7 @@ export const hookWebContentsEvents = (
   wc: WebContents,
 ) => {
   const sendEvent = (channel: string, ...args: any[]) => {
-    webContents.getAllWebContents().forEach(wc => {
+    webContents.getAllWebContents().forEach((wc) => {
       // TODO(sentialx): type backgroundPage
       if (wc.getType() === 'remote') {
         wc.send(channel, ...args);

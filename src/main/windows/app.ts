@@ -2,10 +2,9 @@ import { BrowserWindow, app, dialog } from 'electron';
 import { writeFileSync, promises } from 'fs';
 import { resolve, join } from 'path';
 
-import { ViewManager } from '../view-manager';
 import { getPath } from '~/utils';
 import { runMessagingService } from '../services';
-import { WindowsManager } from '../windows-manager';
+import { Application } from '../application';
 import {
   MenuDialog,
   SearchDialog,
@@ -22,7 +21,7 @@ import {
   ExtensionPopup,
 } from '../dialogs';
 import { isNightly } from '..';
-import { TabEvent } from '~/interfaces/tabs';
+import { ViewManager } from '../view-manager';
 
 interface IDialogs {
   searchDialog?: SearchDialog;
@@ -43,20 +42,19 @@ interface IDialogs {
   [key: string]: Dialog;
 }
 
-export class AppWindow extends BrowserWindow {
-  public viewManager: ViewManager;
+export class AppWindow {
+  public win: BrowserWindow;
 
-  public dialogs: IDialogs = {
-    searchDialog: new SearchDialog(this),
-    previewDialog: new PreviewDialog(this),
-  };
+  public viewManager: ViewManager;
 
   public incognito: boolean;
 
-  private windowsManager: WindowsManager;
+  public dialogs: IDialogs = {
+    searchDialog: new SearchDialog(this),
+  };
 
-  public constructor(windowsManager: WindowsManager, incognito: boolean) {
-    super({
+  public constructor(incognito: boolean) {
+    this.win = new BrowserWindow({
       frame: false,
       minWidth: 400,
       minHeight: 450,
@@ -69,7 +67,6 @@ export class AppWindow extends BrowserWindow {
         nodeIntegration: true,
         contextIsolation: false,
         javascript: true,
-        affinity: 'browser',
         enableRemoteModule: true,
       },
       icon: resolve(
@@ -80,9 +77,12 @@ export class AppWindow extends BrowserWindow {
     });
 
     this.incognito = incognito;
-    this.windowsManager = windowsManager;
+
+    this.viewManager = new ViewManager(this, incognito);
 
     this.webContents.once('dom-ready', () => {
+      this.dialogs.previewDialog = new PreviewDialog(this);
+
       this.dialogs.tabGroupDialog = new TabGroupDialog(this);
       this.dialogs.menuDialog = new MenuDialog(this);
       this.dialogs.findDialog = new FindDialog(this);
@@ -95,8 +95,6 @@ export class AppWindow extends BrowserWindow {
       this.dialogs.credentialsDialog = new CredentialsDialog(this);
       this.dialogs.extensionPopup = new ExtensionPopup(this);
     });
-
-    this.viewManager = new ViewManager(this, incognito);
 
     runMessagingService(this);
 
@@ -116,37 +114,37 @@ export class AppWindow extends BrowserWindow {
 
       // Merge bounds from the last window state to the current window options.
       if (windowState) {
-        this.setBounds({ ...windowState.bounds });
+        this.win.setBounds({ ...windowState.bounds });
       }
 
       if (windowState) {
         if (windowState.maximized) {
-          this.maximize();
+          this.win.maximize();
         }
         if (windowState.fullscreen) {
-          this.setFullScreen(true);
+          this.win.setFullScreen(true);
         }
       }
     })();
 
-    this.show();
+    this.win.show();
 
     // Update window bounds on resize and on move when window is not maximized.
-    this.on('resize', () => {
-      if (!this.isMaximized()) {
-        windowState.bounds = this.getBounds();
+    this.win.on('resize', () => {
+      if (!this.win.isMaximized()) {
+        windowState.bounds = this.win.getBounds();
       }
 
-      Object.values(this.dialogs).forEach(dialog => {
+      Object.values(this.dialogs).forEach((dialog) => {
         if (dialog.visible) {
           dialog.rearrange();
         }
       });
     });
 
-    this.on('move', () => {
-      if (!this.isMaximized()) {
-        windowState.bounds = this.getBounds();
+    this.win.on('move', () => {
+      if (!this.win.isMaximized()) {
+        windowState.bounds = this.win.getBounds();
       }
     });
 
@@ -166,12 +164,12 @@ export class AppWindow extends BrowserWindow {
       this.webContents.send('tabs-resize');
     };
 
-    this.on('maximize', resize);
-    this.on('restore', resize);
-    this.on('unmaximize', resize);
+    this.win.on('maximize', resize);
+    this.win.on('restore', resize);
+    this.win.on('unmaximize', resize);
 
-    this.on('close', (event: Electron.Event) => {
-      const { object: settings } = this.windowsManager.settings;
+    this.win.on('close', (event: Electron.Event) => {
+      const { object: settings } = Application.instance.settings;
 
       if (settings.warnOnQuit && this.viewManager.views.size > 1) {
         const answer = dialog.showMessageBoxSync(null, {
@@ -189,13 +187,13 @@ export class AppWindow extends BrowserWindow {
       }
 
       // Save current window state to a file.
-      windowState.maximized = this.isMaximized();
-      windowState.fullscreen = this.isFullScreen();
+      windowState.maximized = this.win.isMaximized();
+      windowState.fullscreen = this.win.isFullScreen();
       writeFileSync(windowDataPath, JSON.stringify(windowState));
 
-      this.setBrowserView(null);
+      this.win.setBrowserView(null);
 
-      Object.keys(this.dialogs).forEach(key => {
+      Object.keys(this.dialogs).forEach((key) => {
         if (this.dialogs[key]) {
           this.dialogs[key].destroy();
         }
@@ -206,65 +204,87 @@ export class AppWindow extends BrowserWindow {
 
       if (
         incognito &&
-        windowsManager.list.filter(x => x.incognito).length === 1
+        Application.instance.windows.list.filter((x) => x.incognito).length ===
+          1
       ) {
-        windowsManager.sessionsManager.clearCache('incognito');
-        windowsManager.sessionsManager.unloadIncognitoExtensions();
+        Application.instance.sessions.clearCache('incognito');
+        Application.instance.sessions.unloadIncognitoExtensions();
       }
 
-      windowsManager.list = windowsManager.list.filter(x => x.id !== this.id);
+      Application.instance.windows.list = Application.instance.windows.list.filter(
+        (x) => x.win.id !== this.win.id,
+      );
     });
 
     // this.webContents.openDevTools({ mode: 'detach' });
 
     if (process.env.NODE_ENV === 'development') {
       this.webContents.openDevTools({ mode: 'detach' });
-      this.loadURL('http://localhost:4444/app.html');
+      this.win.loadURL('http://localhost:4444/app.html');
     } else {
-      this.loadURL(join('file://', app.getAppPath(), 'build/app.html'));
+      this.win.loadURL(join('file://', app.getAppPath(), 'build/app.html'));
     }
 
-    this.on('enter-full-screen', () => {
-      this.webContents.send('fullscreen', true);
+    this.win.on('enter-full-screen', () => {
+      this.send('fullscreen', true);
       this.viewManager.fixBounds();
     });
 
-    this.on('leave-full-screen', () => {
-      this.webContents.send('fullscreen', false);
+    this.win.on('leave-full-screen', () => {
+      this.send('fullscreen', false);
       this.viewManager.fixBounds();
     });
 
-    this.on('enter-html-full-screen', () => {
+    this.win.on('enter-html-full-screen', () => {
       this.viewManager.fullscreen = true;
-      this.webContents.send('html-fullscreen', true);
+      this.send('html-fullscreen', true);
     });
 
-    this.on('leave-html-full-screen', () => {
+    this.win.on('leave-html-full-screen', () => {
       this.viewManager.fullscreen = false;
-      this.webContents.send('html-fullscreen', false);
+      this.send('html-fullscreen', false);
     });
 
-    this.on('scroll-touch-begin', () => {
-      this.webContents.send('scroll-touch-begin');
+    this.win.on('scroll-touch-begin', () => {
+      this.send('scroll-touch-begin');
     });
 
-    this.on('scroll-touch-end', () => {
-      this.viewManager.selected.webContents.send('scroll-touch-end');
-      this.webContents.send('scroll-touch-end');
+    this.win.on('scroll-touch-end', () => {
+      this.viewManager.selected.send('scroll-touch-end');
+      this.send('scroll-touch-end');
     });
 
-    this.on('focus', () => {
-      windowsManager.currentWindow = this;
+    this.win.on('focus', () => {
+      Application.instance.windows.current = this;
     });
+  }
+
+  public get id() {
+    return this.win.id;
+  }
+
+  public get webContents() {
+    return this.win.webContents;
   }
 
   public fixDragging() {
     if (process.platform === 'darwin') {
-      const bounds = this.getBounds();
-      this.setBounds({
+      const bounds = this.win.getBounds();
+      this.win.setBounds({
         height: bounds.height + 1,
       });
-      this.setBounds(bounds);
+      this.win.setBounds(bounds);
     }
+  }
+
+  public send(channel: string, ...args: any[]) {
+    this.webContents.send(channel, ...args);
+  }
+
+  public updateTitle() {
+    const { title } = this.viewManager.selected;
+    this.win.setTitle(
+      title.trim() === '' ? app.name : `${title} - ${app.name}`,
+    );
   }
 }

@@ -28,7 +28,7 @@ export class ExtensionPopup extends Dialog {
       },
     });
 
-    ipcMain.on(`bounds-${this.webContents.id}`, (e, width, height) => {
+    ipcMain.on(`bounds-${this.id}`, (e, width, height) => {
       this.height = height;
       this.width = width;
       this.rearrange();
@@ -53,6 +53,6 @@ export class ExtensionPopup extends Dialog {
 
   public async show(inspect = false) {
     await super.show();
-    this.webContents.send('visible', true, { url: this.url, inspect });
+    this.send('visible', true, { url: this.url, inspect });
   }
 }

@@ -1,7 +1,6 @@
 import { BrowserView, app, ipcMain } from 'electron';
 import { join } from 'path';
 import { AppWindow } from '../windows';
-import { makeId } from '~/utils';
 
 interface IOptions {
   name: string;
@@ -19,8 +18,9 @@ interface IRectangle {
   height?: number;
 }
 
-export class Dialog extends BrowserView {
+export class Dialog {
   public appWindow: AppWindow;
+  public browserView: BrowserView;
 
   public visible = false;
 
@@ -44,7 +44,7 @@ export class Dialog extends BrowserView {
     appWindow: AppWindow,
     { bounds, name, devtools, hideTimeout, webPreferences }: IOptions,
   ) {
-    super({
+    this.browserView = new BrowserView({
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
@@ -58,14 +58,16 @@ export class Dialog extends BrowserView {
     this.hideTimeout = hideTimeout;
     this.name = name;
 
-    ipcMain.on(`hide-${this.webContents.id}`, () => {
+    const { webContents } = this.browserView;
+
+    ipcMain.on(`hide-${webContents.id}`, () => {
       this.hide(false, false);
       this.tabIds = this.tabIds.filter(
-        x => x !== appWindow.viewManager.selectedId,
+        (x) => x !== appWindow.viewManager.selectedId,
       );
     });
 
-    this.webContents.once('dom-ready', () => {
+    webContents.once('dom-ready', () => {
       this.loaded = true;
 
       if (this.showCallback) {
@@ -75,15 +77,23 @@ export class Dialog extends BrowserView {
     });
 
     if (process.env.NODE_ENV === 'development') {
-      this.webContents.loadURL(`http://localhost:4444/${name}.html`);
+      webContents.loadURL(`http://localhost:4444/${name}.html`);
       if (devtools) {
-        this.webContents.openDevTools({ mode: 'detach' });
+        webContents.openDevTools({ mode: 'detach' });
       }
     } else {
-      this.webContents.loadURL(
+      webContents.loadURL(
         join('file://', app.getAppPath(), `build/${name}.html`),
       );
     }
+  }
+
+  public get webContents() {
+    return this.browserView.webContents;
+  }
+
+  public get id() {
+    return this.webContents.id;
   }
 
   public rearrange(rect: IRectangle = {}) {
@@ -95,7 +105,7 @@ export class Dialog extends BrowserView {
     };
 
     if (this.visible) {
-      this.setBounds(this.bounds as any);
+      this.browserView.setBounds(this.bounds as any);
     }
   }
 
@@ -104,7 +114,7 @@ export class Dialog extends BrowserView {
   }
 
   public show(focus = true, waitForLoad = true) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       clearTimeout(this.timeout);
 
       this.appWindow.webContents.send(
@@ -121,7 +131,7 @@ export class Dialog extends BrowserView {
 
         this.visible = true;
 
-        this.appWindow.addBrowserView(this);
+        this.appWindow.win.addBrowserView(this.browserView);
         this.rearrange();
 
         if (focus) this.webContents.focus();
@@ -139,7 +149,11 @@ export class Dialog extends BrowserView {
   }
 
   public hideVisually() {
-    this.webContents.send('visible', false);
+    this.send('visible', false);
+  }
+
+  public send(channel: string, ...args: any[]) {
+    this.webContents.send(channel, ...args);
   }
 
   public hide(bringToTop = false, hideVisually = true) {
@@ -161,10 +175,10 @@ export class Dialog extends BrowserView {
 
     if (this.hideTimeout) {
       this.timeout = setTimeout(() => {
-        this.appWindow.removeBrowserView(this);
+        this.appWindow.win.removeBrowserView(this.browserView);
       }, this.hideTimeout);
     } else {
-      this.appWindow.removeBrowserView(this);
+      this.appWindow.win.removeBrowserView(this.browserView);
     }
 
     this.visible = false;
@@ -173,7 +187,12 @@ export class Dialog extends BrowserView {
   }
 
   public bringToTop() {
-    this.appWindow.removeBrowserView(this);
-    this.appWindow.addBrowserView(this);
+    this.appWindow.win.removeBrowserView(this.browserView);
+    this.appWindow.win.addBrowserView(this.browserView);
+  }
+
+  public destroy() {
+    this.browserView.destroy();
+    this.browserView = null;
   }
 }

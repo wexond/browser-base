@@ -8,7 +8,7 @@ import { formatTime } from '../../utils';
 import store from '../../store';
 import { ICON_PAGE } from '~/renderer/constants/icons';
 
-const onClick = (item: IHistoryItem) => (e: React.MouseEvent) => {
+const onClick = (item: IHistoryItem) => () => {
   const index = store.selectedItems.indexOf(item._id);
 
   if (index === -1) {
@@ -18,12 +18,14 @@ const onClick = (item: IHistoryItem) => (e: React.MouseEvent) => {
   }
 };
 
-const onRemoveClick = (item: IHistoryItem) => (e: React.MouseEvent) => {
+const onRemoveClick = (item: IHistoryItem) => (
+  e: React.MouseEvent<HTMLDivElement>,
+) => {
   e.stopPropagation();
   store.removeItems([item._id]);
 };
 
-const onTitleClick = (e: React.MouseEvent) => {
+const onTitleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
   e.stopPropagation();
 };
 

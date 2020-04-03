@@ -38,13 +38,13 @@ export class PermissionsDialog extends Dialog {
 
       this.show();
 
-      this.webContents.send('request-permission', { name, url, details });
+      this.send('request-permission', { name, url, details });
 
       ipcMain.once(
         `request-permission-result-${this.appWindow.id}`,
         (e, r: boolean) => {
           resolve(r);
-          this.tabIds = this.tabIds.filter(x => x !== tabId);
+          this.tabIds = this.tabIds.filter((x) => x !== tabId);
           this.hide();
         },
       );
