@@ -22,14 +22,14 @@ export class AuthDialog extends Dialog {
     url: string,
     tabId: number,
   ): Promise<{ username: string; password: string }> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.show();
       this.tabId = tabId;
 
-      this.webContents.send('request-auth', url);
+      this.send('request-auth', url);
 
       ipcMain.once(`request-auth-result-${this.appWindow.id}`, (e, result) => {
-        this.tabId = -1;
+        this.tabIds = this.tabIds.filter((x) => x !== tabId);
         this.hide();
         resolve(result);
       });
@@ -37,7 +37,7 @@ export class AuthDialog extends Dialog {
   }
 
   public rearrange() {
-    const { width } = this.appWindow.getContentBounds();
+    const { width } = this.appWindow.win.getContentBounds();
 
     super.rearrange({
       x: Math.round(width / 2 - WIDTH / 2),

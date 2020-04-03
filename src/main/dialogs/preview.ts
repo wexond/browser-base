@@ -39,14 +39,13 @@ export class PreviewDialog extends Dialog {
 
     super.show(false);
 
-    const tab = this.appWindow.viewManager.views.get(this.tab.id);
+    const { id, url, title, errorURL } = this.appWindow.viewManager.views.get(
+      this.tab.id,
+    );
 
-    const url = tab.webContents.getURL();
-    const title = tab.webContents.getTitle();
-
-    this.webContents.send('visible', true, {
-      id: tab.id,
-      url: url.startsWith('wexond-error') ? tab.errorURL : url,
+    this.send('visible', true, {
+      id,
+      url: url.startsWith('wexond-error') ? errorURL : url,
       title,
       x: Math.round(this.tab.x - 8),
     });

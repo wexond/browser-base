@@ -25,7 +25,7 @@ export class SearchDialog extends Dialog {
       devtools: false,
     });
 
-    ipcMain.on(`height-${this.webContents.id}`, (e, height) => {
+    ipcMain.on(`height-${this.id}`, (e, height) => {
       const { width } = this.appWindow.getContentBounds();
       super.rearrange({
         height: this.isPreviewVisible
@@ -36,15 +36,13 @@ export class SearchDialog extends Dialog {
       this.lastHeight = HEIGHT + height;
     });
 
-    ipcMain.on(`can-show-${this.webContents.id}`, () => {
+    ipcMain.on(`can-show-${this.id}`, () => {
       if (this.queueShow) this.show();
     });
 
-    ipcMain.handle(`is-newtab-${this.webContents.id}`, () => {
+    ipcMain.handle(`is-newtab-${this.id}`, () => {
       return appWindow.viewManager.selected
-        ? appWindow.viewManager.selected.webContents
-            .getURL()
-            .startsWith(NEWTAB_URL)
+        ? appWindow.viewManager.selected.url.startsWith(NEWTAB_URL)
         : false;
     });
   }
@@ -79,17 +77,17 @@ export class SearchDialog extends Dialog {
 
     const selected = this.appWindow.viewManager.selected;
 
-    const url = selected.webContents.getURL();
+    const url = selected.url;
 
-    this.webContents.send('visible', true, {
+    this.send('visible', true, {
       id: this.appWindow.viewManager.selectedId,
       url: url.startsWith('wexond-error') ? selected.errorURL : url,
     });
 
-    this.appWindow.webContents.send('get-search-tabs');
+    this.appWindow.send('get-search-tabs');
 
     ipcMain.once('get-search-tabs', (e, tabs) => {
-      this.webContents.send('search-tabs', tabs);
+      this.send('search-tabs', tabs);
     });
   }
 

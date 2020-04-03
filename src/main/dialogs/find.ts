@@ -17,7 +17,7 @@ export class FindDialog extends Dialog {
       },
     });
 
-    ipcMain.on(`show-${this.webContents.id}`, () => {
+    ipcMain.on(`show-${this.id}`, () => {
       this.show();
     });
   }
@@ -28,19 +28,16 @@ export class FindDialog extends Dialog {
     });
   }
 
-  public find(tabId: number, data: any) {
-    data.visible = true;
-    this.show();
-    this.updateInfo(tabId, data);
-  }
+  public async show() {
+    super.show();
 
-  public updateInfo(tabId: number, data: any) {
-    this.tabId = tabId;
-    this.webContents.send('update-info', tabId, data);
+    const tabId = this.appWindow.viewManager.selectedId;
+    this.tabIds.push(tabId);
+    this.send('visible', true, tabId);
   }
 
   public rearrange() {
-    const { width } = this.appWindow.getContentBounds();
+    const { width } = this.appWindow.win.getContentBounds();
     super.rearrange({
       x: width - WIDTH,
     });

@@ -1,12 +1,15 @@
 import { extname } from 'path';
 import { dialog } from 'electron';
-import { windowsManager } from '..';
+import { Application } from '../application';
 
 export const saveAs = async () => {
-  const wc = windowsManager.currentWindow.viewManager.selected.webContents;
+  const {
+    title,
+    webContents,
+  } = Application.instance.windows.current.viewManager.selected;
 
   const { canceled, filePath } = await dialog.showSaveDialog({
-    defaultPath: wc.getTitle(),
+    defaultPath: title,
     filters: [
       { name: 'Webpage, Complete', extensions: ['html', 'htm'] },
       { name: 'Webpage, HTML Only', extensions: ['htm', 'html'] },
@@ -17,15 +20,15 @@ export const saveAs = async () => {
 
   const ext = extname(filePath);
 
-  wc.savePage(filePath, ext === '.htm' ? 'HTMLOnly' : 'HTMLComplete');
+  webContents.savePage(filePath, ext === '.htm' ? 'HTMLOnly' : 'HTMLComplete');
 };
 
 export const viewSource = async () => {
-  const vm = windowsManager.currentWindow.viewManager;
+  const { viewManager } = Application.instance.windows.current;
 
-  vm.create(
+  viewManager.create(
     {
-      url: `view-source:${vm.selected.webContents.getURL()}`,
+      url: `view-source:${viewManager.selected.url}`,
       active: true,
     },
     true,
@@ -33,6 +36,8 @@ export const viewSource = async () => {
 };
 
 export const printPage = () => {
-  const wc = windowsManager.currentWindow.viewManager.selected.webContents;
-  wc.print();
+  const {
+    webContents,
+  } = Application.instance.windows.current.viewManager.selected;
+  webContents.print();
 };
