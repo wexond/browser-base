@@ -8,6 +8,7 @@ import { isURL, prefixHttp } from '~/utils';
 import { WindowsService } from './windows-service';
 import { StorageService } from './services/storage';
 import { getMainMenu } from './menus/main';
+import { runAutoUpdaterService } from './services';
 
 export class Application {
   public static instance = new Application();
@@ -88,7 +89,7 @@ export class Application {
     this.sessions = new SessionsService();
 
     Menu.setApplicationMenu(getMainMenu());
-    // runAutoUpdaterService();
+    runAutoUpdaterService();
 
     app.on('activate', () => {
       if (this.windows.list.filter((x) => x !== null).length === 0) {
