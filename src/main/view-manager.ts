@@ -3,8 +3,7 @@ import { VIEW_Y_OFFSET } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
 import { WEBUI_BASE_URL } from '~/constants/files';
-import { windowsManager } from '.';
-import { NEWTAB_URL } from '~/constants/tabs';
+import { Application } from './application';
 
 export class ViewManager {
   public views = new Map<number, View>();
@@ -28,14 +27,14 @@ export class ViewManager {
     this.window = window;
     this.incognito = incognito;
 
-    const { id } = window;
+    const { id } = window.win;
     ipcMain.handle(`view-create-${id}`, (e, details) => {
-      return this.create(details, false, false).webContents.id;
+      return this.create(details, false, false).id;
     });
 
     ipcMain.handle(`views-create-${id}`, (e, options) => {
       return options.map((option: any) => {
-        return this.create(option, false, false).webContents.id;
+        return this.create(option, false, false).id;
       });
     });
 
@@ -48,9 +47,7 @@ export class ViewManager {
     });
 
     ipcMain.handle(`view-select-${id}`, (e, id: number, focus: boolean) => {
-      const view = this.views.get(id);
       this.select(id, focus);
-      view.updateNavigationState();
     });
 
     ipcMain.on(`view-destroy-${id}`, (e, id: number) => {
@@ -77,8 +74,8 @@ export class ViewManager {
   }
 
   public get settingsView() {
-    return Object.values(this.views).find(r =>
-      r.webContents.getURL().startsWith(`${WEBUI_BASE_URL}settings`),
+    return Object.values(this.views).find((r) =>
+      r.url.startsWith(`${WEBUI_BASE_URL}settings`),
     );
   }
 
@@ -88,29 +85,26 @@ export class ViewManager {
     sendMessage = true,
   ) {
     const view = new View(this.window, details.url, this.incognito);
-    const { id } = view.webContents;
 
-    view.webContents.once('destroyed', () => {
+    const { webContents } = view.browserView;
+    const { id } = view;
+
+    this.views.set(id, view);
+
+    webContents.once('destroyed', () => {
       this.views.delete(id);
     });
 
-    this.views.set(view.webContents.id, view);
-
     if (sendMessage) {
-      this.window.webContents.send(
-        'create-tab',
-        { ...details },
-        isNext,
-        view.webContents.id,
-      );
+      this.window.send('create-tab', { ...details }, isNext, id);
     }
 
     return view;
   }
 
   public clear() {
-    this.window.setBrowserView(null);
-    Object.values(this.views).forEach(x => x.destroy());
+    this.window.win.setBrowserView(null);
+    Object.values(this.views).forEach((x) => x.destroy());
   }
 
   public select(id: number, focus = true) {
@@ -123,8 +117,11 @@ export class ViewManager {
 
     this.selectedId = id;
 
-    this.window.removeBrowserView(selected);
-    this.window.addBrowserView(view);
+    if (selected) {
+      this.window.win.removeBrowserView(selected.browserView);
+    }
+
+    this.window.win.addBrowserView(view.browserView);
 
     if (focus) {
       // Also fixes switching tabs with Ctrl + Tab
@@ -141,7 +138,7 @@ export class ViewManager {
       'permissionsDialog',
       'formFillDialog',
       'credentialsDialog',
-    ].forEach(dialog => {
+    ].forEach((dialog) => {
       if (this.window.dialogs[dialog].tabIds.includes(id)) {
         this.window.dialogs[dialog].show();
         this.window.dialogs[dialog].bringToTop();
@@ -150,16 +147,18 @@ export class ViewManager {
       }
     });
 
-    view.updateWindowTitle();
+    this.window.updateTitle();
     view.updateBookmark();
 
     if (this.incognito) {
-      windowsManager.sessionsManager.viewIncognito.activeTab = id;
+      Application.instance.sessions.viewIncognito.activeTab = id;
     } else {
-      windowsManager.sessionsManager.view.activeTab = id;
+      Application.instance.sessions.view.activeTab = id;
     }
 
     this.fixBounds();
+
+    view.updateNavigationState();
   }
 
   public fixBounds() {
@@ -167,7 +166,7 @@ export class ViewManager {
 
     if (!view) return;
 
-    const { width, height } = this.window.getContentBounds();
+    const { width, height } = this.window.win.getContentBounds();
 
     const newBounds = {
       x: 0,
@@ -177,7 +176,7 @@ export class ViewManager {
     };
 
     if (newBounds !== view.bounds) {
-      view.setBounds(newBounds);
+      view.browserView.setBounds(newBounds);
       view.bounds = newBounds;
     }
   }
@@ -185,8 +184,8 @@ export class ViewManager {
   public destroy(id: number) {
     const view = this.views.get(id);
 
-    if (view && !view.isDestroyed()) {
-      this.window.removeBrowserView(view);
+    if (view && !view.browserView.isDestroyed()) {
+      this.window.win.removeBrowserView(view.browserView);
       view.destroy();
     }
   }

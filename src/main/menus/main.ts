@@ -1,9 +1,9 @@
 import { Menu, webContents, app, BrowserWindow, MenuItem } from 'electron';
 import { defaultTabOptions } from '~/constants/tabs';
-import { WindowsManager } from '../windows-manager';
 import { viewSource, saveAs, printPage } from './common-actions';
 import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 import { AppWindow } from '../windows';
+import { Application } from '../application';
 
 const isMac = process.platform === 'darwin';
 
@@ -21,13 +21,19 @@ const createMenuItem = (
     visible: label != null && key === 0,
     label: label != null && key === 0 ? label : '',
     click: (menuItem: MenuItem, browserWindow: BrowserWindow) =>
-      action(browserWindow as AppWindow, menuItem, key),
+      action(
+        Application.instance.windows.list.find(
+          (x) => x.win.id === browserWindow.id,
+        ),
+        menuItem,
+        key,
+      ),
   }));
 
   return result;
 };
 
-export const getMainMenu = (windowsManager: WindowsManager) => {
+export const getMainMenu = () => {
   const template: any = [
     ...(isMac
       ? [
@@ -53,28 +59,28 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         ...createMenuItem(
           ['CmdOrCtrl+N'],
           () => {
-            windowsManager.createWindow();
+            Application.instance.windows.open();
           },
           'New window',
         ),
         ...createMenuItem(
           ['CmdOrCtrl+Shift+N'],
           () => {
-            windowsManager.createWindow(true);
+            Application.instance.windows.open(true);
           },
           'New incognito window',
         ),
         ...createMenuItem(
           ['CmdOrCtrl+T'],
-          window => {
+          (window) => {
             window.viewManager.create(defaultTabOptions);
           },
           'New tab',
         ),
         ...createMenuItem(
           ['CmdOrCtrl+Shift+T'],
-          window => {
-            window.webContents.send('revert-closed-tab');
+          (window) => {
+            window.send('revert-closed-tab');
           },
           'Revert closed tab',
         ),
@@ -83,18 +89,15 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         },
         ...createMenuItem(
           ['CmdOrCtrl+Shift+W'],
-          window => {
-            window.close();
+          (window) => {
+            window.win.close();
           },
           'Close window',
         ),
         ...createMenuItem(
           ['CmdOrCtrl+W', 'CmdOrCtrl+F4'],
-          window => {
-            window.webContents.send(
-              'remove-tab',
-              window.viewManager.selectedId,
-            );
+          (window) => {
+            window.send('remove-tab', window.viewManager.selectedId);
           },
           'Close tab',
         ),
@@ -123,12 +126,12 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
 
         // Focus address bar
         ...createMenuItem(['Ctrl+Space', 'CmdOrCtrl+L', 'Alt+D', 'F6'], () => {
-          windowsManager.currentWindow.dialogs.searchDialog.show();
+          Application.instance.windows.current.dialogs.searchDialog.show();
         }),
 
         // Toggle menu
         ...createMenuItem(['Alt+F', 'Alt+E'], () => {
-          windowsManager.currentWindow.dialogs.menuDialog.show();
+          Application.instance.windows.current.dialogs.menuDialog.show();
         }),
       ],
     },
@@ -157,7 +160,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         ...createMenuItem(
           ['CmdOrCtrl+F'],
           () => {
-            windowsManager.currentWindow.webContents.send('find');
+            Application.instance.windows.current.send('find');
           },
           'Find in page',
         ),
@@ -169,14 +172,14 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         ...createMenuItem(
           ['CmdOrCtrl+R', 'F5'],
           () => {
-            windowsManager.currentWindow.viewManager.selected.webContents.reload();
+            Application.instance.windows.current.viewManager.selected.webContents.reload();
           },
           'Reload',
         ),
         ...createMenuItem(
           ['CmdOrCtrl+Shift+R', 'Shift+F5'],
           () => {
-            windowsManager.currentWindow.viewManager.selected.webContents.reloadIgnoringCache();
+            Application.instance.windows.current.viewManager.selected.webContents.reloadIgnoringCache();
           },
           'Reload ignoring cache',
         ),
@@ -189,7 +192,9 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         ...createMenuItem(
           isMac ? ['Cmd+[', 'Cmd+Left'] : ['Alt+Left'],
           () => {
-            const { selected } = windowsManager.currentWindow.viewManager;
+            const {
+              selected,
+            } = Application.instance.windows.current.viewManager;
             if (selected) {
               selected.webContents.goBack();
             }
@@ -199,7 +204,9 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         ...createMenuItem(
           isMac ? ['Cmd+]', 'Cmd+Right'] : ['Alt+Right'],
           () => {
-            const { selected } = windowsManager.currentWindow.viewManager;
+            const {
+              selected,
+            } = Application.instance.windows.current.viewManager;
             if (selected) {
               selected.webContents.goForward();
             }
@@ -214,7 +221,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         ...createMenuItem(
           isMac ? ['Cmd+Y'] : ['Ctrl+H'],
           () => {
-            windowsManager.currentWindow.viewManager.create({
+            Application.instance.windows.current.viewManager.create({
               url: `${WEBUI_BASE_URL}history${WEBUI_URL_SUFFIX}`,
               active: true,
             });
@@ -229,7 +236,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         ...createMenuItem(
           isMac ? ['Cmd+Option+B'] : ['CmdOrCtrl+Shift+O'],
           () => {
-            windowsManager.currentWindow.viewManager.create({
+            Application.instance.windows.current.viewManager.create({
               url: `${WEBUI_BASE_URL}bookmarks${WEBUI_URL_SUFFIX}`,
               active: true,
             });
@@ -239,7 +246,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         ...createMenuItem(
           ['CmdOrCtrl+D'],
           () => {
-            windowsManager.currentWindow.webContents.send(
+            Application.instance.windows.current.webContents.send(
               'show-add-bookmark-dialog',
             );
           },
@@ -266,7 +273,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
               ['CmdOrCtrl+Shift+I', 'CmdOrCtrl+Shift+J', 'F12'],
               () => {
                 setTimeout(() => {
-                  windowsManager.currentWindow.viewManager.selected.webContents.toggleDevTools();
+                  Application.instance.windows.current.viewManager.selected.webContents.toggleDevTools();
                 });
               },
               'Developer tools...',
@@ -290,14 +297,16 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
         ...createMenuItem(
           isMac ? ['Cmd+Option+Right'] : ['Ctrl+Tab', 'Ctrl+PageDown'],
           () => {
-            windowsManager.currentWindow.webContents.send('select-next-tab');
+            Application.instance.windows.current.webContents.send(
+              'select-next-tab',
+            );
           },
           'Select next tab',
         ),
         ...createMenuItem(
           isMac ? ['Cmd+Option+Left'] : ['Ctrl+Shift+Tab', 'Ctrl+PageUp'],
           () => {
-            windowsManager.currentWindow.webContents.send(
+            Application.instance.windows.current.webContents.send(
               'select-previous-tab',
             );
           },
@@ -335,9 +344,12 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
   // Ctrl+1 - Ctrl+8
   template[0].submenu = template[0].submenu.concat(
     createMenuItem(
-      Array.from({ length: 8 }, (v, k) => k + 1).map(i => `CmdOrCtrl+${i}`),
+      Array.from({ length: 8 }, (v, k) => k + 1).map((i) => `CmdOrCtrl+${i}`),
       (window, menuItem, i) => {
-        windowsManager.currentWindow.webContents.send('select-tab-index', i);
+        Application.instance.windows.current.webContents.send(
+          'select-tab-index',
+          i,
+        );
       },
     ),
   );
@@ -345,7 +357,7 @@ export const getMainMenu = (windowsManager: WindowsManager) => {
   // Ctrl+9
   template[0].submenu = template[0].submenu.concat(
     createMenuItem(['CmdOrCtrl+9'], () => {
-      windowsManager.currentWindow.webContents.send('select-last-tab');
+      Application.instance.windows.current.webContents.send('select-last-tab');
     }),
   );
 

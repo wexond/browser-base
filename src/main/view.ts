@@ -2,10 +2,8 @@ import { BrowserView, app, ipcMain } from 'electron';
 import { parse as parseUrl } from 'url';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
-import storage from './services/storage';
 import { IHistoryItem, IBookmark } from '~/interfaces';
 import { WEBUI_BASE_URL } from '~/constants/files';
-import { windowsManager } from '.';
 import { NEWTAB_URL } from '~/constants/tabs';
 import {
   ZOOM_FACTOR_MIN,
@@ -14,10 +12,11 @@ import {
 } from '~/constants/web-contents';
 import { TabEvent } from '~/interfaces/tabs';
 import { Queue } from '~/utils/queue';
+import { Application } from './application';
 
-export class View extends BrowserView {
-  public title = '';
-  public url = '';
+export class View {
+  public browserView: BrowserView;
+
   public isNewTab = false;
   public homeUrl: string;
   public favicon = '';
@@ -35,8 +34,10 @@ export class View extends BrowserView {
 
   private historyQueue = new Queue();
 
+  private lastUrl = '';
+
   public constructor(window: AppWindow, url: string, incognito: boolean) {
-    super({
+    this.browserView = new BrowserView({
       webPreferences: {
         preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
         nodeIntegration: false,
@@ -59,20 +60,20 @@ export class View extends BrowserView {
       .replace(/ Electron\\?.([^\s]+)/g, '')
       .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/80.0.3987.162');
 
-    (this.webContents as any).windowId = window.id;
+    (this.webContents as any).windowId = window.win.id;
 
     this.window = window;
     this.homeUrl = url;
 
     this.webContents.session.webRequest.onBeforeSendHeaders(
       (details, callback) => {
-        const { object: settings } = windowsManager.settings;
+        const { object: settings } = Application.instance.settings;
         if (settings.doNotTrack) details.requestHeaders['DNT'] = '1';
         callback({ requestHeaders: details.requestHeaders });
       },
     );
 
-    ipcMain.handle(`get-error-url-${this.webContents.id}`, async e => {
+    ipcMain.handle(`get-error-url-${this.id}`, async (e) => {
       return this.errorURL;
     });
 
@@ -82,13 +83,11 @@ export class View extends BrowserView {
     });
 
     this.webContents.addListener('found-in-page', (e, result) => {
-      this.window.dialogs.findDialog.webContents.send('found-in-page', result);
+      this.window.dialogs.findDialog.send('found-in-page', result);
     });
 
     this.webContents.addListener('page-title-updated', (e, title) => {
-      this.title = title;
-
-      this.updateWindowTitle();
+      this.window.updateTitle();
       this.updateData();
 
       this.emitEvent('title-updated', title);
@@ -181,7 +180,7 @@ export class View extends BrowserView {
           let fav = this.favicon;
 
           if (fav.startsWith('http')) {
-            fav = await storage.addFavicon(fav);
+            fav = await Application.instance.storage.addFavicon(fav);
           }
 
           this.emitEvent('favicon-updated', fav);
@@ -230,7 +229,7 @@ export class View extends BrowserView {
 
     this.webContents.loadURL(url);
 
-    this.setAutoResize({
+    this.browserView.setAutoResize({
       width: true,
       height: true,
       horizontal: false,
@@ -238,21 +237,46 @@ export class View extends BrowserView {
     });
   }
 
-  public updateNavigationState() {
-    if (this.isDestroyed()) return;
+  public get webContents() {
+    return this.browserView.webContents;
+  }
 
-    if (this.window.viewManager.selectedId === this.webContents.id) {
-      this.window.webContents.send('update-navigation-state', {
+  public get url() {
+    return this.webContents.getURL();
+  }
+
+  public get title() {
+    return this.webContents.getTitle();
+  }
+
+  public get id() {
+    return this.webContents.id;
+  }
+
+  public get isSelected() {
+    return this.id === this.window.viewManager.selectedId;
+  }
+
+  public updateNavigationState() {
+    if (this.browserView.isDestroyed()) return;
+
+    if (this.window.viewManager.selectedId === this.id) {
+      this.window.send('update-navigation-state', {
         canGoBack: this.webContents.canGoBack(),
         canGoForward: this.webContents.canGoForward(),
       });
     }
   }
 
-  public async updateCredentials() {
-    if (this.isDestroyed()) return;
+  public destroy() {
+    this.browserView.destroy();
+    this.browserView = null;
+  }
 
-    const item = await storage.findOne<any>({
+  public async updateCredentials() {
+    if (this.browserView.isDestroyed()) return;
+
+    const item = await Application.instance.storage.findOne<any>({
       scope: 'formfill',
       query: {
         url: this.hostname,
@@ -264,7 +288,7 @@ export class View extends BrowserView {
 
   public async addHistoryItem(url: string, inPage = false) {
     if (
-      url !== this.url &&
+      url !== this.lastUrl &&
       !url.startsWith(WEBUI_BASE_URL) &&
       !url.startsWith('wexond-error://') &&
       !this.incognito
@@ -278,7 +302,7 @@ export class View extends BrowserView {
 
       await this.historyQueue.enqueue(async () => {
         this.lastHistoryId = (
-          await storage.insert<IHistoryItem>({
+          await Application.instance.storage.insert<IHistoryItem>({
             scope: 'history',
             item: historyItem,
           })
@@ -286,7 +310,7 @@ export class View extends BrowserView {
 
         historyItem._id = this.lastHistoryId;
 
-        storage.history.push(historyItem);
+        Application.instance.storage.history.push(historyItem);
       });
     } else if (!inPage) {
       await this.historyQueue.enqueue(async () => {
@@ -298,9 +322,9 @@ export class View extends BrowserView {
   public updateURL = (url: string) => {
     this.emitEvent('url-updated', url);
 
-    if (this.url === url) return;
+    if (this.lastUrl === url) return;
 
-    this.url = url;
+    this.lastUrl = url;
 
     this.isNewTab = url.startsWith(NEWTAB_URL);
 
@@ -310,10 +334,13 @@ export class View extends BrowserView {
   };
 
   public updateBookmark() {
-    this.bookmark = storage.bookmarks.find(
-      x => x.url === this.webContents.getURL(),
+    this.bookmark = Application.instance.storage.bookmarks.find(
+      (x) => x.url === this.url,
     );
-    this.window.webContents.send('is-bookmarked', !!this.bookmark);
+
+    if (!this.isSelected) return;
+
+    this.window.send('is-bookmarked', !!this.bookmark);
   }
 
   public async updateData() {
@@ -323,7 +350,7 @@ export class View extends BrowserView {
         const { title, url, favicon } = this;
 
         this.historyQueue.enqueue(async () => {
-          await storage.update({
+          await Application.instance.storage.update({
             scope: 'history',
             query: {
               _id: id,
@@ -336,7 +363,9 @@ export class View extends BrowserView {
             multi: false,
           });
 
-          const item = storage.history.find(x => x._id === id);
+          const item = Application.instance.storage.history.find(
+            (x) => x._id === id,
+          );
 
           if (item) {
             item.title = title;
@@ -348,14 +377,8 @@ export class View extends BrowserView {
     }
   }
 
-  public updateWindowTitle() {
-    if (this.window.viewManager.selectedId === this.webContents.id) {
-      if (this.title.trim() !== '') {
-        this.window.setTitle(`${this.title} - ${app.name}`);
-      } else {
-        this.window.setTitle(`${app.name}`);
-      }
-    }
+  public send(channel: string, ...args: any[]) {
+    this.webContents.send(channel, ...args);
   }
 
   public get hostname() {
@@ -363,6 +386,6 @@ export class View extends BrowserView {
   }
 
   public emitEvent(event: TabEvent, ...args: any[]) {
-    this.window.webContents.send('tab-event', event, this.webContents.id, args);
+    this.window.send('tab-event', event, this.id, args);
   }
 }

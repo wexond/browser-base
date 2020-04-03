@@ -34,6 +34,6 @@ export class MenuDialog extends Dialog {
 
   public async show() {
     await super.show();
-    this.webContents.send('visible', true);
+    this.send('visible', true);
   }
 }
