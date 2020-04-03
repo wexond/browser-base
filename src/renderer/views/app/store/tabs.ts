@@ -180,7 +180,7 @@ export class TabsStore {
     ipcRenderer.on('get-search-tabs', () => {
       ipcRenderer.send(
         'get-search-tabs',
-        this.list.map(tab => ({
+        this.list.map((tab) => ({
           favicon: tab.favicon,
           url: tab.url,
           title: tab.title,
@@ -206,7 +206,7 @@ export class TabsStore {
   }
 
   public getTabById(id: number) {
-    return this.list.find(x => x.id === id);
+    return this.list.find((x) => x.id === id);
   }
 
   @action public createTab(
@@ -334,7 +334,7 @@ export class TabsStore {
     requestAnimationFrame(() => {
       tab.setLeft(
         Math.max(
-          ...this.list.map(function(item) {
+          ...this.list.map(function (item) {
             return item.left;
           }),
         ) + TAB_MAX_WIDTH,
@@ -367,7 +367,7 @@ export class TabsStore {
 
   @action
   public calculateTabMargins() {
-    const tabs = this.list.filter(x => !x.isClosing);
+    const tabs = this.list.filter((x) => !x.isClosing);
 
     let currentGroup: number;
 
@@ -392,7 +392,7 @@ export class TabsStore {
 
   @action
   public setTabGroupsLefts(animation: boolean) {
-    const tabs = this.list.filter(x => !x.isClosing);
+    const tabs = this.list.filter((x) => !x.isClosing);
 
     let left = 0;
     let currentGroup: number;
@@ -416,7 +416,7 @@ export class TabsStore {
 
   @action
   public setTabsWidths(animation: boolean) {
-    const tabs = this.list.filter(x => !x.isClosing);
+    const tabs = this.list.filter((x) => !x.isClosing);
 
     const containerWidth = this.containerWidth;
     let currentGroup: ITabGroup;
@@ -447,7 +447,7 @@ export class TabsStore {
 
   @action
   public setTabsLefts(animation: boolean) {
-    const tabs = this.list.filter(x => !x.isClosing);
+    const tabs = this.list.filter((x) => !x.isClosing);
 
     const { containerWidth } = store.tabs;
 

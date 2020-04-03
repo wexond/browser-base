@@ -16,6 +16,7 @@ export const StyledClose = styled.div`
   width: 20px;
   margin-left: 2px;
   margin-right: 6px;
+  border-radius: 2px;
   background-image: url('${ICON_CLOSE}');
   transition: 0.1s background-color;
   z-index: 10;

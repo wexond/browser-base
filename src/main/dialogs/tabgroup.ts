@@ -26,6 +26,6 @@ export class TabGroupDialog extends Dialog {
   public edit(tabGroup: any) {
     this.bounds.x = Math.round(tabGroup.x);
     super.show();
-    this.webContents.send('visible', true, tabGroup);
+    this.send('visible', true, tabGroup);
   }
 }

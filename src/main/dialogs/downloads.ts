@@ -26,14 +26,14 @@ export class DownloadsDialog extends Dialog {
       },
     });
 
-    ipcMain.on(`height-${this.webContents.id}`, (e, height) => {
+    ipcMain.on(`height-${this.id}`, (e, height) => {
       this.height = height;
       this.rearrange();
     });
   }
 
   public rearrange() {
-    const { height } = this.appWindow.getContentBounds();
+    const { height } = this.appWindow.win.getContentBounds();
 
     const maxHeight = height - DIALOG_TOP - 16;
 
@@ -43,11 +43,11 @@ export class DownloadsDialog extends Dialog {
       y: Math.round(this.top - DIALOG_MARGIN_TOP),
     });
 
-    this.webContents.send(`max-height`, Math.min(maxHeight, this.height));
+    this.send(`max-height`, Math.min(maxHeight, this.height));
   }
 
   public async show() {
     await super.show();
-    this.webContents.send('visible', true);
+    this.send('visible', true);
   }
 }
