@@ -15,7 +15,7 @@ const queryTabs = async (queryInfo: any): Promise<chrome.tabs.Tab[]> => {
   const readProperty = (obj: any, prop: string) => obj[prop];
   const data: chrome.tabs.Tab[] = await ipcRenderer.invoke(`api-tabs-query`);
 
-  return data.filter(tab => {
+  return data.filter((tab) => {
     for (const key in queryInfo) {
       const tabProp = readProperty(tab, key);
       const queryInfoProp = readProperty(queryInfo, key);
@@ -118,7 +118,7 @@ const changeBrowserActionInfo = async (
       };
 
       if (typeof args[0] === 'object') {
-        tabs.getCurrent(tab => {
+        tabs.getCurrent((tab) => {
           insertCSS(tab.id, args[0], args[1]);
         });
       } else if (typeof args[0] === 'number') {
@@ -178,7 +178,7 @@ const changeBrowserActionInfo = async (
     onClicked: new IpcEvent('browserAction', 'onClicked'),
   };
 
-  BROWSER_ACTION_METHODS.forEach(method => {
+  BROWSER_ACTION_METHODS.forEach((method) => {
     chrome.browserAction[method] = async (details: any, cb: any) => {
       if (details.imageData) {
         return;

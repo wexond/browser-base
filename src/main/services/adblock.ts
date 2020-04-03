@@ -56,10 +56,16 @@ const emitBlockedEvent = (request: Request) => {
 };
 
 let adblockRunning = false;
+let adblockInitialized = false;
 
 export const runAdblockService = async (ses: any) => {
-  if (!engine) {
+  if (!adblockInitialized) {
+    adblockInitialized = true;
     await loadFilters();
+  }
+
+  if (adblockInitialized && !engine) {
+    return;
   }
 
   if (adblockRunning) return;
@@ -75,8 +81,9 @@ export const runAdblockService = async (ses: any) => {
 export const stopAdblockService = (ses: any) => {
   if (!adblockRunning) return;
 
+  adblockRunning = false;
+
   if (engine) {
     engine.disableBlockingInSession(ses);
-    adblockRunning = false;
   }
 };
