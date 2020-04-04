@@ -5,30 +5,30 @@ import { setPassword, deletePassword, getPassword } from 'keytar';
 import { IFormFillData } from '~/interfaces';
 import { AppWindow } from '../windows';
 import { getFormFillMenuItems } from '../utils';
-import storage from './storage';
+import { Application } from '../application';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
 
   ipcMain.on(`window-focus-${id}`, () => {
-    appWindow.focus();
+    appWindow.win.focus();
     appWindow.webContents.focus();
   });
 
   ipcMain.on(`window-toggle-maximize-${id}`, () => {
-    if (appWindow.isMaximized()) {
-      appWindow.unmaximize();
+    if (appWindow.win.isMaximized()) {
+      appWindow.win.unmaximize();
     } else {
-      appWindow.maximize();
+      appWindow.win.maximize();
     }
   });
 
   ipcMain.on(`window-minimize-${id}`, () => {
-    appWindow.minimize();
+    appWindow.win.minimize();
   });
 
   ipcMain.on(`window-close-${id}`, () => {
-    appWindow.close();
+    appWindow.win.close();
   });
 
   ipcMain.on(`window-fix-dragging-${id}`, () => {
@@ -48,7 +48,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     return appWindow.dialogs[dialog].visible;
   });
 
-  ipcMain.on(`search-show-${id}`, e => {
+  ipcMain.on(`search-show-${id}`, (e) => {
     appWindow.dialogs.searchDialog.show();
   });
 
@@ -78,7 +78,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.extensionPopup.show(inspect);
   });
 
-  ipcMain.on(`hide-extension-popup-${id}`, e => {
+  ipcMain.on(`hide-extension-popup-${id}`, (e) => {
     if (appWindow.dialogs.extensionPopup.visible) {
       appWindow.dialogs.extensionPopup.hideVisually();
     }
@@ -93,10 +93,11 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.webContents.send(`edit-tabgroup`, tabGroup);
   });
 
-  ipcMain.on(`is-incognito-${id}`, e => {
+  ipcMain.on(`is-incognito-${id}`, (e) => {
     e.returnValue = appWindow.incognito;
   });
 
+  /*
   ipcMain.on(`form-fill-show-${id}`, async (e, rect, name, value) => {
     const items = await getFormFillMenuItems(name, value);
 
@@ -109,7 +110,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
 
       appWindow.dialogs.formFillDialog.resize(
         items.length,
-        items.find(r => r.subtext) != null,
+        items.find((r) => r.subtext) != null,
       );
       appWindow.dialogs.formFillDialog.rearrange();
       appWindow.dialogs.formFillDialog.show(false);
@@ -130,7 +131,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
 
       const item =
         _id &&
-        (await storage.findOne<IFormFillData>({
+        (await Application.instance.storage.findOne<IFormFillData>({
           scope: 'formfill',
           query: { _id },
         }));
@@ -169,7 +170,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     const hostname = view.hostname;
 
     if (!update) {
-      const item = await storage.insert<IFormFillData>({
+      const item = await Application.instance.storage.insert<IFormFillData>({
         scope: 'formfill',
         item: {
           type: 'password',
@@ -187,7 +188,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
         item,
       );
     } else {
-      await storage.update({
+      await Application.instance.storage.update({
         scope: 'formfill',
         query: {
           type: 'password',
@@ -215,7 +216,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     const { _id, fields } = data;
     const view = appWindow.viewManager.selected;
 
-    await storage.remove({
+    await Application.instance.storage.remove({
       scope: 'formfill',
       query: {
         _id,
@@ -237,4 +238,5 @@ export const runMessagingService = (appWindow: AppWindow) => {
       e.sender.send(id, password);
     },
   );
+  */
 };

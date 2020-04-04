@@ -146,12 +146,12 @@ export class ITab {
   }
 
   @action
-  public select() {
+  public async select() {
     if (!this.isClosing) {
       store.tabs.selectedTabId = this.id;
 
       ipcRenderer.send(`browserview-show-${store.windowId}`);
-      ipcRenderer.send(`view-select-${store.windowId}`, this.id);
+      await ipcRenderer.invoke(`view-select-${store.windowId}`, this.id);
     }
   }
 

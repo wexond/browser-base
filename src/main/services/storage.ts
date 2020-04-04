@@ -15,9 +15,8 @@ import {
   IBookmark,
 } from '~/interfaces';
 import { countVisitedTimes } from '~/utils/history';
-import { windowsManager } from '..';
 import { promises } from 'fs';
-import { Queue } from '~/utils/queue';
+import { Application } from '../application';
 
 interface Databases {
   [key: string]: Datastore;
@@ -99,13 +98,13 @@ export class StorageService {
       await this.exportBookmarks();
     });
 
-    ipcMain.handle('bookmarks-get', e => {
+    ipcMain.handle('bookmarks-get', (e) => {
       return this.bookmarks;
     });
 
     ipcMain.on('bookmarks-remove', (e, ids: string[]) => {
-      ids.forEach(x => this.removeBookmark(x));
-      windowsManager.list.forEach(x => {
+      ids.forEach((x) => this.removeBookmark(x));
+      Application.instance.windows.list.forEach((x) => {
         x.viewManager.selected.updateBookmark();
       });
     });
@@ -113,33 +112,33 @@ export class StorageService {
     ipcMain.handle('bookmarks-add', async (e, item) => {
       const b = await this.addBookmark(item);
 
-      windowsManager.list.forEach(x => {
+      Application.instance.windows.list.forEach((x) => {
         x.viewManager.selected.updateBookmark();
       });
 
       return b;
     });
 
-    ipcMain.handle('bookmarks-get-folders', async e => {
-      return this.bookmarks.filter(x => x.isFolder);
+    ipcMain.handle('bookmarks-get-folders', async (e) => {
+      return this.bookmarks.filter((x) => x.isFolder);
     });
 
     ipcMain.on('bookmarks-update', async (e, id, change) => {
       await this.updateBookmark(id, change);
     });
 
-    ipcMain.handle('history-get', e => {
+    ipcMain.handle('history-get', (e) => {
       return this.history;
     });
 
     ipcMain.on('history-remove', (e, ids: string[]) => {
-      this.history = this.history.filter(x => ids.indexOf(x._id) === -1);
-      ids.forEach(x => this.remove({ scope: 'history', query: { _id: x } }));
+      this.history = this.history.filter((x) => ids.indexOf(x._id) === -1);
+      ids.forEach((x) => this.remove({ scope: 'history', query: { _id: x } }));
     });
 
     ipcMain.handle('topsites-get', (e, count) => {
       return this.historyVisited
-        .filter(x => x.title && x.title !== '')
+        .filter((x) => x.title && x.title !== '')
         .slice(0, count);
     });
   }
@@ -220,7 +219,7 @@ export class StorageService {
 
   private async loadFavicons() {
     (await this.find<IFavicon>({ scope: 'favicons', query: {} })).forEach(
-      favicon => {
+      (favicon) => {
         const { data } = favicon;
 
         if (this.favicons.get(favicon.url) == null) {
@@ -252,7 +251,7 @@ export class StorageService {
 
     this.historyVisited = countVisitedTimes(items);
 
-    this.historyVisited = this.historyVisited.map(x => ({
+    this.historyVisited = this.historyVisited.map((x) => ({
       ...x,
       favicon: this.favicons.get(x.favicon),
     }));
@@ -263,9 +262,9 @@ export class StorageService {
 
     items.sort((a, b) => a.order - b.order);
 
-    let barFolder = items.find(x => x.static === 'main');
-    let otherFolder = items.find(x => x.static === 'other');
-    let mobileFolder = items.find(x => x.static === 'mobile');
+    let barFolder = items.find((x) => x.static === 'main');
+    let otherFolder = items.find((x) => x.static === 'other');
+    let mobileFolder = items.find((x) => x.static === 'mobile');
 
     this.bookmarks = items;
 
@@ -298,21 +297,21 @@ export class StorageService {
   }
 
   public removeBookmark(id: string) {
-    const item = this.bookmarks.find(x => x._id === id);
+    const item = this.bookmarks.find((x) => x._id === id);
 
     if (!item) return;
 
-    this.bookmarks = this.bookmarks.filter(x => x._id !== id);
-    const parent = this.bookmarks.find(x => x._id === item.parent);
+    this.bookmarks = this.bookmarks.filter((x) => x._id !== id);
+    const parent = this.bookmarks.find((x) => x._id === item.parent);
 
-    parent.children = parent.children.filter(x => x !== id);
+    parent.children = parent.children.filter((x) => x !== id);
     this.updateBookmark(item.parent, { children: parent.children });
 
     this.remove({ scope: 'bookmarks', query: { _id: id } });
 
     if (item.isFolder) {
-      this.bookmarks = this.bookmarks.filter(x => x.parent !== id);
-      const removed = this.bookmarks.filter(x => x.parent === id);
+      this.bookmarks = this.bookmarks.filter((x) => x.parent !== id);
+      const removed = this.bookmarks.filter((x) => x.parent === id);
 
       this.remove({ scope: 'bookmarks', query: { parent: id }, multi: true });
 
@@ -326,7 +325,7 @@ export class StorageService {
 
   public async updateBookmark(id: string, change: IBookmark) {
     const index = this.bookmarks.indexOf(
-      this.bookmarks.find(x => x._id === id),
+      this.bookmarks.find((x) => x._id === id),
     );
     this.bookmarks[index] = { ...this.bookmarks[index], ...change };
 
@@ -351,13 +350,13 @@ export class StorageService {
     }
 
     if (item.order === undefined) {
-      item.order = this.bookmarks.filter(x => x.parent === null).length;
+      item.order = this.bookmarks.filter((x) => x.parent === null).length;
     }
 
     const doc = await this.insert<IBookmark>({ item, scope: 'bookmarks' });
 
     if (item.parent) {
-      const parent = this.bookmarks.find(x => x._id === item.parent);
+      const parent = this.bookmarks.find((x) => x._id === item.parent);
       await this.updateBookmark(parent._id, {
         children: [...parent.children, doc._id],
       });
@@ -418,7 +417,7 @@ export class StorageService {
   ): string[] => {
     let payload: string[] = [];
     let title;
-    const bookmarks = this.bookmarks.filter(x => x.parent === parentFolderId);
+    const bookmarks = this.bookmarks.filter((x) => x.parent === parentFolderId);
     const indentFirst = indentType.repeat(depth * indentLength);
     const indentNext = !first
       ? indentFirst
@@ -464,11 +463,11 @@ export class StorageService {
     const documentTitle = 'Bookmarks';
 
     const bar = this.createBookmarkArray(
-      this.bookmarks.find(x => x.static === 'main')._id,
+      this.bookmarks.find((x) => x.static === 'main')._id,
     );
 
     const other = this.createBookmarkArray(
-      this.bookmarks.find(x => x.static === 'other')._id,
+      this.bookmarks.find((x) => x.static === 'other')._id,
       false,
     );
 
@@ -492,5 +491,3 @@ ${other.join(breakTag)}
     }
   };
 }
-
-export default new StorageService();

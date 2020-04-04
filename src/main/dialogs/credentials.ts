@@ -18,7 +18,7 @@ export class CredentialsDialog extends Dialog {
   }
 
   public rearrange() {
-    const { width } = this.appWindow.getContentBounds();
+    const { width } = this.appWindow.win.getContentBounds();
     super.rearrange({
       x: width - WIDTH,
     });

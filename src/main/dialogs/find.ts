@@ -17,7 +17,7 @@ export class FindDialog extends Dialog {
       },
     });
 
-    ipcMain.on(`show-${this.webContents.id}`, () => {
+    ipcMain.on(`show-${this.id}`, () => {
       this.show();
     });
   }
@@ -33,11 +33,11 @@ export class FindDialog extends Dialog {
 
     const tabId = this.appWindow.viewManager.selectedId;
     this.tabIds.push(tabId);
-    this.webContents.send('visible', true, tabId);
+    this.send('visible', true, tabId);
   }
 
   public rearrange() {
-    const { width } = this.appWindow.getContentBounds();
+    const { width } = this.appWindow.win.getContentBounds();
     super.rearrange({
       x: width - WIDTH,
     });

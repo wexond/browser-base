@@ -1,9 +1,9 @@
 import { ipcMain, BrowserWindow, webContents } from 'electron';
-import { windowsManager } from '..';
 import { promises } from 'fs';
 import { resolve } from 'path';
 import { getPath } from '~/utils/paths';
-import { SessionsManager } from '../sessions-manager';
+import { Application } from '../application';
+import { SessionsService } from '../sessions-service';
 
 declare global {
   namespace Electron {
@@ -35,18 +35,16 @@ export const webContentsToTab = (wc: Electron.WebContents): chrome.tabs.Tab => {
 };
 
 export const getAllWebContentsInSession = (ses: Electron.Session) => {
-  return webContents.getAllWebContents().filter(x => x.session === ses);
+  return webContents.getAllWebContents().filter((x) => x.session === ses);
 };
 
-export const runExtensionsMessagingService = (
-  sessionsManager: SessionsManager,
-) => {
+export const runExtensionsMessagingService = (sessions: SessionsService) => {
   const extensionsPath = getPath('extensions');
 
-  const session = sessionsManager.view;
+  const session = sessions.view;
 
-  ipcMain.handle(`api-tabs-query`, e => {
-    const tabs = getAllWebContentsInSession(session).map(x => ({
+  ipcMain.handle(`api-tabs-query`, (e) => {
+    const tabs = getAllWebContentsInSession(session).map((x) => ({
       ...webContentsToTab(x),
       lastFocusedWindow: true,
       currentWindow: true,
@@ -77,7 +75,7 @@ export const runExtensionsMessagingService = (
 
       data.windowId = realWindowId;
 
-      const tabId = await windowsManager.sessionsManager.onCreateTab(data);
+      const tabId = await Application.instance.sessions.onCreateTab(data);
       return webContentsToTab(webContents.fromId(tabId));
     },
   );
@@ -108,7 +106,7 @@ export const runExtensionsMessagingService = (
   ipcMain.handle(
     `api-browserAction-change-info`,
     (e, extensionId, action, details) => {
-      windowsManager.sessionsManager.onBrowserActionUpdate(
+      Application.instance.sessions.onBrowserActionUpdate(
         extensionId,
         action,
         details,
