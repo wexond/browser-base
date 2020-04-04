@@ -97,6 +97,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     e.returnValue = appWindow.incognito;
   });
 
+  /*
   ipcMain.on(`form-fill-show-${id}`, async (e, rect, name, value) => {
     const items = await getFormFillMenuItems(name, value);
 
@@ -237,4 +238,5 @@ export const runMessagingService = (appWindow: AppWindow) => {
       e.sender.send(id, password);
     },
   );
+  */
 };
