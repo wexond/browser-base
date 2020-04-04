@@ -5,6 +5,7 @@ import { AppWindow } from './windows';
 import { IHistoryItem, IBookmark } from '~/interfaces';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { NEWTAB_URL } from '~/constants/tabs';
+import Vibrant = require('node-vibrant');
 import {
   ZOOM_FACTOR_MIN,
   ZOOM_FACTOR_MAX,
@@ -184,6 +185,18 @@ export class View {
           }
 
           this.emitEvent('favicon-updated', fav);
+
+          const buf = Buffer.from(fav.split('base64,')[1], 'base64');
+
+          try {
+            const palette = await Vibrant.from(buf).getPalette();
+
+            if (!palette.Vibrant) return;
+
+            this.emitEvent('color-updated', palette.Vibrant.getHex());
+          } catch (e) {
+            console.error(e);
+          }
         } catch (e) {
           this.favicon = '';
           console.error(e);
