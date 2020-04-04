@@ -15,7 +15,7 @@ export class PreviewDialog extends Dialog {
     super(appWindow, {
       name: 'preview',
       bounds: {
-        width: appWindow.getBounds().width,
+        width: appWindow.win.getBounds().width,
         height: HEIGHT,
         y: 34,
       },
@@ -24,7 +24,7 @@ export class PreviewDialog extends Dialog {
   }
 
   public rearrange() {
-    const { width } = this.appWindow.getContentBounds();
+    const { width } = this.appWindow.win.getContentBounds();
     super.rearrange({ width });
   }
 

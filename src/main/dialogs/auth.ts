@@ -24,7 +24,7 @@ export class AuthDialog extends Dialog {
   ): Promise<{ username: string; password: string }> {
     return new Promise((resolve) => {
       this.show();
-      this.tabId = tabId;
+      this.tabIds.push(tabId);
 
       this.send('request-auth', url);
 

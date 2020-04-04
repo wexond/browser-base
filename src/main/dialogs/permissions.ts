@@ -34,7 +34,7 @@ export class PermissionsDialog extends Dialog {
         return reject('Unknown permission');
       }
 
-      this.tabId = tabId;
+      this.tabIds.push(tabId);
 
       this.show();
 

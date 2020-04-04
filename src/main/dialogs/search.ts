@@ -26,7 +26,7 @@ export class SearchDialog extends Dialog {
     });
 
     ipcMain.on(`height-${this.id}`, (e, height) => {
-      const { width } = this.appWindow.getContentBounds();
+      const { width } = this.appWindow.win.getContentBounds();
       super.rearrange({
         height: this.isPreviewVisible
           ? Math.max(DIALOG_MIN_HEIGHT, HEIGHT + height)
@@ -53,7 +53,7 @@ export class SearchDialog extends Dialog {
   }
 
   public rearrange() {
-    const { width } = this.appWindow.getContentBounds();
+    const { width } = this.appWindow.win.getContentBounds();
     super.rearrange({ x: Math.round(width / 2 - WIDTH / 2) });
   }
 

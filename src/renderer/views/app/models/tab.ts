@@ -49,13 +49,6 @@ export class ITab {
   public url = '';
 
   @observable
-  public findInfo = {
-    occurrences: '0/0',
-    text: '',
-    visible: false,
-  };
-
-  @observable
   public blockedAds = 0;
 
   @observable
@@ -153,15 +146,12 @@ export class ITab {
   }
 
   @action
-  public select() {
+  public async select() {
     if (!this.isClosing) {
       store.tabs.selectedTabId = this.id;
 
       ipcRenderer.send(`browserview-show-${store.windowId}`);
-      ipcRenderer.send(`view-select-${store.windowId}`, this.id);
-      ipcRenderer.send(`update-find-info-${store.windowId}`, this.id, {
-        ...this.findInfo,
-      });
+      await ipcRenderer.invoke(`view-select-${store.windowId}`, this.id);
     }
   }
 

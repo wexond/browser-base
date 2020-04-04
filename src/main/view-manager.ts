@@ -4,6 +4,7 @@ import { View } from './view';
 import { AppWindow } from './windows';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { Application } from './application';
+import { NEWTAB_URL } from '~/constants/tabs';
 
 export class ViewManager {
   public views = new Map<number, View>();
@@ -86,8 +87,7 @@ export class ViewManager {
   ) {
     const view = new View(this.window, details.url, this.incognito);
 
-    const { webContents } = view.browserView;
-    const { id } = view;
+    const { id, webContents } = view;
 
     this.views.set(id, view);
 
@@ -146,6 +146,7 @@ export class ViewManager {
     ].forEach((dialog) => {
       if (this.window.dialogs[dialog].tabIds.includes(id)) {
         this.window.dialogs[dialog].show();
+        this.window.dialogs[dialog].bringToTop();
       } else {
         this.window.dialogs[dialog].hide();
       }

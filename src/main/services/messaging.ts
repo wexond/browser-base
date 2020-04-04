@@ -11,24 +11,24 @@ export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
 
   ipcMain.on(`window-focus-${id}`, () => {
-    appWindow.focus();
+    appWindow.win.focus();
     appWindow.webContents.focus();
   });
 
   ipcMain.on(`window-toggle-maximize-${id}`, () => {
-    if (appWindow.isMaximized()) {
-      appWindow.unmaximize();
+    if (appWindow.win.isMaximized()) {
+      appWindow.win.unmaximize();
     } else {
-      appWindow.maximize();
+      appWindow.win.maximize();
     }
   });
 
   ipcMain.on(`window-minimize-${id}`, () => {
-    appWindow.minimize();
+    appWindow.win.minimize();
   });
 
   ipcMain.on(`window-close-${id}`, () => {
-    appWindow.close();
+    appWindow.win.close();
   });
 
   ipcMain.on(`window-fix-dragging-${id}`, () => {
