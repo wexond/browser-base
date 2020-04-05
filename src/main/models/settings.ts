@@ -95,11 +95,6 @@ export class Settings extends EventEmitter {
       window.viewManager.views.forEach(async (v) => {
         if (v.webContents.getURL().startsWith(WEBUI_BASE_URL)) {
           v.webContents.send('update-settings', this.object);
-
-          if (v.webContents.devToolsWebContents) {
-            v.webContents.toggleDevTools();
-            v.webContents.toggleDevTools();
-          }
         }
       });
     }
