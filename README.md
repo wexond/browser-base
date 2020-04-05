@@ -34,6 +34,10 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 
 ![image](https://user-images.githubusercontent.com/11065386/70392310-180b0c00-19df-11ea-98de-ba96aece86c4.png)
 
+# Downloads
+- [Stable and beta versions](https://github.com/wexond/desktop/releases)
+- [Nightlies](https://github.com/wexond/desktop-nightly/releases)
+
 # [Roadmap](https://github.com/wexond/wexond/projects)
 
 # Contributing
