@@ -2,9 +2,9 @@ import { ipcMain } from 'electron';
 import { parse } from 'url';
 import { setPassword, deletePassword, getPassword } from 'keytar';
 
-import { IFormFillData } from '~/interfaces';
+// import { IFormFillData } from '~/interfaces';
 import { AppWindow } from '../windows';
-import { getFormFillMenuItems } from '../utils';
+// import { getFormFillMenuItems } from '../utils';
 import { Application } from '../application';
 
 export const runMessagingService = (appWindow: AppWindow) => {
@@ -82,7 +82,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.extensionPopup.show(inspect);
   });
 
-  ipcMain.on(`hide-extension-popup-${id}`, (e) => {
+  ipcMain.on(`hide-extension-popup-${id}`, e => {
     if (appWindow.dialogs.extensionPopup.visible) {
       appWindow.dialogs.extensionPopup.hideVisually();
     }
@@ -98,7 +98,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.send(`edit-tabgroup`, tabGroup);
   });
 
-  ipcMain.on(`is-incognito-${id}`, (e) => {
+  ipcMain.on(`is-incognito-${id}`, e => {
     e.returnValue = appWindow.incognito;
   });
   /*

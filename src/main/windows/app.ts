@@ -11,7 +11,7 @@ import {
   FindDialog,
   PermissionsDialog,
   AuthDialog,
-  FormFillDialog,
+  AutoFillDialog,
   CredentialsDialog,
   PreviewDialog,
   TabGroupDialog,
@@ -35,7 +35,7 @@ interface IDialogs {
 
   permissionsDialog?: PermissionsDialog;
   authDialog?: AuthDialog;
-  formFillDialog?: FormFillDialog;
+  formFillDialog?: AutoFillDialog;
   credentialsDialog?: CredentialsDialog;
   extensionPopup?: ExtensionPopup;
 
@@ -91,7 +91,7 @@ export class AppWindow {
 
       this.dialogs.permissionsDialog = new PermissionsDialog(this);
       this.dialogs.authDialog = new AuthDialog(this);
-      this.dialogs.formFillDialog = new FormFillDialog(this);
+      this.dialogs.formFillDialog = new AutoFillDialog(this);
       this.dialogs.credentialsDialog = new CredentialsDialog(this);
       this.dialogs.extensionPopup = new ExtensionPopup(this);
     });
@@ -135,7 +135,7 @@ export class AppWindow {
         windowState.bounds = this.win.getBounds();
       }
 
-      Object.values(this.dialogs).forEach((dialog) => {
+      Object.values(this.dialogs).forEach(dialog => {
         if (dialog.visible) {
           dialog.rearrange();
         }
@@ -193,7 +193,7 @@ export class AppWindow {
 
       this.win.setBrowserView(null);
 
-      Object.keys(this.dialogs).forEach((key) => {
+      Object.keys(this.dialogs).forEach(key => {
         if (this.dialogs[key]) {
           this.dialogs[key].destroy();
         }
@@ -204,15 +204,14 @@ export class AppWindow {
 
       if (
         incognito &&
-        Application.instance.windows.list.filter((x) => x.incognito).length ===
-          1
+        Application.instance.windows.list.filter(x => x.incognito).length === 1
       ) {
         Application.instance.sessions.clearCache('incognito');
         Application.instance.sessions.unloadIncognitoExtensions();
       }
 
       Application.instance.windows.list = Application.instance.windows.list.filter(
-        (x) => x.win.id !== this.win.id,
+        x => x.win.id !== this.win.id,
       );
     });
 

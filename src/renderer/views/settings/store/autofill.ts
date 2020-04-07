@@ -1,16 +1,16 @@
 import { observable, action } from 'mobx';
 
-import { IFormFillData } from '~/interfaces';
+import { IAutoFillItem } from '~/interfaces';
 import { PreloadDatabase } from '~/preloads/models/database';
 
 export class AutoFillStore {
-  public db = new PreloadDatabase<IFormFillData>('formfill');
+  public db = new PreloadDatabase<any>('formfill');
 
   @observable
-  public credentials: IFormFillData[] = [];
+  public credentials: any[] = [];
 
   @observable
-  public addresses: IFormFillData[] = [];
+  public addresses: any[] = [];
 
   @observable
   public menuVisible = false;
@@ -22,7 +22,7 @@ export class AutoFillStore {
   public menuLeft = 0;
 
   @observable
-  public selectedItem: IFormFillData;
+  public selectedItem: any;
 
   public constructor() {
     this.load();
@@ -53,7 +53,7 @@ export class AutoFillStore {
     this.addresses = items.filter(r => r.type === 'address');
   }
 
-  public async removeItem(data: IFormFillData) {
+  public async removeItem(data: any) {
     await this.db.remove({ _id: data._id });
 
     if (data.type === 'password') {

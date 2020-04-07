@@ -2,14 +2,14 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
 import store from '../../store';
-import { IFormFillData } from '~/interfaces';
+// import { IFormFillData } from '~/interfaces';
 import { StyledItem, Username, Password, DeleteIcon } from './styles';
 
-const onDelete = (data: IFormFillData) => () => {
+const onDelete = (data: any) => () => {
   store.remove(data);
 };
 
-const Item = ({ data }: { data: IFormFillData }) => {
+const Item = ({ data }: { data: any }) => {
   const { username, passLength } = data.fields;
 
   return (

@@ -2,13 +2,13 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
 import store from '../../../store';
-import { IFormFillData } from '~/interfaces';
+import { IAutoFillItem } from '~/interfaces';
 import { Section, onMoreClick } from '../Section';
 import { More } from '../Passwords/styles';
 import { StyledItem } from './styles';
 import { ICON_LOCATION } from '~/renderer/constants';
 
-const Item = observer(({ data }: { data: IFormFillData }) => {
+const Item = observer(({ data }: { data: any }) => {
   return (
     <StyledItem>
       {data.fields.address}

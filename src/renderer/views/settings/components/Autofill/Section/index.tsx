@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { IFormFillData } from '~/interfaces';
+// import { IFormFillData } from '~/interfaces';
 import store from '../../../store';
 import {
   StyledSection,
@@ -18,7 +18,7 @@ interface Props {
   style?: any;
 }
 
-export const onMoreClick = (data: IFormFillData) => (
+export const onMoreClick = (data: any) => (
   e: React.MouseEvent<HTMLDivElement>,
 ) => {
   e.stopPropagation();

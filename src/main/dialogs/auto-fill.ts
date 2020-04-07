@@ -5,7 +5,7 @@ import { AppWindow } from '../windows';
 const WIDTH = 208;
 const HEIGHT = 128;
 
-export class AutoillDialog extends Dialog {
+export class AutoFillDialog extends Dialog {
   public inputRect = {
     width: 0,
     height: 0,

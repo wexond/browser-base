@@ -1,17 +1,17 @@
 import { observable, action } from 'mobx';
 import { ipcRenderer } from 'electron';
 
-import { IFormFillData } from '~/interfaces';
+// import { IFormFillData } from '~/interfaces';
 import { Database } from '~/models/database';
 
 export class AutoFillStore {
-  public db = new Database<IFormFillData>('formfill');
+  public db = new Database<any>('formfill');
 
   @observable
-  public credentials: IFormFillData[] = [];
+  public credentials: any[] = [];
 
   @observable
-  public addresses: IFormFillData[] = [];
+  public addresses: any[] = [];
 
   @observable
   public menuVisible = false;
@@ -23,7 +23,7 @@ export class AutoFillStore {
   public menuLeft = 0;
 
   @observable
-  public selectedItem: IFormFillData;
+  public selectedItem: any;
 
   public constructor() {
     this.load();
@@ -51,7 +51,7 @@ export class AutoFillStore {
     this.addresses = items.filter(r => r.type === 'address');
   }
 
-  public async removeItem(data: IFormFillData) {
+  public async removeItem(data: any) {
     await this.db.remove({ _id: data._id });
 
     if (data.type === 'password') {

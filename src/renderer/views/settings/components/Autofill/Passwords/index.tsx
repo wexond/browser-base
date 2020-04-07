@@ -2,9 +2,9 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
 import store from '../../../store';
-import { IFormFillData } from '~/interfaces';
+// import { IFormFillData } from '~/interfaces';
 import { Section, onMoreClick } from '../Section';
-import { getUserPassword } from '~/preloads/utils/autofill';
+// import { getUserPassword } from '~/preloads/utils/autofill';
 import {
   Container,
   HeaderLabel,
@@ -15,16 +15,16 @@ import {
 } from './styles';
 import { ICON_KEY } from '~/renderer/constants';
 
-const Item = observer(({ data }: { data: IFormFillData }) => {
+const Item = observer(({ data }: { data: any }) => {
   const { url, favicon, fields } = data;
   const [realPassword, setRealPassword] = React.useState<string>(null);
 
   const password = realPassword || '•'.repeat(fields.passLength);
 
-  const onIconClick = async () => {
-    const pass = !realPassword && (await getUserPassword(data));
-    setRealPassword(pass);
-  };
+  // const onIconClick = async () => {
+  //   const pass = !realPassword && (await getUserPassword(data));
+  //   setRealPassword(pass);
+  // };
 
   // TODO(xnerhu): favicons
 
@@ -39,7 +39,7 @@ const Item = observer(({ data }: { data: IFormFillData }) => {
       </Wrapper>
       <Wrapper>
         <Label>{password}</Label>
-        <PasswordIcon toggled={!!realPassword} onClick={onIconClick} />
+        <PasswordIcon toggled={!!realPassword} onClick={null} />
         <More onClick={onMoreClick(data)} />
       </Wrapper>
     </>

@@ -4,7 +4,7 @@ import { observable } from 'mobx';
 
 import { Textfield } from '~/renderer/components/Textfield';
 import { PasswordInput } from '~/renderer/components/PasswordInput';
-import { IFormFillData } from '~/interfaces';
+// import { IFormFillData } from '~/interfaces';
 import { DialogStore } from '~/models/dialog-store';
 
 export class Store extends DialogStore {
@@ -12,7 +12,7 @@ export class Store extends DialogStore {
   public content: 'save' | 'update' | 'list';
 
   @observable
-  public list: IFormFillData[] = [];
+  public list: any[] = [];
 
   public usernameRef = React.createRef<Textfield>();
 
@@ -38,7 +38,7 @@ export class Store extends DialogStore {
     });
   }
 
-  public remove(data: IFormFillData) {
+  public remove(data: any) {
     this.list = this.list.filter(r => r._id !== data._id);
     ipcRenderer.send(`credentials-remove-${this.windowId}`, data);
   }
