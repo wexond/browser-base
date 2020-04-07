@@ -1,6 +1,6 @@
 import { ipcRenderer, webFrame } from 'electron';
 
-import AutoComplete from './models/auto-complete';
+import AutoFill from './services/auto-fill';
 import { getTheme } from '~/utils/themes';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { injectChromeWebstoreInstallButton } from './chrome-webstore';
@@ -93,9 +93,6 @@ ipcRenderer.on('scroll-touch-end', () => {
 
   resetCounters();
 });
-
-window.addEventListener('load', AutoComplete.loadForms);
-window.addEventListener('mousedown', AutoComplete.onWindowMouseDown);
 
 const postMsg = (data: any, res: any) => {
   window.postMessage(
@@ -220,4 +217,40 @@ if (window.location.href.startsWith(WEBUI_BASE_URL)) {
       '*',
     );
   });
+} else {
+  AutoFill.init();
+
+  // window.addEventListener('DOMContentLoaded', () => {
+
+  // window.addEventListener('mousedown', (e: MouseEvent) => {
+  //   const target: HTMLInputElement = e.target as any;
+
+  //   if (target instanceof HTMLInputElement) {
+  //     if (target.name === 'password') {
+  //       const onBlur = (e: FocusEvent) => {
+  //         console.log('xd');
+  //       };
+
+  //       target.addEventListener('blur', onBlur);
+  //     }
+  //   }
+  // });
+
+  // const submitButtons = document.querySelectorAll(
+  //   'input[type="submit"], button[type="submit"]',
+  // );
+
+  // console.log(submitButtons);
+
+  // const observer = new MutationObserver(change => {
+  //   console.log(change);
+  // });
+  // observer.observe(document.body, {
+  //   subtree: true,
+  //   attributes: true,
+  //   attributeOldValue: true,
+  //   // attributes: true,
+  //   // attributeFilter: ['type'],
+  // });
+  // });
 }
