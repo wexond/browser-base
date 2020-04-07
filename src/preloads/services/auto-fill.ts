@@ -1,3 +1,7 @@
+import { ipcRenderer } from 'electron';
+
+import { windowId, tabId } from '../view-preload';
+
 class AutoFillService {
   private active = false;
 
@@ -15,14 +19,32 @@ class AutoFillService {
     if (target instanceof HTMLInputElement) {
       if (target.name === 'password') {
         this.passwordRef = target;
-        this.active = target.value.length > 0;
 
-        console.log(this.active);
+        const active = target.value.length > 0;
+
+        if (active !== this.active) {
+          this.active = active;
+          this.setAvailability(active);
+        }
+
+        this.sendData();
       } else if (target.name === 'username') {
         this.usernameRef = target;
+        this.sendData();
       }
     }
   };
+
+  private sendData() {
+    const username = this.usernameRef?.value;
+    const password = this.passwordRef?.value;
+
+    ipcRenderer.send(`credentials-data-${windowId}`, username, password);
+  }
+
+  private setAvailability(active: boolean) {
+    ipcRenderer.send(`credentials-available-${windowId}`, active, tabId);
+  }
 }
 
 export default new AutoFillService();

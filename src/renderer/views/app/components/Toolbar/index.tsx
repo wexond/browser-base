@@ -40,15 +40,17 @@ const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
 };
 
 const onKeyClick = () => {
-  const { hostname } = parse(store.tabs.selectedTab.url);
-  const list = store.autoFill.credentials.filter(
-    (r) => r.url === hostname && r.fields.username,
-  );
+  ipcRenderer.send(`credentials-dialog-toggle-${store.windowId}`);
 
-  ipcRenderer.send(`credentials-show-${store.windowId}`, {
-    content: 'list',
-    list,
-  });
+  // const { hostname } = parse(store.tabs.selectedTab.url);
+  // const list = store.autoFill.credentials.filter(
+  //   r => r.url === hostname && r.fields.username,
+  // );
+
+  // ipcRenderer.send(`credentials-show-${store.windowId}`, {
+  //   content: 'list',
+  //   list,
+  // });
 };
 
 let starRef: HTMLDivElement = null;
@@ -80,7 +82,7 @@ ipcRenderer.on('show-menu-dialog', () => {
   showMenuDialog();
 });
 
-const onStarClick = (e: React.MouseEvent<HTMLDivElement>) => {
+const onStarClick = () => {
   showAddBookmarkDialog();
 };
 
@@ -94,7 +96,7 @@ const BrowserActions = observer(() => {
   return (
     <>
       {selectedTabId &&
-        store.extensions.browserActions.map((item) => {
+        store.extensions.browserActions.map(item => {
           if (item.tabId === selectedTabId) {
             return <BrowserAction data={item} key={item.extensionId} />;
           }
@@ -104,7 +106,7 @@ const BrowserActions = observer(() => {
   );
 });
 
-const onShieldContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+const onShieldContextMenu = () => {
   const menu = remote.Menu.buildFromTemplate([
     {
       checked: store.settings.object.shield,
@@ -158,7 +160,7 @@ const RightButtons = observer(() => {
       )}
       {store.isIncognito && <ToolbarButton icon={ICON_INCOGNITO} size={18} />}
       <ToolbarButton
-        divRef={(r) => (menuRef = r)}
+        divRef={r => (menuRef = r)}
         toggled={store.dialogsVisibility['menu']}
         badge={store.updateAvailable}
         badgeRight={10}
@@ -173,12 +175,12 @@ const RightButtons = observer(() => {
 
 let mouseUpped = false;
 
-const onMouseDown = (e: React.MouseEvent<HTMLInputElement>) => {
+const onMouseDown = () => {
   store.addressbarTextVisible = false;
   store.addressbarFocused = true;
 };
 
-const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+const onFocus = () => {
   store.addressbarTextVisible = false;
   store.addressbarFocused = true;
 
@@ -266,12 +268,6 @@ const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
 export const Toolbar = observer(() => {
   const { selectedTab } = store.tabs;
 
-  let hasCredentials = false;
-
-  if (selectedTab) {
-    hasCredentials = selectedTab.hasCredentials;
-  }
-
   return (
     <StyledToolbar>
       <NavigationButtons />
@@ -318,11 +314,11 @@ export const Toolbar = observer(() => {
           </AddressbarText>
         </AddressbarInputContainer>
 
-        {hasCredentials && (
+        {selectedTab?.autoFillActive && (
           <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
         )}
         <ToolbarButton
-          divRef={(r) => (starRef = r)}
+          divRef={r => (starRef = r)}
           toggled={store.dialogsVisibility['add-bookmark']}
           icon={store.isBookmarked ? ICON_STAR_FILLED : ICON_STAR}
           size={18}

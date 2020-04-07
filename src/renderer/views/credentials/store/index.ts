@@ -20,22 +20,31 @@ export class Store extends DialogStore {
 
   public oldUsername: string;
 
-  public constructor() {
-    super({ hideOnBlur: false });
+  constructor() {
+    super({ hideOnBlur: true });
 
-    ipcRenderer.on('credentials-update', (e, data) => {
-      const { username, password, content, list } = data;
-
-      if (content !== 'list') {
-        this.usernameRef.current.value = username;
-        this.passwordRef.current.value = password;
-        this.oldUsername = username;
-      } else {
-        this.list = list;
-      }
-
-      this.content = content;
+    ipcRenderer.on('show', e => {
+      this.content = 'save';
     });
+
+    ipcRenderer.on('data', (e, username: string, password: string) => {
+      this.usernameRef.current.value = username || '';
+      this.passwordRef.current.value = password || '';
+    });
+
+    // ipcRenderer.on('credentials-update', (e, data) => {
+    //   const { username, password, content, list } = data;
+
+    //   if (content !== 'list') {
+    //     this.usernameRef.current.value = username;
+    //     this.passwordRef.current.value = password;
+    //     this.oldUsername = username;
+    //   } else {
+    //     this.list = list;
+    //   }
+
+    //   this.content = content;
+    // });
   }
 
   public remove(data: any) {

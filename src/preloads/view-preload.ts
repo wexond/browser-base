@@ -5,7 +5,7 @@ import { getTheme } from '~/utils/themes';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { injectChromeWebstoreInstallButton } from './chrome-webstore';
 
-const tabId = ipcRenderer.sendSync('get-webcontents-id');
+export const tabId = ipcRenderer.sendSync('get-webcontents-id');
 
 export const windowId: number = ipcRenderer.sendSync('get-window-id');
 

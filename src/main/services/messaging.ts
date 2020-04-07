@@ -101,6 +101,34 @@ export const runMessagingService = (appWindow: AppWindow) => {
   ipcMain.on(`is-incognito-${id}`, e => {
     e.returnValue = appWindow.incognito;
   });
+
+  ipcMain.on(
+    `credentials-data-${id}`,
+    (e, username: string, password: string) => {
+      appWindow.dialogs.credentialsDialog.send('data', username, password);
+    },
+  );
+
+  ipcMain.on(
+    `credentials-available-${id}`,
+    (e, active: boolean, tabId: number) => {
+      appWindow.webContents.send(`credentials-available`, active, tabId);
+    },
+  );
+
+  ipcMain.on(`credentials-dialog-toggle-${id}`, (e, visible: boolean) => {
+    const dialog = appWindow.dialogs.credentialsDialog;
+    const show = visible == null ? !dialog.visible : visible;
+
+    if (show) {
+      dialog.send('show');
+      dialog.rearrange();
+      dialog.show();
+    } else {
+      dialog.hide();
+    }
+  });
+
   /*
   TODO:
   ipcMain.on(`form-fill-show-${id}`, async (e, rect, name, value) => {
