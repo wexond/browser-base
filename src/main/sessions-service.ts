@@ -5,30 +5,12 @@ import { resolve, basename, parse, extname } from 'path';
 import { Application } from './application';
 import { registerProtocol } from './models/protocol';
 import * as url from 'url';
-import {
-  IDownloadItem,
-  BrowserActionChangeType,
-  Electron10Extension,
-} from '~/interfaces';
+import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
 import { runExtensionsMessagingService } from './services/extensions-messaging';
 import { hookWebContentsEvents } from './services/web-navigation';
-
-// TODO(sentialx): remove this after upgrading to Electron 10:
-const getElectron10Extension = async (
-  session: Electron.Session,
-  path: string,
-) => {
-  return {
-    ...(await session.loadExtension(path)),
-    path,
-    manifest: JSON.parse(
-      await promises.readFile(resolve(path, 'manifest.json'), 'utf8'),
-    ),
-  };
-};
 
 // TODO: move windows list to the corresponding sessions
 export class SessionsService {
@@ -38,7 +20,7 @@ export class SessionsService {
   public incognitoExtensionsLoaded = false;
   public extensionsLoaded = false;
 
-  public extensions: Electron10Extension[] = [];
+  public extensions: Electron.Extension[] = [];
 
   public constructor() {
     this.view.setPreloads([
@@ -223,7 +205,7 @@ export class SessionsService {
 
             await extractZip(crxInfo.zip, path);
 
-            const extension = await getElectron10Extension(this.view, path);
+            const extension = await this.view.loadExtension(path);
 
             if (crxInfo.publicKey) {
               const manifest = JSON.parse(
@@ -331,9 +313,7 @@ export class SessionsService {
     for (const dir of dirs) {
       try {
         const path = resolve(extensionsPath, dir);
-        // TODO(sentialx): after upgrading to Electron 10:
-        // const extension = await context.loadExtension(path);
-        const extension = await getElectron10Extension(context, path);
+        const extension = await context.loadExtension(path);
 
         this.extensions.push(extension);
 
