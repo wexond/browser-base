@@ -39,7 +39,8 @@ export const Input = styled.input.attrs(() => ({
   border: none;
   width: 100%;
   height: 100%;
-  ${body2()};
+  font-family: inherit;
+  font-size: 14px;
   padding-left: 12px;
   padding-right: 8px;
   padding-top: 1px;

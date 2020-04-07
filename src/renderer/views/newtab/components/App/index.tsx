@@ -3,8 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { hot } from 'react-hot-loader/root';
 
 import store from '../../store';
-import { Style } from '../../style';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { Wrapper, Content, IconItem, Menu, Image, RightBar } from './style';
 import { TopSites } from '../TopSites';
 import { News } from '../News';
@@ -18,8 +17,7 @@ import {
   ICON_DOWNLOAD,
   ICON_EXTENSIONS,
 } from '~/renderer/constants/icons';
-
-const GlobalStyle = createGlobalStyle`${Style}`;
+import { WebUIStyle } from '~/renderer/mixins/default-styles';
 
 window.addEventListener('mousedown', () => {
   store.dashboardSettingsVisible = false;
@@ -46,7 +44,7 @@ export default hot(
     return (
       <ThemeProvider theme={{ ...store.theme }}>
         <div>
-          <GlobalStyle />
+          <WebUIStyle />
 
           <Preferences />
 

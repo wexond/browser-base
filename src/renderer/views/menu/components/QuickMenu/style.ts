@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { ITheme } from '~/interfaces';
-import { centerIcon, getLetterSpacing } from '~/renderer/mixins';
+import { centerIcon } from '~/renderer/mixins';
 import { ICON_ARROW_RIGHT } from '~/renderer/constants/icons';
 
 export const Line = styled.div`
@@ -19,9 +19,8 @@ export const MenuItem = styled.div`
   align-items: center;
   display: flex;
   position: relative;
-  padding: 0 16px;
+  padding: 0 12px;
   font-size: 12px;
-  letter-spacing: ${getLetterSpacing(12, 0.1)}rem;
 
   ${({ arrow }: { arrow?: boolean }) =>
     arrow &&
@@ -55,12 +54,10 @@ export const MenuItemTitle = styled.div`
 `;
 
 export const MenuItems = styled.div`
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
   flex: 1;
   overflow: hidden;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 
   ${({ theme }: { theme?: ITheme }) => css`
     background-color: ${theme['dialog.backgroundColor']};
@@ -75,7 +72,7 @@ export const Content = styled.div`
 `;
 
 export const Icon = styled.div`
-  margin-right: 16px;
+  margin-right: 12px;
   width: 20px;
   height: 20px;
   ${centerIcon()};

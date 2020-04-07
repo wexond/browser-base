@@ -126,6 +126,6 @@ export const ToolbarButton = observer(
   autoInvert: true,
   badgeBackground: BLUE_500,
   badgeTextColor: 'white',
-  badgeTop: 6,
+  badgeTop: 4,
   badgeRight: 4,
 };

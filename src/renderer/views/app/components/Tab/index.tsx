@@ -15,7 +15,7 @@ import store from '../../store';
 import { remote, ipcRenderer } from 'electron';
 import { ICON_MUTE } from '~/renderer/constants/icons';
 
-const removeTab = (tab: ITab) => (e: React.MouseEvent) => {
+const removeTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
   tab.close();
 };
@@ -191,7 +191,7 @@ const onContextMenu = (tab: ITab) => () => {
 
 const Content = observer(({ tab }: { tab: ITab }) => {
   return (
-    <StyledContent collapsed={tab.isExpanded} pinned={tab.isPinned}>
+    <StyledContent>
       {!tab.loading && tab.favicon !== '' && (
         <StyledIcon
           isIconSet={tab.favicon !== ''}
@@ -213,6 +213,7 @@ const Content = observer(({ tab }: { tab: ITab }) => {
           {tab.title}
         </StyledTitle>
       )}
+      <Close tab={tab} />
     </StyledContent>
   );
 });
@@ -273,7 +274,6 @@ export default observer(({ tab }: { tab: ITab }) => {
             }}
           />
         )}
-        <Close tab={tab} />
       </TabContainer>
     </StyledTab>
   );

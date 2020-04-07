@@ -1,17 +1,15 @@
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 
-import { Style } from '../../style';
 import { Button } from '~/renderer/components/Button';
 import store from '../../store';
 import { Textfield } from '~/renderer/components/Textfield';
 import { PasswordInput } from '~/renderer/components/PasswordInput';
 import { StyledApp, Title, Buttons, Subtitle } from './style';
-
-const GlobalStyle = createGlobalStyle`${Style}`;
+import { UIStyle } from '~/renderer/mixins/default-styles';
 
 const ref1 = React.createRef<Textfield>();
 const ref2 = React.createRef<PasswordInput>();
@@ -36,7 +34,7 @@ export const App = hot(
         theme={{ ...store.theme, dark: store.theme['dialog.lightForeground'] }}
       >
         <StyledApp>
-          <GlobalStyle />
+          <UIStyle />
           <Title>Login</Title>
           <Subtitle>{store.url}</Subtitle>
           <Textfield

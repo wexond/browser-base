@@ -34,17 +34,17 @@ export class PermissionsDialog extends Dialog {
         return reject('Unknown permission');
       }
 
-      this.tabId = tabId;
+      this.tabIds.push(tabId);
 
       this.show();
 
-      this.webContents.send('request-permission', { name, url, details });
+      this.send('request-permission', { name, url, details });
 
       ipcMain.once(
         `request-permission-result-${this.appWindow.id}`,
         (e, r: boolean) => {
           resolve(r);
-          this.tabId = -1;
+          this.tabIds = this.tabIds.filter((x) => x !== tabId);
           this.hide();
         },
       );

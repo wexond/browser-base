@@ -8,5 +8,4 @@ export type TabEvent =
   | 'pinned'
   | 'credentials'
   | 'blocked-ad'
-  | 'find-info-updated'
   | 'zoom-updated';

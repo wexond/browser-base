@@ -1,9 +1,5 @@
 import { AppWindow } from '../windows';
-import {
-  MENU_WIDTH,
-  TITLEBAR_HEIGHT,
-  DIALOG_MARGIN_TOP,
-} from '~/constants/design';
+import { MENU_WIDTH, TITLEBAR_HEIGHT } from '~/constants/design';
 import { Dialog } from '.';
 
 const WIDTH = MENU_WIDTH;
@@ -19,7 +15,7 @@ export class PreviewDialog extends Dialog {
     super(appWindow, {
       name: 'preview',
       bounds: {
-        width: appWindow.getBounds().width,
+        width: appWindow.win.getBounds().width,
         height: HEIGHT,
         y: TITLEBAR_HEIGHT,
       },
@@ -28,7 +24,7 @@ export class PreviewDialog extends Dialog {
   }
 
   public rearrange() {
-    const { width } = this.appWindow.getContentBounds();
+    const { width } = this.appWindow.win.getContentBounds();
     super.rearrange({ width });
   }
 
@@ -43,14 +39,13 @@ export class PreviewDialog extends Dialog {
 
     super.show(false);
 
-    const tab = this.appWindow.viewManager.views.get(this.tab.id);
+    const { id, url, title, errorURL } = this.appWindow.viewManager.views.get(
+      this.tab.id,
+    );
 
-    const url = tab.webContents.getURL();
-    const title = tab.webContents.getTitle();
-
-    this.webContents.send('visible', true, {
-      id: tab.id,
-      url: url.startsWith('wexond-error') ? tab.errorURL : url,
+    this.send('visible', true, {
+      id,
+      url: url.startsWith('wexond-error') ? errorURL : url,
       title,
       x: Math.round(this.tab.x - 8),
     });

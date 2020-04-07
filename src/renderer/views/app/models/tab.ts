@@ -53,13 +53,6 @@ export class ITab {
   public url = '';
 
   @observable
-  public findInfo = {
-    occurrences: '0/0',
-    text: '',
-    visible: false,
-  };
-
-  @observable
   public blockedAds = 0;
 
   @observable
@@ -144,9 +137,6 @@ export class ITab {
       store.tabs.selectedTabId = this.id;
 
       ipcRenderer.send(`browserview-show-${store.windowId}`);
-      ipcRenderer.send(`update-find-info-${store.windowId}`, this.id, {
-        ...this.findInfo,
-      });
 
       const focused = this.addressbarFocused;
 
@@ -174,10 +164,10 @@ export class ITab {
     }
 
     if (tabs === null) {
-      tabs = store.tabs.list.filter(x => !x.isClosing);
+      tabs = store.tabs.list.filter((x) => !x.isClosing);
     }
 
-    const pinnedTabs = tabs.filter(x => x.isPinned).length;
+    const pinnedTabs = tabs.filter((x) => x.isPinned).length;
 
     const realTabsLength = tabs.length - pinnedTabs + store.tabs.removedTabs;
 
@@ -198,7 +188,7 @@ export class ITab {
   }
 
   public getLeft(calcNewLeft = false) {
-    const tabs = store.tabs.list.filter(x => !x.isClosing).slice();
+    const tabs = store.tabs.list.filter((x) => !x.isClosing).slice();
 
     const index = tabs.indexOf(this);
 
@@ -221,7 +211,7 @@ export class ITab {
 
     if (this.tabGroup.tabs.length === 1) {
       store.tabGroups.list = store.tabGroups.list.filter(
-        x => x.id !== this.tabGroupId,
+        (x) => x.id !== this.tabGroupId,
       );
     }
 
@@ -253,7 +243,7 @@ export class ITab {
 
     ipcRenderer.send(`view-destroy-${store.windowId}`, this.id);
 
-    const notClosingTabs = store.tabs.list.filter(x => !x.isClosing);
+    const notClosingTabs = store.tabs.list.filter((x) => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
 
     if (notClosingTabs.length === 1) {

@@ -1,15 +1,13 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 
-import { Style } from '../../style';
 import { StyledApp } from './style';
 import store from '../../store';
 import { DownloadItem } from '../DownloadItem';
 import { ipcRenderer } from 'electron';
-
-const GlobalStyle = createGlobalStyle`${Style}`;
+import { UIStyle } from '~/renderer/mixins/default-styles';
 
 export const App = hot(
   observer(() => {
@@ -22,7 +20,7 @@ export const App = hot(
           style={{ maxHeight: store.maxHeight }}
           visible={store.visible}
         >
-          <GlobalStyle />
+          <UIStyle />
           {store.downloads.map(item => (
             <DownloadItem item={item} key={item.id}></DownloadItem>
           ))}

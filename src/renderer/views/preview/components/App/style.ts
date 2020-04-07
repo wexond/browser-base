@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { ITheme } from '~/interfaces';
 import { maxLines } from '~/renderer/mixins';
 import { TAB_MAX_WIDTH } from '~/renderer/views/app/constants/tabs';
-import { DIALOG_TRANSITION, DialogStyle } from '~/renderer/mixins/dialogs';
+import { DialogStyle } from '~/renderer/mixins/dialogs';
 
 export const StyledApp = styled(DialogStyle)`
   margin: 0;
@@ -25,7 +25,6 @@ export const Title = styled.div`
 
 export const Domain = styled.div`
   opacity: 0.7;
-  font-weight: 300;
   line-height: 1.3rem;
 `;
 
