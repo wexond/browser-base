@@ -16,6 +16,8 @@ class AutoFillService {
       if (target.name === 'password') {
         this.passwordRef = target;
         this.active = target.value.length > 0;
+
+        console.log(this.active);
       } else if (target.name === 'username') {
         this.usernameRef = target;
       }

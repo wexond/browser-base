@@ -41,7 +41,7 @@ applyEntries('app', appConfig, [
   'app',
   'permissions',
   'auth',
-  'form-fill',
+  'auto-fill',
   'credentials',
   'find',
   'menu',
