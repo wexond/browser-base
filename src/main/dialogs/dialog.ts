@@ -77,7 +77,7 @@ export class Dialog {
     });
 
     if (process.env.NODE_ENV === 'development') {
-      webContents.loadURL(`http://localhost:4444/${name}.html`);
+      webContents.loadURL(`about:blank`);
       if (devtools) {
         webContents.openDevTools({ mode: 'detach' });
       }
@@ -122,6 +122,14 @@ export class Dialog {
         this.name,
         true,
       );
+
+      if (process.env.NODE_ENV === 'development') {
+        this.webContents.loadURL(`http://localhost:4444/${this.name}.html`);
+      } else {
+        this.webContents.loadURL(
+          join('file://', app.getAppPath(), `build/${this.name}.html`),
+        );
+      }
 
       const callback = () => {
         if (this.visible) {
@@ -170,6 +178,8 @@ export class Dialog {
     if (bringToTop) {
       this.bringToTop();
     }
+
+    this.browserView.webContents.loadURL('about:blank');
 
     clearTimeout(this.timeout);
 

@@ -16,7 +16,7 @@ export class DialogStore {
   private _windowId = -1;
 
   @observable
-  public visible = false;
+  public visible = true;
 
   public firstTime = false;
 
@@ -58,7 +58,10 @@ export class DialogStore {
       });
     }
 
-    ipcRenderer.send('get-settings');
+    this.settings = {
+      ...this.settings,
+      ...ipcRenderer.sendSync('get-settings-sync'),
+    };
 
     ipcRenderer.on('update-settings', (e, settings: ISettings) => {
       this.settings = { ...this.settings, ...settings };
