@@ -4,7 +4,6 @@ import { ipcRenderer } from 'electron';
 import { observable, computed } from 'mobx';
 import { ISuggestion, IVisitedItem } from '~/interfaces';
 import { SuggestionsStore } from './suggestions';
-import { NEWTAB_URL } from '~/constants/tabs';
 import { DialogStore } from '~/models/dialog-store';
 
 let lastSuggestion: string;
@@ -40,11 +39,11 @@ export class Store extends DialogStore {
 
     return this.tabs
       .filter(
-        tab =>
+        (tab) =>
           tab.title.indexOf(this.inputText) !== -1 ||
           tab.url.indexOf(this.inputText) !== -1,
       )
-      .map(tab => ({
+      .map((tab) => ({
         primaryText: tab.url,
         secondaryText: tab.title,
         id: id++,
@@ -74,7 +73,6 @@ export class Store extends DialogStore {
 
       if (visible) {
         this.tabs = [];
-        this.suggestions.list = [];
         this.tabId = data.id;
 
         this.canSuggest = this.inputText.length <= data.text.length;
@@ -142,7 +140,7 @@ export class Store extends DialogStore {
       this.autoComplete(input.value, lastSuggestion);
     }
 
-    suggestions.load(input).then(suggestion => {
+    suggestions.load(input).then((suggestion) => {
       lastSuggestion = suggestion;
       if (this.canSuggest) {
         this.autoComplete(

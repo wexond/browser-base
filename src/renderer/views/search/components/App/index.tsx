@@ -57,10 +57,12 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       suggestions.selected--;
     }
 
-    let suggestion = list.find(x => x.id === suggestions.selected);
+    let suggestion = list.find((x) => x.id === suggestions.selected);
 
     if (!suggestion) {
-      suggestion = store.searchedTabs.find(x => x.id === suggestions.selected);
+      suggestion = store.searchedTabs.find(
+        (x) => x.id === suggestions.selected,
+      );
     }
 
     input.value = suggestion.isSearch ? suggestion.primaryText : suggestion.url;
@@ -135,7 +137,6 @@ export const App = hot(
               onInput={onInput}
               ref={store.inputRef}
               onKeyPress={onKeyPress}
-              placeholder="Search or type in a URL"
             ></Input>
           </SearchBox>
           <Suggestions visible={suggestionsVisible}></Suggestions>

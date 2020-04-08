@@ -1,5 +1,6 @@
-import { BrowserView, app } from 'electron';
+import { BrowserView, app, ipcMain } from 'electron';
 import { join } from 'path';
+import { SearchDialog } from '../dialogs/search';
 
 interface IDialogShowOptions {
   name: string;
@@ -18,12 +19,15 @@ interface IDialog {
 
 export class DialogsService {
   public browserViews: BrowserView[] = [];
+  public browserViewDetails = new Map<number, boolean>();
   public dialogs: IDialog[] = [];
 
+  public searchBox: SearchDialog;
+
   public run() {
-    for (let i = 0; i < 2; i++) {
-      this.createBrowserView();
-    }
+    this.createBrowserView();
+
+    this.searchBox = new SearchDialog();
   }
 
   private createBrowserView() {
@@ -36,7 +40,11 @@ export class DialogsService {
       },
     });
 
+    view.webContents.loadURL(`about:blank`);
+
     this.browserViews.push(view);
+
+    this.browserViewDetails.set(view.id, false);
 
     return view;
   }
@@ -47,14 +55,20 @@ export class DialogsService {
     bounds,
     devtools,
     hideTimeout,
-  }: IDialogShowOptions) {
-    let browserView = this.browserViews.find((x) =>
-      this.dialogs.find((y) => y.browserView !== x),
+  }: IDialogShowOptions): IDialog {
+    const foundDialog = this.dialogs.find((x) => x.name === name);
+    if (foundDialog) return foundDialog;
+
+    let browserView = this.browserViews.find(
+      (x) => !this.browserViewDetails.get(x.id),
     );
 
     if (!browserView) {
       browserView = this.createBrowserView();
     }
+
+    bounds.x = Math.round(bounds.x);
+    bounds.y = Math.round(bounds.y);
 
     browserWindow.addBrowserView(browserView);
     browserView.setBounds(bounds);
@@ -67,8 +81,10 @@ export class DialogsService {
       );
     }
 
+    browserView.webContents.focus();
+
     if (devtools) {
-      browserView.webContents.openDevTools({ mode: 'detach' });
+      // browserView.webContents.openDevTools({ mode: 'detach' });
     }
 
     const dialog = {
@@ -76,6 +92,8 @@ export class DialogsService {
       id: browserView.id,
       name,
       hide: () => {
+        ipcMain.removeAllListeners(`hide-${browserView.webContents.id}`);
+
         this.dialogs = this.dialogs.filter((x) => x.id !== dialog.id);
 
         browserWindow.removeBrowserView(browserView);
@@ -83,11 +101,19 @@ export class DialogsService {
         if (this.browserViews.length > 2) {
           browserView.destroy();
           this.browserViews.splice(2, 1);
+          this.browserViewDetails.delete(browserView.id);
         } else {
           browserView.webContents.loadURL('about:blank');
+          this.browserViewDetails.set(browserView.id, false);
         }
       },
     };
+
+    this.browserViewDetails.set(browserView.id, true);
+
+    ipcMain.on(`hide-${browserView.webContents.id}`, () => {
+      dialog.hide();
+    });
 
     this.dialogs.push(dialog);
 

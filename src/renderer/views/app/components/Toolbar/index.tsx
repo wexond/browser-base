@@ -66,10 +66,11 @@ const showAddBookmarkDialog = async () => {
 };
 
 const showMenuDialog = async () => {
-  if (!(await isDialogVisible('menuDialog'))) {
-    const { right, bottom } = menuRef.getBoundingClientRect();
-    ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right, bottom);
-  }
+  // TODO: dialogs
+  //if (!(await isDialogVisible('menuDialog'))) {
+  const { right, bottom } = menuRef.getBoundingClientRect();
+  ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right, bottom);
+  //}
 };
 
 ipcRenderer.on('show-add-bookmark-dialog', () => {

@@ -88,9 +88,11 @@ export class Settings extends EventEmitter {
     for (const window of Application.instance.windows.list) {
       window.send('update-settings', this.object);
 
+      /*
+      // TODO: dialogs
       Object.values(window.dialogs).forEach((dialog) => {
         dialog.send('update-settings', this.object);
-      });
+      });*/
 
       window.viewManager.views.forEach(async (v) => {
         if (v.webContents.getURL().startsWith(WEBUI_BASE_URL)) {

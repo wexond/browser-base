@@ -130,7 +130,7 @@ export class ViewManager {
       this.window.webContents.focus();
     }
 
-    this.window.dialogs.previewDialog.hide(true);
+    /*this.window.dialogs.previewDialog.hide(true);
 
     [
       'findDialog',
@@ -145,7 +145,7 @@ export class ViewManager {
       } else {
         this.window.dialogs[dialog].hide();
       }
-    });
+    });*/
 
     this.window.updateTitle();
     view.updateBookmark();

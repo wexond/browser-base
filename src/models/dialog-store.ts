@@ -16,7 +16,7 @@ export class DialogStore {
   private _windowId = -1;
 
   @observable
-  public visible = true;
+  public visible = false;
 
   public firstTime = false;
 
@@ -33,12 +33,13 @@ export class DialogStore {
     };
     if (visibilityWrapper) {
       ipcRenderer.on('visible', async (e, flag, ...args) => {
-        if (!this.firstTime) {
+        // TODO: diaogs
+        /*if (!this.firstTime) {
           requestAnimationFrame(() => {
             this.visible = true;
 
             setTimeout(() => {
-              this.visible = false;
+              this.visible = true;
 
               setTimeout(() => {
                 this.onVisibilityChange(flag, ...args);
@@ -48,7 +49,9 @@ export class DialogStore {
           this.firstTime = true;
         } else {
           this.onVisibilityChange(flag, ...args);
-        }
+        }*/
+
+        this.onVisibilityChange(flag, ...args);
       });
     }
 
@@ -86,8 +89,9 @@ export class DialogStore {
   public hide(data: any = null) {
     if (this.visible) {
       this.visible = false;
-      this.onHide(data);
+
       setTimeout(() => {
+        this.onHide(data);
         ipcRenderer.send(`hide-${this.id}`);
       });
     }

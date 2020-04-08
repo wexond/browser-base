@@ -5,42 +5,8 @@ import { resolve, join } from 'path';
 import { getPath } from '~/utils';
 import { runMessagingService } from '../services';
 import { Application } from '../application';
-import {
-  MenuDialog,
-  SearchDialog,
-  FindDialog,
-  PermissionsDialog,
-  AuthDialog,
-  FormFillDialog,
-  CredentialsDialog,
-  PreviewDialog,
-  TabGroupDialog,
-  DownloadsDialog,
-  AddBookmarkDialog,
-  Dialog,
-  ExtensionPopup,
-} from '../dialogs';
 import { isNightly } from '..';
 import { ViewManager } from '../view-manager';
-
-interface IDialogs {
-  searchDialog?: SearchDialog;
-  previewDialog?: PreviewDialog;
-
-  tabGroupDialog?: TabGroupDialog;
-  menuDialog?: MenuDialog;
-  findDialog?: FindDialog;
-  downloadsDialog?: DownloadsDialog;
-  addBookmarkDialog?: AddBookmarkDialog;
-
-  permissionsDialog?: PermissionsDialog;
-  authDialog?: AuthDialog;
-  formFillDialog?: FormFillDialog;
-  credentialsDialog?: CredentialsDialog;
-  extensionPopup?: ExtensionPopup;
-
-  [key: string]: Dialog;
-}
 
 export class AppWindow {
   public win: BrowserWindow;
@@ -48,10 +14,6 @@ export class AppWindow {
   public viewManager: ViewManager;
 
   public incognito: boolean;
-
-  public dialogs: IDialogs = {
-    searchDialog: new SearchDialog(this),
-  };
 
   public constructor(incognito: boolean) {
     this.win = new BrowserWindow({
@@ -79,22 +41,6 @@ export class AppWindow {
     this.incognito = incognito;
 
     this.viewManager = new ViewManager(this, incognito);
-
-    this.webContents.once('dom-ready', () => {
-      this.dialogs.previewDialog = new PreviewDialog(this);
-
-      this.dialogs.tabGroupDialog = new TabGroupDialog(this);
-      this.dialogs.menuDialog = new MenuDialog(this);
-      this.dialogs.findDialog = new FindDialog(this);
-      this.dialogs.downloadsDialog = new DownloadsDialog(this);
-      this.dialogs.addBookmarkDialog = new AddBookmarkDialog(this);
-
-      this.dialogs.permissionsDialog = new PermissionsDialog(this);
-      this.dialogs.authDialog = new AuthDialog(this);
-      this.dialogs.formFillDialog = new FormFillDialog(this);
-      this.dialogs.credentialsDialog = new CredentialsDialog(this);
-      this.dialogs.extensionPopup = new ExtensionPopup(this);
-    });
 
     runMessagingService(this);
 
@@ -135,11 +81,11 @@ export class AppWindow {
         windowState.bounds = this.win.getBounds();
       }
 
-      Object.values(this.dialogs).forEach((dialog) => {
+      /*Object.values(this.dialogs).forEach((dialog) => {
         if (dialog.visible) {
           dialog.rearrange();
         }
-      });
+      });*/
     });
 
     this.win.on('move', () => {
@@ -193,12 +139,12 @@ export class AppWindow {
 
       this.win.setBrowserView(null);
 
-      Object.keys(this.dialogs).forEach((key) => {
+      /*Object.keys(this.dialogs).forEach((key) => {
         if (this.dialogs[key]) {
           this.dialogs[key].destroy();
         }
         this.dialogs[key] = null;
-      });
+      });*/
 
       this.viewManager.clear();
 

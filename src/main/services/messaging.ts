@@ -1,10 +1,5 @@
 import { ipcMain } from 'electron';
-import { parse } from 'url';
-import { setPassword, deletePassword, getPassword } from 'keytar';
-
-import { IFormFillData } from '~/interfaces';
 import { AppWindow } from '../windows';
-import { getFormFillMenuItems } from '../utils';
 import { Application } from '../application';
 
 export const runMessagingService = (appWindow: AppWindow) => {
@@ -35,7 +30,26 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.fixDragging();
   });
 
-  ipcMain.on(`find-show-${id}`, () => {
+  ipcMain.on(`show-menu-dialog-${id}`, (e, left, top) => {
+    Application.instance.dialogs.show({
+      name: 'menu',
+      browserWindow: appWindow.win,
+      bounds: {
+        width: 400,
+        height: 600,
+        x: left - 400,
+        y: top,
+      },
+      devtools: true,
+    });
+  });
+
+  ipcMain.on(`search-show-${id}`, (e, data) => {
+    Application.instance.dialogs.searchBox.data = data;
+    Application.instance.dialogs.searchBox.show(appWindow.win);
+  });
+
+  /*ipcMain.on(`find-show-${id}`, () => {
     appWindow.dialogs.findDialog.show();
   });
 
@@ -96,7 +110,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
 
   ipcMain.on(`edit-tabgroup-${id}`, (e, tabGroup) => {
     appWindow.send(`edit-tabgroup`, tabGroup);
-  });
+  });*/
 
   ipcMain.on(`is-incognito-${id}`, (e) => {
     e.returnValue = appWindow.incognito;
