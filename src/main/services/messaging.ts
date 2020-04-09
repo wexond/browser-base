@@ -1,6 +1,8 @@
 import { ipcMain } from 'electron';
 import { AppWindow } from '../windows';
 import { Application } from '../application';
+import { DIALOG_MARGIN_TOP, DIALOG_MARGIN } from '~/constants/design';
+import { showMenuDialog } from '../dialogs/menu';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -30,18 +32,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.fixDragging();
   });
 
-  ipcMain.on(`show-menu-dialog-${id}`, (e, left, top) => {
-    Application.instance.dialogs.show({
-      name: 'menu',
-      browserWindow: appWindow.win,
-      bounds: {
-        width: 400,
-        height: 600,
-        x: left - 400,
-        y: top,
-      },
-      devtools: true,
-    });
+  ipcMain.on(`show-menu-dialog-${id}`, (e, x, y) => {
+    showMenuDialog(appWindow.win, x, y);
   });
 
   ipcMain.on(`search-show-${id}`, (e, data) => {

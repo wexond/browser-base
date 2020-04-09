@@ -12,6 +12,10 @@ export class Store extends DialogStore {
   public constructor() {
     super();
 
+    requestAnimationFrame(() => {
+      this.visible = true;
+    });
+
     ipcRenderer.on('update-available', () => {
       this.updateAvailable = true;
     });
