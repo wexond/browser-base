@@ -41,6 +41,10 @@ export const runMessagingService = (appWindow: AppWindow) => {
     Application.instance.dialogs.searchBox.show(appWindow.win);
   });
 
+  ipcMain.handle(`is-dialog-visible-${id}`, (e, dialog) => {
+    return Application.instance.dialogs.isVisible(dialog);
+  });
+
   /*ipcMain.on(`find-show-${id}`, () => {
     appWindow.dialogs.findDialog.show();
   });
@@ -49,10 +53,6 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.menuDialog.left = left;
     appWindow.dialogs.menuDialog.top = top;
     appWindow.dialogs.menuDialog.show();
-  });
-
-  ipcMain.handle(`is-dialog-visible-${id}`, (e, dialog) => {
-    return appWindow.dialogs[dialog].visible;
   });
 
   ipcMain.on(`search-show-${id}`, (e, data) => {

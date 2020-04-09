@@ -67,6 +67,8 @@ export class DialogsService {
       browserView = this.createBrowserView();
     }
 
+    browserWindow.webContents.send('dialog-visibility-change', name, true);
+
     bounds.x = Math.round(bounds.x);
     bounds.y = Math.round(bounds.y);
 
@@ -92,6 +94,8 @@ export class DialogsService {
       id: browserView.id,
       name,
       hide: () => {
+        browserWindow.webContents.send('dialog-visibility-change', name, false);
+
         ipcMain.removeAllListeners(`hide-${browserView.webContents.id}`);
 
         this.dialogs = this.dialogs.filter((x) => x.id !== dialog.id);
@@ -130,5 +134,9 @@ export class DialogsService {
 
   public sendToAll = (channel: string, ...args: any[]) => {
     this.getBrowserViews().forEach((x) => x.webContents.send(channel, ...args));
+  };
+
+  public isVisible = (name: string) => {
+    return this.dialogs.find((x) => x.name === name);
   };
 }
