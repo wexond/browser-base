@@ -119,4 +119,16 @@ export class DialogsService {
 
     return dialog;
   }
+
+  public getBrowserViews = () => {
+    return this.browserViews.concat([this.searchBox.browserView]);
+  };
+
+  public destroy = () => {
+    this.getBrowserViews().forEach((x) => x.destroy());
+  };
+
+  public sendToAll = (channel: string, ...args: any[]) => {
+    this.getBrowserViews().forEach((x) => x.webContents.send(channel, ...args));
+  };
 }

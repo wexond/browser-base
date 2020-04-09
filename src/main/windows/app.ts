@@ -139,12 +139,7 @@ export class AppWindow {
 
       this.win.setBrowserView(null);
 
-      /*Object.keys(this.dialogs).forEach((key) => {
-        if (this.dialogs[key]) {
-          this.dialogs[key].destroy();
-        }
-        this.dialogs[key] = null;
-      });*/
+      Application.instance.dialogs.destroy();
 
       this.viewManager.clear();
 

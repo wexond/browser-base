@@ -130,7 +130,9 @@ export class ViewManager {
       this.window.webContents.focus();
     }
 
-    /*this.window.dialogs.previewDialog.hide(true);
+    /*
+    TODO: dialogs
+    this.window.dialogs.previewDialog.hide(true);
 
     [
       'findDialog',
