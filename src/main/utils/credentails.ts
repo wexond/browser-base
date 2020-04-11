@@ -1,3 +1,9 @@
+const getService = (hostname: string, username: string) => {
+  return `${hostname}-${username}`;
+};
+
+export const getPassword = () => {};
+
 // import { parse } from 'url';
 
 // import { IFormFillData } from '~/interfaces';

@@ -9,6 +9,7 @@ import { WindowsService } from './windows-service';
 import { StorageService } from './services/storage';
 import { getMainMenu } from './menus/main';
 import { runAutoUpdaterService } from './services';
+import { AutoFillService } from './services/auto-fill';
 
 export class Application {
   public static instance = new Application();
@@ -20,6 +21,8 @@ export class Application {
   public storage = new StorageService();
 
   public windows = new WindowsService();
+
+  public autoFill = new AutoFillService();
 
   public start() {
     const gotTheLock = app.requestSingleInstanceLock();
@@ -92,7 +95,7 @@ export class Application {
     runAutoUpdaterService();
 
     app.on('activate', () => {
-      if (this.windows.list.filter((x) => x !== null).length === 0) {
+      if (this.windows.list.filter(x => x !== null).length === 0) {
         this.windows.open();
       }
     });

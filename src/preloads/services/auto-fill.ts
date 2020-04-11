@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 
 import { windowId, tabId } from '../view-preload';
+import { IAutoFillCredentialsData } from '~/interfaces';
 
 class AutoFillService {
   private active = false;
@@ -8,6 +9,21 @@ class AutoFillService {
   private usernameRef: HTMLInputElement;
 
   private passwordRef: HTMLInputElement;
+
+  constructor() {
+    ipcRenderer.on(
+      'credentials-inject',
+      (e, data: IAutoFillCredentialsData) => {
+        if (data == null) return null;
+
+        requestAnimationFrame(() => {
+          const input = document.querySelector('input[name="username"]');
+
+          input.value = data.username;
+        });
+      },
+    );
+  }
 
   public init() {
     window.addEventListener('keyup', this.onKeyUp);

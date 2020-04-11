@@ -7,7 +7,7 @@ import store from '../../store';
 import { Button } from '~/renderer/components/Button';
 import List from '../List';
 import { BLUE_500 } from '~/renderer/constants';
-import { IAutoFillSavePayload } from '~/interfaces';
+import { IAutoFillCredentialsData } from '~/interfaces';
 import { UIStyle } from '~/renderer/mixins/default-styles';
 import { StyledApp, Title, Buttons, Container } from './style';
 
@@ -17,12 +17,17 @@ const onSave = () => {
 
   ipcRenderer.send(`credentials-dialog-hide-${store.windowId}`);
 
-  ipcRenderer.send(`credentials-save-${store.windowId}`, {
-    username,
-    password,
-    update: store.content === 'update',
-    oldUsername: store.oldUsername,
-  } as IAutoFillSavePayload);
+  const data: IAutoFillCredentialsData = { username, password };
+
+  if (store.content === 'save') {
+    ipcRenderer.send(`credentials-save-${store.windowId}`, data);
+  } else {
+    ipcRenderer.send(
+      `credentials-update-${store.windowId}`,
+      data,
+      store.oldUsername,
+    );
+  }
 };
 
 const onClose = () => {
