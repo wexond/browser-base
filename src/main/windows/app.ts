@@ -35,7 +35,7 @@ interface IDialogs {
 
   permissionsDialog?: PermissionsDialog;
   authDialog?: AuthDialog;
-  formFillDialog?: AutoFillDialog;
+  autoFillDialog?: AutoFillDialog;
   credentialsDialog?: CredentialsDialog;
   extensionPopup?: ExtensionPopup;
 
@@ -91,7 +91,7 @@ export class AppWindow {
 
       this.dialogs.permissionsDialog = new PermissionsDialog(this);
       this.dialogs.authDialog = new AuthDialog(this);
-      this.dialogs.formFillDialog = new AutoFillDialog(this);
+      this.dialogs.autoFillDialog = new AutoFillDialog(this);
       this.dialogs.credentialsDialog = new CredentialsDialog(this);
       this.dialogs.extensionPopup = new ExtensionPopup(this);
     });

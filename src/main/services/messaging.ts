@@ -2,7 +2,7 @@ import { ipcMain } from 'electron';
 
 import { AppWindow } from '../windows';
 import { Application } from '../application';
-import { IAutoFillCredentialsData } from '~/interfaces';
+import { IAutoFillCredentialsData, IAutoFillMenuPosition } from '~/interfaces';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -146,4 +146,33 @@ export const runMessagingService = (appWindow: AppWindow) => {
       );
     },
   );
+
+  ipcMain.on(
+    `auto-fill-show-${id}`,
+    async (e, pos: IAutoFillMenuPosition, name: string, value: string) => {
+      const view = appWindow.viewManager.selected;
+      const hostname = view.hostname;
+
+      const items = await Application.instance.autoFill.getMenuItems(
+        hostname,
+        name,
+        value,
+      );
+
+      if (items.length) {
+        appWindow.dialogs.autoFillDialog.send(`auto-fill-menu-items`, items);
+
+        appWindow.dialogs.autoFillDialog.resize(
+          items.length,
+          items.find(r => r.sublabel) != null,
+        );
+
+        appWindow.dialogs.autoFillDialog.showAtPos(pos);
+      }
+    },
+  );
+
+  ipcMain.on(`auto-fill-hide-${id}`, () => {
+    appWindow.dialogs.autoFillDialog.hide();
+  });
 };

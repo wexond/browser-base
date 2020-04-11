@@ -23,3 +23,16 @@ export interface IAutoFillAddressData {
   phone?: string;
   email?: string;
 }
+
+export interface IAutoFillMenuItem {
+  id?: string;
+  label?: string;
+  sublabel?: string;
+  favicon?: any;
+}
+
+export interface IAutoFillMenuPosition {
+  height: number;
+  x: number;
+  y: number;
+}

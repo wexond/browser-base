@@ -3,7 +3,8 @@ import { getPassword, setPassword, deletePassword } from 'keytar';
 import {
   IAutoFillItem,
   IAutoFillCredentialsData,
-  IAutoFillSavePayload,
+  IAutoFillMenuItem,
+  IAutoFillType,
 } from '~/interfaces';
 import { Application } from '../application';
 
@@ -73,5 +74,36 @@ export class AutoFillService {
     }
 
     await setPassword(`wexond`, `${hostname}-${username}`, password);
+  }
+
+  public async getMenuItems(
+    hostname: string,
+    name: string,
+    value: string,
+  ): Promise<IAutoFillMenuItem[]> {
+    const res = await Application.instance.storage.find<IAutoFillItem>({
+      scope: 'formfill',
+      query: {
+        type: this.getType(name),
+        url: hostname,
+      } as IAutoFillItem,
+    });
+
+    return [{ label: 'user@wexond.net', sublabel: '*****', id: '1' }];
+
+    // return res.map(r => {
+    //   return {
+
+    //   };
+    // });
+  }
+
+  private getType(name: string): IAutoFillType {
+    return name === 'username' ||
+      name === 'login' ||
+      name === 'email' ||
+      name === 'password'
+      ? 'password'
+      : 'address';
   }
 }

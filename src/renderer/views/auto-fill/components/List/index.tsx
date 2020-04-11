@@ -4,7 +4,8 @@ import { observer } from 'mobx-react-lite';
 
 import store from '../../store';
 // import { IFormFillMenuItem } from '~/interfaces';
-import { StyledList, StyledItem, Text, SubText } from './styles';
+import { IAutoFillMenuItem } from '~/interfaces';
+import { StyledList, StyledItem, Text, SubText } from './style';
 
 // const onClick = (data: IFormFillMenuItem) => () => {
 //   ipcRenderer.send(`form-fill-update-${store.windowId}`, data._id, true);
@@ -24,11 +25,11 @@ import { StyledList, StyledItem, Text, SubText } from './styles';
       onMouseEnter={onMouseEnter(data)}
       onMouseLeave={onMouseLeave}
       */
-const Item = observer(({ data }: { data: any }) => {
+const Item = observer(({ data }: { data: IAutoFillMenuItem }) => {
   return (
-    <StyledItem subtext={!!data.subtext}>
-      <Text>{data.text}</Text>
-      <SubText>{data.subtext}</SubText>
+    <StyledItem subtext={!!data.sublabel}>
+      <Text>{data.label}</Text>
+      <SubText>{data.sublabel}</SubText>
     </StyledItem>
   );
 });
@@ -37,7 +38,7 @@ export default observer(() => {
   return (
     <StyledList>
       {store.items.map(item => (
-        <Item key={item._id} data={item} />
+        <Item key={item.id} data={item} />
       ))}
     </StyledList>
   );

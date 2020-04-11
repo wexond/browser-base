@@ -2,18 +2,19 @@ import { ipcRenderer } from 'electron';
 import { observable } from 'mobx';
 
 import { DialogStore } from '~/models/dialog-store';
+import { IAutoFillMenuItem } from '~/interfaces';
 
 export class Store extends DialogStore {
-  public items: any[] = [];
+  @observable
+  public items: IAutoFillMenuItem[] = [];
 
-  // @observable
-  // public items: IFormFillMenuItem[] = [];
-  // public constructor() {
-  //   super({ hideOnBlur: false });
-  //   ipcRenderer.on(`formfill-get-items`, (e, items) => {
-  //     this.items = items;
-  //   });
-  // }
+  constructor() {
+    super({ hideOnBlur: false });
+
+    ipcRenderer.on(`auto-fill-menu-items`, (e, items: IAutoFillMenuItem[]) => {
+      this.items = items;
+    });
+  }
 }
 
 export default new Store();

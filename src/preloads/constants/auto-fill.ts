@@ -1,4 +1,4 @@
-export const AUTOFILL_FIELD_FILTER = [
+export const AUTOFILL_FIELDS = [
   'login',
   'username',
   'email',

@@ -37,7 +37,7 @@ const onClose = () => {
 const Fields = observer(() => {
   return (
     <div style={{ display: store.content !== 'list' ? 'block' : 'none' }}>
-      <input ref={store.usernameRef} label="Username" />
+      <input ref={store.usernameRef} name="username" />
       <input ref={store.passwordRef} type="password" />
     </div>
   );
