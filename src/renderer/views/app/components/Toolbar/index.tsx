@@ -96,7 +96,7 @@ const BrowserActions = observer(() => {
   return (
     <>
       {selectedTabId &&
-        store.extensions.browserActions.map(item => {
+        store.extensions.browserActions.map((item) => {
           if (item.tabId === selectedTabId) {
             return <BrowserAction data={item} key={item.extensionId} />;
           }
@@ -106,7 +106,7 @@ const BrowserActions = observer(() => {
   );
 });
 
-const onShieldContextMenu = () => {
+const onShieldContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
   const menu = remote.Menu.buildFromTemplate([
     {
       checked: store.settings.object.shield,
@@ -160,7 +160,7 @@ const RightButtons = observer(() => {
       )}
       {store.isIncognito && <ToolbarButton icon={ICON_INCOGNITO} size={18} />}
       <ToolbarButton
-        divRef={r => (menuRef = r)}
+        divRef={(r) => (menuRef = r)}
         toggled={store.dialogsVisibility['menu']}
         badge={store.updateAvailable}
         badgeRight={10}
@@ -318,7 +318,7 @@ export const Toolbar = observer(() => {
           <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
         )}
         <ToolbarButton
-          divRef={r => (starRef = r)}
+          divRef={(r) => (starRef = r)}
           toggled={store.dialogsVisibility['add-bookmark']}
           icon={store.isBookmarked ? ICON_STAR_FILLED : ICON_STAR}
           size={18}

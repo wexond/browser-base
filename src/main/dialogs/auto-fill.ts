@@ -1,7 +1,6 @@
 import { VIEW_Y_OFFSET, DIALOG_MARGIN_TOP } from '~/constants/design';
 import { Dialog } from './dialog';
 import { AppWindow } from '../windows';
-import { IAutoFillMenuPosition } from '~/interfaces';
 
 const WIDTH = 208;
 const HEIGHT = 128;

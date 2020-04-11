@@ -74,7 +74,7 @@ export class ViewManager {
   }
 
   public get settingsView() {
-    return Object.values(this.views).find(r =>
+    return Object.values(this.views).find((r) =>
       r.url.startsWith(`${WEBUI_BASE_URL}settings`),
     );
   }
@@ -104,7 +104,7 @@ export class ViewManager {
 
   public clear() {
     this.window.win.setBrowserView(null);
-    Object.values(this.views).forEach(x => x.destroy());
+    Object.values(this.views).forEach((x) => x.destroy());
   }
 
   public select(id: number, focus = true) {
@@ -138,7 +138,7 @@ export class ViewManager {
       'permissionsDialog',
       'autoFillDialog',
       'credentialsDialog',
-    ].forEach(dialog => {
+    ].forEach((dialog) => {
       if (this.window.dialogs[dialog].tabIds.includes(id)) {
         this.window.dialogs[dialog].show();
         this.window.dialogs[dialog].bringToTop();

@@ -95,7 +95,7 @@ export class Application {
     runAutoUpdaterService();
 
     app.on('activate', () => {
-      if (this.windows.list.filter(x => x !== null).length === 0) {
+      if (this.windows.list.filter((x) => x !== null).length === 0) {
         this.windows.open();
       }
     });

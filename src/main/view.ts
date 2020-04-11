@@ -2,7 +2,7 @@ import { BrowserView, app, ipcMain } from 'electron';
 import { parse as parseUrl } from 'url';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
-import { IHistoryItem, IBookmark, IAutoFillItem } from '~/interfaces';
+import { IHistoryItem, IBookmark } from '~/interfaces';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { NEWTAB_URL } from '~/constants/tabs';
 import {
@@ -73,7 +73,7 @@ export class View {
       },
     );
 
-    ipcMain.handle(`get-error-url-${this.id}`, async e => {
+    ipcMain.handle(`get-error-url-${this.id}`, async (e) => {
       return this.errorURL;
     });
 
@@ -338,7 +338,7 @@ export class View {
 
   public updateBookmark() {
     this.bookmark = Application.instance.storage.bookmarks.find(
-      x => x.url === this.url,
+      (x) => x.url === this.url,
     );
 
     if (!this.isSelected) return;
@@ -367,7 +367,7 @@ export class View {
           });
 
           const item = Application.instance.storage.history.find(
-            x => x._id === id,
+            (x) => x._id === id,
           );
 
           if (item) {
