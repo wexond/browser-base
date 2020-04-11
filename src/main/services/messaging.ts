@@ -1,16 +1,8 @@
 import { ipcMain } from 'electron';
-import { parse } from 'url';
-import { setPassword, deletePassword, getPassword } from 'keytar';
 
-// import { IFormFillData } from '~/interfaces';
 import { AppWindow } from '../windows';
-// import { getFormFillMenuItems } from '../utils';
 import { Application } from '../application';
-import {
-  IAutoFillItem,
-  IAutoFillSavePayload,
-  IAutoFillCredentialsData,
-} from '~/interfaces';
+import { IAutoFillCredentialsData } from '~/interfaces';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
