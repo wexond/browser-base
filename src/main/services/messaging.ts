@@ -6,6 +6,7 @@ import { setPassword, deletePassword, getPassword } from 'keytar';
 import { AppWindow } from '../windows';
 // import { getFormFillMenuItems } from '../utils';
 import { Application } from '../application';
+import { IAutoFillItem, IAutoFillSavePayload } from '~/interfaces';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -116,18 +117,69 @@ export const runMessagingService = (appWindow: AppWindow) => {
     },
   );
 
-  ipcMain.on(`credentials-dialog-toggle-${id}`, (e, visible: boolean) => {
+  ipcMain.on(`credentials-dialog-show-${id}`, () => {
     const dialog = appWindow.dialogs.credentialsDialog;
-    const show = visible == null ? !dialog.visible : visible;
 
-    if (show) {
-      dialog.send('show');
-      dialog.rearrange();
-      dialog.show();
-    } else {
-      dialog.hide();
-    }
+    dialog.send('show');
+    dialog.rearrange();
+    dialog.show();
   });
+
+  ipcMain.on(`credentials-dialog-hide-${id}`, () => {
+    appWindow.dialogs.credentialsDialog.hide();
+  });
+
+  ipcMain.on(
+    `credentials-save-${id}`,
+    async (e, data: IAutoFillSavePayload) => {
+      const { username, password, update, oldUsername } = data;
+      const view = appWindow.viewManager.selected;
+      const hostname = view.hostname;
+
+      if (!update) {
+        const item: IAutoFillItem = {
+          type: 'password',
+          data: {
+            url: hostname,
+            username,
+          },
+          favicon: appWindow.viewManager.selected.favicon,
+        };
+
+        const res = await Application.instance.storage.insert<IAutoFillItem>({
+          scope: 'formfill',
+          item,
+        });
+
+        appWindow.viewManager.settingsView.webContents.send(
+          'credentials-insert',
+          res,
+        );
+      } else {
+        await Application.instance.storage.update({
+          scope: 'formfill',
+          query: {
+            type: 'password',
+            url: hostname,
+            'fields.username': oldUsername,
+            'fields.passLength': password.length,
+          },
+          value: {
+            'fields.username': username,
+          },
+        });
+
+        appWindow.viewManager.settingsView.webContents.send(
+          'credentials-update',
+          { ...data, hostname },
+        );
+      }
+
+      await setPassword('wexond', `${hostname}-${username}`, password);
+
+      appWindow.send(`has-credentials-${view.id}`, true);
+    },
+  );
 
   /*
   TODO:

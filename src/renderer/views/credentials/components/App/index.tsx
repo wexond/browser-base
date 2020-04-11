@@ -4,37 +4,36 @@ import { observer } from 'mobx-react-lite';
 import { hot } from 'react-hot-loader/root';
 
 import store from '../../store';
-import { Textfield } from '~/renderer/components/Textfield';
-import { PasswordInput } from '~/renderer/components/PasswordInput';
 import { Button } from '~/renderer/components/Button';
 import List from '../List';
 import { BLUE_500 } from '~/renderer/constants';
-import { StyledApp, Title, Buttons, Container } from './style';
+import { IAutoFillSavePayload } from '~/interfaces';
 import { UIStyle } from '~/renderer/mixins/default-styles';
+import { StyledApp, Title, Buttons, Container } from './style';
 
 const onSave = () => {
   const username = store.usernameRef.current.value.trim();
   const password = store.passwordRef.current.value.trim();
 
-  ipcRenderer.send(`credentials-hide-${store.windowId}`);
+  ipcRenderer.send(`credentials-dialog-hide-${store.windowId}`);
 
   ipcRenderer.send(`credentials-save-${store.windowId}`, {
     username,
     password,
     update: store.content === 'update',
     oldUsername: store.oldUsername,
-  });
+  } as IAutoFillSavePayload);
 };
 
 const onClose = () => {
-  ipcRenderer.send(`credentials-hide-${store.windowId}`);
+  ipcRenderer.send(`credentials-dialog-hide-${store.windowId}`);
 };
 
 const Fields = observer(() => {
   return (
     <div style={{ display: store.content !== 'list' ? 'block' : 'none' }}>
-      <Textfield ref={store.usernameRef} label="Username" />
-      <PasswordInput ref={store.passwordRef} />
+      <input ref={store.usernameRef} label="Username" />
+      <input ref={store.passwordRef} type="password" />
     </div>
   );
 });

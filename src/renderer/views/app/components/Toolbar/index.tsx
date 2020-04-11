@@ -40,7 +40,7 @@ const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
 };
 
 const onKeyClick = () => {
-  ipcRenderer.send(`credentials-dialog-toggle-${store.windowId}`);
+  ipcRenderer.send(`credentials-dialog-show-${store.windowId}`);
 
   // const { hostname } = parse(store.tabs.selectedTab.url);
   // const list = store.autoFill.credentials.filter(

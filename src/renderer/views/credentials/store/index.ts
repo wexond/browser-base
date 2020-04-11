@@ -2,9 +2,6 @@ import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import { observable } from 'mobx';
 
-import { Textfield } from '~/renderer/components/Textfield';
-import { PasswordInput } from '~/renderer/components/PasswordInput';
-// import { IFormFillData } from '~/interfaces';
 import { DialogStore } from '~/models/dialog-store';
 
 export class Store extends DialogStore {
@@ -14,9 +11,9 @@ export class Store extends DialogStore {
   @observable
   public list: any[] = [];
 
-  public usernameRef = React.createRef<Textfield>();
+  public usernameRef = React.createRef<HTMLInputElement>();
 
-  public passwordRef = React.createRef<PasswordInput>();
+  public passwordRef = React.createRef<HTMLInputElement>();
 
   public oldUsername: string;
 
