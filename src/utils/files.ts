@@ -10,7 +10,7 @@ export const checkFiles = () => {
     }
   }
 
-  Object.keys(FILES).forEach(key => {
+  Object.keys(FILES).forEach((key) => {
     const defaultContent = (FILES as any)[key];
     const path = getPath(key);
 
@@ -21,8 +21,8 @@ export const checkFiles = () => {
 };
 
 export const pathExists = (path: string) => {
-  return new Promise(resolve => {
-    stat(path, error => {
+  return new Promise((resolve) => {
+    stat(path, (error) => {
       resolve(!error);
     });
   });

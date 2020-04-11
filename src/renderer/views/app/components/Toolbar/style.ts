@@ -103,13 +103,13 @@ export const AddressbarInput = styled.input`
     }
 
     ${theme['searchBox.lightForeground'] &&
-      css`
-        ::selection {
-          background: rgba(145, 185, 230, 0.99);
-          color: black;
-          height: 100px;
-        }
-      `}
+    css`
+      ::selection {
+        background: rgba(145, 185, 230, 0.99);
+        color: black;
+        height: 100px;
+      }
+    `}
   `};
 `;
 

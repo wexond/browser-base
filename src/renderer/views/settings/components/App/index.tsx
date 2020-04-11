@@ -91,14 +91,14 @@ const onBlur = () => {
 
 const onMakeDefaultClick = () => {
   store.settings.searchEngine = store.settings.searchEngines.findIndex(
-    x => x.keyword === store.editedSearchEngine.keyword,
+    (x) => x.keyword === store.editedSearchEngine.keyword,
   );
   store.menuVisible = false;
 };
 
 const onRemoveClick = () => {
   store.settings.searchEngines = store.settings.searchEngines.filter(
-    x => x.keyword !== store.editedSearchEngine.keyword,
+    (x) => x.keyword !== store.editedSearchEngine.keyword,
   );
   store.save();
   store.menuVisible = false;
@@ -119,7 +119,7 @@ const onSaveClick = () => {
   const keyword = store.searchEngineKeywordInputRef.current.value.trim();
   const url = store.searchEngineUrlInputRef.current.value.trim();
 
-  const item = store.settings.searchEngines.find(x => x.keyword === keyword);
+  const item = store.settings.searchEngines.find((x) => x.keyword === keyword);
 
   if (keyword !== '' && name !== '' && url !== '') {
     if (store.dialogContent === 'edit-search-engine') {
@@ -158,7 +158,7 @@ export default hot(
         theme={{ ...store.theme, dark: store.theme['pages.lightForeground'] }}
       >
         <Container
-          onMouseDown={e => (store.dialogVisible = false)}
+          onMouseDown={(e) => (store.dialogVisible = false)}
           darken={store.dialogVisible}
         >
           <WebUIStyle />
@@ -192,7 +192,7 @@ export default hot(
             )}
           </ContextMenu>
           <Dialog
-            onMouseDown={e => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
             visible={store.dialogVisible}
             ref={store.dialogRef}
             style={{ width: 350 }}

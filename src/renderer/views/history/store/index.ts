@@ -69,7 +69,7 @@ export class Store {
   }
 
   public getById(id: string): IHistoryItem {
-    return this.items.find(x => x._id === id);
+    return this.items.find((x) => x._id === id);
   }
 
   public async load() {
@@ -77,7 +77,7 @@ export class Store {
   }
 
   public async loadFavicons() {
-    (await this.faviconsDb.get({})).forEach(favicon => {
+    (await this.faviconsDb.get({})).forEach((favicon) => {
       const { data } = favicon;
 
       if (this.favicons.get(favicon.url) == null) {
@@ -88,11 +88,11 @@ export class Store {
 
   public clear() {
     this.items = [];
-    (window as any).removeHistory(this.items.map(x => x._id));
+    (window as any).removeHistory(this.items.map((x) => x._id));
   }
 
   public removeItems(id: string[]) {
-    this.items = this.items.filter(x => id.indexOf(x._id) === -1);
+    this.items = this.items.filter((x) => id.indexOf(x._id) === -1);
     (window as any).removeHistory(id);
   }
 

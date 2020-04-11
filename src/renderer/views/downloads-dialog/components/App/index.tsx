@@ -21,7 +21,7 @@ export const App = hot(
           visible={store.visible}
         >
           <UIStyle />
-          {store.downloads.map(item => (
+          {store.downloads.map((item) => (
             <DownloadItem item={item} key={item.id}></DownloadItem>
           ))}
         </StyledApp>

@@ -40,7 +40,7 @@ export const App = hot(
           <Textfield
             dark={store.theme['dialog.lightForeground']}
             ref={ref1}
-            test={str => str.trim().length !== 0}
+            test={(str) => str.trim().length !== 0}
             style={{ width: '100%', marginTop: 16 }}
             label="Username"
           ></Textfield>

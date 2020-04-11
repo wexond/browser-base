@@ -33,7 +33,7 @@ export default class RadioButtons extends React.PureComponent<Props, State> {
 
     return (
       <>
-        {React.Children.map(children, child => {
+        {React.Children.map(children, (child) => {
           return React.cloneElement(child, {
             selected: this.value === child.props.value,
             onSelect: this.onSelect,

@@ -10,7 +10,7 @@ export const HistorySection = observer(
     return (
       <EmptySection>
         <SectionTitle>{data.label}</SectionTitle>
-        {data.items.map(item => (
+        {data.items.map((item) => (
           <HistoryItem key={item._id} data={item} />
         ))}
       </EmptySection>

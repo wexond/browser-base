@@ -37,7 +37,7 @@ const Item = observer(({ data }: { data: IAutoFillMenuItem }) => {
 export default observer(() => {
   return (
     <StyledList>
-      {store.items.map(item => (
+      {store.items.map((item) => (
         <Item key={item.id} data={item} />
       ))}
     </StyledList>

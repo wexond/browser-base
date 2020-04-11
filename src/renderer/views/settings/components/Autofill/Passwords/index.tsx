@@ -53,7 +53,7 @@ export const Passwords = observer(() => {
         <HeaderLabel>Website</HeaderLabel>
         <HeaderLabel>Username</HeaderLabel>
         <HeaderLabel>Password</HeaderLabel>
-        {store.autoFill.credentials.map(item => (
+        {store.autoFill.credentials.map((item) => (
           <Item key={item._id} data={item} />
         ))}
       </Container>

@@ -75,13 +75,13 @@ export const Button = styled.div`
     }
 
     ${!toggled &&
-      css`
-        &:hover {
-          background-color: ${theme['toolbar.lightForeground']
-            ? 'rgba(255, 255, 255, 0.08)'
-            : 'rgba(0, 0, 0, 0.06)'};
-        }
-      `};
+    css`
+      &:hover {
+        background-color: ${theme['toolbar.lightForeground']
+          ? 'rgba(255, 255, 255, 0.08)'
+          : 'rgba(0, 0, 0, 0.06)'};
+      }
+    `};
   `};
 `;
 

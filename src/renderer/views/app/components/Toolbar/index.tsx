@@ -82,7 +82,7 @@ ipcRenderer.on('show-menu-dialog', () => {
   showMenuDialog();
 });
 
-const onStarClick = () => {
+const onStarClick = (e: React.MouseEvent<HTMLDivElement>) => {
   showAddBookmarkDialog();
 };
 
@@ -175,12 +175,12 @@ const RightButtons = observer(() => {
 
 let mouseUpped = false;
 
-const onMouseDown = () => {
+const onMouseDown = (e: React.MouseEvent<HTMLInputElement>) => {
   store.addressbarTextVisible = false;
   store.addressbarFocused = true;
 };
 
-const onFocus = () => {
+const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   store.addressbarTextVisible = false;
   store.addressbarFocused = true;
 

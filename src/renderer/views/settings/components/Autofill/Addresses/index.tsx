@@ -25,7 +25,7 @@ export const Addresses = observer(() => {
 
   return (
     <Section label="Addresses" icon={ICON_LOCATION} style={style}>
-      {store.autoFill.addresses.map(item => (
+      {store.autoFill.addresses.map((item) => (
         <Item key={item._id} data={item} />
       ))}
     </Section>

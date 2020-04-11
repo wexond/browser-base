@@ -16,11 +16,11 @@ export const requestURL = (url: string): Promise<Data> =>
       request = https.request;
     }
 
-    const req = request(options, res => {
+    const req = request(options, (res) => {
       let data = '';
       res.setEncoding('binary');
 
-      res.on('data', chunk => {
+      res.on('data', (chunk) => {
         data += chunk;
       });
 
@@ -29,12 +29,12 @@ export const requestURL = (url: string): Promise<Data> =>
         resolve(d);
       });
 
-      res.on('error', e => {
+      res.on('error', (e) => {
         reject(e);
       });
     });
 
-    req.on('error', e => {
+    req.on('error', (e) => {
       reject(e);
     });
 

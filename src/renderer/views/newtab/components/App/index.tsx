@@ -57,7 +57,7 @@ export default hot(
                 imageSet={store.imageVisible}
                 title="Dashboard settings"
                 icon={ICON_TUNE}
-                onMouseDown={e => e.stopPropagation()}
+                onMouseDown={(e) => e.stopPropagation()}
                 onClick={onTuneClick}
               ></IconItem>
             </RightBar>

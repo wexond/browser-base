@@ -32,7 +32,7 @@ const SuggestionsToggle = observer(() => {
 const onSearchEngineChange = (value: string) => {
   const { searchEngines } = store.settings;
   store.settings.searchEngine = searchEngines.indexOf(
-    searchEngines.find(x => x.name === value),
+    searchEngines.find((x) => x.name === value),
   );
   store.save();
 };

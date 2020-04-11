@@ -83,7 +83,7 @@ export class Store {
   public get visibleItems() {
     return this.list
       .filter(
-        x =>
+        (x) =>
           (this.searched !== '' &&
             ((x.url &&
               x.url.toLowerCase().includes(this.searched.toLowerCase())) ||
@@ -136,7 +136,7 @@ export class Store {
 
   @computed
   public get folders() {
-    return this.list.filter(x => x.isFolder);
+    return this.list.filter((x) => x.isFolder);
   }
 
   public resetLoadedItems(): void {
@@ -144,17 +144,17 @@ export class Store {
   }
 
   public getById(id: string) {
-    return this.list.find(x => x._id === id);
+    return this.list.find((x) => x._id === id);
   }
 
   public async load() {
     const items: IBookmark[] = await ipcRenderer.invoke('bookmarks-get');
-    this.list = items.map(x => ({ ...x }));
-    this.currentFolder = this.list.find(x => x.static === 'main')._id;
+    this.list = items.map((x) => ({ ...x }));
+    this.currentFolder = this.list.find((x) => x.static === 'main')._id;
   }
 
   public async loadFavicons() {
-    (await this.faviconsDb.get({})).forEach(favicon => {
+    (await this.faviconsDb.get({})).forEach((favicon) => {
       const { data } = favicon;
 
       if (this.favicons.get(favicon.url) == null) {
@@ -165,11 +165,11 @@ export class Store {
 
   public removeItems(ids: string[]) {
     for (const id of ids) {
-      const item = this.list.find(x => x._id === id);
-      const parent = this.list.find(x => x._id === item.parent);
-      parent.children = parent.children.filter(x => x !== id);
+      const item = this.list.find((x) => x._id === id);
+      const parent = this.list.find((x) => x._id === item.parent);
+      parent.children = parent.children.filter((x) => x !== id);
     }
-    this.list = this.list.filter(x => !ids.includes(x._id));
+    this.list = this.list.filter((x) => !ids.includes(x._id));
 
     ipcRenderer.send(
       'bookmarks-remove',
@@ -180,12 +180,12 @@ export class Store {
   public async addItem(item: IBookmark) {
     const i = await ipcRenderer.invoke('bookmarks-add', item);
     this.list.push({ ...i });
-    this.list.find(x => x._id === i.parent).children.push(i._id);
+    this.list.find((x) => x._id === i.parent).children.push(i._id);
     return i;
   }
 
   public async updateItem(id: string, change: IBookmark) {
-    const index = this.list.indexOf(this.list.find(x => x._id === id));
+    const index = this.list.indexOf(this.list.find((x) => x._id === id));
     this.list[index] = { ...this.list[index], ...change };
     ipcRenderer.send(
       'bookmarks-update',
@@ -211,7 +211,7 @@ export class Store {
   }
 
   private getFolderPath(parent: string) {
-    const parentFolder = this.list.find(x => x._id === parent);
+    const parentFolder = this.list.find((x) => x._id === parent);
     let path: IBookmark[] = [];
 
     if (parentFolder == null) return [];

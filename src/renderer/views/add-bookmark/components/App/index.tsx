@@ -28,7 +28,7 @@ const onChange = () => {
 const onDropdownClick = (e: React.MouseEvent<HTMLDivElement>) => {
   const { left, top, height } = e.currentTarget.getBoundingClientRect();
   const menu = remote.Menu.buildFromTemplate([
-    ...store.folders.map(folder => ({
+    ...store.folders.map((folder) => ({
       label: getBookmarkTitle(folder),
       click: () => {
         store.currentFolder = folder;
