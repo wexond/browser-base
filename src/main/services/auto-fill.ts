@@ -1,4 +1,4 @@
-import { getPassword, setPassword } from 'keytar';
+import { getPassword, setPassword, deletePassword } from 'keytar';
 
 import {
   IAutoFillItem,
