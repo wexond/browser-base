@@ -68,6 +68,10 @@ export class AutoFillService {
       },
     });
 
+    if (oldUsername !== username) {
+      await deletePassword(`wexond`, `${hostname}-${oldUsername}`);
+    }
+
     await setPassword(`wexond`, `${hostname}-${username}`, password);
   }
 }
