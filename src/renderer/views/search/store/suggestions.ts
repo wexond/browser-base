@@ -27,7 +27,7 @@ export class SuggestionsStore {
 
   @computed
   public get selectedSuggestion() {
-    return this.list.find(x => x.id === this.selected);
+    return this.list.find((x) => x.id === this.selected);
   }
 
   constructor(store: Store) {
@@ -35,7 +35,7 @@ export class SuggestionsStore {
   }
 
   public load(input: HTMLInputElement): Promise<string> {
-    return new Promise(async resolve => {
+    return new Promise(async (resolve) => {
       const filter = input.value.substring(0, input.selectionStart);
       const history = getHistorySuggestions(filter);
 

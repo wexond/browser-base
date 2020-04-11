@@ -22,12 +22,12 @@ export class DownloadsStore {
     });
 
     ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {
-      const i = this.list.find(x => x.id === item.id);
+      const i = this.list.find((x) => x.id === item.id);
       i.receivedBytes = item.receivedBytes;
     });
 
     ipcRenderer.on('download-completed', (e, id: string) => {
-      const i = this.list.find(x => x.id === id);
+      const i = this.list.find((x) => x.id === id);
       i.completed = true;
     });
   }

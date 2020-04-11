@@ -30,12 +30,12 @@ export class Queue {
       this.pendingPromise = true;
       item
         .promise()
-        .then(value => {
+        .then((value) => {
           this.pendingPromise = false;
           item.resolve(value);
           this.dequeue();
         })
-        .catch(err => {
+        .catch((err) => {
           this.pendingPromise = false;
           item.reject(err);
           this.dequeue();

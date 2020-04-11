@@ -19,7 +19,7 @@ export class Store extends DialogStore {
 
     ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {
       const index = this.downloads.indexOf(
-        this.downloads.find(x => x.id === item.id),
+        this.downloads.find((x) => x.id === item.id),
       );
 
       this.downloads[index] = {
@@ -29,7 +29,7 @@ export class Store extends DialogStore {
     });
 
     ipcRenderer.on('download-completed', (e, id: string) => {
-      const i = this.downloads.find(x => x.id === id);
+      const i = this.downloads.find((x) => x.id === id);
       i.completed = true;
     });
 

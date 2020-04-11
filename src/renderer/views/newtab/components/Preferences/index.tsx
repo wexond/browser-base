@@ -63,7 +63,7 @@ export const Preferences = observer(() => {
       bigger
       style={{ right: 32, top: 68, width: 275 }}
       visible={store.dashboardSettingsVisible}
-      onMouseDown={e => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
     >
       <div
         style={{

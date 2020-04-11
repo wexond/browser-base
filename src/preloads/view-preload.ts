@@ -23,7 +23,7 @@ const goForward = () => {
   });
 };
 
-window.addEventListener('mouseup', e => {
+window.addEventListener('mouseup', (e) => {
   if (e.button === 3) {
     e.preventDefault();
     goBack();
@@ -61,7 +61,7 @@ function getScrollStartPoint(x: number, y: number) {
   return { left, right };
 }
 
-document.addEventListener('wheel', e => {
+document.addEventListener('wheel', (e) => {
   verticalMouseMove += e.deltaY;
   horizontalMouseMove += e.deltaX;
 
@@ -119,7 +119,7 @@ if (
   window.location.href.startsWith(WEBUI_BASE_URL) ||
   window.location.protocol === 'wexond-error:'
 ) {
-  (async function() {
+  (async function () {
     const w = await webFrame.executeJavaScript('window');
     w.settings = settings;
     w.require = (id: string) => {
@@ -146,7 +146,7 @@ if (
     }
   })();
 } else {
-  (async function() {
+  (async function () {
     if (settings.doNotTrack) {
       const w = await webFrame.executeJavaScript('window');
       Object.defineProperty(w.navigator, 'doNotTrack', { value: 1 });

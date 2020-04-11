@@ -32,7 +32,7 @@ export class PasswordInput extends React.PureComponent<Props, State> {
   }
 
   public test() {
-    return this.ref.current.test(str => str.trim().length !== 0);
+    return this.ref.current.test((str) => str.trim().length !== 0);
   }
 
   public clear() {

@@ -38,7 +38,7 @@ export class StartupTabsStore {
         tabsToLoad = await this.db.get({
           $or: [{ isUserDefined: true }, { pinned: true }],
         } as any);
-        this.list = tabsToLoad.filter(x => x.isUserDefined);
+        this.list = tabsToLoad.filter((x) => x.isUserDefined);
       } else if (this.store.settings.object.startupBehavior.type === 'empty') {
         tabsToLoad = await this.db.get({ pinned: true });
       }
@@ -75,7 +75,7 @@ export class StartupTabsStore {
       );
 
       // If we only load up pinned tabs, add a new tab page
-      if (tabsToLoad.filter(x => !x.pinned).length == 0) {
+      if (tabsToLoad.filter((x) => !x.pinned).length == 0) {
         needsNewTabPage = true;
       }
     } else {
@@ -109,7 +109,7 @@ export class StartupTabsStore {
   }
 
   public async addStartupTabItem(item: IStartupTab) {
-    const itemToReplace = this.list.find(x => x.id === item.id);
+    const itemToReplace = this.list.find((x) => x.id === item.id);
     if (itemToReplace) {
       this.db.update({ id: item.id }, item);
       this.list[this.list.indexOf(itemToReplace)] = {
@@ -123,9 +123,9 @@ export class StartupTabsStore {
   }
 
   public removeStartupTabItem(tabId: number) {
-    const itemToDelete = this.list.find(x => x.id === tabId);
+    const itemToDelete = this.list.find((x) => x.id === tabId);
     if (itemToDelete) {
-      this.list = this.list.filter(x => x.id !== tabId);
+      this.list = this.list.filter((x) => x.id !== tabId);
       this.db.remove({ id: tabId });
     }
   }
@@ -148,13 +148,13 @@ export class StartupTabsStore {
       this.list = [];
     } else if (!removePinned) {
       this.db.remove({ pinned: false }, true);
-      this.list = this.list.filter(x => x.pinned);
+      this.list = this.list.filter((x) => x.pinned);
     } else if (!removeUserDefined) {
       this.db.remove({ isUserDefined: false }, true);
-      this.list = this.list.filter(x => x.isUserDefined);
+      this.list = this.list.filter((x) => x.isUserDefined);
     } else {
       this.db.remove({ isUserDefined: false, pinned: false }, true);
-      this.list = this.list.filter(x => x.isUserDefined || x.pinned);
+      this.list = this.list.filter((x) => x.isUserDefined || x.pinned);
     }
   }
 }

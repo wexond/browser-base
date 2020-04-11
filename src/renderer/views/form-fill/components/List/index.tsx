@@ -36,7 +36,7 @@ const Item = observer(({ data }: { data: IFormFillMenuItem }) => {
 export default observer(() => {
   return (
     <StyledList>
-      {store.items.map(item => (
+      {store.items.map((item) => (
         <Item key={item._id} data={item} />
       ))}
     </StyledList>

@@ -40,11 +40,11 @@ export class Store extends DialogStore {
 
     return this.tabs
       .filter(
-        tab =>
+        (tab) =>
           tab.title.indexOf(this.inputText) !== -1 ||
           tab.url.indexOf(this.inputText) !== -1,
       )
-      .map(tab => ({
+      .map((tab) => ({
         primaryText: tab.url,
         secondaryText: tab.title,
         id: id++,
@@ -142,7 +142,7 @@ export class Store extends DialogStore {
       this.autoComplete(input.value, lastSuggestion);
     }
 
-    suggestions.load(input).then(suggestion => {
+    suggestions.load(input).then((suggestion) => {
       lastSuggestion = suggestion;
       if (this.canSuggest) {
         this.autoComplete(
