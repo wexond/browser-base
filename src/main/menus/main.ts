@@ -326,7 +326,7 @@ export const getMainMenu = () => {
               { type: 'separator' },
               { role: 'window' },
             ]
-          : [{ role: 'close' }]),
+          : [{ role: 'close', accelerator: '' }]),
         { type: 'separator' },
         {
           label: 'Always on top',
