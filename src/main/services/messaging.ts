@@ -2,6 +2,7 @@ import { ipcMain } from 'electron';
 
 import { AppWindow } from '../windows';
 import { Application } from '../application';
+import { IAutoFillMenuPosition, IAutoFillCredentialsData } from '~/interfaces';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -78,7 +79,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.extensionPopup.show(inspect);
   });
 
-  ipcMain.on(`hide-extension-popup-${id}`, (e) => {
+  ipcMain.on(`hide-extension-popup-${id}`, e => {
     if (appWindow.dialogs.extensionPopup.visible) {
       appWindow.dialogs.extensionPopup.hideVisually();
     }
@@ -94,7 +95,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.send(`edit-tabgroup`, tabGroup);
   });
 
-  ipcMain.on(`is-incognito-${id}`, (e) => {
+  ipcMain.on(`is-incognito-${id}`, e => {
     e.returnValue = appWindow.incognito;
   });
 
@@ -163,7 +164,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
 
         appWindow.dialogs.autoFillDialog.resize(
           items.length,
-          items.find((r) => r.sublabel) != null,
+          items.find(r => r.sublabel) != null,
         );
 
         appWindow.dialogs.autoFillDialog.showAtPos(pos);
