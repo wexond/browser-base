@@ -2,7 +2,11 @@ import { ipcMain } from 'electron';
 
 import { AppWindow } from '../windows';
 import { Application } from '../application';
-import { IAutoFillMenuPosition, IAutoFillCredentialsData } from '~/interfaces';
+import {
+  IAutoFillMenuPosition,
+  IAutoFillCredentialsData,
+  IAutoFillMenuData,
+} from '~/interfaces';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -149,18 +153,28 @@ export const runMessagingService = (appWindow: AppWindow) => {
 
   ipcMain.on(
     `auto-fill-show-${id}`,
-    async (e, pos: IAutoFillMenuPosition, name: string, value: string) => {
+    async (
+      e,
+      pos: IAutoFillMenuPosition,
+      name: string,
+      value: string,
+      credentials: boolean,
+    ) => {
       const view = appWindow.viewManager.selected;
       const hostname = view.hostname;
+      const autoFill = Application.instance.autoFill;
 
-      const items = await Application.instance.autoFill.getMenuItems(
-        hostname,
-        name,
-        value,
-      );
+      const items = await (credentials
+        ? autoFill.getMenuCredentialsItems(hostname, name, value)
+        : autoFill.getMenuAddressItems(hostname, name, value));
 
       if (items.length) {
-        appWindow.dialogs.autoFillDialog.send(`auto-fill-menu-items`, items);
+        const data: IAutoFillMenuData = {
+          items,
+          type: credentials ? 'password' : 'address',
+        };
+
+        appWindow.dialogs.autoFillDialog.send(`auto-fill-menu-data`, data);
 
         appWindow.dialogs.autoFillDialog.resize(
           items.length,

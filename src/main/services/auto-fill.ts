@@ -39,6 +39,7 @@ export class AutoFillService {
       url: hostname,
       data: {
         username,
+        passwordLength: password.length,
       },
       favicon,
     };
@@ -61,11 +62,11 @@ export class AutoFillService {
       query: {
         type: 'password',
         url: hostname,
-        'fields.username': oldUsername,
-        'fields.passLength': password.length,
+        'data.username': oldUsername,
+        'data.passwordLength': password.length,
       },
       value: {
-        'fields.username': username,
+        'data.username': username,
       },
     });
 
@@ -76,10 +77,10 @@ export class AutoFillService {
     await setPassword(`wexond`, `${hostname}-${username}`, password);
   }
 
-  public async getMenuItems(
+  public async getMenuCredentialsItems(
     hostname: string,
     name: string,
-    value: string,
+    value = '',
   ): Promise<IAutoFillMenuItem[]> {
     const res = await Application.instance.storage.find<IAutoFillItem>({
       scope: 'formfill',
@@ -89,13 +90,30 @@ export class AutoFillService {
       } as IAutoFillItem,
     });
 
-    return [{ label: 'user@wexond.net', sublabel: '*****', id: '1' }];
+    const list: IAutoFillMenuItem[] = [];
 
-    // return res.map(r => {
-    //   return {
+    res.forEach(r => {
+      const data = r.data as IAutoFillCredentialsData;
 
-    //   };
-    // });
+      if (data.username.startsWith(value)) {
+        list.push({
+          _id: r._id,
+          favicon: r.favicon,
+          label: data.username,
+          sublabel: '•'.repeat(data.passwordLength),
+        });
+      }
+    });
+
+    return list;
+  }
+
+  public async getMenuAddressItems(
+    hostname: string,
+    name: string,
+    value = '',
+  ): Promise<IAutoFillMenuItem[]> {
+    return [];
   }
 
   private getType(name: string): IAutoFillType {

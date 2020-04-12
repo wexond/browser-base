@@ -3,7 +3,10 @@ import { ipcRenderer } from 'electron';
 import { windowId, tabId } from '../view-preload';
 import { IAutoFillCredentialsData, IAutoFillMenuPosition } from '~/interfaces';
 import { setInputValue } from '../utils';
-import { AUTOFILL_FIELDS } from '../constants/auto-fill';
+import {
+  AUTOFILL_FIELDS,
+  AUTOFILL_CREDENTIALS_FIELDS,
+} from '../constants/auto-fill';
 
 class AutoFillService {
   private active = false;
@@ -64,6 +67,7 @@ class AutoFillService {
         this.getMenuPos(e.target),
         e.target.name,
         e.target.value,
+        AUTOFILL_CREDENTIALS_FIELDS.includes(e.target.name),
       );
     }
   };

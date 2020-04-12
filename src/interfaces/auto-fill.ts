@@ -1,7 +1,7 @@
 export type IAutoFillType = 'password' | 'address';
 
 export interface IAutoFillItem {
-  id?: string;
+  _id?: string;
   type?: IAutoFillType;
   data?: IAutoFillCredentialsData | IAutoFillAddressData;
   favicon?: any;
@@ -11,6 +11,7 @@ export interface IAutoFillItem {
 export interface IAutoFillCredentialsData {
   username?: string;
   password?: string;
+  passwordLength?: number;
 }
 
 export interface IAutoFillAddressData {
@@ -24,8 +25,13 @@ export interface IAutoFillAddressData {
   email?: string;
 }
 
+export interface IAutoFillMenuData {
+  type?: IAutoFillType;
+  items?: IAutoFillMenuItem[];
+}
+
 export interface IAutoFillMenuItem {
-  id?: string;
+  _id?: string;
   label?: string;
   sublabel?: string;
   favicon?: any;
