@@ -6,6 +6,7 @@ import {
   IAutoFillMenuPosition,
   IAutoFillCredentialsData,
   IAutoFillMenuData,
+  IAutoFillMenuItem,
 } from '~/interfaces';
 
 export const runMessagingService = (appWindow: AppWindow) => {
@@ -188,5 +189,14 @@ export const runMessagingService = (appWindow: AppWindow) => {
 
   ipcMain.on(`auto-fill-hide-${id}`, () => {
     appWindow.dialogs.autoFillDialog.hide();
+  });
+
+  ipcMain.on(`auto-fill-inject-${id}`, async (e, _id: string) => {
+    const view = appWindow.viewManager.selected;
+
+    console.log('XDDDDDDDDDDDDDDDDDDD', _id);
+    const data = await Application.instance.autoFill.getCredentialsById(_id);
+
+    view.webContents.send(`credentials-inject`, data);
   });
 };

@@ -9,6 +9,10 @@ import {
 import { Application } from '../application';
 
 export class AutoFillService {
+  public getPassword(hostname: string, username: string) {
+    return getPassword(`wexond`, `${hostname}-${username}`);
+  }
+
   public async getCredentials(
     hostname: string,
   ): Promise<IAutoFillCredentialsData> {
@@ -24,7 +28,27 @@ export class AutoFillService {
     }
 
     const { username } = res.data as IAutoFillCredentialsData;
-    const password = await getPassword(`wexond`, `${hostname}-${username}`);
+    const password = await this.getPassword(hostname, username);
+
+    return { username, password };
+  }
+
+  public async getCredentialsById(
+    _id: string,
+  ): Promise<IAutoFillCredentialsData> {
+    const res = await Application.instance.storage.findOne<IAutoFillItem>({
+      scope: 'formfill',
+      query: {
+        _id,
+      } as IAutoFillItem,
+    });
+
+    if (res == null) {
+      return null;
+    }
+
+    const { username } = res.data as IAutoFillCredentialsData;
+    const password = await this.getPassword(res.url, username);
 
     return { username, password };
   }

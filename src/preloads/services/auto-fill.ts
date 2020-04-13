@@ -38,7 +38,10 @@ class AutoFillService {
   }
 
   private onKeyUp = (e: KeyboardEvent) => {
-    if (e.target instanceof HTMLInputElement) {
+    if (
+      e.target instanceof HTMLInputElement &&
+      AUTOFILL_CREDENTIALS_FIELDS.includes(e.target.name)
+    ) {
       if (e.target.name === 'password') {
         this.passwordRef = e.target;
 
@@ -48,29 +51,32 @@ class AutoFillService {
           this.active = active;
           this.setAvailability(active);
         }
-
-        this.sendData();
-      } else if (e.target.name === 'username') {
+      } else {
         this.usernameRef = e.target;
-        this.sendData();
+        this.showMenu(e.target);
       }
+
+      this.sendData();
     }
   };
 
   private onFocus = (e: MouseEvent) => {
-    if (
-      e.target instanceof HTMLInputElement &&
-      AUTOFILL_FIELDS.includes(e.target.name)
-    ) {
-      ipcRenderer.send(
-        `auto-fill-show-${windowId}`,
-        this.getMenuPos(e.target),
-        e.target.name,
-        e.target.value,
-        AUTOFILL_CREDENTIALS_FIELDS.includes(e.target.name),
-      );
+    if (e.target instanceof HTMLInputElement) {
+      this.showMenu(e.target);
     }
   };
+
+  private showMenu(ref: HTMLInputElement) {
+    if (AUTOFILL_FIELDS.includes(ref.name)) {
+      ipcRenderer.send(
+        `auto-fill-show-${windowId}`,
+        this.getMenuPos(ref),
+        ref.name,
+        ref.value,
+        AUTOFILL_CREDENTIALS_FIELDS.includes(ref.name),
+      );
+    }
+  }
 
   private onBlur = (e: MouseEvent) => {
     if (

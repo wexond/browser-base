@@ -13,6 +13,8 @@ export class AutoFillDialog extends Dialog {
         height: HEIGHT,
         width: WIDTH,
       },
+      devtools: true,
+      customHide: true,
     });
   }
 

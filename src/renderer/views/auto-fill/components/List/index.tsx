@@ -7,11 +7,6 @@ import store from '../../store';
 import { IAutoFillMenuItem } from '~/interfaces';
 import { StyledList, StyledItem, Text, SubText } from './style';
 
-// const onClick = (data: IFormFillMenuItem) => () => {
-//   ipcRenderer.send(`form-fill-update-${store.windowId}`, data._id, true);
-//   ipcRenderer.send(`form-fill-hide-${store.windowId}`);
-// };
-
 // const onMouseEnter = (data: IFormFillMenuItem) => () => {
 //   ipcRenderer.send(`form-fill-update-${store.windowId}`, data._id);
 // };
@@ -26,8 +21,14 @@ import { StyledList, StyledItem, Text, SubText } from './style';
       onMouseLeave={onMouseLeave}
       */
 const Item = observer(({ data }: { data: IAutoFillMenuItem }) => {
+  const onClick = React.useCallback(() => {
+    console.log('test', data);
+    ipcRenderer.send(`auto-fill-inject-${store.windowId}`, data._id);
+    // ipcRenderer.send(`auto-fill-hide-${store.windowId}`);
+  }, [data]);
+
   return (
-    <StyledItem subtext={!!data.sublabel}>
+    <StyledItem subtext={!!data.sublabel} onClick={onClick}>
       <Text>{data.label}</Text>
       <SubText>{data.sublabel}</SubText>
     </StyledItem>
