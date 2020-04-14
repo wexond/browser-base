@@ -9,8 +9,8 @@ export default observer(() => {
   return (
     <StyledTreeView>
       {store.list
-        .filter(r => r.parent == null)
-        .map(item => (
+        .filter((r) => r.parent == null)
+        .map((item) => (
           <TreeItem key={item._id} data={item} depth={0} />
         ))}
     </StyledTreeView>

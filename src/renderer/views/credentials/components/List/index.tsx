@@ -24,7 +24,7 @@ const Item = ({ data }: { data: IFormFillData }) => {
 export default observer(() => {
   return (
     <div style={{ display: store.content === 'list' ? 'block' : 'none' }}>
-      {store.list.map(data => (
+      {store.list.map((data) => (
         <Item key={data._id} data={data} />
       ))}
     </div>

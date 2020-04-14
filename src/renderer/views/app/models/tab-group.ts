@@ -42,7 +42,7 @@ export class ITabGroup {
   }
 
   public get tabs() {
-    return this.store.tabs.list.filter(x => x.tabGroupId === this.id);
+    return this.store.tabs.list.filter((x) => x.tabGroupId === this.id);
   }
 
   @action

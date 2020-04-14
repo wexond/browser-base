@@ -60,6 +60,7 @@ export const AddressbarInputContainer = styled.div`
   position: relative;
   height: 100%;
   margin-left: 2px;
+  overflow: hidden;
 `;
 
 export const AddressbarText = styled.div`
@@ -72,7 +73,6 @@ export const AddressbarText = styled.div`
   flex-wrap: nowrap;
   white-space: nowrap;
   overflow: hidden;
-  ${body2()};
   font-size: 14px;
   ${({ visible }: { visible: boolean; theme: ITheme }) => css`
     display: ${visible ? 'flex' : 'none'};
@@ -89,7 +89,8 @@ export const AddressbarInput = styled.input`
   padding: 0;
   margin: 0;
   color: black;
-  ${body2()};
+  font-family: inherit;
+  word-spacing: inherit;
   font-size: 14px;
 
   ${({ visible, theme }: { visible: boolean; theme: ITheme }) => css`
@@ -102,13 +103,13 @@ export const AddressbarInput = styled.input`
     }
 
     ${theme['searchBox.lightForeground'] &&
-      css`
-        ::selection {
-          background: rgba(145, 185, 230, 0.99);
-          color: black;
-          height: 100px;
-        }
-      `}
+    css`
+      ::selection {
+        background: rgba(145, 185, 230, 0.99);
+        color: black;
+        height: 100px;
+      }
+    `}
   `};
 `;
 

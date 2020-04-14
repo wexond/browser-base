@@ -4,7 +4,7 @@ export const TAB_HEIGHT = 32;
 // Toolbar
 export const TOOLBAR_HEIGHT = 42;
 
-export const TOOLBAR_BUTTON_WIDTH = 34;
+export const TOOLBAR_BUTTON_WIDTH = 36;
 export const TOOLBAR_BUTTON_HEIGHT = 30;
 
 export const ADD_TAB_BUTTON_WIDTH = 28;

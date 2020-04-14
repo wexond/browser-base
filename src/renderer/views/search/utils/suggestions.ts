@@ -47,7 +47,7 @@ export const getHistorySuggestions = (filter: string) => {
         .replace(/%20/g, ' ');
       if (
         query.startsWith(filter) &&
-        urlMatchedItems.filter(x => x.url === query).length === 0
+        urlMatchedItems.filter((x) => x.url === query).length === 0
       ) {
         itemToPush.url = query;
         urlMatchedItems.push({ url: query, canSuggest: true, isSearch: true });

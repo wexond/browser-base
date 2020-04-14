@@ -13,6 +13,8 @@ export class DialogStore {
     return getTheme(this.settings.theme);
   }
 
+  private _windowId = -1;
+
   @observable
   public visible = false;
 
@@ -68,7 +70,12 @@ export class DialogStore {
   }
 
   public get windowId() {
-    return remote.getCurrentWindow().id;
+    if (this._windowId === -1) {
+      const win = remote.getCurrentWindow();
+      if (win) this._windowId = win.id;
+    }
+
+    return this._windowId;
   }
 
   public onVisibilityChange(visible: boolean, ...args: any[]) {}

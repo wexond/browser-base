@@ -8,7 +8,7 @@ import { ListItem } from '~/renderer/components/ListItem';
 import { getBookmarkTitle } from '../../utils';
 import { ICON_PAGE, ICON_FOLDER } from '~/renderer/constants/icons';
 
-const onClick = (item: IBookmark) => (e: React.MouseEvent) => {
+const onClick = (item: IBookmark) => (e: React.MouseEvent<HTMLDivElement>) => {
   const index = store.selectedItems.indexOf(item._id);
 
   if (e.ctrlKey) {

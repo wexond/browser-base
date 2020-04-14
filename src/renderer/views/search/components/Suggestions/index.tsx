@@ -9,14 +9,14 @@ interface Props {
   visible: boolean;
 }
 
-const onMouseDown = (e: React.MouseEvent) => {
+const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 };
 
 export const Suggestions = observer(({ visible }: Props) => {
   return (
     <StyledSuggestions visible={visible} onMouseDown={onMouseDown}>
-      {store.suggestions.list.map(suggestion => (
+      {store.suggestions.list.map((suggestion) => (
         <Suggestion suggestion={suggestion} key={suggestion.id} />
       ))}
     </StyledSuggestions>

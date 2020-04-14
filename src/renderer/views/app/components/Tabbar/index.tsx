@@ -44,7 +44,7 @@ const onWheel = (e: any) => {
 export const TabGroups = observer(() => {
   return (
     <React.Fragment>
-      {store.tabGroups.list.map(item => (
+      {store.tabGroups.list.map((item) => (
         <TabGroup key={item.id} tabGroup={item}></TabGroup>
       ))}
     </React.Fragment>

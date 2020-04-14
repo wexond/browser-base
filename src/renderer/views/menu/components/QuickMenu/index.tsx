@@ -95,18 +95,11 @@ export const QuickMenu = observer(() => {
               <Line />
             </>
           )}
-          <MenuItem onClick={onDarkClick}>
-            <Icon icon={ICON_NIGHT} />
-            <MenuItemTitle>Night mode</MenuItemTitle>
-            <RightControl>
-              <Switch value={store.settings.darkContents}></Switch>
-            </RightControl>
-          </MenuItem>
           <MenuItem onClick={onAlwaysClick}>
             <Icon icon={ICON_TOPMOST} />
             <MenuItemTitle>Always on top</MenuItemTitle>
             <RightControl>
-              <Switch value={store.alwaysOnTop}></Switch>
+              <Switch dense value={store.alwaysOnTop}></Switch>
             </RightControl>
           </MenuItem>
           <Line />

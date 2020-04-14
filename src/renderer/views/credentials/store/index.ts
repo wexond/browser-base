@@ -39,7 +39,7 @@ export class Store extends DialogStore {
   }
 
   public remove(data: IFormFillData) {
-    this.list = this.list.filter(r => r._id !== data._id);
+    this.list = this.list.filter((r) => r._id !== data._id);
     ipcRenderer.send(`credentials-remove-${this.windowId}`, data);
   }
 }

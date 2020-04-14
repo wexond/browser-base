@@ -8,7 +8,7 @@ import { TopSite } from '../TopSite';
 export const TopSites = observer(() => {
   return (
     <StyledTopSites>
-      {store.topSites.map(item => (
+      {store.topSites.map((item) => (
         <TopSite key={item._id} item={item} />
       ))}
       {store.topSites.length < 8 && <TopSite />}

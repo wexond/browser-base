@@ -62,26 +62,26 @@ export const Button = styled.div`
     pointer-events: ${disabled ? 'none' : 'inherit'};
     -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
 
-    &:active {
-      background-color: ${theme['toolbar.lightForeground']
-        ? 'rgba(255, 255, 255, 0.12)'
-        : 'rgba(0, 0, 0, 0.1)'};
-    }
-
     background-color: ${toggled
       ? theme['toolbar.lightForeground']
         ? 'rgba(255, 255, 255, 0.12)'
         : 'rgba(0, 0, 0, 0.1)'
       : 'none'};
 
+    &:active {
+      background-color: ${theme['toolbar.lightForeground']
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.1)'} !important;
+    }
+
     ${!toggled &&
-      css`
-        &:hover {
-          background-color: ${theme['toolbar.lightForeground']
-            ? 'rgba(255, 255, 255, 0.08)'
-            : 'rgba(0, 0, 0, 0.06)'};
-        }
-      `};
+    css`
+      &:hover {
+        background-color: ${theme['toolbar.lightForeground']
+          ? 'rgba(255, 255, 255, 0.08)'
+          : 'rgba(0, 0, 0, 0.06)'};
+      }
+    `};
   `};
 `;
 

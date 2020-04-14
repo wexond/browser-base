@@ -42,7 +42,7 @@ const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
 const onKeyClick = () => {
   const { hostname } = parse(store.tabs.selectedTab.url);
   const list = store.autoFill.credentials.filter(
-    r => r.url === hostname && r.fields.username,
+    (r) => r.url === hostname && r.fields.username,
   );
 
   ipcRenderer.send(`credentials-show-${store.windowId}`, {
@@ -94,7 +94,7 @@ const BrowserActions = observer(() => {
   return (
     <>
       {selectedTabId &&
-        store.extensions.browserActions.map(item => {
+        store.extensions.browserActions.map((item) => {
           if (item.tabId === selectedTabId) {
             return <BrowserAction data={item} key={item.extensionId} />;
           }
@@ -104,7 +104,7 @@ const BrowserActions = observer(() => {
   );
 });
 
-const onShieldContextMenu = (e: React.MouseEvent) => {
+const onShieldContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
   const menu = remote.Menu.buildFromTemplate([
     {
       checked: store.settings.object.shield,
@@ -156,14 +156,13 @@ const RightButtons = observer(() => {
           value={store.downloadProgress}
         ></ToolbarButton>
       )}
-      <Separator />
       {store.isIncognito && <ToolbarButton icon={ICON_INCOGNITO} size={18} />}
       <ToolbarButton
-        divRef={r => (menuRef = r)}
+        divRef={(r) => (menuRef = r)}
         toggled={store.dialogsVisibility['menu']}
         badge={store.updateAvailable}
         badgeRight={10}
-        badgeTop={8}
+        badgeTop={6}
         onMouseDown={onMenuClick}
         icon={ICON_MORE}
         size={18}
@@ -176,12 +175,12 @@ let mouseUpped = false;
 
 const onMouseDown = (e: React.MouseEvent<HTMLInputElement>) => {
   store.addressbarTextVisible = false;
-  store.addressbarEditing = true;
+  store.addressbarFocused = true;
 };
 
 const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   store.addressbarTextVisible = false;
-  store.addressbarEditing = true;
+  store.addressbarFocused = true;
 
   if (store.tabs.selectedTab) {
     store.tabs.selectedTab.addressbarFocused = true;
@@ -207,7 +206,6 @@ const onMouseUp = (e: React.MouseEvent<HTMLInputElement>) => {
 
 const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.key === 'Escape' || e.key === 'Enter') {
-    store.addressbarEditing = false;
     store.tabs.selectedTab.addressbarValue = null;
   }
 
@@ -219,6 +217,7 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
   }
 
   if (e.key === 'Enter') {
+    store.addressbarFocused = false;
     e.currentTarget.blur();
     const { value } = e.currentTarget;
     let url = value;
@@ -248,6 +247,7 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       x: left,
       width: width,
     });
+    store.addressbarEditing = true;
   }
 };
 
@@ -255,7 +255,7 @@ const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
   e.currentTarget.blur();
   window.getSelection().removeAllRanges();
   store.addressbarTextVisible = true;
-  store.addressbarEditing = false;
+  store.addressbarFocused = false;
   mouseUpped = false;
 
   if (store.tabs.selectedTab) {
@@ -275,7 +275,7 @@ export const Toolbar = observer(() => {
   return (
     <StyledToolbar>
       <NavigationButtons />
-      <Addressbar ref={addressbarRef} focus={store.addressbarEditing}>
+      <Addressbar ref={addressbarRef} focus={store.addressbarFocused}>
         <ToolbarButton
           toggled={false}
           icon={ICON_SEARCH}
@@ -322,7 +322,7 @@ export const Toolbar = observer(() => {
           <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
         )}
         <ToolbarButton
-          divRef={r => (starRef = r)}
+          divRef={(r) => (starRef = r)}
           toggled={store.dialogsVisibility['add-bookmark']}
           icon={store.isBookmarked ? ICON_STAR_FILLED : ICON_STAR}
           size={18}

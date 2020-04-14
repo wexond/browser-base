@@ -31,24 +31,25 @@ export class SearchDialog extends Dialog {
         height: HEIGHT,
         y: 48,
       },
-      hideTimeout: 200,
+
       devtools: false,
     });
 
-    ipcMain.on(`height-${this.webContents.id}`, (e, height) => {
+    ipcMain.on(`height-${this.id}`, (e, height) => {
       super.rearrange({
         height: this.isPreviewVisible
           ? Math.max(DIALOG_MIN_HEIGHT, HEIGHT + height)
           : HEIGHT + height,
       });
+
       this.lastHeight = HEIGHT + height;
     });
 
-    ipcMain.on(`addressbar-update-input-${this.webContents.id}`, (e, data) => {
-      this.appWindow.webContents.send('addressbar-update-input', data);
+    ipcMain.on(`addressbar-update-input-${this.id}`, (e, data) => {
+      this.appWindow.send('addressbar-update-input', data);
     });
 
-    ipcMain.on(`can-show-${this.webContents.id}`, () => {
+    ipcMain.on(`can-show-${this.id}`, () => {
       if (this.queueShow) this.show();
     });
   }
@@ -84,16 +85,16 @@ export class SearchDialog extends Dialog {
 
     this.queueShow = true;
 
-    this.webContents.send('visible', true, {
+    this.send('visible', true, {
       id: this.appWindow.viewManager.selectedId,
       ...this.data,
     });
 
     ipcMain.once('get-search-tabs', (e, tabs) => {
-      this.webContents.send('search-tabs', tabs);
+      this.send('search-tabs', tabs);
     });
 
-    this.appWindow.webContents.send('get-search-tabs');
+    this.appWindow.send('get-search-tabs');
   }
 
   public hide(bringToTop = false) {

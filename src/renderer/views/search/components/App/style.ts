@@ -5,7 +5,7 @@ import { DialogStyle } from '~/renderer/mixins/dialogs';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
 
 export const StyledApp = styled(DialogStyle)`
-  transition: 0.08s opacity;
+  transition: none;
   padding-bottom: 4px;
 
   ${({ theme }: { theme?: ITheme }) => css`
@@ -39,7 +39,8 @@ export const Input = styled.input.attrs(() => ({
   border: none;
   width: 100%;
   height: 100%;
-  ${body2()};
+  font-family: inherit;
+  font-size: 14px;
   padding-left: 12px;
   padding-right: 8px;
   padding-top: 1px;

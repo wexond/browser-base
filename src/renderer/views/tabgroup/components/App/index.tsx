@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 
-import { Style } from '../../style';
 import { StyledApp, Colors, Color } from './style';
 import store from '../../store';
 import { Textfield } from '~/renderer/components/Textfield';
@@ -26,8 +25,7 @@ import {
   ORANGE_500,
   DEEP_ORANGE_500,
 } from '~/renderer/constants';
-
-const GlobalStyle = createGlobalStyle`${Style}`;
+import { UIStyle } from '~/renderer/mixins/default-styles';
 
 const onChange = (e: any) => {
   ipcRenderer.send(`edit-tabgroup-${store.windowId}`, {
@@ -48,7 +46,7 @@ export const App = hot(
     return (
       <ThemeProvider theme={{ ...store.theme }}>
         <StyledApp visible={store.visible}>
-          <GlobalStyle />
+          <UIStyle />
           <Textfield
             dark={store.theme['dialog.lightForeground']}
             placeholder="Name"

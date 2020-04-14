@@ -15,7 +15,7 @@ export class IpcEvent {
   }
 
   public emit = (e: any, ...args: any[]) => {
-    this.callbacks.forEach(callback => {
+    this.callbacks.forEach((callback) => {
       callback(...args);
     });
   };
@@ -37,7 +37,7 @@ export class IpcEvent {
   }
 
   public removeListener(callback: Function) {
-    this.callbacks = this.callbacks.filter(x => x !== callback);
+    this.callbacks = this.callbacks.filter((x) => x !== callback);
 
     const id = hashCode(callback.toString());
     ipcRenderer.send(`api-removeListener`, {

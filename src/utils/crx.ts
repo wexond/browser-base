@@ -186,7 +186,7 @@ export const parseCrx = (buf: Buffer) => {
     .digest()
     .toString('hex')
     .split('')
-    .map(x => (parseInt(x, 16) + 0x0a).toString(26))
+    .map((x) => (parseInt(x, 16) + 0x0a).toString(26))
     .join('')
     .slice(0, 32);
 

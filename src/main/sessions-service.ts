@@ -2,50 +2,27 @@ import { session, ipcMain, app } from 'electron';
 import { getPath, makeId } from '~/utils';
 import { promises, existsSync } from 'fs';
 import { resolve, basename, parse, extname } from 'path';
-import { WindowsManager } from './windows-manager';
+import { Application } from './application';
 import { registerProtocol } from './models/protocol';
-import storage from './services/storage';
 import * as url from 'url';
-import {
-  IDownloadItem,
-  BrowserActionChangeType,
-  Electron10Extension,
-} from '~/interfaces';
+import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
 import { runExtensionsMessagingService } from './services/extensions-messaging';
 import { hookWebContentsEvents } from './services/web-navigation';
 
-// TODO(sentialx): remove this after upgrading to Electron 10:
-const getElectron10Extension = async (
-  session: Electron.Session,
-  path: string,
-) => {
-  return {
-    ...(await session.loadExtension(path)),
-    path,
-    manifest: JSON.parse(
-      await promises.readFile(resolve(path, 'manifest.json'), 'utf8'),
-    ),
-  };
-};
-
 // TODO: move windows list to the corresponding sessions
-export class SessionsManager {
+export class SessionsService {
   public view = session.fromPartition('persist:view');
   public viewIncognito = session.fromPartition('view_incognito');
 
   public incognitoExtensionsLoaded = false;
   public extensionsLoaded = false;
 
-  public extensions: Electron10Extension[] = [];
+  public extensions: Electron.Extension[] = [];
 
-  private windowsManager: WindowsManager;
-
-  public constructor(windowsManager: WindowsManager) {
-    this.windowsManager = windowsManager;
-
+  public constructor() {
     this.view.setPreloads([
       ...this.view.getPreloads(),
       `${app.getAppPath()}/build/extensions-preload.bundle.js`,
@@ -72,7 +49,7 @@ export class SessionsManager {
     this.view.cookies.on(
       'changed',
       (e: any, cookie: Electron.Cookie, cause: string) => {
-        this.view.cookiesChangedTargets.forEach(value => {
+        this.view.cookiesChangedTargets.forEach((value) => {
           value.send(`api-emit-event-cookies-onChanged`, cookie, cause);
         });
       },
@@ -98,7 +75,9 @@ export class SessionsManager {
 
     this.view.setPermissionRequestHandler(
       async (webContents, permission, callback, details) => {
-        const window = windowsManager.findWindowByBrowserView(webContents.id);
+        const window = Application.instance.windows.findByBrowserView(
+          webContents.id,
+        );
 
         if (webContents.id !== window.viewManager.selectedId) return;
 
@@ -107,7 +86,7 @@ export class SessionsManager {
         } else {
           try {
             const { hostname } = url.parse(details.requestingUrl);
-            const perm: any = await storage.findOne({
+            const perm: any = await Application.instance.storage.findOne({
               scope: 'permissions',
               query: {
                 url: hostname,
@@ -126,7 +105,7 @@ export class SessionsManager {
 
               callback(response);
 
-              await storage.insert({
+              await Application.instance.storage.insert({
                 scope: 'permissions',
                 item: {
                   url: hostname,
@@ -160,10 +139,13 @@ export class SessionsManager {
     this.view.on('will-download', (event, item, webContents) => {
       const fileName = item.getFilename();
       const id = makeId(32);
-      const window = windowsManager.findWindowByBrowserView(webContents.id);
+      const window = Application.instance.windows.findByBrowserView(
+        webContents.id,
+      );
 
-      if (!windowsManager.settings.object.downloadsDialog) {
-        const downloadsPath = windowsManager.settings.object.downloadsPath;
+      if (!Application.instance.settings.object.downloadsDialog) {
+        const downloadsPath =
+          Application.instance.settings.object.downloadsPath;
         let i = 1;
         let savePath = resolve(downloadsPath, fileName);
 
@@ -178,11 +160,8 @@ export class SessionsManager {
 
       const downloadItem = getDownloadItem(item, id);
 
-      window.dialogs.downloadsDialog.webContents.send(
-        'download-started',
-        downloadItem,
-      );
-      window.webContents.send('download-started', downloadItem);
+      window.dialogs.downloadsDialog.send('download-started', downloadItem);
+      window.send('download-started', downloadItem);
 
       item.on('updated', (event, state) => {
         if (state === 'interrupted') {
@@ -195,19 +174,13 @@ export class SessionsManager {
 
         const data = getDownloadItem(item, id);
 
-        window.dialogs.downloadsDialog.webContents.send(
-          'download-progress',
-          data,
-        );
-        window.webContents.send('download-progress', data);
+        window.dialogs.downloadsDialog.send('download-progress', data);
+        window.send('download-progress', data);
       });
       item.once('done', async (event, state) => {
         if (state === 'completed') {
-          window.dialogs.downloadsDialog.webContents.send(
-            'download-completed',
-            id,
-          );
-          window.webContents.send(
+          window.dialogs.downloadsDialog.send('download-completed', id);
+          window.send(
             'download-completed',
             id,
             !window.dialogs.downloadsDialog.visible,
@@ -232,7 +205,7 @@ export class SessionsManager {
 
             await extractZip(crxInfo.zip, path);
 
-            const extension = await getElectron10Extension(this.view, path);
+            const extension = await this.view.loadExtension(path);
 
             if (crxInfo.publicKey) {
               const manifest = JSON.parse(
@@ -247,7 +220,7 @@ export class SessionsManager {
               );
             }
 
-            window.webContents.send('load-browserAction', extension);
+            window.send('load-browserAction', extension);
           }
         } else {
           console.log(`Download failed: ${state}`);
@@ -257,17 +230,14 @@ export class SessionsManager {
 
     session.defaultSession.on('will-download', (event, item, webContents) => {
       const id = makeId(32);
-      const window = windowsManager.list.find(
-        x => x && x.webContents.id === webContents.id,
+      const window = Application.instance.windows.list.find(
+        (x) => x && x.webContents.id === webContents.id,
       );
 
       const downloadItem = getDownloadItem(item, id);
 
-      window.dialogs.downloadsDialog.webContents.send(
-        'download-started',
-        downloadItem,
-      );
-      window.webContents.send('download-started', downloadItem);
+      window.dialogs.downloadsDialog.send('download-started', downloadItem);
+      window.send('download-started', downloadItem);
 
       item.on('updated', (event, state) => {
         if (state === 'interrupted') {
@@ -280,19 +250,13 @@ export class SessionsManager {
 
         const data = getDownloadItem(item, id);
 
-        window.dialogs.downloadsDialog.webContents.send(
-          'download-progress',
-          data,
-        );
-        window.webContents.send('download-progress', data);
+        window.dialogs.downloadsDialog.send('download-progress', data);
+        window.send('download-progress', data);
       });
       item.once('done', async (event, state) => {
         if (state === 'completed') {
-          window.dialogs.downloadsDialog.webContents.send(
-            'download-completed',
-            id,
-          );
-          window.webContents.send(
+          window.dialogs.downloadsDialog.send('download-completed', id);
+          window.send(
             'download-completed',
             id,
             !window.dialogs.downloadsDialog.visible,
@@ -312,7 +276,7 @@ export class SessionsManager {
   public clearCache(session: 'normal' | 'incognito') {
     const ses = session === 'incognito' ? this.viewIncognito : this.view;
 
-    ses.clearCache().catch(err => {
+    ses.clearCache().catch((err) => {
       console.error(err);
     });
 
@@ -349,23 +313,17 @@ export class SessionsManager {
     for (const dir of dirs) {
       try {
         const path = resolve(extensionsPath, dir);
-        // TODO(sentialx): after upgrading to Electron 10:
-        // const extension = await context.loadExtension(path);
-        const extension = await getElectron10Extension(context, path);
+        const extension = await context.loadExtension(path);
 
         this.extensions.push(extension);
 
-        for (const window of this.windowsManager.list) {
-          window.webContents.send('load-browserAction', extension);
+        for (const window of Application.instance.windows.list) {
+          window.send('load-browserAction', extension);
         }
       } catch (e) {
         console.error(e);
       }
     }
-
-    /*await context.loadExtension(
-      resolve(__dirname, 'extensions/wexond-darkreader'),
-    );*/
 
     /*if (session === 'incognito') {
       this.incognitoExtensionsLoaded = true;
@@ -375,11 +333,11 @@ export class SessionsManager {
   }
 
   public onCreateTab = async (details: chrome.tabs.CreateProperties) => {
-    const view = this.windowsManager.list
-      .find(x => x.id === details.windowId)
+    const view = Application.instance.windows.list
+      .find((x) => x.win.id === details.windowId)
       .viewManager.create(details, false, true);
 
-    return view.webContents.id;
+    return view.id;
   };
 
   public onBrowserActionUpdate = (
@@ -387,13 +345,8 @@ export class SessionsManager {
     action: BrowserActionChangeType,
     details: any,
   ) => {
-    this.windowsManager.list.forEach(w => {
-      w.webContents.send(
-        'set-browserAction-info',
-        extensionId,
-        action,
-        details,
-      );
+    Application.instance.windows.list.forEach((w) => {
+      w.send('set-browserAction-info', extensionId, action, details);
     });
   };
 }

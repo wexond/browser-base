@@ -4,7 +4,7 @@ if (process.env.NODE_ENV === 'development') {
 
 import { ipcMain, app, webContents } from 'electron';
 import { platform } from 'os';
-import { WindowsManager } from './windows-manager';
+import { Application } from './application';
 
 export const isNightly = app.name === 'wexond-nightly';
 
@@ -25,9 +25,10 @@ ipcMain.setMaxListeners(0);
 // app.setAsDefaultProtocolClient('http');
 // app.setAsDefaultProtocolClient('https');
 
-export const windowsManager = new WindowsManager();
+const application = Application.instance;
+application.start();
 
-process.on('uncaughtException', error => {
+process.on('uncaughtException', (error) => {
   console.error(error);
 });
 
@@ -37,11 +38,11 @@ app.on('window-all-closed', () => {
   }
 });
 
-ipcMain.on('get-webcontents-id', e => {
+ipcMain.on('get-webcontents-id', (e) => {
   e.returnValue = e.sender.id;
 });
 
-ipcMain.on('get-window-id', e => {
+ipcMain.on('get-window-id', (e) => {
   e.returnValue = (e.sender as any).windowId;
 });
 

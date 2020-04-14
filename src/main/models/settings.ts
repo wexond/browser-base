@@ -7,9 +7,8 @@ import { promises } from 'fs';
 import { getPath, makeId } from '~/utils';
 import { EventEmitter } from 'events';
 import { runAdblockService, stopAdblockService } from '../services/adblock';
-import { WindowsManager } from '../windows-manager';
+import { Application } from '../application';
 import { WEBUI_BASE_URL } from '~/constants/files';
-import storage from '../services/storage';
 
 export class Settings extends EventEmitter {
   public object = DEFAULT_SETTINGS;
@@ -18,12 +17,8 @@ export class Settings extends EventEmitter {
 
   private loaded = false;
 
-  private windowsManager: WindowsManager;
-
-  public constructor(windowsManager: WindowsManager) {
+  public constructor() {
     super();
-
-    this.windowsManager = windowsManager;
 
     ipcMain.on(
       'save-settings',
@@ -34,13 +29,13 @@ export class Settings extends EventEmitter {
       },
     );
 
-    ipcMain.on('get-settings-sync', async e => {
+    ipcMain.on('get-settings-sync', async (e) => {
       await this.onLoad();
       this.update();
       e.returnValue = this.object;
     });
 
-    ipcMain.on('get-settings', async e => {
+    ipcMain.on('get-settings', async (e) => {
       await this.onLoad();
       this.update();
       e.sender.send('update-settings', this.object);
@@ -67,7 +62,7 @@ export class Settings extends EventEmitter {
   }
 
   private onLoad = async (): Promise<void> => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (!this.loaded) {
         this.once('load', () => {
           resolve();
@@ -83,16 +78,21 @@ export class Settings extends EventEmitter {
       this.object.theme = nativeTheme.shouldUseDarkColors
         ? 'wexond-dark'
         : 'wexond-light';
+
+      nativeTheme.themeSource = 'system';
+    } else {
+      nativeTheme.themeSource =
+        this.object.theme === 'wexond-dark' ? 'dark' : 'light';
     }
 
-    for (const window of this.windowsManager.list) {
-      window.webContents.send('update-settings', this.object);
+    for (const window of Application.instance.windows.list) {
+      window.send('update-settings', this.object);
 
-      Object.values(window.dialogs).forEach(dialog => {
-        dialog.webContents.send('update-settings', this.object);
+      Object.values(window.dialogs).forEach((dialog) => {
+        dialog.send('update-settings', this.object);
       });
 
-      window.viewManager.views.forEach(v => {
+      window.viewManager.views.forEach(async (v) => {
         if (v.webContents.getURL().startsWith(WEBUI_BASE_URL)) {
           v.webContents.send('update-settings', this.object);
         }
@@ -100,26 +100,11 @@ export class Settings extends EventEmitter {
     }
 
     const contexts = [
-      this.windowsManager.sessionsManager.view,
-      this.windowsManager.sessionsManager.viewIncognito,
+      Application.instance.sessions.view,
+      Application.instance.sessions.viewIncognito,
     ];
 
-    contexts.forEach(e => {
-      /*
-      // TODO:
-      if (e.extensions['wexond-darkreader']) {
-        e.extensions['wexond-darkreader'].backgroundPage.webContents.send(
-          'api-runtime-sendMessage',
-          {
-            message: {
-              name: 'toggle',
-              toggle: this.object.darkContents,
-            },
-          },
-        );
-      }
-      */
-
+    contexts.forEach((e) => {
       if (this.object.shield) {
         runAdblockService(e);
       } else {
@@ -135,7 +120,11 @@ export class Settings extends EventEmitter {
 
       if (typeof json.version === 'string') {
         // Migrate from 3.1.0
-        storage.remove({ scope: 'startupTabs', query: {}, multi: true });
+        Application.instance.storage.remove({
+          scope: 'startupTabs',
+          query: {},
+          multi: true,
+        });
       }
 
       if (typeof json.version === 'string' || json.version === 1) {

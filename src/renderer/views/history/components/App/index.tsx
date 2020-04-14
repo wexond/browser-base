@@ -4,8 +4,7 @@ import { hot } from 'react-hot-loader/root';
 
 import store, { QuickRange } from '../../store';
 import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
-import { Style } from '../../style';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { SelectionDialog } from '~/renderer/components/SelectionDialog';
 import { HistorySection } from '../HistorySection';
 import { Container, Content, LeftContent } from '~/renderer/components/Pages';
@@ -18,8 +17,7 @@ import {
   ICON_CALENDAR,
   ICON_TRASH,
 } from '~/renderer/constants';
-
-const GlobalStyle = createGlobalStyle`${Style}`;
+import { WebUIStyle } from '~/renderer/mixins/default-styles';
 
 const onScroll = (e: any) => {
   const scrollPos = e.target.scrollTop;
@@ -50,12 +48,12 @@ const RangeItem = observer(
   ),
 );
 
-const onCancelClick = (e: React.MouseEvent) => {
+const onCancelClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
   store.selectedItems = [];
 };
 
-const onDeleteClick = (e: React.MouseEvent) => {
+const onDeleteClick = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
   store.deleteSelected();
 };
@@ -70,7 +68,7 @@ const HistorySections = observer(() => {
         onDeleteClick={onDeleteClick}
         onCancelClick={onCancelClick}
       />
-      {store.sections.map(data => (
+      {store.sections.map((data) => (
         <HistorySection data={data} key={data.date.getTime()} />
       ))}
     </LeftContent>
@@ -92,7 +90,7 @@ export default hot(
     return (
       <ThemeProvider theme={{ ...store.theme }}>
         <Container>
-          <GlobalStyle />
+          <WebUIStyle />
           <GlobalNavigationDrawer></GlobalNavigationDrawer>
           <NavigationDrawer title="History" search onSearchInput={onInput}>
             <RangeItem icon={ICON_ALL} range="all">

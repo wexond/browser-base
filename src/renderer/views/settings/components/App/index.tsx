@@ -10,7 +10,7 @@ import store from '../../store';
 import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
 import { Button } from '~/renderer/components/Button';
 import { Style } from '../../style';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { Autofill } from '../Autofill';
 import { OnStartup } from '../Startup';
 import { Content, LeftContent, Container } from '~/renderer/components/Pages';
@@ -36,6 +36,7 @@ import {
   DialogButtons,
 } from '~/renderer/views/bookmarks/components/App/style';
 import { Textfield } from '~/renderer/components/Textfield';
+import { WebUIStyle } from '~/renderer/mixins/default-styles';
 
 export const NormalButton = ({
   children,
@@ -59,7 +60,6 @@ export const NormalButton = ({
   );
 };
 
-const GlobalStyle = createGlobalStyle`${Style}`;
 const MenuItem = observer(
   ({
     section,
@@ -91,14 +91,14 @@ const onBlur = () => {
 
 const onMakeDefaultClick = () => {
   store.settings.searchEngine = store.settings.searchEngines.findIndex(
-    x => x.keyword === store.editedSearchEngine.keyword,
+    (x) => x.keyword === store.editedSearchEngine.keyword,
   );
   store.menuVisible = false;
 };
 
 const onRemoveClick = () => {
   store.settings.searchEngines = store.settings.searchEngines.filter(
-    x => x.keyword !== store.editedSearchEngine.keyword,
+    (x) => x.keyword !== store.editedSearchEngine.keyword,
   );
   store.save();
   store.menuVisible = false;
@@ -119,7 +119,7 @@ const onSaveClick = () => {
   const keyword = store.searchEngineKeywordInputRef.current.value.trim();
   const url = store.searchEngineUrlInputRef.current.value.trim();
 
-  const item = store.settings.searchEngines.find(x => x.keyword === keyword);
+  const item = store.settings.searchEngines.find((x) => x.keyword === keyword);
 
   if (keyword !== '' && name !== '' && url !== '') {
     if (store.dialogContent === 'edit-search-engine') {
@@ -158,10 +158,10 @@ export default hot(
         theme={{ ...store.theme, dark: store.theme['pages.lightForeground'] }}
       >
         <Container
-          onMouseDown={e => (store.dialogVisible = false)}
+          onMouseDown={(e) => (store.dialogVisible = false)}
           darken={store.dialogVisible}
         >
-          <GlobalStyle />
+          <WebUIStyle />
           <GlobalNavigationDrawer></GlobalNavigationDrawer>
           <ContextMenu
             tabIndex={1}
@@ -192,7 +192,7 @@ export default hot(
             )}
           </ContextMenu>
           <Dialog
-            onMouseDown={e => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
             visible={store.dialogVisible}
             ref={store.dialogRef}
             style={{ width: 350 }}

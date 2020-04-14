@@ -1,17 +1,15 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 
-import { Style } from '../../style';
 import { StyledApp, Input, CurrentIcon, SearchBox } from './style';
 import store from '../../store';
 import { callViewMethod } from '~/utils/view';
 import { ipcRenderer } from 'electron';
 import { Suggestions } from '../Suggestions';
 import { ICON_SEARCH, ICON_PAGE } from '~/renderer/constants';
-
-const GlobalStyle = createGlobalStyle`${Style}`;
+import { UIStyle } from '~/renderer/mixins/default-styles';
 
 const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.which === 13) {
@@ -59,15 +57,15 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       suggestions.selected--;
     }
 
-    let suggestion = list.find(x => x.id === suggestions.selected);
+    let suggestion = list.find((x) => x.id === suggestions.selected);
 
     if (!suggestion) {
-      suggestion = store.searchedTabs.find(x => x.id === suggestions.selected);
+      suggestion = store.searchedTabs.find(
+        (x) => x.id === suggestions.selected,
+      );
     }
 
-    input.value = suggestion.isSearch
-      ? suggestion.primaryText
-      : suggestion.secondaryText;
+    input.value = suggestion.isSearch ? suggestion.primaryText : suggestion.url;
   }
 };
 
@@ -95,7 +93,9 @@ export const App = hot(
       }
     }
 
-    ipcRenderer.send(`height-${store.id}`, height);
+    requestAnimationFrame(() => {
+      ipcRenderer.send(`height-${store.id}`, height);
+    });
 
     const suggestion = store.suggestions.selectedSuggestion;
     let favicon = ICON_SEARCH;
@@ -119,8 +119,8 @@ export const App = hot(
 
     return (
       <ThemeProvider theme={{ ...store.theme }}>
-        <StyledApp visible={store.visible}>
-          <GlobalStyle />
+        <StyledApp visible={true}>
+          <UIStyle />
           <SearchBox>
             <CurrentIcon
               style={{

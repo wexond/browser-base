@@ -1,15 +1,13 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 
-import { Style } from '../../style';
 import { ipcRenderer } from 'electron';
 import { StyledApp, Title, Permissions, Permission, Buttons } from './style';
 import store from '../../store';
 import { Button } from '~/renderer/components/Button';
-
-const GlobalStyle = createGlobalStyle`${Style}`;
+import { UIStyle } from '~/renderer/mixins/default-styles';
 
 const sendResult = (r: boolean) => {
   ipcRenderer.send(`request-permission-result-${store.windowId}`, r);
@@ -40,10 +38,10 @@ export const App = hot(
     return (
       <ThemeProvider theme={{ ...store.theme }}>
         <StyledApp>
-          <GlobalStyle />
+          <UIStyle />
           <Title>{store.domain} wants to:</Title>
           <Permissions>
-            {store.permissions.map(item => (
+            {store.permissions.map((item) => (
               <Permission key={item}>{getText(item)}</Permission>
             ))}
           </Permissions>

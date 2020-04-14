@@ -133,13 +133,13 @@ function getConfig(...cfg) {
 }
 
 const getHtml = (scope, name, entries = []) => {
-  let excludeChunks = entries.filter(x => x !== name);
+  let excludeChunks = entries.filter((x) => x !== name);
 
   if (!dev) {
     excludeChunks = excludeChunks.concat(
       Object.entries(chunksEntriesMap)
-        .filter(x => !x[1].includes(name))
-        .map(x => x[0]),
+        .filter((x) => !x[1].includes(name))
+        .map((x) => x[0]),
     );
   }
 
@@ -164,7 +164,7 @@ const applyEntries = (scope, config, entries) => {
   }
 };
 
-const getBaseConfig = name => {
+const getBaseConfig = (name) => {
   const config = {
     plugins: [],
 
@@ -208,14 +208,14 @@ const getBaseConfig = name => {
         commons: {
           test: /[\\/]node_modules[\\/]/,
           name(module) {
-            const packageName = module.context.match(
-              /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
-            )[1];
+            const packageName = module.context
+              .match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
+              .replace('@', 'at');
 
             const bundleName = `npm.${packageName}.${name}`;
 
             chunksEntriesMap[bundleName] = Array.from(module._chunks).map(
-              x => x.name,
+              (x) => x.name,
             );
 
             if (prebuild) {
@@ -234,11 +234,11 @@ const getBaseConfig = name => {
 
   if (prebuild) {
     config.plugins.push({
-      apply: compiler => {
-        compiler.hooks.compilation.tap('Compilation', compilation => {
+      apply: (compiler) => {
+        compiler.hooks.compilation.tap('Compilation', (compilation) => {
           compilation.hooks.afterOptimizeChunkAssets.tap(
             'AfterOptimizeChunkAssets',
-            chunks => {
+            (chunks) => {
               for (const chunk of chunks) {
                 if (chunk.name.indexOf('~') !== -1) {
                   chunksEntriesMap[chunk.name] = chunk.name

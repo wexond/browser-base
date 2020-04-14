@@ -1,26 +1,27 @@
-import { AppWindow } from './windows';
-import { app, Menu, ipcMain, session } from 'electron';
+import { app, ipcMain, Menu } from 'electron';
 import { isAbsolute, extname } from 'path';
 import { existsSync } from 'fs';
-import { getMainMenu } from './menus/main';
-import { SessionsManager } from './sessions-manager';
-import { runAutoUpdaterService } from './services';
+import { SessionsService } from './sessions-service';
 import { checkFiles } from '~/utils/files';
 import { Settings } from './models/settings';
 import { isURL, prefixHttp } from '~/utils';
-import { registerProtocol } from './models/protocol';
-import storage from './services/storage';
+import { WindowsService } from './windows-service';
+import { StorageService } from './services/storage';
+import { getMainMenu } from './menus/main';
+import { runAutoUpdaterService } from './services';
 
-export class WindowsManager {
-  public list: AppWindow[] = [];
+export class Application {
+  public static instance = new Application();
 
-  public currentWindow: AppWindow;
+  public sessions: SessionsService;
 
-  public sessionsManager: SessionsManager;
+  public settings = new Settings();
 
-  public settings = new Settings(this);
+  public storage = new StorageService();
 
-  public constructor() {
+  public windows = new WindowsService();
+
+  public start() {
     const gotTheLock = app.requestSingleInstanceLock();
 
     if (!gotTheLock) {
@@ -36,7 +37,7 @@ export class WindowsManager {
             const ext = extname(path);
 
             if (ext === '.html') {
-              this.currentWindow.viewManager.create({
+              this.windows.current.viewManager.create({
                 url: `file:///${path}`,
                 active: true,
               });
@@ -44,21 +45,21 @@ export class WindowsManager {
           }
           return;
         } else if (isURL(path)) {
-          this.currentWindow.viewManager.create({
+          this.windows.current.viewManager.create({
             url: prefixHttp(path),
             active: true,
           });
           return;
         }
 
-        this.createWindow();
+        this.windows.open();
       });
     }
 
     app.on('login', async (e, webContents, request, authInfo, callback) => {
       e.preventDefault();
 
-      const window = this.findWindowByBrowserView(webContents.id);
+      const window = this.windows.findByBrowserView(webContents.id);
       const credentials = await window.dialogs.authDialog.requestAuth(
         request.url,
         webContents.id,
@@ -70,7 +71,7 @@ export class WindowsManager {
     });
 
     ipcMain.on('create-window', (e, incognito = false) => {
-      this.createWindow(incognito);
+      this.windows.open(incognito);
     });
 
     this.onReady();
@@ -81,34 +82,19 @@ export class WindowsManager {
 
     checkFiles();
 
-    storage.run();
+    this.storage.run();
 
-    this.createWindow();
+    this.windows.open();
 
-    this.sessionsManager = new SessionsManager(this);
+    this.sessions = new SessionsService();
 
-    Menu.setApplicationMenu(getMainMenu(this));
-    runAutoUpdaterService(this);
+    Menu.setApplicationMenu(getMainMenu());
+    runAutoUpdaterService();
 
     app.on('activate', () => {
-      if (this.list.filter(x => x !== null).length === 0) {
-        this.createWindow();
+      if (this.windows.list.filter((x) => x !== null).length === 0) {
+        this.windows.open();
       }
     });
-  }
-
-  public createWindow(incognito = false) {
-    const window = new AppWindow(this, incognito);
-    this.list.push(window);
-
-    if (incognito) {
-      if (!this.sessionsManager.incognitoExtensionsLoaded) {
-        this.sessionsManager.loadExtensions();
-      }
-    }
-  }
-
-  public findWindowByBrowserView(webContentsId: number) {
-    return this.list.find(x => !!x.viewManager.views.get(webContentsId));
   }
 }

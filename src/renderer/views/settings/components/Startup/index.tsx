@@ -119,9 +119,9 @@ class StartupControl extends React.PureComponent<Props, State> {
                   key={index}
                   width={350}
                   placeholder={item.url}
-                  onChange={value => this.onUpdateItemURL(index, value)}
+                  onChange={(value) => this.onUpdateItemURL(index, value)}
                   icon={ICON_CLOSE}
-                  onIconClick={target => this.onDeleteItemClick(index)}
+                  onIconClick={(target) => this.onDeleteItemClick(index)}
                   delay={500}
                   style={{ marginBottom: 8 }}
                 />
@@ -145,6 +145,6 @@ class StartupControl extends React.PureComponent<Props, State> {
 
 export const OnStartup = observer(() => {
   const { type } = store.settings.startupBehavior;
-  const startupTabList = store.startupTabs.list.filter(x => x.isUserDefined);
+  const startupTabList = store.startupTabs.list.filter((x) => x.isUserDefined);
   return <StartupControl initialValue={type} initialURLS={startupTabList} />;
 });

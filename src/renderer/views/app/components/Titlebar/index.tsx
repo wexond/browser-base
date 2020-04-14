@@ -16,9 +16,18 @@ const onMaximizeClick = () =>
 const onMinimizeClick = () =>
   ipcRenderer.send(`window-minimize-${store.windowId}`);
 
+const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+  if (store.addressbarFocused) {
+    e.preventDefault();
+  }
+};
+
 export const Titlebar = observer(() => {
   return (
-    <StyledTitlebar isHTMLFullscreen={store.isHTMLFullscreen}>
+    <StyledTitlebar
+      onMouseDown={onMouseDown}
+      isHTMLFullscreen={store.isHTMLFullscreen}
+    >
       <Tabbar />
       {platform() !== 'darwin' && (
         <WindowsControls

@@ -19,7 +19,6 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 
 - **Wexond Shield** - Browse the web without any ads and don't let websites to track you. Thanks to the Wexond Shield, websites can load even 2 times faster!
 - **Chromium without Google services and low resources usage** - Since Wexond uses Electron under the hood which is based on only several and the most important Chromium components, it's not bloated with redundant Google tracking services and others.
-- **Built-in dark mode** - Wexond has a built-in dark theme, but it also changes white websites to dark with just a one click. No eyestrain at night anymore!
 - **Beautiful and minimalistic UI** - The address bar is hidden to take less vertical screen space, but it doesn't impact on usability in any way. It's even better! [Give it a shot](https://github.com/wexond/desktop/releases)
 - **Fast and fluent UI** - The animations are really smooth and their timings are perfectly balanced.
 - **Highly customizable new tab page** - Customize almost an every aspect of the new tab page!
@@ -33,6 +32,10 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 ![image](https://user-images.githubusercontent.com/11065386/70392294-ed20b800-19de-11ea-942b-216e9916f07c.png)
 
 ![image](https://user-images.githubusercontent.com/11065386/70392310-180b0c00-19df-11ea-98de-ba96aece86c4.png)
+
+# Downloads
+- [Stable and beta versions](https://github.com/wexond/desktop/releases)
+- [Nightlies](https://github.com/wexond/desktop-nightly/releases)
 
 # [Roadmap](https://github.com/wexond/wexond/projects)
 

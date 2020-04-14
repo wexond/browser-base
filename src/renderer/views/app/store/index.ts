@@ -38,6 +38,9 @@ export class Store {
   public addressbarTextVisible = true;
 
   @observable
+  public addressbarFocused = false;
+
+  @observable
   public addressbarEditing = false;
 
   @computed
@@ -65,7 +68,7 @@ export class Store {
 
     for (let i = 0; i < url.length; i++) {
       const protocol = whitelistedProtocols.find(
-        x => `${x}:/` === capturedText,
+        (x) => `${x}:/` === capturedText,
       );
       if (url[i] === '/' && protocol && !protocolCaptured) {
         segments.push({
@@ -79,7 +82,7 @@ export class Store {
         url[i] === '/' &&
         !hostnameCaptured &&
         (protocolCaptured ||
-          !whitelistedProtocols.find(x => `${x}:` === capturedText))
+          !whitelistedProtocols.find((x) => `${x}:` === capturedText))
       ) {
         segments.push({
           value: capturedText,
@@ -144,7 +147,7 @@ export class Store {
 
   @computed
   public get downloadProgress() {
-    const downloading = this.downloads.filter(x => !x.completed);
+    const downloading = this.downloads.filter((x) => !x.completed);
 
     if (downloading.length === 0) return 0;
 
@@ -192,7 +195,7 @@ export class Store {
     });
 
     ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {
-      const i = this.downloads.find(x => x.id === item.id);
+      const i = this.downloads.find((x) => x.id === item.id);
       i.receivedBytes = item.receivedBytes;
     });
 
@@ -203,10 +206,10 @@ export class Store {
     ipcRenderer.on(
       'download-completed',
       (e, id: string, downloadNotification: boolean) => {
-        const i = this.downloads.find(x => x.id === id);
+        const i = this.downloads.find((x) => x.id === id);
         i.completed = true;
 
-        if (this.downloads.filter(x => !x.completed).length === 0) {
+        if (this.downloads.filter((x) => !x.completed).length === 0) {
           this.downloads = [];
         }
 
@@ -221,7 +224,7 @@ export class Store {
       async (e, extensionId, action: BrowserActionChangeType, details) => {
         if (
           this.extensions.defaultBrowserActions.filter(
-            x => x.extensionId === extensionId,
+            (x) => x.extensionId === extensionId,
           ).length === 0
         ) {
           this.extensions.load();
@@ -240,15 +243,15 @@ export class Store {
         if (details.tabId) {
           this.extensions.browserActions
             .filter(
-              x => x.extensionId === extensionId && x.tabId === details.tabId,
+              (x) => x.extensionId === extensionId && x.tabId === details.tabId,
             )
             .forEach(handler);
         } else {
           this.extensions.defaultBrowserActions
-            .filter(x => x.extensionId === extensionId)
+            .filter((x) => x.extensionId === extensionId)
             .forEach(handler);
           this.extensions.browserActions
-            .filter(x => x.extensionId === extensionId)
+            .filter((x) => x.extensionId === extensionId)
             .forEach(handler);
         }
       },
@@ -257,11 +260,7 @@ export class Store {
     ipcRenderer.on('find', () => {
       const tab = this.tabs.selectedTab;
       if (tab) {
-        ipcRenderer.send(
-          `find-show-${this.windowId}`,
-          tab.id,
-          toJS(tab.findInfo, { recurseEverything: true }),
-        );
+        ipcRenderer.send(`find-show-${this.windowId}`, tab.id);
       }
     });
 
@@ -272,10 +271,11 @@ export class Store {
     ipcRenderer.on(`addressbar-update-input`, (e, data) => {
       const tab = this.tabs.getTabById(data.id);
 
+      this.addressbarEditing = false;
+
       if (tab) {
         tab.addressbarValue = data.text;
         tab.addressbarSelectionRange = [data.selectionStart, data.selectionEnd];
-        tab.addressbarFocused = true;
 
         if (tab.isSelected) {
           this.inputRef.current.value = data.text;
@@ -289,10 +289,8 @@ export class Store {
             this.inputRef.current.focus();
           }
 
-          console.log(data);
-
           if (data.escape) {
-            this.addressbarEditing = false;
+            this.addressbarFocused = false;
             this.tabs.selectedTab.addressbarValue = null;
 
             requestAnimationFrame(() => {
