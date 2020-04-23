@@ -7,7 +7,7 @@ import { StyledApp, Label, Buttons, Spacer } from './style';
 import { ToolbarButton } from '../../../app/components/ToolbarButton';
 import store from '../../store';
 import { Button } from '~/renderer/components/Button';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import { UIStyle } from '~/renderer/mixins/default-styles';
 
 import {
@@ -16,22 +16,26 @@ import {
 } from '~/renderer/constants/icons';
 
 const onPlus = () => {
-  // TODO
+  ipcRenderer.send('change-zoom', 'in');
 };
 
 const onMinus = () => {
-  // TODO
+  ipcRenderer.send('change-zoom', 'out');
 };
 
 const onReset = () => {
-  // TODO
+  ipcRenderer.send('reset-zoom');
 };
+
+ipcRenderer.on('zoom-factor-updated', (e, zoomFactor) => {
+  store.zoomFactor = zoomFactor;
+});
 
 export const App = hot(
   observer(() => {
     return (
       <ThemeProvider theme={{ ...store.theme }}>
-        <StyledApp visible={store.visible}>
+        <StyledApp visible={store.visible} onMouseEnter={() => store.stopHideTimer()} onMouseLeave={() => store.resetHideTimer()}>
           <UIStyle />
           <Buttons>
             <ToolbarButton
@@ -42,7 +46,7 @@ export const App = hot(
               iconStyle={{ transform: 'scale(-1,1)' }}
               onClick={onPlus}
             />
-            <Label>{store.zoomFactor * 100 + "%"}</Label>
+            <Label>{(store.zoomFactor * 100).toFixed(0) + "%"}</Label>
             <ToolbarButton
               toggled={false}
               icon={ICON_DOWN}

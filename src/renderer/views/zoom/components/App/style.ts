@@ -13,6 +13,8 @@ export const StyledApp = styled(DialogStyle)`
 
 export const Label = styled.div`
   font-size: 16px;
+  min-width: 45px;
+  text-align: center;
 `;
 
 export const Spacer = styled.div`
@@ -27,4 +29,9 @@ export const Buttons = styled.div`
   & .button:not(:last-child) {
     margin-right: 8px;
   }
+`;
+
+export const Container = styled.div`
+  width: 100%;
+  height: 100%;
 `;

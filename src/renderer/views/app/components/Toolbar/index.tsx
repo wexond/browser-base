@@ -69,7 +69,7 @@ const showAddBookmarkDialog = async () => {
 };
 
 const showZoomDialog = async () => {
-  if (!(await isDialogVisible('zoomDialog'))) {
+  if (!(await isDialogVisible('zoomDialog')) && store.zoomFactor != 1) {
     const { right, bottom } = zoomRef.getBoundingClientRect();
     ipcRenderer.send(
       `show-zoom-dialog-${store.windowId}`,
@@ -96,6 +96,13 @@ ipcRenderer.on('show-zoom-dialog', () => {
 
 ipcRenderer.on('show-menu-dialog', () => {
   showMenuDialog();
+});
+
+ipcRenderer.on('zoom-factor-updated', (e, zoomFactor) => {
+  store.zoomFactor = zoomFactor;
+  if(!store.dialogsVisibility['zoom']) {
+    showZoomDialog();
+  }
 });
 
 const onStarClick = (e: React.MouseEvent<HTMLDivElement>) => {

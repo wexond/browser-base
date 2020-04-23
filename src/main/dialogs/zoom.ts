@@ -1,7 +1,6 @@
 import { AppWindow } from '../windows';
 import { Dialog } from '.';
 import { DIALOG_MARGIN, DIALOG_MARGIN_TOP } from '~/constants/design';
-import { Application } from '../application';
 
 const WIDTH = 280;
 
