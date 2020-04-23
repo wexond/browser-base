@@ -49,6 +49,8 @@ export const ICON_DASHBOARD = require('~/renderer/resources/icons/dashboard.svg'
 export const ICON_CHECK = require('~/renderer/resources/icons/check.svg');
 export const ICON_TOPMOST = require('~/renderer/resources/icons/top-most.svg');
 export const ICON_TUNE = require('~/renderer/resources/icons/tune.svg');
+export const ICON_MAGNIFY_PLUS = require('~/renderer/resources/icons/magnify-plus.svg');
+export const ICON_MAGNIFY_MINUS = require('~/renderer/resources/icons/magnify-minus.svg');
 
 export const ICON_WEATHER_DAY_CLEAR = require('~/renderer/resources/icons/weather/day/clear.png');
 export const ICON_WEATHER_DAY_FEW_CLOUDS = require('~/renderer/resources/icons/weather/day/few-clouds.png');
