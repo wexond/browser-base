@@ -94,6 +94,12 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.addBookmarkDialog.show();
   });
 
+  ipcMain.on(`show-zoom-dialog-${id}`, (e, left, top) => {
+    appWindow.dialogs.zoomDialog.left = left;
+    appWindow.dialogs.zoomDialog.top = top;
+    appWindow.dialogs.zoomDialog.show();
+  });
+
   ipcMain.on(`edit-tabgroup-${id}`, (e, tabGroup) => {
     appWindow.send(`edit-tabgroup`, tabGroup);
   });
