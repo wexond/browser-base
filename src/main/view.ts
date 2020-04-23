@@ -204,6 +204,7 @@ export class View {
       ) {
         this.webContents.zoomFactor = newZoomFactor;
         this.emitEvent('zoom-updated', this.webContents.zoomFactor);
+        window.viewManager.emitZoomUpdate();
       } else {
         e.preventDefault();
       }

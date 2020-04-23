@@ -1,9 +1,15 @@
-import { ipcMain } from 'electron';
+import { ipcMain, remote, webContents } from 'electron';
 import { VIEW_Y_OFFSET } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { Application } from './application';
+
+import {
+  ZOOM_FACTOR_MIN,
+  ZOOM_FACTOR_MAX,
+  ZOOM_FACTOR_INCREMENT,
+} from '~/constants/web-contents';
 
 export class ViewManager {
   public views = new Map<number, View>();
@@ -13,6 +19,8 @@ export class ViewManager {
   public incognito: boolean;
 
   private window: AppWindow;
+
+  private zoomUpdateSubscribers: Electron.WebContents[] = [];
 
   public get fullscreen() {
     return this._fullscreen;
@@ -66,6 +74,36 @@ export class ViewManager {
 
     ipcMain.on(`browserview-clear-${id}`, () => {
       this.clear();
+    });
+
+    ipcMain.on('subscribe-zoom-factor-updates', (e) => {
+      e.reply('send-zoom-factor', this.selected.webContents.zoomFactor);
+      this.zoomUpdateSubscribers.push(e.sender);
+    });
+
+    ipcMain.on('change-zoom', (e, zoomDirection) => {
+      const newZoomFactor =
+      this.selected.webContents.zoomFactor +
+      (zoomDirection === 'in'
+        ? ZOOM_FACTOR_INCREMENT
+        : -ZOOM_FACTOR_INCREMENT);
+
+      if (
+        newZoomFactor <= ZOOM_FACTOR_MAX &&
+        newZoomFactor >= ZOOM_FACTOR_MIN
+      ) {
+        this.selected.webContents.zoomFactor = newZoomFactor;
+        this.selected.emitEvent('zoom-updated', this.selected.webContents.zoomFactor);
+      } else {
+        e.preventDefault();
+      }
+      this.emitZoomUpdate();
+    });
+
+    ipcMain.on('reset-zoom', (e) => {
+      this.selected.webContents.zoomFactor = 1;
+      this.selected.emitEvent('zoom-updated', this.selected.webContents.zoomFactor);
+      this.emitZoomUpdate();
     });
   }
 
@@ -159,6 +197,8 @@ export class ViewManager {
     this.fixBounds();
 
     view.updateNavigationState();
+
+    this.emitZoomUpdate();
   }
 
   public fixBounds() {
@@ -188,5 +228,10 @@ export class ViewManager {
       this.window.win.removeBrowserView(view.browserView);
       view.destroy();
     }
+  }
+
+  public emitZoomUpdate() {
+    this.zoomUpdateSubscribers.forEach( e => e.send('zoom-factor-updated', this.selected.webContents.zoomFactor) );
+    this.window.webContents.send('zoom-factor-updated', this.selected.webContents.zoomFactor);
   }
 }
