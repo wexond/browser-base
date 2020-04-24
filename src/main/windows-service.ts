@@ -19,6 +19,10 @@ export class WindowsService {
       details.windowId = win.id;
     };
 
+    extensions.windows.onCreate = async (details) => {
+      return this.open(details.incognito).id;
+    };
+
     extensions.tabs.onCreate = async (details) => {
       const win =
         this.list.find((x) => x.id === details.windowId) || this.lastFocused;
@@ -38,6 +42,8 @@ export class WindowsService {
     window.win.on('focus', () => {
       this.lastFocused = window;
     });
+
+    return window;
   }
 
   public findByBrowserView(webContentsId: number) {
