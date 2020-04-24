@@ -9,8 +9,11 @@ import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
-import { runExtensionsMessagingService } from './services/extensions-messaging';
-import { hookWebContentsEvents } from './services/web-navigation';
+import {
+  extensions,
+  _setFallbackSession,
+  sessionFromIpcEvent,
+} from 'electron-extensions';
 
 // TODO: move windows list to the corresponding sessions
 export class SessionsService {
@@ -23,39 +26,18 @@ export class SessionsService {
   public extensions: Electron.Extension[] = [];
 
   public constructor() {
-    this.view.setPreloads([
-      ...this.view.getPreloads(),
-      `${app.getAppPath()}/build/extensions-preload.bundle.js`,
-    ]);
-
-    this.view.cookiesChangedTargets = new Map();
-    this.viewIncognito.cookiesChangedTargets = new Map();
-
     registerProtocol(this.view);
     registerProtocol(this.viewIncognito);
 
-    runExtensionsMessagingService(this);
-
-    app.on('web-contents-created', (e, webContents) => {
-      if (
-        webContents.getType() !== 'browserView' ||
-        webContents.session !== this.view
-      )
-        return;
-
-      hookWebContentsEvents(this.view, webContents);
-    });
-
-    this.view.cookies.on(
-      'changed',
-      (e: any, cookie: Electron.Cookie, cause: string) => {
-        this.view.cookiesChangedTargets.forEach((value) => {
-          value.send(`api-emit-event-cookies-onChanged`, cookie, cause);
-        });
-      },
-    );
-
     this.clearCache('incognito');
+
+    // TODO: remove this after fix for e.sender.session
+    _setFallbackSession(this.view);
+
+    extensions.initializeSession(
+      this.view,
+      resolve(require.resolve('electron-extensions/build/preload')),
+    );
 
     ipcMain.on('load-extensions', () => {
       this.loadExtensions();
