@@ -50,9 +50,8 @@ const loadFilters = async () => {
 };
 
 const emitBlockedEvent = (request: Request) => {
-  for (const window of Application.instance.windows.list) {
-    window.viewManager.views.get(request.tabId).emitEvent('blocked-ad');
-  }
+  const win = Application.instance.windows.findByBrowserView(request.tabId);
+  win.viewManager.views.get(request.tabId).emitEvent('blocked-ad');
 };
 
 let adblockRunning = false;
