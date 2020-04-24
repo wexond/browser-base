@@ -24,7 +24,7 @@ jobs:
       # run: sudo apt-get install gcc-multilib g++-multilib
 
       - name: Install dependencies
-        run: yarn policies set-version 1.21.1 && yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile
         env:
           ADBLOCK: true
 
