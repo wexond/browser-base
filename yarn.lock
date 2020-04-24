@@ -2413,6 +2413,10 @@ electron-builder@22.4.1:
     update-notifier "^4.1.0"
     yargs "^15.1.0"
 
+"electron-extensions@https://github.com/sentialx/electron-extensions":
+  version "6.0.4"
+  resolved "https://github.com/sentialx/electron-extensions#c62abb1b8c115458554b5895355fbbe170ad254c"
+
 electron-publish@22.4.1:
   version "22.4.1"
   resolved "https://registry.yarnpkg.com/electron-publish/-/electron-publish-22.4.1.tgz#a7fcf166786f7d5957f19a70ee8389f219769ba5"

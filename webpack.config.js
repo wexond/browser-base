@@ -48,7 +48,6 @@ const preloadConfig = getConfig({
   entry: {
     'view-preload': './src/preloads/view-preload',
     'popup-preload': './src/preloads/popup-preload',
-    'extensions-preload': './src/preloads/extensions-preload',
   },
 
   plugins: [],
@@ -56,7 +55,7 @@ const preloadConfig = getConfig({
 
 if (process.env.START === '1') {
   mainConfig.plugins.push({
-    apply: compiler => {
+    apply: (compiler) => {
       compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
         if (electronProcess) {
           try {
