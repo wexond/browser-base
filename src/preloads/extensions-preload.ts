@@ -1,0 +1,1 @@
+require('electron-extensions/preload');

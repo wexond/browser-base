@@ -9,11 +9,7 @@ import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
-import {
-  extensions,
-  _setFallbackSession,
-  sessionFromIpcEvent,
-} from 'electron-extensions';
+import { extensions, _setFallbackSession } from 'electron-extensions';
 
 // TODO: move windows list to the corresponding sessions
 export class SessionsService {
@@ -36,7 +32,7 @@ export class SessionsService {
 
     extensions.initializeSession(
       this.view,
-      resolve(require.resolve('electron-extensions/build/preload')),
+      `${app.getAppPath()}/build/extensions-preload.bundle.js`,
     );
 
     ipcMain.on('load-extensions', () => {
