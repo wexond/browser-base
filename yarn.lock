@@ -2426,7 +2426,7 @@ electron-builder@22.5.1:
 
 "electron-extensions@https://github.com/sentialx/electron-extensions":
   version "6.0.4"
-  resolved "https://github.com/sentialx/electron-extensions#c62abb1b8c115458554b5895355fbbe170ad254c"
+  resolved "https://github.com/sentialx/electron-extensions#04fb7c0bc132f0e21a8944f377d8ece300407adb"
 
 electron-publish@22.5.1:
   version "22.5.1"
