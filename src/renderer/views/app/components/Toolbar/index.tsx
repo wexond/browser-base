@@ -350,11 +350,11 @@ export const Toolbar = observer(() => {
         {hasCredentials && (
           <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
         )}
-        {store.zoomFactor != 1 && (
+        {(store.dialogsVisibility['zoom'] || store.zoomFactor !== 1) && (
           <ToolbarButton
             divRef={(r) => (zoomRef = r)}
             toggled={store.dialogsVisibility['zoom']}
-            icon={store.zoomFactor > 1 ? ICON_MAGNIFY_PLUS : ICON_MAGNIFY_MINUS}
+            icon={store.zoomFactor >= 1 ? ICON_MAGNIFY_PLUS : ICON_MAGNIFY_MINUS}
             size={18}
             dense
             onMouseDown={onZoomClick}
