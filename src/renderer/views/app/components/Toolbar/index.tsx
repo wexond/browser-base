@@ -98,9 +98,9 @@ ipcRenderer.on('show-menu-dialog', () => {
   showMenuDialog();
 });
 
-ipcRenderer.on('zoom-factor-updated', (e, zoomFactor) => {
+ipcRenderer.on('zoom-factor-updated', (e, zoomFactor, showDialog) => {
   store.zoomFactor = zoomFactor;
-  if(!store.dialogsVisibility['zoom']) {
+  if (!store.dialogsVisibility['zoom'] && showDialog) {
     showZoomDialog();
   }
 });

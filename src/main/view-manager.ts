@@ -200,7 +200,7 @@ export class ViewManager {
 
     view.updateNavigationState();
 
-    this.emitZoomUpdate();
+    this.emitZoomUpdate(false);
   }
 
   public fixBounds() {
@@ -232,13 +232,14 @@ export class ViewManager {
     }
   }
 
-  public emitZoomUpdate() {
+  public emitZoomUpdate(showDialog: boolean = true) {
     this.zoomUpdateSubscribers.forEach((e) =>
       e.send('zoom-factor-updated', this.selected.webContents.zoomFactor),
     );
     this.window.webContents.send(
       'zoom-factor-updated',
       this.selected.webContents.zoomFactor,
+      showDialog,
     );
   }
 }
