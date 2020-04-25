@@ -295,6 +295,9 @@ export default observer(({ tab }: { tab: ITab }) => {
             : tab.isHovered
               ? defaultHoverColor
               : defaultColor,
+          borderColor: (tab.isSelected && tab.tabGroupId != undefined)
+            ? tab.tabGroup.color
+            : 'transparent',
         }}
       >
         <Content tab={tab} />
