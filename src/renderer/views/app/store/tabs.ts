@@ -154,8 +154,10 @@ export class TabsStore {
           if (isMainFrame) {
             tab.blockedAds = 0;
           }
-        } else if (event === 'did-navigate') {
-          tab.favicon = '';
+        } else if (event === 'media-playing') {
+          tab.isPlaying = true;
+        } else if (event === 'media-paused') {
+          tab.isPlaying = false;
         } else if (
           event === 'loading' ||
           event === 'pinned' ||
@@ -491,7 +493,7 @@ export class TabsStore {
       if (
         callingTab.left < tabGroup.left ||
         callingTab.left + callingTab.width >=
-          tabGroup.left + tabGroup.width + 20
+        tabGroup.left + tabGroup.width + 20
       ) {
         callingTab.removeFromGroup();
         return;
@@ -595,9 +597,9 @@ export class TabsStore {
       if (
         newLeft + selectedTab.width >
         container.current.scrollLeft +
-          container.current.offsetWidth -
-          TABS_PADDING +
-          20
+        container.current.offsetWidth -
+        TABS_PADDING +
+        20
       ) {
         left =
           container.current.scrollLeft +
