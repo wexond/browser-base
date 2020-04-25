@@ -167,6 +167,8 @@ export const TabContainer = styled.div`
   display: flex;
   backface-visibility: hidden;
   transition: 0.1s background-color;
+  border-bottom: transparent !important;
+  border: 2px solid;
 
   ${({ pinned }: TabContainerProps) => css`
     max-width: ${pinned ? `${TAB_PINNED_WIDTH}px` : '100%'};
