@@ -226,6 +226,14 @@ export class View {
       },
     );
 
+    this.webContents.addListener('media-started-playing', () => {
+      this.emitEvent('media-playing', true);
+    });
+
+    this.webContents.addListener('media-paused', () => {
+      this.emitEvent('media-paused', true);
+    });
+
     if (url.startsWith(NEWTAB_URL)) this.isNewTab = true;
 
     this.webContents.loadURL(url);

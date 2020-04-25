@@ -29,6 +29,9 @@ export class ITab {
   public isMuted = false;
 
   @observable
+  public isPlaying = false;
+
+  @observable
   public title = 'New tab';
 
   @observable
@@ -173,7 +176,7 @@ export class ITab {
 
     const width =
       (containerWidth - pinnedTabs * (TAB_PINNED_WIDTH + TABS_PADDING)) /
-        realTabsLength -
+      realTabsLength -
       TABS_PADDING -
       store.tabs.leftMargins / realTabsLength;
 

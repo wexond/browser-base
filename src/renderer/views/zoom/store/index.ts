@@ -15,8 +15,6 @@ export class Store extends DialogStore {
       this.zoomFactor = zoomFactor;
     });
 
-    ipcRenderer.send('subscribe-zoom-factor-updates');
-
     const zoomFactorChange = reaction(
       () => this.zoomFactor,
       () => this.resetHideTimer()
@@ -25,7 +23,7 @@ export class Store extends DialogStore {
 
   public async onVisibilityChange(visible: boolean) {
     this.visible = visible;
-    if(visible) {
+    if (visible) {
       this.resetHideTimer();
     }
   }
@@ -37,7 +35,7 @@ export class Store extends DialogStore {
       context.hide();
     }, 1500);
   }
-  
+
   public stopHideTimer() {
     clearTimeout(this.timer);
   }
