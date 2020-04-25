@@ -154,6 +154,8 @@ export class TabsStore {
           if (isMainFrame) {
             tab.blockedAds = 0;
           }
+        } else if (event === 'did-navigate') {
+          tab.favicon = '';
         } else if (event === 'media-playing') {
           tab.isPlaying = true;
         } else if (event === 'media-paused') {
