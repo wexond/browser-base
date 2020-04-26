@@ -22,7 +22,7 @@ export const MenuItem = styled.div`
   padding: 0 12px;
   font-size: 12px;
 
-  ${({ arrow }: { arrow?: boolean }) =>
+  ${({ arrow }: { arrow?: boolean; disabled?: boolean }) =>
     arrow &&
     css`
       &:after {
@@ -38,6 +38,12 @@ export const MenuItem = styled.div`
           filter: ${theme['dialog.lightForeground'] ? 'invert(100%)' : 'none'};
         `};
       }
+    `};
+
+  ${({ disabled }: { arrow?: boolean; disabled?: boolean }) =>
+    css`
+      pointer-events: ${disabled ? 'none' : 'inherit'};
+      opacity: ${disabled ? 0.54 : 1};
     `};
 
   &:hover {
