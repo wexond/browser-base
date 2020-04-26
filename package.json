@@ -41,13 +41,13 @@
   "devDependencies": {
     "@cliqz/adblocker-electron": "1.14.2",
     "@types/animejs": "^3.1.0",
-    "@types/chrome": "0.0.104",
+    "@types/chrome": "0.0.106",
     "@types/crypto-js": "^3.1.44",
     "@types/extract-zip": "^1.6.2",
     "@types/gsap": "1.20.2",
     "@types/jszip": "^3.1.7",
     "@types/nedb": "1.8.9",
-    "@types/node": "13.13.2",
+    "@types/node": "13.13.4",
     "@types/node-fetch": "^2.5.7",
     "@types/react": "16.9.34",
     "@types/react-dom": "16.9.6",
@@ -58,11 +58,11 @@
     "awesome-node-loader": "^1.1.1",
     "axios": "0.19.2",
     "cache-loader": "^4.1.0",
-    "concurrently": "^5.1.0",
+    "concurrently": "^5.2.0",
     "copy-webpack-plugin": "^5.1.1",
     "cross-env": "7.0.2",
     "crypto-js": "^4.0.0",
-    "electron": "^9.0.0-beta.16",
+    "electron": "^9.0.0-beta.19",
     "electron-builder": "22.5.1",
     "electron-extensions": "^7.0.0-beta.2",
     "electron-updater": "4.2.5",
@@ -92,7 +92,7 @@
     "source-map-support": "^0.5.19",
     "styled-components": "^5.1.0",
     "terser": "^4.6.12",
-    "terser-webpack-plugin": "^2.3.5",
+    "terser-webpack-plugin": "^2.3.6",
     "ts-loader": "^7.0.1",
     "typescript": "^3.8.3",
     "typescript-plugin-styled-components": "^1.4.4",
@@ -103,6 +103,6 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "keytar": "5.5.0"
+    "keytar": "5.6.0"
   }
 }
