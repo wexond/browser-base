@@ -23,7 +23,7 @@ export const MenuItem = styled.div`
   font-size: 12px;
   letter-spacing: ${getLetterSpacing(12, 0.1)}rem;
 
-  ${({ arrow }: { arrow?: boolean }) =>
+  ${({ arrow }: { arrow?: boolean; disabled?: boolean }) =>
     arrow &&
     css`
       &:after {
@@ -39,6 +39,12 @@ export const MenuItem = styled.div`
           filter: ${theme['dialog.lightForeground'] ? 'invert(100%)' : 'none'};
         `};
       }
+    `};
+
+  ${({ disabled }: { arrow?: boolean; disabled?: boolean }) =>
+    css`
+      pointer-events: ${disabled ? 'none' : 'inherit'};
+      opacity: ${disabled ? 0.54 : 1};
     `};
 
   &:hover {
