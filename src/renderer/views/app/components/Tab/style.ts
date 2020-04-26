@@ -33,6 +33,61 @@ export const StyledClose = styled.div`
   }
 `;
 
+interface ActionProps {
+  visible: boolean;
+  icon: string;
+  theme?: ITheme;
+}
+
+export const StyledAction = styled.div`
+  height: 20px;
+  width: 20px;
+  margin-left: 2px;
+  border-radius: 2px;
+  transition: 0.1s background-color;
+  z-index: 10;
+  ${centerIcon(16)};
+
+    ${({ visible, theme, icon }: ActionProps) => css`
+      opacity: ${visible ? transparency.icons.inactive : 0};
+      display: ${visible ? 'block' : 'none'};
+      filter: ${theme['toolbar.lightForeground'] ? 'invert(100%)' : 'none'};
+      background-image: url('${icon}');
+    `}
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+`;
+
+interface PinActionProps {
+  visible: boolean;
+  icon: string;
+  theme?: ITheme;
+}
+
+export const StyledPinAction = styled.div`
+  height: 12px;
+  width: 12px;
+  border-radius: 100%;
+  transition: 0.1s background-color;
+  z-index: 10;
+  position: fixed;
+  right: 8px;
+  top: 8px;
+  ${centerIcon(10)};
+
+    ${({ visible, theme, icon }: PinActionProps) => css`
+      display: ${visible ? 'block' : 'none'};
+      background-color: ${theme['toolbar.lightForeground'] ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)'};
+      background-image: url('${icon}');
+    `}
+  
+  &:hover {
+    filter: invert(100%);
+  }
+`;
+
 interface TabProps {
   selected: boolean;
 }
@@ -112,6 +167,8 @@ export const TabContainer = styled.div`
   display: flex;
   backface-visibility: hidden;
   transition: 0.1s background-color;
+  border-bottom: transparent !important;
+  border: 2px solid;
 
   ${({ pinned }: TabContainerProps) => css`
     max-width: ${pinned ? `${TAB_PINNED_WIDTH}px` : '100%'};

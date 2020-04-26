@@ -8,19 +8,33 @@ import {
   StyledIcon,
   StyledTitle,
   StyledClose,
+  StyledAction,
+  StyledPinAction,
   TabContainer,
 } from './style';
+import {
+  ICON_VOLUME_HIGH,
+  ICON_VOLUME_OFF,
+} from '~/renderer/constants';
 import { ITab } from '../../models';
 import store from '../../store';
 import { remote, ipcRenderer } from 'electron';
-import { ICON_MUTE } from '~/renderer/constants/icons';
 
 const removeTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
   tab.close();
 };
 
+const toggleMuteTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
+  e.stopPropagation();
+  tab.isMuted ? store.tabs.unmuteTab(tab) : store.tabs.muteTab(tab)
+};
+
 const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+  e.stopPropagation();
+};
+
+const onVolumeMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 };
 
@@ -196,7 +210,9 @@ const Content = observer(({ tab }: { tab: ITab }) => {
         <StyledIcon
           isIconSet={tab.favicon !== ''}
           style={{ backgroundImage: `url(${tab.favicon})` }}
-        ></StyledIcon>
+        >
+          <PinnedVolume tab={tab} />
+        </StyledIcon>
       )}
 
       {tab.loading && (
@@ -213,8 +229,31 @@ const Content = observer(({ tab }: { tab: ITab }) => {
           {tab.title}
         </StyledTitle>
       )}
+      <ExpandedVolume tab={tab} />
       <Close tab={tab} />
     </StyledContent>
+  );
+});
+
+const ExpandedVolume = observer(({ tab }: { tab: ITab }) => {
+  return (
+    <StyledAction
+      onMouseDown={onVolumeMouseDown}
+      onClick={toggleMuteTab(tab)}
+      visible={tab.isExpanded && !tab.isPinned && tab.isPlaying}
+      icon={tab.isMuted ? ICON_VOLUME_OFF : ICON_VOLUME_HIGH}
+    />
+  );
+});
+
+const PinnedVolume = observer(({ tab }: { tab: ITab }) => {
+  return (
+    <StyledPinAction
+      onMouseDown={onVolumeMouseDown}
+      onClick={toggleMuteTab(tab)}
+      visible={tab.isPinned && tab.isPlaying}
+      icon={tab.isMuted ? ICON_VOLUME_OFF : ICON_VOLUME_HIGH}
+    />
   );
 });
 
@@ -254,26 +293,14 @@ export default observer(({ tab }: { tab: ITab }) => {
           backgroundColor: tab.isSelected
             ? store.theme['toolbar.backgroundColor']
             : tab.isHovered
-            ? defaultHoverColor
-            : defaultColor,
+              ? defaultHoverColor
+              : defaultColor,
+          borderColor: (tab.isSelected && tab.tabGroupId != undefined)
+            ? tab.tabGroup.color
+            : 'transparent',
         }}
       >
         <Content tab={tab} />
-        {tab.isMuted && !tab.loading && !tab.isPinned && (
-          <StyledIcon
-            isIconSet={tab.isMuted}
-            style={{
-              backgroundImage: `url(${ICON_MUTE})`,
-              position: 'absolute',
-              right: 32,
-              zIndex: 9999,
-              filter: store.theme['toolbar.lightForeground']
-                ? 'invert(100%)'
-                : 'none',
-              opacity: 0.54,
-            }}
-          />
-        )}
       </TabContainer>
     </StyledTab>
   );

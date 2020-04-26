@@ -35,7 +35,6 @@ export const ICON_INCOGNITO = require('~/renderer/resources/icons/incognito.svg'
 export const ICON_LOCATION = require('~/renderer/resources/icons/location.svg');
 export const ICON_AUTOFILL = require('~/renderer/resources/icons/autofill.svg');
 export const ICON_PALETTE = require('~/renderer/resources/icons/palette.svg');
-export const ICON_MUTE = require('~/renderer/resources/icons/mute.svg');
 export const ICON_POWER = require('~/renderer/resources/icons/power.svg');
 export const ICON_ARROW_RIGHT = require('~/renderer/resources/icons/arrow-right.svg');
 export const ICON_PRINT = require('~/renderer/resources/icons/print.svg');
@@ -51,6 +50,8 @@ export const ICON_TOPMOST = require('~/renderer/resources/icons/top-most.svg');
 export const ICON_TUNE = require('~/renderer/resources/icons/tune.svg');
 export const ICON_MAGNIFY_PLUS = require('~/renderer/resources/icons/magnify-plus.svg');
 export const ICON_MAGNIFY_MINUS = require('~/renderer/resources/icons/magnify-minus.svg');
+export const ICON_VOLUME_HIGH = require('~/renderer/resources/icons/volume-high.svg');
+export const ICON_VOLUME_OFF = require('~/renderer/resources/icons/volume-off.svg');
 
 export const ICON_WEATHER_DAY_CLEAR = require('~/renderer/resources/icons/weather/day/clear.png');
 export const ICON_WEATHER_DAY_FEW_CLOUDS = require('~/renderer/resources/icons/weather/day/few-clouds.png');

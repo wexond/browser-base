@@ -20,8 +20,6 @@ export class ViewManager {
 
   private window: AppWindow;
 
-  private zoomUpdateSubscribers: Electron.WebContents[] = [];
-
   public get fullscreen() {
     return this._fullscreen;
   }
@@ -74,11 +72,6 @@ export class ViewManager {
 
     ipcMain.on(`browserview-clear-${id}`, () => {
       this.clear();
-    });
-
-    ipcMain.on('subscribe-zoom-factor-updates', (e) => {
-      e.reply('send-zoom-factor', this.selected.webContents.zoomFactor);
-      this.zoomUpdateSubscribers.push(e.sender);
     });
 
     ipcMain.on('change-zoom', (e, zoomDirection) => {
@@ -200,7 +193,7 @@ export class ViewManager {
 
     view.updateNavigationState();
 
-    this.emitZoomUpdate();
+    this.emitZoomUpdate(false);
   }
 
   public fixBounds() {
@@ -232,13 +225,15 @@ export class ViewManager {
     }
   }
 
-  public emitZoomUpdate() {
-    this.zoomUpdateSubscribers.forEach((e) =>
-      e.send('zoom-factor-updated', this.selected.webContents.zoomFactor),
+  public emitZoomUpdate(showDialog: boolean = true) {
+    this.window.dialogs.zoomDialog.send(
+      'zoom-factor-updated',
+      this.selected.webContents.zoomFactor
     );
     this.window.webContents.send(
       'zoom-factor-updated',
       this.selected.webContents.zoomFactor,
+      showDialog,
     );
   }
 }
