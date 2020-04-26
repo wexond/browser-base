@@ -107,8 +107,7 @@ export const runMessagingService = (appWindow: AppWindow) => {
   ipcMain.on(`is-incognito-${id}`, (e) => {
     e.returnValue = appWindow.incognito;
   });
-  /*
-  TODO:
+
   ipcMain.on(`form-fill-show-${id}`, async (e, rect, name, value) => {
     const items = await getFormFillMenuItems(name, value);
 
@@ -242,5 +241,5 @@ export const runMessagingService = (appWindow: AppWindow) => {
       const password = await getPassword('wexond', account);
       e.sender.send(id, password);
     },
-  );*/
+  );
 };
