@@ -17,9 +17,9 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 
 # Features
 
-- **Wexond Shield** - Browse the web without any ads and don't let websites to track you. Thanks to the Wexond Shield, websites can load even 2 times faster!
+- **Wexond Shield** - Browse the web without any ads and don't let websites to track you. Thanks to the Wexond Shield, websites can load even 8 times faster!
 - **Chromium without Google services and low resources usage** - Since Wexond uses Electron under the hood which is based on only several and the most important Chromium components, it's not bloated with redundant Google tracking services and others.
-- **Beautiful and minimalistic UI** - The address bar is hidden to take less vertical screen space, but it doesn't impact on usability in any way. It's even better! [Give it a shot](https://github.com/wexond/desktop/releases)
+- **Beautiful and modern UI**
 - **Fast and fluent UI** - The animations are really smooth and their timings are perfectly balanced.
 - **Highly customizable new tab page** - Customize almost an every aspect of the new tab page!
 - **Tab groups** - Easily group tabs, so it's hard to get lost.
@@ -29,9 +29,7 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 
 # Screenshots
 
-![image](https://user-images.githubusercontent.com/11065386/70392294-ed20b800-19de-11ea-942b-216e9916f07c.png)
-
-![image](https://user-images.githubusercontent.com/11065386/70392310-180b0c00-19df-11ea-98de-ba96aece86c4.png)
+![image](https://user-images.githubusercontent.com/11065386/80321519-fab7cc80-881d-11ea-85a2-e8a1c959dca8.png)
 
 # Downloads
 - [Stable and beta versions](https://github.com/wexond/desktop/releases)
