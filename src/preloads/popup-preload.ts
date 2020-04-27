@@ -3,8 +3,10 @@ import { ipcRenderer } from 'electron';
 const updateBounds = () => {
   ipcRenderer.sendToHost(
     'webview-size',
-    document.body.offsetWidth,
-    document.body.offsetHeight,
+    document.documentElement.offsetWidth ||
+      document.documentElement.scrollWidth,
+    document.documentElement.offsetHeight ||
+      document.documentElement.scrollHeight,
   );
 };
 
