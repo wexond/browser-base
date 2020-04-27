@@ -21,6 +21,10 @@ window.addEventListener('load', () => {
   resizeObserver.observe(document.body);
 });
 
-window.addEventListener('blur', () => {
+const close = () => {
   ipcRenderer.sendToHost('webview-blur');
-});
+};
+
+window.addEventListener('blur', close);
+
+window.close = close;
