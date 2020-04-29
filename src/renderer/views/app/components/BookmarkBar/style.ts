@@ -15,6 +15,7 @@ export const BookmarkBar = styled.div`
   height: 32px;
   padding: 2px 8px;
   padding-top: 0px;
+  padding-right: 4px;
   margin-top: -3px;
   ${({ theme }: { theme: ITheme }) => css`
     background-color: ${theme['toolbar.backgroundColor']};
@@ -29,6 +30,7 @@ export const BookmarkSection = styled.div`
   align-items: center;
   justify-content: flex-start;
   flex-flow: row;
+  overflow: hidden;
 `;
 
 export const BookmarkButton = styled(Button)`

@@ -62,7 +62,7 @@ export class BookmarkBarStore {
     if (!this.staticMainID) return;
     const barItems: IBookmark[] = [];
     const overflowItems: IBookmark[] = [];
-    const barWidth = document.body.clientWidth - 50;
+    const barWidth = document.body.clientWidth - 65;
     const maxChars = 18;
     let currentWidth = 0;
     const potentialItems = this.list.filter(

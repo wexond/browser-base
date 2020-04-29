@@ -9,7 +9,12 @@ import {
   Favicon,
   Title,
 } from './style';
-import { ICON_FOLDER, ICON_PAGE } from '~/renderer/constants/icons';
+import { ToolbarButton } from '../ToolbarButton';
+import {
+  ICON_FOLDER,
+  ICON_PAGE,
+  ICON_ARROW_RIGHT,
+} from '~/renderer/constants/icons';
 
 type BookmarkProps = {
   title: string;
@@ -82,9 +87,7 @@ export const BookmarkBar = observer(() => {
         ))}
       </BookmarkSection>
       {store.bookmarksBar.overflowItems.length > 0 && (
-        <button type="button" onClick={showOverflow}>
-          {'>'}
-        </button>
+        <ToolbarButton icon={ICON_ARROW_RIGHT} onClick={showOverflow} />
       )}
     </StyledBookmarkBar>
   ) : null;
