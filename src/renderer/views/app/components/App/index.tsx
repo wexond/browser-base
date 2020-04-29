@@ -8,6 +8,7 @@ import { Titlebar } from '../Titlebar';
 import { Toolbar } from '../Toolbar';
 import store from '../../store';
 import { UIStyle } from '~/renderer/mixins/default-styles';
+import { BookmarkBar } from '../BookmarkBar';
 
 const App = observer(() => {
   return (
@@ -18,6 +19,7 @@ const App = observer(() => {
         <UIStyle />
         <Titlebar />
         <Toolbar></Toolbar>
+        <BookmarkBar />
       </StyledApp>
     </ThemeProvider>
   );
