@@ -244,6 +244,16 @@ export const getMainMenu = () => {
           'Manage bookmarks',
         ),
         ...createMenuItem(
+          ['CmdOrCtrl+Shift+B'],
+          () => {
+            const { bookmarksBar } = Application.instance.settings.object;
+            Application.instance.settings.updateSettings({
+              bookmarksBar: !bookmarksBar,
+            });
+          },
+          'Toggle bookmarks bar',
+        ),
+        ...createMenuItem(
           ['CmdOrCtrl+D'],
           () => {
             Application.instance.windows.current.webContents.send(

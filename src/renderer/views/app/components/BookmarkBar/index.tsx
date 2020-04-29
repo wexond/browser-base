@@ -67,7 +67,7 @@ const Bookmark = observer(
 export const BookmarkBar = observer(() => {
   const { bookmarkBarItems: list, showOverflow } = store.bookmarksBar;
 
-  return (
+  return store.settings.object.bookmarksBar ? (
     <StyledBookmarkBar>
       <BookmarkSection>
         {list.map(({ title, url, favicon, _id, isFolder }) => (
@@ -87,5 +87,5 @@ export const BookmarkBar = observer(() => {
         </button>
       )}
     </StyledBookmarkBar>
-  );
+  ) : null;
 });

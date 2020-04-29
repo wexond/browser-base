@@ -2,6 +2,7 @@ import { AppWindow } from '../windows';
 import { clipboard, nativeImage, Menu, session } from 'electron';
 import { isURL, prefixHttp } from '~/utils';
 import { saveAs, viewSource, printPage } from './common-actions';
+import { Application } from '../application';
 
 export const getViewMenu = (
   appWindow: AppWindow,
@@ -228,6 +229,17 @@ export const getViewMenu = (
       if (webContents.isDevToolsOpened()) {
         webContents.devToolsWebContents.focus();
       }
+    },
+  });
+
+  menuItems.push({
+    label: 'Toggle Bookmarks Bar',
+    accelerator: 'CmdOrCtrl+Shift+B',
+    click: () => {
+      const { bookmarksBar } = Application.instance.settings.object;
+      Application.instance.settings.updateSettings({
+        bookmarksBar: !bookmarksBar,
+      });
     },
   });
 

@@ -9,6 +9,7 @@ import { EventEmitter } from 'events';
 import { runAdblockService, stopAdblockService } from '../services/adblock';
 import { Application } from '../application';
 import { WEBUI_BASE_URL } from '~/constants/files';
+import { ISettings } from '~/interfaces';
 
 export class Settings extends EventEmitter {
   public object = DEFAULT_SETTINGS;
@@ -23,9 +24,7 @@ export class Settings extends EventEmitter {
     ipcMain.on(
       'save-settings',
       (e, { settings }: { settings: string; incognito: boolean }) => {
-        this.object = { ...this.object, ...JSON.parse(settings) };
-
-        this.addToQueue();
+        this.updateSettings(JSON.parse(settings));
       },
     );
 
@@ -199,5 +198,11 @@ export class Settings extends EventEmitter {
         this.save();
       });
     }
+  }
+
+  public updateSettings(settings: Partial<ISettings>) {
+    this.object = { ...this.object, ...settings };
+
+    this.addToQueue();
   }
 }

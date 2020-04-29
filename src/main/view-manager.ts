@@ -104,6 +104,8 @@ export class ViewManager {
       );
       this.emitZoomUpdate();
     });
+
+    this.setBoundsListener();
   }
 
   public get selected() {
@@ -111,7 +113,7 @@ export class ViewManager {
   }
 
   public get settingsView() {
-    return Object.values(this.views).find(r =>
+    return Object.values(this.views).find((r) =>
       r.url.startsWith(`${WEBUI_BASE_URL}settings`),
     );
   }
@@ -142,7 +144,7 @@ export class ViewManager {
 
   public clear() {
     this.window.win.setBrowserView(null);
-    Object.values(this.views).forEach(x => x.destroy());
+    Object.values(this.views).forEach((x) => x.destroy());
   }
 
   public select(id: number, focus = true) {
@@ -176,7 +178,7 @@ export class ViewManager {
       'permissionsDialog',
       'formFillDialog',
       'credentialsDialog',
-    ].forEach(dialog => {
+    ].forEach((dialog) => {
       if (this.window.dialogs[dialog].tabIds.includes(id)) {
         this.window.dialogs[dialog].show();
         this.window.dialogs[dialog].bringToTop();
@@ -220,6 +222,25 @@ export class ViewManager {
     }
   }
 
+  private setBoundsListener() {
+    // resize the BrowserView's height when the toolbar height changes
+    // ex: when the bookmarks bar appears
+    this.window.webContents.executeJavaScript(`
+        const {ipcRenderer} = require('electron');
+        const resizeObserver = new ResizeObserver(([{ contentRect }]) => {
+          ipcRenderer.send('resize-height');
+        });
+        const app = document.getElementById('app');
+        resizeObserver.observe(app);
+      `);
+
+    this.window.webContents.on('ipc-message', (e, message) => {
+      if (message === 'resize-height') {
+        this.fixBounds();
+      }
+    });
+  }
+
   public destroy(id: number) {
     const view = this.views.get(id);
 
@@ -229,10 +250,10 @@ export class ViewManager {
     }
   }
 
-  public emitZoomUpdate(showDialog: boolean = true) {
+  public emitZoomUpdate(showDialog = true) {
     this.window.dialogs.zoomDialog.send(
       'zoom-factor-updated',
-      this.selected.webContents.zoomFactor
+      this.selected.webContents.zoomFactor,
     );
     this.window.webContents.send(
       'zoom-factor-updated',
