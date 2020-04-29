@@ -74,7 +74,7 @@ export class ViewManager {
   }
 
   public get settingsView() {
-    return Object.values(this.views).find((r) =>
+    return Object.values(this.views).find(r =>
       r.url.startsWith(`${WEBUI_BASE_URL}settings`),
     );
   }
@@ -98,13 +98,12 @@ export class ViewManager {
     if (sendMessage) {
       this.window.send('create-tab', { ...details }, isNext, id);
     }
-
     return view;
   }
 
   public clear() {
     this.window.win.setBrowserView(null);
-    Object.values(this.views).forEach((x) => x.destroy());
+    Object.values(this.views).forEach(x => x.destroy());
   }
 
   public select(id: number, focus = true) {
@@ -138,7 +137,7 @@ export class ViewManager {
       'permissionsDialog',
       'formFillDialog',
       'credentialsDialog',
-    ].forEach((dialog) => {
+    ].forEach(dialog => {
       if (this.window.dialogs[dialog].tabIds.includes(id)) {
         this.window.dialogs[dialog].show();
         this.window.dialogs[dialog].bringToTop();
@@ -161,18 +160,23 @@ export class ViewManager {
     view.updateNavigationState();
   }
 
-  public fixBounds() {
+  public async fixBounds() {
     const view = this.selected;
 
     if (!view) return;
 
     const { width, height } = this.window.win.getContentBounds();
 
+    const toolbarContentHeight = await this.window.win.webContents
+      .executeJavaScript(`
+      document.getElementById('app').offsetHeight
+    `);
+
     const newBounds = {
       x: 0,
-      y: this.fullscreen ? 0 : VIEW_Y_OFFSET,
+      y: this.fullscreen ? 0 : toolbarContentHeight,
       width,
-      height: this.fullscreen ? height : height - VIEW_Y_OFFSET,
+      height: this.fullscreen ? height : height - toolbarContentHeight,
     };
 
     if (newBounds !== view.bounds) {
