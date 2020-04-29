@@ -16,8 +16,6 @@ export const Line = styled.div`
 export const StyledApp = styled.div`
   display: flex;
   flex-flow: column;
-
-  ${({ theme }: { theme: ITheme }) => css`
-    background-color: ${theme.backgroundColor};
-  `}
+  height: 100vh;
+  background-color: #fff;
 `;
