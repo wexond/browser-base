@@ -1,11 +1,13 @@
 import { Menu, ipcRenderer } from 'electron';
 import { observable, toJS } from 'mobx';
 import { IBookmark } from '~/interfaces';
+import { Store } from '../store';
 
 export class BookmarkBarStore {
   public buttonWidth = 150;
   public overflowMenu: Menu;
   private staticMainID: string;
+  private store: Store;
 
   @observable
   public list: IBookmark[] = [];
@@ -14,7 +16,8 @@ export class BookmarkBarStore {
   @observable
   public overflowItems: IBookmark[] = [];
 
-  public constructor() {
+  public constructor(store: Store) {
+    this.store = store;
     this.load();
 
     this.handleWindowResize();
@@ -83,7 +86,7 @@ export class BookmarkBarStore {
     const x = Math.floor(clientRect.left) + 20;
 
     ipcRenderer.invoke(
-      'show-bookmarks-bar-dropdown',
+      `show-bookmarks-bar-dropdown-${this.store.windowId}`,
       this.staticMainID,
       toJS(this.overflowItems, { recurseEverything: true }),
       { x, y },
@@ -96,16 +99,21 @@ export class BookmarkBarStore {
     const x = Math.floor(clientRect.left) - 30;
 
     const bookmarks = toJS(this.list, { recurseEverything: true });
-    ipcRenderer.invoke('show-bookmarks-bar-dropdown', id, bookmarks, {
-      x,
-      y,
-    });
+    ipcRenderer.invoke(
+      `show-bookmarks-bar-dropdown-${this.store.windowId}`,
+      id,
+      bookmarks,
+      {
+        x,
+        y,
+      },
+    );
   };
 
   public createContextMenu(event: unknown, id: string) {
     const item = this.list.find(({ _id }) => _id === id);
     ipcRenderer.invoke(
-      'show-bookmarks-bar-context-menu',
+      `show-bookmarks-bar-context-menu-${this.store.windowId}`,
       toJS(item, { recurseEverything: true }),
     );
   }

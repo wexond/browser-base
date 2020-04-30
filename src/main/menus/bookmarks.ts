@@ -4,12 +4,11 @@ import {
   NativeImage,
   MenuItemConstructorOptions,
   app,
-  BrowserWindow,
-  MenuItem,
 } from 'electron';
 import { join } from 'path';
 import { IBookmark } from '~/interfaces';
 import { Application } from '../application';
+import { AppWindow } from '../windows/app';
 
 function getPath(file: string) {
   if (process.env.NODE_ENV === 'development') {
@@ -65,6 +64,7 @@ function getIcon(
 }
 
 export function createDropdown(
+  appWindow: AppWindow,
   parentID: string,
   bookmarks: IBookmark[],
 ): Electron.Menu {
@@ -74,16 +74,13 @@ export function createDropdown(
   const template = folderBookmarks.map<MenuItemConstructorOptions>(
     ({ title, url, favicon, isFolder, _id }) => ({
       click: url
-        ? (menuItem, browserWindow) => {
-            const win = Application.instance.windows.list.find(
-              (x) => x.win.id === browserWindow.id,
-            );
-            win.viewManager.create({ url, active: true });
+        ? () => {
+            appWindow.viewManager.create({ url, active: true });
           }
         : undefined,
       label: title,
       icon: getIcon(favicon, isFolder),
-      submenu: isFolder ? createDropdown(_id, bookmarks) : undefined,
+      submenu: isFolder ? createDropdown(appWindow, _id, bookmarks) : undefined,
       id: _id,
     }),
   );
@@ -93,16 +90,13 @@ export function createDropdown(
     : Menu.buildFromTemplate([{ label: '(empty)', enabled: false }]);
 }
 
-export function createMenu(item: IBookmark) {
+export function createMenu(appWindow: AppWindow, item: IBookmark) {
   const { isFolder, url } = item;
   const folderItems: MenuItemConstructorOptions[] = [
     {
       label: 'Open in New Tab',
-      click: (menuItem: MenuItem, browserWindow: BrowserWindow) => {
-        const win = Application.instance.windows.list.find(
-          (x) => x.win.id === browserWindow.id,
-        );
-        win.viewManager.create({ url, active: true });
+      click: () => {
+        appWindow.viewManager.create({ url, active: true });
       },
     },
     {
@@ -115,13 +109,15 @@ export function createMenu(item: IBookmark) {
     {
       label: 'Edit',
       click: () => {
-        console.log('edit', item);
-        // TODO: Handle edit bookmark event with bookmark dialog
-        // ipcRenderer.send(
-        //   `show-add-bookmark-dialog-${this.store.windowId}`,
-        //   50,
-        //   document.body.offsetWidth - 300,
-        // );
+        const windowBounds = appWindow.win.getBounds();
+        appWindow.dialogs.addBookmarkDialog.left = windowBounds.width - 20;
+        appWindow.dialogs.addBookmarkDialog.top = 72;
+        appWindow.dialogs.addBookmarkDialog.showForBookmark({
+          url: item.url,
+          title: item.title,
+          bookmark: item,
+          favicon: item.favicon,
+        });
       },
     },
     {

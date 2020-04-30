@@ -27,7 +27,7 @@ export class Store {
   public startupTabs = new StartupTabsStore(this);
   public tabGroups = new TabGroupsStore(this);
   public autoFill = new AutoFillStore();
-  public bookmarksBar = new BookmarkBarStore();
+  public bookmarksBar = new BookmarkBarStore(this);
 
   @computed
   public get theme() {
