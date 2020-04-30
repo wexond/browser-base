@@ -15,6 +15,7 @@ import {
   ICON_PAGE,
   ICON_ARROW_RIGHT,
 } from '~/renderer/constants/icons';
+import { IBookmark } from '~/interfaces';
 
 type BookmarkProps = {
   title: string;
@@ -75,7 +76,7 @@ export const BookmarkBar = observer(() => {
   return store.settings.object.bookmarksBar ? (
     <StyledBookmarkBar>
       <BookmarkSection>
-        {list.map(({ title, url, favicon, _id, isFolder }) => (
+        {list.map(({ title, url, favicon, _id, isFolder }: IBookmark) => (
           <Bookmark
             key={_id}
             id={_id}

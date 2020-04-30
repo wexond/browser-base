@@ -1,4 +1,10 @@
-import { BrowserWindow, app, dialog } from 'electron';
+import {
+  BrowserWindow,
+  app,
+  dialog,
+  ipcMain,
+  IpcMainInvokeEvent,
+} from 'electron';
 import { writeFileSync, promises } from 'fs';
 import { resolve, join } from 'path';
 
@@ -23,6 +29,8 @@ import {
 } from '../dialogs';
 import { isNightly } from '..';
 import { ViewManager } from '../view-manager';
+import { IBookmark } from '~/interfaces';
+import * as bookmarkMenu from '../menus/bookmarks';
 
 interface IDialogs {
   searchDialog?: SearchDialog;
@@ -260,6 +268,8 @@ export class AppWindow {
     this.win.on('focus', () => {
       Application.instance.windows.current = this;
     });
+
+    this.registerBookmarkBarHandlers();
   }
 
   public get id() {
@@ -288,6 +298,28 @@ export class AppWindow {
     const { title } = this.viewManager.selected;
     this.win.setTitle(
       title.trim() === '' ? app.name : `${title} - ${app.name}`,
+    );
+  }
+
+  private registerBookmarkBarHandlers() {
+    ipcMain.handle(
+      'show-bookmarks-bar-dropdown',
+      (
+        event: IpcMainInvokeEvent,
+        folderId: string,
+        bookmarks: IBookmark[],
+        { x, y }: { x: number; y: number },
+      ) => {
+        bookmarkMenu
+          .createDropdown(folderId, bookmarks)
+          .popup({ x: Math.floor(x), y: Math.floor(y) });
+      },
+    );
+    ipcMain.handle(
+      'show-bookmarks-bar-context-menu',
+      (event: IpcMainInvokeEvent, item: IBookmark) => {
+        bookmarkMenu.createMenu(item).popup();
+      },
     );
   }
 }

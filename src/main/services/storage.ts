@@ -300,9 +300,7 @@ export class StorageService {
         scope: 'bookmarks',
         query: {},
       })
-    )
-      .sort((a, b) => a.order - b.order)
-      .map((x) => ({ ...x, favicon: this.favicons.get(x.favicon) }));
+    ).sort((a, b) => a.order - b.order);
   }
 
   public removeBookmark(id: string) {
