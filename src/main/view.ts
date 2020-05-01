@@ -32,6 +32,8 @@ export class View {
 
   public bookmark: IBookmark;
 
+  public openDialogs: string[] = [];
+
   private historyQueue = new Queue();
 
   private lastUrl = '';

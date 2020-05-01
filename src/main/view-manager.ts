@@ -227,10 +227,10 @@ export class ViewManager {
     }
   }
 
-  public emitZoomUpdate(showDialog: boolean = true) {
+  public emitZoomUpdate(showDialog = true) {
     this.window.dialogs.zoomDialog.send(
       'zoom-factor-updated',
-      this.selected.webContents.zoomFactor
+      this.selected.webContents.zoomFactor,
     );
     this.window.webContents.send(
       'zoom-factor-updated',
