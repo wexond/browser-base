@@ -41,12 +41,16 @@ export class Store extends DialogStore {
           title,
           url,
           favicon,
-          parent: this.folders[0]._id,
+          parent: this.folders.find((x) => x.static === 'main')._id,
         });
         this.dialogTitle = 'Bookmark added';
       } else {
         this.dialogTitle = 'Edit bookmark';
       }
+
+      this.currentFolder = this.folders.find(
+        (x) => x._id === this.bookmark.parent,
+      );
 
       if (this.titleRef.current) {
         this.titleRef.current.value = title;

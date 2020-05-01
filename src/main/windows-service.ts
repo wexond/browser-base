@@ -54,4 +54,10 @@ export class WindowsService {
   public fromBrowserWindow(browserWindow: BrowserWindow) {
     return this.list.find((x) => x.id === browserWindow.id);
   }
+
+  public broadcast(channel: string, ...args: unknown[]) {
+    this.list.forEach((appWindow) =>
+      appWindow.win.webContents.send(channel, ...args),
+    );
+  }
 }

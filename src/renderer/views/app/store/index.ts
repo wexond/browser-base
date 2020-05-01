@@ -1,4 +1,4 @@
-import { observable, computed, toJS } from 'mobx';
+import { observable, computed } from 'mobx';
 import * as React from 'react';
 
 import { TabsStore } from './tabs';
@@ -16,6 +16,7 @@ import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 import { IBrowserAction } from '../models';
 import { NEWTAB_URL } from '~/constants/tabs';
 import { IURLSegment } from '~/interfaces/urls';
+import { BookmarkBarStore } from './bookmark-bar';
 
 export class Store {
   public settings = new SettingsStore(this);
@@ -26,6 +27,7 @@ export class Store {
   public startupTabs = new StartupTabsStore(this);
   public tabGroups = new TabGroupsStore(this);
   public autoFill = new AutoFillStore();
+  public bookmarksBar = new BookmarkBarStore(this);
 
   @computed
   public get theme() {
@@ -144,7 +146,7 @@ export class Store {
   public dialogsVisibility: { [key: string]: boolean } = {
     menu: false,
     'add-bookmark': false,
-    'zoom': false,
+    zoom: false,
     'extension-popup': false,
     'downloads-dialog': false,
   };

@@ -104,6 +104,8 @@ export class ViewManager {
       );
       this.emitZoomUpdate();
     });
+
+    this.setBoundsListener();
   }
 
   public get selected() {
@@ -137,7 +139,6 @@ export class ViewManager {
     if (sendMessage) {
       this.window.send('create-tab', { ...details }, isNext, id);
     }
-
     return view;
   }
 
@@ -198,24 +199,48 @@ export class ViewManager {
     this.emitZoomUpdate(false);
   }
 
-  public fixBounds() {
+  public async fixBounds() {
     const view = this.selected;
 
     if (!view) return;
 
     const { width, height } = this.window.win.getContentBounds();
 
+    const toolbarContentHeight = await this.window.win.webContents
+      .executeJavaScript(`
+      document.getElementById('app').offsetHeight
+    `);
+
     const newBounds = {
       x: 0,
-      y: this.fullscreen ? 0 : VIEW_Y_OFFSET,
+      y: this.fullscreen ? 0 : toolbarContentHeight,
       width,
-      height: this.fullscreen ? height : height - VIEW_Y_OFFSET,
+      height: this.fullscreen ? height : height - toolbarContentHeight,
     };
 
     if (newBounds !== view.bounds) {
       view.browserView.setBounds(newBounds);
       view.bounds = newBounds;
     }
+  }
+
+  private setBoundsListener() {
+    // resize the BrowserView's height when the toolbar height changes
+    // ex: when the bookmarks bar appears
+    this.window.webContents.executeJavaScript(`
+        const {ipcRenderer} = require('electron');
+        const resizeObserver = new ResizeObserver(([{ contentRect }]) => {
+          ipcRenderer.send('resize-height');
+        });
+        const app = document.getElementById('app');
+        resizeObserver.observe(app);
+      `);
+
+    this.window.webContents.on('ipc-message', (e, message) => {
+      if (message === 'resize-height') {
+        this.fixBounds();
+      }
+    });
   }
 
   public destroy(id: number) {

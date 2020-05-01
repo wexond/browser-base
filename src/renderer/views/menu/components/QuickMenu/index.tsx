@@ -50,6 +50,11 @@ const onPrintClick = () => {
   store.hide();
 };
 
+const onFindInPageClick = () => {
+  ipcRenderer.send(`find-in-page-${store.windowId}`);
+  store.hide();
+};
+
 const onAlwaysClick = () => {
   store.alwaysOnTop = !store.alwaysOnTop;
   remote.getCurrentWindow().setAlwaysOnTop(store.alwaysOnTop);
@@ -153,7 +158,7 @@ export const QuickMenu = observer(() => {
             <MenuItemTitle>Extensions</MenuItemTitle>
           </MenuItem>
           <Line />
-          <MenuItem disabled>
+          <MenuItem onClick={onFindInPageClick}>
             <Icon icon={ICON_FIND} />
             <MenuItemTitle>Find in page</MenuItemTitle>
             <Shortcut>Ctrl+F</Shortcut>

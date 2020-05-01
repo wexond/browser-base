@@ -48,6 +48,9 @@ export class Store extends DialogStore {
         }
         this.tabId = tabId;
       }
+      if (this.findInputRef && this.findInputRef.current) {
+        this.findInputRef.current.focus();
+      }
     });
 
     ipcRenderer.on(
