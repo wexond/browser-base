@@ -294,13 +294,6 @@ export class StorageService {
         isFolder: true,
       });
     }
-
-    this.bookmarks = (
-      await this.find<IBookmark>({
-        scope: 'bookmarks',
-        query: {},
-      })
-    ).sort((a, b) => a.order - b.order);
   }
 
   public removeBookmark(id: string) {
