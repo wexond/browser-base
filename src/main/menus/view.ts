@@ -2,7 +2,6 @@ import { AppWindow } from '../windows';
 import { clipboard, nativeImage, Menu, session } from 'electron';
 import { isURL, prefixHttp } from '~/utils';
 import { saveAs, viewSource, printPage } from './common-actions';
-import { Application } from '../application';
 
 export const getViewMenu = (
   appWindow: AppWindow,
