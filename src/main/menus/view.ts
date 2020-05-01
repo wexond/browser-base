@@ -232,16 +232,5 @@ export const getViewMenu = (
     },
   });
 
-  menuItems.push({
-    label: 'Toggle Bookmarks Bar',
-    accelerator: 'CmdOrCtrl+Shift+B',
-    click: () => {
-      const { bookmarksBar } = Application.instance.settings.object;
-      Application.instance.settings.updateSettings({
-        bookmarksBar: !bookmarksBar,
-      });
-    },
-  });
-
   return Menu.buildFromTemplate(menuItems);
 };
