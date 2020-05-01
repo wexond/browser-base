@@ -48,6 +48,10 @@ export class Store extends DialogStore {
         this.dialogTitle = 'Edit bookmark';
       }
 
+      this.currentFolder = this.folders.find(
+        (x) => x._id === this.bookmark.parent,
+      );
+
       if (this.titleRef.current) {
         this.titleRef.current.value = title;
         this.titleRef.current.focus();
