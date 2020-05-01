@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { observable, computed } from 'mobx';
+import { observable } from 'mobx';
 import { ipcRenderer } from 'electron';
 import { DialogStore } from '~/models/dialog-store';
 import { callViewMethod } from '~/utils/view';
@@ -9,6 +9,11 @@ interface IFindInfo {
   occurrences: string;
   text: string;
 }
+
+const defaultFindInfo = {
+  occurrences: '0/0',
+  text: '',
+};
 
 export class Store extends DialogStore {
   @observable
@@ -19,51 +24,54 @@ export class Store extends DialogStore {
 
   public findInputRef = React.createRef<HTMLInputElement>();
 
-  @computed
-  public get findInfo() {
-    const findInfo = this.tabsFindInfo.get(this.tabId);
-
-    if (findInfo) {
-      return findInfo;
-    }
-
-    return {
-      occurrences: '0/0',
-      text: '',
-    };
-  }
+  @observable
+  public findInfo = defaultFindInfo;
 
   public constructor() {
-    super({ hideOnBlur: false, visibilityWrapper: false });
+    super({ hideOnBlur: false });
 
-    ipcRenderer.on('visible', (e, flag, tabId) => {
-      this.visible = flag;
+    this.init();
+  }
 
-      if (flag && tabId) {
-        if (!this.tabsFindInfo.get(tabId)) {
-          this.tabsFindInfo.set(tabId, {
-            occurrences: '0/0',
-            text: '',
-          });
-        }
-        this.tabId = tabId;
-      }
-      if (this.findInputRef && this.findInputRef.current) {
-        this.findInputRef.current.focus();
-      }
-    });
+  public async init() {
+    const { occurrences, text, tabId } = await this.invoke('fetch');
+
+    this.findInfo = {
+      occurrences,
+      text,
+    };
+    this.tabId = tabId;
+
+    if (this.findInputRef && this.findInputRef.current) {
+      this.findInputRef.current.focus();
+    }
 
     ipcRenderer.on(
       'found-in-page',
       (e, { activeMatchOrdinal, matches }: Electron.FoundInPageResult) => {
         this.findInfo.occurrences = `${activeMatchOrdinal}/${matches}`;
+        this.sendInfo();
       },
     );
+
+    ipcRenderer.on('visibility-changed', (e, flag, tabId, findInfo) => {
+      if (flag) {
+        this.findInfo = findInfo;
+        this.tabId = tabId;
+      } else {
+        this.sendInfo();
+      }
+    });
+  }
+
+  public sendInfo() {
+    this.send('set-find-info', this.tabId, { ...this.findInfo });
   }
 
   public onHide() {
     callViewMethod(this.tabId, 'stopFindInPage', 'clearSelection');
-    this.tabsFindInfo.delete(this.tabId);
+    this.findInfo = defaultFindInfo;
+    this.sendInfo();
     ipcRenderer.send(`window-focus-${this.windowId}`);
   }
 }

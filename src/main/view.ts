@@ -32,7 +32,10 @@ export class View {
 
   public bookmark: IBookmark;
 
-  public openDialogs: string[] = [];
+  public findInfo = {
+    occurrences: '0/0',
+    text: '',
+  };
 
   private historyQueue = new Queue();
 
@@ -85,7 +88,9 @@ export class View {
     });
 
     this.webContents.addListener('found-in-page', (e, result) => {
-      this.window.dialogs.findDialog.send('found-in-page', result);
+      Application.instance.dialogs
+        .getDynamic('find')
+        .browserView.webContents.send('found-in-page', result);
     });
 
     this.webContents.addListener('page-title-updated', (e, title) => {

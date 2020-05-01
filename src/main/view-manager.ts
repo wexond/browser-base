@@ -10,8 +10,9 @@ import {
   ZOOM_FACTOR_INCREMENT,
 } from '~/constants/web-contents';
 import { extensions } from 'electron-extensions';
+import { EventEmitter } from 'events';
 
-export class ViewManager {
+export class ViewManager extends EventEmitter {
   public views = new Map<number, View>();
   public selectedId = 0;
   public _fullscreen = false;
@@ -30,6 +31,8 @@ export class ViewManager {
   }
 
   public constructor(window: AppWindow, incognito: boolean) {
+    super();
+
     this.window = window;
     this.incognito = incognito;
 
@@ -170,25 +173,6 @@ export class ViewManager {
       this.window.webContents.focus();
     }
 
-    /*
-    TODO: dialogs
-    this.window.dialogs.previewDialog.hide(true);
-
-    [
-      'findDialog',
-      'authDialog',
-      'permissionsDialog',
-      'formFillDialog',
-      'credentialsDialog',
-    ].forEach((dialog) => {
-      if (this.window.dialogs[dialog].tabIds.includes(id)) {
-        this.window.dialogs[dialog].show();
-        this.window.dialogs[dialog].bringToTop();
-      } else {
-        this.window.dialogs[dialog].hide();
-      }
-    });*/
-
     this.window.updateTitle();
     view.updateBookmark();
 
@@ -196,7 +180,9 @@ export class ViewManager {
 
     view.updateNavigationState();
 
-    this.emitZoomUpdate(false);
+    this.emit('activated', id);
+
+    // TODO: this.emitZoomUpdate(false);
   }
 
   public async fixBounds() {
@@ -249,6 +235,7 @@ export class ViewManager {
     if (view && !view.browserView.isDestroyed()) {
       this.window.win.removeBrowserView(view.browserView);
       view.destroy();
+      this.emit('removed', id);
     }
   }
 

@@ -13,7 +13,11 @@ export class DialogStore {
     return getTheme(this.settings.theme);
   }
 
+  private lastId = -1;
+
   private _windowId = -1;
+
+  private persistent = false;
 
   @observable
   public visible = false;
@@ -24,33 +28,22 @@ export class DialogStore {
     options: {
       hideOnBlur?: boolean;
       visibilityWrapper?: boolean;
+      persistent?: boolean;
     } = {},
   ) {
-    const { visibilityWrapper, hideOnBlur } = {
+    const { visibilityWrapper, hideOnBlur, persistent } = {
       hideOnBlur: true,
       visibilityWrapper: true,
+      persistent: false,
       ...options,
     };
-    if (visibilityWrapper) {
+
+    if (!persistent) this.visible = true;
+
+    this.persistent = persistent;
+
+    if (visibilityWrapper && persistent) {
       ipcRenderer.on('visible', async (e, flag, ...args) => {
-        // TODO: diaogs
-        /*if (!this.firstTime) {
-          requestAnimationFrame(() => {
-            this.visible = true;
-
-            setTimeout(() => {
-              this.visible = true;
-
-              setTimeout(() => {
-                this.onVisibilityChange(flag, ...args);
-              }, 20);
-            }, 20);
-          });
-          this.firstTime = true;
-        } else {
-          this.onVisibilityChange(flag, ...args);
-        }*/
-
         this.onVisibilityChange(flag, ...args);
       });
     }
@@ -71,6 +64,14 @@ export class DialogStore {
     });
   }
 
+  public async invoke(channel: string, ...args: any[]) {
+    return await ipcRenderer.invoke(`${channel}-${this.id}`, ...args);
+  }
+
+  public async send(channel: string, ...args: any[]) {
+    ipcRenderer.send(`${channel}-${this.id}`, ...args);
+  }
+
   public get id() {
     return remote.getCurrentWebContents().id;
   }
@@ -87,14 +88,14 @@ export class DialogStore {
   public onVisibilityChange(visible: boolean, ...args: any[]) {}
 
   public hide(data: any = null) {
-    if (this.visible) {
-      this.visible = false;
-      this.onHide(data);
+    if (this.persistent && !this.visible) return;
 
-      setTimeout(() => {
-        ipcRenderer.send(`hide-${this.id}`);
-      });
-    }
+    this.visible = false;
+    this.onHide(data);
+
+    setTimeout(() => {
+      ipcRenderer.send(`hide-${this.id}`);
+    });
   }
 
   public onHide(data: any = null) {}

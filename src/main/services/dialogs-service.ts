@@ -3,6 +3,8 @@ import { join } from 'path';
 import { SearchDialog } from '../dialogs/search';
 import { PreviewDialog } from '../dialogs/preview';
 import { PersistentDialog } from '../dialogs/dialog';
+import { Application } from '../application';
+import { extensions } from 'electron-extensions';
 
 interface IDialogShowOptions {
   name: string;
@@ -10,6 +12,8 @@ interface IDialogShowOptions {
   bounds: Electron.Rectangle;
   hideTimeout?: number;
   devtools?: boolean;
+  associateTab?: boolean;
+  onVisibilityChange?: (visible: boolean, tabId: number) => any;
   onHide?: (dialog: IDialog) => void;
 }
 
@@ -17,7 +21,10 @@ interface IDialog {
   name: string;
   browserView: BrowserView;
   id: number;
-  hide: () => void;
+  tabIds: number[];
+  hide: (tabId?: number) => void;
+  handle: (name: string, cb: (...args: any[]) => any) => void;
+  on: (name: string, cb: (...args: any[]) => any) => void;
 }
 
 export class DialogsService {
@@ -53,23 +60,36 @@ export class DialogsService {
     return view;
   }
 
-  public show({
-    name,
-    browserWindow,
-    bounds,
-    devtools,
-    onHide,
-    hideTimeout,
-  }: IDialogShowOptions): IDialog {
-    const foundDialog = this.dialogs.find((x) => x.name === name);
-    if (foundDialog) return foundDialog;
+  public show(options: IDialogShowOptions): IDialog {
+    const {
+      name,
+      browserWindow,
+      bounds,
+      devtools,
+      onHide,
+      hideTimeout,
+      associateTab,
+      onVisibilityChange,
+    } = options;
 
-    let browserView = this.browserViews.find(
-      (x) => !this.browserViewDetails.get(x.id),
+    const foundDialog = this.getDynamic(name);
+
+    let browserView = foundDialog
+      ? foundDialog.browserView
+      : this.browserViews.find((x) => !this.browserViewDetails.get(x.id));
+
+    if (!browserView && !foundDialog) {
+      browserView = this.createBrowserView();
+    }
+
+    const appWindow = Application.instance.windows.fromBrowserWindow(
+      browserWindow,
     );
 
-    if (!browserView) {
-      browserView = this.createBrowserView();
+    const tab = appWindow.viewManager.selected;
+
+    if (foundDialog) {
+      foundDialog.tabIds.push(tab.id);
     }
 
     browserWindow.webContents.send('dialog-visibility-change', name, true);
@@ -79,6 +99,13 @@ export class DialogsService {
 
     browserWindow.addBrowserView(browserView);
     browserView.setBounds(bounds);
+
+    if (foundDialog) {
+      const data = onVisibilityChange && onVisibilityChange(true, tab.id);
+      browserView.webContents.send('visibility-changed', true, tab.id, data);
+    }
+
+    if (foundDialog) return null;
 
     if (process.env.NODE_ENV === 'development') {
       browserView.webContents.loadURL(`http://localhost:4444/${name}.html`);
@@ -94,18 +121,38 @@ export class DialogsService {
       // browserView.webContents.openDevTools({ mode: 'detach' });
     }
 
-    const dialog = {
+    const channels: string[] = [];
+
+    let activateHandler: any;
+    let closeHandler: any;
+
+    const dialog: IDialog = {
       browserView,
       id: browserView.id,
       name,
-      hide: () => {
+      tabIds: [tab.id],
+      hide: (tabId) => {
+        const { selectedId } = appWindow.viewManager;
+
+        dialog.tabIds = dialog.tabIds.filter(
+          (x) => x !== (tabId || selectedId),
+        );
+
+        if (tabId && tabId !== selectedId) return;
+
         browserWindow.webContents.send('dialog-visibility-change', name, false);
 
+        browserWindow.removeBrowserView(browserView);
+
+        if (dialog.tabIds.length > 0) return;
+
         ipcMain.removeAllListeners(`hide-${browserView.webContents.id}`);
+        channels.forEach((x) => {
+          ipcMain.removeHandler(x);
+          ipcMain.removeAllListeners(x);
+        });
 
         this.dialogs = this.dialogs.filter((x) => x.id !== dialog.id);
-
-        browserWindow.removeBrowserView(browserView);
 
         if (this.browserViews.length > 2) {
           browserView.destroy();
@@ -116,9 +163,60 @@ export class DialogsService {
           this.browserViewDetails.set(browserView.id, false);
         }
 
+        if (associateTab) {
+          appWindow.viewManager.off('activated', activateHandler);
+          appWindow.viewManager.off('activated', closeHandler);
+        }
+
         if (onHide) onHide(dialog);
       },
+      handle: (name, cb) => {
+        const channel = `${name}-${browserView.webContents.id}`;
+        ipcMain.handle(channel, (...args) => cb(...args));
+        channels.push(channel);
+      },
+      on: (name, cb) => {
+        const channel = `${name}-${browserView.webContents.id}`;
+        ipcMain.on(channel, (...args) => cb(...args));
+        channels.push(channel);
+      },
     };
+
+    if (associateTab) {
+      activateHandler = (tabId: number) => {
+        const visible = dialog.tabIds.includes(tabId);
+        browserWindow.webContents.send(
+          'dialog-visibility-change',
+          name,
+          visible,
+        );
+
+        const data = onVisibilityChange && onVisibilityChange(visible, tabId);
+
+        browserView.webContents.send(
+          'visibility-changed',
+          visible,
+          tabId,
+          data,
+        );
+
+        if (visible) {
+          browserWindow.removeBrowserView(browserView);
+          browserWindow.addBrowserView(browserView);
+        } else {
+          browserWindow.removeBrowserView(browserView);
+        }
+      };
+
+      closeHandler = (tabId: number) => {
+        dialog.hide(tabId);
+      };
+
+      // TODO: handle tab removed
+
+      appWindow.viewManager.on('removed', closeHandler);
+      appWindow.viewManager.on('activated', activateHandler);
+    }
 
     this.browserViewDetails.set(browserView.id, true);
 

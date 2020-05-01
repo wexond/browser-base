@@ -66,6 +66,7 @@ export class Store extends DialogStore {
   public constructor() {
     super({
       visibilityWrapper: false,
+      persistent: true,
     });
 
     ipcRenderer.on('visible', (e, visible, data) => {

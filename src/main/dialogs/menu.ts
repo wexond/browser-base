@@ -10,7 +10,7 @@ export const showMenuDialog = (
   const menuWidth = 330;
   Application.instance.dialogs.show({
     name: 'menu',
-    browserWindow: browserWindow,
+    browserWindow,
     bounds: {
       width: menuWidth,
       height: 470,

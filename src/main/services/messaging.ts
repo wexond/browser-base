@@ -8,6 +8,7 @@ import { IFormFillData, IBookmark } from '~/interfaces';
 import { SearchDialog } from '../dialogs/search';
 
 import * as bookmarkMenu from '../menus/bookmarks';
+import { showFindDialog } from '../dialogs/find';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -68,74 +69,74 @@ export const runMessagingService = (appWindow: AppWindow) => {
     dialog.hide();
   });
 
-  /*ipcMain.on(`find-show-${id}`, () => {
-    appWindow.dialogs.findDialog.show();
+  ipcMain.on(`find-show-${id}`, () => {
+    showFindDialog(appWindow.win);
   });
 
   ipcMain.on(`find-in-page-${id}`, () => {
     appWindow.send('find');
   });
 
-  ipcMain.on(`show-menu-dialog-${id}`, (e, left, top) => {
-    appWindow.dialogs.menuDialog.left = left;
-    appWindow.dialogs.menuDialog.top = top;
-    appWindow.dialogs.menuDialog.show();
-  });
+  // ipcMain.on(`show-menu-dialog-${id}`, (e, left, top) => {
+  //   appWindow.dialogs.menuDialog.left = left;
+  //   appWindow.dialogs.menuDialog.top = top;
+  //   appWindow.dialogs.menuDialog.show();
+  // });
 
-  ipcMain.on(`search-show-${id}`, (e, data) => {
-    appWindow.dialogs.searchDialog.data = data;
-    appWindow.dialogs.searchDialog.show();
-  });
+  // ipcMain.on(`search-show-${id}`, (e, data) => {
+  //   appWindow.dialogs.searchDialog.data = data;
+  //   appWindow.dialogs.searchDialog.show();
+  // });
 
-  ipcMain.on(`show-tab-preview-${id}`, (e, tab) => {
-    appWindow.dialogs.previewDialog.tab = tab;
-    appWindow.dialogs.previewDialog.show();
-  });
+  // ipcMain.on(`show-tab-preview-${id}`, (e, tab) => {
+  //   appWindow.dialogs.previewDialog.tab = tab;
+  //   appWindow.dialogs.previewDialog.show();
+  // });
 
-  ipcMain.on(`hide-tab-preview-${id}`, (e, tab) => {
-    appWindow.dialogs.previewDialog.hide(
-      appWindow.dialogs.previewDialog.visible,
-    );
-  });
+  // ipcMain.on(`hide-tab-preview-${id}`, (e, tab) => {
+  //   appWindow.dialogs.previewDialog.hide(
+  //     appWindow.dialogs.previewDialog.visible,
+  //   );
+  // });
 
-  ipcMain.on(`show-tabgroup-dialog-${id}`, (e, tabGroup) => {
-    appWindow.dialogs.tabGroupDialog.edit(tabGroup);
-  });
+  // ipcMain.on(`show-tabgroup-dialog-${id}`, (e, tabGroup) => {
+  //   appWindow.dialogs.tabGroupDialog.edit(tabGroup);
+  // });
 
-  ipcMain.on(`show-downloads-dialog-${id}`, (e, left, top) => {
-    appWindow.dialogs.downloadsDialog.left = left;
-    appWindow.dialogs.downloadsDialog.top = top;
-    appWindow.dialogs.downloadsDialog.show();
-  });
+  // ipcMain.on(`show-downloads-dialog-${id}`, (e, left, top) => {
+  //   appWindow.dialogs.downloadsDialog.left = left;
+  //   appWindow.dialogs.downloadsDialog.top = top;
+  //   appWindow.dialogs.downloadsDialog.show();
+  // });
 
-  ipcMain.on(`show-extension-popup-${id}`, (e, left, top, url, inspect) => {
-    appWindow.dialogs.extensionPopup.left = left;
-    appWindow.dialogs.extensionPopup.top = top;
-    appWindow.dialogs.extensionPopup.url = url;
-    appWindow.dialogs.extensionPopup.show(inspect);
-  });
+  // ipcMain.on(`show-extension-popup-${id}`, (e, left, top, url, inspect) => {
+  //   appWindow.dialogs.extensionPopup.left = left;
+  //   appWindow.dialogs.extensionPopup.top = top;
+  //   appWindow.dialogs.extensionPopup.url = url;
+  //   appWindow.dialogs.extensionPopup.show(inspect);
+  // });
 
-  ipcMain.on(`hide-extension-popup-${id}`, (e) => {
-    if (appWindow.dialogs.extensionPopup.visible) {
-      appWindow.dialogs.extensionPopup.hideVisually();
-    }
-  });
+  // ipcMain.on(`hide-extension-popup-${id}`, (e) => {
+  //   if (appWindow.dialogs.extensionPopup.visible) {
+  //     appWindow.dialogs.extensionPopup.hideVisually();
+  //   }
+  // });
 
-  ipcMain.on(`show-add-bookmark-dialog-${id}`, (e, left, top) => {
-    appWindow.dialogs.addBookmarkDialog.left = left;
-    appWindow.dialogs.addBookmarkDialog.top = top;
-    appWindow.dialogs.addBookmarkDialog.show();
-  });
+  // ipcMain.on(`show-add-bookmark-dialog-${id}`, (e, left, top) => {
+  //   appWindow.dialogs.addBookmarkDialog.left = left;
+  //   appWindow.dialogs.addBookmarkDialog.top = top;
+  //   appWindow.dialogs.addBookmarkDialog.show();
+  // });
 
-  ipcMain.on(`show-zoom-dialog-${id}`, (e, left, top) => {
-    appWindow.dialogs.zoomDialog.left = left;
-    appWindow.dialogs.zoomDialog.top = top;
-    appWindow.dialogs.zoomDialog.show();
-  });
+  // ipcMain.on(`show-zoom-dialog-${id}`, (e, left, top) => {
+  //   appWindow.dialogs.zoomDialog.left = left;
+  //   appWindow.dialogs.zoomDialog.top = top;
+  //   appWindow.dialogs.zoomDialog.show();
+  // });
 
-  ipcMain.on(`edit-tabgroup-${id}`, (e, tabGroup) => {
-    appWindow.send(`edit-tabgroup`, tabGroup);
-  });*/
+  // ipcMain.on(`edit-tabgroup-${id}`, (e, tabGroup) => {
+  //   appWindow.send(`edit-tabgroup`, tabGroup);
+  // });
 
   ipcMain.on(`is-incognito-${id}`, (e) => {
     e.returnValue = appWindow.incognito;
